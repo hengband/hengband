@@ -65,6 +65,13 @@ void do_cmd_store(player_type *player_ptr)
         return;
     }
 
+    // TODO:
+    //   施設の種類により、一時的に現在地 (player_ptr->town_num) を違う値に偽装して処理している。
+    //   我が家および博物館は全ての町で内容を共有するため、現在地を辺境の地 (1) にしている。
+    //   ダンジョン内の店の場合、現在地を NO_TOWN にしている。
+    //   inner_town_num は、施設内で C コマンドなどを使ったときにそのままでは現在地の偽装がバレる
+    //   ため、それを糊塗するためのグローバル変数。
+    //   この辺はリファクタしたい。
     int which = f_info[g_ptr->feat].subtype;
     old_town_num = player_ptr->town_num;
     if ((which == STORE_HOME) || (which == STORE_MUSEUM))
@@ -182,8 +189,10 @@ void do_cmd_store(player_type *player_ptr)
             leave_store = TRUE;
     }
 
-    select_floor_music(player_ptr);
+    // 現在地の偽装を解除。
     player_ptr->town_num = old_town_num;
+
+    select_floor_music(player_ptr);
     take_turn(player_ptr, 100);
     current_world_ptr->character_icky = FALSE;
     command_new = 0;
