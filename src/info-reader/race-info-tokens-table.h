@@ -1,9 +1,9 @@
 ﻿#pragma once
 
+#include "monster-attack/monster-attack-effect.h"
+#include "monster-attack/monster-attack-types.h"
 #include "system/angband.h"
 
-#define NUM_R_BLOW_METHOD 27
-#define NUM_R_BLOW_EFFECT 38
 #define NUM_R_FLAGS_1 32
 #define NUM_R_FLAGS_2 32
 #define NUM_R_FLAGS_3 32
@@ -15,8 +15,8 @@
 #define NUM_R_FLAGS_9 33
 #define NUM_R_FLAGS_R 32
 
-extern concptr r_info_blow_method[NUM_R_BLOW_METHOD];
-extern concptr r_info_blow_effect[NUM_R_BLOW_EFFECT];
+extern concptr r_info_blow_method[NB_RBM_TYPE + 1];
+extern concptr r_info_blow_effect[NB_RBE_TYPE + 1];
 extern concptr r_info_flags1[NUM_R_FLAGS_1];
 extern concptr r_info_flags2[NUM_R_FLAGS_2];
 extern concptr r_info_flags3[NUM_R_FLAGS_3];
