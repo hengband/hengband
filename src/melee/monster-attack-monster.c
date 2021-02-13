@@ -35,9 +35,6 @@
 #include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
-/* todo モンスター共通なので、monster-attack-player.cでも使うはず */
-const int MAX_BLOW = 4;
-
 static void heal_monster_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
 {
     if (!monster_living(mam_ptr->m_idx) || (mam_ptr->damage <= 2))
@@ -269,11 +266,11 @@ static void explode_monster_by_melee(player_type *subject_ptr, mam_type *mam_ptr
 void repeat_melee(player_type *subject_ptr, mam_type *mam_ptr)
 {
     monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
-    for (mam_ptr->ap_cnt = 0; mam_ptr->ap_cnt < MAX_BLOW; mam_ptr->ap_cnt++) {
-        mam_ptr->effect = r_ptr->blow[mam_ptr->ap_cnt].effect;
-        mam_ptr->method = r_ptr->blow[mam_ptr->ap_cnt].method;
-        mam_ptr->d_dice = r_ptr->blow[mam_ptr->ap_cnt].d_dice;
-        mam_ptr->d_side = r_ptr->blow[mam_ptr->ap_cnt].d_side;
+    for (int ap_cnt = 0; ap_cnt < MAX_NUM_BLOWS; ap_cnt++) {
+        mam_ptr->effect = r_ptr->blow[ap_cnt].effect;
+        mam_ptr->method = r_ptr->blow[ap_cnt].method;
+        mam_ptr->d_dice = r_ptr->blow[ap_cnt].d_dice;
+        mam_ptr->d_side = r_ptr->blow[ap_cnt].d_side;
 
         if (!monster_is_valid(mam_ptr->m_ptr) || (mam_ptr->t_ptr->fx != mam_ptr->x_saver) || (mam_ptr->t_ptr->fy != mam_ptr->y_saver) || !mam_ptr->method)
             break;
@@ -286,11 +283,11 @@ void repeat_melee(player_type *subject_ptr, mam_type *mam_ptr)
         if (!is_original_ap_and_seen(subject_ptr, mam_ptr->m_ptr) || mam_ptr->do_silly_attack)
             continue;
 
-        if (!mam_ptr->obvious && !mam_ptr->damage && (r_ptr->r_blows[mam_ptr->ap_cnt] <= 10))
+        if (!mam_ptr->obvious && !mam_ptr->damage && (r_ptr->r_blows[ap_cnt] <= 10))
             continue;
 
-        if (r_ptr->r_blows[mam_ptr->ap_cnt] < MAX_UCHAR)
-            r_ptr->r_blows[mam_ptr->ap_cnt]++;
+        if (r_ptr->r_blows[ap_cnt] < MAX_UCHAR)
+            r_ptr->r_blows[ap_cnt]++;
     }
 }
 

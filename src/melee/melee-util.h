@@ -31,7 +31,6 @@ typedef struct mam_type {
     DEPTH rlev;
     bool blinked;
     bool do_silly_attack;
-    ARMOUR_CLASS ap_cnt;
     HIT_POINT power;
     bool obvious;
     int d_dice;
