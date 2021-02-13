@@ -175,7 +175,7 @@ void print_monster_list(floor_type *floor_ptr, TERM_LEN x, TERM_LEN y, TERM_LEN 
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-void fix_monster_list(player_type *player_ptr, bool force_term_fresh)
+void fix_monster_list(player_type *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
         term_type *old = Term;
@@ -183,10 +183,9 @@ void fix_monster_list(player_type *player_ptr, bool force_term_fresh)
             continue;
         if (!(window_flag[j] & PW_MONSTER_LIST))
             continue;
-        if (angband_term[j]->never_fresh && !force_term_fresh)
+        if (angband_term[j]->never_fresh)
             continue;
 
-        angband_term[j]->never_fresh = FALSE;
         term_activate(angband_term[j]);
         int w, h;
         term_get_size(&w, &h);
