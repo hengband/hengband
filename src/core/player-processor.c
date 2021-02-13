@@ -217,7 +217,7 @@ void process_player(player_type *creature_ptr)
     if (creature_ptr->action == ACTION_LEARN) {
         s32b cost = 0L;
         u32b cost_frac = (creature_ptr->msp + 30L) * 256L;
-        s64b_LSHIFT(cost, cost_frac, 16);
+        s64b_lshift(&cost, &cost_frac, 16);
         if (s64b_cmp(creature_ptr->csp, creature_ptr->csp_frac, cost, cost_frac) < 0) {
             creature_ptr->csp = 0;
             creature_ptr->csp_frac = 0;
