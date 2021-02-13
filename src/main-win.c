@@ -2275,7 +2275,7 @@ static void check_for_save_file(player_type *player_ptr, LPSTR cmd_line)
     if (!*s)
         return;
 
-    strcat(savefile, s);
+    strcpy(savefile, s);
     validate_file(savefile);
     game_in_progress = TRUE;
     play_game(player_ptr, FALSE, FALSE);
