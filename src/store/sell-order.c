@@ -194,9 +194,9 @@ void store_sell(player_type *owner_ptr)
     /* 我が家でおかしなメッセージが出るオリジナルのバグを修正 */
     concptr s;
     if (cur_store_num == STORE_HOME) {
-        s = _("置けるアイテムを持っていません。", "You don't have any item to drop.");
+        s = _("置けるアイテムを持っていません。", "You don't have any items to drop.");
     } else if (cur_store_num == STORE_MUSEUM) {
-        s = _("寄贈できるアイテムを持っていません。", "You don't have any item to give.");
+        s = _("寄贈できるアイテムを持っていません。", "You don't have any items to give.");
     } else {
         s = _("欲しい物がないですねえ。", "You have nothing that I want.");
     }
@@ -239,7 +239,7 @@ void store_sell(player_type *owner_ptr)
             msg_print(_("我が家にはもう置く場所がない。", "Your home is full."));
 
         else if (cur_store_num == STORE_MUSEUM)
-            msg_print(_("博物館はもう満杯だ。", "Museum is full."));
+            msg_print(_("博物館はもう満杯だ。", "The Museum is full."));
 
         else
             msg_print(_("すいませんが、店にはもう置く場所がありません。", "I have not the room in my store to keep it."));

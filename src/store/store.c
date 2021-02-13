@@ -186,7 +186,7 @@ void store_examine(player_type *player_ptr)
         if (cur_store_num == STORE_HOME)
             msg_print(_("我が家には何も置いてありません。", "Your home is empty."));
         else if (cur_store_num == STORE_MUSEUM)
-            msg_print(_("博物館には何も置いてありません。", "Museum is empty."));
+            msg_print(_("博物館には何も置いてありません。", "The Museum is empty."));
         else
             msg_print(_("現在商品の在庫を切らしています。", "I am currently out of stock."));
         return;
