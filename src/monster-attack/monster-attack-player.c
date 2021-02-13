@@ -418,7 +418,7 @@ static bool process_monster_blows(player_type *target_ptr, monap_type *monap_ptr
             hit = TRUE;
         } else {
             const int power = mbe_info[monap_ptr->effect].power;
-            hit = (bool)check_hit_from_monster_to_player(target_ptr, power, monap_ptr->rlev, monster_stunned_remaining(monap_ptr->m_ptr));
+            hit = check_hit_from_monster_to_player(target_ptr, power, monap_ptr->rlev, monster_stunned_remaining(monap_ptr->m_ptr));
         }
 
         if (hit) {
