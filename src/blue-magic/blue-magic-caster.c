@@ -264,7 +264,7 @@ bool switch_cast_blue_magic(player_type *caster_ptr, bmc_type *bmc_ptr, SPELL_ID
     case MS_BOLT_ELEC:
         return cast_blue_bolt_elec(caster_ptr, bmc_ptr);
     case MS_BOLT_FIRE:
-        return !cast_blue_bolt_fire(caster_ptr, bmc_ptr);
+        return cast_blue_bolt_fire(caster_ptr, bmc_ptr);
     case MS_BOLT_COLD:
         return cast_blue_bolt_cold(caster_ptr, bmc_ptr);
     case MS_BOLT_NETHER:
