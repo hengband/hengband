@@ -357,7 +357,11 @@ static void process_monster_attack_evasion(player_type *target_ptr, monap_type *
 }
 
 /*!
- * @brief モンスターの打撃に関する知識を増やすことを試みる
+ * @brief モンスターの打撃情報を蓄積させる
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @param ap_cnt モンスターの打撃 N回目
+ * @return なし
  */
 static void increase_blow_type_seen(player_type *target_ptr, monap_type *monap_ptr, const int ap_cnt)
 {
