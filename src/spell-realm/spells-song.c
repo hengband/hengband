@@ -48,7 +48,7 @@ void check_music(player_type *caster_ptr)
         if (INTERUPTING_SONG_EFFECT(caster_ptr)) {
             SINGING_SONG_EFFECT(caster_ptr) = INTERUPTING_SONG_EFFECT(caster_ptr);
             INTERUPTING_SONG_EFFECT(caster_ptr) = MUSIC_NONE;
-            msg_print(_("歌を再開した。", "You restart singing."));
+            msg_print(_("歌を再開した。", "You resume singing."));
             caster_ptr->action = ACTION_SING;
             caster_ptr->update |= (PU_BONUS | PU_HP | PU_MONSTERS);
             caster_ptr->redraw |= (PR_MAP | PR_STATUS | PR_STATE);
