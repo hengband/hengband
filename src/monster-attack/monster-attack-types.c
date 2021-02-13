@@ -177,4 +177,16 @@ const mbe_info_type mbe_info[NB_RBE_TYPE] = {
         60,
         GF_MISSILE,
     }, /* SUPERHURT */
+    {
+        5,
+        GF_MISSILE,
+    }, /* INERTIA */
+    {
+        5,
+        GF_MISSILE,
+    }, /* STUN */
+    {
+        0,
+        GF_NONE,
+    }, /* FLAVOR */
 };
