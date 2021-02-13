@@ -123,15 +123,15 @@ static bool check_mspell_non_stupid(player_type *target_ptr, msa_type *msa_ptr)
 static void set_mspell_list(msa_type *msa_ptr)
 {
     for (int k = 0; k < 32; k++)
-        if (msa_ptr->f4 & (1L << k))
+        if (msa_ptr->f4 & (1UL << k))
             msa_ptr->mspells[msa_ptr->num++] = k + RF4_SPELL_START;
 
     for (int k = 0; k < 32; k++)
-        if (msa_ptr->f5 & (1L << k))
+        if (msa_ptr->f5 & (1UL << k))
             msa_ptr->mspells[msa_ptr->num++] = k + RF5_SPELL_START;
 
     for (int k = 0; k < 32; k++)
-        if (msa_ptr->f6 & (1L << k))
+        if (msa_ptr->f6 & (1UL << k))
             msa_ptr->mspells[msa_ptr->num++] = k + RF6_SPELL_START;
 }
 
@@ -293,7 +293,7 @@ static void remember_mspell(msa_type *msa_ptr)
         return;
 
     if (msa_ptr->thrown_spell < 32 * 4) {
-        msa_ptr->r_ptr->r_flags4 |= (1L << (msa_ptr->thrown_spell - 32 * 3));
+        msa_ptr->r_ptr->r_flags4 |= (1UL << (msa_ptr->thrown_spell - 32 * 3));
         if (msa_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
             msa_ptr->r_ptr->r_cast_spell++;
 
@@ -301,7 +301,7 @@ static void remember_mspell(msa_type *msa_ptr)
     }
     
     if (msa_ptr->thrown_spell < 32 * 5) {
-        msa_ptr->r_ptr->r_flags5 |= (1L << (msa_ptr->thrown_spell - 32 * 4));
+        msa_ptr->r_ptr->r_flags5 |= (1UL << (msa_ptr->thrown_spell - 32 * 4));
         if (msa_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
             msa_ptr->r_ptr->r_cast_spell++;
 
@@ -309,7 +309,7 @@ static void remember_mspell(msa_type *msa_ptr)
     }
     
     if (msa_ptr->thrown_spell < 32 * 6) {
-        msa_ptr->r_ptr->r_flags6 |= (1L << (msa_ptr->thrown_spell - 32 * 5));
+        msa_ptr->r_ptr->r_flags6 |= (1UL << (msa_ptr->thrown_spell - 32 * 5));
         if (msa_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
             msa_ptr->r_ptr->r_cast_spell++;
     }

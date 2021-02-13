@@ -119,7 +119,7 @@ errr grab_one_flag(u32b *flags, concptr names[], concptr what)
 {
     for (int i = 0; i < 32; i++) {
         if (streq(what, names[i])) {
-            *flags |= (1L << i);
+            *flags |= (1UL << i);
             return 0;
         }
     }

@@ -44,7 +44,7 @@ static int pick_vault_type(floor_type *floor_ptr, vault_aux_type *l_ptr, BIT_FLA
         if (n_ptr->level > floor_ptr->dun_level)
             continue;
 
-        if (!(allow_flag_mask & (1L << count)))
+        if (!(allow_flag_mask & (1UL << count)))
             continue;
 
         total += n_ptr->chance * MAX_DEPTH / (MIN(floor_ptr->dun_level, MAX_DEPTH - 1) - n_ptr->level + 5);
@@ -58,7 +58,7 @@ static int pick_vault_type(floor_type *floor_ptr, vault_aux_type *l_ptr, BIT_FLA
         if (n_ptr->level > floor_ptr->dun_level)
             continue;
 
-        if (!(allow_flag_mask & (1L << count)))
+        if (!(allow_flag_mask & (1UL << count)))
             continue;
 
         total += n_ptr->chance * MAX_DEPTH / (MIN(floor_ptr->dun_level, MAX_DEPTH - 1) - n_ptr->level + 5);

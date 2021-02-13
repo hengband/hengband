@@ -20,14 +20,14 @@
  * @param FLG フラグ位置(ビット)
  * @return なし
  */
-#define ADD_BAR_FLAG(FLG) (bar_flags[FLG / 32] |= (1L << (FLG % 32)))
+#define ADD_BAR_FLAG(FLG) (bar_flags[FLG / 32] |= (1UL << (FLG % 32)))
 
 /*!
  * @brief 32ビット変数配列の指定位置のビットフラグが1かどうかを返す。
  * @param FLG フラグ位置(ビット)
  * @return 1ならば0以外を返す
  */
-#define IS_BAR_FLAG(FLG) (bar_flags[FLG / 32] & (1L << (FLG % 32)))
+#define IS_BAR_FLAG(FLG) (bar_flags[FLG / 32] & (1UL << (FLG % 32)))
 
 /*!
  * @brief プレイヤー能力値を描画する / Print character stat in given row, column

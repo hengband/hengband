@@ -57,19 +57,19 @@ int lore_do_probe(player_type *player_ptr, MONRACE_IDX r_idx)
     r_ptr->r_cast_spell = MAX_UCHAR;
 
     for (int i = 0; i < 32; i++) {
-        if (!(r_ptr->r_flags1 & (1L << i)) && (r_ptr->flags1 & (1L << i)))
+        if (!(r_ptr->r_flags1 & (1UL << i)) && (r_ptr->flags1 & (1UL << i)))
             n++;
-        if (!(r_ptr->r_flags2 & (1L << i)) && (r_ptr->flags2 & (1L << i)))
+        if (!(r_ptr->r_flags2 & (1UL << i)) && (r_ptr->flags2 & (1UL << i)))
             n++;
-        if (!(r_ptr->r_flags3 & (1L << i)) && (r_ptr->flags3 & (1L << i)))
+        if (!(r_ptr->r_flags3 & (1UL << i)) && (r_ptr->flags3 & (1UL << i)))
             n++;
-        if (!(r_ptr->r_flags4 & (1L << i)) && (r_ptr->flags4 & (1L << i)))
+        if (!(r_ptr->r_flags4 & (1UL << i)) && (r_ptr->flags4 & (1UL << i)))
             n++;
-        if (!(r_ptr->r_flags5 & (1L << i)) && (r_ptr->a_ability_flags1 & (1L << i)))
+        if (!(r_ptr->r_flags5 & (1UL << i)) && (r_ptr->a_ability_flags1 & (1UL << i)))
             n++;
-        if (!(r_ptr->r_flags6 & (1L << i)) && (r_ptr->a_ability_flags2 & (1L << i)))
+        if (!(r_ptr->r_flags6 & (1UL << i)) && (r_ptr->a_ability_flags2 & (1UL << i)))
             n++;
-        if (!(r_ptr->r_flagsr & (1L << i)) && (r_ptr->flagsr & (1L << i)))
+        if (!(r_ptr->r_flagsr & (1UL << i)) && (r_ptr->flagsr & (1UL << i)))
             n++;
     }
 

@@ -371,10 +371,10 @@ static void dump_aux_race_history(player_type *creature_ptr, FILE *fff)
         if (creature_ptr->start_race == i)
             continue;
         if (i < 32) {
-            if (!(creature_ptr->old_race1 & 1L << i))
+            if (!(creature_ptr->old_race1 & 1UL << i))
                 continue;
         } else {
-            if (!(creature_ptr->old_race2 & 1L << (i - 32)))
+            if (!(creature_ptr->old_race2 & 1UL << (i - 32)))
                 continue;
         }
 
@@ -397,7 +397,7 @@ static void dump_aux_realm_history(player_type *creature_ptr, FILE *fff)
 
     fputc('\n', fff);
     for (int i = 0; i < MAX_MAGIC; i++) {
-        if (!(creature_ptr->old_realm & 1L << i))
+        if (!(creature_ptr->old_realm & 1UL << i))
             continue;
         fprintf(fff, _("\n あなたはかつて%s魔法を使えた。", "\n You were able to use %s magic before."), realm_names[i + 1]);
     }

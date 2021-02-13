@@ -106,7 +106,7 @@ bool stop_hex_spell(player_type *caster_ptr)
         int n = sp[A2I(choice)];
 
         exe_spell(caster_ptr, REALM_HEX, n, SPELL_STOP);
-        casting_hex_flags(caster_ptr) &= ~(1L << n);
+        casting_hex_flags(caster_ptr) &= ~(1UL << n);
         casting_hex_num(caster_ptr)--;
     }
 
@@ -319,6 +319,6 @@ bool multiply_barrier(player_type *caster_ptr, MONSTER_IDX m_idx)
     return TRUE;
 }
 
-bool hex_spelling(player_type *caster_ptr, int hex) { return (caster_ptr->realm1 == REALM_HEX) && (caster_ptr->magic_num1[0] & (1L << (hex))); }
+bool hex_spelling(player_type *caster_ptr, int hex) { return (caster_ptr->realm1 == REALM_HEX) && (caster_ptr->magic_num1[0] & (1UL << (hex))); }
 
 bool hex_spelling_any(player_type *caster_ptr) { return (caster_ptr->realm1 == REALM_HEX) && (caster_ptr->magic_num1[0] != 0); }

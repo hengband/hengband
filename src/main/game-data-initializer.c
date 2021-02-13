@@ -72,25 +72,25 @@ errr init_other(player_type *player_ptr)
         if (!option_info[i].o_var)
             continue;
 
-        option_mask[os] |= (1L << ob);
+        option_mask[os] |= (1UL << ob);
         if (option_info[i].o_norm)
-            option_flag[os] |= (1L << ob);
+            option_flag[os] |= (1UL << ob);
         else
-            option_flag[os] &= ~(1L << ob);
+            option_flag[os] &= ~(1UL << ob);
     }
 
     for (int n = 0; n < 8; n++)
         for (int i = 0; i < 32; i++)
             if (window_flag_desc[i])
-                window_mask[n] |= (1L << i);
+                window_mask[n] |= (1UL << i);
 
     /*
      *  Set the "default" window flags
      *  Window 1 : Display messages
      *  Window 2 : Display inven/equip
      */
-    window_flag[1] = 1L << A_MAX;
-    window_flag[2] = 1L << 0;
+    window_flag[1] = 1UL << A_MAX;
+    window_flag[2] = 1UL << 0;
     (void)format("%s (%s).", "Mr.Hoge", MAINTAINER);
     return 0;
 }

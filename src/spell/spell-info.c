@@ -311,13 +311,13 @@ void print_spells(player_type *caster_ptr, SPELL_IDX target_spell, SPELL_IDX *sp
         } else if ((use_realm != caster_ptr->realm1) && (use_realm != caster_ptr->realm2)) {
             comment = _("未知", "unknown");
             line_attr = TERM_L_BLUE;
-        } else if ((use_realm == caster_ptr->realm1) ? ((caster_ptr->spell_forgotten1 & (1L << spell))) : ((caster_ptr->spell_forgotten2 & (1L << spell)))) {
+        } else if ((use_realm == caster_ptr->realm1) ? ((caster_ptr->spell_forgotten1 & (1UL << spell))) : ((caster_ptr->spell_forgotten2 & (1UL << spell)))) {
             comment = _("忘却", "forgotten");
             line_attr = TERM_YELLOW;
-        } else if (!((use_realm == caster_ptr->realm1) ? (caster_ptr->spell_learned1 & (1L << spell)) : (caster_ptr->spell_learned2 & (1L << spell)))) {
+        } else if (!((use_realm == caster_ptr->realm1) ? (caster_ptr->spell_learned1 & (1UL << spell)) : (caster_ptr->spell_learned2 & (1UL << spell)))) {
             comment = _("未知", "unknown");
             line_attr = TERM_L_BLUE;
-        } else if (!((use_realm == caster_ptr->realm1) ? (caster_ptr->spell_worked1 & (1L << spell)) : (caster_ptr->spell_worked2 & (1L << spell)))) {
+        } else if (!((use_realm == caster_ptr->realm1) ? (caster_ptr->spell_worked1 & (1UL << spell)) : (caster_ptr->spell_worked2 & (1UL << spell)))) {
             comment = _("未経験", "untried");
             line_attr = TERM_L_GREEN;
         }
