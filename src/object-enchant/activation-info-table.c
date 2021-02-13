@@ -59,7 +59,7 @@ const activation_type activation_info[MAX_ACTIVATION_TYPE] = {
     { "GENOCIDE", ACT_GENOCIDE, 50, 10000, { 500, 0 }, _("抹殺", "genocide") },
     { "MASS_GENO", ACT_MASS_GENO, 50, 10000, { 1000, 0 }, _("周辺抹殺", "mass genocide") },
     { "SCARE_AREA", ACT_SCARE_AREA, 20, 2500, { 20, 0 }, _("モンスター恐慌", "frighten monsters") },
-    { "AGGRAVATE", ACT_AGGRAVATE, 0, 100, { 0, 0 }, _("モンスターを怒らせる", "aggravete monsters") },
+    { "AGGRAVATE", ACT_AGGRAVATE, 0, 100, { 0, 0 }, _("モンスターを怒らせる", "aggravate monsters") },
 
     { "CHARM_ANIMAL", ACT_CHARM_ANIMAL, 40, 7500, { 200, 0 }, _("動物魅了", "charm animal") },
     { "CHARM_UNDEAD", ACT_CHARM_UNDEAD, 40, 10000, { 333, 0 }, _("アンデッド従属", "enslave undead") },
