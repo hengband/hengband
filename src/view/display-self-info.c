@@ -78,7 +78,7 @@ void display_mimic_race_ability(player_type *creature_ptr, self_info_type *self_
     switch (creature_ptr->mimic_form) {
     case MIMIC_DEMON:
     case MIMIC_DEMON_LORD:
-        sprintf(self_ptr->plev_buf, _("あなたは %d ダメージの地獄か火炎のブレスを吐くことができる。(%d MP)", "You can nether breathe, dam. %d (cost %d)."),
+        sprintf(self_ptr->plev_buf, _("あなたは %d ダメージの地獄か火炎のブレスを吐くことができる。(%d MP)", "You can breathe nether, dam. %d (cost %d)."),
             3 * creature_ptr->lev, 10 + creature_ptr->lev / 3);
 
         self_ptr->info[self_ptr->line++] = self_ptr->plev_buf;
