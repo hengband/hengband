@@ -6638,8 +6638,7 @@ F:FEMALE |
 F:RAND_50 | DROP_1D2 | 
 F:INVISIBLE | COLD_BLOOD | TAKE_ITEM | PASS_WALL | CAN_FLY |
 F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH | NO_CONF | NO_SLEEP
-S:1_IN_15 | 
-S:TPORT | DRAIN_MANA
+S:1_IN_15 | TPORT | DRAIN_MANA | SHRIEK
 D:$It is a ghostly woman's form that wails mournfully.
 D:それは悲しげに泣き叫ぶ、女性の姿をしたゴーストだ。
 
