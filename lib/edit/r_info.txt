@@ -6638,8 +6638,7 @@ F:FEMALE |
 F:RAND_50 | DROP_1D2 | 
 F:INVISIBLE | COLD_BLOOD | TAKE_ITEM | PASS_WALL | CAN_FLY |
 F:EVIL | UNDEAD | IM_COLD | IM_POIS | RES_NETH | NO_CONF | NO_SLEEP
-S:1_IN_15 | 
-S:TPORT | DRAIN_MANA
+S:1_IN_15 | TPORT | DRAIN_MANA | SHRIEK
 D:$It is a ghostly woman's form that wails mournfully.
 D:それは悲しげに泣き叫ぶ、女性の姿をしたゴーストだ。
 
@@ -20216,7 +20215,7 @@ N:998:黒チォコヴォ
 E:Black Chiokovo
 G:B:D
 I:115:25d20:20:45:20
-W:25:7:0:250:30000:1274
+W:25:7:0:250:10000:1274
 B:CLAW:HURT:2d6
 B:CLAW:HURT:2d6
 B:BITE:HURT:2d6
@@ -22794,7 +22793,7 @@ D:あなたの冒険は間もなく打ち切られるだろう。
 N:1139:遍在する意識『岩倉玲音』
 E:lain, the Master of Wired
 G:p:u
-I:135:130d50:60:100:5
+I:130:130d50:60:100:5
 W:80:3:0:45000:0:0
 B:TOUCH:LOSE_ALL:8d7
 B:TOUCH:UN_BONUS:8d7
@@ -23104,7 +23103,7 @@ D:$It is a extra large bubble that makes an weird movement.
 D:$  You must decide whether running away or squashing them all!
 D:不気味な動きをする巨大な泡だ。逃げるか潰すか二つに一つだ！
 
-N:1155:二週目の小さな泡
+N:1155:二周目の小さな泡
 E:Small aqua illusion in 2nd lap
 G:j:b
 I:120:20d20:10:50:10
@@ -23149,7 +23148,7 @@ D:$  When it is crushed, it becomes a middle bubble.
 D:不気味な動きをして撃ち返してくる大きな泡だ。潰しても中々なくならない。
 
 # 倒すと大きな泡×4に分裂する
-N:1158:二週目の特大の泡
+N:1158:二周目の特大の泡
 E:Extra large aqua illusion in 2nd lap
 G:j:b
 I:120:25d25:10:50:10
@@ -24108,7 +24107,7 @@ D:それはあなたの実力を十分に認めている。
 N:1209:世界を喰らうもの『アルドゥイン』
 E:Alduin, the World Eater
 G:D:v
-I:125:70d100:45:150:10
+I:125:90d100:45:180:10
 W:73:2:0:38000:0:0
 B:BITE:HURT:15d9
 B:CRUSH:HURT:15d9
@@ -24117,8 +24116,8 @@ B:CRUSH:HURT:1d89
 F:UNIQUE | FORCE_MAXHP | DROP_CORPSE | DROP_SKELETON | ATTR_MULTI
 F:DROP_3D2 | DROP_4D2 | DROP_GREAT | ONLY_ITEM | CAN_FLY | EVIL
 F:IM_COLD | IM_FIRE | IM_ELEC | RES_SOUN
-F:BASH_DOOR | KILL_BODY | DRAGON | NO_CONF | NO_SLEEP | NO_STUN | RIDING
-S:1_IN_3 | SCARE | BLINK | S_KIN | ANIM_DEAD
+F:BASH_DOOR | KILL_BODY | DRAGON | NO_CONF | NO_SLEEP | NO_FEAR | RIDING
+S:1_IN_3 | SHRIEK | S_KIN | ANIM_DEAD
 S:BR_ELEC | BR_FIRE | BR_COLD | BR_SOUN | BR_WALL | BR_MANA
 D:$The first dragon created in one of the plural worlds.
 D:$  It eats people's souls, destroys everything and destroys all dimensions.
@@ -24431,7 +24430,7 @@ I:115:22d22:15:70:50
 W:33:3:0:700:0:0
 B:SHOOT:HURT:11d9
 B:SLASH:POISON:14d10
-F:FORCE_MAXHP | EVIL | DROP_CORPSE | DROP_SKELETON | BASH_DOOR | POWERFUL
+F:FORCE_MAXHP | EVIL | DROP_CORPSE | DROP_SKELETON | BASH_DOOR
 F:DROP_60 | DROP_90 | DROP_1D2 | ONLY_ITEM | ESCORT
 F:SMART | IM_POIS | RES_LITE | RES_DARK
 S:1_IN_8 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD | BLIND
@@ -24560,7 +24559,7 @@ N:1237:バーゲスト
 E:Barghest
 G:C:G
 I:115:25d23:30:45:15
-W:23:1:0:350:0:0
+W:23:2:0:350:0:0
 B:BITE:FIRE:6d5
 B:BITE:FIRE:6d5
 B:CLAW:FIRE:6d5
@@ -24593,8 +24592,8 @@ D:人々の私欲と恐怖が生み出した幻影は、彼ら自身に牙を向
 N:1239:惑星生命体『ソラリス』
 E:Solaris, the planet life
 G:j:G
-I:120:50d40:50:90:5
-W:42:4:0:6000:0:0
+I:125:60d100:50:90:5
+W:70:4:0:6000:0:0
 B:CRAWL:HURT:11d11
 B:ENGULF:HURT:11d11
 B:GAZE:HURT:11d11
@@ -24841,7 +24840,7 @@ D:それは毒針を持っている。
 N:1252:ランゴスタ
 E:Vespoid
 G:I:U
-I:125:50d3:10:15:20
+I:120:50d3:20:15:20
 W:17:2:0:50:0:0
 B:STING:PARALYZE:3d3
 B:CRUSH:PARALYZE:3d4
@@ -24854,7 +24853,7 @@ D:突然変異で巨大化した蜂の様な虫。腹部にマヒ性の毒針を
 N:1253:女王虫『クイーンランゴスタ』
 E:Vespoid Queen
 G:I:u
-I:124:120d10:10:80:20
+I:120:120d10:20:80:20
 W:34:4:0:1000:0:0
 B:STING:PARALYZE:3d10
 B:STING:PARALYZE:3d10
@@ -25194,7 +25193,7 @@ D:瑞々しい体からは汁が噴き出す。
 N:1271:吸魂鬼
 E:Dementor
 G:G:D
-I:120:22d202:10:300:50
+I:120:22d202:20:300:50
 W:96:13:0:23000:0:0
 B:GAZE:TERRIFY:10d10
 B:TOUCH:COLD:10d10
@@ -25250,18 +25249,16 @@ D:ダンジョンを照らす光をすべてキャッチし吸い尽くすのが
 N:1274:赤チォコヴォ
 E:Red Chiokovo
 G:B:r
-I:120:20d100:25:100:30
-W:80:10:0:10000:0:0
-B:CLAW:HURT:4d10
-B:CLAW:HURT:4d10
-B:CRUSH:HURT:6d12
-B:CRUSH:HURT:6d12
-F:DROP_SKELETON | DROP_CORPSE | FORCE_MAXHP | RIDING
-F:ONLY_ITEM | DROP_90 | DROP_2D2 | DROP_GOOD | POWERFUL
-F:IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS
-F:RES_LITE | RES_CHAO | RES_INER | NO_STUN | NO_CONF | NO_SLEEP
-F:ANIMAL | CAN_SWIM | FRIENDS
-S:1_IN_3 | BA_FIRE | BA_LITE | HEAL
+I:120:20d55:20:100:30
+W:43:10:0:3000:0:0
+B:CLAW:HURT:4d8
+B:CLAW:HURT:4d8
+B:CRUSH:HURT:6d10
+B:CRUSH:HURT:6d10
+F:ANIMAL | CAN_SWIM | DROP_SKELETON | DROP_CORPSE | FORCE_MAXHP | RIDING
+F:ONLY_ITEM | DROP_90 | DROP_2D2 | DROP_GOOD
+F:IM_FIRE | RES_LITE | RES_CHAO | RES_INER | NO_CONF | NO_SLEEP
+S:1_IN_5 | BA_FIRE | BA_LITE | HEAL | HOLD | CONF | BLIND
 
 N:1275:コティングリーの妖精
 E:Cottingley Fairies
@@ -25279,7 +25276,7 @@ D:たった数枚の古ぼけた写真が、この妖精がかつて実在した
 N:1276:点『P』
 E:Point P
 G:.:v
-I:140:10d100:30:50:110
+I:140:10d100:100:50:10
 W:39:5:0:3800:0:0
 B:SPORE:LOSE_ALL:2d5
 B:SPORE:LOSE_ALL:2d5
