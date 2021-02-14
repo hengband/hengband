@@ -23305,7 +23305,7 @@ F:UNIQUE | FORCE_MAXHP | MALE | GOOD | ANIMAL
 F:DROP_90 | DROP_1D2 | DROP_GOOD | RES_SOUN | NO_STUN
 S:1_IN_6 | SHOOT
 D:$He is the eldest son of the three brothers,
-D:$ and be aware the shot by his cross bow!
+D:$ and be wary of his crossbow shots!
 D:三兄弟の長男で、クロスボウからの一撃に要注意だ！
 
 N:1169:怪物の太母『エキドナ』
