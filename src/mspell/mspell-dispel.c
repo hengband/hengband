@@ -93,7 +93,7 @@ static void dispel_player(player_type *creature_ptr)
         creature_ptr->action = ACTION_NONE;
         creature_ptr->update |= (PU_BONUS | PU_HP | PU_MONSTERS);
         creature_ptr->redraw |= (PR_MAP | PR_STATUS | PR_STATE);
-        creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+        creature_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
         creature_ptr->energy_need += ENERGY_NEED();
     }
 }

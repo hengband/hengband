@@ -437,7 +437,7 @@ bool hp_player(player_type *creature_ptr, int num)
         }
 
         creature_ptr->redraw |= (PR_HP);
-        creature_ptr->window |= (PW_PLAYER);
+        creature_ptr->window_flags |= (PW_PLAYER);
         if (num < 5) {
             msg_print(_("少し気分が良くなった。", "You feel a little better."));
         } else if (num < 15) {

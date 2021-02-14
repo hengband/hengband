@@ -17,7 +17,7 @@ const concptr artifact_bias_name[MAX_BIAS] = {
     _("耐久", "CON"),
     _("魅力", "CHA"),
     _("混沌", "Chaos"),
-    _("プリースト", "Pristly"),
+    _("プリースト", "Priestly"),
     _("死霊", "Necromantic"),
     _("法", "Law"),
     _("盗賊", "Rogue"),

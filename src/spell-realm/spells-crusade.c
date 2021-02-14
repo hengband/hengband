@@ -167,7 +167,7 @@ bool set_tim_eyeeye(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
         }
     } else {
         if (creature_ptr->tim_eyeeye) {
-            msg_print(_("懲罰を執行することができなくなった。", "You no longer feel like a keeper."));
+            msg_print(_("懲罰を執行することができなくなった。", "You lost your aura of retribution."));
             notice = TRUE;
         }
     }

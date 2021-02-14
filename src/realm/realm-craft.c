@@ -435,7 +435,7 @@ concptr do_craft_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 if (summon_specific(caster_ptr, -1, caster_ptr->y, caster_ptr->x, plev, SUMMON_GOLEM, PM_FORCE_PET)) {
                     msg_print(_("ゴーレムを作った。", "You make a golem."));
                 } else {
-                    msg_print(_("うまくゴーレムを作れなかった。", "No Golems arrive."));
+                    msg_print(_("うまくゴーレムを作れなかった。", "You couldn't make a golem."));
                 }
             }
         }
@@ -464,7 +464,7 @@ concptr do_craft_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
         if (name)
             return _("装備無力化", "Remove Enchantment");
         if (desc)
-            return _("武器・防具にかけられたあらゆる魔力を完全に解除する。", "Removes all magics completely from any weapon or armor.");
+            return _("武器・防具にかけられたあらゆる魔力を完全に解除する。", "Completely removes all magics from any weapon or armor.");
 
         {
             if (cast) {
@@ -478,7 +478,7 @@ concptr do_craft_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
         if (name)
             return _("呪い粉砕", "Remove All Curse");
         if (desc)
-            return _("アイテムにかかった強力な呪いを解除する。", "Removes normal and heavy curse from equipped items.");
+            return _("アイテムにかかった強力な呪いを解除する。", "Removes normal and heavy curses from equipped items.");
 
         {
             if (cast)

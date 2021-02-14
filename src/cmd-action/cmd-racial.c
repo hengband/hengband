@@ -309,5 +309,5 @@ void do_cmd_racial_power(player_type *creature_ptr)
         return;
 
     creature_ptr->redraw |= PR_HP | PR_MANA;
-    creature_ptr->window |= PW_PLAYER | PW_SPELL;
+    creature_ptr->window_flags |= PW_PLAYER | PW_SPELL;
 }

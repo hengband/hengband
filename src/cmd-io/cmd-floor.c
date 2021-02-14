@@ -38,7 +38,7 @@ void do_cmd_target(player_type *creature_ptr)
  */
 void do_cmd_look(player_type *creature_ptr)
 {
-    creature_ptr->window |= PW_MONSTER_LIST;
+    creature_ptr->window_flags |= PW_MONSTER_LIST;
     handle_stuff(creature_ptr);
     if (target_set(creature_ptr, TARGET_LOOK))
         msg_print(_("ターゲット決定。", "Target Selected."));
@@ -92,6 +92,6 @@ void do_cmd_locate(player_type *creature_ptr)
     verify_panel(creature_ptr);
     creature_ptr->update |= PU_MONSTERS;
     creature_ptr->redraw |= PR_MAP;
-    creature_ptr->window |= PW_OVERHEAD | PW_DUNGEON;
+    creature_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
     handle_stuff(creature_ptr);
 }

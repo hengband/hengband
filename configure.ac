@@ -45,6 +45,7 @@ AC_SUBST(DEFAULT_VAR_PATH)
 
 dnl Checks for programs.
 AC_PROG_CC
+PKG_PROG_PKG_CONFIG
 
 AC_ARG_ENABLE(japanese,
 [  --disable-japanese      build english version], use_japanese=no, [AC_DEFINE(JP, 1, [Enable Japanese]) AC_DEFINE(EUC, 1, [Use Extended Unix Code])])

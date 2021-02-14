@@ -1,10 +1,12 @@
 ﻿#include "info-reader/race-info-tokens-table.h"
+#include "monster-attack/monster-attack-effect.h"
+#include "monster-attack/monster-attack-types.h"
 
 /*!
   * モンスターの打撃手段トークンの定義 /
   * Monster Blow Methods
   */
-concptr r_info_blow_method[NUM_R_BLOW_METHOD] = {
+concptr r_info_blow_method[NB_RBM_TYPE + 1] = {
 	"",
 	"HIT",
 	"TOUCH",
@@ -38,7 +40,7 @@ concptr r_info_blow_method[NUM_R_BLOW_METHOD] = {
  * モンスターの打撃属性トークンの定義 /
  * Monster Blow Effects
  */
-concptr r_info_blow_effect[NUM_R_BLOW_EFFECT] = {
+concptr r_info_blow_effect[NB_RBE_TYPE + 1] = {
 	"",
 	"HURT",
 	"POISON",
@@ -75,6 +77,7 @@ concptr r_info_blow_effect[NUM_R_BLOW_EFFECT] = {
 	"SUPERHURT",
 	"INERTIA",
 	"STUN",
+	"FLAVOR",
 	NULL
 };
 
@@ -93,7 +96,7 @@ concptr r_info_flags1[NUM_R_FLAGS_1] = {
 	"ATTR_MULTI",
 	"FORCE_DEPTH",
 	"FORCE_MAXHP",
-	"FORCE_SLEEP",
+	"PREVENT_SUDDEN_MAGIC",
 	"FORCE_EXTRA",
 	"ATTR_SEMIRAND",
 	"FRIENDS",

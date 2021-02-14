@@ -314,7 +314,7 @@ static void apply_damage_negative_effect(player_attack_type *pa_ptr, bool is_zan
     }
 
     if (is_zantetsu_nullified) {
-        msg_print(_("こんな軟らかいものは切れん！", "You cannot cut such a elastic thing!"));
+        msg_print(_("こんな軟らかいものは切れん！", "You cannot cut such an elastic thing!"));
         pa_ptr->attack_damage = 0;
     }
 

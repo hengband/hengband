@@ -60,7 +60,7 @@ static bool check_destory_item(player_type *creature_ptr, destroy_type *destroy_
     sprintf(destroy_ptr->out_val, _("本当に%sを壊しますか? [y/n/Auto]", "Really destroy %s? [y/n/Auto]"), destroy_ptr->o_name);
     msg_print(NULL);
     message_add(destroy_ptr->out_val);
-    creature_ptr->window |= PW_MESSAGE;
+    creature_ptr->window_flags |= PW_MESSAGE;
     handle_stuff(creature_ptr);
     while (TRUE) {
         prt(destroy_ptr->out_val, 0, 0);

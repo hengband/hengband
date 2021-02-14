@@ -218,7 +218,7 @@ void print_tomb(player_type *dead_ptr)
     term_clear();
     char buf[1024];
     read_dead_file(buf, sizeof(buf));
-    concptr p = (current_world_ptr->total_winner || (dead_ptr->lev > PY_MAX_LEVEL)) ? _("偉大なる者", "Magnificant")
+    concptr p = (current_world_ptr->total_winner || (dead_ptr->lev > PY_MAX_LEVEL)) ? _("偉大なる者", "Magnificent")
                                                                                     : player_title[dead_ptr->pclass][(dead_ptr->lev - 1) / 5];
 
     center_string(buf, dead_ptr->name);

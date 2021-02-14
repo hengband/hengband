@@ -484,7 +484,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
         if (name)
             return _("防具呪縛", "Curse armor");
         if (desc)
-            return _("装備している防具に呪いをかける。", "Curse a piece of armour that you wielding.");
+            return _("装備している防具に呪いをかける。", "Curse a piece of armour that you are wielding.");
         if (cast) {
             OBJECT_IDX item;
             concptr q, s;
@@ -620,9 +620,9 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
         if (name)
             return _("反増殖結界", "Anti multiply barrier");
         if (desc)
-            return _("その階の増殖するモンスターの増殖を阻止する。", "Obstructs all multiplying by monsters in entire floor.");
+            return _("その階の増殖するモンスターの増殖を阻止する。", "Obstructs all multiplying by monsters on entire floor.");
         if (cast) {
-            msg_print(_("増殖を阻止する呪いをかけた。", "You feel anyone can not already multiply."));
+            msg_print(_("増殖を阻止する呪いをかけた。", "You feel anyone can not multiply."));
         }
         break;
 

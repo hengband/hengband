@@ -28,6 +28,8 @@ const option_type option_info[MAX_OPTION_INFO] = {
 
     { &auto_more, FALSE, OPT_PAGE_INPUT, 2, 6, "auto_more", _("キー待ちしないで連続でメッセージを表示する", "Automatically clear '-more-' prompts") },
 
+    { &skip_more, FALSE, OPT_PAGE_INPUT, 2, 18, "skip_more", _("キー待ちしないで全てのメッセージを読み飛ばす", "Automatically skip all messages.") },
+
     { &command_menu, TRUE, OPT_PAGE_INPUT, 2, 7, "command_menu", _("メニューによりコマンド選択を有効にする", "Enable command selection menu") },
 
     { &other_query_flag, FALSE, OPT_PAGE_INPUT, 0, 2, "other_query_flag", _("床上のアイテムを使用するときに確認する", "Prompt for floor item selection") },
@@ -151,6 +153,8 @@ const option_type option_info[MAX_OPTION_INFO] = {
 
 #ifdef WORLD_SCORE
     { &send_score, TRUE, OPT_PAGE_GAMEPLAY, 4, 6, "send_score", _("スコアサーバにスコアを送る", "Send score dump to the world score server") },
+#else
+    { &send_score, FALSE, OPT_PAGE_HIDE, 4, 6, "send_score", _("スコアサーバにスコアを送る", "Send score dump to the world score server") },
 #endif
 
     { &auto_debug_save, TRUE, OPT_PAGE_GAMEPLAY, 4, 7, "auto_debug_save", _("デバッグ用セーブデータを自動生成する", "Create a debug save automatically") },

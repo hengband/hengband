@@ -37,7 +37,7 @@ void check_music(player_type *caster_ptr)
     MANA_POINT need_mana = mod_need_mana(caster_ptr, s_ptr->smana, spell, REALM_MUSIC);
     u32b need_mana_frac = 0;
 
-    s64b_RSHIFT(need_mana, need_mana_frac, 1);
+    s64b_rshift(&need_mana, &need_mana_frac, 1);
     if (s64b_cmp(caster_ptr->csp, caster_ptr->csp_frac, need_mana, need_mana_frac) < 0) {
         stop_singing(caster_ptr);
         return;
@@ -48,11 +48,11 @@ void check_music(player_type *caster_ptr)
         if (INTERUPTING_SONG_EFFECT(caster_ptr)) {
             SINGING_SONG_EFFECT(caster_ptr) = INTERUPTING_SONG_EFFECT(caster_ptr);
             INTERUPTING_SONG_EFFECT(caster_ptr) = MUSIC_NONE;
-            msg_print(_("歌を再開した。", "You restart singing."));
+            msg_print(_("歌を再開した。", "You resume singing."));
             caster_ptr->action = ACTION_SING;
             caster_ptr->update |= (PU_BONUS | PU_HP | PU_MONSTERS);
             caster_ptr->redraw |= (PR_MAP | PR_STATUS | PR_STATE);
-            caster_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+            caster_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
         }
     }
 

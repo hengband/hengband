@@ -68,7 +68,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
         if (name)
             return _("トラップ/ドア破壊", "Trap / Door Destruction");
         if (desc)
-            return _("隣接する罠と扉を破壊する。", "Destroys all traps in adjacent squares.");
+            return _("隣接する罠と扉を破壊する。", "Destroys all doors and traps in adjacent squares.");
 
         {
             POSITION rad = 1;

@@ -238,7 +238,7 @@ bool get_check_strict(player_type *player_ptr, concptr prompt, BIT_FLAGS mode)
 {
     char buf[80];
     if (auto_more) {
-        player_ptr->window |= PW_MESSAGE;
+        player_ptr->window_flags |= PW_MESSAGE;
         handle_stuff(player_ptr);
         num_more = 0;
     }
@@ -261,7 +261,7 @@ bool get_check_strict(player_type *player_ptr, concptr prompt, BIT_FLAGS mode)
     prt(buf, 0, 0);
     if (!(mode & CHECK_NO_HISTORY) && player_ptr->playing) {
         message_add(buf);
-        player_ptr->window |= (PW_MESSAGE);
+        player_ptr->window_flags |= (PW_MESSAGE);
         handle_stuff(player_ptr);
     }
 

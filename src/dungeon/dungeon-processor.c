@@ -93,7 +93,7 @@ void process_dungeon(player_type *player_ptr, bool load_game)
     msg_erase();
 
     current_world_ptr->character_xtra = TRUE;
-    player_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_MONSTER | PW_OVERHEAD | PW_DUNGEON);
+    player_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_MONSTER | PW_OVERHEAD | PW_DUNGEON);
     player_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_EQUIPPY | PR_MAP);
     player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS | PU_VIEW | PU_LITE | PU_MON_LITE | PU_TORCH | PU_MONSTERS | PU_DISTANCE | PU_FLOW);
     handle_stuff(player_ptr);
@@ -102,7 +102,7 @@ void process_dungeon(player_type *player_ptr, bool load_game)
     player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
     player_ptr->update |= (PU_COMBINE | PU_REORDER);
     handle_stuff(player_ptr);
-    if (need_term_fresh(player_ptr))
+    if (fresh_after)
         term_fresh();
 
     if (quest_num

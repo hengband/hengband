@@ -72,7 +72,7 @@ bool identify_item(player_type *owner_ptr, object_type *o_ptr)
     o_ptr->marked |= OM_TOUCHED;
 
     owner_ptr->update |= (PU_BONUS | PU_COMBINE | PU_REORDER);
-    owner_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+    owner_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
     strcpy(record_o_name, o_name);
     record_turn = current_world_ptr->game_turn;

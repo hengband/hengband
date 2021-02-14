@@ -6,6 +6,7 @@
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
 #include "game-option/birth-options.h"
+#include "game-option/map-screen-options.h"
 #include "grid/grid.h"
 #include "io/cursor.h"
 #include "io/input-key-acceptor.h"
@@ -375,7 +376,7 @@ bool probing(player_type *caster_ptr)
         prt(buf, 0, 0);
 
         message_add(buf);
-        caster_ptr->window |= (PW_MESSAGE);
+        caster_ptr->window_flags |= (PW_MESSAGE);
         handle_stuff(caster_ptr);
         move_cursor_relative(m_ptr->fy, m_ptr->fx);
         inkey();
@@ -396,7 +397,7 @@ bool probing(player_type *caster_ptr)
 
     Term->scr->cu = cu;
     Term->scr->cv = cv;
-    if (need_term_fresh(caster_ptr))
+    if (fresh_after)
         term_fresh();
 
     if (probe) {

@@ -73,7 +73,7 @@ static bool check_no_blow(player_type *target_ptr, monap_type *monap_ptr)
  * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
  * @return 攻撃続行ならばTRUE、打ち切りになったらFALSE
  */
-static bool check_monster_attack_terminated(player_type *target_ptr, monap_type *monap_ptr)
+static bool check_monster_continuous_attack(player_type *target_ptr, monap_type *monap_ptr)
 {
     if (!monster_is_valid(monap_ptr->m_ptr))
         return FALSE;
@@ -356,56 +356,96 @@ static void process_monster_attack_evasion(player_type *target_ptr, monap_type *
     }
 }
 
-static void increase_blow_type_seen(player_type *target_ptr, monap_type *monap_ptr)
+/*!
+ * @brief モンスターの打撃情報を蓄積させる
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
+ * @param ap_cnt モンスターの打撃 N回目
+ * @return なし
+ */
+static void increase_blow_type_seen(player_type *target_ptr, monap_type *monap_ptr, const int ap_cnt)
 {
+    // どの敵が何をしてきたか正しく認識できていなければならない。
     if (!is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr) || monap_ptr->do_silly_attack)
         return;
 
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
-    if (!monap_ptr->obvious && (monap_ptr->damage == 0) && (r_ptr->r_blows[monap_ptr->ap_cnt] <= 10))
+
+    // 非自明な類の打撃については、そのダメージが 0 ならば基本的に知識が増えない。
+    // ただし、既に一定以上の知識があれば常に知識が増える(何をされたのか察知できる)。
+    if (!monap_ptr->obvious && (monap_ptr->damage == 0) && (r_ptr->r_blows[ap_cnt] <= 10))
         return;
 
-    if (r_ptr->r_blows[monap_ptr->ap_cnt] < MAX_UCHAR)
-        r_ptr->r_blows[monap_ptr->ap_cnt]++;
+    if (r_ptr->r_blows[ap_cnt] < MAX_UCHAR)
+        r_ptr->r_blows[ap_cnt]++;
 }
 
+/*!
+ * @brief モンスターからプレイヤーへの打撃処理本体
+ * @return 打撃に反応してプレイヤーがその場から離脱したかどうか
+ */
 static bool process_monster_blows(player_type *target_ptr, monap_type *monap_ptr)
 {
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
-    for (monap_ptr->ap_cnt = 0; monap_ptr->ap_cnt < 4; monap_ptr->ap_cnt++) {
+
+    for (int ap_cnt = 0; ap_cnt < MAX_NUM_BLOWS; ap_cnt++) {
         monap_ptr->obvious = FALSE;
-        HIT_POINT power = 0;
         monap_ptr->damage = 0;
         monap_ptr->act = NULL;
-        monap_ptr->effect = r_ptr->blow[monap_ptr->ap_cnt].effect;
-        monap_ptr->method = r_ptr->blow[monap_ptr->ap_cnt].method;
-        monap_ptr->d_dice = r_ptr->blow[monap_ptr->ap_cnt].d_dice;
-        monap_ptr->d_side = r_ptr->blow[monap_ptr->ap_cnt].d_side;
+        monap_ptr->effect = r_ptr->blow[ap_cnt].effect;
+        monap_ptr->method = r_ptr->blow[ap_cnt].method;
+        monap_ptr->d_dice = r_ptr->blow[ap_cnt].d_dice;
+        monap_ptr->d_side = r_ptr->blow[ap_cnt].d_side;
 
-        if (!check_monster_attack_terminated(target_ptr, monap_ptr))
+        if (!check_monster_continuous_attack(target_ptr, monap_ptr))
             break;
+
+        // effect が RBE_NONE (無効値)になることはあり得ないはずだが、万一そう
+        // なっていたら単に攻撃を打ち切る。
+        // r_info.txt の "B:" トークンに effect 以降を書き忘れた場合が該当する。
+        if (monap_ptr->effect == RBE_NONE) {
+            plog("unexpected: monap_ptr->effect == RBE_NONE");
+            break;
+        }
 
         if (monap_ptr->method == RBM_SHOOT)
             continue;
 
-        power = mbe_info[monap_ptr->effect].power;
+        // フレーバーの打撃は必中扱い。それ以外は通常の命中判定を行う。
         monap_ptr->ac = target_ptr->ac + target_ptr->to_a;
-        if ((monap_ptr->effect == RBE_NONE)
-            || check_hit_from_monster_to_player(target_ptr, power, monap_ptr->rlev, monster_stunned_remaining(monap_ptr->m_ptr))) {
-            if (!process_monster_attack_hit(target_ptr, monap_ptr))
-                continue;
-            else
-                process_monster_attack_evasion(target_ptr, monap_ptr);
+        bool hit;
+        if (monap_ptr->effect == RBE_FLAVOR) {
+            hit = TRUE;
+        } else {
+            const int power = mbe_info[monap_ptr->effect].power;
+            hit = check_hit_from_monster_to_player(target_ptr, power, monap_ptr->rlev, monster_stunned_remaining(monap_ptr->m_ptr));
         }
 
-        increase_blow_type_seen(target_ptr, monap_ptr);
-        check_fall_off_horse(target_ptr, monap_ptr);
-        if (target_ptr->special_defense & NINJA_KAWARIMI) {
-            if (kawarimi(target_ptr, FALSE))
-                return TRUE;
+        if (hit) {
+            // 命中した。命中処理と思い出処理を行う。
+            // 打撃そのものは対邪悪結界で撃退した可能性がある。
+            const bool protect = !process_monster_attack_hit(target_ptr, monap_ptr);
+            increase_blow_type_seen(target_ptr, monap_ptr, ap_cnt);
+
+            // 撃退成功時はそのまま次の打撃へ移行。
+            if (protect)
+                continue;
+
+            // 撃退失敗時は落馬処理、変わり身のテレポート処理を行う。
+            check_fall_off_horse(target_ptr, monap_ptr);
+            if (target_ptr->special_defense & NINJA_KAWARIMI) {
+                // 変わり身のテレポートが成功したら攻撃を打ち切り、プレイヤーが離脱した旨を返す。
+                if (kawarimi(target_ptr, FALSE))
+                    return TRUE;
+            }
+        } else {
+            // 命中しなかった。回避時の処理、思い出処理を行う。
+            process_monster_attack_evasion(target_ptr, monap_ptr);
+            increase_blow_type_seen(target_ptr, monap_ptr, ap_cnt);
         }
     }
 
+    // 通常はプレイヤーはその場にとどまる。
     return FALSE;
 }
 

@@ -93,7 +93,7 @@ void update_player_type(player_type *target_ptr, turn_flags *turn_flags_ptr, mon
 {
     if (turn_flags_ptr->do_view) {
         target_ptr->update |= PU_FLOW;
-        target_ptr->window |= PW_OVERHEAD | PW_DUNGEON;
+        target_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
     }
 
     if (turn_flags_ptr->do_move
@@ -155,7 +155,7 @@ void update_player_window(player_type *target_ptr, old_race_flags *old_race_flag
         || (old_race_flags_ptr->old_r_flagsr != r_ptr->r_flagsr) || (old_race_flags_ptr->old_r_blows0 != r_ptr->r_blows[0])
         || (old_race_flags_ptr->old_r_blows1 != r_ptr->r_blows[1]) || (old_race_flags_ptr->old_r_blows2 != r_ptr->r_blows[2])
         || (old_race_flags_ptr->old_r_blows3 != r_ptr->r_blows[3]) || (old_race_flags_ptr->old_r_cast_spell != r_ptr->r_cast_spell)) {
-        target_ptr->window |= PW_MONSTER;
+        target_ptr->window_flags |= PW_MONSTER;
     }
 }
 

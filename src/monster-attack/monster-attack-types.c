@@ -1,11 +1,12 @@
 ﻿#include "monster-attack/monster-attack-types.h"
+#include "monster-attack/monster-attack-effect.h"
 #include "spell/spell-types.h"
 
 /*!
  * @brief モンスターの打撃効力テーブル /
  * The table of monsters' blow effects
  */
-const mbe_info_type mbe_info[MAX_MBE] = {
+const mbe_info_type mbe_info[NB_RBE_TYPE] = {
     {
         0,
         0,
@@ -176,4 +177,16 @@ const mbe_info_type mbe_info[MAX_MBE] = {
         60,
         GF_MISSILE,
     }, /* SUPERHURT */
+    {
+        5,
+        GF_MISSILE,
+    }, /* INERTIA */
+    {
+        5,
+        GF_MISSILE,
+    }, /* STUN */
+    {
+        0,
+        GF_NONE,
+    }, /* FLAVOR */
 };

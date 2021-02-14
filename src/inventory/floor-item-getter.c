@@ -77,9 +77,6 @@ static bool check_floor_item_tag_aux(player_type *owner_ptr, fis_type *fis_ptr, 
  */
 static bool get_floor_item_tag_inventory(player_type *owner_ptr, fis_type *fis_ptr, char *prev_tag)
 {
-    if ((*prev_tag == '\0') || !command_cmd)
-        return FALSE;
-
     bool flag = FALSE;
     item_use_flag use_flag = (*fis_ptr->cp >= INVEN_MAIN_HAND) ? USE_EQUIP : USE_INVEN;
 
@@ -91,7 +88,7 @@ static bool get_floor_item_tag_inventory(player_type *owner_ptr, fis_type *fis_p
     else
         flag |= !fis_ptr->equip;
 
-    if (!flag) {
+    if (flag) {
         *prev_tag = '\0';
         return FALSE;
     }
@@ -116,8 +113,8 @@ static bool check_floor_item_tag_inventory(player_type *owner_ptr, fis_type *fis
         && (!fis_ptr->equip || (*fis_ptr->cp < INVEN_MAIN_HAND) || (*fis_ptr->cp >= INVEN_TOTAL)))
         return FALSE;
 
-    if (get_floor_item_tag_inventory(owner_ptr, fis_ptr, prev_tag))
-        return TRUE;
+    if ((*prev_tag != '\0') && command_cmd)
+        return get_floor_item_tag_inventory(owner_ptr, fis_ptr, prev_tag);
 
     if (get_item_okay(owner_ptr, *fis_ptr->cp, fis_ptr->tval)) {
         fis_ptr->tval = 0;
@@ -306,7 +303,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
             fis_ptr->toggle = !fis_ptr->toggle;
         }
 
-        owner_ptr->window |= (PW_INVEN | PW_EQUIP);
+        owner_ptr->window_flags |= (PW_INVEN | PW_EQUIP);
         handle_stuff(owner_ptr);
         COMMAND_CODE get_item_label = 0;
         if (command_wrk == USE_INVEN) {
@@ -842,7 +839,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
     if (fis_ptr->toggle)
         toggle_inventory_equipment(owner_ptr);
 
-    owner_ptr->window |= (PW_INVEN | PW_EQUIP);
+    owner_ptr->window_flags |= (PW_INVEN | PW_EQUIP);
     handle_stuff(owner_ptr);
     prt("", 0, 0);
     if (fis_ptr->oops && str)

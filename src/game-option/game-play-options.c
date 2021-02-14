@@ -10,7 +10,5 @@ bool bound_walls_perm; /* Boundary walls become 'permanent wall' */
 bool last_words; /* Leave last words when your character dies */
 bool auto_dump; /* Dump a character record automatically */
 bool auto_debug_save; /* Dump a debug savedata every key input */
-#ifdef WORLD_SCORE
 bool send_score; /* Send score dump to the world score server */
-#endif
 bool allow_debug_opts; /* Allow use of debug/cheat options */

@@ -131,7 +131,7 @@ bool tgt_pt(player_type *creature_ptr, POSITION *x_ptr, POSITION *y_ptr)
                 verify_panel(creature_ptr);
                 creature_ptr->update |= PU_MONSTERS;
                 creature_ptr->redraw |= PR_MAP;
-                creature_ptr->window |= PW_OVERHEAD;
+                creature_ptr->window_flags |= PW_OVERHEAD;
                 handle_stuff(creature_ptr);
             } else {
                 y = tmp_pos.y[n];
@@ -191,7 +191,7 @@ bool tgt_pt(player_type *creature_ptr, POSITION *x_ptr, POSITION *y_ptr)
     verify_panel(creature_ptr);
     creature_ptr->update |= PU_MONSTERS;
     creature_ptr->redraw |= PR_MAP;
-    creature_ptr->window |= PW_OVERHEAD;
+    creature_ptr->window_flags |= PW_OVERHEAD;
     handle_stuff(creature_ptr);
     *x_ptr = x;
     *y_ptr = y;

@@ -1,4 +1,10 @@
-N:*:Default
+N:1:Excellent
+R:ARTIFACT:*:There is a treasure called {Name} in dungeons.
+R:MONSTER:*:There is a monster called {Name}.
+R:DUNGEON:1:The location of {Name} is here: -more-
+R:TOWN:*:Have you ever been to the town of {Name}?
+
+N:0:Default
 They say that you can't trust rumors.
 You have no more Black Potions of Death.
 They say that smart guys hang around at 1600'.

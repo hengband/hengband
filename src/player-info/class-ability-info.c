@@ -106,7 +106,7 @@ void set_class_ability_info(player_type *creature_ptr, self_info_type *self_ptr)
             = _("あなたは1体の生命のあるモンスターを支配することができる。(レベル/4 MP)", "You can dominate a monster (cost level/4).");
         if (creature_ptr->lev > 29)
             self_ptr->info[self_ptr->line++] = _("あなたは視界内の生命のあるモンスターを支配することができる。((レベル+20)/2 MP)",
-                "You can dominate living monsters in sight (cost (level+20)/4).");
+                "You can dominate living monsters in sight (cost (level+20)/2).");
 
         break;
     case CLASS_MAGIC_EATER:

@@ -479,7 +479,7 @@ static void process_boomerang_back(player_type *creature_ptr, it_type *it_ptr)
         object_copy(it_ptr->o_ptr, it_ptr->q_ptr);
         creature_ptr->equip_cnt++;
         creature_ptr->update |= PU_BONUS | PU_TORCH | PU_MANA;
-        creature_ptr->window |= PW_EQUIP;
+        creature_ptr->window_flags |= PW_EQUIP;
         it_ptr->do_drop = FALSE;
         return;
     }

@@ -357,8 +357,8 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
         m_ptr->energy_need = ENERGY_NEED() - (s16b)randint0(100) * 2;
     }
 
-    if ((r_ptr->flags1 & RF1_FORCE_SLEEP) && !ironman_nightmare) {
-        m_ptr->mflag |= (MFLAG_NICE);
+    if ((r_ptr->flags1 & RF1_PREVENT_SUDDEN_MAGIC) && !ironman_nightmare) {
+        m_ptr->mflag |= (MFLAG_PREVENT_MAGIC);
         repair_monsters = TRUE;
     }
 

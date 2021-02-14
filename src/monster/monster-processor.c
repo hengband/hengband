@@ -508,7 +508,7 @@ bool process_monster_fear(player_type *target_ptr, turn_flags *turn_flags_ptr, M
  * during the game turn in which it is created, and we use the "hack_m_idx" to\n
  * determine if the monster is yet to be processed during the game turn.\n
  *\n
- * Note the special "MFLAG_NICE" flag, which allows the player to get one\n
+ * Note the special "MFLAG_PREVENT_MAGIC" flag, which allows the player to get one\n
  * move before any "nasty" monsters get to use their spell attacks.\n
  *\n
  * Note that when the "knowledge" about the currently tracked monster\n

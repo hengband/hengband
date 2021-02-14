@@ -131,7 +131,7 @@ static void see_arena_poster(player_type *player_ptr)
     msg_format(_("%s に挑戦するものはいないか？", "Do I hear any challenges against: %s"), name);
 
     player_ptr->monster_race_idx = arena_info[player_ptr->arena_number].r_idx;
-    player_ptr->window |= (PW_MONSTER);
+    player_ptr->window_flags |= (PW_MONSTER);
     handle_stuff(player_ptr);
 }
 

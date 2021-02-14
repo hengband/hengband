@@ -38,7 +38,7 @@ void effect_player_drain_mana(player_type *target_ptr, effect_player_type *ep_pt
 
     learn_spell(target_ptr, ep_ptr->monspell);
     target_ptr->redraw |= (PR_MANA);
-    target_ptr->window |= (PW_PLAYER | PW_SPELL);
+    target_ptr->window_flags |= (PW_PLAYER | PW_SPELL);
 
     if ((ep_ptr->who <= 0) || (ep_ptr->m_ptr->hp >= ep_ptr->m_ptr->maxhp)) {
         ep_ptr->dam = 0;

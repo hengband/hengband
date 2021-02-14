@@ -62,7 +62,7 @@ bool bless_weapon(player_type *caster_ptr)
         o_ptr->ident |= IDENT_SENSE;
         o_ptr->feeling = FEEL_NONE;
         caster_ptr->update |= PU_BONUS;
-        caster_ptr->window |= PW_EQUIP;
+        caster_ptr->window_flags |= PW_EQUIP;
     }
 
     /*
@@ -133,7 +133,7 @@ bool bless_weapon(player_type *caster_ptr)
     }
 
     caster_ptr->update |= PU_BONUS;
-    caster_ptr->window |= PW_EQUIP | PW_PLAYER;
+    caster_ptr->window_flags |= PW_EQUIP | PW_PLAYER;
     calc_android_exp(caster_ptr);
     return TRUE;
 }

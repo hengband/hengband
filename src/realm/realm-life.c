@@ -301,7 +301,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
         if (name)
             return _("*解呪*", "Dispel Curse");
         if (desc)
-            return _("アイテムにかかった強力な呪いを解除する。", "Removes normal and heavy curse from equipped items.");
+            return _("アイテムにかかった強力な呪いを解除する。", "Removes normal and heavy curses from equipped items.");
         {
             if (cast)
                 (void)remove_all_curse(caster_ptr);

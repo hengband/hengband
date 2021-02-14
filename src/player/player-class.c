@@ -828,7 +828,7 @@ const concptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"Warlock",
 		"Sorcerer",
 		"Ipsissimus",
-		"Archimage",
+		"Archmage",
 	},
 
 	/* Priest */
@@ -954,7 +954,7 @@ const concptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"Warlock",
 		"Sorcerer",
 		"Ipsissimus",
-		"Archimage",
+		"Archmage",
 	},
 
 	/* Tourist */
@@ -1010,7 +1010,7 @@ const concptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"Warlock",
 		"Sorcerer",
 		"Ipsissimus",
-		"Archimage",
+		"Archmage",
 	},
 
 	/* Archer */
@@ -1108,10 +1108,10 @@ const concptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"Warlock",
 		"Sorcerer",
 		"Ipsissimus",
-		"Archimage",
+		"Archmage",
 	},
 
-	/* Warrior */
+	/* Cavalry */
 	{
 		"Rookie",
 		"Soldier",

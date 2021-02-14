@@ -21,6 +21,7 @@
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "target/target-preparation.h"
+#include "target/target-setter.h"
 #include "target/target-types.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
@@ -78,6 +79,7 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type *m_ptr, int 
     MONRACE_IDX r_idx = m_ptr->ap_r_idx;
     monster_race *r_ptr = &r_info[r_idx];
 
+    term_erase(0, y, 255);
     term_gotoxy(x, y);
     if (!r_ptr)
         return;
@@ -157,11 +159,14 @@ void print_monster_list(floor_type *floor_ptr, TERM_LEN x, TERM_LEN y, TERM_LEN 
     }
 
     if (line - y - 1 == max_lines && i != tmp_pos.n) {
+        term_erase(0, line, 255);
         term_gotoxy(x, line);
         term_addstr(-1, TERM_WHITE, "-- and more --");
     } else {
         if (last_mons)
             print_monster_line(x, line++, last_mons, n_same);
+        for (; line < max_lines; line++)
+            term_erase(0, line, 255);
     }
 }
 
@@ -178,15 +183,16 @@ void fix_monster_list(player_type *player_ptr)
             continue;
         if (!(window_flag[j] & PW_MONSTER_LIST))
             continue;
+        if (angband_term[j]->never_fresh)
+            continue;
 
         term_activate(angband_term[j]);
         int w, h;
         term_get_size(&w, &h);
-        term_clear();
         target_set_prepare(player_ptr, TARGET_LOOK);
         print_monster_list(player_ptr->current_floor_ptr, 0, 0, h);
-        if (need_term_fresh(player_ptr))
-            term_fresh();
+        target_clear(player_ptr);
+        term_fresh();
         term_activate(old);
     }
 }
@@ -477,14 +483,14 @@ void toggle_inventory_equipment(player_type *owner_ptr)
         if (window_flag[j] & (PW_INVEN)) {
             window_flag[j] &= ~(PW_INVEN);
             window_flag[j] |= (PW_EQUIP);
-            owner_ptr->window |= (PW_EQUIP);
+            owner_ptr->window_flags |= (PW_EQUIP);
             continue;
         }
 
         if (window_flag[j] & PW_EQUIP) {
             window_flag[j] &= ~(PW_EQUIP);
             window_flag[j] |= PW_INVEN;
-            owner_ptr->window |= PW_INVEN;
+            owner_ptr->window_flags |= PW_INVEN;
         }
     }
 }

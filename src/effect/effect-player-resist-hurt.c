@@ -367,7 +367,7 @@ void effect_player_lite(player_type *target_ptr, effect_player_type *ep_ptr)
 
     target_ptr->redraw |= (PR_MAP | PR_STATUS);
     target_ptr->update |= (PU_MONSTERS);
-    target_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+    target_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
 }
 
 void effect_player_dark(player_type *target_ptr, effect_player_type *ep_ptr)

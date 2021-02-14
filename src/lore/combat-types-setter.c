@@ -191,5 +191,8 @@ void set_monster_blow_effect(lore_type *lore_ptr, int m)
     case RBE_STUN:
         lore_ptr->q = _("朦朧とさせる", "stun");
         break;
+    case RBE_FLAVOR:
+        // フレーバー打撃には何の効果もないので付加説明もない。
+        break;
     }
 }

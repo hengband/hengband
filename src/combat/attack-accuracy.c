@@ -57,7 +57,7 @@ PERCENTAGE hit_chance(player_type *attacker_ptr, HIT_RELIABILITY reli, ARMOUR_CL
  * Always miss 5% of the time, Always hit 5% of the time.
  * Otherwise, match monster power against player armor.
  */
-int check_hit_from_monster_to_player(player_type *target_ptr, int power, DEPTH level, int stun)
+bool check_hit_from_monster_to_player(player_type *target_ptr, int power, DEPTH level, int stun)
 {
     int k = randint0(100);
     if (stun && one_in_(2))
@@ -83,7 +83,7 @@ int check_hit_from_monster_to_player(player_type *target_ptr, int power, DEPTH l
  * @param stun 攻撃側モンスターが朦朧状態ならTRUEを返す
  * @return 命中ならばTRUEを返す
  */
-int check_hit_from_monster_to_monster(int power, DEPTH level, ARMOUR_CLASS ac, int stun)
+bool check_hit_from_monster_to_monster(int power, DEPTH level, ARMOUR_CLASS ac, int stun)
 {
     int k = randint0(100);
     if (stun && one_in_(2))

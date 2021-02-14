@@ -17,7 +17,7 @@
 void museum_remove_object(player_type *player_ptr)
 {
     if (st_ptr->stock_num <= 0) {
-        msg_print(_("博物館には何も置いてありません。", "Museum is empty."));
+        msg_print(_("博物館には何も置いてありません。", "The Museum is empty."));
         return;
     }
 

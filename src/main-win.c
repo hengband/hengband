@@ -2275,7 +2275,7 @@ static void check_for_save_file(player_type *player_ptr, LPSTR cmd_line)
     if (!*s)
         return;
 
-    strcat(savefile, s);
+    strcpy(savefile, s);
     validate_file(savefile);
     game_in_progress = TRUE;
     play_game(player_ptr, FALSE, FALSE);
@@ -3222,7 +3222,7 @@ LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
             term_resize(td->cols, td->rows);
             term_activate(old_term);
             InvalidateRect(td->w, NULL, TRUE);
-            p_ptr->window = 0xFFFFFFFF;
+            p_ptr->window_flags = 0xFFFFFFFF;
             handle_stuff(p_ptr);
         }
 

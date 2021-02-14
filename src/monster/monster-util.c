@@ -315,62 +315,117 @@ monsterrace_hook_type get_monster_hook2(player_type *player_ptr, POSITION y, POS
 }
 
 /*!
- * @brief モンスター生成制限関数最大2つから / Apply a "monster restriction function" to the "monster allocation table"
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param monster_hook 制限関数1
- * @param monster_hook2 制限関数2
- * @return エラーコード
+ * @brief モンスター生成テーブルの重みを指定条件に従って変更する。
+ * @param player_ptr
+ * @param hook1 生成制約関数1 (NULL の場合、制約なし)
+ * @param hook2 生成制約関数2 (NULL の場合、制約なし)
+ * @param restrict_to_dungeon 現在プレイヤーのいるダンジョンの制約を適用するか
+ * @return 常に 0
+ *
+ * モンスター生成テーブル alloc_race_table の各要素の基本重み prob1 を指定条件
+ * に従って変更し、結果を prob2 に書き込む。
  */
-errr get_mon_num_prep(player_type *player_ptr, monsterrace_hook_type monster_hook, monsterrace_hook_type monster_hook2)
+static errr do_get_mon_num_prep(player_type *player_ptr, const monsterrace_hook_type hook1, const monsterrace_hook_type hook2, const bool restrict_to_dungeon)
 {
-    int mon_num = 0;
-    DEPTH lev_min = 127;
-    DEPTH lev_max = 0;
-    int total = 0;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    const floor_type *const floor_ptr = player_ptr->current_floor_ptr;
+
+    // デバッグ用統計情報。
+    int mon_num = 0; // 重み(prob2)が正の要素数
+    DEPTH lev_min = 127; // 重みが正の要素のうち最小階
+    DEPTH lev_max = 0; // 重みが正の要素のうち最大階
+    int prob2_total = 0; // 重みの総和
+
+    // モンスター生成テーブルの各要素について重みを修正する。
     for (int i = 0; i < alloc_race_size; i++) {
-        alloc_entry *entry = &alloc_race_table[i];
+        alloc_entry *const entry = &alloc_race_table[i];
+        const monster_race *const r_ptr = &r_info[entry->index];
+
+        // 生成を禁止する要素は重み 0 とする。
         entry->prob2 = 0;
-        monster_race *r_ptr = &r_info[entry->index];
-        if (((monster_hook != NULL) && !((*monster_hook)(player_ptr, entry->index)))
-            || ((monster_hook2 != NULL) && !((*monster_hook2)(player_ptr, entry->index))))
-            continue;
 
-        if (!player_ptr->phase_out && !chameleon_change_m_idx && summon_specific_type != SUMMON_GUARDIANS) {
-            if (r_ptr->flags1 & RF1_QUESTOR)
-                continue;
-
-            if (r_ptr->flags7 & RF7_GUARDIAN)
-                continue;
-
-            if (((r_ptr->flags1 & RF1_FORCE_DEPTH) != 0) && (r_ptr->level > floor_ptr->dun_level))
-                continue;
-        }
-
+        // 基本重みが 0 以下なら生成禁止。
+        // テーブル内の無効エントリもこれに該当する(alloc_race_table は生成時にゼロクリアされるため)。
         if (entry->prob1 <= 0)
             continue;
 
-        mon_num++;
-        if (lev_min > entry->level)
-            lev_min = entry->level;
-        if (lev_max < entry->level)
-            lev_max = entry->level;
+        // いずれかの生成制約関数が偽を返したら生成禁止。
+        if ((hook1 && !hook1(player_ptr, entry->index)) || (hook2 && !hook2(player_ptr, entry->index)))
+            continue;
 
-        entry->prob2 = entry->prob1;
-        if (floor_ptr->dun_level && (!floor_ptr->inside_quest || is_fixed_quest_idx(floor_ptr->inside_quest))
-            && !restrict_monster_to_dungeon(player_ptr, entry->index) && !player_ptr->phase_out) {
-            int hoge = entry->prob2 * d_info[player_ptr->dungeon_idx].special_div;
-            entry->prob2 = hoge / 64;
-            if (randint0(64) < (hoge & 0x3f))
-                entry->prob2++;
-            if (entry->prob2 <= 0)
-                entry->prob2 = 1;
+        // 原則生成禁止するものたち(フェイズアウト状態 / カメレオンの変身先 / ダンジョンの主召喚 は例外)。
+        if (!player_ptr->phase_out && !chameleon_change_m_idx && summon_specific_type != SUMMON_GUARDIANS) {
+            // クエストモンスターは生成禁止。
+            if (r_ptr->flags1 & RF1_QUESTOR)
+                continue;
+
+            // ダンジョンの主は生成禁止。
+            if (r_ptr->flags7 & RF7_GUARDIAN)
+                continue;
+
+            // RF1_FORCE_DEPTH フラグ持ちは指定階未満では生成禁止。
+            if ((r_ptr->flags1 & RF1_FORCE_DEPTH) && (r_ptr->level > floor_ptr->dun_level))
+                continue;
         }
 
-        total += entry->prob2;
+        // 生成を許可するものは基本重みをそのまま引き継ぐ。
+        entry->prob2 = entry->prob1;
+
+        // 引数で指定されていればさらにダンジョンによる制約を試みる。
+        if (restrict_to_dungeon) {
+            // ダンジョンによる制約を適用する条件:
+            //
+            //   * フェイズアウト状態でない
+            //   * 1階かそれより深いところにいる
+            //   * ランダムクエスト中でない
+            const bool in_random_quest = floor_ptr->inside_quest && !is_fixed_quest_idx(floor_ptr->inside_quest);
+            const bool cond = !player_ptr->phase_out && floor_ptr->dun_level > 0 && !in_random_quest;
+
+            if (cond && !restrict_monster_to_dungeon(player_ptr, entry->index)) {
+                // ダンジョンによる制約に掛かった場合、重みを special_div/64 倍する。
+                // 丸めは確率的に行う。
+                const int numer = entry->prob2 * d_info[player_ptr->dungeon_idx].special_div;
+                const int q = numer / 64;
+                const int r = numer % 64;
+                entry->prob2 = (PROB)(randint0(64) < r ? q + 1 : q);
+            }
+        }
+
+        // 統計情報更新。
+        if (entry->prob2 > 0) {
+            mon_num++;
+            if (lev_min > entry->level)
+                lev_min = entry->level;
+            if (lev_max < entry->level)
+                lev_max = entry->level;
+            prob2_total += entry->prob2;
+        }
     }
-    if (cheat_hear) {
-        msg_format(_("モンスター第2次候補数:%d(%d-%dF)%d ", "monster second selection:%d(%d-%dF)&d "), mon_num, lev_min, lev_max, total);
-    }
+
+    // チートオプションが有効なら統計情報を出力。
+    if (cheat_hear)
+        msg_format(_("モンスター第2次候補数:%d(%d-%dF)%d ", "monster second selection:%d(%d-%dF)&d "), mon_num, lev_min, lev_max, prob2_total);
+
     return 0;
 }
+
+/*!
+ * @brief モンスター生成テーブルの重み修正
+ * @param player_ptr
+ * @param hook1 生成制約関数1 (NULL の場合、制約なし)
+ * @param hook2 生成制約関数2 (NULL の場合、制約なし)
+ * @return 常に 0
+ *
+ * get_mon_num() を呼ぶ前に get_mon_num_prep() 系関数のいずれかを呼ぶこと。
+ */
+errr get_mon_num_prep(player_type *player_ptr, const monsterrace_hook_type hook1, const monsterrace_hook_type hook2)
+{
+    return do_get_mon_num_prep(player_ptr, hook1, hook2, TRUE);
+}
+
+/*!
+ * @brief モンスター生成テーブルの重み修正(賞金首選定用)
+ * @return 常に 0
+ *
+ * get_mon_num() を呼ぶ前に get_mon_num_prep 系関数のいずれかを呼ぶこと。
+ */
+errr get_mon_num_prep_bounty(player_type *player_ptr) { return do_get_mon_num_prep(player_ptr, NULL, NULL, FALSE); }

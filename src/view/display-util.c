@@ -59,7 +59,7 @@ static struct
 };
 #else
 = {
-	{ 1, 10, 25, "Bare hand"},
+	{ 1, 10, 25, "Barehanded"},
 	{ 1, 10, 25, "Two hands"},
 	{ 1, 10, 25, "Right hand"},
 	{ 1, 10, 25, "Left hand"},

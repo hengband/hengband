@@ -78,7 +78,7 @@ bool alchemy(player_type *caster_ptr)
 
     caster_ptr->au += price;
     caster_ptr->redraw |= PR_GOLD;
-    caster_ptr->window |= PW_PLAYER;
+    caster_ptr->window_flags |= PW_PLAYER;
     vary_item(caster_ptr, item, -amt);
     return TRUE;
 }

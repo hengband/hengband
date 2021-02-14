@@ -380,8 +380,8 @@ void do_cmd_mind(player_type *caster_ptr)
     mind_turn_passing(caster_ptr, cm_ptr);
     process_hard_concentration(caster_ptr, cm_ptr);
     caster_ptr->redraw |= PR_MANA;
-    caster_ptr->window |= PW_PLAYER;
-    caster_ptr->window |= PW_SPELL;
+    caster_ptr->window_flags |= PW_PLAYER;
+    caster_ptr->window_flags |= PW_SPELL;
 }
 
 static mind_kind_type decide_use_mind_browse(player_type *caster_ptr)

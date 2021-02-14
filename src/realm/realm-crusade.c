@@ -371,7 +371,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
             return _("聖なるオーラ", "Holy Aura");
         if (desc)
             return _("一定時間、邪悪なモンスターを傷つける聖なるオーラを得る。",
-                "Gives aura of holy power that injures evil monsters which attacked you for a while.");
+                "Gives a temporary aura of holy power that injures evil monsters which attack you.");
 
         {
             int base = 20;
@@ -508,7 +508,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
         if (name)
             return _("呪い退散", "Dispel Curse");
         if (desc)
-            return _("アイテムにかかった強力な呪いを解除する。", "Removes normal and heavy curse from equipped items.");
+            return _("アイテムにかかった強力な呪いを解除する。", "Removes normal and heavy curses from equipped items.");
 
         {
             if (cast)

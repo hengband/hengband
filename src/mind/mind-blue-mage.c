@@ -110,6 +110,6 @@ bool do_cmd_cast_learned(player_type *caster_ptr)
 
     take_turn(caster_ptr, 100);
     caster_ptr->redraw |= PR_MANA;
-    caster_ptr->window |= PW_PLAYER | PW_SPELL;
+    caster_ptr->window_flags |= PW_PLAYER | PW_SPELL;
     return TRUE;
 }

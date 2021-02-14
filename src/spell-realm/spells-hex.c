@@ -59,7 +59,7 @@ bool stop_hex_spell(player_type *caster_ptr)
     int sp[MAX_KEEP];
 
     if (!hex_spelling_any(caster_ptr)) {
-        msg_print(_("呪文を詠唱していません。", "You are casting no spell."));
+        msg_print(_("呪文を詠唱していません。", "You are not casting a spell."));
         return FALSE;
     }
 
@@ -179,7 +179,7 @@ void check_hex(player_type *caster_ptr)
             caster_ptr->update |= (PU_BONUS | PU_HP);
             caster_ptr->redraw |= (PR_MAP | PR_STATUS | PR_STATE);
             caster_ptr->update |= (PU_MONSTERS);
-            caster_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+            caster_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
         }
     }
 

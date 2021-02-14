@@ -620,6 +620,10 @@ void floor_item_describe(player_type *owner_ptr, INVENTORY_IDX item)
 object_type *choose_object(player_type *owner_ptr, OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option, tval_type tval)
 {
     OBJECT_IDX item;
+
+    if (idx)
+        *idx = INVEN_NONE;
+
     if (!get_item(owner_ptr, &item, q, s, option, tval))
         return NULL;
 

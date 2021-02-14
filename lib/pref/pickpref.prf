@@ -57,8 +57,8 @@ scroll of genocide
 
 ?:[EQU $CLASS Archer]
 # Archers pick up all bones to create arrows from it.
-junks:^broken skull
-junks:^broken bone
+junk:^broken skull
+junk:^broken bone
 corpses or skeletons:skeleton
 
 ?:[EQU $CLASS Magic-Eater]
