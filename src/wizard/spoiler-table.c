@@ -171,7 +171,7 @@ const flag_desc misc_flags3_desc[MAX_MISC3_FLAGS_DESCRIPTION] = {
     /*	{ TR_XTRA_MIGHT, _("強力射撃", "Extra Might") }, */
     { TR_XTRA_SHOTS, _("追加射撃", "+1 Extra Shot") }, /* always +1? */
     { TR_DRAIN_EXP, _("経験値吸収", "Drains Experience") },
-    { TR_AGGRAVATE, _("反感", "Blessed Blade") },
+    { TR_AGGRAVATE, _("反感", "Aggravate") },
     { TR_BLESSED, _("祝福", "Blessed Blade") },
     { TR_DEC_MANA, _("消費魔力減少", "Decrease Mana Consumption Rate") },
 };
