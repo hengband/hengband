@@ -12266,7 +12266,7 @@ F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | POWERFUL | FORCE_MAXHP |
 F:OPEN_DOOR | BASH_DOOR | EVIL | IM_POIS | RES_DARK | DROP_CORPSE
 F:ANIMAL | NO_CONF | NO_SLEEP | CAN_SWIM | RIDING
 S:1_IN_8 | BR_POIS | BR_DARK | BR_NETH
-D:$A large basilisk, whose shape resembles that of a ancient dragon.
+D:$A large basilisk, whose shape resembles that of an ancient dragon.
 D:大型のバジリスクで、古代ドラゴンに似た姿をしている。
 
 #JZ#
