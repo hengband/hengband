@@ -25042,7 +25042,7 @@ F:IM_ACID | IM_ELEC | IM_COLD | IM_FIRE | IM_POIS
 S:1_IN_4 | HASTE | HEAL | CAUSE_2
 D:$A fairy cat that walks on two legs and understands human language.
 D:$This Cait Sith is like a swordfighter who serves the cat kingdom
-D:$I see you as a prey to give to the king.
+D:$It sees you as prey to give to the king.
 D:二足で歩き、人語を解す妖精猫。
 D:このケット・シーは猫の王国に仕える剣士のようだ。
 D:あなたを王に献上する獲物と見なしている。
