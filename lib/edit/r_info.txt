@@ -25212,7 +25212,7 @@ D:それのそばでは動く気力すら沸かなくなるため、刑務所の
 D:最近、闇の勢力が力を拡大するに連れて、一部が野に放たれてしまったようだ。
 
 N:1272:セイレーン
-E:Seiren
+E:Siren
 G:l:y
 I:120:80d20:20:50:80
 W:35:3:0:500:0:0
@@ -25222,8 +25222,8 @@ F:FEMALE | AQUATIC | CAN_FLY | CAN_SWIM | WILD_SHORE | NEVER_MOVE
 F:ONLY_ITEM | DROP_GOOD | DROP_1D2
 F:IM_COLD | IM_POIS | RES_WATE | RES_TELE | NO_STUN
 S:1_IN_2 | SHRIEK | TELE_TO
-D:$In folklore, Seirens wrecked the ship with a singing voice.
-D:$  But, Seirens in Angband knows a quicker way.
+D:$In folklore, Sirens wrecked the ship with a singing voice.
+D:$  But, Sirens in Angband know a quicker way.
 D:伝承のセイレーンは歌声で船を難破させたが、
 D:鉄獄のセイレーンはもっと手っ取り早い方法を知っている。
 
