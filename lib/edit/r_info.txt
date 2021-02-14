@@ -24374,7 +24374,7 @@ B:SLASH:POISON:9d7
 F:EVIL | FRIENDS | DROP_CORPSE | DROP_SKELETON | DROP_90 | ONLY_ITEM
 F:IM_POIS | RES_LITE | RES_DARK | BASH_DOOR
 S:1_IN_7 | SHOOT | BA_POIS | BR_POIS | CONF | HOLD | BLIND
-D:$A falmel holding a sword and shield made of chaurus shell.
+D:$A falmer holding a sword and shield made of chaurus shell.
 D:シャウラスの殻でできた剣と盾を手にしたファルメルだ。
 
 N:1225:ファルメル・ナイトプロウラー
