@@ -174,7 +174,7 @@ static process_result describe_hallucinated_target(player_type *subject_ptr, eg_
 static bool describe_grid_lore(player_type *subject_ptr, eg_type *eg_ptr)
 {
     screen_save();
-    screen_roff(subject_ptr, eg_ptr->m_ptr->ap_r_idx, 0);
+    screen_roff(subject_ptr, eg_ptr->m_ptr->ap_r_idx, MONSTER_LORE_NORMAL);
     term_addstr(-1, TERM_WHITE, format(_("  [r思 %s%s]", "  [r,%s%s]"), eg_ptr->x_info, eg_ptr->info));
     eg_ptr->query = inkey();
     screen_load();

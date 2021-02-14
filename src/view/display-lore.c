@@ -84,7 +84,7 @@ void roff_top(MONRACE_IDX r_idx)
  * @param mode 表示オプション
  * @return なし
  */
-void screen_roff(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
+void screen_roff(player_type *player_ptr, MONRACE_IDX r_idx, monster_lore_mode mode)
 {
     msg_erase();
     term_erase(0, 1, 255);
@@ -108,7 +108,7 @@ void display_roff(player_type *player_ptr)
     term_gotoxy(0, 1);
     hook_c_roff = c_roff;
     MONRACE_IDX r_idx = player_ptr->monster_race_idx;
-    process_monster_lore(player_ptr, r_idx, 0);
+    process_monster_lore(player_ptr, r_idx, MONSTER_LORE_NORMAL);
     roff_top(r_idx);
 }
 
@@ -123,7 +123,7 @@ void display_roff(player_type *player_ptr)
 void output_monster_spoiler(player_type *player_ptr, MONRACE_IDX r_idx, void (*roff_func)(TERM_COLOR attr, concptr str))
 {
     hook_c_roff = roff_func;
-    process_monster_lore(player_ptr, r_idx, 0x03);
+    process_monster_lore(player_ptr, r_idx, MONSTER_LORE_DEBUG);
 }
 
 static bool display_kill_unique(lore_type *lore_ptr)

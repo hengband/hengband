@@ -118,7 +118,7 @@ static void set_race_flags(lore_type *lore_ptr)
  * left edge of the screen, on a cleared line, in which the recall is
  * to take place.  One extra blank line is left after the recall.
  */
-void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
+void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, monster_lore_mode mode)
 {
     lore_type tmp_lore;
     lore_type *lore_ptr = initialize_lore_type(&tmp_lore, r_idx, mode);
@@ -127,7 +127,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS 
             lore_ptr->reinforce = TRUE;
     }
 
-    if (cheat_know || (mode & 0x01))
+    if (cheat_know || (mode == MONSTER_LORE_RESEARCH) || (mode == MONSTER_LORE_DEBUG))
         lore_ptr->know_everything = TRUE;
 
     set_drop_flags(lore_ptr);

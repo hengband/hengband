@@ -12,14 +12,14 @@ concptr wd_his[3] = { _("それの", "its"), _("彼の", "his"), _("彼女の", 
  */
 hook_c_roff_pf hook_c_roff = c_roff;
 
-lore_type *initialize_lore_type(lore_type *lore_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
+lore_type *initialize_lore_type(lore_type *lore_ptr, MONRACE_IDX r_idx, monster_lore_mode mode)
 {
 #ifdef JP
 #else
     lore_ptr->sin = FALSE;
 #endif
     lore_ptr->r_idx = r_idx;
-    lore_ptr->nightmare = ironman_nightmare && !(mode & 0x02);
+    lore_ptr->nightmare = ironman_nightmare && (mode != MONSTER_LORE_DEBUG);
     lore_ptr->r_ptr = &r_info[r_idx];
     lore_ptr->speed = lore_ptr->nightmare ? lore_ptr->r_ptr->speed + 5 : lore_ptr->r_ptr->speed;
     lore_ptr->drop_gold = lore_ptr->r_ptr->r_drop_gold;
