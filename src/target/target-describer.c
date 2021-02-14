@@ -129,7 +129,7 @@ static void describe_scan_result(player_type *subject_ptr, eg_type *eg_ptr)
     if (!easy_floor)
         return;
 
-    eg_ptr->floor_num = scan_floor_items(subject_ptr, eg_ptr->floor_list, eg_ptr->y, eg_ptr->x, 0x02, 0);
+    eg_ptr->floor_num = scan_floor_items(subject_ptr, eg_ptr->floor_list, eg_ptr->y, eg_ptr->x, SCAN_FLOOR_ONLY_MARKED, 0);
     if (eg_ptr->floor_num > 0)
         eg_ptr->x_info = _("x物 ", "x,");
 }
@@ -512,7 +512,7 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
     case PROCESS_CONTINUE:
         break;
     }
-    
+
     s16b description_grid = describe_grid(subject_ptr, eg_ptr);
     if (within_char_util(description_grid))
         return (char)description_grid;

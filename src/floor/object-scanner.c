@@ -39,17 +39,17 @@ ITEM_NUMBER scan_floor_items(player_type *owner_ptr, OBJECT_IDX *items, POSITION
         object_type *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
         next_o_idx = o_ptr->next_o_idx;
-        if ((mode & 0x01) && !item_tester_okay(owner_ptr, o_ptr, item_tester_tval))
+        if ((mode & SCAN_FLOOR_ITEM_TESTER) && !item_tester_okay(owner_ptr, o_ptr, item_tester_tval))
             continue;
 
-        if ((mode & 0x02) && !(o_ptr->marked & OM_FOUND))
+        if ((mode & SCAN_FLOOR_ONLY_MARKED) && !(o_ptr->marked & OM_FOUND))
             continue;
 
         if (num < 23)
             items[num] = this_o_idx;
 
         num++;
-        if (mode & 0x04)
+        if (mode & SCAN_FLOOR_AT_MOST_ONE)
             break;
     }
 
@@ -110,7 +110,7 @@ COMMAND_CODE show_floor_items(player_type *owner_ptr, int target_item, POSITION 
     bool dont_need_to_show_weights = TRUE;
     term_get_size(&wid, &hgt);
     int len = MAX((*min_width), 20);
-    floor_num = scan_floor_items(owner_ptr, floor_list, y, x, 0x03, item_tester_tval);
+    floor_num = scan_floor_items(owner_ptr, floor_list, y, x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester_tval);
     floor_type *floor_ptr = owner_ptr->current_floor_ptr;
     for (k = 0, i = 0; i < floor_num && i < 23; i++) {
         o_ptr = &floor_ptr->o_list[floor_list[i]];
