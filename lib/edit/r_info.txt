@@ -17967,7 +17967,7 @@ F:PASS_WALL | POWERFUL | MOVE_BODY | RES_DARK | RES_NETH
 F:EVIL | DRAGON | IM_COLD | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_4 | BR_NETH | BR_DARK | SCARE | BLINK | SHRIEK
 D:$It draws darkness from the underworld and brings chaos to the dungeon.
-D:$  The space around it is distorted and it is not possible
+D:$  The space around it is distorted, and it is not possible
 D:$ to clearly capture its appearance.
 D:それは冥界から闇を呼び寄せてダンジョンに混沌をもたらしている。
 D:それの周りでは空間が歪み、姿をはっきりと捉えることができない。
