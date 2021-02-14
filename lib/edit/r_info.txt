@@ -20207,7 +20207,7 @@ B:KICK:HURT:1d4
 B:BITE:HURT:1d5
 F:ANIMAL | DROP_CORPSE | DROP_SKELETON | RIDING
 D:$It is also called a horse bird.
-D:$  It can run through land quickly instead of being able to fly.
+D:$  It can run quickly instead of being able to fly.
 D:それは馬鳥ともいい、空を飛ぶことができない。
 D:代わりに陸を素早く駆け抜けることができる。
 
