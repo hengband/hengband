@@ -12176,7 +12176,7 @@ F:EVIL | IM_POIS | NO_CONF | NO_SLEEP
 S:1_IN_3
 S:BLIND | SLOW | CONF | SCARE | DRAIN_MANA | MIND_BLAST | FORGET | 
 S:DARKNESS | BO_ACID | BO_FIRE | BO_COLD
-D:$A disembodied eye, surrounded by twenty fourth smaller eyes
+D:$A disembodied eye, surrounded by twenty four smaller eyes
 D:$ on undulating stalks.
 D:大きくうねる触手の先に付いた２４個の小さな目玉に囲まれている、
 D:体を持たない目玉だ。
