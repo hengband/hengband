@@ -17333,21 +17333,17 @@ E:Cerberus, Guardian of Hades
 G:C:r
 I:130:100d100:50:160:10
 W:94:1:0:40000:0:0
-B:HIT:FIRE:9d12
-B:HIT:FIRE:9d12
-B:HIT:FIRE:9d12
-B:HIT:FIRE:9d12
-F:UNIQUE |
-F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | AURA_FIRE | DROP_CORPSE
-F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | 
-F:OPEN_DOOR | BASH_DOOR | MOVE_BODY | 
-F:ANIMAL | EVIL | IM_FIRE | NO_CONF | NO_SLEEP
-S:1_IN_3 | 
-S:BA_DARK | 
-S:BR_FIRE | BR_NETH | 
-S:S_HOUND
-D:$A three-headed hell hound of fearsome aspect.  Flame burns merrily from its 
-D:$hide as it snarls and roars its defiance.
+B:BITE:FIRE:27d19
+B:CLAW:FIRE:27d19
+B:BITE:FIRE:27d19
+B:CLAW:FIRE:27d19
+F:UNIQUE | FORCE_MAXHP | AURA_FIRE | ANIMAL | EVIL
+F:PREVENT_SUDDEN_MAGIC | DROP_CORPSE
+F:ONLY_ITEM | DROP_3D2 | DROP_4D2 | DROP_GREAT
+F:OPEN_DOOR | BASH_DOOR | MOVE_BODY | IM_FIRE | NO_CONF | NO_SLEEP
+S:1_IN_3 | BA_DARK | BR_FIRE | BR_NETH | S_HOUND
+D:$A three-headed hell hound of fearsome aspect.
+D:$  Flame burns merrily from its $hide as it snarls and roars its defiance.
 D:３つ首の恐ろしい形相のヘルハウンドだ。相手に向かって牙をむき吠えると同時に
 D:炎がその体から楽しげに燃え上がる。
 
