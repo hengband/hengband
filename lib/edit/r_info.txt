@@ -25261,7 +25261,7 @@ F:IM_FIRE | RES_LITE | RES_CHAO | RES_INER | NO_CONF | NO_SLEEP
 S:1_IN_5 | BA_FIRE | BA_LITE | HEAL | HOLD | CONF | BLIND
 
 N:1275:コティングリーの妖精
-E:Cottingley Fairies
+E:Cottingley Fairy
 G:I:G
 I:115:3d11:15:30:80
 W:12:3:0:20:0:0
@@ -25270,7 +25270,7 @@ B:WAIL:LOSE_INT
 F:FEMALE | QUANTUM | PREVENT_SUDDEN_MAGIC | FRIENDS | DROP_90 | TAKE_ITEM
 F:HURT_FIRE | CAN_FLY | FRIENDLY | HAS_LITE_1 | IM_POIS | RES_LITE
 S:1_IN_4 | MISSILE
-D:$Only a few old photographs are the only proof that this fairy once existed.
+D:$A few old photographs are the only proof that this fairy once existed.
 D:たった数枚の古ぼけた写真が、この妖精がかつて実在したことの唯一の証拠だ。 
 
 N:1276:点『P』
