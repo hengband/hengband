@@ -23853,7 +23853,7 @@ F:EVIL | DRAGON | IM_POIS | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_4 | BLIND | CONF | SCARE | BR_POIS
 D:$A huge dragon of incredible destructive power.  Noxious vapours 
 D:$fill the room near it, leaving you gasping for breath.
-D:$  Free now while you still can!
+D:$  Flee now while you still can!
 D:信じられない程の破壊的な力を持った巨大なドラゴンだ。
 D:有毒な霧が近くの部屋に充満し、ほとんど息ができない。
 D:逃げられるうちに逃げろ！
