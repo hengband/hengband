@@ -142,6 +142,22 @@ void core(concptr str)
 
 /*** 64-bit integer operations ***/
 
+void s64b_lshift(s32b* hi, u32b* lo, const int n)
+{
+	if (n == 0) return;
+
+	*hi = (s32b)((u32b)(*hi << n) | (*lo >> (32 - n)));
+	*lo <<= n;
+}
+
+void s64b_rshift(s32b* hi, u32b* lo, const int n)
+{
+	if (n == 0) return;
+
+	*lo = ((u32b)*hi << (32 - n)) | (*lo >> n);
+	*hi >>= n;
+}
+
 /* Add B to A */
 void s64b_add(s32b *A1, u32b *A2, s32b B1, u32b B2)
 {
@@ -229,7 +245,7 @@ void s64b_div(s32b *A1, u32b *A2, s32b B1, u32b B2)
 	 */
 	while (s64b_cmp(A1val, A2val, B1, B2) == 1)
 	{
-		s64b_LSHIFT(B1, B2, 1);
+		s64b_lshift(&B1, &B2, 1);
 		bit++;
 	}
 
@@ -246,7 +262,7 @@ void s64b_div(s32b *A1, u32b *A2, s32b B1, u32b B2)
 			s64b_sub(&A1val, &A2val, B1, B2);
 		}
 	
-		s64b_RSHIFT(B1, B2, 1);
+		s64b_rshift(&B1, &B2, 1);
 		bit--;
 	}
 

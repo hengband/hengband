@@ -4,6 +4,9 @@
 #include "monster-attack/monster-attack-types.h"
 #include "system/angband.h"
 
+/*! モンスターが1ターンに攻撃する最大回数 (射撃を含む) / The maximum number of times a monster can attack in a turn (including SHOOT) */
+#define MAX_NUM_BLOWS 4
+
 /*
  * Monster blow structure
  *
@@ -66,7 +69,7 @@ typedef struct monster_race {
     BIT_FLAGS a_ability_flags2; /* Activate Ability Flags 6 (special spells) */
     BIT_FLAGS a_ability_flags3; /* Activate Ability Flags 7 (implementing) */
     BIT_FLAGS a_ability_flags4; /* Activate Ability Flags 8 (implementing) */
-    monster_blow blow[4]; /* Up to four blows per round */
+    monster_blow blow[MAX_NUM_BLOWS]; /* Up to four blows per round */
     MONRACE_IDX reinforce_id[6];
     DICE_NUMBER reinforce_dd[6];
     DICE_SID reinforce_ds[6];
@@ -98,7 +101,7 @@ typedef struct monster_race {
     ITEM_NUMBER r_drop_gold; /*!< これまでに撃破時に落とした財宝の数 / Max number of gold dropped at once */
     ITEM_NUMBER r_drop_item; /*!< これまでに撃破時に落としたアイテムの数 / Max number of item dropped at once */
     byte r_cast_spell; /* Max number of other spells seen */
-    byte r_blows[4]; /* Number of times each blow type was seen */
+    byte r_blows[MAX_NUM_BLOWS]; /* Number of times each blow type was seen */
     u32b r_flags1; /* Observed racial flags */
     u32b r_flags2; /* Observed racial flags */
     u32b r_flags3; /* Observed racial flags */

@@ -258,7 +258,7 @@ void window_stuff(player_type *player_ptr)
 
     if (window_flags & (PW_MONSTER_LIST)) {
         player_ptr->window_flags &= ~(PW_MONSTER_LIST);
-        fix_monster_list(player_ptr, FALSE);
+        fix_monster_list(player_ptr);
     }
 
     if (window_flags & (PW_MESSAGE)) {

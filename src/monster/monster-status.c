@@ -184,7 +184,7 @@ static void get_exp_from_mon(player_type *target_ptr, HIT_POINT dam, monster_typ
 
         while (monnum_penarty--) {
             /* Divide by 4 */
-            s64b_RSHIFT(new_exp, new_exp_frac, 2);
+            s64b_rshift(&new_exp, &new_exp_frac, 2);
         }
     }
 

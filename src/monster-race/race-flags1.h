@@ -11,7 +11,7 @@ typedef enum race_flags1 {
     RF1_ATTR_MULTI = 0x00000080, /*!< モンスター特性: シンボルカラーがランダムに変化する(基本7色) / Changes color */
     RF1_FORCE_DEPTH = 0x00000100, /*!< モンスター特性: 指定階未満では生成されない / Start at "correct" depth */
     RF1_FORCE_MAXHP = 0x00000200, /*!< モンスター特性: 通常生成時必ずHPがダイス最大値になる / Start with max hitpoints */
-    RF1_FORCE_SLEEP = 0x00000400, /*!< モンスター特性: 通常生成時必ず寝ている / Start out sleeping */
+    RF1_PREVENT_SUDDEN_MAGIC = 0x00000400, /*!< モンスター特性: 生成直後に魔法を使用しない / Start with no-magic */
     RF1_FORCE_EXTRA = 0x00000800, /*!< モンスター特性: (未使用) / Start out something */
     RF1_ATTR_SEMIRAND = 0x00001000, /*!< モンスター特性: シンボルカラーがランダムに変化する(15色) / Color is determined semi-randomly */
     RF1_FRIENDS = 0x00002000, /*!< モンスター特性: 同種の友軍を用意している / Arrive with some friends */

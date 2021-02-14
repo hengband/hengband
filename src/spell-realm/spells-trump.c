@@ -194,7 +194,7 @@ void cast_shuffle(player_type *caster_ptr)
     }
 
     if (die < 111) {
-        msg_print(_("《審判》だ。", "It's the Judgement."));
+        msg_print(_("《審判》だ。", "It's Judgement."));
         roll_hitdice(caster_ptr, 0L);
         lose_all_mutations(caster_ptr);
         return;

@@ -68,7 +68,7 @@ bool kawarimi(player_type *caster_ptr, bool success)
         return FALSE;
 
     if (!success && one_in_(3)) {
-        msg_print(_("失敗！逃げられなかった。", "Failed! You couldn't run away."));
+        msg_print(_("変わり身失敗！逃げられなかった。", "Kawarimi failed! You couldn't run away."));
         caster_ptr->special_defense &= ~(NINJA_KAWARIMI);
         caster_ptr->redraw |= (PR_STATUS);
         return FALSE;
@@ -88,7 +88,7 @@ bool kawarimi(player_type *caster_ptr, bool success)
     if (success)
         msg_print(_("攻撃を受ける前に素早く身をひるがえした。", "You have turned around just before the attack hit you."));
     else
-        msg_print(_("失敗！攻撃を受けてしまった。", "Failed! You are hit by the attack."));
+        msg_print(_("変わり身失敗！攻撃を受けてしまった。", "Kawarimi failed! You are hit by the attack."));
 
     caster_ptr->special_defense &= ~(NINJA_KAWARIMI);
     caster_ptr->redraw |= (PR_STATUS);

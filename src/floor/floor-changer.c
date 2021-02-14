@@ -108,8 +108,8 @@ static void set_pet_params(player_type *master_ptr, monster_race **r_ptr, const 
     m_ptr->mtimed[MTIMED_CSLEEP] = 0;
     m_ptr->hold_o_idx = 0;
     m_ptr->target_y = 0;
-    if (((*r_ptr)->flags1 & RF1_FORCE_SLEEP) && !ironman_nightmare) {
-        m_ptr->mflag |= MFLAG_NICE;
+    if (((*r_ptr)->flags1 & RF1_PREVENT_SUDDEN_MAGIC) && !ironman_nightmare) {
+        m_ptr->mflag |= MFLAG_PREVENT_MAGIC;
         repair_monsters = TRUE;
     }
 }

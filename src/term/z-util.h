@@ -52,8 +52,27 @@ extern void core(concptr str);
 
 
 /* 64-bit integer operations */
-#define s64b_LSHIFT(V1, V2, N) {V1 = (V1<<(N)) | (V2>>(32-(N))); V2 <<= (N);}
-#define s64b_RSHIFT(V1, V2, N) {V2 = (V1<<(32-(N))) | (V2>>(N)); V1 >>= (N);}
+
+/*!
+ * @brief 64bit非負整数を n 回左シフトする。
+ * @param hi 上位32bit。負であってはならない。
+ * @param lo 下位32bit。
+ * @param n  シフト量。[0,31] の範囲でなければならない。
+ *
+ * hi や n に範囲外の値を渡したり、オーバーフローした場合の動作は未定義。
+ */
+void s64b_lshift(s32b* hi, u32b* lo, int n);
+
+/*!
+ * @brief 64bit非負整数を n 回右シフトする。
+ * @param hi 上位32bit。負であってはならない。
+ * @param lo 下位32bit。
+ * @param n シフト量。[0,31] の範囲でなければならない。
+ *
+ * hi や n に範囲外の値を渡した場合の動作は未定義。
+ */
+void s64b_rshift(s32b* hi, u32b* lo, int n);
+
 extern void s64b_add(s32b *A1, u32b *A2, s32b B1, u32b B2);
 extern void s64b_sub(s32b *A1, u32b *A2, s32b B1, u32b B2);
 extern int s64b_cmp(s32b A1, u32b A2, s32b B1, u32b B2);

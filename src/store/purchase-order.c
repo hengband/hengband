@@ -320,7 +320,7 @@ static void switch_store_stock(player_type *player_ptr, const int i, const COMMA
 void store_purchase(player_type *player_ptr)
 {
     if (cur_store_num == STORE_MUSEUM) {
-        msg_print(_("博物館から取り出すことはできません。", "Museum."));
+        msg_print(_("博物館から取り出すことはできません。", "Items cannot be taken out of the Museum."));
         return;
     }
 

@@ -3,7 +3,7 @@
 #include "system/angband.h"
 
 #define MAX_NAZGUL_NUM 5
-#define SCREEN_BUF_MAX_SIZE (4 * 65536) /*!< Max size of screen dump buffer */
+#define SCREEN_BUF_MAX_SIZE (1024 * 1024) /*!< Max size of screen dump buffer */
 
 typedef enum init_flags_type {
 	INIT_NAME_ONLY = 0x01,

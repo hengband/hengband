@@ -293,7 +293,8 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
 {
     switch (monap_ptr->effect) {
     case RBE_NONE:
-        monap_ptr->obvious = TRUE;
+        // ここには来ないはずだが、何らかのバグで来た場合はプレイヤーの不利益に
+        // ならないようダメージを 0 にしておく。
         monap_ptr->damage = 0;
         break;
     case RBE_SUPERHURT: { /* AC軽減あり / Player armor reduces total damage */
@@ -471,6 +472,11 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
             break;
 
         process_stun_attack(target_ptr, monap_ptr);
+        break;
+    case RBE_FLAVOR:
+        // フレーバー打撃は自明かつダメージ 0。
+        monap_ptr->obvious = TRUE;
+        monap_ptr->damage = 0;
         break;
     }
 }

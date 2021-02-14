@@ -55,7 +55,7 @@ void change_race(player_type *creature_ptr, player_race_type new_race, concptr e
 #ifdef JP
     msg_format("あなたは%s%sに変化した！", effect_msg, title);
 #else
-    msg_format("You turn into %s %s%s!", (!effect_msg[0] && is_a_vowel(title[0]) ? "an" : "a"), effect_msg, title);
+    msg_format("You turn into %s %s%s!", (is_a_vowel((effect_msg[0]) ? effect_msg[0] : title[0]) ? "an" : "a"), effect_msg, title);
 #endif
 
     chg_virtue(creature_ptr, V_CHANCE, 2);

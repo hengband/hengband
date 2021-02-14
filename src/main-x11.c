@@ -911,7 +911,7 @@ static errr Infofnt_text_std(int x, int y, concptr str, int len)
 		char *kanji = malloc(outlen);
 		char *sp; char *kp = kanji;
 		char sbuf[1024];
-		angband_strcpy(sbuf, str, sizeof(sbuf));
+		memcpy(sbuf, str, (size_t)len);
 		sp = sbuf;
 		iconv(cd, &sp, &inlen, &kp, &outlen);
 		iconv_close(cd);
@@ -1047,7 +1047,8 @@ static x11_selection_type s_ptr[1];
 static void convert_to_euc(char *buf)
 {
 	size_t inlen = strlen(buf);
-	size_t outlen = inlen + 1;
+	size_t outlen_orig = inlen + 1;
+	size_t outlen = outlen_orig;
 	char tmp[outlen];
 
 	iconv_t iconvd = iconv_open("EUC-JP", "UTF-8");
@@ -1056,10 +1057,9 @@ static void convert_to_euc(char *buf)
 	iconv(iconvd, &inbuf, &inlen, &outbuf, &outlen);
 	iconv_close(iconvd);
 
-	int i, l = strlen(tmp);
-	for (i = 0; i < l; i++)
-		buf[i] = tmp[i];
-	buf[l] = '\0';
+	size_t n = outlen_orig - outlen;
+	memcpy(buf, tmp, n);
+	buf[n] = '\0';
 }
 #endif
 

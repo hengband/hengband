@@ -100,14 +100,14 @@ bool set_tim_res_nether(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
             if (creature_ptr->tim_res_nether > v)
                 return FALSE;
         } else if (!creature_ptr->tim_res_nether) {
-            msg_print(_("地獄の力に対して耐性がついた気がする！", "You feel nether resistant!"));
+            msg_print(_("地獄の力に対して耐性がついた気がする！", "You feel nether-resistant!"));
             notice = TRUE;
         }
     }
 
     else {
         if (creature_ptr->tim_res_nether) {
-            msg_print(_("地獄の力に対する耐性が薄れた気がする。", "You feel less nether resistant"));
+            msg_print(_("地獄の力に対する耐性が薄れた気がする。", "You feel less nether-resistant"));
             notice = TRUE;
         }
     }
@@ -137,12 +137,12 @@ bool set_tim_res_time(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
             if (creature_ptr->tim_res_time > v)
                 return FALSE;
         } else if (!creature_ptr->tim_res_time) {
-            msg_print(_("時間逆転の力に対して耐性がついた気がする！", "You feel time resistant!"));
+            msg_print(_("時間逆転の力に対して耐性がついた気がする！", "You feel time-resistant!"));
             notice = TRUE;
         }
     } else {
         if (creature_ptr->tim_res_time) {
-            msg_print(_("時間逆転の力に対する耐性が薄れた気がする。", "You feel less time resistant"));
+            msg_print(_("時間逆転の力に対する耐性が薄れた気がする。", "You feel less time-resistant"));
             notice = TRUE;
         }
     }

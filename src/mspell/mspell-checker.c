@@ -299,24 +299,19 @@ void breath(
  */
 bool spell_is_inate(SPELL_IDX spell)
 {
-    if (spell < 32 * 4) /* Set RF4 */
+    if (32 * 3 <= spell && spell < 32 * 4) /* Set RF4 */
     {
-        if ((1L << (spell - 32 * 3)) & RF4_NOMAGIC_MASK)
-            return TRUE;
+        return ((1UL << (spell - 32 * 3)) & RF4_NOMAGIC_MASK) != 0;
+    }
+    if (32 * 4 <= spell && spell < 32 * 5) /* Set RF5 */
+    {
+        return ((1UL << (spell - 32 * 4)) & RF5_NOMAGIC_MASK) != 0;
+    }
+    if (32 * 5 <= spell && spell < 32 * 6) /* Set RF6 */
+    {
+        return ((1UL << (spell - 32 * 5)) & RF6_NOMAGIC_MASK) != 0;
     }
 
-    if (spell < 32 * 5) /* Set RF5 */
-    {
-        if ((1L << (spell - 32 * 4)) & RF5_NOMAGIC_MASK)
-            return TRUE;
-    }
-
-    if (spell < 32 * 6) /* Set RF6 */
-    {
-        if ((1L << (spell - 32 * 5)) & RF6_NOMAGIC_MASK)
-            return TRUE;
-    }
-
-    /* This spell is not "inate" */
+    // 無効なモンスタースペルIDが渡されたら FALSE を返す。
     return FALSE;
 }

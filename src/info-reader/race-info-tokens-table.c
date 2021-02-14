@@ -75,6 +75,7 @@ concptr r_info_blow_effect[NUM_R_BLOW_EFFECT] = {
 	"SUPERHURT",
 	"INERTIA",
 	"STUN",
+	"FLAVOR",
 	NULL
 };
 
@@ -93,7 +94,7 @@ concptr r_info_flags1[NUM_R_FLAGS_1] = {
 	"ATTR_MULTI",
 	"FORCE_DEPTH",
 	"FORCE_MAXHP",
-	"FORCE_SLEEP",
+	"PREVENT_SUDDEN_MAGIC",
 	"FORCE_EXTRA",
 	"ATTR_SEMIRAND",
 	"FRIENDS",
