@@ -18809,7 +18809,7 @@ F:RES_LITE | RES_DARK | RES_NETH | RES_WATE | RES_PLAS | RES_SHAR | RES_SOUN
 F:RES_CHAO | RES_DISE | RES_WALL | RES_INER | RES_TIME | RES_GRAV | RES_TELE
 F:NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP | CAN_FLY
 S:1_IN_3 | BLINK | HOLD | BLIND | CONF | SCARE
-D:$This was Bull Gates's most devastating weapon once,
+D:$This once was Bull Gates's most devastating weapon,
 D:$ propagating fear and ruin throughout all multiverse.
 D:$  Its weaknesses are cyber weapons named CSS and JavaScript,
 D:$ but neither exists in this universe.
