@@ -24831,9 +24831,9 @@ W:5:2:0:30:0:0
 B:BITE:HURT:2d5
 B:STING:POISON:2d3
 F:AQUATIC | ANIMAL | WILD_ALL | RES_WATE
-D:$This fish is also known as ghost shark, and named after hybrid monster
-D:$ due to its patchwark-like appearance.
-D:$ It has poson needle.
+D:$This fish is also known as a ghost shark and is named after the hybrid
+D:$ monster due to its patchwork-like appearance.
+D:$ It has a poisoned stinger.
 D:この魚は英語ではキマイラと言い、継ぎ接ぎめいた姿から合成魔獣の名を付けられた。
 D:それは毒針を持っている。
 
