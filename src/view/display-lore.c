@@ -120,10 +120,14 @@ void display_roff(player_type *player_ptr)
  * @param roff_func 出力処理を行う関数ポインタ
  * @return なし
  */
-void output_monster_spoiler(player_type *player_ptr, MONRACE_IDX r_idx, void (*roff_func)(TERM_COLOR attr, concptr str))
+void output_monster_spoiler(MONRACE_IDX r_idx, void (*roff_func)(TERM_COLOR attr, concptr str))
 {
     hook_c_roff = roff_func;
-    process_monster_lore(player_ptr, r_idx, MONSTER_LORE_DEBUG);
+    player_type dummy;
+
+    dummy.lev = 1;
+    dummy.max_plv = 1;
+    process_monster_lore(&dummy, r_idx, MONSTER_LORE_DEBUG);
 }
 
 static bool display_kill_unique(lore_type *lore_ptr)

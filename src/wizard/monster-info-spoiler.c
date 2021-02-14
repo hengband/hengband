@@ -237,7 +237,7 @@ void spoil_mon_info(player_type *player_ptr, concptr fname)
         spoil_out(buf);
         sprintf(buf, "Exp:%ld\n", (long)(r_ptr->mexp));
         spoil_out(buf);
-        output_monster_spoiler(player_ptr, who[i], roff_func);
+        output_monster_spoiler(who[i], roff_func);
         spoil_out(NULL);
     }
 
