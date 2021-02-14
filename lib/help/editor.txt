@@ -186,14 +186,14 @@ Keywords:
   missiles          : Arrows, bolts, and shots match.
   magical devices   : Wands, staffs, rods and scrolls match.
   lights            : Light sources match.
-  junks             : Junk items like Shard of Pottery or etc. match.
+  junk              : Junk items like Shard of Pottery or etc. match.
   corpses or skeletons : Corpses or skeletons of monsters match.
   spellbooks        : All books match.
   favorite weapons  : Weapons suitable for your class (for Priest, Monk,
                       BeastMaster, ForceTrainer, Cavalry, and Ninja)
 
   You may also use keywords which match specified kinds of equipment:
-  weapons, armors, missiles, magical devices, lights, junks, spellbooks, 
+  weapons, armors, missiles, magical devices, lights, junk, spellbooks,
   hafted weapons, shields, bows, rings, amulets, suits, cloaks, helms, 
   gloves, boots.
 
@@ -270,7 +270,7 @@ Special Notes:
    [wanted] [unique monster's] [human] [unreadable] 
    [first realm's] [second realm's] [first] [second] [third] [fourth] 
    [items | weapons | favorite weapons | armors | missiles |
-    magical devices | lights | junks | corpses or skeletons | spellbooks |
+    magical devices | lights | junk | corpses or skeletons | spellbooks |
     hafted weapons | shields | bows | rings | amulets | suits | cloaks |
     helms | gloves | boots] :]
   [[^]part-of-item-name] [#auto-inscription-string]
