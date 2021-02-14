@@ -24865,7 +24865,7 @@ F:BASH_DOOR | IM_ACID | IM_ELEC | HURT_FIRE | WEIRD_MIND | NO_FEAR
 R:1252:5d5
 D:$The Queen of vespoid, featuring a huge abdomen and bright wings.
 D:$  Command the subordinate vespoid
-D: with a peculiar flight and attack the intruder.
+D:$ with a peculiar flight and attack the intruder.
 D:$  The abdominal sting is also very well developed,
 D:$ and in addition to neurological poisons,
 D:$ it may also inject acidic fluids towards its prey.
