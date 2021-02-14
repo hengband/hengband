@@ -48,11 +48,17 @@ typedef struct lore_type {
     int count;
 } lore_type;
 
+typedef enum monster_lore_mode { 
+    MONSTER_LORE_NORMAL,
+    MONSTER_LORE_RESEARCH,
+    MONSTER_LORE_DEBUG
+} monster_lore_mode;
+
 typedef void (*hook_c_roff_pf)(TERM_COLOR attr, concptr str);
 extern hook_c_roff_pf hook_c_roff;
 
 extern concptr wd_he[3];
 extern concptr wd_his[3];
 
-lore_type *initialize_lore_type(lore_type *lore_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode);
+lore_type *initialize_lore_type(lore_type *lore_ptr, MONRACE_IDX r_idx, monster_lore_mode mode);
 void hooked_roff(concptr str);

@@ -433,7 +433,7 @@ void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, boo
         case 'R':
         case 'r': {
             if (!visual_list && !visual_only && (mon_idx[mon_cur] > 0)) {
-                screen_roff(creature_ptr, mon_idx[mon_cur], 0);
+                screen_roff(creature_ptr, mon_idx[mon_cur], MONSTER_LORE_NORMAL);
 
                 (void)inkey();
 

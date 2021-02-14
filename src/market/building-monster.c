@@ -168,7 +168,7 @@ bool research_mon(player_type *player_ptr)
                 lore_do_probe(player_ptr, r_idx);
                 monster_race_track(player_ptr, r_idx);
                 handle_stuff(player_ptr);
-                screen_roff(player_ptr, r_idx, 0x01);
+                screen_roff(player_ptr, r_idx, MONSTER_LORE_RESEARCH);
                 notpicked = FALSE;
                 old_sym = sym;
                 old_i = i;

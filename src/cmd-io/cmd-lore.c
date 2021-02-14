@@ -170,7 +170,7 @@ void do_cmd_query_symbol(player_type *creature_ptr)
         while (TRUE) {
             if (recall) {
                 screen_save();
-                screen_roff(creature_ptr, who[i], 0);
+                screen_roff(creature_ptr, who[i], MONSTER_LORE_NORMAL);
             }
 
             roff_top(r_idx);
