@@ -25242,7 +25242,7 @@ F:DROP_90 | ONLY_ITEM
 D:$It's a lump of silvery flesh-like material
 D:$ that works very hard to absorb nearby light.
 D:$  It seems to have a dream of catching and absorbing
-D:$ all the light that illuminates the dungeon."
+D:$ all the light that illuminates the dungeon.
 D:それは銀色の肉のような物質の塊で、付近の光をすごくがんばって吸い取っている。
 D:ダンジョンを照らす光をすべてキャッチし吸い尽くすのが夢らしい。 
 
