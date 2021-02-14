@@ -1,10 +1,14 @@
 ﻿#pragma once
 
+#include "monster-attack/monster-attack-effect.h"
 #include "system/angband.h"
 
 /*!
  * @note モンスターの打撃方法 / New monster blow methods
  * 打撃の種別に応じて傷と朦朧が発生するかがコメントの通りに決まる
+ *
+ * "Race Blow Method" の略。
+ * 実装の都合上、0 から始まる連番でなければならない。
  */
 typedef enum rbm_type {
     RBM_NONE = 0,
@@ -33,13 +37,13 @@ typedef enum rbm_type {
     RBM_MOAN = 23, /*!< モンスターの攻撃種別:うめく */
     RBM_SHOW = 24, /*!< モンスターの攻撃種別:歌う */
     RBM_SHOOT = 25, /*!< モンスターの攻撃種別:射撃(非打撃) */
-} rbm_type;
 
-#define MAX_MBE 34
+    NB_RBM_TYPE, /*!< enum バリアント数 */
+} rbm_type;
 
 typedef struct mbe_info_type {
     int power; /* The attack "power" */
     int explode_type; /* Explosion effect */
 } mbe_info_type;
 
-extern const mbe_info_type mbe_info[MAX_MBE];
+extern const mbe_info_type mbe_info[NB_RBE_TYPE];
