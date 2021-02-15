@@ -72,8 +72,9 @@ static concptr attr_to_text(monster_race *r_ptr)
  * @param fname 生成ファイル名
  * @return なし
  */
-void spoil_mon_desc(player_type *player_ptr, concptr fname)
+void spoil_mon_desc(concptr fname)
 {
+    player_type dummy;
     u16b why = 2;
     MONRACE_IDX *who;
     char buf[1024];
@@ -111,7 +112,7 @@ void spoil_mon_desc(player_type *player_ptr, concptr fname)
             who[n++] = (s16b)i;
     }
 
-    ang_sort(player_ptr, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
+    ang_sort(&dummy, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
     for (int i = 0; i < n; i++) {
         monster_race *r_ptr = &r_info[who[i]];
         concptr name = (r_name + r_ptr->name);
@@ -169,8 +170,9 @@ static void roff_func(TERM_COLOR attr, concptr str)
  * @param fname ファイル名
  * @return なし
  */
-void spoil_mon_info(player_type *player_ptr, concptr fname)
+void spoil_mon_info(concptr fname)
 {
+    player_type dummy;
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
@@ -195,7 +197,7 @@ void spoil_mon_info(player_type *player_ptr, concptr fname)
     }
 
     u16b why = 2;
-    ang_sort(player_ptr, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
+    ang_sort(&dummy, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
     for (int i = 0; i < n; i++) {
         monster_race *r_ptr = &r_info[who[i]];
         BIT_FLAGS flags1 = r_ptr->flags1;

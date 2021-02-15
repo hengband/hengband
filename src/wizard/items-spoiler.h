@@ -2,4 +2,4 @@
 
 #include "system/angband.h"
 
-void spoil_obj_desc(player_type *player_ptr, concptr fname);
+void spoil_obj_desc(concptr fname);

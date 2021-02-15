@@ -49,7 +49,7 @@ static concptr *spoiler_flag_aux(const BIT_FLAGS art_flags[TR_FLAG_SIZE], const 
  */
 static void analyze_general(player_type *player_ptr, object_type *o_ptr, char *desc_ptr)
 {
-    describe_flavor(player_ptr, desc_ptr, o_ptr, OD_NAME_AND_ENCHANT | OD_STORE);
+    describe_flavor(player_ptr, desc_ptr, o_ptr, OD_NAME_AND_ENCHANT | OD_STORE | OD_DEBUG);
 }
 
 /*!
