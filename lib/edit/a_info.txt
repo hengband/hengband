@@ -4155,7 +4155,7 @@ P:0:3d8:20:12:0
 F:SHOW_MODS | VORPAL |
 F:SPEED | DEX | CHR | SLAY_DEMON | SLAY_ORC | SLAY_TROLL |
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
-D:$The rose throrn whip which a fox spirit loved whipping.
+D:$The rose thorn whip which a fox spirit loved to use.
 D:$  'Beautiful roses have thorns.'
 D:「綺麗なバラには、棘があるのさ」とある妖狐が愛用していた茨の鞭だ。
 
