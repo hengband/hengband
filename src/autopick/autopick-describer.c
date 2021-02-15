@@ -311,14 +311,12 @@ void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *
 	if (IS_FLG(FLG_RARE))
 	{
 		before_str[describer->before_n++] = "very rare";
-		describer->body_str = "equipments";
 		after_str[after_n++] = "such as Dragon armor, Blades of Chaos, etc.";
 	}
 
 	if (IS_FLG(FLG_COMMON))
 	{
 		before_str[describer->before_n++] = "relatively common";
-		describer->body_str = "equipments";
 		after_str[after_n++] = "compared to very rare Dragon armor, Blades of Chaos, etc.";
 	}
 
@@ -336,20 +334,17 @@ void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *
 
 	if (IS_FLG(FLG_GOOD))
 	{
-		describer->body_str = "equipment";
-		which_str[which_n++] = "have good quality";
+		which_str[which_n++] = "are of good quality";
 	}
 
 	if (IS_FLG(FLG_NAMELESS))
 	{
-		describer->body_str = "equipment";
-		which_str[which_n++] = "is neither ego-item nor artifact";
+		which_str[which_n++] = "are neither ego items nor artifacts";
 	}
 
 	if (IS_FLG(FLG_AVERAGE))
 	{
-		describer->body_str = "equipment";
-		which_str[which_n++] = "have average quality";
+		which_str[which_n++] = "are of average quality";
 	}
 
 	if (IS_FLG(FLG_BOOSTED))
@@ -379,7 +374,7 @@ void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *
 
 	if (IS_FLG(FLG_MORE_BONUS))
 	{
-		whose_str[whose_n] = "magical bonus is bigger than (+";
+		whose_str[whose_n] = "magical bonuses are bigger than (+";
 		if (arg_n < (int) (sizeof(arg_str) / sizeof(arg_str[0]))) {
 			snprintf(arg_str[arg_n], sizeof(arg_str[arg_n]),
 				"%d)", entry->bonus);
@@ -394,21 +389,21 @@ void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *
 
 	if (IS_FLG(FLG_WANTED))
 	{
-		describer->body_str = "corpse or skeletons";
-		which_str[which_n++] = "is wanted at the Hunter's Office";
+		describer->body_str = "corpses or skeletons";
+		which_str[which_n++] = "are wanted at the Hunter's Office";
 	}
 
 	if (IS_FLG(FLG_HUMAN))
 	{
 		before_str[describer->before_n++] = "humanoid";
-		describer->body_str = "corpse or skeletons";
+		describer->body_str = "corpses or skeletons";
 		which_str[which_n++] = "can be used for Daemon magic";
 	}
 
 	if (IS_FLG(FLG_UNIQUE))
 	{
-		before_str[describer->before_n++] = "unique monster's";
-		describer->body_str = "corpse or skeletons";
+		before_str[describer->before_n++] = "unique monsters'";
+		describer->body_str = "corpses or skeletons";
 	}
 
 	if (IS_FLG(FLG_UNREADABLE))
@@ -460,7 +455,7 @@ void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *
 	else if (IS_FLG(FLG_FAVORITE_WEAPONS))
 		describer->body_str = "favorite weapons";
 	else if (IS_FLG(FLG_ARMORS))
-		describer->body_str = "armors";
+		describer->body_str = "pieces of armor";
 	else if (IS_FLG(FLG_MISSILES))
 		describer->body_str = "shots, arrows or crossbow bolts";
 	else if (IS_FLG(FLG_DEVICES))
@@ -468,7 +463,7 @@ void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *
 	else if (IS_FLG(FLG_LIGHTS))
 		describer->body_str = "light sources";
 	else if (IS_FLG(FLG_JUNKS))
-		describer->body_str = "junk such as broken sticks";
+		describer->body_str = "pieces of junk such as broken sticks";
 	else if (IS_FLG(FLG_CORPSES))
 		describer->body_str = "corpses or skeletons";
 	else if (IS_FLG(FLG_SPELLBOOKS))
@@ -484,7 +479,7 @@ void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *
 	else if (IS_FLG(FLG_AMULETS))
 		describer->body_str = "amulets";
 	else if (IS_FLG(FLG_SUITS))
-		describer->body_str = "body armors";
+		describer->body_str = "pieces of body armor";
 	else if (IS_FLG(FLG_CLOAKS))
 		describer->body_str = "cloaks";
 	else if (IS_FLG(FLG_HELMS))
@@ -500,7 +495,7 @@ void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *
 		{
 			describer->str++;
 			describer->top = TRUE;
-			whose_str[whose_n] = "name begins with \"";
+			whose_str[whose_n] = "names begin with \"";
 			whose_arg_str[whose_n] = "";
 			++whose_n;
 		}
@@ -578,7 +573,7 @@ void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *
 	if (*describer->str && !describer->top)
 	{
 		strncat(buff, describer->str, 80);
-		strcat(buff, "\" as part of its name");
+		strcat(buff, "\" as part of their names");
 	}
 
 	strcat(buff, ".");
