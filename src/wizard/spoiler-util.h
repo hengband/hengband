@@ -46,3 +46,10 @@ extern FILE *spoiler_file;
 void spoiler_blanklines(int n);
 void spoiler_underline(concptr str);
 void spoil_out(concptr str);
+
+typedef enum spoiler_output_status {
+    SPOILER_OUTPUT_CANCEL,
+    SPOILER_OUTPUT_SUCCESS,
+    SPOILER_OUTPUT_FAIL_FOPEN,
+    SPOILER_OUTPUT_FAIL_FCLOSE
+} spoiler_output_status;

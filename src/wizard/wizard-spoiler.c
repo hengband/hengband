@@ -79,7 +79,7 @@ static bool is_partial_tree(int *tree, int *partial_tree)
  * @param fname 出力ファイル名
  * @return なし
  */
-static void spoil_mon_evol(concptr fname)
+static spoiler_output_status spoil_mon_evol(concptr fname)
 {
     char buf[1024];
     monster_race *r_ptr;
@@ -89,8 +89,7 @@ static void spoil_mon_evol(concptr fname)
     path_build(buf, sizeof buf, ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
     if (!spoiler_file) {
-        msg_print("Cannot create spoiler file.");
-        return;
+        return SPOILER_OUTPUT_FAIL_FOPEN;
     }
 
     char title[200];
@@ -157,11 +156,9 @@ static void spoil_mon_evol(concptr fname)
     C_KILL(evol_tree_zero, max_r_idx * (max_evolution_depth + 1), int);
     C_KILL(evol_tree, max_r_idx, int *);
     if (ferror(spoiler_file) || angband_fclose(spoiler_file)) {
-        msg_print("Cannot close spoiler file.");
-        return;
+        return SPOILER_OUTPUT_FAIL_FCLOSE;
     }
-
-    msg_print("Successfully created a spoiler file.");
+    return SPOILER_OUTPUT_SUCCESS;
 }
 
 /*!
@@ -173,6 +170,7 @@ void exe_output_spoilers(void)
 {
     screen_save();
     while (TRUE) {
+        spoiler_output_status status = SPOILER_OUTPUT_CANCEL;
         term_clear();
         prt("Create a spoiler file.", 2, 0);
         prt("(1) Brief Object Info (obj-desc.txt)", 5, 5);
@@ -186,25 +184,36 @@ void exe_output_spoilers(void)
             screen_load();
             return;
         case '1':
-            spoil_obj_desc("obj-desc.txt");
+            status = spoil_obj_desc("obj-desc.txt");
             break;
         case '2':
-            spoil_fixed_artifact("artifact.txt");
+            status = spoil_fixed_artifact("artifact.txt");
             break;
         case '3':
-            spoil_mon_desc("mon-desc.txt");
+            status = spoil_mon_desc("mon-desc.txt");
             break;
         case '4':
-            spoil_mon_info("mon-info.txt");
+            status = spoil_mon_info("mon-info.txt");
             break;
         case '5':
-            spoil_mon_evol("mon-evol.txt");
+            status = spoil_mon_evol("mon-evol.txt");
             break;
         default:
             bell();
             break;
         }
 
+        switch (status) {
+        case SPOILER_OUTPUT_FAIL_FOPEN:
+            msg_print("Cannot create spoiler file.");
+            break;
+        case SPOILER_OUTPUT_FAIL_FCLOSE:
+            msg_print("Cannot close spoiler file.");
+            break;
+        case SPOILER_OUTPUT_SUCCESS:
+            msg_print("Successfully created a spoiler file.");
+            break;
+        }
         msg_erase();
     }
 }
