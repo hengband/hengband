@@ -113,7 +113,7 @@ void display_koff(player_type *owner_ptr, KIND_OBJECT_IDX k_idx)
     SPELL_IDX spells[64];
 
     for (int spell = 0; spell < 32; spell++) {
-        if (fake_spell_flags[sval] & (1L << spell)) {
+        if (fake_spell_flags[sval] & (1UL << spell)) {
             spells[num++] = spell;
         }
     }

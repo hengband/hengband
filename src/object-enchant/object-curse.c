@@ -29,7 +29,7 @@ BIT_FLAGS get_curse(player_type *owner_ptr, int power, object_type *o_ptr)
     BIT_FLAGS new_curse;
 
     while (TRUE) {
-        new_curse = (1 << (randint0(MAX_CURSE) + 4));
+        new_curse = (1U << (randint0(MAX_CURSE) + 4));
         if (power == 2) {
             if (!(new_curse & TRC_HEAVY_MASK))
                 continue;

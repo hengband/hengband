@@ -79,7 +79,7 @@ static void process_rememberance(melee_spell_type *ms_ptr)
         return;
 
     if (ms_ptr->thrown_spell < RF4_SPELL_START + RF4_SPELL_SIZE) {
-        ms_ptr->r_ptr->r_flags4 |= (1L << (ms_ptr->thrown_spell - RF4_SPELL_START));
+        ms_ptr->r_ptr->r_flags4 |= (1UL << (ms_ptr->thrown_spell - RF4_SPELL_START));
         if (ms_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
             ms_ptr->r_ptr->r_cast_spell++;
 
@@ -87,7 +87,7 @@ static void process_rememberance(melee_spell_type *ms_ptr)
     }
     
     if (ms_ptr->thrown_spell < RF5_SPELL_START + RF5_SPELL_SIZE) {
-        ms_ptr->r_ptr->r_flags5 |= (1L << (ms_ptr->thrown_spell - RF5_SPELL_START));
+        ms_ptr->r_ptr->r_flags5 |= (1UL << (ms_ptr->thrown_spell - RF5_SPELL_START));
         if (ms_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
             ms_ptr->r_ptr->r_cast_spell++;
 
@@ -95,7 +95,7 @@ static void process_rememberance(melee_spell_type *ms_ptr)
     }
     
     if (ms_ptr->thrown_spell < RF6_SPELL_START + RF6_SPELL_SIZE) {
-        ms_ptr->r_ptr->r_flags6 |= (1L << (ms_ptr->thrown_spell - RF6_SPELL_START));
+        ms_ptr->r_ptr->r_flags6 |= (1UL << (ms_ptr->thrown_spell - RF6_SPELL_START));
         if (ms_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
             ms_ptr->r_ptr->r_cast_spell++;
     }

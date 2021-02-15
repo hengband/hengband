@@ -684,7 +684,7 @@ static void calc_spells(player_type *creature_ptr)
 
     int num_boukyaku = 0;
     for (int j = 0; j < 64; j++) {
-        if ((j < 32) ? (creature_ptr->spell_forgotten1 & (1L << j)) : (creature_ptr->spell_forgotten2 & (1L << (j - 32)))) {
+        if ((j < 32) ? (creature_ptr->spell_forgotten1 & (1UL << j)) : (creature_ptr->spell_forgotten2 & (1UL << (j - 32)))) {
             num_boukyaku++;
         }
     }
@@ -712,24 +712,24 @@ static void calc_spells(player_type *creature_ptr)
         if (s_ptr->slevel <= creature_ptr->lev)
             continue;
 
-        bool is_spell_learned = (j < 32) ? (creature_ptr->spell_learned1 & (1L << j)) : (creature_ptr->spell_learned2 & (1L << (j - 32)));
+        bool is_spell_learned = (j < 32) ? (creature_ptr->spell_learned1 & (1UL << j)) : (creature_ptr->spell_learned2 & (1UL << (j - 32)));
         if (!is_spell_learned)
             continue;
 
         REALM_IDX which;
         if (j < 32) {
-            creature_ptr->spell_forgotten1 |= (1L << j);
+            creature_ptr->spell_forgotten1 |= (1UL << j);
             which = creature_ptr->realm1;
         } else {
-            creature_ptr->spell_forgotten2 |= (1L << (j - 32));
+            creature_ptr->spell_forgotten2 |= (1UL << (j - 32));
             which = creature_ptr->realm2;
         }
 
         if (j < 32) {
-            creature_ptr->spell_learned1 &= ~(1L << j);
+            creature_ptr->spell_learned1 &= ~(1UL << j);
             which = creature_ptr->realm1;
         } else {
-            creature_ptr->spell_learned2 &= ~(1L << (j - 32));
+            creature_ptr->spell_learned2 &= ~(1UL << (j - 32));
             which = creature_ptr->realm2;
         }
 
@@ -752,24 +752,24 @@ static void calc_spells(player_type *creature_ptr)
         if (j >= 99)
             continue;
 
-        bool is_spell_learned = (j < 32) ? (creature_ptr->spell_learned1 & (1L << j)) : (creature_ptr->spell_learned2 & (1L << (j - 32)));
+        bool is_spell_learned = (j < 32) ? (creature_ptr->spell_learned1 & (1UL << j)) : (creature_ptr->spell_learned2 & (1UL << (j - 32)));
         if (!is_spell_learned)
             continue;
 
         REALM_IDX which;
         if (j < 32) {
-            creature_ptr->spell_forgotten1 |= (1L << j);
+            creature_ptr->spell_forgotten1 |= (1UL << j);
             which = creature_ptr->realm1;
         } else {
-            creature_ptr->spell_forgotten2 |= (1L << (j - 32));
+            creature_ptr->spell_forgotten2 |= (1UL << (j - 32));
             which = creature_ptr->realm2;
         }
 
         if (j < 32) {
-            creature_ptr->spell_learned1 &= ~(1L << j);
+            creature_ptr->spell_learned1 &= ~(1UL << j);
             which = creature_ptr->realm1;
         } else {
-            creature_ptr->spell_learned2 &= ~(1L << (j - 32));
+            creature_ptr->spell_learned2 &= ~(1UL << (j - 32));
             which = creature_ptr->realm2;
         }
 
@@ -805,24 +805,24 @@ static void calc_spells(player_type *creature_ptr)
         if (s_ptr->slevel > creature_ptr->lev)
             continue;
 
-        bool is_spell_learned = (j < 32) ? (creature_ptr->spell_forgotten1 & (1L << j)) : (creature_ptr->spell_forgotten2 & (1L << (j - 32)));
+        bool is_spell_learned = (j < 32) ? (creature_ptr->spell_forgotten1 & (1UL << j)) : (creature_ptr->spell_forgotten2 & (1UL << (j - 32)));
         if (!is_spell_learned)
             continue;
 
         REALM_IDX which;
         if (j < 32) {
-            creature_ptr->spell_forgotten1 &= ~(1L << j);
+            creature_ptr->spell_forgotten1 &= ~(1UL << j);
             which = creature_ptr->realm1;
         } else {
-            creature_ptr->spell_forgotten2 &= ~(1L << (j - 32));
+            creature_ptr->spell_forgotten2 &= ~(1UL << (j - 32));
             which = creature_ptr->realm2;
         }
 
         if (j < 32) {
-            creature_ptr->spell_learned1 |= (1L << j);
+            creature_ptr->spell_learned1 |= (1UL << j);
             which = creature_ptr->realm1;
         } else {
-            creature_ptr->spell_learned2 |= (1L << (j - 32));
+            creature_ptr->spell_learned2 |= (1UL << (j - 32));
             which = creature_ptr->realm2;
         }
 
@@ -846,7 +846,7 @@ static void calc_spells(player_type *creature_ptr)
             if (s_ptr->slevel > creature_ptr->lev)
                 continue;
 
-            if (creature_ptr->spell_learned1 & (1L << j)) {
+            if (creature_ptr->spell_learned1 & (1UL << j)) {
                 continue;
             }
 

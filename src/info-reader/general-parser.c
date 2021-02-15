@@ -53,7 +53,7 @@ errr init_info_txt(FILE *fp, char *buf, angband_header *head, parse_info_txt_fun
             int i;
             for (i = 0; buf[i]; i++) {
                 head->v_extra += (byte)buf[i];
-                head->v_extra ^= (1 << (i % 8));
+                head->v_extra ^= (1U << (i % 8));
             }
         }
 

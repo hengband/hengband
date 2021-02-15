@@ -125,7 +125,7 @@ static int get_hissatsu_power(player_type *creature_ptr, SPELL_IDX *sn)
                     menu_line += 31;
                     if (menu_line > 32)
                         menu_line -= 32;
-                } while (!(creature_ptr->spell_learned1 & (1L << (menu_line - 1))));
+                } while (!(creature_ptr->spell_learned1 & (1UL << (menu_line - 1))));
                 break;
             }
 
@@ -136,7 +136,7 @@ static int get_hissatsu_power(player_type *creature_ptr, SPELL_IDX *sn)
                     menu_line++;
                     if (menu_line > 32)
                         menu_line -= 32;
-                } while (!(creature_ptr->spell_learned1 & (1L << (menu_line - 1))));
+                } while (!(creature_ptr->spell_learned1 & (1UL << (menu_line - 1))));
                 break;
             }
 
@@ -154,7 +154,7 @@ static int get_hissatsu_power(player_type *creature_ptr, SPELL_IDX *sn)
                     reverse = TRUE;
                 } else
                     menu_line += 16;
-                while (!(creature_ptr->spell_learned1 & (1L << (menu_line - 1)))) {
+                while (!(creature_ptr->spell_learned1 & (1UL << (menu_line - 1)))) {
                     if (reverse) {
                         menu_line--;
                         if (menu_line < 2)
@@ -205,7 +205,7 @@ static int get_hissatsu_power(player_type *creature_ptr, SPELL_IDX *sn)
                     /* Access the spell */
                     if (spell.slevel > plev)
                         continue;
-                    if (!(creature_ptr->spell_learned1 & (1L << i)))
+                    if (!(creature_ptr->spell_learned1 & (1UL << i)))
                         continue;
                     if (use_menu) {
                         if (i == (menu_line - 1))
@@ -259,7 +259,7 @@ static int get_hissatsu_power(player_type *creature_ptr, SPELL_IDX *sn)
         }
 
         /* Totally Illegal */
-        if ((i < 0) || (i >= 32) || !(creature_ptr->spell_learned1 & (1 << sentaku[i]))) {
+        if ((i < 0) || (i >= 32) || !(creature_ptr->spell_learned1 & (1U << sentaku[i]))) {
             bell();
             continue;
         }
@@ -400,13 +400,13 @@ void do_cmd_gain_hissatsu(player_type *creature_ptr)
         return;
 
     for (i = o_ptr->sval * 8; i < o_ptr->sval * 8 + 8; i++) {
-        if (creature_ptr->spell_learned1 & (1L << i))
+        if (creature_ptr->spell_learned1 & (1UL << i))
             continue;
         if (technic_info[TECHNIC_HISSATSU][i].slevel > creature_ptr->lev)
             continue;
 
-        creature_ptr->spell_learned1 |= (1L << i);
-        creature_ptr->spell_worked1 |= (1L << i);
+        creature_ptr->spell_learned1 |= (1UL << i);
+        creature_ptr->spell_worked1 |= (1UL << i);
         msg_format(_("%sの技を覚えた。", "You have learned the special attack of %s."), exe_spell(creature_ptr, REALM_HISSATSU, i, SPELL_NAME));
         for (j = 0; j < 64; j++) {
             /* Stop at the first empty space */

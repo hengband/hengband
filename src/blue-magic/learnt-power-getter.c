@@ -172,15 +172,15 @@ static bool sweep_learnt_spells(player_type *caster_ptr, learnt_magic_type *lm_p
 {
     set_rf_masks(&lm_ptr->f4, &lm_ptr->f5, &lm_ptr->f6, lm_ptr->mode);
     for (lm_ptr->blue_magic_num = 0, lm_ptr->count = 0; lm_ptr->blue_magic_num < 32; lm_ptr->blue_magic_num++)
-        if ((0x00000001 << lm_ptr->blue_magic_num) & lm_ptr->f4)
+        if ((0x00000001U << lm_ptr->blue_magic_num) & lm_ptr->f4)
             lm_ptr->blue_magics[lm_ptr->count++] = lm_ptr->blue_magic_num;
 
     for (; lm_ptr->blue_magic_num < 64; lm_ptr->blue_magic_num++)
-        if ((0x00000001 << (lm_ptr->blue_magic_num - 32)) & lm_ptr->f5)
+        if ((0x00000001U << (lm_ptr->blue_magic_num - 32)) & lm_ptr->f5)
             lm_ptr->blue_magics[lm_ptr->count++] = lm_ptr->blue_magic_num;
 
     for (; lm_ptr->blue_magic_num < 96; lm_ptr->blue_magic_num++)
-        if ((0x00000001 << (lm_ptr->blue_magic_num - 64)) & lm_ptr->f6)
+        if ((0x00000001U << (lm_ptr->blue_magic_num - 64)) & lm_ptr->f6)
             lm_ptr->blue_magics[lm_ptr->count++] = lm_ptr->blue_magic_num;
 
     for (lm_ptr->blue_magic_num = 0; lm_ptr->blue_magic_num < lm_ptr->count; lm_ptr->blue_magic_num++) {

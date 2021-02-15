@@ -268,7 +268,7 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
             ADD_FLG_NOUN(FLG_ITEMS);
     } else {
         if (prev_flg != -1) {
-            entry->flag[prev_flg / 32] &= ~(1L << (prev_flg % 32));
+            entry->flag[prev_flg / 32] &= ~(1UL << (prev_flg % 32));
             ptr = prev_ptr;
         }
     }

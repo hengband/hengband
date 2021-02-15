@@ -223,7 +223,7 @@ static bool spell_okay(player_type *caster_ptr, int spell, bool learned, bool st
         return FALSE;
 
     /* Spell is forgotten */
-    if ((use_realm == caster_ptr->realm2) ? (caster_ptr->spell_forgotten2 & (1L << spell)) : (caster_ptr->spell_forgotten1 & (1L << spell))) {
+    if ((use_realm == caster_ptr->realm2) ? (caster_ptr->spell_forgotten2 & (1UL << spell)) : (caster_ptr->spell_forgotten1 & (1UL << spell))) {
         /* Never okay */
         return FALSE;
     }
@@ -234,7 +234,7 @@ static bool spell_okay(player_type *caster_ptr, int spell, bool learned, bool st
         return TRUE;
 
     /* Spell is learned */
-    if ((use_realm == caster_ptr->realm2) ? (caster_ptr->spell_learned2 & (1L << spell)) : (caster_ptr->spell_learned1 & (1L << spell))) {
+    if ((use_realm == caster_ptr->realm2) ? (caster_ptr->spell_learned2 & (1UL << spell)) : (caster_ptr->spell_learned1 & (1UL << spell))) {
         /* Always true */
         return (!study_pray);
     }
@@ -294,7 +294,7 @@ static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJ
     /* Extract spells */
     for (spell = 0; spell < 32; spell++) {
         /* Check for this spell */
-        if ((fake_spell_flags[sval] & (1L << spell))) {
+        if ((fake_spell_flags[sval] & (1UL << spell))) {
             /* Collect this spell */
             spells[num++] = spell;
         }
@@ -617,7 +617,7 @@ void do_cmd_browse(player_type *caster_ptr)
     /* Extract spells */
     for (spell = 0; spell < 32; spell++) {
         /* Check for this spell */
-        if ((fake_spell_flags[sval] & (1L << spell))) {
+        if ((fake_spell_flags[sval] & (1UL << spell))) {
             /* Collect this spell */
             spells[num++] = spell;
         }
@@ -693,7 +693,7 @@ static void change_realm2(player_type *caster_ptr, player_personality_type next_
 
     sprintf(tmp, _("魔法の領域を%sから%sに変更した。", "changed magic realm from %s to %s."), realm_names[caster_ptr->realm2], realm_names[next_realm]);
     exe_write_diary(caster_ptr, DIARY_DESCRIPTION, 0, tmp);
-    caster_ptr->old_realm |= 1 << (caster_ptr->realm2 - 1);
+    caster_ptr->old_realm |= 1U << (caster_ptr->realm2 - 1);
     caster_ptr->realm2 = next_realm;
 
     caster_ptr->update |= (PU_REORDER);
@@ -800,7 +800,7 @@ void do_cmd_study(player_type *caster_ptr)
         /* Extract spells */
         for (spell = 0; spell < 32; spell++) {
             /* Check spells in the book */
-            if ((fake_spell_flags[sval] & (1L << spell))) {
+            if ((fake_spell_flags[sval] & (1UL << spell))) {
                 /* Skip non "okay" prayers */
                 if (!spell_okay(caster_ptr, spell, FALSE, TRUE, (increment ? caster_ptr->realm2 : caster_ptr->realm1)))
                     continue;
@@ -831,15 +831,15 @@ void do_cmd_study(player_type *caster_ptr)
 
     /* Learn the spell */
     if (spell < 32) {
-        if (caster_ptr->spell_learned1 & (1L << spell))
+        if (caster_ptr->spell_learned1 & (1UL << spell))
             learned = TRUE;
         else
-            caster_ptr->spell_learned1 |= (1L << spell);
+            caster_ptr->spell_learned1 |= (1UL << spell);
     } else {
-        if (caster_ptr->spell_learned2 & (1L << (spell - 32)))
+        if (caster_ptr->spell_learned2 & (1UL << (spell - 32)))
             learned = TRUE;
         else
-            caster_ptr->spell_learned2 |= (1L << (spell - 32));
+            caster_ptr->spell_learned2 |= (1UL << (spell - 32));
     }
 
     if (learned) {
@@ -1161,15 +1161,15 @@ void do_cmd_cast(player_type *caster_ptr)
             chg_virtue(caster_ptr, V_CHANCE, 1);
 
         /* A spell was cast */
-        if (!(increment ? (caster_ptr->spell_worked2 & (1L << spell)) : (caster_ptr->spell_worked1 & (1L << spell))) && (caster_ptr->pclass != CLASS_SORCERER)
+        if (!(increment ? (caster_ptr->spell_worked2 & (1UL << spell)) : (caster_ptr->spell_worked1 & (1UL << spell))) && (caster_ptr->pclass != CLASS_SORCERER)
             && (caster_ptr->pclass != CLASS_RED_MAGE)) {
             int e = s_ptr->sexp;
 
             /* The spell worked */
             if (realm == caster_ptr->realm1) {
-                caster_ptr->spell_worked1 |= (1L << spell);
+                caster_ptr->spell_worked1 |= (1UL << spell);
             } else {
-                caster_ptr->spell_worked2 |= (1L << spell);
+                caster_ptr->spell_worked2 |= (1UL << spell);
             }
 
             gain_exp(caster_ptr, e * s_ptr->slevel);

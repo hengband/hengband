@@ -71,15 +71,15 @@ void rd_options(void)
 
     for (int n = 0; n < 8; n++) {
         for (int i = 0; i < 32; i++) {
-            if (!(mask[n] & (1L << i)))
+            if (!(mask[n] & (1UL << i)))
                 continue;
-            if (!(option_mask[n] & (1L << i)))
+            if (!(option_mask[n] & (1UL << i)))
                 continue;
 
-            if (flag[n] & (1L << i)) {
-                option_flag[n] |= (1L << i);
+            if (flag[n] & (1UL << i)) {
+                option_flag[n] |= (1UL << i);
             } else {
-                option_flag[n] &= ~(1L << i);
+                option_flag[n] &= ~(1UL << i);
             }
         }
     }
@@ -96,15 +96,15 @@ void rd_options(void)
 
     for (int n = 0; n < 8; n++) {
         for (int i = 0; i < 32; i++) {
-            if (!(mask[n] & (1L << i)))
+            if (!(mask[n] & (1UL << i)))
                 continue;
-            if (!(window_mask[n] & (1L << i)))
+            if (!(window_mask[n] & (1UL << i)))
                 continue;
 
-            if (flag[n] & (1L << i)) {
-                window_flag[n] |= (1L << i);
+            if (flag[n] & (1UL << i)) {
+                window_flag[n] |= (1UL << i);
             } else {
-                window_flag[n] &= ~(1L << i);
+                window_flag[n] &= ~(1UL << i);
             }
         }
     }

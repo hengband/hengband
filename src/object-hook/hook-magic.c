@@ -113,7 +113,7 @@ bool item_tester_learn_spell(player_type *player_ptr, object_type *o_ptr)
     else if (!is_magic(tval2realm(o_ptr->tval)))
         return FALSE;
 
-    return (get_realm1_book(player_ptr) == o_ptr->tval) || (get_realm2_book(player_ptr) == o_ptr->tval) || (choices & (0x0001 << (tval2realm(o_ptr->tval) - 1)));
+    return (get_realm1_book(player_ptr) == o_ptr->tval) || (get_realm2_book(player_ptr) == o_ptr->tval) || (choices & (0x0001U << (tval2realm(o_ptr->tval) - 1)));
 }
 
 /*!

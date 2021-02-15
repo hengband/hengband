@@ -21,7 +21,7 @@ static void enumerate_class_list(char *sym)
             sym[n] = ('A' + n - 26);
 
         char buf[80];
-        if (!(rp_ptr->choice & (1L << n)))
+        if (!(rp_ptr->choice & (1UL << n)))
             sprintf(buf, "%c%c(%s)", sym[n], p2, str);
         else
             sprintf(buf, "%c%c%s", sym[n], p2, str);
@@ -45,7 +45,7 @@ static void display_class_stat(int cs, int *os, char *cur, char *sym)
         cp_ptr = &class_info[cs];
         mp_ptr = &m_info[cs];
         concptr str = cp_ptr->title;
-        if (!(rp_ptr->choice & (1L << cs)))
+        if (!(rp_ptr->choice & (1UL << cs)))
             sprintf(cur, "%c%c(%s)", sym[cs], p2, str);
         else
             sprintf(cur, "%c%c%s", sym[cs], p2, str);

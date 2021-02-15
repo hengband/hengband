@@ -342,9 +342,9 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
         if (desc)
             return _("呪文詠唱を中止することなく、薬の効果を得ることができる。", "Quaffs a potion without canceling spell casting.");
         if (cast) {
-            casting_hex_flags(caster_ptr) |= (1L << HEX_INHAIL);
+            casting_hex_flags(caster_ptr) |= (1UL << HEX_INHAIL);
             do_cmd_quaff_potion(caster_ptr);
-            casting_hex_flags(caster_ptr) &= ~(1L << HEX_INHAIL);
+            casting_hex_flags(caster_ptr) &= ~(1UL << HEX_INHAIL);
             add = FALSE;
         }
         break;
@@ -581,7 +581,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 
             if ((!o_ptr->k_idx) || (!object_is_cursed(o_ptr))) {
                 exe_spell(caster_ptr, REALM_HEX, spell, SPELL_STOP);
-                casting_hex_flags(caster_ptr) &= ~(1L << spell);
+                casting_hex_flags(caster_ptr) &= ~(1UL << spell);
                 casting_hex_num(caster_ptr)--;
                 if (!SINGING_SONG_ID(caster_ptr))
                     set_action(caster_ptr, ACTION_NONE);
@@ -668,7 +668,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 
             if (!flag) {
                 msg_format(_("%sの呪文の詠唱をやめた。", "Finish casting '%^s'."), exe_spell(caster_ptr, REALM_HEX, HEX_RESTORE, SPELL_NAME));
-                casting_hex_flags(caster_ptr) &= ~(1L << HEX_RESTORE);
+                casting_hex_flags(caster_ptr) &= ~(1UL << HEX_RESTORE);
                 if (cont)
                     casting_hex_num(caster_ptr)--;
                 if (casting_hex_num(caster_ptr))
@@ -873,7 +873,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
     /* start casting */
     if ((cast) && (add)) {
         /* add spell */
-        casting_hex_flags(caster_ptr) |= 1L << (spell);
+        casting_hex_flags(caster_ptr) |= 1UL << (spell);
         casting_hex_num(caster_ptr)++;
 
         if (caster_ptr->action != ACTION_SPELL)

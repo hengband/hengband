@@ -255,9 +255,9 @@ void s64b_div(s32b *A1, u32b *A2, s32b B1, u32b B2)
 		if (s64b_cmp(A1val, A2val, B1, B2) >= 0)
 		{
 			if (bit >= 32)
-				result1 |= (0x00000001L << (bit - 32));
+				result1 |= (0x00000001UL << (bit - 32));
 			else
-				result2 |= (0x00000001L << bit);
+				result2 |= (0x00000001UL << bit);
 
 			s64b_sub(&A1val, &A2val, B1, B2);
 		}

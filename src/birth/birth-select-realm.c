@@ -124,7 +124,7 @@ static void impose_first_realm(player_type *creature_ptr, s32b choices)
 static void analyze_realms(player_type *creature_ptr, s32b choices, birth_realm_type *birth_realm_ptr)
 {
     for (int i = 0; i < 32; i++) {
-        if ((choices & (1L << i)) == 0)
+        if ((choices & (1UL << i)) == 0)
             continue;
 
         if (creature_ptr->realm1 == i + 1) {
