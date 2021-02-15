@@ -12176,7 +12176,7 @@ F:EVIL | IM_POIS | NO_CONF | NO_SLEEP
 S:1_IN_3
 S:BLIND | SLOW | CONF | SCARE | DRAIN_MANA | MIND_BLAST | FORGET | 
 S:DARKNESS | BO_ACID | BO_FIRE | BO_COLD
-D:$A disembodied eye, surrounded by twenty fourth smaller eyes
+D:$A disembodied eye, surrounded by twenty four smaller eyes
 D:$ on undulating stalks.
 D:大きくうねる触手の先に付いた２４個の小さな目玉に囲まれている、
 D:体を持たない目玉だ。
@@ -12266,7 +12266,7 @@ F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | POWERFUL | FORCE_MAXHP |
 F:OPEN_DOOR | BASH_DOOR | EVIL | IM_POIS | RES_DARK | DROP_CORPSE
 F:ANIMAL | NO_CONF | NO_SLEEP | CAN_SWIM | RIDING
 S:1_IN_8 | BR_POIS | BR_DARK | BR_NETH
-D:$A large basilisk, whose shape resembles that of a ancient dragon.
+D:$A large basilisk, whose shape resembles that of an ancient dragon.
 D:大型のバジリスクで、古代ドラゴンに似た姿をしている。
 
 #JZ#
@@ -13813,7 +13813,7 @@ D:睨んでいる。
 
 #JZ#
 N:732:リンゴ嫌い『ブル・ゲイツ』
-E:Bull Gates, the applephobia
+E:Bull Gates, the applephobe
 G:p:D
 I:140:25d100:40:90:0
 W:52:3:0:18000:0:0
@@ -17967,7 +17967,7 @@ F:PASS_WALL | POWERFUL | MOVE_BODY | RES_DARK | RES_NETH
 F:EVIL | DRAGON | IM_COLD | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_4 | BR_NETH | BR_DARK | SCARE | BLINK | SHRIEK
 D:$It draws darkness from the underworld and brings chaos to the dungeon.
-D:$  The space around it is distorted and it is not possible
+D:$  The space around it is distorted, and it is not possible
 D:$ to clearly capture its appearance.
 D:それは冥界から闇を呼び寄せてダンジョンに混沌をもたらしている。
 D:それの周りでは空間が歪み、姿をはっきりと捉えることができない。
@@ -18809,7 +18809,7 @@ F:RES_LITE | RES_DARK | RES_NETH | RES_WATE | RES_PLAS | RES_SHAR | RES_SOUN
 F:RES_CHAO | RES_DISE | RES_WALL | RES_INER | RES_TIME | RES_GRAV | RES_TELE
 F:NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP | CAN_FLY
 S:1_IN_3 | BLINK | HOLD | BLIND | CONF | SCARE
-D:$This was Bull Gates's most devastating weapon once,
+D:$This once was Bull Gates's most devastating weapon,
 D:$ propagating fear and ruin throughout all multiverse.
 D:$  Its weaknesses are cyber weapons named CSS and JavaScript,
 D:$ but neither exists in this universe.
@@ -20207,7 +20207,7 @@ B:KICK:HURT:1d4
 B:BITE:HURT:1d5
 F:ANIMAL | DROP_CORPSE | DROP_SKELETON | RIDING
 D:$It is also called a horse bird.
-D:$  It can run through land quickly instead of being able to fly.
+D:$  It can run quickly instead of being able to fly.
 D:それは馬鳥ともいい、空を飛ぶことができない。
 D:代わりに陸を素早く駆け抜けることができる。
 
@@ -23305,7 +23305,7 @@ F:UNIQUE | FORCE_MAXHP | MALE | GOOD | ANIMAL
 F:DROP_90 | DROP_1D2 | DROP_GOOD | RES_SOUN | NO_STUN
 S:1_IN_6 | SHOOT
 D:$He is the eldest son of the three brothers,
-D:$ and be aware the shot by his cross bow!
+D:$ and be wary of his crossbow shots!
 D:三兄弟の長男で、クロスボウからの一撃に要注意だ！
 
 N:1169:怪物の太母『エキドナ』
@@ -23853,7 +23853,7 @@ F:EVIL | DRAGON | IM_POIS | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_4 | BLIND | CONF | SCARE | BR_POIS
 D:$A huge dragon of incredible destructive power.  Noxious vapours 
 D:$fill the room near it, leaving you gasping for breath.
-D:$  Free now while you still can!
+D:$  Flee now while you still can!
 D:信じられない程の破壊的な力を持った巨大なドラゴンだ。
 D:有毒な霧が近くの部屋に充満し、ほとんど息ができない。
 D:逃げられるうちに逃げろ！
@@ -24142,7 +24142,7 @@ F:IM_FIRE | IM_COLD | IM_ELEC | RES_DARK
 F:NO_SLEEP | NO_CONF | DROP_60
 S:1_IN_5 | SHOOT
 D:$It is one of those who agree with Miraak's corrupt wishes.
-D:$They are relentlessly chasing you as against Mirak's noble will.
+D:$They are relentlessly chasing you as against Miraak's noble will.
 D:ミラークの堕落した願いに賛同している者共の一人だ。
 D:彼らはあなたをミラークの崇高な意志に反する者として執拗に追っている。
 
@@ -24159,7 +24159,7 @@ F:IM_FIRE | IM_COLD | IM_ELEC | RES_DARK
 F:NO_SLEEP | NO_CONF | DROP_60
 S:1_IN_2 | BLINK | CONF | HOLD | BA_POIS | BA_FIRE | BA_COLD | BA_ELEC
 D:$It is one of those who agree with Miraak's corrupt wishes.
-D:$They are relentlessly chasing you as against Mirak's noble will.
+D:$They are relentlessly chasing you as against Miraak's noble will.
 D:ミラークの堕落した願いに賛同している者共の一人だ。
 D:彼らはあなたをミラークの崇高な意志に反する者として執拗に追っている。
 
@@ -24284,7 +24284,7 @@ D:太古に埋葬された戦士だ。
 D:それはドラウグル達を統括し、侵入者を注意深く見守っている。
 
 N:1219:ドラウグル・デス・オーバーロード
-E:Draugr death overload
+E:Draugr death overlord
 G:z:r
 I:120:100d26:50:90:10
 W:51:3:0:13000:0:0
@@ -24374,7 +24374,7 @@ B:SLASH:POISON:9d7
 F:EVIL | FRIENDS | DROP_CORPSE | DROP_SKELETON | DROP_90 | ONLY_ITEM
 F:IM_POIS | RES_LITE | RES_DARK | BASH_DOOR
 S:1_IN_7 | SHOOT | BA_POIS | BR_POIS | CONF | HOLD | BLIND
-D:$A falmel holding a sword and shield made of chaurus shell.
+D:$A falmer holding a sword and shield made of chaurus shell.
 D:シャウラスの殻でできた剣と盾を手にしたファルメルだ。
 
 N:1225:ファルメル・ナイトプロウラー
@@ -24831,9 +24831,9 @@ W:5:2:0:30:0:0
 B:BITE:HURT:2d5
 B:STING:POISON:2d3
 F:AQUATIC | ANIMAL | WILD_ALL | RES_WATE
-D:$This fish is also known as ghost shark, and named after hybrid monster
-D:$ due to its patchwark-like appearance.
-D:$ It has poson needle.
+D:$This fish is also known as a ghost shark and is named after the hybrid
+D:$ monster due to its patchwork-like appearance.
+D:$ It has a poisoned stinger.
 D:この魚は英語ではキマイラと言い、継ぎ接ぎめいた姿から合成魔獣の名を付けられた。
 D:それは毒針を持っている。
 
@@ -24865,7 +24865,7 @@ F:BASH_DOOR | IM_ACID | IM_ELEC | HURT_FIRE | WEIRD_MIND | NO_FEAR
 R:1252:5d5
 D:$The Queen of vespoid, featuring a huge abdomen and bright wings.
 D:$  Command the subordinate vespoid
-D: with a peculiar flight and attack the intruder.
+D:$ with a peculiar flight and attack the intruder.
 D:$  The abdominal sting is also very well developed,
 D:$ and in addition to neurological poisons,
 D:$ it may also inject acidic fluids towards its prey.
@@ -25006,7 +25006,7 @@ D:ブレッタの夢想とゾートの執着心が生み出した、勇者の幻
 D:倒す度に夢の中のゾートは執念を増し、それと反対にブレッタの夢は醒めていく。 
 
 N:1260:天使・クイルスルグ
-E:Engel quylthulg
+E:Angel quylthulg
 G:Q:w
 I:120:48d10:20:1:0
 W:51:1:0:3000:0:0
@@ -25042,7 +25042,7 @@ F:IM_ACID | IM_ELEC | IM_COLD | IM_FIRE | IM_POIS
 S:1_IN_4 | HASTE | HEAL | CAUSE_2
 D:$A fairy cat that walks on two legs and understands human language.
 D:$This Cait Sith is like a swordfighter who serves the cat kingdom
-D:$I see you as a prey to give to the king.
+D:$It sees you as prey to give to the king.
 D:二足で歩き、人語を解す妖精猫。
 D:このケット・シーは猫の王国に仕える剣士のようだ。
 D:あなたを王に献上する獲物と見なしている。
@@ -25212,7 +25212,7 @@ D:それのそばでは動く気力すら沸かなくなるため、刑務所の
 D:最近、闇の勢力が力を拡大するに連れて、一部が野に放たれてしまったようだ。
 
 N:1272:セイレーン
-E:Seiren
+E:Siren
 G:l:y
 I:120:80d20:20:50:80
 W:35:3:0:500:0:0
@@ -25222,8 +25222,8 @@ F:FEMALE | AQUATIC | CAN_FLY | CAN_SWIM | WILD_SHORE | NEVER_MOVE
 F:ONLY_ITEM | DROP_GOOD | DROP_1D2
 F:IM_COLD | IM_POIS | RES_WATE | RES_TELE | NO_STUN
 S:1_IN_2 | SHRIEK | TELE_TO
-D:$In folklore, Seirens wrecked the ship with a singing voice.
-D:$  But, Seirens in Angband knows a quicker way.
+D:$In folklore, Sirens wrecked the ship with a singing voice.
+D:$  But, Sirens in Angband know a quicker way.
 D:伝承のセイレーンは歌声で船を難破させたが、
 D:鉄獄のセイレーンはもっと手っ取り早い方法を知っている。
 
@@ -25242,7 +25242,7 @@ F:DROP_90 | ONLY_ITEM
 D:$It's a lump of silvery flesh-like material
 D:$ that works very hard to absorb nearby light.
 D:$  It seems to have a dream of catching and absorbing
-D:$ all the light that illuminates the dungeon."
+D:$ all the light that illuminates the dungeon.
 D:それは銀色の肉のような物質の塊で、付近の光をすごくがんばって吸い取っている。
 D:ダンジョンを照らす光をすべてキャッチし吸い尽くすのが夢らしい。 
 
@@ -25261,7 +25261,7 @@ F:IM_FIRE | RES_LITE | RES_CHAO | RES_INER | NO_CONF | NO_SLEEP
 S:1_IN_5 | BA_FIRE | BA_LITE | HEAL | HOLD | CONF | BLIND
 
 N:1275:コティングリーの妖精
-E:Cottingley Fairies
+E:Cottingley Fairy
 G:I:G
 I:115:3d11:15:30:80
 W:12:3:0:20:0:0
@@ -25270,7 +25270,7 @@ B:WAIL:LOSE_INT
 F:FEMALE | QUANTUM | PREVENT_SUDDEN_MAGIC | FRIENDS | DROP_90 | TAKE_ITEM
 F:HURT_FIRE | CAN_FLY | FRIENDLY | HAS_LITE_1 | IM_POIS | RES_LITE
 S:1_IN_4 | MISSILE
-D:$Only a few old photographs are the only proof that this fairy once existed.
+D:$A few old photographs are the only proof that this fairy once existed.
 D:たった数枚の古ぼけた写真が、この妖精がかつて実在したことの唯一の証拠だ。 
 
 N:1276:点『P』
