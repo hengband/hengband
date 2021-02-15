@@ -95,7 +95,7 @@ static bool make_fake_artifact(player_type *player_ptr, object_type *o_ptr, ARTI
         return FALSE;
 
     object_prep(player_ptr, o_ptr, i);
-    o_ptr->name1 = (byte)name1;
+    o_ptr->name1 = name1;
     o_ptr->pval = a_ptr->pval;
     o_ptr->ac = a_ptr->ac;
     o_ptr->dd = a_ptr->dd;
