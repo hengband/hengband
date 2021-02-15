@@ -1,5 +1,6 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "wizard/spoiler-util.h"
 
-void spoil_obj_desc(concptr fname);
+spoiler_output_status spoil_obj_desc(concptr fname);

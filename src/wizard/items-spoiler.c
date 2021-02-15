@@ -84,20 +84,17 @@ static void kind_info(player_type *player_ptr, char *buf, char *dam, char *wgt, 
 
 /*!
  * @brief 各ベースアイテムの情報を一行毎に記述する /
- * @param player_ptr プレーヤーへの参照ポインタ
  * Create a spoiler file for items
  * @param fname ファイル名
- * @return なし
  */
-void spoil_obj_desc(concptr fname)
+spoiler_output_status spoil_obj_desc(concptr fname)
 {
     player_type dummy;
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
     if (!spoiler_file) {
-        msg_print("Cannot create spoiler file.");
-        return;
+        return SPOILER_OUTPUT_FAIL_FOPEN;
     }
 
     char title[200];
@@ -163,9 +160,7 @@ void spoil_obj_desc(concptr fname)
     }
 
     if (ferror(spoiler_file) || angband_fclose(spoiler_file)) {
-        msg_print("Cannot close spoiler file.");
-        return;
+        return SPOILER_OUTPUT_FAIL_FCLOSE;
     }
-
-    msg_print("Successfully created a spoiler file.");
+    return SPOILER_OUTPUT_SUCCESS;
 }

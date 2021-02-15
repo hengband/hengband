@@ -9,7 +9,6 @@
 #include "util/sort.h"
 #include "view/display-lore.h"
 #include "view/display-messages.h"
-#include "wizard/spoiler-util.h"
 
 /*!
  * @brief シンボル職の記述名を返す /
@@ -70,9 +69,8 @@ static concptr attr_to_text(monster_race *r_ptr)
  * @brief モンスター簡易情報のスポイラー出力を行うメインルーチン /
  * Create a spoiler file for monsters   -BEN-
  * @param fname 生成ファイル名
- * @return なし
  */
-void spoil_mon_desc(concptr fname)
+spoiler_output_status spoil_mon_desc(concptr fname)
 {
     player_type dummy;
     u16b why = 2;
@@ -88,8 +86,7 @@ void spoil_mon_desc(concptr fname)
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
     if (!spoiler_file) {
-        msg_print("Cannot create spoiler file.");
-        return;
+        return SPOILER_OUTPUT_FAIL_FOPEN;
     }
 
     char title[200];
@@ -144,11 +141,9 @@ void spoil_mon_desc(concptr fname)
     fprintf(spoiler_file, "\n");
     C_KILL(who, max_r_idx, s16b);
     if (ferror(spoiler_file) || angband_fclose(spoiler_file)) {
-        msg_print("Cannot close spoiler file.");
-        return;
+        return SPOILER_OUTPUT_FAIL_FCLOSE;
     }
-
-    msg_print("Successfully created a spoiler file.");
+    return SPOILER_OUTPUT_SUCCESS;
 }
 
 /*!
@@ -170,15 +165,14 @@ static void roff_func(TERM_COLOR attr, concptr str)
  * @param fname ファイル名
  * @return なし
  */
-void spoil_mon_info(concptr fname)
+spoiler_output_status spoil_mon_info(concptr fname)
 {
     player_type dummy;
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
     if (!spoiler_file) {
-        msg_print("Cannot create spoiler file.");
-        return;
+        return SPOILER_OUTPUT_FAIL_FOPEN;
     }
 
     char title[200];
@@ -245,9 +239,7 @@ void spoil_mon_info(concptr fname)
 
     C_KILL(who, max_r_idx, s16b);
     if (ferror(spoiler_file) || angband_fclose(spoiler_file)) {
-        msg_print("Cannot close spoiler file.");
-        return;
+        return SPOILER_OUTPUT_FAIL_FCLOSE;
     }
-
-    msg_print("Successfully created a spoiler file.");
+    return SPOILER_OUTPUT_SUCCESS;
 }

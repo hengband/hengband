@@ -142,11 +142,9 @@ static void spoiler_print_art(obj_desc_list *art_ptr)
 /*!
  * @brief アーティファクト情報のスポイラー出力を行うメインルーチン /
  * Create a spoiler file for artifacts
- * @param player_ptr プレーヤーへの参照ポインタ
  * @param fname 生成ファイル名
- * @return なし
  */
-void spoil_fixed_artifact(concptr fname)
+spoiler_output_status spoil_fixed_artifact(concptr fname)
 {
     player_type dummy;
     object_type forge;
@@ -156,8 +154,7 @@ void spoil_fixed_artifact(concptr fname)
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
     if (!spoiler_file) {
-        msg_print("Cannot create spoiler file.");
-        return;
+        return SPOILER_OUTPUT_FAIL_FOPEN;
     }
 
     print_header();
@@ -184,9 +181,7 @@ void spoil_fixed_artifact(concptr fname)
     }
 
     if (ferror(spoiler_file) || angband_fclose(spoiler_file)) {
-        msg_print("Cannot close spoiler file.");
-        return;
+        return SPOILER_OUTPUT_FAIL_FCLOSE;
     }
-
-    msg_print("Successfully created a spoiler file.");
+    return SPOILER_OUTPUT_SUCCESS;
 }
