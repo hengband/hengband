@@ -146,8 +146,9 @@ static void spoiler_print_art(obj_desc_list *art_ptr)
  * @param fname 生成ファイル名
  * @return なし
  */
-void spoil_fixed_artifact(player_type *player_ptr, concptr fname)
+void spoil_fixed_artifact(concptr fname)
 {
+    player_type dummy;
     object_type forge;
     object_type *q_ptr;
     obj_desc_list artifact;
@@ -174,10 +175,10 @@ void spoil_fixed_artifact(player_type *player_ptr, concptr fname)
 
             q_ptr = &forge;
             object_wipe(q_ptr);
-            if (!make_fake_artifact(player_ptr, q_ptr, j))
+            if (!make_fake_artifact(&dummy, q_ptr, j))
                 continue;
 
-            object_analyze(player_ptr, q_ptr, &artifact);
+            object_analyze(&dummy, q_ptr, &artifact);
             spoiler_print_art(&artifact);
         }
     }

@@ -126,6 +126,7 @@
 #include "util/string-processor.h"
 #include "view/display-map.h"
 #include "view/display-messages.h"
+#include "wizard/wizard-spoiler.h"
 #include "world/world.h"
 
 #ifdef WINDOWS

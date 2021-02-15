@@ -89,8 +89,9 @@ static void kind_info(player_type *player_ptr, char *buf, char *dam, char *wgt, 
  * @param fname ファイル名
  * @return なし
  */
-void spoil_obj_desc(player_type *player_ptr, concptr fname)
+void spoil_obj_desc(concptr fname)
 {
+    player_type dummy;
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
@@ -121,8 +122,8 @@ void spoil_obj_desc(player_type *player_ptr, concptr fname)
                         PRICE t1;
                         PRICE t2;
 
-                        kind_info(player_ptr, NULL, NULL, NULL, NULL, &e1, &t1, who[i1]);
-                        kind_info(player_ptr, NULL, NULL, NULL, NULL, &e2, &t2, who[i2]);
+                        kind_info(&dummy, NULL, NULL, NULL, NULL, &e1, &t1, who[i1]);
+                        kind_info(&dummy, NULL, NULL, NULL, NULL, &e2, &t2, who[i2]);
 
                         if ((t1 > t2) || ((t1 == t2) && (e1 > e2))) {
                             u16b tmp = who[i1];
@@ -139,7 +140,7 @@ void spoil_obj_desc(player_type *player_ptr, concptr fname)
                     char wgt[80];
                     char chance[80];
                     char dam[80];
-                    kind_info(player_ptr, buf, dam, wgt, chance, &e, &v, who[s]);
+                    kind_info(&dummy, buf, dam, wgt, chance, &e, &v, who[s]);
                     fprintf(spoiler_file, "  %-35s%8s%7s%5d %-40s%9ld\n", buf, dam, wgt, (int)e, chance, (long)(v));
                 }
 

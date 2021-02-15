@@ -79,10 +79,11 @@ static bool is_partial_tree(int *tree, int *partial_tree)
  * @param fname 出力ファイル名
  * @return なし
  */
-static void spoil_mon_evol(player_type *player_ptr, concptr fname)
+static void spoil_mon_evol(concptr fname)
 {
     char buf[1024];
     monster_race *r_ptr;
+    player_type dummy;
     int **evol_tree, i, j, n, r_idx;
     int *evol_tree_zero; /* For C_KILL() */
     path_build(buf, sizeof buf, ANGBAND_DIR_USER, fname);
@@ -135,7 +136,7 @@ static void spoil_mon_evol(player_type *player_ptr, concptr fname)
         }
     }
 
-    ang_sort(player_ptr, evol_tree, NULL, max_r_idx, ang_sort_comp_evol_tree, ang_sort_swap_evol_tree);
+    ang_sort(&dummy, evol_tree, NULL, max_r_idx, ang_sort_comp_evol_tree, ang_sort_swap_evol_tree);
     for (i = 0; i < max_r_idx; i++) {
         r_idx = evol_tree[i][0];
         if (!r_idx)
@@ -168,7 +169,7 @@ static void spoil_mon_evol(player_type *player_ptr, concptr fname)
  * Create Spoiler files -BEN-
  * @return なし
  */
-void exe_output_spoilers(player_type *player_ptr)
+void exe_output_spoilers(void)
 {
     screen_save();
     while (TRUE) {
@@ -185,19 +186,19 @@ void exe_output_spoilers(player_type *player_ptr)
             screen_load();
             return;
         case '1':
-            spoil_obj_desc(player_ptr, "obj-desc.txt");
+            spoil_obj_desc("obj-desc.txt");
             break;
         case '2':
-            spoil_fixed_artifact(player_ptr, "artifact.txt");
+            spoil_fixed_artifact("artifact.txt");
             break;
         case '3':
-            spoil_mon_desc(player_ptr, "mon-desc.txt");
+            spoil_mon_desc("mon-desc.txt");
             break;
         case '4':
-            spoil_mon_info(player_ptr, "mon-info.txt");
+            spoil_mon_info("mon-info.txt");
             break;
         case '5':
-            spoil_mon_evol(player_ptr, "mon-evol.txt");
+            spoil_mon_evol("mon-evol.txt");
             break;
         default:
             bell();
