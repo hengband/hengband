@@ -334,7 +334,7 @@ void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *
 
 	if (IS_FLG(FLG_GOOD))
 	{
-		which_str[which_n++] = "have good quality";
+		which_str[which_n++] = "are of good quality";
 	}
 
 	if (IS_FLG(FLG_NAMELESS))
@@ -344,7 +344,7 @@ void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *
 
 	if (IS_FLG(FLG_AVERAGE))
 	{
-		which_str[which_n++] = "have average quality";
+		which_str[which_n++] = "are of average quality";
 	}
 
 	if (IS_FLG(FLG_BOOSTED))
