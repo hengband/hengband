@@ -3921,8 +3921,8 @@ F:DEX | BLOWS | SPEED | HIDE_TYPE |
 F:BRAND_COLD | BRAND_POIS | VORPAL | RES_FEAR
 D:$This is the dagger with a very poisonous sharp edge,
 D:$ which can slash and kill anyone quickly.
-D:$  Many years ago, Jian ke tied to assasinate the first
-D:$ emperor of unified China.
+D:$  Many years ago, Jian ke tried to assassinate the first
+D:$ emperor of unified China with this blade.
 D:猛毒の刃を持つ鋭い匕首だ。斬られればたちまち死に至るだろう。
 D:燕の刺客荊軻は、この匕首を用いて秦の始皇帝の暗殺を試みた。
 D:いまもその執念が宿る。
