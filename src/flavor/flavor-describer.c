@@ -23,6 +23,7 @@
 #include "object-hook/hook-checker.h"
 #include "object-hook/hook-enchant.h"
 #include "object-hook/hook-quest.h"
+#include "object/object-flags.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
 #include "player/player-status-table.h"
@@ -137,13 +138,19 @@ static void describe_bow(player_type *player_ptr, flavor_type *flavor_ptr)
     flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->power);
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
 
+    int num_fire = 100;
     if (!(flavor_ptr->mode & OD_DEBUG)) {
-        flavor_ptr->fire_rate = calc_num_fire(player_ptr, flavor_ptr->o_ptr);
-        if ((flavor_ptr->fire_rate == 0) || (flavor_ptr->power <= 0) || !flavor_ptr->known)
-            return;
+        num_fire = calc_num_fire(player_ptr, flavor_ptr->o_ptr);
+    } else {
+        BIT_FLAGS flgs[TR_FLAG_SIZE];
+        object_flags(player_ptr, flavor_ptr->o_ptr, flgs);
+        if (has_flag(flgs, TR_XTRA_SHOTS))
+            num_fire += 100;
     }
+    if ((num_fire == 0) || (flavor_ptr->power <= 0) || !flavor_ptr->known)
+        return;
 
-    flavor_ptr->fire_rate = bow_energy(flavor_ptr->o_ptr->sval) / flavor_ptr->fire_rate;
+    flavor_ptr->fire_rate = bow_energy(flavor_ptr->o_ptr->sval) / num_fire;
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
     flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->fire_rate / 100);
@@ -500,7 +507,7 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
         else if ((player_ptr->pclass == CLASS_NINJA) && (flavor_ptr->o_ptr->tval == TV_SPIKE))
             describe_spike_power(player_ptr, flavor_ptr);
     }
-    
+
     describe_ac(flavor_ptr);
     if (flavor_ptr->mode & OD_NAME_AND_ENCHANT) {
         angband_strcpy(flavor_ptr->buf, flavor_ptr->tmp_val, MAX_NLEN);
