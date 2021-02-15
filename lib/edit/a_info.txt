@@ -920,7 +920,7 @@ W:30:20:10:100000
 P:1:0d0:0:0:19
 F:STEALTH | SEARCH | FREE_ACT | SEE_INVIS | HOLD_EXP | TELEPATHY
 D:$The cloak of Jack of Shadows. He is one of the kings who rule
-D:$ night side of the earth at which rotetion stopped.
+D:$ the night side of the earth where rotation has stopped.
 D:$(R.Zelazny, 'Jack of Shadows')
 D:自転が止まった地球で夜の世界を支配する王の一人、
 D:泥棒の王である不死身の『影のジャック』のクロークだ。
