@@ -313,7 +313,7 @@ bool cast_force_spell(player_type *caster_ptr, mind_force_trainer_type spell)
         if (success)
             msg_print(_("御用でございますが、御主人様？", "'Your wish, master?'"));
         else
-            msg_print(_("何も現れなかった。", "Nothing happen."));
+            msg_print(_("何も現れなかった。", "Nothing happens."));
 
         break;
     }

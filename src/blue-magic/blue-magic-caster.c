@@ -330,7 +330,7 @@ bool switch_cast_blue_magic(player_type *caster_ptr, bmc_type *bmc_ptr, SPELL_ID
     case MS_MAKE_TRAP:
         return cast_blue_make_trap(caster_ptr);
     case MS_FORGET:
-        msg_print(_("しかし何も起きなかった。", "Nothing happen."));
+        msg_print(_("しかし何も起きなかった。", "Nothing happens."));
         return TRUE;
     case MS_RAISE_DEAD:
         msg_print(_("死者復活の呪文を唱えた。", "You animate the dead."));
