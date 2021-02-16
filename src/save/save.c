@@ -94,7 +94,7 @@ static bool wr_savefile_new(player_type *player_ptr, save_type type)
     wr_randomizer();
     wr_options(type);
     u32b tmp32u = message_num();
-    if (compress_savefile && (tmp32u > 40))
+    if ((compress_savefile || (type == SAVE_TYPE_DEBUG)) && (tmp32u > 40))
         tmp32u = 40;
 
     wr_u32b(tmp32u);
