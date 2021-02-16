@@ -57,7 +57,7 @@ menu_content menu_info[MAX_COMMAND_MENU_NUM][MAX_COMMAND_PER_SCREEN] = {
         { _("杖を使う(u/Z)", "Use a staff(u/Z)"), 'u', TRUE },
         { _("魔法棒で狙う(a/z)", "Aim a wand(a/z)"), 'a', TRUE },
         { _("ロッドを振る(z/a)", "Zap a rod(z/a)"), 'z', TRUE },
-        { _("始動する(A)", "Activate an equipment(A)"), 'A', TRUE },
+        { _("始動する(A)", "Activate equipped item(A)"), 'A', TRUE },
         { _("食べる(E)", "Eat(E)"), 'E', TRUE },
         { _("飛び道具で撃つ(f/t)", "Fire missile weapon(f/t)"), 'f', TRUE },
         { _("投げる(v)", "Throw an item(v)"), 'v', TRUE },
