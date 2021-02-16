@@ -389,7 +389,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
         if (name)
             return _("反魂の術", "Animate dead");
         if (desc)
-            return _("周囲の死体や骨を生き返す。", "Resurrects nearby corpses and skeletons. And makes these your pets.");
+            return _("周囲の死体や骨を生き返す。", "Resurrects nearby corpses and skeletons. And makes them your pets.");
 
         {
             if (cast) {
