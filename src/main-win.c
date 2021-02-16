@@ -3611,7 +3611,7 @@ int PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nC
 
     signals_init();
     term_activate(term_screen);
-    init_angband(p_ptr, process_autopick_file_command);
+    init_angband(p_ptr, process_autopick_file_command, FALSE);
     initialized = TRUE;
     check_for_save_file(p_ptr, lpCmdLine);
     prt(_("[ファイル] メニューの [新規] または [開く] を選択してください。", "[Choose 'New' or 'Open' from the 'File' menu]"), 23, _(8, 17));
