@@ -217,3 +217,34 @@ void exe_output_spoilers(void)
         msg_erase();
     }
 }
+
+/*!
+ * @brief 全スポイラー出力を行うコマンドのメインルーチン /
+ * Create Spoiler files -BEN-
+ * @return 成功時SPOILER_OUTPUT_SUCCESS / 失敗時エラー状態
+ */
+spoiler_output_status output_all_spoilers(void)
+{
+    spoiler_output_status status;
+    status = spoil_obj_desc("obj-desc.txt");
+    if (status != SPOILER_OUTPUT_SUCCESS)
+        return status;
+
+    status = spoil_fixed_artifact("artifact.txt");
+    if (status != SPOILER_OUTPUT_SUCCESS)
+        return status;
+
+    status = spoil_mon_desc("mon-desc.txt");
+    if (status != SPOILER_OUTPUT_SUCCESS)
+        return status;
+
+    status = spoil_mon_info("mon-info.txt");
+    if (status != SPOILER_OUTPUT_SUCCESS)
+        return status;
+
+    status = spoil_mon_evol("mon-evol.txt");
+    if (status != SPOILER_OUTPUT_SUCCESS)
+        return status;
+
+    return SPOILER_OUTPUT_SUCCESS;
+}
