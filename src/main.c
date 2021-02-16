@@ -532,7 +532,7 @@ int main(int argc, char *argv[])
     signals_init();
 
     /* Initialize */
-    init_angband(p_ptr, process_autopick_file_command);
+    init_angband(p_ptr, process_autopick_file_command, FALSE);
 
     /* Wait for response */
     pause_line(23);
