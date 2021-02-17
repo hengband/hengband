@@ -24279,7 +24279,7 @@ F:NO_CONF | BASH_DOOR | MOVE_BODY | NO_FEAR
 F:HURT_LITE | IM_COLD | IM_POIS | RES_NETH | DROP_2D2 | ONLY_ITEM
 S:1_IN_5 | SHOOT | SCARE | BA_COLD | BR_COLD | BR_SOUN | S_UNDEAD
 D:$It is a warrior buried in ancient times.
-D:$  It oversees the draugrs and closely watches the intruders.
+D:$  It oversees other draugrs and closely watches for intruders.
 D:太古に埋葬された戦士だ。
 D:それはドラウグル達を統括し、侵入者を注意深く見守っている。
 
