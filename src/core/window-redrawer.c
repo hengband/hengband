@@ -228,7 +228,7 @@ void window_stuff(player_type *player_ptr)
 {
     if (!player_ptr->window_flags)
         return;
-    
+
     BIT_FLAGS mask = 0L;
     for (int j = 0; j < 8; j++) {
         if (angband_term[j] && !angband_term[j]->never_fresh)
