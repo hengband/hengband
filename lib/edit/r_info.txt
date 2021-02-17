@@ -24214,7 +24214,7 @@ B:HIT:HURT:1d10
 F:UNDEAD | DROP_CORPSE | HURT_FIRE | HURT_LITE | IM_COLD | IM_POIS | RES_NETH
 F:DROP_60 | FRIENDS | NO_FEAR
 D:$It is a warrior buried in ancient times.
-D:$  It does not forgive intruders for treasure.
+D:$  It does not forgive treasure-seeking intruders.
 D:太古に埋葬された戦士だ。財宝を狙う侵入者を容赦しない。
 
 N:1215:ドラウグル・ウォーカー
@@ -24230,7 +24230,7 @@ F:HURT_FIRE | HURT_LITE | IM_COLD | IM_POIS | RES_NETH
 F:DROP_90 | FRIENDS | NO_FEAR
 S:1_IN_9 | SHOOT | BA_COLD
 D:$It is a warrior buried in ancient times.
-D:$  It never forgives intruders for treasure.
+D:$  It never forgives treasure-seeking intruders.
 D:太古に埋葬された戦士だ。財宝を狙う侵入者を決して容赦しない。
 
 N:1216:ドラウグル・ワイト
@@ -24245,8 +24245,8 @@ B:CRUSH:HURT:4d6
 F:UNDEAD | EVIL | DROP_CORPSE
 F:HURT_LITE | IM_COLD | IM_POIS | RES_NETH | DROP_90 | FRIENDS | NO_FEAR
 S:1_IN_8 | SHOOT | BA_COLD
-D:$This warrior has continued to protect the tomb for a long time.
-D:$  You may also be a dependent!
+D:$This warrior has continued to protect its tomb for a long time.
+D:$  It may conscript you as an assistant guard!
 D:この戦士は墳墓を延々と守り続けている。あなたも眷属にされるかもしれない！
 
 N:1217:ドラウグル・スカージ
@@ -24261,8 +24261,8 @@ B:CRUSH:HURT:7d6
 F:UNDEAD | EVIL | DROP_CORPSE | HURT_LITE | IM_COLD | IM_POIS | RES_NETH
 F:DROP_90 | DROP_1D2 | ONLY_ITEM | FRIENDS | NO_FEAR | BASH_DOOR
 S:1_IN_6 | SHOOT | SCARE | BA_COLD | BR_COLD | BR_SOUN
-D:$It is a draugr that has acquired a unique cry.
-D:$  It informs the surroundings of the existence of an intruder.
+D:$It is a draugr that has acquired a unique cry
+D:$ and will warn all nearby of the presence of an intruder.
 D:独特の叫びを会得したドラウグルだ。それは侵入者の存在を周囲に知らせる。
 
 N:1218:ドラウグル・デスロード
@@ -24279,7 +24279,7 @@ F:NO_CONF | BASH_DOOR | MOVE_BODY | NO_FEAR
 F:HURT_LITE | IM_COLD | IM_POIS | RES_NETH | DROP_2D2 | ONLY_ITEM
 S:1_IN_5 | SHOOT | SCARE | BA_COLD | BR_COLD | BR_SOUN | S_UNDEAD
 D:$It is a warrior buried in ancient times.
-D:$  It oversees the draugrs and closely watches the intruders.
+D:$  It oversees other draugrs and closely watches for intruders.
 D:太古に埋葬された戦士だ。
 D:それはドラウグル達を統括し、侵入者を注意深く見守っている。
 
@@ -24298,8 +24298,8 @@ F:IM_COLD | IM_POIS | RES_NETH | RES_TELE | NO_CONF
 F:DROP_90 | DROP_3D2 | DROP_GOOD | ONLY_ITEM | DROP_CORPSE
 S:1_IN_5 | SHOOT | SCARE | HOLD | BA_POIS | BA_COLD | BR_COLD | BR_SOUN
 S:S_UNDEAD | S_KIN
-D:$It is the strongest warrior on top of all draugrs.
-D:$  They are very few buried in the world.
+D:$It is one of the strongest warriors among all the draugrs.
+D:$  Only a very few of them are buried in the world.
 D:あらゆるドラウグル達の上位に立つ最強の戦士だ。
 D:世界でも埋葬された数はごく少ない。
 
