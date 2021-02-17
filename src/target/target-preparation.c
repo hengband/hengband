@@ -150,9 +150,9 @@ void target_set_prepare(player_type *creature_ptr, BIT_FLAGS mode)
     tmp_pos.x[1] = tmp;
 }
 
-void target_sensing_monsters_prepare(player_type *creature_ptr)
+void target_sensing_monsters_prepare(player_type *creature_ptr, pos_list* plist)
 {
-    tmp_pos.n = 0;
+    plist->n = 0;
 
     // 幻覚時は正常に感知できない
     if (creature_ptr->image)
@@ -163,10 +163,10 @@ void target_sensing_monsters_prepare(player_type *creature_ptr)
         if (!monster_is_valid(m_ptr) || !m_ptr->ml || is_pet(m_ptr))
             continue;
 
-        tmp_pos.x[tmp_pos.n] = m_ptr->fx;
-        tmp_pos.y[tmp_pos.n] = m_ptr->fy;
-        tmp_pos.n++;
+        plist->x[plist->n] = m_ptr->fx;
+        plist->y[plist->n] = m_ptr->fy;
+        plist->n++;
     }
 
-    ang_sort(creature_ptr, tmp_pos.x, tmp_pos.y, tmp_pos.n, ang_sort_comp_importance, ang_sort_swap_position);
+    ang_sort(creature_ptr, plist->x, plist->y, plist->n, ang_sort_comp_importance, ang_sort_swap_position);
 }
