@@ -25,6 +25,7 @@
 #include "player-info/avatar.h"
 #include "system/object-type-definition.h"
 #include "view/display-messages.h"
+#include "window/display-sub-windows.h"
 #include "world/world.h"
 
 /*!
@@ -133,6 +134,7 @@ bool ident_spell(player_type *caster_ptr, bool only_equip, tval_type item_tester
         msg_format(_("ザック中: %s(%c)。", "In your pack: %s (%c)."), o_name, index_to_label(item));
     } else {
         msg_format(_("床上: %s。", "On the ground: %s."), o_name);
+        fix_floor_item_list(caster_ptr, caster_ptr->y, caster_ptr->x);
     }
 
     autopick_alter_item(caster_ptr, item, (bool)(destroy_identify && !old_known));

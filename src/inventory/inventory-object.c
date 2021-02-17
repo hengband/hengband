@@ -24,8 +24,7 @@ void vary_item(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
         return;
     }
 
-    floor_type *floor_ptr = owner_ptr->current_floor_ptr;
-    floor_item_increase(floor_ptr, 0 - item, num);
+    floor_item_increase(owner_ptr, 0 - item, num);
     floor_item_describe(owner_ptr, 0 - item);
     floor_item_optimize(owner_ptr, 0 - item);
 }

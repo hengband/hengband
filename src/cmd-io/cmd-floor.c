@@ -38,7 +38,7 @@ void do_cmd_target(player_type *creature_ptr)
  */
 void do_cmd_look(player_type *creature_ptr)
 {
-    creature_ptr->window_flags |= PW_MONSTER_LIST;
+    creature_ptr->window_flags |= (PW_MONSTER_LIST | PW_FLOOR_ITEM_LIST);
     handle_stuff(creature_ptr);
     if (target_set(creature_ptr, TARGET_LOOK))
         msg_print(_("ターゲット決定。", "Target Selected."));

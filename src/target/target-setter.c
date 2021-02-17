@@ -20,6 +20,7 @@
 #include "target/target-types.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
+#include "window/display-sub-windows.h"
 #include "window/main-window-util.h"
 
 // Target Setter.
@@ -302,6 +303,9 @@ static bool set_target_grid(player_type *creature_ptr, ts_type *ts_ptr)
         return FALSE;
 
     describe_projectablity(creature_ptr, ts_ptr);
+
+    fix_floor_item_list(creature_ptr, ts_ptr->y, ts_ptr->x);
+
     while (TRUE) {
         ts_ptr->query = examine_grid(creature_ptr, ts_ptr->y, ts_ptr->x, ts_ptr->mode, ts_ptr->info);
         if (ts_ptr->query)
@@ -443,6 +447,8 @@ static void sweep_target_grids(player_type *creature_ptr, ts_type *ts_ptr)
         if ((ts_ptr->mode & TARGET_LOOK) == 0)
             print_path(creature_ptr, ts_ptr->y, ts_ptr->x);
 
+        fix_floor_item_list(creature_ptr, ts_ptr->y, ts_ptr->x);
+
         ts_ptr->g_ptr = &creature_ptr->current_floor_ptr->grid_array[ts_ptr->y][ts_ptr->x];
         strcpy(ts_ptr->info, _("q止 t決 p自 m近 +次 -前", "q,t,p,m,+,-,<dir>"));
         describe_grid_wizard(creature_ptr, ts_ptr);
@@ -475,7 +481,7 @@ bool target_set(player_type *creature_ptr, target_type mode)
     verify_panel(creature_ptr);
     creature_ptr->update |= (PU_MONSTERS);
     creature_ptr->redraw |= (PR_MAP);
-    creature_ptr->window_flags |= (PW_OVERHEAD);
+    creature_ptr->window_flags |= (PW_OVERHEAD | PW_FLOOR_ITEM_LIST);
     handle_stuff(creature_ptr);
     return target_who != 0;
 }

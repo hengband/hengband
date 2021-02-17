@@ -37,6 +37,7 @@
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include "window/display-sub-windows.h"
 #include "wizard/wizard-messages.h"
 #include "world/world-object.h"
 #include "world/world.h"
@@ -201,8 +202,10 @@ void delete_all_items_from_floor(player_type *player_ptr, POSITION y, POSITION x
  * @param num 増やしたいアイテムの数
  * @return なし
  */
-void floor_item_increase(floor_type *floor_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
+void floor_item_increase(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
 {
+    const floor_type *floor_ptr = owner_ptr->current_floor_ptr;
+
     object_type *o_ptr = &floor_ptr->o_list[item];
     num += o_ptr->number;
     if (num > 255)
@@ -212,6 +215,9 @@ void floor_item_increase(floor_type *floor_ptr, INVENTORY_IDX item, ITEM_NUMBER 
 
     num -= o_ptr->number;
     o_ptr->number += num;
+
+    if (player_bold(owner_ptr, o_ptr->iy, o_ptr->ix))
+        fix_floor_item_list(owner_ptr, o_ptr->iy, o_ptr->ix);
 }
 
 /*!
@@ -229,7 +235,13 @@ void floor_item_optimize(player_type *owner_ptr, INVENTORY_IDX item)
     if (o_ptr->number)
         return;
 
+    const int oy = o_ptr->iy;
+    const int ox = o_ptr->ix;
+
     delete_object_idx(owner_ptr, item);
+
+    if (player_bold(owner_ptr, oy, ox))
+        fix_floor_item_list(owner_ptr, oy, ox);
 }
 
 /*!
@@ -553,6 +565,10 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
     note_spot(owner_ptr, by, bx);
     lite_spot(owner_ptr, by, bx);
     sound(SOUND_DROP);
+
+    // プレイヤーの足元に何かが落ちたら足元アイテムリストの表示を更新
+    if (player_bold(owner_ptr, by, bx))
+        fix_floor_item_list(owner_ptr, by, bx);
 
     if (chance && player_bold(owner_ptr, by, bx)) {
         msg_print(_("何かが足下に転がってきた。", "You feel something roll beneath your feet."));

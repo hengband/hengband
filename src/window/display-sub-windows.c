@@ -16,6 +16,7 @@
 #include "monster/monster-info.h"
 #include "object/item-tester-hooker.h"
 #include "object/object-info.h"
+#include "object/object-mark-types.h"
 #include "player/player-status-flags.h"
 #include "spell-kind/magic-item-recharger.h"
 #include "system/floor-type-definition.h"
@@ -468,6 +469,86 @@ void fix_object(player_type *player_ptr)
             display_koff(player_ptr, player_ptr->object_kind_idx);
 
         term_fresh();
+        term_activate(old);
+    }
+}
+
+static void print_floor_item_list(player_type *player_ptr, const int y, const int x)
+{
+    // Term の行数を取得。
+    TERM_LEN term_h;
+    {
+        TERM_LEN term_w;
+        term_get_size(&term_w, &term_h);
+    }
+    if (term_h <= 0)
+        return;
+
+    term_clear();
+    term_gotoxy(0, 0);
+
+    // 先頭行を書く。
+    if (player_bold(player_ptr, y, x)) {
+        term_addstr(-1, TERM_WHITE, _("あなたの足元のアイテム一覧", "Items at your feet"));
+    } else {
+        char line[256];
+        sprintf(line, _("(X:%03d Y:%03d)の発見済みアイテム一覧", "Found items at (X:%03d Y:%03d)"), x, y);
+        term_addstr(-1, TERM_WHITE, line);
+    }
+
+    const floor_type *const floor_ptr = player_ptr->current_floor_ptr;
+    const grid_type *const g_ptr = &floor_ptr->grid_array[y][x];
+
+    // (y,x) のアイテムを1行に1個ずつ書く。
+    TERM_LEN term_y = 1;
+    for (OBJECT_IDX o_idx = g_ptr->o_idx; o_idx > 0;) {
+        object_type *const o_ptr = &floor_ptr->o_list[o_idx];
+
+        // 未発見アイテムおよび金は対象外。
+        if (!(o_ptr->marked & OM_FOUND))
+            continue;
+        if (o_ptr->tval == TV_GOLD)
+            continue;
+
+        // 途中で行数が足りなくなったら最終行にその旨追記して終了。
+        if (term_y >= term_h) {
+            term_addstr(-1, TERM_WHITE, "-- more --");
+            break;
+        }
+
+        term_gotoxy(0, term_y);
+
+        if (player_ptr->image) {
+            term_addstr(-1, TERM_WHITE, _("何か奇妙な物", "something strange"));
+        } else {
+            char line[1024];
+            describe_flavor(player_ptr, line, o_ptr, 0);
+            TERM_COLOR attr = tval_to_attr[o_ptr->tval % 128];
+            term_addstr(-1, attr, line);
+        }
+
+        o_idx = o_ptr->next_o_idx;
+        ++term_y;
+    }
+}
+
+/*!
+ * @brief (y,x) のアイテム一覧をサブウィンドウに表示する / display item at (y,x) in sub-windows
+ */
+void fix_floor_item_list(player_type *player_ptr, const int y, const int x)
+{
+    for (int j = 0; j < 8; j++) {
+        if (!angband_term[j])
+            continue;
+        if (!(window_flag[j] & PW_FLOOR_ITEM_LIST))
+            continue;
+
+        term_type *old = Term;
+        term_activate(angband_term[j]);
+
+        print_floor_item_list(player_ptr, y, x);
+        term_fresh();
+
         term_activate(old);
     }
 }

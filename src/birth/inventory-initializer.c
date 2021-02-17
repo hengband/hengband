@@ -59,7 +59,7 @@ void wield_all(player_type *creature_ptr)
             inven_item_increase(creature_ptr, item, -1);
             inven_item_optimize(creature_ptr, item);
         } else {
-            floor_item_increase(creature_ptr->current_floor_ptr, 0 - item, -1);
+            floor_item_increase(creature_ptr, 0 - item, -1);
             floor_item_optimize(creature_ptr, 0 - item);
         }
 

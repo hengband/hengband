@@ -205,6 +205,12 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
     if (!(mpe_mode & MPE_DONT_PICKUP))
         carry(creature_ptr, (mpe_mode & MPE_DO_PICKUP) ? TRUE : FALSE);
 
+    // 自動拾い/自動破壊により足元のアイテムリストが変化した可能性があるので表示を更新。
+    if (!creature_ptr->running) {
+        creature_ptr->window_flags |= PW_FLOOR_ITEM_LIST;
+        window_stuff(creature_ptr);
+    }
+
     if (has_flag(f_ptr->flags, FF_STORE)) {
         disturb(creature_ptr, FALSE, TRUE);
         free_turn(creature_ptr);

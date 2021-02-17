@@ -284,4 +284,9 @@ void window_stuff(player_type *player_ptr)
         player_ptr->window_flags &= ~(PW_OBJECT);
         fix_object(player_ptr);
     }
+
+    if (window_flags & (PW_FLOOR_ITEM_LIST)) {
+        player_ptr->window_flags &= ~(PW_FLOOR_ITEM_LIST);
+        fix_floor_item_list(player_ptr, player_ptr->y, player_ptr->x);
+    }
 }
