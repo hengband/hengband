@@ -24298,8 +24298,8 @@ F:IM_COLD | IM_POIS | RES_NETH | RES_TELE | NO_CONF
 F:DROP_90 | DROP_3D2 | DROP_GOOD | ONLY_ITEM | DROP_CORPSE
 S:1_IN_5 | SHOOT | SCARE | HOLD | BA_POIS | BA_COLD | BR_COLD | BR_SOUN
 S:S_UNDEAD | S_KIN
-D:$It is the strongest warrior on top of all draugrs.
-D:$  They are very few buried in the world.
+D:$It is one of the strongest warriors among all the draugrs.
+D:$  Only a very few of them are buried in the world.
 D:あらゆるドラウグル達の上位に立つ最強の戦士だ。
 D:世界でも埋葬された数はごく少ない。
 
