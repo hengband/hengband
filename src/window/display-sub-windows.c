@@ -189,7 +189,7 @@ void fix_monster_list(player_type *player_ptr)
         term_activate(angband_term[j]);
         int w, h;
         term_get_size(&w, &h);
-        target_set_prepare(player_ptr, TARGET_LOOK);
+        target_sensing_monsters_prepare(player_ptr);
         print_monster_list(player_ptr->current_floor_ptr, 0, 0, h);
         target_clear(player_ptr);
         term_fresh();
