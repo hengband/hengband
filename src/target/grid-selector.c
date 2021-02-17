@@ -69,7 +69,7 @@ static void tgt_pt_prepare(player_type *creature_ptr)
         }
     }
 
-    ang_sort(creature_ptr, tmp_pos.x, tmp_pos.y, tmp_pos.n, ang_sort_comp_distance, ang_sort_swap_distance);
+    ang_sort(creature_ptr, tmp_pos.x, tmp_pos.y, tmp_pos.n, ang_sort_comp_distance, ang_sort_swap_position);
 }
 
 /*

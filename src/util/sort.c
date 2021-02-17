@@ -203,7 +203,7 @@ bool ang_sort_comp_importance(player_type *player_ptr, vptr u, vptr v, int a, in
  * We use "u" and "v" to point to arrays of "x" and "y" positions,
  * and sort the arrays by distance to the player.
  */
-void ang_sort_swap_distance(player_type *player_ptr, vptr u, vptr v, int a, int b)
+void ang_sort_swap_position(player_type *player_ptr, vptr u, vptr v, int a, int b)
 {
     /* Unused */
     (void)player_ptr;
