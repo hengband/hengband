@@ -7,7 +7,7 @@ void ang_sort(player_type *player_ptr, vptr u, vptr v, int n, bool (*ang_sort_co
 
 bool ang_sort_comp_distance(player_type *player_ptr, vptr u, vptr v, int a, int b);
 bool ang_sort_comp_importance(player_type *player_ptr, vptr u, vptr v, int a, int b);
-void ang_sort_swap_distance(player_type *player_ptr, vptr u, vptr v, int a, int b);
+void ang_sort_swap_position(player_type *player_ptr, vptr u, vptr v, int a, int b);
 
 bool ang_sort_art_comp(player_type *player_ptr, vptr u, vptr v, int a, int b);
 void ang_sort_art_swap(player_type *player_ptr, vptr u, vptr v, int a, int b);
