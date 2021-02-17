@@ -150,19 +150,22 @@ void print_monster_list(floor_type *floor_ptr, pos_list *plist, TERM_LEN x, TERM
             continue; //表示処理を次に回す
         }
 
-        // print last mons info
+        // last_mons と m_ptr が(見た目が)異なるなら、last_mons とその数を出力。
+        // m_ptr を新たな last_mons とする。
         print_monster_line(x, line++, last_mons, n_same);
         n_same = 1;
         last_mons = m_ptr;
-        if (line - y - 1 == max_lines)
+
+        // 行数が足りなくなったら中断。
+        if (line - y == max_lines)
             break;
     }
 
-    if (line - y - 1 == max_lines && i != plist->n) {
-        term_erase(0, line, 255);
-        term_gotoxy(x, line);
+    if (i != plist->n) {
+        // 行数が足りなかった場合、最終行にその旨表示。
         term_addstr(-1, TERM_WHITE, "-- and more --");
     } else {
+        // 行数が足りていれば last_mons とその数を出力し、残りの行をクリア。
         if (last_mons)
             print_monster_line(x, line++, last_mons, n_same);
         for (; line < max_lines; line++)
