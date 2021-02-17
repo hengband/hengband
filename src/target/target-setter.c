@@ -479,10 +479,3 @@ bool target_set(player_type *creature_ptr, target_type mode)
     handle_stuff(creature_ptr);
     return target_who != 0;
 }
-
-void target_clear(player_type *creature_ptr) {
-    ts_type tmp_ts;
-    ts_type *ts_ptr = initialize_target_set_type(creature_ptr, &tmp_ts, TARGET_LOOK);
-    ts_ptr->done = TRUE;
-    tmp_pos.n = 0;
-}

@@ -149,3 +149,24 @@ void target_set_prepare(player_type *creature_ptr, BIT_FLAGS mode)
     tmp_pos.x[0] = tmp_pos.x[1];
     tmp_pos.x[1] = tmp;
 }
+
+void target_sensing_monsters_prepare(player_type *creature_ptr)
+{
+    tmp_pos.n = 0;
+
+    // 幻覚時は正常に感知できない
+    if (creature_ptr->image)
+        return;
+
+    for (int i = 1; i < creature_ptr->current_floor_ptr->m_max; i++) {
+        monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[i];
+        if (!monster_is_valid(m_ptr) || !m_ptr->ml || is_pet(m_ptr))
+            continue;
+
+        tmp_pos.x[tmp_pos.n] = m_ptr->fx;
+        tmp_pos.y[tmp_pos.n] = m_ptr->fy;
+        tmp_pos.n++;
+    }
+
+    ang_sort(creature_ptr, tmp_pos.x, tmp_pos.y, tmp_pos.n, ang_sort_comp_importance, ang_sort_swap_distance);
+}
