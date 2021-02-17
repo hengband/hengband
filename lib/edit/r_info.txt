@@ -24261,8 +24261,8 @@ B:CRUSH:HURT:7d6
 F:UNDEAD | EVIL | DROP_CORPSE | HURT_LITE | IM_COLD | IM_POIS | RES_NETH
 F:DROP_90 | DROP_1D2 | ONLY_ITEM | FRIENDS | NO_FEAR | BASH_DOOR
 S:1_IN_6 | SHOOT | SCARE | BA_COLD | BR_COLD | BR_SOUN
-D:$It is a draugr that has acquired a unique cry.
-D:$  It informs the surroundings of the existence of an intruder.
+D:$It is a draugr that has acquired a unique cry
+D:$ and will warn all nearby of the presence of an intruder.
 D:独特の叫びを会得したドラウグルだ。それは侵入者の存在を周囲に知らせる。
 
 N:1218:ドラウグル・デスロード
