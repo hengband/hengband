@@ -14,6 +14,8 @@ typedef enum window_redraw_type {
     PW_OBJECT = 0x00000200L, /*!<サブウィンドウ描画フラグ: アイテムの知識 / Display object recall */
     PW_DUNGEON = 0x00000400L, /*!<サブウィンドウ描画フラグ: ダンジョンの地形 / Display dungeon view */
     PW_SNAPSHOT = 0x00000800L, /*!<サブウィンドウ描画フラグ: 記念写真 / Display snap-shot */
+
+    PW_ALL = (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_MONSTER_LIST | PW_MESSAGE | PW_OVERHEAD | PW_MONSTER | PW_OBJECT | PW_DUNGEON | PW_SNAPSHOT),
 } window_redraw_type;
 
 void redraw_window(void);
