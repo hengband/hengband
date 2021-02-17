@@ -126,15 +126,16 @@
 #include "util/string-processor.h"
 #include "view/display-map.h"
 #include "view/display-messages.h"
+#include "wizard/spoiler-util.h"
 #include "wizard/wizard-spoiler.h"
 #include "world/world.h"
 
 #ifdef WINDOWS
+#include "direct.h"
 #include "dungeon/dungeon.h"
+#include "locale.h"
 #include "save/save.h"
-#include <direct.h>
-#include <locale.h>
-#include <windows.h>
+#include "windows.h"
 
 /*
  * Available graphic modes
@@ -3492,6 +3493,28 @@ static void init_stuff(void)
 }
 
 /*!
+ * @brief コマンドラインから全スポイラー出力を行う
+ * Create Spoiler files from Command Line
+ * @return spoiler_output_status
+ */
+static spoiler_output_status create_debug_spoiler(LPSTR cmd_line)
+{
+    char *s, *option;
+    s = cmd_line;
+    if (!*s)
+        return SPOILER_OUTPUT_CANCEL;
+    option = "--output-spoilers";
+
+    if (strncmp(s, option, strlen(option)) != 0)
+        return SPOILER_OUTPUT_CANCEL;
+
+    init_stuff();
+    init_angband(p_ptr, process_autopick_file_command, TRUE);
+
+    return output_all_spoilers();
+}
+
+/*!
  * todo よく見るとhMutexはちゃんと使われていない……？
  * @brief (Windows固有)変愚蛮怒が起動済かどうかのチェック
  */
@@ -3522,6 +3545,23 @@ int PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nC
         MessageBox(
             NULL, _("変愚蛮怒はすでに起動しています。", "Hengband is already running."), _("エラー！", "Error"), MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
         return FALSE;
+    }
+
+    switch (create_debug_spoiler(lpCmdLine)) {
+    case SPOILER_OUTPUT_SUCCESS:
+        fprintf(stdout, "Successfully created a spoiler file.");
+        quit(NULL);
+        return 0;
+    case SPOILER_OUTPUT_FAIL_FOPEN:
+        fprintf(stderr, "Cannot create spoiler file.");
+        quit(NULL);
+        return 0;
+    case SPOILER_OUTPUT_FAIL_FCLOSE:
+        fprintf(stderr, "Cannot close spoiler file.");
+        quit(NULL);
+        return 0;
+    default:
+        break;
     }
 
     if (hPrevInst == NULL) {
