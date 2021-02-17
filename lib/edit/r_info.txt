@@ -24245,8 +24245,8 @@ B:CRUSH:HURT:4d6
 F:UNDEAD | EVIL | DROP_CORPSE
 F:HURT_LITE | IM_COLD | IM_POIS | RES_NETH | DROP_90 | FRIENDS | NO_FEAR
 S:1_IN_8 | SHOOT | BA_COLD
-D:$This warrior has continued to protect the tomb for a long time.
-D:$  You may also be a dependent!
+D:$This warrior has continued to protect its tomb for a long time.
+D:$  It may conscript you as an assistant guard!
 D:この戦士は墳墓を延々と守り続けている。あなたも眷属にされるかもしれない！
 
 N:1217:ドラウグル・スカージ
