@@ -36,6 +36,7 @@ void redraw_window(void)
 
     p_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
     p_ptr->window_flags |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT);
+    p_ptr->window_flags |= PW_MONSTER_LIST;
 
     handle_stuff(p_ptr);
     term_redraw();
