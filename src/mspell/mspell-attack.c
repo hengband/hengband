@@ -216,13 +216,24 @@ static bool check_mspell_unexploded(player_type *target_ptr, msa_type *msa_ptr)
     return FALSE;
 }
 
+/*!
+ * @brief モンスターが使おうとする特技がプレイヤーに届くかどうかを返す
+ *
+ * ターゲット (msa_ptr->y, msa_ptr->x) は設定済みとする。
+ */
 static bool check_thrown_mspell(player_type *target_ptr, msa_type *msa_ptr)
 {
-    bool direct = player_bold(target_ptr, msa_ptr->y, msa_ptr->x);
+    // プレイヤーがモンスターを正しく視認できていれば思い出に残る。
+    // FIXME: ここで処理するのはおかしいような?
     msa_ptr->can_remember = is_original_ap_and_seen(target_ptr, msa_ptr->m_ptr);
+
+    // ターゲットがプレイヤー位置なら直接射線が通っているので常に届く。
+    bool direct = player_bold(target_ptr, msa_ptr->y, msa_ptr->x);
     if (direct)
         return TRUE;
 
+    // ターゲットがプレイヤー位置からずれているとき、直接の射線を必要とする特技
+    // (ボルト系など)は届かないものとみなす。
     switch (msa_ptr->thrown_spell) {
     case 96 + 2: /* RF4_DISPEL */
     case 96 + 4: /* RF4_SHOOT */
