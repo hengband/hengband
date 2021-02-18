@@ -21,8 +21,8 @@ typedef enum choosable_realm {
     CH_HEX = 0x20000,
 } choosable_realm;
 
-extern const s32b realm_choices1[];
-extern const s32b realm_choices2[];
+extern const u32b realm_choices1[];
+extern const u32b realm_choices2[];
 
 /* Magic-books for the realms */
 REALM_IDX get_realm1_book(player_type *player_ptr);
