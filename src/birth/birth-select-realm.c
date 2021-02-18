@@ -23,7 +23,7 @@ typedef struct birth_realm_type {
     int os;
 } birth_realm_type;
 
-static byte count_realm_selection(const s32b choices, int *count)
+static byte count_realm_selection(const u32b choices, int *count)
 {
     byte auto_select = REALM_NONE;
     if (choices & CH_LIFE) {
@@ -106,7 +106,7 @@ static birth_realm_type *initialize_birth_realm_type(birth_realm_type *birth_rea
     return birth_realm_ptr;
 }
 
-static void impose_first_realm(const player_type *creature_ptr, s32b *choices)
+static void impose_first_realm(const player_type *creature_ptr, u32b *choices)
 {
     if (creature_ptr->realm2 == REALM_SELECT_CANCEL)
         return;
@@ -121,7 +121,7 @@ static void impose_first_realm(const player_type *creature_ptr, s32b *choices)
     }
 }
 
-static void analyze_realms(const player_type *creature_ptr, const s32b choices, birth_realm_type *birth_realm_ptr)
+static void analyze_realms(const player_type *creature_ptr, const u32b choices, birth_realm_type *birth_realm_ptr)
 {
     for (int i = 0; i < 32; i++) {
         if ((choices & (1UL << i)) == 0)
@@ -251,7 +251,7 @@ static bool get_a_realm(player_type *creature_ptr, birth_realm_type *birth_realm
  * @return 選択した魔法領域のID
  * @details 領域数が0 (戦士等)or 1 (観光客等)なら自動での値を返す
  */
-static byte select_realm(player_type *creature_ptr, s32b choices, int *count)
+static byte select_realm(player_type *creature_ptr, u32b choices, int *count)
 {
     byte auto_select = count_realm_selection(choices, count);
     clear_from(10);
