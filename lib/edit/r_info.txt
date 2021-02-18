@@ -24550,8 +24550,8 @@ B:STING:HURT:4d10
 B:CRUSH:HURT:4d10
 F:EVIL | ANIMAL | DROP_CORPSE | BASH_DOOR | DROP_90 | DROP_1D2 | FRIENDS
 F:IM_POIS | RES_DARK
-D:$It is Chaurus who has grown into a human-like body.
-D:$  It is often seen that they are kept in falmer.
+D:$It is a Chaurus that keeps it's two front legs off the ground, ready to
+D:$ use as weapons.  It is often seen near the falmer.
 D:人間並みの身体に成長したシャウラスだ。
 D:ファルメルに飼われている姿をよく見かける。
 
