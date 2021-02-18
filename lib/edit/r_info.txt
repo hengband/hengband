@@ -24344,8 +24344,8 @@ W:8:2:0:32:0:0
 B:HIT:POISON:5d5
 F:EVIL | FRIENDS | DROP_CORPSE | DROP_SKELETON | DROP_90
 F:IM_POIS | RES_LITE | RES_DARK | BASH_DOOR
-D:$It is the fallen descendant of the snow elf.
-D:$  It is blind but good ears.
+D:$It is the fallen descendant of a snow elf.
+D:$  It is blind but has good ears.
 D:スノーエルフの堕落した末裔だ。目は見えないがとても耳が利く。
 
 N:1223:ファルメル・スクルカー
