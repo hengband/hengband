@@ -25,6 +25,7 @@
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
 #include "util/string-processor.h"
+#include "wizard/wizard-spoiler.h"
 
 /*
  * Available graphic modes
@@ -252,6 +253,8 @@ static void display_usage(void)
     puts("  -u<who>  Use your <who> savefile");
     puts("  -m<sys>  Force 'main-<sys>.c' usage");
     puts("  -d<def>  Define a 'lib' dir sub-path");
+    puts("  --output-spoilers");
+    puts("           Output auto generated spoilers and exit");
     puts("");
 
 #ifdef USE_X11
@@ -276,6 +279,33 @@ static void display_usage(void)
 
     /* Actually abort the process */
     quit(NULL);
+}
+
+static bool parse_long_opt(const char *opt)
+{
+    bool is_usage_needed = TRUE;
+
+    if (strcmp(opt + 2, "output-spoilers") == 0) {
+        init_stuff();
+        init_angband(p_ptr, process_autopick_file_command, TRUE);
+        switch (output_all_spoilers()) {
+        case SPOILER_OUTPUT_SUCCESS:
+            puts("Successfully created a spiler file.");
+            quit(NULL);
+            break;
+        case SPOILER_OUTPUT_FAIL_FOPEN:
+            quit("Cannot create spoiler file.");
+            break;
+        case SPOILER_OUTPUT_FAIL_FCLOSE:
+            quit("Cannot close spoiler file.");
+            break;
+        default:
+            break;
+        }
+        is_usage_needed = FALSE;
+    }
+
+    return is_usage_needed;
 }
 
 /*
@@ -448,10 +478,14 @@ int main(int argc, char *argv[])
             break;
         }
         case '-': {
-            argv[i] = argv[0];
-            argc = argc - i;
-            argv = argv + i;
-            args = FALSE;
+            if (argv[i][2] == '\0') {
+                argv[i] = argv[0];
+                argc = argc - i;
+                argv = argv + i;
+                args = FALSE;
+            } else {
+                is_usage_needed = parse_long_opt(argv[i]);
+            }
             break;
         }
         default: {
