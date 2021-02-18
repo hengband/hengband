@@ -24420,7 +24420,7 @@ B:SLASH:POISON:17d11
 F:EVIL | DROP_CORPSE | DROP_SKELETON | BASH_DOOR | POWERFUL
 F:DROP_2D2 | DROP_3D2 | ONLY_ITEM | IM_POIS | RES_LITE | RES_DARK
 S:1_IN_6 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD | BLIND
-D:$It is the strongest falmer among general soldiers.
+D:$It is the strongest of the falmers' general soldiers.
 D:一般兵士の中では最強のファルメルだ。
 
 N:1228:グレーター・ファルメル・スクルカー
