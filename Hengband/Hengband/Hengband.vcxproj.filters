@@ -2189,6 +2189,9 @@
     <ClCompile Include="..\..\src\system\angband-version.c">
       <Filter>system</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\locale\utf-8.c">
+      <Filter>locale</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4710,6 +4713,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\artifact\random-art-effects.h">
       <Filter>artifact</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\locale\utf-8.h">
+      <Filter>locale</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
