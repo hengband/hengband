@@ -797,7 +797,7 @@ static errr Infofnt_prepare(XFontSet info)
 
 #ifdef USE_XFT
 	ifnt->asc = info->ascent;
-	ifnt->hgt = info->ascent + info->descent;
+	ifnt->hgt = info->height;
 	const char *text = "A";
 	XGlyphInfo extent;
 	XftTextExtentsUtf8(Metadpy->dpy, info, (FcChar8*)text, strlen(text), &extent);
