@@ -1634,8 +1634,7 @@ bool has_icky_wield_weapon(player_type *creature_ptr, int i)
     bool is_bare_hands = o_ptr->tval == TV_NONE;
     if (creature_ptr->pclass == CLASS_PRIEST) {
         bool is_suitable_weapon = has_flag(flgs, TR_BLESSED);
-        is_suitable_weapon |= o_ptr->tval != TV_SWORD;
-        is_suitable_weapon |= o_ptr->tval != TV_POLEARM;
+        is_suitable_weapon |= (o_ptr->tval != TV_SWORD) && (o_ptr->tval != TV_POLEARM);
         return !is_bare_hands && !is_suitable_weapon;
     }
 
