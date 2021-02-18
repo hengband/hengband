@@ -24,6 +24,7 @@
 #include "mspell/mspell-lite.h"
 #include "mspell/mspell-mask-definitions.h"
 #include "mspell/mspell-selector.h"
+#include "mspell/mspell-type.h"
 #include "mspell/mspell-util.h"
 #include "player/attack-defense-types.h"
 #include "spell-kind/spells-world.h"
@@ -362,15 +363,19 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
     if (check_mspell_unexploded(target_ptr, msa_ptr))
         return TRUE;
 
+    // 特技がプレイヤーに届かないなら使わない。
     if (!check_thrown_mspell(target_ptr, msa_ptr))
         return FALSE;
 
+    // 特技を使う。
     msa_ptr->dam = monspell_to_player(target_ptr, msa_ptr->thrown_spell, msa_ptr->y, msa_ptr->x, m_idx);
     if (msa_ptr->dam < 0)
         return FALSE;
 
-    if ((target_ptr->action == ACTION_LEARN) && msa_ptr->thrown_spell > 175)
-        learn_spell(target_ptr, msa_ptr->thrown_spell - 96);
+    // 召喚を行う特技の場合、ラーニング処理。
+    // TODO: 全てのラーニング処理をここに集約する。
+    if ((target_ptr->action == ACTION_LEARN) && msa_ptr->thrown_spell >= RF4_SPELL_START + MS_S_KIN)
+        learn_spell(target_ptr, msa_ptr->thrown_spell - RF4_SPELL_START);
 
     check_mspell_imitation(target_ptr, msa_ptr);
     remember_mspell(msa_ptr);
