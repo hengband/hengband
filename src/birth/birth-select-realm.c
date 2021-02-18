@@ -106,7 +106,7 @@ static birth_realm_type *initialize_birth_realm_type(birth_realm_type *birth_rea
     return birth_realm_ptr;
 }
 
-static void impose_first_realm(player_type *creature_ptr, s32b choices)
+static void impose_first_realm(player_type *creature_ptr, s32b *choices)
 {
     if (creature_ptr->realm2 == REALM_SELECT_CANCEL)
         return;
@@ -115,9 +115,9 @@ static void impose_first_realm(player_type *creature_ptr, s32b choices)
         return;
 
     if (is_good_realm(creature_ptr->realm1)) {
-        choices &= ~(CH_DEATH | CH_DAEMON);
+        *choices &= ~(CH_DEATH | CH_DAEMON);
     } else {
-        choices &= ~(CH_LIFE | CH_CRUSADE);
+        *choices &= ~(CH_LIFE | CH_CRUSADE);
     }
 }
 
@@ -258,7 +258,7 @@ static byte select_realm(player_type *creature_ptr, s32b choices, int *count)
     if ((*count) < 2)
         return auto_select;
 
-    impose_first_realm(creature_ptr, choices);
+    impose_first_realm(creature_ptr, &choices);
     put_str(_("注意：魔法の領域の選択によりあなたが習得する呪文のタイプが決まります。", "Note: The realm of magic will determine which spells you can learn."),
         23, 5);
 
