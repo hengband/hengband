@@ -299,7 +299,7 @@ static void remember_mspell(msa_type *msa_ptr)
 
         return;
     }
-    
+
     if (msa_ptr->thrown_spell < 32 * 5) {
         msa_ptr->r_ptr->r_flags5 |= (1UL << (msa_ptr->thrown_spell - 32 * 4));
         if (msa_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
@@ -307,7 +307,7 @@ static void remember_mspell(msa_type *msa_ptr)
 
         return;
     }
-    
+
     if (msa_ptr->thrown_spell < 32 * 6) {
         msa_ptr->r_ptr->r_flags6 |= (1UL << (msa_ptr->thrown_spell - 32 * 5));
         if (msa_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
