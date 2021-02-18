@@ -24359,7 +24359,7 @@ F:EVIL | FRIENDS | DROP_CORPSE | DROP_SKELETON | DROP_90
 F:IM_POIS | RES_LITE | RES_DARK | BASH_DOOR
 S:1_IN_8 | SHOOT | BA_POIS
 D:$A falmer whose body is covered with a chaurus shell.
-D:$  It is blind and does not shrug in the light.
+D:$  It is blind and is not bothered by light.
 D:シャウラスの殻で身体を覆ったファルメルだ。
 D:目が見えないので光に身をすくめることもない。
 
