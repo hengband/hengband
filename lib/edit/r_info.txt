@@ -23060,20 +23060,20 @@ W:15:2:0:50:0:0
 B:CRUSH:HURT:6d6
 F:RAND_25 | RAND_50 | FRIENDS | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_WATE
-D:$It is a small bubble that makes an weird movement.
+D:$It is a small bubble that makes a weird movement.
 D:$  It collapses suddenly.
 D:不気味な動きをする小さな泡だ。ぷちぷちと潰れる。
 
 # 倒すと小さな泡×4に分裂する
 N:1152:やや大きな泡
-E:Middle aqua illusion
+E:Medium aqua illusion
 G:j:B
 I:110:12d12:10:30:10
 W:18:2:0:100:0:0
 B:CRUSH:HURT:7d7
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_WATE
-D:$It is a middle bubble that makes an weird movement.
+D:$It is a medium-sized bubble that makes a weird movement.
 D:$  When it is crushed, it becomes a small bubble.
 D:不気味な動きをする、やや大きな泡だ。潰すと小さな泡になる。
 
@@ -23086,8 +23086,8 @@ W:21:2:0:250:0:0
 B:CRUSH:HURT:8d8
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_WATE
-D:$It is a large bubble that makes an weird movement.
-D:$  When it is crushed, it becomes a middle bubble.
+D:$It is a large bubble that makes a weird movement.
+D:$  When it is crushed, it becomes a medium bubble.
 D:不気味な動きをする大きな泡だ。潰しても中々なくならない。
 
 # 倒すと大きな泡×4に分裂する
@@ -23099,8 +23099,8 @@ W:24:3:0:500:0:0
 B:CRUSH:HURT:9d9
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_WATE
-D:$It is a extra large bubble that makes an weird movement.
-D:$  You must decide whether running away or squashing them all!
+D:$It is an extra large bubble that makes a weird movement.
+D:$  You must decide whether to run away or squash them all!
 D:不気味な動きをする巨大な泡だ。逃げるか潰すか二つに一つだ！
 
 N:1155:二周目の小さな泡
@@ -23113,13 +23113,13 @@ B:CRUSH:HURT:6d6
 F:RAND_25 | RAND_50 | FRIENDS | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE
 S:1_IN_5 | MISSILE
-D:$Holy shit! It will shoot you back at this bubble!
+D:$Holy shit! This bubble will shoot back at you!
 D:なんてこった、こいつ泡のくせに撃ち返してくるぞ！
 
 # 倒すと小さな泡×4に分裂する
 # 実際の2周目では一番小さいのしか撃ち返してこないが変愚向けに調整
 N:1156:二周目のやや大きな泡
-E:Middle aqua illusion in 2nd lap
+E:Medium aqua illusion in 2nd lap
 G:j:b
 I:120:20d20:10:50:10
 W:33:2:0:240:0:0
@@ -23128,7 +23128,7 @@ B:CRUSH:HURT:7d7
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE
 S:1_IN_5 | MISSILE
-D:$It is a middle bubble that makes an weird movement and shoots you back.
+D:$It is a medium-sized bubble that makes a weird movement and shoots you back.
 D:$  When it is crushed, it becomes a small bubble.
 D:不気味な動きをして撃ち返してくる、やや大きな泡だ。潰すと小さな泡になる。
 
@@ -23143,8 +23143,8 @@ B:CRUSH:HURT:8d8
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE
 S:1_IN_5 | MISSILE
-D:$It is a large bubble that makes an weird movement and shoots you back.
-D:$  When it is crushed, it becomes a middle bubble.
+D:$It is a large bubble that makes a weird movement and shoots you back.
+D:$  When it is crushed, it becomes a medium bubble.
 D:不気味な動きをして撃ち返してくる大きな泡だ。潰しても中々なくならない。
 
 # 倒すと大きな泡×4に分裂する
@@ -23158,8 +23158,8 @@ B:CRUSH:HURT:9d9
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE
 S:1_IN_5 | MISSILE
-D:$It is a extra large bubble that makes an weird movement and shoots you back!
-D:$  You must decide whether running away or squashing them all!
+D:$It is an extra large bubble that makes a weird movement and shoots you back!
+D:$  You must decide whether to run away or squash them all!
 D:不気味な動きをして撃ち返してくる巨大な泡だ。逃げるか潰すか二つに一つだ！
 
 # 実質召喚専用にしたいのでRarはかなり高め
