@@ -11,9 +11,9 @@
 #include "core/game-play.h"
 #include "core/scores.h"
 #include "game-option/runtime-arguments.h"
-#include "io/record-play-movie.h"
 #include "io/files-util.h"
 #include "io/inet.h"
+#include "io/record-play-movie.h"
 #include "io/signal-handlers.h"
 #include "io/uid-checker.h"
 #include "main/angband-initializer.h"
@@ -116,27 +116,29 @@ static void create_user_dir(void)
  */
 static void init_stuff(void)
 {
-	char libpath[1024], varpath[1024];
+    char libpath[1024], varpath[1024];
 
     concptr tail;
 
     /* Get the environment variable */
     tail = getenv("ANGBAND_PATH");
 
-	/* Use the angband_path, or a default */
-	strncpy(libpath, tail ? tail : DEFAULT_LIB_PATH, 511);
-	strncpy(varpath, tail ? tail : DEFAULT_VAR_PATH, 511);
+    /* Use the angband_path, or a default */
+    strncpy(libpath, tail ? tail : DEFAULT_LIB_PATH, 511);
+    strncpy(varpath, tail ? tail : DEFAULT_VAR_PATH, 511);
 
-	/* Make sure they're terminated */
-	libpath[511] = '\0';
-	varpath[511] = '\0';
+    /* Make sure they're terminated */
+    libpath[511] = '\0';
+    varpath[511] = '\0';
 
-	/* Hack -- Add a path separator (only if needed) */
-	if (!suffix(libpath, PATH_SEP)) strcat(libpath, PATH_SEP);
-	if (!suffix(varpath, PATH_SEP)) strcat(varpath, PATH_SEP);
+    /* Hack -- Add a path separator (only if needed) */
+    if (!suffix(libpath, PATH_SEP))
+        strcat(libpath, PATH_SEP);
+    if (!suffix(varpath, PATH_SEP))
+        strcat(varpath, PATH_SEP);
 
-	/* Initialize */
-	init_file_paths(libpath, varpath);
+    /* Initialize */
+    init_file_paths(libpath, varpath);
 }
 
 /*
