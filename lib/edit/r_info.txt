@@ -24537,7 +24537,7 @@ B:BITE:HURT:4d11
 B:STING:HURT:4d11
 F:EVIL | ANIMAL | DROP_CORPSE | BASH_DOOR | DROP_1D2 | FRIENDS
 F:IM_POIS | RES_DARK
-D:$It still has a small body, but it can easily prey on adventurers.
+D:$It is not fully grown, but it can easily prey on adventurers.
 D:それはまだ小さい体躯をしているが、冒険者を容易に捕食できる。
 
 N:1236:シャウラス・ハンター
