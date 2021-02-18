@@ -236,10 +236,10 @@ static void change_path(concptr info)
     }
 }
 
-static void display_usage(void)
+static void display_usage(const char* program)
 {
     /* Dump usage information */
-    puts("Usage: angband [options] [-- subopts]");
+    printf("Usage: %s [options] [-- subopts]\n", program);
     puts("  -n       Start a new character");
     puts("  -f       Request fiddle mode");
     puts("  -w       Request wizard mode");
@@ -384,7 +384,7 @@ int main(int argc, char *argv[])
     for (i = 1; args && (i < argc); i++) {
         /* Require proper options */
         if (argv[i][0] != '-') {
-            display_usage();
+            display_usage(argv[0]);
             continue;
         }
 
@@ -497,7 +497,7 @@ int main(int argc, char *argv[])
         if (!is_usage_needed)
             continue;
 
-        display_usage();
+        display_usage(argv[0]);
     }
 
     /* Hack -- Forget standard args */
