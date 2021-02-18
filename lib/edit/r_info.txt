@@ -24512,7 +24512,7 @@ B:BITE:HURT:1d13
 B:STING:HURT:1d13
 F:EVIL | ANIMAL | DROP_CORPSE | BASH_DOOR | DROP_60 | FRIENDS
 F:IM_POIS | RES_DARK
-D:$It is about the size of a human and is covered with crustaceans.
+D:$It is about the size of a human and is covered with a shell of chitin.
 D:それは人ほどの大きさを誇り、甲殻に覆われている。
 
 N:1234:シャウラス・リーパー
@@ -24524,8 +24524,8 @@ B:BITE:HURT:3d13
 B:STING:HURT:3d13
 F:EVIL | ANIMAL | DROP_CORPSE | BASH_DOOR | DROP_90 | FRIENDS
 F:IM_POIS | RES_DARK
-D:$It is large enough to easily exceed humans
-D:$ and is covered with an extremely hard crustacean.
+D:$It is much larger than a human
+D:$ and has an extremely hard shell made of chitin.
 D:それは人を軽く超えるほどの大きさを誇り、極めて硬い甲殻に覆われている。
 
 N:1235:シャウラス・ハンターの幼体
