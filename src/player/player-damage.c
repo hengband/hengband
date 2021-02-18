@@ -140,10 +140,8 @@ HIT_POINT acid_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
     int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
     bool double_resist = is_oppose_acid(creature_ptr);
     dam = dam * calc_acid_damage_rate(creature_ptr) / 100;
-    if (dam <= 0) {
-        learn_spell(creature_ptr, monspell);
+    if (dam <= 0)
         return 0;
-    }
 
     if (aura || !check_multishadow(creature_ptr)) {
         if ((!(double_resist || has_resist_acid(creature_ptr))) && one_in_(HURT_CHANCE))
@@ -177,10 +175,8 @@ HIT_POINT elec_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
 
     dam = dam * calc_elec_damage_rate(creature_ptr) / 100;
 
-    if (dam <= 0) {
-        learn_spell(creature_ptr, monspell);
+    if (dam <= 0)
         return 0;
-    }
 
     if (aura || !check_multishadow(creature_ptr)) {
         if ((!(double_resist || has_resist_elec(creature_ptr))) && one_in_(HURT_CHANCE))
@@ -210,10 +206,8 @@ HIT_POINT fire_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
     bool double_resist = is_oppose_fire(creature_ptr);
 
     /* Totally immune */
-    if (has_immune_fire(creature_ptr) || (dam <= 0)) {
-        learn_spell(creature_ptr, monspell);
+    if (has_immune_fire(creature_ptr) || (dam <= 0))
         return 0;
-    }
 
     dam = dam * calc_fire_damage_rate(creature_ptr) / 100;
     if (aura || !check_multishadow(creature_ptr)) {
@@ -242,10 +236,8 @@ HIT_POINT cold_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
 {
     int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
     bool double_resist = is_oppose_cold(creature_ptr);
-    if (has_immune_cold(creature_ptr) || (dam <= 0)) {
-        learn_spell(creature_ptr, monspell);
+    if (has_immune_cold(creature_ptr) || (dam <= 0))
         return 0;
-    }
 
     dam = dam * calc_cold_damage_rate(creature_ptr) / 100;
     if (aura || !check_multishadow(creature_ptr)) {
@@ -294,9 +286,6 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
             creature_ptr->now_damaged = TRUE;
         }
     }
-
-    if (monspell >= 0)
-        learn_spell(creature_ptr, monspell);
 
     if ((damage_type != DAMAGE_USELIFE) && (damage_type != DAMAGE_LOSELIFE)) {
         if (is_invuln(creature_ptr) && (damage < 9000)) {

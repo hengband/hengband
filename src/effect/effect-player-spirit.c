@@ -36,7 +36,6 @@ void effect_player_drain_mana(player_type *target_ptr, effect_player_type *ep_pt
         target_ptr->csp -= ep_ptr->dam;
     }
 
-    learn_spell(target_ptr, ep_ptr->monspell);
     target_ptr->redraw |= (PR_MANA);
     target_ptr->window_flags |= (PW_PLAYER | PW_SPELL);
 
@@ -65,7 +64,6 @@ void effect_player_mind_blast(player_type *target_ptr, effect_player_type *ep_pt
 {
     if ((randint0(100 + ep_ptr->rlev / 2) < MAX(5, target_ptr->skill_sav)) && !check_multishadow(target_ptr)) {
         msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
-        learn_spell(target_ptr, ep_ptr->monspell);
         return;
     }
 
@@ -97,7 +95,6 @@ void effect_player_brain_smash(player_type *target_ptr, effect_player_type *ep_p
 {
     if ((randint0(100 + ep_ptr->rlev / 2) < MAX(5, target_ptr->skill_sav)) && !check_multishadow(target_ptr)) {
         msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
-        learn_spell(target_ptr, ep_ptr->monspell);
         return;
     }
 

@@ -21,6 +21,7 @@
 #include "mspell/improper-mspell-remover.h"
 #include "mspell/mspell-attack-util.h"
 #include "mspell/mspell-checker.h"
+#include "mspell/mspell-learn-checker.h"
 #include "mspell/mspell-lite.h"
 #include "mspell/mspell-mask-definitions.h"
 #include "mspell/mspell-selector.h"
@@ -367,15 +368,24 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
     if (!check_thrown_mspell(target_ptr, msa_ptr))
         return FALSE;
 
+    // 特技使用前の時点でプレイヤーがモンスターを視認できているかチェック(ラーニングの必要条件)。
+    const bool player_could_see_monster = spell_learnable(target_ptr, m_idx);
+
     // 特技を使う。
     msa_ptr->dam = monspell_to_player(target_ptr, msa_ptr->thrown_spell, msa_ptr->y, msa_ptr->x, m_idx);
     if (msa_ptr->dam < 0)
         return FALSE;
 
-    // 召喚を行う特技の場合、ラーニング処理。
-    // TODO: 全てのラーニング処理をここに集約する。
-    if ((target_ptr->action == ACTION_LEARN) && msa_ptr->thrown_spell >= RF4_SPELL_START + MS_S_KIN)
-        learn_spell(target_ptr, msa_ptr->thrown_spell - RF4_SPELL_START);
+    // 条件を満たしていればラーニングを試みる。
+    if (player_could_see_monster) {
+        const int monspell = msa_ptr->thrown_spell - RF4_SPELL_START;
+        // XXX: 「暗闇」は特定条件下でライトエリアになる関係上、やむを得ずラー
+        // ニング処理を特技処理に含めた。よって二重ラーニングを行わないようここ
+        // では除外する。
+        const bool try_learn = monster_spell_is_learnable(monspell) && monspell != MS_DARKNESS;
+        if (try_learn)
+            learn_spell(target_ptr, monspell);
+    }
 
     check_mspell_imitation(target_ptr, msa_ptr);
     remember_mspell(msa_ptr);
