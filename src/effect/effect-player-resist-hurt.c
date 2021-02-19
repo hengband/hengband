@@ -160,7 +160,6 @@ void effect_player_nether(player_type *target_ptr, effect_player_type *ep_ptr)
 
     msg_print(_("気分がよくなった。", "You feel invigorated!"));
     hp_player(target_ptr, ep_ptr->dam / 4);
-    learn_spell(target_ptr, ep_ptr->monspell);
 }
 
 void effect_player_water(player_type *target_ptr, effect_player_type *ep_ptr)
@@ -577,7 +576,6 @@ void effect_player_hand_doom(player_type *target_ptr, effect_player_type *ep_ptr
 {
     if ((randint0(100 + ep_ptr->rlev / 2) < target_ptr->skill_sav) && !check_multishadow(target_ptr)) {
         msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
-        learn_spell(target_ptr, ep_ptr->monspell);
     } else {
         if (!check_multishadow(target_ptr)) {
             msg_print(_("あなたは命が薄まっていくように感じた！", "You feel your life fade away!"));

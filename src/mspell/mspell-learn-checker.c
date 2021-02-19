@@ -9,6 +9,8 @@
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @return プレイヤーが青魔法で学習できるならTRUE、そうでなければFALSEを返す。
+ *
+ * モンスターが特技を使う前にプレイヤーがモンスターを視認できているかどうかの判定用。
  */
 bool spell_learnable(player_type *target_ptr, MONSTER_IDX m_idx)
 {

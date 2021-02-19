@@ -203,8 +203,7 @@ void bolt(player_type *target_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EF
     if (typ != GF_ARROW)
         flg |= PROJECT_REFLECTABLE;
 
-    bool learnable = spell_learnable(target_ptr, m_idx);
-    (void)project(target_ptr, m_idx, 0, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
+    (void)project(target_ptr, m_idx, 0, y, x, dam_hp, typ, flg, monspell);
 }
 
 /*!
@@ -231,8 +230,7 @@ void beam(player_type *target_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EF
         break;
     }
 
-    bool learnable = spell_learnable(target_ptr, m_idx);
-    (void)project(target_ptr, m_idx, 0, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
+    (void)project(target_ptr, m_idx, 0, y, x, dam_hp, typ, flg, monspell);
 }
 
 /*!
@@ -287,8 +285,7 @@ void breath(
         break;
     }
 
-    bool learnable = spell_learnable(target_ptr, m_idx);
-    (void)project(target_ptr, m_idx, rad, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
+    (void)project(target_ptr, m_idx, rad, y, x, dam_hp, typ, flg, monspell);
 }
 
 /*!

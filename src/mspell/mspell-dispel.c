@@ -27,11 +27,11 @@
 #include "status/temporary-resistance.h"
 #include "view/display-messages.h"
 
-#include "status/buff-setter.h"
 #include "core/speed-table.h"
 #include "monster/monster-status-setter.h"
 #include "player/attack-defense-types.h"
 #include "player/player-race.h"
+#include "status/buff-setter.h"
 
 /*!
  * @brief プレイヤーに魔力消去効果を与える。
@@ -129,7 +129,6 @@ void spell_RF4_DISPEL(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_
                 msg_print(_("弱い者いじめは止めるんだ！", ""));
         }
 
-        learn_spell(target_ptr, MS_DISPEL);
         return;
     }
 
