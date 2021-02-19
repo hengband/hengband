@@ -169,10 +169,8 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
                         u16b p = bolt_pict(y, x, y, x, GF_MANA);
                         print_rel(caster_ptr, PICT_C(p), PICT_A(p), y, x);
                         move_cursor_relative(y, x);
-                        if (fresh_after) {
-                            term_fresh();
-                            term_xtra(TERM_XTRA_DELAY, msec);
-                        }
+                        term_fresh();
+                        term_xtra(TERM_XTRA_DELAY, msec);
                     }
                 }
             }

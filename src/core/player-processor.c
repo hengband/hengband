@@ -130,7 +130,7 @@ void process_player(player_type *creature_ptr)
         print_time(creature_ptr);
     }
 
-    if (!fresh_after && (continuous_action_running(creature_ptr) || !command_rep)) {
+    if (fresh_once && (continuous_action_running(creature_ptr) || !command_rep)) {
         stop_term_fresh();
     }
 

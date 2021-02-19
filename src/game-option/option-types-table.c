@@ -3,7 +3,6 @@
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
 #include "game-option/disturbance-options.h"
-#include "game-option/disturbance-options.h"
 #include "game-option/game-play-options.h"
 #include "game-option/input-options.h"
 #include "game-option/map-screen-options.h"
@@ -85,6 +84,8 @@ const option_type option_info[MAX_OPTION_INFO] = {
     { &fresh_before, TRUE, OPT_PAGE_MAPSCREEN, 1, 23, "fresh_before", _("連続コマンド中に画面を再描画し続ける", "Flush output while in repeated command") },
 
     { &fresh_after, FALSE, OPT_PAGE_MAPSCREEN, 1, 24, "fresh_after", _("コマンド後に画面を常に再描画し続ける", "Flush output after monster's move") },
+
+    { &fresh_once, FALSE, OPT_PAGE_MAPSCREEN, 1, 32, "fresh_once", _("キー入力毎に一度だけ画面を再描画する", "Flush output once per key input") },
 
     { &fresh_message, FALSE, OPT_PAGE_MAPSCREEN, 1, 25, "fresh_message", _("メッセージの後に画面を再描画する", "Flush output after every message") },
 
@@ -295,25 +296,26 @@ const option_type option_info[MAX_OPTION_INFO] = {
 /*!
  * チートオプションの定義テーブル / Cheating options
  */
-const option_type cheat_info[MAX_CHEAT_OPTIONS] = { { &cheat_peek, FALSE, 255, 0x01, 0x00, "cheat_peek", _("アイテムの生成をのぞき見る", "Peek into object creation") },
+const option_type cheat_info[MAX_CHEAT_OPTIONS]
+    = { { &cheat_peek, FALSE, 255, 0x01, 0x00, "cheat_peek", _("アイテムの生成をのぞき見る", "Peek into object creation") },
 
-    { &cheat_hear, FALSE, 255, 0x02, 0x00, "cheat_hear", _("モンスターの生成をのぞき見る", "Peek into monster creation") },
+          { &cheat_hear, FALSE, 255, 0x02, 0x00, "cheat_hear", _("モンスターの生成をのぞき見る", "Peek into monster creation") },
 
-    { &cheat_room, FALSE, 255, 0x04, 0x00, "cheat_room", _("ダンジョンの生成をのぞき見る", "Peek into dungeon creation") },
+          { &cheat_room, FALSE, 255, 0x04, 0x00, "cheat_room", _("ダンジョンの生成をのぞき見る", "Peek into dungeon creation") },
 
-    { &cheat_xtra, FALSE, 255, 0x08, 0x00, "cheat_xtra", _("その他の事をのぞき見る", "Peek into something else") },
+          { &cheat_xtra, FALSE, 255, 0x08, 0x00, "cheat_xtra", _("その他の事をのぞき見る", "Peek into something else") },
 
-    { &cheat_know, FALSE, 255, 0x10, 0x00, "cheat_know", _("完全なモンスターの思い出を知る", "Know complete monster info") },
+          { &cheat_know, FALSE, 255, 0x10, 0x00, "cheat_know", _("完全なモンスターの思い出を知る", "Know complete monster info") },
 
-    { &cheat_live, FALSE, 255, 0x20, 0x00, "cheat_live", _("死を回避することを可能にする", "Allow player to avoid death") },
+          { &cheat_live, FALSE, 255, 0x20, 0x00, "cheat_live", _("死を回避することを可能にする", "Allow player to avoid death") },
 
-    { &cheat_save, FALSE, 255, 0x40, 0x00, "cheat_save", _("死んだ時セーブするか確認する", "Ask for saving death") },
+          { &cheat_save, FALSE, 255, 0x40, 0x00, "cheat_save", _("死んだ時セーブするか確認する", "Ask for saving death") },
 
-    { &cheat_diary_output, FALSE, 255, 0x80, 0x00, "cheat_diary_output", _("ウィザードログを日記に出力する", "Output wizard log to diary.") },
+          { &cheat_diary_output, FALSE, 255, 0x80, 0x00, "cheat_diary_output", _("ウィザードログを日記に出力する", "Output wizard log to diary.") },
 
-    { &cheat_turn, FALSE, 255, 0x81, 0x00, "cheat_turn", _("ゲームメッセージにターン表示を行う", "Put turn in game messages.") },
+          { &cheat_turn, FALSE, 255, 0x81, 0x00, "cheat_turn", _("ゲームメッセージにターン表示を行う", "Put turn in game messages.") },
 
-    { &cheat_sight, FALSE, 255, 0x82, 0x00, "cheat_sight", _("「見る」コマンドを拡張する。", "Expand \"L\"ook command.") } };
+          { &cheat_sight, FALSE, 255, 0x82, 0x00, "cheat_sight", _("「見る」コマンドを拡張する。", "Expand \"L\"ook command.") } };
 
 /*!
  * 自動セーブオプションテーブル
