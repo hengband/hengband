@@ -22857,8 +22857,8 @@ R:560:1d2
 R:1113:4d5
 R:1118:4d5
 D:$It is a too huge towering tornado of winds that looks vaguely like
-D:$ dragons or other winged beast.
-D:$  This violent wind enjoying, dragons comes.
+D:$ a dragon or other winged beast.  Violent gusts at its edges seem
+D:$ ready to coalesce into actual dragons.
 D:それはあまりにも高くそびえ立つような風の竜巻で、
 D:漠然とドラゴンか他の翼ある魔獣に見える。
 D:風の暴威を楽しんでドラゴンがやってくる。
@@ -22886,8 +22886,8 @@ R:1098:1d2
 R:1111:4d5
 R:1131:1d3
 D:$It is a too huge towering glowing form of molten hate
-D:$ that looks vaguely like spiders or other arthropod that live in lava cave.
-D:$ Molten mineral give off toxic gas.
+D:$ that looks vaguely like a spider or other arthropod that lives in a lava
+D:$ cave.  Toxic gases leak from its molten minerals.
 D:それはあまりにも高くそびえ立つような光を発する憎悪が溶けてできたような塊で、
 D:漠然と溶岩洞窟に生息する蜘蛛か他の虫のように見える。
 D:溶けた鉱物が有毒ガスを噴出している。
@@ -22912,9 +22912,9 @@ R:1111:4d5
 R:1116:4d5
 R:510:1d3
 R:589:1d2
-D:$It is a too huge towering inferno of flames that looks vaguely like
-D:$ Balrog or other demons.
-D:$ This flame of destruction respecting, demons comes.
+D:$It is a too huge towering inferno of flames that looks vaguely like a
+D:$ Balrog or other demon.  Demonic shapes are poised to materialize in the
+D:$ waves of heat emanating from its core.
 D:それはあまりにも高くそびえ立つような火炎地獄で、
 D:漠然とバルログか他のデーモンのように見える。
 D:その破壊の炎を慕ってデーモンがやってくる。
@@ -22942,7 +22942,7 @@ R:570:1d3
 R:1112:4d5
 R:1117:4d5
 D:$It is a too huge towering glacier of ice that looks vaguely like
-D:$ Animals in cold regions.
+D:$ an animal from cold regions.
 D:それはあまりにも高くそびえ立つような氷河で、
 D:漠然と寒冷地の動物のように見える。
 
@@ -22970,7 +22970,7 @@ R:1115:4d6
 R:1131:1d3
 R:1132:1d3
 D:$It is a too huge towering mass of filth that looks vaguely like
-D:$ Hydras, crocodilians or frogs.
+D:$ a hydra, crocodilian, or frog.
 D:それはあまりにも高くそびえ立つような汚物の塊で、
 D:漠然とヒドラやワニやカエルのように見える。
 
