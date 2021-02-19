@@ -23018,8 +23018,8 @@ B:WAIL:HURT:2d5
 F:UNIQUE | FORCE_MAXHP | HUMAN | MALE | EVIL | DROP_CORPSE | DROP_SKELETON
 F:DROP_90 | ONLY_ITEM | DROP_GOOD
 S:1_IN_12 | BA_FIRE
-D:$He puts a laughing home into misery every day to eradicate his happy family.
-D:$  He has no intention of compensating for what he does.
+D:$This young boy has become a serial arsonist as a way of avoiding his own,
+D:$ troubled, home.  He has no intention of compensating for what he does.
 D:彼は幸せな家族を根絶やしにするため、日々笑い声の聞こえてくる家庭を不幸の底に沈めている。
 D:彼は自分の行いを償うつもりはない。
 
