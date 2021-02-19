@@ -1,8 +1,9 @@
-﻿#include "target/grid-selector.h"
+﻿#include <vector>
+
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
-#include "core/window-redrawer.h"
 #include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
 #include "floor/cave.h"
 #include "game-option/game-play-options.h"
 #include "game-option/keymap-directory-getter.h"
@@ -12,6 +13,7 @@
 #include "io/input-key-acceptor.h"
 #include "io/screen-util.h"
 #include "system/floor-type-definition.h"
+#include "target/grid-selector.h"
 #include "target/target-checker.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
@@ -51,9 +53,8 @@ static bool tgt_pt_accept(player_type *creature_ptr, POSITION y, POSITION x)
  * XAngband: Prepare the "temp" array for "tget_pt"
  * based on target_set_prepare funciton.
  */
-static void tgt_pt_prepare(player_type *creature_ptr)
+static void tgt_pt_prepare(player_type *creature_ptr, std::vector<POSITION> &ys, std::vector<POSITION> &xs)
 {
-    tmp_pos.n = 0;
     if (!expand_list)
         return;
 
@@ -63,13 +64,12 @@ static void tgt_pt_prepare(player_type *creature_ptr)
             if (!tgt_pt_accept(creature_ptr, y, x))
                 continue;
 
-            tmp_pos.x[tmp_pos.n] = x;
-            tmp_pos.y[tmp_pos.n] = y;
-            tmp_pos.n++;
+            ys.emplace_back(y);
+            xs.emplace_back(x);
         }
     }
 
-    ang_sort(creature_ptr, tmp_pos.x, tmp_pos.y, tmp_pos.n, ang_sort_comp_distance, ang_sort_swap_position);
+    ang_sort(creature_ptr, xs.data(), ys.data(), size(ys), ang_sort_comp_distance, ang_sort_swap_position);
 }
 
 /*
@@ -77,19 +77,24 @@ static void tgt_pt_prepare(player_type *creature_ptr)
  */
 bool tgt_pt(player_type *creature_ptr, POSITION *x_ptr, POSITION *y_ptr)
 {
+    // "interesting" な座標たちを記録する配列。
+    // ang_sort() を利用する関係上、y/x 座標それぞれについて配列を作る。
+    std::vector<POSITION> ys;
+    std::vector<POSITION> xs;
+
     TERM_LEN wid, hgt;
     get_screen_size(&wid, &hgt);
 
     POSITION x = creature_ptr->x;
     POSITION y = creature_ptr->y;
     if (expand_list)
-        tgt_pt_prepare(creature_ptr);
+        tgt_pt_prepare(creature_ptr, ys, xs);
 
     msg_print(_("場所を選んでスペースキーを押して下さい。", "Select a point and press space."));
     msg_flag = FALSE;
 
     char ch = 0;
-    int n = 0;
+    size_t n = 0;
     bool success = FALSE;
     while ((ch != ESCAPE) && !success) {
         bool move_fast = FALSE;
@@ -111,20 +116,22 @@ bool tgt_pt(player_type *creature_ptr, POSITION *x_ptr, POSITION *y_ptr)
             break;
         case '>':
         case '<': {
-            if (!expand_list || !tmp_pos.n)
+            if (!expand_list || ys.empty())
                 break;
 
             int dx, dy;
             int cx = (panel_col_min + panel_col_max) / 2;
             int cy = (panel_row_min + panel_row_max) / 2;
             n++;
-            for (; n < tmp_pos.n; ++n) {
-                grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[tmp_pos.y[n]][tmp_pos.x[n]];
+            for (; n < size(ys); ++n) {
+                const POSITION y_cur = ys[n];
+                const POSITION x_cur = xs[n];
+                grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[y_cur][x_cur];
                 if (cave_has_flag_grid(g_ptr, FF_STAIRS) && cave_has_flag_grid(g_ptr, ch == '>' ? FF_MORE : FF_LESS))
                     break;
             }
 
-            if (n == tmp_pos.n) {
+            if (n == size(ys)) {
                 n = 0;
                 y = creature_ptr->y;
                 x = creature_ptr->x;
@@ -134,8 +141,8 @@ bool tgt_pt(player_type *creature_ptr, POSITION *x_ptr, POSITION *y_ptr)
                 creature_ptr->window_flags |= PW_OVERHEAD;
                 handle_stuff(creature_ptr);
             } else {
-                y = tmp_pos.y[n];
-                x = tmp_pos.x[n];
+                y = ys[n];
+                x = xs[n];
                 dy = 2 * (y - cy) / hgt;
                 dx = 2 * (x - cx) / wid;
                 if (dy || dx)
