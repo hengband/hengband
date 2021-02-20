@@ -14,6 +14,7 @@ extern bool view_unsafe_grids; /* Map marked by detect traps */
 extern bool view_reduce_view; /* Reduce view-radius in town */
 extern bool fresh_before; /* Flush output while continuous command */
 extern bool fresh_after; /* Flush output after monster's move */
+extern bool fresh_once; /* Flush output only once per key input */
 extern bool fresh_message; /* Flush output after every message */
 extern bool hilite_player; /* Hilite the player with the cursor */
 extern bool display_path; /* Display actual path before shooting */

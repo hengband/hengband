@@ -11,7 +11,6 @@
 #include "game-option/map-screen-options.h"
 #include "game-option/runtime-arguments.h"
 #include "game-option/special-options.h"
-#include "io/input-key-requester.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "term/z-virt.h"
@@ -1025,7 +1024,7 @@ static void term_fresh_row_text(TERM_LEN y, TERM_LEN x1, TERM_LEN x2)
 bool macro_running(void)
 {
     int diff = angband_term[0]->key_head - angband_term[0]->key_tail;
-    return diff < -1 || 1 < diff;
+    return diff != 0;
 }
 
 /*
@@ -1272,6 +1271,19 @@ errr term_fresh(void)
     /* Actually flush the output */
     term_xtra(TERM_XTRA_FRESH, 0);
     return 0;
+}
+
+
+/*
+ * @brief never_freshの値を無視して強制的にterm_freshを行う。
+ */
+errr term_fresh_force(void)
+{
+    bool old = Term->never_fresh;
+    Term->never_fresh = FALSE;
+    errr err = term_fresh();
+    Term->never_fresh = old;
+    return err;
 }
 
 /*** Output routines ***/

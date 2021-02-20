@@ -397,8 +397,7 @@ bool probing(player_type *caster_ptr)
 
     Term->scr->cu = cu;
     Term->scr->cv = cv;
-    if (fresh_after)
-        term_fresh();
+    term_fresh();
 
     if (probe) {
         chg_virtue(caster_ptr, V_KNOWLEDGE, 1);
