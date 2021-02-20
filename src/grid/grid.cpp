@@ -14,7 +14,8 @@
  * 2013 Deskull Doxygen向けのコメント整理\n
  */
 
-#include "grid/grid.h"
+#include <queue>
+
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
@@ -27,6 +28,7 @@
 #include "game-option/map-screen-options.h"
 #include "game-option/special-options.h"
 #include "grid/feature.h"
+#include "grid/grid.h"
 #include "grid/object-placer.h"
 #include "grid/trap.h"
 #include "io/screen-util.h"
@@ -59,8 +61,6 @@
 #define FAF_DESTROY 0x01
 #define FAF_NO_DROP 0x02
 #define FAF_CRASH_GLASS 0x04
-
-pos_list tmp_pos;
 
 /*!
  * @brief 地形状態フラグテーブル /
@@ -802,14 +802,18 @@ static POSITION flow_y = 0;
  */
 void update_flow(player_type *subject_ptr)
 {
+    struct Point {
+        int y;
+        int x;
+        Point(const int y, const int x)
+            : y(y)
+            , x(x)
+        {
+        }
+    };
+
     POSITION x, y;
     DIRECTION d;
-    int flow_head_grid = 1;
-    int flow_tail_grid = 0;
-
-    /* Paranoia -- make sure the array is empty */
-    if (tmp_pos.n)
-        return;
 
     /* The last way-point is on the map */
     if (subject_ptr->running && in_bounds(subject_ptr->current_floor_ptr, flow_y, flow_x)) {
@@ -830,28 +834,20 @@ void update_flow(player_type *subject_ptr)
     flow_y = subject_ptr->y;
     flow_x = subject_ptr->x;
 
-    /* Add the player's grid to the queue */
-    tmp_pos.y[0] = subject_ptr->y;
-    tmp_pos.x[0] = subject_ptr->x;
+    // 幅優先探索用のキュー。
+    std::queue<Point> que;
+    que.emplace(subject_ptr->y, subject_ptr->x);
 
     /* Now process the queue */
-    while (flow_head_grid != flow_tail_grid) {
-        int ty, tx;
-
+    while (!que.empty()) {
         /* Extract the next entry */
-        ty = tmp_pos.y[flow_tail_grid];
-        tx = tmp_pos.x[flow_tail_grid];
-
-        /* Forget that entry */
-        if (++flow_tail_grid == TEMP_MAX)
-            flow_tail_grid = 0;
+        const auto [ty, tx] = que.front();
+        que.pop();
 
         /* Add the "children" */
         for (d = 0; d < 8; d++) {
-            int old_head = flow_head_grid;
             byte m = subject_ptr->current_floor_ptr->grid_array[ty][tx].cost + 1;
             byte n = subject_ptr->current_floor_ptr->grid_array[ty][tx].dist + 1;
-            grid_type *g_ptr;
 
             /* Child location */
             y = ty + ddy_ddd[d];
@@ -861,7 +857,7 @@ void update_flow(player_type *subject_ptr)
             if (player_bold(subject_ptr, y, x))
                 continue;
 
-            g_ptr = &subject_ptr->current_floor_ptr->grid_array[y][x];
+            grid_type *g_ptr = &subject_ptr->current_floor_ptr->grid_array[y][x];
 
             if (is_closed_door(subject_ptr, g_ptr->feat))
                 m += 3;
@@ -885,16 +881,7 @@ void update_flow(player_type *subject_ptr)
                 continue;
 
             /* Enqueue that entry */
-            tmp_pos.y[flow_head_grid] = y;
-            tmp_pos.x[flow_head_grid] = x;
-
-            /* Advance the queue */
-            if (++flow_head_grid == TEMP_MAX)
-                flow_head_grid = 0;
-
-            /* Hack -- notice overflow by forgetting new entry */
-            if (flow_head_grid == flow_tail_grid)
-                flow_head_grid = old_head;
+            que.emplace(y, x);
         }
     }
 }

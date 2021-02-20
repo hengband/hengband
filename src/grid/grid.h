@@ -151,7 +151,6 @@ typedef struct grid_template_type {
 // clang-format on
 
 extern bool new_player_spot(player_type *creature_ptr);
-extern pos_list tmp_pos;
 
 extern void place_bound_perm_wall(player_type *player_ptr, grid_type *g_ptr);
 extern bool is_known_trap(player_type *player_ptr, grid_type *g_ptr);
