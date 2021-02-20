@@ -3,9 +3,11 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
+#include "monster-race/race-flags8.h"
 #include "system/angband-version.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
+#include "util/bit-flags-calculator.h"
 #include "util/sort.h"
 #include "view/display-lore.h"
 #include "view/display-messages.h"
@@ -65,12 +67,7 @@ static concptr attr_to_text(monster_race *r_ptr)
     return _("変な色の", "Icky");
 }
 
-/*!
- * @brief モンスター簡易情報のスポイラー出力を行うメインルーチン /
- * Create a spoiler file for monsters   -BEN-
- * @param fname 生成ファイル名
- */
-spoiler_output_status spoil_mon_desc(concptr fname)
+spoiler_output_status spoil_mon_desc(concptr fname, bool show_all, race_flags8 RF8_flags)
 {
     player_type dummy;
     u16b why = 2;
@@ -113,6 +110,9 @@ spoiler_output_status spoil_mon_desc(concptr fname)
     for (int i = 0; i < n; i++) {
         monster_race *r_ptr = &r_info[who[i]];
         concptr name = (r_name + r_ptr->name);
+        if (!show_all && !test_bit(r_ptr->flags8, RF8_flags))
+            continue;
+
         if (r_ptr->flags7 & RF7_KAGE)
             continue;
         else if (r_ptr->flags1 & (RF1_UNIQUE))
@@ -145,6 +145,13 @@ spoiler_output_status spoil_mon_desc(concptr fname)
     }
     return SPOILER_OUTPUT_SUCCESS;
 }
+
+/*!
+ * @brief モンスター簡易情報のスポイラー出力を行うメインルーチン /
+ * Create a spoiler file for monsters   -BEN-
+ * @param fname 生成ファイル名
+ */
+spoiler_output_status spoil_mon_desc_all(concptr fname) { return spoil_mon_desc(fname, TRUE, RF8_WILD_ALL); }
 
 /*!
  * @brief 関数ポインタ用の出力関数 /
