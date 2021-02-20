@@ -2365,6 +2365,11 @@ static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_real_value)
         ac += 10;
     }
 
+    if ((creature_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_ICINGDEATH)
+        && (creature_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_TWINKLE)) {
+        ac += 5;
+    }
+
     if (test_bit(creature_ptr->muta3, MUT3_WART_SKIN)) {
         ac += 5;
     }
@@ -2606,6 +2611,11 @@ static s16b calc_speed(player_type *creature_ptr)
                 && (creature_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_TINYTHORN)) {
                 pow += 7;
             }
+
+            if ((creature_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_ICINGDEATH)
+                && (creature_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_TWINKLE)) {
+                pow += 5;
+            }
         }
 
         count = (int)calc_weight_limit(creature_ptr);
@@ -2673,7 +2683,10 @@ s16b calc_double_weapon_penalty(player_type *creature_ptr, INVENTORY_IDX slot)
     int penalty = 0;
     if (has_melee_weapon(creature_ptr, INVEN_MAIN_HAND) && has_melee_weapon(creature_ptr, INVEN_SUB_HAND)) {
         penalty = ((100 - creature_ptr->skill_exp[GINOU_NITOURYU] / 160) - (130 - creature_ptr->inventory_list[slot].weight) / 8);
-        if ((creature_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_QUICKTHORN) && (creature_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_TINYTHORN)) {
+        if (((creature_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_QUICKTHORN)
+            && (creature_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_TINYTHORN))
+            || ((creature_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_ICINGDEATH)
+            && (creature_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_TWINKLE))) {
             penalty = penalty / 2 - 5;
         }
         if (creature_ptr->easy_2weapon) {
