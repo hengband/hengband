@@ -170,7 +170,7 @@ void process_dungeon(player_type *player_ptr, bool load_game)
 
         move_cursor_relative(player_ptr->y, player_ptr->x);
         if (fresh_after)
-            term_fresh();
+            term_fresh_force();
 
         if (!player_ptr->playing || player_ptr->is_dead)
             break;
@@ -180,7 +180,7 @@ void process_dungeon(player_type *player_ptr, bool load_game)
 
         move_cursor_relative(player_ptr->y, player_ptr->x);
         if (fresh_after)
-            term_fresh();
+            term_fresh_force();
 
         if (!player_ptr->playing || player_ptr->is_dead)
             break;
@@ -190,7 +190,7 @@ void process_dungeon(player_type *player_ptr, bool load_game)
 
         move_cursor_relative(player_ptr->y, player_ptr->x);
         if (fresh_after) {
-            term_fresh();
+            term_fresh_force();
         }
 
         if (!player_ptr->playing || player_ptr->is_dead)

@@ -431,7 +431,7 @@ void msg_print(concptr msg)
 #endif
 
     if (fresh_message)
-        term_fresh();
+        term_fresh_force();
 }
 
 /*
