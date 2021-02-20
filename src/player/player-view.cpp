@@ -1,9 +1,11 @@
-﻿#include "player/player-view.h"
+﻿#include <vector>
+
 #include "core/player-update-types.h"
 #include "floor/cave.h"
 #include "floor/line-of-sight.h"
 #include "game-option/map-screen-options.h"
 #include "grid/grid.h"
+#include "player/player-view.h"
 #include "system/floor-type-definition.h"
 
 /*
@@ -94,6 +96,19 @@ static bool update_view_aux(player_type *subject_ptr, POSITION y, POSITION x, PO
  */
 void update_view(player_type *subject_ptr)
 {
+    struct Point {
+        int y;
+        int x;
+        Point(const int y, const int x)
+            : y(y)
+            , x(x)
+        {
+        }
+    };
+
+    // 前回プレイヤーから見えていた座標たちを格納する配列。
+    std::vector<Point> points;
+
     int n, m, d, k, z;
     POSITION y, x;
 
@@ -120,9 +135,8 @@ void update_view(player_type *subject_ptr)
         g_ptr = &floor_ptr->grid_array[y][x];
         g_ptr->info &= ~(CAVE_VIEW);
         g_ptr->info |= CAVE_TEMP;
-        tmp_pos.y[tmp_pos.n] = y;
-        tmp_pos.x[tmp_pos.n] = x;
-        tmp_pos.n++;
+
+        points.emplace_back(y, x);
     }
 
     floor_ptr->view_n = 0;
@@ -334,9 +348,7 @@ void update_view(player_type *subject_ptr)
         cave_note_and_redraw_later(floor_ptr, g_ptr, y, x);
     }
 
-    for (n = 0; n < tmp_pos.n; n++) {
-        y = tmp_pos.y[n];
-        x = tmp_pos.x[n];
+    for (const auto &[y, x] : points) {
         g_ptr = &floor_ptr->grid_array[y][x];
         g_ptr->info &= ~(CAVE_TEMP);
         if (g_ptr->info & CAVE_VIEW)
@@ -345,6 +357,5 @@ void update_view(player_type *subject_ptr)
         cave_redraw_later(floor_ptr, g_ptr, y, x);
     }
 
-    tmp_pos.n = 0;
     subject_ptr->update |= PU_DELAY_VIS;
 }
