@@ -17333,21 +17333,17 @@ E:Cerberus, Guardian of Hades
 G:C:r
 I:130:100d100:50:160:10
 W:94:1:0:40000:0:0
-B:HIT:FIRE:9d12
-B:HIT:FIRE:9d12
-B:HIT:FIRE:9d12
-B:HIT:FIRE:9d12
-F:UNIQUE |
-F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | AURA_FIRE | DROP_CORPSE
-F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | 
-F:OPEN_DOOR | BASH_DOOR | MOVE_BODY | 
-F:ANIMAL | EVIL | IM_FIRE | NO_CONF | NO_SLEEP
-S:1_IN_3 | 
-S:BA_DARK | 
-S:BR_FIRE | BR_NETH | 
-S:S_HOUND
-D:$A three-headed hell hound of fearsome aspect.  Flame burns merrily from its 
-D:$hide as it snarls and roars its defiance.
+B:BITE:FIRE:27d19
+B:CLAW:FIRE:27d19
+B:BITE:FIRE:27d19
+B:CLAW:FIRE:27d19
+F:UNIQUE | FORCE_MAXHP | AURA_FIRE | ANIMAL | EVIL
+F:PREVENT_SUDDEN_MAGIC | DROP_CORPSE
+F:ONLY_ITEM | DROP_3D2 | DROP_4D2 | DROP_GREAT
+F:OPEN_DOOR | BASH_DOOR | MOVE_BODY | IM_FIRE | NO_CONF | NO_SLEEP
+S:1_IN_3 | BA_DARK | BR_FIRE | BR_NETH | S_HOUND
+D:$A three-headed hell hound of fearsome aspect.
+D:$  Flame burns merrily from its $hide as it snarls and roars its defiance.
 D:３つ首の恐ろしい形相のヘルハウンドだ。相手に向かって牙をむき吠えると同時に
 D:炎がその体から楽しげに燃え上がる。
 
@@ -23074,7 +23070,7 @@ B:CRUSH:HURT:7d7
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_WATE
 D:$It is a medium-sized bubble that makes a weird movement.
-D:$  When it is crushed, it becomes a small bubble.
+D:$  When it is squashed, it becomes small bubbles.
 D:不気味な動きをする、やや大きな泡だ。潰すと小さな泡になる。
 
 # 倒すとやや大きな泡×4に分裂する
@@ -23082,12 +23078,12 @@ N:1153:大きな泡
 E:Large aqua illusion
 G:j:B
 I:110:18d18:10:30:10
-W:21:2:0:250:0:0
+W:21:2:0:200:0:0
 B:CRUSH:HURT:8d8
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_WATE
 D:$It is a large bubble that makes a weird movement.
-D:$  When it is crushed, it becomes a medium bubble.
+D:$  When it is squashed, it becomes medium bubbles.
 D:不気味な動きをする大きな泡だ。潰しても中々なくならない。
 
 # 倒すと大きな泡×4に分裂する
@@ -23095,7 +23091,7 @@ N:1154:特大の泡
 E:Extra large aqua illusion
 G:j:B
 I:110:18d18:10:30:10
-W:24:3:0:500:0:0
+W:24:3:0:400:0:0
 B:CRUSH:HURT:9d9
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_WATE
@@ -23107,13 +23103,13 @@ N:1155:二周目の小さな泡
 E:Small aqua illusion in 2nd lap
 G:j:b
 I:120:20d20:10:50:10
-W:30:2:0:120:0:0
+W:30:2:0:125:0:0
 B:CRUSH:HURT:6d6
 B:CRUSH:HURT:6d6
 F:RAND_25 | RAND_50 | FRIENDS | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE
 S:1_IN_5 | MISSILE
-D:$Holy shit! This bubble will shoot back at you!
+D:$Holy shit!  This bubble will shoot back at you!
 D:なんてこった、こいつ泡のくせに撃ち返してくるぞ！
 
 # 倒すと小さな泡×4に分裂する
@@ -23122,14 +23118,14 @@ N:1156:二周目のやや大きな泡
 E:Medium aqua illusion in 2nd lap
 G:j:b
 I:120:20d20:10:50:10
-W:33:2:0:240:0:0
+W:33:2:0:250:0:0
 B:CRUSH:HURT:7d7
 B:CRUSH:HURT:7d7
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE
 S:1_IN_5 | MISSILE
 D:$It is a medium-sized bubble that makes a weird movement and shoots you back.
-D:$  When it is crushed, it becomes a small bubble.
+D:$  When it is squashed, it becomes small bubbles.
 D:不気味な動きをして撃ち返してくる、やや大きな泡だ。潰すと小さな泡になる。
 
 # 倒すとやや大きな泡×4に分裂する
@@ -23137,14 +23133,14 @@ N:1157:二周目の大きな泡
 E:Large aqua illusion in 2nd lap
 G:j:b
 I:120:25d25:10:50:10
-W:36:2:0:600:0:0
+W:36:2:0:500:0:0
 B:CRUSH:HURT:8d8
 B:CRUSH:HURT:8d8
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE
 S:1_IN_5 | MISSILE
 D:$It is a large bubble that makes a weird movement and shoots you back.
-D:$  When it is crushed, it becomes a medium bubble.
+D:$  When it is squashed, it becomes medium bubbles.
 D:不気味な動きをして撃ち返してくる大きな泡だ。潰しても中々なくならない。
 
 # 倒すと大きな泡×4に分裂する
@@ -23152,7 +23148,7 @@ N:1158:二周目の特大の泡
 E:Extra large aqua illusion in 2nd lap
 G:j:b
 I:120:25d25:10:50:10
-W:39:3:0:1200:0:0
+W:39:3:0:1000:0:0
 B:CRUSH:HURT:9d9
 B:CRUSH:HURT:9d9
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
@@ -24110,7 +24106,7 @@ G:D:v
 I:125:90d100:45:180:10
 W:73:2:0:38000:0:0
 B:BITE:HURT:15d9
-B:CRUSH:HURT:15d9
+B:INSULT:SUPERHURT:15d9
 B:CLAW:HURT:15d9
 B:CRUSH:HURT:1d89
 F:UNIQUE | FORCE_MAXHP | DROP_CORPSE | DROP_SKELETON | ATTR_MULTI
@@ -24269,7 +24265,7 @@ N:1218:ドラウグル・デスロード
 E:Draugr deathlord
 G:z:D
 I:120:21d50:40:80:10
-W:42:1:0:3200:0:0
+W:42:2:0:3200:0:0
 B:SHOOT:HURT:12d12
 B:HIT:SUPERHURT:8d8
 B:SLASH:SUPERHURT:8d8
@@ -24593,12 +24589,12 @@ N:1239:惑星生命体『ソラリス』
 E:Solaris, the planet life
 G:j:G
 I:125:60d100:50:90:5
-W:70:4:0:6000:0:0
+W:70:4:0:36000:0:0
 B:CRAWL:HURT:11d11
 B:ENGULF:HURT:11d11
 B:GAZE:HURT:11d11
 B:TOUCH:HURT:11d11
-F:UNIQUE | FORCE_MAXHP | NONLIVING | QUANTUM | DROP_2D2 | DROP_GREAT
+F:UNIQUE | FORCE_MAXHP | NONLIVING | QUANTUM | DROP_3D2 | DROP_GREAT | ONLY_ITEM
 F:IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS | RES_LITE | RES_DARK
 F:RES_NEXU | RES_CHAO | RES_DISE | RES_SHAR | RES_WATE | RES_TIME | RES_NETH
 F:RES_SOUN | WEIRD_MIND | PASS_WALL | SHAPECHANGER | ATTR_MULTI
@@ -25131,8 +25127,8 @@ E:Raphael, the Big Raven
 G:B:R
 I:120:40d30:20:60:20
 W:37:3:0:7000:0:0
-B:CRUSH:SHATTER:12d12
-B:CRUSH:TERRIFY:12d12
+B:CRUSH:SHATTER:7d12
+B:CRUSH:TERRIFY:7d12
 F:UNIQUE | FORCE_MAXHP | ANIMAL | POWERFUL | MOVE_BODY | EVIL
 F:NO_CONF | NO_SLEEP | NO_FEAR | IM_ELEC | RES_GRAV | BASH_DOOR
 F:DROP_GOOD | DROP_2D2 | ONLY_ITEM
