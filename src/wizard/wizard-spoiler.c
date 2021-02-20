@@ -15,6 +15,7 @@
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-flags8.h"
 #include "system/angband-version.h"
 #include "term/screen-processor.h"
 #include "util/angband-files.h"
@@ -190,7 +191,7 @@ void exe_output_spoilers(void)
             status = spoil_fixed_artifact("artifact.txt");
             break;
         case '3':
-            status = spoil_mon_desc("mon-desc.txt");
+            status = spoil_mon_desc_all("mon-desc.txt");
             break;
         case '4':
             status = spoil_mon_info("mon-info.txt");
@@ -234,7 +235,38 @@ spoiler_output_status output_all_spoilers(void)
     if (status != SPOILER_OUTPUT_SUCCESS)
         return status;
 
-    status = spoil_mon_desc("mon-desc.txt");
+    status = spoil_mon_desc_all("mon-desc.txt");
+    if (status != SPOILER_OUTPUT_SUCCESS)
+        return status;
+
+    status = spoil_mon_desc("mon-desc-wildonly.txt", FALSE, RF8_WILD_ONLY);
+    if (status != SPOILER_OUTPUT_SUCCESS)
+        return status;
+    status = spoil_mon_desc("mon-desc-town.txt", FALSE, RF8_WILD_TOWN);
+    if (status != SPOILER_OUTPUT_SUCCESS)
+        return status;
+    status = spoil_mon_desc("mon-desc-shore.txt", FALSE, RF8_WILD_SHORE);
+    if (status != SPOILER_OUTPUT_SUCCESS)
+        return status;
+    status = spoil_mon_desc("mon-desc-ocean.txt", FALSE, RF8_WILD_OCEAN);
+    if (status != SPOILER_OUTPUT_SUCCESS)
+        return status;
+    status = spoil_mon_desc("mon-desc-waste.txt", FALSE, RF8_WILD_WASTE);
+    if (status != SPOILER_OUTPUT_SUCCESS)
+        return status;
+    status = spoil_mon_desc("mon-desc-wood.txt", FALSE, RF8_WILD_WOOD);
+    if (status != SPOILER_OUTPUT_SUCCESS)
+        return status;
+    status = spoil_mon_desc("mon-desc-volcano.txt", FALSE, RF8_WILD_VOLCANO);
+    if (status != SPOILER_OUTPUT_SUCCESS)
+        return status;
+    status = spoil_mon_desc("mon-desc-mountain.txt", FALSE, RF8_WILD_MOUNTAIN);
+    if (status != SPOILER_OUTPUT_SUCCESS)
+        return status;
+    status = spoil_mon_desc("mon-desc-grass.txt", FALSE, RF8_WILD_GRASS);
+    if (status != SPOILER_OUTPUT_SUCCESS)
+        return status;
+    status = spoil_mon_desc("mon-desc-wildall.txt", FALSE, RF8_WILD_ALL);
     if (status != SPOILER_OUTPUT_SUCCESS)
         return status;
 
