@@ -23070,7 +23070,7 @@ B:CRUSH:HURT:7d7
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_WATE
 D:$It is a medium-sized bubble that makes a weird movement.
-D:$  When it is crushed, it becomes a small bubble.
+D:$  When it is squashed, it becomes small bubbles.
 D:不気味な動きをする、やや大きな泡だ。潰すと小さな泡になる。
 
 # 倒すとやや大きな泡×4に分裂する
@@ -23083,7 +23083,7 @@ B:CRUSH:HURT:8d8
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_WATE
 D:$It is a large bubble that makes a weird movement.
-D:$  When it is crushed, it becomes a medium bubble.
+D:$  When it is squashed, it becomes medium bubbles.
 D:不気味な動きをする大きな泡だ。潰しても中々なくならない。
 
 # 倒すと大きな泡×4に分裂する
@@ -23109,7 +23109,7 @@ B:CRUSH:HURT:6d6
 F:RAND_25 | RAND_50 | FRIENDS | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE
 S:1_IN_5 | MISSILE
-D:$Holy shit! This bubble will shoot back at you!
+D:$Holy shit!  This bubble will shoot back at you!
 D:なんてこった、こいつ泡のくせに撃ち返してくるぞ！
 
 # 倒すと小さな泡×4に分裂する
@@ -23125,7 +23125,7 @@ F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE
 S:1_IN_5 | MISSILE
 D:$It is a medium-sized bubble that makes a weird movement and shoots you back.
-D:$  When it is crushed, it becomes a small bubble.
+D:$  When it is squashed, it becomes small bubbles.
 D:不気味な動きをして撃ち返してくる、やや大きな泡だ。潰すと小さな泡になる。
 
 # 倒すとやや大きな泡×4に分裂する
@@ -23140,7 +23140,7 @@ F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE
 S:1_IN_5 | MISSILE
 D:$It is a large bubble that makes a weird movement and shoots you back.
-D:$  When it is crushed, it becomes a medium bubble.
+D:$  When it is squashed, it becomes medium bubbles.
 D:不気味な動きをして撃ち返してくる大きな泡だ。潰しても中々なくならない。
 
 # 倒すと大きな泡×4に分裂する
