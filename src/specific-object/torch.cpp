@@ -1,4 +1,5 @@
-﻿#include "specific-object/torch.h"
+﻿#include <vector>
+
 #include "core/player-update-types.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
@@ -9,8 +10,9 @@
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "player/special-defense-types.h"
-#include "system/floor-type-definition.h"
+#include "specific-object/torch.h"
 #include "sv-definition/sv-lite-types.h"
+#include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*!
@@ -94,7 +96,6 @@ void update_lite_radius(player_type *creature_ptr)
             }
         }
 
-
         POSITION rad = 0;
         if (has_flag(flgs, TR_LITE_1) && !has_flag(flgs, TR_DARK_SOURCE))
             rad += 1;
@@ -165,17 +166,31 @@ void update_lite_radius(player_type *creature_ptr)
  */
 void update_lite(player_type *subject_ptr)
 {
+    struct Point {
+        int y;
+        int x;
+        Point(const int y, const int x)
+            : y(y)
+            , x(x)
+        {
+        }
+    };
+
+    // 前回照らされていた座標たちを格納する配列。
+    std::vector<Point> points;
+
     POSITION p = subject_ptr->cur_lite;
-    grid_type *g_ptr;
-    floor_type *floor_ptr = subject_ptr->current_floor_ptr;
+    floor_type *const floor_ptr = subject_ptr->current_floor_ptr;
+
+    // 前回照らされていた座標たちを記録。
     for (int i = 0; i < floor_ptr->lite_n; i++) {
-        POSITION y = floor_ptr->lite_y[i];
-        POSITION x = floor_ptr->lite_x[i];
+        const POSITION y = floor_ptr->lite_y[i];
+        const POSITION x = floor_ptr->lite_x[i];
+
         floor_ptr->grid_array[y][x].info &= ~(CAVE_LITE);
         floor_ptr->grid_array[y][x].info |= CAVE_TEMP;
-        tmp_pos.y[tmp_pos.n] = y;
-        tmp_pos.x[tmp_pos.n] = x;
-        tmp_pos.n++;
+
+        points.emplace_back(y, x);
     }
 
     floor_ptr->lite_n = 0;
@@ -270,17 +285,16 @@ void update_lite(player_type *subject_ptr)
     for (int i = 0; i < floor_ptr->lite_n; i++) {
         POSITION y = floor_ptr->lite_y[i];
         POSITION x = floor_ptr->lite_x[i];
-        g_ptr = &floor_ptr->grid_array[y][x];
+        grid_type *g_ptr = &floor_ptr->grid_array[y][x];
         if (g_ptr->info & CAVE_TEMP)
             continue;
 
         cave_note_and_redraw_later(floor_ptr, g_ptr, y, x);
     }
 
-    for (int i = 0; i < tmp_pos.n; i++) {
-        POSITION y = tmp_pos.y[i];
-        POSITION x = tmp_pos.x[i];
-        g_ptr = &floor_ptr->grid_array[y][x];
+    // 前回照らされていた座標たちのうち、状態が変わったものについて再描画フラグを立てる。
+    for (const auto &[y, x] : points) {
+        grid_type *g_ptr = &floor_ptr->grid_array[y][x];
         g_ptr->info &= ~(CAVE_TEMP);
         if (g_ptr->info & CAVE_LITE)
             continue;
@@ -288,6 +302,5 @@ void update_lite(player_type *subject_ptr)
         cave_redraw_later(floor_ptr, g_ptr, y, x);
     }
 
-    tmp_pos.n = 0;
     subject_ptr->update |= PU_DELAY_VIS;
 }
