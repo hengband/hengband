@@ -1,0 +1,74 @@
+name: Publish Spoiler Github Pages
+
+on:
+  push:
+    branches: [master]
+  # 手動トリガーを許可
+  workflow_dispatch:
+
+jobs:
+  create_spoilers:
+    name: Create auto generate spoiler files
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install required packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install \
+            nkf \
+
+      - name: Generate configure
+        run: ./bootstrap
+
+      - name: Configuration for Japanese version
+        run: ./configure --disable-worldscore
+        env:
+          CFLAGS: "-pipe"
+
+      - name: Build Japanese version
+        run: make -j$(nproc)
+
+      - name: Output spoilers
+        run: src/hengband --output-spoilers
+
+      - name: Convert encoding to UTF-8
+        run: nkf -w --in-place ~/.angband/Hengband/*.txt
+
+      - name: Upload spoilers
+        uses: actions/upload-artifact@v2
+        with:
+          name: spoiler-files
+          path: ~/.angband/Hengband/*.txt
+
+
+  publish:
+    name: Publish GitHub Pages of spoilers
+    needs: create_spoilers
+    runs-on: ubuntu-20.04
+    env:
+      GITHUB_PAGES_REPOSITORY: hengband/spoiler
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: ${{ env.GITHUB_PAGES_REPOSITORY }}
+
+      - name: Download spoilers
+        uses: actions/download-artifact@v2
+        with:
+          name: spoiler-files
+          path: spoilers
+
+      - name: Copy spoilers to publish dir
+        run: cp -v spoilers/*.txt docs/
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          deploy_key: ${{ secrets.SPOILER_REPOSITORY_DEPLOY_KEY }}
+          publish_dir: ./docs
+          external_repository: ${{ env.GITHUB_PAGES_REPOSITORY }}
+          enable_jekyll: true
+          user_name: hengband
+          user_email: hengband@users.noreply.github.com
