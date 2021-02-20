@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#define reset_bit(FLAG, INDEX) ((FLAG) &= (INDEX))
+#define reset_bit(FLAG, INDEX) ((FLAG) &= ~(INDEX))
 #define set_bit(FLAG, INDEX) ((FLAG) |= (INDEX))
 #define test_bit(FLAG, INDEX) (((FLAG) & (INDEX)) != 0)
 #define has_flag(ARRAY, INDEX) !!((ARRAY)[(INDEX) / 32] & (1UL << ((INDEX) % 32)))
