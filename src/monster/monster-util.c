@@ -403,7 +403,7 @@ static errr do_get_mon_num_prep(player_type *player_ptr, const monsterrace_hook_
 
     // チートオプションが有効なら統計情報を出力。
     if (cheat_hear)
-        msg_format(_("モンスター第2次候補数:%d(%d-%dF)%d ", "monster second selection:%d(%d-%dF)&d "), mon_num, lev_min, lev_max, prob2_total);
+        msg_format(_("モンスター第2次候補数:%d(%d-%dF)%d ", "monster second selection:%d(%d-%dF)%d "), mon_num, lev_min, lev_max, prob2_total);
 
     return 0;
 }
