@@ -142,7 +142,7 @@ static void drop_corpse(player_type *player_ptr, monster_death_type *md_ptr)
  * @param md_ptr モンスター死亡構造体への参照ポインタ
  * @return 何かドロップするなら1以上、何もドロップしないなら0
  */
-static ARTIFACT_IDX get_artifact_index(player_type *player_ptr, monster_death_type *md_ptr)
+static ARTIFACT_IDX drop_artifact_index(player_type *player_ptr, monster_death_type *md_ptr)
 {
     ARTIFACT_IDX a_idx = 0;
     PERCENTAGE chance = 0;
@@ -164,11 +164,13 @@ static ARTIFACT_IDX get_artifact_index(player_type *player_ptr, monster_death_ty
             if (current_world_ptr->character_dungeon)
                 a_ptr->floor_id = player_ptr->floor_id;
 
-            continue;
+            break;
         }
 
-        if (!preserve_mode)
+        if (!preserve_mode) {
             a_ptr->cur_num = 1;
+            break;
+        }
     }
 
     return a_idx;
@@ -201,7 +203,7 @@ static void drop_artifact(player_type *player_ptr, monster_death_type *md_ptr)
     if (!md_ptr->drop_chosen_item)
         return;
 
-    ARTIFACT_IDX a_idx = get_artifact_index(player_ptr, md_ptr);
+    ARTIFACT_IDX a_idx = drop_artifact_index(player_ptr, md_ptr);
     if (((md_ptr->r_ptr->flags7 & RF7_GUARDIAN) == 0) || (d_info[player_ptr->dungeon_idx].final_guardian != md_ptr->m_ptr->r_idx))
         return;
 
