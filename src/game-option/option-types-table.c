@@ -85,7 +85,7 @@ const option_type option_info[MAX_OPTION_INFO] = {
 
     { &fresh_after, FALSE, OPT_PAGE_MAPSCREEN, 1, 24, "fresh_after", _("コマンド後に画面を常に再描画し続ける", "Flush output after monster's move") },
 
-    { &fresh_once, FALSE, OPT_PAGE_MAPSCREEN, 1, 32, "fresh_once", _("キー入力毎に一度だけ画面を再描画する", "Flush output once per key input") },
+    { &fresh_once, FALSE, OPT_PAGE_MAPSCREEN, 1, 10, "fresh_once", _("キー入力毎に一度だけ画面を再描画する", "Flush output once per key input") },
 
     { &fresh_message, FALSE, OPT_PAGE_MAPSCREEN, 1, 25, "fresh_message", _("メッセージの後に画面を再描画する", "Flush output after every message") },
 
