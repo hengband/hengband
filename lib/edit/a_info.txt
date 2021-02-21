@@ -4299,3 +4299,46 @@ D:$(Books of Samuel 17:49)
 D:ダビデは手を袋に入れて、その中から一つの石を取り、石投げで投げて、
 D:ペリシテびとの額を撃ったので、石はその額に突き入り、うつむきに地に倒れた。
 D:（サムエル記上17:49 『聖書 [口語]』日本聖書協会、1955年）
+
+N:258:『天鹿児弓』
+E:'Ama no kago yumi'
+I:19:13:2
+W:40:60:40:100000
+P:0:0d0:21:17:0
+F:DEX | SPEED | HIDE_TYPE | BRAND_FIRE | BRAND_ELEC |
+F:RES_FIRE | RES_ELEC | RES_LITE |
+F:SEE_INVIS | FREE_ACT | XTRA_MIGHT | SHOW_MODS
+D:$It is easy to defeat any enemy when you fire an allow with this bow.
+D:この弓は天椎彦が葦原中国に遣わされた時に高天原の神より与えられたもので、
+D:一度矢を放てばたちどころに邪悪な者達を打ち破ることができる。
+
+#アイスウィンドサーガより。他にはD&Dやバルダーズゲートなど。
+#wikipediaによると右手
+N:259:『アイシングデス』
+E:'Icingdeath'
+I:23:18:2
+W:40:30:130:100000
+P:0:2d5:24:18:0
+F:STR | DEX | BLOWS | HIDE_TYPE |
+F:BRAND_COLD | SLAY_EVIL | KILL_DRAGON |
+F:SLAY_ORC | SLAY_TROLL | SLAY_GIANT |
+F:RES_COLD | RES_FEAR | SH_COLD |
+F:FREE_ACT | REGEN | LITE
+D:伝説のダークエルフ、ドリッズドの二振りの剣のうちの1つだ。
+D:『トゥインクル』と対を成している。
+
+#from Beoline Read
+#アイスウィンドサーガより。他にはD&Dやバルダーズゲートなど。
+#wikipediaによると左手
+N:260:『トゥインクル』
+E:'Twinkle'
+I:23:18:2
+W:40:30:130:100000
+P:0:2d5:18:12:0
+F:CON | BLOWS | STEALTH | HIDE_TYPE |
+F:BRAND_COLD |
+F:RES_COLD | RES_BLIND | RES_DARK | RES_NETHER |
+F:SUST_STR | SUST_DEX | SUST_CON |
+F:SEE_INVIS | HOLD_EXP | WARNING | SLOW_DIGEST | LITE
+D:伝説のダークエルフ、ドリッズドの二振りの剣のうちの1つだ。
+D:『アイシングデス』と対を成している。
