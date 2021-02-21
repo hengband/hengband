@@ -84,6 +84,14 @@ static errr rd_dungeon(player_type *player_ptr)
             if (!load_floor(player_ptr, get_sf_ptr(player_ptr->floor_id), SLF_SECOND))
                 err = 183;
         }
+
+        // latest_visit_mark の復元。
+        // 全ての保存フロアについての visit_mark の最大値 + 1 とする。
+        for (int i = 0; i < num; ++i) {
+            const u32b next_visit_mark = saved_floors[i].visit_mark + 1;
+            if (next_visit_mark > latest_visit_mark)
+                latest_visit_mark = next_visit_mark;
+        }
     }
 
     switch (err) {
