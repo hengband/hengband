@@ -119,15 +119,15 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type *m_ptr, int 
  * @param y 表示行
  * @param max_lines 最大何行描画するか
  */
-void print_monster_list(floor_type *floor_ptr, TERM_LEN x, TERM_LEN y, TERM_LEN max_lines)
+void print_monster_list(floor_type *floor_ptr, pos_list *plist, TERM_LEN x, TERM_LEN y, TERM_LEN max_lines)
 {
     TERM_LEN line = y;
     monster_type *last_mons = NULL;
     monster_type *m_ptr = NULL;
     int n_same = 0;
     int i;
-    for (i = 0; i < tmp_pos.n; i++) {
-        grid_type *g_ptr = &floor_ptr->grid_array[tmp_pos.y[i]][tmp_pos.x[i]];
+    for (i = 0; i < plist->n; i++) {
+        grid_type *g_ptr = &floor_ptr->grid_array[plist->y[i]][plist->x[i]];
         if (!g_ptr->m_idx || !floor_ptr->m_list[g_ptr->m_idx].ml)
             continue;
         m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
@@ -150,19 +150,22 @@ void print_monster_list(floor_type *floor_ptr, TERM_LEN x, TERM_LEN y, TERM_LEN 
             continue; //表示処理を次に回す
         }
 
-        // print last mons info
+        // last_mons と m_ptr が(見た目が)異なるなら、last_mons とその数を出力。
+        // m_ptr を新たな last_mons とする。
         print_monster_line(x, line++, last_mons, n_same);
         n_same = 1;
         last_mons = m_ptr;
-        if (line - y - 1 == max_lines)
+
+        // 行数が足りなくなったら中断。
+        if (line - y == max_lines)
             break;
     }
 
-    if (line - y - 1 == max_lines && i != tmp_pos.n) {
-        term_erase(0, line, 255);
-        term_gotoxy(x, line);
+    if (i != plist->n) {
+        // 行数が足りなかった場合、最終行にその旨表示。
         term_addstr(-1, TERM_WHITE, "-- and more --");
     } else {
+        // 行数が足りていれば last_mons とその数を出力し、残りの行をクリア。
         if (last_mons)
             print_monster_line(x, line++, last_mons, n_same);
         for (; line < max_lines; line++)
@@ -177,6 +180,10 @@ void print_monster_list(floor_type *floor_ptr, TERM_LEN x, TERM_LEN y, TERM_LEN 
  */
 void fix_monster_list(player_type *player_ptr)
 {
+    // 副作用を起こさないようにfix_monster_list専用のpos_listを用意する。
+    // サイズが大きいためスタック領域に入れるには懸念があるのでstatic変数とする。
+    static pos_list plist;
+
     for (int j = 0; j < 8; j++) {
         term_type *old = Term;
         if (!angband_term[j])
@@ -189,9 +196,8 @@ void fix_monster_list(player_type *player_ptr)
         term_activate(angband_term[j]);
         int w, h;
         term_get_size(&w, &h);
-        target_set_prepare(player_ptr, TARGET_LOOK);
-        print_monster_list(player_ptr->current_floor_ptr, 0, 0, h);
-        target_clear(player_ptr);
+        target_sensing_monsters_prepare(player_ptr, &plist);
+        print_monster_list(player_ptr->current_floor_ptr, &plist, 0, 0, h);
         term_fresh();
         term_activate(old);
     }

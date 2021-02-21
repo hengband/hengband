@@ -326,15 +326,15 @@ static bool set_melee_spell_set(player_type *target_ptr, melee_spell_type *ms_pt
         return FALSE;
 
     for (int k = 0; k < 32; k++)
-        if (ms_ptr->f4 & (1L << k))
+        if (ms_ptr->f4 & (1UL << k))
             ms_ptr->spell[ms_ptr->num++] = k + RF4_SPELL_START;
 
     for (int k = 0; k < 32; k++)
-        if (ms_ptr->f5 & (1L << k))
+        if (ms_ptr->f5 & (1UL << k))
             ms_ptr->spell[ms_ptr->num++] = k + RF5_SPELL_START;
 
     for (int k = 0; k < 32; k++)
-        if (ms_ptr->f6 & (1L << k))
+        if (ms_ptr->f6 & (1UL << k))
             ms_ptr->spell[ms_ptr->num++] = k + RF6_SPELL_START;
 
     return (ms_ptr->num != 0) && target_ptr->playing && !target_ptr->is_dead && !target_ptr->leaving;

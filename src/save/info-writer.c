@@ -106,9 +106,9 @@ void wr_options(save_type type)
             continue;
 
         if (*option_info[i].o_var)
-            option_flag[os] |= (1L << ob);
+            option_flag[os] |= (1UL << ob);
         else
-            option_flag[os] &= ~(1L << ob);
+            option_flag[os] &= ~(1UL << ob);
     }
 
     for (int i = 0; i < 8; i++)

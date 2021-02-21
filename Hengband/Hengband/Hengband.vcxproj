@@ -321,6 +321,7 @@
     <ClCompile Include="..\..\src\io\input-key-requester.c" />
     <ClCompile Include="..\..\src\io\store-key-processor.c" />
     <ClCompile Include="..\..\src\load\info-loader.c" />
+    <ClCompile Include="..\..\src\locale\utf-8.c" />
     <ClCompile Include="..\..\src\main\angband-headers.c" />
     <ClCompile Include="..\..\src\main\game-data-initializer.c" />
     <ClCompile Include="..\..\src\main\info-initializer.c" />
@@ -970,6 +971,7 @@
     <ClInclude Include="..\..\src\io\store-key-processor.h" />
     <ClInclude Include="..\..\src\load\info-loader.h" />
     <ClInclude Include="..\..\src\locale\language-switcher.h" />
+    <ClInclude Include="..\..\src\locale\utf-8.h" />
     <ClInclude Include="..\..\src\main\angband-headers.h" />
     <ClInclude Include="..\..\src\main\game-data-initializer.h" />
     <ClInclude Include="..\..\src\main\info-initializer.h" />

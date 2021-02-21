@@ -95,7 +95,7 @@ static bool make_fake_artifact(player_type *player_ptr, object_type *o_ptr, ARTI
         return FALSE;
 
     object_prep(player_ptr, o_ptr, i);
-    o_ptr->name1 = (byte)name1;
+    o_ptr->name1 = name1;
     o_ptr->pval = a_ptr->pval;
     o_ptr->ac = a_ptr->ac;
     o_ptr->dd = a_ptr->dd;
@@ -142,12 +142,11 @@ static void spoiler_print_art(obj_desc_list *art_ptr)
 /*!
  * @brief アーティファクト情報のスポイラー出力を行うメインルーチン /
  * Create a spoiler file for artifacts
- * @param player_ptr プレーヤーへの参照ポインタ
  * @param fname 生成ファイル名
- * @return なし
  */
-void spoil_fixed_artifact(player_type *player_ptr, concptr fname)
+spoiler_output_status spoil_fixed_artifact(concptr fname)
 {
+    player_type dummy;
     object_type forge;
     object_type *q_ptr;
     obj_desc_list artifact;
@@ -155,8 +154,7 @@ void spoil_fixed_artifact(player_type *player_ptr, concptr fname)
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
     if (!spoiler_file) {
-        msg_print("Cannot create spoiler file.");
-        return;
+        return SPOILER_OUTPUT_FAIL_FOPEN;
     }
 
     print_header();
@@ -174,18 +172,16 @@ void spoil_fixed_artifact(player_type *player_ptr, concptr fname)
 
             q_ptr = &forge;
             object_wipe(q_ptr);
-            if (!make_fake_artifact(player_ptr, q_ptr, j))
+            if (!make_fake_artifact(&dummy, q_ptr, j))
                 continue;
 
-            object_analyze(player_ptr, q_ptr, &artifact);
+            object_analyze(&dummy, q_ptr, &artifact);
             spoiler_print_art(&artifact);
         }
     }
 
     if (ferror(spoiler_file) || angband_fclose(spoiler_file)) {
-        msg_print("Cannot close spoiler file.");
-        return;
+        return SPOILER_OUTPUT_FAIL_FCLOSE;
     }
-
-    msg_print("Successfully created a spoiler file.");
+    return SPOILER_OUTPUT_SUCCESS;
 }

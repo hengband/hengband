@@ -130,7 +130,7 @@ void process_player(player_type *creature_ptr)
         print_time(creature_ptr);
     }
 
-    if (!fresh_after && (continuous_action_running(creature_ptr) || !command_rep)) {
+    if (fresh_once && (continuous_action_running(creature_ptr) || !command_rep)) {
         stop_term_fresh();
     }
 
@@ -251,7 +251,7 @@ void process_player(player_type *creature_ptr)
         handle_stuff(creature_ptr);
         move_cursor_relative(creature_ptr->y, creature_ptr->x);
         if (fresh_before)
-            term_fresh();
+            term_fresh_force();
 
         pack_overflow(creature_ptr);
         if (!command_new)

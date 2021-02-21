@@ -149,11 +149,11 @@ static void display_spell_list(player_type *caster_ptr)
             if (s_ptr->slevel >= 99) {
                 strcpy(name, _("(判読不能)", "(illegible)"));
                 a = TERM_L_DARK;
-            } else if ((j < 1) ? ((caster_ptr->spell_forgotten1 & (1L << i))) : ((caster_ptr->spell_forgotten2 & (1L << (i % 32))))) {
+            } else if ((j < 1) ? ((caster_ptr->spell_forgotten1 & (1UL << i))) : ((caster_ptr->spell_forgotten2 & (1UL << (i % 32))))) {
                 a = TERM_ORANGE;
-            } else if (!((j < 1) ? (caster_ptr->spell_learned1 & (1L << i)) : (caster_ptr->spell_learned2 & (1L << (i % 32))))) {
+            } else if (!((j < 1) ? (caster_ptr->spell_learned1 & (1UL << i)) : (caster_ptr->spell_learned2 & (1UL << (i % 32))))) {
                 a = TERM_RED;
-            } else if (!((j < 1) ? (caster_ptr->spell_worked1 & (1L << i)) : (caster_ptr->spell_worked2 & (1L << (i % 32))))) {
+            } else if (!((j < 1) ? (caster_ptr->spell_worked1 & (1UL << i)) : (caster_ptr->spell_worked2 & (1UL << (i % 32))))) {
                 a = TERM_YELLOW;
             }
 

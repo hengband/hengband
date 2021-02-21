@@ -34,8 +34,7 @@ void redraw_window(void)
     if (!current_world_ptr->character_dungeon)
         return;
 
-    p_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
-    p_ptr->window_flags |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT);
+    p_ptr->window_flags = PW_ALL;
 
     handle_stuff(p_ptr);
     term_redraw();
@@ -228,7 +227,7 @@ void window_stuff(player_type *player_ptr)
 {
     if (!player_ptr->window_flags)
         return;
-    
+
     BIT_FLAGS mask = 0L;
     for (int j = 0; j < 8; j++) {
         if (angband_term[j] && !angband_term[j]->never_fresh)

@@ -9,12 +9,14 @@
  * 2014 Deskull rearranged comment for Doxygen. \n
  */
 
-#include "floor/floor-generator.h"
+#include <assert.h>
+
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/cave-generator.h"
 #include "floor/floor-events.h"
+#include "floor/floor-generator.h"
 #include "floor/floor-save.h" // todo precalc_cur_num_of_pet() が依存している、違和感.
 #include "floor/floor-util.h"
 #include "floor/wild.h"
@@ -40,10 +42,84 @@
 #include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/system-variables.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "window/main-window-util.h"
 #include "wizard/wizard-messages.h"
 #include "world/world.h"
+
+//--------------------------------------------------------------------
+// 動的可変長配列
+//--------------------------------------------------------------------
+
+typedef struct Vec {
+    size_t len;
+    size_t cap;
+    int *data;
+} Vec;
+
+// 容量 cap の空 Vec を返す。
+static Vec vec_with_capacity(const size_t cap)
+{
+    assert(cap > 0);
+
+    Vec vec = { .len = 0, .cap = cap, .data = NULL };
+    vec.data = malloc(sizeof(int) * cap);
+    if (!vec.data)
+        rpanic(cap);
+
+    return vec;
+}
+
+// サイズ len で、全要素が init で初期化された Vec を返す。
+static Vec vec_new(const size_t len, const int init)
+{
+    assert(len > 0);
+
+    const size_t cap = 2 * len;
+    Vec vec = vec_with_capacity(cap);
+
+    vec.len = len;
+    for (size_t i = 0; i < len; ++i)
+        vec.data[i] = init;
+
+    return vec;
+}
+
+static void vec_delete(Vec *const vec)
+{
+    free(vec->data);
+
+    vec->len = 0;
+    vec->cap = 0;
+    vec->data = NULL;
+}
+
+static size_t vec_size(const Vec *const vec) { return vec->len; }
+
+static bool vec_is_empty(const Vec *const vec) { return vec_size(vec) == 0; }
+
+static void vec_push_back(Vec *const vec, const int e)
+{
+    // 容量不足になったら容量を拡張する。
+    if (vec->len == vec->cap) {
+        vec->cap = vec->cap > 0 ? 2 * vec->cap : 1;
+        vec->data = realloc(vec->data, sizeof(int) * vec->cap);
+        if (!vec->data)
+            rpanic(vec->cap);
+    }
+
+    vec->data[vec->len++] = e;
+}
+
+static int vec_pop_back(Vec *const vec)
+{
+    assert(!vec_is_empty(vec));
+
+    return vec->data[vec->len-- - 1];
+}
+
+//--------------------------------------------------------------------
 
 /*!
  * @brief 闘技場用のアリーナ地形を作成する / Builds the on_defeat_arena_monster after it is entered -KMW-
@@ -362,6 +438,89 @@ void clear_cave(player_type *player_ptr)
     floor_ptr->object_level = floor_ptr->base_level;
 }
 
+typedef bool (*IsWallFunc)(const floor_type *, int, int);
+
+// (y,x) がプレイヤーが通れない永久地形かどうかを返す。
+static bool is_permanent_blocker(const floor_type *const floor_ptr, const int y, const int x)
+{
+    const FEAT_IDX feat = floor_ptr->grid_array[y][x].feat;
+    const BIT_FLAGS *const flags = f_info[feat].flags;
+    return has_flag(flags, FF_PERMANENT) && !has_flag(flags, FF_MOVE);
+}
+
+static void floor_is_connected_dfs(
+    const floor_type *const floor_ptr, const IsWallFunc is_wall, const int y_start, const int x_start, Vec *const stk, const Vec *const visited)
+{
+    // clang-format off
+    static const int DY[8] = { -1, -1, -1,  0, 0,  1, 1, 1 };
+    static const int DX[8] = { -1,  0,  1, -1, 1, -1, 0, 1 };
+    // clang-format on
+
+    const int h = floor_ptr->height;
+    const int w = floor_ptr->width;
+    const int start = w * y_start + x_start;
+
+    vec_push_back(stk, start);
+    visited->data[start] = 1;
+
+    while (!vec_is_empty(stk)) {
+        const int cur = vec_pop_back(stk);
+        const int y = cur / w;
+        const int x = cur % w;
+
+        for (int i = 0; i < 8; ++i) {
+            const int y_nxt = y + DY[i];
+            const int x_nxt = x + DX[i];
+            if (y_nxt < 0 || h <= y_nxt || x_nxt < 0 || w <= x_nxt)
+                continue;
+            const int nxt = w * y_nxt + x_nxt;
+            if (visited->data[nxt])
+                continue;
+            if (is_wall(floor_ptr, y_nxt, x_nxt))
+                continue;
+
+            vec_push_back(stk, nxt);
+            visited->data[nxt] = 1;
+        }
+    }
+}
+
+// 現在のフロアが連結かどうかを返す。
+// 各セルの8近傍は互いに移動可能とし、is_wall が真を返すセルのみを壁とみなす。
+//
+// 連結成分数が 0 の場合、偽を返す。
+static bool floor_is_connected(const floor_type *const floor_ptr, const IsWallFunc is_wall)
+{
+    const int h = floor_ptr->height;
+    const int w = floor_ptr->width;
+
+    // ヒープ上に確保したスタックを用いてDFSする。
+    // 最大フロアサイズが h=66, w=198 なので、単純に再帰DFSするとスタックオーバーフローが不安。
+    Vec stk = vec_with_capacity(1024);
+    Vec visited = vec_new((size_t)h * (size_t)w, 0);
+    int n_component = 0; // 連結成分数
+
+    for (int y = 0; y < h; ++y) {
+        for (int x = 0; x < w; ++x) {
+            const int idx = w * y + x;
+            if (visited.data[idx])
+                continue;
+            if (is_wall(floor_ptr, y, x))
+                continue;
+
+            if (++n_component >= 2)
+                goto finish;
+            floor_is_connected_dfs(floor_ptr, is_wall, y, x, &stk, &visited);
+        }
+    }
+
+finish:
+    vec_delete(&visited);
+    vec_delete(&stk);
+
+    return n_component == 1;
+}
+
 /*!
  * ダンジョンのランダムフロアを生成する / Generates a random dungeon level -RAK-
  * @parama player_ptr プレーヤーへの参照ポインタ
@@ -398,6 +557,21 @@ void generate_floor(player_type *player_ptr)
         } else if (floor_ptr->m_max >= current_world_ptr->max_m_idx) {
             why = _("モンスターが多すぎる", "too many monsters");
             okay = FALSE;
+        }
+
+        // ダンジョン内フロアが連結でない(永久壁で区切られた孤立部屋がある)場合、
+        // 狂戦士でのプレイに支障をきたしうるので再生成する。
+        // 地上、荒野マップ、クエストでは連結性判定は行わない。
+        // TODO: 本来はダンジョン生成アルゴリズム自身で連結性を保証するのが理想ではある。
+        const bool check_conn = okay && floor_ptr->dun_level > 0 && floor_ptr->inside_quest == 0;
+        if (check_conn && !floor_is_connected(floor_ptr, is_permanent_blocker)) {
+            // 一定回数試しても連結にならないなら諦める。
+            if (num >= 1000) {
+                plog("cannot generate connected floor. giving up...");
+            } else {
+                why = _("フロアが連結でない", "floor is not connected");
+                okay = FALSE;
+            }
         }
 
         if (okay)

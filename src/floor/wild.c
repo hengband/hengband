@@ -306,7 +306,7 @@ static void generate_area(player_type *player_ptr, POSITION y, POSITION x, bool 
 
         parse_fixed_map(player_ptr, "t_info.txt", 0, 0, MAX_HGT, MAX_WID);
         if (!corner && !border)
-            player_ptr->visit |= (1L << (player_ptr->town_num - 1));
+            player_ptr->visit |= (1UL << (player_ptr->town_num - 1));
     } else {
         int terrain = wilderness[y][x].terrain;
         u32b seed = wilderness[y][x].seed;

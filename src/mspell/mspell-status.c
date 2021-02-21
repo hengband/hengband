@@ -11,9 +11,9 @@
 #include "core/player-redraw-types.h"
 #include "mind/drs-types.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-indice-types.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags3.h"
+#include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
@@ -221,7 +221,6 @@ void spell_RF5_SCARE(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_i
             (void)set_afraid(target_ptr, target_ptr->afraid + randint0(4) + 4);
         }
 
-        learn_spell(target_ptr, MS_SCARE);
         update_smart_learn(target_ptr, m_idx, DRS_FEAR);
         return;
     }
@@ -266,7 +265,6 @@ void spell_RF5_BLIND(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_i
             (void)set_blind(target_ptr, 12 + randint0(4));
         }
 
-        learn_spell(target_ptr, MS_BLIND);
         update_smart_learn(target_ptr, m_idx, DRS_BLIND);
         return;
     }
@@ -321,7 +319,6 @@ void spell_RF5_CONF(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
             (void)set_confused(target_ptr, target_ptr->confused + randint0(4) + 4);
         }
 
-        learn_spell(target_ptr, MS_CONF);
         update_smart_learn(target_ptr, m_idx, DRS_CONF);
         return;
     }
@@ -366,7 +363,6 @@ void spell_RF5_HOLD(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
             (void)set_paralyzed(target_ptr, target_ptr->paralyzed + randint0(4) + 4);
         }
 
-        learn_spell(target_ptr, MS_SLEEP);
         update_smart_learn(target_ptr, m_idx, DRS_FREE);
         return;
     }
@@ -438,7 +434,6 @@ void spell_RF5_SLOW(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
             (void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, FALSE);
         }
 
-        learn_spell(target_ptr, MS_SLOW);
         update_smart_learn(target_ptr, m_idx, DRS_FREE);
         return;
     }
@@ -568,6 +563,4 @@ void spell_RF6_FORGET(player_type *target_ptr, MONSTER_IDX m_idx)
     } else if (lose_all_info(target_ptr)) {
         msg_print(_("記憶が薄れてしまった。", "Your memories fade away."));
     }
-
-    learn_spell(target_ptr, MS_FORGET);
 }

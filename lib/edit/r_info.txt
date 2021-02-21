@@ -12176,7 +12176,7 @@ F:EVIL | IM_POIS | NO_CONF | NO_SLEEP
 S:1_IN_3
 S:BLIND | SLOW | CONF | SCARE | DRAIN_MANA | MIND_BLAST | FORGET | 
 S:DARKNESS | BO_ACID | BO_FIRE | BO_COLD
-D:$A disembodied eye, surrounded by twenty fourth smaller eyes
+D:$A disembodied eye, surrounded by twenty four smaller eyes
 D:$ on undulating stalks.
 D:大きくうねる触手の先に付いた２４個の小さな目玉に囲まれている、
 D:体を持たない目玉だ。
@@ -12266,7 +12266,7 @@ F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | POWERFUL | FORCE_MAXHP |
 F:OPEN_DOOR | BASH_DOOR | EVIL | IM_POIS | RES_DARK | DROP_CORPSE
 F:ANIMAL | NO_CONF | NO_SLEEP | CAN_SWIM | RIDING
 S:1_IN_8 | BR_POIS | BR_DARK | BR_NETH
-D:$A large basilisk, whose shape resembles that of a ancient dragon.
+D:$A large basilisk, whose shape resembles that of an ancient dragon.
 D:大型のバジリスクで、古代ドラゴンに似た姿をしている。
 
 #JZ#
@@ -13813,7 +13813,7 @@ D:睨んでいる。
 
 #JZ#
 N:732:リンゴ嫌い『ブル・ゲイツ』
-E:Bull Gates, the applephobia
+E:Bull Gates, the applephobe
 G:p:D
 I:140:25d100:40:90:0
 W:52:3:0:18000:0:0
@@ -17333,21 +17333,17 @@ E:Cerberus, Guardian of Hades
 G:C:r
 I:130:100d100:50:160:10
 W:94:1:0:40000:0:0
-B:HIT:FIRE:9d12
-B:HIT:FIRE:9d12
-B:HIT:FIRE:9d12
-B:HIT:FIRE:9d12
-F:UNIQUE |
-F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | AURA_FIRE | DROP_CORPSE
-F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | 
-F:OPEN_DOOR | BASH_DOOR | MOVE_BODY | 
-F:ANIMAL | EVIL | IM_FIRE | NO_CONF | NO_SLEEP
-S:1_IN_3 | 
-S:BA_DARK | 
-S:BR_FIRE | BR_NETH | 
-S:S_HOUND
-D:$A three-headed hell hound of fearsome aspect.  Flame burns merrily from its 
-D:$hide as it snarls and roars its defiance.
+B:BITE:FIRE:27d19
+B:CLAW:FIRE:27d19
+B:BITE:FIRE:27d19
+B:CLAW:FIRE:27d19
+F:UNIQUE | FORCE_MAXHP | AURA_FIRE | ANIMAL | EVIL
+F:PREVENT_SUDDEN_MAGIC | DROP_CORPSE
+F:ONLY_ITEM | DROP_3D2 | DROP_4D2 | DROP_GREAT
+F:OPEN_DOOR | BASH_DOOR | MOVE_BODY | IM_FIRE | NO_CONF | NO_SLEEP
+S:1_IN_3 | BA_DARK | BR_FIRE | BR_NETH | S_HOUND
+D:$A three-headed hell hound of fearsome aspect.
+D:$  Flame burns merrily from its $hide as it snarls and roars its defiance.
 D:３つ首の恐ろしい形相のヘルハウンドだ。相手に向かって牙をむき吠えると同時に
 D:炎がその体から楽しげに燃え上がる。
 
@@ -17967,7 +17963,7 @@ F:PASS_WALL | POWERFUL | MOVE_BODY | RES_DARK | RES_NETH
 F:EVIL | DRAGON | IM_COLD | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_4 | BR_NETH | BR_DARK | SCARE | BLINK | SHRIEK
 D:$It draws darkness from the underworld and brings chaos to the dungeon.
-D:$  The space around it is distorted and it is not possible
+D:$  The space around it is distorted, and it is not possible
 D:$ to clearly capture its appearance.
 D:それは冥界から闇を呼び寄せてダンジョンに混沌をもたらしている。
 D:それの周りでは空間が歪み、姿をはっきりと捉えることができない。
@@ -18809,7 +18805,7 @@ F:RES_LITE | RES_DARK | RES_NETH | RES_WATE | RES_PLAS | RES_SHAR | RES_SOUN
 F:RES_CHAO | RES_DISE | RES_WALL | RES_INER | RES_TIME | RES_GRAV | RES_TELE
 F:NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP | CAN_FLY
 S:1_IN_3 | BLINK | HOLD | BLIND | CONF | SCARE
-D:$This was Bull Gates's most devastating weapon once,
+D:$This once was Bull Gates's most devastating weapon,
 D:$ propagating fear and ruin throughout all multiverse.
 D:$  Its weaknesses are cyber weapons named CSS and JavaScript,
 D:$ but neither exists in this universe.
@@ -20207,7 +20203,7 @@ B:KICK:HURT:1d4
 B:BITE:HURT:1d5
 F:ANIMAL | DROP_CORPSE | DROP_SKELETON | RIDING
 D:$It is also called a horse bird.
-D:$  It can run through land quickly instead of being able to fly.
+D:$  It can run quickly instead of being able to fly.
 D:それは馬鳥ともいい、空を飛ぶことができない。
 D:代わりに陸を素早く駆け抜けることができる。
 
@@ -22857,8 +22853,8 @@ R:560:1d2
 R:1113:4d5
 R:1118:4d5
 D:$It is a too huge towering tornado of winds that looks vaguely like
-D:$ dragons or other winged beast.
-D:$  This violent wind enjoying, dragons comes.
+D:$ a dragon or other winged beast.  Violent gusts at its edges seem
+D:$ ready to coalesce into actual dragons.
 D:それはあまりにも高くそびえ立つような風の竜巻で、
 D:漠然とドラゴンか他の翼ある魔獣に見える。
 D:風の暴威を楽しんでドラゴンがやってくる。
@@ -22886,8 +22882,8 @@ R:1098:1d2
 R:1111:4d5
 R:1131:1d3
 D:$It is a too huge towering glowing form of molten hate
-D:$ that looks vaguely like spiders or other arthropod that live in lava cave.
-D:$ Molten mineral give off toxic gas.
+D:$ that looks vaguely like a spider or other arthropod that lives in a lava
+D:$ cave.  Toxic gases leak from its molten minerals.
 D:それはあまりにも高くそびえ立つような光を発する憎悪が溶けてできたような塊で、
 D:漠然と溶岩洞窟に生息する蜘蛛か他の虫のように見える。
 D:溶けた鉱物が有毒ガスを噴出している。
@@ -22912,9 +22908,9 @@ R:1111:4d5
 R:1116:4d5
 R:510:1d3
 R:589:1d2
-D:$It is a too huge towering inferno of flames that looks vaguely like
-D:$ Balrog or other demons.
-D:$ This flame of destruction respecting, demons comes.
+D:$It is a too huge towering inferno of flames that looks vaguely like a
+D:$ Balrog or other demon.  Demonic shapes are poised to materialize in the
+D:$ waves of heat emanating from its core.
 D:それはあまりにも高くそびえ立つような火炎地獄で、
 D:漠然とバルログか他のデーモンのように見える。
 D:その破壊の炎を慕ってデーモンがやってくる。
@@ -22942,7 +22938,7 @@ R:570:1d3
 R:1112:4d5
 R:1117:4d5
 D:$It is a too huge towering glacier of ice that looks vaguely like
-D:$ Animals in cold regions.
+D:$ an animal from cold regions.
 D:それはあまりにも高くそびえ立つような氷河で、
 D:漠然と寒冷地の動物のように見える。
 
@@ -22970,7 +22966,7 @@ R:1115:4d6
 R:1131:1d3
 R:1132:1d3
 D:$It is a too huge towering mass of filth that looks vaguely like
-D:$ Hydras, crocodilians or frogs.
+D:$ a hydra, crocodilian, or frog.
 D:それはあまりにも高くそびえ立つような汚物の塊で、
 D:漠然とヒドラやワニやカエルのように見える。
 
@@ -23018,8 +23014,8 @@ B:WAIL:HURT:2d5
 F:UNIQUE | FORCE_MAXHP | HUMAN | MALE | EVIL | DROP_CORPSE | DROP_SKELETON
 F:DROP_90 | ONLY_ITEM | DROP_GOOD
 S:1_IN_12 | BA_FIRE
-D:$He puts a laughing home into misery every day to eradicate his happy family.
-D:$  He has no intention of compensating for what he does.
+D:$This young boy has become a serial arsonist as a way of avoiding his own,
+D:$ troubled, home.  He has no intention of compensating for what he does.
 D:彼は幸せな家族を根絶やしにするため、日々笑い声の聞こえてくる家庭を不幸の底に沈めている。
 D:彼は自分の行いを償うつもりはない。
 
@@ -23060,21 +23056,21 @@ W:15:2:0:50:0:0
 B:CRUSH:HURT:6d6
 F:RAND_25 | RAND_50 | FRIENDS | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_WATE
-D:$It is a small bubble that makes an weird movement.
+D:$It is a small bubble that makes a weird movement.
 D:$  It collapses suddenly.
 D:不気味な動きをする小さな泡だ。ぷちぷちと潰れる。
 
 # 倒すと小さな泡×4に分裂する
 N:1152:やや大きな泡
-E:Middle aqua illusion
+E:Medium aqua illusion
 G:j:B
 I:110:12d12:10:30:10
 W:18:2:0:100:0:0
 B:CRUSH:HURT:7d7
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_WATE
-D:$It is a middle bubble that makes an weird movement.
-D:$  When it is crushed, it becomes a small bubble.
+D:$It is a medium-sized bubble that makes a weird movement.
+D:$  When it is squashed, it becomes small bubbles.
 D:不気味な動きをする、やや大きな泡だ。潰すと小さな泡になる。
 
 # 倒すとやや大きな泡×4に分裂する
@@ -23082,12 +23078,12 @@ N:1153:大きな泡
 E:Large aqua illusion
 G:j:B
 I:110:18d18:10:30:10
-W:21:2:0:250:0:0
+W:21:2:0:200:0:0
 B:CRUSH:HURT:8d8
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_WATE
-D:$It is a large bubble that makes an weird movement.
-D:$  When it is crushed, it becomes a middle bubble.
+D:$It is a large bubble that makes a weird movement.
+D:$  When it is squashed, it becomes medium bubbles.
 D:不気味な動きをする大きな泡だ。潰しても中々なくならない。
 
 # 倒すと大きな泡×4に分裂する
@@ -23095,41 +23091,41 @@ N:1154:特大の泡
 E:Extra large aqua illusion
 G:j:B
 I:110:18d18:10:30:10
-W:24:3:0:500:0:0
+W:24:3:0:400:0:0
 B:CRUSH:HURT:9d9
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_WATE
-D:$It is a extra large bubble that makes an weird movement.
-D:$  You must decide whether running away or squashing them all!
+D:$It is an extra large bubble that makes a weird movement.
+D:$  You must decide whether to run away or squash them all!
 D:不気味な動きをする巨大な泡だ。逃げるか潰すか二つに一つだ！
 
 N:1155:二周目の小さな泡
 E:Small aqua illusion in 2nd lap
 G:j:b
 I:120:20d20:10:50:10
-W:30:2:0:120:0:0
+W:30:2:0:125:0:0
 B:CRUSH:HURT:6d6
 B:CRUSH:HURT:6d6
 F:RAND_25 | RAND_50 | FRIENDS | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE
 S:1_IN_5 | MISSILE
-D:$Holy shit! It will shoot you back at this bubble!
+D:$Holy shit!  This bubble will shoot back at you!
 D:なんてこった、こいつ泡のくせに撃ち返してくるぞ！
 
 # 倒すと小さな泡×4に分裂する
 # 実際の2周目では一番小さいのしか撃ち返してこないが変愚向けに調整
 N:1156:二周目のやや大きな泡
-E:Middle aqua illusion in 2nd lap
+E:Medium aqua illusion in 2nd lap
 G:j:b
 I:120:20d20:10:50:10
-W:33:2:0:240:0:0
+W:33:2:0:250:0:0
 B:CRUSH:HURT:7d7
 B:CRUSH:HURT:7d7
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE
 S:1_IN_5 | MISSILE
-D:$It is a middle bubble that makes an weird movement and shoots you back.
-D:$  When it is crushed, it becomes a small bubble.
+D:$It is a medium-sized bubble that makes a weird movement and shoots you back.
+D:$  When it is squashed, it becomes small bubbles.
 D:不気味な動きをして撃ち返してくる、やや大きな泡だ。潰すと小さな泡になる。
 
 # 倒すとやや大きな泡×4に分裂する
@@ -23137,14 +23133,14 @@ N:1157:二周目の大きな泡
 E:Large aqua illusion in 2nd lap
 G:j:b
 I:120:25d25:10:50:10
-W:36:2:0:600:0:0
+W:36:2:0:500:0:0
 B:CRUSH:HURT:8d8
 B:CRUSH:HURT:8d8
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE
 S:1_IN_5 | MISSILE
-D:$It is a large bubble that makes an weird movement and shoots you back.
-D:$  When it is crushed, it becomes a middle bubble.
+D:$It is a large bubble that makes a weird movement and shoots you back.
+D:$  When it is squashed, it becomes medium bubbles.
 D:不気味な動きをして撃ち返してくる大きな泡だ。潰しても中々なくならない。
 
 # 倒すと大きな泡×4に分裂する
@@ -23152,14 +23148,14 @@ N:1158:二周目の特大の泡
 E:Extra large aqua illusion in 2nd lap
 G:j:b
 I:120:25d25:10:50:10
-W:39:3:0:1200:0:0
+W:39:3:0:1000:0:0
 B:CRUSH:HURT:9d9
 B:CRUSH:HURT:9d9
 F:RAND_25 | RAND_50 | WILD_SWAMP | NONLIVING | EMPTY_MIND
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | RES_TELE | RES_WATE
 S:1_IN_5 | MISSILE
-D:$It is a extra large bubble that makes an weird movement and shoots you back!
-D:$  You must decide whether running away or squashing them all!
+D:$It is an extra large bubble that makes a weird movement and shoots you back!
+D:$  You must decide whether to run away or squash them all!
 D:不気味な動きをして撃ち返してくる巨大な泡だ。逃げるか潰すか二つに一つだ！
 
 # 実質召喚専用にしたいのでRarはかなり高め
@@ -23305,7 +23301,7 @@ F:UNIQUE | FORCE_MAXHP | MALE | GOOD | ANIMAL
 F:DROP_90 | DROP_1D2 | DROP_GOOD | RES_SOUN | NO_STUN
 S:1_IN_6 | SHOOT
 D:$He is the eldest son of the three brothers,
-D:$ and be aware the shot by his cross bow!
+D:$ and be wary of his crossbow shots!
 D:三兄弟の長男で、クロスボウからの一撃に要注意だ！
 
 N:1169:怪物の太母『エキドナ』
@@ -23853,7 +23849,7 @@ F:EVIL | DRAGON | IM_POIS | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_4 | BLIND | CONF | SCARE | BR_POIS
 D:$A huge dragon of incredible destructive power.  Noxious vapours 
 D:$fill the room near it, leaving you gasping for breath.
-D:$  Free now while you still can!
+D:$  Flee now while you still can!
 D:信じられない程の破壊的な力を持った巨大なドラゴンだ。
 D:有毒な霧が近くの部屋に充満し、ほとんど息ができない。
 D:逃げられるうちに逃げろ！
@@ -24110,7 +24106,7 @@ G:D:v
 I:125:90d100:45:180:10
 W:73:2:0:38000:0:0
 B:BITE:HURT:15d9
-B:CRUSH:HURT:15d9
+B:INSULT:SUPERHURT:15d9
 B:CLAW:HURT:15d9
 B:CRUSH:HURT:1d89
 F:UNIQUE | FORCE_MAXHP | DROP_CORPSE | DROP_SKELETON | ATTR_MULTI
@@ -24142,7 +24138,7 @@ F:IM_FIRE | IM_COLD | IM_ELEC | RES_DARK
 F:NO_SLEEP | NO_CONF | DROP_60
 S:1_IN_5 | SHOOT
 D:$It is one of those who agree with Miraak's corrupt wishes.
-D:$They are relentlessly chasing you as against Mirak's noble will.
+D:$They are relentlessly chasing you as against Miraak's noble will.
 D:ミラークの堕落した願いに賛同している者共の一人だ。
 D:彼らはあなたをミラークの崇高な意志に反する者として執拗に追っている。
 
@@ -24159,7 +24155,7 @@ F:IM_FIRE | IM_COLD | IM_ELEC | RES_DARK
 F:NO_SLEEP | NO_CONF | DROP_60
 S:1_IN_2 | BLINK | CONF | HOLD | BA_POIS | BA_FIRE | BA_COLD | BA_ELEC
 D:$It is one of those who agree with Miraak's corrupt wishes.
-D:$They are relentlessly chasing you as against Mirak's noble will.
+D:$They are relentlessly chasing you as against Miraak's noble will.
 D:ミラークの堕落した願いに賛同している者共の一人だ。
 D:彼らはあなたをミラークの崇高な意志に反する者として執拗に追っている。
 
@@ -24214,7 +24210,7 @@ B:HIT:HURT:1d10
 F:UNDEAD | DROP_CORPSE | HURT_FIRE | HURT_LITE | IM_COLD | IM_POIS | RES_NETH
 F:DROP_60 | FRIENDS | NO_FEAR
 D:$It is a warrior buried in ancient times.
-D:$  It does not forgive intruders for treasure.
+D:$  It does not forgive treasure-seeking intruders.
 D:太古に埋葬された戦士だ。財宝を狙う侵入者を容赦しない。
 
 N:1215:ドラウグル・ウォーカー
@@ -24230,7 +24226,7 @@ F:HURT_FIRE | HURT_LITE | IM_COLD | IM_POIS | RES_NETH
 F:DROP_90 | FRIENDS | NO_FEAR
 S:1_IN_9 | SHOOT | BA_COLD
 D:$It is a warrior buried in ancient times.
-D:$  It never forgives intruders for treasure.
+D:$  It never forgives treasure-seeking intruders.
 D:太古に埋葬された戦士だ。財宝を狙う侵入者を決して容赦しない。
 
 N:1216:ドラウグル・ワイト
@@ -24245,8 +24241,8 @@ B:CRUSH:HURT:4d6
 F:UNDEAD | EVIL | DROP_CORPSE
 F:HURT_LITE | IM_COLD | IM_POIS | RES_NETH | DROP_90 | FRIENDS | NO_FEAR
 S:1_IN_8 | SHOOT | BA_COLD
-D:$This warrior has continued to protect the tomb for a long time.
-D:$  You may also be a dependent!
+D:$This warrior has continued to protect its tomb for a long time.
+D:$  It may conscript you as an assistant guard!
 D:この戦士は墳墓を延々と守り続けている。あなたも眷属にされるかもしれない！
 
 N:1217:ドラウグル・スカージ
@@ -24261,15 +24257,15 @@ B:CRUSH:HURT:7d6
 F:UNDEAD | EVIL | DROP_CORPSE | HURT_LITE | IM_COLD | IM_POIS | RES_NETH
 F:DROP_90 | DROP_1D2 | ONLY_ITEM | FRIENDS | NO_FEAR | BASH_DOOR
 S:1_IN_6 | SHOOT | SCARE | BA_COLD | BR_COLD | BR_SOUN
-D:$It is a draugr that has acquired a unique cry.
-D:$  It informs the surroundings of the existence of an intruder.
+D:$It is a draugr that has acquired a unique cry
+D:$ and will warn all nearby of the presence of an intruder.
 D:独特の叫びを会得したドラウグルだ。それは侵入者の存在を周囲に知らせる。
 
 N:1218:ドラウグル・デスロード
 E:Draugr deathlord
 G:z:D
 I:120:21d50:40:80:10
-W:42:1:0:3200:0:0
+W:42:2:0:3200:0:0
 B:SHOOT:HURT:12d12
 B:HIT:SUPERHURT:8d8
 B:SLASH:SUPERHURT:8d8
@@ -24279,12 +24275,12 @@ F:NO_CONF | BASH_DOOR | MOVE_BODY | NO_FEAR
 F:HURT_LITE | IM_COLD | IM_POIS | RES_NETH | DROP_2D2 | ONLY_ITEM
 S:1_IN_5 | SHOOT | SCARE | BA_COLD | BR_COLD | BR_SOUN | S_UNDEAD
 D:$It is a warrior buried in ancient times.
-D:$  It oversees the draugrs and closely watches the intruders.
+D:$  It oversees other draugrs and closely watches for intruders.
 D:太古に埋葬された戦士だ。
 D:それはドラウグル達を統括し、侵入者を注意深く見守っている。
 
 N:1219:ドラウグル・デス・オーバーロード
-E:Draugr death overload
+E:Draugr death overlord
 G:z:r
 I:120:100d26:50:90:10
 W:51:3:0:13000:0:0
@@ -24298,8 +24294,8 @@ F:IM_COLD | IM_POIS | RES_NETH | RES_TELE | NO_CONF
 F:DROP_90 | DROP_3D2 | DROP_GOOD | ONLY_ITEM | DROP_CORPSE
 S:1_IN_5 | SHOOT | SCARE | HOLD | BA_POIS | BA_COLD | BR_COLD | BR_SOUN
 S:S_UNDEAD | S_KIN
-D:$It is the strongest warrior on top of all draugrs.
-D:$  They are very few buried in the world.
+D:$It is one of the strongest warriors among all the draugrs.
+D:$  Only a very few of them are buried in the world.
 D:あらゆるドラウグル達の上位に立つ最強の戦士だ。
 D:世界でも埋葬された数はごく少ない。
 
@@ -24344,8 +24340,8 @@ W:8:2:0:32:0:0
 B:HIT:POISON:5d5
 F:EVIL | FRIENDS | DROP_CORPSE | DROP_SKELETON | DROP_90
 F:IM_POIS | RES_LITE | RES_DARK | BASH_DOOR
-D:$It is the fallen descendant of the snow elf.
-D:$  It is blind but good ears.
+D:$It is the fallen descendant of a snow elf.
+D:$  It is blind but has good ears.
 D:スノーエルフの堕落した末裔だ。目は見えないがとても耳が利く。
 
 N:1223:ファルメル・スクルカー
@@ -24359,7 +24355,7 @@ F:EVIL | FRIENDS | DROP_CORPSE | DROP_SKELETON | DROP_90
 F:IM_POIS | RES_LITE | RES_DARK | BASH_DOOR
 S:1_IN_8 | SHOOT | BA_POIS
 D:$A falmer whose body is covered with a chaurus shell.
-D:$  It is blind and does not shrug in the light.
+D:$  It is blind and is not bothered by light.
 D:シャウラスの殻で身体を覆ったファルメルだ。
 D:目が見えないので光に身をすくめることもない。
 
@@ -24374,7 +24370,7 @@ B:SLASH:POISON:9d7
 F:EVIL | FRIENDS | DROP_CORPSE | DROP_SKELETON | DROP_90 | ONLY_ITEM
 F:IM_POIS | RES_LITE | RES_DARK | BASH_DOOR
 S:1_IN_7 | SHOOT | BA_POIS | BR_POIS | CONF | HOLD | BLIND
-D:$A falmel holding a sword and shield made of chaurus shell.
+D:$A falmer holding a sword and shield made of chaurus shell.
 D:シャウラスの殻でできた剣と盾を手にしたファルメルだ。
 
 N:1225:ファルメル・ナイトプロウラー
@@ -24420,7 +24416,7 @@ B:SLASH:POISON:17d11
 F:EVIL | DROP_CORPSE | DROP_SKELETON | BASH_DOOR | POWERFUL
 F:DROP_2D2 | DROP_3D2 | ONLY_ITEM | IM_POIS | RES_LITE | RES_DARK
 S:1_IN_6 | SHOOT | BA_ELEC | BA_POIS | BR_POIS | CONF | HOLD | BLIND
-D:$It is the strongest falmer among general soldiers.
+D:$It is the strongest of the falmers' general soldiers.
 D:一般兵士の中では最強のファルメルだ。
 
 N:1228:グレーター・ファルメル・スクルカー
@@ -24512,7 +24508,7 @@ B:BITE:HURT:1d13
 B:STING:HURT:1d13
 F:EVIL | ANIMAL | DROP_CORPSE | BASH_DOOR | DROP_60 | FRIENDS
 F:IM_POIS | RES_DARK
-D:$It is about the size of a human and is covered with crustaceans.
+D:$It is about the size of a human and is covered with a shell of chitin.
 D:それは人ほどの大きさを誇り、甲殻に覆われている。
 
 N:1234:シャウラス・リーパー
@@ -24524,8 +24520,8 @@ B:BITE:HURT:3d13
 B:STING:HURT:3d13
 F:EVIL | ANIMAL | DROP_CORPSE | BASH_DOOR | DROP_90 | FRIENDS
 F:IM_POIS | RES_DARK
-D:$It is large enough to easily exceed humans
-D:$ and is covered with an extremely hard crustacean.
+D:$It is much larger than a human
+D:$ and has an extremely hard shell made of chitin.
 D:それは人を軽く超えるほどの大きさを誇り、極めて硬い甲殻に覆われている。
 
 N:1235:シャウラス・ハンターの幼体
@@ -24537,7 +24533,7 @@ B:BITE:HURT:4d11
 B:STING:HURT:4d11
 F:EVIL | ANIMAL | DROP_CORPSE | BASH_DOOR | DROP_1D2 | FRIENDS
 F:IM_POIS | RES_DARK
-D:$It still has a small body, but it can easily prey on adventurers.
+D:$It is not fully grown, but it can easily prey on adventurers.
 D:それはまだ小さい体躯をしているが、冒険者を容易に捕食できる。
 
 N:1236:シャウラス・ハンター
@@ -24550,8 +24546,8 @@ B:STING:HURT:4d10
 B:CRUSH:HURT:4d10
 F:EVIL | ANIMAL | DROP_CORPSE | BASH_DOOR | DROP_90 | DROP_1D2 | FRIENDS
 F:IM_POIS | RES_DARK
-D:$It is Chaurus who has grown into a human-like body.
-D:$  It is often seen that they are kept in falmer.
+D:$It is a Chaurus that keeps it's two front legs off the ground, ready to
+D:$ use as weapons.  It is often seen near the falmer.
 D:人間並みの身体に成長したシャウラスだ。
 D:ファルメルに飼われている姿をよく見かける。
 
@@ -24593,12 +24589,12 @@ N:1239:惑星生命体『ソラリス』
 E:Solaris, the planet life
 G:j:G
 I:125:60d100:50:90:5
-W:70:4:0:6000:0:0
+W:70:4:0:36000:0:0
 B:CRAWL:HURT:11d11
 B:ENGULF:HURT:11d11
 B:GAZE:HURT:11d11
 B:TOUCH:HURT:11d11
-F:UNIQUE | FORCE_MAXHP | NONLIVING | QUANTUM | DROP_2D2 | DROP_GREAT
+F:UNIQUE | FORCE_MAXHP | NONLIVING | QUANTUM | DROP_3D2 | DROP_GREAT | ONLY_ITEM
 F:IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS | RES_LITE | RES_DARK
 F:RES_NEXU | RES_CHAO | RES_DISE | RES_SHAR | RES_WATE | RES_TIME | RES_NETH
 F:RES_SOUN | WEIRD_MIND | PASS_WALL | SHAPECHANGER | ATTR_MULTI
@@ -24831,9 +24827,9 @@ W:5:2:0:30:0:0
 B:BITE:HURT:2d5
 B:STING:POISON:2d3
 F:AQUATIC | ANIMAL | WILD_ALL | RES_WATE
-D:$This fish is also known as ghost shark, and named after hybrid monster
-D:$ due to its patchwark-like appearance.
-D:$ It has poson needle.
+D:$This fish is also known as a ghost shark and is named after the hybrid
+D:$ monster due to its patchwork-like appearance.
+D:$ It has a poisoned stinger.
 D:この魚は英語ではキマイラと言い、継ぎ接ぎめいた姿から合成魔獣の名を付けられた。
 D:それは毒針を持っている。
 
@@ -24865,7 +24861,7 @@ F:BASH_DOOR | IM_ACID | IM_ELEC | HURT_FIRE | WEIRD_MIND | NO_FEAR
 R:1252:5d5
 D:$The Queen of vespoid, featuring a huge abdomen and bright wings.
 D:$  Command the subordinate vespoid
-D: with a peculiar flight and attack the intruder.
+D:$ with a peculiar flight and attack the intruder.
 D:$  The abdominal sting is also very well developed,
 D:$ and in addition to neurological poisons,
 D:$ it may also inject acidic fluids towards its prey.
@@ -25006,7 +25002,7 @@ D:ブレッタの夢想とゾートの執着心が生み出した、勇者の幻
 D:倒す度に夢の中のゾートは執念を増し、それと反対にブレッタの夢は醒めていく。 
 
 N:1260:天使・クイルスルグ
-E:Engel quylthulg
+E:Angel quylthulg
 G:Q:w
 I:120:48d10:20:1:0
 W:51:1:0:3000:0:0
@@ -25042,7 +25038,7 @@ F:IM_ACID | IM_ELEC | IM_COLD | IM_FIRE | IM_POIS
 S:1_IN_4 | HASTE | HEAL | CAUSE_2
 D:$A fairy cat that walks on two legs and understands human language.
 D:$This Cait Sith is like a swordfighter who serves the cat kingdom
-D:$I see you as a prey to give to the king.
+D:$It sees you as prey to give to the king.
 D:二足で歩き、人語を解す妖精猫。
 D:このケット・シーは猫の王国に仕える剣士のようだ。
 D:あなたを王に献上する獲物と見なしている。
@@ -25131,8 +25127,8 @@ E:Raphael, the Big Raven
 G:B:R
 I:120:40d30:20:60:20
 W:37:3:0:7000:0:0
-B:CRUSH:SHATTER:12d12
-B:CRUSH:TERRIFY:12d12
+B:CRUSH:SHATTER:7d12
+B:CRUSH:TERRIFY:7d12
 F:UNIQUE | FORCE_MAXHP | ANIMAL | POWERFUL | MOVE_BODY | EVIL
 F:NO_CONF | NO_SLEEP | NO_FEAR | IM_ELEC | RES_GRAV | BASH_DOOR
 F:DROP_GOOD | DROP_2D2 | ONLY_ITEM
@@ -25212,7 +25208,7 @@ D:それのそばでは動く気力すら沸かなくなるため、刑務所の
 D:最近、闇の勢力が力を拡大するに連れて、一部が野に放たれてしまったようだ。
 
 N:1272:セイレーン
-E:Seiren
+E:Siren
 G:l:y
 I:120:80d20:20:50:80
 W:35:3:0:500:0:0
@@ -25222,8 +25218,8 @@ F:FEMALE | AQUATIC | CAN_FLY | CAN_SWIM | WILD_SHORE | NEVER_MOVE
 F:ONLY_ITEM | DROP_GOOD | DROP_1D2
 F:IM_COLD | IM_POIS | RES_WATE | RES_TELE | NO_STUN
 S:1_IN_2 | SHRIEK | TELE_TO
-D:$In folklore, Seirens wrecked the ship with a singing voice.
-D:$  But, Seirens in Angband knows a quicker way.
+D:$In folklore, Sirens wrecked the ship with a singing voice.
+D:$  But, Sirens in Angband know a quicker way.
 D:伝承のセイレーンは歌声で船を難破させたが、
 D:鉄獄のセイレーンはもっと手っ取り早い方法を知っている。
 
@@ -25242,7 +25238,7 @@ F:DROP_90 | ONLY_ITEM
 D:$It's a lump of silvery flesh-like material
 D:$ that works very hard to absorb nearby light.
 D:$  It seems to have a dream of catching and absorbing
-D:$ all the light that illuminates the dungeon."
+D:$ all the light that illuminates the dungeon.
 D:それは銀色の肉のような物質の塊で、付近の光をすごくがんばって吸い取っている。
 D:ダンジョンを照らす光をすべてキャッチし吸い尽くすのが夢らしい。 
 
@@ -25261,7 +25257,7 @@ F:IM_FIRE | RES_LITE | RES_CHAO | RES_INER | NO_CONF | NO_SLEEP
 S:1_IN_5 | BA_FIRE | BA_LITE | HEAL | HOLD | CONF | BLIND
 
 N:1275:コティングリーの妖精
-E:Cottingley Fairies
+E:Cottingley Fairy
 G:I:G
 I:115:3d11:15:30:80
 W:12:3:0:20:0:0
@@ -25270,7 +25266,7 @@ B:WAIL:LOSE_INT
 F:FEMALE | QUANTUM | PREVENT_SUDDEN_MAGIC | FRIENDS | DROP_90 | TAKE_ITEM
 F:HURT_FIRE | CAN_FLY | FRIENDLY | HAS_LITE_1 | IM_POIS | RES_LITE
 S:1_IN_4 | MISSILE
-D:$Only a few old photographs are the only proof that this fairy once existed.
+D:$A few old photographs are the only proof that this fairy once existed.
 D:たった数枚の古ぼけた写真が、この妖精がかつて実在したことの唯一の証拠だ。 
 
 N:1276:点『P』

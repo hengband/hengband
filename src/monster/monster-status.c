@@ -464,7 +464,7 @@ void process_monsters_mtimed(player_type *target_ptr, int mtimed_idx)
 
     /* Hack -- calculate the "player noise" */
     if (mtimed_idx == MTIMED_CSLEEP)
-        csleep_noise = (1L << (30 - target_ptr->skill_stl));
+        csleep_noise = (1U << (30 - target_ptr->skill_stl));
 
     /* Process the monsters (backwards) */
     for (int i = floor_ptr->mproc_max[mtimed_idx] - 1; i >= 0; i--) {

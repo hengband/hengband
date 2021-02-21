@@ -148,6 +148,7 @@ void term_queue_line(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR *a, char *c, TERM
 bool macro_running(void);
 
 errr term_fresh(void);
+errr term_fresh_force(void);
 errr term_set_cursor(int v);
 errr term_gotoxy(TERM_LEN x, TERM_LEN y);
 errr term_draw(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c);

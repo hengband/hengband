@@ -97,6 +97,7 @@
 #include "game-option/runtime-arguments.h"
 #include "game-option/special-options.h"
 #include "io/files-util.h"
+#include "locale/utf-8.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "main/x11-type-string.h"
@@ -796,7 +797,7 @@ static errr Infofnt_prepare(XFontSet info)
 
 #ifdef USE_XFT
 	ifnt->asc = info->ascent;
-	ifnt->hgt = info->ascent + info->descent;
+	ifnt->hgt = info->height;
 	const char *text = "A";
 	XGlyphInfo extent;
 	XftTextExtentsUtf8(Metadpy->dpy, info, (FcChar8*)text, strlen(text), &extent);
@@ -882,6 +883,24 @@ static void Infofnt_init_data(concptr name)
 	Infofnt->nuke = 1;
 }
 
+#ifdef USE_XFT
+static void Infofnt_text_std_xft_draw_str(int x, int y, concptr str, concptr str_end)
+{
+    int offset = 0;
+    while (str < str_end) {
+        const int byte_len = utf8_next_char_byte_length(str);
+
+        if (byte_len == 0 || str + byte_len > str_end) {
+            return;
+        }
+
+        XftDrawStringUtf8(Infowin->draw, &Infoclr->fg, Infofnt->info, x + Infofnt->wid * offset, y, (const FcChar8 *)str, byte_len);
+        offset += (byte_len > 1 ? 2 : 1);
+        str += byte_len;
+    }
+}
+#endif
+
 /*
  * Standard Text
  */
@@ -926,8 +945,7 @@ static errr Infofnt_text_std(int x, int y, concptr str, int len)
 		r.height = Infofnt->hgt;
 		XftDrawSetClipRectangles(draw, x, y-Infofnt->asc, &r, 1);
 		XftDrawRect(draw, &Infoclr->bg, x, y-Infofnt->asc, Infofnt->wid*len, Infofnt->hgt);
-		XftDrawStringUtf8(draw, &Infoclr->fg, Infofnt->info, x, y,
-			 (FcChar8*)kanji, kp - kanji);
+                Infofnt_text_std_xft_draw_str(x, y, kanji, kp);
 		XftDrawSetClip(draw, 0);
 #else
 		XmbDrawImageString(Metadpy->dpy, Infowin->win, Infofnt->info,

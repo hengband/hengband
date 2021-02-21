@@ -14,7 +14,7 @@
 #define MAX_IMMUNITY_FLAGS_DESCRIPTION 4
 #define MAX_SUSTAINER_FLAGS_DESCRIPTION 6
 #define MAX_MISC2_FLAGS_DESCRIPTION 4
-#define MAX_MISC3_FLAGS_DESCRIPTION 28
+#define MAX_MISC3_FLAGS_DESCRIPTION 29
 
 /* A tval grouper */
 typedef struct grouper {
@@ -26,7 +26,7 @@ typedef struct grouper {
  * Pair together a constant flag with a textual description.
  * Note that it sometimes more efficient to actually make an array
  * of textual names, where entry 'N' is assumed to be paired with
- * the flag whose value is "1L << N", but that requires hard-coding.
+ * the flag whose value is "1UL << N", but that requires hard-coding.
  */
 typedef struct flag_desc {
     const tr_type flag;

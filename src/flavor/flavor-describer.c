@@ -23,11 +23,13 @@
 #include "object-hook/hook-checker.h"
 #include "object-hook/hook-enchant.h"
 #include "object-hook/hook-quest.h"
+#include "object/object-flags.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
 #include "player/player-status-table.h"
 #include "specific-object/bow.h"
 #include "sv-definition/sv-lite-types.h"
+#include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "window/display-sub-window-items.h"
@@ -113,7 +115,7 @@ static void decide_tval_show(player_type *player_ptr, flavor_type *flavor_ptr)
 
 static void describe_digging(player_type *player_ptr, flavor_type *flavor_ptr)
 {
-    if (object_is_quest_target(player_ptr, flavor_ptr->o_ptr) && !flavor_ptr->known)
+    if (!flavor_ptr->known && object_is_quest_target(player_ptr->current_floor_ptr->inside_quest, flavor_ptr->o_ptr))
         return;
 
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
@@ -135,11 +137,20 @@ static void describe_bow(player_type *player_ptr, flavor_type *flavor_ptr)
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, 'x');
     flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->power);
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
-    flavor_ptr->fire_rate = calc_num_fire(player_ptr, flavor_ptr->o_ptr);
-    if ((flavor_ptr->fire_rate == 0) || (flavor_ptr->power <= 0) || !flavor_ptr->known)
+
+    int num_fire = 100;
+    if (!(flavor_ptr->mode & OD_DEBUG)) {
+        num_fire = calc_num_fire(player_ptr, flavor_ptr->o_ptr);
+    } else {
+        BIT_FLAGS flgs[TR_FLAG_SIZE];
+        object_flags(player_ptr, flavor_ptr->o_ptr, flgs);
+        if (has_flag(flgs, TR_XTRA_SHOTS))
+            num_fire += 100;
+    }
+    if ((num_fire == 0) || (flavor_ptr->power <= 0) || !flavor_ptr->known)
         return;
 
-    flavor_ptr->fire_rate = bow_energy(flavor_ptr->o_ptr->sval) / flavor_ptr->fire_rate;
+    flavor_ptr->fire_rate = bow_energy(flavor_ptr->o_ptr->sval) / num_fire;
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
     flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->fire_rate / 100);
@@ -489,11 +500,13 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     decide_tval_show(player_ptr, flavor_ptr);
     describe_tval(player_ptr, flavor_ptr);
     describe_named_item_tval(flavor_ptr);
-    flavor_ptr->bow_ptr = &player_ptr->inventory_list[INVEN_BOW];
-    if ((flavor_ptr->bow_ptr->k_idx != 0) && (flavor_ptr->o_ptr->tval == bow_tval_ammo(flavor_ptr->bow_ptr)))
-        describe_bow_power(player_ptr, flavor_ptr);
-    else if ((player_ptr->pclass == CLASS_NINJA) && (flavor_ptr->o_ptr->tval == TV_SPIKE))
-        describe_spike_power(player_ptr, flavor_ptr);
+    if (!(mode & OD_DEBUG)) {
+        flavor_ptr->bow_ptr = &player_ptr->inventory_list[INVEN_BOW];
+        if ((flavor_ptr->bow_ptr->k_idx != 0) && (flavor_ptr->o_ptr->tval == bow_tval_ammo(flavor_ptr->bow_ptr)))
+            describe_bow_power(player_ptr, flavor_ptr);
+        else if ((player_ptr->pclass == CLASS_NINJA) && (flavor_ptr->o_ptr->tval == TV_SPIKE))
+            describe_spike_power(player_ptr, flavor_ptr);
+    }
 
     describe_ac(flavor_ptr);
     if (flavor_ptr->mode & OD_NAME_AND_ENCHANT) {

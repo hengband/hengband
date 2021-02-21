@@ -264,7 +264,7 @@ bool tele_town(player_type *caster_ptr)
     for (i = 1; i < max_towns; i++) {
         char buf[80];
 
-        if ((i == NO_TOWN) || (i == SECRET_TOWN) || (i == caster_ptr->town_num) || !(caster_ptr->visit & (1L << (i - 1))))
+        if ((i == NO_TOWN) || (i == SECRET_TOWN) || (i == caster_ptr->town_num) || !(caster_ptr->visit & (1UL << (i - 1))))
             continue;
 
         sprintf(buf, "%c) %-20s", I2A(i - 1), town_info[i].name);
@@ -291,7 +291,7 @@ bool tele_town(player_type *caster_ptr)
         else if ((i < 'a') || (i > ('a' + max_towns - 2)))
             continue;
         else if (((i - 'a' + 1) == caster_ptr->town_num) || ((i - 'a' + 1) == NO_TOWN) || ((i - 'a' + 1) == SECRET_TOWN)
-            || !(caster_ptr->visit & (1L << (i - 'a'))))
+            || !(caster_ptr->visit & (1UL << (i - 'a'))))
             continue;
         break;
     }

@@ -11,9 +11,9 @@
 #include "core/game-play.h"
 #include "core/scores.h"
 #include "game-option/runtime-arguments.h"
-#include "io/record-play-movie.h"
 #include "io/files-util.h"
 #include "io/inet.h"
+#include "io/record-play-movie.h"
 #include "io/signal-handlers.h"
 #include "io/uid-checker.h"
 #include "main/angband-initializer.h"
@@ -25,6 +25,7 @@
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
 #include "util/string-processor.h"
+#include "wizard/wizard-spoiler.h"
 
 /*
  * Available graphic modes
@@ -116,27 +117,29 @@ static void create_user_dir(void)
  */
 static void init_stuff(void)
 {
-	char libpath[1024], varpath[1024];
+    char libpath[1024], varpath[1024];
 
     concptr tail;
 
     /* Get the environment variable */
     tail = getenv("ANGBAND_PATH");
 
-	/* Use the angband_path, or a default */
-	strncpy(libpath, tail ? tail : DEFAULT_LIB_PATH, 511);
-	strncpy(varpath, tail ? tail : DEFAULT_VAR_PATH, 511);
+    /* Use the angband_path, or a default */
+    strncpy(libpath, tail ? tail : DEFAULT_LIB_PATH, 511);
+    strncpy(varpath, tail ? tail : DEFAULT_VAR_PATH, 511);
 
-	/* Make sure they're terminated */
-	libpath[511] = '\0';
-	varpath[511] = '\0';
+    /* Make sure they're terminated */
+    libpath[511] = '\0';
+    varpath[511] = '\0';
 
-	/* Hack -- Add a path separator (only if needed) */
-	if (!suffix(libpath, PATH_SEP)) strcat(libpath, PATH_SEP);
-	if (!suffix(varpath, PATH_SEP)) strcat(varpath, PATH_SEP);
+    /* Hack -- Add a path separator (only if needed) */
+    if (!suffix(libpath, PATH_SEP))
+        strcat(libpath, PATH_SEP);
+    if (!suffix(varpath, PATH_SEP))
+        strcat(varpath, PATH_SEP);
 
-	/* Initialize */
-	init_file_paths(libpath, varpath);
+    /* Initialize */
+    init_file_paths(libpath, varpath);
 }
 
 /*
@@ -233,10 +236,10 @@ static void change_path(concptr info)
     }
 }
 
-static void display_usage(void)
+static void display_usage(const char* program)
 {
     /* Dump usage information */
-    puts("Usage: angband [options] [-- subopts]");
+    printf("Usage: %s [options] [-- subopts]\n", program);
     puts("  -n       Start a new character");
     puts("  -f       Request fiddle mode");
     puts("  -w       Request wizard mode");
@@ -250,6 +253,8 @@ static void display_usage(void)
     puts("  -u<who>  Use your <who> savefile");
     puts("  -m<sys>  Force 'main-<sys>.c' usage");
     puts("  -d<def>  Define a 'lib' dir sub-path");
+    puts("  --output-spoilers");
+    puts("           Output auto generated spoilers and exit");
     puts("");
 
 #ifdef USE_X11
@@ -274,6 +279,33 @@ static void display_usage(void)
 
     /* Actually abort the process */
     quit(NULL);
+}
+
+static bool parse_long_opt(const char *opt)
+{
+    bool is_usage_needed = TRUE;
+
+    if (strcmp(opt + 2, "output-spoilers") == 0) {
+        init_stuff();
+        init_angband(p_ptr, process_autopick_file_command, TRUE);
+        switch (output_all_spoilers()) {
+        case SPOILER_OUTPUT_SUCCESS:
+            puts("Successfully created a spiler file.");
+            quit(NULL);
+            break;
+        case SPOILER_OUTPUT_FAIL_FOPEN:
+            quit("Cannot create spoiler file.");
+            break;
+        case SPOILER_OUTPUT_FAIL_FCLOSE:
+            quit("Cannot close spoiler file.");
+            break;
+        default:
+            break;
+        }
+        is_usage_needed = FALSE;
+    }
+
+    return is_usage_needed;
 }
 
 /*
@@ -352,7 +384,7 @@ int main(int argc, char *argv[])
     for (i = 1; args && (i < argc); i++) {
         /* Require proper options */
         if (argv[i][0] != '-') {
-            display_usage();
+            display_usage(argv[0]);
             continue;
         }
 
@@ -446,10 +478,14 @@ int main(int argc, char *argv[])
             break;
         }
         case '-': {
-            argv[i] = argv[0];
-            argc = argc - i;
-            argv = argv + i;
-            args = FALSE;
+            if (argv[i][2] == '\0') {
+                argv[i] = argv[0];
+                argc = argc - i;
+                argv = argv + i;
+                args = FALSE;
+            } else {
+                is_usage_needed = parse_long_opt(argv[i]);
+            }
             break;
         }
         default: {
@@ -461,7 +497,7 @@ int main(int argc, char *argv[])
         if (!is_usage_needed)
             continue;
 
-        display_usage();
+        display_usage(argv[0]);
     }
 
     /* Hack -- Forget standard args */
@@ -532,7 +568,7 @@ int main(int argc, char *argv[])
     signals_init();
 
     /* Initialize */
-    init_angband(p_ptr, process_autopick_file_command);
+    init_angband(p_ptr, process_autopick_file_command, FALSE);
 
     /* Wait for response */
     pause_line(23);

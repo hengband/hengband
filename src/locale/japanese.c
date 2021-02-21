@@ -5,6 +5,7 @@
  */
 
 #include "locale/japanese.h"
+#include "locale/utf-8.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 
@@ -396,31 +397,6 @@ static bool is_ascii_str(concptr str)
 		int ch = *str;
 		if (!(0x00 < ch && ch <= 0x7f))
 			return FALSE;
-	}
-	return TRUE;
-}
-
-/*!
- * @brief 文字列の文字コードがUTF-8かどうかを判定する
- * @param str 判定する文字列へのポインタ
- * @return 文字列の文字コードがUTF-8ならTRUE、そうでなければFALSE
- */
-static bool is_utf8_str(concptr str)
-{
-	const unsigned char* p;
-	for (p = (const unsigned char*)str; *p; p++) {
-		int subseq_num = 0;
-		if (0x00 < *p && *p <= 0x7f) continue;
-		
-		if ((*p & 0xe0) == 0xc0) subseq_num = 1;
-		if ((*p & 0xf0) == 0xe0) subseq_num = 2;
-		if ((*p & 0xf8) == 0xf0) subseq_num = 3;
-
-		if (subseq_num == 0) return FALSE;
-		while (subseq_num--) {
-			p++;
-			if (!*p || (*p & 0xc0) != 0x80) return FALSE;
-		}
 	}
 	return TRUE;
 }

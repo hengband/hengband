@@ -60,9 +60,9 @@ void change_race(player_type *creature_ptr, player_race_type new_race, concptr e
 
     chg_virtue(creature_ptr, V_CHANCE, 2);
     if (creature_ptr->prace < 32) {
-        creature_ptr->old_race1 |= 1L << creature_ptr->prace;
+        creature_ptr->old_race1 |= 1UL << creature_ptr->prace;
     } else {
-        creature_ptr->old_race2 |= 1L << (creature_ptr->prace - 32);
+        creature_ptr->old_race2 |= 1UL << (creature_ptr->prace - 32);
     }
 
     creature_ptr->prace = new_race;

@@ -208,10 +208,10 @@ void request_command(player_type *player_ptr, int shopping)
     use_menu = FALSE;
 
     while (TRUE) {
-        if (!macro_running() && !command_new && auto_debug_save) {
+        if (!macro_running() && !command_new && auto_debug_save && (!inkey_next || *inkey_next == '\0')) {
             save_player(player_ptr, SAVE_TYPE_DEBUG);
         }
-        if (macro_running() && !fresh_after) {
+        if (macro_running() && fresh_once) {
             stop_term_fresh();
         } else {
             start_term_fresh();

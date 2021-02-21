@@ -155,7 +155,6 @@ void spell_RF6_TELE_TO(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t
 
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
         teleport_player_to(target_ptr, m_ptr->fy, m_ptr->fx, TELEPORT_PASSIVE);
-        learn_spell(target_ptr, MS_TELE_TO);
         return;
     }
 
@@ -223,7 +222,6 @@ void spell_RF6_TELE_AWAY(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX
                 msg_print(_("弱い者いじめは止めるんだ！", ""));
         }
 
-        learn_spell(target_ptr, MS_TELE_AWAY);
         teleport_player_away(m_idx, target_ptr, 100, FALSE);
         return;
     }
@@ -292,7 +290,6 @@ void spell_RF6_TELE_LEVEL(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_ID
             teleport_level(target_ptr, 0);
         }
 
-        learn_spell(target_ptr, MS_TELE_LEVEL);
         update_smart_learn(target_ptr, m_idx, DRS_NEXUS);
         return;
     }
@@ -358,6 +355,7 @@ void spell_RF6_DARKNESS(player_type *target_ptr, POSITION y, POSITION x, MONSTER
         if (can_use_lite_area) {
             (void)lite_area(target_ptr, 0, 3);
         } else {
+            // XXX: ラーニング条件が特技IDのみから決まらないため、やむを得ずここでラーニング処理を行う。
             learn_spell(target_ptr, MS_DARKNESS);
             (void)unlite_area(target_ptr, 0, 3);
         }
@@ -392,7 +390,6 @@ void spell_RF6_TRAPS(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
     else
         msg_format(_("%^sが呪文を唱えて邪悪に微笑んだ。", "%^s casts a spell and cackles evilly."), m_name);
 
-    learn_spell(target_ptr, MS_MAKE_TRAP);
     (void)trap_creation(target_ptr, y, x);
 }
 

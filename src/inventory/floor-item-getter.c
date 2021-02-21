@@ -46,7 +46,8 @@ static bool check_floor_item_tag_aux(player_type *owner_ptr, fis_type *fis_ptr, 
         return FALSE;
 
     if (*prev_tag && command_cmd) {
-        fis_ptr->floor_num = scan_floor_items(owner_ptr, fis_ptr->floor_list, owner_ptr->y, owner_ptr->x, 0x03, fis_ptr->tval);
+        fis_ptr->floor_num
+            = scan_floor_items(owner_ptr, fis_ptr->floor_list, owner_ptr->y, owner_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, fis_ptr->tval);
         if (get_tag_floor(owner_ptr->current_floor_ptr, &fis_ptr->k, *prev_tag, fis_ptr->floor_list, fis_ptr->floor_num)) {
             *fis_ptr->cp = 0 - fis_ptr->floor_list[fis_ptr->k];
             fis_ptr->tval = 0;
@@ -246,7 +247,8 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 
     fis_ptr->floor_num = 0;
     if (fis_ptr->floor)
-        fis_ptr->floor_num = scan_floor_items(owner_ptr, fis_ptr->floor_list, owner_ptr->y, owner_ptr->x, 0x03, fis_ptr->tval);
+        fis_ptr->floor_num
+            = scan_floor_items(owner_ptr, fis_ptr->floor_list, owner_ptr->y, owner_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, fis_ptr->tval);
 
     if ((mode & USE_INVEN) && (fis_ptr->i1 <= fis_ptr->i2))
         fis_ptr->allow_inven = TRUE;
@@ -624,7 +626,8 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 i = owner_ptr->current_floor_ptr->o_list[i].next_o_idx;
 
             owner_ptr->current_floor_ptr->o_list[i].next_o_idx = o_idx;
-            fis_ptr->floor_num = scan_floor_items(owner_ptr, fis_ptr->floor_list, owner_ptr->y, owner_ptr->x, 0x03, fis_ptr->tval);
+            fis_ptr->floor_num
+                = scan_floor_items(owner_ptr, fis_ptr->floor_list, owner_ptr->y, owner_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, fis_ptr->tval);
             if (command_see) {
                 screen_load();
                 screen_save();

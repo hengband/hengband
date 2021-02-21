@@ -49,7 +49,7 @@ bool can_get_item(player_type *owner_ptr, tval_type tval)
             return TRUE;
 
     OBJECT_IDX floor_list[23];
-    ITEM_NUMBER floor_num = scan_floor_items(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, 0x03, tval);
+    ITEM_NUMBER floor_num = scan_floor_items(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, tval);
     return floor_num != 0;
 }
 

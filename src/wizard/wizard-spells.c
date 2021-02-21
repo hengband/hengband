@@ -126,17 +126,17 @@ void wiz_learn_blue_magic_all(player_type *caster_ptr)
 
         int i;
         for (i = 0; i < 32; i++) {
-            if ((0x00000001 << i) & f4)
+            if ((0x00000001U << i) & f4)
                 caster_ptr->magic_num2[i] = 1;
         }
 
         for (; i < 64; i++) {
-            if ((0x00000001 << (i - 32)) & f5)
+            if ((0x00000001U << (i - 32)) & f5)
                 caster_ptr->magic_num2[i] = 1;
         }
 
         for (; i < 96; i++) {
-            if ((0x00000001 << (i - 64)) & f6)
+            if ((0x00000001U << (i - 64)) & f6)
                 caster_ptr->magic_num2[i] = 1;
         }
     }

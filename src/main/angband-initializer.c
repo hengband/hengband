@@ -155,11 +155,22 @@ void init_file_paths(char *libpath, char *varpath)
  * @param str 初期化中のコンテンツ文字列
  * @return なし
  */
-static void init_note(concptr str)
+static void init_note_term(concptr str)
 {
     term_erase(0, 23, 255);
     term_putstr(20, 23, -1, TERM_WHITE, str);
     term_fresh();
+}
+
+/*!
+ * @brief ゲーム画面無しの時の初期化メッセージ出力
+ * @param str 初期化中のコンテンツ文字列
+ * @return なし
+ */
+static void init_note_no_term(concptr str)
+{
+    /* Don't show initialization message when there is no game terminal. */
+    (void)str;
 }
 
 /*!
@@ -202,9 +213,11 @@ static void put_title(void)
  * @brief 全ゲームデータ読み込みのメインルーチン /
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param process_autopick_file_command 自動拾いファイル読み込み関数への関数ポインタ
+ * @param no_term TRUEならゲーム画面無しの状態で初期化を行う。
+ *                コマンドラインからスポイラーの出力のみを行う時の使用を想定する。
  * @return なし
  */
-void init_angband(player_type *player_ptr, process_autopick_file_command_pf process_autopick_file_command)
+void init_angband(player_type *player_ptr, process_autopick_file_command_pf process_autopick_file_command, bool no_term)
 {
     C_MAKE(file_read__buf, FILE_READ_BUFF_SIZE, char);
     C_MAKE(file_read__swp, FILE_READ_BUFF_SIZE, char);
@@ -219,19 +232,24 @@ void init_angband(player_type *player_ptr, process_autopick_file_command_pf proc
     }
 
     (void)fd_close(fd);
-    term_clear();
-    path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
-    FILE *fp;
-    fp = angband_fopen(buf, "r");
-    if (fp) {
-        int i = 0;
-        while (0 == angband_fgets(fp, buf, sizeof(buf)))
-            term_putstr(0, i++, -1, TERM_WHITE, buf);
 
-        angband_fclose(fp);
+    if (!no_term) {
+        term_clear();
+
+        path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
+        FILE *fp;
+        fp = angband_fopen(buf, "r");
+        if (fp) {
+            int i = 0;
+            while (0 == angband_fgets(fp, buf, sizeof(buf)))
+                term_putstr(0, i++, -1, TERM_WHITE, buf);
+
+            angband_fclose(fp);
+        }
+
+        term_flush();
     }
 
-    term_flush();
     path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
     fd = fd_open(buf, O_RDONLY);
     BIT_FLAGS file_permission = 0664;
@@ -247,7 +265,11 @@ void init_angband(player_type *player_ptr, process_autopick_file_command_pf proc
     }
 
     (void)fd_close(fd);
-    put_title();
+    if (!no_term) {
+        put_title();
+    }
+
+    void (*init_note)(concptr) = (no_term ? init_note_no_term : init_note_term);
 
     init_note(_("[変数を初期化しています...(その他)", "[Initializing values... (misc)]"));
     if (init_misc(player_ptr))

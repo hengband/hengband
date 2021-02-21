@@ -172,17 +172,17 @@ static void dump_blue_mage(player_type *creature_ptr, FILE *fff)
 
         int num = 0;
         for (int i = 0; i < 32; i++) {
-            if ((0x00000001 << i) & learnt_magic.f4)
+            if ((0x00000001U << i) & learnt_magic.f4)
                 spellnum[num++] = i;
         }
 
         for (int i = 32; i < 64; i++) {
-            if ((0x00000001 << (i - 32)) & learnt_magic.f5)
+            if ((0x00000001U << (i - 32)) & learnt_magic.f5)
                 spellnum[num++] = i;
         }
 
         for (int i = 64; i < 96; i++) {
-            if ((0x00000001 << (i - 64)) & learnt_magic.f6)
+            if ((0x00000001U << (i - 64)) & learnt_magic.f6)
                 spellnum[num++] = i;
         }
 

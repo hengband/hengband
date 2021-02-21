@@ -331,7 +331,7 @@ static errr do_get_mon_num_prep(player_type *player_ptr, const monsterrace_hook_
 
     // デバッグ用統計情報。
     int mon_num = 0; // 重み(prob2)が正の要素数
-    DEPTH lev_min = 127; // 重みが正の要素のうち最小階
+    DEPTH lev_min = MAX_DEPTH; // 重みが正の要素のうち最小階
     DEPTH lev_max = 0; // 重みが正の要素のうち最大階
     int prob2_total = 0; // 重みの総和
 
@@ -403,7 +403,7 @@ static errr do_get_mon_num_prep(player_type *player_ptr, const monsterrace_hook_
 
     // チートオプションが有効なら統計情報を出力。
     if (cheat_hear)
-        msg_format(_("モンスター第2次候補数:%d(%d-%dF)%d ", "monster second selection:%d(%d-%dF)&d "), mon_num, lev_min, lev_max, prob2_total);
+        msg_format(_("モンスター第2次候補数:%d(%d-%dF)%d ", "monster second selection:%d(%d-%dF)%d "), mon_num, lev_min, lev_max, prob2_total);
 
     return 0;
 }

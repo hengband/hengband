@@ -23,50 +23,50 @@
 
 void load_zangband_options(void)
 {
-    if (option_flag[5] & (0x00000001 << 4))
-        option_flag[5] &= ~(0x00000001 << 4);
+    if (option_flag[5] & (0x00000001U << 4))
+        option_flag[5] &= ~(0x00000001U << 4);
     else
-        option_flag[5] |= (0x00000001 << 4);
+        option_flag[5] |= (0x00000001U << 4);
 
-    if (option_flag[2] & (0x00000001 << 5))
-        option_flag[2] &= ~(0x00000001 << 5);
+    if (option_flag[2] & (0x00000001U << 5))
+        option_flag[2] &= ~(0x00000001U << 5);
     else
-        option_flag[2] |= (0x00000001 << 5);
+        option_flag[2] |= (0x00000001U << 5);
 
-    if (option_flag[4] & (0x00000001 << 5))
-        option_flag[4] &= ~(0x00000001 << 5);
+    if (option_flag[4] & (0x00000001U << 5))
+        option_flag[4] &= ~(0x00000001U << 5);
     else
-        option_flag[4] |= (0x00000001 << 5);
+        option_flag[4] |= (0x00000001U << 5);
 
-    if (option_flag[5] & (0x00000001 << 0))
-        option_flag[5] &= ~(0x00000001 << 0);
+    if (option_flag[5] & (0x00000001U << 0))
+        option_flag[5] &= ~(0x00000001U << 0);
     else
-        option_flag[5] |= (0x00000001 << 0);
+        option_flag[5] |= (0x00000001U << 0);
 
-    if (option_flag[5] & (0x00000001 << 12))
-        option_flag[5] &= ~(0x00000001 << 12);
+    if (option_flag[5] & (0x00000001U << 12))
+        option_flag[5] &= ~(0x00000001U << 12);
     else
-        option_flag[5] |= (0x00000001 << 12);
+        option_flag[5] |= (0x00000001U << 12);
 
-    if (option_flag[1] & (0x00000001 << 0))
-        option_flag[1] &= ~(0x00000001 << 0);
+    if (option_flag[1] & (0x00000001U << 0))
+        option_flag[1] &= ~(0x00000001U << 0);
     else
-        option_flag[1] |= (0x00000001 << 0);
+        option_flag[1] |= (0x00000001U << 0);
 
-    if (option_flag[1] & (0x00000001 << 18))
-        option_flag[1] &= ~(0x00000001 << 18);
+    if (option_flag[1] & (0x00000001U << 18))
+        option_flag[1] &= ~(0x00000001U << 18);
     else
-        option_flag[1] |= (0x00000001 << 18);
+        option_flag[1] |= (0x00000001U << 18);
 
-    if (option_flag[1] & (0x00000001 << 19))
-        option_flag[1] &= ~(0x00000001 << 19);
+    if (option_flag[1] & (0x00000001U << 19))
+        option_flag[1] &= ~(0x00000001U << 19);
     else
-        option_flag[1] |= (0x00000001 << 19);
+        option_flag[1] |= (0x00000001U << 19);
 
-    if (option_flag[5] & (0x00000001 << 3))
-        option_flag[1] &= ~(0x00000001 << 3);
+    if (option_flag[5] & (0x00000001U << 3))
+        option_flag[1] &= ~(0x00000001U << 3);
     else
-        option_flag[5] |= (0x00000001 << 3);
+        option_flag[5] |= (0x00000001U << 3);
 }
 
 void set_zangband_realm(player_type* creature_ptr)
@@ -266,7 +266,7 @@ void set_zangband_learnt_spells(player_type *creature_ptr)
 {
     creature_ptr->learned_spells = 0;
     for (int i = 0; i < 64; i++)
-        if ((i < 32) ? (creature_ptr->spell_learned1 & (1L << i)) : (creature_ptr->spell_learned2 & (1L << (i - 32))))
+        if ((i < 32) ? (creature_ptr->spell_learned1 & (1UL << i)) : (creature_ptr->spell_learned2 & (1UL << (i - 32))))
             creature_ptr->learned_spells++;
 }
 

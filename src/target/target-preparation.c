@@ -134,9 +134,9 @@ void target_set_prepare(player_type *creature_ptr, BIT_FLAGS mode)
     }
 
     if (mode & (TARGET_KILL)) {
-        ang_sort(creature_ptr, tmp_pos.x, tmp_pos.y, tmp_pos.n, ang_sort_comp_distance, ang_sort_swap_distance);
+        ang_sort(creature_ptr, tmp_pos.x, tmp_pos.y, tmp_pos.n, ang_sort_comp_distance, ang_sort_swap_position);
     } else {
-        ang_sort(creature_ptr, tmp_pos.x, tmp_pos.y, tmp_pos.n, ang_sort_comp_importance, ang_sort_swap_distance);
+        ang_sort(creature_ptr, tmp_pos.x, tmp_pos.y, tmp_pos.n, ang_sort_comp_importance, ang_sort_swap_position);
     }
 
     if (creature_ptr->riding == 0 || !target_pet || (tmp_pos.n <= 1) || !(mode & (TARGET_KILL)))
@@ -148,4 +148,25 @@ void target_set_prepare(player_type *creature_ptr, BIT_FLAGS mode)
     tmp = tmp_pos.x[0];
     tmp_pos.x[0] = tmp_pos.x[1];
     tmp_pos.x[1] = tmp;
+}
+
+void target_sensing_monsters_prepare(player_type *creature_ptr, pos_list* plist)
+{
+    plist->n = 0;
+
+    // 幻覚時は正常に感知できない
+    if (creature_ptr->image)
+        return;
+
+    for (int i = 1; i < creature_ptr->current_floor_ptr->m_max; i++) {
+        monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[i];
+        if (!monster_is_valid(m_ptr) || !m_ptr->ml || is_pet(m_ptr))
+            continue;
+
+        plist->x[plist->n] = m_ptr->fx;
+        plist->y[plist->n] = m_ptr->fy;
+        plist->n++;
+    }
+
+    ang_sort(creature_ptr, plist->x, plist->y, plist->n, ang_sort_comp_importance, ang_sort_swap_position);
 }

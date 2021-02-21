@@ -212,7 +212,7 @@ static void do_cmd_options_win(player_type *player_ptr)
                 if ((i == y) && (j == x))
                     a = TERM_L_BLUE;
 
-                if (window_flag[j] & (1L << i))
+                if (window_flag[j] & (1UL << i))
                     c = 'X';
 
                 term_putch(35 + j * 5, i + 5, a, c);
@@ -229,11 +229,11 @@ static void do_cmd_options_win(player_type *player_ptr)
         case 'T':
         case 't': {
             for (j = 0; j < 8; j++) {
-                window_flag[j] &= ~(1L << y);
+                window_flag[j] &= ~(1UL << y);
             }
 
             for (i = 0; i < 16; i++) {
-                window_flag[x] &= ~(1L << i);
+                window_flag[x] &= ~(1UL << i);
             }
         }
             /* Fall through */
@@ -242,12 +242,12 @@ static void do_cmd_options_win(player_type *player_ptr)
             if (x == 0)
                 break;
 
-            window_flag[x] |= (1L << y);
+            window_flag[x] |= (1UL << y);
             break;
         }
         case 'n':
         case 'N': {
-            window_flag[x] &= ~(1L << y);
+            window_flag[x] &= ~(1UL << y);
             break;
         }
         case '?': {
@@ -378,7 +378,7 @@ void extract_option_vars(void)
         int os = option_info[i].o_set;
         int ob = option_info[i].o_bit;
         if (option_info[i].o_var) {
-            if (option_flag[os] & (1L << ob)) {
+            if (option_flag[os] & (1UL << ob)) {
                 (*option_info[i].o_var) = TRUE;
             } else {
                 (*option_info[i].o_var) = FALSE;
