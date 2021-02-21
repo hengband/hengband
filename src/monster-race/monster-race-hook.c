@@ -716,7 +716,7 @@ bool vault_aux_dark_elf(player_type *player_ptr, MONRACE_IDX r_idx)
 bool monster_living(MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
-    return test_bit(r_ptr->flags3, (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING));
+    return !test_bit(r_ptr->flags3, (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING));
 }
 
 /*!
