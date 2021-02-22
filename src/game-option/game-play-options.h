@@ -9,6 +9,7 @@ extern bool small_levels; /* Allow unusually small dungeon levels */
 extern bool always_small_levels; /* Always create unusually small dungeon levels */
 extern bool empty_levels; /* Allow empty 'on_defeat_arena_monster' levels */
 extern bool bound_walls_perm; /* Boundary walls become 'permanent wall' */
+extern bool keep_subwindows; /* Show sub-windows even when Hengband is not in focus */
 extern bool last_words; /* Leave last words when your character dies */
 extern bool auto_dump; /* Dump a character record automatically */
 extern bool auto_debug_save; /* Dump a debug savedata every key input */
