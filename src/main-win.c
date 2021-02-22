@@ -101,6 +101,7 @@
 #include "dungeon/quest.h"
 #include "floor/floor-base-definitions.h"
 #include "floor/floor-events.h"
+#include "game-option/game-play-options.h"
 #include "game-option/runtime-arguments.h"
 #include "game-option/special-options.h"
 #include "io/files-util.h"
@@ -131,11 +132,11 @@
 #include "world/world.h"
 
 #ifdef WINDOWS
-#include "direct.h"
 #include "dungeon/dungeon.h"
-#include "locale.h"
 #include "save/save.h"
-#include "windows.h"
+#include <direct.h>
+#include <locale.h>
+#include <windows.h>
 
 /*
  * Available graphic modes
@@ -3161,6 +3162,15 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
                     ShowWindow(data[i].w, SW_SHOW);
                 } else {
                     ShowWindow(data[i].w, SW_HIDE);
+                }
+            }
+        }
+    }
+    case WM_ENABLE: {
+        if (wParam == FALSE && keep_subwindows) {
+            for (int i = 0; i < MAX_TERM_DATA; i++) {
+                if (data[i].visible) {
+                    ShowWindow(data[i].w, SW_SHOW);
                 }
             }
         }
