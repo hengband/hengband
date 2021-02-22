@@ -136,25 +136,28 @@ void c_roff(TERM_COLOR a, concptr str)
 #endif
         {
             int i, n = 0;
+            const int end_col = x - 1;
 
             TERM_COLOR av[256];
             char cv[256];
-            if (x < w)
+            if (x < w) {
 #ifdef JP
-            {
                 /* 現在が半角文字の場合 */
                 if (!k_flag)
 #endif
                 {
-                    for (i = w - 2; i >= 0; i--) {
+                    for (i = 0; i <= end_col; i++) {
                         term_what(i, y, &av[i], &cv[i]);
-                        if (cv[i] == ' ')
-                            break;
 
-                        n = i;
+                        if (cv[i] == ' ') {
+                            n = i + 1;
+                        }
 #ifdef JP
-                        if (cv[i] == '(')
-                            break;
+                        if (iskanji(cv[i])) {
+                            n = i + 2;
+                            i++;
+                            term_what(i, y, &av[i], &cv[i]);
+                        }
 #endif
                     }
                 }
@@ -163,15 +166,13 @@ void c_roff(TERM_COLOR a, concptr str)
                     /* 現在が全角文字のとき */
                     /* 文頭が「。」「、」等になるときは、その１つ前の語で改行 */
                     if (strncmp(s, "。", 2) == 0 || strncmp(s, "、", 2) == 0) {
-                        term_what(x, y, &av[x], &cv[x]);
                         term_what(x - 1, y, &av[x - 1], &cv[x - 1]);
                         term_what(x - 2, y, &av[x - 2], &cv[x - 2]);
                         n = x - 2;
-                        cv[x] = '\0';
                     }
                 }
-            }
 #endif
+            }
             if (n == 0)
                 n = w;
 
@@ -182,7 +183,7 @@ void c_roff(TERM_COLOR a, concptr str)
                 break;
 
             term_erase(x, y, 255);
-            for (i = n; i < w - 1; i++) {
+            for (i = n; i <= end_col; i++) {
 #ifdef JP
                 if (cv[i] == '\0')
                     break;
