@@ -148,8 +148,6 @@ const option_type option_info[MAX_OPTION_INFO] = {
 
     { &bound_walls_perm, FALSE, OPT_PAGE_GAMEPLAY, 2, 1, "bound_walls_perm", _("ダンジョンの外壁を永久岩にする", "Boundary walls become 'permanent wall'") },
 
-    { &keep_subwindows, TRUE, OPT_PAGE_GAMEPLAY, 4, 8, "keep_subwindows", _("フォーカスが外れてもサブウィンドウを表示する", "Show sub-windows even when Hengband is not in focus") },
-
     { &last_words, TRUE, OPT_PAGE_GAMEPLAY, 0, 28, "last_words", _("キャラクターが死んだ時遺言をのこす", "Leave last words when your character dies") },
 
     { &auto_dump, FALSE, OPT_PAGE_GAMEPLAY, 4, 5, "auto_dump", _("自動的にキャラクターの記録をファイルに書き出す", "Dump a character record automatically") },
