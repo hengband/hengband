@@ -118,6 +118,7 @@ bool mon_hook_quest(player_type *player_ptr, MONRACE_IDX r_idx)
  * @return ダンジョンに出現するならばTRUEを返す
  * @details
  * <pre>
+ * 地上は常にTRUE(荒野の出現は別hookで絞るため)。
  * 荒野限定(WILD_ONLY)の場合、荒野の山に出るモンスターにのみダンジョンの山に出現を許可する。
  * その他の場合、山及び火山以外のダンジョンでは全てのモンスターに出現を許可する。
  * ダンジョンが山の場合は、荒野の山(WILD_MOUNTAIN)に出ない水棲動物(AQUATIC)は許可しない。
@@ -126,6 +127,9 @@ bool mon_hook_quest(player_type *player_ptr, MONRACE_IDX r_idx)
  */
 bool mon_hook_dungeon(player_type *player_ptr, MONRACE_IDX r_idx)
 {
+    if (!player_ptr->current_floor_ptr->dun_level && !player_ptr->current_floor_ptr->inside_quest)
+        return TRUE;
+
     monster_race *r_ptr = &r_info[r_idx];
     dungeon_type *d_ptr = &d_info[player_ptr->dungeon_idx];
 
