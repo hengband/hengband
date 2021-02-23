@@ -116,15 +116,26 @@ bool mon_hook_quest(player_type *player_ptr, MONRACE_IDX r_idx)
  * @brief モンスターがダンジョンに出現するかどうかを返す
  * @param r_idx 判定するモンスターの種族ID
  * @return ダンジョンに出現するならばTRUEを返す
+ * @details
+ * <pre>
+ * 荒野限定(WILD_ONLY)の場合、荒野の山に出るモンスターにのみダンジョンの山に出現を許可する。
+ * その他の場合、山及び火山以外のダンジョンでは全てのモンスターに出現を許可する。
+ * ダンジョンが山の場合は、荒野の山(WILD_MOUNTAIN)に出ない水棲動物(AQUATIC)は許可しない。
+ * ダンジョンが火山の場合は、荒野の火山(WILD_VOLCANO)に出ない水棲動物(AQUATIC)は許可しない。
+ * </pre>
  */
 bool mon_hook_dungeon(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
-    if ((r_ptr->flags8 & RF8_WILD_ONLY) == 0)
-        return TRUE;
-
     dungeon_type *d_ptr = &d_info[player_ptr->dungeon_idx];
-    return (test_bit(d_ptr->mflags8, RF8_WILD_MOUNTAIN) && test_bit(r_ptr->flags8, RF8_WILD_MOUNTAIN));
+
+    if (test_bit(r_ptr->flags8, RF8_WILD_ONLY))
+        return (test_bit(d_ptr->mflags8, RF8_WILD_MOUNTAIN) && test_bit(r_ptr->flags8, RF8_WILD_MOUNTAIN));
+
+    bool land = !test_bit(r_ptr->flags7, RF7_AQUATIC);
+    return !test_bit(d_ptr->mflags8, RF8_WILD_MOUNTAIN | RF8_WILD_VOLCANO)
+        || (test_bit(d_ptr->mflags8, RF8_WILD_MOUNTAIN) && (land || test_bit(r_ptr->flags8, RF8_WILD_MOUNTAIN)))
+        || (test_bit(d_ptr->mflags8, RF8_WILD_VOLCANO) && (land || test_bit(r_ptr->flags8, RF8_WILD_VOLCANO)));
 }
 
 /*!
