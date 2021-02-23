@@ -820,7 +820,19 @@ static void save_prefs(void)
     strcpy(buf, use_bg ? "1" : "0");
     WritePrivateProfileString("Angband", "BackGround", buf, ini_file);
     WritePrivateProfileString("Angband", "BackGroundBitmap", bg_bitmap_file[0] != '\0' ? bg_bitmap_file : "bg.bmp", ini_file);
-    WritePrivateProfileString("Angband", "SaveFile", savefile, ini_file);
+
+    int path_length = strlen(ANGBAND_DIR) - 4; /* \libの4文字分を削除 */
+    char tmp[1024] = "";
+    strncat(tmp, ANGBAND_DIR, path_length);
+
+    int n = strncmp(tmp, savefile, path_length);
+    if (n == 0) {
+        char relative_path[1024] = "";
+        snprintf(relative_path, strlen(savefile + path_length) + 3, ".\\%s", (savefile + path_length));
+        WritePrivateProfileString("Angband", "SaveFile", relative_path, ini_file);
+    } else {
+        WritePrivateProfileString("Angband", "SaveFile", savefile, ini_file);
+    }
 
     for (int i = 0; i < MAX_TERM_DATA; ++i) {
         save_prefs_aux(i);
@@ -897,6 +909,16 @@ static void load_prefs(void)
     use_bg = GetPrivateProfileInt("Angband", "BackGround", 0, ini_file);
     GetPrivateProfileString("Angband", "BackGroundBitmap", "bg.bmp", bg_bitmap_file, 1023, ini_file);
     GetPrivateProfileString("Angband", "SaveFile", "", savefile, 1023, ini_file);
+
+    int n = strncmp(".\\", savefile, 2);
+    if (n == 0) {
+        int path_length = strlen(ANGBAND_DIR) - 4; /* \libの4文字分を削除 */
+        char tmp[1024] = "";
+        strncat(tmp, ANGBAND_DIR, path_length);
+        strncat(tmp, savefile + 2, strlen(savefile) - 2 + path_length);
+        strncpy(savefile, tmp, strlen(tmp));
+    }
+
     for (int i = 0; i < MAX_TERM_DATA; ++i) {
         load_prefs_aux(i);
     }
