@@ -15,13 +15,16 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "mutation/mutation-processor.h"
+#include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-chaos.h"
+#include "spell/spell-types.h"
 #include "spell/spells-status.h"
 #include "spell/summon-types.h"
 #include "system/floor-type-definition.h"
-#include "target/target-checker.h"
 #include "target/grid-selector.h"
+#include "target/target-checker.h"
+#include "target/target-getter.h"
 #include "view/display-messages.h"
 
 debug_spell_command debug_spell_commands_list[SPELL_MAX] = {
@@ -179,4 +182,19 @@ void wiz_summon_specific_enemy(player_type *summoner_ptr, MONRACE_IDX r_idx)
 void wiz_summon_pet(player_type *summoner_ptr, MONRACE_IDX r_idx)
 {
     (void)summon_named_creature(summoner_ptr, 0, summoner_ptr->y, summoner_ptr->x, r_idx, PM_ALLOW_SLEEP | PM_ALLOW_GROUP | PM_FORCE_PET);
+}
+
+/*!
+ * @brief ターゲットを指定してダメージ100万・半径0の弱魔力のボールを放つ
+ * @return なし
+ * @details
+ */
+void wiz_kill_enemy(player_type *caster_ptr)
+{
+    DIRECTION dir;
+
+    if (!get_aim_dir(caster_ptr, &dir))
+        return;
+
+    fire_ball(caster_ptr, GF_MISSILE, dir, 1000000, 0);
 }

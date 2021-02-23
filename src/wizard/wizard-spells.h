@@ -35,3 +35,4 @@ void wiz_learn_blue_magic_all(player_type *caster_ptr);
 void wiz_summon_random_enemy(player_type *caster_ptr, int num);
 void wiz_summon_specific_enemy(player_type *summoner_ptr, MONRACE_IDX r_idx);
 void wiz_summon_pet(player_type *summoner_ptr, MONRACE_IDX r_idx);
+void wiz_kill_enemy(player_type *caster_ptr);
