@@ -835,7 +835,7 @@ static void save_prefs(void)
     int n = strncmp(tmp, savefile, path_length);
     if (n == 0) {
         char relative_path[1024] = "";
-        snprintf(relative_path, strlen(savefile + path_length) + 3, ".\\%s", (savefile + path_length));
+        snprintf(relative_path, sizeof(relative_path), ".\\%s", (savefile + path_length));
         WritePrivateProfileString("Angband", "SaveFile", relative_path, ini_file);
     } else {
         WritePrivateProfileString("Angband", "SaveFile", savefile, ini_file);
