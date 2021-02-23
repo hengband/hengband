@@ -409,13 +409,10 @@ void leave_floor(player_type *creature_ptr)
         set_superstealth(creature_ptr, FALSE);
 
     new_floor_id = 0;
-    FLOOR_IDX tmp_floor_idx = 0;
-    if (!creature_ptr->floor_id && (creature_ptr->change_floor_mode & CFM_SAVE_FLOORS) && !(creature_ptr->change_floor_mode & CFM_NO_RETURN))
-        tmp_floor_idx = get_new_floor_id(creature_ptr);
 
     preserve_info(creature_ptr);
     saved_floor_type *sf_ptr = get_sf_ptr(creature_ptr->floor_id);
-    if ((creature_ptr->change_floor_mode & CFM_RAND_CONNECT) && tmp_floor_idx)
+    if (creature_ptr->change_floor_mode & CFM_RAND_CONNECT)
         locate_connected_stairs(creature_ptr, creature_ptr->current_floor_ptr, sf_ptr, creature_ptr->change_floor_mode);
 
     exe_leave_floor(creature_ptr, sf_ptr);
