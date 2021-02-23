@@ -705,7 +705,7 @@ BIT_FLAGS has_levitation(player_type *creature_ptr)
         result = FLAG_CAUSE_BATTLE_FORM;
     }
 
-    if (creature_ptr->ult_res) {
+    if (creature_ptr->ult_res || creature_ptr->magicdef) {
         result |= 0x01U << FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
