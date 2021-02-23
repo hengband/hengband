@@ -44,11 +44,12 @@ void dice_to_string(int base_damage, int dice_num, int dice_side, int dice_mult,
 /*!
  * @brief モンスターのAC情報を得ることができるかを返す / Determine if the "armor" is known
  * @param r_idx モンスターの種族ID
+ * @param know_everything 全知フラグ。TRUEを渡すとTRUEが返る。
  * @return 敵のACを知る条件が満たされているならTRUEを返す
  * @details
  * The higher the level, the fewer kills needed.
  */
-bool know_armour(MONRACE_IDX r_idx)
+bool know_armour(MONRACE_IDX r_idx, const bool know_everything)
 {
     monster_race *r_ptr = &r_info[r_idx];
     DEPTH level = r_ptr->level;
@@ -56,7 +57,7 @@ bool know_armour(MONRACE_IDX r_idx)
 
     bool known = (r_ptr->r_cast_spell == MAX_UCHAR) ? TRUE : FALSE;
 
-    if (cheat_know || known)
+    if (know_everything || known)
         return TRUE;
     if (kills > 304 / (4 + level))
         return TRUE;
@@ -106,21 +107,22 @@ bool know_damage(MONRACE_IDX r_idx, int i)
  * @param r_idx モンスターの種族ID
  * @param SPELL_NUM 呪文番号
  * @param msg 表示する文字列
- * @param tmp 返すメッセージを格納する配列
  * @return なし
  */
-void set_damage(player_type *player_ptr, MONRACE_IDX r_idx, monster_spell_type ms_type, char *msg, char *tmp)
+void set_damage(player_type *player_ptr, lore_type *lore_ptr, monster_spell_type ms_type, char *msg)
 {
+    MONRACE_IDX r_idx = lore_ptr->r_idx;
     int base_damage = monspell_race_damage(player_ptr, ms_type, r_idx, BASE_DAM);
     int dice_num = monspell_race_damage(player_ptr, ms_type, r_idx, DICE_NUM);
     int dice_side = monspell_race_damage(player_ptr, ms_type, r_idx, DICE_SIDE);
     int dice_mult = monspell_race_damage(player_ptr, ms_type, r_idx, DICE_MULT);
     int dice_div = monspell_race_damage(player_ptr, ms_type, r_idx, DICE_DIV);
     char dmg_str[80], dice_str[80];
+    char *tmp = lore_ptr->tmp_msg[lore_ptr->vn];
     dice_to_string(base_damage, dice_num, dice_side, dice_mult, dice_div, dmg_str);
     sprintf(dice_str, "(%s)", dmg_str);
 
-    if (know_armour(r_idx))
+    if (know_armour(r_idx, lore_ptr->know_everything))
         sprintf(tmp, msg, dice_str);
     else
         sprintf(tmp, msg, "");

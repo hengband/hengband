@@ -13,7 +13,7 @@
 
 void display_monster_hp_ac(lore_type *lore_ptr)
 {
-    if (!lore_ptr->know_everything && (know_armour(lore_ptr->r_idx) == 0))
+    if (!know_armour(lore_ptr->r_idx, lore_ptr->know_everything))
         return;
 
     hooked_roff(format(_("%^sは AC%d の防御力と", "%^s has an armor rating of %d"), wd_he[lore_ptr->msex], lore_ptr->r_ptr->ac));

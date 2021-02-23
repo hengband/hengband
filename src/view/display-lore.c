@@ -511,7 +511,7 @@ void display_monster_collective(lore_type *lore_ptr)
 void display_monster_launching(player_type *player_ptr, lore_type *lore_ptr)
 {
     if (lore_ptr->flags4 & RF4_ROCKET) {
-        set_damage(player_ptr, lore_ptr->r_idx, (MS_ROCKET), _("ロケット%sを発射する", "shoot a rocket%s"), lore_ptr->tmp_msg[lore_ptr->vn]);
+        set_damage(player_ptr, lore_ptr, (MS_ROCKET), _("ロケット%sを発射する", "shoot a rocket%s"));
         lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
         lore_ptr->color[lore_ptr->vn++] = TERM_UMBER;
     }
@@ -539,7 +539,7 @@ void display_monster_launching(player_type *player_ptr, lore_type *lore_ptr)
     if (p < 0)
         return;
 
-    if (know_armour(lore_ptr->r_idx))
+    if (know_armour(lore_ptr->r_idx, lore_ptr->know_everything))
         sprintf(lore_ptr->tmp_msg[lore_ptr->vn], _("威力 %dd%d の射撃をする", "fire an arrow (Power:%dd%d)"), lore_ptr->r_ptr->blow[p].d_side,
             lore_ptr->r_ptr->blow[p].d_dice);
     else
