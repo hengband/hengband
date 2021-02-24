@@ -330,14 +330,7 @@ static void display_other_resistance_info(
     process_one_characteristic(creature_ptr, row + 9, col, _("呪い      :", "Cursed    :"), 0, f, DP_CURSE);
 }
 
-/*!
- * @brief プレイヤーの特性フラグ一覧表示1
- * @param creature_ptr プレーヤーへの参照ポインタ
- * @param display_player_equippy 表示へのコールバック
- * Special display, part 1
- * @return なし
- */
-void display_player_flag_info_1(player_type *creature_ptr, void (*display_player_equippy)(player_type *, TERM_LEN, TERM_LEN, BIT_FLAGS16))
+ all_player_flags get_player_state_flags(player_type *creature_ptr)
 {
     all_player_flags f;
     player_flags(creature_ptr, f.player_flags);
@@ -347,6 +340,19 @@ void display_player_flag_info_1(player_type *creature_ptr, void (*display_player
     known_obj_immunity(creature_ptr, f.known_obj_imm);
     player_vulnerability_flags(creature_ptr, f.player_vuln);
     riding_flags(creature_ptr, f.riding_flags, f.riding_negative_flags);
+    return f;
+}
+
+/*!
+ * @brief プレイヤーの特性フラグ一覧表示1
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param display_player_equippy 表示へのコールバック
+ * Special display, part 1
+ * @return なし
+ */
+void display_player_flag_info_1(player_type *creature_ptr, void (*display_player_equippy)(player_type *, TERM_LEN, TERM_LEN, BIT_FLAGS16))
+{
+    all_player_flags f = get_player_state_flags(creature_ptr);
 
     display_basic_resistance_info(creature_ptr, display_player_equippy, &f);
     display_advanced_resistance_info(creature_ptr, display_player_equippy, &f);
@@ -476,13 +482,7 @@ static void display_other_info(player_type *creature_ptr, void (*display_player_
 void display_player_flag_info_2(player_type *creature_ptr, void (*display_player_equippy)(player_type *, TERM_LEN, TERM_LEN, BIT_FLAGS16))
 {
     /* Extract flags and store */
-    all_player_flags f;
-    player_flags(creature_ptr, f.player_flags);
-    tim_player_flags(creature_ptr, f.tim_player_flags);
-    player_immunity(creature_ptr, f.player_imm);
-    tim_player_immunity(creature_ptr, f.tim_player_imm);
-    known_obj_immunity(creature_ptr, f.known_obj_imm);
-    player_vulnerability_flags(creature_ptr, f.player_vuln);
+    all_player_flags f = get_player_state_flags(creature_ptr);
 
     display_slay_info(creature_ptr, display_player_equippy, &f);
     display_esp_sustenance_info(creature_ptr, display_player_equippy, &f);
