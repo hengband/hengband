@@ -23168,7 +23168,7 @@ F:HURT_ROCK | IM_ELEC | RES_PLAS | RES_GRAV
 F:DROP_60 | DROP_1D2 | ONLY_GOLD
 F:NONLIVING | NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
 S:1_IN_2 | BR_ELEC | BR_PLAS
-D:$ Do NOT get behind this Moai!
+D:$ Stay behind this Moai!
 D:こいつの背後には近寄るな！
 
 N:1160:モアイ
