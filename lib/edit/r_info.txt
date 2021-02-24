@@ -13123,9 +13123,9 @@ F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | MOVE_BODY |
 F:SMART | TAKE_ITEM | OPEN_DOOR | BASH_DOOR |
 F:EVIL | GIANT | MALE
 S:1_IN_5 | HEAL | TELE_TO | S_MONSTERS
-D:$A forty foot tall humanoid that shakes the ground as it walks.  The power 
-D:$radiating from its frame shakes your courage, its hatred inspired by your 
-D:$defiance.
+D:$It is a forty foot tall humanoid that shakes the ground as it walks.  The
+D:$ power radiating from its frame shakes your courage.  Your defiance stokes
+D:$ its rage.
 D: 12 メートルもの身長がある人間型のモンスターで、歩くだけで大地が揺れる。
 D:全身から立ち昇る力のオーラは冒険者の勇気を打ち砕こうとするかのようだ。
 D:冒険者が挑みかかると彼の憎悪は一層燃え上がる。
