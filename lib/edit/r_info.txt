@@ -23600,7 +23600,7 @@ S:1_IN_2 |
 S:SLOW | CAUSE_4 | DRAIN_MANA | MIND_BLAST | BRAIN_SMASH | FORGET | 
 S:BO_MANA | ANIM_DEAD 
 S:S_UNDEAD
-D:$It is a deviant monster with innumerable eyes with muddy tentacles.
+D:$It is a deviant monster with innumerable eyes on muddy tentacles.
 D:$  It spreads nauseous nasty odors around.
 D:ドロドロした触手に爛れた目が無数についている異形のモンスターだ。
 D:それは吐き気を催す異臭を周囲に撒き散らしている。
