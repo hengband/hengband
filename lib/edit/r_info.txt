@@ -13145,9 +13145,8 @@ F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | DROP_CORPSE
 F:OPEN_DOOR | BASH_DOOR | ANIMAL | EVIL | DRAGON
 F:IM_FIRE | IM_POIS | RES_NETH | RES_TELE | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_7 | HOLD | SCARE | BR_FIRE | BR_POIS | BR_NETH
-D:$It's a winged basilisk.
-D:$It is aimed at adventurers in order to show off the evil poison
-D:$ and power that it has stored in its body.
+D:$It's a winged basilisk, eager to show an adventurer like yourself
+D:$ the evil poison and power that is has stored in its body.
 D:翼のあるバジリスクだ。
 D:その身体に蓄えた邪悪な毒と力を見せつけるべく虎視眈々と冒険者を狙っている。
 
