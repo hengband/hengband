@@ -112,6 +112,7 @@ static ACTION_SKILL_POWER calc_to_hit_melee(player_type *creature_ptr);
 static ACTION_SKILL_POWER calc_to_hit_shoot(player_type *creature_ptr);
 static ACTION_SKILL_POWER calc_to_hit_throw(player_type *creature_ptr);
 static ACTION_SKILL_POWER calc_skill_dig(player_type *creature_ptr);
+static bool is_heavy_wield(player_type *creature_ptr, int i);
 static s16b calc_num_blow(player_type *creature_ptr, int i);
 static s16b calc_strength_addition(player_type *creature_ptr);
 static s16b calc_intelligence_addition(player_type *creature_ptr);
@@ -124,9 +125,10 @@ static ARMOUR_CLASS calc_base_ac(player_type *creature_ptr);
 static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_real_value);
 static s16b calc_speed(player_type *creature_ptr);
 static s16b calc_double_weapon_penalty(player_type *creature_ptr, INVENTORY_IDX slot);
-static void calc_use_status(player_type *creature_ptr, int status);
-static void calc_top_status(player_type *creature_ptr, int status);
-static void calc_ind_status(player_type *creature_ptr, int status);
+static void update_use_status(player_type *creature_ptr, int status);
+static void update_top_status(player_type *creature_ptr, int status);
+static void update_ind_status(player_type *creature_ptr, int status);
+static bool is_riding_two_hands(player_type *creature_ptr);
 static s16b calc_riding_bow_penalty(player_type *creature_ptr);
 static void put_equipment_warning(player_type *creature_ptr);
 
@@ -303,7 +305,7 @@ WEIGHT calc_inventory_weight(player_type *creature_ptr)
  * @return なし
  * @details
  * <pre>
- * See also calc_mana() and calc_hitpoints().
+ * See also update_max_mana() and update_max_hitpoints().
  *
  * Take note of the new "speed code", in particular, a very strong
  * player will start slowing down as soon as he reaches 150 pounds,
@@ -320,7 +322,7 @@ WEIGHT calc_inventory_weight(player_type *creature_ptr)
  * </pre>
  * @todo ここで計算していた各値は一部の状態変化メッセージ処理を除き、今後必要な時に適示計算する形に移行するためほぼすべて削られる。
  */
-void calc_bonuses(player_type *creature_ptr)
+static void update_bonuses(player_type *creature_ptr)
 {
     int empty_hands_status = empty_hands(creature_ptr, TRUE);
     object_type *o_ptr;
@@ -376,12 +378,12 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->see_inv = has_see_inv(creature_ptr);
     creature_ptr->free_act = has_free_act(creature_ptr);
     creature_ptr->levitation = has_levitation(creature_ptr);
-    has_can_swim(creature_ptr);
+    creature_ptr->can_swim = has_can_swim(creature_ptr);
     creature_ptr->slow_digest = has_slow_digest(creature_ptr);
     creature_ptr->regenerate = has_regenerate(creature_ptr);
-    has_curses(creature_ptr);
+    update_curses(creature_ptr);
     creature_ptr->impact = has_impact(creature_ptr);
-    has_extra_blow(creature_ptr);
+    update_extra_blows(creature_ptr);
 
     creature_ptr->lite = has_lite(creature_ptr);
 
@@ -399,9 +401,9 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->stat_add[A_CHR] = calc_charisma_addition(creature_ptr);
 
     for (int i = 0; i < A_MAX; i++) {
-        calc_top_status(creature_ptr, i);
-        calc_use_status(creature_ptr, i);
-        calc_ind_status(creature_ptr, i);
+        update_top_status(creature_ptr, i);
+        update_use_status(creature_ptr, i);
+        update_ind_status(creature_ptr, i);
     }
 
     o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
@@ -415,6 +417,7 @@ void calc_bonuses(player_type *creature_ptr)
     for (int i = 0; i < 2; i++) {
         creature_ptr->icky_wield[i] = has_icky_wield_weapon(creature_ptr, i);
         creature_ptr->riding_wield[i] = has_riding_wield_weapon(creature_ptr, i);
+        creature_ptr->heavy_wield[i] = is_heavy_wield(creature_ptr, i);
         creature_ptr->num_blow[i] = calc_num_blow(creature_ptr, i);
         creature_ptr->to_dd[i] = calc_to_weapon_dice_num(creature_ptr, INVEN_MAIN_HAND + i);
         creature_ptr->to_ds[i] = calc_to_weapon_dice_side(creature_ptr, INVEN_MAIN_HAND + i);
@@ -431,6 +434,7 @@ void calc_bonuses(player_type *creature_ptr)
     creature_ptr->skill_thn = calc_to_hit_melee(creature_ptr);
     creature_ptr->skill_thb = calc_to_hit_shoot(creature_ptr);
     creature_ptr->skill_tht = calc_to_hit_throw(creature_ptr);
+    creature_ptr->riding_ryoute = is_riding_two_hands(creature_ptr);
     creature_ptr->to_d[0] = calc_to_damage(creature_ptr, INVEN_MAIN_HAND, TRUE);
     creature_ptr->to_d[1] = calc_to_damage(creature_ptr, INVEN_SUB_HAND, TRUE);
     creature_ptr->dis_to_d[0] = calc_to_damage(creature_ptr, INVEN_MAIN_HAND, FALSE);
@@ -485,7 +489,7 @@ void calc_bonuses(player_type *creature_ptr)
     check_no_flowed(creature_ptr);
 }
 
-static void calc_alignment(player_type *creature_ptr)
+static void update_alignment(player_type *creature_ptr)
 {
     creature_ptr->align = 0;
     floor_type *floor_ptr = creature_ptr->current_floor_ptr;
@@ -570,13 +574,13 @@ static void calc_alignment(player_type *creature_ptr)
 }
 
 /*!
- * @brief プレイヤーの最大HPを計算する /
- * Calculate the players (maximal) hit points
+ * @brief プレイヤーの最大HPを更新する /
+ * Update the players maximal hit points
  * Adjust current hitpoints if necessary
  * @return なし
  * @details
  */
-static void calc_hitpoints(player_type *creature_ptr)
+static void update_max_hitpoints(player_type *creature_ptr)
 {
     int bonus = ((int)(adj_con_mhp[creature_ptr->stat_ind[A_CON]]) - 128) * creature_ptr->lev / 4;
     int mhp = creature_ptr->player_hp[creature_ptr->lev - 1];
@@ -644,7 +648,7 @@ static void calc_hitpoints(player_type *creature_ptr)
  * Note that this function induces various "status" messages,
  * which must be bypasses until the character is created.
  */
-static void calc_spells(player_type *creature_ptr)
+static void update_num_of_spells(player_type *creature_ptr)
 {
     if (!mp_ptr->spell_book)
         return;
@@ -884,14 +888,14 @@ static void calc_spells(player_type *creature_ptr)
 }
 
 /*!
- * @brief プレイヤーの最大MPを計算する /
- * Calculate maximum mana.  You do not need to know any spells.
+ * @brief プレイヤーの最大MPを更新する /
+ * Update maximum mana.  You do not need to know any spells.
  * Note that mana is lowered by heavy (or inappropriate) armor.
  * @return なし
  * @details
  * This function induces status messages.
  */
-static void calc_mana(player_type *creature_ptr)
+static void update_max_mana(player_type *creature_ptr)
 {
     if (!mp_ptr->spell_book && mp_ptr->spell_first == SPELL_FIRST_NO_SPELL)
         return;
@@ -1655,6 +1659,13 @@ static bool is_martial_arts_mode(player_type *creature_ptr)
         && (test_bit(empty_hands(creature_ptr, TRUE), EMPTY_HAND_MAIN)) && !can_attack_with_sub_hand(creature_ptr);
 }
 
+static bool is_heavy_wield(player_type *creature_ptr, int i)
+{
+    const object_type* o_ptr = &creature_ptr->inventory_list[INVEN_MAIN_HAND + i];
+
+    return has_melee_weapon(creature_ptr, INVEN_MAIN_HAND + i) && (calc_weapon_weight_limit(creature_ptr) < o_ptr->weight / 10);
+}
+
 static s16b calc_num_blow(player_type *creature_ptr, int i)
 {
     object_type *o_ptr;
@@ -1663,12 +1674,7 @@ static s16b calc_num_blow(player_type *creature_ptr, int i)
 
     o_ptr = &creature_ptr->inventory_list[INVEN_MAIN_HAND + i];
     object_flags(creature_ptr, o_ptr, flgs);
-    creature_ptr->heavy_wield[i] = FALSE;
     if (has_melee_weapon(creature_ptr, INVEN_MAIN_HAND + i)) {
-        if (calc_weapon_weight_limit(creature_ptr) < o_ptr->weight / 10) {
-            creature_ptr->heavy_wield[i] = TRUE;
-        }
-
         if (o_ptr->k_idx && !creature_ptr->heavy_wield[i]) {
             int str_index, dex_index;
             int num = 0, wgt = 0, mul = 0, div = 0;
@@ -2712,7 +2718,7 @@ s16b calc_double_weapon_penalty(player_type *creature_ptr, INVENTORY_IDX slot)
     return (s16b)penalty;
 }
 
-static void calc_ind_status(player_type *creature_ptr, int status)
+static void update_ind_status(player_type *creature_ptr, int status)
 {
     int ind;
     if (creature_ptr->stat_use[status] <= 18)
@@ -2745,7 +2751,7 @@ static void calc_ind_status(player_type *creature_ptr, int status)
     set_bit(creature_ptr->window_flags, PW_PLAYER);
 }
 
-static void calc_use_status(player_type *creature_ptr, int status)
+static void update_use_status(player_type *creature_ptr, int status)
 {
     int use = modify_stat_value(creature_ptr->stat_cur[status], creature_ptr->stat_add[status]);
 
@@ -2763,7 +2769,7 @@ static void calc_use_status(player_type *creature_ptr, int status)
     }
 }
 
-static void calc_top_status(player_type *creature_ptr, int status)
+static void update_top_status(player_type *creature_ptr, int status)
 {
     int top = modify_stat_value(creature_ptr->stat_max[status], creature_ptr->stat_add[status]);
 
@@ -2774,18 +2780,14 @@ static void calc_top_status(player_type *creature_ptr, int status)
     }
 }
 
-static s16b calc_riding_bow_penalty(player_type *creature_ptr)
+static bool is_riding_two_hands(player_type *creature_ptr)
 {
-    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
-    if (!creature_ptr->riding)
-        return 0;
-
-    s16b penalty = 0;
-
-    creature_ptr->riding_ryoute = FALSE;
+    if (!creature_ptr->riding) {
+        return FALSE;
+    }
 
     if (has_two_handed_weapons(creature_ptr) || (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_NONE))
-        creature_ptr->riding_ryoute = TRUE;
+        return TRUE;
     else if (test_bit(creature_ptr->pet_extra_flags, PF_TWO_HANDS)) {
         switch (creature_ptr->pclass) {
         case CLASS_MONK:
@@ -2793,10 +2795,20 @@ static s16b calc_riding_bow_penalty(player_type *creature_ptr)
         case CLASS_BERSERKER:
             if ((empty_hands(creature_ptr, FALSE) != EMPTY_HAND_NONE) && !has_melee_weapon(creature_ptr, INVEN_MAIN_HAND)
                 && !has_melee_weapon(creature_ptr, INVEN_SUB_HAND))
-                creature_ptr->riding_ryoute = TRUE;
-            break;
+                return TRUE;
         }
     }
+
+    return FALSE;
+}
+
+static s16b calc_riding_bow_penalty(player_type *creature_ptr)
+{
+    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+    if (!creature_ptr->riding)
+        return 0;
+
+    s16b penalty = 0;
 
     if ((creature_ptr->pclass == CLASS_BEASTMASTER) || (creature_ptr->pclass == CLASS_CAVALRY)) {
         if (creature_ptr->tval_ammo != TV_ARROW)
@@ -3555,28 +3567,28 @@ void update_creature(player_type *creature_ptr)
 
     if (test_bit(creature_ptr->update, (PU_BONUS))) {
         reset_bit(creature_ptr->update, PU_BONUS);
-        calc_alignment(creature_ptr);
-        calc_bonuses(creature_ptr);
+        update_alignment(creature_ptr);
+        update_bonuses(creature_ptr);
     }
 
     if (test_bit(creature_ptr->update, (PU_TORCH))) {
         reset_bit(creature_ptr->update, PU_TORCH);
-        calc_lite_radius(creature_ptr);
+        update_lite_radius(creature_ptr);
     }
 
     if (test_bit(creature_ptr->update, (PU_HP))) {
         reset_bit(creature_ptr->update, PU_HP);
-        calc_hitpoints(creature_ptr);
+        update_max_hitpoints(creature_ptr);
     }
 
     if (test_bit(creature_ptr->update, (PU_MANA))) {
         reset_bit(creature_ptr->update, PU_MANA);
-        calc_mana(creature_ptr);
+        update_max_mana(creature_ptr);
     }
 
     if (test_bit(creature_ptr->update, (PU_SPELLS))) {
         reset_bit(creature_ptr->update, PU_SPELLS);
-        calc_spells(creature_ptr);
+        update_num_of_spells(creature_ptr);
     }
 
     if (!current_world_ptr->character_generated)
