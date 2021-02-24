@@ -22748,8 +22748,8 @@ B:BITE:HURT:6d3
 F:MALE | WILD_SWAMP | WILD_WASTE
 F:OPEN_DOOR | BASH_DOOR | DROP_CORPSE | DROP_SKELETON
 F:ANIMAL | EVIL | DROP_60 | FRIENDS
-D:$A warrior of skaven mess around with the power of chaos
-D:$ and slaughter their prey from one end.
+D:$Skaven warriors carelessly wield the power of chaos and slaughter any prey
+D:$ they see.
 D:スケイヴン族の戦士は混沌の力をいたずらに振り回し、
 D:目についた獲物を片っ端から屠っていく。
 
