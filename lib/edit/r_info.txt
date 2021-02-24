@@ -24797,9 +24797,9 @@ S:S_KIN
 R:354:4d7
 R:884:4d7
 R:1250:4d7
-D:$A massive legendary chimera.  She has powerful lion, goat, snake heads.
-D:$ This chaotic female monster is the ancestor of chimera.
-D:$ She's wants to give birth to more powerful offspring by eating you.
+D:$She is a massive legendary chimera with powerful lion, goat and snake heads.
+D:$ This chaotic female monster is the ancestor of the other chimera.
+D:$ She wants to give birth to more powerful offspring by eating you.
 D:巨大な伝説的キメラだ。彼女は力に満ちあふれた牡獅子、山羊、蛇の首を持っている。
 D:このキメラの祖である混沌の女怪はあなたを食べることで
 D:より強力な仔を産もうとしている。
