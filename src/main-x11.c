@@ -1043,6 +1043,26 @@ struct x11_selection_type {
 
 static x11_selection_type s_ptr[1];
 
+// EUC-JP -> UTF-8 変換。
+// utf8_buf には十分なサイズがあると仮定している。
+// 出力文字列は0終端される。
+static void euc_to_utf8(const char *const euc, char *const utf8_buf, const size_t utf8_buf_len)
+{
+    static iconv_t cd = NULL;
+    if (!cd)
+        cd = iconv_open("UTF-8", "EUC-JP");
+
+    size_t inlen = strlen(euc);
+    size_t outlen = utf8_buf_len;
+    const char *in = euc;
+    char *out = utf8_buf;
+    // iconv は入力バッファを書き換えないのでキャストで const を外してよい
+    iconv(cd, (char **)&in, &inlen, &out, &outlen);
+
+    const size_t n = utf8_buf_len - outlen;
+    utf8_buf[n] = '\0';
+}
+
 /*
  * Convert to EUC-JP
  */
@@ -1329,7 +1349,7 @@ static void copy_x11_end(const Time time)
     }
 }
 
-static Atom xa_targets, xa_timestamp, xa_text, xa_compound_text;
+static Atom xa_targets, xa_timestamp, xa_text, xa_compound_text, xa_utf8;
 
 /*
  * Set the required variable atoms at start-up to avoid errors later.
@@ -1340,6 +1360,7 @@ static void set_atoms(void)
     xa_timestamp = XInternAtom(DPY, "TIMESTAMP", False);
     xa_text = XInternAtom(DPY, "TEXT", False);
     xa_compound_text = XInternAtom(DPY, "COMPOUND_TEXT", False);
+    xa_utf8 = XInternAtom(DPY, "UTF8_STRING", False);
 }
 
 static Atom request_target = 0;
@@ -1438,24 +1459,18 @@ static void paste_x11_accept(const XSelectionEvent *ptr)
 static bool paste_x11_send_text(XSelectionRequestEvent *rq)
 {
     char buf[1024];
-    char *list[1000];
     co_ord max, min;
     TERM_LEN x, y;
-    int l, n;
+    int l;
     TERM_COLOR a;
     char c;
-
-    if (rq->time < s_ptr->time)
-        return FALSE;
 
     sort_co_ord(&min, &max, &s_ptr->init, &s_ptr->cur);
     if (XGetSelectionOwner(DPY, XA_PRIMARY) != WIN) {
         return FALSE;
     }
 
-    XDeleteProperty(DPY, rq->requestor, rq->property);
-
-    for (n = 0, y = 0; y < Term->hgt; y++) {
+    for (y = 0; y < Term->hgt; y++) {
 #ifdef JP
         int kanji = 0;
 #endif
@@ -1499,40 +1514,22 @@ static bool paste_x11_send_text(XSelectionRequestEvent *rq)
             l++;
         }
 
-        while (buf[l - 1] == ' ')
+        // 末尾の空白を削る。
+        while (l >= 1 && buf[l - 1] == ' ')
             l--;
 
+        // 複数行の場合、各行末に改行を付加。
         if (min.y != max.y) {
             buf[l] = '\n';
             l++;
         }
 
         buf[l] = '\0';
-        list[n++] = (char *)string_make(buf);
-    }
 
-    list[n] = NULL;
-    if (rq->target == XA_STRING) {
-        for (n = 0; list[n]; n++) {
-            XChangeProperty(DPY, rq->requestor, rq->property, rq->target, 8, PropModeAppend, (unsigned char *)list[n], strlen(list[n]));
-        }
-    } else if (rq->target == xa_text || rq->target == xa_compound_text) {
-        XTextProperty text_prop;
-        XICCEncodingStyle style;
+        char utf8_buf[2048];
+        euc_to_utf8(buf, utf8_buf, sizeof(utf8_buf));
 
-        if (rq->target == xa_text)
-            style = XStdICCTextStyle;
-        else
-            style = XCompoundTextStyle;
-
-        if (Success == XmbTextListToTextProperty(DPY, list, n, style, &text_prop)) {
-            XChangeProperty(DPY, rq->requestor, rq->property, text_prop.encoding, text_prop.format, PropModeAppend, text_prop.value, text_prop.nitems);
-            XFree(text_prop.value);
-        }
-    }
-
-    for (n = 0; list[n]; n++) {
-        string_free(list[n]);
+        XChangeProperty(DPY, rq->requestor, rq->property, xa_utf8, 8, PropModeAppend, (unsigned char *)utf8_buf, (int)strlen(utf8_buf));
     }
 
     return TRUE;
@@ -1559,19 +1556,13 @@ static void paste_x11_send(XSelectionRequestEvent *rq)
      * Note that this currently rejects MULTIPLE targets.
      */
 
-    if (rq->target == XA_STRING || rq->target == xa_text || rq->target == xa_compound_text) {
+    if (rq->target == xa_utf8) {
         if (!paste_x11_send_text(rq))
             ptr->property = None;
     } else if (rq->target == xa_targets) {
-        Atom target_list[4];
-        target_list[0] = XA_STRING;
-        target_list[1] = xa_text;
-        target_list[2] = xa_compound_text;
-        target_list[3] = xa_targets;
-        XChangeProperty(DPY, rq->requestor, rq->property, rq->target, (8 * sizeof(target_list[0])), PropModeReplace, (unsigned char *)target_list,
-            (sizeof(target_list) / sizeof(target_list[0])));
-    } else if (rq->target == xa_timestamp) {
-        XChangeProperty(DPY, rq->requestor, rq->property, rq->target, (8 * sizeof(Time)), PropModeReplace, (unsigned char *)s_ptr->time, 1);
+        Atom target_list[] = { xa_targets, xa_utf8 };
+        XChangeProperty(
+            DPY, rq->requestor, rq->property, XA_ATOM, 32, PropModeReplace, (unsigned char *)target_list, (sizeof(target_list) / sizeof(target_list[0])));
     } else {
         ptr->property = None;
     }
