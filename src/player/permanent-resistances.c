@@ -562,3 +562,20 @@ void player_flags(player_type *creature_ptr, BIT_FLAGS *flags)
     add_personality_flags(creature_ptr, flags);
     add_kata_flags(creature_ptr, flags);
 }
+
+void riding_flags(player_type *creature_ptr, BIT_FLAGS *flags, BIT_FLAGS *negative_flags)
+{
+    for (int i = 0; i < TR_FLAG_SIZE; i++) {
+        flags[i] = 0L;
+        negative_flags[i] = 0L;
+    }
+
+    if (!creature_ptr->riding)
+        return;
+
+    if (test_bit(has_levitation(creature_ptr), 0x01U << FLAG_CAUSE_RIDING)) {
+        add_flag(flags, TR_LEVITATION);
+    } else {
+        add_flag(negative_flags, TR_LEVITATION);
+    }
+}

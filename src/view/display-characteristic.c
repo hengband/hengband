@@ -24,6 +24,8 @@ typedef struct {
     BIT_FLAGS tim_player_imm[TR_FLAG_SIZE];
     BIT_FLAGS player_vuln[TR_FLAG_SIZE];
     BIT_FLAGS known_obj_imm[TR_FLAG_SIZE];
+    BIT_FLAGS riding_flags[TR_FLAG_SIZE];
+    BIT_FLAGS riding_negative_flags[TR_FLAG_SIZE];
 } all_player_flags;
 
 /*!
@@ -97,10 +99,12 @@ static bool decide_light_equipment_color(TERM_LEN row, TERM_LEN *col, int flag1,
  * @param vuln プレーヤーの弱点
  * @return なし
  */
-static void decide_vulnerability_color(u16b mode, TERM_LEN row, TERM_LEN *col, int flag1, BIT_FLAGS *flags, byte *header_color, bool vuln)
+static void decide_vulnerability_color(u16b mode, TERM_LEN row, TERM_LEN *col, int flag1, BIT_FLAGS *flags, byte *header_color, bool vuln, bool riding)
 {
+    byte color = (riding ? TERM_L_GREEN : TERM_WHITE);
+    color = (vuln ? TERM_RED : color);
     if (has_flag(flags, flag1)) {
-        c_put_str((byte)(vuln ? TERM_L_RED : TERM_WHITE), (mode & DP_IMM) ? "*" : "+", row, *col);
+        c_put_str(color, (mode & DP_IMM) ? "*" : "+", row, *col);
         *header_color = TERM_WHITE;
     }
 
@@ -120,7 +124,7 @@ static void decide_vulnerability_color(u16b mode, TERM_LEN row, TERM_LEN *col, i
  * @details
  * max_i changes only when weapon flags need only two column
  */
-static void decide_colors(player_type *creature_ptr, u16b mode, TERM_LEN row, TERM_LEN *col, int flag1, byte *header_color, bool vuln)
+static void decide_colors(player_type *creature_ptr, u16b mode, TERM_LEN row, TERM_LEN *col, int flag1, byte *header_color, bool vuln, bool riding)
 {
     int max_i = (mode & DP_WP) ? INVEN_SUB_HAND + 1 : INVEN_TOTAL;
     for (inventory_slot_type i = INVEN_MAIN_HAND; i < max_i; i++) {
@@ -128,15 +132,19 @@ static void decide_colors(player_type *creature_ptr, u16b mode, TERM_LEN row, TE
         object_type *o_ptr;
         o_ptr = &creature_ptr->inventory_list[i];
         object_flags_known(creature_ptr, o_ptr, flags);
-        if (!(mode & DP_IMM))
-            c_put_str((byte)(vuln ? TERM_RED : TERM_SLATE), ".", row, *col);
+        if (!(mode & DP_IMM)) {
+            byte color = (riding ? TERM_L_GREEN : TERM_SLATE);
+            color = (vuln ? TERM_RED : color);
+
+            c_put_str(color, ".", row, *col);
+        }
 
         if (decide_cursed_equipment_color(mode, row, col, flags, header_color, o_ptr))
             continue;
         if (decide_light_equipment_color(row, col, flag1, flags, header_color))
             continue;
 
-        decide_vulnerability_color(mode, row, col, flag1, flags, header_color, vuln);
+        decide_vulnerability_color(mode, row, col, flag1, flags, header_color, vuln, riding);
     }
 }
 
@@ -152,12 +160,18 @@ static void decide_colors(player_type *creature_ptr, u16b mode, TERM_LEN row, TE
  * @param f プレイヤーの特性情報構造体
  * @return なし
  */
-static void display_one_characteristic(TERM_LEN row, TERM_LEN col, concptr header, byte header_color, int header_col, int flag1, bool vuln, all_player_flags *f)
+static void display_one_characteristic(
+    TERM_LEN row, TERM_LEN col, concptr header, byte header_color, int header_col, int flag1, bool vuln, bool riding, all_player_flags *f)
 {
-    c_put_str((byte)(vuln ? TERM_RED : TERM_SLATE), ".", row, col);
+    byte color = (riding ? TERM_L_GREEN : TERM_SLATE);
+    color = (vuln ? TERM_RED : color);
+    c_put_str(color, ".", row, col);
+
     if (has_flag(f->player_flags, flag1)) {
-        c_put_str((byte)(vuln ? TERM_L_RED : TERM_WHITE), "+", row, col);
-        header_color = TERM_WHITE;
+        color = (riding ? TERM_L_GREEN : TERM_WHITE);
+        color = (vuln ? TERM_RED : color);
+        c_put_str(color, "+", row, col);
+        header_color = riding ? color : TERM_WHITE;
     }
 
     if (has_flag(f->tim_player_flags, flag1)) {
@@ -175,8 +189,17 @@ static void display_one_characteristic(TERM_LEN row, TERM_LEN col, concptr heade
         header_color = TERM_WHITE;
     }
 
-    if (vuln)
+    if (riding && !vuln) {
+        c_put_str(TERM_L_GREEN, "+", row, col + 1);
+        header_color = TERM_L_GREEN;
+    }
+    if (riding && vuln) {
+        c_put_str(TERM_RED, "-", row, col + 1);
+        header_color = TERM_RED;
+    }
+    if (!riding && vuln) {
         c_put_str(TERM_RED, "v", row, col + 1);
+    }
 
     c_put_str(header_color, header, row, header_col);
 }
@@ -197,11 +220,20 @@ static void process_one_characteristic(player_type *creature_ptr, TERM_LEN row, 
     byte header_color = TERM_L_DARK;
     int header_col = col;
     bool vuln = FALSE;
-    if (has_flag(f->player_vuln, flag1) && !(has_flag(f->known_obj_imm, flag1) || has_flag(f->player_imm, flag1) || has_flag(f->tim_player_imm, flag1)))
+    bool riding = FALSE;
+    if (has_flag(f->player_vuln, flag1) && !(has_flag(f->known_obj_imm, flag1) || has_flag(f->player_imm, flag1) || has_flag(f->tim_player_imm, flag1))) {
         vuln = TRUE;
+    }
+    if (has_flag(f->riding_flags, flag1)) {
+        riding = TRUE;
+    }
+    if (has_flag(f->riding_negative_flags, flag1)) {
+        riding = TRUE;
+        vuln = TRUE;
+    }
 
     col += strlen(header) + 1;
-    decide_colors(creature_ptr, mode, row, &col, flag1, &header_color, vuln);
+    decide_colors(creature_ptr, mode, row, &col, flag1, &header_color, vuln, riding);
     if (mode & DP_IMM) {
         if (header_color != TERM_L_DARK) {
             c_put_str(header_color, header, row, header_col);
@@ -210,7 +242,7 @@ static void process_one_characteristic(player_type *creature_ptr, TERM_LEN row, 
         return;
     }
 
-    display_one_characteristic(row, col, header, header_color, header_col, flag1, vuln, f);
+    display_one_characteristic(row, col, header, header_color, header_col, flag1, vuln, riding, f);
 }
 
 /*!
@@ -314,6 +346,7 @@ void display_player_flag_info_1(player_type *creature_ptr, void (*display_player
     tim_player_immunity(creature_ptr, f.tim_player_imm);
     known_obj_immunity(creature_ptr, f.known_obj_imm);
     player_vulnerability_flags(creature_ptr, f.player_vuln);
+    riding_flags(creature_ptr, f.riding_flags, f.riding_negative_flags);
 
     display_basic_resistance_info(creature_ptr, display_player_equippy, &f);
     display_advanced_resistance_info(creature_ptr, display_player_equippy, &f);

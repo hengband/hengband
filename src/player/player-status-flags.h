@@ -19,7 +19,8 @@ enum flag_cause {
     FLAG_CAUSE_MAGIC_TIME_EFFECT = 15, /*!< 魔法による時限効果 */
     FLAG_CAUSE_MUTATION = 16, /*!< 変異による効果 */
     FLAG_CAUSE_BATTLE_FORM = 17, /*!< 構えによる効果 */
-    FLAG_CAUSE_MAX = 18
+    FLAG_CAUSE_RIDING = 18, /*!< 乗馬による効果 */
+    FLAG_CAUSE_MAX = 19
 };
 
 typedef enum melee_type {
