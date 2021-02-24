@@ -709,17 +709,17 @@ BIT_FLAGS has_levitation(player_type *creature_ptr)
         result |= 0x01U << FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
-    if (creature_ptr->riding) {
-        monster_type *riding_m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
-        monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
-        result = (riding_r_ptr->flags7 & RF7_CAN_FLY) ? result : 0;
-    }
-
     if (creature_ptr->tim_levitation) {
         result |= 0x01U << FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
     result |= check_equipment_flags(creature_ptr, TR_LEVITATION);
+
+    if (creature_ptr->riding) {
+        monster_type *riding_m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
+        monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
+        result = (riding_r_ptr->flags7 & RF7_CAN_FLY) ? (0x01U << FLAG_CAUSE_RIDING) : 0;
+    }
     return result;
 }
 
