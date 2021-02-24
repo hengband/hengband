@@ -35,7 +35,7 @@
  * @param give_resistance 追加耐性の有無
  * @return そもそも対象のオブジェクトが恐怖の仮面ではないか、「その他の職業」であればTRUE
  */
-static bool invest_terror_mask(player_type *player_ptr, object_type *o_ptr, bool *give_power, bool *give_resistance)
+static bool invest_terror_mask(const player_type *player_ptr, object_type *o_ptr, bool *give_power, bool *give_resistance)
 {
     if (o_ptr->name1 != ART_TERROR)
         return FALSE;
@@ -63,7 +63,7 @@ static bool invest_terror_mask(player_type *player_ptr, object_type *o_ptr, bool
  * @param o_ptr 対象のオブジェクト構造体への参照ポインタ
  * @return なし
  */
-static void milim_swimsuit(player_type *player_ptr, object_type *o_ptr)
+static void milim_swimsuit(const player_type *player_ptr, object_type *o_ptr)
 {
     if ((o_ptr->name1 != ART_MILIM) || (player_ptr->pseikaku != PERSONALITY_SEXY))
         return;
@@ -89,7 +89,7 @@ static void milim_swimsuit(player_type *player_ptr, object_type *o_ptr)
  * @param a_ptr 生成する固定アーティファクト構造体ポインタ
  * @return なし
  */
-static void random_artifact_resistance(player_type *player_ptr, object_type *o_ptr, artifact_type *a_ptr)
+static void random_artifact_resistance(const player_type *player_ptr, object_type *o_ptr, artifact_type *a_ptr)
 {
     bool give_power = FALSE;
     bool give_resistance = FALSE;
@@ -134,7 +134,7 @@ static void random_artifact_resistance(player_type *player_ptr, object_type *o_p
         one_high_resistance(o_ptr);
 }
 
-static void invest_curse_to_fixed_artifact(player_type *player_ptr, artifact_type *a_ptr, object_type *q_ptr)
+static void invest_curse_to_fixed_artifact(const player_type *player_ptr, artifact_type *a_ptr, object_type *q_ptr)
 {
     if (a_ptr->gen_flags & TRG_CURSED)
         q_ptr->curse_flags |= TRC_CURSED;
@@ -206,7 +206,7 @@ bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, P
  * This routine should only be called by "apply_magic()"\n
  * Note -- see "make_artifact_special()" and "apply_magic()"\n
  */
-bool make_artifact(player_type *player_ptr, object_type *o_ptr)
+bool make_artifact(const player_type *player_ptr, object_type *o_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->dun_level == 0)

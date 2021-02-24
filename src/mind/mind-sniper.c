@@ -163,7 +163,7 @@ void reset_concentration(player_type *creature_ptr, bool msg)
  * @param tdam 算出中のダメージ
  * @return 集中度修正を加えたダメージ
  */
-int boost_concentration_damage(player_type *creature_ptr, int tdam)
+int boost_concentration_damage(const player_type *creature_ptr, int tdam)
 {
 	tdam *= (10 + creature_ptr->concent);
 	tdam /= 10;
@@ -175,7 +175,7 @@ int boost_concentration_damage(player_type *creature_ptr, int tdam)
  * @brief スナイパーの技能リストを表示する
  * @return なし
  */
-void display_snipe_list(player_type *sniper_ptr)
+void display_snipe_list(const player_type *sniper_ptr)
 {
 	int i;
 	TERM_LEN y = 1;
@@ -407,7 +407,7 @@ static int get_snipe_power(player_type *sniper_ptr, COMMAND_CODE *sn, bool only_
  * @param m_ptr 目標となるモンスターの構造体参照ポインタ
  * @return スレイの倍率(/10倍)
  */
-MULTIPLY calc_snipe_damage_with_slay(player_type *sniper_ptr, MULTIPLY mult, monster_type *m_ptr, SPELL_IDX snipe_type)
+MULTIPLY calc_snipe_damage_with_slay(const player_type *sniper_ptr, MULTIPLY mult, monster_type *m_ptr, SPELL_IDX snipe_type)
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	bool seen = is_seen(sniper_ptr, m_ptr);

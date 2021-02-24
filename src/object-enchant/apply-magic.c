@@ -61,7 +61,7 @@ static int randint1_signed(const int n)
  * @details
  * エゴ＆アーティファクトの生成、呪い、pval強化
  */
-void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
+void apply_magic(const player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
 {
     if (owner_ptr->pseikaku == PERSONALITY_MUNCHKIN)
         lev += randint0(owner_ptr->lev / 2 + 10);

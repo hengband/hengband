@@ -80,7 +80,7 @@ bool artifact_scroll(player_type *caster_ptr)
             }
         }
 
-        okay = become_random_artifact(caster_ptr, o_ptr, TRUE);
+        okay = create_random_artifact(caster_ptr, o_ptr);
     }
 
     if (!okay) {

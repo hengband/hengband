@@ -49,7 +49,7 @@ static bool is_friendly_idx(player_type *player_ptr, MONSTER_IDX m_idx) { return
  * @return 対象にできるならtrueを返す
  * @todo グローバル変数対策の上 monster_hook.cへ移す。
  */
-static bool monster_hook_tanuki(player_type *player_ptr, MONRACE_IDX r_idx)
+static bool monster_hook_tanuki(const player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
     bool unselectable = (r_ptr->flags1 & RF1_UNIQUE) != 0;

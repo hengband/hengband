@@ -35,7 +35,7 @@
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return concptr 発動名称を返す文字列ポインタ
  */
-static concptr item_activation_dragon_breath(player_type *owner_ptr, object_type *o_ptr)
+static concptr item_activation_dragon_breath(const player_type *owner_ptr, object_type *o_ptr)
 {
     static char desc[256];
     BIT_FLAGS flgs[TR_FLAG_SIZE]; /* for resistance flags */
@@ -63,7 +63,7 @@ static concptr item_activation_dragon_breath(player_type *owner_ptr, object_type
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return concptr 発動名称を返す文字列ポインタ
  */
-static concptr item_activation_aux(player_type *owner_ptr, object_type *o_ptr)
+static concptr item_activation_aux(const player_type *owner_ptr, object_type *o_ptr)
 {
     static char activation_detail[256];
     char timeout[32];
@@ -164,7 +164,7 @@ static concptr item_activation_aux(player_type *owner_ptr, object_type *o_ptr)
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return concptr 発動名称を返す文字列ポインタ
  */
-concptr activation_explanation(player_type *owner_ptr, object_type *o_ptr)
+concptr activation_explanation(const player_type *owner_ptr, object_type *o_ptr)
 {
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     object_flags(owner_ptr, o_ptr, flgs);
@@ -201,7 +201,7 @@ char index_to_label(int i) { return (i < INVEN_MAIN_HAND) ? (I2A(i)) : (I2A(i - 
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return 対応する装備部位ID
  */
-s16b wield_slot(player_type *owner_ptr, object_type *o_ptr)
+s16b wield_slot(const player_type *owner_ptr, object_type *o_ptr)
 {
     switch (o_ptr->tval) {
     case TV_DIGGING:
@@ -269,7 +269,7 @@ s16b wield_slot(player_type *owner_ptr, object_type *o_ptr)
  * @param book_sval ベースアイテムのsval
  * @return 使用可能な魔法書ならばTRUEを返す。
  */
-bool check_book_realm(player_type *owner_ptr, const tval_type book_tval, const OBJECT_SUBTYPE_VALUE book_sval)
+bool check_book_realm(const player_type *owner_ptr, const tval_type book_tval, const OBJECT_SUBTYPE_VALUE book_sval)
 {
     if (book_tval < TV_LIFE_BOOK)
         return FALSE;
@@ -283,7 +283,7 @@ bool check_book_realm(player_type *owner_ptr, const tval_type book_tval, const O
     return (get_realm1_book(owner_ptr) == book_tval || get_realm2_book(owner_ptr) == book_tval);
 }
 
-object_type *ref_item(player_type *owner_ptr, INVENTORY_IDX item)
+object_type *ref_item(const player_type *owner_ptr, INVENTORY_IDX item)
 {
     floor_type *floor_ptr = owner_ptr->current_floor_ptr;
     return item >= 0 ? &owner_ptr->inventory_list[item] : &(floor_ptr->o_list[0 - item]);

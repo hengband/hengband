@@ -30,7 +30,7 @@
  * Hack -- note special processing for crown/helm\n
  * Hack -- note special processing for robe of permanence\n
  */
-void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, int power)
+void apply_magic_armor(const player_type *owner_ptr, object_type *o_ptr, DEPTH level, int power)
 {
     ARMOUR_CLASS toac1 = (ARMOUR_CLASS)randint1(5) + m_bonus(5, level);
     ARMOUR_CLASS toac2 = (ARMOUR_CLASS)m_bonus(10, level);

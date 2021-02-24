@@ -4,4 +4,4 @@
 
 #define SCROBJ_FAKE_OBJECT 0x00000001
 #define SCROBJ_FORCE_DETAIL 0x00000002
-bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode);
+bool screen_object(const player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode);

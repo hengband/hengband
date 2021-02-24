@@ -99,51 +99,52 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-static bool is_martial_arts_mode(player_type *creature_ptr);
+static bool is_martial_arts_mode(const player_type *creature_ptr);
 
-static ACTION_SKILL_POWER calc_intra_vision(player_type *creature_ptr);
-static ACTION_SKILL_POWER calc_stealth(player_type *creature_ptr);
-static ACTION_SKILL_POWER calc_disarming(player_type *creature_ptr);
-static ACTION_SKILL_POWER calc_device_ability(player_type *creature_ptr);
-static ACTION_SKILL_POWER calc_saving_throw(player_type *creature_ptr);
-static ACTION_SKILL_POWER calc_search(player_type *creature_ptr);
-static ACTION_SKILL_POWER calc_search_freq(player_type *creature_ptr);
-static ACTION_SKILL_POWER calc_to_hit_melee(player_type *creature_ptr);
-static ACTION_SKILL_POWER calc_to_hit_shoot(player_type *creature_ptr);
-static ACTION_SKILL_POWER calc_to_hit_throw(player_type *creature_ptr);
-static ACTION_SKILL_POWER calc_skill_dig(player_type *creature_ptr);
-static bool is_heavy_wield(player_type *creature_ptr, int i);
-static s16b calc_num_blow(player_type *creature_ptr, int i);
-static s16b calc_strength_addition(player_type *creature_ptr);
-static s16b calc_intelligence_addition(player_type *creature_ptr);
-static s16b calc_wisdom_addition(player_type *creature_ptr);
-static s16b calc_dexterity_addition(player_type *creature_ptr);
-static s16b calc_constitution_addition(player_type *creature_ptr);
-static s16b calc_charisma_addition(player_type *creature_ptr);
-static s16b calc_to_magic_chance(player_type *creature_ptr);
-static ARMOUR_CLASS calc_base_ac(player_type *creature_ptr);
-static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_real_value);
-static s16b calc_speed(player_type *creature_ptr);
-static s16b calc_double_weapon_penalty(player_type *creature_ptr, INVENTORY_IDX slot);
+static ACTION_SKILL_POWER calc_intra_vision(const player_type *creature_ptr);
+static ACTION_SKILL_POWER calc_stealth(const player_type *creature_ptr);
+static ACTION_SKILL_POWER calc_disarming(const player_type *creature_ptr);
+static ACTION_SKILL_POWER calc_device_ability(const player_type *creature_ptr);
+static ACTION_SKILL_POWER calc_saving_throw(const player_type *creature_ptr);
+static ACTION_SKILL_POWER calc_search(const player_type *creature_ptr);
+static ACTION_SKILL_POWER calc_search_freq(const player_type *creature_ptr);
+static ACTION_SKILL_POWER calc_to_hit_melee(const player_type *creature_ptr);
+static ACTION_SKILL_POWER calc_to_hit_shoot(const player_type *creature_ptr);
+static ACTION_SKILL_POWER calc_to_hit_throw(const player_type *creature_ptr);
+static ACTION_SKILL_POWER calc_skill_dig(const player_type *creature_ptr);
+static bool is_heavy_wield(const player_type *creature_ptr, int i);
+static s16b calc_num_blow(const player_type *creature_ptr, int i);
+static s16b calc_strength_addition(const player_type *creature_ptr);
+static s16b calc_intelligence_addition(const player_type *creature_ptr);
+static s16b calc_wisdom_addition(const player_type *creature_ptr);
+static s16b calc_dexterity_addition(const player_type *creature_ptr);
+static s16b calc_constitution_addition(const player_type *creature_ptr);
+static s16b calc_charisma_addition(const player_type *creature_ptr);
+static s16b calc_to_magic_chance(const player_type *creature_ptr);
+static ARMOUR_CLASS calc_base_ac(const player_type *creature_ptr);
+static ARMOUR_CLASS calc_to_ac(const player_type *creature_ptr, bool is_real_value);
+static s16b calc_speed(const player_type *creature_ptr);
+static s16b calc_double_weapon_penalty(const player_type *creature_ptr, INVENTORY_IDX slot);
 static void update_use_status(player_type *creature_ptr, int status);
 static void update_top_status(player_type *creature_ptr, int status);
 static void update_ind_status(player_type *creature_ptr, int status);
-static bool is_riding_two_hands(player_type *creature_ptr);
-static s16b calc_riding_bow_penalty(player_type *creature_ptr);
+static s16b calc_riding_bow_penalty(const player_type *creature_ptr);
 static void put_equipment_warning(player_type *creature_ptr);
 
-static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool is_real_value);
-static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_real_value);
+static bool is_riding_two_hands(const player_type *creature_ptr);
 
-static s16b calc_to_hit_bow(player_type *creature_ptr, bool is_real_value);
+static s16b calc_to_damage(const player_type *creature_ptr, INVENTORY_IDX slot, bool is_real_value);
+static s16b calc_to_hit(const player_type *creature_ptr, INVENTORY_IDX slot, bool is_real_value);
 
-static s16b calc_to_damage_misc(player_type *creature_ptr);
-static s16b calc_to_hit_misc(player_type *creature_ptr);
+static s16b calc_to_hit_bow(const player_type *creature_ptr, bool is_real_value);
 
-static DICE_NUMBER calc_to_weapon_dice_num(player_type *creature_ptr, INVENTORY_IDX slot);
-static DICE_NUMBER calc_to_weapon_dice_side(player_type *creature_ptr, INVENTORY_IDX slot);
+static s16b calc_to_damage_misc(const player_type *creature_ptr);
+static s16b calc_to_hit_misc(const player_type *creature_ptr);
 
-static player_hand main_attack_hand(player_type *creature_ptr);
+static DICE_NUMBER calc_to_weapon_dice_num(const player_type *creature_ptr, INVENTORY_IDX slot);
+static DICE_NUMBER calc_to_weapon_dice_side(const player_type *creature_ptr, INVENTORY_IDX slot);
+
+static player_hand main_attack_hand(const player_type *creature_ptr);
 
 /*** Player information ***/
 
@@ -162,7 +163,7 @@ player_type *p_ptr = &p_body;
  * @param creature_ptr 算出するクリーチャーの参照ポインタ。
  * @return アライメントの表記を返す。
  */
-concptr your_alignment(player_type *creature_ptr)
+concptr your_alignment(const player_type *creature_ptr)
 {
     if (creature_ptr->align > 150)
         return _("大善", "Lawful");
@@ -273,7 +274,7 @@ static void delayed_visual_update(player_type *player_ptr)
  * @param o_ptr 判定する射撃武器のアイテム情報参照ポインタ
  * @return 重すぎるならばTRUE
  */
-static bool is_heavy_shoot(player_type *creature_ptr, object_type *o_ptr)
+static bool is_heavy_shoot(const player_type *creature_ptr, object_type *o_ptr)
 {
     int hold = adj_str_hold[creature_ptr->stat_ind[A_STR]];
     return (hold < o_ptr->weight / 10);
@@ -284,7 +285,7 @@ static bool is_heavy_shoot(player_type *creature_ptr, object_type *o_ptr)
  * @param creature_ptr 計算対象となるクリーチャーの参照ポインタ
  * @return 総重量
  */
-WEIGHT calc_inventory_weight(player_type *creature_ptr)
+WEIGHT calc_inventory_weight(const player_type *creature_ptr)
 {
     WEIGHT weight = 0;
 
@@ -1108,7 +1109,7 @@ static void update_max_mana(player_type *creature_ptr)
  * @param o_ptr 計算する射撃武器のアイテム情報参照ポインタ
  * @return 射撃倍率の値(100で1.00倍)
  */
-s16b calc_num_fire(player_type *creature_ptr, object_type *o_ptr)
+s16b calc_num_fire(const player_type *creature_ptr, object_type *o_ptr)
 {
     int extra_shots = 0;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
@@ -1175,7 +1176,7 @@ s16b calc_num_fire(player_type *creature_ptr, object_type *o_ptr)
  * * 魔法効果tim_infraによる加算(+3)
  * * 装備がTR_INFRAフラグ持ちなら加算(+pval*1)
  */
-static ACTION_SKILL_POWER calc_intra_vision(player_type *creature_ptr)
+static ACTION_SKILL_POWER calc_intra_vision(const player_type *creature_ptr)
 {
     ACTION_SKILL_POWER pow;
     const player_race *tmp_rp_ptr;
@@ -1228,7 +1229,7 @@ static ACTION_SKILL_POWER calc_intra_vision(player_type *creature_ptr)
  * * 隠密の歌で加算(+99)
  * * 最大30、最低0に補正
  */
-static ACTION_SKILL_POWER calc_stealth(player_type *creature_ptr)
+static ACTION_SKILL_POWER calc_stealth(const player_type *creature_ptr)
 {
     ACTION_SKILL_POWER pow;
     const player_race *tmp_rp_ptr;
@@ -1302,7 +1303,7 @@ static ACTION_SKILL_POWER calc_stealth(player_type *creature_ptr)
  * * 器用さに応じたadj_dex_disテーブルによる加算
  * * 知力に応じたadj_int_disテーブルによる加算
  */
-static ACTION_SKILL_POWER calc_disarming(player_type *creature_ptr)
+static ACTION_SKILL_POWER calc_disarming(const player_type *creature_ptr)
 {
     ACTION_SKILL_POWER pow;
     const player_race *tmp_rp_ptr;
@@ -1332,7 +1333,7 @@ static ACTION_SKILL_POWER calc_disarming(player_type *creature_ptr)
  * * 知力に応じたadj_int_devテーブルによる加算
  * * 狂戦士化による減算(-20)
  */
-static ACTION_SKILL_POWER calc_device_ability(player_type *creature_ptr)
+static ACTION_SKILL_POWER calc_device_ability(const player_type *creature_ptr)
 {
     ACTION_SKILL_POWER pow;
     const player_race *tmp_rp_ptr;
@@ -1381,7 +1382,7 @@ static ACTION_SKILL_POWER calc_device_ability(player_type *creature_ptr)
  * * 生命の「究極の耐性」や regist_magic,magicdef持ちなら大なり上書き(95+レベル未満ならその値に上書き)
  * * 呪いのdown_savingがかかっているなら半減
  */
-static ACTION_SKILL_POWER calc_saving_throw(player_type *creature_ptr)
+static ACTION_SKILL_POWER calc_saving_throw(const player_type *creature_ptr)
 {
     ACTION_SKILL_POWER pow;
     const player_race *tmp_rp_ptr;
@@ -1430,7 +1431,7 @@ static ACTION_SKILL_POWER calc_saving_throw(player_type *creature_ptr)
  * * 狂戦士化による減算(-15)
  * * 変異(MUT3_XTRA_EYES)による加算(+15)
  */
-static ACTION_SKILL_POWER calc_search(player_type *creature_ptr)
+static ACTION_SKILL_POWER calc_search(const player_type *creature_ptr)
 {
     ACTION_SKILL_POWER pow;
     const player_race *tmp_rp_ptr;
@@ -1478,7 +1479,7 @@ static ACTION_SKILL_POWER calc_search(player_type *creature_ptr)
  * * 狂戦士化による減算(-15)
  * * 変異(MUT3_XTRA_EYES)による加算(+15)
  */
-static ACTION_SKILL_POWER calc_search_freq(player_type *creature_ptr)
+static ACTION_SKILL_POWER calc_search_freq(const player_type *creature_ptr)
 {
     ACTION_SKILL_POWER pow;
     const player_race *tmp_rp_ptr;
@@ -1522,7 +1523,7 @@ static ACTION_SKILL_POWER calc_search_freq(player_type *creature_ptr)
  * @details
  * * 種族/職業/性格による加算とレベルによる追加加算
  */
-static ACTION_SKILL_POWER calc_to_hit_melee(player_type *creature_ptr)
+static ACTION_SKILL_POWER calc_to_hit_melee(const player_type *creature_ptr)
 {
     ACTION_SKILL_POWER pow;
     const player_race *tmp_rp_ptr;
@@ -1546,7 +1547,7 @@ static ACTION_SKILL_POWER calc_to_hit_melee(player_type *creature_ptr)
  * @details
  * * 種族/職業/性格による加算とレベルによる追加加算
  */
-static ACTION_SKILL_POWER calc_to_hit_shoot(player_type *creature_ptr)
+static ACTION_SKILL_POWER calc_to_hit_shoot(const player_type *creature_ptr)
 {
     ACTION_SKILL_POWER pow;
     const player_race *tmp_rp_ptr;
@@ -1571,7 +1572,7 @@ static ACTION_SKILL_POWER calc_to_hit_shoot(player_type *creature_ptr)
  * * 種族/職業/性格による加算とレベルによる追加加算
  * * 狂戦士による減算(-20)
  */
-static ACTION_SKILL_POWER calc_to_hit_throw(player_type *creature_ptr)
+static ACTION_SKILL_POWER calc_to_hit_throw(const player_type *creature_ptr)
 {
     ACTION_SKILL_POWER pow;
     const player_race *tmp_rp_ptr;
@@ -1606,7 +1607,7 @@ static ACTION_SKILL_POWER calc_to_hit_throw(player_type *creature_ptr)
  * * 武器重量によるプラス修正
  * * 最終算出値に1を保証
  */
-static ACTION_SKILL_POWER calc_skill_dig(player_type *creature_ptr)
+static ACTION_SKILL_POWER calc_skill_dig(const player_type *creature_ptr)
 {
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
@@ -1653,20 +1654,20 @@ static ACTION_SKILL_POWER calc_skill_dig(player_type *creature_ptr)
     return pow;
 }
 
-static bool is_martial_arts_mode(player_type *creature_ptr)
+static bool is_martial_arts_mode(const player_type *creature_ptr)
 {
     return ((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER) || (creature_ptr->pclass == CLASS_BERSERKER))
         && (test_bit(empty_hands(creature_ptr, TRUE), EMPTY_HAND_MAIN)) && !can_attack_with_sub_hand(creature_ptr);
 }
 
-static bool is_heavy_wield(player_type *creature_ptr, int i)
+static bool is_heavy_wield(const player_type *creature_ptr, int i)
 {
     const object_type* o_ptr = &creature_ptr->inventory_list[INVEN_MAIN_HAND + i];
 
     return has_melee_weapon(creature_ptr, INVEN_MAIN_HAND + i) && (calc_weapon_weight_limit(creature_ptr) < o_ptr->weight / 10);
 }
 
-static s16b calc_num_blow(player_type *creature_ptr, int i)
+static s16b calc_num_blow(const player_type *creature_ptr, int i)
 {
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
@@ -1807,7 +1808,7 @@ static s16b calc_num_blow(player_type *creature_ptr, int i)
  * * 変異MUT3_PUNYで減算(-4)
  * * ネオ・つよしスペシャル中で加算(+4)
  */
-static s16b calc_strength_addition(player_type *creature_ptr)
+static s16b calc_strength_addition(const player_type *creature_ptr)
 {
     s16b pow;
     const player_race *tmp_rp_ptr;
@@ -1890,7 +1891,7 @@ static s16b calc_strength_addition(player_type *creature_ptr)
  * * 変異MUT3_HYPER_INTで加算(+4)
  * * 変異MUT3_MORONICで減算(-4)
  */
-s16b calc_intelligence_addition(player_type *creature_ptr)
+s16b calc_intelligence_addition(const player_type *creature_ptr)
 {
     s16b pow;
     const player_race *tmp_rp_ptr;
@@ -1952,7 +1953,7 @@ s16b calc_intelligence_addition(player_type *creature_ptr)
  * * 変異MUT3_HYPER_INTで加算(+4)
  * * 変異MUT3_MORONICで減算(-4)
  */
-static s16b calc_wisdom_addition(player_type *creature_ptr)
+static s16b calc_wisdom_addition(const player_type *creature_ptr)
 {
     s16b pow;
     const player_race *tmp_rp_ptr;
@@ -2016,7 +2017,7 @@ static s16b calc_wisdom_addition(player_type *creature_ptr)
  * * 変異MUT3_LIMBERで加算(+3)
  * * 変異MUT3_ARTHRITISで減算(-3)
  */
-static s16b calc_dexterity_addition(player_type *creature_ptr)
+static s16b calc_dexterity_addition(const player_type *creature_ptr)
 {
     s16b pow;
     const player_race *tmp_rp_ptr;
@@ -2101,7 +2102,7 @@ static s16b calc_dexterity_addition(player_type *creature_ptr)
  * * 変異MUT3_FLESH_ROTで減算(-2)
  * * ネオ・つよしスペシャル中で加算(+4)
  */
-static s16b calc_constitution_addition(player_type *creature_ptr)
+static s16b calc_constitution_addition(const player_type *creature_ptr)
 {
     s16b pow;
     const player_race *tmp_rp_ptr;
@@ -2192,7 +2193,7 @@ static s16b calc_constitution_addition(player_type *creature_ptr)
  * * 変異MUT3_SCALESで減算(-1)
  * * 変異MUT3_ILL_NORMで0固定(後で個体値のみ上書きを行う)
  */
-static s16b calc_charisma_addition(player_type *creature_ptr)
+static s16b calc_charisma_addition(const player_type *creature_ptr)
 {
     s16b pow;
     const player_race *tmp_rp_ptr;
@@ -2254,7 +2255,7 @@ static s16b calc_charisma_addition(player_type *creature_ptr)
  * * 性格チャージマンなら加算(+5)
  * * 装備品にTRC_LOW_MAGICがあるなら加算(軽い呪いなら+3/重い呪いなら+10)
  */
-static s16b calc_to_magic_chance(player_type *creature_ptr)
+static s16b calc_to_magic_chance(const player_type *creature_ptr)
 {
     s16b chance = 0;
 
@@ -2285,7 +2286,7 @@ static s16b calc_to_magic_chance(player_type *creature_ptr)
     return chance;
 }
 
-static ARMOUR_CLASS calc_base_ac(player_type *creature_ptr)
+static ARMOUR_CLASS calc_base_ac(const player_type *creature_ptr)
 {
     ARMOUR_CLASS ac = 0;
     if (creature_ptr->yoiyami)
@@ -2307,7 +2308,7 @@ static ARMOUR_CLASS calc_base_ac(player_type *creature_ptr)
     return ac;
 }
 
-static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_real_value)
+static ARMOUR_CLASS calc_to_ac(const player_type *creature_ptr, bool is_real_value)
 {
     ARMOUR_CLASS ac = 0;
     if (creature_ptr->yoiyami)
@@ -2497,7 +2498,7 @@ static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_real_value)
  * * 光速移動中かこの時点で+99を超えていたら+99にキャップ
  * * -99未満なら-99にキャップ
  */
-static s16b calc_speed(player_type *creature_ptr)
+static s16b calc_speed(const player_type *creature_ptr)
 {
     floor_type *floor_ptr = creature_ptr->current_floor_ptr;
     feature_type *f_ptr = &f_info[floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat];
@@ -2684,7 +2685,7 @@ static s16b calc_speed(player_type *creature_ptr)
  * * 武蔵セットによる軽減
  * * 竿上武器による増加
  */
-s16b calc_double_weapon_penalty(player_type *creature_ptr, INVENTORY_IDX slot)
+s16b calc_double_weapon_penalty(const player_type *creature_ptr, INVENTORY_IDX slot)
 {
     int penalty = 0;
     if (has_melee_weapon(creature_ptr, INVEN_MAIN_HAND) && has_melee_weapon(creature_ptr, INVEN_SUB_HAND)) {
@@ -2780,7 +2781,7 @@ static void update_top_status(player_type *creature_ptr, int status)
     }
 }
 
-static bool is_riding_two_hands(player_type *creature_ptr)
+static bool is_riding_two_hands(const player_type *creature_ptr)
 {
     if (creature_ptr->riding) {
         return FALSE;
@@ -2802,7 +2803,7 @@ static bool is_riding_two_hands(player_type *creature_ptr)
     return FALSE;
 }
 
-static s16b calc_riding_bow_penalty(player_type *creature_ptr)
+static s16b calc_riding_bow_penalty(const player_type *creature_ptr)
 {
     floor_type *floor_ptr = creature_ptr->current_floor_ptr;
     if (!creature_ptr->riding)
@@ -2917,7 +2918,7 @@ void put_equipment_warning(player_type *creature_ptr)
     }
 }
 
-static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool is_real_value)
+static s16b calc_to_damage(const player_type *creature_ptr, INVENTORY_IDX slot, bool is_real_value)
 {
     object_type *o_ptr = &creature_ptr->inventory_list[slot];
     BIT_FLAGS flgs[TR_FLAG_SIZE];
@@ -3064,7 +3065,7 @@ static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool i
  * @details
  * 'slot' MUST be INVEN_MAIN_HAND or INVEM_SUB_HAND.
  */
-static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_real_value)
+static s16b calc_to_hit(const player_type *creature_ptr, INVENTORY_IDX slot, bool is_real_value)
 {
     s16b hit = 0;
 
@@ -3287,7 +3288,7 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_r
     return hit;
 }
 
-static s16b calc_to_hit_bow(player_type *creature_ptr, bool is_real_value)
+static s16b calc_to_hit_bow(const player_type *creature_ptr, bool is_real_value)
 {
     s16b pow = 0;
 
@@ -3367,7 +3368,7 @@ static s16b calc_to_hit_bow(player_type *creature_ptr, bool is_real_value)
     return pow;
 }
 
-static s16b calc_to_damage_misc(player_type *creature_ptr)
+static s16b calc_to_damage_misc(const player_type *creature_ptr)
 {
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
@@ -3403,7 +3404,7 @@ static s16b calc_to_damage_misc(player_type *creature_ptr)
     return to_dam;
 }
 
-static s16b calc_to_hit_misc(player_type *creature_ptr)
+static s16b calc_to_hit_misc(const player_type *creature_ptr)
 {
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
@@ -3449,7 +3450,7 @@ static s16b calc_to_hit_misc(player_type *creature_ptr)
     return to_hit;
 }
 
-static DICE_NUMBER calc_to_weapon_dice_num(player_type *creature_ptr, INVENTORY_IDX slot)
+static DICE_NUMBER calc_to_weapon_dice_num(const player_type *creature_ptr, INVENTORY_IDX slot)
 {
     object_type *o_ptr = &creature_ptr->inventory_list[slot];
     DICE_NUMBER dn = 0;
@@ -3463,7 +3464,7 @@ static DICE_NUMBER calc_to_weapon_dice_num(player_type *creature_ptr, INVENTORY_
     return dn;
 }
 
-static DICE_NUMBER calc_to_weapon_dice_side(player_type *creature_ptr, INVENTORY_IDX slot)
+static DICE_NUMBER calc_to_weapon_dice_side(const player_type *creature_ptr, INVENTORY_IDX slot)
 {
     (void)creature_ptr; // unused
     (void)slot; // unused
@@ -3475,7 +3476,7 @@ static DICE_NUMBER calc_to_weapon_dice_side(player_type *creature_ptr, INVENTORY
  * Computes current weight limit.
  * @return 制限重量(ポンド)
  */
-WEIGHT calc_weight_limit(player_type *creature_ptr)
+WEIGHT calc_weight_limit(const player_type *creature_ptr)
 {
     WEIGHT i = (WEIGHT)adj_str_wgt[creature_ptr->stat_ind[A_STR]] * 50;
     if (creature_ptr->pclass == CLASS_BERSERKER)
@@ -3488,7 +3489,7 @@ WEIGHT calc_weight_limit(player_type *creature_ptr)
  * @param i 判定する手のID(右手:INVEN_MAIN_HAND 左手:INVEN_SUB_HAND)
  * @return 持っているならばTRUE
  */
-bool has_melee_weapon(player_type *creature_ptr, int slot)
+bool has_melee_weapon(const player_type *creature_ptr, int slot)
 {
     return ((creature_ptr->inventory_list[slot].k_idx) && object_is_melee_weapon(&creature_ptr->inventory_list[slot]));
 }
@@ -3498,7 +3499,7 @@ bool has_melee_weapon(player_type *creature_ptr, int slot)
  * @param riding_control 乗馬中により片手を必要としている状態ならばTRUEを返す。
  * @return 開いている手のビットフラグ
  */
-BIT_FLAGS16 empty_hands(player_type *creature_ptr, bool riding_control)
+BIT_FLAGS16 empty_hands(const player_type *creature_ptr, bool riding_control)
 {
     BIT_FLAGS16 status = EMPTY_HAND_NONE;
     if (!creature_ptr->inventory_list[INVEN_MAIN_HAND].k_idx)
@@ -3520,7 +3521,7 @@ BIT_FLAGS16 empty_hands(player_type *creature_ptr, bool riding_control)
  * @brief プレイヤーが防具重量制限のある職業時にペナルティを受ける状態にあるかどうかを返す。
  * @return ペナルティが適用されるならばTRUE。
  */
-bool heavy_armor(player_type *creature_ptr)
+bool heavy_armor(const player_type *creature_ptr)
 {
     if ((creature_ptr->pclass != CLASS_MONK) && (creature_ptr->pclass != CLASS_FORCETRAINER) && (creature_ptr->pclass != CLASS_NINJA))
         return FALSE;
@@ -3646,7 +3647,7 @@ void update_creature(player_type *creature_ptr)
  * @brief プレイヤーが魔道書を一冊も持っていないかを判定する
  * @return 魔道書を一冊も持っていないならTRUEを返す
  */
-bool player_has_no_spellbooks(player_type *creature_ptr)
+bool player_has_no_spellbooks(const player_type *creature_ptr)
 {
     object_type *o_ptr;
     for (int i = 0; i < INVEN_PACK; i++) {
@@ -3917,7 +3918,7 @@ s16b modify_stat_value(int value, int amount)
  * @return なし
  * @details
  */
-long calc_score(player_type *creature_ptr)
+long calc_score(const player_type *creature_ptr)
 {
     int arena_win = MIN(creature_ptr->arena_number, MAX_ARENA_MONS);
 
@@ -3990,26 +3991,26 @@ long calc_score(player_type *creature_ptr)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return 祝福状態ならばTRUE
  */
-bool is_blessed(player_type *creature_ptr)
+bool is_blessed(const player_type *creature_ptr)
 {
     return creature_ptr->blessed || music_singing(creature_ptr, MUSIC_BLESS) || hex_spelling(creature_ptr, HEX_BLESS);
 }
 
-bool is_tim_esp(player_type *creature_ptr)
+bool is_tim_esp(const player_type *creature_ptr)
 {
     return creature_ptr->tim_esp || music_singing(creature_ptr, MUSIC_MIND) || (creature_ptr->concent >= CONCENT_TELE_THRESHOLD);
 }
 
-bool is_tim_stealth(player_type *creature_ptr) { return creature_ptr->tim_stealth || music_singing(creature_ptr, MUSIC_STEALTH); }
+bool is_tim_stealth(const player_type *creature_ptr) { return creature_ptr->tim_stealth || music_singing(creature_ptr, MUSIC_STEALTH); }
 
-bool is_time_limit_esp(player_type *creature_ptr)
+bool is_time_limit_esp(const player_type *creature_ptr)
 {
     return creature_ptr->tim_esp || music_singing(creature_ptr, MUSIC_MIND) || (creature_ptr->concent >= CONCENT_TELE_THRESHOLD);
 }
 
-bool is_time_limit_stealth(player_type *creature_ptr) { return creature_ptr->tim_stealth || music_singing(creature_ptr, MUSIC_STEALTH); }
+bool is_time_limit_stealth(const player_type *creature_ptr) { return creature_ptr->tim_stealth || music_singing(creature_ptr, MUSIC_STEALTH); }
 
-bool can_two_hands_wielding(player_type *creature_ptr) { return !creature_ptr->riding || test_bit(creature_ptr->pet_extra_flags, PF_TWO_HANDS); }
+bool can_two_hands_wielding(const player_type *creature_ptr) { return !creature_ptr->riding || test_bit(creature_ptr->pet_extra_flags, PF_TWO_HANDS); }
 
 /*!
  * @brief 歌の停止を処理する / Stop singing if the player is a Bard
@@ -4061,7 +4062,7 @@ void stop_mouth(player_type *caster_ptr)
  * @brief ペットの維持コスト計算
  * @return 維持コスト(%)
  */
-PERCENTAGE calculate_upkeep(player_type *creature_ptr)
+PERCENTAGE calculate_upkeep(const player_type *creature_ptr)
 {
     MONSTER_IDX m_idx;
     bool has_a_unique = FALSE;
@@ -4108,22 +4109,22 @@ PERCENTAGE calculate_upkeep(player_type *creature_ptr)
         return 0;
 }
 
-bool music_singing(player_type *caster_ptr, int music_songs) { return (caster_ptr->pclass == CLASS_BARD) && (caster_ptr->magic_num1[0] == music_songs); }
+bool music_singing(const player_type *caster_ptr, int music_songs) { return (caster_ptr->pclass == CLASS_BARD) && (caster_ptr->magic_num1[0] == music_songs); }
 
-bool is_fast(player_type *creature_ptr) { return creature_ptr->fast || music_singing(creature_ptr, MUSIC_SPEED) || music_singing(creature_ptr, MUSIC_SHERO); }
+bool is_fast(const player_type *creature_ptr) { return creature_ptr->fast || music_singing(creature_ptr, MUSIC_SPEED) || music_singing(creature_ptr, MUSIC_SHERO); }
 
-bool is_invuln(player_type *creature_ptr) { return creature_ptr->invuln || music_singing(creature_ptr, MUSIC_INVULN); }
+bool is_invuln(const player_type *creature_ptr) { return creature_ptr->invuln || music_singing(creature_ptr, MUSIC_INVULN); }
 
-bool is_hero(player_type *creature_ptr) { return creature_ptr->hero || music_singing(creature_ptr, MUSIC_HERO) || music_singing(creature_ptr, MUSIC_SHERO); }
+bool is_hero(const player_type *creature_ptr) { return creature_ptr->hero || music_singing(creature_ptr, MUSIC_HERO) || music_singing(creature_ptr, MUSIC_SHERO); }
 
-bool is_shero(player_type *creature_ptr) { return creature_ptr->shero || creature_ptr->pclass == CLASS_BERSERKER; }
+bool is_shero(const player_type *creature_ptr) { return creature_ptr->shero || creature_ptr->pclass == CLASS_BERSERKER; }
 
-bool is_echizen(player_type *creature_ptr)
+bool is_echizen(const player_type *creature_ptr)
 {
     return (creature_ptr->pseikaku == PERSONALITY_COMBAT) || (creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON);
 }
 
-int calc_weapon_weight_limit(player_type *creature_ptr)
+int calc_weapon_weight_limit(const player_type *creature_ptr)
 {
     int weight = adj_str_hold[creature_ptr->stat_ind[A_STR]];
 
@@ -4133,7 +4134,7 @@ int calc_weapon_weight_limit(player_type *creature_ptr)
     return weight;
 }
 
-static player_hand main_attack_hand(player_type *creature_ptr)
+static player_hand main_attack_hand(const player_type *creature_ptr)
 {
     switch (player_melee_type(creature_ptr)) {
     case MELEE_TYPE_BAREHAND_TWO:

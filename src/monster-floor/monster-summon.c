@@ -36,7 +36,7 @@ bool summon_unique_okay = FALSE;
  * @param r_idx チェックするモンスター種族ID
  * @return 召喚対象にできるならばTRUE
  */
-static bool summon_specific_okay(player_type *player_ptr, MONRACE_IDX r_idx)
+static bool summon_specific_okay(const player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[summon_specific_who];

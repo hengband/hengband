@@ -197,7 +197,7 @@ void quest_discovery(QUEST_IDX q_idx)
  * @param level 検索対象になる階
  * @return クエストIDを返す。該当がない場合0を返す。
  */
-QUEST_IDX quest_number(player_type *player_ptr, DEPTH level)
+QUEST_IDX quest_number(const player_type *player_ptr, DEPTH level)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->inside_quest)
@@ -221,7 +221,7 @@ QUEST_IDX quest_number(player_type *player_ptr, DEPTH level)
  * @param level 検索対象になる階
  * @return クエストIDを返す。該当がない場合0を返す。
  */
-QUEST_IDX random_quest_number(player_type *player_ptr, DEPTH level)
+QUEST_IDX random_quest_number(const player_type *player_ptr, DEPTH level)
 {
     if (player_ptr->dungeon_idx != DUNGEON_ANGBAND)
         return 0;

@@ -21,7 +21,7 @@
  * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
  * @return 食べることが可能ならばTRUEを返す
  */
-bool item_tester_hook_eatable(player_type *player_ptr, object_type *o_ptr)
+bool item_tester_hook_eatable(const player_type *player_ptr, object_type *o_ptr)
 {
     if (o_ptr->tval == TV_FOOD)
         return TRUE;
@@ -44,7 +44,7 @@ bool item_tester_hook_eatable(player_type *player_ptr, object_type *o_ptr)
  * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
  * @return 飲むことが可能ならばTRUEを返す
  */
-bool item_tester_hook_quaff(player_type *player_ptr, object_type *o_ptr)
+bool item_tester_hook_quaff(const player_type *player_ptr, object_type *o_ptr)
 {
     if (o_ptr->tval == TV_POTION)
         return TRUE;
@@ -61,7 +61,7 @@ bool item_tester_hook_quaff(player_type *player_ptr, object_type *o_ptr)
  * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
  * @return 読むことが可能ならばTRUEを返す
  */
-bool item_tester_hook_readable(player_type *player_ptr, object_type *o_ptr)
+bool item_tester_hook_readable(const player_type *player_ptr, object_type *o_ptr)
 {
     /* Unused */
     (void)player_ptr;
@@ -78,7 +78,7 @@ bool item_tester_hook_readable(player_type *player_ptr, object_type *o_ptr)
  * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
  * @return オブジェクトがランタンの燃料になるならばTRUEを返す
  */
-bool item_tester_refill_lantern(player_type *player_ptr, object_type *o_ptr)
+bool item_tester_refill_lantern(const player_type *player_ptr, object_type *o_ptr)
 {
     /* Unused */
     (void)player_ptr;
@@ -95,7 +95,7 @@ bool item_tester_refill_lantern(player_type *player_ptr, object_type *o_ptr)
  * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
  * @return オブジェクトが松明に束ねられるならばTRUEを返す
  */
-bool object_can_refill_torch(player_type *player_ptr, object_type *o_ptr)
+bool object_can_refill_torch(const player_type *player_ptr, object_type *o_ptr)
 {
     /* Unused */
     (void)player_ptr;

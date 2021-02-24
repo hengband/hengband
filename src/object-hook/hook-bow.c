@@ -8,7 +8,7 @@
  * @param o_ptr オブジェクトの構造体の参照ポインタ。
  * @return 材料にできるならTRUEを返す
  */
-bool item_tester_hook_convertible(player_type *player_ptr, object_type *o_ptr)
+bool item_tester_hook_convertible(const player_type *player_ptr, object_type *o_ptr)
 {
     /* Unused */
     (void)player_ptr;
@@ -25,7 +25,7 @@ bool item_tester_hook_convertible(player_type *player_ptr, object_type *o_ptr)
  * @param o_ptr オブジェクトの構造体の参照ポインタ。
  * @return 対象になるならTRUEを返す。
  */
-bool item_tester_hook_ammo(player_type *player_ptr, object_type *o_ptr)
+bool item_tester_hook_ammo(const player_type *player_ptr, object_type *o_ptr)
 {
     /* Unused */
     (void)player_ptr;

@@ -20,7 +20,7 @@ extern POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 
 extern void mmove2(POSITION *y, POSITION *x, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 
-extern bool player_can_see_bold(player_type *creature_ptr, POSITION y, POSITION x);
+extern bool player_can_see_bold(const player_type *creature_ptr, POSITION y, POSITION x);
 
 /*!
  * @brief 視界及び光源の過渡処理配列サイズ / Maximum size of the "temp" array
@@ -39,4 +39,4 @@ typedef struct pos_list {
 	POSITION x[TEMP_MAX];
 } pos_list;
 
-bool is_seen(player_type *creature_ptr, monster_type *m_ptr);
+bool is_seen(const player_type *creature_ptr, monster_type *m_ptr);

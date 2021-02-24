@@ -30,7 +30,7 @@
  * Hack -- note special "pval boost" code for ring of speed\n
  * Hack -- note that some items must be cursed (or blessed)\n
  */
-void apply_magic_accessary(player_type *owner_ptr, object_type *o_ptr, DEPTH level, int power)
+void apply_magic_accessary(const player_type *owner_ptr, object_type *o_ptr, DEPTH level, int power)
 {
     switch (o_ptr->tval) {
     case TV_RING: {

@@ -17,7 +17,7 @@
  * @param flgs フラグ情報を受け取る配列
  * @return なし
  */
-void object_flags(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
+void object_flags(const player_type *player_ptr, object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
 {
     object_kind *k_ptr = &k_info[o_ptr->k_idx];
 
@@ -97,7 +97,7 @@ void object_flags(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS flgs[TR
  * @param flgs フラグ情報を受け取る配列
  * @return なし
  */
-void object_flags_known(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
+void object_flags_known(const player_type *player_ptr, object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
 {
     bool spoil = FALSE;
     object_kind *k_ptr = &k_info[o_ptr->k_idx];

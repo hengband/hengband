@@ -36,7 +36,7 @@
 #include "wizard/wizard-messages.h"
 #include "world/world.h"
 
-static bool weakening_artifact(player_type *player_ptr, object_type *o_ptr)
+static bool weakening_artifact(const player_type *player_ptr, object_type *o_ptr)
 {
     KIND_OBJECT_IDX k_idx = lookup_kind(o_ptr->tval, o_ptr->sval);
     object_kind *k_ptr = &k_info[k_idx];
@@ -71,7 +71,7 @@ static bool weakening_artifact(player_type *player_ptr, object_type *o_ptr)
     return FALSE;
 }
 
-static void set_artifact_bias(player_type *player_ptr, object_type *o_ptr, int *warrior_artifact_bias)
+static void set_artifact_bias(const player_type *player_ptr, object_type *o_ptr, int *warrior_artifact_bias)
 {
     switch (player_ptr->pclass) {
     case CLASS_WARRIOR:
@@ -146,7 +146,7 @@ static void set_artifact_bias(player_type *player_ptr, object_type *o_ptr, int *
     }
 }
 
-static void decide_warrior_bias(player_type *player_ptr, object_type *o_ptr, const bool a_scroll)
+static void decide_warrior_bias(const player_type *player_ptr, object_type *o_ptr, const bool a_scroll)
 {
     int warrior_artifact_bias = 0;
     if (a_scroll && one_in_(4))
@@ -182,7 +182,7 @@ static int decide_random_art_power(const bool a_cursed)
     return powers;
 }
 
-static void invest_powers(player_type *player_ptr, object_type *o_ptr, int *powers, bool *has_pval, const bool a_cursed)
+static void invest_powers(const player_type *player_ptr, object_type *o_ptr, int *powers, bool *has_pval, const bool a_cursed)
 {
     int max_type = object_is_weapon_ammo(o_ptr) ? 7 : 5;
     while ((*powers)--) {
@@ -246,7 +246,7 @@ static void strengthen_pval(object_type *o_ptr)
  * @param o_ptr ランダムアーティファクトを示すアイテムへの参照ポインタ
  * @return なし
  */
-static void invest_positive_modified_value(player_type *player_ptr, object_type *o_ptr)
+static void invest_positive_modified_value(const player_type *player_ptr, object_type *o_ptr)
 {
     if (object_is_armour(player_ptr, o_ptr)) {
         o_ptr->to_a += randint1(o_ptr->to_a > 19 ? 1 : 20 - o_ptr->to_a);
@@ -268,7 +268,7 @@ static void invest_positive_modified_value(player_type *player_ptr, object_type 
  * @param o_ptr ランダムアーティファクトを示すアイテムへの参照ポインタ
  * @return なし
  */
-static void invest_negative_modified_value(player_type *player_ptr, object_type *o_ptr)
+static void invest_negative_modified_value(const player_type *player_ptr, object_type *o_ptr)
 {
     if (!object_is_armour(player_ptr, o_ptr))
         return;
@@ -391,7 +391,7 @@ static void generate_unnatural_random_artifact(player_type *player_ptr, object_t
  * @param a_scroll アーティファクト生成の巻物上の処理。呪いのアーティファクトが生成対象外となる。
  * @return 常にTRUE(1)を返す
  */
-bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_scroll)
+bool become_random_artifact(const player_type *player_ptr, object_type *o_ptr, bool a_scroll)
 {
     o_ptr->artifact_bias = 0;
     o_ptr->name1 = 0;
@@ -433,6 +433,48 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
     while (has_extreme_damage_rate(player_ptr, o_ptr) && !one_in_(SWORDFISH_LUCK))
         weakening_artifact(player_ptr, o_ptr);
 
-    generate_unnatural_random_artifact(player_ptr, o_ptr, a_scroll, power_level, max_powers, total_flags);
+    if (!a_scroll) {
+        GAME_TEXT new_name[1024];
+        get_random_name(o_ptr, new_name, object_is_armour(player_ptr, o_ptr), power_level);
+        o_ptr->art_name = quark_add(new_name);
+    }
+
+    msg_format_wizard(player_ptr, CHEAT_OBJECT,
+        _("パワー %d で 価値%ld のランダムアーティファクト生成 バイアスは「%s」", "Random artifact generated - Power:%d Value:%d Bias:%s."), max_powers,
+        total_flags, artifact_bias_name[o_ptr->artifact_bias]);
+
+    /* generate_unnatural_random_artifact(player_ptr, o_ptr, a_scroll, power_level, max_powers, total_flags); */
+    return TRUE;
+}
+
+bool create_random_artifact(player_type *player_ptr, object_type *o_ptr)
+{
+    GAME_TEXT quated_name[1024];
+    GAME_TEXT name[MAX_NLEN] = "";
+    concptr ask_msg = _("このアーティファクトを何と名付けますか？", "What do you want to call the artifact? ");
+
+    become_random_artifact(player_ptr, o_ptr, TRUE);
+
+    object_aware(player_ptr, o_ptr);
+    object_known(o_ptr);
+    o_ptr->ident |= IDENT_FULL_KNOWN;
+    o_ptr->art_name = quark_add("");
+    (void)screen_object(player_ptr, o_ptr, 0L);
+    if (!get_string(ask_msg, name, sizeof name) || !name[0]) {
+        if (one_in_(2)) {
+            get_table_sindarin_aux(name);
+        } else {
+            get_table_name_aux(name);
+        }
+    }
+
+    snprintf(quated_name, sizeof(quated_name), _("《%s》", "'%s'"), name);
+    o_ptr->art_name = quark_add(quated_name);
+
+    chg_virtue(player_ptr, V_INDIVIDUALISM, 2);
+    chg_virtue(player_ptr, V_ENCHANT, 5);
+
+    player_ptr->window_flags |= PW_INVEN | PW_EQUIP;
+
     return TRUE;
 }

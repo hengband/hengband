@@ -79,7 +79,7 @@ static PRICE object_value_base(object_type *o_ptr)
  * Note that discounted items stay discounted forever, even if\n
  * the discount is "forgotten" by the player via memory loss.\n
  */
-PRICE object_value(player_type *player_ptr, object_type *o_ptr)
+PRICE object_value(const player_type *player_ptr, object_type *o_ptr)
 {
     PRICE value;
 
@@ -131,7 +131,7 @@ PRICE object_value(player_type *player_ptr, object_type *o_ptr)
  *\n
  * Every wearable item with a "pval" bonus is worth extra (see below).\n
  */
-PRICE object_value_real(player_type *player_ptr, object_type *o_ptr)
+PRICE object_value_real(const player_type *player_ptr, object_type *o_ptr)
 {
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     object_kind *k_ptr = &k_info[o_ptr->k_idx];

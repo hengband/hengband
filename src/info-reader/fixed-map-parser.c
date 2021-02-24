@@ -34,7 +34,7 @@ static concptr variant = "ZANGBAND";
  * @param fp
  * @return エラーコード
  */
-static concptr parse_fixed_map_expression(player_type *player_ptr, char **sp, char *fp)
+static concptr parse_fixed_map_expression(const player_type *player_ptr, char **sp, char *fp)
 {
     char b1 = '[';
     char b2 = ']';
@@ -168,7 +168,8 @@ static concptr parse_fixed_map_expression(player_type *player_ptr, char **sp, ch
         v = _(E_realm_names[player_ptr->realm2], realm_names[player_ptr->realm2]);
     } else if (streq(b + 1, "PLAYER")) {
         static char tmp_player_name[32];
-        char *pn, *tpn;
+        const char *pn;
+        char *tpn;
         for (pn = player_ptr->name, tpn = tmp_player_name; *pn; pn++, tpn++) {
 #ifdef JP
             if (iskanji(*pn)) {

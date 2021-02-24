@@ -66,7 +66,7 @@ static void add_negative_flags(object_type *o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return なし
  */
-void curse_artifact(player_type *player_ptr, object_type *o_ptr)
+void curse_artifact(const player_type *player_ptr, object_type *o_ptr)
 {
     pval_subtraction(o_ptr);
     o_ptr->curse_flags |= (TRC_HEAVY_CURSE | TRC_CURSED);
@@ -153,7 +153,7 @@ void get_random_name(object_type *o_ptr, char *return_name, bool armour, int pow
 }
 
 /*対邪平均ダメージの計算処理*/
-static HIT_POINT calc_arm_avgdamage(player_type *player_ptr, object_type *o_ptr)
+static HIT_POINT calc_arm_avgdamage(const player_type *player_ptr, object_type *o_ptr)
 {
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     object_flags(player_ptr, o_ptr, flgs);
@@ -182,7 +182,7 @@ static HIT_POINT calc_arm_avgdamage(player_type *player_ptr, object_type *o_ptr)
     return dam;
 }
 
-bool has_extreme_damage_rate(player_type *player_ptr, object_type *o_ptr)
+bool has_extreme_damage_rate(const player_type *player_ptr, object_type *o_ptr)
 {
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     object_flags(player_ptr, o_ptr, flgs);

@@ -21,7 +21,7 @@
 #include "monster-race/race-flags1.h"
 #endif
 
-static void check_object_known_aware(player_type *player_ptr, flavor_type *flavor_ptr)
+static void check_object_known_aware(const player_type *player_ptr, flavor_type *flavor_ptr)
 {
     object_flags(player_ptr, flavor_ptr->o_ptr, flavor_ptr->tr_flags);
     if (object_is_aware(flavor_ptr->o_ptr))
@@ -354,7 +354,7 @@ static void describe_inscription(flavor_type *flavor_ptr)
     }
 }
 
-void describe_named_item(player_type *player_ptr, flavor_type *flavor_ptr)
+void describe_named_item(const player_type *player_ptr, flavor_type *flavor_ptr)
 {
     check_object_known_aware(player_ptr, flavor_ptr);
     switch_tval_description(flavor_ptr);

@@ -342,7 +342,7 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
  * <pre>
  * You may only fire items that "match" your missile launcher.
  * You must use slings + pebbles/shots, bows + arrows, xbows + bolts.
- * See "calc_bonuses()" for more calculations and such.
+ * See "update_bonuses()" for more calculations and such.
  * Note that "firing" a missile is MUCH better than "throwing" it.
  * Note: "unseen" monsters are very hard to hit.
  * Objects are more likely to break if they "attempt" to hit a monster.
@@ -867,7 +867,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
  * @return 命中と判定された場合TRUEを返す
  * @note Always miss 5%, always hit 5%, otherwise random.
  */
-bool test_hit_fire(player_type *shooter_ptr, int chance, monster_type *m_ptr, int vis, char *o_name)
+bool test_hit_fire(const player_type *shooter_ptr, int chance, monster_type *m_ptr, int vis, char *o_name)
 {
     int k;
     ARMOUR_CLASS ac;
@@ -929,7 +929,7 @@ bool test_hit_fire(player_type *shooter_ptr, int chance, monster_type *m_ptr, in
  * @param dam 現在算出中のダメージ値
  * @return クリティカル修正が入ったダメージ値
  */
-HIT_POINT critical_shot(player_type *shooter_ptr, WEIGHT weight, int plus_ammo, int plus_bow, HIT_POINT dam)
+HIT_POINT critical_shot(const player_type *shooter_ptr, WEIGHT weight, int plus_ammo, int plus_bow, HIT_POINT dam)
 {
     int i, k;
     object_type *j_ptr = &shooter_ptr->inventory_list[INVEN_BOW];
@@ -1078,7 +1078,7 @@ int bow_tmul(OBJECT_SUBTYPE_VALUE sval)
  * @return ダメージ期待値
  * @note 基本ダメージ量と重量はこの部位では計算に加わらない。
  */
-HIT_POINT calc_crit_ratio_shot(player_type *shooter_ptr, HIT_POINT plus_ammo, HIT_POINT plus_bow)
+HIT_POINT calc_crit_ratio_shot(const player_type *shooter_ptr, HIT_POINT plus_ammo, HIT_POINT plus_bow)
 {
     HIT_POINT i;
     object_type *j_ptr = &shooter_ptr->inventory_list[INVEN_BOW];
@@ -1114,7 +1114,7 @@ HIT_POINT calc_crit_ratio_shot(player_type *shooter_ptr, HIT_POINT plus_ammo, HI
  * @param dam 基本ダメージ量
  * @return ダメージ期待値
  */
-HIT_POINT calc_expect_crit_shot(player_type *shooter_ptr, WEIGHT weight, int plus_ammo, int plus_bow, HIT_POINT dam)
+HIT_POINT calc_expect_crit_shot(const player_type *shooter_ptr, WEIGHT weight, int plus_ammo, int plus_bow, HIT_POINT dam)
 {
     u32b num;
     int i, k, crit;
@@ -1156,7 +1156,7 @@ HIT_POINT calc_expect_crit_shot(player_type *shooter_ptr, WEIGHT weight, int plu
  * @param dokubari 毒針処理か否か
  * @return ダメージ期待値
  */
-HIT_POINT calc_expect_crit(player_type *shooter_ptr, WEIGHT weight, int plus, HIT_POINT dam, s16b meichuu, bool dokubari)
+HIT_POINT calc_expect_crit(const player_type *shooter_ptr, WEIGHT weight, int plus, HIT_POINT dam, s16b meichuu, bool dokubari)
 {
     u32b k, num;
     if (dokubari)

@@ -79,7 +79,7 @@ MONSTER_IDX m_pop(floor_type *floor_ptr)
  * @param max_level 最大生成階
  * @return 選択されたモンスター生成種族
  */
-MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH min_level, DEPTH max_level, BIT_FLAGS option)
+MONRACE_IDX get_mon_num(const player_type *player_ptr, DEPTH min_level, DEPTH max_level, BIT_FLAGS option)
 {
     int i, j, p;
     int r_idx;
@@ -223,7 +223,7 @@ MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH min_level, DEPTH max_leve
  * @param r_idx モンスター種族ID
  * @return 対象にできるならtrueを返す
  */
-static bool monster_hook_chameleon_lord(player_type *player_ptr, MONRACE_IDX r_idx)
+static bool monster_hook_chameleon_lord(const player_type *player_ptr, MONRACE_IDX r_idx)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     monster_race *r_ptr = &r_info[r_idx];
@@ -262,7 +262,7 @@ static bool monster_hook_chameleon_lord(player_type *player_ptr, MONRACE_IDX r_i
  * @return 対象にできるならtrueを返す
  * @todo グローバル変数対策の上 monster_hook.cへ移す。
  */
-static bool monster_hook_chameleon(player_type *player_ptr, MONRACE_IDX r_idx)
+static bool monster_hook_chameleon(const player_type *player_ptr, MONRACE_IDX r_idx)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     monster_race *r_ptr = &r_info[r_idx];

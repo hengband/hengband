@@ -17,7 +17,7 @@
  * @param plusses フラグに与える価格の基本重み
  * @return オブジェクトのフラグ価格
  */
-PRICE flag_cost(player_type *player_ptr, object_type *o_ptr, int plusses)
+PRICE flag_cost(const player_type *player_ptr, object_type *o_ptr, int plusses)
 {
     PRICE total = 0;
     BIT_FLAGS flgs[TR_FLAG_SIZE];

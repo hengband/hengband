@@ -38,7 +38,7 @@
  * @param caster_ptr プレーヤーの参照ポインタ
  * @return 現在溜まっている気の量
  */
-MAGIC_NUM1 get_current_ki(player_type *caster_ptr) { return caster_ptr->magic_num1[0]; }
+MAGIC_NUM1 get_current_ki(const player_type *caster_ptr) { return caster_ptr->magic_num1[0]; }
 
 /*!
  * @brief 練気術師において、気を溜める

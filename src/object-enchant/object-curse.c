@@ -24,7 +24,7 @@
  * @param o_ptr 呪いをかけられる装備オブジェクトの構造体参照ポインタ
  * @return 与える呪いのID
  */
-BIT_FLAGS get_curse(player_type *owner_ptr, int power, object_type *o_ptr)
+BIT_FLAGS get_curse(const player_type *owner_ptr, int power, object_type *o_ptr)
 {
     BIT_FLAGS new_curse;
 

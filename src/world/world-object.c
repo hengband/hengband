@@ -61,7 +61,7 @@ OBJECT_IDX o_pop(floor_type *floor_ptr)
  * Note that if no objects are "appropriate", then this function will\n
  * fail, and return zero, but this should *almost* never happen.\n
  */
-OBJECT_IDX get_obj_num(player_type *owner_ptr, DEPTH level, BIT_FLAGS mode)
+OBJECT_IDX get_obj_num(const player_type *owner_ptr, DEPTH level, BIT_FLAGS mode)
 {
     int i, j, p;
     KIND_OBJECT_IDX k_idx;

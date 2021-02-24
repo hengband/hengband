@@ -308,7 +308,7 @@ bool is_hidden_door(player_type *player_ptr, grid_type *g_ptr)
  * @param x x座標
  * @return 指定された座標に照明がかかっているならTRUEを返す。。
  */
-bool check_local_illumination(player_type *creature_ptr, POSITION y, POSITION x)
+bool check_local_illumination(const player_type *creature_ptr, POSITION y, POSITION x)
 {
     /* Hack -- move towards player */
     POSITION yy = (y < creature_ptr->y) ? (y + 1) : (y > creature_ptr->y) ? (y - 1) : y;
@@ -400,7 +400,7 @@ void update_local_illumination(player_type *creature_ptr, POSITION y, POSITION x
  * @return 視覚に収められていないならTRUEを返す
  * @details player_can_see_bold()関数の返り値の否定を返している。
  */
-bool no_lite(player_type *creature_ptr) { return (!player_can_see_bold(creature_ptr, creature_ptr->y, creature_ptr->x)); }
+bool no_lite(const player_type *creature_ptr) { return (!player_can_see_bold(creature_ptr, creature_ptr->y, creature_ptr->x)); }
 
 /*
  * Place an attr/char pair at the given map coordinate, if legal.
@@ -464,7 +464,7 @@ void print_rel(player_type *subject_ptr, SYMBOL_CODE c, TERM_COLOR a, POSITION y
  * optimized primarily for the most common cases, that is, for the
  * non-marked floor grids.
  */
-void note_spot(player_type *player_ptr, POSITION y, POSITION x)
+void note_spot(const player_type *player_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     OBJECT_IDX this_o_idx, next_o_idx = 0;

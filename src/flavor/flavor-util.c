@@ -195,7 +195,7 @@ static bool has_flag_of(flag_insc_table *fi_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
  * @param all TRUEならばベースアイテム上で明らかなフラグは省略する
  * @return ptrと同じアドレス
  */
-char *get_ability_abbreviation(player_type *player_ptr, char *short_flavor, object_type *o_ptr, bool kanji, bool all)
+char *get_ability_abbreviation(const player_type *player_ptr, char *short_flavor, object_type *o_ptr, bool kanji, bool all)
 {
     char *prev_ptr = short_flavor;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
@@ -322,7 +322,7 @@ char *get_ability_abbreviation(player_type *player_ptr, char *short_flavor, obje
  * @param o_ptr 特性短縮表記を得たいオブジェクト構造体の参照ポインタ
  * @return なし
  */
-void get_inscription(player_type *player_ptr, char *buff, object_type *o_ptr)
+void get_inscription(const player_type *player_ptr, char *buff, object_type *o_ptr)
 {
     concptr insc = quark_str(o_ptr->inscription);
     char *ptr = buff;

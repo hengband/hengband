@@ -144,7 +144,7 @@ bool make_object(player_type *owner_ptr, object_type *j_ptr, BIT_FLAGS mode)
  * @details
  * The location must be a legal, clean, floor grid.
  */
-bool make_gold(player_type *player_ptr, object_type *j_ptr)
+bool make_gold(const player_type *player_ptr, object_type *j_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     int i = ((randint1(floor_ptr->object_level + 2) + 2) / 2) - 1;

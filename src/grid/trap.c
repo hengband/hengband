@@ -160,7 +160,7 @@ void init_normal_traps(void)
  * Actually, it is not this routine, but the "trap instantiation"\n
  * code, which should also check for "trap doors" on quest levels.\n
  */
-FEAT_IDX choose_random_trap(player_type *trapped_ptr)
+FEAT_IDX choose_random_trap(const player_type *trapped_ptr)
 {
     FEAT_IDX feat;
 
@@ -222,7 +222,7 @@ void disclose_grid(player_type *trapped_ptr, POSITION y, POSITION x)
  * when they are "discovered" (by detecting them or setting them off),\n
  * the trap is "instantiated" as a visible, "typed", trap.\n
  */
-void place_trap(player_type *trapped_ptr, POSITION y, POSITION x)
+void place_trap(const player_type *trapped_ptr, POSITION y, POSITION x)
 {
     floor_type *floor_ptr = trapped_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];

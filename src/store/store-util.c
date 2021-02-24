@@ -109,7 +109,7 @@ void store_delete(void)
  * Should we check for "permission" to have the given item?
  * </pre>
  */
-void store_create(player_type *player_ptr, black_market_crap_pf black_market_crap, store_will_buy_pf store_will_buy, mass_produce_pf mass_produce)
+void store_create(const player_type *player_ptr, black_market_crap_pf black_market_crap, store_will_buy_pf store_will_buy, mass_produce_pf mass_produce)
 {
     if (st_ptr->stock_num >= st_ptr->stock_size)
         return;
@@ -267,7 +267,7 @@ static void store_object_absorb(object_type *o_ptr, object_type *j_ptr)
  * known, the player may have to pick stuff up and drop it again.
  * </pre>
  */
-int store_carry(player_type *player_ptr, object_type *o_ptr)
+int store_carry(const player_type *player_ptr, object_type *o_ptr)
 {
     PRICE value = object_value(player_ptr, o_ptr);
     if (value <= 0)

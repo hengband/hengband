@@ -42,8 +42,8 @@ char *object_desc_chr(char *t, char c);
 char *object_desc_str(char *t, concptr s);
 char *object_desc_num(char *t, uint n);
 char *object_desc_int(char *t, int v);
-char *get_ability_abbreviation(player_type *player_ptr, char *ptr, object_type *o_ptr, bool kanji, bool all);
-void get_inscription(player_type *player_ptr, char *buff, object_type *o_ptr);
+char *get_ability_abbreviation(const player_type *player_ptr, char *ptr, object_type *o_ptr, bool kanji, bool all);
+void get_inscription(const player_type *player_ptr, char *buff, object_type *o_ptr);
 bool has_lite_flag(BIT_FLAGS *flags);
 bool has_dark_flag(BIT_FLAGS *flags);
 

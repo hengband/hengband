@@ -43,7 +43,7 @@ void object_known(object_type *o_ptr)
  * @param o_ptr ＊鑑定＊済にするオブジェクトの構造体参照ポインタ
  * @return なし
  */
-void object_aware(player_type *owner_ptr, object_type *o_ptr)
+void object_aware(const player_type *owner_ptr, object_type *o_ptr)
 {
     k_info[o_ptr->k_idx].aware = TRUE;
 

@@ -161,7 +161,7 @@ void wipe_o_list(floor_type *floor_ptr)
  *
  * Currently the "m" parameter is unused.
  */
-void scatter(player_type *player_ptr, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode)
+void scatter(const player_type *player_ptr, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     POSITION nx, ny;

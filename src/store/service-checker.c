@@ -18,7 +18,7 @@
  * @param o_ptr 判定したいオブジェクト構造体の参照ポインタ
  * @return アイテムが祝福されたアイテムならばTRUEを返す
  */
-static bool is_blessed_item(player_type *player_ptr, object_type *o_ptr)
+static bool is_blessed_item(const player_type *player_ptr, object_type *o_ptr)
 {
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     object_flags(player_ptr, o_ptr, flgs);
@@ -90,7 +90,7 @@ static bool check_store_weapon(object_type *o_ptr)
     }
 }
 
-static bool check_store_temple(player_type *player_ptr, object_type *o_ptr)
+static bool check_store_temple(const player_type *player_ptr, object_type *o_ptr)
 {
     switch (o_ptr->tval) {
     case TV_LIFE_BOOK:
@@ -179,7 +179,7 @@ static bool check_store_book(object_type *o_ptr)
     }
 }
 
-static bool switch_store_check(player_type *player_ptr, object_type *o_ptr)
+static bool switch_store_check(const player_type *player_ptr, object_type *o_ptr)
 {
     switch (cur_store_num) {
     case STORE_GENERAL:
@@ -209,7 +209,7 @@ static bool switch_store_check(player_type *player_ptr, object_type *o_ptr)
  * @note
  * Note that a shop-keeper must refuse to buy "worthless" items
  */
-bool store_will_buy(player_type *player_ptr, object_type *o_ptr)
+bool store_will_buy(const player_type *player_ptr, object_type *o_ptr)
 {
     if ((cur_store_num == STORE_HOME) || (cur_store_num == STORE_MUSEUM))
         return TRUE;
@@ -409,7 +409,7 @@ static DISCOUNT_RATE decide_discount_rate(const PRICE cost)
  * Some objects can be sold at a "discount" (in small piles)
  * </pre>
  */
-void mass_produce(player_type *player_ptr, object_type *o_ptr)
+void mass_produce(const player_type *player_ptr, object_type *o_ptr)
 {
     const PRICE cost = object_value(player_ptr, o_ptr);
     int size = switch_mass_production(o_ptr, cost);

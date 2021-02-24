@@ -641,7 +641,7 @@ bool build_type6(player_type *player_ptr, dun_data_type *dd_ptr)
 /*
  * Helper function for "trapped monster pit"
  */
-static bool vault_aux_trapped_pit(player_type *player_ptr, MONRACE_IDX r_idx)
+static bool vault_aux_trapped_pit(const player_type *player_ptr, MONRACE_IDX r_idx)
 {
     /* Unused */
     (void)player_ptr;

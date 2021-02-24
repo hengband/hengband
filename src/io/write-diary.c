@@ -73,7 +73,7 @@ static bool open_diary_file(FILE **fff, bool *disable_diary)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return クエストID
  */
-static QUEST_IDX write_floor(player_type *creature_ptr, concptr *note_level, char *note_level_buf)
+static QUEST_IDX write_floor(const player_type *creature_ptr, concptr *note_level, char *note_level_buf)
 {
 	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	QUEST_IDX q_idx = quest_number(creature_ptr, floor_ptr->dun_level);
@@ -170,7 +170,7 @@ static void write_diary_pet(FILE *fff, int num, concptr note)
  * @param note 日記内容のIDに応じた文字列参照ポインタ
  * @return エラーコード
  */
-errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
+errr exe_write_diary(const player_type *creature_ptr, int type, int num, concptr note)
 {
 	static bool disable_diary = FALSE;
 
@@ -186,9 +186,10 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		type == DIARY_TO_QUEST)
 	{
 		QUEST_IDX old_quest = creature_ptr->current_floor_ptr->inside_quest;
-		creature_ptr->current_floor_ptr->inside_quest = (quest[num].type == QUEST_TYPE_RANDOM) ? 0 : num;
-		init_flags = INIT_NAME_ONLY;
-		parse_fixed_map(creature_ptr, "q_info.txt", 0, 0, 0, 0);
+                player_type dummy = *creature_ptr;
+                dummy.current_floor_ptr->inside_quest = (quest[num].type == QUEST_TYPE_RANDOM) ? 0 : num;
+                init_flags = INIT_NAME_ONLY;
+		parse_fixed_map(&dummy, "q_info.txt", 0, 0, 0, 0);
 		creature_ptr->current_floor_ptr->inside_quest = old_quest;
 	}
 

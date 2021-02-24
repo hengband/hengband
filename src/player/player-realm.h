@@ -25,6 +25,6 @@ extern const u32b realm_choices1[];
 extern const u32b realm_choices2[];
 
 /* Magic-books for the realms */
-REALM_IDX get_realm1_book(player_type *player_ptr);
-REALM_IDX get_realm2_book(player_type *player_ptr);
-bool is_wizard_class(player_type *player_ptr);
+REALM_IDX get_realm1_book(const player_type *player_ptr);
+REALM_IDX get_realm2_book(const player_type *player_ptr);
+bool is_wizard_class(const player_type *player_ptr);

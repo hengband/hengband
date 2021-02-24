@@ -16,7 +16,7 @@
  * Based on a suggestion by "Lee Vogt" <lvogt@cig.mcel.mot.com>
  * </pre>
  */
-bool black_market_crap(player_type *player_ptr, object_type *o_ptr)
+bool black_market_crap(const player_type *player_ptr, object_type *o_ptr)
 {
     if (object_is_ego(o_ptr))
         return FALSE;

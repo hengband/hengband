@@ -36,7 +36,7 @@
  * @details
  * Hack -- note the special code for various items
  */
-void apply_magic_others(player_type *owner_ptr, object_type *o_ptr, int power)
+void apply_magic_others(const player_type *owner_ptr, object_type *o_ptr, int power)
 {
     object_kind *k_ptr = &k_info[o_ptr->k_idx];
 

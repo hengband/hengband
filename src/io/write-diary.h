@@ -50,4 +50,4 @@ extern bool write_level;
 #else
 concptr get_ordinal_number_suffix(int num);
 #endif
-errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note);
+errr exe_write_diary(const player_type *creature_ptr, int type, int num, concptr note);

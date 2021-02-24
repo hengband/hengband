@@ -211,7 +211,7 @@ static bool place_monster_group(player_type *player_ptr, MONSTER_IDX who, POSITI
  * @param r_idx チェックするモンスター種族のID
  * @return 護衛にできるならばtrue
  */
-static bool place_monster_can_escort(player_type *player_ptr, MONRACE_IDX r_idx)
+static bool place_monster_can_escort(const player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[place_monster_idx];
     monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[place_monster_m_idx];

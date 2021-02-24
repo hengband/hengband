@@ -219,7 +219,7 @@ void check_hex(player_type *caster_ptr)
  * @brief プレイヤーの呪術詠唱枠がすでに最大かどうかを返す
  * @return すでに全枠を利用しているならTRUEを返す
  */
-bool hex_spell_fully(player_type *caster_ptr)
+bool hex_spell_fully(const player_type *caster_ptr)
 {
     int k_max = 0;
     k_max = (caster_ptr->lev / 15) + 1;
@@ -270,7 +270,7 @@ void revenge_store(player_type *caster_ptr, HIT_POINT dam)
  * @param m_idx 判定の対象となるモンスターID
  * @return 反テレポートの効果が適用されるならTRUEを返す
  */
-bool teleport_barrier(player_type *caster_ptr, MONSTER_IDX m_idx)
+bool teleport_barrier(const player_type *caster_ptr, MONSTER_IDX m_idx)
 {
     monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -288,7 +288,7 @@ bool teleport_barrier(player_type *caster_ptr, MONSTER_IDX m_idx)
  * @param m_idx 判定の対象となるモンスターID
  * @return 反魔法の効果が適用されるならTRUEを返す
  */
-bool magic_barrier(player_type *target_ptr, MONSTER_IDX m_idx)
+bool magic_barrier(const player_type *target_ptr, MONSTER_IDX m_idx)
 {
     monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -306,7 +306,7 @@ bool magic_barrier(player_type *target_ptr, MONSTER_IDX m_idx)
  * @param m_idx 判定の対象となるモンスターID
  * @return 反増殖の効果が適用されるならTRUEを返す
  */
-bool multiply_barrier(player_type *caster_ptr, MONSTER_IDX m_idx)
+bool multiply_barrier(const player_type *caster_ptr, MONSTER_IDX m_idx)
 {
     monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -319,6 +319,6 @@ bool multiply_barrier(player_type *caster_ptr, MONSTER_IDX m_idx)
     return TRUE;
 }
 
-bool hex_spelling(player_type *caster_ptr, int hex) { return (caster_ptr->realm1 == REALM_HEX) && (caster_ptr->magic_num1[0] & (1UL << (hex))); }
+bool hex_spelling(const player_type *caster_ptr, int hex) { return (caster_ptr->realm1 == REALM_HEX) && (caster_ptr->magic_num1[0] & (1UL << (hex))); }
 
-bool hex_spelling_any(player_type *caster_ptr) { return (caster_ptr->realm1 == REALM_HEX) && (caster_ptr->magic_num1[0] != 0); }
+bool hex_spelling_any(const player_type *caster_ptr) { return (caster_ptr->realm1 == REALM_HEX) && (caster_ptr->magic_num1[0] != 0); }

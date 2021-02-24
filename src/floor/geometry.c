@@ -142,7 +142,7 @@ DIRECTION coords_to_dir(player_type *creature_ptr, POSITION y, POSITION x)
  * "glowing" grid.  This prevents the player from being able to "see" the\n
  * walls of illuminated rooms from a corridor outside the room.\n
  */
-bool player_can_see_bold(player_type *creature_ptr, POSITION y, POSITION x)
+bool player_can_see_bold(const player_type *creature_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr;
 
@@ -235,7 +235,7 @@ void mmove2(POSITION *y, POSITION *x, POSITION y1, POSITION x1, POSITION y2, POS
  * @param m_ptr 個々のモンスターへの参照ポインタ
  * @return 個々のモンスターがプレーヤーが見えたらTRUE
  */
-bool is_seen(player_type *creature_ptr, monster_type *m_ptr)
+bool is_seen(const player_type *creature_ptr, monster_type *m_ptr)
 {
     bool is_inside_view = !ignore_unview;
     is_inside_view |= creature_ptr->phase_out;

@@ -6,7 +6,7 @@
 #include "util/quarks.h"
 #include "util/string-processor.h"
 
-void display_short_flavors(player_type *player_ptr, flavor_type *flavor_ptr)
+void display_short_flavors(const player_type *player_ptr, flavor_type *flavor_ptr)
 {
     flavor_ptr->tmp_val2[0] = '\0';
     if ((abbrev_extra || abbrev_all) && object_is_fully_known(flavor_ptr->o_ptr)) {
