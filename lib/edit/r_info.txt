@@ -24772,9 +24772,9 @@ F:DROP_4D2 | DROP_1D2 | DROP_GOOD | DROP_60 | DROP_90 | ONLY_ITEM |
 F:EVIL | IM_COLD | IM_ACID | IM_ELEC | IM_FIRE
 S:1_IN_4 |
 S:BR_NETH | S_MONSTERS | S_DEMON | S_HOUND | SCARE
-D:$A two-headed hound with snake tail. He is firstborn of Echidna,
-D:$ father of Sphinx and Lion of Namea, 
-D:$ and deity head the male line in clan. Hades' vassals respond to his call.
+D:$Orthus is a two-headed hound with a snake tail. He is the firstborn of
+D:$ Echidna and father of the Sphinx and the Lion of Nemea.
+D:$ Hades' vassals respond to his call.
 D:２つ首と蛇の尾を持つ猟犬だ。彼はエキドナの長子であり、
 D:スフィンクスとネメアのライオンの父たる一族の男系筆頭の魔神だ。
 D:彼が呼びかければハデスの家臣も応える。
