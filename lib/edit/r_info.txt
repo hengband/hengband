@@ -23181,8 +23181,8 @@ F:FRIENDS | PREVENT_SUDDEN_MAGIC | DROP_90
 F:NONLIVING | NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
 F:NEVER_MOVE | NEVER_BLOW
 S:1_IN_2 | BR_ELEC | BR_PLAS
-D:$It is Moai who landed in Angband.
-D:$  You can not destroy this ion ring.
+D:$It is a Moai who landed in Angband.
+D:$  You can not destroy the ion rings it spits out.
 D:鉄獄に降り立ったモアイだ。こいつの吐き出すイオンリングは破壊できない。
 
 # 死に際に7/8の確率で自分自身を召喚する
