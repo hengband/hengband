@@ -23320,7 +23320,7 @@ F:IM_COLD | IM_POIS | IM_ACID | IM_ELEC | IM_FIRE | RES_TELE
 S:1_IN_5 | 
 S:S_MONSTERS | SCARE | BA_DARK | BA_NETH | BR_POIS
 D:$This sacred and untouchable female monster is half a nymph
-D:$ and half a snake, becoming the mother of many monsters.
+D:$ and half a snake.  She is the mother of many monsters.
 D:この半分がニンフで半分は蛇の神聖にして手の付けられない女怪は、
 D:数々のモンスターの母となった。
 
