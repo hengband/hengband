@@ -129,13 +129,13 @@ BIT_FLAGS has_infra_vision(player_type *creature_ptr)
         tmp_rp_ptr = &race_info[creature_ptr->prace];
 
     if (tmp_rp_ptr->infra > 0)
-        result |= FLAG_CAUSE_RACE;
+        result |= 0x01U << FLAG_CAUSE_RACE;
 
     if (creature_ptr->muta3 & MUT3_INFRAVIS)
-        result |= FLAG_CAUSE_MUTATION;
+        result |= 0x01U << FLAG_CAUSE_MUTATION;
 
     if (creature_ptr->tim_infra)
-        result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
+        result |= 0x01U << FLAG_CAUSE_MAGIC_TIME_EFFECT;
 
     result |= check_equipment_flags(creature_ptr, TR_INFRA);
     return result;
