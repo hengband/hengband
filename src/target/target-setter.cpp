@@ -34,18 +34,18 @@ typedef struct ts_type {
     target_type mode;
     POSITION y;
     POSITION x;
-    POSITION y2;
-    POSITION x2;
+    POSITION y2; // panel_row_min 退避用
+    POSITION x2; // panel_col_min 退避用
     bool done;
-    bool flag;
+    bool flag; // 移動コマンド入力時、"interesting" な座標へ飛ぶかどうか
     char query;
     char info[80];
     grid_type *g_ptr;
     TERM_LEN wid, hgt;
-    int m;
-    int distance;
-    int target_num;
-    bool move_fast;
+    int m; // "interesting" な座標たちのうち現在ターゲットしているもののインデックス
+    int distance; // カーソルの移動方向 (1,2,3,4,6,7,8,9)
+    int target_num; // target_pick() の結果
+    bool move_fast; // カーソル移動を粗くする(1マスずつ移動しない)
 } ts_type;
 
 static ts_type *initialize_target_set_type(player_type *creature_ptr, ts_type *ts_ptr, target_type mode)
@@ -94,32 +94,53 @@ static bool change_panel_xy(player_type *creature_ptr, POSITION y, POSITION x)
     return change_panel(creature_ptr, dy, dx);
 }
 
-/*
- * Help "select" a location (see below)
+/*!
+ * @brief "interesting" な座標たちのうち、(y1,x1) から (dy,dx) 方向にある最も近いもののインデックスを得る。
+ * @param y1 現在地座標y
+ * @param x1 現在地座標x
+ * @param dy 現在地からの向きy [-1,1]
+ * @param dx 現在地からの向きx [-1,1]
+ * @return 最も近い座標のインデックス。適切なものがない場合 -1
  */
-static POSITION_IDX target_pick(POSITION y1, POSITION x1, POSITION dy, POSITION dx)
+static POSITION_IDX target_pick(const POSITION y1, const POSITION x1, const POSITION dy, const POSITION dx)
 {
+    // 最も近いもののインデックスとその距離。
     POSITION_IDX b_i = -1, b_v = 9999;
+
     for (POSITION_IDX i = 0; i < (POSITION_IDX)size(ys_interest); i++) {
-        POSITION x2 = xs_interest[i];
-        POSITION y2 = ys_interest[i];
-        POSITION x3 = (x2 - x1);
-        POSITION y3 = (y2 - y1);
+        const POSITION x2 = xs_interest[i];
+        const POSITION y2 = ys_interest[i];
+
+        // (y1,x1) から (y2,x2) へ向かうベクトル。
+        const POSITION x3 = (x2 - x1);
+        const POSITION y3 = (y2 - y1);
+
+        // (dy,dx) 方向にないものを除外する。
+
+        // dx > 0 のとき、x3 <= 0 なるものは除外。
+        // dx < 0 のとき、x3 >= 0 なるものは除外。
         if (dx && (x3 * dx <= 0))
             continue;
 
+        // dy > 0 のとき、y3 <= 0 なるものは除外。
+        // dy < 0 のとき、y3 >= 0 なるものは除外。
         if (dy && (y3 * dy <= 0))
             continue;
 
-        POSITION x4 = ABS(x3);
-        POSITION y4 = ABS(y3);
+        const POSITION x4 = ABS(x3);
+        const POSITION y4 = ABS(y3);
+
+        // (dy,dx) が (-1,0) or (1,0) のとき、|x3| > |y3| なるものは除外。
         if (dy && !dx && (x4 > y4))
             continue;
 
+        // (dy,dx) が (0,-1) or (0,1) のとき、|y3| > |x3| なるものは除外。
         if (dx && !dy && (y4 > x4))
             continue;
 
-        POSITION_IDX v = ((x4 > y4) ? (x4 + x4 + y4) : (y4 + y4 + x4));
+        // (y1,x1), (y2,x2) 間の距離を求め、最も近いものを更新する。
+        // 距離の定義は v の式を参照。
+        const POSITION_IDX v = ((x4 > y4) ? (x4 + x4 + y4) : (y4 + y4 + x4));
         if ((b_i >= 0) && (v >= b_v))
             continue;
 
@@ -243,14 +264,34 @@ static void switch_target_input(player_type *creature_ptr, ts_type *ts_ptr)
     }
 }
 
+/*!
+ * @brief カーソル移動に伴い、描画範囲、"interesting" 座標リスト、現在のターゲットを更新する。
+ * @return カーソル移動によって描画範囲が変化したかどうか
+ */
 static bool check_panel_changed(player_type *creature_ptr, ts_type *ts_ptr)
 {
+    // カーソル移動によって描画範囲が変化しないなら何もせずその旨を返す。
     if (!change_panel(creature_ptr, ddy[ts_ptr->distance], ddx[ts_ptr->distance]))
         return FALSE;
 
-    const int v = ys_interest[ts_ptr->m];
-    const int u = xs_interest[ts_ptr->m];
+    // 描画範囲が変化した場合、"interesting" 座標リストおよび現在のターゲットを更新する必要がある。
+
+    // "interesting" 座標を探す起点。
+    // ts_ptr->m が有効な座標を指していればそれを使う。
+    // さもなくば (ts_ptr->y, ts_ptr->x) を使う。
+    int v, u;
+    if (ts_ptr->m < (int)size(ys_interest)) {
+        v = ys_interest[ts_ptr->m];
+        u = xs_interest[ts_ptr->m];
+    } else {
+        v = ts_ptr->y;
+        u = ts_ptr->x;
+    }
+
+    // 新たな描画範囲を用いて "interesting" 座標リストを更新。
     target_set_prepare(creature_ptr, ys_interest, xs_interest, ts_ptr->mode);
+
+    // 新たな "interesting" 座標リストからターゲットを探す。
     ts_ptr->flag = TRUE;
     ts_ptr->target_num = target_pick(v, u, ddy[ts_ptr->distance], ddx[ts_ptr->distance]);
     if (ts_ptr->target_num >= 0)
@@ -259,10 +300,17 @@ static bool check_panel_changed(player_type *creature_ptr, ts_type *ts_ptr)
     return TRUE;
 }
 
+/*!
+ * @brief カーソル移動方向に "interesting" な座標がなかったとき、画面外まで探す。
+ *
+ * 既に "interesting" な座標を発見している場合、この関数は何もしない。
+ */
 static void sweep_targets(player_type *creature_ptr, ts_type *ts_ptr)
 {
     floor_type *floor_ptr = creature_ptr->current_floor_ptr;
     while (ts_ptr->flag && (ts_ptr->target_num < 0)) {
+        // カーソル移動に伴い、必要なだけ描画範囲を更新。
+        // "interesting" 座標リストおよび現在のターゲットも更新。
         if (check_panel_changed(creature_ptr, ts_ptr))
             continue;
 
