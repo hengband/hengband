@@ -6,6 +6,7 @@
 #include "monster/smart-learn-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
+#include "util/bit-flags-calculator.h"
 
 /*!
  * @brief モンスターを倒した際の財宝svalを返す
@@ -41,9 +42,9 @@ monster_death_type *initialize_monster_death_type(player_type *player_ptr, monst
     md_ptr->m_idx = m_idx;
     md_ptr->m_ptr = &floor_ptr->m_list[m_idx];
     md_ptr->r_ptr = &r_info[md_ptr->m_ptr->r_idx];
-    md_ptr->do_gold = (!(md_ptr->r_ptr->flags1 & RF1_ONLY_ITEM));
-    md_ptr->do_item = (!(md_ptr->r_ptr->flags1 & RF1_ONLY_GOLD));
-    md_ptr->cloned = (md_ptr->m_ptr->smart & SM_CLONED) ? TRUE : FALSE;
+    md_ptr->do_gold = (!test_bit(md_ptr->r_ptr->flags1, RF1_ONLY_ITEM) && !test_bit(md_ptr->r_ptr->flags1, (RF1_DROP_GOOD | RF1_DROP_GREAT)));
+    md_ptr->do_item = (!test_bit(md_ptr->r_ptr->flags1, RF1_ONLY_GOLD) || test_bit(md_ptr->r_ptr->flags1, (RF1_DROP_GOOD | RF1_DROP_GREAT)));
+    md_ptr->cloned = test_bit(md_ptr->m_ptr->smart, SM_CLONED) ? TRUE : FALSE;
     md_ptr->force_coin = get_coin_type(md_ptr->m_ptr->r_idx);
     md_ptr->drop_chosen_item = drop_item && !md_ptr->cloned && !floor_ptr->inside_arena && !player_ptr->phase_out && !is_pet(md_ptr->m_ptr);
     return md_ptr;
