@@ -24,7 +24,7 @@ typedef struct msa_type {
     POSITION y;
     POSITION x_br_lite;
     POSITION y_br_lite;
-    bool do_spell;
+    mspell_lite_type do_spell;
     bool in_no_magic_dungeon;
     bool success;
     byte mspells[96];
