@@ -69,7 +69,7 @@ void torch_lost_fuel(object_type *o_ptr)
  * @details
  * SWD: Experimental modification: multiple light sources have additive effect.
  */
-void calc_lite_radius(player_type *creature_ptr)
+void update_lite_radius(player_type *creature_ptr)
 {
     creature_ptr->cur_lite = 0;
     for (inventory_slot_type i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
