@@ -161,6 +161,7 @@
 #include "game-option/special-options.h"
 #include "io/exit-panic.h"
 #include "io/files-util.h"
+#include "locale/japanese.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "system/angband.h"
@@ -180,7 +181,6 @@
  * Include the proper "header" file
  */
 #include <curses.h>
-#include <iconv.h>
 
 typedef struct term_data term_data;
 
@@ -193,8 +193,6 @@ struct term_data {
 #define MAX_TERM_DATA 4
 
 static term_data data[MAX_TERM_DATA];
-static iconv_t iconv_to_sys;
-static iconv_t iconv_to_gui;
 
 /*
  * Hack -- try to guess which systems use what commands
@@ -648,32 +646,6 @@ static void Term_nuke_gcu(term_type *t)
 }
 
 /*
- * Convert to EUC-JP
- */
-static void convert_to_sys(char *buf)
-{
-    size_t inlen = strlen(buf);
-    size_t outlen = inlen;
-    char tmp[outlen + 1];
-
-    char *inbuf = buf;
-    char *outbuf = tmp;
-    size_t res;
-    res = iconv(iconv_to_sys, 0, 0, 0, 0);
-    if (res == (size_t)-1)
-        return;
-    res = iconv(iconv_to_sys, &inbuf, &inlen, &outbuf, &outlen);
-    if (res == (size_t)-1)
-        return;
-    res = iconv(iconv_to_sys, 0, 0, &outbuf, &outlen);
-    if (res == (size_t)-1)
-        return;
-
-    outbuf[0] = '\0';
-    strcpy(buf, tmp);
-}
-
-/*
  * Push multiple keys reversal
  */
 static void term_string_push(char *buf)
@@ -726,8 +698,14 @@ static errr Term_xtra_gcu_event(int v)
         nodelay(stdscr, FALSE);
 
         *bp = '\0';
-        convert_to_sys(buf);
-        term_string_push(buf);
+#ifdef JP
+        char eucbuf[sizeof(buf)];
+        /* strlen + 1 を渡して文字列終端('\0')を含めて変換する */
+        if (utf8_to_euc(buf, strlen(buf) + 1, eucbuf, sizeof(eucbuf)) < 0) {
+            return (-1);
+        }
+#endif
+        term_string_push(_(eucbuf, buf));
     }
 
     /* Do not wait */
@@ -796,8 +774,14 @@ static errr Term_xtra_gcu_event(int v)
         }
 
         bp[0] = '\0';
-        convert_to_sys(buf);
-        term_string_push(buf);
+#ifdef JP
+        char eucbuf[sizeof(buf)];
+        /* strlen + 1 を渡して文字列終端('\0')を含めて変換する */
+        if (utf8_to_euc(buf, strlen(buf) + 1, eucbuf, sizeof(eucbuf)) < 0) {
+            return (-1);
+        }
+#endif
+        term_string_push(_(eucbuf, buf));
     }
 
     /* Do not wait */
@@ -1029,14 +1013,6 @@ static errr Term_text_gcu(int x, int y, int n, byte a, concptr s)
 {
     term_data *td = (term_data *)(Term->data);
 
-    char intext[n];
-    char text[80 * 3 + 1];
-    size_t inlen = n;
-    size_t outlen = sizeof(text);
-    char *inbuf = intext;
-    char *outbuf = text;
-    size_t res;
-
 #ifdef USE_NCURSES_ACS
     /* do we have colors + 16 ? */
     /* then call special routine for drawing special characters */
@@ -1045,24 +1021,6 @@ static errr Term_text_gcu(int x, int y, int n, byte a, concptr s)
         return (0);
     }
 #endif
-
-    /* Copy to char array because of iconv's warning by const char pointer */
-    memcpy(intext, s, (size_t)n);
-
-    /* Obtain a copy of the text */
-    res = iconv(iconv_to_gui, 0, 0, 0, 0);
-    if (res == (size_t)-1)
-        return (-1);
-    res = iconv(iconv_to_gui, &inbuf, &inlen, &outbuf, &outlen);
-    if (res == (size_t)-1)
-        return (-1);
-    res = iconv(iconv_to_gui, 0, 0, &outbuf, &outlen);
-    if (res == (size_t)-1)
-        return (-1);
-
-    if (outlen == 0)
-        return (-1);
-    *outbuf = '\0';
 
     /* Move the cursor and dump the string */
     wmove(td->win, y, x);
@@ -1073,8 +1031,15 @@ static errr Term_text_gcu(int x, int y, int n, byte a, concptr s)
         wattrset(td->win, colortable[a & 0x0F]);
 #endif
 
+#ifdef JP
+    char text[1024];
+    int text_len = euc_to_utf8(s, n, text, sizeof(text));
+    if (text_len < 0) {
+        return (-1);
+    }
+#endif
     /* Add the text */
-    waddstr(td->win, text);
+    waddnstr(td->win, _(text, s), _(text_len, n));
 
     /* Success */
     return (0);
@@ -1134,9 +1099,6 @@ static void hook_quit(concptr str)
 
     /* Exit curses */
     endwin();
-
-    iconv_close(iconv_to_sys);
-    iconv_close(iconv_to_gui);
 }
 
 /*
@@ -1159,12 +1121,6 @@ errr init_gcu(int argc, char *argv[])
     (void)argv;
 
     setlocale(LC_ALL, "");
-    iconv_to_sys = iconv_open("EUC-JP", "");
-    if (iconv_to_sys == (iconv_t)-1)
-        return (-1);
-    iconv_to_gui = iconv_open("", "EUC-JP");
-    if (iconv_to_gui == (iconv_t)-1)
-        return (-1);
 
     /* Build the "sound" path */
     path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "sound");

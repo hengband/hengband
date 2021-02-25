@@ -363,9 +363,21 @@ static const struct ms_to_jis_unicode_conv_t {
 };
 
 /*!
- * @brief EUCがシステムコードである環境下向けにUTF-8から変換処理を行うサブルーチン
- * @param str 変換する文字列のポインタ
- * @return なし
+ * @brief 受け取ったUTF-8文字列を調べ、特定のコードポイントの文字の置き換えを行う
+ *
+ * 受け取ったUTF-8の文字列に含まれる文字を1つ1つしらべて、ms_to_jis_unicode_conv で
+ * 定義されている特定のコードポイントの文字の変換を行う。
+ *
+ * '～'と'－'は、Windows環境(CP932)とLinux/UNIX環境(EUC-JP)でUTF-8に対応する
+ * 文字としてそれぞれ別のコードポイントが割り当てられており、別の環境の
+ * UTF-8からシステムの文字コードに変換した時に、これらの文字は変換できず
+ * 文字化けが起きてしまう。
+ *
+ * これを避けるため、Linux/UNIX環境(EUC-JP)ではUTF-8→EUC-JPの変換を行う前に
+ * 該当するコードポイントの文字をLinux/UNIX環境のものに置き換えてから
+ * 変換を行うようにするためのルーチン。
+ *
+ * @param str コードポイントの置き換えを行う文字列へのポインタ
  */
 static void ms_to_jis_unicode(char *str)
 {
@@ -397,6 +409,66 @@ static void ms_to_jis_unicode(char *str)
 #elif defined(SJIS) && defined(WINDOWS)
 #include <Windows.h>
 #endif
+
+#ifdef EUC
+/*!
+ * @brief 文字列の文字コードをUTF-8からEUC-JPに変換する
+ * @param utf8_str 変換元の文字列へのポインタ
+ * @param utf8_str_len 変換元の文字列の長さ(文字数ではなくバイト数)
+ * @param euc_buf 変換した文字列を格納するバッファへのポインタ
+ * @param euc_buf_len 変換した文字列を格納するバッファのサイズ
+ * @return 変換に成功した場合変換後の文字列の長さを返す
+ *         変換に失敗した場合-1を返す
+ */
+int utf8_to_euc(char *utf8_str, size_t utf8_str_len, char *euc_buf, size_t euc_buf_len)
+{
+    static iconv_t cd = NULL;
+    if (!cd)
+        cd = iconv_open("EUC-JP", "UTF-8");
+
+    ms_to_jis_unicode(utf8_str);
+
+    size_t inlen_left = utf8_str_len;
+    size_t outlen_left = euc_buf_len;
+    char *in = utf8_str;
+    char *out = euc_buf;
+
+    if (iconv(cd, &in, &inlen_left, &out, &outlen_left) == (size_t)-1) {
+        return -1;
+    }
+
+    return euc_buf_len - outlen_left;
+}
+
+/*!
+ * @brief 文字列の文字コードをEUC-JPからUTF-8に変換する
+ * @param euc_str 変換元の文字列へのポインタ
+ * @param euc_str_len 変換元の文字列の長さ(文字数ではなくバイト数)
+ * @param utf8_buf 変換した文字列を格納するバッファへのポインタ
+ * @param utf8_buf_len 変換した文字列を格納するバッファのサイズ
+ * @return 変換に成功した場合変換後の文字列の長さを返す
+ *         変換に失敗した場合-1を返す
+ */
+int euc_to_utf8(const char *euc_str, size_t euc_str_len, char *utf8_buf, size_t utf8_buf_len)
+{
+    static iconv_t cd = NULL;
+    if (!cd)
+        cd = iconv_open("UTF-8", "EUC-JP");
+
+    size_t inlen_left = euc_str_len;
+    size_t outlen_left = utf8_buf_len;
+    const char *in = euc_str;
+    char *out = utf8_buf;
+
+    // iconv は入力バッファを書き換えないのでキャストで const を外してよい
+    if (iconv(cd, (char **)&in, &inlen_left, &out, &outlen_left) == (size_t)-1) {
+        return -1;
+    }
+
+    return utf8_buf_len - outlen_left;
+}
+#endif
+
 /*!
  * @brief 文字コードがUTF-8の文字列をシステムの文字コードに変換する
  * @param utf8_str 変換するUTF-8の文字列へのポインタ
@@ -408,15 +480,8 @@ static bool utf8_to_sys(char *utf8_str, char *sys_str_buffer, size_t sys_str_buf
 {
 #if defined(EUC)
 
-    iconv_t cd = iconv_open("EUC-JP", "UTF-8");
-    size_t utf8_len = strlen(utf8_str) + 1; /* include termination character */
-    char *from = utf8_str;
-    int ret;
-
-    ms_to_jis_unicode(utf8_str);
-    ret = iconv(cd, &from, &utf8_len, &sys_str_buffer, &sys_str_buflen);
-    iconv_close(cd);
-    return (ret >= 0);
+    /* strlen + 1 を渡して文字列終端('\0')を含めて変換する */
+    return (utf8_to_euc(utf8_str, strlen(utf8_str) + 1, sys_str_buffer, sys_str_buflen) >= 0);
 
 #elif defined(SJIS) && defined(WINDOWS)
 
