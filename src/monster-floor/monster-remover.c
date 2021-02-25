@@ -74,6 +74,15 @@ void delete_monster_idx(player_type *player_ptr, MONSTER_IDX i)
         delete_object_idx(player_ptr, this_o_idx);
     }
 
+    // 召喚元のモンスターが消滅した時は、召喚されたモンスターのparent_m_idxが
+    // 召喚されたモンスター自身のm_idxを指すようにする
+    for (MONSTER_IDX child_m_idx = 1; child_m_idx < floor_ptr->m_max; child_m_idx++) {
+        monster_type *child_m_ptr = &floor_ptr->m_list[child_m_idx];
+        if (child_m_ptr->r_idx && child_m_ptr->parent_m_idx == i) {
+            child_m_ptr->parent_m_idx = child_m_idx;
+        }
+    }
+
     (void)WIPE(m_ptr, monster_type);
     floor_ptr->m_cnt--;
     lite_spot(player_ptr, y, x);
