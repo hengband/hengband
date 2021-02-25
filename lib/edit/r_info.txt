@@ -24885,10 +24885,10 @@ F:DROP_CORPSE | DROP_SKELETON | DROP_1D2 | DROP_GREAT
 F:IM_POIS | RES_DARK | RES_CHAO | SMART | NO_CONF
 S:1_IN_3 | BR_CONF | CAUSE_3 | MIND_BLAST | S_SPIDER
 S:FORGET | SCARE | BLINK | CONF | DARKNESS
-D:$"Don't you want balloon?"
-D:$  An unknown life form that can transform into a fearful one.
-D:$  The appearance of the clown is just one of them.
-D:$  When you are dragged down, you float too.
+D:$"Don't you want a balloon?"
+D:$  It's an unknown life form that can transform into what its victim
+D:$ fears the most.  A clown is just one its forms.
+D:$  When it drags you down, you'll float too.
 D:「風船、欲しいだろう？」
 D:　相手が恐怖心を抱くものに姿を変えることができる未知の生命体だ。
 D:ピエロの姿もその一つに過ぎない。
