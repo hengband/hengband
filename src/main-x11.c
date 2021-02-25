@@ -95,6 +95,7 @@
 #include "game-option/runtime-arguments.h"
 #include "game-option/special-options.h"
 #include "io/files-util.h"
+#include "locale/japanese.h"
 #include "locale/utf-8.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
@@ -129,7 +130,6 @@
 #include <X11/Xatom.h>
 #endif /* __MAKEDEPEND__ */
 
-#include <iconv.h>
 #ifdef USE_XFT
 #include <X11/Xft/Xft.h>
 #endif
@@ -912,17 +912,13 @@ static errr Infofnt_text_std(int x, int y, concptr str, int len)
         }
 #endif
     } else {
-        iconv_t cd = iconv_open("UTF-8", "EUC-JP");
-        size_t inlen = len;
-        size_t outlen = len * 2;
-        char *kanji = malloc(outlen);
-        char *sp;
-        char *kp = kanji;
-        char sbuf[1024];
-        memcpy(sbuf, str, (size_t)len);
-        sp = sbuf;
-        iconv(cd, &sp, &inlen, &kp, &outlen);
-        iconv_close(cd);
+#ifdef JP
+        char utf8_buf[1024];
+        int utf8_len = euc_to_utf8(str, len, utf8_buf, sizeof(utf8_buf));
+        if (utf8_len < 0) {
+            return (-1);
+        }
+#endif
 
 #ifdef USE_XFT
         XftDraw *draw = Infowin->draw;
@@ -934,12 +930,11 @@ static errr Infofnt_text_std(int x, int y, concptr str, int len)
         r.height = Infofnt->hgt;
         XftDrawSetClipRectangles(draw, x, y - Infofnt->asc, &r, 1);
         XftDrawRect(draw, &Infoclr->bg, x, y - Infofnt->asc, Infofnt->wid * len, Infofnt->hgt);
-        Infofnt_text_std_xft_draw_str(x, y, kanji, kp);
+        Infofnt_text_std_xft_draw_str(x, y, _(utf8_buf, str), _(utf8_buf + utf8_len, str + len));
         XftDrawSetClip(draw, 0);
 #else
-        XmbDrawImageString(Metadpy->dpy, Infowin->win, Infofnt->info, Infoclr->gc, x, y, kanji, kp - kanji);
+        XmbDrawImageString(Metadpy->dpy, Infowin->win, Infofnt->info, Infoclr->gc, x, y, _(utf8_buf, str), _(utf8_len, len));
 #endif
-        free(kanji);
     }
 
     return (0);
@@ -1043,49 +1038,6 @@ struct x11_selection_type {
 
 static x11_selection_type s_ptr[1];
 
-// EUC-JP -> UTF-8 変換。
-// utf8_buf には十分なサイズがあると仮定している。
-// 出力文字列は0終端される。
-static void euc_to_utf8(const char *const euc, char *const utf8_buf, const size_t utf8_buf_len)
-{
-    static iconv_t cd = NULL;
-    if (!cd)
-        cd = iconv_open("UTF-8", "EUC-JP");
-
-    size_t inlen = strlen(euc);
-    size_t outlen = utf8_buf_len;
-    const char *in = euc;
-    char *out = utf8_buf;
-    // iconv は入力バッファを書き換えないのでキャストで const を外してよい
-    iconv(cd, (char **)&in, &inlen, &out, &outlen);
-
-    const size_t n = utf8_buf_len - outlen;
-    utf8_buf[n] = '\0';
-}
-
-/*
- * Convert to EUC-JP
- */
-#ifdef USE_XIM
-static void convert_to_euc(char *buf)
-{
-    size_t inlen = strlen(buf);
-    size_t outlen_orig = inlen + 1;
-    size_t outlen = outlen_orig;
-    char tmp[outlen];
-
-    iconv_t iconvd = iconv_open("EUC-JP", "UTF-8");
-    char *inbuf = buf;
-    char *outbuf = tmp;
-    iconv(iconvd, &inbuf, &inlen, &outbuf, &outlen);
-    iconv_close(iconvd);
-
-    size_t n = outlen_orig - outlen;
-    memcpy(buf, tmp, n);
-    buf[n] = '\0';
-}
-#endif
-
 // ゲーム側へキーを送る
 static void send_key(const char key)
 {
@@ -1151,8 +1103,14 @@ static void react_keypress(XKeyEvent *xev)
 
 #ifdef USE_XIM
     if (!valid_keysym) { /* XIMからの入力時のみ FALSE になる */
-        convert_to_euc(buf);
-        send_keys(buf);
+#ifdef JP
+        char euc_buf[sizeof(buf)];
+        /* strlen + 1 を渡して文字列終端('\0')を含めて変換する */
+        if (utf8_to_euc(buf, strlen(buf) + 1, euc_buf, sizeof(euc_buf)) < 0) {
+            return;
+        }
+#endif
+        send_keys(_(euc_buf, buf));
         return;
     }
 #endif
@@ -1526,10 +1484,13 @@ static bool paste_x11_send_text(XSelectionRequestEvent *rq)
 
         buf[l] = '\0';
 
+#ifdef JP
         char utf8_buf[2048];
-        euc_to_utf8(buf, utf8_buf, sizeof(utf8_buf));
-
-        XChangeProperty(DPY, rq->requestor, rq->property, xa_utf8, 8, PropModeAppend, (unsigned char *)utf8_buf, (int)strlen(utf8_buf));
+        const int len = euc_to_utf8(buf, l, utf8_buf, sizeof(utf8_buf));
+#endif
+        if (_(len, l) > 0) {
+            XChangeProperty(DPY, rq->requestor, rq->property, xa_utf8, 8, PropModeAppend, (unsigned char *)_(utf8_buf, buf), _(len, l));
+        }
     }
 
     return TRUE;
