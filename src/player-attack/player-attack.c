@@ -234,7 +234,8 @@ static void process_weapon_attack(player_type *attacker_ptr, player_attack_type 
     pa_ptr->attack_damage = calc_attack_damage_with_slay(attacker_ptr, o_ptr, pa_ptr->attack_damage, pa_ptr->m_ptr, pa_ptr->mode, FALSE);
     calc_surprise_attack_damage(attacker_ptr, pa_ptr);
 
-    if (((attacker_ptr->impact & FLAG_CAUSE_INVEN_MAIN_HAND) && ((pa_ptr->attack_damage > 50) || one_in_(7))) || (pa_ptr->chaos_effect == CE_QUAKE)
+    BIT_FLAGS attack_hand = 0x01U << ((pa_ptr->hand == 0) ? FLAG_CAUSE_INVEN_MAIN_HAND : FLAG_CAUSE_INVEN_SUB_HAND);
+    if ((test_bit(attacker_ptr->impact, attack_hand) && ((pa_ptr->attack_damage > 50) || one_in_(7))) || (pa_ptr->chaos_effect == CE_QUAKE)
         || (pa_ptr->mode == HISSATSU_QUAKE))
         *do_quake = TRUE;
 
