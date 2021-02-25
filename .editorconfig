@@ -1,0 +1,5 @@
+﻿root = true
+
+[*]
+charset = utf-8-bom
+insert_final_newline = true
