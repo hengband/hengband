@@ -24858,12 +24858,11 @@ F:UNIQUE | FEMALE | ANIMAL | FORCE_MAXHP | PREVENT_SUDDEN_MAGIC | CAN_FLY | RAND
 F:ONLY_ITEM | DROP_60 | DROP_1D2 | DROP_GOOD | DROP_CORPSE |
 F:BASH_DOOR | IM_ACID | IM_ELEC | HURT_FIRE | WEIRD_MIND | NO_FEAR
 R:1252:5d5
-D:$The Queen of vespoid, featuring a huge abdomen and bright wings.
-D:$  Command the subordinate vespoid
-D:$ with a peculiar flight and attack the intruder.
-D:$  The abdominal sting is also very well developed,
-D:$ and in addition to neurological poisons,
-D:$ it may also inject acidic fluids towards its prey.
+D:$The Queen of vespoids has a huge abdomen and bright wings.
+D:$  Using a peculiar pattern of flight, she commands subordinate vespoids
+D:$ to attack any intruders.
+D:$  Her abdominal stinger is also very well developed and
+D:$ can spray acidic fluids or inject neurological poisons.
 D:巨大な腹部と鮮やかな大羽を特徴とするランゴスタの女王。
 D:配下のランゴスタに特異な飛行で命令を行い、侵入者を襲う。
 D:腹部の毒針も非常に発達しており、神経性の毒の他、
