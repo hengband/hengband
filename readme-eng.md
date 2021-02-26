@@ -10,23 +10,29 @@ This readme is very old, so I will update it later.
 
 Download source archive and try...
 
-> tar -zxvf hengband-x.x.x.tar.gz
-> cd hengband-x.x.x
-> ./configure --disable-japanese
-> make install
+```
+tar -zxvf hengband-x.x.x.tar.gz
+cd hengband-x.x.x
+./configure --disable-japanese
+make install
+```
 
 Substitute the version number to x.x.x.
 You need --disable-japanese option of the configure for English version.
 If you are a super user, --with-setgid=games option works.
 then try
 
-> ./hengband -- -n<number of windows>  ## for normal ASCII graphics
+```
+./hengband -- -n<number of windows>  ## for normal ASCII graphics
+```
 
   or
 
-> ./hengband -g -- -n<# of windows>    ## for 8x8 tile graphics 
-> ./hengband -g -- -b -n<# of windows> ## for Bigtile graphics
-> ./hengband -g -- -a -n<# of windows> ## for 16x16 tile (need heng_graf.tar.gz)
+```
+./hengband -g -- -n<# of windows>    ## for 8x8 tile graphics
+./hengband -g -- -b -n<# of windows> ## for Bigtile graphics
+./hengband -g -- -a -n<# of windows> ## for 16x16 tile (need heng_graf.tar.gz)
+```
 
   to play.
 
@@ -35,8 +41,10 @@ variables.
 
 Ex.
 
-> setenv ANGBAND_X11_FONT '-*-*-medium-r-normal--24-*-*-*-*-*-iso8859-1'
-> hengband -- -n
+```
+setenv ANGBAND_X11_FONT '-*-*-medium-r-normal--24-*-*-*-*-*-iso8859-1'
+hengband -- -n
+```
 
 Then font size will be changed.
 
