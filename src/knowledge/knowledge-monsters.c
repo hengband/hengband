@@ -65,10 +65,10 @@ static IDX collect_monsters(player_type *creature_ptr, IDX grp_cur, IDX mon_idx[
             continue;
 
         if (grp_unique) {
-            if (!test_bit(r_ptr->flags1, RF1_UNIQUE))
+            if (none_bits(r_ptr->flags1, RF1_UNIQUE))
                 continue;
         } else if (grp_riding) {
-            if (!test_bit(r_ptr->flags7, RF7_RIDING))
+            if (none_bits(r_ptr->flags7, RF7_RIDING))
                 continue;
         } else if (grp_wanted) {
             bool wanted = FALSE;
@@ -83,7 +83,7 @@ static IDX collect_monsters(player_type *creature_ptr, IDX grp_cur, IDX mon_idx[
             if (!wanted)
                 continue;
         } else if (grp_amberite) {
-            if (!test_bit(r_ptr->flags3, RF3_AMBERITE))
+            if (none_bits(r_ptr->flags3, RF3_AMBERITE))
                 continue;
         } else {
             if (!angband_strchr(group_char, r_ptr->d_char))
@@ -162,7 +162,7 @@ void do_cmd_knowledge_kill_count(player_type *creature_ptr)
     for (int kk = 1; kk < max_r_idx; kk++) {
         monster_race *r_ptr = &r_info[kk];
 
-        if (test_bit(r_ptr->flags1, RF1_UNIQUE)) {
+        if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
             bool dead = (r_ptr->max_num == 0);
 
             if (dead) {
@@ -198,7 +198,7 @@ void do_cmd_knowledge_kill_count(player_type *creature_ptr)
     ang_sort(creature_ptr, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
     for (int k = 0; k < n; k++) {
         monster_race *r_ptr = &r_info[who[k]];
-        if (test_bit(r_ptr->flags1, RF1_UNIQUE)) {
+        if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
             bool dead = (r_ptr->max_num == 0);
             if (dead) {
                 fprintf(fff, "     %s\n", (r_name + r_ptr->name));
@@ -266,7 +266,7 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
         term_erase(69, row + i, 255);
         term_queue_bigchar(use_bigtile ? 69 : 70, row + i, r_ptr->x_attr, r_ptr->x_char, 0, 0);
         if (!visual_only) {
-            if (!test_bit(r_ptr->flags1, RF1_UNIQUE))
+            if (none_bits(r_ptr->flags1, RF1_UNIQUE))
                 put_str(format("%5d", r_ptr->r_pkills), row + i, 73);
             else
                 c_put_str((r_ptr->max_num == 0 ? TERM_L_DARK : TERM_WHITE), (r_ptr->max_num == 0 ? _("死亡", " dead") : _("生存", "alive")), row + i, 74);

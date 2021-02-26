@@ -110,7 +110,7 @@ spoiler_output_status spoil_mon_desc(concptr fname, bool show_all, race_flags8 R
     for (int i = 0; i < n; i++) {
         monster_race *r_ptr = &r_info[who[i]];
         concptr name = (r_name + r_ptr->name);
-        if (!show_all && !test_bit(r_ptr->flags8, RF8_flags))
+        if (!show_all && none_bits(r_ptr->flags8, RF8_flags))
             continue;
 
         if (r_ptr->flags7 & RF7_KAGE)
