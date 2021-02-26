@@ -12,9 +12,9 @@ EXTRA_DIST = \
 	autopick.txt \
 	autopick_eng.txt \
 	bootstrap \
-	readme.txt \
+	readme.md \
 	readme_angband \
-	readme_eng.txt \
+	readme-eng.md \
 	hengband.spec \
 	$(visual_studio_files)
 
