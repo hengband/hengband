@@ -11,167 +11,167 @@
 void add_cheat_remove_flags_others(player_type *target_ptr, msr_type *msr_ptr)
 {
     if (has_resist_neth(target_ptr))
-        set_bit(msr_ptr->smart, SM_RES_NETH);
+        set_bits(msr_ptr->smart, SM_RES_NETH);
 
     if (has_resist_lite(target_ptr))
-        set_bit(msr_ptr->smart, SM_RES_LITE);
+        set_bits(msr_ptr->smart, SM_RES_LITE);
 
     if (has_resist_dark(target_ptr))
-        set_bit(msr_ptr->smart, SM_RES_DARK);
+        set_bits(msr_ptr->smart, SM_RES_DARK);
 
     if (has_resist_fear(target_ptr))
-        set_bit(msr_ptr->smart, SM_RES_FEAR);
+        set_bits(msr_ptr->smart, SM_RES_FEAR);
 
     if (has_resist_conf(target_ptr))
-        set_bit(msr_ptr->smart, SM_RES_CONF);
+        set_bits(msr_ptr->smart, SM_RES_CONF);
 
     if (has_resist_chaos(target_ptr))
-        set_bit(msr_ptr->smart, SM_RES_CHAOS);
+        set_bits(msr_ptr->smart, SM_RES_CHAOS);
 
     if (has_resist_disen(target_ptr))
-        set_bit(msr_ptr->smart, SM_RES_DISEN);
+        set_bits(msr_ptr->smart, SM_RES_DISEN);
 
     if (has_resist_blind(target_ptr))
-        set_bit(msr_ptr->smart, SM_RES_BLIND);
+        set_bits(msr_ptr->smart, SM_RES_BLIND);
 
     if (has_resist_nexus(target_ptr))
-        set_bit(msr_ptr->smart, SM_RES_NEXUS);
+        set_bits(msr_ptr->smart, SM_RES_NEXUS);
 
     if (has_resist_sound(target_ptr))
-        set_bit(msr_ptr->smart, SM_RES_SOUND);
+        set_bits(msr_ptr->smart, SM_RES_SOUND);
 
     if (has_resist_shard(target_ptr))
-        set_bit(msr_ptr->smart, SM_RES_SHARD);
+        set_bits(msr_ptr->smart, SM_RES_SHARD);
 
     if (has_reflect(target_ptr))
-        set_bit(msr_ptr->smart, SM_IMM_REFLECT);
+        set_bits(msr_ptr->smart, SM_IMM_REFLECT);
 
     if (target_ptr->free_act)
-        set_bit(msr_ptr->smart, SM_IMM_FREE);
+        set_bits(msr_ptr->smart, SM_IMM_FREE);
 
     if (!target_ptr->msp)
-        set_bit(msr_ptr->smart, SM_IMM_MANA);
+        set_bits(msr_ptr->smart, SM_IMM_MANA);
 }
 
 static void check_nether_resistance(player_type *target_ptr, msr_type *msr_ptr)
 {
-    if (!test_bit(msr_ptr->smart, SM_RES_NETH))
+    if (none_bits(msr_ptr->smart, SM_RES_NETH))
         return;
 
     if (is_specific_player_race(target_ptr, RACE_SPECTRE)) {
-        reset_bit(msr_ptr->f4, RF4_BR_NETH);
-        reset_bit(msr_ptr->f5, RF5_BA_NETH);
-        reset_bit(msr_ptr->f5, RF5_BO_NETH);
+        reset_bits(msr_ptr->f4, RF4_BR_NETH);
+        reset_bits(msr_ptr->f5, RF5_BA_NETH);
+        reset_bits(msr_ptr->f5, RF5_BO_NETH);
         return;
     }
 
     if (int_outof(msr_ptr->r_ptr, 20))
-        reset_bit(msr_ptr->f4, RF4_BR_NETH);
+        reset_bits(msr_ptr->f4, RF4_BR_NETH);
 
     if (int_outof(msr_ptr->r_ptr, 50))
-        reset_bit(msr_ptr->f5, RF5_BA_NETH);
+        reset_bits(msr_ptr->f5, RF5_BA_NETH);
 
     if (int_outof(msr_ptr->r_ptr, 50))
-        reset_bit(msr_ptr->f5, RF5_BO_NETH);
+        reset_bits(msr_ptr->f5, RF5_BO_NETH);
 }
 
 static void check_lite_resistance(msr_type *msr_ptr)
 {
-    if (!test_bit(msr_ptr->smart, SM_RES_LITE))
+    if (none_bits(msr_ptr->smart, SM_RES_LITE))
         return;
 
     if (int_outof(msr_ptr->r_ptr, 50))
-        reset_bit(msr_ptr->f4, RF4_BR_LITE);
+        reset_bits(msr_ptr->f4, RF4_BR_LITE);
 
     if (int_outof(msr_ptr->r_ptr, 50))
-        reset_bit(msr_ptr->f5, RF5_BA_LITE);
+        reset_bits(msr_ptr->f5, RF5_BA_LITE);
 }
 
 static void check_dark_resistance(player_type *target_ptr, msr_type *msr_ptr)
 {
-    if (!test_bit(msr_ptr->smart, SM_RES_DARK))
+    if (none_bits(msr_ptr->smart, SM_RES_DARK))
         return;
 
     if (is_specific_player_race(target_ptr, RACE_VAMPIRE)) {
-        reset_bit(msr_ptr->f4, RF4_BR_DARK);
-        reset_bit(msr_ptr->f5, RF5_BA_DARK);
+        reset_bits(msr_ptr->f4, RF4_BR_DARK);
+        reset_bits(msr_ptr->f5, RF5_BA_DARK);
         return;
     }
 
     if (int_outof(msr_ptr->r_ptr, 50))
-        reset_bit(msr_ptr->f4, RF4_BR_DARK);
+        reset_bits(msr_ptr->f4, RF4_BR_DARK);
 
     if (int_outof(msr_ptr->r_ptr, 50))
-        reset_bit(msr_ptr->f5, RF5_BA_DARK);
+        reset_bits(msr_ptr->f5, RF5_BA_DARK);
 }
 
 static void check_conf_resistance(msr_type *msr_ptr)
 {
-    if (!test_bit(msr_ptr->smart, SM_RES_CONF))
+    if (none_bits(msr_ptr->smart, SM_RES_CONF))
         return;
 
-    reset_bit(msr_ptr->f5, RF5_CONF);
+    reset_bits(msr_ptr->f5, RF5_CONF);
     if (int_outof(msr_ptr->r_ptr, 50))
-        reset_bit(msr_ptr->f4, RF4_BR_CONF);
+        reset_bits(msr_ptr->f4, RF4_BR_CONF);
 }
 
 static void check_chaos_resistance(msr_type *msr_ptr)
 {
-    if (!test_bit(msr_ptr->smart, SM_RES_CHAOS))
+    if (none_bits(msr_ptr->smart, SM_RES_CHAOS))
         return;
 
     if (int_outof(msr_ptr->r_ptr, 20))
-        reset_bit(msr_ptr->f4, RF4_BR_CHAO);
+        reset_bits(msr_ptr->f4, RF4_BR_CHAO);
 
     if (int_outof(msr_ptr->r_ptr, 50))
-        reset_bit(msr_ptr->f4, RF4_BA_CHAO);
+        reset_bits(msr_ptr->f4, RF4_BA_CHAO);
 }
 
 static void check_nexus_resistance(msr_type *msr_ptr)
 {
-    if (!test_bit(msr_ptr->smart, SM_RES_NEXUS))
+    if (none_bits(msr_ptr->smart, SM_RES_NEXUS))
         return;
 
     if (int_outof(msr_ptr->r_ptr, 50))
-        reset_bit(msr_ptr->f4, RF4_BR_NEXU);
+        reset_bits(msr_ptr->f4, RF4_BR_NEXU);
 
-    reset_bit(msr_ptr->f6, RF6_TELE_LEVEL);
+    reset_bits(msr_ptr->f6, RF6_TELE_LEVEL);
 }
 
 static void check_reflection(msr_type *msr_ptr)
 {
-    if (!test_bit(msr_ptr->smart, SM_IMM_REFLECT))
+    if (none_bits(msr_ptr->smart, SM_IMM_REFLECT))
         return;
 
     if (int_outof(msr_ptr->r_ptr, 150))
-        reset_bit(msr_ptr->f5, RF5_BO_COLD);
+        reset_bits(msr_ptr->f5, RF5_BO_COLD);
 
     if (int_outof(msr_ptr->r_ptr, 150))
-        reset_bit(msr_ptr->f5, RF5_BO_FIRE);
+        reset_bits(msr_ptr->f5, RF5_BO_FIRE);
 
     if (int_outof(msr_ptr->r_ptr, 150))
-        reset_bit(msr_ptr->f5, RF5_BO_ACID);
+        reset_bits(msr_ptr->f5, RF5_BO_ACID);
 
     if (int_outof(msr_ptr->r_ptr, 150))
-        reset_bit(msr_ptr->f5, RF5_BO_ELEC);
+        reset_bits(msr_ptr->f5, RF5_BO_ELEC);
 
     if (int_outof(msr_ptr->r_ptr, 150))
-        reset_bit(msr_ptr->f5, RF5_BO_NETH);
+        reset_bits(msr_ptr->f5, RF5_BO_NETH);
 
     if (int_outof(msr_ptr->r_ptr, 150))
-        reset_bit(msr_ptr->f5, RF5_BO_WATE);
+        reset_bits(msr_ptr->f5, RF5_BO_WATE);
 
     if (int_outof(msr_ptr->r_ptr, 150))
-        reset_bit(msr_ptr->f5, RF5_BO_MANA);
+        reset_bits(msr_ptr->f5, RF5_BO_MANA);
 
     if (int_outof(msr_ptr->r_ptr, 150))
-        reset_bit(msr_ptr->f5, RF5_BO_PLAS);
+        reset_bits(msr_ptr->f5, RF5_BO_PLAS);
 
     if (int_outof(msr_ptr->r_ptr, 150))
-        reset_bit(msr_ptr->f5, RF5_BO_ICEE);
+        reset_bits(msr_ptr->f5, RF5_BO_ICEE);
 
     if (int_outof(msr_ptr->r_ptr, 150))
-        reset_bit(msr_ptr->f5, RF5_MISSILE);
+        reset_bits(msr_ptr->f5, RF5_MISSILE);
 }
 
 void check_high_resistances(player_type *target_ptr, msr_type *msr_ptr)
@@ -179,30 +179,30 @@ void check_high_resistances(player_type *target_ptr, msr_type *msr_ptr)
     check_nether_resistance(target_ptr, msr_ptr);
     check_lite_resistance(msr_ptr);
     check_dark_resistance(target_ptr, msr_ptr);
-    if (test_bit(msr_ptr->smart, SM_RES_FEAR))
-        reset_bit(msr_ptr->f5, RF5_SCARE);
+    if (any_bits(msr_ptr->smart, SM_RES_FEAR))
+        reset_bits(msr_ptr->f5, RF5_SCARE);
 
     check_conf_resistance(msr_ptr);
     check_chaos_resistance(msr_ptr);
-    if (test_bit(msr_ptr->smart, SM_RES_DISEN) && int_outof(msr_ptr->r_ptr, 40))
-        reset_bit(msr_ptr->f4, RF4_BR_DISE);
+    if (any_bits(msr_ptr->smart, SM_RES_DISEN) && int_outof(msr_ptr->r_ptr, 40))
+        reset_bits(msr_ptr->f4, RF4_BR_DISE);
 
-    if (test_bit(msr_ptr->smart, SM_RES_BLIND))
-        reset_bit(msr_ptr->f5, RF5_BLIND);
+    if (any_bits(msr_ptr->smart, SM_RES_BLIND))
+        reset_bits(msr_ptr->f5, RF5_BLIND);
 
     check_nexus_resistance(msr_ptr);
-    if (test_bit(msr_ptr->smart, SM_RES_SOUND) && int_outof(msr_ptr->r_ptr, 50))
-        reset_bit(msr_ptr->f4, RF4_BR_SOUN);
+    if (any_bits(msr_ptr->smart, SM_RES_SOUND) && int_outof(msr_ptr->r_ptr, 50))
+        reset_bits(msr_ptr->f4, RF4_BR_SOUN);
 
-    if (test_bit(msr_ptr->smart, SM_RES_SHARD) && int_outof(msr_ptr->r_ptr, 40))
-        reset_bit(msr_ptr->f4, RF4_BR_SHAR);
+    if (any_bits(msr_ptr->smart, SM_RES_SHARD) && int_outof(msr_ptr->r_ptr, 40))
+        reset_bits(msr_ptr->f4, RF4_BR_SHAR);
 
     check_reflection(msr_ptr);
-    if (test_bit(msr_ptr->smart, SM_IMM_FREE)) {
-        reset_bit(msr_ptr->f5, RF5_HOLD);
-        reset_bit(msr_ptr->f5, RF5_SLOW);
+    if (any_bits(msr_ptr->smart, SM_IMM_FREE)) {
+        reset_bits(msr_ptr->f5, RF5_HOLD);
+        reset_bits(msr_ptr->f5, RF5_SLOW);
     }
 
-    if (test_bit(msr_ptr->smart, SM_IMM_MANA))
-        reset_bit(msr_ptr->f5, RF5_DRAIN_MANA);
+    if (any_bits(msr_ptr->smart, SM_IMM_MANA))
+        reset_bits(msr_ptr->f5, RF5_DRAIN_MANA);
 }

@@ -573,7 +573,7 @@ void riding_flags(player_type *creature_ptr, BIT_FLAGS *flags, BIT_FLAGS *negati
     if (!creature_ptr->riding)
         return;
 
-    if (test_bit(has_levitation(creature_ptr), 0x01U << FLAG_CAUSE_RIDING)) {
+    if (any_bits(has_levitation(creature_ptr), 0x01U << FLAG_CAUSE_RIDING)) {
         add_flag(flags, TR_LEVITATION);
     } else {
         add_flag(negative_flags, TR_LEVITATION);
