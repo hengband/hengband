@@ -1,4 +1,6 @@
-# Caution
+# Introduction
+
+* [日本語](/readme.md)
 
 This readme is very old, so I will update it later.
 
