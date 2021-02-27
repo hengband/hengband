@@ -175,7 +175,9 @@
 /*
  * Hack -- play games with "bool"
  */
+#if __STDC_VERSION__ < 199901L
 #undef bool
+#endif
 
 /*
  * Include the proper "header" file

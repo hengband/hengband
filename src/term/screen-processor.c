@@ -34,7 +34,7 @@ void screen_save()
     if (screen_depth++ == 0)
         term_save();
 
-    current_world_ptr->character_icky++;
+    current_world_ptr->character_icky = TRUE;
 }
 
 /*
@@ -48,7 +48,7 @@ void screen_load()
     if (--screen_depth == 0)
         term_load();
 
-    current_world_ptr->character_icky--;
+    current_world_ptr->character_icky = FALSE;
 }
 
 /*

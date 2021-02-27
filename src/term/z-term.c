@@ -1067,7 +1067,8 @@ errr term_fresh(void)
         term_xtra(TERM_XTRA_CLEAR, 0);
 
         /* clear all "cursor" data */
-        old->cv = old->cu = old->cx = old->cy = 0;
+        old->cv = old->cu = FALSE;
+        old->cx = old->cy = 0;
 
         /* Wipe each row */
         for (TERM_LEN y = 0; y < h; y++) {
