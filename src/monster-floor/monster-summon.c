@@ -39,11 +39,11 @@ bool summon_unique_okay = FALSE;
 static bool summon_specific_okay(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[summon_specific_who];
     if (!mon_hook_dungeon(player_ptr, r_idx))
         return FALSE;
 
     if (summon_specific_who > 0) {
+        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[summon_specific_who];
         if (monster_has_hostile_align(player_ptr, m_ptr, 0, 0, r_ptr))
             return FALSE;
     } else if (summon_specific_who < 0) {
@@ -64,7 +64,12 @@ static bool summon_specific_okay(player_type *player_ptr, MONRACE_IDX r_idx)
     if ((r_ptr->flags7 & RF7_CHAMELEON) && (d_info[player_ptr->dungeon_idx].flags1 & DF1_CHAMELEON))
         return TRUE;
 
-    return check_summon_specific(player_ptr, m_ptr->r_idx, r_idx);
+    if (summon_specific_who > 0) {
+        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[summon_specific_who];
+        return check_summon_specific(player_ptr, m_ptr->r_idx, r_idx);
+    } else {
+        return check_summon_specific(player_ptr, 0, r_idx);
+    }
 }
 
 /*!
