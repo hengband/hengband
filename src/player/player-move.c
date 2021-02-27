@@ -224,6 +224,8 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
         leave_quest_check(creature_ptr);
         floor_ptr->inside_quest = g_ptr->special;
         floor_ptr->dun_level = 0;
+        if (!floor_ptr->inside_quest)
+            creature_ptr->word_recall = 0;
         creature_ptr->oldpx = 0;
         creature_ptr->oldpy = 0;
         creature_ptr->leaving = TRUE;

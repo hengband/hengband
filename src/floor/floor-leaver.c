@@ -329,6 +329,7 @@ static void exit_to_wilderness(player_type *creature_ptr)
     }
 
     creature_ptr->recall_dungeon = creature_ptr->dungeon_idx;
+    creature_ptr->word_recall = 0;
     creature_ptr->dungeon_idx = 0;
     creature_ptr->change_floor_mode &= ~CFM_SAVE_FLOORS; // TODO
 }
