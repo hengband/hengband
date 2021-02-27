@@ -148,6 +148,7 @@ void do_cmd_store(player_type *player_ptr)
         bool need_redraw_store_inv = (player_ptr->update & PU_BONUS) ? TRUE : FALSE;
         current_world_ptr->character_icky = TRUE;
         handle_stuff(player_ptr);
+        player_ptr->redraw = 0L;
         if (player_ptr->inventory_list[INVEN_PACK].k_idx) {
             INVENTORY_IDX item = INVEN_PACK;
             object_type *o_ptr = &player_ptr->inventory_list[item];
