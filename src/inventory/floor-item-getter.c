@@ -306,7 +306,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
         }
 
         owner_ptr->window_flags |= (PW_INVEN | PW_EQUIP);
-        handle_stuff(owner_ptr);
+        window_stuff(owner_ptr);
         COMMAND_CODE get_item_label = 0;
         if (command_wrk == USE_INVEN) {
             fis_ptr->n1 = I2A(fis_ptr->i1);
@@ -843,7 +843,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
         toggle_inventory_equipment(owner_ptr);
 
     owner_ptr->window_flags |= (PW_INVEN | PW_EQUIP);
-    handle_stuff(owner_ptr);
+    window_stuff(owner_ptr);
     prt("", 0, 0);
     if (fis_ptr->oops && str)
         msg_print(str);
