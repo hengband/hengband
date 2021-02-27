@@ -9,6 +9,7 @@
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
 #include "util/sort.h"
+#include "util/string-processor.h"
 #include "view/display-lore.h"
 #include "view/display-messages.h"
 
@@ -92,9 +93,9 @@ spoiler_output_status spoil_mon_desc(concptr fname, bool show_all, race_flags8 R
     C_MAKE(who, max_r_idx, MONRACE_IDX);
     fprintf(spoiler_file, "Monster Spoilers for %s\n", title);
     fprintf(spoiler_file, "------------------------------------------\n\n");
-    fprintf(spoiler_file, "%-162.162s    %4s %4s %4s %7s %7s  %19.19s\n", "Name", "Lev", "Rar", "Spd", "Hp", "Ac", "Visual Info");
-    fprintf(spoiler_file, "%-166.166s%4s %4s %4s %7s %7s  %4.19s\n",
-        "------------------------------------------------------------------------------------------------------------------------------------------------------"
+    fprintf(spoiler_file, "%-45.45s%4s %4s %4s %7s %7s  %19.19s\n", "Name", "Lev", "Rar", "Spd", "Hp", "Ac", "Visual Info");
+    fprintf(spoiler_file, "%-45.45s%4s %4s %4s %7s %7s  %4.19s\n",
+        "---------------------------------------------"
         "----"
         "----------",
         "---", "---", "---", "-----", "-----", "-------------------");
@@ -113,12 +114,16 @@ spoiler_output_status spoil_mon_desc(concptr fname, bool show_all, race_flags8 R
         if (!show_all && none_bits(r_ptr->flags8, RF8_flags))
             continue;
 
+        char name_buf[41];
+        angband_strcpy(name_buf, name, sizeof(name_buf));
+        name += strlen(name_buf);
+
         if (r_ptr->flags7 & RF7_KAGE)
             continue;
         else if (r_ptr->flags1 & (RF1_UNIQUE))
-            sprintf(nam, "[U] %s", name);
+            sprintf(nam, "[U] %s", name_buf);
         else
-            sprintf(nam, _("    %s", "The %s"), name);
+            sprintf(nam, _("    %s", "The %s"), name_buf);
 
         sprintf(lev, "%d", (int)r_ptr->level);
         sprintf(rar, "%d", (int)r_ptr->rarity);
@@ -135,7 +140,13 @@ spoiler_output_status spoil_mon_desc(concptr fname, bool show_all, race_flags8 R
 
         sprintf(symbol, "%ld", (long)(r_ptr->mexp));
         sprintf(symbol, "%s '%c'", attr_to_text(r_ptr), r_ptr->d_char);
-        fprintf(spoiler_file, "%-166.166s%4s %4s %4s %7s %7s  %19.19s\n", nam, lev, rar, spd, hp, ac, symbol);
+        fprintf(spoiler_file, "%-45.45s%4s %4s %4s %7s %7s  %19.19s\n", nam, lev, rar, spd, hp, ac, symbol);
+
+        while (*name != '\0') {
+            angband_strcpy(name_buf, name, sizeof(name_buf));
+            name += strlen(name_buf);
+            fprintf(spoiler_file, "    %s\n", name_buf);
+        }
     }
 
     fprintf(spoiler_file, "\n");
