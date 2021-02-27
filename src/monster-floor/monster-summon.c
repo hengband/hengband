@@ -1,6 +1,7 @@
 ﻿#include "monster-floor/monster-summon.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
+#include "floor/wild.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "monster-floor/monster-generator.h"
@@ -86,6 +87,23 @@ static bool is_dead_summoning(summon_type type)
 }
 
 /*!
+ * @brief 荒野のレベルを含めた階層レベルを返す
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @return 階層レベル
+ * @detail
+ * ダンジョン及びクエストはdun_level>0となる。
+ * 荒野はdun_level==0なので、その場合荒野レベルを返す。
+ */
+DEPTH get_dungeon_or_wilderness_level(player_type *player_ptr)
+{
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    if (floor_ptr->dun_level > 0)
+        return floor_ptr->dun_level;
+
+    return wilderness[player_ptr->wilderness_y][player_ptr->wilderness_x].level;
+}
+
+/*!
  * @brief モンスターを召喚により配置する / Place a monster (of the specified "type") near the given location. Return TRUE if a monster was actually summoned.
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param who 召喚主のモンスター情報ID
@@ -111,7 +129,8 @@ bool summon_specific(player_type *player_ptr, MONSTER_IDX who, POSITION y1, POSI
     summon_unique_okay = (mode & PM_ALLOW_UNIQUE) != 0;
     get_mon_num_prep(player_ptr, summon_specific_okay, get_monster_hook2(player_ptr, y, x));
 
-    MONRACE_IDX r_idx = get_mon_num(player_ptr, 0, (floor_ptr->dun_level + lev) / 2 + 5, 0);
+    DEPTH dlev = get_dungeon_or_wilderness_level(player_ptr);
+    MONRACE_IDX r_idx = get_mon_num(player_ptr, 0, (dlev + lev) / 2 + 5, 0);
     if (!r_idx) {
         summon_specific_type = 0;
         return FALSE;
