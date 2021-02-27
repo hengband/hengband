@@ -48,7 +48,7 @@
  * @param mode ？？？
  * @return The number of monsters in the group
  */
-static IDX collect_monsters(player_type *creature_ptr, IDX grp_cur, IDX mon_idx[], BIT_FLAGS8 mode)
+static IDX collect_monsters(player_type *creature_ptr, IDX grp_cur, IDX mon_idx[], monster_lore_mode mode)
 {
     concptr group_char = monster_group_char[grp_cur];
     bool grp_unique = (monster_group_char[grp_cur] == (char *)-1L);
@@ -61,7 +61,7 @@ static IDX collect_monsters(player_type *creature_ptr, IDX grp_cur, IDX mon_idx[
         monster_race *r_ptr = &r_info[i];
         if (!r_ptr->name)
             continue;
-        if ((mode != MONSTER_LORE_DEBUG) && !cheat_know && !r_ptr->r_sights)
+        if (((mode != MONSTER_LORE_DEBUG) && (mode != MONSTER_LORE_RESEARCH)) && !cheat_know && !r_ptr->r_sights)
             continue;
 
         if (grp_unique) {
@@ -92,6 +92,8 @@ static IDX collect_monsters(player_type *creature_ptr, IDX grp_cur, IDX mon_idx[
 
         mon_idx[mon_cnt++] = i;
         if (mode == MONSTER_LORE_NORMAL)
+            break;
+        if (mode == MONSTER_LORE_DEBUG)
             break;
     }
 
@@ -301,10 +303,10 @@ void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, boo
     bool visual_list = FALSE;
     TERM_COLOR attr_top = 0;
     byte char_left = 0;
-    BIT_FLAGS8 mode;
+    monster_lore_mode mode;
     int browser_rows = hgt - 8;
     if (direct_r_idx < 0) {
-        mode = visual_only ? 0x03 : 0x01;
+        mode = visual_only ? MONSTER_LORE_DEBUG : MONSTER_LORE_NORMAL;
         int len;
         for (IDX i = 0; monster_group_text[i] != NULL; i++) {
             len = strlen(monster_group_text[i]);
@@ -327,7 +329,7 @@ void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, boo
     }
 
     grp_idx[grp_cnt] = -1;
-    mode = visual_only ? 0x02 : 0x00;
+    mode = visual_only ? MONSTER_LORE_RESEARCH : MONSTER_LORE_NONE;
     IDX old_grp_cur = -1;
     IDX grp_cur = 0;
     IDX grp_top = 0;

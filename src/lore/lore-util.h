@@ -49,6 +49,7 @@ typedef struct lore_type {
 } lore_type;
 
 typedef enum monster_lore_mode { 
+    MONSTER_LORE_NONE,
     MONSTER_LORE_NORMAL,
     MONSTER_LORE_RESEARCH,
     MONSTER_LORE_DEBUG
