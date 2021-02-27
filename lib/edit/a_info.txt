@@ -4212,15 +4212,17 @@ P:0:0d0:0:0:0
 F:DEX | CHR
 F:RES_FIRE | RES_SOUND | RES_NETHER | SHOW_MODS | INSTA_ART
 
+# 能力はD&Dベースで調整
 N:252:『サンブレード』
 E:'Sun Blade'
-I:23:25:3
-W:30:150:180:65000
-P:0:3d6:16:20:10
-F:INT | FORCE_WEAPON
-F:SHOW_MODS
-F:SLAY_EVIL | SLAY_UNDEAD
-F:FREE_ACT | LITE
+I:23:21:3
+W:40:150:80:80000
+P:0:5d4:16:16:0
+F:INT | WIS | INFRA | SEARCH | HIDE_TYPE | SHOW_MODS
+F:BRAND_FIRE | KILL_EVIL | KILL_UNDEAD
+F:RES_FIRE | RES_LITE | SH_FIRE
+F:SEE_INVIS | BLESSED | LITE_3 | ACTIVATE
+U:BLINDING_LIGHT
 D:$A shining sword that keeps waiting for a hero in the back of the Mirage Tower.
 D:$  The blade was held by many red robes and continued to slaughter the evil ones.
 D:$ (Square, "Final Fantasy", 1987)
@@ -4257,11 +4259,13 @@ D:太陽を追った巨人、夸父の杖だ。まだ生きているこの木の
 # Eat steel, hungry wolves!
 N:255:ドン・キホーテの
 E:of Don Quixote
-I:22:29:-3
-W:40:30:300:70000
-P:0:3d8:-12:12:0
-F:STR | CON | CHR | IM_ELEC | RES_DARK | RES_FEAR | RIDING
-F:FREE_ACT | SUST_STR | SUST_CON | SUST_CHR | SLAY_EVIL | KILL_GIANT
+I:22:29:-1
+W:40:30:300:76543
+P:0:3d8:-13:13:0
+F:INT | WIS | DEX | CHR | STEALTH | SEARCH | HIDE_TYPE
+F:IM_ELEC | RES_FEAR | ESP_GIANT | ESP_TROLL | RIDING
+F:SLAY_EVIL | KILL_GIANT | KILL_TROLL | ACTIVATE
+U:BERSERK
 D:$Don Quixote born in La Mancha is the brave knight
 D:$ trying to defeat the colossal giant "Windmill".
 D:$  The lance he carried has the courage to face any fear.
