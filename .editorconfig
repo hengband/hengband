@@ -1,5 +1,8 @@
 ﻿root = true
 
 [*]
-charset = utf-8-bom
 insert_final_newline = true
+charset = utf-8
+
+[*.{c,h}]
+charset = utf-8-bom
