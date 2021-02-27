@@ -18,33 +18,43 @@ Option - 壁紙を使う で壁紙を設定できます。使用する壁紙は 
 
 ソースをダウンロードします。そして、
 
-> tar -jxvf hengband-x.x.x.tar.bz2
-> cd hengband-x.x.x
-> ./configure
-> make install
+```
+tar -jxvf hengband-x.x.x.tar.bz2
+cd hengband-x.x.x
+./configure
+make install
+```
 
 でコンパイル及びトップディレクトリへのコピーができます(x.x.x はバージョン番号)。
   
 後は、ASCII文字画面なら、
 
-> ./hengband -- -n＜ウィンドウの数＞  
+```
+./hengband -- -n＜ウィンドウの数＞
+```
 
 タイルグラフィックス画面なら、
 
-> ./hengband -g -- -n＜ウィンドウの数＞      ## 通常の8x8タイル
-> ./hengband -g -- -b -n＜ウィンドウの数＞   ## 2倍幅サイズのタイル
-> ./hengband -g -- -a -n＜ウィンドウの数＞   ## 16x16タイル(別配布のタイルが必要)
+```
+./hengband -g -- -n＜ウィンドウの数＞      ## 通常の8x8タイル
+./hengband -g -- -b -n＜ウィンドウの数＞   ## 2倍幅サイズのタイル
+./hengband -g -- -a -n＜ウィンドウの数＞   ## 16x16タイル(別配布のタイルが必要)
+```
 
   等で遊べます。
 
   また、スーパーユーザーとして setgid を付けてインストールしたい場合は、
 
-> ./configure --with-setgid=games
-> make
+```
+./configure --with-setgid=games
+make
+```
 
   の後、rootとして
 
-> make install  
+```
+make install
+```
 
 を実行すれば、/usr/local/ 以下にインストールされます。インストール場所の変更等については ./configure --help を参照してください。
 
