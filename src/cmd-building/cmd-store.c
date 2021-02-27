@@ -98,7 +98,7 @@ void do_cmd_store(player_type *player_ptr)
 
     forget_lite(player_ptr->current_floor_ptr);
     forget_view(player_ptr->current_floor_ptr);
-    current_world_ptr->character_icky = TRUE;
+    current_world_ptr->character_icky_depth = 1;
     command_arg = 0;
     command_rep = 0;
     command_new = 0;
@@ -146,7 +146,7 @@ void do_cmd_store(player_type *player_ptr)
         store_process_command(player_ptr);
 
         bool need_redraw_store_inv = (player_ptr->update & PU_BONUS) ? TRUE : FALSE;
-        current_world_ptr->character_icky = TRUE;
+        current_world_ptr->character_icky_depth = 1;
         handle_stuff(player_ptr);
         if (player_ptr->inventory_list[INVEN_PACK].k_idx) {
             INVENTORY_IDX item = INVEN_PACK;
@@ -194,7 +194,7 @@ void do_cmd_store(player_type *player_ptr)
 
     select_floor_music(player_ptr);
     take_turn(player_ptr, 100);
-    current_world_ptr->character_icky = FALSE;
+    current_world_ptr->character_icky_depth = 0;
     command_new = 0;
     command_see = FALSE;
     get_com_no_macros = FALSE;
