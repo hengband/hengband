@@ -59,7 +59,7 @@ typedef enum spells_type
 	GF_DISP_LIVING = 71,		/*!< 魔法効果: 生命退散*/
 	GF_ROCKET = 72,				/*!< 魔法効果: ロケット*/
 	GF_NUKE = 73,				/*!< 魔法効果: 放射性廃棄物*/
-	GF_MAKE_GLYPH = 74,			/*!< 魔法効果: 守りのルーン生成*/
+	GF_MAKE_RUNE_PROTECTION = 74,  /*!< 魔法効果: 守りのルーン生成*/
 	GF_STASIS = 75,				/*!< 魔法効果: モンスター拘束*/
 	GF_STONE_WALL = 76,			/*!< 魔法効果: 壁生成*/
 	GF_DEATH_RAY = 77,			/*!< 魔法効果: 死の光線*/

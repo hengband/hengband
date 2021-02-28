@@ -127,7 +127,7 @@ typedef struct grid_template_type {
 #define CAVE_KNOWN      0x0200    /* Directly viewed or map detected flag */
 #define CAVE_NOTE       0x0400    /* Flag for delayed visual update (needs note_spot()) */
 #define CAVE_REDRAW     0x0800    /* Flag for delayed visual update (needs lite_spot()) */
-#define CAVE_OBJECT     0x1000    /* Mirror, glyph, etc. */
+#define CAVE_OBJECT     0x1000    /* Mirror, rune, etc. */
 #define CAVE_UNSAFE     0x2000    /* Might have trap */
 #define CAVE_IN_DETECT  0x4000    /* trap detected area (inner circle only) */
 
@@ -153,8 +153,8 @@ extern void place_bound_perm_wall(player_type *player_ptr, grid_type *g_ptr);
 extern bool is_known_trap(player_type *player_ptr, grid_type *g_ptr);
 extern bool is_hidden_door(player_type *player_ptr, grid_type *g_ptr);
 extern bool is_mirror_grid(grid_type *g_ptr);
-extern bool is_glyph_grid(grid_type *g_ptr);
-extern bool is_explosive_rune_grid(grid_type *g_ptr);
+extern bool is_rune_protection_grid(grid_type *g_ptr);
+extern bool is_rune_explosion_grid(grid_type *g_ptr);
 extern bool player_can_enter(player_type *creature_ptr, FEAT_IDX feature, BIT_FLAGS16 mode);
 
 /*!

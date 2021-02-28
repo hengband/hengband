@@ -3506,7 +3506,7 @@ R:1069:0x03:0x70
 # open floor
 F:1:0xD9:0x80:LIT
 
-# glyph of warding
+# rune of protection
 F:3:0xD9:0x83:LIT
 
 # open door

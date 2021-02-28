@@ -33,7 +33,7 @@ to something you are more comfortable with.
 --- Features that do not block line of sight ---
  
   [[[[w|.|   Floor                       [[[[v|*|   A Mirror                     
-  [[[[w|.|   A trap (hidden)             [[[[y|;|   A glyph of warding             
+  [[[[w|.|   A trap (hidden)             [[[[y|;|   A rune of protection         
   [[[[w|^|   A trap (known)              [[[[R|;|   A explosive rune             
   [[[[u|.|   Dirt                        [[[[B|*|   Section of the Pattern  
   [[[[g|.|   Patch of grass              [[[[b|*|   Section of the Pattern  

@@ -204,10 +204,10 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
                     if (!is_cave_empty_bold(caster_ptr, y, x))
                         continue;
 
-                    if (is_glyph_grid(&floor_ptr->grid_array[y][x]))
+                    if (is_rune_protection_grid(&floor_ptr->grid_array[y][x]))
                         continue;
 
-                    if (is_explosive_rune_grid(&floor_ptr->grid_array[y][x]))
+                    if (is_rune_explosion_grid(&floor_ptr->grid_array[y][x]))
                         continue;
 
                     if (pattern_tile(floor_ptr, y, x))

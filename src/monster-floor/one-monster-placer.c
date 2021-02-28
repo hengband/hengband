@@ -170,11 +170,11 @@ static bool check_quest_placeable(player_type *player_ptr, MONRACE_IDX r_idx)
 static bool check_procection_rune(player_type *player_ptr, MONRACE_IDX r_idx, POSITION y, POSITION x)
 {
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    if (!is_glyph_grid(g_ptr))
+    if (!is_rune_protection_grid(g_ptr))
         return TRUE;
 
     monster_race *r_ptr = &r_info[r_idx];
-    if (randint1(BREAK_GLYPH) >= (r_ptr->level + 20))
+    if (randint1(BREAK_RUNE_PROTECTION) >= (r_ptr->level + 20))
         return FALSE;
 
     if (g_ptr->info & CAVE_MARK)
@@ -385,10 +385,10 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
         floor_ptr->num_repro++;
 
     warn_unique_generation(player_ptr, r_idx);
-    if (!is_explosive_rune_grid(g_ptr))
+    if (!is_rune_explosion_grid(g_ptr))
         return TRUE;
 
-    if (randint1(BREAK_MINOR_GLYPH) > r_ptr->level) {
+    if (randint1(BREAK_RUNE_EXPLOSION) > r_ptr->level) {
         if (g_ptr->info & CAVE_MARK) {
             msg_print(_("ルーンが爆発した！", "The rune explodes!"));
             project(player_ptr, 0, 2, y, x, 2 * (player_ptr->lev + damroll(7, 7)), GF_MANA,

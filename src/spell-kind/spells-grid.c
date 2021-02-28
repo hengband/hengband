@@ -14,10 +14,10 @@
 
 /*!
  * @brief 守りのルーン設置処理 /
- * Leave a "glyph of warding" which prevents monster movement
+ * Leave a "rune of protection" which prevents monster movement
  * @return 実際に設置が行われた場合TRUEを返す
  */
-bool warding_glyph(player_type *caster_ptr)
+bool create_rune_protection_one(player_type *caster_ptr)
 {
     if (!cave_clean_bold(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x)) {
         msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
@@ -25,7 +25,7 @@ bool warding_glyph(player_type *caster_ptr)
     }
 
     caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info |= CAVE_OBJECT;
-    caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].mimic = feat_glyph;
+    caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].mimic = feat_rune_protection;
     note_spot(caster_ptr, caster_ptr->y, caster_ptr->x);
     lite_spot(caster_ptr, caster_ptr->y, caster_ptr->x);
     return TRUE;
@@ -39,7 +39,7 @@ bool warding_glyph(player_type *caster_ptr)
  * @param x 設置場所
  * @return 実際に設置が行われた場合TRUEを返す
  */
-bool explosive_rune(player_type *caster_ptr, POSITION y, POSITION x)
+bool create_rune_explosion(player_type *caster_ptr, POSITION y, POSITION x)
 {
     floor_type *floor_ptr = caster_ptr->current_floor_ptr;
     if (!cave_clean_bold(floor_ptr, y, x)) {
@@ -48,7 +48,7 @@ bool explosive_rune(player_type *caster_ptr, POSITION y, POSITION x)
     }
 
     floor_ptr->grid_array[y][x].info |= CAVE_OBJECT;
-    floor_ptr->grid_array[y][x].mimic = feat_explosive_rune;
+    floor_ptr->grid_array[y][x].mimic = feat_rune_explosion;
     note_spot(caster_ptr, y, x);
     lite_spot(caster_ptr, y, x);
     return TRUE;

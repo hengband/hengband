@@ -226,8 +226,8 @@ static void get_out_monster(player_type *protected_ptr)
         if (tries > 20 * dis * dis)
             dis++;
 
-        if (!in_bounds(floor_ptr, ny, nx) || !is_cave_empty_bold(protected_ptr, ny, nx) || is_glyph_grid(&floor_ptr->grid_array[ny][nx])
-            || is_explosive_rune_grid(&floor_ptr->grid_array[ny][nx]) || pattern_tile(floor_ptr, ny, nx))
+        if (!in_bounds(floor_ptr, ny, nx) || !is_cave_empty_bold(protected_ptr, ny, nx) || is_rune_protection_grid(&floor_ptr->grid_array[ny][nx])
+            || is_rune_explosion_grid(&floor_ptr->grid_array[ny][nx]) || pattern_tile(floor_ptr, ny, nx))
             continue;
 
         m_ptr = &floor_ptr->m_list[m_idx];

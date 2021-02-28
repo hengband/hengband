@@ -328,14 +328,14 @@ bool activate_map_light(player_type *user_ptr)
 bool activate_exploding_rune(player_type *user_ptr)
 {
     msg_print(_("明るい赤色に輝いている...", "It glows bright red..."));
-    explosive_rune(user_ptr, user_ptr->y, user_ptr->x);
+    create_rune_explosion(user_ptr, user_ptr->y, user_ptr->x);
     return TRUE;
 }
 
 bool activate_protection_rune(player_type *user_ptr)
 {
     msg_print(_("ブルーに明るく輝いている...", "It glows light blue..."));
-    warding_glyph(user_ptr);
+    create_rune_protection_one(user_ptr);
     return TRUE;
 }
 

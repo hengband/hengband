@@ -680,7 +680,7 @@ errr rd_dungeon_old(player_type *player_ptr)
                 /* Old CAVE_IN_MIRROR flag */
                 if (g_ptr->info & CAVE_OBJECT) {
                     g_ptr->mimic = feat_mirror;
-                } else if ((g_ptr->feat == OLD_FEAT_MINOR_GLYPH) || (g_ptr->feat == OLD_FEAT_GLYPH)) {
+                } else if ((g_ptr->feat == OLD_FEAT_RUNE_EXPLOSION) || (g_ptr->feat == OLD_FEAT_RUNE_PROTECTION)) {
                     g_ptr->info |= CAVE_OBJECT;
                     g_ptr->mimic = g_ptr->feat;
                     g_ptr->feat = feat_floor;

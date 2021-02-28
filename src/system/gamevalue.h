@@ -139,8 +139,8 @@
 #define TURNS_PER_TICK    10L     /*!< 時間経過処理を行うターン数の刻み / Number of energy-gain-turns per ticks */
 #define INN_DUNGEON_TURN_ADJ 10   /*!< 宿屋で時間をつぶした場合に増える dungeon_turn の倍率 */
 #define MAX_DAYS          20000   /*!< 内部処理中で保持される最大日数 / Maximum days */
-#define BREAK_GLYPH       550     /*!< 守りのルーンの強靭度 / Rune of protection resistance */
-#define BREAK_MINOR_GLYPH 299     /*!< 爆発のルーンの発動しやすさ / For explosive runes */
+#define BREAK_RUNE_PROTECTION       550     /*!< 守りのルーンの強靭度 / Rune of protection resistance */
+#define BREAK_RUNE_EXPLOSION 299     /*!< 爆発のルーンの発動しやすさ / For explosive runes */
 #define BTH_PLUS_ADJ      3       /*!< 武器経験値及びプレイヤーの打撃/射撃能力に応じた修正値倍率 / Adjust BTH per plus-to-hit */
 #define MON_MULT_ADJ      8       /*!< モンスターの増殖しにくさの基本倍率 / High value slows multiplication */
 #define MON_SUMMON_ADJ    2       /*!< 現在未使用 Adjust level of summoned creatures */

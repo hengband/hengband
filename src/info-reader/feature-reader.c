@@ -255,8 +255,8 @@ errr init_feat_variables(void)
     feat_none = f_tag_to_index_in_init("NONE");
 
     feat_floor = f_tag_to_index_in_init("FLOOR");
-    feat_glyph = f_tag_to_index_in_init("GLYPH");
-    feat_explosive_rune = f_tag_to_index_in_init("EXPLOSIVE_RUNE");
+    feat_rune_protection = f_tag_to_index_in_init("RUNE_PROTECTION");
+    feat_rune_explosion = f_tag_to_index_in_init("RUNE_EXPLOSION");
     feat_mirror = f_tag_to_index_in_init("MIRROR");
 
     feat_door[DOOR_DOOR].open = f_tag_to_index_in_init("OPEN_DOOR");

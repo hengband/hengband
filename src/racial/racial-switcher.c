@@ -314,7 +314,7 @@ bool switch_race_racial_execution(player_type *creature_ptr, const s32b command)
         return TRUE;
     case RACE_HALF_OGRE:
         msg_print(_("爆発のルーンを慎重に仕掛けた...", "You carefully set an explosive rune..."));
-        (void)explosive_rune(creature_ptr, creature_ptr->y, creature_ptr->x);
+        (void)create_rune_explosion(creature_ptr, creature_ptr->y, creature_ptr->x);
         return TRUE;
     case RACE_HALF_GIANT:
         if (!get_aim_dir(creature_ptr, &dir))

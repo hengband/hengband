@@ -60,8 +60,8 @@ extern char *f_tag;
 /*** Terrain feature variables ***/
 extern FEAT_IDX feat_none;
 extern FEAT_IDX feat_floor;
-extern FEAT_IDX feat_glyph;
-extern FEAT_IDX feat_explosive_rune;
+extern FEAT_IDX feat_rune_protection;
+extern FEAT_IDX feat_rune_explosion;
 extern FEAT_IDX feat_mirror;
 extern FEAT_IDX feat_up_stair;
 extern FEAT_IDX feat_down_stair;
