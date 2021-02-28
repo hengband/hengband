@@ -316,10 +316,15 @@ F:!:FLOOR:3:0:0:0:15
 F:b:BUILDING_1:3:0:0:0:0:NONE:15
 F:!:FLOOR:3:0:0:0:132
 
-# Quest 27 rewarding (Samurai, Warrior-Mage and Red-Mage gets The Katana 'Aglarang')
-?:[AND [EQU $QUEST27 3] [EQU $CLASS Samurai Warrior-Mage Red-Mage] ]
+# Quest 27 rewarding (Samurai and Warrior-Mage get The Katana 'Aglarang')
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Samurai Warrior-Mage] ]
 F:b:BUILDING_1:3:0:0:0:0:NONE:15
 F:!:FLOOR:3:0:0:0:81
+
+# Quest 27 rewarding (Red-Mage gets 'Sun-blade')
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Red-Mage] ]
+F:b:BUILDING_1:3:0:0:0:0:NONE:15
+F:!:FLOOR:3:0:0:0:252
 
 # Quest 27 rewarding (Crusade Paladin gets the Amulet of Sacred Knights)
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Paladin] [EQU $REALM1 Crusade] ]
