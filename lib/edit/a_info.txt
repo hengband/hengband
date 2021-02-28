@@ -250,7 +250,7 @@ E:'Frakir'
 I:45:32:1
 W:50:40:2:75000
 F:STR | INT | WIS | DEX | CON | CHR | STEALTH | HIDE_TYPE |
-F:RES_POIS | ACTIVATE | SEE_INVIS | SEARCH | WARNING | INSTA_ART
+F:RES_POIS | ACTIVATE | SEE_INVIS | FREE_ACT | SEARCH | WARNING | INSTA_ART
 U:HYPODYNAMIA_1
 D:$This bracelet has its own will.  It was created by Merlin, a prince of Chaos
 D:$ and son of Corwin.  The bracelet is invisible, but it sometimes ripples or
@@ -1453,7 +1453,8 @@ I:23:16:1
 W:20:12:150:40000
 P:0:2d5:10:15:0
 F:INT | WIS | SEARCH | MAGIC_MASTERY | HIDE_TYPE
-F:SLAY_EVIL | BRAND_FIRE | KILL_ORC | RES_FIRE | RES_LITE | LITE
+F:SLAY_EVIL | SLAY_TROLL | SLAY_GIANT | BRAND_FIRE | KILL_ORC
+F:RES_FIRE | RES_LITE | LITE | EASY_SPELL
 F:SLOW_DIGEST | SHOW_MODS | RIDING | XTRA_RES_OR_POWER
 F:ESP_ORC | ESP_TROLL | ESP_GIANT
 D:$This fiery, shining blade earned its sobriquet "Foe-Hammer" from dying orcs 
@@ -1612,9 +1613,9 @@ D:の海賊達の憎悪の的であった。
 #J0# ???
 N:80:『クリスドゥリアン』
 E:'Crisdurian'
-I:23:28:0
-W:40:15:260:111000
-P:0:4d5:18:19:0
+I:23:23:0
+W:40:10:200:111000
+P:0:3d8:18:19:0
 F:SLAY_DRAGON | SLAY_EVIL | SLAY_UNDEAD | SLAY_TROLL | SLAY_GIANT |
 F:SLAY_HUMAN | SLAY_ORC | SEE_INVIS | SHOW_MODS | VORPAL | BRAND_POIS
 D:$A giant's weapon, with a long blade tall and straight thrusting out from a 
@@ -1672,7 +1673,7 @@ D:刻み込まれた。彼はこの剣の力を再び思い知ることになる
 N:83:『アンドゥリル』
 E:'Anduril'
 I:23:17:4
-W:20:40:130:80000
+W:20:20:130:80000
 P:0:2d5:10:15:5
 F:STR | HIDE_TYPE | RIDING | XTRA_RES_OR_POWER |
 F:SLAY_EVIL | BRAND_FIRE | SLAY_TROLL | SLAY_ORC | FREE_ACT |
@@ -2187,7 +2188,7 @@ D:嘲笑い、酸のエレメントの究極的支配力を持つ。
 N:109:『アヴァビア』
 E:'Avavir'
 I:22:17:3
-W:40:8:250:18000
+W:15:8:250:18000
 P:0:5d3:8:8:10
 F:DEX | CHR | HIDE_TYPE | SHOW_MODS
 F:BRAND_COLD | BRAND_FIRE | BRAND_ELEC | RES_FIRE | RES_COLD | RES_ELEC
@@ -2488,7 +2489,8 @@ E:of Bard
 I:19:13:3
 W:30:20:40:40000
 P:0:0d0:17:19:0
-F:DEX | HIDE_TYPE | FREE_ACT | XTRA_MIGHT | SHOW_MODS
+F:STR | DEX | HIDE_TYPE | FREE_ACT | XTRA_MIGHT | SHOW_MODS
+F:SLAY_DRAGON | XTRA_H_RES
 D:$The great yew bow of grim-faced Bard, who shot the mightiest arrow that 
 D:$songs record.
 D:後に王となる湖の街の陰気面バルドが竜を射抜いた伝説のいちいの弓だ。
@@ -3290,11 +3292,12 @@ D:どう見てもやる気のない感じの服だ。
 N:184:『アランルース』
 E:'Aranruth'
 I:23:16:4
-W:20:45:150:50000
+W:20:20:150:50000
 P:0:3d5:20:12:0
-F:DEX | HIDE_TYPE | 
-F:SLAY_DEMON | SLAY_ORC | FREE_ACT | RES_COLD | LEVITATION | 
-F:SLOW_DIGEST | ACTIVATE | SHOW_MODS |
+F:WIS | DEX | HIDE_TYPE | 
+F:SLAY_DEMON | SLAY_ORC | SLAY_TROLL | SLAY_GIANT | BRAND_COLD
+F:FREE_ACT | RES_COLD | LEVITATION | BLESSED | LITE_2
+F:SLOW_DIGEST | ACTIVATE | SHOW_MODS
 F:ESP_ORC | ESP_TROLL | ESP_GIANT | ESP_DEMON
 U:BA_COLD_2
 D:$The beautiful sword of Thingol, justly named "King's Ire".  It glistens
@@ -3629,7 +3632,7 @@ D:風見潤訳）
 N:209:『隠者の紫』
 E:'hermit's purple'
 I:21:2:2
-W:40:40:30:40000
+W:20:30:30:40000
 P:0:1d6:10:5:0
 F:INT | WIS | CHR | FORCE_WEAPON | SLAY_UNDEAD | RIDING
 F:SEE_INVIS | TELEPATHY | REGEN | HOLD_EXP | ACTIVATE
@@ -3791,9 +3794,9 @@ E:Charmed Pendant
 I:40:27:2
 W:50:100:2:100000
 P:0:0d0:0:0:5
-F:INT | CHR | INFRA | SEARCH | HIDE_TYPE | FULL_NAME |
+F:INT | CHR | INFRA | SEARCH | MAGIC_MASTERY | HIDE_TYPE | FULL_NAME |
 F:SEE_INVIS | FREE_ACT | SLOW_DIGEST | REGEN | LITE | WARNING |
-F:SH_FIRE | SH_ELEC | SH_COLD | ACTIVATE |
+F:SH_FIRE | SH_ELEC | SH_COLD | EASY_SPELL | ACTIVATE |
 F:INSTA_ART
 U:CURE_MANA_FULL
 
@@ -3802,8 +3805,8 @@ E:of Gogo
 I:40:28:4
 W:50:100:2:55555
 P:0:0d0:0:0:0
-F:INT | WIS | DEX | 
-F:SEE_INVIS | LITE |
+F:INT | WIS | DEX | SUST_INT | SUST_WIS | SUST_DEX
+F:SEE_INVIS | LITE
 F:INSTA_ART
 
 N:221:森の狩人ロビンフッドの
