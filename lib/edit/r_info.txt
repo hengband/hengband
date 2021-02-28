@@ -18728,9 +18728,9 @@ F:INVISIBLE | OPEN_DOOR | BASH_DOOR |
 F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | 
 F:NO_CONF | NO_SLEEP
 S:1_IN_4 | HEAL | S_SPIDER
-D:$He is being at the culmination of martial arts,
-D:$ but he never gives up on himself.
-D:$  He is still not fully manipulating the creatures of nature
+D:$He is a master of the martial arts yet remains driven to improve his
+D:$ technique.
+D:$  He still hasn't fully manipulated the creatures of nature
 D:$ and suffers from that.
 D:$  However, he does not despair and continues steadily step by step.
 D:彼は修験道を極めつつあるが、決して自分に驕ることはない。
