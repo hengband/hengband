@@ -81,11 +81,6 @@ ANGBAND_X11_FONT_? は ?番目のウィンドウ(?は0から7)の設定になり
 
 XFree86 4.0 でXIMを使うときは、環境変数 XMODIFIERS に "@im=skkinput" や "@im=kinput2" と設定する必要があります。
 
-## Macintosh
-
-自分はMacintoshを所持していないので分かりません(^^;。http://www.boreas.dti.ne.jp/~xdd/index.html へどうぞ。
-
-
 # 基本操作
 
   標準の設定ならば、テンキーで移動しフルキーでコマンド入力を行います。
