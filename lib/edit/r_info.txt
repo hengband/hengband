@@ -18685,7 +18685,8 @@ F:ONLY_ITEM | DROP_1D2 |
 F:INVISIBLE | OPEN_DOOR | BASH_DOOR | 
 F:IM_ACID | IM_POIS | NO_CONF | NO_SLEEP
 S:1_IN_7 | HEAL | S_SPIDER
-D:$He is constantly training for bears and tigers to sank with a single blow.
+D:$He is constantly training, hoping to be able to kill a bear or tiger with
+D:$ a single blow.
 D:彼はクマであれトラであれ一撃で沈めるべく、絶え間ない特訓を続けている。
 
 N:916:中級修験者
