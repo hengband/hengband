@@ -92,7 +92,7 @@
 static void restore_windows(player_type *player_ptr)
 {
     player_ptr->hack_mutation = FALSE;
-    current_world_ptr->character_icky = TRUE;
+    current_world_ptr->character_icky_depth = 1;
     term_activate(angband_term[0]);
     angband_term[0]->resize_hook = resize_map;
     for (MONSTER_IDX i = 1; i < 8; i++)
@@ -116,7 +116,7 @@ static void send_waiting_record(player_type *player_ptr)
     player_ptr->is_dead = TRUE;
     current_world_ptr->start_time = (u32b)time(NULL);
     signals_ignore_tstp();
-    current_world_ptr->character_icky = TRUE;
+    current_world_ptr->character_icky_depth = 1;
     path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
     highscore_fd = fd_open(buf, O_RDWR);
 
@@ -281,7 +281,7 @@ static void generate_world(player_type *player_ptr, bool new_game)
     generate_wilderness(player_ptr);
     change_floor_if_error(player_ptr);
     current_world_ptr->character_generated = TRUE;
-    current_world_ptr->character_icky = FALSE;
+    current_world_ptr->character_icky_depth = 0;
     if (!new_game)
         return;
 

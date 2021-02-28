@@ -79,7 +79,7 @@ void close_game(player_type *player_ptr)
     flush();
     signals_ignore_tstp();
 
-    current_world_ptr->character_icky = TRUE;
+    current_world_ptr->character_icky_depth = 1;
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
     safe_setuid_grab(player_ptr);

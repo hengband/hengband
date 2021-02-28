@@ -190,7 +190,7 @@ char inkey(void)
     (void)term_get_cursor(&v);
 
     /* Show the cursor if waiting, except sometimes in "command" mode */
-    if (!inkey_scan && (!inkey_flag || hilite_player || current_world_ptr->character_icky)) {
+    if (!inkey_scan && (!inkey_flag || hilite_player || current_world_ptr->character_icky_depth > 0)) {
         (void)term_set_cursor(1);
     }
 

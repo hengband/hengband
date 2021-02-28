@@ -3593,7 +3593,7 @@ void update_creature(player_type *creature_ptr)
 
     if (!current_world_ptr->character_generated)
         return;
-    if (current_world_ptr->character_icky)
+    if (current_world_ptr->character_icky_depth > 0)
         return;
     if (any_bits(creature_ptr->update, (PU_UN_LITE))) {
         reset_bits(creature_ptr->update, PU_UN_LITE);

@@ -358,7 +358,7 @@ void do_cmd_building(player_type *player_ptr)
 
 	forget_lite(player_ptr->current_floor_ptr);
 	forget_view(player_ptr->current_floor_ptr);
-	current_world_ptr->character_icky = TRUE;
+	current_world_ptr->character_icky_depth++;
 
 	command_arg = 0;
 	command_rep = 0;
@@ -408,7 +408,7 @@ void do_cmd_building(player_type *player_ptr)
 
 	if (reinit_wilderness) player_ptr->leaving = TRUE;
 
-	current_world_ptr->character_icky = FALSE;
+	current_world_ptr->character_icky_depth--;
 	term_clear();
 
 	player_ptr->update |= (PU_VIEW | PU_MONSTERS | PU_BONUS | PU_LITE | PU_MON_LITE);
