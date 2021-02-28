@@ -63,7 +63,11 @@ typedef int errr;
 /* A signed byte of memory */
 /* typedef signed char syte; */
 typedef unsigned char byte; /*!< byte型をunsighned charとして定義 / Note that unsigned values can cause math problems / An unsigned byte of memory */
+#if __STDC_VERSION__ >= 199901L
+#include <stdbool.h>
+#else
 typedef char bool; /*!< bool型をcharとして定義 / Note that a bool is smaller than a full "int" / Simple True/False type */
+#endif
 typedef unsigned int uint; /* uint型をintとして定義 /  An unsigned, "standard" integer (often pre-defined) */
 
 /* The largest possible unsigned integer */

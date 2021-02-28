@@ -1,6 +1,7 @@
 ﻿#include "monster-floor/monster-summon.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
+#include "floor/wild.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "monster-floor/monster-generator.h"
@@ -39,11 +40,11 @@ bool summon_unique_okay = FALSE;
 static bool summon_specific_okay(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
-    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[summon_specific_who];
     if (!mon_hook_dungeon(player_ptr, r_idx))
         return FALSE;
 
     if (summon_specific_who > 0) {
+        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[summon_specific_who];
         if (monster_has_hostile_align(player_ptr, m_ptr, 0, 0, r_ptr))
             return FALSE;
     } else if (summon_specific_who < 0) {
@@ -64,7 +65,12 @@ static bool summon_specific_okay(player_type *player_ptr, MONRACE_IDX r_idx)
     if ((r_ptr->flags7 & RF7_CHAMELEON) && (d_info[player_ptr->dungeon_idx].flags1 & DF1_CHAMELEON))
         return TRUE;
 
-    return check_summon_specific(player_ptr, m_ptr->r_idx, r_idx);
+    if (summon_specific_who > 0) {
+        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[summon_specific_who];
+        return check_summon_specific(player_ptr, m_ptr->r_idx, r_idx);
+    } else {
+        return check_summon_specific(player_ptr, 0, r_idx);
+    }
 }
 
 /*!
@@ -78,6 +84,23 @@ static bool is_dead_summoning(summon_type type)
     summoning |= type == SUMMON_DAWN;
     summoning |= type == SUMMON_TOTEM_MOAI;
     return summoning;
+}
+
+/*!
+ * @brief 荒野のレベルを含めた階層レベルを返す
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @return 階層レベル
+ * @detail
+ * ダンジョン及びクエストはdun_level>0となる。
+ * 荒野はdun_level==0なので、その場合荒野レベルを返す。
+ */
+DEPTH get_dungeon_or_wilderness_level(player_type *player_ptr)
+{
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    if (floor_ptr->dun_level > 0)
+        return floor_ptr->dun_level;
+
+    return wilderness[player_ptr->wilderness_y][player_ptr->wilderness_x].level;
 }
 
 /*!
@@ -106,7 +129,8 @@ bool summon_specific(player_type *player_ptr, MONSTER_IDX who, POSITION y1, POSI
     summon_unique_okay = (mode & PM_ALLOW_UNIQUE) != 0;
     get_mon_num_prep(player_ptr, summon_specific_okay, get_monster_hook2(player_ptr, y, x));
 
-    MONRACE_IDX r_idx = get_mon_num(player_ptr, 0, (floor_ptr->dun_level + lev) / 2 + 5, 0);
+    DEPTH dlev = get_dungeon_or_wilderness_level(player_ptr);
+    MONRACE_IDX r_idx = get_mon_num(player_ptr, 0, (dlev + lev) / 2 + 5, 0);
     if (!r_idx) {
         summon_specific_type = 0;
         return FALSE;

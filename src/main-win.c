@@ -101,6 +101,7 @@
 #include "dungeon/quest.h"
 #include "floor/floor-base-definitions.h"
 #include "floor/floor-events.h"
+#include "game-option/game-play-options.h"
 #include "game-option/runtime-arguments.h"
 #include "game-option/special-options.h"
 #include "io/files-util.h"
@@ -131,11 +132,11 @@
 #include "world/world.h"
 
 #ifdef WINDOWS
-#include "direct.h"
 #include "dungeon/dungeon.h"
-#include "locale.h"
 #include "save/save.h"
-#include "windows.h"
+#include <direct.h>
+#include <locale.h>
+#include <windows.h>
 
 /*
  * Available graphic modes
@@ -226,6 +227,8 @@
 #define IDM_WINDOW_D_HGT_5 275
 #define IDM_WINDOW_D_HGT_6 276
 #define IDM_WINDOW_D_HGT_7 277
+
+#define IDM_WINDOW_KEEP_SUBWINDOWS 280
 
 #define IDM_OPTIONS_NO_GRAPHICS 400
 #define IDM_OPTIONS_OLD_GRAPHICS 401
@@ -446,6 +449,11 @@ static DIBINIT infMask;
  * Flag set once "sound" has been initialized
  */
 static bool can_use_sound = FALSE;
+
+/*
+ * Show sub-windows even when Hengband is not in focus 
+ */
+static bool keep_subwindows = TRUE;
 
 #define SAMPLE_SOUND_MAX 16
 /*
@@ -819,7 +827,22 @@ static void save_prefs(void)
     strcpy(buf, use_bg ? "1" : "0");
     WritePrivateProfileString("Angband", "BackGround", buf, ini_file);
     WritePrivateProfileString("Angband", "BackGroundBitmap", bg_bitmap_file[0] != '\0' ? bg_bitmap_file : "bg.bmp", ini_file);
-    WritePrivateProfileString("Angband", "SaveFile", savefile, ini_file);
+
+    int path_length = strlen(ANGBAND_DIR) - 4; /* \libの4文字分を削除 */
+    char tmp[1024] = "";
+    strncat(tmp, ANGBAND_DIR, path_length);
+
+    int n = strncmp(tmp, savefile, path_length);
+    if (n == 0) {
+        char relative_path[1024] = "";
+        snprintf(relative_path, sizeof(relative_path), ".\\%s", (savefile + path_length));
+        WritePrivateProfileString("Angband", "SaveFile", relative_path, ini_file);
+    } else {
+        WritePrivateProfileString("Angband", "SaveFile", savefile, ini_file);
+    }
+
+    strcpy(buf, keep_subwindows ? "1" : "0");
+    WritePrivateProfileString("Angband", "KeepSubwindows", buf, ini_file);
 
     for (int i = 0; i < MAX_TERM_DATA; ++i) {
         save_prefs_aux(i);
@@ -896,6 +919,17 @@ static void load_prefs(void)
     use_bg = GetPrivateProfileInt("Angband", "BackGround", 0, ini_file);
     GetPrivateProfileString("Angband", "BackGroundBitmap", "bg.bmp", bg_bitmap_file, 1023, ini_file);
     GetPrivateProfileString("Angband", "SaveFile", "", savefile, 1023, ini_file);
+
+    int n = strncmp(".\\", savefile, 2);
+    if (n == 0) {
+        int path_length = strlen(ANGBAND_DIR) - 4; /* \libの4文字分を削除 */
+        char tmp[1024] = "";
+        strncat(tmp, ANGBAND_DIR, path_length);
+        strncat(tmp, savefile + 2, strlen(savefile) - 2 + path_length);
+        strncpy(savefile, tmp, strlen(tmp));
+    }
+
+    keep_subwindows = (GetPrivateProfileInt("Angband", "KeepSubwindows", 0, ini_file) != 0);
     for (int i = 0; i < MAX_TERM_DATA; ++i) {
         load_prefs_aux(i);
     }
@@ -2227,6 +2261,8 @@ static void setup_menus(void)
             EnableMenuItem(hm, IDM_WINDOW_D_HGT_0 + i, MF_BYCOMMAND | MF_ENABLED);
         }
     }
+    EnableMenuItem(hm, IDM_WINDOW_KEEP_SUBWINDOWS, MF_BYCOMMAND | MF_ENABLED);
+    CheckMenuItem(hm, IDM_WINDOW_KEEP_SUBWINDOWS, (keep_subwindows ? MF_CHECKED : MF_UNCHECKED));
 
     EnableMenuItem(hm, IDM_OPTIONS_NO_GRAPHICS, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
     EnableMenuItem(hm, IDM_OPTIONS_OLD_GRAPHICS, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
@@ -2565,6 +2601,10 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         td->tile_hgt -= 1;
         term_getsize(td);
         term_window_resize(td);
+        break;
+    }
+    case IDM_WINDOW_KEEP_SUBWINDOWS: {
+        keep_subwindows = !keep_subwindows;
         break;
     }
     case IDM_OPTIONS_NO_GRAPHICS: {
@@ -3161,6 +3201,15 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
                     ShowWindow(data[i].w, SW_SHOW);
                 } else {
                     ShowWindow(data[i].w, SW_HIDE);
+                }
+            }
+        }
+    }
+    case WM_ENABLE: {
+        if (wParam == FALSE && keep_subwindows) {
+            for (int i = 0; i < MAX_TERM_DATA; i++) {
+                if (data[i].visible) {
+                    ShowWindow(data[i].w, SW_SHOW);
                 }
             }
         }

@@ -69,7 +69,7 @@ void redraw_stuff(player_type *creature_ptr)
     if (!current_world_ptr->character_generated)
         return;
 
-    if (current_world_ptr->character_icky)
+    if (current_world_ptr->character_icky_depth > 0)
         return;
 
     if (creature_ptr->redraw & (PR_WIPE)) {

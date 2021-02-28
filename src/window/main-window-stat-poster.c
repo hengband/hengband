@@ -364,16 +364,12 @@ void print_imitation(player_type *player_ptr)
     if (player_ptr->pclass != CLASS_IMITATOR)
         return;
 
-    if (player_ptr->mane_num != 0) {
+    if (player_ptr->mane_num == 0) {
         put_str("    ", row_study, col_study);
         return;
     }
 
-    TERM_COLOR attr;
-    if (player_ptr->new_mane)
-        attr = TERM_L_RED;
-    else
-        attr = TERM_WHITE;
+    TERM_COLOR attr = player_ptr->new_mane ? TERM_L_RED : TERM_WHITE;
     c_put_str(attr, _("まね", "Imit"), row_study, col_study);
 }
 

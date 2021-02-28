@@ -136,7 +136,6 @@ HIT_POINT spell_RF6_SPECIAL_ROLENTO(player_type *target_ptr, POSITION y, POSITIO
  */
 HIT_POINT spell_RF6_SPECIAL_B(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-    HIT_POINT dam = -1;
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     monster_type *t_ptr = &floor_ptr->m_list[t_idx];
@@ -154,16 +153,15 @@ HIT_POINT spell_RF6_SPECIAL_B(player_type *target_ptr, POSITION y, POSITION x, M
 
         teleport_away(target_ptr, m_idx, 10, TELEPORT_NONMAGICAL);
         target_ptr->update |= (PU_MONSTERS);
-        return dam;
+        return 0;
     }
 
-    int get_damage = 0;
-    bool fear, dead; /* dummy */
 
     simple_monspell_message(target_ptr, m_idx, t_idx, _("%^sがあなたを掴んで空中から投げ落とした。", "%^s snatches you, soars into the sky, and drops you."),
         _("%^sが%sを掴んで空中から投げ落とした。", "%^s snatches %s, soars into the sky, and releases its grip."), TARGET_TYPE);
 
-    dam = damroll(4, 8);
+    bool fear, dead; /* dummy */
+    HIT_POINT dam = damroll(4, 8);
 
     if (monster_to_player || t_idx == target_ptr->riding)
         teleport_player_to(target_ptr, m_ptr->fy, m_ptr->fx, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
@@ -182,7 +180,7 @@ HIT_POINT spell_RF6_SPECIAL_B(player_type *target_ptr, POSITION y, POSITION x, M
     }
 
     if (monster_to_player || (monster_to_monster && target_ptr->riding == t_idx)) {
-        get_damage = take_hit(target_ptr, DAMAGE_NOESCAPE, dam, m_name, -1);
+        int get_damage = take_hit(target_ptr, DAMAGE_NOESCAPE, dam, m_name, -1);
         if (target_ptr->tim_eyeeye && get_damage > 0 && !target_ptr->is_dead) {
             GAME_TEXT m_name_self[MAX_MONSTER_NAME];
             monster_desc(target_ptr, m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);

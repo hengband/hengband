@@ -53,9 +53,9 @@
 #include "object-enchant/trc-types.h"
 #include "pet/pet-fall-off.h"
 #include "player-info/avatar.h"
+#include "player/player-move.h"
 #include "player/player-skill.h"
 #include "player/player-status-flags.h"
-#include "player/player-move.h"
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/summon-types.h"
@@ -242,7 +242,12 @@ void decide_drop_from_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool i
 bool vanish_summoned_children(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m)
 {
     monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-    if ((m_ptr->parent_m_idx == 0) || (target_ptr->current_floor_ptr->m_list[m_ptr->parent_m_idx].r_idx > 0))
+
+    if (m_ptr->parent_m_idx == 0)
+        return FALSE;
+
+    // parent_m_idxが自分自身を指している場合は召喚主は消滅している
+    if (m_ptr->parent_m_idx != m_idx && (target_ptr->current_floor_ptr->m_list[m_ptr->parent_m_idx].r_idx > 0))
         return FALSE;
 
     if (see_m) {

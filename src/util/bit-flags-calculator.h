@@ -1,8 +1,10 @@
 ﻿#pragma once
 
-#define reset_bit(FLAG, INDEX) ((FLAG) &= ~(INDEX))
-#define set_bit(FLAG, INDEX) ((FLAG) |= (INDEX))
-#define test_bit(FLAG, INDEX) (((FLAG) & (INDEX)) != 0)
+#define reset_bits(FLAG, INDEX) ((FLAG) &= ~(INDEX))
+#define set_bits(FLAG, INDEX) ((FLAG) |= (INDEX))
+#define any_bits(FLAG, INDEX) (((FLAG) & (INDEX)) != 0)
+#define all_bits(FLAG, INDEX) (((FLAG) & (INDEX)) == (INDEX))
+#define none_bits(FLAG, INDEX) (((FLAG) & (INDEX)) == 0)
 #define has_flag(ARRAY, INDEX) !!((ARRAY)[(INDEX) / 32] & (1UL << ((INDEX) % 32)))
 #define add_flag(ARRAY, INDEX) ((ARRAY)[(INDEX) / 32] |= (1UL << ((INDEX) % 32)))
 #define remove_flag(ARRAY, INDEX) ((ARRAY)[(INDEX) / 32] &= ~(1UL << ((INDEX) % 32)))

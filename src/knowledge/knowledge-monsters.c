@@ -27,6 +27,7 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
+#include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "util/sort.h"
 #include "util/string-processor.h"
@@ -47,7 +48,7 @@
  * @param mode ？？？
  * @return The number of monsters in the group
  */
-static IDX collect_monsters(player_type *creature_ptr, IDX grp_cur, IDX mon_idx[], BIT_FLAGS8 mode)
+static IDX collect_monsters(player_type *creature_ptr, IDX grp_cur, IDX mon_idx[], monster_lore_mode mode)
 {
     concptr group_char = monster_group_char[grp_cur];
     bool grp_unique = (monster_group_char[grp_cur] == (char *)-1L);
@@ -60,14 +61,14 @@ static IDX collect_monsters(player_type *creature_ptr, IDX grp_cur, IDX mon_idx[
         monster_race *r_ptr = &r_info[i];
         if (!r_ptr->name)
             continue;
-        if (!(mode & 0x02) && !cheat_know && !r_ptr->r_sights)
+        if (((mode != MONSTER_LORE_DEBUG) && (mode != MONSTER_LORE_RESEARCH)) && !cheat_know && !r_ptr->r_sights)
             continue;
 
         if (grp_unique) {
-            if (!(r_ptr->flags1 & RF1_UNIQUE))
+            if (none_bits(r_ptr->flags1, RF1_UNIQUE))
                 continue;
         } else if (grp_riding) {
-            if (!(r_ptr->flags7 & RF7_RIDING))
+            if (none_bits(r_ptr->flags7, RF7_RIDING))
                 continue;
         } else if (grp_wanted) {
             bool wanted = FALSE;
@@ -82,7 +83,7 @@ static IDX collect_monsters(player_type *creature_ptr, IDX grp_cur, IDX mon_idx[
             if (!wanted)
                 continue;
         } else if (grp_amberite) {
-            if (!(r_ptr->flags3 & RF3_AMBERITE))
+            if (none_bits(r_ptr->flags3, RF3_AMBERITE))
                 continue;
         } else {
             if (!angband_strchr(group_char, r_ptr->d_char))
@@ -90,7 +91,9 @@ static IDX collect_monsters(player_type *creature_ptr, IDX grp_cur, IDX mon_idx[
         }
 
         mon_idx[mon_cnt++] = i;
-        if (mode & 0x01)
+        if (mode == MONSTER_LORE_NORMAL)
+            break;
+        if (mode == MONSTER_LORE_DEBUG)
             break;
     }
 
@@ -161,7 +164,7 @@ void do_cmd_knowledge_kill_count(player_type *creature_ptr)
     for (int kk = 1; kk < max_r_idx; kk++) {
         monster_race *r_ptr = &r_info[kk];
 
-        if (r_ptr->flags1 & (RF1_UNIQUE)) {
+        if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
             bool dead = (r_ptr->max_num == 0);
 
             if (dead) {
@@ -197,7 +200,7 @@ void do_cmd_knowledge_kill_count(player_type *creature_ptr)
     ang_sort(creature_ptr, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
     for (int k = 0; k < n; k++) {
         monster_race *r_ptr = &r_info[who[k]];
-        if (r_ptr->flags1 & (RF1_UNIQUE)) {
+        if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
             bool dead = (r_ptr->max_num == 0);
             if (dead) {
                 fprintf(fff, "     %s\n", (r_name + r_ptr->name));
@@ -265,7 +268,7 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
         term_erase(69, row + i, 255);
         term_queue_bigchar(use_bigtile ? 69 : 70, row + i, r_ptr->x_attr, r_ptr->x_char, 0, 0);
         if (!visual_only) {
-            if (!(r_ptr->flags1 & RF1_UNIQUE))
+            if (none_bits(r_ptr->flags1, RF1_UNIQUE))
                 put_str(format("%5d", r_ptr->r_pkills), row + i, 73);
             else
                 c_put_str((r_ptr->max_num == 0 ? TERM_L_DARK : TERM_WHITE), (r_ptr->max_num == 0 ? _("死亡", " dead") : _("生存", "alive")), row + i, 74);
@@ -300,10 +303,10 @@ void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, boo
     bool visual_list = FALSE;
     TERM_COLOR attr_top = 0;
     byte char_left = 0;
-    BIT_FLAGS8 mode;
+    monster_lore_mode mode;
     int browser_rows = hgt - 8;
     if (direct_r_idx < 0) {
-        mode = visual_only ? 0x03 : 0x01;
+        mode = visual_only ? MONSTER_LORE_DEBUG : MONSTER_LORE_NORMAL;
         int len;
         for (IDX i = 0; monster_group_text[i] != NULL; i++) {
             len = strlen(monster_group_text[i]);
@@ -326,7 +329,7 @@ void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, boo
     }
 
     grp_idx[grp_cnt] = -1;
-    mode = visual_only ? 0x02 : 0x00;
+    mode = visual_only ? MONSTER_LORE_RESEARCH : MONSTER_LORE_NONE;
     IDX old_grp_cur = -1;
     IDX grp_cur = 0;
     IDX grp_top = 0;

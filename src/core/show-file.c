@@ -32,23 +32,29 @@
 static void show_file_aux_line(concptr str, int cy, concptr shower)
 {
     char lcstr[1024];
+    concptr ptr;
+    byte textcolor = TERM_WHITE;
+    byte focuscolor = TERM_YELLOW;
+
     if (shower) {
         strcpy(lcstr, str);
         str_tolower(lcstr);
+
+        ptr = angband_strstr(lcstr, shower);
+        textcolor = (ptr == NULL) ? TERM_L_DARK : TERM_WHITE;
     }
 
     int cx = 0;
     term_gotoxy(cx, cy);
 
     static const char tag_str[] = "[[[[";
-    byte color = TERM_WHITE;
+    byte color = textcolor;
     char in_tag = '\0';
     for (int i = 0; str[i];) {
         int len = strlen(&str[i]);
         int showercol = len + 1;
         int bracketcol = len + 1;
         int endcol = len;
-        concptr ptr;
         if (shower) {
             ptr = angband_strstr(&lcstr[i], shower);
             if (ptr)
@@ -69,7 +75,7 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
 
         if (shower && endcol == showercol) {
             int showerlen = strlen(shower);
-            term_addstr(showerlen, TERM_YELLOW, &str[i]);
+            term_addstr(showerlen, focuscolor, &str[i]);
             cx += showerlen;
             i += showerlen;
             continue;
@@ -81,15 +87,15 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
         if (in_tag) {
             i++;
             in_tag = '\0';
-            color = TERM_WHITE;
+            color = textcolor;
             continue;
         }
 
         i += sizeof(tag_str) - 1;
         color = color_char_to_attr(str[i]);
         if (color == 255 || str[i + 1] == '\0') {
-            color = TERM_WHITE;
-            term_addstr(-1, TERM_WHITE, tag_str);
+            color = textcolor;
+            term_addstr(-1, color, tag_str);
             cx += sizeof(tag_str) - 1;
             continue;
         }
@@ -240,7 +246,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
     concptr shower = NULL;
     while (TRUE) {
         if (line >= size - rows)
-            line = size - rows;
+              line = size - rows;
         if (line < 0)
             line = 0;
 

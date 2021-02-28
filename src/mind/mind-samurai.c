@@ -294,10 +294,11 @@ MULTIPLY mult_hissatsu(player_type *attacker_ptr, MULTIPLY mult, BIT_FLAGS *flag
     hissatsu_lightning_eagle(attacker_ptr, samurai_slaying_ptr);
     hissatsu_bloody_maelstroem(attacker_ptr, samurai_slaying_ptr);
     hissatsu_keiun_kininken(attacker_ptr, samurai_slaying_ptr);
-    if (mult > 150)
-        mult = 150;
 
-    return mult;
+    if (samurai_slaying_ptr->mult > 150)
+        samurai_slaying_ptr->mult = 150;
+
+    return samurai_slaying_ptr->mult;
 }
 
 void concentration(player_type *creature_ptr)

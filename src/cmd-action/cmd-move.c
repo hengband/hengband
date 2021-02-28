@@ -92,8 +92,10 @@ void do_cmd_go_up(player_type *creature_ptr)
             quest[creature_ptr->current_floor_ptr->inside_quest].status = QUEST_STATUS_TAKEN;
         }
 
-        if (!creature_ptr->current_floor_ptr->inside_quest)
+        if (!creature_ptr->current_floor_ptr->inside_quest) {
             creature_ptr->current_floor_ptr->dun_level = 0;
+            creature_ptr->word_recall = 0;
+        }
 
         creature_ptr->leaving = TRUE;
         creature_ptr->oldpx = 0;
@@ -143,8 +145,10 @@ void do_cmd_go_up(player_type *creature_ptr)
 
     if (is_echizen(creature_ptr))
         msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
-    else if (up_num == creature_ptr->current_floor_ptr->dun_level)
+    else if (up_num == creature_ptr->current_floor_ptr->dun_level) {
         msg_print(_("地上に戻った。", "You go back to the surface."));
+        creature_ptr->word_recall = 0;
+    }
     else
         msg_print(_("階段を上って新たなる迷宮へと足を踏み入れた。", "You enter a maze of up staircases."));
 
@@ -199,8 +203,10 @@ void do_cmd_go_down(player_type *creature_ptr)
             quest[creature_ptr->current_floor_ptr->inside_quest].status = QUEST_STATUS_TAKEN;
         }
 
-        if (!creature_ptr->current_floor_ptr->inside_quest)
+        if (!creature_ptr->current_floor_ptr->inside_quest) {
             creature_ptr->current_floor_ptr->dun_level = 0;
+            creature_ptr->word_recall = 0;
+        }
 
         creature_ptr->leaving = TRUE;
         creature_ptr->oldpx = 0;

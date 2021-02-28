@@ -13123,9 +13123,9 @@ F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | MOVE_BODY |
 F:SMART | TAKE_ITEM | OPEN_DOOR | BASH_DOOR |
 F:EVIL | GIANT | MALE
 S:1_IN_5 | HEAL | TELE_TO | S_MONSTERS
-D:$A forty foot tall humanoid that shakes the ground as it walks.  The power 
-D:$radiating from its frame shakes your courage, its hatred inspired by your 
-D:$defiance.
+D:$It is a forty foot tall humanoid that shakes the ground as it walks.  The
+D:$ power radiating from its frame shakes your courage.  Your defiance stokes
+D:$ its rage.
 D: 12 メートルもの身長がある人間型のモンスターで、歩くだけで大地が揺れる。
 D:全身から立ち昇る力のオーラは冒険者の勇気を打ち砕こうとするかのようだ。
 D:冒険者が挑みかかると彼の憎悪は一層燃え上がる。
@@ -13145,9 +13145,8 @@ F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | DROP_CORPSE
 F:OPEN_DOOR | BASH_DOOR | ANIMAL | EVIL | DRAGON
 F:IM_FIRE | IM_POIS | RES_NETH | RES_TELE | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_7 | HOLD | SCARE | BR_FIRE | BR_POIS | BR_NETH
-D:$It's a winged basilisk.
-D:$It is aimed at adventurers in order to show off the evil poison
-D:$ and power that it has stored in its body.
+D:$It's a winged basilisk, eager to show an adventurer like yourself
+D:$ the evil poison and power that is has stored in its body.
 D:翼のあるバジリスクだ。
 D:その身体に蓄えた邪悪な毒と力を見せつけるべく虎視眈々と冒険者を狙っている。
 
@@ -22749,8 +22748,8 @@ B:BITE:HURT:6d3
 F:MALE | WILD_SWAMP | WILD_WASTE
 F:OPEN_DOOR | BASH_DOOR | DROP_CORPSE | DROP_SKELETON
 F:ANIMAL | EVIL | DROP_60 | FRIENDS
-D:$A warrior of skaven mess around with the power of chaos
-D:$ and slaughter their prey from one end.
+D:$Skaven warriors carelessly wield the power of chaos and slaughter any prey
+D:$ they see.
 D:スケイヴン族の戦士は混沌の力をいたずらに振り回し、
 D:目についた獲物を片っ端から屠っていく。
 
@@ -23169,7 +23168,7 @@ F:HURT_ROCK | IM_ELEC | RES_PLAS | RES_GRAV
 F:DROP_60 | DROP_1D2 | ONLY_GOLD
 F:NONLIVING | NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
 S:1_IN_2 | BR_ELEC | BR_PLAS
-D:$ Do NOT get behind this Moai!
+D:$ Stay behind this Moai!
 D:こいつの背後には近寄るな！
 
 N:1160:モアイ
@@ -23182,8 +23181,8 @@ F:FRIENDS | PREVENT_SUDDEN_MAGIC | DROP_90
 F:NONLIVING | NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
 F:NEVER_MOVE | NEVER_BLOW
 S:1_IN_2 | BR_ELEC | BR_PLAS
-D:$It is Moai who landed in Angband.
-D:$  You can not destroy this ion ring.
+D:$It is a Moai who landed in Angband.
+D:$  You can not destroy the ion rings it spits out.
 D:鉄獄に降り立ったモアイだ。こいつの吐き出すイオンリングは破壊できない。
 
 # 死に際に7/8の確率で自分自身を召喚する
@@ -23321,7 +23320,7 @@ F:IM_COLD | IM_POIS | IM_ACID | IM_ELEC | IM_FIRE | RES_TELE
 S:1_IN_5 | 
 S:S_MONSTERS | SCARE | BA_DARK | BA_NETH | BR_POIS
 D:$This sacred and untouchable female monster is half a nymph
-D:$ and half a snake, becoming the mother of many monsters.
+D:$ and half a snake.  She is the mother of many monsters.
 D:この半分がニンフで半分は蛇の神聖にして手の付けられない女怪は、
 D:数々のモンスターの母となった。
 
@@ -23601,7 +23600,7 @@ S:1_IN_2 |
 S:SLOW | CAUSE_4 | DRAIN_MANA | MIND_BLAST | BRAIN_SMASH | FORGET | 
 S:BO_MANA | ANIM_DEAD 
 S:S_UNDEAD
-D:$It is a deviant monster with innumerable eyes with muddy tentacles.
+D:$It is a deviant monster with innumerable eyes on muddy tentacles.
 D:$  It spreads nauseous nasty odors around.
 D:ドロドロした触手に爛れた目が無数についている異形のモンスターだ。
 D:それは吐き気を催す異臭を周囲に撒き散らしている。
@@ -24773,9 +24772,9 @@ F:DROP_4D2 | DROP_1D2 | DROP_GOOD | DROP_60 | DROP_90 | ONLY_ITEM |
 F:EVIL | IM_COLD | IM_ACID | IM_ELEC | IM_FIRE
 S:1_IN_4 |
 S:BR_NETH | S_MONSTERS | S_DEMON | S_HOUND | SCARE
-D:$A two-headed hound with snake tail. He is firstborn of Echidna,
-D:$ father of Sphinx and Lion of Namea, 
-D:$ and deity head the male line in clan. Hades' vassals respond to his call.
+D:$Orthus is a two-headed hound with a snake tail. He is the firstborn of
+D:$ Echidna and father of the Sphinx and the Lion of Nemea.
+D:$ Hades' vassals respond to his call.
 D:２つ首と蛇の尾を持つ猟犬だ。彼はエキドナの長子であり、
 D:スフィンクスとネメアのライオンの父たる一族の男系筆頭の魔神だ。
 D:彼が呼びかければハデスの家臣も応える。
@@ -24798,9 +24797,9 @@ S:S_KIN
 R:354:4d7
 R:884:4d7
 R:1250:4d7
-D:$A massive legendary chimera.  She has powerful lion, goat, snake heads.
-D:$ This chaotic female monster is the ancestor of chimera.
-D:$ She's wants to give birth to more powerful offspring by eating you.
+D:$She is a massive legendary chimera with powerful lion, goat and snake heads.
+D:$ This chaotic female monster is the ancestor of the other chimera.
+D:$ She wants to give birth to more powerful offspring by eating you.
 D:巨大な伝説的キメラだ。彼女は力に満ちあふれた牡獅子、山羊、蛇の首を持っている。
 D:このキメラの祖である混沌の女怪はあなたを食べることで
 D:より強力な仔を産もうとしている。
@@ -24859,12 +24858,11 @@ F:UNIQUE | FEMALE | ANIMAL | FORCE_MAXHP | PREVENT_SUDDEN_MAGIC | CAN_FLY | RAND
 F:ONLY_ITEM | DROP_60 | DROP_1D2 | DROP_GOOD | DROP_CORPSE |
 F:BASH_DOOR | IM_ACID | IM_ELEC | HURT_FIRE | WEIRD_MIND | NO_FEAR
 R:1252:5d5
-D:$The Queen of vespoid, featuring a huge abdomen and bright wings.
-D:$  Command the subordinate vespoid
-D:$ with a peculiar flight and attack the intruder.
-D:$  The abdominal sting is also very well developed,
-D:$ and in addition to neurological poisons,
-D:$ it may also inject acidic fluids towards its prey.
+D:$The Queen of vespoids has a huge abdomen and bright wings.
+D:$  Using a peculiar pattern of flight, she commands subordinate vespoids
+D:$ to attack any intruders.
+D:$  Her abdominal stinger is also very well developed and
+D:$ can spray acidic fluids or inject neurological poisons.
 D:巨大な腹部と鮮やかな大羽を特徴とするランゴスタの女王。
 D:配下のランゴスタに特異な飛行で命令を行い、侵入者を襲う。
 D:腹部の毒針も非常に発達しており、神経性の毒の他、
@@ -24887,10 +24885,10 @@ F:DROP_CORPSE | DROP_SKELETON | DROP_1D2 | DROP_GREAT
 F:IM_POIS | RES_DARK | RES_CHAO | SMART | NO_CONF
 S:1_IN_3 | BR_CONF | CAUSE_3 | MIND_BLAST | S_SPIDER
 S:FORGET | SCARE | BLINK | CONF | DARKNESS
-D:$"Don't you want balloon?"
-D:$  An unknown life form that can transform into a fearful one.
-D:$  The appearance of the clown is just one of them.
-D:$  When you are dragged down, you float too.
+D:$"Don't you want a balloon?"
+D:$  It's an unknown life form that can transform into what its victim
+D:$ fears the most.  A clown is just one its forms.
+D:$  When it drags you down, you'll float too.
 D:「風船、欲しいだろう？」
 D:　相手が恐怖心を抱くものに姿を変えることができる未知の生命体だ。
 D:ピエロの姿もその一つに過ぎない。

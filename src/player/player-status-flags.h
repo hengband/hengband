@@ -19,7 +19,8 @@ enum flag_cause {
     FLAG_CAUSE_MAGIC_TIME_EFFECT = 15, /*!< 魔法による時限効果 */
     FLAG_CAUSE_MUTATION = 16, /*!< 変異による効果 */
     FLAG_CAUSE_BATTLE_FORM = 17, /*!< 構えによる効果 */
-    FLAG_CAUSE_MAX = 18
+    FLAG_CAUSE_RIDING = 18, /*!< 乗馬による効果 */
+    FLAG_CAUSE_MAX = 19
 };
 
 typedef enum melee_type {
@@ -85,12 +86,12 @@ BIT_FLAGS has_sustain_dex(player_type *creature_ptr);
 BIT_FLAGS has_sustain_con(player_type *creature_ptr);
 BIT_FLAGS has_sustain_chr(player_type *creature_ptr);
 BIT_FLAGS has_levitation(player_type *creature_ptr);
-void has_can_swim(player_type *creature_ptr);
+bool has_can_swim(player_type *creature_ptr);
 BIT_FLAGS has_slow_digest(player_type *creature_ptr);
 BIT_FLAGS has_regenerate(player_type *creature_ptr);
-void has_curses(player_type *creature_ptr);
+void update_curses(player_type *creature_ptr);
 BIT_FLAGS has_impact(player_type *creature_ptr);
-void has_extra_blow(player_type *creature_ptr);
+void update_extra_blows(player_type *creature_ptr);
 BIT_FLAGS has_resist_acid(player_type *creature_ptr);
 BIT_FLAGS has_vuln_acid(player_type *creature_ptr);
 BIT_FLAGS has_resist_elec(player_type *creature_ptr);

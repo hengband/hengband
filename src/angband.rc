@@ -52,6 +52,8 @@ ANGBAND MENU
 			MENUITEM "サブウィンドウ 7", 227
 		}
 
+		MENUITEM "常にサブウィンドウを表示(&K)", 280
+
 		MENUITEM SEPARATOR
 
 		/*  POPUP "Bizarre Display"

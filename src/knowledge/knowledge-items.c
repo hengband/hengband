@@ -111,7 +111,7 @@ void do_cmd_knowledge_artifacts(player_type *player_ptr)
             object_type *q_ptr;
             q_ptr = &forge;
             object_prep(player_ptr, q_ptr, z);
-            q_ptr->name1 = (byte)who[k];
+            q_ptr->name1 = who[k];
             q_ptr->ident |= IDENT_STORE;
             describe_flavor(player_ptr, base_name, q_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         }
