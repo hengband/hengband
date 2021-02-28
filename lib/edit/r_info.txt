@@ -18685,7 +18685,8 @@ F:ONLY_ITEM | DROP_1D2 |
 F:INVISIBLE | OPEN_DOOR | BASH_DOOR | 
 F:IM_ACID | IM_POIS | NO_CONF | NO_SLEEP
 S:1_IN_7 | HEAL | S_SPIDER
-D:$He is constantly training for bears and tigers to sank with a single blow.
+D:$He is constantly training, hoping to be able to kill a bear or tiger with
+D:$ a single blow.
 D:彼はクマであれトラであれ一撃で沈めるべく、絶え間ない特訓を続けている。
 
 N:916:中級修験者
@@ -18727,9 +18728,9 @@ F:INVISIBLE | OPEN_DOOR | BASH_DOOR |
 F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | 
 F:NO_CONF | NO_SLEEP
 S:1_IN_4 | HEAL | S_SPIDER
-D:$He is being at the culmination of martial arts,
-D:$ but he never gives up on himself.
-D:$  He is still not fully manipulating the creatures of nature
+D:$He is a master of the martial arts yet remains driven to improve his
+D:$ technique.
+D:$  He still hasn't fully manipulated the creatures of nature
 D:$ and suffers from that.
 D:$  However, he does not despair and continues steadily step by step.
 D:彼は修験道を極めつつあるが、決して自分に驕ることはない。
@@ -23460,9 +23461,9 @@ F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | ONLY_ITEM | DROP_4D2
 F:INVISIBLE | OPEN_DOOR | BASH_DOOR
 F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | NO_CONF | NO_SLEEP
 S:1_IN_3 | HEAL | MIND_BLAST | S_SPIDER | S_HOUND
-D:$He is a martial arts' examiner who has trained his body and spirit
+D:$He is a highly skilled martial artist who has trained his body and spirit
 D:$ so that he can teach the next generation.
-D:$His fist can catch the rock's deadline and crush it with a single blow.
+D:$  His fist can find a rock's hidden flaw and crush it with a single blow.
 D:彼は後進を指導できるほどに肉体も精神も鍛え上げた修験者だ。
 D:彼の拳は岩の死線を捉えて一撃で砕くことができる。
 
