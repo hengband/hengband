@@ -23461,9 +23461,9 @@ F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | ONLY_ITEM | DROP_4D2
 F:INVISIBLE | OPEN_DOOR | BASH_DOOR
 F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | NO_CONF | NO_SLEEP
 S:1_IN_3 | HEAL | MIND_BLAST | S_SPIDER | S_HOUND
-D:$He is a martial arts' examiner who has trained his body and spirit
+D:$He is a highly skilled martial artist who has trained his body and spirit
 D:$ so that he can teach the next generation.
-D:$His fist can catch the rock's deadline and crush it with a single blow.
+D:$  His fist can find a rock's hidden flaw and crush it with a single blow.
 D:彼は後進を指導できるほどに肉体も精神も鍛え上げた修験者だ。
 D:彼の拳は岩の死線を捉えて一撃で砕くことができる。
 
