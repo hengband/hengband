@@ -24138,7 +24138,7 @@ F:IM_FIRE | IM_COLD | IM_ELEC | RES_DARK
 F:NO_SLEEP | NO_CONF | DROP_60
 S:1_IN_5 | SHOOT
 D:$It is one of those who agree with Miraak's corrupt wishes.
-D:$They are relentlessly chasing you as against Miraak's noble will.
+D:$  They relentlessly chase you, seeing you as threat to Miraak's noble will.
 D:ミラークの堕落した願いに賛同している者共の一人だ。
 D:彼らはあなたをミラークの崇高な意志に反する者として執拗に追っている。
 
@@ -24155,7 +24155,7 @@ F:IM_FIRE | IM_COLD | IM_ELEC | RES_DARK
 F:NO_SLEEP | NO_CONF | DROP_60
 S:1_IN_2 | BLINK | CONF | HOLD | BA_POIS | BA_FIRE | BA_COLD | BA_ELEC
 D:$It is one of those who agree with Miraak's corrupt wishes.
-D:$They are relentlessly chasing you as against Miraak's noble will.
+D:$  They relentlessly chase you, seeing you as a threat to Miraak's noble will.
 D:ミラークの堕落した願いに賛同している者共の一人だ。
 D:彼らはあなたをミラークの崇高な意志に反する者として執拗に追っている。
 
