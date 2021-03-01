@@ -24195,9 +24195,9 @@ F:DROP_CORPSE | DROP_SKELETON | BASH_DOOR
 F:HURT_LITE | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS
 F:RES_NETH | RES_DARK | RES_SHAR | NO_SLEEP | NO_CONF
 S:1_IN_4 | TPORT | BA_DARK | S_UNDEAD | S_KIN | S_HI_UNDEAD | HEAL
-D:$A terrifying vampire trying to extinguish the sun's rays from this land.
-D:$  For that purpose, he is also a ruthless man
-D:$ who easily throws away the genus.
+D:$He is a terrifying vampire trying to extinguish the sun's rays from this
+D:$ land.  For that purpose, he is also a ruthless man who easily throws away
+D:$ his own family.
 D:太陽の光をこの大地から消しさそろうとしている恐るべき吸血鬼だ。
 D:そのためには眷属をも容易く使い捨てにする、冷酷な男でもある。
 
