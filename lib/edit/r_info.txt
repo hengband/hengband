@@ -24035,8 +24035,7 @@ F:ONLY_ITEM | DROP_1D2 | DROP_2D2 | DROP_GOOD | CAN_FLY | FRIENDLY | GOOD
 F:IM_COLD | IM_FIRE | IM_ELEC | RES_SOUN
 F:BASH_DOOR | MOVE_BODY | DRAGON | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_8 | SCARE | BA_ELEC | BR_FIRE | BR_COLD | BR_SOUN
-D:$It has a higher pride than the heavens without leaking to other dragons,
-D:$ and it is a character that can quickly rise to provocation.
+D:$Proud, even when compared to other dragons, Odahviing is easily provoked.
 D:他のドラゴンに漏れず天より高いプライドを持ち、挑発にはすぐ乗るタチだ。
 
 N:1206:声の道に仇なすもの『デルフィン』
