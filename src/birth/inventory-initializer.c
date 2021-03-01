@@ -233,9 +233,11 @@ void player_outfit(player_type *creature_ptr)
         add_outfit(creature_ptr, q_ptr);
     }
 
-    if (creature_ptr->pseikaku == PERSONALITY_SEXY) {
-        player_init[creature_ptr->pclass][2][0] = TV_HAFTED;
-        player_init[creature_ptr->pclass][2][1] = SV_WHIP;
+    if (creature_ptr->pclass != CLASS_SORCERER) {
+        if (creature_ptr->pseikaku == PERSONALITY_SEXY) {
+            player_init[creature_ptr->pclass][2][0] = TV_HAFTED;
+            player_init[creature_ptr->pclass][2][1] = SV_WHIP;
+        }
     }
 
     for (int i = 0; i < 3; i++) {
