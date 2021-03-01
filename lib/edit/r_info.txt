@@ -24094,7 +24094,7 @@ F:CAN_FLY | FRIENDLY | GOOD | IM_COLD | IM_FIRE | IM_ELEC | RES_SOUN
 F:BASH_DOOR | MOVE_BODY | DRAGON | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_7 | SCARE | BR_FIRE | BR_SOUN | BR_NETH
 D:$It is a dragon who has been in Oblivion for so long that
-D:$ it has become difficult to maintain his body in this world.
+D:$ it has become difficult to maintain its body in this world.
 D:$  It fully acknowledges your ability.
 D:あまりにも永い間冥界にい続けたため、
 D:現世で肉体を保つことが困難になったドラゴンだ。
