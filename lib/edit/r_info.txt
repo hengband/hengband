@@ -23999,7 +23999,7 @@ F:BASH_DOOR | MOVE_BODY | DRAGON | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_7 | SCARE | BR_FIRE | BA_FIRE
 D:$This dragon is the most loyal subordinate
 D:$ who rushed to the news of the return of Alduin from Oblivion.
-D:$  It lightly turns the town guard into a cinder.
+D:$  Its breath easily turns the town guard into cinders.
 D:このドラゴンはアルドゥイン復活の報を受け、
 D:イの一番に駆けつけた最も忠実な部下だ。
 D:街の衛兵ごときは軽く焼き尽くす。
