@@ -1351,7 +1351,7 @@ W:5:10:12:13000
 P:0:2d4:4:6:0
 F:CON | HIDE_TYPE
 F:BRAND_ELEC | RES_ELEC | ACTIVATE | SHOW_MODS | THROW | XTRA_H_RES
-U:ACID_BALL_AND_RESISTANCE
+U:ELEC_BALL_AND_RESISTANCE
 D:$A dagger covered in sparks and finely balanced for deadly throws.
 D:「黒の牙」を意味する名を持つ、この短剣は雷光に覆われ、
 D:その刃から雷の球を迸らせる力をもつ。
