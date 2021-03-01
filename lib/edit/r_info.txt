@@ -24115,9 +24115,10 @@ F:IM_COLD | IM_FIRE | IM_ELEC | RES_SOUN
 F:BASH_DOOR | KILL_BODY | DRAGON | NO_CONF | NO_SLEEP | NO_FEAR | RIDING
 S:1_IN_3 | SHRIEK | S_KIN | ANIM_DEAD
 S:BR_ELEC | BR_FIRE | BR_COLD | BR_SOUN | BR_WALL | BR_MANA
-D:$The first dragon created in one of the plural worlds.
-D:$  It eats people's souls, destroys everything and destroys all dimensions.
-D:$  It had been sealed for too long, but was finally released.
+D:$It is the first dragon born in the worlds.
+D:$  It destroyed the last world to usher in this one.
+D:$  Said to eat the souls of the dead to gain power, it has returned after
+D:$ a long absence.
 D:$  Only you can defeat this terrifying dragon!
 D:多元世界の一つにおいて最初に創造されたドラゴンだ。
 D:人の魂を喰らい、次元を消滅させんばかりにあらゆるものを破壊して回っている。
