@@ -270,8 +270,11 @@ static void generate_world(player_type *player_ptr, bool new_game)
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     panel_row_min = floor_ptr->height;
     panel_col_min = floor_ptr->width;
-    if (player_ptr->pseikaku == PERSONALITY_SEXY)
-        s_info[player_ptr->pclass].w_max[TV_HAFTED - TV_WEAPON_BEGIN][SV_WHIP] = WEAPON_EXP_MASTER;
+
+    if (player_ptr->pclass != CLASS_SORCERER) {
+        if (player_ptr->pseikaku == PERSONALITY_SEXY)
+            s_info[player_ptr->pclass].w_max[TV_HAFTED - TV_WEAPON_BEGIN][SV_WHIP] = WEAPON_EXP_MASTER;
+    }
 
     set_floor_and_wall(player_ptr->dungeon_idx);
     flavor_init();
