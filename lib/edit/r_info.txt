@@ -23999,7 +23999,7 @@ F:BASH_DOOR | MOVE_BODY | DRAGON | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_7 | SCARE | BR_FIRE | BA_FIRE
 D:$This dragon is the most loyal subordinate
 D:$ who rushed to the news of the return of Alduin from Oblivion.
-D:$  It lightly turns the town guard into a cinder.
+D:$  Its breath easily turns the town guard into cinders.
 D:このドラゴンはアルドゥイン復活の報を受け、
 D:イの一番に駆けつけた最も忠実な部下だ。
 D:街の衛兵ごときは軽く焼き尽くす。
@@ -24018,7 +24018,7 @@ F:CAN_FLY | IM_COLD | HURT_FIRE
 F:BASH_DOOR | MOVE_BODY | DRAGON | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_7 | SCARE | BR_COLD | BA_COLD
 D:$It is a dragon that has returned from Oblivion.
-D:$  It lightly turns the town guard into an ice statue.
+D:$  It lightly turns the town guard into icy statues.
 D:冥界から舞い戻ってきたドラゴンの一体だ。
 D:街の衛兵ごときは軽く氷像にしてしまう。
 
@@ -24035,8 +24035,7 @@ F:ONLY_ITEM | DROP_1D2 | DROP_2D2 | DROP_GOOD | CAN_FLY | FRIENDLY | GOOD
 F:IM_COLD | IM_FIRE | IM_ELEC | RES_SOUN
 F:BASH_DOOR | MOVE_BODY | DRAGON | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_8 | SCARE | BA_ELEC | BR_FIRE | BR_COLD | BR_SOUN
-D:$It has a higher pride than the heavens without leaking to other dragons,
-D:$ and it is a character that can quickly rise to provocation.
+D:$Proud, even when compared to other dragons, Odahviing is easily provoked.
 D:他のドラゴンに漏れず天より高いプライドを持ち、挑発にはすぐ乗るタチだ。
 
 N:1206:声の道に仇なすもの『デルフィン』
@@ -24073,8 +24072,8 @@ F:ONLY_ITEM | DROP_2D2 | DROP_GREAT | CAN_FLY | BASH_DOOR | MOVE_BODY
 F:IM_COLD | IM_FIRE | IM_ELEC | RES_SOUN
 F:NO_CONF | NO_SLEEP | RIDING | DRAGON
 S:1_IN_5 | SCARE | BA_ELEC | BR_FIRE | BR_COLD | BR_SOUN
-D:$This dragon exists to counter the evil kins.
-D:$  It is said that the dragon's power can be obtained
+D:$This dragon exists to counter its evil kin.
+D:$  It is said that this dragon's power can be obtained
 D:$ at the end if strict training is done.
 D:このドラゴンは邪悪なる同族達に対抗するために存在する。
 D:厳しい修行を行えば、その果てにドラゴンの力を手に入れられると伝えられている。
@@ -24094,7 +24093,7 @@ F:CAN_FLY | FRIENDLY | GOOD | IM_COLD | IM_FIRE | IM_ELEC | RES_SOUN
 F:BASH_DOOR | MOVE_BODY | DRAGON | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_7 | SCARE | BR_FIRE | BR_SOUN | BR_NETH
 D:$It is a dragon who has been in Oblivion for so long that
-D:$ it has become difficult to maintain his body in this world.
+D:$ it has become difficult to maintain its body in this world.
 D:$  It fully acknowledges your ability.
 D:あまりにも永い間冥界にい続けたため、
 D:現世で肉体を保つことが困難になったドラゴンだ。
@@ -24115,9 +24114,10 @@ F:IM_COLD | IM_FIRE | IM_ELEC | RES_SOUN
 F:BASH_DOOR | KILL_BODY | DRAGON | NO_CONF | NO_SLEEP | NO_FEAR | RIDING
 S:1_IN_3 | SHRIEK | S_KIN | ANIM_DEAD
 S:BR_ELEC | BR_FIRE | BR_COLD | BR_SOUN | BR_WALL | BR_MANA
-D:$The first dragon created in one of the plural worlds.
-D:$  It eats people's souls, destroys everything and destroys all dimensions.
-D:$  It had been sealed for too long, but was finally released.
+D:$It is the first dragon born in the worlds.
+D:$  It destroyed the last world to usher in this one.
+D:$  Said to eat the souls of the dead to gain power, it has returned after
+D:$ a long absence.
 D:$  Only you can defeat this terrifying dragon!
 D:多元世界の一つにおいて最初に創造されたドラゴンだ。
 D:人の魂を喰らい、次元を消滅させんばかりにあらゆるものを破壊して回っている。
@@ -24138,7 +24138,7 @@ F:IM_FIRE | IM_COLD | IM_ELEC | RES_DARK
 F:NO_SLEEP | NO_CONF | DROP_60
 S:1_IN_5 | SHOOT
 D:$It is one of those who agree with Miraak's corrupt wishes.
-D:$They are relentlessly chasing you as against Miraak's noble will.
+D:$  They relentlessly chase you, seeing you as threat to Miraak's noble will.
 D:ミラークの堕落した願いに賛同している者共の一人だ。
 D:彼らはあなたをミラークの崇高な意志に反する者として執拗に追っている。
 
@@ -24155,7 +24155,7 @@ F:IM_FIRE | IM_COLD | IM_ELEC | RES_DARK
 F:NO_SLEEP | NO_CONF | DROP_60
 S:1_IN_2 | BLINK | CONF | HOLD | BA_POIS | BA_FIRE | BA_COLD | BA_ELEC
 D:$It is one of those who agree with Miraak's corrupt wishes.
-D:$They are relentlessly chasing you as against Miraak's noble will.
+D:$  They relentlessly chase you, seeing you as a threat to Miraak's noble will.
 D:ミラークの堕落した願いに賛同している者共の一人だ。
 D:彼らはあなたをミラークの崇高な意志に反する者として執拗に追っている。
 
@@ -24174,9 +24174,9 @@ F:NO_SLEEP | NO_CONF | BASH_DOOR | KILL_BODY | PASS_WALL
 F:ONLY_ITEM | DROP_3D2 | DROP_4D2 | DROP_GREAT
 S:1_IN_3 | TELE_TO | TPORT | HEAL | S_KIN | BA_ELEC | BA_FIRE | BA_COLD
 S:BR_SOUN | BR_DISI
-D:$This man can completely absorb the soul of dragons
-D:$ without giving him time to save the power to revive in Mordor nor Oblivion.
-D:$  Will there ever be a dragon who can not hang its head to him?
+D:$This man can completely absorb the soul of a dragon
+D:$ without giving it the chance to revive in Mordor or Oblivion.
+D:$  Will there ever be a dragon who does not hang its head to him?
 D:この男は、冥界で復活する力を蓄える時間すら与えず
 D:ドラゴンの魂を完全に吸収することができる。
 D:彼の前で頭を垂れないドラゴンが果たしてこの世にいるだろうか？
@@ -24195,9 +24195,9 @@ F:DROP_CORPSE | DROP_SKELETON | BASH_DOOR
 F:HURT_LITE | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS
 F:RES_NETH | RES_DARK | RES_SHAR | NO_SLEEP | NO_CONF
 S:1_IN_4 | TPORT | BA_DARK | S_UNDEAD | S_KIN | S_HI_UNDEAD | HEAL
-D:$A terrifying vampire trying to extinguish the sun's rays from this land.
-D:$  For that purpose, he is also a ruthless man
-D:$ who easily throws away the genus.
+D:$He is a terrifying vampire trying to extinguish the sun's rays from this
+D:$ land.  For that purpose, he is also a ruthless man who easily throws away
+D:$ his own family.
 D:太陽の光をこの大地から消しさそろうとしている恐るべき吸血鬼だ。
 D:そのためには眷属をも容易く使い捨てにする、冷酷な男でもある。
 
