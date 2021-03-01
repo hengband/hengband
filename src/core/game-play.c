@@ -274,6 +274,10 @@ static void generate_world(player_type *player_ptr, bool new_game)
     if (player_ptr->pclass != CLASS_SORCERER) {
         if (player_ptr->pseikaku == PERSONALITY_SEXY)
             s_info[player_ptr->pclass].w_max[TV_HAFTED - TV_WEAPON_BEGIN][SV_WHIP] = WEAPON_EXP_MASTER;
+        if (player_ptr->prace == RACE_MERFOLK) {
+            s_info[player_ptr->pclass].w_max[TV_POLEARM - TV_WEAPON_BEGIN][SV_TRIDENT] = WEAPON_EXP_MASTER;
+            s_info[player_ptr->pclass].w_max[TV_POLEARM - TV_WEAPON_BEGIN][SV_TRIFURCATE_SPEAR] = WEAPON_EXP_MASTER;
+        }
     }
 
     set_floor_and_wall(player_ptr->dungeon_idx);

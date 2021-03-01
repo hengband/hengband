@@ -237,6 +237,9 @@ void player_outfit(player_type *creature_ptr)
         if (creature_ptr->pseikaku == PERSONALITY_SEXY) {
             player_init[creature_ptr->pclass][2][0] = TV_HAFTED;
             player_init[creature_ptr->pclass][2][1] = SV_WHIP;
+        } else if (creature_ptr->prace == RACE_MERFOLK) {
+            player_init[creature_ptr->pclass][2][0] = TV_POLEARM;
+            player_init[creature_ptr->pclass][2][1] = SV_TRIDENT;
         }
     }
 
