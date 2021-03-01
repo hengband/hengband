@@ -250,7 +250,7 @@ E:'Frakir'
 I:45:32:1
 W:50:40:2:75000
 F:STR | INT | WIS | DEX | CON | CHR | STEALTH | HIDE_TYPE |
-F:RES_POIS | ACTIVATE | SEE_INVIS | SEARCH | WARNING | INSTA_ART
+F:RES_POIS | ACTIVATE | SEE_INVIS | FREE_ACT | SEARCH | WARNING | INSTA_ART
 U:HYPODYNAMIA_1
 D:$This bracelet has its own will.  It was created by Merlin, a prince of Chaos
 D:$ and son of Corwin.  The bracelet is invisible, but it sometimes ripples or
@@ -605,8 +605,8 @@ E:of Caspanion
 I:37:6:3
 W:25:9:270:40000
 P:16:1d4:-2:0:20
-F:INT | WIS | CON | HIDE_TYPE | XTRA_H_RES |
-F:RES_ACID | RES_POIS | RES_CONF | ACTIVATE
+F:INT | WIS | CON | HIDE_TYPE | XTRA_H_RES | FREE_ACT
+F:RES_ACID | RES_POIS | RES_CONF | RES_SOUND | ACTIVATE
 U:DEST_DOOR
 D:$A hauberk, leggings, and sleeves of interlocking steel rings, strategically 
 D:$reinforced at vital locations with a second layer of chain.  Magics to 
@@ -641,6 +641,8 @@ I:36:4:4
 W:20:3:80:45000
 P:4:0d0:0:0:20
 F:STEALTH | RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_DARK | XTRA_H_RES
+F:ACTIVATE
+U:PHASE_DOOR
 D:$Familar with the secret ways hidden in darkness, this leather cuirass is 
 D:$truly more than it appears.
 D:「霧の宝石」を意味する名を持つ、この革の胴鎧は、
@@ -653,8 +655,9 @@ N:28:『サルケットス』
 E:'Thalkettoth'
 I:36:11:3
 W:20:3:60:25000
-P:11:1d1:-1:0:25
-F:DEX | HIDE_TYPE | RES_ACID | RES_SHARDS | XTRA_H_RES
+P:11:1d1:7:3:25
+F:DEX | STEALTH | HIDE_TYPE | SHOW_MODS
+F:RES_ACID | RES_COLD | RES_SHARDS | RES_FEAR | RES_DISEN | XTRA_H_RES
 D:$An amazingly light tunic and skirt sewn with thick, overlapping scales of 
 D:$hardened leather whose wearer moves with agility and assurance.
 D:硬くした革製の鱗を厚く覆うように縫い付けた驚くほど軽い鎧であり、
@@ -731,9 +734,12 @@ D:エレンディルの息子アナリオンの金属の盾だ。
 N:33:インドラの
 E:of Indra
 I:32:2:5
-W:30:50:15:100000
+W:30:30:15:100000
 P:2:0d0:0:0:18
-F:INT | WIS | CHR | SUST_INT | SUST_WIS | SUST_CHR | RES_BLIND | IM_ELEC
+F:INT | WIS | CHR | SUST_INT | SUST_WIS | SUST_CHR
+F:RES_COLD | RES_LITE | RES_BLIND | RES_SOUND | IM_ELEC
+F:LITE | ACTIVATE
+U:BA_ELEC_3
 D:$This is the helm of Indra, the god of thunderstorms.
 D:雷神インドラの兜だ。
 
@@ -766,11 +772,13 @@ D:王冠だ。
 #J0#
 N:35:ベルシエル王妃の
 E:of Beruthiel
-I:33:10:-25
+I:33:10:-5
 W:40:12:20:0
 P:0:1d1:0:0:25
-F:STR | DEX | CON | HIDE_TYPE | DEC_MANA | EASY_SPELL |
-F:FREE_ACT | SEE_INVIS | TELEPATHY | CURSED | XTRA_POWER
+F:STR | DEX | CON | HIDE_TYPE | DEC_MANA | EASY_SPELL
+F:FREE_ACT | SEE_INVIS | CURSED | XTRA_POWER | ACTIVATE
+F:TELEPATHY | ESP_EVIL | ESP_GOOD | ESP_NONLIVING
+U:DETECT_ALL_MONS
 D:$The midnight-hued steel circlet of the sorceress-queen Beruthiel, which 
 D:$grants extraordinary powers of sight and awareness at a terrible physical 
 D:$cost.
@@ -801,7 +809,7 @@ E:of Thengel
 I:32:3:3
 W:10:2:20:22000
 P:3:1d1:0:0:12
-F:WIS | CHR | HIDE_TYPE
+F:WIS | CHR | HIDE_TYPE | XTRA_H_RES
 D:$A ridged helmet made of steel, and embossed with scenes of valor in fine-
 D:$engraved silver.  It grants the wearer nobility, clearness of thought and 
 D:$understanding.
@@ -821,7 +829,7 @@ E:of Hammerhand
 I:32:6:3
 W:20:2:60:45000
 P:6:1d3:0:0:20
-F:STR | DEX | CON | HIDE_TYPE | RES_ACID | RES_NEXUS
+F:STR | DEX | CON | HIDE_TYPE | RES_ACID | RES_FEAR | RES_NEXUS
 D:$A great helm as steady as the heroes of the Westdike. Mighty were the 
 D:$blows of Helm, the Hammerhand!
 D:王家を侮辱した者を素手の決闘で
@@ -860,7 +868,8 @@ E:'Holhenneth'
 I:32:5:2
 W:20:5:75:100000
 P:5:1d3:0:0:10
-F:INT | WIS | SEARCH | HIDE_TYPE | RES_BLIND | SEE_INVIS | ACTIVATE
+F:INT | WIS | INFRA | SEARCH | HIDE_TYPE
+F:RES_BLIND | SEE_INVIS | ACTIVATE | XTRA_H_RES
 U:DETECT_ALL
 D:$A famous helm of forged iron granting extraordinary powers of mind and 
 D:$awareness. 
@@ -946,11 +955,12 @@ D:精霊達が争う渦中の地ヴァリノールの英雄が身に付けてい
 #J0# ???
 N:45:『ホルコルレス』
 E:'Holcolleth'
-I:35:2:2
+I:35:2:3
 W:20:15:5:43000
 P:4:0d0:0:0:4
-F:INT | WIS | STEALTH | HIDE_TYPE | RES_ACID | SEARCH | ACTIVATE
-U:SLEEP
+F:INT | WIS | STEALTH | SEARCH | HIDE_TYPE
+F:SUST_INT | SUST_WIS | RES_ACID | SEE_INVIS | ACTIVATE
+U:ID_PLAIN
 D:$This elven-grey mantle possesses great powers of tranquility and of 
 D:$concealment, and grants the wearer the knowledge and understanding of 
 D:$the Sindar.
@@ -969,7 +979,7 @@ D:知識と思慮を与える。
 N:46:灰色マント王シンゴルの
 E:of Thingol
 I:35:1:3
-W:10:90:10:45000
+W:10:30:10:45000
 P:1:0d0:0:0:18
 F:DEX | CHR | HIDE_TYPE | XTRA_POWER |
 F:FREE_ACT | RES_ACID | RES_FIRE | RES_COLD | ACTIVATE
@@ -990,9 +1000,10 @@ D:水面に映った月のごとく、静かにそしてはっきりと浮かび
 #J0#
 N:47:大将ソロンギルの
 E:of Thorongil
-I:35:1:0
-W:5:20:10:13000
+I:35:1:2
+W:5:8:10:13000
 P:1:0d0:0:0:10
+F:DEX | CHR | INFRA | STEALTH | SEARCH | HIDE_TYPE
 F:FREE_ACT | RES_ACID | SEE_INVIS
 D:$A cloak of shimmering green and brown that grants sight beyond sight and 
 D:$shakes off holding magics, worn by Aragorn son of Arathorn in his youth 
@@ -1008,10 +1019,10 @@ D:身に付けていたものだ。
 #J0# ???
 N:48:『コランノン』
 E:'Colannon'
-I:35:1:3
-W:3:10:10:15000
+I:35:1:5
+W:3:8:10:15000
 P:1:0d0:0:0:15
-F:STEALTH | RES_ACID | ACTIVATE
+F:STEALTH | RES_ACID| RES_COLD | FREE_ACT | ACTIVATE
 U:TELEPORT
 D:$A crystal-blue cape of fine silk worn by a silent messenger of 
 D:$the forces of Law. Somehow, its wearer is always able to escape 
@@ -1024,7 +1035,7 @@ D:秩序の勢力の静かなる使者が着ていた、紺碧の絹のマント
 N:49:ルシエン王女の
 E:of Luthien
 I:35:6:2
-W:40:40:5:80000
+W:40:15:5:80000
 P:6:0d0:0:0:20
 F:INT | WIS | CHR | HIDE_TYPE | SPEED | STEALTH |
 F:RES_ACID | RES_FIRE | RES_COLD | ACTIVATE |
@@ -1045,7 +1056,7 @@ D:身に付ける者は王女の知識と力が自らの内に蘇ってくるの
 N:50:トゥオルの
 E:of Tuor
 I:35:6:4
-W:40:40:5:50000
+W:40:10:5:50000
 P:6:0d0:0:0:12
 F:STEALTH | FREE_ACT | IM_ACID | SEE_INVIS |
 F:RES_DARK | RES_LITE | XTRA_H_RES
@@ -1080,7 +1091,7 @@ E:'Cammithrim'
 I:31:1:0
 W:10:3:5:30000
 P:1:0d0:0:0:10
-F:FREE_ACT | RES_LITE | SUST_CON | LITE | ACTIVATE
+F:FREE_ACT | RES_LITE | SUST_CON | LITE_3 | EASY_SPELL | ACTIVATE
 U:BO_MISS_1
 D:$These gloves glow so brightly as to light the way for their owner and cast 
 D:$magical bolts with great frequency.
@@ -1093,10 +1104,10 @@ D:放つことができる。
 #J0# ???, Ko
 N:54:『パウアハッハ』
 E:'Paurhach'
-I:31:2:1
-W:10:20:25:15000
+I:31:2:2
+W:10:10:25:15000
 P:2:1d1:0:0:15
-F:STR | RES_FIRE | MAGIC_MASTERY | ACTIVATE
+F:STR | RES_FIRE | RES_SOUND | MAGIC_MASTERY | ACTIVATE
 U:BO_FIRE_1
 D:$A fiery set of gauntlets that can even shoot fire from the user's 
 D:$hands. 
@@ -1122,10 +1133,10 @@ D:並外れた強靭さを持つアンバーの王子コーウィンのガント
 #J0# ???, Ko
 N:56:『パウラエゲン』
 E:'Pauraegen'
-I:31:2:1
-W:10:20:25:11000
+I:31:2:2
+W:10:10:25:11000
 P:2:1d1:0:0:15
-F:DEX | RES_ELEC | LITE | ACTIVATE
+F:DEX | RES_ELEC | RES_DARK | LITE | ACTIVATE
 U:BO_ELEC_1
 D:$A set of handgear with sparks surrounding it, able to fire 
 D:$bolts of electricity.
@@ -1137,10 +1148,10 @@ D:火花を散らしていて、電撃の矢を放つことができる。
 #J0# ???, Ko
 N:57:『パウアネン』
 E:'Paurnen'
-I:31:2:1
-W:10:20:25:12000
+I:31:2:2
+W:10:10:25:12000
 P:2:1d1:0:0:15
-F:WIS | RES_ACID | FREE_ACT | ACTIVATE
+F:WIS | RES_ACID | RES_DISEN | FREE_ACT | ACTIVATE
 U:BO_ACID_1
 D:$A set of handgear so corrosive that it may fire bolts of acid.
 D:シンダール語で「水の拳」を意味する名を持つこの籠手は常に
@@ -1213,7 +1224,7 @@ D:隷属させられた中つ国を奪い返す彼の英雄的挑戦の助けと
 N:61:アンバーの王女フローラの
 E:of Flora
 I:30:2:5
-W:10:25:20:70000
+W:10:15:20:70000
 P:2:1d1:0:0:15
 U:CURE_POISON
 F:DEX | HIDE_TYPE | CHR | SUST_CHR | ACTIVATE | FREE_ACT |
@@ -1442,7 +1453,8 @@ I:23:16:1
 W:20:12:150:40000
 P:0:2d5:10:15:0
 F:INT | WIS | SEARCH | MAGIC_MASTERY | HIDE_TYPE
-F:SLAY_EVIL | BRAND_FIRE | KILL_ORC | RES_FIRE | RES_LITE | LITE
+F:SLAY_EVIL | SLAY_TROLL | SLAY_GIANT | BRAND_FIRE | KILL_ORC
+F:RES_FIRE | RES_LITE | LITE | EASY_SPELL
 F:SLOW_DIGEST | SHOW_MODS | RIDING | XTRA_RES_OR_POWER
 F:ESP_ORC | ESP_TROLL | ESP_GIANT
 D:$This fiery, shining blade earned its sobriquet "Foe-Hammer" from dying orcs 
@@ -1601,9 +1613,9 @@ D:の海賊達の憎悪の的であった。
 #J0# ???
 N:80:『クリスドゥリアン』
 E:'Crisdurian'
-I:23:28:0
-W:40:15:260:111000
-P:0:4d5:18:19:0
+I:23:23:0
+W:40:10:200:111000
+P:0:3d8:18:19:0
 F:SLAY_DRAGON | SLAY_EVIL | SLAY_UNDEAD | SLAY_TROLL | SLAY_GIANT |
 F:SLAY_HUMAN | SLAY_ORC | SEE_INVIS | SHOW_MODS | VORPAL | BRAND_POIS
 D:$A giant's weapon, with a long blade tall and straight thrusting out from a 
@@ -1661,7 +1673,7 @@ D:刻み込まれた。彼はこの剣の力を再び思い知ることになる
 N:83:『アンドゥリル』
 E:'Anduril'
 I:23:17:4
-W:20:40:130:80000
+W:20:20:130:80000
 P:0:2d5:10:15:5
 F:STR | HIDE_TYPE | RIDING | XTRA_RES_OR_POWER |
 F:SLAY_EVIL | BRAND_FIRE | SLAY_TROLL | SLAY_ORC | FREE_ACT |
@@ -2176,7 +2188,7 @@ D:嘲笑い、酸のエレメントの究極的支配力を持つ。
 N:109:『アヴァビア』
 E:'Avavir'
 I:22:17:3
-W:40:8:250:18000
+W:15:8:250:18000
 P:0:5d3:8:8:10
 F:DEX | CHR | HIDE_TYPE | SHOW_MODS
 F:BRAND_COLD | BRAND_FIRE | BRAND_ELEC | RES_FIRE | RES_COLD | RES_ELEC
@@ -2477,7 +2489,8 @@ E:of Bard
 I:19:13:3
 W:30:20:40:40000
 P:0:0d0:17:19:0
-F:DEX | HIDE_TYPE | FREE_ACT | XTRA_MIGHT | SHOW_MODS
+F:STR | DEX | HIDE_TYPE | FREE_ACT | XTRA_MIGHT | SHOW_MODS
+F:SLAY_DRAGON | XTRA_H_RES
 D:$The great yew bow of grim-faced Bard, who shot the mightiest arrow that 
 D:$songs record.
 D:後に王となる湖の街の陰気面バルドが竜を射抜いた伝説のいちいの弓だ。
@@ -2507,7 +2520,7 @@ E:of Himring
 I:36:6:0
 W:25:6:100:35000
 P:6:0d0:0:0:15
-F:RES_CHAOS | RES_NETHER | RES_POIS | SH_COLD | ACTIVATE
+F:RES_CHAOS | RES_NETHER | RES_POIS | RES_DISEN | SH_COLD | ACTIVATE
 U:PROT_EVIL
 D:$Contained within this studded cuirass of pliable leather is the memory of 
 D:$unvanquished Himring, defiant fortress surrounded by the legions of Morgoth.
@@ -2588,8 +2601,8 @@ I:36:2:3
 W:50:40:20:100000
 P:2:0d0:0:0:20
 F:INT | WIS | SEARCH | HIDE_TYPE | LEVITATION | ACTIVATE 
-F:SUST_INT | SUST_WIS | FREE_ACT | SEE_INVIS | DEC_MANA |
-F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD
+F:SUST_INT | SUST_WIS | FREE_ACT | SEE_INVIS | DEC_MANA
+F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | XTRA_H_RES
 U:BO_MANA
 D:$The robe of the great wizard Gandalf, also known as Incanus in the 
 D:$lands of the South. It is proof against elements, for neither the 
@@ -2605,9 +2618,10 @@ E:of Numenor
 I:33:12:3
 W:60:15:40:50000
 P:0:1d1:0:0:15
-F:INT | DEX | CHR | HIDE_TYPE |
-F:RES_SHARDS | RES_SOUND | RES_LITE |
-F:LITE |
+F:INT | DEX | CHR | HIDE_TYPE
+F:RES_SHARDS | RES_SOUND | RES_LITE | RES_DARK | XTRA_H_RES
+F:LITE | ACTIVATE
+U:PROT_EVIL
 D:$A crown of massive gold, set with wondrous jewels of thought and warding,
 D:$ worn by the kings of ancient Numenor.
 D:古のヌメノールの王達が用いていた重厚な黄金の王冠で、
@@ -2691,9 +2705,10 @@ D:(神坂一、スレイヤーズ5「白銀の魔獣」)
 N:138:上級王ギル=ガラドの
 E:of Gil-Galad
 I:34:10:4
-W:70:4:100:65000
+W:70:2:100:65000
 P:10:1d2:0:0:20
-F:LITE | CHR | RES_ELEC | RES_ACID | HIDE_TYPE | REFLECT |
+F:LITE_2 | CHR | HIDE_TYPE | REFLECT
+F:RES_ELEC | RES_ACID | RES_FIRE | RES_COLD | RES_LITE
 F:SUST_WIS | SUST_CHR | ACTIVATE
 U:BLINDING_LIGHT
 D:$The legendary shield of Gil-Galad, who fought his way to the gates of
@@ -3027,7 +3042,7 @@ D:彼は悪竜や魔神、自然の妖魔を多数討伐した。
 N:165:ガラスの靴
 E:Pair~ of Glass Slippers
 I:30:2:-3
-W:40:40:20:40000
+W:40:20:20:40000
 P:0:1d1:0:0:0
 F:DEX | HIDE_TYPE | SUST_CHR | STEALTH | SPEED |
 F:RES_LITE | RES_DARK | RES_NEXUS |
@@ -3060,7 +3075,7 @@ D:(J.R.R.トールキン、吉田新一訳、農夫ジャイルズの冒険)
 N:168:農夫ジャイルズの
 E:of Giles
 I:37:2:-2
-W:20:20:200:30000
+W:20:5:200:30000
 P:12:1d4:-2:0:18
 F:STEALTH | 
 F:RES_FIRE | RES_CHAOS | RES_NEXUS | RES_COLD
@@ -3277,11 +3292,12 @@ D:どう見てもやる気のない感じの服だ。
 N:184:『アランルース』
 E:'Aranruth'
 I:23:16:4
-W:20:45:150:50000
+W:20:20:150:50000
 P:0:3d5:20:12:0
-F:DEX | HIDE_TYPE | 
-F:SLAY_DEMON | SLAY_ORC | FREE_ACT | RES_COLD | LEVITATION | 
-F:SLOW_DIGEST | ACTIVATE | SHOW_MODS |
+F:WIS | DEX | HIDE_TYPE | 
+F:SLAY_DEMON | SLAY_ORC | SLAY_TROLL | SLAY_GIANT | BRAND_COLD
+F:FREE_ACT | RES_COLD | LEVITATION | BLESSED | LITE_2
+F:SLOW_DIGEST | ACTIVATE | SHOW_MODS
 F:ESP_ORC | ESP_TROLL | ESP_GIANT | ESP_DEMON
 U:BA_COLD_2
 D:$The beautiful sword of Thingol, justly named "King's Ire".  It glistens
@@ -3296,10 +3312,10 @@ D:その柄を手にすれば、しなやかな身のこなしと軽やかな足
 # ???, Ko
 N:185:『パウアニンメン』
 E:'Paurnimmen'
-I:31:2:1
+I:31:2:2
 W:10:20:25:13000
 P:2:1d1:0:0:15
-F:INT | RES_COLD | EASY_SPELL | ACTIVATE
+F:INT | RES_COLD | RES_SHARDS | EASY_SPELL | ACTIVATE
 U:BO_COLD_1
 D:$A set of handgear so icy as to be able to fire frost bolts.
 D:シンダール語で「白き拳」を意味する名を持つこの籠手は常に
@@ -3308,9 +3324,9 @@ D:冷たく輝き、氷の矢を放つことができる。
 N:186:航海者エアレンディルの
 E:of Earendil
 I:34:7:0
-W:50:6:160:90000
+W:50:3:160:90000
 P:10:1d6:0:0:20
-F:LITE | RES_BLIND | RES_DARK | RES_NETHER | RES_ELEC | RES_FIRE |
+F:LITE_3 | RES_BLIND | RES_DARK | RES_NETHER | RES_ELEC | RES_FIRE |
 F:ACTIVATE | ESP_GOOD
 U:CURING
 D:$A shining shield, once borne by the great mariner Earendil, "scored with 
@@ -3457,8 +3473,8 @@ E:of Perseus
 I:34:3:2
 W:30:10:65:45000
 P:5:1d2:0:0:15
-F:STR | RES_ACID | RES_COLD | RES_FEAR |
-F:REFLECT | SUST_STR | 
+F:STR | SUST_STR | RES_ACID | RES_COLD | RES_POIS | RES_FEAR
+F:REFLECT | FREE_ACT | LITE_2 | XTRA_H_RES
 D:$Perseus evaded the snake-haired Medusa's petrifying gaze with this
 D:$ reflective shield in hand.
 D:蛇の髪を持つメドゥーサの石化の睨みも、この反射の盾の前には
@@ -3574,9 +3590,9 @@ N:206:『バテレン鎧』
 E:of The Padre
 I:37:13:2
 W:45:5:340:80000
-P:23:1d6:5:5:17
+P:23:1d6:5:5:22
 F:CHR | REFLECT |
-F:RES_FIRE | RES_CHAOS | LITE
+F:RES_FIRE | RES_SOUND | RES_CHAOS | LITE
 D:$It is the suit of shining western-style armor that Nobunaga Oda loved.
 D:織田信長の愛用した光り輝く西洋の鎧だ。
 
@@ -3616,7 +3632,7 @@ D:風見潤訳）
 N:209:『隠者の紫』
 E:'hermit's purple'
 I:21:2:2
-W:40:40:30:40000
+W:20:30:30:40000
 P:0:1d6:10:5:0
 F:INT | WIS | CHR | FORCE_WEAPON | SLAY_UNDEAD | RIDING
 F:SEE_INVIS | TELEPATHY | REGEN | HOLD_EXP | ACTIVATE
@@ -3632,7 +3648,7 @@ D:身につけると遠い場所の出来事がわかる。
 N:210:『炎の鉄ゲタ』
 E:'Tetsu-geta of Flame'
 I:30:6:-1
-W:20:15:150:40000
+W:20:10:150:40000
 P:6:1d1:-5:10:20
 F:INT | WIS | CHR | STEALTH | SPEED | RES_FIRE |
 F:SUST_STR | SUST_CON | SH_FIRE | REGEN | RES_FEAR
@@ -3778,9 +3794,9 @@ E:Charmed Pendant
 I:40:27:2
 W:50:100:2:100000
 P:0:0d0:0:0:5
-F:INT | CHR | INFRA | SEARCH | HIDE_TYPE | FULL_NAME |
+F:INT | CHR | INFRA | SEARCH | MAGIC_MASTERY | HIDE_TYPE | FULL_NAME |
 F:SEE_INVIS | FREE_ACT | SLOW_DIGEST | REGEN | LITE | WARNING |
-F:SH_FIRE | SH_ELEC | SH_COLD | ACTIVATE |
+F:SH_FIRE | SH_ELEC | SH_COLD | EASY_SPELL | ACTIVATE |
 F:INSTA_ART
 U:CURE_MANA_FULL
 
@@ -3789,8 +3805,8 @@ E:of Gogo
 I:40:28:4
 W:50:100:2:55555
 P:0:0d0:0:0:0
-F:INT | WIS | DEX | 
-F:SEE_INVIS | LITE |
+F:INT | WIS | DEX | SUST_INT | SUST_WIS | SUST_DEX
+F:SEE_INVIS | LITE
 F:INSTA_ART
 
 N:221:森の狩人ロビンフッドの
