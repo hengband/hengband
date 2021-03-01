@@ -181,23 +181,23 @@ static void neutralize_base_status(player_type *creature_ptr, glm_type *gm_ptr)
 static void neutralize_other_status(player_type *creature_ptr, glm_type *gm_ptr)
 {
     if (gm_ptr->muta_which == MUT2_COWARDICE) {
-        if (creature_ptr->muta3 & MUT3_FEARLESS) {
+        if (any_bits(creature_ptr->muta3, MUT3_FEARLESS)) {
             msg_print(_("恐れ知らずでなくなった。", "You no longer feel fearless."));
-            creature_ptr->muta3 &= ~(MUT3_FEARLESS);
+            reset_bits(creature_ptr->muta3, (MUT3_FEARLESS));
         }
     }
 
     if (gm_ptr->muta_which == MUT2_BEAK) {
-        if (creature_ptr->muta2 & MUT2_TRUNK) {
+        if (any_bits(creature_ptr->muta2, MUT2_TRUNK)) {
             msg_print(_("あなたの鼻はもう象の鼻のようではなくなった。", "Your nose is no longer elephantine."));
-            creature_ptr->muta2 &= ~(MUT2_TRUNK);
+            reset_bits(creature_ptr->muta2, (MUT2_TRUNK));
         }
     }
 
     if (gm_ptr->muta_which == MUT2_TRUNK) {
-        if (creature_ptr->muta2 & MUT2_BEAK) {
+        if (any_bits(creature_ptr->muta2, MUT2_BEAK)) {
             msg_print(_("硬いクチバシがなくなった。", "You no longer have a hard beak."));
-            creature_ptr->muta2 &= ~(MUT2_BEAK);
+            reset_bits(creature_ptr->muta2, (MUT2_BEAK));
         }
     }
 }
@@ -222,7 +222,7 @@ bool gain_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
     msg_print(_("突然変異した！", "You mutate!"));
     msg_print(gm_ptr->muta_desc);
     if (gm_ptr->muta_class != NULL)
-        *gm_ptr->muta_class |= gm_ptr->muta_which;
+        set_bits(*gm_ptr->muta_class, gm_ptr->muta_which);
 
     if (gm_ptr->muta_class == &(creature_ptr->muta3)) {
         neutralize_base_status(creature_ptr, gm_ptr);
@@ -231,7 +231,7 @@ bool gain_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
     }
 
     creature_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(creature_ptr);
-    creature_ptr->update |= PU_BONUS;
+    set_bits(creature_ptr->update, PU_BONUS);
     handle_stuff(creature_ptr);
     return TRUE;
 }
@@ -245,7 +245,7 @@ static void sweep_lose_mutation(player_type *creature_ptr, glm_type *glm_ptr)
     while (attempts_left--) {
         switch_lose_mutation(creature_ptr, glm_ptr);
         if (glm_ptr->muta_class && glm_ptr->muta_which) {
-            if (*(glm_ptr->muta_class) & glm_ptr->muta_which) {
+            if (any_bits(*glm_ptr->muta_class, glm_ptr->muta_which)) {
                 glm_ptr->muta_chosen = TRUE;
             }
         }
@@ -270,9 +270,9 @@ bool lose_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
 
     msg_print(glm_ptr->muta_desc);
     if (glm_ptr->muta_class != NULL)
-        *glm_ptr->muta_class &= ~(glm_ptr->muta_which);
+        reset_bits(*glm_ptr->muta_class, (glm_ptr->muta_which));
 
-    creature_ptr->update |= PU_BONUS;
+    set_bits(creature_ptr->update, PU_BONUS);
     handle_stuff(creature_ptr);
     creature_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(creature_ptr);
     return TRUE;
@@ -284,7 +284,7 @@ void lose_all_mutations(player_type *creature_ptr)
         chg_virtue(creature_ptr, V_CHANCE, -5);
         msg_print(_("全ての突然変異が治った。", "You are cured of all mutations."));
         creature_ptr->muta1 = creature_ptr->muta2 = creature_ptr->muta3 = 0;
-        creature_ptr->update |= PU_BONUS;
+        set_bits(creature_ptr->update, PU_BONUS);
         handle_stuff(creature_ptr);
         creature_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(creature_ptr);
     }
