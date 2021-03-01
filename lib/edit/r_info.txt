@@ -24174,9 +24174,9 @@ F:NO_SLEEP | NO_CONF | BASH_DOOR | KILL_BODY | PASS_WALL
 F:ONLY_ITEM | DROP_3D2 | DROP_4D2 | DROP_GREAT
 S:1_IN_3 | TELE_TO | TPORT | HEAL | S_KIN | BA_ELEC | BA_FIRE | BA_COLD
 S:BR_SOUN | BR_DISI
-D:$This man can completely absorb the soul of dragons
-D:$ without giving him time to save the power to revive in Mordor nor Oblivion.
-D:$  Will there ever be a dragon who can not hang its head to him?
+D:$This man can completely absorb the soul of a dragon
+D:$ without giving it the chance to revive in Mordor or Oblivion.
+D:$  Will there ever be a dragon who does not hang its head to him?
 D:この男は、冥界で復活する力を蓄える時間すら与えず
 D:ドラゴンの魂を完全に吸収することができる。
 D:彼の前で頭を垂れないドラゴンが果たしてこの世にいるだろうか？
