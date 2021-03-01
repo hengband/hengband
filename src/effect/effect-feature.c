@@ -265,11 +265,11 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
             obvious = TRUE;
         break;
     }
-    case GF_MAKE_GLYPH: {
+    case GF_MAKE_RUNE_PROTECTION: {
         if (!cave_naked_bold(caster_ptr, y, x))
             break;
         g_ptr->info |= CAVE_OBJECT;
-        g_ptr->mimic = feat_glyph;
+        g_ptr->mimic = feat_rune_protection;
         note_spot(caster_ptr, y, x);
         lite_spot(caster_ptr, y, x);
         break;
@@ -419,7 +419,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
         break;
     }
     case GF_DISINTEGRATE: {
-        if (is_mirror_grid(g_ptr) || is_glyph_grid(g_ptr) || is_explosive_rune_grid(g_ptr))
+        if (is_mirror_grid(g_ptr) || is_rune_protection_grid(g_ptr) || is_rune_explosion_grid(g_ptr))
             remove_mirror(caster_ptr, y, x);
 
         if (!has_flag(f_ptr->flags, FF_HURT_DISI) || has_flag(f_ptr->flags, FF_PERMANENT))

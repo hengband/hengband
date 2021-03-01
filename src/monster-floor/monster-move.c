@@ -214,11 +214,11 @@ static bool process_protection_rune(player_type *target_ptr, turn_flags *turn_fl
     grid_type *g_ptr;
     g_ptr = &target_ptr->current_floor_ptr->grid_array[ny][nx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    if (!turn_flags_ptr->do_move || !is_glyph_grid(g_ptr) || (((r_ptr->flags1 & RF1_NEVER_BLOW) != 0) && player_bold(target_ptr, ny, nx)))
+    if (!turn_flags_ptr->do_move || !is_rune_protection_grid(g_ptr) || (((r_ptr->flags1 & RF1_NEVER_BLOW) != 0) && player_bold(target_ptr, ny, nx)))
         return FALSE;
 
     turn_flags_ptr->do_move = FALSE;
-    if (is_pet(m_ptr) || (randint1(BREAK_GLYPH) >= r_ptr->level))
+    if (is_pet(m_ptr) || (randint1(BREAK_RUNE_PROTECTION) >= r_ptr->level))
         return TRUE;
 
     if (g_ptr->info & CAVE_MARK) {
@@ -247,14 +247,14 @@ static bool process_explosive_rune(player_type *target_ptr, turn_flags *turn_fla
     grid_type *g_ptr;
     g_ptr = &target_ptr->current_floor_ptr->grid_array[ny][nx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    if (!turn_flags_ptr->do_move || !is_explosive_rune_grid(g_ptr) || (((r_ptr->flags1 & RF1_NEVER_BLOW) != 0) && player_bold(target_ptr, ny, nx)))
+    if (!turn_flags_ptr->do_move || !is_rune_explosion_grid(g_ptr) || (((r_ptr->flags1 & RF1_NEVER_BLOW) != 0) && player_bold(target_ptr, ny, nx)))
         return TRUE;
 
     turn_flags_ptr->do_move = FALSE;
     if (is_pet(m_ptr))
         return TRUE;
 
-    if (randint1(BREAK_MINOR_GLYPH) > r_ptr->level) {
+    if (randint1(BREAK_RUNE_EXPLOSION) > r_ptr->level) {
         if (g_ptr->info & CAVE_MARK) {
             msg_print(_("ルーンが爆発した！", "The rune explodes!"));
             BIT_FLAGS project_flags = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI;

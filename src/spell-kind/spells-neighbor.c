@@ -51,10 +51,10 @@ bool tree_creation(player_type *caster_ptr, POSITION y, POSITION x)
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool glyph_creation(player_type *caster_ptr, POSITION y, POSITION x)
+bool create_rune_protection_area(player_type *caster_ptr, POSITION y, POSITION x)
 {
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM;
-    return (project(caster_ptr, 0, 1, y, x, 0, GF_MAKE_GLYPH, flg, -1));
+    return (project(caster_ptr, 0, 1, y, x, 0, GF_MAKE_RUNE_PROTECTION, flg, -1));
 }
 
 /*!

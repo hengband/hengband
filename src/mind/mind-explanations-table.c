@@ -130,7 +130,7 @@ mind_power const mind_powers[MAX_MIND_KINDS] = {
         { 25, 32, 60, _("煙玉", "Smoke Ball") },
         { 28, 32, 60, _("転身", "Swap Position") },
 
-        { 30, 30, 70, _("爆発の紋章", "Glyph of Explosion") },
+        { 30, 30, 70, _("爆発の紋章", "Rune of Explosion") },
         { 32, 40, 40, _("土遁", "Hide in Mud") },
         { 34, 35, 50, _("霧隠れ", "Hide in Mist") },
         { 38, 40, 60, _("煉獄火炎", "Rengoku-Kaen") },
@@ -285,7 +285,7 @@ concptr const mind_tips[MAX_MIND_KINDS][MAX_MIND_POWERS] = {
         _("ダメージのない混乱の球を放つ。", "Releases a confusion ball which doesn't inflict any damage."),
         _("1体のモンスターと位置を交換する。", "Causes you and a targeted monster to exchange positions."),
         _("自分のいる床の上に、モンスターが通ると爆発してダメージを与えるルーンを描く。",
-            "Sets a glyph under you. The glyph will explode when a monster moves on it."),
+            "Sets a rune under you. The rune will explode when a monster moves on it."),
         _("一定時間、半物質化し壁を通り抜けられるようになる。さらに、一定時間酸への耐性を得る。装備による耐性に累積する。",
             "Makes you ethereal for a period of time. While ethereal, you can pass through walls and are resistant to acid."
             " The resistance can be added to that from equipment for more powerful resistance."),

@@ -432,8 +432,8 @@ bool cast_ninja_spell(player_type *caster_ptr, mind_ninja_type spell)
         project_length = 0;
         (void)teleport_swap(caster_ptr, dir);
         break;
-    case EXPLOSION_GLYPH:
-        explosive_rune(caster_ptr, caster_ptr->y, caster_ptr->x);
+    case EXPLOSIVE_RUNE:
+        create_rune_explosion(caster_ptr, caster_ptr->y, caster_ptr->x);
         break;
     case HIDE_MUD:
         (void)set_pass_wall(caster_ptr, randint1(plev / 2) + plev / 2, FALSE);

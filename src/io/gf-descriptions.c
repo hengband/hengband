@@ -63,7 +63,7 @@ const named_num gf_desc[MAX_NAMED_NUM] =
 	{"GF_DISP_LIVING",			GF_DISP_LIVING		},
 	{"GF_ROCKET",				GF_ROCKET			},
 	{"GF_NUKE",					GF_NUKE				},
-	{"GF_MAKE_GLYPH",			GF_MAKE_GLYPH		},
+    {"GF_MAKE_RUNE_PROTECTION",	GF_MAKE_RUNE_PROTECTION},
 	{"GF_STASIS",				GF_STASIS			},
 	{"GF_STONE_WALL",			GF_STONE_WALL		},
 	{"GF_DEATH_RAY",			GF_DEATH_RAY		},

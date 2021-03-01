@@ -2087,8 +2087,8 @@ G:?:w
 I:70:38:0
 W:50:0:5:500
 A:50/4:90/2
-D:$It creates a glyph on the floor you stand when you read it.
-D:それは読むと自分の足元の床に回避の彫像を作り出す。
+D:$It creates a rune of protection on the floor you stand when you read it.
+D:それは読むと自分の足元の床に守りのルーンを作り出す。
 
 N:191:*解呪*:食地 臓臓 扈知
 E:*Remove Curse*:bluju wex blu

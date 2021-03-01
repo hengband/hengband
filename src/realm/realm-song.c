@@ -823,7 +823,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
             return _("守りの歌", "Endurance");
         if (desc)
             return _("自分のいる床の上に、モンスターが通り抜けたり召喚されたりすることができなくなるルーンを描く。",
-                "Sets a glyph on the floor beneath you. If you are on a glyph, monsters cannot attack you but can try to break the glyph.");
+                "Sets a rune on the floor beneath you. If you are on a rune, monsters cannot attack you but can try to break the rune.");
 
         {
             /* Stop singing before start another */
@@ -832,7 +832,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 msg_print(_("歌が神聖な場を作り出した．．．", "The holy power of the Music is creating sacred field..."));
-                warding_glyph(caster_ptr);
+                create_rune_protection_one(caster_ptr);
             }
         }
         break;

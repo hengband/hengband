@@ -88,7 +88,7 @@ static const byte feature_action_flags[FF_FLAG_MAX] = {
     0, /* DOOR */
     0, /* TRAP */
     0, /* STAIRS */
-    0, /* GLYPH */
+    0, /* RUNE_OF_PROTECTION */
     0, /* LESS */
     0, /* MORE */
     0, /* RUN */
@@ -174,7 +174,7 @@ static const byte feature_action_flags[FF_FLAG_MAX] = {
     0, /* SHAFT */
     0, /* MOUNTAIN */
     0, /* BLDG */
-    0, /* MINOR_GLYPH */
+    0, /* RUNE_OF_EXPLOSION */
     0, /* PATTERN */
     0, /* TOWN */
     0, /* ENTRANCE */
@@ -1011,22 +1011,22 @@ bool is_mirror_grid(grid_type *g_ptr)
 }
 
 /*
- *  Return TRUE if there is a mirror on the grid.
+ *  Return TRUE if there is a rune of protection on the grid.
  */
-bool is_glyph_grid(grid_type *g_ptr)
+bool is_rune_protection_grid(grid_type *g_ptr)
 {
-    if ((g_ptr->info & CAVE_OBJECT) && has_flag(f_info[g_ptr->mimic].flags, FF_GLYPH))
+    if ((g_ptr->info & CAVE_OBJECT) && has_flag(f_info[g_ptr->mimic].flags, FF_RUNE_PROTECTION))
         return TRUE;
     else
         return FALSE;
 }
 
 /*
- *  Return TRUE if there is a mirror on the grid.
+ *  Return TRUE if there is a rune of explosion on the grid.
  */
-bool is_explosive_rune_grid(grid_type *g_ptr)
+bool is_rune_explosion_grid(grid_type *g_ptr)
 {
-    if ((g_ptr->info & CAVE_OBJECT) && has_flag(f_info[g_ptr->mimic].flags, FF_MINOR_GLYPH))
+    if ((g_ptr->info & CAVE_OBJECT) && has_flag(f_info[g_ptr->mimic].flags, FF_RUNE_EXPLOSION))
         return TRUE;
     else
         return FALSE;
@@ -1056,10 +1056,10 @@ bool cave_monster_teleportable_bold(player_type *player_ptr, MONSTER_IDX m_idx, 
     if (player_bold(player_ptr, y, x))
         return FALSE;
 
-    /* Hack -- no teleport onto glyph of warding */
-    if (is_glyph_grid(g_ptr))
+    /* Hack -- no teleport onto rune of protection */
+    if (is_rune_protection_grid(g_ptr))
         return FALSE;
-    if (is_explosive_rune_grid(g_ptr))
+    if (is_rune_explosion_grid(g_ptr))
         return FALSE;
 
     if (!(mode & TELEPORT_PASSIVE)) {

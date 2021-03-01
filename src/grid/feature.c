@@ -28,8 +28,8 @@ FEAT_IDX feat_none;
 FEAT_IDX feat_floor;
 
 /* Objects */
-FEAT_IDX feat_glyph;
-FEAT_IDX feat_explosive_rune;
+FEAT_IDX feat_rune_protection;
+FEAT_IDX feat_rune_explosion;
 FEAT_IDX feat_mirror;
 
 /* Stairs */

@@ -503,7 +503,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
             return _("爆発のルーン", "Explosive Rune");
         if (desc)
             return _("自分のいる床の上に、モンスターが通ると爆発してダメージを与えるルーンを描く。",
-                "Sets a glyph under you. The glyph will explode when a monster moves on it.");
+                "Sets a rune under you. The rune will explode when a monster moves on it.");
 
         {
             DICE_NUMBER dice = 7;
@@ -514,7 +514,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_damage(dice, sides, base);
 
             if (cast) {
-                explosive_rune(caster_ptr, caster_ptr->y, caster_ptr->x);
+                create_rune_explosion(caster_ptr, caster_ptr->y, caster_ptr->x);
             }
         }
         break;

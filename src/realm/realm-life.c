@@ -285,14 +285,14 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 
     case 15:
         if (name)
-            return _("結界の紋章", "Glyph of Warding");
+            return _("結界の紋章", "Rune of Protection");
         if (desc)
             return _("自分のいる床の上に、モンスターが通り抜けたり召喚されたりすることができなくなるルーンを描く。",
-                "Sets a glyph on the floor beneath you. If you are on a glyph, monsters cannot attack you but can try to break the glyph.");
+                "Sets a rune on the floor beneath you. If you are on a rune, monsters cannot attack you but can try to break the rune.");
 
         {
             if (cast) {
-                warding_glyph(caster_ptr);
+                create_rune_protection_one(caster_ptr);
             }
         }
         break;
@@ -425,7 +425,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             return _("真・結界", "Warding True");
         if (desc)
             return _("自分のいる床と周囲8マスの床の上に、モンスターが通り抜けたり召喚されたりすることができなくなるルーンを描く。",
-                "Creates glyphs in all adjacent squares and under you.");
+                "Creates runes in all adjacent squares and under you.");
 
         {
             POSITION rad = 1;
@@ -434,8 +434,8 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 return info_radius(rad);
 
             if (cast) {
-                warding_glyph(caster_ptr);
-                glyph_creation(caster_ptr, caster_ptr->y, caster_ptr->x);
+                create_rune_protection_one(caster_ptr);
+                create_rune_protection_area(caster_ptr, caster_ptr->y, caster_ptr->x);
             }
         }
         break;
