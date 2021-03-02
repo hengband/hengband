@@ -41,5 +41,6 @@ function BuildPackage ($package_name, $package_unique_files, $build_conf) {
 }
 
 # 日本語版
-BuildPackage -package_name Hengband-$Version-jp -package_unique_files .\readme.txt, .\autopick.txt -build_conf Release
-BuildPackage -package_name Hengband-$Version-en -package_unique_files .\readme_eng.txt, .\autopick_eng.txt -build_conf English-Release
+BuildPackage -package_name Hengband-$Version-jp -package_unique_files .\readme.md, .\autopick.txt -build_conf Release
+# 英語版
+BuildPackage -package_name Hengband-$Version-en -package_unique_files .\readme_eng.md, .\autopick_eng.txt -build_conf English-Release
