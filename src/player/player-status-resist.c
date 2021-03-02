@@ -69,9 +69,10 @@ PERCENTAGE calc_acid_damage_rate(player_type *creature_ptr)
     }
 
     BIT_FLAGS flgs = has_vuln_acid(creature_ptr);
-    for (int i = 0; i < FLAG_CAUSE_MAX; i++) {
-        if (flgs & (0x01U << i)) {
-            if (i == FLAG_CAUSE_MUTATION) {
+    
+    for (BIT_FLAGS check_flag = 0x01U; check_flag < FLAG_CAUSE_MAX; check_flag <<= 1) {
+        if (any_bits(flgs, check_flag)) {
+            if (check_flag == FLAG_CAUSE_MUTATION) {
                 per *= 2;
             } else {
                 per += per / 3;
@@ -99,9 +100,9 @@ PERCENTAGE calc_elec_damage_rate(player_type *creature_ptr)
     }
 
     BIT_FLAGS flgs = has_vuln_elec(creature_ptr);
-    for (int i = 0; i < FLAG_CAUSE_MAX; i++) {
-        if (flgs & (0x01U << i)) {
-            if (i == FLAG_CAUSE_MUTATION) {
+    for (BIT_FLAGS check_flag = 0x01U; check_flag < FLAG_CAUSE_MAX; check_flag <<= 1) {
+        if (any_bits(flgs, check_flag)) {
+            if (check_flag == FLAG_CAUSE_MUTATION) {
                 per *= 2;
             } else {
                 per += per / 3;
@@ -124,9 +125,9 @@ PERCENTAGE calc_fire_damage_rate(player_type *creature_ptr)
 {
     PERCENTAGE per = 100;
     BIT_FLAGS flgs = has_vuln_fire(creature_ptr);
-     for (int i = 0; i < FLAG_CAUSE_MAX; i++) {
-        if (flgs & (0x01U << i)) {
-            if (i == FLAG_CAUSE_MUTATION) {
+    for (BIT_FLAGS check_flag = 0x01U; check_flag < FLAG_CAUSE_MAX; check_flag <<= 1) {
+        if (any_bits(flgs, check_flag)) {
+            if (check_flag == FLAG_CAUSE_MUTATION) {
                 per *= 2;
             } else {
                 per += per / 3;
@@ -150,9 +151,9 @@ PERCENTAGE calc_cold_damage_rate(player_type *creature_ptr)
 {
     PERCENTAGE per = 100;
     BIT_FLAGS flgs = has_vuln_cold(creature_ptr);
-    for (int i = 0; i < FLAG_CAUSE_MAX; i++) {
-        if (flgs & (0x01U << i)) {
-            if (i == FLAG_CAUSE_MUTATION) {
+    for (BIT_FLAGS check_flag = 0x01U; check_flag < FLAG_CAUSE_MAX; check_flag <<= 1) {
+        if (any_bits(flgs, check_flag)) {
+            if (check_flag == FLAG_CAUSE_MUTATION) {
                 per *= 2;
             } else {
                 per += per / 3;

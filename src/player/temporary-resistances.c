@@ -24,10 +24,10 @@
  */
 void tim_player_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 {
-    BIT_FLAGS tmp_effect_flag = (0x01U << FLAG_CAUSE_MAGIC_TIME_EFFECT);
-    set_bits(tmp_effect_flag, (0x01U << FLAG_CAUSE_BATTLE_FORM));
-    BIT_FLAGS race_class_flag = (0x01U << FLAG_CAUSE_CLASS);
-    set_bits(race_class_flag, (0x01U << FLAG_CAUSE_RACE));
+    BIT_FLAGS tmp_effect_flag = FLAG_CAUSE_MAGIC_TIME_EFFECT;
+    set_bits(tmp_effect_flag, FLAG_CAUSE_BATTLE_FORM);
+    BIT_FLAGS race_class_flag = FLAG_CAUSE_CLASS;
+    set_bits(race_class_flag, FLAG_CAUSE_RACE);
 
     for (int i = 0; i < TR_FLAG_SIZE; i++)
         flags[i] = 0L;

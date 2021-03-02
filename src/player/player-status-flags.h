@@ -2,26 +2,26 @@
 #include "object-enchant/tr-types.h"
 
 enum flag_cause {
-    FLAG_CAUSE_INVEN_MAIN_HAND = 0, /*!< アイテムスロット…利手 */
-    FLAG_CAUSE_INVEN_SUB_HAND = 1, /*!< アイテムスロット…逆手 */
-    FLAG_CAUSE_INVEN_BOW = 2, /*!< アイテムスロット…射撃 */
-    FLAG_CAUSE_INVEN_MAIN_RING = 3, /*!< アイテムスロット…利手指 */
-    FLAG_CAUSE_INVEN_SUB_RING = 4, /*!< アイテムスロット…逆手指 */
-    FLAG_CAUSE_INVEN_NECK = 5, /*!< アイテムスロット…首 */
-    FLAG_CAUSE_INVEN_LITE = 6, /*!< アイテムスロット…光源 */
-    FLAG_CAUSE_INVEN_BODY = 7, /*!< アイテムスロット…体 */
-    FLAG_CAUSE_INVEN_OUTER = 8, /*!< アイテムスロット…体の上 */
-    FLAG_CAUSE_INVEN_HEAD = 9, /*!< アイテムスロット…頭部 */
-    FLAG_CAUSE_INVEN_ARMS = 10, /*!< アイテムスロット…腕部 */
-    FLAG_CAUSE_INVEN_FEET = 11, /*!< アイテムスロット…脚部 */
-    FLAG_CAUSE_RACE = 12, /*!< 種族上の体得 */
-    FLAG_CAUSE_CLASS = 13, /*!< 職業上の体得 */
-    FLAG_CAUSE_PERSONALITY = 14, /*!< 性格上の体得 */
-    FLAG_CAUSE_MAGIC_TIME_EFFECT = 15, /*!< 魔法による時限効果 */
-    FLAG_CAUSE_MUTATION = 16, /*!< 変異による効果 */
-    FLAG_CAUSE_BATTLE_FORM = 17, /*!< 構えによる効果 */
-    FLAG_CAUSE_RIDING = 18, /*!< 乗馬による効果 */
-    FLAG_CAUSE_MAX = 19
+    FLAG_CAUSE_INVEN_MAIN_HAND = 0x01U << 0, /*!< アイテムスロット…利手 */
+    FLAG_CAUSE_INVEN_SUB_HAND = 0x01U << 1, /*!< アイテムスロット…逆手 */
+    FLAG_CAUSE_INVEN_BOW = 0x01U << 2, /*!< アイテムスロット…射撃 */
+    FLAG_CAUSE_INVEN_MAIN_RING = 0x01U << 3, /*!< アイテムスロット…利手指 */
+    FLAG_CAUSE_INVEN_SUB_RING = 0x01U << 4, /*!< アイテムスロット…逆手指 */
+    FLAG_CAUSE_INVEN_NECK = 0x01U << 5, /*!< アイテムスロット…首 */
+    FLAG_CAUSE_INVEN_LITE = 0x01U << 6, /*!< アイテムスロット…光源 */
+    FLAG_CAUSE_INVEN_BODY = 0x01U << 7, /*!< アイテムスロット…体 */
+    FLAG_CAUSE_INVEN_OUTER = 0x01U << 8, /*!< アイテムスロット…体の上 */
+    FLAG_CAUSE_INVEN_HEAD = 0x01U << 9, /*!< アイテムスロット…頭部 */
+    FLAG_CAUSE_INVEN_ARMS = 0x01U << 10, /*!< アイテムスロット…腕部 */
+    FLAG_CAUSE_INVEN_FEET = 0x01U << 11, /*!< アイテムスロット…脚部 */
+    FLAG_CAUSE_RACE = 0x01U << 12, /*!< 種族上の体得 */
+    FLAG_CAUSE_CLASS = 0x01U << 13, /*!< 職業上の体得 */
+    FLAG_CAUSE_PERSONALITY = 0x01U << 14, /*!< 性格上の体得 */
+    FLAG_CAUSE_MAGIC_TIME_EFFECT = 0x01U << 15, /*!< 魔法による時限効果 */
+    FLAG_CAUSE_MUTATION = 0x01U << 16, /*!< 変異による効果 */
+    FLAG_CAUSE_BATTLE_FORM = 0x01U << 17, /*!< 構えによる効果 */
+    FLAG_CAUSE_RIDING = 0x01U << 18, /*!< 乗馬による効果 */
+    FLAG_CAUSE_MAX = 0x01U << 19
 };
 
 typedef enum melee_type {
