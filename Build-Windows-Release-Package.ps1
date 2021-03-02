@@ -27,16 +27,14 @@ function BuildPackage ($package_name, $package_unique_files, $build_conf) {
     # 必要なファイルをコピーして、その中で不要になりえるものを削除
     Copy-Item -Verbose -Path .\Hengband.exe, .\readme_angband -Destination $hengbandDir
     Copy-Item -Verbose -Path $package_unique_files -Destination $hengbandDir
-    Copy-Item -Verbose -Recurse -Path .\lib -Destination $hengbandDir -Exclude Makefile.am, delete.me, *.raw, .gitattributes
+    Copy-Item -Verbose -Recurse -Path .\lib -Destination $hengbandDir -Exclude Makefile.am, *.raw, .gitattributes
     Copy-Item -Verbose -Path .\lib\apex\h_scores.raw -Destination $hengbandDir\lib\apex
-    Remove-Item -Verbose -Path $hengbandDir\lib\save\*, $hengbandDir\lib\user\*
+    Remove-Item -Verbose -Exclude delete.me -Recurse -Path $hengbandDir\lib\save\*, $hengbandDir\lib\user\*
     Remove-Item -Verbose -Exclude music.cfg -Path $hengbandDir\lib\xtra\music\*
 
     # zipアーカイブ作成
     $package_path = Join-Path $(Get-Location) "${package_name}.zip"
-    Push-Location $tempDir
-    Compress-Archive -Force -Verbose -Path $package_name -DestinationPath $package_path
-    Pop-Location
+    Get-ChildItem -Path $tempDir | Compress-Archive -Force -Verbose -DestinationPath $package_path
 
     # 作業用テンポラリフォルダ削除
     $tempDir | Where-Object { Test-Path $_ } | ForEach-Object { Get-ChildItem $_ -File -Recurse | Remove-Item; $_ } | Remove-Item -Recurse
