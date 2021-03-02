@@ -302,7 +302,7 @@ s16b store_item_to_inventory(player_type *owner_ptr, object_type *o_ptr)
             object_absorb(j_ptr, o_ptr);
 
             owner_ptr->update |= (PU_BONUS);
-            owner_ptr->window_flags |= (PW_INVEN);
+            owner_ptr->window_flags |= (PW_INVEN | PW_PLAYER);
             return (j);
         }
     }
@@ -341,7 +341,7 @@ s16b store_item_to_inventory(player_type *owner_ptr, object_type *o_ptr)
 
     owner_ptr->inven_cnt++;
     owner_ptr->update |= (PU_BONUS | PU_COMBINE | PU_REORDER);
-    owner_ptr->window_flags |= (PW_INVEN);
+    owner_ptr->window_flags |= (PW_INVEN | PW_PLAYER);
 
     return i;
 }
