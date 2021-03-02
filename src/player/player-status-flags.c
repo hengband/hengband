@@ -553,9 +553,13 @@ BIT_FLAGS has_esp_telepathy(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
-    if (is_time_limit_esp(creature_ptr) || creature_ptr->ult_res || (creature_ptr->special_defense & KATA_MUSOU)) {
+    if (is_time_limit_esp(creature_ptr) || creature_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
+    if (creature_ptr->special_defense & KATA_MUSOU) {
+        result |= FLAG_CAUSE_BATTLE_FORM;
+    }
+
 
     if (creature_ptr->muta3 & MUT3_ESP) {
         result |= FLAG_CAUSE_MUTATION;
@@ -1107,7 +1111,7 @@ BIT_FLAGS has_regenerate(player_type *creature_ptr)
         result |= FLAG_CAUSE_MUTATION;
 
     if (creature_ptr->special_defense & KATA_MUSOU) {
-        result |= FLAG_CAUSE_MUTATION;
+        result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
     if (hex_spelling(creature_ptr, HEX_DEMON_AURA) || creature_ptr->ult_res || creature_ptr->tim_regen) {
