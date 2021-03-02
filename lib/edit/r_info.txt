@@ -25116,7 +25116,7 @@ F:ANIMAL | MOVE_BODY | EVIL | FRIENDS
 F:NO_CONF | RES_GRAV | DROP_90
 S:1_IN_8 | BR_GRAV
 D:$What a cute terrestrial raven!
-D:$  They often move around in groups with good behavior.
+D:$  They often move around in well-behaved groups.
 D:かわいい陸行性のカラスだ。よく群れをなして行儀よく動き回っている。
 
 N:1268:『ビッグキューちゃん』
