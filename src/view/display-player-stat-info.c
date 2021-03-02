@@ -30,22 +30,21 @@
  */
 static int calc_basic_stat(player_type *creature_ptr, int stat_num)
 {
-	int e_adj = 0;
-	if ((creature_ptr->stat_max[stat_num] > 18) && (creature_ptr->stat_top[stat_num] > 18))
-		e_adj = (creature_ptr->stat_top[stat_num] - creature_ptr->stat_max[stat_num]) / 10;
+    int e_adj = 0;
+    if ((creature_ptr->stat_max[stat_num] > 18) && (creature_ptr->stat_top[stat_num] > 18))
+        e_adj = (creature_ptr->stat_top[stat_num] - creature_ptr->stat_max[stat_num]) / 10;
 
-	if ((creature_ptr->stat_max[stat_num] <= 18) && (creature_ptr->stat_top[stat_num] <= 18))
-		e_adj = creature_ptr->stat_top[stat_num] - creature_ptr->stat_max[stat_num];
+    if ((creature_ptr->stat_max[stat_num] <= 18) && (creature_ptr->stat_top[stat_num] <= 18))
+        e_adj = creature_ptr->stat_top[stat_num] - creature_ptr->stat_max[stat_num];
 
-	if ((creature_ptr->stat_max[stat_num] <= 18) && (creature_ptr->stat_top[stat_num] > 18))
-		e_adj = (creature_ptr->stat_top[stat_num] - 18) / 10 - creature_ptr->stat_max[stat_num] + 18;
+    if ((creature_ptr->stat_max[stat_num] <= 18) && (creature_ptr->stat_top[stat_num] > 18))
+        e_adj = (creature_ptr->stat_top[stat_num] - 18) / 10 - creature_ptr->stat_max[stat_num] + 18;
 
-	if ((creature_ptr->stat_max[stat_num] > 18) && (creature_ptr->stat_top[stat_num] <= 18))
-		e_adj = creature_ptr->stat_top[stat_num] - (creature_ptr->stat_max[stat_num] - 19) / 10 - 19;
+    if ((creature_ptr->stat_max[stat_num] > 18) && (creature_ptr->stat_top[stat_num] <= 18))
+        e_adj = creature_ptr->stat_top[stat_num] - (creature_ptr->stat_max[stat_num] - 19) / 10 - 19;
 
-	return e_adj;
+    return e_adj;
 }
-
 
 /*!
  * @brief 特殊な種族の時、腕力等の基礎パラメータを変動させる
@@ -55,27 +54,32 @@ static int calc_basic_stat(player_type *creature_ptr, int stat_num)
  */
 static int compensate_special_race(player_type *creature_ptr, int stat_num)
 {
-	if (!is_specific_player_race(creature_ptr, RACE_ENT)) return 0;
+    if (!is_specific_player_race(creature_ptr, RACE_ENT))
+        return 0;
 
-	int r_adj = 0;
-	switch (stat_num)
-	{
-	case A_STR:
-	case A_CON:
-		if (creature_ptr->lev > 25) r_adj++;
-		if (creature_ptr->lev > 40) r_adj++;
-		if (creature_ptr->lev > 45) r_adj++;
-		break;
-	case A_DEX:
-		if (creature_ptr->lev > 25) r_adj--;
-		if (creature_ptr->lev > 40) r_adj--;
-		if (creature_ptr->lev > 45) r_adj--;
-		break;
-	}
+    int r_adj = 0;
+    switch (stat_num) {
+    case A_STR:
+    case A_CON:
+        if (creature_ptr->lev > 25)
+            r_adj++;
+        if (creature_ptr->lev > 40)
+            r_adj++;
+        if (creature_ptr->lev > 45)
+            r_adj++;
+        break;
+    case A_DEX:
+        if (creature_ptr->lev > 25)
+            r_adj--;
+        if (creature_ptr->lev > 40)
+            r_adj--;
+        if (creature_ptr->lev > 45)
+            r_adj--;
+        break;
+    }
 
-	return r_adj;
+    return r_adj;
 }
-
 
 /*!
  * @brief 能力値名を(もし一時的減少なら'x'を付けて)表示する
@@ -87,12 +91,11 @@ static int compensate_special_race(player_type *creature_ptr, int stat_num)
  */
 static void display_basic_stat_name(player_type *creature_ptr, int stat_num, int row, int stat_col)
 {
-	if (creature_ptr->stat_cur[stat_num] < creature_ptr->stat_max[stat_num])
-		c_put_str(TERM_WHITE, stat_names_reduced[stat_num], row + stat_num + 1, stat_col + 1);
-	else
-		c_put_str(TERM_WHITE, stat_names[stat_num], row + stat_num + 1, stat_col + 1);
+    if (creature_ptr->stat_cur[stat_num] < creature_ptr->stat_max[stat_num])
+        c_put_str(TERM_WHITE, stat_names_reduced[stat_num], row + stat_num + 1, stat_col + 1);
+    else
+        c_put_str(TERM_WHITE, stat_names[stat_num], row + stat_num + 1, stat_col + 1);
 }
-
 
 /*!
  * @brief 能力値を、基本・種族補正・職業補正・性格補正・装備補正・合計・現在 (一時的減少のみ) の順で表示する
@@ -107,28 +110,26 @@ static void display_basic_stat_name(player_type *creature_ptr, int stat_num, int
  */
 static void display_basic_stat_value(player_type *creature_ptr, int stat_num, int r_adj, int e_adj, int row, int stat_col, char *buf)
 {
-	(void)sprintf(buf, "%3d", r_adj);
-	c_put_str(TERM_L_BLUE, buf, row + stat_num + 1, stat_col + 13);
+    (void)sprintf(buf, "%3d", r_adj);
+    c_put_str(TERM_L_BLUE, buf, row + stat_num + 1, stat_col + 13);
 
-	(void)sprintf(buf, "%3d", (int)cp_ptr->c_adj[stat_num]);
-	c_put_str(TERM_L_BLUE, buf, row + stat_num + 1, stat_col + 16);
+    (void)sprintf(buf, "%3d", (int)cp_ptr->c_adj[stat_num]);
+    c_put_str(TERM_L_BLUE, buf, row + stat_num + 1, stat_col + 16);
 
-	(void)sprintf(buf, "%3d", (int)ap_ptr->a_adj[stat_num]);
-	c_put_str(TERM_L_BLUE, buf, row + stat_num + 1, stat_col + 19);
+    (void)sprintf(buf, "%3d", (int)ap_ptr->a_adj[stat_num]);
+    c_put_str(TERM_L_BLUE, buf, row + stat_num + 1, stat_col + 19);
 
-	(void)sprintf(buf, "%3d", (int)e_adj);
-	c_put_str(TERM_L_BLUE, buf, row + stat_num + 1, stat_col + 22);
+    (void)sprintf(buf, "%3d", (int)e_adj);
+    c_put_str(TERM_L_BLUE, buf, row + stat_num + 1, stat_col + 22);
 
-	cnv_stat(creature_ptr->stat_top[stat_num], buf);
-	c_put_str(TERM_L_GREEN, buf, row + stat_num + 1, stat_col + 26);
+    cnv_stat(creature_ptr->stat_top[stat_num], buf);
+    c_put_str(TERM_L_GREEN, buf, row + stat_num + 1, stat_col + 26);
 
-	if (creature_ptr->stat_use[stat_num] < creature_ptr->stat_top[stat_num])
-	{
-		cnv_stat(creature_ptr->stat_use[stat_num], buf);
-		c_put_str(TERM_YELLOW, buf, row + stat_num + 1, stat_col + 33);
-	}
+    if (creature_ptr->stat_use[stat_num] < creature_ptr->stat_top[stat_num]) {
+        cnv_stat(creature_ptr->stat_use[stat_num], buf);
+        c_put_str(TERM_YELLOW, buf, row + stat_num + 1, stat_col + 33);
+    }
 }
-
 
 /*!
  * @brief 能力値を補正しつつ表示する
@@ -139,29 +140,25 @@ static void display_basic_stat_value(player_type *creature_ptr, int stat_num, in
  */
 static void process_stats(player_type *creature_ptr, int row, int stat_col)
 {
-	char buf[80];
-	for (int i = 0; i < A_MAX; i++)
-	{
-		int r_adj = creature_ptr->mimic_form
-			? mimic_info[creature_ptr->mimic_form].r_adj[i]
-			: rp_ptr->r_adj[i];
-		int e_adj = calc_basic_stat(creature_ptr, i);
-		r_adj += compensate_special_race(creature_ptr, i);
-		e_adj -= r_adj;
-		e_adj -= cp_ptr->c_adj[i];
-		e_adj -= ap_ptr->a_adj[i];
+    char buf[80];
+    for (int i = 0; i < A_MAX; i++) {
+        int r_adj = creature_ptr->mimic_form ? mimic_info[creature_ptr->mimic_form].r_adj[i] : rp_ptr->r_adj[i];
+        int e_adj = calc_basic_stat(creature_ptr, i);
+        r_adj += compensate_special_race(creature_ptr, i);
+        e_adj -= r_adj;
+        e_adj -= cp_ptr->c_adj[i];
+        e_adj -= ap_ptr->a_adj[i];
 
-		display_basic_stat_name(creature_ptr, i, row, stat_col);
-		cnv_stat(creature_ptr->stat_max[i], buf);
-		if (creature_ptr->stat_max[i] == creature_ptr->stat_max_max[i])
-			c_put_str(TERM_WHITE, "!", row + i + 1, _(stat_col + 6, stat_col + 4));
+        display_basic_stat_name(creature_ptr, i, row, stat_col);
+        cnv_stat(creature_ptr->stat_max[i], buf);
+        if (creature_ptr->stat_max[i] == creature_ptr->stat_max_max[i])
+            c_put_str(TERM_WHITE, "!", row + i + 1, _(stat_col + 6, stat_col + 4));
 
-		c_put_str(TERM_BLUE, buf, row + i + 1, stat_col + 13 - strlen(buf));
+        c_put_str(TERM_BLUE, buf, row + i + 1, stat_col + 13 - strlen(buf));
 
-		display_basic_stat_value(creature_ptr, i, r_adj, e_adj, row, stat_col, buf);
-	}
+        display_basic_stat_value(creature_ptr, i, r_adj, e_adj, row, stat_col, buf);
+    }
 }
-
 
 /*!
  * @brief pval付きの装備に依るステータス補正を表示する
@@ -174,26 +171,24 @@ static void process_stats(player_type *creature_ptr, int row, int stat_col)
  */
 static void compensate_stat_by_weapon(char *c, TERM_COLOR *a, object_type *o_ptr, int stat, BIT_FLAGS *flags)
 {
-	*c = '*';
+    *c = '*';
 
-	if (o_ptr->pval > 0)
-	{
-		*a = TERM_L_GREEN;
-		if (o_ptr->pval < 10) *c = '0' + o_ptr->pval;
-	}
+    if (o_ptr->pval > 0) {
+        *a = TERM_L_GREEN;
+        if (o_ptr->pval < 10)
+            *c = '0' + o_ptr->pval;
+    }
 
-	if (has_flag(flags, stat + TR_SUST_STR))
-	{
-		*a = TERM_GREEN;
-	}
+    if (has_flag(flags, stat + TR_SUST_STR)) {
+        *a = TERM_GREEN;
+    }
 
-	if (o_ptr->pval < 0)
-	{
-		*a = TERM_RED;
-		if (o_ptr->pval > -10) *c = '0' - o_ptr->pval;
-	}
+    if (o_ptr->pval < 0) {
+        *a = TERM_RED;
+        if (o_ptr->pval > -10)
+            *c = '0' - o_ptr->pval;
+    }
 }
-
 
 /*!
  * @brief 装備品を走査してpval付きのものをそれと分かるように表示する
@@ -205,32 +200,26 @@ static void compensate_stat_by_weapon(char *c, TERM_COLOR *a, object_type *o_ptr
  */
 static void display_equipments_compensation(player_type *creature_ptr, BIT_FLAGS *flags, int row, int *col)
 {
-	for (inventory_slot_type i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++)
-	{
-		object_type *o_ptr;
-		o_ptr = &creature_ptr->inventory_list[i];
-		object_flags_known(creature_ptr, o_ptr, flags);
-		for (int stat = 0; stat < A_MAX; stat++)
-		{
-			TERM_COLOR a = TERM_SLATE;
-			char c = '.';
-			if (has_flag(flags, stat))
-			{
-				compensate_stat_by_weapon(&c, &a, o_ptr, stat, flags);
-			}
-			else if (has_flag(flags, stat + TR_SUST_STR))
-			{
-				a = TERM_GREEN;
-				c = 's';
-			}
+    for (inventory_slot_type i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+        object_type *o_ptr;
+        o_ptr = &creature_ptr->inventory_list[i];
+        object_flags_known(creature_ptr, o_ptr, flags);
+        for (int stat = 0; stat < A_MAX; stat++) {
+            TERM_COLOR a = TERM_SLATE;
+            char c = '.';
+            if (has_flag(flags, stat)) {
+                compensate_stat_by_weapon(&c, &a, o_ptr, stat, flags);
+            } else if (has_flag(flags, stat + TR_SUST_STR)) {
+                a = TERM_GREEN;
+                c = 's';
+            }
 
-			term_putch(*col, row + stat + 1, a, c);
-		}
+            term_putch(*col, row + stat + 1, a, c);
+        }
 
-		(*col)++;
-	}
+        (*col)++;
+    }
 }
-
 
 /*!
  * @brief 各能力値の補正
@@ -240,54 +229,67 @@ static void display_equipments_compensation(player_type *creature_ptr, BIT_FLAGS
  */
 static int compensation_stat_by_mutation(player_type *creature_ptr, int stat)
 {
-	int compensation = 0;
-	if (stat == A_STR)
-	{
-		if (creature_ptr->muta3 & MUT3_HYPER_STR) compensation += 4;
-		if (creature_ptr->muta3 & MUT3_PUNY) compensation -= 4;
-		if (creature_ptr->tsuyoshi) compensation += 4;
-		return compensation;
-	}
-	
-	if (stat == A_WIS || stat == A_INT)
-	{
-		if (creature_ptr->muta3 & MUT3_HYPER_INT) compensation += 4;
-		if (creature_ptr->muta3 & MUT3_MORONIC) compensation -= 4;
-		return compensation;
-	}
-	
-	if (stat == A_DEX)
-	{
-		if (creature_ptr->muta3 & MUT3_IRON_SKIN) compensation -= 1;
-		if (creature_ptr->muta3 & MUT3_LIMBER) compensation += 3;
-		if (creature_ptr->muta3 & MUT3_ARTHRITIS) compensation -= 3;
-		return compensation;
-	}
-	
-	if (stat == A_CON)
-	{
-		if (creature_ptr->muta3 & MUT3_RESILIENT) compensation += 4;
-		if (creature_ptr->muta3 & MUT3_XTRA_FAT) compensation += 2;
-		if (creature_ptr->muta3 & MUT3_ALBINO) compensation -= 4;
-		if (creature_ptr->muta3 & MUT3_FLESH_ROT) compensation -= 2;
-		if (creature_ptr->tsuyoshi) compensation += 4;
-		return compensation;
-	}
-	
-	if (stat == A_CHR)
-	{
-		if (creature_ptr->muta3 & MUT3_SILLY_VOI) compensation -= 4;
-		if (creature_ptr->muta3 & MUT3_BLANK_FAC) compensation -= 1;
-		if (creature_ptr->muta3 & MUT3_FLESH_ROT) compensation -= 1;
-		if (creature_ptr->muta3 & MUT3_SCALES) compensation -= 1;
-		if (creature_ptr->muta3 & MUT3_WART_SKIN) compensation -= 2;
-		if (creature_ptr->muta3 & MUT3_ILL_NORM) compensation = 0;
-		return compensation;
-	}
+    int compensation = 0;
+    if (stat == A_STR) {
+        if (any_bits(creature_ptr->muta3, MUT3_HYPER_STR))
+            compensation += 4;
+        if (any_bits(creature_ptr->muta3, MUT3_PUNY))
+            compensation -= 4;
+        if (creature_ptr->tsuyoshi)
+            compensation += 4;
+        return compensation;
+    }
 
-	return 0;
+    if (stat == A_WIS || stat == A_INT) {
+        if (any_bits(creature_ptr->muta3, MUT3_HYPER_INT))
+            compensation += 4;
+        if (any_bits(creature_ptr->muta3, MUT3_MORONIC))
+            compensation -= 4;
+        return compensation;
+    }
+
+    if (stat == A_DEX) {
+        if (any_bits(creature_ptr->muta3, MUT3_IRON_SKIN))
+            compensation -= 1;
+        if (any_bits(creature_ptr->muta3, MUT3_LIMBER))
+            compensation += 3;
+        if (any_bits(creature_ptr->muta3, MUT3_ARTHRITIS))
+            compensation -= 3;
+        return compensation;
+    }
+
+    if (stat == A_CON) {
+        if (any_bits(creature_ptr->muta3, MUT3_RESILIENT))
+            compensation += 4;
+        if (any_bits(creature_ptr->muta3, MUT3_XTRA_FAT))
+            compensation += 2;
+        if (any_bits(creature_ptr->muta3, MUT3_ALBINO))
+            compensation -= 4;
+        if (any_bits(creature_ptr->muta3, MUT3_FLESH_ROT))
+            compensation -= 2;
+        if (creature_ptr->tsuyoshi)
+            compensation += 4;
+        return compensation;
+    }
+
+    if (stat == A_CHR) {
+        if (any_bits(creature_ptr->muta3, MUT3_SILLY_VOI))
+            compensation -= 4;
+        if (any_bits(creature_ptr->muta3, MUT3_BLANK_FAC))
+            compensation -= 1;
+        if (any_bits(creature_ptr->muta3, MUT3_FLESH_ROT))
+            compensation -= 1;
+        if (any_bits(creature_ptr->muta3, MUT3_SCALES))
+            compensation -= 1;
+        if (any_bits(creature_ptr->muta3, MUT3_WART_SKIN))
+            compensation -= 2;
+        if (any_bits(creature_ptr->muta3, MUT3_ILL_NORM))
+            compensation = 0;
+        return compensation;
+    }
+
+    return 0;
 }
-
 
 /*!
  * @brief 突然変異 (と、つよしスペシャル)による能力値の補正有無で表示する記号を変える
@@ -299,23 +301,23 @@ static int compensation_stat_by_mutation(player_type *creature_ptr, int stat)
  */
 static void change_display_by_mutation(player_type *creature_ptr, int stat, char *c, TERM_COLOR *a)
 {
-	int compensation = compensation_stat_by_mutation(creature_ptr, stat);
-	if (compensation == 0) return;
+    int compensation = compensation_stat_by_mutation(creature_ptr, stat);
+    if (compensation == 0)
+        return;
 
-	*c = '*';
-	if (compensation > 0)
-	{
-		*a = TERM_L_GREEN;
-		if (compensation < 10) *c = '0' + compensation;
-	}
+    *c = '*';
+    if (compensation > 0) {
+        *a = TERM_L_GREEN;
+        if (compensation < 10)
+            *c = '0' + compensation;
+    }
 
-	if (compensation < 0)
-	{
-		*a = TERM_RED;
-		if (compensation > -10) *c = '0' - compensation;
-	}
+    if (compensation < 0) {
+        *a = TERM_RED;
+        if (compensation > -10)
+            *c = '0' - compensation;
+    }
 }
-
 
 /*!
  * @brief 能力値を走査し、突然変異 (と、つよしスペシャル)で補正をかける必要があればかける
@@ -327,22 +329,19 @@ static void change_display_by_mutation(player_type *creature_ptr, int stat, char
  */
 static void display_mutation_compensation(player_type *creature_ptr, BIT_FLAGS *flags, int row, int col)
 {
-	for (int stat = 0; stat < A_MAX; stat++)
-	{
-		byte a = TERM_SLATE;
-		char c = '.';
-		change_display_by_mutation(creature_ptr, stat, &c, &a);
+    for (int stat = 0; stat < A_MAX; stat++) {
+        byte a = TERM_SLATE;
+        char c = '.';
+        change_display_by_mutation(creature_ptr, stat, &c, &a);
 
-		if (has_flag(flags, stat + TR_SUST_STR))
-		{
-			a = TERM_GREEN;
-			c = 's';
-		}
+        if (has_flag(flags, stat + TR_SUST_STR)) {
+            a = TERM_GREEN;
+            c = 's';
+        }
 
-		term_putch(col, row + stat + 1, a, c);
-	}
+        term_putch(col, row + stat + 1, a, c);
+    }
 }
-
 
 /*!
  * @brief プレイヤーの特性フラグ一覧表示2b /
@@ -362,21 +361,21 @@ static void display_mutation_compensation(player_type *creature_ptr, BIT_FLAGS *
  */
 void display_player_stat_info(player_type *creature_ptr)
 {
-	int stat_col = 22;
-	int row = 3;
-	c_put_str(TERM_WHITE, _("能力", "Stat"), row, stat_col + 1);
-	c_put_str(TERM_BLUE, _("  基本", "  Base"), row, stat_col + 7);
-	c_put_str(TERM_L_BLUE, _(" 種 職 性 装 ", "RacClaPerMod"), row, stat_col + 13);
-	c_put_str(TERM_L_GREEN, _("合計", "Actual"), row, stat_col + 28);
-	c_put_str(TERM_YELLOW, _("現在", "Current"), row, stat_col + 35);
-	process_stats(creature_ptr, row, stat_col);
+    int stat_col = 22;
+    int row = 3;
+    c_put_str(TERM_WHITE, _("能力", "Stat"), row, stat_col + 1);
+    c_put_str(TERM_BLUE, _("  基本", "  Base"), row, stat_col + 7);
+    c_put_str(TERM_L_BLUE, _(" 種 職 性 装 ", "RacClaPerMod"), row, stat_col + 13);
+    c_put_str(TERM_L_GREEN, _("合計", "Actual"), row, stat_col + 28);
+    c_put_str(TERM_YELLOW, _("現在", "Current"), row, stat_col + 35);
+    process_stats(creature_ptr, row, stat_col);
 
-	int col = stat_col + 41;
-	c_put_str(TERM_WHITE, "abcdefghijkl@", row, col);
-	c_put_str(TERM_L_GREEN, _("能力修正", "Modification"), row - 1, col);
+    int col = stat_col + 41;
+    c_put_str(TERM_WHITE, "abcdefghijkl@", row, col);
+    c_put_str(TERM_L_GREEN, _("能力修正", "Modification"), row - 1, col);
 
-	BIT_FLAGS flags[TR_FLAG_SIZE];
-	display_equipments_compensation(creature_ptr,flags, row, &col);
-	player_flags(creature_ptr, flags);
-	display_mutation_compensation(creature_ptr, flags, row, col);
+    BIT_FLAGS flags[TR_FLAG_SIZE];
+    display_equipments_compensation(creature_ptr, flags, row, &col);
+    player_flags(creature_ptr, flags);
+    display_mutation_compensation(creature_ptr, flags, row, col);
 }
