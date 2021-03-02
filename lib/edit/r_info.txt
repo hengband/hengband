@@ -24909,9 +24909,8 @@ F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
 F:ONLY_ITEM | DROP_GOOD | DROP_1D2 | DROP_90
 S:1_IN_3 | BA_ACID
 D:$When many of these dragon insects are united, it becomes a dragon centipede.
-D:$  The part that corresponds to the spinal cord
-D:$ when it was integrated as a dragon centipede
-D:$ has an organ that seems to be the eye.
+D:$  The part that forms the spinal cord when it is integrated into a dragon
+D:$ centipede has an organ that seems to be the eye.
 D:この龍虫が多数合体すると百足龍虫になる。
 D:百足龍虫時の脊髄にあたる部分には眼と思われる器官がついている。
 
