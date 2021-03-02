@@ -23360,7 +23360,7 @@ S:TELE_TO | BO_MANA | BR_MANA | BR_WALL | BR_PLAS | BR_DISI | HEAL | HASTE
 D:$It is the fusion of twin sisters born at the end of the vaunted study of Vajura energy.
 D:$Its outrageous power will destroy a star and eventually become a new myth.
 D:ヴァジュラエネルギーのおぞましい研究の果てに産みだされた双子の姉妹の融合体だ。
-D:その無法図な力は一個の星を滅ぼし、やがて新たな神話の存在となるに足るものだろう。
+D:その無法なる力は一個の星を滅ぼし、やがて新たな神話の存在となるに足るものだろう。
 
 N:1172:緑衣の高位修行僧
 E:High jade monk
