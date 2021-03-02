@@ -1,4 +1,5 @@
 ﻿#include "player/player-status.h"
+#include "object-enchant/tr-types.h"
 
 enum flag_cause {
     FLAG_CAUSE_INVEN_MAIN_HAND = 0, /*!< アイテムスロット…利手 */
@@ -40,6 +41,7 @@ enum aggravate_state {
     AGGRAVATE_NORMAL = 0x00000002L,
 };
 
+BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag);
 bool has_pass_wall(player_type *creature_ptr);
 bool has_kill_wall(player_type *creature_ptr);
 BIT_FLAGS has_xtra_might(player_type *creature_ptr);

@@ -49,7 +49,7 @@ typedef enum tr_type {
     TR_IM_ELEC = 41,
     TR_IM_FIRE = 42,
     TR_IM_COLD = 43,
-    TR_THROW = 44, /* 強力投擲 */
+    TR_THROW = 44, /* 強力投擲ではなく、投げやすい武器 */
     TR_REFLECT = 45, /* Reflect 'bolts' */
     TR_FREE_ACT = 46, /* 耐麻痺 */
     TR_HOLD_EXP = 47, /* 経験値維持 */
