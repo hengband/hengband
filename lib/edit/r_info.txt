@@ -25147,13 +25147,13 @@ F:FORCE_MAXHP | CAN_SWIM | COLD_BLOOD | WEIRD_MIND | RIDING
 F:IM_COLD | RES_WATE | RES_INER | RES_TIME | RES_TELE
 F:NO_STUN | NO_FEAR | NO_SLEEP
 S:1_IN_5 | BA_WATE | HASTE | S_UNDEAD
-D:$It is a horse born by sticking four sticks into a cucumber
+D:$It is a horse formed by sticking four sticks into a cucumber
 D:$ that is so huge that people can straddle it.
 D:$  The legs are fast.
-D:$  It should carry the spirits of its ancestors,
-D:$ but since the rider was not found,
-D:$ it carries the appropriate spirits.
-D:$ Juice spouts from the fresh body.
+D:$  It should carry the spirits of the ancestors of its maker,
+D:$ but, since a rider was not found,
+D:$ it looks for another spirit to carry.
+D:$  Juice spouts from the fresh body.
 D:人が跨がれるほど巨大なキュウリに四本の棒を刺すことで誕生した馬だ。足が早い。
 D:先祖の霊を乗せるはずだが、乗り手が見つからなかったため適当な霊を乗せている。
 D:瑞々しい体からは汁が噴き出す。
@@ -25171,13 +25171,13 @@ F:FORCE_MAXHP | CAN_SWIM | COLD_BLOOD | WEIRD_MIND | RIDING | TAKE_ITEM
 F:IM_COLD | RES_WATE | RES_TIME | RES_TELE
 F:NO_STUN | NO_FEAR | NO_SLEEP
 S:1_IN_2 | BA_WATE | BR_INER | SLOW | TELE_TO
-D:$It is a cow born by sticking four sticks into an eggplant
+D:$It is a cow formed by sticking four sticks into an eggplant
 D:$ that is so huge that people can straddle it.
 D:$  The legs are slow.
-D:$  It should carry the spirits of its ancestors,
-D:$ but since the rider is not found,
-D:$ it is trying to carry the appropriate spirits.
-D:$ Juice spouts from the fresh body.
+D:$  It should carry the spirits of the ancestors of its maker,
+D:$ but, since a rider was not found,
+D:$ it looks for another spirit to carry.
+D:$  Juice spouts from the fresh body.
 D:人が跨がれるほど巨大なナスに四本の棒を刺すことで誕生した牛だ。足が遅い。
 D:先祖の霊を乗せるはずだが、
 D:乗り手が見つからないため適当な霊を乗せていこうとしている。
