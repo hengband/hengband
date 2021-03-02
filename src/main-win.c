@@ -471,8 +471,9 @@ static bool can_use_music = FALSE;
 static MCI_OPEN_PARMS mop;
 static char mci_device_type[256];
 
-int current_music_type = 0;
-int current_music_id = 0;
+static int current_music_type = TERM_XTRA_MUSIC_MUTE;
+static int current_music_id = 0;
+static char current_music_path[1024];
 
 /*
  * Full path to ANGBAND.INI
@@ -1246,6 +1247,9 @@ static void stop_music(void)
 {
     mciSendCommand(mop.wDeviceID, MCI_STOP, 0, 0);
     mciSendCommand(mop.wDeviceID, MCI_CLOSE, 0, 0);
+    current_music_type = TERM_XTRA_MUSIC_MUTE;
+    current_music_id = 0;
+    strcpy(current_music_path, "\0");
 }
 
 /*
@@ -1554,13 +1558,13 @@ static errr term_xtra_win_music(int n, int v)
 {
     int i = 0;
     char buf[1024];
-    if (n == TERM_XTRA_MUSIC_MUTE) {
-        mciSendCommand(mop.wDeviceID, MCI_STOP, 0, 0);
-        mciSendCommand(mop.wDeviceID, MCI_CLOSE, 0, 0);
-    }
 
-    if (!use_music)
+    if (n == TERM_XTRA_MUSIC_MUTE)
+        stop_music();
+
+    if (!use_music) {
         return 1;
+    }
 
     if (n == TERM_XTRA_MUSIC_BASIC && ((v < 0) || (v >= MUSIC_BASIC_MAX)))
         return 1;
@@ -1609,11 +1613,16 @@ static errr term_xtra_win_music(int n, int v)
         break;
     }
 
-    if (current_music_type == n && current_music_id == v) {
+    if (current_music_type == n && current_music_id == v)
         return 0;
-    }
+
+    if (current_music_type != TERM_XTRA_MUSIC_MUTE && n != TERM_XTRA_MUSIC_MUTE)
+        if (0 == strcmp(current_music_path, buf))
+            return 0;
+
     current_music_type = n;
     current_music_id = v;
+    strcpy(current_music_path, buf);
 
     mop.lpstrDeviceType = mci_device_type;
     mop.lpstrElementName = buf;
