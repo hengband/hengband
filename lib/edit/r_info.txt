@@ -24948,9 +24948,9 @@ F:IM_ACID | IM_COLD | IM_POIS | RES_DISE | RES_WALL | RES_GRAV | RES_TELE
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
 F:ONLY_ITEM | DROP_GOOD | DROP_4D2 | DROP_2D2
 S:1_IN_3 | BA_ACID
-D:$It is the final evolution of a giant creature,
+D:$It is the final evolution of a dragon insect,
 D:$ a magnificent centipede that is taller and longer than the WTC.
-D:$  It pours acid like a downpour from countless outrages.
+D:$  It pours acid like a downpour from countless protrusions.
 D:巨大生物の最終進化形態、ビルよりも高く長い全長を持つ雄大なムカデだ。
 D:無数の突起から土砂降りのように酸を降り注がせる。
 
