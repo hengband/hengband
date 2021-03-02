@@ -25096,10 +25096,10 @@ F:HURT_LITE | SELF_DARK_1 | NO_FEAR | NO_CONF | NO_SLEEP
 F:DROP_2D2 | DROP_GREAT | ONLY_ITEM
 S:1_IN_3 | DISPEL | BA_ELEC | BA_DARK
 S:SHRIEK | SCARE | BLIND | BLINK | DARKNESS | S_KIN
-D:$Boo's boss, which has the ability to confine objects
-D:$ and people in a picture frame.  It is worth living to scare people.
-D:$  Ever since losing to Luigi, has been obsessed with revenge on him.
-D:$  It is going to add you to one of the picture frame collections.
+D:$It is the boss of the Boos and has the ability to confine objects
+D:$ and people in picture frames.  It enjoys scaring and toying with its
+D:$ opponents.  Ever since losing to Luigi, King Boo has been obsessed with
+D:$ revenge.  It is going to add you to its collection of portraits.
 D:物体や人物を額縁に閉じ込め絵にする能力を持つ、テレサの親玉。
 D:人を怖がらせるのが生きがいである。
 D:緑のひげに敗れて以来、彼への仕返しに執念を燃やしている。
