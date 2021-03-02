@@ -25130,7 +25130,7 @@ F:UNIQUE | FORCE_MAXHP | ANIMAL | POWERFUL | MOVE_BODY | EVIL
 F:NO_CONF | NO_SLEEP | NO_FEAR | IM_ELEC | RES_GRAV | BASH_DOOR
 F:DROP_GOOD | DROP_2D2 | ONLY_ITEM
 S:1_IN_6 | BA_ELEC | BR_GRAV | TELE_AWAY
-D:$It is very gentle when the head is stepped on,
+D:$It is very gentle when its head is stepped on,
 D:$ but it gets angry when a stake is driven into its ass.
 D:それは頭を踏まれたくらいでは温厚だが、お尻に杭を打ち込まれると激怒する。
 
