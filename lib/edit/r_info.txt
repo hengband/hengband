@@ -24928,10 +24928,9 @@ F:IM_ACID | IM_POIS | RES_PLAS | RES_DISE | RES_WALL | RES_GRAV | RES_TELE
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
 F:ONLY_ITEM | DROP_GOOD | DROP_3D2
 S:1_IN_3 | BA_ACID
-D:$The identity of the giant centipede
-D:$ was a combination of many giant creatures.
-D:$The colony separated from the dragon centipede begins its activity
-D:$ as an independent dragon worm.
+D:$Dragon centipedes are formed from the combination of many insects.
+D:$  Those centipedes can break apart:  each piece becomes an independent
+D:$ dragon worm.
 D:巨大な百足の正体は多数の巨大生物が合体した生物だった。
 D:百足龍虫から分離した群体は独立した龍虫として活動を始める。
 
