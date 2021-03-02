@@ -21,13 +21,13 @@
  */
 static concptr attr_to_text(monster_race *r_ptr)
 {
-    if (r_ptr->flags1 & RF1_ATTR_CLEAR)
+    if (any_bits(r_ptr->flags1, RF1_ATTR_CLEAR))
         return _("透明な", "Clear");
 
-    if (r_ptr->flags1 & RF1_ATTR_MULTI)
+    if (any_bits(r_ptr->flags1, RF1_ATTR_MULTI))
         return _("万色の", "Multi");
 
-    if (r_ptr->flags1 & RF1_ATTR_SEMIRAND)
+    if (any_bits(r_ptr->flags1, RF1_ATTR_SEMIRAND))
         return _("準ランダムな", "S.Rand");
 
     switch (r_ptr->d_attr) {
@@ -118,9 +118,9 @@ spoiler_output_status spoil_mon_desc(concptr fname, bool show_all, race_flags8 R
         angband_strcpy(name_buf, name, sizeof(name_buf));
         name += strlen(name_buf);
 
-        if (r_ptr->flags7 & RF7_KAGE)
+        if (any_bits(r_ptr->flags7, RF7_KAGE))
             continue;
-        else if (r_ptr->flags1 & (RF1_UNIQUE))
+        else if (any_bits(r_ptr->flags1, (RF1_UNIQUE)))
             sprintf(nam, "[U] %s", name_buf);
         else
             sprintf(nam, _("    %s", "The %s"), name_buf);
@@ -133,7 +133,7 @@ spoiler_output_status spoil_mon_desc(concptr fname, bool show_all, race_flags8 R
             sprintf(spd, "-%d", (110 - r_ptr->speed));
 
         sprintf(ac, "%d", r_ptr->ac);
-        if ((r_ptr->flags1 & (RF1_FORCE_MAXHP)) || (r_ptr->hside == 1))
+        if (any_bits(r_ptr->flags1, RF1_FORCE_MAXHP) || (r_ptr->hside == 1))
             sprintf(hp, "%d", r_ptr->hdice * r_ptr->hside);
         else
             sprintf(hp, "%dd%d", r_ptr->hdice, r_ptr->hside);
@@ -213,7 +213,7 @@ spoiler_output_status spoil_mon_info(concptr fname)
     for (int i = 0; i < n; i++) {
         monster_race *r_ptr = &r_info[who[i]];
         BIT_FLAGS flags1 = r_ptr->flags1;
-        if (flags1 & (RF1_UNIQUE)) {
+        if (any_bits(flags1, RF1_UNIQUE)) {
             spoil_out("[U] ");
         } else {
 #ifdef JP
@@ -241,7 +241,7 @@ spoiler_output_status spoil_mon_info(concptr fname)
             sprintf(buf, "Spd:-%d  ", (110 - r_ptr->speed));
 
         spoil_out(buf);
-        if ((flags1 & (RF1_FORCE_MAXHP)) || (r_ptr->hside == 1))
+        if (any_bits(flags1, RF1_FORCE_MAXHP) || (r_ptr->hside == 1))
             sprintf(buf, "Hp:%d  ", r_ptr->hdice * r_ptr->hside);
         else
             sprintf(buf, "Hp:%dd%d  ", r_ptr->hdice, r_ptr->hside);
