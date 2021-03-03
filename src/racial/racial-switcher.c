@@ -74,6 +74,7 @@
 #include "status/buff-setter.h"
 #include "status/experience.h"
 #include "target/target-getter.h"
+#include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
@@ -128,7 +129,7 @@ bool switch_class_racial_execution(player_type *creature_ptr, const s32b command
     case CLASS_CHAOS_WARRIOR:
         return confusing_light(creature_ptr);
     case CLASS_MONK:
-        if (!(empty_hands(creature_ptr, TRUE) & EMPTY_HAND_MAIN)) {
+        if (none_bits(empty_hands(creature_ptr, TRUE), EMPTY_HAND_MAIN)) {
             msg_print(_("素手じゃないとできません。", "You need to be barehanded."));
             return FALSE;
         }
@@ -142,7 +143,7 @@ bool switch_class_racial_execution(player_type *creature_ptr, const s32b command
             if (!choose_monk_stance(creature_ptr))
                 return FALSE;
 
-            creature_ptr->update |= PU_BONUS;
+            set_bits(creature_ptr->update, PU_BONUS);
             return TRUE;
         }
 
@@ -222,7 +223,7 @@ bool switch_class_racial_execution(player_type *creature_ptr, const s32b command
         if (!choose_kata(creature_ptr))
             return FALSE;
 
-        creature_ptr->update |= PU_BONUS;
+        set_bits(creature_ptr->update, PU_BONUS);
         return TRUE;
     case CLASS_BLUE_MAGE:
         set_action(creature_ptr, creature_ptr->action == ACTION_LEARN ? ACTION_NONE : ACTION_LEARN);
@@ -299,7 +300,7 @@ bool switch_race_racial_execution(player_type *creature_ptr, const s32b command)
             reserve_alter_reality(creature_ptr, randint0(21) + 15);
             return TRUE;
         }
-        
+
         if (command != -2)
             return TRUE;
 
