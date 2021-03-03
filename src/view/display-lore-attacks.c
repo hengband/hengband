@@ -3,6 +3,7 @@
 #include "lore/lore-calculator.h"
 #include "monster-attack/monster-attack-types.h"
 #include "monster-race/race-flags1.h"
+#include "term/term-color-types.h"
 #ifdef JP
 #include "locale/japanese.h"
 #endif
@@ -15,12 +16,14 @@ static void display_monster_blows_jp(lore_type *lore_ptr, int attack_numbers, in
     }
 
     if (d1 && d2 && (lore_ptr->know_everything || know_damage(lore_ptr->r_idx, m))) {
-        hooked_roff(format(" %dd%d ", d1, d2));
+        hook_c_roff(TERM_L_WHITE, format(" %dd%d ", d1, d2));
         hooked_roff("のダメージで");
     }
 
-    if (!lore_ptr->p)
+    if (!lore_ptr->p) {
         lore_ptr->p = "何か奇妙なことをする";
+        lore_ptr->pc = TERM_VIOLET;
+    }
 
     /* XXしてYYし/XXしてYYする/XXし/XXする */
     if (lore_ptr->q != NULL)
@@ -30,13 +33,15 @@ static void display_monster_blows_jp(lore_type *lore_ptr, int attack_numbers, in
     else
         strcpy(lore_ptr->jverb_buf, lore_ptr->p);
 
-    hooked_roff(lore_ptr->jverb_buf);
+    hook_c_roff(lore_ptr->pc, lore_ptr->jverb_buf);
+
     if (lore_ptr->q) {
         if (attack_numbers != lore_ptr->count - 1)
             jverb(lore_ptr->q, lore_ptr->jverb_buf, JVERB_AND);
         else
             strcpy(lore_ptr->jverb_buf, lore_ptr->q);
-        hooked_roff(lore_ptr->jverb_buf);
+
+        hook_c_roff(lore_ptr->qc, lore_ptr->jverb_buf);
     }
 
     if (attack_numbers != lore_ptr->count - 1)
@@ -54,16 +59,18 @@ static void display_monster_blows_en(lore_type *lore_ptr, int attack_numbers, in
         hooked_roff(", and ");
     }
 
-    if (lore_ptr->p == NULL)
+    if (lore_ptr->p == NULL) {
         lore_ptr->p = "do something weird";
+        lore_ptr->pc = TERM_VIOLET;
+    }
 
-    hooked_roff(lore_ptr->p);
+    hook_c_roff(lore_ptr->pc, lore_ptr->p);
     if (lore_ptr->q != NULL) {
         hooked_roff(" to ");
-        hooked_roff(lore_ptr->q);
+        hook_c_roff(lore_ptr->qc, lore_ptr->q);
         if (d1 && d2 && (lore_ptr->know_everything || know_damage(lore_ptr->r_idx, m))) {
             hooked_roff(" with damage");
-            hooked_roff(format(" %dd%d", d1, d2));
+            hook_c_roff(TERM_L_WHITE, format(" %dd%d", d1, d2));
         }
     }
 }

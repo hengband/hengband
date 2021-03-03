@@ -43,7 +43,9 @@ typedef struct lore_type {
     int drop_quantity;
     concptr drop_quality;
     concptr p;
+    byte pc;
     concptr q;
+    byte qc;
     rbm_type method;
     int count;
 } lore_type;
