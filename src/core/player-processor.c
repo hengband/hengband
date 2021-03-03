@@ -43,6 +43,7 @@
 #include "status/action-setter.h"
 #include "system/floor-type-definition.h"
 #include "term/screen-processor.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "window/display-sub-windows.h"
 #include "world/world-turn-processor.h"
@@ -315,43 +316,34 @@ void process_player(player_type *creature_ptr)
                 m_ptr = &creature_ptr->current_floor_ptr->m_list[m_idx];
                 if (!monster_is_valid(m_ptr))
                     continue;
-                if (!m_ptr->ml)
-                    continue;
 
                 r_ptr = &r_info[m_ptr->ap_r_idx];
-                if (!(r_ptr->flags1 & (RF1_ATTR_MULTI | RF1_SHAPECHANGER)))
-                    continue;
 
-                lite_spot(creature_ptr, m_ptr->fy, m_ptr->fx);
-            }
+                // モンスターのシンボル/カラーの更新
+                if (m_ptr->ml && any_bits(r_ptr->flags1, (RF1_ATTR_MULTI | RF1_SHAPECHANGER))) {
+                    lite_spot(creature_ptr, m_ptr->fy, m_ptr->fx);
+                }
 
-            if (repair_monsters) {
-                repair_monsters = FALSE;
-                for (MONSTER_IDX m_idx = 1; m_idx < creature_ptr->current_floor_ptr->m_max; m_idx++) {
-                    monster_type *m_ptr;
-                    m_ptr = &creature_ptr->current_floor_ptr->m_list[m_idx];
-                    if (!monster_is_valid(m_ptr))
-                        continue;
+                // 出現して即魔法を使わないようにするフラグを落とす処理
+                if (m_ptr->mflag & MFLAG_PREVENT_MAGIC) {
+                    m_ptr->mflag &= ~(MFLAG_PREVENT_MAGIC);
+                }
 
-                    if (m_ptr->mflag & MFLAG_PREVENT_MAGIC) {
-                        m_ptr->mflag &= ~(MFLAG_PREVENT_MAGIC);
-                    }
+                // 感知中のモンスターのフラグを落とす処理
+                // 感知したターンはMFLAG2_SHOWを落とし、次のターンに感知中フラグのMFLAG2_MARKを落とす
+                if (m_ptr->mflag2 & MFLAG2_MARK) {
+                    if (m_ptr->mflag2 & MFLAG2_SHOW) {
+                        m_ptr->mflag2 &= ~(MFLAG2_SHOW);
+                    } else {
+                        m_ptr->mflag2 &= ~(MFLAG2_MARK);
+                        m_ptr->ml = FALSE;
+                        update_monster(creature_ptr, m_idx, FALSE);
+                        if (creature_ptr->health_who == m_idx)
+                            creature_ptr->redraw |= (PR_HEALTH);
+                        if (creature_ptr->riding == m_idx)
+                            creature_ptr->redraw |= (PR_UHEALTH);
 
-                    if (m_ptr->mflag2 & MFLAG2_MARK) {
-                        if (m_ptr->mflag2 & MFLAG2_SHOW) {
-                            m_ptr->mflag2 &= ~(MFLAG2_SHOW);
-                            repair_monsters = TRUE;
-                        } else {
-                            m_ptr->mflag2 &= ~(MFLAG2_MARK);
-                            m_ptr->ml = FALSE;
-                            update_monster(creature_ptr, m_idx, FALSE);
-                            if (creature_ptr->health_who == m_idx)
-                                creature_ptr->redraw |= (PR_HEALTH);
-                            if (creature_ptr->riding == m_idx)
-                                creature_ptr->redraw |= (PR_UHEALTH);
-
-                            lite_spot(creature_ptr, m_ptr->fy, m_ptr->fx);
-                        }
+                        lite_spot(creature_ptr, m_ptr->fy, m_ptr->fx);
                     }
                 }
             }

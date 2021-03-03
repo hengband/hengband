@@ -69,7 +69,6 @@ void process_dungeon(player_type *player_ptr, bool load_game)
     player_ptr->riding_t_m_idx = 0;
     player_ptr->ambush_flag = FALSE;
     health_track(player_ptr, 0);
-    repair_monsters = TRUE;
 
     disturb(player_ptr, TRUE, TRUE);
     int quest_num = quest_num = quest_number(player_ptr, floor_ptr->dun_level);

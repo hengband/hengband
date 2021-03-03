@@ -359,7 +359,6 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
 
     if ((r_ptr->flags1 & RF1_PREVENT_SUDDEN_MAGIC) && !ironman_nightmare) {
         m_ptr->mflag |= (MFLAG_PREVENT_MAGIC);
-        repair_monsters = TRUE;
     }
 
     if (g_ptr->m_idx < hack_m_idx) {

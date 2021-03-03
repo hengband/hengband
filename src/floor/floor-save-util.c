@@ -6,7 +6,6 @@
  */
 u32b saved_floor_file_sign;
 saved_floor_type saved_floors[MAX_SAVED_FLOORS];
-bool repair_monsters;
 FLOOR_IDX max_floor_id; /*!< Number of floor_id used from birth */
 FLOOR_IDX new_floor_id; /*!<次のフロアのID / floor_id of the destination */
 u32b latest_visit_mark; /*!<フロアを渡った回数？(確認中) / Max number of visit_mark */
