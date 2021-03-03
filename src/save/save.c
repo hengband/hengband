@@ -298,7 +298,7 @@ bool save_player(player_type *player_ptr, save_type type)
         result = TRUE;
     }
 
-    if (type != SAVE_TYPE_CLOSE_GAME) {
+    if (type == SAVE_TYPE_CONTINUE_GAME) {
         current_world_ptr->is_loading_now = FALSE;
         update_creature(player_ptr);
         mproc_init(player_ptr->current_floor_ptr);
