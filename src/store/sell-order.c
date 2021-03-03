@@ -2,7 +2,9 @@
 #include "action/weapon-shield.h"
 #include "autopick/autopick.h"
 #include "core/asking-player.h"
+#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
@@ -37,6 +39,7 @@
 #include "view/display-messages.h"
 #include "view/display-store.h"
 #include "view/object-describer.h"
+#include "util/bit-flags-calculator.h"
 #include "world/world.h"
 
 /*!
@@ -297,7 +300,6 @@ void store_sell(player_type *owner_ptr)
                 autopick_alter_item(owner_ptr, item, FALSE);
 
             inven_item_optimize(owner_ptr, item);
-            handle_stuff(owner_ptr);
             int item_pos = store_carry(owner_ptr, q_ptr);
             if (item_pos >= 0) {
                 store_top = (item_pos / store_bottom) * store_bottom;
@@ -324,7 +326,6 @@ void store_sell(player_type *owner_ptr)
         choice = 0;
 
         vary_item(owner_ptr, item, -amt);
-        handle_stuff(owner_ptr);
 
         int item_pos = home_carry(owner_ptr, q_ptr);
         if (item_pos >= 0) {
@@ -336,13 +337,16 @@ void store_sell(player_type *owner_ptr)
         msg_format(_("%sを置いた。(%c)", "You drop %s (%c)."), o_name, index_to_label(item));
         choice = 0;
         vary_item(owner_ptr, item, -amt);
-        handle_stuff(owner_ptr);
         int item_pos = home_carry(owner_ptr, q_ptr);
         if (item_pos >= 0) {
             store_top = (item_pos / store_bottom) * store_bottom;
             display_store_inventory(owner_ptr);
         }
     }
+
+    set_bits(owner_ptr->update, PU_BONUS);
+    set_bits(owner_ptr->window_flags, PW_PLAYER);
+    handle_stuff(owner_ptr);
 
     if ((choice == 0) && (item >= INVEN_MAIN_HAND)) {
         calc_android_exp(owner_ptr);

@@ -284,10 +284,10 @@ void do_cmd_wield(player_type *creature_ptr)
     if ((o_ptr->name1 == ART_STONEMASK) && (creature_ptr->prace != RACE_VAMPIRE) && (creature_ptr->prace != RACE_ANDROID))
         change_race(creature_ptr, RACE_VAMPIRE, "");
 
+    calc_android_exp(creature_ptr);
     creature_ptr->update |= PU_BONUS | PU_TORCH | PU_MANA;
     creature_ptr->redraw |= PR_EQUIPPY;
     creature_ptr->window_flags |= PW_INVEN | PW_EQUIP | PW_PLAYER;
-    calc_android_exp(creature_ptr);
 }
 
 /*!
@@ -332,5 +332,7 @@ void do_cmd_takeoff(player_type *creature_ptr)
     (void)inven_takeoff(creature_ptr, item, 255);
     verify_equip_slot(creature_ptr, item);
     calc_android_exp(creature_ptr);
+    creature_ptr->update |= PU_BONUS | PU_TORCH | PU_MANA;
     creature_ptr->redraw |= PR_EQUIPPY;
+    creature_ptr->window_flags |= PW_INVEN | PW_EQUIP | PW_PLAYER;
 }
