@@ -1656,7 +1656,8 @@ static errr term_xtra_win(int n, int v)
     case TERM_XTRA_MUSIC_BASIC:
     case TERM_XTRA_MUSIC_DUNGEON:
     case TERM_XTRA_MUSIC_QUEST:
-    case TERM_XTRA_MUSIC_TOWN: {
+    case TERM_XTRA_MUSIC_TOWN:
+    case TERM_XTRA_MUSIC_MUTE: {
         return (term_xtra_win_music(n, v));
     }
     case TERM_XTRA_SOUND: {
