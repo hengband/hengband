@@ -34,6 +34,39 @@
 
 static BIT_FLAGS check_equipment_flags(player_type *creature_ptr, tr_type tr_flag);
 
+static BIT_FLAGS convert_inventory_slot_type_to_flag_cause(inventory_slot_type inventory_slot)
+{
+    switch (inventory_slot) {
+    case INVEN_MAIN_HAND:
+        return FLAG_CAUSE_INVEN_MAIN_HAND;
+    case INVEN_SUB_HAND:
+        return FLAG_CAUSE_INVEN_SUB_HAND;
+    case INVEN_BOW:
+        return FLAG_CAUSE_INVEN_BOW;
+    case INVEN_MAIN_RING:
+        return FLAG_CAUSE_INVEN_MAIN_RING;
+    case INVEN_SUB_RING:
+        return FLAG_CAUSE_INVEN_SUB_RING;
+    case INVEN_NECK:
+        return FLAG_CAUSE_INVEN_NECK;
+    case INVEN_LITE:
+        return FLAG_CAUSE_INVEN_LITE;
+    case INVEN_BODY:
+        return FLAG_CAUSE_INVEN_BODY;
+    case INVEN_OUTER:
+        return FLAG_CAUSE_INVEN_OUTER;
+    case INVEN_HEAD:
+        return FLAG_CAUSE_INVEN_HEAD;
+    case INVEN_ARMS:
+        return FLAG_CAUSE_INVEN_ARMS;
+    case INVEN_FEET:
+        return FLAG_CAUSE_INVEN_FEET;
+
+    default:
+        return 0;
+    }
+}
+
 /*!
  * @brief 装備による所定の特性フラグを得ているかを一括して取得する関数。
  */
@@ -50,7 +83,7 @@ static BIT_FLAGS check_equipment_flags(player_type *creature_ptr, tr_type tr_fla
         object_flags(creature_ptr, o_ptr, flgs);
 
         if (has_flag(flgs, tr_flag))
-            result |= 0x01U << (i - INVEN_MAIN_HAND);
+            set_bits(result, convert_inventory_slot_type_to_flag_cause(i));
     }
     return result;
 }
@@ -560,7 +593,6 @@ BIT_FLAGS has_esp_telepathy(player_type *creature_ptr)
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
-
     if (creature_ptr->muta3 & MUT3_ESP) {
         result |= FLAG_CAUSE_MUTATION;
     }
@@ -683,7 +715,7 @@ BIT_FLAGS has_warning(player_type *creature_ptr)
 
         if (has_flag(flgs, TR_WARNING)) {
             if (!o_ptr->inscription || !(angband_strchr(quark_str(o_ptr->inscription), '$')))
-                result |= 0x01U << (i - INVEN_MAIN_HAND);
+                set_bits(result, convert_inventory_slot_type_to_flag_cause(i));
         }
     }
     return result;
