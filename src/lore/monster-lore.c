@@ -209,6 +209,6 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, monster_lo
     display_monster_immunities(lore_ptr);
     display_monster_alert(lore_ptr);
     display_monster_drops(lore_ptr);
-    display_monster_attacks(lore_ptr);
+    display_monster_blows(lore_ptr);
     display_monster_guardian(lore_ptr);
 }
