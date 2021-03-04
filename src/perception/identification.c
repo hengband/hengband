@@ -162,6 +162,10 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         }
     }
 
+    if ((o_ptr->tval == TV_SWORD) && ((o_ptr->sval == SV_MAIN_GAUCHE) || (o_ptr->sval == SV_WAKIZASHI))) {
+        info[i++] = _("それは二刀流の利き腕でない方に用いると扱いやすい。", "It is suitable for your non-dominant hand weapon of the dual wielding.");
+    }
+
     if (has_flag(flgs, TR_STR)) {
         info[i++] = _("それは腕力に影響を及ぼす。", "It affects your strength.");
     }
