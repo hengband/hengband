@@ -355,8 +355,8 @@ static bool is_ascii_str(concptr str)
 #include <iconv.h>
 
 static const struct ms_to_jis_unicode_conv_t {
-    char from[3];
-    char to[3];
+    unsigned char from[3];
+    unsigned char to[3];
 } ms_to_jis_unicode_conv[] = {
     { { 0xef, 0xbd, 0x9e }, { 0xe3, 0x80, 0x9c } }, /* FULLWIDTH TILDE -> WAVE DASH */
     { { 0xef, 0xbc, 0x8d }, { 0xe2, 0x88, 0x92 } }, /* FULLWIDTH HYPHEN-MINUS -> MINUS SIGN */

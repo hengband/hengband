@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum race_flags2 {
+enum race_flags2 {
 	RF2_STUPID = 0x00000001, /*!< モンスター特性: 愚かな行動を取る / Monster is stupid */
     RF2_SMART = 0x00000002, /*!< モンスター特性: 賢い行動を取る / Monster is smart */
     RF2_CAN_SPEAK = 0x00000004, /*!< モンスター特性: 台詞をしゃべる / TY: can speak */
@@ -33,4 +33,4 @@ typedef enum race_flags2 {
     RF2_XXX6 = 0x20000000, /*!< モンスター特性: 未使用 / XXX */
     RF2_HUMAN = 0x40000000, /*!< モンスター特性: 人間 / Human */
     RF2_QUANTUM = 0x80000000, /*!< モンスター特性: 量子的な振る舞いをする / Monster has quantum behavior */
-} race_flags2;
+};

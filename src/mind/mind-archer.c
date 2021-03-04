@@ -24,12 +24,12 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
-typedef enum ammo_creation_type {
+enum ammo_creation_type {
     AMMO_NONE = 0,
     AMMO_SHOT = 1,
     AMMO_ARROW = 2,
     AMMO_BOLT = 3,
-} ammo_creation_type;
+};
 
 /*!
  * @brief「弾/矢の製造」処理 / do_cmd_cast calls this function if the player's class is 'archer'.
@@ -115,7 +115,7 @@ bool create_ammo(player_type *creature_ptr)
         concptr q = _("どのアイテムから作りますか？ ", "Convert which item? ");
         concptr s = _("材料を持っていない。", "You have no item to convert.");
         OBJECT_IDX item;
-        object_type *q_ptr = choose_object(creature_ptr, &item, q, s, USE_INVEN | USE_FLOOR, 0);
+        object_type *q_ptr = choose_object(creature_ptr, &item, q, s, USE_INVEN | USE_FLOOR, TV_NONE);
         if (!q_ptr)
             return FALSE;
 
@@ -142,7 +142,7 @@ bool create_ammo(player_type *creature_ptr)
         concptr q = _("どのアイテムから作りますか？ ", "Convert which item? ");
         concptr s = _("材料を持っていない。", "You have no item to convert.");
         OBJECT_IDX item;
-        object_type *q_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
+        object_type *q_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_NONE);
         if (!q_ptr)
             return FALSE;
 

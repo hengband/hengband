@@ -7,7 +7,7 @@ typedef bool (*monsterrace_hook_type)(player_type *, MONRACE_IDX);
 extern MONSTER_IDX hack_m_idx;
 extern MONSTER_IDX hack_m_idx_ii;
 extern int chameleon_change_m_idx;
-typedef enum summon_type summon_type;
+enum summon_type : int;
 extern summon_type summon_specific_type;
 
 monsterrace_hook_type get_monster_hook(player_type *player_ptr);

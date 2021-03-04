@@ -21,7 +21,7 @@ void display_life_rating(player_type *creature_ptr, self_info_type *self_ptr)
 void display_max_base_status(player_type *creature_ptr, self_info_type *self_ptr)
 {
     self_ptr->info[self_ptr->line++] = _("能力の最大値", "Limits of maximum stats");
-    for (base_status_type v_nr = 0; v_nr < A_MAX; v_nr++) {
+    for (int v_nr = 0; v_nr < A_MAX; v_nr++) {
         char stat_desc[80];
         sprintf(stat_desc, "%s 18/%d", stat_names[v_nr], creature_ptr->stat_max_max[v_nr] - 18);
         strcpy(self_ptr->s_string[v_nr], stat_desc);

@@ -64,7 +64,7 @@ static bool py_pickup_floor_aux(player_type *owner_ptr)
     item_tester_hook = check_store_item_to_inventory;
     concptr q = _("どれを拾いますか？", "Get which item? ");
     concptr s = _("もうザックには床にあるどのアイテムも入らない。", "You no longer have any room for the objects on the floor.");
-    if (choose_object(owner_ptr, &item, q, s, (USE_FLOOR), 0))
+    if (choose_object(owner_ptr, &item, q, s, (USE_FLOOR), TV_NONE))
         this_o_idx = 0 - item;
     else
         return FALSE;

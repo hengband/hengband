@@ -237,12 +237,12 @@ void window_stuff(player_type *player_ptr)
 
     if (window_flags & (PW_INVEN)) {
         player_ptr->window_flags &= ~(PW_INVEN);
-        fix_inventory(player_ptr, 0); // TODO:2.2.2 まともなtval参照手段を確保
+        fix_inventory(player_ptr, TV_NONE); // TODO:2.2.2 まともなtval参照手段を確保
     }
 
     if (window_flags & (PW_EQUIP)) {
         player_ptr->window_flags &= ~(PW_EQUIP);
-        fix_equip(player_ptr, 0); // TODO:2.2.2 まともなtval参照手段を確保
+        fix_equip(player_ptr, TV_NONE); // TODO:2.2.2 まともなtval参照手段を確保
     }
 
     if (window_flags & (PW_SPELL)) {

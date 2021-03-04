@@ -84,10 +84,10 @@ errr init_buildings(void)
         }
 
         for (int j = 0; j < MAX_CLASS; j++)
-            building[i].member_class[j] = 0;
+            building[i].member_class[j] = CLASS_WARRIOR;
 
         for (int j = 0; j < MAX_RACES; j++)
-            building[i].member_race[j] = 0;
+            building[i].member_race[j] = RACE_HUMAN;
 
         for (int j = 0; j < MAX_MAGIC + 1; j++)
             building[i].member_realm[j] = 0;

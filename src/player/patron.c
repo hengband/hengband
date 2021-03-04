@@ -291,7 +291,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
             msg_print(_("「我が下僕たちよ、かの傲慢なる者を倒すべし！」", "'My pets, destroy the arrogant mortal!'"));
 
             for (int i = 0, summon_num = randint1(5) + 1; i < summon_num; i++) {
-                (void)summon_specific(creature_ptr, 0, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, 0,
+                (void)summon_specific(creature_ptr, 0, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_NONE,
                     (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
             }
             reward = _("モンスターを召喚された。", "summoning hostile monsters");
@@ -342,7 +342,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
             msg_print(_("「汝、謙虚たることを学ぶべし！」", "'Thou needst a lesson in humility, mortal!'"));
             msg_print(_("あなたは以前より弱くなった！", "You feel less powerful!"));
 
-            for (base_status_type stat = 0; stat < A_MAX; stat++) {
+            for (int stat = 0; stat < A_MAX; stat++) {
                 (void)dec_stat(creature_ptr, stat, 10 + randint1(15), TRUE);
             }
             reward = _("全能力値が下がった。", "decreasing all stats");
@@ -361,7 +361,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 
             msg_print(_("「我がささやかなる賜物を受けとるがよい！」", "'Receive this modest gift from me!'"));
 
-            for (base_status_type stat = 0; stat < A_MAX; stat++) {
+            for (int stat = 0; stat < A_MAX; stat++) {
                 (void)do_inc_stat(creature_ptr, stat);
             }
             reward = _("全能力値が上がった。", "increasing all stats");
@@ -455,7 +455,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
                 }
                 break;
             default:
-                for (base_status_type stat = 0; stat < A_MAX; stat++) {
+                for (int stat = 0; stat < A_MAX; stat++) {
                     (void)dec_stat(creature_ptr, stat, 10 + randint1(15), TRUE);
                 }
                 reward = _("全能力値が下がった。", "decreasing all stats");
@@ -469,13 +469,13 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
             msg_print(_("「死ぬがよい、下僕よ！」", "'Die, mortal!'"));
 
             take_hit(creature_ptr, DAMAGE_LOSELIFE, creature_ptr->lev * 4, wrath_reason, -1);
-            for (base_status_type stat = 0; stat < A_MAX; stat++) {
+            for (int stat = 0; stat < A_MAX; stat++) {
                 (void)dec_stat(creature_ptr, stat, 10 + randint1(15), FALSE);
             }
             activate_hi_summon(creature_ptr, creature_ptr->y, creature_ptr->x, FALSE);
             (void)activate_ty_curse(creature_ptr, FALSE, &count);
             if (one_in_(2)) {
-                inventory_slot_type slot = 0;
+                inventory_slot_type slot = INVEN_NONE;
 
                 if (has_melee_weapon(creature_ptr, INVEN_MAIN_HAND)) {
                     slot = INVEN_MAIN_HAND;
@@ -542,7 +542,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
         case REW_SER_MONS:
             msg_format(_("%sは褒美として使いをよこした！", "%s rewards you with a servant!"), chaos_patrons[creature_ptr->chaos_patron]);
 
-            if (!summon_specific(creature_ptr, -1, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, 0, PM_FORCE_PET))
+            if (!summon_specific(creature_ptr, -1, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_NONE, PM_FORCE_PET))
                 msg_print(_("何も現れなかった...", "Nobody ever turns up..."));
             else
                 reward = _("モンスターがペットになった。", "a servant");

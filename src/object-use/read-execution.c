@@ -137,7 +137,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
         }
         case SV_SCROLL_SUMMON_MONSTER: {
             for (k = 0; k < randint1(3); k++) {
-                if (summon_specific(creature_ptr, 0, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, 0,
+                if (summon_specific(creature_ptr, 0, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_NONE,
                         PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)) {
                     ident = TRUE;
                 }
@@ -157,7 +157,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
         }
         case SV_SCROLL_SUMMON_PET: {
             if (summon_specific(
-                    creature_ptr, -1, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, 0, PM_ALLOW_GROUP | PM_FORCE_PET))
+                    creature_ptr, -1, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_NONE, PM_ALLOW_GROUP | PM_FORCE_PET))
                 ident = TRUE;
 
             break;
@@ -197,14 +197,14 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
             break;
         }
         case SV_SCROLL_IDENTIFY: {
-            if (!ident_spell(creature_ptr, FALSE, 0))
+            if (!ident_spell(creature_ptr, FALSE, TV_NONE))
                 used_up = FALSE;
 
             ident = TRUE;
             break;
         }
         case SV_SCROLL_STAR_IDENTIFY: {
-            if (!identify_fully(creature_ptr, FALSE, 0))
+            if (!identify_fully(creature_ptr, FALSE, TV_NONE))
                 used_up = FALSE;
 
             ident = TRUE;

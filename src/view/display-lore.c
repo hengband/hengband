@@ -383,7 +383,7 @@ void display_monster_exp(player_type *player_ptr, lore_type *lore_ptr)
 #else
     hooked_roff(format(" is worth about %ld.%02ld point%s", exp_integer, exp_decimal, ((exp_integer == 1) && (exp_decimal == 0)) ? "" : "s"));
 
-    char *ordinal;
+    concptr ordinal;
     ordinal = "th";
     exp_integer = player_ptr->lev % 10;
     if ((player_ptr->lev / 10) != 1) {
@@ -395,7 +395,7 @@ void display_monster_exp(player_type *player_ptr, lore_type *lore_ptr)
             ordinal = "rd";
     }
 
-    char *vowel;
+    concptr vowel;
     vowel = "";
     exp_integer = player_ptr->lev;
     if ((exp_integer == 8) || (exp_integer == 11) || (exp_integer == 18))

@@ -84,7 +84,7 @@ void change_race(player_type *creature_ptr, player_race_type new_race, concptr e
     else
         creature_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
 
-    roll_hitdice(creature_ptr, 0L);
+    roll_hitdice(creature_ptr, SPOP_NONE);
     check_experience(creature_ptr);
     creature_ptr->redraw |= (PR_BASIC);
     creature_ptr->update |= (PU_BONUS);
@@ -177,7 +177,7 @@ void do_poly_self(player_type *creature_ptr)
         power -= 10;
 
         get_max_stats(creature_ptr);
-        roll_hitdice(creature_ptr, 0L);
+        roll_hitdice(creature_ptr, SPOP_NONE);
     }
 
     while ((power > randint0(15)) && one_in_(3)) {

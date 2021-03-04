@@ -50,7 +50,7 @@ static bool check_floor_item_tag_aux(player_type *owner_ptr, fis_type *fis_ptr, 
             = scan_floor_items(owner_ptr, fis_ptr->floor_list, owner_ptr->y, owner_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, fis_ptr->tval);
         if (get_tag_floor(owner_ptr->current_floor_ptr, &fis_ptr->k, *prev_tag, fis_ptr->floor_list, fis_ptr->floor_num)) {
             *fis_ptr->cp = 0 - fis_ptr->floor_list[fis_ptr->k];
-            fis_ptr->tval = 0;
+            fis_ptr->tval = TV_NONE;
             item_tester_hook = NULL;
             command_cmd = 0;
             return TRUE;
@@ -63,7 +63,7 @@ static bool check_floor_item_tag_aux(player_type *owner_ptr, fis_type *fis_ptr, 
     if (!item_tester_okay(owner_ptr, &owner_ptr->current_floor_ptr->o_list[0 - (*fis_ptr->cp)], fis_ptr->tval) && ((fis_ptr->mode & USE_FULL) == 0))
         return FALSE;
 
-    fis_ptr->tval = 0;
+    fis_ptr->tval = TV_NONE;
     item_tester_hook = NULL;
     command_cmd = 0;
     return TRUE;
@@ -118,7 +118,7 @@ static bool check_floor_item_tag_inventory(player_type *owner_ptr, fis_type *fis
         return get_floor_item_tag_inventory(owner_ptr, fis_ptr, prev_tag);
 
     if (get_item_okay(owner_ptr, *fis_ptr->cp, fis_ptr->tval)) {
-        fis_ptr->tval = 0;
+        fis_ptr->tval = TV_NONE;
         item_tester_hook = NULL;
         command_cmd = 0;
         return TRUE;
@@ -140,7 +140,7 @@ static bool check_floor_item_tag(player_type *owner_ptr, fis_type *fis_ptr, char
         return FALSE;
 
     if (fis_ptr->force && (*fis_ptr->cp == INVEN_FORCE)) {
-        fis_ptr->tval = 0;
+        fis_ptr->tval = TV_NONE;
         item_tester_hook = NULL;
         command_cmd = 0;
         return TRUE;
@@ -189,7 +189,7 @@ static void test_equipment_floor(player_type *owner_ptr, fis_type *fis_ptr)
     if (!use_menu)
         return;
 
-    for (inventory_slot_type i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++)
+    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++)
         if (owner_ptr->select_ring_slot ? is_ring_slot(i)
                                         : item_tester_okay(owner_ptr, &owner_ptr->inventory_list[i], fis_ptr->tval) || (fis_ptr->mode & USE_FULL))
             fis_ptr->max_equip++;
@@ -840,7 +840,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
         command_see = FALSE;
     }
 
-    fis_ptr->tval = 0;
+    fis_ptr->tval = TV_NONE;
     item_tester_hook = NULL;
     if (fis_ptr->toggle)
         toggle_inventory_equipment(owner_ptr);

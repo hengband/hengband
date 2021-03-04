@@ -215,7 +215,7 @@ void do_cmd_knowledge_kill_count(player_type *creature_ptr)
             continue;
 
 #ifdef JP
-        char *number_of_kills = angband_strchr("pt", r_ptr->d_char) ? "人" : "体";
+        concptr number_of_kills = angband_strchr("pt", r_ptr->d_char) ? "人" : "体";
         fprintf(fff, "     %3d %sの %s\n", (int)this_monster, number_of_kills, r_name + r_ptr->name);
 #else
         if (this_monster < 2) {

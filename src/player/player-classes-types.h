@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum player_class_type {
+enum player_class_type {
 	CLASS_WARRIOR = 0,
     CLASS_MAGE = 1,
     CLASS_PRIEST = 2,
@@ -30,4 +30,4 @@ typedef enum player_class_type {
     CLASS_NINJA = 26,
     CLASS_SNIPER = 27,
     MAX_CLASS = 28, /*!< 職業の最大定義数 Maximum number of player "class" types (see "table.c", etc) */
-} player_class_type;
+};

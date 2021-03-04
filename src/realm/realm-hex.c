@@ -189,7 +189,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             q = _("どれを呪いますか？", "Which weapon do you curse?");
             s = _("武器を装備していない。", "You're not wielding a weapon.");
 
-            o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP), 0);
+            o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP), TV_NONE);
             if (!o_ptr)
                 return FALSE;
 
@@ -496,7 +496,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             q = _("どれを呪いますか？", "Which piece of armour do you curse?");
             s = _("防具を装備していない。", "You're not wearing any armor.");
 
-            o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP), 0);
+            o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP), TV_NONE);
             if (!o_ptr)
                 return FALSE;
 
@@ -697,7 +697,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             q = _("どの装備品から吸収しますか？", "Which cursed equipment do you drain mana from?");
             s = _("呪われたアイテムを装備していない。", "You have no cursed equipment.");
 
-            o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP), 0);
+            o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP), TV_NONE);
             if (!o_ptr)
                 return FALSE;
 

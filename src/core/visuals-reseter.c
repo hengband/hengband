@@ -33,8 +33,8 @@ void reset_visuals(player_type *owner_ptr, void (*process_autopick_file_command)
         r_ptr->x_char = r_ptr->d_char;
     }
 
-    char *pref_file = use_graphics ? "graf.prf" : "font.prf";
-    char *base_name = use_graphics ? "graf-%s.prf" : "font-%s.prf";
+    concptr pref_file = use_graphics ? "graf.prf" : "font.prf";
+    concptr base_name = use_graphics ? "graf-%s.prf" : "font-%s.prf";
     char buf[1024];
     process_pref_file(owner_ptr, pref_file, process_autopick_file_command);
     sprintf(buf, base_name, owner_ptr->base_name);

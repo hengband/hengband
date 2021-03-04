@@ -243,22 +243,22 @@ void set_zangband_class(player_type *creature_ptr)
 {
     if (z_older_than(10, 2, 2) && (creature_ptr->pclass == CLASS_BEASTMASTER) && !creature_ptr->is_dead) {
         creature_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
-        roll_hitdice(creature_ptr, 0L);
+        roll_hitdice(creature_ptr, SPOP_NONE);
     }
 
     if (z_older_than(10, 3, 2) && (creature_ptr->pclass == CLASS_ARCHER) && !creature_ptr->is_dead) {
         creature_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
-        roll_hitdice(creature_ptr, 0L);
+        roll_hitdice(creature_ptr, SPOP_NONE);
     }
 
     if (z_older_than(10, 2, 6) && (creature_ptr->pclass == CLASS_SORCERER) && !creature_ptr->is_dead) {
         creature_ptr->hitdie = rp_ptr->r_mhp / 2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
-        roll_hitdice(creature_ptr, 0L);
+        roll_hitdice(creature_ptr, SPOP_NONE);
     }
 
     if (z_older_than(10, 4, 7) && (creature_ptr->pclass == CLASS_BLUE_MAGE) && !creature_ptr->is_dead) {
         creature_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
-        roll_hitdice(creature_ptr, 0L);
+        roll_hitdice(creature_ptr, SPOP_NONE);
     }
 }
 

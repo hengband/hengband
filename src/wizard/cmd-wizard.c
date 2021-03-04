@@ -142,7 +142,7 @@ void do_cmd_debug(player_type *creature_ptr)
 
         break;
     case 'f':
-        identify_fully(creature_ptr, FALSE, 0);
+        identify_fully(creature_ptr, FALSE, TV_NONE);
         break;
     case 'F':
         wiz_create_feature(creature_ptr);
@@ -154,13 +154,13 @@ void do_cmd_debug(player_type *creature_ptr)
         acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, FALSE, FALSE, TRUE);
         break;
     case 'h':
-        roll_hitdice(creature_ptr, SPOP_DISPLAY_MES | SPOP_DEBUG);
+        roll_hitdice(creature_ptr, static_cast<spell_operation>(SPOP_DISPLAY_MES | SPOP_DEBUG));
         break;
     case 'H':
         wiz_summon_horde(creature_ptr);
         break;
     case 'i':
-        (void)ident_spell(creature_ptr, FALSE, 0);
+        (void)ident_spell(creature_ptr, FALSE, TV_NONE);
         break;
     case 'j':
         wiz_jump_to_dungeon(creature_ptr);

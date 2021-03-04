@@ -32,7 +32,7 @@ bool bless_weapon(player_type *caster_ptr)
     concptr s = _("祝福できる武器がありません。", "You have weapon to bless.");
 
     OBJECT_IDX item;
-    object_type *o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, 0);
+    object_type *o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, TV_NONE);
     if (!o_ptr)
         return FALSE;
 

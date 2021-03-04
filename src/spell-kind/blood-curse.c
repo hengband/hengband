@@ -95,7 +95,7 @@ void blood_curse_to_enemy(player_type *caster_ptr, MONSTER_IDX m_idx)
                 mode |= (PM_NO_PET | PM_FORCE_FRIENDLY);
 
             count += summon_specific(caster_ptr, (pet ? -1 : 0), caster_ptr->y, caster_ptr->x,
-                (pet ? caster_ptr->lev * 2 / 3 + randint1(caster_ptr->lev / 2) : caster_ptr->current_floor_ptr->dun_level), 0, mode);
+                (pet ? caster_ptr->lev * 2 / 3 + randint1(caster_ptr->lev / 2) : caster_ptr->current_floor_ptr->dun_level), SUMMON_NONE, mode);
             if (!one_in_(6))
                 break;
         }

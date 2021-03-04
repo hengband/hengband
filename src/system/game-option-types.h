@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum game_option_types {
+enum game_option_types {
     OPT_PAGE_INPUT,
     OPT_PAGE_MAPSCREEN,
     OPT_PAGE_TEXT,
@@ -10,4 +10,4 @@ typedef enum game_option_types {
     OPT_PAGE_AUTODESTROY,
     OPT_PAGE_PLAYRECORD,
     OPT_PAGE_HIDE,
-} game_option_types;
+};

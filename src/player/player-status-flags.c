@@ -75,7 +75,7 @@ BIT_FLAGS check_equipment_flags(player_type *creature_ptr, tr_type tr_flag)
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     BIT_FLAGS result = 0L;
-    for (inventory_slot_type i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
@@ -83,7 +83,7 @@ BIT_FLAGS check_equipment_flags(player_type *creature_ptr, tr_type tr_flag)
         object_flags(creature_ptr, o_ptr, flgs);
 
         if (has_flag(flgs, tr_flag))
-            set_bits(result, convert_inventory_slot_type_to_flag_cause(i));
+            set_bits(result, convert_inventory_slot_type_to_flag_cause(static_cast<inventory_slot_type>(i)));
     }
     return result;
 }
@@ -697,7 +697,7 @@ BIT_FLAGS has_reflect(player_type *creature_ptr)
     return result;
 }
 
-BIT_FLAGS has_see_nocto(player_type *creature_ptr) { return creature_ptr->pclass == CLASS_NINJA ? FLAG_CAUSE_CLASS : 0L; }
+BIT_FLAGS has_see_nocto(player_type *creature_ptr) { return (creature_ptr->pclass == CLASS_NINJA) ? FLAG_CAUSE_CLASS : FLAG_CAUSE_NONE; }
 
 BIT_FLAGS has_warning(player_type *creature_ptr)
 {
@@ -705,7 +705,7 @@ BIT_FLAGS has_warning(player_type *creature_ptr)
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
 
-    for (inventory_slot_type i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
@@ -714,7 +714,7 @@ BIT_FLAGS has_warning(player_type *creature_ptr)
 
         if (has_flag(flgs, TR_WARNING)) {
             if (!o_ptr->inscription || !(angband_strchr(quark_str(o_ptr->inscription), '$')))
-                set_bits(result, convert_inventory_slot_type_to_flag_cause(i));
+                set_bits(result, convert_inventory_slot_type_to_flag_cause(static_cast<inventory_slot_type>(i)));
         }
     }
     return result;
@@ -1063,7 +1063,7 @@ BIT_FLAGS has_levitation(player_type *creature_ptr)
     if (creature_ptr->riding) {
         monster_type *riding_m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
         monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
-        result = (riding_r_ptr->flags7 & RF7_CAN_FLY) ? FLAG_CAUSE_RIDING : 0;
+        result = (riding_r_ptr->flags7 & RF7_CAN_FLY) ? FLAG_CAUSE_RIDING : FLAG_CAUSE_NONE;
     }
     return result;
 }
@@ -1166,7 +1166,7 @@ void update_curses(player_type *creature_ptr)
     if (creature_ptr->pseikaku == PERSONALITY_SEXY)
         creature_ptr->cursed |= (TRC_AGGRAVATE);
 
-    for (inventory_slot_type i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
@@ -1237,7 +1237,7 @@ void update_extra_blows(player_type *creature_ptr)
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     creature_ptr->extra_blows[0] = creature_ptr->extra_blows[1] = 0;
 
-    for (inventory_slot_type i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
@@ -2015,7 +2015,7 @@ bool has_not_ninja_weapon(player_type *creature_ptr, int i)
     if (!has_melee_weapon(creature_ptr, INVEN_MAIN_HAND + i)) {
         return FALSE;
     }
-    tval_type tval = creature_ptr->inventory_list[INVEN_MAIN_HAND + i].tval - TV_WEAPON_BEGIN;
+    int tval = creature_ptr->inventory_list[INVEN_MAIN_HAND + i].tval - TV_WEAPON_BEGIN;
     OBJECT_SUBTYPE_VALUE sval = creature_ptr->inventory_list[INVEN_MAIN_HAND + i].sval;
     return creature_ptr->pclass == CLASS_NINJA
         && !((s_info[CLASS_NINJA].w_max[tval][sval] > WEAPON_EXP_BEGINNER) && (creature_ptr->inventory_list[INVEN_SUB_HAND - i].tval != TV_SHIELD));
@@ -2026,7 +2026,7 @@ bool has_not_monk_weapon(player_type *creature_ptr, int i)
     if (!has_melee_weapon(creature_ptr, INVEN_MAIN_HAND + i)) {
         return FALSE;
     }
-    tval_type tval = creature_ptr->inventory_list[INVEN_MAIN_HAND + i].tval - TV_WEAPON_BEGIN;
+    int tval = creature_ptr->inventory_list[INVEN_MAIN_HAND + i].tval - TV_WEAPON_BEGIN;
     OBJECT_SUBTYPE_VALUE sval = creature_ptr->inventory_list[INVEN_MAIN_HAND + i].sval;
     return ((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER)) && !(s_info[creature_ptr->pclass].w_max[tval][sval]);
 }

@@ -64,7 +64,7 @@ static Vec vec_with_capacity(const size_t cap)
     assert(cap > 0);
 
     Vec vec = { .len = 0, .cap = cap, .data = NULL };
-    vec.data = malloc(sizeof(int) * cap);
+    vec.data = static_cast<int*>(malloc(sizeof(int) * cap));
     if (!vec.data)
         rpanic(cap);
 
@@ -104,7 +104,7 @@ static void vec_push_back(Vec *const vec, const int e)
     // 容量不足になったら容量を拡張する。
     if (vec->len == vec->cap) {
         vec->cap = vec->cap > 0 ? 2 * vec->cap : 1;
-        vec->data = realloc(vec->data, sizeof(int) * vec->cap);
+        vec->data = static_cast<int*>(realloc(vec->data, sizeof(int) * vec->cap));
         if (!vec->data)
             rpanic(vec->cap);
     }

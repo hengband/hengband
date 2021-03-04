@@ -414,7 +414,7 @@ process_result switch_effects_monster(player_type *caster_ptr, effect_monster_ty
     case GF_CAPTURE:
         return effect_monster_capture(caster_ptr, em_ptr);
     case GF_ATTACK:
-        return (process_result)do_cmd_attack(caster_ptr, em_ptr->y, em_ptr->x, em_ptr->dam);
+        return (process_result)do_cmd_attack(caster_ptr, em_ptr->y, em_ptr->x, static_cast<combat_options>(em_ptr->dam));
     case GF_ENGETSU:
         return effect_monster_engetsu(caster_ptr, em_ptr);
     case GF_GENOCIDE:

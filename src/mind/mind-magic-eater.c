@@ -21,7 +21,7 @@ bool import_magic_device(player_type *user_ptr)
     concptr q = _("どのアイテムの魔力を取り込みますか? ", "Gain power of which item? ");
     concptr s = _("魔力を取り込めるアイテムがない。", "There's nothing with power to absorb.");
     OBJECT_IDX item;
-    object_type *o_ptr = choose_object(user_ptr, &item, q, s, USE_INVEN | USE_FLOOR, 0);
+    object_type *o_ptr = choose_object(user_ptr, &item, q, s, USE_INVEN | USE_FLOOR, TV_NONE);
     if (!o_ptr)
         return FALSE;
 

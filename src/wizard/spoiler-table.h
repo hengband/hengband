@@ -29,8 +29,8 @@ typedef struct grouper {
  * the flag whose value is "1UL << N", but that requires hard-coding.
  */
 typedef struct flag_desc {
-    const tr_type flag;
-    concptr const desc;
+    tr_type flag;
+    concptr desc;
 } flag_desc;
 
 extern grouper group_item[MAX_GROUPER_ITEM];

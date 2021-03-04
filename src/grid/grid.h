@@ -178,7 +178,7 @@ extern bool check_local_illumination(player_type *creature_ptr, POSITION y, POSI
 extern bool cave_monster_teleportable_bold(player_type *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, teleport_flags mode);
 extern bool cave_player_teleportable_bold(player_type *player_ptr, POSITION y, POSITION x, teleport_flags mode);
 
-typedef enum grid_bold_type
+enum grid_bold_type
 {
 	GB_FLOOR,
 	GB_EXTRA,
@@ -190,7 +190,7 @@ typedef enum grid_bold_type
 	GB_SOLID,
 	GB_SOLID_PERM,
 	GB_SOLID_NOPERM
-} grid_bold_type;
+};
 
 void place_grid(player_type *player_ptr, grid_type *g_ptr, grid_bold_type pg_type);
 bool darkened_grid(player_type *player_ptr, grid_type *g_ptr);

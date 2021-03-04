@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum inventory_slot_type {
+enum inventory_slot_type {
     INVEN_PACK = 23, /*!< アイテムスロット…所持品(0～) */
     INVEN_MAIN_HAND = 24, /*!< アイテムスロット…利手 */
     INVEN_SUB_HAND = 25, /*!< アイテムスロット…逆手 */
@@ -18,4 +18,4 @@ typedef enum inventory_slot_type {
     INVEN_TOTAL = 36, /*!< Total number of inventory_list slots (hard-coded). */
     INVEN_NONE = 1000, /*!< アイテムスロット非選択状態 */
     INVEN_FORCE = 1111, /*!< inventory_list slot for selecting force (hard-coded). */
-} inventory_slot_type;
+};

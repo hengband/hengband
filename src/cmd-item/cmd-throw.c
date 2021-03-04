@@ -69,7 +69,7 @@ static bool check_throw_boomerang(player_type *creature_ptr, it_type *it_ptr, co
         item_tester_hook = item_tester_hook_boomerang;
         *q = _("どの武器を投げますか? ", "Throw which item? ");
         *s = _("投げる武器がない。", "You have nothing to throw.");
-        it_ptr->o_ptr = choose_object(creature_ptr, &it_ptr->item, *q, *s, USE_EQUIP, 0);
+        it_ptr->o_ptr = choose_object(creature_ptr, &it_ptr->item, *q, *s, USE_EQUIP, TV_NONE);
         if (!it_ptr->o_ptr) {
             flush();
             return FALSE;
@@ -103,7 +103,7 @@ static bool check_what_throw(player_type *creature_ptr, it_type *it_ptr)
 
     q = _("どのアイテムを投げますか? ", "Throw which item? ");
     s = _("投げるアイテムがない。", "You have nothing to throw.");
-    it_ptr->o_ptr = choose_object(creature_ptr, &it_ptr->item, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP, 0);
+    it_ptr->o_ptr = choose_object(creature_ptr, &it_ptr->item, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP, TV_NONE);
     if (!it_ptr->o_ptr) {
         flush();
         return FALSE;
@@ -284,7 +284,7 @@ static void calc_racial_power_damage(player_type *creature_ptr, it_type *it_ptr)
     int ds = it_ptr->q_ptr->ds;
     torch_dice(it_ptr->q_ptr, &dd, &ds);
     it_ptr->tdam = damroll(dd, ds);
-    it_ptr->tdam = calc_attack_damage_with_slay(creature_ptr, it_ptr->q_ptr, it_ptr->tdam, it_ptr->m_ptr, 0, TRUE);
+    it_ptr->tdam = calc_attack_damage_with_slay(creature_ptr, it_ptr->q_ptr, it_ptr->tdam, it_ptr->m_ptr, HISSATSU_NONE, TRUE);
     it_ptr->tdam = critical_shot(creature_ptr, it_ptr->q_ptr->weight, it_ptr->q_ptr->to_h, 0, it_ptr->tdam);
     if (it_ptr->q_ptr->to_d > 0)
         it_ptr->tdam += it_ptr->q_ptr->to_d;
@@ -364,7 +364,7 @@ void display_figurine_throw(player_type *creature_ptr, it_type *it_ptr)
         return;
 
     it_ptr->corruption_possibility = 100;
-    if (!(summon_named_creature(creature_ptr, 0, it_ptr->y, it_ptr->x, it_ptr->q_ptr->pval, !(object_is_cursed(it_ptr->q_ptr)) ? PM_FORCE_PET : 0L))) {
+    if (!(summon_named_creature(creature_ptr, 0, it_ptr->y, it_ptr->x, it_ptr->q_ptr->pval, !(object_is_cursed(it_ptr->q_ptr)) ? PM_FORCE_PET : PM_NONE))) {
         msg_print(_("人形は捻じ曲がり砕け散ってしまった！", "The Figurine writhes and then shatters."));
         return;
     }

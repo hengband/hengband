@@ -217,7 +217,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
             int k = str[7] - 'A';
             menu = TRUE;
             if ((str[8] == ']') && (str[9] == ' ')) {
-                strncpy(hook[k], str + 10, 31);
+                memcpy(hook[k], str + 10, 31);
                 hook[k][31] = '\0';
             }
 

@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 /* TRCが何の略かは分からない (type / ??? / curse)*/
-typedef enum trc_curse_type {
+enum trc_curse_type {
 	TRC_CURSED = 0x00000001L,
     TRC_HEAVY_CURSE = 0x00000002L,
     TRC_PERMA_CURSE = 0x00000004L,
@@ -24,9 +24,9 @@ typedef enum trc_curse_type {
     TRC_DRAIN_HP = 0x00080000L,
     TRC_DRAIN_MANA = 0x00100000L,
     TRC_CALL_UNDEAD = 0x00200000L,
-} trc_curse_type;
+};
 
-typedef enum trc_special_type {
+enum trc_special_type {
     TRC_TELEPORT_SELF = 0x00000001L,
     TRC_CHAINSWORD = 0x00000002L
-} trc_special_type;
+};

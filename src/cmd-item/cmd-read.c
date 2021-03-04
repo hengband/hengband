@@ -38,7 +38,7 @@ void do_cmd_read_scroll(player_type *creature_ptr)
     concptr s = _("読める巻物がない。", "You have no scrolls to read.");
     object_type *o_ptr;
     OBJECT_IDX item;
-    o_ptr = choose_object(creature_ptr, &item, q, s, USE_INVEN | USE_FLOOR, 0);
+    o_ptr = choose_object(creature_ptr, &item, q, s, USE_INVEN | USE_FLOOR, TV_NONE);
     if (!o_ptr)
         return;
 

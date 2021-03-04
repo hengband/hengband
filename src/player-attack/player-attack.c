@@ -128,7 +128,7 @@ static void get_bare_knuckle_exp(player_type *attacker_ptr, player_attack_type *
  */
 static void get_weapon_exp(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {
-    tval_type tval = attacker_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand].tval - TV_WEAPON_BEGIN;
+    int tval = attacker_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand].tval - TV_WEAPON_BEGIN;
     OBJECT_SUBTYPE_VALUE sval = attacker_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand].sval;
     int now_exp = attacker_ptr->weapon_exp[tval][sval];
     if (now_exp >= s_info[attacker_ptr->pclass].w_max[tval][sval])
@@ -499,6 +499,6 @@ void massacre(player_type *caster_ptr)
         g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
         m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
         if (g_ptr->m_idx && (m_ptr->ml || cave_has_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT)))
-            do_cmd_attack(caster_ptr, y, x, 0);
+            do_cmd_attack(caster_ptr, y, x, HISSATSU_NONE);
     }
 }

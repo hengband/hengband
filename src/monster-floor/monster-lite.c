@@ -163,7 +163,7 @@ void update_mon_lite(player_type *subject_ptr)
             if (!rad)
                 continue;
 
-            int f_flag;
+            feature_flag_type f_flag;
             if (rad > 0) {
                 if (!(r_ptr->flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2))
                     && (monster_csleep_remaining(m_ptr) || (!floor_ptr->dun_level && is_daytime()) || subject_ptr->phase_out))

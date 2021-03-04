@@ -248,7 +248,7 @@ static void drain_essence(player_type *creature_ptr)
     q = _("どのアイテムから抽出しますか？", "Extract from which item? ");
     s = _("抽出できるアイテムがありません。", "You have nothing you can extract from.");
 
-    o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
+    o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), TV_NONE);
     if (!o_ptr)
         return;
 
@@ -561,7 +561,7 @@ static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
     int use_essence;
     essence_type *es_ptr;
     bool able[22] = { 0 };
-    tval_type tval = 0;
+    tval_type tval = TV_NONE;
     int menu_line = (use_menu ? 1 : 0);
 
     for (i = 0; essence_info[i].add_name; i++) {
@@ -1003,7 +1003,7 @@ static void erase_essence(player_type *creature_ptr)
     q = _("どのアイテムのエッセンスを消去しますか？", "Remove from which item? ");
     s = _("エッセンスを付加したアイテムがありません。", "You have nothing with added essence to remove.");
 
-    o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
+    o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_NONE);
     if (!o_ptr)
         return;
 

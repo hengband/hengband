@@ -5,8 +5,10 @@
 #define NO_TOWN 6
 #define SECRET_TOWN 5
 
+enum parse_error_type : int;
+
 /* Wilderness Terrains */
-typedef enum wt_type {
+enum wt_type {
 	TERRAIN_EDGE = 0, /* Edge of the World */
     TERRAIN_TOWN = 1, /* Town */
 	TERRAIN_DEEP_WATER = 2, /* Deep water */
@@ -20,7 +22,7 @@ typedef enum wt_type {
     TERRAIN_DEEP_LAVA = 10, /* Deep lava */
     TERRAIN_MOUNTAIN = 11, /* Mountain */	
 	MAX_WILDERNESS = 12, /* Maximum wilderness index */
-} wt_type;
+};
 
 void set_floor_and_wall(DUNGEON_IDX type);
 void wilderness_gen(player_type *creature_ptr);
@@ -28,7 +30,7 @@ void wilderness_gen_small(player_type *creature_ptr);
 errr init_wilderness(void);
 void init_wilderness_terrains(void);
 void seed_wilderness(void);
-errr parse_line_wilderness(player_type *creature_ptr, char *buf, int xmin, int xmax, int *y, int *x);
+parse_error_type parse_line_wilderness(player_type *creature_ptr, char *buf, int xmin, int xmax, int *y, int *x);
 bool change_wild_mode(player_type *creature_ptr, bool encount);
 
 /*

@@ -441,11 +441,11 @@ void wiz_modify_item(player_type *creature_ptr)
     concptr s = "You have nothing to play with.";
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(creature_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, 0);
+    o_ptr = choose_object(creature_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, TV_NONE);
     if (!o_ptr)
         return;
 
-    screen_save(creature_ptr);
+    screen_save();
 
     object_type forge;
     object_type *q_ptr;
@@ -482,7 +482,7 @@ void wiz_modify_item(player_type *creature_ptr)
         }
     }
 
-    screen_load(creature_ptr);
+    screen_load();
     if (changed) {
         msg_print("Changes accepted.");
 

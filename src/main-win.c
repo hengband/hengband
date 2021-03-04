@@ -451,7 +451,7 @@ static DIBINIT infMask;
 static bool can_use_sound = FALSE;
 
 /*
- * Show sub-windows even when Hengband is not in focus 
+ * Show sub-windows even when Hengband is not in focus
  */
 static bool keep_subwindows = TRUE;
 
@@ -495,7 +495,6 @@ static concptr AngList = "AngList";
  */
 static concptr ANGBAND_DIR_XTRA_GRAF;
 static concptr ANGBAND_DIR_XTRA_SOUND;
-static concptr ANGBAND_DIR_XTRA_MUSIC;
 static concptr ANGBAND_DIR_XTRA_HELP;
 static concptr ANGBAND_DIR_XTRA_MUSIC;
 
@@ -586,7 +585,7 @@ static int init_bg(void)
     if (use_bg == 0)
         return 0;
 
-    hBG = LoadImage(NULL, bmfile, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+    hBG = static_cast<HBITMAP>(LoadImage(NULL, bmfile, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE));
     if (!hBG) {
         plog_fmt(_("壁紙用ビットマップ '%s' を読み込めません。", "Can't load the bitmap file '%s'."), bmfile);
         use_bg = 0;
@@ -611,7 +610,7 @@ static void DrawBG(HDC hdc, RECT *r)
     int shgt = bm.bmHeight;
 
     HDC hdcSrc = CreateCompatibleDC(hdc);
-    HBITMAP hOld = SelectObject(hdcSrc, hBG);
+    HBITMAP hOld = static_cast<HBITMAP>(SelectObject(hdcSrc, hBG));
 
     do {
         int sx = nx % swid;
@@ -1087,7 +1086,7 @@ static int new_palette(void)
     lppe = NULL;
     nEntries = 0;
 
-    HPALETTE hBmPal = infGraph.hPalette;
+    HPALETTE hBmPal = static_cast<HPALETTE>(infGraph.hPalette);
     if (hBmPal) {
         lppeSize = 256 * sizeof(PALETTEENTRY);
         lppe = (LPPALETTEENTRY)ralloc(lppeSize);
@@ -1226,7 +1225,7 @@ static bool init_graphics(void)
     }
 
     current_graphics_mode = arg_graphics;
-    return (current_graphics_mode);
+    return current_graphics_mode != 0;
 }
 
 /*
@@ -1300,7 +1299,7 @@ static errr term_force_font(term_data *td, concptr path)
         TEXTMETRIC tm;
 
         hdcDesktop = GetDC(HWND_DESKTOP);
-        hfOld = SelectObject(hdcDesktop, td->font_id);
+        hfOld = static_cast<HFONT>(SelectObject(hdcDesktop, td->font_id));
         GetTextMetrics(hdcDesktop, &tm);
         SelectObject(hdcDesktop, hfOld);
         ReleaseDC(HWND_DESKTOP, hdcDesktop);
@@ -1369,8 +1368,8 @@ void term_inversed_area(HWND hWnd, int x, int y, int w, int h)
 
     HDC hdc = GetDC(hWnd);
     HBRUSH myBrush = CreateSolidBrush(RGB(255, 255, 255));
-    HBRUSH oldBrush = SelectObject(hdc, myBrush);
-    HPEN oldPen = SelectObject(hdc, GetStockObject(NULL_PEN));
+    HBRUSH oldBrush = static_cast<HBRUSH>(SelectObject(hdc, myBrush));
+    HPEN oldPen = static_cast<HPEN>(SelectObject(hdc, GetStockObject(NULL_PEN)));
 
     PatBlt(hdc, tx, ty, tw, th, PATINVERT);
 
@@ -1429,13 +1428,13 @@ static errr term_xtra_win_react(player_type *player_ptr)
             select_floor_music(player_ptr);
     }
 
-    if (use_graphics != arg_graphics) {
+    if (use_graphics != (arg_graphics > 0)) {
         if (arg_graphics && !init_graphics()) {
             plog(_("グラフィックスを初期化できません!", "Cannot initialize graphics!"));
             arg_graphics = GRAPHICS_NONE;
         }
 
-        use_graphics = arg_graphics;
+        use_graphics = (arg_graphics > 0);
         reset_visuals(player_ptr, process_autopick_file_command);
     }
 
@@ -1829,8 +1828,8 @@ static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
 #ifdef JP
             if (use_bigtile && *(s + i) == "■"[0] && *(s + i + 1) == "■"[1]) {
                 rc.right += td->font_wid;
-                oldBrush = SelectObject(hdc, myBrush);
-                oldPen = SelectObject(hdc, GetStockObject(NULL_PEN));
+                oldBrush = static_cast<HBRUSH>(SelectObject(hdc, myBrush));
+                oldPen = static_cast<HPEN>(SelectObject(hdc, GetStockObject(NULL_PEN)));
                 Rectangle(hdc, rc.left, rc.top, rc.right + 1, rc.bottom + 1);
                 SelectObject(hdc, oldBrush);
                 SelectObject(hdc, oldPen);
@@ -1847,8 +1846,8 @@ static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
                 rc.left += 2 * td->tile_wid;
                 rc.right += 2 * td->tile_wid;
             } else if (*(s + i) == 127) {
-                oldBrush = SelectObject(hdc, myBrush);
-                oldPen = SelectObject(hdc, GetStockObject(NULL_PEN));
+                oldBrush = static_cast<HBRUSH>(SelectObject(hdc, myBrush));
+                oldPen = static_cast<HPEN>(SelectObject(hdc, GetStockObject(NULL_PEN)));
                 Rectangle(hdc, rc.left, rc.top, rc.right + 1, rc.bottom + 1);
                 SelectObject(hdc, oldBrush);
                 SelectObject(hdc, oldPen);
@@ -1861,8 +1860,8 @@ static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
             }
 #else
             if (*(s + i) == 127) {
-                oldBrush = SelectObject(hdc, myBrush);
-                oldPen = SelectObject(hdc, GetStockObject(NULL_PEN));
+                oldBrush = static_cast<HBRUSH>(SelectObject(hdc, myBrush));
+                oldPen = static_cast<HPEN>(SelectObject(hdc, GetStockObject(NULL_PEN)));
                 Rectangle(hdc, rc.left, rc.top, rc.right + 1, rc.bottom + 1);
                 SelectObject(hdc, oldBrush);
                 SelectObject(hdc, oldPen);
@@ -1925,7 +1924,7 @@ static errr term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
     TERM_LEN y2 = y * h2 + td->size_oh1 + infGraph.OffsetY;
     HDC hdc = GetDC(td->w);
     HDC hdcSrc = CreateCompatibleDC(hdc);
-    HBITMAP hbmSrcOld = SelectObject(hdcSrc, infGraph.hBitmap);
+    HBITMAP hbmSrcOld = static_cast<HBITMAP>(SelectObject(hdcSrc, infGraph.hBitmap));
 
     if (arg_graphics == GRAPHICS_ADAM_BOLT || arg_graphics == GRAPHICS_HENGBAND) {
         hdcMask = CreateCompatibleDC(hdc);
@@ -3558,7 +3557,8 @@ static void init_stuff(void)
  */
 static spoiler_output_status create_debug_spoiler(LPSTR cmd_line)
 {
-    char *s, *option;
+    char *s;
+    concptr option;
     s = cmd_line;
     if (!*s)
         return SPOILER_OUTPUT_CANCEL;
@@ -3631,7 +3631,7 @@ int PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nC
         wc.hInstance = hInst;
         wc.hIcon = hIcon = LoadIcon(hInst, AppName);
         wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-        wc.hbrBackground = GetStockObject(BLACK_BRUSH);
+        wc.hbrBackground = static_cast<HBRUSH>(GetStockObject(BLACK_BRUSH));
         wc.lpszMenuName = AppName;
         wc.lpszClassName = AppName;
 

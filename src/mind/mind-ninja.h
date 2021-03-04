@@ -11,5 +11,5 @@ void calc_surprise_attack_damage(player_type *attacker_ptr, player_attack_type *
 bool hayagake(player_type *creature_ptr);
 bool set_superstealth(player_type *creature_ptr, bool set);
 
-typedef enum mind_ninja_type mind_ninja_type;
+enum mind_ninja_type : int;
 bool cast_ninja_spell(player_type *caster_ptr, mind_ninja_type spell);

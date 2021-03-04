@@ -371,7 +371,7 @@ bool teleport_player_aux(player_type *creature_ptr, POSITION dis, bool is_quantu
  */
 void teleport_player(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode)
 {
-    if (!teleport_player_aux(creature_ptr, dis, FALSE, mode))
+    if (!teleport_player_aux(creature_ptr, dis, FALSE, static_cast<teleport_flags>(mode)))
         return;
 
     /* Monsters with teleport ability may follow the player */

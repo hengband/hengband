@@ -483,6 +483,7 @@ bool send_world_score(player_type *current_player_ptr, bool do_send, void(*updat
 errr top_twenty(player_type *current_player_ptr)
 {
 	high_score the_score;
+	char buf[32];
 	(void)WIPE(&the_score, high_score);
 
 	/* Save the version */
@@ -512,9 +513,12 @@ errr top_twenty(player_type *current_player_ptr)
 	/* Save the player info */
 	sprintf(the_score.uid, "%7u", current_player_ptr->player_uid);
 	sprintf(the_score.sex, "%c", (current_player_ptr->psex ? 'm' : 'f'));
-	sprintf(the_score.p_r, "%2d", MIN(current_player_ptr->prace, MAX_RACES));
-	sprintf(the_score.p_c, "%2d", MIN(current_player_ptr->pclass, MAX_CLASS));
-	sprintf(the_score.p_a, "%2d", MIN(current_player_ptr->pseikaku, MAX_PERSONALITIES));
+	snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->prace, MAX_RACES));
+	memcpy(the_score.p_r, buf, 3);
+	snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->pclass, MAX_CLASS));
+	memcpy(the_score.p_c, buf, 3);
+	snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->pseikaku, MAX_PERSONALITIES));
+	memcpy(the_score.p_r, buf, 3);
 
 	/* Save the level and such */
 	sprintf(the_score.cur_lev, "%3d", MIN((u16b)current_player_ptr->lev, 999));
@@ -585,6 +589,7 @@ errr top_twenty(player_type *current_player_ptr)
 errr predict_score(player_type *current_player_ptr)
 {
 	high_score the_score;
+	char buf[32];
 
 	/* No score file */
 	if (highscore_fd < 0)
@@ -616,9 +621,12 @@ errr predict_score(player_type *current_player_ptr)
 	/* Save the player info */
 	sprintf(the_score.uid, "%7u", current_player_ptr->player_uid);
 	sprintf(the_score.sex, "%c", (current_player_ptr->psex ? 'm' : 'f'));
-	sprintf(the_score.p_r, "%2d", MIN(current_player_ptr->prace, MAX_RACES));
-	sprintf(the_score.p_c, "%2d", MIN(current_player_ptr->pclass, MAX_CLASS));
-	sprintf(the_score.p_a, "%2d", MIN(current_player_ptr->pseikaku, MAX_PERSONALITIES));
+	snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->prace, MAX_RACES));
+	memcpy(the_score.p_r, buf, 3);
+	snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->pclass, MAX_CLASS));
+	memcpy(the_score.p_c, buf, 3);
+	snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->pseikaku, MAX_PERSONALITIES));
+	memcpy(the_score.p_a, buf, 3);
 
 	/* Save the level and such */
 	sprintf(the_score.cur_lev, "%3d", MIN((u16b)current_player_ptr->lev, 999));
@@ -725,7 +733,7 @@ void show_highclass(player_type *current_player_ptr)
  */
 void race_score(player_type *current_player_ptr, int race_num)
 {
-	register int i = 0, j, m = 0;
+	int i = 0, j, m = 0;
 	int pr, clev, lastlev;
 	high_score the_score;
 	char buf[1024], out_val[256], tmp_str[80];

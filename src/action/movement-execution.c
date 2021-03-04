@@ -162,7 +162,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
             }
 
             if ((stormbringer && (randint1(1000) > 666)) || (creature_ptr->pclass == CLASS_BERSERKER)) {
-                do_cmd_attack(creature_ptr, y, x, 0);
+                do_cmd_attack(creature_ptr, y, x, HISSATSU_NONE);
                 can_move = FALSE;
             } else if (monster_can_cross_terrain(creature_ptr, floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat, r_ptr, 0)) {
                 do_past = TRUE;
@@ -172,7 +172,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
                 can_move = FALSE;
             }
         } else {
-            do_cmd_attack(creature_ptr, y, x, 0);
+            do_cmd_attack(creature_ptr, y, x, HISSATSU_NONE);
             can_move = FALSE;
         }
     }

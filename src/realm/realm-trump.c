@@ -178,7 +178,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
         {
             if (cast || fail) {
-                int type = (!fail ? SUMMON_ANIMAL_RANGER : SUMMON_ANIMAL);
+                summon_type type = (!fail ? SUMMON_ANIMAL_RANGER : SUMMON_ANIMAL);
                 msg_print(_("あなたは動物のカードに集中する...", "You concentrate on the trump of an animal..."));
                 if (trump_summoning(caster_ptr, 1, !fail, caster_ptr->y, caster_ptr->x, 0, type, 0L)) {
                     if (fail) {
@@ -219,7 +219,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
         {
             if (cast || fail) {
                 POSITION x, y;
-                int type;
+                summon_type type;
 
                 if (cast) {
                     if (!target_set(caster_ptr, TARGET_KILL))
@@ -436,12 +436,12 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
         {
             if (cast || fail) {
-                int type;
+                summon_type type;
                 msg_print(_("あなたはモンスターのカードに集中する...", "You concentrate on several trumps at once..."));
                 if (caster_ptr->pclass == CLASS_BEASTMASTER)
                     type = SUMMON_LIVING;
                 else
-                    type = 0;
+                    type = SUMMON_NONE;
 
                 if (trump_summoning(caster_ptr, (1 + (plev - 15) / 10), !fail, caster_ptr->y, caster_ptr->x, 0, type, 0L)) {
                     if (fail) {
@@ -538,7 +538,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
         {
             if (cast) {
-                if (!identify_fully(caster_ptr, FALSE, 0))
+                if (!identify_fully(caster_ptr, FALSE, TV_NONE))
                     return NULL;
             }
         }
@@ -658,7 +658,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
         {
             if (cast) {
-                int type;
+                summon_type type;
 
                 if (caster_ptr->pclass == CLASS_BEASTMASTER)
                     type = SUMMON_HI_DRAGON_LIVING;

@@ -7,14 +7,14 @@
 #include "system/object-type-definition.h"
 #include "system/monster-type-definition.h"
 
-typedef enum chaotic_effect {
+enum chaotic_effect {
     CE_NONE = 0,
     CE_VAMPIRIC = 1,
     CE_QUAKE = 2,
     CE_CONFUSION = 3,
     CE_TELE_AWAY = 4,
     CE_POLYMORPH = 5,
-} chaotic_effect;
+};
 
 typedef struct player_attack_type {
     s16b hand;

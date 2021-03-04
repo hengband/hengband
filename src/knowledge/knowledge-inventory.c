@@ -217,7 +217,7 @@ static void show_wearing_equipment_resistances(player_type *creature_ptr, tval_t
 {
     char where[32];
     strcpy(where, _("装", "E "));
-    for (inventory_slot_type i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         object_type *o_ptr = &creature_ptr->inventory_list[i];
         if (!check_item_knowledge(o_ptr, tval))
             continue;
@@ -287,11 +287,11 @@ void do_cmd_knowledge_inventory(player_type *creature_ptr)
 
     fprintf(fff, "%s\n", inven_res_label);
     int label_number = 0;
-    for (tval_type tval = TV_WEARABLE_BEGIN; tval <= TV_WEARABLE_END; tval++) {
+    for (int tval = TV_WEARABLE_BEGIN; tval <= TV_WEARABLE_END; tval++) {
         reset_label_number(&label_number, fff);
-        show_wearing_equipment_resistances(creature_ptr, tval, &label_number, fff);
-        show_holding_equipment_resistances(creature_ptr, tval, &label_number, fff);
-        show_home_equipment_resistances(creature_ptr, tval, &label_number, fff);
+        show_wearing_equipment_resistances(creature_ptr, static_cast<tval_type>(tval), &label_number, fff);
+        show_holding_equipment_resistances(creature_ptr, static_cast<tval_type>(tval), &label_number, fff);
+        show_home_equipment_resistances(creature_ptr, static_cast<tval_type>(tval), &label_number, fff);
     }
 
     angband_fclose(fff);

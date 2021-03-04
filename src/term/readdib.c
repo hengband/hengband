@@ -52,7 +52,7 @@ void global_free(DIBINIT *pInfo, INT_PTR *fh, BOOL unlock_needed);
 static DWORD PASCAL lread(int fh, void *pv, DWORD ul)
 {
 	DWORD ulT = ul;
-	BYTE *hp = pv;
+	BYTE *hp = static_cast<BYTE*>(pv);
 
 	while (ul > (DWORD)MAXREAD)
 	{
@@ -120,7 +120,7 @@ static HPALETTE PASCAL MakeDIBPalette(LPBITMAPINFOHEADER lpInfo)
 	 */
 	else
 	{
-		return(GetStockObject(DEFAULT_PALETTE));
+		return static_cast<HPALETTE>(GetStockObject(DEFAULT_PALETTE));
 	}
 }
 
@@ -333,8 +333,8 @@ BOOL ReadDIB(HWND hWnd, LPSTR lpFileName, DIBINIT *pInfo)
 		GlobalUnlock(pInfo->hDIB);
 
 		hDC = GetDC(hWnd);
-		if (!MakeBitmapAndPalette(hDC, pInfo->hDIB, &((HPALETTE)pInfo->hPalette),
-					  &((HBITMAP)pInfo->hBitmap)))
+		if (!MakeBitmapAndPalette(hDC, pInfo->hDIB, reinterpret_cast<HPALETTE*>(&pInfo->hPalette),
+					  reinterpret_cast<HBITMAP*>(&pInfo->hBitmap)))
 		{
 			ReleaseDC(hWnd,hDC);
 			global_free(pInfo, &fh, FALSE);

@@ -31,7 +31,7 @@ static void dump_magic_eater(player_type *creature_ptr, FILE *fff)
     fprintf(fff, _("\n\n  [取り込んだ魔法道具]\n", "\n\n  [Magic devices eaten]\n"));
 
     for (int ext = 0; ext < 3; ext++) {
-        tval_type tval = 0;
+        tval_type tval = TV_NONE;
         switch (ext) {
         case 0:
             tval = TV_STAFF;
@@ -168,7 +168,7 @@ static void dump_blue_mage(player_type *creature_ptr, FILE *fff)
     for (int spell_type = 1; spell_type < 6; spell_type++) {
         col++;
         learnt_spell_table learnt_magic;
-        add_monster_spell_type(p, col, spell_type, &learnt_magic);
+        add_monster_spell_type(p, col, static_cast<blue_magic_type>(spell_type), &learnt_magic);
 
         int num = 0;
         for (int i = 0; i < 32; i++) {

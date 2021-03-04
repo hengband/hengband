@@ -67,7 +67,7 @@ static bool exe_alter(player_type *creature_ptr)
     f_ptr = &f_info[feat];
     take_turn(creature_ptr, 100);
     if (g_ptr->m_idx) {
-        do_cmd_attack(creature_ptr, y, x, 0);
+        do_cmd_attack(creature_ptr, y, x, HISSATSU_NONE);
         return FALSE;
     }
     

@@ -42,7 +42,7 @@ static void set_bluemage_damage(player_type *learner_type, monster_spell_type ms
  * @param power モンスター魔法のID
  * @return なし
  */
-void learnt_info(player_type *learner_ptr, char *p, int power)
+void learnt_info(player_type *learner_ptr, char *p, monster_spell_type power)
 {
     PLAYER_LEVEL plev = get_pseudo_monstetr_level(learner_ptr);
 

@@ -86,7 +86,7 @@ static bool select_destroying_item(player_type *creature_ptr, destroy_type *dest
 {
     concptr q = _("どのアイテムを壊しますか? ", "Destroy which item? ");
     concptr s = _("壊せるアイテムを持っていない。", "You have nothing to destroy.");
-    destroy_ptr->o_ptr = choose_object(creature_ptr, &destroy_ptr->item, q, s, USE_INVEN | USE_FLOOR, 0);
+    destroy_ptr->o_ptr = choose_object(creature_ptr, &destroy_ptr->item, q, s, USE_INVEN | USE_FLOOR, TV_NONE);
     if (destroy_ptr->o_ptr == NULL)
         return FALSE;
 

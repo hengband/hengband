@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum race_flags1 {
+enum race_flags1 {
     RF1_UNIQUE = 0x00000001, /*!< モンスター特性: ユニーク / Unique Monster */
     RF1_QUESTOR = 0x00000002, /*!< モンスター特性: クエストモンスター / Quest Monster */
     RF1_MALE = 0x00000004, /*!< モンスター特性: 男性 / Male gender */
@@ -33,4 +33,4 @@ typedef enum race_flags1 {
     RF1_DROP_GREAT = 0x20000000, /*!< モンスター特性: 必ず高級品をドロップする / Drop great items */
     RF1_XXX2 = 0x40000000, /*!< モンスター特性: 未使用 / XXX */
     RF1_XXX3 = 0x80000000, /*!< モンスター特性: 未使用 / XXX */
-} race_flags1;
+};

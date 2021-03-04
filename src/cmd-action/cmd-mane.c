@@ -912,7 +912,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
             return FALSE;
         msg_print(_("仲間を召喚した。", "You summon help."));
         for (k = 0; k < 1; k++)
-            summon_specific(caster_ptr, -1, target_row, target_col, plev, 0, (mode | u_mode));
+            summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_NONE, (mode | u_mode));
         break;
     }
     case MS_S_MONSTERS: {
@@ -921,7 +921,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
             return FALSE;
         msg_print(_("モンスターを召喚した！", "You summon monsters!"));
         for (k = 0; k < 6; k++)
-            summon_specific(caster_ptr, -1, target_row, target_col, plev, 0, (mode | u_mode));
+            summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_NONE, (mode | u_mode));
         break;
     }
     case MS_S_ANT: {

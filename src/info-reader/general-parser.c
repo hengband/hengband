@@ -76,15 +76,15 @@ errr init_info_txt(FILE *fp, char *buf, angband_header *head, parse_info_txt_fun
  * @param buf 解析文字列
  * @return エラーコード
  */
-errr parse_line_feature(floor_type *floor_ptr, char *buf)
+parse_error_type parse_line_feature(floor_type *floor_ptr, char *buf)
 {
     if (init_flags & INIT_ONLY_BUILDINGS)
-        return 0;
+        return PARSE_ERROR_NONE;
 
     char *zz[9];
     int num = tokenize(buf + 2, 9, zz, 0);
     if (num <= 1)
-        return 1;
+        return PARSE_ERROR_GENERIC;
 
     int index = zz[0][0];
     letter[index].feature = feat_none;
@@ -179,7 +179,7 @@ errr parse_line_feature(floor_type *floor_ptr, char *buf)
         break;
     }
 
-    return 0;
+    return PARSE_ERROR_NONE;
 }
 
 /*!
@@ -188,28 +188,28 @@ errr parse_line_feature(floor_type *floor_ptr, char *buf)
  * @param buf 解析文字列
  * @return エラーコード
  */
-errr parse_line_building(char *buf)
+parse_error_type parse_line_building(char *buf)
 {
     char *zz[1000];
     char *s;
 
 #ifdef JP
     if (buf[2] == '$')
-        return 0;
+        return PARSE_ERROR_NONE;
     s = buf + 2;
 #else
     if (buf[2] != '$')
-        return 0;
+        return PARSE_ERROR_NONE;
     s = buf + 3;
 #endif
     int index = atoi(s);
     s = angband_strchr(s, ':');
     if (!s)
-        return 1;
+        return PARSE_ERROR_GENERIC;
 
     *s++ = '\0';
     if (!*s)
-        return 1;
+        return PARSE_ERROR_GENERIC;
 
     switch (s[0]) {
     case 'N': {
@@ -240,7 +240,7 @@ errr parse_line_building(char *buf)
         int n;
         n = tokenize(s + 2, MAX_CLASS, zz, 0);
         for (int i = 0; i < MAX_CLASS; i++) {
-            building[index].member_class[i] = ((i < n) ? (player_class_type)atoi(zz[i]) : 1);
+            building[index].member_class[i] = static_cast<player_class_type>((i < n) ? atoi(zz[i]) : 1);
         }
 
         break;
@@ -249,7 +249,7 @@ errr parse_line_building(char *buf)
         int n;
         n = tokenize(s + 2, MAX_RACES, zz, 0);
         for (int i = 0; i < MAX_RACES; i++) {
-            building[index].member_race[i] = ((i < n) ? (player_race_type)atoi(zz[i]) : 1);
+            building[index].member_race[i] = static_cast<player_race_type>((i < n) ? atoi(zz[i]) : 1);
         }
 
         break;
@@ -271,5 +271,5 @@ errr parse_line_building(char *buf)
     }
     }
 
-    return 0;
+    return PARSE_ERROR_NONE;
 }

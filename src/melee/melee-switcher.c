@@ -145,7 +145,8 @@ void decide_monster_attack_effect(player_type *subject_ptr, mam_type *mam_ptr)
     switch (mam_ptr->effect) {
     case 0:
     case RBE_DR_MANA:
-        mam_ptr->damage = mam_ptr->pt = 0;
+        mam_ptr->damage = 0;
+        mam_ptr->pt = GF_NONE;
         break;
     case RBE_SUPERHURT:
         if ((randint1(mam_ptr->rlev * 2 + 250) > (mam_ptr->ac + 200)) || one_in_(13)) {

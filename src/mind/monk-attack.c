@@ -231,7 +231,7 @@ void process_monk_attack(player_type *attacker_ptr, player_attack_type *pa_ptr)
     int stun_effect = 0;
     int special_effect = process_monk_additional_effect(pa_ptr, &stun_effect);
     WEIGHT weight = calc_monk_attack_weight(attacker_ptr);
-    pa_ptr->attack_damage = critical_norm(attacker_ptr, attacker_ptr->lev * weight, min_level, pa_ptr->attack_damage, attacker_ptr->to_h[0], 0);
+    pa_ptr->attack_damage = critical_norm(attacker_ptr, attacker_ptr->lev * weight, min_level, pa_ptr->attack_damage, attacker_ptr->to_h[0], HISSATSU_NONE);
     process_attack_vital_spot(attacker_ptr, pa_ptr, &stun_effect, &resist_stun, special_effect);
     print_stun_effect(attacker_ptr, pa_ptr, stun_effect, resist_stun);
 }
@@ -256,10 +256,10 @@ bool double_attack(player_type *creature_ptr)
     else
         msg_print(_("オラオラオラオラオラオラオラオラオラオラオラオラ！！！", "Oraoraoraoraoraoraoraoraoraoraoraoraoraoraoraoraora!!!!"));
 
-    do_cmd_attack(creature_ptr, y, x, 0);
+    do_cmd_attack(creature_ptr, y, x, HISSATSU_NONE);
     if (creature_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
         handle_stuff(creature_ptr);
-        do_cmd_attack(creature_ptr, y, x, 0);
+        do_cmd_attack(creature_ptr, y, x, HISSATSU_NONE);
     }
 
     creature_ptr->energy_need += ENERGY_NEED();

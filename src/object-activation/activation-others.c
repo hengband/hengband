@@ -226,14 +226,14 @@ bool activate_extra_detection(player_type *user_ptr)
     msg_print(_("明るく輝いている...", "It glows brightly..."));
     detect_all(user_ptr, DETECT_RAD_DEFAULT);
     probing(user_ptr);
-    identify_fully(user_ptr, FALSE, 0);
+    identify_fully(user_ptr, FALSE, TV_NONE);
     return TRUE;
 }
 
 bool activate_fully_identification(player_type *user_ptr)
 {
     msg_print(_("黄色く輝いている...", "It glows yellow..."));
-    identify_fully(user_ptr, FALSE, 0);
+    identify_fully(user_ptr, FALSE, TV_NONE);
     return TRUE;
 }
 
@@ -242,7 +242,7 @@ bool activate_fully_identification(player_type *user_ptr)
  * @param user_ptr プレーヤーへの参照ポインタ
  * @return 発動に成功したらTRUE
  */
-bool activate_identification(player_type *user_ptr) { return ident_spell(user_ptr, FALSE, 0); }
+bool activate_identification(player_type *user_ptr) { return ident_spell(user_ptr, FALSE, TV_NONE); }
 
 bool activate_pesticide(player_type *user_ptr)
 {

@@ -1,7 +1,8 @@
 ﻿#include "player/player-status.h"
 #include "object-enchant/tr-types.h"
 
-enum flag_cause {
+enum flag_cause : uint32_t {
+    FLAG_CAUSE_NONE = 0x0U,
     FLAG_CAUSE_INVEN_MAIN_HAND = 0x01U << 0, /*!< アイテムスロット…利手 */
     FLAG_CAUSE_INVEN_SUB_HAND = 0x01U << 1, /*!< アイテムスロット…逆手 */
     FLAG_CAUSE_INVEN_BOW = 0x01U << 2, /*!< アイテムスロット…射撃 */
@@ -26,7 +27,7 @@ enum flag_cause {
     FLAG_CAUSE_MAX = 0x01U << 21
 };
 
-typedef enum melee_type {
+enum melee_type {
     MELEE_TYPE_BAREHAND_TWO = 0,
     MELEE_TYPE_BAREHAND_MAIN = 1,
     MELEE_TYPE_BAREHAND_SUB = 2,
@@ -35,7 +36,7 @@ typedef enum melee_type {
     MELEE_TYPE_WEAPON_TWOHAND = 5,
     MELEE_TYPE_WEAPON_DOUBLE = 6,
     MELEE_TYPE_SHIELD_DOUBLE = 7
-} melee_type;
+};
 
 enum aggravate_state {
     AGGRAVATE_NONE = 0x00000000L,

@@ -356,7 +356,7 @@ void display_player(player_type *creature_ptr, int mode)
 void display_player_equippy(player_type *creature_ptr, TERM_LEN y, TERM_LEN x, BIT_FLAGS16 mode)
 {
 	int max_i = (mode & DP_WP) ? INVEN_SUB_HAND + 1 : INVEN_TOTAL;
-	for (inventory_slot_type i = INVEN_MAIN_HAND; i < max_i; i++)
+	for (int i = INVEN_MAIN_HAND; i < max_i; i++)
 	{
 		object_type *o_ptr;
 		o_ptr = &creature_ptr->inventory_list[i];

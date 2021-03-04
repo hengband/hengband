@@ -43,7 +43,7 @@ static void give_one_ability_of_object(player_type *player_ptr, object_type *to_
 
     int n = 0;
     int cand[TR_FLAG_MAX];
-    for (tr_type i = 0; i < TR_FLAG_MAX; i++) {
+    for (int i = 0; i < TR_FLAG_MAX; i++) {
         switch (i) {
         case TR_IGNORE_ACID:
         case TR_IGNORE_ELEC:
@@ -100,7 +100,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_EQUIP), 0);
+    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_EQUIP), TV_NONE);
     if (!o_ptr)
         return 0;
 
@@ -124,7 +124,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
     item_tester_hook = item_tester_hook_orthodox_melee_weapons;
     OBJECT_IDX mater;
     object_type *mo_ptr;
-    mo_ptr = choose_object(player_ptr, &mater, q, s, (USE_INVEN | USE_EQUIP), 0);
+    mo_ptr = choose_object(player_ptr, &mater, q, s, (USE_INVEN | USE_EQUIP), TV_NONE);
     if (!mo_ptr)
         return 0;
     if (mater == item) {

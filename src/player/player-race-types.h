@@ -3,7 +3,7 @@
 /*!
  * @details 既にplayer_raceが存在するので_typeと付けた
  */
-typedef enum player_race_type {
+enum player_race_type {
     RACE_HUMAN = 0,
     RACE_HALF_ELF = 1,
     RACE_ELF = 2,
@@ -43,4 +43,4 @@ typedef enum player_race_type {
     RACE_ANDROID = 36,
     RACE_MERFOLK = 37,
     MAX_RACES = 38,
-} player_race_type;
+};

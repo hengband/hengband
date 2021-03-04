@@ -3,11 +3,11 @@
 #include "system/angband.h"
 #include "system/monster-race-definition.h"
 
-typedef enum monster_sex {
+enum monster_sex {
     MSEX_NONE = 0,
     MSEX_MALE = 1,
     MSEX_FEMALE = 2,
-} monster_sex;
+};
 
 typedef struct lore_type {
 #ifdef JP
@@ -50,12 +50,12 @@ typedef struct lore_type {
     int count;
 } lore_type;
 
-typedef enum monster_lore_mode { 
+enum monster_lore_mode {
     MONSTER_LORE_NONE,
     MONSTER_LORE_NORMAL,
     MONSTER_LORE_RESEARCH,
     MONSTER_LORE_DEBUG
-} monster_lore_mode;
+};
 
 typedef void (*hook_c_roff_pf)(TERM_COLOR attr, concptr str);
 extern hook_c_roff_pf hook_c_roff;

@@ -54,7 +54,7 @@ void do_cmd_equip(player_type *creature_ptr)
         command_wrk = USE_EQUIP;
 
     screen_save();
-    (void)show_equipment(creature_ptr, 0, USE_FULL, 0);
+    (void)show_equipment(creature_ptr, 0, USE_FULL, TV_NONE);
     WEIGHT weight = calc_inventory_weight(creature_ptr);
     WEIGHT weight_lim = calc_weight_limit(creature_ptr);
 #ifdef JP
@@ -100,7 +100,7 @@ void do_cmd_wield(player_type *creature_ptr)
     item_tester_hook = item_tester_hook_wear;
     concptr q = _("どれを装備しますか? ", "Wear/Wield which item? ");
     concptr s = _("装備可能なアイテムがない。", "You have nothing you can wear or wield.");
-    o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
+    o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_NONE);
     if (!o_ptr)
         return;
 
@@ -114,7 +114,7 @@ void do_cmd_wield(player_type *creature_ptr)
             item_tester_hook = item_tester_hook_melee_weapon;
             q = _("どちらの武器と取り替えますか?", "Replace which weapon? ");
             s = _("おっと。", "Oops.");
-            if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0))
+            if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), TV_NONE))
                 return;
 
             if (slot == INVEN_MAIN_HAND)
@@ -126,7 +126,7 @@ void do_cmd_wield(player_type *creature_ptr)
             item_tester_hook = item_tester_hook_mochikae;
             q = _("どちらの手に装備しますか?", "Equip which hand? ");
             s = _("おっと。", "Oops.");
-            if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP), 0))
+            if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP), TV_NONE))
                 return;
         }
 
@@ -145,7 +145,7 @@ void do_cmd_wield(player_type *creature_ptr)
             item_tester_hook = item_tester_hook_mochikae;
             q = _("どちらの手に装備しますか?", "Equip which hand? ");
             s = _("おっと。", "Oops.");
-            if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP), 0))
+            if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP), TV_NONE))
                 return;
 
             if ((slot == INVEN_SUB_HAND) && !has_melee_weapon(creature_ptr, INVEN_MAIN_HAND))
@@ -161,7 +161,7 @@ void do_cmd_wield(player_type *creature_ptr)
 
         s = _("おっと。", "Oops.");
         creature_ptr->select_ring_slot = TRUE;
-        if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0)) {
+        if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), TV_NONE)) {
             creature_ptr->select_ring_slot = FALSE;
             return;
         }
@@ -303,7 +303,7 @@ void do_cmd_takeoff(player_type *creature_ptr)
 
     concptr q = _("どれを装備からはずしますか? ", "Take off which item? ");
     concptr s = _("はずせる装備がない。", "You are not wearing anything to take off.");
-    o_ptr = choose_object(creature_ptr, &item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), 0);
+    o_ptr = choose_object(creature_ptr, &item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), TV_NONE);
     if (!o_ptr)
         return;
 

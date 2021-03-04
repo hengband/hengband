@@ -260,22 +260,22 @@ static bool switch_mind_class(player_type *caster_ptr, cm_type *cm_ptr)
 {
     switch (cm_ptr->use_mind) {
     case MIND_MINDCRAFTER:
-        cm_ptr->cast = cast_mindcrafter_spell(caster_ptr, cm_ptr->n);
+        cm_ptr->cast = cast_mindcrafter_spell(caster_ptr, static_cast<mind_mindcrafter_type>(cm_ptr->n));
         return TRUE;
     case MIND_KI:
-        cm_ptr->cast = cast_force_spell(caster_ptr, cm_ptr->n);
+        cm_ptr->cast = cast_force_spell(caster_ptr, static_cast<mind_force_trainer_type>(cm_ptr->n));
         return TRUE;
     case MIND_BERSERKER:
-        cm_ptr->cast = cast_berserk_spell(caster_ptr, cm_ptr->n);
+        cm_ptr->cast = cast_berserk_spell(caster_ptr, static_cast<mind_berserker_type>(cm_ptr->n));
         return TRUE;
     case MIND_MIRROR_MASTER:
         if (is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x]))
             cm_ptr->on_mirror = TRUE;
 
-        cm_ptr->cast = cast_mirror_spell(caster_ptr, cm_ptr->n);
+        cm_ptr->cast = cast_mirror_spell(caster_ptr, static_cast<mind_mirror_master_type>(cm_ptr->n));
         return TRUE;
     case MIND_NINJUTSU:
-        cm_ptr->cast = cast_ninja_spell(caster_ptr, cm_ptr->n);
+        cm_ptr->cast = cast_ninja_spell(caster_ptr, static_cast<mind_ninja_type>(cm_ptr->n));
         return TRUE;
     default:
         msg_format(_("謎の能力:%d, %d", "Mystery power:%d, %d"), cm_ptr->use_mind, cm_ptr->n);

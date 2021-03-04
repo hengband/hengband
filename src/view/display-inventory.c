@@ -128,7 +128,7 @@ COMMAND_CODE show_inventory(player_type *owner_ptr, int target_item, BIT_FLAGS m
  */
 void display_inventory(player_type *owner_ptr, tval_type tval)
 {
-    register int i, n, z = 0;
+    int i, n, z = 0;
     object_type *o_ptr;
     TERM_COLOR attr = TERM_WHITE;
     char tmp_val[80];

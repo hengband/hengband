@@ -202,7 +202,7 @@ static bool parse_qtw_QQ(quest_type *q_ptr, char **zz, int num)
     artifact_type *a_ptr;
 
     if (num < 9)
-        return (PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        return TRUE;
 
     q_ptr->type = (QUEST_TYPE)atoi(zz[2]);
     q_ptr->num_mon = (MONSTER_NUMBER)atoi(zz[3]);
@@ -437,7 +437,7 @@ parse_error_type generate_fixed_map_floor(player_type *player_ptr, qtwg_type *qt
         return PARSE_ERROR_NONE;
     }
 
-    parse_error_type parse_result_Q = parse_qtw_Q(qtwg_ptr, zz);
+    parse_error_type parse_result_Q = static_cast<parse_error_type>(parse_qtw_Q(qtwg_ptr, zz));
     if (parse_result_Q != PARSE_CONTINUE)
         return parse_result_Q;
 

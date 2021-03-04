@@ -21,7 +21,7 @@ typedef union spell_functions {
 
 typedef struct debug_spell_command {
     int type;
-    char *command_name;
+    concptr command_name;
     spell_functions command_function;
 } debug_spell_command;
 

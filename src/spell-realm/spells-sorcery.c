@@ -29,7 +29,7 @@ bool alchemy(player_type *caster_ptr)
     concptr s = _("金に変えられる物がありません。", "You have nothing to turn to gold.");
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
+    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_NONE);
     if (!o_ptr)
         return FALSE;
 

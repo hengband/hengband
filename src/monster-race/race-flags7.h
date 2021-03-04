@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum race_flags7 {
+enum race_flags7 {
 	RF7_AQUATIC = 0x00000001, /* Aquatic monster */
     RF7_CAN_SWIM = 0x00000002, /* Monster can swim */
     RF7_CAN_FLY = 0x00000004, /* Monster can fly */
@@ -21,7 +21,7 @@ typedef enum race_flags7 {
     RF7_SELF_DARK_1 = 0x00020000, /* Monster darkens itself */
     RF7_HAS_DARK_2 = 0x00040000, /* Monster carries darkness */
     RF7_SELF_DARK_2 = 0x00080000, /* Monster darkens itself */
-} race_flags7;
+};
 
 #define RF7_LITE_MASK (RF7_HAS_LITE_1 | RF7_SELF_LITE_1 | RF7_HAS_LITE_2 | RF7_SELF_LITE_2)
 #define RF7_DARK_MASK (RF7_HAS_DARK_1 | RF7_SELF_DARK_1 | RF7_HAS_DARK_2 | RF7_SELF_DARK_2)

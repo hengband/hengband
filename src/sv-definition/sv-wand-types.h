@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 /* The "sval" codes for TV_WAND */
-typedef enum sv_wand_type {
+enum sv_wand_type {
     SV_WAND_HEAL_MONSTER = 0,
     SV_WAND_HASTE_MONSTER = 1,
     SV_WAND_CLONE_MONSTER = 2,
@@ -34,4 +34,4 @@ typedef enum sv_wand_type {
     SV_WAND_ROCKETS = 29,
     SV_WAND_STRIKING = 30,
     SV_WAND_GENOCIDE = 31,
-} sv_wand_type;
+};
