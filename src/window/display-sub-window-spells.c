@@ -51,7 +51,7 @@ static void display_spell_list(player_type *caster_ptr)
         PERCENTAGE chance = 0;
         mind_type spell;
         char comment[80];
-        char psi_desc[80];
+        char psi_desc[160];
         int use_mind;
         bool use_hp = FALSE;
 

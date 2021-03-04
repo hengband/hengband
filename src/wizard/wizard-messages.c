@@ -16,7 +16,7 @@ void msg_print_wizard(player_type *player_ptr, int cheat_type, concptr msg)
         return;
 
     concptr cheat_mes[] = { "ITEM", "MONS", "DUNG", "MISC" };
-    char buf[1024];
+    char buf[1024 + 32];
     sprintf(buf, "WIZ-%s:%s", cheat_mes[cheat_type], msg);
     msg_print(buf);
 

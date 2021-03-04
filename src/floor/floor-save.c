@@ -28,7 +28,7 @@ static void check_saved_tmp_files(const int fd, bool *force)
         (void)fd_close(fd);
         return;
     }
-    
+
     if (*force)
         return;
 
@@ -51,7 +51,7 @@ static void check_saved_tmp_files(const int fd, bool *force)
  */
 void init_saved_floors(player_type *creature_ptr, bool force)
 {
-    char floor_savefile[1024];
+    char floor_savefile[sizeof(savefile) + 32];
     int fd = -1;
     BIT_FLAGS mode = 0644;
     for (int i = 0; i < MAX_SAVED_FLOORS; i++) {
@@ -82,7 +82,7 @@ void init_saved_floors(player_type *creature_ptr, bool force)
  */
 void clear_saved_floor_files(player_type *creature_ptr)
 {
-    char floor_savefile[1024];
+    char floor_savefile[sizeof(savefile) + 32];
     for (int i = 0; i < MAX_SAVED_FLOORS; i++) {
         saved_floor_type *sf_ptr = &saved_floors[i];
         if ((sf_ptr->floor_id == 0) || (sf_ptr->floor_id == creature_ptr->floor_id))
@@ -122,7 +122,7 @@ saved_floor_type *get_sf_ptr(FLOOR_IDX floor_id)
  */
 void kill_saved_floor(player_type *creature_ptr, saved_floor_type *sf_ptr)
 {
-    char floor_savefile[1024];
+    char floor_savefile[sizeof(savefile) + 32];
     if (!sf_ptr || (sf_ptr->floor_id == 0))
         return;
 

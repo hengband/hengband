@@ -164,7 +164,7 @@ static int get_mane_power(player_type *caster_ptr, int *sn, bool baigaesi)
         if ((choice == ' ') || (choice == '*') || (choice == '?')) {
             /* Show the list */
             if (!redraw) {
-                char psi_desc[80];
+                char psi_desc[160];
                 redraw = TRUE;
                 screen_save();
 

@@ -61,7 +61,7 @@ errr file_character(player_type *creature_ptr, concptr name, update_playtime_pf 
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
     int fd = fd_open(buf, O_RDONLY);
     if (fd >= 0) {
-        char out_val[160];
+        char out_val[sizeof(buf) + 128];
         (void)fd_close(fd);
         (void)sprintf(out_val, _("現存するファイル %s に上書きしますか? ", "Replace existing file %s? "), buf);
         if (get_check_strict(creature_ptr, out_val, CHECK_NO_HISTORY))

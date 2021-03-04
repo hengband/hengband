@@ -137,7 +137,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
     char shower_str[81];
     strcpy(shower_str, "");
 
-    char caption[128];
+    char caption[1024 + 256];
     strcpy(caption, "");
 
     char hook[68][32];
@@ -453,7 +453,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
         if (skey == '|') {
             FILE *ffp;
             char buff[1024];
-            char xtmp[82];
+            char xtmp[sizeof(caption) + 128];
 
             strcpy(xtmp, "");
 

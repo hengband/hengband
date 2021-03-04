@@ -166,7 +166,7 @@ static bool string_is_repeat(char *str, int len)
 
 static errr send_text_to_chuukei_server(TERM_LEN x, TERM_LEN y, int len, TERM_COLOR col, concptr str)
 {
-    char buf[1024];
+    char buf[1024 + 32];
     char buf2[1024];
 
     strncpy(buf2, str, len);
@@ -292,7 +292,7 @@ void prepare_movie_hooks(player_type *player_ptr)
 
             /* Existing file */
             if (fd >= 0) {
-                char out_val[160];
+                char out_val[sizeof(buf) + 128];
                 (void)fd_close(fd);
 
                 /* Build query */
@@ -489,7 +489,7 @@ static bool flush_ringbuf_client(void)
 #endif
             update_term_size(x, y, len);
             (void)((*angband_term[0]->text_hook)(x, y, len, (byte)col, mesg));
-            strncpy(&Term->scr->c[y][x], mesg, len);
+            memcpy(&Term->scr->c[y][x], mesg, len);
             for (i = x; i < x + len; i++) {
                 Term->scr->a[y][i] = col;
             }
@@ -502,7 +502,7 @@ static bool flush_ringbuf_client(void)
             mesg[i] = '\0';
             update_term_size(x, y, len);
             (void)((*angband_term[0]->text_hook)(x, y, len, (byte)col, mesg));
-            strncpy(&Term->scr->c[y][x], mesg, len);
+            memcpy(&Term->scr->c[y][x], mesg, len);
             for (i = x; i < x + len; i++) {
                 Term->scr->a[y][i] = col;
             }
@@ -511,7 +511,7 @@ static bool flush_ringbuf_client(void)
         case 's': /* 一文字 */
             update_term_size(x, y, 1);
             (void)((*angband_term[0]->text_hook)(x, y, 1, (byte)col, mesg));
-            strncpy(&Term->scr->c[y][x], mesg, 1);
+            memcpy(&Term->scr->c[y][x], mesg, 1);
             Term->scr->a[y][x] = col;
             break;
 

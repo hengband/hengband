@@ -49,7 +49,7 @@ bool exchange_cash(player_type *player_ptr)
     for (INVENTORY_IDX i = 0; i <= INVEN_SUB_HAND; i++) {
         o_ptr = &player_ptr->inventory_list[i];
         if ((o_ptr->tval == TV_CAPTURE) && (o_ptr->pval == MON_TSUCHINOKO)) {
-            char buf[MAX_NLEN + 20];
+            char buf[MAX_NLEN + 32];
             describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
             if (get_check(buf)) {
@@ -66,7 +66,7 @@ bool exchange_cash(player_type *player_ptr)
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
         o_ptr = &player_ptr->inventory_list[i];
         if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_CORPSE) && (o_ptr->pval == MON_TSUCHINOKO)) {
-            char buf[MAX_NLEN + 20];
+            char buf[MAX_NLEN + 32];
             describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
             if (get_check(buf)) {
@@ -83,7 +83,7 @@ bool exchange_cash(player_type *player_ptr)
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
         o_ptr = &player_ptr->inventory_list[i];
         if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_SKELETON) && (o_ptr->pval == MON_TSUCHINOKO)) {
-            char buf[MAX_NLEN + 20];
+            char buf[MAX_NLEN + 32];
             describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
             if (get_check(buf)) {
@@ -100,7 +100,7 @@ bool exchange_cash(player_type *player_ptr)
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
         o_ptr = &player_ptr->inventory_list[i];
         if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_CORPSE) && (streq(r_name + r_info[o_ptr->pval].name, r_name + r_info[today_mon].name))) {
-            char buf[MAX_NLEN + 20];
+            char buf[MAX_NLEN + 32];
             describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
             if (get_check(buf)) {
@@ -118,7 +118,7 @@ bool exchange_cash(player_type *player_ptr)
         o_ptr = &player_ptr->inventory_list[i];
 
         if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_SKELETON) && (streq(r_name + r_info[o_ptr->pval].name, r_name + r_info[today_mon].name))) {
-            char buf[MAX_NLEN + 20];
+            char buf[MAX_NLEN + 32];
             describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
             if (get_check(buf)) {

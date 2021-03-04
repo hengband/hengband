@@ -45,8 +45,8 @@ void do_cmd_checkquest(player_type *creature_ptr)
  */
 static void do_cmd_knowledge_quests_current(player_type *creature_ptr, FILE *fff)
 {
-    char tmp_str[120];
-    char rand_tmp_str[120] = "\0";
+    char tmp_str[1024];
+    char rand_tmp_str[512] = "\0";
     GAME_TEXT name[MAX_NLEN];
     monster_race *r_ptr;
     int rand_level = 100;
@@ -75,7 +75,7 @@ static void do_cmd_knowledge_quests_current(player_type *creature_ptr, FILE *fff
 
         total++;
         if (quest[i].type != QUEST_TYPE_RANDOM) {
-            char note[80] = "\0";
+            char note[512] = "\0";
 
             if (quest[i].status == QUEST_STATUS_TAKEN || quest[i].status == QUEST_STATUS_STAGE_COMPLETED) {
                 switch (quest[i].type) {

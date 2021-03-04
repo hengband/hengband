@@ -287,7 +287,7 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
 {
     /* Assume that object name is to be added */
     bool name = TRUE;
-    GAME_TEXT name_str[MAX_NLEN];
+    GAME_TEXT name_str[MAX_NLEN + 32];
     name_str[0] = '\0';
     entry->insc = string_make(quark_str(o_ptr->inscription));
     entry->action = DO_AUTOPICK | DO_DISPLAY;

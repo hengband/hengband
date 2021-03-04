@@ -313,7 +313,7 @@ bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
         old_h_ver_extra = current_world_ptr->h_ver_extra;
     }
 
-    char floor_savefile[1024];
+    char floor_savefile[sizeof(savefile) + 32];
     sprintf(floor_savefile, "%s.F%02d", savefile, (int)sf_ptr->savefile_id);
 
     safe_setuid_grab(player_ptr);

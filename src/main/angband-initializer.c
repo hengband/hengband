@@ -226,7 +226,7 @@ void init_angband(player_type *player_ptr, process_autopick_file_command_pf proc
     path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
     int fd = fd_open(buf, O_RDONLY);
     if (fd < 0) {
-        char why[1024];
+        char why[sizeof(buf) + 128];
         sprintf(why, _("'%s'ファイルにアクセスできません!", "Cannot access the '%s' file!"), buf);
         init_angband_aux(why);
     }
@@ -258,7 +258,7 @@ void init_angband(player_type *player_ptr, process_autopick_file_command_pf proc
         fd = fd_make(buf, file_permission);
         safe_setuid_drop();
         if (fd < 0) {
-            char why[1024];
+            char why[sizeof(buf) + 128];
             sprintf(why, _("'%s'ファイルを作成できません!", "Cannot create the '%s' file!"), buf);
             init_angband_aux(why);
         }

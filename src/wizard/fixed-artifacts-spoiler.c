@@ -20,7 +20,7 @@
  */
 void spoiler_outlist(concptr header, concptr *list, char separator)
 {
-    char line[MAX_LINE_LEN + 1], buf[80];
+    char line[MAX_LINE_LEN + 20], buf[80];
     if (*list == NULL)
         return;
 
@@ -70,7 +70,7 @@ void spoiler_outlist(concptr header, concptr *list, char separator)
  */
 static void print_header(void)
 {
-    char buf[180];
+    char buf[360];
     char title[180];
     put_version(title);
     sprintf(buf, "Artifact Spoilers for Hengband Version %s", title);

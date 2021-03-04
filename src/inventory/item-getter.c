@@ -81,7 +81,7 @@ static bool check_item_tag_inventory(player_type *owner_ptr, item_selection_type
         return FALSE;
 
     if (*prev_tag && command_cmd) {
-        
+
         bool flag = FALSE;
         item_use_flag use_flag = (*item_selection_ptr->cp >= INVEN_MAIN_HAND) ? USE_EQUIP : USE_INVEN;
 
@@ -309,9 +309,10 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         if (!command_wrk) {
             sprintf(item_selection_ptr->out_val, _("持ち物:", "Inven:"));
             if ((item_selection_ptr->i1 <= item_selection_ptr->i2) && !use_menu) {
-                sprintf(item_selection_ptr->tmp_val, _("%c-%c,'(',')',", " %c-%c,'(',')',"), index_to_label(item_selection_ptr->i1),
+                char tmp_val[80];
+                sprintf(tmp_val, _("%c-%c,'(',')',", " %c-%c,'(',')',"), index_to_label(item_selection_ptr->i1),
                     index_to_label(item_selection_ptr->i2));
-                strcat(item_selection_ptr->out_val, item_selection_ptr->tmp_val);
+                strcat(item_selection_ptr->out_val, tmp_val);
             }
 
             if (!command_see && !use_menu)
@@ -322,9 +323,10 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         } else {
             sprintf(item_selection_ptr->out_val, _("装備品:", "Equip:"));
             if ((item_selection_ptr->e1 <= item_selection_ptr->e2) && !use_menu) {
-                sprintf(item_selection_ptr->tmp_val, _("%c-%c,'(',')',", " %c-%c,'(',')',"), index_to_label(item_selection_ptr->e1),
+                char tmp_val[80];
+                sprintf(tmp_val, _("%c-%c,'(',')',", " %c-%c,'(',')',"), index_to_label(item_selection_ptr->e1),
                     index_to_label(item_selection_ptr->e2));
-                strcat(item_selection_ptr->out_val, item_selection_ptr->tmp_val);
+                strcat(item_selection_ptr->out_val, tmp_val);
             }
 
             if (!command_see && !use_menu)
