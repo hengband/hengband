@@ -11,15 +11,15 @@ Melee can do more damage per turn than any other form of attack, and
 the basic equipment (a weapon) is easy to find. On the other hand,
 melee only works against adjacent monsters and takes a great deal of
 training and equipment to come into its own deeper in the dungeon.
-Upgrading to weapons with higher base damages is vital but heavy
+Upgrading to weapons with higher base damage is vital but heavy
 weapons are harder to master. You will have to find a compromise,
 depending on class, experience level, and available equipment (use the
 'C'haracter screen to see how various weapons affect your melee skill).
 
 You may wield both a primary weapon for melee combat, and a bow or
 other missile launcher for launching missiles at the same time. Most
-classes will benefit from carrying an assortment of attacking magical
-devices.
+classes will also benefit from carrying an assortment of magical
+devices for attack.
 
 ***** <DistanceAttack>
 --- Attacking from a Distance ---
@@ -77,7 +77,7 @@ until the curse is lifted. Identifying a weapon will inform you of the
 magical bonuses and penalties and whether or not it is cursed.
 
 Hengband assumes that your youth in the rough environment near the
-dungeons has taught you the relative merits of different weapons, and
+dungeons has taught you the relative merits of different weapons. Hengband
 displays as part of their description the damage dice which define
 their capabilities. Any damage enchantment is added to the dice roll
 for that weapon. The dice used for a given weapon is displayed as
@@ -153,12 +153,13 @@ you are fighting a demon and your weapon slays both evil and demons
 (demons are evil)), only the most effective slay will apply.
 
 (Defender)
-    A magical weapon that actually helps the wielder defend himself,
-    by increasing his/her armor class, and providing resistance
-    against damage from fire, cold, acid and lightning attacks. It also
-    grants levitation, increases your stealth, let you see invisible
-    creatures and protects from paralyzation and some slowing attacks.
-    It also helps you regenerate hit-points and mana faster.
+    A magical weapon that actually helps defend the wielder by increasing
+    his/her armor class and providing resistance against damage from fire,
+    cold, acid and lightning attacks. It also grants levitation, increases
+    your stealth, let you see invisible creatures and protects you from
+    paralyzation and some slowing attacks.  It also helps you regenerate
+    hit-points and mana faster. It has a randomly chosen ability to sustain
+    a key statistic and to provide additional resistance.
 
 (Holy Avenger)
     A Holy Avenger is one of the more powerful of weapons. It will
@@ -171,29 +172,35 @@ you are fighting a demon and your weapon slays both evil and demons
 Weapon of Westernesse
     A Weapon of Westernesse is one of the more powerful weapons. It
     slays orcs, trolls and giants while increasing your strength,
-    dexterity, and constitution. It also allows you to see invisible
-    creatures and protects from paralyzation and some slowing attacks.
+    dexterity, and constitution. It allows you to sense the presence
+    of nearby orcs, trolls, and giants. It also allows you to see
+    invisible creatures and protects you from paralyzation and some
+    slowing attacks.
 
 (Trump Weapon)
     A Trump Weapon is especially deadly against evil creatures and will
     increase your ability to discover hidden dungeon features. It will
     help you regenerate hit-points and mana faster and at the same time
     will reduce your rate of food consumption. It provides resistance
-    to nexus and protects from paralyzation and some slowing attacks.
-    In addition it may cause you to teleport randomly and can be
-    activated for teleport once every 50+1d50 turns.
+    to nexus and protects you from paralyzation and some slowing attacks.
+    It may have an additional resistance. In addition, it can be
+    activated for teleport once every 50+1d50 turns. A Trump Weapon
+    can cause you to teleport randomly. Random teleports can be
+    annoying when you don't need them, but, unless the weapon is cursed,
+    you may prevent them by inscribing the weapon with the '{' command.
 
 (Pattern Weapon)
     A Pattern Weapon has been embedded with a fragment of the Pattern.
     It will increase your strength and constitution and also has a
     chance of increasing your dexterity. It is especially effective
     when used against evil, undead and demonic creatures. It will allow
-    you to see invisible creatures and protects from paralyzation and
-    some slowing attacks.
+    you to see invisible creatures and protects you from paralyzation
+    and some slowing attacks. It has an additional, random, resistance.
 
 (Blessed Blade)
-    A blessed blade will increase your wisdom and can be wielded by
-    priests with no penalty.
+    A blessed weapon will increase your wisdom and can be wielded by
+    priests with no penalty. It allows you to sense the presence of
+    nearby good creatures. It may have some other special abilities.
 
 Weapon of Extra Attacks
     These weapons will grant the user additional attacks per round.
@@ -208,11 +215,13 @@ Weapon of Earthquakes (hafted weapon only)
     which potentially may cause other monsters in the area to take
     damage from falling rocks and will destroy a small portion of the
     surrounding dungeon. They also increase your ability to tunnel
-    through the dungeon walls.
+    through the dungeon walls. Some weapons of this type found deep
+    in the dungeon may grant extra attacks per round.
 
 Weapon of Slaying
     These weapons have a chance of being granted unusually high damage
-    dice.
+    dice. Some weapons of this type deal poison damage or cause vorpal
+    hits.
 
 Implement of Digging
     These digging implements increase your ability to tunnel through
@@ -220,158 +229,178 @@ Implement of Digging
 
 --- The Elemental and Other Brands ---
 
+For players of Angband, Zangband and older versions of Hengband, keep
+in mind that activations have been added to the weapons with the acid,
+electric, cold, fire or poison brands. Enjoy this new power to your
+heart's content!
+
 (Chaotic)
     These bizarre, feared weapons have been manufactured in the Courts
     of Chaos, and are very unpredictable in combat often producing
     chaotic effects when they strike your opponent. Effects include
     *destruction*, teleport away and vampiric drain among others. A
     Chaotic weapon grants resistance to chaos attacks and cannot be
-    damaged by acid, fire and electricity.
+    damaged by acid, fire and electricity. It may have an additional,
+    random, resistance.
 
 (Vampiric)
     These foul weapons have been created by Death magic. They lust for
     blood, and if such a weapon scores a hit, it greedily sucks life
     from the hapless victim, transferring the life energy to its
-    master and healing them in the process.
+    master and healing them in the process. Some of these weapons
+    are especially effective against human-type opponents, dealing
+    2.5 times the normal dice against those creatures.
 
 Weapon of Melting
     A magical weapon of acid that will inflict damage with 2.5 times
     the normal dice when used against a creature that is not resistant
-    to acid.  It also provides resistance against acid attacks.
+    to acid.  It also provides resistance against acid attacks. It may
+    be activated every 12 turns to attack with a ball of acid.
 
 Weapon of Shocking
     A magical weapon of lightning that will inflict damage with 2.5
     times the normal dice when used against a creature that is not
     resistant to electricity. It also provides resistance against
-    lightning attacks.
+    lightning attacks. It may be activated every 12 turns to attack
+    with a ball of electricity.
 
 Weapon of Freezing
     A magical weapon of ice that will inflict damage with 2.5 the
     normal dice when used against a creature that is not resistant to
-    cold.  It also provides resistance against cold attacks.
+    cold. It also provides resistance against cold attacks. It may
+    be activated every 12 turns to attack with a ball of cold air.
 
 Weapon of Burning
     A magical weapon of fire that will inflict damage with 2.5 the
     normal dice when used against a creature that is not resistant to
-    fire.  It also provides resistance against fire attacks.
+    fire.  It also provides resistance against fire attacks. It may
+    be activated every 12 turns to attack with a ball of fire.
 
 Weapon of Poisoning
     A magical weapon, coated with poison, that will inflict damage
     with 2.5 times the normal dice to creatures not resistant to
     poison. It also provides resistance against toxic and poisonous
-    attacks.
+    attacks. It may be activated every 12 turns to attack with a ball
+    of radioactive waste.
 
 Weapon of Force
     This weapon will attack monsters with your mana power and will
-    inflict damage with 3.5 times the normal dice.
+    inflict damage with 3.5 times the normal dice. It also increases
+    your intelligence and wisdom and allows you to see invisible
+    creatures.
 
 --- Weapons of Slay {Monster-Type} ---
 
+For players of Angband, Zangband and older version of Hengband, keep
+in mind that the old weapons of Slay {Monster-Type} have been discontinued
+since they weren't particularly useful.  The old *Slay* {Monster-Type}
+weapons are now Slay {Monster-Type}, and some of those that still seemed
+weak have been tweaked further.
+
 Weapon of Slay Animal
     This weapon is especially effective against natural creatures and
-    will inflict damage with 2.5 times the normal dice against such
-    creatures.
+    will inflict damage with 4 times the normal dice against such
+    creatures. It allows you to always sense the presence of nearby
+    animals. It also raises your intelligence and helps you regenerate
+    hit-points and mana faster.
 
 Weapon of Slay Evil
     This weapon is especially effective against evil creatures and
     will inflict damage with two times the normal dice against such
-    creatures.
+    creatures. It allows you to always sense the presence of nearby
+    evil creatures. It also increases your wisdom.
 
 Weapon of Slay Human
-    This weapon is especially effective against human type beings and
-    will inflict damage with 2.5 times the normal dice against such
-    beings.
+    This weapon is especially effective against human-type beings and
+    will inflict damage with 4 times the normal dice against such
+    beings. It allows you to always sense the presence of nearby
+    human-type creatures. It also increases your dexterity and
+    provides resistance to fear.
 
 Weapon of Slay Undead
     This weapon is especially effective against undead creatures and
-    will inflict three times the normal dice against such
-    creatures. It will also provide resistance to life draining
-    attacks.
+    will inflict 5 times the normal dice against such creatures.
+    It allows you to always sense the presence of nearby undead.
+    It will also increase your wisdom, allow you to see invisible
+    creatures and provide resistance against nether.
 
 Weapon of Slay Demon
     This weapon is especially effective against demonic creatures and
-    will inflict damage with three times the normal dice against such
-    creatures.
+    will inflict damage with 5 times the normal dice against such
+    creatures. It allows you to always sense the presence of nearby
+    demons. It will also increase your intelligence and provide
+    resistance against fire.
 
 Weapon of Slay Orc
     This weapon is especially effective against orcs and will inflict
-    damage with three times the normal dice against such creatures.
+    damage with 5 times the normal dice against such creatures. It
+    allows you to always sense the presence of nearby orcs. It will
+    also increase your dexterity and provide darkness resistance.
 
 Weapon of Slay Troll
     This weapon is especially effective against trolls and will
-    inflict damage with three times the normal dice against such
-    creatures.
+    inflict damage with 5 times the normal dice against such
+    creatures. It allows you to always sense the presence of nearby
+    trolls. It also increases your strength and accelerates how
+    rapidly you recover hit-points and mana.
 
 Weapon of Slay Giant
     This weapon is especially effective against giant humanoids and
-    will inflict damage with three times the normal dice against such
-    creatures.
+    will inflict damage with 5 times the normal dice against such
+    creatures. It allows you to always sense the presence of nearby
+    giants. It also increases your strength and protects you from
+    paralyzation and some slowing attacks.
 
 Weapon of Slay Dragon
     This weapon is especially effective against dragons and will
-    inflict damage with three times the normal dice against such
-    creatures.
+    inflict damage with 5 times the normal dice against such
+    creatures. It allows you to always sense the presence of
+    nearby dragons. It also increases your constitution and
+    provides additional, random, resistances.
 
---- Weapons of *Slay* {Monster-Type} ---
+--- Cursed Weapons ---
 
-Weapon of *Slay* Animal
-    This weapon is especially effective against natural creatures and
-    will inflict damage with four times the normal dice against such
-    creatures, and allows wielder to sense the presence of natural
-    creatures.  It will also increase your intelligence and allow you
-    to regenerate hit-points and mana faster.
+Equipment that is simply cursed brings only disadvantages, but you
+may find weapons with horrifying and powerful powers. Here, we'll
+introduce the weapons with such powers.
 
-Weapon of *Slay* Evil
-    This weapon is especially effective against evil creatures and
-    will inflict damage with 3.5 times the normal dice against such
-    creatures, and allows wielder to sense the presence of evil
-    creatures.  It will increase your wisdom and will also be a
-    blessed blade.
+Morgul Weapon
+    A Morgul weapon was made by Sauron or one of his magicians.
+    It has larger than normal damage dice, poisons enemies, and
+    is especially effective against undead or human-type creatures.
+    It allows the wielder to always sense the presence of nearby
+    undead. It also grants resistance to cold and nether, allows
+    the wielder to see invisible creatures, and surrounds the
+    wielder with a sheath of cold air that damages those who
+    attack the wielder. However, it has a penalty to AC,
+    aggravates nearby monsters and is randomly and powerfully
+    cursed.
 
-Weapon of *Slay* Human
-    This weapon is especially effective against human type beings and
-    will inflict damage with four times the normal dice against such
-    beings, and allows wielder to sense the presence of Humans.  It
-    will increase your dexterity.
+    For players of Angband, Zangband or older versions of Hengband,
+    keep in mind that Morgul weapons have become more powerful. It
+    seems that some maintainers have been corrupted by Morgoth,
+    and the dark powers that lie to the free people of Middle-earth
+    are becoming stronger.
 
-Weapon of *Slay* Undead
-    This weapon is especially effective against undead creatures and
-    will inflict damage with five times the normal dice against such
-    creatures, and allows wielder to sense the presence of undead
-    creatures.  It will increase your wisdom and will also provide
-    resistance to both nether and life-draining attacks. Finally, it
-    will allow you to see invisible creatures.
+(Demonic)
+    A weapon of this type has larger than normal damage dice,
+    deals flame damage and allows the wielder to always sense
+    the presence of nearby demons. It also increases the wielder's
+    intelligence, grants resistance to fire and nether and
+    allows the wielder to see invisible creatures. It may have
+    a bonus to the number of attacks or cause a random effect,
+    like that of a Chaotic weapon, on a successful attack.
+    A Demonic weapon has a penalty to AC and also has a random
+    unpleasant effect.
 
-Weapon of *Slay* Demon
-    This weapon is especially effective against demonic creatures and
-    will inflict damage with five times the normal dice against such
-    creatures, and allows wielder to sense the presence of demonic
-    creatures.  It will also increase your intelligence.
-
-Weapon of *Slay* Orc
-    This weapon is especially effective against orcs and will inflict
-    damage with five times the normal dice against such creatures, and
-    allows wielder to sense the presence of orcs.  It will also
-    increase your dexterity.
-
-Weapon of *Slay* Troll
-    This weapon is especially effective against trolls and will
-    inflict damage with five times the normal dice against such
-    creatures, and allows wielder to sense the presence of trolls.  It
-    will also increase your strength.
-
-Weapon of *Slay* Giant
-    This weapon is especially effective against giant humanoids and
-    will inflict damage with five times the normal dice against such
-    creatures, and allows wielder to sense the presence of giant
-    humanoids.  It will also increase your strength.
-
-Weapon of *Slay* Dragon
-    This weapon is especially effective against dragons and will
-    inflict damage with five times the normal dice against such
-    creatures, and allows wielder to sense the presence of dragons.
-    It will also increase your constitution.
-
+(Weird Weapon) (edged weapons only)
+    A weapon of this type has larger than normal damage dice,
+    produces vorpal hits, absorbs the vitality of enemies and
+    restores the wielder and also causes extra damage to orcs,
+    trolls, giants, natural animals, humans and dragons.
+    However, it is always strongly cursed, reduces intelligence
+    and wisdom, drains your experience points from time to time
+    and aggravates nearby monsters.
 
 --- Missile Launchers ---
 
@@ -383,6 +412,7 @@ Launcher of Velocity
 
 Launcher of Extra Might
     These missile launchers have an unusually high damage multiplier.
+    They also provide some resistance.
 
 Launcher of Extra Shots
     These missile launchers grant additional shots per round.
@@ -399,7 +429,7 @@ Ammunition of Hurt Evil
 
 Ammunition of Hurt Dragon
     This ammunition is especially effective against dragons and will do
-    three two the normal damage against such creatures.
+    2 times the normal damage against such creatures.
 
 Ammunition of Shocking
     This ammunition will inflict 1.7 times the normal damage when
@@ -422,10 +452,30 @@ Ammunition of Wounding
 
 --- Other Items ---
 
-Apart from these there are some very rare and well made blades in the
-dungeon. These include Blades of Chaos (which grant resistance to
+Apart from these there are some very rare and well made weapons in
+the dungeon. These include Blades of Chaos (which grant resistance to
 chaos), Maces of Disruption (which are especially effective against
 undead creatures) and Scythes of Slicing (which may score vorpal hits).
+You may also find a strange weapon called a Poison Needle which has a
+chance to find an opponent's weakness and kill that opponent with a
+single blow.
+
+Also, legendary weapons (artifacts) are similar to ego items but
+usually have more abilities and are very powerful. Artifacts never
+break.  However, they may deteriorate and, if caught in the effect
+range of *destruction*, may disappear forever.
+
+In Hengband, there are two types of artifacts: fixed and random.
+A fixed artifact has a predetermined name and attributes, so,
+if you play the game many times, you may encounter the same fixed
+artifact. The name and attributes of a random artifact are determined
+when it is generated, so it is extremely unlikely that you would see
+that artifact again in another game. A fixed artifact will have a
+"★" symol in its name. A random one will have a "☆" in its name.
+
+By the way, the rare weapons mentioned above can also become ego
+items at the same time.  A Blade of Chaos (Holy Avenger) will have
+a more powerful attack than many artifacts.
 
 Note on Vorpal Weapons: A weapon with the vorpal flag will have a
 1-in-6 chance of doing additional damage each time it strikes. If it
@@ -441,18 +491,21 @@ There are several magical means of increasing your physical combat
 ability. The most common of these are potions of heroism and berserk
 strength and various scrolls (blessing, holy prayer, etc.). Typically,
 these grant small cumulative bonuses to your combat skill. Some magic
-realms contain equivalent spells.
+realms contain equivalent spells. Be aware that you can't cast spells
+while berserk, for instance from drinking a potion of berserk strength.
+Using a healing potion (or some staffs or rods with healing effects)
+will clear your head, cancel the berserk effect (if you're not a
+berserker), and allow you to cast spells.
 
 
 ***** <MonkAttacks>
 === Monk Attacks ===
 
-The Monk and ForceTrainer are designed to be barehanded fighters
-rather than using a weapon like the other Hengband classes. As a
-Monk's level increases the number of attacks they get per round
-increases and new, increasingly powerful attacks become
-available. Higher level attacks have a chance to stun the Monk's
-opponent.
+A Monk or a ForceTrainer prefer to fight barehanded rather than
+use a weapon like other characters in Hengband.  As a Monk's
+level increases, the number of attacks he or she gets per round
+increases and new, increasingly powerful attacks become available.
+Higher level attacks have a chance to stun the Monk's opponent.
 
 While the type of attack that a Monk uses for each blow is chosen at
 random from the list of available attacks, at higher levels there is a
@@ -491,17 +544,28 @@ Crushing Blow   48      10d13     18
 
 Pillardancing
 -------------
-Not recommended in Hengband:  monsters move at irregular speeds.
+This tactic uses an isolated wall surrounded by eight empty spaces,
+i.e. a pillar, so you can avoid an opponent's attacks while you
+prepare for an attack or escape. If you are the same speed or faster
+than the enemy, you lure it so it is at one face of the pillar while
+you are one square away diagonally on another face.  You then back
+away diagonally to another face of the pillar, out of its line of
+sight. You then repeat that procedure when the opponent moves into
+your field of view.
+
+In Hengband, that tactic is not recommended. Movement has a
+randomized component so you won't be able to avoid all of the
+opponent's attacks with pillardancing.
 
 
 Shoot'n Scoot
 -------------
-Requires a large room, Phase Door, and some type of missile weapon.
-Stand at one end of the room, your enemy at the other. Fire your
-missile weapon at him until he gets close, and then Phase Door. Fire
-again, until he gets close, and repeat. By the time you run out of
-ammunition, he should be dead or weak enough for you to finish him HTH
-(Hand to Hand).
+Requires a large room, Phase Door, and some type of ranged attack.
+Stand at one end of the room while your enemy is at the other end.
+Repeat your ranged attack until it gets close, then Phase Door.
+Keep doing that until you can safely finish off the enemy with melee
+attacks (or until you can't continue your ranged attack and need
+to escape).
 
 
 Wail'n Bail
