@@ -479,7 +479,7 @@ I:23:5:0
 W:3:0:30:25
 A:3/1
 P:0:1d5:0:0:0
-F:SHOW_MODS
+F:SHOW_MODS | SUPPORTIVE
 D:$A short thrusting blade with a large guard, primarily used in duels.
 D:拳を防御する大きな鍔を持つ短い剣。主に決闘で防御用の短剣として用いられる。
 
@@ -5353,7 +5353,7 @@ I:23:13:0
 W:15:0:90:210
 A:15/3
 P:0:2d4:0:0:0
-F:SHOW_MODS
+F:SHOW_MODS | SUPPORTIVE
 
 #JZ#
 N:550:薙刀

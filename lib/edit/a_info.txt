@@ -1287,7 +1287,7 @@ I:23:5:3
 W:15:30:30:62500
 P:0:2d5:12:15:0
 F:INT | DEX | HIDE_TYPE | SPEED | XTRA_RES_OR_POWER |
-F:SLAY_TROLL | SLAY_GIANT | FREE_ACT | SEE_INVIS | SHOW_MODS |
+F:SUPPORTIVE | SLAY_TROLL | SLAY_GIANT | FREE_ACT | SEE_INVIS | SHOW_MODS |
 F:ESP_ORC | ESP_TROLL | ESP_GIANT
 D:$A short thrusting blade with a large guard worn by Maedhros the Tall, 
 D:$eldest son of Feanor, and wielded with his left hand after the loss of 
@@ -2665,7 +2665,7 @@ E:of Azaghal
 I:23:5:0
 W:15:30:30:40000
 P:0:2d5:12:14:0
-F:KILL_DRAGON | ESP_DRAGON | IM_FIRE | XTRA_RES_OR_POWER
+F:SUPPORTIVE | KILL_DRAGON | ESP_DRAGON | IM_FIRE | XTRA_RES_OR_POWER
 D:$At the Nirnaeth the Dwarves stayed the onslaught of Glaurung, and 
 D:$Azaghal their lord drove this short blade into the drake's belly before 
 D:$he was trampled underfoot. The black blood of the Father of Dragons 
@@ -3133,7 +3133,7 @@ E:of Musashi
 I:23:13:3
 W:50:5:90:60000
 P:0:2d4:28:17:0
-F:DEX | HIDE_TYPE | SUST_DEX | SHOW_MODS
+F:SUPPORTIVE | DEX | HIDE_TYPE | SUST_DEX | SHOW_MODS
 D:$It is the wakizashi of the famed creator of the dual sword technique, 
 D:$Miyamoto Musashi, and wielded with his left hand in combat.
 D:名高き二天一流の創始者、宮本武蔵が使っていた小刀だ。
@@ -3171,7 +3171,7 @@ I:23:5:3
 W:20:6:30:22500
 P:0:1d5:18:6:0
 F:INT | CHR | REGEN | SLAY_EVIL |
-F:RES_NEXUS | FREE_ACT | SEE_INVIS | SHOW_MODS |
+F:SUPPORTIVE | RES_NEXUS | FREE_ACT | SEE_INVIS | SHOW_MODS |
 D:復讐のため、三姉妹を探して時間流を旅する＜薔薇＞と呼ばれる女性の剣だ。
 D:『すばやき刺』と対を成している。
 

@@ -162,6 +162,10 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         }
     }
 
+    if (has_flag(flgs, TR_SUPPORTIVE)) {
+        info[i++] = _("それは武器の補助として扱いやすい。", "It is easy to treat it as assistance to weapon.");
+    }
+
     if (has_flag(flgs, TR_STR)) {
         info[i++] = _("それは腕力に影響を及ぼす。", "It affects your strength.");
     }

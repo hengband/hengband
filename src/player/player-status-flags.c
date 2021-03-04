@@ -391,6 +391,7 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
     case TR_INVULN_ARROW:
         return has_invuln_arrow(creature_ptr);
     case TR_DARK_SOURCE:
+    case TR_SUPPORTIVE:
         return check_equipment_flags(creature_ptr, tr_flag);
     }
     return 0;
