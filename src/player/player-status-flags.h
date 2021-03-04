@@ -21,7 +21,9 @@ enum flag_cause {
     FLAG_CAUSE_MUTATION = 0x01U << 16, /*!< 変異による効果 */
     FLAG_CAUSE_BATTLE_FORM = 0x01U << 17, /*!< 構えによる効果 */
     FLAG_CAUSE_RIDING = 0x01U << 18, /*!< 乗馬による効果 */
-    FLAG_CAUSE_MAX = 0x01U << 19
+    FLAG_CAUSE_INVEN_PACK = 0x01U << 19, /*!< その他インベントリによる効果 重量超過等 */
+    FLAG_CAUSE_ACTION = 0x01U << 20, /*!< ACTIONによる効果 探索モード等 */
+    FLAG_CAUSE_MAX = 0x01U << 21
 };
 
 typedef enum melee_type {
@@ -41,6 +43,7 @@ enum aggravate_state {
     AGGRAVATE_NORMAL = 0x00000002L,
 };
 
+BIT_FLAGS check_equipment_flags(player_type *creature_ptr, tr_type tr_flag);
 BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag);
 bool has_pass_wall(player_type *creature_ptr);
 bool has_kill_wall(player_type *creature_ptr);
