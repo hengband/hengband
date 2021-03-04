@@ -2310,6 +2310,7 @@ static ARMOUR_CLASS calc_base_ac(player_type *creature_ptr)
 static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_real_value)
 {
     ARMOUR_CLASS ac = 0;
+    BIT_FLAGS flags[TR_FLAG_SIZE];
     if (creature_ptr->yoiyami)
         return 0;
 
@@ -2338,6 +2339,7 @@ static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_real_value)
     for (inventory_slot_type i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         object_type *o_ptr;
         o_ptr = &creature_ptr->inventory_list[i];
+        object_flags(creature_ptr, o_ptr, flags);
         if (!o_ptr->k_idx)
             continue;
         if (is_real_value || object_is_known(o_ptr))
@@ -2353,7 +2355,7 @@ static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_real_value)
             }
         }
 
-        if ((i == INVEN_SUB_HAND) && (o_ptr->tval == TV_SWORD) && ((o_ptr->sval == SV_MAIN_GAUCHE) || (o_ptr->sval == SV_WAKIZASHI))) {
+        if ((i == INVEN_SUB_HAND) && has_flag(flags, TR_SUPPORTIVE)) {
             ac += 5;
         }
     }
@@ -2687,7 +2689,11 @@ static s16b calc_speed(player_type *creature_ptr)
 s16b calc_double_weapon_penalty(player_type *creature_ptr, INVENTORY_IDX slot)
 {
     int penalty = 0;
+    BIT_FLAGS flags[TR_FLAG_SIZE];
+
     if (has_melee_weapon(creature_ptr, INVEN_MAIN_HAND) && has_melee_weapon(creature_ptr, INVEN_SUB_HAND)) {
+        object_flags(creature_ptr, &creature_ptr->inventory_list[INVEN_SUB_HAND], flags);
+
         penalty = ((100 - creature_ptr->skill_exp[GINOU_NITOURYU] / 160) - (130 - creature_ptr->inventory_list[slot].weight) / 8);
         if (((creature_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_QUICKTHORN)
             && (creature_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_TINYTHORN))
@@ -2698,8 +2704,7 @@ s16b calc_double_weapon_penalty(player_type *creature_ptr, INVENTORY_IDX slot)
         if (creature_ptr->easy_2weapon) {
             if (penalty > 0)
                 penalty /= 2;
-        } else if ((creature_ptr->inventory_list[INVEN_SUB_HAND].tval == TV_SWORD)
-            && ((creature_ptr->inventory_list[INVEN_SUB_HAND].sval == SV_MAIN_GAUCHE) || (creature_ptr->inventory_list[INVEN_SUB_HAND].sval == SV_WAKIZASHI))) {
+        } else if (has_flag(flags, TR_SUPPORTIVE)) {
             penalty = MAX(0, penalty - 10);
         }
         if ((creature_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_MUSASI_KATANA)
