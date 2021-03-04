@@ -1,6 +1,5 @@
 ﻿#include "temporary-resistances.h"
 #include "object-enchant/tr-types.h"
-#include "player/attack-defense-types.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"
 #include "player/player-status-flags.h"
@@ -34,17 +33,6 @@ void tim_player_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 
     if (is_fast(creature_ptr) || creature_ptr->slow)
         add_flag(flags, TR_SPEED);
-
-    if (creature_ptr->special_attack & ATTACK_ACID)
-        add_flag(flags, TR_BRAND_ACID);
-    if (creature_ptr->special_attack & ATTACK_ELEC)
-        add_flag(flags, TR_BRAND_ELEC);
-    if (creature_ptr->special_attack & ATTACK_FIRE)
-        add_flag(flags, TR_BRAND_FIRE);
-    if (creature_ptr->special_attack & ATTACK_COLD)
-        add_flag(flags, TR_BRAND_COLD);
-    if (creature_ptr->special_attack & ATTACK_POIS)
-        add_flag(flags, TR_BRAND_POIS);
 
     if (is_oppose_acid(creature_ptr) && none_bits(has_immune_acid(creature_ptr), (race_class_flag | tmp_effect_flag)))
         add_flag(flags, TR_RES_ACID);
