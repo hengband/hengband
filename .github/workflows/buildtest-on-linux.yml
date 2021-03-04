@@ -12,7 +12,7 @@ jobs:
     name: Build test on Ubuntu-20.04
     runs-on: ubuntu-20.04
     env:
-      CFLAGS: "-pipe -Werror -Wall -Wextra -Wno-format-overflow -Wno-switch -Wno-sign-compare -Wno-unused-parameter -Wno-unused-function"
+      CFLAGS: "-pipe -O3 -Werror -Wall -Wextra -Wno-switch -Wno-sign-compare -Wno-unused-parameter -Wno-unused-function"
     steps:
       - uses: actions/checkout@v2
 
