@@ -33,7 +33,6 @@
 #include "util/quarks.h"
 #include "util/string-processor.h"
 
-static BIT_FLAGS check_equipment_flags(player_type *creature_ptr, tr_type tr_flag);
 
 static BIT_FLAGS convert_inventory_slot_type_to_flag_cause(inventory_slot_type inventory_slot)
 {
@@ -71,7 +70,7 @@ static BIT_FLAGS convert_inventory_slot_type_to_flag_cause(inventory_slot_type i
 /*!
  * @brief 装備による所定の特性フラグを得ているかを一括して取得する関数。
  */
-static BIT_FLAGS check_equipment_flags(player_type *creature_ptr, tr_type tr_flag)
+BIT_FLAGS check_equipment_flags(player_type *creature_ptr, tr_type tr_flag)
 {
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
@@ -172,7 +171,7 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
     case TR_TUNNEL:
         return 0;
     case TR_SPEED:
-        return 0;
+        return player_flags_speed(creature_ptr);
     case TR_BLOWS:
         return 0;
     case TR_CHAOTIC:

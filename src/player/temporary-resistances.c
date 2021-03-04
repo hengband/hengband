@@ -31,9 +31,6 @@ void tim_player_flags(player_type *creature_ptr, BIT_FLAGS *flags)
     for (int i = 0; i < TR_FLAG_SIZE; i++)
         flags[i] = 0L;
 
-    if (is_fast(creature_ptr) || creature_ptr->slow)
-        add_flag(flags, TR_SPEED);
-
     if (is_oppose_acid(creature_ptr) && none_bits(has_immune_acid(creature_ptr), (race_class_flag | tmp_effect_flag)))
         add_flag(flags, TR_RES_ACID);
     if (is_oppose_elec(creature_ptr) && none_bits(has_immune_elec(creature_ptr), (race_class_flag | tmp_effect_flag)))
