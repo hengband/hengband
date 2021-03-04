@@ -260,7 +260,7 @@ bool save_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
     u32b old_v_stamp = 0;
     u32b old_x_stamp = 0;
 
-    char floor_savefile[1024];
+    char floor_savefile[sizeof(savefile) + 32];
     if ((mode & SLF_SECOND) != 0) {
         old_fff = saving_savefile;
         old_xor_byte = save_xor_byte;

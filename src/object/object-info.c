@@ -65,8 +65,8 @@ static concptr item_activation_dragon_breath(player_type *owner_ptr, object_type
  */
 static concptr item_activation_aux(player_type *owner_ptr, object_type *o_ptr)
 {
-    static char activation_detail[256];
-    char timeout[32];
+    static char activation_detail[512];
+    char timeout[64];
     const activation_type *const act_ptr = find_activation_info(owner_ptr, o_ptr);
 
     if (!act_ptr)

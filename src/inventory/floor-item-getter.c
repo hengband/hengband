@@ -330,8 +330,9 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
         if (command_wrk == USE_INVEN) {
             sprintf(fis_ptr->out_val, _("持ち物:", "Inven:"));
             if (!use_menu) {
-                sprintf(fis_ptr->tmp_val, _("%c-%c,'(',')',", " %c-%c,'(',')',"), index_to_label(fis_ptr->i1), index_to_label(fis_ptr->i2));
-                strcat(fis_ptr->out_val, fis_ptr->tmp_val);
+                char tmp_val[80];
+                sprintf(tmp_val, _("%c-%c,'(',')',", " %c-%c,'(',')',"), index_to_label(fis_ptr->i1), index_to_label(fis_ptr->i2));
+                strcat(fis_ptr->out_val, tmp_val);
             }
 
             if (!command_see && !use_menu)
@@ -357,8 +358,9 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
         } else if (command_wrk == (USE_EQUIP)) {
             sprintf(fis_ptr->out_val, _("装備品:", "Equip:"));
             if (!use_menu) {
-                sprintf(fis_ptr->tmp_val, _("%c-%c,'(',')',", " %c-%c,'(',')',"), index_to_label(fis_ptr->e1), index_to_label(fis_ptr->e2));
-                strcat(fis_ptr->out_val, fis_ptr->tmp_val);
+                char tmp_val[80];
+                sprintf(tmp_val, _("%c-%c,'(',')',", " %c-%c,'(',')',"), index_to_label(fis_ptr->e1), index_to_label(fis_ptr->e2));
+                strcat(fis_ptr->out_val, tmp_val);
             }
 
             if (!command_see && !use_menu)
@@ -384,8 +386,9 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
         } else if (command_wrk == USE_FLOOR) {
             sprintf(fis_ptr->out_val, _("床上:", "Floor:"));
             if (!use_menu) {
-                sprintf(fis_ptr->tmp_val, _("%c-%c,'(',')',", " %c-%c,'(',')',"), fis_ptr->n1, fis_ptr->n2);
-                strcat(fis_ptr->out_val, fis_ptr->tmp_val);
+                char tmp_val[80];
+                sprintf(tmp_val, _("%c-%c,'(',')',", " %c-%c,'(',')',"), fis_ptr->n1, fis_ptr->n2);
+                strcat(fis_ptr->out_val, tmp_val);
             }
 
             if (!command_see && !use_menu)

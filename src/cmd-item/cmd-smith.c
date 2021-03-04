@@ -639,7 +639,7 @@ static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
                 if (!redraw || use_menu) {
                     byte y, x = 10;
                     int ctr;
-                    char dummy[80], dummy2[80];
+                    char dummy[80], dummy2[160];
                     byte col;
 
                     strcpy(dummy, "");

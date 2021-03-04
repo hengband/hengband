@@ -247,7 +247,7 @@ void do_cmd_time(player_type *creature_ptr)
     char desc[1024];
     strcpy(desc, _("変な時刻だ。", "It is a strange time."));
 
-    char day_buf[10];
+    char day_buf[20];
     if (day < MAX_DAYS)
         sprintf(day_buf, "%d", day);
     else

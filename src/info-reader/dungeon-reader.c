@@ -269,7 +269,7 @@ errr parse_d_info(char *buf, angband_header *head)
 
             if (!strncmp(s, "R_CHAR_", 7)) {
                 s += 7;
-                strncpy(d_ptr->r_char, s, sizeof(d_ptr->r_char));
+                angband_strcpy(d_ptr->r_char, s, sizeof(d_ptr->r_char));
                 s = t;
                 continue;
             }

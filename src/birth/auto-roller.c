@@ -114,8 +114,8 @@ bool get_stat_limits(player_type *creature_ptr)
     put_str(_("確率: 非常に容易(1/10000以上)", "Prob: Quite Easy(>1/10000)"), 23, col_stat);
 
     int cval[6];
-    char buf[80];
-    char cur[80];
+    char buf[320];
+    char cur[160];
     char inp[80];
     for (int i = 0; i < A_MAX; i++) {
         cval[i] = 3;

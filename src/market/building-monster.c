@@ -22,7 +22,7 @@
  */
 bool research_mon(player_type *player_ptr)
 {
-    char buf[128];
+    char buf[256];
     bool notpicked;
     bool recall = FALSE;
     u16b why = 0;

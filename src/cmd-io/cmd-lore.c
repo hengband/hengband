@@ -38,7 +38,7 @@ void do_cmd_query_symbol(player_type *creature_ptr)
     int n;
     MONRACE_IDX r_idx;
     char sym, query;
-    char buf[128];
+    char buf[256];
 
     bool all = FALSE;
     bool uniq = FALSE;
