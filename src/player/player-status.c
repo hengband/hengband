@@ -1209,40 +1209,91 @@ static ACTION_SKILL_POWER calc_intra_vision(player_type *creature_ptr)
     return pow;
 }
 
+
 /*!
- * @brief 隠密能力計算
+ * @brief 隠密能力計算 - 種族
  * @param creature_ptr 計算するクリーチャーの参照ポインタ
- * @return 隠密能力
+ * @return 隠密能力の増分
  * @details
- * * 初期値1
- * * 種族/職業/性格による加算
- * * 職業による追加加算
- * * 装備による修正(TR_STEALTHがあれば+pval*1)
- * * 変異MUT3_XTRA_NOISで減算(-3)
- * * 変異MUT3_MOTIONで加算(+1)
- * * 呪術を唱えていると減算(-(詠唱数+1))
- * * セクシーギャルでない影フェアリーがTRC_AGGRAVATE持ちの時、別処理でTRC_AGGRAVATEを無効にする代わりに減算(-3か3未満なら(現在値+2)/2)
- * * 狂戦士化で減算(-7)
- * * 忍者がheavy_armorならば減算(-レベル/10)
- * * 忍者がheavy_armorでなく適正な武器を持っていれば加算(+レベル/10)
- * * 隠密の歌で加算(+99)
- * * 最大30、最低0に補正
+ * * 種族による加算
  */
-static ACTION_SKILL_POWER calc_stealth(player_type *creature_ptr)
+static ACTION_SKILL_POWER calc_player_stealth_by_race(player_type *creature_ptr) 
 {
-    ACTION_SKILL_POWER pow;
     const player_race *tmp_rp_ptr;
 
     if (creature_ptr->mimic_form)
         tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
     else
         tmp_rp_ptr = &race_info[creature_ptr->prace];
-    const player_class *c_ptr = &class_info[creature_ptr->pclass];
+
+    return tmp_rp_ptr->r_stl;
+}
+
+
+/*!
+ * @brief 隠密能力計算 - 性格
+ * @param creature_ptr 計算するクリーチャーの参照ポインタ
+ * @return 隠密能力の増分
+ * @details
+ * * 性格による加算
+ */
+static ACTION_SKILL_POWER calc_player_stealth_by_personality(player_type *creature_ptr)
+{
     const player_personality *a_ptr = &personality_info[creature_ptr->pseikaku];
 
-    pow = 1 + tmp_rp_ptr->r_stl + c_ptr->c_stl + a_ptr->a_stl;
-    pow += (c_ptr->x_stl * creature_ptr->lev / 10);
+    return a_ptr->a_stl;
+}
 
+/*!
+ * @brief 隠密能力計算 - 職業(基礎値)
+ * @param creature_ptr 計算するクリーチャーの参照ポインタ
+ * @return 隠密能力の増分
+ * @details
+ * * 職業による加算
+ */
+static ACTION_SKILL_POWER calc_player_base_stealth_by_class(player_type *creature_ptr)
+{
+    const player_class *c_ptr = &class_info[creature_ptr->pclass];
+    return c_ptr->c_stl + (c_ptr->x_stl * creature_ptr->lev / 10);
+}
+
+
+/*!
+ * @brief 隠密能力計算 - 職業(追加分)
+ * @param creature_ptr 計算するクリーチャーの参照ポインタ
+ * @return 隠密能力の増分
+ * @details
+ * * 忍者がheavy_armorならば減算(-レベル/10)
+ * * 忍者がheavy_armorでなく適正な武器を持っていれば加算(+レベル/10)
+ */
+static ACTION_SKILL_POWER calc_player_additional_stealth_by_class(player_type *creature_ptr)
+{
+    ACTION_SKILL_POWER result = 0;
+    
+    if (creature_ptr->pclass == CLASS_NINJA) {
+        if (heavy_armor(creature_ptr)) {
+            result -= (creature_ptr->lev) / 10;
+        } else if ((!creature_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(creature_ptr))
+            && (!creature_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(creature_ptr))) {
+            result += (creature_ptr->lev) / 10;
+        }
+    }
+
+    return result;
+}
+
+
+/*!
+ * @brief 隠密能力計算 - 装備
+ * @param creature_ptr 計算するクリーチャーの参照ポインタ
+ * @return 隠密能力の増分
+ * @details
+ * * 装備による修正(TR_STEALTHがあれば+pval*1)
+ */
+static ACTION_SKILL_POWER calc_player_stealth_by_equipment(player_type *creature_ptr)
+{
+
+    ACTION_SKILL_POWER result = 0;
     for (inventory_slot_type i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         object_type *o_ptr;
         BIT_FLAGS flgs[TR_FLAG_SIZE];
@@ -1251,38 +1302,111 @@ static ACTION_SKILL_POWER calc_stealth(player_type *creature_ptr)
             continue;
         object_flags(creature_ptr, o_ptr, flgs);
         if (has_flag(flgs, TR_STEALTH))
-            pow += o_ptr->pval;
+            result += o_ptr->pval;
     }
+    return result;
+}
 
+
+/*!
+ * @brief 隠密能力計算 - 変異
+ * @param creature_ptr 計算するクリーチャーの参照ポインタ
+ * @return 隠密能力の増分
+ * @details
+ * * 変異MUT3_XTRA_NOISで減算(-3)
+ * * 変異MUT3_MOTIONで加算(+1)
+ */
+static ACTION_SKILL_POWER calc_player_stealth_by_mutation(player_type *creature_ptr)
+{
+    ACTION_SKILL_POWER result = 0;
     if (any_bits(creature_ptr->muta3, MUT3_XTRA_NOIS)) {
-        pow -= 3;
+        result -= 3;
     }
     if (any_bits(creature_ptr->muta3, MUT3_MOTION)) {
-        pow += 1;
+        result += 1;
     }
+    return result;
+}
+
+/*!
+ * @brief 隠密能力計算 - 一時効果
+ * @param creature_ptr 計算するクリーチャーの参照ポインタ
+ * @return 隠密能力の増分
+ * @details
+ * * 呪術を唱えていると減算(-(詠唱数+1))
+ * * 狂戦士化で減算(-7)
+ * * 隠密の歌で加算(+999)
+ */
+static ACTION_SKILL_POWER calc_player_stealth_by_time_effect(player_type *creature_ptr)
+{
+    ACTION_SKILL_POWER result = 0;
     if (creature_ptr->realm1 == REALM_HEX) {
         if (hex_spelling_any(creature_ptr))
-            pow -= (1 + casting_hex_num(creature_ptr));
+            result -= (1 + casting_hex_num(creature_ptr));
     }
+    if (is_shero(creature_ptr)) {
+        result -= 7;
+    }
+    if (is_time_limit_stealth(creature_ptr))
+        result += 999;
+
+    return result;
+}
+
+/*!
+ * @brief 隠密能力計算 - 影フェアリー反感処理
+ * @param creature_ptr 計算するクリーチャーの参照ポインタ
+ * @return 修正後の隠密能力
+ * @details
+ * * セクシーギャルでない影フェアリーがTRC_AGGRAVATE持ちの時、別処理でTRC_AGGRAVATEを無効にする代わりに減算(-3か3未満なら(現在値+2)/2)
+ */
+static ACTION_SKILL_POWER calc_player_stealth_by_s_faiery(player_type *creature_ptr, ACTION_SKILL_POWER pow)
+{
     if (player_aggravate_state(creature_ptr) == AGGRAVATE_S_FAIRY) {
         pow = MIN(pow - 3, (pow + 2) / 2);
     }
+    return pow;
+}
 
-    if (is_shero(creature_ptr)) {
-        pow -= 7;
-    }
 
-    if (creature_ptr->pclass == CLASS_NINJA) {
-        if (heavy_armor(creature_ptr)) {
-            pow -= (creature_ptr->lev) / 10;
-        } else if ((!creature_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(creature_ptr))
-            && (!creature_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(creature_ptr))) {
-            pow += (creature_ptr->lev) / 10;
-        }
-    }
+BIT_FLAGS player_flags_stealth(player_type *creature_ptr)
+{
+    BIT_FLAGS result = check_equipment_flags(creature_ptr, TR_STEALTH);
 
-    if (is_time_limit_stealth(creature_ptr))
-        pow += 99;
+    if (calc_player_additional_stealth_by_class(creature_ptr) != 0)
+        set_bits(result, FLAG_CAUSE_CLASS);
+    
+    if (calc_player_stealth_by_mutation(creature_ptr) != 0)
+        set_bits(result, FLAG_CAUSE_MUTATION);
+
+    if (calc_player_stealth_by_time_effect(creature_ptr) != 0)
+        set_bits(result, FLAG_CAUSE_MAGIC_TIME_EFFECT);
+
+    if (calc_player_stealth_by_s_faiery(creature_ptr, 0) != 0)
+        set_bits(result, FLAG_CAUSE_RACE);
+
+    return result;
+}
+
+/*!
+ * @brief 隠密能力計算
+ * @param creature_ptr 計算するクリーチャーの参照ポインタ
+ * @return 隠密能力
+ * @details
+ * * 初期値1
+ * * 最大30、最低0に補正
+ */
+static ACTION_SKILL_POWER calc_stealth(player_type *creature_ptr)
+{
+    ACTION_SKILL_POWER pow = 1;
+    pow += calc_player_base_stealth_by_class(creature_ptr);
+    pow += calc_player_additional_stealth_by_class(creature_ptr);
+    pow += calc_player_stealth_by_race(creature_ptr);
+    pow += calc_player_stealth_by_personality(creature_ptr);
+    pow += calc_player_stealth_by_equipment(creature_ptr);
+    pow += calc_player_stealth_by_mutation(creature_ptr);
+    pow += calc_player_stealth_by_time_effect(creature_ptr);
+    pow = calc_player_stealth_by_s_faiery(creature_ptr, pow); /* Set New Value */
 
     if (pow > 30)
         pow = 30;

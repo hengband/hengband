@@ -52,11 +52,7 @@ enum empty_hand_status {
 };
 
 /*!< Weapon hand status */
-typedef enum player_hand {
-    PLAYER_HAND_MAIN = 0x0000,
-    PLAYER_HAND_SUB = 0x0001,
-    PLAYER_HAND_OTHER = 0x0002
-} player_hand;
+typedef enum player_hand { PLAYER_HAND_MAIN = 0x0000, PLAYER_HAND_SUB = 0x0001, PLAYER_HAND_OTHER = 0x0002 } player_hand;
 
 /*
  * Player sex constants (hard-coded by save-files, arrays, etc)
@@ -482,6 +478,7 @@ extern WEIGHT calc_inventory_weight(player_type *creature_ptr);
 
 extern s16b calc_num_fire(player_type *creature_ptr, object_type *o_ptr);
 BIT_FLAGS player_flags_speed(player_type *creature_ptr);
+BIT_FLAGS player_flags_stealth(player_type *creature_ptr);
 static void update_bonuses(player_type *creature_ptr);
 extern WEIGHT calc_weight_limit(player_type *creature_ptr);
 extern bool has_melee_weapon(player_type *creature_ptr, int i);
