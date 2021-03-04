@@ -4355,6 +4355,8 @@ F:BRAND_COLD | SLAY_EVIL | KILL_DRAGON |
 F:SLAY_ORC | SLAY_TROLL | SLAY_GIANT |
 F:RES_COLD | RES_FEAR | SH_COLD |
 F:FREE_ACT | REGEN | LITE
+D:$It is one of the two scimitars of the legendary dark elf, Drizzt Do'Urden.
+D:$  It is paired with "Twinkle".
 D:伝説のダークエルフ、ドリッズドの二振りの剣のうちの1つだ。
 D:『トゥインクル』と対を成している。
 
@@ -4371,5 +4373,7 @@ F:BRAND_COLD |
 F:RES_COLD | RES_BLIND | RES_DARK | RES_NETHER |
 F:SUST_STR | SUST_DEX | SUST_CON |
 F:SEE_INVIS | HOLD_EXP | WARNING | SLOW_DIGEST | LITE
+D:$It is one of the two scimitars of the legendary dark elf, Drizzt Do'Urden.
+D:$  It is paired with "Icingdeath".
 D:伝説のダークエルフ、ドリッズドの二振りの剣のうちの1つだ。
 D:『アイシングデス』と対を成している。
