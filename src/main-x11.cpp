@@ -137,7 +137,7 @@
 /*
  * Include some helpful X11 code.
  */
-#include "maid-x11.c"
+#include "maid-x11.cpp"
 
 /*
  * Notes on Colors:
