@@ -373,35 +373,45 @@ void display_monster_exp(player_type *player_ptr, lore_type *lore_ptr)
 #endif
 
     int64_t base_exp = lore_ptr->r_ptr->mexp * lore_ptr->r_ptr->level * 3 / 2;
-    int64_t player_factor = player_ptr->max_plv + 2;
+    int64_t player_factor = (int64_t)player_ptr->max_plv + 2;
     
     int64_t exp_integer = base_exp / player_factor;
     int64_t exp_decimal = ((base_exp % player_factor * 1000 / player_factor) + 5) / 10;
 
 #ifdef JP
-    hooked_roff(format(" %d レベルのキャラクタにとって 約%ld.%02ld ポイントの経験となる。", player_ptr->lev, exp_integer, exp_decimal));
+    hooked_roff(format(" %d レベルのキャラクタにとって 約%Ld.%02Ld ポイントの経験となる。", player_ptr->lev, exp_integer, exp_decimal));
 #else
-    hooked_roff(format(" is worth about %ld.%02ld point%s", exp_integer, exp_decimal, ((exp_integer == 1) && (exp_decimal == 0)) ? "" : "s"));
+    hooked_roff(format(" is worth about %Ld.%02Ld point%s", exp_integer, exp_decimal, ((exp_integer == 1) && (exp_decimal == 0)) ? "" : "s"));
 
-    char *ordinal;
-    ordinal = "th";
-    exp_integer = player_ptr->lev % 10;
-    if ((player_ptr->lev / 10) != 1) {
-        if (exp_integer == 1)
-            ordinal = "st";
-        else if (exp_integer == 2)
-            ordinal = "nd";
-        else if (exp_integer == 3)
-            ordinal = "rd";
+    concptr ordinal;
+    switch (player_ptr->lev % 10) {
+    case 1:
+        ordinal = "st";
+        break;
+    case 2:
+        ordinal = "nd";
+        break;
+    case 3:
+        ordinal = "rd";
+        break;
+    default:
+        ordinal = "th";
+        break;
     }
 
-    char *vowel;
-    vowel = "";
-    exp_integer = player_ptr->lev;
-    if ((exp_integer == 8) || (exp_integer == 11) || (exp_integer == 18))
+    concptr vowel;
+    switch (player_ptr->lev) {
+    case 8:
+    case 11:
+    case 18:
         vowel = "n";
+        break;
+    default:
+        vowel = "";
+        break;
+    }
 
-    hooked_roff(format(" for a%s %lu%s level character.  ", vowel, (long)exp_integer, ordinal));
+    hooked_roff(format(" for a%s %d%s level character.  ", vowel, player_ptr->lev, ordinal));
 #endif
 }
 
