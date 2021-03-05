@@ -115,6 +115,8 @@ const flag_desc resist_flags_desc[MAX_RESISTANCE_FLAGS_DESCRIPTION] = {
     { TR_RES_NEXUS, _("因果混乱", "Nexus") },
     { TR_RES_CHAOS, _("カオス", "Chaos") },
     { TR_RES_DISEN, _("劣化", "Disenchantment") },
+    { TR_RES_TIME, _("時間逆転", "Time") },
+    { TR_RES_WATER, _("水", "Water") },
 };
 
 /* Elemental immunities (along with poison) */
@@ -175,4 +177,7 @@ const flag_desc misc_flags3_desc[MAX_MISC3_FLAGS_DESCRIPTION] = {
     { TR_BLESSED, _("祝福", "Blessed Blade") },
     { TR_DEC_MANA, _("消費魔力減少", "Decrease Mana Consumption Rate") },
     { TR_EASY_SPELL, _("呪文失敗率減少", "Easy Spell") },
+    { TR_SUPPORTIVE, _("攻撃補助", "Support Attack") },
+    { TR_RIDING, _("乗馬適正", "Riding") },
+    { TR_INVULN_ARROW, _("射撃無効", "Immune Arrow") },
 };
