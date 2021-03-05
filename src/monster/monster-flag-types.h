@@ -3,7 +3,7 @@
 typedef enum monster_flags_type {
 	MFLAG_VIEW = 0x01, /* Monster is in line of sight */
     MFLAG_LOS = 0x02, /* Monster is marked for project_all_los(caster_ptr, ) */
-    MFLAG_XXX2 = 0x04, /* (unused) */
+    MFLAG_ESP = 0x04, /* Monster is being sensed by ESP */
     MFLAG_ETF = 0x08, /* Monster is entering the field. */
     MFLAG_BORN = 0x10, /* Monster is still being born */
     MFLAG_PREVENT_MAGIC = 0x20, /* Monster is still being no-magic */

@@ -3,6 +3,7 @@
 #include "game-option/input-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
+#include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "object/object-mark-types.h"
@@ -150,7 +151,7 @@ void target_set_prepare(player_type *creature_ptr, BIT_FLAGS mode)
     tmp_pos.x[1] = tmp;
 }
 
-void target_sensing_monsters_prepare(player_type *creature_ptr, pos_list* plist)
+void target_sensing_monsters_prepare(player_type *creature_ptr, pos_list *plist)
 {
     plist->n = 0;
 
@@ -161,6 +162,10 @@ void target_sensing_monsters_prepare(player_type *creature_ptr, pos_list* plist)
     for (int i = 1; i < creature_ptr->current_floor_ptr->m_max; i++) {
         monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr) || !m_ptr->ml || is_pet(m_ptr))
+            continue;
+
+        // 感知魔法/スキルやESPで感知していない擬態モンスターはモンスター一覧に表示しない
+        if (is_mimicry(m_ptr) && none_bits(m_ptr->mflag2, (MFLAG2_MARK | MFLAG2_SHOW)) && none_bits(m_ptr->mflag, MFLAG_ESP))
             continue;
 
         plist->x[plist->n] = m_ptr->fx;

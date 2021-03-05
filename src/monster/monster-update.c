@@ -33,6 +33,7 @@
 #include "status/element-resistance.h"
 #include "system/floor-type-definition.h"
 #include "target/projection-path-calculator.h"
+#include "util/bit-flags-calculator.h"
 #include "world/world.h"
 
 // Update Monster.
@@ -216,6 +217,7 @@ static bool update_weird_telepathy(player_type *subject_ptr, um_type *um_ptr, MO
         return TRUE;
 
     um_ptr->flag = TRUE;
+    set_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
     if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image) {
         r_ptr->r_flags2 |= RF2_WEIRD_MIND;
         update_smart_stupid_flags(r_ptr);
@@ -229,6 +231,7 @@ static void update_telepathy_sight(player_type *subject_ptr, um_type *um_ptr, MO
     monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
     if (subject_ptr->special_defense & KATA_MUSOU) {
         um_ptr->flag = TRUE;
+        set_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             update_smart_stupid_flags(r_ptr);
 
@@ -249,6 +252,7 @@ static void update_telepathy_sight(player_type *subject_ptr, um_type *um_ptr, MO
         return;
 
     um_ptr->flag = TRUE;
+    set_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
     if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
         update_smart_stupid_flags(r_ptr);
 }
@@ -258,72 +262,84 @@ static void update_specific_race_telepathy(player_type *subject_ptr, um_type *um
     monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
     if ((subject_ptr->esp_animal) && (r_ptr->flags3 & RF3_ANIMAL)) {
         um_ptr->flag = TRUE;
+        set_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags3 |= RF3_ANIMAL;
     }
 
     if ((subject_ptr->esp_undead) && (r_ptr->flags3 & RF3_UNDEAD)) {
         um_ptr->flag = TRUE;
+        set_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags3 |= RF3_UNDEAD;
     }
 
     if ((subject_ptr->esp_demon) && (r_ptr->flags3 & RF3_DEMON)) {
         um_ptr->flag = TRUE;
+        set_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags3 |= RF3_DEMON;
     }
 
     if ((subject_ptr->esp_orc) && (r_ptr->flags3 & RF3_ORC)) {
         um_ptr->flag = TRUE;
+        set_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags3 |= RF3_ORC;
     }
 
     if ((subject_ptr->esp_troll) && (r_ptr->flags3 & RF3_TROLL)) {
         um_ptr->flag = TRUE;
+        set_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags3 |= RF3_TROLL;
     }
 
     if ((subject_ptr->esp_giant) && (r_ptr->flags3 & RF3_GIANT)) {
         um_ptr->flag = TRUE;
+        set_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags3 |= RF3_GIANT;
     }
 
     if ((subject_ptr->esp_dragon) && (r_ptr->flags3 & RF3_DRAGON)) {
         um_ptr->flag = TRUE;
+        set_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags3 |= RF3_DRAGON;
     }
 
     if ((subject_ptr->esp_human) && (r_ptr->flags2 & RF2_HUMAN)) {
         um_ptr->flag = TRUE;
+        set_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags2 |= RF2_HUMAN;
     }
 
     if ((subject_ptr->esp_evil) && (r_ptr->flags3 & RF3_EVIL)) {
         um_ptr->flag = TRUE;
+        set_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags3 |= RF3_EVIL;
     }
 
     if ((subject_ptr->esp_good) && (r_ptr->flags3 & RF3_GOOD)) {
         um_ptr->flag = TRUE;
+        set_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags3 |= RF3_GOOD;
     }
 
     if ((subject_ptr->esp_nonliving) && ((r_ptr->flags3 & (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING)) == RF3_NONLIVING)) {
         um_ptr->flag = TRUE;
+        set_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags3 |= RF3_NONLIVING;
     }
 
     if ((subject_ptr->esp_unique) && (r_ptr->flags1 & RF1_UNIQUE)) {
         um_ptr->flag = TRUE;
+        set_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags1 |= RF1_UNIQUE;
     }
@@ -372,6 +388,9 @@ static void decide_sight_invisible_monster(player_type *subject_ptr, um_type *um
 {
     POSITION distance = decide_updated_distance(subject_ptr, um_ptr);
     monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
+
+    reset_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
+
     if (distance > (um_ptr->in_darkness ? MAX_SIGHT / 2 : MAX_SIGHT))
         return;
 

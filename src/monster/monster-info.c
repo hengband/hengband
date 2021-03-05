@@ -24,10 +24,12 @@
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-flag-types.h"
+#include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"
+#include "player/player-status-flags.h"
 #include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
-#include "player/player-status-flags.h"
+#include "util/string-processor.h"
 
 /*!
  * @brief モンスターを友好的にする
@@ -235,6 +237,37 @@ bool is_friendly(monster_type *m_ptr) { return (m_ptr->smart & SM_FRIENDLY) != 0
 bool is_pet(monster_type *m_ptr) { return (m_ptr->smart & SM_PET) != 0; }
 
 bool is_hostile(monster_type *m_ptr) { return !is_friendly(m_ptr) && !is_pet(m_ptr); }
+
+/*!
+ * @brief モンスターがアイテム類に擬態しているかどうかを返す
+ *
+ * モンスターがアイテム類に擬態しているかどうかを返す。
+ * 擬態の条件:
+ * - シンボルが以下のいずれかであること: /|\()[]=$,.!?&`#%<>+~
+ * - 動かない、もしくは眠っていること
+ *
+ * 但し、以下のモンスターは例外的に擬態しているとする
+ * それ・生ける虚無『ヌル』・ビハインダー
+ *
+ * @param m_ptr モンスターの参照ポインタ
+ * @return モンスターがアイテム類に擬態しているならTRUE、そうでなければFALSE
+ */
+bool is_mimicry(monster_type *m_ptr)
+{
+    if (m_ptr->ap_r_idx == MON_IT || m_ptr->ap_r_idx == MON_NULL || m_ptr->ap_r_idx == MON_BEHINDER)
+        return TRUE;
+
+    monster_race *r_ptr = &r_info[m_ptr->ap_r_idx];
+
+    if (angband_strchr("/|\\()[]=$,.!?&`#%<>+~", r_ptr->d_char) == NULL)
+        return FALSE;
+
+    if (none_bits(r_ptr->flags1, RF1_NEVER_MOVE) && !monster_csleep_remaining(m_ptr)) {
+        return FALSE;
+    }
+
+    return TRUE;
+}
 
 /*!
  * @brief モンスターの真の種族を返す / Extract monster race pointer of a monster's true form
