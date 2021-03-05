@@ -3228,7 +3228,7 @@ static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool i
 
     if (main_attack_hand(creature_ptr) == calc_hand) {
         if ((is_martial_arts_mode(creature_ptr) && empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_MAIN | EMPTY_HAND_SUB))
-            || !has_disable_two_handed_bonus(creature_ptr, 0)) {
+            || !has_disable_two_handed_bonus(creature_ptr, calc_hand)) {
             int bonus_to_d = 0;
             bonus_to_d = ((int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128) / 2;
             damage += MAX(bonus_to_d, 1);
@@ -3303,7 +3303,7 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_r
         }
 
         if ((is_martial_arts_mode(creature_ptr) && empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_MAIN | EMPTY_HAND_SUB))
-            || !has_disable_two_handed_bonus(creature_ptr, 0)) {
+            || !has_disable_two_handed_bonus(creature_ptr, calc_hand)) {
             int bonus_to_h = 0;
             bonus_to_h = ((int)(adj_str_th[creature_ptr->stat_ind[A_STR]]) - 128) + ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
             hit += MAX(bonus_to_h, 1);
@@ -4337,7 +4337,7 @@ static player_hand main_attack_hand(player_type *creature_ptr)
     case MELEE_TYPE_WEAPON_SUB:
         return PLAYER_HAND_SUB;
     case MELEE_TYPE_WEAPON_TWOHAND:
-        return PLAYER_HAND_MAIN;
+        return has_melee_weapon(creature_ptr, INVEN_MAIN_HAND) ? PLAYER_HAND_MAIN : PLAYER_HAND_SUB;
     case MELEE_TYPE_WEAPON_DOUBLE:
         return PLAYER_HAND_MAIN;
     case MELEE_TYPE_SHIELD_DOUBLE:
