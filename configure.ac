@@ -45,6 +45,7 @@ AC_SUBST(DEFAULT_VAR_PATH)
 
 dnl Checks for programs.
 AC_PROG_CC
+AC_PROG_CXX
 PKG_PROG_PKG_CONFIG
 
 AC_ARG_ENABLE(japanese,
