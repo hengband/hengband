@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 AC_INIT(hengband, 3.0.0.0)
 
 AC_CONFIG_HEADERS(src/autoconf.h)
-AC_CONFIG_SRCDIR(src/main.c)
+AC_CONFIG_SRCDIR(src/main.cpp)
 AM_INIT_AUTOMAKE
 
 AC_ARG_WITH(setgid,
