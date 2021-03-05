@@ -246,11 +246,17 @@ bool is_hostile(monster_type *m_ptr) { return !is_friendly(m_ptr) && !is_pet(m_p
  * - シンボルが以下のいずれかであること: /|\()[]=$,.!?&`#%<>+~
  * - 動かない、もしくは眠っていること
  *
+ * 但し、以下のモンスターは例外的に擬態しているとする
+ * それ・生ける虚無『ヌル』・ビハインダー
+ *
  * @param m_ptr モンスターの参照ポインタ
  * @return モンスターがアイテム類に擬態しているならTRUE、そうでなければFALSE
  */
 bool is_mimicry(monster_type *m_ptr)
 {
+    if (m_ptr->ap_r_idx == MON_IT || m_ptr->ap_r_idx == MON_NULL || m_ptr->ap_r_idx == MON_BEHINDER)
+        return TRUE;
+
     monster_race *r_ptr = &r_info[m_ptr->ap_r_idx];
 
     if (angband_strchr("/|\\()[]=$,.!?&`#%<>+~", r_ptr->d_char) == NULL)
