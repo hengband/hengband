@@ -163,7 +163,7 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
     case TR_FORCE_WEAPON:
         return check_equipment_flags(creature_ptr, tr_flag);
     case TR_STEALTH:
-        return 0;
+        return player_flags_stealth(creature_ptr);
     case TR_SEARCH:
         return 0;
     case TR_INFRA:
