@@ -7,6 +7,7 @@
 #include "object/object-value.h"
 #include "store/store-util.h"
 #include "sv-definition/sv-potion-types.h"
+#include "sv-definition/sv-rod-types.h"
 #include "sv-definition/sv-scroll-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/object-type-definition.h"
@@ -28,10 +29,10 @@ static bool is_blessed_item(player_type *player_ptr, object_type *o_ptr)
 static bool check_store_general(object_type *o_ptr)
 {
     switch (o_ptr->tval) {
+    case TV_ROD:
+        return (o_ptr->sval == SV_ROD_PESTICIDE);
     case TV_POTION:
-        if (o_ptr->sval != SV_POTION_WATER)
-            return FALSE;
-        /* Fall through */
+        return (o_ptr->sval == SV_POTION_WATER);
     case TV_WHISTLE:
     case TV_FOOD:
     case TV_LITE:

@@ -90,8 +90,7 @@ void do_cmd_store(player_type *player_ptr)
     if (maintain_num > 10)
         maintain_num = 10;
     if (maintain_num) {
-        for (int i = 0; i < maintain_num; i++)
-            store_maintenance(player_ptr, player_ptr->town_num, which);
+        store_maintenance(player_ptr, player_ptr->town_num, which, maintain_num);
 
         town_info[player_ptr->town_num].store[which].last_visit = current_world_ptr->game_turn;
     }

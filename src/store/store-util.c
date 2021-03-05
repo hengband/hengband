@@ -109,28 +109,32 @@ void store_delete(void)
  * Should we check for "permission" to have the given item?
  * </pre>
  */
-void store_create(player_type *player_ptr, black_market_crap_pf black_market_crap, store_will_buy_pf store_will_buy, mass_produce_pf mass_produce)
+void store_create(
+    player_type *player_ptr, KIND_OBJECT_IDX fix_k_idx, black_market_crap_pf black_market_crap, store_will_buy_pf store_will_buy, mass_produce_pf mass_produce)
 {
     if (st_ptr->stock_num >= st_ptr->stock_size)
         return;
 
     for (int tries = 0; tries < 4; tries++) {
-        OBJECT_IDX i;
+        KIND_OBJECT_IDX k_idx;
         DEPTH level;
         if (cur_store_num == STORE_BLACK) {
             level = 25 + randint0(25);
-            i = get_obj_num(player_ptr, level, 0x00000000);
-            if (i == 0)
+            k_idx = get_obj_num(player_ptr, level, 0x00000000);
+            if (k_idx == 0)
                 continue;
+        } else if (fix_k_idx > 0) {
+            k_idx = fix_k_idx;
+            level = rand_range(1, STORE_OBJ_LEVEL);
         } else {
-            i = st_ptr->table[randint0(st_ptr->table_num)];
+            k_idx = st_ptr->table[randint0(st_ptr->table_num)];
             level = rand_range(1, STORE_OBJ_LEVEL);
         }
 
         object_type forge;
         object_type *q_ptr;
         q_ptr = &forge;
-        object_prep(player_ptr, q_ptr, i);
+        object_prep(player_ptr, q_ptr, k_idx);
         apply_magic(player_ptr, q_ptr, level, AM_NO_FIXED_ART);
         if (!(*store_will_buy)(player_ptr, q_ptr))
             continue;

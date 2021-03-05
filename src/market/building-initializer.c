@@ -2,6 +2,7 @@
 #include "floor/floor-town.h"
 #include "market/articles-on-sale.h"
 #include "object/object-kind.h"
+#include "object/object-kind-hook.h"
 #include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h"
@@ -39,19 +40,35 @@ errr init_towns(void)
             if ((j == STORE_BLACK) || (j == STORE_HOME) || (j == STORE_MUSEUM))
                 continue;
 
-            store_ptr->table_size = STORE_CHOICES;
-            C_MAKE(store_ptr->table, store_ptr->table_size, s16b);
-            for (int k = 0; k < STORE_CHOICES; k++) {
-                KIND_OBJECT_IDX k_idx;
-                int tv = store_table[j][k][0];
-                int sv = store_table[j][k][1];
-                for (k_idx = 1; k_idx < max_k_idx; k_idx++) {
-                    object_kind *k_ptr = &k_info[k_idx];
-                    if ((k_ptr->tval == tv) && (k_ptr->sval == sv))
-                        break;
-                }
+            store_ptr->regular_num = 0;
+            store_ptr->regular_size = STORE_INVEN_MAX;
+            C_MAKE(store_ptr->regular, store_ptr->regular_size + 1, KIND_OBJECT_IDX);
+            for (int k = 0; k < store_ptr->regular_size; k++) {
+                int tv = store_regular_table[j][k].tval;
+                int sv = store_regular_table[j][k].sval;
+                if (tv == 0)
+                    break;
 
-                if (k_idx == max_k_idx)
+                KIND_OBJECT_IDX k_idx = lookup_kind(tv, sv);
+
+                if (k_idx == 0)
+                    continue;
+
+                store_ptr->regular[store_ptr->regular_num++] = k_idx;
+            }
+
+            store_ptr->table_num = 0;
+            store_ptr->table_size = STORE_CHOICES;
+            C_MAKE(store_ptr->table, store_ptr->table_size + 1, KIND_OBJECT_IDX);
+            for (int k = 0; k < store_ptr->table_size; k++) {
+                int tv = store_table[j][k].tval;
+                int sv = store_table[j][k].sval;
+                if (tv == 0)
+                    break;
+
+                KIND_OBJECT_IDX k_idx = lookup_kind(tv, sv);
+
+                if (k_idx == 0)
                     continue;
 
                 store_ptr->table[store_ptr->table_num++] = k_idx;

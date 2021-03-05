@@ -1,5 +1,4 @@
 ﻿#include "market/articles-on-sale.h"
-#include "object/tval-types.h"
 #include "sv-definition/sv-amulet-types.h"
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-bow-types.h"
@@ -11,14 +10,110 @@
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-scroll-types.h"
 #include "sv-definition/sv-ring-types.h"
+#include "sv-definition/sv-rod-types.h"
 #include "sv-definition/sv-staff-types.h"
 #include "sv-definition/sv-wand-types.h"
 #include "sv-definition/sv-weapon-types.h"
 
 /*!
- * 店舗で販売するオブジェクトを定義する / Hack -- Objects sold in the stores -- by tval/sval pair.
+ * @brief 店舗で常時販売するオブジェクトを定義する 
+ * @detail
+ * 上から優先して配置する。
+ * 重複して同じ商品を設定した場合、数量が増える。
+ * 17エントリーまで設定可能。(最後は TV_NONE で止める)
+ * 種類が多すぎる場合、店舗を埋めつくすので注意。
  */
-byte store_table[MAX_STORES][STORE_CHOICES][2] =
+store_stock_item_type store_regular_table[MAX_STORES][STORE_MAX_KEEP] =
+{ 
+	{
+        /* General Store */
+        { TV_FOOD, SV_FOOD_RATION },
+        { TV_LITE, SV_LITE_TORCH },
+        { TV_LITE, SV_LITE_LANTERN },
+        { TV_FLASK, SV_FLASK_OIL },
+        { TV_POTION, SV_POTION_WATER },
+        { TV_SPIKE, 0 },
+        { TV_NONE, 0 },
+    },
+    {
+        /* Armoury */
+        { TV_NONE, 0 },
+    },
+    {
+        /* Weaponsmith */
+        { TV_HISSATSU_BOOK, 0 },
+        { TV_SHOT, SV_AMMO_NORMAL },
+        { TV_SHOT, SV_AMMO_NORMAL },
+        { TV_ARROW, SV_AMMO_NORMAL },
+        { TV_ARROW, SV_AMMO_NORMAL },
+        { TV_BOLT, SV_AMMO_NORMAL },
+        { TV_BOLT, SV_AMMO_NORMAL },
+        { TV_NONE, 0 },
+    },
+    {
+        /* Temple */
+        { TV_POTION, SV_POTION_CURE_CRITICAL },
+        { TV_POTION, SV_POTION_CURE_SERIOUS },
+        { TV_POTION, SV_POTION_HEROISM },
+        { TV_SCROLL, SV_SCROLL_WORD_OF_RECALL },
+        { TV_SCROLL, SV_SCROLL_REMOVE_CURSE },
+        { TV_LIFE_BOOK, 0 },
+        { TV_CRUSADE_BOOK, 0 },
+        { TV_NONE, 0 },
+    },
+    {
+        /* Alchemy shop */
+        { TV_SCROLL, SV_SCROLL_PHASE_DOOR },
+        { TV_SCROLL, SV_SCROLL_PHASE_DOOR },
+        { TV_SCROLL, SV_SCROLL_TELEPORT },
+        { TV_SCROLL, SV_SCROLL_TELEPORT },
+        { TV_SCROLL, SV_SCROLL_RECHARGING },
+        { TV_SCROLL, SV_SCROLL_IDENTIFY },
+        { TV_SCROLL, SV_SCROLL_DETECT_GOLD },
+        { TV_NONE, 0 },
+    },
+    {
+        /* Magic User */
+        { TV_STAFF, SV_STAFF_IDENTIFY },
+        { TV_STAFF, SV_STAFF_IDENTIFY },
+        { TV_STAFF, SV_STAFF_MAPPING },
+        { TV_ARCANE_BOOK, 0 },
+        { TV_SORCERY_BOOK, 0 },
+        { TV_NONE, 0 },
+    },
+    {
+        /* Blackmarket */
+        { TV_NONE, 0 },
+    },
+    {
+        /* Home */
+        { TV_NONE, 0 },
+    },
+    {
+        /* Bookstore */
+        { TV_SORCERY_BOOK, 0 },
+        { TV_NATURE_BOOK, 0 },
+        { TV_CHAOS_BOOK, 0 },
+        { TV_DEATH_BOOK, 0 },
+        { TV_TRUMP_BOOK, 0 },
+        { TV_ARCANE_BOOK, 0 },
+        { TV_CRAFT_BOOK, 0 },
+        { TV_DEMON_BOOK, 0 },
+        { TV_MUSIC_BOOK, 0 },
+        { TV_HEX_BOOK, 0 },
+        { TV_NONE, 0 },
+    },
+    {
+        /* Museum */
+        { TV_NONE, 0 },
+    },
+};
+
+/*!
+ * @brief 店舗でランダム販売するオブジェクトを定義する
+ * @detail tval/svalのペア
+ */
+store_stock_item_type store_table[MAX_STORES][STORE_CHOICES] =
 {
 	{
 		/* General Store */
@@ -27,60 +122,60 @@ byte store_table[MAX_STORES][STORE_CHOICES][2] =
 		{ TV_FOOD, SV_FOOD_RATION },
 		{ TV_FOOD, SV_FOOD_RATION },
 
-		{ TV_FOOD, SV_FOOD_RATION },
 		{ TV_FOOD, SV_FOOD_BISCUIT },
 		{ TV_FOOD, SV_FOOD_JERKY },
-		{ TV_FOOD, SV_FOOD_JERKY },
-
 		{ TV_FOOD, SV_FOOD_PINT_OF_WINE },
 		{ TV_FOOD, SV_FOOD_PINT_OF_ALE },
-		{ TV_LITE, SV_LITE_TORCH },
-		{ TV_LITE, SV_LITE_TORCH },
 
 		{ TV_LITE, SV_LITE_TORCH },
 		{ TV_LITE, SV_LITE_TORCH },
 		{ TV_LITE, SV_LITE_LANTERN },
 		{ TV_LITE, SV_LITE_LANTERN },
 
-		{ TV_FLASK, 0 },
-		{ TV_FLASK, 0 },
-		{ TV_FLASK, 0 },
-		{ TV_FLASK, 0 },
+		{ TV_POTION, SV_POTION_WATER },
+		{ TV_POTION, SV_POTION_WATER },
+		{ TV_FOOD, SV_FOOD_WAYBREAD },
+		{ TV_FOOD, SV_FOOD_WAYBREAD },
 
 		{ TV_FLASK, 0 },
 		{ TV_FLASK, 0 },
 		{ TV_SPIKE, 0 },
 		{ TV_SPIKE, 0 },
 
+		{ TV_SPIKE, 0 },
+		{ TV_SPIKE, 0 },
 		{ TV_SHOT, SV_AMMO_NORMAL },
+		{ TV_SHOT, SV_AMMO_NORMAL },
+
+		{ TV_ARROW, SV_AMMO_NORMAL },
 		{ TV_ARROW, SV_AMMO_NORMAL },
 		{ TV_BOLT, SV_AMMO_NORMAL },
-		{ TV_DIGGING, SV_SHOVEL },
+		{ TV_BOLT, SV_AMMO_NORMAL },
 
+		{ TV_DIGGING, SV_SHOVEL },
+		{ TV_DIGGING, SV_SHOVEL },
 		{ TV_DIGGING, SV_PICK },
 		{ TV_CLOAK, SV_CLOAK },
+
 		{ TV_CLOAK, SV_CLOAK },
 		{ TV_CLOAK, SV_FUR_CLOAK },
-
-		{ TV_FOOD, SV_FOOD_RATION },
-		{ TV_FOOD, SV_FOOD_RATION },
-		{ TV_FOOD, SV_FOOD_RATION },
-		{ TV_FOOD, SV_FOOD_RATION },
-
-		{ TV_POTION, SV_POTION_WATER },
-		{ TV_POTION, SV_POTION_WATER },
-		{ TV_LITE, SV_LITE_LANTERN },
-		{ TV_LITE, SV_LITE_LANTERN },
-
-		{ TV_FOOD, SV_FOOD_WAYBREAD },
-		{ TV_FOOD, SV_FOOD_WAYBREAD },
 		{ TV_CAPTURE, 0 },
-		{ TV_FIGURINE, 0 },
+		{ TV_CAPTURE, 0 },
 
-		{ TV_SHOT, SV_AMMO_NORMAL },
-		{ TV_ARROW, SV_AMMO_NORMAL },
-		{ TV_BOLT, SV_AMMO_NORMAL },
-		{ TV_DIGGING, SV_SHOVEL }
+		{ TV_FIGURINE, 0 },
+        { TV_WHISTLE, 1 },
+        { TV_ROD, SV_ROD_PESTICIDE },
+        { TV_STATUE, SV_ANY },
+
+		{ TV_NONE, 0 },
+        { TV_NONE, 0 },
+        { TV_NONE, 0 },
+        { TV_NONE, 0 },
+
+		{ TV_NONE, 0 },
+        { TV_NONE, 0 },
+        { TV_NONE, 0 },
+        { TV_NONE, 0 },
 	},
 
 	{
@@ -226,28 +321,33 @@ byte store_table[MAX_STORES][STORE_CHOICES][2] =
 		{ TV_SCROLL, SV_SCROLL_BLESSING },
 		{ TV_SCROLL, SV_SCROLL_HOLY_CHANT },
 
+		{ TV_SCROLL, SV_SCROLL_WORD_OF_RECALL },
+		{ TV_SCROLL, SV_SCROLL_WORD_OF_RECALL },
+		{ TV_SCROLL, SV_SCROLL_WORD_OF_RECALL },
+        { TV_POTION, SV_POTION_CURE_LIGHT },
+
 		{ TV_POTION, SV_POTION_HEROISM },
-		{ TV_SCROLL, SV_SCROLL_WORD_OF_RECALL },
-		{ TV_SCROLL, SV_SCROLL_WORD_OF_RECALL },
-		{ TV_SCROLL, SV_SCROLL_WORD_OF_RECALL },
-
-		{ TV_POTION, SV_POTION_CURE_LIGHT },
+		{ TV_POTION, SV_POTION_HEROISM },
 		{ TV_POTION, SV_POTION_CURE_SERIOUS },
 		{ TV_POTION, SV_POTION_CURE_SERIOUS },
-		{ TV_POTION, SV_POTION_CURE_CRITICAL },
 
 		{ TV_POTION, SV_POTION_CURE_CRITICAL },
+		{ TV_POTION, SV_POTION_CURE_CRITICAL },
+		{ TV_POTION, SV_POTION_CURE_CRITICAL },
+		{ TV_POTION, SV_POTION_CURE_CRITICAL },
+
+		{ TV_POTION, SV_POTION_RESTORE_EXP },
 		{ TV_POTION, SV_POTION_RESTORE_EXP },
 		{ TV_POTION, SV_POTION_RESTORE_EXP },
 		{ TV_POTION, SV_POTION_RESTORE_EXP },
 
 		{ TV_LIFE_BOOK, 0 },
-		{ TV_LIFE_BOOK, 0 },
+		{ TV_LIFE_BOOK, 1 },
 		{ TV_LIFE_BOOK, 1 },
 		{ TV_LIFE_BOOK, 1 },
 
 		{ TV_CRUSADE_BOOK, 0 },
-		{ TV_CRUSADE_BOOK, 0 },
+		{ TV_CRUSADE_BOOK, 1 },
 		{ TV_CRUSADE_BOOK, 1 },
 		{ TV_CRUSADE_BOOK, 1 },
 
@@ -256,21 +356,15 @@ byte store_table[MAX_STORES][STORE_CHOICES][2] =
 		{ TV_HAFTED, SV_BALL_AND_CHAIN },
 		{ TV_HAFTED, SV_WAR_HAMMER },
 
-		{ TV_SCROLL, SV_SCROLL_WORD_OF_RECALL },
-		{ TV_SCROLL, SV_SCROLL_WORD_OF_RECALL },
-		{ TV_SCROLL, SV_SCROLL_WORD_OF_RECALL },
-		{ TV_POTION, SV_POTION_CURE_CRITICAL },
-
-		{ TV_POTION, SV_POTION_CURE_CRITICAL },
-		{ TV_POTION, SV_POTION_RESTORE_EXP },
-
+		{ TV_POTION, SV_POTION_RESIST_HEAT },
+		{ TV_POTION, SV_POTION_RESIST_COLD },
 		{ TV_FIGURINE, 0 },
 		{ TV_STATUE, SV_ANY },
 
 		{ TV_SCROLL, SV_SCROLL_REMOVE_CURSE },
 		{ TV_SCROLL, SV_SCROLL_REMOVE_CURSE },
 		{ TV_SCROLL, SV_SCROLL_STAR_REMOVE_CURSE },
-		{ TV_SCROLL, SV_SCROLL_STAR_REMOVE_CURSE }
+		{ TV_SCROLL, SV_SCROLL_STAR_REMOVE_CURSE },
 	},
 
 	{

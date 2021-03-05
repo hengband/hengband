@@ -292,8 +292,7 @@ static void switch_store_stock(player_type *player_ptr, const int i, const COMMA
 {
     if (st_ptr->stock_num == 0) {
         shuffle_store(player_ptr);
-        for (int j = 0; j < 10; j++)
-            store_maintenance(player_ptr, player_ptr->town_num, cur_store_num);
+        store_maintenance(player_ptr, player_ptr->town_num, cur_store_num, 10);
 
         store_top = 0;
         display_store_inventory(player_ptr);
