@@ -150,7 +150,7 @@ void target_set_prepare(player_type *creature_ptr, BIT_FLAGS mode)
     tmp_pos.x[1] = tmp;
 }
 
-void target_sensing_monsters_prepare(player_type *creature_ptr, pos_list* plist)
+void target_sensing_monsters_prepare(player_type *creature_ptr, pos_list *plist)
 {
     plist->n = 0;
 
@@ -161,6 +161,9 @@ void target_sensing_monsters_prepare(player_type *creature_ptr, pos_list* plist)
     for (int i = 1; i < creature_ptr->current_floor_ptr->m_max; i++) {
         monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr) || !m_ptr->ml || is_pet(m_ptr))
+            continue;
+
+        if (is_mimicry(m_ptr))
             continue;
 
         plist->x[plist->n] = m_ptr->fx;
