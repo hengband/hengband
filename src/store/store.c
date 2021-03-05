@@ -272,9 +272,10 @@ void store_shuffle(player_type *player_ptr, int which)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param town_num 町のID
  * @param store_num 店舗種類のID
+ * @param chance 更新商品数
  * @return なし
  */
-void store_maintenance(player_type *player_ptr, int town_num, int store_num)
+void store_maintenance(player_type *player_ptr, int town_num, int store_num, int chance)
 {
     cur_store_num = store_num;
     if ((store_num == STORE_HOME) || (store_num == STORE_MUSEUM))
@@ -294,7 +295,11 @@ void store_maintenance(player_type *player_ptr, int town_num, int store_num)
     }
 
     INVENTORY_IDX j = st_ptr->stock_num;
-    j = j - randint1(STORE_TURNOVER);
+    int turn_over = 0;
+    for (int i = 0; i < chance; i++)
+        turn_over = MAX(turn_over, randint1(STORE_TURNOVER));
+
+    j = j - turn_over;
     if (j > STORE_MAX_KEEP)
         j = STORE_MAX_KEEP;
 
@@ -307,19 +312,27 @@ void store_maintenance(player_type *player_ptr, int town_num, int store_num)
     while (st_ptr->stock_num > j)
         store_delete();
 
-    j = st_ptr->stock_num;
-    j = j + randint1(STORE_TURNOVER);
+    int diff = STORE_MAX_KEEP - st_ptr->stock_num;
+    turn_over = 0;
+    for (int i = 0; i < chance; i++)
+        turn_over = MAX(turn_over, randint1(diff));
+
+    j = st_ptr->stock_num + turn_over;
     if (j > STORE_MAX_KEEP)
         j = STORE_MAX_KEEP;
-
     if (j < STORE_MIN_KEEP)
         j = STORE_MIN_KEEP;
-
     if (j >= st_ptr->stock_size)
         j = st_ptr->stock_size - 1;
 
+    for (int k = 0; k < st_ptr->regular_num; k++) {
+        store_create(player_ptr, st_ptr->regular[k], black_market_crap, store_will_buy, mass_produce);
+        if (st_ptr->stock_num >= STORE_MAX_KEEP)
+            break;
+    }
+
     while (st_ptr->stock_num < j)
-        store_create(player_ptr, black_market_crap, store_will_buy, mass_produce);
+        store_create(player_ptr, 0, black_market_crap, store_will_buy, mass_produce);
 }
 
 /*!
