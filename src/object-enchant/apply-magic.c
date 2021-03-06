@@ -309,7 +309,7 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
                     o_ptr->pval++;
                     if ((lev > 60) && one_in_(3) && ((o_ptr->dd * (o_ptr->ds + 1)) < 15))
                         o_ptr->pval++;
-                } else if (o_ptr->name2 == EGO_DEMON) {
+                } else if (o_ptr->name2 == EGO_DEMON || o_ptr->name2 == EGO_WRAITH || o_ptr->name2 == EGO_NARUKAMI || o_ptr->name2 == EGO_MIZUCHI) {
                     if (has_flag(o_ptr->art_flags, TR_BLOWS)) {
                         o_ptr->pval += randint1(2);
                     } else {

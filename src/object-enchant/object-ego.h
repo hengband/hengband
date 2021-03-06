@@ -14,6 +14,9 @@
 #define EGO_PERMANENCE          11
 #define EGO_YOIYAMI             12
 #define EGO_URUKISH             13
+#define EGO_A_WRAITH           244
+#define EGO_A_NARUKAMI         245
+#define EGO_A_MIZUCHI          246
 
 /* Shields */
 #define EGO_ENDURE_ACID         16
@@ -44,6 +47,9 @@
 #define EGO_BASILISK            37
 #define EGO_ANCIENT_CURSE       38
 #define EGO_SICKLINESS          39
+#define EGO_H_WRAITH            247
+#define EGO_H_NARUKAMI          248
+#define EGO_H_MIZUCHI           249
 
 /* Cloaks */
 #define EGO_PROTECTION          40
@@ -111,6 +117,9 @@
 #define EGO_DEMON               101
 #define EGO_MORGUL              102
 #define EGO_KILL_HUMAN          103
+#define EGO_WRAITH              241
+#define EGO_NARUKAMI            242
+#define EGO_MIZUCHI             243
 
 /* Bows */
 #define EGO_ACCURACY            104
@@ -209,7 +218,6 @@
 #define EGO_AMU_GREAT           235
 #define EGO_AMU_DETECTION       236
 #define EGO_AMU_NAIVETY         237
-// MAX 240
 
 /*
  * Information about "ego-items".

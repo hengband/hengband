@@ -114,6 +114,9 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
                 break;
 
             case EGO_A_DEMON:
+            case EGO_A_WRAITH:
+            case EGO_A_NARUKAMI:
+            case EGO_A_MIZUCHI:
                 if (one_in_(3))
                     o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
                 one_in_(3) ? add_flag(o_ptr->art_flags, TR_DRAIN_EXP)
@@ -362,6 +365,9 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
                         add_flag(o_ptr->art_flags, TR_LITE_2);
                     break;
                 case EGO_H_DEMON:
+                case EGO_H_WRAITH:
+                case EGO_H_NARUKAMI:
+                case EGO_H_MIZUCHI:
                     if (one_in_(3))
                         o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
                     one_in_(3) ? add_flag(o_ptr->art_flags, TR_DRAIN_EXP)
