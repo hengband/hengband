@@ -264,13 +264,13 @@ void process_player_hp_mp(player_type *creature_ptr)
                     format(_("%sの上に浮遊したダメージ", "flying over %s"),
                         f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name),
                     -1);
-                if (has_resist_pois(creature_ptr))
+                if (!has_resist_pois(creature_ptr))
                     (void)set_poisoned(creature_ptr, creature_ptr->poisoned + 1);
             } else {
                 concptr name = f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
                 msg_format(_("%sに毒された！", "The %s poisons you!"), name);
                 take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name, -1);
-                if (has_resist_pois(creature_ptr))
+                if (!has_resist_pois(creature_ptr))
                     (void)set_poisoned(creature_ptr, creature_ptr->poisoned + 3);
             }
 
