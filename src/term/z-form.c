@@ -69,11 +69,17 @@
  * Format("%ld", long int i)
  *   Append the long integer "i".
  *
+ * Format("%Ld", long long int i)
+ *   Append the long long integer "i".
+ *
  * Format("%d", int i)
  *   Append the integer "i".
  *
  * Format("%lu", unsigned long int i)
  *   Append the unsigned long integer "i".
+ *
+ * Format("%Lu", unsigned long long int i)
+ *   Append the unsigned long long integer "i".
  *
  * Format("%u", unsigned int i)
  *   Append the unsigned integer "i".
@@ -232,6 +238,9 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
     /* The argument is "long" */
     bool do_long;
 
+    /* The argument is "long long" */
+    bool do_long_long;
+
     /* The argument needs "processing" */
     bool do_xtra;
 
@@ -329,6 +338,9 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
         /* Assume no "long" argument */
         do_long = FALSE;
 
+        /* Assume no "long long" argument */
+        do_long_long = FALSE;
+
         /* Assume no "xtra" processing */
         do_xtra = FALSE;
 
@@ -365,11 +377,13 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
 
                 /* Mega-Hack -- handle "extra-long" request */
                 else if (*s == 'L') {
-                    /* Error -- illegal format char */
-                    buf[0] = '\0';
+                    /* Save the character */
+                    aux[q++] = 'l';
+                    aux[q++] = 'l';
+                    s++;
 
-                    /* Return "error" */
-                    return 0;
+                    /* Note the "long long" flag */
+                    do_long_long = TRUE;
                 }
 
                 /* Handle normal end of format sequence */
@@ -451,6 +465,14 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
 
                 /* Format the argument */
                 sprintf(tmp, aux, arg);
+            } else if (do_long_long) {
+                long long arg;
+
+                /* Access next argument */
+                arg = va_arg(vp, long long);
+
+                /* Format the argument */
+                sprintf(tmp, aux, arg);
             } else {
                 int arg;
 
@@ -474,6 +496,13 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
 
                 /* Access next argument */
                 arg = va_arg(vp, unsigned long);
+
+                sprintf(tmp, aux, arg);
+            } else if (do_long_long) {
+                unsigned long long arg;
+
+                /* Access next argument */
+                arg = va_arg(vp, unsigned long long);
 
                 sprintf(tmp, aux, arg);
             } else {
