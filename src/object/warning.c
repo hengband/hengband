@@ -55,7 +55,7 @@ object_type *choose_warning_item(player_type *creature_ptr)
 
     /* Search Inventory */
     int number = 0;
-    for (inventory_slot_type i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         BIT_FLAGS flgs[TR_FLAG_SIZE];
         object_type *o_ptr = &creature_ptr->inventory_list[i];
 

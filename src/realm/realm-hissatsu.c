@@ -107,21 +107,21 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
             y = caster_ptr->y + ddy_cdd[cdir];
             x = caster_ptr->x + ddx_cdd[cdir];
             if (caster_ptr->current_floor_ptr->grid_array[y][x].m_idx)
-                do_cmd_attack(caster_ptr, y, x, 0);
+                do_cmd_attack(caster_ptr, y, x, HISSATSU_NONE);
             else
                 msg_print(_("攻撃は空を切った。", "You attack the empty air."));
 
             y = caster_ptr->y + ddy_cdd[(cdir + 7) % 8];
             x = caster_ptr->x + ddx_cdd[(cdir + 7) % 8];
             if (caster_ptr->current_floor_ptr->grid_array[y][x].m_idx)
-                do_cmd_attack(caster_ptr, y, x, 0);
+                do_cmd_attack(caster_ptr, y, x, HISSATSU_NONE);
             else
                 msg_print(_("攻撃は空を切った。", "You attack the empty air."));
 
             y = caster_ptr->y + ddy_cdd[(cdir + 1) % 8];
             x = caster_ptr->x + ddx_cdd[(cdir + 1) % 8];
             if (caster_ptr->current_floor_ptr->grid_array[y][x].m_idx)
-                do_cmd_attack(caster_ptr, y, x, 0);
+                do_cmd_attack(caster_ptr, y, x, HISSATSU_NONE);
             else
                 msg_print(_("攻撃は空を切った。", "You attack the empty air."));
         }
@@ -248,7 +248,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
                 return NULL;
             }
 
-            do_cmd_attack(caster_ptr, y, x, 0);
+            do_cmd_attack(caster_ptr, y, x, HISSATSU_NONE);
 
             if (!player_can_enter(caster_ptr, caster_ptr->current_floor_ptr->grid_array[y][x].feat, 0)
                 || is_trap(caster_ptr, caster_ptr->current_floor_ptr->grid_array[y][x].feat))
@@ -336,7 +336,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
             x = caster_ptr->x + ddx[dir];
 
             if (caster_ptr->current_floor_ptr->grid_array[y][x].m_idx)
-                do_cmd_attack(caster_ptr, y, x, 0);
+                do_cmd_attack(caster_ptr, y, x, HISSATSU_NONE);
             else {
                 msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
                 return NULL;
@@ -390,10 +390,10 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
 
         if (cast) {
             if (plev > 44) {
-                if (!identify_fully(caster_ptr, TRUE, 0))
+                if (!identify_fully(caster_ptr, TRUE, TV_NONE))
                     return NULL;
             } else {
-                if (!ident_spell(caster_ptr, TRUE, 0))
+                if (!ident_spell(caster_ptr, TRUE, TV_NONE))
                     return NULL;
             }
         }
@@ -894,10 +894,10 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
             x = caster_ptr->x + ddx[dir];
 
             if (caster_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
-                do_cmd_attack(caster_ptr, y, x, 0);
+                do_cmd_attack(caster_ptr, y, x, HISSATSU_NONE);
                 if (caster_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
                     handle_stuff(caster_ptr);
-                    do_cmd_attack(caster_ptr, y, x, 0);
+                    do_cmd_attack(caster_ptr, y, x, HISSATSU_NONE);
                 }
             } else {
                 msg_print(_("その方向にはモンスターはいません。", "You don't see any monster in this direction"));

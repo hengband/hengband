@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 /* 部屋型ID / Room types for room_build() */
-typedef enum room_type {
+enum room_type {
 	ROOM_T_NORMAL = 0, /*!<部屋型ID:基本長方形 / Simple (33x11) */
     ROOM_T_OVERLAP = 1, /*!<部屋型ID:長方形二つ重ね / Overlapping (33x11) */
     ROOM_T_CROSS = 2, /*!<部屋型ID:十字 / Crossed (33x11) */
@@ -20,4 +20,4 @@ typedef enum room_type {
     ROOM_T_ARCADE = 15, /*!<部屋型ID:商店 / Arcade */
     ROOM_T_FIXED = 16, /*!<部屋型ID:固定部屋 / Fixed room */
     ROOM_T_MAX = 17, /*!<部屋型ID最大数 */
-} room_type;
+};

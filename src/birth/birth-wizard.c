@@ -157,7 +157,7 @@ static bool get_player_sex(player_type *creature_ptr, char *buf)
 static bool let_player_select_race(player_type *creature_ptr)
 {
     clear_from(10);
-    creature_ptr->prace = 0;
+    creature_ptr->prace = RACE_HUMAN;
     while (TRUE) {
         char temp[80 * 10];
         if (!get_player_race(creature_ptr))
@@ -187,7 +187,7 @@ static bool let_player_select_race(player_type *creature_ptr)
 static bool let_player_select_class(player_type *creature_ptr)
 {
     clear_from(10);
-    creature_ptr->pclass = 0;
+    creature_ptr->pclass = CLASS_WARRIOR;
     while (TRUE) {
         char temp[80 * 9];
         if (!get_player_class(creature_ptr))
@@ -216,7 +216,7 @@ static bool let_player_select_class(player_type *creature_ptr)
 
 static bool let_player_select_personality(player_type *creature_ptr)
 {
-    creature_ptr->pseikaku = 0;
+    creature_ptr->pseikaku = PERSONALITY_ORDINARY;
     while (TRUE) {
         char temp[80 * 8];
         if (!get_player_personality(creature_ptr))

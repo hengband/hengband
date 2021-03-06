@@ -206,7 +206,7 @@ void store_sell(player_type *owner_ptr)
 
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(owner_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, 0);
+    o_ptr = choose_object(owner_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, TV_NONE);
     if (!o_ptr)
         return;
 

@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum realm_song_type {
+enum realm_song_type {
 	MUSIC_NONE = 0,
     MUSIC_SLOW = 1,
     MUSIC_BLESS = 2,
@@ -25,6 +25,6 @@ typedef enum realm_song_type {
     MUSIC_H_LIFE = 21,
     MUSIC_INVULN = 22,
     MUSIC_PSI = 23,
-} realm_song_type;
+};
 
 #define MUSIC_DETECT 101

@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 /* The "sval" values for TV_HAFTED */
-typedef enum sv_hafted_type {
+enum sv_hafted_type {
 	SV_CLUB = 1, /* 1d4  */
     SV_WHIP = 2, /* 1d6  */
     SV_QUARTERSTAFF = 3, /* 1d9  */
@@ -22,10 +22,10 @@ typedef enum sv_hafted_type {
     SV_WIZSTAFF = 21, /* 1d2  */
     SV_GROND = 50, /* 3d9  */
     SV_NAMAKE_HAMMER = 63, /* 1d77 */
-} sv_hafted_type;
+};
 
 /* The "sval" values for TV_POLEARM */
-typedef enum sv_polearm_type {
+enum sv_polearm_type {
     SV_HATCHET = 1, /* 1d5 */
     SV_SPEAR = 2, /* 1d6 */
     SV_SICKLE = 3, /* 2d3 */
@@ -52,10 +52,10 @@ typedef enum sv_polearm_type {
     SV_SCYTHE_OF_SLICING = 30, /* 8d4 */
     SV_TSURIZAO = 40, /* 1d1 */
     SV_DEATH_SCYTHE = 50, /* 10d10 */
-} sv_polearm_type;
+};
 
 /* The "sval" codes for TV_SWORD */
-typedef enum sv_sword_type {
+enum sv_sword_type {
     SV_BROKEN_DAGGER = 1, /* 1d1 */
     SV_BROKEN_SWORD = 2, /* 1d2 */
     SV_DAGGER = 4, /* 1d4 */
@@ -88,4 +88,4 @@ typedef enum sv_sword_type {
     SV_DIAMOND_EDGE = 31, /* 7d5 */
     SV_POISON_NEEDLE = 32, /* 1d1 */
     SV_HAYABUSA = 33, /* 1d6 */
-} sv_sword_type;
+};

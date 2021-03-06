@@ -71,7 +71,7 @@ void process_dungeon(player_type *player_ptr, bool load_game)
     health_track(player_ptr, 0);
 
     disturb(player_ptr, TRUE, TRUE);
-    int quest_num = quest_num = quest_number(player_ptr, floor_ptr->dun_level);
+    int quest_num = quest_number(player_ptr, floor_ptr->dun_level);
     if (quest_num) {
         r_info[quest[quest_num].r_idx].flags1 |= RF1_QUESTOR;
     }

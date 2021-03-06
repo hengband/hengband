@@ -51,7 +51,7 @@ errr parse_m_info(char *buf, angband_header *head)
         else if (streq(book, "HISSATSU"))
             m_ptr->spell_book = TV_HISSATSU_BOOK;
         else if (streq(book, "NONE"))
-            m_ptr->spell_book = 0;
+            m_ptr->spell_book = TV_NONE;
         else
             return 5;
 

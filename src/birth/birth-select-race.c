@@ -152,7 +152,7 @@ bool get_player_race(player_type *creature_ptr)
     if (!select_race(creature_ptr, sym, &k))
         return FALSE;
 
-    creature_ptr->prace = (byte)k;
+    creature_ptr->prace = static_cast<player_race_type>(k);
     rp_ptr = &race_info[creature_ptr->prace];
     c_put_str(TERM_L_BLUE, rp_ptr->title, 4, 15);
     return TRUE;

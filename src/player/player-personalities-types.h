@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum player_personality_type {
+enum player_personality_type {
 	PERSONALITY_ORDINARY = 0,
     PERSONALITY_MIGHTY = 1,
     PERSONALITY_SHREWD = 2,
@@ -15,4 +15,4 @@ typedef enum player_personality_type {
     PERSONALITY_MUNCHKIN = 11,
     PERSONALITY_CHARGEMAN = 12,
     MAX_PERSONALITIES = 13,
-} player_personality_type;
+};

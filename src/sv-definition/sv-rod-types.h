@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 /* The "sval" codes for TV_ROD */
-typedef enum sv_rod_type {
+enum sv_rod_type {
     SV_ROD_DETECT_TRAP = 0,
     SV_ROD_DETECT_DOOR = 1,
     SV_ROD_IDENTIFY = 2,
@@ -33,4 +33,4 @@ typedef enum sv_rod_type {
     SV_ROD_HAVOC = 28,
     SV_ROD_STONE_TO_MUD = 29,
     SV_ROD_AGGRAVATE = 30,
-} sv_rod_type;
+};

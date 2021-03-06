@@ -129,7 +129,7 @@ static void describe_scan_result(player_type *subject_ptr, eg_type *eg_ptr)
     if (!easy_floor)
         return;
 
-    eg_ptr->floor_num = scan_floor_items(subject_ptr, eg_ptr->floor_list, eg_ptr->y, eg_ptr->x, SCAN_FLOOR_ONLY_MARKED, 0);
+    eg_ptr->floor_num = scan_floor_items(subject_ptr, eg_ptr->floor_list, eg_ptr->y, eg_ptr->x, SCAN_FLOOR_ONLY_MARKED, TV_NONE);
     if (eg_ptr->floor_num > 0)
         eg_ptr->x_info = _("x物 ", "x,");
 }
@@ -335,7 +335,7 @@ static char describe_footing_many_items(player_type *subject_ptr, eg_type *eg_pt
     while (TRUE) {
         screen_save();
         show_gold_on_floor = TRUE;
-        (void)show_floor_items(subject_ptr, 0, eg_ptr->y, eg_ptr->x, min_width, 0);
+        (void)show_floor_items(subject_ptr, 0, eg_ptr->y, eg_ptr->x, min_width, TV_NONE);
         show_gold_on_floor = FALSE;
 #ifdef JP
         sprintf(eg_ptr->out_val, "%s %d個のアイテム%s%s [Enterで次へ, %s]", eg_ptr->s1, (int)eg_ptr->floor_num, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);

@@ -79,7 +79,7 @@ static amuse_type amuse_info[]
           { TV_SWORD, SV_BROKEN_DAGGER, 3, AMS_FIXED_ART }, // Broken Dagger of Magician
           { TV_SWORD, SV_BROKEN_DAGGER, 10, AMS_NOTHING }, { TV_SWORD, SV_BROKEN_SWORD, 5, AMS_NOTHING }, { TV_SCROLL, SV_SCROLL_AMUSEMENT, 10, AMS_NOTHING },
 
-          { 0, 0, 0, 0 } };
+          { TV_NONE, 0, 0, 0 } };
 
 /*!
  * @brief 誰得ドロップを行う。
@@ -188,7 +188,7 @@ void acquirement(player_type *caster_ptr, POSITION y1, POSITION x1, int num, boo
 {
     object_type *i_ptr;
     object_type object_type_body;
-    BIT_FLAGS mode = AM_GOOD | (great || special ? AM_GREAT : 0L) | (special ? AM_SPECIAL : 0L);
+    BIT_FLAGS mode = AM_GOOD | (great || special ? AM_GREAT : AM_NONE) | (special ? AM_SPECIAL : AM_NONE);
 
     /* Acquirement */
     while (num--) {
@@ -362,7 +362,7 @@ void brand_bolts(player_type *caster_ptr)
 
 bool perilous_secrets(player_type *user_ptr)
 {
-    if (!ident_spell(user_ptr, FALSE, 0))
+    if (!ident_spell(user_ptr, FALSE, TV_NONE))
         return FALSE;
 
     if (mp_ptr->spell_book) {
@@ -564,7 +564,7 @@ bool enchant_spell(player_type *caster_ptr, HIT_PROB num_hit, HIT_POINT num_dam,
 
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
+    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), TV_NONE);
     if (!o_ptr)
         return FALSE;
 
@@ -617,7 +617,7 @@ void brand_weapon(player_type *caster_ptr, int brand_type)
 
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | IGNORE_BOTHHAND_SLOT, 0);
+    o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | IGNORE_BOTHHAND_SLOT, TV_NONE);
     if (!o_ptr)
         return;
 

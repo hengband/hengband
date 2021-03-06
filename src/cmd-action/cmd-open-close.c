@@ -121,7 +121,7 @@ void do_cmd_open(player_type *creature_ptr)
         } else if (g_ptr->m_idx && creature_ptr->riding != g_ptr->m_idx) {
             take_turn(creature_ptr, 100);
             msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
-            do_cmd_attack(creature_ptr, y, x, 0);
+            do_cmd_attack(creature_ptr, y, x, HISSATSU_NONE);
         } else if (o_idx) {
             more = exe_open_chest(creature_ptr, y, x, o_idx);
         } else {
@@ -172,7 +172,7 @@ void do_cmd_close(player_type *creature_ptr)
         } else if (g_ptr->m_idx) {
             take_turn(creature_ptr, 100);
             msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
-            do_cmd_attack(creature_ptr, y, x, 0);
+            do_cmd_attack(creature_ptr, y, x, HISSATSU_NONE);
         } else {
             more = exe_close(creature_ptr, y, x);
         }
@@ -227,7 +227,7 @@ void do_cmd_disarm(player_type *creature_ptr)
             msg_print(_("そこには解除するものが見当たらない。", "You see nothing there to disarm."));
         } else if (g_ptr->m_idx && creature_ptr->riding != g_ptr->m_idx) {
             msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
-            do_cmd_attack(creature_ptr, y, x, 0);
+            do_cmd_attack(creature_ptr, y, x, HISSATSU_NONE);
         } else if (o_idx) {
             more = exe_disarm_chest(creature_ptr, y, x, o_idx);
         } else {
@@ -286,7 +286,7 @@ void do_cmd_bash(player_type *creature_ptr)
         } else if (g_ptr->m_idx) {
             take_turn(creature_ptr, 100);
             msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
-            do_cmd_attack(creature_ptr, y, x, 0);
+            do_cmd_attack(creature_ptr, y, x, HISSATSU_NONE);
         } else {
             more = exe_bash(creature_ptr, y, x, dir);
         }
@@ -358,7 +358,7 @@ void do_cmd_spike(player_type *creature_ptr)
     } else if (g_ptr->m_idx) {
         take_turn(creature_ptr, 100);
         msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
-        do_cmd_attack(creature_ptr, y, x, 0);
+        do_cmd_attack(creature_ptr, y, x, HISSATSU_NONE);
     } else {
         take_turn(creature_ptr, 100);
         msg_format(_("%sにくさびを打ち込んだ。", "You jam the %s with a spike."), f_name + f_info[feat].name);

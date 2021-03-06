@@ -2,6 +2,8 @@
 
 #include "system/angband.h"
 
+enum parse_error_type : int;
+
 typedef struct dungeon_grid {
     FEAT_IDX feature; /* Terrain feature */
     MONSTER_IDX monster; /* Monster */
@@ -19,5 +21,5 @@ extern dungeon_grid letter[255];
 typedef struct angband_header angband_header;
 typedef errr (*parse_info_txt_func)(char *buf, angband_header *head);
 errr init_info_txt(FILE *fp, char *buf, angband_header *head, parse_info_txt_func parse_info_txt_line);
-errr parse_line_feature(floor_type *floor_ptr, char *buf);
-errr parse_line_building(char *buf);
+parse_error_type parse_line_feature(floor_type *floor_ptr, char *buf);
+parse_error_type parse_line_building(char *buf);

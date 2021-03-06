@@ -448,7 +448,7 @@ static void sweep_target_grids(player_type *creature_ptr, ts_type *ts_ptr)
         describe_grid_wizard(creature_ptr, ts_ptr);
 
         /* Describe and Prompt (enable "TARGET_LOOK") */
-        while ((ts_ptr->query = examine_grid(creature_ptr, ts_ptr->y, ts_ptr->x, ts_ptr->mode | TARGET_LOOK, ts_ptr->info)) == 0)
+        while ((ts_ptr->query = examine_grid(creature_ptr, ts_ptr->y, ts_ptr->x, static_cast<target_type>(ts_ptr->mode | TARGET_LOOK), ts_ptr->info)) == 0)
             ;
 
         ts_ptr->distance = 0;

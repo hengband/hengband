@@ -229,10 +229,10 @@ void spell_RF6_S_MONSTER(player_type *target_ptr, POSITION y, POSITION x, MONSTE
     bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
     for (int k = 0; k < 1; k++) {
         if (mon_to_player)
-            count += summon_specific(target_ptr, m_idx, y, x, rlev, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+            count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_NONE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 
         if (mon_to_mon)
-            count += summon_specific(target_ptr, m_idx, y, x, rlev, 0, (monster_u_mode(floor_ptr, m_idx)));
+            count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_NONE, (monster_u_mode(floor_ptr, m_idx)));
     }
 
     if (target_ptr->blind && count && mon_to_player)
@@ -265,10 +265,10 @@ void spell_RF6_S_MONSTERS(player_type *target_ptr, POSITION y, POSITION x, MONST
     bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
     for (int k = 0; k < S_NUM_6; k++) {
         if (mon_to_player)
-            count += summon_specific(target_ptr, m_idx, y, x, rlev, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+            count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_NONE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 
         if (mon_to_mon)
-            count += summon_specific(target_ptr, m_idx, y, x, rlev, 0, (PM_ALLOW_GROUP | monster_u_mode(floor_ptr, m_idx)));
+            count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_NONE, (PM_ALLOW_GROUP | monster_u_mode(floor_ptr, m_idx)));
     }
 
     if (target_ptr->blind && count && mon_to_player)
@@ -686,9 +686,9 @@ void spell_RF6_S_UNIQUE(player_type *target_ptr, POSITION y, POSITION x, MONSTER
     if (count)
         uniques_are_summoned = TRUE;
 
-    int non_unique_type = SUMMON_HI_UNDEAD;
+    summon_type non_unique_type = SUMMON_HI_UNDEAD;
     if ((m_ptr->sub_align & (SUB_ALIGN_GOOD | SUB_ALIGN_EVIL)) == (SUB_ALIGN_GOOD | SUB_ALIGN_EVIL))
-        non_unique_type = 0;
+        non_unique_type = SUMMON_NONE;
     else if (m_ptr->sub_align & SUB_ALIGN_GOOD)
         non_unique_type = SUMMON_ANGEL;
 

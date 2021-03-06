@@ -82,7 +82,7 @@ static errr init_buffer(void)
     fresh_queue.next = fresh_queue.tail = 0;
     ring.wptr = ring.rptr = ring.inlen = 0;
     fresh_queue.time[0] = 0;
-    ring.buf = malloc(RINGBUF_SIZE);
+    ring.buf = static_cast<char*>(malloc(RINGBUF_SIZE));
     if (ring.buf == NULL)
         return -1;
 

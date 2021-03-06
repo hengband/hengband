@@ -152,7 +152,7 @@ void rd_global_configurations(player_type *creature_ptr)
 
     byte tmp8u;
     rd_byte(&tmp8u);
-    creature_ptr->is_dead = tmp8u;
+    creature_ptr->is_dead = (bool)tmp8u;
 
     rd_byte(&creature_ptr->feeling);
     rd_world_info(creature_ptr);

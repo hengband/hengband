@@ -101,7 +101,7 @@ static bool decide_light_equipment_color(TERM_LEN row, TERM_LEN *col, int flag1,
  */
 static void decide_vulnerability_color(u16b mode, TERM_LEN row, TERM_LEN *col, int flag1, BIT_FLAGS *flags, byte *header_color, bool vuln, bool riding)
 {
-    byte color = (riding ? TERM_L_GREEN : TERM_WHITE);
+    term_color_type color = (riding ? TERM_L_GREEN : TERM_WHITE);
     color = (vuln ? TERM_RED : color);
     if (has_flag(flags, flag1)) {
         c_put_str(color, (mode & DP_IMM) ? "*" : "+", row, *col);
@@ -127,13 +127,13 @@ static void decide_vulnerability_color(u16b mode, TERM_LEN row, TERM_LEN *col, i
 static void decide_colors(player_type *creature_ptr, u16b mode, TERM_LEN row, TERM_LEN *col, int flag1, byte *header_color, bool vuln, bool riding)
 {
     int max_i = (mode & DP_WP) ? INVEN_SUB_HAND + 1 : INVEN_TOTAL;
-    for (inventory_slot_type i = INVEN_MAIN_HAND; i < max_i; i++) {
+    for (int i = INVEN_MAIN_HAND; i < max_i; i++) {
         BIT_FLAGS flags[TR_FLAG_SIZE];
         object_type *o_ptr;
         o_ptr = &creature_ptr->inventory_list[i];
         object_flags_known(creature_ptr, o_ptr, flags);
         if (!(mode & DP_IMM)) {
-            byte color = (riding ? TERM_L_GREEN : TERM_SLATE);
+            term_color_type color = (riding ? TERM_L_GREEN : TERM_SLATE);
             color = (vuln ? TERM_RED : color);
 
             c_put_str(color, ".", row, *col);
@@ -163,7 +163,7 @@ static void decide_colors(player_type *creature_ptr, u16b mode, TERM_LEN row, TE
 static void display_one_characteristic(
     TERM_LEN row, TERM_LEN col, concptr header, byte header_color, int header_col, int flag1, bool vuln, bool riding, all_player_flags *f)
 {
-    byte color = (riding ? TERM_L_GREEN : TERM_SLATE);
+    term_color_type color = (riding ? TERM_L_GREEN : TERM_SLATE);
     color = (vuln ? TERM_RED : color);
     c_put_str(color, ".", row, col);
 

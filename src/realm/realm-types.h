@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum magic_realm_type {
+enum magic_realm_type {
 	REALM_NONE = 0,
     REALM_LIFE = 1,
     REALM_SORCERY = 2,
@@ -18,4 +18,4 @@ typedef enum magic_realm_type {
     REALM_HISSATSU = 17,
     REALM_HEX = 18,
     MAX_REALM = 18,
-} magic_realm_type;
+};

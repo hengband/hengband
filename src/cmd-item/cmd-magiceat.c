@@ -90,7 +90,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
 	OBJECT_SUBTYPE_VALUE ext = 0;
 	char choice;
 	bool flag, request_list;
-	tval_type tval = 0;
+	tval_type tval = TV_NONE;
 	int             ask = TRUE;
 	OBJECT_SUBTYPE_VALUE i = 0;
 	char            out_val[160];

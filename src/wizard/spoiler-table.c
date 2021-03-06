@@ -25,7 +25,7 @@ grouper group_item[MAX_GROUPER_ITEM] = { { TV_SHOT, _("射撃物", "Ammo") }, { 
 
     { TV_SKELETON, _("その他", "Misc") }, { TV_BOTTLE, NULL }, { TV_JUNK, NULL }, { TV_SPIKE, NULL }, { TV_FLASK, NULL }, { TV_PARCHMENT, NULL },
 
-    { 0, "" } };
+    { TV_NONE, "" } };
 
 /* The artifacts categorized by type */
 grouper group_artifact[MAX_GROUPER_ARTIFACT] = {
@@ -52,7 +52,7 @@ grouper group_artifact[MAX_GROUPER_ARTIFACT] = {
     { TV_LITE, _("光源", "Light Sources") },
     { TV_AMULET, _("アミュレット", "Amulets") },
     { TV_RING, _("指輪", "Rings") },
-    { 0, NULL },
+    { TV_NONE, NULL },
 };
 
 flag_desc stat_flags_desc[MAX_STAT_FLAGS_DESCRIPTION] = { { TR_STR, _("腕力", "STR") }, { TR_INT, _("知能", "INT") }, { TR_WIS, _("賢さ", "WIS") },

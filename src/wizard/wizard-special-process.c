@@ -130,7 +130,7 @@ KIND_OBJECT_IDX wiz_create_itemtype(void)
     if ((num < 0) || (num >= max_num))
         return 0;
 
-    tval_type tval = tvals[num].tval;
+    tval_type tval = static_cast<tval_type>(tvals[num].tval);
     concptr tval_desc = tvals[num].desc;
     term_clear();
     num = 0;
@@ -178,9 +178,9 @@ KIND_OBJECT_IDX wiz_create_itemtype(void)
  */
 void wiz_create_item(player_type *caster_ptr)
 {
-    screen_save(caster_ptr);
+    screen_save();
     OBJECT_IDX k_idx = wiz_create_itemtype();
-    screen_load(caster_ptr);
+    screen_load();
     if (!k_idx)
         return;
 
@@ -459,7 +459,7 @@ void wiz_reset_class(player_type *creature_ptr)
     if (tmp_int < 0 || tmp_int >= MAX_CLASS)
         return;
 
-    creature_ptr->pclass = (byte)tmp_int;
+    creature_ptr->pclass = static_cast<player_class_type>(tmp_int);
     creature_ptr->window_flags |= PW_PLAYER;
     creature_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
     handle_stuff(creature_ptr);

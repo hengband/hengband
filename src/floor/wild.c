@@ -299,8 +299,8 @@ static void generate_area(player_type *player_ptr, POSITION y, POSITION x, bool 
     floor_ptr->object_level = floor_ptr->base_level;
     if (player_ptr->town_num) {
         init_buildings();
-        if (border | corner)
-            init_flags = INIT_CREATE_DUNGEON | INIT_ONLY_FEATURES;
+        if (border || corner)
+            init_flags = static_cast<init_flags_type>(INIT_CREATE_DUNGEON | INIT_ONLY_FEATURES);
         else
             init_flags = INIT_CREATE_DUNGEON;
 
@@ -629,7 +629,7 @@ static wilderness_grid w_letter[255];
  * @param x 広域マップの幅を返す参照ポインタ
  * @return なし
  */
-errr parse_line_wilderness(player_type *creature_ptr, char *buf, int xmin, int xmax, int *y, int *x)
+parse_error_type parse_line_wilderness(player_type *creature_ptr, char *buf, int xmin, int xmax, int *y, int *x)
 {
     if (!(buf[0] == 'W'))
         return (PARSE_ERROR_GENERIC);
@@ -640,12 +640,12 @@ errr parse_line_wilderness(player_type *creature_ptr, char *buf, int xmin, int x
         /* Process "W:F:<letter>:<terrain>:<town>:<road>:<name> */
 #ifdef JP
     case 'E':
-        return 0;
+        return PARSE_ERROR_NONE;
     case 'F':
     case 'J':
 #else
     case 'J':
-        return 0;
+        return PARSE_ERROR_NONE;
     case 'F':
     case 'E':
 #endif
@@ -654,9 +654,9 @@ errr parse_line_wilderness(player_type *creature_ptr, char *buf, int xmin, int x
             int index = zz[0][0];
 
             if (num > 1)
-                w_letter[index].terrain = atoi(zz[1]);
+                w_letter[index].terrain = static_cast<wt_type>(atoi(zz[1]));
             else
-                w_letter[index].terrain = 0;
+                w_letter[index].terrain = TERRAIN_EDGE;
 
             if (num > 2)
                 w_letter[index].level = (s16b)atoi(zz[2]);
@@ -739,7 +739,7 @@ errr parse_line_wilderness(player_type *creature_ptr, char *buf, int xmin, int x
         }
     }
 
-    return 0;
+    return PARSE_ERROR_NONE;
 }
 
 /*!

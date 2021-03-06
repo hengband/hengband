@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 /* The "sval" codes for TV_SCROLL */
-typedef enum sv_scroll_type {
+enum sv_scroll_type {
 	SV_SCROLL_DARKNESS = 0,
     SV_SCROLL_AGGRAVATE_MONSTER = 1,
     SV_SCROLL_CURSE_ARMOR = 2,
@@ -59,4 +59,4 @@ typedef enum sv_scroll_type {
     SV_SCROLL_SUMMON_KIN = 54,
     SV_SCROLL_AMUSEMENT = 55,
     SV_SCROLL_STAR_AMUSEMENT = 56,
-} sv_scroll_type;
+};

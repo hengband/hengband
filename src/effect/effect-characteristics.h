@@ -3,7 +3,7 @@
 /*
  * project()関数に用いられる、遠隔攻撃特性ビットフラグ / Bit flags for the "project()" function
  */
-typedef enum effect_characteristics {
+enum effect_characteristics {
     PROJECT_NONE = 0x0000,
     PROJECT_JUMP = 0x0001, /*!< 発動者からの軌跡を持たず、指定地点に直接発生する(予め置いたトラップ、上空からの発生などのイメージ) / Jump directly to the target location (this is a hack) */
     PROJECT_BEAM = 0x0002, /*!< ビーム範囲を持つ。 / Work as a beam weapon (affect every grid passed through) */
@@ -21,4 +21,4 @@ typedef enum effect_characteristics {
     PROJECT_PATH = 0x2000, /*!< 軌跡の表示 / Only used for printing project path */
     PROJECT_FAST = 0x4000, /*!< 炸裂するまで画面上に表示しない / Hide "visual" of flying bolts until blast */
     PROJECT_LOS = 0x8000 /*!< 視線が通っているか(？) / Line of sight */
-} effect_characteristics;
+};

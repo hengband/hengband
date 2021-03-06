@@ -373,7 +373,7 @@ void process_special(player_type *target_ptr, MONSTER_IDX m_idx)
 
     int count = 0;
     DEPTH rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
-    BIT_FLAGS p_mode = is_pet(m_ptr) ? PM_FORCE_PET : 0L;
+    BIT_FLAGS p_mode = is_pet(m_ptr) ? PM_FORCE_PET : PM_NONE;
 
     for (int k = 0; k < A_MAX; k++) {
         if (summon_specific(target_ptr, m_idx, m_ptr->fy, m_ptr->fx, rlev, SUMMON_MOLD, (PM_ALLOW_GROUP | p_mode))) {

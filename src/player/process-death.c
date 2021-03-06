@@ -296,7 +296,7 @@ static bool show_dead_player_items(player_type *creature_ptr)
 {
     if (creature_ptr->equip_cnt) {
         term_clear();
-        (void)show_equipment(creature_ptr, 0, USE_FULL, 0);
+        (void)show_equipment(creature_ptr, 0, USE_FULL, TV_NONE);
         prt(_("装備していたアイテム: -続く-", "You are using: -more-"), 0, 0);
         if (inkey() == ESCAPE)
             return TRUE;
@@ -304,7 +304,7 @@ static bool show_dead_player_items(player_type *creature_ptr)
 
     if (creature_ptr->inven_cnt) {
         term_clear();
-        (void)show_inventory(creature_ptr, 0, USE_FULL, 0);
+        (void)show_inventory(creature_ptr, 0, USE_FULL, TV_NONE);
         prt(_("持っていたアイテム: -続く-", "You are carrying: -more-"), 0, 0);
 
         if (inkey() == ESCAPE)

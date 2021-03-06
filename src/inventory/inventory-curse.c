@@ -46,7 +46,7 @@ static void choise_cursed_item(player_type *creature_ptr, BIT_FLAGS flag, object
     if (!is_specific_curse(flag))
         return;
 
-    tr_type cf = 0;
+    tr_type cf = TR_STR;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     object_flags(creature_ptr, o_ptr, flgs);
     switch (flag) {
@@ -116,7 +116,7 @@ object_type *choose_cursed_obj_name(player_type *creature_ptr, BIT_FLAGS flag)
     if (!(creature_ptr->cursed & flag))
         return NULL;
 
-    for (inventory_slot_type i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         object_type *o_ptr = &creature_ptr->inventory_list[i];
         if (o_ptr->curse_flags & flag) {
             choices[number] = i;
@@ -143,7 +143,7 @@ static void curse_teleport(player_type *creature_ptr)
     GAME_TEXT o_name[MAX_NLEN];
     object_type *o_ptr;
     int i_keep = 0, count = 0;
-    for (inventory_slot_type i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         BIT_FLAGS flgs[TR_FLAG_SIZE];
         o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)

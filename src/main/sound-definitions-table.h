@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum sound_type {
+enum sound_type {
     SOUND_HIT = 1,
     SOUND_MISS = 2,
     SOUND_FLEE = 3,
@@ -68,6 +68,6 @@ typedef enum sound_type {
     SOUND_GLASS = 65, /*!< A glass feature was crashed */
     SOUND_REFLECT = 66, /*!< A bolt was reflected */
     SOUND_MAX = 67, /*!< 効果音定義の最大数 / Maximum numbers of sound effect */
-} sound_type;
+};
 
 extern const concptr angband_sound_name[SOUND_MAX];

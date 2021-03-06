@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum random_art_activation_type {
+enum random_art_activation_type {
     ACT_SUNLIGHT = 1,
     ACT_BO_MISS_1 = 2,
     ACT_BA_POIS_1 = 3,
@@ -141,4 +141,4 @@ typedef enum random_art_activation_type {
     ACT_BLOODY_MOON = 254,
     ACT_CRIMSON = 255,
     ACT_MAX = 255, /* ダミー、最大値と合わせること / Dummy. Please match the value as max value */
-} random_art_activation_type;
+};

@@ -232,13 +232,13 @@ static concptr parse_fixed_map_expression(player_type *player_ptr, char **sp, ch
  * @param xmax 詳細不明
  * @return エラーコード
  */
-errr parse_fixed_map(player_type *player_ptr, concptr name, int ymin, int xmin, int ymax, int xmax)
+parse_error_type parse_fixed_map(player_type *player_ptr, concptr name, int ymin, int xmin, int ymax, int xmax)
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_EDIT, name);
     FILE *fp = angband_fopen(buf, "r");
     if (fp == NULL)
-        return -1;
+        return PARSE_ERROR_GENERIC;
 
     int num = -1;
     parse_error_type err = PARSE_ERROR_NONE;

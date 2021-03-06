@@ -39,7 +39,7 @@ bool eat_magic(player_type *caster_ptr, int power)
 
     object_type *o_ptr;
     OBJECT_IDX item;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
+    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_NONE);
     if (!o_ptr)
         return FALSE;
 

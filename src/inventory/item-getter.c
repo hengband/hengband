@@ -61,7 +61,7 @@ static bool check_item_tag_aux(player_type *owner_ptr, item_selection_type *item
     if (!item_tester_okay(owner_ptr, o_ptr, item_selection_ptr->tval) && ((item_selection_ptr->mode & USE_FULL) == 0))
         return FALSE;
 
-    item_selection_ptr->tval = 0;
+    item_selection_ptr->tval = TV_NONE;
     item_tester_hook = NULL;
     command_cmd = 0;
     return TRUE;
@@ -99,7 +99,7 @@ static bool check_item_tag_inventory(player_type *owner_ptr, item_selection_type
         }
 
         *item_selection_ptr->cp = item_selection_ptr->k;
-        item_selection_ptr->tval = 0;
+        item_selection_ptr->tval = TV_NONE;
         item_tester_hook = NULL;
         command_cmd = 0;
         return TRUE;
@@ -108,7 +108,7 @@ static bool check_item_tag_inventory(player_type *owner_ptr, item_selection_type
     if (!get_item_okay(owner_ptr, *item_selection_ptr->cp, item_selection_ptr->tval))
         return FALSE;
 
-    item_selection_ptr->tval = 0;
+    item_selection_ptr->tval = TV_NONE;
     item_tester_hook = NULL;
     command_cmd = 0;
     return TRUE;
@@ -127,7 +127,7 @@ static bool check_item_tag(player_type *owner_ptr, item_selection_type *item_sel
         return FALSE;
 
     if (item_selection_ptr->mode & USE_FORCE && (*item_selection_ptr->cp == INVEN_FORCE)) {
-        item_selection_ptr->tval = 0;
+        item_selection_ptr->tval = TV_NONE;
         item_tester_hook = NULL;
         command_cmd = 0;
         return TRUE;
@@ -605,7 +605,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         command_see = FALSE;
     }
 
-    item_selection_ptr->tval = 0;
+    item_selection_ptr->tval = TV_NONE;
     item_tester_hook = NULL;
     if (item_selection_ptr->toggle)
         toggle_inventory_equipment(owner_ptr);

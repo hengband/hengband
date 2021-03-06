@@ -523,7 +523,7 @@ static errr Infowin_prepare(Window xid)
 
 #ifdef USE_XFT
     Visual *vis = DefaultVisual(Metadpy->dpy, 0);
-    if (vis->class != TrueColor) {
+    if (vis->c_class != TrueColor) {
         quit_fmt("Display does not support truecolor.\n");
     }
     iwin->draw = XftDrawCreate(Metadpy->dpy, iwin->win, vis, Metadpy->cmap);
@@ -672,7 +672,7 @@ static concptr opcode_pairs[] =
  */
 static int Infoclr_Opcode(concptr str)
 {
-    register int i;
+    int i;
     for (i = 0; opcode_pairs[i * 2]; ++i) {
         if (streq(opcode_pairs[i * 2], str)) {
             return (atoi(opcode_pairs[i * 2 + 1]));
@@ -970,7 +970,7 @@ static errr Infofnt_text_non(int x, int y, concptr str, int len)
 /*
  * Hack -- cursor color
  */
-static infoclr * xor ;
+static infoclr * xor_ ;
 
 /*
  * Actual color table
@@ -1879,15 +1879,15 @@ static errr Term_curs_x11(int x, int y)
 {
     if (use_graphics) {
 #ifdef USE_XFT
-        XftDrawRect(Infowin->draw, &xor->fg, x * Infofnt->wid + Infowin->ox, y * Infofnt->hgt + Infowin->oy, Infofnt->wid - 1, Infofnt->hgt - 1);
-        XftDrawRect(Infowin->draw, &xor->fg, x * Infofnt->wid + Infowin->ox + 1, y * Infofnt->hgt + Infowin->oy + 1, Infofnt->wid - 3, Infofnt->hgt - 3);
+        XftDrawRect(Infowin->draw, &xor_->fg, x * Infofnt->wid + Infowin->ox, y * Infofnt->hgt + Infowin->oy, Infofnt->wid - 1, Infofnt->hgt - 1);
+        XftDrawRect(Infowin->draw, &xor_->fg, x * Infofnt->wid + Infowin->ox + 1, y * Infofnt->hgt + Infowin->oy + 1, Infofnt->wid - 3, Infofnt->hgt - 3);
 #else
-        XDrawRectangle(Metadpy->dpy, Infowin->win, xor->gc, x * Infofnt->wid + Infowin->ox, y * Infofnt->hgt + Infowin->oy, Infofnt->wid - 1, Infofnt->hgt - 1);
+        XDrawRectangle(Metadpy->dpy, Infowin->win, xor_->gc, x * Infofnt->wid + Infowin->ox, y * Infofnt->hgt + Infowin->oy, Infofnt->wid - 1, Infofnt->hgt - 1);
         XDrawRectangle(
-            Metadpy->dpy, Infowin->win, xor->gc, x * Infofnt->wid + Infowin->ox + 1, y * Infofnt->hgt + Infowin->oy + 1, Infofnt->wid - 3, Infofnt->hgt - 3);
+            Metadpy->dpy, Infowin->win, xor_->gc, x * Infofnt->wid + Infowin->ox + 1, y * Infofnt->hgt + Infowin->oy + 1, Infofnt->wid - 3, Infofnt->hgt - 3);
 #endif
     } else {
-        Infoclr_set(xor);
+        Infoclr_set(xor_);
         Infofnt_text_non(x, y, " ", 1);
     }
 
@@ -1901,16 +1901,16 @@ static errr Term_bigcurs_x11(int x, int y)
 {
     if (use_graphics) {
 #ifdef USE_XFT
-        XftDrawRect(Infowin->draw, &xor->fg, x * Infofnt->wid + Infowin->ox, y * Infofnt->hgt + Infowin->oy, Infofnt->twid - 1, Infofnt->hgt - 1);
-        XftDrawRect(Infowin->draw, &xor->fg, x * Infofnt->wid + Infowin->ox + 1, y * Infofnt->hgt + Infowin->oy + 1, Infofnt->twid - 3, Infofnt->hgt - 3);
+        XftDrawRect(Infowin->draw, &xor_->fg, x * Infofnt->wid + Infowin->ox, y * Infofnt->hgt + Infowin->oy, Infofnt->twid - 1, Infofnt->hgt - 1);
+        XftDrawRect(Infowin->draw, &xor_->fg, x * Infofnt->wid + Infowin->ox + 1, y * Infofnt->hgt + Infowin->oy + 1, Infofnt->twid - 3, Infofnt->hgt - 3);
 #else
         XDrawRectangle(
-            Metadpy->dpy, Infowin->win, xor->gc, x * Infofnt->wid + Infowin->ox, y * Infofnt->hgt + Infowin->oy, Infofnt->twid - 1, Infofnt->hgt - 1);
+            Metadpy->dpy, Infowin->win, xor_->gc, x * Infofnt->wid + Infowin->ox, y * Infofnt->hgt + Infowin->oy, Infofnt->twid - 1, Infofnt->hgt - 1);
         XDrawRectangle(
-            Metadpy->dpy, Infowin->win, xor->gc, x * Infofnt->wid + Infowin->ox + 1, y * Infofnt->hgt + Infowin->oy + 1, Infofnt->twid - 3, Infofnt->hgt - 3);
+            Metadpy->dpy, Infowin->win, xor_->gc, x * Infofnt->wid + Infowin->ox + 1, y * Infofnt->hgt + Infowin->oy + 1, Infofnt->twid - 3, Infofnt->hgt - 3);
 #endif
     } else {
-        Infoclr_set(xor);
+        Infoclr_set(xor_);
         Infofnt_text_non(x, y, "  ", 2);
     }
 
@@ -2378,8 +2378,8 @@ errr init_x11(int argc, char *argv[])
     if (Metadpy_init_name(dpy_name))
         return (-1);
 
-    MAKE(xor, infoclr);
-    Infoclr_set(xor);
+    MAKE(xor_, infoclr);
+    Infoclr_set(xor_);
     Infoclr_init_ppn(Metadpy->fg, Metadpy->bg, "xor", 0);
     for (i = 0; i < 256; ++i) {
         Pixell pixel;

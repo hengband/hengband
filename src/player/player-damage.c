@@ -263,6 +263,8 @@ HIT_POINT cold_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
  */
 int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concptr hit_from, int monspell)
 {
+    (void)monspell; // unused
+
     int old_chp = creature_ptr->chp;
 
     char death_message[1024];

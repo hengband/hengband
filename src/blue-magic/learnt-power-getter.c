@@ -170,7 +170,7 @@ static bool check_blue_magic_kind(learnt_magic_type *lm_ptr)
 
 static bool sweep_learnt_spells(player_type *caster_ptr, learnt_magic_type *lm_ptr)
 {
-    set_rf_masks(&lm_ptr->f4, &lm_ptr->f5, &lm_ptr->f6, lm_ptr->mode);
+    set_rf_masks(&lm_ptr->f4, &lm_ptr->f5, &lm_ptr->f6, static_cast<blue_magic_type>(lm_ptr->mode));
     for (lm_ptr->blue_magic_num = 0, lm_ptr->count = 0; lm_ptr->blue_magic_num < 32; lm_ptr->blue_magic_num++)
         if ((0x00000001U << lm_ptr->blue_magic_num) & lm_ptr->f4)
             lm_ptr->blue_magics[lm_ptr->count++] = lm_ptr->blue_magic_num;
@@ -308,7 +308,7 @@ static void describe_blue_magic_name(player_type *caster_ptr, learnt_magic_type 
 
         lm_ptr->spell = monster_powers[lm_ptr->blue_magics[lm_ptr->blue_magic_num]];
         calculate_blue_magic_success_probability(caster_ptr, lm_ptr);
-        learnt_info(caster_ptr, lm_ptr->comment, lm_ptr->blue_magics[lm_ptr->blue_magic_num]);
+        learnt_info(caster_ptr, lm_ptr->comment, static_cast<monster_spell_type>(lm_ptr->blue_magics[lm_ptr->blue_magic_num]));
         close_blue_magic_name(lm_ptr);
         strcat(lm_ptr->psi_desc, format(" %-26s %3d %3d%%%s", lm_ptr->spell.name, lm_ptr->need_mana, lm_ptr->chance, lm_ptr->comment));
         prt(lm_ptr->psi_desc, lm_ptr->y + lm_ptr->blue_magic_num + 1, lm_ptr->x);

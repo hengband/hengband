@@ -3,7 +3,7 @@
 #include "system/angband.h"
 
 /* 職業ごとの選択可能な魔法領域 / Possible realms that can be chosen. */
-typedef enum choosable_realm {
+enum choosable_realm {
 	CH_NONE = 0x00,
 	CH_LIFE = 0x01,
 	CH_SORCERY = 0x02,
@@ -19,7 +19,7 @@ typedef enum choosable_realm {
 	CH_MUSIC = 0x8000,
     CH_HISSATSU = 0x10000,
     CH_HEX = 0x20000,
-} choosable_realm;
+};
 
 extern const u32b realm_choices1[];
 extern const u32b realm_choices2[];

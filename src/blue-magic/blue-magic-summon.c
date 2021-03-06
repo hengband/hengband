@@ -10,7 +10,7 @@ bool cast_blue_summon_kin(player_type *caster_ptr, bmc_type *bmc_ptr)
 {
     msg_print(_("援軍を召喚した。", "You summon one of your kin."));
     for (int k = 0; k < 1; k++) {
-        if (summon_kin_player(caster_ptr, bmc_ptr->summon_lev, caster_ptr->y, caster_ptr->x, (bmc_ptr->pet ? PM_FORCE_PET : 0L))) {
+        if (summon_kin_player(caster_ptr, bmc_ptr->summon_lev, caster_ptr->y, caster_ptr->x, (bmc_ptr->pet ? PM_FORCE_PET : PM_NONE))) {
             if (!bmc_ptr->pet)
                 msg_print(_("召喚された仲間は怒っている！", "The summoned companion is angry!"));
         } else {
@@ -40,7 +40,7 @@ bool cast_blue_summon_monster(player_type *caster_ptr, bmc_type *bmc_ptr)
 {
     msg_print(_("仲間を召喚した。", "You summon help."));
     for (int k = 0; k < 1; k++) {
-        if (summon_specific(caster_ptr, (bmc_ptr->pet ? -1 : 0), caster_ptr->y, caster_ptr->x, bmc_ptr->summon_lev, 0, bmc_ptr->p_mode)) {
+        if (summon_specific(caster_ptr, (bmc_ptr->pet ? -1 : 0), caster_ptr->y, caster_ptr->x, bmc_ptr->summon_lev, SUMMON_NONE, bmc_ptr->p_mode)) {
             if (!bmc_ptr->pet)
                 msg_print(_("召喚されたモンスターは怒っている！", "The summoned monster is angry!"));
         } else {
@@ -55,7 +55,7 @@ bool cast_blue_summon_monsters(player_type *caster_ptr, bmc_type *bmc_ptr)
 {
     msg_print(_("モンスターを召喚した！", "You summon monsters!"));
     for (int k = 0; k < bmc_ptr->plev / 15 + 2; k++) {
-        if (summon_specific(caster_ptr, (bmc_ptr->pet ? -1 : 0), caster_ptr->y, caster_ptr->x, bmc_ptr->summon_lev, 0, (bmc_ptr->p_mode | bmc_ptr->u_mode))) {
+        if (summon_specific(caster_ptr, (bmc_ptr->pet ? -1 : 0), caster_ptr->y, caster_ptr->x, bmc_ptr->summon_lev, SUMMON_NONE, (bmc_ptr->p_mode | bmc_ptr->u_mode))) {
             if (!bmc_ptr->pet)
                 msg_print(_("召喚されたモンスターは怒っている！", "The summoned monsters are angry!"));
         } else {

@@ -1295,7 +1295,7 @@ errr term_fresh_force(void)
 errr term_set_cursor(int v)
 {
     /* Already done */
-    if (Term->scr->cv == v)
+    if (Term->scr->cv == (bool)v)
         return 1;
 
     /* Change */

@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum monsetr_description_type {
+enum monsetr_description_type {
     MD_NONE = 0x00000000,
 	MD_OBJECTIVE = 0x00000001, /* Objective (or Reflexive) */
     MD_POSSESSIVE = 0x00000002, /* Possessive (or Reflexive) */
@@ -12,6 +12,6 @@ typedef enum monsetr_description_type {
     MD_ASSUME_VISIBLE = 0x00000080, /* Assume the monster is visible */
     MD_TRUE_NAME = 0x00000100, /* Chameleon's true name */
     MD_IGNORE_HALLU = 0x00000200, /* Ignore hallucination, and penetrate shape change */
-} monsetr_description_type;
+};
 
 #define MD_WRONGDOER_NAME (MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE) /* 加害明記向け */

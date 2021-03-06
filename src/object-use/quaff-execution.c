@@ -80,7 +80,7 @@ static bool booze(player_type *creature_ptr)
         else
             wiz_dark(creature_ptr);
 
-        (void)teleport_player_aux(creature_ptr, 100, FALSE, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
+        (void)teleport_player_aux(creature_ptr, 100, FALSE, static_cast<teleport_flags>(TELEPORT_NONMAGICAL | TELEPORT_PASSIVE));
         wiz_dark(creature_ptr);
         msg_print(_("知らない場所で目が醒めた。頭痛がする。", "You wake up somewhere with a sore head..."));
         msg_print(_("何も思い出せない。どうやってここへ来たのかも分からない！", "You can't remember a thing or how you got here!"));
@@ -515,7 +515,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
             break;
 
         case SV_POTION_NEW_LIFE:
-            roll_hitdice(creature_ptr, 0L);
+            roll_hitdice(creature_ptr, SPOP_NONE);
             get_max_stats(creature_ptr);
             creature_ptr->update |= PU_BONUS;
             lose_all_mutations(creature_ptr);

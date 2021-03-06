@@ -36,7 +36,7 @@ void do_cmd_quaff_potion(player_type *creature_ptr)
     concptr s = _("飲める薬がない。", "You have no potions to quaff.");
 
     OBJECT_IDX item;
-    if (!choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0))
+    if (!choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_NONE))
         return;
 
     exe_quaff_potion(creature_ptr, item);

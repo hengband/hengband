@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum realm_hex_type {
+enum realm_hex_type {
 	/* 1st book */
 	HEX_BLESS = 0,
     HEX_CURE_LIGHT = 1,
@@ -37,4 +37,4 @@ typedef enum realm_hex_type {
     HEX_SHADOW_MOVE = 29,
     HEX_ANTI_MAGIC = 30,
     HEX_REVENGE = 31,
-} realm_hex_type;
+};

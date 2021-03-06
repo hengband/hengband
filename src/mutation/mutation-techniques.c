@@ -45,7 +45,7 @@ bool eat_rock(player_type *caster_ptr)
         msg_print(_("何かが邪魔しています！", "There's something in the way!"));
 
         if (!m_ptr->ml || !is_pet(m_ptr))
-            do_cmd_attack(caster_ptr, y, x, 0);
+            do_cmd_attack(caster_ptr, y, x, HISSATSU_NONE);
     } else if (has_flag(f_ptr->flags, FF_TREE)) {
         msg_print(_("木の味は好きじゃない！", "You don't like the woody taste!"));
     } else if (has_flag(f_ptr->flags, FF_GLASS)) {

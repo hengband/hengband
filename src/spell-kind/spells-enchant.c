@@ -31,7 +31,7 @@ bool artifact_scroll(player_type *caster_ptr)
     concptr s = _("強化できるアイテムがない。", "You have nothing to enchant.");
     object_type *o_ptr;
     OBJECT_IDX item;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
+    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), TV_NONE);
     if (!o_ptr)
         return FALSE;
 
@@ -128,7 +128,7 @@ bool mundane_spell(player_type *owner_ptr, bool only_equip)
     concptr q = _("どれを使いますか？", "Use which item? ");
     concptr s = _("使えるものがありません。", "You have nothing you can use.");
 
-    o_ptr = choose_object(owner_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
+    o_ptr = choose_object(owner_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), TV_NONE);
     if (!o_ptr)
         return FALSE;
 

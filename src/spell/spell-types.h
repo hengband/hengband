@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum spells_type
+enum spells_type
 {
 	GF_NONE = 0,
 	GF_ELEC = 1,				/*!< 魔法効果: 電撃*/
@@ -103,4 +103,4 @@ typedef enum spells_type
 	GF_STASIS_EVIL = 115,		/*!< 魔法効果: 邪悪拘束*/
 	GF_WOUNDS = 116,			/*!< 魔法効果: 創傷*/
 	MAX_GF = 117,				/*!< 欠番を無視した最大サイズ (直上の値+1) */
-} spells_type;
+};

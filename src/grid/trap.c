@@ -456,7 +456,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
         msg_print(_("何かがピカッと光った！", "There is a flash of shimmering light!"));
         num = 2 + randint1(3);
         for (i = 0; i < num; i++) {
-            (void)summon_specific(trapped_ptr, 0, y, x, trapped_ptr->current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+            (void)summon_specific(trapped_ptr, 0, y, x, trapped_ptr->current_floor_ptr->dun_level, SUMMON_NONE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
         }
 
         if (trapped_ptr->current_floor_ptr->dun_level > randint1(100)) /* No nasty effect for low levels */

@@ -114,7 +114,7 @@ static void natural_attack(player_type *attacker_ptr, MONSTER_IDX m_idx, int att
     msg_format(_("%sを%sで攻撃した。", "You hit %s with your %s."), m_name, atk_desc);
 
     HIT_POINT k = damroll(dice_num, dice_side);
-    k = critical_norm(attacker_ptr, n_weight, bonus, k, (s16b)bonus, 0);
+    k = critical_norm(attacker_ptr, n_weight, bonus, k, (s16b)bonus, HISSATSU_NONE);
     k += attacker_ptr->to_d_m;
     if (k < 0)
         k = 0;

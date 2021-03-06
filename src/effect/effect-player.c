@@ -141,11 +141,11 @@ concptr blind_spell_effect_messages[MAX_GF] = {
     "", // GF_WOUNDS = 116, /*!< 魔法効果: 創傷*/
 };
 
-typedef enum effect_player_check_result {
+enum ep_check_result {
     EP_CHECK_FALSE = 0,
     EP_CHECK_TRUE = 1,
     EP_CHECK_CONTINUE = 2,
-} ep_check_result;
+};
 
 /*!
  * @brief effect_player_type構造体を初期化する
@@ -297,7 +297,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
     effect_player_type *ep_ptr = initialize_effect_player(&tmp_effect, who, dam, effect_type, flag, monspell);
     ep_check_result check_result = check_continue_player_effect(target_ptr, ep_ptr, y, x, project);
     if (check_result != EP_CHECK_CONTINUE)
-        return check_result;
+        return (bool)check_result;
 
     if (ep_ptr->dam > 1600)
         ep_ptr->dam = 1600;

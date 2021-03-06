@@ -68,7 +68,7 @@ void rd_item_old(player_type *player_ptr, object_type *o_ptr)
 
     /* Type/Subtype */
     rd_byte(&tmp8u);
-    o_ptr->tval = tmp8u;
+    o_ptr->tval = static_cast<tval_type>(tmp8u);
     rd_byte(&tmp8u);
     o_ptr->sval = tmp8u;
 

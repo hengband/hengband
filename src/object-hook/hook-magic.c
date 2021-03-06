@@ -105,7 +105,7 @@ bool item_tester_learn_spell(player_type *player_ptr, object_type *o_ptr)
         }
     }
 
-    if ((o_ptr->tval < TV_LIFE_BOOK) || (o_ptr->tval > (TV_LIFE_BOOK + MAX_REALM - 1)))
+    if ((o_ptr->tval < TV_LIFE_BOOK) || (o_ptr->tval > (TV_LIFE_BOOK + static_cast<int>(MAX_REALM) - 1)))
         return FALSE;
 
     if ((o_ptr->tval == TV_MUSIC_BOOK) && (player_ptr->pclass == CLASS_BARD))

@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum racial_flag_type {
+enum racial_flag_type {
 	MUT1_SPIT_ACID = 0x00000001L, /*!< 突然変異: 酸の唾 */
 	MUT1_BR_FIRE = 0x00000002L, /*!< 突然変異: 炎のブレス */
 	MUT1_HYPN_GAZE = 0x00000004L, /*!< 突然変異: 催眠睨み */
@@ -33,9 +33,9 @@ typedef enum racial_flag_type {
 	MUT1_BANISH = 0x20000000L, /*!< 突然変異: 邪悪消滅 */
 	MUT1_COLD_TOUCH = 0x40000000L, /*!< 突然変異: 凍結の手 */
 	MUT1_LAUNCHER = 0x80000000L, /*!< 突然変異: アイテム投げ */
-} racial_flag_type;
+};
 
-typedef enum mutation_flag_type_1 {
+enum mutation_flag_type_1 {
 	MUT2_BERS_RAGE = 0x00000001L, /*!< 突然変異: 狂戦士化の発作 */
 	MUT2_COWARDICE = 0x00000002L, /*!< 突然変異: 臆病 */
 	MUT2_RTELEPORT = 0x00000004L, /*!< 突然変異: ランダムテレポート / Random teleport, instability */
@@ -68,9 +68,9 @@ typedef enum mutation_flag_type_1 {
 	MUT2_SP_TO_HP = 0x20000000L, /*!< 突然変異: ランダムなMPからHPへの変換 */
 	MUT2_HP_TO_SP = 0x40000000L, /*!< 突然変異: ランダムなHPからMPへの変換 */
 	MUT2_DISARM = 0x80000000L, /*!< 突然変異: ランダムな武器落とし */
-} mutation_flag_type_1;
+};
 
-typedef enum mutation_flag_type_2 {
+enum mutation_flag_type_2 {
 	MUT3_HYPER_STR = 0x00000001L, /*!< 突然変異: 超人的な力 */
 	MUT3_PUNY = 0x00000002L, /*!< 突然変異: 虚弱 */
 	MUT3_HYPER_INT = 0x00000004L, /*!< 突然変異: 生体コンピュータ */
@@ -103,4 +103,4 @@ typedef enum mutation_flag_type_2 {
 	MUT3_VULN_ELEM = 0x20000000L, /*!< 突然変異: 元素攻撃弱点 */
 	MUT3_MOTION = 0x40000000L, /*!< 突然変異: 正確で力強い動作 */
 	MUT3_GOOD_LUCK = 0x80000000L, /*!< 突然変異: 白いオーラ(幸運) */
-} mutation_flag_type_2;
+};

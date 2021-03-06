@@ -42,8 +42,8 @@ void tim_player_flags(player_type *creature_ptr, BIT_FLAGS *flags)
     if (is_oppose_pois(creature_ptr))
         add_flag(flags, TR_RES_POIS);
 
-    for (tr_type test_flag = 0; test_flag < TR_FLAG_MAX; test_flag++) {
-        if (any_bits(get_player_flags(creature_ptr, test_flag), tmp_effect_flag))
+    for (int test_flag = 0; test_flag < TR_FLAG_MAX; test_flag++) {
+        if (any_bits(get_player_flags(creature_ptr, static_cast<tr_type>(test_flag)), tmp_effect_flag))
             add_flag(flags, test_flag);
     }
 }

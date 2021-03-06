@@ -119,7 +119,7 @@ bool ident_spell(player_type *caster_ptr, bool only_equip, tval_type item_tester
     concptr s = _("鑑定するべきアイテムがない。", "You have nothing to identify.");
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
+    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), TV_NONE);
     if (!o_ptr)
         return FALSE;
 
@@ -172,7 +172,7 @@ bool identify_fully(player_type *caster_ptr, bool only_equip, tval_type item_tes
 
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
+    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), TV_NONE);
     if (!o_ptr)
         return FALSE;
 

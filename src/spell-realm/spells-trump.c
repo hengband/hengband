@@ -95,7 +95,7 @@ void cast_shuffle(player_type *caster_ptr)
     if (die < 30) {
         msg_print(_("奇妙なモンスターの絵だ。", "It's the picture of a strange monster."));
         trump_summoning(
-            caster_ptr, 1, FALSE, caster_ptr->y, caster_ptr->x, (floor_ptr->dun_level * 3 / 2), (32 + randint1(6)), PM_ALLOW_GROUP | PM_ALLOW_UNIQUE);
+            caster_ptr, 1, FALSE, caster_ptr->y, caster_ptr->x, (floor_ptr->dun_level * 3 / 2), static_cast<summon_type>(SUMMON_UNIQUE + randint1(6)), PM_ALLOW_GROUP | PM_ALLOW_UNIQUE);
         return;
     }
 
@@ -195,7 +195,7 @@ void cast_shuffle(player_type *caster_ptr)
 
     if (die < 111) {
         msg_print(_("《審判》だ。", "It's Judgement."));
-        roll_hitdice(caster_ptr, 0L);
+        roll_hitdice(caster_ptr, SPOP_NONE);
         lose_all_mutations(caster_ptr);
         return;
     }

@@ -78,10 +78,10 @@ int rod_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION d
 
     case SV_ROD_IDENTIFY: {
         if (powerful) {
-            if (!identify_fully(creature_ptr, FALSE, 0))
+            if (!identify_fully(creature_ptr, FALSE, TV_NONE))
                 *use_charge = FALSE;
         } else {
-            if (!ident_spell(creature_ptr, FALSE, 0))
+            if (!ident_spell(creature_ptr, FALSE, TV_NONE))
                 *use_charge = FALSE;
         }
         ident = TRUE;

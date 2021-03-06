@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum monster_race_type {
+enum monster_race_type {
     MON_PLAYER = 0, // Dummy.
     MON_BEGGAR = 12,
     MON_LEPER = 13,
@@ -173,4 +173,4 @@ typedef enum monster_race_type {
     MON_CAIT_SITH = 1262,
     MON_SHIVA_BOOTS = 1264,
     MON_BIG_RAVEN = 1268,
-} monster_race_type;
+};

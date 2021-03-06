@@ -164,9 +164,9 @@ HIT_POINT spell_RF6_SPECIAL_B(player_type *target_ptr, POSITION y, POSITION x, M
     HIT_POINT dam = damroll(4, 8);
 
     if (monster_to_player || t_idx == target_ptr->riding)
-        teleport_player_to(target_ptr, m_ptr->fy, m_ptr->fx, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
+        teleport_player_to(target_ptr, m_ptr->fy, m_ptr->fx, static_cast<teleport_flags>(TELEPORT_NONMAGICAL | TELEPORT_PASSIVE));
     else
-        teleport_monster_to(target_ptr, t_idx, m_ptr->fy, m_ptr->fx, 100, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
+        teleport_monster_to(target_ptr, t_idx, m_ptr->fy, m_ptr->fx, 100, static_cast<teleport_flags>(TELEPORT_NONMAGICAL | TELEPORT_PASSIVE));
 
     sound(SOUND_FALL);
 

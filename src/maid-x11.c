@@ -811,7 +811,7 @@ static XImage *ResizeImage(Display *dpy, XImage *Im,
 	char *Data;
 
 	if (smoothRescaling && (ix != ox || iy != oy) &&
-	    visual->class == TrueColor)
+	    visual->c_class == TrueColor)
 	{
 	    return ResizeImageSmooth(dpy, Im, ix, iy, ox, oy);
 	}

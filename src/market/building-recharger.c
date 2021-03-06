@@ -42,7 +42,7 @@ void building_recharge(player_type *player_ptr)
 
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
+    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_NONE);
     if (!o_ptr)
         return;
 

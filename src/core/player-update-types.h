@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum player_update_type {
+enum player_update_type {
 	PU_BONUS = 0x00000001L, /*!< ステータス更新フラグ: 能力値修正 / Calculate bonuses */
 	PU_TORCH = 0x00000002L, /*!< ステータス更新フラグ: 光源半径 / Calculate torch radius */
 	PU_HP = 0x00000010L, /*!< ステータス更新フラグ: HP / Calculate chp and mhp */
@@ -18,4 +18,4 @@ typedef enum player_update_type {
 	PU_MONSTERS = 0x01000000L, /*!< ステータス更新フラグ: モンスターのステータス / Update monsters */
 	PU_DISTANCE = 0x02000000L, /*!< ステータス更新フラグ: プレイヤーとモンスターの距離 / Update distances */
 	PU_FLOW = 0x10000000L, /*!< ステータス更新フラグ: プレイヤーから各マスへの到達距離 / Update flow */
-} player_update_type;
+};

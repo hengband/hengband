@@ -44,7 +44,7 @@ bool cast_berserk_spell(player_type *caster_ptr, mind_berserker_type spell)
             return FALSE;
         }
 
-        do_cmd_attack(caster_ptr, y, x, 0);
+        do_cmd_attack(caster_ptr, y, x, HISSATSU_NONE);
         if (!player_can_enter(caster_ptr, caster_ptr->current_floor_ptr->grid_array[y][x].feat, 0)
             || is_trap(caster_ptr, caster_ptr->current_floor_ptr->grid_array[y][x].feat))
             break;

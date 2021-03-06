@@ -71,7 +71,7 @@ void set_proxy(char *default_url, int default_port)
 
     /* 文字列の長さを調べ、必要なメモリを確保 */
     len = strlen(s);
-    proxy = malloc(len + 1);
+    proxy = static_cast<char*>(malloc(len + 1));
 
     /* ポート番号があるかどうかを調べ、あればproxy_portに設定。 */
     --len;

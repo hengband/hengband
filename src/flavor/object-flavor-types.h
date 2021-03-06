@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum object_description_type {
+enum object_description_type {
     OD_NAME_ONLY = 0x00000001, /* Omit values, pval, inscription */
     OD_NAME_AND_ENCHANT = 0x00000002, /* Omit pval, inscription */
     OD_OMIT_INSCRIPTION = 0x00000004, /* Omit inscription */
@@ -10,4 +10,4 @@ typedef enum object_description_type {
     OD_NO_FLAVOR = 0x00000040, /* Allow to hidden flavor */
     OD_FORCE_FLAVOR = 0x00000080, /* Get un-shuffled flavor name */
     OD_DEBUG = 0x10000000, /* Print for DEBUG */
-} object_description_type;
+};

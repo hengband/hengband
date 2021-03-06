@@ -58,7 +58,7 @@ static errr init_info_raw(int fd, angband_header *head)
 
     *head = test;
     C_MAKE(head->info_ptr, head->info_size, char);
-    fd_read(fd, head->info_ptr, head->info_size);
+    fd_read(fd, static_cast<char*>(head->info_ptr), head->info_size);
     if (head->name_size) {
         C_MAKE(head->name_ptr, head->name_size, char);
         fd_read(fd, head->name_ptr, head->name_size);
@@ -80,7 +80,7 @@ static errr init_info_raw(int fd, angband_header *head)
 static void update_header(angband_header *head, void **info, char **name, char **text, char **tag)
 {
     if (info)
-        *info = head->info_ptr;
+        *info = static_cast<char*>(head->info_ptr);
 
     if (name)
         *name = head->name_ptr;
@@ -183,7 +183,7 @@ static errr init_info(player_type *player_ptr, concptr filename, angband_header 
         C_MAKE(head->tag_ptr, FAKE_TAG_SIZE, char);
 
     if (info)
-        *info = head->info_ptr;
+        *info = static_cast<char*>(head->info_ptr);
 
     if (name)
         *name = head->name_ptr;
@@ -225,7 +225,7 @@ static errr init_info(player_type *player_ptr, concptr filename, angband_header 
     safe_setuid_drop();
     if (fd >= 0) {
         fd_write(fd, (concptr)(head), head->head_size);
-        fd_write(fd, head->info_ptr, head->info_size);
+        fd_write(fd, static_cast<concptr>(head->info_ptr), head->info_size);
         fd_write(fd, head->name_ptr, head->name_size);
         fd_write(fd, head->text_ptr, head->text_size);
         fd_write(fd, head->tag_ptr, head->tag_size);
@@ -266,7 +266,7 @@ errr init_f_info(player_type *player_ptr)
     init_header(&f_head, max_f_idx, sizeof(feature_type));
     f_head.parse_info_txt = parse_f_info;
     f_head.retouch = retouch_f_info;
-    return init_info(player_ptr, "f_info", &f_head, (void *)&f_info, &f_name, NULL, &f_tag);
+    return init_info(player_ptr, "f_info", &f_head, reinterpret_cast<void**>(&f_info), &f_name, NULL, &f_tag);
 }
 
 /*!
@@ -278,7 +278,7 @@ errr init_k_info(player_type *player_ptr)
 {
     init_header(&k_head, max_k_idx, sizeof(object_kind));
     k_head.parse_info_txt = parse_k_info;
-    return init_info(player_ptr, "k_info", &k_head, (void *)&k_info, &k_name, &k_text, NULL);
+    return init_info(player_ptr, "k_info", &k_head, reinterpret_cast<void**>(&k_info), &k_name, &k_text, NULL);
 }
 
 /*!
@@ -290,7 +290,7 @@ errr init_a_info(player_type *player_ptr)
 {
     init_header(&a_head, max_a_idx, sizeof(artifact_type));
     a_head.parse_info_txt = parse_a_info;
-    return init_info(player_ptr, "a_info", &a_head, (void *)&a_info, &a_name, &a_text, NULL);
+    return init_info(player_ptr, "a_info", &a_head, reinterpret_cast<void**>(&a_info), &a_name, &a_text, NULL);
 }
 
 /*!
@@ -302,7 +302,7 @@ errr init_e_info(player_type *player_ptr)
 {
     init_header(&e_head, max_e_idx, sizeof(ego_item_type));
     e_head.parse_info_txt = parse_e_info;
-    return init_info(player_ptr, "e_info", &e_head, (void *)&e_info, &e_name, &e_text, NULL);
+    return init_info(player_ptr, "e_info", &e_head, reinterpret_cast<void**>(&e_info), &e_name, &e_text, NULL);
 }
 
 /*!
@@ -314,7 +314,7 @@ errr init_r_info(player_type *player_ptr)
 {
     init_header(&r_head, max_r_idx, sizeof(monster_race));
     r_head.parse_info_txt = parse_r_info;
-    return init_info(player_ptr, "r_info", &r_head, (void *)&r_info, &r_name, &r_text, NULL);
+    return init_info(player_ptr, "r_info", &r_head, reinterpret_cast<void**>(&r_info), &r_name, &r_text, NULL);
 }
 
 /*!
@@ -326,7 +326,7 @@ errr init_d_info(player_type *player_ptr)
 {
     init_header(&d_head, current_world_ptr->max_d_idx, sizeof(dungeon_type));
     d_head.parse_info_txt = parse_d_info;
-    return init_info(player_ptr, "d_info", &d_head, (void *)&d_info, &d_name, &d_text, NULL);
+    return init_info(player_ptr, "d_info", &d_head, reinterpret_cast<void**>(&d_info), &d_name, &d_text, NULL);
 }
 
 /*!
@@ -341,7 +341,7 @@ errr init_v_info(player_type *player_ptr)
 {
     init_header(&v_head, max_v_idx, sizeof(vault_type));
     v_head.parse_info_txt = parse_v_info;
-    return init_info(player_ptr, "v_info", &v_head, (void *)&v_info, &v_name, &v_text, NULL);
+    return init_info(player_ptr, "v_info", &v_head, reinterpret_cast<void**>(&v_info), &v_name, &v_text, NULL);
 }
 
 /*!
@@ -353,7 +353,7 @@ errr init_s_info(player_type *player_ptr)
 {
     init_header(&s_head, MAX_CLASS, sizeof(skill_table));
     s_head.parse_info_txt = parse_s_info;
-    return init_info(player_ptr, "s_info", &s_head, (void *)&s_info, NULL, NULL, NULL);
+    return init_info(player_ptr, "s_info", &s_head, reinterpret_cast<void**>(&s_info), NULL, NULL, NULL);
 }
 
 /*!
@@ -365,5 +365,5 @@ errr init_m_info(player_type *player_ptr)
 {
     init_header(&m_head, MAX_CLASS, sizeof(player_magic));
     m_head.parse_info_txt = parse_m_info;
-    return init_info(player_ptr, "m_info", &m_head, (void *)&m_info, NULL, NULL, NULL);
+    return init_info(player_ptr, "m_info", &m_head, reinterpret_cast<void**>(&m_info), NULL, NULL, NULL);
 }
