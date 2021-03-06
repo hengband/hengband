@@ -11,9 +11,13 @@
 void set_race_ability_info(player_type *creature_ptr, self_info_type *self_ptr)
 {
     switch (creature_ptr->prace) {
-    case RACE_NIBELUNG:
     case RACE_DWARF:
         if (creature_ptr->lev >= 5)
+            self_ptr->info[self_ptr->line++] = _("あなたは罠とドアと階段を感知できる。(5 MP)", "You can find traps, doors and stairs (cost 5).");
+
+        break;
+    case RACE_NIBELUNG:
+        if (creature_ptr->lev >= 10)
             self_ptr->info[self_ptr->line++] = _("あなたは罠とドアと階段を感知できる。(5 MP)", "You can find traps, doors and stairs (cost 5).");
 
         break;
@@ -23,11 +27,8 @@ void set_race_ability_info(player_type *creature_ptr, self_info_type *self_ptr)
 
         break;
     case RACE_GNOME:
-        if (creature_ptr->lev >= 5) {
-            sprintf(self_ptr->plev_buf, _("あなたは範囲 %d 以内にテレポートできる。(%d MP)", "You can teleport, range %d (cost %d)."), (1 + creature_ptr->lev),
-                (5 + (creature_ptr->lev / 5)));
-            self_ptr->info[self_ptr->line++] = self_ptr->plev_buf;
-        }
+        if (creature_ptr->lev >= 5)
+            self_ptr->info[self_ptr->line++] = _("あなたは範囲 10 以内にテレポートできる。(5 MP)", "You can teleport, range 10 (cost 5).");
 
         break;
     case RACE_HALF_ORC:
@@ -64,14 +65,14 @@ void set_race_ability_info(player_type *creature_ptr, self_info_type *self_ptr)
 
         break;
     case RACE_HALF_TITAN:
-        if (creature_ptr->lev >= 35)
-            self_ptr->info[self_ptr->line++] = _("あなたはモンスターをスキャンすることができる。(20 MP)", "You can probe monsters (cost 20).");
+        if (creature_ptr->lev >= 15)
+            self_ptr->info[self_ptr->line++] = _("あなたはモンスターをスキャンすることができる。(10 MP)", "You can probe monsters (cost 10).");
 
         break;
     case RACE_CYCLOPS:
         if (creature_ptr->lev >= 20) {
             sprintf(self_ptr->plev_buf, _("あなたは %d ダメージの岩石を投げることができる。(15 MP)", "You can throw a boulder, dam. %d (cost 15)."),
-                3 * creature_ptr->lev);
+                (3 * creature_ptr->lev) / 2);
             self_ptr->info[self_ptr->line++] = self_ptr->plev_buf;
         }
 
@@ -148,14 +149,13 @@ void set_race_ability_info(player_type *creature_ptr, self_info_type *self_ptr)
         if (creature_ptr->lev < 2)
             break;
 
-        sprintf(self_ptr->plev_buf, _("あなたは敵から %d-%d HP の生命力を吸収できる。(%d MP)", "You can steal life from a foe, dam. %d-%d (cost %d)."),
-            creature_ptr->lev + MAX(1, creature_ptr->lev / 10), creature_ptr->lev + creature_ptr->lev * MAX(1, creature_ptr->lev / 10),
-            1 + (creature_ptr->lev / 3));
+        sprintf(self_ptr->plev_buf, _("あなたは敵から %d HP の生命力を吸収できる。(%d MP)", "You can steal life from a foe, dam. %d (cost %d)."),
+            creature_ptr->lev * 2, 1 + (creature_ptr->lev / 3));
         self_ptr->info[self_ptr->line++] = self_ptr->plev_buf;
         break;
     case RACE_SPECTRE:
         if (creature_ptr->lev >= 4)
-            self_ptr->info[self_ptr->line++] = _("あなたは泣き叫んで敵を恐怖させることができる。(3 MP)", "You can wail to terrify your enemies (cost 3).");
+            self_ptr->info[self_ptr->line++] = _("あなたは泣き叫んで敵を恐怖させることができる。(6 MP)", "You can wail to terrify your enemies (cost 6).");
 
         break;
     case RACE_SPRITE:
