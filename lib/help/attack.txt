@@ -593,6 +593,7 @@ Original   : (??) Chris Weisiger and Leon Marrick
 Updated    : (??)
 Updated    : Zangband DevTeam
 Updated    : Hengband 1.5.2
+Updated    : Hengband 3.0.0, English translation backwardsEric
 
 ***** Begin Hyperlinks
 ***** [b] commdesc.txt#ThrowFire
