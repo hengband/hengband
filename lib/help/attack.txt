@@ -470,8 +470,7 @@ A fixed artifact has a predetermined name and attributes, so,
 if you play the game many times, you may encounter the same fixed
 artifact. The name and attributes of a random artifact are determined
 when it is generated, so it is extremely unlikely that you would see
-that artifact again in another game. A fixed artifact will have a
-"★" symol in its name. A random one will have a "☆" in its name.
+that artifact again in another game.
 
 By the way, the rare weapons mentioned above can also become ego
 items at the same time.  A Blade of Chaos (Holy Avenger) will have
@@ -593,6 +592,7 @@ Original   : (??) Chris Weisiger and Leon Marrick
 Updated    : (??)
 Updated    : Zangband DevTeam
 Updated    : Hengband 1.5.2
+Updated    : Hengband 3.0.0, English translation backwardsEric
 
 ***** Begin Hyperlinks
 ***** [b] commdesc.txt#ThrowFire
