@@ -491,8 +491,10 @@ void wiz_reset_class(player_type *creature_ptr)
         return;
 
     creature_ptr->pclass = static_cast<player_class_type>(tmp_int);
+    cp_ptr = &class_info[creature_ptr->pclass];
     creature_ptr->window_flags |= PW_PLAYER;
     creature_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
+    creature_ptr->redraw |= PR_BASIC;
     handle_stuff(creature_ptr);
 }
 
