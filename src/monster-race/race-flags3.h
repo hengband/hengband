@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum race_flags3 {
+enum race_flags3 {
 	RF3_ORC = 0x00000001, /*!< モンスター特性: オーク / Orc */
     RF3_TROLL = 0x00000002, /*!< モンスター特性: トロル / Troll */
     RF3_GIANT = 0x00000004, /*!< モンスター特性: 巨人 / Giant */
@@ -33,4 +33,4 @@ typedef enum race_flags3 {
     RF3_NO_STUN = 0x20000000, /*!< モンスター特性: 朦朧としない / Cannot be stunned */
     RF3_NO_CONF = 0x40000000, /*!< モンスター特性: 混乱しない / Cannot be confused and resist confusion */
     RF3_NO_SLEEP = 0x80000000, /*!< モンスター特性: 眠らない / Cannot be slept */
-} race_flags3;
+};

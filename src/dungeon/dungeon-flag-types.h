@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum dungeon_flag_type {
+enum dungeon_flag_type {
 	DF1_WINNER = 0x00000001L,
     DF1_MAZE = 0x00000002L,
     DF1_SMALLEST = 0x00000004L,
@@ -33,6 +33,6 @@ typedef enum dungeon_flag_type {
     DF1_DARKNESS = 0x20000000L,
     DF1_ACID_RIVER = 0x40000000L,
     DF1_POISONOUS_RIVER = 0x80000000L,
-} dungeon_flag_type;
+};
 
 #define DF1_LAKE_MASK (DF1_LAKE_WATER | DF1_LAKE_LAVA | DF1_LAKE_RUBBLE | DF1_LAKE_TREE | DF1_LAKE_POISONOUS | DF1_LAKE_ACID)

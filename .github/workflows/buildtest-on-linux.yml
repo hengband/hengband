@@ -20,6 +20,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install \
+            autoconf-archive \
             libncursesw5-dev \
             libcurl4-openssl-dev \
             nkf \

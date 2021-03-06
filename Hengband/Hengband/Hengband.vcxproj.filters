@@ -1,2195 +1,2195 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\..\src\main-win.c" />
-    <ClCompile Include="..\..\src\combat\shoot.c">
+    <ClCompile Include="..\..\src\main-win.cpp" />
+    <ClCompile Include="..\..\src\combat\shoot.cpp">
       <Filter>combat</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view\status-first-page.c">
+    <ClCompile Include="..\..\src\view\status-first-page.cpp">
       <Filter>view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view\display-util.c">
+    <ClCompile Include="..\..\src\view\display-util.cpp">
       <Filter>view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\permanent-resistances.c">
+    <ClCompile Include="..\..\src\player\permanent-resistances.cpp">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\temporary-resistances.c">
+    <ClCompile Include="..\..\src\player\temporary-resistances.cpp">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view\display-player.c">
+    <ClCompile Include="..\..\src\view\display-player.cpp">
       <Filter>view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\race-resistances.c">
+    <ClCompile Include="..\..\src\player\race-resistances.cpp">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view\display-characteristic.c">
+    <ClCompile Include="..\..\src\view\display-characteristic.cpp">
       <Filter>view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\process-death.c">
+    <ClCompile Include="..\..\src\player\process-death.cpp">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io\gf-descriptions.c">
+    <ClCompile Include="..\..\src\io\gf-descriptions.cpp">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view\display-player-stat-info.c">
+    <ClCompile Include="..\..\src\view\display-player-stat-info.cpp">
       <Filter>view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view\display-player-misc-info.c">
+    <ClCompile Include="..\..\src\view\display-player-misc-info.cpp">
       <Filter>view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view\display-player-middle.c">
+    <ClCompile Include="..\..\src\view\display-player-middle.cpp">
       <Filter>view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io\tokenizer.c">
+    <ClCompile Include="..\..\src\io\tokenizer.cpp">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\process-name.c">
+    <ClCompile Include="..\..\src\player\process-name.cpp">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\show-file.c">
+    <ClCompile Include="..\..\src\core\show-file.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io\read-pref-file.c">
+    <ClCompile Include="..\..\src\io\read-pref-file.cpp">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io\interpret-pref-file.c">
+    <ClCompile Include="..\..\src\io\interpret-pref-file.cpp">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster\monster-update.c">
+    <ClCompile Include="..\..\src\monster\monster-update.cpp">
       <Filter>monster</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io\write-diary.c">
+    <ClCompile Include="..\..\src\io\write-diary.cpp">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\market\poker.c">
+    <ClCompile Include="..\..\src\market\poker.cpp">
       <Filter>market</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\market\articles-on-sale.c">
+    <ClCompile Include="..\..\src\market\articles-on-sale.cpp">
       <Filter>market</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\market\gold-magnification-table.c">
+    <ClCompile Include="..\..\src\market\gold-magnification-table.cpp">
       <Filter>market</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\market\building-util.c">
+    <ClCompile Include="..\..\src\market\building-util.cpp">
       <Filter>market</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view\display-fruit.c">
+    <ClCompile Include="..\..\src\view\display-fruit.cpp">
       <Filter>view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\market\play-gamble.c">
+    <ClCompile Include="..\..\src\market\play-gamble.cpp">
       <Filter>market</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\market\arena-info-table.c">
+    <ClCompile Include="..\..\src\market\arena-info-table.cpp">
       <Filter>market</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\race-info-table.c">
+    <ClCompile Include="..\..\src\player\race-info-table.cpp">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\mimic-info-table.c">
+    <ClCompile Include="..\..\src\player\mimic-info-table.cpp">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\main\sound-definitions-table.c">
+    <ClCompile Include="..\..\src\main\sound-definitions-table.cpp">
       <Filter>main</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\main\music-definitions-table.c">
+    <ClCompile Include="..\..\src\main\music-definitions-table.cpp">
       <Filter>main</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\knowledge\knowledge-uniques.c">
+    <ClCompile Include="..\..\src\knowledge\knowledge-uniques.cpp">
       <Filter>knowledge</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\knowledge\knowledge-experiences.c">
+    <ClCompile Include="..\..\src\knowledge\knowledge-experiences.cpp">
       <Filter>knowledge</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\object-kind.c">
+    <ClCompile Include="..\..\src\object\object-kind.cpp">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\object-kind-hook.c">
+    <ClCompile Include="..\..\src\object\object-kind-hook.cpp">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\knowledge\knowledge-quests.c">
+    <ClCompile Include="..\..\src\knowledge\knowledge-quests.cpp">
       <Filter>knowledge</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\knowledge\knowledge-self.c">
+    <ClCompile Include="..\..\src\knowledge\knowledge-self.cpp">
       <Filter>knowledge</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\knowledge\knowledge-monsters.c">
+    <ClCompile Include="..\..\src\knowledge\knowledge-monsters.cpp">
       <Filter>knowledge</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\knowledge\knowledge-items.c">
+    <ClCompile Include="..\..\src\knowledge\knowledge-items.cpp">
       <Filter>knowledge</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\knowledge\knowledge-features.c">
+    <ClCompile Include="..\..\src\knowledge\knowledge-features.cpp">
       <Filter>knowledge</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\knowledge\knowledge-autopick.c">
+    <ClCompile Include="..\..\src\knowledge\knowledge-autopick.cpp">
       <Filter>knowledge</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\knowledge\knowledge-inventory.c">
+    <ClCompile Include="..\..\src\knowledge\knowledge-inventory.cpp">
       <Filter>knowledge</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io\mutations-dump.c">
+    <ClCompile Include="..\..\src\io\mutations-dump.cpp">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\knowledge\knowledge-mutations.c">
+    <ClCompile Include="..\..\src\knowledge\knowledge-mutations.cpp">
       <Filter>knowledge</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\autopick\autopick.c">
+    <ClCompile Include="..\..\src\autopick\autopick.cpp">
       <Filter>autopick</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\autopick\autopick-menu-data-table.c">
+    <ClCompile Include="..\..\src\autopick\autopick-menu-data-table.cpp">
       <Filter>autopick</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\autopick\autopick-entry.c">
+    <ClCompile Include="..\..\src\autopick\autopick-entry.cpp">
       <Filter>autopick</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\autopick\autopick-initializer.c">
+    <ClCompile Include="..\..\src\autopick\autopick-initializer.cpp">
       <Filter>autopick</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\autopick\autopick-matcher.c">
+    <ClCompile Include="..\..\src\autopick\autopick-matcher.cpp">
       <Filter>autopick</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\autopick\autopick-describer.c">
+    <ClCompile Include="..\..\src\autopick\autopick-describer.cpp">
       <Filter>autopick</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\room\pit-nest-kinds-table.c">
+    <ClCompile Include="..\..\src\room\pit-nest-kinds-table.cpp">
       <Filter>room</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io\signal-handlers.c">
+    <ClCompile Include="..\..\src\io\signal-handlers.cpp">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io\uid-checker.c">
+    <ClCompile Include="..\..\src\io\uid-checker.cpp">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\autopick\autopick-destroyer.c">
+    <ClCompile Include="..\..\src\autopick\autopick-destroyer.cpp">
       <Filter>autopick</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\autopick\autopick-reader-writer.c">
+    <ClCompile Include="..\..\src\autopick\autopick-reader-writer.cpp">
       <Filter>autopick</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\autopick\autopick-finder.c">
+    <ClCompile Include="..\..\src\autopick\autopick-finder.cpp">
       <Filter>autopick</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\autopick\autopick-pref-processor.c">
+    <ClCompile Include="..\..\src\autopick\autopick-pref-processor.cpp">
       <Filter>autopick</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\autopick\autopick-drawer.c">
+    <ClCompile Include="..\..\src\autopick\autopick-drawer.cpp">
       <Filter>autopick</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\autopick\autopick-inserter-killer.c">
+    <ClCompile Include="..\..\src\autopick\autopick-inserter-killer.cpp">
       <Filter>autopick</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\autopick\autopick-registry.c">
+    <ClCompile Include="..\..\src\autopick\autopick-registry.cpp">
       <Filter>autopick</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\autopick\autopick-command-menu.c">
+    <ClCompile Include="..\..\src\autopick\autopick-command-menu.cpp">
       <Filter>autopick</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\autopick\autopick-editor-util.c">
+    <ClCompile Include="..\..\src\autopick\autopick-editor-util.cpp">
       <Filter>autopick</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\autopick\autopick-editor-command.c">
+    <ClCompile Include="..\..\src\autopick\autopick-editor-command.cpp">
       <Filter>autopick</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\autopick\autopick-util.c">
+    <ClCompile Include="..\..\src\autopick\autopick-util.cpp">
       <Filter>autopick</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\effect\effect-feature.c">
+    <ClCompile Include="..\..\src\effect\effect-feature.cpp">
       <Filter>effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\effect\effect-item.c">
+    <ClCompile Include="..\..\src\effect\effect-item.cpp">
       <Filter>effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\realm\realm-arcane.c">
+    <ClCompile Include="..\..\src\realm\realm-arcane.cpp">
       <Filter>realm</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\realm\realm-chaos.c">
+    <ClCompile Include="..\..\src\realm\realm-chaos.cpp">
       <Filter>realm</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\realm\realm-craft.c">
+    <ClCompile Include="..\..\src\realm\realm-craft.cpp">
       <Filter>realm</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\realm\realm-crusade.c">
+    <ClCompile Include="..\..\src\realm\realm-crusade.cpp">
       <Filter>realm</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\realm\realm-death.c">
+    <ClCompile Include="..\..\src\realm\realm-death.cpp">
       <Filter>realm</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\realm\realm-hex.c">
+    <ClCompile Include="..\..\src\realm\realm-hex.cpp">
       <Filter>realm</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\realm\realm-hissatsu.c">
+    <ClCompile Include="..\..\src\realm\realm-hissatsu.cpp">
       <Filter>realm</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\realm\realm-life.c">
+    <ClCompile Include="..\..\src\realm\realm-life.cpp">
       <Filter>realm</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\realm\realm-nature.c">
+    <ClCompile Include="..\..\src\realm\realm-nature.cpp">
       <Filter>realm</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\realm\realm-song.c">
+    <ClCompile Include="..\..\src\realm\realm-song.cpp">
       <Filter>realm</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\realm\realm-sorcery.c">
+    <ClCompile Include="..\..\src\realm\realm-sorcery.cpp">
       <Filter>realm</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\realm\realm-trump.c">
+    <ClCompile Include="..\..\src\realm\realm-trump.cpp">
       <Filter>realm</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\effect\spells-effect-util.c">
+    <ClCompile Include="..\..\src\effect\spells-effect-util.cpp">
       <Filter>effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell\technic-info-table.c">
+    <ClCompile Include="..\..\src\spell\technic-info-table.cpp">
       <Filter>spell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell\spells-execution.c">
+    <ClCompile Include="..\..\src\spell\spells-execution.cpp">
       <Filter>spell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\effect\effect-player.c">
+    <ClCompile Include="..\..\src\effect\effect-player.cpp">
       <Filter>effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\effect\effect-monster.c">
+    <ClCompile Include="..\..\src\effect\effect-monster.cpp">
       <Filter>effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\effect\effect-monster-util.c">
+    <ClCompile Include="..\..\src\effect\effect-monster-util.cpp">
       <Filter>effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\effect\effect-monster-switcher.c">
+    <ClCompile Include="..\..\src\effect\effect-monster-switcher.cpp">
       <Filter>effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\effect\effect-player-switcher.c">
+    <ClCompile Include="..\..\src\effect\effect-player-switcher.cpp">
       <Filter>effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\effect\effect-monster-resist-hurt.c">
+    <ClCompile Include="..\..\src\effect\effect-monster-resist-hurt.cpp">
       <Filter>effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\effect\effect-monster-psi.c">
+    <ClCompile Include="..\..\src\effect\effect-monster-psi.cpp">
       <Filter>effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\effect\effect-monster-oldies.c">
+    <ClCompile Include="..\..\src\effect\effect-monster-oldies.cpp">
       <Filter>effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\effect\effect-monster-charm.c">
+    <ClCompile Include="..\..\src\effect\effect-monster-charm.cpp">
       <Filter>effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\effect\effect-monster-lite-dark.c">
+    <ClCompile Include="..\..\src\effect\effect-monster-lite-dark.cpp">
       <Filter>effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\effect\effect-monster-evil.c">
+    <ClCompile Include="..\..\src\effect\effect-monster-evil.cpp">
       <Filter>effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\effect\effect-monster-spirit.c">
+    <ClCompile Include="..\..\src\effect\effect-monster-spirit.cpp">
       <Filter>effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\effect\effect-monster-curse.c">
+    <ClCompile Include="..\..\src\effect\effect-monster-curse.cpp">
       <Filter>effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\effect\effect-player-resist-hurt.c">
+    <ClCompile Include="..\..\src\effect\effect-player-resist-hurt.cpp">
       <Filter>effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\effect\effect-player-oldies.c">
+    <ClCompile Include="..\..\src\effect\effect-player-oldies.cpp">
       <Filter>effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\effect\effect-player-curse.c">
+    <ClCompile Include="..\..\src\effect\effect-player-curse.cpp">
       <Filter>effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\effect\effect-player-spirit.c">
+    <ClCompile Include="..\..\src\effect\effect-player-spirit.cpp">
       <Filter>effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\stuff-handler.c">
+    <ClCompile Include="..\..\src\core\stuff-handler.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\birth\birth-explanations-table.c">
+    <ClCompile Include="..\..\src\birth\birth-explanations-table.cpp">
       <Filter>birth</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\output-updater.c">
+    <ClCompile Include="..\..\src\core\output-updater.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\game-closer.c">
+    <ClCompile Include="..\..\src\core\game-closer.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor\pattern-walk.c">
+    <ClCompile Include="..\..\src\floor\pattern-walk.cpp">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\turn-compensator.c">
+    <ClCompile Include="..\..\src\core\turn-compensator.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\hp-mp-regenerator.c">
+    <ClCompile Include="..\..\src\core\hp-mp-regenerator.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\hp-mp-processor.c">
+    <ClCompile Include="..\..\src\core\hp-mp-processor.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mutation\mutation-processor.c">
+    <ClCompile Include="..\..\src\mutation\mutation-processor.cpp">
       <Filter>mutation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\lite-processor.c">
+    <ClCompile Include="..\..\src\object\lite-processor.cpp">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\magic-effects-timeout-reducer.c">
+    <ClCompile Include="..\..\src\core\magic-effects-timeout-reducer.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\inventory\inventory-curse.c">
+    <ClCompile Include="..\..\src\inventory\inventory-curse.cpp">
       <Filter>inventory</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\inventory\recharge-processor.c">
+    <ClCompile Include="..\..\src\inventory\recharge-processor.cpp">
       <Filter>inventory</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\wizard\wizard-spoiler.c">
+    <ClCompile Include="..\..\src\wizard\wizard-spoiler.cpp">
       <Filter>wizard</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\wizard\wizard-special-process.c">
+    <ClCompile Include="..\..\src\wizard\wizard-special-process.cpp">
       <Filter>wizard</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io\input-key-processor.c">
+    <ClCompile Include="..\..\src\io\input-key-processor.cpp">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\inventory\pack-overflow.c">
+    <ClCompile Include="..\..\src\inventory\pack-overflow.cpp">
       <Filter>inventory</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\player-processor.c">
+    <ClCompile Include="..\..\src\core\player-processor.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\digestion-processor.c">
+    <ClCompile Include="..\..\src\player\digestion-processor.cpp">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\world\world-movement-processor.c">
+    <ClCompile Include="..\..\src\world\world-movement-processor.cpp">
       <Filter>world</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\world\world-turn-processor.c">
+    <ClCompile Include="..\..\src\world\world-turn-processor.cpp">
       <Filter>world</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\world\world.c">
+    <ClCompile Include="..\..\src\world\world.cpp">
       <Filter>world</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\dungeon\dungeon-processor.c">
+    <ClCompile Include="..\..\src\dungeon\dungeon-processor.cpp">
       <Filter>dungeon</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\dungeon\dungeon.c">
+    <ClCompile Include="..\..\src\dungeon\dungeon.cpp">
       <Filter>dungeon</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\game-play.c">
+    <ClCompile Include="..\..\src\core\game-play.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor\floor-events.c">
+    <ClCompile Include="..\..\src\floor\floor-events.cpp">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor\floor-save.c">
+    <ClCompile Include="..\..\src\floor\floor-save.cpp">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor\floor-streams.c">
+    <ClCompile Include="..\..\src\floor\floor-streams.cpp">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor\floor-town.c">
+    <ClCompile Include="..\..\src\floor\floor-town.cpp">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\object-broken.c">
+    <ClCompile Include="..\..\src\object\object-broken.cpp">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\room\rooms-city.c">
+    <ClCompile Include="..\..\src\room\rooms-city.cpp">
       <Filter>room</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\room\rooms-fractal.c">
+    <ClCompile Include="..\..\src\room\rooms-fractal.cpp">
       <Filter>room</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\room\rooms-normal.c">
+    <ClCompile Include="..\..\src\room\rooms-normal.cpp">
       <Filter>room</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\room\rooms-special.c">
+    <ClCompile Include="..\..\src\room\rooms-special.cpp">
       <Filter>room</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\room\rooms-trap.c">
+    <ClCompile Include="..\..\src\room\rooms-trap.cpp">
       <Filter>room</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\room\rooms-vault.c">
+    <ClCompile Include="..\..\src\room\rooms-vault.cpp">
       <Filter>room</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\room\rooms-pit-nest.c">
+    <ClCompile Include="..\..\src\room\rooms-pit-nest.cpp">
       <Filter>room</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\player-class.c">
+    <ClCompile Include="..\..\src\player\player-class.cpp">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\player-damage.c">
+    <ClCompile Include="..\..\src\player\player-damage.cpp">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\player-move.c">
+    <ClCompile Include="..\..\src\player\player-move.cpp">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\player-personality.c">
+    <ClCompile Include="..\..\src\player\player-personality.cpp">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\player-race.c">
+    <ClCompile Include="..\..\src\player\player-race.cpp">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\player-sex.c">
+    <ClCompile Include="..\..\src\player\player-sex.cpp">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\player-skill.c">
+    <ClCompile Include="..\..\src\player\player-skill.cpp">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\player-status.c">
+    <ClCompile Include="..\..\src\player\player-status.cpp">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster\monster-status.c">
+    <ClCompile Include="..\..\src\monster\monster-status.cpp">
       <Filter>monster</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\system\system-variables.c">
+    <ClCompile Include="..\..\src\system\system-variables.cpp">
       <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell\spells-diceroll.c">
+    <ClCompile Include="..\..\src\spell\spells-diceroll.cpp">
       <Filter>spell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell\spells-object.c">
+    <ClCompile Include="..\..\src\spell\spells-object.cpp">
       <Filter>spell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell\spells-status.c">
+    <ClCompile Include="..\..\src\spell\spells-status.cpp">
       <Filter>spell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell\spells-summon.c">
+    <ClCompile Include="..\..\src\spell\spells-summon.cpp">
       <Filter>spell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\locale\english.c">
+    <ClCompile Include="..\..\src\locale\english.cpp">
       <Filter>locale</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\locale\japanese.c">
+    <ClCompile Include="..\..\src\locale\japanese.cpp">
       <Filter>locale</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\grid\grid.c">
+    <ClCompile Include="..\..\src\grid\grid.cpp">
       <Filter>grid</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\grid\trap.c">
+    <ClCompile Include="..\..\src\grid\trap.cpp">
       <Filter>grid</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\grid\feature.c">
+    <ClCompile Include="..\..\src\grid\feature.cpp">
       <Filter>grid</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster\horror-descriptions.c">
+    <ClCompile Include="..\..\src\monster\horror-descriptions.cpp">
       <Filter>monster</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\inventory\player-inventory.c">
+    <ClCompile Include="..\..\src\inventory\player-inventory.cpp">
       <Filter>inventory</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\term\gameterm.c">
+    <ClCompile Include="..\..\src\term\gameterm.cpp">
       <Filter>term</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\term\z-form.c">
+    <ClCompile Include="..\..\src\term\z-form.cpp">
       <Filter>term</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\term\z-rand.c">
+    <ClCompile Include="..\..\src\term\z-rand.cpp">
       <Filter>term</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\term\z-term.c">
+    <ClCompile Include="..\..\src\term\z-term.cpp">
       <Filter>term</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\term\z-util.c">
+    <ClCompile Include="..\..\src\term\z-util.cpp">
       <Filter>term</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\term\z-virt.c">
+    <ClCompile Include="..\..\src\term\z-virt.cpp">
       <Filter>term</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor\wild.c">
+    <ClCompile Include="..\..\src\floor\wild.cpp">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io\report.c">
+    <ClCompile Include="..\..\src\io\report.cpp">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor\geometry.c">
+    <ClCompile Include="..\..\src\floor\geometry.cpp">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\patron.c">
+    <ClCompile Include="..\..\src\player\patron.cpp">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\birth\history.c">
+    <ClCompile Include="..\..\src\birth\history.cpp">
       <Filter>birth</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\term\readdib.c">
+    <ClCompile Include="..\..\src\term\readdib.cpp">
       <Filter>term</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\warning.c">
+    <ClCompile Include="..\..\src\object\warning.cpp">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io\inet.c">
+    <ClCompile Include="..\..\src\io\inet.cpp">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\dungeon\quest.c">
+    <ClCompile Include="..\..\src\dungeon\quest.cpp">
       <Filter>dungeon</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\scores.c">
+    <ClCompile Include="..\..\src\core\scores.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\mspell-bolt.c">
+    <ClCompile Include="..\..\src\mspell\mspell-bolt.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\mspell-breath.c">
+    <ClCompile Include="..\..\src\mspell\mspell-breath.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\mspell-curse.c">
+    <ClCompile Include="..\..\src\mspell\mspell-curse.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\mspell-damage-calculator.c">
+    <ClCompile Include="..\..\src\mspell\mspell-damage-calculator.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\mspell-learn-checker.c">
+    <ClCompile Include="..\..\src\mspell\mspell-learn-checker.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\mspell-ball.c">
+    <ClCompile Include="..\..\src\mspell\mspell-ball.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\mspell-summon.c">
+    <ClCompile Include="..\..\src\mspell\mspell-summon.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\mspell-util.c">
+    <ClCompile Include="..\..\src\mspell\mspell-util.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\mspell-floor.c">
+    <ClCompile Include="..\..\src\mspell\mspell-floor.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\mspell-status.c">
+    <ClCompile Include="..\..\src\mspell\mspell-status.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\mspell-special.c">
+    <ClCompile Include="..\..\src\mspell\mspell-special.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\mspell-particularity.c">
+    <ClCompile Include="..\..\src\mspell\mspell-particularity.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\assign-monster-spell.c">
+    <ClCompile Include="..\..\src\mspell\assign-monster-spell.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\birth\birth-util.c">
+    <ClCompile Include="..\..\src\birth\birth-util.cpp">
       <Filter>birth</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\birth\birth-select-realm.c">
+    <ClCompile Include="..\..\src\birth\birth-select-realm.cpp">
       <Filter>birth</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\birth\quick-start.c">
+    <ClCompile Include="..\..\src\birth\quick-start.cpp">
       <Filter>birth</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\birth\birth-stat.c">
+    <ClCompile Include="..\..\src\birth\birth-stat.cpp">
       <Filter>birth</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\birth\history-generator.c">
+    <ClCompile Include="..\..\src\birth\history-generator.cpp">
       <Filter>birth</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\birth\birth-body-spec.c">
+    <ClCompile Include="..\..\src\birth\birth-body-spec.cpp">
       <Filter>birth</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\birth\initial-equipments-table.c">
+    <ClCompile Include="..\..\src\birth\initial-equipments-table.cpp">
       <Filter>birth</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view\display-birth.c">
+    <ClCompile Include="..\..\src\view\display-birth.cpp">
       <Filter>view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\birth\inventory-initializer.c">
+    <ClCompile Include="..\..\src\birth\inventory-initializer.cpp">
       <Filter>birth</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\birth\game-play-initializer.c">
+    <ClCompile Include="..\..\src\birth\game-play-initializer.cpp">
       <Filter>birth</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\birth\history-editor.c">
+    <ClCompile Include="..\..\src\birth\history-editor.cpp">
       <Filter>birth</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\birth\birth-select-race.c">
+    <ClCompile Include="..\..\src\birth\birth-select-race.cpp">
       <Filter>birth</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\birth\birth-select-class.c">
+    <ClCompile Include="..\..\src\birth\birth-select-class.cpp">
       <Filter>birth</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\birth\birth-select-personality.c">
+    <ClCompile Include="..\..\src\birth\birth-select-personality.cpp">
       <Filter>birth</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\birth\auto-roller.c">
+    <ClCompile Include="..\..\src\birth\auto-roller.cpp">
       <Filter>birth</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\birth\birth-wizard.c">
+    <ClCompile Include="..\..\src\birth\birth-wizard.cpp">
       <Filter>birth</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\birth\character-builder.c">
+    <ClCompile Include="..\..\src\birth\character-builder.cpp">
       <Filter>birth</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io\files-util.c">
+    <ClCompile Include="..\..\src\io\files-util.cpp">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io\pref-file-expressor.c">
+    <ClCompile Include="..\..\src\io\pref-file-expressor.cpp">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\market\arena.c">
+    <ClCompile Include="..\..\src\market\arena.cpp">
       <Filter>market</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\market\bounty.c">
+    <ClCompile Include="..\..\src\market\bounty.cpp">
       <Filter>market</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\market\bounty-prize-table.c">
+    <ClCompile Include="..\..\src\market\bounty-prize-table.cpp">
       <Filter>market</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\market\building-recharger.c">
+    <ClCompile Include="..\..\src\market\building-recharger.cpp">
       <Filter>market</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\market\building-quest.c">
+    <ClCompile Include="..\..\src\market\building-quest.cpp">
       <Filter>market</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\market\building-service.c">
+    <ClCompile Include="..\..\src\market\building-service.cpp">
       <Filter>market</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\market\building-craft-weapon.c">
+    <ClCompile Include="..\..\src\market\building-craft-weapon.cpp">
       <Filter>market</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\market\building-craft-armor.c">
+    <ClCompile Include="..\..\src\market\building-craft-armor.cpp">
       <Filter>market</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\market\building-craft-fix.c">
+    <ClCompile Include="..\..\src\market\building-craft-fix.cpp">
       <Filter>market</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\market\building-monster.c">
+    <ClCompile Include="..\..\src\market\building-monster.cpp">
       <Filter>market</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\market\building-enchanter.c">
+    <ClCompile Include="..\..\src\market\building-enchanter.cpp">
       <Filter>market</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\store\rumor.c">
+    <ClCompile Include="..\..\src\store\rumor.cpp">
       <Filter>store</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\store\say-comments.c">
+    <ClCompile Include="..\..\src\store\say-comments.cpp">
       <Filter>store</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\store\store.c">
+    <ClCompile Include="..\..\src\store\store.cpp">
       <Filter>store</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\store\store-owner-comments.c">
+    <ClCompile Include="..\..\src\store\store-owner-comments.cpp">
       <Filter>store</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\store\store-owners.c">
+    <ClCompile Include="..\..\src\store\store-owners.cpp">
       <Filter>store</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\store\store-util.c">
+    <ClCompile Include="..\..\src\store\store-util.cpp">
       <Filter>store</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\store\black-market.c">
+    <ClCompile Include="..\..\src\store\black-market.cpp">
       <Filter>store</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\combat\attack-power-table.c">
+    <ClCompile Include="..\..\src\combat\attack-power-table.cpp">
       <Filter>combat</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\combat\hallucination-attacks-table.c">
+    <ClCompile Include="..\..\src\combat\hallucination-attacks-table.cpp">
       <Filter>combat</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\combat\martial-arts-table.c">
+    <ClCompile Include="..\..\src\combat\martial-arts-table.cpp">
       <Filter>combat</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\combat\attack-accuracy.c">
+    <ClCompile Include="..\..\src\combat\attack-accuracy.cpp">
       <Filter>combat</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\combat\slaying.c">
+    <ClCompile Include="..\..\src\combat\slaying.cpp">
       <Filter>combat</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\combat\attack-criticality.c">
+    <ClCompile Include="..\..\src\combat\attack-criticality.cpp">
       <Filter>combat</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\inventory\inventory-damage.c">
+    <ClCompile Include="..\..\src\inventory\inventory-damage.cpp">
       <Filter>inventory</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\monk-attack.c">
+    <ClCompile Include="..\..\src\mind\monk-attack.cpp">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\combat\aura-counterattack.c">
+    <ClCompile Include="..\..\src\combat\aura-counterattack.cpp">
       <Filter>combat</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\pet\pet-fall-off.c">
+    <ClCompile Include="..\..\src\pet\pet-fall-off.cpp">
       <Filter>pet</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\pet\pet-util.c">
+    <ClCompile Include="..\..\src\pet\pet-util.cpp">
       <Filter>pet</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-item\cmd-eat.c">
+    <ClCompile Include="..\..\src\cmd-item\cmd-eat.cpp">
       <Filter>cmd-item</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-item\cmd-item.c">
+    <ClCompile Include="..\..\src\cmd-item\cmd-item.cpp">
       <Filter>cmd-item</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-item\cmd-magiceat.c">
+    <ClCompile Include="..\..\src\cmd-item\cmd-magiceat.cpp">
       <Filter>cmd-item</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-item\cmd-quaff.c">
+    <ClCompile Include="..\..\src\cmd-item\cmd-quaff.cpp">
       <Filter>cmd-item</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-item\cmd-read.c">
+    <ClCompile Include="..\..\src\cmd-item\cmd-read.cpp">
       <Filter>cmd-item</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-item\cmd-smith.c">
+    <ClCompile Include="..\..\src\cmd-item\cmd-smith.cpp">
       <Filter>cmd-item</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-item\cmd-usestaff.c">
+    <ClCompile Include="..\..\src\cmd-item\cmd-usestaff.cpp">
       <Filter>cmd-item</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-item\cmd-zaprod.c">
+    <ClCompile Include="..\..\src\cmd-item\cmd-zaprod.cpp">
       <Filter>cmd-item</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-item\cmd-zapwand.c">
+    <ClCompile Include="..\..\src\cmd-item\cmd-zapwand.cpp">
       <Filter>cmd-item</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-io\cmd-diary.c">
+    <ClCompile Include="..\..\src\cmd-io\cmd-diary.cpp">
       <Filter>cmd-io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-io\cmd-dump.c">
+    <ClCompile Include="..\..\src\cmd-io\cmd-dump.cpp">
       <Filter>cmd-io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-io\cmd-gameoption.c">
+    <ClCompile Include="..\..\src\cmd-io\cmd-gameoption.cpp">
       <Filter>cmd-io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-io\cmd-help.c">
+    <ClCompile Include="..\..\src\cmd-io\cmd-help.cpp">
       <Filter>cmd-io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-io\cmd-knowledge.c">
+    <ClCompile Include="..\..\src\cmd-io\cmd-knowledge.cpp">
       <Filter>cmd-io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-io\cmd-macro.c">
+    <ClCompile Include="..\..\src\cmd-io\cmd-macro.cpp">
       <Filter>cmd-io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-io\cmd-menu-content-table.c">
+    <ClCompile Include="..\..\src\cmd-io\cmd-menu-content-table.cpp">
       <Filter>cmd-io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-io\cmd-process-screen.c">
+    <ClCompile Include="..\..\src\cmd-io\cmd-process-screen.cpp">
       <Filter>cmd-io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-io\cmd-save.c">
+    <ClCompile Include="..\..\src\cmd-io\cmd-save.cpp">
       <Filter>cmd-io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-io\diary-subtitle-table.c">
+    <ClCompile Include="..\..\src\cmd-io\diary-subtitle-table.cpp">
       <Filter>cmd-io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-io\feeling-table.c">
+    <ClCompile Include="..\..\src\cmd-io\feeling-table.cpp">
       <Filter>cmd-io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-action\cmd-attack.c">
+    <ClCompile Include="..\..\src\cmd-action\cmd-attack.cpp">
       <Filter>cmd-action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-action\cmd-hissatsu.c">
+    <ClCompile Include="..\..\src\cmd-action\cmd-hissatsu.cpp">
       <Filter>cmd-action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-action\cmd-mane.c">
+    <ClCompile Include="..\..\src\cmd-action\cmd-mane.cpp">
       <Filter>cmd-action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-action\cmd-pet.c">
+    <ClCompile Include="..\..\src\cmd-action\cmd-pet.cpp">
       <Filter>cmd-action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-action\cmd-spell.c">
+    <ClCompile Include="..\..\src\cmd-action\cmd-spell.cpp">
       <Filter>cmd-action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-io\cmd-autopick.c">
+    <ClCompile Include="..\..\src\cmd-io\cmd-autopick.cpp">
       <Filter>cmd-io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\knowledge\lighting-level-table.c">
+    <ClCompile Include="..\..\src\knowledge\lighting-level-table.cpp">
       <Filter>knowledge</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\knowledge\monster-group-table.c">
+    <ClCompile Include="..\..\src\knowledge\monster-group-table.cpp">
       <Filter>knowledge</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io-dump\dump-util.c">
+    <ClCompile Include="..\..\src\io-dump\dump-util.cpp">
       <Filter>io-dump</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io-dump\character-dump.c">
+    <ClCompile Include="..\..\src\io-dump\character-dump.cpp">
       <Filter>io-dump</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io-dump\dump-remover.c">
+    <ClCompile Include="..\..\src\io-dump\dump-remover.cpp">
       <Filter>io-dump</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io-dump\player-status-dump.c">
+    <ClCompile Include="..\..\src\io-dump\player-status-dump.cpp">
       <Filter>io-dump</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io-dump\special-class-dump.c">
+    <ClCompile Include="..\..\src\io-dump\special-class-dump.cpp">
       <Filter>io-dump</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\knowledge\object-group-table.c">
+    <ClCompile Include="..\..\src\knowledge\object-group-table.cpp">
       <Filter>knowledge</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor\floor-object.c">
+    <ClCompile Include="..\..\src\floor\floor-object.cpp">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view\object-describer.c">
+    <ClCompile Include="..\..\src\view\object-describer.cpp">
       <Filter>view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\inventory\inventory-object.c">
+    <ClCompile Include="..\..\src\inventory\inventory-object.cpp">
       <Filter>inventory</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\object-value.c">
+    <ClCompile Include="..\..\src\object\object-value.cpp">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\realm\realm-names-table.c">
+    <ClCompile Include="..\..\src\realm\realm-names-table.cpp">
       <Filter>realm</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-building\cmd-building.c">
+    <ClCompile Include="..\..\src\cmd-building\cmd-building.cpp">
       <Filter>cmd-building</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-building\cmd-inn.c">
+    <ClCompile Include="..\..\src\cmd-building\cmd-inn.cpp">
       <Filter>cmd-building</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\world\world-object.c">
+    <ClCompile Include="..\..\src\world\world-object.cpp">
       <Filter>world</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\object-generator.c">
+    <ClCompile Include="..\..\src\object\object-generator.cpp">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-enchant\object-boost.c">
+    <ClCompile Include="..\..\src\object-enchant\object-boost.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-enchant\object-curse.c">
+    <ClCompile Include="..\..\src\object-enchant\object-curse.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-enchant\object-ego.c">
+    <ClCompile Include="..\..\src\object-enchant\object-ego.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-enchant\apply-magic-weapon.c">
+    <ClCompile Include="..\..\src\object-enchant\apply-magic-weapon.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-enchant\apply-magic-armor.c">
+    <ClCompile Include="..\..\src\object-enchant\apply-magic-armor.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-enchant\apply-magic-accessory.c">
+    <ClCompile Include="..\..\src\object-enchant\apply-magic-accessory.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-enchant\apply-magic-others.c">
+    <ClCompile Include="..\..\src\object-enchant\apply-magic-others.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-enchant\apply-magic.c">
+    <ClCompile Include="..\..\src\object-enchant\apply-magic.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\perception\object-perception.c">
+    <ClCompile Include="..\..\src\perception\object-perception.cpp">
       <Filter>perception</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\perception\simple-perception.c">
+    <ClCompile Include="..\..\src\perception\simple-perception.cpp">
       <Filter>perception</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\object-value-calc.c">
+    <ClCompile Include="..\..\src\object\object-value-calc.cpp">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\util\object-sort.c">
+    <ClCompile Include="..\..\src\util\object-sort.cpp">
       <Filter>util</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\object-stack.c">
+    <ClCompile Include="..\..\src\object\object-stack.cpp">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell\spells-describer.c">
+    <ClCompile Include="..\..\src\spell\spells-describer.cpp">
       <Filter>spell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell\range-calc.c">
+    <ClCompile Include="..\..\src\spell\range-calc.cpp">
       <Filter>spell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\specific-object\bow.c">
+    <ClCompile Include="..\..\src\specific-object\bow.cpp">
       <Filter>specific-object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\specific-object\chest.c">
+    <ClCompile Include="..\..\src\specific-object\chest.cpp">
       <Filter>specific-object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\specific-object\death-scythe.c">
+    <ClCompile Include="..\..\src\specific-object\death-scythe.cpp">
       <Filter>specific-object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\specific-object\torch.c">
+    <ClCompile Include="..\..\src\specific-object\torch.cpp">
       <Filter>specific-object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell\spells-staff-only.c">
+    <ClCompile Include="..\..\src\spell\spells-staff-only.cpp">
       <Filter>spell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-kind\spells-beam.c">
+    <ClCompile Include="..\..\src\spell-kind\spells-beam.cpp">
       <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-kind\spells-detection.c">
+    <ClCompile Include="..\..\src\spell-kind\spells-detection.cpp">
       <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-kind\spells-floor.c">
+    <ClCompile Include="..\..\src\spell-kind\spells-floor.cpp">
       <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-kind\spells-genocide.c">
+    <ClCompile Include="..\..\src\spell-kind\spells-genocide.cpp">
       <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-kind\spells-launcher.c">
+    <ClCompile Include="..\..\src\spell-kind\spells-launcher.cpp">
       <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-kind\spells-lite.c">
+    <ClCompile Include="..\..\src\spell-kind\spells-lite.cpp">
       <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-kind\spells-neighbor.c">
+    <ClCompile Include="..\..\src\spell-kind\spells-neighbor.cpp">
       <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-kind\spells-pet.c">
+    <ClCompile Include="..\..\src\spell-kind\spells-pet.cpp">
       <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-kind\spells-sight.c">
+    <ClCompile Include="..\..\src\spell-kind\spells-sight.cpp">
       <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-kind\spells-specific-bolt.c">
+    <ClCompile Include="..\..\src\spell-kind\spells-specific-bolt.cpp">
       <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-kind\spells-teleport.c">
+    <ClCompile Include="..\..\src\spell-kind\spells-teleport.cpp">
       <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-kind\spells-charm.c">
+    <ClCompile Include="..\..\src\spell-kind\spells-charm.cpp">
       <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\mind-cavalry.c">
+    <ClCompile Include="..\..\src\mind\mind-cavalry.cpp">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\mind-force-trainer.c">
+    <ClCompile Include="..\..\src\mind\mind-force-trainer.cpp">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\mind-mindcrafter.c">
+    <ClCompile Include="..\..\src\mind\mind-mindcrafter.cpp">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\mind-mirror-master.c">
+    <ClCompile Include="..\..\src\mind\mind-mirror-master.cpp">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\mind-ninja.c">
+    <ClCompile Include="..\..\src\mind\mind-ninja.cpp">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\mind-samurai.c">
+    <ClCompile Include="..\..\src\mind\mind-samurai.cpp">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\mind-warrior.c">
+    <ClCompile Include="..\..\src\mind\mind-warrior.cpp">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\mind-warrior-mage.c">
+    <ClCompile Include="..\..\src\mind\mind-warrior-mage.cpp">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-realm\spells-crusade.c">
+    <ClCompile Include="..\..\src\spell-realm\spells-crusade.cpp">
       <Filter>spell-realm</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-realm\spells-hex.c">
+    <ClCompile Include="..\..\src\spell-realm\spells-hex.cpp">
       <Filter>spell-realm</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-kind\spells-random.c">
+    <ClCompile Include="..\..\src\spell-kind\spells-random.cpp">
       <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-kind\spells-grid.c">
+    <ClCompile Include="..\..\src\spell-kind\spells-grid.cpp">
       <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-kind\earthquake.c">
+    <ClCompile Include="..\..\src\spell-kind\earthquake.cpp">
       <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-realm\spells-trump.c">
+    <ClCompile Include="..\..\src\spell-realm\spells-trump.cpp">
       <Filter>spell-realm</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player-attack\attack-chaos-effect.c">
+    <ClCompile Include="..\..\src\player-attack\attack-chaos-effect.cpp">
       <Filter>player-attack</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player-attack\blood-sucking-processor.c">
+    <ClCompile Include="..\..\src\player-attack\blood-sucking-processor.cpp">
       <Filter>player-attack</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player-attack\player-attack.c">
+    <ClCompile Include="..\..\src\player-attack\player-attack.cpp">
       <Filter>player-attack</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-attack\insults-moans.c">
+    <ClCompile Include="..\..\src\monster-attack\insults-moans.cpp">
       <Filter>monster-attack</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-attack\monster-attack-describer.c">
+    <ClCompile Include="..\..\src\monster-attack\monster-attack-describer.cpp">
       <Filter>monster-attack</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-attack\monster-attack-player.c">
+    <ClCompile Include="..\..\src\monster-attack\monster-attack-player.cpp">
       <Filter>monster-attack</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-attack\monster-attack-status.c">
+    <ClCompile Include="..\..\src\monster-attack\monster-attack-status.cpp">
       <Filter>monster-attack</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-attack\monster-attack-switcher.c">
+    <ClCompile Include="..\..\src\monster-attack\monster-attack-switcher.cpp">
       <Filter>monster-attack</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-attack\monster-attack-types.c">
+    <ClCompile Include="..\..\src\monster-attack\monster-attack-types.cpp">
       <Filter>monster-attack</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-attack\monster-attack-util.c">
+    <ClCompile Include="..\..\src\monster-attack\monster-attack-util.cpp">
       <Filter>monster-attack</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-attack\monster-eating.c">
+    <ClCompile Include="..\..\src\monster-attack\monster-eating.cpp">
       <Filter>monster-attack</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\melee\melee-postprocess.c">
+    <ClCompile Include="..\..\src\melee\melee-postprocess.cpp">
       <Filter>melee</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\melee\melee-switcher.c">
+    <ClCompile Include="..\..\src\melee\melee-switcher.cpp">
       <Filter>melee</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\melee\melee-util.c">
+    <ClCompile Include="..\..\src\melee\melee-util.cpp">
       <Filter>melee</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\melee\monster-attack-monster.c">
+    <ClCompile Include="..\..\src\melee\monster-attack-monster.cpp">
       <Filter>melee</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-enchant\vorpal-weapon.c">
+    <ClCompile Include="..\..\src\object-enchant\vorpal-weapon.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\race-info-tokens-table.c">
+    <ClCompile Include="..\..\src\info-reader\race-info-tokens-table.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\kind-info-tokens-table.c">
+    <ClCompile Include="..\..\src\info-reader\kind-info-tokens-table.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\dungeon-info-tokens-table.c">
+    <ClCompile Include="..\..\src\info-reader\dungeon-info-tokens-table.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\info-reader-util.c">
+    <ClCompile Include="..\..\src\info-reader\info-reader-util.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\feature-reader.c">
+    <ClCompile Include="..\..\src\info-reader\feature-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\feature-info-tokens-table.c">
+    <ClCompile Include="..\..\src\info-reader\feature-info-tokens-table.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\vault-reader.c">
+    <ClCompile Include="..\..\src\info-reader\vault-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\kind-reader.c">
+    <ClCompile Include="..\..\src\info-reader\kind-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\artifact-reader.c">
+    <ClCompile Include="..\..\src\info-reader\artifact-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\ego-reader.c">
+    <ClCompile Include="..\..\src\info-reader\ego-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\dungeon-reader.c">
+    <ClCompile Include="..\..\src\info-reader\dungeon-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\skill-reader.c">
+    <ClCompile Include="..\..\src\info-reader\skill-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\magic-reader.c">
+    <ClCompile Include="..\..\src\info-reader\magic-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\race-reader.c">
+    <ClCompile Include="..\..\src\info-reader\race-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\general-parser.c">
+    <ClCompile Include="..\..\src\info-reader\general-parser.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor\fixed-map-generator.c">
+    <ClCompile Include="..\..\src\floor\fixed-map-generator.cpp">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\info-reader\fixed-map-parser.c">
+    <ClCompile Include="..\..\src\info-reader\fixed-map-parser.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\perception\identification.c">
+    <ClCompile Include="..\..\src\perception\identification.cpp">
       <Filter>perception</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\visuals-reseter.c">
+    <ClCompile Include="..\..\src\core\visuals-reseter.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\object-flags.c">
+    <ClCompile Include="..\..\src\object\object-flags.cpp">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\object-info.c">
+    <ClCompile Include="..\..\src\object\object-info.cpp">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-enchant\dragon-breaths-table.c">
+    <ClCompile Include="..\..\src\object-enchant\dragon-breaths-table.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-enchant\activation-info-table.c">
+    <ClCompile Include="..\..\src\object-enchant\activation-info-table.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-race\monster-race.c">
+    <ClCompile Include="..\..\src\monster-race\monster-race.cpp">
       <Filter>monster-race</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-race\monster-race-hook.c">
+    <ClCompile Include="..\..\src\monster-race\monster-race-hook.cpp">
       <Filter>monster-race</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\mind-sniper.c">
+    <ClCompile Include="..\..\src\mind\mind-sniper.cpp">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\eldritch-horror.c">
+    <ClCompile Include="..\..\src\player\eldritch-horror.cpp">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster\monster-processor-util.c">
+    <ClCompile Include="..\..\src\monster\monster-processor-util.cpp">
       <Filter>monster</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster\monster-processor.c">
+    <ClCompile Include="..\..\src\monster\monster-processor.cpp">
       <Filter>monster</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\speed-table.c">
+    <ClCompile Include="..\..\src\core\speed-table.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster\monster-util.c">
+    <ClCompile Include="..\..\src\monster\monster-util.cpp">
       <Filter>monster</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\summon-checker.c">
+    <ClCompile Include="..\..\src\mspell\summon-checker.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-io\cmd-lore.c">
+    <ClCompile Include="..\..\src\cmd-io\cmd-lore.cpp">
       <Filter>cmd-io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view\display-monster-status.c">
+    <ClCompile Include="..\..\src\view\display-monster-status.cpp">
       <Filter>view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster\monster-info.c">
+    <ClCompile Include="..\..\src\monster\monster-info.cpp">
       <Filter>monster</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster\monster-describer.c">
+    <ClCompile Include="..\..\src\monster\monster-describer.cpp">
       <Filter>monster</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster\monster-compaction.c">
+    <ClCompile Include="..\..\src\monster\monster-compaction.cpp">
       <Filter>monster</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster\monster-list.c">
+    <ClCompile Include="..\..\src\monster\monster-list.cpp">
       <Filter>monster</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\lore\lore-store.c">
+    <ClCompile Include="..\..\src\lore\lore-store.cpp">
       <Filter>lore</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\lore\monster-lore.c">
+    <ClCompile Include="..\..\src\lore\monster-lore.cpp">
       <Filter>lore</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\lore\lore-util.c">
+    <ClCompile Include="..\..\src\lore\lore-util.cpp">
       <Filter>lore</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view\display-lore.c">
+    <ClCompile Include="..\..\src\view\display-lore.cpp">
       <Filter>view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\lore\lore-calculator.c">
+    <ClCompile Include="..\..\src\lore\lore-calculator.cpp">
       <Filter>lore</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\lore\magic-types-setter.c">
+    <ClCompile Include="..\..\src\lore\magic-types-setter.cpp">
       <Filter>lore</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view\display-lore-magics.c">
+    <ClCompile Include="..\..\src\view\display-lore-magics.cpp">
       <Filter>view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view\display-lore-status.c">
+    <ClCompile Include="..\..\src\view\display-lore-status.cpp">
       <Filter>view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view\display-lore-drops.c">
+    <ClCompile Include="..\..\src\view\display-lore-drops.cpp">
       <Filter>view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\lore\combat-types-setter.c">
+    <ClCompile Include="..\..\src\lore\combat-types-setter.cpp">
       <Filter>lore</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view\display-lore-attacks.c">
+    <ClCompile Include="..\..\src\view\display-lore-attacks.cpp">
       <Filter>view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-attack\monster-attack-processor.c">
+    <ClCompile Include="..\..\src\monster-attack\monster-attack-processor.cpp">
       <Filter>monster-attack</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-floor\monster-death.c">
+    <ClCompile Include="..\..\src\monster-floor\monster-death.cpp">
       <Filter>monster-floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-floor\monster-direction.c">
+    <ClCompile Include="..\..\src\monster-floor\monster-direction.cpp">
       <Filter>monster-floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-floor\monster-dist-offsets.c">
+    <ClCompile Include="..\..\src\monster-floor\monster-dist-offsets.cpp">
       <Filter>monster-floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-floor\monster-generator.c">
+    <ClCompile Include="..\..\src\monster-floor\monster-generator.cpp">
       <Filter>monster-floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-floor\monster-move.c">
+    <ClCompile Include="..\..\src\monster-floor\monster-move.cpp">
       <Filter>monster-floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-floor\monster-object.c">
+    <ClCompile Include="..\..\src\monster-floor\monster-object.cpp">
       <Filter>monster-floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-floor\monster-remover.c">
+    <ClCompile Include="..\..\src\monster-floor\monster-remover.cpp">
       <Filter>monster-floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-floor\monster-runaway.c">
+    <ClCompile Include="..\..\src\monster-floor\monster-runaway.cpp">
       <Filter>monster-floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-floor\monster-safety-hiding.c">
+    <ClCompile Include="..\..\src\monster-floor\monster-safety-hiding.cpp">
       <Filter>monster-floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-floor\monster-sweep-grid.c">
+    <ClCompile Include="..\..\src\monster-floor\monster-sweep-grid.cpp">
       <Filter>monster-floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-floor\quantum-effect.c">
+    <ClCompile Include="..\..\src\monster-floor\quantum-effect.cpp">
       <Filter>monster-floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-floor\one-monster-placer.c">
+    <ClCompile Include="..\..\src\monster-floor\one-monster-placer.cpp">
       <Filter>monster-floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-floor\monster-summon.c">
+    <ClCompile Include="..\..\src\monster-floor\monster-summon.cpp">
       <Filter>monster-floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\game-option\input-options.c">
+    <ClCompile Include="..\..\src\game-option\input-options.cpp">
       <Filter>game-option</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\game-option\map-screen-options.c">
+    <ClCompile Include="..\..\src\game-option\map-screen-options.cpp">
       <Filter>game-option</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\game-option\text-display-options.c">
+    <ClCompile Include="..\..\src\game-option\text-display-options.cpp">
       <Filter>game-option</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\game-option\game-play-options.c">
+    <ClCompile Include="..\..\src\game-option\game-play-options.cpp">
       <Filter>game-option</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\game-option\disturbance-options.c">
+    <ClCompile Include="..\..\src\game-option\disturbance-options.cpp">
       <Filter>game-option</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\game-option\birth-options.c">
+    <ClCompile Include="..\..\src\game-option\birth-options.cpp">
       <Filter>game-option</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\game-option\auto-destruction-options.c">
+    <ClCompile Include="..\..\src\game-option\auto-destruction-options.cpp">
       <Filter>game-option</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\game-option\play-record-options.c">
+    <ClCompile Include="..\..\src\game-option\play-record-options.cpp">
       <Filter>game-option</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\game-option\cheat-options.c">
+    <ClCompile Include="..\..\src\game-option\cheat-options.cpp">
       <Filter>game-option</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\game-option\special-options.c">
+    <ClCompile Include="..\..\src\game-option\special-options.cpp">
       <Filter>game-option</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\game-option\runtime-arguments.c">
+    <ClCompile Include="..\..\src\game-option\runtime-arguments.cpp">
       <Filter>game-option</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\game-option\option-flags.c">
+    <ClCompile Include="..\..\src\game-option\option-flags.cpp">
       <Filter>game-option</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\game-option\option-types-table.c">
+    <ClCompile Include="..\..\src\game-option\option-types-table.cpp">
       <Filter>game-option</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\util\angband-files.c">
+    <ClCompile Include="..\..\src\util\angband-files.cpp">
       <Filter>util</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\system\building-type-definition.c">
+    <ClCompile Include="..\..\src\system\building-type-definition.cpp">
       <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\util\string-processor.c">
+    <ClCompile Include="..\..\src\util\string-processor.cpp">
       <Filter>util</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-io\macro-util.c">
+    <ClCompile Include="..\..\src\cmd-io\macro-util.cpp">
       <Filter>cmd-io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\main\sound-of-music.c">
+    <ClCompile Include="..\..\src\main\sound-of-music.cpp">
       <Filter>main</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io\input-key-acceptor.c">
+    <ClCompile Include="..\..\src\io\input-key-acceptor.cpp">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\util\quarks.c">
+    <ClCompile Include="..\..\src\util\quarks.cpp">
       <Filter>util</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view\display-messages.c">
+    <ClCompile Include="..\..\src\view\display-messages.cpp">
       <Filter>view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\asking-player.c">
+    <ClCompile Include="..\..\src\core\asking-player.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\term\screen-processor.c">
+    <ClCompile Include="..\..\src\term\screen-processor.cpp">
       <Filter>term</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\util\sort.c">
+    <ClCompile Include="..\..\src\util\sort.cpp">
       <Filter>util</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io\input-key-requester.c">
+    <ClCompile Include="..\..\src\io\input-key-requester.cpp">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io\command-repeater.c">
+    <ClCompile Include="..\..\src\io\command-repeater.cpp">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\game-option\keymap-directory-getter.c">
+    <ClCompile Include="..\..\src\game-option\keymap-directory-getter.cpp">
       <Filter>game-option</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\util\tag-sorter.c">
+    <ClCompile Include="..\..\src\util\tag-sorter.cpp">
       <Filter>util</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\util\buffer-shaper.c">
+    <ClCompile Include="..\..\src\util\buffer-shaper.cpp">
       <Filter>util</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\system\alloc-entries.c">
+    <ClCompile Include="..\..\src\system\alloc-entries.cpp">
       <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-realm\spells-song.c">
+    <ClCompile Include="..\..\src\spell-realm\spells-song.cpp">
       <Filter>spell-realm</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\monster-power-table.c">
+    <ClCompile Include="..\..\src\mspell\monster-power-table.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view\status-bars-table.c">
+    <ClCompile Include="..\..\src\view\status-bars-table.cpp">
       <Filter>view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\window-redrawer.c">
+    <ClCompile Include="..\..\src\core\window-redrawer.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-visual\cmd-map.c">
+    <ClCompile Include="..\..\src\cmd-visual\cmd-map.cpp">
       <Filter>cmd-visual</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view\display-map.c">
+    <ClCompile Include="..\..\src\view\display-map.cpp">
       <Filter>view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-visual\cmd-draw.c">
+    <ClCompile Include="..\..\src\cmd-visual\cmd-draw.cpp">
       <Filter>cmd-visual</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-visual\cmd-visuals.c">
+    <ClCompile Include="..\..\src\cmd-visual\cmd-visuals.cpp">
       <Filter>cmd-visual</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor\floor-util.c">
+    <ClCompile Include="..\..\src\floor\floor-util.cpp">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\grid\lighting-colors-table.c">
+    <ClCompile Include="..\..\src\grid\lighting-colors-table.cpp">
       <Filter>grid</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io\cursor.c">
+    <ClCompile Include="..\..\src\io\cursor.cpp">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io\screen-util.c">
+    <ClCompile Include="..\..\src\io\screen-util.cpp">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\realm\realm-demon.c">
+    <ClCompile Include="..\..\src\realm\realm-demon.cpp">
       <Filter>realm</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\wizard\tval-descriptions-table.c">
+    <ClCompile Include="..\..\src\wizard\tval-descriptions-table.cpp">
       <Filter>wizard</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\wizard\spoiler-table.c">
+    <ClCompile Include="..\..\src\wizard\spoiler-table.cpp">
       <Filter>wizard</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\wizard\wizard-spells.c">
+    <ClCompile Include="..\..\src\wizard\wizard-spells.cpp">
       <Filter>wizard</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-realm\spells-chaos.c">
+    <ClCompile Include="..\..\src\spell-realm\spells-chaos.cpp">
       <Filter>spell-realm</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-kind\spells-curse-removal.c">
+    <ClCompile Include="..\..\src\spell-kind\spells-curse-removal.cpp">
       <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-kind\spells-perception.c">
+    <ClCompile Include="..\..\src\spell-kind\spells-perception.cpp">
       <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\mind-mage.c">
+    <ClCompile Include="..\..\src\mind\mind-mage.cpp">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell\spell-info.c">
+    <ClCompile Include="..\..\src\spell\spell-info.cpp">
       <Filter>spell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-hook\hook-perception.c">
+    <ClCompile Include="..\..\src\object-hook\hook-perception.cpp">
       <Filter>object-hook</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-hook\hook-weapon.c">
+    <ClCompile Include="..\..\src\object-hook\hook-weapon.cpp">
       <Filter>object-hook</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-hook\hook-bow.c">
+    <ClCompile Include="..\..\src\object-hook\hook-bow.cpp">
       <Filter>object-hook</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-hook\hook-armor.c">
+    <ClCompile Include="..\..\src\object-hook\hook-armor.cpp">
       <Filter>object-hook</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-hook\hook-checker.c">
+    <ClCompile Include="..\..\src\object-hook\hook-checker.cpp">
       <Filter>object-hook</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-hook\hook-expendable.c">
+    <ClCompile Include="..\..\src\object-hook\hook-expendable.cpp">
       <Filter>object-hook</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-hook\hook-magic.c">
+    <ClCompile Include="..\..\src\object-hook\hook-magic.cpp">
       <Filter>object-hook</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-hook\hook-quest.c">
+    <ClCompile Include="..\..\src\object-hook\hook-quest.cpp">
       <Filter>object-hook</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-hook\hook-enchant.c">
+    <ClCompile Include="..\..\src\object-hook\hook-enchant.cpp">
       <Filter>object-hook</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\mind-weaponsmith.c">
+    <ClCompile Include="..\..\src\mind\mind-weaponsmith.cpp">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\item-tester-hooker.c">
+    <ClCompile Include="..\..\src\object\item-tester-hooker.cpp">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\player-realm.c">
+    <ClCompile Include="..\..\src\player\player-realm.cpp">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\status\sight-setter.c">
+    <ClCompile Include="..\..\src\status\sight-setter.cpp">
       <Filter>status</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\status\buff-setter.c">
+    <ClCompile Include="..\..\src\status\buff-setter.cpp">
       <Filter>status</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\status\bad-status-setter.c">
+    <ClCompile Include="..\..\src\status\bad-status-setter.cpp">
       <Filter>status</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\wizard\wizard-messages.c">
+    <ClCompile Include="..\..\src\wizard\wizard-messages.cpp">
       <Filter>wizard</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-realm\spells-craft.c">
+    <ClCompile Include="..\..\src\spell-realm\spells-craft.cpp">
       <Filter>spell-realm</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\status\element-resistance.c">
+    <ClCompile Include="..\..\src\status\element-resistance.cpp">
       <Filter>status</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\status\temporary-resistance.c">
+    <ClCompile Include="..\..\src\status\temporary-resistance.cpp">
       <Filter>status</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\status\experience.c">
+    <ClCompile Include="..\..\src\status\experience.cpp">
       <Filter>status</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-realm\spells-demon.c">
+    <ClCompile Include="..\..\src\spell-realm\spells-demon.cpp">
       <Filter>spell-realm</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\mind-magic-resistance.c">
+    <ClCompile Include="..\..\src\mind\mind-magic-resistance.cpp">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\status\base-status.c">
+    <ClCompile Include="..\..\src\status\base-status.cpp">
       <Filter>status</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\status\body-improvement.c">
+    <ClCompile Include="..\..\src\status\body-improvement.cpp">
       <Filter>status</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\mspell-dispel.c">
+    <ClCompile Include="..\..\src\mspell\mspell-dispel.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\status\shape-changer.c">
+    <ClCompile Include="..\..\src\status\shape-changer.cpp">
       <Filter>status</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\status\action-setter.c">
+    <ClCompile Include="..\..\src\status\action-setter.cpp">
       <Filter>status</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\inventory\inventory-util.c">
+    <ClCompile Include="..\..\src\inventory\inventory-util.cpp">
       <Filter>inventory</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\inventory\floor-item-getter.c">
+    <ClCompile Include="..\..\src\inventory\floor-item-getter.cpp">
       <Filter>inventory</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\inventory\item-getter.c">
+    <ClCompile Include="..\..\src\inventory\item-getter.cpp">
       <Filter>inventory</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor\object-scanner.c">
+    <ClCompile Include="..\..\src\floor\object-scanner.cpp">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\inventory\inventory-describer.c">
+    <ClCompile Include="..\..\src\inventory\inventory-describer.cpp">
       <Filter>inventory</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view\display-inventory.c">
+    <ClCompile Include="..\..\src\view\display-inventory.cpp">
       <Filter>view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\inventory\item-selection-util.c">
+    <ClCompile Include="..\..\src\inventory\item-selection-util.cpp">
       <Filter>inventory</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-kind\spells-fetcher.c">
+    <ClCompile Include="..\..\src\spell-kind\spells-fetcher.cpp">
       <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-realm\spells-sorcery.c">
+    <ClCompile Include="..\..\src\spell-realm\spells-sorcery.cpp">
       <Filter>spell-realm</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-kind\spells-equipment.c">
+    <ClCompile Include="..\..\src\spell-kind\spells-equipment.cpp">
       <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-kind\spells-polymorph.c">
+    <ClCompile Include="..\..\src\spell-kind\spells-polymorph.cpp">
       <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mutation\mutation-techniques.c">
+    <ClCompile Include="..\..\src\mutation\mutation-techniques.cpp">
       <Filter>mutation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\specific-object\death-crimson.c">
+    <ClCompile Include="..\..\src\specific-object\death-crimson.cpp">
       <Filter>specific-object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-kind\blood-curse.c">
+    <ClCompile Include="..\..\src\spell-kind\blood-curse.cpp">
       <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-kind\spells-world.c">
+    <ClCompile Include="..\..\src\spell-kind\spells-world.cpp">
       <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-kind\spells-enchant.c">
+    <ClCompile Include="..\..\src\spell-kind\spells-enchant.cpp">
       <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-kind\magic-item-recharger.c">
+    <ClCompile Include="..\..\src\spell-kind\magic-item-recharger.cpp">
       <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\load\load.c">
+    <ClCompile Include="..\..\src\load\load.cpp">
       <Filter>load</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\load\angband-version-comparer.c">
+    <ClCompile Include="..\..\src\load\angband-version-comparer.cpp">
       <Filter>load</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\load\load-util.c">
+    <ClCompile Include="..\..\src\load\load-util.cpp">
       <Filter>load</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\load\load-v1-5-0.c">
+    <ClCompile Include="..\..\src\load\load-v1-5-0.cpp">
       <Filter>load</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\load\item-loader.c">
+    <ClCompile Include="..\..\src\load\item-loader.cpp">
       <Filter>load</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\load\monster-loader.c">
+    <ClCompile Include="..\..\src\load\monster-loader.cpp">
       <Filter>load</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\load\load-zangband.c">
+    <ClCompile Include="..\..\src\load\load-zangband.cpp">
       <Filter>load</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\load\store-loader.c">
+    <ClCompile Include="..\..\src\load\store-loader.cpp">
       <Filter>load</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\load\lore-loader.c">
+    <ClCompile Include="..\..\src\load\lore-loader.cpp">
       <Filter>load</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\load\option-loader.c">
+    <ClCompile Include="..\..\src\load\option-loader.cpp">
       <Filter>load</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\load\birth-loader.c">
+    <ClCompile Include="..\..\src\load\birth-loader.cpp">
       <Filter>load</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\load\extra-loader.c">
+    <ClCompile Include="..\..\src\load\extra-loader.cpp">
       <Filter>load</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\load\load-v1-3-0.c">
+    <ClCompile Include="..\..\src\load\load-v1-3-0.cpp">
       <Filter>load</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\load\load-v1-7-0.c">
+    <ClCompile Include="..\..\src\load\load-v1-7-0.cpp">
       <Filter>load</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\load\player-info-loader.c">
+    <ClCompile Include="..\..\src\load\player-info-loader.cpp">
       <Filter>load</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\load\dummy-loader.c">
+    <ClCompile Include="..\..\src\load\dummy-loader.cpp">
       <Filter>load</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\load\world-loader.c">
+    <ClCompile Include="..\..\src\load\world-loader.cpp">
       <Filter>load</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\load\player-attack-loader.c">
+    <ClCompile Include="..\..\src\load\player-attack-loader.cpp">
       <Filter>load</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\load\inventory-loader.c">
+    <ClCompile Include="..\..\src\load\inventory-loader.cpp">
       <Filter>load</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\load\dungeon-loader.c">
+    <ClCompile Include="..\..\src\load\dungeon-loader.cpp">
       <Filter>load</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\load\floor-loader.c">
+    <ClCompile Include="..\..\src\load\floor-loader.cpp">
       <Filter>load</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\load\quest-loader.c">
+    <ClCompile Include="..\..\src\load\quest-loader.cpp">
       <Filter>load</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-use\quaff-execution.c">
+    <ClCompile Include="..\..\src\object-use\quaff-execution.cpp">
       <Filter>object-use</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\flavor\flag-inscriptions-table.c">
+    <ClCompile Include="..\..\src\flavor\flag-inscriptions-table.cpp">
       <Filter>flavor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\flavor\flavor-util.c">
+    <ClCompile Include="..\..\src\flavor\flavor-util.cpp">
       <Filter>flavor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\flavor\flavor-describer.c">
+    <ClCompile Include="..\..\src\flavor\flavor-describer.cpp">
       <Filter>flavor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\flavor\tval-description-switcher.c">
+    <ClCompile Include="..\..\src\flavor\tval-description-switcher.cpp">
       <Filter>flavor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\flavor\named-item-describer.c">
+    <ClCompile Include="..\..\src\flavor\named-item-describer.cpp">
       <Filter>flavor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\flavor\object-flavor.c">
+    <ClCompile Include="..\..\src\flavor\object-flavor.cpp">
       <Filter>flavor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\action\action-limited.c">
+    <ClCompile Include="..\..\src\action\action-limited.cpp">
       <Filter>action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-action\cmd-move.c">
+    <ClCompile Include="..\..\src\cmd-action\cmd-move.cpp">
       <Filter>cmd-action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\action\open-util.c">
+    <ClCompile Include="..\..\src\action\open-util.cpp">
       <Filter>action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-action\cmd-open-close.c">
+    <ClCompile Include="..\..\src\cmd-action\cmd-open-close.cpp">
       <Filter>cmd-action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\action\open-close-execution.c">
+    <ClCompile Include="..\..\src\action\open-close-execution.cpp">
       <Filter>action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\action\tunnel-execution.c">
+    <ClCompile Include="..\..\src\action\tunnel-execution.cpp">
       <Filter>action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-action\cmd-tunnel.c">
+    <ClCompile Include="..\..\src\cmd-action\cmd-tunnel.cpp">
       <Filter>cmd-action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\action\movement-execution.c">
+    <ClCompile Include="..\..\src\action\movement-execution.cpp">
       <Filter>action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-action\cmd-shoot.c">
+    <ClCompile Include="..\..\src\cmd-action\cmd-shoot.cpp">
       <Filter>cmd-action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-item\cmd-throw.c">
+    <ClCompile Include="..\..\src\cmd-item\cmd-throw.cpp">
       <Filter>cmd-item</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\action\weapon-shield.c">
+    <ClCompile Include="..\..\src\action\weapon-shield.cpp">
       <Filter>action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-action\cmd-others.c">
+    <ClCompile Include="..\..\src\cmd-action\cmd-others.cpp">
       <Filter>cmd-action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\action\run-execution.c">
+    <ClCompile Include="..\..\src\action\run-execution.cpp">
       <Filter>action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\action\travel-execution.c">
+    <ClCompile Include="..\..\src\action\travel-execution.cpp">
       <Filter>action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\disturbance.c">
+    <ClCompile Include="..\..\src\core\disturbance.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\window\main-window-equipments.c">
+    <ClCompile Include="..\..\src\window\main-window-equipments.cpp">
       <Filter>window</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\window\display-sub-window-items.c">
+    <ClCompile Include="..\..\src\window\display-sub-window-items.cpp">
       <Filter>window</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\window\display-sub-windows.c">
+    <ClCompile Include="..\..\src\window\display-sub-windows.cpp">
       <Filter>window</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\window\display-sub-window-spells.c">
+    <ClCompile Include="..\..\src\window\display-sub-window-spells.cpp">
       <Filter>window</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\window\main-window-left-frame.c">
+    <ClCompile Include="..\..\src\window\main-window-left-frame.cpp">
       <Filter>window</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\window\main-window-stat-poster.c">
+    <ClCompile Include="..\..\src\window\main-window-stat-poster.cpp">
       <Filter>window</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\window\main-window-util.c">
+    <ClCompile Include="..\..\src\window\main-window-util.cpp">
       <Filter>window</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-action\cmd-travel.c">
+    <ClCompile Include="..\..\src\cmd-action\cmd-travel.cpp">
       <Filter>cmd-action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\artifact\random-art-pval-investor.c">
+    <ClCompile Include="..\..\src\artifact\random-art-pval-investor.cpp">
       <Filter>artifact</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\wizard\artifact-bias-table.c">
+    <ClCompile Include="..\..\src\wizard\artifact-bias-table.cpp">
       <Filter>wizard</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\artifact\random-art-resistance.c">
+    <ClCompile Include="..\..\src\artifact\random-art-resistance.cpp">
       <Filter>artifact</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\artifact\random-art-misc.c">
+    <ClCompile Include="..\..\src\artifact\random-art-misc.cpp">
       <Filter>artifact</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\artifact\random-art-slay.c">
+    <ClCompile Include="..\..\src\artifact\random-art-slay.cpp">
       <Filter>artifact</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\artifact\random-art-activation.c">
+    <ClCompile Include="..\..\src\artifact\random-art-activation.cpp">
       <Filter>artifact</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\artifact\random-art-characteristics.c">
+    <ClCompile Include="..\..\src\artifact\random-art-characteristics.cpp">
       <Filter>artifact</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\artifact\random-art-generator.c">
+    <ClCompile Include="..\..\src\artifact\random-art-generator.cpp">
       <Filter>artifact</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\artifact\fixed-art-generator.c">
+    <ClCompile Include="..\..\src\artifact\fixed-art-generator.cpp">
       <Filter>artifact</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\artifact\artifact-info.c">
+    <ClCompile Include="..\..\src\artifact\artifact-info.cpp">
       <Filter>artifact</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\system\artifact-type-definition.c">
+    <ClCompile Include="..\..\src\system\artifact-type-definition.cpp">
       <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view\display-store.c">
+    <ClCompile Include="..\..\src\view\display-store.cpp">
       <Filter>view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\store\home.c">
+    <ClCompile Include="..\..\src\store\home.cpp">
       <Filter>store</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io\store-key-processor.c">
+    <ClCompile Include="..\..\src\io\store-key-processor.cpp">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-building\cmd-store.c">
+    <ClCompile Include="..\..\src\cmd-building\cmd-store.cpp">
       <Filter>cmd-building</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\store\purchase-order.c">
+    <ClCompile Include="..\..\src\store\purchase-order.cpp">
       <Filter>store</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\store\owner-insults.c">
+    <ClCompile Include="..\..\src\store\owner-insults.cpp">
       <Filter>store</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\store\sell-order.c">
+    <ClCompile Include="..\..\src\store\sell-order.cpp">
       <Filter>store</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\store\museum.c">
+    <ClCompile Include="..\..\src\store\museum.cpp">
       <Filter>store</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\store\pricing.c">
+    <ClCompile Include="..\..\src\store\pricing.cpp">
       <Filter>store</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\store\service-checker.c">
+    <ClCompile Include="..\..\src\store\service-checker.cpp">
       <Filter>store</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\stances-table.c">
+    <ClCompile Include="..\..\src\mind\stances-table.cpp">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\racial\racial-android.c">
+    <ClCompile Include="..\..\src\racial\racial-android.cpp">
       <Filter>racial</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\racial\racial-balrog.c">
+    <ClCompile Include="..\..\src\racial\racial-balrog.cpp">
       <Filter>racial</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\racial\racial-draconian.c">
+    <ClCompile Include="..\..\src\racial\racial-draconian.cpp">
       <Filter>racial</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\racial\racial-kutar.c">
+    <ClCompile Include="..\..\src\racial\racial-kutar.cpp">
       <Filter>racial</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\racial\racial-vampire.c">
+    <ClCompile Include="..\..\src\racial\racial-vampire.cpp">
       <Filter>racial</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\racial\racial-switcher.c">
+    <ClCompile Include="..\..\src\racial\racial-switcher.cpp">
       <Filter>racial</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor\cave.c">
+    <ClCompile Include="..\..\src\floor\cave.cpp">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\save\save.c">
+    <ClCompile Include="..\..\src\save\save.cpp">
       <Filter>save</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\save\save-util.c">
+    <ClCompile Include="..\..\src\save\save-util.cpp">
       <Filter>save</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\save\item-writer.c">
+    <ClCompile Include="..\..\src\save\item-writer.cpp">
       <Filter>save</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\save\monster-writer.c">
+    <ClCompile Include="..\..\src\save\monster-writer.cpp">
       <Filter>save</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\save\info-writer.c">
+    <ClCompile Include="..\..\src\save\info-writer.cpp">
       <Filter>save</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\save\player-writer.c">
+    <ClCompile Include="..\..\src\save\player-writer.cpp">
       <Filter>save</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\save\floor-writer.c">
+    <ClCompile Include="..\..\src\save\floor-writer.cpp">
       <Filter>save</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\load\info-loader.c">
+    <ClCompile Include="..\..\src\load\info-loader.cpp">
       <Filter>load</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\blue-magic\learnt-info.c">
+    <ClCompile Include="..\..\src\blue-magic\learnt-info.cpp">
       <Filter>blue-magic</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\blue-magic\learnt-power-getter.c">
+    <ClCompile Include="..\..\src\blue-magic\learnt-power-getter.cpp">
       <Filter>blue-magic</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\mind-blue-mage.c">
+    <ClCompile Include="..\..\src\mind\mind-blue-mage.cpp">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\blue-magic\blue-magic-checker.c">
+    <ClCompile Include="..\..\src\blue-magic\blue-magic-checker.cpp">
       <Filter>blue-magic</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\blue-magic\blue-magic-caster.c">
+    <ClCompile Include="..\..\src\blue-magic\blue-magic-caster.cpp">
       <Filter>blue-magic</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\blue-magic\blue-magic-util.c">
+    <ClCompile Include="..\..\src\blue-magic\blue-magic-util.cpp">
       <Filter>blue-magic</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\blue-magic\blue-magic-breath.c">
+    <ClCompile Include="..\..\src\blue-magic\blue-magic-breath.cpp">
       <Filter>blue-magic</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\specified-summon.c">
+    <ClCompile Include="..\..\src\mspell\specified-summon.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\blue-magic\blue-magic-ball-bolt.c">
+    <ClCompile Include="..\..\src\blue-magic\blue-magic-ball-bolt.cpp">
       <Filter>blue-magic</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\blue-magic\blue-magic-spirit-curse.c">
+    <ClCompile Include="..\..\src\blue-magic\blue-magic-spirit-curse.cpp">
       <Filter>blue-magic</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\blue-magic\blue-magic-status.c">
+    <ClCompile Include="..\..\src\blue-magic\blue-magic-status.cpp">
       <Filter>blue-magic</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\blue-magic\blue-magic-summon.c">
+    <ClCompile Include="..\..\src\blue-magic\blue-magic-summon.cpp">
       <Filter>blue-magic</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\melee\melee-spell.c">
+    <ClCompile Include="..\..\src\melee\melee-spell.cpp">
       <Filter>melee</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\mspell-judgement.c">
+    <ClCompile Include="..\..\src\mspell\mspell-judgement.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\melee\melee-spell-util.c">
+    <ClCompile Include="..\..\src\melee\melee-spell-util.cpp">
       <Filter>melee</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\melee\melee-spell-flags-checker.c">
+    <ClCompile Include="..\..\src\melee\melee-spell-flags-checker.cpp">
       <Filter>melee</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\improper-mspell-remover.c">
+    <ClCompile Include="..\..\src\mspell\improper-mspell-remover.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\smart-mspell-util.c">
+    <ClCompile Include="..\..\src\mspell\smart-mspell-util.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\element-resistance-checker.c">
+    <ClCompile Include="..\..\src\mspell\element-resistance-checker.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\high-resistance-checker.c">
+    <ClCompile Include="..\..\src\mspell\high-resistance-checker.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\mspell-selector.c">
+    <ClCompile Include="..\..\src\mspell\mspell-selector.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\mspell-attack.c">
+    <ClCompile Include="..\..\src\mspell\mspell-attack.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\mspell-checker.c">
+    <ClCompile Include="..\..\src\mspell\mspell-checker.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\mspell-attack-util.c">
+    <ClCompile Include="..\..\src\mspell\mspell-attack-util.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\mspell-lite.c">
+    <ClCompile Include="..\..\src\mspell\mspell-lite.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-use\read-execution.c">
+    <ClCompile Include="..\..\src\object-use\read-execution.cpp">
       <Filter>object-use</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\player-status-flags.c">
+    <ClCompile Include="..\..\src\player\player-status-flags.cpp">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\room\room-info-table.c">
+    <ClCompile Include="..\..\src\room\room-info-table.cpp">
       <Filter>room</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\room\cave-filler.c">
+    <ClCompile Include="..\..\src\room\cave-filler.cpp">
       <Filter>room</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\room\room-generator.c">
+    <ClCompile Include="..\..\src\room\room-generator.cpp">
       <Filter>room</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\room\treasure-deployment.c">
+    <ClCompile Include="..\..\src\room\treasure-deployment.cpp">
       <Filter>room</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\room\rooms-maze-vault.c">
+    <ClCompile Include="..\..\src\room\rooms-maze-vault.cpp">
       <Filter>room</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\room\space-finder.c">
+    <ClCompile Include="..\..\src\room\space-finder.cpp">
       <Filter>room</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\room\door-definition.c">
+    <ClCompile Include="..\..\src\room\door-definition.cpp">
       <Filter>room</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\room\rooms-builder.c">
+    <ClCompile Include="..\..\src\room\rooms-builder.cpp">
       <Filter>room</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\target\target-describer.c">
+    <ClCompile Include="..\..\src\target\target-describer.cpp">
       <Filter>target</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\target\target-preparation.c">
+    <ClCompile Include="..\..\src\target\target-preparation.cpp">
       <Filter>target</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\target\grid-selector.c">
+    <ClCompile Include="..\..\src\target\grid-selector.cpp">
       <Filter>target</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\target\target-setter.c">
+    <ClCompile Include="..\..\src\target\target-setter.cpp">
       <Filter>target</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\target\target-getter.c">
+    <ClCompile Include="..\..\src\target\target-getter.cpp">
       <Filter>target</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\target\target-checker.c">
+    <ClCompile Include="..\..\src\target\target-checker.cpp">
       <Filter>target</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\mind-explanations-table.c">
+    <ClCompile Include="..\..\src\mind\mind-explanations-table.cpp">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\mind-info.c">
+    <ClCompile Include="..\..\src\mind\mind-info.cpp">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\mind-power-getter.c">
+    <ClCompile Include="..\..\src\mind\mind-power-getter.cpp">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\mind-berserker.c">
+    <ClCompile Include="..\..\src\mind\mind-berserker.cpp">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-action\cmd-mind.c">
+    <ClCompile Include="..\..\src\cmd-action\cmd-mind.cpp">
       <Filter>cmd-action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mutation\gain-mutation-switcher.c">
+    <ClCompile Include="..\..\src\mutation\gain-mutation-switcher.cpp">
       <Filter>mutation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mutation\mutation-util.c">
+    <ClCompile Include="..\..\src\mutation\mutation-util.cpp">
       <Filter>mutation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mutation\lose-mutation-switcher.c">
+    <ClCompile Include="..\..\src\mutation\lose-mutation-switcher.cpp">
       <Filter>mutation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mutation\mutation-investor-remover.c">
+    <ClCompile Include="..\..\src\mutation\mutation-investor-remover.cpp">
       <Filter>mutation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\action\mutation-execution.c">
+    <ClCompile Include="..\..\src\action\mutation-execution.cpp">
       <Filter>action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mutation\mutation-calculator.c">
+    <ClCompile Include="..\..\src\mutation\mutation-calculator.cpp">
       <Filter>mutation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\wizard\cmd-wizard.c">
+    <ClCompile Include="..\..\src\wizard\cmd-wizard.cpp">
       <Filter>wizard</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\wizard\wizard-item-modifier.c">
+    <ClCompile Include="..\..\src\wizard\wizard-item-modifier.cpp">
       <Filter>wizard</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\wizard\spoiler-util.c">
+    <ClCompile Include="..\..\src\wizard\spoiler-util.cpp">
       <Filter>wizard</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\wizard\items-spoiler.c">
+    <ClCompile Include="..\..\src\wizard\items-spoiler.cpp">
       <Filter>wizard</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\wizard\artifact-analyzer.c">
+    <ClCompile Include="..\..\src\wizard\artifact-analyzer.cpp">
       <Filter>wizard</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\wizard\monster-info-spoiler.c">
+    <ClCompile Include="..\..\src\wizard\monster-info-spoiler.cpp">
       <Filter>wizard</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io-dump\random-art-info-dumper.c">
+    <ClCompile Include="..\..\src\io-dump\random-art-info-dumper.cpp">
       <Filter>io-dump</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\wizard\fixed-artifacts-spoiler.c">
+    <ClCompile Include="..\..\src\wizard\fixed-artifacts-spoiler.cpp">
       <Filter>wizard</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor\dungeon-tunnel-util.c">
+    <ClCompile Include="..\..\src\floor\dungeon-tunnel-util.cpp">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor\object-allocator.c">
+    <ClCompile Include="..\..\src\floor\object-allocator.cpp">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor\floor-generator.c">
+    <ClCompile Include="..\..\src\floor\floor-generator.cpp">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor\cave-generator.c">
+    <ClCompile Include="..\..\src\floor\cave-generator.cpp">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor\tunnel-generator.c">
+    <ClCompile Include="..\..\src\floor\tunnel-generator.cpp">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\dungeon\quest-monster-placer.c">
+    <ClCompile Include="..\..\src\dungeon\quest-monster-placer.cpp">
       <Filter>dungeon</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\grid\feature-generator.c">
+    <ClCompile Include="..\..\src\grid\feature-generator.cpp">
       <Filter>grid</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\mind-monk.c">
+    <ClCompile Include="..\..\src\mind\mind-monk.cpp">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-action\cmd-racial.c">
+    <ClCompile Include="..\..\src\cmd-action\cmd-racial.cpp">
       <Filter>cmd-action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\racial\racial-util.c">
+    <ClCompile Include="..\..\src\racial\racial-util.cpp">
       <Filter>racial</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\racial\class-racial-switcher.c">
+    <ClCompile Include="..\..\src\racial\class-racial-switcher.cpp">
       <Filter>racial</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\racial\mutation-racial-selector.c">
+    <ClCompile Include="..\..\src\racial\mutation-racial-selector.cpp">
       <Filter>racial</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\action\racial-execution.c">
+    <ClCompile Include="..\..\src\action\racial-execution.cpp">
       <Filter>action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\racial\race-racial-command-setter.c">
+    <ClCompile Include="..\..\src\racial\race-racial-command-setter.cpp">
       <Filter>racial</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\action\throw-util.c">
+    <ClCompile Include="..\..\src\action\throw-util.cpp">
       <Filter>action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\player-status-table.c">
+    <ClCompile Include="..\..\src\player\player-status-table.cpp">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-floor\monster-lite-util.c">
+    <ClCompile Include="..\..\src\monster-floor\monster-lite-util.cpp">
       <Filter>monster-floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-floor\monster-lite.c">
+    <ClCompile Include="..\..\src\monster-floor\monster-lite.cpp">
       <Filter>monster-floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\dungeon\quest-completion-checker.c">
+    <ClCompile Include="..\..\src\dungeon\quest-completion-checker.cpp">
       <Filter>dungeon</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster\monster-status-setter.c">
+    <ClCompile Include="..\..\src\monster\monster-status-setter.cpp">
       <Filter>monster</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\player-view.c">
+    <ClCompile Include="..\..\src\player\player-view.cpp">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor\floor-mode-changer.c">
+    <ClCompile Include="..\..\src\floor\floor-mode-changer.cpp">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor\floor-save-util.c">
+    <ClCompile Include="..\..\src\floor\floor-save-util.cpp">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor\floor-changer.c">
+    <ClCompile Include="..\..\src\floor\floor-changer.cpp">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor\floor-leaver.c">
+    <ClCompile Include="..\..\src\floor\floor-leaver.cpp">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\action\activation-execution.c">
+    <ClCompile Include="..\..\src\action\activation-execution.cpp">
       <Filter>action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-activation\activation-breath.c">
+    <ClCompile Include="..\..\src\object-activation\activation-breath.cpp">
       <Filter>object-activation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-activation\activation-switcher.c">
+    <ClCompile Include="..\..\src\object-activation\activation-switcher.cpp">
       <Filter>object-activation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-activation\activation-bolt-ball.c">
+    <ClCompile Include="..\..\src\object-activation\activation-bolt-ball.cpp">
       <Filter>object-activation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-activation\activation-charm.c">
+    <ClCompile Include="..\..\src\object-activation\activation-charm.cpp">
       <Filter>object-activation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-activation\activation-resistance.c">
+    <ClCompile Include="..\..\src\object-activation\activation-resistance.cpp">
       <Filter>object-activation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\specific-object\muramasa.c">
+    <ClCompile Include="..\..\src\specific-object\muramasa.cpp">
       <Filter>specific-object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\specific-object\bloody-moon.c">
+    <ClCompile Include="..\..\src\specific-object\bloody-moon.cpp">
       <Filter>specific-object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\specific-object\ring-of-power.c">
+    <ClCompile Include="..\..\src\specific-object\ring-of-power.cpp">
       <Filter>specific-object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-activation\activation-others.c">
+    <ClCompile Include="..\..\src\object-activation\activation-others.cpp">
       <Filter>object-activation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\specific-object\monster-ball.c">
+    <ClCompile Include="..\..\src\specific-object\monster-ball.cpp">
       <Filter>specific-object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-activation\activation-util.c">
+    <ClCompile Include="..\..\src\object-activation\activation-util.cpp">
       <Filter>object-activation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\specific-object\blade-turner.c">
+    <ClCompile Include="..\..\src\specific-object\blade-turner.cpp">
       <Filter>specific-object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-activation\activation-teleport.c">
+    <ClCompile Include="..\..\src\object-activation\activation-teleport.cpp">
       <Filter>object-activation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\specific-object\toragoroshi.c">
+    <ClCompile Include="..\..\src\specific-object\toragoroshi.cpp">
       <Filter>specific-object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-activation\activation-genocide.c">
+    <ClCompile Include="..\..\src\object-activation\activation-genocide.cpp">
       <Filter>object-activation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\effect\effect-processor.c">
+    <ClCompile Include="..\..\src\effect\effect-processor.cpp">
       <Filter>effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-io\cmd-floor.c">
+    <ClCompile Include="..\..\src\cmd-io\cmd-floor.cpp">
       <Filter>cmd-io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-item\cmd-equipment.c">
+    <ClCompile Include="..\..\src\cmd-item\cmd-equipment.cpp">
       <Filter>cmd-item</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-item\cmd-refill.c">
+    <ClCompile Include="..\..\src\cmd-item\cmd-refill.cpp">
       <Filter>cmd-item</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-item\cmd-destroy.c">
+    <ClCompile Include="..\..\src\cmd-item\cmd-destroy.cpp">
       <Filter>cmd-item</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\target\projection-path-calculator.c">
+    <ClCompile Include="..\..\src\target\projection-path-calculator.cpp">
       <Filter>target</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\grid\door.c">
+    <ClCompile Include="..\..\src\grid\door.cpp">
       <Filter>grid</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor\line-of-sight.c">
+    <ClCompile Include="..\..\src\floor\line-of-sight.cpp">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\room\vault-builder.c">
+    <ClCompile Include="..\..\src\room\vault-builder.cpp">
       <Filter>room</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\grid\object-placer.c">
+    <ClCompile Include="..\..\src\grid\object-placer.cpp">
       <Filter>grid</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\grid\stair.c">
+    <ClCompile Include="..\..\src\grid\stair.cpp">
       <Filter>grid</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\object-compressor.c">
+    <ClCompile Include="..\..\src\core\object-compressor.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\main\info-initializer.c">
+    <ClCompile Include="..\..\src\main\info-initializer.cpp">
       <Filter>main</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\main\angband-headers.c">
+    <ClCompile Include="..\..\src\main\angband-headers.cpp">
       <Filter>main</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\main\init-error-messages-table.c">
+    <ClCompile Include="..\..\src\main\init-error-messages-table.cpp">
       <Filter>main</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\market\building-initializer.c">
+    <ClCompile Include="..\..\src\market\building-initializer.cpp">
       <Filter>market</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\main\game-data-initializer.c">
+    <ClCompile Include="..\..\src\main\game-data-initializer.cpp">
       <Filter>main</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\main\angband-initializer.c">
+    <ClCompile Include="..\..\src\main\angband-initializer.cpp">
       <Filter>main</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player-info\self-info-util.c">
+    <ClCompile Include="..\..\src\player-info\self-info-util.cpp">
       <Filter>player-info</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player-info\self-info.c">
+    <ClCompile Include="..\..\src\player-info\self-info.cpp">
       <Filter>player-info</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player-info\avatar.c">
+    <ClCompile Include="..\..\src\player-info\avatar.cpp">
       <Filter>player-info</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player-info\race-ability-info.c">
+    <ClCompile Include="..\..\src\player-info\race-ability-info.cpp">
       <Filter>player-info</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player-info\class-ability-info.c">
+    <ClCompile Include="..\..\src\player-info\class-ability-info.cpp">
       <Filter>player-info</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player-info\mutation-info.c">
+    <ClCompile Include="..\..\src\player-info\mutation-info.cpp">
       <Filter>player-info</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player-info\body-improvement-info.c">
+    <ClCompile Include="..\..\src\player-info\body-improvement-info.cpp">
       <Filter>player-info</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player-info\resistance-info.c">
+    <ClCompile Include="..\..\src\player-info\resistance-info.cpp">
       <Filter>player-info</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player-info\base-status-info.c">
+    <ClCompile Include="..\..\src\player-info\base-status-info.cpp">
       <Filter>player-info</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view\display-self-info.c">
+    <ClCompile Include="..\..\src\view\display-self-info.cpp">
       <Filter>view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player-info\weapon-effect-info.c">
+    <ClCompile Include="..\..\src\player-info\weapon-effect-info.cpp">
       <Filter>player-info</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\mind-archer.c">
+    <ClCompile Include="..\..\src\mind\mind-archer.cpp">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\mind-magic-eater.c">
+    <ClCompile Include="..\..\src\mind\mind-magic-eater.cpp">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\mind-chaos-warrior.c">
+    <ClCompile Include="..\..\src\mind\mind-chaos-warrior.cpp">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-realm\spells-nature.c">
+    <ClCompile Include="..\..\src\spell-realm\spells-nature.cpp">
       <Filter>spell-realm</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-realm\spells-arcane.c">
+    <ClCompile Include="..\..\src\spell-realm\spells-arcane.cpp">
       <Filter>spell-realm</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\mind-priest.c">
+    <ClCompile Include="..\..\src\mind\mind-priest.cpp">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\mind-hobbit.c">
+    <ClCompile Include="..\..\src\mind\mind-hobbit.cpp">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-floor\monster-death-util.c">
+    <ClCompile Include="..\..\src\monster-floor\monster-death-util.cpp">
       <Filter>monster-floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-floor\special-death-switcher.c">
+    <ClCompile Include="..\..\src\monster-floor\special-death-switcher.cpp">
       <Filter>monster-floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\player-status-resist.c">
+    <ClCompile Include="..\..\src\player\player-status-resist.cpp">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-attack\monster-attack-lose.c">
+    <ClCompile Include="..\..\src\monster-attack\monster-attack-lose.cpp">
       <Filter>monster-attack</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io\record-play-movie.c">
+    <ClCompile Include="..\..\src\io\record-play-movie.cpp">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-attack\monster-attack-lose.c">
+    <ClCompile Include="..\..\src\monster-attack\monster-attack-lose.cpp">
       <Filter>monster-attack</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\system\angband-version.c">
+    <ClCompile Include="..\..\src\system\angband-version.cpp">
       <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\locale\utf-8.c">
+    <ClCompile Include="..\..\src\locale\utf-8.cpp">
       <Filter>locale</Filter>
     </ClCompile>
   </ItemGroup>

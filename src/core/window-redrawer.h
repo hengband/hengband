@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef enum window_redraw_type {
+enum window_redraw_type {
     PW_INVEN = 0x00000001L, /*!<サブウィンドウ描画フラグ: 所持品-装備品 / Display inven/equip */
     PW_EQUIP = 0x00000002L, /*!<サブウィンドウ描画フラグ: 装備品-所持品 / Display equip/inven */
     PW_SPELL = 0x00000004L, /*!<サブウィンドウ描画フラグ: 魔法一覧 / Display spell list */
@@ -16,7 +16,7 @@ typedef enum window_redraw_type {
     PW_SNAPSHOT = 0x00000800L, /*!<サブウィンドウ描画フラグ: 記念写真 / Display snap-shot */
 
     PW_ALL = (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_MONSTER_LIST | PW_MESSAGE | PW_OVERHEAD | PW_MONSTER | PW_OBJECT | PW_DUNGEON | PW_SNAPSHOT),
-} window_redraw_type;
+};
 
 void redraw_window(void);
 void window_stuff(player_type *player_ptr);

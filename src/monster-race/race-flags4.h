@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum race_flags4 {
+enum race_flags4 {
 	RF4_SHRIEK = 0x00000001, /*!< モンスター能力: 叫ぶ / Shriek for help */
     RF4_XXX1 = 0x00000002, /*!< モンスター能力: 未使用 / XXX */
     RF4_DISPEL = 0x00000004, /*!< モンスター能力: 魔力消去 / Dispel magic */
@@ -33,4 +33,4 @@ typedef enum race_flags4 {
     RF4_BR_NUKE = 0x20000000, /*!< モンスター能力: 放射性廃棄物のブレス / TY: Toxic Breath */
     RF4_BA_CHAO = 0x40000000, /*!< モンスター能力: ログルス球 / TY: Logrus Ball */
     RF4_BR_DISI = 0x80000000, /*!< モンスター能力: 分解のブレス / Breathe Disintegration */
-} race_flags4;
+};

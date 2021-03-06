@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum music_type {
+enum music_type {
 	MUSIC_BASIC_DEFAULT = 0,
     MUSIC_BASIC_GAMEOVER = 1,
     MUSIC_BASIC_EXIT = 2,
@@ -23,6 +23,6 @@ typedef enum music_type {
     MUSIC_BASIC_FINAL_QUEST_CLEAR = 19,
     MUSIC_BASIC_AMBUSH = 20,
     MUSIC_BASIC_MAX = 21, /*!< BGM定義の最大数 */
-} music_type;
+};
 
 extern const concptr angband_music_basic_name[MUSIC_BASIC_MAX];

@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum savedata_item_flag_type {
+enum savedata_item_flag_type {
 	SAVE_ITEM_PVAL = 0x00000001,
 	SAVE_ITEM_DISCOUNT = 0x00000002,
 	SAVE_ITEM_NUMBER = 0x00000004,
@@ -30,9 +30,9 @@ typedef enum savedata_item_flag_type {
 	SAVE_ITEM_INSCRIPTION = 0x04000000,
 	SAVE_ITEM_ART_NAME = 0x08000000,
 	SAVE_ITEM_ART_FLAGS4 = 0x10000000,
-} savedata_item_flag_type;
+};
 
-typedef enum savedata_monster_flag_type {
+enum savedata_monster_flag_type {
 	SAVE_MON_AP_R_IDX = 0x00000001,
 	SAVE_MON_SUB_ALIGN = 0x00000002,
 	SAVE_MON_CSLEEP = 0x00000004,
@@ -49,4 +49,4 @@ typedef enum savedata_monster_flag_type {
 	SAVE_MON_MFLAG2 = 0x00002000,
 	SAVE_MON_NICKNAME = 0x00004000,
 	SAVE_MON_PARENT = 0x00008000,
-} savedata_monster_flag_type;
+};

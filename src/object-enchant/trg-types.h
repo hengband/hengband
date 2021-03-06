@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum trg_type {
+enum trg_type {
 	TRG_INSTA_ART = 0x00000001L, /* Item must be an artifact */
     TRG_QUESTITEM = 0x00000002L, /* quest level item -KMW- */
     TRG_XTRA_POWER = 0x00000004L, /* Extra power */
@@ -19,4 +19,4 @@ typedef enum trg_type {
     TRG_RANDOM_CURSE2 = 0x00008000L, /* Item is Random Cursed */
     TRG_XTRA_DICE = 0x00010000L, /* Extra dice */
     TRG_POWERFUL = 0x00020000L, /* Item has good value even if Cursed */
-} trg_type;
+};

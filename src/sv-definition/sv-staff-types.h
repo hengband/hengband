@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 /* The "sval" codes for TV_STAFF */
-typedef enum sv_staff_type {
+enum sv_staff_type {
 	SV_STAFF_DARKNESS = 0,
     SV_STAFF_SLOWNESS = 1,
     SV_STAFF_HASTE_MONSTERS = 2,
@@ -35,4 +35,4 @@ typedef enum sv_staff_type {
     SV_STAFF_ANIMATE_DEAD = 30,
     SV_STAFF_MSTORM = 31,
     SV_STAFF_NOTHING = 32,
-} sv_staff_type;
+};

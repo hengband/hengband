@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef enum blue_magic_type blue_magic_type;
+enum blue_magic_type : int;
 
 bool monster_spell_is_learnable(int monspell);
 void learn_spell(player_type *learner_ptr, int monspell);

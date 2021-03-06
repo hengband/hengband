@@ -3,7 +3,7 @@
 /*
  * Buildings actions
  */
-typedef enum ba_actions {
+enum ba_actions {
     BACT_NOTHING = 0,
     BACT_RESEARCH_ITEM = 1,
     BACT_TOWN_HISTORY = 2,
@@ -53,4 +53,4 @@ typedef enum ba_actions {
     BACT_EVAL_AC = 46,
     BACT_BROKEN_WEAPON = 47,
     MAX_BACT = 48,
-} ba_actions;
+};

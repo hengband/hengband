@@ -5,7 +5,7 @@
  * Originally from UnAngband, and modified into TR-like style in Hengband
  */
 
-typedef enum feature_flag_type {
+enum feature_flag_type : int {
 	FF_LOS = 0, /*!< 視界が通る地形である */
     FF_PROJECT = 1, /*!< 飛び道具が通過できる地形である */
     FF_MOVE = 2, /*!< 移動可能な地形である */
@@ -69,6 +69,6 @@ typedef enum feature_flag_type {
     FF_CONVERT = 111, /*!< 地形生成処理中の疑似フラグ */
     FF_GLASS = 112, /*!< ガラス製の地形である */
     FF_FLAG_MAX = 113
-} feature_flag_type;
+};
 
 #define FF_FLAG_SIZE (1 + ((FF_FLAG_MAX - 1) / 32))

@@ -4,7 +4,7 @@
 #include "system/monster-type-definition.h"
 
 // TODO: 更に分割する可能性が中程度あるのでヘッダに置いておく
-typedef enum old_monster_resistance_type {
+enum old_monster_resistance_type {
 	RF3_IM_ACID = 0x00010000, /* Resist acid a lot */
 	RF3_IM_ELEC = 0x00020000, /* Resist elec a lot */
 	RF3_IM_FIRE = 0x00040000, /* Resist fire a lot */
@@ -17,9 +17,9 @@ typedef enum old_monster_resistance_type {
 	RF3_RES_NEXU = 0x02000000, /* Resist nexus */
 	RF3_RES_DISE = 0x04000000, /* Resist disenchantment */
 	RF3_RES_ALL = 0x08000000, /* Resist all */
-} old_monster_resistance_type;
+};
 
-typedef enum old_monster_breath_type {
+enum old_monster_breath_type {
 	RF4_BR_LITE = 0x00004000, /* Breathe Lite */
 	RF4_BR_DARK = 0x00008000, /* Breathe Dark */
 	RF4_BR_CONF = 0x00010000, /* Breathe Confusion */
@@ -30,7 +30,7 @@ typedef enum old_monster_breath_type {
 	RF4_BR_GRAV = 0x00800000, /* Breathe Gravity */
 	RF4_BR_SHAR = 0x01000000, /* Breathe Shards */
 	RF4_BR_WALL = 0x04000000, /* Breathe Force */
-} old_monster_breath_type;
+};
 
 extern const int OLD_QUEST_WATER_CAVE;
 extern const int QUEST_OLD_CASTLE;

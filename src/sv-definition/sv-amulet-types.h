@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 /* The "sval" codes for TV_AMULET */
-typedef enum sv_amulet_type {
+enum sv_amulet_type {
 	SV_AMULET_DOOM = 0,
     SV_AMULET_TELEPORT = 1,
     SV_AMULET_ADORNMENT = 2,
@@ -27,4 +27,4 @@ typedef enum sv_amulet_type {
     SV_AMULET_WISDOM = 22,
     SV_AMULET_MAGIC_MASTERY = 23,
     SV_AMULET_NIGHT = 24,
-} sv_amulet_type;
+};

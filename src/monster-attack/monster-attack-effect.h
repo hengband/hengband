@@ -6,7 +6,7 @@
  * "Race Blow Effect" の略。
  * 実装の都合上、0 から始まる連番でなければならない。
  */
-typedef enum rbe_type {
+enum rbe_type {
     RBE_NONE = 0,
     RBE_HURT = 1, /*!< モンスターの攻撃効果: 攻撃する*/
     RBE_POISON = 2, /*!< モンスターの攻撃効果: 毒をくらわす*/
@@ -46,4 +46,4 @@ typedef enum rbe_type {
     RBE_FLAVOR = 36, /*!< モンスターの攻撃効果: フレーバー(メッセージ表示のみ) */
 
     NB_RBE_TYPE, /*!< enum バリアント数 */
-} rbe_type;
+};

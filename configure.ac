@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 AC_INIT(hengband, 3.0.0.0)
 
 AC_CONFIG_HEADERS(src/autoconf.h)
-AC_CONFIG_SRCDIR(src/main.c)
+AC_CONFIG_SRCDIR(src/main.cpp)
 AM_INIT_AUTOMAKE
 
 AC_ARG_WITH(setgid,
@@ -14,8 +14,6 @@ AC_ARG_WITH(setgid,
 esac])
 AC_SUBST(GAMEGROUP)
 AM_CONDITIONAL(SET_GID, test "$GAMEGROUP" != "")
-
-AC_LANG_C
 
 dnl generate the installation path for the ./lib/ folder
 if test "$GAMEGROUP" != ""; then
@@ -44,7 +42,9 @@ DEFAULT_VAR_PATH="$game_varpath"
 AC_SUBST(DEFAULT_VAR_PATH)
 
 dnl Checks for programs.
-AC_PROG_CC
+AC_LANG(C++)
+AC_PROG_CXX
+AX_CXX_COMPILE_STDCXX_17
 PKG_PROG_PKG_CONFIG
 
 AC_ARG_ENABLE(japanese,

@@ -3,12 +3,12 @@
 #include "system/angband.h"
 #include "player/player-status.h"
 
-typedef enum rate_calc_type_mode {
+enum rate_calc_type_mode {
 	CALC_RAND = 0,
     CALC_AVERAGE = 1,
     CALC_MIN = 2,
     CALC_MAX = 3,
-} rate_calc_type_mode;
+};
 
 
 PERCENTAGE calc_acid_damage_rate(player_type *creature_ptr);

@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum race_flags_ability2 {
+enum race_flags_ability2 {
 	RF6_HASTE = 0x00000001, /* Speed self */
     RF6_HAND_DOOM = 0x00000002, /* Hand of Doom */
     RF6_HEAL = 0x00000004, /* Heal self */
@@ -33,4 +33,4 @@ typedef enum race_flags_ability2 {
     RF6_S_HI_DRAGON = 0x20000000, /* Summon Ancient Dragon */
     RF6_S_AMBERITES = 0x40000000, /* Summon Amberites */
     RF6_S_UNIQUE = 0x80000000, /* Summon Unique Monster */
-} race_flags_ability2;
+};

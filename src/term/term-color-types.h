@@ -6,7 +6,7 @@
  * The "(R,G,B)" codes are given in "fourths" of the "maximal" value,
  * and should "gamma corrected" on most (non-Macintosh) machines.
  */
-typedef enum term_color_type {
+enum term_color_type {
 	TERM_DARK = 0, /*!< 'd' - 黒 0,0,0 */
     TERM_WHITE = 1, /*!< 'w' - 白 4,4,4 */
     TERM_SLATE = 2, /*!< 's' - 灰 2,2,2 */
@@ -23,4 +23,4 @@ typedef enum term_color_type {
     TERM_L_GREEN = 13, /*!< 'G' - 明るい緑 0,4,0 */
     TERM_L_BLUE = 14, /*!< 'B' - 明るい青 0,4,4 */
     TERM_L_UMBER = 15, /*!< 'U' - 明るい琥珀 3,2,1 */
-} term_color_type;
+};

@@ -1,14 +1,14 @@
 ﻿#pragma once
 
-typedef enum mind_berserker_type {
+enum mind_berserker_type : int {
 	DETECT_MANACE = 0,
 	CHARGE = 1,
 	SMASH_TRAP = 2,
 	QUAKE = 3,
 	MASSACRE = 4,
-} mind_berserker_type;
+};
 
-typedef enum mind_force_trainer_type {
+enum mind_force_trainer_type : int {
 	SMALL_FORCE_BALL = 0,
 	FLASH_LIGHT = 1,
 	FLYING_TECHNIQUE = 2,
@@ -23,9 +23,9 @@ typedef enum mind_force_trainer_type {
 	EXPLODING_FLAME = 11,
 	SUPER_KAMEHAMEHA = 12,
 	LIGHT_SPEED = 13,
-} mind_force_trainer_type;
+};
 
-typedef enum mind_mindcrafter_type {
+enum mind_mindcrafter_type : int {
 	PRECOGNITION = 0,
 	NEURAL_BLAST = 1,
 	MINOR_DISPLACEMENT = 2,
@@ -40,9 +40,9 @@ typedef enum mind_mindcrafter_type {
 	PSYCHIC_DRAIN = 11,
 	PSYCHO_SPEAR = 12,
 	THE_WORLD = 13,
-} mind_mindcrafter_type;
+};
 
-typedef enum mind_mirror_master_type {
+enum mind_mirror_master_type : int {
 	MIRROR_SEEING = 0,
 	MAKE_MIRROR = 1,
 	DRIP_LIGHT = 2,
@@ -64,9 +64,9 @@ typedef enum mind_mirror_master_type {
 	MULTI_SHADOW = 18,
 	BINDING_FIELD = 19,
 	RUFFNOR_MIRROR = 20,
-} mind_mirror_master_type;
+};
 
-typedef enum mind_ninja_type {
+enum mind_ninja_type : int {
 	DARKNESS_CREATION = 0,
 	DETECT_NEAR = 1,
 	HIDE_LEAVES = 2,
@@ -87,4 +87,4 @@ typedef enum mind_ninja_type {
 	HIDE_MIST =17,
 	PURGATORY_FLAME = 18,
 	ALTER_EGO = 19,
-} mind_ninja_type;
+};

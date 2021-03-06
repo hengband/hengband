@@ -9,7 +9,7 @@ typedef struct stat_bar {
 } stat_bar;
 
 /* 画面下部に表示する状態表示定義ID / Data structure for status bar */
-typedef enum bar_definition_type {
+enum bar_definition_type {
     BAR_TSUYOSHI = 0, /*!< 下部ステータス表示: オクレ兄さん状態 */
     BAR_HALLUCINATION = 1, /*!< 下部ステータス表示: 幻覚 */
     BAR_BLINDNESS = 2, /*!< 下部ステータス表示: 盲目 */
@@ -78,7 +78,7 @@ typedef enum bar_definition_type {
     BAR_CURE = 65, /*!< 下部ステータス表示: 回復 */
     BAR_ESP_EVIL = 66, /*!< 下部ステータス表示: 邪悪感知 */
     BAR_NIGHTSIGHT = 67, /*!< 下部ステータス表示: 暗視 */
-} bar_definition_type;
+};
 
 #define MAX_STAT_BARS 69
 
