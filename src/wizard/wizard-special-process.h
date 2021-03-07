@@ -10,6 +10,7 @@ void wiz_change_status(player_type *creature_ptr);
 void wiz_create_feature(player_type *creature_ptr);
 void wiz_jump_to_dungeon(player_type *creature_ptr);
 void wiz_learn_items_all(player_type *caster_ptr);
+void wiz_reset_race(player_type *creature_ptr);
 void wiz_reset_class(player_type *creature_ptr);
 void wiz_dump_options(void);
 void set_gametime(void);

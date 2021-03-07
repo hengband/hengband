@@ -78,7 +78,7 @@
  * q：クエストを完了させる / Finish quest
  * Q：クエストに突入する (ウィザードあり) / Jump to quest
  * r：カオスパトロンから報酬を貰う / Gain reward from chaos patron
- * R：クラス変更 / Change class
+ * R：種族変更 / Change race
  * s：フロア相応のモンスター召喚 / Summon a monster
  * S：高級品獲得ドロップ / Get a great item
  * t：テレポート / Teleport
@@ -86,7 +86,7 @@
  * u：啓蒙 (強制的に忍者以外) / Lite floor without ninja classified
  * U：なし / Nothing
  * v：特別品獲得ドロップ / Get a special item
- * V：クラス変更 / Change class / TODO: Rと同じなので何か変えたい
+ * V：クラス変更 / Change class / TODO
  * w：啓蒙 (忍者かどうか考慮) / Lite floor with ninja classified
  * W：なし / Nothing
  * x：経験値を得る / Gain experience
@@ -178,7 +178,7 @@ void do_cmd_debug(player_type *creature_ptr)
         (void)gain_mutation(creature_ptr, command_arg);
         break;
     case 'R':
-        wiz_reset_class(creature_ptr);
+        wiz_reset_race(creature_ptr);
         break;
     case 'r':
         gain_level_reward(creature_ptr, command_arg);
