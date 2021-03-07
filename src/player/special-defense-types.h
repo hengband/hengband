@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum special_defence {
+enum special_defence {
 	DEFENSE_ACID = 0x00000001, /*!< プレイヤーのステータス:酸免疫 */
     DEFENSE_ELEC = 0x00000002, /*!< プレイヤーのステータス:電撃免疫 */
     DEFENSE_FIRE = 0x00000004, /*!< プレイヤーのステータス:火炎免疫 */
@@ -16,7 +16,7 @@ typedef enum special_defence {
     KATA_MUSOU = 0x00001000, /*!< プレイヤーのステータス:無想 */
     NINJA_KAWARIMI = 0x00002000, /*!< プレイヤーのステータス:変わり身 */
     NINJA_S_STEALTH = 0x00004000, /*!< プレイヤーのステータス:超隠密 */
-} special_defence;
+};
 
 #define MAX_KAMAE 4 /*!< 修行僧の構え最大数 */
 #define KAMAE_MASK (KAMAE_GENBU | KAMAE_BYAKKO | KAMAE_SEIRYU | KAMAE_SUZAKU) /*!< 修行僧の構えビット配列 */

@@ -63,10 +63,12 @@ typedef int errr;
 /* A signed byte of memory */
 /* typedef signed char syte; */
 typedef unsigned char byte; /*!< byte型をunsighned charとして定義 / Note that unsigned values can cause math problems / An unsigned byte of memory */
+#ifndef __cplusplus
 #if __STDC_VERSION__ >= 199901L
 #include <stdbool.h>
 #else
 typedef char bool; /*!< bool型をcharとして定義 / Note that a bool is smaller than a full "int" / Simple True/False type */
+#endif
 #endif
 typedef unsigned int uint; /* uint型をintとして定義 /  An unsigned, "standard" integer (often pre-defined) */
 
@@ -251,10 +253,10 @@ typedef uint (*func_hsh)(vptr, uint);
 /* A key extractor takes a thing and returns (a pointer to) some key */
 typedef vptr (*func_key)(vptr);
 
-typedef enum process_result {
+enum process_result {
     PROCESS_FALSE = 0,
     PROCESS_TRUE = 1,
     PROCESS_CONTINUE = 2,
-} process_result;
+};
 
 #endif

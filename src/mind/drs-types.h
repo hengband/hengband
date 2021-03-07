@@ -3,7 +3,7 @@
 /*
  * Some things which induce learning
  */
-typedef enum drs_type {
+enum drs_type {
 	DRS_ACID = 1,
     DRS_ELEC = 2,
     DRS_FIRE = 3,
@@ -23,4 +23,4 @@ typedef enum drs_type {
     DRS_FREE = 30,
     DRS_MANA = 31,
     DRS_REFLECT = 32,
-} drs_type;
+};

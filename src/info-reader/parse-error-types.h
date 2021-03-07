@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum parse_error_type {
+enum parse_error_type : int {
     PARSE_ERROR_NONE = 0,
 	PARSE_ERROR_GENERIC = 1,
     PARSE_ERROR_ABSOLETE_FILE = 2,
@@ -13,4 +13,4 @@ typedef enum parse_error_type {
     PARSE_ERROR_TOO_FEW_ARGUMENTS = 9,
     PARSE_ERROR_UNDEFINED_TERRAIN_TAG = 10,
     PARSE_ERROR_MAX = 11,
-} parse_error_type;
+};

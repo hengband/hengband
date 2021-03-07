@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum race_flags9 {
+enum race_flags9 {
 	RF9_DROP_CORPSE = 0x00000001,
     RF9_DROP_SKELETON = 0x00000002,
     RF9_EAT_BLIND = 0x00000004,
@@ -33,4 +33,4 @@ typedef enum race_flags9 {
     RF9_EAT_LOSE_CON = 0x20000000,
     RF9_EAT_LOSE_CHR = 0x40000000,
     RF9_EAT_DRAIN_MANA = 0x80000000,
-} race_flags9;
+};

@@ -2,7 +2,9 @@
 
 #include "system/angband.h"
 
-bool trump_summoning(player_type *caster_ptr, int num, bool pet, POSITION y, POSITION x, DEPTH lev, int type, BIT_FLAGS mode);
+enum summon_type : int;
+
+bool trump_summoning(player_type *caster_ptr, int num, bool pet, POSITION y, POSITION x, DEPTH lev, summon_type type, BIT_FLAGS mode);
 bool cast_summon_demon(player_type *creature_ptr, int power);
 bool cast_summon_undead(player_type *creature_ptr, int power);
 bool cast_summon_hound(player_type *creature_ptr, int power);

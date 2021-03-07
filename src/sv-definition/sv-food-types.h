@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 /* The "sval" codes for TV_FOOD */
-typedef enum sv_food_type {
+enum sv_food_type {
     SV_FOOD_POISON = 0,
     SV_FOOD_BLINDNESS = 1,
     SV_FOOD_PARANOIA = 2,
@@ -30,4 +30,4 @@ typedef enum sv_food_type {
     SV_FOOD_WAYBREAD = 37,
     SV_FOOD_PINT_OF_ALE = 38,
     SV_FOOD_PINT_OF_WINE = 39,
-} sv_food_type;
+};

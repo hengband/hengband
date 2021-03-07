@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 /* The sval codes for TV_RING */
-typedef enum sv_ring_type {
+enum sv_ring_type {
     SV_RING_WOE = 0,
     SV_RING_AGGRAVATION = 1,
     SV_RING_WEAKNESS = 2,
@@ -57,4 +57,4 @@ typedef enum sv_ring_type {
     SV_RING_DEC_MANA = 53,
     SV_RING_WARNING = 54,
     SV_RING_MUSCLE = 55,
-} sv_ring_type;
+};

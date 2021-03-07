@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum monster_spell_type {
+enum monster_spell_type : int {
     MS_SHRIEK = 0,
     MS_XXX1 = 1,
     MS_DISPEL = 2,
@@ -97,4 +97,4 @@ typedef enum monster_spell_type {
     MS_S_HI_DRAGON = 93,
     MS_S_AMBERITE = 94,
     MS_S_UNIQUE = 95,
-} monster_spell_type;
+};

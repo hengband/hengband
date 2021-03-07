@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum random_art_bias_type {
+enum random_art_bias_type {
     BIAS_NONE = 0,
 	BIAS_ELEC = 1, /*!< ランダムアーティファクトバイアス:電撃 */
 	BIAS_POIS = 2, /*!< ランダムアーティファクトバイアス:毒 */
@@ -22,4 +22,4 @@ typedef enum random_art_bias_type {
     BIAS_WARRIOR = 18, /*!< ランダムアーティファクトバイアス:戦士系 */
     BIAS_RANGER = 19, /*!< ランダムアーティファクトバイアス:レンジャー系 */
     MAX_BIAS = 20, /*!< ランダムアーティファクトバイアス:最大数 */
-} random_art_bias_type;
+};

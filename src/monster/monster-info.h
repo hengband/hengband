@@ -18,6 +18,7 @@ bool is_friendly(monster_type *m_ptr);
 bool is_pet(monster_type *m_ptr);
 bool is_hostile(monster_type *m_ptr);
 bool is_original_ap(monster_type *m_ptr);
+bool is_mimicry(monster_type *m_ptr);
 
 monster_race *real_r_ptr(monster_type *m_ptr);
 MONRACE_IDX real_r_idx(monster_type *m_ptr);

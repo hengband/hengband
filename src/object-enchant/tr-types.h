@@ -3,7 +3,7 @@
 /*!
  * todo TRが何の略か分かる人、補足求む
  */
-typedef enum tr_type {
+enum tr_type {
     TR_STR = 0, /* STR += "pval" */
     TR_INT = 1, /* INT += "pval" */
     TR_WIS = 2, /* WIS += "pval" */
@@ -49,7 +49,7 @@ typedef enum tr_type {
     TR_IM_ELEC = 41,
     TR_IM_FIRE = 42,
     TR_IM_COLD = 43,
-    TR_THROW = 44, /* 強力投擲 */
+    TR_THROW = 44, /* 強力投擲ではなく、投げやすい武器 */
     TR_REFLECT = 45, /* Reflect 'bolts' */
     TR_FREE_ACT = 46, /* 耐麻痺 */
     TR_HOLD_EXP = 47, /* 経験値維持 */
@@ -155,5 +155,6 @@ typedef enum tr_type {
     TR_RES_WATER = 144,
     TR_INVULN_ARROW = 145,
     TR_DARK_SOURCE = 146, 
-    TR_FLAG_MAX = 147,
-} tr_type;
+    TR_SUPPORTIVE = 147,
+    TR_FLAG_MAX = 148,
+};

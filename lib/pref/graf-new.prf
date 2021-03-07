@@ -311,7 +311,7 @@ S:0xFF:0x85/0x9E
 # open floor
 F:1:0x80/0x81:LIT
 
-# glyph of warding
+# rune of protection
 F:3:0x8D/0x95:LIT
 
 # open door

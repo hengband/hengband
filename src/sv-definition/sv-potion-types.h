@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 /* The "sval" codes for TV_POTION */
-typedef enum sv_potion_type {
+enum sv_potion_type {
 	SV_POTION_WATER = 0,
     SV_POTION_APPLE_JUICE = 1,
     SV_POTION_SLIME_MOLD = 2,
@@ -69,4 +69,4 @@ typedef enum sv_potion_type {
     SV_POTION_NEO_TSUYOSHI = 64,
     SV_POTION_TSUYOSHI = 65,
     SV_POTION_POLYMORPH = 66,
-} sv_potion_type;
+};

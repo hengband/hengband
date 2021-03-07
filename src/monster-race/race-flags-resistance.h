@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum race_flags_resistance {
+enum race_flags_resistance {
 	RFR_IM_ACID = 0x00000001, /* Immunity acid */
     RFR_IM_ELEC = 0x00000002, /* Immunity elec */
     RFR_IM_FIRE = 0x00000004, /* Immunity fire */
@@ -33,7 +33,7 @@ typedef enum race_flags_resistance {
     RFR_XXX29 = 0x20000000,
     RFR_XXX30 = 0x40000000,
     RFR_XXX31 = 0x80000000,
-} race_flags_resistance;
+};
 
 #define RFR_EFF_IM_ACID_MASK (RFR_IM_ACID | RFR_RES_ALL)
 #define RFR_EFF_IM_ELEC_MASK (RFR_IM_ELEC | RFR_RES_ALL)

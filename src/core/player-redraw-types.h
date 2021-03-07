@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum player_redraw_type {
+enum player_redraw_type {
 	PR_MISC = 0x00000001L, /*!< 再描画フラグ: 種族と職業 / Display Race/Class */
 	PR_TITLE = 0x00000002L, /*!< 再描画フラグ: 称号 / Display Title */
 	PR_LEV = 0x00000004L, /*!< 再描画フラグ: レベル / Display Level */
@@ -29,4 +29,4 @@ typedef enum player_redraw_type {
 	PR_BASIC = 0x02000000L, /*!< 再描画フラグ: 基本ステータス全体 / Display Basic Info */
 	PR_MAP = 0x04000000L, /*!< 再描画フラグ: ゲームマップ / Display Map */
 	PR_WIPE = 0x08000000L, /*!< 再描画フラグ: 画面消去 / Hack -- Total Redraw */
-} player_redraw_type;
+};

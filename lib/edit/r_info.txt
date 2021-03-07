@@ -18685,7 +18685,8 @@ F:ONLY_ITEM | DROP_1D2 |
 F:INVISIBLE | OPEN_DOOR | BASH_DOOR | 
 F:IM_ACID | IM_POIS | NO_CONF | NO_SLEEP
 S:1_IN_7 | HEAL | S_SPIDER
-D:$He is constantly training for bears and tigers to sank with a single blow.
+D:$He is constantly training, hoping to be able to kill a bear or tiger with
+D:$ a single blow.
 D:彼はクマであれトラであれ一撃で沈めるべく、絶え間ない特訓を続けている。
 
 N:916:中級修験者
@@ -18727,9 +18728,9 @@ F:INVISIBLE | OPEN_DOOR | BASH_DOOR |
 F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | 
 F:NO_CONF | NO_SLEEP
 S:1_IN_4 | HEAL | S_SPIDER
-D:$He is being at the culmination of martial arts,
-D:$ but he never gives up on himself.
-D:$  He is still not fully manipulating the creatures of nature
+D:$He is a master of the martial arts yet remains driven to improve his
+D:$ technique.
+D:$  He still hasn't fully manipulated the creatures of nature
 D:$ and suffers from that.
 D:$  However, he does not despair and continues steadily step by step.
 D:彼は修験道を極めつつあるが、決して自分に驕ることはない。
@@ -23359,7 +23360,7 @@ S:TELE_TO | BO_MANA | BR_MANA | BR_WALL | BR_PLAS | BR_DISI | HEAL | HASTE
 D:$It is the fusion of twin sisters born at the end of the vaunted study of Vajura energy.
 D:$Its outrageous power will destroy a star and eventually become a new myth.
 D:ヴァジュラエネルギーのおぞましい研究の果てに産みだされた双子の姉妹の融合体だ。
-D:その無法図な力は一個の星を滅ぼし、やがて新たな神話の存在となるに足るものだろう。
+D:その無法なる力は一個の星を滅ぼし、やがて新たな神話の存在となるに足るものだろう。
 
 N:1172:緑衣の高位修行僧
 E:High jade monk
@@ -23460,9 +23461,9 @@ F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | ONLY_ITEM | DROP_4D2
 F:INVISIBLE | OPEN_DOOR | BASH_DOOR
 F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | NO_CONF | NO_SLEEP
 S:1_IN_3 | HEAL | MIND_BLAST | S_SPIDER | S_HOUND
-D:$He is a martial arts' examiner who has trained his body and spirit
+D:$He is a highly skilled martial artist who has trained his body and spirit
 D:$ so that he can teach the next generation.
-D:$His fist can catch the rock's deadline and crush it with a single blow.
+D:$  His fist can find a rock's hidden flaw and crush it with a single blow.
 D:彼は後進を指導できるほどに肉体も精神も鍛え上げた修験者だ。
 D:彼の拳は岩の死線を捉えて一撃で砕くことができる。
 
@@ -23998,7 +23999,7 @@ F:BASH_DOOR | MOVE_BODY | DRAGON | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_7 | SCARE | BR_FIRE | BA_FIRE
 D:$This dragon is the most loyal subordinate
 D:$ who rushed to the news of the return of Alduin from Oblivion.
-D:$  It lightly turns the town guard into a cinder.
+D:$  Its breath easily turns the town guard into cinders.
 D:このドラゴンはアルドゥイン復活の報を受け、
 D:イの一番に駆けつけた最も忠実な部下だ。
 D:街の衛兵ごときは軽く焼き尽くす。
@@ -24017,7 +24018,7 @@ F:CAN_FLY | IM_COLD | HURT_FIRE
 F:BASH_DOOR | MOVE_BODY | DRAGON | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_7 | SCARE | BR_COLD | BA_COLD
 D:$It is a dragon that has returned from Oblivion.
-D:$  It lightly turns the town guard into an ice statue.
+D:$  It lightly turns the town guard into icy statues.
 D:冥界から舞い戻ってきたドラゴンの一体だ。
 D:街の衛兵ごときは軽く氷像にしてしまう。
 
@@ -24034,8 +24035,7 @@ F:ONLY_ITEM | DROP_1D2 | DROP_2D2 | DROP_GOOD | CAN_FLY | FRIENDLY | GOOD
 F:IM_COLD | IM_FIRE | IM_ELEC | RES_SOUN
 F:BASH_DOOR | MOVE_BODY | DRAGON | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_8 | SCARE | BA_ELEC | BR_FIRE | BR_COLD | BR_SOUN
-D:$It has a higher pride than the heavens without leaking to other dragons,
-D:$ and it is a character that can quickly rise to provocation.
+D:$Proud, even when compared to other dragons, Odahviing is easily provoked.
 D:他のドラゴンに漏れず天より高いプライドを持ち、挑発にはすぐ乗るタチだ。
 
 N:1206:声の道に仇なすもの『デルフィン』
@@ -24072,8 +24072,8 @@ F:ONLY_ITEM | DROP_2D2 | DROP_GREAT | CAN_FLY | BASH_DOOR | MOVE_BODY
 F:IM_COLD | IM_FIRE | IM_ELEC | RES_SOUN
 F:NO_CONF | NO_SLEEP | RIDING | DRAGON
 S:1_IN_5 | SCARE | BA_ELEC | BR_FIRE | BR_COLD | BR_SOUN
-D:$This dragon exists to counter the evil kins.
-D:$  It is said that the dragon's power can be obtained
+D:$This dragon exists to counter its evil kin.
+D:$  It is said that this dragon's power can be obtained
 D:$ at the end if strict training is done.
 D:このドラゴンは邪悪なる同族達に対抗するために存在する。
 D:厳しい修行を行えば、その果てにドラゴンの力を手に入れられると伝えられている。
@@ -24093,7 +24093,7 @@ F:CAN_FLY | FRIENDLY | GOOD | IM_COLD | IM_FIRE | IM_ELEC | RES_SOUN
 F:BASH_DOOR | MOVE_BODY | DRAGON | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_7 | SCARE | BR_FIRE | BR_SOUN | BR_NETH
 D:$It is a dragon who has been in Oblivion for so long that
-D:$ it has become difficult to maintain his body in this world.
+D:$ it has become difficult to maintain its body in this world.
 D:$  It fully acknowledges your ability.
 D:あまりにも永い間冥界にい続けたため、
 D:現世で肉体を保つことが困難になったドラゴンだ。
@@ -24114,9 +24114,10 @@ F:IM_COLD | IM_FIRE | IM_ELEC | RES_SOUN
 F:BASH_DOOR | KILL_BODY | DRAGON | NO_CONF | NO_SLEEP | NO_FEAR | RIDING
 S:1_IN_3 | SHRIEK | S_KIN | ANIM_DEAD
 S:BR_ELEC | BR_FIRE | BR_COLD | BR_SOUN | BR_WALL | BR_MANA
-D:$The first dragon created in one of the plural worlds.
-D:$  It eats people's souls, destroys everything and destroys all dimensions.
-D:$  It had been sealed for too long, but was finally released.
+D:$It is the first dragon born in the worlds.
+D:$  It destroyed the last world to usher in this one.
+D:$  Said to eat the souls of the dead to gain power, it has returned after
+D:$ a long absence.
 D:$  Only you can defeat this terrifying dragon!
 D:多元世界の一つにおいて最初に創造されたドラゴンだ。
 D:人の魂を喰らい、次元を消滅させんばかりにあらゆるものを破壊して回っている。
@@ -24137,7 +24138,7 @@ F:IM_FIRE | IM_COLD | IM_ELEC | RES_DARK
 F:NO_SLEEP | NO_CONF | DROP_60
 S:1_IN_5 | SHOOT
 D:$It is one of those who agree with Miraak's corrupt wishes.
-D:$They are relentlessly chasing you as against Miraak's noble will.
+D:$  They relentlessly chase you, seeing you as threat to Miraak's noble will.
 D:ミラークの堕落した願いに賛同している者共の一人だ。
 D:彼らはあなたをミラークの崇高な意志に反する者として執拗に追っている。
 
@@ -24154,7 +24155,7 @@ F:IM_FIRE | IM_COLD | IM_ELEC | RES_DARK
 F:NO_SLEEP | NO_CONF | DROP_60
 S:1_IN_2 | BLINK | CONF | HOLD | BA_POIS | BA_FIRE | BA_COLD | BA_ELEC
 D:$It is one of those who agree with Miraak's corrupt wishes.
-D:$They are relentlessly chasing you as against Miraak's noble will.
+D:$  They relentlessly chase you, seeing you as a threat to Miraak's noble will.
 D:ミラークの堕落した願いに賛同している者共の一人だ。
 D:彼らはあなたをミラークの崇高な意志に反する者として執拗に追っている。
 
@@ -24173,9 +24174,9 @@ F:NO_SLEEP | NO_CONF | BASH_DOOR | KILL_BODY | PASS_WALL
 F:ONLY_ITEM | DROP_3D2 | DROP_4D2 | DROP_GREAT
 S:1_IN_3 | TELE_TO | TPORT | HEAL | S_KIN | BA_ELEC | BA_FIRE | BA_COLD
 S:BR_SOUN | BR_DISI
-D:$This man can completely absorb the soul of dragons
-D:$ without giving him time to save the power to revive in Mordor nor Oblivion.
-D:$  Will there ever be a dragon who can not hang its head to him?
+D:$This man can completely absorb the soul of a dragon
+D:$ without giving it the chance to revive in Mordor or Oblivion.
+D:$  Will there ever be a dragon who does not hang its head to him?
 D:この男は、冥界で復活する力を蓄える時間すら与えず
 D:ドラゴンの魂を完全に吸収することができる。
 D:彼の前で頭を垂れないドラゴンが果たしてこの世にいるだろうか？
@@ -24194,9 +24195,9 @@ F:DROP_CORPSE | DROP_SKELETON | BASH_DOOR
 F:HURT_LITE | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS
 F:RES_NETH | RES_DARK | RES_SHAR | NO_SLEEP | NO_CONF
 S:1_IN_4 | TPORT | BA_DARK | S_UNDEAD | S_KIN | S_HI_UNDEAD | HEAL
-D:$A terrifying vampire trying to extinguish the sun's rays from this land.
-D:$  For that purpose, he is also a ruthless man
-D:$ who easily throws away the genus.
+D:$He is a terrifying vampire trying to extinguish the sun's rays from this
+D:$ land.  For that purpose, he is also a ruthless man who easily throws away
+D:$ his own family.
 D:太陽の光をこの大地から消しさそろうとしている恐るべき吸血鬼だ。
 D:そのためには眷属をも容易く使い捨てにする、冷酷な男でもある。
 
@@ -24908,9 +24909,8 @@ F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
 F:ONLY_ITEM | DROP_GOOD | DROP_1D2 | DROP_90
 S:1_IN_3 | BA_ACID
 D:$When many of these dragon insects are united, it becomes a dragon centipede.
-D:$  The part that corresponds to the spinal cord
-D:$ when it was integrated as a dragon centipede
-D:$ has an organ that seems to be the eye.
+D:$  The part that forms the spinal cord when it is integrated into a dragon
+D:$ centipede has an organ that seems to be the eye.
 D:この龍虫が多数合体すると百足龍虫になる。
 D:百足龍虫時の脊髄にあたる部分には眼と思われる器官がついている。
 
@@ -24928,10 +24928,9 @@ F:IM_ACID | IM_POIS | RES_PLAS | RES_DISE | RES_WALL | RES_GRAV | RES_TELE
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
 F:ONLY_ITEM | DROP_GOOD | DROP_3D2
 S:1_IN_3 | BA_ACID
-D:$The identity of the giant centipede
-D:$ was a combination of many giant creatures.
-D:$The colony separated from the dragon centipede begins its activity
-D:$ as an independent dragon worm.
+D:$Dragon centipedes are formed from the combination of many insects.
+D:$  Those centipedes can break apart:  each piece becomes an independent
+D:$ dragon worm.
 D:巨大な百足の正体は多数の巨大生物が合体した生物だった。
 D:百足龍虫から分離した群体は独立した龍虫として活動を始める。
 
@@ -24949,9 +24948,9 @@ F:IM_ACID | IM_COLD | IM_POIS | RES_DISE | RES_WALL | RES_GRAV | RES_TELE
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
 F:ONLY_ITEM | DROP_GOOD | DROP_4D2 | DROP_2D2
 S:1_IN_3 | BA_ACID
-D:$It is the final evolution of a giant creature,
+D:$It is the final evolution of a dragon insect,
 D:$ a magnificent centipede that is taller and longer than the WTC.
-D:$  It pours acid like a downpour from countless outrages.
+D:$  It pours acid like a downpour from countless protrusions.
 D:巨大生物の最終進化形態、ビルよりも高く長い全長を持つ雄大なムカデだ。
 D:無数の突起から土砂降りのように酸を降り注がせる。
 
@@ -25066,7 +25065,7 @@ F:FORCE_MAXHP | NEVER_MOVE | EMPTY_MIND | CAN_FLY
 F:NO_SLEEP | NO_FEAR | NO_CONF | REFLECTING
 F:IM_ACID | RES_DISE | RES_NEXU | RES_GRAV
 S:1_IN_7 | HOLD | BR_ACID | BR_DISE | BR_NEXU | BR_GRAV
-D:$The boots have the ability of Shiva, the god of destruction.
+D:$These boots have the power of Shiva, the god of destruction.
 D:破壊神シヴァの力を持った革の靴だ。
 
 N:1265:テレサ
@@ -25097,10 +25096,10 @@ F:HURT_LITE | SELF_DARK_1 | NO_FEAR | NO_CONF | NO_SLEEP
 F:DROP_2D2 | DROP_GREAT | ONLY_ITEM
 S:1_IN_3 | DISPEL | BA_ELEC | BA_DARK
 S:SHRIEK | SCARE | BLIND | BLINK | DARKNESS | S_KIN
-D:$Boo's boss, which has the ability to confine objects
-D:$ and people in a picture frame.  It is worth living to scare people.
-D:$  Ever since losing to Luigi, has been obsessed with revenge on him.
-D:$  It is going to add you to one of the picture frame collections.
+D:$It is the boss of the Boos and has the ability to confine objects
+D:$ and people in picture frames.  It enjoys scaring and toying with its
+D:$ opponents.  Ever since losing to Luigi, King Boo has been obsessed with
+D:$ revenge.  It is going to add you to its collection of portraits.
 D:物体や人物を額縁に閉じ込め絵にする能力を持つ、テレサの親玉。
 D:人を怖がらせるのが生きがいである。
 D:緑のひげに敗れて以来、彼への仕返しに執念を燃やしている。
@@ -25117,7 +25116,7 @@ F:ANIMAL | MOVE_BODY | EVIL | FRIENDS
 F:NO_CONF | RES_GRAV | DROP_90
 S:1_IN_8 | BR_GRAV
 D:$What a cute terrestrial raven!
-D:$  They often move around in groups with good behavior.
+D:$  They often move around in well-behaved groups.
 D:かわいい陸行性のカラスだ。よく群れをなして行儀よく動き回っている。
 
 N:1268:『ビッグキューちゃん』
@@ -25131,7 +25130,7 @@ F:UNIQUE | FORCE_MAXHP | ANIMAL | POWERFUL | MOVE_BODY | EVIL
 F:NO_CONF | NO_SLEEP | NO_FEAR | IM_ELEC | RES_GRAV | BASH_DOOR
 F:DROP_GOOD | DROP_2D2 | ONLY_ITEM
 S:1_IN_6 | BA_ELEC | BR_GRAV | TELE_AWAY
-D:$It is very gentle when the head is stepped on,
+D:$It is very gentle when its head is stepped on,
 D:$ but it gets angry when a stake is driven into its ass.
 D:それは頭を踏まれたくらいでは温厚だが、お尻に杭を打ち込まれると激怒する。
 
@@ -25148,13 +25147,13 @@ F:FORCE_MAXHP | CAN_SWIM | COLD_BLOOD | WEIRD_MIND | RIDING
 F:IM_COLD | RES_WATE | RES_INER | RES_TIME | RES_TELE
 F:NO_STUN | NO_FEAR | NO_SLEEP
 S:1_IN_5 | BA_WATE | HASTE | S_UNDEAD
-D:$It is a horse born by sticking four sticks into a cucumber
+D:$It is a horse formed by sticking four sticks into a cucumber
 D:$ that is so huge that people can straddle it.
 D:$  The legs are fast.
-D:$  It should carry the spirits of its ancestors,
-D:$ but since the rider was not found,
-D:$ it carries the appropriate spirits.
-D:$ Juice spouts from the fresh body.
+D:$  It should carry the spirits of the ancestors of its maker,
+D:$ but, since a rider was not found,
+D:$ it looks for another spirit to carry.
+D:$  Juice spouts from the fresh body.
 D:人が跨がれるほど巨大なキュウリに四本の棒を刺すことで誕生した馬だ。足が早い。
 D:先祖の霊を乗せるはずだが、乗り手が見つからなかったため適当な霊を乗せている。
 D:瑞々しい体からは汁が噴き出す。
@@ -25172,13 +25171,13 @@ F:FORCE_MAXHP | CAN_SWIM | COLD_BLOOD | WEIRD_MIND | RIDING | TAKE_ITEM
 F:IM_COLD | RES_WATE | RES_TIME | RES_TELE
 F:NO_STUN | NO_FEAR | NO_SLEEP
 S:1_IN_2 | BA_WATE | BR_INER | SLOW | TELE_TO
-D:$It is a cow born by sticking four sticks into an eggplant
+D:$It is a cow formed by sticking four sticks into an eggplant
 D:$ that is so huge that people can straddle it.
 D:$  The legs are slow.
-D:$  It should carry the spirits of its ancestors,
-D:$ but since the rider is not found,
-D:$ it is trying to carry the appropriate spirits.
-D:$ Juice spouts from the fresh body.
+D:$  It should carry the spirits of the ancestors of its maker,
+D:$ but, since a rider was not found,
+D:$ it looks for another spirit to carry.
+D:$  Juice spouts from the fresh body.
 D:人が跨がれるほど巨大なナスに四本の棒を刺すことで誕生した牛だ。足が遅い。
 D:先祖の霊を乗せるはずだが、
 D:乗り手が見つからないため適当な霊を乗せていこうとしている。

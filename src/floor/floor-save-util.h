@@ -18,7 +18,6 @@ typedef struct saved_floor_type {
 
 extern u32b saved_floor_file_sign;
 extern saved_floor_type saved_floors[MAX_SAVED_FLOORS];
-extern bool repair_monsters;
 extern FLOOR_IDX max_floor_id;
 
 extern FLOOR_IDX new_floor_id;

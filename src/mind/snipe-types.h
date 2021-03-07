@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum snipe_type {
+enum snipe_type {
 	SP_NONE = 0,
     SP_LITE = 1,
     SP_AWAY = 2,
@@ -17,4 +17,4 @@ typedef enum snipe_type {
     SP_HOLYNESS = 13,
     SP_FINAL = 14,
     SP_NEEDLE = 15,
-} snipe_type;
+};

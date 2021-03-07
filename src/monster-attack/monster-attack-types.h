@@ -10,7 +10,7 @@
  * "Race Blow Method" の略。
  * 実装の都合上、0 から始まる連番でなければならない。
  */
-typedef enum rbm_type {
+enum rbm_type {
     RBM_NONE = 0,
     RBM_HIT = 1, /*!< モンスターの攻撃種別:殴る(傷/朦朧が半々) */
     RBM_TOUCH = 2, /*!< モンスターの攻撃種別:触る */
@@ -39,7 +39,7 @@ typedef enum rbm_type {
     RBM_SHOOT = 25, /*!< モンスターの攻撃種別:射撃(非打撃) */
 
     NB_RBM_TYPE, /*!< enum バリアント数 */
-} rbm_type;
+};
 
 typedef struct mbe_info_type {
     int power; /* The attack "power" */

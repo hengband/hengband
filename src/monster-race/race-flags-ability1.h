@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum race_flags_ability {
+enum race_flags_ability {
 	RF5_BA_ACID = 0x00000001, /*!< モンスター能力: アシッド・ボール / Acid Ball */
     RF5_BA_ELEC = 0x00000002, /*!< モンスター能力: サンダー・ボール / Elec Ball */
     RF5_BA_FIRE = 0x00000004, /*!< モンスター能力: ファイア・ボール / Fire Ball */
@@ -33,4 +33,4 @@ typedef enum race_flags_ability {
     RF5_CONF = 0x20000000, /*!< モンスター能力: 混乱 / Confuse Player */
     RF5_SLOW = 0x40000000, /*!< モンスター能力: 減速 / Slow Player */
     RF5_HOLD = 0x80000000, /*!< モンスター能力: 麻痺 / Paralyze Player */
-} race_flags_ability;
+};

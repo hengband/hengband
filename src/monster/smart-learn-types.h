@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum smart_learn_type {
+enum smart_learn_type {
 	SM_RES_ACID = 0x00000001, /*!< モンスターの学習フラグ: プレイヤーに酸耐性あり */
     SM_RES_ELEC = 0x00000002, /*!< モンスターの学習フラグ: プレイヤーに電撃耐性あり */
     SM_RES_FIRE = 0x00000004, /*!< モンスターの学習フラグ: プレイヤーに火炎耐性あり */
@@ -33,4 +33,4 @@ typedef enum smart_learn_type {
     SM_IMM_REFLECT = 0x20000000, /*!< モンスターの学習フラグ: プレイヤーに反射あり */
     SM_IMM_FREE = 0x40000000, /*!< モンスターの学習フラグ: プレイヤーに麻痺耐性あり */
     SM_IMM_MANA = 0x80000000, /*!< モンスターの学習フラグ: プレイヤーにMPがない */
-} smart_learn_type;
+};

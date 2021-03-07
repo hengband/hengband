@@ -14,7 +14,7 @@
 
 #pragma once
 
-typedef enum tval_type {
+enum tval_type {
     TV_NONE = 0,
     TV_SKELETON = 1, /* Skeletons ('s'), not specified */
     TV_BOTTLE = 2, /* Empty bottles ('!') */
@@ -70,7 +70,7 @@ typedef enum tval_type {
     TV_HISSATSU_BOOK = 106,
     TV_HEX_BOOK = 107,
     TV_GOLD = 127, /* Gold can only be picked up by players */
-} tval_type;
+};
 
 #define TV_EQUIP_BEGIN TV_SHOT
 #define TV_EQUIP_END TV_CARD
