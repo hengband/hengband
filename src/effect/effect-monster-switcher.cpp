@@ -172,7 +172,7 @@ process_result effect_monster_engetsu(player_type *caster_ptr, effect_monster_ty
         if (em_ptr->r_ptr->level > power)
             continue;
 
-        switch (randint0(3)) {
+        switch (randint0(4)) {
         case 0:
             if (!any_bits(em_ptr->r_ptr->flags1, RF1_UNIQUE)) {
                 if (set_monster_slow(caster_ptr, em_ptr->g_ptr->m_idx, monster_slow_remaining(em_ptr->m_ptr) + 50)) {
@@ -186,6 +186,20 @@ process_result effect_monster_engetsu(player_type *caster_ptr, effect_monster_ty
                 em_ptr->do_stun = 0;
             } else {
                 em_ptr->do_stun = damroll((caster_ptr->lev / 10) + 3, (em_ptr->dam)) + 1;
+                done = TRUE;
+            }
+            break;
+        case 2:
+            if (any_bits(em_ptr->r_ptr->flags1, RF1_UNIQUE) || any_bits(em_ptr->r_ptr->flags3, RF3_NO_CONF)) {
+                if (any_bits(em_ptr->r_ptr->flags3, RF3_NO_CONF)) {
+                    if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+                        set_bits(em_ptr->r_ptr->r_flags3, RF3_NO_CONF);
+                }
+                em_ptr->do_conf = 0;
+            } else {
+                /* Go to sleep (much) later */
+                em_ptr->note = _("は混乱したようだ。", " looks confused.");
+                em_ptr->do_conf = 10 + randint1(15);
                 done = TRUE;
             }
             break;
