@@ -2192,6 +2192,12 @@
     <ClCompile Include="..\..\src\locale\utf-8.cpp">
       <Filter>locale</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\wizard\wizard-game-modifier.cpp">
+      <Filter>wizard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\wizard\wizard-player-modifier.cpp">
+      <Filter>wizard</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4716,6 +4722,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\locale\utf-8.h">
       <Filter>locale</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\wizard\wizard-game-modifier.h">
+      <Filter>wizard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\wizard\wizard-player-modifier.h">
+      <Filter>wizard</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

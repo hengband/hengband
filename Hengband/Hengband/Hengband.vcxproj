@@ -1515,8 +1515,10 @@
     <ClCompile Include="..\..\src\object\warning.cpp" />
     <ClCompile Include="..\..\src\floor\wild.cpp" />
     <ClCompile Include="..\..\src\view\display-messages.cpp" />
+    <ClCompile Include="..\..\src\wizard\wizard-game-modifier.cpp" />
     <ClCompile Include="..\..\src\wizard\wizard-item-modifier.cpp" />
     <ClCompile Include="..\..\src\wizard\wizard-messages.cpp" />
+    <ClCompile Include="..\..\src\wizard\wizard-player-modifier.cpp" />
     <ClCompile Include="..\..\src\wizard\wizard-spells.cpp" />
     <ClCompile Include="..\..\src\wizard\wizard-spoiler.cpp" />
     <ClCompile Include="..\..\src\wizard\wizard-special-process.cpp" />
@@ -1596,8 +1598,10 @@
     <ClInclude Include="..\..\src\wizard\monster-info-spoiler.h" />
     <ClInclude Include="..\..\src\wizard\spoiler-table.h" />
     <ClInclude Include="..\..\src\wizard\spoiler-util.h" />
+    <ClInclude Include="..\..\src\wizard\wizard-game-modifier.h" />
     <ClInclude Include="..\..\src\wizard\wizard-item-modifier.h" />
     <ClInclude Include="..\..\src\wizard\wizard-messages.h" />
+    <ClInclude Include="..\..\src\wizard\wizard-player-modifier.h" />
     <ClInclude Include="..\..\src\wizard\wizard-spells.h" />
     <ClInclude Include="..\..\src\world\world-object.h" />
     <ClInclude Include="..\..\src\locale\english.h" />
