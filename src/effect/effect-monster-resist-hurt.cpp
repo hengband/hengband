@@ -8,6 +8,7 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
+#include "util/bit-flags-calculator.h"
 
 process_result effect_monster_void(effect_monster_type *em_ptr)
 {
@@ -157,17 +158,25 @@ process_result effect_monster_holy_fire(player_type *caster_ptr, effect_monster_
     if (em_ptr->seen)
         em_ptr->obvious = TRUE;
 
-    if ((em_ptr->r_ptr->flags3 & RF3_EVIL) == 0) {
-        em_ptr->note = _("には耐性がある。", " resists.");
-        em_ptr->dam *= 3;
-        em_ptr->dam /= randint1(6) + 6;
+    if (any_bits(em_ptr->r_ptr->flags3, RF3_GOOD)) {
+        em_ptr->note = _("には完全な耐性がある！", " is immune.");
+        em_ptr->dam = 0;
+        if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+            set_bits(em_ptr->r_ptr->r_flags3, RF3_GOOD);
         return PROCESS_CONTINUE;
     }
 
-    em_ptr->dam *= 2;
-    em_ptr->note = _("はひどい痛手をうけた。", " is hit hard.");
-    if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
-        em_ptr->r_ptr->r_flags3 |= RF3_EVIL;
+    if (any_bits(em_ptr->r_ptr->flags3, RF3_EVIL)) {
+        em_ptr->dam *= 2;
+        em_ptr->note = _("はひどい痛手をうけた。", " is hit hard.");
+        if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+            set_bits(em_ptr->r_ptr->r_flags3, RF3_EVIL);
+        return PROCESS_CONTINUE;
+    }
+
+    em_ptr->note = _("には耐性がある。", " resists.");
+    em_ptr->dam *= 3;
+    em_ptr->dam /= randint1(6) + 6;
 
     return PROCESS_CONTINUE;
 }
