@@ -9,15 +9,11 @@
 #include "birth/inventory-initializer.h"
 #include "cmd-io/cmd-help.h"
 #include "core/asking-player.h"
-#include "dungeon/quest.h"
 #include "grid/grid.h"
-#include "info-reader/fixed-map-parser.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-requester.h"
-#include "market/arena.h"
 #include "mutation/mutation-investor-remover.h"
-#include "player-info/self-info.h"
 #include "player/patron.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-perception.h"
@@ -28,98 +24,115 @@
 #include "spell/spells-status.h"
 #include "status/experience.h"
 #include "system/floor-type-definition.h"
+#include "system/object-type-definition.h"
+#include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-item-modifier.h"
+#include "wizard/wizard-game-modifier.h"
+#include "wizard/wizard-player-modifier.h"
 #include "wizard/wizard-special-process.h"
 #include "wizard/wizard-spells.h"
 #include "wizard/wizard-spoiler.h"
+#include <string>
+#include <vector>
+#include <sstream>
 
 /*!
- * @brief デバッグコマンドを選択する処理のメインルーチン /
- * Ask for and parse a "debug command"
- * The "command_arg" may have been set.
- * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
- * @details
- * 番号を指定するには、それをN及びデバッグコマンドをXとしてとして「0N^aX」とする
- * a：全状態回復 / Cure all maladies
- * A：善悪の属性表示 / Know alignment
- * b：相手をテレポバック / Teleport to target
- * B：モンスター闘技場のモンスターを更新する / Update gambling monster
- * c：アイテム生成 / Create any object
- * C：指定番号の固定アーティファクトを生成する / Create a named artifact
- * d：全感知 / Detect everything
- * D：次元の扉 / Dimension_door
- * e：能力変更 / Edit character
- * E：全てのスペルをラーニング状態にする / Blue Mage Only
- * f：*鑑定* / Fully identification
- * F：地形ID変更 / Create desired feature
- * g：上質なアイテムを生成 / Good Objects
- * G：なし / Nothing
- * h：新生 / Hitpoint rerating
- * H：モンスターの群れ生成 / Generate monster group
- * i：鑑定 / Identification
- * I：なし / Nothing
- * j：ダンジョンの指定フロアへテレポート (ウィザードあり) / Jump to dungeon
- * J：なし / Nothing
- * k：自己分析 / Self info
- * K：なし / Nothing
- * l：番号指定したアイテムまで鑑定済にする / Learn about objects
- * L：なし / Nothing
- * m：魔法の地図 / Magic Mapping
- * M：突然変異 / Mutation / TODO: 指定した突然変異の除外機能を追加したい
- * n：番号指定したモンスターを生成 / Generate a monster
- * N：番号指定したペットを生成 / Generate a pet
- * o：アイテムのtval等を編集する / Edit object
- * O：現在のオプション設定をダンプ出力 / Output option settings
- * p：ショートテレポ / Blink
- * P：なし / Nothing
- * q：クエストを完了させる / Finish quest
- * Q：クエストに突入する (ウィザードあり) / Jump to quest
- * r：カオスパトロンから報酬を貰う / Gain reward from chaos patron
- * R：種族変更 / Change race
- * s：フロア相応のモンスター召喚 / Summon a monster
- * S：高級品獲得ドロップ / Get a great item
- * t：テレポート / Teleport
- * T：プレイ日時変更 / Change time
- * u：啓蒙 (強制的に忍者以外) / Lite floor without ninja classified
- * U：なし / Nothing
- * v：特別品獲得ドロップ / Get a special item
- * V：クラス変更 / Change class / TODO
- * w：啓蒙 (忍者かどうか考慮) / Lite floor with ninja classified
- * W：なし / Nothing
- * x：経験値を得る / Gain experience
- * X：アイテムを初期状態に戻す / Return items to the initial ones
- * y：なし / Nothing
- * Y：なし / Nothing
- * z：近隣のモンスター消去 / Zap monsters around
- * Z：フロア中のモンスター消去 / Zap all monsters in the floor
- * @：特殊スペルの発動 / Special spell
- * "：スポイラーのダンプ / Dump spoiler
- * ?：ヘルプ表示 (通常の？と同じ) / Show help (same as normal help)
+ * @brief デバグコマンド一覧表
+ * @detail
+ * 空き: A,B,E,I,J,k,K,L,M,q,Q,R,T,U,V,W,y,Y
  */
-void do_cmd_debug(player_type *creature_ptr)
+std::vector<std::vector<std::string>> debug_menu_table = {
+    { "a", _("全状態回復", "Restore all status") },
+    { "b", _("現在のターゲットを引き寄せる", "Teleport target back") },
+    { "c", _("オブジェクト生成", "Create object") },
+    { "C", _("固定アーティファクト生成", "Create fixed artifact") },
+    { "d", _("全感知", "Detection all") },
+    { "D", _("次元の扉", "Dimension door") },
+    { "e", _("能力値変更", "Modify player status") },
+    { "f", _("*鑑定*", "*Idenfity*") },
+    { "F", _("地形ID変更", "Modify feature type under player") },
+    { "g", _("上質なアイテムドロップ", "Drop good object") },
+    { "G", _("ゲームの設定を変更", "Modify game configurations") },
+    { "H", _("モンスターの群れ生成", "Summon monsters") },
+    { "i", _("鑑定", "Idenfity") },
+    { "j", _("指定ダンジョン階にワープ", "Jump to floor depth of target dungeon") },
+    { "l", _("指定アイテム番号まで一括鑑定", "Make objects idenfified to target object id") },
+    { "m", _("魔法の地図", "Magic mapping") },
+    { "n", _("指定モンスター生成", "Summon target monster") },
+    { "N", _("指定モンスターをペットとして生成", "Summon target monster as pet") },
+    { "o", _("オブジェクトの能力変更", "Modift object abilities") },
+    { "O", _("オプション設定をダンプ", "Dump current options") },
+    { "p", _("ショート・テレポート", "Phase door") },
+    { "P", _("プレイヤーの属性を変更", "Modify player configurations") },
+    { "r", _("カオスパトロンの報酬", "Get reward of chaos patron") },
+    { "s", _("フロア相当のモンスター召喚", "Summon monster which be in target depth") },
+    { "S", _("高級品獲得ドロップ", "Drop excellent object") },
+    { "t", _("テレポート", "Teleport self") },
+    { "u", _("啓蒙(忍者以外)", "Wiz-lite all floor except Ninja") },
+    { "v", _("特別品獲得ドロップ", "Drop special object") },
+    { "w", _("啓蒙(忍者配慮)", "Wiz-lite all floor") },
+    { "x", _("経験値を得る(指定可)", "Get experience") },
+    { "X", _("所持品を初期状態に戻す", "Return inventory to initial") },
+    { "z", _("近隣のモンスター消去", "Terminate near monsters") },
+    { "Z", _("フロアの全モンスター消去", "Terminate all monsters in floor") },
+    { "@", _("特殊スペルの発動", "Activate specified spells") },
+    { "\"", _("スポイラーのダンプ", "Dump spoiler") },
+    { "?", _("ヘルプ表示", "Help") },
+};
+
+/*!
+ * @brief デバグコマンドの一覧を表示する
+ * @param page ページ番号
+ * @param max_page ページ数
+ * @param page_size 1ページ行数
+ * @param max_line コマンド数
+ * @return なし
+ */
+void display_debug_menu(int page, int max_page, int page_size, int max_line)
 {
-    char cmd;
-    get_com("Debug Command: ", &cmd, FALSE);
+    for (int y = 1; y < page_size + 3 ; y++)
+        term_erase(14, y, 64);
+
+    int r = 1;
+    int c = 15;
+    for (int i = 0; i < page_size; i++) {
+        int pos = page * page_size + i;
+        if (pos >= max_line)
+            break;
+
+        std::stringstream ss;
+        ss << debug_menu_table[pos][0] << ") " << debug_menu_table[pos][1];
+        put_str(ss.str().c_str(), r++, c);
+    }
+    if (max_page > 0)
+        put_str("-- more --", r++, c);
+}
+
+/*!
+ * @brief デバッグコマンド選択処理への分岐
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param cmd コマンドキー
+ * @return コマンド終了ならTRUE、ページ送りならFALSE
+ */
+bool exe_cmd_debug(player_type *creature_ptr, char cmd)
+{
     switch (cmd) {
-    case ESCAPE:
     case ' ':
+    case '<':
+    case '>':
+    case KTRL('a'):
+        return FALSE;
+    case ESCAPE:
     case '\n':
     case '\r':
         break;
     case 'a':
         wiz_cure_all(creature_ptr);
         break;
-    case 'A':
-        msg_format("Your alignment is %d.", creature_ptr->align);
-        break;
     case 'b':
         wiz_teleport_back(creature_ptr);
-        break;
-    case 'B':
-        update_gambling_monsters(creature_ptr);
         break;
     case 'c':
         wiz_create_item(creature_ptr);
@@ -153,8 +166,8 @@ void do_cmd_debug(player_type *creature_ptr)
 
         acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, FALSE, FALSE, TRUE);
         break;
-    case 'h':
-        roll_hitdice(creature_ptr, static_cast<spell_operation>(SPOP_DISPLAY_MES | SPOP_DEBUG));
+    case 'G':
+        wizard_game_modifier(creature_ptr);
         break;
     case 'H':
         wiz_summon_horde(creature_ptr);
@@ -165,20 +178,11 @@ void do_cmd_debug(player_type *creature_ptr)
     case 'j':
         wiz_jump_to_dungeon(creature_ptr);
         break;
-    case 'k':
-        self_knowledge(creature_ptr);
-        break;
     case 'l':
         wiz_learn_items_all(creature_ptr);
         break;
     case 'm':
         map_area(creature_ptr, DETECT_RAD_ALL * 3);
-        break;
-    case 'M':
-        (void)gain_mutation(creature_ptr, command_arg);
-        break;
-    case 'R':
-        wiz_reset_race(creature_ptr);
         break;
     case 'r':
         gain_level_reward(creature_ptr, command_arg);
@@ -198,36 +202,8 @@ void do_cmd_debug(player_type *creature_ptr)
     case 'p':
         teleport_player(creature_ptr, 10, TELEPORT_SPONTANEOUS);
         break;
-    case 'Q': {
-        char ppp[30];
-        char tmp_val[5];
-        int tmp_int;
-        sprintf(ppp, "QuestID (0-%d):", max_q_idx - 1);
-        sprintf(tmp_val, "%d", 0);
-
-        if (!get_string(ppp, tmp_val, 3))
-            return;
-
-        tmp_int = atoi(tmp_val);
-        if ((tmp_int < 0) || (tmp_int >= max_q_idx))
-            break;
-
-        creature_ptr->current_floor_ptr->inside_quest = (QUEST_IDX)tmp_int;
-        parse_fixed_map(creature_ptr, "q_info.txt", 0, 0, 0, 0);
-        quest[tmp_int].status = QUEST_STATUS_TAKEN;
-        creature_ptr->current_floor_ptr->inside_quest = 0;
-        break;
-    }
-    case 'q':
-        if (!creature_ptr->current_floor_ptr->inside_quest) {
-            msg_print("No current quest");
-            msg_print(NULL);
-            break;
-        }
-
-        if (quest[creature_ptr->current_floor_ptr->inside_quest].status == QUEST_STATUS_TAKEN)
-            complete_quest(creature_ptr, creature_ptr->current_floor_ptr->inside_quest);
-
+    case 'P':
+        wizard_player_modifier(creature_ptr);
         break;
     case 's':
         if (command_arg <= 0)
@@ -244,9 +220,6 @@ void do_cmd_debug(player_type *creature_ptr)
     case 't':
         teleport_player(creature_ptr, 100, TELEPORT_SPONTANEOUS);
         break;
-    case 'T':
-        set_gametime();
-        break;
     case 'u':
         for (int y = 0; y < creature_ptr->current_floor_ptr->height; y++)
             for (int x = 0; x < creature_ptr->current_floor_ptr->width; x++)
@@ -259,9 +232,6 @@ void do_cmd_debug(player_type *creature_ptr)
             command_arg = 1;
 
         acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, TRUE, FALSE, TRUE);
-        break;
-    case 'V':
-        wiz_reset_class(creature_ptr);
         break;
     case 'w':
         wiz_lite(creature_ptr, (bool)(creature_ptr->pclass == CLASS_NINJA));
@@ -300,5 +270,40 @@ void do_cmd_debug(player_type *creature_ptr)
     default:
         msg_print("That is not a valid debug command.");
         break;
+    }
+
+    return TRUE;
+}
+
+/*!
+ * @brief デバッグコマンドを選択する処理のメインルーチン /
+ * Ask for and parse a "debug command"
+ * The "command_arg" may have been set.
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ * @details
+ * 番号を指定するには、それをN及びデバッグコマンドをXとしてとして「0N^aX」とする
+ */
+void do_cmd_debug(player_type *creature_ptr)
+{
+    TERM_LEN hgt, wid;
+    term_get_size(&wid, &hgt);
+
+    size_t max_line = debug_menu_table.size();
+    int page_size = hgt - 5;
+    int max_page = max_line / page_size + 1;
+    int page = 0;
+    char cmd;
+
+    while (TRUE) {
+        screen_save();
+        display_debug_menu(page, max_page, page_size, max_line);
+        get_com("Debug Command: ", &cmd, FALSE);
+        screen_load();
+
+        if (exe_cmd_debug(creature_ptr, cmd))
+            break;
+
+        page = (page + 1) % max_page;
     }
 }
