@@ -12,6 +12,7 @@
 #include "target/target-checker.h"
 #include "target/target-setter.h"
 #include "target/target-types.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "window/main-window-util.h"
 
@@ -38,7 +39,7 @@ void do_cmd_target(player_type *creature_ptr)
  */
 void do_cmd_look(player_type *creature_ptr)
 {
-    creature_ptr->window_flags |= PW_MONSTER_LIST;
+    set_bits(creature_ptr->window_flags, PW_MONSTER_LIST | PW_FLOOR_ITEM_LIST);
     handle_stuff(creature_ptr);
     if (target_set(creature_ptr, TARGET_LOOK))
         msg_print(_("ターゲット決定。", "Target Selected."));

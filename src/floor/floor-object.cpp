@@ -7,6 +7,7 @@
 
 #include "floor/floor-object.h"
 #include "artifact/fixed-art-generator.h"
+#include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/cave.h"
@@ -214,6 +215,8 @@ void floor_item_increase(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER
 
     num -= o_ptr->number;
     o_ptr->number += num;
+
+    set_bits(owner_ptr->window_flags, PW_FLOOR_ITEM_LIST);
 }
 
 /*!
@@ -232,6 +235,8 @@ void floor_item_optimize(player_type *owner_ptr, INVENTORY_IDX item)
         return;
 
     delete_object_idx(owner_ptr, item);
+
+    set_bits(owner_ptr->window_flags, PW_FLOOR_ITEM_LIST);
 }
 
 /*!
@@ -555,6 +560,9 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
     note_spot(owner_ptr, by, bx);
     lite_spot(owner_ptr, by, bx);
     sound(SOUND_DROP);
+
+    if (player_bold(owner_ptr, by, bx))
+        set_bits(owner_ptr->window_flags, PW_FLOOR_ITEM_LIST);
 
     if (chance && player_bold(owner_ptr, by, bx)) {
         msg_print(_("何かが足下に転がってきた。", "You feel something roll beneath your feet."));
