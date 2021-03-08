@@ -196,13 +196,15 @@ void delete_all_items_from_floor(player_type *player_ptr, POSITION y, POSITION x
 /*!
  * @brief 床上のアイテムの数を増やす /
  * Increase the "number" of an item on the floor
- * @param floo_ptr 現在フロアへの参照ポインタ
+ * @param owner_ptr プレイヤーへの参照ポインタ
  * @param item 増やしたいアイテムの所持スロット
  * @param num 増やしたいアイテムの数
  * @return なし
  */
-void floor_item_increase(floor_type *floor_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
+void floor_item_increase(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
 {
+    const floor_type *floor_ptr = owner_ptr->current_floor_ptr;
+
     object_type *o_ptr = &floor_ptr->o_list[item];
     num += o_ptr->number;
     if (num > 255)

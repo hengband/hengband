@@ -182,7 +182,7 @@ static void reflect_inventory_by_throw(player_type *creature_ptr, it_type *it_pt
         it_ptr->return_when_thrown = TRUE;
 
     if (it_ptr->item < 0) {
-        floor_item_increase(creature_ptr->current_floor_ptr, 0 - it_ptr->item, -1);
+        floor_item_increase(creature_ptr, 0 - it_ptr->item, -1);
         floor_item_optimize(creature_ptr, 0 - it_ptr->item);
         return;
     }
