@@ -387,6 +387,8 @@
     <ClCompile Include="..\..\src\player-info\resistance-info.cpp" />
     <ClCompile Include="..\..\src\player-info\self-info-util.cpp" />
     <ClCompile Include="..\..\src\player-info\weapon-effect-info.cpp" />
+    <ClCompile Include="..\..\src\player-status\player-speed.cpp" />
+    <ClCompile Include="..\..\src\player-status\player-status-base.cpp" />
     <ClCompile Include="..\..\src\player\player-status-resist.cpp" />
     <ClCompile Include="..\..\src\room\vault-builder.cpp" />
     <ClCompile Include="..\..\src\specific-object\blade-turner.cpp" />
@@ -1040,6 +1042,8 @@
     <ClInclude Include="..\..\src\player-info\resistance-info.h" />
     <ClInclude Include="..\..\src\player-info\self-info-util.h" />
     <ClInclude Include="..\..\src\player-info\weapon-effect-info.h" />
+    <ClInclude Include="..\..\src\player-status\player-speed.h" />
+    <ClInclude Include="..\..\src\player-status\player-status-base.h" />
     <ClInclude Include="..\..\src\player\player-status-resist.h" />
     <ClInclude Include="..\..\src\room\vault-builder.h" />
     <ClInclude Include="..\..\src\specific-object\blade-turner.h" />

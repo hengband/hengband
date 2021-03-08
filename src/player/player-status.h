@@ -8,7 +8,6 @@
 #include "player/player-personalities-types.h"
 #include "player/player-race-types.h"
 #include "spell/spells-util.h"
-
 /*
  * Most of the "player" information goes here.
  *
@@ -481,7 +480,6 @@ extern int calc_weapon_weight_limit(player_type *creature_ptr);
 extern WEIGHT calc_inventory_weight(player_type *creature_ptr);
 
 extern s16b calc_num_fire(player_type *creature_ptr, object_type *o_ptr);
-BIT_FLAGS player_flags_speed(player_type *creature_ptr);
 BIT_FLAGS player_flags_stealth(player_type *creature_ptr);
 extern WEIGHT calc_weight_limit(player_type *creature_ptr);
 extern bool has_melee_weapon(player_type *creature_ptr, int i);

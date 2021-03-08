@@ -634,6 +634,11 @@ hengband_SOURCES = \
 	player-attack/blood-sucking-processor.cpp player-attack/blood-sucking-processor.h \
 	player-attack/player-attack.cpp player-attack/player-attack.h \
 	\
+	player-status/player-status-base.h \
+	player-status/player-speed.h \
+	player-status/player-status-base.cpp \
+	player-status/player-speed.cpp \
+	\
 	player-info/avatar.h player-info/avatar.cpp \
 	player-info/base-status-info.cpp player-info/base-status-info.h \
 	player-info/base-status-types.h \
