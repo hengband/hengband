@@ -518,7 +518,7 @@ errr top_twenty(player_type *current_player_ptr)
 	snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->pclass, MAX_CLASS));
 	memcpy(the_score.p_c, buf, 3);
 	snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->pseikaku, MAX_PERSONALITIES));
-	memcpy(the_score.p_r, buf, 3);
+	memcpy(the_score.p_a, buf, 3);
 
 	/* Save the level and such */
 	sprintf(the_score.cur_lev, "%3d", MIN((u16b)current_player_ptr->lev, 999));
