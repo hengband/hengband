@@ -29,6 +29,7 @@
 #include "player/player-status-table.h"
 #include "specific-object/bow.h"
 #include "sv-definition/sv-lite-types.h"
+#include "sv-definition/sv-weapon-types.h"
 #include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
@@ -113,14 +114,18 @@ static void decide_tval_show(player_type *player_ptr, flavor_type *flavor_ptr)
         flavor_ptr->show_armour = TRUE;
 }
 
-static void describe_digging(player_type *player_ptr, flavor_type *flavor_ptr)
+static void describe_weapon_dice(player_type *player_ptr, flavor_type *flavor_ptr)
 {
     if (!flavor_ptr->known && object_is_quest_target(player_ptr->current_floor_ptr->inside_quest, flavor_ptr->o_ptr))
         return;
 
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
-    flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->dd);
+    if (player_ptr->riding && (flavor_ptr->o_ptr->tval == TV_POLEARM) && ((flavor_ptr->o_ptr->sval == SV_LANCE) || (flavor_ptr->o_ptr->sval == SV_HEAVY_LANCE))) {
+        flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->dd + 2);
+    } else {
+        flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->dd);    
+    }
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, 'd');
     flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->ds);
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
@@ -170,7 +175,7 @@ static void describe_tval(player_type *player_ptr, flavor_type *flavor_ptr)
     case TV_POLEARM:
     case TV_SWORD:
     case TV_DIGGING:
-        describe_digging(player_ptr, flavor_ptr);
+        describe_weapon_dice(player_ptr, flavor_ptr);
         break;
     case TV_BOW:
         describe_bow(player_ptr, flavor_ptr);
