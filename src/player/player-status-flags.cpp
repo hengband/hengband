@@ -12,6 +12,7 @@
 #include "object-hook/hook-checker.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-flags.h"
+#include "player-status/player-speed.h"
 #include "player/attack-defense-types.h"
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"
@@ -33,8 +34,7 @@
 #include "util/quarks.h"
 #include "util/string-processor.h"
 
-
-static BIT_FLAGS convert_inventory_slot_type_to_flag_cause(inventory_slot_type inventory_slot)
+BIT_FLAGS convert_inventory_slot_type_to_flag_cause(inventory_slot_type inventory_slot)
 {
     switch (inventory_slot) {
     case INVEN_MAIN_HAND:
@@ -171,7 +171,7 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
     case TR_TUNNEL:
         return 0;
     case TR_SPEED:
-        return player_flags_speed(creature_ptr);
+        return PlayerSpeed(creature_ptr).getFlags();
     case TR_BLOWS:
         return 0;
     case TR_CHAOTIC:

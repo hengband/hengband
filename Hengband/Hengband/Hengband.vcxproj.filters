@@ -2198,6 +2198,12 @@
     <ClCompile Include="..\..\src\wizard\wizard-player-modifier.cpp">
       <Filter>wizard</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player-status\player-speed.cpp">
+      <Filter>player-status</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player-status\player-status-base.cpp">
+      <Filter>player-status</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4729,6 +4735,12 @@
     <ClInclude Include="..\..\src\wizard\wizard-player-modifier.h">
       <Filter>wizard</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\player-status\player-speed.h">
+      <Filter>player-status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-status\player-status-base.h">
+      <Filter>player-status</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -4929,6 +4941,9 @@
     </Filter>
     <Filter Include="player-info">
       <UniqueIdentifier>{9b6116c6-24e1-4d33-b3b5-3591f58fb9e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="player-status">
+      <UniqueIdentifier>{d6c9dc68-d79b-4509-bf9c-34ff9620bbf4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
