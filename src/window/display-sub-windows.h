@@ -15,4 +15,5 @@ void fix_overhead(player_type *player_ptr);
 void fix_dungeon(player_type *player_ptr);
 void fix_monster(player_type *player_ptr);
 void fix_object(player_type *player_ptr);
+void fix_floor_item_list(player_type *player_ptr, const int y, const int x);
 void toggle_inventory_equipment(player_type *owner_ptr);

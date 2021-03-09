@@ -28,6 +28,7 @@
 #include "system/floor-type-definition.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
+#include "window/display-sub-windows.h"
 
 /*
  *  Auto-destroy marked item
@@ -73,6 +74,9 @@ void autopick_delayed_alter(player_type *owner_ptr)
         autopick_delayed_alter_aux(owner_ptr, -item);
         item = next;
     }
+
+    // PW_FLOOR_ITEM_LISTは遅れるので即時更新
+    fix_floor_item_list(owner_ptr, owner_ptr->y, owner_ptr->x);
 }
 
 /*

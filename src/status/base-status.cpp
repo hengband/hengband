@@ -11,6 +11,7 @@
 #include "player-info/avatar.h"
 #include "spell-kind/spells-floor.h"
 #include "system/object-type-definition.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /* Array of stat "descriptions" */
@@ -276,9 +277,8 @@ bool lose_all_info(player_type *creature_ptr)
         o_ptr->ident &= ~(IDENT_SENSE);
     }
 
-    creature_ptr->update |= (PU_BONUS);
-    creature_ptr->update |= (PU_COMBINE | PU_REORDER);
-    creature_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+    set_bits(creature_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
+    set_bits(creature_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST);
     wiz_dark(creature_ptr);
     return TRUE;
 }

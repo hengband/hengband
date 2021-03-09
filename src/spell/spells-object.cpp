@@ -45,6 +45,7 @@
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "term/screen-processor.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 typedef struct {
@@ -529,8 +530,8 @@ bool enchant(player_type *caster_ptr, object_type *o_ptr, int n, int eflag)
     /* Failure */
     if (!res)
         return FALSE;
-    caster_ptr->update |= (PU_BONUS | PU_COMBINE | PU_REORDER);
-    caster_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+    set_bits(caster_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
+    set_bits(caster_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST);
 
     calc_android_exp(caster_ptr);
 

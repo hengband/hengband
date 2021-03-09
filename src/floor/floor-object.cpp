@@ -7,6 +7,7 @@
 
 #include "floor/floor-object.h"
 #include "artifact/fixed-art-generator.h"
+#include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/cave.h"
@@ -196,13 +197,15 @@ void delete_all_items_from_floor(player_type *player_ptr, POSITION y, POSITION x
 /*!
  * @brief 床上のアイテムの数を増やす /
  * Increase the "number" of an item on the floor
- * @param floo_ptr 現在フロアへの参照ポインタ
+ * @param owner_ptr プレイヤーへの参照ポインタ
  * @param item 増やしたいアイテムの所持スロット
  * @param num 増やしたいアイテムの数
  * @return なし
  */
-void floor_item_increase(floor_type *floor_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
+void floor_item_increase(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
 {
+    const floor_type *floor_ptr = owner_ptr->current_floor_ptr;
+
     object_type *o_ptr = &floor_ptr->o_list[item];
     num += o_ptr->number;
     if (num > 255)
@@ -212,6 +215,8 @@ void floor_item_increase(floor_type *floor_ptr, INVENTORY_IDX item, ITEM_NUMBER 
 
     num -= o_ptr->number;
     o_ptr->number += num;
+
+    set_bits(owner_ptr->window_flags, PW_FLOOR_ITEM_LIST);
 }
 
 /*!
@@ -230,6 +235,8 @@ void floor_item_optimize(player_type *owner_ptr, INVENTORY_IDX item)
         return;
 
     delete_object_idx(owner_ptr, item);
+
+    set_bits(owner_ptr->window_flags, PW_FLOOR_ITEM_LIST);
 }
 
 /*!
@@ -553,6 +560,9 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
     note_spot(owner_ptr, by, bx);
     lite_spot(owner_ptr, by, bx);
     sound(SOUND_DROP);
+
+    if (player_bold(owner_ptr, by, bx))
+        set_bits(owner_ptr->window_flags, PW_FLOOR_ITEM_LIST);
 
     if (chance && player_bold(owner_ptr, by, bx)) {
         msg_print(_("何かが足下に転がってきた。", "You feel something roll beneath your feet."));

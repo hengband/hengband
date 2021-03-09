@@ -46,6 +46,7 @@
 #include "status/shape-changer.h"
 #include "sv-definition/sv-staff-types.h"
 #include "system/floor-type-definition.h"
+#include "util/bit-flags-calculator.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 #include "view/object-describer.h"
@@ -375,7 +376,7 @@ void exe_use_staff(player_type *creature_ptr, INVENTORY_IDX item)
      * is deducted from the staff.
      */
     BIT_FLAGS inventory_flags = (PU_COMBINE | PU_REORDER | (creature_ptr->update & PU_AUTODESTROY));
-    creature_ptr->update &= ~(PU_COMBINE | PU_REORDER | PU_AUTODESTROY);
+    reset_bits(creature_ptr->update, PU_COMBINE | PU_REORDER | PU_AUTODESTROY);
 
     /* Tried the item */
     object_tried(o_ptr);
@@ -386,8 +387,8 @@ void exe_use_staff(player_type *creature_ptr, INVENTORY_IDX item)
         gain_exp(creature_ptr, (lev + (creature_ptr->lev >> 1)) / creature_ptr->lev);
     }
 
-    creature_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
-    creature_ptr->update |= inventory_flags;
+    set_bits(creature_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST);
+    set_bits(creature_ptr->update, inventory_flags);
 
     /* Hack -- some uses are "free" */
     if (!use_charge)
