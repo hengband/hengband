@@ -76,7 +76,7 @@ void do_cmd_store(player_type *player_ptr)
     old_town_num = player_ptr->town_num;
     if ((which == STORE_HOME) || (which == STORE_MUSEUM))
         player_ptr->town_num = 1;
-    if (player_ptr->current_floor_ptr->dun_level)
+    if (is_in_dungeon(player_ptr))
         player_ptr->town_num = NO_TOWN;
     inner_town_num = player_ptr->town_num;
 

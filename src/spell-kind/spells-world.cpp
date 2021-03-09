@@ -108,7 +108,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
             msg_format("%^s sink%s through the floor.", m_name, (m_idx <= 0) ? "" : "s");
 #endif
         if (m_idx <= 0) {
-            if (!creature_ptr->current_floor_ptr->dun_level) {
+            if (!is_in_dungeon(creature_ptr)) {
                 creature_ptr->dungeon_idx = ironman_downward ? DUNGEON_ANGBAND : creature_ptr->recall_dungeon;
                 creature_ptr->oldpy = creature_ptr->y;
                 creature_ptr->oldpx = creature_ptr->x;
@@ -120,7 +120,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
             if (autosave_l)
                 do_cmd_save_game(creature_ptr, TRUE);
 
-            if (!creature_ptr->current_floor_ptr->dun_level) {
+            if (!is_in_dungeon(creature_ptr)) {
                 creature_ptr->current_floor_ptr->dun_level = d_info[creature_ptr->dungeon_idx].mindepth;
                 prepare_change_floor_mode(creature_ptr, CFM_RAND_PLACE);
             } else {
@@ -354,7 +354,7 @@ bool recall_player(player_type *creature_ptr, TIME_EFFECT turns)
         return TRUE;
     }
 
-    bool is_special_floor = creature_ptr->current_floor_ptr->dun_level > 0;
+    bool is_special_floor = is_in_dungeon(creature_ptr);
     is_special_floor &= max_dlv[creature_ptr->dungeon_idx] > creature_ptr->current_floor_ptr->dun_level;
     is_special_floor &= !creature_ptr->current_floor_ptr->inside_quest;
     is_special_floor &= !creature_ptr->word_recall;
@@ -373,7 +373,7 @@ bool recall_player(player_type *creature_ptr, TIME_EFFECT turns)
         return TRUE;
     }
 
-    if (!creature_ptr->current_floor_ptr->dun_level) {
+    if (!is_in_dungeon(creature_ptr)) {
         DUNGEON_IDX select_dungeon;
         select_dungeon = choose_dungeon(_("に帰還", "recall"), 2, 14);
         if (!select_dungeon)

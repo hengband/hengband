@@ -59,7 +59,7 @@ static void process_fishing(player_type *creature_ptr)
         bool success = FALSE;
         get_mon_num_prep(creature_ptr, monster_is_fishing_target, NULL);
         r_idx = get_mon_num(creature_ptr, 0,
-            creature_ptr->current_floor_ptr->dun_level ? creature_ptr->current_floor_ptr->dun_level
+            is_in_dungeon(creature_ptr) ? creature_ptr->current_floor_ptr->dun_level
                                                        : wilderness[creature_ptr->wilderness_y][creature_ptr->wilderness_x].level,
             0);
         msg_print(NULL);

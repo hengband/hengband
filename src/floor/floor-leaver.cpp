@@ -307,7 +307,7 @@ static void jump_floors(player_type *creature_ptr)
         move_num += SGN(move_num);
 
     if (creature_ptr->change_floor_mode & CFM_DOWN) {
-        if (!creature_ptr->current_floor_ptr->dun_level)
+        if (!is_in_dungeon(creature_ptr))
             move_num = d_info[creature_ptr->dungeon_idx].mindepth;
     } else if (creature_ptr->change_floor_mode & CFM_UP) {
         if (creature_ptr->current_floor_ptr->dun_level + move_num < d_info[creature_ptr->dungeon_idx].mindepth)
@@ -319,7 +319,7 @@ static void jump_floors(player_type *creature_ptr)
 
 static void exit_to_wilderness(player_type *creature_ptr)
 {
-    if ((creature_ptr->current_floor_ptr->dun_level != 0) || (creature_ptr->dungeon_idx == 0))
+    if (is_in_dungeon(creature_ptr) || (creature_ptr->dungeon_idx == 0))
         return;
 
     creature_ptr->leaving_dungeon = TRUE;

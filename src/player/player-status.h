@@ -511,6 +511,7 @@ bool is_invuln(player_type *creature_ptr);
 bool is_hero(player_type *creature_ptr);
 bool is_shero(player_type *creature_ptr);
 bool is_echizen(player_type *creature_ptr);
+bool is_in_dungeon(player_type *creature_ptr);
 
 /*
  * Player "food" crucial values
