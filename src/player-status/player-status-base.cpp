@@ -192,12 +192,39 @@ s16b PlayerStatusBase::equipments_value()
     return result;
 }
 
-s16b PlayerStatusBase::race_value() { return 0; }
-s16b PlayerStatusBase::class_value() { return 0; }
-s16b PlayerStatusBase::personality_value() { return 0; }
-s16b PlayerStatusBase::time_effect_value() { return 0; }
-s16b PlayerStatusBase::battleform_value() { return 0; }
-s16b PlayerStatusBase::mutation_value() { return 0; }
-s16b PlayerStatusBase::riding_value() { return 0; }
-s16b PlayerStatusBase::inventory_weight_value() { return 0; }
-s16b PlayerStatusBase::action_value() { return 0; }
+s16b PlayerStatusBase::race_value()
+{
+    return 0;
+}
+s16b PlayerStatusBase::class_value()
+{
+    return 0;
+}
+s16b PlayerStatusBase::personality_value()
+{
+    return 0;
+}
+s16b PlayerStatusBase::time_effect_value()
+{
+    return 0;
+}
+s16b PlayerStatusBase::battleform_value()
+{
+    return 0;
+}
+s16b PlayerStatusBase::mutation_value()
+{
+    return 0;
+}
+s16b PlayerStatusBase::riding_value()
+{
+    return 0;
+}
+s16b PlayerStatusBase::inventory_weight_value()
+{
+    return 0;
+}
+s16b PlayerStatusBase::action_value()
+{
+    return 0;
+}

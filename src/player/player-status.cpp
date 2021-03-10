@@ -3580,9 +3580,15 @@ bool player_has_no_spellbooks(player_type *creature_ptr)
     return TRUE;
 }
 
-void take_turn(player_type *creature_ptr, PERCENTAGE need_cost) { creature_ptr->energy_use = (ENERGY)need_cost; }
+void take_turn(player_type *creature_ptr, PERCENTAGE need_cost)
+{
+    creature_ptr->energy_use = (ENERGY)need_cost;
+}
 
-void free_turn(player_type *creature_ptr) { creature_ptr->energy_use = 0; }
+void free_turn(player_type *creature_ptr)
+{
+    creature_ptr->energy_use = 0;
+}
 
 /*!
  * @brief プレイヤーを指定座標に配置する / Place the player in the dungeon XXX XXX
@@ -3915,16 +3921,25 @@ bool is_tim_esp(player_type *creature_ptr)
     return creature_ptr->tim_esp || music_singing(creature_ptr, MUSIC_MIND) || (creature_ptr->concent >= CONCENT_TELE_THRESHOLD);
 }
 
-bool is_tim_stealth(player_type *creature_ptr) { return creature_ptr->tim_stealth || music_singing(creature_ptr, MUSIC_STEALTH); }
+bool is_tim_stealth(player_type *creature_ptr)
+{
+    return creature_ptr->tim_stealth || music_singing(creature_ptr, MUSIC_STEALTH);
+}
 
 bool is_time_limit_esp(player_type *creature_ptr)
 {
     return creature_ptr->tim_esp || music_singing(creature_ptr, MUSIC_MIND) || (creature_ptr->concent >= CONCENT_TELE_THRESHOLD);
 }
 
-bool is_time_limit_stealth(player_type *creature_ptr) { return creature_ptr->tim_stealth || music_singing(creature_ptr, MUSIC_STEALTH); }
+bool is_time_limit_stealth(player_type *creature_ptr)
+{
+    return creature_ptr->tim_stealth || music_singing(creature_ptr, MUSIC_STEALTH);
+}
 
-bool can_two_hands_wielding(player_type *creature_ptr) { return !creature_ptr->riding || any_bits(creature_ptr->pet_extra_flags, PF_TWO_HANDS); }
+bool can_two_hands_wielding(player_type *creature_ptr)
+{
+    return !creature_ptr->riding || any_bits(creature_ptr->pet_extra_flags, PF_TWO_HANDS);
+}
 
 /*!
  * @brief 歌の停止を処理する / Stop singing if the player is a Bard
@@ -4023,15 +4038,30 @@ PERCENTAGE calculate_upkeep(player_type *creature_ptr)
         return 0;
 }
 
-bool music_singing(player_type *caster_ptr, int music_songs) { return (caster_ptr->pclass == CLASS_BARD) && (caster_ptr->magic_num1[0] == music_songs); }
+bool music_singing(player_type *caster_ptr, int music_songs)
+{
+    return (caster_ptr->pclass == CLASS_BARD) && (caster_ptr->magic_num1[0] == music_songs);
+}
 
-bool is_fast(player_type *creature_ptr) { return creature_ptr->fast || music_singing(creature_ptr, MUSIC_SPEED) || music_singing(creature_ptr, MUSIC_SHERO); }
+bool is_fast(player_type *creature_ptr)
+{
+    return creature_ptr->fast || music_singing(creature_ptr, MUSIC_SPEED) || music_singing(creature_ptr, MUSIC_SHERO);
+}
 
-bool is_invuln(player_type *creature_ptr) { return creature_ptr->invuln || music_singing(creature_ptr, MUSIC_INVULN); }
+bool is_invuln(player_type *creature_ptr)
+{
+    return creature_ptr->invuln || music_singing(creature_ptr, MUSIC_INVULN);
+}
 
-bool is_hero(player_type *creature_ptr) { return creature_ptr->hero || music_singing(creature_ptr, MUSIC_HERO) || music_singing(creature_ptr, MUSIC_SHERO); }
+bool is_hero(player_type *creature_ptr)
+{
+    return creature_ptr->hero || music_singing(creature_ptr, MUSIC_HERO) || music_singing(creature_ptr, MUSIC_SHERO);
+}
 
-bool is_shero(player_type *creature_ptr) { return creature_ptr->shero || creature_ptr->pclass == CLASS_BERSERKER; }
+bool is_shero(player_type *creature_ptr)
+{
+    return creature_ptr->shero || creature_ptr->pclass == CLASS_BERSERKER;
+}
 
 bool is_echizen(player_type *creature_ptr)
 {
