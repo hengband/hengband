@@ -30,6 +30,7 @@ s16b PlayerStatusBase::getValue()
 
     pow += this->action_value();
     pow += this->battleform_value();
+    pow += this->class_base_value();
     pow += this->class_value();
     pow += this->equipments_value();
     pow += this->inventory_weight_value();
@@ -38,6 +39,7 @@ s16b PlayerStatusBase::getValue()
     pow += this->race_value();
     pow += this->riding_value();
     pow += this->time_effect_value();
+    pow = this->set_exception_value(pow);
 
     if ((pow > this->max_value)) {
         pow = this->max_value;
@@ -53,9 +55,10 @@ s16b PlayerStatusBase::getValue()
  * @brief 修正値が0でないところにビットを立てて返す。
  * @return 判定結果のBIT_FLAGS
  */
-BIT_FLAGS PlayerStatusBase::getFlags()
+BIT_FLAGS PlayerStatusBase::getAllFlags()
 {
-    BIT_FLAGS result = equipments_flags();
+    this->set_locals(); /* 計算前に値のセット。派生クラスの値がセットされる。*/
+    BIT_FLAGS result = equipments_flags(this->tr_flag);
 
     if (this->class_value() != 0)
         set_bits(result, FLAG_CAUSE_CLASS);
@@ -88,12 +91,52 @@ BIT_FLAGS PlayerStatusBase::getFlags()
 }
 
 /*!
- * @brief 修正値が0以下のところにビットを立てて返す。
+ * @brief 修正値が1以上のところにビットを立てて返す。
+ * @return 判定結果のBIT_FLAGS
+ */
+BIT_FLAGS PlayerStatusBase::getGoodFlags()
+{
+    this->set_locals(); /* 計算前に値のセット。派生クラスの値がセットされる。*/
+    BIT_FLAGS result = equipments_flags(this->tr_flag);
+
+    if (this->class_value() > 0)
+        set_bits(result, FLAG_CAUSE_CLASS);
+
+    if (this->race_value() > 0)
+        set_bits(result, FLAG_CAUSE_RACE);
+
+    if (this->battleform_value() > 0)
+        set_bits(result, FLAG_CAUSE_BATTLE_FORM);
+
+    if (this->mutation_value() > 0)
+        set_bits(result, FLAG_CAUSE_MUTATION);
+
+    if (this->time_effect_value() > 0)
+        set_bits(result, FLAG_CAUSE_MAGIC_TIME_EFFECT);
+
+    if (this->personality_value() > 0)
+        set_bits(result, FLAG_CAUSE_PERSONALITY);
+
+    if (this->riding_value() > 0)
+        set_bits(result, FLAG_CAUSE_RIDING);
+
+    if (this->inventory_weight_value() > 0)
+        set_bits(result, FLAG_CAUSE_INVEN_PACK);
+
+    if (this->action_value() > 0)
+        set_bits(result, FLAG_CAUSE_ACTION);
+
+    return result;
+}
+
+/*!
+ * @brief 修正値が-1以下のところにビットを立てて返す。
  * @return 判定結果のBIT_FLAGS
  */
 BIT_FLAGS PlayerStatusBase::getBadFlags()
 {
-    BIT_FLAGS result = equipments_bad_flags();
+    this->set_locals(); /* 計算前に値のセット。派生クラスの値がセットされる。*/
+    BIT_FLAGS result = equipments_bad_flags(this->tr_bad_flag);
 
     if (this->class_value() < 0)
         set_bits(result, FLAG_CAUSE_CLASS);
@@ -134,9 +177,13 @@ void PlayerStatusBase::set_locals()
     this->tr_bad_flag = TR_FLAG_MAX;
 }
 
-BIT_FLAGS PlayerStatusBase::equipments_flags()
+/*!
+ * @brief 判定するflagを持つ装備品に対応するBIT_FLAGSを返す
+ * @params check_flag 判定するtr_type
+ * @return 判定結果のBIT_FLAGS
+ */
+BIT_FLAGS PlayerStatusBase::equipments_flags(tr_type check_flag)
 {
-    this->set_locals(); /* 計算前に値のセット。派生クラスの値がセットされる。*/
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     BIT_FLAGS result = 0L;
@@ -147,15 +194,19 @@ BIT_FLAGS PlayerStatusBase::equipments_flags()
 
         object_flags(owner_ptr, o_ptr, flgs);
 
-        if (has_flag(flgs, tr_flag))
+        if (has_flag(flgs, check_flag))
             set_bits(result, convert_inventory_slot_type_to_flag_cause(static_cast<inventory_slot_type>(i)));
     }
     return result;
 }
 
-BIT_FLAGS PlayerStatusBase::equipments_bad_flags()
+/*!
+ * @brief 判定するflagを持ち、pvalが負の装備品に対応するBIT_FLAGSを返す
+ * @params check_flag 判定するtr_type
+ * @return 判定結果のBIT_FLAGS
+ */
+BIT_FLAGS PlayerStatusBase::equipments_bad_flags(tr_type check_flag)
 {
-    this->set_locals(); /* 計算前に値のセット。派生クラスの値がセットされる。*/
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     BIT_FLAGS result = 0L;
@@ -166,7 +217,7 @@ BIT_FLAGS PlayerStatusBase::equipments_bad_flags()
 
         object_flags(owner_ptr, o_ptr, flgs);
 
-        if (has_flag(flgs, tr_bad_flag)) {
+        if (has_flag(flgs, check_flag)) {
             if (o_ptr->pval < 0) {
                 set_bits(result, convert_inventory_slot_type_to_flag_cause(static_cast<inventory_slot_type>(i)));
             }
@@ -175,6 +226,10 @@ BIT_FLAGS PlayerStatusBase::equipments_bad_flags()
     return result;
 }
 
+/*!
+ * @brief this->tr_flagを持つ装備品のpval合計値を返す
+ * @return 該当するfalgを持つ全装備のpvalの合計値
+ */
 s16b PlayerStatusBase::equipments_value()
 {
     this->set_locals(); /* 計算前に値のセット。派生クラスの値がセットされる。*/
@@ -186,18 +241,61 @@ s16b PlayerStatusBase::equipments_value()
 
         if (!o_ptr->k_idx)
             continue;
-        if (has_flag(flgs, tr_flag))
+        if (has_flag(flgs, this->tr_flag))
             result += o_ptr->pval;
     }
     return result;
 }
 
-s16b PlayerStatusBase::race_value() { return 0; }
-s16b PlayerStatusBase::class_value() { return 0; }
-s16b PlayerStatusBase::personality_value() { return 0; }
-s16b PlayerStatusBase::time_effect_value() { return 0; }
-s16b PlayerStatusBase::battleform_value() { return 0; }
-s16b PlayerStatusBase::mutation_value() { return 0; }
-s16b PlayerStatusBase::riding_value() { return 0; }
-s16b PlayerStatusBase::inventory_weight_value() { return 0; }
-s16b PlayerStatusBase::action_value() { return 0; }
+s16b PlayerStatusBase::race_value()
+{
+    return 0;
+}
+s16b PlayerStatusBase::class_value()
+{
+    return 0;
+}
+s16b PlayerStatusBase::class_base_value()
+{
+    return 0;
+} 
+s16b PlayerStatusBase::personality_value()
+{
+    return 0;
+}
+s16b PlayerStatusBase::time_effect_value()
+{
+    return 0;
+}
+s16b PlayerStatusBase::battleform_value()
+{
+    return 0;
+}
+s16b PlayerStatusBase::mutation_value()
+{
+    return 0;
+}
+s16b PlayerStatusBase::riding_value()
+{
+    return 0;
+}
+s16b PlayerStatusBase::inventory_weight_value()
+{
+    return 0;
+}
+s16b PlayerStatusBase::action_value()
+{
+    return 0;
+}
+
+/*!
+ * @brief 値を直接変更する例外処理。
+ * @params value 単純加算された修正値の合計
+ * @details
+ * * 派生クラスで必要とされる例外処理でoverrideされる
+ * @return 直接変更された値。このままmin-max処理され最終的なvalueになる。
+ */
+s16b PlayerStatusBase::set_exception_value(s16b value)
+{
+    return value;
+}
