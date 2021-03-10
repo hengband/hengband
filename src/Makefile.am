@@ -636,8 +636,10 @@ hengband_SOURCES = \
 	\
 	player-status/player-status-base.h \
 	player-status/player-speed.h \
+	player-status/player-stealth.h \
 	player-status/player-status-base.cpp \
 	player-status/player-speed.cpp \
+	player-status/player-stealth.cpp \
 	\
 	player-info/avatar.h player-info/avatar.cpp \
 	player-info/base-status-info.cpp player-info/base-status-info.h \

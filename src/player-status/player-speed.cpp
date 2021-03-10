@@ -346,9 +346,9 @@ s16b PlayerSpeed::action_value()
  * @details
  * * セット二刀流は両手のフラグをONにする
  */
-BIT_FLAGS PlayerSpeed::equipments_flags()
+BIT_FLAGS PlayerSpeed::equipments_flags(tr_type check_flag)
 {
-    BIT_FLAGS result = PlayerStatusBase::equipments_flags();
+    BIT_FLAGS result = PlayerStatusBase::equipments_flags(check_flag);
 
     if (this->special_weapon_set_value() != 0)
         set_bits(result, FLAG_CAUSE_INVEN_MAIN_HAND | FLAG_CAUSE_INVEN_SUB_HAND);
@@ -357,27 +357,18 @@ BIT_FLAGS PlayerSpeed::equipments_flags()
 }
 
 /*
- * @brief 速度計算 - 合計値
- * @return 計算済の速度値 11 - 209
+ * @brief 速度計算 - 乗馬時の例外処理
+ * @return 計算済の速度値
  * @details
- * * 非乗馬時 - 乗馬以外の全要素の単純加算
+ * * 非乗馬時 - ここまでの修正値合算をそのまま使用
  * * 乗馬時 - 乗馬の速度と重量減衰のみを計算
  */
-s16b PlayerSpeed::getValue()
+s16b PlayerSpeed::set_exception_value(s16b value)
 {
-    s16b pow = PlayerStatusBase::getValue();
-
     if (this->owner_ptr->riding) {
-        pow = this->default_value;
-        pow += this->riding_value();
-        pow += this->inventory_weight_value();
-
-        if ((pow > this->max_value)) {
-            pow = this->max_value;
-        }
-
-        if (pow < this->min_value)
-            pow = this->min_value;
+        value = this->default_value;
+        value += this->riding_value();
+        value += this->inventory_weight_value();
     }
-    return pow;
+    return value;
 }

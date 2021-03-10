@@ -13,6 +13,7 @@
 #include "object-hook/hook-weapon.h"
 #include "object/object-flags.h"
 #include "player-status/player-speed.h"
+#include "player-status/player-stealth.h"
 #include "player/attack-defense-types.h"
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"
@@ -163,7 +164,7 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
     case TR_FORCE_WEAPON:
         return check_equipment_flags(creature_ptr, tr_flag);
     case TR_STEALTH:
-        return player_flags_stealth(creature_ptr);
+        return PlayerStealth(creature_ptr).getAllFlags();
     case TR_SEARCH:
         return 0;
     case TR_INFRA:
@@ -171,7 +172,7 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
     case TR_TUNNEL:
         return 0;
     case TR_SPEED:
-        return PlayerSpeed(creature_ptr).getFlags();
+        return PlayerSpeed(creature_ptr).getAllFlags();
     case TR_BLOWS:
         return 0;
     case TR_CHAOTIC:

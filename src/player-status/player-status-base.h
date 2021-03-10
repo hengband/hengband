@@ -8,8 +8,10 @@ public:
     PlayerStatusBase() = delete;
     virtual ~PlayerStatusBase() = default;
     virtual s16b getValue();
-    virtual BIT_FLAGS getFlags();
+    virtual BIT_FLAGS getAllFlags();
+    virtual BIT_FLAGS getGoodFlags();
     virtual BIT_FLAGS getBadFlags();
+
 protected:
     s16b default_value;
     s16b min_value;
@@ -20,6 +22,7 @@ protected:
     virtual void set_locals();
     virtual s16b race_value();
     virtual s16b class_value();
+    virtual s16b class_base_value();
     virtual s16b personality_value();
     virtual s16b equipments_value();
     virtual s16b time_effect_value();
@@ -28,6 +31,7 @@ protected:
     virtual s16b riding_value();
     virtual s16b inventory_weight_value();
     virtual s16b action_value();
-    virtual BIT_FLAGS equipments_flags();
-    virtual BIT_FLAGS equipments_bad_flags();
+    virtual s16b set_exception_value(s16b value);
+    virtual BIT_FLAGS equipments_flags(tr_type check_flag);
+    virtual BIT_FLAGS equipments_bad_flags(tr_type check_flag);
 };

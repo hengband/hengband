@@ -2204,6 +2204,9 @@
     <ClCompile Include="..\..\src\player-status\player-status-base.cpp">
       <Filter>player-status</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player-status\player-stealth.cpp">
+      <Filter>player-status</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4739,6 +4742,9 @@
       <Filter>player-status</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player-status\player-status-base.h">
+      <Filter>player-status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-status\player-stealth.h">
       <Filter>player-status</Filter>
     </ClInclude>
   </ItemGroup>
