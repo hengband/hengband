@@ -369,7 +369,7 @@ E:& Mattock~
 G:\:D
 I:20:7:2
 W:50:0:250:700
-A:50/1
+A:30/1
 P:0:1d8:0:0:0
 F:SHOW_MODS | TUNNEL
 
@@ -381,7 +381,7 @@ E:& No-dachi~
 G:|:W
 I:23:27:0
 W:35:0:190:579
-A:35/3
+A:20/3
 P:0:5d4:0:0:0
 F:SHOW_MODS
 
@@ -466,7 +466,7 @@ E:& Two-Handed Sword~
 G:|:W
 I:23:25:0
 W:30:0:200:775
-A:30/1:40/1
+A:20/1:40/1
 P:0:3d6:0:0:0
 F:SHOW_MODS
 D:$A great, double-edged broadsword which few can wield in one hand.
@@ -499,7 +499,7 @@ E:& Executioner's Sword~
 G:|:r
 I:23:28:0
 W:40:0:260:850
-A:40/1
+A:20/1
 P:0:4d5:0:0:0
 F:SHOW_MODS
 D:$A giant, curved blade designed to cleave the head cleanly from the 
@@ -511,7 +511,7 @@ E:& Katana~
 G:|:W
 I:23:20:0
 W:20:0:120:400
-A:20/1
+A:15/1
 P:0:3d4:0:0:0
 F:SHOW_MODS
 D:$A slightly curved long-handled slashing sword with a single-edged 
@@ -535,7 +535,7 @@ E:& Dagger~
 G:|:W
 I:23:4:0
 W:0:0:12:10
-A:0/1:5/1:10/1:20/1
+A:0/1:20/1
 P:0:1d4:0:0:0
 F:SHOW_MODS
 D:$A two-edged knife with a sharp point.
@@ -592,8 +592,8 @@ N:48:鎖つき鉄球
 E:& Ball-and-Chain~
 G:\:D
 I:21:6:0
-W:20:0:150:200
-A:20/1
+W:10:0:150:200
+A:10/1
 P:0:2d4:0:0:0
 F:SHOW_MODS | RIDING
 D:$A weighty iron ball, suspended by a chain from a sturdy oaken handle.
@@ -628,7 +628,7 @@ E:& Two-Handed Flail~
 G:\:y
 I:21:18:0
 W:45:0:280:590
-A:45/1
+A:20/1
 P:0:3d6:0:0:0
 F:SHOW_MODS
 D:$Two great bars of wood connected by a massive chain, needing two hands 
@@ -732,7 +732,7 @@ E:& Glaive~
 G:/:s
 I:22:13:0
 W:20:0:190:363
-A:20/1
+A:15/1
 P:0:2d6:0:0:0
 F:SHOW_MODS | RIDING
 D:$A reinforced wooden pole eight feet long, topped by a massive knife blade 
@@ -745,7 +745,7 @@ E:& Halberd~
 G:/:s
 I:22:15:0
 W:25:0:190:430
-A:25/1
+A:15/1
 P:0:3d5:0:0:0
 F:SHOW_MODS
 D:$The most successful of the polearms, the halberd has a long haft mounted 
@@ -767,7 +767,7 @@ E:& Pike~
 G:/:s
 I:22:8:0
 W:15:0:160:358
-A:15/1
+A:10/1
 P:0:2d5:0:0:0
 F:SHOW_MODS
 D:$A long, heavy spear with an iron head and reinforced shaft.
@@ -815,7 +815,7 @@ E:& Great Axe~
 G:/:s
 I:22:25:0
 W:40:0:230:500
-A:40/1
+A:20/1
 P:0:4d4:0:0:0
 F:SHOW_MODS
 D:$An enormous two-handed battle axe, carried by Dwarven champions, who 
@@ -840,7 +840,7 @@ E:& Lochaber Axe~
 G:/:D
 I:22:28:0
 W:45:0:250:750
-A:45/1
+A:20/1
 P:0:3d8:0:0:0
 F:SHOW_MODS
 
@@ -860,7 +860,7 @@ E:& Scythe~
 G:/:s
 I:22:17:0
 W:45:0:250:800
-A:45/1
+A:20/1
 P:0:5d3:0:0:0
 F:SHOW_MODS
 D:$The long crescent blade stands out from the handle of this polearm, and 
@@ -1032,7 +1032,7 @@ E:& Gnomish Shovel~
 G:\:G
 I:20:2:2
 W:20:0:60:100
-A:20/4
+A:15/4
 P:0:1d2:0:0:0
 F:SHOW_MODS | TUNNEL
 D:$A small spade forged of steel with gnomish craftmanship.
@@ -1043,7 +1043,7 @@ E:& Dwarven Shovel~
 G:\:B
 I:20:3:3
 W:40:0:120:200
-A:40/1
+A:20/1
 P:0:1d3:0:0:0
 F:SHOW_MODS | TUNNEL
 D:$A broad shovel, fit for the strong shoulders of a dwarf.  It bears runes 
@@ -1068,7 +1068,7 @@ E:& Orcish Pick~
 G:\:g
 I:20:5:2
 W:30:0:150:300
-A:30/4
+A:15/4
 P:0:1d3:0:0:0
 F:SHOW_MODS | TUNNEL
 D:$A crude, ugly, but effective pickaxe.  Made in enormous quantities for 
@@ -1080,7 +1080,7 @@ E:& Dwarven Pick~
 G:\:b
 I:20:6:3
 W:50:0:200:600
-A:50/1
+A:20/1
 P:0:1d4:0:0:0
 F:SHOW_MODS | TUNNEL
 D:$A short but sturdy pick, like those that delved deep Moria, with runes to 
@@ -4212,7 +4212,7 @@ E:& Great Hammer~
 G:\:D
 I:21:19:0
 W:45:0:300:350
-A:45/3
+A:30/3
 P:0:4d6:0:0:0
 F:SHOW_MODS
 
@@ -5113,7 +5113,7 @@ E:& Zweihander~
 G:|:w
 I:23:29:0
 W:40:0:280:580
-A:40/3
+A:30/3
 P:0:4d6:0:0:0
 F:SHOW_MODS
 
@@ -5151,7 +5151,7 @@ E:& Trifurcate Spear~
 G:/:o
 I:22:26:0
 W:35:0:140:400
-A:35/3
+A:20/3
 P:0:2d9:0:0:0
 F:SHOW_MODS | RIDING
 
@@ -5160,8 +5160,8 @@ N:529:三節棍
 E:& Three Piece Rod~
 G:\:u
 I:21:11:0
-W:20:0:120:350
-A:20/3
+W:15:0:120:350
+A:15/3
 P:0:3d3:0:0:0
 F:SHOW_MODS
 
@@ -5189,7 +5189,7 @@ E:& Lajatang~
 G:/:s
 I:22:14:0
 W:25:0:175:330
-A:25/2
+A:15/2
 P:0:2d7:0:0:0
 F:SHOW_MODS
 
@@ -5198,8 +5198,8 @@ N:533:ハチェット
 E:& Hatchet~
 G:/:s
 I:22:1:0
-W:10:0:60:120
-A:10/2
+W:5:0:60:120
+A:5/3
 P:0:1d5:0:0:0
 F:SHOW_MODS
 
@@ -5230,8 +5230,8 @@ N:537:鎌
 E:& Sickle~
 G:/:s
 I:22:3:0
-W:10:0:70:110
-A:10/3
+W:5:0:70:110
+A:5/3
 P:0:2d3:0:0:0
 F:SHOW_MODS
 
@@ -5241,7 +5241,7 @@ E:& Tetsubo~
 G:\:u
 I:21:16:0
 W:25:0:190:570
-A:25/2
+A:15/2
 P:0:2d7:0:0:0
 F:SHOW_MODS
 
@@ -5250,8 +5250,8 @@ N:539:ヌンチャク
 E:& Nunchaku~
 G:\:u
 I:21:4:0
-W:16:0:60:120
-A:16/2
+W:10:0:60:120
+A:10/2
 P:0:2d3:0:0:0
 F:SHOW_MODS
 
@@ -5260,8 +5260,8 @@ N:540:六尺棒
 E:& Bo Staff~
 G:\:U
 I:21:14:0
-W:20:0:160:310
-A:20/1
+W:15:0:160:310
+A:15/1
 P:0:1d11:0:0:0
 F:SHOW_MODS
 
@@ -5270,8 +5270,8 @@ N:541:錫杖
 E:& Jo Staff~
 G:\:U
 I:21:7:0
-W:11:0:70:200
-A:11/2
+W:10:0:70:200
+A:10/2
 P:0:1d7:0:0:0
 F:SHOW_MODS
 
@@ -5290,13 +5290,13 @@ N:543:ブロード・スピア
 E:& Broad Spear~
 G:/:w
 I:22:7:0
-W:14:0:100:240
-A:14/1
+W:10:0:100:240
+A:10/1
 P:0:1d9:0:0:0
 F:SHOW_MODS | RIDING
 
 #JZ#
-N:544:クォピス
+N:544:コペシュ
 E:& Khopesh~
 G:|:W
 I:23:14:0
@@ -5311,7 +5311,7 @@ E:& Flamberge~
 G:|:W
 I:23:26:0
 W:40:0:230:600
-A:40/2
+A:30/2
 P:0:3d7:0:0:0
 F:SHOW_MODS
 
@@ -5321,7 +5321,7 @@ E:& Claymore~
 G:|:W
 I:23:23:0
 W:40:0:200:600
-A:40/2
+A:30/2
 P:0:2d8:0:0:0
 F:SHOW_MODS
 
@@ -5331,7 +5331,7 @@ E:& Espadon~
 G:|:W
 I:23:24:0
 W:40:0:200:600
-A:40/3
+A:30/3
 P:0:2d9:0:0:0
 F:SHOW_MODS
 
@@ -5341,7 +5341,7 @@ E:& Falchion~
 G:|:W
 I:23:22:0
 W:40:0:240:500
-A:40/3
+A:30/3
 P:0:4d5:0:0:0
 F:SHOW_MODS | RIDING
 
@@ -5350,8 +5350,8 @@ N:549:脇差し
 E:& Wakizashi~
 G:|:W
 I:23:13:0
-W:15:0:90:210
-A:15/3
+W:10:0:90:210
+A:10/3
 P:0:2d4:0:0:0
 F:SHOW_MODS | SUPPORTIVE
 
@@ -5360,8 +5360,8 @@ N:550:薙刀
 E:& Naginata~
 G:/:s
 I:22:9:0
-W:25:0:150:408
-A:25/2
+W:15:0:150:408
+A:15/2
 P:0:2d6:0:0:0
 F:SHOW_MODS
 
@@ -5370,8 +5370,8 @@ N:551:フォシャール
 E:& Fauchard~
 G:/:s
 I:22:6:0
-W:18:0:155:301
-A:18/2
+W:10:0:155:301
+A:10/2
 P:0:1d10:0:0:0
 F:SHOW_MODS | RIDING
 
@@ -5380,8 +5380,8 @@ N:552:ギザルム
 E:& Guisarme~
 G:/:s
 I:22:16:0
-W:21:0:165:320
-A:21/1
+W:10:0:165:320
+A:10/1
 P:0:2d5:0:0:0
 F:SHOW_MODS
 
@@ -5391,7 +5391,7 @@ E:& Heavy Lance~
 G:/:s
 I:22:29:0
 W:43:0:400:700
-A:43/4
+A:30/4
 P:0:4d8:0:0:0
 F:SHOW_MODS | RIDING
 
@@ -5400,8 +5400,8 @@ N:554:バゼラード
 E:& Basillard~
 G:|:w
 I:23:9:0
-W:15:0:80:220
-A:15/3
+W:10:0:80:220
+A:10/3
 P:0:1d8:0:0:0
 F:SHOW_MODS
 
@@ -5410,8 +5410,8 @@ N:555:忍者刀
 E:& Ninjato~
 G:|:s
 I:23:19:0
-W:15:0:100:265
-A:15/2
+W:10:0:100:265
+A:10/3
 P:0:1d9:0:0:0
 F:SHOW_MODS
 
@@ -5632,7 +5632,7 @@ E:& Wizardstaff~
 G:\:y
 I:21:21:0
 W:25:0:40:4000
-A:25/4
+A:25/4:50/4
 P:0:1d2:0:0:0
 F:SHOW_MODS | DEC_MANA
 
