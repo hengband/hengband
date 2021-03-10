@@ -369,7 +369,7 @@ E:& Mattock~
 G:\:D
 I:20:7:2
 W:50:0:250:700
-A:50/1
+A:30/1
 P:0:1d8:0:0:0
 F:SHOW_MODS | TUNNEL
 
@@ -381,7 +381,7 @@ E:& No-dachi~
 G:|:W
 I:23:27:0
 W:35:0:190:579
-A:35/3
+A:20/3
 P:0:5d4:0:0:0
 F:SHOW_MODS
 
@@ -466,7 +466,7 @@ E:& Two-Handed Sword~
 G:|:W
 I:23:25:0
 W:30:0:200:775
-A:30/1:40/1
+A:20/1:40/1
 P:0:3d6:0:0:0
 F:SHOW_MODS
 D:$A great, double-edged broadsword which few can wield in one hand.
@@ -499,7 +499,7 @@ E:& Executioner's Sword~
 G:|:r
 I:23:28:0
 W:40:0:260:850
-A:40/1
+A:20/1
 P:0:4d5:0:0:0
 F:SHOW_MODS
 D:$A giant, curved blade designed to cleave the head cleanly from the 
@@ -511,7 +511,7 @@ E:& Katana~
 G:|:W
 I:23:20:0
 W:20:0:120:400
-A:20/1
+A:15/1
 P:0:3d4:0:0:0
 F:SHOW_MODS
 D:$A slightly curved long-handled slashing sword with a single-edged 
@@ -535,7 +535,7 @@ E:& Dagger~
 G:|:W
 I:23:4:0
 W:0:0:12:10
-A:0/1:5/1:10/1:20/1
+A:0/1:20/1
 P:0:1d4:0:0:0
 F:SHOW_MODS
 D:$A two-edged knife with a sharp point.
@@ -592,8 +592,8 @@ N:48:鎖つき鉄球
 E:& Ball-and-Chain~
 G:\:D
 I:21:6:0
-W:20:0:150:200
-A:20/1
+W:10:0:150:200
+A:10/1
 P:0:2d4:0:0:0
 F:SHOW_MODS | RIDING
 D:$A weighty iron ball, suspended by a chain from a sturdy oaken handle.
@@ -628,7 +628,7 @@ E:& Two-Handed Flail~
 G:\:y
 I:21:18:0
 W:45:0:280:590
-A:45/1
+A:20/1
 P:0:3d6:0:0:0
 F:SHOW_MODS
 D:$Two great bars of wood connected by a massive chain, needing two hands 
@@ -732,7 +732,7 @@ E:& Glaive~
 G:/:s
 I:22:13:0
 W:20:0:190:363
-A:20/1
+A:15/1
 P:0:2d6:0:0:0
 F:SHOW_MODS | RIDING
 D:$A reinforced wooden pole eight feet long, topped by a massive knife blade 
@@ -745,7 +745,7 @@ E:& Halberd~
 G:/:s
 I:22:15:0
 W:25:0:190:430
-A:25/1
+A:15/1
 P:0:3d5:0:0:0
 F:SHOW_MODS
 D:$The most successful of the polearms, the halberd has a long haft mounted 
@@ -767,7 +767,7 @@ E:& Pike~
 G:/:s
 I:22:8:0
 W:15:0:160:358
-A:15/1
+A:10/1
 P:0:2d5:0:0:0
 F:SHOW_MODS
 D:$A long, heavy spear with an iron head and reinforced shaft.
@@ -815,7 +815,7 @@ E:& Great Axe~
 G:/:s
 I:22:25:0
 W:40:0:230:500
-A:40/1
+A:20/1
 P:0:4d4:0:0:0
 F:SHOW_MODS
 D:$An enormous two-handed battle axe, carried by Dwarven champions, who 
@@ -840,7 +840,7 @@ E:& Lochaber Axe~
 G:/:D
 I:22:28:0
 W:45:0:250:750
-A:45/1
+A:20/1
 P:0:3d8:0:0:0
 F:SHOW_MODS
 
@@ -860,7 +860,7 @@ E:& Scythe~
 G:/:s
 I:22:17:0
 W:45:0:250:800
-A:45/1
+A:20/1
 P:0:5d3:0:0:0
 F:SHOW_MODS
 D:$The long crescent blade stands out from the handle of this polearm, and 
@@ -1032,7 +1032,7 @@ E:& Gnomish Shovel~
 G:\:G
 I:20:2:2
 W:20:0:60:100
-A:20/4
+A:15/4
 P:0:1d2:0:0:0
 F:SHOW_MODS | TUNNEL
 D:$A small spade forged of steel with gnomish craftmanship.
@@ -1043,7 +1043,7 @@ E:& Dwarven Shovel~
 G:\:B
 I:20:3:3
 W:40:0:120:200
-A:40/1
+A:20/1
 P:0:1d3:0:0:0
 F:SHOW_MODS | TUNNEL
 D:$A broad shovel, fit for the strong shoulders of a dwarf.  It bears runes 
@@ -1068,7 +1068,7 @@ E:& Orcish Pick~
 G:\:g
 I:20:5:2
 W:30:0:150:300
-A:30/4
+A:15/4
 P:0:1d3:0:0:0
 F:SHOW_MODS | TUNNEL
 D:$A crude, ugly, but effective pickaxe.  Made in enormous quantities for 
@@ -1080,7 +1080,7 @@ E:& Dwarven Pick~
 G:\:b
 I:20:6:3
 W:50:0:200:600
-A:50/1
+A:20/1
 P:0:1d4:0:0:0
 F:SHOW_MODS | TUNNEL
 D:$A short but sturdy pick, like those that delved deep Moria, with runes to 
@@ -1129,7 +1129,7 @@ E:& Pair~ of Metal Shod Boots
 G:]:s
 I:30:6:0
 W:20:0:80:50
-A:20/1
+A:15/1
 P:6:1d1:0:0:0
 D:$A set of double-lined leather boots, with toes and heels reinforced with 
 D:$iron.
@@ -1160,7 +1160,7 @@ E:& Iron Helm~
 G:]:s
 I:32:5:0
 W:20:0:75:75
-A:20/1
+A:15/1
 P:5:1d3:0:0:0
 D:$A mighty helmet of heavy iron, completely enclosing the head.
 D:頭部を完全に覆う鉄製のヘルメットだ。
@@ -1170,7 +1170,7 @@ E:& Steel Helm~
 G:]:W
 I:32:6:0
 W:40:0:60:200
-A:40/1
+A:20/1
 P:6:1d3:0:0:0
 D:$This great helm covers the head and shoulders with plates of steel and a 
 D:$curtain of mail.
@@ -1181,7 +1181,7 @@ E:& Iron Crown~
 G:]:s
 I:33:10:0
 W:40:0:20:500
-A:40/1
+A:15/1
 P:0:1d1:0:0:0
 D:$A plain band of iron, crowned with iron spikes.  It is a tyrant's 
 D:$symbol.
@@ -1192,7 +1192,7 @@ E:& Golden Crown~
 G:]:y
 I:33:11:0
 W:45:0:30:1000
-A:45/1
+A:25/1
 P:0:1d1:0:0:0
 F:IGNORE_ACID
 D:$An elegant golden circlet, with slender spines thrusting upward. 
@@ -1291,7 +1291,7 @@ E:Metal Scale Mail~
 G:[:s
 I:37:3:0
 W:25:0:250:550
-A:25/1
+A:15/1
 P:13:1d4:-2:0:0
 D:$A heavy shirt of overlapping steel scales backed by leather, with 
 D:$matching skirt and sleeves.
@@ -1302,7 +1302,7 @@ E:Chain Mail~
 G:[:s
 I:37:4:0
 W:25:0:220:750
-A:25/1
+A:15/1
 P:14:1d4:-2:0:0
 D:$A sleeved hauberk of interlocking steel rings, well padded with leather.  
 D:$Chain mail takes skill to make, but offers good protection and relatively 
@@ -1315,7 +1315,7 @@ E:Rusty Chain Mail~
 G:[:r
 I:37:1:0
 W:25:0:200:550
-A:25/1
+A:15/1
 P:14:1d4:-5:0:-8
 D:$Each link of this suit is brittle with rust, and the corroded rings 
 D:$are stiff and weakened.
@@ -1331,7 +1331,7 @@ E:Augmented Chain Mail~
 G:[:s
 I:37:6:0
 W:30:0:270:900
-A:30/1
+A:15/1
 P:16:1d4:-2:0:0
 D:$A hauberk, leggings, and sleeves of interlocking steel rings, 
 D:$strategically reinforced at vital locations with a second layer 
@@ -1345,7 +1345,7 @@ E:Bar Chain Mail~
 G:[:s
 I:37:8:0
 W:35:0:280:1020
-A:35/1
+A:20/1
 P:18:1d4:-2:0:0
 
 N:113:金属製ブリガンダイン・アーマー
@@ -1353,7 +1353,7 @@ E:Metal Brigandine Armour~
 G:[:s
 I:37:9:0
 W:35:0:290:1100
-A:35/1
+A:20/1
 P:19:1d4:-3:0:0
 
 N:114:パーシャル・プレート・メイル
@@ -1361,7 +1361,7 @@ E:Partial Plate Armour~
 G:[:W
 I:37:12:0
 W:45:0:260:1200
-A:45/1
+A:25/1
 P:22:1d6:-3:0:0
 D:$A steel corselet and vambraces over a skirt and leggings of chain.
 D:鋼鉄製の胴鎧であり、スカートの上部には腕鎧があり、鎖の脛当てを持つ。
@@ -1371,7 +1371,7 @@ E:Metal Lamellar Armour~
 G:[:W
 I:37:13:0
 W:45:0:340:1150
-A:45/1
+A:25/1
 P:23:1d6:-3:0:0
 
 N:116:フル・プレート・メイル
@@ -1379,7 +1379,7 @@ E:Full Plate Armour~
 G:[:W
 I:37:15:0
 W:45:0:380:1350
-A:45/1
+A:25/1
 P:25:2d4:-3:0:0
 D:$A full suit of carefully fitted plates, with hinged joints backed 
 D:$by chain, and light padding underneath.
@@ -1391,7 +1391,7 @@ E:Ribbed Plate Armour~
 G:[:W
 I:37:18:0
 W:50:0:380:1500
-A:50/1
+A:25/1
 P:28:2d4:-3:0:0
 
 N:118:アダマンタイト製プレート・メイル
@@ -1399,7 +1399,7 @@ E:Adamantite Plate Mail~
 G:[:G
 I:37:30:0
 W:75:0:420:20000
-A:75/8
+A:35/8
 P:40:2d4:-4:0:0
 F:IGNORE_ACID
 D:$Adamantite, hard as diamonds, forms this exquisite suit; nothing else 
@@ -1412,7 +1412,7 @@ E:Mithril Plate Mail~
 G:[:B
 I:37:25:0
 W:60:0:300:15000
-A:60/4
+A:35/4
 P:35:2d4:-3:0:0
 F:IGNORE_ACID
 D:$A shimmering suit of true-silver, forged long ago by dwarven smiths of 
@@ -1425,7 +1425,7 @@ E:Mithril Chain Mail~
 G:[:B
 I:37:20:0
 W:55:0:150:7000
-A:55/4
+A:35/4
 P:28:1d4:-1:0:0
 F:IGNORE_ACID
 D:$Rare and wondrous is chain mail made of true-silver, for it offers more 
@@ -1438,7 +1438,7 @@ E:Double Chain Mail~
 G:[:s
 I:37:7:0
 W:30:0:250:1000
-A:30/1
+A:15/1
 P:16:1d4:-2:0:0
 
 
@@ -1449,7 +1449,7 @@ E:& Mirror Shield~
 G:[:B
 I:34:10:0
 W:70:0:100:10000
-A:70/8
+A:40/8
 P:10:1d1:0:0:10
 F:IGNORE_ACID | REFLECT
 #D:$A shield of purest white, made of mithril, engraved with runes to keep 
@@ -1474,7 +1474,7 @@ E:& Shadow Cloak~
 G:(:D
 I:35:6:0
 W:60:0:5:7500
-A:75/5
+A:30/5:60/5
 P:6:0d0:0:0:4
 F:RES_DARK | RES_LITE
 D:$A midnight-hued cloak that wreathes the wearer in folds of shadow.
@@ -1508,7 +1508,7 @@ E:& Set~ of Cesti
 G:]:W
 I:31:5:0
 W:50:0:40:100
-A:50/1
+A:20/1
 P:5:1d1:0:0:0
 D:$A massive set of hand sheathings, bound with steel and thrice-cured leather.
 D:重厚な手の覆いで、鋼鉄としっかり煮固めた革で縛ってある。
@@ -1551,8 +1551,8 @@ N:131:金属製ラージ・シールド
 E:& Large Metal Shield~
 G:):s
 I:34:5:0
-W:30:0:120:200
-A:30/1
+W:20:0:120:200
+A:20/1
 P:8:1d3:0:0:0
 D:$An oval shield of wood covered by leather and rimmed with metal.  A large 
 D:$iron shield boss offers excellent hand protection.
@@ -1658,7 +1658,7 @@ E:Poison Resistance:Fluorite
 G:=:G
 I:45:20:0
 W:40:0:2:16000
-A:40/2
+A:30/4:40/4
 F:RES_POIS
 
 N:144:麻痺知らず:ガーネットの
@@ -1828,7 +1828,7 @@ E:Brilliance:Amber
 G:":y
 I:40:6:0
 W:50:0:3:5000
-A:50/4
+A:30/4
 F:INT | WIS | CHR | SUST_INT | SUST_WIS | SUST_CHR | HIDE_TYPE
 
 N:164:魅力:流木の
@@ -1843,9 +1843,9 @@ N:165:探索:サンゴの
 E:Searching:Coral
 G:":w
 I:40:5:0
-W:30:0:3:600
-A:30/4
-F:SEARCH | HIDE_TYPE
+W:15:0:3:1500
+A:15/8:30/4
+F:SEARCH | INFRA | HIDE_TYPE
 
 N:166:テレポート:めのうの
 E:Teleportation:Agate
@@ -1886,7 +1886,7 @@ E:Double Ring Mail~
 G:[:s
 I:37:5:0
 W:25:0:230:700
-A:25/1
+A:15/1
 P:15:1d4:-2:0:0
 
 ##### Additional amulets #####
@@ -1896,7 +1896,7 @@ E:the Magi:Brass
 G:":U
 I:40:8:0
 W:50:0:3:30000
-A:50/4:80/3
+A:30/4:60/3
 P:0:0d0:0:0:3
 F:FREE_ACT | SEE_INVIS | SEARCH | INFRA |
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
@@ -4212,7 +4212,7 @@ E:& Great Hammer~
 G:\:D
 I:21:19:0
 W:45:0:300:350
-A:45/3
+A:30/3
 P:0:4d6:0:0:0
 F:SHOW_MODS
 
@@ -4222,8 +4222,8 @@ N:400:ブラックドラゴン・スケイルメイル
 E:Black Dragon Scale Mail~
 G:[:s
 I:38:1:0
-W:60:0:200:30000
-A:60/8
+W:40:0:200:30000
+A:40/8
 P:40:2d4:-2:0:10
 F:RES_ACID |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
@@ -4249,8 +4249,8 @@ N:402:ホワイトドラゴン・スケイルメイル
 E:White Dragon Scale Mail~
 G:[:w
 I:38:3:0
-W:50:0:200:40000
-A:50/8
+W:40:0:200:40000
+A:40/8
 P:40:2d4:-2:0:10
 F:RES_COLD |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
@@ -4263,8 +4263,8 @@ N:403:レッドドラゴン・スケイルメイル
 E:Red Dragon Scale Mail~
 G:[:r
 I:38:4:0
-W:80:0:200:100000
-A:80/8
+W:45:0:200:100000
+A:45/8
 P:40:2d4:-2:0:10
 F:RES_FIRE |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
@@ -4277,8 +4277,8 @@ N:404:グリーンドラゴン・スケイルメイル
 E:Green Dragon Scale Mail~
 G:[:g
 I:38:5:0
-W:70:0:200:80000
-A:70/8
+W:45:0:200:80000
+A:45/8
 P:40:2d4:-2:0:10
 F:RES_POIS |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
@@ -4310,7 +4310,7 @@ E:Pseudo Dragon Scale Mail~
 G:[:v
 I:38:10:0
 W:65:0:200:60000
-A:65/16
+A:50/16
 P:40:2d4:-2:0:10
 F:RES_LITE | RES_DARK |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
@@ -4336,7 +4336,7 @@ E:Bronze Dragon Scale Mail~
 G:[:U
 I:38:14:0
 W:55:0:200:30000
-A:55/8
+A:40/8
 P:40:2d4:-2:0:10
 F:RES_CONF |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
@@ -4352,7 +4352,7 @@ E:Gold Dragon Scale Mail~
 G:[:y
 I:38:16:0
 W:65:0:200:40000
-A:65/8
+A:40/8
 P:40:2d4:-2:0:10
 F:RES_SOUND |
 F:ACTIVATE | IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
@@ -4420,7 +4420,7 @@ E:& Dragon Helm~
 G:]:G
 I:32:7:0
 W:60:0:50:10000
-A:60/5
+A:40/5:60/5
 P:8:1d3:0:0:10
 F:IGNORE_ACID | IGNORE_FIRE | IGNORE_ELEC | IGNORE_COLD
 D:$A dragon-winged great helm, glowing in all the colors of the rainbow.  
@@ -4433,7 +4433,7 @@ E:& Dragon Shield~
 G:[:G
 I:34:6:0
 W:60:0:100:10000
-A:60/5
+A:40/5:60/5
 P:8:1d3:0:0:10
 F:IGNORE_ACID | IGNORE_FIRE | IGNORE_ELEC | IGNORE_COLD
 
@@ -4618,8 +4618,8 @@ N:432:耐劣化:ミスリルの
 E:Disenchantment Resistance:Mithril
 G:=:B
 I:45:45:0
-W:90:0:2:15000
-A:90/10
+W:40:0:2:7500
+A:40/4
 F:RES_DISEN
 
 #JZ#
@@ -4636,8 +4636,8 @@ N:434:耐盲目:婚約
 E:Blindness Resistance:Engagement
 G:=:y
 I:45:47:0
-W:60:0:2:7500
-A:60/2
+W:30:0:2:4000
+A:30/2
 F:RES_BLIND
 
 #JZ#
@@ -4646,7 +4646,7 @@ E:Lordly Protection:Adamantite
 G:=:v
 I:45:48:0
 W:100:0:2:100000
-A:100/8
+A:75/6
 F:RES_DISEN | RES_POIS | HOLD_EXP | FREE_ACT
 
 #JZ#
@@ -5067,7 +5067,7 @@ E:Reflection:Azure
 G:":B
 I:40:9:0
 W:60:0:3:30000
-A:60/4
+A:40/3
 F:REFLECT
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
@@ -5079,7 +5079,7 @@ E:Anti-Magic:Crystal
 G:":B
 I:40:13:0
 W:40:0:3:10000
-A:40/4
+A:30/4:50/4
 F:NO_MAGIC
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
@@ -5101,7 +5101,7 @@ E:Resistance:Copper
 G:":U
 I:40:15:0
 W:50:0:3:25000
-A:50/4
+A:35/4:50/4
 F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
@@ -5113,7 +5113,7 @@ E:& Zweihander~
 G:|:w
 I:23:29:0
 W:40:0:280:580
-A:40/3
+A:30/3
 P:0:4d6:0:0:0
 F:SHOW_MODS
 
@@ -5133,7 +5133,7 @@ E:Splint Mail~
 G:[:D
 I:37:10:0
 W:35:0:250:1300
-A:35/1
+A:20/1
 P:19:1d4:-2:0:0
 
 #JZ#
@@ -5142,7 +5142,7 @@ E:Do-maru~
 G:[:s
 I:37:11:0
 W:40:0:290:1250
-A:40/2
+A:20/2
 P:20:1d4:-2:0:0
 
 #JZ#
@@ -5151,7 +5151,7 @@ E:& Trifurcate Spear~
 G:/:o
 I:22:26:0
 W:35:0:140:400
-A:35/3
+A:20/3
 P:0:2d9:0:0:0
 F:SHOW_MODS | RIDING
 
@@ -5160,8 +5160,8 @@ N:529:三節棍
 E:& Three Piece Rod~
 G:\:u
 I:21:11:0
-W:20:0:120:350
-A:20/3
+W:15:0:120:350
+A:15/3
 P:0:3d3:0:0:0
 F:SHOW_MODS
 
@@ -5171,7 +5171,7 @@ E:O-yoroi~
 G:[:D
 I:37:16:0
 W:45:0:320:1300
-A:45/2
+A:25/2
 P:24:1d4:-2:0:0
 
 #JZ#
@@ -5189,7 +5189,7 @@ E:& Lajatang~
 G:/:s
 I:22:14:0
 W:25:0:175:330
-A:25/2
+A:15/2
 P:0:2d7:0:0:0
 F:SHOW_MODS
 
@@ -5198,8 +5198,8 @@ N:533:ハチェット
 E:& Hatchet~
 G:/:s
 I:22:1:0
-W:10:0:60:120
-A:10/2
+W:5:0:60:120
+A:5/3
 P:0:1d5:0:0:0
 F:SHOW_MODS
 
@@ -5220,7 +5220,7 @@ E:& Leather Jacket~
 G:(:U
 I:36:12:0
 W:20:0:130:700
-A:20/3
+A:15/3
 P:12:1d2:-1:0:0
 
 ##### New weapons #####
@@ -5230,8 +5230,8 @@ N:537:鎌
 E:& Sickle~
 G:/:s
 I:22:3:0
-W:10:0:70:110
-A:10/3
+W:5:0:70:110
+A:5/3
 P:0:2d3:0:0:0
 F:SHOW_MODS
 
@@ -5241,7 +5241,7 @@ E:& Tetsubo~
 G:\:u
 I:21:16:0
 W:25:0:190:570
-A:25/2
+A:15/2
 P:0:2d7:0:0:0
 F:SHOW_MODS
 
@@ -5250,8 +5250,8 @@ N:539:ヌンチャク
 E:& Nunchaku~
 G:\:u
 I:21:4:0
-W:16:0:60:120
-A:16/2
+W:10:0:60:120
+A:10/2
 P:0:2d3:0:0:0
 F:SHOW_MODS
 
@@ -5260,8 +5260,8 @@ N:540:六尺棒
 E:& Bo Staff~
 G:\:U
 I:21:14:0
-W:20:0:160:310
-A:20/1
+W:15:0:160:310
+A:15/1
 P:0:1d11:0:0:0
 F:SHOW_MODS
 
@@ -5270,8 +5270,8 @@ N:541:錫杖
 E:& Jo Staff~
 G:\:U
 I:21:7:0
-W:11:0:70:200
-A:11/2
+W:10:0:70:200
+A:10/2
 P:0:1d7:0:0:0
 F:SHOW_MODS
 
@@ -5290,13 +5290,13 @@ N:543:ブロード・スピア
 E:& Broad Spear~
 G:/:w
 I:22:7:0
-W:14:0:100:240
-A:14/1
+W:10:0:100:240
+A:10/1
 P:0:1d9:0:0:0
 F:SHOW_MODS | RIDING
 
 #JZ#
-N:544:クォピス
+N:544:コペシュ
 E:& Khopesh~
 G:|:W
 I:23:14:0
@@ -5311,7 +5311,7 @@ E:& Flamberge~
 G:|:W
 I:23:26:0
 W:40:0:230:600
-A:40/2
+A:30/2
 P:0:3d7:0:0:0
 F:SHOW_MODS
 
@@ -5321,7 +5321,7 @@ E:& Claymore~
 G:|:W
 I:23:23:0
 W:40:0:200:600
-A:40/2
+A:30/2
 P:0:2d8:0:0:0
 F:SHOW_MODS
 
@@ -5331,7 +5331,7 @@ E:& Espadon~
 G:|:W
 I:23:24:0
 W:40:0:200:600
-A:40/3
+A:30/3
 P:0:2d9:0:0:0
 F:SHOW_MODS
 
@@ -5341,7 +5341,7 @@ E:& Falchion~
 G:|:W
 I:23:22:0
 W:40:0:240:500
-A:40/3
+A:30/3
 P:0:4d5:0:0:0
 F:SHOW_MODS | RIDING
 
@@ -5350,8 +5350,8 @@ N:549:脇差し
 E:& Wakizashi~
 G:|:W
 I:23:13:0
-W:15:0:90:210
-A:15/3
+W:10:0:90:210
+A:10/3
 P:0:2d4:0:0:0
 F:SHOW_MODS | SUPPORTIVE
 
@@ -5360,8 +5360,8 @@ N:550:薙刀
 E:& Naginata~
 G:/:s
 I:22:9:0
-W:25:0:150:408
-A:25/2
+W:15:0:150:408
+A:15/2
 P:0:2d6:0:0:0
 F:SHOW_MODS
 
@@ -5370,8 +5370,8 @@ N:551:フォシャール
 E:& Fauchard~
 G:/:s
 I:22:6:0
-W:18:0:155:301
-A:18/2
+W:10:0:155:301
+A:10/2
 P:0:1d10:0:0:0
 F:SHOW_MODS | RIDING
 
@@ -5380,8 +5380,8 @@ N:552:ギザルム
 E:& Guisarme~
 G:/:s
 I:22:16:0
-W:21:0:165:320
-A:21/1
+W:10:0:165:320
+A:10/1
 P:0:2d5:0:0:0
 F:SHOW_MODS
 
@@ -5391,7 +5391,7 @@ E:& Heavy Lance~
 G:/:s
 I:22:29:0
 W:43:0:400:700
-A:43/4
+A:30/4
 P:0:4d8:0:0:0
 F:SHOW_MODS | RIDING
 
@@ -5400,8 +5400,8 @@ N:554:バゼラード
 E:& Basillard~
 G:|:w
 I:23:9:0
-W:15:0:80:220
-A:15/3
+W:10:0:80:220
+A:10/3
 P:0:1d8:0:0:0
 F:SHOW_MODS
 
@@ -5410,8 +5410,8 @@ N:555:忍者刀
 E:& Ninjato~
 G:|:s
 I:23:19:0
-W:15:0:100:265
-A:15/2
+W:10:0:100:265
+A:10/3
 P:0:1d9:0:0:0
 F:SHOW_MODS
 
@@ -5420,8 +5420,8 @@ N:556:リング・メイル
 E:Ring Mail~
 G:[:s
 I:37:2:0
-W:20:0:200:500
-A:20/1
+W:15:0:200:500
+A:15/1
 P:12:1d4:-2:0:0
 
 #JZ#
@@ -5456,8 +5456,8 @@ N:560:星兜
 E:& Kabuto~
 G:]:D
 I:32:8:0
-W:50:0:80:300
-A:50/3
+W:35:0:80:300
+A:20/3
 P:7:1d2:0:0:0
 
 #JZ#
@@ -5465,8 +5465,8 @@ N:561:皮石よろい
 E:Stone and Hide Armour~
 G:(:U
 I:36:15:0
-W:35:0:200:1000
-A:35/7
+W:15:0:200:1000
+A:15/7
 P:15:1d1:-1:0:0
 
 #JZ#
@@ -5474,8 +5474,8 @@ N:562:陣笠
 E:& Jingasa~
 G:]:s
 I:32:4:0
-W:16:0:30:60
-A:16/2
+W:15:0:30:60
+A:15/2
 P:4:1d2:0:0:0
 
 #JZ#
@@ -5484,7 +5484,7 @@ E:Haramakido~
 G:[:D
 I:37:14:0
 W:32:0:280:920
-A:32/2
+A:15/2
 P:17:1d4:-2:0:0
 
 N:564:白熱灯
@@ -5632,7 +5632,7 @@ E:& Wizardstaff~
 G:\:y
 I:21:21:0
 W:25:0:40:4000
-A:25/4
+A:25/4:50/4
 P:0:1d2:0:0:0
 F:SHOW_MODS | DEC_MANA
 
@@ -5661,7 +5661,7 @@ E:& Set~ of Dragon Gloves
 G:]:G
 I:31:3:0
 W:60:0:30:10000
-A:60/5
+A:40/5:60/5
 P:4:1d3:0:0:10
 F:IGNORE_ACID | IGNORE_FIRE | IGNORE_ELEC | IGNORE_COLD
 
@@ -5671,7 +5671,7 @@ E:& Pair~ of Dragon Boots
 G:]:G
 I:30:4:0
 W:60:0:60:10000
-A:60/5
+A:40/5:60/5
 P:5:1d3:0:0:10
 F:IGNORE_ACID | IGNORE_FIRE | IGNORE_ELEC | IGNORE_COLD
 
@@ -5687,7 +5687,7 @@ E:Telepathy:Swastika
 G:":v
 I:40:16:0
 W:60:0:3:50000
-A:60/4
+A:50/3
 F:TELEPATHY
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 
@@ -5786,15 +5786,16 @@ E:Sustaining:Rusty
 G:=:r
 I:45:52:0
 W:60:0:2:10000
-A:60/5
+A:35/4
 F:SUST_STR | SUST_INT | SUST_WIS | SUST_DEX | SUST_CON | SUST_CHR
+F:RES_TIME | HOLD_EXP
 
 N:599:消費魔力減少:鋼鉄の
 E:Mana:Steel
 G:=:W
 I:45:53:0
 W:80:0:2:30000
-A:80/8
+A:65:6
 F:DEC_MANA
 
 N:600:呪文:大嘗 真吸 回
@@ -5900,7 +5901,7 @@ E:& Ethereal Cloak~
 G:(:W
 I:35:5:0
 W:50:0:0:2500
-A:70/4
+A:25/8:50/4
 P:0:0d0:0:0:10
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD 
 D:$This unearthly, completely transparent body mantle folds and drapes in 
@@ -6033,7 +6034,7 @@ E:& Knight's Shield~
 G:):W
 I:34:7:0
 W:40:0:160:250
-A:40/2
+A:25/2
 P:10:1d6:0:0:0
 
 N:628:衝撃:イリヂウムの
@@ -6191,7 +6192,7 @@ E:Magic Device Mastery:Mithril
 G:":B
 I:40:23:0
 W:35:0:3:1000
-A:35/4
+A:20/4:35/4
 F:MAGIC_MASTERY | HIDE_TYPE
 
 N:645:ローブ
