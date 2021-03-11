@@ -5,6 +5,7 @@
 #endif
 
 FILE *loading_savefile;
+u32b loading_savefile_version;
 byte load_xor_byte; // Old "encryption" byte.
 u32b v_check = 0L; // Simple "checksum" on the actual values.
 u32b x_check = 0L; // Simple "checksum" on the encoded bytes.
@@ -156,4 +157,16 @@ void strip_bytes(int n)
     byte tmp8u;
     while (n--)
         rd_byte(&tmp8u);
+}
+
+/**
+ * @brief ロード中のセーブファイルのバージョンが引数で指定したバージョンと比較して古いかどうか調べる
+ *
+ * @param version 比較するセーブファイルのバージョン
+ * @return bool ロード中のセーブファイルのバージョンが version より古いなら true
+ *              version と等しいかより新しいなら false
+ */
+bool loading_savefile_version_is_older_than(u32b version)
+{
+    return loading_savefile_version < version;
 }
