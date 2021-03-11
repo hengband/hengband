@@ -182,7 +182,7 @@ bool get_mind_power(player_type *caster_ptr, SPELL_IDX *sn, bool only_browse)
                     mana_cost = spell.mana_cost;
                     if (chance) {
                         chance -= 3 * (plev - spell.min_lev);
-                        chance -= 3 * (adj_mag_stat[caster_ptr->stat_ind[mp_ptr->spell_stat]] - 1);
+                        chance -= 3 * (adj_mag_stat[caster_ptr->stat_index[mp_ptr->spell_stat]] - 1);
                         if (use_mind == MIND_KI) {
                             if (heavy_armor(caster_ptr))
                                 chance += 20;
@@ -208,7 +208,7 @@ bool get_mind_power(player_type *caster_ptr, SPELL_IDX *sn, bool only_browse)
                             chance += 5 * (mana_cost - caster_ptr->csp);
 
                         chance += caster_ptr->to_m_chance;
-                        minfail = adj_mag_fail[caster_ptr->stat_ind[mp_ptr->spell_stat]];
+                        minfail = adj_mag_fail[caster_ptr->stat_index[mp_ptr->spell_stat]];
                         if (chance < minfail)
                             chance = minfail;
 

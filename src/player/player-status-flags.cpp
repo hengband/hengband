@@ -12,6 +12,7 @@
 #include "object-hook/hook-checker.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-flags.h"
+#include "player-status/player-basic-statistics.h"
 #include "player-status/player-speed.h"
 #include "player-status/player-stealth.h"
 #include "player/attack-defense-types.h"
@@ -148,17 +149,17 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
 {
     switch (tr_flag) {
     case TR_STR:
-        return 0;
+        return PlayerStrength(creature_ptr).getAllFlags();
     case TR_INT:
-        return 0;
+        return PlayerIntelligence(creature_ptr).getAllFlags();
     case TR_WIS:
-        return 0;
+        return PlayerWisdom(creature_ptr).getAllFlags();
     case TR_DEX:
-        return 0;
+        return PlayerDextarity(creature_ptr).getAllFlags();
     case TR_CON:
-        return 0;
+        return PlayerConstitution(creature_ptr).getAllFlags();
     case TR_CHR:
-        return 0;
+        return PlayerCharisma(creature_ptr).getAllFlags();
     case TR_MAGIC_MASTERY:
         return has_magic_mastery(creature_ptr);
     case TR_FORCE_WEAPON:

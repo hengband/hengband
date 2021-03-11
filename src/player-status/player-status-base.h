@@ -35,3 +35,5 @@ protected:
     virtual BIT_FLAGS equipments_flags(tr_type check_flag);
     virtual BIT_FLAGS equipments_bad_flags(tr_type check_flag);
 };
+
+

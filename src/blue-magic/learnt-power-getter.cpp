@@ -262,13 +262,13 @@ static void calculate_blue_magic_success_probability(player_type *caster_ptr, le
     else
         lm_ptr->chance += (lm_ptr->spell.level - lm_ptr->plev);
 
-    lm_ptr->chance -= 3 * (adj_mag_stat[caster_ptr->stat_ind[A_INT]] - 1);
+    lm_ptr->chance -= 3 * (adj_mag_stat[caster_ptr->stat_index[A_INT]] - 1);
     lm_ptr->chance = mod_spell_chance_1(caster_ptr, lm_ptr->chance);
     lm_ptr->need_mana = mod_need_mana(caster_ptr, monster_powers[lm_ptr->blue_magics[lm_ptr->blue_magic_num]].smana, 0, REALM_NONE);
     if (lm_ptr->need_mana > caster_ptr->csp)
         lm_ptr->chance += 5 * (lm_ptr->need_mana - caster_ptr->csp);
 
-    PERCENTAGE minfail = adj_mag_fail[caster_ptr->stat_ind[A_INT]];
+    PERCENTAGE minfail = adj_mag_fail[caster_ptr->stat_index[A_INT]];
     if (lm_ptr->chance < minfail)
         lm_ptr->chance = minfail;
 

@@ -147,7 +147,7 @@ static void calc_throw_range(player_type *creature_ptr, it_type *it_ptr)
     if ((has_flag(it_ptr->obj_flags, TR_THROW)) || it_ptr->boomerang)
         div /= 2;
 
-    it_ptr->tdis = (adj_str_blow[creature_ptr->stat_ind[A_STR]] + 20) * mul / div;
+    it_ptr->tdis = (adj_str_blow[creature_ptr->stat_index[A_STR]] + 20) * mul / div;
     if (it_ptr->tdis > mul)
         it_ptr->tdis = mul;
 }
@@ -453,7 +453,7 @@ static void check_boomerang_throw(player_type *creature_ptr, it_type *it_ptr)
     if (!it_ptr->return_when_thrown)
         return;
 
-    it_ptr->back_chance = randint1(30) + 20 + ((int)(adj_dex_th[creature_ptr->stat_ind[A_DEX]]) - 128);
+    it_ptr->back_chance = randint1(30) + 20 + ((int)(adj_dex_th[creature_ptr->stat_index[A_DEX]]) - 128);
     it_ptr->super_boomerang = (((it_ptr->q_ptr->name1 == ART_MJOLLNIR) || (it_ptr->q_ptr->name1 == ART_AEGISFANG)) && it_ptr->boomerang);
     it_ptr->corruption_possibility = -1;
     if (it_ptr->boomerang)

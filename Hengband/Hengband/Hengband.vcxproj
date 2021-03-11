@@ -390,6 +390,13 @@
     <ClCompile Include="..\..\src\player-status\player-speed.cpp" />
     <ClCompile Include="..\..\src\player-status\player-status-base.cpp" />
     <ClCompile Include="..\..\src\player-status\player-stealth.cpp" />
+    <ClCompile Include="..\..\src\player-status\player-basic-statistics.cpp" />
+    <ClCompile Include="..\..\src\player-status\player-strength.cpp" />
+    <ClCompile Include="..\..\src\player-status\player-intelligence.cpp" />
+    <ClCompile Include="..\..\src\player-status\player-wisdom.cpp" />
+    <ClCompile Include="..\..\src\player-status\player-dextarity.cpp" />
+    <ClCompile Include="..\..\src\player-status\player-constitution.cpp" />
+    <ClCompile Include="..\..\src\player-status\player-charisma.cpp" />
     <ClCompile Include="..\..\src\player\player-status-resist.cpp" />
     <ClCompile Include="..\..\src\room\vault-builder.cpp" />
     <ClCompile Include="..\..\src\specific-object\blade-turner.cpp" />
@@ -1046,6 +1053,13 @@
     <ClInclude Include="..\..\src\player-status\player-speed.h" />
     <ClInclude Include="..\..\src\player-status\player-status-base.h" />
     <ClInclude Include="..\..\src\player-status\player-stealth.h" />
+    <ClInclude Include="..\..\src\player-status\player-basic-statistics.h" />
+    <ClInclude Include="..\..\src\player-status\player-strength.h" />
+    <ClInclude Include="..\..\src\player-status\player-intelligence.h" />
+    <ClInclude Include="..\..\src\player-status\player-wisdom.h" />
+    <ClInclude Include="..\..\src\player-status\player-dextarity.h" />
+    <ClInclude Include="..\..\src\player-status\player-constitution.h" />
+    <ClInclude Include="..\..\src\player-status\player-charisma.h" />
     <ClInclude Include="..\..\src\player\player-status-resist.h" />
     <ClInclude Include="..\..\src\room\vault-builder.h" />
     <ClInclude Include="..\..\src\specific-object\blade-turner.h" />

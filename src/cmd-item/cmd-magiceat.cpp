@@ -277,14 +277,14 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
 				y1 = ((ctr < EATER_EXT/2) ? y + ctr : y + ctr - EATER_EXT/2);
 				level = (tval == TV_ROD ? k_info[k_idx].level * 5 / 6 - 5 : k_info[k_idx].level);
 				chance = level * 4 / 5 + 20;
-				chance -= 3 * (adj_mag_stat[creature_ptr->stat_ind[mp_ptr->spell_stat]] - 1);
+				chance -= 3 * (adj_mag_stat[creature_ptr->stat_index[mp_ptr->spell_stat]] - 1);
 				level /= 2;
 				if (creature_ptr->lev > level)
 				{
 					chance -= 3 * (creature_ptr->lev - level);
 				}
 				chance = mod_spell_chance_1(creature_ptr, chance);
-				chance = MAX(chance, adj_mag_fail[creature_ptr->stat_ind[mp_ptr->spell_stat]]);
+				chance = MAX(chance, adj_mag_fail[creature_ptr->stat_index[mp_ptr->spell_stat]]);
 				/* Stunning makes spells harder */
 				if (creature_ptr->stun > 50) chance += 25;
 				else if (creature_ptr->stun) chance += 15;
@@ -547,14 +547,14 @@ bool do_cmd_magic_eater(player_type *creature_ptr, bool only_browse, bool powerf
 
 	level = (tval == TV_ROD ? k_info[k_idx].level * 5 / 6 - 5 : k_info[k_idx].level);
 	chance = level * 4 / 5 + 20;
-	chance -= 3 * (adj_mag_stat[creature_ptr->stat_ind[mp_ptr->spell_stat]] - 1);
+	chance -= 3 * (adj_mag_stat[creature_ptr->stat_index[mp_ptr->spell_stat]] - 1);
 	level /= 2;
 	if (creature_ptr->lev > level)
 	{
 		chance -= 3 * (creature_ptr->lev - level);
 	}
 	chance = mod_spell_chance_1(creature_ptr, chance);
-	chance = MAX(chance, adj_mag_fail[creature_ptr->stat_ind[mp_ptr->spell_stat]]);
+	chance = MAX(chance, adj_mag_fail[creature_ptr->stat_index[mp_ptr->spell_stat]]);
 	/* Stunning makes spells harder */
 	if (creature_ptr->stun > 50) chance += 25;
 	else if (creature_ptr->stun) chance += 15;

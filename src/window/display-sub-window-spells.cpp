@@ -93,7 +93,7 @@ static void display_spell_list(player_type *caster_ptr)
 
             chance = spell.fail;
             chance -= 3 * (caster_ptr->lev - spell.min_lev);
-            chance -= 3 * (adj_mag_stat[caster_ptr->stat_ind[mp_ptr->spell_stat]] - 1);
+            chance -= 3 * (adj_mag_stat[caster_ptr->stat_index[mp_ptr->spell_stat]] - 1);
             if (!use_hp) {
                 if (spell.mana_cost > caster_ptr->csp) {
                     chance += 5 * (spell.mana_cost - caster_ptr->csp);
@@ -106,7 +106,7 @@ static void display_spell_list(player_type *caster_ptr)
                 }
             }
 
-            minfail = adj_mag_fail[caster_ptr->stat_ind[mp_ptr->spell_stat]];
+            minfail = adj_mag_fail[caster_ptr->stat_index[mp_ptr->spell_stat]];
             if (chance < minfail)
                 chance = minfail;
 
