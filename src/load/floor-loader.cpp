@@ -247,6 +247,7 @@ static bool load_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
     current_world_ptr->h_ver_patch = H_VER_PATCH;
     current_world_ptr->h_ver_minor = H_VER_MINOR;
     current_world_ptr->h_ver_major = H_VER_MAJOR;
+    loading_savefile_version = SAVEFILE_VERSION;
 
     u32b tmp32u;
     rd_u32b(&tmp32u);
@@ -302,6 +303,7 @@ bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
     byte old_h_ver_minor = 0;
     byte old_h_ver_patch = 0;
     byte old_h_ver_extra = 0;
+    u32b old_loading_savefile_version = 0;
     if (mode & SLF_SECOND) {
         old_fff = loading_savefile;
         old_xor_byte = load_xor_byte;
@@ -311,6 +313,7 @@ bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
         old_h_ver_minor = current_world_ptr->h_ver_minor;
         old_h_ver_patch = current_world_ptr->h_ver_patch;
         old_h_ver_extra = current_world_ptr->h_ver_extra;
+        old_loading_savefile_version = loading_savefile_version;
     }
 
     char floor_savefile[sizeof(savefile) + 32];
@@ -346,6 +349,7 @@ bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
         current_world_ptr->h_ver_minor = old_h_ver_minor;
         current_world_ptr->h_ver_patch = old_h_ver_patch;
         current_world_ptr->h_ver_extra = old_h_ver_extra;
+        loading_savefile_version = old_loading_savefile_version;
     }
 
     byte old_kanji_code = kanji_code;

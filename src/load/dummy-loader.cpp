@@ -70,9 +70,6 @@ void rd_ghost(void)
 
 void rd_dummy3(void)
 {
-    u32b tmp32u;
-    rd_u32b(&tmp32u);
-
     u16b tmp16u;
     rd_u16b(&tmp16u);
 

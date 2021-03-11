@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/h-type.h"
+
 #define VERSION_NAME "Hengband" /*!< バリアント名称 / Name of the version/variant */
 
 /*!
@@ -48,5 +50,8 @@
 #define H_VER_MINOR FAKE_VER_MINOR /*!< セーブファイル上のバージョン定義(マイナー番号) */
 #define H_VER_PATCH FAKE_VER_PATCH /*!< セーブファイル上のバージョン定義(パッチ番号) */
 #define H_VER_EXTRA FAKE_VER_EXTRA /*!< セーブファイル上のバージョン定義(エクストラ番号) */
+
+/** セーブファイルのバージョン */
+constexpr u32b SAVEFILE_VERSION = 1;
 
 void put_version(char *buf);
