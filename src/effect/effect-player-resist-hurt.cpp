@@ -183,7 +183,7 @@ void effect_player_water(player_type *target_ptr, effect_player_type *ep_ptr)
     }
 
     if (has_resist_water(target_ptr))
-        ep_ptr->get_damage /= 4;
+        ep_ptr->dam /= 4;
 
     ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 }
