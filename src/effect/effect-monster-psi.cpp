@@ -23,7 +23,7 @@
  * @param em_ptr モンスター効果への参照ポインタ
  * @return 完全な耐性を発動した場合TRUE、そうでなければFALSE
  */
-static bool effect_monster_psi_empty_mind(player_type *caster_ptr, effect_monster_type *em_ptr)
+static bool resisted_psi_because_empty_mind(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (none_bits(em_ptr->r_ptr->flags2, RF2_EMPTY_MIND))
         return FALSE;
@@ -46,7 +46,7 @@ static bool effect_monster_psi_empty_mind(player_type *caster_ptr, effect_monste
  * 2) ANIMALである
  * 3) レベルが d(3*ダメージ) より大きい
  */
-static bool effect_monster_psi_weird_mind_and_powerful(effect_monster_type *em_ptr)
+static bool resisted_psi_because_weird_mind_or_powerful(effect_monster_type *em_ptr)
 {
     bool has_resistance = any_bits(em_ptr->r_ptr->flags2, RF2_STUPID | RF2_WEIRD_MIND) || any_bits(em_ptr->r_ptr->flags3, RF3_ANIMAL)
         || (em_ptr->r_ptr->level > randint1(3 * em_ptr->dam));
@@ -68,7 +68,7 @@ static bool effect_monster_psi_weird_mind_and_powerful(effect_monster_type *em_p
  * 1) UNDEADまたはDEMONである
  * 2) レベルが詠唱者の レベル/2 より大きい
  */
-static bool effect_monster_psi_corrupted(player_type *caster_ptr, effect_monster_type *em_ptr)
+static bool reflects_psi_with_currupted_mind(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     bool is_corrupted = any_bits(em_ptr->r_ptr->flags3, RF3_UNDEAD | RF3_DEMON) && (em_ptr->r_ptr->level > caster_ptr->lev / 2) && one_in_(2);
     if (!is_corrupted)
@@ -128,11 +128,11 @@ static void effect_monster_psi_reflect_extra_effect(player_type *caster_ptr, eff
  */
 static void effect_monster_psi_resist(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
-    if (effect_monster_psi_empty_mind(caster_ptr, em_ptr))
+    if (resisted_psi_because_empty_mind(caster_ptr, em_ptr))
         return;
-    if (effect_monster_psi_weird_mind_and_powerful(em_ptr))
+    if (!resisted_psi_because_weird_mind_or_powerful(em_ptr))
         return;
-    if (!effect_monster_psi_corrupted(caster_ptr, em_ptr))
+    if (!reflects_psi_with_currupted_mind(caster_ptr, em_ptr))
         return;
 
     /* プレイヤーの反射判定 */
@@ -217,7 +217,11 @@ process_result effect_monster_psi(player_type *caster_ptr, effect_monster_type *
  */
 static void effect_monster_psi_drain_resist(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
-    if (effect_monster_psi_corrupted(caster_ptr, em_ptr))
+    if (resisted_psi_because_empty_mind(caster_ptr, em_ptr))
+        return;
+    if (!resisted_psi_because_weird_mind_or_powerful(em_ptr))
+        return;
+    if (!reflects_psi_with_currupted_mind(caster_ptr, em_ptr))
         return;
 
     /* プレイヤーの反射判定 */
@@ -277,15 +281,9 @@ process_result effect_monster_psi_drain(player_type *caster_ptr, effect_monster_
     if (em_ptr->seen)
         em_ptr->obvious = TRUE;
 
-    if (em_ptr->r_ptr->flags2 & RF2_EMPTY_MIND) {
-        em_ptr->dam = 0;
-        em_ptr->note = _("には完全な耐性がある！", " is immune.");
-    } else if ((em_ptr->r_ptr->flags2 & (RF2_STUPID | RF2_WEIRD_MIND)) || (em_ptr->r_ptr->flags3 & RF3_ANIMAL)
-        || (em_ptr->r_ptr->level > randint1(3 * em_ptr->dam))) {
-        effect_monster_psi_drain_resist(caster_ptr, em_ptr);
-    } else if (em_ptr->dam > 0) {
+    effect_monster_psi_drain_resist(caster_ptr, em_ptr);
+    if (em_ptr->dam > 0)
         effect_monster_psi_drain_change_power(caster_ptr, em_ptr);
-    }
 
     em_ptr->note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
     return PROCESS_CONTINUE;
