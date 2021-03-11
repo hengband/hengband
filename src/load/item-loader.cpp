@@ -272,18 +272,24 @@ void rd_item(player_type *player_ptr, object_type *o_ptr)
     }
 }
 
+/*!
+ * @brief アイテムオブジェクトの鑑定情報をロードする
+ * @return 成功なら0
+ */
 errr load_item(void)
 {
-    u16b tmp16u;
-    rd_u16b(&tmp16u);
-    if (tmp16u > max_k_idx) {
-        load_note(format(_("アイテムの種類が多すぎる(%u)！", "Too many (%u) object kinds!"), tmp16u));
-        return 22;
-    }
+    u16b loading_max_k_idx;
+    rd_u16b(&loading_max_k_idx);
 
+    object_kind *k_ptr;
+    object_kind dummy;
     byte tmp8u;
-    for (int i = 0; i < tmp16u; i++) {
-        object_kind *k_ptr = &k_info[i];
+    for (int i = 0; i < loading_max_k_idx; i++) {
+        if (i < max_k_idx)
+            k_ptr = &k_info[i];
+        else
+            k_ptr = &dummy;
+
         rd_byte(&tmp8u);
         k_ptr->aware = (tmp8u & 0x01) ? TRUE : FALSE;
         k_ptr->tried = (tmp8u & 0x02) ? TRUE : FALSE;
@@ -295,18 +301,24 @@ errr load_item(void)
     return 0;
 }
 
+/*!
+ * @brief 固定アーティファクトの出現情報をロードする
+ * @return 成功なら0
+ */
 errr load_artifact(void)
 {
-    u16b tmp16u;
-    rd_u16b(&tmp16u);
-    if (tmp16u > max_a_idx) {
-        load_note(format(_("伝説のアイテムが多すぎる(%u)！", "Too many (%u) artifacts!"), tmp16u));
-        return 24;
-    }
+    u16b loading_max_a_idx;
+    rd_u16b(&loading_max_a_idx);
 
+    artifact_type *a_ptr;
+    artifact_type dummy;
     byte tmp8u;
-    for (int i = 0; i < tmp16u; i++) {
-        artifact_type *a_ptr = &a_info[i];
+    for (int i = 0; i < loading_max_a_idx; i++) {
+        if (i < max_a_idx)
+            a_ptr = &a_info[i];
+        else
+            a_ptr = &dummy;
+
         rd_byte(&tmp8u);
         a_ptr->cur_num = tmp8u;
         if (h_older_than(1, 5, 0, 0)) {
