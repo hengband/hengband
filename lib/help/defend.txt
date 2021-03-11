@@ -8,12 +8,12 @@ dirty work for them.
 
 Creatures will attack you in the same manner in which you attack them.
 If they move into you, they attack you. Virtually all monsters can
-lower your hit points by means of a melee attack, and if you lose too
+lower your hit points by means of a melee attack, and, if you lose too
 many, you die. Fortunately, this is also the attack most easily guarded
-against (by wielding armor). Each monster has a maximum of four melee
+against (by wearing armor). Each monster has a maximum of four melee
 attacks which may be of varying type, power and effect.
 
-In addition to pure damage, there can be a number of side-effects from
+In addition to pure damage, there can be a number of side effects from
 a monster hitting you. For example, an especially powerful attack may
 stun or wound you. Stunning is cumulative and, if not addressed, may
 eventually result in you becoming knocked out which allows your
@@ -22,58 +22,57 @@ cause you to lose hit points each round until you either die or your
 wound heals. You will slowly recover from any wound except a Mortal
 Wound with time and all wounds can be healed magically.
 
-In addition to cuts and stunning, some monsters melee attacks may have
+In addition to wouds and stunning, some monsters melee attacks may have
 other consequences. These include causing you to become blind, scared,
 confused, poisoned or paralyzed. There are many others less common
-effects. Full details of monsters melee ability may be found in the
-section on Monsters (see monster.txt).
+effects. More information about monsters' melee attacks may be found
+in the section on Monsters (see monster.txt).
 
-Many monsters also have an array of magical spells which they may use
-against you and others can use various breath attacks on you from a
-distance. For example, a red dragon might breathe fire at you. You can
-defend yourself from the side-effects of melee attacks, monster spells
-and breath attacks by searching for armor that is resistant to that
-form of attack.
+Many monsters also have an array of magical spells or breath attacks
+which they may use against you from a distance. For example, a red
+dragon might breathe fire at you. You can defend yourself from the
+side effects of melee attacks, monster spells and breath attacks
+by searching for armor that is resistant to that form of attack.
 
-As you move down deeper into the dungeon in search of better items,
+As you descend deeper into the dungeon in search of better items,
 you will need to steadily improve your defenses against pure damage,
-wounds, stunning, bolts, balls, and breaths of various kinds,
-reductions of exp and stats, theft, and a variety of miscellaneous
-magical attacks.
+wounds, stunning, bolts, balls, breaths of various kinds, reductions
+of exp and stats, theft and a variety of miscellaneous magical
+attacks.
 
 ***** <Armor>
 === Armor Class ===
 
-Your armor class (or AC) is a number that describes the amount and the
+Your armor class (or AC) is a number that describes the amount and
 quality of armor being worn. Armor class will generally run from about
 0 to 150, but could become negative or greater than 150 with rarer
-armor or by magical means. Note the spell casters receive a penalty
-to their maximum mana for wielding armor that is too heavy. In addition,
-monks lose much of their bare handed fighting skill if their armor
+armor or by magical means. Note that spell casters receive a penalty
+to their maximum mana for wearing armor that is too heavy. In addition,
+monks lose much of their barehanded fighting skill if their armor
 becomes too heavy.
  
 The larger your armor class, the more protective it is. A negative
 armor class would actually help get you hit. Armor protects you in
-three manners. One, it makes you harder to be hit for damage. A hit for
-no damage is the same as a miss. Two, good armor will absorb some of
-the damage that your character would have taken from normal attacks.
-Three, acid damage is reduced by wearing body armor (but the armor will
-be damaged instead). It is obvious that a high armor class is a must
-for surviving the deeper levels of Hengband. Note, however, that armor
-class by itself will not protect you from the side effects of monster
-melee attacks mentioned above.
+three ways. First, it makes you harder to hit for damage. A hit for
+no damage is the same as a miss. Second, good armor will absorb some
+of the damage that your character would have taken from normal attacks.
+Third, acid damage is reduced by wearing body armor (but the armor
+will be damaged instead). It is obvious that a high armor class is
+a must for surviving the deeper levels of Hengband. Note, however,
+that armor class by itself will not protect you from the side effects
+of monster melee attacks mentioned above.
 
 Each piece of armor has a base armor value, which, like the damage from
-weapons, is assumed known by the player, and a magic bonus, which will
+weapons, is assumed known by the player and a magic bonus, which will
 not be displayed unless the armor has been identified or was bought in
 a store.
 
 Armor class values are always displayed between a set of brackets as
 '[#]' or '[#,+#]'. The first value is the armor class of the item. The
 second number is the magical bonus of the item which is only displayed
-if known, and will always have a sign preceding the value.
+if known and will always have a sign preceding the value.
 
-Note: A few rings, amulets, and weapons also have the '[+#]' notation,
+Note: a few rings, amulets and weapons also have the '[+#]' notation,
 indicating that they provide an armor bonus. Many pieces of heavy body
 armor will also have a '(-#)' before the '[#,+#]', which indicates that
 the weight of the armor decreases your chances of hitting monsters.
@@ -87,7 +86,7 @@ very heaviest armor!
 Against some magical attacks (such as cause wounds, cause blindness or
 cause fear) the player will first get a saving throw (see the Skills
 page). However, against attacks such as bolts and ball spells this does
-not apply. Also, there is no saving throw against monster breaths. For
+not apply. Also, there is no saving throw against breath attacks. For
 these types of attacks, your only recourse it to find items or other
 means which grant you 'resistance' to that type of attack.
 
@@ -95,15 +94,15 @@ In Hengband there are many forms of resistance which may be obtained
 either as bonuses from your equipment, as the result of casting a
 magical spell, activating certain artifacts or as the result of a
 mutation. Unfortunately, not all attacks available to monsters can be
-resisted and most can only be partially resisted.
+resisted, and most can only be partially resisted.
 
-Each resistance has one or more corresponding monster attack which it
-'resists'. By this we mean that it reduces the amount of damage that
-your character will take as a result of an attack of that kind. For
-example, fire resistance will reduce the damage to your character
+Each resistance has one or more corresponding monster attacks which
+it 'resists'. By this we mean that it reduces the amount of damage
+that your character will take as a result of an attack of that kind.
+For example, fire resistance will reduce the damage to your character
 resulting from fire attacks such as a fire bolt or being breathed upon
 by a red dragon. Note that appropriate resistances will also negate or
-reduce some side-effects of monster melee attacks.
+reduce some side effects of monster melee attacks.
 
 There are two categories of resistances: (1) the low (or elemental)
 resistances - acid, fire, cold and electricity; and (2) the high
@@ -116,112 +115,198 @@ damage potential.
 A common misconception amongst new players is that having multiple
 sources of a particular resistance will increase your character's
 resistance to attacks of that form. This is not true. You will get the
-same benefit from wielding a single Amulet of Resist Acid as wielding a
-Shield of Resist Acid, an {Armor-type} of Resist Acid and an artifact
-weapon which grants acid resistance all at the same time.
+same benefit from wielding a single Amulet of Resist Acid as wielding
+a Shield of Resist Acid, body armor that grants acid resistance and
+an artifact weapon which grants acid resistance all at the same time.
 
 As stated above, however, it is possible to get double resistance for
 the low resists (and also poison). This is because these resistances
-are also available on a temporary basis by casting certain spells or by
-quaffing a Potion of Resistance. Some items may also activate for
-temporary resistance and it may also be gained from one of the many
-possible mutations. This temporary effect is cumulative with the
-permanent effect and will increase your protection against these kinds
-of attacks.
+are also available on a temporary basis by casting certain spells or
+by quaffing a Potion of Resistance. Some items may also activate for
+temporary resistance. The temporary effect is cumulative with the
+permanent effect and will increase your protection against these
+kinds of attacks. It also prevents damage to your belongings by the
+doubly-resisted element.
 
+(Warning 1) Double resistance prevents an item from being destroyed,
+but it does not prevent equipment from being damaged by acid. It is
+necessary to obtain acid immunity to prevent that form of damage.
+
+(Warning 2) The magical spells in some realms can temporarily add
+a resistance, like nether, which is not a resistance to one of the
+basic four elements nor poison resistance. Currently, that kind of
+temporary resistance does not combine with a permanent resistance
+to become a double resistance.
 
 ***** <EgoArtifact>
 === Ego Armor and Artifacts ===
 
 In addition to the ordinary armor items your character may find in
-the dungeon, some of them may be endowed with additional powers.
-Those fall into two types:  (1) artifacts and (2) ego armor.
+the dungeon, your character may find armor endowed with additional
+powers. Those fall into two types:  (1) artifacts and (2) ego armor.
 Unlike artifacts which are unique and may only be found once in each
 game, it is not unusual to find several pieces of ego armor of the
 same type during the course of a character's adventures.
 
 In general, artifacts and ego armor may boost one or more of your
 primary statistics, may confer certain abilities upon your character
-and may grant resistance to certain forms of attack. Each Ego type may
-only be found on certain types of armor - for example, you can find a
-Shield of Elvenkind but not Boots of Elvenkind.
+and may grant resistance to certain forms of attack. Each Ego type
+may only be found on certain types of armor - for example, you can
+find a Shield of Elvenkind but not Boots of Elvenkind.
 
+--- Shields ---
+of Resist Acid
+     A character using a shield of this type will take only one third
+     the normal damage from acid. The shield can be activated every
+     20+d20 turns to gain temporary resistance to acid. In addition,
+     the shield is not damaged by acid.
 
---- Armor/Shields ---
+of Resist Lightning
+     A character using a shield of this type will take only one third
+     the normal damage from electricity. The shield can be activated
+     every 20+d20 turns to gain temporary resistance to electricity.
 
-of Resist Acid.
-     A character using such an object will take only one third normal
-     damage from any acid thrown upon him.  In addition, armor so
-     enchanted will resist the acid's effects and not be damaged by it.
+of Resist Fire
+     A character using a shield of this type will take only one third
+     the normal damage from fire. The shield can be activated every
+     20+d20 turns to gain temporary resistance to fire.
 
-of Resist Lightning.
-     A character using a resist lightning object will take only one
-     third damage from electrical attacks.
+of Resist Cold
+     A character using a shield of this type will take only one third
+     the normal damage from cold. The shield can be activated every
+     20+d20 turns to gain temporary resistance to cold.
 
-of Resist Fire.
-     A character using a resist fire object will take only one third
-     damage from heat and fire.
+of Resistance
+     A character using a shield of this type gains resistance to acid,
+     cold, fire and electricity. It may also have another, random,
+     resistance or resistance to poison.
 
-of Resist Cold.
-     A character using a resist cold object will take only one third
-     damage from frost and cold.
+of Reflection
+     A shield of this type can cause bolt spells to bounce off,
+     preventing damage from the spell and often damaging the caster.
+     The bounce effect happens most, but not all, of the time.
 
-of Resistance.
-     A character wearing armor with this ability will have resistance
-     to Acid, Cold, Fire, and Lightning as explained in each part
-     above.
+of Night and Day
+     A shield of this type protects against damage from light and
+     darkness attacks and prevents the blinding effect of those
+     attacks.
 
-of Elvenkind.
-     This is the same as Resistance armor, only generally better
-     enchanted. It will also make you stealthier.
+of Protection
+     A shield of this type is not affected by acid, fire, cold
+     or electricity, but it does not provide resistance to them.
+     It usually provides a larger than normal bonus to AC.
 
-of Permanence (Robes Only)
-     These robes provide resistance to fire, cold, acid, and
-     electricity and cannot be damaged by acid. They also resist life
-     draining attacks and sustain all your primary statistics. 
+of the Dwarves
+     A shield of this type has a larger bonus to AC than a normal
+     shield, increases the consitution of the wielder and provides
+     a random resistance to one of the four basic elements.
+     Furthermore, it is lighter than a normal shield.
 
-of Reflection (Shields Only)
-     These shields reflect missiles and bolt spells preventing damage
-     to the player character and often damaging the originating
-     monster. The reflection is not 100% effective but nearly so. 
+--- Armor ---
 
-of Night and Day (Shields Only)
-     These shields provide resistance to light and darkness.
+of Resistance
+     Armor of this type provides resistance to acid, cold, fire
+     and electricity. It also provides another, random, resistance
+     and may provide resistance to poison.
+
+of Elvenkind
+     Armor of this type provides resistance to acid, cold, fire
+     and electricity. It enhances the stealth of the wearer and
+     provides another, random, resistance.
+
+of Uruk-hai
+     Armor of this type gives attack bonuses for to-hit and
+     to-damage. It also provides resistance to acid, cold, fire,
+     electricity and one other, random, resistance.
+
+of the Dwarves
+     Armor of this type has a larger bonus to AC than normal
+     armor, increases the constitution of the wearer and provides
+     a random resistance to one of the four basic elements.
+     Furthermore, it is lighter than normal armor.
+
+of Olog-hai
+     Armor of this type gives attack bonuses for to-hit and
+     to-damage. It also increases the strength of the wearer and
+     provides a random resistance to one of the four basic elements.
+
+of Druid
+     Armor of this type increases the wisdom of the wearer. It also
+     provides a random resistance to one of the four basic elements
+     and another, random, resistance.
+
+Robe of Permanence
+     A robe of this type provides resistance to fire, cold, acid
+     and electricity. It sustains all the primary statistics of the
+     wearer and provides resistance to experience draining attacks.
+     It also provides one additional, random, resistance.
+
+Robe of The Twilight
+     A robe of this type has a very wide range of abilities. It
+     provides resistance to the four basic elements and almost all
+     of the higher resistances. It sustains all the primary statistics
+     of the wearer and provides resistance to experience draining
+     attacks. It also can protect against paralyzation and reflect
+     bolt spells. The wearer can levitate and see invisible creatures.
+     However, the price is that the wearer's armor class is set to
+     zero.
+
+of Morgul
+     Armor of this type provides resistance to cold, poison and
+     nether and may provide an additional, random, resistance.
+     Furthermore, it surrounds the wearer with a sheath of cold
+     air which can damage those that attack the wearer. It also
+     allows the wearer to always sense the presence of nearby
+     undead. However, this armor will drain experience from time
+     to time, spreads curses to equipped items, and has a random,
+     unpleasant, effect.
+
+of Demon
+     Armor of this type increases the strength, intelligence and
+     consitition of the wearer.  If provides resistance to fire and
+     nether and may provide an additional, random resistance.  It
+     allows the wearer to always sense the presence of nearby
+     demons and envelops the wearer in a fiery aura.  However, it
+     has a random, unpleasant, effect.
 
 --- Caps/Helms/Crowns ---
 
-of Intelligence
-     This item will both increase and sustain your intelligence.
-
-of Wisdom
-     This item will both increase and sustain your wisdom.
-
-of Beauty
-     This item will both increase and sustain your charisma.
+of Brilliance
+     This item will increase and sustain your intelligence, wisdom,
+     and charisma.
 
 of the Magi
-     This item will both increase and sustain your intelligence, and
-     grants resistance against fire, frost, acid, and lightning.
+     This item will increase and sustain your intelligence. It grants
+     resistance to fire, cold, acid and electricity. It also has
+     an additional, random, ability and provides another, random,
+     resistance.
 
 of Might
-     This item will both increase and sustain your strength, dexterity,
-     and constitution and will also make you immune to any foe's attempt
-     to slow or paralyze you.
+     This item will increase and sustain your strength, dexterity,
+     and constitution. It will protect you from paralyzation and
+     some slowing attacks. It provides one, random, resistance.
 
 of Lordliness
-     This item will both increase and sustain your wisdom and charisma.
+     This item will increase and sustain your wisdom and charisma.
+     It provides one, random, resistance.
 
 of Seeing
-     This item will grant the ability to see invisible creatures, and
+     This item will grant the ability to see invisible creatures and
      will also increase your ability to locate traps and secret doors.
-     In addition it will also prevent you from being blinded.
+     In addition, it will prevent you from being blinded. Some items
+     of this type confer telepathic abilities.
 
 of Infravision
-     This item will increase the range of you infravision and grants
+     This item will increase the range of your infravision and grants
      infravision if you are a race which does not get it intrinsically.
 
 of Light
-     This item provides a permanent light source.
+     This item provides a permanent light source. It also provides
+     resistance against light attacks.
+
+of Darkness
+     This item provides resistance to darkness but also decreases the
+     radius or your light source.
 
 of Telepathy
      This item grants its wielder telepathy.
@@ -230,13 +315,26 @@ of Regeneration
      This item will help you regenerate hit points and mana more
      quickly than normal, allowing you to fight longer before needing
      to rest. You will use food faster than normal while wearing this
-     crown because of the regenerative effects.
+     headgear because of the regenerative effects.
+
+of Basilisk
+     This item will increase the range of your infravision. It also
+     provides resistance to poison and protects you from paralyzation
+     and some slowing attacks.
+
+of Demon
+     This item will increase your intelligence. It also provides
+     resistance to fire and nether and may provide an additional,
+     random resistance. It allows you to always sense the presence
+     of nearby demons and surrounds you with an aura of fire.
+     However, it has a random, unpleasant, effect.
 
 --- Cloaks ---
 
 of Protection
      These cloaks cannot be harmed by acid, fire, cold or lightning
-     attacks but do not grant resistance to these elements.
+     attacks but do not grant resistance to those elements. They
+     usually have a larger than normal bonus to AC.
 
 of Stealth
      These cloaks will make your character more stealthy.
@@ -244,7 +342,8 @@ of Stealth
 of Aman
      These cloaks cannot be harmed by acid, fire, cold or lightning
      attacks but do not grant resistance to these elements. They also
-     make your character more stealthy.
+     make your character more stealthy and provide one random
+     resistance.
 
 of Immolation
      These cloaks cannot be harmed by acid or fire attacks. They also
@@ -257,40 +356,56 @@ of Electricity
 
 of the Bat
      These very powerful cloaks grant speed, stealth, infravision,
-     levitation, ability to see invisible and resistance to
-     darkness. But in return for these ability, you will have large
-     penalty to to-hit and to-damage bonus.
+     levitation, the ability to see invisible and resistance to
+     darkness. However, in return for those abilities, you will have
+     large penalties to to-hit and to-damage.
 
 --- Gloves/Gauntlets/Sets of Cesti ---
 
 of Free Action
-     This item will make you immune to any foe's attempt to slow or
-     paralyze you. A mage-type spellcaster who wields them will not
-     have their mana penalized.
+     This item will protect you from paralyzation and some slowing
+     attacks.  A mage-type spellcaster who wears them will not have
+     his or her mana penalized.
 
 of Slaying
      In addition to its armor bonus, this item will grant a bonus to
-     your +to-hit and +to-dam.
+     your to-hit and to-damage.
 
 of Agility
      This item will increase your dexterity. A mage-type spellcaster
-     who wields them will not have their mana penalized.
+     who wears them will not have his or her mana penalized.
 
 of Power
      This item will increase your strength and will also grant a bonus
-     to your +to-hit and +to-dam.
+     to your to-hit and to-damage. It also provides one random
+     resistance.
+
+of Genji
+     This item will increase your dexterity and grant a bonus to
+     your to-hit. It can decrease the penalty for wielding two weapons
+     at once, one in each hand.
+
+of Magic Mastery
+     This item will increase your ability to use magical devices.
+     A mage-type spellcaster who wears them will not have his or
+     her mana penalized.
 
 --- Boots ---
 
 of Levitation
-     These boots will grant you levitation.
+     These boots will grant you levitation. Some provide one
+     random resistance.
 
 of Stealth
      These boots will make your character more stealthy.
 
 of Free Action
-     This item will make you immune to any foe's attempt to slow or
-     paralyze you.
+     These boots will protect you from paralyzation and some slowing
+     attacks.
+
+of Jumping
+     These boots can be activated to instantly teleport you a short
+     distance.
 
 of Speed
      These boots will make your character more speedy.
@@ -299,69 +414,84 @@ of Speed
      
 Dragon Scale Mails.
      These extremely rare pieces of armor come in many different
-     colors, each protecting you against the relevant dragons.
-     Naturally they are all resistant to acid damage. They also
-     occasionally allow you to breathe as a dragon would!
+     colors, each protecting you against the dragons of that color.
+     They can not be damaged by acid, fire, cold or electricity.
+     They also occasionally allow you to breathe as a dragon would!
 
-Dragon Shields and Helms
-     These shields and helms have a chance of granting one or more 
-     random resistances.
+Dragon Shields, Helms, Boots and Gloves
+     These items have a chance of granting one or more random
+     resistances. They all can not be damaged by acid, fire, cold
+     or electricity.
 
-Other items
-     Apart from these there are some very rare, and well made armor
-     in the dungeon with not necessarily any special abilities. These
-     include Adamantite Plate Mail, Mithril Plate Mail, Mithril Chain
-     Mail, Shields of Deflection, and Shadow Cloaks. The first four
-     cannot be damaged by acid because of the quality metals they
-     contain. Shadow Cloaks grant resistance to both light and darkness
-     attacks.
+--- Other items ---
+
+
+Apart from these there are some very rare, and well made, pieces of
+armor in the dungeon. Adamantite Plate Mail, Mithril Plate Mail,
+and Mithril Chain Mail are not damaged by acid because of the quality
+metals they contain. Mirror Shields have the ability to reflect bolt
+spells. Elven Cloaks make the wearer more stealthy and make it easier
+to find traps or secret doors. Shadow Cloaks provide resistance to
+light and darkness attacks. All of those could also be ego items or
+artifacts.
+
+There are also legendary pieces of armor (artifacts) which are similar
+to ego items but usually have more abilities and are very powerful.
+Artifacts never break. However, they may deteriorate and, if caught
+in the effect range of *destruction, may disappear forever.
+
+In Hengband, there are two types of artifacts: fixed and random.
+A fixed artifact has a predetermined name and attributes, so,
+if you play the game many times, you may encounter the same fixed
+artifact. The name and attributes of a random artifact are determined
+when it is generated, so it is extremely unlikely that you would see
+that artifact again in another game.
+
 
 
 ***** <Resistances>
 === The Resistances ===
 
-This section describes the various attack-types available to monsters
+This section describes the various types of attack available to monsters
 and how they may be resisted.
 
 Acid
     Acid resistance will cut damage from acid attacks by two-thirds.
-    Temporary resistance will cut further damage by another two-thirds.
+    Temporary resistance will also reduce damage by two-thirds.
     This means that a character with both permanent and temporary
-    resistance will only take one-ninth of the original damage. Acid
-    resistance will also protect your wielded equipment from being
-    corroded by acid but will not protect items in your inventory from
-    being destroyed by acid if they are susceptible to such attacks.
+    resistance will only take one-ninth of the original damage. Double
+    resistance prevents the destruction of acid-sensitive belongings.
 
 Fire
     Fire resistance will cut damage from fire attacks by two-thirds.
-    Temporary resistance will cut further damage by another two-thirds.
+    Temporary resistance will also reduce damage by two-thirds.
     This means that a character with both permanent and temporary
     resistance will only take one-ninth of the original damage. Fire
-    resistance will not protect items in your inventory from being
-    destroyed by fire if they are susceptible to such attacks.
+    resistance helps protect belongings from fire damage; double
+    resistance prevents the destruction of fire-sensitive belongings.
 
 Cold
     Cold resistance will cut damage from cold attacks by two-thirds.
-    Temporary resistance will cut further damage by another two-thirds.
+    Temporary resistance will also reduce damage by two-thirds.
     This means that a character with both permanent and temporary
     resistance will only take one-ninth of the original damage. Cold
-    resistance will not protect items in your inventory from being
-    destroyed by fire if they are susceptible to such attacks.
+    resistance helps protect belongings from cold damage; double
+    resistance prevents the destruction of cold-sensitive belongings.
 
 Electricity
-    Electricity resistance will cut damage from fire attacks by
-    two-thirds. Temporary resistance will cut further damage by another
-    two-thirds. This means that a character with both permanent and
-    temporary resistance will only take one-ninth of the original
-    damage. Electricity resistance will not protect items in your
-    inventory from being destroyed by fire if they are susceptible to
-    such attacks.
+    Electricity resistance will cut damage from electric attacks by
+    two-thirds. Temporary resistance will also reduce damage by
+    two-thirds. This means that a character with both permanent
+    and temporary resistance will only take one-ninth of the original
+    damage. Electricity resistance helps protect belongings from
+    damage due to electricity; double resistance prevents the
+    destruction of electricity-sensitive belongings.
 
 Poison
     Poison resistance will cut damage from poison attacks by
-    two-thirds. Temporary resistance will cut further damage by another
-    two-thirds. This means that a character with both permanent and
-    temporary resistance will only take one-ninth of the original
+    two-thirds. Temporary resistance will also reduce damage by
+    two-thirds. This means that a character with both permanent
+    and temporary resistance will only take one-ninth of the original
     damage. Poison resistance will also protect you from becoming
     'poisoned' but characters will not be healed of their 'poisoned'
     status if they become resistant to poison after already being
@@ -370,37 +500,36 @@ Poison
 Confusion
     Confusion resistance will reduce the damage taken from confusion
     attacks and breaths. It will also prevent your character from
-    becoming 'Confused' (if you are confused you will be unable to read
-    scrolls, cast spells or prayers and will have a dramatically
+    becoming 'Confused' (if you are confused you will be unable to
+    read scrolls, cast spells or prayers and will have a dramatically
     reduced ability to use magical devices). In particular, water
-    attacks may confuse as a side-effect - this is prevented if you
-    have confusion resistance
+    attacks may confuse as a side effect. That can be prevented if
+    you have confusion resistance.
 
 Light
-    Light breaths damage the player and cause blindness as a
-    side-effect. Light resistance reduces the damage and also
-    prevents blindness caused from light attacks (but not from other
-    attacks.
+    Light attacks damage the player and cause blindness as a side
+    effect. Light resistance reduces the damage and also prevents
+    blindness caused from light attacks (but not from other attacks).
 
-Dark
-    Dark breaths damage the player and cause blindness as a
-    side-effect.  Dark resistance reduces the damage and also
-    prevents blindness caused from dark attacks (but not from other
-    attacks. In addition, some high-level monsters can cast Darkness
-    Storms, these are a particularly dangerous form of attack but are
-    resisted if you gave Dark resistance.
+Darkness
+    Darkness attacks damage the player and cause blindness as a
+    side effect.  Darkness resistance reduces the damage and also
+    prevents blindness caused from darkness attacks (but not from other
+    attacks). In addition, some high-level monsters can cast Darkness
+    Storms. Those are a particularly dangerous form of attack but are
+    resisted if you have darkness resistance.
 
 Blindness
     Resist blindness will protect you from spells which blind and from
     being "hit to blind" (a few monsters can do this) as well as from
     the blindness (but not the damage) caused by light and darkness
-    breaths.
+    attacks.
 
 Sound
     Sound resistance reduces damage from sound attacks and also the
     stunning side effects of sound and some other attacks. (Sound,
     plasma, water, force, gravity and shards attacks may all stun the
-    player as may ice-bolt attacks). Sound resistance does not protect
+    player as may ice bolt attacks). Sound resistance does not protect
     against stunning from melee attacks.
 
 Fear
@@ -411,7 +540,7 @@ Fear
 Shards
     Shards resistance will reduce the damage taken from shards attacks
     (this includes a Cyberdemon's Rocket Launchers). It also prevents
-    the cuts that come from these attacks (and also ice-bolts). Some
+    the cuts that come from these attacks (and also ice bolts). Some
     shards attacks may also stun the player, this is prevented if you
     have sound resistance and not by shard resistance.
 
@@ -420,28 +549,28 @@ Nexus
     will rarely kill you directly. A Nexus attack will damage the player
     and may teleport the player, teleport-level the player or swap two
     of your primary statistics around. Nexus resistance will reduce the
-    damage taken from such attacks and prevent the side-effects but
-    will not prevent you from being teleported by non-nexus attacks (for
-    this you will need an item granting anti-teleportation).
+    damage taken from such attacks and prevent the side effects but
+    will not prevent you from being teleported by non-nexus attacks
+    (for that you will need an item granting anti-teleportation).
 
 Chaos
     Chaos attacks are one of the most dangerous attack types in
-    Hengband. They have a relatively high maximum damage, and may also
-    confuse the player, cause hallucination, reduce your character's
+    Hengband. They have a relatively high maximum damage and may also
+    confuse the player, cause hallucinations, reduce your character's
     experience and cause you to mutate. Chaos resistance will the
-    damage taken from such attacks and negate all side-effects.
+    damage taken from such attacks and negate all side effects.
 
 Nether
-    Another dangerous attack type. Nether attacks are common deeper in
-    the dungeon, have a high maximum damage and will also cause your
-    character's experience to be drained. Nether resistance will reduce
-    the damage taken and the experience loss. It will not reduce the
-    experience loss from non-nether attacks (for this you need
-    hold-life).
+    Nether is another dangerous attack type. Nether attacks are common
+    deeper in the dungeon, have a high maximum damage and will also
+    cause your character's experience to be drained. Nether resistance
+    will reduce the damage taken and the experience loss. It will not
+    reduce the experience loss from non-nether attacks (for this you
+    need hold-life).
 
 Gravity
     Gravity attacks damage the player and also cause you (and monsters
-    they hit) to be teleported a short distance. A side-effect of this
+    they hit) to be teleported a short distance. A side effect of this
     is that since the effect is calculated on each spot in turn, it is
     possible to be blinked into a spot which hasn't been calculated yet
     but is in line to be affected by the breath - the net result is to
@@ -467,38 +596,50 @@ Toxic Waste
 --- Unresistable Attacks ---
 
 There is no resistance to the following types of attacks although some
-of their side-effects may be resisted.
+of their side effects may be resisted.
 
 Time
     Time attacks damage the player, drain experience and may reduce one
-    or more of your primary statistics.
+    or more of your primary statistics. Some kinds of magic or very
+    rare items grant resistance to time attacks, but you usually won't
+    have any resistance.
 
 Plasma
     Plasma can damage you, stun you and burn your equipment. Fire
     immunity (not resistance) prevents burning of equipment, sound
-    resistance prevents the stunning but there is no resistance to the
-    damage.
+    resistance prevents the stunning, but there is no resistance to
+    the damage.
 
 Inertia
-    Inertia will damage you and slow you down by -10 speed. There is no
-    resistance to damage or effects.
+    Inertia will damage you and slow you down by -10 speed. There is
+    no resistance to the damage or the slowing.
 
-Mana and Disintegration
-    There is no resistance to the mana and disintegration attacks.
+Mana
+    There is no resistance to this attack. It also destroys all items
+    on the ground.
+
+Disintegration
+    There is no resistance this attack. It also destroys all non-permanent
+    walls and any items on the ground.
 
 ***** <Immunities>
 --- Immunities ---
 
 It is also possible that you may find items which grant immunity
-to one or (very occasionally) more of the low resistances ie. Acid,
-Fire, Cold and Electricity.  In this case, when wielded, you will
+to one or (very occasionally) more of the low resistances, i.e. acid,
+fire, cold and electricity.  In this case, when wielded, you will
 take no damage from attacks of the relevant kind and, in addition,
 your equipment and inventory are safe from being damaged or
 destroyed by the attack.
 
-In addition free action, fear and blindness resistance may be
+In addition, free action, fear and blindness resistance may be
 thought of as immunities since having they protect totally from the
 respective form of attack.
+
+(Warning) Even if you have free action, you may be paralyzed in
+special circumstances. It can be caused by hunger, casting a spell
+when you have insufficient mana or, more importantly, the blood
+curse cast by an Amberite.
 
 ***** <Miscellaneous>
 --- Miscellaneous ---
@@ -528,41 +669,42 @@ need to take steps to recover from the damage as soon as possible.
 
 --- Healing Items ---
 
-Healing is available in multiple forms including: Potions and Staffs
-of Cure Light Wounds, Potions of Cure Serious Wounds, Potions of Cure
-Critical Wounds, Potions, Staffs and Rods of Healing, Potions of
-*Healing* and Potions of Life, from weakest to strongest. Both the Life
-and Nature realms contain spells to heal the player.
+Healing is available in multiple forms including, from weakest to
+strongest: Potions and Staffs of Cure Light Wounds, Potions of Cure
+Serious Wounds, Potions of Cure Critical Wounds, Potions of Curing,
+Potions, Staffs and Rods of Healing, Potions of *Healing* and
+Potions of Life. Both the Life and Nature realms contain spells to
+heal the player.
 
 Cure Light Wounds
-     restores 2d8 hitpoints and removes cuts, blindness and berserk.
+     Restores 2d8 hitpoints and removes cuts, blindness and berserk.
 
 Cure Serious Wounds
-     restores 4d8 hitpoints and removes cuts, blindness, confusion and
+     Restores 4d8 hitpoints and removes cuts, blindness, confusion and
      berserk.
 
 Cure Critical Wounds
-     restores 6d8 hitpoints and removes cuts, blindness, confusion,
+     Restores 6d8 hitpoints and removes cuts, blindness, confusion,
      stun, poison and berserk.
 
 Curing
-     restores 50 hitpoints and removes cuts, blindness, confusion,
+     Restores 50 hitpoints and removes cuts, blindness, confusion,
      stun, poison and hallucination.
 
 Healing
-     restores 300 hitpoints and removes cuts, blindness, confusion,
+     Restores 300 hitpoints and removes cuts, blindness, confusion,
      stun, poison and berserk.
 
 *Healing*
-     restores 1200 hitpoints and removes cuts, blindness, confusion,
+     Restores 1200 hitpoints and removes cuts, blindness, confusion,
      stun, poison and berserk.
 
-
 Potions of Life
-     restores 5000 hitpoints (about 5 times more than you'll ever
+     Restores 5000 hitpoints (about 5 times more than you'll ever
      have), restores all drained stats and experience, and removes all
      bad effects except hunger. These are very rare; save them in your
      home for a dangerous fight.
+
 
 --- Restoring Items ---
 
@@ -572,8 +714,8 @@ drained. Statistics can be restored by quaffing a Potion of Restore
 Restoring. Some towns may provide this service for a fee. Experience
 may be restored by quaffing a Potion of Restore Life Levels or using a
 Rod of Restoration. You may also regain it in the normal course of your
-adventuring or by quaffing a Potion of Experience. The Life realm has
-a spell called Restoration which restores any drained experience.
+adventuring or by quaffing a Potion of Experience. Some spells regain
+lost experience points.
 
 --- Other ---
 
@@ -591,3 +733,4 @@ Original   : (??), Leon Marrick and Chris Weisiger
 Updated    : (??)
 Updated    : Zangband DevTeam
 Updated    : Hengband 1.0.11
+Updated    : Hengband 3.0.0, English translation backwardsEric
