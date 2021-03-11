@@ -20,14 +20,16 @@ void rd_version_info(void)
     rd_byte(&current_world_ptr->h_ver_minor);
     rd_byte(&current_world_ptr->h_ver_major);
 
-    load_note(format(_("バージョン %d.%d.%d.%d のセーブ・ファイルをロード中...", "Loading a %d.%d.%d.%d savefile..."),
-        (current_world_ptr->h_ver_major > 9) ? current_world_ptr->h_ver_major - 10 : current_world_ptr->h_ver_major, current_world_ptr->h_ver_minor,
-        current_world_ptr->h_ver_patch, current_world_ptr->h_ver_extra));
-
     rd_u32b(&current_world_ptr->sf_system);
     rd_u32b(&current_world_ptr->sf_when);
     rd_u16b(&current_world_ptr->sf_lives);
     rd_u16b(&current_world_ptr->sf_saves);
+
+    rd_u32b(&loading_savefile_version);
+
+    load_note(format(_("バージョン %d.%d.%d.%d のセーブデータ(SAVE%lu形式)をロード中...", "Loading a Verison %d.%d.%d.%d savefile (SAVE%lu format)..."),
+        (current_world_ptr->h_ver_major > 9) ? current_world_ptr->h_ver_major - 10 : current_world_ptr->h_ver_major, current_world_ptr->h_ver_minor,
+        current_world_ptr->h_ver_patch, current_world_ptr->h_ver_extra, loading_savefile_version));
 }
 
 /*!

@@ -162,7 +162,6 @@ static errr verify_encoded_checksum()
 static errr exe_reading_savefile(player_type *creature_ptr)
 {
     rd_version_info();
-    rd_u32b(&loading_savefile_version);
     rd_dummy3();
     rd_system_info();
     rd_unique_info();
