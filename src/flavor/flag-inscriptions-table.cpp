@@ -35,7 +35,8 @@ std::vector<flag_insc_table> flag_insc_resistance = {
     { "酸", "Ac", TR_RES_ACID, TR_IM_ACID }, { "電", "El", TR_RES_ELEC, TR_IM_ELEC }, { "火", "Fi", TR_RES_FIRE, TR_IM_FIRE }, { "冷", "Co", TR_RES_COLD, TR_IM_COLD },
     { "毒", "Po", TR_RES_POIS, -1 }, { "閃", "Li", TR_RES_LITE, -1 }, { "暗", "Dk", TR_RES_DARK, -1 }, { "破", "Sh", TR_RES_SHARDS, -1 },
     { "盲", "Bl", TR_RES_BLIND, -1 }, { "乱", "Cf", TR_RES_CONF, -1 }, { "轟", "So", TR_RES_SOUND, -1 }, { "獄", "Nt", TR_RES_NETHER, -1 },
-    { "因", "Nx", TR_RES_NEXUS, -1 }, { "沌", "Ca", TR_RES_CHAOS, -1 }, { "劣", "Di", TR_RES_DISEN, -1 }, { "恐", "Fe", TR_RES_FEAR, -1 },
+    { "因", "Nx", TR_RES_NEXUS, -1 }, { "沌", "Ca", TR_RES_CHAOS, -1 }, { "劣", "Di", TR_RES_DISEN, -1 }, { "時", "Tm", TR_RES_TIME, -1 },
+    { "水", "Wt", TR_RES_WATER, -1 }, { "恐", "Fe", TR_RES_FEAR, -1 },
 };
 
 /*! オブジェクトの特性表示記号テーブルの定義(その他特性) */
@@ -110,7 +111,8 @@ std::vector<flag_insc_table> flag_insc_resistance = {
     { "Ac", TR_RES_ACID, TR_IM_ACID }, { "El", TR_RES_ELEC, TR_IM_ELEC }, { "Fi", TR_RES_FIRE, TR_IM_FIRE }, { "Co", TR_RES_COLD, TR_IM_COLD },
     { "Po", TR_RES_POIS, -1 }, { "Li", TR_RES_LITE, -1 }, { "Dk", TR_RES_DARK, -1 }, { "Sh", TR_RES_SHARDS, -1 },
      { "Bl", TR_RES_BLIND, -1 }, { "Cf", TR_RES_CONF, -1 }, { "So", TR_RES_SOUND, -1 }, { "Nt", TR_RES_NETHER, -1 },
-    { "Nx", TR_RES_NEXUS, -1 }, { "Ca", TR_RES_CHAOS, -1 }, { "Di", TR_RES_DISEN, -1 }, { "Fe", TR_RES_FEAR, -1 },
+    { "Nx", TR_RES_NEXUS, -1 }, { "Ca", TR_RES_CHAOS, -1 }, { "Di", TR_RES_DISEN, -1 }, { "Tm", TR_RES_TIME, -1 },
+    { "Wt", TR_RES_WATER, -1 }, { "Fe", TR_RES_FEAR, -1 },
 };
 
 std::vector<flag_insc_table> flag_insc_misc = {

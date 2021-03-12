@@ -290,6 +290,14 @@ PRICE flag_cost(player_type *player_ptr, object_type *o_ptr, int plusses)
         tmp_cost += 2000;
         count += 2;
     }
+    if (has_flag(flgs, TR_RES_TIME)) {
+        tmp_cost += 2000;
+        count += 2;
+    }
+    if (has_flag(flgs, TR_RES_WATER)) {
+        tmp_cost += 2000;
+        count += 2;
+    }
     total += (tmp_cost * count);
 
     if (has_flag(flgs, TR_SH_FIRE))
