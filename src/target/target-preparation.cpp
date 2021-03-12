@@ -3,6 +3,8 @@
 #include "game-option/input-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
+#include "monster-race/monster-race.h"
+#include "monster-race/race-flags1.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
@@ -14,6 +16,8 @@
 #include "util/bit-flags-calculator.h"
 #include "util/sort.h"
 #include "window/main-window-util.h"
+
+#include <algorithm>
 
 /*
  * Determine is a monster makes a reasonable target
@@ -151,9 +155,9 @@ void target_set_prepare(player_type *creature_ptr, BIT_FLAGS mode)
     tmp_pos.x[1] = tmp;
 }
 
-void target_sensing_monsters_prepare(player_type *creature_ptr, pos_list *plist)
+void target_sensing_monsters_prepare(player_type *creature_ptr, std::vector<MONSTER_IDX> &monster_list)
 {
-    plist->n = 0;
+    monster_list.clear();
 
     // 幻覚時は正常に感知できない
     if (creature_ptr->image)
@@ -168,10 +172,34 @@ void target_sensing_monsters_prepare(player_type *creature_ptr, pos_list *plist)
         if (is_mimicry(m_ptr) && none_bits(m_ptr->mflag2, (MFLAG2_MARK | MFLAG2_SHOW)) && none_bits(m_ptr->mflag, MFLAG_ESP))
             continue;
 
-        plist->x[plist->n] = m_ptr->fx;
-        plist->y[plist->n] = m_ptr->fy;
-        plist->n++;
+        monster_list.push_back(i);
     }
 
-    ang_sort(creature_ptr, plist->x, plist->y, plist->n, ang_sort_comp_importance, ang_sort_swap_position);
+    auto comp_importance = [floor_ptr = creature_ptr->current_floor_ptr](MONSTER_IDX idx1, MONSTER_IDX idx2) {
+        auto m_ptr1 = &floor_ptr->m_list[idx1];
+        auto m_ptr2 = &floor_ptr->m_list[idx2];
+        auto ap_r_ptr1 = &r_info[m_ptr1->ap_r_idx];
+        auto ap_r_ptr2 = &r_info[m_ptr2->ap_r_idx];
+
+        /* Unique monsters first */
+        if (any_bits(ap_r_ptr1->flags1, RF1_UNIQUE) != any_bits(ap_r_ptr2->flags1, RF1_UNIQUE))
+            return any_bits(ap_r_ptr1->flags1, RF1_UNIQUE);
+
+        /* Shadowers first (あやしい影) */
+        if (any_bits(m_ptr1->mflag2, MFLAG2_KAGE) != any_bits(m_ptr2->mflag2, MFLAG2_KAGE))
+            return any_bits(m_ptr1->mflag2, MFLAG2_KAGE);
+
+        /* Unknown monsters first */
+        if ((ap_r_ptr1->r_tkills == 0) != (ap_r_ptr2->r_tkills == 0))
+            return (ap_r_ptr1->r_tkills == 0);
+
+        /* Higher level monsters first (if known) */
+        if (ap_r_ptr1->r_tkills && ap_r_ptr2->r_tkills && ap_r_ptr1->level != ap_r_ptr2->level)
+            return ap_r_ptr1->level > ap_r_ptr2->level;
+
+        /* Sort by index if all conditions are same */
+        return m_ptr1->ap_r_idx > m_ptr2->ap_r_idx;
+    };
+
+    std::sort(monster_list.begin(), monster_list.end(), comp_importance);
 }

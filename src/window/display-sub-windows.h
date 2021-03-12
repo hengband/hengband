@@ -3,10 +3,10 @@
 #include "system/angband.h"
 #include "object/tval-types.h"
 
-typedef struct pos_list pos_list;
+#include <vector>
 
 void fix_inventory(player_type *player_ptr, tval_type item_tester_tval);
-void print_monster_list(floor_type *floor_ptr, pos_list *plist, TERM_LEN x, TERM_LEN y, TERM_LEN max_lines);
+void print_monster_list(floor_type *floor_ptr, const std::vector<MONSTER_IDX> &monster_list, TERM_LEN x, TERM_LEN y, TERM_LEN max_lines);
 void fix_monster_list(player_type *player_ptr);
 void fix_equip(player_type *player_ptr, tval_type item_tester_tval);
 void fix_player(player_type *player_ptr);
