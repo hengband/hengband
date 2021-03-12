@@ -143,25 +143,47 @@ void effect_player_plasma(player_type *target_ptr, effect_player_type *ep_ptr)
         inventory_damage(target_ptr, set_acid_destroy, 3);
 }
 
+/*!
+ * @brief 地獄属性によるダメージを受ける
+ * @param target_ptr プレイヤー情報への参照ポインタ
+ * @param em_ptr プレイヤー効果情報への参照ポインタ
+ * @return なし
+ * @detail
+ * 幽霊は回復する。追加効果で経験値吸収。
+ */
+
 void effect_player_nether(player_type *target_ptr, effect_player_type *ep_ptr)
 {
     if (target_ptr->blind)
         msg_print(_("地獄の力で攻撃された！", "You are hit by nether forces!"));
 
-    ep_ptr->dam = ep_ptr->dam * calc_nether_damage_rate(target_ptr, CALC_RAND) / 100;
+    bool evaded = check_multishadow(target_ptr);
 
-    if (!has_resist_neth(target_ptr) && !check_multishadow(target_ptr))
-        drain_exp(target_ptr, 200 + (target_ptr->exp / 100), 200 + (target_ptr->exp / 1000), 75);
-
-    if (!is_specific_player_race(target_ptr, RACE_SPECTRE) || check_multishadow(target_ptr)) {
-        ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+    if (is_specific_player_race(target_ptr, RACE_SPECTRE)) {
+        if (!evaded) {
+            msg_print(_("気分がよくなった。", "You feel invigorated!"));
+            hp_player(target_ptr, ep_ptr->dam / 4);
+        }
+        ep_ptr->get_damage = 0;
         return;
     }
 
-    msg_print(_("気分がよくなった。", "You feel invigorated!"));
-    hp_player(target_ptr, ep_ptr->dam / 4);
+    ep_ptr->dam = ep_ptr->dam * calc_nether_damage_rate(target_ptr, CALC_RAND) / 100;
+
+    if (!has_resist_neth(target_ptr) && !evaded)
+        drain_exp(target_ptr, 200 + (target_ptr->exp / 100), 200 + (target_ptr->exp / 1000), 75);
+
+    ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 }
 
+/*!
+ * @brief 水流属性によるダメージを受ける
+ * @param target_ptr プレイヤー情報への参照ポインタ
+ * @param em_ptr プレイヤー効果情報への参照ポインタ
+ * @return なし
+ * @detail
+ * 追加効果で朦朧と混乱、冷気同様のインベントリ破壊。
+ */
 void effect_player_water(player_type *target_ptr, effect_player_type *ep_ptr)
 {
     if (target_ptr->blind)
@@ -171,19 +193,22 @@ void effect_player_water(player_type *target_ptr, effect_player_type *ep_ptr)
         return;
     }
 
-    if (!has_resist_sound(target_ptr) && !has_resist_water(target_ptr)) {
-        set_stun(target_ptr, target_ptr->stun + randint1(40));
-    }
-    if (!has_resist_conf(target_ptr) && !has_resist_water(target_ptr)) {
-        set_confused(target_ptr, target_ptr->confused + randint1(5) + 5);
-    }
+    ep_ptr->dam = ep_ptr->dam * calc_water_damage_rate(target_ptr, CALC_RAND) / 100;
 
-    if (one_in_(5) && !has_resist_water(target_ptr)) {
-        inventory_damage(target_ptr, set_cold_destroy, 3);
-    }
+    BIT_FLAGS has_res_water = has_resist_water(target_ptr);
 
-    if (has_resist_water(target_ptr))
-        ep_ptr->get_damage /= 4;
+    if (!check_multishadow(target_ptr)) {
+        if (!has_resist_sound(target_ptr) && !has_res_water) {
+            set_stun(target_ptr, target_ptr->stun + randint1(40));
+        }
+        if (!has_resist_conf(target_ptr) && !has_res_water) {
+            set_confused(target_ptr, target_ptr->confused + randint1(5) + 5);
+        }
+
+        if (one_in_(5) && !has_res_water) {
+            inventory_damage(target_ptr, set_cold_destroy, 3);
+        }
+    }
 
     ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 }
@@ -461,21 +486,28 @@ static void effect_player_time_addition(player_type *target_ptr)
     }
 }
 
+/*!
+ * @brief 時間逆転属性によるダメージを受ける
+ * @param target_ptr プレイヤー情報への参照ポインタ
+ * @param em_ptr プレイヤー効果情報への参照ポインタ
+ * @return なし
+ */
 void effect_player_time(player_type *target_ptr, effect_player_type *ep_ptr)
 {
     if (target_ptr->blind)
         msg_print(_("過去からの衝撃に攻撃された！", "You are hit by a blast from the past!"));
 
     ep_ptr->dam = ep_ptr->dam * calc_time_damage_rate(target_ptr, CALC_RAND) / 100;
-    if (!check_multishadow(target_ptr)) {
-        if (has_resist_time(target_ptr)) {
-            msg_print(_("時間が通り過ぎていく気がする。", "You feel as if time is passing you by."));
-        }
-        ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-        if (!has_resist_time(target_ptr)) {
-            effect_player_time_addition(target_ptr);
-        }
-    }
+
+    bool evaded = check_multishadow(target_ptr);
+
+    if (has_resist_time(target_ptr) && !evaded)
+        msg_print(_("時間が通り過ぎていく気がする。", "You feel as if time is passing you by."));
+
+    ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+
+    if (!has_resist_time(target_ptr) && !evaded)
+        effect_player_time_addition(target_ptr);
 }
 
 void effect_player_gravity(player_type *target_ptr, effect_player_type *ep_ptr)
