@@ -637,9 +637,23 @@ hengband_SOURCES = \
 	player-status/player-status-base.h \
 	player-status/player-speed.h \
 	player-status/player-stealth.h \
+	player-status/player-basic-statistics.h \
+	player-status/player-strength.h \
+	player-status/player-intelligence.h \
+	player-status/player-wisdom.h \
+	player-status/player-dextarity.h \
+	player-status/player-constitution.h \
+	player-status/player-charisma.h \
 	player-status/player-status-base.cpp \
 	player-status/player-speed.cpp \
 	player-status/player-stealth.cpp \
+	player-status/player-basic-statistics.cpp \
+	player-status/player-strength.cpp \
+	player-status/player-intelligence.cpp \
+	player-status/player-wisdom.cpp \
+	player-status/player-dextarity.cpp \
+	player-status/player-constitution.cpp \
+	player-status/player-charisma.cpp \
 	\
 	player-info/avatar.h player-info/avatar.cpp \
 	player-info/base-status-info.cpp player-info/base-status-info.h \

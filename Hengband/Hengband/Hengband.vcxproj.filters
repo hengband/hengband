@@ -2207,6 +2207,27 @@
     <ClCompile Include="..\..\src\player-status\player-stealth.cpp">
       <Filter>player-status</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player-status\player-basic-statistics.cpp">
+      <Filter>player-status</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player-status\player-strength.cpp">
+      <Filter>player-status</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player-status\player-intelligence.cpp">
+      <Filter>player-status</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player-status\player-wisdom.cpp">
+      <Filter>player-status</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player-status\player-dextarity.cpp">
+      <Filter>player-status</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player-status\player-constitution.cpp">
+      <Filter>player-status</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player-status\player-charisma.cpp">
+      <Filter>player-status</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4745,6 +4766,27 @@
       <Filter>player-status</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player-status\player-stealth.h">
+      <Filter>player-status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-status\player-basic-statistics.h">
+      <Filter>player-status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-status\player-strength.h">
+      <Filter>player-status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-status\player-intelligence.h">
+      <Filter>player-status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-status\player-wisdom.h">
+      <Filter>player-status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-status\player-dextarity.h">
+      <Filter>player-status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-status\player-constitution.h">
+      <Filter>player-status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-status\player-charisma.h">
       <Filter>player-status</Filter>
     </ClInclude>
   </ItemGroup>

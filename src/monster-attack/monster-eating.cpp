@@ -30,7 +30,7 @@
 
 void process_eat_gold(player_type *target_ptr, monap_type *monap_ptr)
 {
-    if (!target_ptr->paralyzed && (randint0(100) < (adj_dex_safe[target_ptr->stat_ind[A_DEX]] + target_ptr->lev))) {
+    if (!target_ptr->paralyzed && (randint0(100) < (adj_dex_safe[target_ptr->stat_index[A_DEX]] + target_ptr->lev))) {
         msg_print(_("しかし素早く財布を守った！", "You quickly protect your money pouch!"));
         if (randint0(3))
             monap_ptr->blinked = TRUE;
@@ -80,7 +80,7 @@ bool check_eat_item(player_type *target_ptr, monap_type *monap_ptr)
     if (target_ptr->is_dead || check_multishadow(target_ptr))
         return FALSE;
 
-    if (!target_ptr->paralyzed && (randint0(100) < (adj_dex_safe[target_ptr->stat_ind[A_DEX]] + target_ptr->lev))) {
+    if (!target_ptr->paralyzed && (randint0(100) < (adj_dex_safe[target_ptr->stat_index[A_DEX]] + target_ptr->lev))) {
         msg_print(_("しかしあわててザックを取り返した！", "You grab hold of your backpack!"));
         monap_ptr->blinked = TRUE;
         monap_ptr->obvious = TRUE;

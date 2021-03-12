@@ -253,7 +253,7 @@ static void describe_bow_power(player_type *player_ptr, flavor_type *flavor_ptr)
     if (player_ptr->xtra_might)
         tmul++;
 
-    tmul = tmul * (100 + (int)(adj_str_td[player_ptr->stat_ind[A_STR]]) - 128);
+    tmul = tmul * (100 + (int)(adj_str_td[player_ptr->stat_index[A_STR]]) - 128);
     flavor_ptr->avgdam *= tmul;
     flavor_ptr->avgdam /= (100 * 10);
     if (player_ptr->concent)

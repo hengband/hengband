@@ -39,7 +39,7 @@ bool common_saving_throw_charm(player_type *operator_ptr, HIT_POINT pow, monster
 
 	if (r_ptr->flags1 & RF1_QUESTOR || m_ptr->mflag2 & MFLAG2_NOPET) return TRUE;
 
-	pow += (adj_chr_chm[operator_ptr->stat_ind[A_CHR]] - 1);
+	pow += (adj_chr_chm[operator_ptr->stat_index[A_CHR]] - 1);
 	if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) pow = pow * 2 / 3;
 	return (r_ptr->level > randint1((pow - 10) < 1 ? 1 : (pow - 10)) + 5);
 }
@@ -65,7 +65,7 @@ bool common_saving_throw_control(player_type *operator_ptr, HIT_POINT pow, monst
 
 	if (r_ptr->flags1 & RF1_QUESTOR || m_ptr->mflag2 & MFLAG2_NOPET) return TRUE;
 
-	pow += adj_chr_chm[operator_ptr->stat_ind[A_CHR]] - 1;
+	pow += adj_chr_chm[operator_ptr->stat_index[A_CHR]] - 1;
 	if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) pow = pow * 2 / 3;
 	return (r_ptr->level > randint1((pow - 10) < 1 ? 1 : (pow - 10)) + 5);
 }

@@ -185,7 +185,7 @@ static int get_mane_power(player_type *caster_ptr, int *sn, bool baigaesi)
                         chance -= 3 * (plev - spell.level);
 
                     /* Reduce failure rate by INT/WIS adjustment */
-                    chance -= 3 * (adj_mag_stat[caster_ptr->stat_ind[spell.use_stat]] + adj_mag_stat[caster_ptr->stat_ind[A_DEX]] - 2) / 2;
+                    chance -= 3 * (adj_mag_stat[caster_ptr->stat_index[spell.use_stat]] + adj_mag_stat[caster_ptr->stat_index[A_DEX]] - 2) / 2;
 
                     if (spell.manedam)
                         chance = chance * (baigaesi ? caster_ptr->mane_dam[i] * 2 : caster_ptr->mane_dam[i]) / spell.manedam;
@@ -193,7 +193,7 @@ static int get_mane_power(player_type *caster_ptr, int *sn, bool baigaesi)
                     chance += caster_ptr->to_m_chance;
 
                     /* Extract the minimum failure rate */
-                    minfail = adj_mag_fail[caster_ptr->stat_ind[spell.use_stat]];
+                    minfail = adj_mag_fail[caster_ptr->stat_index[spell.use_stat]];
 
                     /* Minimum failure rate */
                     if (chance < minfail)
@@ -1089,7 +1089,7 @@ bool do_cmd_mane(player_type *creature_ptr, bool baigaesi)
         chance -= 3 * (plev - spell.level);
 
     /* Reduce failure rate by 1 stat and DEX adjustment */
-    chance -= 3 * (adj_mag_stat[creature_ptr->stat_ind[spell.use_stat]] + adj_mag_stat[creature_ptr->stat_ind[A_DEX]] - 2) / 2;
+    chance -= 3 * (adj_mag_stat[creature_ptr->stat_index[spell.use_stat]] + adj_mag_stat[creature_ptr->stat_index[A_DEX]] - 2) / 2;
 
     if (spell.manedam)
         chance = chance * damage / spell.manedam;
@@ -1097,7 +1097,7 @@ bool do_cmd_mane(player_type *creature_ptr, bool baigaesi)
     chance += creature_ptr->to_m_chance;
 
     /* Extract the minimum failure rate */
-    minfail = adj_mag_fail[creature_ptr->stat_ind[spell.use_stat]];
+    minfail = adj_mag_fail[creature_ptr->stat_index[spell.use_stat]];
 
     /* Minimum failure rate */
     if (chance < minfail)

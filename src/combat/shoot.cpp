@@ -418,7 +418,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
     if (shooter_ptr->xtra_might)
         tmul++;
 
-    tmul = tmul * (100 + (int)(adj_str_td[shooter_ptr->stat_ind[A_STR]]) - 128);
+    tmul = tmul * (100 + (int)(adj_str_td[shooter_ptr->stat_index[A_STR]]) - 128);
 
     /* Boost the damage */
     tdam_base *= tmul;
