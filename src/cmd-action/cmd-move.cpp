@@ -104,7 +104,7 @@ void do_cmd_go_up(player_type *creature_ptr)
         return;
     }
 
-    if (!creature_ptr->current_floor_ptr->dun_level)
+    if (!is_in_dungeon(creature_ptr))
         go_up = TRUE;
     else
         go_up = confirm_leave_level(creature_ptr, FALSE);
@@ -216,7 +216,7 @@ void do_cmd_go_down(player_type *creature_ptr)
     }
 
     DUNGEON_IDX target_dungeon = 0;
-    if (!creature_ptr->current_floor_ptr->dun_level) {
+    if (!is_in_dungeon(creature_ptr)) {
         target_dungeon = has_flag(f_ptr->flags, FF_ENTRANCE) ? g_ptr->special : DUNGEON_ANGBAND;
         if (ironman_downward && (target_dungeon != DUNGEON_ANGBAND)) {
             msg_print(_("ダンジョンの入口は塞がれている！", "The entrance of this dungeon is closed!"));
@@ -245,7 +245,7 @@ void do_cmd_go_down(player_type *creature_ptr)
     else
         down_num += 1;
 
-    if (!creature_ptr->current_floor_ptr->dun_level) {
+    if (!is_in_dungeon(creature_ptr)) {
         creature_ptr->enter_dungeon = TRUE;
         down_num = d_info[creature_ptr->dungeon_idx].mindepth;
     }

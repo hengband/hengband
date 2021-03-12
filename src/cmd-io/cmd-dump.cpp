@@ -221,7 +221,7 @@ void do_cmd_feeling(player_type *creature_ptr)
         return;
     }
 
-    if (!creature_ptr->current_floor_ptr->dun_level) {
+    if (!is_in_dungeon(creature_ptr)) {
         msg_print(_("典型的な荒野のようだ。", "Looks like a typical wilderness."));
         return;
     }
