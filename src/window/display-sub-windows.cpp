@@ -124,18 +124,14 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type *m_ptr, int 
  * @param y 表示行
  * @param max_lines 最大何行描画するか
  */
-void print_monster_list(floor_type *floor_ptr, pos_list *plist, TERM_LEN x, TERM_LEN y, TERM_LEN max_lines)
+void print_monster_list(floor_type *floor_ptr, const std::vector<MONSTER_IDX> &monster_list, TERM_LEN x, TERM_LEN y, TERM_LEN max_lines)
 {
     TERM_LEN line = y;
     monster_type *last_mons = NULL;
-    monster_type *m_ptr = NULL;
     int n_same = 0;
     int i;
-    for (i = 0; i < plist->n; i++) {
-        grid_type *g_ptr = &floor_ptr->grid_array[plist->y[i]][plist->x[i]];
-        if (!g_ptr->m_idx || !floor_ptr->m_list[g_ptr->m_idx].ml)
-            continue;
-        m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
+    for (i = 0; i < monster_list.size(); i++) {
+        auto m_ptr = &floor_ptr->m_list[monster_list[i]];
         if (is_pet(m_ptr))
             continue; // pet
         if (!m_ptr->r_idx)
@@ -166,7 +162,7 @@ void print_monster_list(floor_type *floor_ptr, pos_list *plist, TERM_LEN x, TERM
             break;
     }
 
-    if (i != plist->n) {
+    if (i != monster_list.size()) {
         // 行数が足りなかった場合、最終行にその旨表示。
         term_addstr(-1, TERM_WHITE, "-- and more --");
     } else {
@@ -185,9 +181,7 @@ void print_monster_list(floor_type *floor_ptr, pos_list *plist, TERM_LEN x, TERM
  */
 void fix_monster_list(player_type *player_ptr)
 {
-    // 副作用を起こさないようにfix_monster_list専用のpos_listを用意する。
-    // サイズが大きいためスタック領域に入れるには懸念があるのでstatic変数とする。
-    static pos_list plist;
+    static std::vector<MONSTER_IDX> monster_list;
 
     for (int j = 0; j < 8; j++) {
         term_type *old = Term;
@@ -201,8 +195,8 @@ void fix_monster_list(player_type *player_ptr)
         term_activate(angband_term[j]);
         int w, h;
         term_get_size(&w, &h);
-        target_sensing_monsters_prepare(player_ptr, &plist);
-        print_monster_list(player_ptr->current_floor_ptr, &plist, 0, 0, h);
+        target_sensing_monsters_prepare(player_ptr, monster_list);
+        print_monster_list(player_ptr->current_floor_ptr, monster_list, 0, 0, h);
         term_fresh();
         term_activate(old);
     }
