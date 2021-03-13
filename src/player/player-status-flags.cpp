@@ -266,6 +266,10 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
         return has_resist_chaos(creature_ptr);
     case TR_RES_DISEN:
         return has_resist_disen(creature_ptr);
+    case TR_RES_TIME:
+        return has_resist_time(creature_ptr);
+    case TR_RES_WATER:
+        return has_resist_water(creature_ptr);
 
     case TR_SH_FIRE:
         return has_sh_fire(creature_ptr);
@@ -386,10 +390,6 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
         return has_no_ac(creature_ptr);
     case TR_HEAVY_SPELL:
         return has_heavy_spell(creature_ptr);
-    case TR_RES_TIME:
-        return has_resist_time(creature_ptr);
-    case TR_RES_WATER:
-        return has_resist_water(creature_ptr);
     case TR_INVULN_ARROW:
         return has_invuln_arrow(creature_ptr);
     case TR_DARK_SOURCE:

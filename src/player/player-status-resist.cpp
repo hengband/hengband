@@ -405,6 +405,22 @@ PERCENTAGE calc_time_damage_rate(player_type *creature_ptr, rate_calc_type_mode 
 }
 
 /*!
+ * @brief 水流攻撃に対するダメージ倍率計算
+ */
+PERCENTAGE calc_water_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
+{
+    (void)mode; // unused
+    PERCENTAGE per = 100;
+
+    if (has_resist_water(creature_ptr)) {
+        per *= 400;
+        per /= randrate(4, 7, mode);
+    }
+
+    return per;
+}
+
+/*!
  * @brief 聖なる火炎攻撃に対するダメージ倍率計算
  */
 PERCENTAGE calc_holy_fire_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)

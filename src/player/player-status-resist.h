@@ -27,6 +27,7 @@ PERCENTAGE calc_nether_damage_rate(player_type *creature_ptr, rate_calc_type_mod
 PERCENTAGE calc_disenchant_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode);
 PERCENTAGE calc_nexus_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode);
 PERCENTAGE calc_time_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode);
+PERCENTAGE calc_water_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode);
 PERCENTAGE calc_rocket_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode);
 PERCENTAGE calc_deathray_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode);
 PERCENTAGE calc_holy_fire_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode);
