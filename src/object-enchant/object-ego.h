@@ -1,6 +1,8 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "object-enchant/trg-types.h"
+#include "util/flag-group.h"
 #include "system/object-type-definition.h"
 
 /* Body Armor */
@@ -233,7 +235,7 @@ typedef struct ego_item_type {
 	PRICE cost;			/* Ego-item "cost" */
 
 	BIT_FLAGS flags[TR_FLAG_SIZE];	/* Ego-Item Flags */
-	BIT_FLAGS gen_flags;		/* flags for generate */
+	FlagGroup<TRG> gen_flags;		/* flags for generate */
 
 	IDX act_idx;		/* Activative ability index */
 } ego_item_type;

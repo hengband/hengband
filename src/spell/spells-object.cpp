@@ -122,12 +122,12 @@ void amusement(player_type *creature_ptr, POSITION y1, POSITION x1, int num, boo
             continue;
 
         /* Search an artifact index if need */
-        insta_art = (k_info[k_idx].gen_flags & TRG_INSTA_ART);
+        insta_art = k_info[k_idx].gen_flags.has(TRG::INSTA_ART);
         fixed_art = (amuse_info[i].flag & AMS_FIXED_ART);
 
         if (insta_art || fixed_art) {
             for (a_idx = 1; a_idx < max_a_idx; a_idx++) {
-                if (insta_art && !(a_info[a_idx].gen_flags & TRG_INSTA_ART))
+                if (insta_art && !a_info[a_idx].gen_flags.has(TRG::INSTA_ART))
                     continue;
                 if (a_info[a_idx].tval != k_info[k_idx].tval)
                     continue;

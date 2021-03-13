@@ -23,7 +23,7 @@ static bool grab_one_ego_item_flag(ego_item_type *e_ptr, concptr what)
         }
     }
 
-    if (grab_one_flag(&e_ptr->gen_flags, k_info_gen_flags, what) == 0)
+    if (e_ptr->gen_flags.grab_one_flag(k_info_gen_flags, std::string(what)))
         return 0;
 
     msg_format(_("未知の名のあるアイテム・フラグ '%s'。", "Unknown ego-item flag '%s'."), what);

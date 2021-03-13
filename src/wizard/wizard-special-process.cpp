@@ -187,7 +187,7 @@ void wiz_create_item(player_type *caster_ptr)
     if (!k_idx)
         return;
 
-    if (k_info[k_idx].gen_flags & TRG_INSTA_ART) {
+    if (k_info[k_idx].gen_flags.has(TRG::INSTA_ART)) {
         for (ARTIFACT_IDX i = 1; i < max_a_idx; i++) {
             if ((a_info[i].tval != k_info[k_idx].tval) || (a_info[i].sval != k_info[k_idx].sval))
                 continue;

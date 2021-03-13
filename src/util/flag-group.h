@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <bitset>
 #include <functional>
+#include <map>
 
 /**
  * @brief フラグ集合を扱う、FlagGroupクラス
@@ -404,6 +405,15 @@ public:
             }
             wr_byte_func(flag_bits.to_ulong() & 0xff);
         }
+    }
+
+    bool grab_one_flag(const std::unordered_map<std::string_view, FlagType> &dict, std::string_view what)
+    {
+        if (dict.count(what) == 0)
+            return FALSE;
+
+        set(dict.at(what));
+        return TRUE;
     }
 
 private:
