@@ -23,7 +23,7 @@ static errr grab_one_artifact_flag(artifact_type *a_ptr, concptr what)
         }
     }
 
-    if (a_ptr->gen_flags.grab_one_flag(k_info_gen_flags, std::string(what)))
+    if (FlagGroup<TRG>::grab_one_flag(a_ptr->gen_flags, k_info_gen_flags, what))
         return 0;
 
     msg_format(_("未知の伝説のアイテム・フラグ '%s'。", "Unknown artifact flag '%s'."), what);
