@@ -48,7 +48,7 @@ void object_aware(player_type *owner_ptr, object_type *o_ptr)
     k_info[o_ptr->k_idx].aware = TRUE;
 
     bool mihanmei = !object_is_aware(o_ptr);
-    bool is_undefined = mihanmei && !(k_info[o_ptr->k_idx].gen_flags & TRG_INSTA_ART) && record_ident && !owner_ptr->is_dead
+    bool is_undefined = mihanmei && k_info[o_ptr->k_idx].gen_flags.has_not(TRG::INSTA_ART) && record_ident && !owner_ptr->is_dead
         && ((o_ptr->tval >= TV_AMULET && o_ptr->tval <= TV_POTION) || (o_ptr->tval == TV_FOOD));
     if (!is_undefined)
         return;

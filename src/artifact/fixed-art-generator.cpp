@@ -114,13 +114,13 @@ static void random_artifact_resistance(player_type *player_ptr, object_type *o_p
         add_flag(o_ptr->art_flags, TR_AGGRAVATE);
 
     milim_swimsuit(player_ptr, o_ptr);
-    if (a_ptr->gen_flags & TRG_XTRA_POWER)
+    if (a_ptr->gen_flags.has(TRG::XTRA_POWER))
         give_power = TRUE;
 
-    if (a_ptr->gen_flags & TRG_XTRA_H_RES)
+    if (a_ptr->gen_flags.has(TRG::XTRA_H_RES))
         give_resistance = TRUE;
 
-    if (a_ptr->gen_flags & TRG_XTRA_RES_OR_POWER) {
+    if (a_ptr->gen_flags.has(TRG::XTRA_RES_OR_POWER)) {
         if (one_in_(2))
             give_resistance = TRUE;
         else
@@ -136,22 +136,22 @@ static void random_artifact_resistance(player_type *player_ptr, object_type *o_p
 
 static void invest_curse_to_fixed_artifact(player_type *player_ptr, artifact_type *a_ptr, object_type *q_ptr)
 {
-    if (a_ptr->gen_flags & TRG_CURSED)
+    if (a_ptr->gen_flags.has(TRG::CURSED))
         q_ptr->curse_flags |= TRC_CURSED;
 
-    if (a_ptr->gen_flags & TRG_HEAVY_CURSE)
+    if (a_ptr->gen_flags.has(TRG::HEAVY_CURSE))
         q_ptr->curse_flags |= TRC_HEAVY_CURSE;
 
-    if (a_ptr->gen_flags & TRG_PERMA_CURSE)
+    if (a_ptr->gen_flags.has(TRG::PERMA_CURSE))
         q_ptr->curse_flags |= TRC_PERMA_CURSE;
 
-    if (a_ptr->gen_flags & TRG_RANDOM_CURSE0)
+    if (a_ptr->gen_flags.has(TRG::RANDOM_CURSE0))
         q_ptr->curse_flags |= get_curse(player_ptr, 0, q_ptr);
 
-    if (a_ptr->gen_flags & TRG_RANDOM_CURSE1)
+    if (a_ptr->gen_flags.has(TRG::RANDOM_CURSE1))
         q_ptr->curse_flags |= get_curse(player_ptr, 1, q_ptr);
 
-    if (a_ptr->gen_flags & TRG_RANDOM_CURSE2)
+    if (a_ptr->gen_flags.has(TRG::RANDOM_CURSE2))
         q_ptr->curse_flags |= get_curse(player_ptr, 2, q_ptr);
 }
 
@@ -223,10 +223,10 @@ bool make_artifact(player_type *player_ptr, object_type *o_ptr)
         if (a_ptr->cur_num)
             continue;
 
-        if (a_ptr->gen_flags & TRG_QUESTITEM)
+        if (a_ptr->gen_flags.has(TRG::QUESTITEM))
             continue;
 
-        if (a_ptr->gen_flags & TRG_INSTA_ART)
+        if (a_ptr->gen_flags.has(TRG::INSTA_ART))
             continue;
 
         if (a_ptr->tval != o_ptr->tval)
@@ -288,9 +288,9 @@ bool make_artifact_special(player_type *player_ptr, object_type *o_ptr)
         /*! @note 既に生成回数がカウントされたアーティファクト、QUESTITEMと非INSTA_ARTは除外 / Cannot make an artifact twice */
         if (a_ptr->cur_num)
             continue;
-        if (a_ptr->gen_flags & TRG_QUESTITEM)
+        if (a_ptr->gen_flags.has(TRG::QUESTITEM))
             continue;
-        if (!(a_ptr->gen_flags & TRG_INSTA_ART))
+        if (!(a_ptr->gen_flags.has(TRG::INSTA_ART)))
             continue;
 
         /*! @note アーティファクト生成階が現在に対して足りない場合は高確率で1/(不足階層*2)を満たさないと生成リストに加えられない /

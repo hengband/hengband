@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <bitset>
 #include <functional>
+#include <map>
 
 /**
  * @brief フラグ集合を扱う、FlagGroupクラス
@@ -404,6 +405,28 @@ public:
             }
             wr_byte_func(flag_bits.to_ulong() & 0xff);
         }
+    }
+
+    /**
+     * @brief 文字列からフラグへのマップを指定した検索キーで検索し、
+     *        見つかった場合はフラグ集合に該当するフラグをセットする
+     *
+     * @tparam Map std::map<string_view, FlagType> もしくは std::unordered_map<string_view, FlagType>
+     * @param fg フラグをセットするフラグ集合
+     * @param dict 文字列からフラグへのマップ
+     * @param what マップの検索キー
+     * @return bool 検索キーでフラグが見つかり、フラグをセットした場合 true
+     *              見つからなかった場合 false
+     */
+    template <typename Map>
+    static bool grab_one_flag(FlagGroup<FlagType>& fg, const Map &dict, std::string_view what)
+    {
+        auto it = dict.find(what);
+        if (it == dict.end())
+            return false;
+
+        fg.set(it->second);
+        return true;
     }
 
 private:

@@ -1,6 +1,8 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "object-enchant/trg-types.h"
+#include "util/flag-group.h"
 #include "system/object-type-definition.h"
 
 /*!
@@ -26,7 +28,7 @@ typedef struct artifact_type {
 	WEIGHT weight;		/*!< 重量 / Weight */
 	PRICE cost;			/*!< 基本価格 / Artifact "cost" */
 	BIT_FLAGS flags[TR_FLAG_SIZE];       /*! アイテムフラグ / Artifact Flags */
-	BIT_FLAGS gen_flags;		/*! アイテム生成フラグ / flags for generate */
+	FlagGroup<TRG> gen_flags;		/*! アイテム生成フラグ / flags for generate */
 	DEPTH level;		/*! 基本生成階 / Artifact level */
 	RARITY rarity;		/*! レアリティ / Artifact rarity */
 	byte cur_num;		/*! 現在の生成数 / Number created (0 or 1) */
