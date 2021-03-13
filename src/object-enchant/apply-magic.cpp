@@ -270,7 +270,9 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
         if (e_ptr->act_idx)
             o_ptr->xtra2 = (XTRA8)e_ptr->act_idx;
 
-        if ((object_is_cursed(o_ptr) || object_is_broken(o_ptr)) && e_ptr->gen_flags.has_not(TRG::POWERFUL)) {
+        bool is_powerful = e_ptr->gen_flags.has(TRG::POWERFUL);
+
+        if ((object_is_cursed(o_ptr) || object_is_broken(o_ptr)) && !is_powerful) {
             if (e_ptr->max_to_h)
                 o_ptr->to_h -= randint1(e_ptr->max_to_h);
             if (e_ptr->max_to_d)
@@ -280,6 +282,15 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
             if (e_ptr->max_pval)
                 o_ptr->pval -= randint1(e_ptr->max_pval);
         } else {
+            if (is_powerful) {
+                if (e_ptr->max_to_h > 0 && o_ptr->to_h < 0)
+                    o_ptr->to_h = 0 - o_ptr->to_h;
+                if (e_ptr->max_to_d > 0 && o_ptr->to_d < 0)
+                    o_ptr->to_d = 0 - o_ptr->to_d;
+                if (e_ptr->max_to_a > 0 && o_ptr->to_a < 0)
+                    o_ptr->to_a = 0 - o_ptr->to_a;
+            }
+
             o_ptr->to_h += (HIT_PROB)randint1_signed(e_ptr->max_to_h);
             o_ptr->to_d += randint1_signed(e_ptr->max_to_d);
             o_ptr->to_a += (ARMOUR_CLASS)randint1_signed(e_ptr->max_to_a);
