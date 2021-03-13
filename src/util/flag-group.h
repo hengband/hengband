@@ -435,7 +435,7 @@ private:
      */
     class reference {
     public:
-        reference(std::bitset<FlagGroup::FLAG_TYPE_MAX> &flags, size_t pos)
+        reference(std::bitset<static_cast<size_t>(FlagType::MAX)> &flags, size_t pos)
             : bs_(flags)
             , pos_(pos)
         {
@@ -459,7 +459,7 @@ private:
         }
 
     private:
-        std::bitset<FlagGroup::FLAG_TYPE_MAX> &bs_;
+        std::bitset<static_cast<size_t>(FlagType::MAX)> &bs_;
         size_t pos_;
     };
 
