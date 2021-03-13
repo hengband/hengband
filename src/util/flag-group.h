@@ -12,6 +12,10 @@
  */
 template <typename FlagType>
 class FlagGroup {
+private:
+    /** フラグ集合のフラグ数 */
+    static constexpr auto FLAG_TYPE_MAX = static_cast<size_t>(FlagType::MAX);
+
 public:
     /**
      * @brief フラグ集合に含まれるフラグの種類数を返す
@@ -419,7 +423,7 @@ public:
      *              見つからなかった場合 false
      */
     template <typename Map>
-    static bool grab_one_flag(FlagGroup<FlagType>& fg, const Map &dict, std::string_view what)
+    static bool grab_one_flag(FlagGroup<FlagType> &fg, const Map &dict, std::string_view what)
     {
         auto it = dict.find(what);
         if (it == dict.end())
@@ -476,9 +480,6 @@ public:
     }
 
 private:
-    /** フラグ集合のフラグ数 */
-    static constexpr auto FLAG_TYPE_MAX = static_cast<size_t>(FlagType::MAX);
-
     /** フラグ集合を保持するstd::bitsetのインスタンス */
     std::bitset<FLAG_TYPE_MAX> bs_;
 };
