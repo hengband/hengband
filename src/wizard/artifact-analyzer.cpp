@@ -248,7 +248,7 @@ static void analyze_addition(object_type *o_ptr, char *addition)
 {
     artifact_type *a_ptr = &a_info[o_ptr->name1];
     strcpy(addition, "");
-    if (a_ptr->gen_flags.has(TRG::XTRA_POWER) && a_ptr->gen_flags.has(TRG::XTRA_H_RES)) {
+    if (a_ptr->gen_flags.has_all_of({ TRG::XTRA_POWER, TRG::XTRA_H_RES })) {
         strcat(addition, _("能力and耐性", "Ability and Resistance"));
         return;
     }
