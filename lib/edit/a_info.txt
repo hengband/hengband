@@ -3120,9 +3120,11 @@ D:この杖は隊の象徴であり、最も勇気あるものが扱うとされ
 N:171:二天一流開祖宮本武蔵の
 E:of Musashi
 I:23:20:3
-W:50:15:120:60000
+W:30:15:120:60000
 P:0:3d4:28:17:0
-F:DEX | HIDE_TYPE | SUST_DEX | SHOW_MODS
+F:STR | TUNNEL | HIDE_TYPE | SUST_STR | SHOW_MODS
+F:VORPAL | XTRA_DICE
+F:REGEN | SEE_INVIS | INVULN_ARROW | EASY2_WEAPON
 D:$It is the katana of the famed creator of the dual sword technique, 
 D:$Miyamoto Musashi, and wielded with his right hand in combat.
 D:名高き二天一流の創始者、宮本武蔵が使っていた大刀だ。
@@ -3131,9 +3133,11 @@ D:戦いにおいては右に大刀、左に小刀を持って振るったとい
 N:172:二天一流開祖宮本武蔵の
 E:of Musashi
 I:23:13:3
-W:50:5:90:60000
+W:30:5:90:60000
 P:0:2d4:28:17:0
-F:SUPPORTIVE | DEX | HIDE_TYPE | SUST_DEX | SHOW_MODS
+F:DEX | TUNNEL | HIDE_TYPE | SUST_DEX | SHOW_MODS
+F:VORPAL | XTRA_DICE
+F:SLOW_DIGEST | WARNING | SUPPORTIVE | EASY2_WEAPON
 D:$It is the wakizashi of the famed creator of the dual sword technique, 
 D:$Miyamoto Musashi, and wielded with his left hand in combat.
 D:名高き二天一流の創始者、宮本武蔵が使っていた小刀だ。
