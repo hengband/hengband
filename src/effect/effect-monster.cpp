@@ -52,7 +52,7 @@
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @return 効果が何もないならFALSE、何かあるならTRUE
  */
-static bool is_never_effect(player_type *caster_ptr, effect_monster_type *em_ptr)
+static bool is_affective(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (!em_ptr->g_ptr->m_idx)
         return FALSE;
@@ -92,6 +92,12 @@ static void decide_spell_result_description(player_type *caster_ptr, effect_mons
  */
 static process_result process_monster_perfect_resistance(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
+    if (!is_affective(caster_ptr, em_ptr)) {
+        em_ptr->note = _("には効果がなかった。", " is unaffected.");
+        em_ptr->dam = 0;
+        return PROCESS_CONTINUE;
+    }
+
     if (((em_ptr->r_ptr->flagsr & RFR_RES_ALL) == 0) || em_ptr->effect_type == GF_OLD_CLONE || em_ptr->effect_type == GF_STAR_HEAL
         || em_ptr->effect_type == GF_OLD_HEAL || em_ptr->effect_type == GF_OLD_SPEED || em_ptr->effect_type == GF_CAPTURE || em_ptr->effect_type == GF_PHOTO)
         return switch_effects_monster(caster_ptr, em_ptr);
@@ -576,8 +582,6 @@ bool affect_monster(
 {
     effect_monster_type tmp_effect;
     effect_monster_type *em_ptr = initialize_effect_monster(caster_ptr, &tmp_effect, who, r, y, x, dam, effect_type, flag, see_s_msg);
-    if (!is_never_effect(caster_ptr, em_ptr))
-        return FALSE;
 
     decide_spell_result_description(caster_ptr, em_ptr);
     process_result result = process_monster_perfect_resistance(caster_ptr, em_ptr);
