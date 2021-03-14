@@ -19,7 +19,7 @@
 #define FAKE_VER_MAJOR 13 /*!< ゲームのバージョン番号定義(メジャー番号 + 10) */
 #define FAKE_VER_MINOR 0 /*!< ゲームのバージョン番号定義(マイナー番号) */
 #define FAKE_VER_PATCH 0 /*!< ゲームのバージョン番号定義(パッチ番号) */
-#define FAKE_VER_EXTRA 10 /*!< ゲームのバージョン番号定義(エクストラ番号) */
+#define FAKE_VER_EXTRA 11 /*!< ゲームのバージョン番号定義(エクストラ番号) */
 
 /*!
  * @brief バージョンが開発版が安定版かを返す
