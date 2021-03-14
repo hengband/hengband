@@ -159,7 +159,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, monster_lo
     display_lore_this(player_ptr, lore_ptr);
     display_monster_aura(lore_ptr);
     if (lore_ptr->flags2 & RF2_REFLECTING)
-        hooked_roff(format(_("%^sは矢の呪文を跳ね返す。", "%^s reflects bolt spells.  "), wd_he[lore_ptr->msex]));
+        hooked_roff(format(_("%^sは矢の呪文を跳ね返す。", "%^s reflects bolt spells.  "), Who::who(lore_ptr->msex)));
 
     display_monster_collective(lore_ptr);
     lore_ptr->vn = 0;
