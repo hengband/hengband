@@ -802,9 +802,9 @@ static XImage *ResizeImage(Display *dpy, XImage *Im,
 	Visual *visual = DefaultVisual(dpy, DefaultScreen(dpy));
 
 	int width1, height1, width2, height2;
-	int x1, x2, y1, y2, Tx, Ty;
-	int *px1, *px2, *dx1, *dx2;
-	int *py1, *py2, *dy1, *dy2;
+	volatile int x1, x2, y1, y2, Tx, Ty;
+	volatile int *px1, *px2, *dx1, *dx2;
+	volatile int *py1, *py2, *dy1, *dy2;
 
 	XImage *Tmp;
 
