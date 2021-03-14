@@ -37,6 +37,7 @@ static void display_race_stat(int cs, int *os, char *cur, char *sym)
         sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
         put_str("                                   ", 4, 40);
         put_str("                                   ", 5, 40);
+        put_str("                                   ", 6, 40);
     } else {
         rp_ptr = &race_info[cs];
         concptr str = rp_ptr->title;
@@ -48,6 +49,18 @@ static void display_race_stat(int cs, int *os, char *cur, char *sym)
         sprintf(buf, "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ", rp_ptr->r_adj[0], rp_ptr->r_adj[1], rp_ptr->r_adj[2], rp_ptr->r_adj[3], rp_ptr->r_adj[4],
             rp_ptr->r_adj[5], (rp_ptr->r_exp - 100));
         c_put_str(TERM_L_BLUE, buf, 5, 40);
+
+        put_str("HD ", 6, 40);
+        sprintf(buf, "%2d", rp_ptr->r_mhp);
+        c_put_str(TERM_L_BLUE, buf, 6, 43);
+
+        put_str(_("隠密","Stealth"), 6, 47);
+        sprintf(buf, "%+2d", rp_ptr->r_stl);
+        c_put_str(TERM_L_BLUE, buf, 6, _(52, 55));
+
+        put_str(_("赤外線視力", "Infra"), 6, _(56, 59));
+        sprintf(buf, _("%2dft", "%2dft"), 10 * rp_ptr->infra);
+        c_put_str(TERM_L_BLUE, buf, 6, _(67, 65));
     }
 
     c_put_str(TERM_YELLOW, cur, 12 + (cs / 5), 1 + 16 * (cs % 5));

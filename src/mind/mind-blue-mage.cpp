@@ -58,13 +58,13 @@ bool do_cmd_cast_learned(player_type *caster_ptr)
     else
         chance += (spell.level - plev);
 
-    chance -= 3 * (adj_mag_stat[caster_ptr->stat_ind[A_INT]] - 1);
+    chance -= 3 * (adj_mag_stat[caster_ptr->stat_index[A_INT]] - 1);
     chance = mod_spell_chance_1(caster_ptr, chance);
     if (need_mana > caster_ptr->csp) {
         chance += 5 * (need_mana - caster_ptr->csp);
     }
 
-    minfail = adj_mag_fail[caster_ptr->stat_ind[A_INT]];
+    minfail = adj_mag_fail[caster_ptr->stat_index[A_INT]];
     if (chance < minfail)
         chance = minfail;
 

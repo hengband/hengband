@@ -24,8 +24,9 @@
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
 
-static concptr inven_res_label = _("                               酸電火冷毒光闇破轟獄因沌劣 盲怖乱痺透命感消復浮",
-    "                               AcElFiCoPoLiDkShSoNtNxCaDi BlFeCfFaSeHlEpSdRgLv");
+static concptr inven_res_label = _(
+    "                               酸電火冷毒閃暗破轟獄因沌劣 盲恐乱麻視経感遅活浮",
+    "                               AcElFiCoPoLiDkShSoNtNxCaDi BlFeCfFaSiHlEpSdRgLv");
 
 #define IM_FLAG_STR _("＊", "* ")
 #define HAS_FLAG_STR _("＋", "+ ")

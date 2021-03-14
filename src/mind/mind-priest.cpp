@@ -59,10 +59,10 @@ bool bless_weapon(player_type *caster_ptr)
         msg_format("A malignant aura leaves %s %s.", ((item >= 0) ? "your" : "the"), o_name);
 #endif
         o_ptr->curse_flags = 0L;
-        o_ptr->ident |= IDENT_SENSE;
-        o_ptr->feeling = FEEL_NONE;
-        caster_ptr->update |= PU_BONUS;
-        caster_ptr->window_flags |= PW_EQUIP;
+        set_bits(o_ptr->ident, IDENT_SENSE);
+        set_bits(o_ptr->feeling, FEEL_NONE);
+        set_bits(caster_ptr->update, PU_BONUS);
+        set_bits(caster_ptr->window_flags, PW_EQUIP | PW_FLOOR_ITEM_LIST);
     }
 
     /*
@@ -132,8 +132,8 @@ bool bless_weapon(player_type *caster_ptr)
         }
     }
 
-    caster_ptr->update |= PU_BONUS;
-    caster_ptr->window_flags |= PW_EQUIP | PW_PLAYER;
+    set_bits(caster_ptr->update, PU_BONUS);
+    set_bits(caster_ptr->window_flags, PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST);
     calc_android_exp(caster_ptr);
     return TRUE;
 }

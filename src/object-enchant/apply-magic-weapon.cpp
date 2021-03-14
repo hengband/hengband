@@ -165,22 +165,6 @@ void apply_magic_weapon(player_type *owner_ptr, object_type *o_ptr, DEPTH level,
                 if (one_in_(5))
                     add_flag(o_ptr->art_flags, TR_SLAY_HUMAN);
                 break;
-            case EGO_DEMON:
-
-                if (one_in_(3))
-                    o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
-                one_in_(3) ? add_flag(o_ptr->art_flags, TR_DRAIN_EXP)
-                           : one_in_(2) ? add_flag(o_ptr->art_flags, TR_DRAIN_HP) : add_flag(o_ptr->art_flags, TR_DRAIN_MANA);
-
-                if (one_in_(3))
-                    add_flag(o_ptr->art_flags, TR_CHAOTIC);
-                if (one_in_(4))
-                    add_flag(o_ptr->art_flags, TR_BLOWS);
-                if (one_in_(5))
-                    add_flag(o_ptr->art_flags, TR_ADD_H_CURSE);
-                if (one_in_(5))
-                    add_flag(o_ptr->art_flags, TR_CALL_DEMON);
-                break;
             }
 
             if (!o_ptr->art_name) {
@@ -207,6 +191,22 @@ void apply_magic_weapon(player_type *owner_ptr, object_type *o_ptr, DEPTH level,
                         add_flag(o_ptr->art_flags, TR_TY_CURSE);
                     if (one_in_(3))
                         o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
+                    break;
+                case EGO_DEMON:
+
+                    if (one_in_(3))
+                        o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
+                    one_in_(3) ? add_flag(o_ptr->art_flags, TR_DRAIN_EXP)
+                               : one_in_(2) ? add_flag(o_ptr->art_flags, TR_DRAIN_HP) : add_flag(o_ptr->art_flags, TR_DRAIN_MANA);
+
+                    if (one_in_(3))
+                        add_flag(o_ptr->art_flags, TR_CHAOTIC);
+                    if (one_in_(4))
+                        add_flag(o_ptr->art_flags, TR_BLOWS);
+                    if (one_in_(5))
+                        add_flag(o_ptr->art_flags, TR_ADD_H_CURSE);
+                    if (one_in_(5))
+                        add_flag(o_ptr->art_flags, TR_CALL_DEMON);
                     break;
                 }
             }

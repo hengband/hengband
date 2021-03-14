@@ -16,16 +16,19 @@
 #include "monster/monster-info.h"
 #include "object/item-tester-hooker.h"
 #include "object/object-info.h"
+#include "object/object-mark-types.h"
 #include "player/player-status-flags.h"
 #include "spell-kind/magic-item-recharger.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
+#include "target/target-describer.h"
 #include "target/target-preparation.h"
 #include "target/target-setter.h"
 #include "target/target-types.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-lore.h"
 #include "view/display-map.h"
 #include "view/display-messages.h"
@@ -34,6 +37,8 @@
 #include "window/main-window-equipments.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
+#include <string>
+#include <sstream>
 
 /*!
  * @brief サブウィンドウに所持品一覧を表示する / Hack -- display inventory in sub-windows
@@ -119,18 +124,14 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type *m_ptr, int 
  * @param y 表示行
  * @param max_lines 最大何行描画するか
  */
-void print_monster_list(floor_type *floor_ptr, pos_list *plist, TERM_LEN x, TERM_LEN y, TERM_LEN max_lines)
+void print_monster_list(floor_type *floor_ptr, const std::vector<MONSTER_IDX> &monster_list, TERM_LEN x, TERM_LEN y, TERM_LEN max_lines)
 {
     TERM_LEN line = y;
     monster_type *last_mons = NULL;
-    monster_type *m_ptr = NULL;
     int n_same = 0;
     int i;
-    for (i = 0; i < plist->n; i++) {
-        grid_type *g_ptr = &floor_ptr->grid_array[plist->y[i]][plist->x[i]];
-        if (!g_ptr->m_idx || !floor_ptr->m_list[g_ptr->m_idx].ml)
-            continue;
-        m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
+    for (i = 0; i < monster_list.size(); i++) {
+        auto m_ptr = &floor_ptr->m_list[monster_list[i]];
         if (is_pet(m_ptr))
             continue; // pet
         if (!m_ptr->r_idx)
@@ -161,7 +162,7 @@ void print_monster_list(floor_type *floor_ptr, pos_list *plist, TERM_LEN x, TERM
             break;
     }
 
-    if (i != plist->n) {
+    if (i != monster_list.size()) {
         // 行数が足りなかった場合、最終行にその旨表示。
         term_addstr(-1, TERM_WHITE, "-- and more --");
     } else {
@@ -180,9 +181,7 @@ void print_monster_list(floor_type *floor_ptr, pos_list *plist, TERM_LEN x, TERM
  */
 void fix_monster_list(player_type *player_ptr)
 {
-    // 副作用を起こさないようにfix_monster_list専用のpos_listを用意する。
-    // サイズが大きいためスタック領域に入れるには懸念があるのでstatic変数とする。
-    static pos_list plist;
+    static std::vector<MONSTER_IDX> monster_list;
 
     for (int j = 0; j < 8; j++) {
         term_type *old = Term;
@@ -196,8 +195,8 @@ void fix_monster_list(player_type *player_ptr)
         term_activate(angband_term[j]);
         int w, h;
         term_get_size(&w, &h);
-        target_sensing_monsters_prepare(player_ptr, &plist);
-        print_monster_list(player_ptr->current_floor_ptr, &plist, 0, 0, h);
+        target_sensing_monsters_prepare(player_ptr, monster_list);
+        print_monster_list(player_ptr->current_floor_ptr, monster_list, 0, 0, h);
         term_fresh();
         term_activate(old);
     }
@@ -471,6 +470,107 @@ void fix_object(player_type *player_ptr)
             display_koff(player_ptr, player_ptr->object_kind_idx);
 
         term_fresh();
+        term_activate(old);
+    }
+}
+
+static void display_floor_item_list(player_type *player_ptr, const int y, const int x)
+{
+    // Term の行数を取得。
+    TERM_LEN term_h;
+    {
+        TERM_LEN term_w;
+        term_get_size(&term_w, &term_h);
+    }
+    if (term_h <= 0)
+        return;
+
+    term_clear();
+    term_gotoxy(0, 0);
+
+    const floor_type *const floor_ptr = player_ptr->current_floor_ptr;
+    const grid_type *const g_ptr = &floor_ptr->grid_array[y][x];
+    char line[1024];
+
+    // 先頭行を書く。
+    if (player_bold(player_ptr, y, x))
+        sprintf(line, _("(X:%03d Y:%03d) あなたの足元のアイテム一覧", "Items at (%03d,%03d) under you"), x, y);
+    else if (g_ptr->m_idx > 0) {
+        const monster_type *const m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
+
+        if (m_ptr->r_idx == 0)
+            sprintf(line, _("(X:%03d Y:%03d) 奇妙な物体の足元のアイテム一覧", "Items at (%03d,%03d) under an odd object"), x, y);
+        else {
+            const monster_race *const r_ptr = &r_info[m_ptr->r_idx];
+            sprintf(line, _("(X:%03d Y:%03d) %sの足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under %s"), x, y, (r_name + r_ptr->name));
+        }
+    } else {
+        const feature_type *const f_ptr = &f_info[g_ptr->feat];
+        concptr fn = f_name + f_ptr->name;
+        char buf[512];
+
+        if (has_flag(f_ptr->flags, FF_STORE) || (has_flag(f_ptr->flags, FF_BLDG) && !floor_ptr->inside_arena))
+            sprintf(buf, _("%sの入口", "on the entrance of %s"), fn);
+        else if (has_flag(f_ptr->flags, FF_WALL))
+            sprintf(buf, _("%sの中", "in %s"), fn);
+        else
+            sprintf(buf, _("%s", "on %s"), fn);
+        sprintf(line, _("(X:%03d Y:%03d) %sの上の発見済みアイテム一覧", "Found items at (X:%03d Y:%03d) %s"), x, y, buf);
+
+    }
+    term_addstr(-1, TERM_WHITE, line);
+
+    // (y,x) のアイテムを1行に1個ずつ書く。
+    TERM_LEN term_y = 1;
+    for (OBJECT_IDX o_idx = g_ptr->o_idx; o_idx > 0;) {
+        object_type *const o_ptr = &floor_ptr->o_list[o_idx];
+
+        // 未発見アイテムおよび金は対象外。
+        if (!(o_ptr->marked & OM_FOUND))
+            continue;
+        if (o_ptr->tval == TV_GOLD)
+            continue;
+
+        // 途中で行数が足りなくなったら最終行にその旨追記して終了。
+        if (term_y >= term_h) {
+            term_addstr(-1, TERM_WHITE, "-- more --");
+            break;
+        }
+
+        term_gotoxy(0, term_y);
+
+        if (player_ptr->image) {
+            term_addstr(-1, TERM_WHITE, _("何か奇妙な物", "something strange"));
+        } else {
+            describe_flavor(player_ptr, line, o_ptr, 0);
+            TERM_COLOR attr = tval_to_attr[o_ptr->tval % 128];
+            term_addstr(-1, attr, line);
+        }
+
+        o_idx = o_ptr->next_o_idx;
+        ++term_y;
+    }
+}
+
+/*!
+ * @brief (y,x) のアイテム一覧をサブウィンドウに表示する / display item at (y,x) in sub-windows
+ */
+void fix_floor_item_list(player_type *player_ptr, const int y, const int x)
+{
+    for (int j = 0; j < 8; j++) {
+        if (!angband_term[j])
+            continue;
+        if (angband_term[j]->never_fresh)
+            continue;
+        if (!(window_flag[j] & PW_FLOOR_ITEM_LIST))
+            continue;
+
+        term_type *old = Term;
+        term_activate(angband_term[j]);
+
+        display_floor_item_list(player_ptr, y, x);
+        term_fresh();
+
         term_activate(old);
     }
 }

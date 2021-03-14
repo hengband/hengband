@@ -24,7 +24,7 @@ static errr grab_one_kind_flag(object_kind *k_ptr, concptr what)
         }
     }
 
-    if (grab_one_flag(&k_ptr->gen_flags, k_info_gen_flags, what) == 0)
+    if (FlagGroup<TRG>::grab_one_flag(k_ptr->gen_flags, k_info_gen_flags, what))
         return 0;
 
     msg_format(_("未知のアイテム・フラグ '%s'。", "Unknown object flag '%s'."), what);

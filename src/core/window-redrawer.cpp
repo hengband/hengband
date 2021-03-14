@@ -12,6 +12,7 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "view/display-player.h"
 #include "window/display-sub-window-spells.h"
@@ -283,5 +284,11 @@ void window_stuff(player_type *player_ptr)
     if (window_flags & (PW_OBJECT)) {
         player_ptr->window_flags &= ~(PW_OBJECT);
         fix_object(player_ptr);
+    }
+
+    if (any_bits(window_flags, PW_FLOOR_ITEM_LIST)) {
+        reset_bits(player_ptr->window_flags, PW_FLOOR_ITEM_LIST);
+        // ウィンドウサイズ変更に対応できず。カーソル位置を取る必要がある。
+        fix_floor_item_list(player_ptr, player_ptr->y, player_ptr->x);
     }
 }

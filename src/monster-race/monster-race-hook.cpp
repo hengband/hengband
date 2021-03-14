@@ -127,7 +127,7 @@ bool mon_hook_quest(player_type *player_ptr, MONRACE_IDX r_idx)
  */
 bool mon_hook_dungeon(player_type *player_ptr, MONRACE_IDX r_idx)
 {
-    if (!player_ptr->current_floor_ptr->dun_level && !player_ptr->current_floor_ptr->inside_quest)
+    if (!is_in_dungeon(player_ptr) && !player_ptr->current_floor_ptr->inside_quest)
         return TRUE;
 
     monster_race *r_ptr = &r_info[r_idx];

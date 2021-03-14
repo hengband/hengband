@@ -293,7 +293,7 @@ bool exe_bash(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir)
 {
     grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
-    int bash = adj_str_blow[creature_ptr->stat_ind[A_STR]];
+    int bash = adj_str_blow[creature_ptr->stat_index[A_STR]];
     int temp = f_ptr->power;
     bool more = FALSE;
     concptr name = f_name + f_info[get_feat_mimic(g_ptr)].name;
@@ -316,7 +316,7 @@ bool exe_bash(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir)
         }
 
         exe_movement(creature_ptr, dir, FALSE, FALSE);
-    } else if (randint0(100) < adj_dex_safe[creature_ptr->stat_ind[A_DEX]] + creature_ptr->lev) {
+    } else if (randint0(100) < adj_dex_safe[creature_ptr->stat_index[A_DEX]] + creature_ptr->lev) {
         msg_format(_("この%sは頑丈だ。", "The %s holds firm."), name);
         more = TRUE;
     } else {

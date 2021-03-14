@@ -686,7 +686,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
         if (name)
             return _("呪力吸収", "Drain curse power");
         if (desc)
-            return _("呪われた武器の呪いを吸収して魔力を回復する。", "Drains curse on your weapon and heals SP a little.");
+            return _("呪われた装備品の呪いを吸収して魔力を回復する。", "Drains curse on your equipment and heals SP a little.");
         if (cast) {
             OBJECT_IDX item;
             concptr s, q;

@@ -3,6 +3,7 @@
 #include "system/angband.h"
 
 extern FILE *loading_savefile;
+extern u32b loading_savefile_version;
 extern byte load_xor_byte;
 extern u32b v_check;
 extern u32b x_check;
@@ -17,3 +18,4 @@ void rd_u32b(u32b *ip);
 void rd_s32b(s32b *ip);
 void rd_string(char *str, int max);
 void strip_bytes(int n);
+bool loading_savefile_version_is_older_than(u32b version);

@@ -70,7 +70,7 @@ void process_player_hp_mp(player_type *creature_ptr)
     }
 
     if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE)) {
-        if (!creature_ptr->current_floor_ptr->dun_level && !has_resist_lite(creature_ptr) && !is_invuln(creature_ptr) && is_daytime()) {
+        if (!is_in_dungeon(creature_ptr) && !has_resist_lite(creature_ptr) && !is_invuln(creature_ptr) && is_daytime()) {
             if ((creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) {
                 msg_print(_("日光があなたのアンデッドの肉体を焼き焦がした！", "The sun's rays scorch your undead flesh!"));
                 take_hit(creature_ptr, DAMAGE_NOESCAPE, 1, _("日光", "sunlight"), -1);

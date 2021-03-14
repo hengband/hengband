@@ -221,7 +221,7 @@ static bool parse_qtw_QQ(quest_type *q_ptr, char **zz, int num)
         r_ptr->flags1 |= RF1_QUESTOR;
 
     a_ptr = &a_info[q_ptr->k_idx];
-    a_ptr->gen_flags |= TRG_QUESTITEM;
+    a_ptr->gen_flags.set(TRG::QUESTITEM);
     return TRUE;
 }
 
@@ -251,7 +251,7 @@ static bool parse_qtw_QR(quest_type *q_ptr, char **zz, int num)
 
     if (reward_idx) {
         q_ptr->k_idx = (KIND_OBJECT_IDX)reward_idx;
-        a_info[reward_idx].gen_flags |= TRG_QUESTITEM;
+        a_info[reward_idx].gen_flags.set(TRG::QUESTITEM);
     } else {
         q_ptr->type = QUEST_TYPE_KILL_ALL;
     }

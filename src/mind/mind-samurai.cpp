@@ -127,7 +127,7 @@ static void hissatsu_serpent_tongue(player_type *attacker_ptr, samurai_slaying_t
  */
 static void hissatsu_zanma_ken(samurai_slaying_type *samurai_slaying_ptr)
 {
-    if (samurai_slaying_ptr->mode == HISSATSU_ZANMA)
+    if (samurai_slaying_ptr->mode != HISSATSU_ZANMA)
         return;
 
     if (!monster_living(samurai_slaying_ptr->m_ptr->r_idx) && (samurai_slaying_ptr->r_ptr->flags3 & RF3_EVIL)) {

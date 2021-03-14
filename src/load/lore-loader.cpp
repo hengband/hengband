@@ -7,13 +7,12 @@
 
 /*!
  * @brief モンスターの思い出を読み込む / Read the monster lore
- * @param r_idx 読み込み先モンスターID
+ * @param r_ptr 読み込み先モンスター種族情報へのポインタ
+ * @param r_idx 読み込み先モンスターID(種族特定用)
  * @return なし
  */
-void rd_lore(MONRACE_IDX r_idx)
+void rd_lore(monster_race *r_ptr, MONRACE_IDX r_idx)
 {
-    monster_race *r_ptr = &r_info[r_idx];
-
     s16b tmp16s;
     rd_s16b(&tmp16s);
     r_ptr->r_sights = (MONSTER_NUMBER)tmp16s;
@@ -81,15 +80,19 @@ void rd_lore(MONRACE_IDX r_idx)
 
 errr load_lore(void)
 {
-    u16b tmp16u;
-    rd_u16b(&tmp16u);
-    if (tmp16u > max_r_idx) {
-        load_note(format(_("モンスターの種族が多すぎる(%u)！", "Too many (%u) monster races!"), tmp16u));
-        return 21;
-    }
+    u16b loading_max_r_idx;
+    rd_u16b(&loading_max_r_idx);
 
-    for (int i = 0; i < tmp16u; i++)
-        rd_lore((MONRACE_IDX)i);
+    monster_race *r_ptr;
+    monster_race dummy;
+    for (int i = 0; i < loading_max_r_idx; i++) {
+        if (i < max_r_idx)
+            r_ptr = &r_info[i];
+        else
+            r_ptr = &dummy;
+
+        rd_lore(r_ptr, (MONRACE_IDX)i);
+    }
 
     if (arg_fiddle)
         load_note(_("モンスターの思い出をロードしました", "Loaded Monster Memory"));

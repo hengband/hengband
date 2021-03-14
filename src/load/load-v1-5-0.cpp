@@ -134,15 +134,15 @@ void rd_item_old(player_type *player_ptr, object_type *o_ptr)
                 o_ptr->curse_flags |= TRC_PERMA_CURSE;
             if (object_is_fixed_artifact(o_ptr)) {
                 artifact_type *a_ptr = &a_info[o_ptr->name1];
-                if (a_ptr->gen_flags & (TRG_HEAVY_CURSE))
+                if (a_ptr->gen_flags.has(TRG::HEAVY_CURSE))
                     o_ptr->curse_flags |= TRC_HEAVY_CURSE;
-                if (a_ptr->gen_flags & (TRG_PERMA_CURSE))
+                if (a_ptr->gen_flags.has(TRG::PERMA_CURSE))
                     o_ptr->curse_flags |= TRC_PERMA_CURSE;
             } else if (object_is_ego(o_ptr)) {
                 ego_item_type *e_ptr = &e_info[o_ptr->name2];
-                if (e_ptr->gen_flags & (TRG_HEAVY_CURSE))
+                if (e_ptr->gen_flags.has(TRG::HEAVY_CURSE))
                     o_ptr->curse_flags |= TRC_HEAVY_CURSE;
-                if (e_ptr->gen_flags & (TRG_PERMA_CURSE))
+                if (e_ptr->gen_flags.has(TRG::PERMA_CURSE))
                     o_ptr->curse_flags |= TRC_PERMA_CURSE;
             }
         }

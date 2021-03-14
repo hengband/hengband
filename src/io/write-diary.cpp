@@ -362,7 +362,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 	}
 	case DIARY_WIZ_TELE:
 	{
-		concptr to = !creature_ptr->current_floor_ptr->dun_level
+        concptr to = !is_in_dungeon(creature_ptr)
 			? _("地上", "the surface")
 			: format(_("%d階(%s)", "level %d of %s"), creature_ptr->current_floor_ptr->dun_level, d_name + d_info[creature_ptr->dungeon_idx].name);
 		fprintf(fff, _(" %2d:%02d %20s %sへとウィザード・テレポートで移動した。\n",
@@ -371,7 +371,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 	}
 	case DIARY_PAT_TELE:
 	{
-		concptr to = !creature_ptr->current_floor_ptr->dun_level
+		concptr to = !is_in_dungeon(creature_ptr)
 			? _("地上", "the surface")
 			: format(_("%d階(%s)", "level %d of %s"), creature_ptr->current_floor_ptr->dun_level, d_name + d_info[creature_ptr->dungeon_idx].name);
 		fprintf(fff, _(" %2d:%02d %20s %sへとパターンの力で移動した。\n",

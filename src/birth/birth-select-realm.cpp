@@ -309,6 +309,7 @@ bool get_player_realms(player_type *creature_ptr)
     put_str("                                   ", 3, 40);
     put_str("                                   ", 4, 40);
     put_str("                                   ", 5, 40);
+    put_str("                                   ", 6, 40);
 
     /* Select the first realm */
     creature_ptr->realm1 = REALM_NONE;

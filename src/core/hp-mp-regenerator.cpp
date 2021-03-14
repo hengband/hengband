@@ -118,7 +118,7 @@ void regenmagic(player_type *creature_ptr, int regen_amount)
 {
     MANA_POINT new_mana;
     int dev = 30;
-    int mult = (dev + adj_mag_mana[creature_ptr->stat_ind[A_INT]]); /* x1 to x2 speed bonus for recharging */
+    int mult = (dev + adj_mag_mana[creature_ptr->stat_index[A_INT]]); /* x1 to x2 speed bonus for recharging */
 
     for (int i = 0; i < EATER_EXT * 2; i++) {
         if (!creature_ptr->magic_num2[i])

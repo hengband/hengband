@@ -177,6 +177,7 @@ const flag_desc misc_flags3_desc[MAX_MISC3_FLAGS_DESCRIPTION] = {
     { TR_BLESSED, _("祝福", "Blessed Blade") },
     { TR_DEC_MANA, _("消費魔力減少", "Decrease Mana Consumption Rate") },
     { TR_EASY_SPELL, _("呪文失敗率減少", "Easy Spell") },
+    { TR_EASY2_WEAPON, _("二刀流向き", "Dual combat") },
     { TR_SUPPORTIVE, _("攻撃補助", "Support Attack") },
     { TR_RIDING, _("乗馬適正", "Riding") },
     { TR_INVULN_ARROW, _("射撃無効", "Immune Arrow") },

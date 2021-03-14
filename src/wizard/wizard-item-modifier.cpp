@@ -22,6 +22,7 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "view/display-messages.h"
+#include "util/bit-flags-calculator.h"
 
 #define K_MAX_DEPTH 110 /*!< アイテムの階層毎生成率を表示する最大階 */
 
@@ -348,9 +349,8 @@ static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
         return;
 
     object_copy(o_ptr, q_ptr);
-    owner_ptr->update |= PU_BONUS;
-    owner_ptr->update |= PU_COMBINE | PU_REORDER;
-    owner_ptr->window_flags |= PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER;
+    set_bits(owner_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
+    set_bits(owner_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_FLOOR_ITEM_LIST);
 }
 
 /*!
@@ -487,9 +487,8 @@ void wiz_modify_item(player_type *creature_ptr)
         msg_print("Changes accepted.");
 
         object_copy(o_ptr, q_ptr);
-        creature_ptr->update |= PU_BONUS;
-        creature_ptr->update |= PU_COMBINE | PU_REORDER;
-        creature_ptr->window_flags |= PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER;
+        set_bits(creature_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
+        set_bits(creature_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_FLOOR_ITEM_LIST);
     } else {
         msg_print("Changes ignored.");
     }

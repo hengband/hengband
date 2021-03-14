@@ -45,6 +45,7 @@
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "term/screen-processor.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 typedef struct {
@@ -121,12 +122,12 @@ void amusement(player_type *creature_ptr, POSITION y1, POSITION x1, int num, boo
             continue;
 
         /* Search an artifact index if need */
-        insta_art = (k_info[k_idx].gen_flags & TRG_INSTA_ART);
+        insta_art = k_info[k_idx].gen_flags.has(TRG::INSTA_ART);
         fixed_art = (amuse_info[i].flag & AMS_FIXED_ART);
 
         if (insta_art || fixed_art) {
             for (a_idx = 1; a_idx < max_a_idx; a_idx++) {
-                if (insta_art && !(a_info[a_idx].gen_flags & TRG_INSTA_ART))
+                if (insta_art && !a_info[a_idx].gen_flags.has(TRG::INSTA_ART))
                     continue;
                 if (a_info[a_idx].tval != k_info[k_idx].tval)
                     continue;
@@ -529,8 +530,8 @@ bool enchant(player_type *caster_ptr, object_type *o_ptr, int n, int eflag)
     /* Failure */
     if (!res)
         return FALSE;
-    caster_ptr->update |= (PU_BONUS | PU_COMBINE | PU_REORDER);
-    caster_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+    set_bits(caster_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
+    set_bits(caster_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST);
 
     calc_android_exp(caster_ptr);
 
