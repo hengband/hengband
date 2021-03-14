@@ -655,9 +655,9 @@ N:28:『サルケットス』
 E:'Thalkettoth'
 I:36:11:3
 W:20:3:60:25000
-P:11:1d1:7:3:25
+P:11:1d1:3:3:25
 F:DEX | STEALTH | HIDE_TYPE | SHOW_MODS
-F:RES_ACID | RES_COLD | RES_SHARDS | RES_FEAR | RES_DISEN | XTRA_H_RES
+F:RES_ACID | RES_SHARDS | RES_FEAR | RES_DISEN
 D:$An amazingly light tunic and skirt sewn with thick, overlapping scales of 
 D:$hardened leather whose wearer moves with agility and assurance.
 D:硬くした革製の鱗を厚く覆うように縫い付けた驚くほど軽い鎧であり、
@@ -1059,7 +1059,7 @@ I:35:6:4
 W:40:10:5:50000
 P:6:0d0:0:0:12
 F:STEALTH | FREE_ACT | IM_ACID | SEE_INVIS |
-F:RES_DARK | RES_LITE | XTRA_H_RES
+F:RES_DARK | RES_LITE | RES_WATER | XTRA_H_RES
 D:$From the ruin of Gondolin did Tuor escape, through secret ways and travail, 
 D:$shielded by his cloak from a multitude of hostile eyes.
 D:海統べるウルモより授かりし王者の衣に身を包み、
@@ -1304,9 +1304,10 @@ E:of Caine
 I:23:4:4
 W:20:80:12:125000
 P:0:2d4:10:15:5
-F:DEX | HIDE_TYPE | STEALTH | SEARCH | SLAY_HUMAN |
-F:SLAY_EVIL | SLAY_TROLL | SLAY_ORC | BRAND_POIS |
-F:FREE_ACT | RES_DARK | SUST_DEX | SEE_INVIS | SHOW_MODS | THROW
+F:DEX | HIDE_TYPE | STEALTH | SEARCH | SLAY_HUMAN
+F:SLAY_EVIL | SLAY_TROLL | SLAY_ORC | BRAND_POIS
+F:RES_DARK | RES_WATER
+F:FREE_ACT | SUST_DEX | SEE_INVIS | SHOW_MODS | THROW
 D:$The dagger of Caine, the leader of Amber's fleets.
 D:アンバーの艦隊を指揮するケインのダガーだ。
 
@@ -1598,9 +1599,9 @@ E:'Gondricam'
 I:23:12:3
 W:20:8:110:28000
 P:0:1d7:10:11:0
-F:DEX | STEALTH | HIDE_TYPE |
-F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | LEVITATION |
-F:SEE_INVIS | REGEN | SHOW_MODS
+F:DEX | STEALTH | HIDE_TYPE | SHOW_MODS
+F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_WATER
+F:SEE_INVIS | REGEN  | LEVITATION | LITE_2 | XTRA_H_RES
 D:$Famed sea-defender of Lebennin.  A short, slightly curved chopping blade 
 D:$with a perfect edge shining cleanly in the sun, an object of hate to the 
 D:$men of Umbar who met it in combat.
@@ -2145,8 +2146,8 @@ I:22:26:2
 W:35:12:300:90000
 P:0:3d9:16:18:0
 F:STR | DEX | HIDE_TYPE | CHAOTIC |
-F:SLAY_EVIL | SLAY_UNDEAD | RES_LITE | RES_DARK | SEE_INVIS |
-F:BLESSED | SHOW_MODS | RIDING
+F:SLAY_EVIL | SLAY_UNDEAD | RES_LITE | RES_DARK | RES_WATER
+F:SEE_INVIS | BLESSED | SHOW_MODS | RIDING
 D:$A massive triple-pronged spear, so great it normally requires two hands to 
 D:$wield, evoking the spirit of Osse who with it pierced legions of 
 D:$evil and undead.
@@ -2169,9 +2170,10 @@ E:of Ulmo
 I:22:5:4
 W:30:35:70:120000
 P:0:4d8:15:19:0
-F:DEX | HIDE_TYPE | XTRA_POWER |
-F:SLAY_DRAGON | SLAY_ANIMAL | FREE_ACT | HOLD_EXP | IM_ACID |
-F:RES_NETHER | SEE_INVIS | SLOW_DIGEST | REGEN | ACTIVATE |
+F:DEX | HIDE_TYPE | XTRA_POWER
+F:SLAY_DRAGON | SLAY_ANIMAL | FREE_ACT | HOLD_EXP
+F:IM_ACID | RES_NETHER | RES_WATER
+F:SEE_INVIS | SLOW_DIGEST | REGEN | ACTIVATE
 F:BLESSED | SHOW_MODS | RIDING
 U:TELE_AWAY
 D:$The awesome weapon of the Vala Ulmo, Lord of Waters. Mightest of all the 
@@ -2581,11 +2583,12 @@ E:'Bladeturner'
 I:38:30:0
 W:95:3:600:500000
 P:50:2d4:-8:0:35
-F:HOLD_EXP | REGEN |
-F:RES_ACID | RES_FIRE | RES_COLD | RES_ELEC | RES_POIS | LEVITATION |
-F:RES_NETHER | RES_NEXUS | RES_CHAOS | RES_LITE | RES_DARK |
-F:RES_SHARDS | RES_SOUND | RES_DISEN | RES_BLIND | RES_CONF |
-F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD |
+F:FREE_ACT | HOLD_EXP | REGEN  | LEVITATION
+F:RES_ACID | RES_FIRE | RES_COLD | RES_ELEC | RES_POIS
+F:RES_NETHER | RES_NEXUS | RES_CHAOS | RES_LITE | RES_DARK
+F:RES_SHARDS | RES_SOUND | RES_DISEN | RES_BLIND | RES_CONF
+F:RES_TIME | RES_WATER
+F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 F:ACTIVATE
 U:BLADETURNER
 D:$A suit of adamant, set with scales of every color, surrounded in a nimbus 
@@ -3330,8 +3333,8 @@ E:of Earendil
 I:34:7:0
 W:50:3:160:90000
 P:10:1d6:0:0:20
-F:LITE_3 | RES_BLIND | RES_DARK | RES_NETHER | RES_ELEC | RES_FIRE |
-F:ACTIVATE | ESP_GOOD
+F:RES_BLIND | RES_DARK | RES_NETHER | RES_ELEC | RES_FIRE | RES_WATER
+F:ACTIVATE | ESP_GOOD | LITE_3
 U:CURING
 D:$A shining shield, once borne by the great mariner Earendil, "scored with 
 D:$runes to keep all wounds and harm from him".
@@ -3528,11 +3531,11 @@ D:身に纏えば、神の如き守護の力が得られる。
 N:202:『天の沼矛』
 E:'Ama-no-NumaHoko'
 I:22:4:4
-W:50:40:240:150000
+W:50:30:240:150000
 P:0:3d8:16:20:0
 F:WIS | CHR | SUST_WIS | SUST_CHR | HIDE_TYPE |
 F:SLAY_EVIL | SLAY_DEMON | SLAY_UNDEAD |
-F:RES_ACID | RES_COLD | RES_BLIND | RES_CHAOS |
+F:RES_ACID | RES_COLD | RES_BLIND | RES_CHAOS | RES_WATER
 F:LITE | ACTIVATE | BLESSED | SEE_INVIS | SHOW_MODS
 U:BA_WATER
 D:$From the bridge between heaven and earth, Izanagi and Izanami churned the
@@ -3864,13 +3867,13 @@ D:悪代官ゲスラーの命を正確に奪ったという。
 N:225:アスクレピオスの
 E:of Asclepius
 I:21:14:3
-W:40:45:160:300000
+W:40:40:160:300000
 P:0:2d11:15:15:5
-F:WIS | CHR | BLESSED | LITE | ACTIVATE |
-F:SEE_INVIS | FREE_ACT | HOLD_EXP | REGEN | SLOW_DIGEST |
-F:VAMPIRIC | SLAY_ANIMAL | SLAY_DRAGON | SLAY_HUMAN |
-F:SLAY_ORC | SLAY_TROLL | SLAY_GIANT |
-F:RES_POIS | RES_CONF | RES_CHAOS |
+F:WIS | CHR | BLESSED | LITE | ACTIVATE
+F:SEE_INVIS | FREE_ACT | HOLD_EXP | REGEN | SLOW_DIGEST
+F:VAMPIRIC | SLAY_ANIMAL | SLAY_DRAGON | SLAY_HUMAN
+F:SLAY_ORC | SLAY_TROLL | SLAY_GIANT
+F:RES_POIS | RES_CONF | RES_CHAOS | RES_TIME
 U:REST_ALL
 D:$This is the staff of Asclepius, a hero and god of medicine in Greek
 D:$ mythology.
@@ -3975,8 +3978,8 @@ E:of the Heavenly Maiden
 I:35:5:4
 W:50:3:0:45000
 P:0:0d0:0:0:20
-F:CHR | LEVITATION | SEE_INVIS | FREE_ACT | ACTIVATE |
-F:RES_COLD | RES_ELEC | XTRA_H_RES | XTRA_POWER
+F:CHR | LEVITATION | SEE_INVIS | FREE_ACT | ACTIVATE
+F:RES_COLD | RES_ELEC | RES_WATER | XTRA_H_RES | XTRA_POWER
 U:RECALL
 D:$This is a heavenly cloak of the maiden which was stolen 
 D:$by a man, when she was having a bath at a lake with her 
