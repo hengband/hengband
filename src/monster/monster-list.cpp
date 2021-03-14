@@ -35,8 +35,10 @@
 #include "pet/pet-fall-off.h"
 #include "system/alloc-entries.h"
 #include "system/floor-type-definition.h"
+#include "util/probability-table.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <iterator>
 
 #define HORDE_NOGOOD 0x01 /*!< (未実装フラグ)HORDE生成でGOODなモンスターの生成を禁止する？ */
 #define HORDE_NOEVIL 0x02 /*!< (未実装フラグ)HORDE生成でEVILなモンスターの生成を禁止する？ */
@@ -81,10 +83,7 @@ MONSTER_IDX m_pop(floor_type *floor_ptr)
  */
 MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH min_level, DEPTH max_level, BIT_FLAGS option)
 {
-    int i, j, p;
     int r_idx;
-    long value, total_prob3;
-    int mon_num = 0;
     monster_race *r_ptr;
     alloc_entry *table = alloc_race_table;
 
@@ -130,11 +129,10 @@ MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH min_level, DEPTH max_leve
         }
     }
 
-    total_prob3 = 0L;
+    ProbabilityTable<int> prob_table;
 
     /* Process probabilities */
-    for (i = 0; i < alloc_race_size; i++) {
-        table[i].prob3 = 0;
+    for (int i = 0; i < alloc_race_size; i++) {
         if (table[i].level < min_level)
             continue;
         if (max_level < table[i].level)
@@ -158,63 +156,32 @@ MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH min_level, DEPTH max_leve
             }
         }
 
-        table[i].prob3 = table[i].prob2;
-
-        if (table[i].prob3 > 0) {
-            mon_num++;
-            total_prob3 += table[i].prob3;
-        }
+        prob_table.entry_item(i, table[i].prob2);
     }
 
     if (cheat_hear) {
-        msg_format(_("モンスター第3次候補数:%d(%d-%dF)%d ", "monster third selection:%d(%d-%dF)%d "), mon_num, min_level, max_level, total_prob3);
+        msg_format(_("モンスター第3次候補数:%d(%d-%dF)%d ", "monster third selection:%d(%d-%dF)%d "), prob_table.item_count(), min_level, max_level,
+            prob_table.total_prob());
     }
 
-    if (total_prob3 <= 0)
+    if (prob_table.empty())
         return 0;
 
-    value = randint0(total_prob3);
-    int found_count = 0;
-    for (i = 0; i < alloc_race_size; i++) {
-        if (value < table[i].prob3)
-            break;
-        value = value - table[i].prob3;
-        found_count++;
-    }
+    // 40%で1回、50%で2回、10%で3回抽選し、その中で一番レベルが高いモンスターを選択する
+    int n = 1;
 
-    p = randint0(100);
+    const int p = randint0(100);
+    if (p < 60)
+        n++;
+    if (p < 10)
+        n++;
 
-    /* Try for a "harder" monster once (50%) or twice (10%) */
-    if (p < 60) {
-        j = found_count;
-        value = randint0(total_prob3);
-        for (found_count = 0; found_count < alloc_race_size; found_count++) {
-            if (value < table[found_count].prob3)
-                break;
+    std::vector<int> result;
+    ProbabilityTable<int>::lottery(std::back_inserter(result), prob_table, n);
 
-            value = value - table[found_count].prob3;
-        }
+    auto it = std::max_element(result.begin(), result.end(), [table](int a, int b) { return table[a].level < table[b].level; });
 
-        if (table[found_count].level < table[j].level)
-            found_count = j;
-    }
-
-    /* Try for a "harder" monster twice (10%) */
-    if (p < 10) {
-        j = found_count;
-        value = randint0(total_prob3);
-        for (found_count = 0; found_count < alloc_race_size; found_count++) {
-            if (value < table[found_count].prob3)
-                break;
-
-            value = value - table[found_count].prob3;
-        }
-
-        if (table[found_count].level < table[j].level)
-            found_count = j;
-    }
-
-    return (table[found_count].index);
+    return (table[*it].index);
 }
 
 /*!

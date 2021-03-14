@@ -858,6 +858,7 @@ hengband_SOURCES = \
 	util/flag-group.h \
 	util/int-char-converter.h \
 	util/object-sort.cpp util/object-sort.h \
+	util/probability-table.h \
 	util/quarks.cpp util/quarks.h \
 	util/sort.cpp util/sort.h \
 	util/string-processor.cpp util/string-processor.h \
