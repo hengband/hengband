@@ -52,21 +52,21 @@
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @return 効果が何もないならFALSE、何かあるならTRUE
  */
-static bool is_affective(player_type *caster_ptr, effect_monster_type *em_ptr)
+static process_result is_affective(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (!em_ptr->g_ptr->m_idx)
-        return FALSE;
+        return PROCESS_FALSE;
     if (em_ptr->who && (em_ptr->g_ptr->m_idx == em_ptr->who))
-        return FALSE;
+        return PROCESS_FALSE;
     if ((em_ptr->g_ptr->m_idx == caster_ptr->riding) && !em_ptr->who && !(em_ptr->effect_type == GF_OLD_HEAL) && !(em_ptr->effect_type == GF_OLD_SPEED)
         && !(em_ptr->effect_type == GF_STAR_HEAL))
-        return FALSE;
+        return PROCESS_CONTINUE;
     if (sukekaku && ((em_ptr->m_ptr->r_idx == MON_SUKE) || (em_ptr->m_ptr->r_idx == MON_KAKU)))
-        return FALSE;
+        return PROCESS_FALSE;
     if (em_ptr->m_ptr->hp < 0)
-        return FALSE;
+        return PROCESS_FALSE;
 
-    return TRUE;
+    return PROCESS_TRUE;
 }
 
 /*!
@@ -92,10 +92,13 @@ static void decide_spell_result_description(player_type *caster_ptr, effect_mons
  */
 static process_result process_monster_perfect_resistance(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
-    if (!is_affective(caster_ptr, em_ptr)) {
-        em_ptr->note = _("には効果がなかった。", " is unaffected.");
-        em_ptr->dam = 0;
-        return PROCESS_CONTINUE;
+    process_result result = is_affective(caster_ptr, em_ptr);
+    if (result != PROCESS_TRUE) {
+        if (result == PROCESS_CONTINUE) {
+            em_ptr->note = _("には効果がなかった。", " is unaffected.");
+            em_ptr->dam = 0;
+        }
+        return result;
     }
 
     if (((em_ptr->r_ptr->flagsr & RFR_RES_ALL) == 0) || em_ptr->effect_type == GF_OLD_CLONE || em_ptr->effect_type == GF_STAR_HEAL
