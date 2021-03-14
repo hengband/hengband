@@ -148,19 +148,20 @@ static bool display_kill_unique(lore_type *lore_ptr)
         }
 
         hooked_roff("\n");
-    } else if (dead) {
-        hooked_roff(_("あなたはこの仇敵をすでに葬り去っている。", "You have slain this foe.  "));
+    } else {
+        if (dead)
+            hooked_roff(_("あなたはこの仇敵をすでに葬り去っている。", "You have slain this foe.  "));
+        else
+            hooked_roff(_("この仇敵はまだ生きている！", "This foe is still alive!  "));
+
         hooked_roff("\n");
     }
 
     return TRUE;
 }
 
-static bool display_killed(lore_type *lore_ptr)
+static void display_killed(lore_type *lore_ptr)
 {
-    if (lore_ptr->r_ptr->r_deaths == 0)
-        return FALSE;
-
     hooked_roff(_(format("このモンスターはあなたの先祖を %d 人葬っている", lore_ptr->r_ptr->r_deaths),
         format("%d of your ancestors %s been killed by this creature, ", lore_ptr->r_ptr->r_deaths, plural(lore_ptr->r_ptr->r_deaths, "has", "have"))));
 
@@ -174,9 +175,49 @@ static bool display_killed(lore_type *lore_ptr)
     } else {
         hooked_roff(format(_("が、まだ%sを倒したことはない。", "and %s is not ever known to have been defeated.  "), Who::who(lore_ptr->msex)));
     }
+}
 
-    hooked_roff("\n");
-    return TRUE;
+static void display_no_killed(lore_type *lore_ptr)
+{
+    if (lore_ptr->r_ptr->r_pkills) {
+        hooked_roff(format(
+            _("あなたはこのモンスターを少なくとも %d 体は殺している。", "You have killed at least %d of these creatures.  "), lore_ptr->r_ptr->r_pkills));
+    } else if (lore_ptr->r_ptr->r_tkills) {
+        hooked_roff(format(_("あなたの先祖はこのモンスターを少なくとも %d 体は殺している。", "Your ancestors have killed at least %d of these creatures.  "),
+            lore_ptr->r_ptr->r_tkills));
+    } else {
+        hooked_roff(_("このモンスターを倒したことはない。", "No battles to the death are recalled.  "));
+    }
+}
+
+/*!
+ * @brief 生存数制限のあるモンスターの最大生存数を表示する
+ * @param lore_ptr モンスターの思い出構造体への参照ポインタ
+ * @return なし
+ * @detail
+ * 一度も倒したことのないモンスターの情報は不明。
+ */
+static void display_number_of_nazguls(lore_type *lore_ptr)
+{
+    if (lore_ptr->mode != MONSTER_LORE_DEBUG && lore_ptr->r_ptr->r_tkills == 0)
+        return;
+
+    int remain = lore_ptr->r_ptr->max_num;
+    int killed = lore_ptr->r_ptr->r_akills;
+    if (remain == 0) {
+#ifdef JP
+        hooked_roff(format("%sはかつて %ld 体存在した。", Who::who(lore_ptr->msex, (killed > 1)), killed));
+#else
+        hooked_roff(format("You already killed all %ld of %s.  ", killed, Who::whom(lore_ptr->msex, (killed > 1))));
+#endif
+    } else {
+#ifdef JP
+        hooked_roff(format("%sはまだ %ld 体生きている。", Who::who(lore_ptr->msex, (remain + killed > 1)), remain));
+#else
+        concptr be = (remain > 1) ? "are" : "is";
+        hooked_roff(format("%ld of %s %s still alive.  ", remain, Who::whom(lore_ptr->msex, (remain + killed > 1)), be));
+#endif
+    }
 }
 
 void display_kill_numbers(lore_type *lore_ptr)
@@ -187,18 +228,12 @@ void display_kill_numbers(lore_type *lore_ptr)
     if (display_kill_unique(lore_ptr))
         return;
 
-    if (display_killed(lore_ptr))
-        return;
+    if (lore_ptr->r_ptr->r_deaths == 0)
+        display_no_killed(lore_ptr);
+    else
+        display_killed(lore_ptr);
 
-    if (lore_ptr->r_ptr->r_pkills) {
-        hooked_roff(format(
-            _("あなたはこのモンスターを少なくとも %d 体は殺している。", "You have killed at least %d of these creatures.  "), lore_ptr->r_ptr->r_pkills));
-    } else if (lore_ptr->r_ptr->r_tkills) {
-        hooked_roff(format(_("あなたの先祖はこのモンスターを少なくとも %d 体は殺している。", "Your ancestors have killed at least %d of these creatures.  "),
-            lore_ptr->r_ptr->r_tkills));
-    } else {
-        hooked_roff(_("このモンスターを倒したことはない。", "No battles to the death are recalled.  "));
-    }
+    display_number_of_nazguls(lore_ptr);
 
     hooked_roff("\n");
 }
