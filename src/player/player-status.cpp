@@ -1930,11 +1930,11 @@ static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_real_value)
  * @return 二刀流ペナルティ量
  * @details
  * * 二刀流にしていなければ0
- * * 棘セットによる軽減
- * * 源氏エゴによる軽減
- * * マンゴーシュ/脇差を左に装備した場合の軽減
- * * 武蔵セットによる軽減
- * * 竿上武器による増加
+ * * 特別セットによる軽減
+ * * EASY2_WEAPONによる軽減
+ * * SUPPORTIVEを左に装備した場合の軽減
+ * * 武蔵セットによる免除
+ * * 竿状武器による増加
  */
 s16b calc_double_weapon_penalty(player_type *creature_ptr, INVENTORY_IDX slot)
 {
@@ -1950,20 +1950,17 @@ s16b calc_double_weapon_penalty(player_type *creature_ptr, INVENTORY_IDX slot)
                 && (creature_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_TWINKLE))) {
             penalty = penalty / 2 - 5;
         }
-        if (creature_ptr->easy_2weapon) {
-            if (penalty > 0)
+
+        for (int i = FLAG_CAUSE_INVEN_MAIN_HAND; i < FLAG_CAUSE_MAX; i <<= 1)
+            if (penalty > 0 && any_bits(creature_ptr->easy_2weapon, i))
                 penalty /= 2;
-        } else if (has_flag(flags, TR_SUPPORTIVE)) {
+
+        if (has_flag(flags, TR_SUPPORTIVE))
             penalty = MAX(0, penalty - 10);
-        }
+
         if ((creature_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_MUSASI_KATANA)
             && (creature_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_MUSASI_WAKIZASI)) {
             penalty = MIN(0, penalty);
-        } else {
-            if ((creature_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_MUSASI_KATANA) && (penalty > 0))
-                penalty /= 2;
-            if ((creature_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_MUSASI_WAKIZASI) && (penalty > 0))
-                penalty /= 2;
         }
 
         if (creature_ptr->inventory_list[slot].tval == TV_POLEARM)

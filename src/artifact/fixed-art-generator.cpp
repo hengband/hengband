@@ -132,6 +132,15 @@ static void random_artifact_resistance(player_type *player_ptr, object_type *o_p
 
     if (give_resistance)
         one_high_resistance(o_ptr);
+
+    if (a_ptr->gen_flags.has(TRG::XTRA_DICE)) {
+        do {
+            o_ptr->dd++;
+        } while (one_in_(o_ptr->dd));
+
+        if (o_ptr->dd > 9)
+            o_ptr->dd = 9;
+    }
 }
 
 static void invest_curse_to_fixed_artifact(player_type *player_ptr, artifact_type *a_ptr, object_type *q_ptr)

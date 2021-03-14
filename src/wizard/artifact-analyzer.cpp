@@ -248,29 +248,25 @@ static void analyze_addition(object_type *o_ptr, char *addition)
 {
     artifact_type *a_ptr = &a_info[o_ptr->name1];
     strcpy(addition, "");
+
     if (a_ptr->gen_flags.has_all_of({ TRG::XTRA_POWER, TRG::XTRA_H_RES })) {
         strcat(addition, _("能力and耐性", "Ability and Resistance"));
-        return;
-    }
-    
-    if (a_ptr->gen_flags.has(TRG::XTRA_POWER)) {
+    } else if (a_ptr->gen_flags.has(TRG::XTRA_POWER)) {
         strcat(addition, _("能力", "Ability"));
         if (a_ptr->gen_flags.has(TRG::XTRA_RES_OR_POWER))
             strcat(addition, _("(1/2でand耐性)", "(plus Resistance about 1/2)"));
-
-        return;
-    }
-    
-    if (a_ptr->gen_flags.has(TRG::XTRA_H_RES)) {
+    } else if (a_ptr->gen_flags.has(TRG::XTRA_H_RES)) {
         strcat(addition, _("耐性", "Resistance"));
         if (a_ptr->gen_flags.has(TRG::XTRA_RES_OR_POWER))
             strcat(addition, _("(1/2でand能力)", "(plus Ability about 1/2)"));
-
-        return;
-    }
-    
-    if (a_ptr->gen_flags.has(TRG::XTRA_RES_OR_POWER))
+    } else if (a_ptr->gen_flags.has(TRG::XTRA_RES_OR_POWER))
         strcat(addition, _("能力or耐性", "Ability or Resistance"));
+
+    if (a_ptr->gen_flags.has(TRG::XTRA_DICE)) {
+        if (strlen(addition) > 0)
+            strcat(addition, _("、", ", "));
+        strcat(addition, _("ダイス数", "Dice number"));
+    }
 }
 
 /*!
