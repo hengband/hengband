@@ -47,7 +47,7 @@ s16b PlayerStealth::personality_value()
  * @details
  * * 職業による加算
  */
-s16b PlayerStealth::base_class_value()
+s16b PlayerStealth::class_base_value()
 {
     const player_class *c_ptr = &class_info[this->owner_ptr->pclass];
     return c_ptr->c_stl + (c_ptr->x_stl * this->owner_ptr->lev / 10);
