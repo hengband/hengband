@@ -12,7 +12,7 @@ protected:
     void set_locals() override;
     s16b race_value() override;
     s16b class_value() override;
-    s16b base_class_value();
+    s16b class_base_value() override;
     s16b personality_value() override;
     s16b time_effect_value() override;
     s16b mutation_value() override;

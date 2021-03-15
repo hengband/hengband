@@ -526,10 +526,10 @@ static void display_floor_item_list(player_type *player_ptr, const int y, const 
         object_type *const o_ptr = &floor_ptr->o_list[o_idx];
 
         // 未発見アイテムおよび金は対象外。
-        if (!(o_ptr->marked & OM_FOUND))
+        if (none_bits(o_ptr->marked, OM_FOUND) || o_ptr->tval == TV_GOLD) {
+            o_idx = o_ptr->next_o_idx;
             continue;
-        if (o_ptr->tval == TV_GOLD)
-            continue;
+        }
 
         // 途中で行数が足りなくなったら最終行にその旨追記して終了。
         if (term_y >= term_h) {

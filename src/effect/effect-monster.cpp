@@ -58,15 +58,30 @@ static process_result is_affective(player_type *caster_ptr, effect_monster_type 
         return PROCESS_FALSE;
     if (em_ptr->who && (em_ptr->g_ptr->m_idx == em_ptr->who))
         return PROCESS_FALSE;
-    if ((em_ptr->g_ptr->m_idx == caster_ptr->riding) && !em_ptr->who && !(em_ptr->effect_type == GF_OLD_HEAL) && !(em_ptr->effect_type == GF_OLD_SPEED)
-        && !(em_ptr->effect_type == GF_STAR_HEAL))
-        return PROCESS_CONTINUE;
     if (sukekaku && ((em_ptr->m_ptr->r_idx == MON_SUKE) || (em_ptr->m_ptr->r_idx == MON_KAKU)))
         return PROCESS_FALSE;
     if (em_ptr->m_ptr->hp < 0)
         return PROCESS_FALSE;
+    if (em_ptr->who || em_ptr->g_ptr->m_idx != caster_ptr->riding)
+        return PROCESS_TRUE;
 
-    return PROCESS_TRUE;
+    switch (em_ptr->effect_type) {
+    case GF_OLD_HEAL:
+    case GF_OLD_SPEED:
+    case GF_STAR_HEAL:
+        return PROCESS_TRUE;
+    case GF_OLD_SLOW:
+    case GF_OLD_SLEEP:
+    case GF_OLD_CLONE:
+    case GF_OLD_CONF:
+    case GF_OLD_POLY:
+    case GF_GENOCIDE:
+        return PROCESS_CONTINUE;
+    default:
+        break;
+    }
+
+    return PROCESS_FALSE;
 }
 
 /*!
