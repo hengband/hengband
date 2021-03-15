@@ -239,34 +239,38 @@ spoiler_output_status output_all_spoilers(void)
     if (status != SPOILER_OUTPUT_SUCCESS)
         return status;
 
-    status = spoil_mon_desc("mon-desc-wildonly.txt", FALSE, RF8_WILD_ONLY);
+    status = spoil_mon_desc("mon-desc-ridable.txt", TRUE, TRUE, RF8_WILD_ALL);
     if (status != SPOILER_OUTPUT_SUCCESS)
         return status;
-    status = spoil_mon_desc("mon-desc-town.txt", FALSE, RF8_WILD_TOWN);
+
+    status = spoil_mon_desc("mon-desc-wildonly.txt", FALSE, FALSE, RF8_WILD_ONLY);
     if (status != SPOILER_OUTPUT_SUCCESS)
         return status;
-    status = spoil_mon_desc("mon-desc-shore.txt", FALSE, RF8_WILD_SHORE);
+    status = spoil_mon_desc("mon-desc-town.txt", FALSE, FALSE, RF8_WILD_TOWN);
     if (status != SPOILER_OUTPUT_SUCCESS)
         return status;
-    status = spoil_mon_desc("mon-desc-ocean.txt", FALSE, RF8_WILD_OCEAN);
+    status = spoil_mon_desc("mon-desc-shore.txt", FALSE, FALSE, RF8_WILD_SHORE);
     if (status != SPOILER_OUTPUT_SUCCESS)
         return status;
-    status = spoil_mon_desc("mon-desc-waste.txt", FALSE, RF8_WILD_WASTE);
+    status = spoil_mon_desc("mon-desc-ocean.txt", FALSE, FALSE, RF8_WILD_OCEAN);
     if (status != SPOILER_OUTPUT_SUCCESS)
         return status;
-    status = spoil_mon_desc("mon-desc-wood.txt", FALSE, RF8_WILD_WOOD);
+    status = spoil_mon_desc("mon-desc-waste.txt", FALSE, FALSE, RF8_WILD_WASTE);
     if (status != SPOILER_OUTPUT_SUCCESS)
         return status;
-    status = spoil_mon_desc("mon-desc-volcano.txt", FALSE, RF8_WILD_VOLCANO);
+    status = spoil_mon_desc("mon-desc-wood.txt", FALSE, FALSE, RF8_WILD_WOOD);
     if (status != SPOILER_OUTPUT_SUCCESS)
         return status;
-    status = spoil_mon_desc("mon-desc-mountain.txt", FALSE, RF8_WILD_MOUNTAIN);
+    status = spoil_mon_desc("mon-desc-volcano.txt", FALSE, FALSE, RF8_WILD_VOLCANO);
     if (status != SPOILER_OUTPUT_SUCCESS)
         return status;
-    status = spoil_mon_desc("mon-desc-grass.txt", FALSE, RF8_WILD_GRASS);
+    status = spoil_mon_desc("mon-desc-mountain.txt", FALSE, FALSE, RF8_WILD_MOUNTAIN);
     if (status != SPOILER_OUTPUT_SUCCESS)
         return status;
-    status = spoil_mon_desc("mon-desc-wildall.txt", FALSE, RF8_WILD_ALL);
+    status = spoil_mon_desc("mon-desc-grass.txt", FALSE, FALSE, RF8_WILD_GRASS);
+    if (status != SPOILER_OUTPUT_SUCCESS)
+        return status;
+    status = spoil_mon_desc("mon-desc-wildall.txt", FALSE, FALSE, RF8_WILD_ALL);
     if (status != SPOILER_OUTPUT_SUCCESS)
         return status;
 
