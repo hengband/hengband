@@ -375,8 +375,11 @@ bool set_shero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
     if (creature_ptr->is_dead)
         return FALSE;
 
-    if (creature_ptr->pclass == CLASS_BERSERKER)
+    if (creature_ptr->pclass == CLASS_BERSERKER) {
         v = 1;
+        return FALSE;
+    }
+
     if (v) {
         if (creature_ptr->shero && !do_dec) {
             if (creature_ptr->shero > v)
