@@ -113,7 +113,7 @@ void display_rumor(player_type *player_ptr, bool ex)
         IDX t_idx;
         while (TRUE) {
             t_idx = rumor_num(zz[1], NO_TOWN);
-            if (town_info[t_idx].name)
+            if (town_info[t_idx].name[0] != '\0')
                 break;
         }
 
