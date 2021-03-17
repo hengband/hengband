@@ -3573,6 +3573,21 @@ static spoiler_output_status create_debug_spoiler(LPSTR cmd_line)
     return output_all_spoilers();
 }
 
+typedef BOOL(_stdcall *SetProcessDpiAwarenessContextFunc)(DPI_AWARENESS_CONTEXT);
+/*!
+ * @brief 高DPI設定。Windows10に高DPIスケール設定をまかせる。Windows 10バージョン1809以降のみ有効。
+ */
+void setup_dpi_Awareness()
+{
+    SetDllDirectory("");
+    HMODULE hm = LoadLibrary("User32.dll");
+    SetProcessDpiAwarenessContextFunc func = (SetProcessDpiAwarenessContextFunc)GetProcAddress(hm, "SetProcessDpiAwarenessContext");
+    if (func)
+        (*func)(DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED);
+    if (hm)
+        FreeLibrary(hm);
+}
+
 /*!
  * todo よく見るとhMutexはちゃんと使われていない……？
  * @brief (Windows固有)変愚蛮怒が起動済かどうかのチェック
@@ -3597,6 +3612,7 @@ int PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nC
     HDC hdc;
     MSG msg;
 
+    setup_dpi_Awareness();
     setlocale(LC_ALL, "ja_JP");
     (void)nCmdShow;
     hInstance = hInst;
