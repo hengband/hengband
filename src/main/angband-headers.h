@@ -12,7 +12,7 @@ struct angband_header {
     byte v_major; /* Version -- major */
     byte v_minor; /* Version -- minor */
     byte v_patch; /* Version -- patch */
-    byte v_extra; /* Version -- extra */
+    byte checksum; /* Version -- extra */
 
     u16b info_num; /* Number of "info" records */
     int info_len; /* Size of each "info" record */

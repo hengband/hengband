@@ -105,7 +105,7 @@ static void init_header(angband_header *head, IDX num, int len)
     head->v_major = FAKE_VER_MAJOR;
     head->v_minor = FAKE_VER_MINOR;
     head->v_patch = FAKE_VER_PATCH;
-    head->v_extra = 0;
+    head->checksum = 0;
 
     head->info_num = (IDX)num;
     head->info_len = len;
