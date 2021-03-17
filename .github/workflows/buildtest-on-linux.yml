@@ -12,7 +12,7 @@ jobs:
     name: Build test on Ubuntu-20.04
     runs-on: ubuntu-20.04
     env:
-      CFLAGS: "-pipe -O3 -Werror -Wall -Wextra -Wno-switch -Wno-sign-compare -Wno-unused-parameter -Wno-unused-function"
+      CXXFLAGS: "-pipe -O3 -Werror -Wall -Wextra"
     steps:
       - uses: actions/checkout@v2
 
@@ -24,6 +24,7 @@ jobs:
             libncursesw5-dev \
             libcurl4-openssl-dev \
             nkf \
+            clang-11 \
 
       - name: Generate configure
         run: ./bootstrap
@@ -32,13 +33,25 @@ jobs:
         run: ./configure
 
       - name: Build Japanese version
-        run: make -j$(nproc)
+        run: make -j$(nproc) 1> /dev/null
 
       - name: Clean source tree
         run: make clean
 
-      - name: Configure for English versoin
+      - name: Configure for English version
         run: ./configure --disable-japanese
 
       - name: Build English version
-        run: make -j$(nproc)
+        run: make -j$(nproc) 1> /dev/null
+
+      - name: Clean source tree
+        run: make clean
+
+      - name: Configure for compiling with clang
+        run: ./configure
+        env:
+          CXX: clang++-11
+          CXXFLAGS: "-pipe -O3 -Werror -Wall -Wextra -Wno-unused-const-variable -Wno-invalid-source-encoding"
+
+      - name: Build with clang
+        run: make -j$(nproc) 1> /dev/null
