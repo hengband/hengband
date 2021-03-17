@@ -68,7 +68,7 @@ static concptr attr_to_text(monster_race *r_ptr)
     return _("変な色の", "Icky");
 }
 
-spoiler_output_status spoil_mon_desc(concptr fname, bool show_all, race_flags8 RF8_flags)
+spoiler_output_status spoil_mon_desc(concptr fname, std::function<bool(const monster_race *)> filter_monster)
 {
     player_type dummy;
     u16b why = 2;
@@ -111,7 +111,7 @@ spoiler_output_status spoil_mon_desc(concptr fname, bool show_all, race_flags8 R
     for (int i = 0; i < n; i++) {
         monster_race *r_ptr = &r_info[who[i]];
         concptr name = (r_name + r_ptr->name);
-        if (!show_all && none_bits(r_ptr->flags8, RF8_flags))
+        if (filter_monster && !filter_monster(r_ptr))
             continue;
 
         char name_buf[41];
@@ -156,13 +156,6 @@ spoiler_output_status spoil_mon_desc(concptr fname, bool show_all, race_flags8 R
     }
     return SPOILER_OUTPUT_SUCCESS;
 }
-
-/*!
- * @brief モンスター簡易情報のスポイラー出力を行うメインルーチン /
- * Create a spoiler file for monsters   -BEN-
- * @param fname 生成ファイル名
- */
-spoiler_output_status spoil_mon_desc_all(concptr fname) { return spoil_mon_desc(fname, TRUE, RF8_WILD_ALL); }
 
 /*!
  * @brief 関数ポインタ用の出力関数 /
