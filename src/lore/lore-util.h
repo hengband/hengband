@@ -2,6 +2,8 @@
 
 #include "system/angband.h"
 #include "system/monster-race-definition.h"
+#include <string>
+#include <unordered_map>
 
 enum monster_sex {
     MSEX_NONE = 0,
@@ -60,8 +62,76 @@ enum monster_lore_mode {
 typedef void (*hook_c_roff_pf)(TERM_COLOR attr, concptr str);
 extern hook_c_roff_pf hook_c_roff;
 
-extern concptr wd_he[3];
-extern concptr wd_his[3];
-
 lore_type *initialize_lore_type(lore_type *lore_ptr, MONRACE_IDX r_idx, monster_lore_mode mode);
 void hooked_roff(concptr str);
+
+enum WHO_WORD_TYPE { WHO = 0, WHOSE = 1, WHOM = 2 };
+using who_word_definition = std::unordered_map<WHO_WORD_TYPE, const std::unordered_map<bool, const std::unordered_map<monster_sex, std::string>>>;
+
+class Who {
+public:
+    static const who_word_definition words;
+
+    /*!
+     * @brief 三人称主格を取得(単数のみ)
+     * @param msex モンスターの性別
+     * @return 主語
+     */
+    static concptr who(monster_sex msex)
+    {
+        return who(msex, false);
+    }
+
+    /*!
+     * @brief 三人称主格を取得
+     * @param msex モンスターの性別
+     * @param multi 複数かどうか
+     * @return 主語
+     */
+    static concptr who(monster_sex msex, bool multi)
+    {
+        return words.at(WHO_WORD_TYPE::WHO).at(multi).at(msex).data();
+    }
+
+    /*!
+     * @brief 三人称所有格を取得(単数のみ)
+     * @param msex モンスターの性別
+     * @return 所有格
+     */
+    static concptr whose(monster_sex msex)
+    {
+        return whose(msex, false);
+    }
+
+    /*!
+     * @brief 三人称所有格を取得
+     * @param msex モンスターの性別
+     * @param multi 複数かどうか
+     * @return 所有格
+     */
+    static concptr whose(monster_sex msex, bool multi)
+    {
+        return words.at(WHO_WORD_TYPE::WHOSE).at(multi).at(msex).data();
+    }
+
+    /*!
+     * @brief 三人称目的格を取得(単数のみ)
+     * @param msex モンスターの性別
+     * @return 目的語
+     */
+    static concptr whom(monster_sex msex)
+    {
+        return whom(msex, false);
+    }
+
+    /*!
+     * @brief 三人称目的格を取得
+     * @param msex モンスターの性別
+     * @param multi 複数かどうか
+     * @return 目的語
+     */
+    static concptr whom(monster_sex msex, bool multi)
+    {
+        return words.at(WHO_WORD_TYPE::WHOM).at(multi).at(msex).data();
+    }
+};

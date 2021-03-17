@@ -4,8 +4,23 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 
-concptr wd_he[3] = { _("それ", "it"), _("彼", "he"), _("彼女", "she") };
-concptr wd_his[3] = { _("それの", "its"), _("彼の", "his"), _("彼女の", "her") };
+const who_word_definition Who::words = {
+    { WHO_WORD_TYPE::WHO,
+        {
+            { false, { { MSEX_NONE, _("それ", "it") }, { MSEX_MALE, _("彼", "he") }, { MSEX_FEMALE, _("彼女", "she") } } },
+            { true, { { MSEX_NONE, _("それら", "they") }, { MSEX_MALE, _("彼ら", "they") }, { MSEX_FEMALE, _("彼女ら", "they") } } },
+        } },
+    { WHO_WORD_TYPE::WHOSE,
+        {
+            { false, { { MSEX_NONE, _("それの", "its") }, { MSEX_MALE, _("彼の", "his") }, { MSEX_FEMALE, _("彼女の", "her") } } },
+            { true, { { MSEX_NONE, _("それらの", "their") }, { MSEX_MALE, _("彼らの", "their") }, { MSEX_FEMALE, _("彼女らの", "their") } } },
+        } },
+    { WHO_WORD_TYPE::WHOM,
+        {
+            { false, { { MSEX_NONE, _("それ", "it") }, { MSEX_MALE, _("彼", "him") }, { MSEX_FEMALE, _("彼女", "her") } } },
+            { true, { { MSEX_NONE, _("それら", "them") }, { MSEX_MALE, _("彼ら", "them") }, { MSEX_FEMALE, _("彼女ら", "them") } } },
+        } },
+};
 
 /*
  * Prepare hook for c_roff(). It will be changed for spoiler generation in wizard1.c.
