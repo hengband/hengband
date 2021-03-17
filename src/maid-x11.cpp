@@ -318,11 +318,11 @@ static XImage *ReadBMP(Display *dpy, char *Name)
 		return (NULL);
 	}
 
-	for (y = 0; y < infoheader.biHeight; y++)
+	for (y = 0; y < static_cast<int>(infoheader.biHeight); y++)
 	{
 		int y2 = infoheader.biHeight - y - 1;
 
-		for (x = 0; x < infoheader.biWidth; x++)
+		for (x = 0; x < static_cast<int>(infoheader.biWidth); x++)
 		{
 			int ch = getc(f);
 

@@ -1951,7 +1951,7 @@ s16b calc_double_weapon_penalty(player_type *creature_ptr, INVENTORY_IDX slot)
             penalty = penalty / 2 - 5;
         }
 
-        for (int i = FLAG_CAUSE_INVEN_MAIN_HAND; i < FLAG_CAUSE_MAX; i <<= 1)
+        for (unsigned int i = FLAG_CAUSE_INVEN_MAIN_HAND; i < FLAG_CAUSE_MAX; i <<= 1)
             if (penalty > 0 && any_bits(creature_ptr->easy_2weapon, i))
                 penalty /= 2;
 
