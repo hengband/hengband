@@ -107,6 +107,9 @@ static void decide_breath_kind(player_type *creature_ptr, int *breath_type, conc
         }
 
         break;
+
+    default:
+        break;
     }
 }
 

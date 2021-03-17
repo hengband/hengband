@@ -27,6 +27,9 @@ bool item_tester_hook_orthodox_melee_weapons(player_type *player_ptr, object_typ
         if (o_ptr->sval != SV_POISON_NEEDLE)
             return TRUE;
     }
+
+    default:
+        break;
     }
 
     return FALSE;

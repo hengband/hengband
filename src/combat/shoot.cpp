@@ -322,6 +322,9 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
         }
         break;
     }
+
+    default:
+        break;
     }
 
     /* Sniper */

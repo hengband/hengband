@@ -219,6 +219,9 @@ PERCENTAGE calc_deathray_damage_rate(player_type *creature_ptr, rate_calc_type_m
     case RACE_SPECTRE:
         return 0;
         break;
+
+    default:
+        break;
     }
 
     return 100;

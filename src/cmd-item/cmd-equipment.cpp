@@ -168,6 +168,9 @@ void do_cmd_wield(player_type *creature_ptr)
 
         creature_ptr->select_ring_slot = FALSE;
         break;
+
+    default:
+        break;
     }
 
     if (object_is_cursed(&creature_ptr->inventory_list[slot])) {

@@ -137,6 +137,11 @@ void describe_melee_method(player_type *subject_ptr, mam_type *mam_ptr)
         mam_ptr->touched = FALSE;
         break;
     }
+
+    case RBM_NONE:
+    case RBM_SHOOT:
+    case NB_RBM_TYPE:
+        break;
     }
 }
 

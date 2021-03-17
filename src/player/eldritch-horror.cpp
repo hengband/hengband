@@ -196,6 +196,9 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
                 if (saving_throw(10 + creature_ptr->lev))
                     return;
                 break;
+
+            default:
+                break;
             }
         } else {
             if (mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON) {

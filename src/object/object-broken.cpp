@@ -68,6 +68,9 @@ bool hates_acid(object_type *o_ptr)
 	{
 		return TRUE;
 	}
+
+	default:
+		break;
 	}
 
 	return FALSE;
@@ -89,6 +92,9 @@ bool hates_elec(object_type *o_ptr)
 	{
 		return TRUE;
 	}
+
+	default:
+            break;
 	}
 
 	return FALSE;
@@ -153,6 +159,9 @@ bool hates_fire(object_type *o_ptr)
 	{
 		return TRUE;
 	}
+
+	default:
+		break;
 	}
 
 	return FALSE;
@@ -175,6 +184,9 @@ bool hates_cold(object_type *o_ptr)
 	{
 		return TRUE;
 	}
+
+	default:
+		break;
 	}
 
 	return FALSE;

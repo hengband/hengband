@@ -180,6 +180,9 @@ static void describe_tval(player_type *player_ptr, flavor_type *flavor_ptr)
     case TV_BOW:
         describe_bow(player_ptr, flavor_ptr);
         break;
+
+    default:
+        break;
     }
 }
 

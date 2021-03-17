@@ -104,6 +104,9 @@ bool object_sort_comp(player_type *player_ptr, object_type *o_ptr, s32b o_value,
         if (o_ptr->pval > j_ptr->pval)
             return FALSE;
         break;
+
+    default:
+        break;
     }
 
     return o_value > object_value(player_ptr, j_ptr);

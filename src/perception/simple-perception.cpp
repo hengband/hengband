@@ -82,6 +82,9 @@ static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, b
             feel = FEEL_TERRIBLE;
             break;
         }
+
+        default:
+            break;
         }
     }
 
@@ -238,6 +241,9 @@ void sense_inventory1(player_type *creature_ptr)
         heavy = TRUE;
         break;
     }
+
+    case MAX_CLASS:
+        break;
     }
 
     if (compare_virtue(creature_ptr, V_KNOWLEDGE, 100, VIRTUE_LARGE))
@@ -273,6 +279,9 @@ void sense_inventory1(player_type *creature_ptr)
             okay = TRUE;
             break;
         }
+
+        default:
+            break;
         }
 
         if (!okay)
@@ -356,6 +365,9 @@ void sense_inventory2(player_type *creature_ptr)
 
         break;
     }
+
+    case MAX_CLASS:
+        break;
     }
 
     for (INVENTORY_IDX i = 0; i < INVEN_TOTAL; i++) {
@@ -372,6 +384,9 @@ void sense_inventory2(player_type *creature_ptr)
             okay = TRUE;
             break;
         }
+
+        default:
+            break;
         }
 
         if (!okay)

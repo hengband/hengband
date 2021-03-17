@@ -85,6 +85,9 @@ static bool object_easy_know(int i)
     case TV_SCROLL:
     case TV_ROD:
         return TRUE;
+
+    default:
+        break;
     }
 
     return FALSE;

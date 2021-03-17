@@ -520,6 +520,9 @@ static void update_alignment(player_type *creature_ptr)
         case RACE_BALROG:
             creature_ptr->align -= 200;
             break;
+
+        default:
+            break;
         }
     }
 
@@ -1986,6 +1989,9 @@ static bool is_riding_two_hands(player_type *creature_ptr)
             if ((empty_hands(creature_ptr, FALSE) != EMPTY_HAND_NONE) && !has_melee_weapon(creature_ptr, INVEN_MAIN_HAND)
                 && !has_melee_weapon(creature_ptr, INVEN_SUB_HAND))
                 return TRUE;
+
+        default:
+            break;
         }
     }
 
@@ -2300,6 +2306,10 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_r
             /* fall through */
         case MELEE_TYPE_BAREHAND_TWO:
             hit += (creature_ptr->skill_exp[GINOU_SUDE] - WEAPON_EXP_BEGINNER) / 200;
+            break;
+
+        default:
+            break;
         }
 
         if ((is_martial_arts_mode(creature_ptr) && empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_MAIN | EMPTY_HAND_SUB))
