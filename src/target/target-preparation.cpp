@@ -1,4 +1,6 @@
-﻿#include "target/target-preparation.h"
+﻿#include <utility>
+#include <vector>
+
 #include "floor/cave.h"
 #include "game-option/input-options.h"
 #include "grid/feature.h"
@@ -12,6 +14,7 @@
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
 #include "target/projection-path-calculator.h"
+#include "target/target-preparation.h"
 #include "target/target-types.h"
 #include "util/bit-flags-calculator.h"
 #include "util/sort.h"
@@ -98,12 +101,16 @@ static bool target_set_accept(player_type *creature_ptr, POSITION y, POSITION x)
     return FALSE;
 }
 
-/*
- * Prepare the "temp" array for "target_set"
+/*!
+ * @brief "interesting" な座標たちを ys, xs に返す。
+ * @param creature_ptr
+ * @param ys y座標たちを格納する配列 (POSITION 型)
+ * @param xs x座標たちを格納する配列 (POSITION 型)
+ * @param mode
  *
- * Return the number of target_able monsters in the set.
+ * ys, xs は処理開始時にクリアされる。
  */
-void target_set_prepare(player_type *creature_ptr, BIT_FLAGS mode)
+void target_set_prepare(player_type *creature_ptr, std::vector<POSITION> &ys, std::vector<POSITION> &xs, const BIT_FLAGS mode)
 {
     POSITION min_hgt, max_hgt, min_wid, max_wid;
     if (mode & TARGET_KILL) {
@@ -118,7 +125,9 @@ void target_set_prepare(player_type *creature_ptr, BIT_FLAGS mode)
         max_wid = panel_col_max;
     }
 
-    tmp_pos.n = 0;
+    ys.clear();
+    xs.clear();
+
     for (POSITION y = min_hgt; y <= max_hgt; y++) {
         for (POSITION x = min_wid; x <= max_wid; x++) {
             grid_type *g_ptr;
@@ -132,27 +141,25 @@ void target_set_prepare(player_type *creature_ptr, BIT_FLAGS mode)
             if ((mode & (TARGET_KILL)) && !target_pet && is_pet(&creature_ptr->current_floor_ptr->m_list[g_ptr->m_idx]))
                 continue;
 
-            tmp_pos.x[tmp_pos.n] = x;
-            tmp_pos.y[tmp_pos.n] = y;
-            tmp_pos.n++;
+            ys.emplace_back(y);
+            xs.emplace_back(x);
         }
     }
 
     if (mode & (TARGET_KILL)) {
-        ang_sort(creature_ptr, tmp_pos.x, tmp_pos.y, tmp_pos.n, ang_sort_comp_distance, ang_sort_swap_position);
+        ang_sort(creature_ptr, xs.data(), ys.data(), size(ys), ang_sort_comp_distance, ang_sort_swap_position);
     } else {
-        ang_sort(creature_ptr, tmp_pos.x, tmp_pos.y, tmp_pos.n, ang_sort_comp_importance, ang_sort_swap_position);
+        ang_sort(creature_ptr, xs.data(), ys.data(), size(ys), ang_sort_comp_importance, ang_sort_swap_position);
     }
 
-    if (creature_ptr->riding == 0 || !target_pet || (tmp_pos.n <= 1) || !(mode & (TARGET_KILL)))
+    // 乗っているモンスターがターゲットリストの先頭にならないようにする調整。
+
+    if (creature_ptr->riding == 0 || !target_pet || (size(ys) <= 1) || !(mode & (TARGET_KILL)))
         return;
 
-    POSITION tmp = tmp_pos.y[0];
-    tmp_pos.y[0] = tmp_pos.y[1];
-    tmp_pos.y[1] = tmp;
-    tmp = tmp_pos.x[0];
-    tmp_pos.x[0] = tmp_pos.x[1];
-    tmp_pos.x[1] = tmp;
+    // 0 番目と 1 番目を入れ替える。
+    std::swap(ys[0], ys[1]);
+    std::swap(xs[0], xs[1]);
 }
 
 void target_sensing_monsters_prepare(player_type *creature_ptr, std::vector<MONSTER_IDX> &monster_list)
