@@ -15,10 +15,12 @@
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-flags7.h"
 #include "monster-race/race-flags8.h"
 #include "system/angband-version.h"
 #include "term/screen-processor.h"
 #include "util/angband-files.h"
+#include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "util/sort.h"
 #include "view/display-messages.h"
@@ -191,7 +193,7 @@ void exe_output_spoilers(void)
             status = spoil_fixed_artifact("artifact.txt");
             break;
         case '3':
-            status = spoil_mon_desc_all("mon-desc.txt");
+            status = spoil_mon_desc("mon-desc.txt");
             break;
         case '4':
             status = spoil_mon_info("mon-info.txt");
@@ -235,42 +237,42 @@ spoiler_output_status output_all_spoilers(void)
     if (status != SPOILER_OUTPUT_SUCCESS)
         return status;
 
-    status = spoil_mon_desc_all("mon-desc.txt");
+    status = spoil_mon_desc("mon-desc.txt");
     if (status != SPOILER_OUTPUT_SUCCESS)
         return status;
 
-    status = spoil_mon_desc("mon-desc-ridable.txt", TRUE, TRUE, RF8_WILD_ALL);
+    status = spoil_mon_desc("mon-desc-ridable.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags7, RF7_RIDING); });
     if (status != SPOILER_OUTPUT_SUCCESS)
         return status;
 
-    status = spoil_mon_desc("mon-desc-wildonly.txt", FALSE, FALSE, RF8_WILD_ONLY);
+    status = spoil_mon_desc("mon-desc-wildonly.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_ONLY); });
     if (status != SPOILER_OUTPUT_SUCCESS)
         return status;
-    status = spoil_mon_desc("mon-desc-town.txt", FALSE, FALSE, RF8_WILD_TOWN);
+    status = spoil_mon_desc("mon-desc-town.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_TOWN); });
     if (status != SPOILER_OUTPUT_SUCCESS)
         return status;
-    status = spoil_mon_desc("mon-desc-shore.txt", FALSE, FALSE, RF8_WILD_SHORE);
+    status = spoil_mon_desc("mon-desc-shore.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_SHORE); });
     if (status != SPOILER_OUTPUT_SUCCESS)
         return status;
-    status = spoil_mon_desc("mon-desc-ocean.txt", FALSE, FALSE, RF8_WILD_OCEAN);
+    status = spoil_mon_desc("mon-desc-ocean.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_OCEAN); });
     if (status != SPOILER_OUTPUT_SUCCESS)
         return status;
-    status = spoil_mon_desc("mon-desc-waste.txt", FALSE, FALSE, RF8_WILD_WASTE);
+    status = spoil_mon_desc("mon-desc-waste.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_WASTE); });
     if (status != SPOILER_OUTPUT_SUCCESS)
         return status;
-    status = spoil_mon_desc("mon-desc-wood.txt", FALSE, FALSE, RF8_WILD_WOOD);
+    status = spoil_mon_desc("mon-desc-wood.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_WOOD); });
     if (status != SPOILER_OUTPUT_SUCCESS)
         return status;
-    status = spoil_mon_desc("mon-desc-volcano.txt", FALSE, FALSE, RF8_WILD_VOLCANO);
+    status = spoil_mon_desc("mon-desc-volcano.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_VOLCANO); });
     if (status != SPOILER_OUTPUT_SUCCESS)
         return status;
-    status = spoil_mon_desc("mon-desc-mountain.txt", FALSE, FALSE, RF8_WILD_MOUNTAIN);
+    status = spoil_mon_desc("mon-desc-mountain.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_MOUNTAIN); });
     if (status != SPOILER_OUTPUT_SUCCESS)
         return status;
-    status = spoil_mon_desc("mon-desc-grass.txt", FALSE, FALSE, RF8_WILD_GRASS);
+    status = spoil_mon_desc("mon-desc-grass.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_GRASS); });
     if (status != SPOILER_OUTPUT_SUCCESS)
         return status;
-    status = spoil_mon_desc("mon-desc-wildall.txt", FALSE, FALSE, RF8_WILD_ALL);
+    status = spoil_mon_desc("mon-desc-wildall.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_ALL); });
     if (status != SPOILER_OUTPUT_SUCCESS)
         return status;
 
