@@ -87,8 +87,7 @@ void curse_artifact(player_type *player_ptr, object_type *o_ptr)
 static concptr get_random_art_filename(const bool armour, const int power)
 {
     concptr filename;
-    switch (armour) {
-    case 1:
+    if (armour) {
         switch (power) {
         case 0:
             filename = _("a_cursed_j.txt", "a_cursed.txt");
@@ -102,8 +101,7 @@ static concptr get_random_art_filename(const bool armour, const int power)
         default:
             filename = _("a_high_j.txt", "a_high.txt");
         }
-        break;
-    default:
+    } else {
         switch (power) {
         case 0:
             filename = _("w_cursed_j.txt", "w_cursed.txt");

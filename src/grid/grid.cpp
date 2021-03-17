@@ -208,7 +208,7 @@ bool new_player_spot(player_type *creature_ptr)
         /* Must be a "naked" floor grid */
         if (g_ptr->m_idx)
             continue;
-        if (creature_ptr->current_floor_ptr->dun_level) {
+        if (is_in_dungeon(creature_ptr)) {
             f_ptr = &f_info[g_ptr->feat];
 
             if (max_attempts > 5000) /* Rule 1 */

@@ -248,7 +248,7 @@ static void rd_arena(player_type *creature_ptr)
     creature_ptr->oldpx = (POSITION)tmp16s;
     rd_s16b(&tmp16s);
     creature_ptr->oldpy = (POSITION)tmp16s;
-    if (z_older_than(10, 3, 13) && !creature_ptr->current_floor_ptr->dun_level && !creature_ptr->current_floor_ptr->inside_arena) {
+    if (z_older_than(10, 3, 13) && !is_in_dungeon(creature_ptr) && !creature_ptr->current_floor_ptr->inside_arena) {
         creature_ptr->oldpy = 33;
         creature_ptr->oldpx = 131;
     }

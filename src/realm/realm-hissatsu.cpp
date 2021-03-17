@@ -808,8 +808,6 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
         if (cast) {
             msg_print(_("武器を不規則に揺らした．．．", "You irregularly wave your weapon..."));
             project_all_los(caster_ptr, GF_ENGETSU, plev * 4);
-            project_all_los(caster_ptr, GF_ENGETSU, plev * 4);
-            project_all_los(caster_ptr, GF_ENGETSU, plev * 4);
         }
         break;
 

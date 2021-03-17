@@ -442,6 +442,14 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それはカオスへの耐性を授ける。", "It provides resistance to chaos.");
     }
 
+    if (has_flag(flgs, TR_RES_TIME)) {
+        info[i++] = _("それは時間逆転への耐性を授ける。", "It provides resistance to time stream.");
+    }
+
+    if (has_flag(flgs, TR_RES_WATER)) {
+        info[i++] = _("それは水流への耐性を授ける。", "It provides resistance to water stream.");
+    }
+
     if (has_flag(flgs, TR_RES_DISEN)) {
         info[i++] = _("それは劣化への耐性を授ける。", "It provides resistance to disenchantment.");
     }

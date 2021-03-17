@@ -412,6 +412,10 @@ static void add_race_flags(player_type *creature_ptr, BIT_FLAGS *flags)
         add_flag(flags, TR_HOLD_EXP);
         break;
     }
+    case RACE_MERFOLK: {
+        add_flag(flags, TR_RES_WATER);
+        break;
+    }
     default:
         break;
     }

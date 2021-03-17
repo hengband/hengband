@@ -152,11 +152,11 @@ static void decide_mind_chance(player_type *caster_ptr, cm_type *cm_ptr)
 
     cm_ptr->chance -= 3 * (cm_ptr->plev - cm_ptr->spell.min_lev);
     cm_ptr->chance += caster_ptr->to_m_chance;
-    cm_ptr->chance -= 3 * (adj_mag_stat[caster_ptr->stat_ind[mp_ptr->spell_stat]] - 1);
+    cm_ptr->chance -= 3 * (adj_mag_stat[caster_ptr->stat_index[mp_ptr->spell_stat]] - 1);
     if ((cm_ptr->mana_cost > caster_ptr->csp) && (cm_ptr->use_mind != MIND_BERSERKER) && (cm_ptr->use_mind != MIND_NINJUTSU))
         cm_ptr->chance += 5 * (cm_ptr->mana_cost - caster_ptr->csp);
 
-    cm_ptr->minfail = adj_mag_fail[caster_ptr->stat_ind[mp_ptr->spell_stat]];
+    cm_ptr->minfail = adj_mag_fail[caster_ptr->stat_index[mp_ptr->spell_stat]];
     if (cm_ptr->chance < cm_ptr->minfail)
         cm_ptr->chance = cm_ptr->minfail;
 

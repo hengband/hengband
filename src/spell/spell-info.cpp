@@ -140,7 +140,7 @@ PERCENTAGE spell_chance(player_type *caster_ptr, SPELL_IDX spell, REALM_IDX use_
 
     PERCENTAGE chance = s_ptr->sfail;
     chance -= 3 * (caster_ptr->lev - s_ptr->slevel);
-    chance -= 3 * (adj_mag_stat[caster_ptr->stat_ind[mp_ptr->spell_stat]] - 1);
+    chance -= 3 * (adj_mag_stat[caster_ptr->stat_index[mp_ptr->spell_stat]] - 1);
     if (caster_ptr->riding)
         chance += (MAX(r_info[caster_ptr->current_floor_ptr->m_list[caster_ptr->riding].r_idx].level - caster_ptr->skill_exp[GINOU_RIDING] / 100 - 10, 0));
 
@@ -152,7 +152,7 @@ PERCENTAGE spell_chance(player_type *caster_ptr, SPELL_IDX spell, REALM_IDX use_
     if ((use_realm != caster_ptr->realm1) && ((caster_ptr->pclass == CLASS_MAGE) || (caster_ptr->pclass == CLASS_PRIEST)))
         chance += 5;
 
-    PERCENTAGE minfail = adj_mag_fail[caster_ptr->stat_ind[mp_ptr->spell_stat]];
+    PERCENTAGE minfail = adj_mag_fail[caster_ptr->stat_index[mp_ptr->spell_stat]];
     if (mp_ptr->spell_xtra & MAGIC_FAIL_5PERCENT) {
         if (minfail < 5)
             minfail = 5;

@@ -76,7 +76,7 @@ static bool wr_savefile_new(player_type *player_ptr, save_type type)
     wr_u16b(current_world_ptr->sf_lives);
     wr_u16b(current_world_ptr->sf_saves);
 
-    wr_u32b(0L);
+    wr_u32b(SAVEFILE_VERSION);
     wr_u16b(0);
     wr_byte(0);
 

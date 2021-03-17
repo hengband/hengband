@@ -7,7 +7,7 @@
 
 enum spell_type { SPELL_NAME = 0, SPELL_DESC = 1, SPELL_INFO = 2, SPELL_CAST = 3, SPELL_FAIL = 4, SPELL_STOP = 5, SPELL_CONT = 6 };
 
-enum spell_operation : uint16_t {
+enum spell_operation {
     SPOP_NONE = 0x0000U,
     SPOP_DISPLAY_MES = 0x0001U, // !< スペル処理オプション … メッセージを表示する
     SPOP_NO_UPDATE = 0x0002U, // !< スペル処理オプション … ステータス更新を解決後行う

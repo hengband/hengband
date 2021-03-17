@@ -267,10 +267,34 @@ static bool let_player_build_character(player_type *creature_ptr)
 
 static void display_initial_options(player_type *creature_ptr)
 {
-    clear_from(10);
+    s16b adj[A_MAX];
+    for (int i = 0; i < A_MAX; i++) {
+        adj[i] = rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i];
+    }
+
+    char buf[80];
     put_str("                                   ", 3, 40);
-    put_str("                                   ", 4, 40);
-    put_str("                                   ", 5, 40);
+    put_str(_("修正の合計値", "Your total modification"), 3, 40);
+    put_str(_("腕力 知能 賢さ 器用 耐久 魅力 経験 ", "Str  Int  Wis  Dex  Con  Chr   EXP "), 4, 40);
+    sprintf(buf, "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ", adj[0], adj[1], adj[2], adj[3], adj[4], adj[5], cp_ptr->c_exp);
+    c_put_str(TERM_L_BLUE, buf, 5, 40);
+
+    put_str("HD ", 6, 40);
+    sprintf(buf, "%2d", rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp);
+    c_put_str(TERM_L_BLUE, buf, 6, 43);
+
+    put_str(_("隠密", "Stealth"), 6, 47);
+    if (creature_ptr->pclass == CLASS_BERSERKER)
+        strcpy(buf, "xx");
+    else
+        sprintf(buf, "%+2d", rp_ptr->r_stl + cp_ptr->c_stl + ap_ptr->a_stl);
+    c_put_str(TERM_L_BLUE, buf, 6, _(52, 55));
+
+    put_str(_("赤外線視力", "Infra"), 6, _(56, 59));
+    sprintf(buf, _("%2dft", "%2dft"), 10 * rp_ptr->infra);
+    c_put_str(TERM_L_BLUE, buf, 6, _(67, 65));
+
+    clear_from(10);
     screen_save();
     do_cmd_options_aux(creature_ptr, OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
     screen_load();

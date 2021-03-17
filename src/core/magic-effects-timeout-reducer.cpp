@@ -206,17 +206,17 @@ void reduce_magic_effects_timeout(player_type *creature_ptr)
     }
 
     if (creature_ptr->poisoned) {
-        int adjust = adj_con_fix[creature_ptr->stat_ind[A_CON]] + 1;
+        int adjust = adj_con_fix[creature_ptr->stat_index[A_CON]] + 1;
         (void)set_poisoned(creature_ptr, creature_ptr->poisoned - adjust);
     }
 
     if (creature_ptr->stun) {
-        int adjust = adj_con_fix[creature_ptr->stat_ind[A_CON]] + 1;
+        int adjust = adj_con_fix[creature_ptr->stat_index[A_CON]] + 1;
         (void)set_stun(creature_ptr, creature_ptr->stun - adjust);
     }
 
     if (creature_ptr->cut) {
-        int adjust = adj_con_fix[creature_ptr->stat_ind[A_CON]] + 1;
+        int adjust = adj_con_fix[creature_ptr->stat_index[A_CON]] + 1;
         if (creature_ptr->cut > 1000)
             adjust = 0;
         (void)set_cut(creature_ptr, creature_ptr->cut - adjust);

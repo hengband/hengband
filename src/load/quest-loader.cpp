@@ -104,7 +104,7 @@ static void load_quest_details(player_type *creature_ptr, quest_type *q_ptr, int
 
     rd_s16b(&q_ptr->k_idx);
     if (q_ptr->k_idx)
-        a_info[q_ptr->k_idx].gen_flags |= TRG_QUESTITEM;
+        a_info[q_ptr->k_idx].gen_flags.set(TRG::QUESTITEM);
 
     byte tmp8u;
     rd_byte(&tmp8u);

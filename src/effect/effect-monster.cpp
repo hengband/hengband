@@ -52,21 +52,36 @@
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @return 効果が何もないならFALSE、何かあるならTRUE
  */
-static bool is_never_effect(player_type *caster_ptr, effect_monster_type *em_ptr)
+static process_result is_affective(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (!em_ptr->g_ptr->m_idx)
-        return FALSE;
+        return PROCESS_FALSE;
     if (em_ptr->who && (em_ptr->g_ptr->m_idx == em_ptr->who))
-        return FALSE;
-    if ((em_ptr->g_ptr->m_idx == caster_ptr->riding) && !em_ptr->who && !(em_ptr->effect_type == GF_OLD_HEAL) && !(em_ptr->effect_type == GF_OLD_SPEED)
-        && !(em_ptr->effect_type == GF_STAR_HEAL))
-        return FALSE;
+        return PROCESS_FALSE;
     if (sukekaku && ((em_ptr->m_ptr->r_idx == MON_SUKE) || (em_ptr->m_ptr->r_idx == MON_KAKU)))
-        return FALSE;
+        return PROCESS_FALSE;
     if (em_ptr->m_ptr->hp < 0)
-        return FALSE;
+        return PROCESS_FALSE;
+    if (em_ptr->who || em_ptr->g_ptr->m_idx != caster_ptr->riding)
+        return PROCESS_TRUE;
 
-    return TRUE;
+    switch (em_ptr->effect_type) {
+    case GF_OLD_HEAL:
+    case GF_OLD_SPEED:
+    case GF_STAR_HEAL:
+        return PROCESS_TRUE;
+    case GF_OLD_SLOW:
+    case GF_OLD_SLEEP:
+    case GF_OLD_CLONE:
+    case GF_OLD_CONF:
+    case GF_OLD_POLY:
+    case GF_GENOCIDE:
+        return PROCESS_CONTINUE;
+    default:
+        break;
+    }
+
+    return PROCESS_FALSE;
 }
 
 /*!
@@ -92,6 +107,15 @@ static void decide_spell_result_description(player_type *caster_ptr, effect_mons
  */
 static process_result process_monster_perfect_resistance(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
+    process_result result = is_affective(caster_ptr, em_ptr);
+    if (result != PROCESS_TRUE) {
+        if (result == PROCESS_CONTINUE) {
+            em_ptr->note = _("には効果がなかった。", " is unaffected.");
+            em_ptr->dam = 0;
+        }
+        return result;
+    }
+
     if (((em_ptr->r_ptr->flagsr & RFR_RES_ALL) == 0) || em_ptr->effect_type == GF_OLD_CLONE || em_ptr->effect_type == GF_STAR_HEAL
         || em_ptr->effect_type == GF_OLD_HEAL || em_ptr->effect_type == GF_OLD_SPEED || em_ptr->effect_type == GF_CAPTURE || em_ptr->effect_type == GF_PHOTO)
         return switch_effects_monster(caster_ptr, em_ptr);
@@ -576,8 +600,6 @@ bool affect_monster(
 {
     effect_monster_type tmp_effect;
     effect_monster_type *em_ptr = initialize_effect_monster(caster_ptr, &tmp_effect, who, r, y, x, dam, effect_type, flag, see_s_msg);
-    if (!is_never_effect(caster_ptr, em_ptr))
-        return FALSE;
 
     decide_spell_result_description(caster_ptr, em_ptr);
     process_result result = process_monster_perfect_resistance(caster_ptr, em_ptr);

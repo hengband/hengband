@@ -39,6 +39,7 @@ static void display_personality_stat(int cs, int *os, concptr *str, char *cur, c
         sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
         put_str("                                   ", 4, 40);
         put_str("                                   ", 5, 40);
+        put_str("                                   ", 6, 40);
     } else {
         ap_ptr = &personality_info[cs];
         *str = ap_ptr->title;
@@ -49,6 +50,14 @@ static void display_personality_stat(int cs, int *os, concptr *str, char *cur, c
         sprintf(buf, "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d       ", ap_ptr->a_adj[0], ap_ptr->a_adj[1], ap_ptr->a_adj[2], ap_ptr->a_adj[3], ap_ptr->a_adj[4],
             ap_ptr->a_adj[5]);
         c_put_str(TERM_L_BLUE, buf, 5, 40);
+
+        put_str("HD", 6, 40);
+        sprintf(buf, "%+3d", ap_ptr->a_mhp);
+        c_put_str(TERM_L_BLUE, buf, 6, 42);
+
+        put_str(_("隠密", "Stealth"), 6, 47);
+        sprintf(buf, "%+3d", ap_ptr->a_stl);
+        c_put_str(TERM_L_BLUE, buf, 6, _(51, 54));
     }
 
     c_put_str(TERM_YELLOW, cur, 12 + (cs / 4), 2 + 18 * (cs % 4));
@@ -180,6 +189,8 @@ bool get_player_personality(player_type *creature_ptr)
     clear_from(10);
     put_str(_("注意：《性格》によってキャラクターの能力やボーナスが変化します。", "Note: Your personality determines various intrinsic abilities and bonuses."),
         23, 5);
+    put_str("                                   ", 6, 40);
+
     concptr str;
     char sym[MAX_PERSONALITIES];
     enumerate_personality_list(creature_ptr, &str, sym);

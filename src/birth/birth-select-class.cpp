@@ -41,6 +41,7 @@ static void display_class_stat(int cs, int *os, char *cur, char *sym)
         sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
         put_str("                                   ", 4, 40);
         put_str("                                   ", 5, 40);
+        put_str("                                   ", 6, 40);
     } else {
         cp_ptr = &class_info[cs];
         mp_ptr = &m_info[cs];
@@ -57,6 +58,17 @@ static void display_class_stat(int cs, int *os, char *cur, char *sym)
         sprintf(buf, "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ", cp_ptr->c_adj[0], cp_ptr->c_adj[1], cp_ptr->c_adj[2], cp_ptr->c_adj[3], cp_ptr->c_adj[4],
             cp_ptr->c_adj[5], cp_ptr->c_exp);
         c_put_str(TERM_L_BLUE, buf, 5, 40);
+
+        put_str("HD", 6, 40);
+        sprintf(buf, "%+3d", cp_ptr->c_mhp);
+        c_put_str(TERM_L_BLUE, buf, 6, 42);
+
+        put_str(_("隠密", "Stealth"), 6, 47);
+        if (cs == CLASS_BERSERKER)
+            strcpy(buf, " xx");
+        else
+            sprintf(buf, " %+2d", cp_ptr->c_stl);
+        c_put_str(TERM_L_BLUE, buf, 6, _(51, 54));
     }
 
     c_put_str(TERM_YELLOW, cur, 13 + (cs / 4), 2 + 19 * (cs % 4));
@@ -154,6 +166,7 @@ bool get_player_class(player_type *creature_ptr)
         _("注意：《職業》によってキャラクターの先天的な能力やボーナスが変化します。", "Note: Your 'class' determines various intrinsic abilities and bonuses."),
         23, 5);
     put_str(_("()で囲まれた選択肢はこの種族には似合わない職業です。", "Any entries in parentheses should only be used by advanced players."), 11, 5);
+    put_str("                                   ", 6, 40);
 
     char sym[MAX_CLASS];
     enumerate_class_list(sym);

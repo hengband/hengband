@@ -38,6 +38,7 @@
 #include "sv-definition/sv-rod-types.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /*!
@@ -400,7 +401,7 @@ void exe_zap_rod(player_type *creature_ptr, INVENTORY_IDX item)
         gain_exp(creature_ptr, (lev + (creature_ptr->lev >> 1)) / creature_ptr->lev);
     }
 
-    creature_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+    set_bits(creature_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST);
 }
 
 /*!

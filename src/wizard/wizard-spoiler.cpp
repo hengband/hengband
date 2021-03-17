@@ -15,10 +15,12 @@
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-flags7.h"
 #include "monster-race/race-flags8.h"
 #include "system/angband-version.h"
 #include "term/screen-processor.h"
 #include "util/angband-files.h"
+#include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "util/sort.h"
 #include "view/display-messages.h"
@@ -162,6 +164,34 @@ static spoiler_output_status spoil_mon_evol(concptr fname)
     return SPOILER_OUTPUT_SUCCESS;
 }
 
+spoiler_output_status spoil_categorized_mon_desc()
+{
+    spoiler_output_status status = spoil_mon_desc("mon-desc-ridable.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags7, RF7_RIDING); });
+
+    if (status == SPOILER_OUTPUT_SUCCESS)
+        status = spoil_mon_desc("mon-desc-wildonly.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_ONLY); });
+    if (status == SPOILER_OUTPUT_SUCCESS)
+        status = spoil_mon_desc("mon-desc-town.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_TOWN); });
+    if (status == SPOILER_OUTPUT_SUCCESS)
+        status = spoil_mon_desc("mon-desc-shore.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_SHORE); });
+    if (status == SPOILER_OUTPUT_SUCCESS)
+        status = spoil_mon_desc("mon-desc-ocean.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_OCEAN); });
+    if (status == SPOILER_OUTPUT_SUCCESS)
+        status = spoil_mon_desc("mon-desc-waste.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_WASTE); });
+    if (status == SPOILER_OUTPUT_SUCCESS)
+        status = spoil_mon_desc("mon-desc-wood.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_WOOD); });
+    if (status == SPOILER_OUTPUT_SUCCESS)
+        status = spoil_mon_desc("mon-desc-volcano.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_VOLCANO); });
+    if (status == SPOILER_OUTPUT_SUCCESS)
+        status = spoil_mon_desc("mon-desc-mountain.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_MOUNTAIN); });
+    if (status == SPOILER_OUTPUT_SUCCESS)
+        status = spoil_mon_desc("mon-desc-grass.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_GRASS); });
+    if (status == SPOILER_OUTPUT_SUCCESS)
+        status = spoil_mon_desc("mon-desc-wildall.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_ALL); });
+
+    return status;
+}
+
 /*!
  * @brief スポイラー出力を行うコマンドのメインルーチン /
  * Create Spoiler files -BEN-
@@ -177,8 +207,9 @@ void exe_output_spoilers(void)
         prt("(1) Brief Object Info (obj-desc.txt)", 5, 5);
         prt("(2) Brief Artifact Info (artifact.txt)", 6, 5);
         prt("(3) Brief Monster Info (mon-desc.txt)", 7, 5);
-        prt("(4) Full Monster Info (mon-info.txt)", 8, 5);
-        prt("(5) Monster Evolution Info (mon-evol.txt)", 9, 5);
+        prt("(4) Brief Categorized Monster Info (mon-desc-*.txt)", 8, 5);
+        prt("(5) Full Monster Info (mon-info.txt)", 9, 5);
+        prt("(6) Monster Evolution Info (mon-evol.txt)", 10, 5);
         prt(_("コマンド:", "Command: "), _(18, 12), 0);
         switch (inkey()) {
         case ESCAPE:
@@ -191,12 +222,15 @@ void exe_output_spoilers(void)
             status = spoil_fixed_artifact("artifact.txt");
             break;
         case '3':
-            status = spoil_mon_desc_all("mon-desc.txt");
+            status = spoil_mon_desc("mon-desc.txt");
             break;
         case '4':
-            status = spoil_mon_info("mon-info.txt");
+            status = spoil_categorized_mon_desc();
             break;
         case '5':
+            status = spoil_mon_info("mon-info.txt");
+            break;
+        case '6':
             status = spoil_mon_evol("mon-evol.txt");
             break;
         default:
@@ -235,38 +269,11 @@ spoiler_output_status output_all_spoilers(void)
     if (status != SPOILER_OUTPUT_SUCCESS)
         return status;
 
-    status = spoil_mon_desc_all("mon-desc.txt");
+    status = spoil_mon_desc("mon-desc.txt");
     if (status != SPOILER_OUTPUT_SUCCESS)
         return status;
 
-    status = spoil_mon_desc("mon-desc-wildonly.txt", FALSE, RF8_WILD_ONLY);
-    if (status != SPOILER_OUTPUT_SUCCESS)
-        return status;
-    status = spoil_mon_desc("mon-desc-town.txt", FALSE, RF8_WILD_TOWN);
-    if (status != SPOILER_OUTPUT_SUCCESS)
-        return status;
-    status = spoil_mon_desc("mon-desc-shore.txt", FALSE, RF8_WILD_SHORE);
-    if (status != SPOILER_OUTPUT_SUCCESS)
-        return status;
-    status = spoil_mon_desc("mon-desc-ocean.txt", FALSE, RF8_WILD_OCEAN);
-    if (status != SPOILER_OUTPUT_SUCCESS)
-        return status;
-    status = spoil_mon_desc("mon-desc-waste.txt", FALSE, RF8_WILD_WASTE);
-    if (status != SPOILER_OUTPUT_SUCCESS)
-        return status;
-    status = spoil_mon_desc("mon-desc-wood.txt", FALSE, RF8_WILD_WOOD);
-    if (status != SPOILER_OUTPUT_SUCCESS)
-        return status;
-    status = spoil_mon_desc("mon-desc-volcano.txt", FALSE, RF8_WILD_VOLCANO);
-    if (status != SPOILER_OUTPUT_SUCCESS)
-        return status;
-    status = spoil_mon_desc("mon-desc-mountain.txt", FALSE, RF8_WILD_MOUNTAIN);
-    if (status != SPOILER_OUTPUT_SUCCESS)
-        return status;
-    status = spoil_mon_desc("mon-desc-grass.txt", FALSE, RF8_WILD_GRASS);
-    if (status != SPOILER_OUTPUT_SUCCESS)
-        return status;
-    status = spoil_mon_desc("mon-desc-wildall.txt", FALSE, RF8_WILD_ALL);
+    status = spoil_categorized_mon_desc();
     if (status != SPOILER_OUTPUT_SUCCESS)
         return status;
 

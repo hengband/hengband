@@ -123,7 +123,7 @@ const concptr window_flag_desc[32] =
 	_("アイテムの詳細", "Display object recall"),
 	_("自分の周囲を表示", "Display dungeon view"),
 	_("記念撮影", "Display snap-shot"),
-	NULL,
+	_("足元/床上のアイテム一覧", "Display items on floor"),
 	NULL,
 	NULL,
 	NULL,

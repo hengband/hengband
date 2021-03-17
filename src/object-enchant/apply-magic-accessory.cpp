@@ -367,11 +367,6 @@ void apply_magic_accessary(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
                         one_lordly_high_resistance(o_ptr);
                         o_ptr->name2 = EGO_RING_TRUE;
                         break;
-                    case SV_RING_SUSTAIN:
-                        if (!one_in_(4))
-                            break;
-                        o_ptr->name2 = EGO_RING_RES_TIME;
-                        break;
                     case SV_RING_FLAMES:
                         if (!one_in_(2))
                             break;
@@ -483,13 +478,14 @@ void apply_magic_accessary(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
             break;
         }
         case SV_AMULET_SEARCHING: {
-            o_ptr->pval = randint1(2) + (PARAMETER_VALUE)m_bonus(4, level);
+            o_ptr->pval = 2 + randint1(6);
             if (power < 0) {
                 o_ptr->ident |= (IDENT_BROKEN);
                 o_ptr->curse_flags |= (TRC_CURSED);
                 o_ptr->pval = 0 - (o_ptr->pval);
+            } else {
+                add_esp_weak(o_ptr, FALSE);
             }
-
             break;
         }
         case SV_AMULET_THE_MAGI: {

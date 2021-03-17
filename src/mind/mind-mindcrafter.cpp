@@ -34,6 +34,7 @@
 #include "status/sight-setter.h"
 #include "system/object-type-definition.h"
 #include "target/target-getter.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /*!
@@ -79,12 +80,12 @@ bool psychometry(player_type *caster_ptr)
     msg_format("You feel that the %s %s %s...", o_name, ((o_ptr->number == 1) ? "is" : "are"), game_inscriptions[feel]);
 #endif
 
-    o_ptr->ident |= (IDENT_SENSE);
+    set_bits(o_ptr->ident, IDENT_SENSE);
     o_ptr->feeling = feel;
-    o_ptr->marked |= OM_TOUCHED;
+    set_bits(o_ptr->marked, OM_TOUCHED);
 
-    caster_ptr->update |= (PU_COMBINE | PU_REORDER);
-    caster_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+    set_bits(caster_ptr->update, PU_COMBINE | PU_REORDER);
+    set_bits(caster_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST);
 
     bool okay = FALSE;
     switch (o_ptr->tval) {

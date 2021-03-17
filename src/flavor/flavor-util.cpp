@@ -141,7 +141,7 @@ static void add_inscription(char **short_flavor, concptr str) { *short_flavor = 
 
 /*!
  * @brief get_inscriptionのサブセットとしてオブジェクトの特性フラグを返す / Helper function for get_inscription()
- * @param fi_ptr 参照する特性表示記号テーブル
+ * @param fi_vec 参照する特性表示記号テーブル
  * @param flgs 対応するオブジェクトのフラグ文字列
  * @param kanji TRUEならば漢字記述/FALSEならば英語記述
  * @param ptr フラグ群を保管する文字列参照ポインタ
@@ -151,19 +151,16 @@ static void add_inscription(char **short_flavor, concptr str) { *short_flavor = 
  * sprintf(t, "%+d", n), and return a pointer to the terminator.
  * Note that we always print a sign, either "+" or "-".
  */
-static char *inscribe_flags_aux(flag_insc_table *fi_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE], bool kanji, char *ptr)
+static char *inscribe_flags_aux(std::vector<flag_insc_table>& fi_vec, BIT_FLAGS flgs[TR_FLAG_SIZE], bool kanji, char *ptr)
 {
 #ifdef JP
 #else
     (void)kanji;
 #endif
 
-    while (fi_ptr->english) {
-        if (has_flag(flgs, fi_ptr->flag) && (fi_ptr->except_flag == -1 || !has_flag(flgs, fi_ptr->except_flag)))
-            add_inscription(&ptr, _(kanji ? fi_ptr->japanese : fi_ptr->english, fi_ptr->english));
-
-        fi_ptr++;
-    }
+    for (flag_insc_table &fi : fi_vec)
+        if (has_flag(flgs, fi.flag) && (fi.except_flag == -1 || !has_flag(flgs, fi.except_flag)))
+            add_inscription(&ptr, _(kanji ? fi.japanese : fi.english, fi.english));
 
     return ptr;
 }
@@ -171,18 +168,15 @@ static char *inscribe_flags_aux(flag_insc_table *fi_ptr, BIT_FLAGS flgs[TR_FLAG_
 /*!
  * @brief オブジェクトの特性表示記号テーブル1つに従いオブジェクトの特性フラグ配列に1つでも該当の特性があるかを返す / Special variation of has_flag for
  * auto-inscription
- * @param fi_ptr 参照する特性表示記号テーブル
+ * @param fi_vec 参照する特性表示記号テーブル
  * @param flgs 対応するオブジェクトのフラグ文字列
  * @return 1つでも該当の特性があったらTRUEを返す。
  */
-static bool has_flag_of(flag_insc_table *fi_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
+static bool has_flag_of(std::vector<flag_insc_table>& fi_vec, BIT_FLAGS flgs[TR_FLAG_SIZE])
 {
-    while (fi_ptr->english) {
-        if (has_flag(flgs, fi_ptr->flag) && (fi_ptr->except_flag == -1 || !has_flag(flgs, fi_ptr->except_flag)))
+    for (flag_insc_table &fi : fi_vec)
+        if (has_flag(flgs, fi.flag) && (fi.except_flag == -1 || !has_flag(flgs, fi.except_flag)))
             return TRUE;
-
-        fi_ptr++;
-    }
 
     return FALSE;
 }

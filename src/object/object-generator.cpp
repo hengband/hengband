@@ -51,16 +51,16 @@ void object_prep(player_type *player_ptr, object_type *o_ptr, KIND_OBJECT_IDX k_
     if (k_info[o_ptr->k_idx].cost <= 0)
         o_ptr->ident |= (IDENT_BROKEN);
 
-    if (k_ptr->gen_flags & (TRG_CURSED))
+    if (k_ptr->gen_flags.has(TRG::CURSED))
         o_ptr->curse_flags |= (TRC_CURSED);
-    if (k_ptr->gen_flags & (TRG_HEAVY_CURSE))
+    if (k_ptr->gen_flags.has(TRG::HEAVY_CURSE))
         o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
-    if (k_ptr->gen_flags & (TRG_PERMA_CURSE))
+    if (k_ptr->gen_flags.has(TRG::PERMA_CURSE))
         o_ptr->curse_flags |= (TRC_PERMA_CURSE);
-    if (k_ptr->gen_flags & (TRG_RANDOM_CURSE0))
+    if (k_ptr->gen_flags.has(TRG::RANDOM_CURSE0))
         o_ptr->curse_flags |= get_curse(player_ptr, 0, o_ptr);
-    if (k_ptr->gen_flags & (TRG_RANDOM_CURSE1))
+    if (k_ptr->gen_flags.has(TRG::RANDOM_CURSE1))
         o_ptr->curse_flags |= get_curse(player_ptr, 1, o_ptr);
-    if (k_ptr->gen_flags & (TRG_RANDOM_CURSE2))
+    if (k_ptr->gen_flags.has(TRG::RANDOM_CURSE2))
         o_ptr->curse_flags |= get_curse(player_ptr, 2, o_ptr);
 }

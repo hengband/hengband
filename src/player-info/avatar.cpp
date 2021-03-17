@@ -337,6 +337,7 @@ void get_virtues(player_type *creature_ptr)
     case RACE_ELF:
     case RACE_SPRITE:
     case RACE_ENT:
+    case RACE_MERFOLK:
         creature_ptr->vir_types[i++] = V_NATURE;
         break;
     case RACE_HOBBIT:

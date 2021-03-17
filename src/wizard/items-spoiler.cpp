@@ -152,7 +152,7 @@ spoiler_output_status spoil_obj_desc(concptr fname)
 
         for (int k = 1; k < max_k_idx; k++) {
             object_kind *k_ptr = &k_info[k];
-            if ((k_ptr->tval != group_item[i].tval) || (k_ptr->gen_flags & TRG_INSTA_ART))
+            if ((k_ptr->tval != group_item[i].tval) || k_ptr->gen_flags.has(TRG::INSTA_ART))
                 continue;
 
             who[n++] = (u16b)k;

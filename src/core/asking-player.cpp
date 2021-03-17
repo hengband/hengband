@@ -237,13 +237,6 @@ bool get_check(concptr prompt) { return get_check_strict(p_ptr, prompt, 0); }
 bool get_check_strict(player_type *player_ptr, concptr prompt, BIT_FLAGS mode)
 {
     char buf[80];
-    if (auto_more) {
-        player_ptr->window_flags |= PW_MESSAGE;
-        handle_stuff(player_ptr);
-        num_more = 0;
-    }
-
-    msg_print(NULL);
     if (!rogue_like_commands)
         mode &= ~CHECK_OKAY_CANCEL;
 
@@ -257,6 +250,14 @@ bool get_check_strict(player_type *player_ptr, concptr prompt, BIT_FLAGS mode)
         angband_strcpy(buf, prompt, sizeof(buf) - 5);
         strcat(buf, "[y/n]");
     }
+
+    if (auto_more) {
+        player_ptr->window_flags |= PW_MESSAGE;
+        handle_stuff(player_ptr);
+        num_more = 0;
+    }
+
+    msg_print(NULL);
 
     prt(buf, 0, 0);
     if (!(mode & CHECK_NO_HISTORY) && player_ptr->playing) {

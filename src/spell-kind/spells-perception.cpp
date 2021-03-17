@@ -24,6 +24,7 @@
 #include "perception/object-perception.h"
 #include "player-info/avatar.h"
 #include "system/object-type-definition.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -59,7 +60,7 @@ bool identify_item(player_type *owner_ptr, object_type *o_ptr)
     describe_flavor(owner_ptr, o_name, o_ptr, 0);
 
     bool old_known = FALSE;
-    if (o_ptr->ident & IDENT_KNOWN)
+    if (any_bits(o_ptr->ident, IDENT_KNOWN))
         old_known = TRUE;
 
     if (!object_is_fully_known(o_ptr)) {
@@ -69,10 +70,10 @@ bool identify_item(player_type *owner_ptr, object_type *o_ptr)
 
     object_aware(owner_ptr, o_ptr);
     object_known(o_ptr);
-    o_ptr->marked |= OM_TOUCHED;
+    set_bits(o_ptr->marked, OM_TOUCHED);
 
-    owner_ptr->update |= (PU_BONUS | PU_COMBINE | PU_REORDER);
-    owner_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+    set_bits(owner_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
+    set_bits(owner_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST);
 
     strcpy(record_o_name, o_name);
     record_turn = current_world_ptr->game_turn;

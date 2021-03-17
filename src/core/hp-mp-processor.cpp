@@ -70,7 +70,7 @@ void process_player_hp_mp(player_type *creature_ptr)
     }
 
     if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE)) {
-        if (!creature_ptr->current_floor_ptr->dun_level && !has_resist_lite(creature_ptr) && !is_invuln(creature_ptr) && is_daytime()) {
+        if (!is_in_dungeon(creature_ptr) && !has_resist_lite(creature_ptr) && !is_invuln(creature_ptr) && is_daytime()) {
             if ((creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) {
                 msg_print(_("日光があなたのアンデッドの肉体を焼き焦がした！", "The sun's rays scorch your undead flesh!"));
                 take_hit(creature_ptr, DAMAGE_NOESCAPE, 1, _("日光", "sunlight"), -1);
@@ -252,7 +252,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         }
 
         if (damage) {
-            damage = calc_pois_damage_rate(creature_ptr) / 100;
+            damage *= (calc_pois_damage_rate(creature_ptr) / 100);
             if (creature_ptr->levitation)
                 damage = damage / 5;
 
@@ -265,13 +265,13 @@ void process_player_hp_mp(player_type *creature_ptr)
                         f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name),
                     -1);
                 if (!has_resist_pois(creature_ptr))
-                    (void)set_poisoned(creature_ptr, creature_ptr->poisoned + 1);
+                    (void)set_poisoned(creature_ptr, creature_ptr->poisoned + damage);
             } else {
                 concptr name = f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
                 msg_format(_("%sに毒された！", "The %s poisons you!"), name);
                 take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name, -1);
                 if (!has_resist_pois(creature_ptr))
-                    (void)set_poisoned(creature_ptr, creature_ptr->poisoned + 3);
+                    (void)set_poisoned(creature_ptr, creature_ptr->poisoned + damage);
             }
 
             cave_no_regen = TRUE;

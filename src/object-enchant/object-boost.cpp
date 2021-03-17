@@ -508,7 +508,7 @@ void one_activation(object_type *o_ptr)
  */
 void one_lordly_high_resistance(object_type *o_ptr)
 {
-    switch (randint0(10)) {
+    switch (randint0(12)) {
     case 0:
         add_flag(o_ptr->art_flags, TR_RES_LITE);
         break;
@@ -538,6 +538,12 @@ void one_lordly_high_resistance(object_type *o_ptr)
         break;
     case 9:
         add_flag(o_ptr->art_flags, TR_RES_FEAR);
+        break;
+    case 10:
+        add_flag(o_ptr->art_flags, TR_RES_TIME);
+        break;
+    case 11:
+        add_flag(o_ptr->art_flags, TR_RES_WATER);
         break;
     }
 }

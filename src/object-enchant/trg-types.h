@@ -1,22 +1,25 @@
 ﻿#pragma once
 
-enum trg_type {
-	TRG_INSTA_ART = 0x00000001L, /* Item must be an artifact */
-    TRG_QUESTITEM = 0x00000002L, /* quest level item -KMW- */
-    TRG_XTRA_POWER = 0x00000004L, /* Extra power */
-    TRG_ONE_SUSTAIN = 0x00000008L, /* One sustain */
-    TRG_XTRA_RES_OR_POWER = 0x00000010L, /* Extra resistance or power */
-    TRG_XTRA_H_RES = 0x00000020L, /* Extra high resistance */
-    TRG_XTRA_E_RES = 0x00000040L, /* Extra element resistance */
-    TRG_XTRA_L_RES = 0x00000080L, /* Extra lordly resistance */
-    TRG_XTRA_D_RES = 0x00000100L, /* Extra dragon resistance */
-    TRG_XTRA_RES = 0x00000200L, /* Extra resistance */
-    TRG_CURSED = 0x00000400L, /* Item is Cursed */
-    TRG_HEAVY_CURSE = 0x00000800L, /* Item is Heavily Cursed */
-    TRG_PERMA_CURSE = 0x00001000L, /* Item is Perma Cursed */
-    TRG_RANDOM_CURSE0 = 0x00002000L, /* Item is Random Cursed */
-    TRG_RANDOM_CURSE1 = 0x00004000L, /* Item is Random Cursed */
-    TRG_RANDOM_CURSE2 = 0x00008000L, /* Item is Random Cursed */
-    TRG_XTRA_DICE = 0x00010000L, /* Extra dice */
-    TRG_POWERFUL = 0x00020000L, /* Item has good value even if Cursed */
+// clang-format off
+enum class TRG {
+	INSTA_ART         =  1, /* Item must be an artifact */
+    QUESTITEM         =  2, /* quest level item -KMW- */
+    XTRA_POWER        =  3, /* Extra power */
+    ONE_SUSTAIN       =  4, /* One sustain */
+    XTRA_RES_OR_POWER =  5, /* Extra resistance or power */
+    XTRA_H_RES        =  6, /* Extra high resistance */
+    XTRA_E_RES        =  7, /* Extra element resistance */
+    XTRA_L_RES        =  8, /* Extra lordly resistance */
+    XTRA_D_RES        =  9, /* Extra dragon resistance */
+    XTRA_RES          = 10, /* Extra resistance */
+    CURSED            = 11, /* Item is Cursed */
+    HEAVY_CURSE       = 12, /* Item is Heavily Cursed */
+    PERMA_CURSE       = 13, /* Item is Perma Cursed */
+    RANDOM_CURSE0     = 14, /* Item is Random Cursed */
+    RANDOM_CURSE1     = 15, /* Item is Random Cursed */
+    RANDOM_CURSE2     = 16, /* Item is Random Cursed */
+    XTRA_DICE         = 17, /* Extra dice */
+    POWERFUL          = 18, /* Item has good value even if Cursed */
+    MAX,
 };
+// clang-format on

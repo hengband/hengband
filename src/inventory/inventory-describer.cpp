@@ -43,7 +43,7 @@ concptr mention_use(player_type *owner_ptr, int i)
 #endif
 
     case INVEN_BOW:
-        p = (adj_str_hold[owner_ptr->stat_ind[A_STR]] < owner_ptr->inventory_list[i].weight / 10) ? _("運搬中", "Just holding") : _("射撃用", "Shooting");
+        p = (adj_str_hold[owner_ptr->stat_index[A_STR]] < owner_ptr->inventory_list[i].weight / 10) ? _("運搬中", "Just holding") : _("射撃用", "Shooting");
         break;
     case INVEN_MAIN_RING:
         p = (left_hander ? _("左手指", "On left hand") : _("右手指", "On right hand"));
@@ -119,7 +119,7 @@ concptr describe_use(player_type *owner_ptr, int i)
 #endif
 
     case INVEN_BOW:
-        p = (adj_str_hold[owner_ptr->stat_ind[A_STR]] < owner_ptr->inventory_list[i].weight / 10) ? _("持つだけで精一杯の", "just holding")
+        p = (adj_str_hold[owner_ptr->stat_index[A_STR]] < owner_ptr->inventory_list[i].weight / 10) ? _("持つだけで精一杯の", "just holding")
                                                                                                   : _("射撃用に装備している", "shooting missiles with");
         break;
     case INVEN_MAIN_RING:

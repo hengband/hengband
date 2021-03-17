@@ -30,6 +30,7 @@
 #include "player/player-damage.h"
 #include "spell-kind/spells-genocide.h"
 #include "spell/spell-types.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 process_result effect_monster_hypodynamia(player_type *caster_ptr, effect_monster_type *em_ptr)
@@ -131,19 +132,27 @@ process_result effect_monster_hand_doom(effect_monster_type *em_ptr)
     return PROCESS_CONTINUE;
 }
 
+/*!
+ * @brief 剣術「幻惑」の効果をモンスターに与える
+ * @param caster_ptr プレイヤーの情報へのポインタ
+ * @param effect_monster_type モンスターの効果情報へのポインタ
+ * @detail
+ * 精神のないモンスター、寝ているモンスターには無効。
+ * 3回試行し、それぞれ2/5で失敗。
+ * 寝た場合は試行終了。
+ * 与える効果は減速、朦朧、混乱、睡眠。
+ */
 process_result effect_monster_engetsu(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
-    int effect = 0;
-    bool done = TRUE;
-
     if (em_ptr->seen)
         em_ptr->obvious = TRUE;
-    if (em_ptr->r_ptr->flags2 & RF2_EMPTY_MIND) {
+
+    if (any_bits(em_ptr->r_ptr->flags2, RF2_EMPTY_MIND)) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
         em_ptr->dam = 0;
         em_ptr->skipped = TRUE;
         if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
-            em_ptr->r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
+            set_bits(em_ptr->r_ptr->r_flags2, RF2_EMPTY_MIND);
         return PROCESS_CONTINUE;
     }
 
@@ -154,50 +163,69 @@ process_result effect_monster_engetsu(player_type *caster_ptr, effect_monster_ty
         return PROCESS_CONTINUE;
     }
 
-    if (one_in_(5))
-        effect = 1;
-    else if (one_in_(4))
-        effect = 2;
-    else if (one_in_(3))
-        effect = 3;
-    else
-        done = FALSE;
+    bool done = FALSE;
+    for (int i = 0; i < 3; i++) {
+        if (randint0(5) < 2)
+            continue;
 
-    if (effect == 1) {
-        if ((em_ptr->r_ptr->flags1 & RF1_UNIQUE) || (em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10)) {
-            em_ptr->note = _("には効果がなかった。", " is unaffected.");
-            em_ptr->obvious = FALSE;
-        } else {
-            if (set_monster_slow(caster_ptr, em_ptr->g_ptr->m_idx, monster_slow_remaining(em_ptr->m_ptr) + 50)) {
-                em_ptr->note = _("の動きが遅くなった。", " starts moving slower.");
-            }
-        }
-    } else if (effect == 2) {
-        em_ptr->do_stun = damroll((caster_ptr->lev / 10) + 3, (em_ptr->dam)) + 1;
-        if ((em_ptr->r_ptr->flags1 & (RF1_UNIQUE)) || (em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10)) {
-            em_ptr->do_stun = 0;
-            em_ptr->note = _("には効果がなかった。", " is unaffected.");
-            em_ptr->obvious = FALSE;
-        }
-    } else if (effect == 3) {
-        if ((em_ptr->r_ptr->flags1 & RF1_UNIQUE) || (em_ptr->r_ptr->flags3 & RF3_NO_SLEEP)
-            || (em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10)) {
-            if (em_ptr->r_ptr->flags3 & RF3_NO_SLEEP) {
-                if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
-                    em_ptr->r_ptr->r_flags3 |= (RF3_NO_SLEEP);
-            }
+        int power = 10 + randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10));
+        if (em_ptr->r_ptr->level > power)
+            continue;
 
-            em_ptr->note = _("には効果がなかった。", " is unaffected.");
-            em_ptr->obvious = FALSE;
-        } else {
-            /* Go to sleep (much) later */
-            em_ptr->note = _("は眠り込んでしまった！", " falls asleep!");
-            em_ptr->do_sleep = 500;
+        switch (randint0(4)) {
+        case 0:
+            if (!any_bits(em_ptr->r_ptr->flags1, RF1_UNIQUE)) {
+                if (set_monster_slow(caster_ptr, em_ptr->g_ptr->m_idx, monster_slow_remaining(em_ptr->m_ptr) + 50)) {
+                    em_ptr->note = _("の動きが遅くなった。", " starts moving slower.");
+                }
+                done = TRUE;
+            }
+            break;
+        case 1:
+            if (any_bits(em_ptr->r_ptr->flags1, RF1_UNIQUE)) {
+                em_ptr->do_stun = 0;
+            } else {
+                em_ptr->do_stun = damroll((caster_ptr->lev / 10) + 3, (em_ptr->dam)) + 1;
+                done = TRUE;
+            }
+            break;
+        case 2:
+            if (any_bits(em_ptr->r_ptr->flags1, RF1_UNIQUE) || any_bits(em_ptr->r_ptr->flags3, RF3_NO_CONF)) {
+                if (any_bits(em_ptr->r_ptr->flags3, RF3_NO_CONF)) {
+                    if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+                        set_bits(em_ptr->r_ptr->r_flags3, RF3_NO_CONF);
+                }
+                em_ptr->do_conf = 0;
+            } else {
+                /* Go to sleep (much) later */
+                em_ptr->note = _("は混乱したようだ。", " looks confused.");
+                em_ptr->do_conf = 10 + randint1(15);
+                done = TRUE;
+            }
+            break;
+        default:
+            if (any_bits(em_ptr->r_ptr->flags1, RF1_UNIQUE) || any_bits(em_ptr->r_ptr->flags3, RF3_NO_SLEEP)) {
+                if (any_bits(em_ptr->r_ptr->flags3, RF3_NO_SLEEP)) {
+                    if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+                        set_bits(em_ptr->r_ptr->r_flags3, RF3_NO_SLEEP);
+                }
+                em_ptr->do_sleep = 0;
+            } else {
+                /* Go to sleep (much) later */
+                em_ptr->note = _("は眠り込んでしまった！", " falls asleep!");
+                em_ptr->do_sleep = 500;
+                done = TRUE;
+            }
+            break;
         }
+
+        if (em_ptr->do_sleep > 0)
+            break;
     }
 
     if (!done) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
+        em_ptr->obvious = FALSE;
     }
 
     em_ptr->dam = 0;
