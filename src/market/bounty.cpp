@@ -304,6 +304,9 @@ void determine_daily_bounty(player_type *player_ptr, bool conv_old)
             continue;
         break;
     }
+
+    // プレイヤーは日替わり賞金首に関する知識を失う。
+    player_ptr->today_mon = 0;
 }
 
 /*!
