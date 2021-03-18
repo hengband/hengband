@@ -16,9 +16,6 @@
 
 extern bool reinit_wilderness;
 
-//! 日替わり賞金首のモンスターID。
-extern MONRACE_IDX today_mon;
-
 extern u32b mon_odds[4];
 extern int battle_odds;
 extern PRICE kakekin;

@@ -119,7 +119,7 @@ static void rd_world_info(player_type *creature_ptr)
     if (z_older_than(10, 0, 3))
         determine_daily_bounty(creature_ptr, TRUE);
     else {
-        rd_s16b(&today_mon);
+        rd_s16b(&current_world_ptr->today_mon);
         rd_s16b(&creature_ptr->today_mon);
     }
 }

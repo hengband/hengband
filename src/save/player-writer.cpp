@@ -225,7 +225,7 @@ void wr_player(player_type *creature_ptr)
     wr_s32b(current_world_ptr->game_turn);
     wr_s32b(current_world_ptr->dungeon_turn);
     wr_s32b(current_world_ptr->arena_start_turn);
-    wr_s16b(today_mon);
+    wr_s16b(current_world_ptr->today_mon);
     wr_s16b(creature_ptr->today_mon);
     wr_s16b(creature_ptr->riding);
     wr_s16b(creature_ptr->floor_id);
