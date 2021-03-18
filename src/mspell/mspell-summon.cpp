@@ -14,6 +14,7 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "mspell/mspell-util.h"
+#include "mspell/mspell.h"
 #include "mspell/specified-summon.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"
@@ -51,7 +52,7 @@ static BIT_FLAGS monster_u_mode(floor_type *floor_ptr, MONSTER_IDX m_idx)
  * @param m_idx 呪文を唱えるモンスターID
  * @return 召喚したモンスターの数を返す。
  */
-MONSTER_NUMBER summon_Kin(player_type *target_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
+static MONSTER_NUMBER summon_Kin(player_type *target_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
 {
     int count = 0;
     for (int k = 0; k < 4; k++) {
@@ -103,9 +104,10 @@ static void decide_summon_kin_caster(
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
- * @return 召喚したモンスターの数を返す。
+ *
+ * プレイヤーが対象ならラーニング可。
  */
-void spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
+MonsterSpellResult spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
@@ -169,6 +171,11 @@ void spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
 
     if (known && !see_monster(target_ptr, t_idx) && count && (target_type == MONSTER_TO_MONSTER))
         floor_ptr->monster_noise = TRUE;
+
+    auto res = MonsterSpellResult::make_valid();
+    res.learnable = target_type == MONSTER_TO_PLAYER;
+
+    return res;
 }
 
 /*!
@@ -179,9 +186,10 @@ void spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
- * @return 召喚したモンスターの数を返す。
+ *
+ * プレイヤーが対象ならラーニング可。
  */
-void spell_RF6_S_CYBER(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_CYBER(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     int count = 0;
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
@@ -205,6 +213,11 @@ void spell_RF6_S_CYBER(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
 
     if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
+
+    auto res = MonsterSpellResult::make_valid();
+    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+
+    return res;
 }
 
 /*!
@@ -215,9 +228,10 @@ void spell_RF6_S_CYBER(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
- * @return 召喚したモンスターの数を返す。
+ *
+ * プレイヤーが対象ならラーニング可。
  */
-void spell_RF6_S_MONSTER(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_MONSTER(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."), _("%^sが魔法で仲間を召喚した！", "%^s magically summons help!"),
         _("%^sが魔法で仲間を召喚した！", "%^s magically summons help!"), TARGET_TYPE);
@@ -240,6 +254,11 @@ void spell_RF6_S_MONSTER(player_type *target_ptr, POSITION y, POSITION x, MONSTE
 
     if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
+
+    auto res = MonsterSpellResult::make_valid();
+    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+
+    return res;
 }
 
 /*!
@@ -250,9 +269,10 @@ void spell_RF6_S_MONSTER(player_type *target_ptr, POSITION y, POSITION x, MONSTE
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
- * @return 召喚したモンスターの数を返す。
+ *
+ * プレイヤーが対象ならラーニング可。
  */
-void spell_RF6_S_MONSTERS(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_MONSTERS(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sが魔法でモンスターを召喚した！", "%^s magically summons monsters!"), _("%^sが魔法でモンスターを召喚した！", "%^s magically summons monsters!"),
@@ -276,6 +296,11 @@ void spell_RF6_S_MONSTERS(player_type *target_ptr, POSITION y, POSITION x, MONST
 
     if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
+
+    auto res = MonsterSpellResult::make_valid();
+    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+
+    return res;
 }
 
 /*!
@@ -286,9 +311,10 @@ void spell_RF6_S_MONSTERS(player_type *target_ptr, POSITION y, POSITION x, MONST
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
- * @return 召喚したモンスターの数を返す。
+ *
+ * プレイヤーが対象ならラーニング可。
  */
-void spell_RF6_S_ANT(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_ANT(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."), _("%^sが魔法でアリを召喚した。", "%^s magically summons ants."),
         _("%^sが魔法でアリを召喚した。", "%^s magically summons ants."), TARGET_TYPE);
@@ -307,6 +333,11 @@ void spell_RF6_S_ANT(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
 
     if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
+
+    auto res = MonsterSpellResult::make_valid();
+    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+
+    return res;
 }
 
 /*!
@@ -317,9 +348,10 @@ void spell_RF6_S_ANT(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
- * @return 召喚したモンスターの数を返す。
+ *
+ * プレイヤーが対象ならラーニング可。
  */
-void spell_RF6_S_SPIDER(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_SPIDER(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."), _("%^sが魔法でクモを召喚した。", "%^s magically summons spiders."),
         _("%^sが魔法でクモを召喚した。", "%^s magically summons spiders."), TARGET_TYPE);
@@ -338,6 +370,11 @@ void spell_RF6_S_SPIDER(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 
     if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
+
+    auto res = MonsterSpellResult::make_valid();
+    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+
+    return res;
 }
 
 /*!
@@ -348,9 +385,10 @@ void spell_RF6_S_SPIDER(player_type *target_ptr, POSITION y, POSITION x, MONSTER
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
- * @return 召喚したモンスターの数を返す。
+ *
+ * プレイヤーが対象ならラーニング可。
  */
-void spell_RF6_S_HOUND(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_HOUND(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sが魔法でハウンドを召喚した。", "%^s magically summons hounds."), _("%^sが魔法でハウンドを召喚した。", "%^s magically summons hounds."),
@@ -370,6 +408,11 @@ void spell_RF6_S_HOUND(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
 
     if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
+
+    auto res = MonsterSpellResult::make_valid();
+    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+
+    return res;
 }
 
 /*!
@@ -380,9 +423,10 @@ void spell_RF6_S_HOUND(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
- * @return 召喚したモンスターの数を返す。
+ *
+ * プレイヤーが対象ならラーニング可。
  */
-void spell_RF6_S_HYDRA(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_HYDRA(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sが魔法でヒドラを召喚した。", "%^s magically summons hydras."), _("%^sが魔法でヒドラを召喚した。", "%^s magically summons hydras."), TARGET_TYPE);
@@ -401,6 +445,11 @@ void spell_RF6_S_HYDRA(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
 
     if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
+
+    auto res = MonsterSpellResult::make_valid();
+    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+
+    return res;
 }
 
 /*!
@@ -411,9 +460,10 @@ void spell_RF6_S_HYDRA(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
- * @return 召喚したモンスターの数を返す。
+ *
+ * プレイヤーが対象ならラーニング可。
  */
-void spell_RF6_S_ANGEL(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_ANGEL(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sが魔法で天使を召喚した！", "%^s magically summons an angel!"), _("%^sが魔法で天使を召喚した！", "%^s magically summons an angel!"), TARGET_TYPE);
@@ -443,6 +493,11 @@ void spell_RF6_S_ANGEL(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
     if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
+
+    auto res = MonsterSpellResult::make_valid();
+    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+
+    return res;
 }
 
 /*!
@@ -453,9 +508,10 @@ void spell_RF6_S_ANGEL(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
- * @return 召喚したモンスターの数を返す。
+ *
+ * プレイヤーが対象ならラーニング可。
  */
-void spell_RF6_S_DEMON(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_DEMON(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sは魔法で混沌の宮廷から悪魔を召喚した！", "%^s magically summons a demon from the Courts of Chaos!"),
@@ -474,6 +530,11 @@ void spell_RF6_S_DEMON(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
     if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
+
+    auto res = MonsterSpellResult::make_valid();
+    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+
+    return res;
 }
 
 /*!
@@ -484,9 +545,10 @@ void spell_RF6_S_DEMON(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
- * @return 召喚したモンスターの数を返す。
+ *
+ * プレイヤーが対象ならラーニング可。
  */
-void spell_RF6_S_UNDEAD(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_UNDEAD(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sが魔法でアンデッドの強敵を召喚した！", "%^s magically summons an undead adversary!"),
@@ -505,6 +567,11 @@ void spell_RF6_S_UNDEAD(player_type *target_ptr, POSITION y, POSITION x, MONSTER
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
     if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
+
+    auto res = MonsterSpellResult::make_valid();
+    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+
+    return res;
 }
 
 /*!
@@ -515,9 +582,10 @@ void spell_RF6_S_UNDEAD(player_type *target_ptr, POSITION y, POSITION x, MONSTER
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
- * @return 召喚したモンスターの数を返す。
+ *
+ * プレイヤーが対象ならラーニング可。
  */
-void spell_RF6_S_DRAGON(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_DRAGON(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sが魔法でドラゴンを召喚した！", "%^s magically summons a dragon!"), _("%^sが魔法でドラゴンを召喚した！", "%^s magically summons a dragon!"),
@@ -536,6 +604,11 @@ void spell_RF6_S_DRAGON(player_type *target_ptr, POSITION y, POSITION x, MONSTER
     bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
     if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
+
+    auto res = MonsterSpellResult::make_valid();
+    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+
+    return res;
 }
 
 /*!
@@ -546,9 +619,10 @@ void spell_RF6_S_DRAGON(player_type *target_ptr, POSITION y, POSITION x, MONSTER
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
- * @return 召喚したモンスターの数を返す。
+ *
+ * プレイヤーが対象ならラーニング可。
  */
-void spell_RF6_S_HI_UNDEAD(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_HI_UNDEAD(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     GAME_TEXT m_name[MAX_NLEN];
     monster_name(target_ptr, m_idx, m_name);
@@ -584,6 +658,11 @@ void spell_RF6_S_HI_UNDEAD(player_type *target_ptr, POSITION y, POSITION x, MONS
 
     if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
+
+    auto res = MonsterSpellResult::make_valid();
+    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+
+    return res;
 }
 
 /*!
@@ -594,9 +673,10 @@ void spell_RF6_S_HI_UNDEAD(player_type *target_ptr, POSITION y, POSITION x, MONS
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
- * @return 召喚したモンスターの数を返す。
+ *
+ * プレイヤーが対象ならラーニング可。
  */
-void spell_RF6_S_HI_DRAGON(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_HI_DRAGON(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sが魔法で古代ドラゴンを召喚した！", "%^s magically summons ancient dragons!"),
@@ -621,6 +701,11 @@ void spell_RF6_S_HI_DRAGON(player_type *target_ptr, POSITION y, POSITION x, MONS
 
     if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
+
+    auto res = MonsterSpellResult::make_valid();
+    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+
+    return res;
 }
 
 /*!
@@ -631,9 +716,10 @@ void spell_RF6_S_HI_DRAGON(player_type *target_ptr, POSITION y, POSITION x, MONS
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
- * @return 召喚したモンスターの数を返す。
+ *
+ * プレイヤーが対象ならラーニング可。
  */
-void spell_RF6_S_AMBERITES(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_AMBERITES(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sがアンバーの王族を召喚した！", "%^s magically summons Lords of Amber!"),
@@ -654,6 +740,11 @@ void spell_RF6_S_AMBERITES(player_type *target_ptr, POSITION y, POSITION x, MONS
 
     if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
+
+    auto res = MonsterSpellResult::make_valid();
+    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+
+    return res;
 }
 
 /*!
@@ -664,9 +755,10 @@ void spell_RF6_S_AMBERITES(player_type *target_ptr, POSITION y, POSITION x, MONS
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param target_type プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
- * @return 召喚したモンスターの数を返す。
+ *
+ * プレイヤーが対象ならラーニング可。
  */
-void spell_RF6_S_UNIQUE(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_S_UNIQUE(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sが魔法で特別な強敵を召喚した！", "%^s magically summons special opponents!"),
@@ -703,4 +795,9 @@ void spell_RF6_S_UNIQUE(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 
     if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
+
+    auto res = MonsterSpellResult::make_valid();
+    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+
+    return res;
 }

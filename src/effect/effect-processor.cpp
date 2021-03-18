@@ -79,11 +79,9 @@ static void next_mirror(player_type *creature_ptr, POSITION *next_y, POSITION *n
  * @param typ 効果属性 / Type of damage to apply to monsters (and objects)
  * @param flag 効果フラグ / Extra bit flags (see PROJECT_xxxx)
  * @param monspell 効果元のモンスター魔法ID
- * @return 何か一つでも効力があればTRUEを返す / TRUE if any "effects" of the
- * projection were observed, else FALSE
  */
-bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, const HIT_POINT dam, const EFFECT_ID typ, BIT_FLAGS flag,
-    const int monspell)
+ProjectResult project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, const HIT_POINT dam, const EFFECT_ID typ,
+    BIT_FLAGS flag, const int monspell)
 {
     int dist;
     POSITION y1;
@@ -93,7 +91,6 @@ bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSIT
     POSITION y_saver;
     POSITION x_saver;
     int msec = delay_factor * delay_factor * delay_factor;
-    bool notice = FALSE;
     bool visual = FALSE;
     bool drawn = FALSE;
     bool breath = FALSE;
@@ -114,6 +111,8 @@ bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSIT
     rakubadam_m = 0;
     monster_target_y = caster_ptr->y;
     monster_target_x = caster_ptr->x;
+
+    ProjectResult res;
 
     if (flag & (PROJECT_JUMP)) {
         x1 = x;
@@ -224,7 +223,7 @@ bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSIT
             }
 
             if (affect_item(caster_ptr, 0, 0, y, x, dam, GF_SEEKER))
-                notice = TRUE;
+                res.notice = TRUE;
             if (!is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]))
                 continue;
 
@@ -237,7 +236,7 @@ bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSIT
                 y = get_grid_y(path_g[j]);
                 x = get_grid_x(path_g[j]);
                 if (affect_monster(caster_ptr, 0, 0, y, x, dam, GF_SEEKER, flag, TRUE))
-                    notice = TRUE;
+                    res.notice = TRUE;
                 if (!who && (project_m_n == 1) && !jump && (caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0)) {
                     monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
                     if (m_ptr->ml) {
@@ -258,7 +257,7 @@ bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSIT
             py = get_grid_y(path_g[i]);
             px = get_grid_x(path_g[i]);
             if (affect_monster(caster_ptr, 0, 0, py, px, dam, GF_SEEKER, flag, TRUE))
-                notice = TRUE;
+                res.notice = TRUE;
             if (!who && (project_m_n == 1) && !jump) {
                 if (caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0) {
                     monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
@@ -274,7 +273,7 @@ bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSIT
             (void)affect_feature(caster_ptr, 0, 0, py, px, dam, GF_SEEKER);
         }
 
-        return notice;
+        return res;
     } else if (typ == GF_SUPER_RAY) {
         int j;
         int second_step = 0;
@@ -321,7 +320,7 @@ bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSIT
             }
 
             if (affect_item(caster_ptr, 0, 0, y, x, dam, GF_SUPER_RAY))
-                notice = TRUE;
+                res.notice = TRUE;
             if (!cave_has_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT)) {
                 if (second_step)
                     continue;
@@ -378,7 +377,7 @@ bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSIT
             (void)affect_feature(caster_ptr, 0, 0, py, px, dam, GF_SUPER_RAY);
         }
 
-        return notice;
+        return res;
     }
 
     int k;
@@ -507,7 +506,7 @@ bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSIT
     }
 
     if (!grids)
-        return FALSE;
+        return res;
 
     if (!blind && !(flag & (PROJECT_HIDE)) && (msec > 0)) {
         for (int t = 0; t <= gm_rad; t++) {
@@ -564,10 +563,10 @@ bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSIT
             if (breath) {
                 int d = dist_to_line(y, x, y1, x1, by, bx);
                 if (affect_feature(caster_ptr, who, d, y, x, dam, typ))
-                    notice = TRUE;
+                    res.notice = TRUE;
             } else {
                 if (affect_feature(caster_ptr, who, dist, y, x, dam, typ))
-                    notice = TRUE;
+                    res.notice = TRUE;
             }
         }
     }
@@ -584,10 +583,10 @@ bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSIT
             if (breath) {
                 int d = dist_to_line(y, x, y1, x1, by, bx);
                 if (affect_item(caster_ptr, who, d, y, x, dam, typ))
-                    notice = TRUE;
+                    res.notice = TRUE;
             } else {
                 if (affect_item(caster_ptr, who, dist, y, x, dam, typ))
-                    notice = TRUE;
+                    res.notice = TRUE;
             }
         }
     }
@@ -709,7 +708,7 @@ bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSIT
             }
 
             if (affect_monster(caster_ptr, who, effective_dist, y, x, dam, typ, flag, see_s_msg))
-                notice = TRUE;
+                res.notice = TRUE;
         }
 
         /* Player affected one monster (without "jumping") */
@@ -779,8 +778,10 @@ bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSIT
                 }
             }
 
-            if (affect_player(who, caster_ptr, who_name, effective_dist, y, x, dam, typ, flag, monspell, project))
-                notice = TRUE;
+            if (affect_player(who, caster_ptr, who_name, effective_dist, y, x, dam, typ, flag, monspell, project)) {
+                res.notice = TRUE;
+                res.affected_player = TRUE;
+            }
         }
     }
 
@@ -800,5 +801,5 @@ bool project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSIT
         }
     }
 
-    return (notice);
+    return res;
 }

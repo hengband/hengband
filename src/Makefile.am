@@ -525,6 +525,7 @@ hengband_SOURCES = \
 	mspell/mspell-status.cpp mspell/mspell-status.h \
 	mspell/mspell-particularity.cpp mspell/mspell-particularity.h \
 	mspell/mspell-selector.cpp mspell/mspell-selector.h \
+	mspell/mspell.h \
 	mspell/smart-mspell-util.cpp mspell/smart-mspell-util.h \
 	mspell/specified-summon.cpp mspell/specified-summon.h \
 	mspell/summon-checker.cpp mspell/summon-checker.h \
