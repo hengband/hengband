@@ -395,6 +395,9 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
     case TR_DARK_SOURCE:
     case TR_SUPPORTIVE:
         return check_equipment_flags(creature_ptr, tr_flag);
+
+    case TR_FLAG_MAX:
+        break;
     }
     return 0;
 }
@@ -1833,6 +1836,9 @@ BIT_FLAGS has_resist_fear(player_type *creature_ptr)
         break;
     case CLASS_NINJA:
         result |= FLAG_CAUSE_CLASS;
+        break;
+
+    default:
         break;
     }
 

@@ -143,6 +143,9 @@ static void set_artifact_bias(player_type *player_ptr, object_type *o_ptr, int *
             o_ptr->artifact_bias = BIAS_ROGUE;
         
         break;
+
+    case MAX_CLASS:
+        break;
     }
 }
 

@@ -478,5 +478,8 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
         monap_ptr->obvious = TRUE;
         monap_ptr->damage = 0;
         break;
+
+    case NB_RBE_TYPE:
+        break;
     }
 }

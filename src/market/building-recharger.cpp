@@ -211,6 +211,9 @@ void building_recharge_all(player_type *player_ptr)
             price = MAX(10, price);
             price = (o_ptr->number * k_ptr->pval - o_ptr->pval) * price;
             break;
+
+        default:
+            break;
         }
 
         if (price > 0)
@@ -261,6 +264,9 @@ void building_recharge_all(player_type *player_ptr)
                 o_ptr->pval = o_ptr->number * k_ptr->pval;
 
             o_ptr->ident &= ~(IDENT_EMPTY);
+            break;
+
+        default:
             break;
         }
     }

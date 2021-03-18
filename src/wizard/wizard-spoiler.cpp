@@ -248,6 +248,8 @@ void exe_output_spoilers(void)
         case SPOILER_OUTPUT_SUCCESS:
             msg_print("Successfully created a spoiler file.");
             break;
+        case SPOILER_OUTPUT_CANCEL:
+            break;
         }
         msg_erase();
     }

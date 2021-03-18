@@ -128,6 +128,9 @@ bool make_object(player_type *owner_ptr, object_type *j_ptr, BIT_FLAGS mode)
         if (!j_ptr->name1)
             j_ptr->number = (byte)damroll(6, 7);
     }
+
+    default:
+        break;
     }
 
     if (cheat_peek)

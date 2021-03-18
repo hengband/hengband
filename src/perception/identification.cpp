@@ -676,6 +676,9 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
             }
 
             break;
+
+        default:
+            break;
         }
     }
 

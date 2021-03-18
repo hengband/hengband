@@ -129,7 +129,7 @@ void print_monster_list(floor_type *floor_ptr, const std::vector<MONSTER_IDX> &m
     TERM_LEN line = y;
     monster_type *last_mons = NULL;
     int n_same = 0;
-    int i;
+    size_t i;
     for (i = 0; i < monster_list.size(); i++) {
         auto m_ptr = &floor_ptr->m_list[monster_list[i]];
         if (is_pet(m_ptr))

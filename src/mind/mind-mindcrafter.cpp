@@ -113,6 +113,9 @@ bool psychometry(player_type *caster_ptr)
     case TV_FIGURINE:
         okay = TRUE;
         break;
+
+    default:
+        break;
     }
 
     autopick_alter_item(caster_ptr, item, (bool)(okay && destroy_feeling));
