@@ -22,6 +22,7 @@
 #include "room/pit-nest-kinds-table.h"
 #include "room/space-finder.h"
 #include "system/floor-type-definition.h"
+#include "util/probability-table.h"
 #include "util/sort.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
@@ -34,10 +35,10 @@
  */
 static int pick_vault_type(floor_type *floor_ptr, vault_aux_type *l_ptr, BIT_FLAGS16 allow_flag_mask)
 {
-    int total;
     int count;
     vault_aux_type *n_ptr;
-    for (n_ptr = l_ptr, total = 0, count = 0; TRUE; n_ptr++, count++) {
+    ProbabilityTable<int> table;
+    for (n_ptr = l_ptr, count = 0; TRUE; n_ptr++, count++) {
         if (!n_ptr->name)
             break;
 
@@ -47,26 +48,10 @@ static int pick_vault_type(floor_type *floor_ptr, vault_aux_type *l_ptr, BIT_FLA
         if (!(allow_flag_mask & (1UL << count)))
             continue;
 
-        total += n_ptr->chance * MAX_DEPTH / (MIN(floor_ptr->dun_level, MAX_DEPTH - 1) - n_ptr->level + 5);
+        table.entry_item(count, n_ptr->chance * MAX_DEPTH / (MIN(floor_ptr->dun_level, MAX_DEPTH - 1) - n_ptr->level + 5));
     }
 
-    int random_type = randint0(total);
-    for (n_ptr = l_ptr, total = 0, count = 0; TRUE; n_ptr++, count++) {
-        if (!n_ptr->name)
-            break;
-
-        if (n_ptr->level > floor_ptr->dun_level)
-            continue;
-
-        if (!(allow_flag_mask & (1UL << count)))
-            continue;
-
-        total += n_ptr->chance * MAX_DEPTH / (MIN(floor_ptr->dun_level, MAX_DEPTH - 1) - n_ptr->level + 5);
-        if (random_type < total)
-            break;
-    }
-
-    return n_ptr->name ? count : -1;
+    return !table.empty() ? table.pick_one_at_random() : -1;
 }
 
 /*!

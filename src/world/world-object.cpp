@@ -5,8 +5,10 @@
 #include "object/object-kind.h"
 #include "system/alloc-entries.h"
 #include "system/floor-type-definition.h"
+#include "util/probability-table.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <iterator>
 
 /*!
  * @brief グローバルオブジェクト配列から空きを取得する /
@@ -63,10 +65,6 @@ OBJECT_IDX o_pop(floor_type *floor_ptr)
  */
 OBJECT_IDX get_obj_num(player_type *owner_ptr, DEPTH level, BIT_FLAGS mode)
 {
-    int i, j, p;
-    KIND_OBJECT_IDX k_idx;
-    long value, total;
-    object_kind *k_ptr;
     alloc_entry *table = alloc_kind_table;
 
     if (level > MAX_DEPTH - 1)
@@ -78,61 +76,38 @@ OBJECT_IDX get_obj_num(player_type *owner_ptr, DEPTH level, BIT_FLAGS mode)
         }
     }
 
-    total = 0L;
-    for (i = 0; i < alloc_kind_size; i++) {
+    // 候補の確率テーブル生成
+    ProbabilityTable<int> prob_table;
+    for (int i = 0; i < alloc_kind_size; i++) {
         if (table[i].level > level)
             break;
 
-        table[i].prob3 = 0;
-        k_idx = table[i].index;
-        k_ptr = &k_info[k_idx];
+        KIND_OBJECT_IDX k_idx = table[i].index;
+        object_kind *k_ptr = &k_info[k_idx];
 
         if ((mode & AM_FORBID_CHEST) && (k_ptr->tval == TV_CHEST))
             continue;
 
-        table[i].prob3 = table[i].prob2;
-        total += table[i].prob3;
+        prob_table.entry_item(i, table[i].prob2);
     }
 
-    if (total <= 0)
+    // 候補なし
+    if (prob_table.empty())
         return 0;
 
-    value = randint0(total);
-    for (i = 0; i < alloc_kind_size; i++) {
-        if (value < table[i].prob3)
-            break;
+    // 40%で1回、50%で2回、10%で3回抽選し、その中で一番レベルが高いアイテムを選択する
+    int n = 1;
 
-        value = value - table[i].prob3;
-    }
+    const int p = randint0(100);
+    if (p < 60)
+        n++;
+    if (p < 10)
+        n++;
 
-    p = randint0(100);
-    if (p < 60) {
-        j = i;
-        value = randint0(total);
-        for (i = 0; i < alloc_kind_size; i++) {
-            if (value < table[i].prob3)
-                break;
+    std::vector<int> result;
+    ProbabilityTable<int>::lottery(std::back_inserter(result), prob_table, n);
 
-            value = value - table[i].prob3;
-        }
+    auto it = std::max_element(result.begin(), result.end(), [table](int a, int b) { return table[a].level < table[b].level; });
 
-        if (table[i].level < table[j].level)
-            i = j;
-    }
-
-    if (p >= 10)
-        return (table[i].index);
-
-    j = i;
-    value = randint0(total);
-    for (i = 0; i < alloc_kind_size; i++) {
-        if (value < table[i].prob3)
-            break;
-
-        value = value - table[i].prob3;
-    }
-
-    if (table[i].level < table[j].level)
-        i = j;
-    return (table[i].index);
+    return table[*it].index;
 }

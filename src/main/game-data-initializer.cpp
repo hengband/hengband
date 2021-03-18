@@ -147,7 +147,6 @@ errr init_object_alloc(void)
             table[z].level = (DEPTH)x;
             table[z].prob1 = (PROB)p;
             table[z].prob2 = (PROB)p;
-            table[z].prob3 = (PROB)p;
             aux[x]++;
         }
     }
@@ -184,7 +183,6 @@ errr init_alloc(void)
         alloc_race_table[i].level = (DEPTH)x;
         alloc_race_table[i].prob1 = (PROB)p;
         alloc_race_table[i].prob2 = (PROB)p;
-        alloc_race_table[i].prob3 = (PROB)p;
     }
 
     C_KILL(elements, max_r_idx, tag_type);

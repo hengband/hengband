@@ -16,6 +16,7 @@
 #include "room/rooms-vault.h"
 #include "system/dungeon-data-definition.h"
 #include "system/floor-type-definition.h"
+#include "util/probability-table.h"
 #include "wizard/wizard-messages.h"
 
 /*!
@@ -146,24 +147,18 @@ bool generate_rooms(player_type *player_ptr, dun_data_type *dd_ptr)
     if (!(d_info[floor_ptr->dungeon_idx].flags1 & DF1_ARCADE))
         prob_list[ROOM_T_ARCADE] = 0;
 
-    int total_prob = 0;
+    ProbabilityTable<int> prob_table;
     for (int i = 0; i < ROOM_T_MAX; i++) {
         room_num[i] = 0;
-        total_prob += prob_list[i];
+        prob_table.entry_item(i, prob_list[i]);
     }
 
     for (int i = dun_rooms; i > 0; i--) {
         int room_type;
-        int rand = randint0(total_prob);
-        for (room_type = 0; room_type < ROOM_T_MAX; room_type++) {
-            if (rand < prob_list[room_type])
-                break;
-            else
-                rand -= prob_list[room_type];
-        }
-
-        if (room_type >= ROOM_T_MAX)
+        if (prob_table.empty())
             room_type = ROOM_T_NORMAL;
+        else
+            room_type = prob_table.pick_one_at_random();
 
         room_num[room_type]++;
         switch (room_type) {
