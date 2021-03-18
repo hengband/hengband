@@ -38,8 +38,10 @@
 #include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
-bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activation_type *const act_ptr, concptr name)
+bool switch_activation(player_type *user_ptr, object_type **o_ptr_ptr, const activation_type *const act_ptr, concptr name)
 {
+    object_type *o_ptr = (*o_ptr_ptr);
+
     switch (act_ptr->index) {
     case ACT_SUNLIGHT:
         return activate_sunlight(user_ptr);
@@ -338,7 +340,7 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
     case ACT_ULTIMATE_RESIST:
         return activate_ultimate_resistance(user_ptr);
     case ACT_CAST_OFF:
-        (void)cosmic_cast_off(user_ptr, o_ptr);
+        (void)cosmic_cast_off(user_ptr, o_ptr_ptr);
         return TRUE;
     case ACT_FALLING_STAR:
         return activate_toragoroshi(user_ptr);
