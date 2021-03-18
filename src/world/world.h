@@ -20,6 +20,7 @@ typedef struct world_type {
 	MONSTER_IDX timewalk_m_idx;     /*!< 現在時間停止を行っているモンスターのID */
 
 	MONRACE_IDX bounty_r_idx[MAX_BOUNTY];
+    MONSTER_IDX today_mon; //!< 実際の日替わり賞金首
 
 	u32b play_time; /*!< 実プレイ時間 */
 

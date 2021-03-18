@@ -25,7 +25,7 @@ bool object_is_bounty(player_type *player_ptr, object_type *o_ptr)
     if (vanilla_town)
         return FALSE;
 
-    if (player_ptr->today_mon > 0 && (streq(r_name + r_info[o_ptr->pval].name, r_name + r_info[today_mon].name)))
+    if (player_ptr->today_mon > 0 && (streq(r_name + r_info[o_ptr->pval].name, r_name + r_info[current_world_ptr->today_mon].name)))
         return TRUE;
 
     if (o_ptr->pval == MON_TSUCHINOKO)
