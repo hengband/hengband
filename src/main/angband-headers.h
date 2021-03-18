@@ -9,28 +9,31 @@ typedef struct angband_header angband_header;
 typedef errr (*parse_info_txt_func)(char *buf, angband_header *head);
 
 struct angband_header {
-    byte v_major; /* Version -- major */
-    byte v_minor; /* Version -- minor */
-    byte v_patch; /* Version -- patch */
-    byte v_extra; /* Version -- extra */
+    byte v_major; //!< Major version
+    byte v_minor; //!< Minor version
+    byte v_patch; //!< Patch version
+    byte checksum; //!< Checksum of "info" records
 
-    u16b info_num; /* Number of "info" records */
-    int info_len; /* Size of each "info" record */
-    u16b head_size; /* Size of the "header" in bytes */
+    u16b info_num; //!< このinfoのデータ数
+    int info_len; //!< このinfoの総サイズ
+    u16b head_size; //!< このinfoのヘッダサイズ
 
-    STR_OFFSET info_size; /* Size of the "info" array in bytes */
-    STR_OFFSET name_size; /* Size of the "name" array in bytes */
-    STR_OFFSET text_size; /* Size of the "text" array in bytes */
-    STR_OFFSET tag_size; /* Size of the "tag" array in bytes */
+    STR_OFFSET info_size; //!< info配列サイズ
+    STR_OFFSET name_size; //!< 名前文字列群サイズ(総文字長)
+    STR_OFFSET text_size; //!< フレーバー文字列群サイズ(総文字長)
+    STR_OFFSET tag_size; //!< タグ文字列群サイズ(総文字長)
 
-    void *info_ptr;
-    char *name_ptr;
-    char *text_ptr;
-    char *tag_ptr;
+    void *info_ptr; //!< info配列へのポインタ
+    char *name_ptr; //!< 名前文字列群へのポインタ
+    char *text_ptr; //!< フレーバー文字列群へのポインタ
+    char *tag_ptr; //!< タグ文字列群へのポインタ
 
-    parse_info_txt_func parse_info_txt;
+    parse_info_txt_func parse_info_txt; //!< Pointer to parser callback function
 
-    void (*retouch)(angband_header *head);
+    void (*retouch)(angband_header *head); //!< 設定再読み込み用？
+
+    byte v_extra; ///< Extra version for Alpha, Beta
+    byte v_savefile; ///< Savefile version
 };
 
 extern angband_header f_head;

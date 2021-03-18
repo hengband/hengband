@@ -50,11 +50,12 @@ errr init_misc(player_type *player_ptr) { return parse_fixed_map(player_ptr, "mi
 static errr init_info_raw(int fd, angband_header *head)
 {
     angband_header test;
-    if (fd_read(fd, (char *)(&test), sizeof(angband_header)) || (test.v_major != head->v_major) || (test.v_minor != head->v_minor)
-        || (test.v_patch != head->v_patch) || (test.info_num != head->info_num) || (test.info_len != head->info_len) || (test.head_size != head->head_size)
-        || (test.info_size != head->info_size)) {
+    if (fd_read(fd, (char *)(&test), sizeof(angband_header))
+        || (test.v_major != head->v_major) || (test.v_minor != head->v_minor) || (test.v_patch != head->v_patch)
+        || (test.v_extra != head->v_extra) || (test.v_savefile != head->v_savefile)
+        || (test.head_size != head->head_size) || (test.info_size != head->info_size)
+        || (test.info_num != head->info_num) || (test.info_len != head->info_len))
         return -1;
-    }
 
     *head = test;
     C_MAKE(head->info_ptr, head->info_size, char);
@@ -105,13 +106,16 @@ static void init_header(angband_header *head, IDX num, int len)
     head->v_major = FAKE_VER_MAJOR;
     head->v_minor = FAKE_VER_MINOR;
     head->v_patch = FAKE_VER_PATCH;
-    head->v_extra = 0;
+    head->checksum = 0;
 
     head->info_num = (IDX)num;
     head->info_len = len;
 
     head->head_size = sizeof(angband_header);
     head->info_size = head->info_num * head->info_len;
+
+    head->v_extra = FAKE_VER_EXTRA;
+    head->v_savefile = SAVEFILE_VERSION;
 }
 
 /*!
