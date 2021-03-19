@@ -385,19 +385,19 @@ static void update_bonuses(player_type *creature_ptr)
         }
     }
 
-    creature_ptr->stat_add[A_STR] = PlayerStrength(creature_ptr).ModificationValue();
-    creature_ptr->stat_add[A_INT] = PlayerIntelligence(creature_ptr).ModificationValue();
-    creature_ptr->stat_add[A_WIS] = PlayerWisdom(creature_ptr).ModificationValue();
-    creature_ptr->stat_add[A_DEX] = PlayerDextarity(creature_ptr).ModificationValue();
-    creature_ptr->stat_add[A_CON] = PlayerConstitution(creature_ptr).ModificationValue();
-    creature_ptr->stat_add[A_CHR] = PlayerCharisma(creature_ptr).ModificationValue();
+    creature_ptr->stat_add[A_STR] = PlayerStrength(creature_ptr).modification_value();
+    creature_ptr->stat_add[A_INT] = PlayerIntelligence(creature_ptr).modification_value();
+    creature_ptr->stat_add[A_WIS] = PlayerWisdom(creature_ptr).modification_value();
+    creature_ptr->stat_add[A_DEX] = PlayerDextarity(creature_ptr).modification_value();
+    creature_ptr->stat_add[A_CON] = PlayerConstitution(creature_ptr).modification_value();
+    creature_ptr->stat_add[A_CHR] = PlayerCharisma(creature_ptr).modification_value();
 
-    PlayerStrength(creature_ptr).updateValue();
-    PlayerIntelligence(creature_ptr).updateValue();
-    PlayerWisdom(creature_ptr).updateValue();
-    PlayerDextarity(creature_ptr).updateValue();
-    PlayerConstitution(creature_ptr).updateValue();
-    PlayerCharisma(creature_ptr).updateValue();
+    PlayerStrength(creature_ptr).update_value();
+    PlayerIntelligence(creature_ptr).update_value();
+    PlayerWisdom(creature_ptr).update_value();
+    PlayerDextarity(creature_ptr).update_value();
+    PlayerConstitution(creature_ptr).update_value();
+    PlayerCharisma(creature_ptr).update_value();
 
     o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
     if (o_ptr->k_idx) {
@@ -416,9 +416,9 @@ static void update_bonuses(player_type *creature_ptr)
         creature_ptr->to_ds[i] = calc_to_weapon_dice_side(creature_ptr, INVEN_MAIN_HAND + i);
     }
 
-    creature_ptr->pspeed = PlayerSpeed(creature_ptr).getValue();
+    creature_ptr->pspeed = PlayerSpeed(creature_ptr).get_value();
     creature_ptr->see_infra = calc_intra_vision(creature_ptr);
-    creature_ptr->skill_stl = PlayerStealth(creature_ptr).getValue();
+    creature_ptr->skill_stl = PlayerStealth(creature_ptr).get_value();
     creature_ptr->skill_dis = calc_disarming(creature_ptr);
     creature_ptr->skill_dev = calc_device_ability(creature_ptr);
     creature_ptr->skill_sav = calc_saving_throw(creature_ptr);

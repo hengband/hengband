@@ -144,9 +144,9 @@ s16b PlayerStealth::set_exception_value(s16b value)
  * @details
  * * TR_STELATHがマイナスの要素に加え、種族影フェアリーかつ反感のとき種族にマイナスフラグを与える
  */
-BIT_FLAGS PlayerStealth::getBadFlags()
+BIT_FLAGS PlayerStealth::get_bad_flags()
 {
-    BIT_FLAGS result = PlayerStatusBase::getBadFlags();
+    BIT_FLAGS result = PlayerStatusBase::get_bad_flags();
 
     if (this->is_aggravated_s_fairy())
         set_bits(result, FLAG_CAUSE_RACE);

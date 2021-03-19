@@ -149,23 +149,23 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
 {
     switch (tr_flag) {
     case TR_STR:
-        return PlayerStrength(creature_ptr).getAllFlags();
+        return PlayerStrength(creature_ptr).get_all_flags();
     case TR_INT:
-        return PlayerIntelligence(creature_ptr).getAllFlags();
+        return PlayerIntelligence(creature_ptr).get_all_flags();
     case TR_WIS:
-        return PlayerWisdom(creature_ptr).getAllFlags();
+        return PlayerWisdom(creature_ptr).get_all_flags();
     case TR_DEX:
-        return PlayerDextarity(creature_ptr).getAllFlags();
+        return PlayerDextarity(creature_ptr).get_all_flags();
     case TR_CON:
-        return PlayerConstitution(creature_ptr).getAllFlags();
+        return PlayerConstitution(creature_ptr).get_all_flags();
     case TR_CHR:
-        return PlayerCharisma(creature_ptr).getAllFlags();
+        return PlayerCharisma(creature_ptr).get_all_flags();
     case TR_MAGIC_MASTERY:
         return has_magic_mastery(creature_ptr);
     case TR_FORCE_WEAPON:
         return check_equipment_flags(creature_ptr, tr_flag);
     case TR_STEALTH:
-        return PlayerStealth(creature_ptr).getAllFlags();
+        return PlayerStealth(creature_ptr).get_all_flags();
     case TR_SEARCH:
         return 0;
     case TR_INFRA:
@@ -173,7 +173,7 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
     case TR_TUNNEL:
         return 0;
     case TR_SPEED:
-        return PlayerSpeed(creature_ptr).getAllFlags();
+        return PlayerSpeed(creature_ptr).get_all_flags();
     case TR_BLOWS:
         return 0;
     case TR_CHAOTIC:
