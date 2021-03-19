@@ -1,20 +1,30 @@
 ﻿#include "wizard/wizard-item-modifier.h"
+#include "artifact/fixed-art-generator.h"
 #include "artifact/random-art-generator.h"
 #include "core/asking-player.h"
+#include "core/show-file.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
+#include "game-option/cheat-options.h"
+#include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
+#include "object-enchant/object-ego.h"
+#include "object-enchant/tr-types.h"
 #include "object-hook/hook-enchant.h"
+#include "object-hook/hook-checker.h"
 #include "object/item-use-flags.h"
 #include "object/object-flags.h"
 #include "object/object-generator.h"
+#include "object/object-info.h"
 #include "object/object-kind.h"
+#include "object/object-kind-hook.h"
 #include "object/object-value.h"
+#include "util/string-processor.h"
 #include "system/alloc-entries.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
@@ -23,6 +33,8 @@
 #include "term/term-color-types.h"
 #include "view/display-messages.h"
 #include "util/bit-flags-calculator.h"
+#include "world/world.h"
+#include <vector>
 
 #define K_MAX_DEPTH 110 /*!< アイテムの階層毎生成率を表示する最大階 */
 
@@ -492,4 +504,398 @@ void wiz_modify_item(player_type *creature_ptr)
     } else {
         msg_print("Changes ignored.");
     }
+}
+
+/*!
+ * @brief オブジェクトの装備スロットがエゴが有効なスロットかどうか判定
+ */
+static int is_slot_able_to_be_ego(player_type *caster_ptr, object_type *o_ptr)
+{
+    int slot = wield_slot(caster_ptr, o_ptr);
+
+    if (slot > -1)
+        return slot;
+
+    if ((o_ptr->tval == TV_SHOT) || (o_ptr->tval == TV_ARROW) || (o_ptr->tval == TV_BOLT))
+        return (INVEN_AMMO);
+
+    return (-1);
+}
+
+/*!
+ * @brief 願ったが消えてしまった場合のメッセージ 
+ */
+static void wishing_puff_of_smoke(void)
+{
+    msg_print(_("何かが足下に転がってきたが、煙のように消えてしまった。",
+        "You feel something roll beneath your feet, but it disappears in a puff of smoke!"));
+}
+
+/*!
+ * @brief 願ったが消えてしまった場合のメッセージ
+ * @param caster_ptr 願ったプレイヤー情報への参照ポインタ
+ * @param prob ★などを願った場合の生成確率
+ * @param art_ok アーティファクトの生成を許すならTRUE
+ * @param ego_ok エゴの生成を許すならTRUE
+ * @param confirm 願わない場合に確認するかどうか
+ * @return 願った結果
+ */
+WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, bool allow_ego, bool confirm)
+{
+    concptr fixed_str[] = {
+#ifdef JP
+        "燃えない",
+        "錆びない",
+        "腐食しない",
+        "安定した",
+#else
+        "rotproof",
+        "fireproof",
+        "rustproof",
+        "erodeproof",
+        "corrodeproof",
+        "fixed",
+#endif
+        NULL,
+    };
+
+    char buf[MAX_NLEN] = "\0";
+    char *str = buf;
+    object_type forge;
+    object_type *o_ptr = &forge;
+    char o_name[MAX_NLEN];
+
+    bool wish_art = FALSE;
+    bool wish_randart = FALSE;
+    bool wish_ego = FALSE;
+    bool exam_base = TRUE;
+    bool ok_art = (randint0(100) < prob) ? TRUE : FALSE;
+    bool ok_ego = (randint0(100) < 50 + prob) ? TRUE : FALSE;
+    bool must = (prob < 0) ? TRUE : FALSE;
+    bool blessed = FALSE;
+    bool fixed = TRUE;
+
+    while (1) {
+        if (get_string(_("何をお望み？ ", "For what do you wish?"), buf, (MAX_NLEN - 1)))
+            break;
+        if (confirm) {
+            if (!get_check(_("何も願いません。本当によろしいですか？", "Do you wish nothing, really?")))
+                continue;
+        }
+        return WishResult::NOTHING;
+    }
+
+#ifndef JP
+    str_tolower(str);
+
+    /* remove 'a' */
+    if (!strncmp(buf, "a ", 2))
+        str = ltrim(str + 1);
+    else if (!strncmp(buf, "an ", 3))
+        str = ltrim(str + 2);
+#endif // !JP
+
+    str = rtrim(str);
+
+    if (!strncmp(str, _("祝福された", "blessed"), _(10, 7))) {
+        str = ltrim(str + _(10, 7));
+        blessed = TRUE;
+    }
+
+    for (int i = 0; fixed_str[i] != NULL; i++) {
+        int len = strlen(fixed_str[i]);
+        if (!strncmp(str, fixed_str[i], len)) {
+            str = ltrim(str + len);
+            fixed = TRUE;
+            break;
+        }
+    }
+
+#ifdef JP
+    if (!strncmp(str, "★", 2)) {
+        str = ltrim(str + 2);
+        wish_art = TRUE;
+        exam_base = FALSE;
+    } else
+#endif
+
+    if (!strncmp(str, _("☆", "The "), _(2, 4))) {
+        str = ltrim(str + _(2, 4));
+        wish_art = TRUE;
+        wish_randart = TRUE;
+    }
+
+    /* wishing random ego ? */
+    else if (!strncmp(str, _("高級な", "excellent "), _(6, 9))) {
+        str = ltrim(str + _(6, 9));
+        wish_ego = TRUE;
+    }
+
+    if (strlen(str) < 1) {
+        msg_print(_("名前がない！", "What?"));
+        return WishResult::NOTHING;
+    }
+
+    if (!allow_art && wish_art) {
+        msg_print(_("アーティファクトは願えない!", "You can not wish artifacts!"));
+        return WishResult::NOTHING;
+    }
+
+    if (cheat_xtra)
+        msg_format("Wishing %s....", buf);
+
+    std::vector<KIND_OBJECT_IDX> k_ids;
+    std::vector<EGO_IDX> e_ids;
+    if (exam_base) {
+        int len;
+        int max_len = 0;
+        for (KIND_OBJECT_IDX k = 1; k < max_k_idx; k++) {
+            object_kind *k_ptr = &k_info[k];
+            if (!k_ptr->name)
+                continue;
+
+            object_prep(caster_ptr, o_ptr, k);
+            describe_flavor(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
+#ifndef JP
+            str_tolower(o_name);
+#endif
+            if (cheat_xtra)
+                msg_format("Matching object No.%d %s", k, o_name);
+
+            len = strlen(o_name);
+
+            if (_(!strrncmp(str, o_name, len), !strncmp(str, o_name, len))) {
+                if (len > max_len) {
+                    k_ids.push_back(k);
+                    max_len = len;
+                }
+            }
+        }
+
+        if (allow_ego && k_ids.size() == 1) {
+            KIND_OBJECT_IDX k_idx = k_ids.back();
+            object_prep(caster_ptr, o_ptr, k_idx);
+
+            for (EGO_IDX k = 1; k < max_e_idx; k++) {
+                ego_item_type *e_ptr = &e_info[k];
+                if (!e_ptr->name)
+                    continue;
+
+                strcpy(o_name, (e_name + e_ptr->name));
+#ifndef JP
+                str_tolower(o_name);
+#endif
+                if (cheat_xtra)
+                    msg_format("Mathcing ego No.%d %s...", k, o_name);
+
+                if (_(!strncmp(str, o_name, strlen(o_name)), !strrncmp(str, o_name, strlen(o_name)))) {
+                    if (is_slot_able_to_be_ego(caster_ptr, o_ptr) != e_ptr->slot)
+                        continue;
+
+                    e_ids.push_back(k);
+                }
+            }
+        }
+    }
+
+    std::vector<ARTIFACT_IDX> a_ids;
+
+    if (allow_art) {
+        char a_desc[MAX_NLEN] = "\0";
+        char *a_str = a_desc;
+
+        int len;
+        int mlen = 0;
+        for (ARTIFACT_IDX i = 1; i < max_a_idx; i++) {
+            artifact_type *a_ptr = &a_info[i];
+            if (!a_ptr->name)
+                continue;
+
+            KIND_OBJECT_IDX k_idx = lookup_kind(a_ptr->tval, a_ptr->sval);
+            if (!k_idx)
+                continue;
+
+            object_prep(caster_ptr, o_ptr, k_idx);
+            o_ptr->name1 = i;
+
+            describe_flavor(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
+#ifndef JP
+            str_tolower(o_name);
+#endif
+            a_str = a_desc;
+            strcpy(a_desc, a_name + a_ptr->name);
+
+            if (*a_str == '$')
+                a_str++;
+#ifdef JP
+            /* remove quotes */
+            if (!strncmp(a_str, "『", 2)) {
+                a_str += 2;
+                char *s = strstr(a_str, "』");
+                *s = '\0';
+            }
+            /* remove 'of' */
+            else {
+                int l = strlen(a_str);
+                if (!strrncmp(a_str, "の", 2)) {
+                    a_str[l - 2] = '\0';
+                }
+            }
+#else
+            /* remove quotes */
+            if (a_str[0] == '\'') {
+                a_str += 1;
+                char *s = strchr(a_desc, '\'');
+                *s = '\0';
+            }
+            /* remove 'of ' */
+            else if (!strncmp(a_str, (const char *)"of ", 3)) {
+                a_str += 3;
+            }
+
+            str_tolower(a_str);
+#endif
+
+            if (cheat_xtra)
+                msg_format("Matching artifact No.%d %s(%s)", i, a_desc, _(&o_name[2], o_name));
+
+            std::vector<char *> l = { a_str, a_name + a_ptr->name, _(&o_name[2], o_name) };
+            for (size_t c = 0; c < l.size(); c++) {
+                if (!strcmp(str, l.at(c))) {
+                    len = strlen(l.at(c));
+                    if (len > mlen) {
+                        a_ids.push_back(i);
+                        mlen = len;
+                    }
+                }
+            }
+        }
+    }
+
+    if (current_world_ptr->wizard && (a_ids.size() > 1 || e_ids.size() > 1)) {
+        msg_print(_("候補が多すぎる！", "Too many matches!"));
+        return WishResult::FAIL;
+    }
+    
+    if (a_ids.size() == 1) {
+        ARTIFACT_IDX a_idx = a_ids.back();
+        if (must || (ok_art && !a_info[a_idx].cur_num)) {
+            create_named_art(caster_ptr, a_idx, caster_ptr->y, caster_ptr->x);
+            if (!current_world_ptr->wizard)
+                a_info[a_idx].cur_num = 1;
+        }
+        else
+            wishing_puff_of_smoke();
+        return WishResult::ARTIFACT;
+    }
+    
+    if (!allow_ego && (wish_ego || e_ids.size() > 0)) {
+        msg_print(_("エゴアイテムは願えない！", "Can not wish ego item."));
+        return WishResult::NOTHING;
+    }
+    
+    if (k_ids.size() == 1) {
+        KIND_OBJECT_IDX k_idx = k_ids.back();
+        object_kind *k_ptr = &k_info[k_idx];
+
+        artifact_type *a_ptr;
+        ARTIFACT_IDX a_idx = 0;
+        if (k_ptr->gen_flags.has(TRG::INSTA_ART)) {
+            for (ARTIFACT_IDX i = 1; i < max_a_idx; i++) {
+                a_ptr = &a_info[i];
+                if (a_ptr->tval != k_ptr->tval || a_ptr->sval != k_ptr->sval)
+                    continue;
+                a_idx = i;
+                break;
+            }
+        }
+
+        if (a_idx > 0) {
+            a_ptr = &a_info[a_idx];
+            if (must || (ok_art && !a_ptr->cur_num)) {
+                create_named_art(caster_ptr, a_idx, caster_ptr->y, caster_ptr->x);
+                if (!current_world_ptr->wizard)
+                    a_info[a_idx].cur_num = 1;
+            }
+            else
+                wishing_puff_of_smoke();
+            return WishResult::ARTIFACT;
+        }
+
+        if (wish_randart) {
+            if (must || ok_art) {
+                do {
+                    object_prep(caster_ptr, o_ptr, k_idx);
+                    apply_magic(caster_ptr, o_ptr, k_ptr->level, (AM_SPECIAL | AM_NO_FIXED_ART));
+                } while (!o_ptr->art_name || o_ptr->name1 || o_ptr->name2 || object_is_cursed(o_ptr));
+
+                if (o_ptr->art_name)
+                    drop_near(caster_ptr, o_ptr, -1, caster_ptr->y, caster_ptr->x);
+            } else {
+                wishing_puff_of_smoke();
+            }
+            return WishResult::ARTIFACT;
+        }
+
+        WishResult res = WishResult::NOTHING;
+        if (allow_ego && (wish_ego || e_ids.size() > 0)) {
+            if (must || ok_ego) {
+                int max_roll = 1000;
+                int i = 0;
+                for (i = 0; i < max_roll; i++) {
+                    object_prep(caster_ptr, o_ptr, k_idx);
+                    (void)apply_magic(caster_ptr, o_ptr, k_ptr->level, (AM_GREAT | AM_NO_FIXED_ART));
+
+                    if (o_ptr->name1 || o_ptr->art_name)
+                        continue;
+
+                    if (wish_ego)
+                        break;
+
+                    EGO_IDX e_idx = 0;
+                    for (auto e : e_ids) {
+                        if (o_ptr->name2 == e) {
+                            e_idx = e;
+                            break;
+                        }
+                    }
+
+                    if (e_idx != 0)
+                        break;
+                }
+
+                if (i == max_roll) {
+                    msg_print(_("失敗！もう一度願ってみてください。", "Failed! Try again."));
+                    return WishResult::FAIL;
+                }
+            } else {
+                wishing_puff_of_smoke();
+            }
+            
+            res = WishResult::EGO;
+        } else {
+            for (int i = 0; i < 100; i++) {
+                object_prep(caster_ptr, o_ptr, k_idx);
+                apply_magic(caster_ptr, o_ptr, 0, (AM_NO_FIXED_ART));
+                if (!object_is_cursed(o_ptr))
+                    break;
+            }
+            res = WishResult::NORMAL;
+        }
+
+        if (blessed && wield_slot(caster_ptr, o_ptr) != -1)
+            add_flag(o_ptr->art_flags, TR_BLESSED);
+
+        if (fixed && wield_slot(caster_ptr, o_ptr) != -1) {
+            add_flag(o_ptr->art_flags, TR_IGNORE_ACID);
+            add_flag(o_ptr->art_flags, TR_IGNORE_FIRE);
+        }
+
+        (void)drop_near(caster_ptr, o_ptr, -1, caster_ptr->y, caster_ptr->x);
+
+        return res;
+    }
+
+    msg_print(_("うーん、そんなものは存在しないようだ。", "Ummmm, that is not existing..."));
+    return WishResult::FAIL;
 }
