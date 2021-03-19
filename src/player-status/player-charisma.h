@@ -6,8 +6,8 @@ public:
     using PlayerBasicStatistics::PlayerBasicStatistics;
     PlayerCharisma() = delete;
 
-    BIT_FLAGS getAllFlags() override;
-    BIT_FLAGS getBadFlags() override;
+    BIT_FLAGS get_all_flags() override;
+    BIT_FLAGS get_bad_flags() override;
 
 protected:
     void set_locals() override;
