@@ -418,6 +418,7 @@ hengband_SOURCES = \
 	mind/mind-blue-mage.cpp mind/mind-blue-mage.h \
 	mind/mind-cavalry.cpp mind/mind-cavalry.h \
 	mind/mind-chaos-warrior.cpp mind/mind-chaos-warrior.h \
+	mind/mind-elementalist.cpp mind/mind-elementalist.h \
 	mind/mind-explanations-table.cpp mind/mind-explanations-table.h \
 	mind/mind-force-trainer.cpp mind/mind-force-trainer.h \
 	mind/mind-info.cpp mind/mind-info.h \

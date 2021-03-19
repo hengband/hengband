@@ -389,6 +389,19 @@ const player_class class_info[MAX_CLASS] =
 		2, 20, 40,
 		4, 70, 2
 	},
+
+	{
+#ifdef JP
+		"元素使い",
+#endif
+		"Elementalist",
+
+		{-3, 1, 3, 0, -1, 0},
+		30, 40, 38, 3, 16, 20, 34, 20,
+		7,  15, 11, 0,  0,  0,  6,  7,
+		0, 30, 25,
+		3, 100, 2
+	},
 };
 
 /*!
@@ -798,6 +811,20 @@ const concptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"伯爵",
 		"領主",
 	},
+
+    /* Elementalist */
+    {
+        "練習生",
+        "奇術師",
+        "幻術師",
+        "呪術師",
+        "召霊師",
+        "召魔師",
+        "魔術師",
+        "魔道師",
+        "イプシシマス",
+        "大魔道師",
+    },
 };
 
 #else
@@ -1194,5 +1221,19 @@ const concptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5] =
 		"Duke",
 		"Lord",
 	},
+
+    /* Elementalist */
+    {
+        "Apprentice",
+        "Trickster",
+        "Illusionist",
+        "Spellbinder",
+        "Evoker",
+        "Conjurer",
+        "Warlock",
+        "Sorcerer",
+        "Ipsissimus",
+        "Archmage",
+    },
 };
 #endif

@@ -2228,6 +2228,9 @@
     <ClCompile Include="..\..\src\player-status\player-charisma.cpp">
       <Filter>player-status</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-elementalist.cpp">
+      <Filter>mind</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4791,6 +4794,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\util\flag-group.h">
       <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-elementalist.h">
+      <Filter>mind</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

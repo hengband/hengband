@@ -141,7 +141,9 @@ static void set_artifact_bias(player_type *player_ptr, object_type *o_ptr, int *
             o_ptr->artifact_bias = BIAS_MAGE;
         else
             o_ptr->artifact_bias = BIAS_ROGUE;
-        
+        break;
+    case CLASS_ELEMENTALIST:
+        o_ptr->artifact_bias = one_in_(2) ? BIAS_MAGE : BIAS_INT;
         break;
 
     case MAX_CLASS:

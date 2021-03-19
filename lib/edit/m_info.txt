@@ -3737,3 +3737,37 @@ R:8:0
 
 # Crusade
 R:9:0
+
+
+### Elementalist ###
+N:28
+I:NONE:WIS:0x00:0:1:430
+# Life
+R:0:0
+
+# Sorcery
+R:1:0
+
+# Neture
+R:2:0
+
+# Chaos
+R:3:0
+
+# Death
+R:4:0
+
+# Trump
+R:5:0
+
+# Arcane
+R:6:0
+
+# Craft
+R:7:0
+
+# Deamon
+R:8:0
+
+# Crusade
+R:9:0

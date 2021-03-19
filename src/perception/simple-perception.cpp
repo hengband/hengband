@@ -158,7 +158,8 @@ void sense_inventory1(player_type *creature_ptr)
     case CLASS_MAGE:
     case CLASS_HIGH_MAGE:
     case CLASS_SORCERER:
-    case CLASS_MAGIC_EATER: {
+    case CLASS_MAGIC_EATER:
+    case CLASS_ELEMENTALIST: {
         if (0 != randint0(240000L / (plev + 5)))
             return;
 
@@ -353,7 +354,8 @@ void sense_inventory2(player_type *creature_ptr)
     case CLASS_SORCERER:
     case CLASS_MAGIC_EATER:
     case CLASS_MIRROR_MASTER:
-    case CLASS_BLUE_MAGE: {
+    case CLASS_BLUE_MAGE:
+    case CLASS_ELEMENTALIST: {
         if (0 != randint0(9000L / (plev * plev + 40)))
             return;
 

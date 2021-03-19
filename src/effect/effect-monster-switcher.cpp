@@ -17,6 +17,7 @@
 #include "effect/effect-monster-resist-hurt.h"
 #include "effect/effect-monster-spirit.h"
 #include "effect/effect-monster-util.h"
+#include "mind/mind-elementalist.h"
 #include "monster-floor/monster-death.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"

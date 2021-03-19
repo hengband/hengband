@@ -29,5 +29,6 @@ enum player_class_type {
     CLASS_MIRROR_MASTER = 25,
     CLASS_NINJA = 26,
     CLASS_SNIPER = 27,
-    MAX_CLASS = 28, /*!< 職業の最大定義数 Maximum number of player "class" types (see "table.c", etc) */
+    CLASS_ELEMENTALIST = 28,
+    MAX_CLASS = 29, /*!< 職業の最大定義数 Maximum number of player "class" types (see "table.c", etc) */
 };

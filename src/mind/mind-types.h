@@ -6,4 +6,5 @@ enum mind_kind_type {
     MIND_BERSERKER = 2, /*!< 特殊能力: 怒り */
     MIND_MIRROR_MASTER = 3, /*!< 特殊能力: 鏡魔法 */
     MIND_NINJUTSU = 4, /*!< 特殊能力: 忍術 */
+    MIND_ELEMENTAL = 5, //!< 特殊能力: 元素魔法 */
 };

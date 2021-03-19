@@ -30,6 +30,7 @@
 #include "melee/melee-postprocess.h"
 #include "mind/mind-archer.h"
 #include "mind/mind-cavalry.h"
+#include "mind/mind-elementalist.h"
 #include "mind/mind-force-trainer.h"
 #include "mind/mind-hobbit.h"
 #include "mind/mind-mage.h"
@@ -250,6 +251,12 @@ bool switch_class_racial_execution(player_type *creature_ptr, const s32b command
         return TRUE;
     case CLASS_NINJA:
         return hayagake(creature_ptr);
+    case CLASS_ELEMENTALIST:
+        if (command == -3)
+            return clear_mind(creature_ptr);
+        if (command == -4)
+            return switch_element_execution(creature_ptr);
+        return TRUE;
     default:
         return TRUE;
     }

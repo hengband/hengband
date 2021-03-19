@@ -1,5 +1,6 @@
 ﻿#include "permanent-resistances.h"
 #include "inventory/inventory-slot-types.h"
+#include "mind/mind-elementalist.h"
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
 #include "player/player-personalities-types.h"
@@ -113,6 +114,40 @@ static void add_class_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 
         break;
     }
+    case CLASS_ELEMENTALIST:
+        if (has_element_resist(creature_ptr, ElementRealm::FIRE, 1))
+            add_flag(flags, TR_RES_FIRE);
+        if (has_element_resist(creature_ptr, ElementRealm::FIRE, 30))
+            add_flag(flags, TR_IM_FIRE);
+        if (has_element_resist(creature_ptr, ElementRealm::ICE, 1))
+            add_flag(flags, TR_RES_COLD);
+        if (has_element_resist(creature_ptr, ElementRealm::ICE, 30))
+            add_flag(flags, TR_IM_COLD);
+        if (has_element_resist(creature_ptr, ElementRealm::SKY, 1))
+            add_flag(flags, TR_RES_ELEC);
+        if (has_element_resist(creature_ptr, ElementRealm::SKY, 30))
+            add_flag(flags, TR_IM_ELEC);
+        if (has_element_resist(creature_ptr, ElementRealm::SEA, 1))
+            add_flag(flags, TR_RES_ACID);
+        if (has_element_resist(creature_ptr, ElementRealm::SEA, 30))
+            add_flag(flags, TR_IM_ACID);
+        if (has_element_resist(creature_ptr, ElementRealm::DARKNESS, 1))
+            add_flag(flags, TR_RES_DARK);
+        if (has_element_resist(creature_ptr, ElementRealm::DARKNESS, 30))
+            add_flag(flags, TR_RES_NETHER);
+        if (has_element_resist(creature_ptr, ElementRealm::CHAOS, 1))
+            add_flag(flags, TR_RES_CONF);
+        if (has_element_resist(creature_ptr, ElementRealm::CHAOS, 30))
+            add_flag(flags, TR_RES_CHAOS);
+        if (has_element_resist(creature_ptr, ElementRealm::EARTH, 1))
+            add_flag(flags, TR_RES_SHARDS);
+        if (has_element_resist(creature_ptr, ElementRealm::EARTH, 30))
+            add_flag(flags, TR_REFLECT);
+        if (has_element_resist(creature_ptr, ElementRealm::DEATH, 1))
+            add_flag(flags, TR_RES_POIS);
+        if (has_element_resist(creature_ptr, ElementRealm::DEATH, 30))
+            add_flag(flags, TR_RES_DISEN);
+        break;
     default:
         break;
     }

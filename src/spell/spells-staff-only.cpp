@@ -59,6 +59,7 @@ bool unleash_mana_storm(player_type *creature_ptr, bool powerful)
     is_special_class &= creature_ptr->pclass != CLASS_SORCERER;
     is_special_class &= creature_ptr->pclass != CLASS_MAGIC_EATER;
     is_special_class &= creature_ptr->pclass != CLASS_BLUE_MAGE;
+    is_special_class &= creature_ptr->pclass != CLASS_ELEMENTALIST;
     if (is_special_class)
         (void)take_hit(creature_ptr, DAMAGE_NOESCAPE, 50, _("コントロールし難い強力な魔力の解放", "unleashing magics too mighty to control"), -1);
 

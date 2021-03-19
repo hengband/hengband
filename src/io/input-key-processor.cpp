@@ -72,6 +72,7 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-blue-mage.h"
+#include "mind/mind-elementalist.h"
 #include "mind/mind-magic-eater.h"
 #include "mind/mind-sniper.h"
 #include "mind/snipe-types.h"
@@ -356,6 +357,8 @@ void process_command(player_type *creature_ptr)
         if ((creature_ptr->pclass == CLASS_MINDCRAFTER) || (creature_ptr->pclass == CLASS_BERSERKER) || (creature_ptr->pclass == CLASS_NINJA)
             || (creature_ptr->pclass == CLASS_MIRROR_MASTER))
             do_cmd_mind_browse(creature_ptr);
+        else if (creature_ptr->pclass == CLASS_ELEMENTALIST)
+            do_cmd_element_browse(creature_ptr);
         else if (creature_ptr->pclass == CLASS_SMITH)
             do_cmd_kaji(creature_ptr, TRUE);
         else if (creature_ptr->pclass == CLASS_MAGIC_EATER)
@@ -377,18 +380,30 @@ void process_command(player_type *creature_ptr)
                 msg_print(NULL);
             } else if (creature_ptr->anti_magic && (creature_ptr->pclass != CLASS_BERSERKER) && (creature_ptr->pclass != CLASS_SMITH)) {
                 concptr which_power = _("魔法", "magic");
-                if (creature_ptr->pclass == CLASS_MINDCRAFTER)
+                switch (creature_ptr->pclass) {
+                case CLASS_MINDCRAFTER:
                     which_power = _("超能力", "psionic powers");
-                else if (creature_ptr->pclass == CLASS_IMITATOR)
+                    break;
+                case CLASS_IMITATOR:
                     which_power = _("ものまね", "imitation");
-                else if (creature_ptr->pclass == CLASS_SAMURAI)
+                    break;
+                case CLASS_SAMURAI:
                     which_power = _("必殺剣", "hissatsu");
-                else if (creature_ptr->pclass == CLASS_MIRROR_MASTER)
+                    break;
+                case CLASS_MIRROR_MASTER:
                     which_power = _("鏡魔法", "mirror magic");
-                else if (creature_ptr->pclass == CLASS_NINJA)
+                    break;
+                case CLASS_NINJA:
                     which_power = _("忍術", "ninjutsu");
-                else if (mp_ptr->spell_book == TV_LIFE_BOOK)
-                    which_power = _("祈り", "prayer");
+                    break;
+                case CLASS_ELEMENTALIST:
+                    which_power = _("元素魔法", "magic");
+                    break;
+                default:
+                    if (mp_ptr->spell_book == TV_LIFE_BOOK)
+                        which_power = _("祈り", "prayer");
+                    break;
+                }
 
                 msg_format(_("反魔法バリアが%sを邪魔した！", "An anti-magic shell disrupts your %s!"), which_power);
                 free_turn(creature_ptr);
@@ -399,6 +414,8 @@ void process_command(player_type *creature_ptr)
                 if ((creature_ptr->pclass == CLASS_MINDCRAFTER) || (creature_ptr->pclass == CLASS_BERSERKER) || (creature_ptr->pclass == CLASS_NINJA)
                     || (creature_ptr->pclass == CLASS_MIRROR_MASTER))
                     do_cmd_mind(creature_ptr);
+                else if (creature_ptr->pclass == CLASS_ELEMENTALIST)
+                    do_cmd_element(creature_ptr);
                 else if (creature_ptr->pclass == CLASS_IMITATOR)
                     do_cmd_mane(creature_ptr, FALSE);
                 else if (creature_ptr->pclass == CLASS_MAGIC_EATER)

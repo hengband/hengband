@@ -1,4 +1,5 @@
 ﻿#include "racial/class-racial-switcher.h"
+#include "mind/mind-elementalist.h"
 #include "racial/racial-util.h"
 #include "realm/realm-names-table.h"
 #include "realm/realm-types.h"
@@ -280,6 +281,16 @@ void switch_class_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rc_ptr->power_desc[rc_ptr->num].stat = A_DEX;
         rc_ptr->power_desc[rc_ptr->num].fail = 0;
         rc_ptr->power_desc[rc_ptr->num++].number = -3;
+        break;
+    case CLASS_ELEMENTALIST:
+        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("明鏡止水", "Clear Mind"));
+        rc_ptr->power_desc[rc_ptr->num].min_level = 15;
+        rc_ptr->power_desc[rc_ptr->num].cost = 0;
+        rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
+        rc_ptr->power_desc[rc_ptr->num].fail = 10;
+        rc_ptr->power_desc[rc_ptr->num++].number = -3;
+
+        switch_element_racial(creature_ptr, rc_ptr);
         break;
     default:
         strcpy(rc_ptr->power_desc[0].racial_name, _("(なし)", "(none)"));
