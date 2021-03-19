@@ -1339,7 +1339,10 @@ static void term_change_font(term_data *td)
 /*
  * Allow the user to lock this window.
  */
-static void term_window_pos(term_data *td, HWND hWnd) { SetWindowPos(td->w, hWnd, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE); }
+static void term_window_pos(term_data *td, HWND hWnd)
+{
+    SetWindowPos(td->w, hWnd, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+}
 
 static void windows_map(player_type *player_ptr);
 
