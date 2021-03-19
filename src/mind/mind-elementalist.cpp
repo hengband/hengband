@@ -104,6 +104,7 @@ struct element_power {
 using element_type_list = const std::unordered_map<ElementRealm, element_type>;
 using element_power_list = const std::unordered_map<ElementSpells, element_power>;
 using element_tip_list = const std::unordered_map<ElementSpells, std::string_view>;
+using element_text_list = const std::unordered_map<ElementRealm, std::string_view>;
 
 // clang-format off
 /*!
@@ -229,6 +230,36 @@ static element_tip_list element_tips = {
     _("%sのブレスを吐く。", "Fire a breath of %s.") },
     { ElementSpells::STORM_3ND,
     _("%sの巨大な球を放つ。", "Fire a large ball of %s.") },
+};
+
+/*!
+ * @brief 元素魔法選択時説明文定義
+ */
+static element_text_list element_texts = {
+    { ElementRealm::FIRE,
+    _("炎系統は巨大なエネルギーで灼熱を生み出し、全ての敵を燃やし尽くそうとします。",
+        "Great energy of Fire system will be able to burn out all of your enemies.")},
+    { ElementRealm::ICE,
+    _("氷系統の魔法はその冷たさで敵の動きを奪い尽くし、魂すらも止めてしまうでしょう。",
+        "Ice system will be freeze your enemies even their souls.")},
+    { ElementRealm::SKY,
+    _("空系統は大いなる天空のエネルギーを駆使して敵の全てを撃滅できます。",
+        "Sky system can terminate all of your enemies powerfully with enery of the great sky.")},
+    { ElementRealm::SEA,
+    _("海系統はその敵の全てを溶かし、大いなる海へと返してしまいます。",
+        "Sea system melts all of your enemies and returns them to the great oscean.")},
+    { ElementRealm::DARKNESS,
+    _("闇系統は恐るべき力を常闇から引き出し、敵を地獄へと叩き落とすでしょう。",
+        "Dark system buries all of your enemies by scary power from dark hell.")},
+    { ElementRealm::CHAOS,
+    _("混沌系統は敵の意識も条理も捻じ曲げ、その存在をあの世に送ってしまいます。",
+        "Chaos system twists and wraps your enemies even their souls and kill all of them resultly.")},
+    { ElementRealm::EARTH,
+    _("地系統は偉大なる大地の力を呼び出して、数多の敵のことごとくを粉砕しようとします。",
+        "Earth system smash all of your enemies massively using its huge powers.")},
+    { ElementRealm::DEATH,
+    _("瘴気系統は全ての生ける者にとって途轍もない毒です。",
+        "Death system is doomed poison for all of living your ememies.")},
 };
 
 // clang-format on
@@ -1020,9 +1051,9 @@ static int interpret_realm_select_key(int cs, int n, char c)
  * @param n 最後尾の位置
  * @return 領域番号
  */
-static int get_element_realm(player_type *creature_ptr, int n)
+static int get_element_realm(player_type *creature_ptr, int is, int n)
 {
-    int cs = MAX(0, creature_ptr->realm1 - 1);
+    int cs = MAX(0, is);
     int os = cs;
     int k;
 
@@ -1042,13 +1073,18 @@ static int get_element_realm(player_type *creature_ptr, int n)
             return 255;
 
         if (c == ' ' || c == '\r' || c == '\n') {
-            if (cs == n)
+            if (cs == n) {
+                display_realm_cursor(cs, n, TERM_WHITE);
                 cs = randint0(n - 1);
+                display_realm_cursor(cs, n, TERM_YELLOW);
+            }
             break;
         }
 
         if (c == '*') {
+            display_realm_cursor(cs, n, TERM_WHITE);
             cs = randint0(n - 1);
+            display_realm_cursor(cs, n, TERM_YELLOW);
             break;
         }
 
@@ -1084,16 +1120,38 @@ byte select_element_realm(player_type *creature_ptr)
 {
     clear_from(10);
 
-    put_str(_("注意：元素系統の選択によりあなたが習得する呪文のタイプが決まります。",
-        "Note: The system of element will determine which spells you can learn."),
-        23, 5);
-
     int realm_max = static_cast<int>(ElementRealm::MAX);
-    for (int i = 0; i < realm_max; i++) {
-        display_realm_cursor(i, realm_max - 1, TERM_WHITE);
-    }
+    int realm_idx = 1;
+    int row = 16;
+    while (1) {
+        put_str(
+            _("注意：元素系統の選択によりあなたが習得する呪文のタイプが決まります。", "Note: The system of element will determine which spells you can learn."),
+            23, 5);
 
-    int realm_idx = get_element_realm(creature_ptr, realm_max - 1);
+        for (int i = 0; i < realm_max; i++) {
+            display_realm_cursor(i, realm_max - 1, TERM_WHITE);
+        }
+
+        realm_idx = get_element_realm(creature_ptr, realm_idx - 1, realm_max - 1);
+        if (realm_idx == 255)
+            break;
+
+        auto realm = static_cast<ElementRealm>(realm_idx);
+        char temp[80 * 5];
+        shape_buffer(element_texts.at(realm).data(), 74, temp, sizeof(temp));
+        concptr t = temp;
+        for (int i = 0; i < 5; i++) {
+            if (t[0] == 0)
+                break;
+            prt(t, row + i, 3);
+            t += strlen(t) + 1;
+        }
+
+        if (get_check_strict(creature_ptr, _("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
+            break;
+
+        clear_from(row);
+    }
 
     clear_from(10);
     return (byte)realm_idx;
