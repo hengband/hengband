@@ -2861,6 +2861,7 @@ static bool process_keydown(WPARAM wParam, LPARAM lParam)
         switch (wParam) {
         case VK_DIVIDE:
             term_no_press = TRUE;
+            [[fallthrough]]; /* Fall through */
         case VK_RETURN:
             numpad = ext_key;
             break;
@@ -2880,6 +2881,7 @@ static bool process_keydown(WPARAM wParam, LPARAM lParam)
         case VK_SEPARATOR:
         case VK_DECIMAL:
             term_no_press = TRUE;
+            [[fallthrough]]; /* Fall through */
         case VK_CLEAR:
         case VK_HOME:
         case VK_END:
@@ -3178,6 +3180,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         if ((HWND)wParam == hWnd)
             return 0;
     }
+        [[fallthrough]]; /* Fall through */
     case WM_QUERYNEWPALETTE: {
         if (!paletted)
             return 0;
@@ -3217,6 +3220,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
             }
         }
     }
+        [[fallthrough]]; /* Fall through */
     case WM_ENABLE: {
         if (wParam == FALSE && keep_subwindows) {
             for (int i = 0; i < MAX_TERM_DATA; i++) {
@@ -3317,6 +3321,7 @@ LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
         if ((HWND)wParam == hWnd)
             return FALSE;
     }
+        [[fallthrough]]; /* Fall through */
     case WM_QUERYNEWPALETTE: {
         if (!paletted)
             return 0;
@@ -3594,7 +3599,7 @@ static bool is_already_running(void)
 /*!
  * @brief (Windows固有)Windowsアプリケーションとしてのエントリポイント
  */
-int PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nCmdShow)
+int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 {
     WNDCLASS wc;
     HDC hdc;
