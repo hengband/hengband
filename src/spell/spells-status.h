@@ -28,6 +28,6 @@ bool restore_mana(player_type *creature_ptr, bool magic_eater);
 bool restore_all_status(player_type *creature_ptr);
 
 bool fishing(player_type *creature_ptr);
-bool cosmic_cast_off(player_type *creature_ptr, object_type *o_ptr);
+bool cosmic_cast_off(player_type *creature_ptr, object_type **o_ptr_ptr);
 void apply_nexus(monster_type *m_ptr, player_type *target_ptr);
 void status_shuffle(player_type *creature_ptr);

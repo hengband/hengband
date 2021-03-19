@@ -139,7 +139,7 @@ static bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
         return FALSE;
     }
 
-    if (!switch_activation(user_ptr, o_ptr, act_ptr, name))
+    if (!switch_activation(user_ptr, &o_ptr, act_ptr, name))
         return FALSE;
 
     if (act_ptr->timeout.constant >= 0) {
