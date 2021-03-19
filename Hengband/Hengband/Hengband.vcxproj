@@ -343,6 +343,7 @@
     <ClCompile Include="..\..\src\mind\mind-berserker.cpp" />
     <ClCompile Include="..\..\src\mind\mind-blue-mage.cpp" />
     <ClCompile Include="..\..\src\mind\mind-chaos-warrior.cpp" />
+    <ClCompile Include="..\..\src\mind\mind-elementalist.cpp" />
     <ClCompile Include="..\..\src\mind\mind-explanations-table.cpp" />
     <ClCompile Include="..\..\src\mind\mind-hobbit.cpp" />
     <ClCompile Include="..\..\src\mind\mind-info.cpp" />
@@ -1003,6 +1004,7 @@
     <ClInclude Include="..\..\src\mind\mind-berserker.h" />
     <ClInclude Include="..\..\src\mind\mind-blue-mage.h" />
     <ClInclude Include="..\..\src\mind\mind-chaos-warrior.h" />
+    <ClInclude Include="..\..\src\mind\mind-elementalist.h" />
     <ClInclude Include="..\..\src\mind\mind-explanations-table.h" />
     <ClInclude Include="..\..\src\mind\mind-hobbit.h" />
     <ClInclude Include="..\..\src\mind\mind-info.h" />

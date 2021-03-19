@@ -33,6 +33,7 @@ const u32b realm_choices1[MAX_CLASS] = {
     (CH_NONE), /* Mirror-master */
     (CH_NONE), /* Ninja */
     (CH_NONE), /* Sniper */
+    (CH_NONE), /* Elementalist */
 };
 
 /*!
@@ -67,6 +68,7 @@ const u32b realm_choices2[MAX_CLASS] = {
     (CH_NONE), /* Mirror-master */
     (CH_NONE), /* Ninja */
     (CH_NONE), /* Sniper */
+    (CH_NONE), /* Elementalist */
 };
 
 REALM_IDX get_realm1_book(player_type *player_ptr) { return player_ptr->realm1 + TV_LIFE_BOOK - 1; }
@@ -76,5 +78,5 @@ REALM_IDX get_realm2_book(player_type *player_ptr) { return player_ptr->realm2 +
 bool is_wizard_class(player_type *player_ptr)
 {
     return (player_ptr->pclass == CLASS_MAGE || player_ptr->pclass == CLASS_HIGH_MAGE || player_ptr->pclass == CLASS_SORCERER || player_ptr->pclass == CLASS_MAGIC_EATER
-        || player_ptr->pclass == CLASS_BLUE_MAGE);
+        || player_ptr->pclass == CLASS_BLUE_MAGE || player_ptr->pclass == CLASS_ELEMENTALIST);
 }

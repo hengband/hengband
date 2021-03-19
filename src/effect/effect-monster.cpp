@@ -76,6 +76,7 @@ static process_result is_affective(player_type *caster_ptr, effect_monster_type 
     case GF_OLD_CONF:
     case GF_OLD_POLY:
     case GF_GENOCIDE:
+    case GF_E_GENOCIDE:
         return PROCESS_CONTINUE;
     default:
         break;

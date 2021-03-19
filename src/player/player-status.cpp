@@ -894,7 +894,8 @@ static void update_max_mana(player_type *creature_ptr)
         return;
 
     int levels;
-    if ((creature_ptr->pclass == CLASS_MINDCRAFTER) || (creature_ptr->pclass == CLASS_MIRROR_MASTER) || (creature_ptr->pclass == CLASS_BLUE_MAGE)) {
+    if ((creature_ptr->pclass == CLASS_MINDCRAFTER) || (creature_ptr->pclass == CLASS_MIRROR_MASTER) || (creature_ptr->pclass == CLASS_BLUE_MAGE)
+        || creature_ptr->pclass == CLASS_ELEMENTALIST) {
         levels = creature_ptr->lev;
     } else {
         if (mp_ptr->spell_first > creature_ptr->lev) {
@@ -957,7 +958,8 @@ static void update_max_mana(player_type *creature_ptr)
     case CLASS_BLUE_MAGE:
     case CLASS_MONK:
     case CLASS_FORCETRAINER:
-    case CLASS_SORCERER: {
+    case CLASS_SORCERER:
+    case CLASS_ELEMENTALIST: {
         if (creature_ptr->inventory_list[INVEN_MAIN_HAND].tval <= TV_SWORD)
             cur_wgt += creature_ptr->inventory_list[INVEN_MAIN_HAND].weight;
         if (creature_ptr->inventory_list[INVEN_SUB_HAND].tval <= TV_SWORD)
@@ -1011,7 +1013,8 @@ static void update_max_mana(player_type *creature_ptr)
         switch (creature_ptr->pclass) {
         case CLASS_MAGE:
         case CLASS_HIGH_MAGE:
-        case CLASS_BLUE_MAGE: {
+        case CLASS_BLUE_MAGE:
+        case CLASS_ELEMENTALIST:  {
             msp -= msp * (cur_wgt - max_wgt) / 600;
             break;
         }

@@ -45,7 +45,7 @@ static void display_spell_list(player_type *caster_ptr)
     }
 
     if ((caster_ptr->pclass == CLASS_MINDCRAFTER) || (caster_ptr->pclass == CLASS_BERSERKER) || (caster_ptr->pclass == CLASS_NINJA)
-        || (caster_ptr->pclass == CLASS_MIRROR_MASTER) || (caster_ptr->pclass == CLASS_FORCETRAINER)) {
+        || (caster_ptr->pclass == CLASS_MIRROR_MASTER) || (caster_ptr->pclass == CLASS_FORCETRAINER) || caster_ptr->pclass == CLASS_ELEMENTALIST) {
         PERCENTAGE minfail = 0;
         PLAYER_LEVEL plev = caster_ptr->lev;
         PERCENTAGE chance = 0;
@@ -79,6 +79,9 @@ static void display_spell_list(player_type *caster_ptr)
         case CLASS_NINJA:
             use_mind = MIND_NINJUTSU;
             use_hp = TRUE;
+            break;
+        case CLASS_ELEMENTALIST:
+            use_mind = MIND_ELEMENTAL;
             break;
         default:
             use_mind = 0;

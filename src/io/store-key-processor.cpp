@@ -21,6 +21,7 @@
 #include "game-option/input-options.h"
 #include "io/command-repeater.h"
 #include "io/input-key-requester.h"
+#include "mind/mind-elementalist.h"
 #include "mind/mind-sniper.h"
 #include "store/home.h"
 #include "store/museum.h"
@@ -154,6 +155,8 @@ void store_process_command(player_type *client_ptr)
         if ((client_ptr->pclass == CLASS_MINDCRAFTER) || (client_ptr->pclass == CLASS_BERSERKER) || (client_ptr->pclass == CLASS_NINJA)
             || (client_ptr->pclass == CLASS_MIRROR_MASTER))
             do_cmd_mind_browse(client_ptr);
+        else if (client_ptr->pclass == CLASS_ELEMENTALIST)
+            do_cmd_element_browse(client_ptr);
         else if (client_ptr->pclass == CLASS_SMITH)
             do_cmd_kaji(client_ptr, TRUE);
         else if (client_ptr->pclass == CLASS_MAGIC_EATER)
