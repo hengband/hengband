@@ -89,6 +89,7 @@
  * </p>
  */
 
+#ifdef WINDOWS
 #include "autopick/autopick-pref-processor.h"
 #include "cmd-io/cmd-process-screen.h"
 #include "cmd-io/cmd-save.h"
@@ -101,11 +102,9 @@
 #include "dungeon/quest.h"
 #include "floor/floor-base-definitions.h"
 #include "floor/floor-events.h"
-#include "game-option/game-play-options.h"
 #include "game-option/runtime-arguments.h"
 #include "game-option/special-options.h"
 #include "io/files-util.h"
-#include "io/inet.h"
 #include "io/input-key-acceptor.h"
 #include "io/record-play-movie.h"
 #include "io/signal-handlers.h"
@@ -115,6 +114,7 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "monster-floor/monster-lite.h"
+#include "save/save.h"
 #include "system/angband-version.h"
 #include "system/angband.h"
 #include "system/floor-type-definition.h"
@@ -131,12 +131,49 @@
 #include "wizard/wizard-spoiler.h"
 #include "world/world.h"
 
-#ifdef WINDOWS
-#include "dungeon/dungeon.h"
-#include "save/save.h"
 #include <direct.h>
 #include <locale.h>
+/*
+ * Exclude parts of WINDOWS.H that are not needed (Win32)
+ */
+#define WIN32_LEAN_AND_MEAN
+#define NONLS /* All NLS defines and routines */
+#define NOSERVICE /* All Service Controller routines, SERVICE_ equates, etc. */
+#define NOMCX /* Modem Configuration Extensions */
+
+/*
+ * Include the "windows" support file
+ */
 #include <windows.h>
+
+/*
+ * Exclude parts of MMSYSTEM.H that are not needed
+ */
+#define MMNODRV /* Installable driver support */
+#define MMNOWAVE /* Waveform support */
+#define MMNOMIDI /* MIDI support */
+#define MMNOAUX /* Auxiliary audio support */
+#define MMNOTIMER /* Timer support */
+#define MMNOJOY /* Joystick support */
+#define MMNOMCI /* MCI support */
+#define MMNOMMIO /* Multimedia file I/O support */
+
+/*
+ * Include some more files. Note: the Cygnus Cygwin compiler
+ * doesn't use mmsystem.h instead it includes the winmm library
+ * which performs a similar function.
+ */
+#include <commdlg.h>
+#include <mmsystem.h>
+#include <mciapi.h>
+
+/*
+ * Include the support for loading bitmaps
+ */
+#include "term/readdib.h"
+
+#define INVALID_FILE_NAME (DWORD)0xFFFFFFFF
+#define MOUSE_SENS 40
 
 /*
  * Available graphic modes
@@ -245,49 +282,6 @@
 #define IDM_DUMP_SCREEN_HTML 450
 
 #define IDM_HELP_CONTENTS 901
-
-/*
- * Exclude parts of WINDOWS.H that are not needed (Win32)
- */
-#define WIN32_LEAN_AND_MEAN
-#define NONLS /* All NLS defines and routines */
-#define NOSERVICE /* All Service Controller routines, SERVICE_ equates, etc. */
-#define NOMCX /* Modem Configuration Extensions */
-
-/*
- * Include the "windows" support file
- */
-#include <windows.h>
-
-/*
- * Exclude parts of MMSYSTEM.H that are not needed
- */
-#define MMNODRV /* Installable driver support */
-#define MMNOWAVE /* Waveform support */
-#define MMNOMIDI /* MIDI support */
-#define MMNOAUX /* Auxiliary audio support */
-#define MMNOTIMER /* Timer support */
-#define MMNOJOY /* Joystick support */
-#define MMNOMCI /* MCI support */
-#define MMNOMMIO /* Multimedia file I/O support */
-
-#define INVALID_FILE_NAME (DWORD)0xFFFFFFFF
-#define MOUSE_SENS 40
-
-/*
- * Include some more files. Note: the Cygnus Cygwin compiler
- * doesn't use mmsystem.h instead it includes the winmm library
- * which performs a similar function.
- */
-#include <commdlg.h>
-#include <mmsystem.h>
-
-/*
- * Include the support for loading bitmaps
- */
-#include "term/readdib.h"
-
-#define MoveTo(H, X, Y) MoveToEx(H, X, Y, NULL)
 
 /*
  * Foreground color bits
@@ -564,10 +558,6 @@ static byte ignore_key_list[] = {
     VK_ESCAPE, VK_TAB, VK_SPACE, 'F', 'W', 'O', /*'H',*/ /* these are menu characters.*/
     VK_SHIFT, VK_CONTROL, VK_MENU, VK_LWIN, VK_RWIN, VK_LSHIFT, VK_RSHIFT, VK_LCONTROL, VK_RCONTROL, VK_LMENU, VK_RMENU, 0 /* End of List */
 };
-
-/* Function prototype */
-
-static bool is_already_running(void);
 
 /* bg */
 static void delete_bg(void)
