@@ -925,7 +925,7 @@ EXTRA_hengband_SOURCES = \
 EXTRA_DIST = \
 	gcc-wrap
 
-DEFAULT_INCLUDES = -I$(srcdir)
+DEFAULT_INCLUDES = -I$(srcdir) -I$(top_builddir)/src
 CPPFLAGS += $(XFT_CFLAGS) $(libcurl_CFLAGS)
 LIBS += $(XFT_LIBS) $(libcurl_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
