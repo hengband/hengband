@@ -60,6 +60,9 @@ static PRICE object_value_base(object_type *o_ptr)
             return 1000L;
         else
             return ((r_info[o_ptr->pval].level) * 50L + 1000);
+
+    default:
+        break;
     }
 
     return (0L);
@@ -220,6 +223,9 @@ PRICE object_value_real(player_type *player_ptr, object_type *o_ptr)
         if (has_flag(flgs, TR_SPEED))
             value += (o_ptr->pval * 10000L);
         break;
+
+    default:
+        break;
     }
 
     switch (o_ptr->tval) {
@@ -310,6 +316,9 @@ PRICE object_value_real(player_type *player_ptr, object_type *o_ptr)
             value = 0L;
         break;
     }
+
+    default:
+        break;
     }
 
     if (value < 0)

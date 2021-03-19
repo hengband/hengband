@@ -98,6 +98,11 @@ void set_monster_blow_method(lore_type *lore_ptr, int m)
         lore_ptr->p = _("歌う", "sing");
         lore_ptr->pc = TERM_SLATE;
         break;
+
+    case RBM_NONE:
+    case RBM_SHOOT:
+    case NB_RBM_TYPE:
+        break;
     }
 }
 
@@ -248,6 +253,10 @@ void set_monster_blow_effect(lore_type *lore_ptr, int m)
         break;
     case RBE_FLAVOR:
         // フレーバー打撃には何の効果もないので付加説明もない。
+        break;
+
+    case RBE_NONE:
+    case NB_RBE_TYPE:
         break;
     }
 }

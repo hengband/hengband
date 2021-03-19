@@ -319,6 +319,9 @@ static int blow_damcalc(monster_type *m_ptr, player_type *target_ptr, monster_bl
         dam = 0;
         check_wraith_form = FALSE;
         break;
+
+    default:
+        break;
     }
 
     if (check_wraith_form && target_ptr->wraith_form) {

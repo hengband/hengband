@@ -79,6 +79,9 @@ static bool item_tester_hook_weapon_except_bow(player_type *player_ptr, object_t
     case TV_DIGGING: {
         return TRUE;
     }
+
+    default:
+        break;
     }
 
     return FALSE;

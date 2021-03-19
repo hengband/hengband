@@ -257,6 +257,9 @@ s16b wield_slot(player_type *owner_ptr, object_type *o_ptr)
     case TV_BOOTS: {
         return (INVEN_FEET);
     }
+
+    default:
+        break;
     }
 
     return -1;

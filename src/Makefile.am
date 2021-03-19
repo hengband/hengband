@@ -927,12 +927,12 @@ EXTRA_DIST = \
 	gcc-wrap
 
 DEFAULT_INCLUDES = -I$(srcdir) -I$(top_builddir)/src
-CFLAGS += $(XFT_CFLAGS) $(libcurl_CFLAGS)
+CPPFLAGS += $(XFT_CFLAGS) $(libcurl_CFLAGS)
 LIBS += $(XFT_LIBS) $(libcurl_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CXXCOMPILE = $(srcdir)/gcc-wrap $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CXXFLAGS)
 
 install-exec-hook:
 if SET_GID

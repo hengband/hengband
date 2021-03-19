@@ -112,7 +112,6 @@ static void decide_breath_kind(player_type *creature_ptr, int *breath_type, conc
         *breath_type = get_element_type(creature_ptr->realm1, 0);
         *breath_type_description = get_element_name(creature_ptr->realm1, 0);
         break;
-
     default:
         break;
     }
