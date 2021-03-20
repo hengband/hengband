@@ -1,6 +1,6 @@
 ﻿/*!
  * todo main関数を含むファイルの割に長過ぎる。main-win-utils.cなどといった形で分割したい
- * @file main-win.c
+ * @file main-win.cpp
  * @brief Windows版固有実装(メインエントリポイント含む)
  * @date 2018/03/16
  * @author Hengband Team
@@ -89,6 +89,7 @@
  * </p>
  */
 
+#ifdef WINDOWS
 #include "autopick/autopick-pref-processor.h"
 #include "cmd-io/cmd-process-screen.h"
 #include "cmd-io/cmd-save.h"
@@ -101,20 +102,22 @@
 #include "dungeon/quest.h"
 #include "floor/floor-base-definitions.h"
 #include "floor/floor-events.h"
-#include "game-option/game-play-options.h"
 #include "game-option/runtime-arguments.h"
 #include "game-option/special-options.h"
 #include "io/files-util.h"
-#include "io/inet.h"
 #include "io/input-key-acceptor.h"
 #include "io/record-play-movie.h"
 #include "io/signal-handlers.h"
 #include "io/write-diary.h"
+#include "main-win/main-win-bg.h"
+#include "main-win/main-win-file-utils.h"
+#include "main-win/main-win-mci.h"
+#include "main-win/main-win-music.h"
+#include "main-win/main-win-sound.h"
 #include "main/angband-initializer.h"
-#include "main/music-definitions-table.h"
-#include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "monster-floor/monster-lite.h"
+#include "save/save.h"
 #include "system/angband-version.h"
 #include "system/angband.h"
 #include "system/floor-type-definition.h"
@@ -131,12 +134,16 @@
 #include "wizard/wizard-spoiler.h"
 #include "world/world.h"
 
-#ifdef WINDOWS
-#include "dungeon/dungeon.h"
-#include "save/save.h"
+#include <commdlg.h>
 #include <direct.h>
 #include <locale.h>
-#include <windows.h>
+
+/*
+ * Include the support for loading bitmaps
+ */
+#include "term/readdib.h"
+
+#define MOUSE_SENS 40
 
 /*
  * Available graphic modes
@@ -245,49 +252,6 @@
 #define IDM_DUMP_SCREEN_HTML 450
 
 #define IDM_HELP_CONTENTS 901
-
-/*
- * Exclude parts of WINDOWS.H that are not needed (Win32)
- */
-#define WIN32_LEAN_AND_MEAN
-#define NONLS /* All NLS defines and routines */
-#define NOSERVICE /* All Service Controller routines, SERVICE_ equates, etc. */
-#define NOMCX /* Modem Configuration Extensions */
-
-/*
- * Include the "windows" support file
- */
-#include <windows.h>
-
-/*
- * Exclude parts of MMSYSTEM.H that are not needed
- */
-#define MMNODRV /* Installable driver support */
-#define MMNOWAVE /* Waveform support */
-#define MMNOMIDI /* MIDI support */
-#define MMNOAUX /* Auxiliary audio support */
-#define MMNOTIMER /* Timer support */
-#define MMNOJOY /* Joystick support */
-#define MMNOMCI /* MCI support */
-#define MMNOMMIO /* Multimedia file I/O support */
-
-#define INVALID_FILE_NAME (DWORD)0xFFFFFFFF
-#define MOUSE_SENS 40
-
-/*
- * Include some more files. Note: the Cygnus Cygwin compiler
- * doesn't use mmsystem.h instead it includes the winmm library
- * which performs a similar function.
- */
-#include <commdlg.h>
-#include <mmsystem.h>
-
-/*
- * Include the support for loading bitmaps
- */
-#include "term/readdib.h"
-
-#define MoveTo(H, X, Y) MoveToEx(H, X, Y, NULL)
 
 /*
  * Foreground color bits
@@ -420,9 +384,8 @@ static HICON hIcon;
 static HPALETTE hPal;
 
 /* bg */
-static HBITMAP hBG = NULL;
-static int use_bg = 0; //!< 背景使用フラグ、1なら私用。
-static char bg_bitmap_file[1024] = "bg.bmp"; //!< 現在の背景ビットマップファイル名。
+static int use_bg = 0; //!< 背景使用フラグ、1なら使用。
+#define DEFAULT_BG_FILENAME "bg.bmp"
 
 /*
  * The screen saver window
@@ -455,25 +418,10 @@ static bool can_use_sound = FALSE;
  */
 static bool keep_subwindows = TRUE;
 
-#define SAMPLE_SOUND_MAX 16
 /*
- * An array of sound file names
+ * Flag set once "music" has been initialized
  */
-static concptr sound_file[SOUND_MAX][SAMPLE_SOUND_MAX];
-
-#define SAMPLE_MUSIC_MAX 16
-static concptr music_file[MUSIC_BASIC_MAX][SAMPLE_MUSIC_MAX];
-static concptr dungeon_music_file[1000][SAMPLE_MUSIC_MAX];
-static concptr town_music_file[1000][SAMPLE_MUSIC_MAX];
-static concptr quest_music_file[1000][SAMPLE_MUSIC_MAX];
 static bool can_use_music = FALSE;
-
-static MCI_OPEN_PARMS mop;
-static char mci_device_type[256];
-
-static int current_music_type = TERM_XTRA_MUSIC_MUTE;
-static int current_music_id = 0;
-static char current_music_path[1024];
 
 /*
  * Full path to ANGBAND.INI
@@ -494,9 +442,7 @@ static concptr AngList = "AngList";
  * Directory names
  */
 static concptr ANGBAND_DIR_XTRA_GRAF;
-static concptr ANGBAND_DIR_XTRA_SOUND;
 static concptr ANGBAND_DIR_XTRA_HELP;
-static concptr ANGBAND_DIR_XTRA_MUSIC;
 
 /*
  * The "complex" color values
@@ -564,107 +510,6 @@ static byte ignore_key_list[] = {
     VK_ESCAPE, VK_TAB, VK_SPACE, 'F', 'W', 'O', /*'H',*/ /* these are menu characters.*/
     VK_SHIFT, VK_CONTROL, VK_MENU, VK_LWIN, VK_RWIN, VK_LSHIFT, VK_RSHIFT, VK_LCONTROL, VK_RCONTROL, VK_LMENU, VK_RMENU, 0 /* End of List */
 };
-
-/* Function prototype */
-
-static bool is_already_running(void);
-
-/* bg */
-static void delete_bg(void)
-{
-    if (hBG != NULL) {
-        DeleteObject(hBG);
-        hBG = NULL;
-    }
-}
-
-static int init_bg(void)
-{
-    char *bmfile = bg_bitmap_file;
-    delete_bg();
-    if (use_bg == 0)
-        return 0;
-
-    hBG = static_cast<HBITMAP>(LoadImage(NULL, bmfile, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE));
-    if (!hBG) {
-        plog_fmt(_("壁紙用ビットマップ '%s' を読み込めません。", "Can't load the bitmap file '%s'."), bmfile);
-        use_bg = 0;
-        return 0;
-    }
-
-    use_bg = 1;
-    return 1;
-}
-
-static void DrawBG(HDC hdc, RECT *r)
-{
-    if (!use_bg || !hBG)
-        return;
-
-    int x = r->left, y = r->top;
-    int nx = x;
-    int ny = y;
-    BITMAP bm;
-    GetObject(hBG, sizeof(bm), &bm);
-    int swid = bm.bmWidth;
-    int shgt = bm.bmHeight;
-
-    HDC hdcSrc = CreateCompatibleDC(hdc);
-    HBITMAP hOld = static_cast<HBITMAP>(SelectObject(hdcSrc, hBG));
-
-    do {
-        int sx = nx % swid;
-        int cwid = MIN(swid - sx, r->right - nx);
-        do {
-            int sy = ny % shgt;
-            int chgt = MIN(shgt - sy, r->bottom - ny);
-            BitBlt(hdc, nx, ny, cwid, chgt, hdcSrc, sx, sy, SRCCOPY);
-            ny += chgt;
-        } while (ny < r->bottom);
-
-        ny = y;
-        nx += cwid;
-    } while (nx < r->right);
-
-    SelectObject(hdcSrc, hOld);
-    DeleteDC(hdcSrc);
-}
-
-/*
- * Check for existance of a file
- */
-static bool check_file(concptr s)
-{
-    char path[1024];
-    strcpy(path, s);
-    DWORD attrib = GetFileAttributes(path);
-    if (attrib == INVALID_FILE_NAME)
-        return FALSE;
-    if (attrib & FILE_ATTRIBUTE_DIRECTORY)
-        return FALSE;
-
-    return TRUE;
-}
-
-/*
- * Check for existance of a directory
- */
-static bool check_dir(concptr s)
-{
-    char path[1024];
-    strcpy(path, s);
-    int i = strlen(path);
-    if (i && (path[i - 1] == '\\'))
-        path[--i] = '\0';
-
-    DWORD attrib = GetFileAttributes(path);
-    if (attrib == INVALID_FILE_NAME)
-        return FALSE;
-    if (!(attrib & FILE_ATTRIBUTE_DIRECTORY))
-        return FALSE;
-
-    return TRUE;
-}
 
 /*
  * Validate a file
@@ -826,7 +671,7 @@ static void save_prefs(void)
 
     strcpy(buf, use_bg ? "1" : "0");
     WritePrivateProfileString("Angband", "BackGround", buf, ini_file);
-    WritePrivateProfileString("Angband", "BackGroundBitmap", bg_bitmap_file[0] != '\0' ? bg_bitmap_file : "bg.bmp", ini_file);
+    WritePrivateProfileString("Angband", "BackGroundBitmap", bg_bitmap_file[0] != '\0' ? bg_bitmap_file : DEFAULT_BG_FILENAME, ini_file);
 
     int path_length = strlen(ANGBAND_DIR) - 4; /* \libの4文字分を削除 */
     char tmp[1024] = "";
@@ -917,7 +762,7 @@ static void load_prefs(void)
     arg_sound = (GetPrivateProfileInt("Angband", "Sound", 0, ini_file) != 0);
     arg_music = (GetPrivateProfileInt("Angband", "Music", 0, ini_file) != 0);
     use_bg = GetPrivateProfileInt("Angband", "BackGround", 0, ini_file);
-    GetPrivateProfileString("Angband", "BackGroundBitmap", "bg.bmp", bg_bitmap_file, 1023, ini_file);
+    GetPrivateProfileString("Angband", "BackGroundBitmap", DEFAULT_BG_FILENAME, bg_bitmap_file, 1023, ini_file);
     GetPrivateProfileString("Angband", "SaveFile", "", savefile, 1023, ini_file);
 
     int n = strncmp(".\\", savefile, 2);
@@ -932,130 +777,6 @@ static void load_prefs(void)
     keep_subwindows = (GetPrivateProfileInt("Angband", "KeepSubwindows", 0, ini_file) != 0);
     for (int i = 0; i < MAX_TERM_DATA; ++i) {
         load_prefs_aux(i);
-    }
-}
-
-/*
- * - Taken from files.c.
- *
- * Extract "tokens" from a buffer
- *
- * This function uses "whitespace" as delimiters, and treats any amount of
- * whitespace as a single delimiter.  We will never return any empty tokens.
- * When given an empty buffer, or a buffer containing only "whitespace", we
- * will return no tokens.  We will never extract more than "num" tokens.
- *
- * By running a token through the "text_to_ascii()" function, you can allow
- * that token to include (encoded) whitespace, using "\s" to encode spaces.
- *
- * We save pointers to the tokens in "tokens", and return the number found.
- */
-static s16b tokenize_whitespace(char *buf, s16b num, char **tokens)
-{
-    s16b k = 0;
-    char *s = buf;
-
-    while (k < num) {
-        char *t;
-        for (; *s && iswspace(*s); ++s) /* loop */
-            ;
-
-        if (!*s)
-            break;
-
-        for (t = s; *t && !iswspace(*t); ++t) /* loop */
-            ;
-
-        if (*t)
-            *t++ = '\0';
-
-        tokens[k++] = s;
-        s = t;
-    }
-
-    return k;
-}
-
-static void load_sound_prefs(void)
-{
-    char tmp[1024];
-    char ini_path[1024];
-    char wav_path[1024];
-    char *zz[SAMPLE_SOUND_MAX];
-
-    path_build(ini_path, 1024, ANGBAND_DIR_XTRA_SOUND, "sound_debug.cfg");
-    if (GetPrivateProfileString("Device", "type", "", mci_device_type, 256, ini_path) == 0) {
-        path_build(ini_path, 1024, ANGBAND_DIR_XTRA_SOUND, "sound.cfg");
-        GetPrivateProfileString("Device", "type", "", mci_device_type, 256, ini_path);
-    }
-
-    for (int i = 0; i < SOUND_MAX; i++) {
-        GetPrivateProfileString("Sound", angband_sound_name[i], "", tmp, 1024, ini_path);
-        int num = tokenize_whitespace(tmp, SAMPLE_SOUND_MAX, zz);
-        for (int j = 0; j < num; j++) {
-            path_build(wav_path, 1024, ANGBAND_DIR_XTRA_SOUND, zz[j]);
-            if (check_file(wav_path))
-                sound_file[i][j] = string_make(zz[j]);
-        }
-    }
-}
-
-static void load_music_prefs(void)
-{
-    char tmp[1024];
-    char ini_path[1024];
-    char wav_path[1024];
-    char *zz[SAMPLE_MUSIC_MAX];
-    char key[80];
-
-    path_build(ini_path, 1024, ANGBAND_DIR_XTRA_MUSIC, "music_debug.cfg");
-    if (GetPrivateProfileString("Device", "type", "", mci_device_type, 256, ini_path) == 0) {
-        path_build(ini_path, 1024, ANGBAND_DIR_XTRA_MUSIC, "music.cfg");
-        GetPrivateProfileString("Device", "type", "", mci_device_type, 256, ini_path);
-    }
-
-    for (int i = 0; i < MUSIC_BASIC_MAX; i++) {
-        GetPrivateProfileString("Basic", angband_music_basic_name[i], "", tmp, 1024, ini_path);
-        int num = tokenize_whitespace(tmp, SAMPLE_MUSIC_MAX, zz);
-        for (int j = 0; j < num; j++) {
-            path_build(wav_path, 1024, ANGBAND_DIR_XTRA_MUSIC, zz[j]);
-            if (check_file(wav_path))
-                music_file[i][j] = string_make(zz[j]);
-        }
-    }
-
-    for (int i = 0; i < current_world_ptr->max_d_idx; i++) {
-        sprintf(key, "dungeon%03d", i);
-        GetPrivateProfileString("Dungeon", key, "", tmp, 1024, ini_path);
-        int num = tokenize_whitespace(tmp, SAMPLE_MUSIC_MAX, zz);
-        for (int j = 0; j < num; j++) {
-            path_build(wav_path, 1024, ANGBAND_DIR_XTRA_MUSIC, zz[j]);
-            if (check_file(wav_path))
-                dungeon_music_file[i][j] = string_make(zz[j]);
-        }
-    }
-
-    for (int i = 0; i < max_q_idx; i++) {
-        sprintf(key, "quest%03d", i);
-        GetPrivateProfileString("Quest", key, "", tmp, 1024, ini_path);
-        int num = tokenize_whitespace(tmp, SAMPLE_MUSIC_MAX, zz);
-        for (int j = 0; j < num; j++) {
-            path_build(wav_path, 1024, ANGBAND_DIR_XTRA_MUSIC, zz[j]);
-            if (check_file(wav_path))
-                quest_music_file[i][j] = string_make(zz[j]);
-        }
-    }
-
-    for (int i = 0; i < 1000; i++) /*!< @todo 町最大数指定 */
-    {
-        sprintf(key, "town%03d", i);
-        GetPrivateProfileString("Town", key, "", tmp, 1024, ini_path);
-        int num = tokenize_whitespace(tmp, SAMPLE_MUSIC_MAX, zz);
-        for (int j = 0; j < num; j++) {
-            path_build(wav_path, 1024, ANGBAND_DIR_XTRA_MUSIC, zz[j]);
-            if (check_file(wav_path))
-                town_music_file[i][j] = string_make(zz[j]);
-        }
     }
 }
 
@@ -1234,21 +955,9 @@ static bool init_graphics(void)
 static void init_music(void)
 {
     if (!can_use_music) {
-        load_music_prefs();
+        main_win_music::load_music_prefs(current_world_ptr->max_d_idx, max_q_idx);
         can_use_music = TRUE;
     }
-}
-
-/*
- * Hack -- Stop a music
- */
-static void stop_music(void)
-{
-    mciSendCommand(mop.wDeviceID, MCI_STOP, 0, 0);
-    mciSendCommand(mop.wDeviceID, MCI_CLOSE, 0, 0);
-    current_music_type = TERM_XTRA_MUSIC_MUTE;
-    current_music_id = 0;
-    strcpy(current_music_path, "\0");
 }
 
 /*
@@ -1339,7 +1048,10 @@ static void term_change_font(term_data *td)
 /*
  * Allow the user to lock this window.
  */
-static void term_window_pos(term_data *td, HWND hWnd) { SetWindowPos(td->w, hWnd, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE); }
+static void term_window_pos(term_data *td, HWND hWnd)
+{
+    SetWindowPos(td->w, hWnd, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+}
 
 static void windows_map(player_type *player_ptr);
 
@@ -1423,7 +1135,7 @@ static errr term_xtra_win_react(player_type *player_ptr)
         init_music();
         use_music = arg_music;
         if (!arg_music)
-            stop_music();
+            main_win_music::stop_music();
         else
             select_floor_music(player_ptr);
     }
@@ -1510,7 +1222,7 @@ static errr term_xtra_win_clear(void)
     if (use_bg) {
         rc.left = 0;
         rc.top = 0;
-        DrawBG(hdc, &rc);
+        draw_bg(hdc, &rc);
     }
 
     ReleaseDC(td->w, hdc);
@@ -1531,23 +1243,9 @@ static errr term_xtra_win_noise(void)
  */
 static errr term_xtra_win_sound(int v)
 {
-    char buf[1024];
     if (!use_sound)
         return 1;
-    if ((v < 0) || (v >= SOUND_MAX))
-        return 1;
-
-    int i;
-    for (i = 0; i < SAMPLE_SOUND_MAX; i++) {
-        if (!sound_file[v][i])
-            break;
-    }
-
-    if (i == 0)
-        return 1;
-
-    path_build(buf, 1024, ANGBAND_DIR_XTRA_SOUND, sound_file[v][Rand_external(i)]);
-    return (PlaySound(buf, 0, SND_FILENAME | SND_ASYNC));
+    return play_sound(v);
 }
 
 /*
@@ -1555,82 +1253,15 @@ static errr term_xtra_win_sound(int v)
  */
 static errr term_xtra_win_music(int n, int v)
 {
-    int i = 0;
-    char buf[1024];
-
+    // FIXME use_musicの値に関わらずミュートを実行している
     if (n == TERM_XTRA_MUSIC_MUTE)
-        stop_music();
+        main_win_music::stop_music();
 
     if (!use_music) {
         return 1;
     }
 
-    if (n == TERM_XTRA_MUSIC_BASIC && ((v < 0) || (v >= MUSIC_BASIC_MAX)))
-        return 1;
-    else if (v < 0 || v >= 1000)
-        return (1); /*!< TODO */
-
-    switch (n) {
-    case TERM_XTRA_MUSIC_BASIC:
-        for (i = 0; i < SAMPLE_MUSIC_MAX; i++)
-            if (!music_file[v][i])
-                break;
-        break;
-    case TERM_XTRA_MUSIC_DUNGEON:
-        for (i = 0; i < SAMPLE_MUSIC_MAX; i++)
-            if (!dungeon_music_file[v][i])
-                break;
-        break;
-    case TERM_XTRA_MUSIC_QUEST:
-        for (i = 0; i < SAMPLE_MUSIC_MAX; i++)
-            if (!quest_music_file[v][i])
-                break;
-        break;
-    case TERM_XTRA_MUSIC_TOWN:
-        for (i = 0; i < SAMPLE_MUSIC_MAX; i++)
-            if (!town_music_file[v][i])
-                break;
-        break;
-    }
-
-    if (i == 0) {
-        return 1;
-    }
-
-    switch (n) {
-    case TERM_XTRA_MUSIC_BASIC:
-        path_build(buf, 1024, ANGBAND_DIR_XTRA_MUSIC, music_file[v][Rand_external(i)]);
-        break;
-    case TERM_XTRA_MUSIC_DUNGEON:
-        path_build(buf, 1024, ANGBAND_DIR_XTRA_MUSIC, dungeon_music_file[v][Rand_external(i)]);
-        break;
-    case TERM_XTRA_MUSIC_QUEST:
-        path_build(buf, 1024, ANGBAND_DIR_XTRA_MUSIC, quest_music_file[v][Rand_external(i)]);
-        break;
-    case TERM_XTRA_MUSIC_TOWN:
-        path_build(buf, 1024, ANGBAND_DIR_XTRA_MUSIC, town_music_file[v][Rand_external(i)]);
-        break;
-    }
-
-    if (current_music_type == n && current_music_id == v)
-        return 0;
-
-    if (current_music_type != TERM_XTRA_MUSIC_MUTE && n != TERM_XTRA_MUSIC_MUTE)
-        if (0 == strcmp(current_music_path, buf))
-            return 0;
-
-    current_music_type = n;
-    current_music_id = v;
-    strcpy(current_music_path, buf);
-
-    mop.lpstrDeviceType = mci_device_type;
-    mop.lpstrElementName = buf;
-    mciSendCommand(mop.wDeviceID, MCI_STOP, 0, 0);
-    mciSendCommand(mop.wDeviceID, MCI_CLOSE, 0, 0);
-    mciSendCommand(mop.wDeviceID, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&mop);
-    mciSendCommand(mop.wDeviceID, MCI_SEEK, MCI_SEEK_TO_START, 0);
-    mciSendCommand(mop.wDeviceID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mop);
-    return 0;
+    return main_win_music::play_music(n, v);
 }
 
 /*
@@ -1761,7 +1392,7 @@ static errr term_wipe_win(int x, int y, int n)
     SetBkColor(hdc, RGB(0, 0, 0));
     SelectObject(hdc, td->font_id);
     if (use_bg)
-        DrawBG(hdc, &rc);
+        draw_bg(hdc, &rc);
     else
         ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rc, NULL, 0, NULL);
 
@@ -1817,7 +1448,7 @@ static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
     if (td->bizarre || (td->tile_hgt != td->font_hgt) || (td->tile_wid != td->font_wid)) {
         ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rc, NULL, 0, NULL);
         if (use_bg)
-            DrawBG(hdc, &rc);
+            draw_bg(hdc, &rc);
 
         rc.left += ((td->tile_wid - td->font_wid) / 2);
         rc.right = rc.left + td->font_wid;
@@ -2714,7 +2345,12 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         }
 
         use_bg = !use_bg;
-        init_bg();
+        if (use_bg) {
+            use_bg = init_bg();
+        } else {
+            delete_bg();
+        }
+
         term_xtra_win_react(player_ptr);
         term_key_push(KTRL('R'));
         break;
@@ -2737,8 +2373,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         ofn.Flags = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
 
         if (GetOpenFileName(&ofn)) {
-            use_bg = 1;
-            init_bg();
+            use_bg = init_bg();
         }
 
         term_xtra_win_react(player_ptr);
@@ -2858,6 +2493,7 @@ static bool process_keydown(WPARAM wParam, LPARAM lParam)
         switch (wParam) {
         case VK_DIVIDE:
             term_no_press = TRUE;
+            [[fallthrough]]; /* Fall through */
         case VK_RETURN:
             numpad = ext_key;
             break;
@@ -2877,6 +2513,7 @@ static bool process_keydown(WPARAM wParam, LPARAM lParam)
         case VK_SEPARATOR:
         case VK_DECIMAL:
             term_no_press = TRUE;
+            [[fallthrough]]; /* Fall through */
         case VK_CLEAR:
         case VK_HOME:
         case VK_END:
@@ -3175,6 +2812,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         if ((HWND)wParam == hWnd)
             return 0;
     }
+        [[fallthrough]]; /* Fall through */
     case WM_QUERYNEWPALETTE: {
         if (!paletted)
             return 0;
@@ -3214,6 +2852,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
             }
         }
     }
+        [[fallthrough]]; /* Fall through */
     case WM_ENABLE: {
         if (wParam == FALSE && keep_subwindows) {
             for (int i = 0; i < MAX_TERM_DATA; i++) {
@@ -3314,6 +2953,7 @@ LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
         if ((HWND)wParam == hWnd)
             return FALSE;
     }
+        [[fallthrough]]; /* Fall through */
     case WM_QUERYNEWPALETTE: {
         if (!paletted)
             return 0;
@@ -3591,7 +3231,7 @@ static bool is_already_running(void)
 /*!
  * @brief (Windows固有)Windowsアプリケーションとしてのエントリポイント
  */
-int PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nCmdShow)
+int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 {
     WNDCLASS wc;
     HDC hdc;
@@ -3682,7 +3322,9 @@ int PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nC
     }
 
     init_windows();
-    init_bg();
+    if (use_bg) {
+        use_bg = init_bg();
+    }
 
     plog_aux = hook_plog;
     quit_aux = hook_quit;
