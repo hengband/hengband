@@ -52,6 +52,6 @@
 #define H_VER_EXTRA FAKE_VER_EXTRA /*!< セーブファイル上のバージョン定義(エクストラ番号) */
 
 /** セーブファイルのバージョン */
-constexpr u32b SAVEFILE_VERSION = 1;
+constexpr u32b SAVEFILE_VERSION = 2;
 
 void put_version(char *buf);
