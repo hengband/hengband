@@ -205,7 +205,7 @@ concptr class_explanations[MAX_CLASS] =
       "Snipers are good at shooting, and they can kill targets by a few shots. After they concentrate deeply, they can demonstrate their shooting talents. You can see the incredible firepower of their shots."),
 
     _("元素使いはエレメンタルの力を駆使して戦う魔法使いです。扱える属性は限られますが、その力を十二分に引き出すことができます。魔法に必要な能力は賢さです。",
-      "Elementalist is a spell caster with elemental forces.  They can cast only lmited elemental spells but can use their power enough.  Wisdom determines a Elementalist's spell casting ability.")
+      "An Elementalist is a spell caster that specializes in tapping elemental forces.  They have a limited, but powerful, repertoire of spells.  Wisdom determines an Elementalist's spell casting ability.")
 };
 
 /*! 性格の解説メッセージテーブル */
