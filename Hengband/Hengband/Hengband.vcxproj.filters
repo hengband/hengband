@@ -2231,6 +2231,24 @@
     <ClCompile Include="..\..\src\mind\mind-elementalist.cpp">
       <Filter>mind</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\main-win\main-win-bg.cpp">
+      <Filter>main-win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\main-win\main-win-music.cpp">
+      <Filter>main-win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\main-win\main-win-sound.cpp">
+      <Filter>main-win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\main-win\main-win-mci.cpp">
+      <Filter>main-win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\main-win\main-win-tokenizer.cpp">
+      <Filter>main-win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\main-win\main-win-file-utils.cpp">
+      <Filter>main-win</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4798,6 +4816,33 @@
     <ClInclude Include="..\..\src\mind\mind-elementalist.h">
       <Filter>mind</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\main-win\main-win-bg.h">
+      <Filter>main-win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main-win\main-win-windows.h">
+      <Filter>main-win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main-win\main-win-music.h">
+      <Filter>main-win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main-win\main-win-sound.h">
+      <Filter>main-win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main-win\main-win-mmsystem.h">
+      <Filter>main-win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main-win\main-win-define.h">
+      <Filter>main-win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main-win\main-win-mci.h">
+      <Filter>main-win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main-win\main-win-tokenizer.h">
+      <Filter>main-win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main-win\main-win-file-utils.h">
+      <Filter>main-win</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -5001,6 +5046,9 @@
     </Filter>
     <Filter Include="player-status">
       <UniqueIdentifier>{d6c9dc68-d79b-4509-bf9c-34ff9620bbf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="main-win">
+      <UniqueIdentifier>{8175f3d1-c8b3-4f2b-8536-8631d77eb53c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
