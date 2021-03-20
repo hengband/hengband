@@ -1116,7 +1116,6 @@ static int get_element_realm(player_type *creature_ptr, int is, int n)
             if (cs == n) {
                 display_realm_cursor(cs, n, TERM_WHITE);
                 cs = randint0(n - 1);
-                display_realm_cursor(cs, n, TERM_YELLOW);
             }
             break;
         }
@@ -1124,20 +1123,21 @@ static int get_element_realm(player_type *creature_ptr, int is, int n)
         if (c == '*') {
             display_realm_cursor(cs, n, TERM_WHITE);
             cs = randint0(n - 1);
-            display_realm_cursor(cs, n, TERM_YELLOW);
             break;
         }
 
         k = islower(c) ? A2I(c) : -1;
         if (k >= 0 && k < n) {
+            display_realm_cursor(cs, n, TERM_WHITE);
             cs = k;
-            continue;
+            break;
         }
 
         k = isupper(c) ? (26 + c - 'A') : -1;
         if (k >= 26 && k < n) {
+            display_realm_cursor(cs, n, TERM_WHITE);
             cs = k;
-            continue;
+            break;
         }
 
         if (c == '=') {
@@ -1148,6 +1148,7 @@ static int get_element_realm(player_type *creature_ptr, int is, int n)
             bell();
     }
 
+    display_realm_cursor(cs, n, TERM_YELLOW);
     return (cs + 1);
 }
 
