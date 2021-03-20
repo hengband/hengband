@@ -139,6 +139,6 @@ ANGBAND MENU
 */
 }
 
-ANGBAND ICON "angband.ico"
+ANGBAND ICON hengband.ico"
 
 ANGBAND BITMAP "wall.bmp"
