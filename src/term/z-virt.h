@@ -47,20 +47,20 @@
 // データクリアマクロ WIPE/C_WIPE の実装
 //
 
-// トリビアルコピーが可能な型は memset でゼロクリアする
-template <typename T, std::enable_if_t<std::is_trivially_copyable_v<T>, std::nullptr_t> = nullptr>
+// トリビアル型は memset でゼロクリアする
+template <typename T, std::enable_if_t<std::is_trivial_v<T>, std::nullptr_t> = nullptr>
 inline T *c_wipe_impl(T *p, size_t n)
 {
     return static_cast<T *>(memset(p, 0, sizeof(T) * n));
 }
-template <typename T, std::enable_if_t<std::is_trivially_copyable_v<T>, std::nullptr_t> = nullptr>
+template <typename T, std::enable_if_t<std::is_trivial_v<T>, std::nullptr_t> = nullptr>
 inline T *wipe_impl(T *p)
 {
     return static_cast<T *>(memset(p, 0, sizeof(T)));
 }
 
-// トリビアルコピーが不可能な型はデフォルトコンストラクタで生成したオブジェクトをコピーする
-template <typename T, std::enable_if_t<!std::is_trivially_copyable_v<T>, std::nullptr_t> = nullptr>
+// 非トリビアル型はデフォルトコンストラクタで生成したオブジェクトをコピーする
+template <typename T, std::enable_if_t<!std::is_trivial_v<T>, std::nullptr_t> = nullptr>
 inline T *c_wipe_impl(T *p, size_t n)
 {
     T obj{};
@@ -69,7 +69,7 @@ inline T *c_wipe_impl(T *p, size_t n)
     }
     return p;
 }
-template <typename T, std::enable_if_t<!std::is_trivially_copyable_v<T>, std::nullptr_t> = nullptr>
+template <typename T, std::enable_if_t<!std::is_trivial_v<T>, std::nullptr_t> = nullptr>
 inline T *wipe_impl(T *p)
 {
     *p = T{};
