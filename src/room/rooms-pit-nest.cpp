@@ -26,6 +26,7 @@
 #include "util/sort.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
+#include <vector>
 
 /*!
  * @brief ダンジョン毎に指定されたピット配列を基準にランダムなpit/nestタイプを決める
@@ -33,22 +34,19 @@
  * @param allow_flag_mask 生成が許されるpit/nestのビット配列
  * @return 選択されたpit/nestのID、選択失敗した場合-1を返す。
  */
-static int pick_vault_type(floor_type *floor_ptr, vault_aux_type *l_ptr, BIT_FLAGS16 allow_flag_mask)
+static int pick_vault_type(floor_type *floor_ptr, std::vector<nest_pit_type>& l_ptr, BIT_FLAGS16 allow_flag_mask)
 {
-    int count;
-    vault_aux_type *n_ptr;
     ProbabilityTable<int> table;
-    for (n_ptr = l_ptr, count = 0; TRUE; n_ptr++, count++) {
-        if (!n_ptr->name)
-            break;
+    for (size_t i = 0; i < l_ptr.size(); i++) {
+        nest_pit_type *n_ptr = &l_ptr.at(i);
 
         if (n_ptr->level > floor_ptr->dun_level)
             continue;
 
-        if (!(allow_flag_mask & (1UL << count)))
+        if (!(allow_flag_mask & (1UL << i)))
             continue;
 
-        table.entry_item(count, n_ptr->chance * MAX_DEPTH / (MIN(floor_ptr->dun_level, MAX_DEPTH - 1) - n_ptr->level + 5));
+        table.entry_item(i, n_ptr->chance * MAX_DEPTH / (MIN(floor_ptr->dun_level, MAX_DEPTH - 1) - n_ptr->level + 5));
     }
 
     return !table.empty() ? table.pick_one_at_random() : -1;
@@ -180,6 +178,22 @@ static void ang_sort_swap_nest_mon_info(player_type *player_ptr, vptr u, vptr v,
 }
 
 /*!
+ * @brief 生成するNestの情報テーブル
+ */
+std::vector<nest_pit_type> nest_types = {
+    { _("クローン", "clone"), vault_aux_clone, vault_prep_clone, 5, 3 },
+    { _("ゼリー", "jelly"), vault_aux_jelly, NULL, 5, 6 },
+    { _("シンボル(善)", "symbol good"), vault_aux_symbol_g, vault_prep_symbol, 25, 2 },
+    { _("シンボル(悪)", "symbol evil"), vault_aux_symbol_e, vault_prep_symbol, 25, 2 },
+    { _("ミミック", "mimic"), vault_aux_mimic, NULL, 30, 4 },
+    { _("狂気", "lovecraftian"), vault_aux_cthulhu, NULL, 70, 2 },
+    { _("犬小屋", "kennel"), vault_aux_kennel, NULL, 45, 4 },
+    { _("動物園", "animal"), vault_aux_animal, NULL, 35, 5 },
+    { _("教会", "chapel"), vault_aux_chapel_g, NULL, 75, 4 },
+    { _("アンデッド", "undead"), vault_aux_undead, NULL, 75, 5 },
+};
+
+/*!
  * @brief タイプ5の部屋…nestを生成する / Type 5 -- Monster nests
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
@@ -212,7 +226,7 @@ bool build_type5(player_type *player_ptr, dun_data_type *dd_ptr)
 
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     int cur_nest_type = pick_vault_type(floor_ptr, nest_types, d_info[floor_ptr->dungeon_idx].nest);
-    vault_aux_type *n_ptr;
+    nest_pit_type *n_ptr;
 
     /* No type available */
     if (cur_nest_type < 0)
@@ -375,6 +389,22 @@ bool build_type5(player_type *player_ptr, dun_data_type *dd_ptr)
 }
 
 /*!
+ * @brief 生成するPitの情報テーブル
+ */
+std::vector<nest_pit_type> pit_types = {
+    { _("オーク", "orc"), vault_aux_orc, NULL, 5, 6 },
+    { _("トロル", "troll"), vault_aux_troll, NULL, 20, 6 },
+    { _("巨人", "giant"), vault_aux_giant, NULL, 50, 6 },
+    { _("狂気", "lovecraftian"), vault_aux_cthulhu, NULL, 80, 2 },
+    { _("シンボル(善)", "symbol good"), vault_aux_symbol_g, vault_prep_symbol, 70, 1 },
+    { _("シンボル(悪)", "symbol evil"), vault_aux_symbol_e, vault_prep_symbol, 70, 1 },
+    { _("教会", "chapel"), vault_aux_chapel_g, NULL, 65, 2 },
+    { _("ドラゴン", "dragon"), vault_aux_dragon, vault_prep_dragon, 70, 6 },
+    { _("デーモン", "demon"), vault_aux_demon, NULL, 80, 6 },
+    { _("ダークエルフ", "dark elf"), vault_aux_dark_elf, NULL, 45, 4 },
+};
+
+/*!
  * @brief タイプ6の部屋…pitを生成する / Type 6 -- Monster pits
  * @return なし
  * @details
@@ -424,7 +454,7 @@ bool build_type6(player_type *player_ptr, dun_data_type *dd_ptr)
 
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     int cur_pit_type = pick_vault_type(floor_ptr, pit_types, d_info[floor_ptr->dungeon_idx].pit);
-    vault_aux_type *n_ptr;
+    nest_pit_type *n_ptr;
 
     /* No type available */
     if (cur_pit_type < 0)
@@ -623,8 +653,33 @@ bool build_type6(player_type *player_ptr, dun_data_type *dd_ptr)
     return TRUE;
 }
 
-/*
- * Helper function for "trapped monster pit"
+// clang-format off
+/*!
+ * @brief 開門トラップのモンスター配置テーブル
+ * @detail
+ * 中央からの相対座標(X,Y)、モンスターの強さ
+ */
+const int place_table_trapped_pit[TRAPPED_PIT_MONSTER_PLACE_MAX][3] = {
+    { -2, -9, 0 }, { -2, -8, 0 }, { -3, -7, 0 }, { -3, -6, 0 }, { +2, -9, 0 }, { +2, -8, 0 }, { +3, -7, 0 }, { +3, -6, 0 },
+    { -2, +9, 0 }, { -2, +8, 0 }, { -3, +7, 0 }, { -3, +6, 0 }, { +2, +9, 0 }, { +2, +8, 0 }, { +3, +7, 0 }, { +3, +6, 0 },
+    { -2, -7, 1 }, { -3, -5, 1 }, { -3, -4, 1 }, { -2, +7, 1 }, { -3, +5, 1 }, { -3, +4, 1 },
+    { +2, -7, 1 }, { +3, -5, 1 }, { +3, -4, 1 }, { +2, +7, 1 }, { +3, +5, 1 }, { +3, +4, 1 },
+    { -2, -6, 2 }, { -2, -5, 2 }, { -3, -3, 2 }, { -2, +6, 2 }, { -2, +5, 2 }, { -3, +3, 2 },
+    { +2, -6, 2 }, { +2, -5, 2 }, { +3, -3, 2 }, { +2, +6, 2 }, { +2, +5, 2 }, { +3, +3, 2 },
+    { -2, -4, 3 }, { -3, -2, 3 }, { -2, +4, 3 }, { -3, +2, 3 },
+    { +2, -4, 3 }, { +3, -2, 3 }, { +2, +4, 3 }, { +3, +2, 3 },
+    { -2, -3, 4 }, { -3, -1, 4 }, { +2, -3, 4 }, { +3, -1, 4 },
+    { -2, +3, 4 }, { -3, +1, 4 }, { +2, +3, 4 }, { +3, +1, 4 },
+    { -2, -2, 5 }, { -3, 0, 5 }, { -2, +2, 5 }, { +2, -2, 5 }, { +3, 0, 5 }, { +2, +2, 5 },
+    { -2, -1, 6 }, { -2, +1, 6 }, { +2, -1, 6 }, { +2, +1, 6 },
+    { -2, 0, 7 }, { +2, 0, 7 },
+    { 0, 0, -1 } };
+// clang-format on
+
+/*!
+ * @brief 開門トラップに配置するモンスターの条件フィルタ
+ * @detai;
+ * 穴を掘るモンスター、壁を抜けるモンスターは却下
  */
 static bool vault_aux_trapped_pit(player_type *player_ptr, MONRACE_IDX r_idx)
 {
@@ -644,7 +699,7 @@ static bool vault_aux_trapped_pit(player_type *player_ptr, MONRACE_IDX r_idx)
 }
 
 /*!
- * @brief タイプ13の部屋…トラップpitの生成 / Type 13 -- Trapped monster pits
+ * @brief タイプ13の部屋…開門トラップpitの生成 / Type 13 -- Trapped monster pits
  * @return なし
  * @details
  * A trapped monster pit is a "big" room with a straight corridor in\n
@@ -701,7 +756,7 @@ bool build_type13(player_type *player_ptr, dun_data_type *dd_ptr)
 
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     int cur_pit_type = pick_vault_type(floor_ptr, pit_types, d_info[floor_ptr->dungeon_idx].pit);
-    vault_aux_type *n_ptr;
+    nest_pit_type *n_ptr;
 
     /* Only in Angband */
     if (floor_ptr->dungeon_idx != DUNGEON_ANGBAND)
@@ -874,10 +929,10 @@ bool build_type13(player_type *player_ptr, dun_data_type *dd_ptr)
         }
     }
 
-    for (i = 0; placing[i][2] >= 0; i++) {
-        y = yval + placing[i][0];
-        x = xval + placing[i][1];
-        place_monster_aux(player_ptr, 0, y, x, what[placing[i][2]], PM_NO_KAGE);
+    for (i = 0; place_table_trapped_pit[i][2] >= 0; i++) {
+        y = yval + place_table_trapped_pit[i][0];
+        x = xval + place_table_trapped_pit[i][1];
+        place_monster_aux(player_ptr, 0, y, x, what[place_table_trapped_pit[i][2]], PM_NO_KAGE);
     }
 
     return TRUE;

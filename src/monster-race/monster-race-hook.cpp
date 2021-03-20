@@ -636,7 +636,7 @@ bool vault_aux_dragon(player_type *player_ptr, MONRACE_IDX r_idx)
     if (none_bits(r_ptr->flags3, RF3_DRAGON))
         return FALSE;
 
-    if (none_bits(r_ptr->flags4, vault_aux_dragon_mask4))
+    if (!all_bits(r_ptr->flags4, vault_aux_dragon_mask4))
         return FALSE;
 
     if (any_bits(r_ptr->flags3, RF3_UNDEAD))

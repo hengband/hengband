@@ -152,9 +152,6 @@
     <ClCompile Include="..\..\src\autopick\autopick-describer.cpp">
       <Filter>autopick</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\room\pit-nest-kinds-table.cpp">
-      <Filter>room</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\io\signal-handlers.cpp">
       <Filter>io</Filter>
     </ClCompile>
@@ -2421,9 +2418,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\autopick\autopick-describer.h">
       <Filter>autopick</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\room\pit-nest-kinds-table.h">
-      <Filter>room</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\io\signal-handlers.h">
       <Filter>io</Filter>
