@@ -124,7 +124,7 @@ static element_type_list element_types = {
         ElementRealm::ICE, {
             _("氷", "Ice"),
             { GF_COLD, GF_INERTIAL, GF_TIME },
-            { _("冷気", "Ice"), _("遅鈍", "Inertial"), _("時間逆転", "Time Stream") },
+            { _("冷気", "Ice"), _("遅鈍", "Inertia"), _("時間逆転", "Time Stream") },
             { { GF_COLD, GF_ICE} },
         }
     },
@@ -140,7 +140,7 @@ static element_type_list element_types = {
         ElementRealm::SEA, {
             _("海", "Sea"),
             { GF_ACID, GF_WATER, GF_DISINTEGRATE },
-            { _("酸", "Acid"), _("水", "Water"), _("分解", "Disintegrate") },
+            { _("酸", "Acid"), _("水", "Water"), _("分解", "Disintegration") },
             { },
         }
     },
@@ -164,7 +164,7 @@ static element_type_list element_types = {
         ElementRealm::EARTH, {
             _("地", "Earth"),
             { GF_SHARDS, GF_FORCE, GF_METEOR },
-            { _("破片", "Shard"), _("フォース", "Force"), _("隕石", "Meteo") },
+            { _("破片", "Shards"), _("フォース", "Force"), _("隕石", "Meteor") },
             { },
         }
     },
@@ -172,7 +172,7 @@ static element_type_list element_types = {
         ElementRealm::DEATH, {
             _("瘴気", "Death"),
             { GF_POIS, GF_HYPODYNAMIA, GF_DISENCHANT },
-            { _("毒", "Poison"), _("吸血", "Drain Life"), _("劣化", "Disenchant") },
+            { _("毒", "Poison"), _("吸血", "Drain Life"), _("劣化", "Disenchantment") },
             { },
         }
     },
@@ -218,7 +218,7 @@ static element_tip_list element_tips = {
     { ElementSpells::MAG_DETECT,
     _("近くの魔法のアイテムを感知する。", "Detects magic devices.") },
     { ElementSpells::BALL_3RD,
-    _("高威力で射程が短い%sの球を放つ。", "Fire a strong ball of %s to near.") },
+    _("高威力で射程が短い%sの球を放つ。", "Fire a strong, short-range, ball of %s.") },
     { ElementSpells::BALL_1ST,
     _("%sの球を放つ。",  "Fire a ball of %s.") },
     { ElementSpells::BREATH_2ND,
@@ -228,11 +228,11 @@ static element_tip_list element_tips = {
     { ElementSpells::BOLT_3RD,
     _("%sの矢を放つ。", "Fire a bolt of %s.") },
     { ElementSpells::WAVE_1ST,
-    _("視界内の全ての敵に%sによるダメージを与える。", "Inflict all monsters with %s damage.") },
+    _("視界内の全ての敵に%sによるダメージを与える。", "Inflict %s damage on all monsters in sight.") },
     { ElementSpells::BALL_2ND,
     _("%sの球を放つ。",  "Fire a ball of %s.") },
     { ElementSpells::BURST_1ST,
-    _("ランダムな方向に%sの矢を放つ。", "Fire some bolts of %s toward random direction.") },
+    _("ランダムな方向に%sの矢を放つ。", "Fire some bolts of %s in random direction.") },
     { ElementSpells::STORM_2ND,
     _("%sの巨大な球を放つ。", "Fire a large ball of %s.") },
     { ElementSpells::BREATH_1ST,
@@ -250,25 +250,25 @@ static element_text_list element_texts = {
         "Great energy of Fire system will be able to burn out all of your enemies.")},
     { ElementRealm::ICE,
     _("氷系統の魔法はその冷たさで敵の動きを奪い尽くし、魂すらも止めてしまうでしょう。",
-        "Ice system will be freeze your enemies even their souls.")},
+        "Ice system will freeze your enemies, even their souls.")},
     { ElementRealm::SKY,
     _("空系統は大いなる天空のエネルギーを駆使して敵の全てを撃滅できます。",
-        "Sky system can terminate all of your enemies powerfully with enery of the great sky.")},
+        "Sky system can terminate all of your enemies powerfully with the energy of the great sky.")},
     { ElementRealm::SEA,
     _("海系統はその敵の全てを溶かし、大いなる海へと返してしまいます。",
-        "Sea system melts all of your enemies and returns them to the great oscean.")},
+        "Sea system melts all of your enemies and returns them to the great ocean.")},
     { ElementRealm::DARKNESS,
     _("闇系統は恐るべき力を常闇から引き出し、敵を地獄へと叩き落とすでしょう。",
-        "Dark system buries all of your enemies by scary power from dark hell.")},
+        "Dark system draws terrifying power from the darkness and knocks your enemies into hell.")},
     { ElementRealm::CHAOS,
     _("混沌系統は敵の意識も条理も捻じ曲げ、その存在をあの世に送ってしまいます。",
-        "Chaos system twists and wraps your enemies even their souls and kill all of them resultly.")},
+        "Chaos system twists and wraps your enemies, even their souls, and scatters them as dust in the wind.")},
     { ElementRealm::EARTH,
     _("地系統は偉大なる大地の力を呼び出して、数多の敵のことごとくを粉砕しようとします。",
-        "Earth system smashs all of your enemies massively using its huge powers.")},
+        "Earth system smashes all of your enemies massively using its huge powers.")},
     { ElementRealm::DEATH,
     _("瘴気系統は全ての生ける者にとって途轍もない毒です。",
-        "Death system is doomed poison for all of living your ememies.")},
+        "Death system is a tremendous poison for all living enemies.")},
 };
 
 // clang-format on
