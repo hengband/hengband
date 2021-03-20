@@ -236,7 +236,8 @@ static errr init_info(player_type *player_ptr, concptr filename, angband_header 
         (void)fd_close(fd);
     }
 
-    C_KILL(head->info_ptr, head->info_size, char);
+    C_FREE(static_cast<char *>(head->info_ptr), head->info_size, char);
+    head->info_ptr = nullptr;
     if (name)
         C_KILL(head->name_ptr, FAKE_NAME_SIZE, char);
 
