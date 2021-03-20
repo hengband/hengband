@@ -23,18 +23,19 @@ vptr (*rnfree_aux)(vptr, huge) = NULL;
  */
 vptr rnfree(vptr p, huge len)
 {
-	/* Easy to free zero bytes */
-	if (len == 0) return (NULL);
+    /* Easy to free zero bytes */
+    if (len == 0)
+        return (NULL);
 
-	/* Use the "aux" function */
-	if (rnfree_aux) return ((*rnfree_aux)(p, len));
+    /* Use the "aux" function */
+    if (rnfree_aux)
+        return ((*rnfree_aux)(p, len));
 
-	/* Use "free" */
-	free ((char*)(p));
+    /* Use "free" */
+    free((char *)(p));
 
-	return (NULL);
+    return (NULL);
 }
-
 
 /*
  * Optional auxiliary "rpanic" function
@@ -49,88 +50,88 @@ vptr (*rpanic_aux)(huge) = NULL;
  */
 vptr rpanic(huge len)
 {
-	/* Hopefully, we have a real "panic" function */
-	if (rpanic_aux) return ((*rpanic_aux)(len));
+    /* Hopefully, we have a real "panic" function */
+    if (rpanic_aux)
+        return ((*rpanic_aux)(len));
 
-	/* Attempt to crash before icky things happen */
-	core("Out of Memory!");
-	return ((vptr)(NULL));
+    /* Attempt to crash before icky things happen */
+    core("Out of Memory!");
+    return ((vptr)(NULL));
 }
-
 
 /*
  * Optional auxiliary "ralloc" function
  */
 vptr (*ralloc_aux)(huge) = NULL;
 
-
 /*
  * Allocate some memory
  */
 vptr ralloc(huge len)
 {
-	vptr mem;
+    vptr mem;
 
-	/* Allow allocation of "zero bytes" */
-	if (len == 0) return ((vptr)(NULL));
+    /* Allow allocation of "zero bytes" */
+    if (len == 0)
+        return ((vptr)(NULL));
 
 #ifdef VERBOSE_RALLOC
 
-	/* Count allocated memory */
-	virt_make += len;
+    /* Count allocated memory */
+    virt_make += len;
 
-	/* Log important allocations */
-	if (len > virt_size)
-	{
-		char buf[80];
-		sprintf(buf, "Make (%ld): %ld - %ld = %ld.",
-			len, virt_make, virt_kill, virt_make - virt_kill);
-		plog(buf);
-	}
+    /* Log important allocations */
+    if (len > virt_size) {
+        char buf[80];
+        sprintf(buf, "Make (%ld): %ld - %ld = %ld.", len, virt_make, virt_kill, virt_make - virt_kill);
+        plog(buf);
+    }
 
 #endif
 
-	/* Use the aux function if set */
-	if (ralloc_aux) mem = (*ralloc_aux)(len);
+    /* Use the aux function if set */
+    if (ralloc_aux)
+        mem = (*ralloc_aux)(len);
 
-	/* Use malloc() to allocate some memory */
-	else mem = ((vptr)(malloc((size_t)(len))));
+    /* Use malloc() to allocate some memory */
+    else
+        mem = ((vptr)(malloc((size_t)(len))));
 
-	/* We were able to acquire memory */
-	if (!mem) mem = rpanic(len);
+    /* We were able to acquire memory */
+    if (!mem)
+        mem = rpanic(len);
 
-	/* Return the memory, if any */
-	return (mem);
+    /* Return the memory, if any */
+    return (mem);
 }
-
-
-
 
 /*
  * Allocate a constant string, containing the same thing as 'str'
  */
 concptr string_make(concptr str)
 {
-	huge len = 0;
-	concptr t = str;
-	char *s, *res;
+    huge len = 0;
+    concptr t = str;
+    char *s, *res;
 
-	/* Simple sillyness */
-	if (!str) return (str);
+    /* Simple sillyness */
+    if (!str)
+        return (str);
 
-	/* Get the number of chars in the string, including terminator */
-	while (str[len++]) /* loop */;
+    /* Get the number of chars in the string, including terminator */
+    while (str[len++]) /* loop */
+        ;
 
-	/* Allocate space for the string */
-	s = res = (char*)(ralloc(len));
+    /* Allocate space for the string */
+    s = res = (char *)(ralloc(len));
 
-	/* Copy the string (with terminator) */
-	while ((*s++ = *t++) != 0) /* loop */;
+    /* Copy the string (with terminator) */
+    while ((*s++ = *t++) != 0) /* loop */
+        ;
 
-	/* Return the allocated, initialized, string */
-	return (res);
+    /* Return the allocated, initialized, string */
+    return (res);
 }
-
 
 /*
  * Un-allocate a string allocated above.
@@ -138,17 +139,19 @@ concptr string_make(concptr str)
  */
 errr string_free(concptr str)
 {
-	huge len = 0;
+    huge len = 0;
 
-	/* Succeed on non-strings */
-	if (!str) return 0;
+    /* Succeed on non-strings */
+    if (!str)
+        return 0;
 
-	/* Count the number of chars in 'str' plus the terminator */
-	while (str[len++]) /* loop */;
+    /* Count the number of chars in 'str' plus the terminator */
+    while (str[len++]) /* loop */
+        ;
 
-	/* Kill the buffer of chars we must have allocated above */
-	(void)rnfree((vptr)(str), len);
+    /* Kill the buffer of chars we must have allocated above */
+    (void)rnfree((vptr)(str), len);
 
-	/* Success */
-	return 0;
+    /* Success */
+    return 0;
 }
