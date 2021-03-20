@@ -26,6 +26,7 @@
 #include "monster/monster-util.h"
 #include "mspell/mspell-checker.h"
 #include "mspell/mspell-util.h"
+#include "mspell/mspell.h"
 #include "player/player-damage.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-crusade.h"
@@ -38,7 +39,7 @@
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param m_idx 呪文を唱えるモンスターID
  */
-HIT_POINT spell_RF6_SPECIAL_BANORLUPART(player_type *target_ptr, MONSTER_IDX m_idx)
+static MonsterSpellResult spell_RF6_SPECIAL_BANORLUPART(player_type *target_ptr, MONSTER_IDX m_idx)
 {
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
@@ -53,7 +54,7 @@ HIT_POINT spell_RF6_SPECIAL_BANORLUPART(player_type *target_ptr, MONSTER_IDX m_i
         dummy_maxhp = m_ptr->maxhp / 2;
 
         if (floor_ptr->inside_arena || target_ptr->phase_out || !summon_possible(target_ptr, m_ptr->fy, m_ptr->fx))
-            return -1;
+            return MonsterSpellResult::make_invalid();
 
         delete_monster_idx(target_ptr, floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx);
         summon_named_creature(target_ptr, 0, dummy_y, dummy_x, MON_BANOR, mode);
@@ -72,7 +73,7 @@ HIT_POINT spell_RF6_SPECIAL_BANORLUPART(player_type *target_ptr, MONSTER_IDX m_i
         dummy_maxhp = 0;
 
         if (!r_info[MON_BANOR].cur_num || !r_info[MON_LUPART].cur_num)
-            return -1;
+            return MonsterSpellResult::make_invalid();
 
         for (MONSTER_IDX k = 1; k < floor_ptr->m_max; k++) {
             if (floor_ptr->m_list[k].r_idx == MON_BANOR || floor_ptr->m_list[k].r_idx == MON_LUPART) {
@@ -93,7 +94,7 @@ HIT_POINT spell_RF6_SPECIAL_BANORLUPART(player_type *target_ptr, MONSTER_IDX m_i
         break;
     }
 
-    return 0;
+    return MonsterSpellResult::make_valid();
 }
 
 /*!
@@ -104,9 +105,8 @@ HIT_POINT spell_RF6_SPECIAL_BANORLUPART(player_type *target_ptr, MONSTER_IDX m_i
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
- * @return ダメージ量を返す。
  */
-HIT_POINT spell_RF6_SPECIAL_ROLENTO(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+static MonsterSpellResult spell_RF6_SPECIAL_ROLENTO(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     int count = 0, k;
     int num = 1 + randint1(3);
@@ -121,7 +121,8 @@ HIT_POINT spell_RF6_SPECIAL_ROLENTO(player_type *target_ptr, POSITION y, POSITIO
     if (target_ptr->blind && count) {
         msg_print(_("多くのものが間近にばらまかれる音がする。", "You hear many things scattered nearby."));
     }
-    return 0;
+
+    return MonsterSpellResult::make_valid();
 }
 
 /*!
@@ -132,9 +133,8 @@ HIT_POINT spell_RF6_SPECIAL_ROLENTO(player_type *target_ptr, POSITION y, POSITIO
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
- * @return ダメージ量を返す。
  */
-HIT_POINT spell_RF6_SPECIAL_B(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+static MonsterSpellResult spell_RF6_SPECIAL_B(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
@@ -153,9 +153,8 @@ HIT_POINT spell_RF6_SPECIAL_B(player_type *target_ptr, POSITION y, POSITION x, M
 
         teleport_away(target_ptr, m_idx, 10, TELEPORT_NONMAGICAL);
         target_ptr->update |= (PU_MONSTERS);
-        return 0;
+        return MonsterSpellResult::make_valid();
     }
-
 
     simple_monspell_message(target_ptr, m_idx, t_idx, _("%^sがあなたを掴んで空中から投げ落とした。", "%^s snatches you, soars into the sky, and drops you."),
         _("%^sが%sを掴んで空中から投げ落とした。", "%^s snatches %s, soars into the sky, and releases its grip."), TARGET_TYPE);
@@ -195,7 +194,8 @@ HIT_POINT spell_RF6_SPECIAL_B(player_type *target_ptr, POSITION y, POSITION x, M
 
     if (monster_to_monster)
         mon_take_hit_mon(target_ptr, t_idx, dam, &dead, &fear, extract_note_dies(real_r_idx(t_ptr)), m_idx);
-    return dam;
+
+    return MonsterSpellResult::make_valid();
 }
 
 /*!
@@ -206,9 +206,10 @@ HIT_POINT spell_RF6_SPECIAL_B(player_type *target_ptr, POSITION y, POSITION x, M
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
- * @return ダメージ量を返す。
+ *
+ * ラーニング不可。
  */
-HIT_POINT spell_RF6_SPECIAL(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_SPECIAL(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
@@ -217,7 +218,7 @@ HIT_POINT spell_RF6_SPECIAL(player_type *target_ptr, POSITION y, POSITION x, MON
     disturb(target_ptr, TRUE, TRUE);
     switch (m_ptr->r_idx) {
     case MON_OHMU:
-        return -1;
+        return MonsterSpellResult::make_invalid();
 
     case MON_BANORLUPART:
     case MON_BANOR:
@@ -232,9 +233,8 @@ HIT_POINT spell_RF6_SPECIAL(player_type *target_ptr, POSITION y, POSITION x, MON
         if (r_ptr->d_char == 'B') {
             return spell_RF6_SPECIAL_B(target_ptr, y, x, m_idx, t_idx, TARGET_TYPE);
             break;
+        } else {
+            return MonsterSpellResult::make_invalid();
         }
-
-        else
-            return -1;
     }
 }

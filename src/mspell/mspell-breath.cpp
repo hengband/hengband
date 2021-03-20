@@ -1,5 +1,6 @@
 ﻿#include "mspell/mspell-breath.h"
 #include "core/disturbance.h"
+#include "effect/effect-processor.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/drs-types.h"
@@ -9,6 +10,7 @@
 #include "mspell/mspell-checker.h"
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-util.h"
+#include "mspell/mspell.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
 #include "view/display-messages.h"
@@ -22,9 +24,10 @@
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
- * @return ダメージ量を返す。
+ *
+ * プレイヤーに当たったらラーニング可。
  */
-HIT_POINT spell_RF4_BREATH(player_type *target_ptr, int GF_TYPE, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF4_BREATH(player_type *target_ptr, int GF_TYPE, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     HIT_POINT dam, ms_type, drs_type = 0;
     concptr type_s;
@@ -203,9 +206,12 @@ HIT_POINT spell_RF4_BREATH(player_type *target_ptr, int GF_TYPE, POSITION y, POS
         floor_ptr->monster_noise = TRUE;
 
     sound(SOUND_BREATH);
-    breath(target_ptr, y, x, m_idx, GF_TYPE, dam, 0, TRUE, ms_type, TARGET_TYPE);
+    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_TYPE, dam, 0, TRUE, ms_type, TARGET_TYPE);
     if (smart_learn_aux && mon_to_player)
         update_smart_learn(target_ptr, m_idx, drs_type);
 
-    return dam;
+    auto res = MonsterSpellResult::make_valid();
+    res.learnable = proj_res.affected_player;
+
+    return res;
 }

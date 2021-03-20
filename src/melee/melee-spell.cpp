@@ -10,6 +10,7 @@
 #include "mspell/assign-monster-spell.h"
 #include "mspell/mspell-checker.h"
 #include "mspell/mspell-util.h"
+#include "mspell/mspell.h"
 #include "spell-realm/spells-hex.h"
 #include "system/floor-type-definition.h"
 #include "view/display-messages.h"
@@ -85,7 +86,7 @@ static void process_rememberance(melee_spell_type *ms_ptr)
 
         return;
     }
-    
+
     if (ms_ptr->thrown_spell < RF5_SPELL_START + RF5_SPELL_SIZE) {
         ms_ptr->r_ptr->r_flags5 |= (1UL << (ms_ptr->thrown_spell - RF5_SPELL_START));
         if (ms_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
@@ -93,7 +94,7 @@ static void process_rememberance(melee_spell_type *ms_ptr)
 
         return;
     }
-    
+
     if (ms_ptr->thrown_spell < RF6_SPELL_START + RF6_SPELL_SIZE) {
         ms_ptr->r_ptr->r_flags6 |= (1UL << (ms_ptr->thrown_spell - RF6_SPELL_START));
         if (ms_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
@@ -141,8 +142,8 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
         return TRUE;
 
     ms_ptr->can_remember = is_original_ap_and_seen(target_ptr, ms_ptr->m_ptr);
-    ms_ptr->dam = monspell_to_monster(target_ptr, ms_ptr->thrown_spell, ms_ptr->y, ms_ptr->x, m_idx, ms_ptr->target_idx, FALSE);
-    if (ms_ptr->dam < 0)
+    const auto res = monspell_to_monster(target_ptr, ms_ptr->thrown_spell, ms_ptr->y, ms_ptr->x, m_idx, ms_ptr->target_idx, FALSE);
+    if (!res.valid)
         return FALSE;
 
     process_special_melee_spell(target_ptr, ms_ptr);

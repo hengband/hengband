@@ -11,6 +11,7 @@
 #include "monster/monster-status.h"
 #include "mspell/mspell-type.h"
 #include "mspell/mspell-util.h"
+#include "mspell/mspell.h"
 #include "player/attack-defense-types.h"
 #include "realm/realm-song-numbers.h"
 #include "spell-realm/spells-craft.h"
@@ -104,9 +105,14 @@ static void dispel_player(player_type *creature_ptr)
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ *
+ * プレイヤーが対象ならラーニング可。
  */
-void spell_RF4_DISPEL(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF4_DISPEL(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
+    auto res = MonsterSpellResult::make_valid();
+    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+
     GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
     monster_name(target_ptr, m_idx, m_name);
     monster_name(target_ptr, t_idx, t_name);
@@ -129,7 +135,7 @@ void spell_RF4_DISPEL(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_
                 msg_print(_("弱い者いじめは止めるんだ！", ""));
         }
 
-        return;
+        return res;
     }
 
     if (TARGET_TYPE == MONSTER_TO_MONSTER) {
@@ -138,4 +144,6 @@ void spell_RF4_DISPEL(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_
 
         dispel_monster_status(target_ptr, t_idx);
     }
+
+    return res;
 }
