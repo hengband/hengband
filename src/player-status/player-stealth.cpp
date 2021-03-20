@@ -86,10 +86,11 @@ s16b PlayerStealth::class_value()
 s16b PlayerStealth::mutation_value()
 {
     s16b result = 0;
-    if (any_bits(this->owner_ptr->muta3, MUT3_XTRA_NOIS)) {
+    const auto &muta = this->owner_ptr->muta;
+    if (muta.has(MUTA::XTRA_NOIS)) {
         result -= 3;
     }
-    if (any_bits(this->owner_ptr->muta3, MUT3_MOTION)) {
+    if (muta.has(MUTA::MOTION)) {
         result += 1;
     }
     return result;

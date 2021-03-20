@@ -394,9 +394,22 @@ static void set_timed_effects(player_type *creature_ptr)
 
 static void set_mutations(player_type *creature_ptr)
 {
-    rd_u32b(&creature_ptr->muta1);
-    rd_u32b(&creature_ptr->muta2);
-    rd_u32b(&creature_ptr->muta3);
+    if (loading_savefile_version_is_older_than(2)) {
+        for (int i = 0; i < 3; i++) {
+            u32b tmp32u;
+            rd_u32b(&tmp32u);
+            std::bitset<32> rd_bits(tmp32u);
+            for (size_t j = 0; j < rd_bits.size(); j++) {
+                size_t pos = i * rd_bits.size() + j;
+                if (pos < creature_ptr->muta.size()) {
+                    auto f = static_cast<MUTA>(pos);
+                    creature_ptr->muta[f] = rd_bits[j];
+                }
+            }
+        }
+    } else {
+        rd_FlagGroup(creature_ptr->muta, rd_byte);
+    }
 }
 
 static void set_virtues(player_type *creature_ptr)

@@ -232,7 +232,7 @@ static void check_cast_racial_power(player_type *creature_ptr, rc_type *rc_ptr)
         if (rc_ptr->power_desc[rc_ptr->command_code].number < 0)
             rc_ptr->cast = exe_racial_power(creature_ptr, rc_ptr->power_desc[rc_ptr->command_code].number);
         else
-            rc_ptr->cast = exe_mutation_power(creature_ptr, rc_ptr->power_desc[rc_ptr->command_code].number);
+            rc_ptr->cast = exe_mutation_power(creature_ptr, static_cast<MUTA>(rc_ptr->power_desc[rc_ptr->command_code].number));
 
         break;
     case RACIAL_FAILURE:

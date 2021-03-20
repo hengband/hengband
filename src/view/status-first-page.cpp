@@ -296,15 +296,15 @@ static void display_first_page(player_type *creature_ptr, int xthb, int *damage,
     int xthn = creature_ptr->skill_thn + (creature_ptr->to_h_m * BTH_PLUS_ADJ);
 
     int muta_att = 0;
-    if (creature_ptr->muta2 & MUT2_HORNS)
+    if (creature_ptr->muta.has(MUTA::HORNS))
         muta_att++;
-    if (creature_ptr->muta2 & MUT2_SCOR_TAIL)
+    if (creature_ptr->muta.has(MUTA::SCOR_TAIL))
         muta_att++;
-    if (creature_ptr->muta2 & MUT2_BEAK)
+    if (creature_ptr->muta.has(MUTA::BEAK))
         muta_att++;
-    if (creature_ptr->muta2 & MUT2_TRUNK)
+    if (creature_ptr->muta.has(MUTA::TRUNK))
         muta_att++;
-    if (creature_ptr->muta2 & MUT2_TENTACLES)
+    if (creature_ptr->muta.has(MUTA::TENTACLES))
         muta_att++;
 
     int blows1 = can_attack_with_main_hand(creature_ptr) ? creature_ptr->num_blow[0] : 0;

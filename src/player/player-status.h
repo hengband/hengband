@@ -3,11 +3,14 @@
 #include "system/angband.h"
 
 /* 人畜無害なenumヘッダを先に読み込む */
+#include "mutation/mutation-flag-types.h"
 #include "player-info/base-status-types.h"
 #include "player/player-classes-types.h"
 #include "player/player-personalities-types.h"
 #include "player/player-race-types.h"
 #include "spell/spells-util.h"
+#include "util/flag-group.h"
+
 /*
  * Most of the "player" information goes here.
  *
@@ -51,11 +54,7 @@ enum empty_hand_status {
 };
 
 /*!< Weapon hand status */
-enum player_hand {
-    PLAYER_HAND_MAIN = 0x0000,
-    PLAYER_HAND_SUB = 0x0001,
-    PLAYER_HAND_OTHER = 0x0002
-};
+enum player_hand { PLAYER_HAND_MAIN = 0x0000, PLAYER_HAND_SUB = 0x0001, PLAYER_HAND_OTHER = 0x0002 };
 
 /*
  * Player sex constants (hard-coded by save-files, arrays, etc)
@@ -195,9 +194,7 @@ typedef struct player_type {
 
     PATRON_IDX chaos_patron;
 
-    BIT_FLAGS muta1; /*!< レイシャル型の変異 / "Activatable" mutations must be in MUT1_* */
-    BIT_FLAGS muta2; /*!< 常時効果つきの変異1 / Randomly activating mutations must be MUT2_* */
-    BIT_FLAGS muta3; /*!< 常時効果つきの変異2 / Other mutations will be mainly in MUT3_* */
+    FlagGroup<MUTA> muta; /*!< 突然変異 / mutations */
 
     s16b virtues[8];
     s16b vir_types[8];

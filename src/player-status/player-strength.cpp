@@ -110,12 +110,12 @@ s16b PlayerStrength::mutation_value()
 {
     s16b result = 0;
 
-    if (this->owner_ptr->muta3) {
-        if (any_bits(this->owner_ptr->muta3, MUT3_HYPER_STR)) {
+    if (this->owner_ptr->muta.any()) {
+        if (this->owner_ptr->muta.has(MUTA::HYPER_STR)) {
             result += 4;
         }
 
-        if (any_bits(this->owner_ptr->muta3, MUT3_PUNY)) {
+        if (this->owner_ptr->muta.has(MUTA::PUNY)) {
             result -= 4;
         }
     }

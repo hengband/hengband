@@ -202,9 +202,7 @@ void self_knowledge(player_type *creature_ptr)
         set_race_ability_info(creature_ptr, self_ptr);
 
     set_class_ability_info(creature_ptr, self_ptr);
-    set_mutation_info_1(creature_ptr, self_ptr);
-    set_mutation_info_2(creature_ptr, self_ptr);
-    set_mutation_info_3(creature_ptr, self_ptr);
+    set_mutation_info(creature_ptr, self_ptr);
     set_bad_status_info(creature_ptr, self_ptr);
     set_curse_info(creature_ptr, self_ptr);
     set_body_improvement_info_1(creature_ptr, self_ptr);

@@ -150,7 +150,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
         monster_race *r_ptr = &r_info[m_ptr->r_idx];
         if (!is_hostile(m_ptr)
             && !(creature_ptr->confused || creature_ptr->image || !m_ptr->ml || creature_ptr->stun
-                || ((creature_ptr->muta2 & MUT2_BERS_RAGE) && is_shero(creature_ptr)))
+                || (creature_ptr->muta.has(MUTA::BERS_RAGE) && is_shero(creature_ptr)))
             && pattern_seq(creature_ptr, creature_ptr->y, creature_ptr->x, y, x) && (p_can_enter || p_can_kill_walls)) {
             (void)set_monster_csleep(creature_ptr, g_ptr->m_idx, 0);
             monster_desc(creature_ptr, m_name, m_ptr, 0);

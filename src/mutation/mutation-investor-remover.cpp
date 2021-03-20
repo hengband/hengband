@@ -18,7 +18,7 @@ static void sweep_gain_mutation(player_type *creature_ptr, glm_type *gm_ptr)
 
     while (attempts_left--) {
         switch_gain_mutation(creature_ptr, gm_ptr);
-        if ((gm_ptr->muta_class != NULL) && (gm_ptr->muta_which != 0) && none_bits(*gm_ptr->muta_class, gm_ptr->muta_which))
+        if (gm_ptr->muta_which != MUTA::MAX && creature_ptr->muta.has_not(gm_ptr->muta_which))
             gm_ptr->muta_chosen = TRUE;
 
         if (gm_ptr->muta_chosen)
@@ -31,147 +31,142 @@ static void race_dependent_mutation(player_type *creature_ptr, glm_type *gm_ptr)
     if (gm_ptr->choose_mut != 0)
         return;
 
-    if (creature_ptr->prace == RACE_VAMPIRE && none_bits(creature_ptr->muta1, MUT1_HYPN_GAZE) && (randint1(10) < 7)) {
-        gm_ptr->muta_class = &(creature_ptr->muta1);
-        gm_ptr->muta_which = MUT1_HYPN_GAZE;
+    if (creature_ptr->prace == RACE_VAMPIRE && creature_ptr->muta.has_not(MUTA::HYPN_GAZE) && (randint1(10) < 7)) {
+        gm_ptr->muta_which = MUTA::HYPN_GAZE;
         gm_ptr->muta_desc = _("眼が幻惑的になった...", "Your eyes look mesmerizing...");
         return;
     }
 
-    if (creature_ptr->prace == RACE_IMP && none_bits(creature_ptr->muta2, MUT2_HORNS) && (randint1(10) < 7)) {
-        gm_ptr->muta_class = &(creature_ptr->muta2);
-        gm_ptr->muta_which = MUT2_HORNS;
+    if (creature_ptr->prace == RACE_IMP && creature_ptr->muta.has_not(MUTA::HORNS) && (randint1(10) < 7)) {
+        gm_ptr->muta_which = MUTA::HORNS;
         gm_ptr->muta_desc = _("角が額から生えてきた！", "Horns pop forth into your forehead!");
         return;
     }
 
-    if (creature_ptr->prace == RACE_YEEK && none_bits(creature_ptr->muta1, MUT1_SHRIEK) && (randint1(10) < 7)) {
-        gm_ptr->muta_class = &(creature_ptr->muta1);
-        gm_ptr->muta_which = MUT1_SHRIEK;
+    if (creature_ptr->prace == RACE_YEEK && creature_ptr->muta.has_not(MUTA::SHRIEK) && (randint1(10) < 7)) {
+        gm_ptr->muta_which = MUTA::SHRIEK;
         gm_ptr->muta_desc = _("声質がかなり強くなった。", "Your vocal cords get much tougher.");
         return;
     }
 
-    if (creature_ptr->prace == RACE_BEASTMAN && none_bits(creature_ptr->muta1, MUT1_POLYMORPH) && (randint1(10) < 2)) {
-        gm_ptr->muta_class = &(creature_ptr->muta1);
-        gm_ptr->muta_which = MUT1_POLYMORPH;
+    if (creature_ptr->prace == RACE_BEASTMAN && creature_ptr->muta.has_not(MUTA::POLYMORPH) && (randint1(10) < 2)) {
+        gm_ptr->muta_which = MUTA::POLYMORPH;
         gm_ptr->muta_desc = _("あなたの肉体は変化できるようになった、", "Your body seems mutable.");
         return;
     }
 
-    if (creature_ptr->prace == RACE_MIND_FLAYER && none_bits(creature_ptr->muta2, MUT2_TENTACLES) && (randint1(10) < 7)) {
-        gm_ptr->muta_class = &(creature_ptr->muta2);
-        gm_ptr->muta_which = MUT2_TENTACLES;
+    if (creature_ptr->prace == RACE_MIND_FLAYER && creature_ptr->muta.has_not(MUTA::TENTACLES) && (randint1(10) < 7)) {
+        gm_ptr->muta_which = MUTA::TENTACLES;
         gm_ptr->muta_desc = _("邪悪な触手が口の周りに生えた。", "Evil-looking tentacles sprout from your mouth.");
     }
 }
 
 static void neutralize_base_status(player_type *creature_ptr, glm_type *gm_ptr)
 {
-    if (gm_ptr->muta_which == MUT3_PUNY) {
-        if (any_bits(creature_ptr->muta3, MUT3_HYPER_STR)) {
+    if (gm_ptr->muta_which == MUTA::PUNY) {
+        if (creature_ptr->muta.has(MUTA::HYPER_STR)) {
             msg_print(_("あなたはもう超人的に強くはない！", "You no longer feel super-strong!"));
-            reset_bits(creature_ptr->muta3, MUT3_HYPER_STR);
+            creature_ptr->muta.reset(MUTA::HYPER_STR);
         }
 
         return;
     }
 
-    if (gm_ptr->muta_which == MUT3_HYPER_STR) {
-        if (any_bits(creature_ptr->muta3, MUT3_PUNY)) {
+    if (gm_ptr->muta_which == MUTA::HYPER_STR) {
+        if (creature_ptr->muta.has(MUTA::PUNY)) {
             msg_print(_("あなたはもう虚弱ではない！", "You no longer feel puny!"));
-            reset_bits(creature_ptr->muta3, MUT3_PUNY);
+            creature_ptr->muta.reset(MUTA::PUNY);
         }
 
         return;
     }
 
-    if (gm_ptr->muta_which == MUT3_MORONIC) {
-        if (any_bits(creature_ptr->muta3, MUT3_HYPER_INT)) {
+    if (gm_ptr->muta_which == MUTA::MORONIC) {
+        if (creature_ptr->muta.has(MUTA::HYPER_INT)) {
             msg_print(_("あなたの脳はもう生体コンピュータではない。", "Your brain is no longer a living computer."));
-            reset_bits(creature_ptr->muta3, MUT3_HYPER_INT);
+            creature_ptr->muta.reset(MUTA::HYPER_INT);
         }
 
         return;
     }
 
-    if (gm_ptr->muta_which == MUT3_HYPER_INT) {
-        if (any_bits(creature_ptr->muta3, MUT3_MORONIC)) {
+    if (gm_ptr->muta_which == MUTA::HYPER_INT) {
+        if (creature_ptr->muta.has(MUTA::MORONIC)) {
             msg_print(_("あなたはもう精神薄弱ではない。", "You are no longer moronic."));
-            reset_bits(creature_ptr->muta3, MUT3_MORONIC);
+            creature_ptr->muta.reset(MUTA::MORONIC);
         }
 
         return;
     }
 
-    if (gm_ptr->muta_which == MUT3_IRON_SKIN) {
-        if (any_bits(creature_ptr->muta3, MUT3_SCALES)) {
+    if (gm_ptr->muta_which == MUTA::IRON_SKIN) {
+        if (creature_ptr->muta.has(MUTA::SCALES)) {
             msg_print(_("鱗がなくなった。", "You lose your scales."));
-            reset_bits(creature_ptr->muta3, MUT3_SCALES);
+            creature_ptr->muta.reset(MUTA::SCALES);
         }
 
-        if (any_bits(creature_ptr->muta3, MUT3_FLESH_ROT)) {
+        if (creature_ptr->muta.has(MUTA::FLESH_ROT)) {
             msg_print(_("肉体が腐乱しなくなった。", "Your flesh rots no longer."));
-            reset_bits(creature_ptr->muta3, MUT3_FLESH_ROT);
+            creature_ptr->muta.reset(MUTA::FLESH_ROT);
         }
 
-        if (any_bits(creature_ptr->muta3, MUT3_WART_SKIN)) {
+        if (creature_ptr->muta.has(MUTA::WART_SKIN)) {
             msg_print(_("肌のイボイボがなくなった。", "You lose your warts."));
-            reset_bits(creature_ptr->muta3, MUT3_WART_SKIN);
+            creature_ptr->muta.reset(MUTA::WART_SKIN);
         }
 
         return;
     }
 
-    if (gm_ptr->muta_which == MUT3_WART_SKIN || gm_ptr->muta_which == MUT3_SCALES || gm_ptr->muta_which == MUT3_FLESH_ROT) {
-        if (any_bits(creature_ptr->muta3, MUT3_IRON_SKIN)) {
+    if (gm_ptr->muta_which == MUTA::WART_SKIN || gm_ptr->muta_which == MUTA::SCALES || gm_ptr->muta_which == MUTA::FLESH_ROT) {
+        if (creature_ptr->muta.has(MUTA::IRON_SKIN)) {
             msg_print(_("あなたの肌はもう鉄ではない。", "Your skin is no longer made of steel."));
-            reset_bits(creature_ptr->muta3, MUT3_IRON_SKIN);
+            creature_ptr->muta.reset(MUTA::IRON_SKIN);
         }
 
         return;
     }
 
-    if (gm_ptr->muta_which == MUT3_FEARLESS) {
-        if (any_bits(creature_ptr->muta2, MUT2_COWARDICE)) {
+    if (gm_ptr->muta_which == MUTA::FEARLESS) {
+        if (creature_ptr->muta.has(MUTA::COWARDICE)) {
             msg_print(_("臆病でなくなった。", "You are no longer cowardly."));
-            reset_bits(creature_ptr->muta2, MUT2_COWARDICE);
+            creature_ptr->muta.reset(MUTA::COWARDICE);
         }
 
         return;
     }
 
-    if (gm_ptr->muta_which == MUT3_FLESH_ROT) {
-        if (any_bits(creature_ptr->muta3, MUT3_REGEN)) {
+    if (gm_ptr->muta_which == MUTA::FLESH_ROT) {
+        if (creature_ptr->muta.has(MUTA::REGEN)) {
             msg_print(_("急速に回復しなくなった。", "You stop regenerating."));
-            reset_bits(creature_ptr->muta3, MUT3_REGEN);
+            creature_ptr->muta.reset(MUTA::REGEN);
         }
 
         return;
     }
 
-    if (gm_ptr->muta_which == MUT3_REGEN) {
-        if (any_bits(creature_ptr->muta3, MUT3_FLESH_ROT)) {
+    if (gm_ptr->muta_which == MUTA::REGEN) {
+        if (creature_ptr->muta.has(MUTA::FLESH_ROT)) {
             msg_print(_("肉体が腐乱しなくなった。", "Your flesh stops rotting."));
-            reset_bits(creature_ptr->muta3, MUT3_FLESH_ROT);
+            creature_ptr->muta.reset(MUTA::FLESH_ROT);
         }
 
         return;
     }
 
-    if (gm_ptr->muta_which == MUT3_LIMBER) {
-        if (any_bits(creature_ptr->muta3, MUT3_ARTHRITIS)) {
+    if (gm_ptr->muta_which == MUTA::LIMBER) {
+        if (creature_ptr->muta.has(MUTA::ARTHRITIS)) {
             msg_print(_("関節が痛くなくなった。", "Your joints stop hurting."));
-            reset_bits(creature_ptr->muta3, MUT3_ARTHRITIS);
+            creature_ptr->muta.reset(MUTA::ARTHRITIS);
         }
 
         return;
     }
 
-    if (gm_ptr->muta_which == MUT3_ARTHRITIS) {
-        if (any_bits(creature_ptr->muta3, MUT3_LIMBER)) {
+    if (gm_ptr->muta_which == MUTA::ARTHRITIS) {
+        if (creature_ptr->muta.has(MUTA::LIMBER)) {
             msg_print(_("あなたはしなやかでなくなった。", "You no longer feel limber."));
-            reset_bits(creature_ptr->muta3, MUT3_LIMBER);
+            creature_ptr->muta.reset(MUTA::LIMBER);
         }
 
         return;
@@ -180,24 +175,24 @@ static void neutralize_base_status(player_type *creature_ptr, glm_type *gm_ptr)
 
 static void neutralize_other_status(player_type *creature_ptr, glm_type *gm_ptr)
 {
-    if (gm_ptr->muta_which == MUT2_COWARDICE) {
-        if (any_bits(creature_ptr->muta3, MUT3_FEARLESS)) {
+    if (gm_ptr->muta_which == MUTA::COWARDICE) {
+        if (creature_ptr->muta.has(MUTA::FEARLESS)) {
             msg_print(_("恐れ知らずでなくなった。", "You no longer feel fearless."));
-            reset_bits(creature_ptr->muta3, (MUT3_FEARLESS));
+            creature_ptr->muta.reset(MUTA::FEARLESS);
         }
     }
 
-    if (gm_ptr->muta_which == MUT2_BEAK) {
-        if (any_bits(creature_ptr->muta2, MUT2_TRUNK)) {
+    if (gm_ptr->muta_which == MUTA::BEAK) {
+        if (creature_ptr->muta.has(MUTA::TRUNK)) {
             msg_print(_("あなたの鼻はもう象の鼻のようではなくなった。", "Your nose is no longer elephantine."));
-            reset_bits(creature_ptr->muta2, (MUT2_TRUNK));
+            creature_ptr->muta.reset(MUTA::TRUNK);
         }
     }
 
-    if (gm_ptr->muta_which == MUT2_TRUNK) {
-        if (any_bits(creature_ptr->muta2, MUT2_BEAK)) {
+    if (gm_ptr->muta_which == MUTA::TRUNK) {
+        if (creature_ptr->muta.has(MUTA::BEAK)) {
             msg_print(_("硬いクチバシがなくなった。", "You no longer have a hard beak."));
-            reset_bits(creature_ptr->muta2, (MUT2_BEAK));
+            creature_ptr->muta.reset(MUTA::BEAK);
         }
     }
 }
@@ -221,14 +216,11 @@ bool gain_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
     race_dependent_mutation(creature_ptr, gm_ptr);
     msg_print(_("突然変異した！", "You mutate!"));
     msg_print(gm_ptr->muta_desc);
-    if (gm_ptr->muta_class != NULL)
-        set_bits(*gm_ptr->muta_class, gm_ptr->muta_which);
+    if (gm_ptr->muta_which != MUTA::MAX)
+        creature_ptr->muta.set(gm_ptr->muta_which);
 
-    if (gm_ptr->muta_class == &(creature_ptr->muta3)) {
-        neutralize_base_status(creature_ptr, gm_ptr);
-    } else if (gm_ptr->muta_class == &(creature_ptr->muta2)) {
-        neutralize_other_status(creature_ptr, gm_ptr);
-    }
+    neutralize_base_status(creature_ptr, gm_ptr);
+    neutralize_other_status(creature_ptr, gm_ptr);
 
     creature_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(creature_ptr);
     set_bits(creature_ptr->update, PU_BONUS);
@@ -244,8 +236,8 @@ static void sweep_lose_mutation(player_type *creature_ptr, glm_type *glm_ptr)
 
     while (attempts_left--) {
         switch_lose_mutation(creature_ptr, glm_ptr);
-        if (glm_ptr->muta_class && glm_ptr->muta_which) {
-            if (any_bits(*glm_ptr->muta_class, glm_ptr->muta_which)) {
+        if (glm_ptr->muta_which != MUTA::MAX) {
+            if (creature_ptr->muta.has(glm_ptr->muta_which)) {
                 glm_ptr->muta_chosen = TRUE;
             }
         }
@@ -269,8 +261,8 @@ bool lose_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
         return FALSE;
 
     msg_print(glm_ptr->muta_desc);
-    if (glm_ptr->muta_class != NULL)
-        reset_bits(*glm_ptr->muta_class, (glm_ptr->muta_which));
+    if (glm_ptr->muta_which != MUTA::MAX)
+        creature_ptr->muta.reset(glm_ptr->muta_which);
 
     set_bits(creature_ptr->update, PU_BONUS);
     handle_stuff(creature_ptr);
@@ -280,10 +272,10 @@ bool lose_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
 
 void lose_all_mutations(player_type *creature_ptr)
 {
-    if (creature_ptr->muta1 || creature_ptr->muta2 || creature_ptr->muta3) {
+    if (creature_ptr->muta.any()) {
         chg_virtue(creature_ptr, V_CHANCE, -5);
         msg_print(_("全ての突然変異が治った。", "You are cured of all mutations."));
-        creature_ptr->muta1 = creature_ptr->muta2 = creature_ptr->muta3 = 0;
+        creature_ptr->muta.clear();
         set_bits(creature_ptr->update, PU_BONUS);
         handle_stuff(creature_ptr);
         creature_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(creature_ptr);
