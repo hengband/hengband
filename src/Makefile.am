@@ -921,6 +921,15 @@ hengband_SOURCES = \
 
 EXTRA_hengband_SOURCES = \
 	angband.ico angband.rc ang_eng.rc maid-x11.cpp main-win.cpp \
+	main-win/main-win-bg.cpp main-win/main-win-bg.h \
+	main-win/main-win-define.h \
+	main-win/main-win-file-utils.cpp main-win/main-win-file-utils.h \
+	main-win/main-win-mci.cpp main-win/main-win-mci.h \
+	main-win/main-win-mmsystem.h \
+	main-win/main-win-music.cpp main-win/main-win-music.h \
+	main-win/main-win-sound.cpp main-win/main-win-sound.h \
+	main-win/main-win-tokenizer.cpp main-win/main-win-tokenizer.h \
+	main-win/main-win-windows.h \
 	makefile.bcc makefile.std term/readdib.cpp term/readdib.h wall.bmp
 
 EXTRA_DIST = \
