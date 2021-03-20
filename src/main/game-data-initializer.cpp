@@ -103,10 +103,10 @@ errr init_other(player_type *player_ptr)
 errr init_object_alloc(void)
 {
     s16b aux[MAX_DEPTH];
-    (void)C_WIPE(&aux, MAX_DEPTH, s16b);
+    (void)C_WIPE(aux, MAX_DEPTH, s16b);
 
     s16b num[MAX_DEPTH];
-    (void)C_WIPE(&num, MAX_DEPTH, s16b);
+    (void)C_WIPE(num, MAX_DEPTH, s16b);
 
     if (alloc_kind_table)
         C_KILL(alloc_kind_table, alloc_kind_size, alloc_entry);
