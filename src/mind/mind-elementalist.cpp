@@ -70,7 +70,7 @@ enum class ElementSpells {
     CURE = 3,
     BOLT_2ND = 4,
     MAG_DETECT = 5,
-    BEAM_1ST = 6,
+    BALL_3RD = 6,
     BALL_1ST = 7,
     BREATH_2ND = 8,
     ANNIHILATE = 9,
@@ -91,6 +91,7 @@ struct element_type {
     std::string_view title; //!< 領域名
     std::array<spells_type, 3> type; //!< 属性タイプリスト
     std::array<std::string_view, 3> name; //!< 属性名リスト
+    std::unordered_map<spells_type, spells_type> extra; //!< 追加属性タイプ
 };
 
 /*!
@@ -104,6 +105,7 @@ struct element_power {
 using element_type_list = const std::unordered_map<ElementRealm, element_type>;
 using element_power_list = const std::unordered_map<ElementSpells, element_power>;
 using element_tip_list = const std::unordered_map<ElementSpells, std::string_view>;
+using element_text_list = const std::unordered_map<ElementRealm, std::string_view>;
 
 // clang-format off
 /*!
@@ -113,8 +115,9 @@ static element_type_list element_types = {
     {
         ElementRealm::FIRE, {
             _("炎", "Fire"),
-            { GF_FIRE, GF_PLASMA, GF_HOLY_FIRE },
-            { _("火炎", "Fire"), _("プラズマ", "Plasma"), _("聖気", "Holy Fire") },
+            { GF_FIRE, GF_ROCKET, GF_PLASMA },
+            { _("火炎", "Fire"), _("爆発", "Explosion"), _("プラズマ", "Plasma") },
+            { },
         }
     },
     {
@@ -122,6 +125,7 @@ static element_type_list element_types = {
             _("氷", "Ice"),
             { GF_COLD, GF_INERTIAL, GF_TIME },
             { _("冷気", "Ice"), _("遅鈍", "Inertial"), _("時間逆転", "Time Stream") },
+            { { GF_COLD, GF_ICE} },
         }
     },
     {
@@ -129,6 +133,7 @@ static element_type_list element_types = {
             _("空", "Sky"),
             { GF_ELEC, GF_LITE, GF_MANA },
             { _("電撃", "Lightning"), _("光", "Light"), _("魔力", "Mana") },
+            { },
         }
     },
     {
@@ -136,6 +141,7 @@ static element_type_list element_types = {
             _("海", "Sea"),
             { GF_ACID, GF_WATER, GF_DISINTEGRATE },
             { _("酸", "Acid"), _("水", "Water"), _("分解", "Disintegrate") },
+            { },
         }
     },
     {
@@ -143,13 +149,15 @@ static element_type_list element_types = {
             _("闇", "Darkness"),
             { GF_DARK, GF_NETHER, GF_HELL_FIRE },
             { _("暗黒", "Darkness"), _("地獄", "Nether"), _("業火", "Hell Fire") },
+            { },
         }
     },
     {
         ElementRealm::CHAOS, {
             _("混沌", "Chaos"),
-            { GF_CONFUSION, GF_NEXUS, GF_CHAOS },
-            { _("混乱", "Confusion"), _("因果混乱", "Nexus"), _("カオス", "Chaos") },
+            { GF_CONFUSION, GF_CHAOS, GF_NEXUS },
+            { _("混乱", "Confusion"), _("カオス", "Chaos"), _("因果混乱", "Nexus") },
+            { },
         }
     },
     {
@@ -157,6 +165,7 @@ static element_type_list element_types = {
             _("地", "Earth"),
             { GF_SHARDS, GF_FORCE, GF_METEOR },
             { _("破片", "Shard"), _("フォース", "Force"), _("隕石", "Meteo") },
+            { },
         }
     },
     {
@@ -164,6 +173,7 @@ static element_type_list element_types = {
             _("瘴気", "Death"),
             { GF_POIS, GF_HYPODYNAMIA, GF_DISENCHANT },
             { _("毒", "Poison"), _("吸血", "Drain Life"), _("劣化", "Disenchant") },
+            { },
         }
     },
 };
@@ -173,13 +183,13 @@ static element_type_list element_types = {
  */
 static element_power_list element_powers = {
     { ElementSpells::BOLT_1ST,   { 0, {  1,  1,  15, _("%sの矢", "%s Bolt") }}},
-    { ElementSpells::MON_DETECT, { 0, {  2,  1,  20, _("モンスター感知", "Detect Monsters") }}},
+    { ElementSpells::MON_DETECT, { 0, {  2,  2,  20, _("モンスター感知", "Detect Monsters") }}},
     { ElementSpells::PERCEPT,    { 0, {  5,  5,  50, _("擬似鑑定", "Psychometry") }}},
     { ElementSpells::CURE,       { 0, {  6,  5,  35, _("傷の治癒", "Cure Wounds") }}},
     { ElementSpells::BOLT_2ND,   { 1, {  8,  6,  35, _("%sの矢", "%s Bolt") }}},
     { ElementSpells::MAG_DETECT, { 0, { 10,  8,  60, _("魔法感知", "Detect Magical Objs") }}},
-    { ElementSpells::BEAM_1ST,   { 0, { 15, 10,  45, _("%sの鞭", "%s Whip") }}},
-    { ElementSpells::BALL_1ST,   { 0, { 18, 15,  70, _("%sの球", "%s Ball") }}},
+    { ElementSpells::BALL_3RD,   { 2, { 15, 10,  55, _("%s放射", "%s Spout") }}},
+    { ElementSpells::BALL_1ST,   { 0, { 18, 13,  65, _("%sの球", "%s Ball") }}},
     { ElementSpells::BREATH_2ND, { 1, { 21, 20,  70, _("%sのブレス", "Breath of %s") }}},
     { ElementSpells::ANNIHILATE, { 0, { 24, 20,  75, _("モンスター消滅", "Annihilation") }}},
     { ElementSpells::BOLT_3RD,   { 2, { 25, 15,  60, _("%sの矢", "%s Bolt") }}},
@@ -207,8 +217,8 @@ static element_tip_list element_tips = {
     _("%sの矢を放つ。", "Fire a bolt of %s.") },
     { ElementSpells::MAG_DETECT,
     _("近くの魔法のアイテムを感知する。", "Detects magic devices.") },
-    { ElementSpells::BEAM_1ST,
-    _("高威力で射程が短い%sのビームを放つ。", "Fire a short and strong beam of %s.") },
+    { ElementSpells::BALL_3RD,
+    _("高威力で射程が短い%sの球を放つ。", "Fire a strong ball of %s to near.") },
     { ElementSpells::BALL_1ST,
     _("%sの球を放つ。",  "Fire a ball of %s.") },
     { ElementSpells::BREATH_2ND,
@@ -229,6 +239,36 @@ static element_tip_list element_tips = {
     _("%sのブレスを吐く。", "Fire a breath of %s.") },
     { ElementSpells::STORM_3ND,
     _("%sの巨大な球を放つ。", "Fire a large ball of %s.") },
+};
+
+/*!
+ * @brief 元素魔法選択時説明文定義
+ */
+static element_text_list element_texts = {
+    { ElementRealm::FIRE,
+    _("炎系統は巨大なエネルギーで灼熱を生み出し、全ての敵を燃やし尽くそうとします。",
+        "Great energy of Fire system will be able to burn out all of your enemies.")},
+    { ElementRealm::ICE,
+    _("氷系統の魔法はその冷たさで敵の動きを奪い尽くし、魂すらも止めてしまうでしょう。",
+        "Ice system will be freeze your enemies even their souls.")},
+    { ElementRealm::SKY,
+    _("空系統は大いなる天空のエネルギーを駆使して敵の全てを撃滅できます。",
+        "Sky system can terminate all of your enemies powerfully with enery of the great sky.")},
+    { ElementRealm::SEA,
+    _("海系統はその敵の全てを溶かし、大いなる海へと返してしまいます。",
+        "Sea system melts all of your enemies and returns them to the great oscean.")},
+    { ElementRealm::DARKNESS,
+    _("闇系統は恐るべき力を常闇から引き出し、敵を地獄へと叩き落とすでしょう。",
+        "Dark system buries all of your enemies by scary power from dark hell.")},
+    { ElementRealm::CHAOS,
+    _("混沌系統は敵の意識も条理も捻じ曲げ、その存在をあの世に送ってしまいます。",
+        "Chaos system twists and wraps your enemies even their souls and kill all of them resultly.")},
+    { ElementRealm::EARTH,
+    _("地系統は偉大なる大地の力を呼び出して、数多の敵のことごとくを粉砕しようとします。",
+        "Earth system smashs all of your enemies massively using its huge powers.")},
+    { ElementRealm::DEATH,
+    _("瘴気系統は全ての生ける者にとって途轍もない毒です。",
+        "Death system is doomed poison for all of living your ememies.")},
 };
 
 // clang-format on
@@ -264,6 +304,22 @@ static std::array<spells_type, 3> get_element_types(int realm_idx)
 spells_type get_element_type(int realm_idx, int n)
 {
     return get_element_types(realm_idx)[n];
+}
+
+/*!
+ * @brief 元素魔法領域のn番目の呪文用の属性を返す
+ * @param realm_idx 領域番号
+ * @param n 属性の何番目か
+ * @return 属性タイプ
+ */
+static spells_type get_element_spells_type(player_type *caster_ptr, int n) {
+    auto realm = element_types.at(static_cast<ElementRealm>(caster_ptr->realm1));
+    auto t = realm.type.at(n);
+    if (realm.extra.find(t) != realm.extra.end()) {
+        if (randint0(100) < caster_ptr->lev * 2)
+            return realm.extra.at(t);
+    }
+    return t;
 }
 
 /*!
@@ -351,7 +407,7 @@ void get_element_effect_info(player_type *caster_ptr, int spell_idx, char *p)
     case ElementSpells::BOLT_2ND:
         sprintf(p, " %s%dd%d", KWD_DAM, 8 + ((plev - 5) / 4), 8);
         break;
-    case ElementSpells::BEAM_1ST:
+    case ElementSpells::BALL_3RD:
         sprintf(p, " %s%d", KWD_DAM, (50 + plev * 2));
         break;
     case ElementSpells::BALL_1ST:
@@ -359,7 +415,7 @@ void get_element_effect_info(player_type *caster_ptr, int spell_idx, char *p)
         break;
     case ElementSpells::BREATH_2ND:
         dam = p_ptr->chp / 2;
-        sprintf(p, " %s%d", KWD_DAM, (dam > 120) ? 120 : dam);
+        sprintf(p, " %s%d", KWD_DAM, (dam > 150) ? 150 : dam);
         break;
     case ElementSpells::ANNIHILATE:
         sprintf(p, " %s%d", _("効力:", "pow "), 50 + plev);
@@ -400,7 +456,7 @@ void get_element_effect_info(player_type *caster_ptr, int spell_idx, char *p)
 static bool cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx)
 {
     auto spell = static_cast<ElementSpells>(spell_idx);
-    auto types = get_element_types(caster_ptr->realm1);
+    spells_type typ;
     DIRECTION dir;
     PLAYER_LEVEL plev = caster_ptr->lev;
     HIT_POINT dam;
@@ -412,7 +468,8 @@ static bool cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx)
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         dam = damroll(3 + ((plev - 1) / 5), 4);
-        (void)fire_bolt(caster_ptr, types[0], dir, dam);
+        typ = get_element_spells_type(caster_ptr, 0);
+        (void)fire_bolt(caster_ptr, typ, dir, dam);
         break;
     case ElementSpells::MON_DETECT:
         (void)detect_monsters_normal(caster_ptr, DETECT_RAD_DEFAULT);
@@ -428,8 +485,9 @@ static bool cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx)
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         dam = damroll(8 + ((plev - 5) / 4), 8);
-        if (fire_bolt_or_beam(caster_ptr, plev, types[1], dir, dam)) {
-            if (types[1] == GF_HYPODYNAMIA) {
+        typ = get_element_spells_type(caster_ptr, 1);
+        if (fire_bolt_or_beam(caster_ptr, plev, typ, dir, dam)) {
+            if (typ == GF_HYPODYNAMIA) {
                 (void)hp_player(caster_ptr, dam / 2);
             }
         }
@@ -437,25 +495,29 @@ static bool cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx)
     case ElementSpells::MAG_DETECT:
         (void)detect_objects_magic(caster_ptr, DETECT_RAD_DEFAULT);
         break;
-    case ElementSpells::BEAM_1ST:
-        project_length = 2;
+    case ElementSpells::BALL_3RD:
+        project_length = 4;
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
-        (void)fire_beam(caster_ptr, types[0], dir, 50 + plev * 2);
+        typ = get_element_spells_type(caster_ptr, 0);
+        dam = 50 + plev * 2;
+        (void)fire_ball(caster_ptr, typ, dir, dam, 1);
         project_length = 0;
         break;
     case ElementSpells::BALL_1ST:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         dam = 55 + plev;
-        (void)fire_ball(caster_ptr, types[0], dir, dam, 2);
+        typ = get_element_spells_type(caster_ptr, 0);
+        (void)fire_ball(caster_ptr, typ, dir, dam, 2);
         break;
     case ElementSpells::BREATH_2ND:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
-        dam = caster_ptr->chp / 2;
-        if (fire_breath(caster_ptr, types[1], dir, dam, 3)) {
-            if (types[1] == GF_HYPODYNAMIA) {
+        dam = MIN(150, caster_ptr->chp / 2);
+        typ = get_element_spells_type(caster_ptr, 1);
+        if (fire_breath(caster_ptr, typ, dir, dam, 3)) {
+            if (typ == GF_HYPODYNAMIA) {
                 (void)hp_player(caster_ptr, dam / 2);
             }
         }
@@ -469,18 +531,21 @@ static bool cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx)
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         dam = damroll(12 + ((plev - 5) / 4), 8);
-        fire_bolt_or_beam(caster_ptr, plev, types[2], dir, dam);
+        typ = get_element_spells_type(caster_ptr, 2);
+        fire_bolt_or_beam(caster_ptr, plev, typ, dir, dam);
         break;
     case ElementSpells::WAVE_1ST:
         dam = randint1(plev * 4);
-        project_all_los(caster_ptr, types[0], dam);
+        typ = get_element_spells_type(caster_ptr, 0);
+        project_all_los(caster_ptr, typ, dam);
         break;
     case ElementSpells::BALL_2ND:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         dam = 75 + plev;
-        if (fire_ball(caster_ptr, types[1], dir, dam, 2)) {
-            if (types[1] == GF_HYPODYNAMIA) {
+        typ = get_element_spells_type(caster_ptr, 1);
+        if (fire_ball(caster_ptr, typ, dir, dam, 2)) {
+            if (typ == GF_HYPODYNAMIA) {
                 (void)hp_player(caster_ptr, dam / 2);
             }
         }
@@ -489,6 +554,7 @@ static bool cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx)
         y = caster_ptr->y;
         x = caster_ptr->x;
         num = damroll(5, 3);
+        typ = get_element_spells_type(caster_ptr, 0);
         for (int k = 0; k < num; k++) {
             int attempts = 1000;
             while (attempts--) {
@@ -496,15 +562,16 @@ static bool cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx)
                 if (!player_bold(caster_ptr, y, x))
                     break;
             }
-            project(caster_ptr, 0, 0, y, x, damroll(6 + plev / 8, 10), types[0], (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL), -1);
+            project(caster_ptr, 0, 0, y, x, damroll(6 + plev / 8, 10), typ, (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL), -1);
         }
         break;
     case ElementSpells::STORM_2ND:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         dam = 125 + plev * 2;
-        if (fire_ball(caster_ptr, types[1], dir, dam, 4)) {
-            if (types[1] == GF_HYPODYNAMIA) {
+        typ = get_element_spells_type(caster_ptr, 1);
+        if (fire_ball(caster_ptr, typ, dir, dam, 4)) {
+            if (typ == GF_HYPODYNAMIA) {
                 (void)hp_player(caster_ptr, dam / 2);
             }
         }
@@ -513,13 +580,15 @@ static bool cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx)
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         dam = caster_ptr->chp * 2 / 3;
-        (void)fire_breath(caster_ptr, types[0], dir, dam, 3);
+        typ = get_element_spells_type(caster_ptr, 0);
+        (void)fire_breath(caster_ptr, typ, dir, dam, 3);
         break;
     case ElementSpells::STORM_3ND:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         dam = 300 + plev * 5;
-        (void)fire_ball(caster_ptr, types[2], dir, dam, 5);
+        typ = get_element_spells_type(caster_ptr, 2);
+        (void)fire_ball(caster_ptr, typ, dir, dam, 5);
         break;
     default:
         return FALSE;
@@ -796,6 +865,8 @@ static bool try_cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx,
             get_element_types(caster_ptr->realm1)[0],
             PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM, -1);
         caster_ptr->csp = MAX(0, caster_ptr->csp - plev * MAX(1, plev / 10));
+
+        return FALSE;
     }
 
     return TRUE;
@@ -1020,9 +1091,9 @@ static int interpret_realm_select_key(int cs, int n, char c)
  * @param n 最後尾の位置
  * @return 領域番号
  */
-static int get_element_realm(player_type *creature_ptr, int n)
+static int get_element_realm(player_type *creature_ptr, int is, int n)
 {
-    int cs = MAX(0, creature_ptr->realm1 - 1);
+    int cs = MAX(0, is);
     int os = cs;
     int k;
 
@@ -1042,13 +1113,18 @@ static int get_element_realm(player_type *creature_ptr, int n)
             return 255;
 
         if (c == ' ' || c == '\r' || c == '\n') {
-            if (cs == n)
+            if (cs == n) {
+                display_realm_cursor(cs, n, TERM_WHITE);
                 cs = randint0(n - 1);
+                display_realm_cursor(cs, n, TERM_YELLOW);
+            }
             break;
         }
 
         if (c == '*') {
+            display_realm_cursor(cs, n, TERM_WHITE);
             cs = randint0(n - 1);
+            display_realm_cursor(cs, n, TERM_YELLOW);
             break;
         }
 
@@ -1084,16 +1160,38 @@ byte select_element_realm(player_type *creature_ptr)
 {
     clear_from(10);
 
-    put_str(_("注意：元素系統の選択によりあなたが習得する呪文のタイプが決まります。",
-        "Note: The system of element will determine which spells you can learn."),
-        23, 5);
-
     int realm_max = static_cast<int>(ElementRealm::MAX);
-    for (int i = 0; i < realm_max; i++) {
-        display_realm_cursor(i, realm_max - 1, TERM_WHITE);
-    }
+    int realm_idx = 1;
+    int row = 16;
+    while (1) {
+        put_str(
+            _("注意：元素系統の選択によりあなたが習得する呪文のタイプが決まります。", "Note: The system of element will determine which spells you can learn."),
+            23, 5);
 
-    int realm_idx = get_element_realm(creature_ptr, realm_max - 1);
+        for (int i = 0; i < realm_max; i++) {
+            display_realm_cursor(i, realm_max - 1, TERM_WHITE);
+        }
+
+        realm_idx = get_element_realm(creature_ptr, realm_idx - 1, realm_max - 1);
+        if (realm_idx == 255)
+            break;
+
+        auto realm = static_cast<ElementRealm>(realm_idx);
+        char temp[80 * 5];
+        shape_buffer(element_texts.at(realm).data(), 74, temp, sizeof(temp));
+        concptr t = temp;
+        for (int i = 0; i < 5; i++) {
+            if (t[0] == 0)
+                break;
+            prt(t, row + i, 3);
+            t += strlen(t) + 1;
+        }
+
+        if (get_check_strict(creature_ptr, _("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
+            break;
+
+        clear_from(row);
+    }
 
     clear_from(10);
     return (byte)realm_idx;

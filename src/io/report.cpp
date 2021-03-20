@@ -16,6 +16,7 @@
 #include "io-dump/character-dump.h"
 #include "io/inet.h"
 #include "io/input-key-acceptor.h"
+#include "mind/mind-elementalist.h"
 #include "player/player-class.h"
 #include "player/player-personality.h"
 #include "player/player-race.h"
@@ -406,6 +407,7 @@ errr report_score(player_type *creature_ptr, void (*update_playtime)(void), disp
     BUF *score;
     score = buf_new();
 
+    concptr realm1_name;
     char seikakutmp[128];
     char title[128];
     put_version(title);
@@ -414,6 +416,11 @@ errr report_score(player_type *creature_ptr, void (*update_playtime)(void), disp
 #else
     sprintf(seikakutmp, "%s ", ap_ptr->title);
 #endif
+
+    if (creature_ptr->pclass == CLASS_ELEMENTALIST)
+        realm1_name = get_element_title(creature_ptr->realm1);
+    else
+        realm1_name = realm_names[creature_ptr->realm1];
 
     buf_sprintf(score, "name: %s\n", creature_ptr->name);
     buf_sprintf(score, "version: %s\n", title);
@@ -428,7 +435,7 @@ errr report_score(player_type *creature_ptr, void (*update_playtime)(void), disp
     buf_sprintf(score, "race: %s\n", rp_ptr->title);
     buf_sprintf(score, "class: %s\n", cp_ptr->title);
     buf_sprintf(score, "seikaku: %s\n", seikakutmp);
-    buf_sprintf(score, "realm1: %s\n", realm_names[creature_ptr->realm1]);
+    buf_sprintf(score, "realm1: %s\n", realm1_name);
     buf_sprintf(score, "realm2: %s\n", realm_names[creature_ptr->realm2]);
     buf_sprintf(score, "killer: %s\n", creature_ptr->died_from);
     buf_sprintf(score, "-----charcter dump-----\n");
