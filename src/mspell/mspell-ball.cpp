@@ -112,7 +112,7 @@ MonsterSpellResult spell_RF5_BA_ACID(player_type *target_ptr, POSITION y, POSITI
 MonsterSpellResult spell_RF5_BA_ELEC(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
-        _("%^sがサンダー・・ボールの呪文を唱えた。", "%^s casts a lightning ball."),
+        _("%^sがサンダー・ボールの呪文を唱えた。", "%^s casts a lightning ball."),
         _("%^sが%sに向かってサンダー・ボールの呪文を唱えた。", "%^s casts a lightning ball at %s."), TARGET_TYPE);
 
     const auto rad = monster_is_powerful(target_ptr->current_floor_ptr, m_idx) ? 4 : 2;
