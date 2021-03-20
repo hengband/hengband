@@ -701,6 +701,7 @@ hengband_SOURCES = \
 	room/cave-filler.cpp room/cave-filler.h \
 	room/door-definition.cpp room/door-definition.h \
 	room/lake-types.h room/room-types.h \
+	room/pit-nest-kinds-table.cpp room/pit-nest-kinds-table.h \
 	room/room-generator.cpp room/room-generator.h \
 	room/room-info-table.cpp room/room-info-table.h \
 	room/rooms-builder.cpp room/rooms-builder.h \
