@@ -88,7 +88,7 @@ static void dump_yourself(player_type *creature_ptr, FILE *fff)
     }
 
     fprintf(fff, "\n");
-    if (creature_ptr->realm1) {
+    if (creature_ptr->realm1 && creature_ptr->pclass != CLASS_ELEMENTALIST) {
         shape_buffer(realm_explanations[technic2magic(creature_ptr->realm1) - 1], 78, temp, sizeof(temp));
         fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), realm_names[creature_ptr->realm1]);
 
