@@ -1,4 +1,6 @@
-﻿#include "autopick/autopick-editor-util.h"
+﻿#include <cstdlib>
+
+#include "autopick/autopick-editor-util.h"
 #include "autopick/autopick-flags-table.h"
 #include "autopick/autopick-methods-table.h"
 #include "autopick/autopick-dirty-flags.h"
@@ -206,9 +208,8 @@ bool add_empty_line(text_body_type *tb)
 
 static chain_str_type *new_chain_str(concptr str)
 {
-	chain_str_type *chain;
 	size_t len = strlen(str);
-	chain = (chain_str_type *)ralloc(sizeof(chain_str_type) + len * sizeof(char));
+	auto *chain = static_cast<chain_str_type *>(std::malloc(sizeof(chain_str_type) + len * sizeof(char)));
 	strcpy(chain->s, str);
 	chain->next = NULL;
 	return chain;
@@ -224,9 +225,8 @@ void kill_yank_chain(text_body_type *tb)
 	while (chain)
 	{
 		chain_str_type *next = chain->next;
-		size_t len = strlen(chain->s);
 
-		rnfree(chain, sizeof(chain_str_type) + len * sizeof(char));
+		std::free(chain);
 
 		chain = next;
 	}

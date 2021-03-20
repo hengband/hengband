@@ -90,6 +90,9 @@
  */
 
 #ifdef WINDOWS
+
+#include <cstdlib>
+
 #include "autopick/autopick-pref-processor.h"
 #include "cmd-io/cmd-process-screen.h"
 #include "cmd-io/cmd-save.h"
@@ -810,17 +813,17 @@ static int new_palette(void)
     HPALETTE hBmPal = static_cast<HPALETTE>(infGraph.hPalette);
     if (hBmPal) {
         lppeSize = 256 * sizeof(PALETTEENTRY);
-        lppe = (LPPALETTEENTRY)ralloc(lppeSize);
+        lppe = (LPPALETTEENTRY)std::malloc(lppeSize);
         nEntries = GetPaletteEntries(hBmPal, 0, 255, lppe);
         if ((nEntries == 0) || (nEntries > 220)) {
             plog(_("画面を16ビットか24ビットカラーモードにして下さい。", "Please switch to high- or true-color mode."));
-            rnfree(lppe, lppeSize);
+            std::free(lppe);
             return FALSE;
         }
     }
 
     pLogPalSize = sizeof(LOGPALETTE) + (nEntries + 16) * sizeof(PALETTEENTRY);
-    pLogPal = (LPLOGPALETTE)ralloc(pLogPalSize);
+    pLogPal = (LPLOGPALETTE)std::malloc(pLogPalSize);
     pLogPal->palVersion = 0x300;
     pLogPal->palNumEntries = nEntries + 16;
     for (i = 0; i < nEntries; i++) {
@@ -837,13 +840,13 @@ static int new_palette(void)
     }
 
     if (lppe)
-        rnfree(lppe, lppeSize);
+        std::free(lppe);
 
     HPALETTE hNewPal = CreatePalette(pLogPal);
     if (!hNewPal)
         quit(_("パレットを作成できません！", "Cannot create palette!"));
 
-    rnfree(pLogPal, pLogPalSize);
+    std::free(pLogPal);
     td = &data[0];
     HDC hdc = GetDC(td->w);
     SelectPalette(hdc, hNewPal, 0);
