@@ -25,7 +25,7 @@ static errr rd_inventory(player_type *player_ptr)
     player_ptr->equip_cnt = 0;
 
     if (player_ptr->inventory_list != NULL)
-        C_WIPE(player_ptr->inventory_list, INVEN_TOTAL, object_type);
+        C_KILL(player_ptr->inventory_list, INVEN_TOTAL, object_type);
     C_MAKE(player_ptr->inventory_list, INVEN_TOTAL, object_type);
 
     int slot = 0;
