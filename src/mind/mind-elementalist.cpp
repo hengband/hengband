@@ -164,7 +164,7 @@ static element_type_list element_types = {
         ElementRealm::EARTH, {
             _("地", "Earth"),
             { GF_SHARDS, GF_FORCE, GF_METEOR },
-            { _("破片", "Shards"), _("フォース", "Force"), _("隕石", "Meteo") },
+            { _("破片", "Shards"), _("フォース", "Force"), _("隕石", "Meteor") },
             { },
         }
     },
