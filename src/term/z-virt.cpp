@@ -10,8 +10,10 @@
 
 /* Purpose: Memory management routines -BEN- */
 
-#include "term/z-virt.h"
+#include <cstring>
+
 #include "term/z-util.h"
+#include "term/z-virt.h"
 
 /*
  * Optional auxiliary "rnfree" function
@@ -105,53 +107,35 @@ vptr ralloc(huge len)
     return (mem);
 }
 
-/*
- * Allocate a constant string, containing the same thing as 'str'
+/*!
+ * @brief str の複製を返す。戻り値は使用後に string_free() で解放すること。
+ *
+ * nullptr が渡された場合、nullptr を返す。
  */
-concptr string_make(concptr str)
+concptr string_make(const concptr str)
 {
-    huge len = 0;
-    concptr t = str;
-    char *s, *res;
-
-    /* Simple sillyness */
     if (!str)
-        return (str);
+        return nullptr;
 
-    /* Get the number of chars in the string, including terminator */
-    while (str[len++]) /* loop */
-        ;
+    const auto bufsize = std::strlen(str) + 1;
+    auto *const buf = new char[bufsize];
+    std::strcpy(buf, str);
 
-    /* Allocate space for the string */
-    s = res = (char *)(ralloc(len));
-
-    /* Copy the string (with terminator) */
-    while ((*s++ = *t++) != 0) /* loop */
-        ;
-
-    /* Return the allocated, initialized, string */
-    return (res);
+    return buf;
 }
 
-/*
- * Un-allocate a string allocated above.
- * Depends on no changes being made to the string.
+/*!
+ * @brief string_make() で割り当てたバッファを解放する。
+ * @return 常に 0
+ *
+ * nullptr が渡された場合、何もせず 0 を返す。
  */
-errr string_free(concptr str)
+errr string_free(const concptr str)
 {
-    huge len = 0;
-
-    /* Succeed on non-strings */
     if (!str)
         return 0;
 
-    /* Count the number of chars in 'str' plus the terminator */
-    while (str[len++]) /* loop */
-        ;
+    delete[] str;
 
-    /* Kill the buffer of chars we must have allocated above */
-    (void)rnfree((vptr)(str), len);
-
-    /* Success */
     return 0;
 }
