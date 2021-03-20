@@ -1490,7 +1490,6 @@
     <ClCompile Include="..\..\src\room\rooms-trap.cpp" />
     <ClCompile Include="..\..\src\room\rooms-vault.cpp" />
     <ClCompile Include="..\..\src\room\rooms-builder.cpp" />
-    <ClCompile Include="..\..\src\room\pit-nest-kinds-table.cpp" />
     <ClCompile Include="..\..\src\store\rumor.cpp" />
     <ClCompile Include="..\..\src\save\save.cpp" />
     <ClCompile Include="..\..\src\core\scores.cpp" />
@@ -1668,7 +1667,6 @@
     <ClInclude Include="..\..\src\player\race-info-table.h" />
     <ClInclude Include="..\..\src\player\race-resistances.h" />
     <ClInclude Include="..\..\src\player\temporary-resistances.h" />
-    <ClInclude Include="..\..\src\room\pit-nest-kinds-table.h" />
     <ClInclude Include="..\..\src\io\signal-handlers.h" />
     <ClInclude Include="..\..\src\io\uid-checker.h" />
     <ClInclude Include="..\..\src\spell-realm\spells-song.h" />

@@ -712,7 +712,6 @@ hengband_SOURCES = \
 	room/rooms-trap.cpp room/rooms-trap.h \
 	room/rooms-vault.cpp room/rooms-vault.h \
 	room/space-finder.cpp room/space-finder.h \
-	room/pit-nest-kinds-table.cpp room/pit-nest-kinds-table.h \
 	room/treasure-deployment.cpp room/treasure-deployment.h \
 	room/vault-builder.cpp room/vault-builder.h \
 	\
