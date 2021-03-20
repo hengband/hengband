@@ -23,3 +23,6 @@ size_t angband_strcpy(char *buf, concptr src, size_t bufsize);
 size_t angband_strcat(char *buf, concptr src, size_t bufsize);
 char *angband_strstr(concptr haystack, concptr needle);
 char *angband_strchr(concptr ptr, char ch);
+char *ltrim(char *p);
+char *rtrim(char *p);
+int strrncmp(const char *s1, const char *s2, int len);
