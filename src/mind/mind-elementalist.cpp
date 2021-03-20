@@ -124,7 +124,7 @@ static element_type_list element_types = {
         ElementRealm::ICE, {
             _("氷", "Ice"),
             { GF_COLD, GF_INERTIAL, GF_TIME },
-            { _("冷気", "Ice"), _("遅鈍", "Inertial"), _("時間逆転", "Time Stream") },
+            { _("冷気", "Ice"), _("遅鈍", "Inertia"), _("時間逆転", "Time Stream") },
             { { GF_COLD, GF_ICE} },
         }
     },
@@ -140,7 +140,7 @@ static element_type_list element_types = {
         ElementRealm::SEA, {
             _("海", "Sea"),
             { GF_ACID, GF_WATER, GF_DISINTEGRATE },
-            { _("酸", "Acid"), _("水", "Water"), _("分解", "Disintegrate") },
+            { _("酸", "Acid"), _("水", "Water"), _("分解", "Disintegration") },
             { },
         }
     },
@@ -164,7 +164,7 @@ static element_type_list element_types = {
         ElementRealm::EARTH, {
             _("地", "Earth"),
             { GF_SHARDS, GF_FORCE, GF_METEOR },
-            { _("破片", "Shard"), _("フォース", "Force"), _("隕石", "Meteo") },
+            { _("破片", "Shards"), _("フォース", "Force"), _("隕石", "Meteo") },
             { },
         }
     },
@@ -172,7 +172,7 @@ static element_type_list element_types = {
         ElementRealm::DEATH, {
             _("瘴気", "Death"),
             { GF_POIS, GF_HYPODYNAMIA, GF_DISENCHANT },
-            { _("毒", "Poison"), _("吸血", "Drain Life"), _("劣化", "Disenchant") },
+            { _("毒", "Poison"), _("吸血", "Drain Life"), _("劣化", "Disenchantment") },
             { },
         }
     },
