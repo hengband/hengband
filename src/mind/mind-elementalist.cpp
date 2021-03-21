@@ -456,6 +456,7 @@ void get_element_effect_info(player_type *caster_ptr, int spell_idx, char *p)
 static bool cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx)
 {
     auto spell = static_cast<ElementSpells>(spell_idx);
+    auto power = element_powers.at(spell);
     spells_type typ;
     DIRECTION dir;
     PLAYER_LEVEL plev = caster_ptr->lev;
@@ -468,7 +469,7 @@ static bool cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx)
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         dam = damroll(3 + ((plev - 1) / 5), 4);
-        typ = get_element_spells_type(caster_ptr, 0);
+        typ = get_element_spells_type(caster_ptr, power.elem);
         (void)fire_bolt(caster_ptr, typ, dir, dam);
         break;
     case ElementSpells::MON_DETECT:
@@ -485,7 +486,7 @@ static bool cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx)
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         dam = damroll(8 + ((plev - 5) / 4), 8);
-        typ = get_element_spells_type(caster_ptr, 1);
+        typ = get_element_spells_type(caster_ptr, power.elem);
         if (fire_bolt_or_beam(caster_ptr, plev, typ, dir, dam)) {
             if (typ == GF_HYPODYNAMIA) {
                 (void)hp_player(caster_ptr, dam / 2);
@@ -499,7 +500,7 @@ static bool cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx)
         project_length = 4;
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
-        typ = get_element_spells_type(caster_ptr, 0);
+        typ = get_element_spells_type(caster_ptr, power.elem);
         dam = 50 + plev * 2;
         (void)fire_ball(caster_ptr, typ, dir, dam, 1);
         project_length = 0;
@@ -508,14 +509,14 @@ static bool cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx)
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         dam = 55 + plev;
-        typ = get_element_spells_type(caster_ptr, 0);
+        typ = get_element_spells_type(caster_ptr, power.elem);
         (void)fire_ball(caster_ptr, typ, dir, dam, 2);
         break;
     case ElementSpells::BREATH_2ND:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         dam = MIN(150, caster_ptr->chp / 2);
-        typ = get_element_spells_type(caster_ptr, 1);
+        typ = get_element_spells_type(caster_ptr, power.elem);
         if (fire_breath(caster_ptr, typ, dir, dam, 3)) {
             if (typ == GF_HYPODYNAMIA) {
                 (void)hp_player(caster_ptr, dam / 2);
@@ -531,19 +532,19 @@ static bool cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx)
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         dam = damroll(12 + ((plev - 5) / 4), 8);
-        typ = get_element_spells_type(caster_ptr, 2);
+        typ = get_element_spells_type(caster_ptr, power.elem);
         fire_bolt_or_beam(caster_ptr, plev, typ, dir, dam);
         break;
     case ElementSpells::WAVE_1ST:
         dam = randint1(plev * 4);
-        typ = get_element_spells_type(caster_ptr, 0);
+        typ = get_element_spells_type(caster_ptr, power.elem);
         project_all_los(caster_ptr, typ, dam);
         break;
     case ElementSpells::BALL_2ND:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         dam = 75 + plev;
-        typ = get_element_spells_type(caster_ptr, 1);
+        typ = get_element_spells_type(caster_ptr, power.elem);
         if (fire_ball(caster_ptr, typ, dir, dam, 2)) {
             if (typ == GF_HYPODYNAMIA) {
                 (void)hp_player(caster_ptr, dam / 2);
@@ -554,7 +555,7 @@ static bool cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx)
         y = caster_ptr->y;
         x = caster_ptr->x;
         num = damroll(5, 3);
-        typ = get_element_spells_type(caster_ptr, 0);
+        typ = get_element_spells_type(caster_ptr, power.elem);
         for (int k = 0; k < num; k++) {
             int attempts = 1000;
             while (attempts--) {
@@ -569,7 +570,7 @@ static bool cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx)
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         dam = 125 + plev * 2;
-        typ = get_element_spells_type(caster_ptr, 1);
+        typ = get_element_spells_type(caster_ptr, power.elem);
         if (fire_ball(caster_ptr, typ, dir, dam, 4)) {
             if (typ == GF_HYPODYNAMIA) {
                 (void)hp_player(caster_ptr, dam / 2);
@@ -580,14 +581,14 @@ static bool cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx)
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         dam = caster_ptr->chp * 2 / 3;
-        typ = get_element_spells_type(caster_ptr, 0);
+        typ = get_element_spells_type(caster_ptr, power.elem);
         (void)fire_breath(caster_ptr, typ, dir, dam, 3);
         break;
     case ElementSpells::STORM_3ND:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         dam = 300 + plev * 5;
-        typ = get_element_spells_type(caster_ptr, 2);
+        typ = get_element_spells_type(caster_ptr, power.elem);
         (void)fire_ball(caster_ptr, typ, dir, dam, 5);
         break;
     default:
