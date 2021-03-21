@@ -18,10 +18,6 @@
 /*
  * Memory management routines.
  *
- * Set ralloc_aux to modify the memory allocation routine.
- * Set rnfree_aux to modify the memory de-allocation routine.
- * Set rpanic_aux to let the program react to memory failures.
- *
  * These routines work best as a *replacement* for malloc/free.
  *
  * The string_make() and string_free() routines handle dynamic strings.
@@ -207,27 +203,7 @@ inline T *free_impl(T *p)
 /* Free a thing of type T, at location P, and set P to NULL */
 #define KILL(P, T) ((P) = FREE(P, T))
 
-/**** Available variables ****/
-
-/* Replacement hook for "rnfree()" */
-extern vptr (*rnfree_aux)(vptr, huge);
-
-/* Replacement hook for "rpanic()" */
-extern vptr (*rpanic_aux)(huge);
-
-/* Replacement hook for "ralloc()" */
-extern vptr (*ralloc_aux)(huge);
-
 /**** Available functions ****/
-
-/* De-allocate a given amount of memory */
-extern vptr rnfree(vptr p, huge len);
-
-/* Panic, attempt to Allocate 'len' bytes */
-extern vptr rpanic(huge len);
-
-/* Allocate (and return) 'len', or dump core */
-extern vptr ralloc(huge len);
 
 /* Create a "dynamic string" */
 extern concptr string_make(concptr str);
