@@ -117,20 +117,12 @@ static void add_class_flags(player_type *creature_ptr, BIT_FLAGS *flags)
     case CLASS_ELEMENTALIST:
         if (has_element_resist(creature_ptr, ElementRealm::FIRE, 1))
             add_flag(flags, TR_RES_FIRE);
-        if (has_element_resist(creature_ptr, ElementRealm::FIRE, 30))
-            add_flag(flags, TR_IM_FIRE);
         if (has_element_resist(creature_ptr, ElementRealm::ICE, 1))
             add_flag(flags, TR_RES_COLD);
-        if (has_element_resist(creature_ptr, ElementRealm::ICE, 30))
-            add_flag(flags, TR_IM_COLD);
         if (has_element_resist(creature_ptr, ElementRealm::SKY, 1))
             add_flag(flags, TR_RES_ELEC);
-        if (has_element_resist(creature_ptr, ElementRealm::SKY, 30))
-            add_flag(flags, TR_IM_ELEC);
         if (has_element_resist(creature_ptr, ElementRealm::SEA, 1))
             add_flag(flags, TR_RES_ACID);
-        if (has_element_resist(creature_ptr, ElementRealm::SEA, 30))
-            add_flag(flags, TR_IM_ACID);
         if (has_element_resist(creature_ptr, ElementRealm::DARKNESS, 1))
             add_flag(flags, TR_RES_DARK);
         if (has_element_resist(creature_ptr, ElementRealm::DARKNESS, 30))
