@@ -19,7 +19,7 @@
 bool door_creation(player_type *caster_ptr, POSITION y, POSITION x)
 {
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
-    return (project(caster_ptr, 0, 1, y, x, 0, GF_MAKE_DOOR, flg, -1));
+    return project(caster_ptr, 0, 1, y, x, 0, GF_MAKE_DOOR, flg, -1).notice;
 }
 
 /*!
@@ -32,7 +32,7 @@ bool door_creation(player_type *caster_ptr, POSITION y, POSITION x)
 bool trap_creation(player_type *caster_ptr, POSITION y, POSITION x)
 {
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
-    return (project(caster_ptr, 0, 1, y, x, 0, GF_MAKE_TRAP, flg, -1));
+    return project(caster_ptr, 0, 1, y, x, 0, GF_MAKE_TRAP, flg, -1).notice;
 }
 
 /*!
@@ -43,7 +43,7 @@ bool trap_creation(player_type *caster_ptr, POSITION y, POSITION x)
 bool tree_creation(player_type *caster_ptr, POSITION y, POSITION x)
 {
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
-    return (project(caster_ptr, 0, 1, y, x, 0, GF_MAKE_TREE, flg, -1));
+    return project(caster_ptr, 0, 1, y, x, 0, GF_MAKE_TREE, flg, -1).notice;
 }
 
 /*!
@@ -54,7 +54,7 @@ bool tree_creation(player_type *caster_ptr, POSITION y, POSITION x)
 bool create_rune_protection_area(player_type *caster_ptr, POSITION y, POSITION x)
 {
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM;
-    return (project(caster_ptr, 0, 1, y, x, 0, GF_MAKE_RUNE_PROTECTION, flg, -1));
+    return project(caster_ptr, 0, 1, y, x, 0, GF_MAKE_RUNE_PROTECTION, flg, -1).notice;
 }
 
 /*!
@@ -65,7 +65,7 @@ bool create_rune_protection_area(player_type *caster_ptr, POSITION y, POSITION x
 bool wall_stone(player_type *caster_ptr)
 {
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
-    bool dummy = (project(caster_ptr, 0, 1, caster_ptr->y, caster_ptr->x, 0, GF_STONE_WALL, flg, -1));
+    bool dummy = project(caster_ptr, 0, 1, caster_ptr->y, caster_ptr->x, 0, GF_STONE_WALL, flg, -1).notice;
     caster_ptr->update |= (PU_FLOW);
     caster_ptr->redraw |= (PR_MAP);
     return dummy;
@@ -79,7 +79,7 @@ bool wall_stone(player_type *caster_ptr)
 bool destroy_doors_touch(player_type *caster_ptr)
 {
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
-    return (project(caster_ptr, 0, 1, caster_ptr->y, caster_ptr->x, 0, GF_KILL_DOOR, flg, -1));
+    return project(caster_ptr, 0, 1, caster_ptr->y, caster_ptr->x, 0, GF_KILL_DOOR, flg, -1).notice;
 }
 
 /*!
@@ -90,7 +90,7 @@ bool destroy_doors_touch(player_type *caster_ptr)
 bool disarm_traps_touch(player_type *caster_ptr)
 {
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_HIDE;
-    return (project(caster_ptr, 0, 1, caster_ptr->y, caster_ptr->x, 0, GF_KILL_TRAP, flg, -1));
+    return project(caster_ptr, 0, 1, caster_ptr->y, caster_ptr->x, 0, GF_KILL_TRAP, flg, -1).notice;
 }
 
 /*!
@@ -101,7 +101,7 @@ bool disarm_traps_touch(player_type *caster_ptr)
 bool sleep_monsters_touch(player_type *caster_ptr)
 {
     BIT_FLAGS flg = PROJECT_KILL | PROJECT_HIDE;
-    return (project(caster_ptr, 0, 1, caster_ptr->y, caster_ptr->x, caster_ptr->lev, GF_OLD_SLEEP, flg, -1));
+    return project(caster_ptr, 0, 1, caster_ptr->y, caster_ptr->x, caster_ptr->lev, GF_OLD_SLEEP, flg, -1).notice;
 }
 
 /*!
@@ -115,13 +115,12 @@ bool sleep_monsters_touch(player_type *caster_ptr)
 bool animate_dead(player_type *caster_ptr, MONSTER_IDX who, POSITION y, POSITION x)
 {
     BIT_FLAGS flg = PROJECT_ITEM | PROJECT_HIDE;
-    return (project(caster_ptr, who, 5, y, x, 0, GF_ANIM_DEAD, flg, -1));
+    return project(caster_ptr, who, 5, y, x, 0, GF_ANIM_DEAD, flg, -1).notice;
 }
 
 /*!
  * @brief 周辺破壊効果(プレイヤー中心)
  * @param caster_ptr プレーヤーへの参照ポインタ
- * @return 作用が実際にあった場合TRUEを返す
  */
 void wall_breaker(player_type *caster_ptr)
 {

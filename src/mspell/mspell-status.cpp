@@ -9,6 +9,7 @@
 #include "blue-magic/blue-magic-checker.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
+#include "effect/effect-processor.h"
 #include "mind/drs-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
@@ -23,6 +24,7 @@
 #include "mspell/mspell-checker.h"
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-util.h"
+#include "mspell/mspell.h"
 #include "player/player-personalities-types.h"
 #include "player/player-status-flags.h"
 #include "spell/spell-types.h"
@@ -104,11 +106,11 @@ void spell_badstatus_message(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
- * @return ダメージ量を返す。
+ *
+ * プレイヤーに当たったらラーニング可。
  */
-HIT_POINT spell_RF5_DRAIN_MANA(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF5_DRAIN_MANA(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-    HIT_POINT dam;
     GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
     monster_name(target_ptr, m_idx, m_name);
     monster_name(target_ptr, t_idx, t_name);
@@ -120,12 +122,15 @@ HIT_POINT spell_RF5_DRAIN_MANA(player_type *target_ptr, POSITION y, POSITION x, 
         msg_format(_("%^sは精神エネルギーを%sから吸いとった。", "%^s draws psychic energy from %s."), m_name, t_name);
     }
 
-    dam = monspell_damage(target_ptr, (MS_DRAIN_MANA), m_idx, DAM_ROLL);
-    breath(target_ptr, y, x, m_idx, GF_DRAIN_MANA, dam, 0, FALSE, MS_DRAIN_MANA, TARGET_TYPE);
+    const auto dam = monspell_damage(target_ptr, (MS_DRAIN_MANA), m_idx, DAM_ROLL);
+    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_DRAIN_MANA, dam, 0, FALSE, MS_DRAIN_MANA, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(target_ptr, m_idx, DRS_MANA);
 
-    return dam;
+    auto res = MonsterSpellResult::make_valid();
+    res.learnable = proj_res.affected_player;
+
+    return res;
 }
 
 /*!
@@ -136,13 +141,13 @@ HIT_POINT spell_RF5_DRAIN_MANA(player_type *target_ptr, POSITION y, POSITION x, 
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
- * @return ダメージ量を返す。
+ *
+ * プレイヤーに当たったらラーニング可。
  */
-HIT_POINT spell_RF5_MIND_BLAST(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF5_MIND_BLAST(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
     bool seen = (!target_ptr->blind && m_ptr->ml);
-    HIT_POINT dam;
     GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
     monster_name(target_ptr, m_idx, m_name);
     monster_name(target_ptr, t_idx, t_name);
@@ -157,9 +162,13 @@ HIT_POINT spell_RF5_MIND_BLAST(player_type *target_ptr, POSITION y, POSITION x, 
         msg_format(_("%^sは%sをじっと睨んだ。", "%^s gazes intently at %s."), m_name, t_name);
     }
 
-    dam = monspell_damage(target_ptr, (MS_MIND_BLAST), m_idx, DAM_ROLL);
-    breath(target_ptr, y, x, m_idx, GF_MIND_BLAST, dam, 0, FALSE, MS_MIND_BLAST, TARGET_TYPE);
-    return dam;
+    const auto dam = monspell_damage(target_ptr, (MS_MIND_BLAST), m_idx, DAM_ROLL);
+    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_MIND_BLAST, dam, 0, FALSE, MS_MIND_BLAST, TARGET_TYPE);
+
+    auto res = MonsterSpellResult::make_valid();
+    res.learnable = proj_res.affected_player;
+
+    return res;
 }
 
 /*!
@@ -170,13 +179,13 @@ HIT_POINT spell_RF5_MIND_BLAST(player_type *target_ptr, POSITION y, POSITION x, 
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
- * @return ダメージ量を返す。
+ *
+ * プレイヤーに当たったらラーニング可。
  */
-HIT_POINT spell_RF5_BRAIN_SMASH(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF5_BRAIN_SMASH(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
     bool seen = (!target_ptr->blind && m_ptr->ml);
-    HIT_POINT dam;
     GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
     monster_name(target_ptr, m_idx, m_name);
     monster_name(target_ptr, t_idx, t_name);
@@ -191,9 +200,13 @@ HIT_POINT spell_RF5_BRAIN_SMASH(player_type *target_ptr, POSITION y, POSITION x,
         msg_format(_("%^sは%sをじっと睨んだ。", "%^s gazes intently at %s."), m_name, t_name);
     }
 
-    dam = monspell_damage(target_ptr, (MS_BRAIN_SMASH), m_idx, DAM_ROLL);
-    breath(target_ptr, y, x, m_idx, GF_BRAIN_SMASH, dam, 0, FALSE, MS_BRAIN_SMASH, TARGET_TYPE);
-    return dam;
+    const auto dam = monspell_damage(target_ptr, (MS_BRAIN_SMASH), m_idx, DAM_ROLL);
+    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_BRAIN_SMASH, dam, 0, FALSE, MS_BRAIN_SMASH, TARGET_TYPE);
+
+    auto res = MonsterSpellResult::make_valid();
+    res.learnable = proj_res.affected_player;
+
+    return res;
 }
 
 /*!
@@ -201,9 +214,14 @@ HIT_POINT spell_RF5_BRAIN_SMASH(player_type *target_ptr, POSITION y, POSITION x,
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ *
+ * プレイヤーが対象ならラーニング可。
  */
-void spell_RF5_SCARE(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF5_SCARE(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
+    auto res = MonsterSpellResult::make_valid();
+    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     monster_type *t_ptr = &floor_ptr->m_list[t_idx];
     monster_race *tr_ptr = &r_info[t_ptr->r_idx];
@@ -222,11 +240,11 @@ void spell_RF5_SCARE(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_i
         }
 
         update_smart_learn(target_ptr, m_idx, DRS_FEAR);
-        return;
+        return res;
     }
 
     if (TARGET_TYPE != MONSTER_TO_MONSTER)
-        return;
+        return res;
 
     resist = ((tr_ptr->flags3 & RF3_NO_FEAR) != 0);
     saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
@@ -238,6 +256,8 @@ void spell_RF5_SCARE(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_i
     if (!resist && !saving_throw) {
         set_monster_monfear(target_ptr, t_idx, monster_fear_remaining(t_ptr) + randint0(4) + 4);
     }
+
+    return res;
 }
 
 /*!
@@ -245,9 +265,14 @@ void spell_RF5_SCARE(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_i
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ *
+ * プレイヤーが対象ならラーニング可。
  */
-void spell_RF5_BLIND(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF5_BLIND(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
+    auto res = MonsterSpellResult::make_valid();
+    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     monster_type *t_ptr = &floor_ptr->m_list[t_idx];
     monster_race *tr_ptr = &r_info[t_ptr->r_idx];
@@ -266,11 +291,11 @@ void spell_RF5_BLIND(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_i
         }
 
         update_smart_learn(target_ptr, m_idx, DRS_BLIND);
-        return;
+        return res;
     }
 
     if (TARGET_TYPE != MONSTER_TO_MONSTER)
-        return;
+        return res;
 
     concptr msg1;
     GAME_TEXT t_name[MAX_NLEN];
@@ -291,6 +316,8 @@ void spell_RF5_BLIND(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_i
     if (!resist && !saving_throw) {
         (void)set_monster_confused(target_ptr, t_idx, monster_confused_remaining(t_ptr) + 12 + randint0(4));
     }
+
+    return res;
 }
 
 /*!
@@ -298,9 +325,14 @@ void spell_RF5_BLIND(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_i
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ *
+ * プレイヤーが対象ならラーニング可。
  */
-void spell_RF5_CONF(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF5_CONF(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
+    auto res = MonsterSpellResult::make_valid();
+    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     monster_type *t_ptr = &floor_ptr->m_list[t_idx];
     monster_race *tr_ptr = &r_info[t_ptr->r_idx];
@@ -320,11 +352,11 @@ void spell_RF5_CONF(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
         }
 
         update_smart_learn(target_ptr, m_idx, DRS_CONF);
-        return;
+        return res;
     }
 
     if (TARGET_TYPE != MONSTER_TO_MONSTER)
-        return;
+        return res;
 
     resist = ((tr_ptr->flags3 & RF3_NO_CONF) != 0);
     saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
@@ -336,6 +368,8 @@ void spell_RF5_CONF(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
     if (!resist && !saving_throw) {
         (void)set_monster_confused(target_ptr, t_idx, monster_confused_remaining(t_ptr) + 12 + randint0(4));
     }
+
+    return res;
 }
 
 /*!
@@ -343,9 +377,14 @@ void spell_RF5_CONF(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ *
+ * プレイヤーが対象ならラーニング可。
  */
-void spell_RF5_HOLD(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF5_HOLD(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
+    auto res = MonsterSpellResult::make_valid();
+    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     monster_type *t_ptr = &floor_ptr->m_list[t_idx];
     monster_race *tr_ptr = &r_info[t_ptr->r_idx];
@@ -364,11 +403,11 @@ void spell_RF5_HOLD(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
         }
 
         update_smart_learn(target_ptr, m_idx, DRS_FREE);
-        return;
+        return res;
     }
 
     if (TARGET_TYPE != MONSTER_TO_MONSTER)
-        return;
+        return res;
 
     resist = ((tr_ptr->flags1 & RF1_UNIQUE) != 0 || (tr_ptr->flags3 & RF3_NO_STUN) != 0);
     saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
@@ -380,6 +419,8 @@ void spell_RF5_HOLD(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
     if (!resist && !saving_throw) {
         (void)set_monster_stunned(target_ptr, t_idx, monster_stunned_remaining(t_ptr) + randint1(4) + 4);
     }
+
+    return res;
 }
 
 /*!
@@ -388,8 +429,10 @@ void spell_RF5_HOLD(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ *
+ * ラーニング不可。
  */
-void spell_RF6_HASTE(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_HASTE(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     bool see_m = see_monster(target_ptr, m_idx);
     monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
@@ -407,6 +450,8 @@ void spell_RF6_HASTE(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_i
         if (TARGET_TYPE == MONSTER_TO_PLAYER || (TARGET_TYPE == MONSTER_TO_MONSTER && see_m))
             msg_format(_("%^sの動きが速くなった。", "%^s starts moving faster."), m_name);
     }
+
+    return MonsterSpellResult::make_valid();
 }
 
 /*!
@@ -414,9 +459,14 @@ void spell_RF6_HASTE(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_i
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ *
+ * プレイヤーが対象ならラーニング可。
  */
-void spell_RF5_SLOW(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF5_SLOW(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
+    auto res = MonsterSpellResult::make_valid();
+    res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
+
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     monster_type *t_ptr = &floor_ptr->m_list[t_idx];
     monster_race *tr_ptr = &r_info[t_ptr->r_idx];
@@ -435,11 +485,11 @@ void spell_RF5_SLOW(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
         }
 
         update_smart_learn(target_ptr, m_idx, DRS_FREE);
-        return;
+        return res;
     }
 
     if (TARGET_TYPE != MONSTER_TO_MONSTER)
-        return;
+        return res;
 
     concptr msg1;
     GAME_TEXT t_name[MAX_NLEN];
@@ -460,6 +510,8 @@ void spell_RF5_SLOW(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
     if (!resist && !saving_throw) {
         set_monster_slow(target_ptr, t_idx, monster_slow_remaining(t_ptr) + 50);
     }
+
+    return res;
 }
 
 /*!
@@ -468,9 +520,13 @@ void spell_RF5_SLOW(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ *
+ * ラーニング不可。
  */
-void spell_RF6_HEAL(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_HEAL(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
+    const auto res = MonsterSpellResult::make_valid();
+
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
@@ -507,12 +563,14 @@ void spell_RF6_HEAL(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_id
         target_ptr->redraw |= (PR_UHEALTH);
 
     if (!monster_fear_remaining(m_ptr))
-        return;
+        return res;
 
     (void)set_monster_monfear(target_ptr, m_idx, 0);
 
     if (see_monster(target_ptr, m_idx))
         msg_format(_("%^sは勇気を取り戻した。", format("%%^s recovers %s courage.", m_poss)), m_name);
+
+    return res;
 }
 
 /*!
@@ -521,8 +579,10 @@ void spell_RF6_HEAL(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_id
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ *
+ * ラーニング不可。
  */
-void spell_RF6_INVULNER(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF6_INVULNER(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
     monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
     bool seen = (!target_ptr->blind && m_ptr->ml);
@@ -540,15 +600,18 @@ void spell_RF6_INVULNER(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX 
 
     if (!monster_invulner_remaining(m_ptr))
         (void)set_monster_invulner(target_ptr, m_idx, randint1(4) + 4, FALSE);
+
+    return MonsterSpellResult::make_valid();
 }
 
 /*!
  * @brief RF6_FORGETの処理。記憶消去。 /
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_idx 呪文を唱えるモンスターID
- * @param なし
+ *
+ * ラーニング可。
  */
-void spell_RF6_FORGET(player_type *target_ptr, MONSTER_IDX m_idx)
+MonsterSpellResult spell_RF6_FORGET(player_type *target_ptr, MONSTER_IDX m_idx)
 {
     DEPTH rlev = monster_level_idx(target_ptr->current_floor_ptr, m_idx);
     GAME_TEXT m_name[MAX_NLEN];
@@ -563,4 +626,9 @@ void spell_RF6_FORGET(player_type *target_ptr, MONSTER_IDX m_idx)
     } else if (lose_all_info(target_ptr)) {
         msg_print(_("記憶が薄れてしまった。", "Your memories fade away."));
     }
+
+    auto res = MonsterSpellResult::make_valid();
+    res.learnable = true;
+
+    return res;
 }

@@ -369,6 +369,7 @@ s16b PlayerSpeed::set_exception_value(s16b value)
         value = this->default_value;
         value += this->riding_value();
         value += this->inventory_weight_value();
+        value += this->action_value();
     }
     return value;
 }

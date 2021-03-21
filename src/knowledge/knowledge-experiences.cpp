@@ -73,7 +73,7 @@ void do_cmd_knowledge_spell_exp(player_type *creature_ptr)
     if (!open_temporary_file(&fff, file_name))
         return;
 
-    if (creature_ptr->realm1 != REALM_NONE) {
+    if (creature_ptr->realm1 != REALM_NONE && creature_ptr->pclass != CLASS_ELEMENTALIST) {
         fprintf(fff, _("%sの魔法書\n", "%s Spellbook\n"), realm_names[creature_ptr->realm1]);
         for (SPELL_IDX i = 0; i < 32; i++) {
             const magic_type *s_ptr;

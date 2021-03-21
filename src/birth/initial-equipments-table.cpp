@@ -171,4 +171,10 @@ byte player_init[MAX_CLASS][3][2] = {
         { TV_SOFT_ARMOR, SV_SOFT_LEATHER_ARMOR },
         { TV_SWORD, SV_DAGGER }
     },
+
+    { /* Elementalist */
+        { TV_POTION, SV_POTION_SPEED },
+        { TV_RING, SV_RING_SUSTAIN_WIS },
+        { TV_SWORD, SV_DAGGER }
+    },
 };

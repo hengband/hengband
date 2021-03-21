@@ -46,7 +46,7 @@ void free_text_lines(concptr *lines_list)
 	}
 
 	/* free list of pointers */
-	C_FREE((vptr)lines_list, MAX_LINES, concptr);
+	C_FREE(lines_list, MAX_LINES, concptr);
 }
 
 

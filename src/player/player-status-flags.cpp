@@ -2,6 +2,7 @@
 #include "artifact/fixed-art-types.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
+#include "mind/mind-elementalist.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags7.h"
@@ -149,23 +150,23 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
 {
     switch (tr_flag) {
     case TR_STR:
-        return PlayerStrength(creature_ptr).getAllFlags();
+        return PlayerStrength(creature_ptr).get_all_flags();
     case TR_INT:
-        return PlayerIntelligence(creature_ptr).getAllFlags();
+        return PlayerIntelligence(creature_ptr).get_all_flags();
     case TR_WIS:
-        return PlayerWisdom(creature_ptr).getAllFlags();
+        return PlayerWisdom(creature_ptr).get_all_flags();
     case TR_DEX:
-        return PlayerDextarity(creature_ptr).getAllFlags();
+        return PlayerDextarity(creature_ptr).get_all_flags();
     case TR_CON:
-        return PlayerConstitution(creature_ptr).getAllFlags();
+        return PlayerConstitution(creature_ptr).get_all_flags();
     case TR_CHR:
-        return PlayerCharisma(creature_ptr).getAllFlags();
+        return PlayerCharisma(creature_ptr).get_all_flags();
     case TR_MAGIC_MASTERY:
         return has_magic_mastery(creature_ptr);
     case TR_FORCE_WEAPON:
         return check_equipment_flags(creature_ptr, tr_flag);
     case TR_STEALTH:
-        return PlayerStealth(creature_ptr).getAllFlags();
+        return PlayerStealth(creature_ptr).get_all_flags();
     case TR_SEARCH:
         return 0;
     case TR_INFRA:
@@ -173,7 +174,7 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
     case TR_TUNNEL:
         return 0;
     case TR_SPEED:
-        return PlayerSpeed(creature_ptr).getAllFlags();
+        return PlayerSpeed(creature_ptr).get_all_flags();
     case TR_BLOWS:
         return 0;
     case TR_CHAOTIC:
@@ -395,6 +396,9 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
     case TR_DARK_SOURCE:
     case TR_SUPPORTIVE:
         return check_equipment_flags(creature_ptr, tr_flag);
+
+    case TR_FLAG_MAX:
+        break;
     }
     return 0;
 }
@@ -745,6 +749,9 @@ BIT_FLAGS has_reflect(player_type *creature_ptr)
     if (creature_ptr->ult_res || creature_ptr->wraith_form || creature_ptr->magicdef || creature_ptr->tim_reflect) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
+
+    if (has_element_resist(creature_ptr, ElementRealm::EARTH, 30))
+        result |= FLAG_CAUSE_CLASS;
 
     result |= check_equipment_flags(creature_ptr, TR_REFLECT);
     return result;
@@ -1350,6 +1357,9 @@ BIT_FLAGS has_resist_acid(player_type *creature_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
+    if (has_element_resist(creature_ptr, ElementRealm::SEA, 1))
+        result |= FLAG_CAUSE_CLASS;
+
     result |= has_immune_acid(creature_ptr);
 
     result |= check_equipment_flags(creature_ptr, TR_RES_ACID);
@@ -1386,6 +1396,9 @@ BIT_FLAGS has_resist_elec(player_type *creature_ptr)
     if (creature_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
+
+    if (has_element_resist(creature_ptr, ElementRealm::SKY, 1))
+        result |= FLAG_CAUSE_CLASS;
 
     result |= check_equipment_flags(creature_ptr, TR_RES_ELEC);
     result |= has_immune_elec(creature_ptr);
@@ -1432,6 +1445,9 @@ BIT_FLAGS has_resist_fire(player_type *creature_ptr)
     if (creature_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
+
+    if (has_element_resist(creature_ptr, ElementRealm::FIRE, 1))
+        result |= FLAG_CAUSE_CLASS;
 
     result |= check_equipment_flags(creature_ptr, TR_RES_FIRE);
     result |= has_immune_fire(creature_ptr);
@@ -1483,6 +1499,9 @@ BIT_FLAGS has_resist_cold(player_type *creature_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
+    if (has_element_resist(creature_ptr, ElementRealm::ICE, 1))
+        result |= FLAG_CAUSE_CLASS;
+
     result |= check_equipment_flags(creature_ptr, TR_RES_COLD);
     result |= has_immune_cold(creature_ptr);
     return result;
@@ -1530,6 +1549,9 @@ BIT_FLAGS has_resist_pois(player_type *creature_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
+    if (has_element_resist(creature_ptr, ElementRealm::DEATH, 1))
+        result |= FLAG_CAUSE_CLASS;
+
     result |= check_equipment_flags(creature_ptr, TR_RES_POIS);
     return result;
 }
@@ -1560,6 +1582,9 @@ BIT_FLAGS has_resist_conf(player_type *creature_ptr)
     if (creature_ptr->special_defense & KATA_MUSOU) {
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
+
+    if (has_element_resist(creature_ptr, ElementRealm::CHAOS, 1))
+        result |= FLAG_CAUSE_CLASS;
 
     result |= check_equipment_flags(creature_ptr, TR_RES_CONF);
     return result;
@@ -1646,6 +1671,9 @@ BIT_FLAGS has_resist_dark(player_type *creature_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
+    if (has_element_resist(creature_ptr, ElementRealm::DARKNESS, 1))
+        result |= FLAG_CAUSE_CLASS;
+
     result |= check_equipment_flags(creature_ptr, TR_RES_DARK);
     return result;
 }
@@ -1672,6 +1700,9 @@ BIT_FLAGS has_resist_chaos(player_type *creature_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
+    if (has_element_resist(creature_ptr, ElementRealm::CHAOS, 30))
+        result |= FLAG_CAUSE_CLASS;
+
     result |= check_equipment_flags(creature_ptr, TR_RES_CHAOS);
     return result;
 }
@@ -1695,6 +1726,9 @@ BIT_FLAGS has_resist_disen(player_type *creature_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
+    if (has_element_resist(creature_ptr, ElementRealm::DEATH, 30))
+        result |= FLAG_CAUSE_CLASS;
+
     result |= check_equipment_flags(creature_ptr, TR_RES_DISEN);
     return result;
 }
@@ -1713,6 +1747,9 @@ BIT_FLAGS has_resist_shard(player_type *creature_ptr)
     if (creature_ptr->ult_res) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
+
+    if (has_element_resist(creature_ptr, ElementRealm::EARTH, 1))
+        result |= FLAG_CAUSE_CLASS;
 
     result |= check_equipment_flags(creature_ptr, TR_RES_SHARDS);
     return result;
@@ -1782,6 +1819,9 @@ BIT_FLAGS has_resist_neth(player_type *creature_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
+    if (has_element_resist(creature_ptr, ElementRealm::DARKNESS, 30))
+        result |= FLAG_CAUSE_CLASS;
+
     result |= check_equipment_flags(creature_ptr, TR_RES_NETHER);
     return result;
 }
@@ -1834,6 +1874,9 @@ BIT_FLAGS has_resist_fear(player_type *creature_ptr)
     case CLASS_NINJA:
         result |= FLAG_CAUSE_CLASS;
         break;
+
+    default:
+        break;
     }
 
     if (creature_ptr->mimic_form == MIMIC_DEMON_LORD) {
@@ -1866,6 +1909,9 @@ BIT_FLAGS has_immune_acid(player_type *creature_ptr)
             result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
+    if (has_element_resist(creature_ptr, ElementRealm::SEA, 30))
+        result |= FLAG_CAUSE_CLASS;
+
     result |= check_equipment_flags(creature_ptr, TR_IM_ACID);
     return result;
 }
@@ -1878,6 +1924,9 @@ BIT_FLAGS has_immune_elec(player_type *creature_ptr)
         if (creature_ptr->special_defense & DEFENSE_ELEC)
             result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
+
+    if (has_element_resist(creature_ptr, ElementRealm::SKY, 30))
+        result |= FLAG_CAUSE_CLASS;
 
     result |= check_equipment_flags(creature_ptr, TR_IM_ELEC);
     return result;
@@ -1892,6 +1941,9 @@ BIT_FLAGS has_immune_fire(player_type *creature_ptr)
             result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
+    if (has_element_resist(creature_ptr, ElementRealm::FIRE, 30))
+        result |= FLAG_CAUSE_CLASS;
+
     result |= check_equipment_flags(creature_ptr, TR_IM_FIRE);
     return result;
 }
@@ -1904,6 +1956,9 @@ BIT_FLAGS has_immune_cold(player_type *creature_ptr)
         if (creature_ptr->special_defense & DEFENSE_COLD)
             result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
+
+    if (has_element_resist(creature_ptr, ElementRealm::ICE, 30))
+        result |= FLAG_CAUSE_CLASS;
 
     result |= check_equipment_flags(creature_ptr, TR_IM_COLD);
     return result;

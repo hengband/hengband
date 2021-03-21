@@ -186,9 +186,8 @@ bool clean_shot(player_type *target_ptr, POSITION y1, POSITION x1, POSITION y2, 
  * @param dam_hp 威力
  * @param monspell モンスター魔法のID
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
- * @return なし
  */
-void bolt(player_type *target_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, int monspell, int target_type)
+ProjectResult bolt(player_type *target_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, int monspell, int target_type)
 {
     BIT_FLAGS flg = 0;
     switch (target_type) {
@@ -203,7 +202,7 @@ void bolt(player_type *target_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EF
     if (typ != GF_ARROW)
         flg |= PROJECT_REFLECTABLE;
 
-    (void)project(target_ptr, m_idx, 0, y, x, dam_hp, typ, flg, monspell);
+    return project(target_ptr, m_idx, 0, y, x, dam_hp, typ, flg, monspell);
 }
 
 /*!
@@ -216,9 +215,8 @@ void bolt(player_type *target_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EF
  * @param dam_hp 威力
  * @param monspell モンスター魔法のID
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
- * @return なし
  */
-void beam(player_type *target_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, int monspell, int target_type)
+ProjectResult beam(player_type *target_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, int monspell, int target_type)
 {
     BIT_FLAGS flg = 0;
     switch (target_type) {
@@ -230,7 +228,7 @@ void beam(player_type *target_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EF
         break;
     }
 
-    (void)project(target_ptr, m_idx, 0, y, x, dam_hp, typ, flg, monspell);
+    return project(target_ptr, m_idx, 0, y, x, dam_hp, typ, flg, monspell);
 }
 
 /*!
@@ -246,9 +244,8 @@ void beam(player_type *target_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EF
  * @param breath
  * @param monspell モンスター魔法のID
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
- * @return なし
  */
-void breath(
+ProjectResult breath(
     player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, EFFECT_ID typ, int dam_hp, POSITION rad, bool breath, int monspell, int target_type)
 {
     monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
@@ -285,7 +282,7 @@ void breath(
         break;
     }
 
-    (void)project(target_ptr, m_idx, rad, y, x, dam_hp, typ, flg, monspell);
+    return project(target_ptr, m_idx, rad, y, x, dam_hp, typ, flg, monspell);
 }
 
 /*!

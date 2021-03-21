@@ -115,6 +115,8 @@
       <AdditionalIncludeDirectories>..\..\src;curl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <ExceptionHandling>SyncCThrow</ExceptionHandling>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -127,6 +129,10 @@
       <Command>
       </Command>
     </PreBuildEvent>
+    <ResourceCompile>
+      <Culture>0x0411</Culture>
+      <PreprocessorDefinitions>JP</PreprocessorDefinitions>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='English-Debug|Win32'">
     <ClCompile>
@@ -141,6 +147,8 @@
       <AdditionalIncludeDirectories>..\..\src;curl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>SyncCThrow</ExceptionHandling>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -164,6 +172,8 @@
       <CompileAs>CompileAsCpp</CompileAs>
       <ExceptionHandling>SyncCThrow</ExceptionHandling>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
@@ -174,6 +184,12 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <SubSystem>Windows</SubSystem>
     </Link>
+    <ResourceCompile>
+      <PreprocessorDefinitions>JP</PreprocessorDefinitions>
+    </ResourceCompile>
+    <ResourceCompile>
+      <Culture>0x0411</Culture>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='English-Release|Win32'">
     <ClCompile>
@@ -190,6 +206,8 @@
       <ExceptionHandling>SyncCThrow</ExceptionHandling>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <CompileAs>CompileAsCpp</CompileAs>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <AdditionalDependencies>winmm.lib;Ws2_32.lib;Wldap32.lib;Crypt32.lib;Normaliz.lib;curl\x86 Release\libcurl_a.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -331,10 +349,16 @@
     <ClCompile Include="..\..\src\io\store-key-processor.cpp" />
     <ClCompile Include="..\..\src\load\info-loader.cpp" />
     <ClCompile Include="..\..\src\locale\utf-8.cpp" />
+    <ClCompile Include="..\..\src\main-win\main-win-file-utils.cpp" />
+    <ClCompile Include="..\..\src\main-win\main-win-mci.cpp" />
+    <ClCompile Include="..\..\src\main-win\main-win-music.cpp" />
+    <ClCompile Include="..\..\src\main-win\main-win-sound.cpp" />
+    <ClCompile Include="..\..\src\main-win\main-win-tokenizer.cpp" />
     <ClCompile Include="..\..\src\main\angband-headers.cpp" />
     <ClCompile Include="..\..\src\main\game-data-initializer.cpp" />
     <ClCompile Include="..\..\src\main\info-initializer.cpp" />
     <ClCompile Include="..\..\src\main\init-error-messages-table.cpp" />
+    <ClCompile Include="..\..\src\main-win\main-win-bg.cpp" />
     <ClCompile Include="..\..\src\market\building-initializer.cpp" />
     <ClCompile Include="..\..\src\melee\melee-spell-flags-checker.cpp" />
     <ClCompile Include="..\..\src\melee\melee-spell-util.cpp" />
@@ -343,6 +367,7 @@
     <ClCompile Include="..\..\src\mind\mind-berserker.cpp" />
     <ClCompile Include="..\..\src\mind\mind-blue-mage.cpp" />
     <ClCompile Include="..\..\src\mind\mind-chaos-warrior.cpp" />
+    <ClCompile Include="..\..\src\mind\mind-elementalist.cpp" />
     <ClCompile Include="..\..\src\mind\mind-explanations-table.cpp" />
     <ClCompile Include="..\..\src\mind\mind-hobbit.cpp" />
     <ClCompile Include="..\..\src\mind\mind-info.cpp" />
@@ -845,6 +870,12 @@
     <ClCompile Include="..\..\src\load\quest-loader.cpp" />
     <ClCompile Include="..\..\src\view\display-store.cpp" />
     <ClCompile Include="..\..\src\action\throw-util.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='English-Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='English-Debug|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClInclude Include="..\..\src\action\action-limited.h" />
     <ClInclude Include="..\..\src\action\activation-execution.h" />
     <ClInclude Include="..\..\src\action\mutation-execution.h" />
@@ -991,10 +1022,19 @@
     <ClInclude Include="..\..\src\load\info-loader.h" />
     <ClInclude Include="..\..\src\locale\language-switcher.h" />
     <ClInclude Include="..\..\src\locale\utf-8.h" />
+    <ClInclude Include="..\..\src\main-win\main-win-file-utils.h" />
+    <ClInclude Include="..\..\src\main-win\main-win-mci.h" />
+    <ClInclude Include="..\..\src\main-win\main-win-mmsystem.h" />
+    <ClInclude Include="..\..\src\main-win\main-win-music.h" />
+    <ClInclude Include="..\..\src\main-win\main-win-sound.h" />
+    <ClInclude Include="..\..\src\main-win\main-win-define.h" />
+    <ClInclude Include="..\..\src\main-win\main-win-tokenizer.h" />
     <ClInclude Include="..\..\src\main\angband-headers.h" />
     <ClInclude Include="..\..\src\main\game-data-initializer.h" />
     <ClInclude Include="..\..\src\main\info-initializer.h" />
     <ClInclude Include="..\..\src\main\init-error-messages-table.h" />
+    <ClInclude Include="..\..\src\main-win\main-win-bg.h" />
+    <ClInclude Include="..\..\src\main-win\main-win-windows.h" />
     <ClInclude Include="..\..\src\market\building-initializer.h" />
     <ClInclude Include="..\..\src\melee\melee-spell-flags-checker.h" />
     <ClInclude Include="..\..\src\melee\melee-spell-util.h" />
@@ -1003,6 +1043,7 @@
     <ClInclude Include="..\..\src\mind\mind-berserker.h" />
     <ClInclude Include="..\..\src\mind\mind-blue-mage.h" />
     <ClInclude Include="..\..\src\mind\mind-chaos-warrior.h" />
+    <ClInclude Include="..\..\src\mind\mind-elementalist.h" />
     <ClInclude Include="..\..\src\mind\mind-explanations-table.h" />
     <ClInclude Include="..\..\src\mind\mind-hobbit.h" />
     <ClInclude Include="..\..\src\mind\mind-info.h" />
@@ -1406,6 +1447,7 @@
     <ClInclude Include="..\..\src\mspell\mspell-type.h" />
     <ClInclude Include="..\..\src\mspell\mspell-util.h" />
     <ClInclude Include="..\..\src\mspell\mspell-ball.h" />
+    <ClInclude Include="..\..\src\mspell\mspell.h" />
     <ClInclude Include="..\..\src\player\player-personalities-types.h" />
     <ClInclude Include="..\..\src\player\player-race-types.h" />
     <ClInclude Include="..\..\src\player\player-classes-types.h" />
@@ -1488,7 +1530,6 @@
     <ClCompile Include="..\..\src\room\rooms-trap.cpp" />
     <ClCompile Include="..\..\src\room\rooms-vault.cpp" />
     <ClCompile Include="..\..\src\room\rooms-builder.cpp" />
-    <ClCompile Include="..\..\src\room\pit-nest-kinds-table.cpp" />
     <ClCompile Include="..\..\src\store\rumor.cpp" />
     <ClCompile Include="..\..\src\save\save.cpp" />
     <ClCompile Include="..\..\src\core\scores.cpp" />
@@ -1666,7 +1707,6 @@
     <ClInclude Include="..\..\src\player\race-info-table.h" />
     <ClInclude Include="..\..\src\player\race-resistances.h" />
     <ClInclude Include="..\..\src\player\temporary-resistances.h" />
-    <ClInclude Include="..\..\src\room\pit-nest-kinds-table.h" />
     <ClInclude Include="..\..\src\io\signal-handlers.h" />
     <ClInclude Include="..\..\src\io\uid-checker.h" />
     <ClInclude Include="..\..\src\spell-realm\spells-song.h" />
@@ -1695,6 +1735,7 @@
     <ClInclude Include="..\..\src\wizard\tval-descriptions-table.h" />
     <ClInclude Include="..\..\src\load\quest-loader.h" />
     <ClInclude Include="..\..\src\view\display-store.h" />
+    <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\system\angband.h" />

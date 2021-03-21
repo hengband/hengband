@@ -52,8 +52,8 @@ errr init_info_txt(FILE *fp, char *buf, angband_header *head, parse_info_txt_fun
         if (buf[0] != 'N' && buf[0] != 'D') {
             int i;
             for (i = 0; buf[i]; i++) {
-                head->v_extra += (byte)buf[i];
-                head->v_extra ^= (1U << (i % 8));
+                head->checksum += (byte)buf[i];
+                head->checksum ^= (1U << (i % 8));
             }
         }
 

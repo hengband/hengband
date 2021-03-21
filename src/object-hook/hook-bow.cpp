@@ -36,6 +36,9 @@ bool item_tester_hook_ammo(player_type *player_ptr, object_type *o_ptr)
     case TV_BOLT: {
         return TRUE;
     }
+
+    default:
+        break;
     }
 
     return FALSE;

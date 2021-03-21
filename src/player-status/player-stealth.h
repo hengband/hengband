@@ -6,7 +6,7 @@ public:
     using PlayerStatusBase::PlayerStatusBase;
     PlayerStealth() = delete;
 
-    BIT_FLAGS getBadFlags() override;
+    BIT_FLAGS get_bad_flags() override;
 
 protected:
     void set_locals() override;

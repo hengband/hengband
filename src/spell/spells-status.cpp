@@ -457,27 +457,38 @@ bool fishing(player_type *creature_ptr)
     return TRUE;
 }
 
-bool cosmic_cast_off(player_type *creature_ptr, object_type *o_ptr)
+/*!
+ * @brief 装備を脱ぎ捨てて小宇宙を燃やす
+ * @param creature_ptr プレイヤー情報への参照ポインタ
+ * @param o_ptr_ptr 脱ぐ装備品への参照ポインタのポインタ
+ * @return 脱いだらTRUE、脱がなかったらFALSE
+ * @detail
+ * 脱いで落とした装備にtimeoutを設定するために装備品のアドレスを返す。
+ */
+bool cosmic_cast_off(player_type *creature_ptr, object_type **o_ptr_ptr)
 {
+    object_type *o_ptr = (*o_ptr_ptr);
+
     /* Cast off activated item */
-    INVENTORY_IDX inv;
-    for (inv = INVEN_MAIN_HAND; inv <= INVEN_FEET; inv++) {
-        if (o_ptr == &creature_ptr->inventory_list[inv])
+    INVENTORY_IDX slot;
+    for (slot = INVEN_MAIN_HAND; slot <= INVEN_FEET; slot++) {
+        if (o_ptr == &creature_ptr->inventory_list[slot])
             break;
     }
 
-    if (inv > INVEN_FEET)
+    if (slot > INVEN_FEET)
         return FALSE;
 
     object_type forge;
     object_copy(&forge, o_ptr);
-    inven_item_increase(creature_ptr, inv, (0 - o_ptr->number));
-    inven_item_optimize(creature_ptr, inv);
-    OBJECT_IDX o_idx = drop_near(creature_ptr, &forge, 0, creature_ptr->y, creature_ptr->x);
-    o_ptr = &creature_ptr->current_floor_ptr->o_list[o_idx];
+    inven_item_increase(creature_ptr, slot, (0 - o_ptr->number));
+    inven_item_optimize(creature_ptr, slot);
+
+    OBJECT_IDX old_o_idx = drop_near(creature_ptr, &forge, 0, creature_ptr->y, creature_ptr->x);
+    *o_ptr_ptr = &creature_ptr->current_floor_ptr->o_list[old_o_idx];
 
     GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(creature_ptr, o_name, o_ptr, OD_NAME_ONLY);
+    describe_flavor(creature_ptr, o_name, &forge, OD_NAME_ONLY);
     msg_format(_("%sを脱ぎ捨てた。", "You cast off %s."), o_name);
 
     /* Get effects */

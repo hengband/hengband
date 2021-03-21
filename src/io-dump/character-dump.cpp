@@ -548,8 +548,8 @@ static void dump_aux_home_museum(player_type *creature_ptr, FILE *fff)
  */
 static concptr get_check_sum(void)
 {
-    return format("%02x%02x%02x%02x%02x%02x%02x%02x%02x", f_head.v_extra, k_head.v_extra, a_head.v_extra, e_head.v_extra, r_head.v_extra, d_head.v_extra,
-        m_head.v_extra, s_head.v_extra, v_head.v_extra);
+    return format("%02x%02x%02x%02x%02x%02x%02x%02x%02x", f_head.checksum, k_head.checksum, a_head.checksum, e_head.checksum, r_head.checksum, d_head.checksum,
+        m_head.checksum, s_head.checksum, v_head.checksum);
 }
 
 /*!

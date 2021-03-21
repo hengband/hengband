@@ -89,7 +89,7 @@ void display_monster_drops(lore_type *lore_ptr)
     if ((lore_ptr->drop_gold == 0) && (lore_ptr->drop_item == 0))
         return;
 
-    hooked_roff(format(_("%^sは", "%^s may carry"), wd_he[lore_ptr->msex]));
+    hooked_roff(format(_("%^sは", "%^s may carry"), Who::who(lore_ptr->msex)));
 #ifdef JP
 #else
     lore_ptr->sin = FALSE;

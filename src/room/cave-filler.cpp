@@ -4,12 +4,14 @@
  * @author Hourier
  */
 
-#include "room/cave-filler.h"
+#include <queue>
+
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/cave.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
+#include "room/cave-filler.h"
 #include "room/lake-types.h"
 #include "system/floor-type-definition.h"
 
@@ -223,46 +225,46 @@ static bool hack_isnt_wall(player_type *player_ptr, POSITION y, POSITION x, int 
  * Quick and nasty fill routine used to find the connected region
  * of floor in the middle of the grids
  */
-static void cave_fill(player_type *player_ptr, POSITION y, POSITION x)
+static void cave_fill(player_type *player_ptr, const POSITION y, const POSITION x)
 {
-    int flow_tail_room = 1;
-    int flow_head_room = 0;
-    tmp_pos.y[0] = y;
-    tmp_pos.x[0] = x;
+    struct Point {
+        int y;
+        int x;
+        Point(const int y, const int x)
+            : y(y)
+            , x(x)
+        {
+        }
+    };
+
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    while (flow_head_room != flow_tail_room) {
-        POSITION ty = tmp_pos.y[flow_head_room];
-        POSITION tx = tmp_pos.x[flow_head_room];
-        if (++flow_head_room == TEMP_MAX)
-            flow_head_room = 0;
+
+    // 幅優先探索用のキュー。
+    std::queue<Point> que;
+    que.emplace(y, x);
+
+    while (!que.empty()) {
+        const auto [y_cur, x_cur] = que.front();
+        que.pop();
 
         for (int d = 0; d < 8; d++) {
-            int old_head = flow_tail_room;
-            int j = ty + ddy_ddd[d];
-            int i = tx + ddx_ddd[d];
-            if (!in_bounds(floor_ptr, j, i)) {
-                floor_ptr->grid_array[j][i].info |= CAVE_ICKY;
+            int y_to = y_cur + ddy_ddd[d];
+            int x_to = x_cur + ddx_ddd[d];
+            if (!in_bounds(floor_ptr, y_to, x_to)) {
+                floor_ptr->grid_array[y_to][x_to].info |= CAVE_ICKY;
                 continue;
             }
 
-            if ((i <= fill_data.xmin) || (i >= fill_data.xmax) || (j <= fill_data.ymin) || (j >= fill_data.ymax)) {
-                floor_ptr->grid_array[j][i].info |= CAVE_ICKY;
+            if ((x_to <= fill_data.xmin) || (x_to >= fill_data.xmax) || (y_to <= fill_data.ymin) || (y_to >= fill_data.ymax)) {
+                floor_ptr->grid_array[y_to][x_to].info |= CAVE_ICKY;
                 continue;
             }
 
-            if (!hack_isnt_wall(player_ptr, j, i, fill_data.c1, fill_data.c2, fill_data.c3, fill_data.feat1, fill_data.feat2, fill_data.feat3, fill_data.info1,
-                    fill_data.info2, fill_data.info3))
+            if (!hack_isnt_wall(player_ptr, y_to, x_to, fill_data.c1, fill_data.c2, fill_data.c3, fill_data.feat1, fill_data.feat2, fill_data.feat3,
+                    fill_data.info1, fill_data.info2, fill_data.info3))
                 continue;
 
-            tmp_pos.y[flow_tail_room] = (byte)j;
-            tmp_pos.x[flow_tail_room] = (byte)i;
-            if (++flow_tail_room == TEMP_MAX)
-                flow_tail_room = 0;
-
-            if (flow_tail_room == flow_head_room) {
-                flow_tail_room = old_head;
-                continue;
-            }
+            que.emplace(y_to, x_to);
 
             (fill_data.amount)++;
         }

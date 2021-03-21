@@ -74,7 +74,6 @@ PRICE kakekin;
 int sel_monster;
 
 bool reinit_wilderness = FALSE;
-MONSTER_IDX today_mon;
 
 /*!
  * @brief 町に関するヘルプを表示する / Display town history

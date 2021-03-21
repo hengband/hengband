@@ -86,18 +86,29 @@ void get_stats(player_type* creature_ptr)
 }
 
 /*!
+ * @brief 経験値修正の合計値を計算
+ * @return なし
+ */
+u16b get_expfact(player_type *creature_ptr)
+{
+    u16b expfact = rp_ptr->r_exp;
+
+    if (creature_ptr->prace != RACE_ANDROID)
+        expfact += cp_ptr->c_exp;
+    if (((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER) || (creature_ptr->pclass == CLASS_NINJA))
+        && ((creature_ptr->prace == RACE_KLACKON) || (creature_ptr->prace == RACE_SPRITE)))
+        expfact -= 15;
+
+    return expfact;
+}
+
+/*!
  * @brief その他「オートローラ中は算出の対象にしない」副次ステータスを処理する / Roll for some info that the auto-roller ignores
  * @return なし
  */
 void get_extra(player_type* creature_ptr, bool roll_hitdie)
 {
-    if (creature_ptr->prace == RACE_ANDROID)
-        creature_ptr->expfact = rp_ptr->r_exp;
-    else
-        creature_ptr->expfact = rp_ptr->r_exp + cp_ptr->c_exp;
-
-    if (((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER) || (creature_ptr->pclass == CLASS_NINJA)) && ((creature_ptr->prace == RACE_KLACKON) || (creature_ptr->prace == RACE_SPRITE)))
-        creature_ptr->expfact -= 15;
+    creature_ptr->expfact = get_expfact(creature_ptr);
 
     /* Reset record of race/realm changes */
     creature_ptr->start_race = creature_ptr->prace;

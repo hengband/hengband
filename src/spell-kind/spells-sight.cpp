@@ -67,7 +67,7 @@ bool project_all_los(player_type *caster_ptr, EFFECT_ID typ, HIT_POINT dam)
         POSITION y = m_ptr->fy;
         POSITION x = m_ptr->fx;
 
-        if (project(caster_ptr, 0, 0, y, x, dam, typ, flg, -1))
+        if (project(caster_ptr, 0, 0, y, x, dam, typ, flg, -1).notice)
             obvious = TRUE;
     }
 

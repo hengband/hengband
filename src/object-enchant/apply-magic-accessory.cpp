@@ -684,5 +684,8 @@ void apply_magic_accessary(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
 
         break;
     }
+
+    default:
+        break;
     }
 }

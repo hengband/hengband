@@ -6,9 +6,9 @@ public:
     using PlayerStatusBase::PlayerStatusBase;
     PlayerBasicStatistics() = delete;
 
-    void updateValue();
-    s16b ModificationValue();
-    s16b getValue() override;
+    void update_value();
+    s16b modification_value();
+    s16b get_value() override;
 
 protected:
     base_status_type status_type;

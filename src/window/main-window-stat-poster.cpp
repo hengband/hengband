@@ -271,7 +271,7 @@ void print_state(player_type *player_ptr)
 }
 
 /*!
- * @brief プレイヤーの行動速度を表示する / Prints the speed of a character.			-CJS-
+ * @brief プレイヤーの行動速度を表示する / Prints the speed_value of a character.			-CJS-
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
@@ -282,15 +282,13 @@ void print_speed(player_type *player_ptr)
     TERM_LEN col_speed = wid + COL_SPEED;
     TERM_LEN row_speed = hgt + ROW_SPEED;
 
-    int i = player_ptr->pspeed;
-    if (player_ptr->action == ACTION_SEARCH && !player_ptr->lightspeed)
-        i += 10;
+    int speed_value = player_ptr->pspeed - 110;
 
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     bool is_player_fast = is_fast(player_ptr);
     char buf[32] = "";
     TERM_COLOR attr = TERM_WHITE;
-    if (i > 110) {
+    if (speed_value > 0) {
         if (player_ptr->riding) {
             monster_type *m_ptr = &floor_ptr->m_list[player_ptr->riding];
             if (monster_fast_remaining(m_ptr) && !monster_slow_remaining(m_ptr))
@@ -305,8 +303,8 @@ void print_speed(player_type *player_ptr)
             attr = TERM_VIOLET;
         else
             attr = TERM_L_GREEN;
-        sprintf(buf, "%s(+%d)", (player_ptr->riding ? _("乗馬", "Ride") : _("加速", "Fast")), (i - 110));
-    } else if (i < 110) {
+        sprintf(buf, "%s(+%d)", (player_ptr->riding ? _("乗馬", "Ride") : _("加速", "Fast")), speed_value);
+    } else if (speed_value < 0) {
         if (player_ptr->riding) {
             monster_type *m_ptr = &floor_ptr->m_list[player_ptr->riding];
             if (monster_fast_remaining(m_ptr) && !monster_slow_remaining(m_ptr))
@@ -321,7 +319,7 @@ void print_speed(player_type *player_ptr)
             attr = TERM_VIOLET;
         else
             attr = TERM_L_UMBER;
-        sprintf(buf, "%s(-%d)", (player_ptr->riding ? _("乗馬", "Ride") : _("減速", "Slow")), (110 - i));
+        sprintf(buf, "%s(%d)", (player_ptr->riding ? _("乗馬", "Ride") : _("減速", "Slow")), speed_value);
     } else if (player_ptr->riding) {
         attr = TERM_GREEN;
         strcpy(buf, _("乗馬中", "Riding"));

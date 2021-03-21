@@ -50,6 +50,8 @@ void safe_setuid_grab(player_type *player_ptr)
         quit(_("setgid(): 正しく許可が取れません！", "setgid(): cannot set permissions correctly!"));
     }
 #else
+    (void)player_ptr;
+
     if (setreuid(geteuid(), getuid()) != 0) {
         quit(_("setreuid(): 正しく許可が取れません！", "setreuid(): cannot set permissions correctly!"));
     }

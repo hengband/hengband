@@ -267,6 +267,7 @@ static bool let_player_build_character(player_type *creature_ptr)
 
 static void display_initial_options(player_type *creature_ptr)
 {
+    u16b expfact = get_expfact(creature_ptr) - 100;
     s16b adj[A_MAX];
     for (int i = 0; i < A_MAX; i++) {
         adj[i] = rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i];
@@ -276,7 +277,7 @@ static void display_initial_options(player_type *creature_ptr)
     put_str("                                   ", 3, 40);
     put_str(_("修正の合計値", "Your total modification"), 3, 40);
     put_str(_("腕力 知能 賢さ 器用 耐久 魅力 経験 ", "Str  Int  Wis  Dex  Con  Chr   EXP "), 4, 40);
-    sprintf(buf, "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ", adj[0], adj[1], adj[2], adj[3], adj[4], adj[5], cp_ptr->c_exp);
+    sprintf(buf, "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ", adj[0], adj[1], adj[2], adj[3], adj[4], adj[5], expfact);
     c_put_str(TERM_L_BLUE, buf, 5, 40);
 
     put_str("HD ", 6, 40);

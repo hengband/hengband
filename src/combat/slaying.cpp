@@ -194,6 +194,9 @@ HIT_POINT calc_attack_damage_with_slay(player_type *attacker_ptr, object_type *o
             mult = 150;
         break;
     }
+
+    default:
+        break;
     }
 
     if (mult > 150)

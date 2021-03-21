@@ -1,4 +1,5 @@
 ﻿#include "racial/racial-draconian.h"
+#include "mind/mind-elementalist.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"
 #include "target/target-getter.h"
@@ -106,6 +107,12 @@ static void decide_breath_kind(player_type *creature_ptr, int *breath_type, conc
             *breath_type_description = _("混乱", "confusion");
         }
 
+        break;
+    case CLASS_ELEMENTALIST:
+        *breath_type = get_element_type(creature_ptr->realm1, 0);
+        *breath_type_description = get_element_name(creature_ptr->realm1, 0);
+        break;
+    default:
         break;
     }
 }

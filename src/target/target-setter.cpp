@@ -1,4 +1,5 @@
-﻿#include "target/target-setter.h"
+﻿#include <vector>
+
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
@@ -17,6 +18,7 @@
 #include "target/target-checker.h"
 #include "target/target-describer.h"
 #include "target/target-preparation.h"
+#include "target/target-setter.h"
 #include "target/target-types.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
@@ -24,23 +26,28 @@
 #include "window/display-sub-windows.h"
 #include "window/main-window-util.h"
 
+// "interesting" な座標たちを記録する配列。
+// ang_sort() を利用する関係上、y/x座標それぞれについて配列を作る。
+static std::vector<POSITION> ys_interest;
+static std::vector<POSITION> xs_interest;
+
 // Target Setter.
 typedef struct ts_type {
     target_type mode;
     POSITION y;
     POSITION x;
-    POSITION y2;
-    POSITION x2;
+    POSITION y2; // panel_row_min 退避用
+    POSITION x2; // panel_col_min 退避用
     bool done;
-    bool flag;
+    bool flag; // 移動コマンド入力時、"interesting" な座標へ飛ぶかどうか
     char query;
     char info[80];
     grid_type *g_ptr;
     TERM_LEN wid, hgt;
-    int m;
-    int distance;
-    int target_num;
-    bool move_fast;
+    int m; // "interesting" な座標たちのうち現在ターゲットしているもののインデックス
+    int distance; // カーソルの移動方向 (1,2,3,4,6,7,8,9)
+    int target_num; // target_pick() の結果
+    bool move_fast; // カーソル移動を粗くする(1マスずつ移動しない)
 } ts_type;
 
 static ts_type *initialize_target_set_type(player_type *creature_ptr, ts_type *ts_ptr, target_type mode)
@@ -89,32 +96,53 @@ static bool change_panel_xy(player_type *creature_ptr, POSITION y, POSITION x)
     return change_panel(creature_ptr, dy, dx);
 }
 
-/*
- * Help "select" a location (see below)
+/*!
+ * @brief "interesting" な座標たちのうち、(y1,x1) から (dy,dx) 方向にある最も近いもののインデックスを得る。
+ * @param y1 現在地座標y
+ * @param x1 現在地座標x
+ * @param dy 現在地からの向きy [-1,1]
+ * @param dx 現在地からの向きx [-1,1]
+ * @return 最も近い座標のインデックス。適切なものがない場合 -1
  */
-static POSITION_IDX target_pick(POSITION y1, POSITION x1, POSITION dy, POSITION dx)
+static POSITION_IDX target_pick(const POSITION y1, const POSITION x1, const POSITION dy, const POSITION dx)
 {
+    // 最も近いもののインデックスとその距離。
     POSITION_IDX b_i = -1, b_v = 9999;
-    for (POSITION_IDX i = 0; i < tmp_pos.n; i++) {
-        POSITION x2 = tmp_pos.x[i];
-        POSITION y2 = tmp_pos.y[i];
-        POSITION x3 = (x2 - x1);
-        POSITION y3 = (y2 - y1);
+
+    for (POSITION_IDX i = 0; i < (POSITION_IDX)size(ys_interest); i++) {
+        const POSITION x2 = xs_interest[i];
+        const POSITION y2 = ys_interest[i];
+
+        // (y1,x1) から (y2,x2) へ向かうベクトル。
+        const POSITION x3 = (x2 - x1);
+        const POSITION y3 = (y2 - y1);
+
+        // (dy,dx) 方向にないものを除外する。
+
+        // dx > 0 のとき、x3 <= 0 なるものは除外。
+        // dx < 0 のとき、x3 >= 0 なるものは除外。
         if (dx && (x3 * dx <= 0))
             continue;
 
+        // dy > 0 のとき、y3 <= 0 なるものは除外。
+        // dy < 0 のとき、y3 >= 0 なるものは除外。
         if (dy && (y3 * dy <= 0))
             continue;
 
-        POSITION x4 = ABS(x3);
-        POSITION y4 = ABS(y3);
+        const POSITION x4 = ABS(x3);
+        const POSITION y4 = ABS(y3);
+
+        // (dy,dx) が (-1,0) or (1,0) のとき、|x3| > |y3| なるものは除外。
         if (dy && !dx && (x4 > y4))
             continue;
 
+        // (dy,dx) が (0,-1) or (0,1) のとき、|y3| > |x3| なるものは除外。
         if (dx && !dy && (y4 > x4))
             continue;
 
-        POSITION_IDX v = ((x4 > y4) ? (x4 + x4 + y4) : (y4 + y4 + x4));
+        // (y1,x1), (y2,x2) 間の距離を求め、最も近いものを更新する。
+        // 距離の定義は v の式を参照。
+        const POSITION_IDX v = ((x4 > y4) ? (x4 + x4 + y4) : (y4 + y4 + x4));
         if ((b_i >= 0) && (v >= b_v))
             continue;
 
@@ -127,8 +155,8 @@ static POSITION_IDX target_pick(POSITION y1, POSITION x1, POSITION dy, POSITION 
 
 static void describe_projectablity(player_type *creature_ptr, ts_type *ts_ptr)
 {
-    ts_ptr->y = tmp_pos.y[ts_ptr->m];
-    ts_ptr->x = tmp_pos.x[ts_ptr->m];
+    ts_ptr->y = ys_interest[ts_ptr->m];
+    ts_ptr->x = xs_interest[ts_ptr->m];
     change_panel_xy(creature_ptr, ts_ptr->y, ts_ptr->x);
     if ((ts_ptr->mode & TARGET_LOOK) == 0)
         print_path(creature_ptr, ts_ptr->y, ts_ptr->x);
@@ -183,7 +211,7 @@ static void switch_target_input(player_type *creature_ptr, ts_type *ts_ptr)
     case ' ':
     case '*':
     case '+':
-        if (++ts_ptr->m != tmp_pos.n)
+        if (++ts_ptr->m != (int)size(ys_interest))
             return;
 
         ts_ptr->m = 0;
@@ -195,7 +223,7 @@ static void switch_target_input(player_type *creature_ptr, ts_type *ts_ptr)
         if (ts_ptr->m-- != 0)
             return;
 
-        ts_ptr->m = tmp_pos.n - 1;
+        ts_ptr->m = (int)size(ys_interest) - 1;
         if (!expand_list)
             ts_ptr->done = TRUE;
 
@@ -206,7 +234,7 @@ static void switch_target_input(player_type *creature_ptr, ts_type *ts_ptr)
         creature_ptr->redraw |= PR_MAP;
         creature_ptr->window_flags |= PW_OVERHEAD;
         handle_stuff(creature_ptr);
-        target_set_prepare(creature_ptr, ts_ptr->mode);
+        target_set_prepare(creature_ptr, ys_interest, xs_interest, ts_ptr->mode);
         ts_ptr->y = creature_ptr->y;
         ts_ptr->x = creature_ptr->x;
     }
@@ -226,7 +254,7 @@ static void switch_target_input(player_type *creature_ptr, ts_type *ts_ptr)
             return;
         }
 
-        if (++ts_ptr->m != tmp_pos.n)
+        if (++ts_ptr->m != (int)size(ys_interest))
             return;
 
         ts_ptr->m = 0;
@@ -238,14 +266,34 @@ static void switch_target_input(player_type *creature_ptr, ts_type *ts_ptr)
     }
 }
 
+/*!
+ * @brief カーソル移動に伴い、描画範囲、"interesting" 座標リスト、現在のターゲットを更新する。
+ * @return カーソル移動によって描画範囲が変化したかどうか
+ */
 static bool check_panel_changed(player_type *creature_ptr, ts_type *ts_ptr)
 {
+    // カーソル移動によって描画範囲が変化しないなら何もせずその旨を返す。
     if (!change_panel(creature_ptr, ddy[ts_ptr->distance], ddx[ts_ptr->distance]))
         return FALSE;
 
-    int v = tmp_pos.y[ts_ptr->m];
-    int u = tmp_pos.x[ts_ptr->m];
-    target_set_prepare(creature_ptr, ts_ptr->mode);
+    // 描画範囲が変化した場合、"interesting" 座標リストおよび現在のターゲットを更新する必要がある。
+
+    // "interesting" 座標を探す起点。
+    // ts_ptr->m が有効な座標を指していればそれを使う。
+    // さもなくば (ts_ptr->y, ts_ptr->x) を使う。
+    int v, u;
+    if (ts_ptr->m < (int)size(ys_interest)) {
+        v = ys_interest[ts_ptr->m];
+        u = xs_interest[ts_ptr->m];
+    } else {
+        v = ts_ptr->y;
+        u = ts_ptr->x;
+    }
+
+    // 新たな描画範囲を用いて "interesting" 座標リストを更新。
+    target_set_prepare(creature_ptr, ys_interest, xs_interest, ts_ptr->mode);
+
+    // 新たな "interesting" 座標リストからターゲットを探す。
     ts_ptr->flag = TRUE;
     ts_ptr->target_num = target_pick(v, u, ddy[ts_ptr->distance], ddx[ts_ptr->distance]);
     if (ts_ptr->target_num >= 0)
@@ -254,10 +302,17 @@ static bool check_panel_changed(player_type *creature_ptr, ts_type *ts_ptr)
     return TRUE;
 }
 
+/*!
+ * @brief カーソル移動方向に "interesting" な座標がなかったとき、画面外まで探す。
+ *
+ * 既に "interesting" な座標を発見している場合、この関数は何もしない。
+ */
 static void sweep_targets(player_type *creature_ptr, ts_type *ts_ptr)
 {
     floor_type *floor_ptr = creature_ptr->current_floor_ptr;
     while (ts_ptr->flag && (ts_ptr->target_num < 0)) {
+        // カーソル移動に伴い、必要なだけ描画範囲を更新。
+        // "interesting" 座標リストおよび現在のターゲットも更新。
         if (check_panel_changed(creature_ptr, ts_ptr))
             continue;
 
@@ -270,7 +325,7 @@ static void sweep_targets(player_type *creature_ptr, ts_type *ts_ptr)
         creature_ptr->redraw |= PR_MAP;
         creature_ptr->window_flags |= PW_OVERHEAD;
         handle_stuff(creature_ptr);
-        target_set_prepare(creature_ptr, ts_ptr->mode);
+        target_set_prepare(creature_ptr, ys_interest, xs_interest, ts_ptr->mode);
         ts_ptr->flag = FALSE;
         ts_ptr->x += dx;
         ts_ptr->y += dy;
@@ -283,7 +338,7 @@ static void sweep_targets(player_type *creature_ptr, ts_type *ts_ptr)
         if ((ts_ptr->y >= panel_row_min + ts_ptr->hgt) || (ts_ptr->y < panel_row_min) || (ts_ptr->x >= panel_col_min + ts_ptr->wid)
             || (ts_ptr->x < panel_col_min)) {
             if (change_panel(creature_ptr, dy, dx))
-                target_set_prepare(creature_ptr, ts_ptr->mode);
+                target_set_prepare(creature_ptr, ys_interest, xs_interest, ts_ptr->mode);
         }
 
         if (ts_ptr->x >= floor_ptr->width - 1)
@@ -300,7 +355,7 @@ static void sweep_targets(player_type *creature_ptr, ts_type *ts_ptr)
 
 static bool set_target_grid(player_type *creature_ptr, ts_type *ts_ptr)
 {
-    if (!ts_ptr->flag || (tmp_pos.n == 0))
+    if (!ts_ptr->flag || ys_interest.empty())
         return FALSE;
 
     describe_projectablity(creature_ptr, ts_ptr);
@@ -319,7 +374,11 @@ static bool set_target_grid(player_type *creature_ptr, ts_type *ts_ptr)
 
     ts_ptr->y2 = panel_row_min;
     ts_ptr->x2 = panel_col_min;
-    ts_ptr->target_num = target_pick(tmp_pos.y[ts_ptr->m], tmp_pos.x[ts_ptr->m], ddy[ts_ptr->distance], ddx[ts_ptr->distance]);
+    {
+        const POSITION y = ys_interest[ts_ptr->m];
+        const POSITION x = xs_interest[ts_ptr->m];
+        ts_ptr->target_num = target_pick(y, x, ddy[ts_ptr->distance], ddx[ts_ptr->distance]);
+    }
     sweep_targets(creature_ptr, ts_ptr);
     ts_ptr->m = ts_ptr->target_num;
     return TRUE;
@@ -358,7 +417,7 @@ static void switch_next_grid_command(player_type *creature_ptr, ts_type *ts_ptr)
         creature_ptr->redraw |= PR_MAP;
         creature_ptr->window_flags |= PW_OVERHEAD;
         handle_stuff(creature_ptr);
-        target_set_prepare(creature_ptr, ts_ptr->mode);
+        target_set_prepare(creature_ptr, ys_interest, xs_interest, ts_ptr->mode);
         ts_ptr->y = creature_ptr->y;
         ts_ptr->x = creature_ptr->x;
     case 'o':
@@ -372,8 +431,10 @@ static void switch_next_grid_command(player_type *creature_ptr, ts_type *ts_ptr)
         ts_ptr->flag = TRUE;
         ts_ptr->m = 0;
         int bd = 999;
-        for (int i = 0; i < tmp_pos.n; i++) {
-            int t = distance(ts_ptr->y, ts_ptr->x, tmp_pos.y[i], tmp_pos.x[i]);
+        for (size_t i = 0; i < size(ys_interest); i++) {
+            const POSITION y = ys_interest[i];
+            const POSITION x = xs_interest[i];
+            int t = distance(ts_ptr->y, ts_ptr->x, y, x);
             if (t < bd) {
                 ts_ptr->m = i;
                 bd = t;
@@ -422,7 +483,7 @@ static void decide_change_panel(player_type *creature_ptr, ts_type *ts_ptr)
     if ((ts_ptr->y >= panel_row_min + ts_ptr->hgt) || (ts_ptr->y < panel_row_min) || (ts_ptr->x >= panel_col_min + ts_ptr->wid)
         || (ts_ptr->x < panel_col_min)) {
         if (change_panel(creature_ptr, dy, dx))
-            target_set_prepare(creature_ptr, ts_ptr->mode);
+            target_set_prepare(creature_ptr, ys_interest, xs_interest, ts_ptr->mode);
     }
 
     floor_type *floor_ptr = creature_ptr->current_floor_ptr;
@@ -473,9 +534,8 @@ bool target_set(player_type *creature_ptr, target_type mode)
     ts_type tmp_ts;
     ts_type *ts_ptr = initialize_target_set_type(creature_ptr, &tmp_ts, mode);
     target_who = 0;
-    target_set_prepare(creature_ptr, mode);
+    target_set_prepare(creature_ptr, ys_interest, xs_interest, mode);
     sweep_target_grids(creature_ptr, ts_ptr);
-    tmp_pos.n = 0;
     prt("", 0, 0);
     verify_panel(creature_ptr);
     set_bits(creature_ptr->update, PU_MONSTERS);

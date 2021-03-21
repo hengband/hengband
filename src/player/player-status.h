@@ -277,7 +277,7 @@ typedef struct player_type {
     s16b pet_follow_distance; /* Length of the imaginary "leash" for pets */
     s16b pet_extra_flags; /* Various flags for controling pets */
 
-    s16b today_mon; /* Wanted monster */
+    MONSTER_IDX today_mon; //!< 日替わり賞金首を知っていればそのモンスターID、知らなければ 0
 
     bool dtrap; /* Whether you are on trap-safe grids */
     FLOOR_IDX floor_id; /* Current floor location */

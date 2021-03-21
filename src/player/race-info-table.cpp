@@ -31,7 +31,7 @@ const player_race race_info[MAX_RACES] =
 		72,  6, 180, 25,
 		66,  4, 150, 20,
 		0,
-		0xFFFFFFF,
+		0x1FFFFFFF,
 	},
 	{
 #ifdef JP
@@ -46,7 +46,7 @@ const player_race race_info[MAX_RACES] =
 		66,  6, 130, 15,
 		62,  6, 100, 10,
 		2,
-		0xE77E7FF,
+		0x1E77E7FF,
 	},
 	{
 #ifdef JP
@@ -61,7 +61,7 @@ const player_race race_info[MAX_RACES] =
 		60,  4, 100,  6,
 		54,  4, 80,  6,
 		3,
-		0xE77E75B,
+		0x1E77E75B,
 
 	},
 	{
@@ -77,7 +77,7 @@ const player_race race_info[MAX_RACES] =
 		36,  3, 60,  3,
 		33,  3, 50,  3,
 		4,
-		0xF6FFC0B,
+		0x1F6FFC0B,
 	},
 	{
 #ifdef JP
@@ -92,7 +92,7 @@ const player_race race_info[MAX_RACES] =
 		42,  3, 90,  6,
 		39,  3, 75,  3,
 		4,
-		0xF67D60F,
+		0x1F67D60F,
 	},
 	{
 #ifdef JP
@@ -107,7 +107,7 @@ const player_race race_info[MAX_RACES] =
 		48,  3, 150, 10,
 		46,  3, 120, 10,
 		5,
-		0x1890005,
+		0x01890005,
 	},
 	{
 #ifdef JP
@@ -122,7 +122,7 @@ const player_race race_info[MAX_RACES] =
 		66,  1, 150,  5,
 		62,  1, 120,  5,
 		3,
-		0xDD8818D,
+		0x0DD8818D,
 	},
 	{
 #ifdef JP
@@ -137,7 +137,7 @@ const player_race race_info[MAX_RACES] =
 		96, 10, 250, 50,
 		84,  8, 225, 40,
 		3,
-		0x0880005,
+		0x00880005,
 	},
 	{
 #ifdef JP
@@ -152,7 +152,7 @@ const player_race race_info[MAX_RACES] =
 		82, 5, 190, 20,
 		78,  6, 180, 15,
 		0,
-		0xFFFF7FF,
+		0x1FFFF7FF,
 	},
 	{
 #ifdef JP
@@ -167,7 +167,7 @@ const player_race race_info[MAX_RACES] =
 		90, 10, 190, 20,
 		82, 10, 180, 15,
 		4,
-		0xF77E75B,
+		0x1F77E75B,
 	},
 	{
 #ifdef JP
@@ -182,7 +182,7 @@ const player_race race_info[MAX_RACES] =
 		82, 5, 200, 20,
 		78,  6, 190, 15,
 		0,
-		0x5C0A09D,
+		0x05C0A09D,
 	},
 	{
 #ifdef JP
@@ -197,7 +197,7 @@ const player_race race_info[MAX_RACES] =
 		92, 10, 255, 60,
 		80,  8, 235, 60,
 		3,
-		0x0A80407,
+		0x00A80407,
 	},
 	{
 #ifdef JP
@@ -212,7 +212,7 @@ const player_race race_info[MAX_RACES] =
 		100,10, 255, 65,
 		80, 10, 240, 64,
 		3,
-		0x8880011,
+		0x08880011,
 	},
 	{
 #ifdef JP
@@ -227,7 +227,7 @@ const player_race race_info[MAX_RACES] =
 		111, 11, 255, 86,
 		99, 11, 250, 86,
 		0,
-		0x23D4727,
+		0x123D4727,
 	},
 	{
 #ifdef JP
@@ -242,7 +242,7 @@ const player_race race_info[MAX_RACES] =
 		92, 10, 255, 60,
 		80,  8, 235, 60,
 		1,
-		0x0888005,
+		0x00888005,
 	},
 	{
 #ifdef JP
@@ -257,7 +257,7 @@ const player_race race_info[MAX_RACES] =
 		50,  3, 90,  6,
 		50,  3, 75,  3,
 		2,
-		0x667360F,
+		0x1667360F,
 	},
 	{
 #ifdef JP
@@ -272,7 +272,7 @@ const player_race race_info[MAX_RACES] =
 		60,  3, 80,  4,
 		54,  3, 70,  4,
 		2,
-		0x04D8011,
+		0x004D8011,
 	},
 	{
 #ifdef JP
@@ -287,7 +287,7 @@ const player_race race_info[MAX_RACES] =
 		60,  1, 130,  5,
 		55,  1, 100,  5,
 		3,
-		0x444A009,
+		0x0444A009,
 	},
 	{
 #ifdef JP
@@ -302,7 +302,7 @@ const player_race race_info[MAX_RACES] =
 		43,  3, 92,  6,
 		40,  3, 78,  3,
 		5,
-		0x569040F,
+		0x0569040F,
 	},
 	{
 #ifdef JP
@@ -317,7 +317,7 @@ const player_race race_info[MAX_RACES] =
 		60,  4, 100,  6,
 		54,  4, 80,  6,
 		5,
-		0xE77C7DF,
+		0x1E77C7DF,
 	},
 	{
 #ifdef JP
@@ -332,7 +332,7 @@ const player_race race_info[MAX_RACES] =
 		76,  1, 160,  5,
 		72,  1, 130,  5,
 		2,
-		0x7FFE757,
+		0x07FFE757,
 	},
 	{
 #ifdef JP
@@ -347,7 +347,7 @@ const player_race race_info[MAX_RACES] =
 		68,  6, 142, 15,
 		63,  6, 112, 10,
 		4,
-		0x2334746,
+		0x12334746,
 	},
 	{
 #ifdef JP
@@ -362,7 +362,7 @@ const player_race race_info[MAX_RACES] =
 		68,  1, 150,  5,
 		64,  1, 120,  5,
 		3,
-		0xDB537CB,
+		0x1DB537CB,
 	},
 	{
 #ifdef JP
@@ -377,7 +377,7 @@ const player_race race_info[MAX_RACES] =
 		66,  1, 200,  6,
 		62,  1, 180,  6,
 		4,
-		0x0800001,
+		0x00800001,
 	},
 	{
 #ifdef JP
@@ -392,7 +392,7 @@ const player_race race_info[MAX_RACES] =
 		72,  6, 50, 5,
 		66,  4, 50, 5,
 		2,
-		0x234070F,
+		0x1234070F,
 	},
 	{
 #ifdef JP
@@ -407,7 +407,7 @@ const player_race race_info[MAX_RACES] =
 		72, 6, 100, 25,
 		66, 4, 100, 20,
 		2,
-		0x0800001,
+		0x00800001,
 	},
 	{
 #ifdef JP
@@ -422,7 +422,7 @@ const player_race race_info[MAX_RACES] =
 		72,  6, 180, 25,
 		66,  4, 150, 20,
 		5,
-		0x67DC7FF,
+		0x167DC7FF,
 	},
 	{
 #ifdef JP
@@ -437,7 +437,7 @@ const player_race race_info[MAX_RACES] =
 		72, 6, 100, 25,
 		66, 4, 100, 20,
 		5,
-		0x631474A,
+		0x1631474A,
 	},
 	{
 #ifdef JP
@@ -452,7 +452,7 @@ const player_race race_info[MAX_RACES] =
 		32,  2, 75,  2,
 		29,  2, 65,  2,
 		4,
-		0x623F65E,
+		0x1623F65E,
 	},
 	{
 #ifdef JP
@@ -467,7 +467,7 @@ const player_race race_info[MAX_RACES] =
 		65,  6, 150, 20,
 		61,  6, 120, 15,
 		0,
-		0x57887CF,
+		0x057887CF,
 	},
 	{
 #ifdef JP
@@ -481,7 +481,7 @@ const player_race race_info[MAX_RACES] =
 		111, 11, 255, 50,
 		99, 11, 250, 45,
 		  0,
-		0x0010005,
+		0x00010005,
 	},
 	{
 #ifdef JP
@@ -496,7 +496,7 @@ const player_race race_info[MAX_RACES] =
 		82, 5, 190, 20,
 		78,  6, 180, 15,
 		3,
-		0x779F777,
+		0x0779F777,
 	},
 	{
 #ifdef JP
@@ -513,7 +513,7 @@ const player_race race_info[MAX_RACES] =
 		100,10, 255, 65,
 		80, 10, 240, 64,
 		5,
-		0x7EDC4DB,
+		0x17EDC4DB,
 	},
 	{
 #ifdef JP
@@ -528,7 +528,7 @@ const player_race race_info[MAX_RACES] =
 		82, 5, 190, 20,
 		78,  6, 180, 15,
 		0,
-		0xFFFF7FF,
+		0x1FFFF7FF,
 	},
 	{
 #ifdef JP
@@ -542,7 +542,7 @@ const player_race race_info[MAX_RACES] =
 		 80,  8, 90, 20,
 		 73,  8, 80, 15,
 		  4,
-		0xE33C7DF,
+		0x1E33C7DF,
 	},
 	{
 #ifdef JP
@@ -557,7 +557,7 @@ const player_race race_info[MAX_RACES] =
 		48,  6, 150, 25,
 		44,  4, 130, 20,
 		0,
-		0xC18B7AD,
+		0x0C18B7AD,
 	},
 	{
 #ifdef JP
@@ -572,7 +572,7 @@ const player_race race_info[MAX_RACES] =
 		72, 12, 240, 64,
 		66, 12, 220, 64,
 		0,
-		0x0800001,
+		0x00800001,
 	},
 	{
 #ifdef JP
@@ -587,7 +587,7 @@ const player_race race_info[MAX_RACES] =
 			66,  6, 130, 15,
 			62,  6, 100, 10,
 			2,
-			0xE77E7FF,
+			0x1E77E7FF,
 	},
 
 };

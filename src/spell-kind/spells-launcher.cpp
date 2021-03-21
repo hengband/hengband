@@ -35,7 +35,7 @@ bool fire_ball(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT 
         ty = target_row;
     }
 
-    return project(caster_ptr, 0, rad, ty, tx, dam, typ, flg, -1);
+    return project(caster_ptr, 0, rad, ty, tx, dam, typ, flg, -1).notice;
 }
 
 /*!
@@ -53,7 +53,10 @@ bool fire_ball(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT 
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_breath(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad) { return fire_ball(caster_ptr, typ, dir, dam, -rad); }
+bool fire_breath(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
+{
+    return fire_ball(caster_ptr, typ, dir, dam, -rad);
+}
 
 /*!
  * @brief ロケット系スペルの発動(詳細な差は確認中) / Cast a ball spell
@@ -80,7 +83,7 @@ bool fire_rocket(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POIN
     }
 
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-    return (project(caster_ptr, 0, rad, ty, tx, dam, typ, flg, -1));
+    return project(caster_ptr, 0, rad, ty, tx, dam, typ, flg, -1).notice;
 }
 
 /*!
@@ -109,7 +112,7 @@ bool fire_ball_hide(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_P
         ty = target_row;
     }
 
-    return (project(caster_ptr, 0, rad, ty, tx, dam, typ, flg, -1));
+    return project(caster_ptr, 0, rad, ty, tx, dam, typ, flg, -1).notice;
 }
 
 /*!
@@ -134,7 +137,7 @@ bool fire_ball_hide(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_P
 bool fire_meteor(player_type *caster_ptr, MONSTER_IDX who, EFFECT_ID typ, POSITION y, POSITION x, HIT_POINT dam, POSITION rad)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-    return (project(caster_ptr, who, rad, y, x, dam, typ, flg, -1));
+    return project(caster_ptr, who, rad, y, x, dam, typ, flg, -1).notice;
 }
 
 /*!
@@ -177,9 +180,9 @@ bool fire_blast(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, DICE_NUMB
         }
 
         /* Analyze the "dir" and the "target". */
-        if (!project(caster_ptr, 0, 0, y, x, damroll(dd, ds), typ, flg, -1)) {
+        const auto proj_res = project(caster_ptr, 0, 0, y, x, damroll(dd, ds), typ, flg, -1);
+        if (!proj_res.notice)
             result = FALSE;
-        }
     }
 
     return result;
@@ -267,5 +270,5 @@ bool project_hook(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POI
         ty = target_row;
     }
 
-    return (project(caster_ptr, 0, 0, ty, tx, dam, typ, flg, -1));
+    return project(caster_ptr, 0, 0, ty, tx, dam, typ, flg, -1).notice;
 }

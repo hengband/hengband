@@ -314,7 +314,7 @@ void health_redraw(player_type *creature_ptr, bool riding)
     m_ptr = &creature_ptr->current_floor_ptr->m_list[health_who];
 
     if (current_world_ptr->wizard && creature_ptr->phase_out) {
-        row = ROW_INFO - 2;
+        row = ROW_INFO - 1;
         col = COL_INFO + 2;
 
         term_putstr(col - 2, row, 12, TERM_WHITE, "      /     ");

@@ -44,7 +44,11 @@ AC_SUBST(DEFAULT_VAR_PATH)
 dnl Checks for programs.
 AC_LANG(C++)
 AC_PROG_CXX
-AX_CXX_COMPILE_STDCXX_17
+m4_ifdef([AX_CXX_COMPILE_STDCXX_17], [
+  AX_CXX_COMPILE_STDCXX_17
+], [
+  AC_MSG_ERROR([AX_CXX_COMPILE_STDCXX_17 macro is not defined. You need to install autoconf-archive.])
+])
 PKG_PROG_PKG_CONFIG
 
 AC_ARG_ENABLE(japanese,

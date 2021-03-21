@@ -19,16 +19,16 @@
  * @details
  * * 各要素によるステータス修正値の合計
  */
-s16b PlayerBasicStatistics::ModificationValue() 
+s16b PlayerBasicStatistics::modification_value() 
 {
-    return PlayerStatusBase::getValue();
+    return PlayerStatusBase::get_value();
 }
 
 /*!
  * @brief 基礎ステータスの実値
  * @return status_typeに対応するステータスの実値を返す
  */
-s16b PlayerBasicStatistics::getValue()
+s16b PlayerBasicStatistics::get_value()
 {
     this->set_locals();
     return this->owner_ptr->stat_index[(int)this->status_type];
@@ -83,7 +83,7 @@ s16b PlayerBasicStatistics::personality_value()
  * @details
  * * owner_ptrのステータスを更新する
  */
-void PlayerBasicStatistics::updateValue()
+void PlayerBasicStatistics::update_value()
 {
     this->set_locals();
     this->update_top_status();

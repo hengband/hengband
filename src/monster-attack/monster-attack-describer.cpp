@@ -239,5 +239,10 @@ void describe_monster_attack_method(monap_type *monap_ptr)
         monster_attack_show(monap_ptr);
         break;
     }
+
+    case RBM_NONE:
+    case RBM_SHOOT:
+    case NB_RBM_TYPE:
+        break;
     }
 }

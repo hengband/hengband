@@ -531,6 +531,9 @@ void do_cmd_pet(player_type *creature_ptr)
                     powers[num++] = PET_TWO_HANDS;
                 }
                 break;
+
+            default:
+                break;
             }
         }
     }

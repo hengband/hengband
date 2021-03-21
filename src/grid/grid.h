@@ -14,64 +14,64 @@
  * included in all such copies.
  */
 
-#include "system/angband.h"
 #include "floor/geometry.h"
 #include "spell/spells-util.h"
+#include "system/angband.h"
 
- /*
-  * A single "grid" in a Cave
-  *
-  * Note that several aspects of the code restrict the actual grid
-  * to a max size of 256 by 256.  In partcular, locations are often
-  * saved as bytes, limiting each coordinate to the 0-255 range.
-  *
-  * The "o_idx" and "m_idx" fields are very interesting.  There are
-  * many places in the code where we need quick access to the actual
-  * monster or object(s) in a given grid.  The easiest way to
-  * do this is to simply keep the index of the monster and object
-  * (if any) with the grid, but this takes 198*66*4 bytes of memory.
-  * Several other methods come to mind, which require only half this
-  * amound of memory, but they all seem rather complicated, and would
-  * probably add enough code that the savings would be lost.  So for
-  * these reasons, we simply store an index into the "o_list" and
-  * ">m_list" arrays, using "zero" when no monster/object is present.
-  *
-  * Note that "o_idx" is the index of the top object in a stack of
-  * objects, using the "next_o_idx" field of objects (see below) to
-  * create the singly linked list of objects.  If "o_idx" is zero
-  * then there are no objects in the grid.
-  *
-  * Note the special fields for the "MONSTER_FLOW" code.
-  */
+/*
+ * A single "grid" in a Cave
+ *
+ * Note that several aspects of the code restrict the actual grid
+ * to a max size of 256 by 256.  In partcular, locations are often
+ * saved as bytes, limiting each coordinate to the 0-255 range.
+ *
+ * The "o_idx" and "m_idx" fields are very interesting.  There are
+ * many places in the code where we need quick access to the actual
+ * monster or object(s) in a given grid.  The easiest way to
+ * do this is to simply keep the index of the monster and object
+ * (if any) with the grid, but this takes 198*66*4 bytes of memory.
+ * Several other methods come to mind, which require only half this
+ * amound of memory, but they all seem rather complicated, and would
+ * probably add enough code that the savings would be lost.  So for
+ * these reasons, we simply store an index into the "o_list" and
+ * ">m_list" arrays, using "zero" when no monster/object is present.
+ *
+ * Note that "o_idx" is the index of the top object in a stack of
+ * objects, using the "next_o_idx" field of objects (see below) to
+ * create the singly linked list of objects.  If "o_idx" is zero
+ * then there are no objects in the grid.
+ *
+ * Note the special fields for the "MONSTER_FLOW" code.
+ */
 
 typedef struct grid_type {
-	BIT_FLAGS info;		/* Hack -- grid flags */
+    BIT_FLAGS info; /* Hack -- grid flags */
 
-	FEAT_IDX feat;		/* Hack -- feature type */
-	OBJECT_IDX o_idx;		/* Object in this grid */
-	MONSTER_IDX m_idx;		/* Monster in this grid */
+    FEAT_IDX feat; /* Hack -- feature type */
+    OBJECT_IDX o_idx; /* Object in this grid */
+    MONSTER_IDX m_idx; /* Monster in this grid */
 
-	/*! 地形の特別な情報を保存する / Special grid info
-	 * 具体的な使用一覧はクエスト行き階段の移行先クエストID、
-	 * 各ダンジョン入口の移行先ダンジョンID、
-	 *
-	 */
-	s16b special;
+    /*! 地形の特別な情報を保存する / Special grid info
+     * 具体的な使用一覧はクエスト行き階段の移行先クエストID、
+     * 各ダンジョン入口の移行先ダンジョンID、
+     *
+     */
+    s16b special;
 
-	FEAT_IDX mimic;		/* Feature to mimic */
+    FEAT_IDX mimic; /* Feature to mimic */
 
-	byte cost;		/* Hack -- cost of flowing */
-	byte dist;		/* Hack -- distance from player */
-	byte when;		/* Hack -- when cost was computed */
+    byte cost; /* Hack -- cost of flowing */
+    byte dist; /* Hack -- distance from player */
+    byte when; /* Hack -- when cost was computed */
 } grid_type;
 
 /*  A structure type for terrain template of saving dungeon floor */
 typedef struct grid_template_type {
-	BIT_FLAGS info;
-	FEAT_IDX feat;
-	FEAT_IDX mimic;
-	s16b special;
-	u16b occurrence;
+    BIT_FLAGS info;
+    FEAT_IDX feat;
+    FEAT_IDX mimic;
+    s16b special;
+    u16b occurrence;
 } grid_template_type;
 
 /*!
@@ -79,7 +79,7 @@ typedef struct grid_template_type {
  * @param Y 指定Y座標
  * @param X 指定X座標
  */
-#define place_rubble(F,Y,X)       set_cave_feat(F,Y,X,feat_rubble)
+#define place_rubble(F, Y, X) set_cave_feat(F, Y, X, feat_rubble)
 
 /*!
  * @brief 指定座標がFLOOR属性を持ったマスかどうかを返す
@@ -87,18 +87,20 @@ typedef struct grid_template_type {
  * @param X 指定X座標
  * @return FLOOR属性を持っているならばTRUE
  */
-#define is_floor_bold(F,Y,X) (F->grid_array[Y][X].info & CAVE_FLOOR)
-#define is_extra_bold(F,Y,X) (F->grid_array[Y][X].info & CAVE_EXTRA)
+#define is_floor_bold(F, Y, X) (F->grid_array[Y][X].info & CAVE_FLOOR)
+#define is_extra_bold(F, Y, X) (F->grid_array[Y][X].info & CAVE_EXTRA)
 
-#define is_inner_bold(F,Y,X) (F->grid_array[Y][X].info & CAVE_INNER)
-#define is_outer_bold(F,Y,X) (F->grid_array[Y][X].info & CAVE_OUTER)
-#define is_solid_bold(F,Y,X) (F->grid_array[Y][X].info & CAVE_SOLID)
+#define is_inner_bold(F, Y, X) (F->grid_array[Y][X].info & CAVE_INNER)
+#define is_outer_bold(F, Y, X) (F->grid_array[Y][X].info & CAVE_OUTER)
+#define is_solid_bold(F, Y, X) (F->grid_array[Y][X].info & CAVE_SOLID)
 
 #define is_floor_grid(C) ((C)->info & CAVE_FLOOR)
 #define is_extra_grid(C) ((C)->info & CAVE_EXTRA)
 #define is_inner_grid(C) ((C)->info & CAVE_INNER)
 #define is_outer_grid(C) ((C)->info & CAVE_OUTER)
 #define is_solid_grid(C) ((C)->info & CAVE_SOLID)
+
+// clang-format off
 
 /*
  * 特殊なマス状態フラグ / Special grid flags
@@ -115,7 +117,7 @@ typedef struct grid_template_type {
 #define CAVE_MNDK       0x8000    /*!< モンスターの暗源によって暗闇になっている / Darken by monster */
 
 /* Used only while floor generation */
-#define CAVE_FLOOR      0x0200	/*!< フロア属性のあるマス */
+#define CAVE_FLOOR      0x0200    /*!< フロア属性のあるマス */
 #define CAVE_EXTRA      0x0400
 #define CAVE_INNER      0x0800
 #define CAVE_OUTER      0x1000
@@ -146,8 +148,9 @@ typedef struct grid_template_type {
 #define DOOR_GLASS_DOOR  1
 #define DOOR_CURTAIN     2
 
+// clang-format on
+
 extern bool new_player_spot(player_type *creature_ptr);
-extern pos_list tmp_pos;
 
 extern void place_bound_perm_wall(player_type *player_ptr, grid_type *g_ptr);
 extern bool is_known_trap(player_type *player_ptr, grid_type *g_ptr);
@@ -162,7 +165,6 @@ extern bool player_can_enter(player_type *creature_ptr, FEAT_IDX feature, BIT_FL
  */
 bool feat_uses_special(FEAT_IDX f_idx);
 
-extern POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern void update_local_illumination(player_type *creature_ptr, POSITION y, POSITION x);
 extern bool no_lite(player_type *creature_ptr);
 extern void print_rel(player_type *subject_ptr, SYMBOL_CODE c, TERM_COLOR a, POSITION y, POSITION x);
@@ -178,19 +180,20 @@ extern bool check_local_illumination(player_type *creature_ptr, POSITION y, POSI
 extern bool cave_monster_teleportable_bold(player_type *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, teleport_flags mode);
 extern bool cave_player_teleportable_bold(player_type *player_ptr, POSITION y, POSITION x, teleport_flags mode);
 
-enum grid_bold_type
-{
-	GB_FLOOR,
-	GB_EXTRA,
-	GB_EXTRA_PERM,
-	GB_INNER,
-	GB_INNER_PERM,
-	GB_OUTER,
-	GB_OUTER_NOPERM,
-	GB_SOLID,
-	GB_SOLID_PERM,
-	GB_SOLID_NOPERM
+// clang-format off
+enum grid_bold_type {
+    GB_FLOOR,
+    GB_EXTRA,
+    GB_EXTRA_PERM,
+    GB_INNER,
+    GB_INNER_PERM,
+    GB_OUTER,
+    GB_OUTER_NOPERM,
+    GB_SOLID,
+    GB_SOLID_PERM,
+    GB_SOLID_NOPERM
 };
+// clang-format on
 
 void place_grid(player_type *player_ptr, grid_type *g_ptr, grid_bold_type pg_type);
 bool darkened_grid(player_type *player_ptr, grid_type *g_ptr);
@@ -200,6 +203,8 @@ void set_cave_feat(floor_type *floor_ptr, POSITION y, POSITION x, FEAT_IDX featu
 void add_cave_info(floor_type *floor_ptr, POSITION y, POSITION x, int cave_mask);
 FEAT_IDX get_feat_mimic(grid_type *g_ptr);
 
+// clang-format off
+
 /*
  * This macro allows us to efficiently add a grid to the "lite" array,
  * note that we are never called for illegal grids, or for grids which
@@ -208,12 +213,12 @@ FEAT_IDX get_feat_mimic(grid_type *g_ptr);
  */
 #define cave_lite_hack(F,Y,X) \
 {\
-	if (!((F)->grid_array[Y][X].info & (CAVE_LITE))) \
-	{ \
-		(F)->grid_array[Y][X].info |= (CAVE_LITE); \
-		(F)->lite_y[(F)->lite_n] = (Y); \
-		(F)->lite_x[(F)->lite_n++] = (X); \
-	} \
+    if (!((F)->grid_array[Y][X].info & (CAVE_LITE))) \
+    { \
+        (F)->grid_array[Y][X].info |= (CAVE_LITE); \
+        (F)->lite_y[(F)->lite_n] = (Y); \
+        (F)->lite_x[(F)->lite_n++] = (X); \
+    } \
 }
 
 /*
@@ -221,8 +226,8 @@ FEAT_IDX get_feat_mimic(grid_type *g_ptr);
  */
 #define cave_note_and_redraw_later(F,C,Y,X) \
 {\
-	(C)->info |= CAVE_NOTE; \
-	cave_redraw_later((F), (C), (Y), (X)); \
+    (C)->info |= CAVE_NOTE; \
+    cave_redraw_later((F), (C), (Y), (X)); \
 }
 
 /*
@@ -230,12 +235,12 @@ FEAT_IDX get_feat_mimic(grid_type *g_ptr);
 */
 #define cave_redraw_later(F,G,Y,X) \
 {\
-	if (!((G)->info & CAVE_REDRAW)) \
-	{ \
-		(G)->info |= CAVE_REDRAW; \
-		(F)->redraw_y[(F)->redraw_n] = (Y); \
-		(F)->redraw_x[(F)->redraw_n++] = (X); \
-	} \
+    if (!((G)->info & CAVE_REDRAW)) \
+    { \
+        (G)->info |= CAVE_REDRAW; \
+        (F)->redraw_y[(F)->redraw_n] = (Y); \
+        (F)->redraw_x[(F)->redraw_n++] = (X); \
+    } \
 }
 
 /*
@@ -252,5 +257,7 @@ FEAT_IDX get_feat_mimic(grid_type *g_ptr);
     (F)->view_x[(F)->view_n] = (X); \
     (F)->view_n++;}\
 }
+
+// clang-format on
 
 int count_dt(player_type *creature_ptr, POSITION *y, POSITION *x, bool (*test)(player_type *, FEAT_IDX), bool under);

@@ -38,8 +38,10 @@
 #include "system/floor-type-definition.h"
 #include "view/display-messages.h"
 
-bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activation_type *const act_ptr, concptr name)
+bool switch_activation(player_type *user_ptr, object_type **o_ptr_ptr, const activation_type *const act_ptr, concptr name)
 {
+    object_type *o_ptr = (*o_ptr_ptr);
+
     switch (act_ptr->index) {
     case ACT_SUNLIGHT:
         return activate_sunlight(user_ptr);
@@ -219,7 +221,7 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
         true_healing(user_ptr, 0);
         return TRUE;
     case ACT_CURE_MANA_FULL:
-        msg_format(_("%sが青白く光った．．．", "The %s glows pale..."), name);
+        msg_format(_("%sが青白く光った．．．", "The %s glows palely..."), name);
         restore_mana(user_ptr, TRUE);
         return TRUE;
     case ACT_ESP:
@@ -338,7 +340,7 @@ bool switch_activation(player_type *user_ptr, object_type *o_ptr, const activati
     case ACT_ULTIMATE_RESIST:
         return activate_ultimate_resistance(user_ptr);
     case ACT_CAST_OFF:
-        (void)cosmic_cast_off(user_ptr, o_ptr);
+        (void)cosmic_cast_off(user_ptr, o_ptr_ptr);
         return TRUE;
     case ACT_FALLING_STAR:
         return activate_toragoroshi(user_ptr);

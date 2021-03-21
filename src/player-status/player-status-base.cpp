@@ -23,7 +23,7 @@ PlayerStatusBase::PlayerStatusBase(player_type *owner_ptr)
  * * 派生クラスからset_locals()をコールして初期値、上限、下限をセット。
  * * 各要素毎に計算した値を初期値に単純に加算し、上限と下限で丸める。
  */
-s16b PlayerStatusBase::getValue()
+s16b PlayerStatusBase::get_value()
 {
     this->set_locals(); /* 計算前に値のセット。派生クラスの値がセットされる。*/
     s16b pow = this->default_value;
@@ -55,7 +55,7 @@ s16b PlayerStatusBase::getValue()
  * @brief 修正値が0でないところにビットを立てて返す。
  * @return 判定結果のBIT_FLAGS
  */
-BIT_FLAGS PlayerStatusBase::getAllFlags()
+BIT_FLAGS PlayerStatusBase::get_all_flags()
 {
     this->set_locals(); /* 計算前に値のセット。派生クラスの値がセットされる。*/
     BIT_FLAGS result = equipments_flags(this->tr_flag);
@@ -94,7 +94,7 @@ BIT_FLAGS PlayerStatusBase::getAllFlags()
  * @brief 修正値が1以上のところにビットを立てて返す。
  * @return 判定結果のBIT_FLAGS
  */
-BIT_FLAGS PlayerStatusBase::getGoodFlags()
+BIT_FLAGS PlayerStatusBase::get_good_flags()
 {
     this->set_locals(); /* 計算前に値のセット。派生クラスの値がセットされる。*/
     BIT_FLAGS result = equipments_flags(this->tr_flag);
@@ -133,7 +133,7 @@ BIT_FLAGS PlayerStatusBase::getGoodFlags()
  * @brief 修正値が-1以下のところにビットを立てて返す。
  * @return 判定結果のBIT_FLAGS
  */
-BIT_FLAGS PlayerStatusBase::getBadFlags()
+BIT_FLAGS PlayerStatusBase::get_bad_flags()
 {
     this->set_locals(); /* 計算前に値のセット。派生クラスの値がセットされる。*/
     BIT_FLAGS result = equipments_bad_flags(this->tr_bad_flag);

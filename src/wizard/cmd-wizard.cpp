@@ -73,6 +73,7 @@ std::vector<std::vector<std::string>> debug_menu_table = {
     { "u", _("啓蒙(忍者以外)", "Wiz-lite all floor except Ninja") },
     { "v", _("特別品獲得ドロップ", "Drop special object") },
     { "w", _("啓蒙(忍者配慮)", "Wiz-lite all floor") },
+    { "W", _("願い", "Wishing") },
     { "x", _("経験値を得る(指定可)", "Get experience") },
     { "X", _("所持品を初期状態に戻す", "Return inventory to initial") },
     { "z", _("近隣のモンスター消去", "Terminate near monsters") },
@@ -235,6 +236,9 @@ bool exe_cmd_debug(player_type *creature_ptr, char cmd)
         break;
     case 'w':
         wiz_lite(creature_ptr, (bool)(creature_ptr->pclass == CLASS_NINJA));
+        break;
+    case 'W':
+        do_cmd_wishing(creature_ptr, -1, TRUE, TRUE, TRUE);
         break;
     case 'x':
         gain_exp(creature_ptr, command_arg ? command_arg : (creature_ptr->exp + 1));

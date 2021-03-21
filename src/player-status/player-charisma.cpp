@@ -84,9 +84,9 @@ s16b PlayerCharisma::set_exception_value(s16b value)
     return result;
 }
 
-BIT_FLAGS PlayerCharisma::getAllFlags()
+BIT_FLAGS PlayerCharisma::get_all_flags()
 {
-    BIT_FLAGS flags = PlayerStatusBase::getAllFlags();
+    BIT_FLAGS flags = PlayerStatusBase::get_all_flags();
 
     if (any_bits(this->owner_ptr->muta3, MUT3_ILL_NORM)) {
         set_bits(flags, FLAG_CAUSE_MUTATION);
@@ -95,9 +95,9 @@ BIT_FLAGS PlayerCharisma::getAllFlags()
     return flags;
 }
 
-BIT_FLAGS PlayerCharisma::getBadFlags()
+BIT_FLAGS PlayerCharisma::get_bad_flags()
 {
-    BIT_FLAGS flags = PlayerStatusBase::getBadFlags();
+    BIT_FLAGS flags = PlayerStatusBase::get_bad_flags();
 
     if (any_bits(this->owner_ptr->muta3, MUT3_ILL_NORM)) {
         set_bits(flags, FLAG_CAUSE_MUTATION);

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="..\..\src\main-win.cpp" />
@@ -151,9 +151,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\autopick\autopick-describer.cpp">
       <Filter>autopick</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\room\pit-nest-kinds-table.cpp">
-      <Filter>room</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\io\signal-handlers.cpp">
       <Filter>io</Filter>
@@ -2228,6 +2225,28 @@
     <ClCompile Include="..\..\src\player-status\player-charisma.cpp">
       <Filter>player-status</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-elementalist.cpp">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\main-win\main-win-bg.cpp">
+      <Filter>main-win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\main-win\main-win-music.cpp">
+      <Filter>main-win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\main-win\main-win-sound.cpp">
+      <Filter>main-win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\main-win\main-win-mci.cpp">
+      <Filter>main-win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\main-win\main-win-tokenizer.cpp">
+      <Filter>main-win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\main-win\main-win-file-utils.cpp">
+      <Filter>main-win</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -2400,9 +2419,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\autopick\autopick-describer.h">
       <Filter>autopick</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\room\pit-nest-kinds-table.h">
-      <Filter>room</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\io\signal-handlers.h">
       <Filter>io</Filter>
@@ -4363,6 +4379,9 @@
     <ClInclude Include="..\..\src\mspell\mspell-lite.h">
       <Filter>mspell</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\mspell\mspell.h">
+      <Filter>mspell</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\object-use\read-execution.h">
       <Filter>object-use</Filter>
     </ClInclude>
@@ -4792,6 +4811,37 @@
     <ClInclude Include="..\..\src\util\flag-group.h">
       <Filter>util</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-elementalist.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main-win\main-win-bg.h">
+      <Filter>main-win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main-win\main-win-windows.h">
+      <Filter>main-win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main-win\main-win-music.h">
+      <Filter>main-win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main-win\main-win-sound.h">
+      <Filter>main-win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main-win\main-win-mmsystem.h">
+      <Filter>main-win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main-win\main-win-define.h">
+      <Filter>main-win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main-win\main-win-mci.h">
+      <Filter>main-win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main-win\main-win-tokenizer.h">
+      <Filter>main-win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main-win\main-win-file-utils.h">
+      <Filter>main-win</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -4995,6 +5045,9 @@
     </Filter>
     <Filter Include="player-status">
       <UniqueIdentifier>{d6c9dc68-d79b-4509-bf9c-34ff9620bbf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="main-win">
+      <UniqueIdentifier>{8175f3d1-c8b3-4f2b-8536-8631d77eb53c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

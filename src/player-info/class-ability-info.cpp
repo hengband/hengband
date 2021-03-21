@@ -85,6 +85,7 @@ void set_class_ability_info(player_type *creature_ptr, self_info_type *self_ptr)
         break;
     case CLASS_MINDCRAFTER:
     case CLASS_FORCETRAINER:
+    case CLASS_ELEMENTALIST:
         if (creature_ptr->lev > 14)
             self_ptr->info[self_ptr->line++]
                 = _("あなたは精神を集中してＭＰを回復させることができる。(消費なし)", "You can concentrate to regenerate your mana (cost 0).");
@@ -163,6 +164,12 @@ void set_class_ability_info(player_type *creature_ptr, self_info_type *self_ptr)
         if (creature_ptr->lev > 19)
             self_ptr->info[self_ptr->line++] = _("あなたは素早く移動することができる。(消費なし)", "You can walk extremely fast (cost 0).");
 
+        break;
+
+    case CLASS_ARCHER:
+    case CLASS_BARD:
+    case CLASS_SNIPER:
+    case MAX_CLASS:
         break;
     }
 }

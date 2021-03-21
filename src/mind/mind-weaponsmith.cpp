@@ -26,6 +26,9 @@ bool item_tester_hook_melee_ammo(player_type *player_ptr, object_type *o_ptr)
         if (o_ptr->sval != SV_POISON_NEEDLE)
             return TRUE;
     }
+
+    default:
+        break;
     }
 
     return FALSE;

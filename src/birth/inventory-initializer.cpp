@@ -180,7 +180,7 @@ void player_outfit(player_type *creature_ptr)
         object_prep(creature_ptr, q_ptr, lookup_kind(TV_ARROW, SV_AMMO_NORMAL));
         q_ptr->number = (ITEM_NUMBER)rand_range(15, 20);
         add_outfit(creature_ptr, q_ptr);
-    } else if (creature_ptr->pclass == CLASS_HIGH_MAGE) {
+    } else if (creature_ptr->pclass == CLASS_HIGH_MAGE || creature_ptr->pclass == CLASS_ELEMENTALIST) {
         object_prep(creature_ptr, q_ptr, lookup_kind(TV_WAND, SV_WAND_MAGIC_MISSILE));
         q_ptr->number = 1;
         q_ptr->pval = (PARAMETER_VALUE)rand_range(25, 30);

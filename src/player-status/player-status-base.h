@@ -7,10 +7,10 @@ public:
     PlayerStatusBase(player_type *owner_ptr);
     PlayerStatusBase() = delete;
     virtual ~PlayerStatusBase() = default;
-    virtual s16b getValue();
-    virtual BIT_FLAGS getAllFlags();
-    virtual BIT_FLAGS getGoodFlags();
-    virtual BIT_FLAGS getBadFlags();
+    virtual s16b get_value();
+    virtual BIT_FLAGS get_all_flags();
+    virtual BIT_FLAGS get_good_flags();
+    virtual BIT_FLAGS get_bad_flags();
 
 protected:
     s16b default_value;

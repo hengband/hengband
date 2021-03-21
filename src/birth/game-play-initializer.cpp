@@ -50,7 +50,7 @@ void player_wipe_without_name(player_type *creature_ptr)
         string_free(creature_ptr->last_message);
 
     if (creature_ptr->inventory_list != NULL)
-        C_WIPE(creature_ptr->inventory_list, INVEN_TOTAL, object_type);
+        C_KILL(creature_ptr->inventory_list, INVEN_TOTAL, object_type);
 
     (void)WIPE(creature_ptr, player_type);
 
@@ -218,7 +218,7 @@ void init_dungeon_quests(player_type *creature_ptr)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @details アンデッド系種族は開始時刻を夜からにする / Undead start just sunset
- * @details        
+ * @details
  */
 void init_turn(player_type *creature_ptr)
 {
