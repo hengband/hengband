@@ -1021,12 +1021,6 @@ static void term_fresh_row_text(TERM_LEN y, TERM_LEN x1, TERM_LEN x2)
     }
 }
 
-bool macro_running(void)
-{
-    int diff = angband_term[0]->key_head - angband_term[0]->key_tail;
-    return diff != 0;
-}
-
 /*
  * @brief Actually perform all requested changes to the window
  */

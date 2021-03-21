@@ -413,3 +413,27 @@ void start_term_fresh(void)
             angband_term[j]->never_fresh = FALSE;
     }
 }
+
+/*!
+ * @brief マクロ実行中かの判定関数
+ * @return 実行中であればtrue
+ */
+bool macro_running(void)
+{
+    /* マクロ展開中のみ詳細に判定する */
+    if (parse_macro) {
+        int diff = angband_term[0]->key_head - angband_term[0]->key_tail;
+
+        /* 最終入力を展開した直後はdiff==1となる */
+        if (diff != 1)
+            return true;
+
+        /* 最終入力の処理中はまだtrueを返す */
+        if (inkey_next && *inkey_next && !inkey_xtra)
+            return true;
+
+        return false;
+    }
+
+    return false;
+}
