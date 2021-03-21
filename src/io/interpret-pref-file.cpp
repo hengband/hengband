@@ -226,8 +226,7 @@ static errr interpret_p_token(char *buf)
 {
 	char tmp[1024];
 	text_to_ascii(tmp, buf + 2);
-	macro_add(tmp, macro__buf);
-	return 0;
+	return macro_add(tmp, macro__buf);
 }
 
 

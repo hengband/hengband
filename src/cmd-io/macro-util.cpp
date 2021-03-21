@@ -122,6 +122,8 @@ errr macro_add(concptr pat, concptr act)
 {
     if (!pat || !act)
         return -1;
+    if (strlen(pat) == 0 || strlen(act) == 0)
+        return -1;
 
     int n = macro_find_exact(pat);
     if (n >= 0) {
