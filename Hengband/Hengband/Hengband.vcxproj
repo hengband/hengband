@@ -115,6 +115,8 @@
       <AdditionalIncludeDirectories>..\..\src;curl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <ExceptionHandling>SyncCThrow</ExceptionHandling>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -127,6 +129,10 @@
       <Command>
       </Command>
     </PreBuildEvent>
+    <ResourceCompile>
+      <Culture>0x0411</Culture>
+      <PreprocessorDefinitions>JP</PreprocessorDefinitions>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='English-Debug|Win32'">
     <ClCompile>
@@ -141,6 +147,8 @@
       <AdditionalIncludeDirectories>..\..\src;curl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>SyncCThrow</ExceptionHandling>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -164,6 +172,8 @@
       <CompileAs>CompileAsCpp</CompileAs>
       <ExceptionHandling>SyncCThrow</ExceptionHandling>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
@@ -174,6 +184,12 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <SubSystem>Windows</SubSystem>
     </Link>
+    <ResourceCompile>
+      <PreprocessorDefinitions>JP</PreprocessorDefinitions>
+    </ResourceCompile>
+    <ResourceCompile>
+      <Culture>0x0411</Culture>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='English-Release|Win32'">
     <ClCompile>
@@ -190,6 +206,8 @@
       <ExceptionHandling>SyncCThrow</ExceptionHandling>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <CompileAs>CompileAsCpp</CompileAs>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <AdditionalDependencies>winmm.lib;Ws2_32.lib;Wldap32.lib;Crypt32.lib;Normaliz.lib;curl\x86 Release\libcurl_a.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -852,6 +870,12 @@
     <ClCompile Include="..\..\src\load\quest-loader.cpp" />
     <ClCompile Include="..\..\src\view\display-store.cpp" />
     <ClCompile Include="..\..\src\action\throw-util.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='English-Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='English-Debug|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClInclude Include="..\..\src\action\action-limited.h" />
     <ClInclude Include="..\..\src\action\activation-execution.h" />
     <ClInclude Include="..\..\src\action\mutation-execution.h" />
@@ -1711,6 +1735,7 @@
     <ClInclude Include="..\..\src\wizard\tval-descriptions-table.h" />
     <ClInclude Include="..\..\src\load\quest-loader.h" />
     <ClInclude Include="..\..\src\view\display-store.h" />
+    <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\system\angband.h" />

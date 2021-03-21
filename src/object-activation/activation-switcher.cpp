@@ -221,7 +221,7 @@ bool switch_activation(player_type *user_ptr, object_type **o_ptr_ptr, const act
         true_healing(user_ptr, 0);
         return TRUE;
     case ACT_CURE_MANA_FULL:
-        msg_format(_("%sが青白く光った．．．", "The %s glows pale..."), name);
+        msg_format(_("%sが青白く光った．．．", "The %s glows palely..."), name);
         restore_mana(user_ptr, TRUE);
         return TRUE;
     case ACT_ESP:

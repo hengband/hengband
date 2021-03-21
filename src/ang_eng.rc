@@ -52,6 +52,8 @@ ANGBAND MENU
 			MENUITEM "Term-7 window", 227
 		}
 
+		MENUITEM "&Always display subwindows", 280
+
 		MENUITEM SEPARATOR
 /*
 		POPUP "Bizarre Display"
@@ -125,6 +127,7 @@ ANGBAND MENU
 			MENUITEM "&Bigtile mode", 409
 		}
 
+		MENUITEM "&Music", 411
 		MENUITEM "&Sound", 410
 		MENUITEM "&Back ground pict", 440
 		MENUITEM "Choose BG pict", 441
@@ -135,6 +138,7 @@ ANGBAND MENU
 	POPUP "&Help"
 	{
 		MENUITEM "&Contents", 901
+		MENUITEM "&Spoilers", 902
 	}
 */
 }

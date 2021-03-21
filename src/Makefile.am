@@ -920,7 +920,7 @@ hengband_SOURCES = \
 	world/world-turn-processor.cpp world/world-turn-processor.h
 
 EXTRA_hengband_SOURCES = \
-	angband.ico angband.rc ang_eng.rc maid-x11.cpp main-win.cpp \
+	angband.ico angband.rc ang_eng.rc ang_jp.rc maid-x11.cpp main-win.cpp \
 	main-win/main-win-bg.cpp main-win/main-win-bg.h \
 	main-win/main-win-define.h \
 	main-win/main-win-file-utils.cpp main-win/main-win-file-utils.h \
