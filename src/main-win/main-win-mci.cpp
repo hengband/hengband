@@ -14,5 +14,6 @@ char mci_device_type[MCI_DEVICE_TYPE_MAX_LENGTH];
  * @param hWnd MCIコマンドのコールバックウインドウ
  */
 void setup_mci(HWND hWnd) {
+    mci_open_parms.dwCallback = (DWORD)hWnd;
     mci_play_parms.dwCallback = (DWORD)hWnd;
 }
