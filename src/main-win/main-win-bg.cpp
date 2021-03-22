@@ -3,13 +3,42 @@
  * @brief Windows版固有実装(壁紙)
  */
 
-#include "locale/language-switcher.h"
 #include "main-win/main-win-bg.h"
+#include "locale/language-switcher.h"
 #include "system/h-define.h"
 #include "term/z-form.h"
 
+#include <gdiplus.h>
+
 static HBITMAP hBG = NULL;
 char bg_bitmap_file[MAIN_WIN_MAX_PATH] = ""; //!< 現在の背景ビットマップファイル名。
+
+static bool gdi_plus_started = false;
+static ULONG_PTR gdiplusToken;
+
+static void init_gdi_plus()
+{
+    if (!gdi_plus_started) {
+        Gdiplus::GdiplusStartupInput gdiplusStartupInput;
+        Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+        gdi_plus_started = true;
+    }
+}
+
+void finalize_bg()
+{
+    delete_bg();
+    if (gdi_plus_started) {
+        Gdiplus::GdiplusShutdown(gdiplusToken);
+    }
+}
+
+void load_bg_prefs(void)
+{
+    init_gdi_plus();
+
+    // TODO 背景の設定読込
+}
 
 void delete_bg(void)
 {
@@ -21,11 +50,15 @@ void delete_bg(void)
 
 static BOOL init_bg_impl(void)
 {
-    char *bmfile = bg_bitmap_file;
     delete_bg();
 
-    hBG = static_cast<HBITMAP>(LoadImage(NULL, bmfile, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE));
-    if (!hBG) {
+    wchar_t wc[MAIN_WIN_MAX_PATH] = L"";
+    mbstowcs(wc, bg_bitmap_file, MAIN_WIN_MAX_PATH - 1);
+    Gdiplus::Bitmap bitmap(wc);
+
+    COLORREF bgcolor = RGB(0x00, 0x00, 0x00);
+    Gdiplus::Status status = bitmap.GetHBITMAP(bgcolor, &hBG);
+    if ((status != Gdiplus::Ok) || !hBG) {
         return FALSE;
     }
 
@@ -36,7 +69,7 @@ BOOL init_bg(void)
 {
     BOOL result = init_bg_impl();
     if (!result) {
-        plog_fmt(_("壁紙用ビットマップ '%s' を読み込めません。", "Can't load the bitmap file '%s'."), bg_bitmap_file);
+        plog_fmt(_("壁紙用ファイル '%s' を読み込めません。", "Can't load the image file '%s'."), bg_bitmap_file);
     }
 
     return result;

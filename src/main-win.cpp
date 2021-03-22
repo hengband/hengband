@@ -412,19 +412,9 @@ static DIBINIT infGraph;
 static DIBINIT infMask;
 
 /*
- * Flag set once "sound" has been initialized
- */
-static bool can_use_sound = FALSE;
-
-/*
  * Show sub-windows even when Hengband is not in focus
  */
 static bool keep_subwindows = TRUE;
-
-/*
- * Flag set once "music" has been initialized
- */
-static bool can_use_music = FALSE;
 
 /*
  * Full path to ANGBAND.INI
@@ -957,6 +947,9 @@ static bool init_graphics(void)
  */
 static void init_music(void)
 {
+    // Flag set once "music" has been initialized
+    static bool can_use_music = FALSE;
+
     if (!can_use_music) {
         main_win_music::load_music_prefs(current_world_ptr->max_d_idx, max_q_idx);
         can_use_music = TRUE;
@@ -968,9 +961,26 @@ static void init_music(void)
  */
 static void init_sound(void)
 {
+    // Flag set once "sound" has been initialized
+    static bool can_use_sound = FALSE;
+
     if (!can_use_sound) {
         load_sound_prefs();
         can_use_sound = TRUE;
+    }
+}
+
+/*
+ * Initialize background
+ */
+static void init_background(void)
+{
+    // Flag set once "background" has been initialized
+    static bool can_use_background = FALSE;
+
+    if (!can_use_background) {
+        load_bg_prefs();
+        can_use_background = TRUE;
     }
 }
 
@@ -2349,6 +2359,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 
         use_bg = !use_bg;
         if (use_bg) {
+            init_background();
             use_bg = init_bg();
         } else {
             delete_bg();
@@ -2367,7 +2378,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         memset(&ofn, 0, sizeof(ofn));
         ofn.lStructSize = sizeof(ofn);
         ofn.hwndOwner = data[0].w;
-        ofn.lpstrFilter = "Bitmap Files (*.bmp)\0*.bmp\0";
+        ofn.lpstrFilter = "Image Files (*.bmp;*.png;*.jpg;*.jpeg;)\0*.bmp;*.png;*.jpg;*.jpeg;\0";
         ofn.nFilterIndex = 1;
         ofn.lpstrFile = bg_bitmap_file;
         ofn.nMaxFile = 1023;
@@ -2376,6 +2387,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         ofn.Flags = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
 
         if (GetOpenFileName(&ofn)) {
+            init_background();
             use_bg = init_bg();
         }
 
@@ -3125,7 +3137,7 @@ static void hook_quit(concptr str)
         DeleteObject(infMask.hBitmap);
 
     DeleteObject(hbrYellow);
-    delete_bg();
+    finalize_bg();
 
     if (hPal)
         DeleteObject(hPal);
@@ -3326,6 +3338,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPST
 
     init_windows();
     if (use_bg) {
+        init_background();
         use_bg = init_bg();
     }
 
