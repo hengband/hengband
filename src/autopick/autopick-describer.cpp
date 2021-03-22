@@ -1,8 +1,8 @@
 ﻿/*!
- * todo 1つ300行近い関数なので後ほど要分割
  * @brief 自動拾いの記述
  * @date 2020/04/25
  * @author Hourier
+ * @todo 1つ300行近い関数なので後ほど要分割
  */
 
 #include "autopick/autopick-describer.h"

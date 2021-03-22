@@ -487,8 +487,7 @@ static void describe_grid_monster_all(eg_type *eg_ptr)
 #endif
 }
 
-/*
- * todo xとlで処理を分ける？
+/*!
  * @brief xまたはlで指定したグリッドにあるアイテムやモンスターの説明を記述する
  * @param subject_ptr プレーヤーへの参照ポインタ
  * @param y 指定グリッドのY座標
@@ -496,6 +495,7 @@ static void describe_grid_monster_all(eg_type *eg_ptr)
  * @param mode x (KILL)かl (LOOK)
  * @param info 記述用文字列
  * @return 入力キー
+ * @todo xとlで処理を分ける？
  */
 char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, target_type mode, concptr info)
 {

@@ -565,7 +565,7 @@ void status_shuffle(player_type *creature_ptr)
     int i = randint0(A_MAX);
     int j;
 
-    // todo ここのループは一体何をしている？
+    //!< @todo ここのループは一体何をしている？
     for (j = i; j == i; j = randint0(A_MAX)) /* loop */
         ;
 

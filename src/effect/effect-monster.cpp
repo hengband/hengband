@@ -259,11 +259,11 @@ static bool process_monster_fear(player_type *caster_ptr, effect_monster_type *e
 }
 
 /*!
- * todo 睡眠処理があるので、死に際とは言えない。適切な関数名に要修正
  * @brief モンスターの死に際処理 (魔力吸収を除く)
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @return なし
+ * @todo 睡眠処理があるので、死に際とは言えない。適切な関数名に要修正
  */
 static void process_monster_last_moment(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
@@ -476,11 +476,11 @@ static void process_monster_bad_stat_damage(player_type *caster_ptr, effect_mons
 }
 
 /*!
- * todo 関数名が微妙、もっと適切な関数名が欲しい
  * @brief モンスターへの影響全般を処理する
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @return なし
+ * @todo 関数名が微妙、もっと適切な関数名が欲しい
  */
 static void process_spell(player_type *caster_ptr, effect_monster_type *em_ptr)
 {

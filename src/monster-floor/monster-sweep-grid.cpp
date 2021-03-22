@@ -295,13 +295,13 @@ static bool sweep_runnable_away_grid(floor_type *floor_ptr, MONSTER_IDX m_idx, P
 
 
 /*!
- * todo 分割したいが条件が多すぎて適切な関数名と詳細処理を追いきれない……
  * @brief モンスターの移動方向を返す /
  * Choose "logical" directions for monster movement
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスターの参照ID
  * @param mm 移動方向を返す方向IDの参照ポインタ
  * @return 有効方向があった場合TRUEを返す
+ * @todo 分割したいが条件が多すぎて適切な関数名と詳細処理を追いきれない……
  */
 bool get_movable_grid(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
 {

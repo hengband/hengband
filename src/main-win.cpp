@@ -1,9 +1,9 @@
 ﻿/*!
- * todo main関数を含むファイルの割に長過ぎる。main-win-utils.cなどといった形で分割したい
  * @file main-win.cpp
  * @brief Windows版固有実装(メインエントリポイント含む)
  * @date 2018/03/16
  * @author Hengband Team
+ * @todo main関数を含むファイルの割に長過ぎる。main-win-utils.cなどといった形で分割したい
  * @details
  *
  * <h3>概要</h3>
@@ -984,8 +984,8 @@ static void init_background(void)
     }
 }
 
-/*
- * Resize a window
+/*!
+ * @brief Resize a window
  */
 static void term_window_resize(term_data *td)
 {
@@ -996,12 +996,12 @@ static void term_window_resize(term_data *td)
     InvalidateRect(td->w, NULL, TRUE);
 }
 
-/*
- * todo 引数のpathを消す
- * Force the use of a new "font file" for a term_data.
+/*!
+ * @brief Force the use of a new "font file" for a term_data.
  * This function may be called before the "window" is ready.
  * This function returns zero only if everything succeeds.
- * Note that the "font name" must be capitalized!!!
+ * @note that the "font name" must be capitalized!!!
+ * @todo 引数のpathを消す
  */
 static errr term_force_font(term_data *td, concptr path)
 {
@@ -1286,9 +1286,9 @@ static int term_xtra_win_delay(int v)
     return 0;
 }
 
-/*
- * todo z-termに影響があるのでplayer_typeの追加は保留
- * Do a "special thing"
+/*!
+ * @brief Do a "special thing"
+ * @todo z-termに影響があるのでplayer_typeの追加は保留
  */
 static errr term_xtra_win(int n, int v)
 {
@@ -2557,7 +2557,7 @@ static bool process_keydown(WPARAM wParam, LPARAM lParam)
 }
 
 /*!
- * todo WNDCLASSに影響があるのでplayer_type*の追加は保留
+ * @todo WNDCLASSに影響があるのでplayer_type*の追加は保留
  */
 LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -2782,7 +2782,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         if (td->size_hack)
             return 1;
 
-        // todo 二重のswitch文。後で分割する.
+        //!< @todo 二重のswitch文。後で分割する.
         switch (wParam) {
         case SIZE_MINIMIZED: {
             for (int i = 1; i < MAX_TERM_DATA; i++) {
@@ -2883,7 +2883,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 }
 
 /*!
- * todo WNDCLASSに影響があるのでplayer_type*の追加は保留
+ * @todo WNDCLASSに影響があるのでplayer_type*の追加は保留
  */
 LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -3229,7 +3229,7 @@ static spoiler_output_status create_debug_spoiler(LPSTR cmd_line)
 }
 
 /*!
- * todo よく見るとhMutexはちゃんと使われていない……？
+ * @todo よく見るとhMutexはちゃんと使われていない……？
  * @brief (Windows固有)変愚蛮怒が起動済かどうかのチェック
  */
 static bool is_already_running(void)

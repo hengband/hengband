@@ -30,7 +30,7 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-// todo コールバック関数に変更するので、いずれ消す.
+//!< @todo コールバック関数に変更するので、いずれ消す.
 #define PREF_TYPE_NORMAL 0
 #define PREF_TYPE_AUTOPICK 1
 #define PREF_TYPE_HISTPREF 2
@@ -44,13 +44,13 @@ char auto_dump_footer[] = "# ^^^^^^^== %s ==^^^^^^^";
 static int auto_dump_line_num;
 
 /*!
- * todo 関数名を変更する
  * @brief process_pref_fileのサブルーチン /
  * Open the "user pref file" and parse it.
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param name 読み込むファイル名
  * @param preftype prefファイルのタイプ
  * @return エラーコード
+ * @todo 関数名を変更する
  */
 static errr process_pref_file_aux(player_type *creature_ptr, concptr name, int preftype, void (*process_autopick_file_command)(char *))
 {

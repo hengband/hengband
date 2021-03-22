@@ -1,8 +1,8 @@
 ﻿/*!
- * todo 300行以上の凶悪関数なので後で分割しておく
  * @brief 床のアイテムが自動拾いに一致するかどうかを調べる関数だけを格納したファイル
  * @date 2020/04/25
  * @author Hourier
+ * @todo 300行以上の凶悪関数なので後で分割しておく
  */
 
 #include "autopick/autopick-matcher.h"

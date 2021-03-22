@@ -1,8 +1,8 @@
 ﻿/*!
- * todo 1関数100行以上ある、後で関数を分割すること
  * @brief 自動拾いエディタのコマンドを受け付ける
  * @date 2020/04/26
  * @author Hourier
+ * @todo 1関数100行以上ある、後で関数を分割すること
  */
 
 #include "autopick/autopick-command-menu.h"

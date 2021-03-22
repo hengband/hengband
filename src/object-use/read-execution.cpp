@@ -1,8 +1,8 @@
 ﻿/*!
- * todo 長い、要分割
  * @brief 巻物を読んだ際の効果処理
  * @date 2020/07/23
  * @author Hourier
+ * @todo 長い、要分割
  */
 
 #include "object-use/read-execution.h"

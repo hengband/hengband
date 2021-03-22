@@ -424,8 +424,8 @@ void print_rel(player_type *subject_ptr, SYMBOL_CODE c, TERM_COLOR a, POSITION y
     }
 }
 
-/*
- * todo ここにplayer_type を追加した時のコンパイルエラーに対処できなかったので保留
+/*!
+ * @todo ここにplayer_type を追加した時のコンパイルエラーに対処できなかったので保留
  * Memorize interesting viewable object/features in the given grid
  *
  * This function should only be called on "legal" grids.
@@ -1250,7 +1250,7 @@ void place_bold(player_type *player_ptr, POSITION y, POSITION x, grid_bold_type 
 void set_cave_feat(floor_type *floor_ptr, POSITION y, POSITION x, FEAT_IDX feature_idx) { floor_ptr->grid_array[y][x].feat = feature_idx; }
 
 /*!
- * todo intをenumに変更する
+ * @todo intをenumに変更する
  */
 void add_cave_info(floor_type *floor_ptr, POSITION y, POSITION x, int cave_mask) { floor_ptr->grid_array[y][x].info |= cave_mask; }
 

@@ -17,8 +17,7 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-// todo *抹殺* したい…
-bool write_level;
+bool write_level; //!< @todo *抹殺* したい…
 
 #ifdef JP
 #else
@@ -46,11 +45,11 @@ concptr get_ordinal_number_suffix(int num)
 
 
 /*!
- * todo files.c に移すことも検討する？
  * @brief 日記ファイルを開く
  * @param fff ファイルへのポインタ
  * @param disable_diary 日記への追加を無効化する場合TRUE
  * @return ファイルがあったらTRUE、なかったらFALSE
+ * @todo files.c に移すことも検討する？
  */
 static bool open_diary_file(FILE **fff, bool *disable_diary)
 {

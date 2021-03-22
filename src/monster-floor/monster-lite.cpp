@@ -129,12 +129,12 @@ static void update_monster_dark(
     g_ptr->info |= CAVE_MNDK;
 }
 
-/*
- * todo player-status からのみ呼ばれている。しかしあちらは行数が酷いので要調整
- * Update squares illuminated or darkened by monsters.
+/*!
+ * @brief Update squares illuminated or darkened by monsters.
  * The CAVE_TEMP and CAVE_XTRA flag are used to store the state during the
  * updating.  Only squares in view of the player, whos state
  * changes are drawn via lite_spot().
+ * @todo player-status からのみ呼ばれている。しかしあちらは行数が酷いので要調整
  */
 void update_mon_lite(player_type *subject_ptr)
 {

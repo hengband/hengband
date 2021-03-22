@@ -1,9 +1,9 @@
 ﻿/*!
- * todo どうしても「その他」に分類せざるを得ない魔法種別が残った
  * 本ファイル内の行数はまともなレベルに落ち着いているので、一旦ここに留め置くこととする
  * @brief 魔法種別による各種処理切り替え
  * @date 2020/04/29
  * @author Hourier
+ * @todo どうしても「その他」に分類せざるを得ない魔法種別が残った
  */
 
 #include "effect/effect-monster-switcher.h"
@@ -59,7 +59,9 @@ process_result effect_monster_hypodynamia(player_type *caster_ptr, effect_monste
     return PROCESS_CONTINUE;
 }
 
-// todo リファクタリング前のコード時点で、単に耐性があるだけでもダメージ0だった.
+/*!
+ * @todo リファクタリング前のコード時点で、単に耐性があるだけでもダメージ0だった.
+ */
 process_result effect_monster_death_ray(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)

@@ -14,7 +14,7 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
 #include "monster/monster-processor.h"
-#include "monster/monster-status.h" // todo 相互依存. 後で何とかする.
+#include "monster/monster-status.h" //!< @todo 相互依存. 後で何とかする.
 #include "monster/monster-util.h"
 #include "monster/smart-learn-types.h"
 #include "player-info/avatar.h"

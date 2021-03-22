@@ -38,10 +38,10 @@
 #include "world/world.h"
 
 /*!
- * todo 変数名が実態と合っているかどうかは要確認
- * テレポート・レベルが効かないモンスターであるかどうかを判定する
+ * @brief テレポート・レベルが効かないモンスターであるかどうかを判定する
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param idx テレポート・レベル対象のモンスター
+ * @todo 変数名が実態と合っているかどうかは要確認
  */
 bool is_teleport_level_ineffective(player_type *caster_ptr, MONSTER_IDX idx)
 {
@@ -56,12 +56,12 @@ bool is_teleport_level_ineffective(player_type *caster_ptr, MONSTER_IDX idx)
 }
 
 /*!
- * todo cmd-save.h への依存あり。コールバックで何とかしたい
  * @brief プレイヤー及びモンスターをレベルテレポートさせる /
  * Teleport the player one level up or down (random when legal)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param m_idx テレポートの対象となるモンスターID(0ならばプレイヤー) / If m_idx <= 0, target is player.
  * @return なし
+ * @todo cmd-save.h への依存あり。コールバックで何とかしたい
  */
 void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 {

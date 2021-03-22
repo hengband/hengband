@@ -40,7 +40,7 @@
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
-#include "monster/monster-status-setter.h" // todo 相互依存. 後で何とかする.
+#include "monster/monster-status-setter.h" //!< @todo 相互依存. 後で何とかする.
 #include "monster/monster-update.h"
 #include "monster/smart-learn-types.h"
 #include "mspell/mspell-mask-definitions.h"
@@ -145,7 +145,7 @@ static void get_exp_from_mon(player_type *target_ptr, HIT_POINT dam, monster_typ
         return;
 
     /*!
-     * todo 変数宣言と代入を同時に実行するとコンパイル警告が出る
+     * @todo 変数宣言と代入を同時に実行するとコンパイル警告が出る
      * ここの整形は実施せず保留
      */
     s32b new_exp;

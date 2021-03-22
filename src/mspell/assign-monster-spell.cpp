@@ -271,7 +271,6 @@ MonsterSpellResult monspell_to_player(player_type *target_ptr, SPELL_IDX ms_type
 }
 
 /*!
- * todo モンスターからモンスターへの呪文なのにplayer_typeが引数になり得るのは間違っている……
  * @brief モンスターからモンスターへの魔法使用。ラーニング処理も行う。
  * @param target_ptr プレーヤーへの参照ポインタ (monster_spell_typeのenum値とは異なる)
  * @param ms_type モンスター魔法ID
@@ -280,6 +279,7 @@ MonsterSpellResult monspell_to_player(player_type *target_ptr, SPELL_IDX ms_type
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param is_special_spell 特殊な行動である時TRUE
+ * @todo モンスターからモンスターへの呪文なのにplayer_typeが引数になり得るのは間違っている……
  */
 MonsterSpellResult monspell_to_monster(
     player_type *target_ptr, SPELL_IDX ms_type, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, bool is_special_spell)

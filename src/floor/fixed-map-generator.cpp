@@ -225,7 +225,7 @@ static bool parse_qtw_QQ(quest_type *q_ptr, char **zz, int num)
     return TRUE;
 }
 
-/**
+/*!
  * @todo 処理がどうなっているのかいずれチェックする
  */
 static bool parse_qtw_QR(quest_type *q_ptr, char **zz, int num)

@@ -527,11 +527,11 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
 }
 
 /*!
- * todo モンスターの感知状況しか更新していないように見える。関数名変更を検討する
  * @param player_ptr プレーヤーへの参照ポインタ
  * @brief 単純に生存している全モンスターの更新処理を行う / This function simply updates all the (non-dead) monsters (see above).
  * @param full 距離更新を行うならtrue
  * @return なし
+ * @todo モンスターの感知状況しか更新していないように見える。関数名変更を検討する
  */
 void update_monsters(player_type *player_ptr, bool full)
 {

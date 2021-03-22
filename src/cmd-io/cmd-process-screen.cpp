@@ -27,13 +27,13 @@ static concptr html_head[3] = { "<html>\n<body text=\"#ffffff\" bgcolor=\"#00000
 static concptr html_foot[3] = { "</pre>\n", "</body>\n</html>\n", 0, };
 
 /*!
- * todo io/ 以下に移したいところだが、このファイルの行数も大したことがないので一旦保留
  * @brief 一時ファイルを読み込み、ファイルに書き出す
  * @param fff ファイルへの参照ポインタ
  * @param tempfff 一時ファイルへの参照ポインタ
  * @param buf バッファ
  * @param buf_size バッファサイズ
  * @param num_tag タグ番号
+ * @todo io/ 以下に移したいところだが、このファイルの行数も大したことがないので一旦保留
  */
 static void read_temporary_file(FILE *fff, FILE *tmpfff, char buf[], size_t buf_size, int num_tag)
 {
@@ -280,11 +280,11 @@ static bool check_screen_text_can_open(FILE *fff, char buf[])
 
 
 /*!
- * todo どこかバグっていて、(恐らく初期化されていない)変な文字列まで出力される
  * @brief テキスト方式で記念撮影する
  * @param wid 幅
  * @param hgt 高さ
  * @return 記念撮影に成功したらTRUE、ファイルが開けなかったらFALSE
+ * @todo どこかバグっていて、(恐らく初期化されていない)変な文字列まで出力される
  */
 static bool do_cmd_save_screen_text(int wid, int hgt)
 {
@@ -388,11 +388,12 @@ void do_cmd_save_screen(player_type *creature_ptr, void(*process_autopick_file_c
 
 
 /*!
- * @brief 白文字だけ画面に描画する (todo 目的は不明瞭)
+ * @brief 白文字だけ画面に描画する 
  * @param buf 描画用バッファ
  * @param fff 記念撮影ファイルへの参照ポインタ
  * @param wid 幅
  * @param hgt 高さ
+ * @todo 目的は不明瞭
  * @return ファイルが読み込めなくなったらFALSEで抜ける
  */
 static bool draw_white_characters(char buf[], FILE *fff, int wid, int hgt)
@@ -418,12 +419,13 @@ static bool draw_white_characters(char buf[], FILE *fff, int wid, int hgt)
 
 
 /*!
- * @brief 白以外の文字を画面に描画する (todo 目的は不明瞭)
+ * @brief 白以外の文字を画面に描画する
  * @param buf 描画用バッファ
  * @param fff 記念撮影ファイルへの参照ポインタ
  * @param wid 幅
  * @param hgt 高さ
  * @param 白文字が途中で読み込めなくなっていたらTRUE
+ * @todo 目的は不明瞭
  * @return なし
  */
 static void draw_colored_characters(char buf[], FILE *fff, int wid, int hgt, bool okay)

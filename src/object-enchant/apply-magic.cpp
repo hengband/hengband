@@ -1,8 +1,8 @@
 ﻿/*!
- * todo 少し長い。要分割
  * @brief ベースアイテムを強化する処理
  * @date 2020/06/03
  * @author Hourier
+ * @todo 少し長い。要分割
  */
 
 #include "object-enchant/apply-magic.h"

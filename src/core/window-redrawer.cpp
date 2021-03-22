@@ -25,10 +25,10 @@
 #include "world/world.h"
 
 /*!
- * todo ここにplayer_type を追加するとz-termに影響が行くので保留
  * @brief コンソールを再描画する /
  * Redraw a term when it is resized
  * @return なし
+ * @todo ここにplayer_type を追加するとz-termに影響が行くので保留
  */
 void redraw_window(void)
 {

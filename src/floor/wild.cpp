@@ -314,7 +314,7 @@ static void generate_area(player_type *player_ptr, POSITION y, POSITION x, bool 
     }
 
     if (!corner && !wilderness[y][x].town) {
-        // todo make the road a bit more interresting.
+        //!< @todo make the road a bit more interresting.
         if (wilderness[y][x].road) {
             floor_ptr->grid_array[MAX_HGT / 2][MAX_WID / 2].feat = feat_floor;
             POSITION x1, y1;

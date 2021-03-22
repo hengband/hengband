@@ -39,7 +39,6 @@
 void global_free(DIBINIT *pInfo, INT_PTR *fh, BOOL unlock_needed);
 
 /*!
- * todo コードが古すぎる。何とかしたい
  * @brief 32KBのデータ読み取りを繰り返すことで、64KB以上のデータを一度に読み取るサブルーチン
  * Private routine to read more than 64K at a time Reads data in steps of 32k till all the data has been read.
  * @param fh ファイルヘッダ
@@ -48,6 +47,7 @@ void global_free(DIBINIT *pInfo, INT_PTR *fh, BOOL unlock_needed);
  * @return
  * 取得できたデータ量をバイトで返す。0ならば何らかのエラー。
  * Returns number of bytes requested, or zero if something went wrong.
+ * @todo コードが古すぎる。何とかしたい
  */
 static DWORD PASCAL lread(int fh, void *pv, DWORD ul)
 {

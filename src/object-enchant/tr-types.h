@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 /*!
- * todo TRが何の略か分かる人、補足求む
+ * @todo TRが何の略か分かる人、補足求む
  */
 enum tr_type {
     TR_STR = 0, /* STR += "pval" */

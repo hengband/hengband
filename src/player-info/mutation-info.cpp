@@ -214,7 +214,7 @@ void set_mutation_info_2(player_type *creature_ptr, self_info_type *self_ptr)
         self_ptr->info[self_ptr->line++] = _("あなたはよくつまづいて物を落とす。", "You occasionally stumble and drop things.");
 }
 
-/* todo FEAELESS フラグも記述して問題ないと思われる */
+/*!< @todo FEAELESS フラグも記述して問題ないと思われる */
 void set_mutation_info_3(player_type *creature_ptr, self_info_type *self_ptr)
 {
     if (creature_ptr->muta3 == 0)

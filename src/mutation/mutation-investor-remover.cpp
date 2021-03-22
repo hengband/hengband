@@ -3,7 +3,7 @@
 #include "core/stuff-handler.h"
 #include "mutation/gain-mutation-switcher.h"
 #include "mutation/lose-mutation-switcher.h"
-#include "mutation/mutation-calculator.h" // todo calc_mutant_regenerate_mod() が相互依存している、後で消す.
+#include "mutation/mutation-calculator.h" //!< @todo calc_mutant_regenerate_mod() が相互依存している、後で消す.
 #include "mutation/mutation-flag-types.h"
 #include "mutation/mutation-util.h"
 #include "player-info/avatar.h"

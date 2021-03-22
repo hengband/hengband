@@ -1,8 +1,8 @@
 ﻿/*!
- * todo サブルーチン分割を行うと行数が膨れ上がりそう、再分割も検討すべし
  * @brief 既知のモンスターに関する情報を表示する
  * @date 2020/04/24
  * @author Hourier
+ * @todo サブルーチン分割を行うと行数が膨れ上がりそう、再分割も検討すべし
  */
 
 #include "knowledge/knowledge-monsters.h"
@@ -35,8 +35,7 @@
 #include "view/display-monster-status.h"
 #include "world/world.h"
 
-/*
- * todo 引数と戻り値について追記求む
+/*!
  * Build a list of monster indexes in the given group.
  *
  * mode & 0x01 : check for non-empty group
@@ -47,6 +46,7 @@
  * @param mon_idx[] ？？？
  * @param mode ？？？
  * @return The number of monsters in the group
+ * @todo 引数と戻り値について追記求む
  */
 static IDX collect_monsters(player_type *creature_ptr, IDX grp_cur, IDX mon_idx[], monster_lore_mode mode)
 {
@@ -280,13 +280,13 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
     }
 }
 
-/*
- * todo 引数の詳細について加筆求む
+/*!
  * Display known monsters.
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param need_redraw 画面の再描画が必要な時TRUE
  * @param visual_only ？？？
  * @param direct_r_idx モンスターID
+ * @todo 引数の詳細について加筆求む
  * @return なし
  */
 void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, bool visual_only, IDX direct_r_idx)

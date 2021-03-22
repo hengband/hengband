@@ -38,7 +38,6 @@ struct Point {
 using PassBoldFunc = bool (*)(floor_type *, POSITION, POSITION);
 
 /*!
- * todo この辺、xとyが引数になっているが、caster_ptr->xとcaster_ptr->yで全て置き換えが効くはず……
  * @brief 指定した座標全てを照らす。
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param points 明るくすべき座標たち
@@ -54,6 +53,7 @@ using PassBoldFunc = bool (*)(floor_type *, POSITION, POSITION);
  * NORMAL monsters wake up 1/4 the time when illuminated
  * STUPID monsters wake up 1/10 the time when illuminated
  * </pre>
+ * @todo この辺、xとyが引数になっているが、caster_ptr->xとcaster_ptr->yで全て置き換えが効くはず……
  */
 static void cave_temp_room_lite(player_type *caster_ptr, const std::vector<Point> &points)
 {
@@ -91,7 +91,6 @@ static void cave_temp_room_lite(player_type *caster_ptr, const std::vector<Point
 }
 
 /*!
- * todo この辺、xとyが引数になっているが、caster_ptr->xとcaster_ptr->yで全て置き換えが効くはず……
  * @brief 指定した座標全てを暗くする。
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param points 暗くすべき座標たち
@@ -103,6 +102,7 @@ static void cave_temp_room_lite(player_type *caster_ptr, const std::vector<Point
  * This routine is used (only) by "unlite_room()"
  * Also, process all affected monsters
  * </pre>
+ * @todo この辺、xとyが引数になっているが、caster_ptr->xとcaster_ptr->yで全て置き換えが効くはず……
  */
 static void cave_temp_room_unlite(player_type *caster_ptr, const std::vector<Point> &points)
 {

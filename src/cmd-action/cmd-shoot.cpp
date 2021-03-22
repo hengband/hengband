@@ -14,12 +14,12 @@
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 
-/*
- * todo Doxygenの加筆求む
+/*!
  * @brief 射撃処理のメインルーチン
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param snipe_type ？？？
  * @return なし
+ * @todo Doxygenの加筆求む
  */
 void do_cmd_fire(player_type *creature_ptr, SPELL_IDX snipe_type)
 {

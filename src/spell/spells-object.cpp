@@ -210,10 +210,10 @@ void acquirement(player_type *caster_ptr, POSITION y1, POSITION x1, int num, boo
 }
 
 /*!
- * todo 元のreturnは間違っているが、修正後の↓文がどれくらい正しいかは要チェック
  * @brief 防具呪縛処理 /
  * Curse the players armor
  * @return 何も持っていない場合を除き、常にTRUEを返す
+ * @todo 元のreturnは間違っているが、修正後の↓文がどれくらい正しいかは要チェック
  */
 bool curse_armor(player_type *owner_ptr)
 {
@@ -266,13 +266,13 @@ bool curse_armor(player_type *owner_ptr)
 }
 
 /*!
- * todo 元のreturnは間違っているが、修正後の↓文がどれくらい正しいかは要チェック
  * @brief 武器呪縛処理 /
  * Curse the players weapon
  * @param owner_ptr 所持者の参照ポインタ
  * @param force 無条件に呪縛を行うならばTRUE
  * @param o_ptr 呪縛する武器のアイテム情報参照ポインタ
  * @return 何も持っていない場合を除き、常にTRUEを返す
+ * @todo 元のreturnは間違っているが、修正後の↓文がどれくらい正しいかは要チェック
  */
 bool curse_weapon_object(player_type *owner_ptr, bool force, object_type *o_ptr)
 {

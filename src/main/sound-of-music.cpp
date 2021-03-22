@@ -18,9 +18,9 @@ void bell(void)
     flush();
 }
 
-/*
- * todo intをsound_typeに差し替える
+/*!
  * @brief 音を鳴らす
+ * @todo intをsound_typeに差し替える
  */
 void sound(int val)
 {
@@ -30,8 +30,8 @@ void sound(int val)
     term_xtra(TERM_XTRA_SOUND, val);
 }
 
-/*
- * Hack -- Play a music
+/*!
+ * @brief Hack -- Play a music
  */
 errr play_music(int type, int val)
 {

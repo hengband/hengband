@@ -11,12 +11,12 @@
 #include "wizard/spoiler-util.h"
 
 /*!
- * todo 固定アーティファクトとランダムアーティファクトで共用、ここに置くべきかは要調整.
  * @brief フラグ名称を出力する汎用関数
  * @param header ヘッダに出力するフラグ群の名前
  * @param list フラグ名リスト
  * @param separator フラグ表示の区切り記号
  * @return なし
+ * @todo 固定アーティファクトとランダムアーティファクトで共用、ここに置くべきかは要調整.
  */
 void spoiler_outlist(concptr header, concptr *list, char separator)
 {

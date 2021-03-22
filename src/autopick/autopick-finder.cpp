@@ -1,8 +1,8 @@
 ﻿/*!
- * todo get_string_for_search() は長い、要分割
  * @brief 自動拾いの検索
  * @date 2020/04/26
  * @author Hourier
+ * @todo get_string_for_search() は長い、要分割
  */
 
 #include "autopick/autopick-finder.h"

@@ -292,7 +292,7 @@ void rd_item_old(player_type *player_ptr, object_type *o_ptr)
 
     rd_string(buf, sizeof(buf));
 
-    /* todo 元々このif文には末尾に";"が付いていた、バグかもしれない */
+    /*!< @todo 元々このif文には末尾に";"が付いていた、バグかもしれない */
     if (buf[0])
         o_ptr->art_name = quark_add(buf);
     {

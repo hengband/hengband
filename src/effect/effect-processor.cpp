@@ -64,8 +64,6 @@ static void next_mirror(player_type *creature_ptr, POSITION *next_y, POSITION *n
 }
 
 /*!
- * todo 似たような処理が山ほど並んでいる、何とかならないものか
- * todo 引数にそのまま再代入していてカオスすぎる。直すのは簡単ではない
  * @brief 汎用的なビーム/ボルト/ボール系処理のルーチン Generic
  * "beam"/"bolt"/"ball" projection routine.
  * @param who 魔法を発動したモンスター(0ならばプレイヤー) / Index of "source"
@@ -79,6 +77,8 @@ static void next_mirror(player_type *creature_ptr, POSITION *next_y, POSITION *n
  * @param typ 効果属性 / Type of damage to apply to monsters (and objects)
  * @param flag 効果フラグ / Extra bit flags (see PROJECT_xxxx)
  * @param monspell 効果元のモンスター魔法ID
+ * @todo 似たような処理が山ほど並んでいる、何とかならないものか
+ * @todo 引数にそのまま再代入していてカオスすぎる。直すのは簡単ではない
  */
 ProjectResult project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, const HIT_POINT dam, const EFFECT_ID typ,
     BIT_FLAGS flag, const int monspell)

@@ -177,16 +177,17 @@ static void init_world_floor_info(player_type *player_ptr)
     wipe_o_list(floor_ptr);
 }
 
+/*!
+ * @brief フロア情報をゲームロード時に復帰 
+ * @todo 3.0.Xで削除予定
+ * 1.0.9 以前はセーブ前に player_ptr->riding = -1 としていたので、再設定が必要だった。
+ * もう不要だが、以前のセーブファイルとの互換のために残しておく。
+ */
 static void restore_world_floor_info(player_type *player_ptr)
 {
     write_level = FALSE;
     exe_write_diary(player_ptr, DIARY_GAMESTART, 1, _("                            ----ゲーム再開----", "                            --- Restarted Game ---"));
 
-    /*
-     * todo 3.0.Xで削除予定
-     * 1.0.9 以前はセーブ前に player_ptr->riding = -1 としていたので、再設定が必要だった。
-     * もう不要だが、以前のセーブファイルとの互換のために残しておく。
-     */
     if (player_ptr->riding == -1) {
         player_ptr->riding = 0;
         floor_type *floor_ptr = player_ptr->current_floor_ptr;
