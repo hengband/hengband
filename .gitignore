@@ -7,6 +7,7 @@ src/stamp-h1
 src/**/*.o
 src/hengband
 src/stdafx.h.gch
+src/stdafx.h.gch.sum
 
 # Ignore generated documents by Doxygen
 doxygen/html/
