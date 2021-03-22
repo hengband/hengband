@@ -2246,7 +2246,7 @@
     <ClCompile Include="..\..\src\main-win\main-win-file-utils.cpp">
       <Filter>main-win</Filter>
     </ClCompile>
-    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="..\..\src\stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4841,7 +4841,7 @@
     <ClInclude Include="..\..\src\main-win\main-win-file-utils.h">
       <Filter>main-win</Filter>
     </ClInclude>
-    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="..\..\src\stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

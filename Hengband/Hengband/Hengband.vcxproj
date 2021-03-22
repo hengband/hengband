@@ -514,6 +514,12 @@
     <ClCompile Include="..\..\src\status\sight-setter.cpp" />
     <ClCompile Include="..\..\src\status\experience.cpp" />
     <ClCompile Include="..\..\src\status\temporary-resistance.cpp" />
+    <ClCompile Include="..\..\src\stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='English-Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='English-Debug|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\..\src\store\home.cpp" />
     <ClCompile Include="..\..\src\store\museum.cpp" />
     <ClCompile Include="..\..\src\store\owner-insults.cpp" />
@@ -870,12 +876,6 @@
     <ClCompile Include="..\..\src\load\quest-loader.cpp" />
     <ClCompile Include="..\..\src\view\display-store.cpp" />
     <ClCompile Include="..\..\src\action\throw-util.cpp" />
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='English-Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='English-Debug|Win32'">Create</PrecompiledHeader>
-    </ClCompile>
     <ClInclude Include="..\..\src\action\action-limited.h" />
     <ClInclude Include="..\..\src\action\activation-execution.h" />
     <ClInclude Include="..\..\src\action\mutation-execution.h" />
@@ -1207,6 +1207,7 @@
     <ClInclude Include="..\..\src\status\sight-setter.h" />
     <ClInclude Include="..\..\src\status\experience.h" />
     <ClInclude Include="..\..\src\status\temporary-resistance.h" />
+    <ClInclude Include="..\..\src\stdafx.h" />
     <ClInclude Include="..\..\src\store\home.h" />
     <ClInclude Include="..\..\src\store\museum.h" />
     <ClInclude Include="..\..\src\store\owner-insults.h" />
@@ -1735,7 +1736,6 @@
     <ClInclude Include="..\..\src\wizard\tval-descriptions-table.h" />
     <ClInclude Include="..\..\src\load\quest-loader.h" />
     <ClInclude Include="..\..\src\view\display-store.h" />
-    <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\system\angband.h" />
