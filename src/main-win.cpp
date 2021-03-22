@@ -2571,7 +2571,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         break;
     }
     case WM_CREATE: {
-        mop.dwCallback = (DWORD)hWnd;
+        setup_mci(hWnd);
         return 0;
     }
     case WM_GETMINMAXINFO: {
@@ -2602,10 +2602,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         return 0;
     }
     case MM_MCINOTIFY: {
-        if (wParam == MCI_NOTIFY_SUCCESSFUL) {
-            mciSendCommand(mop.wDeviceID, MCI_SEEK, MCI_SEEK_TO_START, 0);
-            mciSendCommand(mop.wDeviceID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mop);
-        }
+        main_win_music::on_mci_notify(wParam, lParam);
 
         return 0;
     }
