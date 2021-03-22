@@ -1,8 +1,8 @@
 ﻿/*!
- * todo これ単体で700行を超えているので要分割
  * @brief 自動拾いエディタ画面でキーを押した時の挙動一式
  * @date 2020/04/26
  * @author Hourier
+ * @todo これ単体で700行を超えているので要分割
  */
 
 #include "autopick/autopick-editor-command.h"

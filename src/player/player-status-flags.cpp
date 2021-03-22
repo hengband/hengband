@@ -2101,8 +2101,9 @@ bool has_disable_two_handed_bonus(player_type *creature_ptr, int i)
     return TRUE;
 }
 
-/*
- * todo 相応しい時にFALSEで相応しくない時にTRUEという負論理は良くない、後で修正する
+/*!
+ * @brief ふさわしくない武器を持っているかどうかを返す。
+ * @todo 相応しい時にFALSEで相応しくない時にTRUEという負論理は良くない、後で修正する
  */
 bool has_icky_wield_weapon(player_type *creature_ptr, int i)
 {

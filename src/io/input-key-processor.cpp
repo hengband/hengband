@@ -1,8 +1,8 @@
 ﻿/*!
- * todo Ctrl+C がShift+Q に認識されている。仕様の可能性も高いが要確認
  * @brief キー入力に応じてゲーム内コマンドを実行する
  * @date 2020/05/10
  * @author Hourier
+ * @todo Ctrl+C がShift+Q に認識されている。仕様の可能性も高いが要確認
  */
 
 #include "io/input-key-processor.h"
@@ -54,7 +54,7 @@
 #include "core/special-internal-keys.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
-#include "dungeon/quest.h" // do_cmd_quest() がある。後で移設する.
+#include "dungeon/quest.h" //!< @do_cmd_quest() がある。後で移設する.
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/disturbance-options.h"
@@ -65,7 +65,7 @@
 #include "io/record-play-movie.h"
 #include "io/command-repeater.h"
 #include "io/files-util.h"
-#include "io/input-key-requester.h" // todo 相互依存している、後で何とかする.
+#include "io/input-key-requester.h" //!< @todo 相互依存している、後で何とかする.
 #include "io/write-diary.h"
 #include "knowledge/knowledge-autopick.h"
 #include "knowledge/knowledge-quests.h"

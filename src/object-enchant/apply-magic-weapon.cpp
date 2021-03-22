@@ -1,8 +1,8 @@
 ﻿/*!
- * todo ちょっと長い。要分割
  * @brief 武器系のアイテムを強化して(恐らく床に)生成する処理
  * @date 2020/06/02
  * @author Hourier
+ * @todo ちょっと長い。要分割
  */
 
 #include "object-enchant/apply-magic-weapon.h"

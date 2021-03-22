@@ -145,12 +145,12 @@ bool get_enemy_dir(player_type *target_ptr, MONSTER_IDX m_idx, int *mm)
 
 
 /*!
- * todo ↓のように書いたが、"5"とはもしかして「その場に留まる」という意味か？
  * @brief 不規則歩行フラグを持つモンスターの移動方向をその確率に基づいて決定する
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param mm 移動方向
  * @param m_ptr モンスターへの参照ポインタ
  * @return 不規則な方向へ歩くことになったらTRUE
+ * @todo "5"とはもしかして「その場に留まる」という意味か？
  */
 static bool random_walk(player_type *target_ptr, DIRECTION *mm, monster_type *m_ptr)
 {

@@ -50,7 +50,6 @@ void learn_spell(player_type *learner_ptr, int monspell)
 }
 
 /*!
- * todo f4, f5, f6を構造体にまとめ直す
  * @brief モンスター特殊能力のフラグ配列から特定条件の魔法だけを抜き出す処理
  * Extract monster spells mask for the given mode
  * @param f4 モンスター特殊能力の4番目のフラグ配列
@@ -58,8 +57,7 @@ void learn_spell(player_type *learner_ptr, int monspell)
  * @param f6 モンスター特殊能力の6番目のフラグ配列
  * @param mode 抜き出したい条件
  * @return なし
- */
-/*
+ * @todo f4, f5, f6を構造体にまとめ直す
  */
 void set_rf_masks(BIT_FLAGS *f4, BIT_FLAGS *f5, BIT_FLAGS *f6, blue_magic_type mode)
 {

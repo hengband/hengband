@@ -25,8 +25,8 @@
 #include "util/sort.h"
 #include "world/world.h"
 
-/*
- * Check on the status of an active quest
+/*!
+ * @brief Check on the status of an active quest
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
@@ -37,11 +37,11 @@ void do_cmd_checkquest(player_type *creature_ptr)
     screen_load();
 }
 
-/*
- * todo player_typeではなくQUEST_IDXを引数にすべきかもしれない
- * Print all active quests
+/*!
+ * @brief Print all active quests
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
+ * @todo player_typeではなくQUEST_IDXを引数にすべきかもしれない
  */
 static void do_cmd_knowledge_quests_current(player_type *creature_ptr, FILE *fff)
 {

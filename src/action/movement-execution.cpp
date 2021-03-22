@@ -35,13 +35,13 @@
 #include "locale/english.h"
 #endif
 
-/*
- * todo 負論理なので反転させたい
+/*!
  * Determine if a "boundary" grid is "floor mimic"
  * @param grid_type *g_ptr
  * @param feature_type *f_ptr
  * @param feature_type  *mimic_f_ptr
  * @return 移動不能であればTRUE
+ * @todo 負論理なので反転させたい
  */
 static bool boundary_floor(grid_type *g_ptr, feature_type *f_ptr, feature_type *mimic_f_ptr)
 {

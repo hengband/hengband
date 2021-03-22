@@ -75,8 +75,7 @@ bool exe_open(player_type *creature_ptr, POSITION y, POSITION x)
     return FALSE;
 }
 
-/*
- * todo 常にFALSEを返している
+/*!
  * @brief 「閉じる」動作コマンドのサブルーチン /
  * Perform the basic "close" command
  * @param y 対象を行うマスのY座標
@@ -86,6 +85,7 @@ bool exe_open(player_type *creature_ptr, POSITION y, POSITION x)
  * Assume destination is an open/broken door
  * Assume there is no monster blocking the destination
  * Returns TRUE if repeated commands may continue
+ * @todo 常にFALSEを返している
  */
 bool exe_close(player_type *creature_ptr, POSITION y, POSITION x)
 {

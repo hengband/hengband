@@ -5,7 +5,7 @@
 #include "game-option/input-options.h"
 #include "io/command-repeater.h"
 #include "io/input-key-acceptor.h"
-#include "io/input-key-requester.h" // todo 相互依存している、後で何とかする.
+#include "io/input-key-requester.h" //!< @todo 相互依存している、後で何とかする.
 #include "main/sound-of-music.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"

@@ -333,7 +333,7 @@ bool load_savedata(player_type *player_ptr, bool *new_game)
         return FALSE;
     }
 
-    /* todo v3.2.0 で削除予定 */
+    /*!< @todo v3.2.0 で削除予定 */
     if ((FAKE_VER_MAJOR != current_world_ptr->z_major) || (FAKE_VER_MINOR != current_world_ptr->z_minor) || (FAKE_VER_PATCH != current_world_ptr->z_patch)) {
         if (current_world_ptr->z_major == 2 && current_world_ptr->z_minor == 0 && current_world_ptr->z_patch == 6) {
             msg_print(_("バージョン 2.0.* 用のセーブファイルを変換しました。", "Converted a 2.0.* savefile."));

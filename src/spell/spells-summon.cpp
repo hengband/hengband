@@ -347,13 +347,13 @@ void mitokohmon(player_type *kohmon_ptr)
 }
 
 /*!
- * todo 引数にPOSITION x/yは必要か？ 要調査
  * @brief HI_SUMMON(上級召喚)処理発動
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param y 召喚位置Y座標
  * @param x 召喚位置X座標
  * @param can_pet プレイヤーのペットとなる可能性があるならばTRUEにする
  * @return 作用が実際にあった場合TRUEを返す
+ * @todo 引数にPOSITION x/yは必要か？ 要調査
  */
 int activate_hi_summon(player_type *caster_ptr, POSITION y, POSITION x, bool can_pet)
 {

@@ -52,11 +52,11 @@ static concptr decide_horror_message(monster_race *r_ptr)
 }
 
 /*!
- * todo m_nameとdescで何が違うのかは良く分からない
  * @brief エルドリッチホラー持ちのモンスターを見た時の反応 (モンスター名版)
  * @param m_name モンスター名
  * @param r_ptr モンスター情報への参照ポインタ
  * @return なし
+ * @todo m_nameとdescで何が違うのかは良く分からない
  */
 static void see_eldritch_horror(GAME_TEXT *m_name, monster_race *r_ptr)
 {
@@ -283,7 +283,7 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
             (void)set_image(creature_ptr, creature_ptr->image + randint0(250) + 150);
         }
 
-        /* todo いつからかは不明だがreturnとbreakが同時に存在している。どちらがデッドコードか不明瞭なので保留 */
+        /*!< @todo いつからかは不明だがreturnとbreakが同時に存在している。どちらがデッドコードか不明瞭なので保留 */
         return;
         break;
     }

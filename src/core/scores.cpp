@@ -432,11 +432,11 @@ void display_scores(int from, int to)
 
 
 /*!
- * todo プリプロが邪魔していて最初のif文を削除すると到達不能コードが発生する
  * @brief スコアサーバへの転送処理
  * @param current_player_ptr プレーヤーへの参照ポインタ
  * @param do_send 実際に転送ア処置を行うか否か
  * @return 転送が成功したらTRUEを返す
+ * @todo プリプロが邪魔していて最初のif文を削除すると到達不能コードが発生する
  */
 bool send_world_score(player_type *current_player_ptr, bool do_send, void(*update_playtime)(void), display_player_pf display_player)
 {

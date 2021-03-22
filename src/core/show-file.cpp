@@ -13,7 +13,6 @@
 #include "view/display-messages.h"
 
 /*!
- * todo 表示とそれ以外を分割する
  * @brief ファイル内容の一行をコンソールに出力する
  * Display single line of on-line help file
  * @param str 出力する文字列
@@ -28,6 +27,7 @@
  * A colored segment is between "[[[[y|" and the last "|".
  * You can use any single character in place of the "|".
  * </pre>
+ * @todo 表示とそれ以外を分割する
  */
 static void show_file_aux_line(concptr str, int cy, concptr shower)
 {
@@ -109,7 +109,6 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
 }
 
 /*!
- * todo 表示とそれ以外を分割する
  * @brief ファイル内容をコンソールに出力する
  * Recursive file perusal.
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -125,6 +124,7 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
  * the "menu" structures used by the "help file" system.
  * Return FALSE on 'q' to exit from a deep, otherwise TRUE.
  * </pre>
+ * @todo 表示とそれ以外を分割する
  */
 bool show_file(player_type *creature_ptr, bool show_version, concptr name, concptr what, int line, BIT_FLAGS mode)
 {

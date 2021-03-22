@@ -1,6 +1,6 @@
 ﻿#include "blue-magic/learnt-info.h"
 #include "cmd-action/cmd-spell.h"
-#include "lore/lore-calculator.h" // todo 少し違和感.
+#include "lore/lore-calculator.h" //!< @todo 少し違和感.
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-type.h"
 

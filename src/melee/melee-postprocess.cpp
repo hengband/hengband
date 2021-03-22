@@ -240,7 +240,6 @@ static void fall_off_horse_by_melee(player_type *player_ptr, mam_pp_type *mam_pp
 }
 
 /*!
- * todo 打撃が当たった時の後処理 (爆発持ちのモンスターを爆発させる等)なので、関数名を変更する必要あり
  * @brief モンスターが敵モンスターに行う打撃処理 /
  * Hack, based on mon_take_hit... perhaps all monster attacks on other monsters should use this?
  * @param m_idx 目標となるモンスターの参照ID
@@ -250,6 +249,7 @@ static void fall_off_horse_by_melee(player_type *player_ptr, mam_pp_type *mam_pp
  * @param note 目標モンスターが死亡した場合の特別メッセージ(NULLならば標準表示を行う)
  * @param who 打撃を行ったモンスターの参照ID
  * @return なし
+ * @todo 打撃が当たった時の後処理 (爆発持ちのモンスターを爆発させる等)なので、関数名を変更する必要あり
  */
 void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, concptr note, MONSTER_IDX who)
 {

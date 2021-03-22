@@ -1,8 +1,8 @@
 ﻿/*!
- * todo 少し長い。switch/case文と効果処理を分離してもいいかも
  * @brief 薬を飲んだ時の各種効果処理
  * @date 2020/07/04
  * @author Hourier
+ * @todo 少し長い。switch/case文と効果処理を分離してもいいかも
  */
 
 #include "object-use/quaff-execution.h"

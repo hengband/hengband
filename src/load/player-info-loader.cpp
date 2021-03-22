@@ -316,10 +316,10 @@ static void rd_energy(player_type *creature_ptr)
 }
 
 /*!
- * todo 明らかに関数名がビッグワードだが他に思いつかなかった
  * @brief プレーヤーのグッド/バッドステータスを読み込む
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
+ * @todo 明らかに関数名がビッグワードだが他に思いつかなかった
  */
 static void rd_status(player_type *creature_ptr)
 {

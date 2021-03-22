@@ -315,9 +315,8 @@ static void msg_flush(player_type *player_ptr, int x)
 
 void msg_erase(void) { msg_print(NULL); }
 
-/*
- * todo ここのp_ptrを削除するのは破滅的に作業が増えるので保留
- * Output a message to the top line of the screen.
+/*!
+ * @briefOutput a message to the top line of the screen.
  *
  * Break long messages into multiple pieces (40-72 chars).
  *
@@ -340,6 +339,7 @@ void msg_erase(void) { msg_print(NULL); }
  *
  * Note that "msg_print(NULL)" will clear the top line
  * even if no messages are pending.  This is probably a hack.
+ * @todo ここのp_ptrを削除するのは破滅的に作業が増えるので保留
  */
 void msg_print(concptr msg)
 {

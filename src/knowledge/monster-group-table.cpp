@@ -6,8 +6,8 @@
 
 #include "knowledge/monster-group-table.h"
 
-/*
- * todo 元々t (町人)がいなかったが、問題ないのか？
+/*!
+ * @todo 元々t (町人)がいなかったが、問題ないのか？
  * Description of each monster group.
  */
 concptr monster_group_text[] = {

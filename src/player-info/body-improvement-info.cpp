@@ -2,7 +2,7 @@
 #include "player-info/self-info-util.h"
 #include "player/player-status-flags.h"
 
-/* todo 並び順の都合で連番を付ける。まとめても良いならまとめてしまう予定 */
+/*!< @todo 並び順の都合で連番を付ける。まとめても良いならまとめてしまう予定 */
 void set_body_improvement_info_1(player_type *creature_ptr, self_info_type *self_ptr)
 {
     if (is_blessed(creature_ptr))
@@ -27,7 +27,7 @@ void set_body_improvement_info_1(player_type *creature_ptr, self_info_type *self
         self_ptr->info[self_ptr->line++] = _("あなたは一時的に幽体化している。", "You are temporarily incorporeal.");
 }
 
-/* todo 並び順の都合で連番を付ける。まとめても良いならまとめてしまう予定 */
+/*!< @todo 並び順の都合で連番を付ける。まとめても良いならまとめてしまう予定 */
 void set_body_improvement_info_2(player_type *creature_ptr, self_info_type *self_ptr)
 {
     if (creature_ptr->new_spells)
@@ -58,7 +58,7 @@ void set_body_improvement_info_2(player_type *creature_ptr, self_info_type *self
         self_ptr->info[self_ptr->line++] = _("あなたは食欲が少ない。", "Your appetite is small.");
 }
 
-/* todo 並び順の都合で連番を付ける。まとめても良いならまとめてしまう予定 */
+/*!< @todo 並び順の都合で連番を付ける。まとめても良いならまとめてしまう予定 */
 void set_body_improvement_info_3(player_type *creature_ptr, self_info_type *self_ptr)
 {
     if (creature_ptr->hold_exp)
@@ -107,7 +107,7 @@ void set_body_improvement_info_3(player_type *creature_ptr, self_info_type *self
         self_ptr->info[self_ptr->line++] = _("あなたは強く物を投げる。", "You can throw objects powerfully.");
 }
 
-/* todo 並び順の都合で連番を付ける。まとめても良いならまとめてしまう予定 */
+/*!< @todo 並び順の都合で連番を付ける。まとめても良いならまとめてしまう予定 */
 void set_body_improvement_info_4(player_type *creature_ptr, self_info_type *self_ptr)
 {
     if (has_resist_fear(creature_ptr))

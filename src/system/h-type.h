@@ -106,8 +106,8 @@ typedef s32b ACTION_IDX; /*!< プレイヤーが現在取っている常時行�
 typedef s16b BACT_IDX; /*!< 町の施設処理のID定義 */
 typedef s16b BACT_RESTRICT_IDX; /*!< 町の施設処理の規制処理ID定義 */
 
-typedef s16b MONRACE_IDX; /*!< todo monster_race_typeに差し替えて消滅させる ゲーム中のモンスター種族ID型を定義 */
-typedef s16b MONSTER_IDX; /*!< todo monster_race_typeに差し替えて消滅させる ゲーム中のモンスター個体ID型を定義 */
+typedef s16b MONRACE_IDX; /*!< @todo monster_race_typeに差し替えて消滅させる ゲーム中のモンスター種族ID型を定義 */
+typedef s16b MONSTER_IDX; /*!< @todo monster_race_typeに差し替えて消滅させる ゲーム中のモンスター個体ID型を定義 */
 typedef s16b DUNGEON_IDX; /*!< ゲーム中のダンジョンID型を定義 */
 typedef s16b REALM_IDX; /*!< ゲーム中の魔法領域ID型を定義 */
 typedef s16b ARTIFACT_IDX; /*!< ゲーム中のアーティファクトID型を定義 */
