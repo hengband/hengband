@@ -9,6 +9,7 @@
 #include "grid/trap.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
+#include "mind/mind-elementalist.h"
 #include "mind/mind-ninja.h"
 #include "monster/monster-update.h"
 #include "player/special-defense-types.h"
@@ -358,7 +359,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
         g_ptr->info &= ~(CAVE_GLOW);
 
         /* Hack -- Forget "boring" grids */
-        if (!has_flag(f_ptr->flags, FF_REMEMBER)) {
+        if (!has_flag(f_ptr->flags, FF_REMEMBER) || has_element_resist(caster_ptr, ElementRealm::DARKNESS, 1)) {
             /* Forget */
             g_ptr->info &= ~(CAVE_MARK);
             note_spot(caster_ptr, y, x);
