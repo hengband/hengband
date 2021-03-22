@@ -689,8 +689,15 @@ void check_no_flowed(player_type *creature_ptr)
 
     creature_ptr->no_flowed = FALSE;
 
-    if (has_pass_wall(creature_ptr) && !has_kill_wall(creature_ptr))
+    if (has_pass_wall(creature_ptr) && !has_kill_wall(creature_ptr)) {
         creature_ptr->no_flowed = TRUE;
+        return;
+    }
+
+    if (!creature_ptr->realm1 || creature_ptr->pclass == CLASS_ELEMENTALIST) {
+        creature_ptr->no_flowed = FALSE;
+        return;
+    }
 
     for (int i = 0; i < INVEN_PACK; i++) {
         if ((creature_ptr->inventory_list[i].tval == TV_NATURE_BOOK) && (creature_ptr->inventory_list[i].sval == 2))
