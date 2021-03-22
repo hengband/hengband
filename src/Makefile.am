@@ -945,7 +945,7 @@ CXXCOMPILE = $(srcdir)/gcc-wrap $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CXXFLAGS)
 
 stdafx.h.gch: stdafx.h stdafx.cpp Makefile
-	$(CXX) -x c++-header $(CXXFLAGS) stdafx.cpp -o $@
+	$(CXX) -x c++-header $(CXXFLAGS) $(srcdir)/stdafx.cpp -o $@
 	rm -f stdafx.h.gch.sum
 	md5sum $@ > stdafx.h.gch.sum
 
@@ -956,3 +956,6 @@ if SET_GID
 	chgrp "@GAMEGROUP@" "$(DESTDIR)$(bindir)/hengband"
 	chmod g+s "$(DESTDIR)$(bindir)/hengband"
 endif
+
+clean-local:
+	-rm stdafx.h.gch stdafx.h.gch.sum
