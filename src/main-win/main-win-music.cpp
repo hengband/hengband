@@ -20,6 +20,7 @@ concptr quest_music_file[1000][SAMPLE_MUSIC_MAX];
 
 static int current_music_type = TERM_XTRA_MUSIC_MUTE;
 static int current_music_id = 0;
+// current filename being played 
 static char current_music_path[MAIN_WIN_MAX_PATH];
 
 /*
@@ -93,8 +94,8 @@ void load_music_prefs(DUNGEON_IDX max_d_idx, QUEST_IDX max_q_idx)
  */
 void stop_music(void)
 {
-    mciSendCommand(mop.wDeviceID, MCI_STOP, 0, 0);
-    mciSendCommand(mop.wDeviceID, MCI_CLOSE, 0, 0);
+    mciSendCommand(mci_open_parms.wDeviceID, MCI_STOP, MCI_WAIT, 0);
+    mciSendCommand(mci_open_parms.wDeviceID, MCI_CLOSE, MCI_WAIT, 0);
     current_music_type = TERM_XTRA_MUSIC_MUTE;
     current_music_id = 0;
     strcpy(current_music_path, "\0");
@@ -169,13 +170,24 @@ errr play_music(int type, int val)
     current_music_id = val;
     strcpy(current_music_path, buf);
 
-    mop.lpstrDeviceType = mci_device_type;
-    mop.lpstrElementName = buf;
-    mciSendCommand(mop.wDeviceID, MCI_STOP, 0, 0);
-    mciSendCommand(mop.wDeviceID, MCI_CLOSE, 0, 0);
-    mciSendCommand(mop.wDeviceID, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&mop);
-    mciSendCommand(mop.wDeviceID, MCI_SEEK, MCI_SEEK_TO_START, 0);
-    mciSendCommand(mop.wDeviceID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mop);
+    mci_open_parms.lpstrDeviceType = mci_device_type;
+    mci_open_parms.lpstrElementName = buf;
+    mciSendCommand(mci_open_parms.wDeviceID, MCI_STOP, MCI_WAIT, 0);
+    mciSendCommand(mci_open_parms.wDeviceID, MCI_CLOSE, MCI_WAIT, 0);
+    mciSendCommand(mci_open_parms.wDeviceID, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT | MCI_NOTIFY, (DWORD)&mci_open_parms);
+    // Start MCI_PLAY in the notification event after MCI_OPEN is completed
     return 0;
 }
+
+/*
+ * Notify event
+ */
+void on_mci_notify(WPARAM wFlags, LONG lDevID) {
+    if (wFlags == MCI_NOTIFY_SUCCESSFUL) {
+        // (repeat) play a music
+        mciSendCommand(mci_open_parms.wDeviceID, MCI_SEEK, MCI_SEEK_TO_START | MCI_WAIT, 0);
+        mciSendCommand(mci_open_parms.wDeviceID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mci_play_parms);
+    }
+}
+
 }
