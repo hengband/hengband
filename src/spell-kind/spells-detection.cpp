@@ -76,19 +76,23 @@ static bool detect_feat_flag(player_type *caster_ptr, POSITION range, int flag, 
  * @param range 効果範囲
  * @param known 感知外範囲を超える警告フラグを立てる場合TRUEを返す
  * @return 効力があった場合TRUEを返す
+ * @detail
+ * 吟遊詩人による感知についてはFALSEを返す
  */
 bool detect_traps(player_type *caster_ptr, POSITION range, bool known)
 {
     bool detect = detect_feat_flag(caster_ptr, range, FF_TRAP, known);
+    if (!known && detect)
+        detect_feat_flag(caster_ptr, range, FF_TRAP, true);
 
-    if (known)
+    if (known || detect)
         caster_ptr->dtrap = TRUE;
 
     if (music_singing(caster_ptr, MUSIC_DETECT) && SINGING_COUNT(caster_ptr) > 0)
         detect = FALSE;
-    if (detect) {
+
+    if (detect)
         msg_print(_("トラップの存在を感じとった！", "You sense the presence of traps!"));
-    }
 
     return detect;
 }
