@@ -16,9 +16,7 @@ visual_studio_files = \
 	Hengband/Hengband/curl/include/curl/urlapi.h \
 	Hengband/Hengband/Hengband.vcxproj \
 	Hengband/Hengband/Hengband.vcxproj.filters \
-	Hengband/Hengband/packages.config \
-	Hengband/Hengband/stdafx.cpp \
-	Hengband/Hengband/stdafx.h
+	Hengband/Hengband/packages.config
 
 EXTRA_DIST = \
 	autopick.txt \
