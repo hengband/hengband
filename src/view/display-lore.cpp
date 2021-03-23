@@ -17,6 +17,7 @@
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
 #include "mspell/mspell-type.h"
+#include "util/bit-flags-calculator.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "view/display-messages.h"
@@ -200,6 +201,8 @@ static void display_no_killed(lore_type *lore_ptr)
 static void display_number_of_nazguls(lore_type *lore_ptr)
 {
     if (lore_ptr->mode != MONSTER_LORE_DEBUG && lore_ptr->r_ptr->r_tkills == 0)
+        return;
+    if (!any_bits(lore_ptr->r_ptr->flags7, RF7_NAZGUL))
         return;
 
     int remain = lore_ptr->r_ptr->max_num;
