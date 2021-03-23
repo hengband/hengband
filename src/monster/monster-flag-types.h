@@ -18,5 +18,8 @@ enum class MFLAG2 {
     NOFLOW = 4, /* Monster is in no_flow_by_smell mode */
     SHOW = 5, /* Monster is recently memorized */
     MARK = 6, /* Monster is currently memorized */
+    FRIENDLY = 7, /*!< 友好的である / Friendly */
+    PET = 8, /*!< ペットである / Pet */
+    CLONED = 9, /*!< クローンである / Cloned */
     MAX,
 };

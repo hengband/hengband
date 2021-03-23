@@ -42,7 +42,7 @@ static void write_monster_flags(monster_type *m_ptr, BIT_FLAGS *flags)
     if (monster_invulner_remaining(m_ptr))
         *flags |= SAVE_MON_INVULNER;
 
-    if (m_ptr->smart)
+    if (m_ptr->smart.any())
         *flags |= SAVE_MON_SMART;
 
     if (m_ptr->exp)
@@ -100,7 +100,7 @@ static void write_monster_info(monster_type *m_ptr, const BIT_FLAGS flags)
     }
 
     if (flags & SAVE_MON_SMART)
-        wr_u32b(m_ptr->smart);
+        wr_FlagGroup(m_ptr->smart, wr_byte);
 
     if (flags & SAVE_MON_EXP)
         wr_u32b(m_ptr->exp);

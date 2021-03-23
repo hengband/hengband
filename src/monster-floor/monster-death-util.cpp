@@ -44,7 +44,7 @@ monster_death_type *initialize_monster_death_type(player_type *player_ptr, monst
     md_ptr->r_ptr = &r_info[md_ptr->m_ptr->r_idx];
     md_ptr->do_gold = (none_bits(md_ptr->r_ptr->flags1, (RF1_ONLY_ITEM | RF1_DROP_GOOD | RF1_DROP_GREAT)));
     md_ptr->do_item = (none_bits(md_ptr->r_ptr->flags1, RF1_ONLY_GOLD) || any_bits(md_ptr->r_ptr->flags1, (RF1_DROP_GOOD | RF1_DROP_GREAT)));
-    md_ptr->cloned = any_bits(md_ptr->m_ptr->smart, SM_CLONED) ? TRUE : FALSE;
+    md_ptr->cloned = md_ptr->m_ptr->mflag2.has(MFLAG2::CLONED);
     md_ptr->force_coin = get_coin_type(md_ptr->m_ptr->r_idx);
     md_ptr->drop_chosen_item = drop_item && !md_ptr->cloned && !floor_ptr->inside_arena && !player_ptr->phase_out && !is_pet(md_ptr->m_ptr);
     return md_ptr;

@@ -138,9 +138,8 @@ bool multiply_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool clone, BI
     if (!place_monster_aux(player_ptr, m_idx, y, x, m_ptr->r_idx, (mode | PM_NO_KAGE | PM_MULTIPLY)))
         return FALSE;
 
-    if (clone || (m_ptr->smart & SM_CLONED)) {
-        floor_ptr->m_list[hack_m_idx_ii].smart |= SM_CLONED;
-        floor_ptr->m_list[hack_m_idx_ii].mflag2.set(MFLAG2::NOPET);
+    if (clone || m_ptr->mflag2.has(MFLAG2::CLONED)) {
+        floor_ptr->m_list[hack_m_idx_ii].mflag2.set({MFLAG2::CLONED, MFLAG2::NOPET});
     }
 
     return TRUE;

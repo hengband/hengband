@@ -11,7 +11,7 @@ msr_type *initialize_msr_type(player_type *target_ptr, msr_type *msr_ptr, MONSTE
     msr_ptr->f4 = f4p;
     msr_ptr->f5 = f5p;
     msr_ptr->f6 = f6p;
-    msr_ptr->smart = 0L;
+    msr_ptr->smart.clear();
     return msr_ptr;
 }
 

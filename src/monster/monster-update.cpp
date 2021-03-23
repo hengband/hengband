@@ -561,124 +561,124 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
     switch (what) {
     case DRS_ACID:
         if (has_resist_acid(player_ptr))
-            m_ptr->smart |= SM_RES_ACID;
+            m_ptr->smart.set(SM::RES_ACID);
 
         if (is_oppose_acid(player_ptr))
-            m_ptr->smart |= SM_OPP_ACID;
+            m_ptr->smart.set(SM::OPP_ACID);
 
         if (has_immune_acid(player_ptr))
-            m_ptr->smart |= SM_IMM_ACID;
+            m_ptr->smart.set(SM::IMM_ACID);
 
         break;
     case DRS_ELEC:
         if (has_resist_elec(player_ptr))
-            m_ptr->smart |= SM_RES_ELEC;
+            m_ptr->smart.set(SM::RES_ELEC);
 
         if (is_oppose_elec(player_ptr))
-            m_ptr->smart |= SM_OPP_ELEC;
+            m_ptr->smart.set(SM::OPP_ELEC);
 
         if (has_immune_elec(player_ptr))
-            m_ptr->smart |= SM_IMM_ELEC;
+            m_ptr->smart.set(SM::IMM_ELEC);
 
         break;
     case DRS_FIRE:
         if (has_resist_fire(player_ptr))
-            m_ptr->smart |= SM_RES_FIRE;
+            m_ptr->smart.set(SM::RES_FIRE);
 
         if (is_oppose_fire(player_ptr))
-            m_ptr->smart |= SM_OPP_FIRE;
+            m_ptr->smart.set(SM::OPP_FIRE);
 
         if (has_immune_fire(player_ptr))
-            m_ptr->smart |= SM_IMM_FIRE;
+            m_ptr->smart.set(SM::IMM_FIRE);
 
         break;
     case DRS_COLD:
         if (has_resist_cold(player_ptr))
-            m_ptr->smart |= SM_RES_COLD;
+            m_ptr->smart.set(SM::RES_COLD);
 
         if (is_oppose_cold(player_ptr))
-            m_ptr->smart |= SM_OPP_COLD;
+            m_ptr->smart.set(SM::OPP_COLD);
 
         if (has_immune_cold(player_ptr))
-            m_ptr->smart |= SM_IMM_COLD;
+            m_ptr->smart.set(SM::IMM_COLD);
 
         break;
     case DRS_POIS:
         if (has_resist_pois(player_ptr))
-            m_ptr->smart |= SM_RES_POIS;
+            m_ptr->smart.set(SM::RES_POIS);
 
         if (is_oppose_pois(player_ptr))
-            m_ptr->smart |= SM_OPP_POIS;
+            m_ptr->smart.set(SM::OPP_POIS);
 
         break;
     case DRS_NETH:
         if (has_resist_neth(player_ptr))
-            m_ptr->smart |= SM_RES_NETH;
+            m_ptr->smart.set(SM::RES_NETH);
 
         break;
     case DRS_LITE:
         if (has_resist_lite(player_ptr))
-            m_ptr->smart |= SM_RES_LITE;
+            m_ptr->smart.set(SM::RES_LITE);
 
         break;
     case DRS_DARK:
         if (has_resist_dark(player_ptr))
-            m_ptr->smart |= SM_RES_DARK;
+            m_ptr->smart.set(SM::RES_DARK);
 
         break;
     case DRS_FEAR:
         if (has_resist_fear(player_ptr))
-            m_ptr->smart |= SM_RES_FEAR;
+            m_ptr->smart.set(SM::RES_FEAR);
 
         break;
     case DRS_CONF:
         if (has_resist_conf(player_ptr))
-            m_ptr->smart |= SM_RES_CONF;
+            m_ptr->smart.set(SM::RES_CONF);
 
         break;
     case DRS_CHAOS:
         if (has_resist_chaos(player_ptr))
-            m_ptr->smart |= SM_RES_CHAOS;
+            m_ptr->smart.set(SM::RES_CHAOS);
 
         break;
     case DRS_DISEN:
         if (has_resist_disen(player_ptr))
-            m_ptr->smart |= SM_RES_DISEN;
+            m_ptr->smart.set(SM::RES_DISEN);
 
         break;
     case DRS_BLIND:
         if (has_resist_blind(player_ptr))
-            m_ptr->smart |= SM_RES_BLIND;
+            m_ptr->smart.set(SM::RES_BLIND);
 
         break;
     case DRS_NEXUS:
         if (has_resist_nexus(player_ptr))
-            m_ptr->smart |= SM_RES_NEXUS;
+            m_ptr->smart.set(SM::RES_NEXUS);
 
         break;
     case DRS_SOUND:
         if (has_resist_sound(player_ptr))
-            m_ptr->smart |= SM_RES_SOUND;
+            m_ptr->smart.set(SM::RES_SOUND);
 
         break;
     case DRS_SHARD:
         if (has_resist_shard(player_ptr))
-            m_ptr->smart |= SM_RES_SHARD;
+            m_ptr->smart.set(SM::RES_SHARD);
 
         break;
     case DRS_FREE:
         if (player_ptr->free_act)
-            m_ptr->smart |= SM_IMM_FREE;
+            m_ptr->smart.set(SM::IMM_FREE);
 
         break;
     case DRS_MANA:
         if (!player_ptr->msp)
-            m_ptr->smart |= SM_IMM_MANA;
+            m_ptr->smart.set(SM::IMM_MANA);
 
         break;
     case DRS_REFLECT:
         if (has_reflect(player_ptr))
-            m_ptr->smart |= SM_IMM_REFLECT;
+            m_ptr->smart.set(SM::IMM_REFLECT);
 
         break;
     default:

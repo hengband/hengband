@@ -33,7 +33,7 @@
 void set_pet(player_type *player_ptr, monster_type *m_ptr)
 {
     check_quest_completion(player_ptr, m_ptr);
-    m_ptr->smart |= SM_PET;
+    m_ptr->mflag2.set(MFLAG2::PET);
     if (!(r_info[m_ptr->r_idx].flags3 & (RF3_EVIL | RF3_GOOD)))
         m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
 }
@@ -49,8 +49,7 @@ void set_hostile(player_type *player_ptr, monster_type *m_ptr)
     if (player_ptr->phase_out)
         return;
 
-    m_ptr->smart &= ~SM_PET;
-    m_ptr->smart &= ~SM_FRIENDLY;
+    m_ptr->mflag2.reset({MFLAG2::PET, MFLAG2::FRIENDLY});
 }
 
 /*!
