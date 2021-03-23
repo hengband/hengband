@@ -176,7 +176,7 @@ void target_sensing_monsters_prepare(player_type *creature_ptr, std::vector<MONS
             continue;
 
         // 感知魔法/スキルやESPで感知していない擬態モンスターはモンスター一覧に表示しない
-        if (is_mimicry(m_ptr) && none_bits(m_ptr->mflag2, (MFLAG2_MARK | MFLAG2_SHOW)) && none_bits(m_ptr->mflag, MFLAG_ESP))
+        if (is_mimicry(m_ptr) && m_ptr->mflag2.has_none_of({ MFLAG2::MARK, MFLAG2::SHOW }) && m_ptr->mflag.has_not(MFLAG::ESP))
             continue;
 
         monster_list.push_back(i);
@@ -193,8 +193,8 @@ void target_sensing_monsters_prepare(player_type *creature_ptr, std::vector<MONS
             return any_bits(ap_r_ptr1->flags1, RF1_UNIQUE);
 
         /* Shadowers first (あやしい影) */
-        if (any_bits(m_ptr1->mflag2, MFLAG2_KAGE) != any_bits(m_ptr2->mflag2, MFLAG2_KAGE))
-            return any_bits(m_ptr1->mflag2, MFLAG2_KAGE);
+        if (m_ptr1->mflag2.has(MFLAG2::KAGE) != m_ptr2->mflag2.has(MFLAG2::KAGE))
+            return m_ptr1->mflag2.has(MFLAG2::KAGE);
 
         /* Unknown monsters first */
         if ((ap_r_ptr1->r_tkills == 0) != (ap_r_ptr2->r_tkills == 0))

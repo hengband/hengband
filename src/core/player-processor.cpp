@@ -116,7 +116,7 @@ void process_player(player_type *creature_ptr)
             if (!monster_is_valid(m_ptr))
                 continue;
 
-            m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
+            m_ptr->mflag2.set({MFLAG2::MARK, MFLAG2::SHOW});
             update_monster(creature_ptr, m_idx, FALSE);
         }
 
@@ -325,17 +325,17 @@ void process_player(player_type *creature_ptr)
                 }
 
                 // 出現して即魔法を使わないようにするフラグを落とす処理
-                if (m_ptr->mflag & MFLAG_PREVENT_MAGIC) {
-                    m_ptr->mflag &= ~(MFLAG_PREVENT_MAGIC);
+                if (m_ptr->mflag.has(MFLAG::PREVENT_MAGIC)) {
+                    m_ptr->mflag.reset(MFLAG::PREVENT_MAGIC);
                 }
 
                 // 感知中のモンスターのフラグを落とす処理
                 // 感知したターンはMFLAG2_SHOWを落とし、次のターンに感知中フラグのMFLAG2_MARKを落とす
-                if (m_ptr->mflag2 & MFLAG2_MARK) {
-                    if (m_ptr->mflag2 & MFLAG2_SHOW) {
-                        m_ptr->mflag2 &= ~(MFLAG2_SHOW);
+                if (m_ptr->mflag2.has(MFLAG2::MARK)) {
+                    if (m_ptr->mflag2.has(MFLAG2::SHOW)) {
+                        m_ptr->mflag2.reset(MFLAG2::SHOW);
                     } else {
-                        m_ptr->mflag2 &= ~(MFLAG2_MARK);
+                        m_ptr->mflag2.reset(MFLAG2::MARK);
                         m_ptr->ml = FALSE;
                         update_monster(creature_ptr, m_idx, FALSE);
                         if (creature_ptr->health_who == m_idx)

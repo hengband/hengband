@@ -442,14 +442,21 @@ void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
     if (z_older_than(10, 2, 2)) {
         if (m_ptr->r_idx < 0) {
             m_ptr->r_idx = (0 - m_ptr->r_idx);
-            m_ptr->mflag2 |= MFLAG2_KAGE;
+            m_ptr->mflag2.set(MFLAG2::KAGE);
         }
     } else {
-        rd_byte(&m_ptr->mflag2);
+        byte tmp8u;
+        rd_byte(&tmp8u);
+        constexpr auto base = static_cast<int>(MFLAG2::KAGE);
+        std::bitset<8> rd_bits(tmp8u);
+        for (int i = 0; i < std::min(m_ptr->mflag2.size(), 8UL); ++i) {
+            auto f = static_cast<MFLAG2>(base + i);
+            m_ptr->mflag2[f] = rd_bits[i];
+        }
     }
 
     if (z_older_than(11, 0, 12)) {
-        if (m_ptr->mflag2 & MFLAG2_KAGE)
+        if (m_ptr->mflag2.has(MFLAG2::KAGE))
             m_ptr->ap_r_idx = MON_KAGE;
     }
 

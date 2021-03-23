@@ -39,7 +39,7 @@ concptr look_mon_desc(monster_type *m_ptr, BIT_FLAGS mode)
 
     concptr clone = (m_ptr->smart & SM_CLONED) ? ", clone" : "";
     monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
-    if (ap_r_ptr->r_tkills && !(m_ptr->mflag2 & MFLAG2_KAGE)) {
+    if (ap_r_ptr->r_tkills && m_ptr->mflag2.has_not(MFLAG2::KAGE)) {
         return format(_("レベル%d, %s%s%s", "Level %d, %s%s%s"), ap_r_ptr->level, desc, attitude, clone);
     }
 

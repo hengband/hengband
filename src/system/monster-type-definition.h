@@ -1,6 +1,8 @@
 ﻿#pragma once
 
+#include "monster/monster-flag-types.h"
 #include "monster/monster-timed-effect-types.h"
+#include "util/flag-group.h"
 
 /*!
  * @brief Monster information, for a specific monster.
@@ -32,8 +34,8 @@ typedef struct monster_type {
 	SPEED mspeed;	        /*!< モンスターの個体加速値 / Monster "speed" */
 	ACTION_ENERGY energy_need;	/*!< モンスター次ターンまでに必要な行動エネルギー / Monster "energy" */
 	POSITION cdis;		/*!< 現在のプレイヤーから距離(逐一計算を避けるためのテンポラリ変数) Current dis from player */
-	BIT_FLAGS8 mflag;	/*!< モンスター個体に与えられた特殊フラグ1 / Extra monster flags */
-	BIT_FLAGS8 mflag2;	/*!< モンスター個体に与えられた特殊フラグ2 /   Extra monster flags */
+	FlagGroup<MFLAG> mflag;	/*!< モンスター個体に与えられた特殊フラグ1 (セーブ不要) / Extra monster flags */
+	FlagGroup<MFLAG2> mflag2;	/*!< モンスター個体に与えられた特殊フラグ2 (セーブ必要) / Extra monster flags */
 	bool ml;		/*!< モンスターがプレイヤーにとって視認できるか(処理のためのテンポラリ変数) Monster is "visible" */
 	OBJECT_IDX hold_o_idx;	/*!< モンスターが盗み処理により保持しているアイテム(object_type構造体自身がリスト構造を持つ) Object being held (if any) */
 	POSITION target_y;		/*!< モンスターの攻撃目標対象Y座標 / Can attack !los player */

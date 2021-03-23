@@ -1,7 +1,7 @@
 ﻿#include "load/monster-loader.h"
 #include "load/angband-version-comparer.h"
-#include "load/load-v1-5-0.h"
 #include "load/load-util.h"
+#include "load/load-v1-5-0.h"
 #include "load/savedata-flag-types.h"
 #include "util/quarks.h"
 
@@ -121,12 +121,23 @@ void rd_monster(player_type *player_ptr, monster_type *m_ptr)
     } else
         m_ptr->exp = 0;
 
-    m_ptr->mflag = 0; /* Not saved */
+    m_ptr->mflag.clear();
+    m_ptr->mflag2.clear();
 
-    if (flags & SAVE_MON_MFLAG2)
-        rd_byte(&m_ptr->mflag2);
-    else
-        m_ptr->mflag2 = 0;
+    if (flags & SAVE_MON_MFLAG2) {
+        if (loading_savefile_version_is_older_than(2)) {
+            byte tmp8u;
+            rd_byte(&tmp8u);
+            constexpr auto base = static_cast<int>(MFLAG2::KAGE);
+            std::bitset<8> rd_bits(tmp8u);
+            for (int i = 0; i < std::min(m_ptr->mflag2.size(), 8UL); ++i) {
+                auto f = static_cast<MFLAG2>(base + i);
+                m_ptr->mflag2[f] = rd_bits[i];
+            }
+        } else {
+            rd_FlagGroup(m_ptr->mflag2, rd_byte);
+        }
+    }
 
     if (flags & SAVE_MON_NICKNAME) {
         char buf[128];

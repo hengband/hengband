@@ -53,17 +53,17 @@ bool project_all_los(player_type *caster_ptr, EFFECT_ID typ, HIT_POINT dam)
         if (!player_has_los_bold(caster_ptr, y, x) || !projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y, x))
             continue;
 
-        m_ptr->mflag |= (MFLAG_LOS);
+        m_ptr->mflag.set(MFLAG::LOS);
     }
 
     BIT_FLAGS flg = PROJECT_JUMP | PROJECT_KILL | PROJECT_HIDE;
     bool obvious = FALSE;
     for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++) {
         monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
-        if (!(m_ptr->mflag & (MFLAG_LOS)))
+        if (m_ptr->mflag.has_not(MFLAG::LOS))
             continue;
 
-        m_ptr->mflag &= ~(MFLAG_LOS);
+        m_ptr->mflag.reset(MFLAG::LOS);
         POSITION y = m_ptr->fy;
         POSITION x = m_ptr->fx;
 
@@ -193,7 +193,7 @@ void aggravate_monsters(player_type *caster_ptr, MONSTER_IDX who)
             }
 
             if (!is_pet(m_ptr))
-                m_ptr->mflag2 |= MFLAG2_NOPET;
+                m_ptr->mflag2.set(MFLAG2::NOPET);
         }
 
         if (player_has_los_bold(caster_ptr, m_ptr->fy, m_ptr->fx)) {
@@ -322,8 +322,8 @@ bool probing(player_type *caster_ptr)
         msg_print(NULL);
 
         if (!is_original_ap(m_ptr)) {
-            if (m_ptr->mflag2 & MFLAG2_KAGE)
-                m_ptr->mflag2 &= ~(MFLAG2_KAGE);
+            if (m_ptr->mflag2.has(MFLAG2::KAGE))
+                m_ptr->mflag2.reset(MFLAG2::KAGE);
 
             m_ptr->ap_r_idx = m_ptr->r_idx;
             lite_spot(caster_ptr, m_ptr->fy, m_ptr->fx);

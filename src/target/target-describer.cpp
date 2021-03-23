@@ -98,7 +98,7 @@ static void evaluate_monster_exp(player_type *creature_ptr, char *buf, monster_t
         return;
     }
 
-    if (!ap_r_ptr->r_tkills || (m_ptr->mflag2 & MFLAG2_KAGE)) {
+    if (!ap_r_ptr->r_tkills || m_ptr->mflag2.has(MFLAG2::KAGE)) {
         if (!current_world_ptr->wizard) {
             sprintf(buf, "??");
             return;

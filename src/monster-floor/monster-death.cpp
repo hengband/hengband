@@ -338,7 +338,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 
     write_pet_death(player_ptr, md_ptr);
     on_dead_explosion(player_ptr, md_ptr);
-    if (md_ptr->m_ptr->mflag2 & MFLAG2_CHAMELEON) {
+    if (md_ptr->m_ptr->mflag2.has(MFLAG2::CHAMELEON)) {
         choose_new_monster(player_ptr, m_idx, TRUE, MON_CHAMELEON);
         md_ptr->r_ptr = &r_info[md_ptr->m_ptr->r_idx];
     }

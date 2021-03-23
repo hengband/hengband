@@ -48,7 +48,7 @@ static void write_monster_flags(monster_type *m_ptr, BIT_FLAGS *flags)
     if (m_ptr->exp)
         *flags |= SAVE_MON_EXP;
 
-    if (m_ptr->mflag2)
+    if (m_ptr->mflag2.any())
         *flags |= SAVE_MON_MFLAG2;
 
     if (m_ptr->nickname)
@@ -106,7 +106,7 @@ static void write_monster_info(monster_type *m_ptr, const BIT_FLAGS flags)
         wr_u32b(m_ptr->exp);
 
     if (flags & SAVE_MON_MFLAG2)
-        wr_byte(m_ptr->mflag2);
+        wr_FlagGroup(m_ptr->mflag2, wr_byte);
 
     if (flags & SAVE_MON_NICKNAME)
         wr_string(quark_str(m_ptr->nickname));

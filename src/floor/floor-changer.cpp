@@ -109,7 +109,7 @@ static void set_pet_params(player_type *master_ptr, monster_race **r_ptr, const 
     m_ptr->hold_o_idx = 0;
     m_ptr->target_y = 0;
     if (((*r_ptr)->flags1 & RF1_PREVENT_SUDDEN_MAGIC) && !ironman_nightmare) {
-        m_ptr->mflag |= MFLAG_PREVENT_MAGIC;
+        m_ptr->mflag.set(MFLAG::PREVENT_MAGIC);
     }
 }
 
@@ -329,7 +329,7 @@ static void cut_off_the_upstair(player_type *creature_ptr)
         (void)new_player_spot(creature_ptr);
         return;
     }
-    
+
     if (((creature_ptr->change_floor_mode & CFM_NO_RETURN) == 0) || ((creature_ptr->change_floor_mode & (CFM_DOWN | CFM_UP)) == 0))
         return;
 
