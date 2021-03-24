@@ -45,14 +45,26 @@ void object_known(object_type *o_ptr)
  */
 void object_aware(player_type *owner_ptr, object_type *o_ptr)
 {
+    const bool is_already_awared = object_is_aware(o_ptr);
+
     k_info[o_ptr->k_idx].aware = TRUE;
 
-    bool mihanmei = !object_is_aware(o_ptr);
-    bool is_undefined = mihanmei && k_info[o_ptr->k_idx].gen_flags.has_not(TRG::INSTA_ART) && record_ident && !owner_ptr->is_dead
-        && ((o_ptr->tval >= TV_AMULET && o_ptr->tval <= TV_POTION) || (o_ptr->tval == TV_FOOD));
-    if (!is_undefined)
+    // 以下、playrecordに記録しない場合はreturnする
+    if (!record_ident)
         return;
 
+    if (is_already_awared || owner_ptr->is_dead)
+        return;
+
+    // アーティファクト専用ベースアイテムは記録しない
+    if (k_info[o_ptr->k_idx].gen_flags.has(TRG::INSTA_ART))
+        return;
+
+    // 未鑑定名の無いアイテムは記録しない
+    if (!((o_ptr->tval >= TV_AMULET && o_ptr->tval <= TV_POTION) || o_ptr->tval == TV_FOOD))
+        return;
+
+    // playrecordに識別したアイテムを記録
     object_type forge;
     object_type *q_ptr;
     GAME_TEXT o_name[MAX_NLEN];
