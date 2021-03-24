@@ -104,15 +104,15 @@ s16b PlayerDextarity::mutation_value()
 {
     s16b result = 0;
 
-    if (any_bits(this->owner_ptr->muta3, MUT3_IRON_SKIN)) {
+    if (this->owner_ptr->muta.has(MUTA::IRON_SKIN)) {
         result -= 1;
     }
 
-    if (any_bits(this->owner_ptr->muta3, MUT3_LIMBER)) {
+    if (this->owner_ptr->muta.has(MUTA::LIMBER)) {
         result += 3;
     }
 
-    if (any_bits(this->owner_ptr->muta3, MUT3_ARTHRITIS)) {
+    if (this->owner_ptr->muta.has(MUTA::ARTHRITIS)) {
         result -= 3;
     }
 

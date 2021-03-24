@@ -536,7 +536,7 @@ void monster_gain_exp(player_type *target_ptr, MONSTER_IDX m_idx, MONRACE_IDX s_
     if (!floor_ptr->dun_level)
         new_exp /= 5;
     m_ptr->exp += new_exp;
-    if (m_ptr->mflag2 & MFLAG2_CHAMELEON)
+    if (m_ptr->mflag2.has(MFLAG2::CHAMELEON))
         return;
 
     if (m_ptr->exp < r_ptr->next_exp) {
@@ -712,14 +712,14 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
                 r_ptr->r_sights++;
         }
 
-        if (m_ptr->mflag2 & MFLAG2_CHAMELEON) {
+        if (m_ptr->mflag2.has(MFLAG2::CHAMELEON)) {
             /* You might have unmasked Chameleon first time */
             r_ptr = real_r_ptr(m_ptr);
             if (r_ptr->r_sights < MAX_SHORT)
                 r_ptr->r_sights++;
         }
 
-        if (!(m_ptr->smart & SM_CLONED)) {
+        if (m_ptr->mflag2.has_not(MFLAG2::CLONED)) {
             /* When the player kills a Unique, it stays dead */
             if (r_ptr->flags1 & RF1_UNIQUE) {
                 r_ptr->max_num = 0;
@@ -757,13 +757,13 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
         /* Recall even invisible uniques or winners */
         if ((m_ptr->ml && !target_ptr->image) || (r_ptr->flags1 & RF1_UNIQUE)) {
             /* Count kills this life */
-            if ((m_ptr->mflag2 & MFLAG2_KAGE) && (r_info[MON_KAGE].r_pkills < MAX_SHORT))
+            if (m_ptr->mflag2.has(MFLAG2::KAGE) && (r_info[MON_KAGE].r_pkills < MAX_SHORT))
                 r_info[MON_KAGE].r_pkills++;
             else if (r_ptr->r_pkills < MAX_SHORT)
                 r_ptr->r_pkills++;
 
             /* Count kills in all lives */
-            if ((m_ptr->mflag2 & MFLAG2_KAGE) && (r_info[MON_KAGE].r_tkills < MAX_SHORT))
+            if (m_ptr->mflag2.has(MFLAG2::KAGE) && (r_info[MON_KAGE].r_tkills < MAX_SHORT))
                 r_info[MON_KAGE].r_tkills++;
             else if (r_ptr->r_tkills < MAX_SHORT)
                 r_ptr->r_tkills++;
@@ -895,7 +895,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 
         if ((r_ptr->flags1 & RF1_UNIQUE) && record_destroy_uniq) {
             char note_buf[160];
-            sprintf(note_buf, "%s%s", r_name + r_ptr->name, (m_ptr->smart & SM_CLONED) ? _("(クローン)", "(Clone)") : "");
+            sprintf(note_buf, "%s%s", r_name + r_ptr->name, m_ptr->mflag2.has(MFLAG2::CLONED) ? _("(クローン)", "(Clone)") : "");
             exe_write_diary(target_ptr, DIARY_UNIQUE, 0, note_buf);
         }
 
@@ -955,9 +955,9 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
             msg_format("You have slain %s.", m_name);
 #endif
         }
-        if ((r_ptr->flags1 & RF1_UNIQUE) && !(m_ptr->smart & SM_CLONED) && !vanilla_town) {
+        if ((r_ptr->flags1 & RF1_UNIQUE) && m_ptr->mflag2.has_not(MFLAG2::CLONED) && !vanilla_town) {
             for (i = 0; i < MAX_BOUNTY; i++) {
-                if ((current_world_ptr->bounty_r_idx[i] == m_ptr->r_idx) && !(m_ptr->mflag2 & MFLAG2_CHAMELEON)) {
+                if ((current_world_ptr->bounty_r_idx[i] == m_ptr->r_idx) && m_ptr->mflag2.has_not(MFLAG2::CHAMELEON)) {
                     msg_format(_("%sの首には賞金がかかっている。", "There is a price on %s's head."), m_name);
                     break;
                 }

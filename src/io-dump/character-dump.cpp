@@ -451,7 +451,7 @@ static void dump_aux_virtues(player_type *creature_ptr, FILE *fff)
  */
 static void dump_aux_mutations(player_type *creature_ptr, FILE *fff)
 {
-    if (creature_ptr->muta1 || creature_ptr->muta2 || creature_ptr->muta3) {
+    if (creature_ptr->muta.any()) {
         fprintf(fff, _("\n\n  [突然変異]\n\n", "\n\n  [Mutations]\n\n"));
         dump_mutations(creature_ptr, fff);
     }

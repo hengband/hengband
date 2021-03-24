@@ -158,9 +158,7 @@ void player_wipe_without_name(player_type *creature_ptr)
     creature_ptr->exit_bldg = TRUE;
     creature_ptr->today_mon = 0;
     update_gambling_monsters(creature_ptr);
-    creature_ptr->muta1 = 0;
-    creature_ptr->muta2 = 0;
-    creature_ptr->muta3 = 0;
+    creature_ptr->muta.clear();
 
     for (int i = 0; i < 8; i++)
         creature_ptr->virtues[i] = 0;

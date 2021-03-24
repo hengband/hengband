@@ -174,7 +174,7 @@ void monster_desc(player_type *player_ptr, char *desc, monster_type *m_ptr, BIT_
 #endif
     } else {
         if ((r_ptr->flags1 & RF1_UNIQUE) && !(player_ptr->image && !(mode & MD_IGNORE_HALLU))) {
-            if ((m_ptr->mflag2 & MFLAG2_CHAMELEON) && !(mode & MD_TRUE_NAME)) {
+            if (m_ptr->mflag2.has(MFLAG2::CHAMELEON) && !(mode & MD_TRUE_NAME)) {
 #ifdef JP
                 char *t;
                 char buf[128];
@@ -222,7 +222,7 @@ void monster_desc(player_type *player_ptr, char *desc, monster_type *m_ptr, BIT_
         strcat(desc, _("(乗馬中)", "(riding)"));
     }
 
-    if ((mode & MD_IGNORE_HALLU) && (m_ptr->mflag2 & MFLAG2_CHAMELEON)) {
+    if ((mode & MD_IGNORE_HALLU) && m_ptr->mflag2.has(MFLAG2::CHAMELEON)) {
         if (r_ptr->flags1 & RF1_UNIQUE) {
             strcat(desc, _("(カメレオンの王)", "(Chameleon Lord)"));
         } else {

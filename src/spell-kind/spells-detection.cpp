@@ -326,7 +326,7 @@ bool detect_monsters_normal(player_type *caster_ptr, POSITION range)
             continue;
 
         if (!(r_ptr->flags2 & RF2_INVISIBLE) || caster_ptr->see_inv) {
-            m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
+            m_ptr->mflag2.set({MFLAG2::MARK, MFLAG2::SHOW});
             update_monster(caster_ptr, i, FALSE);
             flag = TRUE;
         }
@@ -371,7 +371,7 @@ bool detect_monsters_invis(player_type *caster_ptr, POSITION range)
                 caster_ptr->window_flags |= (PW_MONSTER);
             }
 
-            m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
+            m_ptr->mflag2.set({MFLAG2::MARK, MFLAG2::SHOW});
             update_monster(caster_ptr, i, FALSE);
             flag = TRUE;
         }
@@ -418,7 +418,7 @@ bool detect_monsters_evil(player_type *caster_ptr, POSITION range)
                 }
             }
 
-            m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
+            m_ptr->mflag2.set({MFLAG2::MARK, MFLAG2::SHOW});
             update_monster(caster_ptr, i, FALSE);
             flag = TRUE;
         }
@@ -458,7 +458,7 @@ bool detect_monsters_nonliving(player_type *caster_ptr, POSITION range)
                 caster_ptr->window_flags |= (PW_MONSTER);
             }
 
-            m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
+            m_ptr->mflag2.set({MFLAG2::MARK, MFLAG2::SHOW});
             update_monster(caster_ptr, i, FALSE);
             flag = TRUE;
         }
@@ -500,7 +500,7 @@ bool detect_monsters_mind(player_type *caster_ptr, POSITION range)
                 caster_ptr->window_flags |= (PW_MONSTER);
             }
 
-            m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
+            m_ptr->mflag2.set({MFLAG2::MARK, MFLAG2::SHOW});
             update_monster(caster_ptr, i, FALSE);
             flag = TRUE;
         }
@@ -543,7 +543,7 @@ bool detect_monsters_string(player_type *caster_ptr, POSITION range, concptr Mat
                 caster_ptr->window_flags |= (PW_MONSTER);
             }
 
-            m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
+            m_ptr->mflag2.set({MFLAG2::MARK, MFLAG2::SHOW});
             update_monster(caster_ptr, i, FALSE);
             flag = TRUE;
         }
@@ -591,7 +591,7 @@ bool detect_monsters_xxx(player_type *caster_ptr, POSITION range, u32b match_fla
                 }
             }
 
-            m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
+            m_ptr->mflag2.set({MFLAG2::MARK, MFLAG2::SHOW});
             update_monster(caster_ptr, i, FALSE);
             flag = TRUE;
         }

@@ -112,7 +112,7 @@ void player_vulnerability_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 	for (int i = 0; i < TR_FLAG_SIZE; i++)
 		flags[i] = 0L;
 
-	if ((creature_ptr->muta3 & MUT3_VULN_ELEM) || (creature_ptr->special_defense & KATA_KOUKIJIN))
+	if (creature_ptr->muta.has(MUTA::VULN_ELEM) || (creature_ptr->special_defense & KATA_KOUKIJIN))
 	{
 		add_flag(flags, TR_RES_ACID);
 		add_flag(flags, TR_RES_ELEC);

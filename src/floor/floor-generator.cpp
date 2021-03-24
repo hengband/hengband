@@ -229,7 +229,7 @@ static void generate_gambling_arena(player_type *creature_ptr)
         if (!monster_is_valid(m_ptr))
             continue;
 
-        m_ptr->mflag2 |= MFLAG2_MARK | MFLAG2_SHOW;
+        m_ptr->mflag2.set({MFLAG2::MARK, MFLAG2::SHOW});
         update_monster(creature_ptr, i, FALSE);
     }
 }

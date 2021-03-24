@@ -426,10 +426,24 @@ void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
     rd_byte(&tmp8u);
     m_ptr->mtimed[MTIMED_INVULNER] = (s16b)tmp8u;
 
-    if (!(current_world_ptr->z_major == 2 && current_world_ptr->z_minor == 0 && current_world_ptr->z_patch == 6))
-        rd_u32b(&m_ptr->smart);
-    else
-        m_ptr->smart = 0;
+    if (!(current_world_ptr->z_major == 2 && current_world_ptr->z_minor == 0 && current_world_ptr->z_patch == 6)) {
+        u32b tmp32u;
+        rd_u32b(&tmp32u);
+        std::bitset<32> rd_bits(tmp32u);
+        for (size_t i = 0; i < std::min(m_ptr->smart.size(), rd_bits.size()); i++) {
+            auto f = static_cast<SM>(i);
+            m_ptr->smart[f] = rd_bits[i];
+        }
+
+        // 3.0.0Alpha10以前のSM_CLONED(ビット位置22)、SM_PET(23)、SM_FRIEDLY(28)をMFLAG2に移行する
+        // ビット位置の定義はなくなるので、ビット位置の値をハードコードする。
+        m_ptr->mflag2[MFLAG2::CLONED] = rd_bits[22];
+        m_ptr->mflag2[MFLAG2::PET] = rd_bits[23];
+        m_ptr->mflag2[MFLAG2::FRIENDLY] = rd_bits[28];
+        m_ptr->smart.reset(static_cast<SM>(22)).reset(static_cast<SM>(23)).reset(static_cast<SM>(28));
+    } else {
+        m_ptr->smart.clear();
+    }
 
     u32b tmp32u;
     if (z_older_than(10, 4, 5)) {
@@ -442,14 +456,21 @@ void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
     if (z_older_than(10, 2, 2)) {
         if (m_ptr->r_idx < 0) {
             m_ptr->r_idx = (0 - m_ptr->r_idx);
-            m_ptr->mflag2 |= MFLAG2_KAGE;
+            m_ptr->mflag2.set(MFLAG2::KAGE);
         }
     } else {
-        rd_byte(&m_ptr->mflag2);
+        byte tmp8u;
+        rd_byte(&tmp8u);
+        constexpr auto base = static_cast<int>(MFLAG2::KAGE);
+        std::bitset<7> rd_bits(tmp8u);
+        for (size_t i = 0; i < std::min(m_ptr->mflag2.size(), rd_bits.size()); ++i) {
+            auto f = static_cast<MFLAG2>(base + i);
+            m_ptr->mflag2[f] = rd_bits[i];
+        }
     }
 
     if (z_older_than(11, 0, 12)) {
-        if (m_ptr->mflag2 & MFLAG2_KAGE)
+        if (m_ptr->mflag2.has(MFLAG2::KAGE))
             m_ptr->ap_r_idx = MON_KAGE;
     }
 

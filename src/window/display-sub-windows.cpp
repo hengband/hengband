@@ -106,7 +106,7 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type *m_ptr, int 
     term_addstr(-1, TERM_WHITE, " ");
     term_add_bigch(r_ptr->x_attr, r_ptr->x_char);
 
-    if (r_ptr->r_tkills && !(m_ptr->mflag2 & MFLAG2_KAGE)) {
+    if (r_ptr->r_tkills && m_ptr->mflag2.has_not(MFLAG2::KAGE)) {
         sprintf(buf, " %2d", (int)r_ptr->level);
     } else {
         strcpy(buf, " ??");

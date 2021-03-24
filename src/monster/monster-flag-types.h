@@ -1,20 +1,25 @@
 ﻿#pragma once
 
-enum monster_flags_type {
-	MFLAG_VIEW = 0x01, /* Monster is in line of sight */
-    MFLAG_LOS = 0x02, /* Monster is marked for project_all_los(caster_ptr, ) */
-    MFLAG_ESP = 0x04, /* Monster is being sensed by ESP */
-    MFLAG_ETF = 0x08, /* Monster is entering the field. */
-    MFLAG_BORN = 0x10, /* Monster is still being born */
-    MFLAG_PREVENT_MAGIC = 0x20, /* Monster is still being no-magic */
+enum class MFLAG {
+    VIEW = 0, /* Monster is in line of sight */
+    LOS = 1, /* Monster is marked for project_all_los(caster_ptr, ) */
+    ESP = 2, /* Monster is being sensed by ESP */
+    ETF = 3, /* Monster is entering the field. */
+    BORN = 4, /* Monster is still being born */
+    PREVENT_MAGIC = 5, /* Monster is still being no-magic */
+    MAX,
 };
 
-enum monster_flags2_type {
-    MFLAG2_KAGE = 0x01, /* Monster is kage */
-    MFLAG2_NOPET = 0x02, /* Cannot make monster pet */
-    MFLAG2_NOGENO = 0x04, /* Cannot genocide */
-    MFLAG2_CHAMELEON = 0x08, /* Monster is chameleon */
-    MFLAG2_NOFLOW = 0x10, /* Monster is in no_flow_by_smell mode */
-    MFLAG2_SHOW = 0x20, /* Monster is recently memorized */
-    MFLAG2_MARK = 0x40, /* Monster is currently memorized */
+enum class MFLAG2 {
+    KAGE = 0, /* Monster is kage */
+    NOPET = 1, /* Cannot make monster pet */
+    NOGENO = 2, /* Cannot genocide */
+    CHAMELEON = 3, /* Monster is chameleon */
+    NOFLOW = 4, /* Monster is in no_flow_by_smell mode */
+    SHOW = 5, /* Monster is recently memorized */
+    MARK = 6, /* Monster is currently memorized */
+    FRIENDLY = 7, /*!< 友好的である / Friendly */
+    PET = 8, /*!< ペットである / Pet */
+    CLONED = 9, /*!< クローンである / Cloned */
+    MAX,
 };

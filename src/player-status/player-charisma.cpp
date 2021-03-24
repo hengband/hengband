@@ -52,20 +52,20 @@ s16b PlayerCharisma::mutation_value()
 {
     s16b result = 0;
 
-    if (this->owner_ptr->muta3) {
-        if (any_bits(this->owner_ptr->muta3, MUT3_FLESH_ROT)) {
+    if (this->owner_ptr->muta.any()) {
+        if (this->owner_ptr->muta.has(MUTA::FLESH_ROT)) {
             result -= 1;
         }
-        if (any_bits(this->owner_ptr->muta3, MUT3_SILLY_VOI)) {
+        if (this->owner_ptr->muta.has(MUTA::SILLY_VOI)) {
             result -= 4;
         }
-        if (any_bits(this->owner_ptr->muta3, MUT3_BLANK_FAC)) {
+        if (this->owner_ptr->muta.has(MUTA::BLANK_FAC)) {
             result -= 1;
         }
-        if (any_bits(this->owner_ptr->muta3, MUT3_WART_SKIN)) {
+        if (this->owner_ptr->muta.has(MUTA::WART_SKIN)) {
             result -= 2;
         }
-        if (any_bits(this->owner_ptr->muta3, MUT3_SCALES)) {
+        if (this->owner_ptr->muta.has(MUTA::SCALES)) {
             result -= 1;
         }
     }
@@ -77,7 +77,7 @@ s16b PlayerCharisma::set_exception_value(s16b value)
 {
     s16b result = value;
 
-    if (any_bits(this->owner_ptr->muta3, MUT3_ILL_NORM)) {
+    if (this->owner_ptr->muta.has(MUTA::ILL_NORM)) {
         result = 0;
     }
 
@@ -88,7 +88,7 @@ BIT_FLAGS PlayerCharisma::get_all_flags()
 {
     BIT_FLAGS flags = PlayerStatusBase::get_all_flags();
 
-    if (any_bits(this->owner_ptr->muta3, MUT3_ILL_NORM)) {
+    if (this->owner_ptr->muta.has(MUTA::ILL_NORM)) {
         set_bits(flags, FLAG_CAUSE_MUTATION);
     }
 
@@ -99,7 +99,7 @@ BIT_FLAGS PlayerCharisma::get_bad_flags()
 {
     BIT_FLAGS flags = PlayerStatusBase::get_bad_flags();
 
-    if (any_bits(this->owner_ptr->muta3, MUT3_ILL_NORM)) {
+    if (this->owner_ptr->muta.has(MUTA::ILL_NORM)) {
         set_bits(flags, FLAG_CAUSE_MUTATION);
     }
 
@@ -116,7 +116,7 @@ BIT_FLAGS PlayerCharisma::get_bad_flags()
  */
 s16b PlayerCharisma::set_exception_use_status(s16b value)
 {
-    if (any_bits(this->owner_ptr->muta3, MUT3_ILL_NORM)) {
+    if (this->owner_ptr->muta.has(MUTA::ILL_NORM)) {
         /* 10 to 18/90 charisma, guaranteed, based on level */
         if (value < 8 + 2 * this->owner_ptr->lev) {
             value = 8 + 2 * this->owner_ptr->lev;

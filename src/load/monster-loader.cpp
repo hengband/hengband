@@ -1,7 +1,7 @@
 ﻿#include "load/monster-loader.h"
 #include "load/angband-version-comparer.h"
-#include "load/load-v1-5-0.h"
 #include "load/load-util.h"
+#include "load/load-v1-5-0.h"
 #include "load/savedata-flag-types.h"
 #include "util/quarks.h"
 
@@ -109,10 +109,28 @@ void rd_monster(player_type *player_ptr, monster_type *m_ptr)
     } else
         m_ptr->mtimed[MTIMED_INVULNER] = 0;
 
-    if (flags & SAVE_MON_SMART)
-        rd_u32b(&m_ptr->smart);
-    else
-        m_ptr->smart = 0;
+    if (flags & SAVE_MON_SMART) {
+        if (loading_savefile_version_is_older_than(2)) {
+            u32b tmp32u;
+            rd_u32b(&tmp32u);
+            std::bitset<32> rd_bits(tmp32u);
+            for (size_t i = 0; i < std::min(m_ptr->smart.size(), rd_bits.size()); i++) {
+                auto f = static_cast<SM>(i);
+                m_ptr->smart[f] = rd_bits[i];
+            }
+
+            // 3.0.0Alpha10以前のSM_CLONED(ビット位置22)、SM_PET(23)、SM_FRIEDLY(28)をMFLAG2に移行する
+            // ビット位置の定義はなくなるので、ビット位置の値をハードコードする。
+            m_ptr->mflag2[MFLAG2::CLONED] = rd_bits[22];
+            m_ptr->mflag2[MFLAG2::PET] = rd_bits[23];
+            m_ptr->mflag2[MFLAG2::FRIENDLY] = rd_bits[28];
+            m_ptr->smart.reset(static_cast<SM>(22)).reset(static_cast<SM>(23)).reset(static_cast<SM>(28));
+        } else {
+            rd_FlagGroup(m_ptr->smart, rd_byte);
+        }
+    } else {
+        m_ptr->smart.clear();
+    }
 
     if (flags & SAVE_MON_EXP) {
         u32b tmp32u;
@@ -121,12 +139,23 @@ void rd_monster(player_type *player_ptr, monster_type *m_ptr)
     } else
         m_ptr->exp = 0;
 
-    m_ptr->mflag = 0; /* Not saved */
+    m_ptr->mflag.clear();
+    m_ptr->mflag2.clear();
 
-    if (flags & SAVE_MON_MFLAG2)
-        rd_byte(&m_ptr->mflag2);
-    else
-        m_ptr->mflag2 = 0;
+    if (flags & SAVE_MON_MFLAG2) {
+        if (loading_savefile_version_is_older_than(2)) {
+            byte tmp8u;
+            rd_byte(&tmp8u);
+            constexpr auto base = static_cast<int>(MFLAG2::KAGE);
+            std::bitset<7> rd_bits(tmp8u);
+            for (size_t i = 0; i < std::min(m_ptr->mflag2.size(), rd_bits.size()); ++i) {
+                auto f = static_cast<MFLAG2>(base + i);
+                m_ptr->mflag2[f] = rd_bits[i];
+            }
+        } else {
+            rd_FlagGroup(m_ptr->mflag2, rd_byte);
+        }
+    }
 
     if (flags & SAVE_MON_NICKNAME) {
         char buf[128];

@@ -217,7 +217,7 @@ static bool update_weird_telepathy(player_type *subject_ptr, um_type *um_ptr, MO
         return TRUE;
 
     um_ptr->flag = TRUE;
-    set_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
+    um_ptr->m_ptr->mflag.set(MFLAG::ESP);
     if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image) {
         r_ptr->r_flags2 |= RF2_WEIRD_MIND;
         update_smart_stupid_flags(r_ptr);
@@ -231,7 +231,7 @@ static void update_telepathy_sight(player_type *subject_ptr, um_type *um_ptr, MO
     monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
     if (subject_ptr->special_defense & KATA_MUSOU) {
         um_ptr->flag = TRUE;
-        set_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
+        um_ptr->m_ptr->mflag.set(MFLAG::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             update_smart_stupid_flags(r_ptr);
 
@@ -252,7 +252,7 @@ static void update_telepathy_sight(player_type *subject_ptr, um_type *um_ptr, MO
         return;
 
     um_ptr->flag = TRUE;
-    set_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
+    um_ptr->m_ptr->mflag.set(MFLAG::ESP);
     if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
         update_smart_stupid_flags(r_ptr);
 }
@@ -262,84 +262,84 @@ static void update_specific_race_telepathy(player_type *subject_ptr, um_type *um
     monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
     if ((subject_ptr->esp_animal) && (r_ptr->flags3 & RF3_ANIMAL)) {
         um_ptr->flag = TRUE;
-        set_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
+        um_ptr->m_ptr->mflag.set(MFLAG::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags3 |= RF3_ANIMAL;
     }
 
     if ((subject_ptr->esp_undead) && (r_ptr->flags3 & RF3_UNDEAD)) {
         um_ptr->flag = TRUE;
-        set_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
+        um_ptr->m_ptr->mflag.set(MFLAG::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags3 |= RF3_UNDEAD;
     }
 
     if ((subject_ptr->esp_demon) && (r_ptr->flags3 & RF3_DEMON)) {
         um_ptr->flag = TRUE;
-        set_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
+        um_ptr->m_ptr->mflag.set(MFLAG::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags3 |= RF3_DEMON;
     }
 
     if ((subject_ptr->esp_orc) && (r_ptr->flags3 & RF3_ORC)) {
         um_ptr->flag = TRUE;
-        set_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
+        um_ptr->m_ptr->mflag.set(MFLAG::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags3 |= RF3_ORC;
     }
 
     if ((subject_ptr->esp_troll) && (r_ptr->flags3 & RF3_TROLL)) {
         um_ptr->flag = TRUE;
-        set_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
+        um_ptr->m_ptr->mflag.set(MFLAG::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags3 |= RF3_TROLL;
     }
 
     if ((subject_ptr->esp_giant) && (r_ptr->flags3 & RF3_GIANT)) {
         um_ptr->flag = TRUE;
-        set_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
+        um_ptr->m_ptr->mflag.set(MFLAG::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags3 |= RF3_GIANT;
     }
 
     if ((subject_ptr->esp_dragon) && (r_ptr->flags3 & RF3_DRAGON)) {
         um_ptr->flag = TRUE;
-        set_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
+        um_ptr->m_ptr->mflag.set(MFLAG::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags3 |= RF3_DRAGON;
     }
 
     if ((subject_ptr->esp_human) && (r_ptr->flags2 & RF2_HUMAN)) {
         um_ptr->flag = TRUE;
-        set_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
+        um_ptr->m_ptr->mflag.set(MFLAG::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags2 |= RF2_HUMAN;
     }
 
     if ((subject_ptr->esp_evil) && (r_ptr->flags3 & RF3_EVIL)) {
         um_ptr->flag = TRUE;
-        set_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
+        um_ptr->m_ptr->mflag.set(MFLAG::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags3 |= RF3_EVIL;
     }
 
     if ((subject_ptr->esp_good) && (r_ptr->flags3 & RF3_GOOD)) {
         um_ptr->flag = TRUE;
-        set_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
+        um_ptr->m_ptr->mflag.set(MFLAG::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags3 |= RF3_GOOD;
     }
 
     if ((subject_ptr->esp_nonliving) && ((r_ptr->flags3 & (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING)) == RF3_NONLIVING)) {
         um_ptr->flag = TRUE;
-        set_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
+        um_ptr->m_ptr->mflag.set(MFLAG::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags3 |= RF3_NONLIVING;
     }
 
     if ((subject_ptr->esp_unique) && (r_ptr->flags1 & RF1_UNIQUE)) {
         um_ptr->flag = TRUE;
-        set_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
+        um_ptr->m_ptr->mflag.set(MFLAG::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags1 |= RF1_UNIQUE;
     }
@@ -389,7 +389,7 @@ static void decide_sight_invisible_monster(player_type *subject_ptr, um_type *um
     POSITION distance = decide_updated_distance(subject_ptr, um_ptr);
     monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
 
-    reset_bits(um_ptr->m_ptr->mflag, MFLAG_ESP);
+    um_ptr->m_ptr->mflag.reset(MFLAG::ESP);
 
     if (distance > (um_ptr->in_darkness ? MAX_SIGHT / 2 : MAX_SIGHT))
         return;
@@ -484,8 +484,8 @@ static bool update_clear_monster(player_type *subject_ptr, um_type *um_ptr)
     if (!um_ptr->easy)
         return FALSE;
 
-    if (!(um_ptr->m_ptr->mflag & MFLAG_VIEW)) {
-        um_ptr->m_ptr->mflag |= MFLAG_VIEW;
+    if (um_ptr->m_ptr->mflag.has_not(MFLAG::VIEW)) {
+        um_ptr->m_ptr->mflag.set(MFLAG::VIEW);
         if (um_ptr->do_disturb && (disturb_pets || is_hostile(um_ptr->m_ptr)))
             disturb(subject_ptr, TRUE, TRUE);
     }
@@ -509,7 +509,7 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
             um_ptr->do_disturb = TRUE;
     }
 
-    if (um_ptr->m_ptr->mflag2 & MFLAG2_MARK)
+    if (um_ptr->m_ptr->mflag2.has(MFLAG2::MARK))
         um_ptr->flag = TRUE;
 
     decide_sight_invisible_monster(subject_ptr, um_ptr, m_idx);
@@ -518,10 +518,10 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
     else
         update_visible_monster(subject_ptr, um_ptr, m_idx);
 
-    if (update_clear_monster(subject_ptr, um_ptr) || ((um_ptr->m_ptr->mflag & MFLAG_VIEW) == 0))
+    if (update_clear_monster(subject_ptr, um_ptr) || um_ptr->m_ptr->mflag.has_not(MFLAG::VIEW))
         return;
 
-    um_ptr->m_ptr->mflag &= ~(MFLAG_VIEW);
+    um_ptr->m_ptr->mflag.reset(MFLAG::VIEW);
     if (um_ptr->do_disturb && (disturb_pets || is_hostile(um_ptr->m_ptr)))
         disturb(subject_ptr, TRUE, TRUE);
 }
@@ -561,124 +561,124 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
     switch (what) {
     case DRS_ACID:
         if (has_resist_acid(player_ptr))
-            m_ptr->smart |= SM_RES_ACID;
+            m_ptr->smart.set(SM::RES_ACID);
 
         if (is_oppose_acid(player_ptr))
-            m_ptr->smart |= SM_OPP_ACID;
+            m_ptr->smart.set(SM::OPP_ACID);
 
         if (has_immune_acid(player_ptr))
-            m_ptr->smart |= SM_IMM_ACID;
+            m_ptr->smart.set(SM::IMM_ACID);
 
         break;
     case DRS_ELEC:
         if (has_resist_elec(player_ptr))
-            m_ptr->smart |= SM_RES_ELEC;
+            m_ptr->smart.set(SM::RES_ELEC);
 
         if (is_oppose_elec(player_ptr))
-            m_ptr->smart |= SM_OPP_ELEC;
+            m_ptr->smart.set(SM::OPP_ELEC);
 
         if (has_immune_elec(player_ptr))
-            m_ptr->smart |= SM_IMM_ELEC;
+            m_ptr->smart.set(SM::IMM_ELEC);
 
         break;
     case DRS_FIRE:
         if (has_resist_fire(player_ptr))
-            m_ptr->smart |= SM_RES_FIRE;
+            m_ptr->smart.set(SM::RES_FIRE);
 
         if (is_oppose_fire(player_ptr))
-            m_ptr->smart |= SM_OPP_FIRE;
+            m_ptr->smart.set(SM::OPP_FIRE);
 
         if (has_immune_fire(player_ptr))
-            m_ptr->smart |= SM_IMM_FIRE;
+            m_ptr->smart.set(SM::IMM_FIRE);
 
         break;
     case DRS_COLD:
         if (has_resist_cold(player_ptr))
-            m_ptr->smart |= SM_RES_COLD;
+            m_ptr->smart.set(SM::RES_COLD);
 
         if (is_oppose_cold(player_ptr))
-            m_ptr->smart |= SM_OPP_COLD;
+            m_ptr->smart.set(SM::OPP_COLD);
 
         if (has_immune_cold(player_ptr))
-            m_ptr->smart |= SM_IMM_COLD;
+            m_ptr->smart.set(SM::IMM_COLD);
 
         break;
     case DRS_POIS:
         if (has_resist_pois(player_ptr))
-            m_ptr->smart |= SM_RES_POIS;
+            m_ptr->smart.set(SM::RES_POIS);
 
         if (is_oppose_pois(player_ptr))
-            m_ptr->smart |= SM_OPP_POIS;
+            m_ptr->smart.set(SM::OPP_POIS);
 
         break;
     case DRS_NETH:
         if (has_resist_neth(player_ptr))
-            m_ptr->smart |= SM_RES_NETH;
+            m_ptr->smart.set(SM::RES_NETH);
 
         break;
     case DRS_LITE:
         if (has_resist_lite(player_ptr))
-            m_ptr->smart |= SM_RES_LITE;
+            m_ptr->smart.set(SM::RES_LITE);
 
         break;
     case DRS_DARK:
         if (has_resist_dark(player_ptr))
-            m_ptr->smart |= SM_RES_DARK;
+            m_ptr->smart.set(SM::RES_DARK);
 
         break;
     case DRS_FEAR:
         if (has_resist_fear(player_ptr))
-            m_ptr->smart |= SM_RES_FEAR;
+            m_ptr->smart.set(SM::RES_FEAR);
 
         break;
     case DRS_CONF:
         if (has_resist_conf(player_ptr))
-            m_ptr->smart |= SM_RES_CONF;
+            m_ptr->smart.set(SM::RES_CONF);
 
         break;
     case DRS_CHAOS:
         if (has_resist_chaos(player_ptr))
-            m_ptr->smart |= SM_RES_CHAOS;
+            m_ptr->smart.set(SM::RES_CHAOS);
 
         break;
     case DRS_DISEN:
         if (has_resist_disen(player_ptr))
-            m_ptr->smart |= SM_RES_DISEN;
+            m_ptr->smart.set(SM::RES_DISEN);
 
         break;
     case DRS_BLIND:
         if (has_resist_blind(player_ptr))
-            m_ptr->smart |= SM_RES_BLIND;
+            m_ptr->smart.set(SM::RES_BLIND);
 
         break;
     case DRS_NEXUS:
         if (has_resist_nexus(player_ptr))
-            m_ptr->smart |= SM_RES_NEXUS;
+            m_ptr->smart.set(SM::RES_NEXUS);
 
         break;
     case DRS_SOUND:
         if (has_resist_sound(player_ptr))
-            m_ptr->smart |= SM_RES_SOUND;
+            m_ptr->smart.set(SM::RES_SOUND);
 
         break;
     case DRS_SHARD:
         if (has_resist_shard(player_ptr))
-            m_ptr->smart |= SM_RES_SHARD;
+            m_ptr->smart.set(SM::RES_SHARD);
 
         break;
     case DRS_FREE:
         if (player_ptr->free_act)
-            m_ptr->smart |= SM_IMM_FREE;
+            m_ptr->smart.set(SM::IMM_FREE);
 
         break;
     case DRS_MANA:
         if (!player_ptr->msp)
-            m_ptr->smart |= SM_IMM_MANA;
+            m_ptr->smart.set(SM::IMM_MANA);
 
         break;
     case DRS_REFLECT:
         if (has_reflect(player_ptr))
-            m_ptr->smart |= SM_IMM_REFLECT;
+            m_ptr->smart.set(SM::IMM_REFLECT);
 
         break;
     default:

@@ -314,7 +314,7 @@ bool get_movable_grid(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
 	bool done = FALSE;
 	bool will_run = mon_will_run(target_ptr, m_idx);
 	grid_type *g_ptr;
-	bool no_flow = ((m_ptr->mflag2 & MFLAG2_NOFLOW) != 0) && (floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].cost > 2);
+	bool no_flow = m_ptr->mflag2.has(MFLAG2::NOFLOW) && (floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].cost > 2);
 	bool can_pass_wall = ((r_ptr->flags2 & RF2_PASS_WALL) != 0) && ((m_idx != target_ptr->riding) || has_pass_wall(target_ptr));
 
 	if (!will_run && m_ptr->target_y)

@@ -310,7 +310,7 @@ static void display_current_floor(char *statmsg)
  */
 void display_player(player_type *creature_ptr, int mode)
 {
-	if ((creature_ptr->muta1 || creature_ptr->muta2 || creature_ptr->muta3) && display_mutations)
+	if (creature_ptr->muta.any() && display_mutations)
 		mode = (mode % 5);
 	else
 		mode = (mode % 4);
@@ -321,7 +321,7 @@ void display_player(player_type *creature_ptr, int mode)
 	display_player_basic_info(creature_ptr);
 	display_magic_realms(creature_ptr);
 
-	if ((creature_ptr->pclass == CLASS_CHAOS_WARRIOR) || (creature_ptr->muta2 & MUT2_CHAOS_GIFT))
+	if ((creature_ptr->pclass == CLASS_CHAOS_WARRIOR) || (creature_ptr->muta.has(MUTA::CHAOS_GIFT)))
 		display_player_one_line(ENTRY_PATRON, chaos_patrons[creature_ptr->chaos_patron], TERM_L_BLUE);
 
 	display_phisique(creature_ptr);

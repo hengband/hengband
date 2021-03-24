@@ -36,7 +36,7 @@
  * @param m_ptr モンスター情報構造体の参照ポインタ
  * @return なし
  */
-void set_friendly(monster_type *m_ptr) { m_ptr->smart |= SM_FRIENDLY; }
+void set_friendly(monster_type *m_ptr) { m_ptr->mflag2.set(MFLAG2::FRIENDLY); }
 
 /*!
  * @brief モンスターが地形を踏破できるかどうかを返す
@@ -176,7 +176,7 @@ bool are_enemies(player_type *player_ptr, monster_type *m_ptr, monster_type *n_p
     }
 
     if (check_hostile_align(m_ptr->sub_align, n_ptr->sub_align)) {
-        if (!(m_ptr->mflag2 & MFLAG2_CHAMELEON) || !(n_ptr->mflag2 & MFLAG2_CHAMELEON))
+        if (m_ptr->mflag2.has_not(MFLAG2::CHAMELEON) || n_ptr->mflag2.has_not(MFLAG2::CHAMELEON))
             return TRUE;
     }
 
@@ -232,9 +232,9 @@ bool is_original_ap_and_seen(player_type *player_ptr, monster_type *m_ptr) { ret
 /*  Determine monster race appearance index is same as race index */
 bool is_original_ap(monster_type *m_ptr) { return m_ptr->ap_r_idx == m_ptr->r_idx; }
 
-bool is_friendly(monster_type *m_ptr) { return (m_ptr->smart & SM_FRIENDLY) != 0; }
+bool is_friendly(monster_type *m_ptr) { return m_ptr->mflag2.has(MFLAG2::FRIENDLY); }
 
-bool is_pet(monster_type *m_ptr) { return (m_ptr->smart & SM_PET) != 0; }
+bool is_pet(monster_type *m_ptr) { return m_ptr->mflag2.has(MFLAG2::PET); }
 
 bool is_hostile(monster_type *m_ptr) { return !is_friendly(m_ptr) && !is_pet(m_ptr); }
 
@@ -279,7 +279,7 @@ monster_race *real_r_ptr(monster_type *m_ptr) { return &r_info[real_r_idx(m_ptr)
 MONRACE_IDX real_r_idx(monster_type *m_ptr)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    if (m_ptr->mflag2 & MFLAG2_CHAMELEON) {
+    if (m_ptr->mflag2.has(MFLAG2::CHAMELEON)) {
         if (r_ptr->flags1 & RF1_UNIQUE)
             return MON_CHAMELEON_K;
         else
