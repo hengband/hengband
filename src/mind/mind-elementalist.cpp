@@ -956,6 +956,53 @@ void do_cmd_element_browse(player_type *caster_ptr)
     }
 }
 
+/*!
+ * @brief 元素魔法の単体抹殺が有効か確認する
+ * @param r_ptr モンスター種族への参照ポインタ
+ * @param type 魔法攻撃属性
+ * @return 効果があるならTRUE、なければFALSE
+ */
+bool is_elemental_genocide_effective(monster_race *r_ptr, spells_type type)
+{
+    switch (type) {
+    case GF_FIRE:
+        if (any_bits(r_ptr->flagsr, RFR_IM_FIRE))
+            return FALSE;
+        break;
+    case GF_COLD:
+        if (any_bits(r_ptr->flagsr, RFR_IM_COLD))
+            return FALSE;
+        break;
+    case GF_ELEC:
+        if (any_bits(r_ptr->flagsr, RFR_IM_ELEC))
+            return FALSE;
+        break;
+    case GF_ACID:
+        if (any_bits(r_ptr->flagsr, RFR_IM_ACID))
+            return FALSE;
+        break;
+    case GF_DARK:
+        if (any_bits(r_ptr->flagsr, RFR_RES_DARK) || any_bits(r_ptr->r_flags3, RF3_HURT_LITE))
+            return FALSE;
+        break;
+    case GF_CONFUSION:
+        if (any_bits(r_ptr->flags3, RF3_NO_CONF))
+            return FALSE;
+        break;
+    case GF_SHARDS:
+        if (any_bits(r_ptr->flagsr, RFR_RES_SHAR))
+            return FALSE;
+        break;
+    case GF_POIS:
+        if (any_bits(r_ptr->flagsr, RFR_IM_POIS))
+            return FALSE;
+        break;
+    default:
+        return FALSE;
+    }
+
+    return TRUE;
+}
 
 /*!
  * @brief 元素魔法の単体抹殺の効果を発動する 
@@ -965,56 +1012,27 @@ void do_cmd_element_browse(player_type *caster_ptr)
  */
 process_result effect_monster_elemental_genocide(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
-    auto types = get_element_types(caster_ptr->realm1);
-    char m_name[160];
+    auto type = get_element_type(caster_ptr->realm1, 0);
+    auto name = get_element_name(caster_ptr->realm1, 0);
+    bool b = is_elemental_genocide_effective(em_ptr->r_ptr, type);
 
-    monster_desc(caster_ptr, m_name, em_ptr->m_ptr, 0);
-    msg_format(_("%sが%sを包み込んだ。", "The %s surrounds %s."), types[0], m_name);
-
-    auto realm = static_cast<ElementRealm>(caster_ptr->realm1);
-    switch (realm) {
-    case ElementRealm::FIRE:
-        if (any_bits(em_ptr->r_ptr->r_flagsr, RFR_IM_FIRE))
-            return PROCESS_CONTINUE;
-        break;
-    case ElementRealm::ICE:
-        if (any_bits(em_ptr->r_ptr->r_flagsr, RFR_IM_COLD))
-            return PROCESS_CONTINUE;
-        break;
-    case ElementRealm::SKY:
-        if (any_bits(em_ptr->r_ptr->r_flagsr, RFR_IM_ELEC))
-            return PROCESS_CONTINUE;
-        break;
-    case ElementRealm::SEA:
-        if (any_bits(em_ptr->r_ptr->r_flagsr, RFR_IM_ACID))
-            return PROCESS_CONTINUE;
-        break;
-    case ElementRealm::DARKNESS:
-        if (any_bits(em_ptr->r_ptr->r_flagsr, RFR_RES_DARK) || any_bits(em_ptr->r_ptr->r_flags3, RF3_HURT_LITE))
-            return PROCESS_CONTINUE;
-        break;
-    case ElementRealm::CHAOS:
-        if (any_bits(em_ptr->r_ptr->r_flags3, RF3_NO_CONF))
-            return PROCESS_CONTINUE;
-        break;
-    case ElementRealm::EARTH:
-        if (any_bits(em_ptr->r_ptr->r_flagsr, RFR_RES_SHAR))
-            return PROCESS_CONTINUE;
-        break;
-    case ElementRealm::DEATH:
-        if (any_bits(em_ptr->r_ptr->r_flagsr, RFR_IM_POIS))
-            return PROCESS_CONTINUE;
-        break;
-    default:
-        return PROCESS_CONTINUE;
-    }
+    if (em_ptr->seen_msg)
+        msg_format(_("%sが%sを包み込んだ。", "The %s surrounds %s."), name, em_ptr->m_name);
 
     if (em_ptr->seen)
         em_ptr->obvious = TRUE;
 
+    if (!b) {
+        if (em_ptr->seen_msg)
+            msg_format(_("%sには効果がなかった。", "%^s is unaffected."), em_ptr->m_name);
+        em_ptr->dam = 0;
+        return PROCESS_TRUE;
+    }
+
     if (genocide_aux(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, !em_ptr->who, (em_ptr->r_ptr->level + 1) / 2, _("モンスター消滅", "Genocide One"))) {
         if (em_ptr->seen_msg)
             msg_format(_("%sは消滅した！", "%^s disappeared!"), em_ptr->m_name);
+        em_ptr->dam = 0;
         chg_virtue(caster_ptr, V_VITALITY, -1);
         return PROCESS_TRUE;
     }

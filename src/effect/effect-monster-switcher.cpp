@@ -456,6 +456,8 @@ process_result switch_effects_monster(player_type *caster_ptr, effect_monster_ty
         return effect_monster_crusade(caster_ptr, em_ptr);
     case GF_WOUNDS:
         return effect_monster_wounds(em_ptr);
+    case GF_E_GENOCIDE:
+        return effect_monster_elemental_genocide(caster_ptr, em_ptr);
     default: {
         em_ptr->skipped = TRUE;
         em_ptr->dam = 0;
