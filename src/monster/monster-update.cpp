@@ -26,7 +26,6 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"
-#include "player/eldritch-horror.h"
 #include "player/player-move.h"
 #include "player/player-status-flags.h"
 #include "player/special-defense-types.h"
@@ -451,7 +450,7 @@ static void update_invisible_monster(player_type *subject_ptr, um_type *um_ptr, 
     }
 
     if (r_info[um_ptr->m_ptr->ap_r_idx].flags2 & RF2_ELDRITCH_HORROR)
-        sanity_blast(subject_ptr, um_ptr->m_ptr, FALSE);
+        um_ptr->m_ptr->mflag.set(MFLAG::SANITY_BLAST);
 
     if (disturb_near
         && (projectable(subject_ptr, um_ptr->m_ptr->fy, um_ptr->m_ptr->fx, subject_ptr->y, subject_ptr->x)
