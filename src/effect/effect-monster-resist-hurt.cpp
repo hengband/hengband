@@ -3,14 +3,21 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"
+#include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
+#include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "util/bit-flags-calculator.h"
 
-process_result effect_monster_void(effect_monster_type *em_ptr)
+/*!
+ * @brief モンスターの耐性がなく、効果もない場合の処理
+ * @param em_ptr 魔法効果情報への参照ポインタ
+ * @return 効果処理を続ける
+ */
+process_result effect_monster_nothing(effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = TRUE;
@@ -558,6 +565,104 @@ process_result effect_monster_icee_bolt(player_type *caster_ptr, effect_monster_
         em_ptr->dam *= 2;
         if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
             em_ptr->r_ptr->r_flags3 |= (RF3_HURT_COLD);
+    }
+
+    return PROCESS_CONTINUE;
+}
+
+/*!
+ * @brief 虚無属性の耐性と効果の発動
+ * @param caster_ptr プレイヤー情報への参照ポインタ
+ * @em_ptr 魔法効果情報への参照ポインタ
+ * @return 効果処理を続けるかどうか
+ * @detail
+ * 量子生物に倍打、壁抜けに1.5倍打、テレポート耐性が耐性
+ */
+process_result effect_monster_void(player_type* caster_ptr, effect_monster_type* em_ptr)
+{
+    if (em_ptr->seen)
+        em_ptr->obvious = TRUE;
+
+    if (any_bits(em_ptr->r_ptr->flags2, RF2_QUANTUM)) {
+        em_ptr->note = _("の存在確率が減少した。", "'s wave function is reduced.");
+        em_ptr->note_dies = _("は観測されなくなった。", "'s wave function is collapsed.");
+        em_ptr->dam *= 2;
+        if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+            set_bits(em_ptr->r_ptr->r_flags2, RF2_QUANTUM);
+    } else if (any_bits(em_ptr->r_ptr->flags2, RF2_PASS_WALL)) {
+        em_ptr->note = _("の存在が薄れていく。", "is fading out.");
+        em_ptr->note_dies = _("は消えてしまった。", "has disappeared.");
+        em_ptr->dam *= 3;
+        em_ptr->dam /= 2;
+        if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+            set_bits(em_ptr->r_ptr->r_flags2, RF2_PASS_WALL);
+    } else if (any_bits(em_ptr->r_ptr->flagsr, RFR_RES_TELE | RFR_RES_WALL | RFR_RES_GRAV)) {
+        em_ptr->note = _("には耐性がある！", " resists!");
+        em_ptr->dam *= 3;
+        em_ptr->dam /= randint1(6) + 6;
+        if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) {
+            if (any_bits(em_ptr->r_ptr->flagsr, RFR_RES_TELE))
+                set_bits(em_ptr->r_ptr->r_flagsr, RFR_RES_TELE);
+            if (any_bits(em_ptr->r_ptr->flagsr, RFR_RES_WALL))
+                set_bits(em_ptr->r_ptr->r_flagsr, RFR_RES_WALL);
+            if (any_bits(em_ptr->r_ptr->flagsr, RFR_RES_GRAV))
+                set_bits(em_ptr->r_ptr->r_flagsr, RFR_RES_GRAV);
+        }
+    } else
+        em_ptr->note_dies = _("は消滅してしまった。", "has vanished.");
+
+    return PROCESS_CONTINUE;
+}
+
+/*!
+ * @brief 深淵属性の耐性と効果の発動
+ * @param caster_ptr プレイヤー情報への参照ポインタ
+ * @em_ptr 魔法効果情報への参照ポインタ
+ * @return 効果処理を続けるかどうか
+ * @detail
+ * 飛ばないテレポート耐性に1.25倍打、暗黒耐性が耐性
+ * 1/3で追加に混乱か恐怖
+ */
+process_result effect_monster_abyss(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+    if (em_ptr->seen)
+        em_ptr->obvious = TRUE;
+
+    BIT_FLAGS dark = RF7_SELF_DARK_1 | RF7_SELF_DARK_2 | RF7_HAS_DARK_1 | RF7_HAS_DARK_2;
+
+    if (any_bits(em_ptr->r_ptr->flags7, dark)) {
+        em_ptr->note = _("には耐性がある！", " resists!");
+        em_ptr->dam *= 3;
+        em_ptr->dam /= (randint1(6) + 6);
+    } else if (any_bits(em_ptr->r_ptr->flagsr, RFR_RES_DARK)) {
+        em_ptr->note = _("には耐性がある！", " resists!");
+        em_ptr->dam *= 3;
+        em_ptr->dam /= (randint1(4) + 5);
+        if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+            em_ptr->r_ptr->r_flagsr |= (RFR_RES_DARK);
+    } else if (!any_bits(em_ptr->r_ptr->flags7, RF7_CAN_FLY)) {
+        if (any_bits(em_ptr->r_ptr->flagsr, RFR_RES_TELE)) {
+            em_ptr->dam *= 5;
+            em_ptr->dam /= 4;
+            if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+                set_bits(em_ptr->r_ptr->r_flagsr, RFR_RES_TELE);
+        }
+
+        em_ptr->note = _("は深淵に囚われていく。", " has be captured by abyss.");
+        em_ptr->note_dies = _("は深淵に堕ちてしまった。", " has fall in abyss.");
+
+        if (one_in_(3) && set_monster_slow(caster_ptr, em_ptr->g_ptr->m_idx, monster_slow_remaining(em_ptr->m_ptr) + 50))
+            em_ptr->note = _("の動きが遅くなった。", " starts moving slower.");
+    }
+
+    if (any_bits(em_ptr->r_ptr->flags2, RF2_ELDRITCH_HORROR) || any_bits(em_ptr->r_ptr->flags2, RF2_EMPTY_MIND))
+        return PROCESS_CONTINUE;
+
+    if (one_in_(3)) {
+        if (one_in_(2))
+            em_ptr->do_conf = (10 + randint1(15) + em_ptr->r) / (em_ptr->r + 1);
+        else
+            em_ptr->do_fear = (10 + randint1(15) + em_ptr->r) / (em_ptr->r + 1);
     }
 
     return PROCESS_CONTINUE;

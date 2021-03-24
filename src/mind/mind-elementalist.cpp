@@ -120,8 +120,8 @@ static element_type_list element_types = {
     {
         ElementRealm::FIRE, {
             _("炎", "Fire"),
-            { GF_FIRE, GF_ROCKET, GF_PLASMA },
-            { _("火炎", "Fire"), _("爆発", "Explosion"), _("プラズマ", "Plasma") },
+            { GF_FIRE, GF_HELL_FIRE, GF_PLASMA },
+            { _("火炎", "Fire"), _("業火", "Hell Fire"), _("プラズマ", "Plasma") },
             { },
         }
     },
@@ -152,9 +152,9 @@ static element_type_list element_types = {
     {
         ElementRealm::DARKNESS, {
             _("闇", "Darkness"),
-            { GF_DARK, GF_NETHER, GF_HELL_FIRE },
-            { _("暗黒", "Darkness"), _("地獄", "Nether"), _("業火", "Hell Fire") },
-            { },
+            { GF_DARK, GF_NETHER, GF_VOID },
+            { _("暗黒", "Darkness"), _("地獄", "Nether"), _("虚無", "void") },
+            { { GF_DARK, GF_ABYSS } },
         }
     },
     {

@@ -107,6 +107,9 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
         case GF_GRAVITY:
             message = _("粉砕された", "was crushed.");
             break;
+        case GF_VOID:
+            message = _("消滅した", "vanished.");
+            break;
         default:
             message = NULL;
             break;
@@ -332,7 +335,8 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
         break;
     }
     case GF_DARK_WEAK:
-    case GF_DARK: {
+    case GF_DARK:
+    case GF_ABYSS: {
         bool do_dark = !caster_ptr->phase_out && !is_mirror_grid(g_ptr);
         if (!do_dark)
             break;

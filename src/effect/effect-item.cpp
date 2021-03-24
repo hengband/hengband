@@ -175,6 +175,11 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
 
             break;
         }
+        case GF_VOID: {
+            do_kill = TRUE;
+            note_kill = _("消滅してしまった！", (plural ? " vanish!" : " vanishes!"));
+            break;
+        }
         case GF_IDENTIFY: {
             identify_item(caster_ptr, o_ptr);
             autopick_alter_item(caster_ptr, (-this_o_idx), FALSE);
