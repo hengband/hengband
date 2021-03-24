@@ -8,7 +8,10 @@
 #include "system/h-define.h"
 #include "term/z-form.h"
 
+#pragma warning(push)
+#pragma warning(disable : 4458)
 #include <gdiplus.h>
+#pragma warning(pop)
 
 static HBITMAP hBG = NULL;
 char bg_bitmap_file[MAIN_WIN_MAX_PATH] = ""; //!< 現在の背景ビットマップファイル名。

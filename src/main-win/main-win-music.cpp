@@ -183,6 +183,8 @@ errr play_music(int type, int val)
  * Notify event
  */
 void on_mci_notify(WPARAM wFlags, LONG lDevID) {
+    UNREFERENCED_PARAMETER(lDevID);
+
     if (wFlags == MCI_NOTIFY_SUCCESSFUL) {
         // (repeat) play a music
         mciSendCommand(mci_open_parms.wDeviceID, MCI_SEEK, MCI_SEEK_TO_START | MCI_WAIT, 0);
