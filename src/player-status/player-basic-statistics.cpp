@@ -132,7 +132,7 @@ s16b PlayerBasicStatistics::set_exception_use_status(s16b value)
 void PlayerBasicStatistics::update_use_status()
 {
     int status = (int)this->status_type;
-    int use = modify_stat_value(this->owner_ptr->stat_cur[status], this->owner_ptr->stat_add[status]);
+    s16b use = modify_stat_value(this->owner_ptr->stat_cur[status], this->owner_ptr->stat_add[status]);
 
     use = this->set_exception_use_status(use);
 

@@ -348,13 +348,13 @@ void update_view(player_type *subject_ptr)
         cave_note_and_redraw_later(floor_ptr, g_ptr, y, x);
     }
 
-    for (const auto &[y, x] : points) {
-        g_ptr = &floor_ptr->grid_array[y][x];
+    for (const auto &[py, px] : points) {
+        g_ptr = &floor_ptr->grid_array[py][px];
         g_ptr->info &= ~(CAVE_TEMP);
         if (g_ptr->info & CAVE_VIEW)
             continue;
 
-        cave_redraw_later(floor_ptr, g_ptr, y, x);
+        cave_redraw_later(floor_ptr, g_ptr, py, px);
     }
 
     subject_ptr->update |= PU_DELAY_VIS;

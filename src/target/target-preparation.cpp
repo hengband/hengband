@@ -170,7 +170,7 @@ void target_sensing_monsters_prepare(player_type *creature_ptr, std::vector<MONS
     if (creature_ptr->image)
         return;
 
-    for (int i = 1; i < creature_ptr->current_floor_ptr->m_max; i++) {
+    for (MONSTER_IDX i = 1; i < creature_ptr->current_floor_ptr->m_max; i++) {
         monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr) || !m_ptr->ml || is_pet(m_ptr))
             continue;

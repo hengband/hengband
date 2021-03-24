@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-enum race_flags4 {
-	RF4_SHRIEK = 0x00000001, /*!< モンスター能力: 叫ぶ / Shriek for help */
+enum race_flags4 : u32b {
+    RF4_SHRIEK = 0x00000001, /*!< モンスター能力: 叫ぶ / Shriek for help */
     RF4_XXX1 = 0x00000002, /*!< モンスター能力: 未使用 / XXX */
     RF4_DISPEL = 0x00000004, /*!< モンスター能力: 魔力消去 / Dispel magic */
     RF4_ROCKET = 0x00000008, /*!< モンスター能力: ロケット / TY: Rocket */
