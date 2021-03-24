@@ -865,7 +865,11 @@ static bool try_cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx,
         project(caster_ptr, PROJECT_WHO_UNCTRL_POWER, 2 + plev / 10, caster_ptr->y, caster_ptr->x, plev * 2,
             get_element_types(caster_ptr->realm1)[0],
             PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM, -1);
-        caster_ptr->csp = MAX(0, caster_ptr->csp - plev * MAX(1, plev / 10));
+        caster_ptr->csp = MAX(0, caster_ptr->csp - caster_ptr->msp * 10 / (20 + randint1(10)));
+
+        take_turn(caster_ptr, 100);
+        set_bits(caster_ptr->redraw, PR_MANA);
+        set_bits(caster_ptr->window_flags, PW_PLAYER | PW_SPELL);
 
         return FALSE;
     }
