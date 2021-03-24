@@ -459,7 +459,6 @@ void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
             m_ptr->mflag2.set(MFLAG2::KAGE);
         }
     } else {
-        byte tmp8u;
         rd_byte(&tmp8u);
         constexpr auto base = static_cast<int>(MFLAG2::KAGE);
         std::bitset<7> rd_bits(tmp8u);

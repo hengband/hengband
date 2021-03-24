@@ -144,7 +144,6 @@ void rd_monster(player_type *player_ptr, monster_type *m_ptr)
 
     if (flags & SAVE_MON_MFLAG2) {
         if (loading_savefile_version_is_older_than(2)) {
-            byte tmp8u;
             rd_byte(&tmp8u);
             constexpr auto base = static_cast<int>(MFLAG2::KAGE);
             std::bitset<7> rd_bits(tmp8u);
