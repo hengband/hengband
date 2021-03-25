@@ -7,6 +7,7 @@ enum class MFLAG {
     ETF = 3, /* Monster is entering the field. */
     BORN = 4, /* Monster is still being born */
     PREVENT_MAGIC = 5, /* Monster is still being no-magic */
+    SANITY_BLAST = 6, /* Monster gives sanity blast effects to player */
     MAX,
 };
 
