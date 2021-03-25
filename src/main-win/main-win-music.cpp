@@ -3,6 +3,7 @@
  * @brief Windows版固有実装(BGM)
  */
 
+#include "main/scene-table.h"
 #include "main-win/main-win-music.h"
 #include "main-win/main-win-define.h"
 #include "main-win/main-win-file-utils.h"
@@ -92,13 +93,14 @@ void load_music_prefs(DUNGEON_IDX max_d_idx, QUEST_IDX max_q_idx)
 /*
  * Stop a music
  */
-void stop_music(void)
+errr stop_music(void)
 {
     mciSendCommand(mci_open_parms.wDeviceID, MCI_STOP, MCI_WAIT, 0);
     mciSendCommand(mci_open_parms.wDeviceID, MCI_CLOSE, MCI_WAIT, 0);
     current_music_type = TERM_XTRA_MUSIC_MUTE;
     current_music_id = 0;
     strcpy(current_music_path, "\0");
+    return 0;
 }
 
 /*
@@ -110,7 +112,7 @@ errr play_music(int type, int val)
     char buf[MAIN_WIN_MAX_PATH];
 
     if (type == TERM_XTRA_MUSIC_MUTE)
-        stop_music();
+        return stop_music();
 
     if (type == TERM_XTRA_MUSIC_BASIC && ((val < 0) || (val >= MUSIC_BASIC_MAX)))
         return 1;
@@ -162,7 +164,7 @@ errr play_music(int type, int val)
     if (current_music_type == type && current_music_id == val)
         return 0;
 
-    if (current_music_type != TERM_XTRA_MUSIC_MUTE && type != TERM_XTRA_MUSIC_MUTE)
+    if (current_music_type != TERM_XTRA_MUSIC_MUTE)
         if (0 == strcmp(current_music_path, buf))
             return 0;
 
@@ -175,7 +177,22 @@ errr play_music(int type, int val)
     mciSendCommand(mci_open_parms.wDeviceID, MCI_STOP, MCI_WAIT, 0);
     mciSendCommand(mci_open_parms.wDeviceID, MCI_CLOSE, MCI_WAIT, 0);
     mciSendCommand(mci_open_parms.wDeviceID, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT | MCI_NOTIFY, (DWORD)&mci_open_parms);
-    // Start MCI_PLAY in the notification event after MCI_OPEN is completed
+    // Send MCI_PLAY in the notification event once MCI_OPEN is completed
+    return 0;
+}
+
+/*
+ * Play a music matches a situation
+ */
+errr play_music_scene()
+{
+    // テーブルの先頭から順に再生を試み、再生できたら抜ける
+    auto ite = get_scene_table_iterator();
+    const errr err_sucsess = 0;
+    while (play_music(ite->type, ite->val) != err_sucsess) {
+        ++ite;
+    }
+
     return 0;
 }
 
@@ -186,7 +203,7 @@ void on_mci_notify(WPARAM wFlags, LONG lDevID) {
     UNREFERENCED_PARAMETER(lDevID);
 
     if (wFlags == MCI_NOTIFY_SUCCESSFUL) {
-        // (repeat) play a music
+        // play a music (repeat)
         mciSendCommand(mci_open_parms.wDeviceID, MCI_SEEK, MCI_SEEK_TO_START | MCI_WAIT, 0);
         mciSendCommand(mci_open_parms.wDeviceID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mci_play_parms);
     }

@@ -1266,15 +1266,24 @@ static errr term_xtra_win_sound(int v)
  */
 static errr term_xtra_win_music(int n, int v)
 {
-    // FIXME use_musicの値に関わらずミュートを実行している
-    if (n == TERM_XTRA_MUSIC_MUTE)
-        main_win_music::stop_music();
-
     if (!use_music) {
         return 1;
     }
 
     return main_win_music::play_music(n, v);
+}
+
+/*
+ * Hack -- play a music matches a situation
+ */
+static errr term_xtra_win_scene()
+{
+    // TODO 場面に合った壁紙変更対応
+    if (!use_music) {
+        return 1;
+    }
+
+    return main_win_music::play_music_scene();
 }
 
 /*
@@ -1299,9 +1308,14 @@ static errr term_xtra_win(int n, int v)
     case TERM_XTRA_MUSIC_BASIC:
     case TERM_XTRA_MUSIC_DUNGEON:
     case TERM_XTRA_MUSIC_QUEST:
-    case TERM_XTRA_MUSIC_TOWN:
+    case TERM_XTRA_MUSIC_TOWN: {
+        return term_xtra_win_music(n, v);
+    }
     case TERM_XTRA_MUSIC_MUTE: {
-        return (term_xtra_win_music(n, v));
+        return main_win_music::stop_music();
+    }
+    case TERM_XTRA_SCENE: {
+        return term_xtra_win_scene();
     }
     case TERM_XTRA_SOUND: {
         return (term_xtra_win_sound(v));

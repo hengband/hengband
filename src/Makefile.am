@@ -379,6 +379,7 @@ hengband_SOURCES = \
 	main/info-initializer.cpp main/info-initializer.h \
 	main/init-error-messages-table.cpp main/init-error-messages-table.h \
 	main/music-definitions-table.cpp main/music-definitions-table.h \
+	main/scene-table.cpp main/scene-table.h \
 	main/sound-definitions-table.cpp main/sound-definitions-table.h \
 	main/sound-of-music.cpp main/sound-of-music.h \
 	main/x11-gamma-builder.cpp main/x11-gamma-builder.h \
