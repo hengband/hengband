@@ -620,3 +620,50 @@ void effect_player_hand_doom(player_type *target_ptr, effect_player_type *ep_ptr
             target_ptr->chp = 1;
     }
 }
+
+void effect_player_void(player_type *target_ptr, effect_player_type *ep_ptr)
+{
+    if (target_ptr->blind)
+        msg_print(_("何かに身体が引っ張りこまれる！", "Something absorbs you!"));
+    else
+        msg_print(_("周辺の空間が歪んだ。", "Sight warps around you."));
+
+    if (!check_multishadow(target_ptr)) {
+        if (!target_ptr->levitation && !target_ptr->anti_tele)
+            (void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, FALSE);
+    }
+
+    ep_ptr->dam = ep_ptr->dam * calc_void_damage_rate(target_ptr, CALC_RAND) / 100;
+
+    if (!target_ptr->levitation || one_in_(13)) {
+        inventory_damage(target_ptr, set_cold_destroy, 2);
+    }
+}
+
+void effect_player_abyss(player_type *target_ptr, effect_player_type *ep_ptr)
+{
+    if (target_ptr->blind)
+        msg_print(_("身体が沈み込む気がする！", "You feel you are sinking into something!"));
+    else
+        msg_print(_("深淵があなたを誘い込んでいる！", "You are falling in abyss!"));
+
+    ep_ptr->dam = ep_ptr->dam * calc_abyss_damage_rate(target_ptr, CALC_RAND) / 100;
+
+    if (!check_multishadow(target_ptr)) {
+        if (!target_ptr->levitation)
+            (void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, FALSE);
+
+        if (!target_ptr->blind) {
+            msg_print(_("深淵から何かがあなたを覗き込んでいる！", "Something gazes you from abyss!"));
+
+            if (!has_resist_chaos(target_ptr))
+                (void)set_image(target_ptr, target_ptr->image + randint1(10));
+
+            if (!has_resist_conf(target_ptr))
+                (void)set_confused(target_ptr, target_ptr->confused + randint1(10));
+
+            if (!has_resist_fear(target_ptr))
+                (void)set_afraid(target_ptr, target_ptr->afraid + randint1(10));
+        }
+    }
+}

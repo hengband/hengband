@@ -301,7 +301,7 @@ process_result switch_effects_monster(player_type *caster_ptr, effect_monster_ty
     case GF_BLOOD_CURSE:
     case GF_SEEKER:
     case GF_SUPER_RAY:
-        return effect_monster_void(em_ptr);
+        return effect_monster_nothing(em_ptr);
     case GF_ACID:
         return effect_monster_acid(caster_ptr, em_ptr);
     case GF_ELEC:
@@ -456,6 +456,12 @@ process_result switch_effects_monster(player_type *caster_ptr, effect_monster_ty
         return effect_monster_crusade(caster_ptr, em_ptr);
     case GF_WOUNDS:
         return effect_monster_wounds(em_ptr);
+    case GF_E_GENOCIDE:
+        return effect_monster_elemental_genocide(caster_ptr, em_ptr);
+    case GF_VOID:
+        return effect_monster_void(caster_ptr, em_ptr);
+    case GF_ABYSS:
+        return effect_monster_abyss(caster_ptr, em_ptr);
     default: {
         em_ptr->skipped = TRUE;
         em_ptr->dam = 0;

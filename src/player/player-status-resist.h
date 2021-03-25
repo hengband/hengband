@@ -33,3 +33,5 @@ PERCENTAGE calc_deathray_damage_rate(player_type *creature_ptr, rate_calc_type_m
 PERCENTAGE calc_holy_fire_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode);
 PERCENTAGE calc_hell_fire_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode);
 PERCENTAGE calc_gravity_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode);
+PERCENTAGE calc_void_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode);
+PERCENTAGE calc_abyss_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode);

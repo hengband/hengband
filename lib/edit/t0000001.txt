@@ -432,9 +432,9 @@ F:@:FLOOR:3:0:0:0:215
 F:a:BUILDING_0:3
 F:@:FLOOR:3:0:0:0:33
 
-# Quest 27 rewarding (Priest and ForceTrainer
+# Quest 27 rewarding (Priest and ForceTrainer and Elementalist
 # get The Palantir of Westernesse)
-?:[AND [EQU $QUEST27 3] [EQU $CLASS Priest ForceTrainer] ]
+?:[AND [EQU $QUEST27 3] [EQU $CLASS Priest ForceTrainer Elementalist] ]
 F:a:BUILDING_0:3
 F:@:FLOOR:3:0:0:0:15
 
@@ -483,11 +483,6 @@ F:@:FLOOR:3:0:0:0:220
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Sniper] ]
 F:a:BUILDING_0:3
 F:@:FLOOR:3:0:0:0:223
-
-# Quest 27 rewarding (Elementalist gets The Stone of Laputa)
-?:[AND [EQU $QUEST27 3] [EQU $CLASS Elementalist] ]
-F:a:BUILDING_0:3
-F:@:FLOOR:3:0:0:0:147
 
 # Quest 27 finished, no new quest is available
 ?:[EQU $QUEST27 4]

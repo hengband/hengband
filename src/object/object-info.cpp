@@ -276,6 +276,8 @@ bool check_book_realm(player_type *owner_ptr, const tval_type book_tval, const O
 {
     if (book_tval < TV_LIFE_BOOK)
         return FALSE;
+    if (owner_ptr->pclass == CLASS_ELEMENTALIST)
+        return FALSE;
     if (owner_ptr->pclass == CLASS_SORCERER) {
         return is_magic(tval2realm(book_tval));
     } else if (owner_ptr->pclass == CLASS_RED_MAGE) {

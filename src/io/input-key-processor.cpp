@@ -342,7 +342,7 @@ void process_command(player_type *creature_ptr)
         break;
     }
     case 'G': {
-        if ((creature_ptr->pclass == CLASS_SORCERER) || (creature_ptr->pclass == CLASS_RED_MAGE))
+        if (creature_ptr->pclass == CLASS_SORCERER || creature_ptr->pclass == CLASS_RED_MAGE || creature_ptr->pclass == CLASS_ELEMENTALIST)
             msg_print(_("呪文を学習する必要はない！", "You don't have to learn spells!"));
         else if (creature_ptr->pclass == CLASS_SAMURAI)
             do_cmd_gain_hissatsu(creature_ptr);
