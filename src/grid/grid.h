@@ -44,7 +44,13 @@
  * Note the special fields for the "MONSTER_FLOW" code.
  */
 
-typedef struct grid_type {
+enum flow_type {
+    FLOW_NORMAL = 0,
+    FLOW_CAN_FLY = 1,
+    FLOW_MAX = 2,
+};
+
+struct grid_type {
     BIT_FLAGS info; /* Hack -- grid flags */
 
     FEAT_IDX feat; /* Hack -- feature type */
@@ -60,10 +66,10 @@ typedef struct grid_type {
 
     FEAT_IDX mimic; /* Feature to mimic */
 
-    byte cost; /* Hack -- cost of flowing */
-    byte dist; /* Hack -- distance from player */
+    byte costs[FLOW_MAX]; /* Hack -- cost of flowing */
+    byte dists[FLOW_MAX]; /* Hack -- distance from player */
     byte when; /* Hack -- when cost was computed */
-} grid_type;
+};
 
 /*  A structure type for terrain template of saving dungeon floor */
 typedef struct grid_template_type {
@@ -171,6 +177,8 @@ extern void print_rel(player_type *subject_ptr, SYMBOL_CODE c, TERM_COLOR a, POS
 extern void note_spot(player_type *player_ptr, POSITION y, POSITION x);
 extern void lite_spot(player_type *player_ptr, POSITION y, POSITION x);
 extern void update_flow(player_type *subject_ptr);
+extern byte grid_cost(grid_type *g_ptr, monster_race *r_ptr);
+extern byte grid_dist(grid_type *g_ptr, monster_race *r_ptr);
 extern FEAT_IDX feat_state(player_type *player_ptr, FEAT_IDX feat, int action);
 extern void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, int action);
 extern void remove_mirror(player_type *caster_ptr, POSITION y, POSITION x);

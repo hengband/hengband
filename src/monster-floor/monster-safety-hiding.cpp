@@ -35,17 +35,19 @@ static coordinate_candidate sweep_safe_coordinate(player_type *target_ptr, MONST
         if (!in_bounds(floor_ptr, y, x))
             continue;
 
+        monster_race *r_ptr = &r_info[m_ptr->r_idx];
         grid_type *g_ptr;
         g_ptr = &floor_ptr->grid_array[y][x];
 
         BIT_FLAGS16 riding_mode = (m_idx == target_ptr->riding) ? CEM_RIDING : 0;
-        if (!monster_can_cross_terrain(target_ptr, g_ptr->feat, &r_info[m_ptr->r_idx], riding_mode))
+        if (!monster_can_cross_terrain(target_ptr, g_ptr->feat, r_ptr, riding_mode))
             continue;
 
         if (m_ptr->mflag2.has_not(MFLAG2::NOFLOW)) {
-            if (g_ptr->dist == 0)
+            byte dist = grid_dist(g_ptr, r_ptr);
+            if (dist == 0)
                 continue;
-            if (g_ptr->dist > floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].dist + 2 * d)
+            if (dist > grid_dist(&floor_ptr->grid_array[m_ptr->fy][m_ptr->fx], r_ptr) + 2 * d)
                 continue;
         }
 
