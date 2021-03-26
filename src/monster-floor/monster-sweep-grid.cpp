@@ -97,7 +97,7 @@ static bool sweep_ranged_attack_grid(player_type *target_ptr, MONSTER_IDX m_idx,
     if (projectable(target_ptr, y1, x1, target_ptr->y, target_ptr->x))
         return FALSE;
 
-    int now_cost = floor_ptr->grid_array[y1][x1].cost;
+    int now_cost = grid_cost(&floor_ptr->grid_array[y1][x1], r_ptr);
     if (now_cost == 0)
         now_cost = 999;
 
@@ -117,7 +117,7 @@ static bool sweep_ranged_attack_grid(player_type *target_ptr, MONSTER_IDX m_idx,
 
         grid_type *g_ptr;
         g_ptr = &floor_ptr->grid_array[y][x];
-        int cost = g_ptr->cost;
+        int cost = grid_cost(g_ptr, r_ptr);
         if (!(((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != target_ptr->riding) || has_pass_wall(target_ptr)))
                 || ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != target_ptr->riding)))) {
             if (cost == 0)
@@ -196,14 +196,19 @@ static void sweep_movable_grid(player_type *target_ptr, MONSTER_IDX m_idx, POSIT
 
     POSITION y1 = m_ptr->fy;
     POSITION x1 = m_ptr->fx;
-    if (player_has_los_bold(target_ptr, y1, x1) && projectable(target_ptr, target_ptr->y, target_ptr->x, y1, x1))
-        return;
-
     g_ptr = &floor_ptr->grid_array[y1][x1];
+    if (player_has_los_bold(target_ptr, y1, x1) && projectable(target_ptr, target_ptr->y, target_ptr->x, y1, x1)) {
+        if (distance(y1, x1, target_ptr->y, target_ptr->x) == 1)
+            return;
+        if (r_ptr->freq_spell > 0)
+            return;
+        if (grid_cost(g_ptr, r_ptr) > 5)
+            return;
+    }
 
     int best;
     bool use_scent = FALSE;
-    if (g_ptr->cost) {
+    if (grid_cost(g_ptr, r_ptr)) {
         best = 999;
     } else if (g_ptr->when) {
         if (floor_ptr->grid_array[target_ptr->y][target_ptr->x].when - g_ptr->when > 127)
@@ -232,9 +237,9 @@ static void sweep_movable_grid(player_type *target_ptr, MONSTER_IDX m_idx, POSIT
         } else {
             int cost;
             if (r_ptr->flags2 & (RF2_BASH_DOOR | RF2_OPEN_DOOR)) {
-                cost = g_ptr->dist;
+                cost = grid_dist(g_ptr, r_ptr);
             } else {
-                cost = g_ptr->cost;
+                cost = grid_cost(g_ptr, r_ptr);
             }
 
             if ((cost == 0) || (best < cost))
@@ -265,6 +270,7 @@ static bool sweep_runnable_away_grid(floor_type *floor_ptr, MONSTER_IDX m_idx, P
     POSITION gy = 0, gx = 0;
 
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    monster_race *r_ptr = &r_info[m_ptr->r_idx];
     POSITION fy = m_ptr->fy;
     POSITION fx = m_ptr->fx;
 
@@ -279,7 +285,7 @@ static bool sweep_runnable_away_grid(floor_type *floor_ptr, MONSTER_IDX m_idx, P
             continue;
 
         POSITION dis = distance(y, x, y1, x1);
-        POSITION s = 5000 / (dis + 3) - 500 / (floor_ptr->grid_array[y][x].dist + 1);
+        POSITION s = 5000 / (dis + 3) - 500 / (grid_dist(&floor_ptr->grid_array[y][x], r_ptr) + 1);
         if (s < 0)
             s = 0;
 
@@ -320,7 +326,7 @@ bool get_movable_grid(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
     bool done = FALSE;
     bool will_run = mon_will_run(target_ptr, m_idx);
     grid_type *g_ptr;
-    bool no_flow = m_ptr->mflag2.has(MFLAG2::NOFLOW) && (floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].cost > 2);
+    bool no_flow = m_ptr->mflag2.has(MFLAG2::NOFLOW) && grid_cost(&floor_ptr->grid_array[m_ptr->fy][m_ptr->fx], r_ptr) > 2;
     bool can_pass_wall = ((r_ptr->flags2 & RF2_PASS_WALL) != 0) && ((m_idx != target_ptr->riding) || has_pass_wall(target_ptr));
 
     if (!will_run && m_ptr->target_y) {
@@ -336,7 +342,7 @@ bool get_movable_grid(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
 
     if (!done && !will_run && is_hostile(m_ptr) && (r_ptr->flags1 & RF1_FRIENDS)
         && ((los(target_ptr, m_ptr->fy, m_ptr->fx, target_ptr->y, target_ptr->x) && projectable(target_ptr, m_ptr->fy, m_ptr->fx, target_ptr->y, target_ptr->x))
-            || (floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].dist < MAX_SIGHT / 2))) {
+            || (grid_dist(&floor_ptr->grid_array[m_ptr->fy][m_ptr->fx], r_ptr) < MAX_SIGHT / 2))) {
         if ((r_ptr->flags3 & RF3_ANIMAL) && !can_pass_wall && !(r_ptr->flags2 & RF2_KILL_WALL)) {
             int room = 0;
             for (int i = 0; i < 8; i++) {
@@ -363,7 +369,7 @@ bool get_movable_grid(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
             }
         }
 
-        if (!done && (floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].dist < 3)) {
+        if (!done && grid_dist(&floor_ptr->grid_array[m_ptr->fy][m_ptr->fx], r_ptr) < 3) {
             for (int i = 0; i < 8; i++) {
                 y2 = target_ptr->y + ddy_ddd[(m_idx + i) & 7];
                 x2 = target_ptr->x + ddx_ddd[(m_idx + i) & 7];
