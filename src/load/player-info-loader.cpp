@@ -50,7 +50,7 @@ void rd_base_info(player_type *creature_ptr)
     creature_ptr->realm2 = (REALM_IDX)tmp8u;
 
     rd_byte(&tmp8u);
-    if (z_older_than(10, 4, 4))
+    if (h_older_than(0, 4, 4))
         set_zangband_realm(creature_ptr);
 
     rd_byte(&tmp8u);
@@ -80,11 +80,11 @@ void rd_experience(player_type *creature_ptr)
     for (int i = 0; i < 64; i++)
         rd_s16b(&creature_ptr->spell_exp[i]);
 
-    if ((creature_ptr->pclass == CLASS_SORCERER) && z_older_than(10, 4, 2))
+    if ((creature_ptr->pclass == CLASS_SORCERER) && h_older_than(0, 4, 2))
         for (int i = 0; i < 64; i++)
             creature_ptr->spell_exp[i] = SPELL_EXP_MASTER;
 
-    const int max_weapon_exp_size = z_older_than(10, 3, 6) ? 60 : 64;
+    const int max_weapon_exp_size = h_older_than(0, 3, 6) ? 60 : 64;
     for (int i = 0; i < 5; i++)
         for (int j = 0; j < max_weapon_exp_size; j++)
             rd_s16b(&creature_ptr->weapon_exp[i][j]);
@@ -107,10 +107,10 @@ static void set_spells(player_type *creature_ptr)
 
 void rd_skills(player_type *creature_ptr)
 {
-    if (z_older_than(10, 4, 1))
+    if (h_older_than(0, 4, 1))
         set_zangband_skill(creature_ptr);
 
-    if (z_older_than(10, 3, 14))
+    if (h_older_than(0, 3, 14))
         set_zangband_spells(creature_ptr);
     else
         set_spells(creature_ptr);
@@ -134,7 +134,7 @@ static void set_race(player_type *creature_ptr)
 
 void rd_race(player_type *creature_ptr)
 {
-    if (z_older_than(11, 0, 7)) {
+    if (h_older_than(1, 0, 7)) {
         set_zangband_race(creature_ptr);
         return;
     }
@@ -144,7 +144,7 @@ void rd_race(player_type *creature_ptr)
 
 void rd_bounty_uniques(player_type *creature_ptr)
 {
-    if (z_older_than(10, 0, 3)) {
+    if (h_older_than(0, 0, 3)) {
         set_zangband_bounty_uniques(creature_ptr);
         return;
     }
@@ -172,7 +172,7 @@ static void rd_base_status(player_type *creature_ptr)
 
 static void set_imitation(player_type *creature_ptr)
 {
-    if (z_older_than(10, 0, 1)) {
+    if (h_older_than(0, 0, 1)) {
         for (int i = 0; i < MAX_MANE; i++) {
             creature_ptr->mane_spell[i] = -1;
             creature_ptr->mane_dam[i] = 0;
@@ -182,7 +182,7 @@ static void set_imitation(player_type *creature_ptr)
         return;
     }
 
-    if (z_older_than(10, 2, 3)) {
+    if (h_older_than(0, 2, 3)) {
         s16b tmp16s;
         const int OLD_MAX_MANE = 22;
         for (int i = 0; i < OLD_MAX_MANE; i++) {
@@ -217,7 +217,7 @@ static void rd_phase_out(player_type *creature_ptr)
     rd_s16b(&tmp16s);
     creature_ptr->current_floor_ptr->inside_arena = (bool)tmp16s;
     rd_s16b(&creature_ptr->current_floor_ptr->inside_quest);
-    if (z_older_than(10, 3, 5))
+    if (h_older_than(0, 3, 5))
         creature_ptr->phase_out = FALSE;
     else {
         rd_s16b(&tmp16s);
@@ -227,7 +227,7 @@ static void rd_phase_out(player_type *creature_ptr)
 
 static void rd_arena(player_type *creature_ptr)
 {
-    if (z_older_than(10, 0, 3))
+    if (h_older_than(0, 0, 3))
         update_gambling_monsters(creature_ptr);
     else
         set_gambling_monsters();
@@ -248,7 +248,7 @@ static void rd_arena(player_type *creature_ptr)
     creature_ptr->oldpx = (POSITION)tmp16s;
     rd_s16b(&tmp16s);
     creature_ptr->oldpy = (POSITION)tmp16s;
-    if (z_older_than(10, 3, 13) && !is_in_dungeon(creature_ptr) && !creature_ptr->current_floor_ptr->inside_arena) {
+    if (h_older_than(0, 3, 13) && !is_in_dungeon(creature_ptr) && !creature_ptr->current_floor_ptr->inside_arena) {
         creature_ptr->oldpy = 33;
         creature_ptr->oldpx = 131;
     }
@@ -306,7 +306,7 @@ static void rd_bad_status(player_type *creature_ptr)
 static void rd_energy(player_type *creature_ptr)
 {
     rd_s16b(&creature_ptr->energy_need);
-    if (z_older_than(11, 0, 13))
+    if (h_older_than(1, 0, 13))
         creature_ptr->energy_need = 100 - creature_ptr->energy_need;
 
     if (h_older_than(2, 1, 2, 0))
@@ -332,7 +332,7 @@ static void rd_status(player_type *creature_ptr)
     rd_s16b(&creature_ptr->image);
     rd_s16b(&creature_ptr->protevil);
     rd_s16b(&creature_ptr->invuln);
-    if (z_older_than(10, 0, 0))
+    if (h_older_than(0, 0, 0))
         creature_ptr->ult_res = 0;
     else
         rd_s16b(&creature_ptr->ult_res);
@@ -340,7 +340,7 @@ static void rd_status(player_type *creature_ptr)
 
 static void rd_tsuyoshi(player_type *creature_ptr)
 {
-    if (z_older_than(10, 0, 2))
+    if (h_older_than(0, 0, 2))
         creature_ptr->tsuyoshi = 0;
     else
         rd_s16b(&creature_ptr->tsuyoshi);
@@ -358,13 +358,13 @@ static void set_timed_effects(player_type *creature_ptr)
     rd_s16b(&creature_ptr->tim_sh_touki);
     rd_s16b(&creature_ptr->lightspeed);
     rd_s16b(&creature_ptr->tsubureru);
-    if (z_older_than(10, 4, 7))
+    if (h_older_than(0, 4, 7))
         creature_ptr->magicdef = 0;
     else
         rd_s16b(&creature_ptr->magicdef);
 
     rd_s16b(&creature_ptr->tim_res_nether);
-    if (z_older_than(10, 4, 11))
+    if (h_older_than(0, 4, 11))
         set_zangband_mimic(creature_ptr);
     else {
         rd_s16b(&creature_ptr->tim_res_time);
@@ -376,14 +376,14 @@ static void set_timed_effects(player_type *creature_ptr)
         rd_s16b(&creature_ptr->tim_sh_fire);
     }
 
-    if (z_older_than(11, 0, 99))
+    if (h_older_than(1, 0, 99))
         set_zangband_holy_aura(creature_ptr);
     else {
         rd_s16b(&creature_ptr->tim_sh_holy);
         rd_s16b(&creature_ptr->tim_eyeeye);
     }
 
-    if (z_older_than(11, 0, 3))
+    if (h_older_than(1, 0, 3))
         set_zangband_reflection(creature_ptr);
     else {
         rd_s16b(&creature_ptr->tim_reflect);
@@ -425,15 +425,9 @@ static void set_virtues(player_type *creature_ptr)
  * @brief 各種時限効果を読み込む
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
- * @details ZAngbandとの互換性を保つ都合上、突然変異と徳の処理も追加している
  */
 static void rd_timed_effects(player_type *creature_ptr)
 {
-    if ((current_world_ptr->z_major == 2) && (current_world_ptr->z_minor == 0) && (current_world_ptr->z_patch == 6)) {
-        set_zangband_timed_effects(creature_ptr);
-        return;
-    }
-
     set_timed_effects(creature_ptr);
     rd_s16b(&creature_ptr->chaos_patron);
     set_mutations(creature_ptr);

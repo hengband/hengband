@@ -72,7 +72,7 @@ void rd_item_old(player_type *player_ptr, object_type *o_ptr)
     rd_byte(&tmp8u);
     o_ptr->sval = tmp8u;
 
-    if (z_older_than(10, 4, 4)) {
+    if (h_older_than(0, 4, 4)) {
         if (o_ptr->tval == 100)
             o_ptr->tval = TV_GOLD;
         if (o_ptr->tval == 98)
@@ -124,7 +124,7 @@ void rd_item_old(player_type *player_ptr, object_type *o_ptr)
             add_flag(o_ptr->art_flags, TR_TELEPATHY);
     }
 
-    if (z_older_than(11, 0, 11)) {
+    if (h_older_than(1, 0, 11)) {
         o_ptr->curse_flags = 0L;
         if (o_ptr->ident & 0x40) {
             o_ptr->curse_flags |= TRC_CURSED;
@@ -156,7 +156,7 @@ void rd_item_old(player_type *player_ptr, object_type *o_ptr)
     rd_byte(&tmp8u);
     o_ptr->xtra2 = tmp8u;
 
-    if (z_older_than(11, 0, 10)) {
+    if (h_older_than(1, 0, 10)) {
         if (o_ptr->xtra1 == EGO_XTRA_SUSTAIN) {
             switch (o_ptr->xtra2 % 6) {
             case 0:
@@ -248,7 +248,7 @@ void rd_item_old(player_type *player_ptr, object_type *o_ptr)
         o_ptr->xtra1 = 0;
     }
 
-    if (z_older_than(10, 2, 3)) {
+    if (h_older_than(0, 2, 3)) {
         o_ptr->xtra3 = 0;
         o_ptr->xtra4 = 0;
         o_ptr->xtra5 = 0;
@@ -277,7 +277,7 @@ void rd_item_old(player_type *player_ptr, object_type *o_ptr)
         rd_s16b(&o_ptr->xtra5);
     }
 
-    if (z_older_than(11, 0, 5)
+    if (h_older_than(1, 0, 5)
         && (((o_ptr->tval == TV_LITE) && ((o_ptr->sval == SV_LITE_TORCH) || (o_ptr->sval == SV_LITE_LANTERN))) || (o_ptr->tval == TV_FLASK))) {
         o_ptr->xtra4 = o_ptr->pval;
         o_ptr->pval = 0;
@@ -305,10 +305,10 @@ void rd_item_old(player_type *player_ptr, object_type *o_ptr)
     if ((o_ptr->k_idx >= 445) && (o_ptr->k_idx <= 479))
         return;
 
-    if (z_older_than(10, 4, 10) && (o_ptr->name2 == EGO_YOIYAMI))
+    if (h_older_than(0, 4, 10) && (o_ptr->name2 == EGO_YOIYAMI))
         o_ptr->k_idx = lookup_kind(TV_SOFT_ARMOR, SV_YOIYAMI_ROBE);
 
-    if (z_older_than(10, 4, 9)) {
+    if (h_older_than(0, 4, 9)) {
         if (has_flag(o_ptr->art_flags, TR_MAGIC_MASTERY)) {
             remove_flag(o_ptr->art_flags, TR_MAGIC_MASTERY);
             add_flag(o_ptr->art_flags, TR_DEC_MANA);
@@ -340,12 +340,12 @@ void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
 {
     rd_s16b(&m_ptr->r_idx);
 
-    if (z_older_than(11, 0, 12))
+    if (h_older_than(1, 0, 12))
         m_ptr->ap_r_idx = m_ptr->r_idx;
     else
         rd_s16b(&m_ptr->ap_r_idx);
 
-    if (z_older_than(11, 0, 14)) {
+    if (h_older_than(1, 0, 14)) {
         monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
         m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
@@ -369,7 +369,7 @@ void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
     rd_s16b(&tmp16s);
     m_ptr->maxhp = tmp16s;
 
-    if (z_older_than(11, 0, 5)) {
+    if (h_older_than(1, 0, 5)) {
         m_ptr->max_maxhp = m_ptr->maxhp;
     } else {
         rd_s16b(&tmp16s);
@@ -385,16 +385,16 @@ void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
     rd_byte(&tmp8u);
     m_ptr->mspeed = tmp8u;
 
-    if (z_older_than(10, 4, 2)) {
+    if (h_older_than(0, 4, 2)) {
         rd_byte(&tmp8u);
         m_ptr->energy_need = (s16b)tmp8u;
     } else
         rd_s16b(&m_ptr->energy_need);
 
-    if (z_older_than(11, 0, 13))
+    if (h_older_than(1, 0, 13))
         m_ptr->energy_need = 100 - m_ptr->energy_need;
 
-    if (z_older_than(10, 0, 7)) {
+    if (h_older_than(0, 0, 7)) {
         m_ptr->mtimed[MTIMED_FAST] = 0;
         m_ptr->mtimed[MTIMED_SLOW] = 0;
     } else {
@@ -411,9 +411,9 @@ void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
     rd_byte(&tmp8u);
     m_ptr->mtimed[MTIMED_MONFEAR] = (s16b)tmp8u;
 
-    if (z_older_than(10, 0, 10)) {
+    if (h_older_than(0, 0, 10)) {
         reset_target(m_ptr);
-    } else if (z_older_than(10, 0, 11)) {
+    } else if (h_older_than(0, 0, 11)) {
         rd_s16b(&tmp16s);
         reset_target(m_ptr);
     } else {
@@ -426,34 +426,29 @@ void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
     rd_byte(&tmp8u);
     m_ptr->mtimed[MTIMED_INVULNER] = (s16b)tmp8u;
 
-    if (!(current_world_ptr->z_major == 2 && current_world_ptr->z_minor == 0 && current_world_ptr->z_patch == 6)) {
-        u32b tmp32u;
-        rd_u32b(&tmp32u);
-        std::bitset<32> rd_bits(tmp32u);
-        for (size_t i = 0; i < std::min(m_ptr->smart.size(), rd_bits.size()); i++) {
-            auto f = static_cast<SM>(i);
-            m_ptr->smart[f] = rd_bits[i];
-        }
-
-        // 3.0.0Alpha10以前のSM_CLONED(ビット位置22)、SM_PET(23)、SM_FRIEDLY(28)をMFLAG2に移行する
-        // ビット位置の定義はなくなるので、ビット位置の値をハードコードする。
-        m_ptr->mflag2[MFLAG2::CLONED] = rd_bits[22];
-        m_ptr->mflag2[MFLAG2::PET] = rd_bits[23];
-        m_ptr->mflag2[MFLAG2::FRIENDLY] = rd_bits[28];
-        m_ptr->smart.reset(static_cast<SM>(22)).reset(static_cast<SM>(23)).reset(static_cast<SM>(28));
-    } else {
-        m_ptr->smart.clear();
+    u32b tmp32u;
+    rd_u32b(&tmp32u);
+    std::bitset<32> rd_bits(tmp32u);
+    for (size_t i = 0; i < std::min(m_ptr->smart.size(), rd_bits.size()); i++) {
+        auto f = static_cast<SM>(i);
+        m_ptr->smart[f] = rd_bits[i];
     }
 
-    u32b tmp32u;
-    if (z_older_than(10, 4, 5)) {
+    // 3.0.0Alpha10以前のSM_CLONED(ビット位置22)、SM_PET(23)、SM_FRIEDLY(28)をMFLAG2に移行する
+    // ビット位置の定義はなくなるので、ビット位置の値をハードコードする。
+    m_ptr->mflag2[MFLAG2::CLONED] = rd_bits[22];
+    m_ptr->mflag2[MFLAG2::PET] = rd_bits[23];
+    m_ptr->mflag2[MFLAG2::FRIENDLY] = rd_bits[28];
+    m_ptr->smart.reset(static_cast<SM>(22)).reset(static_cast<SM>(23)).reset(static_cast<SM>(28));
+
+    if (h_older_than(0, 4, 5)) {
         m_ptr->exp = 0;
     } else {
         rd_u32b(&tmp32u);
         m_ptr->exp = tmp32u;
     }
 
-    if (z_older_than(10, 2, 2)) {
+    if (h_older_than(0, 2, 2)) {
         if (m_ptr->r_idx < 0) {
             m_ptr->r_idx = (0 - m_ptr->r_idx);
             m_ptr->mflag2.set(MFLAG2::KAGE);
@@ -468,12 +463,12 @@ void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
         }
     }
 
-    if (z_older_than(11, 0, 12)) {
+    if (h_older_than(1, 0, 12)) {
         if (m_ptr->mflag2.has(MFLAG2::KAGE))
             m_ptr->ap_r_idx = MON_KAGE;
     }
 
-    if (z_older_than(10, 1, 3)) {
+    if (h_older_than(0, 1, 3)) {
         m_ptr->nickname = 0;
     } else {
         char buf[128];
@@ -555,7 +550,7 @@ errr rd_dungeon_old(player_type *player_ptr)
     rd_s16b(&tmp16s);
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->dun_level = (DEPTH)tmp16s;
-    if (z_older_than(10, 3, 8))
+    if (h_older_than(0, 3, 8))
         player_ptr->dungeon_idx = DUNGEON_ANGBAND;
     else {
         byte tmp8u;
@@ -573,7 +568,7 @@ errr rd_dungeon_old(player_type *player_ptr)
     player_ptr->y = (POSITION)tmp16s;
     rd_s16b(&tmp16s);
     player_ptr->x = (POSITION)tmp16s;
-    if (z_older_than(10, 3, 13) && !floor_ptr->dun_level && !floor_ptr->inside_arena) {
+    if (h_older_than(0, 3, 13) && !floor_ptr->dun_level && !floor_ptr->inside_arena) {
         player_ptr->y = 33;
         player_ptr->x = 131;
     }
@@ -591,7 +586,7 @@ errr rd_dungeon_old(player_type *player_ptr)
         u16b info;
         byte count;
         rd_byte(&count);
-        if (z_older_than(10, 3, 6)) {
+        if (h_older_than(0, 3, 6)) {
             byte tmp8u;
             rd_byte(&tmp8u);
             info = (u16b)tmp8u;
@@ -662,7 +657,7 @@ errr rd_dungeon_old(player_type *player_ptr)
         }
     }
 
-    if (z_older_than(11, 0, 99)) {
+    if (h_older_than(1, 0, 99)) {
         for (int y = 0; y < ymax; y++) {
             for (int x = 0; x < xmax; x++) {
                 floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
@@ -792,7 +787,7 @@ errr rd_dungeon_old(player_type *player_ptr)
         real_r_ptr(m_ptr)->cur_num++;
     }
 
-    if (z_older_than(10, 3, 13) && !floor_ptr->dun_level && !floor_ptr->inside_arena)
+    if (h_older_than(0, 3, 13) && !floor_ptr->dun_level && !floor_ptr->inside_arena)
         current_world_ptr->character_dungeon = FALSE;
     else
         current_world_ptr->character_dungeon = TRUE;

@@ -46,7 +46,7 @@ errr load_town(void)
 errr load_quest_info(u16b *max_quests_load, byte *max_rquests_load)
 {
     rd_u16b(max_quests_load);
-    if (z_older_than(11, 0, 7))
+    if (h_older_than(1, 0, 7))
         *max_rquests_load = 10;
     else
         rd_byte(max_rquests_load);
@@ -75,7 +75,7 @@ static void load_quest_completion(quest_type *q_ptr)
     rd_s16b(&tmp16s);
     q_ptr->level = tmp16s;
 
-    if (z_older_than(11, 0, 6))
+    if (h_older_than(1, 0, 6))
         q_ptr->complev = 0;
     else {
         byte tmp8u;
@@ -121,13 +121,13 @@ void analyze_quests(player_type *creature_ptr, const u16b max_quests_load, const
         quest_type *const q_ptr = &quest[i];
         load_quest_completion(q_ptr);
         bool is_quest_running = (q_ptr->status == QUEST_STATUS_TAKEN);
-        is_quest_running |= (!z_older_than(10, 3, 14) && (q_ptr->status == QUEST_STATUS_COMPLETED));
-        is_quest_running |= (!z_older_than(11, 0, 7) && (i >= MIN_RANDOM_QUEST) && (i <= (MIN_RANDOM_QUEST + max_rquests_load)));
+        is_quest_running |= (!h_older_than(0, 3, 14) && (q_ptr->status == QUEST_STATUS_COMPLETED));
+        is_quest_running |= (!h_older_than(1, 0, 7) && (i >= MIN_RANDOM_QUEST) && (i <= (MIN_RANDOM_QUEST + max_rquests_load)));
         if (!is_quest_running)
             continue;
 
         load_quest_details(creature_ptr, q_ptr, i);
-        if (z_older_than(10, 3, 11))
+        if (h_older_than(0, 3, 11))
             set_zangband_quest(creature_ptr, q_ptr, i, old_inside_quest);
         else {
             byte tmp8u;

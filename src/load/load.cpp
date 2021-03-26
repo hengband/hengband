@@ -51,7 +51,7 @@
  */
 static errr load_town_quest(player_type *creature_ptr)
 {
-    if (z_older_than(12, 1, 3))
+    if (h_older_than(2, 1, 3))
         return 0;
 
     errr load_town_result = load_town();
@@ -120,12 +120,12 @@ static void load_spells(player_type *creature_ptr)
     rd_u32b(&creature_ptr->spell_forgotten1);
     rd_u32b(&creature_ptr->spell_forgotten2);
 
-    if (z_older_than(10, 0, 5))
+    if (h_older_than(0, 0, 5))
         set_zangband_learnt_spells(creature_ptr);
     else
         rd_s16b(&creature_ptr->learned_spells);
 
-    if (z_older_than(10, 0, 6))
+    if (h_older_than(0, 0, 6))
         creature_ptr->add_spells = 0;
     else
         rd_s16b(&creature_ptr->add_spells);
@@ -210,12 +210,12 @@ static errr exe_reading_savefile(player_type *creature_ptr)
         return load_store_result;
 
     rd_s16b(&creature_ptr->pet_follow_distance);
-    if (z_older_than(10, 4, 10))
+    if (h_older_than(0, 4, 10))
         set_zangband_pet(creature_ptr);
     else
         rd_s16b(&creature_ptr->pet_extra_flags);
 
-    if (!z_older_than(11, 0, 9)) {
+    if (!h_older_than(1, 0, 9)) {
         char *buf;
         C_MAKE(buf, SCREEN_BUF_MAX_SIZE, char);
         rd_string(buf, SCREEN_BUF_MAX_SIZE);
@@ -283,67 +283,65 @@ bool load_savedata(player_type *player_ptr, bool *new_game)
     }
 #endif
 
-    errr err = 0;
+    bool err = false;
     int fd = -1;
-    byte vvv[4];
+    byte fake_ver[4];
     if (!err) {
         fd = fd_open(savefile, O_RDONLY);
         if (fd < 0)
-            err = -1;
+            err = true;
 
         if (err)
-            what = _("セーブファイルを開けません。", "Cannot open savefile");
+            what = _("セーブファイルを開けません", "Cannot open savefile");
     }
 
     if (!err) {
-        if (fd_read(fd, (char *)(vvv), 4))
-            err = -1;
+        if (fd_read(fd, (char *)(fake_ver), 4))
+            err = true;
 
         if (err)
-            what = _("セーブファイルを読めません。", "Cannot read savefile");
+            what = _("セーブファイルを読めません", "Cannot read savefile");
 
         (void)fd_close(fd);
     }
 
     if (!err) {
-        current_world_ptr->z_major = vvv[0];
-        current_world_ptr->z_minor = vvv[1];
-        current_world_ptr->z_patch = vvv[2];
-        current_world_ptr->sf_extra = vvv[3];
+        if (fake_ver[0] < FAKE_VER_PLUS) {
+            what = _("セーブデータが古すぎます", "Savefile version is too old");
+            err = true;
+        }
+    }
+
+    if (err) {
+        msg_format("%s: %s", what, savefile);
+        msg_print(NULL);
+        return FALSE;
+    }
+
+    current_world_ptr->sf_extra = fake_ver[3];
+
+    if (!err) {
         term_clear();
-        err = rd_savefile(player_ptr);
+        if (rd_savefile(player_ptr))
+            err = true;
         if (err)
             what = _("セーブファイルを解析出来ません。", "Cannot parse savefile");
     }
 
     if (!err) {
         if (!current_world_ptr->game_turn)
-            err = -1;
+            err = true;
 
         if (err)
             what = _("セーブファイルが壊れています", "Broken savefile");
     }
 
     if (err) {
-        msg_format(_("エラー(%s)がバージョン%d.%d.%d 用セーブファイル読み込み中に発生。", "Error (%s) reading %d.%d.%d savefile."), what,
-            (current_world_ptr->z_major > 9) ? current_world_ptr->z_major - 10 : current_world_ptr->z_major, current_world_ptr->z_minor,
-            current_world_ptr->z_patch);
+        msg_format(_("エラー(%s)がバージョン%d.%d.%d.%d 用セーブファイル読み込み中に発生。", "Error (%s) reading %d.%d.%d.% savefile."), what,
+            current_world_ptr->h_ver_major, current_world_ptr->h_ver_minor, current_world_ptr->h_ver_patch, current_world_ptr->h_ver_extra);
 
         msg_print(NULL);
         return FALSE;
-    }
-
-    /*!< @todo v3.2.0 で削除予定 */
-    if ((FAKE_VER_MAJOR != current_world_ptr->z_major) || (FAKE_VER_MINOR != current_world_ptr->z_minor) || (FAKE_VER_PATCH != current_world_ptr->z_patch)) {
-        if (current_world_ptr->z_major == 2 && current_world_ptr->z_minor == 0 && current_world_ptr->z_patch == 6) {
-            msg_print(_("バージョン 2.0.* 用のセーブファイルを変換しました。", "Converted a 2.0.* savefile."));
-        } else {
-            msg_format(_("バージョン %d.%d.%d 用のセーブ・ファイルを変換しました。", "Converted a %d.%d.%d savefile."),
-                (current_world_ptr->z_major > 9) ? current_world_ptr->z_major - 10 : current_world_ptr->z_major, current_world_ptr->z_minor,
-                current_world_ptr->z_patch);
-        }
-
-        msg_print(NULL);
     }
 
     if (player_ptr->is_dead) {

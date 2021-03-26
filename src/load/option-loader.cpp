@@ -84,7 +84,7 @@ void rd_options(void)
         }
     }
 
-    if (z_older_than(10, 4, 5))
+    if (h_older_than(0, 4, 5))
         load_zangband_options();
 
     extract_option_vars();

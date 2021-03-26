@@ -119,37 +119,6 @@ void set_zangband_bounty_uniques(player_type *creature_ptr)
     }
 }
 
-/*!
- * @brief ZAngband v2.0.6に存在しない時限効果を0で初期化する / Old savefiles do not have the following fields...
- * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
- * @details 厳密にv2.0.6しか見ていないため、ZAngband v2.0.5 以前のセーブデータは非対応
- */
-void set_zangband_timed_effects(player_type *creature_ptr)
-{
-    creature_ptr->tim_esp = 0;
-    creature_ptr->wraith_form = 0;
-    creature_ptr->resist_magic = 0;
-    creature_ptr->tim_regen = 0;
-    creature_ptr->tim_pass_wall = 0;
-    creature_ptr->tim_stealth = 0;
-    creature_ptr->tim_levitation = 0;
-    creature_ptr->tim_sh_touki = 0;
-    creature_ptr->lightspeed = 0;
-    creature_ptr->tsubureru = 0;
-    creature_ptr->tim_res_nether = 0;
-    creature_ptr->tim_res_time = 0;
-    creature_ptr->mimic_form = 0;
-    creature_ptr->tim_mimic = 0;
-    creature_ptr->tim_sh_fire = 0;
-    creature_ptr->tim_reflect = 0;
-    creature_ptr->multishadow = 0;
-    creature_ptr->dustrobe = 0;
-    creature_ptr->chaos_patron = ((creature_ptr->age + creature_ptr->sc) % MAX_PATRON);
-    creature_ptr->muta.clear();
-    get_virtues(creature_ptr);
-}
-
 void set_zangband_mimic(player_type *creature_ptr)
 {
     creature_ptr->tim_res_time = 0;
@@ -239,22 +208,22 @@ void set_zangband_quest(player_type *creature_ptr, quest_type *const q_ptr, int 
 
 void set_zangband_class(player_type *creature_ptr)
 {
-    if (z_older_than(10, 2, 2) && (creature_ptr->pclass == CLASS_BEASTMASTER) && !creature_ptr->is_dead) {
+    if (h_older_than(0, 2, 2) && (creature_ptr->pclass == CLASS_BEASTMASTER) && !creature_ptr->is_dead) {
         creature_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
         roll_hitdice(creature_ptr, SPOP_NONE);
     }
 
-    if (z_older_than(10, 3, 2) && (creature_ptr->pclass == CLASS_ARCHER) && !creature_ptr->is_dead) {
+    if (h_older_than(0, 3, 2) && (creature_ptr->pclass == CLASS_ARCHER) && !creature_ptr->is_dead) {
         creature_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
         roll_hitdice(creature_ptr, SPOP_NONE);
     }
 
-    if (z_older_than(10, 2, 6) && (creature_ptr->pclass == CLASS_SORCERER) && !creature_ptr->is_dead) {
+    if (h_older_than(0, 2, 6) && (creature_ptr->pclass == CLASS_SORCERER) && !creature_ptr->is_dead) {
         creature_ptr->hitdie = rp_ptr->r_mhp / 2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
         roll_hitdice(creature_ptr, SPOP_NONE);
     }
 
-    if (z_older_than(10, 4, 7) && (creature_ptr->pclass == CLASS_BLUE_MAGE) && !creature_ptr->is_dead) {
+    if (h_older_than(0, 4, 7) && (creature_ptr->pclass == CLASS_BLUE_MAGE) && !creature_ptr->is_dead) {
         creature_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
         roll_hitdice(creature_ptr, SPOP_NONE);
     }
@@ -280,7 +249,7 @@ void set_zangband_pet(player_type *creature_ptr)
     if (tmp8u)
         creature_ptr->pet_extra_flags |= PF_PICKUP_ITEMS;
 
-    if (z_older_than(10, 0, 4))
+    if (h_older_than(0, 0, 4))
         creature_ptr->pet_extra_flags |= PF_TELEPORT;
     else {
         rd_byte(&tmp8u);
@@ -288,7 +257,7 @@ void set_zangband_pet(player_type *creature_ptr)
             creature_ptr->pet_extra_flags |= PF_TELEPORT;
     }
 
-    if (z_older_than(10, 0, 7))
+    if (h_older_than(0, 0, 7))
         creature_ptr->pet_extra_flags |= PF_ATTACK_SPELL;
     else {
         rd_byte(&tmp8u);
@@ -296,7 +265,7 @@ void set_zangband_pet(player_type *creature_ptr)
             creature_ptr->pet_extra_flags |= PF_ATTACK_SPELL;
     }
 
-    if (z_older_than(10, 0, 8))
+    if (h_older_than(0, 0, 8))
         creature_ptr->pet_extra_flags |= PF_SUMMON_SPELL;
     else {
         rd_byte(&tmp8u);
@@ -304,7 +273,7 @@ void set_zangband_pet(player_type *creature_ptr)
             creature_ptr->pet_extra_flags |= PF_SUMMON_SPELL;
     }
 
-    if (z_older_than(10, 0, 8))
+    if (h_older_than(0, 0, 8))
         return;
 
     rd_byte(&tmp8u);

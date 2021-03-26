@@ -66,7 +66,7 @@ static errr rd_store(player_type *player_ptr, int town_number, int store_number)
 {
     store_type *store_ptr;
     bool sort = FALSE;
-    if (z_older_than(10, 3, 3) && (store_number == STORE_HOME)) {
+    if (h_older_than(0, 3, 3) && (store_number == STORE_HOME)) {
         store_ptr = &town_info[1].store[store_number];
         if (store_ptr->stock_num)
             sort = TRUE;
@@ -80,7 +80,7 @@ static errr rd_store(player_type *player_ptr, int town_number, int store_number)
     rd_s32b(&store_ptr->store_open);
     rd_s16b(&store_ptr->insult_cur);
     rd_byte(&own);
-    if (z_older_than(11, 0, 4)) {
+    if (h_older_than(1, 0, 4)) {
         rd_byte(&tmp8u);
         num = tmp8u;
     } else {

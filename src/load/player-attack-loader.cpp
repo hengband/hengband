@@ -7,7 +7,7 @@
 
 void rd_special_attack(player_type *creature_ptr)
 {
-    if (z_older_than(10, 0, 9)) {
+    if (h_older_than(0, 0, 9)) {
         set_zangband_special_attack(creature_ptr);
         return;
     }
@@ -29,7 +29,7 @@ void rd_special_action(player_type *creature_ptr)
 
 void rd_special_defense(player_type *creature_ptr)
 {
-    if (z_older_than(10, 0, 12)) {
+    if (h_older_than(0, 0, 12)) {
         set_zangband_special_defense(creature_ptr);
         return;
     }
@@ -44,6 +44,6 @@ void rd_action(player_type *creature_ptr)
     rd_byte(&tmp8u);
     rd_byte(&tmp8u);
     creature_ptr->action = (ACTION_IDX)tmp8u;
-    if (!z_older_than(10, 4, 3))
+    if (!h_older_than(0, 4, 3))
         set_zangband_action(creature_ptr);
 }
