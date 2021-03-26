@@ -63,23 +63,18 @@ int lore_do_probe(player_type *player_ptr, MONRACE_IDX r_idx)
             n++;
         if (!(r_ptr->r_flags3 & (1UL << i)) && (r_ptr->flags3 & (1UL << i)))
             n++;
-        if (!(r_ptr->r_flags4 & (1UL << i)) && (r_ptr->flags4 & (1UL << i)))
-            n++;
-        if (!(r_ptr->r_flags5 & (1UL << i)) && (r_ptr->a_ability_flags1 & (1UL << i)))
-            n++;
-        if (!(r_ptr->r_flags6 & (1UL << i)) && (r_ptr->a_ability_flags2 & (1UL << i)))
-            n++;
         if (!(r_ptr->r_flagsr & (1UL << i)) && (r_ptr->flagsr & (1UL << i)))
             n++;
     }
 
+    auto ability_flags = r_ptr->ability_flags;
+    n += ability_flags.reset(r_ptr->r_ability_flags).count();
+
     r_ptr->r_flags1 = r_ptr->flags1;
     r_ptr->r_flags2 = r_ptr->flags2;
     r_ptr->r_flags3 = r_ptr->flags3;
-    r_ptr->r_flags4 = r_ptr->flags4;
-    r_ptr->r_flags5 = r_ptr->a_ability_flags1;
-    r_ptr->r_flags6 = r_ptr->a_ability_flags2;
     r_ptr->r_flagsr = r_ptr->flagsr;
+    r_ptr->r_ability_flags = r_ptr->ability_flags;
 
     if (!(r_ptr->r_xtra1 & MR1_EVOLUTION))
         n++;

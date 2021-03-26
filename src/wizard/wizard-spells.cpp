@@ -14,6 +14,7 @@
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
+#include "monster-race/race-ability-flags.h"
 #include "mutation/mutation-processor.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-teleport.h"
@@ -123,24 +124,14 @@ void wiz_teleport_back(player_type *caster_ptr)
  */
 void wiz_learn_blue_magic_all(player_type *caster_ptr)
 {
-    BIT_FLAGS f4 = 0L, f5 = 0L, f6 = 0L;
+    FlagGroup<RF_ABILITY> ability_flags;
     for (int j = 1; j < A_MAX; j++) {
-        set_rf_masks(&f4, &f5, &f6, static_cast<blue_magic_type>(j));
+        set_rf_masks(ability_flags, static_cast<blue_magic_type>(j));
 
-        int i;
-        for (i = 0; i < 32; i++) {
-            if ((0x00000001U << i) & f4)
-                caster_ptr->magic_num2[i] = 1;
-        }
-
-        for (; i < 64; i++) {
-            if ((0x00000001U << (i - 32)) & f5)
-                caster_ptr->magic_num2[i] = 1;
-        }
-
-        for (; i < 96; i++) {
-            if ((0x00000001U << (i - 64)) & f6)
-                caster_ptr->magic_num2[i] = 1;
+        std::vector<RF_ABILITY> spells;
+        FlagGroup<RF_ABILITY>::get_flags(ability_flags, std::back_inserter(spells));
+        for (auto spell : spells) {
+            caster_ptr->magic_num2[static_cast<int>(spell)] = 1;
         }
     }
 }

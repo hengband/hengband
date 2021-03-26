@@ -488,9 +488,9 @@ static void move_RF3_to_RFR(monster_race *r_ptr, const BIT_FLAGS rf3, const BIT_
     }
 }
 
-static void move_RF4_BR_to_RFR(monster_race *r_ptr, const BIT_FLAGS rf4_br, const BIT_FLAGS rfr)
+static void move_RF4_BR_to_RFR(monster_race *r_ptr, BIT_FLAGS f4, const BIT_FLAGS rf4_br, const BIT_FLAGS rfr)
 {
-    if (r_ptr->r_flags4 & rf4_br)
+    if (f4 & rf4_br)
         r_ptr->r_flagsr |= rfr;
 }
 
@@ -500,7 +500,7 @@ static void move_RF4_BR_to_RFR(monster_race *r_ptr, const BIT_FLAGS rf4_br, cons
  * @param r_idx モンスター種族ID
  * @details 本来はr_idxからr_ptrを決定可能だが、互換性を優先するため元コードのままとする
  */
-void set_old_lore(monster_race *r_ptr, const MONRACE_IDX r_idx)
+void set_old_lore(monster_race *r_ptr, BIT_FLAGS f4, const MONRACE_IDX r_idx)
 {
     r_ptr->r_flagsr = 0L;
     move_RF3_to_RFR(r_ptr, RF3_IM_ACID, RFR_IM_ACID);
@@ -516,17 +516,17 @@ void set_old_lore(monster_race *r_ptr, const MONRACE_IDX r_idx)
     move_RF3_to_RFR(r_ptr, RF3_RES_DISE, RFR_RES_DISE);
     move_RF3_to_RFR(r_ptr, RF3_RES_ALL, RFR_RES_ALL);
 
-    move_RF4_BR_to_RFR(r_ptr, RF4_BR_LITE, RFR_RES_LITE);
-    move_RF4_BR_to_RFR(r_ptr, RF4_BR_DARK, RFR_RES_DARK);
-    move_RF4_BR_to_RFR(r_ptr, RF4_BR_SOUN, RFR_RES_SOUN);
-    move_RF4_BR_to_RFR(r_ptr, RF4_BR_CHAO, RFR_RES_CHAO);
-    move_RF4_BR_to_RFR(r_ptr, RF4_BR_TIME, RFR_RES_TIME);
-    move_RF4_BR_to_RFR(r_ptr, RF4_BR_INER, RFR_RES_INER);
-    move_RF4_BR_to_RFR(r_ptr, RF4_BR_GRAV, RFR_RES_GRAV);
-    move_RF4_BR_to_RFR(r_ptr, RF4_BR_SHAR, RFR_RES_SHAR);
-    move_RF4_BR_to_RFR(r_ptr, RF4_BR_WALL, RFR_RES_WALL);
+    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_LITE, RFR_RES_LITE);
+    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_DARK, RFR_RES_DARK);
+    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_SOUN, RFR_RES_SOUN);
+    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_CHAO, RFR_RES_CHAO);
+    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_TIME, RFR_RES_TIME);
+    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_INER, RFR_RES_INER);
+    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_GRAV, RFR_RES_GRAV);
+    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_SHAR, RFR_RES_SHAR);
+    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_WALL, RFR_RES_WALL);
 
-    if (r_ptr->r_flags4 & RF4_BR_CONF)
+    if (f4 & RF4_BR_CONF)
         r_ptr->r_flags3 |= RF3_NO_CONF;
 
     if (r_idx == MON_STORMBRINGER)

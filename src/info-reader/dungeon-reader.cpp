@@ -69,13 +69,7 @@ static errr grab_one_basic_monster_flag(dungeon_type *d_ptr, concptr what)
  */
 static errr grab_one_spell_monster_flag(dungeon_type *d_ptr, concptr what)
 {
-    if (grab_one_flag(&d_ptr->mflags4, r_info_flags4, what) == 0)
-        return 0;
-
-    if (grab_one_flag(&d_ptr->m_a_ability_flags1, r_a_ability_flags1, what) == 0)
-        return 0;
-
-    if (grab_one_flag(&d_ptr->m_a_ability_flags2, r_a_ability_flags2, what) == 0)
+    if (FlagGroup<RF_ABILITY>::grab_one_flag(d_ptr->m_ability_flags, r_info_ability_flags, what))
         return 0;
 
     msg_format(_("未知のモンスター・フラグ '%s'。", "Unknown monster flag '%s'."), what);

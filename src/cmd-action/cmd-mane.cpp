@@ -34,7 +34,6 @@
 #include "monster/monster-processor.h"
 #include "monster/monster-status.h"
 #include "mspell/monster-power-table.h"
-#include "mspell/mspell-type.h"
 #include "player/player-status-table.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
@@ -69,35 +68,37 @@ static int damage;
  * @param dam ものまねの威力
  * @return なし
  */
-static void mane_info(player_type *caster_ptr, char *p, int power, HIT_POINT dam)
+static void mane_info(player_type *caster_ptr, char *p, RF_ABILITY power, HIT_POINT dam)
 {
     PLAYER_LEVEL plev = caster_ptr->lev;
 
     strcpy(p, "");
 
-    if ((power > 2 && power < 41) || (power > 41 && power < 59) || (power == 75))
+    const auto power_int = static_cast<int>(power);
+
+    if ((power_int > 2 && power_int < 41) || (power_int > 41 && power_int < 59) || (power == RF_ABILITY::PSY_SPEAR))
         sprintf(p, " %s%d", KWD_DAM, (int)dam);
     else {
         switch (power) {
-        case 41:
+        case RF_ABILITY::DRAIN_MANA:
             sprintf(p, " %sd%d+%d", KWD_HEAL, plev * 3, plev);
             break;
-        case 64:
+        case RF_ABILITY::HASTE:
             sprintf(p, " %sd%d+%d", KWD_DURATION, 20 + plev, plev);
             break;
-        case 66:
+        case RF_ABILITY::HEAL:
             sprintf(p, " %s%d", KWD_HEAL, plev * 6);
             break;
-        case 67:
+        case RF_ABILITY::INVULNER:
             sprintf(p, " %sd7+7", KWD_DURATION);
             break;
-        case 68:
+        case RF_ABILITY::BLINK:
             sprintf(p, " %s10", KWD_SPHERE);
             break;
-        case 69:
+        case RF_ABILITY::TPORT:
             sprintf(p, " %s%d", KWD_SPHERE, plev * 5);
             break;
-        case 79:
+        case RF_ABILITY::RAISE_DEAD:
             sprintf(p, " %s5", KWD_SPHERE);
             break;
         default:
@@ -176,7 +177,7 @@ static int get_mane_power(player_type *caster_ptr, int *sn, bool baigaesi)
                 /* Dump the spells */
                 for (i = 0; i < num; i++) {
                     /* Access the spell */
-                    spell = monster_powers[caster_ptr->mane_spell[i]];
+                    spell = monster_powers[static_cast<size_t>(caster_ptr->mane_spell[i])];
 
                     chance = spell.manefail;
 
@@ -249,14 +250,14 @@ static int get_mane_power(player_type *caster_ptr, int *sn, bool baigaesi)
         }
 
         /* Save the spell index */
-        spell = monster_powers[caster_ptr->mane_spell[i]];
+        spell = monster_powers[static_cast<int>(caster_ptr->mane_spell[i])];
 
         /* Verify it */
         if (ask) {
             char tmp_val[160];
 
             /* Prompt */
-            (void)strnfmt(tmp_val, 78, _("%sをまねますか？", "Use %s? "), monster_powers[caster_ptr->mane_spell[i]].name);
+            (void)strnfmt(tmp_val, 78, _("%sをまねますか？", "Use %s? "), spell.name);
 
             /* Belay that order */
             if (!get_check(tmp_val))
@@ -292,7 +293,7 @@ static int get_mane_power(player_type *caster_ptr, int *sn, bool baigaesi)
  * @param spell 発動するモンスター攻撃のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-static bool use_mane(player_type *caster_ptr, int spell)
+static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
 {
     DIRECTION dir;
     PLAYER_LEVEL plev = caster_ptr->lev;
@@ -304,15 +305,15 @@ static bool use_mane(player_type *caster_ptr, int spell)
 
     /* spell code */
     switch (spell) {
-    case MS_SHRIEK:
+    case RF_ABILITY::SHRIEK:
         msg_print(_("かん高い金切り声をあげた。", "You make a high pitched shriek."));
         aggravate_monsters(caster_ptr, 0);
         break;
 
-    case MS_XXX1:
+    case RF_ABILITY::XXX1:
         break;
 
-    case MS_DISPEL: {
+    case RF_ABILITY::DISPEL: {
         MONSTER_IDX m_idx;
 
         if (!target_set(caster_ptr, TARGET_KILL))
@@ -328,7 +329,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
         break;
     }
 
-    case MS_ROCKET:
+    case RF_ABILITY::ROCKET:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -336,7 +337,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
         fire_rocket(caster_ptr, GF_ROCKET, dir, damage, 2);
         break;
 
-    case MS_SHOOT:
+    case RF_ABILITY::SHOOT:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -344,16 +345,16 @@ static bool use_mane(player_type *caster_ptr, int spell)
         fire_bolt(caster_ptr, GF_ARROW, dir, damage);
         break;
 
-    case MS_XXX2:
+    case RF_ABILITY::XXX2:
         break;
 
-    case MS_XXX3:
+    case RF_ABILITY::XXX3:
         break;
 
-    case MS_XXX4:
+    case RF_ABILITY::XXX4:
         break;
 
-    case MS_BR_ACID:
+    case RF_ABILITY::BR_ACID:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -361,7 +362,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
         fire_breath(caster_ptr, GF_ACID, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case MS_BR_ELEC:
+    case RF_ABILITY::BR_ELEC:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -369,7 +370,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
         fire_breath(caster_ptr, GF_ELEC, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case MS_BR_FIRE:
+    case RF_ABILITY::BR_FIRE:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -377,7 +378,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
         fire_breath(caster_ptr, GF_FIRE, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case MS_BR_COLD:
+    case RF_ABILITY::BR_COLD:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -385,7 +386,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
         fire_breath(caster_ptr, GF_COLD, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case MS_BR_POIS:
+    case RF_ABILITY::BR_POIS:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -393,7 +394,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
         fire_breath(caster_ptr, GF_POIS, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case MS_BR_NETHER:
+    case RF_ABILITY::BR_NETH:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -401,7 +402,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
         fire_breath(caster_ptr, GF_NETHER, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case MS_BR_LITE:
+    case RF_ABILITY::BR_LITE:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -409,7 +410,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
         fire_breath(caster_ptr, GF_LITE, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case MS_BR_DARK:
+    case RF_ABILITY::BR_DARK:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -417,7 +418,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
         fire_breath(caster_ptr, GF_DARK, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case MS_BR_CONF:
+    case RF_ABILITY::BR_CONF:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -425,7 +426,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
         fire_breath(caster_ptr, GF_CONFUSION, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case MS_BR_SOUND:
+    case RF_ABILITY::BR_SOUN:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -433,7 +434,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
         fire_breath(caster_ptr, GF_SOUND, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case MS_BR_CHAOS:
+    case RF_ABILITY::BR_CHAO:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -441,7 +442,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
         fire_breath(caster_ptr, GF_CHAOS, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case MS_BR_DISEN:
+    case RF_ABILITY::BR_DISE:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -449,7 +450,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
         fire_breath(caster_ptr, GF_DISENCHANT, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case MS_BR_NEXUS:
+    case RF_ABILITY::BR_NEXU:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -457,7 +458,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
         fire_breath(caster_ptr, GF_NEXUS, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case MS_BR_TIME:
+    case RF_ABILITY::BR_TIME:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -465,7 +466,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
         fire_breath(caster_ptr, GF_TIME, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case MS_BR_INERTIA:
+    case RF_ABILITY::BR_INER:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -473,7 +474,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
         fire_breath(caster_ptr, GF_INERTIAL, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case MS_BR_GRAVITY:
+    case RF_ABILITY::BR_GRAV:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -481,7 +482,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
         fire_breath(caster_ptr, GF_GRAVITY, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case MS_BR_SHARDS:
+    case RF_ABILITY::BR_SHAR:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -489,7 +490,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
         fire_breath(caster_ptr, GF_SHARDS, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case MS_BR_PLASMA:
+    case RF_ABILITY::BR_PLAS:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -498,7 +499,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
         fire_breath(caster_ptr, GF_PLASMA, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case MS_BR_FORCE:
+    case RF_ABILITY::BR_WALL:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -507,7 +508,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
         fire_breath(caster_ptr, GF_FORCE, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case MS_BR_MANA:
+    case RF_ABILITY::BR_MANA:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -516,7 +517,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
         fire_breath(caster_ptr, GF_MANA, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case MS_BALL_NUKE:
+    case RF_ABILITY::BA_NUKE:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -525,7 +526,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
         fire_ball(caster_ptr, GF_NUKE, dir, damage, 2);
         break;
 
-    case MS_BR_NUKE:
+    case RF_ABILITY::BR_NUKE:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -534,7 +535,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
         fire_breath(caster_ptr, GF_NUKE, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case MS_BALL_CHAOS:
+    case RF_ABILITY::BA_CHAO:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -542,7 +543,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 
         fire_ball(caster_ptr, GF_CHAOS, dir, damage, 4);
         break;
-    case MS_BR_DISI:
+    case RF_ABILITY::BR_DISI:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -550,7 +551,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 
         fire_breath(caster_ptr, GF_DISINTEGRATE, dir, damage, (plev > 35 ? 3 : 2));
         break;
-    case MS_BALL_ACID:
+    case RF_ABILITY::BA_ACID:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -558,7 +559,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 
         fire_ball(caster_ptr, GF_ACID, dir, damage, 2);
         break;
-    case MS_BALL_ELEC:
+    case RF_ABILITY::BA_ELEC:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -566,7 +567,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 
         fire_ball(caster_ptr, GF_ELEC, dir, damage, 2);
         break;
-    case MS_BALL_FIRE:
+    case RF_ABILITY::BA_FIRE:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -574,7 +575,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 
         fire_ball(caster_ptr, GF_FIRE, dir, damage, 2);
         break;
-    case MS_BALL_COLD:
+    case RF_ABILITY::BA_COLD:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -582,7 +583,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 
         fire_ball(caster_ptr, GF_COLD, dir, damage, 2);
         break;
-    case MS_BALL_POIS:
+    case RF_ABILITY::BA_POIS:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -590,7 +591,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 
         fire_ball(caster_ptr, GF_POIS, dir, damage, 2);
         break;
-    case MS_BALL_NETHER:
+    case RF_ABILITY::BA_NETH:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -598,7 +599,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 
         fire_ball(caster_ptr, GF_NETHER, dir, damage, 2);
         break;
-    case MS_BALL_WATER:
+    case RF_ABILITY::BA_WATE:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -606,7 +607,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 
         fire_ball(caster_ptr, GF_WATER, dir, damage, 4);
         break;
-    case MS_BALL_MANA:
+    case RF_ABILITY::BA_MANA:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -614,7 +615,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 
         fire_ball(caster_ptr, GF_MANA, dir, damage, 4);
         break;
-    case MS_BALL_DARK:
+    case RF_ABILITY::BA_DARK:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -622,42 +623,42 @@ static bool use_mane(player_type *caster_ptr, int spell)
 
         fire_ball(caster_ptr, GF_DARK, dir, damage, 4);
         break;
-    case MS_DRAIN_MANA:
+    case RF_ABILITY::DRAIN_MANA:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         fire_ball_hide(caster_ptr, GF_DRAIN_MANA, dir, randint1(plev * 3) + plev, 0);
         break;
-    case MS_MIND_BLAST:
+    case RF_ABILITY::MIND_BLAST:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         fire_ball_hide(caster_ptr, GF_MIND_BLAST, dir, damage, 0);
         break;
-    case MS_BRAIN_SMASH:
+    case RF_ABILITY::BRAIN_SMASH:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         fire_ball_hide(caster_ptr, GF_BRAIN_SMASH, dir, damage, 0);
         break;
-    case MS_CAUSE_1:
+    case RF_ABILITY::CAUSE_1:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         fire_ball_hide(caster_ptr, GF_CAUSE_1, dir, damage, 0);
         break;
-    case MS_CAUSE_2:
+    case RF_ABILITY::CAUSE_2:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         fire_ball_hide(caster_ptr, GF_CAUSE_2, dir, damage, 0);
         break;
-    case MS_CAUSE_3:
+    case RF_ABILITY::CAUSE_3:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         fire_ball_hide(caster_ptr, GF_CAUSE_3, dir, damage, 0);
         break;
-    case MS_CAUSE_4:
+    case RF_ABILITY::CAUSE_4:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         fire_ball_hide(caster_ptr, GF_CAUSE_4, dir, damage, 0);
         break;
-    case MS_BOLT_ACID:
+    case RF_ABILITY::BO_ACID:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -665,7 +666,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 
         fire_bolt(caster_ptr, GF_ACID, dir, damage);
         break;
-    case MS_BOLT_ELEC:
+    case RF_ABILITY::BO_ELEC:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -673,7 +674,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 
         fire_bolt(caster_ptr, GF_ELEC, dir, damage);
         break;
-    case MS_BOLT_FIRE:
+    case RF_ABILITY::BO_FIRE:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -681,7 +682,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 
         fire_bolt(caster_ptr, GF_FIRE, dir, damage);
         break;
-    case MS_BOLT_COLD:
+    case RF_ABILITY::BO_COLD:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -689,7 +690,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 
         fire_bolt(caster_ptr, GF_COLD, dir, damage);
         break;
-    case MS_STARBURST:
+    case RF_ABILITY::BA_LITE:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -697,7 +698,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 
         fire_ball(caster_ptr, GF_LITE, dir, damage, 4);
         break;
-    case MS_BOLT_NETHER:
+    case RF_ABILITY::BO_NETH:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -705,7 +706,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 
         fire_bolt(caster_ptr, GF_NETHER, dir, damage);
         break;
-    case MS_BOLT_WATER:
+    case RF_ABILITY::BO_WATE:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -713,7 +714,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 
         fire_bolt(caster_ptr, GF_WATER, dir, damage);
         break;
-    case MS_BOLT_MANA:
+    case RF_ABILITY::BO_MANA:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -721,7 +722,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 
         fire_bolt(caster_ptr, GF_MANA, dir, damage);
         break;
-    case MS_BOLT_PLASMA:
+    case RF_ABILITY::BO_PLAS:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -729,7 +730,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 
         fire_bolt(caster_ptr, GF_PLASMA, dir, damage);
         break;
-    case MS_BOLT_ICE:
+    case RF_ABILITY::BO_ICEE:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -737,7 +738,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 
         fire_bolt(caster_ptr, GF_ICE, dir, damage);
         break;
-    case MS_MAGIC_MISSILE:
+    case RF_ABILITY::MISSILE:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -745,7 +746,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 
         fire_bolt(caster_ptr, GF_MISSILE, dir, damage);
         break;
-    case MS_SCARE:
+    case RF_ABILITY::SCARE:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -753,12 +754,12 @@ static bool use_mane(player_type *caster_ptr, int spell)
 
         fear_monster(caster_ptr, dir, plev + 10);
         break;
-    case MS_BLIND:
+    case RF_ABILITY::BLIND:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         confuse_monster(caster_ptr, dir, plev * 2);
         break;
-    case MS_CONF:
+    case RF_ABILITY::CONF:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -766,20 +767,20 @@ static bool use_mane(player_type *caster_ptr, int spell)
 
         confuse_monster(caster_ptr, dir, plev * 2);
         break;
-    case MS_SLOW:
+    case RF_ABILITY::SLOW:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         slow_monster(caster_ptr, dir, plev);
         break;
-    case MS_SLEEP:
+    case RF_ABILITY::HOLD:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         sleep_monster(caster_ptr, dir, plev);
         break;
-    case MS_SPEED:
+    case RF_ABILITY::HASTE:
         (void)set_fast(caster_ptr, randint1(20 + plev) + plev, FALSE);
         break;
-    case MS_HAND_DOOM: {
+    case RF_ABILITY::HAND_DOOM: {
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -788,28 +789,28 @@ static bool use_mane(player_type *caster_ptr, int spell)
         fire_ball_hide(caster_ptr, GF_HAND_DOOM, dir, 200, 0);
         break;
     }
-    case MS_HEAL:
+    case RF_ABILITY::HEAL:
         msg_print(_("自分の傷に念を集中した。", "You concentrate on your wounds!"));
         (void)hp_player(caster_ptr, plev * 6);
         (void)set_stun(caster_ptr, 0);
         (void)set_cut(caster_ptr, 0);
         break;
-    case MS_INVULNER:
+    case RF_ABILITY::INVULNER:
         msg_print(_("無傷の球の呪文を唱えた。", "You cast a Globe of Invulnerability."));
         (void)set_invuln(caster_ptr, randint1(7) + 7, FALSE);
         break;
-    case MS_BLINK:
+    case RF_ABILITY::BLINK:
         teleport_player(caster_ptr, 10, TELEPORT_SPONTANEOUS);
         break;
-    case MS_TELEPORT:
+    case RF_ABILITY::TPORT:
         teleport_player(caster_ptr, plev * 5, TELEPORT_SPONTANEOUS);
         break;
-    case MS_WORLD:
+    case RF_ABILITY::WORLD:
         (void)time_walk(caster_ptr);
         break;
-    case MS_SPECIAL:
+    case RF_ABILITY::SPECIAL:
         break;
-    case MS_TELE_TO: {
+    case RF_ABILITY::TELE_TO: {
         monster_type *m_ptr;
         monster_race *r_ptr;
         GAME_TEXT m_name[MAX_NLEN];
@@ -846,18 +847,18 @@ static bool use_mane(player_type *caster_ptr, int spell)
             caster_ptr, caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx, caster_ptr->y, caster_ptr->x, 100, TELEPORT_PASSIVE);
         break;
     }
-    case MS_TELE_AWAY:
+    case RF_ABILITY::TELE_AWAY:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
 
         (void)fire_beam(caster_ptr, GF_AWAY_ALL, dir, plev);
         break;
 
-    case MS_TELE_LEVEL:
+    case RF_ABILITY::TELE_LEVEL:
         return teleport_level_other(caster_ptr);
         break;
 
-    case MS_PSY_SPEAR:
+    case RF_ABILITY::PSY_SPEAR:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else
@@ -865,25 +866,25 @@ static bool use_mane(player_type *caster_ptr, int spell)
         (void)fire_beam(caster_ptr, GF_PSY_SPEAR, dir, damage);
         break;
 
-    case MS_DARKNESS:
+    case RF_ABILITY::DARKNESS:
         msg_print(_("暗闇の中で手を振った。", "You gesture in shadow."));
         (void)unlite_area(caster_ptr, 10, 3);
         break;
 
-    case MS_MAKE_TRAP:
+    case RF_ABILITY::TRAPS:
         if (!target_set(caster_ptr, TARGET_KILL))
             return FALSE;
         msg_print(_("呪文を唱えて邪悪に微笑んだ。", "You cast a spell and cackle evilly."));
         trap_creation(caster_ptr, target_row, target_col);
         break;
-    case MS_FORGET:
+    case RF_ABILITY::FORGET:
         msg_print(_("しかし何も起きなかった。", "Nothing happens."));
         break;
-    case MS_RAISE_DEAD:
+    case RF_ABILITY::RAISE_DEAD:
         msg_print(_("死者復活の呪文を唱えた。", "You animate the dead."));
         (void)animate_dead(caster_ptr, 0, caster_ptr->y, caster_ptr->x);
         break;
-    case MS_S_KIN: {
+    case RF_ABILITY::S_KIN: {
         int k;
         if (!target_set(caster_ptr, TARGET_KILL))
             return FALSE;
@@ -894,7 +895,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
         }
         break;
     }
-    case MS_S_CYBER: {
+    case RF_ABILITY::S_CYBER: {
         int k;
         int max_cyber = (caster_ptr->current_floor_ptr->dun_level / 50) + randint1(3);
         if (!target_set(caster_ptr, TARGET_KILL))
@@ -906,7 +907,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
             summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_CYBER, mode);
         break;
     }
-    case MS_S_MONSTER: {
+    case RF_ABILITY::S_MONSTER: {
         int k;
         if (!target_set(caster_ptr, TARGET_KILL))
             return FALSE;
@@ -915,7 +916,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
             summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_NONE, (mode | u_mode));
         break;
     }
-    case MS_S_MONSTERS: {
+    case RF_ABILITY::S_MONSTERS: {
         int k;
         if (!target_set(caster_ptr, TARGET_KILL))
             return FALSE;
@@ -924,7 +925,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
             summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_NONE, (mode | u_mode));
         break;
     }
-    case MS_S_ANT: {
+    case RF_ABILITY::S_ANT: {
         int k;
         if (!target_set(caster_ptr, TARGET_KILL))
             return FALSE;
@@ -933,7 +934,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
             summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_ANT, mode);
         break;
     }
-    case MS_S_SPIDER: {
+    case RF_ABILITY::S_SPIDER: {
         int k;
         if (!target_set(caster_ptr, TARGET_KILL))
             return FALSE;
@@ -942,7 +943,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
             summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_SPIDER, mode);
         break;
     }
-    case MS_S_HOUND: {
+    case RF_ABILITY::S_HOUND: {
         int k;
         if (!target_set(caster_ptr, TARGET_KILL))
             return FALSE;
@@ -951,7 +952,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
             summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_HOUND, mode);
         break;
     }
-    case MS_S_HYDRA: {
+    case RF_ABILITY::S_HYDRA: {
         int k;
         if (!target_set(caster_ptr, TARGET_KILL))
             return FALSE;
@@ -960,7 +961,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
             summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_HYDRA, mode);
         break;
     }
-    case MS_S_ANGEL: {
+    case RF_ABILITY::S_ANGEL: {
         int k;
         if (!target_set(caster_ptr, TARGET_KILL))
             return FALSE;
@@ -969,7 +970,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
             summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_ANGEL, mode);
         break;
     }
-    case MS_S_DEMON: {
+    case RF_ABILITY::S_DEMON: {
         int k;
         if (!target_set(caster_ptr, TARGET_KILL))
             return FALSE;
@@ -978,7 +979,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
             summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_DEMON, (mode | u_mode));
         break;
     }
-    case MS_S_UNDEAD: {
+    case RF_ABILITY::S_UNDEAD: {
         int k;
         if (!target_set(caster_ptr, TARGET_KILL))
             return FALSE;
@@ -987,7 +988,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
             summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_UNDEAD, (mode | u_mode));
         break;
     }
-    case MS_S_DRAGON: {
+    case RF_ABILITY::S_DRAGON: {
         int k;
         if (!target_set(caster_ptr, TARGET_KILL))
             return FALSE;
@@ -996,7 +997,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
             summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_DRAGON, (mode | u_mode));
         break;
     }
-    case MS_S_HI_UNDEAD: {
+    case RF_ABILITY::S_HI_UNDEAD: {
         int k;
         if (!target_set(caster_ptr, TARGET_KILL))
             return FALSE;
@@ -1005,7 +1006,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
             summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_HI_UNDEAD, (mode | u_mode));
         break;
     }
-    case MS_S_HI_DRAGON: {
+    case RF_ABILITY::S_HI_DRAGON: {
         int k;
         if (!target_set(caster_ptr, TARGET_KILL))
             return FALSE;
@@ -1014,7 +1015,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
             summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_HI_DRAGON, (mode | u_mode));
         break;
     }
-    case MS_S_AMBERITE: {
+    case RF_ABILITY::S_AMBERITES: {
         int k;
         if (!target_set(caster_ptr, TARGET_KILL))
             return FALSE;
@@ -1023,7 +1024,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
             summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_AMBERITES, (mode | PM_ALLOW_UNIQUE));
         break;
     }
-    case MS_S_UNIQUE: {
+    case RF_ABILITY::S_UNIQUE: {
         int k, count = 0;
         if (!target_set(caster_ptr, TARGET_KILL))
             return FALSE;
@@ -1079,7 +1080,7 @@ bool do_cmd_mane(player_type *creature_ptr, bool baigaesi)
     if (!get_mane_power(creature_ptr, &n, baigaesi))
         return FALSE;
 
-    spell = monster_powers[creature_ptr->mane_spell[n]];
+    spell = monster_powers[static_cast<int>(creature_ptr->mane_spell[n])];
 
     /* Spell failure chance */
     chance = spell.manefail;

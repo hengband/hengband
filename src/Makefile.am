@@ -492,10 +492,11 @@ hengband_SOURCES = \
 	\
 	monster-race/monster-race.cpp monster-race/monster-race.h \
 	monster-race/monster-race-hook.cpp monster-race/monster-race-hook.h \
+	monster-race/race-ability-flags.h \
+	monster-race/race-ability-mask.cpp monster-race/race-ability-mask.h \
 	monster-race/race-flags-resistance.h \
 	monster-race/race-flags1.h monster-race/race-flags2.h \
-	monster-race/race-flags3.h monster-race/race-flags4.h \
-	monster-race/race-flags-ability1.h monster-race/race-flags-ability2.h \
+	monster-race/race-flags3.h \
 	monster-race/race-flags7.h monster-race/race-flags8.h \
 	monster-race/race-flags9.h \
 	monster-race/race-indice-types.h \
@@ -521,7 +522,6 @@ hengband_SOURCES = \
 	mspell/mspell-damage-calculator.cpp mspell/mspell-damage-calculator.h \
 	mspell/mspell-learn-checker.cpp mspell/mspell-learn-checker.h \
 	mspell/mspell-floor.cpp mspell/mspell-floor.h \
-	mspell/mspell-mask-definitions.h \
 	mspell/mspell-special.cpp mspell/mspell-special.h \
 	mspell/mspell-status.cpp mspell/mspell-status.h \
 	mspell/mspell-particularity.cpp mspell/mspell-particularity.h \

@@ -1,7 +1,5 @@
 ﻿#include "mspell/element-resistance-checker.h"
 #include "game-option/birth-options.h"
-#include "monster-race/race-flags-ability1.h"
-#include "monster-race/race-flags4.h"
 #include "monster/smart-learn-types.h"
 #include "mspell/smart-mspell-util.h"
 #include "player/player-status-flags.h"
@@ -56,143 +54,143 @@ void add_cheat_remove_flags_element(player_type *target_ptr, msr_type *msr_ptr)
 static void check_acid_resistance(msr_type *msr_ptr)
 {
     if (msr_ptr->smart.has(SM::IMM_ACID)) {
-        reset_bits(msr_ptr->f4, RF4_BR_ACID);
-        reset_bits(msr_ptr->f5, RF5_BA_ACID);
-        reset_bits(msr_ptr->f5, RF5_BO_ACID);
+        msr_ptr->ability_flags.reset(RF_ABILITY::BR_ACID);
+        msr_ptr->ability_flags.reset(RF_ABILITY::BA_ACID);
+        msr_ptr->ability_flags.reset(RF_ABILITY::BO_ACID);
         return;
     }
 
     if (msr_ptr->smart.has_all_of({SM::OPP_ACID, SM::RES_ACID})) {
         if (int_outof(msr_ptr->r_ptr, 80))
-            reset_bits(msr_ptr->f4, RF4_BR_ACID);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BR_ACID);
 
         if (int_outof(msr_ptr->r_ptr, 80))
-            reset_bits(msr_ptr->f5, RF5_BA_ACID);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BA_ACID);
 
         if (int_outof(msr_ptr->r_ptr, 80))
-            reset_bits(msr_ptr->f5, RF5_BO_ACID);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BO_ACID);
 
         return;
     }
 
     if (msr_ptr->smart.has_any_of({SM::OPP_ACID, SM::RES_ACID})) {
         if (int_outof(msr_ptr->r_ptr, 30))
-            reset_bits(msr_ptr->f4, RF4_BR_ACID);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BR_ACID);
 
         if (int_outof(msr_ptr->r_ptr, 30))
-            reset_bits(msr_ptr->f5, RF5_BA_ACID);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BA_ACID);
 
         if (int_outof(msr_ptr->r_ptr, 30))
-            reset_bits(msr_ptr->f5, RF5_BO_ACID);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BO_ACID);
     }
 }
 
 static void check_elec_resistance(msr_type *msr_ptr)
 {
     if (msr_ptr->smart.has(SM::IMM_ELEC)) {
-        reset_bits(msr_ptr->f4, RF4_BR_ELEC);
-        reset_bits(msr_ptr->f5, RF5_BA_ELEC);
-        reset_bits(msr_ptr->f5, RF5_BO_ELEC);
+        msr_ptr->ability_flags.reset(RF_ABILITY::BR_ELEC);
+        msr_ptr->ability_flags.reset(RF_ABILITY::BA_ELEC);
+        msr_ptr->ability_flags.reset(RF_ABILITY::BO_ELEC);
         return;
     }
 
     if (msr_ptr->smart.has_all_of({SM::OPP_ELEC, SM::RES_ELEC})) {
         if (int_outof(msr_ptr->r_ptr, 80))
-            reset_bits(msr_ptr->f4, RF4_BR_ELEC);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BR_ELEC);
 
         if (int_outof(msr_ptr->r_ptr, 80))
-            reset_bits(msr_ptr->f5, RF5_BA_ELEC);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BA_ELEC);
 
         if (int_outof(msr_ptr->r_ptr, 80))
-            reset_bits(msr_ptr->f5, RF5_BO_ELEC);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BO_ELEC);
 
         return;
     }
 
     if (msr_ptr->smart.has_any_of({SM::OPP_ELEC, SM::RES_ELEC})) {
         if (int_outof(msr_ptr->r_ptr, 30))
-            reset_bits(msr_ptr->f4, RF4_BR_ELEC);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BR_ELEC);
 
         if (int_outof(msr_ptr->r_ptr, 30))
-            reset_bits(msr_ptr->f5, RF5_BA_ELEC);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BA_ELEC);
 
         if (int_outof(msr_ptr->r_ptr, 30))
-            reset_bits(msr_ptr->f5, RF5_BO_ELEC);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BO_ELEC);
     }
 }
 
 static void check_fire_resistance(msr_type *msr_ptr)
 {
     if (msr_ptr->smart.has(SM::IMM_FIRE)) {
-        reset_bits(msr_ptr->f4, RF4_BR_FIRE);
-        reset_bits(msr_ptr->f5, RF5_BA_FIRE);
-        reset_bits(msr_ptr->f5, RF5_BO_FIRE);
+        msr_ptr->ability_flags.reset(RF_ABILITY::BR_FIRE);
+        msr_ptr->ability_flags.reset(RF_ABILITY::BA_FIRE);
+        msr_ptr->ability_flags.reset(RF_ABILITY::BO_FIRE);
         return;
     }
 
     if (msr_ptr->smart.has_all_of({SM::OPP_FIRE, SM::RES_FIRE})) {
         if (int_outof(msr_ptr->r_ptr, 80))
-            reset_bits(msr_ptr->f4, RF4_BR_FIRE);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BR_FIRE);
 
         if (int_outof(msr_ptr->r_ptr, 80))
-            reset_bits(msr_ptr->f5, RF5_BA_FIRE);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BA_FIRE);
 
         if (int_outof(msr_ptr->r_ptr, 80))
-            reset_bits(msr_ptr->f5, RF5_BO_FIRE);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BO_FIRE);
 
         return;
     }
 
     if (msr_ptr->smart.has_any_of({SM::OPP_FIRE, SM::RES_FIRE})) {
         if (int_outof(msr_ptr->r_ptr, 30))
-            reset_bits(msr_ptr->f4, RF4_BR_FIRE);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BR_FIRE);
 
         if (int_outof(msr_ptr->r_ptr, 30))
-            reset_bits(msr_ptr->f5, RF5_BA_FIRE);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BA_FIRE);
 
         if (int_outof(msr_ptr->r_ptr, 30))
-            reset_bits(msr_ptr->f5, RF5_BO_FIRE);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BO_FIRE);
     }
 }
 
 static void check_cold_resistance(msr_type *msr_ptr)
 {
     if (msr_ptr->smart.has(SM::IMM_COLD)) {
-        reset_bits(msr_ptr->f4, RF4_BR_COLD);
-        reset_bits(msr_ptr->f5, RF5_BA_COLD);
-        reset_bits(msr_ptr->f5, RF5_BO_COLD);
-        reset_bits(msr_ptr->f5, RF5_BO_ICEE);
+        msr_ptr->ability_flags.reset(RF_ABILITY::BR_COLD);
+        msr_ptr->ability_flags.reset(RF_ABILITY::BA_COLD);
+        msr_ptr->ability_flags.reset(RF_ABILITY::BO_COLD);
+        msr_ptr->ability_flags.reset(RF_ABILITY::BO_ICEE);
         return;
     }
 
     if (msr_ptr->smart.has_all_of({SM::OPP_COLD, SM::RES_COLD})) {
         if (int_outof(msr_ptr->r_ptr, 80))
-            reset_bits(msr_ptr->f4, RF4_BR_COLD);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BR_COLD);
 
         if (int_outof(msr_ptr->r_ptr, 80))
-            reset_bits(msr_ptr->f5, RF5_BA_COLD);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BA_COLD);
 
         if (int_outof(msr_ptr->r_ptr, 80))
-            reset_bits(msr_ptr->f5, RF5_BO_COLD);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BO_COLD);
 
         if (int_outof(msr_ptr->r_ptr, 80))
-            reset_bits(msr_ptr->f5, RF5_BO_ICEE);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BO_ICEE);
 
         return;
     }
 
     if (msr_ptr->smart.has_any_of({SM::OPP_COLD, SM::RES_COLD})) {
         if (int_outof(msr_ptr->r_ptr, 30))
-            reset_bits(msr_ptr->f4, RF4_BR_COLD);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BR_COLD);
 
         if (int_outof(msr_ptr->r_ptr, 30))
-            reset_bits(msr_ptr->f5, RF5_BA_COLD);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BA_COLD);
 
         if (int_outof(msr_ptr->r_ptr, 30))
-            reset_bits(msr_ptr->f5, RF5_BO_COLD);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BO_COLD);
 
         if (int_outof(msr_ptr->r_ptr, 20))
-            reset_bits(msr_ptr->f5, RF5_BO_ICEE);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BO_ICEE);
     }
 }
 
@@ -200,26 +198,26 @@ static void check_pois_resistance(msr_type *msr_ptr)
 {
     if (msr_ptr->smart.has_all_of({SM::OPP_POIS, SM::RES_POIS})) {
         if (int_outof(msr_ptr->r_ptr, 80))
-            reset_bits(msr_ptr->f4, RF4_BR_POIS);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BR_POIS);
 
         if (int_outof(msr_ptr->r_ptr, 80))
-            reset_bits(msr_ptr->f5, RF5_BA_POIS);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BA_POIS);
 
         if (int_outof(msr_ptr->r_ptr, 60))
-            reset_bits(msr_ptr->f4, RF4_BA_NUKE);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BA_NUKE);
 
         if (int_outof(msr_ptr->r_ptr, 60))
-            reset_bits(msr_ptr->f4, RF4_BR_NUKE);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BR_NUKE);
 
         return;
     }
 
     if (msr_ptr->smart.has_any_of({SM::OPP_POIS, SM::RES_POIS})) {
         if (int_outof(msr_ptr->r_ptr, 30))
-            reset_bits(msr_ptr->f4, RF4_BR_POIS);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BR_POIS);
 
         if (int_outof(msr_ptr->r_ptr, 30))
-            reset_bits(msr_ptr->f5, RF5_BA_POIS);
+            msr_ptr->ability_flags.reset(RF_ABILITY::BA_POIS);
     }
 }
 

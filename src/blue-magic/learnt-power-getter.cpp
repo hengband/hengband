@@ -10,13 +10,17 @@
 #include "io/input-key-requester.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-blue-mage.h"
+#include "monster-race/race-ability-flags.h"
 #include "mspell/monster-power-table.h"
+#include "player/player-status-table.h"
 #include "realm/realm-types.h"
 #include "spell/spell-info.h"
 #include "term/screen-processor.h"
+#include "util/flag-group.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
-#include "player/player-status-table.h"
+
+#include <vector>
 
 typedef struct learnt_magic_type {
     int blue_magic_num;
@@ -27,13 +31,11 @@ typedef struct learnt_magic_type {
     PERCENTAGE chance;
     int ask;
     int mode;
-    int blue_magics[MAX_MONSPELLS];
+    std::vector<int> blue_magics;
     char choice;
     char out_val[160];
     char comment[80];
-    BIT_FLAGS f4;
-    BIT_FLAGS f5;
-    BIT_FLAGS f6;
+    FlagGroup<RF_ABILITY> ability_flags;
     monster_power spell;
     int menu_line;
     bool flag;
@@ -52,9 +54,8 @@ static learnt_magic_type *initialize_lenat_magic_type(player_type *caster_ptr, l
     lm_ptr->chance = 0;
     lm_ptr->ask = TRUE;
     lm_ptr->mode = 0;
-    lm_ptr->f4 = 0L;
-    lm_ptr->f5 = 0L;
-    lm_ptr->f6 = 0L;
+    lm_ptr->blue_magics.clear();
+    lm_ptr->ability_flags.clear();
     lm_ptr->menu_line = use_menu ? 1 : 0;
     lm_ptr->flag = FALSE;
     lm_ptr->redraw = FALSE;
@@ -170,18 +171,12 @@ static bool check_blue_magic_kind(learnt_magic_type *lm_ptr)
 
 static bool sweep_learnt_spells(player_type *caster_ptr, learnt_magic_type *lm_ptr)
 {
-    set_rf_masks(&lm_ptr->f4, &lm_ptr->f5, &lm_ptr->f6, static_cast<blue_magic_type>(lm_ptr->mode));
-    for (lm_ptr->blue_magic_num = 0, lm_ptr->count = 0; lm_ptr->blue_magic_num < 32; lm_ptr->blue_magic_num++)
-        if ((0x00000001U << lm_ptr->blue_magic_num) & lm_ptr->f4)
-            lm_ptr->blue_magics[lm_ptr->count++] = lm_ptr->blue_magic_num;
+    set_rf_masks(lm_ptr->ability_flags, static_cast<blue_magic_type>(lm_ptr->mode));
 
-    for (; lm_ptr->blue_magic_num < 64; lm_ptr->blue_magic_num++)
-        if ((0x00000001U << (lm_ptr->blue_magic_num - 32)) & lm_ptr->f5)
-            lm_ptr->blue_magics[lm_ptr->count++] = lm_ptr->blue_magic_num;
-
-    for (; lm_ptr->blue_magic_num < 96; lm_ptr->blue_magic_num++)
-        if ((0x00000001U << (lm_ptr->blue_magic_num - 64)) & lm_ptr->f6)
-            lm_ptr->blue_magics[lm_ptr->count++] = lm_ptr->blue_magic_num;
+    std::vector<RF_ABILITY> spells;
+    FlagGroup<RF_ABILITY>::get_flags(lm_ptr->ability_flags, std::back_inserter(spells));
+    std::transform(spells.begin(), spells.end(), std::back_inserter(lm_ptr->blue_magics), [](RF_ABILITY ability) { return static_cast<int>(ability); });
+    lm_ptr->count = lm_ptr->ability_flags.count();
 
     for (lm_ptr->blue_magic_num = 0; lm_ptr->blue_magic_num < lm_ptr->count; lm_ptr->blue_magic_num++) {
         if (caster_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->blue_magic_num]] == 0)
@@ -355,7 +350,7 @@ static bool ask_cast_blue_magic(learnt_magic_type *lm_ptr)
         return TRUE;
 
     char tmp_val[160];
-    (void)strnfmt(tmp_val, 78, _("%sの魔法を唱えますか？", "Use %s? "), monster_powers[lm_ptr->blue_magics[lm_ptr->blue_magic_num]].name);
+    (void)strnfmt(tmp_val, 78, _("%sの魔法を唱えますか？", "Use %s? "), monster_powers[static_cast<int>(lm_ptr->blue_magics[lm_ptr->blue_magic_num])].name);
     return get_check(tmp_val);
 }
 

@@ -9,14 +9,16 @@
 #include "cmd-item/cmd-magiceat.h"
 #include "cmd-item/cmd-smith.h"
 #include "mind/mind-blue-mage.h"
+#include "monster-race/race-ability-flags.h"
 #include "mspell/monster-power-table.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
+#include "util/flag-group.h"
+
+#include <vector>
 
 typedef struct {
-    BIT_FLAGS f4;
-    BIT_FLAGS f5;
-    BIT_FLAGS f6;
+    FlagGroup<RF_ABILITY> ability_flags;
 } learnt_spell_table;
 
 /*!
@@ -121,10 +123,8 @@ static void dump_smith(player_type *creature_ptr, FILE *fff)
  */
 static void add_monster_spell_type(char p[][80], int col, blue_magic_type spell_type, learnt_spell_table *learnt_spell_ptr)
 {
-    learnt_spell_ptr->f4 = 0;
-    learnt_spell_ptr->f5 = 0;
-    learnt_spell_ptr->f6 = 0;
-    set_rf_masks(&learnt_spell_ptr->f4, &learnt_spell_ptr->f5, &learnt_spell_ptr->f6, spell_type);
+    learnt_spell_ptr->ability_flags.clear();
+    set_rf_masks(learnt_spell_ptr->ability_flags, spell_type);
     switch (spell_type) {
     case MONSPELL_TYPE_BOLT:
         strcat(p[col], _("\n     [ボルト型]\n", "\n     [Bolt  Type]\n"));
@@ -164,46 +164,33 @@ static void dump_blue_mage(player_type *creature_ptr, FILE *fff)
     int col = 0;
     strcat(p[col], _("\n\n  [学習済みの青魔法]\n", "\n\n  [Learned Blue Magic]\n"));
 
-    int spellnum[MAX_MONSPELLS];
     for (int spell_type = 1; spell_type < 6; spell_type++) {
         col++;
         learnt_spell_table learnt_magic;
         add_monster_spell_type(p, col, static_cast<blue_magic_type>(spell_type), &learnt_magic);
 
-        int num = 0;
-        for (int i = 0; i < 32; i++) {
-            if ((0x00000001U << i) & learnt_magic.f4)
-                spellnum[num++] = i;
-        }
-
-        for (int i = 32; i < 64; i++) {
-            if ((0x00000001U << (i - 32)) & learnt_magic.f5)
-                spellnum[num++] = i;
-        }
-
-        for (int i = 64; i < 96; i++) {
-            if ((0x00000001U << (i - 64)) & learnt_magic.f6)
-                spellnum[num++] = i;
-        }
+        std::vector<RF_ABILITY> learnt_spells;
+        FlagGroup<RF_ABILITY>::get_flags(learnt_magic.ability_flags, std::back_inserter(learnt_spells));
 
         col++;
         bool pcol = FALSE;
         strcat(p[col], "       ");
 
-        for (int i = 0; i < num; i++) {
-            if (creature_ptr->magic_num2[spellnum[i]] == 0)
+        for (auto spell : learnt_spells) {
+            const int spellnum = static_cast<int>(spell);
+            if (creature_ptr->magic_num2[spellnum] == 0)
                 continue;
 
             pcol = TRUE;
             int l1 = strlen(p[col]);
-            int l2 = strlen(monster_powers_short[spellnum[i]]);
+            int l2 = strlen(monster_powers_short[spellnum]);
             if ((l1 + l2) >= 75) {
                 strcat(p[col], "\n");
                 col++;
                 strcat(p[col], "       ");
             }
 
-            strcat(p[col], monster_powers_short[spellnum[i]]);
+            strcat(p[col], monster_powers_short[spellnum]);
             strcat(p[col], ", ");
         }
 

@@ -2250,6 +2250,9 @@
     <ClCompile Include="..\..\src\main-win\main-win-cfg-reader.cpp">
       <Filter>main-win</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster-race\race-ability-mask.cpp">
+      <Filter>monster-race</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3539,9 +3542,6 @@
     <ClInclude Include="..\..\src\monster-race\race-flags3.h">
       <Filter>monster-race</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\monster-race\race-flags4.h">
-      <Filter>monster-race</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\monster-race\race-flags7.h">
       <Filter>monster-race</Filter>
     </ClInclude>
@@ -3549,12 +3549,6 @@
       <Filter>monster-race</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster-race\race-flags-resistance.h">
-      <Filter>monster-race</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monster-race\race-flags-ability1.h">
-      <Filter>monster-race</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monster-race\race-flags-ability2.h">
       <Filter>monster-race</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster-race\race-flags8.h">
@@ -3793,9 +3787,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\mind\mind-blue-mage.h">
       <Filter>mind</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\mspell\mspell-mask-definitions.h">
-      <Filter>mspell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mspell\monster-power-table.h">
       <Filter>mspell</Filter>
@@ -4853,6 +4844,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\main-win\main-win-menuitem.h">
       <Filter>main-win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-race\race-ability-flags.h">
+      <Filter>monster-race</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-race\race-ability-mask.h">
+      <Filter>monster-race</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

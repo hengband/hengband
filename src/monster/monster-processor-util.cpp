@@ -44,10 +44,8 @@ old_race_flags *init_old_race_flags(old_race_flags *old_race_flags_ptr)
 	old_race_flags_ptr->old_r_flags1 = 0L;
 	old_race_flags_ptr->old_r_flags2 = 0L;
 	old_race_flags_ptr->old_r_flags3 = 0L;
-	old_race_flags_ptr->old_r_flags4 = 0L;
-	old_race_flags_ptr->old_r_flags5 = 0L;
-	old_race_flags_ptr->old_r_flags6 = 0L;
 	old_race_flags_ptr->old_r_flagsr = 0L;
+        old_race_flags_ptr->old_r_ability_flags.clear();
 
 	old_race_flags_ptr->old_r_blows0 = 0;
 	old_race_flags_ptr->old_r_blows1 = 0;
@@ -339,10 +337,8 @@ void save_old_race_flags(MONRACE_IDX monster_race_idx, old_race_flags *old_race_
 	old_race_flags_ptr->old_r_flags1 = r_ptr->r_flags1;
 	old_race_flags_ptr->old_r_flags2 = r_ptr->r_flags2;
 	old_race_flags_ptr->old_r_flags3 = r_ptr->r_flags3;
-	old_race_flags_ptr->old_r_flags4 = r_ptr->r_flags4;
-	old_race_flags_ptr->old_r_flags5 = r_ptr->r_flags5;
-	old_race_flags_ptr->old_r_flags6 = r_ptr->r_flags6;
 	old_race_flags_ptr->old_r_flagsr = r_ptr->r_flagsr;
+	old_race_flags_ptr->old_r_ability_flags = r_ptr->r_ability_flags;
 
 	old_race_flags_ptr->old_r_blows0 = r_ptr->r_blows[0];
 	old_race_flags_ptr->old_r_blows1 = r_ptr->r_blows[1];

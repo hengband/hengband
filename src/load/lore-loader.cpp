@@ -55,13 +55,30 @@ void rd_lore(monster_race *r_ptr, MONRACE_IDX r_idx)
     rd_u32b(&r_ptr->r_flags1);
     rd_u32b(&r_ptr->r_flags2);
     rd_u32b(&r_ptr->r_flags3);
-    rd_u32b(&r_ptr->r_flags4);
-    rd_u32b(&r_ptr->r_flags5);
-    rd_u32b(&r_ptr->r_flags6);
-    if (h_older_than(1, 5, 0, 3))
-        set_old_lore(r_ptr, r_idx);
-    else
+    if (loading_savefile_version_is_older_than(3)) {
+        u32b f4, f5, f6;
+        rd_u32b(&f4);
+        rd_u32b(&f5);
+        rd_u32b(&f6);
+        if (h_older_than(1, 5, 0, 3))
+            set_old_lore(r_ptr, f4, r_idx);
+        else
+            rd_u32b(&r_ptr->r_flagsr);
+
+        auto migrate = [r_ptr](u32b f, int start_idx) {
+            std::bitset<32> flag_bits(f);
+            for (size_t i = 0; i < flag_bits.size(); i++) {
+                auto ability = static_cast<RF_ABILITY>(start_idx + i);
+                r_ptr->r_ability_flags[ability] = flag_bits[i];
+            }
+        };
+        migrate(f4, 0);
+        migrate(f5, 32);
+        migrate(f6, 64);
+    } else {
         rd_u32b(&r_ptr->r_flagsr);
+        rd_FlagGroup(r_ptr->r_ability_flags, rd_byte);
+    }
 
     rd_byte(&tmp8u);
     r_ptr->max_num = (MONSTER_NUMBER)tmp8u;
@@ -72,10 +89,8 @@ void rd_lore(monster_race *r_ptr, MONRACE_IDX r_idx)
     r_ptr->r_flags1 &= r_ptr->flags1;
     r_ptr->r_flags2 &= r_ptr->flags2;
     r_ptr->r_flags3 &= r_ptr->flags3;
-    r_ptr->r_flags4 &= r_ptr->flags4;
-    r_ptr->r_flags5 &= r_ptr->a_ability_flags1;
-    r_ptr->r_flags6 &= r_ptr->a_ability_flags2;
     r_ptr->r_flagsr &= r_ptr->flagsr;
+    r_ptr->r_ability_flags &= r_ptr->ability_flags;
 }
 
 errr load_lore(void)
