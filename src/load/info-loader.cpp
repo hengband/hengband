@@ -4,12 +4,22 @@
 #include "load/load-util.h"
 #include "load/option-loader.h"
 #include "system/angband.h"
+#include "system/angband-version.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
+/*!
+ * @brief セーブファイルからバージョン情報及びセーブ情報を取得する
+ * @details
+ * バージョン0.x.x時代のバージョン情報である場合、サポート対象外
+ * (FAKE_VERもH_VERも10台の数字のはず)
+ */
 void rd_version_info(void)
 {
-    strip_bytes(4);
+    byte fake_major;
+    rd_byte(&fake_major);
+
+    strip_bytes(3);
     load_xor_byte = current_world_ptr->sf_extra;
     v_check = 0L;
     x_check = 0L;
@@ -27,9 +37,13 @@ void rd_version_info(void)
 
     rd_u32b(&loading_savefile_version);
 
-    load_note(format(_("バージョン %d.%d.%d.%d のセーブデータ(SAVE%lu形式)をロード中...", "Loading a Verison %d.%d.%d.%d savefile (SAVE%lu format)..."),
-        (current_world_ptr->h_ver_major > 9) ? current_world_ptr->h_ver_major - 10 : current_world_ptr->h_ver_major, current_world_ptr->h_ver_minor,
-        current_world_ptr->h_ver_patch, current_world_ptr->h_ver_extra, loading_savefile_version));
+    /* h_ver_majorがfake_ver_majorと同じだったころへの対策 */
+    if (fake_major - current_world_ptr->h_ver_major < FAKE_VER_PLUS)
+        current_world_ptr->h_ver_major -= FAKE_VER_PLUS;
+
+    load_note(format(_("バージョン %d.%d.%d のセーブデータ(SAVE%lu形式)をロード中...", "Loading a Verison %d.%d.%d savefile (SAVE%lu format)..."),
+        current_world_ptr->h_ver_major, current_world_ptr->h_ver_minor, current_world_ptr->h_ver_patch,
+        loading_savefile_version));
 }
 
 /*!

@@ -425,15 +425,9 @@ static void set_virtues(player_type *creature_ptr)
  * @brief 各種時限効果を読み込む
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
- * @details ZAngbandとの互換性を保つ都合上、突然変異と徳の処理も追加している
  */
 static void rd_timed_effects(player_type *creature_ptr)
 {
-    if ((current_world_ptr->z_major == 2) && (current_world_ptr->z_minor == 0) && (current_world_ptr->z_patch == 6)) {
-        set_zangband_timed_effects(creature_ptr);
-        return;
-    }
-
     set_timed_effects(creature_ptr);
     rd_s16b(&creature_ptr->chaos_patron);
     set_mutations(creature_ptr);

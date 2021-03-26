@@ -5,26 +5,29 @@
 #define VERSION_NAME "Hengband" /*!< バリアント名称 / Name of the version/variant */
 
 /*!
- * @brief ゲームのバージョン番号定義 / "Program Version Number" of the game
+ * @brief セーブファイル上のバージョン定義(メジャー番号) / "Savefile Version Number" for Hengband 1.1.1 and later
  * @details
- * 本FAKE_VERSIONそのものは未使用である。Zangと整合性を合わせるための疑似的処理のためFAKE_VER_MAJORは実値-10が該当のバージョン番号となる。
+ * 当面FAKE_VER_*を参照しておく。
  * <pre>
- * FAKE_VER_MAJOR=1,2 were reserved for ZAngband version 1.x.x/2.x.x .
  * Program Version of Hengband version is
- *   "(FAKE_VER_MAJOR-10).(FAKE_VER_MINOR).(FAKE_VER_PATCH)".
+ *   "(H_VER_MAJOR).(H_VER_MINOR).(H_VER_PATCH).(H_VER_EXTRA)".
+ * Upper compatibility is always guaranteed when it is more than 1.0.0 .
  * </pre>
  */
-#define FAKE_VERSION 0
-
-#define FAKE_VER_MAJOR 13 /*!< ゲームのバージョン番号定義(メジャー番号 + 10) */
-#define FAKE_VER_MINOR 0 /*!< ゲームのバージョン番号定義(マイナー番号) */
-#define FAKE_VER_PATCH 0 /*!< ゲームのバージョン番号定義(パッチ番号) */
-#define FAKE_VER_EXTRA 13 /*!< ゲームのバージョン番号定義(エクストラ番号) */
+#define H_VER_MAJOR  3 //!< ゲームのバージョン定義(メジャー番号)
+#define H_VER_MINOR  0 //!< ゲームのバージョン定義(マイナー番号)
+#define H_VER_PATCH  0 //!< ゲームのバージョン定義(パッチ番号)
+#define H_VER_EXTRA 13 //!< ゲームのバージョン定義(エクストラ番号)
 
 /*!
- * @brief バージョンが開発版が安定版かを返す
+ * @brief セーブファイルのバージョン(3.0.0から導入)
  */
-#define IS_STABLE_VERSION (FAKE_VER_MINOR % 2 == 0 && FAKE_VER_EXTRA == 0)
+constexpr u32b SAVEFILE_VERSION = 2;
+
+/*!
+ * @brief バージョンが開発版が安定版かを返す(廃止予定)
+ */
+#define IS_STABLE_VERSION (H_VER_MINOR % 2 == 0 && H_VER_EXTRA == 0)
 
 /*!
  * @brief 状態がアルファ版かどうかを返す
@@ -33,25 +36,17 @@
 #define IS_ALPHA_VERSION 1
 
 /*!
- * @brief セーブファイル上のバージョン定義(メジャー番号) / "Savefile Version Number" for Hengband 1.1.1 and later
+ * @brief ゲームのバージョン番号定義 / "Program Version Number" of the game
  * @details
- * 当面FAKE_VER_*を参照しておく。
+ * 本FAKE_VERSIONそのものは未使用である。Zangと整合性を合わせるための疑似的処理のためFAKE_VER_MAJORは実値-10が該当のバージョン番号となる。
  * <pre>
- * First three digits may be same as the Program Version.  But not
- * always same.  It means that newer version may preserves lower
- * compatibility with the older version.
- * For example, newer Hengband 1.4.4 creates savefiles marked with
- * Savefile Version 1.4.0.0 .  It means that Hengband 1.4.0 can load a
- * savefile of Hengband 1.4.4 (lower compatibility!).
- * Upper compatibility is always guaranteed.
+ * FAKE_VER_MAJOR=1,2 were reserved for ZAngband version 1.x.x/2.x.x .
  * </pre>
  */
-#define H_VER_MAJOR (FAKE_VER_MAJOR - 10) /*!< セーブファイル上のバージョン定義(メジャー番号) */
-#define H_VER_MINOR FAKE_VER_MINOR /*!< セーブファイル上のバージョン定義(マイナー番号) */
-#define H_VER_PATCH FAKE_VER_PATCH /*!< セーブファイル上のバージョン定義(パッチ番号) */
-#define H_VER_EXTRA FAKE_VER_EXTRA /*!< セーブファイル上のバージョン定義(エクストラ番号) */
-
-/** セーブファイルのバージョン */
-constexpr u32b SAVEFILE_VERSION = 2;
+#define FAKE_VER_PLUS 10 //!< 偽バージョン番号としていくつ足すか
+#define FAKE_VER_MAJOR (H_VER_MAJOR + FAKE_VER_PLUS) //!< 偽バージョン番号定義(メジャー番号) */
+#define FAKE_VER_MINOR H_VER_MINOR //!< 偽バージョン番号定義(マイナー番号) */
+#define FAKE_VER_PATCH H_VER_PATCH //!< 偽バージョン番号定義(パッチ番号) */
+#define FAKE_VER_EXTRA H_VER_EXTRA //!< 偽バージョン番号定義(エクストラ番号) */
 
 void put_version(char *buf);
