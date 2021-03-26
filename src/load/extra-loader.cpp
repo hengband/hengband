@@ -19,7 +19,7 @@
  */
 void rd_extra(player_type *creature_ptr)
 {
-    if (z_older_than(10, 0, 7))
+    if (h_older_than(0, 0, 7))
         creature_ptr->riding = 0;
     else
         rd_s16b(&creature_ptr->riding);
@@ -30,12 +30,12 @@ void rd_extra(player_type *creature_ptr)
         rd_s16b(&creature_ptr->floor_id);
 
     rd_dummy_monsters(creature_ptr);
-    if (z_older_than(10, 1, 2))
+    if (h_older_than(0, 1, 2))
         current_world_ptr->play_time = 0;
     else
         rd_u32b(&current_world_ptr->play_time);
 
     rd_visited_towns(creature_ptr);
-    if (!z_older_than(11, 0, 5))
+    if (!h_older_than(1, 0, 5))
         rd_u32b(&creature_ptr->count);
 }

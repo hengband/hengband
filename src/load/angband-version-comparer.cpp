@@ -36,27 +36,29 @@ bool h_older_than(byte major, byte minor, byte patch, byte extra)
 }
 
 /*!
- * @brief Zangbandのバージョン比較処理 / The above function, adapted for Zangband
- * @param x メジャーバージョン値
- * @param y マイナーバージョン値
- * @param z パッチバージョン値
+ * @brief [互換性用/新規仕様禁止]変愚蛮怒のバージョン比較処理 / The above function, adapted for Hengband
+ * @param major メジャーバージョン値
+ * @param minor マイナーバージョン値
+ * @param patch パッチバージョン値
  * @return 現在のバージョンより値が古いならtrue
+ * @detail
+ * 旧バージョン比較の互換性のためにのみ保持。
  */
-bool z_older_than(byte x, byte y, byte z)
+bool h_older_than(byte major, byte minor, byte patch)
 {
-    if (current_world_ptr->z_major < x)
+    if (current_world_ptr->h_ver_major < major)
         return TRUE;
-    if (current_world_ptr->z_major > x)
+    if (current_world_ptr->h_ver_major > major)
         return FALSE;
 
-    if (current_world_ptr->z_minor < y)
+    if (current_world_ptr->h_ver_minor < minor)
         return TRUE;
-    if (current_world_ptr->z_minor > y)
+    if (current_world_ptr->h_ver_minor > minor)
         return FALSE;
 
-    if (current_world_ptr->z_patch < z)
+    if (current_world_ptr->h_ver_patch < patch)
         return TRUE;
-    if (current_world_ptr->z_patch > z)
+    if (current_world_ptr->h_ver_patch > patch)
         return FALSE;
 
     return FALSE;

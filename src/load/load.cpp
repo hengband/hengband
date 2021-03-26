@@ -51,7 +51,7 @@
  */
 static errr load_town_quest(player_type *creature_ptr)
 {
-    if (z_older_than(12, 1, 3))
+    if (h_older_than(2, 1, 3))
         return 0;
 
     errr load_town_result = load_town();
@@ -120,12 +120,12 @@ static void load_spells(player_type *creature_ptr)
     rd_u32b(&creature_ptr->spell_forgotten1);
     rd_u32b(&creature_ptr->spell_forgotten2);
 
-    if (z_older_than(10, 0, 5))
+    if (h_older_than(0, 0, 5))
         set_zangband_learnt_spells(creature_ptr);
     else
         rd_s16b(&creature_ptr->learned_spells);
 
-    if (z_older_than(10, 0, 6))
+    if (h_older_than(0, 0, 6))
         creature_ptr->add_spells = 0;
     else
         rd_s16b(&creature_ptr->add_spells);
@@ -210,12 +210,12 @@ static errr exe_reading_savefile(player_type *creature_ptr)
         return load_store_result;
 
     rd_s16b(&creature_ptr->pet_follow_distance);
-    if (z_older_than(10, 4, 10))
+    if (h_older_than(0, 4, 10))
         set_zangband_pet(creature_ptr);
     else
         rd_s16b(&creature_ptr->pet_extra_flags);
 
-    if (!z_older_than(11, 0, 9)) {
+    if (!h_older_than(1, 0, 9)) {
         char *buf;
         C_MAKE(buf, SCREEN_BUF_MAX_SIZE, char);
         rd_string(buf, SCREEN_BUF_MAX_SIZE);
