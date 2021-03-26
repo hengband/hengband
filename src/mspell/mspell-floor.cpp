@@ -396,16 +396,15 @@ MonsterSpellResult spell_RF6_DARKNESS(player_type *target_ptr, POSITION y, POSIT
         } else {
             (void)unlite_area(target_ptr, 0, 3);
         }
-
-        return res;
+    } else if (monster_to_monster) {
+        if (can_use_lite_area) {
+            (void)project(target_ptr, m_idx, 3, y, x, 0, GF_LITE_WEAK, PROJECT_GRID | PROJECT_KILL, -1);
+            lite_room(target_ptr, y, x);
+        } else {
+            (void)project(target_ptr, m_idx, 3, y, x, 0, GF_DARK_WEAK, PROJECT_GRID | PROJECT_KILL, MS_DARKNESS);
+            unlite_room(target_ptr, y, x);
+        }
     }
-
-    if (!monster_to_monster)
-        return res;
-
-    int lite_area = can_use_lite_area ? -1 : MS_DARKNESS;
-    (void)project(target_ptr, m_idx, 3, y, x, 0, GF_LITE_WEAK, PROJECT_GRID | PROJECT_KILL, lite_area);
-    lite_room(target_ptr, y, x);
 
     return res;
 }
