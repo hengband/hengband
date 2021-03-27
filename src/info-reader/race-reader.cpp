@@ -90,7 +90,7 @@ errr parse_r_info(char *buf, angband_header *head)
             return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
 
         if (i >= head->info_num)
-            return PARSE_ERROR_ABSOLETE_FILE;
+            return PARSE_ERROR_OBSOLETE_FILE;
 
         error_idx = i;
         r_ptr = &r_info[i];
