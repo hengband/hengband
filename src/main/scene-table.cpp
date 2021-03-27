@@ -178,7 +178,7 @@ void refresh_scene_table(player_type *player_ptr)
     }
 }
 
-std::vector<scene_type>::iterator get_scene_table_iterator()
+scene_iterator get_scene_table_iterator()
 {
     return playfallback.begin();
 }

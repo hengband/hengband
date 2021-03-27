@@ -3,25 +3,22 @@
  * @brief Windows版固有実装(BGM)
  */
 
-#include "main/scene-table.h"
 #include "main-win/main-win-music.h"
+#include "dungeon/quest.h"
+#include "floor/floor-town.h"
 #include "main-win/main-win-define.h"
 #include "main-win/main-win-file-utils.h"
 #include "main-win/main-win-mci.h"
 #include "main-win/main-win-mmsystem.h"
 #include "main-win/main-win-tokenizer.h"
+#include "main/scene-table.h"
 #include "term/z-term.h"
 #include "util/angband-files.h"
-
-concptr music_file[MUSIC_BASIC_MAX][SAMPLE_MUSIC_MAX];
-// TODO マジックナンバー除去
-concptr dungeon_music_file[1000][SAMPLE_MUSIC_MAX];
-concptr town_music_file[1000][SAMPLE_MUSIC_MAX];
-concptr quest_music_file[1000][SAMPLE_MUSIC_MAX];
+#include "world/world.h"
 
 static int current_music_type = TERM_XTRA_MUSIC_MUTE;
 static int current_music_id = 0;
-// current filename being played 
+// current filename being played
 static char current_music_path[MAIN_WIN_MAX_PATH];
 
 /*
@@ -29,65 +26,109 @@ static char current_music_path[MAIN_WIN_MAX_PATH];
  */
 concptr ANGBAND_DIR_XTRA_MUSIC;
 
+/*
+ * "music.cfg" data
+ */
+CfgData *music_cfg_data;
+
 namespace main_win_music {
-void load_music_prefs(DUNGEON_IDX max_d_idx, QUEST_IDX max_q_idx)
+
+/*!
+ * @brief action-valに対応する[Basic]セクションのキー名を取得する
+ * @param index "term_xtra()"の第2引数action-valに対応する値
+ * @param buf 使用しない
+ * @return 対応するキー名を返す
+ */
+static concptr basic_key_at(int index, char *buf)
 {
-    char tmp[MAIN_WIN_MAX_PATH];
-    char ini_path[MAIN_WIN_MAX_PATH];
-    char wav_path[MAIN_WIN_MAX_PATH];
-    char *zz[SAMPLE_MUSIC_MAX];
-    // TODO マジックナンバー除去
-    char key[80];
+    (void)buf;
 
-    path_build(ini_path, MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_MUSIC, "music_debug.cfg");
-    if (GetPrivateProfileString("Device", "type", "", mci_device_type, _countof(mci_device_type), ini_path) == 0) {
-        path_build(ini_path, MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_MUSIC, "music.cfg");
-        GetPrivateProfileString("Device", "type", "", mci_device_type, _countof(mci_device_type), ini_path);
-    }
+    if (index >= MUSIC_BASIC_MAX)
+        return NULL;
 
-    for (int i = 0; i < MUSIC_BASIC_MAX; i++) {
-        GetPrivateProfileString("Basic", angband_music_basic_name[i], "", tmp, MAIN_WIN_MAX_PATH, ini_path);
-        int num = tokenize_whitespace(tmp, SAMPLE_MUSIC_MAX, zz);
-        for (int j = 0; j < num; j++) {
-            path_build(wav_path, MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_MUSIC, zz[j]);
-            if (check_file(wav_path))
-                music_file[i][j] = string_make(zz[j]);
-        }
-    }
+    return angband_music_basic_name[index];
+}
 
-    for (int i = 0; i < max_d_idx; i++) {
-        sprintf(key, "dungeon%03d", i);
-        GetPrivateProfileString("Dungeon", key, "", tmp, MAIN_WIN_MAX_PATH, ini_path);
-        int num = tokenize_whitespace(tmp, SAMPLE_MUSIC_MAX, zz);
-        for (int j = 0; j < num; j++) {
-            path_build(wav_path, MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_MUSIC, zz[j]);
-            if (check_file(wav_path))
-                dungeon_music_file[i][j] = string_make(zz[j]);
-        }
-    }
+static inline DUNGEON_IDX get_dungeon_count()
+{
+    return current_world_ptr->max_d_idx;
+}
 
-    for (int i = 0; i < max_q_idx; i++) {
-        sprintf(key, "quest%03d", i);
-        GetPrivateProfileString("Quest", key, "", tmp, MAIN_WIN_MAX_PATH, ini_path);
-        int num = tokenize_whitespace(tmp, SAMPLE_MUSIC_MAX, zz);
-        for (int j = 0; j < num; j++) {
-            path_build(wav_path, MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_MUSIC, zz[j]);
-            if (check_file(wav_path))
-                quest_music_file[i][j] = string_make(zz[j]);
-        }
-    }
+/*!
+ * @brief action-valに対応する[Dungeon]セクションのキー名を取得する
+ * @param index "term_xtra()"の第2引数action-valに対応する値
+ * @param buf バッファ
+ * @return 対応するキー名を返す
+ */
+static concptr dungeon_key_at(int index, char *buf)
+{
+    if (index >= get_dungeon_count())
+        return NULL;
 
-    for (int i = 0; i < 1000; i++) /*!< @todo 町最大数指定 */
-    {
-        sprintf(key, "town%03d", i);
-        GetPrivateProfileString("Town", key, "", tmp, MAIN_WIN_MAX_PATH, ini_path);
-        int num = tokenize_whitespace(tmp, SAMPLE_MUSIC_MAX, zz);
-        for (int j = 0; j < num; j++) {
-            path_build(wav_path, MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_MUSIC, zz[j]);
-            if (check_file(wav_path))
-                town_music_file[i][j] = string_make(zz[j]);
-        }
-    }
+    sprintf(buf, "dungeon%03d", index);
+    return buf;
+}
+
+static inline QUEST_IDX get_quest_count()
+{
+    return max_q_idx;
+}
+
+/*!
+ * @brief action-valに対応する[Quest]セクションのキー名を取得する
+ * @param index "term_xtra()"の第2引数action-valに対応する値
+ * @param buf バッファ
+ * @return 対応するキー名を返す
+ */
+static concptr quest_key_at(int index, char *buf)
+{
+    if (index >= get_quest_count())
+        return NULL;
+
+    sprintf(buf, "quest%03d", index);
+    return buf;
+}
+
+static inline TOWN_IDX get_town_count()
+{
+    return max_towns;
+}
+
+/*!
+ * @brief action-valに対応する[Town]セクションのキー名を取得する
+ * @param index "term_xtra()"の第2引数action-valに対応する値
+ * @param buf バッファ
+ * @return 対応するキー名を返す
+ */
+static concptr town_key_at(int index, char *buf)
+{
+    if (index >= get_town_count())
+        return NULL;
+
+    sprintf(buf, "town%03d", index);
+    return buf;
+}
+
+/*!
+ * @brief BGMの設定を読み込む。
+ * @details
+ * "music_debug.cfg"ファイルを優先して読み込む。無ければ"music.cfg"ファイルを読み込む。
+ * この処理は複数回実行されることを想定していない。複数回実行した場合には前回読み込まれた設定のメモリは解放されない。
+ */
+void load_music_prefs()
+{
+    CfgReader reader(ANGBAND_DIR_XTRA_MUSIC, { "music_debug.cfg", "music.cfg" });
+
+    GetPrivateProfileString("Device", "type", "MPEGVideo", mci_device_type, _countof(mci_device_type), reader.get_cfg_path());
+
+    // clang-format off
+    music_cfg_data = reader.read_sections({
+        { "Basic", TERM_XTRA_MUSIC_BASIC, basic_key_at },
+        { "Dungeon", TERM_XTRA_MUSIC_DUNGEON, dungeon_key_at },
+        { "Quest", TERM_XTRA_MUSIC_QUEST, quest_key_at },
+        { "Town", TERM_XTRA_MUSIC_TOWN, town_key_at }
+        });
+    // clang-format on
 }
 
 /*
@@ -108,65 +149,22 @@ errr stop_music(void)
  */
 errr play_music(int type, int val)
 {
-    int i = 0;
-    char buf[MAIN_WIN_MAX_PATH];
-
     if (type == TERM_XTRA_MUSIC_MUTE)
         return stop_music();
 
-    if (type == TERM_XTRA_MUSIC_BASIC && ((val < 0) || (val >= MUSIC_BASIC_MAX)))
-        return 1;
-    else if (val < 0 || val >= 1000)
-        return (1); /*!< TODO */
-
-    switch (type) {
-    case TERM_XTRA_MUSIC_BASIC:
-        for (i = 0; i < SAMPLE_MUSIC_MAX; i++)
-            if (!music_file[val][i])
-                break;
-        break;
-    case TERM_XTRA_MUSIC_DUNGEON:
-        for (i = 0; i < SAMPLE_MUSIC_MAX; i++)
-            if (!dungeon_music_file[val][i])
-                break;
-        break;
-    case TERM_XTRA_MUSIC_QUEST:
-        for (i = 0; i < SAMPLE_MUSIC_MAX; i++)
-            if (!quest_music_file[val][i])
-                break;
-        break;
-    case TERM_XTRA_MUSIC_TOWN:
-        for (i = 0; i < SAMPLE_MUSIC_MAX; i++)
-            if (!town_music_file[val][i])
-                break;
-        break;
-    }
-
-    if (i == 0) {
-        return 1;
-    }
-
-    switch (type) {
-    case TERM_XTRA_MUSIC_BASIC:
-        path_build(buf, MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_MUSIC, music_file[val][Rand_external(i)]);
-        break;
-    case TERM_XTRA_MUSIC_DUNGEON:
-        path_build(buf, MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_MUSIC, dungeon_music_file[val][Rand_external(i)]);
-        break;
-    case TERM_XTRA_MUSIC_QUEST:
-        path_build(buf, MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_MUSIC, quest_music_file[val][Rand_external(i)]);
-        break;
-    case TERM_XTRA_MUSIC_TOWN:
-        path_build(buf, MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_MUSIC, town_music_file[val][Rand_external(i)]);
-        break;
-    }
-
     if (current_music_type == type && current_music_id == val)
-        return 0;
+        return 0; // now playing
+
+    concptr filename = music_cfg_data->get_rand(type, val);
+    if (!filename)
+        return 1; // no setting
+
+    char buf[MAIN_WIN_MAX_PATH];
+    path_build(buf, MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_MUSIC, filename);
 
     if (current_music_type != TERM_XTRA_MUSIC_MUTE)
         if (0 == strcmp(current_music_path, buf))
-            return 0;
+            return 0; // now playing same file
 
     current_music_type = type;
     current_music_id = val;
@@ -199,7 +197,8 @@ errr play_music_scene()
 /*
  * Notify event
  */
-void on_mci_notify(WPARAM wFlags, LONG lDevID) {
+void on_mci_notify(WPARAM wFlags, LONG lDevID)
+{
     UNREFERENCED_PARAMETER(lDevID);
 
     if (wFlags == MCI_NOTIFY_SUCCESSFUL) {

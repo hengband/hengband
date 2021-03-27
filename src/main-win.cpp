@@ -102,7 +102,6 @@
 #include "core/special-internal-keys.h"
 #include "core/stuff-handler.h"
 #include "core/visuals-reseter.h"
-#include "dungeon/quest.h"
 #include "floor/floor-base-definitions.h"
 #include "floor/floor-events.h"
 #include "game-option/runtime-arguments.h"
@@ -951,7 +950,7 @@ static void init_music(void)
     static bool can_use_music = FALSE;
 
     if (!can_use_music) {
-        main_win_music::load_music_prefs(current_world_ptr->max_d_idx, max_q_idx);
+        main_win_music::load_music_prefs();
         can_use_music = TRUE;
     }
 }
