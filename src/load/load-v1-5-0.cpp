@@ -318,14 +318,14 @@ void rd_item_old(player_type *player_ptr, object_type *o_ptr)
     if (object_is_fixed_artifact(o_ptr)) {
         artifact_type *a_ptr;
         a_ptr = &a_info[o_ptr->name1];
-        if (!a_ptr->name)
+        if (a_ptr->name.empty())
             o_ptr->name1 = 0;
     }
 
     if (object_is_ego(o_ptr)) {
         ego_item_type *e_ptr;
         e_ptr = &e_info[o_ptr->name2];
-        if (!e_ptr->name)
+        if (e_ptr->name.empty())
             o_ptr->name2 = 0;
     }
 }

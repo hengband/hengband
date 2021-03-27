@@ -49,7 +49,7 @@ unique_list_type *initialize_unique_lsit_type(unique_list_type *unique_list_ptr,
  */
 static bool sweep_uniques(monster_race *r_ptr, bool is_alive)
 {
-    if (!r_ptr->name)
+    if (r_ptr->name.empty())
         return FALSE;
 
     if (!(r_ptr->flags1 & RF1_UNIQUE))
@@ -110,7 +110,7 @@ static void display_uniques(unique_list_type *unique_list_ptr, FILE *fff)
 
     for (int k = 0; k < unique_list_ptr->n; k++) {
         monster_race *r_ptr = &r_info[unique_list_ptr->who[k]];
-        fprintf(fff, _("     %s (レベル%d)\n", "     %s (level %d)\n"), r_name + r_ptr->name, (int)r_ptr->level);
+        fprintf(fff, _("     %s (レベル%d)\n", "     %s (level %d)\n"), r_ptr->name.c_str(), (int)r_ptr->level);
     }
 }
 

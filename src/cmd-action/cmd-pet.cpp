@@ -255,7 +255,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
             /* Feature code (applying "mimic" field) */
             feature_type *f_ptr = &f_info[get_feat_mimic(g_ptr)];
 #ifdef JP
-            msg_format("そのモンスターは%sの%sにいる。", f_name + f_ptr->name,
+            msg_format("そのモンスターは%sの%sにいる。", f_ptr->name.c_str(),
                 ((!has_flag(f_ptr->flags, FF_MOVE) && !has_flag(f_ptr->flags, FF_CAN_FLY))
                     || (!has_flag(f_ptr->flags, FF_LOS) && !has_flag(f_ptr->flags, FF_TREE)))
                     ? "中"
@@ -266,7 +266,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
                     || (!has_flag(f_ptr->flags, FF_LOS) && !has_flag(f_ptr->flags, FF_TREE)))
                     ? "in"
                     : "on",
-                f_name + f_ptr->name);
+                f_ptr->name.c_str());
 #endif
 
             return FALSE;
@@ -408,12 +408,12 @@ void do_cmd_pet(player_type *creature_ptr)
 #ifdef JP
     sprintf(target_buf, "ペットのターゲットを指定 (現在：%s)",
         (creature_ptr->pet_t_m_idx
-                ? (creature_ptr->image ? "何か奇妙な物" : (r_name + r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->pet_t_m_idx].ap_r_idx].name))
+                ? (creature_ptr->image ? "何か奇妙な物" : r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->pet_t_m_idx].ap_r_idx].name.c_str())
                 : "指定なし"));
 #else
     sprintf(target_buf, "specify a target of pet (now:%s)",
         (creature_ptr->pet_t_m_idx ? (
-             creature_ptr->image ? "something strange" : (r_name + r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->pet_t_m_idx].ap_r_idx].name))
+             creature_ptr->image ? "something strange" : r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->pet_t_m_idx].ap_r_idx].name.c_str())
                                    : "nothing"));
 #endif
     power_desc[num] = target_buf;

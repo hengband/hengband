@@ -228,7 +228,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
         if (!known || !has_flag(mimic_f_ptr->flags, FF_OPEN))
             break;
 
-        msg_format(_("%sに何かがつっかえて開かなくなった。", "The %s seems stuck."), f_name + mimic_f_ptr->name);
+        msg_format(_("%sに何かがつっかえて開かなくなった。", "The %s seems stuck."), mimic_f_ptr->name.c_str());
         obvious = TRUE;
         break;
     }
@@ -237,7 +237,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
             break;
 
         if (known && (g_ptr->info & (CAVE_MARK))) {
-            msg_format(_("%sが溶けて泥になった！", "The %s turns into mud!"), f_name + f_info[get_feat_mimic(g_ptr)].name);
+            msg_format(_("%sが溶けて泥になった！", "The %s turns into mud!"), f_info[get_feat_mimic(g_ptr)].name.c_str());
             obvious = TRUE;
         }
 
@@ -394,7 +394,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
             break;
 
         if (known && (g_ptr->info & CAVE_MARK)) {
-            msg_format(_("%sが割れた！", "The %s crumbled!"), f_name + f_info[get_feat_mimic(g_ptr)].name);
+            msg_format(_("%sが割れた！", "The %s crumbled!"), f_info[get_feat_mimic(g_ptr)].name.c_str());
             sound(SOUND_GLASS);
         }
 
@@ -415,7 +415,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
             break;
 
         if (known && (g_ptr->info & CAVE_MARK)) {
-            msg_format(_("%sが割れた！", "The %s crumbled!"), f_name + f_info[get_feat_mimic(g_ptr)].name);
+            msg_format(_("%sが割れた！", "The %s crumbled!"), f_info[get_feat_mimic(g_ptr)].name.c_str());
             sound(SOUND_GLASS);
         }
 

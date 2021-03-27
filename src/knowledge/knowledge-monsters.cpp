@@ -59,7 +59,7 @@ static IDX collect_monsters(player_type *creature_ptr, IDX grp_cur, IDX mon_idx[
     IDX mon_cnt = 0;
     for (IDX i = 0; i < max_r_idx; i++) {
         monster_race *r_ptr = &r_info[i];
-        if (!r_ptr->name)
+        if (r_ptr->name.empty())
             continue;
         if (((mode != MONSTER_LORE_DEBUG) && (mode != MONSTER_LORE_RESEARCH)) && !cheat_know && !r_ptr->r_sights)
             continue;
@@ -192,7 +192,7 @@ void do_cmd_knowledge_kill_count(player_type *creature_ptr)
     int n = 0;
     for (MONRACE_IDX i = 1; i < max_r_idx; i++) {
         monster_race *r_ptr = &r_info[i];
-        if (r_ptr->name)
+        if (!r_ptr->name.empty())
             who[n++] = i;
     }
 
@@ -203,7 +203,7 @@ void do_cmd_knowledge_kill_count(player_type *creature_ptr)
         if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
             bool dead = (r_ptr->max_num == 0);
             if (dead) {
-                fprintf(fff, "     %s\n", (r_name + r_ptr->name));
+                fprintf(fff, "     %s\n", r_ptr->name.c_str());
                 total++;
             }
 
@@ -216,17 +216,17 @@ void do_cmd_knowledge_kill_count(player_type *creature_ptr)
 
 #ifdef JP
         concptr number_of_kills = angband_strchr("pt", r_ptr->d_char) ? "人" : "体";
-        fprintf(fff, "     %3d %sの %s\n", (int)this_monster, number_of_kills, r_name + r_ptr->name);
+        fprintf(fff, "     %3d %sの %s\n", (int)this_monster, number_of_kills, r_ptr->name.c_str());
 #else
         if (this_monster < 2) {
-            if (angband_strstr(r_name + r_ptr->name, "coins")) {
-                fprintf(fff, "     1 pile of %s\n", (r_name + r_ptr->name));
+            if (angband_strstr(r_ptr->name.c_str(), "coins")) {
+                fprintf(fff, "     1 pile of %s\n", r_ptr->name.c_str());
             } else {
-                fprintf(fff, "     1 %s\n", (r_name + r_ptr->name));
+                fprintf(fff, "     1 %s\n", r_ptr->name.c_str());
             }
         } else {
             char ToPlural[80];
-            strcpy(ToPlural, (r_name + r_ptr->name));
+            strcpy(ToPlural, r_ptr->name.c_str());
             plural_aux(ToPlural);
             fprintf(fff, "     %d %s\n", this_monster, ToPlural);
         }
@@ -258,7 +258,7 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
         MONRACE_IDX r_idx = mon_idx[mon_top + i];
         monster_race *r_ptr = &r_info[r_idx];
         attr = ((i + mon_top == mon_cur) ? TERM_L_BLUE : TERM_WHITE);
-        c_prt(attr, (r_name + r_ptr->name), row + i, col);
+        c_prt(attr, (r_ptr->name.c_str()), row + i, col);
         if (per_page == 1)
             c_prt(attr, format("%02x/%02x", r_ptr->x_attr, r_ptr->x_char), row + i, (current_world_ptr->wizard || visual_only) ? 56 : 61);
 
@@ -470,7 +470,7 @@ void do_cmd_knowledge_bounty(player_type *creature_ptr)
         return;
 
     fprintf(fff, _("今日のターゲット : %s\n", "Today's target : %s\n"),
-        (creature_ptr->today_mon ? r_name + r_info[creature_ptr->today_mon].name : _("不明", "unknown")));
+        (creature_ptr->today_mon ? r_info[creature_ptr->today_mon].name.c_str() : _("不明", "unknown")));
     fprintf(fff, "\n");
     fprintf(fff, _("賞金首リスト\n", "List of wanted monsters\n"));
     fprintf(fff, "----------------------------------------------\n");
@@ -478,7 +478,7 @@ void do_cmd_knowledge_bounty(player_type *creature_ptr)
     bool listed = FALSE;
     for (int i = 0; i < MAX_BOUNTY; i++) {
         if (current_world_ptr->bounty_r_idx[i] <= 10000) {
-            fprintf(fff, "%s\n", r_name + r_info[current_world_ptr->bounty_r_idx[i]].name);
+            fprintf(fff, "%s\n", r_info[current_world_ptr->bounty_r_idx[i]].name.c_str());
             listed = TRUE;
         }
     }

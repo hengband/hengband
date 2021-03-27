@@ -206,5 +206,5 @@ concptr map_name(player_type *creature_ptr)
     else if (!floor_ptr->dun_level && creature_ptr->town_num)
         return town_info[creature_ptr->town_num].name;
     else
-        return d_name + d_info[creature_ptr->dungeon_idx].name;
+        return d_info[creature_ptr->dungeon_idx].name.c_str();
 }

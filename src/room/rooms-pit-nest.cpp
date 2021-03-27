@@ -67,7 +67,7 @@ static concptr pit_subtype_string(int type, bool nest)
     if (nest) {
         switch (type) {
         case NEST_TYPE_CLONE:
-            sprintf(inner_buf, "(%s)", r_name + r_info[vault_aux_race].name);
+            sprintf(inner_buf, "(%s)", r_info[vault_aux_race].name.c_str());
             break;
         case NEST_TYPE_SYMBOL_GOOD:
         case NEST_TYPE_SYMBOL_EVIL:
@@ -380,7 +380,7 @@ bool build_type5(player_type *player_ptr, dun_data_type *dd_ptr)
                     break;
             }
 
-            msg_format_wizard(player_ptr, CHEAT_DUNGEON, "Nest構成モンスターNo.%d:%s", i, r_name + r_info[nest_mon_info[i].r_idx].name);
+            msg_format_wizard(player_ptr, CHEAT_DUNGEON, "Nest構成モンスターNo.%d:%s", i, r_info[nest_mon_info[i].r_idx].name.c_str());
         }
     }
 
@@ -600,7 +600,7 @@ bool build_type6(player_type *player_ptr, dun_data_type *dd_ptr)
     for (i = 0; i < 8; i++) {
         /* Every other entry */
         what[i] = what[i * 2];
-        msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("Nest構成モンスター選択No.%d:%s", "Nest Monster Select No.%d:%s"), i, r_name + r_info[what[i]].name);
+        msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("Nest構成モンスター選択No.%d:%s", "Nest Monster Select No.%d:%s"), i, r_info[what[i]].name.c_str());
     }
 
     /* Top and bottom rows */
@@ -924,7 +924,7 @@ bool build_type13(player_type *player_ptr, dun_data_type *dd_ptr)
         what[i] = what[i * 2];
 
         if (cheat_hear) {
-            msg_print(r_name + r_info[what[i]].name);
+            msg_print(r_info[what[i]].name.c_str());
         }
     }
 

@@ -125,10 +125,10 @@ void process_player_hp_mp(player_type *creature_ptr)
                 msg_print(_("熱で火傷した！", "The heat burns you!"));
                 take_hit(creature_ptr, DAMAGE_NOESCAPE, damage,
                     format(_("%sの上に浮遊したダメージ", "flying over %s"),
-                        f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name),
+                        f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name.c_str()),
                     -1);
             } else {
-                concptr name = f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
+                concptr name = f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name.c_str();
                 msg_format(_("%sで火傷した！", "The %s burns you!"), name);
                 take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name, -1);
             }
@@ -160,10 +160,10 @@ void process_player_hp_mp(player_type *creature_ptr)
                 msg_print(_("冷気に覆われた！", "The cold engulfs you!"));
                 take_hit(creature_ptr, DAMAGE_NOESCAPE, damage,
                     format(_("%sの上に浮遊したダメージ", "flying over %s"),
-                        f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name),
+                        f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name.c_str()),
                     -1);
             } else {
-                concptr name = f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
+                concptr name = f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name.c_str();
                 msg_format(_("%sに凍えた！", "The %s frostbites you!"), name);
                 take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name, -1);
             }
@@ -195,10 +195,10 @@ void process_player_hp_mp(player_type *creature_ptr)
                 msg_print(_("電撃を受けた！", "The electricity shocks you!"));
                 take_hit(creature_ptr, DAMAGE_NOESCAPE, damage,
                     format(_("%sの上に浮遊したダメージ", "flying over %s"),
-                        f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name),
+                       f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name.c_str()),
                     -1);
             } else {
-                concptr name = f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
+                concptr name = f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name.c_str();
                 msg_format(_("%sに感電した！", "The %s shocks you!"), name);
                 take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name, -1);
             }
@@ -230,10 +230,10 @@ void process_player_hp_mp(player_type *creature_ptr)
                 msg_print(_("酸が飛び散った！", "The acid melts you!"));
                 take_hit(creature_ptr, DAMAGE_NOESCAPE, damage,
                     format(_("%sの上に浮遊したダメージ", "flying over %s"),
-                        f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name),
+                        f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name.c_str()),
                     -1);
             } else {
-                concptr name = f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
+                concptr name = f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name.c_str();
                 msg_format(_("%sに溶かされた！", "The %s melts you!"), name);
                 take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name, -1);
             }
@@ -262,12 +262,12 @@ void process_player_hp_mp(player_type *creature_ptr)
                 msg_print(_("毒気を吸い込んだ！", "The gas poisons you!"));
                 take_hit(creature_ptr, DAMAGE_NOESCAPE, damage,
                     format(_("%sの上に浮遊したダメージ", "flying over %s"),
-                        f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name),
+                        f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name.c_str()),
                     -1);
                 if (!has_resist_pois(creature_ptr))
                     (void)set_poisoned(creature_ptr, creature_ptr->poisoned + damage);
             } else {
-                concptr name = f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
+                concptr name = f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name.c_str();
                 msg_format(_("%sに毒された！", "The %s poisons you!"), name);
                 take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name, -1);
                 if (!has_resist_pois(creature_ptr))

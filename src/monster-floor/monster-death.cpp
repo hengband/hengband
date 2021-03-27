@@ -217,7 +217,7 @@ static void drop_artifact(player_type *player_ptr, monster_death_type *md_ptr)
         (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
     }
 
-    msg_format(_("あなたは%sを制覇した！", "You have conquered %s!"), d_name + d_info[player_ptr->dungeon_idx].name);
+    msg_format(_("あなたは%sを制覇した！", "You have conquered %s!"), d_info[player_ptr->dungeon_idx].name.c_str());
 }
 
 static void decide_drop_quality(monster_death_type *md_ptr)

@@ -11,6 +11,8 @@
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <string>
+#include <string_view>
 
 /*! 地形タグ情報から地形IDを得られなかった場合にTRUEを返す */
 static bool feat_tag_is_not_found = FALSE;
@@ -84,8 +86,7 @@ errr parse_f_info(char *buf, angband_header *head)
         error_idx = i;
         f_ptr = &f_info[i];
         if (s) {
-            if (!add_tag(&f_ptr->tag, head, s))
-                return 7;
+            f_ptr->tag = std::string(s);
         }
 
         f_ptr->mimic = (FEAT_IDX)i;
@@ -97,24 +98,17 @@ errr parse_f_info(char *buf, angband_header *head)
     }
 #ifdef JP
     else if (buf[0] == 'J') {
-        if (!add_name(&f_ptr->name, head, buf + 2))
-            return 7;
+        f_ptr->name = std::string(buf + 2);
     } else if (buf[0] == 'E') {
     }
 #else
     else if (buf[0] == 'J') {
     } else if (buf[0] == 'E') {
-        s = buf + 2;
-        if (!add_name(&f_ptr->name, head, s))
-            return 7;
+        f_ptr->name = std::string(buf + 2);
     }
 #endif
     else if (buf[0] == 'M') {
-        STR_OFFSET offset;
-        if (!add_tag(&offset, head, buf + 2))
-            return PARSE_ERROR_OUT_OF_MEMORY;
-
-        f_ptr->mimic_tag = offset;
+        f_ptr->mimic_tag = std::string(buf + 2);
     } else if (buf[0] == 'G') {
         int j;
         byte s_attr;
@@ -209,7 +203,6 @@ errr parse_f_info(char *buf, angband_header *head)
             return (PARSE_ERROR_GENERIC);
         f_ptr->priority = (FEAT_PRIORITY)priority;
     } else if (buf[0] == 'K') {
-        STR_OFFSET offset;
         for (i = 0; i < MAX_FEAT_STATES; i++)
             if (f_ptr->state[i].action == FF_FLAG_MAX)
                 break;
@@ -225,18 +218,13 @@ errr parse_f_info(char *buf, angband_header *head)
             *t++ = '\0';
 
         if (streq(s, "DESTROYED")) {
-            if (!add_tag(&offset, head, t))
-                return PARSE_ERROR_OUT_OF_MEMORY;
-
-            f_ptr->destroyed_tag = offset;
+            f_ptr->destroyed_tag = std::string(t);
         } else {
             f_ptr->state[i].action = 0;
             if (0 != grab_one_feat_action(f_ptr, s, i))
                 return PARSE_ERROR_INVALID_FLAG;
-            if (!add_tag(&offset, head, t))
-                return PARSE_ERROR_OUT_OF_MEMORY;
 
-            f_ptr->state[i].result_tag = offset;
+            f_ptr->state[i].result_tag = std::string(t);
         }
     } else {
         return 6;
@@ -408,7 +396,7 @@ errr init_feat_variables(void)
 s16b f_tag_to_index(concptr str)
 {
     for (u16b i = 0; i < f_head.info_num; i++) {
-        if (streq(f_tag + f_info[i].tag, str)) {
+        if (streq(f_info[i].tag.c_str(), str)) {
             return (s16b)i;
         }
     }
@@ -437,19 +425,19 @@ s16b f_tag_to_index_in_init(concptr str)
  * @param feat タグ文字列のオフセット
  * @return 地形ID。該当がないなら-1
  */
-static FEAT_IDX search_real_feat(STR_OFFSET feat)
+static FEAT_IDX search_real_feat(std::string feat)
 {
-    if (feat <= 0) {
+    if (feat.empty()) {
         return -1;
     }
 
     for (FEAT_IDX i = 0; i < f_head.info_num; i++) {
-        if (feat == f_info[i].tag) {
+        if (feat.compare(f_info[i].tag) == 0) {
             return i;
         }
     }
 
-    msg_format(_("未定義のタグ '%s'。", "%s is undefined."), f_tag + feat);
+    msg_format(_("未定義のタグ '%s'。", "%s is undefined."), feat.c_str());
     return -1;
 }
 

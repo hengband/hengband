@@ -29,7 +29,7 @@ static FEAT_IDX collect_features(FEAT_IDX *feat_idx, BIT_FLAGS8 mode)
     FEAT_IDX feat_cnt = 0;
     for (FEAT_IDX i = 0; i < max_f_idx; i++) {
         feature_type *f_ptr = &f_info[i];
-        if (!f_ptr->name)
+        if (f_ptr->name.empty())
             continue;
         if (f_ptr->mimic != i)
             continue;
@@ -61,9 +61,9 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
         feature_type *f_ptr = &f_info[f_idx];
         int row_i = row + i;
         attr = ((i + feat_top == feat_cur) ? TERM_L_BLUE : TERM_WHITE);
-        c_prt(attr, f_name + f_ptr->name, row_i, col);
+        c_prt(attr, f_ptr->name.c_str(), row_i, col);
         if (per_page == 1) {
-            c_prt(attr, format("(%s)", lighting_level_str[lighting_level]), row_i, col + 1 + strlen(f_name + f_ptr->name));
+            c_prt(attr, format("(%s)", lighting_level_str[lighting_level]), row_i, col + 1 + f_ptr->name.size());
             c_prt(attr, format("%02x/%02x", f_ptr->x_attr[lighting_level], f_ptr->x_char[lighting_level]), row_i,
                 f_idx_col - ((current_world_ptr->wizard || visual_only) ? 6 : 2));
         }
@@ -360,7 +360,7 @@ void do_cmd_knowledge_dungeon(player_type *creature_ptr)
         } else if (max_dlv[i] == d_info[i].maxdepth)
             seiha = TRUE;
 
-        fprintf(fff, _("%c%-12s :  %3d 階\n", "%c%-16s :  level %3d\n"), seiha ? '!' : ' ', d_name + d_info[i].name, (int)max_dlv[i]);
+        fprintf(fff, _("%c%-12s :  %3d 階\n", "%c%-16s :  level %3d\n"), seiha ? '!' : ' ', d_info[i].name.c_str(), (int)max_dlv[i]);
     }
 
     angband_fclose(fff);

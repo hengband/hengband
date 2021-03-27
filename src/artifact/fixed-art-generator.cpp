@@ -179,7 +179,7 @@ static void invest_curse_to_fixed_artifact(player_type *player_ptr, artifact_typ
 bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, POSITION x)
 {
     artifact_type *a_ptr = &a_info[a_idx];
-    if (!a_ptr->name)
+    if (a_ptr->name.empty())
         return FALSE;
 
     KIND_OBJECT_IDX i = lookup_kind(a_ptr->tval, a_ptr->sval);
@@ -226,7 +226,7 @@ bool make_artifact(player_type *player_ptr, object_type *o_ptr)
 
     for (ARTIFACT_IDX i = 0; i < max_a_idx; i++) {
         artifact_type *a_ptr = &a_info[i];
-        if (!a_ptr->name)
+        if (a_ptr->name.empty())
             continue;
 
         if (a_ptr->cur_num)
@@ -291,7 +291,7 @@ bool make_artifact_special(player_type *player_ptr, object_type *o_ptr)
         artifact_type *a_ptr = &a_info[i];
 
         /*! @note アーティファクト名が空の不正なデータは除外する / Skip "empty" artifacts */
-        if (!a_ptr->name)
+        if (a_ptr->name.empty())
             continue;
 
         /*! @note 既に生成回数がカウントされたアーティファクト、QUESTITEMと非INSTA_ARTは除外 / Cannot make an artifact twice */

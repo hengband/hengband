@@ -195,7 +195,7 @@ void apply_magic_others(player_type *owner_ptr, object_type *o_ptr, int power)
 
         o_ptr->pval = i;
         if (cheat_peek) {
-            msg_format(_("%sの像", "Statue of %s"), r_name + r_ptr->name);
+            msg_format(_("%sの像", "Statue of %s"), r_ptr->name.c_str());
         }
 
         object_aware(owner_ptr, o_ptr);

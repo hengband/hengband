@@ -39,7 +39,7 @@ bool eat_rock(player_type *caster_ptr)
     if (!has_flag(mimic_f_ptr->flags, FF_HURT_ROCK)) {
         msg_print(_("この地形は食べられない。", "You cannot eat this feature."));
     } else if (has_flag(f_ptr->flags, FF_PERMANENT)) {
-        msg_format(_("いてっ！この%sはあなたの歯より硬い！", "Ouch!  This %s is harder than your teeth!"), f_name + mimic_f_ptr->name);
+        msg_format(_("いてっ！この%sはあなたの歯より硬い！", "Ouch!  This %s is harder than your teeth!"), mimic_f_ptr->name.c_str());
     } else if (g_ptr->m_idx) {
         monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
         msg_print(_("何かが邪魔しています！", "There's something in the way!"));
@@ -55,7 +55,7 @@ bool eat_rock(player_type *caster_ptr)
     } else if (has_flag(f_ptr->flags, FF_MAY_HAVE_GOLD) || has_flag(f_ptr->flags, FF_HAS_GOLD)) {
         (void)set_food(caster_ptr, caster_ptr->food + 5000);
     } else {
-        msg_format(_("この%sはとてもおいしい！", "This %s is very filling!"), f_name + mimic_f_ptr->name);
+        msg_format(_("この%sはとてもおいしい！", "This %s is very filling!"), mimic_f_ptr->name.c_str());
         (void)set_food(caster_ptr, caster_ptr->food + 10000);
     }
 

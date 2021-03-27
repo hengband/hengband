@@ -238,7 +238,7 @@ void flavor_init(void)
     Rand_state_set(current_world_ptr->seed_flavor);
     for (KIND_OBJECT_IDX i = 0; i < max_k_idx; i++) {
         object_kind *k_ptr = &k_info[i];
-        if (!k_ptr->flavor_name)
+        if (k_ptr->flavor_name.empty())
             continue;
 
         k_ptr->flavor = i;
@@ -255,7 +255,7 @@ void flavor_init(void)
     Rand_state_restore(state_backup);
     for (KIND_OBJECT_IDX i = 1; i < max_k_idx; i++) {
         object_kind *k_ptr = &k_info[i];
-        if (!k_ptr->name)
+        if (k_ptr->name.empty())
             continue;
 
         if (!k_ptr->flavor)
@@ -274,7 +274,7 @@ void flavor_init(void)
 void strip_name(char *buf, KIND_OBJECT_IDX k_idx)
 {
     object_kind *k_ptr = &k_info[k_idx];
-    concptr str = (k_name + k_ptr->name);
+    concptr str = k_ptr->name.c_str();
     while ((*str == ' ') || (*str == '&'))
         str++;
 

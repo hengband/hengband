@@ -189,7 +189,7 @@ void display_store(player_type *player_ptr)
         return;
     }
 
-    concptr store_name = (f_name + f_info[cur_store_feat].name);
+    concptr store_name = f_info[cur_store_feat].name.c_str();
     concptr owner_name = (ot_ptr->owner_name);
     concptr race_name = race_info[ot_ptr->owner_race].title;
     char buf[80];

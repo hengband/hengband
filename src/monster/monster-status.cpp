@@ -602,10 +602,10 @@ void monster_gain_exp(player_type *target_ptr, MONSTER_IDX m_idx, MONRACE_IDX s_
 
                 do {
                     hallu_race = &r_info[randint1(max_r_idx - 1)];
-                } while (!hallu_race->name || (hallu_race->flags1 & RF1_UNIQUE));
-                msg_format(_("%sは%sに進化した。", "%^s evolved into %s."), m_name, r_name + hallu_race->name);
+                } while (hallu_race->name.empty() || (hallu_race->flags1 & RF1_UNIQUE));
+                msg_format(_("%sは%sに進化した。", "%^s evolved into %s."), m_name, hallu_race->name.c_str());
             } else {
-                msg_format(_("%sは%sに進化した。", "%^s evolved into %s."), m_name, r_name + r_ptr->name);
+                msg_format(_("%sは%sに進化した。", "%^s evolved into %s."), m_name, r_ptr->name.c_str());
             }
         }
 
@@ -895,7 +895,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 
         if ((r_ptr->flags1 & RF1_UNIQUE) && record_destroy_uniq) {
             char note_buf[160];
-            sprintf(note_buf, "%s%s", r_name + r_ptr->name, m_ptr->mflag2.has(MFLAG2::CLONED) ? _("(クローン)", "(Clone)") : "");
+            sprintf(note_buf, "%s%s", r_ptr->name.c_str(), m_ptr->mflag2.has(MFLAG2::CLONED) ? _("(クローン)", "(Clone)") : "");
             exe_write_diary(target_ptr, DIARY_UNIQUE, 0, note_buf);
         }
 

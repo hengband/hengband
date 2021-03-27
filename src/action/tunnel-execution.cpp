@@ -60,7 +60,7 @@ bool exe_tunnel(player_type *creature_ptr, POSITION y, POSITION x)
     f_ptr = &f_info[g_ptr->feat];
     power = f_ptr->power;
     mimic_f_ptr = &f_info[get_feat_mimic(g_ptr)];
-    name = f_name + mimic_f_ptr->name;
+    name = mimic_f_ptr->name.c_str();
     sound(SOUND_DIG);
     if (has_flag(f_ptr->flags, FF_PERMANENT)) {
         if (has_flag(mimic_f_ptr->flags, FF_PERMANENT))

@@ -25,7 +25,7 @@ void monster_desc(player_type *player_ptr, char *desc, monster_type *m_ptr, BIT_
 {
     monster_race *r_ptr;
     r_ptr = &r_info[m_ptr->ap_r_idx];
-    concptr name = (mode & MD_TRUE_NAME) ? (r_name + real_r_ptr(m_ptr)->name) : (r_name + r_ptr->name);
+    concptr name = (mode & MD_TRUE_NAME) ? real_r_ptr(m_ptr)->name.c_str() : r_ptr->name.c_str();
     GAME_TEXT silly_name[1024];
     bool named = FALSE;
     if (player_ptr->image && !(mode & MD_IGNORE_HALLU)) {
@@ -39,9 +39,9 @@ void monster_desc(player_type *player_ptr, char *desc, monster_type *m_ptr, BIT_
 
             do {
                 hallu_race = &r_info[randint1(max_r_idx - 1)];
-            } while (!hallu_race->name || (hallu_race->flags1 & RF1_UNIQUE));
+            } while (hallu_race->name.empty() || (hallu_race->flags1 & RF1_UNIQUE));
 
-            strcpy(silly_name, (r_name + hallu_race->name));
+            strcpy(silly_name, (hallu_race->name.c_str()));
         }
 
         name = silly_name;
@@ -231,7 +231,7 @@ void monster_desc(player_type *player_ptr, char *desc, monster_type *m_ptr, BIT_
     }
 
     if ((mode & MD_IGNORE_HALLU) && !is_original_ap(m_ptr)) {
-        strcat(desc, format("(%s)", r_name + r_info[m_ptr->r_idx].name));
+        strcat(desc, format("(%s)", r_info[m_ptr->r_idx].name.c_str()));
     }
 
     /* Handle the Possessive as a special afterthought */
