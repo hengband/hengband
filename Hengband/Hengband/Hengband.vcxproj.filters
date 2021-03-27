@@ -2247,6 +2247,9 @@
       <Filter>main-win</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\stdafx.cpp" />
+    <ClCompile Include="..\..\src\main\scene-table.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4842,6 +4845,9 @@
       <Filter>main-win</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\stdafx.h" />
+    <ClInclude Include="..\..\src\main\scene-table.h">
+      <Filter>main</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

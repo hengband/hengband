@@ -134,6 +134,7 @@ typedef struct term_type {
 #define TERM_XTRA_MUSIC_QUEST 16 /* Play a music(quest)   (optional) */
 #define TERM_XTRA_MUSIC_TOWN 17 /* Play a music(floor)   (optional) */
 #define TERM_XTRA_MUSIC_MUTE 18
+#define TERM_XTRA_SCENE 19 /* React to scene changes (optional) */
 
 /**** Available Variables ****/
 extern term_type *Term;
