@@ -3,6 +3,7 @@
 #include "system/angband.h"
 
 #include <iterator>
+#include <vector>
 
 struct scene_type;
 // シチュエーション判定関数。valueに設定した場合trueを返す。
