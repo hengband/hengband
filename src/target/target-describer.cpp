@@ -449,7 +449,7 @@ static concptr decide_target_floor(player_type *subject_ptr, eg_type *eg_ptr)
         return building[eg_ptr->f_ptr->subtype].name;
 
     if (has_flag(eg_ptr->f_ptr->flags, FF_ENTRANCE))
-        return format(_("%s(%d階相当)", "%s(level %d)"), d_text + d_info[eg_ptr->g_ptr->special].text, d_info[eg_ptr->g_ptr->special].mindepth);
+        return format(_("%s(%d階相当)", "%s(level %d)"), d_info[eg_ptr->g_ptr->special].text.c_str(), d_info[eg_ptr->g_ptr->special].mindepth);
 
     if (has_flag(eg_ptr->f_ptr->flags, FF_TOWN))
         return town_info[eg_ptr->g_ptr->special].name;
@@ -457,7 +457,7 @@ static concptr decide_target_floor(player_type *subject_ptr, eg_type *eg_ptr)
     if (subject_ptr->wild_mode && (eg_ptr->feat == feat_floor))
         return _("道", "road");
 
-    return f_name + eg_ptr->f_ptr->name;
+    return eg_ptr->f_ptr->name.c_str();
 }
 
 static void describe_grid_monster_all(eg_type *eg_ptr)

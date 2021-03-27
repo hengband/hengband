@@ -170,7 +170,7 @@ static void dump_aux_recall(FILE *fff)
         } else if (max_dlv[y] == d_info[y].maxdepth)
             seiha = TRUE;
 
-        fprintf(fff, _("   %c%-12s: %3d 階\n", "   %c%-16s: level %3d\n"), seiha ? '!' : ' ', d_name + d_info[y].name, (int)max_dlv[y]);
+        fprintf(fff, _("   %c%-12s: %3d 階\n", "   %c%-16s: level %3d\n"), seiha ? '!' : ' ', d_info[y].name.c_str(), (int)max_dlv[y]);
     }
 }
 
@@ -245,9 +245,9 @@ static void dump_aux_arena(player_type *creature_ptr, FILE *fff)
         } else {
 #ifdef JP
             fprintf(
-                fff, "\n 闘技場: %d回戦で%sの前に敗北\n", -creature_ptr->arena_number, r_name + r_info[arena_info[-1 - creature_ptr->arena_number].r_idx].name);
+                fff, "\n 闘技場: %d回戦で%sの前に敗北\n", -creature_ptr->arena_number, r_info[arena_info[-1 - creature_ptr->arena_number].r_idx].name.c_str());
 #else
-            fprintf(fff, "\n Arena: Defeated by %s in the %d%s fight\n", r_name + r_info[arena_info[-1 - creature_ptr->arena_number].r_idx].name,
+            fprintf(fff, "\n Arena: Defeated by %s in the %d%s fight\n", r_info[arena_info[-1 - creature_ptr->arena_number].r_idx].name.c_str(),
                 -creature_ptr->arena_number, get_ordinal_number_suffix(-creature_ptr->arena_number));
 #endif
         }
@@ -297,7 +297,7 @@ static void dump_aux_monsters(player_type *creature_ptr, FILE *fff)
     for (MONRACE_IDX k = 1; k < max_r_idx; k++) {
         /* Ignore unused index */
         monster_race *r_ptr = &r_info[k];
-        if (!r_ptr->name)
+        if (r_ptr->name.empty())
             continue;
 
         if (r_ptr->flags1 & RF1_UNIQUE) {
@@ -349,7 +349,7 @@ static void dump_aux_monsters(player_type *creature_ptr, FILE *fff)
 
     for (MONRACE_IDX k = uniq_total - 1; k >= 0 && k >= uniq_total - 10; k--) {
         monster_race *r_ptr = &r_info[who[k]];
-        fprintf(fff, _("  %-40s (レベル%3d)\n", "  %-40s (level %3d)\n"), (r_name + r_ptr->name), (int)r_ptr->level);
+        fprintf(fff, _("  %-40s (レベル%3d)\n", "  %-40s (level %3d)\n"), r_ptr->name.c_str(), (int)r_ptr->level);
     }
 
     C_KILL(who, max_r_idx, s16b);

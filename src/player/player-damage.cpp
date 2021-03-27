@@ -355,7 +355,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
         creature_ptr->leaving = TRUE;
         creature_ptr->is_dead = TRUE;
         if (creature_ptr->current_floor_ptr->inside_arena) {
-            concptr m_name = r_name + r_info[arena_info[creature_ptr->arena_number].r_idx].name;
+            concptr m_name = r_info[arena_info[creature_ptr->arena_number].r_idx].name.c_str();
             msg_format(_("あなたは%sの前に敗れ去った。", "You are beaten by %s."), m_name);
             msg_print(NULL);
             if (record_arena)

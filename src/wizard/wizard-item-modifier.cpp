@@ -651,7 +651,7 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
         int max_len = 0;
         for (KIND_OBJECT_IDX k = 1; k < max_k_idx; k++) {
             object_kind *k_ptr = &k_info[k];
-            if (!k_ptr->name)
+            if (k_ptr->name.empty())
                 continue;
 
             object_prep(caster_ptr, o_ptr, k);
@@ -678,10 +678,10 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
 
             for (EGO_IDX k = 1; k < max_e_idx; k++) {
                 ego_item_type *e_ptr = &e_info[k];
-                if (!e_ptr->name)
+                if (e_ptr->name.empty())
                     continue;
 
-                strcpy(o_name, (e_name + e_ptr->name));
+                strcpy(o_name, e_ptr->name.c_str());
 #ifndef JP
                 str_tolower(o_name);
 #endif
@@ -708,7 +708,7 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
         int mlen = 0;
         for (ARTIFACT_IDX i = 1; i < max_a_idx; i++) {
             artifact_type *a_ptr = &a_info[i];
-            if (!a_ptr->name)
+            if (a_ptr->name.empty())
                 continue;
 
             KIND_OBJECT_IDX k_idx = lookup_kind(a_ptr->tval, a_ptr->sval);
@@ -723,7 +723,7 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
             str_tolower(o_name);
 #endif
             a_str = a_desc;
-            strcpy(a_desc, a_name + a_ptr->name);
+            strcpy(a_desc, a_ptr->name.c_str());
 
             if (*a_str == '$')
                 a_str++;
@@ -759,7 +759,7 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
             if (cheat_xtra)
                 msg_format("Matching artifact No.%d %s(%s)", i, a_desc, _(&o_name[2], o_name));
 
-            std::vector<char *> l = { a_str, a_name + a_ptr->name, _(&o_name[2], o_name) };
+            std::vector<const char *> l = { a_str, a_ptr->name.c_str(), _(&o_name[2], o_name) };
             for (size_t c = 0; c < l.size(); c++) {
                 if (!strcmp(str, l.at(c))) {
                     len = strlen(l.at(c));

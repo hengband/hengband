@@ -6,6 +6,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <string>
 
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る(アーティファクト用) /
@@ -64,8 +65,7 @@ errr parse_a_info(char *buf, angband_header *head)
         add_flag(a_ptr->flags, TR_IGNORE_FIRE);
         add_flag(a_ptr->flags, TR_IGNORE_COLD);
 #ifdef JP
-        if (!add_name(&a_ptr->name, head, s))
-            return 7;
+        a_ptr->name = std::string(s);
 #endif
     } else if (!a_ptr) {
         return 3;
@@ -79,8 +79,7 @@ errr parse_a_info(char *buf, angband_header *head)
 #else
     else if (buf[0] == 'E') {
         s = buf + 2;
-        if (!add_name(&a_ptr->name, head, s))
-            return 7;
+        a_ptr->name = std::string(s);
     }
 #endif
     else if (buf[0] == 'D') {
@@ -93,8 +92,7 @@ errr parse_a_info(char *buf, angband_header *head)
             return 0;
         s = buf + 3;
 #endif
-        if (!add_text(&a_ptr->text, head, s, TRUE))
-            return 7;
+        a_ptr->text.append(s);
     } else if (buf[0] == 'I') {
         int tval, sval, pval;
         if (3 != sscanf(buf + 2, "%d:%d:%d", &tval, &sval, &pval))

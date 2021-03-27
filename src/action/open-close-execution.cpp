@@ -38,7 +38,7 @@ bool exe_open(player_type *creature_ptr, POSITION y, POSITION x)
     feature_type *f_ptr = &f_info[g_ptr->feat];
     take_turn(creature_ptr, 100);
     if (!has_flag(f_ptr->flags, FF_OPEN)) {
-        msg_format(_("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck."), f_name + f_info[get_feat_mimic(g_ptr)].name);
+        msg_format(_("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck."), f_info[get_feat_mimic(g_ptr)].name.c_str());
         return FALSE;
     }
 
@@ -134,7 +134,7 @@ bool easy_open_door(player_type *creature_ptr, POSITION y, POSITION x)
         return FALSE;
 
     if (!has_flag(f_ptr->flags, FF_OPEN)) {
-        msg_format(_("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck."), f_name + f_info[get_feat_mimic(g_ptr)].name);
+        msg_format(_("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck."), f_info[get_feat_mimic(g_ptr)].name.c_str());
     } else if (f_ptr->power) {
         i = creature_ptr->skill_dis;
         if (creature_ptr->blind || no_lite(creature_ptr))
@@ -241,7 +241,7 @@ bool exe_disarm(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir
 {
     grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
-    concptr name = (f_name + f_ptr->name);
+    concptr name = f_ptr->name.c_str();
     int power = f_ptr->power;
     bool more = FALSE;
     int i = creature_ptr->skill_dis;
@@ -296,7 +296,7 @@ bool exe_bash(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir)
     int bash = adj_str_blow[creature_ptr->stat_index[A_STR]];
     int temp = f_ptr->power;
     bool more = FALSE;
-    concptr name = f_name + f_info[get_feat_mimic(g_ptr)].name;
+    concptr name = f_info[get_feat_mimic(g_ptr)].name.c_str();
     take_turn(creature_ptr, 100);
     msg_format(_("%sに体当たりをした！", "You smash into the %s!"), name);
     temp = (bash - (temp * 10));

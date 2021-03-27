@@ -100,7 +100,7 @@ bool exchange_cash(player_type *player_ptr)
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
         o_ptr = &player_ptr->inventory_list[i];
         if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_CORPSE)
-            && (streq(r_name + r_info[o_ptr->pval].name, r_name + r_info[current_world_ptr->today_mon].name))) {
+            && (streq(r_info[o_ptr->pval].name.c_str(), r_info[current_world_ptr->today_mon].name.c_str()))) {
             char buf[MAX_NLEN + 32];
             describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
@@ -119,7 +119,7 @@ bool exchange_cash(player_type *player_ptr)
         o_ptr = &player_ptr->inventory_list[i];
 
         if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_SKELETON)
-            && (streq(r_name + r_info[o_ptr->pval].name, r_name + r_info[current_world_ptr->today_mon].name))) {
+            && (streq(r_info[o_ptr->pval].name.c_str(), r_info[current_world_ptr->today_mon].name.c_str()))) {
             char buf[MAX_NLEN + 32];
             describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
@@ -202,7 +202,7 @@ void today_target(player_type *player_ptr)
 
     clear_bldg(4, 18);
     c_put_str(TERM_YELLOW, _("本日の賞金首", "Wanted monster that changes from day to day"), 5, 10);
-    sprintf(buf, _("ターゲット： %s", "target: %s"), r_name + r_ptr->name);
+    sprintf(buf, _("ターゲット： %s", "target: %s"), r_ptr->name.c_str());
     c_put_str(TERM_YELLOW, buf, 6, 10);
     sprintf(buf, _("死体 ---- $%d", "corpse   ---- $%d"), (int)r_ptr->level * 50 + 100);
     prt(buf, 8, 10);
@@ -251,7 +251,7 @@ void show_bounty(void)
             done_mark = "";
         }
 
-        c_prt(color, format("%s %s", r_name + r_ptr->name, done_mark), y + 7, 10);
+        c_prt(color, format("%s %s", r_ptr->name.c_str(), done_mark), y + 7, 10);
 
         y = (y + 1) % 10;
         if (!y && (i < MAX_BOUNTY - 1)) {
@@ -291,7 +291,7 @@ void determine_daily_bounty(player_type *player_ptr, bool conv_old)
         r_ptr = &r_info[current_world_ptr->today_mon];
 
         if (cheat_hear) {
-            msg_format("日替わり候補: %s ", r_ptr->name + r_name);
+            msg_format("日替わり候補: %s ", r_ptr->name.c_str());
         }
 
         if (r_ptr->flags1 & RF1_UNIQUE)

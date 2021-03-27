@@ -103,14 +103,14 @@ spoiler_output_status spoil_mon_desc(concptr fname, std::function<bool(const mon
     int n = 0;
     for (int i = 1; i < max_r_idx; i++) {
         monster_race *r_ptr = &r_info[i];
-        if (r_ptr->name)
+        if (!r_ptr->name.empty())
             who[n++] = (s16b)i;
     }
 
     ang_sort(&dummy, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
     for (int i = 0; i < n; i++) {
         monster_race *r_ptr = &r_info[who[i]];
-        concptr name = (r_name + r_ptr->name);
+        concptr name = r_ptr->name.c_str();
         if (filter_monster && !filter_monster(r_ptr))
             continue;
 
@@ -197,7 +197,7 @@ spoiler_output_status spoil_mon_info(concptr fname)
     int n = 0;
     for (int i = 1; i < max_r_idx; i++) {
         monster_race *r_ptr = &r_info[i];
-        if (r_ptr->name)
+        if (!r_ptr->name.empty())
             who[n++] = (s16b)i;
     }
 
@@ -215,7 +215,7 @@ spoiler_output_status spoil_mon_info(concptr fname)
 #endif
         }
 
-        sprintf(buf, _("%s/%s  (", "%s%s ("), (r_name + r_ptr->name), _(r_name + r_ptr->E_name, "")); /* ---)--- */
+        sprintf(buf, _("%s/%s  (", "%s%s ("), r_ptr->name.c_str(), _(r_ptr->E_name.c_str(), "")); /* ---)--- */
         spoil_out(buf);
         spoil_out(attr_to_text(r_ptr));
         sprintf(buf, " '%c')\n", r_ptr->d_char);

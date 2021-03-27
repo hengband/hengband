@@ -114,7 +114,7 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type *m_ptr, int 
 
     term_addstr(-1, TERM_WHITE, buf);
 
-    sprintf(buf, " %s ", r_name + r_ptr->name);
+    sprintf(buf, " %s ", r_ptr->name.c_str());
     term_addstr(-1, TERM_WHITE, buf);
 }
 
@@ -502,11 +502,11 @@ static void display_floor_item_list(player_type *player_ptr, const int y, const 
             sprintf(line, _("(X:%03d Y:%03d) 奇妙な物体の足元のアイテム一覧", "Items at (%03d,%03d) under an odd object"), x, y);
         else {
             const monster_race *const r_ptr = &r_info[m_ptr->r_idx];
-            sprintf(line, _("(X:%03d Y:%03d) %sの足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under %s"), x, y, (r_name + r_ptr->name));
+            sprintf(line, _("(X:%03d Y:%03d) %sの足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under %s"), x, y, r_ptr->name.c_str());
         }
     } else {
         const feature_type *const f_ptr = &f_info[g_ptr->feat];
-        concptr fn = f_name + f_ptr->name;
+        concptr fn = f_ptr->name.c_str();
         char buf[512];
 
         if (has_flag(f_ptr->flags, FF_STORE) || (has_flag(f_ptr->flags, FF_BLDG) && !floor_ptr->inside_arena))

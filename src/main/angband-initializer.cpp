@@ -276,30 +276,30 @@ void init_angband(player_type *player_ptr, process_autopick_file_command_pf proc
         quit(_("その他の変数を初期化できません", "Cannot initialize misc. values"));
 
     init_note(_("[データの初期化中... (地形)]", "[Initializing arrays... (features)]"));
-    if (init_f_info(player_ptr))
+    if (init_f_info())
         quit(_("地形初期化不能", "Cannot initialize features"));
 
     if (init_feat_variables())
         quit(_("地形初期化不能", "Cannot initialize features"));
 
     init_note(_("[データの初期化中... (アイテム)]", "[Initializing arrays... (objects)]"));
-    if (init_k_info(player_ptr))
+    if (init_k_info())
         quit(_("アイテム初期化不能", "Cannot initialize objects"));
 
     init_note(_("[データの初期化中... (伝説のアイテム)]", "[Initializing arrays... (artifacts)]"));
-    if (init_a_info(player_ptr))
+    if (init_a_info())
         quit(_("伝説のアイテム初期化不能", "Cannot initialize artifacts"));
 
     init_note(_("[データの初期化中... (名のあるアイテム)]", "[Initializing arrays... (ego-items)]"));
-    if (init_e_info(player_ptr))
+    if (init_e_info())
         quit(_("名のあるアイテム初期化不能", "Cannot initialize ego-items"));
 
     init_note(_("[データの初期化中... (モンスター)]", "[Initializing arrays... (monsters)]"));
-    if (init_r_info(player_ptr))
+    if (init_r_info())
         quit(_("モンスター初期化不能", "Cannot initialize monsters"));
 
     init_note(_("[データの初期化中... (ダンジョン)]", "[Initializing arrays... (dungeon)]"));
-    if (init_d_info(player_ptr))
+    if (init_d_info())
         quit(_("ダンジョン初期化不能", "Cannot initialize dungeon"));
 
     for (int i = 1; i < current_world_ptr->max_d_idx; i++)
@@ -307,11 +307,11 @@ void init_angband(player_type *player_ptr, process_autopick_file_command_pf proc
             r_info[d_info[i].final_guardian].flags7 |= RF7_GUARDIAN;
 
     init_note(_("[データの初期化中... (魔法)]", "[Initializing arrays... (magic)]"));
-    if (init_m_info(player_ptr))
+    if (init_m_info())
         quit(_("魔法初期化不能", "Cannot initialize magic"));
 
     init_note(_("[データの初期化中... (熟練度)]", "[Initializing arrays... (skill)]"));
-    if (init_s_info(player_ptr))
+    if (init_s_info())
         quit(_("熟練度初期化不能", "Cannot initialize skill"));
 
     init_note(_("[配列を初期化しています... (荒野)]", "[Initializing arrays... (wilderness)]"));
@@ -330,7 +330,7 @@ void init_angband(player_type *player_ptr, process_autopick_file_command_pf proc
     if (init_quests())
         quit(_("クエストを初期化できません", "Cannot initialize quests"));
 
-    if (init_v_info(player_ptr))
+    if (init_v_info())
         quit(_("vault 初期化不能", "Cannot initialize vaults"));
 
     init_note(_("[データの初期化中... (その他)]", "[Initializing arrays... (other)]"));

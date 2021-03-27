@@ -12,8 +12,6 @@
  * The dungeon arrays
  */
 dungeon_type *d_info;
-char *d_name;
-char *d_text;
 
 /*
  * Maximum number of dungeon in d_info.txt
@@ -41,7 +39,7 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
 		if (max_dlv[DUNGEON_ANGBAND]) return DUNGEON_ANGBAND;
 		else
 		{
-			msg_format(_("まだ%sに入ったことはない。", "You haven't entered %s yet."), d_name + d_info[DUNGEON_ANGBAND].name);
+                    msg_format(_("まだ%sに入ったことはない。", "You haven't entered %s yet."), d_info[DUNGEON_ANGBAND].name.c_str());
 			msg_print(NULL);
 			return 0;
 		}
@@ -65,7 +63,7 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
 		else if (max_dlv[i] == d_info[i].maxdepth) seiha = TRUE;
 
 		sprintf(buf, _("      %c) %c%-12s : 最大 %d 階", "      %c) %c%-16s : Max level %d"),
-			'a' + num, seiha ? '!' : ' ', d_name + d_info[i].name, (int)max_dlv[i]);
+			'a' + num, seiha ? '!' : ' ', d_info[i].name.c_str(), (int)max_dlv[i]);
 		prt(buf, y + num, x);
 		dun[num++] = i;
 	}

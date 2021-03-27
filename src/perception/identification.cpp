@@ -43,7 +43,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
     int trivial_info = 0;
     object_flags(player_ptr, o_ptr, flgs);
 
-    shape_buffer(o_ptr->name1 ? (a_text + a_info[o_ptr->name1].text) : (k_text + k_info[o_ptr->k_idx].text), 77 - 15, temp, sizeof(temp));
+    shape_buffer(o_ptr->name1 ? a_info[o_ptr->name1].text.c_str() : k_info[o_ptr->k_idx].text.c_str(), 77 - 15, temp, sizeof(temp));
 
     int i = 0;
     for (int j = 0; temp[j]; j += 1 + strlen(&temp[j])) {
@@ -724,8 +724,8 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 
     if ((o_ptr->tval == TV_STATUE) && (o_ptr->sval == SV_PHOTO)) {
         monster_race *r_ptr = &r_info[o_ptr->pval];
-        int namelen = strlen(r_name + r_ptr->name);
-        prt(format("%s: '", r_name + r_ptr->name), 1, 15);
+        int namelen = strlen(r_ptr->name.c_str());
+        prt(format("%s: '", r_ptr->name.c_str()), 1, 15);
         term_queue_bigchar(18 + namelen, 1, r_ptr->x_attr, r_ptr->x_char, 0, 0);
         prt("'", 1, (use_bigtile ? 20 : 19) + namelen);
     } else {

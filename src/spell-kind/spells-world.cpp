@@ -402,7 +402,7 @@ bool free_level_recall(player_type *creature_ptr)
     }
 
     QUANTITY amt = get_quantity(
-        format(_("%sの何階にテレポートしますか？", "Teleport to which level of %s? "), d_name + d_info[select_dungeon].name), (QUANTITY)max_depth);
+        format(_("%sの何階にテレポートしますか？", "Teleport to which level of %s? "), d_info[select_dungeon].name.c_str()), (QUANTITY)max_depth);
     if (amt <= 0) {
         return FALSE;
     }
@@ -460,7 +460,7 @@ bool reset_recall(player_type *caster_ptr)
     if (record_maxdepth)
         exe_write_diary(caster_ptr, DIARY_TRUMP, select_dungeon, _("フロア・リセットで", "using a scroll of reset recall"));
 #ifdef JP
-    msg_format("%sの帰還レベルを %d 階にセット。", d_name + d_info[select_dungeon].name, dummy, dummy * 50);
+    msg_format("%sの帰還レベルを %d 階にセット。", d_info[select_dungeon].name.c_str(), dummy, dummy * 50);
 #else
     msg_format("Recall depth set to level %d (%d').", dummy, dummy * 50);
 #endif

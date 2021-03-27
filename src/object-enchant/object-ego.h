@@ -1,9 +1,10 @@
 ﻿#pragma once
 
-#include "system/angband.h"
 #include "object-enchant/trg-types.h"
-#include "util/flag-group.h"
+#include "system/angband.h"
 #include "system/object-type-definition.h"
+#include "util/flag-group.h"
+#include <string>
 
 /* Body Armor */
 #define EGO_A_MORGUL            4
@@ -217,32 +218,30 @@
  * Information about "ego-items".
  */
 typedef struct ego_item_type {
-	STR_OFFSET name;			/* Name (offset) */
-	STR_OFFSET text;			/* Text (offset) */
+    std::string name; /* Name (offset) */
+    std::string text; /* Text (offset) */
 
-	INVENTORY_IDX slot;		/*!< 装備部位 / Standard slot value */
-	PRICE rating;		/*!< ベースアイテムからの価値加速 / Rating boost */
+    INVENTORY_IDX slot{}; /*!< 装備部位 / Standard slot value */
+    PRICE rating{}; /*!< ベースアイテムからの価値加速 / Rating boost */
 
-	DEPTH level;			/* Minimum level */
-	RARITY rarity;		/* Object rarity */
+    DEPTH level{}; /* Minimum level */
+    RARITY rarity{}; /* Object rarity */
 
-	HIT_PROB max_to_h;		/* Maximum to-hit bonus */
-	HIT_POINT max_to_d;		/* Maximum to-dam bonus */
-	ARMOUR_CLASS max_to_a;		/* Maximum to-ac bonus */
+    HIT_PROB max_to_h{}; /* Maximum to-hit bonus */
+    HIT_POINT max_to_d{}; /* Maximum to-dam bonus */
+    ARMOUR_CLASS max_to_a{}; /* Maximum to-ac bonus */
 
-	PARAMETER_VALUE max_pval;		/* Maximum pval */
+    PARAMETER_VALUE max_pval{}; /* Maximum pval */
 
-	PRICE cost;			/* Ego-item "cost" */
+    PRICE cost{}; /* Ego-item "cost" */
 
-	BIT_FLAGS flags[TR_FLAG_SIZE];	/* Ego-Item Flags */
-	FlagGroup<TRG> gen_flags;		/* flags for generate */
+    BIT_FLAGS flags[TR_FLAG_SIZE]{}; /* Ego-Item Flags */
+    FlagGroup<TRG> gen_flags; /* flags for generate */
 
-	IDX act_idx;		/* Activative ability index */
+    IDX act_idx{}; /* Activative ability index */
 } ego_item_type;
 
 extern EGO_IDX max_e_idx;
 extern ego_item_type *e_info;
-extern char *e_name;
-extern char *e_text;
 
 byte get_random_ego(byte slot, bool good);

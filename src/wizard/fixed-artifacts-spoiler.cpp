@@ -87,7 +87,7 @@ static void print_header(void)
 static bool make_fake_artifact(player_type *player_ptr, object_type *o_ptr, ARTIFACT_IDX name1)
 {
     artifact_type *a_ptr = &a_info[name1];
-    if (!a_ptr->name)
+    if (a_ptr->name.empty())
         return FALSE;
 
     OBJECT_IDX i = lookup_kind(a_ptr->tval, a_ptr->sval);

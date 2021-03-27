@@ -8,6 +8,7 @@
 #include "main/angband-headers.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <string>
 
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る(ダンジョン用) /
@@ -112,8 +113,7 @@ errr parse_d_info(char *buf, angband_header *head)
         error_idx = i;
         d_ptr = &d_info[i];
 #ifdef JP
-        if (!add_name(&d_ptr->name, head, s))
-            return 7;
+        d_ptr->name = std::string(s);
 #endif
     }
 #ifdef JP
@@ -125,8 +125,7 @@ errr parse_d_info(char *buf, angband_header *head)
         s = buf + 2;
 
         /* Store the name */
-        if (!add_name(&d_ptr->name, head, s))
-            return 7;
+        d_ptr->name = std::string(s);
     }
 #endif
     else if (buf[0] == 'D') {
@@ -139,8 +138,7 @@ errr parse_d_info(char *buf, angband_header *head)
             return 0;
         s = buf + 3;
 #endif
-        if (!add_text(&d_ptr->text, head, s, TRUE))
-            return 7;
+        d_ptr->text.append(s);
     } else if (buf[0] == 'W') {
         int min_lev, max_lev;
         int min_plev, mode;

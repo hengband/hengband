@@ -301,7 +301,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
 					{
 						strcat(dummy, format(
 							       _(" %-22.22s 充填:%2d/%2d%3d%%", " %-22.22s   (%2d/%2d) %3d%%"),
-							       k_name + k_info[k_idx].name, 
+							       k_info[k_idx].name.c_str(), 
 							       creature_ptr->magic_num1[ctr+ext] ? 
 							       (creature_ptr->magic_num1[ctr+ext] - 1) / (EATER_ROD_CHARGE * k_info[k_idx].pval) +1 : 0, 
 							       creature_ptr->magic_num2[ctr+ext], chance));
@@ -309,7 +309,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
 					}
 					else
 					{
-						strcat(dummy, format(" %-22.22s    %2d/%2d %3d%%", k_name + k_info[k_idx].name, (s16b)(creature_ptr->magic_num1[ctr+ext]/EATER_CHARGE), creature_ptr->magic_num2[ctr+ext], chance));
+						strcat(dummy, format(" %-22.22s    %2d/%2d %3d%%", k_info[k_idx].name.c_str(), (s16b)(creature_ptr->magic_num1[ctr+ext]/EATER_CHARGE), creature_ptr->magic_num2[ctr+ext], chance));
 						if (creature_ptr->magic_num1[ctr+ext] < EATER_CHARGE) col = TERM_RED;
 					}
 				}
@@ -454,7 +454,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
 				char tmp_val[160];
 
 				/* Prompt */
-				(void) strnfmt(tmp_val, 78, _("%sを使いますか？ ", "Use %s?"), k_name + k_info[lookup_kind(tval ,i)].name);
+				(void) strnfmt(tmp_val, 78, _("%sを使いますか？ ", "Use %s?"), k_info[lookup_kind(tval ,i)].name.c_str());
 
 				/* Belay that order */
 				if (!get_check(tmp_val)) continue;
@@ -493,7 +493,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
 			term_erase(7, 21, 255);
 			term_erase(7, 20, 255);
 
-			shape_buffer(k_text + k_info[lookup_kind(tval, i)].text, 62, temp, sizeof(temp));
+			shape_buffer(k_info[lookup_kind(tval, i)].text.c_str(), 62, temp, sizeof(temp));
 			for (j = 0, line = 21; temp[j]; j += 1 + strlen(&temp[j]))
 			{
 				prt(&temp[j], line, 10);

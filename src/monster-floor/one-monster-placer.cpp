@@ -236,9 +236,9 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
     monster_race *r_ptr = &r_info[r_idx];
-    concptr name = (r_name + r_ptr->name);
+    concptr name = r_ptr->name.c_str();
 
-    if (player_ptr->wild_mode || !in_bounds(floor_ptr, y, x) || (r_idx == 0) || (r_ptr->name == 0))
+    if (player_ptr->wild_mode || !in_bounds(floor_ptr, y, x) || (r_idx == 0) || r_ptr->name.empty())
         return FALSE;
 
     if (((mode & PM_IGNORE_TERRAIN) == 0) && (pattern_tile(floor_ptr, y, x) || !monster_can_enter(player_ptr, y, x, r_ptr, 0)))

@@ -141,14 +141,14 @@ void process_world(player_type *player_ptr)
 
                 for (FEAT_IDX i = 1; i < max_f_idx; i++) {
                     feature_type *f_ptr = &f_info[i];
-                    if (!f_ptr->name)
+                    if (f_ptr->name.empty())
                         continue;
                     if (!has_flag(f_ptr->flags, FF_STORE))
                         continue;
 
                     if (f_ptr->subtype == n) {
                         if (cheat_xtra)
-                            msg_format(_("%sの店主をシャッフルします。", "Shuffle a Shopkeeper of %s."), f_name + f_ptr->name);
+                            msg_format(_("%sの店主をシャッフルします。", "Shuffle a Shopkeeper of %s."), f_ptr->name.c_str());
 
                         store_shuffle(player_ptr, n);
                         break;

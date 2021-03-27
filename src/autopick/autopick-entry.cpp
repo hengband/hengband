@@ -346,10 +346,10 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
                 ego_item_type *e_ptr = &e_info[o_ptr->name2];
 #ifdef JP
                 /* エゴ銘には「^」マークが使える */
-                sprintf(name_str, "^%s", e_name + e_ptr->name);
+                sprintf(name_str, "^%s", e_ptr->name.c_str());
 #else
                 /* We ommit the basename and cannot use the ^ mark */
-                strcpy(name_str, e_name + e_ptr->name);
+                strcpy(name_str, e_ptr->name.c_str());
 #endif
                 name = FALSE;
                 if (!object_is_rare(o_ptr))

@@ -82,7 +82,7 @@ static void do_cmd_knowledge_quests_current(player_type *creature_ptr, FILE *fff
                 case QUEST_TYPE_KILL_LEVEL:
                 case QUEST_TYPE_KILL_ANY_LEVEL:
                     r_ptr = &r_info[quest[i].r_idx];
-                    strcpy(name, r_name + r_ptr->name);
+                    strcpy(name, r_ptr->name.c_str());
                     if (quest[i].max_num > 1) {
 #ifdef JP
                         sprintf(note, " - %d 体の%sを倒す。(あと %d 体)", (int)quest[i].max_num, name, (int)(quest[i].max_num - quest[i].cur_num));
@@ -151,7 +151,7 @@ static void do_cmd_knowledge_quests_current(player_type *creature_ptr, FILE *fff
             continue;
 
         r_ptr = &r_info[quest[i].r_idx];
-        strcpy(name, r_name + r_ptr->name);
+        strcpy(name, r_ptr->name.c_str());
         if (quest[i].max_num <= 1) {
             sprintf(rand_tmp_str, _("  %s (%d 階) - %sを倒す。\n", "  %s (Dungeon level: %d)\n  Kill %s.\n"), quest[i].name, (int)quest[i].level, name);
             continue;
@@ -203,12 +203,12 @@ static bool do_cmd_knowledge_quests_aux(player_type *player_ptr, FILE *fff, IDX 
 
     if (q_ptr->complev == 0) {
         sprintf(tmp_str, _("  %-35s (%3d階)            -   不戦勝 - %s\n", "  %-35s (Dungeon level: %3d) - Unearned - %s\n"),
-            r_name + r_info[q_ptr->r_idx].name, (int)q_ptr->level, playtime_str);
+            r_info[q_ptr->r_idx].name.c_str(), (int)q_ptr->level, playtime_str);
         fputs(tmp_str, fff);
         return TRUE;
     }
 
-    sprintf(tmp_str, _("  %-35s (%3d階)            - レベル%2d - %s\n", "  %-35s (Dungeon level: %3d) - level %2d - %s\n"), r_name + r_info[q_ptr->r_idx].name,
+    sprintf(tmp_str, _("  %-35s (%3d階)            - レベル%2d - %s\n", "  %-35s (Dungeon level: %3d) - level %2d - %s\n"), r_info[q_ptr->r_idx].name.c_str(),
         (int)q_ptr->level, q_ptr->complev, playtime_str);
     fputs(tmp_str, fff);
     return TRUE;
@@ -276,7 +276,7 @@ static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
 
         if ((quest[i].type == QUEST_TYPE_RANDOM) && (quest[i].status == QUEST_STATUS_TAKEN)) {
             total++;
-            sprintf(tmp_str, _("  %s (%d階, %s)\n", "  %s (%d, %s)\n"), quest[i].name, (int)quest[i].level, r_name + r_info[quest[i].r_idx].name);
+            sprintf(tmp_str, _("  %s (%d階, %s)\n", "  %s (%d, %s)\n"), quest[i].name, (int)quest[i].level, r_info[quest[i].r_idx].name.c_str());
             fputs(tmp_str, fff);
         }
     }

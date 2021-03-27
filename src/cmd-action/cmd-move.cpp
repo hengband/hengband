@@ -224,7 +224,7 @@ void do_cmd_go_down(player_type *creature_ptr)
         }
 
         if (!max_dlv[target_dungeon]) {
-            msg_format(_("ここには%sの入り口(%d階相当)があります", "There is the entrance of %s (Danger level: %d)"), d_name + d_info[target_dungeon].name,
+            msg_format(_("ここには%sの入り口(%d階相当)があります", "There is the entrance of %s (Danger level: %d)"), d_info[target_dungeon].name.c_str(),
                 d_info[target_dungeon].mindepth);
             if (!get_check(_("本当にこのダンジョンに入りますか？", "Do you really get in this dungeon? ")))
                 return;
@@ -261,7 +261,7 @@ void do_cmd_go_down(player_type *creature_ptr)
         msg_print(_("わざと落とし戸に落ちた。", "You deliberately jump through the trap door."));
     } else {
         if (target_dungeon) {
-            msg_format(_("%sへ入った。", "You entered %s."), d_text + d_info[creature_ptr->dungeon_idx].text);
+            msg_format(_("%sへ入った。", "You entered %s."), d_info[creature_ptr->dungeon_idx].text.c_str());
         } else {
             if (is_echizen(creature_ptr))
                 msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));

@@ -54,7 +54,7 @@ void do_cmd_knowledge_artifacts(player_type *player_ptr)
     for (ARTIFACT_IDX k = 0; k < max_a_idx; k++) {
         artifact_type *a_ptr = &a_info[k];
         okay[k] = FALSE;
-        if (!a_ptr->name)
+        if (a_ptr->name.empty())
             continue;
         if (!a_ptr->cur_num)
             continue;
@@ -138,7 +138,7 @@ static KIND_OBJECT_IDX collect_objects(int grp_cur, KIND_OBJECT_IDX object_idx[]
     byte group_tval = object_group_tval[grp_cur];
     for (KIND_OBJECT_IDX i = 0; i < max_k_idx; i++) {
         object_kind *k_ptr = &k_info[i];
-        if (!k_ptr->name)
+        if (k_ptr->name.empty())
             continue;
 
         if (!(mode & 0x02)) {
@@ -199,7 +199,7 @@ static void display_object_list(int col, int row, int per_page, IDX object_idx[]
         if (!k_ptr->flavor || (!visual_only && k_ptr->aware)) {
             strip_name(o_name, k_idx);
         } else {
-            strcpy(o_name, k_name + flavor_k_ptr->flavor_name);
+            strcpy(o_name, flavor_k_ptr->flavor_name.c_str());
         }
 
         c_prt(attr, o_name, row + i, col);

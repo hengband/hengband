@@ -91,7 +91,7 @@ bool research_mon(player_type *player_ptr)
         monster_race *r_ptr = &r_info[i];
 
         /* Empty monster */
-        if (!r_ptr->name)
+        if (r_ptr->name.empty())
             continue;
 
         /* XTRA HACK WHATSEARCH */
@@ -118,9 +118,9 @@ bool research_mon(player_type *player_ptr)
 
             char temp2[MAX_MONSTER_NAME];
 #ifdef JP
-            strcpy(temp2, r_name + r_ptr->E_name);
+            strcpy(temp2, r_ptr->E_name.c_str());
 #else
-            strcpy(temp2, r_name + r_ptr->name);
+            strcpy(temp2, r_ptr->name.c_str());
 #endif
             for (int xx = 0; temp2[xx] && xx < 80; xx++) {
                 if (isupper(temp2[xx]))
@@ -128,7 +128,7 @@ bool research_mon(player_type *player_ptr)
             }
 
 #ifdef JP
-            if (angband_strstr(temp2, temp) || angband_strstr(r_name + r_ptr->name, temp))
+            if (angband_strstr(temp2, temp) || angband_strstr(r_ptr->name.c_str(), temp))
 #else
             if (angband_strstr(temp2, temp))
 #endif
