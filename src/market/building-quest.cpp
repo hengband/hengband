@@ -1,5 +1,6 @@
 ﻿#include "market/building-quest.h"
 #include "cmd-building/cmd-building.h"
+#include "core/asking-player.h"
 #include "dungeon/quest.h"
 #include "grid/grid.h"
 #include "info-reader/fixed-map-parser.h"
@@ -14,10 +15,10 @@
 #include "view/display-messages.h"
 
 /*!
- * @brief クエスト情報を表示しつつ処理する。/ Display quest information
+ * @brief クエスト情報を処理しつつ取得する。/ Process and get quest information
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param questnum クエストのID
- * @param do_init クエストの開始処理(TRUE)、結果処理か(FALSE)
+ * @param do_init クエストの開始処理か(TRUE)、結果処理か(FALSE)
  * @return なし
  */
 static void get_questinfo(player_type *player_ptr, IDX questnum, bool do_init)
@@ -38,6 +39,18 @@ static void get_questinfo(player_type *player_ptr, IDX questnum, bool do_init)
 
     parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
     floor_ptr->inside_quest = old_quest;
+}
+
+/*!
+ * @brief クエスト情報を処理しつつ表示する。/ Process and display quest information
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param questnum クエストのID
+ * @param do_init クエストの開始処理か(TRUE)、結果処理か(FALSE)
+ * @return なし
+ */
+void print_questinfo(player_type *player_ptr, IDX questnum, bool do_init)
+{
+    get_questinfo(player_ptr, questnum, do_init);
 
     GAME_TEXT tmp_str[80];
     sprintf(tmp_str, _("クエスト情報 (危険度: %d 階相当)", "Quest Information (Danger level: %d)"), (int)quest[questnum].level);
@@ -68,14 +81,7 @@ void castle_quest(player_type *player_ptr)
     q_ptr = &quest[q_index];
     if (q_ptr->status == QUEST_STATUS_COMPLETED) {
         q_ptr->status = QUEST_STATUS_REWARDED;
-        get_questinfo(player_ptr, q_index, FALSE);
-        reinit_wilderness = TRUE;
-        return;
-    }
-
-    if (q_ptr->status == QUEST_STATUS_FAILED) {
-        get_questinfo(player_ptr, q_index, FALSE);
-        q_ptr->status = QUEST_STATUS_FAILED_DONE;
+        print_questinfo(player_ptr, q_index, FALSE);
         reinit_wilderness = TRUE;
         return;
     }
@@ -83,7 +89,30 @@ void castle_quest(player_type *player_ptr)
     if (q_ptr->status == QUEST_STATUS_TAKEN) {
         put_str(_("あなたは現在のクエストを終了させていません！", "You have not completed your current quest yet!"), 8, 0);
         put_str(_("CTRL-Qを使えばクエストの状態がチェックできます。", "Use CTRL-Q to check the status of your quest."), 9, 0);
-        put_str(_("クエストを終わらせたら戻って来て下さい。", "Return when you have completed your quest."), 12, 0);
+
+        get_questinfo(player_ptr, q_index, FALSE);
+        put_str(format(_("現在のクエスト「%s」", "Current quest is '%s'."), q_ptr->name), 11, 0);
+
+        if (q_ptr->type != QUEST_TYPE_KILL_LEVEL) {
+            put_str(_("クエストを終わらせたら戻って来て下さい。", "Return when you have completed your quest."), 12, 0);
+            return;
+        }
+
+        put_str(_("このクエストは放棄することができます。", "You can give up this quest."), 12, 0);
+
+        if (!get_check(_("二度と受けられなくなりますが放棄しますか？", "Are you sure to give up this quest?")))
+            return;
+
+        clear_bldg(4, 18);
+        msg_print(_("放棄しました。", "You gave up."));
+        msg_print(NULL);
+        q_ptr->status = QUEST_STATUS_FAILED;
+    }
+
+    if (q_ptr->status == QUEST_STATUS_FAILED) {
+        print_questinfo(player_ptr, q_index, FALSE);
+        q_ptr->status = QUEST_STATUS_FAILED_DONE;
+        reinit_wilderness = TRUE;
         return;
     }
 
@@ -93,7 +122,7 @@ void castle_quest(player_type *player_ptr)
     q_ptr->status = QUEST_STATUS_TAKEN;
     reinit_wilderness = TRUE;
     if (q_ptr->type != QUEST_TYPE_KILL_ANY_LEVEL) {
-        get_questinfo(player_ptr, q_index, TRUE);
+        print_questinfo(player_ptr, q_index, TRUE);
         return;
     }
 
@@ -122,5 +151,5 @@ void castle_quest(player_type *player_ptr)
 #else
     msg_format("Your quest: kill %d %s", q_ptr->max_num, name);
 #endif
-    get_questinfo(player_ptr, q_index, TRUE);
+    print_questinfo(player_ptr, q_index, TRUE);
 }

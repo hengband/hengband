@@ -136,6 +136,11 @@ F:!:FLOOR:3:0:75
 # Continue with quest 18
 ?:[EQU $QUEST14 4]
 F:b:BUILDING_1:3:0:0:0:0:NONE:18
+F:!:FLOOR:3:0:75
+
+# Continue with quest 18
+?:[EQU $QUEST14 6]
+F:b:BUILDING_1:3:0:0:0:0:NONE:18
 
 ?:1
 
