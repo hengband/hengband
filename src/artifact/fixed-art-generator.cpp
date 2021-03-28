@@ -15,6 +15,7 @@
 #include "floor/floor-object.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-curse.h"
+#include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "object-enchant/trg-types.h"
@@ -254,11 +255,54 @@ bool make_artifact(player_type *player_ptr, object_type *o_ptr)
             continue;
 
         o_ptr->name1 = i;
-        random_artifact_resistance(player_ptr, o_ptr, a_ptr);
         return TRUE;
     }
 
     return FALSE;
+}
+
+/*!
+ * @brief make_artifact()で選択した固定アーティファクトをオブジェクトに割り当てる。
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param o_ptr 生成に割り当てたいオブジェクトの構造体参照ポインタ
+ * @return 適用したアーティファクト情報への参照ポインタ
+ */
+artifact_type *apply_artifact(player_type *player_ptr, object_type *o_ptr)
+{
+    artifact_type *a_ptr = &a_info[o_ptr->name1];
+    o_ptr->pval = a_ptr->pval;
+    o_ptr->ac = a_ptr->ac;
+    o_ptr->dd = a_ptr->dd;
+    o_ptr->ds = a_ptr->ds;
+    o_ptr->to_a = a_ptr->to_a;
+    o_ptr->to_h = a_ptr->to_h;
+    o_ptr->to_d = a_ptr->to_d;
+    o_ptr->weight = a_ptr->weight;
+    o_ptr->xtra2 = a_ptr->act_idx;
+    random_artifact_resistance(player_ptr, o_ptr, a_ptr);
+
+    if (o_ptr->name1 == ART_MILIM) {
+        if (player_ptr->pseikaku == PERSONALITY_SEXY) {
+            o_ptr->pval = 3;
+        }
+    }
+
+    if (!a_ptr->cost)
+        o_ptr->ident |= (IDENT_BROKEN);
+    if (a_ptr->gen_flags.has(TRG::CURSED))
+        o_ptr->curse_flags |= (TRC_CURSED);
+    if (a_ptr->gen_flags.has(TRG::HEAVY_CURSE))
+        o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
+    if (a_ptr->gen_flags.has(TRG::PERMA_CURSE))
+        o_ptr->curse_flags |= (TRC_PERMA_CURSE);
+    if (a_ptr->gen_flags.has(TRG::RANDOM_CURSE0))
+        o_ptr->curse_flags |= get_curse(player_ptr, 0, o_ptr);
+    if (a_ptr->gen_flags.has(TRG::RANDOM_CURSE1))
+        o_ptr->curse_flags |= get_curse(player_ptr, 1, o_ptr);
+    if (a_ptr->gen_flags.has(TRG::RANDOM_CURSE2))
+        o_ptr->curse_flags |= get_curse(player_ptr, 2, o_ptr);
+
+    return a_ptr;
 }
 
 /*!
