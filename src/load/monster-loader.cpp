@@ -109,6 +109,9 @@ void rd_monster(player_type *player_ptr, monster_type *m_ptr)
     } else
         m_ptr->mtimed[MTIMED_INVULNER] = 0;
 
+    m_ptr->mflag.clear();
+    m_ptr->mflag2.clear();
+
     if (flags & SAVE_MON_SMART) {
         if (loading_savefile_version_is_older_than(2)) {
             u32b tmp32u;
@@ -138,9 +141,6 @@ void rd_monster(player_type *player_ptr, monster_type *m_ptr)
         m_ptr->exp = (EXP)tmp32u;
     } else
         m_ptr->exp = 0;
-
-    m_ptr->mflag.clear();
-    m_ptr->mflag2.clear();
 
     if (flags & SAVE_MON_MFLAG2) {
         if (loading_savefile_version_is_older_than(2)) {
