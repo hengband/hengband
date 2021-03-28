@@ -21,6 +21,7 @@
 #include "game-option/disturbance-options.h"
 #include "game-option/input-options.h"
 #include "game-option/text-display-options.h"
+#include "grid/feature-flag-types.h"
 #include "io/command-repeater.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
@@ -30,6 +31,7 @@
 #include "monster/monster-describer.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags3.h"
+#include "monster-race/race-flags7.h"
 #include "monster-race/race-flags-resistance.h"
 #include "mind/mind-mindcrafter.h"
 #include "player/player-status-table.h"
@@ -45,13 +47,16 @@
 #include "spell-kind/magic-item-recharger.h"
 #include "spell-kind/spells-beam.h"
 #include "spell-kind/spells-sight.h"
+#include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
+#include "system/floor-type-definition.h"
 #include "system/game-option-types.h"
 #include "util/bit-flags-calculator.h"
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
+#include "target/grid-selector.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -115,8 +120,8 @@ static element_type_list element_types = {
     {
         ElementRealm::FIRE, {
             _("炎", "Fire"),
-            { GF_FIRE, GF_ROCKET, GF_PLASMA },
-            { _("火炎", "Fire"), _("爆発", "Explosion"), _("プラズマ", "Plasma") },
+            { GF_FIRE, GF_HELL_FIRE, GF_PLASMA },
+            { _("火炎", "Fire"), _("業火", "Hell Fire"), _("プラズマ", "Plasma") },
             { },
         }
     },
@@ -147,9 +152,9 @@ static element_type_list element_types = {
     {
         ElementRealm::DARKNESS, {
             _("闇", "Darkness"),
-            { GF_DARK, GF_NETHER, GF_HELL_FIRE },
-            { _("暗黒", "Darkness"), _("地獄", "Nether"), _("業火", "Hell Fire") },
-            { },
+            { GF_DARK, GF_NETHER, GF_VOID },
+            { _("暗黒", "Darkness"), _("地獄", "Nether"), _("虚無", "void") },
+            { { GF_DARK, GF_ABYSS } },
         }
     },
     {
@@ -424,16 +429,16 @@ void get_element_effect_info(player_type *caster_ptr, int spell_idx, char *p)
         sprintf(p, " %s%dd%d", KWD_DAM, 12 + ((plev - 5) / 4), 8);
         break;
     case ElementSpells::WAVE_1ST:
-        sprintf(p, " %sd%d", KWD_DAM, plev * 4);
+        sprintf(p, " %s50+d%d", KWD_DAM, plev * 3);
         break;
     case ElementSpells::BALL_2ND:
-        sprintf(p, " %s%d", KWD_DAM, 75 + plev);
+        sprintf(p, " %s%d", KWD_DAM, 75 + plev * 3 / 2);
         break;
     case ElementSpells::BURST_1ST:
-        sprintf(p, " %s%dd%d", KWD_DAM, 6 + plev / 8, 8);
+        sprintf(p, " %s%dd%d", KWD_DAM, 6 + plev / 8, 7);
         break;
     case ElementSpells::STORM_2ND:
-        sprintf(p, " %s%d", KWD_DAM, 120 + plev * 2);
+        sprintf(p, " %s%d", KWD_DAM, 115 + plev * 5 / 2);
         break;
     case ElementSpells::BREATH_1ST:
         sprintf(p, " %s%d", KWD_DAM, p_ptr->chp * 2 / 3);
@@ -536,16 +541,16 @@ static bool cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx)
         fire_bolt_or_beam(caster_ptr, plev, typ, dir, dam);
         break;
     case ElementSpells::WAVE_1ST:
-        dam = randint1(plev * 4);
+        dam = 50 + randint1(plev * 3);
         typ = get_element_spells_type(caster_ptr, power.elem);
         project_all_los(caster_ptr, typ, dam);
         break;
     case ElementSpells::BALL_2ND:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
-        dam = 75 + plev;
+        dam = 75 + plev * 3 / 2;
         typ = get_element_spells_type(caster_ptr, power.elem);
-        if (fire_ball(caster_ptr, typ, dir, dam, 2)) {
+        if (fire_ball(caster_ptr, typ, dir, dam, 3)) {
             if (typ == GF_HYPODYNAMIA) {
                 (void)hp_player(caster_ptr, dam / 2);
             }
@@ -554,22 +559,24 @@ static bool cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx)
     case ElementSpells::BURST_1ST:
         y = caster_ptr->y;
         x = caster_ptr->x;
-        num = damroll(5, 3);
+        num = damroll(4, 3);
         typ = get_element_spells_type(caster_ptr, power.elem);
         for (int k = 0; k < num; k++) {
             int attempts = 1000;
             while (attempts--) {
                 scatter(caster_ptr, &y, &x, caster_ptr->y, caster_ptr->x, 4, PROJECT_NONE);
+                if (!cave_has_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT))
+                    continue;
                 if (!player_bold(caster_ptr, y, x))
                     break;
             }
-            project(caster_ptr, 0, 0, y, x, damroll(6 + plev / 8, 10), typ, (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL), -1);
+            project(caster_ptr, 0, 0, y, x, damroll(6 + plev / 8, 7), typ, (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL), -1);
         }
         break;
     case ElementSpells::STORM_2ND:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
-        dam = 125 + plev * 2;
+        dam = 115 + plev * 5 / 2;
         typ = get_element_spells_type(caster_ptr, power.elem);
         if (fire_ball(caster_ptr, typ, dir, dam, 4)) {
             if (typ == GF_HYPODYNAMIA) {
@@ -865,7 +872,11 @@ static bool try_cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx,
         project(caster_ptr, PROJECT_WHO_UNCTRL_POWER, 2 + plev / 10, caster_ptr->y, caster_ptr->x, plev * 2,
             get_element_types(caster_ptr->realm1)[0],
             PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM, -1);
-        caster_ptr->csp = MAX(0, caster_ptr->csp - plev * MAX(1, plev / 10));
+        caster_ptr->csp = MAX(0, caster_ptr->csp - caster_ptr->msp * 10 / (20 + randint1(10)));
+
+        take_turn(caster_ptr, 100);
+        set_bits(caster_ptr->redraw, PR_MANA);
+        set_bits(caster_ptr->window_flags, PW_PLAYER | PW_SPELL);
 
         return FALSE;
     }
@@ -949,6 +960,53 @@ void do_cmd_element_browse(player_type *caster_ptr)
     }
 }
 
+/*!
+ * @brief 元素魔法の単体抹殺が有効か確認する
+ * @param r_ptr モンスター種族への参照ポインタ
+ * @param type 魔法攻撃属性
+ * @return 効果があるならTRUE、なければFALSE
+ */
+bool is_elemental_genocide_effective(monster_race *r_ptr, spells_type type)
+{
+    switch (type) {
+    case GF_FIRE:
+        if (any_bits(r_ptr->flagsr, RFR_IM_FIRE))
+            return FALSE;
+        break;
+    case GF_COLD:
+        if (any_bits(r_ptr->flagsr, RFR_IM_COLD))
+            return FALSE;
+        break;
+    case GF_ELEC:
+        if (any_bits(r_ptr->flagsr, RFR_IM_ELEC))
+            return FALSE;
+        break;
+    case GF_ACID:
+        if (any_bits(r_ptr->flagsr, RFR_IM_ACID))
+            return FALSE;
+        break;
+    case GF_DARK:
+        if (any_bits(r_ptr->flagsr, RFR_RES_DARK) || any_bits(r_ptr->r_flags3, RF3_HURT_LITE))
+            return FALSE;
+        break;
+    case GF_CONFUSION:
+        if (any_bits(r_ptr->flags3, RF3_NO_CONF))
+            return FALSE;
+        break;
+    case GF_SHARDS:
+        if (any_bits(r_ptr->flagsr, RFR_RES_SHAR))
+            return FALSE;
+        break;
+    case GF_POIS:
+        if (any_bits(r_ptr->flagsr, RFR_IM_POIS))
+            return FALSE;
+        break;
+    default:
+        return FALSE;
+    }
+
+    return TRUE;
+}
 
 /*!
  * @brief 元素魔法の単体抹殺の効果を発動する 
@@ -958,56 +1016,27 @@ void do_cmd_element_browse(player_type *caster_ptr)
  */
 process_result effect_monster_elemental_genocide(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
-    auto types = get_element_types(caster_ptr->realm1);
-    char m_name[160];
+    auto type = get_element_type(caster_ptr->realm1, 0);
+    auto name = get_element_name(caster_ptr->realm1, 0);
+    bool b = is_elemental_genocide_effective(em_ptr->r_ptr, type);
 
-    monster_desc(caster_ptr, m_name, em_ptr->m_ptr, 0);
-    msg_format(_("%sが%sを包み込んだ。", "The %s surrounds %s."), types[0], m_name);
-
-    auto realm = static_cast<ElementRealm>(caster_ptr->realm1);
-    switch (realm) {
-    case ElementRealm::FIRE:
-        if (any_bits(em_ptr->r_ptr->r_flagsr, RFR_IM_FIRE))
-            return PROCESS_CONTINUE;
-        break;
-    case ElementRealm::ICE:
-        if (any_bits(em_ptr->r_ptr->r_flagsr, RFR_IM_COLD))
-            return PROCESS_CONTINUE;
-        break;
-    case ElementRealm::SKY:
-        if (any_bits(em_ptr->r_ptr->r_flagsr, RFR_IM_ELEC))
-            return PROCESS_CONTINUE;
-        break;
-    case ElementRealm::SEA:
-        if (any_bits(em_ptr->r_ptr->r_flagsr, RFR_IM_ACID))
-            return PROCESS_CONTINUE;
-        break;
-    case ElementRealm::DARKNESS:
-        if (any_bits(em_ptr->r_ptr->r_flagsr, RFR_RES_DARK) || any_bits(em_ptr->r_ptr->r_flags3, RF3_HURT_LITE))
-            return PROCESS_CONTINUE;
-        break;
-    case ElementRealm::CHAOS:
-        if (any_bits(em_ptr->r_ptr->r_flags3, RF3_NO_CONF))
-            return PROCESS_CONTINUE;
-        break;
-    case ElementRealm::EARTH:
-        if (any_bits(em_ptr->r_ptr->r_flagsr, RFR_RES_SHAR))
-            return PROCESS_CONTINUE;
-        break;
-    case ElementRealm::DEATH:
-        if (any_bits(em_ptr->r_ptr->r_flagsr, RFR_IM_POIS))
-            return PROCESS_CONTINUE;
-        break;
-    default:
-        return PROCESS_CONTINUE;
-    }
+    if (em_ptr->seen_msg)
+        msg_format(_("%sが%sを包み込んだ。", "The %s surrounds %s."), name, em_ptr->m_name);
 
     if (em_ptr->seen)
         em_ptr->obvious = TRUE;
 
+    if (!b) {
+        if (em_ptr->seen_msg)
+            msg_format(_("%sには効果がなかった。", "%^s is unaffected."), em_ptr->m_name);
+        em_ptr->dam = 0;
+        return PROCESS_TRUE;
+    }
+
     if (genocide_aux(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, !em_ptr->who, (em_ptr->r_ptr->level + 1) / 2, _("モンスター消滅", "Genocide One"))) {
         if (em_ptr->seen_msg)
             msg_format(_("%sは消滅した！", "%^s disappeared!"), em_ptr->m_name);
+        em_ptr->dam = 0;
         chg_virtue(caster_ptr, V_VITALITY, -1);
         return PROCESS_TRUE;
     }
@@ -1210,6 +1239,7 @@ byte select_element_realm(player_type *creature_ptr)
  */
 void switch_element_racial(player_type *creature_ptr, rc_type *rc_ptr)
 {
+    auto plev = creature_ptr->lev;
     auto realm = static_cast<ElementRealm>(creature_ptr->realm1);
     switch (realm) {
     case ElementRealm::FIRE:
@@ -1221,11 +1251,11 @@ void switch_element_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rc_ptr->power_desc[rc_ptr->num++].number = -4;
         break;
     case ElementRealm::ICE:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("フリーズ・モンスター", "Sleep monster"));
+        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("周辺フリーズ", "Sleep monsters"));
         rc_ptr->power_desc[rc_ptr->num].min_level = 10;
-        rc_ptr->power_desc[rc_ptr->num].cost = 10;
+        rc_ptr->power_desc[rc_ptr->num].cost = 15;
         rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
-        rc_ptr->power_desc[rc_ptr->num].fail = 15;
+        rc_ptr->power_desc[rc_ptr->num].fail = 25;
         rc_ptr->power_desc[rc_ptr->num++].number = -4;
         break;
     case ElementRealm::SKY:
@@ -1245,9 +1275,9 @@ void switch_element_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rc_ptr->power_desc[rc_ptr->num++].number = -4;
         break;
     case ElementRealm::DARKNESS:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("アンデッド従属", "Enslave undead"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 10;
-        rc_ptr->power_desc[rc_ptr->num].cost = 10;
+        sprintf(rc_ptr->power_desc[rc_ptr->num].racial_name, _("闇の扉(半径%d)", "Door to darkness(rad %d)"), 15 + plev / 2);
+        rc_ptr->power_desc[rc_ptr->num].min_level = 5;
+        rc_ptr->power_desc[rc_ptr->num].cost = 5 + plev / 7;
         rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
         rc_ptr->power_desc[rc_ptr->num].fail = 20;
         rc_ptr->power_desc[rc_ptr->num++].number = -4;
@@ -1269,9 +1299,9 @@ void switch_element_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rc_ptr->power_desc[rc_ptr->num++].number = -4;
         break;
     case ElementRealm::DEATH:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("害虫駆除", "Pesticide"));
+        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("増殖阻止", "Sterilization"));
         rc_ptr->power_desc[rc_ptr->num].min_level = 5;
-        rc_ptr->power_desc[rc_ptr->num].cost = 3;
+        rc_ptr->power_desc[rc_ptr->num].cost = 5;
         rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
         rc_ptr->power_desc[rc_ptr->num].fail = 20;
         rc_ptr->power_desc[rc_ptr->num++].number = -4;
@@ -1280,6 +1310,11 @@ void switch_element_racial(player_type *creature_ptr, rc_type *rc_ptr)
         break;
     }
 }
+
+/*!
+ * @todo 宣言だけ。後日適切な場所に移動
+ */
+static bool door_to_darkness(player_type *caster_ptr, POSITION dist);
 
 /*!
  * @brief クラスパワーを実行
@@ -1297,9 +1332,8 @@ bool switch_element_execution(player_type *creature_ptr)
         (void)lite_area(creature_ptr, damroll(2, plev / 2), plev / 10);
         break;
     case ElementRealm::ICE:
-        if (!get_aim_dir(creature_ptr, &dir))
-            return FALSE;
-        (void)project_hook(creature_ptr, GF_OLD_SLEEP, dir, (plev * 2), PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE);
+        (void)project(creature_ptr, 0, 5, creature_ptr->y, creature_ptr->x, 1, GF_COLD, PROJECT_ITEM, -1);
+        (void)project_all_los(creature_ptr, GF_OLD_SLEEP, 20 + plev * 3 / 2);
         break;
     case ElementRealm::SKY:
         (void)recharge(creature_ptr, 120);
@@ -1310,9 +1344,7 @@ bool switch_element_execution(player_type *creature_ptr)
         (void)wall_to_mud(creature_ptr, dir, plev * 3 / 2);
         break;
     case ElementRealm::DARKNESS:
-        if (!get_aim_dir(creature_ptr, &dir))
-            return FALSE;
-        (void)control_one_undead(creature_ptr, dir, plev * 3 / 2);
+        return door_to_darkness(creature_ptr, 15 + plev / 2);
         break;
     case ElementRealm::CHAOS:
         reserve_alter_reality(creature_ptr, randint0(21) + 15);
@@ -1321,11 +1353,91 @@ bool switch_element_execution(player_type *creature_ptr)
         (void)earthquake(creature_ptr, creature_ptr->y, creature_ptr->x, 10, 0);
         break;
     case ElementRealm::DEATH:
-        (void)dispel_monsters(creature_ptr, plev / 2);
+        if (creature_ptr->current_floor_ptr->num_repro <= MAX_REPRO)
+            creature_ptr->current_floor_ptr->num_repro += MAX_REPRO;
         break;
     default:
         return FALSE;
     }
 
+    return TRUE;
+}
+
+/*!
+ * @brief 指定したマスが暗いかどうか
+ * @param f_ptr 階の情報への参照ポインタ
+ * @param y 指定のy座標
+ * @param x 指定のx座標
+ * @return 暗いならTRUE、そうでないならFALSE
+ */
+static bool is_target_grid_dark(floor_type* f_ptr, POSITION y, POSITION x)
+{
+    if (any_bits(f_ptr->grid_array[y][x].info, CAVE_MNLT))
+        return FALSE;
+
+    bool is_dark = FALSE;
+    bool is_lite = any_bits(f_ptr->grid_array[y][x].info, CAVE_GLOW | CAVE_LITE);
+
+    for (int dx = x - 2; dx <= x + 2; dx++)
+        for (int dy = y - 2; dy <= y + 2; dy++) {
+            if (dx == x && dy == y)
+                continue;
+            if (!in_bounds(f_ptr, dy, dx))
+                continue;
+
+            MONSTER_IDX m_idx = f_ptr->grid_array[dy][dx].m_idx;
+            if (!m_idx)
+                continue;
+
+            POSITION d = distance(dy, dx, y, x);
+            monster_race *r_ptr = &r_info[f_ptr->m_list[m_idx].r_idx];
+            if (d <= 1 && any_bits(r_ptr->flags7, RF7_HAS_LITE_1 | RF7_SELF_LITE_1))
+                return FALSE;
+            if (d <= 2 && any_bits(r_ptr->flags7, RF7_HAS_LITE_2 | RF7_SELF_LITE_2))
+                return FALSE;
+            if (d <= 1 && any_bits(r_ptr->flags7, RF7_HAS_DARK_1 | RF7_SELF_DARK_1))
+                is_dark = TRUE;
+            if (d <= 2 && any_bits(r_ptr->flags7, RF7_HAS_DARK_2 | RF7_SELF_DARK_2))
+                is_dark = TRUE;
+        }
+
+    return !is_lite || is_dark;
+}
+
+/*!
+ * @breif 暗いところ限定での次元の扉
+ * @param caster_ptr プレイヤー情報への参照ポインタ
+ */
+static bool door_to_darkness(player_type* caster_ptr, POSITION dist)
+{
+    POSITION y = caster_ptr->y;
+    POSITION x = caster_ptr->x;
+    floor_type *f_ptr;
+
+    for (int i = 0; i < 3; i++) {
+        if (!tgt_pt(caster_ptr, &x, &y))
+            return FALSE;
+
+        f_ptr = caster_ptr->current_floor_ptr;
+
+        if (distance(y, x, caster_ptr->y, caster_ptr->x) > dist) {
+            msg_print(_("遠すぎる！", "There is too far!"));
+            continue;
+        }
+
+        if (!is_cave_empty_bold(caster_ptr, y, x) || f_ptr->grid_array[y][x].info & CAVE_ICKY) {
+            msg_print(_("そこには移動できない。", "Can not teleport to there."));
+            continue;
+        }
+
+        break;
+    }
+
+    bool flag = cave_player_teleportable_bold(caster_ptr, y, x, TELEPORT_SPONTANEOUS)  && is_target_grid_dark(f_ptr, y, x);
+    if (flag) {
+        teleport_player_to(caster_ptr, y, x, TELEPORT_SPONTANEOUS);
+    } else {
+        msg_print(_("闇の扉は開かなかった！", "Door to darkness does not open!"));
+    }
     return TRUE;
 }

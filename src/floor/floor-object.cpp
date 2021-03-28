@@ -1,8 +1,8 @@
 ﻿/*!
- * todo ちょっとギリギリ。後で分割を検討する
  * @brief フロア生成時にアイテムを配置する
  * @date 2020/06/01
  * @author Hourier
+ * @todo ちょっとギリギリ。後で分割を検討する
  */
 
 #include "floor/floor-object.h"

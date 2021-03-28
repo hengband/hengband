@@ -35,13 +35,13 @@
 #include "locale/english.h"
 #endif
 
-/*
- * todo 負論理なので反転させたい
+/*!
  * Determine if a "boundary" grid is "floor mimic"
  * @param grid_type *g_ptr
  * @param feature_type *f_ptr
  * @param feature_type  *mimic_f_ptr
  * @return 移動不能であればTRUE
+ * @todo 負論理なので反転させたい
  */
 static bool boundary_floor(grid_type *g_ptr, feature_type *f_ptr, feature_type *mimic_f_ptr)
 {
@@ -150,7 +150,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
         monster_race *r_ptr = &r_info[m_ptr->r_idx];
         if (!is_hostile(m_ptr)
             && !(creature_ptr->confused || creature_ptr->image || !m_ptr->ml || creature_ptr->stun
-                || ((creature_ptr->muta2 & MUT2_BERS_RAGE) && is_shero(creature_ptr)))
+                || (creature_ptr->muta.has(MUTA::BERS_RAGE) && is_shero(creature_ptr)))
             && pattern_seq(creature_ptr, creature_ptr->y, creature_ptr->x, y, x) && (p_can_enter || p_can_kill_walls)) {
             (void)set_monster_csleep(creature_ptr, g_ptr->m_idx, 0);
             monster_desc(creature_ptr, m_name, m_ptr, 0);
@@ -200,17 +200,17 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
             /* Allow moving */
         } else if (has_flag(f_ptr->flags, FF_WATER) && !(riding_r_ptr->flags7 & RF7_AQUATIC)
             && (has_flag(f_ptr->flags, FF_DEEP) || (riding_r_ptr->flags2 & RF2_AURA_FIRE))) {
-            msg_format(_("%sの上に行けない。", "Can't swim."), f_name + f_info[get_feat_mimic(g_ptr)].name);
+            msg_format(_("%sの上に行けない。", "Can't swim."), f_info[get_feat_mimic(g_ptr)].name.c_str());
             free_turn(creature_ptr);
             can_move = FALSE;
             disturb(creature_ptr, FALSE, TRUE);
         } else if (!has_flag(f_ptr->flags, FF_WATER) && (riding_r_ptr->flags7 & RF7_AQUATIC)) {
-            msg_format(_("%sから上がれない。", "Can't land."), f_name + f_info[get_feat_mimic(&floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name);
+            msg_format(_("%sから上がれない。", "Can't land."), f_info[get_feat_mimic(&floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name.c_str());
             free_turn(creature_ptr);
             can_move = FALSE;
             disturb(creature_ptr, FALSE, TRUE);
         } else if (has_flag(f_ptr->flags, FF_LAVA) && !(riding_r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK)) {
-            msg_format(_("%sの上に行けない。", "Too hot to go through."), f_name + f_info[get_feat_mimic(g_ptr)].name);
+            msg_format(_("%sの上に行けない。", "Too hot to go through."), f_info[get_feat_mimic(g_ptr)].name.c_str());
             free_turn(creature_ptr);
             can_move = FALSE;
             disturb(creature_ptr, FALSE, TRUE);
@@ -227,7 +227,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
 
     if (!can_move) {
     } else if (!has_flag(f_ptr->flags, FF_MOVE) && has_flag(f_ptr->flags, FF_CAN_FLY) && !creature_ptr->levitation) {
-        msg_format(_("空を飛ばないと%sの上には行けない。", "You need to fly to go through the %s."), f_name + f_info[get_feat_mimic(g_ptr)].name);
+        msg_format(_("空を飛ばないと%sの上には行けない。", "You need to fly to go through the %s."), f_info[get_feat_mimic(g_ptr)].name.c_str());
         free_turn(creature_ptr);
         creature_ptr->running = 0;
         can_move = FALSE;
@@ -242,7 +242,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
     } else if (!p_can_enter && !p_can_kill_walls) {
         FEAT_IDX feat = get_feat_mimic(g_ptr);
         feature_type *mimic_f_ptr = &f_info[feat];
-        concptr name = f_name + mimic_f_ptr->name;
+        concptr name = mimic_f_ptr->name.c_str();
         can_move = FALSE;
         if (!(g_ptr->info & CAVE_MARK) && !player_can_see_bold(creature_ptr, y, x)) {
             if (boundary_floor(g_ptr, f_ptr, mimic_f_ptr))

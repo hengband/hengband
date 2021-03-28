@@ -300,18 +300,6 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 
     creature_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
-    /* Vampires are filled only by bloods */
-    if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE)) {
-        /* Reduced nutritional benefit */
-        (void)set_food(creature_ptr, creature_ptr->food + (o_ptr->pval / 10));
-        msg_print(_("あなたのような者にとって食糧など僅かな栄養にしかならない。", "Mere victuals hold scant sustenance for a being such as yourself."));
-
-        if (creature_ptr->food < PY_FOOD_ALERT) /* Hungry */
-            msg_print(_("あなたの飢えは新鮮な血によってのみ満たされる！", "Your hunger can only be satisfied with fresh blood!"));
-
-        return;
-    }
-
     /* Undeads drain recharge of magic device */
     if (exe_eat_charge_of_magic_device(creature_ptr, o_ptr, item)) {
         creature_ptr->update |= inventory_flags;
@@ -330,7 +318,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
         vary_item(creature_ptr, item, -1);
         return;
     }
-    
+
     if (is_specific_player_race(creature_ptr, RACE_SKELETON)) {
         if (!((o_ptr->sval == SV_FOOD_WAYBREAD) || (o_ptr->sval < SV_FOOD_BISCUIT))) {
             object_type forge;
@@ -344,6 +332,13 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
         } else {
             msg_print(_("食べ物がアゴを素通りして落ち、消えた！", "The food falls through your jaws and vanishes!"));
         }
+    } else if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE)) {
+        /* Vampires are filled only by bloods, so reduced nutritional benefit */
+        (void)set_food(creature_ptr, creature_ptr->food + (o_ptr->pval / 10));
+        msg_print(_("あなたのような者にとって食糧など僅かな栄養にしかならない。", "Mere victuals hold scant sustenance for a being such as yourself."));
+
+        if (creature_ptr->food < PY_FOOD_ALERT) /* Hungry */
+            msg_print(_("あなたの飢えは新鮮な血によってのみ満たされる！", "Your hunger can only be satisfied with fresh blood!"));
     } else if (is_specific_player_race(creature_ptr, RACE_GOLEM) || is_specific_player_race(creature_ptr, RACE_ZOMBIE)
         || is_specific_player_race(creature_ptr, RACE_ENT) || is_specific_player_race(creature_ptr, RACE_BALROG)
         || is_specific_player_race(creature_ptr, RACE_ANDROID) || is_specific_player_race(creature_ptr, RACE_SPECTRE)

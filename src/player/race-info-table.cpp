@@ -107,7 +107,7 @@ const player_race race_info[MAX_RACES] =
 		48,  3, 150, 10,
 		46,  3, 120, 10,
 		5,
-		0x01890005,
+		0x11890005,
 	},
 	{
 #ifdef JP
@@ -122,7 +122,7 @@ const player_race race_info[MAX_RACES] =
 		66,  1, 150,  5,
 		62,  1, 120,  5,
 		3,
-		0x0DD8818D,
+		0x1DD8818D,
 	},
 	{
 #ifdef JP
@@ -197,7 +197,7 @@ const player_race race_info[MAX_RACES] =
 		92, 10, 255, 60,
 		80,  8, 235, 60,
 		3,
-		0x00A80407,
+		0x10A80407,
 	},
 	{
 #ifdef JP
@@ -287,7 +287,7 @@ const player_race race_info[MAX_RACES] =
 		60,  1, 130,  5,
 		55,  1, 100,  5,
 		3,
-		0x0444A009,
+		0x1444A009,
 	},
 	{
 #ifdef JP
@@ -302,7 +302,7 @@ const player_race race_info[MAX_RACES] =
 		43,  3, 92,  6,
 		40,  3, 78,  3,
 		5,
-		0x0569040F,
+		0x1569040F,
 	},
 	{
 #ifdef JP
@@ -392,7 +392,7 @@ const player_race race_info[MAX_RACES] =
 		72,  6, 50, 5,
 		66,  4, 50, 5,
 		2,
-		0x1234070F,
+		0x0234070F,
 	},
 	{
 #ifdef JP
@@ -422,7 +422,7 @@ const player_race race_info[MAX_RACES] =
 		72,  6, 180, 25,
 		66,  4, 150, 20,
 		5,
-		0x167DC7FF,
+		0x067DC7FF,
 	},
 	{
 #ifdef JP
@@ -437,7 +437,7 @@ const player_race race_info[MAX_RACES] =
 		72, 6, 100, 25,
 		66, 4, 100, 20,
 		5,
-		0x1631474A,
+		0x0631474A,
 	},
 	{
 #ifdef JP
@@ -481,7 +481,7 @@ const player_race race_info[MAX_RACES] =
 		111, 11, 255, 50,
 		99, 11, 250, 45,
 		  0,
-		0x00010005,
+		0x10010005,
 	},
 	{
 #ifdef JP
@@ -496,7 +496,7 @@ const player_race race_info[MAX_RACES] =
 		82, 5, 190, 20,
 		78,  6, 180, 15,
 		3,
-		0x0779F777,
+		0x1779F777,
 	},
 	{
 #ifdef JP
@@ -513,7 +513,7 @@ const player_race race_info[MAX_RACES] =
 		100,10, 255, 65,
 		80, 10, 240, 64,
 		5,
-		0x17EDC4DB,
+		0x07EDC4DB,
 	},
 	{
 #ifdef JP
@@ -581,13 +581,12 @@ const player_race race_info[MAX_RACES] =
 		"Merfolk",
 
 		{ -1,  0,  2,  1,  -1,  1},
-			2,  3,  2,  1, 6,  11, -1,  5,
-			10,  130,
-			24, 16,
-			66,  6, 130, 15,
-			62,  6, 100, 10,
-			2,
-			0x1E77E7FF,
+		2,  3,  2,  1, 6,  11, -1,  5,
+		10,  130,
+		24, 16,
+		66,  6, 130, 15,
+		62,  6, 100, 10,
+		2,
+		0x1E77E7FF,
 	},
-
 };

@@ -130,11 +130,11 @@ void process_dungeon(player_type *player_ptr, bool load_game)
     if ((floor_ptr->dun_level == d_info[player_ptr->dungeon_idx].maxdepth) && d_info[player_ptr->dungeon_idx].final_guardian) {
         if (r_info[d_info[player_ptr->dungeon_idx].final_guardian].max_num)
 #ifdef JP
-            msg_format("この階には%sの主である%sが棲んでいる。", d_name + d_info[player_ptr->dungeon_idx].name,
-                r_name + r_info[d_info[player_ptr->dungeon_idx].final_guardian].name);
+            msg_format("この階には%sの主である%sが棲んでいる。", d_info[player_ptr->dungeon_idx].name.c_str(),
+                r_info[d_info[player_ptr->dungeon_idx].final_guardian].name.c_str());
 #else
-            msg_format("%^s lives in this level as the keeper of %s.", r_name + r_info[d_info[player_ptr->dungeon_idx].final_guardian].name,
-                d_name + d_info[player_ptr->dungeon_idx].name);
+            msg_format("%^s lives in this level as the keeper of %s.", r_info[d_info[player_ptr->dungeon_idx].final_guardian].name.c_str(),
+                d_info[player_ptr->dungeon_idx].name.c_str());
 #endif
     }
 

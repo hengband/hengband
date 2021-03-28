@@ -7,6 +7,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <string>
 
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る(ベースアイテム用) /
@@ -69,12 +70,10 @@ errr parse_k_info(char *buf, angband_header *head)
         flavor = angband_strchr(s, ':');
         if (flavor) {
             *flavor++ = '\0';
-            if (!add_name(&k_ptr->flavor_name, head, flavor))
-                return 7;
+            k_ptr->flavor_name = std::string(flavor);
         }
 
-        if (!add_name(&k_ptr->name, head, s))
-            return 7;
+        k_ptr->name = std::string(s);
 #endif
     } else if (!k_ptr) {
         return 3;
@@ -92,12 +91,10 @@ errr parse_k_info(char *buf, angband_header *head)
         flavor = angband_strchr(s, ':');
         if (flavor) {
             *flavor++ = '\0';
-            if (!add_name(&k_ptr->flavor_name, head, flavor))
-                return 7;
+            k_ptr->flavor_name = std::string(flavor);
         }
 
-        if (!add_name(&k_ptr->name, head, s))
-            return 7;
+        k_ptr->name = std::string(s);
     }
 #endif
     else if (buf[0] == 'D') {
@@ -110,8 +107,7 @@ errr parse_k_info(char *buf, angband_header *head)
             return 0;
         s = buf + 3;
 #endif
-        if (!add_text(&k_ptr->text, head, s, TRUE))
-            return 7;
+        k_ptr->text.append(s);
     } else if (buf[0] == 'G') {
         char sym;
         byte tmp;

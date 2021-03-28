@@ -295,7 +295,10 @@ static void on_dead_dragon_centipede(player_type *player_ptr, monster_death_type
     }
 }
 
-/* todo 死亡時の特殊メッセージを表示するだけの処理を複数作るなら、switch/case文に分けられるように汎用化すること */
+/*!
+ * @brief キューちゃん撃破時メッセージ
+ * @todo 死亡時の特殊メッセージを表示するだけの処理を複数作るなら、switch/case文に分けられるように汎用化すること
+ */
 static void on_dead_big_raven(player_type *player_ptr, monster_death_type *md_ptr)
 {
     if (!is_seen(player_ptr, md_ptr->m_ptr))

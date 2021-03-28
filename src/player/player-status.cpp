@@ -1186,7 +1186,7 @@ static ACTION_SKILL_POWER calc_intra_vision(player_type *creature_ptr)
 
     pow = tmp_rp_ptr->infra;
 
-    if (any_bits(creature_ptr->muta3, MUT3_INFRAVIS)) {
+    if (creature_ptr->muta.has(MUTA::INFRAVIS)) {
         pow += 3;
     }
 
@@ -1312,7 +1312,7 @@ static ACTION_SKILL_POWER calc_saving_throw(player_type *creature_ptr)
     pow = tmp_rp_ptr->r_sav + c_ptr->c_sav + a_ptr->a_sav;
     pow += ((cp_ptr->x_sav * creature_ptr->lev / 10) + (ap_ptr->a_sav * creature_ptr->lev / 50));
 
-    if (any_bits(creature_ptr->muta3, MUT3_MAGIC_RES))
+    if (creature_ptr->muta.has(MUTA::MAGIC_RES))
         pow += (15 + (creature_ptr->lev / 5));
 
     pow += adj_wis_sav[creature_ptr->stat_index[A_WIS]];
@@ -1372,7 +1372,7 @@ static ACTION_SKILL_POWER calc_search(player_type *creature_ptr)
             pow += (o_ptr->pval * 5);
     }
 
-    if (any_bits(creature_ptr->muta3, MUT3_XTRA_EYES)) {
+    if (creature_ptr->muta.has(MUTA::XTRA_EYES)) {
         pow += 15;
     }
 
@@ -1424,7 +1424,7 @@ static ACTION_SKILL_POWER calc_search_freq(player_type *creature_ptr)
         pow -= 15;
     }
 
-    if (any_bits(creature_ptr->muta3, MUT3_XTRA_EYES)) {
+    if (creature_ptr->muta.has(MUTA::XTRA_EYES)) {
         pow += 15;
     }
 
@@ -1840,15 +1840,15 @@ static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_real_value)
         ac += 5;
     }
 
-    if (any_bits(creature_ptr->muta3, MUT3_WART_SKIN)) {
+    if (creature_ptr->muta.has(MUTA::WART_SKIN)) {
         ac += 5;
     }
 
-    if (any_bits(creature_ptr->muta3, MUT3_SCALES)) {
+    if (creature_ptr->muta.has(MUTA::SCALES)) {
         ac += 10;
     }
 
-    if (any_bits(creature_ptr->muta3, MUT3_IRON_SKIN)) {
+    if (creature_ptr->muta.has(MUTA::IRON_SKIN)) {
         ac += 25;
     }
 
@@ -2973,7 +2973,7 @@ void check_experience(player_type *creature_ptr)
         if (creature_ptr->lev > creature_ptr->max_plv) {
             creature_ptr->max_plv = creature_ptr->lev;
 
-            if ((creature_ptr->pclass == CLASS_CHAOS_WARRIOR) || any_bits(creature_ptr->muta2, MUT2_CHAOS_GIFT)) {
+            if ((creature_ptr->pclass == CLASS_CHAOS_WARRIOR) || creature_ptr->muta.has(MUTA::CHAOS_GIFT)) {
                 level_reward = TRUE;
             }
             if (creature_ptr->prace == RACE_BEASTMAN) {

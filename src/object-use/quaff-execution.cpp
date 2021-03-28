@@ -1,8 +1,8 @@
 ﻿/*!
- * todo 少し長い。switch/case文と効果処理を分離してもいいかも
  * @brief 薬を飲んだ時の各種効果処理
  * @date 2020/07/04
  * @author Hourier
+ * @todo 少し長い。switch/case文と効果処理を分離してもいいかも
  */
 
 #include "object-use/quaff-execution.h"
@@ -540,7 +540,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
             break;
 
         case SV_POTION_POLYMORPH:
-            if ((creature_ptr->muta1 || creature_ptr->muta2 || creature_ptr->muta3) && one_in_(23)) {
+            if (creature_ptr->muta.any() && one_in_(23)) {
                 lose_all_mutations(creature_ptr);
             } else {
                 do {

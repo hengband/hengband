@@ -217,7 +217,7 @@ static void drop_artifact(player_type *player_ptr, monster_death_type *md_ptr)
         (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
     }
 
-    msg_format(_("あなたは%sを制覇した！", "You have conquered %s!"), d_name + d_info[player_ptr->dungeon_idx].name);
+    msg_format(_("あなたは%sを制覇した！", "You have conquered %s!"), d_info[player_ptr->dungeon_idx].name.c_str());
 }
 
 static void decide_drop_quality(monster_death_type *md_ptr)
@@ -338,7 +338,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 
     write_pet_death(player_ptr, md_ptr);
     on_dead_explosion(player_ptr, md_ptr);
-    if (md_ptr->m_ptr->mflag2 & MFLAG2_CHAMELEON) {
+    if (md_ptr->m_ptr->mflag2.has(MFLAG2::CHAMELEON)) {
         choose_new_monster(player_ptr, m_idx, TRUE, MON_CHAMELEON);
         md_ptr->r_ptr = &r_info[md_ptr->m_ptr->r_idx];
     }

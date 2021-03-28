@@ -421,7 +421,7 @@ static void switch_next_grid_command(player_type *creature_ptr, ts_type *ts_ptr)
         ts_ptr->y = creature_ptr->y;
         ts_ptr->x = creature_ptr->x;
     case 'o':
-        // todo ↑元からbreakしていないがFall Throughを付けてよいか不明なので保留
+        //!< @todo ↑元からbreakしていないがFall Throughを付けてよいか不明なので保留
         break;
     case ' ':
     case '*':

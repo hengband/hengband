@@ -98,7 +98,7 @@ static void evaluate_monster_exp(player_type *creature_ptr, char *buf, monster_t
         return;
     }
 
-    if (!ap_r_ptr->r_tkills || (m_ptr->mflag2 & MFLAG2_KAGE)) {
+    if (!ap_r_ptr->r_tkills || m_ptr->mflag2.has(MFLAG2::KAGE)) {
         if (!current_world_ptr->wizard) {
             sprintf(buf, "??");
             return;
@@ -449,7 +449,7 @@ static concptr decide_target_floor(player_type *subject_ptr, eg_type *eg_ptr)
         return building[eg_ptr->f_ptr->subtype].name;
 
     if (has_flag(eg_ptr->f_ptr->flags, FF_ENTRANCE))
-        return format(_("%s(%d階相当)", "%s(level %d)"), d_text + d_info[eg_ptr->g_ptr->special].text, d_info[eg_ptr->g_ptr->special].mindepth);
+        return format(_("%s(%d階相当)", "%s(level %d)"), d_info[eg_ptr->g_ptr->special].text.c_str(), d_info[eg_ptr->g_ptr->special].mindepth);
 
     if (has_flag(eg_ptr->f_ptr->flags, FF_TOWN))
         return town_info[eg_ptr->g_ptr->special].name;
@@ -457,7 +457,7 @@ static concptr decide_target_floor(player_type *subject_ptr, eg_type *eg_ptr)
     if (subject_ptr->wild_mode && (eg_ptr->feat == feat_floor))
         return _("道", "road");
 
-    return f_name + eg_ptr->f_ptr->name;
+    return eg_ptr->f_ptr->name.c_str();
 }
 
 static void describe_grid_monster_all(eg_type *eg_ptr)
@@ -479,16 +479,15 @@ static void describe_grid_monster_all(eg_type *eg_ptr)
 
 #ifdef JP
     sprintf(eg_ptr->out_val, "%s%s%s%s[%s] %x %s %d %d %d (%d,%d) %d", eg_ptr->s1, eg_ptr->name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info,
-        (unsigned int)eg_ptr->g_ptr->info, f_idx_str, eg_ptr->g_ptr->dist, eg_ptr->g_ptr->cost, eg_ptr->g_ptr->when, (int)eg_ptr->y, (int)eg_ptr->x,
-        travel.cost[eg_ptr->y][eg_ptr->x]);
+        (unsigned int)eg_ptr->g_ptr->info, f_idx_str, eg_ptr->g_ptr->dists[FLOW_NORMAL], eg_ptr->g_ptr->costs[FLOW_NORMAL], eg_ptr->g_ptr->when, (int)eg_ptr->y,
+        (int)eg_ptr->x, travel.cost[eg_ptr->y][eg_ptr->x]);
 #else
     sprintf(eg_ptr->out_val, "%s%s%s%s [%s] %x %s %d %d %d (%d,%d)", eg_ptr->s1, eg_ptr->s2, eg_ptr->s3, eg_ptr->name, eg_ptr->info, eg_ptr->g_ptr->info,
-        f_idx_str, eg_ptr->g_ptr->dist, eg_ptr->g_ptr->cost, eg_ptr->g_ptr->when, (int)eg_ptr->y, (int)eg_ptr->x);
+        f_idx_str, eg_ptr->g_ptr->dists[FLOW_NORMAL], eg_ptr->g_ptr->costs[FLOW_NORMAL], eg_ptr->g_ptr->when, (int)eg_ptr->y, (int)eg_ptr->x);
 #endif
 }
 
-/*
- * todo xとlで処理を分ける？
+/*!
  * @brief xまたはlで指定したグリッドにあるアイテムやモンスターの説明を記述する
  * @param subject_ptr プレーヤーへの参照ポインタ
  * @param y 指定グリッドのY座標
@@ -496,6 +495,7 @@ static void describe_grid_monster_all(eg_type *eg_ptr)
  * @param mode x (KILL)かl (LOOK)
  * @param info 記述用文字列
  * @return 入力キー
+ * @todo xとlで処理を分ける？
  */
 char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, target_type mode, concptr info)
 {

@@ -16,9 +16,7 @@ visual_studio_files = \
 	Hengband/Hengband/curl/include/curl/urlapi.h \
 	Hengband/Hengband/Hengband.vcxproj \
 	Hengband/Hengband/Hengband.vcxproj.filters \
-	Hengband/Hengband/packages.config \
-	Hengband/Hengband/stdafx.cpp \
-	Hengband/Hengband/stdafx.h
+	Hengband/Hengband/packages.config
 
 EXTRA_DIST = \
 	autopick.txt \
@@ -31,3 +29,8 @@ EXTRA_DIST = \
 	$(visual_studio_files)
 
 SUBDIRS = src lib
+
+# Handle some paths in Hengband/Hengband that have spaces in them and would
+# be mishandled by make/automake.
+dist-hook:
+	(cd $(srcdir)/Hengband/Hengband/curl && tar -cf - "x86 Debug" "x86 Release" ) | (cd $(distdir)/Hengband/Hengband/curl && tar -xf -)

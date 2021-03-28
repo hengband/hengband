@@ -361,7 +361,7 @@ void do_cmd_spike(player_type *creature_ptr)
         do_cmd_attack(creature_ptr, y, x, HISSATSU_NONE);
     } else {
         take_turn(creature_ptr, 100);
-        msg_format(_("%sにくさびを打ち込んだ。", "You jam the %s with a spike."), f_name + f_info[feat].name);
+        msg_format(_("%sにくさびを打ち込んだ。", "You jam the %s with a spike."), f_info[feat].name.c_str());
         cave_alter_feat(creature_ptr, y, x, FF_SPIKE);
         vary_item(creature_ptr, item, -1);
     }

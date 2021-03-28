@@ -194,7 +194,6 @@ static bool spell_heal(byte spell) { return spell == 160 + 2; }
 static bool spell_dispel(byte spell) { return spell == 96 + 2; }
 
 /*!
- * todo 長過ぎる。切り分けが必要
  * @brief モンスターの魔法選択ルーチン
  * Have a monster choose a spell from a list of "useful" spells.
  * @param target_ptr プレーヤーへの参照ポインタ
@@ -213,6 +212,7 @@ static bool spell_dispel(byte spell) { return spell == 96 + 2; }
  * Use the helper functions above to put spells into categories.\n
  *\n
  * This function may well be an efficiency bottleneck.\n
+ * @todo 長過ぎる。切り分けが必要
  */
 int choose_attack_spell(player_type *target_ptr, msa_type *msa_ptr)
 {

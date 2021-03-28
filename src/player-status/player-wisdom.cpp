@@ -55,12 +55,12 @@ s16b PlayerWisdom::mutation_value()
 {
     s16b result = 0;
 
-    if (this->owner_ptr->muta3) {
-        if (any_bits(this->owner_ptr->muta3, MUT3_HYPER_INT)) {
+    if (this->owner_ptr->muta.any()) {
+        if (this->owner_ptr->muta.has(MUTA::HYPER_INT)) {
             result += 4;
         }
 
-        if (any_bits(this->owner_ptr->muta3, MUT3_MORONIC)) {
+        if (this->owner_ptr->muta.has(MUTA::MORONIC)) {
             result -= 4;
         }
     }

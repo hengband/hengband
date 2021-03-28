@@ -2,6 +2,7 @@
 #include "main/angband-headers.h"
 #include "room/rooms-vault.h"
 #include "util/string-processor.h"
+#include <string>
 
 /*!
  * @brief Vault情報(v_info)のパース関数 /
@@ -32,14 +33,11 @@ errr parse_v_info(char *buf, angband_header *head)
 
         error_idx = i;
         v_ptr = &v_info[i];
-        if (!add_name(&v_ptr->name, head, s))
-            return 7;
+        v_ptr->name = std::string(s);
     } else if (!v_ptr)
         return 3;
     else if (buf[0] == 'D') {
-        s = buf + 2;
-        if (!add_text(&v_ptr->text, head, s, FALSE))
-            return 7;
+        v_ptr->text.append(buf + 2);
     } else if (buf[0] == 'X') {
         EFFECT_ID typ, rat, hgt, wid;
         if (4 != sscanf(buf + 2, "%d:%d:%d:%d", &typ, &rat, &hgt, &wid))

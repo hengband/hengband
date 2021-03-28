@@ -461,3 +461,38 @@ PERCENTAGE calc_gravity_damage_rate(player_type *creature_ptr, rate_calc_type_mo
     }
     return per;
 }
+
+/*!
+ * @brief 虚無攻撃に対するダメージ倍率計算
+ */
+PERCENTAGE calc_void_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
+{
+    (void)mode; // unused
+    PERCENTAGE per = 100;
+    if (creature_ptr->tim_pass_wall) {
+        per = per * 3 / 2;
+    } else if (creature_ptr->anti_tele) {
+        per *= 400;
+        per /= randrate(4, 7, mode);
+    } else if (creature_ptr->levitation) {
+        per = (per * 2) / 3;
+    }
+    return per;
+}
+
+/*!
+ * @brief 深淵攻撃に対するダメージ倍率計算
+ */
+PERCENTAGE calc_abyss_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
+{
+    (void)mode; // unused
+    PERCENTAGE per = 100;
+
+    if (has_resist_dark(creature_ptr)) {
+        per *= 400;
+        per /= randrate(4, 7, mode);
+    } else if (!creature_ptr->levitation && creature_ptr->anti_tele) {
+        per = (per * 5) / 4;
+    }
+    return per;
+}

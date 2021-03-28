@@ -1,8 +1,8 @@
 ﻿/*!
- * todo 300行以上の凶悪関数なので後で分割しておく
  * @brief 床のアイテムが自動拾いに一致するかどうかを調べる関数だけを格納したファイル
  * @date 2020/04/25
  * @author Hourier
+ * @todo 300行以上の凶悪関数なので後で分割しておく
  */
 
 #include "autopick/autopick-matcher.h"
@@ -180,10 +180,12 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
     if (IS_FLG(FLG_UNREADABLE) && (o_ptr->tval < TV_LIFE_BOOK || check_book_realm(player_ptr, o_ptr->tval, o_ptr->sval)))
         return FALSE;
 
-    if (IS_FLG(FLG_REALM1) && (get_realm1_book(player_ptr) != o_ptr->tval || player_ptr->pclass == CLASS_SORCERER || player_ptr->pclass == CLASS_RED_MAGE))
+    bool realm_except_class = player_ptr->pclass == CLASS_SORCERER || player_ptr->pclass == CLASS_RED_MAGE || player_ptr->pclass == CLASS_ELEMENTALIST;
+
+    if (IS_FLG(FLG_REALM1) && (get_realm1_book(player_ptr) != o_ptr->tval || realm_except_class))
         return FALSE;
 
-    if (IS_FLG(FLG_REALM2) && (get_realm2_book(player_ptr) != o_ptr->tval || player_ptr->pclass == CLASS_SORCERER || player_ptr->pclass == CLASS_RED_MAGE))
+    if (IS_FLG(FLG_REALM2) && (get_realm2_book(player_ptr) != o_ptr->tval || realm_except_class))
         return FALSE;
 
     if (IS_FLG(FLG_FIRST) && (o_ptr->tval < TV_LIFE_BOOK || 0 != o_ptr->sval))

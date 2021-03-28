@@ -151,13 +151,13 @@ bool build_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, dt_type *dt_pt
 }
 
 /*!
- * todo 特に詳細な処理の意味を調査すべし
  * @brief トンネル生成のための基準点を指定する。
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param x 基準点を指定するX座標の参照ポインタ、適時値が修正される。
  * @param y 基準点を指定するY座標の参照ポインタ、適時値が修正される。
  * @param affectwall (調査中)
  * @return なし
+ * @todo 特に詳細な処理の意味を調査すべし
  */
 static bool set_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, POSITION *x, POSITION *y, bool affectwall)
 {
@@ -252,10 +252,10 @@ static void create_cata_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, P
 }
 
 /*!
- * todo 詳細用調査
  * @brief トンネル生成処理（詳細調査中）/ This routine does the bulk of the work in creating the new types of tunnels.
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
+ * @todo 詳細用調査
  */
 static void short_seg_hack(
     player_type *player_ptr, dun_data_type *dd_ptr, const POSITION x1, const POSITION y1, const POSITION x2, const POSITION y2, int type, int count, bool *fail)
@@ -341,9 +341,9 @@ static void short_seg_hack(
 }
 
 /*!
- * todo 詳細要調査
  * @brief 特定の壁(永久壁など)を避けながら部屋間の通路を作成する / This routine maps a path from (x1, y1) to (x2, y2) avoiding SOLID walls.
  * @return なし
+ * @todo 詳細要調査
  */
 bool build_tunnel2(player_type *player_ptr, dun_data_type *dd_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type, int cutoff)
 {

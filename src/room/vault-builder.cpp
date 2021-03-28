@@ -144,7 +144,6 @@ static void vault_trap_aux(player_type *player_ptr, POSITION y, POSITION x, POSI
 }
 
 /*!
- * todo rooms-normal からしか呼ばれていない、要調整
  * @brief 特殊な部屋向けに各種アイテムを配置する(メインルーチン) / Place some traps with a given displacement of given location
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param y トラップを配置したいマスの中心Y座標
@@ -155,6 +154,7 @@ static void vault_trap_aux(player_type *player_ptr, POSITION y, POSITION x, POSI
  * @return なし
  * @details
  * Only really called by some of the "vault" routines.
+ * @todo rooms-normal からしか呼ばれていない、要調整
  */
 void vault_traps(player_type *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd, int num)
 {

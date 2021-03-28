@@ -236,9 +236,9 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
     monster_race *r_ptr = &r_info[r_idx];
-    concptr name = (r_name + r_ptr->name);
+    concptr name = r_ptr->name.c_str();
 
-    if (player_ptr->wild_mode || !in_bounds(floor_ptr, y, x) || (r_idx == 0) || (r_ptr->name == 0))
+    if (player_ptr->wild_mode || !in_bounds(floor_ptr, y, x) || (r_idx == 0) || r_ptr->name.empty())
         return FALSE;
 
     if (((mode & PM_IGNORE_TERRAIN) == 0) && (pattern_tile(floor_ptr, y, x) || !monster_can_enter(player_ptr, y, x, r_ptr, 0)))
@@ -261,12 +261,12 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
     m_ptr->r_idx = r_idx;
     m_ptr->ap_r_idx = initial_r_appearance(player_ptr, r_idx, mode);
 
-    m_ptr->mflag = 0;
-    m_ptr->mflag2 = 0;
+    m_ptr->mflag.clear();
+    m_ptr->mflag2.clear();
     if ((mode & PM_MULTIPLY) && (who > 0) && !is_original_ap(&floor_ptr->m_list[who])) {
         m_ptr->ap_r_idx = floor_ptr->m_list[who].ap_r_idx;
-        if (floor_ptr->m_list[who].mflag2 & MFLAG2_KAGE)
-            m_ptr->mflag2 |= MFLAG2_KAGE;
+        if (floor_ptr->m_list[who].mflag2.has(MFLAG2::KAGE))
+            m_ptr->mflag2.set(MFLAG2::KAGE);
     }
 
     if ((who > 0) && !(r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)))
@@ -301,16 +301,16 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
     if (r_ptr->flags7 & RF7_CHAMELEON) {
         choose_new_monster(player_ptr, g_ptr->m_idx, TRUE, 0);
         r_ptr = &r_info[m_ptr->r_idx];
-        m_ptr->mflag2 |= MFLAG2_CHAMELEON;
+        m_ptr->mflag2.set(MFLAG2::CHAMELEON);
         if ((r_ptr->flags1 & RF1_UNIQUE) && (who <= 0))
             m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
     } else if ((mode & PM_KAGE) && !(mode & PM_FORCE_PET)) {
         m_ptr->ap_r_idx = MON_KAGE;
-        m_ptr->mflag2 |= MFLAG2_KAGE;
+        m_ptr->mflag2.set(MFLAG2::KAGE);
     }
 
     if (mode & PM_NO_PET)
-        m_ptr->mflag2 |= MFLAG2_NOPET;
+        m_ptr->mflag2.set(MFLAG2::NOPET);
 
     m_ptr->ml = FALSE;
     if (mode & PM_FORCE_PET) {
@@ -358,11 +358,11 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
     }
 
     if ((r_ptr->flags1 & RF1_PREVENT_SUDDEN_MAGIC) && !ironman_nightmare) {
-        m_ptr->mflag |= (MFLAG_PREVENT_MAGIC);
+        m_ptr->mflag.set(MFLAG::PREVENT_MAGIC);
     }
 
     if (g_ptr->m_idx < hack_m_idx) {
-        m_ptr->mflag |= (MFLAG_BORN);
+        m_ptr->mflag.set(MFLAG::BORN);
     }
 
     if (r_ptr->flags7 & RF7_SELF_LD_MASK)

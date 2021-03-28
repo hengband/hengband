@@ -125,7 +125,9 @@ static void effect_monster_old_heal_recovery(player_type *caster_ptr, effect_mon
     }
 }
 
-// todo サーペントのHPがマジックナンバー扱いになっている
+/*!
+ * @todo サーペントのHPがマジックナンバー扱いになっている
+ */
 process_result effect_monster_old_heal(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
@@ -197,7 +199,7 @@ process_result effect_monster_old_slow(player_type *caster_ptr, effect_monster_t
 }
 
 /*!
- * todo 「ユニークは (魔法では)常に眠らない」はr_infoの趣旨に反すると思われる
+ * @todo 「ユニークは (魔法では)常に眠らない」はr_infoの趣旨に反すると思われる
  * 眠る確率を半分にするとかしておいた方が良さそう
  */
 process_result effect_monster_old_sleep(player_type *caster_ptr, effect_monster_type *em_ptr)
@@ -224,7 +226,7 @@ process_result effect_monster_old_sleep(player_type *caster_ptr, effect_monster_
 }
 
 /*!
- * todo 「ユニークは (魔法では)常に混乱しない」はr_infoの趣旨に反すると思われる
+ * @todo 「ユニークは (魔法では)常に混乱しない」はr_infoの趣旨に反すると思われる
  * 眠る確率を半分にするとかしておいた方が良さそう
  */
 process_result effect_monster_old_conf(player_type *caster_ptr, effect_monster_type *em_ptr)

@@ -119,10 +119,10 @@ void do_cmd_visuals(player_type *creature_ptr, void (*process_autopick_file_comm
             auto_dump_printf(auto_dump_stream, _("\n# モンスターの[色/文字]の設定\n\n", "\n# Monster attr/char definitions\n\n"));
             for (i = 0; i < max_r_idx; i++) {
                 monster_race *r_ptr = &r_info[i];
-                if (!r_ptr->name)
+                if (r_ptr->name.empty())
                     continue;
 
-                auto_dump_printf(auto_dump_stream, "# %s\n", (r_name + r_ptr->name));
+                auto_dump_printf(auto_dump_stream, "# %s\n", r_ptr->name.c_str());
                 auto_dump_printf(auto_dump_stream, "R:%d:0x%02X/0x%02X\n\n", i, (byte)(r_ptr->x_attr), (byte)(r_ptr->x_char));
             }
 
@@ -146,7 +146,7 @@ void do_cmd_visuals(player_type *creature_ptr, void (*process_autopick_file_comm
             for (KIND_OBJECT_IDX k_idx = 0; k_idx < max_k_idx; k_idx++) {
                 GAME_TEXT o_name[MAX_NLEN];
                 object_kind *k_ptr = &k_info[k_idx];
-                if (!k_ptr->name)
+                if (k_ptr->name.empty())
                     continue;
 
                 if (!k_ptr->flavor) {
@@ -180,12 +180,12 @@ void do_cmd_visuals(player_type *creature_ptr, void (*process_autopick_file_comm
             auto_dump_printf(auto_dump_stream, _("\n# 地形の[色/文字]の設定\n\n", "\n# Feature attr/char definitions\n\n"));
             for (i = 0; i < max_f_idx; i++) {
                 feature_type *f_ptr = &f_info[i];
-                if (!f_ptr->name)
+                if (f_ptr->name.empty())
                     continue;
                 if (f_ptr->mimic != i)
                     continue;
 
-                auto_dump_printf(auto_dump_stream, "# %s\n", (f_name + f_ptr->name));
+                auto_dump_printf(auto_dump_stream, "# %s\n", (f_ptr->name.c_str()));
                 auto_dump_printf(auto_dump_stream, "F:%d:0x%02X/0x%02X:0x%02X/0x%02X:0x%02X/0x%02X\n\n", i, (byte)(f_ptr->x_attr[F_LIT_STANDARD]),
                     (byte)(f_ptr->x_char[F_LIT_STANDARD]), (byte)(f_ptr->x_attr[F_LIT_LITE]), (byte)(f_ptr->x_char[F_LIT_LITE]),
                     (byte)(f_ptr->x_attr[F_LIT_DARK]), (byte)(f_ptr->x_char[F_LIT_DARK]));
@@ -209,7 +209,7 @@ void do_cmd_visuals(player_type *creature_ptr, void (*process_autopick_file_comm
                 TERM_COLOR ca = r_ptr->x_attr;
                 byte cc = r_ptr->x_char;
 
-                term_putstr(5, 17, -1, TERM_WHITE, format(_("モンスター = %d, 名前 = %-40.40s", "Monster = %d, Name = %-40.40s"), r, (r_name + r_ptr->name)));
+                term_putstr(5, 17, -1, TERM_WHITE, format(_("モンスター = %d, 名前 = %-40.40s", "Monster = %d, Name = %-40.40s"), r, r_ptr->name.c_str()));
                 term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3u / %3u", "Default attr/char = %3u / %3u"), da, dc));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 19, da, dc, 0, 0);
@@ -236,7 +236,7 @@ void do_cmd_visuals(player_type *creature_ptr, void (*process_autopick_file_comm
                             r = prev_r;
                             break;
                         }
-                    } while (!r_info[r].name);
+                    } while (r_info[r].name.empty());
                 }
 
                 break;
@@ -278,7 +278,7 @@ void do_cmd_visuals(player_type *creature_ptr, void (*process_autopick_file_comm
 
                 term_putstr(5, 17, -1, TERM_WHITE,
                     format(
-                        _("アイテム = %d, 名前 = %-40.40s", "Object = %d, Name = %-40.40s"), k, k_name + (!k_ptr->flavor ? k_ptr->name : k_ptr->flavor_name)));
+                        _("アイテム = %d, 名前 = %-40.40s", "Object = %d, Name = %-40.40s"), k, (!k_ptr->flavor ? k_ptr->name : k_ptr->flavor_name).c_str()));
                 term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), da, dc));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 19, da, dc, 0, 0);
@@ -306,7 +306,7 @@ void do_cmd_visuals(player_type *creature_ptr, void (*process_autopick_file_comm
                             k = prev_k;
                             break;
                         }
-                    } while (!k_info[k].name);
+                    } while (k_info[k].name.empty());
                 }
 
                 break;
@@ -349,7 +349,7 @@ void do_cmd_visuals(player_type *creature_ptr, void (*process_autopick_file_comm
 
                 prt("", 17, 5);
                 term_putstr(5, 17, -1, TERM_WHITE,
-                    format(_("地形 = %d, 名前 = %s, 明度 = %s", "Terrain = %d, Name = %s, Lighting = %s"), f, (f_name + f_ptr->name),
+                    format(_("地形 = %d, 名前 = %s, 明度 = %s", "Terrain = %d, Name = %s, Lighting = %s"), f, (f_ptr->name.c_str()),
                         lighting_level_str[lighting_level]));
                 term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), da, dc));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
@@ -379,7 +379,7 @@ void do_cmd_visuals(player_type *creature_ptr, void (*process_autopick_file_comm
                             f = prev_f;
                             break;
                         }
-                    } while (!f_info[f].name || (f_info[f].mimic != f));
+                    } while (f_info[f].name.empty() || (f_info[f].mimic != f));
                 }
 
                 break;

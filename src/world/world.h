@@ -4,7 +4,10 @@
 
 #define MAX_BOUNTY 20
 
-typedef struct world_type {
+/*!
+ * @brief 世界情報構造体
+ */
+struct world_type {
 
     POSITION max_wild_x; /*!< Maximum size of the wilderness */
     POSITION max_wild_y; /*!< Maximum size of the wilderness */
@@ -29,27 +32,17 @@ typedef struct world_type {
 
     bool is_loading_now; /*!< ロード処理中フラグ...ロード直後にcalc_bonus()時の徳変化、及びsanity_blast()による異常を抑止する */
 
-    /*
-     * Savefile version
-     */
-    byte h_ver_major; /* Savefile version for Hengband 1.1.1 and later */
-    byte h_ver_minor;
-    byte h_ver_patch;
-    byte h_ver_extra;
+    byte h_ver_major; //!< 変愚蛮怒バージョン(メジャー番号) / Hengband version (major ver.)
+    byte h_ver_minor; //!< 変愚蛮怒バージョン(マイナー番号) / Hengband version (minor ver.)
+    byte h_ver_patch; //!< 変愚蛮怒バージョン(パッチ番号) / Hengband version (patch ver.)
+    byte h_ver_extra; //!< 変愚蛮怒バージョン(エクストラ番号) / Hengband version (extra ver.)
 
-    byte sf_extra; /* Savefile's encoding key */
+    byte sf_extra; //!< セーブファイルエンコードキー(XOR)
 
-    byte z_major; /* Savefile version for Hengband */
-    byte z_minor;
-    byte z_patch;
-
-    /*
-     * Savefile information
-     */
-    u32b sf_system; /* Operating system info */
-    u32b sf_when; /* Time when savefile created */
-    u16b sf_lives; /* Number of past "lives" with this file */
-    u16b sf_saves; /* Number of "saves" during this life */
+    u32b sf_system; //!< OS情報 / OS information
+    u32b sf_when; //!< 作成日時 / Created Date
+    u16b sf_lives; //!< このセーブファイルで何人プレイしたか / Number of past "lives" with this file
+    u16b sf_saves; //!< 現在のプレイで何回セーブしたか / Number of "saves" during this life
 
     bool character_generated; /* The character exists */
     bool character_dungeon; /* The character has a dungeon */
@@ -68,7 +61,7 @@ typedef struct world_type {
 
     DUNGEON_IDX max_d_idx;
 
-} world_type;
+};
 
 extern world_type *current_world_ptr;
 

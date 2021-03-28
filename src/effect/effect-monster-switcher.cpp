@@ -1,9 +1,9 @@
 ﻿/*!
- * todo どうしても「その他」に分類せざるを得ない魔法種別が残った
  * 本ファイル内の行数はまともなレベルに落ち着いているので、一旦ここに留め置くこととする
  * @brief 魔法種別による各種処理切り替え
  * @date 2020/04/29
  * @author Hourier
+ * @todo どうしても「その他」に分類せざるを得ない魔法種別が残った
  */
 
 #include "effect/effect-monster-switcher.h"
@@ -59,7 +59,9 @@ process_result effect_monster_hypodynamia(player_type *caster_ptr, effect_monste
     return PROCESS_CONTINUE;
 }
 
-// todo リファクタリング前のコード時点で、単に耐性があるだけでもダメージ0だった.
+/*!
+ * @todo リファクタリング前のコード時点で、単に耐性があるだけでもダメージ0だった.
+ */
 process_result effect_monster_death_ray(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
@@ -299,7 +301,7 @@ process_result switch_effects_monster(player_type *caster_ptr, effect_monster_ty
     case GF_BLOOD_CURSE:
     case GF_SEEKER:
     case GF_SUPER_RAY:
-        return effect_monster_void(em_ptr);
+        return effect_monster_nothing(em_ptr);
     case GF_ACID:
         return effect_monster_acid(caster_ptr, em_ptr);
     case GF_ELEC:
@@ -454,6 +456,12 @@ process_result switch_effects_monster(player_type *caster_ptr, effect_monster_ty
         return effect_monster_crusade(caster_ptr, em_ptr);
     case GF_WOUNDS:
         return effect_monster_wounds(em_ptr);
+    case GF_E_GENOCIDE:
+        return effect_monster_elemental_genocide(caster_ptr, em_ptr);
+    case GF_VOID:
+        return effect_monster_void(caster_ptr, em_ptr);
+    case GF_ABYSS:
+        return effect_monster_abyss(caster_ptr, em_ptr);
     default: {
         em_ptr->skipped = TRUE;
         em_ptr->dam = 0;

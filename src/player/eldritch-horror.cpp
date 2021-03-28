@@ -52,11 +52,11 @@ static concptr decide_horror_message(monster_race *r_ptr)
 }
 
 /*!
- * todo m_nameとdescで何が違うのかは良く分からない
  * @brief エルドリッチホラー持ちのモンスターを見た時の反応 (モンスター名版)
  * @param m_name モンスター名
  * @param r_ptr モンスター情報への参照ポインタ
  * @return なし
+ * @todo m_nameとdescで何が違うのかは良く分からない
  */
 static void see_eldritch_horror(GAME_TEXT *m_name, monster_race *r_ptr)
 {
@@ -148,7 +148,7 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
         get_mon_num_prep(creature_ptr, get_nightmare, NULL);
         r_ptr = &r_info[get_mon_num(creature_ptr, 0, MAX_DEPTH, 0)];
         power = r_ptr->level + 10;
-        desc = r_name + r_ptr->name;
+        desc = r_ptr->name.c_str();
         get_mon_num_prep(creature_ptr, NULL, NULL);
 #ifdef JP
 #else
@@ -221,48 +221,48 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
 
     switch (randint1(22)) {
     case 1: {
-        if (!(creature_ptr->muta3 & MUT3_MORONIC)) {
+        if (creature_ptr->muta.has_not(MUTA::MORONIC)) {
             if ((creature_ptr->stat_use[A_INT] < 4) && (creature_ptr->stat_use[A_WIS] < 4)) {
                 msg_print(_("あなたは完璧な馬鹿になったような気がした。しかしそれは元々だった。", "You turn into an utter moron!"));
             } else {
                 msg_print(_("あなたは完璧な馬鹿になった！", "You turn into an utter moron!"));
             }
 
-            if (creature_ptr->muta3 & MUT3_HYPER_INT) {
+            if (creature_ptr->muta.has(MUTA::HYPER_INT)) {
                 msg_print(_("あなたの脳は生体コンピュータではなくなった。", "Your brain is no longer a living computer."));
-                creature_ptr->muta3 &= ~(MUT3_HYPER_INT);
+                creature_ptr->muta.reset(MUTA::HYPER_INT);
             }
 
-            creature_ptr->muta3 |= MUT3_MORONIC;
+            creature_ptr->muta.set(MUTA::MORONIC);
         }
 
         break;
     }
     case 2: {
-        if (!(creature_ptr->muta2 & MUT2_COWARDICE) && !has_resist_fear(creature_ptr)) {
+        if (creature_ptr->muta.has_not(MUTA::COWARDICE) && !has_resist_fear(creature_ptr)) {
             msg_print(_("あなたはパラノイアになった！", "You become paranoid!"));
-            if (creature_ptr->muta3 & MUT3_FEARLESS) {
+            if (creature_ptr->muta.has(MUTA::FEARLESS)) {
                 msg_print(_("あなたはもう恐れ知らずではなくなった。", "You are no longer fearless."));
-                creature_ptr->muta3 &= ~(MUT3_FEARLESS);
+                creature_ptr->muta.reset(MUTA::FEARLESS);
             }
 
-            creature_ptr->muta2 |= MUT2_COWARDICE;
+            creature_ptr->muta.set(MUTA::COWARDICE);
         }
 
         break;
     }
     case 3: {
-        if (!(creature_ptr->muta2 & MUT2_HALLU) && !has_resist_chaos(creature_ptr)) {
+        if (creature_ptr->muta.has_not(MUTA::HALLU) && !has_resist_chaos(creature_ptr)) {
             msg_print(_("幻覚をひき起こす精神錯乱に陥った！", "You are afflicted by a hallucinatory insanity!"));
-            creature_ptr->muta2 |= MUT2_HALLU;
+            creature_ptr->muta.set(MUTA::HALLU);
         }
 
         break;
     }
     case 4: {
-        if (!(creature_ptr->muta2 & MUT2_BERS_RAGE) && !has_resist_conf(creature_ptr)) {
+        if (creature_ptr->muta.has_not(MUTA::BERS_RAGE) && !has_resist_conf(creature_ptr)) {
             msg_print(_("激烈な感情の発作におそわれるようになった！", "You become subject to fits of berserk rage!"));
-            creature_ptr->muta2 |= MUT2_BERS_RAGE;
+            creature_ptr->muta.set(MUTA::BERS_RAGE);
         }
 
         break;
@@ -283,7 +283,7 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
             (void)set_image(creature_ptr, creature_ptr->image + randint0(250) + 150);
         }
 
-        /* todo いつからかは不明だがreturnとbreakが同時に存在している。どちらがデッドコードか不明瞭なので保留 */
+        /*!< @todo いつからかは不明だがreturnとbreakが同時に存在している。どちらがデッドコードか不明瞭なので保留 */
         return;
         break;
     }

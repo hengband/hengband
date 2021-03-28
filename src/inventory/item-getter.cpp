@@ -44,11 +44,11 @@ static void check_item_selection_mode(item_selection_type *item_selection_ptr)
 }
 
 /*!
- * todo 適切な関数名をどうしても付けられなかったので暫定でauxとした
  * @brief アイテムへにタグ付けがされているかの調査処理 (のはず)
  * @param owner_ptr プレーヤーへの参照ポインタ
  * @param item_selection_ptr アイテムへの参照ポインタ
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
+ * @todo 適切な関数名をどうしても付けられなかったので暫定でauxとした
  */
 static bool check_item_tag_aux(player_type *owner_ptr, item_selection_type *item_selection_ptr)
 {

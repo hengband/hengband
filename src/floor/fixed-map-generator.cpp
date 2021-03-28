@@ -136,7 +136,7 @@ static void parse_qtw_D(player_type *player_ptr, qtwg_type *qtwg_ptr, char *s)
 
             place_monster_aux(player_ptr, 0, *qtwg_ptr->y, *qtwg_ptr->x, monster_index, (PM_ALLOW_SLEEP | PM_NO_KAGE));
             if (clone) {
-                floor_ptr->m_list[hack_m_idx_ii].smart |= SM_CLONED;
+                floor_ptr->m_list[hack_m_idx_ii].mflag2.set(MFLAG2::CLONED);
                 r_info[monster_index].cur_num = old_cur_num;
                 r_info[monster_index].max_num = old_max_num;
             }
@@ -225,7 +225,7 @@ static bool parse_qtw_QQ(quest_type *q_ptr, char **zz, int num)
     return TRUE;
 }
 
-/**
+/*!
  * @todo 処理がどうなっているのかいずれチェックする
  */
 static bool parse_qtw_QR(quest_type *q_ptr, char **zz, int num)

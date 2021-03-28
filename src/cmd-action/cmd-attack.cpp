@@ -52,7 +52,7 @@
  * @param mdeath 攻撃を受けたモンスターが死亡したかを返す参照ポインタ
  * @return なし
  */
-static void natural_attack(player_type *attacker_ptr, MONSTER_IDX m_idx, int attack, bool *fear, bool *mdeath)
+static void natural_attack(player_type *attacker_ptr, MONSTER_IDX m_idx, MUTA attack, bool *fear, bool *mdeath)
 {
     WEIGHT n_weight = 0;
     monster_type *m_ptr = &attacker_ptr->current_floor_ptr->m_list[m_idx];
@@ -61,31 +61,31 @@ static void natural_attack(player_type *attacker_ptr, MONSTER_IDX m_idx, int att
     int dice_num, dice_side;
     concptr atk_desc;
     switch (attack) {
-    case MUT2_SCOR_TAIL:
+    case MUTA::SCOR_TAIL:
         dice_num = 3;
         dice_side = 7;
         n_weight = 5;
         atk_desc = _("尻尾", "tail");
         break;
-    case MUT2_HORNS:
+    case MUTA::HORNS:
         dice_num = 2;
         dice_side = 6;
         n_weight = 15;
         atk_desc = _("角", "horns");
         break;
-    case MUT2_BEAK:
+    case MUTA::BEAK:
         dice_num = 2;
         dice_side = 4;
         n_weight = 5;
         atk_desc = _("クチバシ", "beak");
         break;
-    case MUT2_TRUNK:
+    case MUTA::TRUNK:
         dice_num = 1;
         dice_side = 4;
         n_weight = 35;
         atk_desc = _("象の鼻", "trunk");
         break;
-    case MUT2_TENTACLES:
+    case MUTA::TENTACLES:
         dice_num = 2;
         dice_side = 5;
         n_weight = 5;
@@ -126,20 +126,20 @@ static void natural_attack(player_type *attacker_ptr, MONSTER_IDX m_idx, int att
         anger_monster(attacker_ptr, m_ptr);
 
     switch (attack) {
-    case MUT2_SCOR_TAIL:
+    case MUTA::SCOR_TAIL:
         project(attacker_ptr, 0, 0, m_ptr->fy, m_ptr->fx, k, GF_POIS, PROJECT_KILL, -1);
         *mdeath = (m_ptr->r_idx == 0);
         break;
-    case MUT2_HORNS:
+    case MUTA::HORNS:
         *mdeath = mon_take_hit(attacker_ptr, m_idx, k, fear, NULL);
         break;
-    case MUT2_BEAK:
+    case MUTA::BEAK:
         *mdeath = mon_take_hit(attacker_ptr, m_idx, k, fear, NULL);
         break;
-    case MUT2_TRUNK:
+    case MUTA::TRUNK:
         *mdeath = mon_take_hit(attacker_ptr, m_idx, k, fear, NULL);
         break;
-    case MUT2_TENTACLES:
+    case MUTA::TENTACLES:
         *mdeath = mon_take_hit(attacker_ptr, m_idx, k, fear, NULL);
         break;
     default:
@@ -165,12 +165,14 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     GAME_TEXT m_name[MAX_NLEN];
 
+    const auto mutation_attack_methods = {MUTA::HORNS, MUTA::BEAK, MUTA::SCOR_TAIL, MUTA::TRUNK, MUTA::TENTACLES};
+
     disturb(attacker_ptr, FALSE, TRUE);
 
     take_turn(attacker_ptr, 100);
 
     if (!can_attack_with_main_hand(attacker_ptr) && !can_attack_with_sub_hand(attacker_ptr)
-        && !(attacker_ptr->muta2 & (MUT2_HORNS | MUT2_BEAK | MUT2_SCOR_TAIL | MUT2_TRUNK | MUT2_TENTACLES))) {
+        && attacker_ptr->muta.has_none_of(mutation_attack_methods)) {
         msg_format(_("%s攻撃できない。", "You cannot attack."), (empty_hands(attacker_ptr, FALSE) == EMPTY_HAND_NONE) ? _("両手がふさがって", "") : "");
         return FALSE;
     }
@@ -287,16 +289,11 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
         exe_player_attack_to_monster(attacker_ptr, y, x, &fear, &mdeath, 1, mode);
 
     if (!mdeath) {
-        if ((attacker_ptr->muta2 & MUT2_HORNS) && !mdeath)
-            natural_attack(attacker_ptr, g_ptr->m_idx, MUT2_HORNS, &fear, &mdeath);
-        if ((attacker_ptr->muta2 & MUT2_BEAK) && !mdeath)
-            natural_attack(attacker_ptr, g_ptr->m_idx, MUT2_BEAK, &fear, &mdeath);
-        if ((attacker_ptr->muta2 & MUT2_SCOR_TAIL) && !mdeath)
-            natural_attack(attacker_ptr, g_ptr->m_idx, MUT2_SCOR_TAIL, &fear, &mdeath);
-        if ((attacker_ptr->muta2 & MUT2_TRUNK) && !mdeath)
-            natural_attack(attacker_ptr, g_ptr->m_idx, MUT2_TRUNK, &fear, &mdeath);
-        if ((attacker_ptr->muta2 & MUT2_TENTACLES) && !mdeath)
-            natural_attack(attacker_ptr, g_ptr->m_idx, MUT2_TENTACLES, &fear, &mdeath);
+        for (auto m : mutation_attack_methods) {
+            if (attacker_ptr->muta.has(m) && !mdeath) {
+                natural_attack(attacker_ptr, g_ptr->m_idx, m, &fear, &mdeath);
+            }
+        }
     }
 
     if (fear && m_ptr->ml && !mdeath) {

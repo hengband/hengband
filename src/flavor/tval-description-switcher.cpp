@@ -29,10 +29,10 @@ static void describe_monster_ball(flavor_type *flavor_ptr)
     }
 
 #ifdef JP
-    sprintf(flavor_ptr->tmp_val2, " (%s)", r_name + r_ptr->name);
+    sprintf(flavor_ptr->tmp_val2, " (%s)", r_ptr->name.c_str());
     flavor_ptr->modstr = flavor_ptr->tmp_val2;
 #else
-    flavor_ptr->t = r_name + r_ptr->name;
+    flavor_ptr->t = format("%s", r_ptr->name.c_str());
     if (!(r_ptr->flags1 & RF1_UNIQUE)) {
         sprintf(flavor_ptr->tmp_val2, " (%s%s)", (is_a_vowel(*flavor_ptr->t) ? "an " : "a "), flavor_ptr->t);
         flavor_ptr->modstr = flavor_ptr->tmp_val2;
@@ -47,9 +47,9 @@ static void describe_statue(flavor_type *flavor_ptr)
 {
     monster_race *r_ptr = &r_info[flavor_ptr->o_ptr->pval];
 #ifdef JP
-    flavor_ptr->modstr = r_name + r_ptr->name;
+    flavor_ptr->modstr = r_ptr->name.c_str();
 #else
-    flavor_ptr->t = r_name + r_ptr->name;
+    flavor_ptr->t = format("%s", r_ptr->name.c_str());
     if (!(r_ptr->flags1 & RF1_UNIQUE)) {
         sprintf(flavor_ptr->tmp_val2, "%s%s", (is_a_vowel(*flavor_ptr->t) ? "an " : "a "), flavor_ptr->t);
         flavor_ptr->modstr = flavor_ptr->tmp_val2;
@@ -61,7 +61,7 @@ static void describe_statue(flavor_type *flavor_ptr)
 static void describe_corpse(flavor_type *flavor_ptr)
 {
     monster_race *r_ptr = &r_info[flavor_ptr->o_ptr->pval];
-    flavor_ptr->modstr = r_name + r_ptr->name;
+    flavor_ptr->modstr = r_ptr->name.c_str();
 #ifdef JP
     flavor_ptr->basenm = "#%";
 #else
@@ -77,7 +77,7 @@ static void describe_amulet(flavor_type *flavor_ptr)
     if (flavor_ptr->aware && (object_is_fixed_artifact(flavor_ptr->o_ptr) || flavor_ptr->k_ptr->gen_flags.has(TRG::INSTA_ART)))
         return;
 
-    flavor_ptr->modstr = k_name + flavor_ptr->flavor_k_ptr->flavor_name;
+    flavor_ptr->modstr = flavor_ptr->flavor_k_ptr->flavor_name.c_str();
     if (!flavor_ptr->flavor)
         flavor_ptr->basenm = _("%のアミュレット", "& Amulet~ of %");
     else if (flavor_ptr->aware)
@@ -91,7 +91,7 @@ static void describe_ring(flavor_type *flavor_ptr)
     if (flavor_ptr->aware && (object_is_fixed_artifact(flavor_ptr->o_ptr) || flavor_ptr->k_ptr->gen_flags.has(TRG::INSTA_ART)))
         return;
 
-    flavor_ptr->modstr = k_name + flavor_ptr->flavor_k_ptr->flavor_name;
+    flavor_ptr->modstr = flavor_ptr->flavor_k_ptr->flavor_name.c_str();
     if (!flavor_ptr->flavor)
         flavor_ptr->basenm = _("%の指輪", "& Ring~ of %");
     else if (flavor_ptr->aware)
@@ -105,7 +105,7 @@ static void describe_ring(flavor_type *flavor_ptr)
 
 static void describe_staff(flavor_type *flavor_ptr)
 {
-    flavor_ptr->modstr = k_name + flavor_ptr->flavor_k_ptr->flavor_name;
+    flavor_ptr->modstr = flavor_ptr->flavor_k_ptr->flavor_name.c_str();
     if (!flavor_ptr->flavor)
         flavor_ptr->basenm = _("%の杖", "& Staff~ of %");
     else if (flavor_ptr->aware)
@@ -116,7 +116,7 @@ static void describe_staff(flavor_type *flavor_ptr)
 
 static void describe_wand(flavor_type *flavor_ptr)
 {
-    flavor_ptr->modstr = k_name + flavor_ptr->flavor_k_ptr->flavor_name;
+    flavor_ptr->modstr = flavor_ptr->flavor_k_ptr->flavor_name.c_str();
     if (!flavor_ptr->flavor)
         flavor_ptr->basenm = _("%の魔法棒", "& Wand~ of %");
     else if (flavor_ptr->aware)
@@ -127,7 +127,7 @@ static void describe_wand(flavor_type *flavor_ptr)
 
 static void describe_rod(flavor_type *flavor_ptr)
 {
-    flavor_ptr->modstr = k_name + flavor_ptr->flavor_k_ptr->flavor_name;
+    flavor_ptr->modstr = flavor_ptr->flavor_k_ptr->flavor_name.c_str();
     if (!flavor_ptr->flavor)
         flavor_ptr->basenm = _("%のロッド", "& Rod~ of %");
     else if (flavor_ptr->aware)
@@ -138,7 +138,7 @@ static void describe_rod(flavor_type *flavor_ptr)
 
 static void describe_scroll(flavor_type *flavor_ptr)
 {
-    flavor_ptr->modstr = k_name + flavor_ptr->flavor_k_ptr->flavor_name;
+    flavor_ptr->modstr = flavor_ptr->flavor_k_ptr->flavor_name.c_str();
     if (!flavor_ptr->flavor)
         flavor_ptr->basenm = _("%の巻物", "& Scroll~ of %");
     else if (flavor_ptr->aware)
@@ -149,7 +149,7 @@ static void describe_scroll(flavor_type *flavor_ptr)
 
 static void describe_potion(flavor_type *flavor_ptr)
 {
-    flavor_ptr->modstr = k_name + flavor_ptr->flavor_k_ptr->flavor_name;
+    flavor_ptr->modstr = flavor_ptr->flavor_k_ptr->flavor_name.c_str();
     if (!flavor_ptr->flavor)
         flavor_ptr->basenm = _("%の薬", "& Potion~ of %");
     else if (flavor_ptr->aware)
@@ -160,10 +160,10 @@ static void describe_potion(flavor_type *flavor_ptr)
 
 static void describe_food(flavor_type *flavor_ptr)
 {
-    if (!flavor_ptr->k_ptr->flavor_name)
+    if (flavor_ptr->k_ptr->flavor_name.empty())
         return;
 
-    flavor_ptr->modstr = k_name + flavor_ptr->flavor_k_ptr->flavor_name;
+    flavor_ptr->modstr = flavor_ptr->flavor_k_ptr->flavor_name.c_str();
     if (!flavor_ptr->flavor)
         flavor_ptr->basenm = _("%のキノコ", "& Mushroom~ of %");
     else if (flavor_ptr->aware)

@@ -110,20 +110,20 @@ s16b PlayerConstitution::mutation_value()
 {
     s16b result = 0;
 
-    if (this->owner_ptr->muta3) {
-        if (any_bits(this->owner_ptr->muta3, MUT3_RESILIENT)) {
+    if (this->owner_ptr->muta.any()) {
+        if (this->owner_ptr->muta.has(MUTA::RESILIENT)) {
             result += 4;
         }
 
-        if (any_bits(this->owner_ptr->muta3, MUT3_ALBINO)) {
+        if (this->owner_ptr->muta.has(MUTA::ALBINO)) {
             result -= 4;
         }
 
-        if (any_bits(this->owner_ptr->muta3, MUT3_XTRA_FAT)) {
+        if (this->owner_ptr->muta.has(MUTA::XTRA_FAT)) {
             result += 2;
         }
 
-        if (any_bits(this->owner_ptr->muta3, MUT3_FLESH_ROT)) {
+        if (this->owner_ptr->muta.has(MUTA::FLESH_ROT)) {
             result -= 2;
         }
     }

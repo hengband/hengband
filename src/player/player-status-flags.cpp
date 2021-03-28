@@ -479,7 +479,7 @@ BIT_FLAGS has_infra_vision(player_type *creature_ptr)
     if (tmp_rp_ptr->infra > 0)
         result |= FLAG_CAUSE_RACE;
 
-    if (creature_ptr->muta3 & MUT3_INFRAVIS)
+    if (creature_ptr->muta.has(MUTA::INFRAVIS))
         result |= FLAG_CAUSE_MUTATION;
 
     if (creature_ptr->tim_infra)
@@ -631,7 +631,7 @@ BIT_FLAGS has_esp_telepathy(player_type *creature_ptr)
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
 
-    if (creature_ptr->muta3 & MUT3_ESP) {
+    if (creature_ptr->muta.has(MUTA::ESP)) {
         result |= FLAG_CAUSE_MUTATION;
     }
 
@@ -689,8 +689,15 @@ void check_no_flowed(player_type *creature_ptr)
 
     creature_ptr->no_flowed = FALSE;
 
-    if (has_pass_wall(creature_ptr) && !has_kill_wall(creature_ptr))
+    if (has_pass_wall(creature_ptr) && !has_kill_wall(creature_ptr)) {
         creature_ptr->no_flowed = TRUE;
+        return;
+    }
+
+    if (!creature_ptr->realm1 || creature_ptr->pclass == CLASS_ELEMENTALIST) {
+        creature_ptr->no_flowed = FALSE;
+        return;
+    }
 
     for (int i = 0; i < INVEN_PACK; i++) {
         if ((creature_ptr->inventory_list[i].tval == TV_NATURE_BOOK) && (creature_ptr->inventory_list[i].sval == 2))
@@ -797,7 +804,7 @@ BIT_FLAGS has_sh_fire(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
-    if (creature_ptr->muta3 & MUT3_FIRE_BODY) {
+    if (creature_ptr->muta.has(MUTA::FIRE_BODY)) {
         result |= FLAG_CAUSE_MUTATION;
     }
 
@@ -821,7 +828,7 @@ BIT_FLAGS has_sh_elec(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
-    if (creature_ptr->muta3 & MUT3_ELEC_TOUC)
+    if (creature_ptr->muta.has(MUTA::ELEC_TOUC))
         result |= FLAG_CAUSE_MUTATION;
 
     if (hex_spelling(creature_ptr, HEX_SHOCK_CLOAK) || creature_ptr->ult_res) {
@@ -940,7 +947,7 @@ BIT_FLAGS has_free_act(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
-    if (creature_ptr->muta3 & MUT3_MOTION)
+    if (creature_ptr->muta.has(MUTA::MOTION))
         result |= FLAG_CAUSE_MUTATION;
 
     if (is_specific_player_race(creature_ptr, RACE_GNOME) || is_specific_player_race(creature_ptr, RACE_GOLEM)
@@ -1110,7 +1117,7 @@ BIT_FLAGS has_levitation(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
-    if (creature_ptr->muta3 & MUT3_WINGS) {
+    if (creature_ptr->muta.has(MUTA::WINGS)) {
         result |= FLAG_CAUSE_MUTATION;
     }
 
@@ -1216,7 +1223,7 @@ BIT_FLAGS has_regenerate(player_type *creature_ptr)
         result |= FLAG_CAUSE_RACE;
     }
 
-    if (creature_ptr->muta3 & MUT3_REGEN)
+    if (creature_ptr->muta.has(MUTA::REGEN))
         result |= FLAG_CAUSE_MUTATION;
 
     if (creature_ptr->special_defense & KATA_MUSOU) {
@@ -1229,7 +1236,7 @@ BIT_FLAGS has_regenerate(player_type *creature_ptr)
 
     result |= check_equipment_flags(creature_ptr, TR_REGEN);
 
-    if (creature_ptr->muta3 & MUT3_FLESH_ROT)
+    if (creature_ptr->muta.has(MUTA::FLESH_ROT))
         result = 0L;
 
     return result;
@@ -1369,7 +1376,7 @@ BIT_FLAGS has_resist_acid(player_type *creature_ptr)
 BIT_FLAGS has_vuln_acid(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
-    if (creature_ptr->muta3 & MUT3_VULN_ELEM) {
+    if (creature_ptr->muta.has(MUTA::VULN_ELEM)) {
         result |= FLAG_CAUSE_MUTATION;
     }
 
@@ -1408,7 +1415,7 @@ BIT_FLAGS has_resist_elec(player_type *creature_ptr)
 BIT_FLAGS has_vuln_elec(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
-    if (creature_ptr->muta3 & MUT3_VULN_ELEM) {
+    if (creature_ptr->muta.has(MUTA::VULN_ELEM)) {
         result |= FLAG_CAUSE_MUTATION;
     }
 
@@ -1457,7 +1464,7 @@ BIT_FLAGS has_resist_fire(player_type *creature_ptr)
 BIT_FLAGS has_vuln_fire(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
-    if (creature_ptr->muta3 & MUT3_VULN_ELEM) {
+    if (creature_ptr->muta.has(MUTA::VULN_ELEM)) {
         result |= FLAG_CAUSE_MUTATION;
     }
 
@@ -1510,7 +1517,7 @@ BIT_FLAGS has_resist_cold(player_type *creature_ptr)
 BIT_FLAGS has_vuln_cold(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
-    if (creature_ptr->muta3 & MUT3_VULN_ELEM) {
+    if (creature_ptr->muta.has(MUTA::VULN_ELEM)) {
         result |= FLAG_CAUSE_MUTATION;
     }
 
@@ -1853,7 +1860,7 @@ BIT_FLAGS has_resist_fear(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
-    if (creature_ptr->muta3 & MUT3_FEARLESS)
+    if (creature_ptr->muta.has(MUTA::FEARLESS))
         result |= FLAG_CAUSE_MUTATION;
 
     switch (creature_ptr->pclass) {
@@ -2101,8 +2108,9 @@ bool has_disable_two_handed_bonus(player_type *creature_ptr, int i)
     return TRUE;
 }
 
-/*
- * todo 相応しい時にFALSEで相応しくない時にTRUEという負論理は良くない、後で修正する
+/*!
+ * @brief ふさわしくない武器を持っているかどうかを返す。
+ * @todo 相応しい時にFALSEで相応しくない時にTRUEという負論理は良くない、後で修正する
  */
 bool has_icky_wield_weapon(player_type *creature_ptr, int i)
 {
@@ -2165,7 +2173,7 @@ bool has_not_monk_weapon(player_type *creature_ptr, int i)
 
 bool has_good_luck(player_type *creature_ptr)
 {
-    return (creature_ptr->pseikaku == PERSONALITY_LUCKY) || (creature_ptr->muta3 & MUT3_GOOD_LUCK);
+    return (creature_ptr->pseikaku == PERSONALITY_LUCKY) || (creature_ptr->muta.has(MUTA::GOOD_LUCK));
 }
 
 BIT_FLAGS player_aggravate_state(player_type *creature_ptr)

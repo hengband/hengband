@@ -57,7 +57,7 @@ static void dump_magic_eater(player_type *creature_ptr, FILE *fff)
             KIND_OBJECT_IDX k_idx = lookup_kind(tval, i);
             if (!k_idx)
                 continue;
-            sprintf(s[eat_num], "%23s (%2d)", (k_name + k_info[k_idx].name), magic_num);
+            sprintf(s[eat_num], "%23s (%2d)", k_info[k_idx].name.c_str(), magic_num);
             eat_num++;
         }
 

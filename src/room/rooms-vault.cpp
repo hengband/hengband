@@ -36,8 +36,6 @@
  * The vault generation arrays
  */
 vault_type *v_info;
-char *v_name;
-char *v_text;
 
 /*
  * Maximum number of vaults in v_info.txt
@@ -664,10 +662,10 @@ bool build_type7(player_type *player_ptr, dun_data_type *dd_ptr)
     if (!find_space(player_ptr, dd_ptr, &yval, &xval, abs(y), abs(x)))
         return FALSE;
 
-    msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("小型Vault(%s)を生成しました。", "Lesser vault (%s)."), v_name + v_ptr->name);
+    msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("小型Vault(%s)を生成しました。", "Lesser vault (%s)."), v_ptr->name.c_str());
 
     /* Hack -- Build the vault */
-    build_vault(player_ptr, yval, xval, v_ptr->hgt, v_ptr->wid, v_text + v_ptr->text, xoffset, yoffset, transno);
+    build_vault(player_ptr, yval, xval, v_ptr->hgt, v_ptr->wid, v_ptr->text.c_str(), xoffset, yoffset, transno);
 
     return TRUE;
 }
@@ -739,10 +737,10 @@ bool build_type8(player_type *player_ptr, dun_data_type *dd_ptr)
     if (!find_space(player_ptr, dd_ptr, &yval, &xval, (POSITION)(abs(y) + 2), (POSITION)(abs(x) + 2)))
         return FALSE;
 
-    msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("大型固定Vault(%s)を生成しました。", "Greater vault (%s)."), v_name + v_ptr->name);
+    msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("大型固定Vault(%s)を生成しました。", "Greater vault (%s)."), v_ptr->name.c_str());
 
     /* Hack -- Build the vault */
-    build_vault(player_ptr, yval, xval, v_ptr->hgt, v_ptr->wid, v_text + v_ptr->text, xoffset, yoffset, transno);
+    build_vault(player_ptr, yval, xval, v_ptr->hgt, v_ptr->wid, v_ptr->text.c_str(), xoffset, yoffset, transno);
 
     return TRUE;
 }
@@ -1208,10 +1206,10 @@ bool build_type17(player_type *player_ptr, dun_data_type *dd_ptr)
     if (!find_space(player_ptr, dd_ptr, &yval, &xval, abs(y), abs(x)))
         return FALSE;
 
-    msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("特殊固定部屋(%s)を生成しました。", "Special Fixed Room (%s)."), v_name + v_ptr->name);
+    msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("特殊固定部屋(%s)を生成しました。", "Special Fixed Room (%s)."), v_ptr->name.c_str());
 
     /* Hack -- Build the vault */
-    build_vault(player_ptr, yval, xval, v_ptr->hgt, v_ptr->wid, v_text + v_ptr->text, xoffset, yoffset, transno);
+    build_vault(player_ptr, yval, xval, v_ptr->hgt, v_ptr->wid, v_ptr->text.c_str(), xoffset, yoffset, transno);
 
     return TRUE;
 }

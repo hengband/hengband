@@ -68,7 +68,7 @@ void display_rumor(player_type *player_ptr, bool ex)
             a_idx = rumor_num(zz[1], max_a_idx);
 
             a_ptr = &a_info[a_idx];
-            if (a_ptr->name)
+            if (!a_ptr->name.empty())
                 break;
         }
 
@@ -84,11 +84,11 @@ void display_rumor(player_type *player_ptr, bool ex)
         while (TRUE) {
             MONRACE_IDX r_idx = rumor_num(zz[1], max_r_idx);
             r_ptr = &r_info[r_idx];
-            if (r_ptr->name)
+            if (!r_ptr->name.empty())
                 break;
         }
 
-        strcpy(fullname, r_name + r_ptr->name);
+        strcpy(fullname, r_ptr->name.c_str());
 
         if (!r_ptr->r_sights) {
             r_ptr->r_sights++;
@@ -99,11 +99,11 @@ void display_rumor(player_type *player_ptr, bool ex)
         while (TRUE) {
             d_idx = rumor_num(zz[1], current_world_ptr->max_d_idx);
             d_ptr = &d_info[d_idx];
-            if (d_ptr->name)
+            if (!d_ptr->name.empty())
                 break;
         }
 
-        strcpy(fullname, d_name + d_ptr->name);
+        strcpy(fullname, d_ptr->name.c_str());
 
         if (!max_dlv[d_idx]) {
             max_dlv[d_idx] = d_ptr->mindepth;

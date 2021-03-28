@@ -132,15 +132,14 @@ bool multiply_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool clone, BI
     if (!mon_scatter(player_ptr, m_ptr->r_idx, &y, &x, m_ptr->fy, m_ptr->fx, 1))
         return FALSE;
 
-    if (m_ptr->mflag2 & MFLAG2_NOPET)
+    if (m_ptr->mflag2.has(MFLAG2::NOPET))
         mode |= PM_NO_PET;
 
     if (!place_monster_aux(player_ptr, m_idx, y, x, m_ptr->r_idx, (mode | PM_NO_KAGE | PM_MULTIPLY)))
         return FALSE;
 
-    if (clone || (m_ptr->smart & SM_CLONED)) {
-        floor_ptr->m_list[hack_m_idx_ii].smart |= SM_CLONED;
-        floor_ptr->m_list[hack_m_idx_ii].mflag2 |= MFLAG2_NOPET;
+    if (clone || m_ptr->mflag2.has(MFLAG2::CLONED)) {
+        floor_ptr->m_list[hack_m_idx_ii].mflag2.set({MFLAG2::CLONED, MFLAG2::NOPET});
     }
 
     return TRUE;
@@ -377,7 +376,7 @@ bool alloc_horde(player_type *player_ptr, POSITION y, POSITION x, summon_specifi
         return FALSE;
 
     MONSTER_IDX m_idx = floor_ptr->grid_array[y][x].m_idx;
-    if (floor_ptr->m_list[m_idx].mflag2 & MFLAG2_CHAMELEON)
+    if (floor_ptr->m_list[m_idx].mflag2.has(MFLAG2::CHAMELEON))
         r_ptr = &r_info[floor_ptr->m_list[m_idx].r_idx];
 
     POSITION cy = y;

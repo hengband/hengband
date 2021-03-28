@@ -18,8 +18,6 @@
 
 /* The terrain feature arrays */
 feature_type *f_info;
-char *f_name;
-char *f_tag;
 
 /* Nothing */
 FEAT_IDX feat_none;

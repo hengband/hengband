@@ -156,7 +156,7 @@ void wiz_restore_monster_max_num()
     }
 
     monster_race *r_ptr = &r_info[r_idx];
-    if (!r_ptr->name) {
+    if (r_ptr->name.empty()) {
         msg_print("そのモンスターは存在しません。");
         msg_print(NULL);
         return;
@@ -179,8 +179,7 @@ void wiz_restore_monster_max_num()
     r_ptr->r_akills = 0;
 
     std::stringstream ss;
-    std::string name(r_name + r_ptr->name);
-    ss << name << _("の出現数を復元しました。", " can appear again now.");
+    ss << r_ptr->name << _("の出現数を復元しました。", " can appear again now.");
     msg_print(ss.str().c_str());
     msg_print(NULL);
 }

@@ -32,10 +32,6 @@ errr init_info_txt(FILE *fp, char *buf, angband_header *head, parse_info_txt_fun
     error_idx = -1;
     error_line = 0;
 
-    head->name_size = 0;
-    head->text_size = 0;
-    head->tag_size = 0;
-
     errr err;
     while (angband_fgets(fp, buf, 1024) == 0) {
         error_line++;
@@ -60,11 +56,6 @@ errr init_info_txt(FILE *fp, char *buf, angband_header *head, parse_info_txt_fun
         if ((err = (*parse_info_txt_line)(buf, head)) != 0)
             return (err);
     }
-
-    if (head->name_size)
-        head->name_size++;
-    if (head->text_size)
-        head->text_size++;
 
     return 0;
 }

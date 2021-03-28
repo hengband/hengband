@@ -1,6 +1,8 @@
 ﻿#pragma once
 
+#include "monster/smart-learn-types.h"
 #include "system/angband.h"
+#include "util/flag-group.h"
 
 // Monster Spell Remover.
 typedef struct monster_race monster_race;
@@ -9,7 +11,7 @@ typedef struct msr_type {
     u32b f4;
     u32b f5;
     u32b f6;
-    u32b smart;
+    FlagGroup<SM> smart;
 } msr_type;
 
 msr_type *initialize_msr_type(player_type *target_ptr, msr_type *msr_ptr, MONSTER_IDX m_idx, const u32b f4p, const u32b f5p, const u32b f6p);

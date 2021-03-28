@@ -162,7 +162,7 @@ void quest_discovery(QUEST_IDX q_idx)
         return;
 
     GAME_TEXT name[MAX_NLEN];
-    strcpy(name, (r_name + r_ptr->name));
+    strcpy(name, (r_ptr->name.c_str()));
 
     msg_print(find_quest[rand_range(0, 4)]);
     msg_print(NULL);

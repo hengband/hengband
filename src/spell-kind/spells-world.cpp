@@ -38,10 +38,10 @@
 #include "world/world.h"
 
 /*!
- * todo 変数名が実態と合っているかどうかは要確認
- * テレポート・レベルが効かないモンスターであるかどうかを判定する
+ * @brief テレポート・レベルが効かないモンスターであるかどうかを判定する
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param idx テレポート・レベル対象のモンスター
+ * @todo 変数名が実態と合っているかどうかは要確認
  */
 bool is_teleport_level_ineffective(player_type *caster_ptr, MONSTER_IDX idx)
 {
@@ -56,12 +56,12 @@ bool is_teleport_level_ineffective(player_type *caster_ptr, MONSTER_IDX idx)
 }
 
 /*!
- * todo cmd-save.h への依存あり。コールバックで何とかしたい
  * @brief プレイヤー及びモンスターをレベルテレポートさせる /
  * Teleport the player one level up or down (random when legal)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param m_idx テレポートの対象となるモンスターID(0ならばプレイヤー) / If m_idx <= 0, target is player.
  * @return なし
+ * @todo cmd-save.h への依存あり。コールバックで何とかしたい
  */
 void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 {
@@ -402,7 +402,7 @@ bool free_level_recall(player_type *creature_ptr)
     }
 
     QUANTITY amt = get_quantity(
-        format(_("%sの何階にテレポートしますか？", "Teleport to which level of %s? "), d_name + d_info[select_dungeon].name), (QUANTITY)max_depth);
+        format(_("%sの何階にテレポートしますか？", "Teleport to which level of %s? "), d_info[select_dungeon].name.c_str()), (QUANTITY)max_depth);
     if (amt <= 0) {
         return FALSE;
     }
@@ -460,7 +460,7 @@ bool reset_recall(player_type *caster_ptr)
     if (record_maxdepth)
         exe_write_diary(caster_ptr, DIARY_TRUMP, select_dungeon, _("フロア・リセットで", "using a scroll of reset recall"));
 #ifdef JP
-    msg_format("%sの帰還レベルを %d 階にセット。", d_name + d_info[select_dungeon].name, dummy, dummy * 50);
+    msg_format("%sの帰還レベルを %d 階にセット。", d_info[select_dungeon].name.c_str(), dummy, dummy * 50);
 #else
     msg_format("Recall depth set to level %d (%d').", dummy, dummy * 50);
 #endif

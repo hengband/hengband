@@ -1,9 +1,6 @@
 ﻿#pragma once
 
-#include <algorithm>
 #include <bitset>
-#include <functional>
-#include <map>
 
 /**
  * @brief フラグ集合を扱う、FlagGroupクラス
@@ -101,7 +98,10 @@ public:
     {
         static_assert(std::is_same<typename std::iterator_traits<InputIter>::value_type, FlagType>::value, "Iterator value type is invalid");
 
-        std::for_each(first, last, [this](FlagType t) { set(t); });
+        for (; first != last; ++first) {
+            set(*first);
+        }
+
         return *this;
     }
 
@@ -153,7 +153,10 @@ public:
     {
         static_assert(std::is_same<typename std::iterator_traits<InputIter>::value_type, FlagType>::value, "Iterator value type is invalid");
 
-        std::for_each(first, last, [this](FlagType t) { reset(t); });
+        for (; first != last; ++first) {
+            reset(*first);
+        }
+
         return *this;
     }
 
@@ -237,7 +240,13 @@ public:
     {
         static_assert(std::is_same<typename std::iterator_traits<InputIter>::value_type, FlagType>::value, "Iterator value type is invalid");
 
-        return std::all_of(first, last, [this](FlagType f) { return has(f); });
+        for (; first != last; ++first) {
+            if (has_not(*first)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -275,7 +284,13 @@ public:
     {
         static_assert(std::is_same<typename std::iterator_traits<InputIter>::value_type, FlagType>::value, "Iterator value type is invalid");
 
-        return std::any_of(first, last, [this](FlagType f) { return has(f); });
+        for (; first != last; ++first) {
+            if (has(*first)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -367,7 +382,8 @@ public:
      * @param fg 読み出したフラグ集合を格納するFlagGroupインスタンスの参照
      * @param rd_byte_func セーブファイルから1バイトデータを読み出す関数(rd_byte)へのポインタ
      */
-    friend void rd_FlagGroup(FlagGroup<FlagType> &fg, std::function<void(uint8_t *)> rd_byte_func)
+    template <typename Func>
+    friend void rd_FlagGroup(FlagGroup<FlagType> &fg, Func rd_byte_func)
     {
         uint8_t tmp_l, tmp_h;
         rd_byte_func(&tmp_l);
@@ -393,7 +409,8 @@ public:
      * @param fg 書き込むフラグ集合を保持したFlagGroupインスタンスの参照
      * @param wr_byte_func セーブファイルに1バイトデータを書き込む関数(wr_byte)へのポインタ
      */
-    friend void wr_FlagGroup(const FlagGroup<FlagType> &fg, std::function<void(uint8_t)> wr_byte_func)
+    template <typename Func>
+    friend void wr_FlagGroup(const FlagGroup<FlagType> &fg, Func wr_byte_func)
     {
         const auto fg_size = static_cast<uint16_t>((fg.bs_.size() + 7) / 8);
         wr_byte_func(fg_size & 0xff);

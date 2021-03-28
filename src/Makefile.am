@@ -379,6 +379,7 @@ hengband_SOURCES = \
 	main/info-initializer.cpp main/info-initializer.h \
 	main/init-error-messages-table.cpp main/init-error-messages-table.h \
 	main/music-definitions-table.cpp main/music-definitions-table.h \
+	main/scene-table.cpp main/scene-table.h \
 	main/sound-definitions-table.cpp main/sound-definitions-table.h \
 	main/sound-of-music.cpp main/sound-of-music.h \
 	main/x11-gamma-builder.cpp main/x11-gamma-builder.h \
@@ -930,21 +931,32 @@ EXTRA_hengband_SOURCES = \
 	main-win/main-win-sound.cpp main-win/main-win-sound.h \
 	main-win/main-win-tokenizer.cpp main-win/main-win-tokenizer.h \
 	main-win/main-win-windows.h \
-	makefile.bcc makefile.std term/readdib.cpp term/readdib.h wall.bmp
+	makefile.bcc makefile.std term/readdib.cpp term/readdib.h wall.bmp \
+	stdafx.cpp stdafx.h
 
 EXTRA_DIST = \
 	gcc-wrap
 
 DEFAULT_INCLUDES = -I$(srcdir) -I$(top_builddir)/src
-CPPFLAGS += $(XFT_CFLAGS) $(libcurl_CFLAGS)
+CPPFLAGS += $(XFT_CFLAGS) $(libcurl_CFLAGS) -include stdafx.h
 LIBS += $(XFT_LIBS) $(libcurl_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CXXCOMPILE = $(srcdir)/gcc-wrap $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CXXFLAGS)
 
+stdafx.h.gch: stdafx.h stdafx.cpp Makefile
+	$(CXX) -x c++-header $(CXXFLAGS) $(srcdir)/stdafx.cpp -o $@
+	rm -f stdafx.h.gch.sum
+	md5sum $@ > stdafx.h.gch.sum
+
+$(hengband_SOURCES:.cpp=.$(OBJEXT)): stdafx.h.gch
+
 install-exec-hook:
 if SET_GID
 	chgrp "@GAMEGROUP@" "$(DESTDIR)$(bindir)/hengband"
 	chmod g+s "$(DESTDIR)$(bindir)/hengband"
 endif
+
+clean-local:
+	-rm stdafx.h.gch stdafx.h.gch.sum

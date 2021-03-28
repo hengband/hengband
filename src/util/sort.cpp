@@ -153,9 +153,9 @@ bool ang_sort_comp_importance(player_type *player_ptr, vptr u, vptr v, int a, in
             return FALSE;
 
         /* Shadowers first (あやしい影) */
-        if ((ma_ptr->mflag2 & MFLAG2_KAGE) && !(mb_ptr->mflag2 & MFLAG2_KAGE))
+        if (ma_ptr->mflag2.has(MFLAG2::KAGE) && mb_ptr->mflag2.has_not(MFLAG2::KAGE))
             return TRUE;
-        if (!(ma_ptr->mflag2 & MFLAG2_KAGE) && (mb_ptr->mflag2 & MFLAG2_KAGE))
+        if (ma_ptr->mflag2.has_not(MFLAG2::KAGE) && mb_ptr->mflag2.has(MFLAG2::KAGE))
             return FALSE;
 
         /* Unknown monsters first */

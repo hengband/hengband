@@ -322,7 +322,6 @@ static bool process_post_dig_wall(player_type *target_ptr, turn_flags *turn_flag
 }
 
 /*!
- * todo 少し長いが、これといってブロックとしてまとまった部分もないので暫定でこのままとする
  * @brief モンスターの移動に関するメインルーチン
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
@@ -332,6 +331,7 @@ static bool process_post_dig_wall(player_type *target_ptr, turn_flags *turn_flag
  * @param ox 移動前の、モンスターのX座標
  * @param count 移動回数 (のはず todo)
  * @return 移動が阻害される何か (ドア等)があったらFALSE
+ * @todo 少し長いが、これといってブロックとしてまとまった部分もないので暫定でこのままとする
  */
 bool process_monster_movement(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, DIRECTION *mm, POSITION oy, POSITION ox, int *count)
 {
@@ -406,7 +406,7 @@ bool process_monster_movement(player_type *target_ptr, turn_flags *turn_flags_pt
 
         monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
         if (m_ptr->ml
-            && (disturb_move || (disturb_near && (m_ptr->mflag & MFLAG_VIEW) && projectable(target_ptr, target_ptr->y, target_ptr->x, m_ptr->fy, m_ptr->fx))
+            && (disturb_move || (disturb_near && m_ptr->mflag.has(MFLAG::VIEW) && projectable(target_ptr, target_ptr->y, target_ptr->x, m_ptr->fy, m_ptr->fx))
                 || (disturb_high && ap_r_ptr->r_tkills && ap_r_ptr->level >= target_ptr->lev))) {
             if (is_hostile(m_ptr))
                 disturb(target_ptr, FALSE, TRUE);

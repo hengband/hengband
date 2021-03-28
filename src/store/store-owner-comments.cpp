@@ -1,7 +1,7 @@
 ﻿#include "store/store-owner-comments.h"
 
 /*!
- * todo _() でまとめる
+ * @todo _() でまとめる
  */
 concptr comment_1[MAX_COMMENT_1] =
 {

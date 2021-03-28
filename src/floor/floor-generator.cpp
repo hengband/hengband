@@ -19,7 +19,7 @@
 #include "floor/cave-generator.h"
 #include "floor/floor-events.h"
 #include "floor/floor-generator.h"
-#include "floor/floor-save.h" // todo precalc_cur_num_of_pet() が依存している、違和感.
+#include "floor/floor-save.h" //!< @todo precalc_cur_num_of_pet() が依存している、違和感.
 #include "floor/floor-util.h"
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
@@ -229,7 +229,7 @@ static void generate_gambling_arena(player_type *creature_ptr)
         if (!monster_is_valid(m_ptr))
             continue;
 
-        m_ptr->mflag2 |= MFLAG2_MARK | MFLAG2_SHOW;
+        m_ptr->mflag2.set({MFLAG2::MARK, MFLAG2::SHOW});
         update_monster(creature_ptr, i, FALSE);
     }
 }
@@ -356,8 +356,8 @@ void clear_cave(player_type *player_ptr)
             g_ptr->m_idx = 0;
             g_ptr->special = 0;
             g_ptr->mimic = 0;
-            g_ptr->cost = 0;
-            g_ptr->dist = 0;
+            memset(g_ptr->costs, 0, sizeof(g_ptr->costs));
+            memset(g_ptr->costs, 0, sizeof(g_ptr->dists));
             g_ptr->when = 0;
         }
     }

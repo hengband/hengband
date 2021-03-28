@@ -294,15 +294,15 @@ static void apply_damage_bonus(player_type *attacker_ptr, player_attack_type *pa
 }
 
 /*!
- * todo かなりのレアケースだが、右手に混沌属性の武器を持ち、左手にエクスカリバー・ジュニアを持ち、
- * 右手の最終打撃で蜘蛛に変身したとしても、左手の攻撃でダメージが減らない気がする
- * モンスターへの参照ポインタは変身時に変わるのにis_ej_nullifiedはその前に代入されて参照されるだけであるため
  * @brief 特殊な条件でダメージが減ったり0になったりする処理
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param is_zantetsu_nullified 斬鉄剣で切れないならばTRUE
  * @param is_ej_nullified 蜘蛛相手ならばTRUE
  * @details ダメージが0未満なら0に補正する
+ * @todo かなりのレアケースだが、右手に混沌属性の武器を持ち、左手にエクスカリバー・ジュニアを持ち、
+ * 右手の最終打撃で蜘蛛に変身したとしても、左手の攻撃でダメージが減らない気がする
+ * モンスターへの参照ポインタは変身時に変わるのにis_ej_nullifiedはその前に代入されて参照されるだけであるため
  */
 static void apply_damage_negative_effect(player_attack_type *pa_ptr, bool is_zantetsu_nullified, bool is_ej_nullified)
 {

@@ -2,10 +2,10 @@
 
 #include "system/angband.h"
 
-// Gain and Lose Mutation.
+enum class MUTA;
+
 typedef struct glm_type {
-    BIT_FLAGS *muta_class;
-    int muta_which; // mutation_flag_type_1 とmutation_flag_type_2 の両対応とするため、敢えてint型で定義する
+    MUTA muta_which;
     concptr muta_desc;
     bool muta_chosen;
     MUTATION_IDX choose_mut;

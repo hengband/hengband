@@ -132,7 +132,7 @@ static bool check_activation_conditions(player_type *user_ptr, ae_type *ae_ptr)
  */
 static bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 {
-    concptr name = k_name + k_info[o_ptr->k_idx].name;
+    concptr name = k_info[o_ptr->k_idx].name.c_str();
     const activation_type *const act_ptr = find_activation_info(user_ptr, o_ptr);
     if (!act_ptr) {
         msg_print("Activation information is not found.");

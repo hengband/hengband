@@ -109,13 +109,13 @@ int calc_monster_critical(DICE_NUMBER dice, DICE_SID sides, HIT_POINT dam)
 }
 
 /*!
- * todo 3つの処理をdetailsに書くよりは関数自体を分割すべきだが、一旦後回しにする。他の項目と一緒に処理する
  * @brief 忍者ヒットで急所を突く
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @return なし
  * @details 闇討ち＆追討ちを実施した後に致命傷チェックを行う
  * チェックを通ったら、ユニークならば2倍ダメージ、それ以外は一撃死
+ * @todo 3つの処理をdetailsに書くよりは関数自体を分割すべきだが、一旦後回しにする。他の項目と一緒に処理する
  */
 static void ninja_critical(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {

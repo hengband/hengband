@@ -20,7 +20,7 @@
  */
 static int count_mutations(player_type *creature_ptr)
 {
-    return count_bits(creature_ptr->muta1) + count_bits(creature_ptr->muta2) + count_bits(creature_ptr->muta3);
+    return creature_ptr->muta.count();
 }
 
 /*!

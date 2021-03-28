@@ -2,7 +2,7 @@
 #include "player/player-race-types.h"
 
 /*!
- * todo _() でまとめる
+ * @todo _() でまとめる
  */
 const owner_type owners[MAX_STORES][MAX_OWNERS] =
 {

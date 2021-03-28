@@ -31,3 +31,11 @@ Q:14:T:ほとんどの物資はダンジョン内の我々の部隊に送って�
 Q:14:T:大したお礼は出来ませんが、外にささやかなお礼を置いておきました。
 ?:1
 
+# Description for quest failed
+?:[EQU $QUEST14 5]
+Q:$14:T:Are *you* a dog, sneaked away with your tail between 
+Q:$14:T:your legs? I need a pet sitter for you, i think.
+Q:$14:T:It awaits you outside.
+Q:14:T:おめおめと尻尾を巻いて逃げ帰るとは、これではどちらが
+Q:14:T:犬かわかりませんね！ペットシッターが必要なようですね。
+?:1

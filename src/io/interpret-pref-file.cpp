@@ -431,10 +431,10 @@ static errr interpret_macro_keycodes(int tok, char **zz)
 
 
 /*!
- * todo 2.2.1r時点のコードからトークン数0～1の場合もエラーコード0だが、1であるべきでは？
  * @brief Tトークンの個数調査 (解釈はサブルーチンで) / Initialize macro trigger names and a template
  * @param buf バッファ
  * @return エラーコード
+ * @todo 2.2.1r時点のコードからトークン数0～1の場合もエラーコード0だが、1であるべきでは？
  */
 static errr interpret_t_token(char *buf)
 {

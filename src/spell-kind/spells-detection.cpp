@@ -76,19 +76,23 @@ static bool detect_feat_flag(player_type *caster_ptr, POSITION range, int flag, 
  * @param range 効果範囲
  * @param known 感知外範囲を超える警告フラグを立てる場合TRUEを返す
  * @return 効力があった場合TRUEを返す
+ * @detail
+ * 吟遊詩人による感知についてはFALSEを返す
  */
 bool detect_traps(player_type *caster_ptr, POSITION range, bool known)
 {
     bool detect = detect_feat_flag(caster_ptr, range, FF_TRAP, known);
+    if (!known && detect)
+        detect_feat_flag(caster_ptr, range, FF_TRAP, true);
 
-    if (known)
+    if (known || detect)
         caster_ptr->dtrap = TRUE;
 
     if (music_singing(caster_ptr, MUSIC_DETECT) && SINGING_COUNT(caster_ptr) > 0)
         detect = FALSE;
-    if (detect) {
+
+    if (detect)
         msg_print(_("トラップの存在を感じとった！", "You sense the presence of traps!"));
-    }
 
     return detect;
 }
@@ -322,7 +326,7 @@ bool detect_monsters_normal(player_type *caster_ptr, POSITION range)
             continue;
 
         if (!(r_ptr->flags2 & RF2_INVISIBLE) || caster_ptr->see_inv) {
-            m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
+            m_ptr->mflag2.set({MFLAG2::MARK, MFLAG2::SHOW});
             update_monster(caster_ptr, i, FALSE);
             flag = TRUE;
         }
@@ -367,7 +371,7 @@ bool detect_monsters_invis(player_type *caster_ptr, POSITION range)
                 caster_ptr->window_flags |= (PW_MONSTER);
             }
 
-            m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
+            m_ptr->mflag2.set({MFLAG2::MARK, MFLAG2::SHOW});
             update_monster(caster_ptr, i, FALSE);
             flag = TRUE;
         }
@@ -414,7 +418,7 @@ bool detect_monsters_evil(player_type *caster_ptr, POSITION range)
                 }
             }
 
-            m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
+            m_ptr->mflag2.set({MFLAG2::MARK, MFLAG2::SHOW});
             update_monster(caster_ptr, i, FALSE);
             flag = TRUE;
         }
@@ -454,7 +458,7 @@ bool detect_monsters_nonliving(player_type *caster_ptr, POSITION range)
                 caster_ptr->window_flags |= (PW_MONSTER);
             }
 
-            m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
+            m_ptr->mflag2.set({MFLAG2::MARK, MFLAG2::SHOW});
             update_monster(caster_ptr, i, FALSE);
             flag = TRUE;
         }
@@ -496,7 +500,7 @@ bool detect_monsters_mind(player_type *caster_ptr, POSITION range)
                 caster_ptr->window_flags |= (PW_MONSTER);
             }
 
-            m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
+            m_ptr->mflag2.set({MFLAG2::MARK, MFLAG2::SHOW});
             update_monster(caster_ptr, i, FALSE);
             flag = TRUE;
         }
@@ -539,7 +543,7 @@ bool detect_monsters_string(player_type *caster_ptr, POSITION range, concptr Mat
                 caster_ptr->window_flags |= (PW_MONSTER);
             }
 
-            m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
+            m_ptr->mflag2.set({MFLAG2::MARK, MFLAG2::SHOW});
             update_monster(caster_ptr, i, FALSE);
             flag = TRUE;
         }
@@ -587,7 +591,7 @@ bool detect_monsters_xxx(player_type *caster_ptr, POSITION range, u32b match_fla
                 }
             }
 
-            m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
+            m_ptr->mflag2.set({MFLAG2::MARK, MFLAG2::SHOW});
             update_monster(caster_ptr, i, FALSE);
             flag = TRUE;
         }

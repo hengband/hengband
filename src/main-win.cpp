@@ -1,9 +1,9 @@
 ﻿/*!
- * todo main関数を含むファイルの割に長過ぎる。main-win-utils.cなどといった形で分割したい
  * @file main-win.cpp
  * @brief Windows版固有実装(メインエントリポイント含む)
  * @date 2018/03/16
  * @author Hengband Team
+ * @todo main関数を含むファイルの割に長過ぎる。main-win-utils.cなどといった形で分割したい
  * @details
  *
  * <h3>概要</h3>
@@ -412,19 +412,9 @@ static DIBINIT infGraph;
 static DIBINIT infMask;
 
 /*
- * Flag set once "sound" has been initialized
- */
-static bool can_use_sound = FALSE;
-
-/*
  * Show sub-windows even when Hengband is not in focus
  */
 static bool keep_subwindows = TRUE;
-
-/*
- * Flag set once "music" has been initialized
- */
-static bool can_use_music = FALSE;
 
 /*
  * Full path to ANGBAND.INI
@@ -957,6 +947,9 @@ static bool init_graphics(void)
  */
 static void init_music(void)
 {
+    // Flag set once "music" has been initialized
+    static bool can_use_music = FALSE;
+
     if (!can_use_music) {
         main_win_music::load_music_prefs(current_world_ptr->max_d_idx, max_q_idx);
         can_use_music = TRUE;
@@ -968,6 +961,9 @@ static void init_music(void)
  */
 static void init_sound(void)
 {
+    // Flag set once "sound" has been initialized
+    static bool can_use_sound = FALSE;
+
     if (!can_use_sound) {
         load_sound_prefs();
         can_use_sound = TRUE;
@@ -975,7 +971,21 @@ static void init_sound(void)
 }
 
 /*
- * Resize a window
+ * Initialize background
+ */
+static void init_background(void)
+{
+    // Flag set once "background" has been initialized
+    static bool can_use_background = FALSE;
+
+    if (!can_use_background) {
+        load_bg_prefs();
+        can_use_background = TRUE;
+    }
+}
+
+/*!
+ * @brief Resize a window
  */
 static void term_window_resize(term_data *td)
 {
@@ -986,12 +996,12 @@ static void term_window_resize(term_data *td)
     InvalidateRect(td->w, NULL, TRUE);
 }
 
-/*
- * todo 引数のpathを消す
- * Force the use of a new "font file" for a term_data.
+/*!
+ * @brief Force the use of a new "font file" for a term_data.
  * This function may be called before the "window" is ready.
  * This function returns zero only if everything succeeds.
- * Note that the "font name" must be capitalized!!!
+ * @note that the "font name" must be capitalized!!!
+ * @todo 引数のpathを消す
  */
 static errr term_force_font(term_data *td, concptr path)
 {
@@ -1256,15 +1266,24 @@ static errr term_xtra_win_sound(int v)
  */
 static errr term_xtra_win_music(int n, int v)
 {
-    // FIXME use_musicの値に関わらずミュートを実行している
-    if (n == TERM_XTRA_MUSIC_MUTE)
-        main_win_music::stop_music();
-
     if (!use_music) {
         return 1;
     }
 
     return main_win_music::play_music(n, v);
+}
+
+/*
+ * Hack -- play a music matches a situation
+ */
+static errr term_xtra_win_scene()
+{
+    // TODO 場面に合った壁紙変更対応
+    if (!use_music) {
+        return 1;
+    }
+
+    return main_win_music::play_music_scene();
 }
 
 /*
@@ -1276,9 +1295,9 @@ static int term_xtra_win_delay(int v)
     return 0;
 }
 
-/*
- * todo z-termに影響があるのでplayer_typeの追加は保留
- * Do a "special thing"
+/*!
+ * @brief Do a "special thing"
+ * @todo z-termに影響があるのでplayer_typeの追加は保留
  */
 static errr term_xtra_win(int n, int v)
 {
@@ -1289,9 +1308,14 @@ static errr term_xtra_win(int n, int v)
     case TERM_XTRA_MUSIC_BASIC:
     case TERM_XTRA_MUSIC_DUNGEON:
     case TERM_XTRA_MUSIC_QUEST:
-    case TERM_XTRA_MUSIC_TOWN:
+    case TERM_XTRA_MUSIC_TOWN: {
+        return term_xtra_win_music(n, v);
+    }
     case TERM_XTRA_MUSIC_MUTE: {
-        return (term_xtra_win_music(n, v));
+        return main_win_music::stop_music();
+    }
+    case TERM_XTRA_SCENE: {
+        return term_xtra_win_scene();
     }
     case TERM_XTRA_SOUND: {
         return (term_xtra_win_sound(v));
@@ -2349,6 +2373,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 
         use_bg = !use_bg;
         if (use_bg) {
+            init_background();
             use_bg = init_bg();
         } else {
             delete_bg();
@@ -2367,7 +2392,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         memset(&ofn, 0, sizeof(ofn));
         ofn.lStructSize = sizeof(ofn);
         ofn.hwndOwner = data[0].w;
-        ofn.lpstrFilter = "Bitmap Files (*.bmp)\0*.bmp\0";
+        ofn.lpstrFilter = "Image Files (*.bmp;*.png;*.jpg;*.jpeg;)\0*.bmp;*.png;*.jpg;*.jpeg;\0";
         ofn.nFilterIndex = 1;
         ofn.lpstrFile = bg_bitmap_file;
         ofn.nMaxFile = 1023;
@@ -2376,6 +2401,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         ofn.Flags = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
 
         if (GetOpenFileName(&ofn)) {
+            init_background();
             use_bg = init_bg();
         }
 
@@ -2545,7 +2571,7 @@ static bool process_keydown(WPARAM wParam, LPARAM lParam)
 }
 
 /*!
- * todo WNDCLASSに影響があるのでplayer_type*の追加は保留
+ * @todo WNDCLASSに影響があるのでplayer_type*の追加は保留
  */
 LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -2559,7 +2585,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         break;
     }
     case WM_CREATE: {
-        mop.dwCallback = (DWORD)hWnd;
+        setup_mci(hWnd);
         return 0;
     }
     case WM_GETMINMAXINFO: {
@@ -2590,10 +2616,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         return 0;
     }
     case MM_MCINOTIFY: {
-        if (wParam == MCI_NOTIFY_SUCCESSFUL) {
-            mciSendCommand(mop.wDeviceID, MCI_SEEK, MCI_SEEK_TO_START, 0);
-            mciSendCommand(mop.wDeviceID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mop);
-        }
+        main_win_music::on_mci_notify(wParam, lParam);
 
         return 0;
     }
@@ -2770,7 +2793,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         if (td->size_hack)
             return 1;
 
-        // todo 二重のswitch文。後で分割する.
+        //!< @todo 二重のswitch文。後で分割する.
         switch (wParam) {
         case SIZE_MINIMIZED: {
             for (int i = 1; i < MAX_TERM_DATA; i++) {
@@ -2871,7 +2894,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 }
 
 /*!
- * todo WNDCLASSに影響があるのでplayer_type*の追加は保留
+ * @todo WNDCLASSに影響があるのでplayer_type*の追加は保留
  */
 LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -3125,7 +3148,7 @@ static void hook_quit(concptr str)
         DeleteObject(infMask.hBitmap);
 
     DeleteObject(hbrYellow);
-    delete_bg();
+    finalize_bg();
 
     if (hPal)
         DeleteObject(hPal);
@@ -3217,7 +3240,7 @@ static spoiler_output_status create_debug_spoiler(LPSTR cmd_line)
 }
 
 /*!
- * todo よく見るとhMutexはちゃんと使われていない……？
+ * @todo よく見るとhMutexはちゃんと使われていない……？
  * @brief (Windows固有)変愚蛮怒が起動済かどうかのチェック
  */
 static bool is_already_running(void)
@@ -3326,6 +3349,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPST
 
     init_windows();
     if (use_bg) {
+        init_background();
         use_bg = init_bg();
     }
 

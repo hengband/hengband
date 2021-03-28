@@ -73,7 +73,7 @@ F:b:BUILDING_1:3:0:0:0:0:NONE:2
 F:!:FLOOR:3:0:543
 
 # Set of Gauntlets
-?:[AND [EQU $QUEST1 3] [EQU $CLASS Monk ForceTrainer] ]
+?:[AND [EQU $QUEST1 3] [EQU $CLASS Monk ForceTrainer Elementalist] ]
 F:b:BUILDING_1:3:0:0:0:0:NONE:2
 F:!:FLOOR:3:0:126
 

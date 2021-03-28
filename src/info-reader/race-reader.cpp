@@ -90,13 +90,12 @@ errr parse_r_info(char *buf, angband_header *head)
             return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
 
         if (i >= head->info_num)
-            return PARSE_ERROR_ABSOLETE_FILE;
+            return PARSE_ERROR_OBSOLETE_FILE;
 
         error_idx = i;
         r_ptr = &r_info[i];
 #ifdef JP
-        if (!add_name(&r_ptr->name, head, s))
-            return PARSE_ERROR_OUT_OF_MEMORY;
+        r_ptr->name = std::string(s);
 #endif
     } else if (!r_ptr) {
         return PARSE_ERROR_MISSING_RECORD_HEADER;
@@ -105,15 +104,11 @@ errr parse_r_info(char *buf, angband_header *head)
     /* 英語名を読むルーチンを追加 */
     /* 'E' から始まる行は英語名 */
     else if (buf[0] == 'E') {
-        s = buf + 2;
-        if (!add_name(&r_ptr->E_name, head, s))
-            return PARSE_ERROR_OUT_OF_MEMORY;
+        r_ptr->E_name = std::string(buf + 2);
     }
 #else
     else if (buf[0] == 'E') {
-        s = buf + 2;
-        if (!add_name(&r_ptr->name, head, s))
-            return PARSE_ERROR_OUT_OF_MEMORY;
+        r_ptr->name = std::string(buf + 2);
     }
 #endif
     else if (buf[0] == 'D') {
@@ -127,8 +122,7 @@ errr parse_r_info(char *buf, angband_header *head)
             return PARSE_ERROR_NONE;
         s = buf + 3;
 #endif
-        if (!add_text(&r_ptr->text, head, s, TRUE))
-            return PARSE_ERROR_OUT_OF_MEMORY;
+        r_ptr->text.append(s);
     } else if (buf[0] == 'G') {
         if ((buf[1] != ':') || !buf[2] || (buf[3] != ':') || !buf[4])
             return PARSE_ERROR_GENERIC;

@@ -145,12 +145,12 @@ static spoiler_output_status spoil_mon_evol(concptr fname)
             continue;
 
         r_ptr = &r_info[r_idx];
-        fprintf(spoiler_file, _("[%d]: %s (レベル%d, '%c')\n", "[%d]: %s (Level %d, '%c')\n"), r_idx, r_name + r_ptr->name, (int)r_ptr->level, r_ptr->d_char);
+        fprintf(spoiler_file, _("[%d]: %s (レベル%d, '%c')\n", "[%d]: %s (Level %d, '%c')\n"), r_idx, r_ptr->name.c_str(), (int)r_ptr->level, r_ptr->d_char);
         for (n = 1; r_ptr->next_exp; n++) {
             fprintf(spoiler_file, "%*s-(%ld)-> ", n * 2, "", (long int)r_ptr->next_exp);
             fprintf(spoiler_file, "[%d]: ", r_ptr->next_r_idx);
             r_ptr = &r_info[r_ptr->next_r_idx];
-            fprintf(spoiler_file, _("%s (レベル%d, '%c')\n", "%s (Level %d, '%c')\n"), r_name + r_ptr->name, (int)r_ptr->level, r_ptr->d_char);
+            fprintf(spoiler_file, _("%s (レベル%d, '%c')\n", "%s (Level %d, '%c')\n"), r_ptr->name.c_str(), (int)r_ptr->level, r_ptr->d_char);
         }
 
         fputc('\n', spoiler_file);

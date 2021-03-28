@@ -1,8 +1,8 @@
 ﻿/*!
- * todo 少し長い。要分割
  * @brief ベースアイテムを強化する処理
  * @date 2020/06/03
  * @author Hourier
+ * @todo 少し長い。要分割
  */
 
 #include "object-enchant/apply-magic.h"
@@ -79,7 +79,7 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
     if (has_good_luck(owner_ptr)) {
         f1 += 5;
         f2 += 2;
-    } else if (owner_ptr->muta3 & MUT3_BAD_LUCK) {
+    } else if (owner_ptr->muta.has(MUTA::BAD_LUCK)) {
         f1 -= 5;
         f2 -= 2;
     }

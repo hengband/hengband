@@ -505,7 +505,7 @@ void teleport_away_followable(player_type *tracer_ptr, MONSTER_IDX m_idx)
         return;
 
     bool follow = FALSE;
-    if ((tracer_ptr->muta1 & MUT1_VTELEPORT) || (tracer_ptr->pclass == CLASS_IMITATOR))
+    if (tracer_ptr->muta.has(MUTA::VTELEPORT) || (tracer_ptr->pclass == CLASS_IMITATOR))
         follow = TRUE;
     else {
         BIT_FLAGS flgs[TR_FLAG_SIZE];

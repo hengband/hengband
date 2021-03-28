@@ -236,7 +236,7 @@ static void change_path(concptr info)
     }
 }
 
-static void display_usage(const char* program)
+static void display_usage(const char *program)
 {
     /* Dump usage information */
     printf("Usage: %s [options] [-- subopts]\n", program);
@@ -290,7 +290,7 @@ static bool parse_long_opt(const char *opt)
         init_angband(p_ptr, process_autopick_file_command, TRUE);
         switch (output_all_spoilers()) {
         case SPOILER_OUTPUT_SUCCESS:
-            puts("Successfully created a spiler file.");
+            puts("Successfully created a spoiler file.");
             quit(NULL);
             break;
         case SPOILER_OUTPUT_FAIL_FOPEN:

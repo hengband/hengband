@@ -397,11 +397,11 @@ static void hit_trap_set_abnormal_status_p(player_type *trapped_ptr, concptr tra
 }
 
 /*!
- * todo cmd-save.h への依存あり。コールバックで何とかしたい
  * @brief プレイヤーへのトラップ作動処理メインルーチン /
  * Handle player hitting a real trap
  * @param break_trap 作動後のトラップ破壊が確定しているならばTRUE
  * @return なし
+ * @todo cmd-save.h への依存あり。コールバックで何とかしたい
  */
 void hit_trap(player_type *trapped_ptr, bool break_trap)
 {

@@ -39,14 +39,15 @@ void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *f4p, u3
 
     monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
     if (smart_learn) {
-        if (m_ptr->smart && (randint0(100) < 1))
-            m_ptr->smart &= SM_FRIENDLY | SM_PET | SM_CLONED;
+        /* 時々学習情報を忘れる */
+        if (randint0(100) < 1)
+            m_ptr->smart.clear();
 
         msr_ptr->smart = m_ptr->smart;
     }
 
     add_cheat_remove_flags(target_ptr, msr_ptr);
-    if (!msr_ptr->smart)
+    if (msr_ptr->smart.none())
         return;
 
     check_element_resistance(msr_ptr);
