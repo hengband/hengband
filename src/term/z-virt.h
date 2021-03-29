@@ -13,6 +13,7 @@
 
 #include "system/h-basic.h"
 
+#include <algorithm>
 #include <type_traits>
 
 /*
@@ -59,10 +60,7 @@ inline T *wipe_impl(T *p)
 template <typename T, std::enable_if_t<!std::is_trivial_v<T>, std::nullptr_t> = nullptr>
 inline T *c_wipe_impl(T *p, size_t n)
 {
-    T obj{};
-    for (size_t i = 0; i < n; i++) {
-        *p = obj;
-    }
+    std::fill_n(p, n, T{});
     return p;
 }
 template <typename T, std::enable_if_t<!std::is_trivial_v<T>, std::nullptr_t> = nullptr>
