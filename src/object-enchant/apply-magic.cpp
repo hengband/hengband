@@ -124,42 +124,10 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
     }
 
     if (object_is_fixed_artifact(o_ptr)) {
-        artifact_type *a_ptr = &a_info[o_ptr->name1];
+        artifact_type *a_ptr = apply_artifact(owner_ptr, o_ptr);
         a_ptr->cur_num = 1;
         if (current_world_ptr->character_dungeon)
             a_ptr->floor_id = owner_ptr->floor_id;
-
-        o_ptr->pval = a_ptr->pval;
-        o_ptr->ac = a_ptr->ac;
-        o_ptr->dd = a_ptr->dd;
-        o_ptr->ds = a_ptr->ds;
-        o_ptr->to_a = a_ptr->to_a;
-        o_ptr->to_h = a_ptr->to_h;
-        o_ptr->to_d = a_ptr->to_d;
-        o_ptr->weight = a_ptr->weight;
-        o_ptr->xtra2 = a_ptr->act_idx;
-
-        if (o_ptr->name1 == ART_MILIM) {
-            if (owner_ptr->pseikaku == PERSONALITY_SEXY) {
-                o_ptr->pval = 3;
-            }
-        }
-
-        if (!a_ptr->cost)
-            o_ptr->ident |= (IDENT_BROKEN);
-        if (a_ptr->gen_flags.has(TRG::CURSED))
-            o_ptr->curse_flags |= (TRC_CURSED);
-        if (a_ptr->gen_flags.has(TRG::HEAVY_CURSE))
-            o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
-        if (a_ptr->gen_flags.has(TRG::PERMA_CURSE))
-            o_ptr->curse_flags |= (TRC_PERMA_CURSE);
-        if (a_ptr->gen_flags.has(TRG::RANDOM_CURSE0))
-            o_ptr->curse_flags |= get_curse(owner_ptr, 0, o_ptr);
-        if (a_ptr->gen_flags.has(TRG::RANDOM_CURSE1))
-            o_ptr->curse_flags |= get_curse(owner_ptr, 1, o_ptr);
-        if (a_ptr->gen_flags.has(TRG::RANDOM_CURSE2))
-            o_ptr->curse_flags |= get_curse(owner_ptr, 2, o_ptr);
-
         return;
     }
 
