@@ -207,27 +207,16 @@ void display_map(player_type *player_ptr, int *cy, int *cx)
     view_special_lite = FALSE;
     view_granite_lite = FALSE;
 
-    std::vector<std::vector<TERM_COLOR>> ma;
-    std::vector<std::vector<SYMBOL_CODE>> mc;
-    std::vector<std::vector<byte>> mp;
-    std::vector<std::vector<int>> match_autopick_yx;
-    std::vector<std::vector<object_type *>> object_autopick_yx;
-    for (y = 0; y < (hgt + 2); y++) {
-        ma.push_back(std::vector<TERM_COLOR>(wid + 2, TERM_WHITE));
-        mc.push_back(std::vector<SYMBOL_CODE>(wid + 2, ' '));
-        mp.push_back(std::vector<byte>(wid + 2, 0));
-        match_autopick_yx.push_back(std::vector<int>(wid + 2, -1));
-        object_autopick_yx.push_back(std::vector<object_type *>(wid + 2, NULL));
-    }
+    using std::vector;
+    vector<vector<TERM_COLOR>> ma(hgt + 2, vector<TERM_COLOR>(wid + 2, TERM_WHITE));
+    vector<vector<SYMBOL_CODE>> mc(hgt + 2, vector<SYMBOL_CODE>(wid + 2, ' '));
+    vector<vector<byte>> mp(hgt + 2, vector<byte>(wid + 2, 0));
+    vector<vector<int>> match_autopick_yx(hgt + 2, vector<int>(wid + 2, -1));
+    vector<vector<object_type *>> object_autopick_yx(hgt + 2, vector<object_type *>(wid + 2, NULL));
 
-    std::vector<std::vector<TERM_COLOR>> bigma;
-    std::vector<std::vector<SYMBOL_CODE>> bigmc;
-    std::vector<std::vector<byte>> bigmp;
-    for (y = 0; y < floor_ptr->height + 2; y++) {
-        bigma.push_back(std::vector<TERM_COLOR>(floor_ptr->width + 2, TERM_WHITE));
-        bigmc.push_back(std::vector<SYMBOL_CODE>(floor_ptr->width + 2, ' '));
-        bigmp.push_back(std::vector<byte>(floor_ptr->width + 2, 0));
-    }
+    vector<vector<TERM_COLOR>> bigma(floor_ptr->height + 2, vector<TERM_COLOR>(floor_ptr->width + 2, TERM_WHITE));
+    vector<vector<SYMBOL_CODE>> bigmc(floor_ptr->height + 2, vector<SYMBOL_CODE>(floor_ptr->width + 2, ' '));
+    vector<vector<byte>> bigmp(floor_ptr->height + 2, vector<byte>(floor_ptr->width + 2, 0));
 
     for (i = 0; i < floor_ptr->width; ++i) {
         for (j = 0; j < floor_ptr->height; ++j) {
