@@ -80,7 +80,15 @@ static void image_random(TERM_COLOR *ap, SYMBOL_CODE *cp)
 }
 
 /*!
- * @brief Mコマンドによる縮小マップの表示を行う / Extract the attr/char to display at the given (legal) map location
+ * @brief 指定した座標の地形の表示属性を取得する / Extract the attr/char to display at the given (legal) map location
+ * @param player_ptr プレイヤー情報への参照ポインタ
+ * @param y 階の中のy座標
+ * @param x 階の中のy座標
+ * @param ap 文字色属性
+ * @param cp 文字種属性
+ * @param tap 文字色属性(タイル)
+ * @param tcp 文字種属性(タイル)
+ * @return なし
  */
 void map_info(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLOR *tap, SYMBOL_CODE *tcp)
 {

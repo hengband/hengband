@@ -173,8 +173,14 @@ static void display_shortened_item_name(player_type *player_ptr, object_type *o_
     term_putstr(0, y, 12, attr, buf);
 }
 
-/*
- * Display a "small-scale" map of the dungeon in the active Term
+/*!
+ * @brief 縮小マップ表示 / Display a "small-scale" map of the dungeon in the active Term
+ * @param player_ptr プレイヤー情報への参照ポインタ
+ * @param cy 縮小マップ上のプレイヤーのy座標
+ * @param cx 縮小マップ上のプレイヤーのx座標
+ * @return なし
+ * @details
+ * メインウィンドウ('M'コマンド)、サブウィンドウ兼(縮小図)用。
  */
 void display_map(player_type *player_ptr, int *cy, int *cx)
 {
