@@ -12,20 +12,20 @@
  *	- Textual name (or NULL)
  *	- Textual description
  */
-typedef struct option_type {
-    bool *o_var;
-    byte o_norm;
-    byte o_page;
-    byte o_set;
-    byte o_bit;
-    concptr o_text;
-    concptr o_desc;
-} option_type;
+struct option_type {
+    bool *o_var{};
+    byte o_norm{};
+    byte o_page{};
+    byte o_set{};
+    byte o_bit{};
+    concptr o_text{};
+    concptr o_desc{};
+};
 
-#define MAX_OPTION_INFO 123
+#define MAX_OPTION_INFO 124
 #define MAX_CHEAT_OPTIONS 10
 #define MAX_AUTOSAVE_INFO 2
 
-extern const option_type option_info[MAX_OPTION_INFO];
+extern const std::array<option_type, MAX_OPTION_INFO> option_info;
 extern const option_type cheat_info[MAX_CHEAT_OPTIONS];
 extern const option_type autosave_info[MAX_AUTOSAVE_INFO];

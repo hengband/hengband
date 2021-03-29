@@ -15,6 +15,7 @@
 #include "term/term-color-types.h"
 #include "view/display-map.h"
 #include "world/world.h"
+#include <vector>
 
 /*
  * Dungeon size info
@@ -173,8 +174,14 @@ static void display_shortened_item_name(player_type *player_ptr, object_type *o_
     term_putstr(0, y, 12, attr, buf);
 }
 
-/*
- * Display a "small-scale" map of the dungeon in the active Term
+/*!
+ * @brief 縮小マップ表示 / Display a "small-scale" map of the dungeon in the active Term
+ * @param player_ptr プレイヤー情報への参照ポインタ
+ * @param cy 縮小マップ上のプレイヤーのy座標
+ * @param cx 縮小マップ上のプレイヤーのx座標
+ * @return なし
+ * @details
+ * メインウィンドウ('M'コマンド)、サブウィンドウ兼(縮小図)用。
  */
 void display_map(player_type *player_ptr, int *cy, int *cx)
 {
@@ -185,19 +192,9 @@ void display_map(player_type *player_ptr, int *cy, int *cx)
 
     byte tp;
 
-    TERM_COLOR **bigma;
-    SYMBOL_CODE **bigmc;
-    byte **bigmp;
-
-    TERM_COLOR **ma;
-    SYMBOL_CODE **mc;
-    byte **mp;
-
     bool old_view_special_lite = view_special_lite;
     bool old_view_granite_lite = view_granite_lite;
     TERM_LEN hgt, wid, yrat, xrat;
-    int **match_autopick_yx;
-    object_type ***object_autopick_yx;
     term_get_size(&wid, &hgt);
     hgt -= 2;
     wid -= 14;
@@ -210,39 +207,16 @@ void display_map(player_type *player_ptr, int *cy, int *cx)
     view_special_lite = FALSE;
     view_granite_lite = FALSE;
 
-    C_MAKE(ma, (hgt + 2), TERM_COLOR *);
-    C_MAKE(mc, (hgt + 2), char_ptr);
-    C_MAKE(mp, (hgt + 2), byte_ptr);
-    C_MAKE(match_autopick_yx, (hgt + 2), int *);
-    C_MAKE(object_autopick_yx, (hgt + 2), object_type **);
-    for (y = 0; y < (hgt + 2); y++) {
-        C_MAKE(ma[y], (wid + 2), TERM_COLOR);
-        C_MAKE(mc[y], (wid + 2), char);
-        C_MAKE(mp[y], (wid + 2), byte);
-        C_MAKE(match_autopick_yx[y], (wid + 2), int);
-        C_MAKE(object_autopick_yx[y], (wid + 2), object_type *);
-        for (x = 0; x < wid + 2; ++x) {
-            match_autopick_yx[y][x] = -1;
-            object_autopick_yx[y][x] = NULL;
-            ma[y][x] = TERM_WHITE;
-            mc[y][x] = ' ';
-            mp[y][x] = 0;
-        }
-    }
+    using std::vector;
+    vector<vector<TERM_COLOR>> ma(hgt + 2, vector<TERM_COLOR>(wid + 2, TERM_WHITE));
+    vector<vector<SYMBOL_CODE>> mc(hgt + 2, vector<SYMBOL_CODE>(wid + 2, ' '));
+    vector<vector<byte>> mp(hgt + 2, vector<byte>(wid + 2, 0));
+    vector<vector<int>> match_autopick_yx(hgt + 2, vector<int>(wid + 2, -1));
+    vector<vector<object_type *>> object_autopick_yx(hgt + 2, vector<object_type *>(wid + 2, NULL));
 
-    C_MAKE(bigma, (floor_ptr->height + 2), TERM_COLOR *);
-    C_MAKE(bigmc, (floor_ptr->height + 2), char_ptr);
-    C_MAKE(bigmp, (floor_ptr->height + 2), byte_ptr);
-    for (y = 0; y < (floor_ptr->height + 2); y++) {
-        C_MAKE(bigma[y], (floor_ptr->width + 2), TERM_COLOR);
-        C_MAKE(bigmc[y], (floor_ptr->width + 2), char);
-        C_MAKE(bigmp[y], (floor_ptr->width + 2), byte);
-        for (x = 0; x < floor_ptr->width + 2; ++x) {
-            bigma[y][x] = TERM_WHITE;
-            bigmc[y][x] = ' ';
-            bigmp[y][x] = 0;
-        }
-    }
+    vector<vector<TERM_COLOR>> bigma(floor_ptr->height + 2, vector<TERM_COLOR>(floor_ptr->width + 2, TERM_WHITE));
+    vector<vector<SYMBOL_CODE>> bigmc(floor_ptr->height + 2, vector<SYMBOL_CODE>(floor_ptr->width + 2, ' '));
+    vector<vector<byte>> bigmp(floor_ptr->height + 2, vector<byte>(floor_ptr->width + 2, 0));
 
     for (i = 0; i < floor_ptr->width; ++i) {
         for (j = 0; j < floor_ptr->height; ++j) {
@@ -344,29 +318,6 @@ void display_map(player_type *player_ptr, int *cy, int *cx)
 
     view_special_lite = old_view_special_lite;
     view_granite_lite = old_view_granite_lite;
-
-    for (y = 0; y < (hgt + 2); y++) {
-        C_KILL(ma[y], (wid + 2), TERM_COLOR);
-        C_KILL(mc[y], (wid + 2), SYMBOL_CODE);
-        C_KILL(mp[y], (wid + 2), byte);
-        C_KILL(match_autopick_yx[y], (wid + 2), int);
-        C_KILL(object_autopick_yx[y], (wid + 2), object_type *);
-    }
-
-    C_KILL(ma, (hgt + 2), TERM_COLOR *);
-    C_KILL(mc, (hgt + 2), char_ptr);
-    C_KILL(mp, (hgt + 2), byte_ptr);
-    C_KILL(match_autopick_yx, (hgt + 2), int *);
-    C_KILL(object_autopick_yx, (hgt + 2), object_type **);
-    for (y = 0; y < (floor_ptr->height + 2); y++) {
-        C_KILL(bigma[y], (floor_ptr->width + 2), TERM_COLOR);
-        C_KILL(bigmc[y], (floor_ptr->width + 2), SYMBOL_CODE);
-        C_KILL(bigmp[y], (floor_ptr->width + 2), byte);
-    }
-
-    C_KILL(bigma, (floor_ptr->height + 2), TERM_COLOR *);
-    C_KILL(bigmc, (floor_ptr->height + 2), char_ptr);
-    C_KILL(bigmp, (floor_ptr->height + 2), byte_ptr);
 }
 
 void set_term_color(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp)

@@ -368,6 +368,11 @@ void fix_overhead(player_type *player_ptr)
     }
 }
 
+/*!
+ * @brief 自分の周辺の地形をTermに表示する
+ * @param プレイヤー情報への参照ポインタ
+ * @return なし
+ */
 static void display_dungeon(player_type *player_ptr)
 {
     TERM_COLOR ta = 0;
@@ -402,8 +407,7 @@ static void display_dungeon(player_type *player_ptr)
 }
 
 /*!
- * @brief ダンジョンの地形をサブウィンドウに表示する /
- * Hack -- display dungeon view in sub-windows
+ * @brief 自分の周辺のダンジョンの地形をサブウィンドウに表示する / display dungeon view around player in a sub window
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
