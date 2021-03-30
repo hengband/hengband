@@ -8,8 +8,9 @@
     (d) ダンジョンで見つかるアイテム          (jdungeon.txt#Objects)
     (e) 採掘                                  (jdungeon.txt#Mining)
     (f) 階段、隠しドア、通路、部屋            (jdungeon.txt#StairsDoorsEtc)
-    (g) 階の雰囲気                            (jdungeon.txt#Feelings)
-    (h) ランダムクエスト                      (jdungeon.txt#RandomQuests)
+    (g) 危険な地形                            (jdungeon.txt#DangerousTerrain)
+    (h) 階の雰囲気                            (jdungeon.txt#Feelings)
+    (i) ランダムクエスト                      (jdungeon.txt#RandomQuests)
 
     (?) Help System Commands                  (helpinfo.txt)
 
@@ -20,5 +21,6 @@
 ***** [d] jdungeon.txt#Objects
 ***** [e] jdungeon.txt#Mining
 ***** [f] jdungeon.txt#StairsDoorsEtc
-***** [g] jdungeon.txt#Feelings
-***** [h] jdungeon.txt#RandomQuests
+***** [g] jdungeon.txt#DangerousTerrain
+***** [h] jdungeon.txt#Feelings
+***** [i] jdungeon.txt#RandomQuests
