@@ -938,19 +938,24 @@ EXTRA_DIST = \
 	gcc-wrap
 
 DEFAULT_INCLUDES = -I$(srcdir) -I$(top_builddir)/src
-CPPFLAGS += $(XFT_CFLAGS) $(libcurl_CFLAGS) -include stdafx.h
+CPPFLAGS += $(XFT_CFLAGS) $(libcurl_CFLAGS)
+if PCH
+CPPFLAGS += -include stdafx.h
+endif
 LIBS += $(XFT_LIBS) $(libcurl_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CXXCOMPILE = $(srcdir)/gcc-wrap $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CXXFLAGS)
 
+if PCH
 stdafx.h.gch: stdafx.h stdafx.cpp Makefile
 	$(CXX) -x c++-header $(CXXFLAGS) $(srcdir)/stdafx.cpp -o $@
 	rm -f stdafx.h.gch.sum
 	md5sum $@ > stdafx.h.gch.sum
 
 $(hengband_SOURCES:.cpp=.$(OBJEXT)): stdafx.h.gch
+endif
 
 install-exec-hook:
 if SET_GID

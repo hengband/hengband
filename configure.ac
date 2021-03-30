@@ -64,6 +64,10 @@ AC_ARG_ENABLE(worldscore,
 [  --disable-worldscore    disable worldscore support], worldscore=no, AC_DEFINE(WORLD_SCORE, 1, [Allow the game to send scores to the score server]))
 AC_ARG_ENABLE(chuukei,
 [  --enable-chuukei        enable internet chuukei support], AC_DEFINE(CHUUKEI, 1, [Chuukei mode]))
+AC_ARG_ENABLE([pch],
+[  --disable-pch           disable use of precompiled headers],
+enable_pch=no, enable_pch=yes)
+AM_CONDITIONAL([PCH], [test x$enable_pch = xyes])
 
 dnl Checks for libraries.
 dnl Replace `main' with a function in -lncurses:
