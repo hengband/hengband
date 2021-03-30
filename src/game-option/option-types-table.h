@@ -2,6 +2,8 @@
 
 #include "system/angband.h"
 
+#include <array>
+
 /*
  * Available "options"
  *	- Address of actual option variable (or NULL)
