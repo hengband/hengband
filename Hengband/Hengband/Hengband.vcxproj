@@ -349,6 +349,7 @@
     <ClCompile Include="..\..\src\io\store-key-processor.cpp" />
     <ClCompile Include="..\..\src\load\info-loader.cpp" />
     <ClCompile Include="..\..\src\locale\utf-8.cpp" />
+    <ClCompile Include="..\..\src\main-win\main-win-cfg-reader.cpp" />
     <ClCompile Include="..\..\src\main-win\main-win-file-utils.cpp" />
     <ClCompile Include="..\..\src\main-win\main-win-mci.cpp" />
     <ClCompile Include="..\..\src\main-win\main-win-music.cpp" />
@@ -1023,6 +1024,7 @@
     <ClInclude Include="..\..\src\load\info-loader.h" />
     <ClInclude Include="..\..\src\locale\language-switcher.h" />
     <ClInclude Include="..\..\src\locale\utf-8.h" />
+    <ClInclude Include="..\..\src\main-win\main-win-cfg-reader.h" />
     <ClInclude Include="..\..\src\main-win\main-win-file-utils.h" />
     <ClInclude Include="..\..\src\main-win\main-win-mci.h" />
     <ClInclude Include="..\..\src\main-win\main-win-mmsystem.h" />

@@ -2250,6 +2250,9 @@
     <ClCompile Include="..\..\src\main\scene-table.cpp">
       <Filter>main</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\main-win\main-win-cfg-reader.cpp">
+      <Filter>main-win</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4847,6 +4850,9 @@
     <ClInclude Include="..\..\src\stdafx.h" />
     <ClInclude Include="..\..\src\main\scene-table.h">
       <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main-win\main-win-cfg-reader.h">
+      <Filter>main-win</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
