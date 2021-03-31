@@ -2247,11 +2247,17 @@
       <Filter>main-win</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\stdafx.cpp" />
-    <ClCompile Include="..\..\src\main\scene-table.cpp">
-      <Filter>main</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\main-win\main-win-cfg-reader.cpp">
       <Filter>main-win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\main\scene-table-floor.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\main\scene-table-monster.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\main\scene-table.cpp">
+      <Filter>main</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4848,14 +4854,20 @@
       <Filter>main-win</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\stdafx.h" />
-    <ClInclude Include="..\..\src\main\scene-table.h">
-      <Filter>main</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\main-win\main-win-cfg-reader.h">
       <Filter>main-win</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\util\point-2d.h">
       <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main\scene-table-floor.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main\scene-table-monster.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main\scene-table.h">
+      <Filter>main</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

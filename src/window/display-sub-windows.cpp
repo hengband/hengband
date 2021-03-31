@@ -39,6 +39,7 @@
 #include "world/world.h"
 #include <string>
 #include <sstream>
+#include <main/sound-of-music.h>
 
 /*!
  * @brief サブウィンドウに所持品一覧を表示する / Hack -- display inventory in sub-windows
@@ -197,6 +198,7 @@ void fix_monster_list(player_type *player_ptr)
         term_get_size(&w, &h);
         target_sensing_monsters_prepare(player_ptr, monster_list);
         print_monster_list(player_ptr->current_floor_ptr, monster_list, 0, 0, h);
+        select_monster_music(player_ptr, monster_list);
         term_fresh();
         term_activate(old);
     }

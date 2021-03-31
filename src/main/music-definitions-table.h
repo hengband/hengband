@@ -22,7 +22,11 @@ enum music_type {
     MUSIC_BASIC_QUEST_CLEAR = 18,
     MUSIC_BASIC_FINAL_QUEST_CLEAR = 19,
     MUSIC_BASIC_AMBUSH = 20,
-    MUSIC_BASIC_MAX = 21, /*!< BGM定義の最大数 */
+    MUSIC_BASIC_UNIQUE = 21,
+    MUSIC_BASIC_SHADOWER = 22,
+    MUSIC_BASIC_UNKNOWN_MONSTER = 23,
+    MUSIC_BASIC_HIGHER_LEVEL_MONSTER = 24,
+    MUSIC_BASIC_MAX = 25, /*!< BGM定義の最大数 */
 };
 
 extern const concptr angband_music_basic_name[MUSIC_BASIC_MAX];

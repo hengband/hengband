@@ -14,6 +14,6 @@ namespace main_win_music {
 void load_music_prefs();
 errr stop_music(void);
 errr play_music(int type, int val);
-errr play_music_scene();
+errr play_music_scene(int val);
 void on_mci_notify(WPARAM wFlags, LONG lDevID);
 }
