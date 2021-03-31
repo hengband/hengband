@@ -165,7 +165,7 @@ MonsterSpellResult spell_RF5_MIND_BLAST(player_type *target_ptr, POSITION y, POS
     const auto dam = monspell_damage(target_ptr, (MS_MIND_BLAST), m_idx, DAM_ROLL);
     const auto proj_res = breath(target_ptr, y, x, m_idx, GF_MIND_BLAST, dam, 0, FALSE, MS_MIND_BLAST, TARGET_TYPE);
 
-    auto res = MonsterSpellResult::make_valid();
+    auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
 
     return res;
@@ -203,7 +203,7 @@ MonsterSpellResult spell_RF5_BRAIN_SMASH(player_type *target_ptr, POSITION y, PO
     const auto dam = monspell_damage(target_ptr, (MS_BRAIN_SMASH), m_idx, DAM_ROLL);
     const auto proj_res = breath(target_ptr, y, x, m_idx, GF_BRAIN_SMASH, dam, 0, FALSE, MS_BRAIN_SMASH, TARGET_TYPE);
 
-    auto res = MonsterSpellResult::make_valid();
+    auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
 
     return res;

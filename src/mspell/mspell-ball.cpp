@@ -36,7 +36,7 @@ MonsterSpellResult spell_RF4_BA_NUKE(player_type *target_ptr, POSITION y, POSITI
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(target_ptr, m_idx, DRS_POIS);
 
-    auto res = MonsterSpellResult::make_valid();
+    auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
 
     return res;
@@ -63,7 +63,7 @@ MonsterSpellResult spell_RF4_BA_CHAO(player_type *target_ptr, POSITION y, POSITI
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(target_ptr, m_idx, DRS_CHAOS);
 
-    auto res = MonsterSpellResult::make_valid();
+    auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
 
     return res;
@@ -92,7 +92,7 @@ MonsterSpellResult spell_RF5_BA_ACID(player_type *target_ptr, POSITION y, POSITI
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(target_ptr, m_idx, DRS_ACID);
 
-    auto res = MonsterSpellResult::make_valid();
+    auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
 
     return res;
@@ -121,7 +121,7 @@ MonsterSpellResult spell_RF5_BA_ELEC(player_type *target_ptr, POSITION y, POSITI
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(target_ptr, m_idx, DRS_ELEC);
 
-    auto res = MonsterSpellResult::make_valid();
+    auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
 
     return res;
@@ -157,7 +157,7 @@ MonsterSpellResult spell_RF5_BA_FIRE(player_type *target_ptr, POSITION y, POSITI
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(target_ptr, m_idx, DRS_FIRE);
 
-    auto res = MonsterSpellResult::make_valid();
+    auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
 
     return res;
@@ -186,7 +186,7 @@ MonsterSpellResult spell_RF5_BA_COLD(player_type *target_ptr, POSITION y, POSITI
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(target_ptr, m_idx, DRS_COLD);
 
-    auto res = MonsterSpellResult::make_valid();
+    auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
 
     return res;
@@ -213,7 +213,7 @@ MonsterSpellResult spell_RF5_BA_POIS(player_type *target_ptr, POSITION y, POSITI
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(target_ptr, m_idx, DRS_POIS);
 
-    auto res = MonsterSpellResult::make_valid();
+    auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
 
     return res;
@@ -240,7 +240,7 @@ MonsterSpellResult spell_RF5_BA_NETH(player_type *target_ptr, POSITION y, POSITI
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(target_ptr, m_idx, DRS_NETH);
 
-    auto res = MonsterSpellResult::make_valid();
+    auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
 
     return res;
@@ -278,7 +278,7 @@ MonsterSpellResult spell_RF5_BA_WATE(player_type *target_ptr, POSITION y, POSITI
     const auto dam = monspell_damage(target_ptr, (MS_BALL_WATER), m_idx, DAM_ROLL);
     const auto proj_res = breath(target_ptr, y, x, m_idx, GF_WATER, dam, 4, FALSE, MS_BALL_WATER, TARGET_TYPE);
 
-    auto res = MonsterSpellResult::make_valid();
+    auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
 
     return res;
@@ -304,7 +304,7 @@ MonsterSpellResult spell_RF5_BA_MANA(player_type *target_ptr, POSITION y, POSITI
     const auto dam = monspell_damage(target_ptr, (MS_BALL_MANA), m_idx, DAM_ROLL);
     const auto proj_res = breath(target_ptr, y, x, m_idx, GF_MANA, dam, 4, FALSE, MS_BALL_MANA, TARGET_TYPE);
 
-    auto res = MonsterSpellResult::make_valid();
+    auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
 
     return res;
@@ -332,7 +332,7 @@ MonsterSpellResult spell_RF5_BA_DARK(player_type *target_ptr, POSITION y, POSITI
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(target_ptr, m_idx, DRS_DARK);
 
-    auto res = MonsterSpellResult::make_valid();
+    auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
 
     return res;
@@ -360,7 +360,7 @@ MonsterSpellResult spell_RF5_BA_LITE(player_type *target_ptr, POSITION y, POSITI
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(target_ptr, m_idx, DRS_LITE);
 
-    auto res = MonsterSpellResult::make_valid();
+    auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
 
     return res;
