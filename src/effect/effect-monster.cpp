@@ -394,7 +394,7 @@ static void effect_damage_piles_confusion(player_type *caster_ptr, effect_monste
  */
 static void effect_damage_piles_fear(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
-    if (em_ptr->do_fear == 0)
+    if (em_ptr->do_fear == 0 || any_bits(em_ptr->r_ptr->flags3, RF3_NO_FEAR))
         return;
 
     (void)set_monster_monfear(caster_ptr, em_ptr->g_ptr->m_idx, monster_fear_remaining(em_ptr->m_ptr) + em_ptr->do_fear);
