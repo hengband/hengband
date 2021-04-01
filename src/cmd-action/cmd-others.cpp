@@ -50,6 +50,9 @@ void do_cmd_search(player_type *creature_ptr)
 
     take_turn(creature_ptr, 100);
     search(creature_ptr);
+
+    if (creature_ptr->action == ACTION_SEARCH)
+        search(creature_ptr);
 }
 
 static bool exe_alter(player_type *creature_ptr)
