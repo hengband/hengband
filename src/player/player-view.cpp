@@ -7,6 +7,7 @@
 #include "grid/grid.h"
 #include "player/player-view.h"
 #include "system/floor-type-definition.h"
+#include "util/point-2d.h"
 
 /*
  * Helper function for "update_view()" below
@@ -96,18 +97,8 @@ static bool update_view_aux(player_type *subject_ptr, POSITION y, POSITION x, PO
  */
 void update_view(player_type *subject_ptr)
 {
-    struct Point {
-        int y;
-        int x;
-        Point(const int y, const int x)
-            : y(y)
-            , x(x)
-        {
-        }
-    };
-
     // 前回プレイヤーから見えていた座標たちを格納する配列。
-    std::vector<Point> points;
+    std::vector<Pos2D> points;
 
     int n, m, d, k, z;
     POSITION y, x;

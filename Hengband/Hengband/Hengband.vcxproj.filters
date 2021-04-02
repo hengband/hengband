@@ -4854,6 +4854,9 @@
     <ClInclude Include="..\..\src\main-win\main-win-cfg-reader.h">
       <Filter>main-win</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\util\point-2d.h">
+      <Filter>util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

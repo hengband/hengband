@@ -34,11 +34,11 @@
 #include "io/screen-util.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-flags2.h"
+#include "monster-race/race-flags7.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
-#include "monster-race/race-flags2.h"
-#include "monster-race/race-flags7.h"
 #include "object/item-tester-hooker.h"
 #include "object/object-mark-types.h"
 #include "player/player-class.h"
@@ -49,6 +49,7 @@
 #include "system/floor-type-definition.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
+#include "util/point-2d.h"
 #include "view/display-map.h"
 #include "view/display-messages.h"
 #include "window/main-window-util.h"
@@ -804,16 +805,6 @@ static POSITION flow_y = 0;
  */
 void update_flow(player_type *subject_ptr)
 {
-    struct Point {
-        int y;
-        int x;
-        Point(const int y, const int x)
-            : y(y)
-            , x(x)
-        {
-        }
-    };
-
     POSITION x, y;
     DIRECTION d;
     floor_type *f_ptr = subject_ptr->current_floor_ptr;
@@ -839,7 +830,7 @@ void update_flow(player_type *subject_ptr)
 
     for (int i = 0; i < FLOW_MAX; i++) {
         // 幅優先探索用のキュー。
-        std::queue<Point> que;
+        std::queue<Pos2D> que;
         que.emplace(subject_ptr->y, subject_ptr->x);
 
         /* Now process the queue */

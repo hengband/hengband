@@ -14,6 +14,7 @@
 #include "sv-definition/sv-lite-types.h"
 #include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
+#include "util/point-2d.h"
 
 /*!
  * @brief 投擲時たいまつに投げやすい/焼棄/アンデッドスレイの特別効果を返す。
@@ -166,18 +167,8 @@ void update_lite_radius(player_type *creature_ptr)
  */
 void update_lite(player_type *subject_ptr)
 {
-    struct Point {
-        int y;
-        int x;
-        Point(const int y, const int x)
-            : y(y)
-            , x(x)
-        {
-        }
-    };
-
     // 前回照らされていた座標たちを格納する配列。
-    std::vector<Point> points;
+    std::vector<Pos2D> points;
 
     POSITION p = subject_ptr->cur_lite;
     floor_type *const floor_ptr = subject_ptr->current_floor_ptr;
