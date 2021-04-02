@@ -499,7 +499,7 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     flavor_type tmp_flavor;
     flavor_type *flavor_ptr = initialize_flavor_type(&tmp_flavor, buf, o_ptr, mode);
     describe_named_item(player_ptr, flavor_ptr);
-    if (flavor_ptr->mode & OD_NAME_ONLY) {
+    if (flavor_ptr->mode & OD_NAME_ONLY || o_ptr->k_idx == 0) {
         angband_strcpy(flavor_ptr->buf, flavor_ptr->tmp_val, MAX_NLEN);
         return;
     }
