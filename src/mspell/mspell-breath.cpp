@@ -210,7 +210,7 @@ MonsterSpellResult spell_RF4_BREATH(player_type *target_ptr, int GF_TYPE, POSITI
     if (smart_learn_aux && mon_to_player)
         update_smart_learn(target_ptr, m_idx, drs_type);
 
-    auto res = MonsterSpellResult::make_valid();
+    auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
 
     return res;

@@ -40,7 +40,7 @@ MonsterSpellResult spell_RF4_ROCKET(player_type *target_ptr, POSITION y, POSITIO
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(target_ptr, m_idx, DRS_SHARD);
 
-    auto res = MonsterSpellResult::make_valid();
+    auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
 
     return res;
@@ -95,7 +95,7 @@ MonsterSpellResult spell_RF6_PSY_SPEAR(player_type *target_ptr, POSITION y, POSI
     const auto dam = monspell_damage(target_ptr, (MS_PSY_SPEAR), m_idx, DAM_ROLL);
     const auto proj_res = beam(target_ptr, m_idx, y, x, GF_PSY_SPEAR, dam, MS_PSY_SPEAR, MONSTER_TO_PLAYER);
 
-    auto res = MonsterSpellResult::make_valid();
+    auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
 
     return res;
