@@ -94,7 +94,7 @@ static bool scene_field(player_type *player_ptr, scene_type *value)
 
 static bool scene_dungeon_feeling(player_type *player_ptr, scene_type *value)
 {
-    const bool enable = (player_ptr->feeling >= 2);
+    const bool enable = (player_ptr->feeling >= 2) && (player_ptr->feeling <= 5);
     if (enable) {
         value->type = TERM_XTRA_MUSIC_BASIC;
 
