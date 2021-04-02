@@ -374,7 +374,6 @@ bool make_artifact_special(player_type *player_ptr, object_type *o_ptr)
         object_prep(player_ptr, o_ptr, k_idx);
 
         o_ptr->name1 = i;
-        random_artifact_resistance(player_ptr, o_ptr, a_ptr);
         return TRUE;
     }
 
