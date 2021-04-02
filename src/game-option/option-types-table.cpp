@@ -15,7 +15,8 @@
  * @brief オプションテーブル /
  * Available Options
  */
-const std::array<option_type, MAX_OPTION_INFO> option_info = {{ /*** Input Options ***/
+const std::array<const option_type, MAX_OPTION_INFO> option_info = {{
+    /*** Input Options ***/
     { &rogue_like_commands, FALSE, OPT_PAGE_INPUT, 0, 0, "rogue_like_commands", _("ローグ風キー配置を使用する", "Rogue-like commands") },
 
     { &always_pickup, FALSE, OPT_PAGE_INPUT, 0, 5, "always_pickup", _("常にアイテムを拾う", "Pick things up by default") },
@@ -239,6 +240,8 @@ const std::array<option_type, MAX_OPTION_INFO> option_info = {{ /*** Input Optio
     { &autochara, FALSE, OPT_PAGE_BIRTH, 6, 16, "autochara", _("体格/地位にオートローラー使用", "Autoroll for weight, height and social status") },
 
     { &powerup_home, TRUE, OPT_PAGE_BIRTH, 4, 3, "powerup_home", _("我が家を拡張する(*)", "Increase capacity of your home (*)") },
+
+    { &keep_savefile, TRUE, OPT_PAGE_BIRTH, 4, 4, "keep_savefile", _("同一のセーブファイルでゲームを開始する(*)", "Start game with same savefile thet is loaded (*)") },
 
     /*** Easy Object Auto-Destroyer ***/
     { &destroy_items, FALSE, OPT_PAGE_AUTODESTROY, 7, 0, "destroy_items", _("アイテムの簡易自動破壊を使用する", "Use easy auto-destroyer") },
