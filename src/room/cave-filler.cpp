@@ -14,6 +14,7 @@
 #include "room/cave-filler.h"
 #include "room/lake-types.h"
 #include "system/floor-type-definition.h"
+#include "util/point-2d.h"
 
 typedef struct fill_data_type {
     POSITION xmin;
@@ -227,20 +228,10 @@ static bool hack_isnt_wall(player_type *player_ptr, POSITION y, POSITION x, int 
  */
 static void cave_fill(player_type *player_ptr, const POSITION y, const POSITION x)
 {
-    struct Point {
-        int y;
-        int x;
-        Point(const int y, const int x)
-            : y(y)
-            , x(x)
-        {
-        }
-    };
-
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
 
     // 幅優先探索用のキュー。
-    std::queue<Point> que;
+    std::queue<Pos2D> que;
     que.emplace(y, x);
 
     while (!que.empty()) {
