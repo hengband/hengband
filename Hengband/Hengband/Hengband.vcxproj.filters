@@ -4851,6 +4851,9 @@
     <ClInclude Include="..\..\src\util\point-2d.h">
       <Filter>util</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\main-win\main-win-menuitem.h">
+      <Filter>main-win</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

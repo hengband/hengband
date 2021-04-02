@@ -74,12 +74,6 @@
  * </p>
  *
  * <p>
- * Special "Windows Help Files" can be placed into "lib/xtra/help/" for
- * use with the "winhelp.exe" program.  These files *may* be available
- * at the ftp site somewhere, but I have not seen them.
- * </p>
- *
- * <p>
  * Initial framework (and most code) by Ben Harrison (benh@phial.com).
  *
  * Original code by Skirmantas Kligys (kligys@scf.usc.edu).
@@ -90,8 +84,6 @@
  */
 
 #ifdef WINDOWS
-
-#include <cstdlib>
 
 #include "autopick/autopick-pref-processor.h"
 #include "cmd-io/cmd-process-screen.h"
@@ -114,6 +106,7 @@
 #include "main-win/main-win-bg.h"
 #include "main-win/main-win-file-utils.h"
 #include "main-win/main-win-mci.h"
+#include "main-win/main-win-menuitem.h"
 #include "main-win/main-win-music.h"
 #include "main-win/main-win-sound.h"
 #include "main/angband-initializer.h"
@@ -136,16 +129,16 @@
 #include "wizard/wizard-spoiler.h"
 #include "world/world.h"
 
+#include <cstdlib>
+#include <locale>
+
 #include <commdlg.h>
 #include <direct.h>
-#include <locale.h>
 
 /*
  * Include the support for loading bitmaps
  */
 #include "term/readdib.h"
-
-#define MOUSE_SENS 40
 
 /*
  * Available graphic modes
@@ -154,106 +147,6 @@
 #define GRAPHICS_ORIGINAL 1
 #define GRAPHICS_ADAM_BOLT 2
 #define GRAPHICS_HENGBAND 3
-
-/*
- * Menu constants -- see "ANGBAND.RC"
- */
-#define IDM_FILE_NEW 100
-#define IDM_FILE_OPEN 101
-#define IDM_FILE_SAVE 110
-#define IDM_FILE_SCORE 120
-#define IDM_FILE_MOVIE 121
-#define IDM_FILE_EXIT 130
-
-#define IDM_WINDOW_VIS_0 200
-#define IDM_WINDOW_VIS_1 201
-#define IDM_WINDOW_VIS_2 202
-#define IDM_WINDOW_VIS_3 203
-#define IDM_WINDOW_VIS_4 204
-#define IDM_WINDOW_VIS_5 205
-#define IDM_WINDOW_VIS_6 206
-#define IDM_WINDOW_VIS_7 207
-
-#define IDM_WINDOW_FONT_0 210
-#define IDM_WINDOW_FONT_1 211
-#define IDM_WINDOW_FONT_2 212
-#define IDM_WINDOW_FONT_3 213
-#define IDM_WINDOW_FONT_4 214
-#define IDM_WINDOW_FONT_5 215
-#define IDM_WINDOW_FONT_6 216
-#define IDM_WINDOW_FONT_7 217
-
-#define IDM_WINDOW_POS_0 220
-#define IDM_WINDOW_POS_1 221
-#define IDM_WINDOW_POS_2 222
-#define IDM_WINDOW_POS_3 223
-#define IDM_WINDOW_POS_4 224
-#define IDM_WINDOW_POS_5 225
-#define IDM_WINDOW_POS_6 226
-#define IDM_WINDOW_POS_7 227
-
-#define IDM_WINDOW_BIZ_0 230
-#define IDM_WINDOW_BIZ_1 231
-#define IDM_WINDOW_BIZ_2 232
-#define IDM_WINDOW_BIZ_3 233
-#define IDM_WINDOW_BIZ_4 234
-#define IDM_WINDOW_BIZ_5 235
-#define IDM_WINDOW_BIZ_6 236
-#define IDM_WINDOW_BIZ_7 237
-
-#define IDM_WINDOW_I_WID_0 240
-#define IDM_WINDOW_I_WID_1 241
-#define IDM_WINDOW_I_WID_2 242
-#define IDM_WINDOW_I_WID_3 243
-#define IDM_WINDOW_I_WID_4 244
-#define IDM_WINDOW_I_WID_5 245
-#define IDM_WINDOW_I_WID_6 246
-#define IDM_WINDOW_I_WID_7 247
-
-#define IDM_WINDOW_D_WID_0 250
-#define IDM_WINDOW_D_WID_1 251
-#define IDM_WINDOW_D_WID_2 252
-#define IDM_WINDOW_D_WID_3 253
-#define IDM_WINDOW_D_WID_4 254
-#define IDM_WINDOW_D_WID_5 255
-#define IDM_WINDOW_D_WID_6 256
-#define IDM_WINDOW_D_WID_7 257
-
-#define IDM_WINDOW_I_HGT_0 260
-#define IDM_WINDOW_I_HGT_1 261
-#define IDM_WINDOW_I_HGT_2 262
-#define IDM_WINDOW_I_HGT_3 263
-#define IDM_WINDOW_I_HGT_4 264
-#define IDM_WINDOW_I_HGT_5 265
-#define IDM_WINDOW_I_HGT_6 266
-#define IDM_WINDOW_I_HGT_7 267
-
-#define IDM_WINDOW_D_HGT_0 270
-#define IDM_WINDOW_D_HGT_1 271
-#define IDM_WINDOW_D_HGT_2 272
-#define IDM_WINDOW_D_HGT_3 273
-#define IDM_WINDOW_D_HGT_4 274
-#define IDM_WINDOW_D_HGT_5 275
-#define IDM_WINDOW_D_HGT_6 276
-#define IDM_WINDOW_D_HGT_7 277
-
-#define IDM_WINDOW_KEEP_SUBWINDOWS 280
-
-#define IDM_OPTIONS_NO_GRAPHICS 400
-#define IDM_OPTIONS_OLD_GRAPHICS 401
-#define IDM_OPTIONS_NEW_GRAPHICS 402
-#define IDM_OPTIONS_NEW2_GRAPHICS 403
-#define IDM_OPTIONS_BIGTILE 409
-#define IDM_OPTIONS_SOUND 410
-#define IDM_OPTIONS_MUSIC 411
-#define IDM_OPTIONS_SAVER 420
-#define IDM_OPTIONS_MAP 430
-#define IDM_OPTIONS_BG 440
-#define IDM_OPTIONS_OPEN_BG 441
-
-#define IDM_DUMP_SCREEN_HTML 450
-
-#define IDM_HELP_CONTENTS 901
 
 /*
  * Foreground color bits
@@ -325,10 +218,6 @@ typedef struct {
     int tile_wid; //!< タイル横幅
     int tile_hgt; //!< タイル縦幅
 
-    uint map_tile_wid;
-    uint map_tile_hgt;
-
-    bool map_active;
     LOGFONT lf;
 
     bool posfix;
@@ -389,11 +278,6 @@ static HPALETTE hPal;
 static int use_bg = 0; //!< 背景使用フラグ、1なら使用。
 #define DEFAULT_BG_FILENAME "bg.bmp"
 
-/*
- * The screen saver window
- */
-static HWND hwndSaver;
-
 /*!
  * 現在使用中のタイルID(0ならば未使用)
  * Flag set once "graphics" has been initialized
@@ -434,7 +318,6 @@ static concptr AngList = "AngList";
  * Directory names
  */
 static concptr ANGBAND_DIR_XTRA_GRAF;
-static concptr ANGBAND_DIR_XTRA_HELP;
 
 /*
  * The "complex" color values
@@ -1065,18 +948,11 @@ static void term_window_pos(term_data *td, HWND hWnd)
     SetWindowPos(td->w, hWnd, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
 }
 
-static void windows_map(player_type *player_ptr);
-
 /*
  * Hack -- redraw a term_data
  */
-static void term_data_redraw(player_type *player_ptr, term_data *td)
+static void term_data_redraw(term_data *td)
 {
-    if (td->map_active) {
-        windows_map(player_ptr);
-        return;
-    }
-
     term_activate(&td->t);
     term_redraw();
     term_activate(term_screen);
@@ -1351,13 +1227,8 @@ static errr term_curs_win(int x, int y)
 {
     term_data *td = (term_data *)(Term->data);
     int tile_wid, tile_hgt;
-    if (td->map_active) {
-        tile_wid = td->map_tile_wid;
-        tile_hgt = td->map_tile_hgt;
-    } else {
-        tile_wid = td->tile_wid;
-        tile_hgt = td->tile_hgt;
-    }
+    tile_wid = td->tile_wid;
+    tile_hgt = td->tile_hgt;
 
     RECT rc;
     rc.left = x * tile_wid + td->size_ow1;
@@ -1380,13 +1251,8 @@ static errr term_bigcurs_win(int x, int y)
 {
     term_data *td = (term_data *)(Term->data);
     int tile_wid, tile_hgt;
-    if (td->map_active) {
-        term_curs_win(x, y);
-        return 0;
-    } else {
-        tile_wid = td->tile_wid;
-        tile_hgt = td->tile_hgt;
-    }
+    tile_wid = td->tile_wid;
+    tile_hgt = td->tile_hgt;
 
     RECT rc;
     rc.left = x * tile_wid + td->size_ow1;
@@ -1566,16 +1432,11 @@ static errr term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
     TERM_LEN tw1 = infGraph.TileWidth;
     TERM_LEN th1 = infGraph.TileHeight;
     TERM_LEN w2, h2, tw2 = 0;
-    if (td->map_active) {
-        w2 = td->map_tile_wid;
-        h2 = td->map_tile_hgt;
-    } else {
-        w2 = td->tile_wid;
-        h2 = td->tile_hgt;
-        tw2 = w2;
-        if (use_bigtile)
-            tw2 *= 2;
-    }
+    w2 = td->tile_wid;
+    h2 = td->tile_hgt;
+    tw2 = w2;
+    if (use_bigtile)
+        tw2 *= 2;
 
     TERM_LEN x2 = x * w2 + td->size_ow1 + infGraph.OffsetX;
     TERM_LEN y2 = y * h2 + td->size_oh1 + infGraph.OffsetY;
@@ -1637,43 +1498,6 @@ static errr term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
 
     ReleaseDC(td->w, hdc);
     return 0;
-}
-
-static void windows_map(player_type *player_ptr)
-{
-    term_data *td = &data[0];
-    TERM_COLOR ta;
-    if (!use_graphics)
-        return;
-
-    term_xtra_win_clear();
-    td->map_tile_wid = (td->tile_wid * td->cols) / MAX_WID;
-    td->map_tile_hgt = (td->tile_hgt * td->rows) / MAX_HGT;
-    td->map_active = TRUE;
-
-    TERM_LEN min_x = 0;
-    TERM_LEN min_y = 0;
-    TERM_LEN max_x = player_ptr->current_floor_ptr->width;
-    TERM_LEN max_y = player_ptr->current_floor_ptr->height;
-
-    char c;
-    for (TERM_LEN x = min_x; x < max_x; x++) {
-        for (TERM_LEN y = min_y; y < max_y; y++) {
-            TERM_COLOR a;
-            char tc;
-            map_info(player_ptr, y, x, &a, (char *)&c, &ta, (char *)&tc);
-            if ((a & 0x80) && (c & 0x80)) {
-                term_pict_win(x - min_x, y - min_y, 1, &a, &c, &ta, &tc);
-            }
-        }
-    }
-
-    term_curs_win(player_ptr->x - min_x, player_ptr->y - min_y);
-    term_inkey(&c, TRUE, TRUE);
-    term_flush();
-    td->map_active = FALSE;
-    term_xtra_win_clear();
-    term_redraw();
 }
 
 /*
@@ -1851,23 +1675,19 @@ static void init_windows(void)
 static void setup_menus(void)
 {
     HMENU hm = GetMenu(data[0].w);
-    EnableMenuItem(hm, IDM_FILE_NEW, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
-    EnableMenuItem(hm, IDM_FILE_OPEN, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
-    EnableMenuItem(hm, IDM_FILE_SAVE, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
-    EnableMenuItem(hm, IDM_FILE_EXIT, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
-    EnableMenuItem(hm, IDM_FILE_SCORE, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
-
-    if (!current_world_ptr->character_generated) {
-        EnableMenuItem(hm, IDM_FILE_NEW, MF_BYCOMMAND | MF_ENABLED);
-        EnableMenuItem(hm, IDM_FILE_OPEN, MF_BYCOMMAND | MF_ENABLED);
-    }
 
     if (current_world_ptr->character_generated) {
+        EnableMenuItem(hm, IDM_FILE_NEW, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
+        EnableMenuItem(hm, IDM_FILE_OPEN, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
         EnableMenuItem(hm, IDM_FILE_SAVE, MF_BYCOMMAND | MF_ENABLED);
+    } else {
+        EnableMenuItem(hm, IDM_FILE_NEW, MF_BYCOMMAND | MF_ENABLED);
+        EnableMenuItem(hm, IDM_FILE_OPEN, MF_BYCOMMAND | MF_ENABLED);
+        EnableMenuItem(hm, IDM_FILE_SAVE, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
     }
 
-    EnableMenuItem(hm, IDM_FILE_EXIT, MF_BYCOMMAND | MF_ENABLED);
     EnableMenuItem(hm, IDM_FILE_SCORE, MF_BYCOMMAND | MF_ENABLED);
+    EnableMenuItem(hm, IDM_FILE_EXIT, MF_BYCOMMAND | MF_ENABLED);
 
     for (int i = 0; i < MAX_TERM_DATA; i++) {
         EnableMenuItem(hm, IDM_WINDOW_VIS_0 + i, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
@@ -1935,15 +1755,6 @@ static void setup_menus(void)
     EnableMenuItem(hm, IDM_OPTIONS_NEW_GRAPHICS, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
     EnableMenuItem(hm, IDM_OPTIONS_BIGTILE, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
     EnableMenuItem(hm, IDM_OPTIONS_SOUND, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
-#ifdef JP
-#else
-    EnableMenuItem(hm, IDM_OPTIONS_SAVER, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
-#endif
-
-    if (use_graphics != GRAPHICS_NONE)
-        EnableMenuItem(GetMenu(data[0].w), IDM_OPTIONS_MAP, MF_BYCOMMAND | MF_ENABLED);
-    else
-        EnableMenuItem(GetMenu(data[0].w), IDM_OPTIONS_MAP, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 
     CheckMenuItem(hm, IDM_OPTIONS_NO_GRAPHICS, (arg_graphics == GRAPHICS_NONE ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_OLD_GRAPHICS, (arg_graphics == GRAPHICS_ORIGINAL ? MF_CHECKED : MF_UNCHECKED));
@@ -1953,16 +1764,12 @@ static void setup_menus(void)
     CheckMenuItem(hm, IDM_OPTIONS_MUSIC, (arg_music ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_SOUND, (arg_sound ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_BG, (use_bg ? MF_CHECKED : MF_UNCHECKED));
-#ifdef JP
-#else
-    CheckMenuItem(hm, IDM_OPTIONS_SAVER, (hwndSaver ? MF_CHECKED : MF_UNCHECKED));
-#endif
+
     EnableMenuItem(hm, IDM_OPTIONS_NO_GRAPHICS, MF_ENABLED);
     EnableMenuItem(hm, IDM_OPTIONS_OLD_GRAPHICS, MF_ENABLED);
     EnableMenuItem(hm, IDM_OPTIONS_NEW_GRAPHICS, MF_ENABLED);
     EnableMenuItem(hm, IDM_OPTIONS_BIGTILE, MF_ENABLED);
     EnableMenuItem(hm, IDM_OPTIONS_SOUND, MF_ENABLED);
-    EnableMenuItem(hm, IDM_OPTIONS_SAVER, MF_BYCOMMAND | MF_ENABLED);
 }
 
 /*
@@ -2132,7 +1939,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         if (!td->visible) {
             td->visible = TRUE;
             ShowWindow(td->w, SW_SHOW);
-            term_data_redraw(player_ptr, td);
+            term_data_redraw(td);
         } else {
             td->visible = FALSE;
             td->posfix = FALSE;
@@ -2428,43 +2235,6 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 
         break;
     }
-    case IDM_OPTIONS_SAVER: {
-        if (hwndSaver) {
-            DestroyWindow(hwndSaver);
-            hwndSaver = NULL;
-            break;
-        }
-
-        hwndSaver = CreateWindowEx(WS_EX_TOPMOST, "WindowsScreenSaverClass", "Angband Screensaver", WS_POPUP | WS_MAXIMIZE | WS_VISIBLE, 0, 0,
-            GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), NULL, NULL, hInstance, NULL);
-
-        if (hwndSaver) {
-            SetWindowPos(hwndSaver, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
-        } else {
-            plog(_("ウィンドウを作成出来ません", "Failed to create saver window"));
-        }
-
-        break;
-    }
-    case IDM_OPTIONS_MAP: {
-        windows_map(player_ptr);
-        break;
-    }
-
-    case IDM_HELP_CONTENTS: {
-        char buf[1024];
-        char tmp[1024];
-        path_build(tmp, sizeof(tmp), ANGBAND_DIR_XTRA_HELP, "zangband.hlp");
-        if (check_file(tmp)) {
-            sprintf(buf, "winhelp.exe %s", tmp);
-            WinExec(buf, SW_NORMAL);
-            break;
-        }
-
-        plog_fmt(_("ヘルプファイル[%s]が見付かりません。", "Cannot find help file: %s"), tmp);
-        plog(_("代わりにオンラインヘルプを使用してください。", "Use the online help files instead."));
-        break;
-    }
     }
 }
 
@@ -2609,7 +2379,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
     case WM_PAINT: {
         BeginPaint(hWnd, &ps);
         if (td)
-            term_data_redraw(p_ptr, td);
+            term_data_redraw(td);
         EndPaint(hWnd, &ps);
         ValidateRect(hWnd, NULL);
         return 0;
@@ -2956,7 +2726,7 @@ LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
     case WM_PAINT: {
         BeginPaint(hWnd, &ps);
         if (td)
-            term_data_redraw(p_ptr, td);
+            term_data_redraw(td);
         EndPaint(hWnd, &ps);
         return 0;
     }
@@ -3006,60 +2776,6 @@ LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
         }
 
         break;
-    }
-    }
-
-    return DefWindowProc(hWnd, uMsg, wParam, lParam);
-}
-
-LRESULT PASCAL AngbandSaverProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-    static int iMouse = 0;
-    static WORD xMouse = 0;
-    static WORD yMouse = 0;
-
-    switch (uMsg) {
-    case WM_NCCREATE: {
-        break;
-    }
-
-    case WM_SETCURSOR: {
-        SetCursor(NULL);
-        return 0;
-    }
-
-    case WM_LBUTTONDOWN:
-    case WM_MBUTTONDOWN:
-    case WM_RBUTTONDOWN:
-    case WM_KEYDOWN: {
-        SendMessage(hWnd, WM_CLOSE, 0, 0);
-        return 0;
-    }
-    case WM_MOUSEMOVE: {
-        if (iMouse) {
-            int dx = LOWORD(lParam) - xMouse;
-            int dy = HIWORD(lParam) - yMouse;
-
-            if (dx < 0)
-                dx = -dx;
-            if (dy < 0)
-                dy = -dy;
-
-            if ((dx > MOUSE_SENS) || (dy > MOUSE_SENS)) {
-                SendMessage(hWnd, WM_CLOSE, 0, 0);
-            }
-        }
-
-        iMouse = 1;
-        xMouse = LOWORD(lParam);
-        yMouse = HIWORD(lParam);
-
-        return 0;
-    }
-    case WM_CLOSE: {
-        DestroyWindow(hwndSaver);
-        hwndSaver = NULL;
-        return 0;
     }
     }
 
@@ -3210,9 +2926,6 @@ static void init_stuff(void)
     path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "music");
     ANGBAND_DIR_XTRA_MUSIC = string_make(path);
     validate_dir(ANGBAND_DIR_XTRA_MUSIC, FALSE);
-
-    path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "help");
-    ANGBAND_DIR_XTRA_HELP = string_make(path);
 }
 
 /*!
@@ -3309,15 +3022,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPST
 
         if (!RegisterClass(&wc))
             exit(2);
-
-        wc.style = CS_VREDRAW | CS_HREDRAW | CS_SAVEBITS | CS_DBLCLKS;
-        wc.lpfnWndProc = AngbandSaverProc;
-        wc.hCursor = NULL;
-        wc.lpszMenuName = NULL;
-        wc.lpszClassName = "WindowsScreenSaverClass";
-
-        if (!RegisterClass(&wc))
-            exit(3);
     }
 
     plog_aux = hack_plog;

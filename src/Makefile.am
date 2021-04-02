@@ -927,6 +927,7 @@ EXTRA_hengband_SOURCES = \
 	main-win/main-win-define.h \
 	main-win/main-win-file-utils.cpp main-win/main-win-file-utils.h \
 	main-win/main-win-mci.cpp main-win/main-win-mci.h \
+	main-win/main-win-menuitem.h \
 	main-win/main-win-mmsystem.h \
 	main-win/main-win-music.cpp main-win/main-win-music.h \
 	main-win/main-win-sound.cpp main-win/main-win-sound.h \
