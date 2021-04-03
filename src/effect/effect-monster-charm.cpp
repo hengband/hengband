@@ -17,6 +17,7 @@
 #include "object-enchant/trc-types.h"
 #include "pet/pet-fall-off.h"
 #include "player-info/avatar.h"
+#include "player/player-status.h"
 #include "player/player-status-flags.h"
 #include "spell/spells-diceroll.h"
 #include "status/bad-status-setter.h"
@@ -359,6 +360,7 @@ static bool effect_monster_capture_attemption(player_type *caster_ptr, effect_mo
         msg_format(_("地面に落とされた。", "You have fallen from %s."), em_ptr->m_name);
 
     delete_monster_idx(caster_ptr, em_ptr->g_ptr->m_idx);
+    calculate_upkeep(caster_ptr);
     return TRUE;
 }
 
