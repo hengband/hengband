@@ -12,6 +12,8 @@
 #include "main-win/main-win-mmsystem.h"
 #include "main-win/main-win-tokenizer.h"
 #include "main/scene-table.h"
+#include "main/sound-of-music.h"
+#include "monster-race/monster-race.h"
 #include "term/z-term.h"
 #include "util/angband-files.h"
 #include "world/world.h"
@@ -109,6 +111,26 @@ static concptr town_key_at(int index, char *buf)
     return buf;
 }
 
+static inline MONRACE_IDX get_monster_count()
+{
+    return max_r_idx;
+}
+
+/*!
+ * @brief action-valに対応する[Monster]セクションのキー名を取得する
+ * @param index "term_xtra()"の第2引数action-valに対応する値
+ * @param buf バッファ
+ * @return 対応するキー名を返す
+ */
+static concptr monster_key_at(int index, char *buf)
+{
+    if (index >= get_monster_count())
+        return NULL;
+
+    sprintf(buf, "monster%04d", index);
+    return buf;
+}
+
 /*!
  * @brief BGMの設定を読み込む。
  * @details
@@ -126,9 +148,20 @@ void load_music_prefs()
         { "Basic", TERM_XTRA_MUSIC_BASIC, basic_key_at },
         { "Dungeon", TERM_XTRA_MUSIC_DUNGEON, dungeon_key_at },
         { "Quest", TERM_XTRA_MUSIC_QUEST, quest_key_at },
-        { "Town", TERM_XTRA_MUSIC_TOWN, town_key_at }
+        { "Town", TERM_XTRA_MUSIC_TOWN, town_key_at },
+        { "Monster", TERM_XTRA_MUSIC_MONSTER, monster_key_at, &has_monster_music }
         });
     // clang-format on
+
+    if (!has_monster_music) {
+        int type = TERM_XTRA_MUSIC_BASIC;
+        for (int val = MUSIC_BASIC_UNIQUE; val <= MUSIC_BASIC_HIGHER_LEVEL_MONSTER; val++) {
+            if (music_cfg_data->has_key(type, val)) {
+                has_monster_music = true;
+                break;
+            }
+        }
+    }
 }
 
 /*
@@ -182,13 +215,15 @@ errr play_music(int type, int val)
 /*
  * Play a music matches a situation
  */
-errr play_music_scene()
+errr play_music_scene(int val)
 {
-    // テーブルの先頭から順に再生を試み、再生できたら抜ける
-    auto ite = get_scene_table_iterator();
+    // リストの先頭から順に再生を試み、再生できたら抜ける
+    auto list = get_scene_type_list(val);
     const errr err_sucsess = 0;
-    while (play_music(ite->type, ite->val) != err_sucsess) {
-        ++ite;
+    for (auto &item : list) {
+        if (play_music(item.type, item.val) == err_sucsess) {
+            break;
+        }
     }
 
     return 0;

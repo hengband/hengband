@@ -360,6 +360,8 @@
     <ClCompile Include="..\..\src\main\info-initializer.cpp" />
     <ClCompile Include="..\..\src\main\init-error-messages-table.cpp" />
     <ClCompile Include="..\..\src\main-win\main-win-bg.cpp" />
+    <ClCompile Include="..\..\src\main\scene-table-floor.cpp" />
+    <ClCompile Include="..\..\src\main\scene-table-monster.cpp" />
     <ClCompile Include="..\..\src\main\scene-table.cpp" />
     <ClCompile Include="..\..\src\market\building-initializer.cpp" />
     <ClCompile Include="..\..\src\melee\melee-spell-flags-checker.cpp" />
@@ -1039,6 +1041,8 @@
     <ClInclude Include="..\..\src\main\init-error-messages-table.h" />
     <ClInclude Include="..\..\src\main-win\main-win-bg.h" />
     <ClInclude Include="..\..\src\main-win\main-win-windows.h" />
+    <ClInclude Include="..\..\src\main\scene-table-floor.h" />
+    <ClInclude Include="..\..\src\main\scene-table-monster.h" />
     <ClInclude Include="..\..\src\main\scene-table.h" />
     <ClInclude Include="..\..\src\market\building-initializer.h" />
     <ClInclude Include="..\..\src\melee\melee-spell-flags-checker.h" />

@@ -4,6 +4,9 @@
 #include "main/scene-table.h"
 #include "term/screen-processor.h"
 
+// モンスターBGMの設定有無。設定なし時に関連処理をスキップする。
+bool has_monster_music = false;
+
 /*
  * Flush the screen, make a noise
  */
@@ -36,6 +39,7 @@ errr play_music(int type, int val)
     if (!use_music)
         return 1;
 
+    interrupt_scene(type, val);
     return term_xtra(type, val);
 }
 
@@ -50,5 +54,19 @@ void select_floor_music(player_type *player_ptr)
         return;
 
     refresh_scene_table(player_ptr);
-    play_music(TERM_XTRA_SCENE, 0);
+    term_xtra(TERM_XTRA_SCENE, 0);
+}
+
+/*!
+ * @brief モンスターBGM選曲
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param monster_list モンスターリスト
+ */
+void select_monster_music(player_type *player_ptr, const std::vector<MONSTER_IDX> &monster_list)
+{
+    if (!use_music)
+        return;
+
+    refresh_scene_table(player_ptr, monster_list);
+    term_xtra(TERM_XTRA_SCENE, 0);
 }

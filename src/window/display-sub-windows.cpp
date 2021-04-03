@@ -10,6 +10,7 @@
 #include "inventory/inventory-describer.h"
 #include "inventory/inventory-slot-types.h"
 #include "inventory/inventory-util.h"
+#include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster/monster-flag-types.h"
@@ -39,6 +40,7 @@
 #include "world/world.h"
 #include <string>
 #include <sstream>
+#include <mutex>
 
 /*!
  * @brief サブウィンドウに所持品一覧を表示する / Hack -- display inventory in sub-windows
@@ -182,6 +184,7 @@ void print_monster_list(floor_type *floor_ptr, const std::vector<MONSTER_IDX> &m
 void fix_monster_list(player_type *player_ptr)
 {
     static std::vector<MONSTER_IDX> monster_list;
+    std::once_flag once;
 
     for (int j = 0; j < 8; j++) {
         term_type *old = Term;
@@ -195,10 +198,15 @@ void fix_monster_list(player_type *player_ptr)
         term_activate(angband_term[j]);
         int w, h;
         term_get_size(&w, &h);
-        target_sensing_monsters_prepare(player_ptr, monster_list);
+        std::call_once(once, target_sensing_monsters_prepare, player_ptr, monster_list);
         print_monster_list(player_ptr->current_floor_ptr, monster_list, 0, 0, h);
         term_fresh();
         term_activate(old);
+    }
+
+    if (use_music && has_monster_music) {
+        std::call_once(once, target_sensing_monsters_prepare, player_ptr, monster_list);
+        select_monster_music(player_ptr, monster_list);
     }
 }
 

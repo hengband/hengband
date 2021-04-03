@@ -24,4 +24,8 @@ const concptr angband_music_basic_name[MUSIC_BASIC_MAX] =
 	"quest_clear",
 	"final_quest_clear",
 	"ambush",
+    "unique",
+    "shadower",
+    "unk_monster",
+    "hl_monster",
 };

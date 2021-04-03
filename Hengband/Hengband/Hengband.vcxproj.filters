@@ -2253,6 +2253,12 @@
     <ClCompile Include="..\..\src\store\store-key-processor.cpp">
       <Filter>store</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\main\scene-table-floor.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\main\scene-table-monster.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4832,6 +4838,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\main-win\main-win-menuitem.h">
       <Filter>main-win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main\scene-table-floor.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main\scene-table-monster.h">
+      <Filter>main</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster-race\race-ability-flags.h">
       <Filter>monster-race</Filter>
