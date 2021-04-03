@@ -192,10 +192,12 @@ N:5:上級王イングウェの
 E:of Ingwe
 I:40:11:3
 W:65:50:3:90000
-F:WIS | CHR | INFRA | HIDE_TYPE |
-F:SEE_INVIS | FREE_ACT | ACTIVATE |
-F:RES_ACID | RES_COLD | RES_ELEC |
-F:INSTA_ART
+P:0:1d1:0:0:5
+F:WIS | CHR | INFRA | HIDE_TYPE
+F:SUST_WIS | SUST_CON | SUST_CHR
+F:SEE_INVIS | FREE_ACT | WARNING
+F:RES_ACID | RES_COLD | RES_ELEC | RES_FIRE
+F:INSTA_ART | ACTIVATE | XTRA_H_RES
 U:DISP_EVIL
 D:$The ancient heirloom of Ingwe, high lord of the Vanyar, against whom nothing 
 D:$of evil could stand. 
@@ -1354,7 +1356,7 @@ F:CON | HIDE_TYPE
 F:BRAND_ELEC | RES_ELEC | ACTIVATE | SHOW_MODS | THROW | XTRA_H_RES
 U:ELEC_BALL_AND_RESISTANCE
 D:$A dagger covered in sparks and finely balanced for deadly throws.
-D:「黒の牙」を意味する名を持つ、この短剣は雷光に覆われ、
+D:「闇夜の牙」を意味する名を持つ、この短剣は雷光に覆われ、
 D:その刃から雷の球を迸らせる力をもつ。
 
 # The Dagger of Rilia
@@ -2860,11 +2862,15 @@ N:149:八尺
 E:'Yasaka-no-Magatama'
 I:40:19:3
 W:65:50:3:90000
-F:INT | CHR | SEARCH | HIDE_TYPE |
-F:SEE_INVIS | FREE_ACT | ACTIVATE |
-F:RES_FIRE | RES_COLD | RES_ELEC |
-F:INSTA_ART
+P:0:0d0:0:0:5
+F:INT | CHR | SEARCH | HIDE_TYPE
+F:SUST_INT | SUST_DEX | SUST_CHR
+F:RES_FIRE | RES_COLD | RES_ELEC | RES_WATER
+F:SEE_INVIS | FREE_ACT | HOLD_EXP | WARNING
+F:INSTA_ART | ACTIVATE | XTRA_H_RES
 U:RECALL
+D:玉祖命が造り、のちに邇邇芸命に授けられた勾玉だ。
+D:身に着ける者を様々な危機から守る霊力が備わっている。
 
 N:150:『斬鉄剣』
 E:'Zantetsuken'
@@ -4384,3 +4390,41 @@ D:$It is one of the two scimitars of the legendary dark elf, Drizzt Do'Urden.
 D:$  It is paired with "Icingdeath".
 D:伝説のダークエルフ、ドリッズドの二振りの剣のうちの1つだ。
 D:『アイシングデス』と対を成している。
+
+N:261:『モルサンク』
+E:'Morthanc'
+I:23:4:1
+W:4:10:12:12000
+P:0:2d4:4:6:0
+F:STR | HIDE_TYPE
+F:BRAND_ACID | RES_ACID | ACTIVATE | SHOW_MODS | LITE | THROW | XTRA_H_RES
+U:ACID_BALL_AND_RESISTANCE
+D:$A acidic dagger finely balanced for deadly throws.
+D:「黒の牙」を意味する名を持つこの暗澹とした短剣は、
+D:その刃から酸の球を迸らせる力をもつ。
+
+N:262:有翼のサンダル『タラリア』
+E:Winged sandals 'Talaria'
+I:30:2:6
+W:30:30:10:100000
+P:0:0d0:0:0:10
+F:FULL_NAME | SPEED | STEALTH | FREE_ACT | LEVITATION
+F:ACTIVATE
+U:PHASE_DOOR
+D:$Can fly if wearing these winged sandals of Hermes.
+D:伝令神ヘルメスの有翼のサンダルだ。
+D:身につけると空を飛ぶことができる。
+
+N:263:破壊神シヴァの三叉槍『トリシューラ』
+E:Trifurcate Spear of Shiva 'Trishula'
+I:22:26:4
+W:80:100:400:150000
+P:0:4d9:15:25:5
+F:FULL_NAME | DEX | HIDE_TYPE | SHOW_MODS
+F:SLAY_EVIL | KILL_DEMON | BRAND_FIRE | BRAND_ELEC
+F:IM_FIRE | RES_ELEC | SEE_INVIS | LITE | LITE_3
+F:BLESSED | RIDING | ACTIVATE
+U:BA_FIRE_2
+D:破壊神シヴァが持つ三又槍だ。3つの穂先はそれぞれシヴァの力である、意志(欲望)、行動、知恵をあらわす。
+D:シヴァはこの槍を用いて、アシュラ族の3人の魔神『トリプラースラ』がつくった「鉄でできた町」「銀でできた町」
+D:「金でできた町」を一晩で焼き払った。
