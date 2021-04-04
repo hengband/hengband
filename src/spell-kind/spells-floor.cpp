@@ -82,10 +82,6 @@ void wiz_lite(player_type *caster_ptr, bool ninja)
             feature_type *f_ptr;
             f_ptr = &f_info[feat];
 
-            /* Process all non-walls */
-            if (has_flag(f_ptr->flags, FF_WALL))
-                continue;
-
             /* Scan all neighbors */
             for (OBJECT_IDX i = 0; i < 9; i++) {
                 POSITION yy = y + ddy_ddd[i];
@@ -203,10 +199,6 @@ void map_area(player_type *caster_ptr, POSITION range)
             FEAT_IDX feat = get_feat_mimic(g_ptr);
             feature_type *f_ptr;
             f_ptr = &f_info[feat];
-
-            /* All non-walls are "checked" */
-            if (has_flag(f_ptr->flags, FF_WALL))
-                continue;
 
             /* Memorize normal features */
             if (has_flag(f_ptr->flags, FF_REMEMBER)) {

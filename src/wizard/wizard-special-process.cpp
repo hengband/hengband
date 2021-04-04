@@ -212,15 +212,22 @@ void wiz_create_item(player_type *caster_ptr)
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-void wiz_create_named_art(player_type *caster_ptr)
+void wiz_create_named_art(player_type *caster_ptr, ARTIFACT_IDX a_idx)
 {
-    char tmp_val[10] = "";
-    if (!get_string("Artifact ID:", tmp_val, 3))
-        return;
+    if (a_idx <= 0) {
+        char tmp[80] = "";
+        sprintf(tmp, "Artifact ID (1-%d): ", max_a_idx - 1);
+        char tmp_val[10] = "";
+        if (!get_string(tmp, tmp_val, 3))
+            return;
+    
+        a_idx = (ARTIFACT_IDX)atoi(tmp_val);
+    }
 
-    ARTIFACT_IDX a_idx = (ARTIFACT_IDX)atoi(tmp_val);
-    if ((a_idx < 0) || (a_idx >= max_a_idx))
-        a_idx = 0;
+    if (a_idx <= 0 || a_idx >= max_a_idx) {
+        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), max_a_idx - 1);
+        return;
+    }
 
     (void)create_named_art(caster_ptr, a_idx, caster_ptr->y, caster_ptr->x);
     msg_print("Allocated.");
@@ -252,7 +259,7 @@ void wiz_change_status(player_type *creature_ptr)
     }
 
     sprintf(tmp_val, "%d", WEAPON_EXP_MASTER);
-    if (!get_string(_("熟練度: ", "Proficiency: "), tmp_val, 9))
+    if (!get_string(_("熟練度: ", "Proficiency: "), tmp_val, 4))
         return;
 
     s16b tmp_s16b = (s16b)atoi(tmp_val);
@@ -466,7 +473,7 @@ void wiz_reset_race(player_type *creature_ptr)
 
     creature_ptr->window_flags |= PW_PLAYER;
     creature_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
-    creature_ptr->redraw |= PR_BASIC;
+    creature_ptr->redraw |= PR_BASIC | PR_HP | PR_MANA | PR_STATS;
     handle_stuff(creature_ptr);
 }
 
@@ -492,6 +499,36 @@ void wiz_reset_class(player_type *creature_ptr)
 
     creature_ptr->pclass = static_cast<player_class_type>(tmp_int);
     cp_ptr = &class_info[creature_ptr->pclass];
+    mp_ptr = &m_info[creature_ptr->pclass];
+    creature_ptr->window_flags |= PW_PLAYER;
+    creature_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
+    creature_ptr->redraw |= PR_BASIC | PR_HP | PR_MANA | PR_STATS;
+    handle_stuff(creature_ptr);
+}
+
+/*!
+ * @brief プレイヤーの領域を変更する
+ * @return なし
+ * @todo 存在有無などは未判定。そのうちすべき。
+ */
+void wiz_reset_realms(player_type *creature_ptr)
+{
+    char ppp[80];
+    char tmp_val[160];
+
+    sprintf(ppp, "1st Realm (None=0, 1-%d): ", MAX_REALM - 1);
+    sprintf(tmp_val, "%d", creature_ptr->realm1);
+    if (!get_string(ppp, tmp_val, 2))
+        return;
+
+    creature_ptr->realm1 = static_cast<REALM_IDX>(atoi(tmp_val));
+
+    sprintf(ppp, "2st Realm (None=0, 1-%d): ", MAX_REALM - 1);
+    sprintf(tmp_val, "%d", creature_ptr->realm2);
+    if (!get_string(ppp, tmp_val, 2))
+        return;
+
+    creature_ptr->realm2 = static_cast<REALM_IDX>(atoi(tmp_val));
     creature_ptr->window_flags |= PW_PLAYER;
     creature_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
     creature_ptr->redraw |= PR_BASIC;

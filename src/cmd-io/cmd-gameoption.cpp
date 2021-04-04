@@ -17,6 +17,7 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -167,6 +168,48 @@ static void do_cmd_options_autosave(player_type *player_ptr, concptr info)
 }
 
 /*!
+ * @brief 指定のサブウィンドウが指定のウィンドウフラグを持つか調べる
+ * @param x ウィンドウ番号
+ * @param y ウィンドウフラグ番号
+ * @return 持つならTRUE、持たないならFALSE
+ */
+static bool has_window_flag(int x, int y)
+{
+    auto flag = static_cast<window_redraw_type>(1UL << y);
+    return any_bits(window_flag[x], flag);
+}
+
+/*!
+ * @brief 指定のサブウィンドウに指定のウィンドウフラグをセットする
+ * @param x ウィンドウ番号
+ * @param y ウィンドウフラグ番号
+ * @return なし
+ * @details
+ * 未使用フラグはセットしない。
+ */
+static void set_window_flag(int x, int y)
+{
+    auto flag = static_cast<window_redraw_type>(1UL << y);
+    if (any_bits(PW_ALL, flag))
+        set_bits(window_flag[x], flag);
+}
+
+/*!
+ * @brief 指定のウィンドウフラグをサブウィンドウからクリアする
+ * @param y ウィンドウフラグ番号
+ * @return なし
+ */
+static void clear_window_flag(int x, int y)
+{
+    window_flag[x] = 0;
+
+    auto flag = static_cast<window_redraw_type>(1UL << y);
+    for (int i = 0; i < 8; i++) {
+        reset_bits(window_flag[i], flag);
+    }
+}
+
+/*!
  * @brief ウィンドウオプションを変更するコマンドのメインルーチン /
  * Modify the "window" options
  * @return なし
@@ -186,7 +229,7 @@ static void do_cmd_options_win(player_type *player_ptr)
 
     term_clear();
     while (go) {
-        prt(_("ウィンドウ・フラグ (<方向>で移動, tでチェンジ, y/n でセット, ESC)", "Window Flags (<dir>, t, y, n, ESC) "), 0, 0);
+        prt(_("ウィンドウ・フラグ (<方向>で移動, 't'でON/OFF,'s'でON(他窓OFF), ESC)", "Window Flags (<dir>, <t>oggle, <s>et, ESC) "), 0, 0);
         for (j = 0; j < 8; j++) {
             byte a = TERM_WHITE;
             concptr s = angband_term_name[j];
@@ -219,49 +262,40 @@ static void do_cmd_options_win(player_type *player_ptr)
             }
         }
 
+        bool has_flag = false;
         term_gotoxy(35 + x * 5, y + 5);
         ch = inkey();
         switch (ch) {
-        case ESCAPE: {
+        case ESCAPE:
             go = FALSE;
             break;
-        }
+        case ' ':
+        case 't':
         case 'T':
-        case 't': {
-            for (j = 0; j < 8; j++) {
-                window_flag[j] &= ~(1UL << y);
-            }
-
-            for (i = 0; i < 16; i++) {
-                window_flag[x] &= ~(1UL << i);
-            }
-        }
-            /* Fall through */
-        case 'y':
-        case 'Y': {
+            has_flag = has_window_flag(x, y);
+            window_flag[x] = 0;
+            if (x > 0 && !has_flag)
+                set_window_flag(x, y);
+            break;
+        case 's':
+        case 'S':
             if (x == 0)
                 break;
-
-            window_flag[x] |= (1UL << y);
+            window_flag[x] = 0;
+            clear_window_flag(x, y);
+            set_window_flag(x, y);
             break;
-        }
-        case 'n':
-        case 'N': {
-            window_flag[x] &= ~(1UL << y);
-            break;
-        }
-        case '?': {
+        case '?':
             (void)show_file(player_ptr, TRUE, _("joption.txt#Window", "option.txt#Window"), NULL, 0, 0);
             term_clear();
             break;
-        }
-        default: {
+        default:
             d = get_keymap_dir(ch);
             x = (x + ddx[d] + 8) % 8;
             y = (y + ddy[d] + 16) % 16;
             if (!d)
                 bell();
-        }
+            break;
         }
     }
 

@@ -76,6 +76,7 @@ std::vector<std::vector<std::string>> debug_menu_table = {
     { "W", _("願い", "Wishing") },
     { "x", _("経験値を得る(指定可)", "Get experience") },
     { "X", _("所持品を初期状態に戻す", "Return inventory to initial") },
+    { "y", _("ダメージ100万・半径0の弱魔力のボールを放つ", "Cast missile ball had power a million") },
     { "z", _("近隣のモンスター消去", "Terminate near monsters") },
     { "Z", _("フロアの全モンスター消去", "Terminate all monsters in floor") },
     { "@", _("特殊スペルの発動", "Activate specified spells") },
@@ -139,7 +140,7 @@ bool exe_cmd_debug(player_type *creature_ptr, char cmd)
         wiz_create_item(creature_ptr);
         break;
     case 'C':
-        wiz_create_named_art(creature_ptr);
+        wiz_create_named_art(creature_ptr, command_arg);
         break;
     case 'd':
         detect_all(creature_ptr, DETECT_RAD_ALL * 3);

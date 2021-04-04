@@ -8,6 +8,7 @@
 #include "monster/monster-info.h"
 #include "monster/monster-util.h"
 #include "object-activation/activation-util.h"
+#include "player/player-status.h"
 #include "racial/racial-android.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"
@@ -185,6 +186,7 @@ bool exe_monster_capture(player_type *user_ptr, ae_type *ae_ptr)
     if (!ae_ptr->success)
         msg_print(_("おっと、解放に失敗した。", "Oops.  You failed to release your pet."));
 
+    calculate_upkeep(user_ptr);
     calc_android_exp(user_ptr);
     return TRUE;
 }

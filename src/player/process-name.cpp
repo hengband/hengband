@@ -1,6 +1,7 @@
 ﻿#include "player/process-name.h"
 #include "autopick/autopick-reader-writer.h"
 #include "core/asking-player.h"
+#include "game-option/birth-options.h"
 #include "io/files-util.h"
 #include "player/player-personality.h"
 #include "term/screen-processor.h"
@@ -80,37 +81,39 @@ void process_player_name(player_type *creature_ptr, bool sf)
     if (!creature_ptr->base_name[0])
         strcpy(creature_ptr->base_name, "PLAYER");
 
+    if (!keep_savefile || !savefile[0]) {
 #ifdef SAVEFILE_MUTABLE
-    sf = TRUE;
+        sf = TRUE;
 #endif
-    if (!savefile_base[0] && savefile[0]) {
-        concptr s = savefile;
-        while (TRUE) {
-            concptr t;
-            t = angband_strstr(s, PATH_SEP);
-            if (!t)
-                break;
-            s = t + 1;
+        if (!savefile_base[0] && savefile[0]) {
+            concptr s = savefile;
+            while (TRUE) {
+                concptr t;
+                t = angband_strstr(s, PATH_SEP);
+                if (!t)
+                    break;
+                s = t + 1;
+            }
+
+            strcpy(savefile_base, s);
         }
 
-        strcpy(savefile_base, s);
-    }
+        if (!savefile_base[0] || !savefile[0])
+            sf = TRUE;
 
-    if (!savefile_base[0] || !savefile[0])
-        sf = TRUE;
-
-    if (sf) {
-        char temp[128];
-        strcpy(savefile_base, creature_ptr->base_name);
+        if (sf) {
+            char temp[128];
+            strcpy(savefile_base, creature_ptr->base_name);
 
 #ifdef SAVEFILE_USE_UID
-        /* Rename the savefile, using the creature_ptr->player_uid and creature_ptr->base_name */
-        (void)sprintf(temp, "%d.%s", creature_ptr->player_uid, creature_ptr->base_name);
+            /* Rename the savefile, using the creature_ptr->player_uid and creature_ptr->base_name */
+            (void)sprintf(temp, "%d.%s", creature_ptr->player_uid, creature_ptr->base_name);
 #else
-        /* Rename the savefile, using the creature_ptr->base_name */
-        (void)sprintf(temp, "%s", creature_ptr->base_name);
+            /* Rename the savefile, using the creature_ptr->base_name */
+            (void)sprintf(temp, "%s", creature_ptr->base_name);
 #endif
-        path_build(savefile, sizeof(savefile), ANGBAND_DIR_SAVE, temp);
+            path_build(savefile, sizeof(savefile), ANGBAND_DIR_SAVE, temp);
+        }
     }
 
     if (current_world_ptr->character_generated && !streq(old_player_base, creature_ptr->base_name)) {

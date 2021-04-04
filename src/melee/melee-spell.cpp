@@ -146,6 +146,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
     if (!res.valid)
         return FALSE;
 
+    ms_ptr->dam = res.dam;
     process_special_melee_spell(target_ptr, ms_ptr);
     process_rememberance(ms_ptr);
     if (target_ptr->is_dead && (ms_ptr->r_ptr->r_deaths < MAX_SHORT) && !target_ptr->current_floor_ptr->inside_arena)

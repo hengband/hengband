@@ -22,18 +22,9 @@
 #include "system/floor-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
+#include "util/point-2d.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-
-struct Point {
-    int y;
-    int x;
-    Point(const int y, const int x)
-        : y(y)
-        , x(x)
-    {
-    }
-};
 
 using PassBoldFunc = bool (*)(floor_type *, POSITION, POSITION);
 
@@ -55,7 +46,7 @@ using PassBoldFunc = bool (*)(floor_type *, POSITION, POSITION);
  * </pre>
  * @todo この辺、xとyが引数になっているが、caster_ptr->xとcaster_ptr->yで全て置き換えが効くはず……
  */
-static void cave_temp_room_lite(player_type *caster_ptr, const std::vector<Point> &points)
+static void cave_temp_room_lite(player_type *caster_ptr, const std::vector<Pos2D> &points)
 {
     for (const auto &point : points) {
         const POSITION y = point.y;
@@ -104,7 +95,7 @@ static void cave_temp_room_lite(player_type *caster_ptr, const std::vector<Point
  * </pre>
  * @todo この辺、xとyが引数になっているが、caster_ptr->xとcaster_ptr->yで全て置き換えが効くはず……
  */
-static void cave_temp_room_unlite(player_type *caster_ptr, const std::vector<Point> &points)
+static void cave_temp_room_unlite(player_type *caster_ptr, const std::vector<Pos2D> &points)
 {
     for (const auto &point : points) {
         const POSITION y = point.y;
@@ -213,7 +204,7 @@ static int next_to_walls_adj(floor_type *floor_ptr, const POSITION cy, const POS
  * @param pass_bold 地形条件を返す関数ポインタ
  */
 static void cave_temp_room_aux(
-    player_type *caster_ptr, std::vector<Point> &points, const POSITION y, const POSITION x, const bool only_room, const PassBoldFunc pass_bold)
+    player_type *caster_ptr, std::vector<Pos2D> &points, const POSITION y, const POSITION x, const bool only_room, const PassBoldFunc pass_bold)
 {
     floor_type *floor_ptr = caster_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
@@ -256,7 +247,7 @@ static void cave_temp_room_aux(
  * @param y 指定Y座標
  * @param x 指定X座標
  */
-static void cave_temp_lite_room_aux(player_type *caster_ptr, std::vector<Point> &points, const POSITION y, const POSITION x)
+static void cave_temp_lite_room_aux(player_type *caster_ptr, std::vector<Pos2D> &points, const POSITION y, const POSITION x)
 {
     cave_temp_room_aux(caster_ptr, points, y, x, FALSE, cave_los_bold);
 }
@@ -276,7 +267,7 @@ static bool cave_pass_dark_bold(floor_type *floor_ptr, POSITION y, POSITION x) {
  * @param y 指定Y座標
  * @param x 指定X座標
  */
-static void cave_temp_unlite_room_aux(player_type *caster_ptr, std::vector<Point> &points, const POSITION y, const POSITION x)
+static void cave_temp_unlite_room_aux(player_type *caster_ptr, std::vector<Pos2D> &points, const POSITION y, const POSITION x)
 {
     cave_temp_room_aux(caster_ptr, points, y, x, TRUE, cave_pass_dark_bold);
 }
@@ -292,7 +283,7 @@ static void cave_temp_unlite_room_aux(player_type *caster_ptr, std::vector<Point
 void lite_room(player_type *caster_ptr, const POSITION y1, const POSITION x1)
 {
     // 明るくするマスを記録する配列。
-    std::vector<Point> points;
+    std::vector<Pos2D> points;
 
     floor_type *floor_ptr = caster_ptr->current_floor_ptr;
 
@@ -337,7 +328,7 @@ void lite_room(player_type *caster_ptr, const POSITION y1, const POSITION x1)
 void unlite_room(player_type *caster_ptr, const POSITION y1, const POSITION x1)
 {
     // 暗くするマスを記録する配列。
-    std::vector<Point> points;
+    std::vector<Pos2D> points;
 
     floor_type *floor_ptr = caster_ptr->current_floor_ptr;
 

@@ -14,18 +14,9 @@
 #include "player/special-defense-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
+#include "util/point-2d.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-
-struct Point {
-    int y;
-    int x;
-    Point(const int y, const int x)
-        : y(y)
-        , x(x)
-    {
-    }
-};
 
 /*!
  * @brief モンスターによる光量状態更新 / Add a square to the changes array
@@ -35,7 +26,7 @@ struct Point {
  * @param x X座標
  */
 static void update_monster_lite(
-    player_type *const subject_ptr, std::vector<Point> &points, const POSITION y, const POSITION x, const monster_lite_type *const ml_ptr)
+    player_type *const subject_ptr, std::vector<Pos2D> &points, const POSITION y, const POSITION x, const monster_lite_type *const ml_ptr)
 {
     grid_type *g_ptr;
     int dpf, d;
@@ -87,7 +78,7 @@ static void update_monster_lite(
  * Add a square to the changes array
  */
 static void update_monster_dark(
-    player_type *const subject_ptr, std::vector<Point> &points, const POSITION y, const POSITION x, const monster_lite_type *const ml_ptr)
+    player_type *const subject_ptr, std::vector<Pos2D> &points, const POSITION y, const POSITION x, const monster_lite_type *const ml_ptr)
 {
     grid_type *g_ptr;
     int midpoint, dpf, d;
@@ -139,9 +130,9 @@ static void update_monster_dark(
 void update_mon_lite(player_type *subject_ptr)
 {
     // 座標たちを記録する配列。
-    std::vector<Point> points;
+    std::vector<Pos2D> points;
 
-    void (*add_mon_lite)(player_type *, std::vector<Point> &, const POSITION, const POSITION, const monster_lite_type *);
+    void (*add_mon_lite)(player_type *, std::vector<Pos2D> &, const POSITION, const POSITION, const monster_lite_type *);
     int dis_lim = ((d_info[subject_ptr->dungeon_idx].flags1 & DF1_DARKNESS) && !subject_ptr->see_nocto) ? (MAX_SIGHT / 2 + 1) : (MAX_SIGHT + 3);
     floor_type *floor_ptr = subject_ptr->current_floor_ptr;
     for (int i = 0; i < floor_ptr->mon_lite_n; i++) {

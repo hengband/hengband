@@ -32,7 +32,7 @@ MonsterSpellResult spell_RF4_SHOOT(player_type *target_ptr, POSITION y, POSITION
     const auto proj_res = bolt(target_ptr, m_idx, y, x, GF_ARROW, dam, MS_SHOOT, TARGET_TYPE);
     sound(SOUND_SHOOT);
 
-    auto res = MonsterSpellResult::make_valid();
+    auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
 
     return res;
@@ -62,7 +62,7 @@ MonsterSpellResult spell_RF5_BO_ACID(player_type *target_ptr, POSITION y, POSITI
         update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
     }
 
-    auto res = MonsterSpellResult::make_valid();
+    auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
 
     return res;
@@ -92,7 +92,7 @@ MonsterSpellResult spell_RF5_BO_ELEC(player_type *target_ptr, POSITION y, POSITI
         update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
     }
 
-    auto res = MonsterSpellResult::make_valid();
+    auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
 
     return res;
@@ -122,7 +122,7 @@ MonsterSpellResult spell_RF5_BO_FIRE(player_type *target_ptr, POSITION y, POSITI
         update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
     }
 
-    auto res = MonsterSpellResult::make_valid();
+    auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
 
     return res;
@@ -152,7 +152,7 @@ MonsterSpellResult spell_RF5_BO_COLD(player_type *target_ptr, POSITION y, POSITI
         update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
     }
 
-    auto res = MonsterSpellResult::make_valid();
+    auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
 
     return res;
@@ -181,7 +181,7 @@ MonsterSpellResult spell_RF5_BO_NETH(player_type *target_ptr, POSITION y, POSITI
         update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
     }
 
-    auto res = MonsterSpellResult::make_valid();
+    auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
 
     return res;
@@ -210,7 +210,7 @@ MonsterSpellResult spell_RF5_BO_WATE(player_type *target_ptr, POSITION y, POSITI
         update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
     }
 
-    auto res = MonsterSpellResult::make_valid();
+    auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
 
     return res;
@@ -238,7 +238,7 @@ MonsterSpellResult spell_RF5_BO_MANA(player_type *target_ptr, POSITION y, POSITI
         update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
     }
 
-    auto res = MonsterSpellResult::make_valid();
+    auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
 
     return res;
@@ -267,7 +267,7 @@ MonsterSpellResult spell_RF5_BO_PLAS(player_type *target_ptr, POSITION y, POSITI
         update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
     }
 
-    auto res = MonsterSpellResult::make_valid();
+    auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
 
     return res;
@@ -296,7 +296,7 @@ MonsterSpellResult spell_RF5_BO_ICEE(player_type *target_ptr, POSITION y, POSITI
         update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
     }
 
-    auto res = MonsterSpellResult::make_valid();
+    auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
 
     return res;
@@ -325,7 +325,7 @@ MonsterSpellResult spell_RF5_MISSILE(player_type *target_ptr, POSITION y, POSITI
         update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
     }
 
-    auto res = MonsterSpellResult::make_valid();
+    auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
 
     return res;

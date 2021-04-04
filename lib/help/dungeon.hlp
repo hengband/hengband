@@ -8,8 +8,9 @@ Please choose one of the following online help files:
     (d) Objects in the Dungeon                (dungeon.txt#Objects)
     (e) Mining                                (dungeon.txt#Mining)
     (f) Staircases, Doors, Passages & Rooms   (dungeon.txt#StairsDoorsEtc)
-    (g) Level Feelings                        (dungeon.txt#Feelings)
-    (h) Random Quests                         (dungeon.txt#RandomQuests)
+    (g) Dangerous Terrain                     (dungeon.txt#DangerousTerrain)
+    (h) Level Feelings                        (dungeon.txt#Feelings)
+    (i) Random Quests                         (dungeon.txt#RandomQuests)
 
     (?) Help System Commands                  (helpinfo.txt)
 
@@ -20,5 +21,6 @@ Please choose one of the following online help files:
 ***** [d] dungeon.txt#Objects
 ***** [e] dungeon.txt#Mining
 ***** [f] dungeon.txt#StairsDoorsEtc
-***** [g] dungeon.txt#Feelings
-***** [h] dungeon.txt#RandomQuests
+***** [g] dungeon.txt#DangerousTerrain
+***** [h] dungeon.txt#Feelings
+***** [i] dungeon.txt#RandomQuests

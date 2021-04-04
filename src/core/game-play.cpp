@@ -17,7 +17,6 @@
 #include "cmd-io/cmd-gameoption.h"
 #include "core/asking-player.h"
 #include "core/game-closer.h"
-#include "core/output-updater.h"
 #include "core/player-processor.h"
 #include "core/player-update-types.h"
 #include "core/scores.h"

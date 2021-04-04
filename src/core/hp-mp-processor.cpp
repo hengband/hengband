@@ -32,6 +32,59 @@
 #include "object/object-flags.h"
 #include "object-enchant/tr-types.h"
 
+/*!
+ * @brief 地形によるダメージを与える / Deal damage from feature.
+ * @params creature_ptr プレイヤー情報への参照ポインタ
+ * @params g_ptr 現在の床の情報への参照ポインタ
+ * @params msg_levitation 浮遊時にダメージを受けた場合に表示するメッセージ
+ * @params msg_normal 通常時にダメージを受けた場合に表示するメッセージの述部
+ * @params 耐性等によるダメージレートを計算する関数
+ * @patams ダメージを受けた際の追加処理を行う関数
+ * @return ダメージを与えたらTRUE、なければFALSE
+ * @details
+ * ダメージを受けた場合、自然回復できない。
+ */
+static bool deal_damege_by_feat(player_type *creature_ptr, grid_type *g_ptr, concptr msg_levitation, concptr msg_normal,
+    std::function<PERCENTAGE(player_type *)> damage_rate, std::function<void(player_type *, int)> additional_effect)
+{
+    feature_type *f_ptr = &f_info[g_ptr->feat];
+    int damage = 0;
+
+    if (has_flag(f_ptr->flags, FF_DEEP)) {
+        damage = 6000 + randint0(4000);
+    } else if (!creature_ptr->levitation) {
+        damage = 3000 + randint0(2000);
+    }
+
+    damage *= damage_rate(creature_ptr);
+    damage /= 100;
+    if (creature_ptr->levitation)
+        damage /= 5;
+
+    damage = damage / 100 + (randint0(100) < (damage % 100));
+
+    if (damage == 0)
+        return FALSE;
+
+    if (creature_ptr->levitation) {
+        msg_print(msg_levitation);
+
+        take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"),
+            f_info[get_feat_mimic(g_ptr)].name.c_str()), -1);
+
+        if (additional_effect != NULL)
+            additional_effect(creature_ptr, damage);
+    } else {
+        concptr name = f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name.c_str();
+        msg_format(_("%s%s！", "The %s %s!"), name, msg_normal);
+        take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name, -1);
+
+        if (additional_effect != NULL)
+            additional_effect(creature_ptr, damage);
+    }
+
+    return TRUE;
+}
 
 /*!
  * @brief 10ゲームターンが進行するごとにプレイヤーのHPとMPの増減処理を行う。
@@ -40,7 +93,8 @@
  */
 void process_player_hp_mp(player_type *creature_ptr)
 {
-    feature_type *f_ptr = &f_info[creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat];
+    grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
+    feature_type *f_ptr = &f_info[g_ptr->feat];
     bool cave_no_regen = FALSE;
     int upkeep_factor = 0;
     int regen_amount = PY_REGEN_NORMAL;
@@ -99,183 +153,31 @@ void process_player_hp_mp(player_type *creature_ptr)
     }
 
     if (has_flag(f_ptr->flags, FF_LAVA) && !is_invuln(creature_ptr) && !has_immune_fire(creature_ptr)) {
-        int damage = 0;
-
-        if (has_flag(f_ptr->flags, FF_DEEP)) {
-            damage = 6000 + randint0(4000);
-        } else if (!creature_ptr->levitation) {
-            damage = 3000 + randint0(2000);
-        }
-
-        if (damage) {
-            if (is_specific_player_race(creature_ptr, RACE_ENT))
-                damage += damage / 3;
-            if (has_resist_fire(creature_ptr))
-                damage = damage / 3;
-            if (is_oppose_fire(creature_ptr))
-                damage = damage / 3;
-
-
-            if (creature_ptr->levitation)
-                damage = damage / 5;
-
-            damage = damage / 100 + (randint0(100) < (damage % 100));
-
-            if (creature_ptr->levitation) {
-                msg_print(_("熱で火傷した！", "The heat burns you!"));
-                take_hit(creature_ptr, DAMAGE_NOESCAPE, damage,
-                    format(_("%sの上に浮遊したダメージ", "flying over %s"),
-                        f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name.c_str()),
-                    -1);
-            } else {
-                concptr name = f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name.c_str();
-                msg_format(_("%sで火傷した！", "The %s burns you!"), name);
-                take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name, -1);
-            }
-
-            cave_no_regen = TRUE;
-        }
+        cave_no_regen = deal_damege_by_feat(creature_ptr, g_ptr, _("熱で火傷した！", "The heat burns you!"), _("で火傷した！", "burns you!"),
+            calc_fire_damage_rate, NULL);
     }
 
     if (has_flag(f_ptr->flags, FF_COLD_PUDDLE) && !is_invuln(creature_ptr) && !has_immune_cold(creature_ptr)) {
-        int damage = 0;
-
-        if (has_flag(f_ptr->flags, FF_DEEP)) {
-            damage = 6000 + randint0(4000);
-        } else if (!creature_ptr->levitation) {
-            damage = 3000 + randint0(2000);
-        }
-
-        if (damage) {
-            if (has_resist_cold(creature_ptr))
-                damage = damage / 3;
-            if (is_oppose_cold(creature_ptr))
-                damage = damage / 3;
-            if (creature_ptr->levitation)
-                damage = damage / 5;
-
-            damage = damage / 100 + (randint0(100) < (damage % 100));
-
-            if (creature_ptr->levitation) {
-                msg_print(_("冷気に覆われた！", "The cold engulfs you!"));
-                take_hit(creature_ptr, DAMAGE_NOESCAPE, damage,
-                    format(_("%sの上に浮遊したダメージ", "flying over %s"),
-                        f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name.c_str()),
-                    -1);
-            } else {
-                concptr name = f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name.c_str();
-                msg_format(_("%sに凍えた！", "The %s frostbites you!"), name);
-                take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name, -1);
-            }
-
-            cave_no_regen = TRUE;
-        }
+        cave_no_regen = deal_damege_by_feat(creature_ptr, g_ptr, _("冷気に覆われた！", "The cold engulfs you!"), _("に凍えた！", "frostbites you!"),
+            calc_cold_damage_rate, NULL);
     }
 
     if (has_flag(f_ptr->flags, FF_ELEC_PUDDLE) && !is_invuln(creature_ptr) && !has_immune_elec(creature_ptr)) {
-        int damage = 0;
-
-        if (has_flag(f_ptr->flags, FF_DEEP)) {
-            damage = 6000 + randint0(4000);
-        } else if (!creature_ptr->levitation) {
-            damage = 3000 + randint0(2000);
-        }
-
-        if (damage) {
-            if (has_resist_elec(creature_ptr))
-                damage = damage / 3;
-            if (is_oppose_elec(creature_ptr))
-                damage = damage / 3;
-            if (creature_ptr->levitation)
-                damage = damage / 5;
-
-            damage = damage / 100 + (randint0(100) < (damage % 100));
-
-            if (creature_ptr->levitation) {
-                msg_print(_("電撃を受けた！", "The electricity shocks you!"));
-                take_hit(creature_ptr, DAMAGE_NOESCAPE, damage,
-                    format(_("%sの上に浮遊したダメージ", "flying over %s"),
-                       f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name.c_str()),
-                    -1);
-            } else {
-                concptr name = f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name.c_str();
-                msg_format(_("%sに感電した！", "The %s shocks you!"), name);
-                take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name, -1);
-            }
-
-            cave_no_regen = TRUE;
-        }
+        cave_no_regen = deal_damege_by_feat(creature_ptr, g_ptr, _("電撃を受けた！", "The electricity shocks you!"), _("に感電した！", "shocks you!"),
+            calc_elec_damage_rate, NULL);
     }
 
     if (has_flag(f_ptr->flags, FF_ACID_PUDDLE) && !is_invuln(creature_ptr) && !has_immune_acid(creature_ptr)) {
-        int damage = 0;
-
-        if (has_flag(f_ptr->flags, FF_DEEP)) {
-            damage = 6000 + randint0(4000);
-        } else if (!creature_ptr->levitation) {
-            damage = 3000 + randint0(2000);
-        }
-
-        if (damage) {
-            if (has_resist_acid(creature_ptr))
-                damage = damage / 3;
-            if (is_oppose_acid(creature_ptr))
-                damage = damage / 3;
-            if (creature_ptr->levitation)
-                damage = damage / 5;
-
-            damage = damage / 100 + (randint0(100) < (damage % 100));
-
-            if (creature_ptr->levitation) {
-                msg_print(_("酸が飛び散った！", "The acid melts you!"));
-                take_hit(creature_ptr, DAMAGE_NOESCAPE, damage,
-                    format(_("%sの上に浮遊したダメージ", "flying over %s"),
-                        f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name.c_str()),
-                    -1);
-            } else {
-                concptr name = f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name.c_str();
-                msg_format(_("%sに溶かされた！", "The %s melts you!"), name);
-                take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name, -1);
-            }
-
-            cave_no_regen = TRUE;
-        }
+        cave_no_regen = deal_damege_by_feat(creature_ptr, g_ptr, _("酸が飛び散った！", "The acid melts you!"), _("に溶かされた！", "melts you!"),
+            calc_acid_damage_rate, NULL);
     }
 
     if (has_flag(f_ptr->flags, FF_POISON_PUDDLE) && !is_invuln(creature_ptr)) {
-        int damage = 0;
-
-        if (has_flag(f_ptr->flags, FF_DEEP)) {
-            damage = 6000 + randint0(4000);
-        } else if (!creature_ptr->levitation) {
-            damage = 3000 + randint0(2000);
-        }
-
-        if (damage) {
-            damage *= (calc_pois_damage_rate(creature_ptr) / 100);
-            if (creature_ptr->levitation)
-                damage = damage / 5;
-
-            damage = damage / 100 + (randint0(100) < (damage % 100));
-
-            if (creature_ptr->levitation) {
-                msg_print(_("毒気を吸い込んだ！", "The gas poisons you!"));
-                take_hit(creature_ptr, DAMAGE_NOESCAPE, damage,
-                    format(_("%sの上に浮遊したダメージ", "flying over %s"),
-                        f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name.c_str()),
-                    -1);
+        cave_no_regen = deal_damege_by_feat(creature_ptr, g_ptr, _("毒気を吸い込んだ！", "The gas poisons you!"), _("に毒された！", "poisons you!"),
+            calc_acid_damage_rate, [](player_type *creature_ptr, int damage) {
                 if (!has_resist_pois(creature_ptr))
                     (void)set_poisoned(creature_ptr, creature_ptr->poisoned + damage);
-            } else {
-                concptr name = f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name.c_str();
-                msg_format(_("%sに毒された！", "The %s poisons you!"), name);
-                take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name, -1);
-                if (!has_resist_pois(creature_ptr))
-                    (void)set_poisoned(creature_ptr, creature_ptr->poisoned + damage);
-            }
-
-            cave_no_regen = TRUE;
-        }
+            });
     }
 
     if (has_flag(f_ptr->flags, FF_WATER) && has_flag(f_ptr->flags, FF_DEEP) && !creature_ptr->levitation && !creature_ptr->can_swim

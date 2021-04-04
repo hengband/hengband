@@ -449,7 +449,8 @@ static void update_invisible_monster(player_type *subject_ptr, um_type *um_ptr, 
             r_ptr->r_sights++;
     }
 
-    if (r_info[um_ptr->m_ptr->ap_r_idx].flags2 & RF2_ELDRITCH_HORROR)
+    if (current_world_ptr->is_loading_now && current_world_ptr->character_dungeon && !subject_ptr->phase_out
+        && r_info[um_ptr->m_ptr->ap_r_idx].flags2 & RF2_ELDRITCH_HORROR)
         um_ptr->m_ptr->mflag.set(MFLAG::SANITY_BLAST);
 
     if (disturb_near

@@ -12,6 +12,7 @@ extern bool view_perma_grids; /* Map remembers all perma-lit grids */
 extern bool view_torch_grids; /* Map remembers all torch-lit grids */
 extern bool view_unsafe_grids; /* Map marked by detect traps */
 extern bool view_reduce_view; /* Reduce view-radius in town */
+extern bool view_hidden_walls; /* Map walls hidden in other walls. */
 extern bool fresh_before; /* Flush output while continuous command */
 extern bool fresh_after; /* Flush output after monster's move */
 extern bool fresh_once; /* Flush output only once per key input */

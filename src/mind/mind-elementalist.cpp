@@ -803,10 +803,13 @@ bool get_element_power(player_type *caster_ptr, SPELL_IDX *sn, bool only_browse)
             continue;
         }
 
-        spell = get_elemental_info(caster_ptr, i);
         if (ask) {
+            char name[80];
             char tmp_val[160];
-            (void)strnfmt(tmp_val, 78, _("%sを使いますか？", "Use %s? "), spell.name);
+            elem = get_elemental_elem(caster_ptr, i);
+            spell = get_elemental_info(caster_ptr, i);
+            (void)sprintf(name, spell.name, get_element_name(caster_ptr->realm1, elem));
+            (void)strnfmt(tmp_val, 78, _("%sを使いますか？", "Use %s? "), name);
             if (!get_check(tmp_val))
                 continue;
         }

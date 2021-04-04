@@ -94,7 +94,7 @@ static bool scene_field(player_type *player_ptr, scene_type *value)
 
 static bool scene_dungeon_feeling(player_type *player_ptr, scene_type *value)
 {
-    const bool enable = (player_ptr->feeling >= 2);
+    const bool enable = (player_ptr->feeling >= 2) && (player_ptr->feeling <= 5);
     if (enable) {
         value->type = TERM_XTRA_MUSIC_BASIC;
 
@@ -178,7 +178,7 @@ void refresh_scene_table(player_type *player_ptr)
     }
 }
 
-std::vector<scene_type>::iterator get_scene_table_iterator()
+scene_iterator get_scene_table_iterator()
 {
     return playfallback.begin();
 }

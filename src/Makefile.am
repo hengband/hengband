@@ -153,7 +153,6 @@ hengband_SOURCES = \
 	core/hp-mp-regenerator.cpp core/hp-mp-regenerator.h \
 	core/magic-effects-timeout-reducer.cpp core/magic-effects-timeout-reducer.h \
 	core/object-compressor.cpp core/object-compressor.h \
-	core/output-updater.cpp core/output-updater.h \
 	core/player-processor.cpp core/player-processor.h \
 	core/player-redraw-types.h \
 	core/player-update-types.h \
@@ -860,6 +859,7 @@ hengband_SOURCES = \
 	util/flag-group.h \
 	util/int-char-converter.h \
 	util/object-sort.cpp util/object-sort.h \
+	util/point-2d.h \
 	util/probability-table.h \
 	util/quarks.cpp util/quarks.h \
 	util/sort.cpp util/sort.h \
@@ -923,6 +923,7 @@ hengband_SOURCES = \
 EXTRA_hengband_SOURCES = \
 	angband.ico angband.rc ang_eng.rc ang_jp.rc maid-x11.cpp main-win.cpp \
 	main-win/main-win-bg.cpp main-win/main-win-bg.h \
+	main-win/main-win-cfg-reader.cpp main-win/main-win-cfg-reader.h \
 	main-win/main-win-define.h \
 	main-win/main-win-file-utils.cpp main-win/main-win-file-utils.h \
 	main-win/main-win-mci.cpp main-win/main-win-mci.h \
@@ -938,19 +939,24 @@ EXTRA_DIST = \
 	gcc-wrap
 
 DEFAULT_INCLUDES = -I$(srcdir) -I$(top_builddir)/src
-CPPFLAGS += $(XFT_CFLAGS) $(libcurl_CFLAGS) -include stdafx.h
+CPPFLAGS += $(XFT_CFLAGS) $(libcurl_CFLAGS)
+if PCH
+CPPFLAGS += -include stdafx.h
+endif
 LIBS += $(XFT_LIBS) $(libcurl_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CXXCOMPILE = $(srcdir)/gcc-wrap $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CXXFLAGS)
 
+if PCH
 stdafx.h.gch: stdafx.h stdafx.cpp Makefile
 	$(CXX) -x c++-header $(CXXFLAGS) $(srcdir)/stdafx.cpp -o $@
 	rm -f stdafx.h.gch.sum
 	md5sum $@ > stdafx.h.gch.sum
 
 $(hengband_SOURCES:.cpp=.$(OBJEXT)): stdafx.h.gch
+endif
 
 install-exec-hook:
 if SET_GID

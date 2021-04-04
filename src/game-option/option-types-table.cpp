@@ -15,7 +15,7 @@
  * @brief オプションテーブル /
  * Available Options
  */
-const option_type option_info[MAX_OPTION_INFO] = {
+const std::array<const option_type, MAX_OPTION_INFO> option_info = {{
     /*** Input Options ***/
     { &rogue_like_commands, FALSE, OPT_PAGE_INPUT, 0, 0, "rogue_like_commands", _("ローグ風キー配置を使用する", "Rogue-like commands") },
 
@@ -78,6 +78,8 @@ const option_type option_info[MAX_OPTION_INFO] = {
     { &view_torch_grids, FALSE, OPT_PAGE_MAPSCREEN, 1, 7, "view_torch_grids", _("明かりで照らした場所はそのままにする", "Map remembers all torch-lit grids") },
 
     { &view_unsafe_grids, FALSE, OPT_PAGE_MAPSCREEN, 1, 8, "view_unsafe_grids", _("トラップ感知済みでない場所を表示する", "Map marked by detect traps") },
+
+    { &view_hidden_walls, FALSE, OPT_PAGE_MAPSCREEN, 1, 2, "view_hidden_walls", _("壁の中に囲まれた壁を表示する", "Map walls hidden in other walls") },
 
     { &view_reduce_view, FALSE, OPT_PAGE_MAPSCREEN, 1, 17, "view_reduce_view", _("街では視野を狭くする", "Reduce view-radius in town") },
 
@@ -239,6 +241,8 @@ const option_type option_info[MAX_OPTION_INFO] = {
 
     { &powerup_home, TRUE, OPT_PAGE_BIRTH, 4, 3, "powerup_home", _("我が家を拡張する(*)", "Increase capacity of your home (*)") },
 
+    { &keep_savefile, TRUE, OPT_PAGE_BIRTH, 4, 4, "keep_savefile", _("同一のセーブファイルでゲームを開始する(*)", "Start game with same savefile thet is loaded (*)") },
+
     /*** Easy Object Auto-Destroyer ***/
     { &destroy_items, FALSE, OPT_PAGE_AUTODESTROY, 7, 0, "destroy_items", _("アイテムの簡易自動破壊を使用する", "Use easy auto-destroyer") },
 
@@ -291,7 +295,7 @@ const option_type option_info[MAX_OPTION_INFO] = {
 
     /*** End of Table ***/
     { NULL, 0, 0, 0, 0, NULL, NULL }
-};
+}};
 
 /*!
  * チートオプションの定義テーブル / Cheating options

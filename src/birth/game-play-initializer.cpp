@@ -22,10 +22,12 @@
 /*!
  * @brief ベースアイテム構造体の鑑定済みフラグをリセットする。
  * @return なし
+ * @details
+ * 不具合対策で0からリセットする(セーブは0から)
  */
 static void k_info_reset(void)
 {
-    for (int i = 1; i < max_k_idx; i++) {
+    for (int i = 0; i < max_k_idx; i++) {
         object_kind *k_ptr = &k_info[i];
         k_ptr->tried = FALSE;
         k_ptr->aware = FALSE;

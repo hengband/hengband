@@ -17,6 +17,7 @@ msa_type *initialize_msa_type(player_type *target_ptr, msa_type *msa_ptr, MONSTE
     msa_ptr->x_br_lite = 0;
     msa_ptr->y_br_lite = 0;
     msa_ptr->do_spell = DO_SPELL_NONE;
+    msa_ptr->dam = 0;
     msa_ptr->num = 0;
     msa_ptr->thrown_spell = 0;
     return msa_ptr;

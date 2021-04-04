@@ -30,7 +30,7 @@
 static MonsterSpellResult spell_RF5_CAUSE(player_type *target_ptr, int GF_TYPE, HIT_POINT dam, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx,
     concptr msg1, concptr msg2, concptr msg3, int MS_TYPE, int TARGET_TYPE)
 {
-    auto res = MonsterSpellResult::make_valid();
+    auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
 
     GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
