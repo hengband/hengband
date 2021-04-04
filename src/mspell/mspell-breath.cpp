@@ -16,6 +16,32 @@
 #include "view/display-messages.h"
 
 /*!
+ * @brief ブレスを吐くときにモンスター固有のセリフを表示する
+ * @param r_idx モンスター種族番号
+ * @param GF_TYPE 魔法効果
+ * @return 表示したらTRUE、しなかったらFALSE
+ */
+static bool spell_RF4_BREATH_special_message(MONSTER_IDX r_idx, int GF_TYPE, concptr m_name)
+{
+    if (r_idx == MON_JAIAN && GF_TYPE == GF_SOUND) {
+        msg_format(_("%^s「ボォエ～～～～～～」", "%^s sings, 'Booooeeeeee'"), m_name);
+        return TRUE;
+    }
+    if (r_idx == MON_BOTEI && GF_TYPE == GF_SHARDS) {
+        msg_format(_("%^s「ボ帝ビルカッター！！！」", "%^s shouts, 'Boty-Build cutter!!!'"), m_name);
+        return TRUE;
+    }
+    if (r_idx == MON_RAOU &&GF_TYPE == GF_FORCE) {
+        if (one_in_(2))
+            msg_format(_("%^s「北斗剛掌波！！」", "%^s says, 'Hokuto Goh-Sho-Ha!!'"), m_name);
+        else
+            msg_format(_("%^s「受けてみい！！天将奔烈！！！」", "%^s says, 'Tensho-Honretsu!!'"), m_name);
+        return TRUE;
+    }
+    return FALSE;
+}
+
+/*!
  * @brief RF4_BR_*の処理。各種ブレス。 /
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param GF_TYPE ブレスの属性
@@ -187,18 +213,16 @@ MonsterSpellResult spell_RF4_BREATH(player_type *target_ptr, int GF_TYPE, POSITI
     if (mon_to_player || (mon_to_mon && known && see_either))
         disturb(target_ptr, TRUE, TRUE);
 
-    if (m_ptr->r_idx == MON_JAIAN && GF_TYPE == GF_SOUND) {
-        msg_format(_("「ボォエ～～～～～～」", "'Booooeeeeee'"));
-    } else if (m_ptr->r_idx == MON_BOTEI && GF_TYPE == GF_SHARDS) {
-        msg_format(_("「ボ帝ビルカッター！！！」", "'Boty-Build cutter!!!'"));
-    } else if (target_ptr->blind) {
-        if (mon_to_player || (mon_to_mon && known && see_either))
-            msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
-    } else {
-        if (mon_to_player) {
-            msg_format(_("%^sが%^sのブレスを吐いた。", "%^s breathes %^s."), m_name, type_s);
-        } else if (mon_to_mon && known && see_either) {
-            _(msg_format("%^sが%^sに%^sのブレスを吐いた。", m_name, t_name, type_s), msg_format("%^s breathes %^s at %^s.", m_name, type_s, t_name));
+    if (!spell_RF4_BREATH_special_message(m_ptr->r_idx, GF_TYPE, m_name)) {
+        if (target_ptr->blind) {
+            if (mon_to_player || (mon_to_mon && known && see_either))
+                msg_format(_("%^sが何かのブレスを吐いた。", "%^s breathes."), m_name);
+        } else {
+            if (mon_to_player) {
+                msg_format(_("%^sが%^sのブレスを吐いた。", "%^s breathes %^s."), m_name, type_s);
+            } else if (mon_to_mon && known && see_either) {
+                _(msg_format("%^sが%^sに%^sのブレスを吐いた。", m_name, t_name, type_s), msg_format("%^s breathes %^s at %^s.", m_name, type_s, t_name));
+            }
         }
     }
 

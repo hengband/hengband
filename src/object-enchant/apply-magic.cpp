@@ -307,7 +307,10 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
                 } else if (o_ptr->name2 == EGO_A_DEMON || o_ptr->name2 == EGO_DRUID || o_ptr->name2 == EGO_OLOG) {
                     o_ptr->pval = randint1(e_ptr->max_pval);
                 } else {
-                    o_ptr->pval += randint1(e_ptr->max_pval);
+                    if (e_ptr->max_pval > 0)
+                        o_ptr->pval += randint1(e_ptr->max_pval);
+                    else if (e_ptr->max_pval < 0)
+                        o_ptr->pval -= randint1(0 - e_ptr->max_pval);
                 }
             }
 
