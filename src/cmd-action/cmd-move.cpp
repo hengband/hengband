@@ -5,9 +5,9 @@
 #include "cmd-io/cmd-save.h"
 #include "core/asking-player.h"
 #include "core/disturbance.h"
-#include "core/output-updater.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
+#include "core/stuff-handler.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
@@ -429,8 +429,7 @@ void do_cmd_rest(player_type *creature_ptr)
     creature_ptr->resting = command_arg;
     creature_ptr->action = ACTION_REST;
     creature_ptr->update |= PU_BONUS;
-    update_creature(creature_ptr);
     creature_ptr->redraw |= (PR_STATE);
-    update_output(creature_ptr);
+    handle_stuff(creature_ptr);
     term_fresh();
 }

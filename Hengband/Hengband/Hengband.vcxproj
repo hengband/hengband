@@ -674,7 +674,6 @@
     <ClCompile Include="..\..\src\core\hp-mp-processor.cpp" />
     <ClCompile Include="..\..\src\core\hp-mp-regenerator.cpp" />
     <ClCompile Include="..\..\src\core\magic-effects-timeout-reducer.cpp" />
-    <ClCompile Include="..\..\src\core\output-updater.cpp" />
     <ClCompile Include="..\..\src\core\stuff-handler.cpp" />
     <ClCompile Include="..\..\src\core\turn-compensator.cpp" />
     <ClCompile Include="..\..\src\effect\effect-feature.cpp" />
@@ -1441,7 +1440,6 @@
     <ClInclude Include="..\..\src\core\hp-mp-processor.h" />
     <ClInclude Include="..\..\src\core\hp-mp-regenerator.h" />
     <ClInclude Include="..\..\src\core\magic-effects-timeout-reducer.h" />
-    <ClInclude Include="..\..\src\core\output-updater.h" />
     <ClInclude Include="..\..\src\core\special-internal-keys.h" />
     <ClInclude Include="..\..\src\core\stuff-handler.h" />
     <ClInclude Include="..\..\src\mspell\mspell-bolt.h" />

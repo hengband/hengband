@@ -153,7 +153,6 @@ hengband_SOURCES = \
 	core/hp-mp-regenerator.cpp core/hp-mp-regenerator.h \
 	core/magic-effects-timeout-reducer.cpp core/magic-effects-timeout-reducer.h \
 	core/object-compressor.cpp core/object-compressor.h \
-	core/output-updater.cpp core/output-updater.h \
 	core/player-processor.cpp core/player-processor.h \
 	core/player-redraw-types.h \
 	core/player-update-types.h \
