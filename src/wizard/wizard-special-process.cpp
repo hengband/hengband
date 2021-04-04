@@ -252,7 +252,7 @@ void wiz_change_status(player_type *creature_ptr)
     }
 
     sprintf(tmp_val, "%d", WEAPON_EXP_MASTER);
-    if (!get_string(_("熟練度: ", "Proficiency: "), tmp_val, 9))
+    if (!get_string(_("熟練度: ", "Proficiency: "), tmp_val, 4))
         return;
 
     s16b tmp_s16b = (s16b)atoi(tmp_val);
