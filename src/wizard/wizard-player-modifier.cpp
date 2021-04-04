@@ -23,6 +23,7 @@
 std::vector<std::vector<std::string>> wizard_player_modifier_menu_table = {
     { "r", _("種族変更", "Change race") },
     { "c", _("職業変更", "Change class") },
+    { "R", _("領域変更", "Change realms") },
     { "e", _("能力変更", "Change status") },
     { "k", _("自己分析", "Self knowledge") },
     { "l", _("ライフレート変更", "Set new life rate") },
@@ -89,6 +90,9 @@ void wizard_player_modifier(player_type *creature_ptr)
         break;
     case 'r':
         wiz_reset_race(creature_ptr);
+        break;
+    case 'R':
+        wiz_reset_realms(creature_ptr);
         break;
     default:
         msg_print("That is not a valid debug command.");
