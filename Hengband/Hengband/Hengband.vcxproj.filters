@@ -299,9 +299,6 @@
     <ClCompile Include="..\..\src\birth\birth-explanations-table.cpp">
       <Filter>birth</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\output-updater.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\core\game-closer.cpp">
       <Filter>core</Filter>
     </ClCompile>
@@ -2581,9 +2578,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\birth\birth-explanations-table.h">
       <Filter>birth</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\core\output-updater.h">
-      <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\core\game-closer.h">
       <Filter>core</Filter>

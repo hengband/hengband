@@ -1,5 +1,4 @@
 ﻿#include "view/display-messages.h"
-#include "core/output-updater.h"
 #include "core/window-redrawer.h"
 #include "game-option/cheat-options.h"
 #include "game-option/input-options.h"
@@ -421,7 +420,7 @@ void msg_print(concptr msg)
 
     term_putstr(p, 0, n, TERM_WHITE, t);
     p_ptr->window_flags |= (PW_MESSAGE);
-    update_output(p_ptr);
+    window_stuff(p_ptr);
 
     msg_flag = TRUE;
 #ifdef JP
