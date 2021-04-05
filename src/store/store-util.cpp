@@ -93,6 +93,7 @@ void store_delete(void)
     store_item_optimize(what);
 }
 
+
 /*!
  * @brief 店舗の品揃え変化のためにアイテムを追加する /
  * Creates a random item and gives it to a store

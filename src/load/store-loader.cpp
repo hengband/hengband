@@ -36,7 +36,7 @@ static void home_carry_load(player_type *player_ptr, store_type *store_ptr, obje
         return;
     }
 
-    if (store_ptr->stock_num >= STORE_INVEN_MAX * 10)
+    if (store_ptr->stock_num >= store_get_stock_max(STORE_HOME))
         return;
 
     s32b value = object_value(player_ptr, o_ptr);
@@ -74,26 +74,26 @@ static errr rd_store(player_type *player_ptr, int town_number, int store_number)
         store_ptr = &town_info[town_number].store[store_number];
     }
 
-    byte own;
+    byte owner_idx;
     byte tmp8u;
-    s16b num;
+    s16b inven_num;
     rd_s32b(&store_ptr->store_open);
     rd_s16b(&store_ptr->insult_cur);
-    rd_byte(&own);
+    rd_byte(&owner_idx);
     if (h_older_than(1, 0, 4)) {
         rd_byte(&tmp8u);
-        num = tmp8u;
+        inven_num = tmp8u;
     } else {
-        rd_s16b(&num);
+        rd_s16b(&inven_num);
     }
 
     rd_s16b(&store_ptr->good_buy);
     rd_s16b(&store_ptr->bad_buy);
 
     rd_s32b(&store_ptr->last_visit);
-    store_ptr->owner = own;
+    store_ptr->owner = owner_idx;
 
-    for (int j = 0; j < num; j++) {
+    for (int j = 0; j < inven_num; j++) {
         object_type forge;
         object_type *q_ptr;
         q_ptr = &forge;
@@ -101,9 +101,8 @@ static errr rd_store(player_type *player_ptr, int town_number, int store_number)
 
         rd_item(player_ptr, q_ptr);
 
-        bool is_valid_item = store_ptr->stock_num
-            < (store_number == STORE_HOME ? STORE_INVEN_MAX * 10 : store_number == STORE_MUSEUM ? STORE_INVEN_MAX * 50 : STORE_INVEN_MAX);
-        if (!is_valid_item)
+        auto stock_max = store_get_stock_max(static_cast<STORE_TYPE_IDX>(store_number));
+        if (store_ptr->stock_num >= stock_max)
             continue;
 
         if (sort) {
@@ -117,15 +116,25 @@ static errr rd_store(player_type *player_ptr, int town_number, int store_number)
     return 0;
 }
 
+/*!
+ * @brief 店舗情報を読み込む
+ * @param creature_ptr プレイヤー情報への参照ポインタ(未使用)
+ * @return 読み込み終わったら0、失敗したら22
+ */
 errr load_store(player_type *creature_ptr)
 {
+    (void)creature_ptr;
+
     u16b tmp16u;
     rd_u16b(&tmp16u);
-    int town_count = tmp16u;
+    auto town_count = (int)tmp16u;
+
     rd_u16b(&tmp16u);
-    for (int i = 1; i < town_count; i++)
-        for (int j = 0; j < tmp16u; j++)
-            if (rd_store(creature_ptr, i, j))
+    auto store_count = (int)tmp16u;
+
+    for (int town_idx = 1; town_idx < town_count; town_idx++)
+        for (int store_idx = 0; store_idx < store_count; store_idx++)
+            if (rd_store(creature_ptr, town_idx, store_idx))
                 return 22;
 
     return 0;
