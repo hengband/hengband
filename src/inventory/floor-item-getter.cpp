@@ -753,63 +753,53 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
         }
             /* Fall through */
         default: {
-            int ver;
-            if (command_wrk != USE_FLOOR) {
-                bool not_found = FALSE;
-                if (!get_tag(owner_ptr, &fis_ptr->k, fis_ptr->which, command_wrk, fis_ptr->tval))
-                    not_found = TRUE;
-                else if ((fis_ptr->k < INVEN_MAIN_HAND) ? !fis_ptr->inven : !fis_ptr->equip)
-                    not_found = TRUE;
-                else if (!get_item_okay(owner_ptr, fis_ptr->k, fis_ptr->tval))
-                    not_found = TRUE;
+            bool tag_not_found = FALSE;
 
-                if (!not_found) {
-                    *cp = fis_ptr->k;
-                    fis_ptr->item = TRUE;
-                    fis_ptr->done = TRUE;
+            if (command_wrk != USE_FLOOR) {
+                if (!get_tag(owner_ptr, &fis_ptr->k, fis_ptr->which, command_wrk, fis_ptr->tval))
+                    tag_not_found = TRUE;
+                else if ((fis_ptr->k < INVEN_MAIN_HAND) ? !fis_ptr->inven : !fis_ptr->equip)
+                    tag_not_found = TRUE;
+
+                if (!tag_not_found)
                     fis_ptr->cur_tag = fis_ptr->which;
-                    break;
-                }
             } else {
                 if (get_tag_floor(owner_ptr->current_floor_ptr, &fis_ptr->k, fis_ptr->which, fis_ptr->floor_list, fis_ptr->floor_num)) {
                     fis_ptr->k = 0 - fis_ptr->floor_list[fis_ptr->k];
-                    *cp = fis_ptr->k;
-                    fis_ptr->item = TRUE;
-                    fis_ptr->done = TRUE;
                     fis_ptr->cur_tag = fis_ptr->which;
-                    break;
                 }
             }
 
-            ver = isupper(fis_ptr->which);
-            fis_ptr->which = (char)tolower(fis_ptr->which);
-            if (command_wrk == (USE_INVEN)) {
-                if (fis_ptr->which == '(')
-                    fis_ptr->k = fis_ptr->i1;
-                else if (fis_ptr->which == ')')
-                    fis_ptr->k = fis_ptr->i2;
-                else
-                    fis_ptr->k = label_to_inventory(owner_ptr, fis_ptr->which);
-            } else if (command_wrk == (USE_EQUIP)) {
-                if (fis_ptr->which == '(')
-                    fis_ptr->k = fis_ptr->e1;
-                else if (fis_ptr->which == ')')
-                    fis_ptr->k = fis_ptr->e2;
-                else
-                    fis_ptr->k = label_to_equipment(owner_ptr, fis_ptr->which);
-            } else if (command_wrk == USE_FLOOR) {
-                if (fis_ptr->which == '(')
-                    fis_ptr->k = 0;
-                else if (fis_ptr->which == ')')
-                    fis_ptr->k = fis_ptr->floor_num - 1;
-                else
-                    fis_ptr->k = islower(fis_ptr->which) ? A2I(fis_ptr->which) : -1;
-                if (fis_ptr->k < 0 || fis_ptr->k >= fis_ptr->floor_num || fis_ptr->k >= 23) {
-                    bell();
-                    break;
-                }
+            if (tag_not_found) {
+                fis_ptr->which = (char)tolower(fis_ptr->which);
+                if (command_wrk == (USE_INVEN)) {
+                    if (fis_ptr->which == '(')
+                        fis_ptr->k = fis_ptr->i1;
+                    else if (fis_ptr->which == ')')
+                        fis_ptr->k = fis_ptr->i2;
+                    else
+                        fis_ptr->k = label_to_inventory(owner_ptr, fis_ptr->which);
+                } else if (command_wrk == (USE_EQUIP)) {
+                    if (fis_ptr->which == '(')
+                        fis_ptr->k = fis_ptr->e1;
+                    else if (fis_ptr->which == ')')
+                        fis_ptr->k = fis_ptr->e2;
+                    else
+                        fis_ptr->k = label_to_equipment(owner_ptr, fis_ptr->which);
+                } else if (command_wrk == USE_FLOOR) {
+                    if (fis_ptr->which == '(')
+                        fis_ptr->k = 0;
+                    else if (fis_ptr->which == ')')
+                        fis_ptr->k = fis_ptr->floor_num - 1;
+                    else
+                        fis_ptr->k = islower(fis_ptr->which) ? A2I(fis_ptr->which) : -1;
+                    if (fis_ptr->k < 0 || fis_ptr->k >= fis_ptr->floor_num || fis_ptr->k >= 23) {
+                        bell();
+                        break;
+                    }
 
-                fis_ptr->k = 0 - fis_ptr->floor_list[fis_ptr->k];
+                    fis_ptr->k = 0 - fis_ptr->floor_list[fis_ptr->k];
+                }
             }
 
             if ((command_wrk != USE_FLOOR) && !get_item_okay(owner_ptr, fis_ptr->k, fis_ptr->tval)) {
@@ -817,6 +807,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 break;
             }
 
+            int ver = isupper(fis_ptr->which);
             if (ver && !verify(owner_ptr, _("本当に", "Try"), fis_ptr->k)) {
                 fis_ptr->done = TRUE;
                 break;
