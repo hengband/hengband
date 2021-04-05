@@ -13,6 +13,7 @@
 #include "floor/wild.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/map-screen-options.h"
+#include "game-option/cheat-options.h"
 #include "grid/grid.h"
 #include "inventory/pack-overflow.h"
 #include "io/cursor.h"
@@ -264,7 +265,7 @@ void process_player(player_type *creature_ptr)
             move_cursor_relative(creature_ptr->y, creature_ptr->x);
             command_cmd = SPECIAL_KEY_BUILDING;
             process_command(creature_ptr);
-        } else if (creature_ptr->paralyzed || (creature_ptr->stun >= 100)) {
+        } else if ((creature_ptr->paralyzed || creature_ptr->stun >= 100) && !cheat_immortal) {
             take_turn(creature_ptr, 100);
         } else if (creature_ptr->action == ACTION_REST) {
             if (creature_ptr->resting > 0) {

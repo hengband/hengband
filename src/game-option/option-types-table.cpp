@@ -319,7 +319,11 @@ const option_type cheat_info[MAX_CHEAT_OPTIONS]
 
           { &cheat_turn, FALSE, 255, 0x81, 0x00, "cheat_turn", _("ゲームメッセージにターン表示を行う", "Put turn in game messages.") },
 
-          { &cheat_sight, FALSE, 255, 0x82, 0x00, "cheat_sight", _("「見る」コマンドを拡張する。", "Expand \"L\"ook command.") } };
+          { &cheat_sight, FALSE, 255, 0x82, 0x00, "cheat_sight", _("「見る」コマンドを拡張する。", "Expand \"L\"ook command.") },
+
+          { &cheat_immortal, FALSE, 255, 0x83, 0x00, "cheat_immortal", _("完全な不滅状態になる。", "Completely immortal.") } };
+
+
 
 /*!
  * 自動セーブオプションテーブル

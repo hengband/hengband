@@ -12,3 +12,4 @@ extern bool cheat_save;
 extern bool cheat_diary_output;
 extern bool cheat_turn;
 extern bool cheat_sight;
+extern bool cheat_immortal;
