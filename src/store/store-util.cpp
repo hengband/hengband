@@ -93,6 +93,28 @@ void store_delete(void)
     store_item_optimize(what);
 }
 
+/*!
+ * @brief 店舗販売中の杖と魔法棒のpvalのリストを返す
+ * @param j_ptr これから売ろうとしているオブジェクト
+ * @return plavリスト(充填数)
+ * @details
+ * 回数の違う杖と魔法棒がスロットを圧迫するのでスロット数制限をかける
+ */
+static std::vector<PARAMETER_VALUE> store_same_magic_device_pvals(object_type *j_ptr)
+{
+    auto list = std::vector<PARAMETER_VALUE>();
+    for (INVENTORY_IDX i = 0; i < st_ptr->stock_num; i++) {
+        object_type *o_ptr = &st_ptr->stock[i];
+        if (o_ptr == j_ptr)
+            continue;
+        if (o_ptr->k_idx != j_ptr->k_idx)
+            continue;
+        if (o_ptr->tval != TV_STAFF && o_ptr->tval != TV_WAND)
+            continue;
+        list.push_back(o_ptr->pval);
+    }
+    return list;
+}
 
 /*!
  * @brief 店舗の品揃え変化のためにアイテムを追加する /
@@ -138,6 +160,12 @@ void store_create(
         apply_magic(player_ptr, q_ptr, level, AM_NO_FIXED_ART);
         if (!(*store_will_buy)(player_ptr, q_ptr))
             continue;
+
+        auto pvals = store_same_magic_device_pvals(q_ptr);
+        if (pvals.size() >= 2) {
+            auto pval = pvals.at(randint0(pvals.size()));
+            q_ptr->pval = pval;
+        }
 
         if (q_ptr->tval == TV_LITE) {
             if (q_ptr->sval == SV_LITE_TORCH)

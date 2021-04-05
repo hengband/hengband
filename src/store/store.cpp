@@ -60,7 +60,7 @@ s16b store_get_stock_max(STORE_TYPE_IDX store_idx, bool powerup)
     case STORE_MUSEUM:
         return STORE_INVEN_MAX * 50;
     default:
-        return STORE_INVEN_MAX;
+        return STORE_INVEN_MAX * 3 / 2;
     }
 }
 
@@ -312,7 +312,7 @@ void store_maintenance(player_type *player_ptr, int town_num, int store_num, int
     }
 
     INVENTORY_IDX j = st_ptr->stock_num;
-    int remain = STORE_TURNOVER;
+    int remain = STORE_TURNOVER + MAX(0, j - STORE_MAX_KEEP);
     int turn_over = 1;
     for (int i = 0; i < chance; i++) {
         auto n = randint0(remain);
@@ -329,10 +329,13 @@ void store_maintenance(player_type *player_ptr, int town_num, int store_num, int
     while (st_ptr->stock_num > j)
         store_delete();
 
-    auto diff = STORE_MAX_KEEP - st_ptr->stock_num;
-    turn_over = 0;
-    for (int i = 0; i < chance; i++)
-        turn_over = MAX(turn_over, randint1(diff));
+    remain = STORE_MAX_KEEP - st_ptr->stock_num;
+    turn_over = 1;
+    for (int i = 0; i < chance; i++) {
+        auto n = randint0(remain);
+        turn_over += n;
+        remain -= n;
+    }
 
     j = st_ptr->stock_num + turn_over;
     if (j > STORE_MAX_KEEP)
