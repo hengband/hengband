@@ -325,7 +325,7 @@ void store_maintenance(player_type *player_ptr, int town_num, int store_num, int
     if (j >= st_ptr->stock_size)
         j = st_ptr->stock_size - 1;
 
-    for (int k = 0; k < st_ptr->regular_num; k++) {
+    for (size_t k = 0; k < st_ptr->regular.size(); k++) {
         store_create(player_ptr, st_ptr->regular[k], black_market_crap, store_will_buy, mass_produce);
         if (st_ptr->stock_num >= STORE_MAX_KEEP)
             break;

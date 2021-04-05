@@ -32,9 +32,8 @@ store_type *st_ptr = NULL;
  * Increase, by a given amount, the number of a certain item
  * in a certain store.	This can result in zero items.
  * </pre>
- * @todo numは本来ITEM_NUMBER型にしたい。
  */
-void store_item_increase(INVENTORY_IDX item, int num)
+void store_item_increase(INVENTORY_IDX item, ITEM_NUMBER num)
 {
     object_type *o_ptr;
     o_ptr = &st_ptr->stock[item];
@@ -45,7 +44,7 @@ void store_item_increase(INVENTORY_IDX item, int num)
         cnt = 0;
 
     num = cnt - o_ptr->number;
-    o_ptr->number += (ITEM_NUMBER)num;
+    o_ptr->number += num;
 }
 
 /*!
@@ -127,7 +126,7 @@ void store_create(
             k_idx = fix_k_idx;
             level = rand_range(1, STORE_OBJ_LEVEL);
         } else {
-            k_idx = st_ptr->table[randint0(st_ptr->table_num)];
+            k_idx = st_ptr->table[randint0(st_ptr->table.size())];
             level = rand_range(1, STORE_OBJ_LEVEL);
         }
 
