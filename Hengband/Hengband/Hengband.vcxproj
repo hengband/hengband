@@ -1026,6 +1026,7 @@
     <ClInclude Include="..\..\src\main-win\main-win-cfg-reader.h" />
     <ClInclude Include="..\..\src\main-win\main-win-file-utils.h" />
     <ClInclude Include="..\..\src\main-win\main-win-mci.h" />
+    <ClInclude Include="..\..\src\main-win\main-win-menuitem.h" />
     <ClInclude Include="..\..\src\main-win\main-win-mmsystem.h" />
     <ClInclude Include="..\..\src\main-win\main-win-music.h" />
     <ClInclude Include="..\..\src\main-win\main-win-sound.h" />
