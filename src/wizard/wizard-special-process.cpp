@@ -665,14 +665,13 @@ void cheat_death(player_type *creature_ptr)
     msg_print(_("ウィザードモードに念を送り、死を欺いた。", "You invoke wizard mode and cheat death."));
     msg_print(NULL);
 
+    creature_ptr->is_dead = FALSE;
     (void)life_stream(creature_ptr, FALSE, FALSE);
     (void)restore_mana(creature_ptr, TRUE);
-
     (void)recall_player(creature_ptr, 0);
     reserve_alter_reality(creature_ptr, 0);
 
     (void)strcpy(creature_ptr->died_from, _("死の欺き", "Cheating death"));
-    creature_ptr->is_dead = FALSE;
     (void)set_food(creature_ptr, PY_FOOD_MAX - 1);
 
     floor_type *floor_ptr = creature_ptr->current_floor_ptr;
