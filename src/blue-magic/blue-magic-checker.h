@@ -5,4 +5,4 @@
 enum blue_magic_type : int;
 
 void learn_spell(player_type *learner_ptr, int monspell);
-void set_rf_masks(BIT_FLAGS *f4, BIT_FLAGS *f5, BIT_FLAGS *f6, blue_magic_type mode);
+void set_rf_masks(FlagGroup<RF_ABILITY>& ability_flags, blue_magic_type mode);

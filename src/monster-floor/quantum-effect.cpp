@@ -65,9 +65,8 @@ static void produce_quantum_effect(player_type *target_ptr, MONSTER_IDX m_idx, b
         msg_print(_("量子的効果が起こった！", "A decoherence was produced!"));
 
     bool target = one_in_(2);
-    const int blink = 32 * 5 + 4;
     if (target)
-        (void)monspell_to_monster(target_ptr, blink, m_ptr->fy, m_ptr->fx, m_idx, m_idx, TRUE);
+        (void)monspell_to_monster(target_ptr, RF_ABILITY::BLINK, m_ptr->fy, m_ptr->fx, m_idx, m_idx, TRUE);
     else
         teleport_player_away(m_idx, target_ptr, 10, TRUE);
 }

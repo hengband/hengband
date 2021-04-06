@@ -2,6 +2,8 @@
 
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-types.h"
+#include "monster-race/race-ability-flags.h"
+#include "util/flag-group.h"
 #include "system/angband.h"
 #include <string>
 
@@ -61,15 +63,11 @@ typedef struct monster_race {
     BIT_FLAGS flags1{}; /* Flags 1 (general) */
     BIT_FLAGS flags2{}; /* Flags 2 (abilities) */
     BIT_FLAGS flags3{}; /* Flags 3 (race/resist) */
-    BIT_FLAGS flags4{}; /* Flags 4 (inate/breath) */
     BIT_FLAGS flags7{}; /* Flags 7 (movement related abilities) */
     BIT_FLAGS flags8{}; /* Flags 8 (wilderness info) */
     BIT_FLAGS flags9{}; /* Flags 9 (drops info) */
     BIT_FLAGS flagsr{}; /* Flags R (resistances info) */
-    BIT_FLAGS a_ability_flags1{}; /* Activate Ability Flags 5 (normal spells) */
-    BIT_FLAGS a_ability_flags2{}; /* Activate Ability Flags 6 (special spells) */
-    BIT_FLAGS a_ability_flags3{}; /* Activate Ability Flags 7 (implementing) */
-    BIT_FLAGS a_ability_flags4{}; /* Activate Ability Flags 8 (implementing) */
+    FlagGroup<RF_ABILITY> ability_flags; /* Ability Flags */
     monster_blow blow[MAX_NUM_BLOWS]{}; /* Up to four blows per round */
     MONRACE_IDX reinforce_id[6]{};
     DICE_NUMBER reinforce_dd[6]{};
@@ -106,8 +104,6 @@ typedef struct monster_race {
     u32b r_flags1{}; /* Observed racial flags */
     u32b r_flags2{}; /* Observed racial flags */
     u32b r_flags3{}; /* Observed racial flags */
-    u32b r_flags4{}; /* Observed racial flags */
-    u32b r_flags5{}; /* Observed racial flags */
-    u32b r_flags6{}; /* Observed racial flags */
     u32b r_flagsr{}; /* Observed racial resistance flags */
+    FlagGroup<RF_ABILITY> r_ability_flags; /* Observed racial ability flags */
 } monster_race;

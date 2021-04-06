@@ -2,16 +2,19 @@
 
 #include "system/angband.h"
 #include "system/monster-type-definition.h"
+#include "monster-race/race-ability-flags.h"
+#include "util/flag-group.h"
+
+#include <vector>
 
 typedef struct melee_spell_type {
     MONSTER_IDX m_idx;
     POSITION y;
     POSITION x;
     MONSTER_IDX target_idx;
-    int thrown_spell;
+    RF_ABILITY thrown_spell;
     HIT_POINT dam;
-    byte spell[96];
-    byte num;
+    std::vector<RF_ABILITY> spells;
     GAME_TEXT m_name[160];
 #ifdef JP
 #else
@@ -26,9 +29,7 @@ typedef struct melee_spell_type {
     bool pet;
     bool in_no_magic_dungeon;
     bool can_remember;
-    BIT_FLAGS f4;
-    BIT_FLAGS f5;
-    BIT_FLAGS f6;
+    FlagGroup<RF_ABILITY> ability_flags;
 } melee_spell_type;
 
 melee_spell_type *initialize_melee_spell_type(player_type *target_ptr, melee_spell_type *ms_ptr, MONSTER_IDX m_idx);

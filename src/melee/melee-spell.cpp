@@ -54,7 +54,7 @@ static void process_special_melee_spell(player_type *target_ptr, melee_spell_typ
     is_special_magic &= current_world_ptr->timewalk_m_idx == 0;
     is_special_magic &= !target_ptr->blind;
     is_special_magic &= target_ptr->pclass == CLASS_IMITATOR;
-    is_special_magic &= ms_ptr->thrown_spell != 167; /* Not RF6_SPECIAL */
+    is_special_magic &= ms_ptr->thrown_spell != RF_ABILITY::SPECIAL;
     if (!is_special_magic)
         return;
 
@@ -66,7 +66,7 @@ static void process_special_melee_spell(player_type *target_ptr, melee_spell_typ
         }
     }
 
-    target_ptr->mane_spell[target_ptr->mane_num] = ms_ptr->thrown_spell - RF4_SPELL_START;
+    target_ptr->mane_spell[target_ptr->mane_num] = ms_ptr->thrown_spell;
     target_ptr->mane_dam[target_ptr->mane_num] = ms_ptr->dam;
     target_ptr->mane_num++;
     target_ptr->new_mane = TRUE;
@@ -79,27 +79,10 @@ static void process_rememberance(melee_spell_type *ms_ptr)
     if (!ms_ptr->can_remember)
         return;
 
-    if (ms_ptr->thrown_spell < RF4_SPELL_START + RF4_SPELL_SIZE) {
-        ms_ptr->r_ptr->r_flags4 |= (1UL << (ms_ptr->thrown_spell - RF4_SPELL_START));
-        if (ms_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
-            ms_ptr->r_ptr->r_cast_spell++;
+    ms_ptr->r_ptr->r_ability_flags.set(ms_ptr->thrown_spell);
 
-        return;
-    }
-
-    if (ms_ptr->thrown_spell < RF5_SPELL_START + RF5_SPELL_SIZE) {
-        ms_ptr->r_ptr->r_flags5 |= (1UL << (ms_ptr->thrown_spell - RF5_SPELL_START));
-        if (ms_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
-            ms_ptr->r_ptr->r_cast_spell++;
-
-        return;
-    }
-
-    if (ms_ptr->thrown_spell < RF6_SPELL_START + RF6_SPELL_SIZE) {
-        ms_ptr->r_ptr->r_flags6 |= (1UL << (ms_ptr->thrown_spell - RF6_SPELL_START));
-        if (ms_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
-            ms_ptr->r_ptr->r_cast_spell++;
-    }
+    if (ms_ptr->r_ptr->r_cast_spell < MAX_UCHAR)
+        ms_ptr->r_ptr->r_cast_spell++;
 }
 
 static void describe_melee_spell(player_type *target_ptr, melee_spell_type *ms_ptr)
@@ -134,7 +117,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
         return FALSE;
 
     describe_melee_spell(target_ptr, ms_ptr);
-    ms_ptr->thrown_spell = ms_ptr->spell[randint0(ms_ptr->num)];
+    ms_ptr->thrown_spell = ms_ptr->spells[randint0(ms_ptr->spells.size())];
     if (target_ptr->riding && (m_idx == target_ptr->riding))
         disturb(target_ptr, TRUE, TRUE);
 

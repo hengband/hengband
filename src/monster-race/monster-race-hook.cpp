@@ -3,19 +3,16 @@
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-types.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags-ability1.h"
-#include "monster-race/race-flags-ability2.h"
+#include "monster-race/race-ability-mask.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
-#include "monster-race/race-flags4.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-flags8.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
-#include "mspell/mspell-mask-definitions.h"
 #include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
@@ -27,7 +24,7 @@ int vault_aux_race;
 char vault_aux_char;
 
 /*! ブレス属性に基づくドラゴンpit生成時条件マスク / Breath mask for "monster pit (dragon)" */
-BIT_FLAGS vault_aux_dragon_mask4;
+FlagGroup<RF_ABILITY> vault_aux_dragon_mask4;
 
 /*!
  * @brief pit/nestの基準となる単種モンスターを決める /
@@ -64,24 +61,25 @@ void vault_prep_dragon(player_type *player_ptr)
     /* Unused */
     (void)player_ptr;
 
+    vault_aux_dragon_mask4.clear();
     switch (randint0(6)) {
     case 0: /* Black */
-        vault_aux_dragon_mask4 = RF4_BR_ACID;
+        vault_aux_dragon_mask4.set(RF_ABILITY::BR_ACID);
         break;
     case 1: /* Blue */
-        vault_aux_dragon_mask4 = RF4_BR_ELEC;
+        vault_aux_dragon_mask4.set(RF_ABILITY::BR_ELEC);
         break;
     case 2: /* Red */
-        vault_aux_dragon_mask4 = RF4_BR_FIRE;
+        vault_aux_dragon_mask4.set(RF_ABILITY::BR_FIRE);
         break;
     case 3: /* White */
-        vault_aux_dragon_mask4 = RF4_BR_COLD;
+        vault_aux_dragon_mask4.set(RF_ABILITY::BR_COLD);
         break;
     case 4: /* Green */
-        vault_aux_dragon_mask4 = RF4_BR_POIS;
+        vault_aux_dragon_mask4.set(RF_ABILITY::BR_POIS);
         break;
     default: /* Multi-hued */
-        vault_aux_dragon_mask4 = (RF4_BR_ACID | RF4_BR_ELEC | RF4_BR_FIRE | RF4_BR_COLD | RF4_BR_POIS);
+        vault_aux_dragon_mask4.set({ RF_ABILITY::BR_ACID, RF_ABILITY::BR_ELEC, RF_ABILITY::BR_FIRE, RF_ABILITY::BR_COLD, RF_ABILITY::BR_POIS });
         break;
     }
 }
@@ -325,13 +323,13 @@ bool vault_aux_lite(player_type *player_ptr, MONRACE_IDX r_idx)
     if (!vault_monster_okay(player_ptr, r_idx))
         return FALSE;
 
-    if (none_bits(r_ptr->flags4, RF4_BR_LITE) && none_bits(r_ptr->a_ability_flags1, RF5_BA_LITE))
+    if (r_ptr->ability_flags.has_none_of({ RF_ABILITY::BR_LITE, RF_ABILITY::BA_LITE }))
         return FALSE;
 
     if (any_bits(r_ptr->flags2, (RF2_PASS_WALL | RF2_KILL_WALL)))
         return FALSE;
 
-    if (any_bits(r_ptr->flags4, RF4_BR_DISI))
+    if (r_ptr->ability_flags.has(RF_ABILITY::BR_DISI))
         return FALSE;
 
     return TRUE;
@@ -346,7 +344,7 @@ bool vault_aux_shards(player_type *player_ptr, MONRACE_IDX r_idx)
     if (!vault_monster_okay(player_ptr, r_idx))
         return FALSE;
 
-    if (none_bits(r_ptr->flags4, RF4_BR_SHAR))
+    if (r_ptr->ability_flags.has_not(RF_ABILITY::BR_SHAR))
         return FALSE;
 
     return TRUE;
@@ -639,10 +637,10 @@ bool vault_aux_dragon(player_type *player_ptr, MONRACE_IDX r_idx)
     if (any_bits(r_ptr->flags3, RF3_UNDEAD))
         return FALSE;
 
-    BIT_FLAGS flags = RF4_BREATH_MASK;
-    reset_bits(flags, vault_aux_dragon_mask4);
+    auto flags = RF_ABILITY_BREATH_MASK;
+    flags.reset(vault_aux_dragon_mask4);
 
-    if (any_bits(r_ptr->flags4, flags) || !all_bits(r_ptr->flags4, vault_aux_dragon_mask4))
+    if (r_ptr->ability_flags.has_any_of(flags) || !r_ptr->ability_flags.has_all_of(vault_aux_dragon_mask4))
         return FALSE;
 
     return TRUE;
@@ -845,16 +843,14 @@ bool monster_can_entry_arena(player_type *player_ptr, MONRACE_IDX r_idx)
             dam += r_ptr->blow[i].d_dice;
     }
 
-    if (!dam && none_bits(r_ptr->flags4, (RF4_BOLT_MASK | RF4_BEAM_MASK | RF4_BALL_MASK | RF4_BREATH_MASK))
-        && none_bits(r_ptr->a_ability_flags1, (RF5_BOLT_MASK | RF5_BEAM_MASK | RF5_BALL_MASK | RF5_BREATH_MASK))
-        && none_bits(r_ptr->a_ability_flags2, (RF6_BOLT_MASK | RF6_BEAM_MASK | RF6_BALL_MASK | RF6_BREATH_MASK)))
+    if (!dam && r_ptr->ability_flags.has_none_of(RF_ABILITY_BOLT_MASK | RF_ABILITY_BEAM_MASK | RF_ABILITY_BALL_MASK | RF_ABILITY_BREATH_MASK))
         return FALSE;
 
     return TRUE;
 }
 
 /*!
- * @brief モンスターが人形のベースにできるかを返す
+ * モンスターが人形のベースにできるかを返す
  * @param r_idx チェックしたいモンスター種族のID
  * @return 人形にできるならTRUEを返す
  */

@@ -8,6 +8,8 @@
 
 #include "system/angband.h"
 #include "system/monster-type-definition.h"
+#include "monster-race/race-ability-flags.h"
+#include "util/flag-group.h"
 
 typedef struct {
 	bool see_m;
@@ -32,10 +34,8 @@ typedef struct {
 	BIT_FLAGS old_r_flags1;
 	BIT_FLAGS old_r_flags2;
 	BIT_FLAGS old_r_flags3;
-	BIT_FLAGS old_r_flags4;
-	BIT_FLAGS old_r_flags5;
-	BIT_FLAGS old_r_flags6;
 	BIT_FLAGS old_r_flagsr;
+	FlagGroup<RF_ABILITY> old_r_ability_flags;
 
 	byte old_r_blows0;
 	byte old_r_blows1;

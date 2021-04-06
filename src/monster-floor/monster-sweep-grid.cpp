@@ -11,16 +11,13 @@
 #include "grid/grid.h"
 #include "monster-floor/monster-safety-hiding.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags-ability1.h"
-#include "monster-race/race-flags-ability2.h"
+#include "monster-race/race-ability-mask.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
-#include "monster-race/race-flags4.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
-#include "mspell/mspell-mask-definitions.h"
 #include "player/player-status-flags.h"
 #include "system/floor-type-definition.h"
 #include "target/projection-path-calculator.h"
@@ -182,7 +179,7 @@ static void sweep_movable_grid(player_type *target_ptr, MONSTER_IDX m_idx, POSIT
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-    if (r_ptr->flags4 & (RF4_ATTACK_MASK) || r_ptr->a_ability_flags1 & (RF5_ATTACK_MASK) || r_ptr->a_ability_flags2 & (RF6_ATTACK_MASK)) {
+    if (r_ptr->ability_flags.has_any_of(RF_ABILITY_ATTACK_MASK)) {
         if (sweep_ranged_attack_grid(target_ptr, m_idx, yp, xp))
             return;
     }
@@ -360,7 +357,7 @@ bool get_movable_grid(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
 
             if (floor_ptr->grid_array[target_ptr->y][target_ptr->x].info & CAVE_ROOM)
                 room -= 2;
-            if (!r_ptr->flags4 && !r_ptr->a_ability_flags1 && !r_ptr->a_ability_flags2)
+            if (r_ptr->ability_flags.none())
                 room -= 2;
 
             if (room < (8 * (target_ptr->chp + target_ptr->csp)) / (target_ptr->mhp + target_ptr->msp)) {

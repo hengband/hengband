@@ -152,7 +152,7 @@ void player_wipe_without_name(player_type *creature_ptr)
     creature_ptr->current_floor_ptr->inside_arena = FALSE;
     creature_ptr->current_floor_ptr->inside_quest = 0;
     for (int i = 0; i < MAX_MANE; i++) {
-        creature_ptr->mane_spell[i] = -1;
+        creature_ptr->mane_spell[i] = RF_ABILITY::MAX;
         creature_ptr->mane_dam[i] = 0;
     }
 

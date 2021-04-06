@@ -2,6 +2,9 @@
 
 #include "system/angband.h"
 #include "system/monster-race-definition.h"
+#include "monster-race/race-ability-flags.h"
+#include "util/flag-group.h"
+
 #include <string>
 #include <unordered_map>
 
@@ -25,9 +28,8 @@ typedef struct lore_type {
     BIT_FLAGS flags1;
     BIT_FLAGS flags2;
     BIT_FLAGS flags3;
-    BIT_FLAGS flags4;
-    BIT_FLAGS a_ability_flags1;
-    BIT_FLAGS a_ability_flags2;
+    FlagGroup<RF_ABILITY> ability_flags;
+
     BIT_FLAGS flags7;
     BIT_FLAGS flagsr;
     bool reinforce;

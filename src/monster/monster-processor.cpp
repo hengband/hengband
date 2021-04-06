@@ -32,7 +32,6 @@
 #include "monster-floor/place-monster-types.h"
 #include "monster-floor/quantum-effect.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags-ability2.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
@@ -367,7 +366,7 @@ void process_special(player_type *target_ptr, MONSTER_IDX m_idx)
 {
     monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    if (((r_ptr->a_ability_flags2 & RF6_SPECIAL) == 0) || (m_ptr->r_idx != MON_OHMU) || target_ptr->current_floor_ptr->inside_arena || target_ptr->phase_out
+    if (r_ptr->ability_flags.has_not(RF_ABILITY::SPECIAL) || (m_ptr->r_idx != MON_OHMU) || target_ptr->current_floor_ptr->inside_arena || target_ptr->phase_out
         || (r_ptr->freq_spell == 0) || (randint1(100) > r_ptr->freq_spell))
         return;
 
@@ -383,7 +382,7 @@ void process_special(player_type *target_ptr, MONSTER_IDX m_idx)
     }
 
     if (count && is_original_ap_and_seen(target_ptr, m_ptr))
-        r_ptr->r_flags6 |= (RF6_SPECIAL);
+        r_ptr->r_ability_flags.set(RF_ABILITY::SPECIAL);
 }
 
 /*!

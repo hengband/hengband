@@ -5,7 +5,6 @@
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
-#include "monster-race/race-flags4.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-flags8.h"
 #include "monster-race/race-indice-types.h"
@@ -83,7 +82,7 @@ bool check_summon_specific(player_type *player_ptr, MONRACE_IDX summoner_idx, MO
         is_match = (r_ptr->d_char == 'g');
         break;
     case SUMMON_CYBER:
-        is_match = (r_ptr->d_char == 'U') && ((r_ptr->flags4 & RF4_ROCKET) != 0);
+        is_match = (r_ptr->d_char == 'U') && r_ptr->ability_flags.has(RF_ABILITY::ROCKET);
         break;
     case SUMMON_KIN: {
         SYMBOL_CODE summon_kin_type = summoner_idx > 0 ? r_info[summoner_idx].d_char : get_summon_symbol_from_player(player_ptr);
@@ -99,7 +98,7 @@ bool check_summon_specific(player_type *player_ptr, MONRACE_IDX summoner_idx, MO
     case SUMMON_ANIMAL_RANGER:
         is_match = ((r_ptr->flags3 & (RF3_ANIMAL)) && (angband_strchr("abcflqrwBCHIJKMRS", r_ptr->d_char)) && !(r_ptr->flags3 & (RF3_DRAGON))
             && !(r_ptr->flags3 & (RF3_EVIL)) && !(r_ptr->flags3 & (RF3_UNDEAD)) && !(r_ptr->flags3 & (RF3_DEMON)) && !(r_ptr->flags2 & (RF2_MULTIPLY))
-            && !(r_ptr->flags4 || r_ptr->a_ability_flags1 || r_ptr->a_ability_flags2));
+            && r_ptr->ability_flags.none());
         break;
     case SUMMON_SMALL_MOAI:
         is_match = r_idx == MON_SMALL_MOAI;

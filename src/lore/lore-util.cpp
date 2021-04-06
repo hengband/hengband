@@ -42,9 +42,7 @@ lore_type *initialize_lore_type(lore_type *lore_ptr, MONRACE_IDX r_idx, monster_
     lore_ptr->flags1 = (lore_ptr->r_ptr->flags1 & lore_ptr->r_ptr->r_flags1);
     lore_ptr->flags2 = (lore_ptr->r_ptr->flags2 & lore_ptr->r_ptr->r_flags2);
     lore_ptr->flags3 = (lore_ptr->r_ptr->flags3 & lore_ptr->r_ptr->r_flags3);
-    lore_ptr->flags4 = (lore_ptr->r_ptr->flags4 & lore_ptr->r_ptr->r_flags4);
-    lore_ptr->a_ability_flags1 = (lore_ptr->r_ptr->a_ability_flags1 & lore_ptr->r_ptr->r_flags5);
-    lore_ptr->a_ability_flags2 = (lore_ptr->r_ptr->a_ability_flags2 & lore_ptr->r_ptr->r_flags6);
+    lore_ptr->ability_flags = (lore_ptr->r_ptr->ability_flags & lore_ptr->r_ptr->r_ability_flags);
     lore_ptr->flags7 = (lore_ptr->r_ptr->flags7 & lore_ptr->r_ptr->flags7);
     lore_ptr->flagsr = (lore_ptr->r_ptr->flagsr & lore_ptr->r_ptr->r_flagsr);
     lore_ptr->reinforce = FALSE;

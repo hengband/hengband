@@ -50,13 +50,7 @@ static errr grab_one_basic_flag(monster_race *r_ptr, concptr what)
  */
 static errr grab_one_spell_flag(monster_race *r_ptr, concptr what)
 {
-    if (grab_one_flag(&r_ptr->flags4, r_info_flags4, what) == 0)
-        return PARSE_ERROR_NONE;
-
-    if (grab_one_flag(&r_ptr->a_ability_flags1, r_a_ability_flags1, what) == 0)
-        return PARSE_ERROR_NONE;
-
-    if (grab_one_flag(&r_ptr->a_ability_flags2, r_a_ability_flags2, what) == 0)
+    if (FlagGroup<RF_ABILITY>::grab_one_flag(r_ptr->ability_flags, r_info_ability_flags, what))
         return PARSE_ERROR_NONE;
 
     msg_format(_("未知のモンスター・フラグ '%s'。", "Unknown monster flag '%s'."), what);

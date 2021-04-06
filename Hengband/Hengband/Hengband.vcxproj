@@ -385,6 +385,7 @@
     <ClCompile Include="..\..\src\monster-floor\monster-lite-util.cpp" />
     <ClCompile Include="..\..\src\monster-floor\monster-lite.cpp" />
     <ClCompile Include="..\..\src\monster-floor\special-death-switcher.cpp" />
+    <ClCompile Include="..\..\src\monster-race\race-ability-mask.cpp" />
     <ClCompile Include="..\..\src\monster\monster-status-setter.cpp" />
     <ClCompile Include="..\..\src\mspell\element-resistance-checker.cpp" />
     <ClCompile Include="..\..\src\mspell\high-resistance-checker.cpp" />
@@ -1065,6 +1066,8 @@
     <ClInclude Include="..\..\src\monster-floor\monster-lite-util.h" />
     <ClInclude Include="..\..\src\monster-floor\monster-lite.h" />
     <ClInclude Include="..\..\src\monster-floor\special-death-switcher.h" />
+    <ClInclude Include="..\..\src\monster-race\race-ability-flags.h" />
+    <ClInclude Include="..\..\src\monster-race\race-ability-mask.h" />
     <ClInclude Include="..\..\src\monster\monster-status-setter.h" />
     <ClInclude Include="..\..\src\mspell\element-resistance-checker.h" />
     <ClInclude Include="..\..\src\mspell\high-resistance-checker.h" />
@@ -1121,7 +1124,6 @@
     <ClInclude Include="..\..\src\mind\stances-table.h" />
     <ClInclude Include="..\..\src\mspell\monster-power-table.h" />
     <ClInclude Include="..\..\src\mspell\mspell-dispel.h" />
-    <ClInclude Include="..\..\src\mspell\mspell-mask-definitions.h" />
     <ClInclude Include="..\..\src\mspell\mspell-checker.h" />
     <ClInclude Include="..\..\src\mspell\mspell-judgement.h" />
     <ClInclude Include="..\..\src\blue-magic\blue-magic-checker.h" />
@@ -1250,13 +1252,10 @@
     <ClInclude Include="..\..\src\lore\lore-store.h" />
     <ClInclude Include="..\..\src\lore\monster-lore.h" />
     <ClInclude Include="..\..\src\monster-race\race-flags8.h" />
-    <ClInclude Include="..\..\src\monster-race\race-flags-ability1.h" />
-    <ClInclude Include="..\..\src\monster-race\race-flags-ability2.h" />
     <ClInclude Include="..\..\src\monster-race\race-flags-resistance.h" />
     <ClInclude Include="..\..\src\monster-race\race-flags1.h" />
     <ClInclude Include="..\..\src\monster-race\race-flags2.h" />
     <ClInclude Include="..\..\src\monster-race\race-flags3.h" />
-    <ClInclude Include="..\..\src\monster-race\race-flags4.h" />
     <ClInclude Include="..\..\src\monster-race\race-flags7.h" />
     <ClInclude Include="..\..\src\monster-race\race-flags9.h" />
     <ClInclude Include="..\..\src\monster-race\race-indice-types.h" />

@@ -7,13 +7,10 @@
 #include "grid/grid.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags-ability1.h"
-#include "monster-race/race-flags-ability2.h"
+#include "monster-race/race-ability-mask.h"
 #include "monster-race/race-flags1.h"
-#include "monster-race/race-flags4.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
-#include "mspell/mspell-mask-definitions.h"
 #include "spell/summon-types.h"
 #include "system/alloc-entries.h"
 #include "system/floor-type-definition.h"
@@ -62,18 +59,16 @@ static bool restrict_monster_to_dungeon(player_type *player_ptr, MONRACE_IDX r_i
     }
 
     if (d_ptr->flags1 & DF1_NO_MAGIC) {
-        if (r_idx != MON_CHAMELEON && r_ptr->freq_spell && !(r_ptr->flags4 & RF4_NOMAGIC_MASK) && !(r_ptr->a_ability_flags1 & RF5_NOMAGIC_MASK)
-            && !(r_ptr->a_ability_flags2 & RF6_NOMAGIC_MASK))
+        if (r_idx != MON_CHAMELEON && r_ptr->freq_spell && r_ptr->ability_flags.has_none_of(RF_ABILITY_NOMAGIC_MASK))
             return FALSE;
     }
 
     if (d_ptr->flags1 & DF1_NO_MELEE) {
         if (r_idx == MON_CHAMELEON)
             return TRUE;
-        if (!(r_ptr->flags4 & (RF4_BOLT_MASK | RF4_BEAM_MASK | RF4_BALL_MASK))
-            && !(r_ptr->a_ability_flags1
-                & (RF5_BOLT_MASK | RF5_BEAM_MASK | RF5_BALL_MASK | RF5_CAUSE_1 | RF5_CAUSE_2 | RF5_CAUSE_3 | RF5_CAUSE_4 | RF5_MIND_BLAST | RF5_BRAIN_SMASH))
-            && !(r_ptr->a_ability_flags2 & (RF6_BOLT_MASK | RF6_BEAM_MASK | RF6_BALL_MASK)))
+        if (r_ptr->ability_flags.has_none_of(RF_ABILITY_BOLT_MASK | RF_ABILITY_BEAM_MASK | RF_ABILITY_BALL_MASK)
+            && r_ptr->ability_flags.has_none_of(
+                { RF_ABILITY::CAUSE_1, RF_ABILITY::CAUSE_2, RF_ABILITY::CAUSE_3, RF_ABILITY::CAUSE_4, RF_ABILITY::MIND_BLAST, RF_ABILITY::BRAIN_SMASH }))
             return FALSE;
     }
 
@@ -106,18 +101,8 @@ static bool restrict_monster_to_dungeon(player_type *player_ptr, MONRACE_IDX r_i
                 return FALSE;
         }
 
-        if (d_ptr->mflags4) {
-            if ((d_ptr->mflags4 & r_ptr->flags4) != d_ptr->mflags4)
-                return FALSE;
-        }
-
-        if (d_ptr->m_a_ability_flags1) {
-            if ((d_ptr->m_a_ability_flags1 & r_ptr->a_ability_flags1) != d_ptr->m_a_ability_flags1)
-                return FALSE;
-        }
-
-        if (d_ptr->m_a_ability_flags2) {
-            if ((d_ptr->m_a_ability_flags2 & r_ptr->a_ability_flags2) != d_ptr->m_a_ability_flags2)
+        if (d_ptr->m_ability_flags.any()) {
+            if (!r_ptr->ability_flags.has_all_of(d_ptr->m_ability_flags))
                 return FALSE;
         }
 
@@ -163,18 +148,8 @@ static bool restrict_monster_to_dungeon(player_type *player_ptr, MONRACE_IDX r_i
                 return TRUE;
         }
 
-        if (d_ptr->mflags4) {
-            if ((d_ptr->mflags4 & r_ptr->flags4) != d_ptr->mflags4)
-                return TRUE;
-        }
-
-        if (d_ptr->m_a_ability_flags1) {
-            if ((d_ptr->m_a_ability_flags1 & r_ptr->a_ability_flags1) != d_ptr->m_a_ability_flags1)
-                return TRUE;
-        }
-
-        if (d_ptr->m_a_ability_flags2) {
-            if ((d_ptr->m_a_ability_flags2 & r_ptr->a_ability_flags2) != d_ptr->m_a_ability_flags2)
+        if (d_ptr->m_ability_flags.any()) {
+            if (!r_ptr->ability_flags.has_all_of(d_ptr->m_ability_flags))
                 return TRUE;
         }
 
@@ -211,11 +186,7 @@ static bool restrict_monster_to_dungeon(player_type *player_ptr, MONRACE_IDX r_i
             return TRUE;
         if (r_ptr->flags3 & d_ptr->mflags3)
             return TRUE;
-        if (r_ptr->flags4 & d_ptr->mflags4)
-            return TRUE;
-        if (r_ptr->a_ability_flags1 & d_ptr->m_a_ability_flags1)
-            return TRUE;
-        if (r_ptr->a_ability_flags2 & d_ptr->m_a_ability_flags2)
+        if (r_ptr->ability_flags.has_any_of(d_ptr->m_ability_flags))
             return TRUE;
         if (r_ptr->flags7 & d_ptr->mflags7)
             return TRUE;
@@ -238,11 +209,7 @@ static bool restrict_monster_to_dungeon(player_type *player_ptr, MONRACE_IDX r_i
             return FALSE;
         if (r_ptr->flags3 & d_ptr->mflags3)
             return FALSE;
-        if (r_ptr->flags4 & d_ptr->mflags4)
-            return FALSE;
-        if (r_ptr->a_ability_flags1 & d_ptr->m_a_ability_flags1)
-            return FALSE;
-        if (r_ptr->a_ability_flags2 & d_ptr->m_a_ability_flags2)
+        if (r_ptr->ability_flags.has_any_of(d_ptr->m_ability_flags))
             return FALSE;
         if (r_ptr->flags7 & d_ptr->mflags7)
             return FALSE;
@@ -428,4 +395,7 @@ errr get_mon_num_prep(player_type *player_ptr, const monsterrace_hook_type hook1
  *
  * get_mon_num() を呼ぶ前に get_mon_num_prep 系関数のいずれかを呼ぶこと。
  */
-errr get_mon_num_prep_bounty(player_type *player_ptr) { return do_get_mon_num_prep(player_ptr, NULL, NULL, FALSE); }
+errr get_mon_num_prep_bounty(player_type *player_ptr)
+{
+    return do_get_mon_num_prep(player_ptr, NULL, NULL, FALSE);
+}
