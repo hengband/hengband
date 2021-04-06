@@ -21,6 +21,7 @@
 #include "floor/floor-save.h"
 #include "floor/floor-util.h"
 #include "game-option/birth-options.h"
+#include "game-option/text-display-options.h"
 #include "grid/feature.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
@@ -150,11 +151,11 @@ player_type p_body;
 player_type *p_ptr = &p_body;
 
 /*!
- * @brief クリーチャーの抽象的善悪アライメントの表記を返す。 / Return alignment title
+ * @brief クリーチャーの抽象的善悪アライメントの表記名のみを返す。 / Return only alignment title
  * @param creature_ptr 算出するクリーチャーの参照ポインタ。
- * @return アライメントの表記を返す。
+ * @return アライメントの表記名
  */
-concptr your_alignment(player_type *creature_ptr)
+concptr alignment_label(player_type *creature_ptr)
 {
     if (creature_ptr->align > 150)
         return _("大善", "Lawful");
@@ -170,6 +171,20 @@ concptr your_alignment(player_type *creature_ptr)
         return _("中悪", "Evil");
     else
         return _("大悪", "Chaotic");
+}
+
+/*!
+ * @brief クリーチャーの抽象的善悪アライメントの表記を返す。 / Return alignment title
+ * @param creature_ptr 算出するクリーチャーの参照ポインタ。
+ * @return アライメントの表記を返す。
+ */
+concptr your_alignment(player_type *creature_ptr)
+{
+    auto s = alignment_label(creature_ptr);
+    if (show_actual_value)
+        return format(_("%s(%ld)", "%s (%ld)"), s, creature_ptr->align);
+
+    return s;
 }
 
 /*!

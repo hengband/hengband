@@ -132,7 +132,7 @@ const std::array<const option_type, MAX_OPTION_INFO> option_info = {{
 
     { &show_ammo_crit_ratio, FALSE, OPT_PAGE_TEXT, 2, 16, "show_ammo_crit_ratio", _("矢弾の会心発生率を表示する", "Show critical ratio of ammo") },
 
-    { &show_actual_value, FALSE, OPT_PAGE_TEXT, 2, 17, "show_actual_vaule", _("各技能値に実値を表示する", "Show actual value of skill") },
+    { &show_actual_value, FALSE, OPT_PAGE_TEXT, 2, 17, "show_actual_value", _("技能値等に実値を並記する", "Show actual values of skills or etc.") },
 
     /*** Game-Play ***/
     { &stack_force_notes, TRUE, OPT_PAGE_GAMEPLAY, 0, 8, "stack_force_notes", _("異なる銘のアイテムをまとめる", "Merge inscriptions when stacking") },

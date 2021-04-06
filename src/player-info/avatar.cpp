@@ -14,6 +14,7 @@
 
 #include "player-info/avatar.h"
 #include "core/player-update-types.h"
+#include "game-option/text-display-options.h"
 #include "player/player-class.h"
 #include "player/player-race-types.h"
 #include "realm/realm-names-table.h"
@@ -524,35 +525,36 @@ void dump_virtues(player_type *creature_ptr, FILE *out_file)
         GAME_TEXT vir_name[20];
         int tester = creature_ptr->virtues[v_nr];
         strcpy(vir_name, virtue[(creature_ptr->vir_types[v_nr]) - 1]);
+        concptr vir_val = show_actual_value ? format(_("(%d)", " (%d)"), tester) : "";
         if (creature_ptr->vir_types[v_nr] == 0 || creature_ptr->vir_types[v_nr] > MAX_VIRTUE)
             fprintf(out_file, _("おっと。%sの情報なし。", "Oops. No info about %s."), vir_name);
 
         else if (tester < -100)
-            fprintf(out_file, _("[%s]の対極", "You are the polar opposite of %s."), vir_name);
+            fprintf(out_file, _("[%s]の対極%s", "You are the polar opposite of %s.%s"), vir_name, vir_val);
         else if (tester < -80)
-            fprintf(out_file, _("[%s]の大敵", "You are an arch-enemy of %s."), vir_name);
+            fprintf(out_file, _("[%s]の大敵%s", "You are an arch-enemy of %s.%s"), vir_name, vir_val);
         else if (tester < -60)
-            fprintf(out_file, _("[%s]の強敵", "You are a bitter enemy of %s."), vir_name);
+            fprintf(out_file, _("[%s]の強敵%s", "You are a bitter enemy of %s.%s"), vir_name, vir_val);
         else if (tester < -40)
-            fprintf(out_file, _("[%s]の敵", "You are an enemy of %s."), vir_name);
+            fprintf(out_file, _("[%s]の敵%s", "You are an enemy of %s.%s"), vir_name, vir_val);
         else if (tester < -20)
-            fprintf(out_file, _("[%s]の罪者", "You have sinned against %s."), vir_name);
+            fprintf(out_file, _("[%s]の罪者%s", "You have sinned against %s.%s"), vir_name, vir_val);
         else if (tester < 0)
-            fprintf(out_file, _("[%s]の迷道者", "You have strayed from the path of %s."), vir_name);
+            fprintf(out_file, _("[%s]の迷道者%s", "You have strayed from the path of %s.%s"), vir_name, vir_val);
         else if (tester == 0)
-            fprintf(out_file, _("[%s]の中立者", "You are neutral to %s."), vir_name);
+            fprintf(out_file, _("[%s]の中立者%s", "You are neutral to %s.%s"), vir_name, vir_val);
         else if (tester < 20)
-            fprintf(out_file, _("[%s]の小徳者", "You are somewhat virtuous in %s."), vir_name);
+            fprintf(out_file, _("[%s]の小徳者%s", "You are somewhat virtuous in %s.%s"), vir_name, vir_val);
         else if (tester < 40)
-            fprintf(out_file, _("[%s]の中徳者", "You are virtuous in %s."), vir_name);
+            fprintf(out_file, _("[%s]の中徳者%s", "You are virtuous in %s.%s"), vir_name, vir_val);
         else if (tester < 60)
-            fprintf(out_file, _("[%s]の高徳者", "You are very virtuous in %s."), vir_name);
+            fprintf(out_file, _("[%s]の高徳者%s", "You are very virtuous in %s.%s"), vir_name, vir_val);
         else if (tester < 80)
-            fprintf(out_file, _("[%s]の覇者", "You are a champion of %s."), vir_name);
+            fprintf(out_file, _("[%s]の覇者%s", "You are a champion of %s.%s"), vir_name, vir_val);
         else if (tester < 100)
-            fprintf(out_file, _("[%s]の偉大な覇者", "You are a great champion of %s."), vir_name);
+            fprintf(out_file, _("[%s]の偉大な覇者%s", "You are a great champion of %s.%s"), vir_name, vir_val);
         else
-            fprintf(out_file, _("[%s]の具現者", "You are the living embodiment of %s."), vir_name);
+            fprintf(out_file, _("[%s]の具現者%s", "You are the living embodiment of %s.%s"), vir_name, vir_val);
 
         fprintf(out_file, "\n");
     }
