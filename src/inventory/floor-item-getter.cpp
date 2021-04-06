@@ -767,7 +767,8 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 if (get_tag_floor(owner_ptr->current_floor_ptr, &fis_ptr->k, fis_ptr->which, fis_ptr->floor_list, fis_ptr->floor_num)) {
                     fis_ptr->k = 0 - fis_ptr->floor_list[fis_ptr->k];
                     fis_ptr->cur_tag = fis_ptr->which;
-                }
+                } else
+                    tag_not_found = TRUE;
             }
 
             if (tag_not_found) {
