@@ -327,6 +327,8 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
     }
 
     creature_ptr->chp -= damage;
+    if (creature_ptr->chp < -9999)
+        creature_ptr->chp = -9999;
     if (damage_type == DAMAGE_GENO && creature_ptr->chp < 0) {
         damage += creature_ptr->chp;
         creature_ptr->chp = 0;
@@ -340,7 +342,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
         chg_virtue(creature_ptr, V_CHANCE, 2);
     }
 
-    if (creature_ptr->chp < 0) {
+    if (creature_ptr->chp < 0 && !cheat_immortal) {
         bool android = (creature_ptr->prace == RACE_ANDROID ? TRUE : FALSE);
 
 #ifdef JP
@@ -353,7 +355,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
         chg_virtue(creature_ptr, V_SACRIFICE, 10);
         handle_stuff(creature_ptr);
         creature_ptr->leaving = TRUE;
-        creature_ptr->is_dead = TRUE;
+        if(!cheat_immortal) creature_ptr->is_dead = TRUE;
         if (creature_ptr->current_floor_ptr->inside_arena) {
             concptr m_name = r_info[arena_info[creature_ptr->arena_number].r_idx].name.c_str();
             msg_format(_("あなたは%sの前に敗れ去った。", "You are beaten by %s."), m_name);

@@ -24,7 +24,7 @@ struct option_type {
 };
 
 #define MAX_OPTION_INFO 125
-#define MAX_CHEAT_OPTIONS 10
+#define MAX_CHEAT_OPTIONS 11
 #define MAX_AUTOSAVE_INFO 2
 
 extern const std::array<const option_type, MAX_OPTION_INFO> option_info;

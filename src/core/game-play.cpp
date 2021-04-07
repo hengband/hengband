@@ -425,7 +425,7 @@ void play_game(player_type *player_ptr, bool new_game, bool browsing_movie)
         player_outfit(player_ptr);
 
     init_io(player_ptr);
-    if (player_ptr->chp < 0)
+    if (player_ptr->chp < 0 && !cheat_immortal)
         player_ptr->is_dead = TRUE;
 
     if (player_ptr->prace == RACE_ANDROID)

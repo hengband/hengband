@@ -125,6 +125,7 @@ void player_wipe_without_name(player_type *creature_ptr)
     cheat_save = FALSE;
     cheat_diary_output = FALSE;
     cheat_turn = FALSE;
+    cheat_immortal = FALSE;
 
     current_world_ptr->total_winner = FALSE;
     creature_ptr->timewalk = FALSE;
