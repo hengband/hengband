@@ -81,6 +81,8 @@ const std::array<const option_type, MAX_OPTION_INFO> option_info = {{
 
     { &view_hidden_walls, FALSE, OPT_PAGE_MAPSCREEN, 1, 2, "view_hidden_walls", _("壁の中に囲まれた壁を表示する", "Map walls hidden in other walls") },
 
+    { &view_unsafe_walls, TRUE, OPT_PAGE_MAPSCREEN, 1, 1, "view_unsafe_walls", _("トラップ未感知の壁の中に囲まれた壁を表示する", "Map hidden walls not marked by detect traps") },
+
     { &view_reduce_view, FALSE, OPT_PAGE_MAPSCREEN, 1, 17, "view_reduce_view", _("街では視野を狭くする", "Reduce view-radius in town") },
 
     { &fresh_before, TRUE, OPT_PAGE_MAPSCREEN, 1, 23, "fresh_before", _("連続コマンド中に画面を再描画し続ける", "Flush output while in repeated command") },
