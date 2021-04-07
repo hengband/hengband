@@ -275,7 +275,7 @@ void strip_name(char *buf, KIND_OBJECT_IDX k_idx)
 {
     object_kind *k_ptr = &k_info[k_idx];
     concptr str = k_ptr->name.c_str();
-    while ((*str == ' ') || (*str == '&'))
+    while ((*str == ' ') || (*str == '&') || (*str == '#'))
         str++;
 
     char *t;
@@ -287,7 +287,7 @@ void strip_name(char *buf, KIND_OBJECT_IDX k_idx)
             continue;
         }
 #endif
-        if (*str != '~')
+        if (*str != '~' && *str != '#')
             *t++ = *str;
     }
 
