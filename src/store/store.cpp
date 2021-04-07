@@ -47,7 +47,24 @@ int cur_store_feat;
 /* Enable "increments" */
 bool allow_inc = FALSE;
 
-/*
+/*!
+ * @brief 店舗の最大スロット数を返す
+ * @param store_idx 店舗ID
+ * @return 店舗の最大スロット数
+ */
+s16b store_get_stock_max(STORE_TYPE_IDX store_idx, bool powerup)
+{
+    switch (store_idx) {
+    case STORE_HOME:
+        return powerup ? STORE_INVEN_MAX * 10 : STORE_INVEN_MAX;
+    case STORE_MUSEUM:
+        return STORE_INVEN_MAX * 50;
+    default:
+        return STORE_INVEN_MAX * 3 / 2;
+    }
+}
+
+/*!
  * @brief アイテムが格納可能な数より多いかをチェックする
  * @param なし
  * @return 
@@ -295,27 +312,30 @@ void store_maintenance(player_type *player_ptr, int town_num, int store_num, int
     }
 
     INVENTORY_IDX j = st_ptr->stock_num;
-    int turn_over = 0;
-    for (int i = 0; i < chance; i++)
-        turn_over = MAX(turn_over, randint1(STORE_TURNOVER));
+    int remain = STORE_TURNOVER + MAX(0, j - STORE_MAX_KEEP);
+    int turn_over = 1;
+    for (int i = 0; i < chance; i++) {
+        auto n = randint0(remain);
+        turn_over += n;
+        remain -= n;
+    }
 
     j = j - turn_over;
     if (j > STORE_MAX_KEEP)
         j = STORE_MAX_KEEP;
-
     if (j < STORE_MIN_KEEP)
         j = STORE_MIN_KEEP;
-
-    if (j < 0)
-        j = 0;
 
     while (st_ptr->stock_num > j)
         store_delete();
 
-    int diff = STORE_MAX_KEEP - st_ptr->stock_num;
-    turn_over = 0;
-    for (int i = 0; i < chance; i++)
-        turn_over = MAX(turn_over, randint1(diff));
+    remain = STORE_MAX_KEEP - st_ptr->stock_num;
+    turn_over = 1;
+    for (int i = 0; i < chance; i++) {
+        auto n = randint0(remain);
+        turn_over += n;
+        remain -= n;
+    }
 
     j = st_ptr->stock_num + turn_over;
     if (j > STORE_MAX_KEEP)
@@ -325,7 +345,7 @@ void store_maintenance(player_type *player_ptr, int town_num, int store_num, int
     if (j >= st_ptr->stock_size)
         j = st_ptr->stock_size - 1;
 
-    for (int k = 0; k < st_ptr->regular_num; k++) {
+    for (size_t k = 0; k < st_ptr->regular.size(); k++) {
         store_create(player_ptr, st_ptr->regular[k], black_market_crap, store_will_buy, mass_produce);
         if (st_ptr->stock_num >= STORE_MAX_KEEP)
             break;

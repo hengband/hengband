@@ -32,9 +32,8 @@ store_type *st_ptr = NULL;
  * Increase, by a given amount, the number of a certain item
  * in a certain store.	This can result in zero items.
  * </pre>
- * @todo numは本来ITEM_NUMBER型にしたい。
  */
-void store_item_increase(INVENTORY_IDX item, int num)
+void store_item_increase(INVENTORY_IDX item, ITEM_NUMBER num)
 {
     object_type *o_ptr;
     o_ptr = &st_ptr->stock[item];
@@ -45,7 +44,7 @@ void store_item_increase(INVENTORY_IDX item, int num)
         cnt = 0;
 
     num = cnt - o_ptr->number;
-    o_ptr->number += (ITEM_NUMBER)num;
+    o_ptr->number += num;
 }
 
 /*!
@@ -95,6 +94,29 @@ void store_delete(void)
 }
 
 /*!
+ * @brief 店舗販売中の杖と魔法棒のpvalのリストを返す
+ * @param j_ptr これから売ろうとしているオブジェクト
+ * @return plavリスト(充填数)
+ * @details
+ * 回数の違う杖と魔法棒がスロットを圧迫するのでスロット数制限をかける
+ */
+static std::vector<PARAMETER_VALUE> store_same_magic_device_pvals(object_type *j_ptr)
+{
+    auto list = std::vector<PARAMETER_VALUE>();
+    for (INVENTORY_IDX i = 0; i < st_ptr->stock_num; i++) {
+        object_type *o_ptr = &st_ptr->stock[i];
+        if (o_ptr == j_ptr)
+            continue;
+        if (o_ptr->k_idx != j_ptr->k_idx)
+            continue;
+        if (o_ptr->tval != TV_STAFF && o_ptr->tval != TV_WAND)
+            continue;
+        list.push_back(o_ptr->pval);
+    }
+    return list;
+}
+
+/*!
  * @brief 店舗の品揃え変化のためにアイテムを追加する /
  * Creates a random item and gives it to a store
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -127,7 +149,7 @@ void store_create(
             k_idx = fix_k_idx;
             level = rand_range(1, STORE_OBJ_LEVEL);
         } else {
-            k_idx = st_ptr->table[randint0(st_ptr->table_num)];
+            k_idx = st_ptr->table[randint0(st_ptr->table.size())];
             level = rand_range(1, STORE_OBJ_LEVEL);
         }
 
@@ -138,6 +160,12 @@ void store_create(
         apply_magic(player_ptr, q_ptr, level, AM_NO_FIXED_ART);
         if (!(*store_will_buy)(player_ptr, q_ptr))
             continue;
+
+        auto pvals = store_same_magic_device_pvals(q_ptr);
+        if (pvals.size() >= 2) {
+            auto pval = pvals.at(randint0(pvals.size()));
+            q_ptr->pval = pval;
+        }
 
         if (q_ptr->tval == TV_LITE) {
             if (q_ptr->sval == SV_LITE_TORCH)

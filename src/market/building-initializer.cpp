@@ -28,22 +28,13 @@ errr init_towns(void)
              * 我が家が 20 ページまで使える隠し機能のための準備。
              * オプションが有効でもそうでなくても一応スペースを作っておく。
              */
-            if (j == STORE_HOME) {
-                store_ptr->stock_size = STORE_INVEN_MAX * 10;
-            } else if (j == STORE_MUSEUM) {
-                store_ptr->stock_size = STORE_INVEN_MAX * 50;
-            } else {
-                store_ptr->stock_size = STORE_INVEN_MAX;
-            }
+            store_ptr->stock_size = store_get_stock_max(static_cast<STORE_TYPE_IDX>(j));
 
             C_MAKE(store_ptr->stock, store_ptr->stock_size, object_type);
             if ((j == STORE_BLACK) || (j == STORE_HOME) || (j == STORE_MUSEUM))
                 continue;
 
-            store_ptr->regular_num = 0;
-            store_ptr->regular_size = STORE_INVEN_MAX;
-            C_MAKE(store_ptr->regular, store_ptr->regular_size + 1, KIND_OBJECT_IDX);
-            for (int k = 0; k < store_ptr->regular_size; k++) {
+            for (int k = 0; k < STORE_INVEN_MAX; k++) {
                 int tv = store_regular_table[j][k].tval;
                 int sv = store_regular_table[j][k].sval;
                 if (tv == 0)
@@ -54,13 +45,10 @@ errr init_towns(void)
                 if (k_idx == 0)
                     continue;
 
-                store_ptr->regular[store_ptr->regular_num++] = k_idx;
+                store_ptr->regular.push_back(k_idx);
             }
 
-            store_ptr->table_num = 0;
-            store_ptr->table_size = STORE_CHOICES;
-            C_MAKE(store_ptr->table, store_ptr->table_size + 1, KIND_OBJECT_IDX);
-            for (int k = 0; k < store_ptr->table_size; k++) {
+            for (int k = 0; k < STORE_CHOICES; k++) {
                 int tv = store_table[j][k].tval;
                 int sv = store_table[j][k].sval;
                 if (tv == 0)
@@ -71,7 +59,7 @@ errr init_towns(void)
                 if (k_idx == 0)
                     continue;
 
-                store_ptr->table[store_ptr->table_num++] = k_idx;
+                store_ptr->table.push_back(k_idx);
             }
         }
     }
