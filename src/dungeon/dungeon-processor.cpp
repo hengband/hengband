@@ -17,6 +17,7 @@
 #include "floor/floor-save.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/play-record-options.h"
+#include "game-option/cheat-options.h"
 #include "io/cursor.h"
 #include "io/input-key-requester.h"
 #include "io/write-diary.h"

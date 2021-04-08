@@ -10,3 +10,4 @@ bool cheat_save; /* Ask for saving death */
 bool cheat_diary_output; /* Detailed info to diary */
 bool cheat_turn; /* Peek turn */
 bool cheat_sight;
+bool cheat_immortal;

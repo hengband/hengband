@@ -90,6 +90,9 @@ void wr_options(save_type type)
     if (cheat_diary_output)
         c |= 0x8000;
 
+    if (cheat_immortal)
+        c |= 0x0020;
+
     if (type == SAVE_TYPE_DEBUG)
         c |= 0xFFFF;
 
