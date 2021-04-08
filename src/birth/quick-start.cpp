@@ -62,7 +62,7 @@ bool ask_quick_start(player_type *creature_ptr)
     update_creature(creature_ptr);
     creature_ptr->chp = creature_ptr->mhp;
     creature_ptr->csp = creature_ptr->msp;
-    process_player_name(creature_ptr, FALSE);
+    process_player_name(creature_ptr);
     return TRUE;
 }
 /*!
