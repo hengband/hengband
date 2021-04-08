@@ -7,6 +7,7 @@
 #include "util/flag-group.h"
 
 #include <string>
+#include <vector>
 
 #define DUNGEON_FEAT_PROB_NUM 3
 
@@ -81,6 +82,6 @@ struct dungeon_type {
 };
 
 extern DEPTH *max_dlv;
-extern dungeon_type *d_info;
+extern std::vector<dungeon_type> d_info;
 
 extern DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x);

@@ -1,10 +1,13 @@
 ﻿#pragma once
 
-#include "object-enchant/trg-types.h"
 #include "system/angband.h"
+
+#include "object-enchant/trg-types.h"
 #include "system/object-type-definition.h"
 #include "util/flag-group.h"
+
 #include <string>
+#include <vector>
 
 /* Body Armor */
 #define EGO_A_MORGUL            4
@@ -242,6 +245,6 @@ typedef struct ego_item_type {
 } ego_item_type;
 
 extern EGO_IDX max_e_idx;
-extern ego_item_type *e_info;
+extern std::vector<ego_item_type> e_info;
 
 byte get_random_ego(byte slot, bool good);

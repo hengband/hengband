@@ -1,10 +1,13 @@
 ﻿#pragma once
 
-#include "object-enchant/trg-types.h"
 #include "system/angband.h"
+
+#include "object-enchant/trg-types.h"
 #include "system/object-type-definition.h"
 #include "util/flag-group.h"
+
 #include <string>
+#include <vector>
 
 typedef struct object_kind {
     std::string name; /*!< ベースアイテム名参照のためのネームバッファオフセット値 / Name (offset) */
@@ -53,7 +56,7 @@ typedef struct object_kind {
     ACTIVATION_IDX act_idx{}; /*!< 発動能力のID /  Activative ability index */
 } object_kind;
 
-extern object_kind *k_info;
+extern std::vector<object_kind> k_info;
 extern KIND_OBJECT_IDX max_k_idx;
 
 SYMBOL_CODE object_char(object_type *o_ptr);

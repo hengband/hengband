@@ -13,7 +13,7 @@
 /*
  * The ego-item arrays
  */
-ego_item_type *e_info;
+std::vector<ego_item_type> e_info;
 
 /*
  * Maximum number of ego-items in e_info.txt

@@ -1,10 +1,13 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+
 #include "object-enchant/trg-types.h"
-#include "util/flag-group.h"
 #include "system/object-type-definition.h"
+#include "util/flag-group.h"
+
 #include <string>
+#include <vector>
 
 /*!
  * @struct artifact_type
@@ -38,5 +41,5 @@ typedef struct artifact_type {
 	byte act_idx{};		/*! 発動能力ID / Activative ability index */
 } artifact_type;
 
-extern artifact_type *a_info;
+extern std::vector<artifact_type> a_info;
 extern ARTIFACT_IDX max_a_idx;

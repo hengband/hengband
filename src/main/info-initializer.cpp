@@ -66,7 +66,7 @@ static void init_header(angband_header *head, IDX num)
  * even if the string happens to be empty (everyone has a unique '\0').
  */
 template <typename InfoType>
-static errr init_info(concptr filename, angband_header& head, InfoType*& info, parse_info_txt_func parser, void(*retouch)(angband_header *head))
+static errr init_info(concptr filename, angband_header &head, std::vector<InfoType> &info, parse_info_txt_func parser, void (*retouch)(angband_header *head))
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_EDIT, format("%s.txt", filename));
@@ -76,7 +76,7 @@ static errr init_info(concptr filename, angband_header& head, InfoType*& info, p
     if (!fp)
         quit(format(_("'%s.txt'ファイルをオープンできません。", "Cannot open '%s.txt' file."), filename));
 
-    C_MAKE(info, head.info_num, InfoType);
+    info = std::vector<InfoType>(head.info_num);
 
     errr err = init_info_txt(fp, buf, &head, parser);
     angband_fclose(fp);
