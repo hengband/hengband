@@ -11,6 +11,7 @@ bool view_torch_grids; /* Map remembers all torch-lit grids */
 bool view_unsafe_grids; /* Map marked by detect traps */
 bool view_reduce_view; /* Reduce view-radius in town */
 bool view_hidden_walls; /* Map walls hidden in other walls. */
+bool view_unsafe_walls; /* Map hidden walls not marked by detect traps. */
 bool fresh_before; /* Flush output while in repeated command */
 bool fresh_after; /* Flush output after monster's move */
 bool fresh_once; /* Flush output only once per key input */
