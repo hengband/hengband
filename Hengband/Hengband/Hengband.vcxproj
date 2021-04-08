@@ -267,7 +267,7 @@
     <ClCompile Include="..\..\src\cmd-action\cmd-travel.cpp" />
     <ClCompile Include="..\..\src\cmd-action\cmd-tunnel.cpp" />
     <ClCompile Include="..\..\src\action\movement-execution.cpp" />
-    <ClCompile Include="..\..\src\cmd-building\cmd-store.cpp" />
+    <ClCompile Include="..\..\src\store\cmd-store.cpp" />
     <ClCompile Include="..\..\src\cmd-io\cmd-floor.cpp" />
     <ClCompile Include="..\..\src\cmd-io\cmd-lore.cpp" />
     <ClCompile Include="..\..\src\cmd-io\cmd-menu-content-table.cpp" />
@@ -346,7 +346,7 @@
     <ClCompile Include="..\..\src\io\cursor.cpp" />
     <ClCompile Include="..\..\src\io\input-key-acceptor.cpp" />
     <ClCompile Include="..\..\src\io\input-key-requester.cpp" />
-    <ClCompile Include="..\..\src\io\store-key-processor.cpp" />
+    <ClCompile Include="..\..\src\store\store-key-processor.cpp" />
     <ClCompile Include="..\..\src\load\info-loader.cpp" />
     <ClCompile Include="..\..\src\locale\utf-8.cpp" />
     <ClCompile Include="..\..\src\main-win\main-win-cfg-reader.cpp" />
@@ -800,10 +800,10 @@
     <ClCompile Include="..\..\src\io\tokenizer.cpp" />
     <ClCompile Include="..\..\src\io\write-diary.cpp" />
     <ClCompile Include="..\..\src\market\arena-info-table.cpp" />
-    <ClCompile Include="..\..\src\market\articles-on-sale.cpp" />
+    <ClCompile Include="..\..\src\store\articles-on-sale.cpp" />
     <ClCompile Include="..\..\src\store\black-market.cpp" />
     <ClCompile Include="..\..\src\market\building-util.cpp" />
-    <ClCompile Include="..\..\src\market\gold-magnification-table.cpp" />
+    <ClCompile Include="..\..\src\store\gold-magnification-table.cpp" />
     <ClCompile Include="..\..\src\market\play-gamble.cpp" />
     <ClCompile Include="..\..\src\market\poker.cpp" />
     <ClCompile Include="..\..\src\store\say-comments.cpp" />
@@ -930,7 +930,7 @@
     <ClInclude Include="..\..\src\cmd-action\cmd-travel.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-tunnel.h" />
     <ClInclude Include="..\..\src\action\movement-execution.h" />
-    <ClInclude Include="..\..\src\cmd-building\cmd-store.h" />
+    <ClInclude Include="..\..\src\store\cmd-store.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-floor.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-lore.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-menu-content-table.h" />
@@ -1020,7 +1020,7 @@
     <ClInclude Include="..\..\src\io\cursor.h" />
     <ClInclude Include="..\..\src\io\input-key-acceptor.h" />
     <ClInclude Include="..\..\src\io\input-key-requester.h" />
-    <ClInclude Include="..\..\src\io\store-key-processor.h" />
+    <ClInclude Include="..\..\src\store\store-key-processor.h" />
     <ClInclude Include="..\..\src\load\info-loader.h" />
     <ClInclude Include="..\..\src\locale\language-switcher.h" />
     <ClInclude Include="..\..\src\locale\utf-8.h" />
@@ -1680,10 +1680,10 @@
     <ClInclude Include="..\..\src\io\tokenizer.h" />
     <ClInclude Include="..\..\src\io\write-diary.h" />
     <ClInclude Include="..\..\src\market\arena-info-table.h" />
-    <ClInclude Include="..\..\src\market\articles-on-sale.h" />
+    <ClInclude Include="..\..\src\store\articles-on-sale.h" />
     <ClInclude Include="..\..\src\store\black-market.h" />
     <ClInclude Include="..\..\src\market\building-util.h" />
-    <ClInclude Include="..\..\src\market\gold-magnification-table.h" />
+    <ClInclude Include="..\..\src\store\gold-magnification-table.h" />
     <ClInclude Include="..\..\src\market\play-gamble.h" />
     <ClInclude Include="..\..\src\market\poker.h" />
     <ClInclude Include="..\..\src\store\say-comments.h" />
