@@ -525,7 +525,7 @@ void dump_virtues(player_type *creature_ptr, FILE *out_file)
         GAME_TEXT vir_name[20];
         int tester = creature_ptr->virtues[v_nr];
         strcpy(vir_name, virtue[(creature_ptr->vir_types[v_nr]) - 1]);
-        concptr vir_val = show_actual_value ? format(_("(%d)", " (%d)"), tester) : "";
+        concptr vir_val = show_actual_value ? format(" (%d)", tester) : "";
         if (creature_ptr->vir_types[v_nr] == 0 || creature_ptr->vir_types[v_nr] > MAX_VIRTUE)
             fprintf(out_file, _("おっと。%sの情報なし。", "Oops. No info about %s."), vir_name);
 

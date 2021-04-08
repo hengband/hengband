@@ -36,6 +36,7 @@
 #include "view/display-player-stat-info.h"
 #include "view/display-util.h"
 #include "world/world.h"
+#include <string>
 
 /*!
  * @brief
@@ -125,7 +126,8 @@ static void display_phisique(player_type *creature_ptr)
     display_player_one_line(ENTRY_WEIGHT, format("%d", (int)creature_ptr->wt), TERM_L_BLUE);
     display_player_one_line(ENTRY_SOCIAL, format("%d", (int)creature_ptr->sc), TERM_L_BLUE);
 #endif
-    display_player_one_line(ENTRY_ALIGN, format("%s", your_alignment(creature_ptr)), TERM_L_BLUE);
+    std::string alg = your_alignment(creature_ptr);
+    display_player_one_line(ENTRY_ALIGN, format("%s", alg.c_str()), TERM_L_BLUE);
 }
 
 /*!

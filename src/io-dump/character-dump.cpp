@@ -38,6 +38,7 @@
 #include "util/sort.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <string>
 
 /*!
  * @brief プレイヤーのペット情報をファイルにダンプする
@@ -438,7 +439,8 @@ static void dump_aux_virtues(player_type *creature_ptr, FILE *fff)
             fprintf(fff, "%s ???\n", stat_names[v_nr]);
     }
 
-    fprintf(fff, _("\n属性 : %s\n", "\nYour alignment : %s\n"), your_alignment(creature_ptr));
+    std::string alg = your_alignment(creature_ptr);
+    fprintf(fff, _("\n属性 : %s\n", "\nYour alignment : %s\n"), alg.c_str());
     fprintf(fff, "\n");
     dump_virtues(creature_ptr, fff);
 }
