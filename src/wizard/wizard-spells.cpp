@@ -28,6 +28,8 @@
 #include "target/target-getter.h"
 #include "view/display-messages.h"
 
+#include <vector>
+
 debug_spell_command debug_spell_commands_list[SPELL_MAX] = {
     { 2, "vanish dungeon", { .spell2 = { vanish_dungeon } } },
     { 3, "true healing", { .spell3 = { true_healing } } },
