@@ -178,11 +178,11 @@ concptr alignment_label(player_type *creature_ptr)
  * @param creature_ptr 算出するクリーチャーの参照ポインタ。
  * @return アライメントの表記を返す。
  */
-concptr your_alignment(player_type *creature_ptr)
+concptr your_alignment(player_type *creature_ptr, bool with_value)
 {
     auto s = alignment_label(creature_ptr);
-    if (show_actual_value)
-        return format(_("%s(%ld)", "%s (%ld)"), s, creature_ptr->align);
+    if (with_value || show_actual_value)
+        return format(_("%s(%ld)", "%s (%ld)"), s, static_cast<long>(creature_ptr->align));
 
     return s;
 }

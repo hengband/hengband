@@ -21,6 +21,7 @@
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "world/world.h"
+#include <string>
 
 /*
  * List virtues & status
@@ -32,7 +33,8 @@ void do_cmd_knowledge_virtues(player_type *creature_ptr)
     if (!open_temporary_file(&fff, file_name))
         return;
 
-    fprintf(fff, _("現在の属性 : %s\n\n", "Your alignment : %s\n\n"), your_alignment(creature_ptr));
+    std::string alg = your_alignment(creature_ptr);
+    fprintf(fff, _("現在の属性 : %s\n\n", "Your alignment : %s\n\n"), alg.c_str());
     dump_virtues(creature_ptr, fff);
     angband_fclose(fff);
     (void)show_file(creature_ptr, TRUE, file_name, _("八つの徳", "Virtues"), 0, 0);
