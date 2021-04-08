@@ -11,7 +11,7 @@
 /*
  * The dungeon arrays
  */
-dungeon_type *d_info;
+std::vector<dungeon_type> d_info;
 
 /*
  * Maximum number of dungeon in d_info.txt
@@ -99,4 +99,3 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
 
 	return select_dungeon;
 }
-

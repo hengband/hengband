@@ -2,6 +2,7 @@
 
 #include "system/angband.h"
 #include <string>
+#include <vector>
 
 #define GINOU_SUDE 0
 #define GINOU_NITOURYU 1
@@ -49,4 +50,4 @@ typedef struct skill_table {
     SUB_EXP s_max[10]{}; /* max skill */
 } skill_table;
 
-extern skill_table *s_info;
+extern std::vector<skill_table> s_info;

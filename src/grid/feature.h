@@ -1,8 +1,11 @@
 ﻿#pragma once
 
-#include "grid/feature-flag-types.h"
 #include "system/angband.h"
+
+#include "grid/feature-flag-types.h"
+
 #include <string>
+#include <vector>
 
 /* Number of feats we change to (Excluding default). Used in f_info.txt. */
 #define MAX_FEAT_STATES	 8
@@ -54,7 +57,7 @@ typedef struct feature_type {
 } feature_type;
 
 extern FEAT_IDX max_f_idx;
-extern feature_type *f_info;
+extern std::vector<feature_type> f_info;
 
 /*** Terrain feature variables ***/
 extern FEAT_IDX feat_none;

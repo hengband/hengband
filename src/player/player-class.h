@@ -1,12 +1,15 @@
 ﻿#pragma once
 
 /* 人畜無害なenumヘッダを先に読み込む */
-#include "player/player-classes-types.h"
-#include "object/tval-types.h"
-#include "realm/realm-types.h"
 #include "system/angband.h"
+
+#include "object/tval-types.h"
+#include "player/player-classes-types.h"
+#include "realm/realm-types.h"
 #include "spell/technic-info-table.h"
+
 #include <string>
+#include <vector>
 
 /** m_info.txtでMPの無い職業に設定される */
 #define SPELL_FIRST_NO_SPELL 99
@@ -30,7 +33,7 @@ typedef struct player_magic {
     magic_type info[MAX_MAGIC][32]{}; /* The available spells */
 } player_magic;
 
-extern player_magic *m_info;
+extern std::vector<player_magic> m_info;
 extern const player_magic *mp_ptr;
 
 /*
