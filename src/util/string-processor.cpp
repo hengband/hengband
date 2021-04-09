@@ -610,17 +610,20 @@ std::string str_ltrim(std::string_view str)
  *
  * @param str 操作の対象とする文字列
  * @param delim 文字列を分割する文字
+ * @param trim trueの場合、分割した文字列の両端の空白を削除する
  * @return std::vector<std::string> 分割した文字列を要素とする配列
  */
-std::vector<std::string> str_split(std::string_view str, char delim)
+std::vector<std::string> str_split(std::string_view str, char delim, bool trim)
 {
     std::vector<std::string> result;
+
+    auto make_str = [trim](std::string_view sv) { return trim ? str_trim(sv) : std::string(sv); };
 
     while (true) {
         bool found = false;
         for (size_t i = 0; i < str.size(); ++i) {
             if (str[i] == delim) {
-                result.emplace_back(str.substr(0, i));
+                result.push_back(make_str(str.substr(0, i)));
                 str.remove_prefix(i + 1);
                 found = true;
                 break;
@@ -631,7 +634,7 @@ std::vector<std::string> str_split(std::string_view str, char delim)
 #endif
         }
         if (!found) {
-            result.emplace_back(std::move(str));
+            result.push_back(make_str(str));
             return result;
         }
     }
