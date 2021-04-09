@@ -149,6 +149,11 @@ bool object_is_favorite(player_type *player_ptr, object_type *o_ptr)
         break;
     }
 
+    case CLASS_SORCERER:
+        if (s_info[player_ptr->pclass].w_max[o_ptr->tval - TV_WEAPON_BEGIN][o_ptr->sval] < WEAPON_EXP_MASTER)
+            return FALSE;
+        break;
+
     case CLASS_NINJA:
         /* Icky to wield? */
         if (s_info[player_ptr->pclass].w_max[o_ptr->tval - TV_WEAPON_BEGIN][o_ptr->sval] <= WEAPON_EXP_BEGINNER)
