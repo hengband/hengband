@@ -231,6 +231,7 @@
 #          Nibelung, Dark-Elf, Draconian, Mindflayer, Imp, Golem,
 #          Skeleton, Zombie, Vampire, Spectre, Sprite, Beastman, Ent,
 #          Archon, Balrog, Dunadan, Shadow-Fairy, Kutar, Android,
+#          Merfolk
 #          のどれか
 #        $CLASS
 #          職業を英語名で返す。
@@ -239,7 +240,7 @@
 #          Tourist, Imitator, BeastMaster, Sorcerer, Archer,
 #          Magic-Eater, Bard, Red-Mage, Samurai, ForceTrainer,
 #          Blue-Mage, Cavalry, Berserker, Weaponsmith, Mirror-Master,
-#          Ninja, Sniper
+#          Ninja, Sniper, Elementalist
 #          のどれか
 #        $PLAYER
 #          プレイヤーの名前を返す。ただし、' '(スペース)、'['、']'は
