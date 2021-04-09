@@ -15,14 +15,12 @@
 #include "object-enchant/apply-magic-others.h"
 #include "object-enchant/apply-magic-weapon.h"
 #include "object-enchant/item-apply-magic.h"
-#include "object-enchant/object-boost.h"
 #include "object-enchant/object-curse.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "object-enchant/trg-types.h"
-#include "object-hook/hook-checker.h"
 #include "object-hook/hook-enchant.h"
 #include "object/object-kind.h"
 #include "player/player-status-flags.h"
@@ -33,22 +31,6 @@
 #include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "world/world.h"
-
-/*!
- * @brief 0 および負数に対応した randint1()
- * @param n
- *
- * n == 0 のとき、常に 0 を返す。
- * n >  0 のとき、[1, n] の乱数を返す。
- * n <  0 のとき、[n,-1] の乱数を返す。
- */
-static int randint1_signed(const int n)
-{
-    if (n == 0)
-        return 0;
-
-    return n > 0 ? randint1(n) : -randint1(-n);
-}
 
 /*!
  * @brief 生成されたベースアイテムに魔法的な強化を与えるメインルーチン
@@ -195,133 +177,7 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
     }
 
     if (object_is_ego(o_ptr)) {
-        ego_item_type *e_ptr = &e_info[o_ptr->name2];
-        if (!e_ptr->cost)
-            o_ptr->ident |= (IDENT_BROKEN);
-
-        if (e_ptr->gen_flags.has(TRG::CURSED))
-            o_ptr->curse_flags |= (TRC_CURSED);
-        if (e_ptr->gen_flags.has(TRG::HEAVY_CURSE))
-            o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
-        if (e_ptr->gen_flags.has(TRG::PERMA_CURSE))
-            o_ptr->curse_flags |= (TRC_PERMA_CURSE);
-        if (e_ptr->gen_flags.has(TRG::RANDOM_CURSE0))
-            o_ptr->curse_flags |= get_curse(owner_ptr, 0, o_ptr);
-        if (e_ptr->gen_flags.has(TRG::RANDOM_CURSE1))
-            o_ptr->curse_flags |= get_curse(owner_ptr, 1, o_ptr);
-        if (e_ptr->gen_flags.has(TRG::RANDOM_CURSE2))
-            o_ptr->curse_flags |= get_curse(owner_ptr, 2, o_ptr);
-
-        if (e_ptr->gen_flags.has(TRG::ONE_SUSTAIN))
-            one_sustain(o_ptr);
-        if (e_ptr->gen_flags.has(TRG::XTRA_POWER))
-            one_ability(o_ptr);
-        if (e_ptr->gen_flags.has(TRG::XTRA_H_RES))
-            one_high_resistance(o_ptr);
-        if (e_ptr->gen_flags.has(TRG::XTRA_E_RES))
-            one_ele_resistance(o_ptr);
-        if (e_ptr->gen_flags.has(TRG::XTRA_D_RES))
-            one_dragon_ele_resistance(o_ptr);
-        if (e_ptr->gen_flags.has(TRG::XTRA_L_RES))
-            one_lordly_high_resistance(o_ptr);
-        if (e_ptr->gen_flags.has(TRG::XTRA_RES))
-            one_resistance(o_ptr);
-        if (e_ptr->gen_flags.has(TRG::XTRA_DICE)) {
-            do {
-                o_ptr->dd++;
-            } while (one_in_(o_ptr->dd));
-
-            if (o_ptr->dd > 9)
-                o_ptr->dd = 9;
-        }
-
-        if (e_ptr->act_idx)
-            o_ptr->xtra2 = (XTRA8)e_ptr->act_idx;
-
-        bool is_powerful = e_ptr->gen_flags.has(TRG::POWERFUL);
-
-        if ((object_is_cursed(o_ptr) || object_is_broken(o_ptr)) && !is_powerful) {
-            if (e_ptr->max_to_h)
-                o_ptr->to_h -= randint1(e_ptr->max_to_h);
-            if (e_ptr->max_to_d)
-                o_ptr->to_d -= randint1(e_ptr->max_to_d);
-            if (e_ptr->max_to_a)
-                o_ptr->to_a -= randint1(e_ptr->max_to_a);
-            if (e_ptr->max_pval)
-                o_ptr->pval -= randint1(e_ptr->max_pval);
-        } else {
-            if (is_powerful) {
-                if (e_ptr->max_to_h > 0 && o_ptr->to_h < 0)
-                    o_ptr->to_h = 0 - o_ptr->to_h;
-                if (e_ptr->max_to_d > 0 && o_ptr->to_d < 0)
-                    o_ptr->to_d = 0 - o_ptr->to_d;
-                if (e_ptr->max_to_a > 0 && o_ptr->to_a < 0)
-                    o_ptr->to_a = 0 - o_ptr->to_a;
-            }
-
-            o_ptr->to_h += (HIT_PROB)randint1_signed(e_ptr->max_to_h);
-            o_ptr->to_d += randint1_signed(e_ptr->max_to_d);
-            o_ptr->to_a += (ARMOUR_CLASS)randint1_signed(e_ptr->max_to_a);
-
-            if (o_ptr->name2 == EGO_ACCURACY) {
-                while (o_ptr->to_h < o_ptr->to_d + 10) {
-                    o_ptr->to_h += 5;
-                    o_ptr->to_d -= 5;
-                }
-                o_ptr->to_h = MAX(o_ptr->to_h, 15);
-            }
-
-            if (o_ptr->name2 == EGO_VELOCITY) {
-                while (o_ptr->to_d < o_ptr->to_h + 10) {
-                    o_ptr->to_d += 5;
-                    o_ptr->to_h -= 5;
-                }
-                o_ptr->to_d = MAX(o_ptr->to_d, 15);
-            }
-
-            if ((o_ptr->name2 == EGO_PROTECTION) || (o_ptr->name2 == EGO_S_PROTECTION) || (o_ptr->name2 == EGO_H_PROTECTION)) {
-                o_ptr->to_a = MAX(o_ptr->to_a, 15);
-            }
-
-            if (e_ptr->max_pval) {
-                if ((o_ptr->name2 == EGO_HA) && (has_flag(o_ptr->art_flags, TR_BLOWS))) {
-                    o_ptr->pval++;
-                    if ((lev > 60) && one_in_(3) && ((o_ptr->dd * (o_ptr->ds + 1)) < 15))
-                        o_ptr->pval++;
-                } else if (o_ptr->name2 == EGO_DEMON) {
-                    if (has_flag(o_ptr->art_flags, TR_BLOWS)) {
-                        o_ptr->pval += randint1(2);
-                    } else {
-                        o_ptr->pval += randint1(e_ptr->max_pval);
-                    }
-                } else if (o_ptr->name2 == EGO_ATTACKS) {
-                    o_ptr->pval = randint1(e_ptr->max_pval * lev / 100 + 1);
-                    if (o_ptr->pval > 3)
-                        o_ptr->pval = 3;
-                    if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_HAYABUSA))
-                        o_ptr->pval += randint1(2);
-                } else if (o_ptr->name2 == EGO_BAT) {
-                    o_ptr->pval = randint1(e_ptr->max_pval);
-                    if (o_ptr->sval == SV_ELVEN_CLOAK)
-                        o_ptr->pval += randint1(2);
-                } else if (o_ptr->name2 == EGO_A_DEMON || o_ptr->name2 == EGO_DRUID || o_ptr->name2 == EGO_OLOG) {
-                    o_ptr->pval = randint1(e_ptr->max_pval);
-                } else {
-                    if (e_ptr->max_pval > 0)
-                        o_ptr->pval += randint1(e_ptr->max_pval);
-                    else if (e_ptr->max_pval < 0)
-                        o_ptr->pval -= randint1(0 - e_ptr->max_pval);
-                }
-            }
-
-            if ((o_ptr->name2 == EGO_SPEED) && (lev < 50)) {
-                o_ptr->pval = randint1(o_ptr->pval);
-            }
-
-            if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_HAYABUSA) && (o_ptr->pval > 2) && (o_ptr->name2 != EGO_ATTACKS))
-                o_ptr->pval = 2;
-        }
-
+        apply_ego(owner_ptr, o_ptr, lev);
         return;
     }
 
