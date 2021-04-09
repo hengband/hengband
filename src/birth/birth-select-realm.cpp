@@ -314,38 +314,42 @@ bool get_player_realms(player_type *creature_ptr)
 
     /* Select the first realm */
     creature_ptr->realm1 = REALM_NONE;
-    creature_ptr->realm2 = REALM_SELECT_CANCEL;
+    creature_ptr->realm2 = REALM_NONE;
 
     if (creature_ptr->pclass == CLASS_ELEMENTALIST) {
-        creature_ptr->realm1 = select_element_realm(creature_ptr);
+        creature_ptr->element = select_element_realm(creature_ptr);
+        if (creature_ptr->element == REALM_SELECT_CANCEL)
+            return FALSE;
+
+        put_str(_("魔法        :", "Magic       :"), 6, 1);
+        c_put_str(TERM_L_BLUE, get_element_title(creature_ptr->element), 6, 15);
+        return TRUE;
+    }
+
+    while (TRUE) {
+        char temp[80 * 10];
+        int count = 0;
+        creature_ptr->realm1 = select_realm(creature_ptr, realm_choices1[creature_ptr->pclass], &count);
         if (creature_ptr->realm1 == REALM_SELECT_CANCEL)
             return FALSE;
-    }
-    else
-        while (TRUE) {
-            char temp[80 * 10];
-            int count = 0;
-            creature_ptr->realm1 = select_realm(creature_ptr, realm_choices1[creature_ptr->pclass], &count);
-            if (creature_ptr->realm1 == REALM_SELECT_CANCEL)
-                return FALSE;
-            if (!creature_ptr->realm1)
-                break;
+        if (!creature_ptr->realm1)
+            break;
 
-            cleanup_realm_selection_window();
-            shape_buffer(realm_explanations[technic2magic(creature_ptr->realm1) - 1], 74, temp, sizeof(temp));
-            concptr t = temp;
-            for (int i = 0; i < 10; i++) {
-                if (t[0] == 0)
-                    break;
-                else {
-                    prt(t, 12 + i, 3);
-                    t += strlen(t) + 1;
-                }
+        cleanup_realm_selection_window();
+        shape_buffer(realm_explanations[technic2magic(creature_ptr->realm1) - 1], 74, temp, sizeof(temp));
+        concptr t = temp;
+        for (int i = 0; i < 10; i++) {
+            if (t[0] == 0)
+                break;
+            else {
+                prt(t, 12 + i, 3);
+                t += strlen(t) + 1;
             }
-
-            if (check_realm_selection(creature_ptr, count))
-                break;
         }
+
+        if (check_realm_selection(creature_ptr, count))
+            break;
+    }
 
     /* Select the second realm */
     creature_ptr->realm2 = REALM_NONE;
@@ -354,10 +358,7 @@ bool get_player_realms(player_type *creature_ptr)
 
     /* Print the realm */
     put_str(_("魔法        :", "Magic       :"), 6, 1);
-    if (creature_ptr->pclass == CLASS_ELEMENTALIST)
-        c_put_str(TERM_L_BLUE, get_element_title(creature_ptr->realm1), 6, 15);
-    else
-        c_put_str(TERM_L_BLUE, realm_names[creature_ptr->realm1], 6, 15);
+    c_put_str(TERM_L_BLUE, realm_names[creature_ptr->realm1], 6, 15);
 
     /* Select the second realm */
     while (TRUE) {

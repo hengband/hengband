@@ -92,12 +92,12 @@ static void display_player_basic_info(player_type *creature_ptr)
  */
 static void display_magic_realms(player_type *creature_ptr)
 {
-    if (creature_ptr->realm1 == 0)
+    if (creature_ptr->realm1 == REALM_NONE && creature_ptr->element == REALM_NONE)
         return;
 
     char tmp[64];
     if (creature_ptr->pclass == CLASS_ELEMENTALIST)
-        sprintf(tmp, "%s", get_element_title(creature_ptr->realm1));
+        sprintf(tmp, "%s", get_element_title(creature_ptr->element));
     else if (creature_ptr->realm2)
         sprintf(tmp, "%s, %s", realm_names[creature_ptr->realm1], realm_names[creature_ptr->realm2]);
     else

@@ -9,6 +9,20 @@
 #include "world/world.h"
 
 /*!
+ * @brief セーブデータに領域情報を書き込む / Write player realms
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+static void wr_relams(player_type *creature_ptr)
+{
+    if (creature_ptr->pclass == CLASS_ELEMENTALIST)
+        wr_byte((byte)creature_ptr->element);
+    else
+        wr_byte((byte)creature_ptr->realm1);
+    wr_byte((byte)creature_ptr->realm2);
+}
+
+/*!
  * @brief セーブデータにプレーヤー情報を書き込む / Write some "player" info
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
@@ -27,8 +41,7 @@ void wr_player(player_type *creature_ptr)
     wr_byte((byte)creature_ptr->pclass);
     wr_byte((byte)creature_ptr->pseikaku);
     wr_byte((byte)creature_ptr->psex);
-    wr_byte((byte)creature_ptr->realm1);
-    wr_byte((byte)creature_ptr->realm2);
+    wr_relams(creature_ptr);
     wr_byte(0);
 
     wr_byte((byte)creature_ptr->hitdie);

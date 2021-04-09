@@ -98,8 +98,6 @@ void display_koff(player_type *owner_ptr, KIND_OBJECT_IDX k_idx)
     use_realm = tval2realm(q_ptr->tval);
 
     if (owner_ptr->realm1 || owner_ptr->realm2) {
-        if (owner_ptr->pclass == CLASS_ELEMENTALIST)
-            return;
         if ((use_realm != owner_ptr->realm1) && (use_realm != owner_ptr->realm2))
             return;
     } else {
