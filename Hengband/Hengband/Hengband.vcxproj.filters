@@ -1676,9 +1676,6 @@
     <ClCompile Include="..\..\src\store\purchase-order.cpp">
       <Filter>store</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\store\owner-insults.cpp">
-      <Filter>store</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\store\sell-order.cpp">
       <Filter>store</Filter>
     </ClCompile>
@@ -4206,9 +4203,6 @@
       <Filter>store</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\store\purchase-order.h">
-      <Filter>store</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\store\owner-insults.h">
       <Filter>store</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\store\sell-order.h">

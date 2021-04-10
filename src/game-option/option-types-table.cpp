@@ -206,8 +206,6 @@ const std::array<const option_type, MAX_OPTION_INFO> option_info = {{
         _("トラップ感知範囲外に出る直前に警告する", "Alert when leaving trap detected area") },
 
     /*** Birth Options ***/
-    { &manual_haggle, FALSE, OPT_PAGE_BIRTH, 1, 0, "manual_haggle", _("店で値切り交渉をする", "Manually haggle in stores") },
-
     { &easy_band, FALSE, OPT_PAGE_BIRTH, 6, 31, "easy_band", _("初心者用簡単モード(*)", "Easy Mode (*)") },
 
     { &smart_learn, TRUE, OPT_PAGE_BIRTH, 1, 14, "smart_learn", _("モンスターは失敗を学習する(*)", "Monsters learn from their mistakes (*)") },
