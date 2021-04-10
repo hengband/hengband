@@ -50,7 +50,7 @@
  */
 static std::optional<PRICE> prompt_to_sell(player_type *player_ptr, object_type *o_ptr)
 {
-    auto price_ask = price_item(player_ptr, o_ptr, ot_ptr->min_inflate, TRUE);
+    auto price_ask = price_item(player_ptr, o_ptr, ot_ptr->inflate, TRUE);
     auto is_low_price = price_ask < LOW_PRICE_THRESHOLD;
 
     if (!is_low_price)

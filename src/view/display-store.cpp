@@ -98,13 +98,13 @@ void display_entry(player_type *player_ptr, int pos)
 
     s32b x;
     if (o_ptr->ident & IDENT_FIXED) {
-        x = price_item(player_ptr, o_ptr, ot_ptr->min_inflate, FALSE);
+        x = price_item(player_ptr, o_ptr, ot_ptr->inflate, FALSE);
         (void)sprintf(out_val, _("%9ld固", "%9ld F"), (long)x);
         put_str(out_val, i + 6, 68);
         return;
     }
 
-    x = price_item(player_ptr, o_ptr, ot_ptr->min_inflate, FALSE);
+    x = price_item(player_ptr, o_ptr, ot_ptr->inflate, FALSE);
     if (x >= LOW_PRICE_THRESHOLD)
         x += x / 10;
 
