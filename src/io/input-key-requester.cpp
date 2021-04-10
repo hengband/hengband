@@ -211,12 +211,8 @@ void request_command(player_type *player_ptr, int shopping)
         if (!macro_running() && !command_new && auto_debug_save && (!inkey_next || *inkey_next == '\0')) {
             save_player(player_ptr, SAVE_TYPE_DEBUG);
         }
-        if (macro_running() && fresh_once) {
+        if (fresh_once && macro_running()) {
             stop_term_fresh();
-        } else {
-            start_term_fresh();
-            player_ptr->window_flags |= PW_MONSTER_LIST;
-            handle_stuff(player_ptr);
         }
 
         if (command_new) {
