@@ -1752,7 +1752,7 @@ static s16b calc_to_magic_chance(player_type *creature_ptr)
         if (!o_ptr->k_idx)
             continue;
         object_flags(creature_ptr, o_ptr, flgs);
-        if (any_bits(o_ptr->curse_flags, TRC_LOW_MAGIC)) {
+        if (any_bits(o_ptr->curse_flags, TRC_HARD_SPELL)) {
             if (any_bits(o_ptr->curse_flags, TRC_HEAVY_CURSE)) {
                 chance += 10;
             } else {
