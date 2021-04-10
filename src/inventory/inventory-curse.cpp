@@ -38,7 +38,7 @@ static bool is_specific_curse(BIT_FLAGS flag)
 {
     return (flag == TRC_ADD_L_CURSE) || (flag == TRC_ADD_H_CURSE) || (flag == TRC_DRAIN_HP) || (flag == TRC_DRAIN_MANA) || (flag == TRC_CALL_ANIMAL)
         || (flag == TRC_CALL_DEMON) || (flag == TRC_CALL_DRAGON) || (flag == TRC_CALL_UNDEAD) || (flag == TRC_COWARDICE) || (flag == TRC_LOW_MELEE)
-        || (flag == TRC_LOW_AC) || (flag == TRC_LOW_MAGIC) || (flag == TRC_FAST_DIGEST) || (flag == TRC_SLOW_REGEN);
+        || (flag == TRC_LOW_AC) || (flag == TRC_HARD_SPELL) || (flag == TRC_FAST_DIGEST) || (flag == TRC_SLOW_REGEN);
 }
 
 static void choise_cursed_item(player_type *creature_ptr, BIT_FLAGS flag, object_type *o_ptr, int *choices, int *number, int item_num)
@@ -83,8 +83,8 @@ static void choise_cursed_item(player_type *creature_ptr, BIT_FLAGS flag, object
     case TRC_LOW_AC:
         cf = TR_LOW_AC;
         break;
-    case TRC_LOW_MAGIC:
-        cf = TR_LOW_MAGIC;
+    case TRC_HARD_SPELL:
+        cf = TR_HARD_SPELL;
         break;
     case TRC_FAST_DIGEST:
         cf = TR_FAST_DIGEST;

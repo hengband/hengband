@@ -320,7 +320,7 @@ static void drain_essence(player_type *creature_ptr)
         dec--;
     if (has_flag(old_flgs, TR_LOW_AC))
         dec--;
-    if (has_flag(old_flgs, TR_LOW_MAGIC))
+    if (has_flag(old_flgs, TR_HARD_SPELL))
         dec--;
     if (has_flag(old_flgs, TR_FAST_DIGEST))
         dec--;

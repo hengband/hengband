@@ -102,7 +102,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それは物を強く投げることを可能にする。", "It provides great strength when you throw an item.");
     }
 
-    if (has_flag(flgs, TR_LOW_MAGIC)) {
+    if (has_flag(flgs, TR_DOWN_SAVING)) {
         info[i++] = _("それは魔法抵抗力を下げる。", "It decreases your magic resistance.");
     }
 
@@ -634,7 +634,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それは攻撃を受けやすい。", "It helps your enemies' blows.");
     }
 
-    if ((has_flag(flgs, TR_LOW_MAGIC)) || (o_ptr->curse_flags & TRC_LOW_MAGIC)) {
+    if ((has_flag(flgs, TR_HARD_SPELL)) || (o_ptr->curse_flags & TRC_HARD_SPELL)) {
         info[i++] = _("それは魔法を唱えにくくする。", "It encumbers you while spellcasting.");
     }
 

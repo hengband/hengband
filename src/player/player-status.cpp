@@ -1730,7 +1730,7 @@ static s16b calc_num_blow(player_type *creature_ptr, int i)
  * * 性格きれものなら減算(-3)
  * * 性格ちからじまんとがまんづよいなら加算(+1)
  * * 性格チャージマンなら加算(+5)
- * * 装備品にTRC_LOW_MAGICがあるなら加算(軽い呪いなら+3/重い呪いなら+10)
+ * * 装備品にTRC_HARD_SPELLがあるなら加算(軽い呪いなら+3/重い呪いなら+10)
  */
 static s16b calc_to_magic_chance(player_type *creature_ptr)
 {
@@ -1752,7 +1752,7 @@ static s16b calc_to_magic_chance(player_type *creature_ptr)
         if (!o_ptr->k_idx)
             continue;
         object_flags(creature_ptr, o_ptr, flgs);
-        if (any_bits(o_ptr->curse_flags, TRC_LOW_MAGIC)) {
+        if (any_bits(o_ptr->curse_flags, TRC_HARD_SPELL)) {
             if (any_bits(o_ptr->curse_flags, TRC_HEAVY_CURSE)) {
                 chance += 10;
             } else {
