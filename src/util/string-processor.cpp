@@ -537,3 +537,132 @@ int strrncmp(const char *s1, const char *s2, int len)
 
     return (0);
 }
+
+/**
+ * @brief 文字列の両端の空白を削除する
+ *
+ * 文字列 str の両端にある空白(スペースおよびタブ)を削除し、
+ * 削除した文字列を std::string 型のオブジェクトとして返す。
+ * 文字列全体が空白の場合は空文字列を返す。
+ *
+ * @param str 操作の対象とする文字列
+ * @return std::string strの両端の空白を削除した文字列
+ */
+std::string str_trim(std::string_view str)
+{
+    const auto start_pos = str.find_first_not_of(" \t");
+    const auto end_pos = str.find_last_not_of(" \t");
+
+    if (start_pos == std::string_view::npos || end_pos == std::string_view::npos) {
+        return std::string();
+    }
+
+    return std::string(str.substr(start_pos, end_pos - start_pos + 1));
+}
+
+/**
+ * @brief 文字列の右端の空白を削除する
+ *
+ * 文字列 str の右端にある空白(スペースおよびタブ)を削除し、
+ * 削除した文字列を std::string 型のオブジェクトとして返す。
+ * 文字列全体が空白の場合は空文字列を返す。
+ *
+ * @param str 操作の対象とする文字列
+ * @return std::string strの右端の空白を削除した文字列
+ */
+std::string str_rtrim(std::string_view str)
+{
+    const auto end_pos = str.find_last_not_of(" \t");
+
+    if (end_pos == std::string_view::npos) {
+        return std::string();
+    }
+
+    return std::string(str.substr(0, end_pos + 1));
+}
+
+/**
+ * @brief 文字列の左端の空白を削除する
+ *
+ * 文字列 str の左端にある空白(スペースおよびタブ)を削除し、
+ * 削除した文字列を std::string 型のオブジェクトとして返す。
+ * 文字列全体が空白の場合は空文字列を返す。
+ *
+ * @param str 操作の対象とする文字列
+ * @return std::string strの左端の空白を削除した文字列
+ */
+std::string str_ltrim(std::string_view str)
+{
+    const auto start_pos = str.find_first_not_of(" \t");
+
+    if (start_pos == std::string_view::npos) {
+        return std::string();
+    }
+
+    return std::string(str.substr(start_pos));
+}
+
+/**
+ * @brief 文字列を指定した文字で分割する
+ *
+ * 文字列 str を delim で指定した文字で分割し、分割した文字列を要素とする配列を
+ * std::vector<std::string> 型のオブジェクトとして返す。
+ *
+ * @param str 操作の対象とする文字列
+ * @param delim 文字列を分割する文字
+ * @param trim trueの場合、分割した文字列の両端の空白を削除する
+ * @return std::vector<std::string> 分割した文字列を要素とする配列
+ */
+std::vector<std::string> str_split(std::string_view str, char delim, bool trim)
+{
+    std::vector<std::string> result;
+
+    auto make_str = [trim](std::string_view sv) { return trim ? str_trim(sv) : std::string(sv); };
+
+    while (true) {
+        bool found = false;
+        for (size_t i = 0; i < str.size(); ++i) {
+            if (str[i] == delim) {
+                result.push_back(make_str(str.substr(0, i)));
+                str.remove_prefix(i + 1);
+                found = true;
+                break;
+            }
+#ifdef JP
+            if (iskanji(str[i]))
+                ++i;
+#endif
+        }
+        if (!found) {
+            result.push_back(make_str(str));
+            return result;
+        }
+    }
+}
+
+/**
+ * @brief 文字列から指定した文字を取り除く
+ *
+ * 文字列 str から文字列 erase_chars に含まれる文字をすべて削除し、
+ * 削除した文字列を std::string 型のオブジェクトとして返す。
+ *
+ * @param str 操作の対象とする文字列
+ * @param erase_chars 削除する文字を指定する文字列
+ * @return std::string 指定した文字をすべて削除した文字列
+ */
+std::string str_erase(std::string str, std::string_view erase_chars)
+{
+    for (auto it = str.begin(); it != str.end();) {
+        if (erase_chars.find(*it) != std::string_view::npos) {
+            it = str.erase(it);
+            continue;
+        }
+#ifdef JP
+        if (iskanji(*it))
+            ++it;
+#endif
+        ++it;
+    }
+
+    return str;
+}
