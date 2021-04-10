@@ -154,7 +154,7 @@ void store_sell(player_type *owner_ptr)
         placed = res.has_value();
         if (placed) {
             PRICE price = res.value();
-            say_comment_1(owner_ptr);
+            store_owner_says_comment(owner_ptr);
 
             sound(SOUND_SELL);
             if (cur_store_num == STORE_BLACK)

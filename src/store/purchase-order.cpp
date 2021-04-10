@@ -279,7 +279,7 @@ void store_purchase(player_type *player_ptr)
         return;
     }
 
-    say_comment_1(player_ptr);
+    store_owner_says_comment(player_ptr);
     if (cur_store_num == STORE_BLACK)
         chg_virtue(player_ptr, V_JUSTICE, -1);
     if ((o_ptr->tval == TV_BOTTLE) && (cur_store_num != STORE_HOME))

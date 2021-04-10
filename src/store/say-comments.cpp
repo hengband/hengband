@@ -16,155 +16,18 @@
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-void say_comment_1(player_type *player_ptr)
+void store_owner_says_comment(player_type *player_ptr)
 {
-#ifdef JP
 	if (cur_store_num == STORE_BLACK)
-	{
 		msg_print(comment_1_B[randint0(MAX_COMMENT_1)]);
-	}
 	else
-	{
 		msg_print(comment_1[randint0(MAX_COMMENT_1)]);
-	}
-#else
-	msg_print(comment_1[randint0(MAX_COMMENT_1)]);
-#endif
 
 	if (one_in_(RUMOR_CHANCE))
 	{
 		msg_print(_("店主は耳うちした:", "The shopkeeper whispers something into your ear:"));
 		display_rumor(player_ptr, TRUE);
 	}
-}
-
-
-/*!
- * @brief プレイヤーがアイテムを買う時の価格代案メッセージ処理 /
- * Continue haggling (player is buying)
- * @param value 店主の提示価格
- * @param annoyed 店主のいらつき度
- * @return なし
- */
-void say_comment_2(PRICE value, int annoyed)
-{
-	char tmp_val[80];
-	sprintf(tmp_val, "%ld", (long)value);
-
-	if (annoyed > 0)
-	{
-		msg_format(comment_2a[randint0(MAX_COMMENT_2A)], tmp_val);
-		return;
-	}
-
-#ifdef JP
-	if (cur_store_num == STORE_BLACK)
-	{
-		msg_format(comment_2b_B[randint0(MAX_COMMENT_2B)], tmp_val);
-	}
-	else
-	{
-		msg_format(comment_2b[randint0(MAX_COMMENT_2B)], tmp_val);
-	}
-#else
-	msg_format(comment_2b[randint0(MAX_COMMENT_2B)], tmp_val);
-#endif
-}
-
-
-/*!
- * @brief プレイヤーがアイテムを売る時の価格代案メッセージ処理 /
- * ブラックマーケットのときは別のメッセージを出す
- * Continue haggling (player is selling)
- * @param value 店主の提示価格
- * @param annoyed 店主のいらつき度
- * @return なし
- */
-void say_comment_3(PRICE value, int annoyed)
-{
-	char tmp_val[80];
-	sprintf(tmp_val, "%ld", (long)value);
-	if (annoyed > 0)
-	{
-		msg_format(comment_3a[randint0(MAX_COMMENT_3A)], tmp_val);
-	}
-	else
-	{
-#ifdef JP
-		if (cur_store_num == STORE_BLACK)
-		{
-			msg_format(comment_3b_B[randint0(MAX_COMMENT_3B)], tmp_val);
-		}
-		else
-		{
-			msg_format(comment_3b[randint0(MAX_COMMENT_3B)], tmp_val);
-		}
-#else
-		msg_format(comment_3b[randint0(MAX_COMMENT_3B)], tmp_val);
-#endif
-	}
-}
-
-
-/*!
- * @brief 店主がプレイヤーを追い出す時のメッセージ処理 /
- * ブラックマーケットの時は別のメッセージを出す
- * Kick 'da bum out.					-RAK-
- * @return なし
- */
-void say_comment_4(void)
-{
-#ifdef JP
-	if (cur_store_num == STORE_BLACK)
-	{
-		msg_print(comment_4a_B[randint0(MAX_COMMENT_4A)]);
-		msg_print(comment_4b_B[randint0(MAX_COMMENT_4B)]);
-	}
-	else
-	{
-		msg_print(comment_4a[randint0(MAX_COMMENT_4A)]);
-		msg_print(comment_4b[randint0(MAX_COMMENT_4B)]);
-	}
-#else
-	msg_print(comment_4a[randint0(MAX_COMMENT_4A)]);
-	msg_print(comment_4b[randint0(MAX_COMMENT_4B)]);
-#endif
-
-}
-
-
-/*!
- * @brief 店主がプレイヤーに取り合わない時のメッセージ処理 /
- * ブラックマーケットの時は別のメッセージを出す
- * You are insulting me
- * @return なし
- */
-void say_comment_5(void)
-{
-#ifdef JP
-	if (cur_store_num == STORE_BLACK)
-	{
-		msg_print(comment_5_B[randint0(MAX_COMMENT_5)]);
-	}
-	else
-	{
-		msg_print(comment_5[randint0(MAX_COMMENT_5)]);
-	}
-#else
-	msg_print(comment_5[randint0(MAX_COMMENT_5)]);
-#endif
-
-}
-
-
-/*!
- * @brief 店主がプレイヤーの提示を理解できなかった時のメッセージ処理 /
- * That makes no sense.
- * @return なし
- */
-void say_comment_6(void)
-{
-	msg_print(comment_6[randint0(MAX_COMMENT_6)]);
 }
 
 /*!
