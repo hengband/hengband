@@ -694,7 +694,7 @@ void check_no_flowed(player_type *creature_ptr)
         return;
     }
 
-    if (!creature_ptr->realm1 || creature_ptr->pclass == CLASS_ELEMENTALIST) {
+    if (!creature_ptr->realm1) {
         creature_ptr->no_flowed = FALSE;
         return;
     }

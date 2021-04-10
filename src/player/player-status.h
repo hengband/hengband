@@ -83,6 +83,7 @@ typedef struct player_type {
     player_personality_type pseikaku{}; /* Seikaku index */
     REALM_IDX realm1{}; /* First magic realm */
     REALM_IDX realm2{}; /* Second magic realm */
+    REALM_IDX element{}; //!< 元素使い領域番号 / Elementalist system index
     player_personality_type oops{}; /* Unused */
 
     DICE_SID hitdie{}; /* Hit dice (sides) */

@@ -17,6 +17,30 @@
 #include "system/floor-type-definition.h"
 #include "world/world.h"
 
+/*!
+ * @brief セーブデータから領域情報を読み込む / Read player realms
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+static void rd_realms(player_type *creature_ptr)
+{
+    byte tmp8u;
+
+    rd_byte(&tmp8u);
+    if (creature_ptr->pclass == CLASS_ELEMENTALIST)
+        creature_ptr->element = (REALM_IDX)tmp8u;
+    else
+        creature_ptr->realm1 = (REALM_IDX)tmp8u;
+
+    rd_byte(&tmp8u);
+    creature_ptr->realm2 = (REALM_IDX)tmp8u;
+}
+
+/*!
+ * @brief セーブデータからプレイヤー基本情報を読み込む / Read player's basic info
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
 void rd_base_info(player_type *creature_ptr)
 {
     rd_string(creature_ptr->name, sizeof(creature_ptr->name));
@@ -44,11 +68,8 @@ void rd_base_info(player_type *creature_ptr)
     creature_ptr->pseikaku = (player_personality_type)tmp8u;
 
     rd_byte(&creature_ptr->psex);
-    rd_byte(&tmp8u);
-    creature_ptr->realm1 = (REALM_IDX)tmp8u;
 
-    rd_byte(&tmp8u);
-    creature_ptr->realm2 = (REALM_IDX)tmp8u;
+    rd_realms(creature_ptr);
 
     rd_byte(&tmp8u);
     if (h_older_than(0, 4, 4))

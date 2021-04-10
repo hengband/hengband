@@ -318,7 +318,7 @@ spells_type get_element_type(int realm_idx, int n)
  * @return 属性タイプ
  */
 static spells_type get_element_spells_type(player_type *caster_ptr, int n) {
-    auto realm = element_types.at(static_cast<ElementRealm>(caster_ptr->realm1));
+    auto realm = element_types.at(static_cast<ElementRealm>(caster_ptr->element));
     auto t = realm.type.at(n);
     if (realm.extra.find(t) != realm.extra.end()) {
         if (randint0(100) < caster_ptr->lev * 2)
@@ -357,7 +357,7 @@ concptr get_element_name(int realm_idx, int n)
  */
 static concptr get_element_tip(player_type *caster_ptr, int spell_idx)
 {
-    auto realm = static_cast<ElementRealm>(caster_ptr->realm1);
+    auto realm = static_cast<ElementRealm>(caster_ptr->element);
     auto spell = static_cast<ElementSpells>(spell_idx);
     auto elem = element_powers.at(spell).elem;
     return format(element_tips.at(spell).data(), element_types.at(realm).name[elem].data());
@@ -774,7 +774,7 @@ bool get_element_power(player_type *caster_ptr, SPELL_IDX *sn, bool only_browse)
                     } else
                         sprintf(desc, "  %c) ", I2A(i));
 
-                    concptr s = get_element_name(caster_ptr->realm1, elem);
+                    concptr s = get_element_name(caster_ptr->element, elem);
                     sprintf(name, spell.name, s);
                     strcat(desc,
                         format("%-30s%2d %4d %3d%%%s", name, spell.min_lev, mana_cost, chance, comment));
@@ -808,7 +808,7 @@ bool get_element_power(player_type *caster_ptr, SPELL_IDX *sn, bool only_browse)
             char tmp_val[160];
             elem = get_elemental_elem(caster_ptr, i);
             spell = get_elemental_info(caster_ptr, i);
-            (void)sprintf(name, spell.name, get_element_name(caster_ptr->realm1, elem));
+            (void)sprintf(name, spell.name, get_element_name(caster_ptr->element, elem));
             (void)strnfmt(tmp_val, 78, _("%sを使いますか？", "Use %s? "), name);
             if (!get_check(tmp_val))
                 continue;
@@ -873,7 +873,7 @@ static bool try_cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx,
         msg_print(_("元素の力が制御できない氾流となって解放された！",
             "Elemental power unleashes its power in an uncontrollable storm!"));
         project(caster_ptr, PROJECT_WHO_UNCTRL_POWER, 2 + plev / 10, caster_ptr->y, caster_ptr->x, plev * 2,
-            get_element_types(caster_ptr->realm1)[0],
+            get_element_types(caster_ptr->element)[0],
             PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM, -1);
         caster_ptr->csp = MAX(0, caster_ptr->csp - caster_ptr->msp * 10 / (20 + randint1(10)));
 
@@ -1019,8 +1019,8 @@ bool is_elemental_genocide_effective(monster_race *r_ptr, spells_type type)
  */
 process_result effect_monster_elemental_genocide(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
-    auto type = get_element_type(caster_ptr->realm1, 0);
-    auto name = get_element_name(caster_ptr->realm1, 0);
+    auto type = get_element_type(caster_ptr->element, 0);
+    auto name = get_element_name(caster_ptr->element, 0);
     bool b = is_elemental_genocide_effective(em_ptr->r_ptr, type);
 
     if (em_ptr->seen_msg)
@@ -1062,7 +1062,7 @@ bool has_element_resist(player_type *creature_ptr, ElementRealm realm, PLAYER_LE
     if (creature_ptr->pclass != CLASS_ELEMENTALIST)
         return FALSE;
 
-    auto prealm = static_cast<ElementRealm>(creature_ptr->realm1);
+    auto prealm = static_cast<ElementRealm>(creature_ptr->element);
     return (prealm == realm && creature_ptr->lev >= lev);
 }
 
@@ -1243,7 +1243,7 @@ byte select_element_realm(player_type *creature_ptr)
 void switch_element_racial(player_type *creature_ptr, rc_type *rc_ptr)
 {
     auto plev = creature_ptr->lev;
-    auto realm = static_cast<ElementRealm>(creature_ptr->realm1);
+    auto realm = static_cast<ElementRealm>(creature_ptr->element);
     switch (realm) {
     case ElementRealm::FIRE:
         strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("ライト・エリア", "Light area"));
@@ -1326,7 +1326,7 @@ static bool door_to_darkness(player_type *caster_ptr, POSITION dist);
  */
 bool switch_element_execution(player_type *creature_ptr)
 {
-    auto realm = static_cast<ElementRealm>(creature_ptr->realm1);
+    auto realm = static_cast<ElementRealm>(creature_ptr->element);
     PLAYER_LEVEL plev = creature_ptr->lev;
     DIRECTION dir;
 

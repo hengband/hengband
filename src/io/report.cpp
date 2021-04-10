@@ -418,7 +418,7 @@ errr report_score(player_type *creature_ptr, void (*update_playtime)(void), disp
 #endif
 
     if (creature_ptr->pclass == CLASS_ELEMENTALIST)
-        realm1_name = get_element_title(creature_ptr->realm1);
+        realm1_name = get_element_title(creature_ptr->element);
     else
         realm1_name = realm_names[creature_ptr->realm1];
 
