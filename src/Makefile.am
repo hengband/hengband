@@ -99,7 +99,6 @@ hengband_SOURCES = \
 	\
 	cmd-building/cmd-building.cpp cmd-building/cmd-building.h \
 	cmd-building/cmd-inn.cpp cmd-building/cmd-inn.h \
-	cmd-building/cmd-store.cpp cmd-building/cmd-store.h \
 	\
 	cmd-io/cmd-autopick.cpp cmd-io/cmd-autopick.h \
 	cmd-io/cmd-diary.cpp cmd-io/cmd-diary.h \
@@ -306,7 +305,6 @@ hengband_SOURCES = \
 	io/report.cpp io/report.h \
 	io/screen-util.cpp io/screen-util.h \
 	io/signal-handlers.cpp io/signal-handlers.h \
-	io/store-key-processor.cpp io/store-key-processor.h \
 	io/tokenizer.cpp io/tokenizer.h \
 	io/uid-checker.cpp io/uid-checker.h \
 	io/write-diary.cpp io/write-diary.h \
@@ -389,8 +387,6 @@ hengband_SOURCES = \
 	market/building-util.cpp market/building-util.h \
 	market/play-gamble.cpp market/play-gamble.h \
 	market/poker.cpp market/poker.h \
-	market/articles-on-sale.cpp market/articles-on-sale.h \
-	market/gold-magnification-table.cpp market/gold-magnification-table.h \
 	market/arena.cpp market/arena.h \
 	market/bounty-prize-table.cpp market/bounty-prize-table.h \
 	market/bounty.cpp market/bounty.h \
@@ -798,7 +794,10 @@ hengband_SOURCES = \
 	\
 	store/home.cpp store/home.h \
 	store/store.cpp store/store.h \
+	store/articles-on-sale.cpp store/articles-on-sale.h \
 	store/black-market.cpp store/black-market.h \
+	store/cmd-store.cpp store/cmd-store.h \
+	store/gold-magnification-table.cpp store/gold-magnification-table.h \
 	store/museum.cpp store/museum.h \
 	store/pricing.cpp store/pricing.h \
 	store/purchase-order.cpp store/purchase-order.h \
@@ -807,6 +806,7 @@ hengband_SOURCES = \
 	store/say-comments.cpp store/say-comments.h \
 	store/sell-order.cpp store/sell-order.h \
 	store/service-checker.cpp store/service-checker.h \
+	store/store-key-processor.cpp store/store-key-processor.h \
 	store/store-util.cpp store/store-util.h \
 	store/store-owners.cpp store/store-owners.h \
 	store/store-owner-comments.cpp store/store-owner-comments.h \

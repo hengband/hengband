@@ -65,12 +65,6 @@
     <ClCompile Include="..\..\src\market\poker.cpp">
       <Filter>market</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\market\articles-on-sale.cpp">
-      <Filter>market</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\market\gold-magnification-table.cpp">
-      <Filter>market</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\market\building-util.cpp">
       <Filter>market</Filter>
     </ClCompile>
@@ -1679,12 +1673,6 @@
     <ClCompile Include="..\..\src\store\home.cpp">
       <Filter>store</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io\store-key-processor.cpp">
-      <Filter>io</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\cmd-building\cmd-store.cpp">
-      <Filter>cmd-building</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\store\purchase-order.cpp">
       <Filter>store</Filter>
     </ClCompile>
@@ -2253,6 +2241,18 @@
     <ClCompile Include="..\..\src\monster-race\race-ability-mask.cpp">
       <Filter>monster-race</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\store\articles-on-sale.cpp">
+      <Filter>store</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\store\gold-magnification-table.cpp">
+      <Filter>store</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\store\cmd-store.cpp">
+      <Filter>store</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\store\store-key-processor.cpp">
+      <Filter>store</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -2316,12 +2316,6 @@
       <Filter>io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\market\poker.h">
-      <Filter>market</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\market\articles-on-sale.h">
-      <Filter>market</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\market\gold-magnification-table.h">
       <Filter>market</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\market\building-util.h">
@@ -4211,12 +4205,6 @@
     <ClInclude Include="..\..\src\store\home.h">
       <Filter>store</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\io\store-key-processor.h">
-      <Filter>io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd-building\cmd-store.h">
-      <Filter>cmd-building</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\store\purchase-order.h">
       <Filter>store</Filter>
     </ClInclude>
@@ -4850,6 +4838,18 @@
     </ClInclude>
     <ClInclude Include="..\..\src\monster-race\race-ability-mask.h">
       <Filter>monster-race</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\store\articles-on-sale.h">
+      <Filter>store</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\store\gold-magnification-table.h">
+      <Filter>store</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\store\cmd-store.h">
+      <Filter>store</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\store\store-key-processor.h">
+      <Filter>store</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
