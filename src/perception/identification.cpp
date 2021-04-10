@@ -102,7 +102,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それは物を強く投げることを可能にする。", "It provides great strength when you throw an item.");
     }
 
-    if (has_flag(flgs, TR_HARD_SPELL)) {
+    if (has_flag(flgs, TR_DOWN_SAVING)) {
         info[i++] = _("それは魔法抵抗力を下げる。", "It decreases your magic resistance.");
     }
 
