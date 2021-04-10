@@ -1,5 +1,6 @@
 ﻿#include "io/input-key-acceptor.h"
 #include "cmd-io/macro-util.h"
+#include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "game-option/input-options.h"
 #include "game-option/map-screen-options.h"
@@ -412,6 +413,10 @@ void start_term_fresh(void)
         if (angband_term[j])
             angband_term[j]->never_fresh = FALSE;
     }
+    p_ptr->window_flags |= PW_ALL;
+    handle_stuff(p_ptr);
+    term_fresh();
+    term_activate(angband_term[0]);
 }
 
 /*!
