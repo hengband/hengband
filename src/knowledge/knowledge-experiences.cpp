@@ -8,6 +8,7 @@
 #include "core/show-file.h"
 #include "flavor/object-flavor.h"
 #include "game-option/cheat-options.h"
+#include "game-option/text-display-options.h"
 #include "io-dump/dump-util.h"
 #include "object/object-kind.h"
 #include "player/player-class.h"
@@ -30,7 +31,6 @@ void do_cmd_knowledge_weapon_exp(player_type *creature_ptr)
 
     for (int i = 0; i < 5; i++) {
         for (int num = 0; num < 64; num++) {
-            SUB_EXP weapon_exp;
             char tmp[30];
             for (KIND_OBJECT_IDX j = 0; j < max_k_idx; j++) {
                 object_kind *k_ptr = &k_info[j];
@@ -40,10 +40,13 @@ void do_cmd_knowledge_weapon_exp(player_type *creature_ptr)
                 if ((k_ptr->tval == TV_BOW) && (k_ptr->sval == SV_CRIMSON || k_ptr->sval == SV_HARP))
                     continue;
 
-                weapon_exp = creature_ptr->weapon_exp[4 - i][num];
+                SUB_EXP weapon_exp = creature_ptr->weapon_exp[4 - i][num];
+                SUB_EXP weapon_max = s_info[creature_ptr->pclass].w_max[4 - i][num];
                 strip_name(tmp, j);
                 fprintf(fff, "%-25s ", tmp);
-                if (weapon_exp >= s_info[creature_ptr->pclass].w_max[4 - i][num])
+                if (show_actual_value)
+                    fprintf(fff, "%4d/%4d ", MIN(weapon_exp, weapon_max), weapon_max);
+                if (weapon_exp >= weapon_max)
                     fprintf(fff, "!");
                 else
                     fprintf(fff, " ");
@@ -88,9 +91,14 @@ void do_cmd_knowledge_spell_exp(player_type *creature_ptr)
             SUB_EXP spell_exp = creature_ptr->spell_exp[i];
             int exp_level = spell_exp_level(spell_exp);
             fprintf(fff, "%-25s ", exe_spell(creature_ptr, creature_ptr->realm1, i, SPELL_NAME));
-            if (creature_ptr->realm1 == REALM_HISSATSU)
+            if (creature_ptr->realm1 == REALM_HISSATSU) {
+                if (show_actual_value)
+                    fprintf(fff, "----/---- ");
                 fprintf(fff, "[--]");
+            }
             else {
+                if (show_actual_value)
+                    fprintf(fff, "%4d/%4d ", MIN(spell_exp, SPELL_EXP_MASTER), SPELL_EXP_MASTER);
                 if (exp_level >= EXP_LEVEL_MASTER)
                     fprintf(fff, "!");
                 else
@@ -120,6 +128,8 @@ void do_cmd_knowledge_spell_exp(player_type *creature_ptr)
             SUB_EXP spell_exp = creature_ptr->spell_exp[i + 32];
             int exp_level = spell_exp_level(spell_exp);
             fprintf(fff, "%-25s ", exe_spell(creature_ptr, creature_ptr->realm2, i, SPELL_NAME));
+            if (show_actual_value)
+                fprintf(fff, "%4d/%4d ", MIN(spell_exp, SPELL_EXP_MASTER), SPELL_EXP_MASTER);
             if (exp_level >= EXP_LEVEL_EXPERT)
                 fprintf(fff, "!");
             else
@@ -152,9 +162,12 @@ void do_cmd_knowledge_skill_exp(player_type *creature_ptr)
         return;
 
     for (int i = 0; i < GINOU_TEMPMAX; i++) {
-        int skill_exp = creature_ptr->skill_exp[i];
+        SUB_EXP skill_exp = creature_ptr->skill_exp[i];
+        SUB_EXP skill_max = s_info[creature_ptr->pclass].s_max[i];
         fprintf(fff, "%-20s ", skill_name[i]);
-        if (skill_exp >= s_info[creature_ptr->pclass].s_max[i])
+        if (show_actual_value)
+            fprintf(fff, "%4d/%4d ", MIN(skill_exp, skill_max), skill_max);
+        if (skill_exp >= skill_max)
             fprintf(fff, "!");
         else
             fprintf(fff, " ");
