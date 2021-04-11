@@ -150,7 +150,7 @@ static void init_random_seed(player_type *player_ptr, bool new_game)
         init_saved_floors(player_ptr, TRUE);
 
     if (!new_game)
-        process_player_name(player_ptr, FALSE);
+        process_player_name(player_ptr);
 
     if (init_random_seed)
         Rand_state_init();
