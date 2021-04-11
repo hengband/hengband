@@ -61,6 +61,12 @@ concptr CfgData::get_rand(int key1_type, int key2_val)
     return filenames->at(Rand_external(filenames->size()));
 }
 
+bool CfgData::has_key(int key1_type, int key2_val)
+{
+    auto ite = map->find(make_cfg_key(key1_type, key2_val));
+    return (ite != map->end());
+}
+
 void CfgData::insert(int key1_type, int key2_val, cfg_values *value)
 {
     this->map->insert(std::make_pair(make_cfg_key(key1_type, key2_val), value));
@@ -96,6 +102,7 @@ CfgData *CfgReader::read_sections(std::initializer_list<cfg_section> sections)
 
     for (auto &section : sections) {
     
+        bool has_data = false;
         int index = 0;
         concptr read_key;
         while ((read_key = section.key_at(index, key_buf)) != NULL) {
@@ -112,10 +119,15 @@ CfgData *CfgReader::read_sections(std::initializer_list<cfg_section> sections)
                     delete filenames;
                 } else {
                     result->insert(section.action_type, index, filenames);
+                    has_data = true;
                 }
             }
 
             index++;
+        }
+
+        if (section.has_data) {
+            *(section.has_data) = has_data;
         }
     }
 

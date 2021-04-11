@@ -32,6 +32,8 @@ struct cfg_section {
      * *action-val : the 2nd parameter of "term_xtra()"
      */
     key_name_func key_at;
+    //! 1つでもデータを読み込めた場合にtrueを設定する。（NULLの場合を除く）
+    bool *has_data = NULL;
 };
 
 class CfgData {
@@ -45,6 +47,7 @@ public:
         delete map;
     }
     concptr get_rand(int key1_type, int key2_val);
+    bool has_key(int key1_type, int key2_val);
     void insert(int key1_type, int key2_val, cfg_values *value);
 
 protected:
