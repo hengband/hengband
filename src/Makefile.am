@@ -801,7 +801,6 @@ hengband_SOURCES = \
 	store/museum.cpp store/museum.h \
 	store/pricing.cpp store/pricing.h \
 	store/purchase-order.cpp store/purchase-order.h \
-	store/owner-insults.cpp store/owner-insults.h \
 	store/rumor.cpp store/rumor.h \
 	store/say-comments.cpp store/say-comments.h \
 	store/sell-order.cpp store/sell-order.h \

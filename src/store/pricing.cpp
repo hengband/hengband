@@ -61,16 +61,3 @@ PRICE price_item(player_type *player_ptr, object_type *o_ptr, int greed, bool fl
 
     return price;
 }
-
-/*!
- * @brief 店舗の割引対象外にするかどうかを判定 /
- * Eliminate need to bargain if player has haggled well in the past
- * @param minprice アイテムの最低販売価格
- * @return 割引を禁止するならTRUEを返す。
- */
-bool noneedtobargain(PRICE minprice)
-{
-    PRICE good = st_ptr->good_buy;
-    PRICE bad = st_ptr->bad_buy;
-    return (minprice < 10L) || (good == MAX_SHORT) || (good > ((3 * bad) + (5 + (minprice / 50))));
-}

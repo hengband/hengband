@@ -525,7 +525,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\store\home.cpp" />
     <ClCompile Include="..\..\src\store\museum.cpp" />
-    <ClCompile Include="..\..\src\store\owner-insults.cpp" />
     <ClCompile Include="..\..\src\store\pricing.cpp" />
     <ClCompile Include="..\..\src\store\purchase-order.cpp" />
     <ClCompile Include="..\..\src\store\sell-order.cpp" />
@@ -1216,7 +1215,6 @@
     <ClInclude Include="..\..\src\stdafx.h" />
     <ClInclude Include="..\..\src\store\home.h" />
     <ClInclude Include="..\..\src\store\museum.h" />
-    <ClInclude Include="..\..\src\store\owner-insults.h" />
     <ClInclude Include="..\..\src\store\pricing.h" />
     <ClInclude Include="..\..\src\store\purchase-order.h" />
     <ClInclude Include="..\..\src\store\sell-order.h" />
