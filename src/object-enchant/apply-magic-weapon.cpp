@@ -15,6 +15,7 @@
 #include "sv-definition/sv-weapon-types.h"
 #include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief 武器系オブジェクトに生成ランクごとの強化を与えるサブルーチン
@@ -94,8 +95,6 @@ void apply_magic_weapon(player_type *owner_ptr, object_type *o_ptr, DEPTH level,
                     continue;
                 if (o_ptr->name2 == EGO_EARTHQUAKES && o_ptr->tval != TV_HAFTED)
                     continue;
-                if (o_ptr->name2 == EGO_WEIRD && o_ptr->tval != TV_SWORD)
-                    continue;
                 break;
             }
 
@@ -135,12 +134,21 @@ void apply_magic_weapon(player_type *owner_ptr, object_type *o_ptr, DEPTH level,
             }
         } else if (power < -1) {
             if (randint0(MAX_DEPTH) < level) {
+                int n = 0;
                 while (TRUE) {
                     o_ptr->name2 = get_random_ego(INVEN_MAIN_HAND, FALSE);
                     if (o_ptr->name2 == EGO_WEIRD && o_ptr->tval != TV_SWORD) {
                         continue;
                     }
 
+                    ego_item_type *e_ptr = &e_info[o_ptr->name2];
+                    if (o_ptr->tval == TV_SWORD && o_ptr->sval == SV_HAYABUSA && e_ptr->max_pval < 0) {
+                        if (++n > 1000) {
+                            msg_print(_("エラー:隼の剣に割り当てるエゴ無し", "Error: Cannot find for Hayabusa."));
+                            return;
+                        }
+                        continue;
+                    }
                     break;
                 }
             }
