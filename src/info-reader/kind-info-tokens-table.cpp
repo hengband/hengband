@@ -160,6 +160,7 @@ concptr k_info_flags[NUM_K_FLAGS] = {
     "SUPPORTIVE",
 };
 
+// clang-format off
 /*!
  * オブジェクト生成特性トークンの定義 /
  * Object flags
@@ -183,4 +184,13 @@ std::unordered_map<std::string_view, TRG> k_info_gen_flags = {
     { "RANDOM_CURSE2", TRG::RANDOM_CURSE2 },
     { "XTRA_DICE", TRG::XTRA_DICE },
     { "POWERFUL", TRG::POWERFUL },
+    { "LIGHT_WEIGHT", TRG::LIGHT_WEIGHT },
+    { "HEAVY_WEIGHT", TRG::HEAVY_WEIGHT },
+    { "XTRA_AC", TRG::XTRA_AC },
+    { "HIGH_TELEPATHY", TRG::HIGH_TELEPATHY },
+    { "LOW_TELEPATHY", TRG::LOW_TELEPATHY },
+    { "XTRA_L_ESP", TRG::XTRA_L_ESP },
+    { "MOD_ACCURACY", TRG::MOD_ACCURACY },
+    { "MOD_VELOCITY", TRG::MOD_VELOCITY },
 };
+// clang-format on

@@ -87,6 +87,18 @@ static void ego_invest_extra_abilities(object_type *o_ptr, FlagGroup<TRG> &gen_f
         one_lordly_high_resistance(o_ptr);
     if (gen_flags.has(TRG::XTRA_RES))
         one_resistance(o_ptr);
+    if (gen_flags.has(TRG::LIGHT_WEIGHT))
+        make_weight_ligten(o_ptr);
+    if (gen_flags.has(TRG::HEAVY_WEIGHT))
+        make_weight_heavy(o_ptr);
+    if (gen_flags.has(TRG::XTRA_AC))
+        add_xtra_ac(o_ptr);
+    if (gen_flags.has(TRG::HIGH_TELEPATHY))
+        add_high_telepathy(o_ptr);
+    if (gen_flags.has(TRG::LOW_TELEPATHY))
+        add_low_telepathy(o_ptr);
+    if (gen_flags.has(TRG::XTRA_L_ESP))
+        one_low_esp(o_ptr);
     if (gen_flags.has(TRG::XTRA_DICE)) {
         do {
             o_ptr->dd++;
@@ -175,7 +187,8 @@ void apply_ego(player_type *player_ptr, object_type *o_ptr, DEPTH lev)
         o_ptr->to_h += (HIT_PROB)randint1_signed(e_ptr->max_to_h);
         o_ptr->to_d += randint1_signed(e_ptr->max_to_d);
         o_ptr->to_a += (ARMOUR_CLASS)randint1_signed(e_ptr->max_to_a);
-        if (o_ptr->name2 == EGO_ACCURACY) {
+
+        if (gen_flags.has(TRG::MOD_ACCURACY)) {
             while (o_ptr->to_h < o_ptr->to_d + 10) {
                 o_ptr->to_h += 5;
                 o_ptr->to_d -= 5;
@@ -183,7 +196,7 @@ void apply_ego(player_type *player_ptr, object_type *o_ptr, DEPTH lev)
             o_ptr->to_h = MAX(o_ptr->to_h, 15);
         }
 
-        if (o_ptr->name2 == EGO_VELOCITY) {
+        if (gen_flags.has(TRG::MOD_VELOCITY)) {
             while (o_ptr->to_d < o_ptr->to_h + 10) {
                 o_ptr->to_d += 5;
                 o_ptr->to_h -= 5;

@@ -61,8 +61,7 @@ static bool grab_ego_generate_flags(ego_generate_type &xtra, concptr what)
 errr parse_e_info(char *buf, angband_header *head)
 {
     static ego_item_type *e_ptr = NULL;
-    error_idx = -1;
-    error_line = -1;
+    error_idx = 0;
     char *s, *t;
     if (buf[0] == 'N') {
         s = angband_strchr(buf + 2, ':');
