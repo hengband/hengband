@@ -1,6 +1,8 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "util/point-2d.h"
+#include <optional>
 
 #define MAX_BOUNTY 20
 
@@ -61,6 +63,7 @@ struct world_type {
 
     DUNGEON_IDX max_d_idx;
 
+    std::optional<Pos2D> itemlist_pos{}; /*!< 床上アイテム描写用の現在座標 / Floor item list location */
 };
 
 extern world_type *current_world_ptr;

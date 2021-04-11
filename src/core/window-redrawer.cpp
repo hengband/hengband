@@ -287,7 +287,6 @@ void window_stuff(player_type *player_ptr)
 
     if (any_bits(window_flags, PW_FLOOR_ITEM_LIST)) {
         reset_bits(player_ptr->window_flags, PW_FLOOR_ITEM_LIST);
-        // ウィンドウサイズ変更に対応できず。カーソル位置を取る必要がある。
-        fix_floor_item_list(player_ptr, player_ptr->y, player_ptr->x);
+        print_floor_item_list(player_ptr);
     }
 }

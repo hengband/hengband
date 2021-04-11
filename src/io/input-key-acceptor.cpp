@@ -223,6 +223,9 @@ char inkey(void)
         if (!done && (0 != term_inkey(&kk, FALSE, FALSE))) {
             start_term_fresh();
             all_term_fresh(x, y);
+            if (fresh_once)
+                stop_term_fresh();
+
             current_world_ptr->character_saved = FALSE;
 
             signal_count = 0;

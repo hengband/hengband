@@ -38,9 +38,9 @@
 #include "window/main-window-equipments.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
-#include <string>
-#include <sstream>
 #include <mutex>
+#include <sstream>
+#include <string>
 
 /*!
  * @brief サブウィンドウに所持品一覧を表示する / Hack -- display inventory in sub-windows
@@ -528,7 +528,6 @@ static void display_floor_item_list(player_type *player_ptr, const int y, const 
         else
             sprintf(buf, _("%s", "on %s"), fn);
         sprintf(line, _("(X:%03d Y:%03d) %sの上の発見済みアイテム一覧", "Found items at (X:%03d Y:%03d) %s"), x, y, buf);
-
     }
     term_addstr(-1, TERM_WHITE, line);
 
@@ -565,10 +564,12 @@ static void display_floor_item_list(player_type *player_ptr, const int y, const 
 }
 
 /*!
- * @brief (y,x) のアイテム一覧をサブウィンドウに表示する / display item at (y,x) in sub-windows
+ * @brief (current_world_ptr->itemlist_y, current_world_ptr->itemlist_x) のアイテム一覧をサブウィンドウに表示する
+ * display item at (current_world_ptr->itemlist_y, current_world_ptr->itemlist_x) in sub-windows
  */
-void fix_floor_item_list(player_type *player_ptr, const int y, const int x)
+void print_floor_item_list(player_type *player_ptr)
 {
+    bool printed = false;
     for (int j = 0; j < 8; j++) {
         if (!angband_term[j])
             continue;
@@ -577,14 +578,34 @@ void fix_floor_item_list(player_type *player_ptr, const int y, const int x)
         if (!(window_flag[j] & PW_FLOOR_ITEM_LIST))
             continue;
 
+        //座標を記憶していないときはPlayerの足元を表示する
+        if (!current_world_ptr->itemlist_pos) {
+            current_world_ptr->itemlist_pos = { player_ptr->y, player_ptr->x };
+        }
+
         term_type *old = Term;
         term_activate(angband_term[j]);
-
-        display_floor_item_list(player_ptr, y, x);
+        display_floor_item_list(player_ptr, current_world_ptr->itemlist_pos->y, current_world_ptr->itemlist_pos->x);
         term_fresh();
 
         term_activate(old);
+        printed = true;
     }
+
+    //一度表示したら座標を忘れる
+    if (printed) {
+        current_world_ptr->itemlist_pos = std::nullopt;
+    }
+}
+
+/*!
+ * @brief (y,x) のアイテム一覧をサブウィンドウに表示する / display item at (y,x) in sub-windows
+ */
+void fix_floor_item_list(player_type *player_ptr, const int y, const int x)
+{
+    set_bits(player_ptr->window_flags, PW_FLOOR_ITEM_LIST);
+    current_world_ptr->itemlist_pos = { y, x };
+    print_floor_item_list(player_ptr);
 }
 
 /*!
