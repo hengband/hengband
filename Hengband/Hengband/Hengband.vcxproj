@@ -267,7 +267,7 @@
     <ClCompile Include="..\..\src\cmd-action\cmd-travel.cpp" />
     <ClCompile Include="..\..\src\cmd-action\cmd-tunnel.cpp" />
     <ClCompile Include="..\..\src\action\movement-execution.cpp" />
-    <ClCompile Include="..\..\src\cmd-building\cmd-store.cpp" />
+    <ClCompile Include="..\..\src\store\cmd-store.cpp" />
     <ClCompile Include="..\..\src\cmd-io\cmd-floor.cpp" />
     <ClCompile Include="..\..\src\cmd-io\cmd-lore.cpp" />
     <ClCompile Include="..\..\src\cmd-io\cmd-menu-content-table.cpp" />
@@ -346,7 +346,7 @@
     <ClCompile Include="..\..\src\io\cursor.cpp" />
     <ClCompile Include="..\..\src\io\input-key-acceptor.cpp" />
     <ClCompile Include="..\..\src\io\input-key-requester.cpp" />
-    <ClCompile Include="..\..\src\io\store-key-processor.cpp" />
+    <ClCompile Include="..\..\src\store\store-key-processor.cpp" />
     <ClCompile Include="..\..\src\load\info-loader.cpp" />
     <ClCompile Include="..\..\src\locale\utf-8.cpp" />
     <ClCompile Include="..\..\src\main-win\main-win-cfg-reader.cpp" />
@@ -360,6 +360,8 @@
     <ClCompile Include="..\..\src\main\info-initializer.cpp" />
     <ClCompile Include="..\..\src\main\init-error-messages-table.cpp" />
     <ClCompile Include="..\..\src\main-win\main-win-bg.cpp" />
+    <ClCompile Include="..\..\src\main\scene-table-floor.cpp" />
+    <ClCompile Include="..\..\src\main\scene-table-monster.cpp" />
     <ClCompile Include="..\..\src\main\scene-table.cpp" />
     <ClCompile Include="..\..\src\market\building-initializer.cpp" />
     <ClCompile Include="..\..\src\melee\melee-spell-flags-checker.cpp" />
@@ -385,6 +387,7 @@
     <ClCompile Include="..\..\src\monster-floor\monster-lite-util.cpp" />
     <ClCompile Include="..\..\src\monster-floor\monster-lite.cpp" />
     <ClCompile Include="..\..\src\monster-floor\special-death-switcher.cpp" />
+    <ClCompile Include="..\..\src\monster-race\race-ability-mask.cpp" />
     <ClCompile Include="..\..\src\monster\monster-status-setter.cpp" />
     <ClCompile Include="..\..\src\mspell\element-resistance-checker.cpp" />
     <ClCompile Include="..\..\src\mspell\high-resistance-checker.cpp" />
@@ -524,7 +527,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\store\home.cpp" />
     <ClCompile Include="..\..\src\store\museum.cpp" />
-    <ClCompile Include="..\..\src\store\owner-insults.cpp" />
     <ClCompile Include="..\..\src\store\pricing.cpp" />
     <ClCompile Include="..\..\src\store\purchase-order.cpp" />
     <ClCompile Include="..\..\src\store\sell-order.cpp" />
@@ -799,10 +801,10 @@
     <ClCompile Include="..\..\src\io\tokenizer.cpp" />
     <ClCompile Include="..\..\src\io\write-diary.cpp" />
     <ClCompile Include="..\..\src\market\arena-info-table.cpp" />
-    <ClCompile Include="..\..\src\market\articles-on-sale.cpp" />
+    <ClCompile Include="..\..\src\store\articles-on-sale.cpp" />
     <ClCompile Include="..\..\src\store\black-market.cpp" />
     <ClCompile Include="..\..\src\market\building-util.cpp" />
-    <ClCompile Include="..\..\src\market\gold-magnification-table.cpp" />
+    <ClCompile Include="..\..\src\store\gold-magnification-table.cpp" />
     <ClCompile Include="..\..\src\market\play-gamble.cpp" />
     <ClCompile Include="..\..\src\market\poker.cpp" />
     <ClCompile Include="..\..\src\store\say-comments.cpp" />
@@ -929,7 +931,7 @@
     <ClInclude Include="..\..\src\cmd-action\cmd-travel.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-tunnel.h" />
     <ClInclude Include="..\..\src\action\movement-execution.h" />
-    <ClInclude Include="..\..\src\cmd-building\cmd-store.h" />
+    <ClInclude Include="..\..\src\store\cmd-store.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-floor.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-lore.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-menu-content-table.h" />
@@ -1019,13 +1021,14 @@
     <ClInclude Include="..\..\src\io\cursor.h" />
     <ClInclude Include="..\..\src\io\input-key-acceptor.h" />
     <ClInclude Include="..\..\src\io\input-key-requester.h" />
-    <ClInclude Include="..\..\src\io\store-key-processor.h" />
+    <ClInclude Include="..\..\src\store\store-key-processor.h" />
     <ClInclude Include="..\..\src\load\info-loader.h" />
     <ClInclude Include="..\..\src\locale\language-switcher.h" />
     <ClInclude Include="..\..\src\locale\utf-8.h" />
     <ClInclude Include="..\..\src\main-win\main-win-cfg-reader.h" />
     <ClInclude Include="..\..\src\main-win\main-win-file-utils.h" />
     <ClInclude Include="..\..\src\main-win\main-win-mci.h" />
+    <ClInclude Include="..\..\src\main-win\main-win-menuitem.h" />
     <ClInclude Include="..\..\src\main-win\main-win-mmsystem.h" />
     <ClInclude Include="..\..\src\main-win\main-win-music.h" />
     <ClInclude Include="..\..\src\main-win\main-win-sound.h" />
@@ -1037,6 +1040,8 @@
     <ClInclude Include="..\..\src\main\init-error-messages-table.h" />
     <ClInclude Include="..\..\src\main-win\main-win-bg.h" />
     <ClInclude Include="..\..\src\main-win\main-win-windows.h" />
+    <ClInclude Include="..\..\src\main\scene-table-floor.h" />
+    <ClInclude Include="..\..\src\main\scene-table-monster.h" />
     <ClInclude Include="..\..\src\main\scene-table.h" />
     <ClInclude Include="..\..\src\market\building-initializer.h" />
     <ClInclude Include="..\..\src\melee\melee-spell-flags-checker.h" />
@@ -1064,6 +1069,8 @@
     <ClInclude Include="..\..\src\monster-floor\monster-lite-util.h" />
     <ClInclude Include="..\..\src\monster-floor\monster-lite.h" />
     <ClInclude Include="..\..\src\monster-floor\special-death-switcher.h" />
+    <ClInclude Include="..\..\src\monster-race\race-ability-flags.h" />
+    <ClInclude Include="..\..\src\monster-race\race-ability-mask.h" />
     <ClInclude Include="..\..\src\monster\monster-status-setter.h" />
     <ClInclude Include="..\..\src\mspell\element-resistance-checker.h" />
     <ClInclude Include="..\..\src\mspell\high-resistance-checker.h" />
@@ -1120,7 +1127,6 @@
     <ClInclude Include="..\..\src\mind\stances-table.h" />
     <ClInclude Include="..\..\src\mspell\monster-power-table.h" />
     <ClInclude Include="..\..\src\mspell\mspell-dispel.h" />
-    <ClInclude Include="..\..\src\mspell\mspell-mask-definitions.h" />
     <ClInclude Include="..\..\src\mspell\mspell-checker.h" />
     <ClInclude Include="..\..\src\mspell\mspell-judgement.h" />
     <ClInclude Include="..\..\src\blue-magic\blue-magic-checker.h" />
@@ -1213,7 +1219,6 @@
     <ClInclude Include="..\..\src\stdafx.h" />
     <ClInclude Include="..\..\src\store\home.h" />
     <ClInclude Include="..\..\src\store\museum.h" />
-    <ClInclude Include="..\..\src\store\owner-insults.h" />
     <ClInclude Include="..\..\src\store\pricing.h" />
     <ClInclude Include="..\..\src\store\purchase-order.h" />
     <ClInclude Include="..\..\src\store\sell-order.h" />
@@ -1249,13 +1254,10 @@
     <ClInclude Include="..\..\src\lore\lore-store.h" />
     <ClInclude Include="..\..\src\lore\monster-lore.h" />
     <ClInclude Include="..\..\src\monster-race\race-flags8.h" />
-    <ClInclude Include="..\..\src\monster-race\race-flags-ability1.h" />
-    <ClInclude Include="..\..\src\monster-race\race-flags-ability2.h" />
     <ClInclude Include="..\..\src\monster-race\race-flags-resistance.h" />
     <ClInclude Include="..\..\src\monster-race\race-flags1.h" />
     <ClInclude Include="..\..\src\monster-race\race-flags2.h" />
     <ClInclude Include="..\..\src\monster-race\race-flags3.h" />
-    <ClInclude Include="..\..\src\monster-race\race-flags4.h" />
     <ClInclude Include="..\..\src\monster-race\race-flags7.h" />
     <ClInclude Include="..\..\src\monster-race\race-flags9.h" />
     <ClInclude Include="..\..\src\monster-race\race-indice-types.h" />
@@ -1680,10 +1682,10 @@
     <ClInclude Include="..\..\src\io\tokenizer.h" />
     <ClInclude Include="..\..\src\io\write-diary.h" />
     <ClInclude Include="..\..\src\market\arena-info-table.h" />
-    <ClInclude Include="..\..\src\market\articles-on-sale.h" />
+    <ClInclude Include="..\..\src\store\articles-on-sale.h" />
     <ClInclude Include="..\..\src\store\black-market.h" />
     <ClInclude Include="..\..\src\market\building-util.h" />
-    <ClInclude Include="..\..\src\market\gold-magnification-table.h" />
+    <ClInclude Include="..\..\src\store\gold-magnification-table.h" />
     <ClInclude Include="..\..\src\market\play-gamble.h" />
     <ClInclude Include="..\..\src\market\poker.h" />
     <ClInclude Include="..\..\src\store\say-comments.h" />

@@ -400,7 +400,7 @@ PRICE flag_cost(player_type *player_ptr, object_type *o_ptr, int plusses)
         total -= 5000;
     if (has_flag(flgs, TR_LOW_AC))
         total -= 5000;
-    if (has_flag(flgs, TR_LOW_MAGIC))
+    if (has_flag(flgs, TR_HARD_SPELL))
         total -= 15000;
     if (has_flag(flgs, TR_FAST_DIGEST))
         total -= 10000;

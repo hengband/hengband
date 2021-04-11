@@ -11,11 +11,36 @@
 #include "load/world-loader.h"
 #include "market/arena.h"
 #include "mutation/mutation-calculator.h"
+#include "monster-race/race-ability-flags.h"
 #include "player/attack-defense-types.h"
 #include "player/player-skill.h"
 #include "system/floor-type-definition.h"
 #include "world/world.h"
 
+/*!
+ * @brief セーブデータから領域情報を読み込む / Read player realms
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+static void rd_realms(player_type *creature_ptr)
+{
+    byte tmp8u;
+
+    rd_byte(&tmp8u);
+    if (creature_ptr->pclass == CLASS_ELEMENTALIST)
+        creature_ptr->element = (REALM_IDX)tmp8u;
+    else
+        creature_ptr->realm1 = (REALM_IDX)tmp8u;
+
+    rd_byte(&tmp8u);
+    creature_ptr->realm2 = (REALM_IDX)tmp8u;
+}
+
+/*!
+ * @brief セーブデータからプレイヤー基本情報を読み込む / Read player's basic info
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
 void rd_base_info(player_type *creature_ptr)
 {
     rd_string(creature_ptr->name, sizeof(creature_ptr->name));
@@ -43,11 +68,8 @@ void rd_base_info(player_type *creature_ptr)
     creature_ptr->pseikaku = (player_personality_type)tmp8u;
 
     rd_byte(&creature_ptr->psex);
-    rd_byte(&tmp8u);
-    creature_ptr->realm1 = (REALM_IDX)tmp8u;
 
-    rd_byte(&tmp8u);
-    creature_ptr->realm2 = (REALM_IDX)tmp8u;
+    rd_realms(creature_ptr);
 
     rd_byte(&tmp8u);
     if (h_older_than(0, 4, 4))
@@ -174,7 +196,7 @@ static void set_imitation(player_type *creature_ptr)
 {
     if (h_older_than(0, 0, 1)) {
         for (int i = 0; i < MAX_MANE; i++) {
-            creature_ptr->mane_spell[i] = -1;
+            creature_ptr->mane_spell[i] = RF_ABILITY::MAX;
             creature_ptr->mane_dam[i] = 0;
         }
 
@@ -191,7 +213,7 @@ static void set_imitation(player_type *creature_ptr)
         }
 
         for (int i = 0; i < MAX_MANE; i++) {
-            creature_ptr->mane_spell[i] = -1;
+            creature_ptr->mane_spell[i] = RF_ABILITY::MAX;
             creature_ptr->mane_dam[i] = 0;
         }
 
@@ -203,7 +225,7 @@ static void set_imitation(player_type *creature_ptr)
     for (int i = 0; i < MAX_MANE; i++) {
         s16b tmp16s;
         rd_s16b(&tmp16s);
-        creature_ptr->mane_spell[i] = (SPELL_IDX)tmp16s;
+        creature_ptr->mane_spell[i] = static_cast<RF_ABILITY>(tmp16s);
         rd_s16b(&tmp16s);
         creature_ptr->mane_dam[i] = (SPELL_IDX)tmp16s;
     }

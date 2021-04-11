@@ -145,7 +145,7 @@ concptr k_info_flags[NUM_K_FLAGS] = {
     "COWARDICE",
     "LOW_MELEE",
     "LOW_AC",
-    "LOW_MAGIC",
+    "HARD_SPELL",
     "FAST_DIGEST",
     "SLOW_REGEN",
     "MIGHTY_THROW",

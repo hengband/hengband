@@ -96,7 +96,7 @@ void do_cmd_player_status(player_type *creature_ptr)
 		if (c == 'c')
 		{
 			get_name(creature_ptr);
-			process_player_name(creature_ptr, FALSE);
+			process_player_name(creature_ptr);
 		}
 		else if (c == 'f')
 		{

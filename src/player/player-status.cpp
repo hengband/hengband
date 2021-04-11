@@ -21,6 +21,7 @@
 #include "floor/floor-save.h"
 #include "floor/floor-util.h"
 #include "game-option/birth-options.h"
+#include "game-option/text-display-options.h"
 #include "grid/feature.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
@@ -150,11 +151,11 @@ player_type p_body;
 player_type *p_ptr = &p_body;
 
 /*!
- * @brief クリーチャーの抽象的善悪アライメントの表記を返す。 / Return alignment title
+ * @brief クリーチャーの抽象的善悪アライメントの表記名のみを返す。 / Return only alignment title
  * @param creature_ptr 算出するクリーチャーの参照ポインタ。
- * @return アライメントの表記を返す。
+ * @return アライメントの表記名
  */
-concptr your_alignment(player_type *creature_ptr)
+concptr alignment_label(player_type *creature_ptr)
 {
     if (creature_ptr->align > 150)
         return _("大善", "Lawful");
@@ -170,6 +171,20 @@ concptr your_alignment(player_type *creature_ptr)
         return _("中悪", "Evil");
     else
         return _("大悪", "Chaotic");
+}
+
+/*!
+ * @brief クリーチャーの抽象的善悪アライメントの表記を返す。 / Return alignment title
+ * @param creature_ptr 算出するクリーチャーの参照ポインタ。
+ * @return アライメントの表記を返す。
+ */
+concptr your_alignment(player_type *creature_ptr, bool with_value)
+{
+    auto s = alignment_label(creature_ptr);
+    if (with_value || show_actual_value)
+        return format(_("%s(%ld)", "%s (%ld)"), s, static_cast<long>(creature_ptr->align));
+
+    return s;
 }
 
 /*!
@@ -1715,7 +1730,7 @@ static s16b calc_num_blow(player_type *creature_ptr, int i)
  * * 性格きれものなら減算(-3)
  * * 性格ちからじまんとがまんづよいなら加算(+1)
  * * 性格チャージマンなら加算(+5)
- * * 装備品にTRC_LOW_MAGICがあるなら加算(軽い呪いなら+3/重い呪いなら+10)
+ * * 装備品にTRC_HARD_SPELLがあるなら加算(軽い呪いなら+3/重い呪いなら+10)
  */
 static s16b calc_to_magic_chance(player_type *creature_ptr)
 {
@@ -1737,7 +1752,7 @@ static s16b calc_to_magic_chance(player_type *creature_ptr)
         if (!o_ptr->k_idx)
             continue;
         object_flags(creature_ptr, o_ptr, flgs);
-        if (any_bits(o_ptr->curse_flags, TRC_LOW_MAGIC)) {
+        if (any_bits(o_ptr->curse_flags, TRC_HARD_SPELL)) {
             if (any_bits(o_ptr->curse_flags, TRC_HEAVY_CURSE)) {
                 chance += 10;
             } else {

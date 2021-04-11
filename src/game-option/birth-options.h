@@ -2,7 +2,6 @@
 
 #include "system/angband.h"
 
-extern bool manual_haggle; /* Manually haggle in stores */
 extern bool easy_band; /* Easy Mode (*) */
 extern bool smart_learn; /* Monsters learn from their mistakes (*) */
 extern bool smart_cheat; /* Monsters exploit players weaknesses (*) */

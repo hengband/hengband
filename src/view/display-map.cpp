@@ -80,10 +80,25 @@ static void image_random(TERM_COLOR *ap, SYMBOL_CODE *cp)
     }
 }
 
+/*!
+ * @brief マップに表示されるべき地形(壁)かどうかを判定する
+ * @param floor_ptr 階の情報への参照ポインタ
+ * @param f_ptr 地形の情報への参照ポインタ
+ * @param y グリッドy座標
+ * @param x グリッドx座標
+ * @return 表示されるべきならtrue、そうでないならfalse
+ * @details
+ * 周り全てが壁に囲まれている壁についてはオプション状態による。
+ * 1か所でも空きがあるか、壁ではない地形、金を含む地形、永久岩は表示。
+ */
 static bool is_revealed_wall(floor_type *floor_ptr, feature_type *f_ptr, POSITION y, POSITION x)
 {
-    if (view_hidden_walls)
-        return TRUE;
+    if (view_hidden_walls) {
+        if (view_unsafe_walls)
+            return TRUE;
+        if (none_bits(floor_ptr->grid_array[y][x].info, CAVE_UNSAFE))
+            return TRUE;
+    }
 
     if (!has_flag(f_ptr->flags, FF_WALL) || has_flag(f_ptr->flags, FF_HAS_GOLD))
         return TRUE;

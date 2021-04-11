@@ -840,33 +840,39 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
         WishResult res = WishResult::NOTHING;
         if (allow_ego && (wish_ego || e_ids.size() > 0)) {
             if (must || ok_ego) {
-                int max_roll = 1000;
-                int i = 0;
-                for (i = 0; i < max_roll; i++) {
+                if (e_ids.size() > 0) {
                     object_prep(caster_ptr, o_ptr, k_idx);
-                    (void)apply_magic(caster_ptr, o_ptr, k_ptr->level, (AM_GREAT | AM_NO_FIXED_ART));
+                    o_ptr->name2 = e_ids[0];
+                    apply_ego(caster_ptr, o_ptr, caster_ptr->current_floor_ptr->base_level);
+                } else {
+                    int max_roll = 1000;
+                    int i = 0;
+                    for (i = 0; i < max_roll; i++) {
+                        object_prep(caster_ptr, o_ptr, k_idx);
+                        (void)apply_magic(caster_ptr, o_ptr, k_ptr->level, (AM_GREAT | AM_NO_FIXED_ART));
 
-                    if (o_ptr->name1 || o_ptr->art_name)
-                        continue;
+                        if (o_ptr->name1 || o_ptr->art_name)
+                            continue;
 
-                    if (wish_ego)
-                        break;
-
-                    EGO_IDX e_idx = 0;
-                    for (auto e : e_ids) {
-                        if (o_ptr->name2 == e) {
-                            e_idx = e;
+                        if (wish_ego)
                             break;
+
+                        EGO_IDX e_idx = 0;
+                        for (auto e : e_ids) {
+                            if (o_ptr->name2 == e) {
+                                e_idx = e;
+                                break;
+                            }
                         }
+
+                        if (e_idx != 0)
+                            break;
                     }
 
-                    if (e_idx != 0)
-                        break;
-                }
-
-                if (i == max_roll) {
-                    msg_print(_("失敗！もう一度願ってみてください。", "Failed! Try again."));
-                    return WishResult::FAIL;
+                    if (i == max_roll) {
+                        msg_print(_("失敗！もう一度願ってみてください。", "Failed! Try again."));
+                        return WishResult::FAIL;
+                    }
                 }
             } else {
                 wishing_puff_of_smoke();

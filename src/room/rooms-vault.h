@@ -2,6 +2,7 @@
 
 #include "system/angband.h"
 #include <string>
+#include <vector>
 
 typedef struct vault_type {
     std::string name; /* Name (offset) */
@@ -13,7 +14,7 @@ typedef struct vault_type {
     POSITION wid{}; /* Vault width */
 } vault_type;
 
-extern vault_type *v_info;
+extern std::vector<vault_type> v_info;
 extern VAULT_IDX max_v_idx;
 
 typedef struct dun_data_type dun_data_type;

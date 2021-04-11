@@ -377,6 +377,66 @@ public:
     }
 
     /**
+     * @brief フラグ集合 *this と rhs が等値かどうかを調べる
+     *
+     * @param rhs 比較するフラグ集合
+     * @return bool すべてのフラグの状態が等しければtrue、そうでなければfalse
+     */
+    bool operator==(const FlagGroup<FlagType> &rhs) const noexcept
+    {
+        return bs_ == rhs.bs_;
+    }
+
+    /**
+     * @brief フラグ集合 *this と rhs が非等値かどうかを調べる
+     *
+     * @param rhs 比較するフラグ集合
+     * @return bool いずれかのフラグの状態が等しくなければtrue、そうでなければfalse
+     */
+    bool operator!=(const FlagGroup<FlagType> &rhs) const noexcept
+    {
+        return bs_ != rhs.bs_;
+    }
+
+    /**
+     * @brief フラグ集合 *this と rhs の論理積(AND)の複合演算を行う
+     *
+     * *this に対して、*this と rhs で共通してONのフラグをONのままにし、それ以外のフラグをOFFにする
+     *
+     * @param rhs 複合演算を行うフラグ集合
+     * @return FlagGroup<FlagType>& *thisを返す
+     */
+    FlagGroup<FlagType> &operator&=(const FlagGroup<FlagType> &rhs) noexcept
+    {
+        bs_ &= rhs.bs_;
+        return *this;
+    }
+
+    /**
+     * @brief フラグ集合 *this と rhs の論理和(OR)の複合演算を行う
+     *
+     * *this に対して、*this と rhs でどちらか一方でもONのフラグをONにし、それ以外のフラグをOFFにする
+     *
+     * @param rhs 複合演算を行うフラグ集合
+     * @return FlagGroup<FlagType>& *thisを返す
+     */
+    FlagGroup<FlagType> &operator|=(const FlagGroup<FlagType> &rhs) noexcept
+    {
+        bs_ |= rhs.bs_;
+        return *this;
+    }
+
+    template <typename OutputIter>
+    static void get_flags(const FlagGroup<FlagType>& flag_group, OutputIter start)
+    {
+        for (size_t i = 0; i < flag_group.size(); i++) {
+            if (flag_group.bs_.test(i)) {
+                *start++ = static_cast<FlagType>(i);
+            }
+        }
+    }
+
+    /**
      * @brief セーブファイルからフラグ集合を読み出す
      *
      * @param fg 読み出したフラグ集合を格納するFlagGroupインスタンスの参照
@@ -500,3 +560,35 @@ private:
     /** フラグ集合を保持するstd::bitsetのインスタンス */
     std::bitset<FLAG_TYPE_MAX> bs_;
 };
+
+/**
+ * @brief フラグ集合 lhs と rhs に対して論理積(AND)を取ったフラグ集合を生成する
+ *
+ * lhs と rhs で共通してONのフラグがON、それ以外のフラグがOFFのフラグ集合を生成する
+ *
+ * @tparam FlagType 扱うフラグ集合を定義したenum class型
+ * @param lhs フラグ集合1
+ * @param rhs フラグ集合2
+ * @return FlagGroup<FlagType> lhs と rhs の論理積を取ったフラグ集合
+ */
+template <typename FlagType>
+FlagGroup<FlagType> operator&(const FlagGroup<FlagType> &lhs, const FlagGroup<FlagType> &rhs) noexcept
+{
+    return FlagGroup<FlagType>(lhs) &= rhs;
+}
+
+/**
+ * @brief フラグ集合 lhs と rhs に対して論理和(OR)を取ったフラグ集合を生成する
+ *
+ * lhs と rhs でどちらか一方でもONのフラグがON、それ以外のフラグがOFFのフラグ集合を生成する
+ *
+ * @tparam FlagType 扱うフラグ集合を定義したenum class型
+ * @param lhs フラグ集合1
+ * @param rhs フラグ集合2
+ * @return FlagGroup<FlagType> lhs と rhs の論理積を取ったフラグ集合
+ */
+template <typename FlagType>
+FlagGroup<FlagType> operator|(const FlagGroup<FlagType> &lhs, const FlagGroup<FlagType> &rhs) noexcept
+{
+    return FlagGroup<FlagType>(lhs) |= rhs;
+}

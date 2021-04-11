@@ -81,6 +81,8 @@ const std::array<const option_type, MAX_OPTION_INFO> option_info = {{
 
     { &view_hidden_walls, FALSE, OPT_PAGE_MAPSCREEN, 1, 2, "view_hidden_walls", _("壁の中に囲まれた壁を表示する", "Map walls hidden in other walls") },
 
+    { &view_unsafe_walls, TRUE, OPT_PAGE_MAPSCREEN, 1, 1, "view_unsafe_walls", _("トラップ未感知の壁の中に囲まれた壁を表示する", "Map hidden walls not marked by detect traps") },
+
     { &view_reduce_view, FALSE, OPT_PAGE_MAPSCREEN, 1, 17, "view_reduce_view", _("街では視野を狭くする", "Reduce view-radius in town") },
 
     { &fresh_before, TRUE, OPT_PAGE_MAPSCREEN, 1, 23, "fresh_before", _("連続コマンド中に画面を再描画し続ける", "Flush output while in repeated command") },
@@ -132,7 +134,7 @@ const std::array<const option_type, MAX_OPTION_INFO> option_info = {{
 
     { &show_ammo_crit_ratio, FALSE, OPT_PAGE_TEXT, 2, 16, "show_ammo_crit_ratio", _("矢弾の会心発生率を表示する", "Show critical ratio of ammo") },
 
-    { &show_actual_value, FALSE, OPT_PAGE_TEXT, 2, 17, "show_actual_vaule", _("各技能値に実値を表示する", "Show actual value of skill") },
+    { &show_actual_value, FALSE, OPT_PAGE_TEXT, 2, 17, "show_actual_value", _("技能値等に実値を並記する", "Show actual values of skills or etc.") },
 
     /*** Game-Play ***/
     { &stack_force_notes, TRUE, OPT_PAGE_GAMEPLAY, 0, 8, "stack_force_notes", _("異なる銘のアイテムをまとめる", "Merge inscriptions when stacking") },
@@ -204,8 +206,6 @@ const std::array<const option_type, MAX_OPTION_INFO> option_info = {{
         _("トラップ感知範囲外に出る直前に警告する", "Alert when leaving trap detected area") },
 
     /*** Birth Options ***/
-    { &manual_haggle, FALSE, OPT_PAGE_BIRTH, 1, 0, "manual_haggle", _("店で値切り交渉をする", "Manually haggle in stores") },
-
     { &easy_band, FALSE, OPT_PAGE_BIRTH, 6, 31, "easy_band", _("初心者用簡単モード(*)", "Easy Mode (*)") },
 
     { &smart_learn, TRUE, OPT_PAGE_BIRTH, 1, 14, "smart_learn", _("モンスターは失敗を学習する(*)", "Monsters learn from their mistakes (*)") },
@@ -319,7 +319,11 @@ const option_type cheat_info[MAX_CHEAT_OPTIONS]
 
           { &cheat_turn, FALSE, 255, 0x81, 0x00, "cheat_turn", _("ゲームメッセージにターン表示を行う", "Put turn in game messages.") },
 
-          { &cheat_sight, FALSE, 255, 0x82, 0x00, "cheat_sight", _("「見る」コマンドを拡張する。", "Expand \"L\"ook command.") } };
+          { &cheat_sight, FALSE, 255, 0x82, 0x00, "cheat_sight", _("「見る」コマンドを拡張する。", "Expand \"L\"ook command.") },
+
+          { &cheat_immortal, FALSE, 255, 0x83, 0x00, "cheat_immortal", _("完全な不滅状態になる。", "Completely immortal.") } };
+
+
 
 /*!
  * 自動セーブオプションテーブル

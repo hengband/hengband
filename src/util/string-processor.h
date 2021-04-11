@@ -2,6 +2,10 @@
 
 #include "system/angband.h"
 
+#include <string>
+#include <string_view>
+#include <vector>
+
 #define MAX_MACRO_MOD 12
 #define MAX_MACRO_TRIG 200 /*!< 登録を許すマクロ（トリガー）の最大数 */
 
@@ -26,3 +30,8 @@ char *angband_strchr(concptr ptr, char ch);
 char *ltrim(char *p);
 char *rtrim(char *p);
 int strrncmp(const char *s1, const char *s2, int len);
+std::string str_trim(std::string_view str);
+std::string str_rtrim(std::string_view str);
+std::string str_ltrim(std::string_view str);
+std::vector<std::string> str_split(std::string_view str, char delim, bool trim = false);
+std::string str_erase(std::string str, std::string_view erase_chars);

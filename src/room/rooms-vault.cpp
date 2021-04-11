@@ -35,7 +35,7 @@
 /*
  * The vault generation arrays
  */
-vault_type *v_info;
+std::vector<vault_type> v_info;
 
 /*
  * Maximum number of vaults in v_info.txt

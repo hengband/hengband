@@ -133,19 +133,7 @@ ANGBAND MENU
 		MENUITEM "壁紙を使う(&B)", 440
 		MENUITEM "壁紙を選択(&O)...", 441
 		MENUITEM "画面をHTMLで保存(&H)...", 450
-		/*  MENUITEM "地図(&M)", 430 */
-		/*  MENUITEM SEPARATOR
-		MENUITEM "未使用", 410
-		MENUITEM "未使用", 411*/
 	}
-
-	/*
-	POPUP "ヘルプ(&H)"
-	{
-		MENUITEM "一般(&G)",      901
-		MENUITEM "スポイラー(&S)", 902
-	}
-	*/
 }
 
 ANGBAND ICON "angband.ico"

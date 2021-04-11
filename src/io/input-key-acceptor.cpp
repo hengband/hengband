@@ -1,5 +1,6 @@
 ﻿#include "io/input-key-acceptor.h"
 #include "cmd-io/macro-util.h"
+#include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "game-option/input-options.h"
 #include "game-option/map-screen-options.h"
@@ -39,6 +40,22 @@ static bool parse_macro = FALSE;
  * Strip all keypresses until a low ascii value is found.
  */
 static bool parse_under = FALSE;
+
+/*!
+ * @brief 全てのウィンドウの再描画を行う
+ * @return なし
+ * @details
+ * カーソル位置がずれるので戻す。
+ */
+static void all_term_fresh(int x, int y)
+{
+    p_ptr->window_flags |= PW_ALL;
+    handle_stuff(p_ptr);
+
+    term_activate(angband_term[0]);
+    term_gotoxy(x, y);
+    term_fresh();
+}
 
 /*
  * Cancel macro action on the queue
@@ -195,6 +212,8 @@ char inkey(void)
     }
 
     term_activate(angband_term[0]);
+    auto y = angband_term[0]->scr->cy;
+    auto x = angband_term[0]->scr->cx;
     char kk;
     while (!ch) {
         if (!inkey_base && inkey_scan && (0 != term_inkey(&kk, FALSE, FALSE))) {
@@ -203,9 +222,7 @@ char inkey(void)
 
         if (!done && (0 != term_inkey(&kk, FALSE, FALSE))) {
             start_term_fresh();
-            term_activate(old);
-            term_fresh();
-            term_activate(angband_term[0]);
+            all_term_fresh(x, y);
             current_world_ptr->character_saved = FALSE;
 
             signal_count = 0;
@@ -398,6 +415,10 @@ int inkey_special(bool numpad_cursor)
     return (int)((unsigned char)key);
 }
 
+/*!
+ * @brief 全てのウィンドウの描画を止める
+ * @return なし
+ */
 void stop_term_fresh(void)
 {
     for (int j = 0; j < 8; j++) {
@@ -406,6 +427,10 @@ void stop_term_fresh(void)
     }
 }
 
+/*!
+ * @brief 全てのウィンドウの描画を再開する
+ * @return なし
+ */
 void start_term_fresh(void)
 {
     for (int j = 0; j < 8; j++) {

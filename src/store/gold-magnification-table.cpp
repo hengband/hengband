@@ -1,4 +1,4 @@
-﻿#include "market/gold-magnification-table.h"
+﻿#include "store/gold-magnification-table.h"
 
 /*
  * Buying and selling adjustments for race combinations.

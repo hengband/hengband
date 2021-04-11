@@ -19,6 +19,7 @@
 #include "player-info/avatar.h"
 #include "player/player-status.h"
 #include "player/player-status-flags.h"
+#include "util/bit-flags-calculator.h"
 #include "spell/spells-diceroll.h"
 #include "status/bad-status-setter.h"
 #include "system/floor-type-definition.h"
@@ -342,11 +343,32 @@ process_result effect_monster_crusade(player_type *caster_ptr, effect_monster_ty
     return PROCESS_CONTINUE;
 }
 
-static bool effect_monster_capture_attemption(player_type *caster_ptr, effect_monster_type *em_ptr, int capturable_hp)
+/*!
+ * @brief モンスターボールで捕まえられる最大HPを計算する
+ * @param caster_ptr プレイヤー情報への参照ポインタ
+ * @param m_ptr モンスター情報への参照ポインタ
+ * @param hp 計算対象のHP
+ * @return 捕まえられる最大HP
+ */
+static HIT_POINT calcutate_capturable_hp(player_type *caster_ptr, monster_type *m_ptr, HIT_POINT hp)
 {
-    if (em_ptr->m_ptr->hp >= randint0(capturable_hp))
-        return FALSE;
+    if (is_pet(m_ptr))
+        return hp * 4L;
 
+    if ((caster_ptr->pclass == CLASS_BEASTMASTER) && monster_living(m_ptr->r_idx))
+        return hp * 3 / 10;
+
+    return hp * 3 / 20;
+}
+
+/*!
+ * @brief モンスターボールで捕らえた処理
+ * @param caster_ptr プレイヤー情報への参照ポインタ
+ * @param em_ptr 効果情報への参照ポインタ
+ * @return なし
+ */
+static void effect_monster_captured(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
     if (em_ptr->m_ptr->mflag2.has(MFLAG2::CHAMELEON))
         choose_new_monster(caster_ptr, em_ptr->g_ptr->m_idx, FALSE, MON_CHAMELEON);
 
@@ -361,36 +383,39 @@ static bool effect_monster_capture_attemption(player_type *caster_ptr, effect_mo
 
     delete_monster_idx(caster_ptr, em_ptr->g_ptr->m_idx);
     calculate_upkeep(caster_ptr);
-    return TRUE;
 }
 
+/*!
+ * @brief モンスターボールで捕らえる効果(GF_CAPTURE)
+ * @param caster_ptr プレイヤー情報への参照ポインタ
+ * @param em_ptr 効果情報への参照ポインタ
+ * @return 効果発動結果
+ */
 process_result effect_monster_capture(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     floor_type *floor_ptr = caster_ptr->current_floor_ptr;
-    int capturable_hp;
     if ((floor_ptr->inside_quest && (quest[floor_ptr->inside_quest].type == QUEST_TYPE_KILL_ALL) && !is_pet(em_ptr->m_ptr))
-        || (em_ptr->r_ptr->flags1 & (RF1_UNIQUE)) || (em_ptr->r_ptr->flags7 & (RF7_NAZGUL)) || (em_ptr->r_ptr->flags7 & (RF7_UNIQUE2))
-        || (em_ptr->r_ptr->flags1 & RF1_QUESTOR) || em_ptr->m_ptr->parent_m_idx) {
+        || any_bits(em_ptr->r_ptr->flags1, RF1_UNIQUE | RF1_QUESTOR) || any_bits(em_ptr->r_ptr->flags7, RF7_NAZGUL | RF7_UNIQUE2)
+        || em_ptr->m_ptr->parent_m_idx) {
         msg_format(_("%sには効果がなかった。", "%s is unaffected."), em_ptr->m_name);
         em_ptr->skipped = TRUE;
         return PROCESS_CONTINUE;
     }
 
-    if (is_pet(em_ptr->m_ptr))
-        capturable_hp = em_ptr->m_ptr->maxhp * 4L;
-    else if ((caster_ptr->pclass == CLASS_BEASTMASTER) && monster_living(em_ptr->m_ptr->r_idx))
-        capturable_hp = em_ptr->m_ptr->maxhp * 3 / 10;
-    else
-        capturable_hp = em_ptr->m_ptr->maxhp * 3 / 20;
+    auto r_max_hp = em_ptr->r_ptr->hdice * em_ptr->r_ptr->hside;
+    auto threshold_hp = calcutate_capturable_hp(caster_ptr, em_ptr->m_ptr, r_max_hp);
+    auto capturable_hp = MAX(2, calcutate_capturable_hp(caster_ptr, em_ptr->m_ptr, em_ptr->m_ptr->max_maxhp));
 
-    if (em_ptr->m_ptr->hp >= capturable_hp) {
+    if (threshold_hp < 2 || em_ptr->m_ptr->hp >= capturable_hp) {
         msg_format(_("もっと弱らせないと。", "You need to weaken %s more."), em_ptr->m_name);
         em_ptr->skipped = TRUE;
         return PROCESS_CONTINUE;
     }
 
-    if (effect_monster_capture_attemption(caster_ptr, em_ptr, capturable_hp))
+    if (em_ptr->m_ptr->hp <= randint1(capturable_hp)) {
+        effect_monster_captured(caster_ptr, em_ptr);
         return PROCESS_TRUE;
+    }
 
     msg_format(_("うまく捕まえられなかった。", "You failed to capture %s."), em_ptr->m_name);
     em_ptr->skipped = TRUE;

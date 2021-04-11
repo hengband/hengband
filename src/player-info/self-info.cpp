@@ -92,7 +92,7 @@ static void set_curse_info(player_type *creature_ptr, self_info_type *self_ptr)
     if (creature_ptr->cursed & TRC_LOW_AC)
         self_ptr->info[self_ptr->line++] = _("あなたは攻撃を受けやすい。", "You are subject to be hit.");
 
-    if (creature_ptr->cursed & TRC_LOW_MAGIC)
+    if (creature_ptr->cursed & TRC_HARD_SPELL)
         self_ptr->info[self_ptr->line++] = _("あなたは魔法を失敗しやすい。", "Your spells fail more frequently.");
 
     if (creature_ptr->cursed & TRC_FAST_DIGEST)

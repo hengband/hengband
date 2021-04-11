@@ -12,7 +12,7 @@
 /*
  * The object kind arrays
  */
-object_kind *k_info;
+std::vector<object_kind> k_info;
 
 /*
  * Maximum number of items in k_info.txt

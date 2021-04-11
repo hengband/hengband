@@ -65,6 +65,9 @@ enum player_hand { PLAYER_HAND_MAIN = 0x0000, PLAYER_HAND_SUB = 0x0001, PLAYER_H
 
 typedef struct floor_type floor_type;
 typedef struct object_type object_type;
+
+enum class RF_ABILITY;
+
 typedef struct player_type {
     int player_uid{};
     int player_euid{};
@@ -80,6 +83,7 @@ typedef struct player_type {
     player_personality_type pseikaku{}; /* Seikaku index */
     REALM_IDX realm1{}; /* First magic realm */
     REALM_IDX realm2{}; /* Second magic realm */
+    REALM_IDX element{}; //!< 元素使い領域番号 / Elementalist system index
     player_personality_type oops{}; /* Unused */
 
     DICE_SID hitdie{}; /* Hit dice (sides) */
@@ -235,7 +239,7 @@ typedef struct player_type {
     MAGIC_NUM1 magic_num1[MAX_SPELLS]{}; /*!< Array for non-spellbook type magic */
     MAGIC_NUM2 magic_num2[MAX_SPELLS]{}; /*!< 魔道具術師の取り込み済魔道具使用回数 / Flags for non-spellbook type magics */
 
-    SPELL_IDX mane_spell[MAX_MANE]{};
+    RF_ABILITY mane_spell[MAX_MANE]{};
     HIT_POINT mane_dam[MAX_MANE]{};
     s16b mane_num{};
     bool new_mane{};
@@ -468,7 +472,7 @@ typedef struct player_type {
 
 extern player_type *p_ptr;
 
-extern concptr your_alignment(player_type *creature_ptr);
+extern concptr your_alignment(player_type *creature_ptr, bool with_value = false);
 extern int weapon_exp_level(int weapon_exp);
 extern int riding_exp_level(int riding_exp);
 extern int spell_exp_level(int spell_exp);

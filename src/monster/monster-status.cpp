@@ -26,12 +26,11 @@
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags-ability2.h"
+#include "monster-race/race-ability-mask.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
-#include "monster-race/race-flags4.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-flags8.h"
 #include "monster-race/race-indice-types.h"
@@ -43,7 +42,6 @@
 #include "monster/monster-status-setter.h" //!< @todo 相互依存. 後で何とかする.
 #include "monster/monster-update.h"
 #include "monster/smart-learn-types.h"
-#include "mspell/mspell-mask-definitions.h"
 #include "object-enchant/object-curse.h"
 #include "player-info/avatar.h"
 #include "player/player-personalities-types.h"
@@ -887,8 +885,9 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
             chg_virtue(target_ptr, V_JUSTICE, -1);
         }
 
-        if ((r_ptr->flags3 & RF3_ANIMAL) && !(r_ptr->flags3 & RF3_EVIL) && !(r_ptr->flags4 & ~(RF4_NOMAGIC_MASK))
-            && !(r_ptr->a_ability_flags1 & ~(RF5_NOMAGIC_MASK)) && !(r_ptr->a_ability_flags2 & ~(RF6_NOMAGIC_MASK))) {
+        auto magic_ability_flags = r_ptr->ability_flags;
+        magic_ability_flags.reset(RF_ABILITY_NOMAGIC_MASK);
+        if ((r_ptr->flags3 & RF3_ANIMAL) && !(r_ptr->flags3 & RF3_EVIL) && magic_ability_flags.none()) {
             if (one_in_(4))
                 chg_virtue(target_ptr, V_NATURE, -1);
         }

@@ -5,6 +5,7 @@
 #include "player/player-race.h"
 #include "player/player-status-table.h"
 #include "term/screen-processor.h"
+#include <string>
 
 void display_life_rating(player_type *creature_ptr, self_info_type *self_ptr)
 {
@@ -32,7 +33,8 @@ void display_max_base_status(player_type *creature_ptr, self_info_type *self_ptr
 void display_virtue(player_type *creature_ptr, self_info_type *self_ptr)
 {
     self_ptr->info[self_ptr->line++] = "";
-    sprintf(self_ptr->plev_buf, _("現在の属性 : %s(%ld)", "Your alignment : %s(%ld)"), your_alignment(creature_ptr), (long int)creature_ptr->align);
+    std::string alg = your_alignment(creature_ptr, true);
+    sprintf(self_ptr->plev_buf, _("現在の属性 : %s", "Your alignment : %s"), alg.c_str());
     strcpy(self_ptr->buf[1], self_ptr->plev_buf);
     self_ptr->info[self_ptr->line++] = self_ptr->buf[1];
     for (int v_nr = 0; v_nr < 8; v_nr++) {

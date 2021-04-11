@@ -150,7 +150,7 @@ static void init_random_seed(player_type *player_ptr, bool new_game)
         init_saved_floors(player_ptr, TRUE);
 
     if (!new_game)
-        process_player_name(player_ptr, FALSE);
+        process_player_name(player_ptr);
 
     if (init_random_seed)
         Rand_state_init();
@@ -425,7 +425,7 @@ void play_game(player_type *player_ptr, bool new_game, bool browsing_movie)
         player_outfit(player_ptr);
 
     init_io(player_ptr);
-    if (player_ptr->chp < 0)
+    if (player_ptr->chp < 0 && !cheat_immortal)
         player_ptr->is_dead = TRUE;
 
     if (player_ptr->prace == RACE_ANDROID)

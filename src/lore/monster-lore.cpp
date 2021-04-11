@@ -10,11 +10,9 @@
 #include "lore/lore-util.h"
 #include "lore/magic-types-setter.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags-ability2.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
-#include "monster-race/race-flags4.h"
 #include "monster-race/race-indice-types.h"
 #include "term/term-color-types.h"
 #include "view/display-lore-attacks.h"
@@ -163,13 +161,13 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, monster_lo
 
     display_monster_collective(lore_ptr);
     lore_ptr->vn = 0;
-    if (lore_ptr->flags4 & RF4_SHRIEK) {
+    if (lore_ptr->ability_flags.has(RF_ABILITY::SHRIEK)) {
         lore_ptr->vp[lore_ptr->vn] = _("悲鳴で助けを求める", "shriek for help");
         lore_ptr->color[lore_ptr->vn++] = TERM_L_WHITE;
     }
 
     display_monster_launching(player_ptr, lore_ptr);
-    if (lore_ptr->a_ability_flags2 & (RF6_SPECIAL)) {
+    if (lore_ptr->ability_flags.has(RF_ABILITY::SPECIAL)) {
         lore_ptr->vp[lore_ptr->vn] = _("特別な行動をする", "do something");
         lore_ptr->color[lore_ptr->vn++] = TERM_VIOLET;
     }

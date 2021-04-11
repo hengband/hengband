@@ -146,8 +146,6 @@ void set_drop_flags(lore_type *lore_ptr)
     lore_ptr->flags1 = lore_ptr->r_ptr->flags1;
     lore_ptr->flags2 = lore_ptr->r_ptr->flags2;
     lore_ptr->flags3 = lore_ptr->r_ptr->flags3;
-    lore_ptr->flags4 = lore_ptr->r_ptr->flags4;
-    lore_ptr->a_ability_flags1 = lore_ptr->r_ptr->a_ability_flags1;
-    lore_ptr->a_ability_flags2 = lore_ptr->r_ptr->a_ability_flags2;
+    lore_ptr->ability_flags = lore_ptr->r_ptr->ability_flags;
     lore_ptr->flagsr = lore_ptr->r_ptr->flagsr;
 }

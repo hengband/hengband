@@ -12,15 +12,12 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags-ability1.h"
-#include "monster-race/race-flags-ability2.h"
+#include "monster-race/race-ability-mask.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
-#include "monster-race/race-flags4.h"
 #include "monster-race/race-flags7.h"
 #include "mspell/mspell-attack-util.h"
 #include "mspell/mspell-judgement.h"
-#include "mspell/mspell-mask-definitions.h"
 #include "spell/range-calc.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
@@ -72,7 +69,7 @@ bool adjacent_grid_check(player_type *target_ptr, monster_type *m_ptr, POSITION 
 
 void decide_lite_range(player_type *target_ptr, msa_type *msa_ptr)
 {
-    if ((msa_ptr->f4 & RF4_BR_LITE) == 0)
+    if (msa_ptr->ability_flags.has_not(RF_ABILITY::BR_LITE))
         return;
 
     msa_ptr->y_br_lite = msa_ptr->y;
@@ -80,11 +77,11 @@ void decide_lite_range(player_type *target_ptr, msa_type *msa_ptr)
     if (los(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y_br_lite, msa_ptr->x_br_lite)) {
         feature_type *f_ptr = &f_info[target_ptr->current_floor_ptr->grid_array[msa_ptr->y_br_lite][msa_ptr->x_br_lite].feat];
         if (!has_flag(f_ptr->flags, FF_LOS) && has_flag(f_ptr->flags, FF_PROJECT) && one_in_(2))
-            msa_ptr->f4 &= ~(RF4_BR_LITE);
+            msa_ptr->ability_flags.reset(RF_ABILITY::BR_LITE);
     } else if (!adjacent_grid_check(target_ptr, msa_ptr->m_ptr, &msa_ptr->y_br_lite, &msa_ptr->x_br_lite, FF_LOS, los))
-        msa_ptr->f4 &= ~(RF4_BR_LITE);
+        msa_ptr->ability_flags.reset(RF_ABILITY::BR_LITE);
 
-    if ((msa_ptr->f4 & RF4_BR_LITE) != 0)
+    if (msa_ptr->ability_flags.has(RF_ABILITY::BR_LITE))
         return;
 
     msa_ptr->y_br_lite = 0;
@@ -97,18 +94,18 @@ static void feature_projection(floor_type *floor_ptr, msa_type *msa_ptr)
     if (has_flag(f_ptr->flags, FF_PROJECT))
         return;
 
-    if ((msa_ptr->f4 & RF4_BR_DISI) && has_flag(f_ptr->flags, FF_HURT_DISI) && one_in_(2)) {
+    if (msa_ptr->ability_flags.has(RF_ABILITY::BR_DISI) && has_flag(f_ptr->flags, FF_HURT_DISI) && one_in_(2)) {
         msa_ptr->do_spell = DO_SPELL_BR_DISI;
         return;
     }
 
-    if ((msa_ptr->f4 & RF4_BR_LITE) && has_flag(f_ptr->flags, FF_LOS) && one_in_(2))
+    if (msa_ptr->ability_flags.has(RF_ABILITY::BR_LITE) && has_flag(f_ptr->flags, FF_LOS) && one_in_(2))
         msa_ptr->do_spell = DO_SPELL_BR_LITE;
 }
 
 static void check_lite_area_by_mspell(player_type *target_ptr, msa_type *msa_ptr)
 {
-    if ((msa_ptr->f4 & RF4_BR_DISI) && (msa_ptr->m_ptr->cdis < get_max_range(target_ptr) / 2)
+    if (msa_ptr->ability_flags.has(RF_ABILITY::BR_DISI) && (msa_ptr->m_ptr->cdis < get_max_range(target_ptr) / 2)
         && in_disintegration_range(target_ptr->current_floor_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x)
         && (one_in_(10) || (projectable(target_ptr, msa_ptr->y, msa_ptr->x, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx) && one_in_(2)))) {
         msa_ptr->do_spell = DO_SPELL_BR_DISI;
@@ -116,14 +113,14 @@ static void check_lite_area_by_mspell(player_type *target_ptr, msa_type *msa_ptr
         return;
     }
 
-    if ((msa_ptr->f4 & RF4_BR_LITE) && (msa_ptr->m_ptr->cdis < get_max_range(target_ptr) / 2)
+    if (msa_ptr->ability_flags.has(RF_ABILITY::BR_LITE) && (msa_ptr->m_ptr->cdis < get_max_range(target_ptr) / 2)
         && los(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x) && one_in_(5)) {
         msa_ptr->do_spell = DO_SPELL_BR_LITE;
         msa_ptr->success = TRUE;
         return;
     }
 
-    if (((msa_ptr->f5 & RF5_BA_LITE) == 0) || (msa_ptr->m_ptr->cdis > get_max_range(target_ptr)))
+    if (msa_ptr->ability_flags.has_not(RF_ABILITY::BA_LITE) || (msa_ptr->m_ptr->cdis > get_max_range(target_ptr)))
         return;
 
     POSITION by = msa_ptr->y, bx = msa_ptr->x;
@@ -142,9 +139,7 @@ static void decide_lite_breath(player_type *target_ptr, msa_type *msa_ptr)
     if (msa_ptr->m_ptr->target_y && msa_ptr->m_ptr->target_x) {
         msa_ptr->y = msa_ptr->m_ptr->target_y;
         msa_ptr->x = msa_ptr->m_ptr->target_x;
-        msa_ptr->f4 &= RF4_INDIRECT_MASK;
-        msa_ptr->f5 &= RF5_INDIRECT_MASK;
-        msa_ptr->f6 &= RF6_INDIRECT_MASK;
+        msa_ptr->ability_flags &= RF_ABILITY_INDIRECT_MASK;
         msa_ptr->success = TRUE;
     }
 
@@ -152,7 +147,7 @@ static void decide_lite_breath(player_type *target_ptr, msa_type *msa_ptr)
         return;
 
     if (msa_ptr->success) {
-        msa_ptr->f4 |= RF4_BR_LITE;
+        msa_ptr->ability_flags.set(RF_ABILITY::BR_LITE);
         return;
     }
 
@@ -180,7 +175,7 @@ bool decide_lite_projection(player_type *target_ptr, msa_type *msa_ptr)
 
 void decide_lite_area(player_type *target_ptr, msa_type *msa_ptr)
 {
-    if ((msa_ptr->f6 & RF6_DARKNESS) == 0)
+    if (msa_ptr->ability_flags.has_not(RF_ABILITY::DARKNESS))
         return;
 
     bool can_use_lite_area = (target_ptr->pclass == CLASS_NINJA) && ((msa_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) == 0)
@@ -190,10 +185,10 @@ void decide_lite_area(player_type *target_ptr, msa_type *msa_ptr)
         return;
 
     if (d_info[target_ptr->dungeon_idx].flags1 & DF1_DARKNESS) {
-        msa_ptr->f6 &= ~(RF6_DARKNESS);
+        msa_ptr->ability_flags.reset(RF_ABILITY::DARKNESS);
         return;
     }
 
     if ((target_ptr->pclass == CLASS_NINJA) && !can_use_lite_area)
-        msa_ptr->f6 &= ~(RF6_DARKNESS);
+        msa_ptr->ability_flags.reset(RF_ABILITY::DARKNESS);
 }

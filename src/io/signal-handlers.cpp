@@ -11,6 +11,7 @@
 #include "floor/floor-events.h"
 #include "io/write-diary.h"
 #include "monster-floor/monster-lite.h"
+#include "game-option/cheat-options.h"
 #include "save/save.h"
 #include "system/system-variables.h"
 #include "term/term-color-types.h"
@@ -78,7 +79,8 @@ static void handle_signal_simple(int sig)
         forget_view(p_ptr->current_floor_ptr);
         clear_mon_lite(p_ptr->current_floor_ptr);
         p_ptr->playing = FALSE;
-        p_ptr->is_dead = TRUE;
+        if (!cheat_immortal)
+            p_ptr->is_dead = TRUE;
         p_ptr->leaving = TRUE;
         close_game(p_ptr);
         quit(_("強制終了", "interrupt"));

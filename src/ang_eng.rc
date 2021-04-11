@@ -133,14 +133,6 @@ ANGBAND MENU
 		MENUITEM "Choose BG pict", 441
 		MENUITEM "&HTML dump", 450
 	}
-
-/*
-	POPUP "&Help"
-	{
-		MENUITEM "&Contents", 901
-		MENUITEM "&Spoilers", 902
-	}
-*/
 }
 
 ANGBAND ICON "angband.ico"

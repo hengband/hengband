@@ -14,7 +14,6 @@
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
-#include "monster-race/race-flags4.h"
 #include "monster-race/race-flags7.h"
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
@@ -85,28 +84,20 @@ static concptr pit_subtype_string(int type, bool nest)
         sprintf(inner_buf, "(%c)", vault_aux_char);
         break;
     case PIT_TYPE_DRAGON:
-        switch (vault_aux_dragon_mask4) {
-        case RF4_BR_ACID:
-            strcpy(inner_buf, _("(酸)", "(acid)"));
-            break;
-        case RF4_BR_ELEC:
-            strcpy(inner_buf, _("(稲妻)", "(lightning)"));
-            break;
-        case RF4_BR_FIRE:
-            strcpy(inner_buf, _("(火炎)", "(fire)"));
-            break;
-        case RF4_BR_COLD:
-            strcpy(inner_buf, _("(冷気)", "(frost)"));
-            break;
-        case RF4_BR_POIS:
-            strcpy(inner_buf, _("(毒)", "(poison)"));
-            break;
-        case (RF4_BR_ACID | RF4_BR_ELEC | RF4_BR_FIRE | RF4_BR_COLD | RF4_BR_POIS):
+        if (vault_aux_dragon_mask4.has_all_of({ RF_ABILITY::BR_ACID, RF_ABILITY::BR_ELEC, RF_ABILITY::BR_FIRE, RF_ABILITY::BR_COLD, RF_ABILITY::BR_POIS })) {
             strcpy(inner_buf, _("(万色)", "(multi-hued)"));
-            break;
-        default:
+        } else if (vault_aux_dragon_mask4.has(RF_ABILITY::BR_ACID)) {
+            strcpy(inner_buf, _("(酸)", "(acid)"));
+        }else if (vault_aux_dragon_mask4.has(RF_ABILITY::BR_ELEC)) {
+            strcpy(inner_buf, _("(稲妻)", "(lightning)"));
+        }else if (vault_aux_dragon_mask4.has(RF_ABILITY::BR_FIRE)) {
+            strcpy(inner_buf, _("(火炎)", "(fire)"));
+        }else if (vault_aux_dragon_mask4.has(RF_ABILITY::BR_COLD)) {
+            strcpy(inner_buf, _("(冷気)", "(frost)"));
+        }else if (vault_aux_dragon_mask4.has(RF_ABILITY::BR_POIS)) {
+            strcpy(inner_buf, _("(毒)", "(poison)"));
+        } else {
             strcpy(inner_buf, _("(未定義)", "(undefined)"));
-            break;
         }
         break;
     }

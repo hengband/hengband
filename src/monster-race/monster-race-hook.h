@@ -4,7 +4,7 @@
 
 extern int vault_aux_race;
 extern char vault_aux_char;
-extern BIT_FLAGS vault_aux_dragon_mask4;
+extern FlagGroup<RF_ABILITY> vault_aux_dragon_mask4;
 
 bool mon_hook_quest(player_type *player_ptr, MONRACE_IDX r_idx);
 bool mon_hook_dungeon(player_type *player_ptr, MONRACE_IDX r_idx);

@@ -8,7 +8,6 @@
 #include "mspell/mspell-selector.h"
 #include "floor/geometry.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags-ability2.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-status.h"
@@ -19,31 +18,47 @@
 #include "world/world.h"
 
 /*!
- * @brief ID値が正しいモンスター魔法IDかどうかを返す /
+ * @brief 指定したID値が指定した範囲内のIDかどうかを返す
+ *
+ * enum値に対して範囲で判定するのはあまり好ましくないが、歴史的経緯により仕方がない
+ *
+ * @param spell 判定対象のID
+ * @param start 範囲の開始ID
+ * @param end 範囲の終了ID(このIDも含む)
+ * @return IDが start <= spell <= end なら true、そうでなければ false
+ */
+static bool spell_in_between(RF_ABILITY spell, RF_ABILITY start, RF_ABILITY end)
+{
+    auto spell_int = static_cast<int>(spell);
+    return static_cast<int>(start) <= spell_int && spell_int <= static_cast<int>(end);
+}
+
+/*!
+ * @brief ID値が攻撃魔法のIDかどうかを返す /
  * Return TRUE if a spell is good for hurting the player (directly).
  * @param spell 判定対象のID
  * @return 正しいIDならばTRUEを返す。
  */
-static bool spell_attack(byte spell)
+static bool spell_attack(RF_ABILITY spell)
 {
     /* All RF4 spells hurt (except for shriek and dispel) */
-    if (spell < 128 && spell > 98)
+    if (spell_in_between(spell, RF_ABILITY::ROCKET, RF_ABILITY::BR_DISI))
         return TRUE;
 
     /* Various "ball" spells */
-    if (spell >= 128 && spell <= 128 + 8)
+    if (spell_in_between(spell, RF_ABILITY::BA_ACID, RF_ABILITY::BA_DARK))
         return TRUE;
 
     /* "Cause wounds" and "bolt" spells */
-    if (spell >= 128 + 12 && spell < 128 + 27)
+    if (spell_in_between(spell, RF_ABILITY::CAUSE_1, RF_ABILITY::MISSILE))
         return TRUE;
 
     /* Hand of Doom */
-    if (spell == 160 + 1)
+    if (spell == RF_ABILITY::HAND_DOOM)
         return TRUE;
 
     /* Psycho-Spear */
-    if (spell == 160 + 11)
+    if (spell == RF_ABILITY::PSY_SPEAR)
         return TRUE;
 
     /* Doesn't hurt */
@@ -56,14 +71,14 @@ static bool spell_attack(byte spell)
  * @param spell 判定対象のID
  * @return 適した魔法のIDならばTRUEを返す。
  */
-static bool spell_escape(byte spell)
+static bool spell_escape(RF_ABILITY spell)
 {
     /* Blink or Teleport */
-    if (spell == 160 + 4 || spell == 160 + 5)
+    if (spell == RF_ABILITY::BLINK || spell == RF_ABILITY::TPORT)
         return TRUE;
 
     /* Teleport the player away */
-    if (spell == 160 + 9 || spell == 160 + 10)
+    if (spell == RF_ABILITY::TELE_AWAY || spell == RF_ABILITY::TELE_LEVEL)
         return TRUE;
 
     /* Isn't good for escaping */
@@ -76,30 +91,30 @@ static bool spell_escape(byte spell)
  * @param spell 判定対象のID
  * @return 適した魔法のIDならばTRUEを返す。
  */
-static bool spell_annoy(byte spell)
+static bool spell_annoy(RF_ABILITY spell)
 {
     /* Shriek */
-    if (spell == 96 + 0)
+    if (spell == RF_ABILITY::SHRIEK)
         return TRUE;
 
     /* Brain smash, et al (added curses) */
-    if (spell >= 128 + 9 && spell <= 128 + 14)
+    if (spell_in_between(spell, RF_ABILITY::DRAIN_MANA, RF_ABILITY::CAUSE_4))
         return TRUE;
 
     /* Scare, confuse, blind, slow, paralyze */
-    if (spell >= 128 + 27 && spell <= 128 + 31)
+    if (spell_in_between(spell, RF_ABILITY::SCARE, RF_ABILITY::HOLD))
         return TRUE;
 
     /* Teleport to */
-    if (spell == 160 + 8)
+    if (spell == RF_ABILITY::TELE_TO)
         return TRUE;
 
     /* Teleport level */
-    if (spell == 160 + 10)
+    if (spell == RF_ABILITY::TELE_LEVEL)
         return TRUE;
 
     /* Darkness, make traps, cause amnesia */
-    if (spell >= 160 + 12 && spell <= 160 + 14)
+    if (spell_in_between(spell, RF_ABILITY::TRAPS, RF_ABILITY::RAISE_DEAD))
         return TRUE;
 
     /* Doesn't annoy */
@@ -112,7 +127,10 @@ static bool spell_annoy(byte spell)
  * @param spell 判定対象のID
  * @return 召喚型魔法のIDならばTRUEを返す。
  */
-static bool spell_summon(byte spell) { return spell >= 160 + 16; }
+static bool spell_summon(RF_ABILITY spell)
+{
+    return spell_in_between(spell, RF_ABILITY::S_KIN, RF_ABILITY::S_UNIQUE);
+}
 
 /*!
  * @brief ID値が死者復活処理かどうかを返す /
@@ -120,7 +138,10 @@ static bool spell_summon(byte spell) { return spell >= 160 + 16; }
  * @param spell 判定対象のID
  * @return 死者復活の処理ならばTRUEを返す。
  */
-static bool spell_raise(byte spell) { return spell == 160 + 15; }
+static bool spell_raise(RF_ABILITY spell)
+{
+    return spell == RF_ABILITY::RAISE_DEAD;
+}
 
 /*!
  * @brief ID値が戦術的なモンスター魔法IDかどうかを返す /
@@ -128,7 +149,10 @@ static bool spell_raise(byte spell) { return spell == 160 + 15; }
  * @param spell 判定対象のID
  * @return 戦術的な魔法のIDならばTRUEを返す。
  */
-static bool spell_tactic(byte spell) { return spell == 160 + 4; }
+static bool spell_tactic(RF_ABILITY spell)
+{
+    return spell == RF_ABILITY::BLINK;
+}
 
 /*!
  * @brief ID値が無敵化するモンスター魔法IDかどうかを返す /
@@ -136,7 +160,10 @@ static bool spell_tactic(byte spell) { return spell == 160 + 4; }
  * @param spell 判定対象のID
  * @return 召喚型魔法のIDならばTRUEを返す。
  */
-static bool spell_invulner(byte spell) { return spell == 160 + 3; }
+static bool spell_invulner(RF_ABILITY spell)
+{
+    return spell == RF_ABILITY::INVULNER;
+}
 
 /*!
  * @brief ID値が加速するモンスター魔法IDかどうかを返す /
@@ -144,7 +171,10 @@ static bool spell_invulner(byte spell) { return spell == 160 + 3; }
  * @param spell 判定対象のID
  * @return 召喚型魔法のIDならばTRUEを返す。
  */
-static bool spell_haste(byte spell) { return spell == 160 + 0; }
+static bool spell_haste(RF_ABILITY spell)
+{
+    return spell == RF_ABILITY::HASTE;
+}
 
 /*!
  * @brief ID値が時間停止を行うモンスター魔法IDかどうかを返す /
@@ -152,7 +182,10 @@ static bool spell_haste(byte spell) { return spell == 160 + 0; }
  * @param spell 判定対象のID
  * @return 時間停止魔法のIDならばTRUEを返す。
  */
-static bool spell_world(byte spell) { return spell == 160 + 6; }
+static bool spell_world(RF_ABILITY spell)
+{
+    return spell == RF_ABILITY::WORLD;
+}
 
 /*!
  * @brief ID値が特別効果のモンスター魔法IDかどうかを返す /
@@ -161,12 +194,12 @@ static bool spell_world(byte spell) { return spell == 160 + 6; }
  * @param spell 判定対象のID
  * @return 特別効果魔法のIDならばTRUEを返す。
  */
-static bool spell_special(player_type *target_ptr, byte spell)
+static bool spell_special(player_type *target_ptr, RF_ABILITY spell)
 {
     if (target_ptr->phase_out)
         return FALSE;
 
-    return spell == 160 + 7;
+    return spell == RF_ABILITY::SPECIAL;
 }
 
 /*!
@@ -175,7 +208,10 @@ static bool spell_special(player_type *target_ptr, byte spell)
  * @param spell 判定対象のID
  * @return 光の剣のIDならばTRUEを返す。
  */
-static bool spell_psy_spe(byte spell) { return spell == 160 + 11; }
+static bool spell_psy_spe(RF_ABILITY spell)
+{
+    return spell == RF_ABILITY::PSY_SPEAR;
+}
 
 /*!
  * @brief ID値が治癒魔法かどうかを返す /
@@ -183,7 +219,10 @@ static bool spell_psy_spe(byte spell) { return spell == 160 + 11; }
  * @param spell 判定対象のID
  * @return 治癒魔法のIDならばTRUEを返す。
  */
-static bool spell_heal(byte spell) { return spell == 160 + 2; }
+static bool spell_heal(RF_ABILITY spell)
+{
+    return spell == RF_ABILITY::HEAL;
+}
 
 /*!
  * @brief ID値が魔力消去かどうかを返す /
@@ -191,7 +230,10 @@ static bool spell_heal(byte spell) { return spell == 160 + 2; }
  * @param spell 判定対象のID
  * @return 魔力消去のIDならばTRUEを返す。
  */
-static bool spell_dispel(byte spell) { return spell == 96 + 2; }
+static bool spell_dispel(RF_ABILITY spell)
+{
+    return spell == RF_ABILITY::DISPEL;
+}
 
 /*!
  * @brief モンスターの魔法選択ルーチン
@@ -214,72 +256,72 @@ static bool spell_dispel(byte spell) { return spell == 96 + 2; }
  * This function may well be an efficiency bottleneck.\n
  * @todo 長過ぎる。切り分けが必要
  */
-int choose_attack_spell(player_type *target_ptr, msa_type *msa_ptr)
+RF_ABILITY choose_attack_spell(player_type *target_ptr, msa_type *msa_ptr)
 {
-    byte escape[96], escape_num = 0;
-    byte attack[96], attack_num = 0;
-    byte summon[96], summon_num = 0;
-    byte tactic[96], tactic_num = 0;
-    byte annoy[96], annoy_num = 0;
-    byte invul[96], invul_num = 0;
-    byte haste[96], haste_num = 0;
-    byte world[96], world_num = 0;
-    byte special[96], special_num = 0;
-    byte psy_spe[96], psy_spe_num = 0;
-    byte raise[96], raise_num = 0;
-    byte heal[96], heal_num = 0;
-    byte dispel[96], dispel_num = 0;
+    std::vector<RF_ABILITY> escape;
+    std::vector<RF_ABILITY> attack;
+    std::vector<RF_ABILITY> summon;
+    std::vector<RF_ABILITY> tactic;
+    std::vector<RF_ABILITY> annoy;
+    std::vector<RF_ABILITY> invul;
+    std::vector<RF_ABILITY> haste;
+    std::vector<RF_ABILITY> world;
+    std::vector<RF_ABILITY> special;
+    std::vector<RF_ABILITY> psy_spe;
+    std::vector<RF_ABILITY> raise;
+    std::vector<RF_ABILITY> heal;
+    std::vector<RF_ABILITY> dispel;
 
     monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[msa_ptr->m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     if (r_ptr->flags2 & RF2_STUPID)
-        return (msa_ptr->mspells[randint0(msa_ptr->num)]);
+        return (msa_ptr->mspells[randint0(msa_ptr->mspells.size())]);
 
-    for (int i = 0; i < msa_ptr->num; i++) {
+    for (size_t i = 0; i < msa_ptr->mspells.size(); i++) {
         if (spell_escape(msa_ptr->mspells[i]))
-            escape[escape_num++] = msa_ptr->mspells[i];
+            escape.push_back(msa_ptr->mspells[i]);
 
         if (spell_attack(msa_ptr->mspells[i]))
-            attack[attack_num++] = msa_ptr->mspells[i];
+            attack.push_back(msa_ptr->mspells[i]);
 
         if (spell_summon(msa_ptr->mspells[i]))
-            summon[summon_num++] = msa_ptr->mspells[i];
+            summon.push_back(msa_ptr->mspells[i]);
 
         if (spell_tactic(msa_ptr->mspells[i]))
-            tactic[tactic_num++] = msa_ptr->mspells[i];
+            tactic.push_back(msa_ptr->mspells[i]);
 
         if (spell_annoy(msa_ptr->mspells[i]))
-            annoy[annoy_num++] = msa_ptr->mspells[i];
+            annoy.push_back(msa_ptr->mspells[i]);
 
         if (spell_invulner(msa_ptr->mspells[i]))
-            invul[invul_num++] = msa_ptr->mspells[i];
+            invul.push_back(msa_ptr->mspells[i]);
 
         if (spell_haste(msa_ptr->mspells[i]))
-            haste[haste_num++] = msa_ptr->mspells[i];
+            haste.push_back(msa_ptr->mspells[i]);
 
         if (spell_world(msa_ptr->mspells[i]))
-            world[world_num++] = msa_ptr->mspells[i];
+            world.push_back(msa_ptr->mspells[i]);
 
         if (spell_special(target_ptr, msa_ptr->mspells[i]))
-            special[special_num++] = msa_ptr->mspells[i];
+            special.push_back(msa_ptr->mspells[i]);
 
         if (spell_psy_spe(msa_ptr->mspells[i]))
-            psy_spe[psy_spe_num++] = msa_ptr->mspells[i];
+            psy_spe.push_back(msa_ptr->mspells[i]);
 
         if (spell_raise(msa_ptr->mspells[i]))
-            raise[raise_num++] = msa_ptr->mspells[i];
+            raise.push_back(msa_ptr->mspells[i]);
 
         if (spell_heal(msa_ptr->mspells[i]))
-            heal[heal_num++] = msa_ptr->mspells[i];
+            heal.push_back(msa_ptr->mspells[i]);
 
         if (spell_dispel(msa_ptr->mspells[i]))
-            dispel[dispel_num++] = msa_ptr->mspells[i];
+            dispel.push_back(msa_ptr->mspells[i]);
     }
 
-    if (world_num && (randint0(100) < 15) && !current_world_ptr->timewalk_m_idx)
-        return (world[randint0(world_num)]);
+    if (!world.empty() && (randint0(100) < 15) && !current_world_ptr->timewalk_m_idx)
+        return (world[randint0(world.size())]);
 
-    if (special_num) {
+    if (!special.empty()) {
         bool success = FALSE;
         switch (m_ptr->r_idx) {
         case MON_BANOR:
@@ -292,20 +334,20 @@ int choose_attack_spell(player_type *target_ptr, msa_type *msa_ptr)
         }
 
         if (success)
-            return (special[randint0(special_num)]);
+            return (special[randint0(special.size())]);
     }
 
     if (m_ptr->hp < m_ptr->maxhp / 3 && one_in_(2)) {
-        if (heal_num)
-            return (heal[randint0(heal_num)]);
+        if (!heal.empty())
+            return (heal[randint0(heal.size())]);
     }
 
     if (((m_ptr->hp < m_ptr->maxhp / 3) || monster_fear_remaining(m_ptr)) && one_in_(2)) {
-        if (escape_num)
-            return (escape[randint0(escape_num)]);
+        if (!escape.empty())
+            return (escape[randint0(escape.size())]);
     }
 
-    if (special_num) {
+    if (!special.empty()) {
         bool success = FALSE;
         switch (m_ptr->r_idx) {
         case MON_OHMU:
@@ -326,53 +368,53 @@ int choose_attack_spell(player_type *target_ptr, msa_type *msa_ptr)
             break;
         }
         if (success)
-            return (special[randint0(special_num)]);
+            return (special[randint0(special.size())]);
     }
 
-    if ((distance(target_ptr->y, target_ptr->x, m_ptr->fy, m_ptr->fx) < 4) && (attack_num || (r_ptr->a_ability_flags2 & RF6_TRAPS)) && (randint0(100) < 75)
+    if ((distance(target_ptr->y, target_ptr->x, m_ptr->fy, m_ptr->fx) < 4) && (!attack.empty() || r_ptr->ability_flags.has(RF_ABILITY::TRAPS)) && (randint0(100) < 75)
         && !current_world_ptr->timewalk_m_idx) {
-        if (tactic_num)
-            return (tactic[randint0(tactic_num)]);
+        if (!tactic.empty())
+            return (tactic[randint0(tactic.size())]);
     }
 
-    if (summon_num && (randint0(100) < 40))
-        return (summon[randint0(summon_num)]);
+    if (!summon.empty() && (randint0(100) < 40))
+        return (summon[randint0(summon.size())]);
 
-    if (dispel_num && one_in_(2)) {
+    if (!dispel.empty() && one_in_(2)) {
         if (dispel_check(target_ptr, msa_ptr->m_idx)) {
-            return (dispel[randint0(dispel_num)]);
+            return (dispel[randint0(dispel.size())]);
         }
     }
 
-    if (raise_num && (randint0(100) < 40))
-        return (raise[randint0(raise_num)]);
+    if (!raise.empty() && (randint0(100) < 40))
+        return (raise[randint0(raise.size())]);
 
     if (is_invuln(target_ptr)) {
-        if (psy_spe_num && (randint0(100) < 50)) {
-            return (psy_spe[randint0(psy_spe_num)]);
-        } else if (attack_num && (randint0(100) < 40)) {
-            return (attack[randint0(attack_num)]);
+        if (!psy_spe.empty() && (randint0(100) < 50)) {
+            return (psy_spe[randint0(psy_spe.size())]);
+        } else if (!attack.empty() && (randint0(100) < 40)) {
+            return (attack[randint0(attack.size())]);
         }
-    } else if (attack_num && (randint0(100) < 85)) {
-        return (attack[randint0(attack_num)]);
+    } else if (!attack.empty() && (randint0(100) < 85)) {
+        return (attack[randint0(attack.size())]);
     }
 
-    if (tactic_num && (randint0(100) < 50) && !current_world_ptr->timewalk_m_idx)
-        return (tactic[randint0(tactic_num)]);
+    if (!tactic.empty() && (randint0(100) < 50) && !current_world_ptr->timewalk_m_idx)
+        return (tactic[randint0(tactic.size())]);
 
-    if (invul_num && !m_ptr->mtimed[MTIMED_INVULNER] && (randint0(100) < 50))
-        return (invul[randint0(invul_num)]);
+    if (!invul.empty() && !m_ptr->mtimed[MTIMED_INVULNER] && (randint0(100) < 50))
+        return (invul[randint0(invul.size())]);
 
     if ((m_ptr->hp < m_ptr->maxhp * 3 / 4) && (randint0(100) < 25)) {
-        if (heal_num)
-            return (heal[randint0(heal_num)]);
+        if (!heal.empty())
+            return (heal[randint0(heal.size())]);
     }
 
-    if (haste_num && (randint0(100) < 20) && !monster_fast_remaining(m_ptr))
-        return (haste[randint0(haste_num)]);
+    if (!haste.empty() && (randint0(100) < 20) && !monster_fast_remaining(m_ptr))
+        return (haste[randint0(haste.size())]);
 
-    if (annoy_num && (randint0(100) < 80))
-        return (annoy[randint0(annoy_num)]);
+    if (!annoy.empty() && (randint0(100) < 80))
+        return (annoy[randint0(annoy.size())]);
 
-    return 0;
+    return RF_ABILITY::MAX;
 }

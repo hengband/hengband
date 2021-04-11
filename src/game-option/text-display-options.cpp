@@ -14,3 +14,7 @@ bool abbrev_extra; /* Describe obj's extra resistances by abbreviation */
 bool abbrev_all; /* Describe obj's all resistances by abbreviation */
 bool exp_need; /* Show the experience needed for next level */
 bool ignore_unview; /* Ignore whenever any monster does */
+bool show_ammo_detail; /* Show Description of ammo damage */
+bool show_ammo_no_crit; /* Show No-crit damage of ammo */
+bool show_ammo_crit_ratio; /* Show critical ratio of ammo */
+bool show_actual_value; /* Show actual value of skill */

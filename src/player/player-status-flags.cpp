@@ -377,7 +377,7 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
     case TR_COWARDICE:
     case TR_LOW_MELEE:
     case TR_LOW_AC:
-    case TR_LOW_MAGIC:
+    case TR_HARD_SPELL:
     case TR_FAST_DIGEST:
     case TR_SLOW_REGEN:
         return check_equipment_flags(creature_ptr, tr_flag);
@@ -694,7 +694,7 @@ void check_no_flowed(player_type *creature_ptr)
         return;
     }
 
-    if (!creature_ptr->realm1 || creature_ptr->pclass == CLASS_ELEMENTALIST) {
+    if (!creature_ptr->realm1) {
         creature_ptr->no_flowed = FALSE;
         return;
     }
@@ -1284,8 +1284,8 @@ void update_curses(player_type *creature_ptr)
             creature_ptr->cursed |= TRC_LOW_MELEE;
         if (has_flag(flgs, TR_LOW_AC))
             creature_ptr->cursed |= TRC_LOW_AC;
-        if (has_flag(flgs, TR_LOW_MAGIC))
-            creature_ptr->cursed |= TRC_LOW_MAGIC;
+        if (has_flag(flgs, TR_HARD_SPELL))
+            creature_ptr->cursed |= TRC_HARD_SPELL;
         if (has_flag(flgs, TR_FAST_DIGEST))
             creature_ptr->cursed |= TRC_FAST_DIGEST;
         if (has_flag(flgs, TR_SLOW_REGEN))

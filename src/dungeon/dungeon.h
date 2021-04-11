@@ -1,8 +1,13 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+
 #include "grid/feature.h"
+#include "monster-race/race-ability-flags.h"
+#include "util/flag-group.h"
+
 #include <string>
+#include <vector>
 
 #define DUNGEON_FEAT_PROB_NUM 3
 
@@ -58,16 +63,12 @@ struct dungeon_type {
 	BIT_FLAGS mflags1{};		/* The monster flags that are allowed */
 	BIT_FLAGS mflags2{};
 	BIT_FLAGS mflags3{};
-	BIT_FLAGS mflags4{};
 	BIT_FLAGS mflags7{};
 	BIT_FLAGS mflags8{};
 	BIT_FLAGS mflags9{};
 	BIT_FLAGS mflagsr{};
 
-	BIT_FLAGS m_a_ability_flags1{};
-	BIT_FLAGS m_a_ability_flags2{};
-	BIT_FLAGS m_a_ability_flags3{};
-	BIT_FLAGS m_a_ability_flags4{};
+	FlagGroup<RF_ABILITY> m_ability_flags;
 
 	char r_char[5]{};		/* Monster race allowed */
 	KIND_OBJECT_IDX final_object{};	/* The object you'll find at the bottom */
@@ -81,6 +82,6 @@ struct dungeon_type {
 };
 
 extern DEPTH *max_dlv;
-extern dungeon_type *d_info;
+extern std::vector<dungeon_type> d_info;
 
 extern DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x);

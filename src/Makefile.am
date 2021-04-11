@@ -99,7 +99,6 @@ hengband_SOURCES = \
 	\
 	cmd-building/cmd-building.cpp cmd-building/cmd-building.h \
 	cmd-building/cmd-inn.cpp cmd-building/cmd-inn.h \
-	cmd-building/cmd-store.cpp cmd-building/cmd-store.h \
 	\
 	cmd-io/cmd-autopick.cpp cmd-io/cmd-autopick.h \
 	cmd-io/cmd-diary.cpp cmd-io/cmd-diary.h \
@@ -306,7 +305,6 @@ hengband_SOURCES = \
 	io/report.cpp io/report.h \
 	io/screen-util.cpp io/screen-util.h \
 	io/signal-handlers.cpp io/signal-handlers.h \
-	io/store-key-processor.cpp io/store-key-processor.h \
 	io/tokenizer.cpp io/tokenizer.h \
 	io/uid-checker.cpp io/uid-checker.h \
 	io/write-diary.cpp io/write-diary.h \
@@ -379,6 +377,8 @@ hengband_SOURCES = \
 	main/init-error-messages-table.cpp main/init-error-messages-table.h \
 	main/music-definitions-table.cpp main/music-definitions-table.h \
 	main/scene-table.cpp main/scene-table.h \
+	main/scene-table-floor.cpp main/scene-table-floor.h \
+	main/scene-table-monster.cpp main/scene-table-monster.h \
 	main/sound-definitions-table.cpp main/sound-definitions-table.h \
 	main/sound-of-music.cpp main/sound-of-music.h \
 	main/x11-gamma-builder.cpp main/x11-gamma-builder.h \
@@ -389,8 +389,6 @@ hengband_SOURCES = \
 	market/building-util.cpp market/building-util.h \
 	market/play-gamble.cpp market/play-gamble.h \
 	market/poker.cpp market/poker.h \
-	market/articles-on-sale.cpp market/articles-on-sale.h \
-	market/gold-magnification-table.cpp market/gold-magnification-table.h \
 	market/arena.cpp market/arena.h \
 	market/bounty-prize-table.cpp market/bounty-prize-table.h \
 	market/bounty.cpp market/bounty.h \
@@ -492,10 +490,11 @@ hengband_SOURCES = \
 	\
 	monster-race/monster-race.cpp monster-race/monster-race.h \
 	monster-race/monster-race-hook.cpp monster-race/monster-race-hook.h \
+	monster-race/race-ability-flags.h \
+	monster-race/race-ability-mask.cpp monster-race/race-ability-mask.h \
 	monster-race/race-flags-resistance.h \
 	monster-race/race-flags1.h monster-race/race-flags2.h \
-	monster-race/race-flags3.h monster-race/race-flags4.h \
-	monster-race/race-flags-ability1.h monster-race/race-flags-ability2.h \
+	monster-race/race-flags3.h \
 	monster-race/race-flags7.h monster-race/race-flags8.h \
 	monster-race/race-flags9.h \
 	monster-race/race-indice-types.h \
@@ -521,7 +520,6 @@ hengband_SOURCES = \
 	mspell/mspell-damage-calculator.cpp mspell/mspell-damage-calculator.h \
 	mspell/mspell-learn-checker.cpp mspell/mspell-learn-checker.h \
 	mspell/mspell-floor.cpp mspell/mspell-floor.h \
-	mspell/mspell-mask-definitions.h \
 	mspell/mspell-special.cpp mspell/mspell-special.h \
 	mspell/mspell-status.cpp mspell/mspell-status.h \
 	mspell/mspell-particularity.cpp mspell/mspell-particularity.h \
@@ -798,15 +796,18 @@ hengband_SOURCES = \
 	\
 	store/home.cpp store/home.h \
 	store/store.cpp store/store.h \
+	store/articles-on-sale.cpp store/articles-on-sale.h \
 	store/black-market.cpp store/black-market.h \
+	store/cmd-store.cpp store/cmd-store.h \
+	store/gold-magnification-table.cpp store/gold-magnification-table.h \
 	store/museum.cpp store/museum.h \
 	store/pricing.cpp store/pricing.h \
 	store/purchase-order.cpp store/purchase-order.h \
-	store/owner-insults.cpp store/owner-insults.h \
 	store/rumor.cpp store/rumor.h \
 	store/say-comments.cpp store/say-comments.h \
 	store/sell-order.cpp store/sell-order.h \
 	store/service-checker.cpp store/service-checker.h \
+	store/store-key-processor.cpp store/store-key-processor.h \
 	store/store-util.cpp store/store-util.h \
 	store/store-owners.cpp store/store-owners.h \
 	store/store-owner-comments.cpp store/store-owner-comments.h \
@@ -927,6 +928,7 @@ EXTRA_hengband_SOURCES = \
 	main-win/main-win-define.h \
 	main-win/main-win-file-utils.cpp main-win/main-win-file-utils.h \
 	main-win/main-win-mci.cpp main-win/main-win-mci.h \
+	main-win/main-win-menuitem.h \
 	main-win/main-win-mmsystem.h \
 	main-win/main-win-music.cpp main-win/main-win-music.h \
 	main-win/main-win-sound.cpp main-win/main-win-sound.h \

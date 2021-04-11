@@ -14,12 +14,8 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-blue-mage.h"
-#include "monster-race/race-flags-ability1.h"
-#include "monster-race/race-flags-ability2.h"
-#include "monster-race/race-flags4.h"
+#include "monster-race/race-ability-mask.h"
 #include "mspell/monster-power-table.h"
-#include "mspell/mspell-mask-definitions.h"
-#include "mspell/mspell-type.h"
 #include "player/attack-defense-types.h"
 #include "status/experience.h"
 #include "view/display-messages.h"
@@ -59,37 +55,30 @@ void learn_spell(player_type *learner_ptr, int monspell)
  * @return なし
  * @todo f4, f5, f6を構造体にまとめ直す
  */
-void set_rf_masks(BIT_FLAGS *f4, BIT_FLAGS *f5, BIT_FLAGS *f6, blue_magic_type mode)
+void set_rf_masks(FlagGroup<RF_ABILITY>& ability_flags, blue_magic_type mode)
 {
+    ability_flags.clear();
+
     switch (mode) {
     case MONSPELL_TYPE_BOLT:
-        *f4 = ((RF4_BOLT_MASK | RF4_BEAM_MASK) & ~(RF4_ROCKET));
-        *f5 = RF5_BOLT_MASK | RF5_BEAM_MASK;
-        *f6 = RF6_BOLT_MASK | RF6_BEAM_MASK;
+        ability_flags.set(RF_ABILITY_BOLT_MASK | RF_ABILITY_BEAM_MASK).reset(RF_ABILITY::ROCKET);
         break;
 
     case MONSPELL_TYPE_BALL:
-        *f4 = (RF4_BALL_MASK & ~(RF4_BREATH_MASK));
-        *f5 = (RF5_BALL_MASK & ~(RF5_BREATH_MASK));
-        *f6 = (RF6_BALL_MASK & ~(RF6_BREATH_MASK));
+        ability_flags.set(RF_ABILITY_BALL_MASK).reset(RF_ABILITY_BREATH_MASK);
         break;
 
     case MONSPELL_TYPE_BREATH:
-        *f4 = (BIT_FLAGS)RF4_BREATH_MASK;
-        *f5 = RF5_BREATH_MASK;
-        *f6 = RF6_BREATH_MASK;
+        ability_flags.set(RF_ABILITY_BREATH_MASK);
         break;
 
     case MONSPELL_TYPE_SUMMON:
-        *f4 = RF4_SUMMON_MASK;
-        *f5 = RF5_SUMMON_MASK;
-        *f6 = (BIT_FLAGS)RF6_SUMMON_MASK;
+        ability_flags.set(RF_ABILITY_SUMMON_MASK);
         break;
 
     case MONSPELL_TYPE_OTHER:
-        *f4 = RF4_ATTACK_MASK & ~(RF4_BOLT_MASK | RF4_BEAM_MASK | RF4_BALL_MASK | RF4_INDIRECT_MASK);
-        *f5 = RF5_ATTACK_MASK & ~(RF5_BOLT_MASK | RF5_BEAM_MASK | RF5_BALL_MASK | RF5_INDIRECT_MASK);
-        *f6 = RF6_ATTACK_MASK & ~(RF6_BOLT_MASK | RF6_BEAM_MASK | RF6_BALL_MASK | RF6_INDIRECT_MASK);
+        ability_flags.set(RF_ABILITY_ATTACK_MASK);
+        ability_flags.reset(RF_ABILITY_BOLT_MASK | RF_ABILITY_BEAM_MASK | RF_ABILITY_BALL_MASK | RF_ABILITY_INDIRECT_MASK);
         break;
     }
 }

@@ -285,7 +285,7 @@ void load_all_pref_files(player_type *player_ptr)
     process_pref_file(player_ptr, buf, process_autopick_file_command);
     sprintf(buf, "%s.prf", player_ptr->base_name);
     process_pref_file(player_ptr, buf, process_autopick_file_command);
-    if (player_ptr->realm1 != REALM_NONE && player_ptr->pclass != CLASS_ELEMENTALIST) {
+    if (player_ptr->realm1 != REALM_NONE) {
         sprintf(buf, "%s.prf", realm_names[player_ptr->realm1]);
         process_pref_file(player_ptr, buf, process_autopick_file_command);
     }

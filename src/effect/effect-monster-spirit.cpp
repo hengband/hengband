@@ -6,22 +6,18 @@
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
-#include "monster-race/race-flags4.h"
-#include "monster-race/race-flags-ability1.h"
-#include "monster-race/race-flags-ability2.h"
+#include "monster-race/race-ability-mask.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "monster/monster-info.h"
-#include "mspell/mspell-mask-definitions.h"
 #include "view/display-messages.h"
 
 process_result effect_monster_drain_mana(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
-	bool has_mana = ((em_ptr->r_ptr->flags4 & ~(RF4_NOMAGIC_MASK))) != 0;
-	has_mana |= ((em_ptr->r_ptr->a_ability_flags1 & ~(RF5_NOMAGIC_MASK))) != 0;
-	has_mana |= ((em_ptr->r_ptr->a_ability_flags2 & ~(RF6_NOMAGIC_MASK))) != 0;
+        auto ability_flags = em_ptr->r_ptr->ability_flags;
+        bool has_mana = ability_flags.reset(RF_ABILITY_NOMAGIC_MASK).any();
 	if (!has_mana)
 	{
 		if (em_ptr->see_s_msg)

@@ -28,7 +28,6 @@
 #include "racial/racial-android.h"
 #include "spell-kind/spells-perception.h"
 #include "store/home.h"
-#include "store/owner-insults.h"
 #include "store/pricing.h"
 #include "store/say-comments.h"
 #include "store/service-checker.h"
@@ -36,144 +35,45 @@
 #include "store/store.h"
 #include "system/object-type-definition.h"
 #include "term/screen-processor.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "view/display-store.h"
 #include "view/object-describer.h"
-#include "util/bit-flags-calculator.h"
 #include "world/world.h"
+#include <optional>
 
 /*!
- * @brief プレイヤーが売却する時の値切り処理メインルーチン /
- * Haggling routine 				-RAK-
+ * @brief プレイヤーが売却する時の確認プロンプト / Prompt to sell for the price
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr オブジェクトの構造体参照ポインタ
- * @param price 最終価格を返す参照ポインタ
- * @return プレイヤーの価格に対して店主が不服ならばTRUEを返す /
- * Return TRUE if purchase is NOT successful
+ * @return 売るなら(true,売値)、売らないなら(false,0)のタプル
  */
-static bool sell_haggle(player_type *player_ptr, object_type *o_ptr, s32b *price)
+static std::optional<PRICE> prompt_to_sell(player_type *player_ptr, object_type *o_ptr)
 {
-    s32b cur_ask = price_item(player_ptr, o_ptr, ot_ptr->max_inflate, TRUE);
-    s32b final_ask = price_item(player_ptr, o_ptr, ot_ptr->min_inflate, TRUE);
-    int noneed = noneedtobargain(final_ask);
-    s32b purse = (s32b)(ot_ptr->max_cost);
-    bool final = FALSE;
-    concptr pmt = _("提示金額", "Offer");
-    if (noneed || !manual_haggle || (final_ask >= purse)) {
-        if (!manual_haggle && !noneed) {
-            final_ask -= final_ask / 10;
-        }
+    auto price_ask = price_item(player_ptr, o_ptr, ot_ptr->inflate, TRUE);
+    auto is_low_price = price_ask < LOW_PRICE_THRESHOLD;
 
-        if (final_ask >= purse) {
-            msg_print(_("即座にこの金額にまとまった。", "You instantly agree upon the price."));
-            msg_print(NULL);
-            final_ask = purse;
-        } else if (noneed) {
-            msg_print(_("結局この金額にまとまった。", "You eventually agree upon the price."));
-            msg_print(NULL);
-        } else {
-            msg_print(_("すんなりとこの金額にまとまった。", "You quickly agree upon the price."));
-            msg_print(NULL);
-        }
+    if (!is_low_price)
+        price_ask -= price_ask / 10;
 
-        cur_ask = final_ask;
-        final = TRUE;
-        pmt = _("最終提示金額", "Final Offer");
+    auto max_price = (PRICE)ot_ptr->max_cost;
+
+    if (price_ask > max_price) {
+        msg_print(_("即座にこの金額にまとまった。", "You instantly agree upon the price."));
+        msg_print(NULL);
+        price_ask = max_price;
+    } else {
+        msg_print(_("すんなりとこの金額にまとまった。", "You quickly agree upon the price."));
+        msg_print(NULL);
     }
 
-    cur_ask *= o_ptr->number;
-    final_ask *= o_ptr->number;
-
-    s32b min_per = ot_ptr->haggle_per;
-    s32b max_per = min_per * 3;
-    s32b last_offer = object_value(player_ptr, o_ptr) * o_ptr->number;
-    last_offer = last_offer * ot_ptr->max_inflate / 100L;
-    s32b offer = 0;
-    allow_inc = FALSE;
-    bool flag = FALSE;
-    bool loop_flag;
-    int annoyed = 0;
-    bool cancel = FALSE;
-    *price = 0;
-    while (!flag) {
-        while (TRUE) {
-            loop_flag = TRUE;
-
-            char out_val[160];
-            (void)sprintf(out_val, "%s :  %ld", pmt, (long)cur_ask);
-            put_str(out_val, 1, 0);
-            cancel = receive_offer(_("提示する価格? ", "What price do you ask? "), &offer, last_offer, -1, cur_ask, final);
-
-            if (cancel) {
-                flag = TRUE;
-            } else if (offer < cur_ask) {
-                say_comment_6();
-                offer = last_offer;
-            } else if (offer == cur_ask) {
-                flag = TRUE;
-                *price = offer;
-            } else {
-                loop_flag = FALSE;
-            }
-
-            if (flag || !loop_flag)
-                break;
-        }
-
-        if (flag)
-            continue;
-
-        s32b x1 = 100 * (last_offer - offer) / (last_offer - cur_ask);
-        if (x1 < min_per) {
-            if (haggle_insults()) {
-                flag = TRUE;
-                cancel = TRUE;
-            }
-        } else if (x1 > max_per) {
-            x1 = x1 * 3 / 4;
-            if (x1 < max_per)
-                x1 = max_per;
-        }
-
-        s32b x2 = rand_range(x1 - 2, x1 + 2);
-        s32b x3 = ((offer - cur_ask) * x2 / 100L) + 1;
-        if (x3 < 0)
-            x3 = 0;
-        cur_ask += x3;
-
-        if (cur_ask > final_ask) {
-            cur_ask = final_ask;
-            final = TRUE;
-            pmt = _("最終提示金額", "Final Offer");
-
-            annoyed++;
-            if (annoyed > 3) {
-                flag = TRUE;
-#ifdef JP
-                /* 追加 $0 で買い取られてしまうのを防止 By FIRST*/
-                cancel = TRUE;
-#endif
-                (void)(increase_insults());
-            }
-        } else if (offer <= cur_ask) {
-            flag = TRUE;
-            *price = offer;
-        }
-
-        last_offer = offer;
-        allow_inc = TRUE;
-        prt("", 1, 0);
-        char out_val[160];
-        (void)sprintf(out_val, _("前回の提示価格 $%ld", "Your last bid %ld"), (long)last_offer);
-        put_str(out_val, 1, 39);
-        say_comment_3(cur_ask, annoyed);
+    price_ask *= o_ptr->number;
+    concptr s = format(_("売値 $%ld で売りますか？", "Do you sell for $%ld?"), static_cast<long>(price_ask));
+    if (get_check_strict(player_ptr, s, CHECK_DEFAULT_Y)) {
+        return price_ask;
     }
 
-    if (cancel)
-        return TRUE;
-
-    updatebargain(*price, final_ask, o_ptr->number);
-    return FALSE;
+    return std::nullopt;
 }
 
 /*!
@@ -184,29 +84,32 @@ static bool sell_haggle(player_type *player_ptr, object_type *o_ptr, s32b *price
  */
 void store_sell(player_type *owner_ptr)
 {
-    concptr q;
-    if (cur_store_num == STORE_HOME)
+    concptr q; //!< @note プロンプトメッセージ
+    concptr s_none; //!< @note 売る/置くものがない場合のメッセージ
+    concptr s_full; //!< @note もう置けない場合のメッセージ
+    switch (cur_store_num) {
+    case STORE_HOME:
         q = _("どのアイテムを置きますか? ", "Drop which item? ");
-    else if (cur_store_num == STORE_MUSEUM)
+        s_none = _("置けるアイテムを持っていません。", "You don't have any items to drop.");
+        s_full = _("我が家にはもう置く場所がない。", "Your home is full.");
+        break;
+    case STORE_MUSEUM:
         q = _("どのアイテムを寄贈しますか? ", "Give which item? ");
-    else
+        s_none = _("寄贈できるアイテムを持っていません。", "You don't have any items to give.");
+        s_full = _("博物館はもう満杯だ。", "The Museum is full.");
+        break;
+    default:
         q = _("どのアイテムを売りますか? ", "Sell which item? ");
+        s_none = _("欲しい物がないですねえ。", "You have nothing that I want.");
+        s_full = _("すいませんが、店にはもう置く場所がありません。", "I have not the room in my store to keep it.");
+        break;
+    }
 
     item_tester_hook = store_will_buy;
 
-    /* 我が家でおかしなメッセージが出るオリジナルのバグを修正 */
-    concptr s;
-    if (cur_store_num == STORE_HOME) {
-        s = _("置けるアイテムを持っていません。", "You don't have any items to drop.");
-    } else if (cur_store_num == STORE_MUSEUM) {
-        s = _("寄贈できるアイテムを持っていません。", "You don't have any items to give.");
-    } else {
-        s = _("欲しい物がないですねえ。", "You have nothing that I want.");
-    }
-
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(owner_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, TV_NONE);
+    o_ptr = choose_object(owner_ptr, &item, q, s_none, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, TV_NONE);
     if (!o_ptr)
         return;
 
@@ -223,10 +126,10 @@ void store_sell(player_type *owner_ptr)
     }
 
     object_type forge;
-    object_type *q_ptr;
-    q_ptr = &forge;
+    object_type *q_ptr = &forge;
     object_copy(q_ptr, o_ptr);
     q_ptr->number = amt;
+
     if ((o_ptr->tval == TV_ROD) || (o_ptr->tval == TV_WAND))
         q_ptr->pval = o_ptr->pval * amt / o_ptr->number;
 
@@ -238,53 +141,44 @@ void store_sell(player_type *owner_ptr)
     }
 
     if (!store_check_num(q_ptr)) {
-        if (cur_store_num == STORE_HOME)
-            msg_print(_("我が家にはもう置く場所がない。", "Your home is full."));
-
-        else if (cur_store_num == STORE_MUSEUM)
-            msg_print(_("博物館はもう満杯だ。", "The Museum is full."));
-
-        else
-            msg_print(_("すいませんが、店にはもう置く場所がありません。", "I have not the room in my store to keep it."));
-
+        msg_print(s_full);
         return;
     }
 
-    int choice;
-    PRICE price, value, dummy;
+    bool placed = false;
     if ((cur_store_num != STORE_HOME) && (cur_store_num != STORE_MUSEUM)) {
         msg_format(_("%s(%c)を売却する。", "Selling %s (%c)."), o_name, index_to_label(item));
         msg_print(NULL);
 
-        choice = sell_haggle(owner_ptr, q_ptr, &price);
-        if (st_ptr->store_open >= current_world_ptr->game_turn)
-            return;
+        auto res = prompt_to_sell(owner_ptr, q_ptr);
+        placed = res.has_value();
+        if (placed) {
+            PRICE price = res.value();
+            store_owner_says_comment(owner_ptr);
 
-        if (choice == 0) {
-            say_comment_1(owner_ptr);
             sound(SOUND_SELL);
             if (cur_store_num == STORE_BLACK)
                 chg_virtue(owner_ptr, V_JUSTICE, -1);
 
             if ((o_ptr->tval == TV_BOTTLE) && (cur_store_num != STORE_HOME))
                 chg_virtue(owner_ptr, V_NATURE, 1);
-            decrease_insults();
 
             owner_ptr->au += price;
             store_prt_gold(owner_ptr);
-            dummy = object_value(owner_ptr, q_ptr) * q_ptr->number;
+            PRICE dummy = object_value(owner_ptr, q_ptr) * q_ptr->number;
 
             identify_item(owner_ptr, o_ptr);
             q_ptr = &forge;
             object_copy(q_ptr, o_ptr);
             q_ptr->number = amt;
             q_ptr->ident |= IDENT_STORE;
+
             if ((o_ptr->tval == TV_ROD) || (o_ptr->tval == TV_WAND))
                 q_ptr->pval = o_ptr->pval * amt / o_ptr->number;
 
-            value = object_value(owner_ptr, q_ptr) * q_ptr->number;
+            PRICE value = object_value(owner_ptr, q_ptr) * q_ptr->number;
             describe_flavor(owner_ptr, o_name, q_ptr, 0);
-            msg_format(_("%sを $%ldで売却しました。", "You sold %s for %ld gold."), o_name, (long)price);
+            msg_format(_("%sを $%ldで売却しました。", "You sold %s for %ld gold."), o_name, static_cast<long>(price));
 
             if (record_sell)
                 exe_write_diary(owner_ptr, DIARY_SELL, 0, o_name);
@@ -314,7 +208,7 @@ void store_sell(player_type *owner_ptr)
             msg_print(_("それと同じ品物は既に博物館にあるようです。", "The Museum already has one of those items."));
         else
             msg_print(_("博物館に寄贈したものは取り出すことができません！！", "You cannot take back items which have been donated to the Museum!!"));
-        
+
         if (!get_check(format(_("本当に%sを寄贈しますか？", "Really give %s to the Museum? "), o2_name)))
             return;
 
@@ -323,7 +217,7 @@ void store_sell(player_type *owner_ptr)
 
         distribute_charges(o_ptr, q_ptr, amt);
         msg_format(_("%sを置いた。(%c)", "You drop %s (%c)."), o_name, index_to_label(item));
-        choice = 0;
+        placed = true;
 
         vary_item(owner_ptr, item, -amt);
 
@@ -335,7 +229,7 @@ void store_sell(player_type *owner_ptr)
     } else {
         distribute_charges(o_ptr, q_ptr, amt);
         msg_format(_("%sを置いた。(%c)", "You drop %s (%c)."), o_name, index_to_label(item));
-        choice = 0;
+        placed = true;
         vary_item(owner_ptr, item, -amt);
         int item_pos = home_carry(owner_ptr, q_ptr);
         if (item_pos >= 0) {
@@ -348,7 +242,7 @@ void store_sell(player_type *owner_ptr)
     set_bits(owner_ptr->window_flags, PW_PLAYER);
     handle_stuff(owner_ptr);
 
-    if ((choice == 0) && (item >= INVEN_MAIN_HAND)) {
+    if (placed && (item >= INVEN_MAIN_HAND)) {
         calc_android_exp(owner_ptr);
         verify_equip_slot(owner_ptr, item);
     }

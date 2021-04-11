@@ -27,10 +27,10 @@ static void add_cheat_remove_flags(player_type *target_ptr, msr_type *msr_ptr)
  * @param f6p モンスター魔法のフラグリスト3
  * @return なし
  */
-void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *f4p, u32b *f5p, u32b *f6p)
+void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, FlagGroup<RF_ABILITY>& ability_flags)
 {
     msr_type tmp_msr;
-    msr_type *msr_ptr = initialize_msr_type(target_ptr, &tmp_msr, m_idx, *f4p, *f5p, *f6p);
+    msr_type *msr_ptr = initialize_msr_type(target_ptr, &tmp_msr, m_idx, ability_flags);
     if (msr_ptr->r_ptr->flags2 & RF2_STUPID)
         return;
 
@@ -52,7 +52,5 @@ void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *f4p, u3
 
     check_element_resistance(msr_ptr);
     check_high_resistances(target_ptr, msr_ptr);
-    *f4p = msr_ptr->f4;
-    *f5p = msr_ptr->f5;
-    *f6p = msr_ptr->f6;
+    ability_flags = msr_ptr->ability_flags;
 }

@@ -23,11 +23,9 @@
 #include "grid/grid.h"
 #include "monster-floor/monster-move.h"
 #include "monster-race/monster-race.h"
-#include "monster-race/race-flags-ability1.h"
-#include "monster-race/race-flags-ability2.h"
+#include "monster-race/race-ability-mask.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
-#include "monster-race/race-flags4.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
@@ -39,7 +37,6 @@
 #include "mspell/improper-mspell-remover.h"
 #include "mspell/mspell-judgement.h"
 #include "mspell/mspell-learn-checker.h"
-#include "mspell/mspell-mask-definitions.h"
 #include "mspell/mspell-selector.h"
 #include "mspell/mspell-util.h"
 #include "object-enchant/object-curse.h"
@@ -291,21 +288,7 @@ ProjectResult breath(
  * @param spell 判定対象のID
  * @return 非魔術的な特殊技能ならばTRUEを返す。
  */
-bool spell_is_inate(SPELL_IDX spell)
+bool spell_is_inate(RF_ABILITY spell)
 {
-    if (32 * 3 <= spell && spell < 32 * 4) /* Set RF4 */
-    {
-        return ((1UL << (spell - 32 * 3)) & RF4_NOMAGIC_MASK) != 0;
-    }
-    if (32 * 4 <= spell && spell < 32 * 5) /* Set RF5 */
-    {
-        return ((1UL << (spell - 32 * 4)) & RF5_NOMAGIC_MASK) != 0;
-    }
-    if (32 * 5 <= spell && spell < 32 * 6) /* Set RF6 */
-    {
-        return ((1UL << (spell - 32 * 5)) & RF6_NOMAGIC_MASK) != 0;
-    }
-
-    // 無効なモンスタースペルIDが渡されたら FALSE を返す。
-    return FALSE;
+    return RF_ABILITY_NOMAGIC_MASK.has(spell);
 }

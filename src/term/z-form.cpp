@@ -620,6 +620,17 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
                 break;
 
             /* Save the character */
+#ifdef JP
+            if (iskanji(tmp[q])) {
+                if (tmp[q + 1]) {
+                    buf[n++] = tmp[q++];
+                } else {
+                    // 最後の文字が2バイト文字の前半で終わる場合は空白で置き換えて終了する
+                    buf[n++] = ' ';
+                    break;
+                }
+            }
+#endif
             buf[n++] = tmp[q];
         }
     }
