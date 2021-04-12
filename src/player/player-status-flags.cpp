@@ -397,6 +397,7 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
         return has_invuln_arrow(creature_ptr);
     case TR_DARK_SOURCE:
     case TR_SUPPORTIVE:
+    case TR_BERS_RAGE:
         return check_equipment_flags(creature_ptr, tr_flag);
 
     case TR_FLAG_MAX:
@@ -1292,6 +1293,8 @@ void update_curses(player_type *creature_ptr)
             creature_ptr->cursed |= TRC_FAST_DIGEST;
         if (has_flag(flgs, TR_SLOW_REGEN))
             creature_ptr->cursed |= TRC_SLOW_REGEN;
+        if (has_flag(flgs, TR_BERS_RAGE))
+            creature_ptr->cursed |= TRC_BERS_RAGE;
 
         creature_ptr->cursed |= (o_ptr->curse_flags & (0xFFFFFFF0L));
         if (o_ptr->name1 == ART_CHAINSWORD)

@@ -157,5 +157,6 @@ enum tr_type {
     TR_DARK_SOURCE = 146,
     TR_SUPPORTIVE = 147,
     TR_RES_CURSE = 148,
-    TR_FLAG_MAX = 149,
+    TR_BERS_RAGE = 149, //!< 狂戦士化の発作
+    TR_FLAG_MAX = 150,
 };
