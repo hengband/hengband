@@ -18,11 +18,9 @@
  */
 static errr grab_one_kind_flag(object_kind *k_ptr, concptr what)
 {
-    for (int i = 0; i < TR_FLAG_MAX; i++) {
-        if (streq(what, k_info_flags[i])) {
-            add_flag(k_ptr->flags, i);
-            return 0;
-        }
+    if (k_info_flags.find(what) != k_info_flags.end()) {
+        add_flag(k_ptr->flags, k_info_flags[what]);
+        return 0;
     }
 
     if (FlagGroup<TRG>::grab_one_flag(k_ptr->gen_flags, k_info_gen_flags, what))
