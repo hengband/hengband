@@ -314,7 +314,7 @@ bool get_player_realms(player_type *creature_ptr)
 
     /* Select the first realm */
     creature_ptr->realm1 = REALM_NONE;
-    creature_ptr->realm2 = REALM_NONE;
+    creature_ptr->realm2 = REALM_SELECT_CANCEL;
 
     if (creature_ptr->pclass == CLASS_ELEMENTALIST) {
         creature_ptr->element = select_element_realm(creature_ptr);
