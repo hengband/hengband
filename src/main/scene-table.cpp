@@ -26,12 +26,19 @@ static void resize_scene_list()
  * 3.通常BGM
  * の順に設定する。
  * 街の施設等で、コマンド実行→視界内モンスターリスト更新(空のリスト:再生なし)→割り込みBGMに戻るようにする。
+ * 選曲テーブルでは割り込みBGMは2番目だが、
+ * 一時的に優先するためにBGM対象のモンスターを忘れ、モンスターBGMに制限期間を設定する。
  * @param type action-type
  * @param val action-val
  */
 void interrupt_scene(int type, int val) {
     interrupt_scene_type = type;
     interrupt_scene_val = val;
+
+    // forget BGM-target monster
+    clear_scene_target_monster();
+    // モンスターBGMの再生を一時的に抑制する
+    set_temp_mute_scene_monster(2);
 }
 
 /*!
@@ -40,12 +47,8 @@ void interrupt_scene(int type, int val) {
  */
 void refresh_scene_table(player_type *player_ptr)
 {
-    // forget BGM-target monster
-    clear_scene_target_monster();
     // clear interrupt_scene
     interrupt_scene(0, 0);
-    // モンスターBGMの再生を一時的に抑制する
-    set_temp_mute_scene_monster(2);
 
     resize_scene_list();
     refresh_scene_floor(player_ptr, scene_list, 0);
