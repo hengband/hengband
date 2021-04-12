@@ -3,7 +3,7 @@
 
 const concptr angband_music_basic_name[MUSIC_BASIC_MAX] =
 {
-	"default",
+	"new_game",
 	"gameover",
 	"exit",
 	"town",
