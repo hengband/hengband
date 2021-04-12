@@ -492,7 +492,7 @@ static void effect_damage_gives_bad_status(player_type *caster_ptr, effect_monst
 {
     int tmp_damage = em_ptr->dam;
     em_ptr->dam = mon_damage_mod(caster_ptr, em_ptr->m_ptr, em_ptr->dam, (bool)(em_ptr->effect_type == GF_PSY_SPEAR));
-    if ((tmp_damage > 0) && (em_ptr->dam == 0))
+    if ((tmp_damage > 0) && (em_ptr->dam == 0) && em_ptr->seen)
         em_ptr->note = _("はダメージを受けていない。", " is unharmed.");
 
     if (em_ptr->dam > em_ptr->m_ptr->hp)
