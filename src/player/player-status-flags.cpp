@@ -271,6 +271,8 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
         return has_resist_time(creature_ptr);
     case TR_RES_WATER:
         return has_resist_water(creature_ptr);
+    case TR_RES_CURSE :
+        return has_resist_curse(creature_ptr);
 
     case TR_SH_FIRE:
         return has_sh_fire(creature_ptr);
@@ -1853,6 +1855,19 @@ BIT_FLAGS has_resist_water(player_type *creature_ptr)
         result |= FLAG_CAUSE_RACE;
 
     result |= check_equipment_flags(creature_ptr, TR_RES_WATER);
+    return result;
+}
+
+/*!
+ * @brief 呪力耐性を所持しているかどうか
+ * @param プレイヤー情報への参照ポインタ
+ * @return 呪力耐性を所持していればTRUE、なければFALSE
+ */
+BIT_FLAGS has_resist_curse(player_type *creature_ptr)
+{
+    BIT_FLAGS result = 0L;
+
+    result |= check_equipment_flags(creature_ptr, TR_RES_CURSE);
     return result;
 }
 

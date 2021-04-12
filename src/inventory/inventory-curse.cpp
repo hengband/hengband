@@ -360,7 +360,7 @@ static void occur_curse_effects(player_type *creature_ptr)
 void execute_cursed_items_effect(player_type *creature_ptr)
 {
     occur_curse_effects(creature_ptr);
-    if (!one_in_(999) || creature_ptr->anti_magic)
+    if (!one_in_(999) || creature_ptr->anti_magic || (one_in_(2) && has_resist_curse(creature_ptr)))
         return;
 
     object_type *o_ptr = &creature_ptr->inventory_list[INVEN_LITE];

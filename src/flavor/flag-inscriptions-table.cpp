@@ -36,7 +36,7 @@ std::vector<flag_insc_table> flag_insc_resistance = {
     { "毒", "Po", TR_RES_POIS, -1 }, { "閃", "Li", TR_RES_LITE, -1 }, { "暗", "Dk", TR_RES_DARK, -1 }, { "破", "Sh", TR_RES_SHARDS, -1 },
     { "盲", "Bl", TR_RES_BLIND, -1 }, { "乱", "Cf", TR_RES_CONF, -1 }, { "轟", "So", TR_RES_SOUND, -1 }, { "獄", "Nt", TR_RES_NETHER, -1 },
     { "因", "Nx", TR_RES_NEXUS, -1 }, { "沌", "Ca", TR_RES_CHAOS, -1 }, { "劣", "Di", TR_RES_DISEN, -1 }, { "時", "Tm", TR_RES_TIME, -1 },
-    { "水", "Wt", TR_RES_WATER, -1 }, { "恐", "Fe", TR_RES_FEAR, -1 },
+    { "水", "Wt", TR_RES_WATER, -1 }, { "恐", "Fe", TR_RES_FEAR, -1 }, { "呪", "Cu", TR_RES_CURSE, -1 },
 };
 
 /*! オブジェクトの特性表示記号テーブルの定義(その他特性) */

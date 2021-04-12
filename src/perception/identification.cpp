@@ -530,7 +530,12 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それは矢の呪文を反射する。", "It reflects bolt spells.");
     }
 
-    if (has_flag(flgs, TR_SH_FIRE)) {
+    if (has_flag(flgs, TR_RES_CURSE)) {
+        info[i++] = _("それは呪いへの抵抗力を高める。", "It produces your high resisrance to curse.");
+    }
+
+    if (has_flag(flgs, TR_SH_FIRE))
+    {
         info[i++] = _("それは炎のバリアを張る。", "It produces a fiery sheath.");
     }
 

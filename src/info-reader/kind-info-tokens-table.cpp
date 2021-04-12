@@ -160,6 +160,7 @@ std::unordered_map<std::string_view, tr_type> k_info_flags = {
     { "INVULN_ARROW", TR_INVULN_ARROW },
     { "DARK_SOURCE", TR_DARK_SOURCE },
     { "SUPPORTIVE", TR_SUPPORTIVE },
+    { "RES_CURSE", TR_RES_CURSE },
 };
 
 /*!

@@ -300,6 +300,8 @@ PRICE flag_cost(player_type *player_ptr, object_type *o_ptr, int plusses)
     }
     total += (tmp_cost * count);
 
+    if (has_flag(flgs, TR_RES_CURSE))
+        total += 7500;
     if (has_flag(flgs, TR_SH_FIRE))
         total += 5000;
     if (has_flag(flgs, TR_SH_ELEC))

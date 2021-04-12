@@ -117,6 +117,7 @@ const flag_desc resist_flags_desc[MAX_RESISTANCE_FLAGS_DESCRIPTION] = {
     { TR_RES_DISEN, _("劣化", "Disenchantment") },
     { TR_RES_TIME, _("時間逆転", "Time") },
     { TR_RES_WATER, _("水", "Water") },
+    { TR_RES_CURSE, _("呪力", "Curse") },
 };
 
 /* Elemental immunities (along with poison) */

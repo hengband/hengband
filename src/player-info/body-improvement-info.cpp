@@ -67,6 +67,9 @@ void set_body_improvement_info_3(player_type *creature_ptr, self_info_type *self
     if (has_reflect(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたは矢の呪文を反射する。", "You reflect bolt spells.");
 
+    if (has_resist_curse(creature_ptr))
+        self_ptr->info[self_ptr->line++] = _("あなたはより強く呪いに抵抗できる。", "You can resist curses powerfully.");
+
     if (has_sh_fire(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたは炎のオーラに包まれている。", "You are surrounded with a fiery aura.");
 

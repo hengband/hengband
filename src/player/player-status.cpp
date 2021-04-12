@@ -1330,6 +1330,9 @@ static ACTION_SKILL_POWER calc_saving_throw(player_type *creature_ptr)
     if (creature_ptr->muta.has(MUTA::MAGIC_RES))
         pow += (15 + (creature_ptr->lev / 5));
 
+    if (has_resist_curse(creature_ptr))
+        pow += 30;
+
     pow += adj_wis_sav[creature_ptr->stat_index[A_WIS]];
 
     if (is_shero(creature_ptr))
