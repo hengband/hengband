@@ -256,10 +256,13 @@ void message_pain(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam)
 
     GAME_TEXT m_name[MAX_NLEN];
 
+
     monster_desc(player_ptr, m_name, m_ptr, 0);
 
     if (dam == 0) {
-        msg_format(_("%^sはダメージを受けていない。", "%^s is unharmed."), m_name);
+        if (m_ptr->ml) {
+            msg_format(_("%^sはダメージを受けていない。", "%^s is unharmed."), m_name);
+        }
         return;
     }
 
