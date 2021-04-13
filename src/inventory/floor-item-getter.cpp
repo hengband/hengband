@@ -772,28 +772,29 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
             }
 
             if (tag_not_found) {
-                fis_ptr->which = (char)tolower(fis_ptr->which);
+                auto which = (char)tolower(fis_ptr->which);
+
                 if (command_wrk == (USE_INVEN)) {
-                    if (fis_ptr->which == '(')
+                    if (which == '(')
                         fis_ptr->k = fis_ptr->i1;
-                    else if (fis_ptr->which == ')')
+                    else if (which == ')')
                         fis_ptr->k = fis_ptr->i2;
                     else
-                        fis_ptr->k = label_to_inventory(owner_ptr, fis_ptr->which);
+                        fis_ptr->k = label_to_inventory(owner_ptr, which);
                 } else if (command_wrk == (USE_EQUIP)) {
-                    if (fis_ptr->which == '(')
+                    if (which == '(')
                         fis_ptr->k = fis_ptr->e1;
-                    else if (fis_ptr->which == ')')
+                    else if (which == ')')
                         fis_ptr->k = fis_ptr->e2;
                     else
-                        fis_ptr->k = label_to_equipment(owner_ptr, fis_ptr->which);
+                        fis_ptr->k = label_to_equipment(owner_ptr, which);
                 } else if (command_wrk == USE_FLOOR) {
-                    if (fis_ptr->which == '(')
+                    if (which == '(')
                         fis_ptr->k = 0;
-                    else if (fis_ptr->which == ')')
+                    else if (which == ')')
                         fis_ptr->k = fis_ptr->floor_num - 1;
                     else
-                        fis_ptr->k = islower(fis_ptr->which) ? A2I(fis_ptr->which) : -1;
+                        fis_ptr->k = islower(which) ? A2I(which) : -1;
                     if (fis_ptr->k < 0 || fis_ptr->k >= fis_ptr->floor_num || fis_ptr->k >= 23) {
                         bell();
                         break;
@@ -808,7 +809,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 break;
             }
 
-            int ver = isupper(fis_ptr->which);
+            auto ver = tag_not_found && isupper(fis_ptr->which);
             if (ver && !verify(owner_ptr, _("本当に", "Try"), fis_ptr->k)) {
                 fis_ptr->done = TRUE;
                 break;

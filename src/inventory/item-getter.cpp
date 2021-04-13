@@ -552,21 +552,22 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
             if (!tag_not_found)
                 item_selection_ptr->cur_tag = item_selection_ptr->which;
             else {
-                item_selection_ptr->which = (char)tolower(item_selection_ptr->which);
+                auto which = (char)tolower(item_selection_ptr->which);
+
                 if (!command_wrk) {
-                    if (item_selection_ptr->which == '(')
+                    if (which == '(')
                         item_selection_ptr->k = item_selection_ptr->i1;
-                    else if (item_selection_ptr->which == ')')
+                    else if (which == ')')
                         item_selection_ptr->k = item_selection_ptr->i2;
                     else
-                        item_selection_ptr->k = label_to_inventory(owner_ptr, item_selection_ptr->which);
+                        item_selection_ptr->k = label_to_inventory(owner_ptr, which);
                 } else {
-                    if (item_selection_ptr->which == '(')
+                    if (which == '(')
                         item_selection_ptr->k = item_selection_ptr->e1;
-                    else if (item_selection_ptr->which == ')')
+                    else if (which == ')')
                         item_selection_ptr->k = item_selection_ptr->e2;
                     else
-                        item_selection_ptr->k = label_to_equipment(owner_ptr, item_selection_ptr->which);
+                        item_selection_ptr->k = label_to_equipment(owner_ptr, which);
                 }
             }
 
@@ -575,7 +576,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
                 break;
             }
 
-            int ver = isupper(item_selection_ptr->which);
+            auto ver = tag_not_found && isupper(item_selection_ptr->which);
             if (ver && !verify(owner_ptr, _("本当に", "Try"), item_selection_ptr->k)) {
                 item_selection_ptr->done = TRUE;
                 break;
