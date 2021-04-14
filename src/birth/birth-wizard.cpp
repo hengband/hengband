@@ -524,16 +524,15 @@ static bool display_auto_roller(player_type *creature_ptr, chara_limit_type char
 /*!
  * @brief 名前と生い立ちを設定する
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @param process_autopick_file_command 自動拾いコマンドへの関数ポインタ
  * @return なし
  * @details ついでにステータス限界もここで決めている
  */
-static void set_name_history(player_type *creature_ptr, void (*process_autopick_file_command)(char *))
+static void set_name_history(player_type *creature_ptr)
 {
     clear_from(23);
     get_name(creature_ptr);
     process_player_name(creature_ptr, current_world_ptr->creating_savefile);
-    edit_history(creature_ptr, process_autopick_file_command);
+    edit_history(creature_ptr);
     get_max_stats(creature_ptr);
     get_virtues(creature_ptr);
     prt(_("[ 'Q' 中断, 'S' 初めから, Enter ゲーム開始 ]", "['Q'uit, 'S'tart over, or Enter to continue]"), 23, _(14, 10));
@@ -547,7 +546,7 @@ static void set_name_history(player_type *creature_ptr, void (*process_autopick_
  * expensive CPU wise.  And it cuts down on player stupidity.
  * @return なし
  */
-bool player_birth_wizard(player_type *creature_ptr, void (*process_autopick_file_command)(char *))
+bool player_birth_wizard(player_type *creature_ptr)
 {
     display_initial_birth_message(creature_ptr);
     const char p2 = ')';
@@ -583,7 +582,7 @@ bool player_birth_wizard(player_type *creature_ptr, void (*process_autopick_file
     if (!display_auto_roller(creature_ptr, chara_limit))
         return FALSE;
 
-    set_name_history(creature_ptr, process_autopick_file_command);
+    set_name_history(creature_ptr);
     char c = inkey();
     if (c == 'Q')
         birth_quit();

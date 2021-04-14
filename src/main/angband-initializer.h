@@ -14,8 +14,7 @@
 
 #include "system/angband.h"
 
-typedef void (*process_autopick_file_command_pf)(char *);
-void init_angband(player_type *player_ptr, process_autopick_file_command_pf process_autopick_file_command, bool no_term);
+void init_angband(player_type *player_ptr, bool no_term);
 void init_file_paths(char *path, char *varpath);
 
 #endif /* INCLUDED_INIT_H */

@@ -794,7 +794,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 
 #ifdef WORLD_SCORE
             if (m_ptr->r_idx == MON_SERPENT) {
-                screen_dump = make_screen_dump(target_ptr, process_autopick_file_command);
+                screen_dump = make_screen_dump(target_ptr);
             }
 #endif
         }

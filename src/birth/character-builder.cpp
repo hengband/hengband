@@ -72,7 +72,7 @@ static void write_birth_diary(player_type *creature_ptr)
  * fields, so we must be sure to clear them first.
  * @return なし
  */
-void player_birth(player_type *creature_ptr, void (*process_autopick_file_command)(char *))
+void player_birth(player_type *creature_ptr)
 {
     current_world_ptr->play_time = 0;
     wipe_monsters_list(creature_ptr);
@@ -80,7 +80,7 @@ void player_birth(player_type *creature_ptr, void (*process_autopick_file_comman
     if (!ask_quick_start(creature_ptr)) {
         play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DEFAULT);
         while (TRUE) {
-            if (player_birth_wizard(creature_ptr, process_autopick_file_command))
+            if (player_birth_wizard(creature_ptr))
                 break;
 
             player_wipe_without_name(creature_ptr);

@@ -167,7 +167,7 @@ static void init_world_floor_info(player_type *player_ptr)
     write_level = TRUE;
     current_world_ptr->seed_flavor = randint0(0x10000000);
     current_world_ptr->seed_town = randint0(0x10000000);
-    player_birth(player_ptr, process_autopick_file_command);
+    player_birth(player_ptr);
     counts_write(player_ptr, 2, 0);
     player_ptr->count = 0;
     load = FALSE;
@@ -399,7 +399,7 @@ static void process_game_turn(player_type *player_ptr)
 void play_game(player_type *player_ptr, bool new_game, bool browsing_movie)
 {
     if (browsing_movie) {
-        reset_visuals(player_ptr, process_autopick_file_command);
+        reset_visuals(player_ptr);
         browse_movie();
         return;
     }
@@ -419,7 +419,7 @@ void play_game(player_type *player_ptr, bool new_game, bool browsing_movie)
 
     generate_world(player_ptr, new_game);
     player_ptr->playing = TRUE;
-    reset_visuals(player_ptr, process_autopick_file_command);
+    reset_visuals(player_ptr);
     load_all_pref_files(player_ptr);
     if (new_game)
         player_outfit(player_ptr);

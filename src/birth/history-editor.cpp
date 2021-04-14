@@ -12,10 +12,9 @@
 /*!
  * @brief 生い立ちメッセージを編集する。/Character background edit-mode
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @param process_autopick_file_command 自動拾いファイルコマンドへの関数ポインタ
  * @return なし
  */
-void edit_history(player_type *creature_ptr, void (*process_autopick_file_command)(char *))
+void edit_history(player_type *creature_ptr)
 {
     char old_history[4][60];
     for (int i = 0; i < 4; i++) {
@@ -114,7 +113,7 @@ void edit_history(player_type *creature_ptr, void (*process_autopick_file_comman
 
             break;
         } else if (c == KTRL('A')) {
-            if (read_histpref(creature_ptr, process_autopick_file_command)) {
+            if (read_histpref(creature_ptr)) {
 #ifdef JP
                 if ((x > 0) && (iskanji2(creature_ptr->history[y], x - 1)))
                     x--;

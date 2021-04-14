@@ -336,15 +336,14 @@ static bool do_cmd_save_screen_text(int wid, int hgt)
 /*!
  * @brief 記念撮影のためにグラフィック使用をOFFにする
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @param handle_stuff 画面更新用の関数ポインタ
  * @return 記念撮影直前のグラフィックオプション
  */
-static bool update_use_graphics(player_type *creature_ptr, void(*process_autopick_file_command)(char*))
+static bool update_use_graphics(player_type *creature_ptr)
 {
 	if (!use_graphics) return TRUE;
 
 	use_graphics = FALSE;
-	reset_visuals(creature_ptr, process_autopick_file_command);
+	reset_visuals(creature_ptr);
 	creature_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
 	handle_stuff(creature_ptr);
 	return FALSE;
@@ -354,10 +353,9 @@ static bool update_use_graphics(player_type *creature_ptr, void(*process_autopic
 /*
  * Save a screen dump to a file
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @param handle_stuff 画面更新用の関数ポインタ
  * @return なし
  */
-void do_cmd_save_screen(player_type *creature_ptr, void(*process_autopick_file_command)(char*))
+void do_cmd_save_screen(player_type *creature_ptr)
 {
 	prt(_("記念撮影しますか？ [(y)es/(h)tml/(n)o] ", "Save screen dump? [(y)es/(h)tml/(n)o] "), 0, 0);
 	bool html_dump;
@@ -366,7 +364,7 @@ void do_cmd_save_screen(player_type *creature_ptr, void(*process_autopick_file_c
 	int wid, hgt;
 	term_get_size(&wid, &hgt);
 
-	bool old_use_graphics = update_use_graphics(creature_ptr, process_autopick_file_command);
+	bool old_use_graphics = update_use_graphics(creature_ptr);
 
 	if (html_dump)
 	{
@@ -381,7 +379,7 @@ void do_cmd_save_screen(player_type *creature_ptr, void(*process_autopick_file_c
 	if (old_use_graphics) return;
 
 	use_graphics = TRUE;
-	reset_visuals(creature_ptr, process_autopick_file_command);
+	reset_visuals(creature_ptr);
 	creature_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
 	handle_stuff(creature_ptr);
 }
