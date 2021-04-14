@@ -570,6 +570,16 @@ static void save_prefs(void)
 }
 
 /*
+ * callback for EnumDisplayMonitors API
+ */
+BOOL CALLBACK monitorenumproc(HMONITOR hMon, HDC hdcMon, LPRECT lpMon, LPARAM dwDate)
+{
+    bool *result = (bool *)dwDate;
+    *result = true;
+    return FALSE;
+}
+
+/*
  * Load the "prefs" for a single term
  */
 static void load_prefs_aux(int i)
@@ -577,11 +587,6 @@ static void load_prefs_aux(int i)
     term_data *td = &data[i];
     GAME_TEXT sec_name[128];
     char tmp[1024];
-
-    int dispx = GetSystemMetrics(SM_CXVIRTUALSCREEN);
-    int dispy = GetSystemMetrics(SM_CYVIRTUALSCREEN);
-    int posx = 0;
-    int posy = 0;
 
     sprintf(sec_name, "Term-%d", i);
     sprintf(sec_name, "Term-%d", i);
@@ -616,10 +621,17 @@ static void load_prefs_aux(int i)
         win_maximized = (GetPrivateProfileInt(sec_name, "Maximized", win_maximized, ini_file) != 0);
     }
 
-    posx = GetPrivateProfileInt(sec_name, "PositionX", posx, ini_file);
-    posy = GetPrivateProfileInt(sec_name, "PositionY", posy, ini_file);
-    td->pos_x = MIN(MAX(0, posx), dispx - 128);
-    td->pos_y = MIN(MAX(0, posy), dispy - 128);
+    int posx = GetPrivateProfileInt(sec_name, "PositionX", 0, ini_file);
+    int posy = GetPrivateProfileInt(sec_name, "PositionY", 0, ini_file);
+    // 保存座標がモニタ内の領域にあるかチェック
+    RECT rect = { posx, posy, posx + 128, posy +128 };
+    bool in_any_monitor = false;
+    ::EnumDisplayMonitors(NULL, &rect, monitorenumproc, (LPARAM)&in_any_monitor);
+    if (in_any_monitor) {
+        // いずれかのモニタに表示可能、ウインドウ位置を復元
+        td->pos_x = posx;
+        td->pos_y = posy;
+    }
 
     if (i > 0) {
         td->posfix = (GetPrivateProfileInt(sec_name, "PositionFix", td->posfix, ini_file) != 0);
