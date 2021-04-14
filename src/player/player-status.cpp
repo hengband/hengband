@@ -1305,6 +1305,8 @@ static ACTION_SKILL_POWER calc_device_ability(player_type *creature_ptr)
  * * 種族/職業/性格による加算
  * * 職業と性格とレベルによる追加加算
  * * 変異MUT3_MAGIC_RESによる加算(15 + レベル / 5)
+ * * 呪力耐性の装備による加算(30)
+ * * 祝福された装備による加算(5 + レベル / 10)
  * * 賢さによるadj_wis_savテーブル加算
  * * 狂戦士化による減算(-30)
  * * 反魔法持ちで大なり上書き(90+レベル未満ならその値に上書き)
@@ -1332,6 +1334,9 @@ static ACTION_SKILL_POWER calc_saving_throw(player_type *creature_ptr)
 
     if (has_resist_curse(creature_ptr))
         pow += 30;
+
+    if (creature_ptr->blessed)
+        pow += 6 + (creature_ptr->lev - 1) / 10;
 
     pow += adj_wis_sav[creature_ptr->stat_index[A_WIS]];
 
