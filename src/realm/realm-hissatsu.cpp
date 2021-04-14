@@ -871,7 +871,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
                 msg_print(_("不思議な力がテレポートを防いだ！", "A mysterious force prevents you from teleporting!"));
                 break;
             }
-            project(caster_ptr, 0, 0, y, x, HISSATSU_ISSEN, GF_ATTACK, PROJECT_BEAM | PROJECT_KILL, -1);
+            project(caster_ptr, 0, 0, y, x, HISSATSU_ISSEN, GF_ATTACK, PROJECT_BEAM | PROJECT_KILL);
             teleport_player_to(caster_ptr, y, x, TELEPORT_SPONTANEOUS);
         }
         break;
@@ -952,7 +952,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
                 total_damage += (damage / 100);
             }
             project(caster_ptr, 0, (cave_has_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT) ? 5 : 0), y, x, total_damage * 3 / 2, GF_METEOR,
-                PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM, -1);
+                PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM);
         }
         break;
 
@@ -980,7 +980,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
                 msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
                 return NULL;
             }
-            take_hit(caster_ptr, DAMAGE_NOESCAPE, 100 + randint1(100), _("慶雲鬼忍剣を使った衝撃", "exhaustion on using Keiun-Kininken"), -1);
+            take_hit(caster_ptr, DAMAGE_NOESCAPE, 100 + randint1(100), _("慶雲鬼忍剣を使った衝撃", "exhaustion on using Keiun-Kininken"));
         }
         break;
 
@@ -1003,11 +1003,11 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
             if (i != '@')
                 return NULL;
             if (current_world_ptr->total_winner) {
-                take_hit(caster_ptr, DAMAGE_FORCE, 9999, "Seppuku", -1);
+                take_hit(caster_ptr, DAMAGE_FORCE, 9999, "Seppuku");
                 current_world_ptr->total_winner = TRUE;
             } else {
                 msg_print(_("武士道とは、死ぬことと見つけたり。", "The meaning of bushido is found in death."));
-                take_hit(caster_ptr, DAMAGE_FORCE, 9999, "Seppuku", -1);
+                take_hit(caster_ptr, DAMAGE_FORCE, 9999, "Seppuku");
             }
         }
         break;

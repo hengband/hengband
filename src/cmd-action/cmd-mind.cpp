@@ -208,7 +208,7 @@ static void check_mind_mindcrafter(player_type *caster_ptr, cm_type *cm_ptr)
 
     msg_format(_("%sの力が制御できない氾流となって解放された！", "Your mind unleashes its power in an uncontrollable storm!"), cm_ptr->mind_explanation);
     project(caster_ptr, PROJECT_WHO_UNCTRL_POWER, 2 + cm_ptr->plev / 10, caster_ptr->y, caster_ptr->x, cm_ptr->plev * 2, GF_MANA,
-        PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM, -1);
+        PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM);
     caster_ptr->csp = MAX(0, caster_ptr->csp - cm_ptr->plev * MAX(1, cm_ptr->plev / 10));
 }
 
@@ -234,7 +234,7 @@ static void check_mind_mirror_master(player_type *caster_ptr, cm_type *cm_ptr)
 
     msg_format(_("%sの力が制御できない氾流となって解放された！", "Your mind unleashes its power in an uncontrollable storm!"), cm_ptr->mind_explanation);
     project(caster_ptr, PROJECT_WHO_UNCTRL_POWER, 2 + cm_ptr->plev / 10, caster_ptr->y, caster_ptr->x, cm_ptr->plev * 2, GF_MANA,
-        PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM, -1);
+        PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM);
     caster_ptr->csp = MAX(0, caster_ptr->csp - cm_ptr->plev * MAX(1, cm_ptr->plev / 10));
 }
 
@@ -331,7 +331,7 @@ static void mind_reflection(player_type *caster_ptr, cm_type *cm_ptr)
 static void process_hard_concentration(player_type *caster_ptr, cm_type *cm_ptr)
 {
     if ((cm_ptr->use_mind == MIND_BERSERKER) || (cm_ptr->use_mind == MIND_NINJUTSU)) {
-        take_hit(caster_ptr, DAMAGE_USELIFE, cm_ptr->mana_cost, _("過度の集中", "concentrating too hard"), -1);
+        take_hit(caster_ptr, DAMAGE_USELIFE, cm_ptr->mana_cost, _("過度の集中", "concentrating too hard"));
         caster_ptr->redraw |= PR_HP;
         return;
     }

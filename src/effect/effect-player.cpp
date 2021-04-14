@@ -159,7 +159,7 @@ enum ep_check_result {
  * @return 初期化後の構造体ポインタ
  */
 static effect_player_type *initialize_effect_player(
-    effect_player_type *ep_ptr, MONSTER_IDX who, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag, int monspell)
+    effect_player_type *ep_ptr, MONSTER_IDX who, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag)
 {
     ep_ptr->rlev = 0;
     ep_ptr->m_ptr = NULL;
@@ -168,7 +168,6 @@ static effect_player_type *initialize_effect_player(
     ep_ptr->dam = dam;
     ep_ptr->effect_type = effect_type;
     ep_ptr->flag = flag;
-    ep_ptr->monspell = monspell;
     return ep_ptr;
 }
 
@@ -215,7 +214,7 @@ static bool process_bolt_reflection(player_type *target_ptr, effect_player_type 
         t_x = target_ptr->x - 1 + randint1(3);
     }
 
-    (*project)(target_ptr, 0, 0, t_y, t_x, ep_ptr->dam, ep_ptr->effect_type, (PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE), ep_ptr->monspell);
+    (*project)(target_ptr, 0, 0, t_y, t_x, ep_ptr->dam, ep_ptr->effect_type, (PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE));
     disturb(target_ptr, TRUE, TRUE);
     return TRUE;
 }
@@ -292,10 +291,10 @@ static void describe_effect_source(player_type *target_ptr, effect_player_type *
  * @return 何か一つでも効力があればTRUEを返す / TRUE if any "effects" of the projection were observed, else FALSE
  */
 bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, int r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID effect_type,
-    BIT_FLAGS flag, int monspell, project_func project)
+    BIT_FLAGS flag, project_func project)
 {
     effect_player_type tmp_effect;
-    effect_player_type *ep_ptr = initialize_effect_player(&tmp_effect, who, dam, effect_type, flag, monspell);
+    effect_player_type *ep_ptr = initialize_effect_player(&tmp_effect, who, dam, effect_type, flag);
     ep_check_result check_result = check_continue_player_effect(target_ptr, ep_ptr, y, x, project);
     if (check_result != EP_CHECK_CONTINUE)
         return (bool)check_result;
@@ -312,7 +311,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
         GAME_TEXT m_name_self[MAX_MONSTER_NAME];
         monster_desc(target_ptr, m_name_self, ep_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
         msg_format(_("攻撃が%s自身を傷つけた！", "The attack of %s has wounded %s!"), ep_ptr->m_name, m_name_self);
-        (*project)(target_ptr, 0, 0, ep_ptr->m_ptr->fy, ep_ptr->m_ptr->fx, ep_ptr->get_damage, GF_MISSILE, PROJECT_KILL, -1);
+        (*project)(target_ptr, 0, 0, ep_ptr->m_ptr->fy, ep_ptr->m_ptr->fx, ep_ptr->get_damage, GF_MISSILE, PROJECT_KILL);
         if (target_ptr->tim_eyeeye)
             set_tim_eyeeye(target_ptr, target_ptr->tim_eyeeye - 5, TRUE);
     }

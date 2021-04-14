@@ -258,7 +258,7 @@ static bool reduce_mana_by_racial(player_type *creature_ptr, rc_type *rc_ptr)
 
     actual_racial_cost -= creature_ptr->csp;
     creature_ptr->csp = 0;
-    take_hit(creature_ptr, DAMAGE_USELIFE, actual_racial_cost, _("過度の集中", "concentrating too hard"), -1);
+    take_hit(creature_ptr, DAMAGE_USELIFE, actual_racial_cost, _("過度の集中", "concentrating too hard"));
     return TRUE;
 }
 

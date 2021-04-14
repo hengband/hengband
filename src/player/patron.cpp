@@ -373,7 +373,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
             msg_print(_("「苦しむがよい、無能な愚か者よ！」", "'Suffer, pathetic fool!'"));
 
             fire_ball(creature_ptr, GF_DISINTEGRATE, 0, creature_ptr->lev * 4, 4);
-            take_hit(creature_ptr, DAMAGE_NOESCAPE, creature_ptr->lev * 4, wrath_reason, -1);
+            take_hit(creature_ptr, DAMAGE_NOESCAPE, creature_ptr->lev * 4, wrath_reason);
             reward = _("分解の球が発生した。", "generating disintegration ball");
             break;
 
@@ -468,7 +468,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
             msg_format(_("%sの声が轟き渡った:", "The voice of %s thunders:"), chaos_patrons[creature_ptr->chaos_patron]);
             msg_print(_("「死ぬがよい、下僕よ！」", "'Die, mortal!'"));
 
-            take_hit(creature_ptr, DAMAGE_LOSELIFE, creature_ptr->lev * 4, wrath_reason, -1);
+            take_hit(creature_ptr, DAMAGE_LOSELIFE, creature_ptr->lev * 4, wrath_reason);
             for (int stat = 0; stat < A_MAX; stat++) {
                 (void)dec_stat(creature_ptr, stat, 10 + randint1(15), FALSE);
             }

@@ -2925,7 +2925,7 @@ void wreck_the_pattern(player_type *creature_ptr)
     msg_print(_("何か恐ろしい事が起こった！", "Something terrible happens!"));
 
     if (!is_invuln(creature_ptr))
-        take_hit(creature_ptr, DAMAGE_NOESCAPE, damroll(10, 8), _("パターン損壊", "corrupting the Pattern"), -1);
+        take_hit(creature_ptr, DAMAGE_NOESCAPE, damroll(10, 8), _("パターン損壊", "corrupting the Pattern"));
 
     int to_ruin = randint1(45) + 35;
     while (to_ruin--) {

@@ -273,7 +273,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 msg_print(_("ドーン！部屋が揺れた！", "BOOM! Shake the room!"));
-                project(caster_ptr, 0, rad, caster_ptr->y, caster_ptr->x, dam, GF_SOUND, PROJECT_KILL | PROJECT_ITEM, -1);
+                project(caster_ptr, 0, rad, caster_ptr->y, caster_ptr->x, dam, GF_SOUND, PROJECT_KILL | PROJECT_ITEM);
             }
         }
         break;

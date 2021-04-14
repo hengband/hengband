@@ -78,7 +78,7 @@ MONSTER_NUMBER summon_guardian(player_type *target_ptr, POSITION y, POSITION x, 
         if (mon_to_player)
             fire_ball_hide(target_ptr, GF_WATER_FLOW, 0, 3, 8);
         else if (mon_to_mon)
-            project(target_ptr, t_idx, 8, y, x, 3, GF_WATER_FLOW, PROJECT_GRID | PROJECT_HIDE, -1);
+            project(target_ptr, t_idx, 8, y, x, 3, GF_WATER_FLOW, PROJECT_GRID | PROJECT_HIDE);
     }
 
     int count = 0;

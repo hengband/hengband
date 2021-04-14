@@ -334,7 +334,7 @@ static void hit_trap_pit(player_type *trapped_ptr, int trap_feat_type)
         }
     }
 
-    take_hit(trapped_ptr, DAMAGE_NOESCAPE, dam, trap_name, -1);
+    take_hit(trapped_ptr, DAMAGE_NOESCAPE, dam, trap_name);
 }
 
 /*!
@@ -347,7 +347,7 @@ static bool hit_trap_dart(player_type *target_ptr)
 
     if (check_hit_from_monster_to_player(target_ptr, 125)) {
         msg_print(_("小さなダーツが飛んできて刺さった！", "A small dart hits you!"));
-        take_hit(target_ptr, DAMAGE_ATTACK, damroll(1, 4), _("ダーツの罠", "a dart trap"), -1);
+        take_hit(target_ptr, DAMAGE_ATTACK, damroll(1, 4), _("ダーツの罠", "a dart trap"));
         if (!check_multishadow(target_ptr))
             hit = TRUE;
     } else {
@@ -432,7 +432,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
             dam = damroll(2, 8);
             name = _("落とし戸", "a trap door");
 
-            take_hit(trapped_ptr, DAMAGE_NOESCAPE, dam, name, -1);
+            take_hit(trapped_ptr, DAMAGE_NOESCAPE, dam, name);
 
             /* Still alive and autosave enabled */
             if (autosave_l && (trapped_ptr->chp >= 0))
@@ -480,14 +480,14 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
     case TRAP_FIRE: {
         msg_print(_("炎に包まれた！", "You are enveloped in flames!"));
         dam = damroll(4, 6);
-        (void)fire_dam(trapped_ptr, dam, _("炎のトラップ", "a fire trap"), -1, FALSE);
+        (void)fire_dam(trapped_ptr, dam, _("炎のトラップ", "a fire trap"), FALSE);
         break;
     }
 
     case TRAP_ACID: {
         msg_print(_("酸が吹きかけられた！", "You are splashed with acid!"));
         dam = damroll(4, 6);
-        (void)acid_dam(trapped_ptr, dam, _("酸のトラップ", "an acid trap"), -1, FALSE);
+        (void)acid_dam(trapped_ptr, dam, _("酸のトラップ", "an acid trap"), FALSE);
         break;
     }
 
@@ -548,7 +548,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
     case TRAP_TRAPS: {
         msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
         /* Make some new traps */
-        project(trapped_ptr, 0, 1, y, x, 0, GF_MAKE_TRAP, PROJECT_HIDE | PROJECT_JUMP | PROJECT_GRID, -1);
+        project(trapped_ptr, 0, 1, y, x, 0, GF_MAKE_TRAP, PROJECT_HIDE | PROJECT_JUMP | PROJECT_GRID);
 
         break;
     }
@@ -563,9 +563,9 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 
     case TRAP_OPEN: {
         msg_print(_("大音響と共にまわりの壁が崩れた！", "Suddenly, surrounding walls are opened!"));
-        (void)project(trapped_ptr, 0, 3, y, x, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE, -1);
-        (void)project(trapped_ptr, 0, 3, y, x - 4, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE, -1);
-        (void)project(trapped_ptr, 0, 3, y, x + 4, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE, -1);
+        (void)project(trapped_ptr, 0, 3, y, x, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE);
+        (void)project(trapped_ptr, 0, 3, y, x - 4, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE);
+        (void)project(trapped_ptr, 0, 3, y, x + 4, 0, GF_DISINTEGRATE, PROJECT_GRID | PROJECT_HIDE);
         aggravate_monsters(trapped_ptr, 0);
 
         break;

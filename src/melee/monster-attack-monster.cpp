@@ -61,11 +61,10 @@ static void process_blow_effect(player_type *subject_ptr, mam_type *mam_ptr)
     switch (mam_ptr->effect_type) {
     case BLOW_EFFECT_TYPE_FEAR:
         project(subject_ptr, mam_ptr->m_idx, 0, mam_ptr->t_ptr->fy, mam_ptr->t_ptr->fx, mam_ptr->damage, GF_TURN_ALL,
-            PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
+            PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED);
         break;
     case BLOW_EFFECT_TYPE_SLEEP:
-        project(subject_ptr, mam_ptr->m_idx, 0, mam_ptr->t_ptr->fy, mam_ptr->t_ptr->fx, r_ptr->level, GF_OLD_SLEEP, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED,
-            -1);
+        project(subject_ptr, mam_ptr->m_idx, 0, mam_ptr->t_ptr->fy, mam_ptr->t_ptr->fx, r_ptr->level, GF_OLD_SLEEP, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED);
         break;
     case BLOW_EFFECT_TYPE_HEAL:
         heal_monster_by_melee(subject_ptr, mam_ptr);
@@ -92,7 +91,7 @@ static void aura_fire_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
         tr_ptr->r_flags2 |= RF2_AURA_FIRE;
 
     project(subject_ptr, mam_ptr->t_idx, 0, mam_ptr->m_ptr->fy, mam_ptr->m_ptr->fx, damroll(1 + ((tr_ptr->level) / 26), 1 + ((tr_ptr->level) / 17)), GF_FIRE,
-        PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
+        PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED);
 }
 
 static void aura_cold_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
@@ -114,7 +113,7 @@ static void aura_cold_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
         tr_ptr->r_flags3 |= RF3_AURA_COLD;
 
     project(subject_ptr, mam_ptr->t_idx, 0, mam_ptr->m_ptr->fy, mam_ptr->m_ptr->fx, damroll(1 + ((tr_ptr->level) / 26), 1 + ((tr_ptr->level) / 17)), GF_COLD,
-        PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
+        PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED);
 }
 
 static void aura_elec_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
@@ -136,7 +135,7 @@ static void aura_elec_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
         tr_ptr->r_flags2 |= RF2_AURA_ELEC;
 
     project(subject_ptr, mam_ptr->t_idx, 0, mam_ptr->m_ptr->fy, mam_ptr->m_ptr->fx, damroll(1 + ((tr_ptr->level) / 26), 1 + ((tr_ptr->level) / 17)), GF_ELEC,
-        PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
+        PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED);
 }
 
 static bool check_same_monster(player_type *subject_ptr, mam_type *mam_ptr)
@@ -196,7 +195,7 @@ static void process_monster_attack_effect(player_type *subject_ptr, mam_type *ma
 
     if (!mam_ptr->explode)
         project(subject_ptr, mam_ptr->m_idx, 0, mam_ptr->t_ptr->fy, mam_ptr->t_ptr->fx, mam_ptr->damage, mam_ptr->pt,
-            PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
+            PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED);
 
     process_blow_effect(subject_ptr, mam_ptr);
     if (!mam_ptr->touched)

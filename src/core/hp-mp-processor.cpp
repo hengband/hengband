@@ -69,15 +69,14 @@ static bool deal_damege_by_feat(player_type *creature_ptr, grid_type *g_ptr, con
     if (creature_ptr->levitation) {
         msg_print(msg_levitation);
 
-        take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"),
-            f_info[get_feat_mimic(g_ptr)].name.c_str()), -1);
+        take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"), f_info[get_feat_mimic(g_ptr)].name.c_str()));
 
         if (additional_effect != NULL)
             additional_effect(creature_ptr, damage);
     } else {
         concptr name = f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name.c_str();
         msg_format(_("%s%s！", "The %s %s!"), name, msg_normal);
-        take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name, -1);
+        take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name);
 
         if (additional_effect != NULL)
             additional_effect(creature_ptr, damage);
@@ -99,7 +98,7 @@ void process_player_hp_mp(player_type *creature_ptr)
     int upkeep_factor = 0;
     int regen_amount = PY_REGEN_NORMAL;
     if (creature_ptr->poisoned && !is_invuln(creature_ptr)) {
-        take_hit(creature_ptr, DAMAGE_NOESCAPE, 1, _("毒", "poison"), -1);
+        take_hit(creature_ptr, DAMAGE_NOESCAPE, 1, _("毒", "poison"));
     }
 
     if (creature_ptr->cut && !is_invuln(creature_ptr)) {
@@ -120,14 +119,14 @@ void process_player_hp_mp(player_type *creature_ptr)
             dam = 1;
         }
 
-        take_hit(creature_ptr, DAMAGE_NOESCAPE, dam, _("致命傷", "a fatal wound"), -1);
+        take_hit(creature_ptr, DAMAGE_NOESCAPE, dam, _("致命傷", "a fatal wound"));
     }
 
     if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE)) {
         if (!is_in_dungeon(creature_ptr) && !has_resist_lite(creature_ptr) && !is_invuln(creature_ptr) && is_daytime()) {
             if ((creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) {
                 msg_print(_("日光があなたのアンデッドの肉体を焼き焦がした！", "The sun's rays scorch your undead flesh!"));
-                take_hit(creature_ptr, DAMAGE_NOESCAPE, 1, _("日光", "sunlight"), -1);
+                take_hit(creature_ptr, DAMAGE_NOESCAPE, 1, _("日光", "sunlight"));
                 cave_no_regen = TRUE;
             }
         }
@@ -148,7 +147,7 @@ void process_player_hp_mp(player_type *creature_ptr)
             sprintf(ouch, _("%sを装備したダメージ", "wielding %s"), o_name);
 
             if (!is_invuln(creature_ptr))
-                take_hit(creature_ptr, DAMAGE_NOESCAPE, 1, ouch, -1);
+                take_hit(creature_ptr, DAMAGE_NOESCAPE, 1, ouch);
         }
     }
 
@@ -184,7 +183,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         && !has_resist_water(creature_ptr)) {
         if (calc_inventory_weight(creature_ptr) > calc_weight_limit(creature_ptr)) {
             msg_print(_("溺れている！", "You are drowning!"));
-            take_hit(creature_ptr, DAMAGE_NOESCAPE, randint1(creature_ptr->lev), _("溺れ", "drowning"), -1);
+            take_hit(creature_ptr, DAMAGE_NOESCAPE, randint1(creature_ptr->lev), _("溺れ", "drowning"));
             cave_no_regen = TRUE;
         }
     }
@@ -200,7 +199,7 @@ void process_player_hp_mp(player_type *creature_ptr)
             if (is_oppose_fire(creature_ptr))
                 damage = damage / 3;
             msg_print(_("熱い！", "It's hot!"));
-            take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, _("炎のオーラ", "Fire aura"), -1);
+            take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, _("炎のオーラ", "Fire aura"));
         }
         if ((r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags2 & RF2_AURA_ELEC) && !has_immune_elec(creature_ptr)) {
             damage = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
@@ -211,7 +210,7 @@ void process_player_hp_mp(player_type *creature_ptr)
             if (is_oppose_elec(creature_ptr))
                 damage = damage / 3;
             msg_print(_("痛い！", "It hurts!"));
-            take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, _("電気のオーラ", "Elec aura"), -1);
+            take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, _("電気のオーラ", "Elec aura"));
         }
         if ((r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].flags3 & RF3_AURA_COLD) && !has_immune_cold(creature_ptr)) {
             damage = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
@@ -220,7 +219,7 @@ void process_player_hp_mp(player_type *creature_ptr)
             if (is_oppose_cold(creature_ptr))
                 damage = damage / 3;
             msg_print(_("冷たい！", "It's cold!"));
-            take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, _("冷気のオーラ", "Cold aura"), -1);
+            take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, _("冷気のオーラ", "Cold aura"));
         }
     }
 
@@ -245,7 +244,7 @@ void process_player_hp_mp(player_type *creature_ptr)
                 dam_desc = _("硬い岩", "solid rock");
             }
 
-            take_hit(creature_ptr, DAMAGE_NOESCAPE, 1 + (creature_ptr->lev / 5), dam_desc, -1);
+            take_hit(creature_ptr, DAMAGE_NOESCAPE, 1 + (creature_ptr->lev / 5), dam_desc);
         }
     }
 

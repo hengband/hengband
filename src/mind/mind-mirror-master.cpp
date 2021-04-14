@@ -91,7 +91,7 @@ void remove_all_mirrors(player_type *caster_ptr, bool explode)
                 continue;
 
             project(caster_ptr, 0, 2, y, x, caster_ptr->lev / 2 + 5, GF_SHARDS,
-                (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
+                (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
         }
     }
 }
@@ -474,7 +474,7 @@ bool cast_mirror_spell(player_type *caster_ptr, mind_mirror_master_type spell)
             for (y = 0; y < caster_ptr->current_floor_ptr->height; y++)
                 if (is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]))
                     project(caster_ptr, 0, 2, y, x, (HIT_POINT)plev, GF_OLD_SLEEP,
-                        (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
+                        (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
 
         break;
     case SEEKER_RAY:

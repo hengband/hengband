@@ -451,14 +451,14 @@ void process_world_aux_mutation(player_type *creature_ptr)
 
             creature_ptr->csp += healing;
             creature_ptr->redraw |= (PR_HP | PR_MANA);
-            take_hit(creature_ptr, DAMAGE_LOSELIFE, healing, _("頭に昇った血", "blood rushing to the head"), -1);
+            take_hit(creature_ptr, DAMAGE_LOSELIFE, healing, _("頭に昇った血", "blood rushing to the head"));
         }
     }
 
     if (creature_ptr->muta.has(MUTA::DISARM) && one_in_(10000)) {
         disturb(creature_ptr, FALSE, TRUE);
         msg_print(_("足がもつれて転んだ！", "You trip over your own feet!"));
-        take_hit(creature_ptr, DAMAGE_NOESCAPE, randint1(creature_ptr->wt / 6), _("転倒", "tripping"), -1);
+        take_hit(creature_ptr, DAMAGE_NOESCAPE, randint1(creature_ptr->wt / 6), _("転倒", "tripping"));
         drop_weapons(creature_ptr);
     }
 }

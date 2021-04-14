@@ -32,7 +32,7 @@ MonsterSpellResult spell_RF4_BA_NUKE(player_type *target_ptr, POSITION y, POSITI
         _("%^sが%sに放射能球を放った。", "%^s casts a ball of radiation at %s."), TARGET_TYPE);
 
     const auto dam = monspell_damage(target_ptr, (MS_BALL_NUKE), m_idx, DAM_ROLL);
-    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_NUKE, dam, 2, FALSE, MS_BALL_NUKE, TARGET_TYPE);
+    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_NUKE, dam, 2, FALSE, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(target_ptr, m_idx, DRS_POIS);
 
@@ -59,7 +59,7 @@ MonsterSpellResult spell_RF4_BA_CHAO(player_type *target_ptr, POSITION y, POSITI
         _("%^sが純ログルスを放った。", "%^s invokes a raw Logrus."), _("%^sが%sに純ログルスを放った。", "%^s invokes raw Logrus upon %s."), TARGET_TYPE);
 
     const auto dam = monspell_damage(target_ptr, (MS_BALL_CHAOS), m_idx, DAM_ROLL);
-    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_CHAOS, dam, 4, FALSE, MS_BALL_CHAOS, TARGET_TYPE);
+    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_CHAOS, dam, 4, FALSE, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(target_ptr, m_idx, DRS_CHAOS);
 
@@ -88,7 +88,7 @@ MonsterSpellResult spell_RF5_BA_ACID(player_type *target_ptr, POSITION y, POSITI
 
     const auto rad = monster_is_powerful(target_ptr->current_floor_ptr, m_idx) ? 4 : 2;
     const auto dam = monspell_damage(target_ptr, (MS_BALL_ACID), m_idx, DAM_ROLL);
-    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_ACID, dam, rad, FALSE, MS_BALL_ACID, TARGET_TYPE);
+    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_ACID, dam, rad, FALSE, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(target_ptr, m_idx, DRS_ACID);
 
@@ -117,7 +117,7 @@ MonsterSpellResult spell_RF5_BA_ELEC(player_type *target_ptr, POSITION y, POSITI
 
     const auto rad = monster_is_powerful(target_ptr->current_floor_ptr, m_idx) ? 4 : 2;
     const auto dam = monspell_damage(target_ptr, (MS_BALL_ELEC), m_idx, DAM_ROLL);
-    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_ELEC, dam, rad, FALSE, MS_BALL_ELEC, TARGET_TYPE);
+    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_ELEC, dam, rad, FALSE, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(target_ptr, m_idx, DRS_ELEC);
 
@@ -153,7 +153,7 @@ MonsterSpellResult spell_RF5_BA_FIRE(player_type *target_ptr, POSITION y, POSITI
 
     const auto rad = monster_is_powerful(target_ptr->current_floor_ptr, m_idx) ? 4 : 2;
     const auto dam = monspell_damage(target_ptr, (MS_BALL_FIRE), m_idx, DAM_ROLL);
-    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_FIRE, dam, rad, FALSE, MS_BALL_FIRE, TARGET_TYPE);
+    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_FIRE, dam, rad, FALSE, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(target_ptr, m_idx, DRS_FIRE);
 
@@ -182,7 +182,7 @@ MonsterSpellResult spell_RF5_BA_COLD(player_type *target_ptr, POSITION y, POSITI
 
     const auto rad = monster_is_powerful(target_ptr->current_floor_ptr, m_idx) ? 4 : 2;
     const auto dam = monspell_damage(target_ptr, (MS_BALL_COLD), m_idx, DAM_ROLL);
-    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_COLD, dam, rad, FALSE, MS_BALL_COLD, TARGET_TYPE);
+    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_COLD, dam, rad, FALSE, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(target_ptr, m_idx, DRS_COLD);
 
@@ -209,7 +209,7 @@ MonsterSpellResult spell_RF5_BA_POIS(player_type *target_ptr, POSITION y, POSITI
         _("%^sが%sに向かって悪臭雲の呪文を唱えた。", "%^s casts a stinking cloud at %s."), TARGET_TYPE);
 
     const auto dam = monspell_damage(target_ptr, (MS_BALL_POIS), m_idx, DAM_ROLL);
-    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_POIS, dam, 2, FALSE, MS_BALL_POIS, TARGET_TYPE);
+    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_POIS, dam, 2, FALSE, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(target_ptr, m_idx, DRS_POIS);
 
@@ -236,7 +236,7 @@ MonsterSpellResult spell_RF5_BA_NETH(player_type *target_ptr, POSITION y, POSITI
         _("%^sが%sに向かって地獄球の呪文を唱えた。", "%^s casts a nether ball at %s."), TARGET_TYPE);
 
     const auto dam = monspell_damage(target_ptr, (MS_BALL_NETHER), m_idx, DAM_ROLL);
-    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_NETHER, dam, 2, FALSE, MS_BALL_NETHER, TARGET_TYPE);
+    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_NETHER, dam, 2, FALSE, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(target_ptr, m_idx, DRS_NETH);
 
@@ -276,7 +276,7 @@ MonsterSpellResult spell_RF5_BA_WATE(player_type *target_ptr, POSITION y, POSITI
     }
 
     const auto dam = monspell_damage(target_ptr, (MS_BALL_WATER), m_idx, DAM_ROLL);
-    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_WATER, dam, 4, FALSE, MS_BALL_WATER, TARGET_TYPE);
+    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_WATER, dam, 4, FALSE, TARGET_TYPE);
 
     auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
@@ -302,7 +302,7 @@ MonsterSpellResult spell_RF5_BA_MANA(player_type *target_ptr, POSITION y, POSITI
         TARGET_TYPE);
 
     const auto dam = monspell_damage(target_ptr, (MS_BALL_MANA), m_idx, DAM_ROLL);
-    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_MANA, dam, 4, FALSE, MS_BALL_MANA, TARGET_TYPE);
+    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_MANA, dam, 4, FALSE, TARGET_TYPE);
 
     auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
@@ -328,7 +328,7 @@ MonsterSpellResult spell_RF5_BA_DARK(player_type *target_ptr, POSITION y, POSITI
         _("%^sが%sに対して暗黒の嵐の呪文を念じた。", "%^s invokes a darkness storm upon %s."), TARGET_TYPE);
 
     const auto dam = monspell_damage(target_ptr, (MS_BALL_DARK), m_idx, DAM_ROLL);
-    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_DARK, dam, 4, FALSE, MS_BALL_DARK, TARGET_TYPE);
+    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_DARK, dam, 4, FALSE, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(target_ptr, m_idx, DRS_DARK);
 
@@ -356,7 +356,7 @@ MonsterSpellResult spell_RF5_BA_LITE(player_type *target_ptr, POSITION y, POSITI
         _("%^sが%sに対してスターバーストの呪文を念じた。", "%^s invokes a starburst upon %s."), TARGET_TYPE);
 
     const auto dam = monspell_damage(target_ptr, (MS_STARBURST), m_idx, DAM_ROLL);
-    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_LITE, dam, 4, FALSE, MS_STARBURST, TARGET_TYPE);
+    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_LITE, dam, 4, FALSE, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(target_ptr, m_idx, DRS_LITE);
 

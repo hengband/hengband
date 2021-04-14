@@ -317,7 +317,7 @@ bool activate_ball_lite(player_type *user_ptr, concptr name)
                 break;
         }
 
-        project(user_ptr, 0, 3, y, x, 150, GF_ELEC, PROJECT_THRU | PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL, -1);
+        project(user_ptr, 0, 3, y, x, 150, GF_ELEC, PROJECT_THRU | PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
     }
 
     return TRUE;

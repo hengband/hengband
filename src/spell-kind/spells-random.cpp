@@ -111,8 +111,8 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
             if (!(*count)) {
                 HIT_POINT dam = damroll(10, 10);
                 msg_print(_("純粋な魔力の次元への扉が開いた！", "A portal opens to a plane of raw mana!"));
-                project(target_ptr, 0, 8, target_ptr->y, target_ptr->x, dam, GF_MANA, flg, -1);
-                take_hit(target_ptr, DAMAGE_NOESCAPE, dam, _("純粋な魔力の解放", "released pure mana"), -1);
+                project(target_ptr, 0, 8, target_ptr->y, target_ptr->x, dam, GF_MANA, flg);
+                take_hit(target_ptr, DAMAGE_NOESCAPE, dam, _("純粋な魔力の解放", "released pure mana"));
                 if (!one_in_(6))
                     break;
             }
@@ -132,8 +132,8 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
             msg_print(_("エネルギーのうねりを感じた！", "You feel a surge of energy!"));
             wall_breaker(target_ptr);
             if (!randint0(7)) {
-                project(target_ptr, 0, 7, target_ptr->y, target_ptr->x, 50, GF_KILL_WALL, flg, -1);
-                take_hit(target_ptr, DAMAGE_NOESCAPE, 50, _("エネルギーのうねり", "surge of energy"), -1);
+                project(target_ptr, 0, 7, target_ptr->y, target_ptr->x, 50, GF_KILL_WALL, flg);
+                take_hit(target_ptr, DAMAGE_NOESCAPE, 50, _("エネルギーのうねり", "surge of energy"));
             }
 
             if (!one_in_(6))

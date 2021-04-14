@@ -1138,7 +1138,7 @@ void do_cmd_cast(player_type *caster_ptr)
                 sanity_blast(caster_ptr, 0, TRUE);
             } else {
                 msg_print(_("痛い！", "It hurts!"));
-                take_hit(caster_ptr, DAMAGE_LOSELIFE, damroll(o_ptr->sval + 1, 6), _("暗黒魔法の逆流", "a miscast Death spell"), -1);
+                take_hit(caster_ptr, DAMAGE_LOSELIFE, damroll(o_ptr->sval + 1, 6), _("暗黒魔法の逆流", "a miscast Death spell"));
 
                 if ((spell > 15) && one_in_(6) && !caster_ptr->hold_exp)
                     lose_exp(caster_ptr, spell * 250);
