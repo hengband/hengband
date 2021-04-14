@@ -9,6 +9,7 @@
 #include "cmd-io/cmd-save.h"
 #include "core/asking-player.h"
 #include "core/hp-mp-processor.h"
+#include "core/player-redraw-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "game-option/special-options.h"
@@ -39,10 +40,12 @@
 #include "spell/spell-types.h"
 #include "spell/spells-status.h"
 #include "status/bad-status-setter.h"
+#include "status/body-improvement.h"
 #include "status/buff-setter.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
 #include "target/target-getter.h"
+#include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
 #include "view/display-messages.h"
 
@@ -336,6 +339,18 @@ bool activate_protection_rune(player_type *user_ptr)
 {
     msg_print(_("ブルーに明るく輝いている...", "It glows light blue..."));
     create_rune_protection_one(user_ptr);
+    return TRUE;
+}
+
+bool activate_protection_elbereth(player_type *user_ptr)
+{
+    msg_print(_("エルベレスよ、我を護り給え！", "A Elbereth gilthoniel!"));
+    create_rune_protection_one(user_ptr);
+    set_afraid(user_ptr, 0);
+    set_blind(user_ptr, 0);
+    set_image(user_ptr, 0);
+    set_blessed(user_ptr, randint0(25) + 25, true);
+    set_bits(user_ptr->redraw, PR_STATS);
     return TRUE;
 }
 
