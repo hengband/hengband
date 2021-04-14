@@ -181,10 +181,10 @@ static char inkey_aux(void)
 
 /*
  * @brief キー入力を受け付けるメインルーチン / Get a keypress from the user.
- * @param なし
+ * @param do_all_term_refresh trueであれば強制的にhandle_stuffと再描画を行う。デフォルト false
  * return キーを表すコード
  */
-char inkey(void)
+char inkey(bool do_all_term_refresh)
 {
     char ch = 0;
     bool done = FALSE;
@@ -222,7 +222,10 @@ char inkey(void)
 
         if (!done && (0 != term_inkey(&kk, FALSE, FALSE))) {
             start_term_fresh();
-            all_term_fresh(x, y);
+            if (do_all_term_refresh)
+                all_term_fresh(x, y);
+            else
+                term_fresh();
             current_world_ptr->character_saved = FALSE;
 
             signal_count = 0;

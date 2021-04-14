@@ -1014,18 +1014,17 @@ static errr term_xtra_win_react(player_type *player_ptr)
             (void)new_palette();
     }
 
-    if (use_sound != arg_sound) {
+    use_sound = arg_sound;
+    if (use_sound) {
         init_sound();
-        use_sound = arg_sound;
     }
 
-    if (use_music != arg_music) {
+    use_music = arg_music;
+    if (use_music) {
         init_music();
-        use_music = arg_music;
-        if (!arg_music)
-            main_win_music::stop_music();
-        else
-            select_floor_music(player_ptr);
+        select_floor_music(player_ptr);
+    } else {
+        main_win_music::stop_music();
     }
 
     if (use_graphics != (arg_graphics > 0)) {
@@ -1798,13 +1797,16 @@ static void check_for_save_file(player_type *player_ptr, LPSTR cmd_line)
  */
 static void process_menus(player_type *player_ptr, WORD wCmd)
 {
+    if (!initialized) {
+        plog(_("まだ初期化中です...", "You cannot do that yet..."));
+        return;
+    }
+
     term_data *td;
     OPENFILENAME ofn;
     switch (wCmd) {
     case IDM_FILE_NEW: {
-        if (!initialized) {
-            plog(_("まだ初期化中です...", "You cannot do that yet..."));
-        } else if (game_in_progress) {
+        if (game_in_progress) {
             plog(_("プレイ中は新しいゲームを始めることができません！", "You can't start a new game while you're still playing!"));
         } else {
             game_in_progress = TRUE;
@@ -1817,9 +1819,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         break;
     }
     case IDM_FILE_OPEN: {
-        if (!initialized) {
-            plog(_("まだ初期化中です...", "You cannot do that yet..."));
-        } else if (game_in_progress) {
+        if (game_in_progress) {
             plog(_("プレイ中はゲームをロードすることができません！", "You can't open a new game while you're still playing!"));
         } else {
             memset(&ofn, 0, sizeof(ofn));
@@ -1896,9 +1896,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         break;
     }
     case IDM_FILE_MOVIE: {
-        if (!initialized) {
-            plog(_("まだ初期化中です...", "You cannot do that yet..."));
-        } else if (game_in_progress) {
+        if (game_in_progress) {
             plog(_("プレイ中はムービーをロードすることができません！", "You can't open a movie while you're playing!"));
         } else {
             memset(&ofn, 0, sizeof(ofn));
@@ -2082,68 +2080,60 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         break;
     }
     case IDM_OPTIONS_NO_GRAPHICS: {
-        if (!inkey_flag) {
-            plog("You may not do that right now.");
-            break;
-        }
-
         if (arg_graphics != GRAPHICS_NONE) {
             arg_graphics = GRAPHICS_NONE;
-            term_xtra_win_react(player_ptr);
-            term_key_push(KTRL('R'));
-        }
 
+            if (inkey_flag) {
+                term_xtra_win_react(player_ptr);
+                term_key_push(KTRL('R'));
+            }
+        }
         break;
     }
     case IDM_OPTIONS_OLD_GRAPHICS: {
-        if (!inkey_flag) {
-            plog("You may not do that right now.");
-            break;
-        }
-
         if (arg_graphics != GRAPHICS_ORIGINAL) {
             arg_graphics = GRAPHICS_ORIGINAL;
-            term_xtra_win_react(player_ptr);
-            term_key_push(KTRL('R'));
+
+            if (inkey_flag) {
+                term_xtra_win_react(player_ptr);
+                term_key_push(KTRL('R'));
+            } else if (!init_graphics()) {
+                arg_graphics = GRAPHICS_NONE;
+            }
         }
 
         break;
     }
     case IDM_OPTIONS_NEW_GRAPHICS: {
-        if (!inkey_flag) {
-            plog("You may not do that right now.");
-            break;
-        }
-
         if (arg_graphics != GRAPHICS_ADAM_BOLT) {
             arg_graphics = GRAPHICS_ADAM_BOLT;
-            term_xtra_win_react(player_ptr);
-            term_key_push(KTRL('R'));
+
+            if (inkey_flag) {
+                term_xtra_win_react(player_ptr);
+                term_key_push(KTRL('R'));
+            } else if (!init_graphics()) {
+                arg_graphics = GRAPHICS_NONE;
+            }
         }
 
         break;
     }
     case IDM_OPTIONS_NEW2_GRAPHICS: {
-        if (!inkey_flag) {
-            plog("You may not do that right now.");
-            break;
-        }
-
         if (arg_graphics != GRAPHICS_HENGBAND) {
             arg_graphics = GRAPHICS_HENGBAND;
-            term_xtra_win_react(player_ptr);
-            term_key_push(KTRL('R'));
+
+            if (inkey_flag) {
+                term_xtra_win_react(player_ptr);
+                term_key_push(KTRL('R'));
+            } else if (!init_graphics()) {
+                arg_graphics = GRAPHICS_NONE;
+            }
         }
 
         break;
     }
     case IDM_OPTIONS_BIGTILE: {
         td = &data[0];
-        if (!inkey_flag) {
-            plog("You may not do that right now.");
-            break;
-        }
-
         arg_bigtile = !arg_bigtile;
         term_activate(&td->t);
         term_resize(td->cols, td->rows);
@@ -2151,34 +2141,19 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         break;
     }
     case IDM_OPTIONS_MUSIC: {
-        if (!inkey_flag) {
-            plog("You may not do that right now.");
-            break;
-        }
-
         arg_music = !arg_music;
-        term_xtra_win_react(player_ptr);
-        term_key_push(KTRL('R'));
+        if (inkey_flag)
+            term_xtra_win_react(player_ptr);
         break;
     }
     case IDM_OPTIONS_SOUND: {
-        if (!inkey_flag) {
-            plog("You may not do that right now.");
-            break;
-        }
-
         arg_sound = !arg_sound;
-        term_xtra_win_react(player_ptr);
-        term_key_push(KTRL('R'));
+        if (inkey_flag)
+            term_xtra_win_react(player_ptr);
         break;
     }
     case IDM_OPTIONS_BG: {
-        if (!inkey_flag) {
-            plog("You may not do that right now.");
-            break;
-        }
-
-        use_bg = !use_bg;
+        use_bg = !(use_bg > 0);
         if (use_bg) {
             init_background();
             use_bg = init_bg();
@@ -2186,16 +2161,11 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
             delete_bg();
         }
 
-        term_xtra_win_react(player_ptr);
-        term_key_push(KTRL('R'));
+        td = &data[0];
+        InvalidateRect(td->w, NULL, TRUE);
         break;
     }
     case IDM_OPTIONS_OPEN_BG: {
-        if (!inkey_flag) {
-            plog("You may not do that right now.");
-            break;
-        }
-
         memset(&ofn, 0, sizeof(ofn));
         ofn.lStructSize = sizeof(ofn);
         ofn.hwndOwner = data[0].w;
@@ -2210,10 +2180,10 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         if (GetOpenFileName(&ofn)) {
             init_background();
             use_bg = init_bg();
-        }
 
-        term_xtra_win_react(player_ptr);
-        term_key_push(KTRL('R'));
+            td = &data[0];
+            InvalidateRect(td->w, NULL, TRUE);
+        }
         break;
     }
     case IDM_DUMP_SCREEN_HTML: {
