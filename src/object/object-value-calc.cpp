@@ -79,6 +79,10 @@ PRICE flag_cost(player_type *player_ptr, object_type *o_ptr, int plusses)
         total += 5000;
         count++;
     }
+    if (has_flag(flgs, TR_BRAND_MAGIC)) {
+        total += 1000;
+        count++;
+    }
     if (has_flag(flgs, TR_VAMPIRIC)) {
         total += 6500;
         count++;

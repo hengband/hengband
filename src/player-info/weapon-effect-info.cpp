@@ -12,6 +12,9 @@ static void set_weapon_bless_info(self_info_type *self_ptr)
     if (has_flag(self_ptr->flags, TR_CHAOTIC))
         self_ptr->info[self_ptr->line++] = _("あなたの武器はログルスの徴の属性をもつ。", "Your weapon is branded with the Sign of Logrus.");
 
+    if (has_flag(self_ptr->flags, TR_BRAND_MAGIC))
+        self_ptr->info[self_ptr->line++] = _("あなたの武器は魔術的効果を発動することがある。", "Your weapon is branded with magical power.");
+
     if (has_flag(self_ptr->flags, TR_IMPACT))
         self_ptr->info[self_ptr->line++] = _("あなたの武器は打撃で地震を発生することができる。", "The impact of your weapon can cause earthquakes.");
 

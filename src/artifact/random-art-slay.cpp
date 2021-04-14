@@ -43,6 +43,15 @@ static bool random_art_slay_chaos(object_type *o_ptr)
     return one_in_(2);
 }
 
+static bool random_art_brand_magical(object_type *o_ptr)
+{
+    if (has_flag(o_ptr->art_flags, TR_BRAND_MAGIC))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_BRAND_MAGIC);
+    return one_in_(3);
+}
+
 static bool random_art_slay_vampiric(object_type *o_ptr)
 {
     if (has_flag(o_ptr->art_flags, TR_VAMPIRIC))
@@ -138,6 +147,9 @@ static bool switch_random_art_slay(object_type *o_ptr)
     switch (o_ptr->artifact_bias) {
     case BIAS_CHAOS:
         return random_art_slay_chaos(o_ptr);
+    case BIAS_MAGE:
+    case BIAS_INT:
+        return random_art_brand_magical(o_ptr);
     case BIAS_PRIESTLY:
         if (((o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM)) && !has_flag(o_ptr->art_flags, TR_BLESSED))
             add_flag(o_ptr->art_flags, TR_BLESSED);
@@ -186,7 +198,7 @@ void random_slay(object_type *o_ptr)
     if (random_art_slay_bow(o_ptr) || switch_random_art_slay(o_ptr))
         return;
 
-    switch (randint1(36)) {
+    switch (randint1(37)) {
     case 1:
     case 2:
         if (one_in_(4))
@@ -343,6 +355,11 @@ void random_slay(object_type *o_ptr)
         else
             add_flag(o_ptr->art_flags, TR_SLAY_HUMAN);
         
+        break;
+    case 35:
+        add_flag(o_ptr->art_flags, TR_BRAND_MAGIC);
+        if (o_ptr->artifact_bias == BIAS_NONE)
+            o_ptr->artifact_bias = BIAS_MAGE;
         break;
     default:
         add_flag(o_ptr->art_flags, TR_CHAOTIC);

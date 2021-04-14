@@ -398,6 +398,7 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
     case TR_DARK_SOURCE:
     case TR_SUPPORTIVE:
     case TR_BERS_RAGE:
+    case TR_BRAND_MAGIC:
         return check_equipment_flags(creature_ptr, tr_flag);
 
     case TR_FLAG_MAX:

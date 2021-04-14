@@ -93,6 +93,7 @@ flag_desc brand_flags_desc[MAX_BRAND_FLAGS_DESCRIPTION] = {
     { TR_BRAND_POIS, _("毒殺", "Poisoned") },
     { TR_FORCE_WEAPON, _("理力", "Force") },
     { TR_CHAOTIC, _("混沌", "Mark of Chaos") },
+    { TR_BRAND_MAGIC, _("魔術", "Magical Brand") },
     { TR_VAMPIRIC, _("吸血", "Vampiric") },
     { TR_IMPACT, _("地震", "Earthquake impact on hit") },
     { TR_VORPAL, _("切れ味", "Very sharp") },

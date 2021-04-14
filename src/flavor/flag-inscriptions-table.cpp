@@ -59,8 +59,8 @@ std::vector<flag_insc_table> flag_insc_aura = {
 /*! オブジェクトの特性表示記号テーブルの定義(属性スレイ) */
 std::vector<flag_insc_table> flag_insc_brand = {
     { "酸", "A", TR_BRAND_ACID, -1 }, { "電", "E", TR_BRAND_ELEC, -1 }, { "焼", "F", TR_BRAND_FIRE, -1 }, { "凍", "Co", TR_BRAND_COLD, -1 },
-    { "毒", "P", TR_BRAND_POIS, -1 }, { "沌", "Ca", TR_CHAOTIC, -1 },
-    { "吸", "V", TR_VAMPIRIC, -1 }, { "震", "Q", TR_IMPACT, -1 }, { "切", "S", TR_VORPAL, -1 }, { "理", "M", TR_FORCE_WEAPON, -1 }
+    { "毒", "P", TR_BRAND_POIS, -1 }, { "沌", "Ca", TR_CHAOTIC, -1 }, { "魔", "Ma", TR_BRAND_MAGIC, -1 },
+    { "吸", "V", TR_VAMPIRIC, -1 }, { "震", "Q", TR_IMPACT, -1 }, { "切", "S", TR_VORPAL, -1 }, { "理", "Mf", TR_FORCE_WEAPON, -1 }
 };
 
 /*! オブジェクトの特性表示記号テーブルの定義(種族スレイ) */
@@ -132,8 +132,8 @@ std::vector<flag_insc_table> flag_insc_aura = {
 
 std::vector<flag_insc_table> flag_insc_brand = {
     { "A", TR_BRAND_ACID, -1 }, { "E", TR_BRAND_ELEC, -1 }, { "F", TR_BRAND_FIRE, -1 }, { "Co", TR_BRAND_COLD, -1 },
-    { "P", TR_BRAND_POIS, -1 }, { "Ca", TR_CHAOTIC, -1 },
-    { "V", TR_VAMPIRIC, -1 }, { "Q", TR_IMPACT, -1 }, { "S", TR_VORPAL, -1 }, { "M", TR_FORCE_WEAPON, -1 },
+    { "P", TR_BRAND_POIS, -1 }, { "Ca", TR_CHAOTIC, -1 }, { "Ma", TR_BRAND_MAGIC, -1 },
+    { "V", TR_VAMPIRIC, -1 }, { "Q", TR_IMPACT, -1 }, { "S", TR_VORPAL, -1 }, { "Mf", TR_FORCE_WEAPON, -1 },
 };
 
 std::vector<flag_insc_table> flag_insc_kill = {

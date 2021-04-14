@@ -242,6 +242,10 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それはカオス的な効果を及ぼす。", "It produces chaotic effects.");
     }
 
+    if (has_flag(flgs, TR_BRAND_MAGIC)) {
+        info[i++] = _("それは魔術的な効果を及ぼす。", "It produces magical effects.");
+    }
+
     if (has_flag(flgs, TR_VAMPIRIC)) {
         info[i++] = _("それは敵から生命力を吸収する。", "It drains life from your foes.");
     }

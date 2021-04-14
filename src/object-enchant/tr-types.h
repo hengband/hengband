@@ -158,5 +158,6 @@ enum tr_type {
     TR_SUPPORTIVE = 147,
     TR_RES_CURSE = 148,
     TR_BERS_RAGE = 149, //!< 狂戦士化の発作
-    TR_FLAG_MAX = 150,
+    TR_BRAND_MAGIC = 150, //!< 魔術属性
+    TR_FLAG_MAX = 151,
 };
