@@ -55,6 +55,11 @@ static void set_slay_info(self_info_type *self_ptr)
     else if (has_flag(self_ptr->flags, TR_SLAY_EVIL))
         self_ptr->info[self_ptr->line++] = _("あなたの武器は邪悪なる存在に対して強い力を発揮する。", "Your weapon strikes at evil with extra force.");
 
+    if (has_flag(self_ptr->flags, TR_KILL_GOOD))
+        self_ptr->info[self_ptr->line++] = _("あなたの武器は善良なる存在の天敵である。", "Your weapon is a great bane of good.");
+    else if (has_flag(self_ptr->flags, TR_SLAY_GOOD))
+        self_ptr->info[self_ptr->line++] = _("あなたの武器は善良なる存在に対して強い力を発揮する。", "Your weapon strikes at good with extra force.");
+
     if (has_flag(self_ptr->flags, TR_KILL_HUMAN))
         self_ptr->info[self_ptr->line++] = _("あなたの武器は人間の天敵である。", "Your weapon is a great bane of humans.");
     else if (has_flag(self_ptr->flags, TR_SLAY_HUMAN))

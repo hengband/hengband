@@ -122,6 +122,22 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
                 mult = 25;
         }
 
+        if ((has_flag(flags, TR_SLAY_GOOD)) && any_bits(race_ptr->flags3, RF3_GOOD)) {
+            if (is_original_ap_and_seen(sniper_ptr, monster_ptr)) {
+                set_bits(race_ptr->r_flags3, RF3_GOOD);
+            }
+            if (mult < 15)
+                mult = 15;
+        }
+
+        if ((has_flag(flags, TR_KILL_GOOD)) && any_bits(race_ptr->flags3, RF3_GOOD)) {
+            if (is_original_ap_and_seen(sniper_ptr, monster_ptr)) {
+                set_bits(race_ptr->r_flags3, RF3_GOOD);
+            }
+            if (mult < 25)
+                mult = 25;
+        }
+
         if ((has_flag(flags, TR_SLAY_HUMAN)) && any_bits(race_ptr->flags2, RF2_HUMAN)) {
             if (is_original_ap_and_seen(sniper_ptr, monster_ptr)) {
                 set_bits(race_ptr->r_flags2, RF2_HUMAN);

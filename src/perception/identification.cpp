@@ -310,6 +310,14 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それは邪悪なる存在に対して聖なる力で攻撃する。", "It fights against evil with holy fury.");
     }
 
+    if (has_flag(flgs, TR_KILL_GOOD)) {
+        info[i++] = _("それは善良なる存在にとっての天敵である。", "It is a great bane of good monsters.");
+    }
+
+    if (has_flag(flgs, TR_SLAY_EVIL)) {
+        info[i++] = _("それは善良なる存在に対して邪悪なる力で攻撃する。", "It fights against good with evil fury.");
+    }
+
     if (has_flag(flgs, TR_KILL_ANIMAL)) {
         info[i++] = _("それは自然界の動物にとっての天敵である。", "It is a great bane of natural creatures.");
     }

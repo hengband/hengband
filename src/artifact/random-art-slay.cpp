@@ -198,7 +198,7 @@ void random_slay(object_type *o_ptr)
     if (random_art_slay_bow(o_ptr) || switch_random_art_slay(o_ptr))
         return;
 
-    switch (randint1(37)) {
+    switch (randint1(39)) {
     case 1:
     case 2:
         if (one_in_(4))
@@ -361,10 +361,26 @@ void random_slay(object_type *o_ptr)
         if (o_ptr->artifact_bias == BIAS_NONE)
             o_ptr->artifact_bias = BIAS_MAGE;
         break;
-    default:
+    case 36:
+    case 37:
         add_flag(o_ptr->art_flags, TR_CHAOTIC);
         if (o_ptr->artifact_bias == BIAS_NONE)
             o_ptr->artifact_bias = BIAS_CHAOS;
+
+        break;
+    default:
+        if (one_in_(8))
+            add_flag(o_ptr->art_flags, TR_KILL_GOOD);
+        else
+            add_flag(o_ptr->art_flags, TR_SLAY_GOOD);
+
+        if ((o_ptr->artifact_bias == BIAS_NONE) && one_in_(2)) {
+            o_ptr->artifact_bias = BIAS_POIS;
+            break;
+        }
+
+        if ((o_ptr->artifact_bias == BIAS_NONE) && one_in_(9))
+            o_ptr->artifact_bias = BIAS_ROGUE;
 
         break;
     }

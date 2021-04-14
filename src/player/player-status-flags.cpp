@@ -294,9 +294,8 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
         return has_warning(creature_ptr);
     case TR_HIDE_TYPE:
     case TR_SHOW_MODS:
-        return check_equipment_flags(creature_ptr, tr_flag);
     case TR_SLAY_GOOD:
-        return 0;
+        return check_equipment_flags(creature_ptr, tr_flag);
     case TR_LEVITATION:
         return has_levitation(creature_ptr);
     case TR_LITE_1:

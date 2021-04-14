@@ -105,6 +105,13 @@ PRICE flag_cost(player_type *player_ptr, object_type *o_ptr, int plusses)
         tmp_cost += 2300;
         count++;
     }
+    if (has_flag(flgs, TR_KILL_GOOD)) {
+        tmp_cost += 2800;
+        count++;
+    } else if (has_flag(flgs, TR_SLAY_GOOD)) {
+        tmp_cost += 1800;
+        count++;
+    }
     if (has_flag(flgs, TR_KILL_HUMAN)) {
         tmp_cost += 2800;
         count++;

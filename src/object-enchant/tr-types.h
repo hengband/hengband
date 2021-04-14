@@ -81,7 +81,7 @@ enum tr_type {
     TR_WARNING = 72, /* Warning */
     TR_HIDE_TYPE = 73, /* Hide "pval" description */
     TR_SHOW_MODS = 74, /* Always show Tohit/Todam */
-    TR_SLAY_GOOD = 75,
+    TR_SLAY_GOOD = 75,  //!< 善良スレイ(/善)
     TR_LEVITATION = 76, /* Feather Falling */
     TR_LITE_1 = 77, /* Light Radius 1*/
     TR_SEE_INVIS = 78, /* See Invisible */
@@ -101,7 +101,7 @@ enum tr_type {
     TR_BLESSED = 92, /* Item is Blessed */
     TR_ES_ATTACK = 93, /* Fake flag for Smith */
     TR_ES_AC = 94, /* Fake flag for Smith */
-    TR_KILL_GOOD = 95,
+    TR_KILL_GOOD = 95,  //!< 善良スレイ(X善)
 
     TR_KILL_ANIMAL = 96,
     TR_KILL_EVIL = 97,
@@ -159,5 +159,5 @@ enum tr_type {
     TR_RES_CURSE = 148,
     TR_BERS_RAGE = 149, //!< 狂戦士化の発作
     TR_BRAND_MAGIC = 150, //!< 魔術属性
-    TR_FLAG_MAX = 151,
+    TR_FLAG_MAX = 152,
 };
