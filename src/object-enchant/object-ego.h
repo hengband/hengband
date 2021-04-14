@@ -101,6 +101,10 @@
 #define EGO_CHAOTIC             77
 #define EGO_SHARPNESS           78
 #define EGO_EARTHQUAKES         79
+#define EGO_W_FAIRLY            83
+#define EGO_W_OMNIVOROUS        84
+#define EGO_W_DARK_REVENGER     85
+#define EGO_KILL_GOOD           86
 #define EGO_WEIRD               87
 #define EGO_KILL_ANIMAL         88
 #define EGO_KILL_EVIL           89
