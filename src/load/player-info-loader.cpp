@@ -34,6 +34,8 @@ static void rd_realms(player_type *creature_ptr)
 
     rd_byte(&tmp8u);
     creature_ptr->realm2 = (REALM_IDX)tmp8u;
+    if (creature_ptr->realm2 == 255)
+        creature_ptr->realm2 = 0;
 }
 
 /*!
