@@ -218,7 +218,7 @@ errr play_music(int type, int val)
 errr play_music_scene(int val)
 {
     // リストの先頭から順に再生を試み、再生できたら抜ける
-    auto list = get_scene_type_list(val);
+    auto &list = get_scene_type_list(val);
     const errr err_sucsess = 0;
     for (auto &item : list) {
         if (play_music(item.type, item.val) == err_sucsess) {
@@ -232,10 +232,8 @@ errr play_music_scene(int val)
 /*
  * Notify event
  */
-void on_mci_notify(WPARAM wFlags, LONG lDevID)
+void on_mci_notify(WPARAM wFlags, [[maybe_unused]] LONG lDevID)
 {
-    UNREFERENCED_PARAMETER(lDevID);
-
     if (wFlags == MCI_NOTIFY_SUCCESSFUL) {
         // play a music (repeat)
         mciSendCommand(mci_open_parms.wDeviceID, MCI_SEEK, MCI_SEEK_TO_START | MCI_WAIT, 0);
