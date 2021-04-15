@@ -199,19 +199,19 @@ void store_process_command(player_type *client_ptr)
     }
     case '@': {
         client_ptr->town_num = old_town_num;
-        do_cmd_macros(client_ptr, process_autopick_file_command);
+        do_cmd_macros(client_ptr);
         client_ptr->town_num = inner_town_num;
         break;
     }
     case '%': {
         client_ptr->town_num = old_town_num;
-        do_cmd_visuals(client_ptr, process_autopick_file_command);
+        do_cmd_visuals(client_ptr);
         client_ptr->town_num = inner_town_num;
         break;
     }
     case '&': {
         client_ptr->town_num = old_town_num;
-        do_cmd_colors(client_ptr, process_autopick_file_command);
+        do_cmd_colors(client_ptr);
         client_ptr->town_num = inner_town_num;
         break;
     }
@@ -255,7 +255,7 @@ void store_process_command(player_type *client_ptr)
         break;
     }
     case ')': {
-        do_cmd_save_screen(client_ptr, process_autopick_file_command);
+        do_cmd_save_screen(client_ptr);
         break;
     }
     default: {

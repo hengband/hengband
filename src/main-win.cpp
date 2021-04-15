@@ -1046,7 +1046,7 @@ static errr term_xtra_win_react(player_type *player_ptr)
         }
 
         use_graphics = (arg_graphics > 0);
-        reset_visuals(player_ptr, process_autopick_file_command);
+        reset_visuals(player_ptr);
     }
 
     for (int i = 0; i < MAX_TERM_DATA; i++) {
@@ -2929,7 +2929,7 @@ static spoiler_output_status create_debug_spoiler(LPSTR cmd_line)
         return SPOILER_OUTPUT_CANCEL;
 
     init_stuff();
-    init_angband(p_ptr, process_autopick_file_command, TRUE);
+    init_angband(p_ptr, TRUE);
 
     return output_all_spoilers();
 }
@@ -3065,7 +3065,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPST
 
     signals_init();
     term_activate(term_screen);
-    init_angband(p_ptr, process_autopick_file_command, FALSE);
+    init_angband(p_ptr, FALSE);
     initialized = TRUE;
     check_for_save_file(p_ptr, lpCmdLine);
     prt(_("[ファイル] メニューの [新規] または [開く] を選択してください。", "[Choose 'New' or 'Open' from the 'File' menu]"), 23, _(8, 17));

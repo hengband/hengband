@@ -6,7 +6,6 @@
  * are included in all such copies.
  */
 
-#include "autopick/autopick-pref-processor.h"
 #include "core/asking-player.h"
 #include "core/game-play.h"
 #include "core/scores.h"
@@ -287,7 +286,7 @@ static bool parse_long_opt(const char *opt)
 
     if (strcmp(opt + 2, "output-spoilers") == 0) {
         init_stuff();
-        init_angband(p_ptr, process_autopick_file_command, TRUE);
+        init_angband(p_ptr, TRUE);
         switch (output_all_spoilers()) {
         case SPOILER_OUTPUT_SUCCESS:
             puts("Successfully created a spoiler file.");
@@ -568,7 +567,7 @@ int main(int argc, char *argv[])
     signals_init();
 
     /* Initialize */
-    init_angband(p_ptr, process_autopick_file_command, FALSE);
+    init_angband(p_ptr, FALSE);
 
     /* Wait for response */
     pause_line(23);

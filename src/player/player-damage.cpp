@@ -368,7 +368,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
             play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_GAMEOVER);
 
 #ifdef WORLD_SCORE
-            screen_dump = make_screen_dump(creature_ptr, process_autopick_file_command);
+            screen_dump = make_screen_dump(creature_ptr);
 #endif
             if (seppuku) {
                 strcpy(creature_ptr->died_from, hit_from);
@@ -410,7 +410,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
             exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, "\n\n\n\n");
             flush();
             if (get_check_strict(creature_ptr, _("画面を保存しますか？", "Dump the screen? "), CHECK_NO_HISTORY))
-                do_cmd_save_screen(creature_ptr, process_autopick_file_command);
+                do_cmd_save_screen(creature_ptr);
 
             flush();
             if (creature_ptr->last_message)
@@ -497,7 +497,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
                     term_putstr(w - 1, h - 1, 1, TERM_WHITE, " ");
                     flush();
 #ifdef WORLD_SCORE
-                    screen_dump = make_screen_dump(creature_ptr, process_autopick_file_command);
+                    screen_dump = make_screen_dump(creature_ptr);
 #endif
                     (void)inkey();
                 } else
