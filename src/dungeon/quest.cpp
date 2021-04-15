@@ -98,6 +98,21 @@ void determine_random_questor(player_type *player_ptr, quest_type *q_ptr)
 }
 
 /*!
+ * @brief クエストの最終状態を記録する(成功or失敗、時間)
+ * @param player_type プレイヤー情報への参照ポインタ
+ * @param q_ptr クエスト情報への参照ポインタ
+ * @param stat ステータス(成功or失敗)
+ * @return なし
+ */
+void record_quest_final_status(quest_type *q_ptr, PLAYER_LEVEL lev, QUEST_STATUS stat)
+{
+    q_ptr->status = stat;
+    q_ptr->complev = lev;
+    update_playtime();
+    q_ptr->comptime = current_world_ptr->play_time;
+}
+
+/*!
  * @brief クエストを達成状態にする /
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param quest_num 達成状態にしたいクエストのID
@@ -118,10 +133,7 @@ void complete_quest(player_type *player_ptr, QUEST_IDX quest_num)
         break;
     }
 
-    q_ptr->status = QUEST_STATUS_COMPLETED;
-    q_ptr->complev = player_ptr->lev;
-    update_playtime();
-    q_ptr->comptime = current_world_ptr->play_time;
+    record_quest_final_status(q_ptr, player_ptr->lev, QUEST_STATUS_COMPLETED);
 
     if (q_ptr->flags & QUEST_FLAG_SILENT)
         return;
@@ -184,10 +196,7 @@ void quest_discovery(QUEST_IDX q_idx)
     }
 
     msg_print(_("この階は以前は誰かによって守られていたようだ…。", "It seems that this level was protected by someone before..."));
-    quest[q_idx].status = QUEST_STATUS_FINISHED;
-    q_ptr->complev = 0;
-    update_playtime();
-    q_ptr->comptime = current_world_ptr->play_time;
+    record_quest_final_status(q_ptr, 0, QUEST_STATUS_FINISHED);
 }
 
 /*!
@@ -252,10 +261,7 @@ void leave_quest_check(player_type *player_ptr)
     if (!is_one_time_quest)
         return;
 
-    q_ptr->status = QUEST_STATUS_FAILED;
-    q_ptr->complev = player_ptr->lev;
-    update_playtime();
-    q_ptr->comptime = current_world_ptr->play_time;
+    record_quest_final_status(q_ptr, player_ptr->lev, QUEST_STATUS_FAILED);
 
     /* Additional settings */
     switch (q_ptr->type) {
