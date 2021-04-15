@@ -436,11 +436,10 @@ void display_scores(int from, int to)
  * @param current_player_ptr プレーヤーへの参照ポインタ
  * @param do_send 実際に転送ア処置を行うか否か
  * @return 転送が成功したらTRUEを返す
- * @todo プリプロが邪魔していて最初のif文を削除すると到達不能コードが発生する
  */
-bool send_world_score(player_type *current_player_ptr, bool do_send, void(*update_playtime)(void), display_player_pf display_player)
-{
 #ifdef WORLD_SCORE
+bool send_world_score(player_type *current_player_ptr, bool do_send, void (*update_playtime)(void), display_player_pf display_player)
+{
 	if (send_score && do_send)
 	{
 		if (easy_band)
@@ -466,9 +465,9 @@ bool send_world_score(player_type *current_player_ptr, bool do_send, void(*updat
 		prt(_("完了。何かキーを押してください。", "Completed.  Hit any key."), 0, 0);
 		(void)inkey();
 	}
-#endif
 	return TRUE;
 }
+#endif
 
 
 /*!

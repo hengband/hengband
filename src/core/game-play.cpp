@@ -101,6 +101,7 @@ static void restore_windows(player_type *player_ptr)
     (void)term_set_cursor(0);
 }
 
+#ifdef WORLD_SCORE
 static void send_waiting_record(player_type *player_ptr)
 {
     if (!player_ptr->wait_report_score)
@@ -137,6 +138,7 @@ static void send_waiting_record(player_type *player_ptr)
     signals_handle_tstp();
     quit(0);
 }
+#endif
 
 static void init_random_seed(player_type *player_ptr, bool new_game)
 {
@@ -409,7 +411,11 @@ void play_game(player_type *player_ptr, bool new_game, bool browsing_movie)
         quit(_("セーブファイルが壊れています", "broken savefile"));
 
     extract_option_vars();
+
+#ifdef WORLD_SCORE
     send_waiting_record(player_ptr);
+#endif
+
     current_world_ptr->creating_savefile = new_game;
     init_random_seed(player_ptr, new_game);
     if (new_game)

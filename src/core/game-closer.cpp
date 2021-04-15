@@ -26,6 +26,7 @@ static void clear_floor(player_type *player_ptr)
     signals_handle_tstp();
 }
 
+#ifdef WORLD_SCORE
 static void send_world_score_on_closing(player_type *player_ptr, bool do_send)
 {
     if (send_world_score(player_ptr, do_send, update_playtime, display_player))
@@ -40,6 +41,7 @@ static void send_world_score_on_closing(player_type *player_ptr, bool do_send)
     if (!save_player(player_ptr, SAVE_TYPE_CLOSE_GAME))
         msg_print(_("セーブ失敗！", "death save failed!"));
 }
+#endif
 
 /*!
  * @brief ゲームクローズ時、プレイヤーが死亡しているかのチェックを行い死亡していないならば、確認キー入力とスコア表示、現フロアの初期化を行う。
@@ -102,8 +104,11 @@ void close_game(player_type *player_ptr)
     flush();
     show_death_info(player_ptr, update_playtime, display_player);
     term_clear();
+
     if (check_score(player_ptr)) {
+#ifdef WORLD_SCORE
         send_world_score_on_closing(player_ptr, do_send);
+#endif
         if (!player_ptr->wait_report_score)
             (void)top_twenty(player_ptr);
     } else if (highscore_fd >= 0) {
