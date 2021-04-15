@@ -576,7 +576,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
             /* Sniper */
             if (snipe_type == SP_KILL_TRAP) {
-                project(shooter_ptr, 0, 0, ny, nx, 0, GF_KILL_TRAP, (PROJECT_JUMP | PROJECT_HIDE | PROJECT_GRID | PROJECT_ITEM), -1);
+                project(shooter_ptr, 0, 0, ny, nx, 0, GF_KILL_TRAP, (PROJECT_JUMP | PROJECT_HIDE | PROJECT_GRID | PROJECT_ITEM));
             }
 
             /* Sniper */
@@ -704,7 +704,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
                         u16b flg = (PROJECT_STOP | PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID);
 
                         sound(SOUND_EXPLODE); /* No explode sound - use breath fire instead */
-                        project(shooter_ptr, 0, ((shooter_ptr->concent + 1) / 2 + 1), ny, nx, tdam, GF_MISSILE, flg, -1);
+                        project(shooter_ptr, 0, ((shooter_ptr->concent + 1) / 2 + 1), ny, nx, tdam, GF_MISSILE, flg);
                         break;
                     }
 

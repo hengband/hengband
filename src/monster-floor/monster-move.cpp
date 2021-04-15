@@ -258,7 +258,7 @@ static bool process_explosive_rune(player_type *target_ptr, turn_flags *turn_fla
         if (g_ptr->info & CAVE_MARK) {
             msg_print(_("ルーンが爆発した！", "The rune explodes!"));
             BIT_FLAGS project_flags = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI;
-            project(target_ptr, 0, 2, ny, nx, 2 * (target_ptr->lev + damroll(7, 7)), GF_MANA, project_flags, -1);
+            project(target_ptr, 0, 2, ny, nx, 2 * (target_ptr->lev + damroll(7, 7)), GF_MANA, project_flags);
         }
     } else {
         msg_print(_("爆発のルーンは解除された。", "An explosive rune was disarmed."));

@@ -153,6 +153,6 @@ void process_death_scythe_reflection(player_type *attacker_ptr, player_attack_ty
     if (pa_ptr->attack_damage < 0)
         pa_ptr->attack_damage = 0;
 
-    take_hit(attacker_ptr, DAMAGE_FORCE, pa_ptr->attack_damage, _("死の大鎌", "Death scythe"), -1);
+    take_hit(attacker_ptr, DAMAGE_FORCE, pa_ptr->attack_damage, _("死の大鎌", "Death scythe"));
     handle_stuff(attacker_ptr);
 }

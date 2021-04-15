@@ -68,7 +68,7 @@ void effect_player_mind_blast(player_type *target_ptr, effect_player_type *ep_pt
     }
 
     if (check_multishadow(target_ptr)) {
-        ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+        ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
         return;
     }
 
@@ -88,7 +88,7 @@ void effect_player_mind_blast(player_type *target_ptr, effect_player_type *ep_pt
     }
 
     target_ptr->redraw |= PR_MANA;
-    ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+    ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
 }
 
 void effect_player_brain_smash(player_type *target_ptr, effect_player_type *ep_ptr)
@@ -109,7 +109,7 @@ void effect_player_brain_smash(player_type *target_ptr, effect_player_type *ep_p
         target_ptr->redraw |= PR_MANA;
     }
 
-    ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+    ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
     if (check_multishadow(target_ptr))
         return;
 

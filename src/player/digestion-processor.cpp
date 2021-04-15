@@ -58,7 +58,7 @@ void starve_player(player_type *creature_ptr)
     if (creature_ptr->food < PY_FOOD_STARVE) {
         HIT_POINT dam = (PY_FOOD_STARVE - creature_ptr->food) / 10;
         if (!is_invuln(creature_ptr))
-            take_hit(creature_ptr, DAMAGE_LOSELIFE, dam, _("空腹", "starvation"), -1);
+            take_hit(creature_ptr, DAMAGE_LOSELIFE, dam, _("空腹", "starvation"));
     }
 }
 

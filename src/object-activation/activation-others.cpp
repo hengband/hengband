@@ -119,7 +119,7 @@ bool activate_judgement(player_type *user_ptr, concptr name)
     wiz_lite(user_ptr, FALSE);
 
     msg_format(_("%sはあなたの体力を奪った...", "The %s drains your vitality..."), name);
-    take_hit(user_ptr, DAMAGE_LOSELIFE, damroll(3, 8), _("審判の宝石", "the Jewel of Judgement"), -1);
+    take_hit(user_ptr, DAMAGE_LOSELIFE, damroll(3, 8), _("審判の宝石", "the Jewel of Judgement"));
 
     (void)detect_traps(user_ptr, DETECT_RAD_DEFAULT, TRUE);
     (void)detect_doors(user_ptr, DETECT_RAD_DEFAULT);
@@ -181,7 +181,7 @@ bool activate_cure_lw(player_type *user_ptr)
 bool activate_grand_cross(player_type *user_ptr)
 {
     msg_print(_("「闇に還れ！」", "You say, 'Return to darkness!'"));
-    (void)project(user_ptr, 0, 8, user_ptr->y, user_ptr->x, (randint1(100) + 200) * 2, GF_HOLY_FIRE, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
+    (void)project(user_ptr, 0, 8, user_ptr->y, user_ptr->x, (randint1(100) + 200) * 2, GF_HOLY_FIRE, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID);
     return TRUE;
 }
 

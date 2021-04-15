@@ -144,7 +144,7 @@ static void effect_monster_psi_resist(player_type *caster_ptr, effect_monster_ty
 
     /* Injure +/- confusion */
     monster_desc(caster_ptr, em_ptr->killer, em_ptr->m_ptr, MD_WRONGDOER_NAME);
-    take_hit(caster_ptr, DAMAGE_ATTACK, em_ptr->dam, em_ptr->killer, -1);
+    take_hit(caster_ptr, DAMAGE_ATTACK, em_ptr->dam, em_ptr->killer);
     effect_monster_psi_reflect_extra_effect(caster_ptr, em_ptr);
     em_ptr->dam = 0;
 }
@@ -233,7 +233,7 @@ static void effect_monster_psi_drain_resist(player_type *caster_ptr, effect_mons
 
     monster_desc(caster_ptr, em_ptr->killer, em_ptr->m_ptr, MD_WRONGDOER_NAME);
     if (check_multishadow(caster_ptr)) {
-        take_hit(caster_ptr, DAMAGE_ATTACK, em_ptr->dam, em_ptr->killer, -1);
+        take_hit(caster_ptr, DAMAGE_ATTACK, em_ptr->dam, em_ptr->killer);
         em_ptr->dam = 0;
         return;
     }
@@ -245,7 +245,7 @@ static void effect_monster_psi_drain_resist(player_type *caster_ptr, effect_mons
 
     set_bits(caster_ptr->redraw, PR_MANA);
     set_bits(caster_ptr->window_flags, PW_SPELL);
-    take_hit(caster_ptr, DAMAGE_ATTACK, em_ptr->dam, em_ptr->killer, -1);
+    take_hit(caster_ptr, DAMAGE_ATTACK, em_ptr->dam, em_ptr->killer);
     em_ptr->dam = 0;
 }
 

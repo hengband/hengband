@@ -467,7 +467,7 @@ static void eyes_on_eyes(player_type *target_ptr, monap_type *monap_ptr)
     monster_desc(target_ptr, m_name_self, monap_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
     msg_format("The attack of %s has wounded %s!", monap_ptr->m_name, m_name_self);
 #endif
-    project(target_ptr, 0, 0, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, monap_ptr->get_damage, GF_MISSILE, PROJECT_KILL, -1);
+    project(target_ptr, 0, 0, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, monap_ptr->get_damage, GF_MISSILE, PROJECT_KILL);
     if (target_ptr->tim_eyeeye)
         set_tim_eyeeye(target_ptr, target_ptr->tim_eyeeye - 5, TRUE);
 }

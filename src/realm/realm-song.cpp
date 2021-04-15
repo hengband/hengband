@@ -405,7 +405,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
              * MP不足で鑑定が発動される前に歌が中断してしまうのを防止。
              */
             if (cont || cast) {
-                project(caster_ptr, 0, rad, caster_ptr->y, caster_ptr->x, 0, GF_IDENTIFY, PROJECT_ITEM, -1);
+                project(caster_ptr, 0, rad, caster_ptr->y, caster_ptr->x, 0, GF_IDENTIFY, PROJECT_ITEM);
             }
         }
 
@@ -559,7 +559,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
              * MP不足で効果が発動される前に歌が中断してしまうのを防止。
              */
             if (cont || cast) {
-                project(caster_ptr, 0, 0, caster_ptr->y, caster_ptr->x, 0, GF_DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM | PROJECT_HIDE, -1);
+                project(caster_ptr, 0, 0, caster_ptr->y, caster_ptr->x, 0, GF_DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM | PROJECT_HIDE);
             }
         }
         break;
@@ -647,7 +647,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 msg_print(_("歌が空間を歪めた．．．", "Reality whirls wildly as you sing a dizzying melody..."));
-                project(caster_ptr, 0, rad, caster_ptr->y, caster_ptr->x, power, GF_AWAY_ALL, PROJECT_KILL, -1);
+                project(caster_ptr, 0, rad, caster_ptr->y, caster_ptr->x, power, GF_AWAY_ALL, PROJECT_KILL);
             }
         }
         break;

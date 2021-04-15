@@ -142,7 +142,7 @@ static void on_dead_unmaker(player_type *player_ptr, monster_death_type *md_ptr)
         msg_format(_("%sは辺りにログルスの残り香を撒き散らした！", "%^s sprinkled the remaining incense from Logrus!"), m_name);
     }
 
-    (void)project(player_ptr, md_ptr->m_idx, 6, md_ptr->md_y, md_ptr->md_x, 100, GF_CHAOS, PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL, -1);
+    (void)project(player_ptr, md_ptr->m_idx, 6, md_ptr->md_y, md_ptr->md_x, 100, GF_CHAOS, PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
 }
 
 static void on_dead_sacred_treasures(player_type *player_ptr, monster_death_type *md_ptr)
@@ -233,7 +233,7 @@ static void on_dead_rolento(player_type *player_ptr, monster_death_type *md_ptr)
         msg_format(_("%sは手榴弾を抱えて自爆した！", "%^s blew himself up with grenades!"), m_name);
     }
 
-    (void)project(player_ptr, md_ptr->m_idx, 3, md_ptr->md_y, md_ptr->md_x, damroll(20, 10), GF_FIRE, PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL, -1);
+    (void)project(player_ptr, md_ptr->m_idx, 3, md_ptr->md_y, md_ptr->md_x, damroll(20, 10), GF_FIRE, PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
 }
 
 static void on_dead_aqua_illusion(player_type *player_ptr, monster_death_type *md_ptr)

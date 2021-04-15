@@ -80,7 +80,7 @@ void call_the_void(player_type *caster_ptr)
     if (one_in_(666)) {
         if (!vanish_dungeon(caster_ptr))
             msg_print(_("ダンジョンは一瞬静まり返った。", "The dungeon becomes quiet for a moment."));
-        take_hit(caster_ptr, DAMAGE_NOESCAPE, 100 + randint1(150), _("自殺的な虚無招来", "a suicidal Call the Void"), -1);
+        take_hit(caster_ptr, DAMAGE_NOESCAPE, 100 + randint1(150), _("自殺的な虚無招来", "a suicidal Call the Void"));
         return;
     }
 
@@ -88,7 +88,7 @@ void call_the_void(player_type *caster_ptr)
         msg_print(_("ダンジョンが崩壊した...", "The dungeon collapses..."));
     else
         msg_print(_("ダンジョンは大きく揺れた。", "The dungeon trembles."));
-    take_hit(caster_ptr, DAMAGE_NOESCAPE, 100 + randint1(150), _("自殺的な虚無招来", "a suicidal Call the Void"), -1);
+    take_hit(caster_ptr, DAMAGE_NOESCAPE, 100 + randint1(150), _("自殺的な虚無招来", "a suicidal Call the Void"));
 }
 
 /*!
@@ -219,6 +219,6 @@ void cast_meteor(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
         if (count > 20)
             continue;
 
-        project(caster_ptr, 0, rad, y, x, dam, GF_METEOR, PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM, -1);
+        project(caster_ptr, 0, rad, y, x, dam, GF_METEOR, PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM);
     }
 }

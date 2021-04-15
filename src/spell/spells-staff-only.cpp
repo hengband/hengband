@@ -52,7 +52,7 @@ bool unleash_mana_storm(player_type *creature_ptr, bool powerful)
 {
     msg_print(_("強力な魔力が敵を引き裂いた！", "Mighty magics rend your enemies!"));
     project(creature_ptr, 0, (powerful ? 7 : 5), creature_ptr->y, creature_ptr->x, (randint1(200) + (powerful ? 500 : 300)) * 2, GF_MANA,
-        PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
+        PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID);
 
     bool is_special_class = creature_ptr->pclass != CLASS_MAGE;
     is_special_class &= creature_ptr->pclass != CLASS_HIGH_MAGE;
@@ -61,7 +61,7 @@ bool unleash_mana_storm(player_type *creature_ptr, bool powerful)
     is_special_class &= creature_ptr->pclass != CLASS_BLUE_MAGE;
     is_special_class &= creature_ptr->pclass != CLASS_ELEMENTALIST;
     if (is_special_class)
-        (void)take_hit(creature_ptr, DAMAGE_NOESCAPE, 50, _("コントロールし難い強力な魔力の解放", "unleashing magics too mighty to control"), -1);
+        (void)take_hit(creature_ptr, DAMAGE_NOESCAPE, 50, _("コントロールし難い強力な魔力の解放", "unleashing magics too mighty to control"));
 
     return TRUE;
 }

@@ -43,7 +43,7 @@ static void calc_blow_poison(player_type *target_ptr, monap_type *monap_ptr)
         monap_ptr->obvious = TRUE;
 
     monap_ptr->damage = monap_ptr->damage * calc_nuke_damage_rate(target_ptr) / 100;
-    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
     update_smart_learn(target_ptr, monap_ptr->m_idx, DRS_POIS);
 }
 
@@ -66,7 +66,7 @@ static void calc_blow_disenchant(player_type *target_ptr, monap_type *monap_ptr)
     if (has_resist_disen(target_ptr))
         monap_ptr->damage = monap_ptr->damage * (randint1(4) + 4) / 9;
 
-    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
     update_smart_learn(target_ptr, monap_ptr->m_idx, DRS_DISEN);
 }
 
@@ -91,7 +91,7 @@ static void calc_blow_un_power(player_type *target_ptr, monap_type *monap_ptr)
         damage_ratio -= 75;
 
     monap_ptr->damage = monap_ptr->damage * damage_ratio / 1000;
-    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
     if (target_ptr->is_dead || check_multishadow(target_ptr))
         return;
 
@@ -118,7 +118,7 @@ static void calc_blow_blind(player_type *target_ptr, monap_type *monap_ptr)
     if (has_resist_blind(target_ptr))
         monap_ptr->damage = monap_ptr->damage * (randint1(4) + 3) / 8;
 
-    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
     if (target_ptr->is_dead)
         return;
 
@@ -140,7 +140,7 @@ static void calc_blow_confusion(player_type *target_ptr, monap_type *monap_ptr)
     if (has_resist_conf(target_ptr))
         monap_ptr->damage = monap_ptr->damage * (randint1(4) + 3) / 8;
 
-    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
     if (target_ptr->is_dead)
         return;
 
@@ -161,7 +161,7 @@ static void calc_blow_fear(player_type *target_ptr, monap_type *monap_ptr)
     if (has_resist_fear(target_ptr))
         monap_ptr->damage = monap_ptr->damage * (randint1(4) + 3) / 8;
 
-    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
     if (target_ptr->is_dead)
         return;
 
@@ -180,7 +180,7 @@ static void calc_blow_paralysis(player_type *target_ptr, monap_type *monap_ptr)
     if (has_free_act(target_ptr))
         monap_ptr->damage = monap_ptr->damage * (randint1(4) + 3) / 8;
 
-    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
     if (target_ptr->is_dead)
         return;
 
@@ -206,7 +206,7 @@ static void calc_blow_drain_exp(player_type *target_ptr, monap_type *monap_ptr, 
         damage_ratio -= 75;
 
     monap_ptr->damage = monap_ptr->damage * damage_ratio / 1000;
-    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
     if (target_ptr->is_dead || check_multishadow(target_ptr))
         return;
 
@@ -228,7 +228,7 @@ static void calc_blow_time(player_type *target_ptr, monap_type *monap_ptr)
     if (has_resist_time(target_ptr))
         monap_ptr->damage = monap_ptr->damage * (randint1(4) + 4) / 9;
 
-    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
 }
 
 /*!
@@ -244,7 +244,7 @@ static void calc_blow_drain_life(player_type *target_ptr, monap_type *monap_ptr)
     if (target_ptr->hold_exp)
         monap_ptr->damage = monap_ptr->damage * 9 / 10;
 
-    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
     if (target_ptr->is_dead || check_multishadow(target_ptr))
         return;
 
@@ -281,7 +281,7 @@ static void calc_blow_inertia(player_type *target_ptr, monap_type *monap_ptr)
     if ((target_ptr->fast > 0) || (target_ptr->pspeed >= 130))
         monap_ptr->damage = monap_ptr->damage * (randint1(4) + 4) / 9;
 
-    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
     if (target_ptr->is_dead || check_multishadow(target_ptr))
         return;
 
@@ -302,7 +302,7 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
             int tmp_damage = monap_ptr->damage - (monap_ptr->damage * ((monap_ptr->ac < 150) ? monap_ptr->ac : 150) / 250);
             msg_print(_("痛恨の一撃！", "It was a critical hit!"));
             tmp_damage = MAX(monap_ptr->damage, tmp_damage * 2);
-            monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, tmp_damage, monap_ptr->ddesc, -1);
+            monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, tmp_damage, monap_ptr->ddesc);
             break;
         }
     }
@@ -310,7 +310,7 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
     case RBE_HURT: { /* AC軽減あり / Player armor reduces total damage */
         monap_ptr->obvious = TRUE;
         monap_ptr->damage -= (monap_ptr->damage * ((monap_ptr->ac < 150) ? monap_ptr->ac : 150) / 250);
-        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
         break;
     }
     case RBE_POISON:
@@ -323,7 +323,7 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
         calc_blow_un_power(target_ptr, monap_ptr);
         break;
     case RBE_EAT_GOLD:
-        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
         if (monster_confused_remaining(monap_ptr->m_ptr) || target_ptr->is_dead || check_multishadow(target_ptr))
             break;
 
@@ -331,7 +331,7 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
         process_eat_gold(target_ptr, monap_ptr);
         break;
     case RBE_EAT_ITEM: {
-        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
         if (!check_eat_item(target_ptr, monap_ptr))
             break;
 
@@ -340,7 +340,7 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
     }
 
     case RBE_EAT_FOOD: {
-        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
         if (target_ptr->is_dead || check_multishadow(target_ptr))
             break;
 
@@ -349,7 +349,7 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
     }
     case RBE_EAT_LITE: {
         monap_ptr->o_ptr = &target_ptr->inventory_list[INVEN_LITE];
-        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
         if (target_ptr->is_dead || check_multishadow(target_ptr))
             break;
 
@@ -362,7 +362,7 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
 
         monap_ptr->obvious = TRUE;
         msg_print(_("酸を浴びせられた！", "You are covered in acid!"));
-        monap_ptr->get_damage += acid_dam(target_ptr, monap_ptr->damage, monap_ptr->ddesc, -1, FALSE);
+        monap_ptr->get_damage += acid_dam(target_ptr, monap_ptr->damage, monap_ptr->ddesc, FALSE);
         update_creature(target_ptr);
         update_smart_learn(target_ptr, monap_ptr->m_idx, DRS_ACID);
         break;
@@ -373,7 +373,7 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
 
         monap_ptr->obvious = TRUE;
         msg_print(_("電撃を浴びせられた！", "You are struck by electricity!"));
-        monap_ptr->get_damage += elec_dam(target_ptr, monap_ptr->damage, monap_ptr->ddesc, -1, FALSE);
+        monap_ptr->get_damage += elec_dam(target_ptr, monap_ptr->damage, monap_ptr->ddesc, FALSE);
         update_smart_learn(target_ptr, monap_ptr->m_idx, DRS_ELEC);
         break;
     }
@@ -383,7 +383,7 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
 
         monap_ptr->obvious = TRUE;
         msg_print(_("全身が炎に包まれた！", "You are enveloped in flames!"));
-        monap_ptr->get_damage += fire_dam(target_ptr, monap_ptr->damage, monap_ptr->ddesc, -1, FALSE);
+        monap_ptr->get_damage += fire_dam(target_ptr, monap_ptr->damage, monap_ptr->ddesc, FALSE);
         update_smart_learn(target_ptr, monap_ptr->m_idx, DRS_FIRE);
         break;
     }
@@ -393,7 +393,7 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
 
         monap_ptr->obvious = TRUE;
         msg_print(_("全身が冷気で覆われた！", "You are covered with frost!"));
-        monap_ptr->get_damage += cold_dam(target_ptr, monap_ptr->damage, monap_ptr->ddesc, -1, FALSE);
+        monap_ptr->get_damage += cold_dam(target_ptr, monap_ptr->damage, monap_ptr->ddesc, FALSE);
         update_smart_learn(target_ptr, monap_ptr->m_idx, DRS_COLD);
         break;
     }
@@ -433,7 +433,7 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
     case RBE_SHATTER: { /* AC軽減あり / Player armor reduces total damage */
         monap_ptr->obvious = TRUE;
         monap_ptr->damage -= (monap_ptr->damage * ((monap_ptr->ac < 150) ? monap_ptr->ac : 150) / 250);
-        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
         if (monap_ptr->damage > 23 || monap_ptr->explode)
             earthquake(target_ptr, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, 8, monap_ptr->m_idx);
 
@@ -467,7 +467,7 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
         calc_blow_inertia(target_ptr, monap_ptr);
         break;
     case RBE_STUN:
-        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+        monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
         if (target_ptr->is_dead)
             break;
 

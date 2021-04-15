@@ -97,7 +97,7 @@ static bool booze(player_type *creature_ptr)
 static bool detonation(player_type *creature_ptr)
 {
     msg_print(_("体の中で激しい爆発が起きた！", "Massive explosions rupture your body!"));
-    take_hit(creature_ptr, DAMAGE_NOESCAPE, damroll(50, 20), _("爆発の薬", "a potion of Detonation"), -1);
+    take_hit(creature_ptr, DAMAGE_NOESCAPE, damroll(50, 20), _("爆発の薬", "a potion of Detonation"));
     (void)set_stun(creature_ptr, creature_ptr->stun + 75);
     (void)set_cut(creature_ptr, creature_ptr->cut + 5000);
     return TRUE;
@@ -230,7 +230,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 
         case SV_POTION_RUINATION:
             msg_print(_("身も心も弱ってきて、精気が抜けていくようだ。", "Your nerves and muscles feel weak and lifeless!"));
-            take_hit(creature_ptr, DAMAGE_LOSELIFE, damroll(10, 10), _("破滅の薬", "a potion of Ruination"), -1);
+            take_hit(creature_ptr, DAMAGE_LOSELIFE, damroll(10, 10), _("破滅の薬", "a potion of Ruination"));
 
             (void)dec_stat(creature_ptr, A_DEX, 25, TRUE);
             (void)dec_stat(creature_ptr, A_WIS, 25, TRUE);
@@ -279,7 +279,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
             chg_virtue(creature_ptr, V_VITALITY, -1);
             chg_virtue(creature_ptr, V_UNLIFE, 5);
             msg_print(_("死の予感が体中を駆けめぐった。", "A feeling of Death flows through your body."));
-            take_hit(creature_ptr, DAMAGE_LOSELIFE, 5000, _("死の薬", "a potion of Death"), -1);
+            take_hit(creature_ptr, DAMAGE_LOSELIFE, 5000, _("死の薬", "a potion of Death"));
             ident = TRUE;
             break;
 

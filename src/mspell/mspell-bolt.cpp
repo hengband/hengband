@@ -29,7 +29,7 @@ MonsterSpellResult spell_RF4_SHOOT(player_type *target_ptr, POSITION y, POSITION
         _("%^sが%sに矢を放った。", "%^s fires an arrow at %s."), TARGET_TYPE);
 
     const auto dam = monspell_damage(target_ptr, (MS_SHOOT), m_idx, DAM_ROLL);
-    const auto proj_res = bolt(target_ptr, m_idx, y, x, GF_ARROW, dam, MS_SHOOT, TARGET_TYPE);
+    const auto proj_res = bolt(target_ptr, m_idx, y, x, GF_ARROW, dam, TARGET_TYPE);
     sound(SOUND_SHOOT);
 
     auto res = MonsterSpellResult::make_valid(dam);
@@ -56,7 +56,7 @@ MonsterSpellResult spell_RF5_BO_ACID(player_type *target_ptr, POSITION y, POSITI
         _("%sが%sに向かってアシッド・ボルトの呪文を唱えた。", "%^s casts an acid bolt at %s."), TARGET_TYPE);
 
     const auto dam = monspell_damage(target_ptr, (MS_BOLT_ACID), m_idx, DAM_ROLL);
-    const auto proj_res = bolt(target_ptr, m_idx, y, x, GF_ACID, dam, MS_BOLT_ACID, TARGET_TYPE);
+    const auto proj_res = bolt(target_ptr, m_idx, y, x, GF_ACID, dam, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
         update_smart_learn(target_ptr, m_idx, DRS_ACID);
         update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
@@ -86,7 +86,7 @@ MonsterSpellResult spell_RF5_BO_ELEC(player_type *target_ptr, POSITION y, POSITI
         _("%^sが%sに向かってサンダー・ボルトの呪文を唱えた。", "%^s casts a lightning bolt at %s."), TARGET_TYPE);
 
     const auto dam = monspell_damage(target_ptr, (MS_BOLT_ELEC), m_idx, DAM_ROLL);
-    const auto proj_res = bolt(target_ptr, m_idx, y, x, GF_ELEC, dam, MS_BOLT_ELEC, TARGET_TYPE);
+    const auto proj_res = bolt(target_ptr, m_idx, y, x, GF_ELEC, dam, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
         update_smart_learn(target_ptr, m_idx, DRS_ELEC);
         update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
@@ -116,7 +116,7 @@ MonsterSpellResult spell_RF5_BO_FIRE(player_type *target_ptr, POSITION y, POSITI
         _("%^sが%sに向かってファイア・ボルトの呪文を唱えた。", "%^s casts a fire bolt at %s."), TARGET_TYPE);
 
     const auto dam = monspell_damage(target_ptr, (MS_BOLT_FIRE), m_idx, DAM_ROLL);
-    const auto proj_res = bolt(target_ptr, m_idx, y, x, GF_FIRE, dam, MS_BOLT_FIRE, TARGET_TYPE);
+    const auto proj_res = bolt(target_ptr, m_idx, y, x, GF_FIRE, dam, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
         update_smart_learn(target_ptr, m_idx, DRS_FIRE);
         update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
@@ -146,7 +146,7 @@ MonsterSpellResult spell_RF5_BO_COLD(player_type *target_ptr, POSITION y, POSITI
         _("%^sが%sに向かってアイス・ボルトの呪文を唱えた。", "%^s casts a frost bolt at %s."), TARGET_TYPE);
 
     const auto dam = monspell_damage(target_ptr, (MS_BOLT_COLD), m_idx, DAM_ROLL);
-    const auto proj_res = bolt(target_ptr, m_idx, y, x, GF_COLD, dam, MS_BOLT_COLD, TARGET_TYPE);
+    const auto proj_res = bolt(target_ptr, m_idx, y, x, GF_COLD, dam, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
         update_smart_learn(target_ptr, m_idx, DRS_COLD);
         update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
@@ -175,7 +175,7 @@ MonsterSpellResult spell_RF5_BO_NETH(player_type *target_ptr, POSITION y, POSITI
         _("%^sが%sに向かって地獄の矢の呪文を唱えた。", "%^s casts a nether bolt at %s."), TARGET_TYPE);
 
     const auto dam = monspell_damage(target_ptr, (MS_BOLT_NETHER), m_idx, DAM_ROLL);
-    const auto proj_res = bolt(target_ptr, m_idx, y, x, GF_NETHER, dam, MS_BOLT_NETHER, TARGET_TYPE);
+    const auto proj_res = bolt(target_ptr, m_idx, y, x, GF_NETHER, dam, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
         update_smart_learn(target_ptr, m_idx, DRS_NETH);
         update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
@@ -205,7 +205,7 @@ MonsterSpellResult spell_RF5_BO_WATE(player_type *target_ptr, POSITION y, POSITI
         _("%^sが%sに向かってウォーター・ボルトの呪文を唱えた。", "%^s casts a water bolt at %s."), TARGET_TYPE);
 
     const auto dam = monspell_damage(target_ptr, (MS_BOLT_WATER), m_idx, DAM_ROLL);
-    const auto proj_res = bolt(target_ptr, m_idx, y, x, GF_WATER, dam, MS_BOLT_WATER, TARGET_TYPE);
+    const auto proj_res = bolt(target_ptr, m_idx, y, x, GF_WATER, dam, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
         update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
     }
@@ -233,7 +233,7 @@ MonsterSpellResult spell_RF5_BO_MANA(player_type *target_ptr, POSITION y, POSITI
         _("%^sが%sに向かって魔力の矢の呪文を唱えた。", "%^s casts a mana bolt at %s."), TARGET_TYPE);
 
     const auto dam = monspell_damage(target_ptr, (MS_BOLT_MANA), m_idx, DAM_ROLL);
-    const auto proj_res = bolt(target_ptr, m_idx, y, x, GF_MANA, dam, MS_BOLT_MANA, TARGET_TYPE);
+    const auto proj_res = bolt(target_ptr, m_idx, y, x, GF_MANA, dam, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
         update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
     }
@@ -262,7 +262,7 @@ MonsterSpellResult spell_RF5_BO_PLAS(player_type *target_ptr, POSITION y, POSITI
         _("%^sが%sに向かってプラズマ・ボルトの呪文を唱えた。", "%^s casts a plasma bolt at %s."), TARGET_TYPE);
 
     const auto dam = monspell_damage(target_ptr, (MS_BOLT_PLASMA), m_idx, DAM_ROLL);
-    const auto proj_res = bolt(target_ptr, m_idx, y, x, GF_PLASMA, dam, MS_BOLT_PLASMA, TARGET_TYPE);
+    const auto proj_res = bolt(target_ptr, m_idx, y, x, GF_PLASMA, dam, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
         update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
     }
@@ -290,7 +290,7 @@ MonsterSpellResult spell_RF5_BO_ICEE(player_type *target_ptr, POSITION y, POSITI
         _("%^sが%sに向かって極寒の矢の呪文を唱えた。", "%^s casts an ice bolt at %s."), TARGET_TYPE);
 
     const auto dam = monspell_damage(target_ptr, (MS_BOLT_ICE), m_idx, DAM_ROLL);
-    const auto proj_res = bolt(target_ptr, m_idx, y, x, GF_ICE, dam, MS_BOLT_ICE, TARGET_TYPE);
+    const auto proj_res = bolt(target_ptr, m_idx, y, x, GF_ICE, dam, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
         update_smart_learn(target_ptr, m_idx, DRS_COLD);
         update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
@@ -320,7 +320,7 @@ MonsterSpellResult spell_RF5_MISSILE(player_type *target_ptr, POSITION y, POSITI
         _("%^sが%sに向かってマジック・ミサイルの呪文を唱えた。", "%^s casts a magic missile at %s."), TARGET_TYPE);
 
     const auto dam = monspell_damage(target_ptr, (MS_MAGIC_MISSILE), m_idx, DAM_ROLL);
-    const auto proj_res = bolt(target_ptr, m_idx, y, x, GF_MISSILE, dam, MS_MAGIC_MISSILE, TARGET_TYPE);
+    const auto proj_res = bolt(target_ptr, m_idx, y, x, GF_MISSILE, dam, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
         update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
     }

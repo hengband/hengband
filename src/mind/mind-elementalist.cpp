@@ -570,7 +570,7 @@ static bool cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx)
                 if (!player_bold(caster_ptr, y, x))
                     break;
             }
-            project(caster_ptr, 0, 0, y, x, damroll(6 + plev / 8, 7), typ, (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL), -1);
+            project(caster_ptr, 0, 0, y, x, damroll(6 + plev / 8, 7), typ, (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL));
         }
         break;
     case ElementSpells::STORM_2ND:
@@ -874,7 +874,7 @@ static bool try_cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx,
             "Elemental power unleashes its power in an uncontrollable storm!"));
         project(caster_ptr, PROJECT_WHO_UNCTRL_POWER, 2 + plev / 10, caster_ptr->y, caster_ptr->x, plev * 2,
             get_element_types(caster_ptr->element)[0],
-            PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM, -1);
+            PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM);
         caster_ptr->csp = MAX(0, caster_ptr->csp - caster_ptr->msp * 10 / (20 + randint1(10)));
 
         take_turn(caster_ptr, 100);
@@ -1335,7 +1335,7 @@ bool switch_element_execution(player_type *creature_ptr)
         (void)lite_area(creature_ptr, damroll(2, plev / 2), plev / 10);
         break;
     case ElementRealm::ICE:
-        (void)project(creature_ptr, 0, 5, creature_ptr->y, creature_ptr->x, 1, GF_COLD, PROJECT_ITEM, -1);
+        (void)project(creature_ptr, 0, 5, creature_ptr->y, creature_ptr->x, 1, GF_COLD, PROJECT_ITEM);
         (void)project_all_los(creature_ptr, GF_OLD_SLEEP, 20 + plev * 3 / 2);
         break;
     case ElementRealm::SKY:

@@ -305,7 +305,7 @@ static void curse_drain_hp(player_type *creature_ptr)
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC_DRAIN_HP), (OD_OMIT_PREFIX | OD_NAME_ONLY));
     msg_format(_("%sはあなたの体力を吸収した！", "Your %s drains HP from you!"), o_name);
-    take_hit(creature_ptr, DAMAGE_LOSELIFE, MIN(creature_ptr->lev * 2, 100), o_name, -1);
+    take_hit(creature_ptr, DAMAGE_LOSELIFE, MIN(creature_ptr->lev * 2, 100), o_name);
 }
 
 static void curse_drain_mp(player_type *creature_ptr)
@@ -372,5 +372,5 @@ void execute_cursed_items_effect(player_type *creature_ptr)
     else
         msg_print(_("なにかがあなたの体力を吸収した！", "Something drains life from you!"));
 
-    take_hit(creature_ptr, DAMAGE_LOSELIFE, MIN(creature_ptr->lev, 50), _("審判の宝石", "the Jewel of Judgement"), -1);
+    take_hit(creature_ptr, DAMAGE_LOSELIFE, MIN(creature_ptr->lev, 50), _("審判の宝石", "the Jewel of Judgement"));
 }

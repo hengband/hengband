@@ -651,7 +651,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                     return NULL;
 
                 fire_ball_hide(caster_ptr, GF_BLOOD_CURSE, dir, dam, rad);
-                take_hit(caster_ptr, DAMAGE_USELIFE, 20 + randint1(30), _("血の呪い", "Blood curse"), -1);
+                take_hit(caster_ptr, DAMAGE_USELIFE, 20 + randint1(30), _("血の呪い", "Blood curse"));
             }
         }
         break;

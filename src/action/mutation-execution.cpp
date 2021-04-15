@@ -201,7 +201,7 @@ bool exe_mutation_power(player_type *creature_ptr, MUTA power)
         return TRUE;
     case MUTA::STERILITY:
         msg_print(_("突然頭が痛くなった！", "You suddenly have a headache!"));
-        take_hit(creature_ptr, DAMAGE_LOSELIFE, randint1(17) + 17, _("禁欲を強いた疲労", "the strain of forcing abstinence"), -1);
+        take_hit(creature_ptr, DAMAGE_LOSELIFE, randint1(17) + 17, _("禁欲を強いた疲労", "the strain of forcing abstinence"));
         creature_ptr->current_floor_ptr->num_repro += MAX_REPRO;
         return TRUE;
     case MUTA::HIT_AND_AWAY:
