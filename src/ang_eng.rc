@@ -127,7 +127,8 @@ ANGBAND MENU
 			MENUITEM "&Bigtile mode", 409
 		}
 
-		MENUITEM "&Music", 411
+		MENUITEM "&Music", 420
+		MENUITEM "&Pause music when inactive", 421
 		MENUITEM "&Sound", 410
 		MENUITEM "&Back ground pict", 440
 		MENUITEM "Choose BG pict", 441

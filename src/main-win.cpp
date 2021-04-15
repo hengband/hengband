@@ -539,6 +539,8 @@ static void save_prefs(void)
 
     strcpy(buf, arg_music ? "1" : "0");
     WritePrivateProfileString("Angband", "Music", buf, ini_file);
+    strcpy(buf, use_pause_music_inactive ? "1" : "0");
+    WritePrivateProfileString("Angband", "MusicPauseInactive", buf, ini_file);
 
     strcpy(buf, use_bg ? "1" : "0");
     WritePrivateProfileString("Angband", "BackGround", buf, ini_file);
@@ -620,7 +622,7 @@ static void load_prefs_aux(int i)
     int posx = GetPrivateProfileInt(sec_name, "PositionX", 0, ini_file);
     int posy = GetPrivateProfileInt(sec_name, "PositionY", 0, ini_file);
     // 保存座標がモニタ内の領域にあるかチェック
-    RECT rect = { posx, posy, posx + 128, posy +128 };
+    RECT rect = { posx, posy, posx + 128, posy + 128 };
     bool in_any_monitor = false;
     ::EnumDisplayMonitors(NULL, &rect, monitorenumproc, (LPARAM)&in_any_monitor);
     if (in_any_monitor) {
@@ -644,6 +646,7 @@ static void load_prefs(void)
     use_bigtile = arg_bigtile;
     arg_sound = (GetPrivateProfileInt("Angband", "Sound", 0, ini_file) != 0);
     arg_music = (GetPrivateProfileInt("Angband", "Music", 0, ini_file) != 0);
+    use_pause_music_inactive = (GetPrivateProfileInt("Angband", "MusicPauseInactive", 0, ini_file) != 0);
     use_bg = GetPrivateProfileInt("Angband", "BackGround", 0, ini_file);
     GetPrivateProfileString("Angband", "BackGroundBitmap", DEFAULT_BG_FILENAME, bg_bitmap_file, 1023, ini_file);
     GetPrivateProfileString("Angband", "SaveFile", "", savefile, 1023, ini_file);
@@ -1770,6 +1773,7 @@ static void setup_menus(void)
     CheckMenuItem(hm, IDM_OPTIONS_NEW2_GRAPHICS, (arg_graphics == GRAPHICS_HENGBAND ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_BIGTILE, (arg_bigtile ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_MUSIC, (arg_music ? MF_CHECKED : MF_UNCHECKED));
+    CheckMenuItem(hm, IDM_OPTIONS_MUSIC_PAUSE_INACTIVE, (use_pause_music_inactive ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_SOUND, (arg_sound ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_BG, (use_bg ? MF_CHECKED : MF_UNCHECKED));
 
@@ -2154,6 +2158,10 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
             term_xtra_win_react(player_ptr);
         break;
     }
+    case IDM_OPTIONS_MUSIC_PAUSE_INACTIVE: {
+        use_pause_music_inactive = !use_pause_music_inactive;
+        break;
+    }
     case IDM_OPTIONS_SOUND: {
         arg_sound = !arg_sound;
         if (inkey_flag)
@@ -2318,6 +2326,28 @@ static bool process_keydown(WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
+static void handle_app_active(HWND hWnd, UINT uMsg, WPARAM wParam, [[maybe_unused]] LPARAM lParam)
+{
+    switch (uMsg) {
+    case WM_ACTIVATEAPP: {
+        if (wParam) {
+            if (use_pause_music_inactive)
+                main_win_music::resume_music();
+        } else {
+            if (use_pause_music_inactive)
+                main_win_music::pause_music();
+        }
+        break;
+    }
+    case WM_WINDOWPOSCHANGING: {
+        if (!IsIconic(hWnd))
+            if (use_pause_music_inactive)
+                main_win_music::resume_music();
+        break;
+    }
+    }
+}
+
 /*!
  * @todo WNDCLASSに影響があるのでplayer_type*の追加は保留
  */
@@ -2326,6 +2356,8 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
     PAINTSTRUCT ps;
     term_data *td;
     td = (term_data *)GetWindowLong(hWnd, 0);
+
+    handle_app_active(hWnd, uMsg, wParam, lParam);
 
     switch (uMsg) {
     case WM_NCCREATE: {

@@ -7,6 +7,7 @@
 
 #include <windows.h>
 
+extern bool use_pause_music_inactive;
 extern concptr ANGBAND_DIR_XTRA_MUSIC;
 extern CfgData *music_cfg_data;
 
@@ -15,5 +16,7 @@ void load_music_prefs();
 errr stop_music(void);
 errr play_music(int type, int val);
 errr play_music_scene(int val);
+void pause_music(void);
+void resume_music(void);
 void on_mci_notify(WPARAM wFlags, LONG lDevID);
 }
