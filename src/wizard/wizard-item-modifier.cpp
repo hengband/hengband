@@ -5,6 +5,7 @@
 #include "core/show-file.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
+#include "core/stuff-handler.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
@@ -14,6 +15,7 @@
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/object-ego.h"
+#include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-enchant.h"
 #include "object-hook/hook-checker.h"
@@ -23,7 +25,9 @@
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "object/object-kind-hook.h"
+#include "object/object-mark-types.h"
 #include "object/object-value.h"
+#include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "system/alloc-entries.h"
 #include "system/artifact-type-definition.h"
@@ -37,6 +41,24 @@
 #include <vector>
 
 #define K_MAX_DEPTH 110 /*!< アイテムの階層毎生成率を表示する最大階 */
+
+void wiz_identify_full_inventory(player_type *caster_ptr)
+{
+    for (int i = 0; i < INVEN_TOTAL; i++) {
+        object_type *o_ptr = &caster_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+
+        set_bits(o_ptr->ident, IDENT_KNOWN | IDENT_FULL_KNOWN);
+        set_bits(o_ptr->marked, OM_TOUCHED);
+    }
+
+    /* Refrect item informaiton onto subwindows without updating inventory */
+    reset_bits(caster_ptr->update, PU_COMBINE | PU_REORDER);
+    handle_stuff(caster_ptr);
+    set_bits(caster_ptr->update, PU_COMBINE | PU_REORDER);
+    set_bits(caster_ptr->window_flags, PW_INVEN | PW_EQUIP);
+}
 
 /*!
  * @brief アイテムの階層毎生成率を表示する / Output a rarity graph for a type of object.

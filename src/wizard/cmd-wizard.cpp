@@ -57,6 +57,7 @@ std::vector<std::vector<std::string>> debug_menu_table = {
     { "G", _("ゲームの設定を変更", "Modify game configurations") },
     { "H", _("モンスターの群れ生成", "Summon monsters") },
     { "i", _("鑑定", "Idenfity") },
+    { "I", _("インベントリ全*鑑定*", "Idenfity all objects fully in inventory") },
     { "j", _("指定ダンジョン階にワープ", "Jump to floor depth of target dungeon") },
     { "l", _("指定アイテム番号まで一括鑑定", "Make objects idenfified to target object id") },
     { "m", _("魔法の地図", "Magic mapping") },
@@ -176,6 +177,9 @@ bool exe_cmd_debug(player_type *creature_ptr, char cmd)
         break;
     case 'i':
         (void)ident_spell(creature_ptr, FALSE, TV_NONE);
+        break;
+    case 'I':
+        wiz_identify_full_inventory(creature_ptr);
         break;
     case 'j':
         wiz_jump_to_dungeon(creature_ptr);
