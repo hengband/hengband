@@ -100,6 +100,7 @@ BIT_FLAGS has_slow_digest(player_type *creature_ptr);
 BIT_FLAGS has_regenerate(player_type *creature_ptr);
 void update_curses(player_type *creature_ptr);
 BIT_FLAGS has_impact(player_type *creature_ptr);
+BIT_FLAGS has_earthquake(player_type *creature_ptr);
 void update_extra_blows(player_type *creature_ptr);
 BIT_FLAGS has_resist_acid(player_type *creature_ptr);
 BIT_FLAGS has_vuln_acid(player_type *creature_ptr);

@@ -30,7 +30,7 @@ enum tr_type {
     TR_SLAY_DRAGON = 23,
     TR_KILL_DRAGON = 24, /* Execute Dragon */
     TR_VORPAL = 25, /* Later */
-    TR_IMPACT = 26, /* Cause Earthquakes */
+    TR_EARTHQUAKE = 26, //!< 地震を起こす / Cause earthquake
     TR_BRAND_POIS = 27,
     TR_BRAND_ACID = 28,
     TR_BRAND_ELEC = 29,
@@ -159,5 +159,7 @@ enum tr_type {
     TR_RES_CURSE = 148,
     TR_BERS_RAGE = 149, //!< 狂戦士化の発作
     TR_BRAND_MAGIC = 150, //!< 魔術属性
-    TR_FLAG_MAX = 152,
+    TR_IMPACT = 151, //!< クリティカル率アップ / Increase critical hit ratio
+
+        TR_FLAG_MAX = 152,
 };

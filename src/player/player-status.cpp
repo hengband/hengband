@@ -390,6 +390,7 @@ static void update_bonuses(player_type *creature_ptr)
     creature_ptr->regenerate = has_regenerate(creature_ptr);
     update_curses(creature_ptr);
     creature_ptr->impact = has_impact(creature_ptr);
+    creature_ptr->earthquake = has_earthquake(creature_ptr);
     update_extra_blows(creature_ptr);
 
     creature_ptr->lite = has_lite(creature_ptr);

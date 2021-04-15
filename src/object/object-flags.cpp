@@ -84,7 +84,7 @@ void object_flags(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS flgs[TR
             add_flag(flgs, TR_RES_ELEC);
             add_flag(flgs, TR_RES_FIRE);
             add_flag(flgs, TR_RES_COLD);
-        } else if (add == TR_IMPACT) {
+        } else if (add == TR_EARTHQUAKE) {
             add_flag(flgs, TR_ACTIVATE);
         }
     }

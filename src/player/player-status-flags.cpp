@@ -190,8 +190,8 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
     case TR_KILL_DRAGON:
     case TR_VORPAL:
         return check_equipment_flags(creature_ptr, tr_flag);
-    case TR_IMPACT:
-        return has_impact(creature_ptr);
+    case TR_EARTHQUAKE:
+        return has_earthquake(creature_ptr);
     case TR_BRAND_POIS:
         return player_flags_brand_pois(creature_ptr);
     case TR_BRAND_ACID:
@@ -399,6 +399,8 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
     case TR_BERS_RAGE:
     case TR_BRAND_MAGIC:
         return check_equipment_flags(creature_ptr, tr_flag);
+    case TR_IMPACT:
+        return has_impact(creature_ptr);
 
     case TR_FLAG_MAX:
         break;
@@ -1322,6 +1324,11 @@ void update_curses(player_type *creature_ptr)
 BIT_FLAGS has_impact(player_type *creature_ptr)
 {
     return check_equipment_flags(creature_ptr, TR_IMPACT);
+}
+
+BIT_FLAGS has_earthquake(player_type *creature_ptr)
+{
+    return check_equipment_flags(creature_ptr, TR_EARTHQUAKE);
 }
 
 void update_extra_blows(player_type *creature_ptr)

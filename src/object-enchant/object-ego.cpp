@@ -196,7 +196,7 @@ static bool ego_has_flag(object_type *o_ptr, ego_item_type *e_ptr, tr_type flag)
 void ego_invest_extra_attack(player_type *player_ptr, object_type *o_ptr, ego_item_type *e_ptr, DEPTH lev)
 {
     if (!object_is_weapon(player_ptr, o_ptr)) {
-        o_ptr->pval = 1;
+        o_ptr->pval = e_ptr->max_pval >= 0 ? 1 : randint1_signed(e_ptr->max_pval);
         return;
     }
 
@@ -209,7 +209,7 @@ void ego_invest_extra_attack(player_type *player_ptr, object_type *o_ptr, ego_it
         return;
     }
 
-    if (ego_has_flag(o_ptr, e_ptr, TR_IMPACT)) {
+    if (ego_has_flag(o_ptr, e_ptr, TR_EARTHQUAKE)) {
         o_ptr->pval += randint1(e_ptr->max_pval);
         return;
     }

@@ -250,12 +250,16 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それは敵から生命力を吸収する。", "It drains life from your foes.");
     }
 
-    if (has_flag(flgs, TR_IMPACT)) {
+    if (has_flag(flgs, TR_EARTHQUAKE)) {
         info[i++] = _("それは地震を起こすことができる。", "It can cause earthquakes.");
     }
 
     if (has_flag(flgs, TR_VORPAL)) {
         info[i++] = _("それは非常に切れ味が鋭く敵を切断することができる。", "It is very sharp and can cut your foes.");
+    }
+
+    if (has_flag(flgs, TR_IMPACT)) {
+        info[i++] = _("それは非常に強く敵を攻撃することができる。", "It can hit your foes strongly.");
     }
 
     if (has_flag(flgs, TR_KILL_DRAGON)) {

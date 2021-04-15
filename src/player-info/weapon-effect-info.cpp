@@ -15,11 +15,14 @@ static void set_weapon_bless_info(self_info_type *self_ptr)
     if (has_flag(self_ptr->flags, TR_BRAND_MAGIC))
         self_ptr->info[self_ptr->line++] = _("あなたの武器は魔術的効果を発動することがある。", "Your weapon is branded with magical power.");
 
-    if (has_flag(self_ptr->flags, TR_IMPACT))
+    if (has_flag(self_ptr->flags, TR_EARTHQUAKE))
         self_ptr->info[self_ptr->line++] = _("あなたの武器は打撃で地震を発生することができる。", "The impact of your weapon can cause earthquakes.");
 
     if (has_flag(self_ptr->flags, TR_VORPAL))
         self_ptr->info[self_ptr->line++] = _("あなたの武器は非常に鋭い。", "Your weapon is very sharp.");
+
+    if (has_flag(self_ptr->flags, TR_IMPACT))
+        self_ptr->info[self_ptr->line++] = _("あなたの武器は強力な一撃を放てる。", "Your weapon hits your foes strongly.");
 
     if (has_flag(self_ptr->flags, TR_VAMPIRIC))
         self_ptr->info[self_ptr->line++] = _("あなたの武器は敵から生命力を吸収する。", "Your weapon drains life from your foes.");

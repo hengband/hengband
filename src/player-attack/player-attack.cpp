@@ -267,6 +267,56 @@ static DICE_NUMBER magical_brand_extra_dice(player_attack_type* pa_ptr)
 }
 
 /*!
+ * @brief 装備品が地震を起こすか判定
+ * @param attacker_ptr プレイヤー情報への参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @return 地震を起こすならtrue、起こさないならfalse
+ * @details
+ * 打撃に使用する武器または武器以外の装備品が地震を起こすなら、
+ * ダメージ量が50より多いか1/7で地震を起こす
+ */
+static bool does_equip_cause_earthquake(player_type *attacker_ptr, player_attack_type *pa_ptr)
+{
+    if (!attacker_ptr->earthquake)
+        return false;
+
+    auto do_quake = false;
+
+    auto hand = (pa_ptr->hand == 0) ? FLAG_CAUSE_INVEN_MAIN_HAND : FLAG_CAUSE_INVEN_SUB_HAND;
+    if (any_bits(attacker_ptr->earthquake, hand))
+        do_quake = true;
+    else {
+        auto flags = attacker_ptr->earthquake;
+        reset_bits(flags, FLAG_CAUSE_INVEN_MAIN_HAND | FLAG_CAUSE_INVEN_SUB_HAND);
+        do_quake = flags != 0;
+    }
+
+    if (do_quake)
+        return pa_ptr->attack_damage > 50 || one_in_(7);
+
+    return false;
+}
+
+/*!
+ * @brief 手にしている装備品がフラグを持つか判定
+ * @param attacker_flags 装備状況で集計されたフラグ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @return 持つならtrue、持たないならfalse
+ */
+static bool does_weapon_has_flag(BIT_FLAGS &attacker_flags, player_attack_type *pa_ptr) {
+    if (!attacker_flags)
+        return false;
+
+    auto hand = (pa_ptr->hand == 0) ? FLAG_CAUSE_INVEN_MAIN_HAND : FLAG_CAUSE_INVEN_SUB_HAND;
+    if (any_bits(attacker_flags, hand))
+        return true;
+
+    auto flags = attacker_flags;
+    reset_bits(flags, FLAG_CAUSE_INVEN_MAIN_HAND | FLAG_CAUSE_INVEN_SUB_HAND);
+    return flags != 0;
+}
+
+/*!
  * @brief 武器による直接攻撃メインルーチン
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
@@ -282,13 +332,12 @@ static void process_weapon_attack(player_type *attacker_ptr, player_attack_type 
     pa_ptr->attack_damage = calc_attack_damage_with_slay(attacker_ptr, o_ptr, pa_ptr->attack_damage, pa_ptr->m_ptr, pa_ptr->mode, FALSE);
     calc_surprise_attack_damage(attacker_ptr, pa_ptr);
 
-    BIT_FLAGS attack_hand = (pa_ptr->hand == 0) ? FLAG_CAUSE_INVEN_MAIN_HAND : FLAG_CAUSE_INVEN_SUB_HAND;
-    if ((any_bits(attacker_ptr->impact, attack_hand) && ((pa_ptr->attack_damage > 50) || one_in_(7))) || (pa_ptr->chaos_effect == CE_QUAKE)
-        || (pa_ptr->mode == HISSATSU_QUAKE))
+    if (does_equip_cause_earthquake(attacker_ptr, pa_ptr) || (pa_ptr->chaos_effect == CE_QUAKE) || (pa_ptr->mode == HISSATSU_QUAKE))
         *do_quake = TRUE;
 
+    auto do_impact = does_weapon_has_flag(attacker_ptr->impact, pa_ptr);
     if ((!(o_ptr->tval == TV_SWORD) || !(o_ptr->sval == SV_POISON_NEEDLE)) && !(pa_ptr->mode == HISSATSU_KYUSHO))
-        pa_ptr->attack_damage = critical_norm(attacker_ptr, o_ptr->weight, o_ptr->to_h, pa_ptr->attack_damage, attacker_ptr->to_h[pa_ptr->hand], pa_ptr->mode);
+        pa_ptr->attack_damage = critical_norm(attacker_ptr, o_ptr->weight, o_ptr->to_h, pa_ptr->attack_damage, attacker_ptr->to_h[pa_ptr->hand], pa_ptr->mode, do_impact);
 
     pa_ptr->drain_result = pa_ptr->attack_damage;
     process_vorpal_attack(attacker_ptr, pa_ptr, vorpal_cut, vorpal_chance);

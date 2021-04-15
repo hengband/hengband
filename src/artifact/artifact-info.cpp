@@ -29,7 +29,7 @@ int activation_index(player_type *player_ptr, object_type *o_ptr)
             return ACT_RESIST_FIRE;
         case ESSENCE_TMP_RES_COLD:
             return ACT_RESIST_COLD;
-        case TR_IMPACT:
+        case TR_EARTHQUAKE:
             return ACT_QUAKE;
         }
     }

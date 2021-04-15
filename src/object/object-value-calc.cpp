@@ -170,6 +170,10 @@ PRICE flag_cost(player_type *player_ptr, object_type *o_ptr, int plusses)
         tmp_cost += 2500;
         count++;
     }
+    if (has_flag(flgs, TR_EARTHQUAKE)) {
+        tmp_cost += 2500;
+        count++;
+    }
     if (has_flag(flgs, TR_BRAND_POIS)) {
         tmp_cost += 3800;
         count++;

@@ -289,7 +289,7 @@ void random_slay(object_type *o_ptr)
 
         break;
     case 20:
-        add_flag(o_ptr->art_flags, TR_IMPACT);
+        add_flag(o_ptr->art_flags, TR_EARTHQUAKE);
         break;
     case 21:
     case 22:

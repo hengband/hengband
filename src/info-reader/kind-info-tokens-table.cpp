@@ -32,7 +32,7 @@ std::unordered_map<std::string_view, tr_type> k_info_flags = {
     { "SLAY_DRAGON", TR_SLAY_DRAGON },
     { "KILL_DRAGON", TR_KILL_DRAGON },
     { "VORPAL", TR_VORPAL },
-    { "IMPACT", TR_IMPACT },
+    { "EARTHQUAKE", TR_EARTHQUAKE },
     { "BRAND_POIS", TR_BRAND_POIS },
     { "BRAND_ACID", TR_BRAND_ACID },
     { "BRAND_ELEC", TR_BRAND_ELEC },
@@ -163,6 +163,7 @@ std::unordered_map<std::string_view, tr_type> k_info_flags = {
     { "RES_CURSE", TR_RES_CURSE },
     { "BERS_RAGE", TR_BERS_RAGE },
     { "BRAND_MAGIC", TR_BRAND_MAGIC },
+    { "IMPACT", TR_IMPACT },
 };
 
 /*!

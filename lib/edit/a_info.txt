@@ -2237,7 +2237,7 @@ E:'Grond'
 I:21:50:0
 W:100:1:1000:500000
 P:0:9d9:5:25:10
-F:KILL_DRAGON | SLAY_ANIMAL | SLAY_EVIL | IMPACT | SLAY_UNDEAD | NO_MAGIC |
+F:KILL_DRAGON | SLAY_ANIMAL | SLAY_EVIL | IMPACT | EARTHQUAKE | SLAY_UNDEAD | NO_MAGIC |
 F:SLAY_DEMON | SLAY_TROLL | SLAY_ORC | RES_ACID | RES_ELEC | RES_FIRE |
 F:RES_COLD | SEE_INVIS | TELEPATHY | AGGRAVATE | SHOW_MODS | INSTA_ART |
 F:SLAY_HUMAN | RIDING | QUESTITEM
@@ -2729,7 +2729,7 @@ I:21:13:-4
 W:30:20:500:0
 P:0:8d6:0:30:0
 F:STEALTH | INT | WIS | AGGRAVATE | CURSED | HEAVY_CURSE |
-F:SHOW_MODS | CHAOTIC | IMPACT | SPEED
+F:SHOW_MODS | CHAOTIC | IMPACT | EARTHQUAKE | SPEED
 F:RANDOM_CURSE0
 D:$This is a destructive heavy thing made by Micro$oft.
 D:$  It will bring many troubles to its user.
@@ -3157,7 +3157,7 @@ E:'Iron ball'
 I:21:6:-6
 W:45:40:666:66666
 P:0:25d4:-30:0:20
-F:SPEED | STEALTH | WIS | IMPACT | SHOW_MODS | HIDE_TYPE |
+F:SPEED | STEALTH | WIS | IMPACT | EARTHQUAKE | SHOW_MODS | HIDE_TYPE |
 F:CURSED | HEAVY_CURSE
 D:$It is a very heavy iron ball, likely too cumbersome to be effective as
 D:$ a weapon, with an attached chain and metal ring, ready to be fastened to
