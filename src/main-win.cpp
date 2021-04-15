@@ -85,7 +85,6 @@
 
 #ifdef WINDOWS
 
-#include "autopick/autopick-pref-processor.h"
 #include "cmd-io/cmd-process-screen.h"
 #include "cmd-io/cmd-save.h"
 #include "core/game-play.h"
@@ -94,7 +93,6 @@
 #include "core/special-internal-keys.h"
 #include "core/stuff-handler.h"
 #include "core/visuals-reseter.h"
-#include "floor/floor-base-definitions.h"
 #include "floor/floor-events.h"
 #include "game-option/runtime-arguments.h"
 #include "game-option/special-options.h"
@@ -115,7 +113,6 @@
 #include "save/save.h"
 #include "system/angband-version.h"
 #include "system/angband.h"
-#include "system/floor-type-definition.h"
 #include "system/system-variables.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
@@ -123,7 +120,6 @@
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
-#include "view/display-map.h"
 #include "view/display-messages.h"
 #include "wizard/spoiler-util.h"
 #include "wizard/wizard-spoiler.h"
@@ -572,7 +568,7 @@ static void save_prefs(void)
 /*
  * callback for EnumDisplayMonitors API
  */
-BOOL CALLBACK monitorenumproc(HMONITOR hMon, HDC hdcMon, LPRECT lpMon, LPARAM dwDate)
+BOOL CALLBACK monitorenumproc([[maybe_unused]] HMONITOR hMon, [[maybe_unused]] HDC hdcMon, [[maybe_unused]] LPRECT lpMon, LPARAM dwDate)
 {
     bool *result = (bool *)dwDate;
     *result = true;
