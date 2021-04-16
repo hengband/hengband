@@ -24,6 +24,7 @@ enum trc_curse_type {
     TRC_DRAIN_HP = 0x00080000L,
     TRC_DRAIN_MANA = 0x00100000L,
     TRC_CALL_UNDEAD = 0x00200000L,
+    TRC_BERS_RAGE = 0x00400000L,
 };
 
 enum trc_special_type {

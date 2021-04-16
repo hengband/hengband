@@ -103,15 +103,6 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
                 if (okay_flag)
                     break;
             }
-
-            switch (o_ptr->name2) {
-            case EGO_DWARVEN:
-                o_ptr->weight = (2 * k_info[o_ptr->k_idx].weight / 3);
-                o_ptr->ac = k_info[o_ptr->k_idx].ac + 5;
-                break;
-            default:
-                break;
-            }
         } else if (power < -1) {
             while (TRUE) {
                 bool okay_flag = TRUE;
@@ -161,10 +152,6 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
             case EGO_REFLECTION:
                 if (o_ptr->sval == SV_MIRROR_SHIELD)
                     o_ptr->name2 = 0;
-                break;
-            case EGO_S_DWARVEN:
-                o_ptr->weight = (2 * k_info[o_ptr->k_idx].weight / 3);
-                o_ptr->ac = k_info[o_ptr->k_idx].ac + 3;
                 break;
             default:
                 break;
@@ -229,11 +216,6 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
 
                 switch (o_ptr->name2) {
                 case EGO_TELEPATHY:
-                    if (add_esp_strong(o_ptr))
-                        add_esp_weak(o_ptr, TRUE);
-                    else
-                        add_esp_weak(o_ptr, FALSE);
-                    break;
                 case EGO_MAGI:
                 case EGO_MIGHT:
                 case EGO_REGENERATION:
@@ -241,12 +223,8 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
                 case EGO_BASILISK:
                     break;
                 case EGO_SEEING:
-                    if (one_in_(3)) {
-                        if (one_in_(2))
-                            add_esp_strong(o_ptr);
-                        else
-                            add_esp_weak(o_ptr, FALSE);
-                    }
+                    if (one_in_(3))
+                        add_low_telepathy(o_ptr);
                     break;
                 default:
                     /* not existing crown (wisdom,lite, etc...) */
@@ -297,18 +275,14 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
                 o_ptr->name2 = get_random_ego(INVEN_HEAD, TRUE);
                 switch (o_ptr->name2) {
                 case EGO_BRILLIANCE:
-                case EGO_DARK:
+                case EGO_DARK:  
                 case EGO_INFRAVISION:
                 case EGO_H_PROTECTION:
                 case EGO_LITE:
                     break;
                 case EGO_SEEING:
-                    if (one_in_(7)) {
-                        if (one_in_(2))
-                            add_esp_strong(o_ptr);
-                        else
-                            add_esp_weak(o_ptr, FALSE);
-                    }
+                    if (one_in_(7))
+                        add_low_telepathy(o_ptr);
                     break;
                 default:
                     /* not existing helm (Magi, Might, etc...)*/

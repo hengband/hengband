@@ -36,7 +36,7 @@ std::vector<flag_insc_table> flag_insc_resistance = {
     { "毒", "Po", TR_RES_POIS, -1 }, { "閃", "Li", TR_RES_LITE, -1 }, { "暗", "Dk", TR_RES_DARK, -1 }, { "破", "Sh", TR_RES_SHARDS, -1 },
     { "盲", "Bl", TR_RES_BLIND, -1 }, { "乱", "Cf", TR_RES_CONF, -1 }, { "轟", "So", TR_RES_SOUND, -1 }, { "獄", "Nt", TR_RES_NETHER, -1 },
     { "因", "Nx", TR_RES_NEXUS, -1 }, { "沌", "Ca", TR_RES_CHAOS, -1 }, { "劣", "Di", TR_RES_DISEN, -1 }, { "時", "Tm", TR_RES_TIME, -1 },
-    { "水", "Wt", TR_RES_WATER, -1 }, { "恐", "Fe", TR_RES_FEAR, -1 },
+    { "水", "Wt", TR_RES_WATER, -1 }, { "恐", "Fe", TR_RES_FEAR, -1 }, { "呪", "Cu", TR_RES_CURSE, -1 },
 };
 
 /*! オブジェクトの特性表示記号テーブルの定義(その他特性) */
@@ -59,20 +59,21 @@ std::vector<flag_insc_table> flag_insc_aura = {
 /*! オブジェクトの特性表示記号テーブルの定義(属性スレイ) */
 std::vector<flag_insc_table> flag_insc_brand = {
     { "酸", "A", TR_BRAND_ACID, -1 }, { "電", "E", TR_BRAND_ELEC, -1 }, { "焼", "F", TR_BRAND_FIRE, -1 }, { "凍", "Co", TR_BRAND_COLD, -1 },
-    { "毒", "P", TR_BRAND_POIS, -1 }, { "沌", "Ca", TR_CHAOTIC, -1 },
-    { "吸", "V", TR_VAMPIRIC, -1 }, { "震", "Q", TR_IMPACT, -1 }, { "切", "S", TR_VORPAL, -1 }, { "理", "M", TR_FORCE_WEAPON, -1 }
+    { "毒", "P", TR_BRAND_POIS, -1 }, { "沌", "Ca", TR_CHAOTIC, -1 }, { "魔", "Ma", TR_BRAND_MAGIC, -1 },
+    { "吸", "V", TR_VAMPIRIC, -1 }, { "震", "Q", TR_EARTHQUAKE, -1 }, { "切", "Sl", TR_VORPAL, -1 }, { "強", "Sm", TR_IMPACT, -1 },
+    { "理", "Mf", TR_FORCE_WEAPON, -1 }
 };
 
 /*! オブジェクトの特性表示記号テーブルの定義(種族スレイ) */
 std::vector<flag_insc_table> flag_insc_kill = {
-    { "邪", "*", TR_KILL_EVIL, -1 }, { "人", "p", TR_KILL_HUMAN, -1 }, { "龍", "D", TR_KILL_DRAGON, -1 }, { "オ", "o", TR_KILL_ORC, -1 },
+    { "邪", "*", TR_KILL_EVIL, -1 }, { "善", "A", TR_KILL_GOOD, -1 }, { "人", "p", TR_KILL_HUMAN, -1 }, { "龍", "D", TR_KILL_DRAGON, -1 }, { "オ", "o", TR_KILL_ORC, -1 },
     { "ト", "T", TR_KILL_TROLL, -1 }, { "巨", "P", TR_KILL_GIANT, -1 }, { "デ", "U", TR_KILL_DEMON, -1 }, { "死", "L", TR_KILL_UNDEAD, -1 },
     { "動", "Z", TR_KILL_ANIMAL, -1 },
 };
 
 /*! オブジェクトの特性表示記号テーブルの定義(種族*スレイ*) */
 std::vector<flag_insc_table> flag_insc_slay = {
-    { "邪", "*", TR_SLAY_EVIL, TR_KILL_EVIL }, { "人", "p", TR_SLAY_HUMAN, TR_KILL_HUMAN }, { "竜", "D", TR_SLAY_DRAGON, TR_KILL_DRAGON },
+    { "邪", "*", TR_SLAY_EVIL, TR_KILL_EVIL }, { "善", "A", TR_SLAY_GOOD, TR_KILL_GOOD }, { "人", "p", TR_SLAY_HUMAN, TR_KILL_HUMAN }, { "竜", "D", TR_SLAY_DRAGON, TR_KILL_DRAGON },
     { "オ", "o", TR_SLAY_ORC, TR_KILL_ORC }, { "ト", "T", TR_SLAY_TROLL, TR_KILL_TROLL }, { "巨", "P", TR_SLAY_GIANT, TR_KILL_GIANT },
     { "デ", "U", TR_SLAY_DEMON, TR_KILL_DEMON }, { "死", "L", TR_SLAY_UNDEAD, TR_KILL_UNDEAD }, { "動", "Z", TR_SLAY_ANIMAL, TR_KILL_ANIMAL },
 };
@@ -132,18 +133,19 @@ std::vector<flag_insc_table> flag_insc_aura = {
 
 std::vector<flag_insc_table> flag_insc_brand = {
     { "A", TR_BRAND_ACID, -1 }, { "E", TR_BRAND_ELEC, -1 }, { "F", TR_BRAND_FIRE, -1 }, { "Co", TR_BRAND_COLD, -1 },
-    { "P", TR_BRAND_POIS, -1 }, { "Ca", TR_CHAOTIC, -1 },
-    { "V", TR_VAMPIRIC, -1 }, { "Q", TR_IMPACT, -1 }, { "S", TR_VORPAL, -1 }, { "M", TR_FORCE_WEAPON, -1 },
+    { "P", TR_BRAND_POIS, -1 }, { "Ca", TR_CHAOTIC, -1 }, { "Ma", TR_BRAND_MAGIC, -1 },
+    { "V", TR_VAMPIRIC, -1 }, { "Q", TR_EARTHQUAKE, -1 }, { "Sl", TR_VORPAL, -1 }, { "Sm", TR_IMPACT, -1 },
+    { "Mf", TR_FORCE_WEAPON, -1 },
 };
 
 std::vector<flag_insc_table> flag_insc_kill = {
-    { "*", TR_KILL_EVIL, -1 }, { "p", TR_KILL_HUMAN, -1 }, { "D", TR_KILL_DRAGON, -1 }, { "o", TR_KILL_ORC, -1 },
+    { "*", TR_KILL_EVIL, -1 }, { "A", TR_KILL_GOOD, -1 }, { "p", TR_KILL_HUMAN, -1 }, { "D", TR_KILL_DRAGON, -1 }, { "o", TR_KILL_ORC, -1 },
     { "T", TR_KILL_TROLL, -1 }, { "P", TR_KILL_GIANT, -1 }, { "U", TR_KILL_DEMON, -1 }, { "L", TR_KILL_UNDEAD, -1 },
     { "Z", TR_KILL_ANIMAL, -1 },
 };
 
 std::vector<flag_insc_table> flag_insc_slay = {
-    { "*", TR_SLAY_EVIL, TR_KILL_EVIL }, { "p", TR_SLAY_HUMAN, TR_KILL_HUMAN }, { "D", TR_SLAY_DRAGON, TR_KILL_DRAGON }, { "o", TR_SLAY_ORC, TR_KILL_ORC },
+    { "*", TR_SLAY_EVIL, TR_KILL_EVIL }, { "A", TR_SLAY_GOOD, TR_KILL_GOOD }, { "p", TR_SLAY_HUMAN, TR_KILL_HUMAN }, { "D", TR_SLAY_DRAGON, TR_KILL_DRAGON }, { "o", TR_SLAY_ORC, TR_KILL_ORC },
     { "T", TR_SLAY_TROLL, TR_KILL_TROLL }, { "P", TR_SLAY_GIANT, TR_KILL_GIANT }, { "U", TR_SLAY_DEMON, TR_KILL_DEMON }, { "L", TR_SLAY_UNDEAD, TR_KILL_UNDEAD },
     { "Z", TR_SLAY_ANIMAL, TR_KILL_ANIMAL },
 };

@@ -77,6 +77,15 @@ static bool invest_misc_chaos(object_type *o_ptr)
     return one_in_(2);
 }
 
+static bool invest_misc_res_curse(object_type* o_ptr)
+{
+    if (has_flag(o_ptr->art_flags, TR_RES_CURSE))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_RES_CURSE);
+    return one_in_(2);
+}
+
 /*!
  * @brief アーティファクトのバイアス値に基づいて特性を付与する
  * @param o_ptr 対象のオブジェクト構造体への参照ポインタ
@@ -237,7 +246,7 @@ void random_misc(player_type *player_ptr, object_type *o_ptr)
     if (switch_misc_bias(o_ptr))
         return;
 
-    switch (randint1(33)) {
+    switch (randint1(34)) {
     case 1:
         add_flag(o_ptr->art_flags, TR_SUST_STR);
         if (!o_ptr->artifact_bias)
@@ -339,6 +348,9 @@ void random_misc(player_type *player_ptr, object_type *o_ptr)
         break;
     case 33:
         invest_misc_weak_esps(o_ptr);
+        break;
+    case 34:
+        invest_misc_res_curse(o_ptr);
         break;
     }
 }

@@ -24,6 +24,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell/summon-types.h"
 #include "status/bad-status-setter.h"
+#include "status/buff-setter.h"
 #include "system/floor-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
@@ -32,13 +33,13 @@
 
 #define TRC_P_FLAG_MASK                                                                                                                                        \
     (TRC_TELEPORT_SELF | TRC_CHAINSWORD | TRC_TY_CURSE | TRC_DRAIN_EXP | TRC_ADD_L_CURSE | TRC_ADD_H_CURSE | TRC_CALL_ANIMAL | TRC_CALL_DEMON                  \
-        | TRC_CALL_DRAGON | TRC_COWARDICE | TRC_TELEPORT | TRC_DRAIN_HP | TRC_DRAIN_MANA | TRC_CALL_UNDEAD)
+        | TRC_CALL_DRAGON | TRC_COWARDICE | TRC_TELEPORT | TRC_DRAIN_HP | TRC_DRAIN_MANA | TRC_CALL_UNDEAD | TRC_BERS_RAGE)
 
 static bool is_specific_curse(BIT_FLAGS flag)
 {
     return (flag == TRC_ADD_L_CURSE) || (flag == TRC_ADD_H_CURSE) || (flag == TRC_DRAIN_HP) || (flag == TRC_DRAIN_MANA) || (flag == TRC_CALL_ANIMAL)
         || (flag == TRC_CALL_DEMON) || (flag == TRC_CALL_DRAGON) || (flag == TRC_CALL_UNDEAD) || (flag == TRC_COWARDICE) || (flag == TRC_LOW_MELEE)
-        || (flag == TRC_LOW_AC) || (flag == TRC_HARD_SPELL) || (flag == TRC_FAST_DIGEST) || (flag == TRC_SLOW_REGEN);
+        || (flag == TRC_LOW_AC) || (flag == TRC_HARD_SPELL) || (flag == TRC_FAST_DIGEST) || (flag == TRC_SLOW_REGEN || flag == TRC_BERS_RAGE);
 }
 
 static void choise_cursed_item(player_type *creature_ptr, BIT_FLAGS flag, object_type *o_ptr, int *choices, int *number, int item_num)
@@ -91,6 +92,9 @@ static void choise_cursed_item(player_type *creature_ptr, BIT_FLAGS flag, object
         break;
     case TRC_SLOW_REGEN:
         cf = TR_SLOW_REGEN;
+        break;
+    case TRC_BERS_RAGE:
+        cf = TR_BERS_RAGE;
         break;
     default:
         break;
@@ -297,6 +301,22 @@ static void curse_cowardice(player_type *creature_ptr)
     set_afraid(creature_ptr, creature_ptr->afraid + 13 + randint1(26));
 }
 
+/*!
+ * @brief 装備による狂戦士化の発作を引き起こす
+ * @param creature_ptr プレイヤー情報への参照ポインタ
+ */
+static void curse_berserk_rage(player_type *creature_ptr)
+{
+    if (((creature_ptr->cursed & TRC_BERS_RAGE) == 0) || !one_in_(1500))
+        return;
+
+    disturb(creature_ptr, FALSE, TRUE);
+    msg_print(_("ウガァァア！", "RAAAAGHH!"));
+    msg_print(_("激怒の発作に襲われた！", "You feel a fit of rage coming over you!"));
+    (void)set_shero(creature_ptr, 10 + randint1(creature_ptr->lev), FALSE);
+    (void)set_afraid(creature_ptr, 0);
+}
+
 static void curse_drain_hp(player_type *creature_ptr)
 {
     if (((creature_ptr->cursed & TRC_DRAIN_HP) == 0) || !one_in_(666))
@@ -342,6 +362,7 @@ static void occur_curse_effects(player_type *creature_ptr)
     multiply_high_curse(creature_ptr);
     curse_call_monster(creature_ptr);
     curse_cowardice(creature_ptr);
+    curse_berserk_rage(creature_ptr);
     if ((creature_ptr->cursed & TRC_TELEPORT) && one_in_(200) && !creature_ptr->anti_tele) {
         disturb(creature_ptr, FALSE, TRUE);
         teleport_player(creature_ptr, 40, TELEPORT_PASSIVE);
@@ -360,7 +381,7 @@ static void occur_curse_effects(player_type *creature_ptr)
 void execute_cursed_items_effect(player_type *creature_ptr)
 {
     occur_curse_effects(creature_ptr);
-    if (!one_in_(999) || creature_ptr->anti_magic)
+    if (!one_in_(999) || creature_ptr->anti_magic || (one_in_(2) && has_resist_curse(creature_ptr)))
         return;
 
     object_type *o_ptr = &creature_ptr->inventory_list[INVEN_LITE];

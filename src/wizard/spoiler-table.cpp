@@ -68,6 +68,8 @@ flag_desc slay_flags_desc[MAX_SLAY_FLAGS_DESCRIPTION] = {
     { TR_KILL_ANIMAL, _("*動物*", "XAnimal") },
     { TR_SLAY_EVIL, _("邪悪", "Evil") },
     { TR_KILL_EVIL, _("*邪悪*", "XEvil") },
+    { TR_SLAY_EVIL, _("善良", "Good") },
+    { TR_KILL_EVIL, _("*善良*", "XGood") },
     { TR_SLAY_HUMAN, _("人間", "Human") },
     { TR_KILL_HUMAN, _("*人間*", "XHuman") },
     { TR_SLAY_UNDEAD, _("アンデッド", "Undead") },
@@ -93,9 +95,11 @@ flag_desc brand_flags_desc[MAX_BRAND_FLAGS_DESCRIPTION] = {
     { TR_BRAND_POIS, _("毒殺", "Poisoned") },
     { TR_FORCE_WEAPON, _("理力", "Force") },
     { TR_CHAOTIC, _("混沌", "Mark of Chaos") },
+    { TR_BRAND_MAGIC, _("魔術", "Magical Brand") },
     { TR_VAMPIRIC, _("吸血", "Vampiric") },
-    { TR_IMPACT, _("地震", "Earthquake impact on hit") },
+    { TR_EARTHQUAKE, _("地震", "Earthquake impact on hit") },
     { TR_VORPAL, _("切れ味", "Very sharp") },
+    { TR_IMPACT, _("強撃", "Smash hit") },
 };
 
 const flag_desc resist_flags_desc[MAX_RESISTANCE_FLAGS_DESCRIPTION] = {
@@ -117,6 +121,7 @@ const flag_desc resist_flags_desc[MAX_RESISTANCE_FLAGS_DESCRIPTION] = {
     { TR_RES_DISEN, _("劣化", "Disenchantment") },
     { TR_RES_TIME, _("時間逆転", "Time") },
     { TR_RES_WATER, _("水", "Water") },
+    { TR_RES_CURSE, _("呪力", "Curse") },
 };
 
 /* Elemental immunities (along with poison) */

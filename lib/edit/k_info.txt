@@ -6416,4 +6416,14 @@ I:19:51:0
 W:20:0:0:2000
 F:SHOW_MODS | INSTA_ART
 
+N:672:魔法を防ぐクローク
+E:& Cloak~ of Magic Resistance
+G:(:s
+I:35:1:0
+W:1:0:10:3
+A:20/4:50/4
+P:1:0d0:0:0:0
+F:RES_CURSE
+D:$A faded cloak carved with magical runes.
+D:魔術的なルーンの刻まれた陰気な外套だ。
 

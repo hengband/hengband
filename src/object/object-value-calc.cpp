@@ -79,6 +79,10 @@ PRICE flag_cost(player_type *player_ptr, object_type *o_ptr, int plusses)
         total += 5000;
         count++;
     }
+    if (has_flag(flgs, TR_BRAND_MAGIC)) {
+        total += 1000;
+        count++;
+    }
     if (has_flag(flgs, TR_VAMPIRIC)) {
         total += 6500;
         count++;
@@ -99,6 +103,13 @@ PRICE flag_cost(player_type *player_ptr, object_type *o_ptr, int plusses)
         count++;
     } else if (has_flag(flgs, TR_SLAY_EVIL)) {
         tmp_cost += 2300;
+        count++;
+    }
+    if (has_flag(flgs, TR_KILL_GOOD)) {
+        tmp_cost += 2800;
+        count++;
+    } else if (has_flag(flgs, TR_SLAY_GOOD)) {
+        tmp_cost += 1800;
         count++;
     }
     if (has_flag(flgs, TR_KILL_HUMAN)) {
@@ -156,6 +167,10 @@ PRICE flag_cost(player_type *player_ptr, object_type *o_ptr, int plusses)
         count++;
     }
     if (has_flag(flgs, TR_IMPACT)) {
+        tmp_cost += 2500;
+        count++;
+    }
+    if (has_flag(flgs, TR_EARTHQUAKE)) {
         tmp_cost += 2500;
         count++;
     }
@@ -300,6 +315,8 @@ PRICE flag_cost(player_type *player_ptr, object_type *o_ptr, int plusses)
     }
     total += (tmp_cost * count);
 
+    if (has_flag(flgs, TR_RES_CURSE))
+        total += 7500;
     if (has_flag(flgs, TR_SH_FIRE))
         total += 5000;
     if (has_flag(flgs, TR_SH_ELEC))

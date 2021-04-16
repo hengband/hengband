@@ -397,7 +397,7 @@ static void display_slay_info(player_type *creature_ptr, void (*display_player_e
     process_one_characteristic(creature_ptr, row + 12, col, _("凍結      :", "Cold Brand:"), TR_BRAND_COLD, f, DP_WP);
     process_one_characteristic(creature_ptr, row + 13, col, _("毒殺      :", "Poison Brd:"), TR_BRAND_POIS, f, DP_WP);
     process_one_characteristic(creature_ptr, row + 14, col, _("切れ味    :", "Sharpness :"), TR_VORPAL, f, DP_WP);
-    process_one_characteristic(creature_ptr, row + 15, col, _("地震      :", "Quake     :"), TR_IMPACT, f, DP_WP);
+    process_one_characteristic(creature_ptr, row + 15, col, _("地震      :", "Quake     :"), TR_EARTHQUAKE, f, DP_WP);
     process_one_characteristic(creature_ptr, row + 16, col, _("吸血      :", "Vampiric  :"), TR_VAMPIRIC, f, DP_WP);
     process_one_characteristic(creature_ptr, row + 17, col, _("カオス効果:", "Chaotic   :"), TR_CHAOTIC, f, DP_WP);
     process_one_characteristic(creature_ptr, row + 18, col, _("理力      :", "Force Wep.:"), TR_FORCE_WEAPON, f, DP_WP);

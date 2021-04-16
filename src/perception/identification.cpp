@@ -242,16 +242,24 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それはカオス的な効果を及ぼす。", "It produces chaotic effects.");
     }
 
+    if (has_flag(flgs, TR_BRAND_MAGIC)) {
+        info[i++] = _("それは魔術的な効果を及ぼす。", "It produces magical effects.");
+    }
+
     if (has_flag(flgs, TR_VAMPIRIC)) {
         info[i++] = _("それは敵から生命力を吸収する。", "It drains life from your foes.");
     }
 
-    if (has_flag(flgs, TR_IMPACT)) {
+    if (has_flag(flgs, TR_EARTHQUAKE)) {
         info[i++] = _("それは地震を起こすことができる。", "It can cause earthquakes.");
     }
 
     if (has_flag(flgs, TR_VORPAL)) {
         info[i++] = _("それは非常に切れ味が鋭く敵を切断することができる。", "It is very sharp and can cut your foes.");
+    }
+
+    if (has_flag(flgs, TR_IMPACT)) {
+        info[i++] = _("それは非常に強く敵を攻撃することができる。", "It can hit your foes strongly.");
     }
 
     if (has_flag(flgs, TR_KILL_DRAGON)) {
@@ -304,6 +312,14 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 
     if (has_flag(flgs, TR_SLAY_EVIL)) {
         info[i++] = _("それは邪悪なる存在に対して聖なる力で攻撃する。", "It fights against evil with holy fury.");
+    }
+
+    if (has_flag(flgs, TR_KILL_GOOD)) {
+        info[i++] = _("それは善良なる存在にとっての天敵である。", "It is a great bane of good monsters.");
+    }
+
+    if (has_flag(flgs, TR_SLAY_EVIL)) {
+        info[i++] = _("それは善良なる存在に対して邪悪なる力で攻撃する。", "It fights against good with evil fury.");
     }
 
     if (has_flag(flgs, TR_KILL_ANIMAL)) {
@@ -530,7 +546,12 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それは矢の呪文を反射する。", "It reflects bolt spells.");
     }
 
-    if (has_flag(flgs, TR_SH_FIRE)) {
+    if (has_flag(flgs, TR_RES_CURSE)) {
+        info[i++] = _("それは呪いへの抵抗力を高める。", "It produces your high resisrance to curse.");
+    }
+
+    if (has_flag(flgs, TR_SH_FIRE))
+    {
         info[i++] = _("それは炎のバリアを張る。", "It produces a fiery sheath.");
     }
 
@@ -621,6 +642,9 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
     if ((has_flag(flgs, TR_COWARDICE)) || (o_ptr->curse_flags & TRC_COWARDICE)) {
         info[i++] = _("それは恐怖感を引き起こす。", "It makes you subject to cowardice.");
     }
+
+    if (has_flag(flgs, TR_BERS_RAGE))
+        info[i++] = _("それは狂戦士化の発作を引き起こす。", "It makes you subject to berserker fits.");
 
     if ((has_flag(flgs, TR_TELEPORT)) || (o_ptr->curse_flags & TRC_TELEPORT)) {
         info[i++] = _("それはランダムなテレポートを引き起こす。", "It induces random teleportation.");

@@ -18,11 +18,9 @@
  */
 static bool grab_one_ego_item_flag(ego_item_type *e_ptr, concptr what)
 {
-    for (int i = 0; i < TR_FLAG_MAX; i++) {
-        if (streq(what, k_info_flags[i])) {
-            add_flag(e_ptr->flags, i);
-            return 0;
-        }
+    if (k_info_flags.find(what) != k_info_flags.end()) {
+        add_flag(e_ptr->flags, k_info_flags[what]);
+        return 0;
     }
 
     if (FlagGroup<TRG>::grab_one_flag(e_ptr->gen_flags, k_info_gen_flags, what))
@@ -34,11 +32,9 @@ static bool grab_one_ego_item_flag(ego_item_type *e_ptr, concptr what)
 
 static bool grab_ego_generate_flags(ego_generate_type &xtra, concptr what)
 {
-    for (int i = 0; i < TR_FLAG_MAX; i++) {
-        if (streq(what, k_info_flags[i])) {
-            xtra.tr_flags.push_back(static_cast<tr_type>(i));
-            return false;
-        }
+    if (k_info_flags.find(what) != k_info_flags.end()) {
+        xtra.tr_flags.push_back(k_info_flags[what]);
+        return 0;
     }
 
     auto it = k_info_gen_flags.find(what);
@@ -61,8 +57,7 @@ static bool grab_ego_generate_flags(ego_generate_type &xtra, concptr what)
 errr parse_e_info(char *buf, angband_header *head)
 {
     static ego_item_type *e_ptr = NULL;
-    error_idx = -1;
-    error_line = -1;
+    error_idx = 0;
     char *s, *t;
     if (buf[0] == 'N') {
         s = angband_strchr(buf + 2, ':');

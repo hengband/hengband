@@ -30,13 +30,13 @@ enum tr_type {
     TR_SLAY_DRAGON = 23,
     TR_KILL_DRAGON = 24, /* Execute Dragon */
     TR_VORPAL = 25, /* Later */
-    TR_IMPACT = 26, /* Cause Earthquakes */
+    TR_EARTHQUAKE = 26, //!< 地震を起こす / Cause earthquake
     TR_BRAND_POIS = 27,
     TR_BRAND_ACID = 28,
     TR_BRAND_ELEC = 29,
     TR_BRAND_FIRE = 30,
     TR_BRAND_COLD = 31,
-    
+
     TR_SUST_STR = 32,
     TR_SUST_INT = 33,
     TR_SUST_WIS = 34,
@@ -69,7 +69,7 @@ enum tr_type {
     TR_RES_NEXUS = 61,
     TR_RES_CHAOS = 62,
     TR_RES_DISEN = 63,
-    
+
     TR_SH_FIRE = 64, /* Immolation (Fire) */
     TR_SH_ELEC = 65, /* Electric Sheath */
     TR_SLAY_HUMAN = 66, /* Slay human */
@@ -81,7 +81,7 @@ enum tr_type {
     TR_WARNING = 72, /* Warning */
     TR_HIDE_TYPE = 73, /* Hide "pval" description */
     TR_SHOW_MODS = 74, /* Always show Tohit/Todam */
-    TR_SLAY_GOOD = 75,
+    TR_SLAY_GOOD = 75,  //!< 善良スレイ(/善)
     TR_LEVITATION = 76, /* Feather Falling */
     TR_LITE_1 = 77, /* Light Radius 1*/
     TR_SEE_INVIS = 78, /* See Invisible */
@@ -101,8 +101,8 @@ enum tr_type {
     TR_BLESSED = 92, /* Item is Blessed */
     TR_ES_ATTACK = 93, /* Fake flag for Smith */
     TR_ES_AC = 94, /* Fake flag for Smith */
-    TR_KILL_GOOD = 95,
-    
+    TR_KILL_GOOD = 95,  //!< 善良スレイ(X善)
+
     TR_KILL_ANIMAL = 96,
     TR_KILL_EVIL = 97,
     TR_KILL_UNDEAD = 98,
@@ -135,7 +135,7 @@ enum tr_type {
     TR_LITE_M2 = 125, /* Permanent decrease Light Area (-1) */
     TR_LITE_M3 = 126, /* Permanent decrease Light Area (-1) */
     TR_LITE_FUEL = 127, /* Lights need Fuels */
-    
+
     TR_CALL_ANIMAL = 128,
     TR_CALL_DEMON = 129,
     TR_CALL_DRAGON = 130,
@@ -154,7 +154,12 @@ enum tr_type {
     TR_RES_TIME = 143,
     TR_RES_WATER = 144,
     TR_INVULN_ARROW = 145,
-    TR_DARK_SOURCE = 146, 
+    TR_DARK_SOURCE = 146,
     TR_SUPPORTIVE = 147,
-    TR_FLAG_MAX = 148,
+    TR_RES_CURSE = 148,
+    TR_BERS_RAGE = 149, //!< 狂戦士化の発作
+    TR_BRAND_MAGIC = 150, //!< 魔術属性
+    TR_IMPACT = 151, //!< クリティカル率アップ / Increase critical hit ratio
+
+        TR_FLAG_MAX = 152,
 };

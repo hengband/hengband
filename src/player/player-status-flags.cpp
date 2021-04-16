@@ -190,8 +190,8 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
     case TR_KILL_DRAGON:
     case TR_VORPAL:
         return check_equipment_flags(creature_ptr, tr_flag);
-    case TR_IMPACT:
-        return has_impact(creature_ptr);
+    case TR_EARTHQUAKE:
+        return has_earthquake(creature_ptr);
     case TR_BRAND_POIS:
         return player_flags_brand_pois(creature_ptr);
     case TR_BRAND_ACID:
@@ -271,6 +271,8 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
         return has_resist_time(creature_ptr);
     case TR_RES_WATER:
         return has_resist_water(creature_ptr);
+    case TR_RES_CURSE :
+        return has_resist_curse(creature_ptr);
 
     case TR_SH_FIRE:
         return has_sh_fire(creature_ptr);
@@ -292,9 +294,8 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
         return has_warning(creature_ptr);
     case TR_HIDE_TYPE:
     case TR_SHOW_MODS:
-        return check_equipment_flags(creature_ptr, tr_flag);
     case TR_SLAY_GOOD:
-        return 0;
+        return check_equipment_flags(creature_ptr, tr_flag);
     case TR_LEVITATION:
         return has_levitation(creature_ptr);
     case TR_LITE_1:
@@ -395,7 +396,11 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
         return has_invuln_arrow(creature_ptr);
     case TR_DARK_SOURCE:
     case TR_SUPPORTIVE:
+    case TR_BERS_RAGE:
+    case TR_BRAND_MAGIC:
         return check_equipment_flags(creature_ptr, tr_flag);
+    case TR_IMPACT:
+        return has_impact(creature_ptr);
 
     case TR_FLAG_MAX:
         break;
@@ -1290,6 +1295,8 @@ void update_curses(player_type *creature_ptr)
             creature_ptr->cursed |= TRC_FAST_DIGEST;
         if (has_flag(flgs, TR_SLOW_REGEN))
             creature_ptr->cursed |= TRC_SLOW_REGEN;
+        if (has_flag(flgs, TR_BERS_RAGE))
+            creature_ptr->cursed |= TRC_BERS_RAGE;
 
         creature_ptr->cursed |= (o_ptr->curse_flags & (0xFFFFFFF0L));
         if (o_ptr->name1 == ART_CHAINSWORD)
@@ -1317,6 +1324,11 @@ void update_curses(player_type *creature_ptr)
 BIT_FLAGS has_impact(player_type *creature_ptr)
 {
     return check_equipment_flags(creature_ptr, TR_IMPACT);
+}
+
+BIT_FLAGS has_earthquake(player_type *creature_ptr)
+{
+    return check_equipment_flags(creature_ptr, TR_EARTHQUAKE);
 }
 
 void update_extra_blows(player_type *creature_ptr)
@@ -1853,6 +1865,19 @@ BIT_FLAGS has_resist_water(player_type *creature_ptr)
         result |= FLAG_CAUSE_RACE;
 
     result |= check_equipment_flags(creature_ptr, TR_RES_WATER);
+    return result;
+}
+
+/*!
+ * @brief 呪力耐性を所持しているかどうか
+ * @param プレイヤー情報への参照ポインタ
+ * @return 呪力耐性を所持していればTRUE、なければFALSE
+ */
+BIT_FLAGS has_resist_curse(player_type *creature_ptr)
+{
+    BIT_FLAGS result = 0L;
+
+    result |= check_equipment_flags(creature_ptr, TR_RES_CURSE);
     return result;
 }
 

@@ -292,6 +292,72 @@ bool turn_monsters(player_type *caster_ptr, HIT_POINT dam) { return (project_all
 bool deathray_monsters(player_type *caster_ptr) { return (project_all_los(caster_ptr, GF_DEATH_RAY, caster_ptr->lev * 200)); }
 
 /*!
+ * @brief 調査したモンスターの情報を表示する
+ * @param caster_ptr プレーヤー情報への参照ポインタ
+ * @param m_ptr モンスター情報への参照ポインタ
+ * @param r_ptr モンスター種族への参照ポインタ
+ * @return なし
+ */
+void probed_monster_info(char *buf, player_type *caster_ptr, monster_type *m_ptr, monster_race *r_ptr)
+{
+    if (!is_original_ap(m_ptr)) {
+        if (m_ptr->mflag2.has(MFLAG2::KAGE))
+            m_ptr->mflag2.reset(MFLAG2::KAGE);
+
+        m_ptr->ap_r_idx = m_ptr->r_idx;
+        lite_spot(caster_ptr, m_ptr->fy, m_ptr->fx);
+    }
+
+    GAME_TEXT m_name[MAX_NLEN];
+    monster_desc(caster_ptr, m_name, m_ptr, MD_IGNORE_HALLU | MD_INDEF_HIDDEN);
+
+    SPEED speed = m_ptr->mspeed - 110;
+    if (monster_fast_remaining(m_ptr))
+        speed += 10;
+    if (monster_slow_remaining(m_ptr))
+        speed -= 10;
+    if (ironman_nightmare)
+        speed += 5;
+
+    concptr align;
+    if ((r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)) == (RF3_EVIL | RF3_GOOD))
+        align = _("善悪", "good&evil");
+    else if (r_ptr->flags3 & RF3_EVIL)
+        align = _("邪悪", "evil");
+    else if (r_ptr->flags3 & RF3_GOOD)
+        align = _("善良", "good");
+    else if ((m_ptr->sub_align & (SUB_ALIGN_EVIL | SUB_ALIGN_GOOD)) == (SUB_ALIGN_EVIL | SUB_ALIGN_GOOD))
+        align = _("中立(善悪)", "neutral(good&evil)");
+    else if (m_ptr->sub_align & SUB_ALIGN_EVIL)
+        align = _("中立(邪悪)", "neutral(evil)");
+    else if (m_ptr->sub_align & SUB_ALIGN_GOOD)
+        align = _("中立(善良)", "neutral(good)");
+    else
+        align = _("中立", "neutral");
+
+    sprintf(buf, _("%s ... 属性:%s HP:%d/%d AC:%d 速度:%s%d 経験:", "%s ... align:%s HP:%d/%d AC:%d speed:%s%d exp:"), m_name, align, (int)m_ptr->hp,
+        (int)m_ptr->maxhp, r_ptr->ac, (speed > 0) ? "+" : "", speed);
+
+    if (r_ptr->next_r_idx) {
+        strcat(buf, format("%d/%d ", m_ptr->exp, r_ptr->next_exp));
+    } else {
+        strcat(buf, "xxx ");
+    }
+
+    if (monster_csleep_remaining(m_ptr))
+        strcat(buf, _("睡眠 ", "sleeping "));
+    if (monster_stunned_remaining(m_ptr))
+        strcat(buf, _("朦朧 ", "stunned "));
+    if (monster_fear_remaining(m_ptr))
+        strcat(buf, _("恐怖 ", "scared "));
+    if (monster_confused_remaining(m_ptr))
+        strcat(buf, _("混乱 ", "confused "));
+    if (monster_invulner_remaining(m_ptr))
+        strcat(buf, _("無敵 ", "invulnerable "));
+    buf[strlen(buf) - 1] = '\0';
+}
+
+/*!
  * @brief 周辺モンスターを調査する / Probe nearby monsters
  * @return 効力があった場合TRUEを返す
  */
@@ -303,9 +369,7 @@ bool probing(player_type *caster_ptr)
     Term->scr->cv = 1;
 
     bool probe = FALSE;
-    int speed;
     char buf[256];
-    concptr align;
     for (int i = 1; i < caster_ptr->current_floor_ptr->m_max; i++) {
         monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
         monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -316,63 +380,11 @@ bool probing(player_type *caster_ptr)
         if (!m_ptr->ml)
             continue;
 
-        GAME_TEXT m_name[MAX_NLEN];
         if (!probe)
             msg_print(_("調査中...", "Probing..."));
         msg_print(NULL);
 
-        if (!is_original_ap(m_ptr)) {
-            if (m_ptr->mflag2.has(MFLAG2::KAGE))
-                m_ptr->mflag2.reset(MFLAG2::KAGE);
-
-            m_ptr->ap_r_idx = m_ptr->r_idx;
-            lite_spot(caster_ptr, m_ptr->fy, m_ptr->fx);
-        }
-
-        monster_desc(caster_ptr, m_name, m_ptr, MD_IGNORE_HALLU | MD_INDEF_HIDDEN);
-        speed = m_ptr->mspeed - 110;
-        if (monster_fast_remaining(m_ptr))
-            speed += 10;
-        if (monster_slow_remaining(m_ptr))
-            speed -= 10;
-        if (ironman_nightmare)
-            speed += 5;
-
-        if ((r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)) == (RF3_EVIL | RF3_GOOD))
-            align = _("善悪", "good&evil");
-        else if (r_ptr->flags3 & RF3_EVIL)
-            align = _("邪悪", "evil");
-        else if (r_ptr->flags3 & RF3_GOOD)
-            align = _("善良", "good");
-        else if ((m_ptr->sub_align & (SUB_ALIGN_EVIL | SUB_ALIGN_GOOD)) == (SUB_ALIGN_EVIL | SUB_ALIGN_GOOD))
-            align = _("中立(善悪)", "neutral(good&evil)");
-        else if (m_ptr->sub_align & SUB_ALIGN_EVIL)
-            align = _("中立(邪悪)", "neutral(evil)");
-        else if (m_ptr->sub_align & SUB_ALIGN_GOOD)
-            align = _("中立(善良)", "neutral(good)");
-        else
-            align = _("中立", "neutral");
-
-        sprintf(buf, _("%s ... 属性:%s HP:%d/%d AC:%d 速度:%s%d 経験:", "%s ... align:%s HP:%d/%d AC:%d speed:%s%d exp:"), m_name, align, (int)m_ptr->hp,
-            (int)m_ptr->maxhp, r_ptr->ac, (speed > 0) ? "+" : "", speed);
-
-        if (r_ptr->next_r_idx) {
-            strcat(buf, format("%d/%d ", m_ptr->exp, r_ptr->next_exp));
-        } else {
-            strcat(buf, "xxx ");
-        }
-
-        if (monster_csleep_remaining(m_ptr))
-            strcat(buf, _("睡眠 ", "sleeping "));
-        if (monster_stunned_remaining(m_ptr))
-            strcat(buf, _("朦朧 ", "stunned "));
-        if (monster_fear_remaining(m_ptr))
-            strcat(buf, _("恐怖 ", "scared "));
-        if (monster_confused_remaining(m_ptr))
-            strcat(buf, _("混乱 ", "confused "));
-        if (monster_invulner_remaining(m_ptr))
-            strcat(buf, _("無敵 ", "invulnerable "));
-        buf[strlen(buf) - 1] = '\0';
+        probed_monster_info(buf, caster_ptr, m_ptr, r_ptr);
         prt(buf, 0, 0);
 
         message_add(buf);
