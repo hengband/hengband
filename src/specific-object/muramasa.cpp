@@ -11,7 +11,7 @@ bool activate_muramasa(player_type *user_ptr, object_type *o_ptr)
     if (o_ptr->name1 != ART_MURAMASA)
         return FALSE;
 
-    if (!get_check(_("本当に使いますか？", "Are you sure?!")))
+    if (!get_check(_("本当に使いますか？", "Are you sure?! ")))
         return TRUE;
 
     msg_print(_("村正が震えた．．．", "The Muramasa pulsates..."));

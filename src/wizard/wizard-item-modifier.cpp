@@ -601,7 +601,7 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
         if (get_string(_("何をお望み？ ", "For what do you wish?"), buf, (MAX_NLEN - 1)))
             break;
         if (confirm) {
-            if (!get_check(_("何も願いません。本当によろしいですか？", "Do you wish nothing, really?")))
+            if (!get_check(_("何も願いません。本当によろしいですか？", "Do you wish nothing, really? ")))
                 continue;
         }
         return WishResult::NOTHING;
