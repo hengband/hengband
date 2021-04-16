@@ -135,7 +135,7 @@ bool vanish_dungeon(player_type *caster_ptr)
         g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
         if (g_ptr->mimic && has_flag(f_ptr->flags, FF_HURT_DISI)) {
-            g_ptr->mimic = feat_state(caster_ptr, g_ptr->mimic, FF_HURT_DISI);
+            g_ptr->mimic = feat_state(caster_ptr->current_floor_ptr, g_ptr->mimic, FF_HURT_DISI);
             if (!has_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER))
                 g_ptr->info &= ~(CAVE_MARK);
         }
@@ -145,7 +145,7 @@ bool vanish_dungeon(player_type *caster_ptr)
         g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
         if (g_ptr->mimic && has_flag(f_ptr->flags, FF_HURT_DISI)) {
-            g_ptr->mimic = feat_state(caster_ptr, g_ptr->mimic, FF_HURT_DISI);
+            g_ptr->mimic = feat_state(caster_ptr->current_floor_ptr, g_ptr->mimic, FF_HURT_DISI);
             if (!has_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER))
                 g_ptr->info &= ~(CAVE_MARK);
         }
@@ -158,7 +158,7 @@ bool vanish_dungeon(player_type *caster_ptr)
         g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
         if (g_ptr->mimic && has_flag(f_ptr->flags, FF_HURT_DISI)) {
-            g_ptr->mimic = feat_state(caster_ptr, g_ptr->mimic, FF_HURT_DISI);
+            g_ptr->mimic = feat_state(caster_ptr->current_floor_ptr, g_ptr->mimic, FF_HURT_DISI);
             if (!has_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER))
                 g_ptr->info &= ~(CAVE_MARK);
         }
@@ -168,7 +168,7 @@ bool vanish_dungeon(player_type *caster_ptr)
         g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
         if (g_ptr->mimic && has_flag(f_ptr->flags, FF_HURT_DISI)) {
-            g_ptr->mimic = feat_state(caster_ptr, g_ptr->mimic, FF_HURT_DISI);
+            g_ptr->mimic = feat_state(caster_ptr->current_floor_ptr, g_ptr->mimic, FF_HURT_DISI);
             if (!has_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER))
                 g_ptr->info &= ~(CAVE_MARK);
         }

@@ -179,7 +179,7 @@ extern void lite_spot(player_type *player_ptr, POSITION y, POSITION x);
 extern void update_flow(player_type *subject_ptr);
 extern byte grid_cost(grid_type *g_ptr, monster_race *r_ptr);
 extern byte grid_dist(grid_type *g_ptr, monster_race *r_ptr);
-extern FEAT_IDX feat_state(player_type *player_ptr, FEAT_IDX feat, int action);
+extern FEAT_IDX feat_state(floor_type *floor_ptr, FEAT_IDX feat, int action);
 extern void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, int action);
 extern void remove_mirror(player_type *caster_ptr, POSITION y, POSITION x);
 extern bool is_open(player_type *player_ptr, FEAT_IDX feat);
