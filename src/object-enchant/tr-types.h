@@ -161,5 +161,5 @@ enum tr_type {
     TR_BRAND_MAGIC = 150, //!< 魔術属性
     TR_IMPACT = 151, //!< クリティカル率アップ / Increase critical hit ratio
 
-        TR_FLAG_MAX = 152,
+    TR_FLAG_MAX = 152,
 };

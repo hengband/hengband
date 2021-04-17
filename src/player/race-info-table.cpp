@@ -6,6 +6,7 @@
 #define N(JAPANESE, ENGLISH) ENGLISH
 #endif
 
+// clang-format off
 /*!
  * @brief 種族情報 / Player Races
  * @details
@@ -33,6 +34,7 @@ const player_race race_info[MAX_RACES] =
 		66,  4, 150, 20,
 		0,
 		0x1FFFFFFF,
+		{},
 	},
 	{
         N("ハーフエルフ", "Half-Elf"), "h",
@@ -44,7 +46,8 @@ const player_race race_info[MAX_RACES] =
 		62,  6, 100, 10,
 		2,
 		0x1E77E7FF,
-	},
+        {},
+    },
 	{
 		N("エルフ", "Elf"), "h",
 		{ -1,  2,  0,  1, -2,  2 },
@@ -55,8 +58,10 @@ const player_race race_info[MAX_RACES] =
 		54,  4, 80,  6,
 		3,
 		0x1E77E75B,
-
-	},
+        {
+			{ TR_RES_LITE },
+		},
+    },
 	{
 		N("ホビット", "Hobbit"), "h",
 		{ -2,  1,  1,  3,  2,  1 },
@@ -67,7 +72,10 @@ const player_race race_info[MAX_RACES] =
 		33,  3, 50,  3,
 		4,
 		0x1F6FFC0B,
-	},
+        {
+			{ TR_HOLD_EXP },
+		},
+    },
 	{
 		N("ノーム", "Gnome"), "h",
 		{ -1,  2,  0,  2,  1, -1 },
@@ -78,7 +86,10 @@ const player_race race_info[MAX_RACES] =
 		39,  3, 75,  3,
 		4,
 		0x1F67D60F,
-	},
+        {
+			{ TR_FREE_ACT },
+		},
+    },
 	{
 		N("ドワーフ", "Dwarf"), "h",
 		{  2, -2,  2, -2,  2, -1 },
@@ -89,7 +100,10 @@ const player_race race_info[MAX_RACES] =
 		46,  3, 120, 10,
 		5,
 		0x11890005,
-	},
+        {
+			{ TR_RES_BLIND },
+		},
+    },
 	{
 		N("ハーフオーク", "Half-Orc"), "o",
 		{  2, -1,  0,  0,  1, -2 },
@@ -100,7 +114,10 @@ const player_race race_info[MAX_RACES] =
 		62,  1, 120,  5,
 		3,
 		0x1DD8818D,
-	},
+        {
+			{ TR_RES_DARK },
+		},
+    },
 	{
 		N("ハーフトロル", "Half-Troll"), "T",
 		{ 4, -4, -1, -3,  3, -3 },
@@ -111,7 +128,13 @@ const player_race race_info[MAX_RACES] =
 		84,  8, 225, 40,
 		3,
 		0x00880005,
-	},
+        {
+			{ TR_SUST_STR },
+			{ TR_REGEN, 15 },
+			{ TR_SLOW_DIGEST, 15, CLASS_WARRIOR },
+			{ TR_SLOW_DIGEST, 15, CLASS_BERSERKER },
+		},
+    },
 	{
 
 		N("アンバライト", "Amberite"), "p",
@@ -123,7 +146,11 @@ const player_race race_info[MAX_RACES] =
 		78,  6, 180, 15,
 		0,
 		0x1FFFF7FF,
-	},
+        {
+			{ TR_SUST_CON },
+			{ TR_REGEN },
+		},
+    },
 	{
 		N("ハイエルフ", "High-Elf"), "h",
 		{  1,  3,  -1,  3,  1,  3 },
@@ -134,7 +161,11 @@ const player_race race_info[MAX_RACES] =
 		82, 10, 180, 15,
 		4,
 		0x1F77E75B,
-	},
+        {
+			{ TR_RES_LITE },
+			{ TR_SEE_INVIS },
+		},
+    },
 	{
 		N("野蛮人", "Barbarian"), "p",
 		{ 3, -2,  -1,  1,  2, 0 },
@@ -145,7 +176,10 @@ const player_race race_info[MAX_RACES] =
 		78,  6, 190, 15,
 		0,
 		0x05C0A09D,
-	},
+        {
+			{ TR_RES_FEAR },
+		},
+    },
 	{
 		N("ハーフオーガ", "Half-Ogre"), "O",
 		{ 3, -2, 0, -1, 3, -2 },
@@ -156,7 +190,11 @@ const player_race race_info[MAX_RACES] =
 		80,  8, 235, 60,
 		3,
 		0x10A80407,
-	},
+        {
+			{ TR_SUST_STR },
+			{ TR_RES_DARK },
+		},
+    },
 	{
 		N("半巨人", "Half-Giant"), "P",
 		{ 4, -2, -2, -2, 3, -2 },
@@ -167,7 +205,11 @@ const player_race race_info[MAX_RACES] =
 		80, 10, 240, 64,
 		3,
 		0x08880011,
-	},
+        {
+			{ TR_SUST_STR },
+			{ TR_RES_SHARDS },
+		},
+    },
 	{
 		N("半タイタン", "Half-Titan"), "P",
 		{ 5, 1, 2, -2, 3, 1 },
@@ -178,7 +220,10 @@ const player_race race_info[MAX_RACES] =
 		99, 11, 250, 86,
 		0,
 		0x123D4727,
-	},
+        {
+			{ TR_RES_CHAOS },
+		},
+    },
 	{
 		N("サイクロプス", "Cyclops"), "P",
 		{ 4, -3, -2, -3, 4, -3 },
@@ -189,7 +234,10 @@ const player_race race_info[MAX_RACES] =
 		80,  8, 235, 60,
 		1,
 		0x00888005,
-	},
+        {
+			{ TR_RES_SOUND },
+		},
+    },
 	{
 		N("イーク", "Yeek"), "y",
 		{ -2, 1, 1, 1, -2, -4 },
@@ -200,7 +248,11 @@ const player_race race_info[MAX_RACES] =
 		50,  3, 75,  3,
 		2,
 		0x1667360F,
-	},
+        {
+			{ TR_RES_ACID },
+			{ TR_IM_ACID, 20 },
+		},
+    },
 	{
 		N("クラッコン", "Klackon"), "K",
 		{ 2, -1, -1, 1, 2, -1 },
@@ -211,7 +263,12 @@ const player_race race_info[MAX_RACES] =
 		54,  3, 70,  4,
 		2,
 		0x004D8011,
-	},
+        {
+			{ TR_RES_ACID },
+			{ TR_RES_CONF },
+			{ TR_SPEED, 10 },
+		},
+    },
 	{
 		N("コボルド", "Kobold"), "k",
 		{ 1, -1, 0, 1, 0, -2 },
@@ -222,7 +279,10 @@ const player_race race_info[MAX_RACES] =
 		55,  1, 100,  5,
 		3,
 		0x1444A009,
-	},
+        {
+			{ TR_RES_POIS },
+		},
+    },
 	{
 		N("ニーベルング", "Nibelung"), "h",
 		{ 1, -1, 2, 0, 2, -2 },
@@ -233,7 +293,11 @@ const player_race race_info[MAX_RACES] =
 		40,  3, 78,  3,
 		5,
 		0x1569040F,
-	},
+        {
+			{ TR_RES_DARK },
+			{ TR_RES_DISEN },
+		},
+    },
 	{
 		N("ダークエルフ", "Dark-Elf"), "h",
 		{ -1, 3, 2, 2, -2, 1 },
@@ -244,7 +308,11 @@ const player_race race_info[MAX_RACES] =
 		54,  4, 80,  6,
 		5,
 		0x1E77C7DF,
-	},
+        {
+			{ TR_RES_DARK },
+			{ TR_SEE_INVIS, 20 },
+		},
+    },
 	{
 		N("ドラコニアン", "Draconian"), "dD",
 		{ 2, 1, 1, 1, 2, -1 },
@@ -255,7 +323,15 @@ const player_race race_info[MAX_RACES] =
 		72,  1, 130,  5,
 		2,
 		0x07FFE757,
-	},
+        {
+			{ TR_RES_FIRE, 5 },
+			{ TR_RES_COLD, 10 },
+			{ TR_RES_ACID, 15 },
+			{ TR_RES_ELEC, 20 },
+			{ TR_RES_POIS, 35 },
+			{ TR_LEVITATION },
+		},
+    },
 	{
 		N("マインドフレア", "Mindflayer"), "h",
 		{ -3, 4, 4, 0, -2, -3 },
@@ -266,7 +342,13 @@ const player_race race_info[MAX_RACES] =
 		63,  6, 112, 10,
 		4,
 		0x12334746,
-	},
+        {
+			{ TR_SUST_INT },
+			{ TR_SUST_WIS },
+			{ TR_SEE_INVIS, 15 },
+			{ TR_TELEPATHY, 30 },
+		},
+    },
 	{
 		N("インプ", "Imp"), "uU",
 		{ 0, -1, -1, 1, 2, -1 },
@@ -277,7 +359,11 @@ const player_race race_info[MAX_RACES] =
 		64,  1, 120,  5,
 		3,
 		0x1DB537CB,
-	},
+        {
+			{ TR_RES_FIRE },
+			{ TR_SEE_INVIS, 10 },
+		},
+    },
 	{
 		N("ゴーレム", "Golem"), "g",
 		{ 4, -5, -5, -2, 4, -2 },
@@ -288,7 +374,14 @@ const player_race race_info[MAX_RACES] =
 		62,  1, 180,  6,
 		4,
 		0x00800001,
-	},
+        {
+			{ TR_RES_POIS },
+			{ TR_SEE_INVIS },
+			{ TR_FREE_ACT },
+			{ TR_SLOW_DIGEST },
+			{ TR_HOLD_EXP, 35 },
+		},
+    },
 	{
 		N("骸骨", "Skeleton"), "sL",
 		{ 0, 1, -2, 0, 1, -2 },
@@ -299,7 +392,14 @@ const player_race race_info[MAX_RACES] =
 		66,  4, 50, 5,
 		2,
 		0x0234070F,
-	},
+		{
+			{ TR_RES_COLD, 10 },
+			{ TR_RES_POIS },
+			{ TR_RES_SHARDS },
+			{ TR_SEE_INVIS },
+			{ TR_HOLD_EXP },
+		},
+    },
 	{
 		N("ゾンビ", "Zombie"), "z",
 		{ 2, -6, -6, 1, 4, -3 },
@@ -310,7 +410,15 @@ const player_race race_info[MAX_RACES] =
 		66, 4, 100, 20,
 		2,
 		0x00800001,
-	},
+		{
+			{ TR_RES_COLD, 5 },
+			{ TR_RES_POIS },
+			{ TR_RES_NETHER },
+			{ TR_SEE_INVIS },
+			{ TR_HOLD_EXP },
+			{ TR_SLOW_DIGEST },
+		},
+    },
 	{
 		N("吸血鬼", "Vampire"), "V",
 		{ 3, 3, -1, -1, 1, 2 },
@@ -321,7 +429,17 @@ const player_race race_info[MAX_RACES] =
 		66,  4, 150, 20,
 		5,
 		0x067DC7FF,
-	},
+		{
+			// { TR_VUL_LITE }, (予定)
+			// { TR_IM_DARK }, (予定)
+			{ TR_RES_COLD },
+			{ TR_RES_POIS },
+			{ TR_RES_DARK },
+			{ TR_RES_NETHER },
+			{ TR_HOLD_EXP },
+			{ TR_LITE_1, 1, CLASS_NINJA, true },
+		},
+    },
 	{
 		N("幽霊", "Spectre"), "G",
 		{ -5, 4, -1, 2, 0, -3 },
@@ -332,7 +450,18 @@ const player_race race_info[MAX_RACES] =
 		66, 4, 100, 20,
 		5,
 		0x0631474A,
-	},
+		{
+			{ TR_RES_COLD },
+			{ TR_RES_POIS },
+			{ TR_RES_NETHER },
+			{ TR_SEE_INVIS },
+			{ TR_TELEPATHY, 35 },
+			{ TR_FREE_ACT },
+			{ TR_HOLD_EXP },
+			{ TR_SLOW_DIGEST },
+			{ TR_LEVITATION },
+		},
+    },
 	{
 		N("妖精", "Sprite"), "I",
 		{ -4, 3, 3, 3, -2, 2 },
@@ -343,7 +472,12 @@ const player_race race_info[MAX_RACES] =
 		29,  2, 65,  2,
 		4,
 		0x1623F65E,
-	},
+        {
+			{ TR_RES_LITE },
+			{ TR_LEVITATION },
+			{ TR_SPEED, 10 },
+		},
+    },
 	{
 		N("獣人", "Beastman"), "p",
 		{ 2, -2, -1, -1, 2, -2 },
@@ -354,7 +488,11 @@ const player_race race_info[MAX_RACES] =
 		61,  6, 120, 15,
 		0,
 		0x057887CF,
-	},
+        {
+			{ TR_RES_CONF },
+			{ TR_RES_SOUND },
+		},
+    },
 	{
 		N("エント", "Ent"), "#",
 		{ 2,  0,  2, -3,  2,  0 },
@@ -365,7 +503,10 @@ const player_race race_info[MAX_RACES] =
 		99, 11, 250, 45,
 		  0,
 		0x10010005,
-	},
+        {
+			// { TR_VUL_FIRE } (予定)
+		},
+    },
 	{
 		N("アルコン", "Archon"), "A",
 		{  2,  0,  4,  1,  2,  3 },
@@ -376,7 +517,11 @@ const player_race race_info[MAX_RACES] =
 		78,  6, 180, 15,
 		3,
 		0x1779F777,
-	},
+        {
+			{ TR_SEE_INVIS },
+			{ TR_LEVITATION },
+		},
+    },
 	{
 		N("バルログ", "Balrog"), "U",
 		{  4,  2,  -10,  2,  3,  -5 },
@@ -387,7 +532,13 @@ const player_race race_info[MAX_RACES] =
 		80, 10, 240, 64,
 		5,
 		0x07EDC4DB,
-	},
+        {
+			{ TR_RES_FIRE },
+			{ TR_RES_NETHER },
+			{ TR_SEE_INVIS, 10 },
+			{ TR_HOLD_EXP },
+		},
+    },
 	{
 		N("ドゥナダン", "Dunadan"), "p",
 		{  1,  2,  2,  2,  3,  2 },
@@ -398,7 +549,10 @@ const player_race race_info[MAX_RACES] =
 		78,  6, 180, 15,
 		0,
 		0x1FFFF7FF,
-	},
+        {
+			{ TR_SUST_CON },
+		},
+    },
 	{
 		N("影フェアリー", "Shadow-Fairy"), "h",
 		{-2,  2,  2,  1, -1,  0 },
@@ -409,7 +563,11 @@ const player_race race_info[MAX_RACES] =
 		 73,  8, 80, 15,
 		  4,
 		0x1E33C7DF,
-	},
+        {
+			// { TR_VUL_LITE }, (予定)
+			{ TR_LEVITATION },
+		},
+    },
 	{
 		N("クター", "Kutar"), "h",
 		{  0,  -1,  -1,  1,  2,  3 },
@@ -420,7 +578,10 @@ const player_race race_info[MAX_RACES] =
 		44,  4, 130, 20,
 		0,
 		0x0C18B7AD,
-	},
+        {
+			{ TR_RES_CONF },
+		},
+    },
 	{
 		N("アンドロイド", "Android"), "g",
 		{ 4, -5, -5, 0, 4, -2 },
@@ -431,7 +592,14 @@ const player_race race_info[MAX_RACES] =
 		66, 12, 220, 64,
 		0,
 		0x00800001,
-	},
+        {
+			// { TR_VUL_ELEC }, (予定)
+			{ TR_RES_POIS },
+			{ TR_FREE_ACT },
+			{ TR_HOLD_EXP },
+			{ TR_SLOW_DIGEST },
+		},
+    },
 	{
 		N("マーフォーク", "Merfolk"), "l",
 		{ -1,  0,  2,  1,  -1,  1},
@@ -442,5 +610,10 @@ const player_race race_info[MAX_RACES] =
 		62,  6, 100, 10,
 		2,
 		0x1E77E7FF,
-	},
+        {
+			{ TR_RES_WATER },
+		},
+    },
 };
+
+// clang-format on

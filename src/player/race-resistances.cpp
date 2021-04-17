@@ -19,17 +19,23 @@
  */
 void player_immunity(player_type *creature_ptr, BIT_FLAGS *flags)
 {
-    for (int i = 0; i < TR_FLAG_SIZE; i++)
+    for (int i = 0; i < TR_FLAG_SIZE; i++) {
         flags[i] = 0L;
+    }
+
+	if (player_race_has_flag(creature_ptr, TR_IM_ACID))
+        add_flag(flags, TR_RES_ACID);
+    if (player_race_has_flag(creature_ptr, TR_IM_COLD))
+        add_flag(flags, TR_RES_COLD);
+    if (player_race_has_flag(creature_ptr, TR_IM_ELEC))
+        add_flag(flags, TR_RES_ELEC);
+    if (player_race_has_flag(creature_ptr, TR_IM_FIRE))
+        add_flag(flags, TR_RES_FIRE);
 
     if (is_specific_player_race(creature_ptr, RACE_SPECTRE))
         add_flag(flags, TR_RES_NETHER);
     if (creature_ptr->mimic_form == MIMIC_VAMPIRE || is_specific_player_race(creature_ptr, RACE_VAMPIRE))
         add_flag(flags, TR_RES_DARK);
-    if (creature_ptr->mimic_form == MIMIC_DEMON_LORD)
-        add_flag(flags, TR_RES_FIRE);
-    else if (is_specific_player_race(creature_ptr, RACE_YEEK) && creature_ptr->lev > 19)
-        add_flag(flags, TR_RES_ACID);
 
     if (creature_ptr->pclass == CLASS_ELEMENTALIST) {
         if (has_element_resist(creature_ptr, ElementRealm::FIRE, 30))

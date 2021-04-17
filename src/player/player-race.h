@@ -1,6 +1,9 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "object-enchant/tr-types.h"
+#include <unordered_map>
+#include <optional>
 
 /*
  * Constant for kinds of mimic
@@ -14,6 +17,16 @@
 #define MIMIC_IS_NONLIVING 0x00000001
 #define MIMIC_IS_DEMON 0x00000002
 #define MIMIC_IS_UNDEAD 0x00000004
+
+struct player_race_condition {
+    tr_type type{};
+    PLAYER_LEVEL level{};
+    std::optional<player_class_type> pclass{};
+    bool not_class{};
+
+    player_race_condition(tr_type t, PLAYER_LEVEL l = 1, const std::optional<player_class_type>& c = std::nullopt, bool nc = false)
+        : type(t), level(l), pclass(c), not_class(nc) {}
+};
 
 /*!
  * p@brief プレイヤー種族構造体 / Player racial info
@@ -54,6 +67,8 @@ struct player_race {
     byte infra{}; //!< 赤外線視力 / Infra-vision range
 
     u32b choice{}; //!< 似つかわしい職業(ミミック時はミミック種族属性) / Legal class choices
+
+    std::vector<player_race_condition> extra_flags;
 };
 
 extern const player_race *rp_ptr;
@@ -61,3 +76,5 @@ extern const player_race *rp_ptr;
 struct player_type;
 SYMBOL_CODE get_summon_symbol_from_player(player_type *creature_ptr);
 bool is_specific_player_race(player_type *creature_ptr, player_race_type prace);
+bool player_race_has_flag(player_type *creature_ptr, tr_type flag, bool base_race = false);
+void add_player_race_flags(player_type *creature_ptr, BIT_FLAGS *flags, bool base_race = false);
