@@ -4358,9 +4358,6 @@
     <ClInclude Include="..\..\src\mspell\mspell-lite.h">
       <Filter>mspell</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\mspell\mspell.h">
-      <Filter>mspell</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\object-use\read-execution.h">
       <Filter>object-use</Filter>
     </ClInclude>

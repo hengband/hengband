@@ -22,7 +22,6 @@
 #include "mspell/mspell-learn-checker.h"
 #include "mspell/mspell-lite.h"
 #include "mspell/mspell-selector.h"
-#include "mspell/mspell-type.h"
 #include "mspell/mspell-util.h"
 #include "mspell/mspell.h"
 #include "player/attack-defense-types.h"

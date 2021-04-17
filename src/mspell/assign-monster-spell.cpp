@@ -18,7 +18,6 @@
 #include "mspell/mspell-special.h"
 #include "mspell/mspell-status.h"
 #include "mspell/mspell-summon.h"
-#include "mspell/mspell-type.h"
 #include "mspell/mspell-util.h"
 #include "mspell/mspell.h"
 #include "spell/spell-types.h"

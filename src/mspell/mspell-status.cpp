@@ -12,6 +12,7 @@
 #include "effect/effect-processor.h"
 #include "mind/drs-types.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-ability-flags.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-indice-types.h"
@@ -122,7 +123,7 @@ MonsterSpellResult spell_RF5_DRAIN_MANA(player_type *target_ptr, POSITION y, POS
         msg_format(_("%^sは精神エネルギーを%sから吸いとった。", "%^s draws psychic energy from %s."), m_name, t_name);
     }
 
-    const auto dam = monspell_damage(target_ptr, (MS_DRAIN_MANA), m_idx, DAM_ROLL);
+    const auto dam = monspell_damage(target_ptr, RF_ABILITY::DRAIN_MANA, m_idx, DAM_ROLL);
     const auto proj_res = breath(target_ptr, y, x, m_idx, GF_DRAIN_MANA, dam, 0, FALSE, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(target_ptr, m_idx, DRS_MANA);
@@ -162,7 +163,7 @@ MonsterSpellResult spell_RF5_MIND_BLAST(player_type *target_ptr, POSITION y, POS
         msg_format(_("%^sは%sをじっと睨んだ。", "%^s gazes intently at %s."), m_name, t_name);
     }
 
-    const auto dam = monspell_damage(target_ptr, (MS_MIND_BLAST), m_idx, DAM_ROLL);
+    const auto dam = monspell_damage(target_ptr, RF_ABILITY::MIND_BLAST, m_idx, DAM_ROLL);
     const auto proj_res = breath(target_ptr, y, x, m_idx, GF_MIND_BLAST, dam, 0, FALSE, TARGET_TYPE);
 
     auto res = MonsterSpellResult::make_valid(dam);
@@ -200,7 +201,7 @@ MonsterSpellResult spell_RF5_BRAIN_SMASH(player_type *target_ptr, POSITION y, PO
         msg_format(_("%^sは%sをじっと睨んだ。", "%^s gazes intently at %s."), m_name, t_name);
     }
 
-    const auto dam = monspell_damage(target_ptr, (MS_BRAIN_SMASH), m_idx, DAM_ROLL);
+    const auto dam = monspell_damage(target_ptr, RF_ABILITY::BRAIN_SMASH, m_idx, DAM_ROLL);
     const auto proj_res = breath(target_ptr, y, x, m_idx, GF_BRAIN_SMASH, dam, 0, FALSE, TARGET_TYPE);
 
     auto res = MonsterSpellResult::make_valid(dam);

@@ -11,10 +11,10 @@
 #include "mspell/mspell-particularity.h"
 #include "effect/effect-processor.h"
 #include "mind/drs-types.h"
+#include "monster-race/race-ability-flags.h"
 #include "monster/monster-update.h"
 #include "mspell/mspell-checker.h"
 #include "mspell/mspell-damage-calculator.h"
-#include "mspell/mspell-type.h"
 #include "mspell/mspell-util.h"
 #include "mspell/mspell.h"
 #include "spell/spell-types.h"
@@ -35,7 +35,7 @@ MonsterSpellResult spell_RF4_ROCKET(player_type *target_ptr, POSITION y, POSITIO
     monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かを射った。", "%^s shoots something."), _("%^sがロケットを発射した。", "%^s fires a rocket."),
         _("%^sが%sにロケットを発射した。", "%^s fires a rocket at %s."), TARGET_TYPE);
 
-    const auto dam = monspell_damage(target_ptr, (MS_ROCKET), m_idx, DAM_ROLL);
+    const auto dam = monspell_damage(target_ptr, RF_ABILITY::ROCKET, m_idx, DAM_ROLL);
     const auto proj_res = breath(target_ptr, y, x, m_idx, GF_ROCKET, dam, 2, FALSE, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(target_ptr, m_idx, DRS_SHARD);
@@ -64,7 +64,7 @@ MonsterSpellResult spell_RF6_HAND_DOOM(player_type *target_ptr, POSITION y, POSI
 
     ProjectResult proj_res;
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
-        const auto dam = monspell_damage(target_ptr, (MS_HAND_DOOM), m_idx, DAM_ROLL);
+        const auto dam = monspell_damage(target_ptr, RF_ABILITY::HAND_DOOM, m_idx, DAM_ROLL);
         proj_res = breath(target_ptr, y, x, m_idx, GF_HAND_DOOM, dam, 0, FALSE, MONSTER_TO_PLAYER);
     } else if (TARGET_TYPE == MONSTER_TO_MONSTER) {
         const auto dam = 20; /* Dummy power */
@@ -92,7 +92,7 @@ MonsterSpellResult spell_RF6_PSY_SPEAR(player_type *target_ptr, POSITION y, POSI
     monspell_message(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."), _("%^sが光の剣を放った。", "%^s throw a Psycho-Spear."),
         _("%^sが%sに向かって光の剣を放った。", "%^s throw a Psycho-spear at %s."), TARGET_TYPE);
 
-    const auto dam = monspell_damage(target_ptr, (MS_PSY_SPEAR), m_idx, DAM_ROLL);
+    const auto dam = monspell_damage(target_ptr, RF_ABILITY::PSY_SPEAR, m_idx, DAM_ROLL);
     const auto proj_res = beam(target_ptr, m_idx, y, x, GF_PSY_SPEAR, dam, MONSTER_TO_PLAYER);
 
     auto res = MonsterSpellResult::make_valid(dam);

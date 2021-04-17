@@ -9,8 +9,8 @@
 #include "game-option/input-options.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
+#include "monster-race/race-ability-mask.h"
 #include "mspell/monster-power-table.h"
-#include "mspell/mspell-type.h"
 #include "player/player-status-table.h"
 #include "player-info/avatar.h"
 #include "realm/realm-types.h"
@@ -77,17 +77,18 @@ bool do_cmd_cast_learned(player_type *caster_ptr)
         chance = 95;
 
     chance = mod_spell_chance_2(caster_ptr, chance);
+    const auto spell_type = static_cast<RF_ABILITY>(n);
     if (randint0(100) < chance) {
         if (flush_failure)
             flush();
 
         msg_print(_("魔法をうまく唱えられなかった。", "You failed to concentrate hard enough!"));
         sound(SOUND_FAIL);
-        if (n >= MS_S_KIN)
-            cast = cast_learned_spell(caster_ptr, n, FALSE);
+        if (RF_ABILITY_SUMMON_MASK.has(spell_type))
+            cast = cast_learned_spell(caster_ptr, spell_type, FALSE);
     } else {
         sound(SOUND_ZAP);
-        cast = cast_learned_spell(caster_ptr, n, TRUE);
+        cast = cast_learned_spell(caster_ptr, spell_type, TRUE);
         if (!cast)
             return FALSE;
     }
