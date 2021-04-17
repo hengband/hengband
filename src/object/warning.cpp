@@ -134,7 +134,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
 
     case GF_DARK:
         dam = dam * calc_dark_damage_rate(target_ptr, CALC_MAX) / 100;
-        if (is_specific_player_race(target_ptr, RACE_VAMPIRE) || (target_ptr->mimic_form == MIMIC_VAMPIRE) || target_ptr->wraith_form)
+        if (has_immune_dark(target_ptr) || target_ptr->wraith_form)
             ignore_wraith_form = TRUE;
         break;
 

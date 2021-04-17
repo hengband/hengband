@@ -22,6 +22,7 @@ const player_race mimic_info[MAX_MIMIC_FORMS] =
 		0,  0, 0, 0,
 		0,
 		0x000000,
+		PlayerRaceLife::LIVING,
 		{ },
 	},
 	{
@@ -34,6 +35,7 @@ const player_race mimic_info[MAX_MIMIC_FORMS] =
 		0,  0, 0, 0,
 		5,
 		0x000003,
+		PlayerRaceLife::DEMON,
 		{
 			{ TR_RES_FIRE },
 			{ TR_RES_NETHER },
@@ -53,6 +55,7 @@ const player_race mimic_info[MAX_MIMIC_FORMS] =
 		0,  0, 0, 0,
 		20,
 		0x000003,
+		PlayerRaceLife::DEMON,
 		{
 			{ TR_IM_FIRE },
 			{ TR_RES_COLD },
@@ -83,10 +86,12 @@ const player_race mimic_info[MAX_MIMIC_FORMS] =
 		0,  0, 0, 0,
 		5,
 		0x000005,
+		PlayerRaceLife::UNDEAD,
 		{
 			{ TR_RES_COLD },
 			{ TR_RES_POIS },
-			{ TR_RES_DARK },
+			{ TR_VUL_LITE },
+			{ TR_IM_DARK },
 			{ TR_RES_NETHER },
 			{ TR_SEE_INVIS },
 			{ TR_HOLD_EXP },

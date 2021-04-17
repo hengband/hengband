@@ -34,6 +34,7 @@ const player_race race_info[MAX_RACES] =
 		66,  4, 150, 20,
 		0,
 		0x1FFFFFFF,
+		PlayerRaceLife::LIVING,
 		{},
 	},
 	{
@@ -46,6 +47,7 @@ const player_race race_info[MAX_RACES] =
 		62,  6, 100, 10,
 		2,
 		0x1E77E7FF,
+		PlayerRaceLife::LIVING,
         {},
     },
 	{
@@ -58,6 +60,7 @@ const player_race race_info[MAX_RACES] =
 		54,  4, 80,  6,
 		3,
 		0x1E77E75B,
+		PlayerRaceLife::LIVING,
         {
 			{ TR_RES_LITE },
 		},
@@ -72,6 +75,7 @@ const player_race race_info[MAX_RACES] =
 		33,  3, 50,  3,
 		4,
 		0x1F6FFC0B,
+		PlayerRaceLife::LIVING,
         {
 			{ TR_HOLD_EXP },
 		},
@@ -86,6 +90,7 @@ const player_race race_info[MAX_RACES] =
 		39,  3, 75,  3,
 		4,
 		0x1F67D60F,
+		PlayerRaceLife::LIVING,
         {
 			{ TR_FREE_ACT },
 		},
@@ -100,6 +105,7 @@ const player_race race_info[MAX_RACES] =
 		46,  3, 120, 10,
 		5,
 		0x11890005,
+		PlayerRaceLife::LIVING,
         {
 			{ TR_RES_BLIND },
 		},
@@ -114,6 +120,7 @@ const player_race race_info[MAX_RACES] =
 		62,  1, 120,  5,
 		3,
 		0x1DD8818D,
+		PlayerRaceLife::LIVING,
         {
 			{ TR_RES_DARK },
 		},
@@ -128,6 +135,7 @@ const player_race race_info[MAX_RACES] =
 		84,  8, 225, 40,
 		3,
 		0x00880005,
+		PlayerRaceLife::LIVING,
         {
 			{ TR_SUST_STR },
 			{ TR_REGEN, 15 },
@@ -146,6 +154,7 @@ const player_race race_info[MAX_RACES] =
 		78,  6, 180, 15,
 		0,
 		0x1FFFF7FF,
+		PlayerRaceLife::LIVING,
         {
 			{ TR_SUST_CON },
 			{ TR_REGEN },
@@ -161,6 +170,7 @@ const player_race race_info[MAX_RACES] =
 		82, 10, 180, 15,
 		4,
 		0x1F77E75B,
+		PlayerRaceLife::LIVING,
         {
 			{ TR_RES_LITE },
 			{ TR_SEE_INVIS },
@@ -176,6 +186,7 @@ const player_race race_info[MAX_RACES] =
 		78,  6, 190, 15,
 		0,
 		0x05C0A09D,
+		PlayerRaceLife::LIVING,
         {
 			{ TR_RES_FEAR },
 		},
@@ -190,6 +201,7 @@ const player_race race_info[MAX_RACES] =
 		80,  8, 235, 60,
 		3,
 		0x10A80407,
+		PlayerRaceLife::LIVING,
         {
 			{ TR_SUST_STR },
 			{ TR_RES_DARK },
@@ -205,6 +217,7 @@ const player_race race_info[MAX_RACES] =
 		80, 10, 240, 64,
 		3,
 		0x08880011,
+		PlayerRaceLife::LIVING,
         {
 			{ TR_SUST_STR },
 			{ TR_RES_SHARDS },
@@ -220,6 +233,7 @@ const player_race race_info[MAX_RACES] =
 		99, 11, 250, 86,
 		0,
 		0x123D4727,
+		PlayerRaceLife::LIVING,
         {
 			{ TR_RES_CHAOS },
 		},
@@ -234,6 +248,7 @@ const player_race race_info[MAX_RACES] =
 		80,  8, 235, 60,
 		1,
 		0x00888005,
+		PlayerRaceLife::LIVING,
         {
 			{ TR_RES_SOUND },
 		},
@@ -248,6 +263,7 @@ const player_race race_info[MAX_RACES] =
 		50,  3, 75,  3,
 		2,
 		0x1667360F,
+		PlayerRaceLife::LIVING,
         {
 			{ TR_RES_ACID },
 			{ TR_IM_ACID, 20 },
@@ -263,6 +279,7 @@ const player_race race_info[MAX_RACES] =
 		54,  3, 70,  4,
 		2,
 		0x004D8011,
+		PlayerRaceLife::LIVING,
         {
 			{ TR_RES_ACID },
 			{ TR_RES_CONF },
@@ -279,6 +296,7 @@ const player_race race_info[MAX_RACES] =
 		55,  1, 100,  5,
 		3,
 		0x1444A009,
+		PlayerRaceLife::LIVING,
         {
 			{ TR_RES_POIS },
 		},
@@ -293,6 +311,7 @@ const player_race race_info[MAX_RACES] =
 		40,  3, 78,  3,
 		5,
 		0x1569040F,
+		PlayerRaceLife::LIVING,
         {
 			{ TR_RES_DARK },
 			{ TR_RES_DISEN },
@@ -308,6 +327,7 @@ const player_race race_info[MAX_RACES] =
 		54,  4, 80,  6,
 		5,
 		0x1E77C7DF,
+		PlayerRaceLife::LIVING,
         {
 			{ TR_RES_DARK },
 			{ TR_SEE_INVIS, 20 },
@@ -323,6 +343,7 @@ const player_race race_info[MAX_RACES] =
 		72,  1, 130,  5,
 		2,
 		0x07FFE757,
+		PlayerRaceLife::LIVING,
         {
 			{ TR_RES_FIRE, 5 },
 			{ TR_RES_COLD, 10 },
@@ -342,6 +363,7 @@ const player_race race_info[MAX_RACES] =
 		63,  6, 112, 10,
 		4,
 		0x12334746,
+		PlayerRaceLife::LIVING,
         {
 			{ TR_SUST_INT },
 			{ TR_SUST_WIS },
@@ -359,6 +381,7 @@ const player_race race_info[MAX_RACES] =
 		64,  1, 120,  5,
 		3,
 		0x1DB537CB,
+		PlayerRaceLife::DEMON,
         {
 			{ TR_RES_FIRE },
 			{ TR_SEE_INVIS, 10 },
@@ -374,6 +397,7 @@ const player_race race_info[MAX_RACES] =
 		62,  1, 180,  6,
 		4,
 		0x00800001,
+		PlayerRaceLife::NONLIVING,
         {
 			{ TR_RES_POIS },
 			{ TR_SEE_INVIS },
@@ -392,6 +416,7 @@ const player_race race_info[MAX_RACES] =
 		66,  4, 50, 5,
 		2,
 		0x0234070F,
+		PlayerRaceLife::UNDEAD,
 		{
 			{ TR_RES_COLD, 10 },
 			{ TR_RES_POIS },
@@ -410,6 +435,7 @@ const player_race race_info[MAX_RACES] =
 		66, 4, 100, 20,
 		2,
 		0x00800001,
+		PlayerRaceLife::UNDEAD,
 		{
 			{ TR_RES_COLD, 5 },
 			{ TR_RES_POIS },
@@ -429,12 +455,12 @@ const player_race race_info[MAX_RACES] =
 		66,  4, 150, 20,
 		5,
 		0x067DC7FF,
+		PlayerRaceLife::UNDEAD,
 		{
-			// { TR_VUL_LITE }, (予定)
-			// { TR_IM_DARK }, (予定)
 			{ TR_RES_COLD },
 			{ TR_RES_POIS },
-			{ TR_RES_DARK },
+			{ TR_VUL_LITE },
+			{ TR_IM_DARK },
 			{ TR_RES_NETHER },
 			{ TR_HOLD_EXP },
 			{ TR_LITE_1, 1, CLASS_NINJA, true },
@@ -450,6 +476,7 @@ const player_race race_info[MAX_RACES] =
 		66, 4, 100, 20,
 		5,
 		0x0631474A,
+		PlayerRaceLife::UNDEAD,
 		{
 			{ TR_RES_COLD },
 			{ TR_RES_POIS },
@@ -472,6 +499,7 @@ const player_race race_info[MAX_RACES] =
 		29,  2, 65,  2,
 		4,
 		0x1623F65E,
+		PlayerRaceLife::LIVING,
         {
 			{ TR_RES_LITE },
 			{ TR_LEVITATION },
@@ -488,6 +516,7 @@ const player_race race_info[MAX_RACES] =
 		61,  6, 120, 15,
 		0,
 		0x057887CF,
+		PlayerRaceLife::LIVING,
         {
 			{ TR_RES_CONF },
 			{ TR_RES_SOUND },
@@ -503,8 +532,9 @@ const player_race race_info[MAX_RACES] =
 		99, 11, 250, 45,
 		  0,
 		0x10010005,
+		PlayerRaceLife::LIVING,
         {
-			// { TR_VUL_FIRE } (予定)
+			{ TR_VUL_FIRE }
 		},
     },
 	{
@@ -517,6 +547,7 @@ const player_race race_info[MAX_RACES] =
 		78,  6, 180, 15,
 		3,
 		0x1779F777,
+		PlayerRaceLife::LIVING,
         {
 			{ TR_SEE_INVIS },
 			{ TR_LEVITATION },
@@ -532,6 +563,7 @@ const player_race race_info[MAX_RACES] =
 		80, 10, 240, 64,
 		5,
 		0x07EDC4DB,
+		PlayerRaceLife::DEMON,
         {
 			{ TR_RES_FIRE },
 			{ TR_RES_NETHER },
@@ -549,6 +581,7 @@ const player_race race_info[MAX_RACES] =
 		78,  6, 180, 15,
 		0,
 		0x1FFFF7FF,
+		PlayerRaceLife::LIVING,
         {
 			{ TR_SUST_CON },
 		},
@@ -563,8 +596,9 @@ const player_race race_info[MAX_RACES] =
 		 73,  8, 80, 15,
 		  4,
 		0x1E33C7DF,
+		PlayerRaceLife::LIVING,
         {
-			// { TR_VUL_LITE }, (予定)
+			{ TR_VUL_LITE },
 			{ TR_LEVITATION },
 		},
     },
@@ -578,6 +612,7 @@ const player_race race_info[MAX_RACES] =
 		44,  4, 130, 20,
 		0,
 		0x0C18B7AD,
+		PlayerRaceLife::LIVING,
         {
 			{ TR_RES_CONF },
 		},
@@ -592,8 +627,9 @@ const player_race race_info[MAX_RACES] =
 		66, 12, 220, 64,
 		0,
 		0x00800001,
+		PlayerRaceLife::NONLIVING,
         {
-			// { TR_VUL_ELEC }, (予定)
+			{ TR_VUL_ELEC },
 			{ TR_RES_POIS },
 			{ TR_FREE_ACT },
 			{ TR_HOLD_EXP },
@@ -610,6 +646,7 @@ const player_race race_info[MAX_RACES] =
 		62,  6, 100, 10,
 		2,
 		0x1E77E7FF,
+		PlayerRaceLife::LIVING,
         {
 			{ TR_RES_WATER },
 		},

@@ -34,7 +34,7 @@ void player_immunity(player_type *creature_ptr, BIT_FLAGS *flags)
 
     if (is_specific_player_race(creature_ptr, RACE_SPECTRE))
         add_flag(flags, TR_RES_NETHER);
-    if (creature_ptr->mimic_form == MIMIC_VAMPIRE || is_specific_player_race(creature_ptr, RACE_VAMPIRE))
+    if (player_race_has_flag(creature_ptr, TR_IM_DARK))
         add_flag(flags, TR_RES_DARK);
 
     if (creature_ptr->pclass == CLASS_ELEMENTALIST) {
@@ -126,11 +126,14 @@ void player_vulnerability_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 		add_flag(flags, TR_RES_COLD);
 	}
 
-	if (is_specific_player_race(creature_ptr, RACE_ANDROID))
-		add_flag(flags, TR_RES_ELEC);
-	if (is_specific_player_race(creature_ptr, RACE_ENT))
-		add_flag(flags, TR_RES_FIRE);
-	if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || is_specific_player_race(creature_ptr, RACE_S_FAIRY) ||
-		(creature_ptr->mimic_form == MIMIC_VAMPIRE))
-		add_flag(flags, TR_RES_LITE);
+	if (player_race_has_flag(creature_ptr, TR_VUL_ACID))
+            add_flag(flags, TR_RES_ACID);
+    if (player_race_has_flag(creature_ptr, TR_VUL_COLD))
+        add_flag(flags, TR_RES_COLD);
+    if (player_race_has_flag(creature_ptr, TR_VUL_ELEC))
+        add_flag(flags, TR_RES_ELEC);
+    if (player_race_has_flag(creature_ptr, TR_VUL_FIRE))
+        add_flag(flags, TR_RES_FIRE);
+    if (player_race_has_flag(creature_ptr, TR_VUL_LITE))
+        add_flag(flags, TR_RES_LITE);
 }

@@ -401,6 +401,18 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
         return check_equipment_flags(creature_ptr, tr_flag);
     case TR_IMPACT:
         return has_impact(creature_ptr);
+    case TR_VUL_ACID:
+        return has_vuln_acid(creature_ptr);
+    case TR_VUL_COLD:
+        return has_vuln_cold(creature_ptr);
+    case TR_VUL_ELEC:
+        return has_vuln_elec(creature_ptr);
+    case TR_VUL_FIRE:
+        return has_vuln_fire(creature_ptr);
+    case TR_VUL_LITE:
+        return has_vuln_lite(creature_ptr);
+    case TR_IM_DARK:
+        return has_immune_dark(creature_ptr);
 
     case TR_FLAG_MAX:
         break;
@@ -1327,9 +1339,13 @@ BIT_FLAGS has_resist_acid(player_type *creature_ptr)
 BIT_FLAGS has_vuln_acid(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
+
     if (creature_ptr->muta.has(MUTA::VULN_ELEM)) {
         result |= FLAG_CAUSE_MUTATION;
     }
+
+    if (player_race_has_flag(creature_ptr, TR_VUL_ACID))
+        result |= FLAG_CAUSE_RACE;
 
     if (creature_ptr->special_defense & KATA_KOUKIJIN) {
         result |= FLAG_CAUSE_BATTLE_FORM;
@@ -1367,9 +1383,8 @@ BIT_FLAGS has_vuln_elec(player_type *creature_ptr)
         result |= FLAG_CAUSE_MUTATION;
     }
 
-    if (is_specific_player_race(creature_ptr, RACE_ANDROID)) {
+    if (player_race_has_flag(creature_ptr, TR_VUL_ELEC))
         result |= FLAG_CAUSE_RACE;
-    }
 
     if (creature_ptr->special_defense & KATA_KOUKIJIN) {
         result |= FLAG_CAUSE_BATTLE_FORM;
@@ -1403,13 +1418,13 @@ BIT_FLAGS has_resist_fire(player_type *creature_ptr)
 BIT_FLAGS has_vuln_fire(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
+
     if (creature_ptr->muta.has(MUTA::VULN_ELEM)) {
         result |= FLAG_CAUSE_MUTATION;
     }
 
-    if (is_specific_player_race(creature_ptr, RACE_ENT)) {
+    if (player_race_has_flag(creature_ptr, TR_VUL_FIRE))
         result |= FLAG_CAUSE_RACE;
-    }
 
     if (creature_ptr->special_defense & KATA_KOUKIJIN) {
         result |= FLAG_CAUSE_BATTLE_FORM;
@@ -1443,9 +1458,13 @@ BIT_FLAGS has_resist_cold(player_type *creature_ptr)
 BIT_FLAGS has_vuln_cold(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
+
     if (creature_ptr->muta.has(MUTA::VULN_ELEM)) {
         result |= FLAG_CAUSE_MUTATION;
     }
+
+    if (player_race_has_flag(creature_ptr, TR_VUL_COLD))
+        result |= FLAG_CAUSE_RACE;
 
     if (creature_ptr->special_defense & KATA_KOUKIJIN) {
         result |= FLAG_CAUSE_BATTLE_FORM;
@@ -1551,10 +1570,9 @@ BIT_FLAGS has_resist_lite(player_type *creature_ptr)
 BIT_FLAGS has_vuln_lite(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
-    if (is_specific_player_race(creature_ptr, RACE_S_FAIRY) || is_specific_player_race(creature_ptr, RACE_VAMPIRE)
-        || (creature_ptr->mimic_form == MIMIC_VAMPIRE)) {
+
+    if (player_race_has_flag(creature_ptr, TR_VUL_LITE))
         result |= FLAG_CAUSE_RACE;
-    }
 
     if (creature_ptr->wraith_form) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
@@ -1885,9 +1903,8 @@ BIT_FLAGS has_immune_dark(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
 
-    if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE)) {
+    if (player_race_has_flag(creature_ptr, TR_IM_DARK))
         result |= FLAG_CAUSE_RACE;
-    }
 
     if (creature_ptr->wraith_form) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
@@ -1977,11 +1994,7 @@ BIT_FLAGS has_lite(player_type *creature_ptr)
         result |= FLAG_CAUSE_PERSONALITY;
     }
 
-    if (creature_ptr->mimic_form == MIMIC_VAMPIRE) {
-        result |= FLAG_CAUSE_RACE;
-    }
-
-    if (!creature_ptr->mimic_form && creature_ptr->prace == RACE_VAMPIRE)
+    if (player_race_has_flag(creature_ptr, TR_LITE_1))
         result |= FLAG_CAUSE_RACE;
 
     if (creature_ptr->ult_res) {

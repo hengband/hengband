@@ -101,3 +101,14 @@ void add_player_race_flags(player_type *creature_ptr, BIT_FLAGS *flags, bool bas
         add_flag(flags, cond.type);
     }
 }
+
+/*!
+ * @brief 種族の生命形態を返す
+ * @param creature_ptr プレイヤー情報への参照ポインタ
+ * @return 生命形態
+ */
+PlayerRaceLife player_race_life(player_type *creature_ptr, bool base_race)
+{
+    auto race_ptr = get_player_race_info(creature_ptr, base_race);
+    return race_ptr->life;
+}

@@ -18,6 +18,17 @@
 #define MIMIC_IS_DEMON 0x00000002
 #define MIMIC_IS_UNDEAD 0x00000004
 
+/*!
+ * プレイヤー種族の生命形態
+ */
+enum class PlayerRaceLife {
+    LIVING = 0, //生きている
+    UNDEAD = 1, //不死
+    DEMON = 2, //悪魔
+    NONLIVING = 3, //生きてない
+    MAX
+};
+
 struct player_race_condition {
     tr_type type{};
     PLAYER_LEVEL level{};
@@ -67,6 +78,7 @@ struct player_race {
     byte infra{}; //!< 赤外線視力 / Infra-vision range
 
     u32b choice{}; //!< 似つかわしい職業(ミミック時はミミック種族属性) / Legal class choices
+    PlayerRaceLife life{}; //!< 生命の形態
 
     std::vector<player_race_condition> extra_flags;
 };
@@ -78,3 +90,4 @@ SYMBOL_CODE get_summon_symbol_from_player(player_type *creature_ptr);
 bool is_specific_player_race(player_type *creature_ptr, player_race_type prace);
 bool player_race_has_flag(player_type *creature_ptr, tr_type flag, bool base_race = false);
 void add_player_race_flags(player_type *creature_ptr, BIT_FLAGS *flags, bool base_race = false);
+PlayerRaceLife player_race_life(player_type *creature_ptr, bool base_race = false);

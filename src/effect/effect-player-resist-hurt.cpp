@@ -376,7 +376,7 @@ void effect_player_lite(player_type *target_ptr, effect_player_type *ep_ptr)
 
     ep_ptr->dam = ep_ptr->dam * calc_lite_damage_rate(target_ptr, CALC_RAND) / 100;
 
-    if (is_specific_player_race(target_ptr, RACE_VAMPIRE) || (target_ptr->mimic_form == MIMIC_VAMPIRE)) {
+    if (player_race_life(target_ptr) == PlayerRaceLife::UNDEAD && player_race_has_flag(target_ptr, TR_VUL_LITE)) {
         if (!check_multishadow(target_ptr))
             msg_print(_("光で肉体が焦がされた！", "The light scorches your flesh!"));
     }

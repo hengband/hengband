@@ -131,15 +131,15 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
         }
 
         see_eldritch_horror(m_name, r_ptr);
-        if (is_specific_player_race(creature_ptr, RACE_IMP) || is_specific_player_race(creature_ptr, RACE_BALROG)
-            || (mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON) || current_world_ptr->wizard)
+        switch (player_race_life(creature_ptr)) {
+        case PlayerRaceLife::DEMON:
             return;
-
-        if (is_specific_player_race(creature_ptr, RACE_SKELETON) || is_specific_player_race(creature_ptr, RACE_ZOMBIE)
-            || is_specific_player_race(creature_ptr, RACE_VAMPIRE) || is_specific_player_race(creature_ptr, RACE_SPECTRE)
-            || (mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_UNDEAD)) {
+        case PlayerRaceLife::UNDEAD:
             if (saving_throw(25 + creature_ptr->lev))
                 return;
+            break;
+        default:
+            break;
         }
     } else if (!necro) {
         monster_race *r_ptr;
@@ -182,32 +182,17 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
         }
 
         feel_eldritch_horror(desc, r_ptr);
-        if (!creature_ptr->mimic_form) {
-            switch (creature_ptr->prace) {
-            case RACE_IMP:
-            case RACE_BALROG:
-                if (saving_throw(20 + creature_ptr->lev))
-                    return;
-                break;
-            case RACE_SKELETON:
-            case RACE_ZOMBIE:
-            case RACE_SPECTRE:
-            case RACE_VAMPIRE:
-                if (saving_throw(10 + creature_ptr->lev))
-                    return;
-                break;
-
-            default:
-                break;
-            }
-        } else {
-            if (mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON) {
-                if (saving_throw(20 + creature_ptr->lev))
-                    return;
-            } else if (mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_UNDEAD) {
-                if (saving_throw(10 + creature_ptr->lev))
-                    return;
-            }
+        switch (player_race_life(creature_ptr)) {
+        case PlayerRaceLife::DEMON:
+            if (saving_throw(20 + creature_ptr->lev))
+                return;
+            break;
+        case PlayerRaceLife::UNDEAD:
+            if (saving_throw(10 + creature_ptr->lev))
+                return;
+            break;
+        default:
+            break;
         }
     } else {
         msg_print(_("ネクロノミコンを読んで正気を失った！", "Your sanity is shaken by reading the Necronomicon!"));
