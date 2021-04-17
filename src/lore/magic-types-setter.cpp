@@ -115,8 +115,8 @@ void set_breath_types(player_type *player_ptr, lore_type *lore_ptr)
         lore_ptr->color[lore_ptr->vn++] = TERM_L_RED;
     }
 
-    if (lore_ptr->ability_flags.has(RF_ABILITY::BR_WALL)) {
-        set_damage(player_ptr, lore_ptr, RF_ABILITY::BR_WALL, _("フォース%s", "force%s"));
+    if (lore_ptr->ability_flags.has(RF_ABILITY::BR_FORC)) {
+        set_damage(player_ptr, lore_ptr, RF_ABILITY::BR_FORC, _("フォース%s", "force%s"));
         lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
         lore_ptr->color[lore_ptr->vn++] = TERM_UMBER;
     }

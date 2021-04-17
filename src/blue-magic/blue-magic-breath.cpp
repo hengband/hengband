@@ -212,7 +212,7 @@ bool cast_blue_breath_force(player_type *caster_ptr, bmc_type *bmc_ptr)
         return FALSE;
 
     msg_print(_("フォースのブレスを吐いた。", "You breathe force."));
-    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, RF_ABILITY::BR_WALL, bmc_ptr->plev, DAM_ROLL);
+    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, RF_ABILITY::BR_FORC, bmc_ptr->plev, DAM_ROLL);
     fire_breath(caster_ptr, GF_FORCE, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
     return TRUE;
 }

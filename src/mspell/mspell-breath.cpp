@@ -160,7 +160,7 @@ MonsterSpellResult spell_RF4_BREATH(player_type *target_ptr, int GF_TYPE, POSITI
         smart_learn_aux = FALSE;
         break;
     case GF_FORCE:
-        dam = monspell_damage(target_ptr, RF_ABILITY::BR_WALL, m_idx, DAM_ROLL);
+        dam = monspell_damage(target_ptr, RF_ABILITY::BR_FORC, m_idx, DAM_ROLL);
         type_s = _("フォース", "force");
         smart_learn_aux = FALSE;
         break;

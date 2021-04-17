@@ -231,7 +231,7 @@ const std::unordered_map<std::string_view, RF_ABILITY> r_info_ability_flags = {
 	{"BR_GRAV", RF_ABILITY::BR_GRAV },
 	{"BR_SHAR", RF_ABILITY::BR_SHAR },
 	{"BR_PLAS", RF_ABILITY::BR_PLAS },
-	{"BR_WALL", RF_ABILITY::BR_WALL },
+	{"BR_FORC", RF_ABILITY::BR_FORC },
 	{"BR_MANA", RF_ABILITY::BR_MANA },
 	{"BA_NUKE", RF_ABILITY::BA_NUKE },
 	{"BR_NUKE", RF_ABILITY::BR_NUKE },

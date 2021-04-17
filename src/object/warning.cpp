@@ -427,8 +427,8 @@ bool process_warning(player_type *creature_ptr, POSITION xx, POSITION yy)
                     spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::BR_SHAR, GF_SHARDS, g_ptr->m_idx, &dam_max0);
                 if (flags.has(RF_ABILITY::BR_PLAS))
                     spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::BR_PLAS, GF_PLASMA, g_ptr->m_idx, &dam_max0);
-                if (flags.has(RF_ABILITY::BR_WALL))
-                    spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::BR_WALL, GF_FORCE, g_ptr->m_idx, &dam_max0);
+                if (flags.has(RF_ABILITY::BR_FORC))
+                    spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::BR_FORC, GF_FORCE, g_ptr->m_idx, &dam_max0);
                 if (flags.has(RF_ABILITY::BR_MANA))
                     spell_damcalc_by_spellnum(creature_ptr, RF_ABILITY::BR_MANA, GF_MANA, g_ptr->m_idx, &dam_max0);
                 if (flags.has(RF_ABILITY::BR_NUKE))

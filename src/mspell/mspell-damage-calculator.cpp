@@ -128,7 +128,7 @@ static HIT_POINT monspell_damage_base(
     case RF_ABILITY::BR_PLAS:
         dam = ((hp / 6) > 150 ? 150 : (hp / 6));
         break;
-    case RF_ABILITY::BR_WALL:
+    case RF_ABILITY::BR_FORC:
         dam = ((hp / 6) > 200 ? 200 : (hp / 6));
         break;
     case RF_ABILITY::BR_MANA:

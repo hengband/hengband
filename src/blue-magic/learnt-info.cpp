@@ -114,7 +114,7 @@ void learnt_info(player_type *learner_ptr, char *p, RF_ABILITY power)
     case RF_ABILITY::BR_SHAR:
     case RF_ABILITY::BR_PLAS:
     case RF_ABILITY::BR_INER:
-    case RF_ABILITY::BR_WALL:
+    case RF_ABILITY::BR_FORC:
     case RF_ABILITY::BR_DISI:
     case RF_ABILITY::BA_NUKE:
     case RF_ABILITY::BA_CHAO:

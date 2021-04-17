@@ -214,7 +214,7 @@ static bool switch_cast_blue_magic(player_type *caster_ptr, bmc_type *bmc_ptr, R
         return cast_blue_breath_shards(caster_ptr, bmc_ptr);
     case RF_ABILITY::BR_PLAS:
         return cast_blue_breath_plasma(caster_ptr, bmc_ptr);
-    case RF_ABILITY::BR_WALL:
+    case RF_ABILITY::BR_FORC:
         return cast_blue_breath_force(caster_ptr, bmc_ptr);
     case RF_ABILITY::BR_MANA:
         return cast_blue_breath_mana(caster_ptr, bmc_ptr);
