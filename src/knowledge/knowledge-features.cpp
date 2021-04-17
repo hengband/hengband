@@ -64,7 +64,7 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
         c_prt(attr, f_ptr->name.c_str(), row_i, col);
         if (per_page == 1) {
             c_prt(attr, format("(%s)", lighting_level_str[lighting_level]), row_i, col + 1 + f_ptr->name.size());
-            c_prt(attr, format("%02x/%02x", f_ptr->x_attr[lighting_level], f_ptr->x_char[lighting_level]), row_i,
+            c_prt(attr, format("%02x/%02x", f_ptr->x_attr[lighting_level], (unsigned char)f_ptr->x_char[lighting_level]), row_i,
                 f_idx_col - ((current_world_ptr->wizard || visual_only) ? 6 : 2));
         }
         if (current_world_ptr->wizard || visual_only) {
