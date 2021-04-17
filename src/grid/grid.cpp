@@ -267,7 +267,7 @@ void place_bound_perm_wall(player_type *player_ptr, grid_type *g_ptr)
 
         /* Hack -- Decline boundary walls with known treasure  */
         if ((has_flag(f_ptr->flags, FF_HAS_GOLD) || has_flag(f_ptr->flags, FF_HAS_ITEM)) && !has_flag(f_ptr->flags, FF_SECRET))
-            g_ptr->feat = feat_state(player_ptr, g_ptr->feat, FF_ENSECRET);
+            g_ptr->feat = feat_state(player_ptr->current_floor_ptr, g_ptr->feat, FF_ENSECRET);
 
         /* Set boundary mimic */
         g_ptr->mimic = g_ptr->feat;
@@ -912,13 +912,12 @@ byte grid_dist(grid_type *g_ptr, monster_race *r_ptr)
  * Take a feature, determine what that feature becomes
  * through applying the given action.
  */
-FEAT_IDX feat_state(player_type *player_ptr, FEAT_IDX feat, int action)
+FEAT_IDX feat_state(floor_type *floor_ptr, FEAT_IDX feat, int action)
 {
     feature_type *f_ptr = &f_info[feat];
     int i;
 
     /* Get the new feature */
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     for (i = 0; i < MAX_FEAT_STATES; i++) {
         if (f_ptr->state[i].action == action)
             return conv_dungeon_feat(floor_ptr, f_ptr->state[i].result);
@@ -941,7 +940,7 @@ void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, int action
     FEAT_IDX oldfeat = floor_ptr->grid_array[y][x].feat;
 
     /* Get the new feat */
-    FEAT_IDX newfeat = feat_state(player_ptr, oldfeat, action);
+    FEAT_IDX newfeat = feat_state(player_ptr->current_floor_ptr, oldfeat, action);
 
     /* No change */
     if (newfeat == oldfeat)
@@ -1136,7 +1135,10 @@ bool cave_player_teleportable_bold(player_type *player_ptr, POSITION y, POSITION
  * @param feat 地形ID
  * @return 開いた地形である場合TRUEを返す /  Return TRUE if the given feature is an open door
  */
-bool is_open(player_type *player_ptr, FEAT_IDX feat) { return has_flag(f_info[feat].flags, FF_CLOSE) && (feat != feat_state(player_ptr, feat, FF_CLOSE)); }
+bool is_open(player_type *player_ptr, FEAT_IDX feat)
+{
+    return has_flag(f_info[feat].flags, FF_CLOSE) && (feat != feat_state(player_ptr->current_floor_ptr, feat, FF_CLOSE));
+}
 
 /*!
  * @brief プレイヤーが地形踏破可能かを返す
@@ -1212,7 +1214,7 @@ void place_grid(player_type *player_ptr, grid_type *g_ptr, grid_bold_type gb_typ
     case GB_OUTER_NOPERM: {
         feature_type *f_ptr = &f_info[feat_wall_outer];
         if (permanent_wall(f_ptr)) {
-            g_ptr->feat = (s16b)feat_state(player_ptr, feat_wall_outer, FF_UNPERM);
+            g_ptr->feat = (s16b)feat_state(player_ptr->current_floor_ptr, feat_wall_outer, FF_UNPERM);
         } else {
             g_ptr->feat = feat_wall_outer;
         }
@@ -1236,7 +1238,7 @@ void place_grid(player_type *player_ptr, grid_type *g_ptr, grid_bold_type gb_typ
     case GB_SOLID_NOPERM: {
         feature_type *f_ptr = &f_info[feat_wall_solid];
         if ((g_ptr->info & CAVE_VAULT) && permanent_wall(f_ptr))
-            g_ptr->feat = (s16b)feat_state(player_ptr, feat_wall_solid, FF_UNPERM);
+            g_ptr->feat = (s16b)feat_state(player_ptr->current_floor_ptr, feat_wall_solid, FF_UNPERM);
         else
             g_ptr->feat = feat_wall_solid;
         g_ptr->info &= ~(CAVE_MASK);

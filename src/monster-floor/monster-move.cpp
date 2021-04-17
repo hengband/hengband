@@ -181,7 +181,7 @@ static bool process_door(player_type *target_ptr, turn_flags *turn_flags_ptr, mo
         return TRUE;
 
     if (turn_flags_ptr->did_bash_door
-        && ((randint0(100) < 50) || (feat_state(target_ptr, g_ptr->feat, FF_OPEN) == g_ptr->feat) || has_flag(f_ptr->flags, FF_GLASS))) {
+        && ((randint0(100) < 50) || (feat_state(target_ptr->current_floor_ptr, g_ptr->feat, FF_OPEN) == g_ptr->feat) || has_flag(f_ptr->flags, FF_GLASS))) {
         cave_alter_feat(target_ptr, ny, nx, FF_BASH);
         if (!monster_is_valid(m_ptr)) {
             target_ptr->update |= (PU_FLOW);
