@@ -364,6 +364,8 @@ bool switch_activation(player_type *user_ptr, object_type **o_ptr_ptr, const act
         return activate_bloody_moon(user_ptr, o_ptr);
     case ACT_CRIMSON:
         return activate_crimson(user_ptr, o_ptr);
+    case ACT_ELBERETH:
+        return activate_protection_elbereth(user_ptr);
     default:
         msg_format(_("Unknown activation effect: %d.", "Unknown activation effect: %d."), act_ptr->index);
         return FALSE;
