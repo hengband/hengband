@@ -78,7 +78,7 @@ void player_birth(player_type *creature_ptr)
     wipe_monsters_list(creature_ptr);
     player_wipe_without_name(creature_ptr);
     if (!ask_quick_start(creature_ptr)) {
-        play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DEFAULT);
+        play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_NEW_GAME);
         while (TRUE) {
             if (player_birth_wizard(creature_ptr))
                 break;

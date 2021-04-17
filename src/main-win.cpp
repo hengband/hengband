@@ -1027,14 +1027,6 @@ static errr term_xtra_win_react(player_type *player_ptr)
         init_sound();
     }
 
-    use_music = arg_music;
-    if (use_music) {
-        init_music();
-        select_floor_music(player_ptr);
-    } else {
-        main_win_music::stop_music();
-    }
-
     if (use_graphics != (arg_graphics > 0)) {
         if (arg_graphics && !init_graphics()) {
             plog(_("グラフィックスを初期化できません!", "Cannot initialize graphics!"));
@@ -2150,8 +2142,14 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
     }
     case IDM_OPTIONS_MUSIC: {
         arg_music = !arg_music;
-        if (inkey_flag)
-            term_xtra_win_react(player_ptr);
+        use_music = arg_music;
+        if (use_music) {
+            init_music();
+            if (game_in_progress)
+                select_floor_music(player_ptr);
+        } else {
+            main_win_music::stop_music();
+        }
         break;
     }
     case IDM_OPTIONS_SOUND: {
@@ -3033,6 +3031,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPST
     if (use_bg) {
         init_background();
         use_bg = init_bg();
+    }
+
+    use_music = arg_music;
+    if (use_music) {
+        init_music();
     }
 
     plog_aux = hook_plog;
