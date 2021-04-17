@@ -128,7 +128,8 @@ ANGBAND MENU
 			MENUITEM "新タイル", 403
 			MENUITEM "タイルを2倍幅で表示", 409
 		}
-		MENUITEM "BGM(&M)", 411
+		MENUITEM "BGM(&M)", 420
+		MENUITEM "アクティブ時のみBGM再生(&M)", 421
 		MENUITEM "効果音(&S)", 410
 		MENUITEM "壁紙を使う(&B)", 440
 		MENUITEM "壁紙を選択(&O)...", 441

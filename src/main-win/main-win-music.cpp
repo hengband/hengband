@@ -18,6 +18,7 @@
 #include "util/angband-files.h"
 #include "world/world.h"
 
+bool use_pause_music_inactive = false;
 static int current_music_type = TERM_XTRA_MUSIC_MUTE;
 static int current_music_id = 0;
 // current filename being played
@@ -210,6 +211,22 @@ errr play_music(int type, int val)
     mciSendCommand(mci_open_parms.wDeviceID, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT | MCI_NOTIFY, (DWORD)&mci_open_parms);
     // Send MCI_PLAY in the notification event once MCI_OPEN is completed
     return 0;
+}
+
+/*
+ * Pause a music
+ */
+void pause_music(void)
+{
+    mciSendCommand(mci_open_parms.wDeviceID, MCI_PAUSE, MCI_WAIT, 0);
+}
+
+/*
+ * Resume a music
+ */
+void resume_music(void)
+{
+    mciSendCommand(mci_open_parms.wDeviceID, MCI_RESUME, MCI_WAIT, 0);
 }
 
 /*
