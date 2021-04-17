@@ -1556,6 +1556,7 @@ BIT_FLAGS has_resist_pois(player_type *creature_ptr)
 
     if (!creature_ptr->mimic_form
         && (creature_ptr->prace == RACE_KOBOLD || creature_ptr->prace == RACE_GOLEM || creature_ptr->prace == RACE_SKELETON
+            || creature_ptr->prace == RACE_ZOMBIE
             || creature_ptr->prace == RACE_VAMPIRE || creature_ptr->prace == RACE_SPECTRE || creature_ptr->prace == RACE_ANDROID)) {
         result |= FLAG_CAUSE_RACE;
     }
