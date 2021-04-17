@@ -1,8 +1,13 @@
 ﻿#include "player/race-info-table.h"
 
+#ifdef JP
+#define N(JAPANESE, ENGLISH) JAPANESE, ENGLISH
+#else
+#define N(JAPANESE, ENGLISH) ENGLISH
+#endif
+
 /*!
- * @brief 種族情報 /
- * Player Races
+ * @brief 種族情報 / Player Races
  * @details
  * <pre>
  *      Title,
@@ -19,11 +24,7 @@
 const player_race race_info[MAX_RACES] =
 {
 	{
-#ifdef JP
-		"人間",
-#endif
-		"Human",
-
+		N("人間", "Human"), "p",
 		{  0,  0,  0,  0,  0,  0 },
 		0,  0,  0,  0,  0,  10,  0,  0,
 		10,  100,
@@ -34,11 +35,7 @@ const player_race race_info[MAX_RACES] =
 		0x1FFFFFFF,
 	},
 	{
-#ifdef JP
-		"ハーフエルフ",
-#endif
-		"Half-Elf",
-
+        N("ハーフエルフ", "Half-Elf"), "h",
 		{ -1,  1,  1,  1, -1,  1 },
 		2,  3,  2,  1, 6,  11, -1,  5,
 		9,  110,
@@ -49,11 +46,7 @@ const player_race race_info[MAX_RACES] =
 		0x1E77E7FF,
 	},
 	{
-#ifdef JP
-		"エルフ",
-#endif
-		"Elf",
-
+		N("エルフ", "Elf"), "h",
 		{ -1,  2,  0,  1, -2,  2 },
 		5,  6,  4,  2, 8,  12, -5, 15,
 		8,  120,
@@ -65,11 +58,7 @@ const player_race race_info[MAX_RACES] =
 
 	},
 	{
-#ifdef JP
-		"ホビット",
-#endif
-		"Hobbit",
-
+		N("ホビット", "Hobbit"), "h",
 		{ -2,  1,  1,  3,  2,  1 },
 		15, 12, 10, 5, 12,  15, -10, 20,
 		7,  110,
@@ -80,11 +69,7 @@ const player_race race_info[MAX_RACES] =
 		0x1F6FFC0B,
 	},
 	{
-#ifdef JP
-		"ノーム",
-#endif
-		"Gnome",
-
+		N("ノーム", "Gnome"), "h",
 		{ -1,  2,  0,  2,  1, -1 },
 		10, 8, 7,  3, 6,  13, -8, 12,
 		8,  120,
@@ -95,11 +80,7 @@ const player_race race_info[MAX_RACES] =
 		0x1F67D60F,
 	},
 	{
-#ifdef JP
-		"ドワーフ",
-#endif
-		"Dwarf",
-
+		N("ドワーフ", "Dwarf"), "h",
 		{  2, -2,  2, -2,  2, -1 },
 		2,  7,  6,  -1,  7,  10, 15,  0,
 		11,  125,
@@ -110,11 +91,7 @@ const player_race race_info[MAX_RACES] =
 		0x11890005,
 	},
 	{
-#ifdef JP
-		"ハーフオーク",
-#endif
-		"Half-Orc",
-
+		N("ハーフオーク", "Half-Orc"), "o",
 		{  2, -1,  0,  0,  1, -2 },
 		-3, -3, -2,  -1,  0, 7, 12, -5,
 		10,  110,
@@ -125,11 +102,7 @@ const player_race race_info[MAX_RACES] =
 		0x1DD8818D,
 	},
 	{
-#ifdef JP
-		"ハーフトロル",
-#endif
-		"Half-Troll",
-
+		N("ハーフトロル", "Half-Troll"), "T",
 		{ 4, -4, -1, -3,  3, -3 },
 		-5, -8, -5, -2,  -1, 5, 20, -10,
 		12,  125,
@@ -140,11 +113,8 @@ const player_race race_info[MAX_RACES] =
 		0x00880005,
 	},
 	{
-#ifdef JP
-		"アンバライト",
-#endif
-		"Amberite",
 
+		N("アンバライト", "Amberite"), "p",
 		{  1,  2,  2,  2,  3,  2 },
 		4,  5,  3,  2, 3, 13, 15, 10,
 		10,  225,
@@ -155,11 +125,7 @@ const player_race race_info[MAX_RACES] =
 		0x1FFFF7FF,
 	},
 	{
-#ifdef JP
-		"ハイエルフ",
-#endif
-		"High-Elf",
-
+		N("ハイエルフ", "High-Elf"), "h",
 		{  1,  3,  -1,  3,  1,  3 },
 		4,  13, 12,  4,  3, 14, 10, 25,
 		10,  200,
@@ -170,11 +136,7 @@ const player_race race_info[MAX_RACES] =
 		0x1F77E75B,
 	},
 	{
-#ifdef JP
-		"野蛮人",
-#endif
-		"Barbarian",
-
+		N("野蛮人", "Barbarian"), "p",
 		{ 3, -2,  -1,  1,  2, 0 },
 		-2, -10, 2,  -1,  1, 7, 12, 10,
 		11, 120,
@@ -185,11 +147,7 @@ const player_race race_info[MAX_RACES] =
 		0x05C0A09D,
 	},
 	{
-#ifdef JP
-		"ハーフオーガ",
-#endif
-		"Half-Ogre",
-
+		N("ハーフオーガ", "Half-Ogre"), "O",
 		{ 3, -2, 0, -1, 3, -2 },
 		-3, -5, -3, -2, -1, 5, 20, 0,
 		12,  145,
@@ -200,11 +158,7 @@ const player_race race_info[MAX_RACES] =
 		0x10A80407,
 	},
 	{
-#ifdef JP
-		"半巨人",
-#endif
-		"Half-Giant",
-
+		N("半巨人", "Half-Giant"), "P",
 		{ 4, -2, -2, -2, 3, -2 },
 		-6, -8, -3, -2, -1, 5, 25, 5,
 		13, 160,
@@ -215,11 +169,7 @@ const player_race race_info[MAX_RACES] =
 		0x08880011,
 	},
 	{
-#ifdef JP
-		"半タイタン",
-#endif
-		"Half-Titan",
-
+		N("半タイタン", "Half-Titan"), "P",
 		{ 5, 1, 2, -2, 3, 1 },
 		-5, 5, 1, -2, 1, 8, 25, 0,
 		14, 255,
@@ -230,11 +180,7 @@ const player_race race_info[MAX_RACES] =
 		0x123D4727,
 	},
 	{
-#ifdef JP
-		"サイクロプス",
-#endif
-		"Cyclops",
-
+		N("サイクロプス", "Cyclops"), "P",
 		{ 4, -3, -2, -3, 4, -3 },
 		-4, -5, -3, -2, -2, 5, 20, 12,
 		13, 150,
@@ -245,11 +191,7 @@ const player_race race_info[MAX_RACES] =
 		0x00888005,
 	},
 	{
-#ifdef JP
-		"イーク",
-#endif
-		"Yeek",
-
+		N("イーク", "Yeek"), "y",
 		{ -2, 1, 1, 1, -2, -4 },
 		2, 4, 6, 3, 5, 15, -5, -5,
 		7, 100,
@@ -260,11 +202,7 @@ const player_race race_info[MAX_RACES] =
 		0x1667360F,
 	},
 	{
-#ifdef JP
-		"クラッコン",
-#endif
-		"Klackon",
-
+		N("クラッコン", "Klackon"), "K",
 		{ 2, -1, -1, 1, 2, -1 },
 		10, 5, 3, 0, -1, 10, 5, 5,
 		12, 190,
@@ -275,11 +213,7 @@ const player_race race_info[MAX_RACES] =
 		0x004D8011,
 	},
 	{
-#ifdef JP
-		"コボルド",
-#endif
-		"Kobold",
-
+		N("コボルド", "Kobold"), "k",
 		{ 1, -1, 0, 1, 0, -2 },
 		-2, -3, -1, -1, 1, 8, 10, -8,
 		9, 125,
@@ -290,11 +224,7 @@ const player_race race_info[MAX_RACES] =
 		0x1444A009,
 	},
 	{
-#ifdef JP
-		"ニーベルング",
-#endif
-		"Nibelung",
-
+		N("ニーベルング", "Nibelung"), "h",
 		{ 1, -1, 2, 0, 2, -2 },
 		3, 5, 6, 1, 5, 10, 9, 0,
 		11, 170,
@@ -305,11 +235,7 @@ const player_race race_info[MAX_RACES] =
 		0x1569040F,
 	},
 	{
-#ifdef JP
-		"ダークエルフ",
-#endif
-		"Dark-Elf",
-
+		N("ダークエルフ", "Dark-Elf"), "h",
 		{ -1, 3, 2, 2, -2, 1 },
 		5, 10, 12, 3, 8, 12, -5, 10,
 		9, 150,
@@ -320,11 +246,7 @@ const player_race race_info[MAX_RACES] =
 		0x1E77C7DF,
 	},
 	{
-#ifdef JP
-		"ドラコニアン",
-#endif
-		"Draconian",
-
+		N("ドラコニアン", "Draconian"), "dD",
 		{ 2, 1, 1, 1, 2, -1 },
 		-2, 5, 2, 0, 1, 10, 5, 5,
 		11, 220,
@@ -335,11 +257,7 @@ const player_race race_info[MAX_RACES] =
 		0x07FFE757,
 	},
 	{
-#ifdef JP
-		"マインドフレア",
-#endif
-		"Mindflayer",
-
+		N("マインドフレア", "Mindflayer"), "h",
 		{ -3, 4, 4, 0, -2, -3 },
 		10, 15, 9, 2, 5, 12, -10, -5,
 		9, 140,
@@ -350,11 +268,7 @@ const player_race race_info[MAX_RACES] =
 		0x12334746,
 	},
 	{
-#ifdef JP
-		"インプ",
-#endif
-		"Imp",
-
+		N("インプ", "Imp"), "uU",
 		{ 0, -1, -1, 1, 2, -1 },
 		-3, 2, -1, 1, -1, 10, 5, -5,
 		10, 115,
@@ -365,11 +279,7 @@ const player_race race_info[MAX_RACES] =
 		0x1DB537CB,
 	},
 	{
-#ifdef JP
-		"ゴーレム",
-#endif
-		"Golem",
-
+		N("ゴーレム", "Golem"), "g",
 		{ 4, -5, -5, -2, 4, -2 },
 		-5, -5, 6, -1, -1, 8, 20, 0,
 		12, 200,
@@ -380,11 +290,7 @@ const player_race race_info[MAX_RACES] =
 		0x00800001,
 	},
 	{
-#ifdef JP
-		"骸骨",
-#endif
-		"Skeleton",
-
+		N("骸骨", "Skeleton"), "sL",
 		{ 0, 1, -2, 0, 1, -2 },
 		-5, 0, 3, -1, -1, 8, 10, 0,
 		10, 145,
@@ -395,11 +301,7 @@ const player_race race_info[MAX_RACES] =
 		0x0234070F,
 	},
 	{
-#ifdef JP
-		"ゾンビ",
-#endif
-		"Zombie",
-
+		N("ゾンビ", "Zombie"), "z",
 		{ 2, -6, -6, 1, 4, -3 },
 		-5, -5, 5, -1, -1, 5, 15, 0,
 		13, 150,
@@ -410,11 +312,7 @@ const player_race race_info[MAX_RACES] =
 		0x00800001,
 	},
 	{
-#ifdef JP
-		"吸血鬼",
-#endif
-		"Vampire",
-
+		N("吸血鬼", "Vampire"), "V",
 		{ 3, 3, -1, -1, 1, 2 },
 		4, 8, 6, 4, 1, 8, 5, 0,
 		11, 200,
@@ -425,11 +323,7 @@ const player_race race_info[MAX_RACES] =
 		0x067DC7FF,
 	},
 	{
-#ifdef JP
-		"幽霊",
-#endif
-		"Spectre",
-
+		N("幽霊", "Spectre"), "G",
 		{ -5, 4, -1, 2, 0, -3 },
 		10, 15, 12, 5, 5, 14, -15, -5,
 		7, 210,
@@ -440,11 +334,7 @@ const player_race race_info[MAX_RACES] =
 		0x0631474A,
 	},
 	{
-#ifdef JP
-		"妖精",
-#endif
-		"Sprite",
-
+		N("妖精", "Sprite"), "I",
 		{ -4, 3, 3, 3, -2, 2 },
 		10, 8, 6, 4, 10, 10, -12, 0,
 		7, 145,
@@ -455,11 +345,7 @@ const player_race race_info[MAX_RACES] =
 		0x1623F65E,
 	},
 	{
-#ifdef JP
-		"獣人",
-#endif
-		"Beastman",
-
+		N("獣人", "Beastman"), "p",
 		{ 2, -2, -1, -1, 2, -2 },
 		-5, -2, -1, -1, -1, 5, 12, 5,
 		11, 140,
@@ -470,10 +356,7 @@ const player_race race_info[MAX_RACES] =
 		0x057887CF,
 	},
 	{
-#ifdef JP
-		"エント",
-#endif
-		"Ent",
+		N("エント", "Ent"), "#",
 		{ 2,  0,  2, -3,  2,  0 },
 		 -5,  2,  5,  -1, 0, 9,  15, -5,
 		 12, 140,
@@ -484,11 +367,7 @@ const player_race race_info[MAX_RACES] =
 		0x10010005,
 	},
 	{
-#ifdef JP
-		"アルコン",
-#endif
-		"Archon",
-
+		N("アルコン", "Archon"), "A",
 		{  2,  0,  4,  1,  2,  3 },
 		0,  12,  8,  2, 2, 11, 10, 10,
 		11,  235,
@@ -499,13 +378,7 @@ const player_race race_info[MAX_RACES] =
 		0x1779F777,
 	},
 	{
-#ifdef JP
-		"バルログ",
-		"Balrog",
-#else
-		"Balrog",
-#endif
-
+		N("バルログ", "Balrog"), "U",
 		{  4,  2,  -10,  2,  3,  -5 },
 		-3,  12, 15,  -2,  1, 8, 20, 0,
 		12,  250,
@@ -516,11 +389,7 @@ const player_race race_info[MAX_RACES] =
 		0x07EDC4DB,
 	},
 	{
-#ifdef JP
-		"ドゥナダン",
-#endif
-		"Dunadan",
-
+		N("ドゥナダン", "Dunadan"), "p",
 		{  1,  2,  2,  2,  3,  2 },
 		4,  5,  3,  2, 3, 13, 15, 10,
 		10,  180,
@@ -531,10 +400,7 @@ const player_race race_info[MAX_RACES] =
 		0x1FFFF7FF,
 	},
 	{
-#ifdef JP
-		"影フェアリー",
-#endif
-		"Shadow-Fairy",
+		N("影フェアリー", "Shadow-Fairy"), "h",
 		{-2,  2,  2,  1, -1,  0 },
 		  7,  8,  0,  6, 12, 15, -10, -5,
 		  7, 120,
@@ -545,11 +411,7 @@ const player_race race_info[MAX_RACES] =
 		0x1E33C7DF,
 	},
 	{
-#ifdef JP
-		"クター",
-#endif
-		"Kutar",
-
+		N("クター", "Kutar"), "h",
 		{  0,  -1,  -1,  1,  2,  3 },
 		-2,  5,  5,  5,  -2,  6,  0,  -5,
 		11,  140,
@@ -560,11 +422,7 @@ const player_race race_info[MAX_RACES] =
 		0x0C18B7AD,
 	},
 	{
-#ifdef JP
-		"アンドロイド",
-#endif
-		"Android",
-
+		N("アンドロイド", "Android"), "g",
 		{ 4, -5, -5, 0, 4, -2 },
 		0, -5, 0, -2, 3, 14, 20, 10,
 		13, 200,
@@ -575,11 +433,7 @@ const player_race race_info[MAX_RACES] =
 		0x00800001,
 	},
 	{
-#ifdef JP
-		"マーフォーク",
-#endif
-		"Merfolk",
-
+		N("マーフォーク", "Merfolk"), "l",
 		{ -1,  0,  2,  1,  -1,  1},
 		2,  3,  2,  1, 6,  11, -1,  5,
 		10,  130,
