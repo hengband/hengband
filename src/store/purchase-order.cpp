@@ -53,7 +53,7 @@ static std::optional<PRICE> prompt_to_buy(player_type *player_ptr, object_type *
     msg_print(NULL);
 
     price_ask *= o_ptr->number;
-    concptr s = format(_("買値 $%ld で買いますか？", "Do you buy for $%ld?"), static_cast<long>(price_ask));
+    concptr s = format(_("買値 $%ld で買いますか？", "Do you buy for $%ld? "), static_cast<long>(price_ask));
     if (get_check_strict(player_ptr, s, CHECK_DEFAULT_Y)) {
         return price_ask;
     }

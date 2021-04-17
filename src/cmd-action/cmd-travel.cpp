@@ -139,7 +139,7 @@ static void travel_flow(player_type *creature_ptr, POSITION ty, POSITION tx)
 void do_cmd_travel(player_type *creature_ptr)
 {
     POSITION x, y;
-    if (travel.x != 0 && travel.y != 0 && get_check(_("トラベルを継続しますか？", "Do you continue to travel?"))) {
+    if (travel.x != 0 && travel.y != 0 && get_check(_("トラベルを継続しますか？", "Do you continue to travel? "))) {
         y = travel.y;
         x = travel.x;
     } else if (!tgt_pt(creature_ptr, &x, &y))
