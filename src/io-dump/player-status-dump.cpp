@@ -60,6 +60,8 @@ void dump_aux_player_status(player_type *creature_ptr, FILE *fff, display_player
 	fprintf(fff, "\n");
 	dump_player_status_with_screen_num(creature_ptr, fff, display_player, 2, 2, 22, TRUE);
 	fprintf(fff, "\n");
-	dump_player_status_with_screen_num(creature_ptr, fff, display_player, 3, 1, 22, TRUE);
+	dump_player_status_with_screen_num(creature_ptr, fff, display_player, 3, 1, 18, TRUE);
 	fprintf(fff, "\n");
+    dump_player_status_with_screen_num(creature_ptr, fff, display_player, 4, 1, 19, TRUE);
+    fprintf(fff, "\n");
 }
