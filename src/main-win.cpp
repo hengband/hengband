@@ -50,9 +50,7 @@
  * <p>
  * Compiling this file, and using the resulting executable, requires
  * several extra files not distributed with the standard Angband code.
- * In any case, some "*.fon" files (including "8X13.FON" if nothing else)
- * must be placed into "lib/xtra/font/".  All of these extra files can be found
- * in the "ext-win" archive.
+ * All of these extra files can be found in the "ext-win" archive.
  * </p>
  *
  * <p>
@@ -175,11 +173,7 @@
  * </p>
  * <p>
  * Note the use of "font_want" for the names of the font file requested by
- * the user, and the use of "font_file" for the currently active font file.
- *
- * The "font_file" is uppercased, and takes the form "8X13.FON", while
- * "font_want" can be in almost any form as long as it could be construed
- * as attempting to represent the name of a font.
+ * the user.
  * </p>
  */
 typedef struct {
@@ -207,7 +201,6 @@ typedef struct {
     bool visible;
     bool bizarre;
     concptr font_want;
-    concptr font_file;
     HFONT font_id;
     int font_wid; //!< フォント横幅
     int font_hgt; //!< フォント縦幅
@@ -890,18 +883,16 @@ static void term_window_resize(term_data *td)
 }
 
 /*!
- * @brief Force the use of a new "font file" for a term_data.
+ * @brief Force the use of a new font for a term_data.
  * This function may be called before the "window" is ready.
  * This function returns zero only if everything succeeds.
  * @note that the "font name" must be capitalized!!!
- * @todo 引数のpathを消す
  */
-static errr term_force_font(term_data *td, concptr path)
+static errr term_force_font(term_data *td)
 {
     if (td->font_id)
         DeleteObject(td->font_id);
 
-    (void)path;
     td->font_id = CreateFontIndirect(&(td->lf));
     int wid = td->lf.lfWidth;
     int hgt = td->lf.lfHeight;
@@ -943,7 +934,7 @@ static void term_change_font(term_data *td)
     if (!ChooseFont(&cf))
         return;
 
-    term_force_font(td, NULL);
+    term_force_font(td);
     td->bizarre = TRUE;
     td->tile_wid = td->font_wid;
     td->tile_hgt = td->font_hgt;
@@ -1596,7 +1587,7 @@ static void init_windows(void)
         strncpy(td->lf.lfFaceName, td->font_want, LF_FACESIZE);
         td->lf.lfCharSet = DEFAULT_CHARSET;
         td->lf.lfPitchAndFamily = FIXED_PITCH | FF_DONTCARE;
-        term_force_font(td, NULL);
+        term_force_font(td);
         if (!td->tile_wid)
             td->tile_wid = td->font_wid;
         if (!td->tile_hgt)
@@ -2854,7 +2845,7 @@ static void hook_quit(concptr str)
 
     save_prefs();
     for (int i = MAX_TERM_DATA - 1; i >= 0; --i) {
-        term_force_font(&data[i], NULL);
+        term_force_font(&data[i]);
         if (data[i].font_want)
             string_free(data[i].font_want);
         if (data[i].w)
