@@ -76,8 +76,31 @@ static errr load_town_quest(player_type *creature_ptr)
     return analyze_wilderness();
 }
 
+/*!
+ * @brief 勝利した職業フラグをロードする
+ */
+static void rd_winner_class()
+{
+    if (loading_savefile_version_is_older_than(4))
+        return;
+
+    s16b flag_size;
+    rd_s16b(&flag_size);
+    for (int i = 0; i < flag_size; i++) {
+        if (i == CLASS_FLAG_SIZE)
+            break;
+        rd_u32b(&current_world_ptr->sf_winner[i]);
+    }
+    for (int i = 0; i < flag_size; i++) {
+        if (i == CLASS_FLAG_SIZE)
+            break;
+        rd_u32b(&current_world_ptr->sf_retired[i]);
+    }
+}
+
 static void load_player_world(player_type *creature_ptr)
 {
+    rd_winner_class();
     rd_base_info(creature_ptr);
     rd_player_info(creature_ptr);
     rd_byte((byte *)&preserve_mode);

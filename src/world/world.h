@@ -3,6 +3,7 @@
 #include "system/angband.h"
 
 #define MAX_BOUNTY 20
+#define CLASS_FLAG_SIZE 1 + MAX_CLASS / 32
 
 /*!
  * @brief 世界情報構造体
@@ -43,6 +44,8 @@ struct world_type {
     u32b sf_when; //!< 作成日時 / Created Date
     u16b sf_lives; //!< このセーブファイルで何人プレイしたか / Number of past "lives" with this file
     u16b sf_saves; //!< 現在のプレイで何回セーブしたか / Number of "saves" during this life
+    BIT_FLAGS sf_winner[CLASS_FLAG_SIZE];
+    BIT_FLAGS sf_retired[CLASS_FLAG_SIZE];
 
     bool character_generated; /* The character exists */
     bool character_dungeon; /* The character has a dungeon */
@@ -68,3 +71,7 @@ extern world_type *current_world_ptr;
 bool is_daytime(void);
 void extract_day_hour_min(player_type *player_ptr, int *day, int *hour, int *min);
 void update_playtime(void);
+void add_winner_class(player_class_type c);
+void add_retired_class(player_class_type c);
+bool is_winner_class(player_class_type c);
+bool is_retired_class(player_class_type c);

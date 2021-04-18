@@ -108,9 +108,17 @@ static void display_uniques(unique_list_type *unique_list_ptr, FILE *fff)
         fputs(no_unique_desc, fff);
     }
 
+    char buf[80];
     for (int k = 0; k < unique_list_ptr->n; k++) {
         monster_race *r_ptr = &r_info[unique_list_ptr->who[k]];
-        fprintf(fff, _("     %s (レベル%d)\n", "     %s (level %d)\n"), r_ptr->name.c_str(), (int)r_ptr->level);
+
+        if (r_ptr->defeat_level && r_ptr->defeat_time)
+            sprintf(buf, _(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), r_ptr->defeat_level, r_ptr->defeat_time / (60 * 60),
+                (r_ptr->defeat_time / 60) % 60, r_ptr->defeat_time % 60);
+        else
+            buf[0] = '\0';
+
+        fprintf(fff, _("     %s (レベル%d)%s\n", "     %s (level %d)%s\n"), r_ptr->name.c_str(), (int)r_ptr->level, buf);
     }
 }
 
