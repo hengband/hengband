@@ -258,7 +258,7 @@ static void display_equipment(player_type *owner_ptr, tval_type tval)
         if (o_ptr->timeout)
             attr = TERM_L_DARK;
 
-        if (do_disp && show_item_graph) {
+        if (show_item_graph) {
             TERM_COLOR a = object_attr(o_ptr);
             SYMBOL_CODE c = object_char(o_ptr);
             term_queue_bigchar(cur_col, cur_row, a, c, 0, 0);
