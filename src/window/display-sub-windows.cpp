@@ -17,6 +17,7 @@
 #include "monster/monster-info.h"
 #include "object/item-tester-hooker.h"
 #include "object/object-info.h"
+#include "object/object-kind.h"
 #include "object/object-mark-types.h"
 #include "player/player-status-flags.h"
 #include "spell-kind/magic-item-recharger.h"
@@ -227,15 +228,20 @@ static void display_equipment(player_type *owner_ptr, tval_type tval)
     char tmp_val[80];
     GAME_TEXT o_name[MAX_NLEN];
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        object_type *o_ptr;
-        o_ptr = &owner_ptr->inventory_list[i];
-        tmp_val[0] = tmp_val[1] = tmp_val[2] = ' ';
-        if (owner_ptr->select_ring_slot ? is_ring_slot(i) : item_tester_okay(owner_ptr, o_ptr, tval)) {
+        auto o_ptr = &owner_ptr->inventory_list[i];
+        auto do_disp = owner_ptr->select_ring_slot ? is_ring_slot(i) : item_tester_okay(owner_ptr, o_ptr, tval);
+        strcpy(tmp_val, "   ");
+
+        if (do_disp) {
             tmp_val[0] = index_to_label(i);
             tmp_val[1] = ')';
         }
 
-        term_putstr(0, i - INVEN_MAIN_HAND, 3, TERM_WHITE, tmp_val);
+        int cur_row = i - INVEN_MAIN_HAND;
+        int cur_col = 3;
+        term_erase(cur_col, cur_row, 255);
+        term_putstr(0, cur_row, cur_col, TERM_WHITE, tmp_val);
+
         if ((((i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(owner_ptr)) || ((i == INVEN_SUB_HAND) && can_attack_with_main_hand(owner_ptr)))
             && has_two_handed_weapons(owner_ptr)) {
             strcpy(o_name, _("(武器を両手持ち)", "(wielding with two-hands)"));
@@ -249,17 +255,26 @@ static void display_equipment(player_type *owner_ptr, tval_type tval)
         if (o_ptr->timeout)
             attr = TERM_L_DARK;
 
-        term_putstr(3, i - INVEN_MAIN_HAND, n, attr, o_name);
-        term_erase(3 + n, i - INVEN_MAIN_HAND, 255);
+        if (do_disp && show_item_graph) {
+            TERM_COLOR a = object_attr(o_ptr);
+            SYMBOL_CODE c = object_char(o_ptr);
+            term_queue_bigchar(cur_col, cur_row, a, c, 0, 0);
+            if (use_bigtile)
+                cur_col++;
+
+            cur_col += 2;
+        }
+
+        term_putstr(cur_col, cur_row, n, attr, o_name);
         if (show_weights) {
             int wgt = o_ptr->weight * o_ptr->number;
             sprintf(tmp_val, _("%3d.%1d kg", "%3d.%1d lb"), _(lbtokg1(wgt), wgt / 10), _(lbtokg2(wgt), wgt % 10));
-            prt(tmp_val, i - INVEN_MAIN_HAND, wid - (show_labels ? 28 : 9));
+            prt(tmp_val, cur_row, wid - (show_labels ? 28 : 9));
         }
 
         if (show_labels) {
-            term_putstr(wid - 20, i - INVEN_MAIN_HAND, -1, TERM_WHITE, " <-- ");
-            prt(mention_use(owner_ptr, i), i - INVEN_MAIN_HAND, wid - 15);
+            term_putstr(wid - 20, cur_row, -1, TERM_WHITE, " <-- ");
+            prt(mention_use(owner_ptr, i), cur_row, wid - 15);
         }
     }
 

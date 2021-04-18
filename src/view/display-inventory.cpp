@@ -129,7 +129,6 @@ COMMAND_CODE show_inventory(player_type *owner_ptr, int target_item, BIT_FLAGS m
 void display_inventory(player_type *owner_ptr, tval_type tval)
 {
     int i, n, z = 0;
-    object_type *o_ptr;
     TERM_COLOR attr = TERM_WHITE;
     char tmp_val[80];
     GAME_TEXT o_name[MAX_NLEN];
@@ -140,21 +139,24 @@ void display_inventory(player_type *owner_ptr, tval_type tval)
 
     term_get_size(&wid, &hgt);
     for (i = 0; i < INVEN_PACK; i++) {
-        o_ptr = &owner_ptr->inventory_list[i];
+        auto o_ptr = &owner_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
         z = i + 1;
     }
 
     for (i = 0; i < z; i++) {
-        o_ptr = &owner_ptr->inventory_list[i];
-        tmp_val[0] = tmp_val[1] = tmp_val[2] = ' ';
-        if (item_tester_okay(owner_ptr, o_ptr, tval)) {
+        auto o_ptr = &owner_ptr->inventory_list[i];
+        auto do_disp = item_tester_okay(owner_ptr, o_ptr, tval);
+        strcpy(tmp_val, "   ");
+        if (do_disp) {
             tmp_val[0] = index_to_label(i);
             tmp_val[1] = ')';
         }
 
-        term_putstr(0, i, 3, TERM_WHITE, tmp_val);
+        int cur_col = 3;
+        term_erase(cur_col, i, 255);
+        term_putstr(0, i, cur_col, TERM_WHITE, tmp_val);
         describe_flavor(owner_ptr, o_name, o_ptr, 0);
         n = strlen(o_name);
         attr = tval_to_attr[o_ptr->tval % 128];
@@ -162,8 +164,17 @@ void display_inventory(player_type *owner_ptr, tval_type tval)
             attr = TERM_L_DARK;
         }
 
-        term_putstr(3, i, n, attr, o_name);
-        term_erase(3 + n, i, 255);
+        if (do_disp && show_item_graph) {
+            TERM_COLOR a = object_attr(o_ptr);
+            SYMBOL_CODE c = object_char(o_ptr);
+            term_queue_bigchar(cur_col, i, a, c, 0, 0);
+            if (use_bigtile)
+                cur_col++;
+
+            cur_col += 2;
+        }
+
+        term_putstr(cur_col, i, n, attr, o_name);
 
         if (show_weights) {
             int wgt = o_ptr->weight * o_ptr->number;
