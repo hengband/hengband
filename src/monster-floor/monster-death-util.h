@@ -1,9 +1,9 @@
-#pragma once
+﻿#pragma once
 
 #include "system/angband.h"
 
 typedef struct monster_type monster_type;
-typedef struct monster_race monster_race;
+struct monster_race;
 typedef struct monster_death_type {
     MONSTER_IDX m_idx;
     monster_type *m_ptr;

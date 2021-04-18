@@ -13,7 +13,7 @@
  * of objects (if any) being carried by the monster (see above).
  */
 typedef struct floor_type floor_type;
-typedef struct monster_race monster_race;
+struct monster_race;
 typedef struct monster_type {
 	MONRACE_IDX r_idx{};		/*!< モンスターの実種族ID (これが0の時は死亡扱いになる) / Monster race index 0 = dead. */
 	MONRACE_IDX ap_r_idx{};	/*!< モンスターの外見種族ID（あやしい影、たぬき、ジュラル星人誤認などにより変化する）Monster race appearance index */
