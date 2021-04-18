@@ -138,6 +138,7 @@ void display_inventory(player_type *owner_ptr, tval_type tval)
         return;
 
     term_get_size(&wid, &hgt);
+
     for (i = 0; i < INVEN_PACK; i++) {
         auto o_ptr = &owner_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
@@ -146,6 +147,9 @@ void display_inventory(player_type *owner_ptr, tval_type tval)
     }
 
     for (i = 0; i < z; i++) {
+        if (i >= hgt)
+            break;
+
         auto o_ptr = &owner_ptr->inventory_list[i];
         auto do_disp = item_tester_okay(owner_ptr, o_ptr, tval);
         strcpy(tmp_val, "   ");

@@ -228,6 +228,10 @@ static void display_equipment(player_type *owner_ptr, tval_type tval)
     char tmp_val[80];
     GAME_TEXT o_name[MAX_NLEN];
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+        int cur_row = i - INVEN_MAIN_HAND;
+        if (cur_row >= hgt)
+            break;
+
         auto o_ptr = &owner_ptr->inventory_list[i];
         auto do_disp = owner_ptr->select_ring_slot ? is_ring_slot(i) : item_tester_okay(owner_ptr, o_ptr, tval);
         strcpy(tmp_val, "   ");
@@ -237,7 +241,6 @@ static void display_equipment(player_type *owner_ptr, tval_type tval)
             tmp_val[1] = ')';
         }
 
-        int cur_row = i - INVEN_MAIN_HAND;
         int cur_col = 3;
         term_erase(cur_col, cur_row, 255);
         term_putstr(0, cur_row, cur_col, TERM_WHITE, tmp_val);
