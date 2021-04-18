@@ -82,7 +82,7 @@ void do_cmd_player_status(player_type *creature_ptr)
 		update_playtime();
 		display_player(creature_ptr, mode);
 
-		if (mode == 4)
+		if (mode == 5)
 		{
 			mode = 0;
 			display_player(creature_ptr, mode);

@@ -171,7 +171,7 @@ static void describe_projectablity(player_type *creature_ptr, ts_type *ts_ptr)
         return;
 
     char cheatinfo[30];
-    sprintf(cheatinfo, " LOS:%d, PROJECTABLE:%d", los(creature_ptr, creature_ptr->y, creature_ptr->x, ts_ptr->y, ts_ptr->x),
+    sprintf(cheatinfo, " X:%d Y:%d LOS:%d LOP:%d", ts_ptr->x, ts_ptr->y, los(creature_ptr, creature_ptr->y, creature_ptr->x, ts_ptr->y, ts_ptr->x),
         projectable(creature_ptr, creature_ptr->y, creature_ptr->x, ts_ptr->y, ts_ptr->x));
     strcat(ts_ptr->info, cheatinfo);
 }
@@ -390,7 +390,8 @@ static void describe_grid_wizard(player_type *creature_ptr, ts_type *ts_ptr)
         return;
 
     char cheatinfo[100];
-    sprintf(cheatinfo, " LOS:%d, PROJECTABLE:%d, SPECIAL:%d", los(creature_ptr, creature_ptr->y, creature_ptr->x, ts_ptr->y, ts_ptr->x),
+    sprintf(cheatinfo, " X:%d Y:%d LOS:%d LOP:%d SPECIAL:%d", ts_ptr->x, ts_ptr->y,
+        los(creature_ptr, creature_ptr->y, creature_ptr->x, ts_ptr->y, ts_ptr->x),
         projectable(creature_ptr, creature_ptr->y, creature_ptr->x, ts_ptr->y, ts_ptr->x), ts_ptr->g_ptr->special);
     strcat(ts_ptr->info, cheatinfo);
 }

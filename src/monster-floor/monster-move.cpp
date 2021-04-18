@@ -181,7 +181,7 @@ static bool process_door(player_type *target_ptr, turn_flags *turn_flags_ptr, mo
         return TRUE;
 
     if (turn_flags_ptr->did_bash_door
-        && ((randint0(100) < 50) || (feat_state(target_ptr, g_ptr->feat, FF_OPEN) == g_ptr->feat) || has_flag(f_ptr->flags, FF_GLASS))) {
+        && ((randint0(100) < 50) || (feat_state(target_ptr->current_floor_ptr, g_ptr->feat, FF_OPEN) == g_ptr->feat) || has_flag(f_ptr->flags, FF_GLASS))) {
         cave_alter_feat(target_ptr, ny, nx, FF_BASH);
         if (!monster_is_valid(m_ptr)) {
             target_ptr->update |= (PU_FLOW);
@@ -258,7 +258,7 @@ static bool process_explosive_rune(player_type *target_ptr, turn_flags *turn_fla
         if (g_ptr->info & CAVE_MARK) {
             msg_print(_("ルーンが爆発した！", "The rune explodes!"));
             BIT_FLAGS project_flags = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI;
-            project(target_ptr, 0, 2, ny, nx, 2 * (target_ptr->lev + damroll(7, 7)), GF_MANA, project_flags, -1);
+            project(target_ptr, 0, 2, ny, nx, 2 * (target_ptr->lev + damroll(7, 7)), GF_MANA, project_flags);
         }
     } else {
         msg_print(_("爆発のルーンは解除された。", "An explosive rune was disarmed."));

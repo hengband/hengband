@@ -190,7 +190,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 
     if (mpe_mode & MPE_ENERGY_USE) {
         if (music_singing(creature_ptr, MUSIC_WALL)) {
-            (void)project(creature_ptr, 0, 0, creature_ptr->y, creature_ptr->x, (60 + creature_ptr->lev), GF_DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM, -1);
+            (void)project(creature_ptr, 0, 0, creature_ptr->y, creature_ptr->x, (60 + creature_ptr->lev), GF_DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM);
             if (!player_bold(creature_ptr, ny, nx) || creature_ptr->is_dead || creature_ptr->leaving)
                 return FALSE;
         }

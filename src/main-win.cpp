@@ -85,7 +85,6 @@
 
 #ifdef WINDOWS
 
-#include "autopick/autopick-pref-processor.h"
 #include "cmd-io/cmd-process-screen.h"
 #include "cmd-io/cmd-save.h"
 #include "core/game-play.h"
@@ -94,7 +93,6 @@
 #include "core/special-internal-keys.h"
 #include "core/stuff-handler.h"
 #include "core/visuals-reseter.h"
-#include "floor/floor-base-definitions.h"
 #include "floor/floor-events.h"
 #include "game-option/runtime-arguments.h"
 #include "game-option/special-options.h"
@@ -115,7 +113,6 @@
 #include "save/save.h"
 #include "system/angband-version.h"
 #include "system/angband.h"
-#include "system/floor-type-definition.h"
 #include "system/system-variables.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
@@ -123,7 +120,6 @@
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
-#include "view/display-map.h"
 #include "view/display-messages.h"
 #include "wizard/spoiler-util.h"
 #include "wizard/wizard-spoiler.h"
@@ -543,6 +539,8 @@ static void save_prefs(void)
 
     strcpy(buf, arg_music ? "1" : "0");
     WritePrivateProfileString("Angband", "Music", buf, ini_file);
+    strcpy(buf, use_pause_music_inactive ? "1" : "0");
+    WritePrivateProfileString("Angband", "MusicPauseInactive", buf, ini_file);
 
     strcpy(buf, use_bg ? "1" : "0");
     WritePrivateProfileString("Angband", "BackGround", buf, ini_file);
@@ -570,6 +568,16 @@ static void save_prefs(void)
 }
 
 /*
+ * callback for EnumDisplayMonitors API
+ */
+BOOL CALLBACK monitorenumproc([[maybe_unused]] HMONITOR hMon, [[maybe_unused]] HDC hdcMon, [[maybe_unused]] LPRECT lpMon, LPARAM dwDate)
+{
+    bool *result = (bool *)dwDate;
+    *result = true;
+    return FALSE;
+}
+
+/*
  * Load the "prefs" for a single term
  */
 static void load_prefs_aux(int i)
@@ -577,11 +585,6 @@ static void load_prefs_aux(int i)
     term_data *td = &data[i];
     GAME_TEXT sec_name[128];
     char tmp[1024];
-
-    int dispx = GetSystemMetrics(SM_CXVIRTUALSCREEN);
-    int dispy = GetSystemMetrics(SM_CYVIRTUALSCREEN);
-    int posx = 0;
-    int posy = 0;
 
     sprintf(sec_name, "Term-%d", i);
     sprintf(sec_name, "Term-%d", i);
@@ -616,10 +619,17 @@ static void load_prefs_aux(int i)
         win_maximized = (GetPrivateProfileInt(sec_name, "Maximized", win_maximized, ini_file) != 0);
     }
 
-    posx = GetPrivateProfileInt(sec_name, "PositionX", posx, ini_file);
-    posy = GetPrivateProfileInt(sec_name, "PositionY", posy, ini_file);
-    td->pos_x = MIN(MAX(0, posx), dispx - 128);
-    td->pos_y = MIN(MAX(0, posy), dispy - 128);
+    int posx = GetPrivateProfileInt(sec_name, "PositionX", 0, ini_file);
+    int posy = GetPrivateProfileInt(sec_name, "PositionY", 0, ini_file);
+    // 保存座標がモニタ内の領域にあるかチェック
+    RECT rect = { posx, posy, posx + 128, posy + 128 };
+    bool in_any_monitor = false;
+    ::EnumDisplayMonitors(NULL, &rect, monitorenumproc, (LPARAM)&in_any_monitor);
+    if (in_any_monitor) {
+        // いずれかのモニタに表示可能、ウインドウ位置を復元
+        td->pos_x = posx;
+        td->pos_y = posy;
+    }
 
     if (i > 0) {
         td->posfix = (GetPrivateProfileInt(sec_name, "PositionFix", td->posfix, ini_file) != 0);
@@ -636,6 +646,7 @@ static void load_prefs(void)
     use_bigtile = arg_bigtile;
     arg_sound = (GetPrivateProfileInt("Angband", "Sound", 0, ini_file) != 0);
     arg_music = (GetPrivateProfileInt("Angband", "Music", 0, ini_file) != 0);
+    use_pause_music_inactive = (GetPrivateProfileInt("Angband", "MusicPauseInactive", 0, ini_file) != 0);
     use_bg = GetPrivateProfileInt("Angband", "BackGround", 0, ini_file);
     GetPrivateProfileString("Angband", "BackGroundBitmap", DEFAULT_BG_FILENAME, bg_bitmap_file, 1023, ini_file);
     GetPrivateProfileString("Angband", "SaveFile", "", savefile, 1023, ini_file);
@@ -1019,14 +1030,6 @@ static errr term_xtra_win_react(player_type *player_ptr)
         init_sound();
     }
 
-    use_music = arg_music;
-    if (use_music) {
-        init_music();
-        select_floor_music(player_ptr);
-    } else {
-        main_win_music::stop_music();
-    }
-
     if (use_graphics != (arg_graphics > 0)) {
         if (arg_graphics && !init_graphics()) {
             plog(_("グラフィックスを初期化できません!", "Cannot initialize graphics!"));
@@ -1034,7 +1037,7 @@ static errr term_xtra_win_react(player_type *player_ptr)
         }
 
         use_graphics = (arg_graphics > 0);
-        reset_visuals(player_ptr, process_autopick_file_command);
+        reset_visuals(player_ptr);
     }
 
     for (int i = 0; i < MAX_TERM_DATA; i++) {
@@ -1762,6 +1765,7 @@ static void setup_menus(void)
     CheckMenuItem(hm, IDM_OPTIONS_NEW2_GRAPHICS, (arg_graphics == GRAPHICS_HENGBAND ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_BIGTILE, (arg_bigtile ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_MUSIC, (arg_music ? MF_CHECKED : MF_UNCHECKED));
+    CheckMenuItem(hm, IDM_OPTIONS_MUSIC_PAUSE_INACTIVE, (use_pause_music_inactive ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_SOUND, (arg_sound ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_BG, (use_bg ? MF_CHECKED : MF_UNCHECKED));
 
@@ -2142,8 +2146,18 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
     }
     case IDM_OPTIONS_MUSIC: {
         arg_music = !arg_music;
-        if (inkey_flag)
-            term_xtra_win_react(player_ptr);
+        use_music = arg_music;
+        if (use_music) {
+            init_music();
+            if (game_in_progress)
+                select_floor_music(player_ptr);
+        } else {
+            main_win_music::stop_music();
+        }
+        break;
+    }
+    case IDM_OPTIONS_MUSIC_PAUSE_INACTIVE: {
+        use_pause_music_inactive = !use_pause_music_inactive;
         break;
     }
     case IDM_OPTIONS_SOUND: {
@@ -2310,6 +2324,28 @@ static bool process_keydown(WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
+static void handle_app_active(HWND hWnd, UINT uMsg, WPARAM wParam, [[maybe_unused]] LPARAM lParam)
+{
+    switch (uMsg) {
+    case WM_ACTIVATEAPP: {
+        if (wParam) {
+            if (use_pause_music_inactive)
+                main_win_music::resume_music();
+        } else {
+            if (use_pause_music_inactive)
+                main_win_music::pause_music();
+        }
+        break;
+    }
+    case WM_WINDOWPOSCHANGING: {
+        if (!IsIconic(hWnd))
+            if (use_pause_music_inactive)
+                main_win_music::resume_music();
+        break;
+    }
+    }
+}
+
 /*!
  * @todo WNDCLASSに影響があるのでplayer_type*の追加は保留
  */
@@ -2318,6 +2354,8 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
     PAINTSTRUCT ps;
     term_data *td;
     td = (term_data *)GetWindowLong(hWnd, 0);
+
+    handle_app_active(hWnd, uMsg, wParam, lParam);
 
     switch (uMsg) {
     case WM_NCCREATE: {
@@ -2917,7 +2955,7 @@ static spoiler_output_status create_debug_spoiler(LPSTR cmd_line)
         return SPOILER_OUTPUT_CANCEL;
 
     init_stuff();
-    init_angband(p_ptr, process_autopick_file_command, TRUE);
+    init_angband(p_ptr, TRUE);
 
     return output_all_spoilers();
 }
@@ -3027,6 +3065,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPST
         use_bg = init_bg();
     }
 
+    use_music = arg_music;
+    if (use_music) {
+        init_music();
+    }
+
     plog_aux = hook_plog;
     quit_aux = hook_quit;
     core_aux = hook_quit;
@@ -3053,7 +3096,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPST
 
     signals_init();
     term_activate(term_screen);
-    init_angband(p_ptr, process_autopick_file_command, FALSE);
+    init_angband(p_ptr, FALSE);
     initialized = TRUE;
     check_for_save_file(p_ptr, lpCmdLine);
     prt(_("[ファイル] メニューの [新規] または [開く] を選択してください。", "[Choose 'New' or 'Open' from the 'File' menu]"), 23, _(8, 17));

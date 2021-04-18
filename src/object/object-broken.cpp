@@ -419,7 +419,7 @@ bool potion_smash_effect(player_type *owner_ptr, MONSTER_IDX who, POSITION y, PO
 		break;
 	}
 
-	(void)project(owner_ptr, who, radius, y, x, dam, dt, (PROJECT_JUMP | PROJECT_ITEM | PROJECT_KILL), -1);
+	(void)project(owner_ptr, who, radius, y, x, dam, dt, (PROJECT_JUMP | PROJECT_ITEM | PROJECT_KILL));
 	return angry;
 }
 

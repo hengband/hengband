@@ -8,10 +8,9 @@
 /*!
  * @brief オブジェクト、地形の表示シンボルなど初期化する / Reset the "visual" lists
  * @param owner_ptr プレーヤーへの参照ポインタ
- * @param process_autopick_file_command 自動拾いファイル読み込みへの関数ポインタ
  * @return なし
  */
-void reset_visuals(player_type *owner_ptr, void (*process_autopick_file_command)(char *))
+void reset_visuals(player_type *owner_ptr)
 {
     for (int i = 0; i < max_f_idx; i++) {
         feature_type *f_ptr = &f_info[i];
@@ -36,7 +35,7 @@ void reset_visuals(player_type *owner_ptr, void (*process_autopick_file_command)
     concptr pref_file = use_graphics ? "graf.prf" : "font.prf";
     concptr base_name = use_graphics ? "graf-%s.prf" : "font-%s.prf";
     char buf[1024];
-    process_pref_file(owner_ptr, pref_file, process_autopick_file_command);
+    process_pref_file(owner_ptr, pref_file);
     sprintf(buf, base_name, owner_ptr->base_name);
-    process_pref_file(owner_ptr, buf, process_autopick_file_command);
+    process_pref_file(owner_ptr, buf);
 }

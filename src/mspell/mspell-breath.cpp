@@ -55,7 +55,7 @@ static bool spell_RF4_BREATH_special_message(MONSTER_IDX r_idx, int GF_TYPE, con
  */
 MonsterSpellResult spell_RF4_BREATH(player_type *target_ptr, int GF_TYPE, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-    HIT_POINT dam, ms_type, drs_type = 0;
+    HIT_POINT dam, drs_type = 0;
     concptr type_s;
     bool smart_learn_aux = TRUE;
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
@@ -72,140 +72,117 @@ MonsterSpellResult spell_RF4_BREATH(player_type *target_ptr, int GF_TYPE, POSITI
     case GF_ACID:
         dam = monspell_damage(target_ptr, (MS_BR_ACID), m_idx, DAM_ROLL);
         type_s = _("酸", "acid");
-        ms_type = MS_BR_ACID;
         drs_type = DRS_ACID;
         break;
     case GF_ELEC:
         dam = monspell_damage(target_ptr, (MS_BR_ELEC), m_idx, DAM_ROLL);
         type_s = _("稲妻", "lightning");
-        ms_type = MS_BR_ELEC;
         drs_type = DRS_ELEC;
         break;
     case GF_FIRE:
         dam = monspell_damage(target_ptr, (MS_BR_FIRE), m_idx, DAM_ROLL);
         type_s = _("火炎", "fire");
-        ms_type = MS_BR_FIRE;
         drs_type = DRS_FIRE;
         break;
     case GF_COLD:
         dam = monspell_damage(target_ptr, (MS_BR_COLD), m_idx, DAM_ROLL);
         type_s = _("冷気", "frost");
-        ms_type = MS_BR_COLD;
         drs_type = DRS_COLD;
         break;
     case GF_POIS:
         dam = monspell_damage(target_ptr, (MS_BR_POIS), m_idx, DAM_ROLL);
         type_s = _("ガス", "gas");
-        ms_type = MS_BR_POIS;
         drs_type = DRS_POIS;
         break;
     case GF_NETHER:
         dam = monspell_damage(target_ptr, (MS_BR_NETHER), m_idx, DAM_ROLL);
         type_s = _("地獄", "nether");
-        ms_type = MS_BR_NETHER;
         drs_type = DRS_NETH;
         break;
     case GF_LITE:
         dam = monspell_damage(target_ptr, (MS_BR_LITE), m_idx, DAM_ROLL);
         type_s = _("閃光", "light");
-        ms_type = MS_BR_LITE;
         drs_type = DRS_LITE;
         break;
     case GF_DARK:
         dam = monspell_damage(target_ptr, (MS_BR_DARK), m_idx, DAM_ROLL);
         type_s = _("暗黒", "darkness");
-        ms_type = MS_BR_DARK;
         drs_type = DRS_DARK;
         break;
     case GF_CONFUSION:
         dam = monspell_damage(target_ptr, (MS_BR_CONF), m_idx, DAM_ROLL);
         type_s = _("混乱", "confusion");
-        ms_type = MS_BR_CONF;
         drs_type = DRS_CONF;
         break;
     case GF_SOUND:
         dam = monspell_damage(target_ptr, (MS_BR_SOUND), m_idx, DAM_ROLL);
         type_s = _("轟音", "sound");
-        ms_type = MS_BR_SOUND;
         drs_type = DRS_SOUND;
         break;
     case GF_CHAOS:
         dam = monspell_damage(target_ptr, (MS_BR_CHAOS), m_idx, DAM_ROLL);
         type_s = _("カオス", "chaos");
-        ms_type = MS_BR_CHAOS;
         drs_type = DRS_CHAOS;
         break;
     case GF_DISENCHANT:
         dam = monspell_damage(target_ptr, (MS_BR_DISEN), m_idx, DAM_ROLL);
         type_s = _("劣化", "disenchantment");
-        ms_type = MS_BR_DISEN;
         drs_type = DRS_DISEN;
         break;
     case GF_NEXUS:
         dam = monspell_damage(target_ptr, (MS_BR_NEXUS), m_idx, DAM_ROLL);
         type_s = _("因果混乱", "nexus");
-        ms_type = MS_BR_NEXUS;
         drs_type = DRS_NEXUS;
         break;
     case GF_TIME:
         dam = monspell_damage(target_ptr, (MS_BR_TIME), m_idx, DAM_ROLL);
         type_s = _("時間逆転", "time");
-        ms_type = MS_BR_TIME;
         smart_learn_aux = FALSE;
         break;
     case GF_INERTIAL:
         dam = monspell_damage(target_ptr, (MS_BR_INERTIA), m_idx, DAM_ROLL);
         type_s = _("遅鈍", "inertia");
-        ms_type = MS_BR_INERTIA;
         smart_learn_aux = FALSE;
         break;
     case GF_GRAVITY:
         dam = monspell_damage(target_ptr, (MS_BR_GRAVITY), m_idx, DAM_ROLL);
         type_s = _("重力", "gravity");
-        ms_type = MS_BR_GRAVITY;
         smart_learn_aux = FALSE;
         break;
     case GF_SHARDS:
         dam = monspell_damage(target_ptr, (MS_BR_SHARDS), m_idx, DAM_ROLL);
         type_s = _("破片", "shards");
-        ms_type = MS_BR_SHARDS;
         drs_type = DRS_SHARD;
         break;
     case GF_PLASMA:
         dam = monspell_damage(target_ptr, (MS_BR_PLASMA), m_idx, DAM_ROLL);
         type_s = _("プラズマ", "plasma");
-        ms_type = MS_BR_PLASMA;
         smart_learn_aux = FALSE;
         break;
     case GF_FORCE:
         dam = monspell_damage(target_ptr, (MS_BR_FORCE), m_idx, DAM_ROLL);
         type_s = _("フォース", "force");
-        ms_type = MS_BR_FORCE;
         smart_learn_aux = FALSE;
         break;
     case GF_MANA:
         dam = monspell_damage(target_ptr, (MS_BR_MANA), m_idx, DAM_ROLL);
         type_s = _("魔力", "mana");
-        ms_type = MS_BR_MANA;
         smart_learn_aux = FALSE;
         break;
     case GF_NUKE:
         dam = monspell_damage(target_ptr, (MS_BR_NUKE), m_idx, DAM_ROLL);
         type_s = _("放射性廃棄物", "toxic waste");
-        ms_type = MS_BR_NUKE;
         drs_type = DRS_POIS;
         break;
     case GF_DISINTEGRATE:
         dam = monspell_damage(target_ptr, (MS_BR_DISI), m_idx, DAM_ROLL);
         type_s = _("分解", "disintegration");
-        ms_type = MS_BR_DISI;
         smart_learn_aux = FALSE;
         break;
     default:
         /* Do not reach here */
         dam = 0;
         type_s = _("不明", "Unknown");
-        ms_type = MS_BR_ACID;
         smart_learn_aux = FALSE;
         break;
     }
@@ -230,7 +207,7 @@ MonsterSpellResult spell_RF4_BREATH(player_type *target_ptr, int GF_TYPE, POSITI
         floor_ptr->monster_noise = TRUE;
 
     sound(SOUND_BREATH);
-    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_TYPE, dam, 0, TRUE, ms_type, TARGET_TYPE);
+    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_TYPE, dam, 0, TRUE, TARGET_TYPE);
     if (smart_learn_aux && mon_to_player)
         update_smart_learn(target_ptr, m_idx, drs_type);
 

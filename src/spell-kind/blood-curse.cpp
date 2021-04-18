@@ -42,7 +42,7 @@ void blood_curse_to_enemy(player_type *caster_ptr, MONSTER_IDX m_idx)
             if (!count) {
                 int extra_dam = damroll(10, 10);
                 msg_print(_("純粋な魔力の次元への扉が開いた！", "A portal opens to a plane of raw mana!"));
-                project(caster_ptr, 0, 8, m_ptr->fy, m_ptr->fx, extra_dam, GF_MANA, curse_flg, -1);
+                project(caster_ptr, 0, 8, m_ptr->fy, m_ptr->fx, extra_dam, GF_MANA, curse_flg);
                 if (!one_in_(6))
                     break;
             }
@@ -63,7 +63,7 @@ void blood_curse_to_enemy(player_type *caster_ptr, MONSTER_IDX m_idx)
         case 10:
         case 11:
             msg_print(_("エネルギーのうねりを感じた！", "You feel a surge of energy!"));
-            project(caster_ptr, 0, 7, m_ptr->fy, m_ptr->fx, 50, GF_DISINTEGRATE, curse_flg, -1);
+            project(caster_ptr, 0, 7, m_ptr->fy, m_ptr->fx, 50, GF_DISINTEGRATE, curse_flg);
             if (!one_in_(6))
                 break;
             /* Fall through */

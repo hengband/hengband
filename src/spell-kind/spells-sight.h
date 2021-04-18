@@ -2,6 +2,8 @@
 
 #include "system/angband.h"
 
+struct monster_race;
+struct monster_type;
 bool project_all_los(player_type *caster_ptr, EFFECT_ID typ, HIT_POINT dam);
 bool speed_monsters(player_type *caster_ptr);
 bool slow_monsters(player_type *caster_ptr, int power);
@@ -26,4 +28,5 @@ bool banish_monsters(player_type *caster_ptr, int dist);
 bool turn_evil(player_type *caster_ptr, HIT_POINT dam);
 bool turn_monsters(player_type *caster_ptr, HIT_POINT dam);
 bool deathray_monsters(player_type *caster_ptr);
+void probed_monster_info(char *buf, player_type *caster_ptr, monster_type *m_ptr, monster_race *r_ptr);
 bool probing(player_type *caster_ptr);

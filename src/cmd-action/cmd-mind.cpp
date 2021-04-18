@@ -45,21 +45,28 @@
 #include "util/buffer-shaper.h"
 #include "view/display-messages.h"
 
+
+/*!
+ * @brief 職業別特殊技能の処理用構造体
+ */
 typedef struct cm_type {
-    mind_kind_type use_mind;
-    concptr mind_explanation;
-    SPELL_IDX n;
-    int b;
-    PERCENTAGE chance;
-    PERCENTAGE minfail;
-    PLAYER_LEVEL plev;
-    int old_csp;
-    mind_type spell;
-    bool cast;
-    int mana_cost;
-    bool on_mirror;
+    mind_kind_type use_mind; //!< 使った職業技能構造体
+    concptr mind_explanation; //!< 特殊技能の説明
+    SPELL_IDX n; //!< 職業種別毎ID
+    int b; //!< 失敗時チャート用乱数
+    PERCENTAGE chance; //!< 失敗率
+    PERCENTAGE minfail; //!< 最低失敗率
+    PLAYER_LEVEL plev; //!< 取得レベル
+    int old_csp; //!< 行使前のMP
+    mind_type spell; //!< 職業技能の基本設定構造体
+    bool cast; //!< 行使の成否
+    int mana_cost; //!< 最終算出消費MP
+    bool on_mirror; //!< 鏡の上に乗っているどうかの判定
 } cm_type;
 
+/*!
+ * @brief 職業技能処理構造体の初期化
+ */
 static cm_type *initialize_cm_type(player_type *caster_ptr, cm_type *cm_ptr)
 {
     cm_ptr->n = 0;
@@ -71,6 +78,9 @@ static cm_type *initialize_cm_type(player_type *caster_ptr, cm_type *cm_ptr)
     return cm_ptr;
 }
 
+/*!
+ * @brief 職業別の行使可能な技能種別を構造体に付加する
+ */
 static void switch_mind_kind(player_type *caster_ptr, cm_type *cm_ptr)
 {
     switch (caster_ptr->pclass) {
@@ -208,7 +218,7 @@ static void check_mind_mindcrafter(player_type *caster_ptr, cm_type *cm_ptr)
 
     msg_format(_("%sの力が制御できない氾流となって解放された！", "Your mind unleashes its power in an uncontrollable storm!"), cm_ptr->mind_explanation);
     project(caster_ptr, PROJECT_WHO_UNCTRL_POWER, 2 + cm_ptr->plev / 10, caster_ptr->y, caster_ptr->x, cm_ptr->plev * 2, GF_MANA,
-        PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM, -1);
+        PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM);
     caster_ptr->csp = MAX(0, caster_ptr->csp - cm_ptr->plev * MAX(1, cm_ptr->plev / 10));
 }
 
@@ -234,7 +244,7 @@ static void check_mind_mirror_master(player_type *caster_ptr, cm_type *cm_ptr)
 
     msg_format(_("%sの力が制御できない氾流となって解放された！", "Your mind unleashes its power in an uncontrollable storm!"), cm_ptr->mind_explanation);
     project(caster_ptr, PROJECT_WHO_UNCTRL_POWER, 2 + cm_ptr->plev / 10, caster_ptr->y, caster_ptr->x, cm_ptr->plev * 2, GF_MANA,
-        PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM, -1);
+        PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM);
     caster_ptr->csp = MAX(0, caster_ptr->csp - cm_ptr->plev * MAX(1, cm_ptr->plev / 10));
 }
 
@@ -331,7 +341,7 @@ static void mind_reflection(player_type *caster_ptr, cm_type *cm_ptr)
 static void process_hard_concentration(player_type *caster_ptr, cm_type *cm_ptr)
 {
     if ((cm_ptr->use_mind == MIND_BERSERKER) || (cm_ptr->use_mind == MIND_NINJUTSU)) {
-        take_hit(caster_ptr, DAMAGE_USELIFE, cm_ptr->mana_cost, _("過度の集中", "concentrating too hard"), -1);
+        take_hit(caster_ptr, DAMAGE_USELIFE, cm_ptr->mana_cost, _("過度の集中", "concentrating too hard"));
         caster_ptr->redraw |= PR_HP;
         return;
     }

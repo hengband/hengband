@@ -67,7 +67,7 @@ static void on_dead_explosion(player_type *player_ptr, monster_death_type *md_pt
         DICE_NUMBER d_dice = md_ptr->r_ptr->blow[i].d_dice;
         DICE_SID d_side = md_ptr->r_ptr->blow[i].d_side;
         HIT_POINT damage = damroll(d_dice, d_side);
-        (void)project(player_ptr, md_ptr->m_idx, 3, md_ptr->md_y, md_ptr->md_x, damage, typ, flg, -1);
+        (void)project(player_ptr, md_ptr->m_idx, 3, md_ptr->md_y, md_ptr->md_x, damage, typ, flg);
         break;
     }
 }

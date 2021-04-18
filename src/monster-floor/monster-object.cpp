@@ -63,6 +63,10 @@ static void update_object_flags(BIT_FLAGS *flgs, BIT_FLAGS *flg2, BIT_FLAGS *flg
         *flg3 |= (RF3_EVIL);
     if (has_flag(flgs, TR_KILL_EVIL))
         *flg3 |= (RF3_EVIL);
+    if (has_flag(flgs, TR_SLAY_GOOD))
+        *flg3 |= (RF3_GOOD);
+    if (has_flag(flgs, TR_KILL_GOOD))
+        *flg3 |= (RF3_GOOD);
     if (has_flag(flgs, TR_SLAY_HUMAN))
         *flg2 |= (RF2_HUMAN);
     if (has_flag(flgs, TR_KILL_HUMAN))

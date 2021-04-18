@@ -385,7 +385,7 @@ bool starlight(player_type *caster_ptr, bool magic)
         }
 
         project(caster_ptr, 0, 0, y, x, damroll(6 + caster_ptr->lev / 8, 10), GF_LITE_WEAK,
-            (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL | PROJECT_LOS), -1);
+            (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL | PROJECT_LOS));
     }
 
     return TRUE;
@@ -410,7 +410,7 @@ bool lite_area(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
     }
 
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_KILL;
-    (void)project(caster_ptr, 0, rad, caster_ptr->y, caster_ptr->x, dam, GF_LITE_WEAK, flg, -1);
+    (void)project(caster_ptr, 0, rad, caster_ptr->y, caster_ptr->x, dam, GF_LITE_WEAK, flg);
 
     lite_room(caster_ptr, caster_ptr->y, caster_ptr->x);
 
@@ -431,7 +431,7 @@ bool unlite_area(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
     }
 
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_KILL;
-    (void)project(caster_ptr, 0, rad, caster_ptr->y, caster_ptr->x, dam, GF_DARK_WEAK, flg, -1);
+    (void)project(caster_ptr, 0, rad, caster_ptr->y, caster_ptr->x, dam, GF_DARK_WEAK, flg);
 
     unlite_room(caster_ptr, caster_ptr->y, caster_ptr->x);
 

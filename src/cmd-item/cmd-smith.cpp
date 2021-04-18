@@ -59,7 +59,7 @@ static essence_type essence_info[] = { { TR_STR, "腕力", 4, TR_STR, 20 }, { TR
     { TR_MAGIC_MASTERY, "魔力支配", 4, TR_MAGIC_MASTERY, 20 }, { TR_STEALTH, "隠密", 4, TR_STEALTH, 40 }, { TR_SEARCH, "探索", 4, TR_SEARCH, 15 },
     { TR_INFRA, "赤外線視力", 4, TR_INFRA, 15 }, { TR_TUNNEL, "採掘", 4, TR_TUNNEL, 15 }, { TR_SPEED, "スピード", 4, TR_SPEED, 12 },
     { TR_BLOWS, "追加攻撃", 1, TR_BLOWS, 20 }, { TR_CHAOTIC, "カオス攻撃", 1, TR_CHAOTIC, 15 }, { TR_VAMPIRIC, "吸血攻撃", 1, TR_VAMPIRIC, 60 },
-    { TR_IMPACT, "地震発動", 7, TR_IMPACT, 15 }, { TR_BRAND_POIS, "毒殺", 1, TR_BRAND_POIS, 20 }, { TR_BRAND_ACID, "溶解", 1, TR_BRAND_ACID, 20 },
+    { TR_EARTHQUAKE, "地震発動", 7, TR_EARTHQUAKE, 15 }, { TR_BRAND_POIS, "毒殺", 1, TR_BRAND_POIS, 20 }, { TR_BRAND_ACID, "溶解", 1, TR_BRAND_ACID, 20 },
     { TR_BRAND_ELEC, "電撃", 1, TR_BRAND_ELEC, 20 }, { TR_BRAND_FIRE, "焼棄", 1, TR_BRAND_FIRE, 20 }, { TR_BRAND_COLD, "凍結", 1, TR_BRAND_COLD, 20 },
     { TR_SUST_STR, "腕力維持", 3, TR_SUST_STR, 15 }, { TR_SUST_INT, "知能維持", 3, TR_SUST_STR, 15 }, { TR_SUST_WIS, "賢さ維持", 3, TR_SUST_STR, 15 },
     { TR_SUST_DEX, "器用さ維持", 3, TR_SUST_STR, 15 }, { TR_SUST_CON, "耐久力維持", 3, TR_SUST_STR, 15 }, { TR_SUST_CHR, "魅力維持", 3, TR_SUST_STR, 15 },

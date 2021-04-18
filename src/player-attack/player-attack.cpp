@@ -48,26 +48,27 @@
 #include "wizard/wizard-messages.h"
 #include "world/world.h"
 
+/*!
+ * @brief プレイヤーの攻撃情報を初期化する(コンストラクタ以外の分)
+ */
 static player_attack_type *initialize_player_attack_type(
-    player_attack_type *pa_ptr, s16b hand, combat_options mode, monster_type *m_ptr, grid_type *g_ptr, bool *fear, bool *mdeath)
+    player_attack_type *pa_ptr, player_type *attacker_ptr, POSITION y, POSITION x, s16b hand, combat_options mode, bool *fear, bool *mdeath)
 {
+    auto floor_ptr = attacker_ptr->current_floor_ptr;
+    auto g_ptr = &floor_ptr->grid_array[y][x];
+    auto m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
+
     pa_ptr->hand = hand;
     pa_ptr->mode = mode;
+    pa_ptr->m_idx = g_ptr->m_idx;
     pa_ptr->m_ptr = m_ptr;
-    pa_ptr->backstab = FALSE;
-    pa_ptr->surprise_attack = FALSE;
-    pa_ptr->stab_fleeing = FALSE;
-    pa_ptr->monk_attack = FALSE;
-    pa_ptr->num_blow = 0;
-    pa_ptr->attack_damage = 0;
-    pa_ptr->can_drain = FALSE;
+    pa_ptr->r_idx = m_ptr->r_idx;
+    pa_ptr->r_ptr = &r_info[m_ptr->r_idx];
     pa_ptr->ma_ptr = &ma_blows[0];
-    pa_ptr->drain_result = 0;
     pa_ptr->g_ptr = g_ptr;
     pa_ptr->fear = fear;
     pa_ptr->mdeath = mdeath;
     pa_ptr->drain_left = MAX_VAMPIRIC_DRAIN;
-    pa_ptr->weak = FALSE;
     return pa_ptr;
 }
 
@@ -220,6 +221,102 @@ static chaotic_effect select_chaotic_effect(player_type *attacker_ptr, player_at
 }
 
 /*!
+ * @brief 魔術属性による追加ダイス数を返す
+ * @param attacker_ptr プレーヤー情報への参照ポインタ
+ * @param pa_ptr プレイヤー攻撃情報への参照ポインタ
+ * @return 魔術属性効果
+ */
+static MagicalBrandEffect select_magical_brand_effect(player_type *attacker_ptr, player_attack_type *pa_ptr)
+{
+    if (!has_flag(pa_ptr->flags, TR_BRAND_MAGIC))
+        return MagicalBrandEffect::NONE;
+
+    if (one_in_(10))
+        chg_virtue(attacker_ptr, V_CHANCE, 1);
+
+    if (one_in_(5))
+        return MagicalBrandEffect::STUN;
+
+    if (one_in_(5))
+        return MagicalBrandEffect::SCARE;
+
+    if (one_in_(10))
+        return MagicalBrandEffect::DISPELL;
+
+    if (one_in_(16))
+        return MagicalBrandEffect::PROBE;
+
+    return MagicalBrandEffect::EXTRA;
+}
+
+/*!
+ * @brief 魔法属性による追加ダイス数を返す
+ * @param pa_ptr プレイヤー攻撃情報への参照ポインタ
+ * @return ダイス数
+ */
+static DICE_NUMBER magical_brand_extra_dice(player_attack_type* pa_ptr)
+{
+    switch (pa_ptr->magical_effect) {
+    case MagicalBrandEffect::NONE:
+        return 0;
+    case MagicalBrandEffect::EXTRA:
+        return 1;
+    default:
+        return 2;
+    }
+}
+
+/*!
+ * @brief 装備品が地震を起こすか判定
+ * @param attacker_ptr プレイヤー情報への参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @return 地震を起こすならtrue、起こさないならfalse
+ * @details
+ * 打撃に使用する武器または武器以外の装備品が地震を起こすなら、
+ * ダメージ量が50より多いか1/7で地震を起こす
+ */
+static bool does_equip_cause_earthquake(player_type *attacker_ptr, player_attack_type *pa_ptr)
+{
+    if (!attacker_ptr->earthquake)
+        return false;
+
+    auto do_quake = false;
+
+    auto hand = (pa_ptr->hand == 0) ? FLAG_CAUSE_INVEN_MAIN_HAND : FLAG_CAUSE_INVEN_SUB_HAND;
+    if (any_bits(attacker_ptr->earthquake, hand))
+        do_quake = true;
+    else {
+        auto flags = attacker_ptr->earthquake;
+        reset_bits(flags, FLAG_CAUSE_INVEN_MAIN_HAND | FLAG_CAUSE_INVEN_SUB_HAND);
+        do_quake = flags != 0;
+    }
+
+    if (do_quake)
+        return pa_ptr->attack_damage > 50 || one_in_(7);
+
+    return false;
+}
+
+/*!
+ * @brief 手にしている装備品がフラグを持つか判定
+ * @param attacker_flags 装備状況で集計されたフラグ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @return 持つならtrue、持たないならfalse
+ */
+static bool does_weapon_has_flag(BIT_FLAGS &attacker_flags, player_attack_type *pa_ptr) {
+    if (!attacker_flags)
+        return false;
+
+    auto hand = (pa_ptr->hand == 0) ? FLAG_CAUSE_INVEN_MAIN_HAND : FLAG_CAUSE_INVEN_SUB_HAND;
+    if (any_bits(attacker_flags, hand))
+        return true;
+
+    auto flags = attacker_flags;
+    reset_bits(flags, FLAG_CAUSE_INVEN_MAIN_HAND | FLAG_CAUSE_INVEN_SUB_HAND);
+    return flags != 0;
+}
+
+/*!
  * @brief 武器による直接攻撃メインルーチン
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
@@ -230,17 +327,17 @@ static chaotic_effect select_chaotic_effect(player_type *attacker_ptr, player_at
 static void process_weapon_attack(player_type *attacker_ptr, player_attack_type *pa_ptr, bool *do_quake, const bool vorpal_cut, const int vorpal_chance)
 {
     object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
-    pa_ptr->attack_damage = damroll(o_ptr->dd + attacker_ptr->to_dd[pa_ptr->hand], o_ptr->ds + attacker_ptr->to_ds[pa_ptr->hand]);
+    auto dd = o_ptr->dd + attacker_ptr->to_dd[pa_ptr->hand] + magical_brand_extra_dice(pa_ptr);
+    pa_ptr->attack_damage = damroll(dd, o_ptr->ds + attacker_ptr->to_ds[pa_ptr->hand]);
     pa_ptr->attack_damage = calc_attack_damage_with_slay(attacker_ptr, o_ptr, pa_ptr->attack_damage, pa_ptr->m_ptr, pa_ptr->mode, FALSE);
     calc_surprise_attack_damage(attacker_ptr, pa_ptr);
 
-    BIT_FLAGS attack_hand = (pa_ptr->hand == 0) ? FLAG_CAUSE_INVEN_MAIN_HAND : FLAG_CAUSE_INVEN_SUB_HAND;
-    if ((any_bits(attacker_ptr->impact, attack_hand) && ((pa_ptr->attack_damage > 50) || one_in_(7))) || (pa_ptr->chaos_effect == CE_QUAKE)
-        || (pa_ptr->mode == HISSATSU_QUAKE))
+    if (does_equip_cause_earthquake(attacker_ptr, pa_ptr) || (pa_ptr->chaos_effect == CE_QUAKE) || (pa_ptr->mode == HISSATSU_QUAKE))
         *do_quake = TRUE;
 
+    auto do_impact = does_weapon_has_flag(attacker_ptr->impact, pa_ptr);
     if ((!(o_ptr->tval == TV_SWORD) || !(o_ptr->sval == SV_POISON_NEEDLE)) && !(pa_ptr->mode == HISSATSU_KYUSHO))
-        pa_ptr->attack_damage = critical_norm(attacker_ptr, o_ptr->weight, o_ptr->to_h, pa_ptr->attack_damage, attacker_ptr->to_h[pa_ptr->hand], pa_ptr->mode);
+        pa_ptr->attack_damage = critical_norm(attacker_ptr, o_ptr->weight, o_ptr->to_h, pa_ptr->attack_damage, attacker_ptr->to_h[pa_ptr->hand], pa_ptr->mode, do_impact);
 
     pa_ptr->drain_result = pa_ptr->attack_damage;
     process_vorpal_attack(attacker_ptr, pa_ptr, vorpal_cut, vorpal_chance);
@@ -333,7 +430,7 @@ static void apply_damage_negative_effect(player_attack_type *pa_ptr, bool is_zan
  */
 static bool check_fear_death(player_type *attacker_ptr, player_attack_type *pa_ptr, const int num, const bool is_lowlevel)
 {
-    if (!mon_take_hit(attacker_ptr, pa_ptr->g_ptr->m_idx, pa_ptr->attack_damage, pa_ptr->fear, NULL))
+    if (!mon_take_hit(attacker_ptr, pa_ptr->m_idx, pa_ptr->attack_damage, pa_ptr->fear, NULL))
         return FALSE;
 
     *(pa_ptr->mdeath) = TRUE;
@@ -375,6 +472,7 @@ static void apply_actual_attack(
 
     object_flags(attacker_ptr, o_ptr, pa_ptr->flags);
     pa_ptr->chaos_effect = select_chaotic_effect(attacker_ptr, pa_ptr);
+    pa_ptr->magical_effect = select_magical_brand_effect(attacker_ptr, pa_ptr);
     decide_blood_sucking(attacker_ptr, pa_ptr);
 
     // process_monk_attackの中でplayer_type->magic_num1[0] を書き換えているので、ここでhex_spelling() の判定をしないとダメ.
@@ -385,6 +483,7 @@ static void apply_actual_attack(
     apply_damage_bonus(attacker_ptr, pa_ptr);
     apply_damage_negative_effect(pa_ptr, is_zantetsu_nullified, is_ej_nullified);
     mineuchi(attacker_ptr, pa_ptr);
+
     pa_ptr->attack_damage = mon_damage_mod(attacker_ptr, pa_ptr->m_ptr, pa_ptr->attack_damage,
         (bool)(((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) || ((attacker_ptr->pclass == CLASS_BERSERKER) && one_in_(2))));
     critical_attack(attacker_ptr, pa_ptr);
@@ -429,26 +528,23 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
     bool do_quake = FALSE;
     bool drain_msg = TRUE;
 
-    floor_type *floor_ptr = attacker_ptr->current_floor_ptr;
-    grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-    monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
     player_attack_type tmp_attack;
-    player_attack_type *pa_ptr = initialize_player_attack_type(&tmp_attack, hand, mode, m_ptr, g_ptr, fear, mdeath);
-    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
-    bool is_human = (r_ptr->d_char == 'p');
-    bool is_lowlevel = (r_ptr->level < (attacker_ptr->lev - 15));
+    auto pa_ptr = initialize_player_attack_type(&tmp_attack, attacker_ptr, y, x, hand, mode, fear, mdeath);
+
+    bool is_human = (pa_ptr->r_ptr->d_char == 'p');
+    bool is_lowlevel = (pa_ptr->r_ptr->level < (attacker_ptr->lev - 15));
 
     attack_classify(attacker_ptr, pa_ptr);
     get_attack_exp(attacker_ptr, pa_ptr);
 
     /* Disturb the monster */
-    (void)set_monster_csleep(attacker_ptr, g_ptr->m_idx, 0);
-    monster_desc(attacker_ptr, pa_ptr->m_name, m_ptr, 0);
+    (void)set_monster_csleep(attacker_ptr, pa_ptr->m_idx, 0);
+    monster_desc(attacker_ptr, pa_ptr->m_name, pa_ptr->m_ptr, 0);
 
     int chance = calc_attack_quality(attacker_ptr, pa_ptr);
     object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
-    bool is_zantetsu_nullified = ((o_ptr->name1 == ART_ZANTETSU) && (r_ptr->d_char == 'j'));
-    bool is_ej_nullified = ((o_ptr->name1 == ART_EXCALIBUR_J) && (r_ptr->d_char == 'S'));
+    bool is_zantetsu_nullified = ((o_ptr->name1 == ART_ZANTETSU) && (pa_ptr->r_ptr->d_char == 'j'));
+    bool is_ej_nullified = ((o_ptr->name1 == ART_EXCALIBUR_J) && (pa_ptr->r_ptr->d_char == 'S'));
     calc_num_blow(attacker_ptr, pa_ptr);
 
     /* Attack once for each legal blow */
@@ -464,9 +560,9 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
 
         /* Anger the monster */
         if (pa_ptr->attack_damage > 0)
-            anger_monster(attacker_ptr, m_ptr);
+            anger_monster(attacker_ptr, pa_ptr->m_ptr);
 
-        touch_zap_player(m_ptr, attacker_ptr);
+        touch_zap_player(pa_ptr->m_ptr, attacker_ptr);
         process_drain(attacker_ptr, pa_ptr, is_human, &drain_msg);
         pa_ptr->can_drain = FALSE;
         pa_ptr->drain_result = 0;

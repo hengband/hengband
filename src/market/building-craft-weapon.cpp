@@ -183,6 +183,16 @@ static void compare_weapon_aux(player_type *owner_ptr, object_type *o_ptr, int c
         show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("邪悪:", "Evil:"), TERM_YELLOW);
     }
 
+    if (has_flag(flgs, TR_KILL_GOOD)) {
+        mindam = calc_expect_dice(owner_ptr, mindice, 7, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+        maxdam = calc_expect_dice(owner_ptr, maxdice, 7, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+        show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("善良:", "Good:"), TERM_YELLOW);
+    } else if (has_flag(flgs, TR_SLAY_GOOD)) {
+        mindam = calc_expect_dice(owner_ptr, mindice, 2, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+        maxdam = calc_expect_dice(owner_ptr, maxdice, 2, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+        show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("善良:", "Good:"), TERM_YELLOW);
+    }
+
     if (has_flag(flgs, TR_KILL_HUMAN)) {
         mindam = calc_expect_dice(owner_ptr, mindice, 4, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
         maxdam = calc_expect_dice(owner_ptr, maxdice, 4, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);

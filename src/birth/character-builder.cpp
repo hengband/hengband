@@ -23,7 +23,9 @@
 #include "io/write-diary.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-of-music.h"
+#include "mind/mind-elementalist.h"
 #include "monster-floor/monster-remover.h"
+#include "player/patron.h"
 #include "player/player-class.h"
 #include "player/player-race-types.h"
 #include "player/player-sex.h"
@@ -39,6 +41,8 @@
  */
 static void write_birth_diary(player_type *creature_ptr)
 {
+    concptr indent = "                            ";                  
+
     message_add(" ");
     message_add("  ");
     message_add("====================");
@@ -48,21 +52,27 @@ static void write_birth_diary(player_type *creature_ptr)
     exe_write_diary(creature_ptr, DIARY_GAMESTART, 1, _("-------- 新規ゲーム開始 --------", "------- Started New Game -------"));
     exe_write_diary(creature_ptr, DIARY_DIALY, 0, NULL);
     char buf[80];
-    sprintf(buf, _("                            性別に%sを選択した。", "                            chose %s gender."), sex_info[creature_ptr->psex].title);
+    sprintf(buf, _("%s性別に%sを選択した。", "%schose %s gender."), indent, sex_info[creature_ptr->psex].title);
     exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, buf);
-    sprintf(buf, _("                            種族に%sを選択した。", "                            chose %s race."), race_info[creature_ptr->prace].title);
+    sprintf(buf, _("%s種族に%sを選択した。", "%schose %s race."), indent, race_info[creature_ptr->prace].title);
     exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, buf);
-    sprintf(buf, _("                            職業に%sを選択した。", "                            chose %s class."), class_info[creature_ptr->pclass].title);
+    sprintf(buf, _("%s職業に%sを選択した。", "%schose %s class."), indent, class_info[creature_ptr->pclass].title);
     exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, buf);
     if (creature_ptr->realm1) {
-        sprintf(buf, _("                            魔法の領域に%s%sを選択した。", "                            chose %s%s."),
+        sprintf(buf, _("%s魔法の領域に%s%sを選択した。", "%schose %s%s."), indent,
             realm_names[creature_ptr->realm1], creature_ptr->realm2 ? format(_("と%s", " and %s realms"), realm_names[creature_ptr->realm2]) : _("", " realm"));
         exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, buf);
     }
-
-    sprintf(buf, _("                            性格に%sを選択した。", "                            chose %s personality."),
-        personality_info[creature_ptr->pseikaku].title);
+    if (creature_ptr->element) {
+        sprintf(buf, _("%s元素系統に%sを選択した。", "%schose %s system."), indent, get_element_title(creature_ptr->element));
+        exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, buf);
+    }
+    sprintf(buf, _("%s性格に%sを選択した。", "%schose %s personality."), indent, personality_info[creature_ptr->pseikaku].title);
     exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, buf);
+    if (creature_ptr->pclass == CLASS_CHAOS_WARRIOR) {
+        sprintf(buf, _("%s守護神%sと契約を交わした。", "%smade a contract with patron %s."), indent, chaos_patrons[creature_ptr->chaos_patron]);
+        exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, buf);
+    }
 }
 
 /*!
@@ -72,15 +82,15 @@ static void write_birth_diary(player_type *creature_ptr)
  * fields, so we must be sure to clear them first.
  * @return なし
  */
-void player_birth(player_type *creature_ptr, void (*process_autopick_file_command)(char *))
+void player_birth(player_type *creature_ptr)
 {
     current_world_ptr->play_time = 0;
     wipe_monsters_list(creature_ptr);
     player_wipe_without_name(creature_ptr);
     if (!ask_quick_start(creature_ptr)) {
-        play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DEFAULT);
+        play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_NEW_GAME);
         while (TRUE) {
-            if (player_birth_wizard(creature_ptr, process_autopick_file_command))
+            if (player_birth_wizard(creature_ptr))
                 break;
 
             player_wipe_without_name(creature_ptr);

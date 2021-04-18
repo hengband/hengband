@@ -297,7 +297,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 msg_print(_("我慢が解かれた！", "My patience is at an end!"));
                 if (power) {
                     project(
-                        caster_ptr, 0, rad, caster_ptr->y, caster_ptr->x, power, GF_HELL_FIRE, (PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL), -1);
+                        caster_ptr, 0, rad, caster_ptr->y, caster_ptr->x, power, GF_HELL_FIRE, (PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL));
                 }
                 if (current_world_ptr->wizard) {
                     msg_format(_("%d点のダメージを返した。", "You return %d damage."), power);

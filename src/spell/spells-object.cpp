@@ -392,13 +392,13 @@ bool perilous_secrets(player_type *user_ptr)
         user_ptr->redraw |= (PR_MANA);
     }
 
-    take_hit(user_ptr, DAMAGE_LOSELIFE, damroll(1, 12), _("危険な秘密", "perilous secrets"), -1);
+    take_hit(user_ptr, DAMAGE_LOSELIFE, damroll(1, 12), _("危険な秘密", "perilous secrets"));
 
     if (one_in_(5))
         (void)set_confused(user_ptr, user_ptr->confused + randint1(10));
 
     if (one_in_(20))
-        take_hit(user_ptr, DAMAGE_LOSELIFE, damroll(4, 10), _("危険な秘密", "perilous secrets"), -1);
+        take_hit(user_ptr, DAMAGE_LOSELIFE, damroll(4, 10), _("危険な秘密", "perilous secrets"));
 
     return TRUE;
 }

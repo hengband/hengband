@@ -81,7 +81,7 @@ static void next_mirror(player_type *creature_ptr, POSITION *next_y, POSITION *n
  * @todo 引数にそのまま再代入していてカオスすぎる。直すのは簡単ではない
  */
 ProjectResult project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, const HIT_POINT dam, const EFFECT_ID typ,
-    BIT_FLAGS flag, const int monspell)
+    BIT_FLAGS flag)
 {
     int dist;
     POSITION y1;
@@ -640,7 +640,7 @@ ProjectResult project(player_type *caster_ptr, const MONSTER_IDX who, POSITION r
                     else
                         flag |= PROJECT_PLAYER;
 
-                    project(caster_ptr, caster_ptr->current_floor_ptr->grid_array[y][x].m_idx, 0, t_y, t_x, dam, typ, flag, monspell);
+                    project(caster_ptr, caster_ptr->current_floor_ptr->grid_array[y][x].m_idx, 0, t_y, t_x, dam, typ, flag);
                     continue;
                 }
             }
@@ -778,7 +778,7 @@ ProjectResult project(player_type *caster_ptr, const MONSTER_IDX who, POSITION r
                 }
             }
 
-            if (affect_player(who, caster_ptr, who_name, effective_dist, y, x, dam, typ, flag, monspell, project)) {
+            if (affect_player(who, caster_ptr, who_name, effective_dist, y, x, dam, typ, flag, project)) {
                 res.notice = TRUE;
                 res.affected_player = TRUE;
             }

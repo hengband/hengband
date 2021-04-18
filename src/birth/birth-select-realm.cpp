@@ -323,6 +323,7 @@ bool get_player_realms(player_type *creature_ptr)
 
         put_str(_("魔法        :", "Magic       :"), 6, 1);
         c_put_str(TERM_L_BLUE, get_element_title(creature_ptr->element), 6, 15);
+        creature_ptr->realm2 = REALM_NONE;
         return TRUE;
     }
 

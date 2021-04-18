@@ -90,23 +90,23 @@ void castle_quest(player_type *player_ptr)
         put_str(_("あなたは現在のクエストを終了させていません！", "You have not completed your current quest yet!"), 8, 0);
         put_str(_("CTRL-Qを使えばクエストの状態がチェックできます。", "Use CTRL-Q to check the status of your quest."), 9, 0);
 
-        get_questinfo(player_ptr, q_index, FALSE);
+        get_questinfo(player_ptr, q_index, true);
         put_str(format(_("現在のクエスト「%s」", "Current quest is '%s'."), q_ptr->name), 11, 0);
 
-        if (q_ptr->type != QUEST_TYPE_KILL_LEVEL) {
+        if (q_ptr->type != QUEST_TYPE_KILL_LEVEL || q_ptr->dungeon == 0) {
             put_str(_("クエストを終わらせたら戻って来て下さい。", "Return when you have completed your quest."), 12, 0);
             return;
         }
 
         put_str(_("このクエストは放棄することができます。", "You can give up this quest."), 12, 0);
 
-        if (!get_check(_("二度と受けられなくなりますが放棄しますか？", "Are you sure to give up this quest?")))
+        if (!get_check(_("二度と受けられなくなりますが放棄しますか？", "Are you sure to give up this quest? ")))
             return;
 
         clear_bldg(4, 18);
         msg_print(_("放棄しました。", "You gave up."));
         msg_print(NULL);
-        q_ptr->status = QUEST_STATUS_FAILED;
+        record_quest_final_status(q_ptr, player_ptr->lev, QUEST_STATUS_FAILED);
     }
 
     if (q_ptr->status == QUEST_STATUS_FAILED) {

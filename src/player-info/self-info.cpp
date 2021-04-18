@@ -83,6 +83,9 @@ static void set_curse_info(player_type *creature_ptr, self_info_type *self_ptr)
     if (creature_ptr->cursed & TRC_COWARDICE)
         self_ptr->info[self_ptr->line++] = _("あなたは時々臆病になる。", "You are subject to cowardice.");
 
+    if (creature_ptr->cursed & TRC_BERS_RAGE)
+        self_ptr->info[self_ptr->line++] = _("あなたは狂戦士化の発作を起こす。", "You are subject to berserker fits.");
+
     if (creature_ptr->cursed & TRC_TELEPORT)
         self_ptr->info[self_ptr->line++] = _("あなたの位置はひじょうに不安定だ。", "Your position is very uncertain.");
 

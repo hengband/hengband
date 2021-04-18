@@ -80,7 +80,7 @@ void call_the_void(player_type *caster_ptr)
     if (one_in_(666)) {
         if (!vanish_dungeon(caster_ptr))
             msg_print(_("ダンジョンは一瞬静まり返った。", "The dungeon becomes quiet for a moment."));
-        take_hit(caster_ptr, DAMAGE_NOESCAPE, 100 + randint1(150), _("自殺的な虚無招来", "a suicidal Call the Void"), -1);
+        take_hit(caster_ptr, DAMAGE_NOESCAPE, 100 + randint1(150), _("自殺的な虚無招来", "a suicidal Call the Void"));
         return;
     }
 
@@ -88,7 +88,7 @@ void call_the_void(player_type *caster_ptr)
         msg_print(_("ダンジョンが崩壊した...", "The dungeon collapses..."));
     else
         msg_print(_("ダンジョンは大きく揺れた。", "The dungeon trembles."));
-    take_hit(caster_ptr, DAMAGE_NOESCAPE, 100 + randint1(150), _("自殺的な虚無招来", "a suicidal Call the Void"), -1);
+    take_hit(caster_ptr, DAMAGE_NOESCAPE, 100 + randint1(150), _("自殺的な虚無招来", "a suicidal Call the Void"));
 }
 
 /*!
@@ -135,7 +135,7 @@ bool vanish_dungeon(player_type *caster_ptr)
         g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
         if (g_ptr->mimic && has_flag(f_ptr->flags, FF_HURT_DISI)) {
-            g_ptr->mimic = feat_state(caster_ptr, g_ptr->mimic, FF_HURT_DISI);
+            g_ptr->mimic = feat_state(caster_ptr->current_floor_ptr, g_ptr->mimic, FF_HURT_DISI);
             if (!has_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER))
                 g_ptr->info &= ~(CAVE_MARK);
         }
@@ -145,7 +145,7 @@ bool vanish_dungeon(player_type *caster_ptr)
         g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
         if (g_ptr->mimic && has_flag(f_ptr->flags, FF_HURT_DISI)) {
-            g_ptr->mimic = feat_state(caster_ptr, g_ptr->mimic, FF_HURT_DISI);
+            g_ptr->mimic = feat_state(caster_ptr->current_floor_ptr, g_ptr->mimic, FF_HURT_DISI);
             if (!has_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER))
                 g_ptr->info &= ~(CAVE_MARK);
         }
@@ -158,7 +158,7 @@ bool vanish_dungeon(player_type *caster_ptr)
         g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
         if (g_ptr->mimic && has_flag(f_ptr->flags, FF_HURT_DISI)) {
-            g_ptr->mimic = feat_state(caster_ptr, g_ptr->mimic, FF_HURT_DISI);
+            g_ptr->mimic = feat_state(caster_ptr->current_floor_ptr, g_ptr->mimic, FF_HURT_DISI);
             if (!has_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER))
                 g_ptr->info &= ~(CAVE_MARK);
         }
@@ -168,7 +168,7 @@ bool vanish_dungeon(player_type *caster_ptr)
         g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
         if (g_ptr->mimic && has_flag(f_ptr->flags, FF_HURT_DISI)) {
-            g_ptr->mimic = feat_state(caster_ptr, g_ptr->mimic, FF_HURT_DISI);
+            g_ptr->mimic = feat_state(caster_ptr->current_floor_ptr, g_ptr->mimic, FF_HURT_DISI);
             if (!has_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER))
                 g_ptr->info &= ~(CAVE_MARK);
         }
@@ -219,6 +219,6 @@ void cast_meteor(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
         if (count > 20)
             continue;
 
-        project(caster_ptr, 0, rad, y, x, dam, GF_METEOR, PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM, -1);
+        project(caster_ptr, 0, rad, y, x, dam, GF_METEOR, PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM);
     }
 }

@@ -96,7 +96,7 @@ bool exe_close(player_type *creature_ptr, POSITION y, POSITION x)
     if (!has_flag(f_info[old_feat].flags, FF_CLOSE))
         return more;
 
-    s16b closed_feat = feat_state(creature_ptr, old_feat, FF_CLOSE);
+    s16b closed_feat = feat_state(creature_ptr->current_floor_ptr, old_feat, FF_CLOSE);
     if ((g_ptr->o_idx || (g_ptr->info & CAVE_OBJECT)) && (closed_feat != old_feat) && !has_flag(f_info[closed_feat].flags, FF_DROP)) {
         msg_print(_("何かがつっかえて閉まらない。", "Something prevents it from closing."));
     } else {
@@ -309,7 +309,7 @@ bool exe_bash(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir)
     if (randint0(100) < temp) {
         msg_format(_("%sを壊した！", "The %s crashes open!"), name);
         sound(has_flag(f_ptr->flags, FF_GLASS) ? SOUND_GLASS : SOUND_OPENDOOR);
-        if ((randint0(100) < 50) || (feat_state(creature_ptr, g_ptr->feat, FF_OPEN) == g_ptr->feat) || has_flag(f_ptr->flags, FF_GLASS)) {
+        if ((randint0(100) < 50) || (feat_state(creature_ptr->current_floor_ptr, g_ptr->feat, FF_OPEN) == g_ptr->feat) || has_flag(f_ptr->flags, FF_GLASS)) {
             cave_alter_feat(creature_ptr, y, x, FF_BASH);
         } else {
             cave_alter_feat(creature_ptr, y, x, FF_OPEN);

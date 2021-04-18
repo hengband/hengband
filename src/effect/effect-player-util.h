@@ -14,5 +14,4 @@ typedef struct effect_player_type {
     HIT_POINT dam;
     EFFECT_ID effect_type;
     BIT_FLAGS flag;
-    int monspell;
 } effect_player_type;

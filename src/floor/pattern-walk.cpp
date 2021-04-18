@@ -132,14 +132,14 @@ bool pattern_effect(player_type *creature_ptr)
 
     case PATTERN_TILE_WRECKED:
         if (!is_invuln(creature_ptr))
-            take_hit(creature_ptr, DAMAGE_NOESCAPE, 200, _("壊れた「パターン」を歩いたダメージ", "walking the corrupted Pattern"), -1);
+            take_hit(creature_ptr, DAMAGE_NOESCAPE, 200, _("壊れた「パターン」を歩いたダメージ", "walking the corrupted Pattern"));
         break;
 
     default:
         if (is_specific_player_race(creature_ptr, RACE_AMBERITE) && !one_in_(2))
             return TRUE;
         else if (!is_invuln(creature_ptr))
-            take_hit(creature_ptr, DAMAGE_NOESCAPE, damroll(1, 3), _("「パターン」を歩いたダメージ", "walking the Pattern"), -1);
+            take_hit(creature_ptr, DAMAGE_NOESCAPE, damroll(1, 3), _("「パターン」を歩いたダメージ", "walking the Pattern"));
         break;
     }
 

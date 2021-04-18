@@ -10,6 +10,7 @@
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/trc-types.h"
 #include "object-hook/hook-checker.h"
+#include "object-hook/hook-weapon.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "util/bit-flags-calculator.h"
@@ -55,6 +56,13 @@ byte get_random_ego(byte slot, bool good)
     return (EGO_IDX)0;
 }
 
+/*!
+ * @brief エゴオブジェクトに呪いを付加する
+ * @param player_ptr プレイヤー情報への参照ポインタ
+ * @param o_ptr オブジェクト情報への参照ポインタ
+ * @param gen_flags 生成フラグ(参照渡し)
+ * @return なし
+ */
 static void ego_invest_curse(player_type* player_ptr, object_type* o_ptr, FlagGroup<TRG>& gen_flags)
 {
     if (gen_flags.has(TRG::CURSED))
@@ -71,6 +79,12 @@ static void ego_invest_curse(player_type* player_ptr, object_type* o_ptr, FlagGr
         o_ptr->curse_flags |= get_curse(player_ptr, 2, o_ptr);
 }
 
+/*!
+ * @brief エゴオブジェクトに追加能力/耐性を付加する
+ * @param o_ptr オブジェクト情報への参照ポインタ
+ * @param gen_flags 生成フラグ(参照渡し)
+ * @return なし
+ */
 static void ego_invest_extra_abilities(object_type *o_ptr, FlagGroup<TRG> &gen_flags)
 {
     if (gen_flags.has(TRG::ONE_SUSTAIN))
@@ -87,6 +101,18 @@ static void ego_invest_extra_abilities(object_type *o_ptr, FlagGroup<TRG> &gen_f
         one_lordly_high_resistance(o_ptr);
     if (gen_flags.has(TRG::XTRA_RES))
         one_resistance(o_ptr);
+    if (gen_flags.has(TRG::LIGHT_WEIGHT))
+        make_weight_ligten(o_ptr);
+    if (gen_flags.has(TRG::HEAVY_WEIGHT))
+        make_weight_heavy(o_ptr);
+    if (gen_flags.has(TRG::XTRA_AC))
+        add_xtra_ac(o_ptr);
+    if (gen_flags.has(TRG::HIGH_TELEPATHY))
+        add_high_telepathy(o_ptr);
+    if (gen_flags.has(TRG::LOW_TELEPATHY))
+        add_low_telepathy(o_ptr);
+    if (gen_flags.has(TRG::XTRA_L_ESP))
+        one_low_esp(o_ptr);
     if (gen_flags.has(TRG::XTRA_DICE)) {
         do {
             o_ptr->dd++;
@@ -97,6 +123,14 @@ static void ego_invest_extra_abilities(object_type *o_ptr, FlagGroup<TRG> &gen_f
     }
 }
 
+/*!
+ * @brief エゴアイテムの追加能力/耐性フラグを解釈する
+ * @param player_ptr プレイヤー情報への参照ポインタ
+ * @param o_ptr オブジェクト情報への参照ポインタ
+ * @param e_ptr エゴアイテム情報への参照ポインタ
+ * @param gen_flags 生成フラグ(参照渡し)
+ * @return なし
+ */
 static void ego_interpret_extra_abilities(object_type *o_ptr, ego_item_type *e_ptr, FlagGroup<TRG> &gen_flags)
 {
     for (auto& xtra : e_ptr->xtra_flags) {
@@ -135,6 +169,68 @@ static int randint1_signed(const int n)
     return n > 0 ? randint1(n) : -randint1(-n);
 }
 
+/*!
+ * @brief 追加込みでエゴがフラグを保持しているか判定する
+ * @param o_ptr オブジェクト情報への参照ポインタ
+ * @param e_ptr エゴアイテム情報への参照ポインタ
+ * @param flag フラグ
+ * @return 持つならtrue、持たないならfalse
+ */
+static bool ego_has_flag(object_type *o_ptr, ego_item_type *e_ptr, tr_type flag)
+{
+    if (has_flag(o_ptr->art_flags, flag))
+        return true;
+    if (has_flag(e_ptr->flags, flag))
+        return true;
+    return false;
+}
+
+/*!
+ * @brief エゴに追加攻撃のpvalを付加する
+ * @param player_ptr プレイヤー情報への参照ポインタ
+ * @param o_ptr オブジェクト情報への参照ポインタ
+ * @param e_ptr エゴアイテム情報への参照ポインタ
+ * @param lev 生成階
+ * @return なし
+ */
+void ego_invest_extra_attack(player_type *player_ptr, object_type *o_ptr, ego_item_type *e_ptr, DEPTH lev)
+{
+    if (!object_is_weapon(player_ptr, o_ptr)) {
+        o_ptr->pval = e_ptr->max_pval >= 0 ? 1 : randint1_signed(e_ptr->max_pval);
+        return;
+    }
+
+    if (o_ptr->name2 == EGO_ATTACKS) {
+        o_ptr->pval = randint1(e_ptr->max_pval * lev / 100 + 1);
+        if (o_ptr->pval > 3)
+            o_ptr->pval = 3;
+        if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_HAYABUSA))
+            o_ptr->pval += randint1(2);
+        return;
+    }
+
+    if (ego_has_flag(o_ptr, e_ptr, TR_EARTHQUAKE)) {
+        o_ptr->pval += randint1(e_ptr->max_pval);
+        return;
+    }
+
+    if (ego_has_flag(o_ptr, e_ptr, TR_SLAY_EVIL) || ego_has_flag(o_ptr, e_ptr, TR_KILL_EVIL)) {
+        o_ptr->pval++;
+        if ((lev > 60) && one_in_(3) && ((o_ptr->dd * (o_ptr->ds + 1)) < 15))
+            o_ptr->pval++;
+        return;
+    }
+
+    o_ptr->pval += randint1(2);
+}
+
+/*!
+ * @brief オブジェクトをエゴアイテムにする
+ * @param player_ptr プレイヤー情報への参照ポインタ
+ * @param o_ptr オブジェクト情報への参照ポインタ
+ * @param lev 生成階
+ * @return なし
+ */
 void apply_ego(player_type *player_ptr, object_type *o_ptr, DEPTH lev)
 {
     auto e_ptr = &e_info[o_ptr->name2];
@@ -175,7 +271,8 @@ void apply_ego(player_type *player_ptr, object_type *o_ptr, DEPTH lev)
         o_ptr->to_h += (HIT_PROB)randint1_signed(e_ptr->max_to_h);
         o_ptr->to_d += randint1_signed(e_ptr->max_to_d);
         o_ptr->to_a += (ARMOUR_CLASS)randint1_signed(e_ptr->max_to_a);
-        if (o_ptr->name2 == EGO_ACCURACY) {
+
+        if (gen_flags.has(TRG::MOD_ACCURACY)) {
             while (o_ptr->to_h < o_ptr->to_d + 10) {
                 o_ptr->to_h += 5;
                 o_ptr->to_d -= 5;
@@ -183,7 +280,7 @@ void apply_ego(player_type *player_ptr, object_type *o_ptr, DEPTH lev)
             o_ptr->to_h = MAX(o_ptr->to_h, 15);
         }
 
-        if (o_ptr->name2 == EGO_VELOCITY) {
+        if (gen_flags.has(TRG::MOD_VELOCITY)) {
             while (o_ptr->to_d < o_ptr->to_h + 10) {
                 o_ptr->to_d += 5;
                 o_ptr->to_h -= 5;
@@ -196,33 +293,19 @@ void apply_ego(player_type *player_ptr, object_type *o_ptr, DEPTH lev)
         }
 
         if (e_ptr->max_pval) {
-            if ((o_ptr->name2 == EGO_HA) && (has_flag(o_ptr->art_flags, TR_BLOWS))) {
-                o_ptr->pval++;
-                if ((lev > 60) && one_in_(3) && ((o_ptr->dd * (o_ptr->ds + 1)) < 15))
-                    o_ptr->pval++;
-            } else if (o_ptr->name2 == EGO_DEMON) {
-                if (has_flag(o_ptr->art_flags, TR_BLOWS)) {
-                    o_ptr->pval += randint1(2);
-                } else {
-                    o_ptr->pval += randint1(e_ptr->max_pval);
-                }
-            } else if (o_ptr->name2 == EGO_ATTACKS) {
-                o_ptr->pval = randint1(e_ptr->max_pval * lev / 100 + 1);
-                if (o_ptr->pval > 3)
-                    o_ptr->pval = 3;
-                if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_HAYABUSA))
-                    o_ptr->pval += randint1(2);
-            } else if (o_ptr->name2 == EGO_BAT) {
+            if (o_ptr->name2 == EGO_BAT) {
                 o_ptr->pval = randint1(e_ptr->max_pval);
                 if (o_ptr->sval == SV_ELVEN_CLOAK)
                     o_ptr->pval += randint1(2);
-            } else if (o_ptr->name2 == EGO_A_DEMON || o_ptr->name2 == EGO_DRUID || o_ptr->name2 == EGO_OLOG) {
-                o_ptr->pval = randint1(e_ptr->max_pval);
             } else {
-                if (e_ptr->max_pval > 0)
-                    o_ptr->pval += randint1(e_ptr->max_pval);
-                else if (e_ptr->max_pval < 0)
-                    o_ptr->pval -= randint1(0 - e_ptr->max_pval);
+                if (ego_has_flag(o_ptr, e_ptr, TR_BLOWS))
+                    ego_invest_extra_attack(player_ptr, o_ptr, e_ptr, lev);
+                else {
+                    if (e_ptr->max_pval > 0)
+                        o_ptr->pval += randint1(e_ptr->max_pval);
+                    else if (e_ptr->max_pval < 0)
+                        o_ptr->pval -= randint1(0 - e_ptr->max_pval);
+                }
             }
         }
 

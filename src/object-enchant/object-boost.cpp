@@ -1,6 +1,7 @@
 ﻿#include "object-enchant/object-boost.h"
 #include "artifact/random-art-effects.h"
 #include "object-enchant/tr-types.h"
+#include "object/object-kind.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
@@ -175,6 +176,39 @@ void add_esp_weak(object_type *o_ptr, bool extra)
         add_flag(o_ptr->art_flags, weak_esp_list[choice]);
         weak_esp_list[choice] = weak_esp_list[i];
     }
+}
+
+/*!
+ * @brief 高級なテレパシー群を付ける
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return なし
+ * @details
+ * テレパシーの冠など。
+ * ESPまたは邪ESPは1d3の種族ESPを得る。
+ * 無ESPは3+1d6の種族ESPを得る。
+ */
+void add_high_telepathy(object_type* o_ptr)
+{
+    if (add_esp_strong(o_ptr))
+        add_esp_weak(o_ptr, TRUE);
+    else
+        add_esp_weak(o_ptr, FALSE);
+}
+
+/*!
+ * @brief テレパシー群を付ける
+ * @param o_ptr 対象のオブジェクト構造体ポインタ
+ * @return なし
+ * @details
+ * 鋭敏の帽子など。
+ * ESP、邪ESP、無ESPまたは1d3の種族ESP。
+ */
+void add_low_telepathy(object_type *o_ptr)
+{
+    if (one_in_(2))
+        add_esp_strong(o_ptr);
+    else
+        add_esp_weak(o_ptr, FALSE);
 }
 
 /*!
@@ -546,4 +580,36 @@ void one_lordly_high_resistance(object_type *o_ptr)
         add_flag(o_ptr->art_flags, TR_RES_WATER);
         break;
     }
+}
+
+/*!
+ * @brief オブジェクトの重量を軽くする
+ * @param o_ptr オブジェクト情報への参照ポインタ
+ * @return なし
+ */
+void make_weight_ligten(object_type* o_ptr)
+{
+    o_ptr->weight = (2 * k_info[o_ptr->k_idx].weight / 3);
+}
+
+/*!
+ * @brief オブジェクトの重量を重くする
+ * @param o_ptr オブジェクト情報への参照ポインタ
+ * @return なし
+ */
+void make_weight_heavy(object_type *o_ptr)
+{
+    o_ptr->weight = (4 * k_info[o_ptr->k_idx].weight / 3);
+}
+
+/*!
+ * @brief オブジェクトのベースACを増やす
+ * @param o_ptr オブジェクト情報への参照ポインタ
+ * @return なし
+ * @details
+ * 1/4を加算。最低+5を保証。
+ */
+void add_xtra_ac(object_type *o_ptr)
+{
+    o_ptr->ac += MAX(5, o_ptr->ac / 4);
 }

@@ -87,6 +87,7 @@ extern int quest_text_line;
 extern int leaving_quest;
 
 void determine_random_questor(player_type *player_ptr, quest_type *q_ptr);
+void record_quest_final_status(quest_type *q_ptr, PLAYER_LEVEL lev, QUEST_STATUS stat);
 void complete_quest(player_type *player_ptr, QUEST_IDX quest_num);
 void check_find_art_quest_completion(player_type *player_ptr, object_type *o_ptr);
 void quest_discovery(QUEST_IDX q_idx);

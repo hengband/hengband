@@ -17,20 +17,24 @@
  * @param mode オプションフラグ
  * @return クリティカル修正が入ったダメージ値
  */
-HIT_POINT critical_norm(player_type *attacker_ptr, WEIGHT weight, int plus, HIT_POINT dam, s16b meichuu, combat_options mode)
+HIT_POINT critical_norm(player_type *attacker_ptr, WEIGHT weight, int plus, HIT_POINT dam, s16b meichuu, combat_options mode, bool impact)
 {
     /* Extract "blow" power */
     int i = (weight + (meichuu * 3 + plus * 5) + attacker_ptr->skill_thn);
 
     /* Chance */
-    bool is_special_option = randint1((attacker_ptr->pclass == CLASS_NINJA) ? 4444 : 5000) <= i;
+    auto pow = (attacker_ptr->pclass == CLASS_NINJA) ? 4444 : 5000;
+    if (impact)
+        pow /= 2;
+
+    bool is_special_option = randint1(pow) <= i;
     is_special_option |= mode == HISSATSU_MAJIN;
     is_special_option |= mode == HISSATSU_3DAN;
     if (!is_special_option)
         return dam;
 
     int k = weight + randint1(650);
-    if ((mode == HISSATSU_MAJIN) || (mode == HISSATSU_3DAN))
+    if (impact || (mode == HISSATSU_MAJIN) || (mode == HISSATSU_3DAN))
         k += randint1(650);
 
     if (k < 400) {

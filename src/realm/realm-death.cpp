@@ -298,7 +298,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_damage(0, 0, dam / 2);
 
             if (cast) {
-                project(caster_ptr, 0, rad, caster_ptr->y, caster_ptr->x, dam, GF_POIS, PROJECT_KILL | PROJECT_ITEM, -1);
+                project(caster_ptr, 0, rad, caster_ptr->y, caster_ptr->x, dam, GF_POIS, PROJECT_KILL | PROJECT_ITEM);
             }
         }
         break;
@@ -693,7 +693,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                     return NULL;
 
                 fire_ball(caster_ptr, GF_HELL_FIRE, dir, dam, rad);
-                take_hit(caster_ptr, DAMAGE_USELIFE, 20 + randint1(30), _("地獄の劫火の呪文を唱えた疲労", "the strain of casting Hellfire"), -1);
+                take_hit(caster_ptr, DAMAGE_USELIFE, 20 + randint1(30), _("地獄の劫火の呪文を唱えた疲労", "the strain of casting Hellfire"));
             }
         }
         break;

@@ -401,9 +401,10 @@ typedef struct player_type {
     BIT_FLAGS esp_unique{};
 
     BIT_FLAGS slow_digest{}; /* Slower digestion */
-    BIT_FLAGS bless_blade{}; /* Blessed blade */
+    BIT_FLAGS bless_blade{}; //!< 祝福された装備をしている / Blessed by inventory items
     BIT_FLAGS xtra_might{}; /* Extra might bow */
-    BIT_FLAGS impact{}; /* Earthquake blows */
+    BIT_FLAGS impact{}; //!< クリティカル率を上げる装備をしている / Critical blows
+    BIT_FLAGS earthquake{}; //!< 地震を起こす装備をしている / Earthquake blows
     BIT_FLAGS dec_mana{};
     BIT_FLAGS easy_spell{};
     BIT_FLAGS heavy_spell{};

@@ -43,6 +43,15 @@ static bool random_art_slay_chaos(object_type *o_ptr)
     return one_in_(2);
 }
 
+static bool random_art_brand_magical(object_type *o_ptr)
+{
+    if (has_flag(o_ptr->art_flags, TR_BRAND_MAGIC))
+        return FALSE;
+
+    add_flag(o_ptr->art_flags, TR_BRAND_MAGIC);
+    return one_in_(3);
+}
+
 static bool random_art_slay_vampiric(object_type *o_ptr)
 {
     if (has_flag(o_ptr->art_flags, TR_VAMPIRIC))
@@ -138,6 +147,9 @@ static bool switch_random_art_slay(object_type *o_ptr)
     switch (o_ptr->artifact_bias) {
     case BIAS_CHAOS:
         return random_art_slay_chaos(o_ptr);
+    case BIAS_MAGE:
+    case BIAS_INT:
+        return random_art_brand_magical(o_ptr);
     case BIAS_PRIESTLY:
         if (((o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM)) && !has_flag(o_ptr->art_flags, TR_BLESSED))
             add_flag(o_ptr->art_flags, TR_BLESSED);
@@ -186,7 +198,7 @@ void random_slay(object_type *o_ptr)
     if (random_art_slay_bow(o_ptr) || switch_random_art_slay(o_ptr))
         return;
 
-    switch (randint1(36)) {
+    switch (randint1(39)) {
     case 1:
     case 2:
         if (one_in_(4))
@@ -277,7 +289,7 @@ void random_slay(object_type *o_ptr)
 
         break;
     case 20:
-        add_flag(o_ptr->art_flags, TR_IMPACT);
+        add_flag(o_ptr->art_flags, TR_EARTHQUAKE);
         break;
     case 21:
     case 22:
@@ -344,10 +356,31 @@ void random_slay(object_type *o_ptr)
             add_flag(o_ptr->art_flags, TR_SLAY_HUMAN);
         
         break;
-    default:
+    case 35:
+        add_flag(o_ptr->art_flags, TR_BRAND_MAGIC);
+        if (o_ptr->artifact_bias == BIAS_NONE)
+            o_ptr->artifact_bias = BIAS_MAGE;
+        break;
+    case 36:
+    case 37:
         add_flag(o_ptr->art_flags, TR_CHAOTIC);
         if (o_ptr->artifact_bias == BIAS_NONE)
             o_ptr->artifact_bias = BIAS_CHAOS;
+
+        break;
+    default:
+        if (one_in_(8))
+            add_flag(o_ptr->art_flags, TR_KILL_GOOD);
+        else
+            add_flag(o_ptr->art_flags, TR_SLAY_GOOD);
+
+        if ((o_ptr->artifact_bias == BIAS_NONE) && one_in_(2)) {
+            o_ptr->artifact_bias = BIAS_POIS;
+            break;
+        }
+
+        if ((o_ptr->artifact_bias == BIAS_NONE) && one_in_(9))
+            o_ptr->artifact_bias = BIAS_ROGUE;
 
         break;
     }

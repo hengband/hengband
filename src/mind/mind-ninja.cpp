@@ -456,7 +456,7 @@ bool cast_ninja_spell(player_type *caster_ptr, mind_ninja_type spell)
                     break;
             }
 
-            project(caster_ptr, 0, 0, y, x, damroll(6 + plev / 8, 10), typ, (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL), -1);
+            project(caster_ptr, 0, 0, y, x, damroll(6 + plev / 8, 10), typ, (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL));
         }
 
         break;

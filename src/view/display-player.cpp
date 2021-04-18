@@ -59,6 +59,11 @@ static bool display_player_info(player_type *creature_ptr, int mode)
     }
 
     if (mode == 4) {
+        display_player_flag_info_3(creature_ptr, display_player_equippy);
+        return TRUE;
+    }
+
+    if (mode == 5) {
         do_cmd_knowledge_mutations(creature_ptr);
         return TRUE;
     }
@@ -297,9 +302,9 @@ static void display_current_floor(char *statmsg)
 void display_player(player_type *creature_ptr, int mode)
 {
     if (creature_ptr->muta.any() && display_mutations)
-        mode = (mode % 5);
+        mode = (mode % 6);
     else
-        mode = (mode % 4);
+        mode = (mode % 5);
 
     clear_from(0);
     if (display_player_info(creature_ptr, mode))
@@ -345,10 +350,11 @@ void display_player(player_type *creature_ptr, int mode)
  */
 void display_player_equippy(player_type *creature_ptr, TERM_LEN y, TERM_LEN x, BIT_FLAGS16 mode)
 {
-    int max_i = (mode & DP_WP) ? INVEN_SUB_HAND + 1 : INVEN_TOTAL;
-    for (int i = INVEN_MAIN_HAND; i < max_i; i++) {
-        object_type *o_ptr;
-        o_ptr = &creature_ptr->inventory_list[i];
+	int max_i = (mode & DP_WP) ? INVEN_BOW + 1 : INVEN_TOTAL;
+	for (int i = INVEN_MAIN_HAND; i < max_i; i++)
+	{
+		object_type *o_ptr;
+		o_ptr = &creature_ptr->inventory_list[i];
 
         TERM_COLOR a = object_attr(o_ptr);
         SYMBOL_CODE c = object_char(o_ptr);

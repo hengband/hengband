@@ -127,7 +127,7 @@ static void natural_attack(player_type *attacker_ptr, MONSTER_IDX m_idx, MUTA at
 
     switch (attack) {
     case MUTA::SCOR_TAIL:
-        project(attacker_ptr, 0, 0, m_ptr->fy, m_ptr->fx, k, GF_POIS, PROJECT_KILL, -1);
+        project(attacker_ptr, 0, 0, m_ptr->fy, m_ptr->fx, k, GF_POIS, PROJECT_KILL);
         *mdeath = (m_ptr->r_idx == 0);
         break;
     case MUTA::HORNS:

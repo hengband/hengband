@@ -57,7 +57,7 @@ void do_cmd_pref(player_type *creature_ptr)
 /*
  * Interact with "colors"
  */
-void do_cmd_colors(player_type *creature_ptr, void (*process_autopick_file_command)(char *))
+void do_cmd_colors(player_type *creature_ptr)
 {
     int i;
     char tmp[160];
@@ -82,7 +82,7 @@ void do_cmd_colors(player_type *creature_ptr, void (*process_autopick_file_comma
             if (!askfor(tmp, 70))
                 continue;
 
-            (void)process_pref_file(creature_ptr, tmp, process_autopick_file_command);
+            (void)process_pref_file(creature_ptr, tmp);
             term_xtra(TERM_XTRA_REACT, 0);
             term_redraw();
         } else if (i == '2') {

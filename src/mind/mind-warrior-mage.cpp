@@ -6,7 +6,7 @@
 
 bool comvert_hp_to_mp(player_type *creature_ptr)
 {
-    int gain_sp = take_hit(creature_ptr, DAMAGE_USELIFE, creature_ptr->lev, _("ＨＰからＭＰへの無謀な変換", "thoughtless conversion from HP to SP"), -1) / 5;
+    int gain_sp = take_hit(creature_ptr, DAMAGE_USELIFE, creature_ptr->lev, _("ＨＰからＭＰへの無謀な変換", "thoughtless conversion from HP to SP")) / 5;
     if (!gain_sp) {
         msg_print(_("変換に失敗した。", "You failed to convert."));
         creature_ptr->redraw |= (PR_HP | PR_MANA);

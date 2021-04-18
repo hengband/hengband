@@ -25,7 +25,7 @@ void calc_blow_disease(player_type *target_ptr, monap_type *monap_ptr)
     if (is_oppose_pois(target_ptr))
         monap_ptr->damage = monap_ptr->damage * (randint1(4) + 4) / 9;
 
-    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
     if (target_ptr->is_dead || check_multishadow(target_ptr))
         return;
 
@@ -54,7 +54,7 @@ void calc_blow_lose_strength(player_type *target_ptr, monap_type *monap_ptr)
     if (has_sustain_str(target_ptr))
         monap_ptr->get_damage = monap_ptr->get_damage * (randint1(4) + 4) / 9;
 
-    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
     if (target_ptr->is_dead || check_multishadow(target_ptr))
         return;
 
@@ -73,7 +73,7 @@ void calc_blow_lose_intelligence(player_type *target_ptr, monap_type *monap_ptr)
     if (has_sustain_int(target_ptr))
         monap_ptr->get_damage = monap_ptr->get_damage * (randint1(4) + 4) / 9;
 
-    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
     if (target_ptr->is_dead || check_multishadow(target_ptr))
         return;
 
@@ -92,7 +92,7 @@ void calc_blow_lose_wisdom(player_type *target_ptr, monap_type *monap_ptr)
     if (has_sustain_wis(target_ptr))
         monap_ptr->get_damage = monap_ptr->get_damage * (randint1(4) + 4) / 9;
 
-    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
     if (target_ptr->is_dead || check_multishadow(target_ptr))
         return;
 
@@ -111,7 +111,7 @@ void calc_blow_lose_dexterity(player_type *target_ptr, monap_type *monap_ptr)
     if (has_sustain_dex(target_ptr))
         monap_ptr->get_damage = monap_ptr->get_damage * (randint1(4) + 4) / 9;
 
-    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
     if (target_ptr->is_dead || check_multishadow(target_ptr))
         return;
 
@@ -130,7 +130,7 @@ void calc_blow_lose_constitution(player_type *target_ptr, monap_type *monap_ptr)
     if (has_sustain_con(target_ptr))
         monap_ptr->get_damage = monap_ptr->get_damage * (randint1(4) + 4) / 9;
 
-    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
     if (target_ptr->is_dead || check_multishadow(target_ptr))
         return;
 
@@ -149,7 +149,7 @@ void calc_blow_lose_charisma(player_type *target_ptr, monap_type *monap_ptr)
     if (has_sustain_chr(target_ptr))
         monap_ptr->get_damage = monap_ptr->get_damage * (randint1(4) + 4) / 9;
 
-    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
     if (target_ptr->is_dead || check_multishadow(target_ptr))
         return;
 
@@ -185,7 +185,7 @@ void calc_blow_lose_all(player_type *target_ptr, monap_type *monap_ptr)
         damage_ratio -= 3;
 
     monap_ptr->damage = monap_ptr->damage * damage_ratio / 100;
-    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc, -1);
+    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
     if (target_ptr->is_dead || check_multishadow(target_ptr))
         return;
 

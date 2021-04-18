@@ -454,7 +454,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
 				char tmp_val[160];
 
 				/* Prompt */
-				(void) strnfmt(tmp_val, 78, _("%sを使いますか？ ", "Use %s?"), k_info[lookup_kind(tval ,i)].name.c_str());
+				(void) strnfmt(tmp_val, 78, _("%sを使いますか？ ", "Use %s? "), k_info[lookup_kind(tval ,i)].name.c_str());
 
 				/* Belay that order */
 				if (!get_check(tmp_val)) continue;

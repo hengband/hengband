@@ -166,7 +166,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
                 killer = _("地震", "an earthquake");
             }
 
-            take_hit(caster_ptr, DAMAGE_ATTACK, damage, killer, -1);
+            take_hit(caster_ptr, DAMAGE_ATTACK, damage, killer);
         }
     }
 

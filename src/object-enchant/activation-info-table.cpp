@@ -149,5 +149,7 @@ const activation_type activation_info[MAX_ACTIVATION_TYPE] = {
     { "ARTS_FALLING_STAR", ACT_FALLING_STAR, 20, 5500, { 30, 50 }, _("魔剣・流れ星", "blade arts 'falling star'") },
     { "ANIM_DEAD", ACT_ANIM_DEAD, 30, 2000, { 10, 10 }, _("死者復活", "animate dead") },
     { "TREE_CREATION", ACT_TREE_CREATION, 50, 25000, { 1000, 0 }, _("森林生成", "tree creation") },
+    { "ELBERETH", ACT_ELBERETH, 10, 30000, { 75, 0 }, _("エルベレスの結界", "Rune of Elbereth") },
+
     { NULL, 0, 0, 0, { 0, 0 }, "" },
 };

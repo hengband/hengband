@@ -28,7 +28,7 @@
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  */
 static MonsterSpellResult spell_RF5_CAUSE(player_type *target_ptr, int GF_TYPE, HIT_POINT dam, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx,
-    concptr msg1, concptr msg2, concptr msg3, int MS_TYPE, int TARGET_TYPE)
+    concptr msg1, concptr msg2, concptr msg3, int TARGET_TYPE)
 {
     auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = TARGET_TYPE == MONSTER_TO_PLAYER;
@@ -43,7 +43,7 @@ static MonsterSpellResult spell_RF5_CAUSE(player_type *target_ptr, int GF_TYPE, 
             msg_format(msg1, m_name);
         else
             msg_format(msg2, m_name);
-        breath(target_ptr, y, x, m_idx, GF_TYPE, dam, 0, FALSE, MS_TYPE, TARGET_TYPE);
+        breath(target_ptr, y, x, m_idx, GF_TYPE, dam, 0, FALSE, TARGET_TYPE);
         return res;
     }
 
@@ -55,7 +55,7 @@ static MonsterSpellResult spell_RF5_CAUSE(player_type *target_ptr, int GF_TYPE, 
         }
     }
 
-    breath(target_ptr, y, x, m_idx, GF_TYPE, dam, 0, FALSE, MS_TYPE, TARGET_TYPE);
+    breath(target_ptr, y, x, m_idx, GF_TYPE, dam, 0, FALSE, TARGET_TYPE);
 
     return res;
 }
@@ -79,7 +79,7 @@ MonsterSpellResult spell_RF5_CAUSE_1(player_type *target_ptr, POSITION y, POSITI
 
     const auto dam = monspell_damage(target_ptr, (MS_CAUSE_1), m_idx, DAM_ROLL);
 
-    return spell_RF5_CAUSE(target_ptr, GF_CAUSE_1, dam, y, x, m_idx, t_idx, msg1, msg2, msg3, MS_CAUSE_1, TARGET_TYPE);
+    return spell_RF5_CAUSE(target_ptr, GF_CAUSE_1, dam, y, x, m_idx, t_idx, msg1, msg2, msg3, TARGET_TYPE);
 }
 
 /*!
@@ -101,7 +101,7 @@ MonsterSpellResult spell_RF5_CAUSE_2(player_type *target_ptr, POSITION y, POSITI
 
     const auto dam = monspell_damage(target_ptr, (MS_CAUSE_2), m_idx, DAM_ROLL);
 
-    return spell_RF5_CAUSE(target_ptr, GF_CAUSE_2, dam, y, x, m_idx, t_idx, msg1, msg2, msg3, MS_CAUSE_2, TARGET_TYPE);
+    return spell_RF5_CAUSE(target_ptr, GF_CAUSE_2, dam, y, x, m_idx, t_idx, msg1, msg2, msg3, TARGET_TYPE);
 }
 
 /*!
@@ -123,7 +123,7 @@ MonsterSpellResult spell_RF5_CAUSE_3(player_type *target_ptr, POSITION y, POSITI
 
     const auto dam = monspell_damage(target_ptr, (MS_CAUSE_3), m_idx, DAM_ROLL);
 
-    return spell_RF5_CAUSE(target_ptr, GF_CAUSE_3, dam, y, x, m_idx, t_idx, msg1, msg2, msg3, MS_CAUSE_3, TARGET_TYPE);
+    return spell_RF5_CAUSE(target_ptr, GF_CAUSE_3, dam, y, x, m_idx, t_idx, msg1, msg2, msg3, TARGET_TYPE);
 }
 
 /*!
@@ -145,5 +145,5 @@ MonsterSpellResult spell_RF5_CAUSE_4(player_type *target_ptr, POSITION y, POSITI
 
     const auto dam = monspell_damage(target_ptr, (MS_CAUSE_4), m_idx, DAM_ROLL);
 
-    return spell_RF5_CAUSE(target_ptr, GF_CAUSE_4, dam, y, x, m_idx, t_idx, msg1, msg2, msg3, MS_CAUSE_4, TARGET_TYPE);
+    return spell_RF5_CAUSE(target_ptr, GF_CAUSE_4, dam, y, x, m_idx, t_idx, msg1, msg2, msg3, TARGET_TYPE);
 }

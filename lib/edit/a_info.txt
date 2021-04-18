@@ -464,7 +464,7 @@ E:'Soulkeeper'
 I:37:30:2
 W:75:9:420:200000
 P:40:2d4:-4:0:20
-F:CON | HOLD_EXP | SUST_CON |
+F:CON | HOLD_EXP | SUST_CON | RES_CURSE
 F:RES_ACID | RES_COLD | RES_DARK | RES_NETHER | RES_NEXUS | RES_CHAOS |
 F:ACTIVATE
 U:CURE_1000
@@ -2237,7 +2237,7 @@ E:'Grond'
 I:21:50:0
 W:100:1:1000:500000
 P:0:9d9:5:25:10
-F:KILL_DRAGON | SLAY_ANIMAL | SLAY_EVIL | IMPACT | SLAY_UNDEAD | NO_MAGIC |
+F:KILL_DRAGON | SLAY_ANIMAL | SLAY_EVIL | IMPACT | EARTHQUAKE | SLAY_UNDEAD | NO_MAGIC |
 F:SLAY_DEMON | SLAY_TROLL | SLAY_ORC | RES_ACID | RES_ELEC | RES_FIRE |
 F:RES_COLD | SEE_INVIS | TELEPATHY | AGGRAVATE | SHOW_MODS | INSTA_ART |
 F:SLAY_HUMAN | RIDING | QUESTITEM
@@ -2729,7 +2729,7 @@ I:21:13:-4
 W:30:20:500:0
 P:0:8d6:0:30:0
 F:STEALTH | INT | WIS | AGGRAVATE | CURSED | HEAVY_CURSE |
-F:SHOW_MODS | CHAOTIC | IMPACT | SPEED
+F:SHOW_MODS | CHAOTIC | IMPACT | EARTHQUAKE | SPEED
 F:RANDOM_CURSE0
 D:$This is a destructive heavy thing made by Micro$oft.
 D:$  It will bring many troubles to its user.
@@ -3157,7 +3157,7 @@ E:'Iron ball'
 I:21:6:-6
 W:45:40:666:66666
 P:0:25d4:-30:0:20
-F:SPEED | STEALTH | WIS | IMPACT | SHOW_MODS | HIDE_TYPE |
+F:SPEED | STEALTH | WIS | IMPACT | EARTHQUAKE | SHOW_MODS | HIDE_TYPE |
 F:CURSED | HEAVY_CURSE
 D:$It is a very heavy iron ball, likely too cumbersome to be effective as
 D:$ a weapon, with an attached chain and metal ring, ready to be fastened to
@@ -3199,7 +3199,7 @@ P:0:5d5:21:19:5
 F:WIS | CHR | SUST_WIS | SUST_CHR | 
 F:VORPAL | TUNNEL | RIDING |
 F:SLAY_EVIL | SLAY_UNDEAD | SLAY_DEMON |
-F:RES_SHARDS | RES_FEAR | BLESSED | HOLD_EXP | 
+F:RES_SHARDS | RES_FEAR | RES_CURSE | BLESSED | HOLD_EXP
 F:SEE_INVIS | WARNING | SHOW_MODS
 D:「妖精郷にて鍛えられし我はいや高き刃なりて、相応しき王の佩刀とならん」
 D:（トマス・マロリー、アーサー王の死）
@@ -3340,7 +3340,7 @@ I:34:7:0
 W:50:3:160:90000
 P:10:1d6:0:0:20
 F:RES_BLIND | RES_DARK | RES_NETHER | RES_ELEC | RES_FIRE | RES_WATER
-F:ACTIVATE | ESP_GOOD | LITE_3
+F:ACTIVATE | ESP_GOOD | LITE_3 | RES_CURSE
 U:CURING
 D:$A shining shield, once borne by the great mariner Earendil, "scored with 
 D:$runes to keep all wounds and harm from him".
@@ -3525,7 +3525,7 @@ I:38:2:0
 W:80:9:300:200000
 P:40:2d4:-3:0:30
 F:RES_ACID | RES_FIRE | RES_COLD | RES_ELEC |
-F:RES_DARK | RES_CONF | RES_POIS |
+F:RES_DARK | RES_CONF | RES_POIS | RES_TIME | RES_CURSE
 F:FREE_ACT | SEE_INVIS | ACTIVATE
 U:RESIST_ALL
 D:$This blue dragon scale armor has been blessed by the azure dragon that
@@ -3563,7 +3563,7 @@ W:90:8:200:100000
 P:14:1d4:-5:0:-40
 F:INT | WIS | CHR | HIDE_TYPE | RES_LITE | RES_DARK |
 F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD |
-F:RES_POIS | RES_CONF | RES_CHAOS | RES_NETHER |
+F:RES_POIS | RES_CONF | RES_CHAOS | RES_NETHER | RES_CURSE
 F:RES_NEXUS | AGGRAVATE | CURSED | HEAVY_CURSE | TY_CURSE
 D:$This badly rusted chain mail was once worn by a high priest who guarded a
 D:$ powerful magic amulet.  That priest's despair and the amulet's magic have
@@ -3782,7 +3782,7 @@ I:40:25:2
 W:50:50:2:77777
 P:0:0d0:0:0:10
 F:STR | WIS | HIDE_TYPE |
-F:RES_CONF | RES_CHAOS | BLESSED | 
+F:RES_CONF | RES_CHAOS | BLESSED |
 F:SEE_INVIS | FREE_ACT | REGEN | HOLD_EXP | ACTIVATE |
 F:INSTA_ART
 U:DISP_CURSE_XTRA
@@ -4155,7 +4155,8 @@ E:The Orb of Fate
 I:39:10:3
 W:70:70:15:45000
 P:0:1d1:0:0:20
-F:WIS | CON | WARNING | ACTIVATE | FULL_NAME | LITE_3 | INSTA_ART
+F:FULL_NAME | INSTA_ART
+F:WIS | CON | WARNING | RES_CURSE | LITE_3 | ACTIVATE 
 U:TELEPORT_LEVEL
 D:$"You may take the Orb of Fate with you.
 D:$  I have removed from it the power to foretell the future,
@@ -4428,3 +4429,25 @@ U:BA_FIRE_2
 D:破壊神シヴァが持つ三又槍だ。3つの穂先はそれぞれシヴァの力である、意志(欲望)、行動、知恵をあらわす。
 D:シヴァはこの槍を用いて、アシュラ族の3人の魔神『トリプラースラ』がつくった「鉄でできた町」「銀でできた町」
 D:「金でできた町」を一晩で焼き払った。
+
+N:264:『マジックベーン』
+E:'Magicbane'
+I:23:4:1
+W:30:40:12:50000
+P:0:2d4:0:0:0
+F:INT | WIS | HIDE_TYPE | SHOW_MODS
+F:BRAND_MAGIC | RES_CURSE | REFLECT
+F:SEE_INVIS | EASY_SPELL | BLESSED | ACTIVATE
+U:ELBERETH
+D:$This athame has magical blade which provides some nasty effect to your enemies.
+D:魔力を帯びた刃を持つアサメだ。斬りつけた敵に様々な効果をもたらすだろう。
+
+N:265:賢者マーリンの魔法の
+E:of Wizard Marlin
+I:34:50:3
+W:65:90:50:50000
+P:0:1d1:0:0:15
+F:INT | WIS | HIDE_TYPE | INSTA_ART
+F:RES_CURSE | RES_BLIND
+F:TELEPATHY | DEC_MANA | REFLECT | BLESSED
+D:賢者マーリンの魔法の鏡だ。鏡を通じて賢者の助けを得ることができるだろう。

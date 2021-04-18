@@ -16,6 +16,7 @@ X:always_pickup
 X:carry_query_flag
 Y:quick_messages
 X:auto_more
+X:skip_more
 Y:command_menu
 X:other_query_flag
 X:use_old_target
@@ -26,7 +27,7 @@ Y:confirm_quest
 X:target_pet
 Y:easy_open
 Y:easy_disarm
-X:easy_floor
+Y:easy_floor
 X:use_command
 X:over_exert
 Y:numpad_as_cursorkey
@@ -41,13 +42,16 @@ Y:view_granite_lite
 Y:view_special_lite
 Y:view_perma_grids
 X:view_torch_grids
-X:view_unsafe_grids
+Y:view_unsafe_grids
+Y:view_hidden_walls
+X:view_unsafe_walls
 X:view_reduce_view
 Y:fresh_before
 X:fresh_after
+X:fresh_once
 X:fresh_message
 X:hilite_player
-X:display_path
+Y:display_path
 
 ##### Text Display Options #####
 
@@ -62,9 +66,13 @@ Y:equippy_chars
 X:display_mutations
 X:compress_savefile
 X:abbrev_extra
-X:abbrev_all
+Y:abbrev_all
 X:exp_need
 X:ignore_unview
+Y:show_ammo_detail
+X:show_ammo_no_crit
+X:show_ammo_crit_ratio
+Y:show_actual_value
 
 ##### Game-Play #####
 
@@ -74,7 +82,7 @@ Y:expand_list
 Y:small_levels
 X:always_small_levels
 Y:empty_levels
-X:bound_walls_perm
+Y:bound_walls_perm
 Y:last_words
 X:auto_dump
 Y:send_score
@@ -97,7 +105,7 @@ Y:disturb_state
 Y:disturb_minor
 X:ring_bell
 Y:disturb_trap_detect
-X:alert_trap_detect
+Y:alert_trap_detect
 
 ##### Birth Options #####
 
@@ -117,6 +125,7 @@ Y:preserve_mode
 Y:autoroller
 X:autochara
 Y:powerup_home
+Y:keep_savefile
 
 ##### Easy Object Auto-Destroyer #####
 

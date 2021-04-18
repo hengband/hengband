@@ -160,7 +160,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
                 if ((is_specific_player_race(caster_ptr, RACE_VAMPIRE) || (caster_ptr->mimic_form == MIMIC_VAMPIRE)) && !has_resist_lite(caster_ptr)) {
                     msg_print(_("日の光があなたの肉体を焦がした！", "The daylight scorches your flesh!"));
-                    take_hit(caster_ptr, DAMAGE_NOESCAPE, damroll(2, 2), _("日の光", "daylight"), -1);
+                    take_hit(caster_ptr, DAMAGE_NOESCAPE, damroll(2, 2), _("日の光", "daylight"));
                 }
             }
         }
@@ -625,7 +625,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
                 if ((is_specific_player_race(caster_ptr, RACE_VAMPIRE) || (caster_ptr->mimic_form == MIMIC_VAMPIRE)) && !has_resist_lite(caster_ptr)) {
                     msg_print(_("日光があなたの肉体を焦がした！", "The sunlight scorches your flesh!"));
-                    take_hit(caster_ptr, DAMAGE_NOESCAPE, 50, _("日光", "sunlight"), -1);
+                    take_hit(caster_ptr, DAMAGE_NOESCAPE, 50, _("日光", "sunlight"));
                 }
             }
         }
@@ -663,7 +663,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
             if (cast) {
                 dispel_monsters(caster_ptr, d_dam);
                 earthquake(caster_ptr, caster_ptr->y, caster_ptr->x, q_rad, 0);
-                project(caster_ptr, 0, b_rad, caster_ptr->y, caster_ptr->x, b_dam, GF_DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM, -1);
+                project(caster_ptr, 0, b_rad, caster_ptr->y, caster_ptr->x, b_dam, GF_DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM);
             }
         }
         break;

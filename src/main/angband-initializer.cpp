@@ -212,12 +212,11 @@ static void put_title(void)
 /*!
  * @brief 全ゲームデータ読み込みのメインルーチン /
  * @param player_ptr プレーヤーへの参照ポインタ
- * @param process_autopick_file_command 自動拾いファイル読み込み関数への関数ポインタ
  * @param no_term TRUEならゲーム画面無しの状態で初期化を行う。
  *                コマンドラインからスポイラーの出力のみを行う時の使用を想定する。
  * @return なし
  */
-void init_angband(player_type *player_ptr, process_autopick_file_command_pf process_autopick_file_command, bool no_term)
+void init_angband(player_type *player_ptr, bool no_term)
 {
     C_MAKE(file_read__buf, FILE_READ_BUFF_SIZE, char);
     C_MAKE(file_read__swp, FILE_READ_BUFF_SIZE, char);
@@ -343,8 +342,8 @@ void init_angband(player_type *player_ptr, process_autopick_file_command_pf proc
 
     init_note(_("[ユーザー設定ファイルを初期化しています...]", "[Initializing user pref files...]"));
     strcpy(buf, "pref.prf");
-    process_pref_file(player_ptr, buf, process_autopick_file_command);
+    process_pref_file(player_ptr, buf);
     sprintf(buf, "pref-%s.prf", ANGBAND_SYS);
-    process_pref_file(player_ptr, buf, process_autopick_file_command);
+    process_pref_file(player_ptr, buf);
     init_note(_("[初期化終了]", "[Initialization complete]"));
 }
