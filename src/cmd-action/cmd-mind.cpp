@@ -45,21 +45,28 @@
 #include "util/buffer-shaper.h"
 #include "view/display-messages.h"
 
+
+/*!
+ * @brief 職業別特殊技能の処理用構造体
+ */
 typedef struct cm_type {
-    mind_kind_type use_mind;
-    concptr mind_explanation;
-    SPELL_IDX n;
-    int b;
-    PERCENTAGE chance;
-    PERCENTAGE minfail;
-    PLAYER_LEVEL plev;
-    int old_csp;
-    mind_type spell;
-    bool cast;
-    int mana_cost;
-    bool on_mirror;
+    mind_kind_type use_mind; //!< 使った職業技能構造体
+    concptr mind_explanation; //!< 特殊技能の説明
+    SPELL_IDX n; //!< 職業種別毎ID
+    int b; //!< 失敗時チャート用乱数
+    PERCENTAGE chance; //!< 失敗率
+    PERCENTAGE minfail; //!< 最低失敗率
+    PLAYER_LEVEL plev; //!< 取得レベル
+    int old_csp; //!< 行使前のMP
+    mind_type spell; //!< 職業技能の基本設定構造体
+    bool cast; //!< 行使の成否
+    int mana_cost; //!< 最終算出消費MP
+    bool on_mirror; //!< 鏡の上に乗っているどうかの判定
 } cm_type;
 
+/*!
+ * @brief 職業技能処理構造体の初期化
+ */
 static cm_type *initialize_cm_type(player_type *caster_ptr, cm_type *cm_ptr)
 {
     cm_ptr->n = 0;
@@ -71,6 +78,9 @@ static cm_type *initialize_cm_type(player_type *caster_ptr, cm_type *cm_ptr)
     return cm_ptr;
 }
 
+/*!
+ * @brief 職業別の行使可能な技能種別を構造体に付加する
+ */
 static void switch_mind_kind(player_type *caster_ptr, cm_type *cm_ptr)
 {
     switch (caster_ptr->pclass) {
