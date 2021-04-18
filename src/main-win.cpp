@@ -37,8 +37,7 @@
  * </p>
  *
  * <p>
- * The "lib/user/font-win.prf" contains attr/char mappings for use with the
- * normal "lib/xtra/font/*.fon" font files.
+ * The "lib/user/font-win.prf" contains attr/char mappings for wall.bmp.
  * </p>
  *
  * <p>
