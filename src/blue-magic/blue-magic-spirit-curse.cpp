@@ -1,4 +1,10 @@
-﻿#include "blue-magic/blue-magic-spirit-curse.h"
+﻿/*!
+ * @file blue-magic-spirit-curse.cpp
+ * @brief 青魔法の呪い系処理定義
+ */
+
+
+#include "blue-magic/blue-magic-spirit-curse.h"
 #include "blue-magic/blue-magic-util.h"
 #include "monster-race/race-ability-flags.h"
 #include "mspell/mspell-damage-calculator.h"

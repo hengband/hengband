@@ -1,4 +1,9 @@
-﻿#include "blue-magic/blue-magic-breath.h"
+﻿/*!
+ * @file blue-magic-breath.cpp
+ * @brief 青魔法のブレス系呪文定義
+ */
+
+#include "blue-magic/blue-magic-breath.h"
 #include "blue-magic/blue-magic-util.h"
 #include "mind/mind-blue-mage.h"
 #include "monster-race/race-ability-flags.h"

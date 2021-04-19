@@ -1,4 +1,8 @@
 ﻿#pragma once
+/*!
+ * @file learnt-info.h
+ * @brief 青魔法の情報表示処理ヘッダ
+ */
 
 #include "system/angband.h"
 

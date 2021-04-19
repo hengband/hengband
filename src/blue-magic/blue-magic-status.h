@@ -1,4 +1,8 @@
 ﻿#pragma once
+/*!
+ * @file blue-magic-status.h
+ * @brief 青魔法の状態以上系スペルヘッダ
+ */
 
 #include "system/angband.h"
 

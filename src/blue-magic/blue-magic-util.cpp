@@ -1,4 +1,9 @@
-﻿#include "blue-magic/blue-magic-util.h"
+﻿/*!
+ * @file blue-magic-util.cpp
+ * @brief 青魔法の構造体、初期化処理定義
+ */
+
+#include "blue-magic/blue-magic-util.h"
 #include "monster-floor/place-monster-types.h"
 
 bmc_type *initialize_blue_magic_type(

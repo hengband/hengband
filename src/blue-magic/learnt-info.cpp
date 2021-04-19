@@ -1,4 +1,9 @@
-﻿#include "blue-magic/learnt-info.h"
+﻿/*!
+ * @file learnt-info.cpp
+ * @brief 青魔法の情報表示処理定義
+ */
+
+#include "blue-magic/learnt-info.h"
 #include "cmd-action/cmd-spell.h"
 #include "lore/lore-calculator.h" //!< @todo 少し違和感.
 #include "monster-race/race-ability-flags.h"

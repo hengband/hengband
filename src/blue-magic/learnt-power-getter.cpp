@@ -1,4 +1,9 @@
-﻿#include "blue-magic/learnt-power-getter.h"
+﻿/*!
+ * @file learnt-power-getter.cpp
+ * @brief 青魔法の処理実行定義
+ */
+
+#include "blue-magic/learnt-power-getter.h"
 #include "blue-magic/blue-magic-checker.h"
 #include "blue-magic/learnt-info.h"
 #include "core/asking-player.h"

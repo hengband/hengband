@@ -1,4 +1,9 @@
-﻿#include "blue-magic/blue-magic-caster.h"
+﻿/*!
+ * @file blue-magic-caster.cpp
+ * @brief 青魔法のその他系統の呪文定義と詠唱時分岐処理
+ */
+
+#include "blue-magic/blue-magic-caster.h"
 #include "blue-magic/blue-magic-ball-bolt.h"
 #include "blue-magic/blue-magic-breath.h"
 #include "blue-magic/blue-magic-spirit-curse.h"
