@@ -3,6 +3,7 @@
 #include "system/angband.h"
 #include "object-enchant/tr-types.h"
 #include <unordered_map>
+#include <vector>
 #include <optional>
 
 /*
