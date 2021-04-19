@@ -1,4 +1,9 @@
 ﻿#pragma once
+/*!
+ * @file blue-magic-breath.h
+ * @brief 青魔法のブレス系呪文ヘッダ
+ */
+
 
 #include "system/angband.h"
 

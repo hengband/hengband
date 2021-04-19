@@ -1,4 +1,9 @@
-﻿#include "blue-magic/blue-magic-ball-bolt.h"
+﻿/*!
+ * @file blue-magic-ball-bolt.cpp
+ * @brief 青魔法のボール/ボルト系呪文定義
+ */
+
+#include "blue-magic/blue-magic-ball-bolt.h"
 #include "blue-magic/blue-magic-util.h"
 #include "monster-race/race-ability-flags.h"
 #include "mspell/mspell-damage-calculator.h"

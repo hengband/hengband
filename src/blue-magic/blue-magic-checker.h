@@ -1,4 +1,8 @@
 ﻿#pragma once
+/*!
+ * @file blue-magic-checker.h
+ * @brief 青魔法の処理ヘッダ / Blue magic
+ */
 
 #include "system/angband.h"
 
