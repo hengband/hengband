@@ -1,4 +1,8 @@
 ﻿#pragma once
+/*!
+ * @file blue-magic-summon.h
+ * @brief 青魔法の召喚系スペルヘッダ
+ */
 
 #include "system/angband.h"
 

@@ -1,4 +1,8 @@
 ﻿#pragma once
+/*!
+ * @file learnt-power-getter.h
+ * @brief 青魔法の処理実行ヘッダ
+ */
 
 #include "system/angband.h"
 

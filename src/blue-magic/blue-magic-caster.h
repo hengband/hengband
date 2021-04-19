@@ -1,4 +1,8 @@
 ﻿#pragma once
+/*!
+ * @file blue-magic-caster.h
+ * @brief 青魔法のその他系統の呪文定義と詠唱時分岐処理ヘッダ
+ */
 
 #include "system/angband.h"
 
