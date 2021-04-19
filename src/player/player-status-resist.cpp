@@ -233,10 +233,16 @@ PERCENTAGE calc_deathray_damage_rate(player_type *creature_ptr, rate_calc_type_m
 PERCENTAGE calc_lite_damage_rate(player_type *creature_ptr, rate_calc_type_mode mode)
 {
     PERCENTAGE per = 100;
-    if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE)) {
-        per *= 2;
-    } else if (is_specific_player_race(creature_ptr, RACE_S_FAIRY)) {
-        per = per * 4 / 3;
+
+    if (player_race_has_flag(creature_ptr, TR_VUL_LITE)) {
+        switch (player_race_life(creature_ptr)) {
+        case PlayerRaceLife::UNDEAD:
+            per *= 2;
+            break;
+        default:
+            per = per * 4 / 3;
+            break;
+        }
     }
 
     if (has_resist_lite(creature_ptr)) {
@@ -257,9 +263,8 @@ PERCENTAGE calc_dark_damage_rate(player_type *creature_ptr, rate_calc_type_mode 
 {
     PERCENTAGE per = 100;
 
-    if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE) || creature_ptr->wraith_form) {
+    if (has_immune_dark(creature_ptr))
         return 0;
-    }
 
     if (has_resist_dark(creature_ptr)) {
         per *= 400;

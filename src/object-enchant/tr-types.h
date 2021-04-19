@@ -160,6 +160,12 @@ enum tr_type {
     TR_BERS_RAGE = 149, //!< 狂戦士化の発作
     TR_BRAND_MAGIC = 150, //!< 魔術属性
     TR_IMPACT = 151, //!< クリティカル率アップ / Increase critical hit ratio
+    TR_VUL_ACID = 152, //!< 酸弱点
+    TR_VUL_COLD = 153, //!< 冷気弱点
+    TR_VUL_ELEC = 154, //!< 電撃弱点
+    TR_VUL_FIRE = 155, //!< 火炎弱点
+    TR_VUL_LITE = 156, //!< 閃光弱点
+    TR_IM_DARK = 157, //!< 暗黒免疫
 
-        TR_FLAG_MAX = 152,
+    TR_FLAG_MAX = 158,
 };
