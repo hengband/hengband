@@ -165,7 +165,7 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     GAME_TEXT m_name[MAX_NLEN];
 
-    const auto mutation_attack_methods = {MUTA::HORNS, MUTA::BEAK, MUTA::SCOR_TAIL, MUTA::TRUNK, MUTA::TENTACLES};
+    const std::initializer_list<MUTA> mutation_attack_methods = { MUTA::HORNS, MUTA::BEAK, MUTA::SCOR_TAIL, MUTA::TRUNK, MUTA::TENTACLES };
 
     disturb(attacker_ptr, FALSE, TRUE);
 
