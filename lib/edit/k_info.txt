@@ -6420,7 +6420,7 @@ N:672:魔法を防ぐクローク
 E:& Cloak~ of Magic Resistance
 G:(:s
 I:35:4:0
-W:1:0:10:3
+W:1:0:10:2500
 A:20/4:50/4
 P:1:0d0:0:0:0
 F:RES_CURSE
