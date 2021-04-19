@@ -318,7 +318,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それは善良なる存在にとっての天敵である。", "It is a great bane of good monsters.");
     }
 
-    if (has_flag(flgs, TR_SLAY_EVIL)) {
+    if (has_flag(flgs, TR_SLAY_GOOD)) {
         info[i++] = _("それは善良なる存在に対して邪悪なる力で攻撃する。", "It fights against good with evil fury.");
     }
 
