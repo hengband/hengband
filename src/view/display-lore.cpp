@@ -10,15 +10,15 @@
 #include "lore/monster-lore.h"
 #include "monster-attack/monster-attack-types.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-ability-flags.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
-#include "mspell/mspell-type.h"
-#include "util/bit-flags-calculator.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #ifdef JP
@@ -563,7 +563,7 @@ void display_monster_collective(lore_type *lore_ptr)
 void display_monster_launching(player_type *player_ptr, lore_type *lore_ptr)
 {
     if (lore_ptr->ability_flags.has(RF_ABILITY::ROCKET)) {
-        set_damage(player_ptr, lore_ptr, (MS_ROCKET), _("ロケット%sを発射する", "shoot a rocket%s"));
+        set_damage(player_ptr, lore_ptr, RF_ABILITY::ROCKET, _("ロケット%sを発射する", "shoot a rocket%s"));
         lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
         lore_ptr->color[lore_ptr->vn++] = TERM_UMBER;
     }

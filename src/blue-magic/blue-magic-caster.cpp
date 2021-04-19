@@ -10,6 +10,7 @@
 #include "floor/cave.h"
 #include "grid/grid.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-ability-flags.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"
 #include "monster/monster-describer.h"
@@ -55,7 +56,7 @@ static bool cast_blue_rocket(player_type *caster_ptr, bmc_type *bmc_ptr)
         return FALSE;
 
     msg_print(_("ロケットを発射した。", "You fire a rocket."));
-    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_ROCKET), bmc_ptr->plev, DAM_ROLL);
+    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, RF_ABILITY::ROCKET, bmc_ptr->plev, DAM_ROLL);
     fire_rocket(caster_ptr, GF_ROCKET, bmc_ptr->dir, bmc_ptr->damage, 2);
     return TRUE;
 }
@@ -66,7 +67,7 @@ static bool cast_blue_shoot(player_type *caster_ptr, bmc_type *bmc_ptr)
         return FALSE;
 
     msg_print(_("矢を放った。", "You fire an arrow."));
-    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_SHOOT), bmc_ptr->plev, DAM_ROLL);
+    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, RF_ABILITY::SHOOT, bmc_ptr->plev, DAM_ROLL);
     fire_bolt(caster_ptr, GF_ARROW, bmc_ptr->dir, bmc_ptr->damage);
     return TRUE;
 }
@@ -144,7 +145,7 @@ static bool cast_blue_psy_spear(player_type *caster_ptr, bmc_type *bmc_ptr)
         return FALSE;
 
     msg_print(_("光の剣を放った。", "You throw a psycho-spear."));
-    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, (MS_PSY_SPEAR), bmc_ptr->plev, DAM_ROLL);
+    bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, RF_ABILITY::PSY_SPEAR, bmc_ptr->plev, DAM_ROLL);
     (void)fire_beam(caster_ptr, GF_PSY_SPEAR, bmc_ptr->dir, bmc_ptr->damage);
     return TRUE;
 }
@@ -159,214 +160,214 @@ static bool cast_blue_make_trap(player_type *caster_ptr)
     return TRUE;
 }
 
-bool switch_cast_blue_magic(player_type *caster_ptr, bmc_type *bmc_ptr, SPELL_IDX spell)
+static bool switch_cast_blue_magic(player_type *caster_ptr, bmc_type *bmc_ptr, RF_ABILITY spell)
 {
     switch (spell) {
-    case MS_SHRIEK:
+    case RF_ABILITY::SHRIEK:
         msg_print(_("かん高い金切り声をあげた。", "You make a high pitched shriek."));
         aggravate_monsters(caster_ptr, 0);
         return TRUE;
-    case MS_XXX1:
-    case MS_XXX2:
-    case MS_XXX3:
-    case MS_XXX4:
+    case RF_ABILITY::XXX1:
+    case RF_ABILITY::XXX2:
+    case RF_ABILITY::XXX3:
+    case RF_ABILITY::XXX4:
         return TRUE;
-    case MS_DISPEL:
+    case RF_ABILITY::DISPEL:
         return cast_blue_dispel(caster_ptr);
-    case MS_ROCKET:
+    case RF_ABILITY::ROCKET:
         return cast_blue_rocket(caster_ptr, bmc_ptr);
-    case MS_SHOOT:
+    case RF_ABILITY::SHOOT:
         return cast_blue_shoot(caster_ptr, bmc_ptr);
-    case MS_BR_ACID:
+    case RF_ABILITY::BR_ACID:
         return cast_blue_breath_acid(caster_ptr, bmc_ptr);
-    case MS_BR_ELEC:
+    case RF_ABILITY::BR_ELEC:
         return cast_blue_breath_elec(caster_ptr, bmc_ptr);
-    case MS_BR_FIRE:
+    case RF_ABILITY::BR_FIRE:
         return cast_blue_breath_fire(caster_ptr, bmc_ptr);
-    case MS_BR_COLD:
+    case RF_ABILITY::BR_COLD:
         return cast_blue_breath_cold(caster_ptr, bmc_ptr);
-    case MS_BR_POIS:
+    case RF_ABILITY::BR_POIS:
         return cast_blue_breath_pois(caster_ptr, bmc_ptr);
-    case MS_BR_NETHER:
+    case RF_ABILITY::BR_NETH:
         return cast_blue_breath_nether(caster_ptr, bmc_ptr);
-    case MS_BR_LITE:
+    case RF_ABILITY::BR_LITE:
         return cast_blue_breath_lite(caster_ptr, bmc_ptr);
-    case MS_BR_DARK:
+    case RF_ABILITY::BR_DARK:
         return cast_blue_breath_dark(caster_ptr, bmc_ptr);
-    case MS_BR_CONF:
+    case RF_ABILITY::BR_CONF:
         return cast_blue_breath_conf(caster_ptr, bmc_ptr);
-    case MS_BR_SOUND:
+    case RF_ABILITY::BR_SOUN:
         return cast_blue_breath_sound(caster_ptr, bmc_ptr);
-    case MS_BR_CHAOS:
+    case RF_ABILITY::BR_CHAO:
         return cast_blue_breath_chaos(caster_ptr, bmc_ptr);
-    case MS_BR_DISEN:
+    case RF_ABILITY::BR_DISE:
         return cast_blue_breath_disenchant(caster_ptr, bmc_ptr);
-    case MS_BR_NEXUS:
+    case RF_ABILITY::BR_NEXU:
         return cast_blue_breath_nexus(caster_ptr, bmc_ptr);
-    case MS_BR_TIME:
+    case RF_ABILITY::BR_TIME:
         return cast_blue_breath_time(caster_ptr, bmc_ptr);
-    case MS_BR_INERTIA:
+    case RF_ABILITY::BR_INER:
         return cast_blue_breath_inertia(caster_ptr, bmc_ptr);
-    case MS_BR_GRAVITY:
+    case RF_ABILITY::BR_GRAV:
         return cast_blue_breath_gravity(caster_ptr, bmc_ptr);
-    case MS_BR_SHARDS:
+    case RF_ABILITY::BR_SHAR:
         return cast_blue_breath_shards(caster_ptr, bmc_ptr);
-    case MS_BR_PLASMA:
+    case RF_ABILITY::BR_PLAS:
         return cast_blue_breath_plasma(caster_ptr, bmc_ptr);
-    case MS_BR_FORCE:
+    case RF_ABILITY::BR_FORC:
         return cast_blue_breath_force(caster_ptr, bmc_ptr);
-    case MS_BR_MANA:
+    case RF_ABILITY::BR_MANA:
         return cast_blue_breath_mana(caster_ptr, bmc_ptr);
-    case MS_BR_NUKE:
+    case RF_ABILITY::BR_NUKE:
         return cast_blue_breath_nuke(caster_ptr, bmc_ptr);
-    case MS_BR_DISI:
+    case RF_ABILITY::BR_DISI:
         return cast_blue_breath_disintegration(caster_ptr, bmc_ptr);
-    case MS_BALL_ACID:
+    case RF_ABILITY::BA_ACID:
         return cast_blue_ball_acid(caster_ptr, bmc_ptr);
-    case MS_BALL_ELEC:
+    case RF_ABILITY::BA_ELEC:
         return cast_blue_ball_elec(caster_ptr, bmc_ptr);
-    case MS_BALL_FIRE:
+    case RF_ABILITY::BA_FIRE:
         return cast_blue_ball_fire(caster_ptr, bmc_ptr);
-    case MS_BALL_COLD:
+    case RF_ABILITY::BA_COLD:
         return cast_blue_ball_cold(caster_ptr, bmc_ptr);
-    case MS_BALL_POIS:
+    case RF_ABILITY::BA_POIS:
         return cast_blue_ball_pois(caster_ptr, bmc_ptr);
-    case MS_BALL_NUKE:
+    case RF_ABILITY::BA_NUKE:
         return cast_blue_ball_nuke(caster_ptr, bmc_ptr);
-    case MS_BALL_NETHER:
+    case RF_ABILITY::BA_NETH:
         return cast_blue_ball_nether(caster_ptr, bmc_ptr);
-    case MS_BALL_CHAOS:
+    case RF_ABILITY::BA_CHAO:
         return cast_blue_ball_chaos(caster_ptr, bmc_ptr);
-    case MS_BALL_WATER:
+    case RF_ABILITY::BA_WATE:
         return cast_blue_ball_water(caster_ptr, bmc_ptr);
-    case MS_STARBURST:
+    case RF_ABILITY::BA_LITE:
         return cast_blue_ball_star_burst(caster_ptr, bmc_ptr);
-    case MS_BALL_DARK:
+    case RF_ABILITY::BA_DARK:
         return cast_blue_ball_dark_storm(caster_ptr, bmc_ptr);
-    case MS_BALL_MANA:
+    case RF_ABILITY::BA_MANA:
         return cast_blue_ball_mana_storm(caster_ptr, bmc_ptr);
-    case MS_DRAIN_MANA:
+    case RF_ABILITY::DRAIN_MANA:
         return cast_blue_drain_mana(caster_ptr, bmc_ptr);
-    case MS_MIND_BLAST:
+    case RF_ABILITY::MIND_BLAST:
         return cast_blue_mind_blast(caster_ptr, bmc_ptr);
-    case MS_BRAIN_SMASH:
+    case RF_ABILITY::BRAIN_SMASH:
         return cast_blue_brain_smash(caster_ptr, bmc_ptr);
-    case MS_CAUSE_1:
+    case RF_ABILITY::CAUSE_1:
         return cast_blue_curse_1(caster_ptr, bmc_ptr);
-    case MS_CAUSE_2:
+    case RF_ABILITY::CAUSE_2:
         return cast_blue_curse_2(caster_ptr, bmc_ptr);
-    case MS_CAUSE_3:
+    case RF_ABILITY::CAUSE_3:
         return cast_blue_curse_3(caster_ptr, bmc_ptr);
-    case MS_CAUSE_4:
+    case RF_ABILITY::CAUSE_4:
         return cast_blue_curse_4(caster_ptr, bmc_ptr);
-    case MS_BOLT_ACID:
+    case RF_ABILITY::BO_ACID:
         return cast_blue_bolt_acid(caster_ptr, bmc_ptr);
-    case MS_BOLT_ELEC:
+    case RF_ABILITY::BO_ELEC:
         return cast_blue_bolt_elec(caster_ptr, bmc_ptr);
-    case MS_BOLT_FIRE:
+    case RF_ABILITY::BO_FIRE:
         return cast_blue_bolt_fire(caster_ptr, bmc_ptr);
-    case MS_BOLT_COLD:
+    case RF_ABILITY::BO_COLD:
         return cast_blue_bolt_cold(caster_ptr, bmc_ptr);
-    case MS_BOLT_NETHER:
+    case RF_ABILITY::BO_NETH:
         return cast_blue_bolt_nether(caster_ptr, bmc_ptr);
-    case MS_BOLT_WATER:
+    case RF_ABILITY::BO_WATE:
         return cast_blue_bolt_water(caster_ptr, bmc_ptr);
-    case MS_BOLT_MANA:
+    case RF_ABILITY::BO_MANA:
         return cast_blue_bolt_mana(caster_ptr, bmc_ptr);
-    case MS_BOLT_PLASMA:
+    case RF_ABILITY::BO_PLAS:
         return cast_blue_bolt_plasma(caster_ptr, bmc_ptr);
-    case MS_BOLT_ICE:
+    case RF_ABILITY::BO_ICEE:
         return cast_blue_bolt_icee(caster_ptr, bmc_ptr);
-    case MS_MAGIC_MISSILE:
+    case RF_ABILITY::MISSILE:
         return cast_blue_bolt_missile(caster_ptr, bmc_ptr);
-    case MS_SCARE:
+    case RF_ABILITY::SCARE:
         return cast_blue_scare(caster_ptr, bmc_ptr);
-    case MS_BLIND:
+    case RF_ABILITY::BLIND:
         return cast_blue_blind(caster_ptr, bmc_ptr);
-    case MS_CONF:
+    case RF_ABILITY::CONF:
         return cast_blue_confusion(caster_ptr, bmc_ptr);
-    case MS_SLOW:
+    case RF_ABILITY::SLOW:
         return cast_blue_slow(caster_ptr, bmc_ptr);
-    case MS_SLEEP:
+    case RF_ABILITY::HOLD:
         return cast_blue_sleep(caster_ptr, bmc_ptr);
-    case MS_SPEED:
+    case RF_ABILITY::HASTE:
         (void)set_fast(caster_ptr, randint1(20 + bmc_ptr->plev) + bmc_ptr->plev, FALSE);
         return TRUE;
-    case MS_HAND_DOOM:
+    case RF_ABILITY::HAND_DOOM:
         return cast_blue_hand_doom(caster_ptr, bmc_ptr);
-    case MS_HEAL:
+    case RF_ABILITY::HEAL:
         msg_print(_("自分の傷に念を集中した。", "You concentrate on your wounds!"));
         (void)hp_player(caster_ptr, bmc_ptr->plev * 4);
         (void)set_stun(caster_ptr, 0);
         (void)set_cut(caster_ptr, 0);
         return TRUE;
-    case MS_INVULNER:
+    case RF_ABILITY::INVULNER:
         msg_print(_("無傷の球の呪文を唱えた。", "You cast a Globe of Invulnerability."));
         (void)set_invuln(caster_ptr, randint1(4) + 4, FALSE);
         return TRUE;
-    case MS_BLINK:
+    case RF_ABILITY::BLINK:
         teleport_player(caster_ptr, 10, TELEPORT_SPONTANEOUS);
         return TRUE;
-    case MS_TELEPORT:
+    case RF_ABILITY::TPORT:
         teleport_player(caster_ptr, bmc_ptr->plev * 5, TELEPORT_SPONTANEOUS);
         return TRUE;
-    case MS_WORLD:
+    case RF_ABILITY::WORLD:
         (void)time_walk(caster_ptr);
         return TRUE;
-    case MS_SPECIAL:
+    case RF_ABILITY::SPECIAL:
         return TRUE;
-    case MS_TELE_TO:
+    case RF_ABILITY::TELE_TO:
         return cast_blue_teleport_back(caster_ptr);
-    case MS_TELE_AWAY:
+    case RF_ABILITY::TELE_AWAY:
         return cast_blue_teleport_away(caster_ptr, bmc_ptr);
-    case MS_TELE_LEVEL:
+    case RF_ABILITY::TELE_LEVEL:
         return teleport_level_other(caster_ptr);
-    case MS_PSY_SPEAR:
+    case RF_ABILITY::PSY_SPEAR:
         return cast_blue_psy_spear(caster_ptr, bmc_ptr);
-    case MS_DARKNESS:
+    case RF_ABILITY::DARKNESS:
         msg_print(_("暗闇の中で手を振った。", "You gesture in shadow."));
         (void)unlite_area(caster_ptr, 10, 3);
         return TRUE;
-    case MS_MAKE_TRAP:
+    case RF_ABILITY::TRAPS:
         return cast_blue_make_trap(caster_ptr);
-    case MS_FORGET:
+    case RF_ABILITY::FORGET:
         msg_print(_("しかし何も起きなかった。", "Nothing happens."));
         return TRUE;
-    case MS_RAISE_DEAD:
+    case RF_ABILITY::RAISE_DEAD:
         msg_print(_("死者復活の呪文を唱えた。", "You animate the dead."));
         (void)animate_dead(caster_ptr, 0, caster_ptr->y, caster_ptr->x);
         return TRUE;
-    case MS_S_KIN:
+    case RF_ABILITY::S_KIN:
         return cast_blue_summon_kin(caster_ptr, bmc_ptr);
-    case MS_S_CYBER:
+    case RF_ABILITY::S_CYBER:
         return cast_blue_summon_cyber(caster_ptr, bmc_ptr);
-    case MS_S_MONSTER:
+    case RF_ABILITY::S_MONSTER:
         return cast_blue_summon_monster(caster_ptr, bmc_ptr);
-    case MS_S_MONSTERS:
+    case RF_ABILITY::S_MONSTERS:
         return cast_blue_summon_monsters(caster_ptr, bmc_ptr);
-    case MS_S_ANT:
+    case RF_ABILITY::S_ANT:
         return cast_blue_summon_ant(caster_ptr, bmc_ptr);
-    case MS_S_SPIDER:
+    case RF_ABILITY::S_SPIDER:
         return cast_blue_summon_spider(caster_ptr, bmc_ptr);
-    case MS_S_HOUND:
+    case RF_ABILITY::S_HOUND:
         return cast_blue_summon_hound(caster_ptr, bmc_ptr);
-    case MS_S_HYDRA:
+    case RF_ABILITY::S_HYDRA:
         return cast_blue_summon_hydra(caster_ptr, bmc_ptr);
-    case MS_S_ANGEL:
+    case RF_ABILITY::S_ANGEL:
         return cast_blue_summon_angel(caster_ptr, bmc_ptr);
-    case MS_S_DEMON:
+    case RF_ABILITY::S_DEMON:
         return cast_blue_summon_demon(caster_ptr, bmc_ptr);
-    case MS_S_UNDEAD:
+    case RF_ABILITY::S_UNDEAD:
         return cast_blue_summon_undead(caster_ptr, bmc_ptr);
-    case MS_S_DRAGON:
+    case RF_ABILITY::S_DRAGON:
         return cast_blue_summon_dragon(caster_ptr, bmc_ptr);
-    case MS_S_HI_UNDEAD:
+    case RF_ABILITY::S_HI_UNDEAD:
         return cast_blue_summon_high_undead(caster_ptr, bmc_ptr);
-    case MS_S_HI_DRAGON:
+    case RF_ABILITY::S_HI_DRAGON:
         return cast_blue_summon_high_dragon(caster_ptr, bmc_ptr);
-    case MS_S_AMBERITE:
+    case RF_ABILITY::S_AMBERITES:
         return cast_blue_summon_amberite(caster_ptr, bmc_ptr);
-    case MS_S_UNIQUE:
+    case RF_ABILITY::S_UNIQUE:
         return cast_blue_summon_unique(caster_ptr, bmc_ptr);
     default:
         msg_print("hoge?");
@@ -381,7 +382,7 @@ bool switch_cast_blue_magic(player_type *caster_ptr, bmc_type *bmc_ptr, SPELL_ID
  * @param success TRUEは成功時、FALSEは失敗時の処理を行う
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-bool cast_learned_spell(player_type *caster_ptr, SPELL_IDX spell, const bool success)
+bool cast_learned_spell(player_type *caster_ptr, RF_ABILITY spell, const bool success)
 {
     bmc_type tmp_bm;
     bmc_type *bmc_ptr = initialize_blue_magic_type(caster_ptr, &tmp_bm, success, get_pseudo_monstetr_level);

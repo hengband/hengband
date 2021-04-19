@@ -1,8 +1,8 @@
 ﻿#include "blue-magic/learnt-info.h"
 #include "cmd-action/cmd-spell.h"
 #include "lore/lore-calculator.h" //!< @todo 少し違和感.
+#include "monster-race/race-ability-flags.h"
 #include "mspell/mspell-damage-calculator.h"
-#include "mspell/mspell-type.h"
 
 /*!
  * @brief モンスター魔法をプレイヤーが使用する場合の換算レベル
@@ -23,7 +23,7 @@ PLAYER_LEVEL get_pseudo_monstetr_level(player_type *caster_ptr)
  * @param tmp 返すメッセージを格納する配列
  * @return なし
  */
-static void set_bluemage_damage(player_type *learner_type, monster_spell_type ms_type, PLAYER_LEVEL plev, concptr msg, char *tmp)
+static void set_bluemage_damage(player_type *learner_type, RF_ABILITY ms_type, PLAYER_LEVEL plev, concptr msg, char *tmp)
 {
     int base_damage = monspell_bluemage_damage(learner_type, ms_type, plev, BASE_DAM);
     int dice_num = monspell_bluemage_damage(learner_type, ms_type, plev, DICE_NUM);
@@ -42,132 +42,132 @@ static void set_bluemage_damage(player_type *learner_type, monster_spell_type ms
  * @param power モンスター魔法のID
  * @return なし
  */
-void learnt_info(player_type *learner_ptr, char *p, monster_spell_type power)
+void learnt_info(player_type *learner_ptr, char *p, RF_ABILITY power)
 {
     PLAYER_LEVEL plev = get_pseudo_monstetr_level(learner_ptr);
 
     strcpy(p, "");
 
     switch (power) {
-    case MS_SHRIEK:
-    case MS_XXX1:
-    case MS_XXX2:
-    case MS_XXX3:
-    case MS_XXX4:
-    case MS_SCARE:
-    case MS_BLIND:
-    case MS_CONF:
-    case MS_SLOW:
-    case MS_SLEEP:
-    case MS_HAND_DOOM:
-    case MS_WORLD:
-    case MS_SPECIAL:
-    case MS_TELE_TO:
-    case MS_TELE_AWAY:
-    case MS_TELE_LEVEL:
-    case MS_DARKNESS:
-    case MS_MAKE_TRAP:
-    case MS_FORGET:
-    case MS_S_KIN:
-    case MS_S_CYBER:
-    case MS_S_MONSTER:
-    case MS_S_MONSTERS:
-    case MS_S_ANT:
-    case MS_S_SPIDER:
-    case MS_S_HOUND:
-    case MS_S_HYDRA:
-    case MS_S_ANGEL:
-    case MS_S_DEMON:
-    case MS_S_UNDEAD:
-    case MS_S_DRAGON:
-    case MS_S_HI_UNDEAD:
-    case MS_S_HI_DRAGON:
-    case MS_S_AMBERITE:
-    case MS_S_UNIQUE:
+    case RF_ABILITY::SHRIEK:
+    case RF_ABILITY::XXX1:
+    case RF_ABILITY::XXX2:
+    case RF_ABILITY::XXX3:
+    case RF_ABILITY::XXX4:
+    case RF_ABILITY::SCARE:
+    case RF_ABILITY::BLIND:
+    case RF_ABILITY::CONF:
+    case RF_ABILITY::SLOW:
+    case RF_ABILITY::HOLD:
+    case RF_ABILITY::HAND_DOOM:
+    case RF_ABILITY::WORLD:
+    case RF_ABILITY::SPECIAL:
+    case RF_ABILITY::TELE_TO:
+    case RF_ABILITY::TELE_AWAY:
+    case RF_ABILITY::TELE_LEVEL:
+    case RF_ABILITY::DARKNESS:
+    case RF_ABILITY::TRAPS:
+    case RF_ABILITY::FORGET:
+    case RF_ABILITY::S_KIN:
+    case RF_ABILITY::S_CYBER:
+    case RF_ABILITY::S_MONSTER:
+    case RF_ABILITY::S_MONSTERS:
+    case RF_ABILITY::S_ANT:
+    case RF_ABILITY::S_SPIDER:
+    case RF_ABILITY::S_HOUND:
+    case RF_ABILITY::S_HYDRA:
+    case RF_ABILITY::S_ANGEL:
+    case RF_ABILITY::S_DEMON:
+    case RF_ABILITY::S_UNDEAD:
+    case RF_ABILITY::S_DRAGON:
+    case RF_ABILITY::S_HI_UNDEAD:
+    case RF_ABILITY::S_HI_DRAGON:
+    case RF_ABILITY::S_AMBERITES:
+    case RF_ABILITY::S_UNIQUE:
         break;
-    case MS_BALL_MANA:
-    case MS_BALL_DARK:
-    case MS_STARBURST:
+    case RF_ABILITY::BA_MANA:
+    case RF_ABILITY::BA_DARK:
+    case RF_ABILITY::BA_LITE:
         set_bluemage_damage(learner_ptr, power, plev, KWD_DAM, p);
         break;
-    case MS_DISPEL:
+    case RF_ABILITY::DISPEL:
         break;
-    case MS_ROCKET:
-    case MS_SHOOT:
-    case MS_BR_ACID:
-    case MS_BR_ELEC:
-    case MS_BR_FIRE:
-    case MS_BR_COLD:
-    case MS_BR_POIS:
-    case MS_BR_NUKE:
-    case MS_BR_NEXUS:
-    case MS_BR_TIME:
-    case MS_BR_GRAVITY:
-    case MS_BR_MANA:
-    case MS_BR_NETHER:
-    case MS_BR_LITE:
-    case MS_BR_DARK:
-    case MS_BR_CONF:
-    case MS_BR_SOUND:
-    case MS_BR_CHAOS:
-    case MS_BR_DISEN:
-    case MS_BR_SHARDS:
-    case MS_BR_PLASMA:
-    case MS_BR_INERTIA:
-    case MS_BR_FORCE:
-    case MS_BR_DISI:
-    case MS_BALL_NUKE:
-    case MS_BALL_CHAOS:
-    case MS_BALL_ACID:
-    case MS_BALL_ELEC:
-    case MS_BALL_FIRE:
-    case MS_BALL_COLD:
-    case MS_BALL_POIS:
-    case MS_BALL_NETHER:
-    case MS_BALL_WATER:
+    case RF_ABILITY::ROCKET:
+    case RF_ABILITY::SHOOT:
+    case RF_ABILITY::BR_ACID:
+    case RF_ABILITY::BR_ELEC:
+    case RF_ABILITY::BR_FIRE:
+    case RF_ABILITY::BR_COLD:
+    case RF_ABILITY::BR_POIS:
+    case RF_ABILITY::BR_NUKE:
+    case RF_ABILITY::BR_NEXU:
+    case RF_ABILITY::BR_TIME:
+    case RF_ABILITY::BR_GRAV:
+    case RF_ABILITY::BR_MANA:
+    case RF_ABILITY::BR_NETH:
+    case RF_ABILITY::BR_LITE:
+    case RF_ABILITY::BR_DARK:
+    case RF_ABILITY::BR_CONF:
+    case RF_ABILITY::BR_SOUN:
+    case RF_ABILITY::BR_CHAO:
+    case RF_ABILITY::BR_DISE:
+    case RF_ABILITY::BR_SHAR:
+    case RF_ABILITY::BR_PLAS:
+    case RF_ABILITY::BR_INER:
+    case RF_ABILITY::BR_FORC:
+    case RF_ABILITY::BR_DISI:
+    case RF_ABILITY::BA_NUKE:
+    case RF_ABILITY::BA_CHAO:
+    case RF_ABILITY::BA_ACID:
+    case RF_ABILITY::BA_ELEC:
+    case RF_ABILITY::BA_FIRE:
+    case RF_ABILITY::BA_COLD:
+    case RF_ABILITY::BA_POIS:
+    case RF_ABILITY::BA_NETH:
+    case RF_ABILITY::BA_WATE:
         set_bluemage_damage(learner_ptr, power, plev, KWD_DAM, p);
         break;
-    case MS_DRAIN_MANA:
+    case RF_ABILITY::DRAIN_MANA:
         set_bluemage_damage(learner_ptr, power, plev, KWD_HEAL, p);
         break;
-    case MS_MIND_BLAST:
-    case MS_BRAIN_SMASH:
-    case MS_CAUSE_1:
-    case MS_CAUSE_2:
-    case MS_CAUSE_3:
-    case MS_CAUSE_4:
-    case MS_BOLT_ACID:
-    case MS_BOLT_ELEC:
-    case MS_BOLT_FIRE:
-    case MS_BOLT_COLD:
-    case MS_BOLT_NETHER:
-    case MS_BOLT_WATER:
-    case MS_BOLT_MANA:
-    case MS_BOLT_PLASMA:
-    case MS_BOLT_ICE:
-    case MS_MAGIC_MISSILE:
+    case RF_ABILITY::MIND_BLAST:
+    case RF_ABILITY::BRAIN_SMASH:
+    case RF_ABILITY::CAUSE_1:
+    case RF_ABILITY::CAUSE_2:
+    case RF_ABILITY::CAUSE_3:
+    case RF_ABILITY::CAUSE_4:
+    case RF_ABILITY::BO_ACID:
+    case RF_ABILITY::BO_ELEC:
+    case RF_ABILITY::BO_FIRE:
+    case RF_ABILITY::BO_COLD:
+    case RF_ABILITY::BO_NETH:
+    case RF_ABILITY::BO_WATE:
+    case RF_ABILITY::BO_MANA:
+    case RF_ABILITY::BO_PLAS:
+    case RF_ABILITY::BO_ICEE:
+    case RF_ABILITY::MISSILE:
         set_bluemage_damage(learner_ptr, power, plev, KWD_DAM, p);
         break;
-    case MS_SPEED:
+    case RF_ABILITY::HASTE:
         sprintf(p, " %sd%d+%d", KWD_DURATION, 20 + plev, plev);
         break;
-    case MS_HEAL:
+    case RF_ABILITY::HEAL:
         set_bluemage_damage(learner_ptr, power, plev, KWD_HEAL, p);
         break;
-    case MS_INVULNER:
+    case RF_ABILITY::INVULNER:
         sprintf(p, " %sd7+7", KWD_DURATION);
         break;
-    case MS_BLINK:
+    case RF_ABILITY::BLINK:
         sprintf(p, " %s10", KWD_SPHERE);
         break;
-    case MS_TELEPORT:
+    case RF_ABILITY::TPORT:
         sprintf(p, " %s%d", KWD_SPHERE, plev * 5);
         break;
-    case MS_PSY_SPEAR:
+    case RF_ABILITY::PSY_SPEAR:
         set_bluemage_damage(learner_ptr, power, plev, KWD_DAM, p);
         break;
         break;
-    case MS_RAISE_DEAD:
+    case RF_ABILITY::RAISE_DEAD:
         sprintf(p, " %s5", KWD_SPHERE);
         break;
     default:

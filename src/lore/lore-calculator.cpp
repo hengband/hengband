@@ -1,6 +1,7 @@
 ﻿#include "lore/lore-calculator.h"
 #include "game-option/cheat-options.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-ability-flags.h"
 #include "monster-race/race-flags1.h"
 #include "mspell/mspell-damage-calculator.h"
 
@@ -109,7 +110,7 @@ bool know_damage(MONRACE_IDX r_idx, int i)
  * @param msg 表示する文字列
  * @return なし
  */
-void set_damage(player_type *player_ptr, lore_type *lore_ptr, monster_spell_type ms_type, concptr msg)
+void set_damage(player_type *player_ptr, lore_type *lore_ptr, RF_ABILITY ms_type, concptr msg)
 {
     MONRACE_IDX r_idx = lore_ptr->r_idx;
     int base_damage = monspell_race_damage(player_ptr, ms_type, r_idx, BASE_DAM);

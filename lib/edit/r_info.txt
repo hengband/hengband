@@ -9567,7 +9567,7 @@ F:FRIENDS |
 F:BASH_DOOR |
 F:ANIMAL | RES_WALL | NO_CONF | NO_SLEEP
 S:1_IN_8 | 
-S:BR_WALL
+S:BR_FORC
 D:$A deep brown shape is visible before you, its canine form strikes you with 
 D:$an almost physical force.  The dungeon floor buckles as if struck by a 
 D:$powerful blow as it stalks towards you.
@@ -10314,7 +10314,7 @@ F:PASS_WALL | INVISIBLE | FORCE_MAXHP | RES_DISE |
 F:IM_POIS | IM_COLD | IM_ACID | RES_WALL | ELDRITCH_HORROR |
 F:NO_CONF | NO_SLEEP | EVIL | CAN_FLY |
 S:1_IN_7
-S:BR_WALL |
+S:BR_FORC |
 D:$"They were only partly material and had the power of aerial motion, 
 D:$despite the absence of wings... Suggestions of monstrous plasticity 
 D:$and of temporary lapses of visibility..."
@@ -12624,7 +12624,7 @@ F:INVISIBLE | DROP_2D2 | DROP_4D2 | CAN_FLY | EVIL |
 F:OPEN_DOOR | BASH_DOOR | MOVE_BODY | POWERFUL | NONLIVING | RES_WALL |
 F:SMART | IM_FIRE | IM_COLD | IM_ELEC | IM_ACID | IM_POIS | RES_GRAV |
 S:1_IN_4 | 
-S:BR_WALL | TELE_AWAY | BR_GRAV |
+S:BR_FORC | TELE_AWAY | BR_GRAV |
 S:S_KIN | MIND_BLAST | BLIND | BLINK
 V:133
 D:$"Invisible ones from the stars... They sometimes took forms... 
@@ -13249,7 +13249,7 @@ F:OPEN_DOOR | BASH_DOOR | MOVE_BODY | POWERFUL | EVIL |
 F:SMART | IM_FIRE | IM_COLD | IM_ELEC | IM_ACID | IM_POIS |
 F:RES_WALL | RES_GRAV | RES_INER
 S:1_IN_4 | 
-S:BR_WALL | TELE_AWAY | BR_GRAV | TELE_LEVEL | S_DEMON | S_UNDEAD |
+S:BR_FORC | TELE_AWAY | BR_GRAV | TELE_LEVEL | S_DEMON | S_UNDEAD |
 S:BRAIN_SMASH | HASTE | BLIND | BLINK | BR_INER | CAUSE_3 | CAUSE_4
 D:$The chief among the creatures known as Lloigor. Ghatanothoa has 
 D:$assumed a shape which is too horrible to describe: "Nothing I could say 
@@ -13784,7 +13784,7 @@ F:BASH_DOOR | DROP_CORPSE
 F:EVIL | IM_FIRE | IM_POIS | RES_WALL | NO_CONF | NO_SLEEP
 S:1_IN_6 | 
 S:SLOW | SHOOT | BO_MANA | BO_PLAS | BA_ELEC | 
-S:BR_WALL
+S:BR_FORC
 D:$A fearsome bull-headed demon, Baphomet swings a mighty axe as he curses 
 D:$all that defy him.
 D:牛の頭を持った恐るべきデーモンであるバフォメットは、刃向かう者に呪い
@@ -14361,7 +14361,7 @@ F:NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN | NONLIVING |
 S:1_IN_6 | 
 S:BR_ACID | BR_FIRE | BR_COLD | BR_ELEC | BR_POIS | 
 S:BR_LITE | BR_DARK | BR_SOUN | BR_CONF | BR_CHAO |
-S:BR_NETH | BR_DISE | BR_WALL | BR_INER | BR_TIME | 
+S:BR_NETH | BR_DISE | BR_FORC | BR_INER | BR_TIME | 
 S:BR_GRAV | BR_PLAS | BR_NEXU | BR_SHAR | BR_NUKE
 V:150
 D:$An awesome vortex of pure magic, power radiates from its frame.
@@ -16063,7 +16063,7 @@ F:NO_CONF | NO_SLEEP
 S:1_IN_5 | 
 S:BR_ACID | BR_FIRE | BR_COLD | BR_ELEC | BR_POIS | 
 S:BR_LITE | BR_DARK | BR_SOUN | BR_CONF | BR_CHAO |
-S:BR_NETH | BR_DISE | BR_WALL | BR_INER | BR_TIME | 
+S:BR_NETH | BR_DISE | BR_FORC | BR_INER | BR_TIME | 
 S:BR_GRAV | BR_PLAS | BR_NEXU | BR_SHAR | BR_NUKE
 V:150
 D:$A shifting, swirling form.  It seems to be all colours and sizes and 
@@ -17147,7 +17147,7 @@ S:BR_NUKE | BR_ACID | BR_ELEC | BR_FIRE |
 S:BR_COLD | BR_POIS | BR_NETH | BR_LITE | BR_DARK |
 S:BR_CONF | BR_SOUN | BR_CHAO | BR_DISE | BR_NEXU |
 S:BR_TIME | BR_INER | BR_GRAV | BR_SHAR | BR_PLAS |
-S:BR_WALL | BR_MANA | BR_DISI
+S:BR_FORC | BR_MANA | BR_DISI
 V:200
 D:$The mightiest of all dragonkind, a great wyrm of power is seldom 
 D:$encountered in our world. It can crush stars with its might.
@@ -18956,7 +18956,7 @@ S:1_IN_3 |
 S:SHRIEK | DISPEL | ROCKET | SHOOT | BR_ACID |
 S:BR_ELEC | BR_FIRE | BR_COLD | BR_POIS | BR_NETH | BR_LITE | BR_DARK | BR_CONF |
 S:BR_SOUN | BR_CHAO | BR_DISE | BR_NEXU | BR_TIME | BR_INER | BR_GRAV | BR_SHAR |
-S:BR_PLAS | BR_WALL | BR_MANA | BA_NUKE | BR_NUKE | BA_CHAO | BR_DISI | BA_ACID |
+S:BR_PLAS | BR_FORC | BR_MANA | BA_NUKE | BR_NUKE | BA_CHAO | BR_DISI | BA_ACID |
 S:BA_ELEC | BA_FIRE | BA_COLD | BA_POIS | BA_NETH | BA_WATE | BA_MANA | BA_DARK |
 S:DRAIN_MANA | MIND_BLAST| BRAIN_SMASH | CAUSE_1 | CAUSE_2 | CAUSE_3 | CAUSE_4 |
 S:BO_ACID | BO_ELEC | BO_FIRE | BO_COLD | BO_NETH | BO_WATE | BO_MANA |
@@ -20570,7 +20570,7 @@ F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | NO_CONF | NO_SLEEP
 F:DROP_2D2 | DROP_1D2 | DROP_GOOD | ONLY_ITEM | CAN_SWIM
 F:GOOD | EVIL | IM_COLD | IM_POIS | IM_ACID | IM_ELEC | IM_FIRE | REGENERATE
 S:1_IN_4
-S:BR_WALL | TELE_TO
+S:BR_FORC | TELE_TO
 D:$Raou is the eldest of four honorary brothers, another being Kenshirou,
 D:$ who were trained by the master of Hokuto Shinken, a martial art.
 D:$ Headstrong, Raou tries to forge a new order through conquest in a
@@ -22387,7 +22387,7 @@ B:HIT:COLD:8d6
 F:DROP_60 | OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
 F:EVIL | IM_POIS | EAT_POISONOUS | CAN_SWIM
 F:IM_COLD | FRIENDS
-S:1_IN_10 | BR_COLD | BR_WALL
+S:1_IN_10 | BR_COLD | BR_FORC
 D:$This white kobold has frost covering its hands, and small ice crystals swirl
 D:$ in the air around it.
 D:部屋の全てを永遠に凍りつかせるほどの強力な冷気を吐き出すことができる。
@@ -22641,7 +22641,7 @@ F:IM_FIRE | RES_DARK | RES_NETH
 F:NO_FEAR | NO_CONF | NO_SLEEP | DROP_90
 S:1_IN_7
 S:SCARE | BLIND | CONF | HOLD
-S:BR_WALL | BA_NETH | BR_PLAS | S_DEMON
+S:BR_FORC | BA_NETH | BR_PLAS | S_DEMON
 R:1125:5d3
 D:$This ogre has earthy colored skin.
 D:$  Besides punishing sinners, it also leads lower-class ogres.
@@ -23353,7 +23353,7 @@ F:REGENERATE | NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR | POWERFUL
 F:IM_COLD | IM_POIS | IM_ACID | IM_ELEC | IM_FIRE
 F:OPEN_DOOR | BASH_DOOR | RES_WALL
 S:1_IN_8 |
-S:TELE_TO | BO_MANA | BR_MANA | BR_WALL | BR_PLAS | BR_DISI | HEAL | HASTE
+S:TELE_TO | BO_MANA | BR_MANA | BR_FORC | BR_PLAS | BR_DISI | HEAL | HASTE
 D:$It is the fusion of twin sisters born at the end of the vaunted study of Vajura energy.
 D:$Its outrageous power will destroy a star and eventually become a new myth.
 D:ヴァジュラエネルギーのおぞましい研究の果てに産みだされた双子の姉妹の融合体だ。
@@ -24110,7 +24110,7 @@ F:DROP_3D2 | DROP_4D2 | DROP_GREAT | ONLY_ITEM | CAN_FLY | EVIL
 F:IM_COLD | IM_FIRE | IM_ELEC | RES_SOUN
 F:BASH_DOOR | KILL_BODY | DRAGON | NO_CONF | NO_SLEEP | NO_FEAR | RIDING
 S:1_IN_3 | SHRIEK | S_KIN | ANIM_DEAD
-S:BR_ELEC | BR_FIRE | BR_COLD | BR_SOUN | BR_WALL | BR_MANA
+S:BR_ELEC | BR_FIRE | BR_COLD | BR_SOUN | BR_FORC | BR_MANA
 D:$It is the first dragon born in the worlds.
 D:$  It destroyed the last world to usher in this one.
 D:$  Said to eat the souls of the dead to gain power, it has returned after
@@ -24595,7 +24595,7 @@ F:UNIQUE | FORCE_MAXHP | NONLIVING | QUANTUM | DROP_3D2 | DROP_GREAT | ONLY_ITEM
 F:IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS | RES_LITE | RES_DARK
 F:RES_NEXU | RES_CHAO | RES_DISE | RES_SHAR | RES_WATE | RES_TIME | RES_NETH
 F:RES_SOUN | WEIRD_MIND | PASS_WALL | SHAPECHANGER | ATTR_MULTI
-S:1_IN_5 | BR_LITE | BR_GRAV | BR_INER | BR_WALL | BR_NEXU
+S:1_IN_5 | BR_LITE | BR_GRAV | BR_INER | BR_FORC | BR_NEXU
 S:HASTE | SLOW | MIND_BLAST | BRAIN_SMASH | BLINK | FORGET | DISPEL
 S:TELE_TO | TELE_AWAY
 D:$Communication with the adventurer is not established properly.

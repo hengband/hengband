@@ -70,112 +70,112 @@ MonsterSpellResult spell_RF4_BREATH(player_type *target_ptr, int GF_TYPE, POSITI
 
     switch (GF_TYPE) {
     case GF_ACID:
-        dam = monspell_damage(target_ptr, (MS_BR_ACID), m_idx, DAM_ROLL);
+        dam = monspell_damage(target_ptr, RF_ABILITY::BR_ACID, m_idx, DAM_ROLL);
         type_s = _("酸", "acid");
         drs_type = DRS_ACID;
         break;
     case GF_ELEC:
-        dam = monspell_damage(target_ptr, (MS_BR_ELEC), m_idx, DAM_ROLL);
+        dam = monspell_damage(target_ptr, RF_ABILITY::BR_ELEC, m_idx, DAM_ROLL);
         type_s = _("稲妻", "lightning");
         drs_type = DRS_ELEC;
         break;
     case GF_FIRE:
-        dam = monspell_damage(target_ptr, (MS_BR_FIRE), m_idx, DAM_ROLL);
+        dam = monspell_damage(target_ptr, RF_ABILITY::BR_FIRE, m_idx, DAM_ROLL);
         type_s = _("火炎", "fire");
         drs_type = DRS_FIRE;
         break;
     case GF_COLD:
-        dam = monspell_damage(target_ptr, (MS_BR_COLD), m_idx, DAM_ROLL);
+        dam = monspell_damage(target_ptr, RF_ABILITY::BR_COLD, m_idx, DAM_ROLL);
         type_s = _("冷気", "frost");
         drs_type = DRS_COLD;
         break;
     case GF_POIS:
-        dam = monspell_damage(target_ptr, (MS_BR_POIS), m_idx, DAM_ROLL);
+        dam = monspell_damage(target_ptr, RF_ABILITY::BR_POIS, m_idx, DAM_ROLL);
         type_s = _("ガス", "gas");
         drs_type = DRS_POIS;
         break;
     case GF_NETHER:
-        dam = monspell_damage(target_ptr, (MS_BR_NETHER), m_idx, DAM_ROLL);
+        dam = monspell_damage(target_ptr, RF_ABILITY::BR_NETH, m_idx, DAM_ROLL);
         type_s = _("地獄", "nether");
         drs_type = DRS_NETH;
         break;
     case GF_LITE:
-        dam = monspell_damage(target_ptr, (MS_BR_LITE), m_idx, DAM_ROLL);
+        dam = monspell_damage(target_ptr, RF_ABILITY::BR_LITE, m_idx, DAM_ROLL);
         type_s = _("閃光", "light");
         drs_type = DRS_LITE;
         break;
     case GF_DARK:
-        dam = monspell_damage(target_ptr, (MS_BR_DARK), m_idx, DAM_ROLL);
+        dam = monspell_damage(target_ptr, RF_ABILITY::BR_DARK, m_idx, DAM_ROLL);
         type_s = _("暗黒", "darkness");
         drs_type = DRS_DARK;
         break;
     case GF_CONFUSION:
-        dam = monspell_damage(target_ptr, (MS_BR_CONF), m_idx, DAM_ROLL);
+        dam = monspell_damage(target_ptr, RF_ABILITY::BR_CONF, m_idx, DAM_ROLL);
         type_s = _("混乱", "confusion");
         drs_type = DRS_CONF;
         break;
     case GF_SOUND:
-        dam = monspell_damage(target_ptr, (MS_BR_SOUND), m_idx, DAM_ROLL);
+        dam = monspell_damage(target_ptr, RF_ABILITY::BR_SOUN, m_idx, DAM_ROLL);
         type_s = _("轟音", "sound");
         drs_type = DRS_SOUND;
         break;
     case GF_CHAOS:
-        dam = monspell_damage(target_ptr, (MS_BR_CHAOS), m_idx, DAM_ROLL);
+        dam = monspell_damage(target_ptr, RF_ABILITY::BR_CHAO, m_idx, DAM_ROLL);
         type_s = _("カオス", "chaos");
         drs_type = DRS_CHAOS;
         break;
     case GF_DISENCHANT:
-        dam = monspell_damage(target_ptr, (MS_BR_DISEN), m_idx, DAM_ROLL);
+        dam = monspell_damage(target_ptr, RF_ABILITY::BR_DISE, m_idx, DAM_ROLL);
         type_s = _("劣化", "disenchantment");
         drs_type = DRS_DISEN;
         break;
     case GF_NEXUS:
-        dam = monspell_damage(target_ptr, (MS_BR_NEXUS), m_idx, DAM_ROLL);
+        dam = monspell_damage(target_ptr, RF_ABILITY::BR_NEXU, m_idx, DAM_ROLL);
         type_s = _("因果混乱", "nexus");
         drs_type = DRS_NEXUS;
         break;
     case GF_TIME:
-        dam = monspell_damage(target_ptr, (MS_BR_TIME), m_idx, DAM_ROLL);
+        dam = monspell_damage(target_ptr, RF_ABILITY::BR_TIME, m_idx, DAM_ROLL);
         type_s = _("時間逆転", "time");
         smart_learn_aux = FALSE;
         break;
     case GF_INERTIAL:
-        dam = monspell_damage(target_ptr, (MS_BR_INERTIA), m_idx, DAM_ROLL);
+        dam = monspell_damage(target_ptr, RF_ABILITY::BR_INER, m_idx, DAM_ROLL);
         type_s = _("遅鈍", "inertia");
         smart_learn_aux = FALSE;
         break;
     case GF_GRAVITY:
-        dam = monspell_damage(target_ptr, (MS_BR_GRAVITY), m_idx, DAM_ROLL);
+        dam = monspell_damage(target_ptr, RF_ABILITY::BR_GRAV, m_idx, DAM_ROLL);
         type_s = _("重力", "gravity");
         smart_learn_aux = FALSE;
         break;
     case GF_SHARDS:
-        dam = monspell_damage(target_ptr, (MS_BR_SHARDS), m_idx, DAM_ROLL);
+        dam = monspell_damage(target_ptr, RF_ABILITY::BR_SHAR, m_idx, DAM_ROLL);
         type_s = _("破片", "shards");
         drs_type = DRS_SHARD;
         break;
     case GF_PLASMA:
-        dam = monspell_damage(target_ptr, (MS_BR_PLASMA), m_idx, DAM_ROLL);
+        dam = monspell_damage(target_ptr, RF_ABILITY::BR_PLAS, m_idx, DAM_ROLL);
         type_s = _("プラズマ", "plasma");
         smart_learn_aux = FALSE;
         break;
     case GF_FORCE:
-        dam = monspell_damage(target_ptr, (MS_BR_FORCE), m_idx, DAM_ROLL);
+        dam = monspell_damage(target_ptr, RF_ABILITY::BR_FORC, m_idx, DAM_ROLL);
         type_s = _("フォース", "force");
         smart_learn_aux = FALSE;
         break;
     case GF_MANA:
-        dam = monspell_damage(target_ptr, (MS_BR_MANA), m_idx, DAM_ROLL);
+        dam = monspell_damage(target_ptr, RF_ABILITY::BR_MANA, m_idx, DAM_ROLL);
         type_s = _("魔力", "mana");
         smart_learn_aux = FALSE;
         break;
     case GF_NUKE:
-        dam = monspell_damage(target_ptr, (MS_BR_NUKE), m_idx, DAM_ROLL);
+        dam = monspell_damage(target_ptr, RF_ABILITY::BR_NUKE, m_idx, DAM_ROLL);
         type_s = _("放射性廃棄物", "toxic waste");
         drs_type = DRS_POIS;
         break;
     case GF_DISINTEGRATE:
-        dam = monspell_damage(target_ptr, (MS_BR_DISI), m_idx, DAM_ROLL);
+        dam = monspell_damage(target_ptr, RF_ABILITY::BR_DISI, m_idx, DAM_ROLL);
         type_s = _("分解", "disintegration");
         smart_learn_aux = FALSE;
         break;
