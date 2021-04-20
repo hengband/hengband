@@ -7,6 +7,7 @@
 #include "core/window-redrawer.h"
 #include "game-option/text-display-options.h"
 #include "io/command-repeater.h"
+#include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
 #include "main/sound-of-music.h"
 #include "mutation/mutation-flag-types.h"
@@ -21,6 +22,7 @@
 #include "status/action-setter.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
+#include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include <string>
@@ -88,7 +90,33 @@ static void racial_power_display_list(player_type *creature_ptr, rc_type *rc_ptr
         racial_power_display_cursor(rc_ptr);
 }
 
-static void racial_power_add_index(player_type *creature_ptr, rc_type* rc_ptr, int i) {
+/*!
+ * @brief レイシャルパワー選択用のプロンプトを作成する
+ * @param rc_ptr レイシャルパワー情報への参照ポインタ
+ * @return なし
+ */
+static void racial_power_make_prompt(rc_type *rc_ptr)
+{
+    concptr fmt;
+
+    if (rc_ptr->browse_mode)
+        fmt = _(
+            "(特殊能力 %c-%c, '*':一覧, '/'で使用, ESCで中断) どの能力について知りますか？", "(Powers %c-%c, *=List. /=Use, ESC=exit) Browse which power? ");
+    else
+        fmt = _("(特殊能力 %c-%c, '*'で一覧, '/'で閲覧, ESCで中断) どの能力を使いますか？", "(Powers %c-%c, *=List, /=Browse, ESC=exit) Use which power? ");
+
+    (void)strnfmt(rc_ptr->out_val, 78, fmt, I2A(0), (rc_ptr->size() <= 26) ? I2A(rc_ptr->size() - 1) : '0' + rc_ptr->size() - 27);
+}
+
+/*!
+ * @brief レイシャルパワー選択用のカーソル位置を進める
+ * @param creature_ptr プレイヤー情報への参照ポインタ
+ * @param rc_ptr レイシャルパワー情報への参照ポインタ
+ * @param i カーソル増分
+ * @return なし
+ */
+static void racial_power_add_index(player_type *creature_ptr, rc_type *rc_ptr, int i)
+{
     auto n = rc_ptr->menu_line + i;
     if (i < -1 || i > 1) {
         if (n < 0 || n >= rc_ptr->size())
@@ -114,6 +142,7 @@ static void racial_power_add_index(player_type *creature_ptr, rc_type* rc_ptr, i
 /*!
  * @brief メニューによる選択のキーを処理する
  * @param rc_ptr レイシャルパワー情報への参照ポインタ
+ * @return キャンセルならRC_CANCEL、そうでないならRC_CONTINUE
  */
 static bool racial_power_interpret_menu_keys(player_type *creature_ptr, rc_type *rc_ptr)
 {
@@ -146,6 +175,10 @@ static bool racial_power_interpret_menu_keys(player_type *creature_ptr, rc_type 
         rc_ptr->command_code = (COMMAND_CODE)rc_ptr->menu_line;
         rc_ptr->is_chosen = true;
         rc_ptr->ask = false;
+        return RC_CONTINUE;
+    case '/':
+        rc_ptr->browse_mode = !rc_ptr->browse_mode;
+        racial_power_make_prompt(rc_ptr);
         return RC_CONTINUE;
     default:
         return RC_CONTINUE;
@@ -193,6 +226,12 @@ static bool racial_power_interpret_choise(player_type *creature_ptr, rc_type *rc
         return false;
     }
 
+    if (rc_ptr->choice == '/') {
+        rc_ptr->browse_mode = !rc_ptr->browse_mode;
+        racial_power_make_prompt(rc_ptr);
+        return false;
+    }
+
     if (rc_ptr->choice == '?')
         return true;
 
@@ -235,6 +274,32 @@ static bool ask_invoke_racial_power(rc_type *rc_ptr)
     return get_check(tmp_val);
 }
 
+static void racial_power_display_explanation(player_type *creature_ptr, rc_type *rc_ptr)
+{
+    auto &rpi = rc_ptr->power_desc[rc_ptr->command_code];
+    char temp[62 * 5];
+
+    term_erase(12, 21, 255);
+    term_erase(12, 20, 255);
+    term_erase(12, 19, 255);
+    term_erase(12, 18, 255);
+    term_erase(12, 17, 255);
+    term_erase(12, 16, 255);
+    shape_buffer(rpi.text.c_str(), 62, temp, sizeof(temp));
+    for (int j = 0, line = 17; temp[j]; j += (1 + strlen(&temp[j]))) {
+        prt(&temp[j], line, 15);
+        line++;
+    }
+
+    prt(_("何かキーを押して下さい。", "Hit any key."), 0, 0);
+    (void)inkey();
+
+    screen_load();
+    screen_save();
+    racial_power_display_list(creature_ptr, rc_ptr);
+    rc_ptr->is_chosen = false;
+}
+
 /*!
  * @brief レイシャルパワー選択処理のメインループ
  * @param creature_ptr プレイヤー情報への参照ポインタ
@@ -254,12 +319,16 @@ static bool racial_power_process_input(player_type *creature_ptr, rc_type *rc_pt
         if (racial_power_select_by_menu(creature_ptr, rc_ptr) == RC_CANCEL)
             return RC_CANCEL;
 
-        if (rc_ptr->is_chosen)
-            break;
-
-        if (racial_power_interpret_choise(creature_ptr, rc_ptr)) {
+        if (!rc_ptr->is_chosen && racial_power_interpret_choise(creature_ptr, rc_ptr)) {
             decide_racial_command(rc_ptr);
             if (ask_invoke_racial_power(rc_ptr))
+                rc_ptr->is_chosen = true;
+        }
+
+        if (rc_ptr->is_chosen) {
+            if (rc_ptr->browse_mode)
+                racial_power_display_explanation(creature_ptr, rc_ptr);
+            else
                 break;
         }
     }
@@ -387,10 +456,7 @@ void do_cmd_racial_power(player_type *creature_ptr)
 
     rc_ptr->max_page = 1 + (rc_ptr->size() - 1) / RC_PAGE_SIZE;
     rc_ptr->page = use_menu ? 0 : -1;
-
-    (void)strnfmt(rc_ptr->out_val, 78,
-        _("(特殊能力 %c-%c, *'で一覧, ESCで中断) どの特殊能力を使いますか？", "(Powers %c-%c, *=List, ESC=exit) Use which power? "), I2A(0),
-        (rc_ptr->size() <= 26) ? I2A(rc_ptr->size() - 1) : '0' + rc_ptr->size() - 27);
+    racial_power_make_prompt(rc_ptr);
 
     if (racial_power_select_power(creature_ptr, rc_ptr) == RC_CONTINUE)
         racial_power_cast_power(creature_ptr, rc_ptr);

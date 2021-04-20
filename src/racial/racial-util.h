@@ -20,6 +20,7 @@ enum rc_index : int {
 struct rpi_type {
     std::string racial_name{}; //!< パワー名
     std::string info{}; //!< パワー情報
+    std::string text{}; //パワー説明文
     PLAYER_LEVEL min_level{}; //!< 使用可能最小レベル
     int cost{}; //!< コスト
     int stat{}; //!< 使用に必要な能力値
@@ -34,6 +35,7 @@ struct rpi_type {
 struct rc_type {
     std::vector<rpi_type> power_desc{}; //!< パワー定義配列
     COMMAND_CODE command_code{}; //!< 使用しようとしているパワー番号
+    bool browse_mode{}; //!< 閲覧のみかどうか
     int page{}; //!< 表示中のページ
     int max_page{}; //!< ページ数
     int ask{}; //!< 選択後確認するかどうか

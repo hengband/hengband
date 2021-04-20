@@ -1248,6 +1248,7 @@ void switch_element_racial(player_type *creature_ptr, rc_type *rc_ptr)
     switch (realm) {
     case ElementRealm::FIRE:
         rpi = rc_ptr->make_power(_("ライト・エリア", "Light area"));
+        rpi.text = _("光源が照らしている範囲か部屋全体を永久に明るくする。", "Lights up nearby area and the inside of a room permanently.");
         rpi.min_level = 3;
         rpi.cost = 5;
         rpi.stat = A_WIS;
@@ -1257,6 +1258,7 @@ void switch_element_racial(player_type *creature_ptr, rc_type *rc_ptr)
     case ElementRealm::ICE:
         rpi = rc_ptr->make_power(_("周辺フリーズ", "Sleep monsters"));
         rpi.info = format("%s%d", KWD_POWER, 20 + plev * 3 / 2);
+        rpi.text = _("視界内の全てのモンスターを眠らせる。抵抗されると無効。", "Attempts to put all monsters in sight to sleep.");
         rpi.min_level = 10;
         rpi.cost = 15;
         rpi.stat = A_WIS;
@@ -1266,6 +1268,7 @@ void switch_element_racial(player_type *creature_ptr, rc_type *rc_ptr)
     case ElementRealm::SKY:
         rpi = rc_ptr->make_power(_("魔力充填", "Recharging"));
         rpi.info = format("%s%d", KWD_POWER, 120);
+        rpi.text = _("杖/魔法棒の充填回数を増やすか、充填中のロッドの充填時間を減らす。", "Recharges staffs, wands or rods.");
         rpi.min_level = 20;
         rpi.cost = 15;
         rpi.stat = A_WIS;
@@ -1274,6 +1277,7 @@ void switch_element_racial(player_type *creature_ptr, rc_type *rc_ptr)
         break;
     case ElementRealm::SEA:
         rpi = rc_ptr->make_power(_("岩石溶解", "Stone to mud"));
+        rpi.text = _("壁を溶かして床にする。", "Turns one rock square to mud.");
         rpi.min_level = 5;
         rpi.cost = 5;
         rpi.stat = A_WIS;
@@ -1291,6 +1295,7 @@ void switch_element_racial(player_type *creature_ptr, rc_type *rc_ptr)
         break;
     case ElementRealm::CHAOS:
         rpi = rc_ptr->make_power(_("現実変容", "Alter reality"));
+        rpi.text = _("現在の階を再構成する。", "Recreates current dungeon level.");
         rpi.min_level = 35;
         rpi.cost = 30;
         rpi.stat = A_WIS;
@@ -1300,6 +1305,8 @@ void switch_element_racial(player_type *creature_ptr, rc_type *rc_ptr)
     case ElementRealm::EARTH:
         rpi = rc_ptr->make_power(_("地震", "Earthquake"));
         rpi.info = format("%s%d", KWD_SPHERE, 10);
+        rpi.text
+            = _("周囲のダンジョンを揺らし、壁と床をランダムに入れ変える。", "Shakes dungeon structure, and results in random swapping of floors and walls.");
         rpi.min_level = 25;
         rpi.cost = 15;
         rpi.stat = A_WIS;
@@ -1308,6 +1315,7 @@ void switch_element_racial(player_type *creature_ptr, rc_type *rc_ptr)
         break;
     case ElementRealm::DEATH:
         rpi = rc_ptr->make_power(_("増殖阻止", "Sterilization"));
+        rpi.text = _("この階の増殖するモンスターが増殖できなくなる。", "Prevents any breeders on current level from breeding.");
         rpi.min_level = 5;
         rpi.cost = 5;
         rpi.stat = A_WIS;
