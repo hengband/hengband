@@ -66,7 +66,7 @@ void update_playtime(void)
 void add_winner_class(player_class_type c)
 {
     if (!current_world_ptr->noscore)
-	    add_flag(current_world_ptr->sf_winner, c);
+        current_world_ptr->sf_winner.set(c);
 }
 
 /*!
@@ -75,7 +75,7 @@ void add_winner_class(player_class_type c)
 void add_retired_class(player_class_type c)
 {
     if (!current_world_ptr->noscore)
-        add_flag(current_world_ptr->sf_retired, c);
+        current_world_ptr->sf_retired.set(c);
 }
 
 /*!
@@ -85,7 +85,7 @@ bool is_winner_class(player_class_type c)
 {
     if (c == MAX_CLASS)
         return false;
-    return has_flag(current_world_ptr->sf_winner, c);
+    return current_world_ptr->sf_winner.has(c);
 }
 
 /*!
@@ -95,5 +95,5 @@ bool is_retired_class(player_class_type c)
 {
     if (c == MAX_CLASS)
         return false;
-    return has_flag(current_world_ptr->sf_retired, c);
+    return current_world_ptr->sf_retired.has(c);
 }

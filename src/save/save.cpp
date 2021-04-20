@@ -160,12 +160,8 @@ static bool wr_savefile_new(player_type *player_ptr, save_type type)
         wr_s16b(a_ptr->floor_id);
     }
 
-    wr_s16b(CLASS_FLAG_SIZE);
-    for (int i = 0; i < CLASS_FLAG_SIZE; i++)
-        wr_u32b(current_world_ptr->sf_winner[i]);
-
-    for (int i = 0; i < CLASS_FLAG_SIZE; i++)
-        wr_u32b(current_world_ptr->sf_retired[i]);
+    wr_FlagGroup(current_world_ptr->sf_winner, wr_byte);
+    wr_FlagGroup(current_world_ptr->sf_retired, wr_byte);
 
     wr_player(player_ptr);
     tmp16u = PY_MAX_LEVEL;

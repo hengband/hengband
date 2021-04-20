@@ -84,18 +84,8 @@ static void rd_winner_class()
     if (loading_savefile_version_is_older_than(4))
         return;
 
-    s16b flag_size;
-    rd_s16b(&flag_size);
-    for (int i = 0; i < flag_size; i++) {
-        if (i == CLASS_FLAG_SIZE)
-            break;
-        rd_u32b(&current_world_ptr->sf_winner[i]);
-    }
-    for (int i = 0; i < flag_size; i++) {
-        if (i == CLASS_FLAG_SIZE)
-            break;
-        rd_u32b(&current_world_ptr->sf_retired[i]);
-    }
+    rd_FlagGroup(current_world_ptr->sf_winner, rd_byte);
+    rd_FlagGroup(current_world_ptr->sf_retired, rd_byte);
 }
 
 static void load_player_world(player_type *creature_ptr)
