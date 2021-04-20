@@ -3016,11 +3016,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPST
         use_bg = init_bg();
     }
 
-    use_music = arg_music;
-    if (use_music) {
-        init_music();
-    }
-
     plog_aux = hook_plog;
     quit_aux = hook_quit;
     core_aux = hook_quit;
@@ -3052,6 +3047,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPST
     check_for_save_file(p_ptr, lpCmdLine);
     prt(_("[ファイル] メニューの [新規] または [開く] を選択してください。", "[Choose 'New' or 'Open' from the 'File' menu]"), 23, _(8, 17));
     term_fresh();
+
+    use_music = arg_music;
+    if (use_music) {
+        init_music();
+    }
+
     while (GetMessage(&msg, NULL, 0, 0)) {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
