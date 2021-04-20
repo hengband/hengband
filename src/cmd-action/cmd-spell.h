@@ -2,12 +2,14 @@
 
 #include "system/angband.h"
 
-extern concptr KWD_DAM;
-extern concptr KWD_RANGE;
-extern concptr KWD_DURATION;
-extern concptr KWD_SPHERE;
-extern concptr KWD_HEAL;
-extern concptr KWD_RANDOM;
+extern concptr KWD_DAM; //!< 効果文字列: 損傷 / dam
+extern concptr KWD_RANGE; //!< 効果文字列: 射程 / dir
+extern concptr KWD_DURATION; //!< 効果文字列: 期間 / dur
+extern concptr KWD_SPHERE; //!< 効果文字列: 範囲 / range
+extern concptr KWD_HEAL; //!< 効果文字列: 回復 / heal
+extern concptr KWD_MANA; //!< 効果文字列: MP回復 / heal SP
+extern concptr KWD_POWER; //!< 効果文字列: 効力 / power
+extern concptr KWD_RANDOM; //!< 効果文字列: ランダム / random
 
 extern const u32b fake_spell_flags[4];
 

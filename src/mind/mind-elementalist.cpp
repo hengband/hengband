@@ -1256,6 +1256,7 @@ void switch_element_racial(player_type *creature_ptr, rc_type *rc_ptr)
         break;
     case ElementRealm::ICE:
         rpi = rc_ptr->make_power(_("周辺フリーズ", "Sleep monsters"));
+        rpi.info = format("%s%d", KWD_POWER, 20 + plev * 3 / 2);
         rpi.min_level = 10;
         rpi.cost = 15;
         rpi.stat = A_WIS;
@@ -1264,6 +1265,7 @@ void switch_element_racial(player_type *creature_ptr, rc_type *rc_ptr)
         break;
     case ElementRealm::SKY:
         rpi = rc_ptr->make_power(_("魔力充填", "Recharging"));
+        rpi.info = format("%s%d", KWD_POWER, 120);
         rpi.min_level = 20;
         rpi.cost = 15;
         rpi.stat = A_WIS;
@@ -1279,7 +1281,8 @@ void switch_element_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rc_ptr->add_power(rpi, RC_IDX_CLASS_1);
         break;
     case ElementRealm::DARKNESS:
-        rpi = rc_ptr->make_power(format(_("闇の扉(半径%d)", "Door to darkness(rad %d)"), 15 + plev / 2));
+        rpi = rc_ptr->make_power(format(_("闇の扉", "Door to darkness"), 15 + plev / 2));
+        rpi.info = format("%s%d", KWD_SPHERE, 15 + plev / 2);
         rpi.min_level = 5;
         rpi.cost = 5 + plev / 7;
         rpi.stat = A_WIS;
@@ -1296,6 +1299,7 @@ void switch_element_racial(player_type *creature_ptr, rc_type *rc_ptr)
         break;
     case ElementRealm::EARTH:
         rpi = rc_ptr->make_power(_("地震", "Earthquake"));
+        rpi.info = format("%s%d", KWD_SPHERE, 10);
         rpi.min_level = 25;
         rpi.cost = 15;
         rpi.stat = A_WIS;

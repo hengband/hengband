@@ -1,4 +1,5 @@
 ﻿#include "racial/mutation-racial-selector.h"
+#include "cmd-action/cmd-spell.h"
 #include "mutation/mutation-flag-types.h"
 #include "racial/racial-util.h"
 
@@ -8,6 +9,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
 
     if (creature_ptr->muta.has(MUTA::SPIT_ACID)) {
         rpi = rc_ptr->make_power(_("酸の唾", "Spit Acid"));
+        rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl);
         rpi.min_level = 9;
         rpi.cost = 9;
         rpi.stat = A_DEX;
@@ -17,6 +19,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
 
     if (creature_ptr->muta.has(MUTA::BR_FIRE)) {
         rpi = rc_ptr->make_power(_("炎のブレス", "Fire Breath"));
+        rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl);
         rpi.min_level = 20;
         rpi.cost = rc_ptr->lvl;
         rpi.stat = A_CON;
@@ -26,6 +29,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
 
     if (creature_ptr->muta.has(MUTA::HYPN_GAZE)) {
         rpi = rc_ptr->make_power(_("催眠睨み", "Hypnotic Gaze"));
+        rpi.info = format("%s%d", KWD_POWER, rc_ptr->lvl);
         rpi.min_level = 12;
         rpi.cost = 12;
         rpi.stat = A_CHR;
@@ -35,6 +39,11 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
 
     if (creature_ptr->muta.has(MUTA::TELEKINES)) {
         rpi = rc_ptr->make_power(_("念動力", "Telekinesis"));
+#ifdef JP
+        rpi.info = format("最大重量: %d.%dkg", lbtokg1(rc_ptr->lvl * 10), lbtokg2(rc_ptr->lvl * 10));
+#else
+        rpi.info = format("max wgt %d", rc_ptr->lvl * 10);
+#endif
         rpi.min_level = 9;
         rpi.cost = 9;
         rpi.stat = A_WIS;
@@ -44,6 +53,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
 
     if (creature_ptr->muta.has(MUTA::VTELEPORT)) {
         rpi = rc_ptr->make_power(_("テレポート", "Teleport"));
+        rpi.info = format("%s%d", KWD_SPHERE, 10 + rc_ptr->lvl * 4);
         rpi.min_level = 7;
         rpi.cost = 7;
         rpi.stat = A_WIS;
@@ -53,6 +63,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
 
     if (creature_ptr->muta.has(MUTA::MIND_BLST)) {
         rpi = rc_ptr->make_power(_("精神攻撃", "Mind Blast"));
+        rpi.info = format("%s%dd%", KWD_DAM, 3 + (rc_ptr->lvl - 1) / 5, 3);
         rpi.min_level = 5;
         rpi.cost = 3;
         rpi.stat = A_WIS;
@@ -62,6 +73,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
 
     if (creature_ptr->muta.has(MUTA::RADIATION)) {
         rpi = rc_ptr->make_power(_("放射能", "Emit Radiation"));
+        rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 2);
         rpi.min_level = 15;
         rpi.cost = 15;
         rpi.stat = A_CON;
@@ -71,6 +83,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
 
     if (creature_ptr->muta.has(MUTA::VAMPIRISM)) {
         rpi = rc_ptr->make_power(_("吸血", "Vampiric Drain"));
+        rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 2);
         rpi.min_level = 2;
         rpi.cost = 1 + (rc_ptr->lvl / 3);
         rpi.stat = A_CON;
@@ -98,6 +111,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
 
     if (creature_ptr->muta.has(MUTA::BLINK)) {
         rpi = rc_ptr->make_power(_("ショート・テレポート", "Blink"));
+        rpi.info = format("%s%d", KWD_SPHERE, 10);
         rpi.min_level = 3;
         rpi.cost = 3;
         rpi.stat = A_WIS;
@@ -116,6 +130,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
 
     if (creature_ptr->muta.has(MUTA::SWAP_POS)) {
         rpi = rc_ptr->make_power(_("位置交換", "Swap Position"));
+        rpi.info = format("%s%d", KWD_SPHERE, 10 + rc_ptr->lvl * 3 / 2);
         rpi.min_level = 15;
         rpi.cost = 12;
         rpi.stat = A_DEX;
@@ -152,6 +167,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
 
     if (creature_ptr->muta.has(MUTA::BERSERK)) {
         rpi = rc_ptr->make_power(_("狂戦士化", "Berserk"));
+        rpi.info = format("%s%d+d%d", KWD_DURATION, 25, 25);
         rpi.min_level = 8;
         rpi.cost = 8;
         rpi.stat = A_STR;
@@ -188,6 +204,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
 
     if (creature_ptr->muta.has(MUTA::RESIST)) {
         rpi = rc_ptr->make_power(_("エレメント耐性", "Resist Elements"));
+        rpi.info = format("%s%d+d%d", KWD_DURATION, 20, 20);
         rpi.min_level = 10;
         rpi.cost = 12;
         rpi.stat = A_CON;
@@ -197,6 +214,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
 
     if (creature_ptr->muta.has(MUTA::EARTHQUAKE)) {
         rpi = rc_ptr->make_power(_("地震", "Earthquake"));
+        rpi.info = format("%s%d", KWD_SPHERE, 10);
         rpi.min_level = 12;
         rpi.cost = 12;
         rpi.stat = A_STR;
@@ -206,6 +224,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
 
     if (creature_ptr->muta.has(MUTA::EAT_MAGIC)) {
         rpi = rc_ptr->make_power(_("魔力食い", "Eat Magic"));
+        rpi.info = format("%s%d", KWD_POWER, rc_ptr->lvl * 2);
         rpi.min_level = 17;
         rpi.cost = 1;
         rpi.stat = A_WIS;
@@ -233,6 +252,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
 
     if (creature_ptr->muta.has(MUTA::HIT_AND_AWAY)) {
         rpi = rc_ptr->make_power(_("ヒット＆アウェイ", "Panic Hit"));
+        rpi.info = format("%s%d", KWD_SPHERE, 30);
         rpi.min_level = 10;
         rpi.cost = 12;
         rpi.stat = A_DEX;
@@ -242,6 +262,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
 
     if (creature_ptr->muta.has(MUTA::DAZZLE)) {
         rpi = rc_ptr->make_power(_("眩惑", "Dazzle"));
+        rpi.info = format("%s%d", KWD_POWER, rc_ptr->lvl * 4);
         rpi.min_level = 7;
         rpi.cost = 15;
         rpi.stat = A_CHR;
@@ -251,6 +272,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
 
     if (creature_ptr->muta.has(MUTA::LASER_EYE)) {
         rpi = rc_ptr->make_power(_("レーザー・アイ", "Laser Eye"));
+        rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 2);
         rpi.min_level = 7;
         rpi.cost = 10;
         rpi.stat = A_WIS;
@@ -269,6 +291,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
 
     if (creature_ptr->muta.has(MUTA::BANISH)) {
         rpi = rc_ptr->make_power(_("邪悪消滅", "Banish Evil"));
+        rpi.info = format("%s%d", KWD_POWER, 50 + rc_ptr->lvl);
         rpi.min_level = 25;
         rpi.cost = 25;
         rpi.stat = A_WIS;
@@ -278,6 +301,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
 
     if (creature_ptr->muta.has(MUTA::COLD_TOUCH)) {
         rpi = rc_ptr->make_power(_("凍結の手", "Cold Touch"));
+        rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 2);
         rpi.min_level = 2;
         rpi.cost = 2;
         rpi.stat = A_CON;

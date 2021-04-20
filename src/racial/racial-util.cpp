@@ -6,7 +6,6 @@ rc_type::rc_type(player_type *creature_ptr)
     this->ask = true;
     this->lvl = creature_ptr->lev;
     this->is_warrior = (creature_ptr->pclass == CLASS_WARRIOR || creature_ptr->pclass == CLASS_BERSERKER);
-    this->menu_line = use_menu ? 1 : 0;
 }
 
 rpi_type rc_type::make_power(std::string name)

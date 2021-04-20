@@ -1,4 +1,5 @@
 ﻿#include "racial/class-racial-switcher.h"
+#include "cmd-action/cmd-spell.h"
 #include "mind/mind-elementalist.h"
 #include "racial/racial-util.h"
 #include "realm/realm-names-table.h"
@@ -30,6 +31,7 @@ void switch_class_racial(player_type *creature_ptr, rc_type *rc_ptr)
     case CLASS_MAGE:
     case CLASS_SORCERER:
         rpi = rc_ptr->make_power(_("魔力食い", "Eat Magic"));
+        rpi.info = format("%s%d", KWD_POWER, rc_ptr->lvl * 2);
         rpi.min_level = 25;
         rpi.cost = 1;
         rpi.stat = A_INT;
@@ -46,6 +48,7 @@ void switch_class_racial(player_type *creature_ptr, rc_type *rc_ptr)
             rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
         } else {
             rpi = rc_ptr->make_power(_("召魂", "Evocation"));
+            rpi.info = format("%s%d", KWD_POWER, rc_ptr->lvl * 4);
             rpi.min_level = 42;
             rpi.cost = 40;
             rpi.stat = A_WIS;
@@ -56,6 +59,7 @@ void switch_class_racial(player_type *creature_ptr, rc_type *rc_ptr)
         break;
     case CLASS_ROGUE:
         rpi = rc_ptr->make_power(_("ヒット＆アウェイ", "Hit and Away"));
+        rpi.info = format("%s%d", KWD_SPHERE, 30);
         rpi.min_level = 8;
         rpi.cost = 12;
         rpi.stat = A_DEX;
@@ -74,6 +78,7 @@ void switch_class_racial(player_type *creature_ptr, rc_type *rc_ptr)
     case CLASS_PALADIN:
         if (is_good_realm(creature_ptr->realm1)) {
             rpi = rc_ptr->make_power(_("ホーリー・ランス", "Holy Lance"));
+            rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 3);
             rpi.min_level = 30;
             rpi.cost = 30;
             rpi.stat = A_WIS;
@@ -81,6 +86,7 @@ void switch_class_racial(player_type *creature_ptr, rc_type *rc_ptr)
             rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
         } else {
             rpi = rc_ptr->make_power(_("ヘル・ランス", "Hell Lance"));
+            rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 3);
             rpi.min_level = 30;
             rpi.cost = 30;
             rpi.stat = A_WIS;
@@ -106,6 +112,7 @@ void switch_class_racial(player_type *creature_ptr, rc_type *rc_ptr)
         break;
     case CLASS_CHAOS_WARRIOR:
         rpi = rc_ptr->make_power(_("幻惑の光", "Confusing Light"));
+        rpi.info = format("%s%d", KWD_POWER, rc_ptr->lvl * 4);
         rpi.min_level = 40;
         rpi.cost = 50;
         rpi.stat = A_INT;
@@ -130,6 +137,7 @@ void switch_class_racial(player_type *creature_ptr, rc_type *rc_ptr)
     case CLASS_MINDCRAFTER:
     case CLASS_FORCETRAINER:
         rpi = rc_ptr->make_power(_("明鏡止水", "Clear Mind"));
+        rpi.info = format("%s%d", KWD_MANA, 3 + rc_ptr->lvl / 20);
         rpi.min_level = 15;
         rpi.cost = 0;
         rpi.stat = A_WIS;
@@ -161,6 +169,7 @@ void switch_class_racial(player_type *creature_ptr, rc_type *rc_ptr)
         break;
     case CLASS_BEASTMASTER:
         rpi = rc_ptr->make_power(_("生物支配", "Dominate a Living Thing"));
+        rpi.info = format("%s%d", KWD_POWER, rc_ptr->lvl);
         rpi.min_level = 1;
         rpi.cost = (creature_ptr->lev + 3) / 4;
         rpi.stat = A_CHR;
@@ -168,6 +177,7 @@ void switch_class_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
 
         rpi = rc_ptr->make_power(_("真・生物支配", "Dominate Living Things"));
+        rpi.info = format("%s%d", KWD_POWER, rc_ptr->lvl);
         rpi.min_level = 30;
         rpi.cost = (creature_ptr->lev + 20) / 2;
         rpi.stat = A_CHR;
@@ -261,6 +271,7 @@ void switch_class_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
 
         rpi = rc_ptr->make_power(_("静水", "Mirror Concentration"));
+        rpi.info = format("%s%d", KWD_MANA, 3 + rc_ptr->lvl / 20);
         rpi.min_level = 30;
         rpi.cost = 0;
         rpi.stat = A_INT;
@@ -285,6 +296,7 @@ void switch_class_racial(player_type *creature_ptr, rc_type *rc_ptr)
         break;
     case CLASS_ELEMENTALIST:
         rpi = rc_ptr->make_power(_("明鏡止水", "Clear Mind"));
+        rpi.info = format("%s%d", KWD_MANA, 3 + rc_ptr->lvl / 20);
         rpi.min_level = 15;
         rpi.cost = 0;
         rpi.stat = A_WIS;
