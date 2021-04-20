@@ -1244,70 +1244,71 @@ void switch_element_racial(player_type *creature_ptr, rc_type *rc_ptr)
 {
     auto plev = creature_ptr->lev;
     auto realm = static_cast<ElementRealm>(creature_ptr->element);
+    rpi_type rpi;
     switch (realm) {
     case ElementRealm::FIRE:
-        rc_ptr->power_desc[rc_ptr->num].racial_name = _("ライト・エリア", "Light area");
-        rc_ptr->power_desc[rc_ptr->num].min_level = 3;
-        rc_ptr->power_desc[rc_ptr->num].cost = 5;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
-        rc_ptr->power_desc[rc_ptr->num].fail = 10;
-        rc_ptr->power_desc[rc_ptr->num++].number = -4;
+        rpi = rc_ptr->make_power(_("ライト・エリア", "Light area"));
+        rpi.min_level = 3;
+        rpi.cost = 5;
+        rpi.stat = A_WIS;
+        rpi.fail = 10;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_1);
         break;
     case ElementRealm::ICE:
-        rc_ptr->power_desc[rc_ptr->num].racial_name = _("周辺フリーズ", "Sleep monsters");
-        rc_ptr->power_desc[rc_ptr->num].min_level = 10;
-        rc_ptr->power_desc[rc_ptr->num].cost = 15;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
-        rc_ptr->power_desc[rc_ptr->num].fail = 25;
-        rc_ptr->power_desc[rc_ptr->num++].number = -4;
+        rpi = rc_ptr->make_power(_("周辺フリーズ", "Sleep monsters"));
+        rpi.min_level = 10;
+        rpi.cost = 15;
+        rpi.stat = A_WIS;
+        rpi.fail = 25;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_1);
         break;
     case ElementRealm::SKY:
-        rc_ptr->power_desc[rc_ptr->num].racial_name = _("魔力充填", "Recharging");
-        rc_ptr->power_desc[rc_ptr->num].min_level = 20;
-        rc_ptr->power_desc[rc_ptr->num].cost = 15;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
-        rc_ptr->power_desc[rc_ptr->num].fail = 25;
-        rc_ptr->power_desc[rc_ptr->num++].number = -4;
+        rpi = rc_ptr->make_power(_("魔力充填", "Recharging"));
+        rpi.min_level = 20;
+        rpi.cost = 15;
+        rpi.stat = A_WIS;
+        rpi.fail = 25;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_1);
         break;
     case ElementRealm::SEA:
-        rc_ptr->power_desc[rc_ptr->num].racial_name = _("岩石溶解", "Stone to mud");
-        rc_ptr->power_desc[rc_ptr->num].min_level = 5;
-        rc_ptr->power_desc[rc_ptr->num].cost = 5;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
-        rc_ptr->power_desc[rc_ptr->num].fail = 10;
-        rc_ptr->power_desc[rc_ptr->num++].number = -4;
+        rpi = rc_ptr->make_power(_("岩石溶解", "Stone to mud"));
+        rpi.min_level = 5;
+        rpi.cost = 5;
+        rpi.stat = A_WIS;
+        rpi.fail = 10;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_1);
         break;
     case ElementRealm::DARKNESS:
-        rc_ptr->power_desc[rc_ptr->num].racial_name = format(_("闇の扉(半径%d)", "Door to darkness(rad %d)"), 15 + plev / 2);
-        rc_ptr->power_desc[rc_ptr->num].min_level = 5;
-        rc_ptr->power_desc[rc_ptr->num].cost = 5 + plev / 7;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
-        rc_ptr->power_desc[rc_ptr->num].fail = 20;
-        rc_ptr->power_desc[rc_ptr->num++].number = -4;
+        rpi = rc_ptr->make_power(format(_("闇の扉(半径%d)", "Door to darkness(rad %d)"), 15 + plev / 2));
+        rpi.min_level = 5;
+        rpi.cost = 5 + plev / 7;
+        rpi.stat = A_WIS;
+        rpi.fail = 20;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_1);
         break;
     case ElementRealm::CHAOS:
-        rc_ptr->power_desc[rc_ptr->num].racial_name = _("現実変容", "Alter reality");
-        rc_ptr->power_desc[rc_ptr->num].min_level = 35;
-        rc_ptr->power_desc[rc_ptr->num].cost = 30;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
-        rc_ptr->power_desc[rc_ptr->num].fail = 40;
-        rc_ptr->power_desc[rc_ptr->num++].number = -4;
+        rpi = rc_ptr->make_power(_("現実変容", "Alter reality"));
+        rpi.min_level = 35;
+        rpi.cost = 30;
+        rpi.stat = A_WIS;
+        rpi.fail = 40;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_1);
         break;
     case ElementRealm::EARTH:
-        rc_ptr->power_desc[rc_ptr->num].racial_name = _("地震", "Earthquake");
-        rc_ptr->power_desc[rc_ptr->num].min_level = 25;
-        rc_ptr->power_desc[rc_ptr->num].cost = 15;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
-        rc_ptr->power_desc[rc_ptr->num].fail = 20;
-        rc_ptr->power_desc[rc_ptr->num++].number = -4;
+        rpi = rc_ptr->make_power(_("地震", "Earthquake"));
+        rpi.min_level = 25;
+        rpi.cost = 15;
+        rpi.stat = A_WIS;
+        rpi.fail = 20;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_1);
         break;
     case ElementRealm::DEATH:
-        rc_ptr->power_desc[rc_ptr->num].racial_name = _("増殖阻止", "Sterilization");
-        rc_ptr->power_desc[rc_ptr->num].min_level = 5;
-        rc_ptr->power_desc[rc_ptr->num].cost = 5;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
-        rc_ptr->power_desc[rc_ptr->num].fail = 20;
-        rc_ptr->power_desc[rc_ptr->num++].number = -4;
+        rpi = rc_ptr->make_power(_("増殖阻止", "Sterilization"));
+        rpi.min_level = 5;
+        rpi.cost = 5;
+        rpi.stat = A_WIS;
+        rpi.fail = 20;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_1);
         break;
     default:
         break;

@@ -21,6 +21,7 @@
 #include "status/action-setter.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
+#include "view/display-messages.h"
 #include <string>
 
 static bool input_racial_power_selection(player_type *creature_ptr, rc_type *rc_ptr)
@@ -33,7 +34,7 @@ static bool input_racial_power_selection(player_type *creature_ptr, rc_type *rc_
     case '8':
     case 'k':
     case 'K':
-        rc_ptr->menu_line += (rc_ptr->num - 1);
+        rc_ptr->menu_line += (rc_ptr->size() - 1);
         return FALSE;
     case '2':
     case 'j':
@@ -48,7 +49,7 @@ static bool input_racial_power_selection(player_type *creature_ptr, rc_type *rc_
     case 'H':
         if (rc_ptr->menu_line > 18)
             rc_ptr->menu_line -= 18;
-        else if (rc_ptr->menu_line + 18 <= rc_ptr->num)
+        else if (rc_ptr->menu_line + 18 <= rc_ptr->size())
             rc_ptr->menu_line += 18;
 
         return FALSE;
@@ -71,8 +72,8 @@ static bool check_input_racial_power(player_type *creature_ptr, rc_type *rc_ptr)
     if (input_racial_power_selection(creature_ptr, rc_ptr))
         return TRUE;
 
-    if (rc_ptr->menu_line > rc_ptr->num)
-        rc_ptr->menu_line -= rc_ptr->num;
+    if (rc_ptr->menu_line > rc_ptr->size())
+        rc_ptr->menu_line -= rc_ptr->size();
 
     return FALSE;
 }
@@ -84,7 +85,7 @@ static void display_racial_list(rc_type *rc_ptr, char *dummy)
     if (!use_menu)
         screen_save();
 
-    if (rc_ptr->num < 18) {
+    if (rc_ptr->size() < 18) {
         prt(_("                            Lv   MP 失率", "                            Lv Cost Fail"), 1, 0);
         return;
     }
@@ -101,7 +102,7 @@ static void select_racial_power(player_type *creature_ptr, rc_type *rc_ptr)
     byte y = 2;
     byte x = 0;
     int ctr = 0;
-    while (ctr < rc_ptr->num) {
+    while (ctr < rc_ptr->size()) {
         TERM_LEN x1 = ((ctr < 18) ? x : x + 40);
         TERM_LEN y1 = ((ctr < 18) ? y + ctr : y + ctr - 18);
         if (use_menu) {
@@ -147,7 +148,7 @@ static void decide_racial_command(rc_type *rc_ptr)
     if (use_menu)
         return;
 
-    if (rc_ptr->choice == '\r' && rc_ptr->num == 1)
+    if (rc_ptr->choice == '\r' && rc_ptr->size() == 1)
         rc_ptr->choice = 'a';
 
     if (!isalpha(rc_ptr->choice)) {
@@ -165,7 +166,7 @@ static void decide_racial_command(rc_type *rc_ptr)
 
 static bool ask_invoke_racial_power(rc_type *rc_ptr)
 {
-    if ((rc_ptr->command_code < 0) || (rc_ptr->command_code >= rc_ptr->num)) {
+    if ((rc_ptr->command_code < 0) || (rc_ptr->command_code >= rc_ptr->size())) {
         bell();
         return FALSE;
     }
@@ -205,7 +206,7 @@ static bool process_racial_power_choice(player_type *creature_ptr, rc_type *rc_p
 
 static bool repeat_racial_power(player_type *creature_ptr, rc_type *rc_ptr)
 {
-    if (repeat_pull(&rc_ptr->command_code) && (rc_ptr->command_code >= 0) && (rc_ptr->command_code < rc_ptr->num))
+    if (repeat_pull(&rc_ptr->command_code) && (rc_ptr->command_code >= 0) && (rc_ptr->command_code < rc_ptr->size()))
         return FALSE;
 
     if (use_menu)
@@ -281,8 +282,8 @@ void do_cmd_racial_power(player_type *creature_ptr)
     if (creature_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
         set_action(creature_ptr, ACTION_NONE);
 
-    rc_type tmp_rc;
-    rc_type *rc_ptr = initialize_rc_type(creature_ptr, &tmp_rc);
+    rc_type tmp_r = rc_type(creature_ptr);
+    rc_type *rc_ptr = &tmp_r;
     switch_class_racial(creature_ptr, rc_ptr);
     if (creature_ptr->mimic_form)
         set_mimic_racial_command(creature_ptr, rc_ptr);
@@ -293,9 +294,14 @@ void do_cmd_racial_power(player_type *creature_ptr)
     rc_ptr->flag = FALSE;
     rc_ptr->redraw = FALSE;
 
+    if (rc_ptr->size() == 0) {
+        msg_print(_("特殊能力はありません。", "You have no special powers."));
+        return;
+    }
+
     (void)strnfmt(rc_ptr->out_val, 78,
         _("(特殊能力 %c-%c, *'で一覧, ESCで中断) どの特殊能力を使いますか？", "(Powers %c-%c, *=List, ESC=exit) Use which power? "), I2A(0),
-        (rc_ptr->num <= 26) ? I2A(rc_ptr->num - 1) : '0' + rc_ptr->num - 27);
+        (rc_ptr->size() <= 26) ? I2A(rc_ptr->size() - 1) : '0' + rc_ptr->size() - 27);
 
     if (repeat_racial_power(creature_ptr, rc_ptr))
         return;
