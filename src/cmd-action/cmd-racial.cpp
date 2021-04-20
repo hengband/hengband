@@ -21,6 +21,7 @@
 #include "status/action-setter.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
+#include <string>
 
 static bool input_racial_power_selection(player_type *creature_ptr, rc_type *rc_ptr)
 {
@@ -119,7 +120,7 @@ static void select_racial_power(player_type *creature_ptr, rc_type *rc_ptr)
         }
 
         strcat(dummy,
-            format("%-23.23s %2d %4d %3d%%", rc_ptr->power_desc[ctr].racial_name, rc_ptr->power_desc[ctr].min_level, rc_ptr->power_desc[ctr].cost,
+            format("%-23.23s %2d %4d %3d%%", rc_ptr->power_desc[ctr].racial_name.c_str(), rc_ptr->power_desc[ctr].min_level, rc_ptr->power_desc[ctr].cost,
                 100 - racial_chance(creature_ptr, &rc_ptr->power_desc[ctr])));
         prt(dummy, y1, x1);
         ctr++;
@@ -173,7 +174,7 @@ static bool ask_invoke_racial_power(rc_type *rc_ptr)
         return TRUE;
 
     char tmp_val[160];
-    (void)strnfmt(tmp_val, 78, _("%sを使いますか？ ", "Use %s? "), rc_ptr->power_desc[rc_ptr->command_code].racial_name);
+    (void)strnfmt(tmp_val, 78, _("%sを使いますか？ ", "Use %s? "), rc_ptr->power_desc[rc_ptr->command_code].racial_name.c_str());
     return get_check(tmp_val);
 }
 

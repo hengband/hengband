@@ -1246,7 +1246,7 @@ void switch_element_racial(player_type *creature_ptr, rc_type *rc_ptr)
     auto realm = static_cast<ElementRealm>(creature_ptr->element);
     switch (realm) {
     case ElementRealm::FIRE:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("ライト・エリア", "Light area"));
+        rc_ptr->power_desc[rc_ptr->num].racial_name = _("ライト・エリア", "Light area");
         rc_ptr->power_desc[rc_ptr->num].min_level = 3;
         rc_ptr->power_desc[rc_ptr->num].cost = 5;
         rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
@@ -1254,7 +1254,7 @@ void switch_element_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rc_ptr->power_desc[rc_ptr->num++].number = -4;
         break;
     case ElementRealm::ICE:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("周辺フリーズ", "Sleep monsters"));
+        rc_ptr->power_desc[rc_ptr->num].racial_name = _("周辺フリーズ", "Sleep monsters");
         rc_ptr->power_desc[rc_ptr->num].min_level = 10;
         rc_ptr->power_desc[rc_ptr->num].cost = 15;
         rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
@@ -1262,7 +1262,7 @@ void switch_element_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rc_ptr->power_desc[rc_ptr->num++].number = -4;
         break;
     case ElementRealm::SKY:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("魔力充填", "Recharging"));
+        rc_ptr->power_desc[rc_ptr->num].racial_name = _("魔力充填", "Recharging");
         rc_ptr->power_desc[rc_ptr->num].min_level = 20;
         rc_ptr->power_desc[rc_ptr->num].cost = 15;
         rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
@@ -1270,7 +1270,7 @@ void switch_element_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rc_ptr->power_desc[rc_ptr->num++].number = -4;
         break;
     case ElementRealm::SEA:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("岩石溶解", "Stone to mud"));
+        rc_ptr->power_desc[rc_ptr->num].racial_name = _("岩石溶解", "Stone to mud");
         rc_ptr->power_desc[rc_ptr->num].min_level = 5;
         rc_ptr->power_desc[rc_ptr->num].cost = 5;
         rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
@@ -1278,7 +1278,7 @@ void switch_element_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rc_ptr->power_desc[rc_ptr->num++].number = -4;
         break;
     case ElementRealm::DARKNESS:
-        sprintf(rc_ptr->power_desc[rc_ptr->num].racial_name, _("闇の扉(半径%d)", "Door to darkness(rad %d)"), 15 + plev / 2);
+        rc_ptr->power_desc[rc_ptr->num].racial_name = format(_("闇の扉(半径%d)", "Door to darkness(rad %d)"), 15 + plev / 2);
         rc_ptr->power_desc[rc_ptr->num].min_level = 5;
         rc_ptr->power_desc[rc_ptr->num].cost = 5 + plev / 7;
         rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
@@ -1286,7 +1286,7 @@ void switch_element_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rc_ptr->power_desc[rc_ptr->num++].number = -4;
         break;
     case ElementRealm::CHAOS:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("現実変容", "Alter reality"));
+        rc_ptr->power_desc[rc_ptr->num].racial_name = _("現実変容", "Alter reality");
         rc_ptr->power_desc[rc_ptr->num].min_level = 35;
         rc_ptr->power_desc[rc_ptr->num].cost = 30;
         rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
@@ -1294,7 +1294,7 @@ void switch_element_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rc_ptr->power_desc[rc_ptr->num++].number = -4;
         break;
     case ElementRealm::EARTH:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("地震", "Earthquake"));
+        rc_ptr->power_desc[rc_ptr->num].racial_name = _("地震", "Earthquake");
         rc_ptr->power_desc[rc_ptr->num].min_level = 25;
         rc_ptr->power_desc[rc_ptr->num].cost = 15;
         rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
@@ -1302,7 +1302,7 @@ void switch_element_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rc_ptr->power_desc[rc_ptr->num++].number = -4;
         break;
     case ElementRealm::DEATH:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("増殖阻止", "Sterilization"));
+        rc_ptr->power_desc[rc_ptr->num].racial_name = _("増殖阻止", "Sterilization");
         rc_ptr->power_desc[rc_ptr->num].min_level = 5;
         rc_ptr->power_desc[rc_ptr->num].cost = 5;
         rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
