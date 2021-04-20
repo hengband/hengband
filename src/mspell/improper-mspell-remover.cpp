@@ -27,7 +27,7 @@ static void add_cheat_remove_flags(player_type *target_ptr, msr_type *msr_ptr)
  * @param f6p モンスター魔法のフラグリスト3
  * @return なし
  */
-void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, FlagGroup<RF_ABILITY>& ability_flags)
+void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, EnumClassFlagGroup<RF_ABILITY> &ability_flags)
 {
     msr_type tmp_msr;
     msr_type *msr_ptr = initialize_msr_type(target_ptr, &tmp_msr, m_idx, ability_flags);

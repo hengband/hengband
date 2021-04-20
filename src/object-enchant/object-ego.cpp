@@ -63,7 +63,7 @@ byte get_random_ego(byte slot, bool good)
  * @param gen_flags 生成フラグ(参照渡し)
  * @return なし
  */
-static void ego_invest_curse(player_type* player_ptr, object_type* o_ptr, FlagGroup<TRG>& gen_flags)
+static void ego_invest_curse(player_type *player_ptr, object_type *o_ptr, EnumClassFlagGroup<TRG> &gen_flags)
 {
     if (gen_flags.has(TRG::CURSED))
         o_ptr->curse_flags |= (TRC_CURSED);
@@ -85,7 +85,7 @@ static void ego_invest_curse(player_type* player_ptr, object_type* o_ptr, FlagGr
  * @param gen_flags 生成フラグ(参照渡し)
  * @return なし
  */
-static void ego_invest_extra_abilities(object_type *o_ptr, FlagGroup<TRG> &gen_flags)
+static void ego_invest_extra_abilities(object_type *o_ptr, EnumClassFlagGroup<TRG> &gen_flags)
 {
     if (gen_flags.has(TRG::ONE_SUSTAIN))
         one_sustain(o_ptr);
@@ -131,7 +131,7 @@ static void ego_invest_extra_abilities(object_type *o_ptr, FlagGroup<TRG> &gen_f
  * @param gen_flags 生成フラグ(参照渡し)
  * @return なし
  */
-static void ego_interpret_extra_abilities(object_type *o_ptr, ego_item_type *e_ptr, FlagGroup<TRG> &gen_flags)
+static void ego_interpret_extra_abilities(object_type *o_ptr, ego_item_type *e_ptr, EnumClassFlagGroup<TRG> &gen_flags)
 {
     for (auto& xtra : e_ptr->xtra_flags) {
         if (xtra.mul == 0 || xtra.dev == 0)

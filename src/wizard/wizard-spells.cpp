@@ -126,12 +126,12 @@ void wiz_teleport_back(player_type *caster_ptr)
  */
 void wiz_learn_blue_magic_all(player_type *caster_ptr)
 {
-    FlagGroup<RF_ABILITY> ability_flags;
+    EnumClassFlagGroup<RF_ABILITY> ability_flags;
     for (int j = 1; j < A_MAX; j++) {
         set_rf_masks(ability_flags, static_cast<blue_magic_type>(j));
 
         std::vector<RF_ABILITY> spells;
-        FlagGroup<RF_ABILITY>::get_flags(ability_flags, std::back_inserter(spells));
+        EnumClassFlagGroup<RF_ABILITY>::get_flags(ability_flags, std::back_inserter(spells));
         for (auto spell : spells) {
             caster_ptr->magic_num2[static_cast<int>(spell)] = 1;
         }

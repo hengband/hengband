@@ -22,7 +22,7 @@ typedef struct msa_type {
     monster_type *m_ptr;
     monster_race *r_ptr;
     bool no_inate;
-    FlagGroup<RF_ABILITY> ability_flags;
+    EnumClassFlagGroup<RF_ABILITY> ability_flags;
     POSITION x;
     POSITION y;
     POSITION x_br_lite;

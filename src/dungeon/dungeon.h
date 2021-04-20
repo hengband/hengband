@@ -68,7 +68,7 @@ struct dungeon_type {
 	BIT_FLAGS mflags9{};
 	BIT_FLAGS mflagsr{};
 
-	FlagGroup<RF_ABILITY> m_ability_flags;
+	EnumClassFlagGroup<RF_ABILITY> m_ability_flags;
 
 	char r_char[5]{};		/* Monster race allowed */
 	KIND_OBJECT_IDX final_object{};	/* The object you'll find at the bottom */

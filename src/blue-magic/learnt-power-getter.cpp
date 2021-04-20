@@ -40,7 +40,7 @@ typedef struct learnt_magic_type {
     char choice;
     char out_val[160];
     char comment[80];
-    FlagGroup<RF_ABILITY> ability_flags;
+    EnumClassFlagGroup<RF_ABILITY> ability_flags;
     monster_power spell;
     int menu_line;
     bool flag;
@@ -179,7 +179,7 @@ static bool sweep_learnt_spells(player_type *caster_ptr, learnt_magic_type *lm_p
     set_rf_masks(lm_ptr->ability_flags, static_cast<blue_magic_type>(lm_ptr->mode));
 
     std::vector<RF_ABILITY> spells;
-    FlagGroup<RF_ABILITY>::get_flags(lm_ptr->ability_flags, std::back_inserter(spells));
+    EnumClassFlagGroup<RF_ABILITY>::get_flags(lm_ptr->ability_flags, std::back_inserter(spells));
     std::transform(spells.begin(), spells.end(), std::back_inserter(lm_ptr->blue_magics), [](RF_ABILITY ability) { return static_cast<int>(ability); });
     lm_ptr->count = lm_ptr->ability_flags.count();
 

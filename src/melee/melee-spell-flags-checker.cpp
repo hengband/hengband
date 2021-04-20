@@ -298,7 +298,7 @@ static bool set_melee_spell_set(player_type *target_ptr, melee_spell_type *ms_pt
     if (ms_ptr->ability_flags.none())
         return FALSE;
 
-    FlagGroup<RF_ABILITY>::get_flags(ms_ptr->ability_flags, std::back_inserter(ms_ptr->spells));
+    EnumClassFlagGroup<RF_ABILITY>::get_flags(ms_ptr->ability_flags, std::back_inserter(ms_ptr->spells));
 
     return !ms_ptr->spells.empty() && target_ptr->playing && !target_ptr->is_dead && !target_ptr->leaving;
 }
