@@ -2,4 +2,4 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-SUBDIRS = font graf music sound
+SUBDIRS = graf music sound

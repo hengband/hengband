@@ -37,8 +37,7 @@
  * </p>
  *
  * <p>
- * The "lib/user/font-win.prf" contains attr/char mappings for use with the
- * normal "lib/xtra/font/*.fon" font files.
+ * The "lib/user/font-win.prf" contains attr/char mappings for wall.bmp.
  * </p>
  *
  * <p>
@@ -199,7 +198,6 @@ typedef struct {
     bool size_hack;
     bool xtra_hack;
     bool visible;
-    bool bizarre;
     concptr font_want;
     HFONT font_id;
     int font_wid; //!< フォント横幅
@@ -470,9 +468,6 @@ static void save_prefs_aux(int i)
     wsprintf(buf, "%d", td->lf.lfWeight);
     WritePrivateProfileString(sec_name, "FontWgt", buf, ini_file);
 
-    strcpy(buf, td->bizarre ? "1" : "0");
-    WritePrivateProfileString(sec_name, "Bizarre", buf, ini_file);
-
     wsprintf(buf, "%d", td->tile_wid);
     WritePrivateProfileString(sec_name, "TileWid", buf, ini_file);
 
@@ -590,8 +585,6 @@ static void load_prefs_aux(int i)
 #else
     GetPrivateProfileString(sec_name, "Font", "Courier", tmp, 127, ini_file);
 #endif
-
-    td->bizarre = (GetPrivateProfileInt(sec_name, "Bizarre", td->bizarre, ini_file) != 0);
 
     td->font_want = string_make(tmp);
     int hgt = 15;
@@ -935,7 +928,6 @@ static void term_change_font(term_data *td)
         return;
 
     term_force_font(td);
-    td->bizarre = TRUE;
     td->tile_wid = td->font_wid;
     td->tile_hgt = td->font_hgt;
     term_getsize(td);
@@ -1331,68 +1323,64 @@ static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
     if (use_bg)
         SetBkMode(hdc, TRANSPARENT);
 
-    if (td->bizarre || (td->tile_hgt != td->font_hgt) || (td->tile_wid != td->font_wid)) {
-        ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rc, NULL, 0, NULL);
-        if (use_bg)
-            draw_bg(hdc, &rc);
+    ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rc, NULL, 0, NULL);
+    if (use_bg)
+        draw_bg(hdc, &rc);
 
-        rc.left += ((td->tile_wid - td->font_wid) / 2);
-        rc.right = rc.left + td->font_wid;
-        rc.top += ((td->tile_hgt - td->font_hgt) / 2);
-        rc.bottom = rc.top + td->font_hgt;
+    rc.left += ((td->tile_wid - td->font_wid) / 2);
+    rc.right = rc.left + td->font_wid;
+    rc.top += ((td->tile_hgt - td->font_hgt) / 2);
+    rc.bottom = rc.top + td->font_hgt;
 
-        for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++) {
 #ifdef JP
-            if (use_bigtile && *(s + i) == "■"[0] && *(s + i + 1) == "■"[1]) {
-                rc.right += td->font_wid;
-                oldBrush = static_cast<HBRUSH>(SelectObject(hdc, myBrush));
-                oldPen = static_cast<HPEN>(SelectObject(hdc, GetStockObject(NULL_PEN)));
-                Rectangle(hdc, rc.left, rc.top, rc.right + 1, rc.bottom + 1);
-                SelectObject(hdc, oldBrush);
-                SelectObject(hdc, oldPen);
-                rc.right -= td->font_wid;
-                i++;
-                rc.left += 2 * td->tile_wid;
-                rc.right += 2 * td->tile_wid;
-            } else if (iskanji(*(s + i))) /* 2バイト文字 */
-            {
-                rc.right += td->font_wid;
-                ExtTextOut(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s + i, 2, NULL);
-                rc.right -= td->font_wid;
-                i++;
-                rc.left += 2 * td->tile_wid;
-                rc.right += 2 * td->tile_wid;
-            } else if (*(s + i) == 127) {
-                oldBrush = static_cast<HBRUSH>(SelectObject(hdc, myBrush));
-                oldPen = static_cast<HPEN>(SelectObject(hdc, GetStockObject(NULL_PEN)));
-                Rectangle(hdc, rc.left, rc.top, rc.right + 1, rc.bottom + 1);
-                SelectObject(hdc, oldBrush);
-                SelectObject(hdc, oldPen);
-                rc.left += td->tile_wid;
-                rc.right += td->tile_wid;
-            } else {
-                ExtTextOut(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s + i, 1, NULL);
-                rc.left += td->tile_wid;
-                rc.right += td->tile_wid;
-            }
-#else
-            if (*(s + i) == 127) {
-                oldBrush = static_cast<HBRUSH>(SelectObject(hdc, myBrush));
-                oldPen = static_cast<HPEN>(SelectObject(hdc, GetStockObject(NULL_PEN)));
-                Rectangle(hdc, rc.left, rc.top, rc.right + 1, rc.bottom + 1);
-                SelectObject(hdc, oldBrush);
-                SelectObject(hdc, oldPen);
-                rc.left += td->tile_wid;
-                rc.right += td->tile_wid;
-            } else {
-                ExtTextOut(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s + i, 1, NULL);
-                rc.left += td->tile_wid;
-                rc.right += td->tile_wid;
-            }
-#endif
+        if (use_bigtile && *(s + i) == "■"[0] && *(s + i + 1) == "■"[1]) {
+            rc.right += td->font_wid;
+            oldBrush = static_cast<HBRUSH>(SelectObject(hdc, myBrush));
+            oldPen = static_cast<HPEN>(SelectObject(hdc, GetStockObject(NULL_PEN)));
+            Rectangle(hdc, rc.left, rc.top, rc.right + 1, rc.bottom + 1);
+            SelectObject(hdc, oldBrush);
+            SelectObject(hdc, oldPen);
+            rc.right -= td->font_wid;
+            i++;
+            rc.left += 2 * td->tile_wid;
+            rc.right += 2 * td->tile_wid;
+        } else if (iskanji(*(s + i))) /* 2バイト文字 */
+        {
+            rc.right += td->font_wid;
+            ExtTextOut(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s + i, 2, NULL);
+            rc.right -= td->font_wid;
+            i++;
+            rc.left += 2 * td->tile_wid;
+            rc.right += 2 * td->tile_wid;
+        } else if (*(s + i) == 127) {
+            oldBrush = static_cast<HBRUSH>(SelectObject(hdc, myBrush));
+            oldPen = static_cast<HPEN>(SelectObject(hdc, GetStockObject(NULL_PEN)));
+            Rectangle(hdc, rc.left, rc.top, rc.right + 1, rc.bottom + 1);
+            SelectObject(hdc, oldBrush);
+            SelectObject(hdc, oldPen);
+            rc.left += td->tile_wid;
+            rc.right += td->tile_wid;
+        } else {
+            ExtTextOut(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s + i, 1, NULL);
+            rc.left += td->tile_wid;
+            rc.right += td->tile_wid;
         }
-    } else {
-        ExtTextOut(hdc, rc.left, rc.top, ETO_OPAQUE | ETO_CLIPPED, &rc, s, n, NULL);
+#else
+        if (*(s + i) == 127) {
+            oldBrush = static_cast<HBRUSH>(SelectObject(hdc, myBrush));
+            oldPen = static_cast<HPEN>(SelectObject(hdc, GetStockObject(NULL_PEN)));
+            Rectangle(hdc, rc.left, rc.top, rc.right + 1, rc.bottom + 1);
+            SelectObject(hdc, oldBrush);
+            SelectObject(hdc, oldPen);
+            rc.left += td->tile_wid;
+            rc.right += td->tile_wid;
+        } else {
+            ExtTextOut(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s + i, 1, NULL);
+            rc.left += td->tile_wid;
+            rc.right += td->tile_wid;
+        }
+#endif
     }
 
     ReleaseDC(td->w, hdc);
@@ -1546,7 +1534,6 @@ static void init_windows(void)
     td->pos_x = 7 * 30;
     td->pos_y = 7 * 20;
     td->posfix = FALSE;
-    td->bizarre = TRUE;
 
     for (int i = 1; i < MAX_TERM_DATA; i++) {
         td = &data[i];
@@ -1563,7 +1550,6 @@ static void init_windows(void)
         td->pos_x = (7 - i) * 30;
         td->pos_y = (7 - i) * 20;
         td->posfix = FALSE;
-        td->bizarre = TRUE;
     }
 
     load_prefs();
@@ -1702,14 +1688,6 @@ static void setup_menus(void)
         CheckMenuItem(hm, IDM_WINDOW_POS_0 + i, (data[i].posfix ? MF_CHECKED : MF_UNCHECKED));
         if (data[i].visible) {
             EnableMenuItem(hm, IDM_WINDOW_POS_0 + i, MF_BYCOMMAND | MF_ENABLED);
-        }
-    }
-
-    for (int i = 0; i < MAX_TERM_DATA; i++) {
-        EnableMenuItem(hm, IDM_WINDOW_BIZ_0 + i, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
-        CheckMenuItem(hm, IDM_WINDOW_BIZ_0 + i, (data[i].bizarre ? MF_CHECKED : MF_UNCHECKED));
-        if (data[i].visible) {
-            EnableMenuItem(hm, IDM_WINDOW_BIZ_0 + i, MF_BYCOMMAND | MF_ENABLED);
         }
     }
 
@@ -1978,24 +1956,6 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
             term_window_pos(td, data[0].w);
         }
 
-        break;
-    }
-    case IDM_WINDOW_BIZ_0:
-    case IDM_WINDOW_BIZ_1:
-    case IDM_WINDOW_BIZ_2:
-    case IDM_WINDOW_BIZ_3:
-    case IDM_WINDOW_BIZ_4:
-    case IDM_WINDOW_BIZ_5:
-    case IDM_WINDOW_BIZ_6:
-    case IDM_WINDOW_BIZ_7: {
-        int i = wCmd - IDM_WINDOW_BIZ_0;
-        if ((i < 0) || (i >= MAX_TERM_DATA))
-            break;
-
-        td = &data[i];
-        td->bizarre = !td->bizarre;
-        term_getsize(td);
-        term_window_resize(td);
         break;
     }
     case IDM_WINDOW_I_WID_0:

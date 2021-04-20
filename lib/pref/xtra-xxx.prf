@@ -140,3 +140,5 @@ R:0:0xAD/0
 R:0:0xAA/0
 ?:[EQU $CLASS Sniper]
 R:0:0xA8/0
+?:[EQU $CLASS Elementalist]
+R:0:0xAE/0

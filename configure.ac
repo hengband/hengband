@@ -150,4 +150,4 @@ AC_FUNC_STRFTIME
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS(gethostname mkdir select socket strtol vsnprintf mkstemp usleep)
 
-AC_OUTPUT(Makefile src/Makefile lib/Makefile lib/apex/Makefile lib/bone/Makefile lib/data/Makefile lib/edit/Makefile lib/file/Makefile lib/help/Makefile lib/info/Makefile lib/pref/Makefile lib/save/Makefile lib/script/Makefile lib/user/Makefile lib/xtra/Makefile lib/xtra/font/Makefile lib/xtra/graf/Makefile lib/xtra/music/Makefile lib/xtra/sound/Makefile)
+AC_OUTPUT(Makefile src/Makefile lib/Makefile lib/apex/Makefile lib/bone/Makefile lib/data/Makefile lib/edit/Makefile lib/file/Makefile lib/help/Makefile lib/info/Makefile lib/pref/Makefile lib/save/Makefile lib/script/Makefile lib/user/Makefile lib/xtra/Makefile lib/xtra/graf/Makefile lib/xtra/music/Makefile lib/xtra/sound/Makefile)

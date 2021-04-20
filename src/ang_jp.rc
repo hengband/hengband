@@ -56,19 +56,6 @@ ANGBAND MENU
 
 		MENUITEM SEPARATOR
 
-		/*  POPUP "Bizarre Display"
-		{
-			MENUITEM "メインウィンドウ", 230
-			MENUITEM "サブウィンドウ 1", 231
-			MENUITEM "サブウィンドウ 2", 232
-			MENUITEM "サブウィンドウ 3", 233
-			MENUITEM "サブウィンドウ 4", 234
-			MENUITEM "サブウィンドウ 5", 235
-			MENUITEM "サブウィンドウ 6", 236
-			MENUITEM "サブウィンドウ 7", 237
-		}
-		*/
-
 		POPUP "タイルの幅を広げる"
 		{
 			MENUITEM "メインウィンドウ", 240
