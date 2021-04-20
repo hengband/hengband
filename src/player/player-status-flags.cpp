@@ -1944,7 +1944,7 @@ melee_type player_melee_type(player_type *creature_ptr)
  * @brief 利き手で攻撃可能かどうかを判定する
  *        利き手で攻撃可能とは、利き手に武器を持っているか、
  *        利き手が素手かつ左手も素手もしくは盾を装備している事を意味する。
- * @detail Includes martial arts and hand combats as weapons.
+ * @details Includes martial arts and hand combats as weapons.
  */
 bool can_attack_with_main_hand(player_type *creature_ptr)
 {
@@ -1960,7 +1960,7 @@ bool can_attack_with_main_hand(player_type *creature_ptr)
 /*
  * @brief 非利き手で攻撃可能かどうかを判定する
  *        非利き手で攻撃可能とは、非利き手に武器を持っている事に等しい
- * @detail Exclude martial arts and hand combats from weapons.
+ * @details Exclude martial arts and hand combats from weapons.
  */
 bool can_attack_with_sub_hand(player_type *creature_ptr)
 {
@@ -2012,7 +2012,7 @@ BIT_FLAGS has_lite(player_type *creature_ptr)
 
 /*
  * @brief 両手持ちボーナスがもらえないかどうかを判定する。 / Does *not * get two hand wielding bonus.
- * @detail
+ * @details
  *  Only can get hit bonuses when wieids an enough light weapon which is lighter than 5 times of weight limit.
  *  If its weight is 10 times heavier or more than weight limit, gets hit penalty in calc_to_hit().
  */

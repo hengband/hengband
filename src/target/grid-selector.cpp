@@ -107,7 +107,7 @@ std::unordered_map<int, std::function<bool(grid_type*)>> tgt_pt_symbol_call_back
 
 /*!
  * @brief 位置ターゲット指定情報構造体
- * @detail
+ * @details
  * ang_sort() を利用する関係上、y/x 座標それぞれについて配列を作る。
  */
 struct tgt_pt_info {

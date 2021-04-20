@@ -40,7 +40,7 @@
 
 /*!
  * @brief デバグコマンド一覧表
- * @detail
+ * @details
  * 空き: A,B,E,I,J,k,K,L,M,q,Q,R,T,U,V,W,y,Y
  */
 std::vector<std::vector<std::string>> debug_menu_table = {

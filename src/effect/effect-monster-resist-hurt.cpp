@@ -575,7 +575,7 @@ process_result effect_monster_icee_bolt(player_type *caster_ptr, effect_monster_
  * @param caster_ptr プレイヤー情報への参照ポインタ
  * @em_ptr 魔法効果情報への参照ポインタ
  * @return 効果処理を続けるかどうか
- * @detail
+ * @details
  * 量子生物に倍打、壁抜けに1.5倍打、テレポート耐性が耐性
  */
 process_result effect_monster_void(player_type* caster_ptr, effect_monster_type* em_ptr)
@@ -619,7 +619,7 @@ process_result effect_monster_void(player_type* caster_ptr, effect_monster_type*
  * @param caster_ptr プレイヤー情報への参照ポインタ
  * @em_ptr 魔法効果情報への参照ポインタ
  * @return 効果処理を続けるかどうか
- * @detail
+ * @details
  * 飛ばないテレポート耐性に1.25倍打、暗黒耐性が耐性
  * 1/3で追加に混乱か恐怖
  */

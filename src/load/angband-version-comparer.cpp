@@ -41,7 +41,7 @@ bool h_older_than(byte major, byte minor, byte patch, byte extra)
  * @param minor マイナーバージョン値
  * @param patch パッチバージョン値
  * @return 現在のバージョンより値が古いならtrue
- * @detail
+ * @details
  * 旧バージョン比較の互換性のためにのみ保持。
  */
 bool h_older_than(byte major, byte minor, byte patch)

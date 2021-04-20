@@ -148,7 +148,7 @@ void effect_player_plasma(player_type *target_ptr, effect_player_type *ep_ptr)
  * @param target_ptr プレイヤー情報への参照ポインタ
  * @param em_ptr プレイヤー効果情報への参照ポインタ
  * @return なし
- * @detail
+ * @details
  * 幽霊は回復する。追加効果で経験値吸収。
  */
 
@@ -181,7 +181,7 @@ void effect_player_nether(player_type *target_ptr, effect_player_type *ep_ptr)
  * @param target_ptr プレイヤー情報への参照ポインタ
  * @param em_ptr プレイヤー効果情報への参照ポインタ
  * @return なし
- * @detail
+ * @details
  * 追加効果で朦朧と混乱、冷気同様のインベントリ破壊。
  */
 void effect_player_water(player_type *target_ptr, effect_player_type *ep_ptr)

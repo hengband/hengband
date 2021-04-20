@@ -139,7 +139,7 @@ process_result effect_monster_hand_doom(effect_monster_type *em_ptr)
  * @brief 剣術「幻惑」の効果をモンスターに与える
  * @param caster_ptr プレイヤーの情報へのポインタ
  * @param effect_monster_type モンスターの効果情報へのポインタ
- * @detail
+ * @details
  * 精神のないモンスター、寝ているモンスターには無効。
  * 3回試行し、それぞれ2/5で失敗。
  * 寝た場合は試行終了。
