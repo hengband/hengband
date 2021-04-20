@@ -56,13 +56,6 @@ enum empty_hand_status {
 /*!< Weapon hand status */
 enum player_hand { PLAYER_HAND_MAIN = 0x0000, PLAYER_HAND_SUB = 0x0001, PLAYER_HAND_OTHER = 0x0002 };
 
-/*
- * Player sex constants (hard-coded by save-files, arrays, etc)
- */
-#define SEX_FEMALE 0
-#define SEX_MALE 1
-#define MAX_SEXES 2 /*!< 性別の定義最大数 / Maximum number of player "sex" types (see "table.c", etc) */
-
 typedef struct floor_type floor_type;
 typedef struct object_type object_type;
 

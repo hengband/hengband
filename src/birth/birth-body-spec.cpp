@@ -2,6 +2,7 @@
 #include "player/player-personalities-types.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"
+#include "player/player-sex.h"
 
 /*!
  * @brief プレイヤーの身長体重を決める / Get character's height and weight
