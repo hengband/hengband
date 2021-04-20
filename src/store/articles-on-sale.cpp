@@ -17,7 +17,7 @@
 
 /*!
  * @brief 店舗で常時販売するオブジェクトを定義する 
- * @detail
+ * @details
  * 上から優先して配置する。
  * 重複して同じ商品を設定した場合、数量が増える。
  * 17エントリーまで設定可能。(最後は TV_NONE で止める)
@@ -111,7 +111,7 @@ store_stock_item_type store_regular_table[MAX_STORES][STORE_MAX_KEEP] =
 
 /*!
  * @brief 店舗でランダム販売するオブジェクトを定義する
- * @detail tval/svalのペア
+ * @details tval/svalのペア
  */
 store_stock_item_type store_table[MAX_STORES][STORE_CHOICES] =
 {

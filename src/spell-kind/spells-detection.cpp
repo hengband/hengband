@@ -76,7 +76,7 @@ static bool detect_feat_flag(player_type *caster_ptr, POSITION range, int flag, 
  * @param range 効果範囲
  * @param known 感知外範囲を超える警告フラグを立てる場合TRUEを返す
  * @return 効力があった場合TRUEを返す
- * @detail
+ * @details
  * 吟遊詩人による感知についてはFALSEを返す
  */
 bool detect_traps(player_type *caster_ptr, POSITION range, bool known)

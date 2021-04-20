@@ -463,7 +463,7 @@ bool fishing(player_type *creature_ptr)
  * @param creature_ptr プレイヤー情報への参照ポインタ
  * @param o_ptr_ptr 脱ぐ装備品への参照ポインタのポインタ
  * @return 脱いだらTRUE、脱がなかったらFALSE
- * @detail
+ * @details
  * 脱いで落とした装備にtimeoutを設定するために装備品のアドレスを返す。
  */
 bool cosmic_cast_off(player_type *creature_ptr, object_type **o_ptr_ptr)

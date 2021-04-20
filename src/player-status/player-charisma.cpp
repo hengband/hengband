@@ -108,7 +108,7 @@ BIT_FLAGS PlayerCharisma::get_bad_flags()
 
 /*!
  * @brief ステータス現在値更新の例外処理
- * @params 通常処理されたステータスの値
+ * @param 通常処理されたステータスの値
  * @returns 例外処理されたステータスの値
  * @details
  * * MUT3_ILL_NORMを保持しているときの例外処理。

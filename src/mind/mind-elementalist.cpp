@@ -1054,7 +1054,7 @@ process_result effect_monster_elemental_genocide(player_type *caster_ptr, effect
  * @param realm 領域
  * @param lev プレイヤーレベル
  * @return 見合うならTRUE、そうでなければFALSE
- * @detail
+ * @details
  * レベルに応じて取得する耐性などの判定に使用する
  */
 bool has_element_resist(player_type *creature_ptr, ElementRealm realm, PLAYER_LEVEL lev)

@@ -34,12 +34,12 @@
 
 /*!
  * @brief 地形によるダメージを与える / Deal damage from feature.
- * @params creature_ptr プレイヤー情報への参照ポインタ
- * @params g_ptr 現在の床の情報への参照ポインタ
- * @params msg_levitation 浮遊時にダメージを受けた場合に表示するメッセージ
- * @params msg_normal 通常時にダメージを受けた場合に表示するメッセージの述部
- * @params 耐性等によるダメージレートを計算する関数
- * @patams ダメージを受けた際の追加処理を行う関数
+ * @param creature_ptr プレイヤー情報への参照ポインタ
+ * @param g_ptr 現在の床の情報への参照ポインタ
+ * @param msg_levitation 浮遊時にダメージを受けた場合に表示するメッセージ
+ * @param msg_normal 通常時にダメージを受けた場合に表示するメッセージの述部
+ * @param 耐性等によるダメージレートを計算する関数
+ * @param ダメージを受けた際の追加処理を行う関数
  * @return ダメージを与えたらTRUE、なければFALSE
  * @details
  * ダメージを受けた場合、自然回復できない。

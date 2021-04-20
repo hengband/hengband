@@ -194,7 +194,7 @@ static void display_no_killed(lore_type *lore_ptr)
  * @brief 生存数制限のあるモンスターの最大生存数を表示する
  * @param lore_ptr モンスターの思い出構造体への参照ポインタ
  * @return なし
- * @detail
+ * @details
  * 一度も倒したことのないモンスターの情報は不明。
  */
 static void display_number_of_nazguls(lore_type *lore_ptr)

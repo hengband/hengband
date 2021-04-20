@@ -506,7 +506,7 @@ char *rtrim(char *p)
  * @param s2 比較先文字列ポインタ
  * @param len 比較する長さ
  * @return 等しい場合は0、p1が大きい場合は-1、p2が大きい場合は1
- * @detail
+ * @details
  * strncmpの後方から比較する版
  */
 int strrncmp(const char *s1, const char *s2, int len)

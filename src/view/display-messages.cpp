@@ -53,7 +53,7 @@ s32b message_num(void)
 
 /*!
  * @brief 過去のゲームメッセージを返す。 / Recall the "text" of a saved message
- * @params age メッセージの世代
+ * @param age メッセージの世代
  * @return メッセージの文字列ポインタ
  */
 concptr message_str(int age)
@@ -69,7 +69,7 @@ concptr message_str(int age)
 
 /*!
  * @brief ゲームメッセージをログに追加する。 / Add a new message, with great efficiency
- * @params str 保存したいメッセージ
+ * @param str 保存したいメッセージ
  * @return なし
  */
 void message_add(concptr str)

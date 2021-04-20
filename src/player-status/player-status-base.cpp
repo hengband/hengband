@@ -179,7 +179,7 @@ void PlayerStatusBase::set_locals()
 
 /*!
  * @brief 判定するflagを持つ装備品に対応するBIT_FLAGSを返す
- * @params check_flag 判定するtr_type
+ * @param check_flag 判定するtr_type
  * @return 判定結果のBIT_FLAGS
  */
 BIT_FLAGS PlayerStatusBase::equipments_flags(tr_type check_flag)
@@ -202,7 +202,7 @@ BIT_FLAGS PlayerStatusBase::equipments_flags(tr_type check_flag)
 
 /*!
  * @brief 判定するflagを持ち、pvalが負の装備品に対応するBIT_FLAGSを返す
- * @params check_flag 判定するtr_type
+ * @param check_flag 判定するtr_type
  * @return 判定結果のBIT_FLAGS
  */
 BIT_FLAGS PlayerStatusBase::equipments_bad_flags(tr_type check_flag)
@@ -290,7 +290,7 @@ s16b PlayerStatusBase::action_value()
 
 /*!
  * @brief 値を直接変更する例外処理。
- * @params value 単純加算された修正値の合計
+ * @param value 単純加算された修正値の合計
  * @details
  * * 派生クラスで必要とされる例外処理でoverrideされる
  * @return 直接変更された値。このままmin-max処理され最終的なvalueになる。

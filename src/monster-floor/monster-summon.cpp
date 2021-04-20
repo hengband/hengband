@@ -90,7 +90,7 @@ static bool is_dead_summoning(summon_type type)
  * @brief 荒野のレベルを含めた階層レベルを返す
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return 階層レベル
- * @detail
+ * @details
  * ダンジョン及びクエストはdun_level>0となる。
  * 荒野はdun_level==0なので、その場合荒野レベルを返す。
  */
