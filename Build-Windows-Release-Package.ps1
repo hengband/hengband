@@ -31,7 +31,6 @@ function BuildPackage ($package_name, $package_unique_files, $build_conf) {
     Copy-Item -Verbose -Path .\lib\apex\h_scores.raw -Destination $hengbandDir\lib\apex
     Remove-Item -Verbose -Exclude delete.me -Recurse -Path $hengbandDir\lib\save\*, $hengbandDir\lib\user\*
     Remove-Item -Verbose -Exclude music.cfg -Path $hengbandDir\lib\xtra\music\*
-    Remove-Item -Verbose -Recurse -Force -Path $hengbandDir\lib\xtra\font
 
     # zipアーカイブ作成
     $package_path = Join-Path $(Get-Location) "${package_name}.zip"
