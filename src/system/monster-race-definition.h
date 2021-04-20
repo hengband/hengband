@@ -67,7 +67,7 @@ typedef struct monster_race {
     BIT_FLAGS flags8{}; /* Flags 8 (wilderness info) */
     BIT_FLAGS flags9{}; /* Flags 9 (drops info) */
     BIT_FLAGS flagsr{}; /* Flags R (resistances info) */
-    FlagGroup<RF_ABILITY> ability_flags; /* Ability Flags */
+    EnumClassFlagGroup<RF_ABILITY> ability_flags; /* Ability Flags */
     monster_blow blow[MAX_NUM_BLOWS]{}; /* Up to four blows per round */
     MONRACE_IDX reinforce_id[6]{};
     DICE_NUMBER reinforce_dd[6]{};
@@ -105,5 +105,5 @@ typedef struct monster_race {
     u32b r_flags2{}; /* Observed racial flags */
     u32b r_flags3{}; /* Observed racial flags */
     u32b r_flagsr{}; /* Observed racial resistance flags */
-    FlagGroup<RF_ABILITY> r_ability_flags; /* Observed racial ability flags */
+    EnumClassFlagGroup<RF_ABILITY> r_ability_flags; /* Observed racial ability flags */
 } monster_race;

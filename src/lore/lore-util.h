@@ -28,7 +28,7 @@ typedef struct lore_type {
     BIT_FLAGS flags1;
     BIT_FLAGS flags2;
     BIT_FLAGS flags3;
-    FlagGroup<RF_ABILITY> ability_flags;
+    EnumClassFlagGroup<RF_ABILITY> ability_flags;
 
     BIT_FLAGS flags7;
     BIT_FLAGS flagsr;

@@ -35,7 +35,7 @@ typedef struct {
 	BIT_FLAGS old_r_flags2;
 	BIT_FLAGS old_r_flags3;
 	BIT_FLAGS old_r_flagsr;
-	FlagGroup<RF_ABILITY> old_r_ability_flags;
+	EnumClassFlagGroup<RF_ABILITY> old_r_ability_flags;
 
 	byte old_r_blows0;
 	byte old_r_blows1;

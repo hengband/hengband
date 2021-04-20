@@ -56,7 +56,7 @@ void learn_spell(player_type *learner_ptr, int monspell)
  * @return なし
  * @todo f4, f5, f6を構造体にまとめ直す
  */
-void set_rf_masks(FlagGroup<RF_ABILITY>& ability_flags, blue_magic_type mode)
+void set_rf_masks(EnumClassFlagGroup<RF_ABILITY> &ability_flags, blue_magic_type mode)
 {
     ability_flags.clear();
 

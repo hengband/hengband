@@ -109,7 +109,7 @@ static bool check_mspell_non_stupid(player_type *target_ptr, msa_type *msa_ptr)
 
 static void set_mspell_list(msa_type *msa_ptr)
 {
-    FlagGroup<RF_ABILITY>::get_flags(msa_ptr->ability_flags, std::back_inserter(msa_ptr->mspells));
+    EnumClassFlagGroup<RF_ABILITY>::get_flags(msa_ptr->ability_flags, std::back_inserter(msa_ptr->mspells));
 }
 
 static void describe_mspell_monster(player_type *target_ptr, msa_type *msa_ptr)

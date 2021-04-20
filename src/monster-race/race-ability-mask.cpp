@@ -2,7 +2,7 @@
 
 // clang-format off
 /* "summon" spells currently "summon" spells are included in "intelligent" and "indirect" */
-const FlagGroup<RF_ABILITY> RF_ABILITY_SUMMON_MASK = {
+const EnumClassFlagGroup<RF_ABILITY> RF_ABILITY_SUMMON_MASK = {
     RF_ABILITY::S_KIN, RF_ABILITY::S_CYBER, RF_ABILITY::S_MONSTER, RF_ABILITY::S_MONSTERS,
     RF_ABILITY::S_ANT, RF_ABILITY::S_SPIDER, RF_ABILITY::S_HOUND, RF_ABILITY::S_HYDRA,
     RF_ABILITY::S_ANGEL, RF_ABILITY::S_DEMON, RF_ABILITY::S_UNDEAD, RF_ABILITY::S_DRAGON,
@@ -10,8 +10,8 @@ const FlagGroup<RF_ABILITY> RF_ABILITY_SUMMON_MASK = {
 };
 
 /* Choose "intelligent" spells when desperate Including "summon" spells */
-const FlagGroup<RF_ABILITY> RF_ABILITY_INT_MASK =
-    FlagGroup<RF_ABILITY>(RF_ABILITY_SUMMON_MASK).set({
+const EnumClassFlagGroup<RF_ABILITY> RF_ABILITY_INT_MASK =
+    EnumClassFlagGroup<RF_ABILITY>(RF_ABILITY_SUMMON_MASK).set({
     RF_ABILITY::DISPEL, RF_ABILITY::HOLD, RF_ABILITY::SLOW, RF_ABILITY::CONF,
     RF_ABILITY::BLIND, RF_ABILITY::SCARE, RF_ABILITY::BLINK, RF_ABILITY::TPORT,
     RF_ABILITY::TELE_LEVEL, RF_ABILITY::TELE_AWAY, RF_ABILITY::HEAL, RF_ABILITY::INVULNER,
@@ -19,7 +19,7 @@ const FlagGroup<RF_ABILITY> RF_ABILITY_INT_MASK =
 });
 
 /* Spells that cannot be used while player riding on the monster */
-const FlagGroup<RF_ABILITY> RF_ABILITY_RIDING_MASK = {
+const EnumClassFlagGroup<RF_ABILITY> RF_ABILITY_RIDING_MASK = {
     RF_ABILITY::SHRIEK, RF_ABILITY::BLINK, RF_ABILITY::TPORT, RF_ABILITY::TRAPS,
     RF_ABILITY::DARKNESS, RF_ABILITY::SPECIAL,
 };
@@ -28,7 +28,7 @@ const FlagGroup<RF_ABILITY> RF_ABILITY_RIDING_MASK = {
  * "bolt" spells that may hurt fellow monsters
  * Currently "bolt" spells are included in "attack"
  */
-const FlagGroup<RF_ABILITY> RF_ABILITY_BOLT_MASK = {
+const EnumClassFlagGroup<RF_ABILITY> RF_ABILITY_BOLT_MASK = {
     RF_ABILITY::ROCKET, RF_ABILITY::SHOOT, RF_ABILITY::BO_ACID, RF_ABILITY::BO_ELEC,
     RF_ABILITY::BO_FIRE, RF_ABILITY::BO_COLD, RF_ABILITY::BO_NETH, RF_ABILITY::BO_WATE,
     RF_ABILITY::BO_MANA, RF_ABILITY::BO_PLAS, RF_ABILITY::BO_ICEE, RF_ABILITY::MISSILE,
@@ -38,7 +38,7 @@ const FlagGroup<RF_ABILITY> RF_ABILITY_BOLT_MASK = {
  * "beam" spells that may hurt fellow monsters
  * Currently "beam" spells are included in "attack"
  */
-const FlagGroup<RF_ABILITY> RF_ABILITY_BEAM_MASK = {
+const EnumClassFlagGroup<RF_ABILITY> RF_ABILITY_BEAM_MASK = {
     RF_ABILITY::PSY_SPEAR,
 };
 
@@ -46,7 +46,7 @@ const FlagGroup<RF_ABILITY> RF_ABILITY_BEAM_MASK = {
  * "ball" spells with radius 4 that may hurt friends
  * Currently "radius 4 ball" spells are included in "ball"
  */
-const FlagGroup<RF_ABILITY> RF_ABILITY_BIG_BALL_MASK = {
+const EnumClassFlagGroup<RF_ABILITY> RF_ABILITY_BIG_BALL_MASK = {
     RF_ABILITY::BA_CHAO, RF_ABILITY::BA_LITE, RF_ABILITY::BA_DARK, RF_ABILITY::BA_WATE,
     RF_ABILITY::BA_MANA,
 };
@@ -55,7 +55,7 @@ const FlagGroup<RF_ABILITY> RF_ABILITY_BIG_BALL_MASK = {
  * "breath" spells that may hurt friends
  * Currently "breath" spells are included in "ball" and "non-magic"
  */
-const FlagGroup<RF_ABILITY> RF_ABILITY_BREATH_MASK = {
+const EnumClassFlagGroup<RF_ABILITY> RF_ABILITY_BREATH_MASK = {
     RF_ABILITY::BR_ACID, RF_ABILITY::BR_ELEC, RF_ABILITY::BR_FIRE, RF_ABILITY::BR_COLD,
     RF_ABILITY::BR_POIS, RF_ABILITY::BR_NETH, RF_ABILITY::BR_LITE, RF_ABILITY::BR_DARK,
     RF_ABILITY::BR_CONF, RF_ABILITY::BR_SOUN, RF_ABILITY::BR_CHAO, RF_ABILITY::BR_DISE,
@@ -69,14 +69,14 @@ const FlagGroup<RF_ABILITY> RF_ABILITY_BREATH_MASK = {
  * Including "radius 4 ball" and "breath" spells
  * Currently "ball" spells are included in "attack"
  */
-const FlagGroup<RF_ABILITY> RF_ABILITY_BALL_MASK =
+const EnumClassFlagGroup<RF_ABILITY> RF_ABILITY_BALL_MASK =
     (RF_ABILITY_BIG_BALL_MASK | RF_ABILITY_BREATH_MASK).set({
     RF_ABILITY::ROCKET, RF_ABILITY::BA_NUKE, RF_ABILITY::BA_ACID, RF_ABILITY::BA_ELEC,
     RF_ABILITY::BA_FIRE, RF_ABILITY::BA_COLD, RF_ABILITY::BA_POIS, RF_ABILITY::BA_NETH,
 });
 
 /* "attack" spells including "bolt", "beam" and "ball" spells */
-const FlagGroup<RF_ABILITY> RF_ABILITY_ATTACK_MASK =
+const EnumClassFlagGroup<RF_ABILITY> RF_ABILITY_ATTACK_MASK =
     (RF_ABILITY_BOLT_MASK | RF_ABILITY_BEAM_MASK | RF_ABILITY_BALL_MASK).set({
     RF_ABILITY::DISPEL, RF_ABILITY::DRAIN_MANA, RF_ABILITY::MIND_BLAST, RF_ABILITY::BRAIN_SMASH,
     RF_ABILITY::CAUSE_1, RF_ABILITY::CAUSE_2, RF_ABILITY::CAUSE_3, RF_ABILITY::CAUSE_4,
@@ -86,14 +86,14 @@ const FlagGroup<RF_ABILITY> RF_ABILITY_ATTACK_MASK =
 });
 
 /* "indirect" spells Including "summon" spells */
-const FlagGroup<RF_ABILITY> RF_ABILITY_INDIRECT_MASK =
-    FlagGroup<RF_ABILITY>(RF_ABILITY_SUMMON_MASK).set({
+const EnumClassFlagGroup<RF_ABILITY> RF_ABILITY_INDIRECT_MASK =
+    EnumClassFlagGroup<RF_ABILITY>(RF_ABILITY_SUMMON_MASK).set({
     RF_ABILITY::SHRIEK, RF_ABILITY::HASTE, RF_ABILITY::HEAL, RF_ABILITY::INVULNER,
     RF_ABILITY::BLINK, RF_ABILITY::WORLD, RF_ABILITY::TPORT, RF_ABILITY::RAISE_DEAD,
 });
 
 /* "non-magic" spells including "breath" spells */
-const FlagGroup<RF_ABILITY> RF_ABILITY_NOMAGIC_MASK =
-    FlagGroup<RF_ABILITY>(RF_ABILITY_BREATH_MASK).set({
+const EnumClassFlagGroup<RF_ABILITY> RF_ABILITY_NOMAGIC_MASK =
+    EnumClassFlagGroup<RF_ABILITY>(RF_ABILITY_BREATH_MASK).set({
     RF_ABILITY::SHRIEK, RF_ABILITY::ROCKET, RF_ABILITY::SHOOT, RF_ABILITY::SPECIAL,
 });
