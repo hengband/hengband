@@ -4,11 +4,9 @@
 
 #include <windows.h>
 
-extern char bg_bitmap_file[MAIN_WIN_MAX_PATH]; //!< 現在の背景ビットマップファイル名。
-
 void load_bg_prefs(void);
 void finalize_bg();
 
 void delete_bg(void);
-BOOL init_bg(void);
+bool load_bg(char *filename);
 void draw_bg(HDC hdc, RECT *r);

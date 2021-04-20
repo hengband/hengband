@@ -112,14 +112,22 @@ ANGBAND MENU
 			MENUITEM "&None", 400
 			MENUITEM "&Old tiles", 401
 			MENUITEM "&Adam Bolt's tiles", 402
+			MENUITEM SEPARATOR
 			MENUITEM "&Bigtile mode", 409
+		}
+
+		POPUP "&Back ground pict"
+		{
+			MENUITEM "&None", 440
+			MENUITEM "&Selected one", 441
+			MENUITEM "&Your preset", 442
+			MENUITEM SEPARATOR
+			MENUITEM "Choose BG pict", 449
 		}
 
 		MENUITEM "&Music", 420
 		MENUITEM "&Pause music when inactive", 421
 		MENUITEM "&Sound", 410
-		MENUITEM "&Back ground pict", 440
-		MENUITEM "Choose BG pict", 441
 		MENUITEM "&HTML dump", 450
 	}
 }
