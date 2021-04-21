@@ -13,11 +13,9 @@
 #include <gdiplus.h>
 #pragma warning(pop)
 
-static HBITMAP hBG = NULL;
-char bg_bitmap_file[MAIN_WIN_MAX_PATH] = ""; //!< 現在の背景ビットマップファイル名。
-
-static bool gdi_plus_started = false;
-static ULONG_PTR gdiplusToken;
+HBITMAP hBG = NULL;
+bool gdi_plus_started = false;
+ULONG_PTR gdiplusToken;
 
 static void init_gdi_plus()
 {
@@ -51,31 +49,18 @@ void delete_bg(void)
     }
 }
 
-static BOOL init_bg_impl(void)
+bool load_bg(char* filename)
 {
     delete_bg();
 
     wchar_t wc[MAIN_WIN_MAX_PATH] = L"";
-    mbstowcs(wc, bg_bitmap_file, MAIN_WIN_MAX_PATH - 1);
+    mbstowcs(wc, filename, MAIN_WIN_MAX_PATH - 1);
     Gdiplus::Bitmap bitmap(wc);
 
     COLORREF bgcolor = RGB(0x00, 0x00, 0x00);
     Gdiplus::Status status = bitmap.GetHBITMAP(bgcolor, &hBG);
-    if ((status != Gdiplus::Ok) || !hBG) {
-        return FALSE;
-    }
 
-    return TRUE;
-}
-
-BOOL init_bg(void)
-{
-    BOOL result = init_bg_impl();
-    if (!result) {
-        plog_fmt(_("壁紙用ファイル '%s' を読み込めません。", "Can't load the image file '%s'."), bg_bitmap_file);
-    }
-
-    return result;
+    return (status == Gdiplus::Ok);
 }
 
 void draw_bg(HDC hdc, RECT *r)

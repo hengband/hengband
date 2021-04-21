@@ -262,8 +262,14 @@ static HICON hIcon;
 static HPALETTE hPal;
 
 /* bg */
-static int use_bg = 0; //!< 背景使用フラグ、1なら使用。
+enum class bg_mode {
+    BG_NONE = 0,
+    BG_ONE = 1,
+    BG_PRESET = 2,
+};
+bg_mode current_bg_mode = bg_mode::BG_NONE;
 #define DEFAULT_BG_FILENAME "bg.bmp"
+char wallpaper_file[MAIN_WIN_MAX_PATH] = ""; //!< 壁紙ファイル名。
 
 /*!
  * 現在使用中のタイルID(0ならば未使用)
@@ -530,9 +536,9 @@ static void save_prefs(void)
     strcpy(buf, use_pause_music_inactive ? "1" : "0");
     WritePrivateProfileString("Angband", "MusicPauseInactive", buf, ini_file);
 
-    strcpy(buf, use_bg ? "1" : "0");
+    sprintf(buf, "%d", current_bg_mode);
     WritePrivateProfileString("Angband", "BackGround", buf, ini_file);
-    WritePrivateProfileString("Angband", "BackGroundBitmap", bg_bitmap_file[0] != '\0' ? bg_bitmap_file : DEFAULT_BG_FILENAME, ini_file);
+    WritePrivateProfileString("Angband", "BackGroundBitmap", wallpaper_file[0] != '\0' ? wallpaper_file : DEFAULT_BG_FILENAME, ini_file);
 
     int path_length = strlen(ANGBAND_DIR) - 4; /* \libの4文字分を削除 */
     char tmp[1024] = "";
@@ -633,8 +639,8 @@ static void load_prefs(void)
     arg_sound = (GetPrivateProfileInt("Angband", "Sound", 0, ini_file) != 0);
     arg_music = (GetPrivateProfileInt("Angband", "Music", 0, ini_file) != 0);
     use_pause_music_inactive = (GetPrivateProfileInt("Angband", "MusicPauseInactive", 0, ini_file) != 0);
-    use_bg = GetPrivateProfileInt("Angband", "BackGround", 0, ini_file);
-    GetPrivateProfileString("Angband", "BackGroundBitmap", DEFAULT_BG_FILENAME, bg_bitmap_file, 1023, ini_file);
+    current_bg_mode = static_cast<bg_mode>(GetPrivateProfileInt("Angband", "BackGround", 0, ini_file));
+    GetPrivateProfileString("Angband", "BackGroundBitmap", DEFAULT_BG_FILENAME, wallpaper_file, 1023, ini_file);
     GetPrivateProfileString("Angband", "SaveFile", "", savefile, 1023, ini_file);
 
     int n = strncmp(".\\", savefile, 2);
@@ -861,6 +867,30 @@ static void init_background(void)
         load_bg_prefs();
         can_use_background = TRUE;
     }
+}
+
+/*!
+ * @brief Change background mode
+ * @param new_mode bg_mode
+ * @param show_error trueに設定した場合のみ、エラーダイアログを表示する
+ * @retval true success
+ * @retval false failed
+ */
+static bool change_bg_mode(bg_mode new_mode, bool show_error = false)
+{
+    current_bg_mode = new_mode;
+    if (current_bg_mode != bg_mode::BG_NONE) {
+        init_background();
+        if (!load_bg(wallpaper_file)) {
+            current_bg_mode = bg_mode::BG_NONE;
+            if (show_error)
+                plog_fmt(_("壁紙用ファイル '%s' を読み込めません。", "Can't load the image file '%s'."), wallpaper_file);
+        }
+    } else {
+        delete_bg();
+    }
+
+    return (current_bg_mode == new_mode);
 }
 
 /*!
@@ -1092,7 +1122,7 @@ static errr term_xtra_win_clear(void)
     SelectObject(hdc, td->font_id);
     ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rc, NULL, 0, NULL);
 
-    if (use_bg) {
+    if (current_bg_mode != bg_mode::BG_NONE) {
         rc.left = 0;
         rc.top = 0;
         draw_bg(hdc, &rc);
@@ -1269,7 +1299,7 @@ static errr term_wipe_win(int x, int y, int n)
     HDC hdc = GetDC(td->w);
     SetBkColor(hdc, RGB(0, 0, 0));
     SelectObject(hdc, td->font_id);
-    if (use_bg)
+    if (current_bg_mode != bg_mode::BG_NONE)
         draw_bg(hdc, &rc);
     else
         ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rc, NULL, 0, NULL);
@@ -1320,11 +1350,11 @@ static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
     }
 
     SelectObject(hdc, td->font_id);
-    if (use_bg)
+    if (current_bg_mode != bg_mode::BG_NONE)
         SetBkMode(hdc, TRANSPARENT);
 
     ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rc, NULL, 0, NULL);
-    if (use_bg)
+    if (current_bg_mode != bg_mode::BG_NONE)
         draw_bg(hdc, &rc);
 
     rc.left += ((td->tile_wid - td->font_wid) / 2);
@@ -1666,9 +1696,6 @@ static void setup_menus(void)
         EnableMenuItem(hm, IDM_FILE_SAVE, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
     }
 
-    EnableMenuItem(hm, IDM_FILE_SCORE, MF_BYCOMMAND | MF_ENABLED);
-    EnableMenuItem(hm, IDM_FILE_EXIT, MF_BYCOMMAND | MF_ENABLED);
-
     for (int i = 0; i < MAX_TERM_DATA; i++) {
         EnableMenuItem(hm, IDM_WINDOW_VIS_0 + i, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
         CheckMenuItem(hm, IDM_WINDOW_VIS_0 + i, (data[i].visible ? MF_CHECKED : MF_UNCHECKED));
@@ -1719,14 +1746,7 @@ static void setup_menus(void)
             EnableMenuItem(hm, IDM_WINDOW_D_HGT_0 + i, MF_BYCOMMAND | MF_ENABLED);
         }
     }
-    EnableMenuItem(hm, IDM_WINDOW_KEEP_SUBWINDOWS, MF_BYCOMMAND | MF_ENABLED);
     CheckMenuItem(hm, IDM_WINDOW_KEEP_SUBWINDOWS, (keep_subwindows ? MF_CHECKED : MF_UNCHECKED));
-
-    EnableMenuItem(hm, IDM_OPTIONS_NO_GRAPHICS, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
-    EnableMenuItem(hm, IDM_OPTIONS_OLD_GRAPHICS, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
-    EnableMenuItem(hm, IDM_OPTIONS_NEW_GRAPHICS, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
-    EnableMenuItem(hm, IDM_OPTIONS_BIGTILE, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
-    EnableMenuItem(hm, IDM_OPTIONS_SOUND, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 
     CheckMenuItem(hm, IDM_OPTIONS_NO_GRAPHICS, (arg_graphics == GRAPHICS_NONE ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_OLD_GRAPHICS, (arg_graphics == GRAPHICS_ORIGINAL ? MF_CHECKED : MF_UNCHECKED));
@@ -1736,13 +1756,11 @@ static void setup_menus(void)
     CheckMenuItem(hm, IDM_OPTIONS_MUSIC, (arg_music ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_MUSIC_PAUSE_INACTIVE, (use_pause_music_inactive ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_SOUND, (arg_sound ? MF_CHECKED : MF_UNCHECKED));
-    CheckMenuItem(hm, IDM_OPTIONS_BG, (use_bg ? MF_CHECKED : MF_UNCHECKED));
-
-    EnableMenuItem(hm, IDM_OPTIONS_NO_GRAPHICS, MF_ENABLED);
-    EnableMenuItem(hm, IDM_OPTIONS_OLD_GRAPHICS, MF_ENABLED);
-    EnableMenuItem(hm, IDM_OPTIONS_NEW_GRAPHICS, MF_ENABLED);
-    EnableMenuItem(hm, IDM_OPTIONS_BIGTILE, MF_ENABLED);
-    EnableMenuItem(hm, IDM_OPTIONS_SOUND, MF_ENABLED);
+    CheckMenuItem(hm, IDM_OPTIONS_NO_BG, ((current_bg_mode == bg_mode::BG_NONE) ? MF_CHECKED : MF_UNCHECKED));
+    CheckMenuItem(hm, IDM_OPTIONS_BG, ((current_bg_mode == bg_mode::BG_ONE) ? MF_CHECKED : MF_UNCHECKED));
+    CheckMenuItem(hm, IDM_OPTIONS_PRESET_BG, ((current_bg_mode == bg_mode::BG_PRESET) ? MF_CHECKED : MF_UNCHECKED));
+    // TODO IDM_OPTIONS_PRESET_BG を有効にする
+    EnableMenuItem(hm, IDM_OPTIONS_PRESET_BG, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 }
 
 /*
@@ -2117,35 +2135,42 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
             term_xtra_win_react(player_ptr);
         break;
     }
-    case IDM_OPTIONS_BG: {
-        use_bg = !(use_bg > 0);
-        if (use_bg) {
-            init_background();
-            use_bg = init_bg();
-        } else {
-            delete_bg();
-        }
-
+    case IDM_OPTIONS_NO_BG: {
+        change_bg_mode(bg_mode::BG_NONE);
         td = &data[0];
         InvalidateRect(td->w, NULL, TRUE);
         break;
     }
+    case IDM_OPTIONS_PRESET_BG: {
+        change_bg_mode(bg_mode::BG_PRESET);
+        td = &data[0];
+        InvalidateRect(td->w, NULL, TRUE);
+        break;
+    }
+    case IDM_OPTIONS_BG: {
+        bool ret = change_bg_mode(bg_mode::BG_ONE);
+        if (ret) {
+            td = &data[0];
+            InvalidateRect(td->w, NULL, TRUE);
+            break;
+        }
+        // 壁紙の設定に失敗した（ファイルが存在しない等）場合、壁紙に使うファイルを選択させる
+    }
+        [[fallthrough]]; /* Fall through */
     case IDM_OPTIONS_OPEN_BG: {
         memset(&ofn, 0, sizeof(ofn));
         ofn.lStructSize = sizeof(ofn);
         ofn.hwndOwner = data[0].w;
         ofn.lpstrFilter = "Image Files (*.bmp;*.png;*.jpg;*.jpeg;)\0*.bmp;*.png;*.jpg;*.jpeg;\0";
         ofn.nFilterIndex = 1;
-        ofn.lpstrFile = bg_bitmap_file;
+        ofn.lpstrFile = wallpaper_file;
         ofn.nMaxFile = 1023;
         ofn.lpstrInitialDir = NULL;
         ofn.lpstrTitle = _("壁紙を選んでね。", "Choose wall paper.");
         ofn.Flags = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
 
         if (GetOpenFileName(&ofn)) {
-            init_background();
-            use_bg = init_bg();
-
+            change_bg_mode(bg_mode::BG_ONE, true);
             td = &data[0];
             InvalidateRect(td->w, NULL, TRUE);
         }
@@ -3011,10 +3036,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPST
     }
 
     init_windows();
-    if (use_bg) {
-        init_background();
-        use_bg = init_bg();
-    }
+    change_bg_mode(current_bg_mode, true);
 
     plog_aux = hook_plog;
     quit_aux = hook_quit;
