@@ -438,7 +438,7 @@ void display_scores(int from, int to)
  * @return 転送が成功したらTRUEを返す
  * @todo プリプロが邪魔していて最初のif文を削除すると到達不能コードが発生する
  */
-bool send_world_score(player_type *current_player_ptr, bool do_send, void(*update_playtime)(void), display_player_pf display_player)
+bool send_world_score(player_type *current_player_ptr, bool do_send, display_player_pf display_player)
 {
 #ifdef WORLD_SCORE
 	if (send_score && do_send)
@@ -459,7 +459,7 @@ bool send_world_score(player_type *current_player_ptr, bool do_send, void(*updat
 		prt(_("送信中．．", "Sending..."), 0, 0);
 		term_fresh();
 		screen_save();
-		err = report_score(current_player_ptr, update_playtime, display_player);
+		err = report_score(current_player_ptr, display_player);
 		screen_load();
 		if (err) return FALSE;
 

@@ -568,12 +568,11 @@ static concptr get_check_sum(void)
  * @param fff ファイルポインタ
  * @return エラーコード
  */
-void make_character_dump(player_type *creature_ptr, FILE *fff, void (*update_playtime)(void), display_player_pf display_player)
+void make_character_dump(player_type *creature_ptr, FILE *fff, display_player_pf display_player)
 {
     char title[127];
     put_version(title);
     fprintf(fff, _("  [%s キャラクタ情報]\n\n", "  [%s Character Dump]\n\n"), title);
-    (*update_playtime)();
 
     dump_aux_player_status(creature_ptr, fff, display_player);
     dump_aux_last_message(creature_ptr, fff);

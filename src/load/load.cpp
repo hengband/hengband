@@ -77,6 +77,17 @@ static errr load_town_quest(player_type *creature_ptr)
 }
 
 /*!
+ * @brief 合計のプレイ時間をロードする
+ */
+static void rd_total_play_time()
+{
+    if (loading_savefile_version_is_older_than(4))
+        return;
+
+    rd_u32b(&current_world_ptr->sf_play_time);
+}
+
+/*!
  * @brief 勝利した職業フラグをロードする
  */
 static void rd_winner_class()
@@ -90,6 +101,7 @@ static void rd_winner_class()
 
 static void load_player_world(player_type *creature_ptr)
 {
+    rd_total_play_time();
     rd_winner_class();
     rd_base_info(creature_ptr);
     rd_player_info(creature_ptr);
