@@ -141,23 +141,6 @@
 #define GRAPHICS_ADAM_BOLT 2
 #define GRAPHICS_HENGBAND 3
 
-/*
- * Foreground color bits
- */
-#define VID_BLACK 0x00
-#define VID_BLUE 0x01
-#define VID_GREEN 0x02
-#define VID_CYAN 0x03
-#define VID_RED 0x04
-#define VID_MAGENTA 0x05
-#define VID_YELLOW 0x06
-#define VID_WHITE 0x07
-
-/*
- * Bright text
- */
-#define VID_BRIGHT 0x08
-
 /*!
  * @struct term_data
  * @brief ターム情報構造体 / Extra "term" data
@@ -235,11 +218,6 @@ bool initialized = FALSE;
  * screen paletted, i.e. 256 colors
  */
 bool paletted = FALSE;
-
-/*
- * 16 colors screen, don't use RGB()
- */
-bool colors16 = FALSE;
 
 /*
  * Saved instance handle
@@ -329,32 +307,6 @@ static bool mouse_down = FALSE;
 static bool paint_rect = FALSE;
 static TERM_LEN mousex = 0, mousey = 0;
 static TERM_LEN oldx, oldy;
-
-/*!
- * @brief The "simple" color values
- * @details
- * See "main-ibm.c" for original table information
- * The entries below are taken from the "color bits" defined above.
- * Note that many of the choices below suck, but so do crappy monitors.
- */
-static BYTE win_pal[256] = {
-    VID_BLACK, /* Dark */
-    VID_WHITE, /* White */
-    VID_CYAN, /* Slate XXX */
-    VID_RED | VID_BRIGHT, /* Orange XXX */
-    VID_RED, /* Red */
-    VID_GREEN, /* Green */
-    VID_BLUE, /* Blue */
-    VID_YELLOW, /* Umber XXX */
-    VID_BLACK | VID_BRIGHT, /* Light Dark */
-    VID_CYAN | VID_BRIGHT, /* Light Slate XXX */
-    VID_MAGENTA, /* Violet XXX */
-    VID_YELLOW | VID_BRIGHT, /* Yellow */
-    VID_MAGENTA | VID_BRIGHT, /* Light Red XXX */
-    VID_GREEN | VID_BRIGHT, /* Light Green */
-    VID_BLUE | VID_BRIGHT, /* Light Blue */
-    VID_YELLOW /* Light Umber XXX */
-};
 
 /*
  * Hack -- define which keys are "special"
@@ -1015,28 +967,22 @@ static errr term_user_win(int n)
  */
 static errr term_xtra_win_react(player_type *player_ptr)
 {
-    if (colors16) {
-        for (int i = 0; i < 256; i++) {
-            win_pal[i] = angband_color_table[i][0];
+    COLORREF code;
+    byte rv, gv, bv;
+    bool change = FALSE;
+    for (int i = 0; i < 256; i++) {
+        rv = angband_color_table[i][1];
+        gv = angband_color_table[i][2];
+        bv = angband_color_table[i][3];
+        code = PALETTERGB(rv, gv, bv);
+        if (win_clr[i] != code) {
+            change = TRUE;
+            win_clr[i] = code;
         }
-    } else {
-        COLORREF code;
-        byte rv, gv, bv;
-        bool change = FALSE;
-        for (int i = 0; i < 256; i++) {
-            rv = angband_color_table[i][1];
-            gv = angband_color_table[i][2];
-            bv = angband_color_table[i][3];
-            code = PALETTERGB(rv, gv, bv);
-            if (win_clr[i] != code) {
-                change = TRUE;
-                win_clr[i] = code;
-            }
-        }
-
-        if (change)
-            (void)new_palette();
     }
+
+    if (change)
+        (void)new_palette();
 
     use_sound = arg_sound;
     if (use_sound) {
@@ -1341,9 +1287,7 @@ static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
 
     HDC hdc = GetDC(td->w);
     SetBkColor(hdc, RGB(0, 0, 0));
-    if (colors16) {
-        SetTextColor(hdc, PALETTEINDEX(win_pal[a]));
-    } else if (paletted) {
+    if (paletted) {
         SetTextColor(hdc, win_clr[a & 0x0F]);
     } else {
         SetTextColor(hdc, win_clr[a]);
@@ -3023,7 +2967,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPST
     }
 
     hdc = GetDC(NULL);
-    colors16 = (GetDeviceCaps(hdc, BITSPIXEL) == 4);
+    if (GetDeviceCaps(hdc, BITSPIXEL) <= 8) {
+        quit(_("画面を16ビット以上のカラーモードにして下さい。", "Please switch to High Color (16-bit) or higher color mode."));
+    }
     paletted = ((GetDeviceCaps(hdc, RASTERCAPS) & RC_PALETTE) ? TRUE : FALSE);
     ReleaseDC(NULL, hdc);
 
@@ -3032,7 +2978,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPST
         byte gv = angband_color_table[i][2];
         byte bv = angband_color_table[i][3];
         win_clr[i] = PALETTERGB(rv, gv, bv);
-        angband_color_table[i][0] = win_pal[i];
     }
 
     init_windows();
