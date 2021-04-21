@@ -1,4 +1,9 @@
-﻿#include "main/scene-table.h"
+﻿/*!
+ * @file scene-table.cpp
+ * @brief BGM選曲の基本処理部分実装
+ */
+
+#include "main/scene-table.h"
 #include "main/scene-table-floor.h"
 #include "main/scene-table-monster.h"
 #include "system/floor-type-definition.h"

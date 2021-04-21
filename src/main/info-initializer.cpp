@@ -1,4 +1,9 @@
-﻿#include "main/info-initializer.h"
+﻿/*!
+ * @file info-initializer.cpp
+ * @brief 変愚蛮怒のゲームデータ解析処理定義
+ */
+
+#include "main/info-initializer.h"
 #include "dungeon/dungeon.h"
 #include "grid/feature.h"
 #include "info-reader/artifact-reader.h"

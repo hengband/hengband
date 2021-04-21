@@ -1,4 +1,8 @@
 ﻿#pragma once
+/*!
+ * @file scene-table-floor.h
+ * @brief フロアの状況に応じたBGM設定処理ヘッダ
+ */
 
 #include "main/scene-table.h"
 #include "system/angband.h"

@@ -1,4 +1,8 @@
-﻿#include "main/angband-headers.h"
+﻿/*!
+ * @file angband-headers.cpp
+ * @brief ゲームデータのグローバルヘッダ情報定義
+ */
+#include "main/angband-headers.h"
 
 angband_header f_head; /*!< 地形情報のヘッダ構造体 */
 angband_header v_head; /*!< Vault情報のヘッダ構造体 */
