@@ -215,11 +215,6 @@ bool game_in_progress = FALSE;
 bool initialized = FALSE;
 
 /*
- * screen paletted, i.e. 256 colors
- */
-bool paletted = FALSE;
-
-/*
  * Saved instance handle
  */
 static HINSTANCE hInstance;
@@ -610,92 +605,6 @@ static void load_prefs(void)
     }
 }
 
-/*
- * Create the new global palette based on the bitmap palette
- * (if any), and the standard 16 entry palette derived from
- * "win_clr[]" which is used for the basic 16 Angband colors.
- *
- * This function is never called before all windows are ready.
- *
- * This function returns FALSE if the new palette could not be
- * prepared, which should normally be a fatal error.  XXX XXX
- *
- * Note that only some machines actually use a "palette".
- */
-static int new_palette(void)
-{
-    int i, nEntries;
-    int pLogPalSize;
-    int lppeSize;
-    LPLOGPALETTE pLogPal;
-    LPPALETTEENTRY lppe;
-    term_data *td;
-    if (!paletted)
-        return TRUE;
-
-    lppeSize = 0;
-    lppe = NULL;
-    nEntries = 0;
-
-    HPALETTE hBmPal = static_cast<HPALETTE>(infGraph.hPalette);
-    if (hBmPal) {
-        lppeSize = 256 * sizeof(PALETTEENTRY);
-        lppe = (LPPALETTEENTRY)std::malloc(lppeSize);
-        nEntries = GetPaletteEntries(hBmPal, 0, 255, lppe);
-        if ((nEntries == 0) || (nEntries > 220)) {
-            plog(_("画面を16ビットか24ビットカラーモードにして下さい。", "Please switch to high- or true-color mode."));
-            std::free(lppe);
-            return FALSE;
-        }
-    }
-
-    pLogPalSize = sizeof(LOGPALETTE) + (nEntries + 16) * sizeof(PALETTEENTRY);
-    pLogPal = (LPLOGPALETTE)std::malloc(pLogPalSize);
-    pLogPal->palVersion = 0x300;
-    pLogPal->palNumEntries = nEntries + 16;
-    for (i = 0; i < nEntries; i++) {
-        pLogPal->palPalEntry[i] = lppe[i];
-    }
-
-    for (i = 0; i < 16; i++) {
-        LPPALETTEENTRY p;
-        p = &(pLogPal->palPalEntry[i + nEntries]);
-        p->peRed = GetRValue(win_clr[i]);
-        p->peGreen = GetGValue(win_clr[i]);
-        p->peBlue = GetBValue(win_clr[i]);
-        p->peFlags = PC_NOCOLLAPSE;
-    }
-
-    if (lppe)
-        std::free(lppe);
-
-    HPALETTE hNewPal = CreatePalette(pLogPal);
-    if (!hNewPal)
-        quit(_("パレットを作成できません！", "Cannot create palette!"));
-
-    std::free(pLogPal);
-    td = &data[0];
-    HDC hdc = GetDC(td->w);
-    SelectPalette(hdc, hNewPal, 0);
-    i = RealizePalette(hdc);
-    ReleaseDC(td->w, hdc);
-    if (i == 0)
-        quit(_("パレットをシステムエントリにマップできません！", "Cannot realize palette!"));
-
-    for (i = 1; i < MAX_TERM_DATA; i++) {
-        td = &data[i];
-        hdc = GetDC(td->w);
-        SelectPalette(hdc, hNewPal, 0);
-        ReleaseDC(td->w, hdc);
-    }
-
-    if (hPal)
-        DeleteObject(hPal);
-
-    hPal = hNewPal;
-    return TRUE;
-}
-
 /*!
  * @brief グラフィクスを初期化する / Initialize graphics
  * @details
@@ -770,13 +679,8 @@ static bool init_graphics(void)
         }
     }
 
-    if (!new_palette()) {
-        plog(_("パレットを実現できません！", "Cannot activate palette!"));
-        return FALSE;
-    }
-
     current_graphics_mode = arg_graphics;
-    return current_graphics_mode != 0;
+    return (current_graphics_mode != GRAPHICS_NONE);
 }
 
 /*
@@ -962,27 +866,21 @@ static errr term_user_win(int n)
     return 0;
 }
 
+static void refresh_color_table() {
+    for (int i = 0; i < 256; i++) {
+        byte rv = angband_color_table[i][1];
+        byte gv = angband_color_table[i][2];
+        byte bv = angband_color_table[i][3];
+        win_clr[i] = PALETTERGB(rv, gv, bv);
+    }
+}
+
 /*
  * React to global changes
  */
 static errr term_xtra_win_react(player_type *player_ptr)
 {
-    COLORREF code;
-    byte rv, gv, bv;
-    bool change = FALSE;
-    for (int i = 0; i < 256; i++) {
-        rv = angband_color_table[i][1];
-        gv = angband_color_table[i][2];
-        bv = angband_color_table[i][3];
-        code = PALETTERGB(rv, gv, bv);
-        if (win_clr[i] != code) {
-            change = TRUE;
-            win_clr[i] = code;
-        }
-    }
-
-    if (change)
-        (void)new_palette();
+    refresh_color_table();
 
     use_sound = arg_sound;
     if (use_sound) {
@@ -1279,19 +1177,12 @@ static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
         init_done = TRUE;
     }
 
-    RECT rc;
-    rc.left = x * td->tile_wid + td->size_ow1;
-    rc.right = rc.left + n * td->tile_wid;
-    rc.top = y * td->tile_hgt + td->size_oh1;
-    rc.bottom = rc.top + td->tile_hgt;
+    RECT rc{ static_cast<LONG>(x * td->tile_wid + td->size_ow1), static_cast<LONG>(y * td->tile_hgt + td->size_oh1),
+        static_cast<LONG>(rc.left + n * td->tile_wid), static_cast<LONG>(rc.top + td->tile_hgt) };
 
     HDC hdc = GetDC(td->w);
     SetBkColor(hdc, RGB(0, 0, 0));
-    if (paletted) {
-        SetTextColor(hdc, win_clr[a & 0x0F]);
-    } else {
-        SetTextColor(hdc, win_clr[a]);
-    }
+    SetTextColor(hdc, win_clr[a]);
 
     SelectObject(hdc, td->font_id);
     if (current_bg_mode != bg_mode::BG_NONE)
@@ -1618,7 +1509,6 @@ static void init_windows(void)
         ShowWindow(td->w, SW_SHOW);
 
     SetWindowPos(td->w, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
-    (void)new_palette();
     hbrYellow = CreateSolidBrush(win_clr[TERM_YELLOW]);
     (void)term_xtra_win_flush();
 }
@@ -2532,24 +2422,6 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 
         break;
     }
-    case WM_PALETTECHANGED: {
-        if ((HWND)wParam == hWnd)
-            return 0;
-    }
-        [[fallthrough]]; /* Fall through */
-    case WM_QUERYNEWPALETTE: {
-        if (!paletted)
-            return 0;
-
-        HDC hdc = GetDC(hWnd);
-        SelectPalette(hdc, hPal, FALSE);
-        int i = RealizePalette(hdc);
-        if (i)
-            InvalidateRect(hWnd, NULL, TRUE);
-
-        ReleaseDC(hWnd, hdc);
-        return 0;
-    }
     case WM_ACTIVATE: {
         if (!wParam || HIWORD(lParam))
             break;
@@ -2671,24 +2543,6 @@ LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
             term_no_press = FALSE;
         else
             term_keypress(wParam);
-        return 0;
-    }
-    case WM_PALETTECHANGED: {
-        if ((HWND)wParam == hWnd)
-            return FALSE;
-    }
-        [[fallthrough]]; /* Fall through */
-    case WM_QUERYNEWPALETTE: {
-        if (!paletted)
-            return 0;
-
-        HDC hdc = GetDC(hWnd);
-        SelectPalette(hdc, hPal, FALSE);
-        int i = RealizePalette(hdc);
-        if (i)
-            InvalidateRect(hWnd, NULL, TRUE);
-
-        ReleaseDC(hWnd, hdc);
         return 0;
     }
     case WM_NCLBUTTONDOWN: {
@@ -2898,14 +2752,9 @@ static bool is_already_running(void)
 /*!
  * @brief (Windows固有)Windowsアプリケーションとしてのエントリポイント
  */
-int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
+int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPSTR lpCmdLine, [[maybe_unused]] _In_ int nCmdShow)
 {
-    WNDCLASS wc;
-    HDC hdc;
-    MSG msg;
-
     setlocale(LC_ALL, "ja_JP");
-    (void)nCmdShow;
     hInstance = hInst;
     if (is_already_running()) {
         MessageBox(
@@ -2931,6 +2780,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPST
     }
 
     if (hPrevInst == NULL) {
+        WNDCLASS wc;
         wc.style = CS_CLASSDC;
         wc.lpfnWndProc = AngbandWndProc;
         wc.cbClsExtra = 0;
@@ -2966,20 +2816,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPST
         ignore_key[ignore_key_list[i]] = TRUE;
     }
 
-    hdc = GetDC(NULL);
+    HDC hdc = GetDC(NULL);
     if (GetDeviceCaps(hdc, BITSPIXEL) <= 8) {
         quit(_("画面を16ビット以上のカラーモードにして下さい。", "Please switch to High Color (16-bit) or higher color mode."));
     }
-    paletted = ((GetDeviceCaps(hdc, RASTERCAPS) & RC_PALETTE) ? TRUE : FALSE);
     ReleaseDC(NULL, hdc);
 
-    for (int i = 0; i < 256; i++) {
-        byte rv = angband_color_table[i][1];
-        byte gv = angband_color_table[i][2];
-        byte bv = angband_color_table[i][3];
-        win_clr[i] = PALETTERGB(rv, gv, bv);
-    }
-
+    refresh_color_table();
     init_windows();
     change_bg_mode(current_bg_mode, true);
 
@@ -3020,6 +2863,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPST
         init_music();
     }
 
+    MSG msg;
     while (GetMessage(&msg, NULL, 0, 0)) {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
