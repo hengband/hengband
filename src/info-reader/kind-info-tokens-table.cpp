@@ -197,5 +197,8 @@ std::unordered_map<std::string_view, TRG> k_info_gen_flags = {
     { "XTRA_L_ESP", TRG::XTRA_L_ESP },
     { "MOD_ACCURACY", TRG::MOD_ACCURACY },
     { "MOD_VELOCITY", TRG::MOD_VELOCITY },
+    { "XTRA_DICE_SIDE", TRG::XTRA_DICE_SIDE },
+    { "ADD_DICE", TRG::ADD_DICE },
+    { "DOUBLED_DICE", TRG::DOUBLED_DICE },
 };
 // clang-format on

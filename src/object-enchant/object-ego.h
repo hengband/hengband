@@ -242,6 +242,10 @@ struct ego_item_type {
     DEPTH level{}; //!< 生成レベル
     RARITY rarity{}; //<! レアリティ
 
+    HIT_PROB base_to_h{}; //!< ベース命中修正
+    HIT_POINT base_to_d{}; //!< べ^スダメージ修正
+    ARMOUR_CLASS base_to_a{}; //!< ベースAC修正
+
     HIT_PROB max_to_h{}; //!< 最大ボーナス命中修正
     HIT_POINT max_to_d{}; //!< 最大ボーナスダメージ修正
     ARMOUR_CLASS max_to_a{}; //!< 最大ボーナスAC修正

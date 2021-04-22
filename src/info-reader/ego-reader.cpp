@@ -103,6 +103,14 @@ errr parse_e_info(char *buf, angband_header *head)
         e_ptr->level = (DEPTH)std::stoi(tok[1]);
         e_ptr->rarity = (RARITY)std::stoi(tok[2]);
         e_ptr->cost = (PRICE)std::stoi(tok[4]);
+    } else if (tok[0] == "B") {
+        // Base bonuses
+        // B:to_hit:to_dam:to_ac
+        if (tok.size() < 4)
+            return 1;
+        e_ptr->base_to_h = (HIT_PROB)std::stoi(tok[1]);
+        e_ptr->base_to_d = (HIT_POINT)std::stoi(tok[2]);
+        e_ptr->base_to_a = (ARMOUR_CLASS)std::stoi(tok[3]);
     } else if (tok[0] == "C") {
         // Creation bonuses (random plus)
         // C:to_hit:to_dam:to_ac:pval
