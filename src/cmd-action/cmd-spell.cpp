@@ -68,6 +68,8 @@ concptr KWD_RANGE = _("射程:", "rng ");
 concptr KWD_DURATION = _("期間:", "dur ");
 concptr KWD_SPHERE = _("範囲:", "range ");
 concptr KWD_HEAL = _("回復:", "heal ");
+concptr KWD_MANA = _("MP回復:", "heal SP ");
+concptr KWD_POWER _("効力:", "power ");
 concptr KWD_RANDOM = _("ランダム", "random");
 
 /*!
