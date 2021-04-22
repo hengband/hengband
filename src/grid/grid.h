@@ -111,48 +111,57 @@ typedef struct grid_template_type {
 /*
  * 特殊なマス状態フラグ / Special grid flags
  */
-#define CAVE_MARK       0x0001    /*!< 現在プレイヤーの記憶に収まっている / memorized feature */
-#define CAVE_GLOW       0x0002    /*!< マス自体が光源を持っている / self-illuminating */
-#define CAVE_ICKY       0x0004    /*!< 生成されたVaultの一部である / part of a vault */
-#define CAVE_ROOM       0x0008    /*!< 生成された部屋の一部である / part of a room */
-#define CAVE_LITE       0x0010    /*!< 現在光に照らされている / lite flag  */
-#define CAVE_VIEW       0x0020    /*!< 現在プレイヤーの視界に収まっている / view flag */
-#define CAVE_TEMP       0x0040    /*!< 光源に関する処理のアルゴリズム用記録フラグ / temp flag */
-#define CAVE_XTRA       0x0080    /*!< 視界に関する処理のアルゴリズム用記録フラグ(update_view()等参照) / misc flag */
-#define CAVE_MNLT       0x0100    /*!< モンスターの光源によって照らされている / Illuminated by monster */
-#define CAVE_MNDK       0x8000    /*!< モンスターの暗源によって暗闇になっている / Darken by monster */
+enum cave_flags
+{
+    CAVE_MARK = 1L << 0,    /*!< 現在プレイヤーの記憶に収まっている / memorized feature */
+    CAVE_GLOW = 1L << 1,    /*!< マス自体が光源を持っている / self-illuminating */
+    CAVE_ICKY = 1L << 2,    /*!< 生成されたVaultの一部である / part of a vault */
+    CAVE_ROOM = 1L << 3,    /*!< 生成された部屋の一部である / part of a room */
+    CAVE_LITE = 1L << 4,    /*!< 現在光に照らされている / lite flag  */
+    CAVE_VIEW = 1L << 5,    /*!< 現在プレイヤーの視界に収まっている / view flag */
+    CAVE_TEMP = 1L << 6,    /*!< 光源に関する処理のアルゴリズム用記録フラグ / temp flag */
+    CAVE_XTRA = 1L << 7,    /*!< 視界に関する処理のアルゴリズム用記録フラグ(update_view()等参照) / misc flag */
+    CAVE_MNLT = 1L << 8,    /*!< モンスターの光源によって照らされている / Illuminated by monster */
+    CAVE_MNDK = 1L << 15,    /*!< モンスターの暗源によって暗闇になっている / Darken by monster */
 
-/* Used only while floor generation */
-#define CAVE_FLOOR      0x0200    /*!< フロア属性のあるマス */
-#define CAVE_EXTRA      0x0400
-#define CAVE_INNER      0x0800
-#define CAVE_OUTER      0x1000
-#define CAVE_SOLID      0x2000
-#define CAVE_VAULT      0x4000
-#define CAVE_MASK (CAVE_FLOOR | CAVE_EXTRA | CAVE_INNER | CAVE_OUTER | CAVE_SOLID | CAVE_VAULT)
+    /* Used only while floor generation */
+    CAVE_FLOOR = 1L << 9,    /*!< フロア属性のあるマス */
+    CAVE_EXTRA = 1L << 10,
+    CAVE_INNER = 1L << 11,
+    CAVE_OUTER = 1L << 12,
+    CAVE_SOLID = 1L << 13,
+    CAVE_VAULT = 1L << 14,
 
-/* Used only after floor generation */
-#define CAVE_KNOWN      0x0200    /* Directly viewed or map detected flag */
-#define CAVE_NOTE       0x0400    /* Flag for delayed visual update (needs note_spot()) */
-#define CAVE_REDRAW     0x0800    /* Flag for delayed visual update (needs lite_spot()) */
-#define CAVE_OBJECT     0x1000    /* Mirror, rune, etc. */
-#define CAVE_UNSAFE     0x2000    /* Might have trap */
-#define CAVE_IN_DETECT  0x4000    /* trap detected area (inner circle only) */
+    CAVE_KNOWN     = 1L << 15,    /* Directly viewed or map detected flag */
+    CAVE_NOTE      = 1L << 16,    /* Flag for delayed visual update (needs note_spot()) */
+    CAVE_REDRAW    = 1L << 17,    /* Flag for delayed visual update (needs lite_spot()) */
+    CAVE_OBJECT    = 1L << 18,    /* Mirror, rune, etc. */
+    CAVE_UNSAFE    = 1L << 19,    /* Might have trap */
+    CAVE_IN_DETECT = 1L << 20    /* trap detected area (inner circle only) */
+
+};
+const BIT_FLAGS CAVE_MASK = (CAVE_FLOOR | CAVE_EXTRA | CAVE_INNER | CAVE_OUTER | CAVE_SOLID | CAVE_VAULT);
 
 /* Types of conversions */
-#define CONVERT_TYPE_FLOOR   0
-#define CONVERT_TYPE_WALL    1
-#define CONVERT_TYPE_INNER   2
-#define CONVERT_TYPE_OUTER   3
-#define CONVERT_TYPE_SOLID   4
-#define CONVERT_TYPE_STREAM1 5
-#define CONVERT_TYPE_STREAM2 6
+enum convert_type
+{
+    CONVERT_TYPE_FLOOR = 0,
+    CONVERT_TYPE_WALL  = 1,
+    CONVERT_TYPE_INNER = 2,
+    CONVERT_TYPE_OUTER = 3,
+    CONVERT_TYPE_SOLID = 4,
+    CONVERT_TYPE_STREAM1 = 5,
+    CONVERT_TYPE_STREAM2 = 6,
+};
 
 /* Types of doors */
-#define DOOR_DEFAULT    -1
-#define DOOR_DOOR        0
-#define DOOR_GLASS_DOOR  1
-#define DOOR_CURTAIN     2
+enum door_form
+{
+    DOOR_DEFAULT = -1,
+    DOOR_DOOR = 0,
+    DOOR_GLASS_DOOR = 1,
+    DOOR_CURTAIN = 2,
+};
 
 // clang-format on
 
