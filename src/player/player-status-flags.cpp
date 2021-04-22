@@ -1350,6 +1350,8 @@ BIT_FLAGS has_vuln_acid(player_type *creature_ptr)
     if (creature_ptr->special_defense & KATA_KOUKIJIN) {
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
+
+    result |= check_equipment_flags(creature_ptr, TR_VUL_ACID);
     return result;
 }
 
@@ -1389,6 +1391,8 @@ BIT_FLAGS has_vuln_elec(player_type *creature_ptr)
     if (creature_ptr->special_defense & KATA_KOUKIJIN) {
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
+
+    result |= check_equipment_flags(creature_ptr, TR_VUL_ELEC);
     return result;
 }
 
@@ -1429,6 +1433,8 @@ BIT_FLAGS has_vuln_fire(player_type *creature_ptr)
     if (creature_ptr->special_defense & KATA_KOUKIJIN) {
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
+
+    result |= check_equipment_flags(creature_ptr, TR_VUL_FIRE);
     return result;
 }
 
@@ -1469,6 +1475,8 @@ BIT_FLAGS has_vuln_cold(player_type *creature_ptr)
     if (creature_ptr->special_defense & KATA_KOUKIJIN) {
         result |= FLAG_CAUSE_BATTLE_FORM;
     }
+
+    result |= check_equipment_flags(creature_ptr, TR_VUL_COLD);
     return result;
 }
 
@@ -1578,6 +1586,7 @@ BIT_FLAGS has_vuln_lite(player_type *creature_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
+    result |= check_equipment_flags(creature_ptr, TR_VUL_LITE);
     return result;
 }
 
@@ -1910,6 +1919,7 @@ BIT_FLAGS has_immune_dark(player_type *creature_ptr)
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
+    result |= check_equipment_flags(creature_ptr, TR_IM_DARK);
     return result;
 }
 
