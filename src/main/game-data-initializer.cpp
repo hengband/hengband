@@ -1,4 +1,9 @@
-﻿#include "main/game-data-initializer.h"
+﻿/*!
+ * @file game-data-initializer.cpp
+ * @brief 変愚蛮怒のゲームデータ初期化定義
+ */
+
+#include "main/game-data-initializer.h"
 #include "cmd-io/macro-util.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"

@@ -1,4 +1,8 @@
 ﻿#pragma once
+/*!
+ * @file angband-headers.h
+ * @brief ゲームデータのグローバルヘッダ情報ヘッダ
+ */
 
 #include "system/angband.h"
 

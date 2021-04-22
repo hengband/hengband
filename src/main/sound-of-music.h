@@ -1,4 +1,8 @@
 ﻿#pragma once
+/*!
+ * @file sound-of-music.h
+ * @brief BGM及び効果音のterm出力処理ヘッダ
+ */
 
 #include "system/angband.h"
 

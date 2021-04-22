@@ -1,4 +1,9 @@
-﻿#include "main/init-error-messages-table.h"
+﻿/*!
+ * @file init-error-messages-table.cpp
+ * @brief 変愚蛮怒のゲームデータ解析エラー名定義
+ */
+
+#include "main/init-error-messages-table.h"
 
 /*!
  * エラーメッセージの名称定義 / Standard error message text

@@ -1,4 +1,9 @@
-﻿#include "main/scene-table-monster.h"
+﻿/*!
+ * @file scene-table-monster.cpp
+ * @brief モンスターの遭遇状況に応じたBGM設定処理実装
+ */
+
+#include "main/scene-table-monster.h"
 #include "dungeon/quest.h"
 #include "main/music-definitions-table.h"
 #include "monster-race/monster-race.h"
