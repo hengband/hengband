@@ -8,20 +8,18 @@ rc_type::rc_type(player_type *creature_ptr)
     this->is_warrior = (creature_ptr->pclass == CLASS_WARRIOR || creature_ptr->pclass == CLASS_BERSERKER);
 }
 
-rpi_type rc_type::make_power(std::string name)
-{
-    auto rpi = rpi_type();
-    rpi.racial_name = name;
-    return rpi;
-}
-
 void rc_type::add_power(rpi_type& rpi, int number)
 {
     rpi.number = number;
-    this->power_desc.emplace_back(rpi);
+    this->power_desc.push_back(std::move(rpi));
 }
 
-COMMAND_CODE rc_type::size()
+void rc_type::add_power(rpi_type &rpi, MUTA flag)
+{
+    add_power(rpi, static_cast<int>(flag));
+}
+
+COMMAND_CODE rc_type::power_count()
 {
     return (COMMAND_CODE)this->power_desc.size();
 }

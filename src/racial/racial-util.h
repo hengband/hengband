@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "mutation/mutation-flag-types.h"
 #include <string>
 #include <vector>
 
@@ -27,6 +28,13 @@ struct rpi_type {
     PERCENTAGE fail{}; //!< 難易度(失敗率)
     int number{}; //!< 呼び出し番号
     int racial_cost{}; //!< @todo 種族コスト、おそらく不要
+
+    /*!
+     * @brief コンストラクタ
+     * @param name パワー名
+     */
+    rpi_type(std::string name = {})
+        : racial_name(name) {}
 };
 
 /*!
@@ -55,13 +63,6 @@ struct rc_type {
     rc_type(player_type *creature_prt);
 
     /*!
-     * @brief 指定したパワー名のレイシャル/クラスパワー定義構造体を返す
-     * @param name パワー名
-     * @return パワー定義構造体
-     */
-    rpi_type make_power(std::string name);
-
-    /*!
      * @brief レイシャル/クラスパワー定義を追加
      * @param rpi レイシャル/クラスパワー定義(参照渡し)
      * @param number 呼び出し番号
@@ -69,8 +70,15 @@ struct rc_type {
     void add_power(rpi_type &rpi, int number);
 
     /*!
+     * @brief レイシャル/クラスパワー定義を追加
+     * @param rpi レイシャル/クラスパワー定義(参照渡し)
+     * @param number 突然変異ID
+     */
+    void add_power(rpi_type &rpi, MUTA flag);
+
+    /*!
      * @brief レイシャル/クラスパワー数を返す
      * @return パワー数
      */
-    COMMAND_CODE size();
+    COMMAND_CODE power_count();
 };
