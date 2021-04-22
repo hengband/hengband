@@ -7,7 +7,7 @@
 #include "util/flag-group.h"
 
 // Monster Spell Remover.
-typedef struct monster_race monster_race;
+struct monster_race;
 typedef struct msr_type {
     monster_race *r_ptr;
     EnumClassFlagGroup<RF_ABILITY> ability_flags;

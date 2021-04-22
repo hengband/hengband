@@ -353,7 +353,7 @@ static void show_dead_home_items(player_type *creature_ptr)
  * @param file_character ステータスダンプへのコールバック
  * @return なし
  */
-static void export_player_info(player_type *creature_ptr, update_playtime_pf update_playtime, display_player_pf display_player)
+static void export_player_info(player_type *creature_ptr, display_player_pf display_player)
 {
     prt(_("キャラクターの記録をファイルに書き出すことができます。", "You may now dump a character record to one or more files."), 21, 0);
     prt(_("リターンキーでキャラクターを見ます。ESCで中断します。", "Then, hit RETURN to see the character, or ESC to abort."), 22, 0);
@@ -367,7 +367,7 @@ static void export_player_info(player_type *creature_ptr, update_playtime_pf upd
             break;
 
         screen_save();
-        (void)file_character(creature_ptr, out_val, update_playtime, display_player);
+        (void)file_character(creature_ptr, out_val, display_player);
         screen_load();
     }
 }
@@ -376,7 +376,7 @@ static void export_player_info(player_type *creature_ptr, update_playtime_pf upd
  * @brief 自動的にプレイヤーステータスをファイルダンプ出力する
  * @return なし
  */
-static void file_character_auto(player_type *creature_ptr, update_playtime_pf update_playtime, display_player_pf display_player)
+static void file_character_auto(player_type *creature_ptr, display_player_pf display_player)
 {
     time_t now_t = time(NULL);
     struct tm *now_tm = localtime(&now_t);
@@ -388,20 +388,17 @@ static void file_character_auto(player_type *creature_ptr, update_playtime_pf up
     strnfmt(filename, sizeof(filename), "%s_Autodump_%s.txt", p_ptr->name, datetime);
 
     screen_save();
-    (void)file_character(creature_ptr, filename, update_playtime, display_player);
+    (void)file_character(creature_ptr, filename, display_player);
     screen_load();
 }
 
 /*!
  * @brief 死亡、引退時の簡易ステータス表示
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @param handle_stuff 更新処理チェックへのコールバック
- * @param file_character ステータスダンプへのコールバック
- * @param update_playtime プレイ時間更新処理へのコールバック
  * @param display_player ステータス表示へのコールバック
  * @return なし
  */
-void show_death_info(player_type *creature_ptr, update_playtime_pf update_playtime, display_player_pf display_player)
+void show_death_info(player_type *creature_ptr, display_player_pf display_player)
 {
     inventory_aware(creature_ptr);
     home_aware(creature_ptr);
@@ -412,10 +409,9 @@ void show_death_info(player_type *creature_ptr, update_playtime_pf update_playti
     msg_erase();
 
     if (auto_dump)
-        file_character_auto(creature_ptr, update_playtime, display_player);
+        file_character_auto(creature_ptr, display_player);
 
-    export_player_info(creature_ptr, update_playtime, display_player);
-    (*update_playtime)();
+    export_player_info(creature_ptr, display_player);
     (*display_player)(creature_ptr, 0);
     prt(_("何かキーを押すとさらに情報が続きます (ESCで中断): ", "Hit any key to see more information (ESC to abort): "), 23, 0);
     if (inkey() == ESCAPE)

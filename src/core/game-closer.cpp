@@ -28,7 +28,7 @@ static void clear_floor(player_type *player_ptr)
 
 static void send_world_score_on_closing(player_type *player_ptr, bool do_send)
 {
-    if (send_world_score(player_ptr, do_send, update_playtime, display_player))
+    if (send_world_score(player_ptr, do_send, display_player))
         return;
 
     if (!get_check_strict(
@@ -93,6 +93,9 @@ void close_game(player_type *player_ptr)
         kingly(player_ptr);
 
     if (!cheat_save || get_check(_("死んだデータをセーブしますか？ ", "Save death? "))) {
+        update_playtime();
+        current_world_ptr->sf_play_time += current_world_ptr->play_time;
+
         if (!save_player(player_ptr, SAVE_TYPE_CLOSE_GAME))
             msg_print(_("セーブ失敗！", "death save failed!"));
     } else
@@ -100,7 +103,7 @@ void close_game(player_type *player_ptr)
 
     print_tomb(player_ptr);
     flush();
-    show_death_info(player_ptr, update_playtime, display_player);
+    show_death_info(player_ptr, display_player);
     term_clear();
     if (check_score(player_ptr)) {
         send_world_score_on_closing(player_ptr, do_send);

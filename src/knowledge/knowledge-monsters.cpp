@@ -197,13 +197,20 @@ void do_cmd_knowledge_kill_count(player_type *creature_ptr)
     }
 
     u16b why = 2;
+    char buf[80];
     ang_sort(creature_ptr, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
     for (int k = 0; k < n; k++) {
         monster_race *r_ptr = &r_info[who[k]];
         if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
             bool dead = (r_ptr->max_num == 0);
             if (dead) {
-                fprintf(fff, "     %s\n", r_ptr->name.c_str());
+                if (r_ptr->defeat_level && r_ptr->defeat_time)
+                    sprintf(buf, _(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), r_ptr->defeat_level, r_ptr->defeat_time / (60 * 60),
+                        (r_ptr->defeat_time / 60) % 60, r_ptr->defeat_time % 60);
+                else
+                    buf[0] = '\0';
+
+                fprintf(fff, "     %s%s\n", r_ptr->name.c_str(), buf);
                 total++;
             }
 

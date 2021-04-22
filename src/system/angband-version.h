@@ -22,7 +22,7 @@
 /*!
  * @brief セーブファイルのバージョン(3.0.0から導入)
  */
-constexpr u32b SAVEFILE_VERSION = 3;
+constexpr u32b SAVEFILE_VERSION = 4;
 
 /*!
  * @brief バージョンが開発版が安定版かを返す(廃止予定)

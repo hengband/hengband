@@ -6,8 +6,20 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/int-char-converter.h"
+#include "world/world.h"
 
 static const char p2 = ')';
+
+static TERM_COLOR birth_class_color(int cs)
+{
+    if (cs < MAX_CLASS) {
+        if (is_retired_class(static_cast<player_class_type>(cs)))
+            return TERM_L_DARK;
+        if (is_winner_class(static_cast<player_class_type>(cs)))
+            return TERM_SLATE;
+    }
+    return TERM_WHITE;
+}
 
 static void enumerate_class_list(char *sym)
 {
@@ -26,7 +38,7 @@ static void enumerate_class_list(char *sym)
         else
             sprintf(buf, "%c%c%s", sym[n], p2, str);
 
-        put_str(buf, 13 + (n / 4), 2 + 19 * (n % 4));
+        c_put_str(birth_class_color(n), buf, 13 + (n / 4), 2 + 19 * (n % 4));
     }
 }
 
@@ -35,7 +47,7 @@ static void display_class_stat(int cs, int *os, char *cur, char *sym)
     if (cs == *os)
         return;
 
-    c_put_str(TERM_WHITE, cur, 13 + (*os / 4), 2 + 19 * (*os % 4));
+    c_put_str(birth_class_color(*os), cur, 13 + (*os / 4), 2 + 19 * (*os % 4));
     put_str("                                   ", 3, 40);
     if (cs == MAX_CLASS) {
         sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
@@ -108,9 +120,9 @@ static bool select_class(player_type *creature_ptr, char *cur, char *sym, int *k
             break;
 
         char buf[80];
-        sprintf(buf, _("職業を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a class (%c-%c) ('=' for options): "), sym[0], sym[MAX_CLASS - 1]);
+        sprintf(buf, _("職業を選んで下さい (%c-%c) ('='初期オプション設定, 灰色:勝利済): ", "Choose a class (%c-%c) ('=' for options, Gray is winner): "), sym[0], sym[MAX_CLASS - 1]);
 
-        put_str(buf, 10, 10);
+        put_str(buf, 10, 6);
         char c = inkey();
         if (c == 'Q')
             birth_quit();
