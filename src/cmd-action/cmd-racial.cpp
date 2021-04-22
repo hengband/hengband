@@ -61,7 +61,7 @@ static void racial_power_display_list(player_type *creature_ptr, rc_type *rc_ptr
     auto y = 0;
     for (; y < RC_PAGE_SIZE; y++) {
         auto ctr = RC_PAGE_SIZE * rc_ptr->page + y;
-        if (ctr >= rc_ptr->size())
+        if (ctr >= rc_ptr->power_count())
             break;
 
         if (use_menu)
@@ -105,7 +105,7 @@ static void racial_power_make_prompt(rc_type *rc_ptr)
     else
         fmt = _("(特殊能力 %c-%c, '*'で一覧, '/'で閲覧, ESCで中断) どの能力を使いますか？", "(Powers %c-%c, *=List, /=Browse, ESC=exit) Use which power? ");
 
-    (void)strnfmt(rc_ptr->out_val, 78, fmt, I2A(0), (rc_ptr->size() <= 26) ? I2A(rc_ptr->size() - 1) : '0' + rc_ptr->size() - 27);
+    (void)strnfmt(rc_ptr->out_val, 78, fmt, I2A(0), (rc_ptr->power_count() <= 26) ? I2A(rc_ptr->power_count() - 1) : '0' + rc_ptr->power_count() - 27);
 }
 
 /*!
@@ -119,12 +119,12 @@ static void racial_power_add_index(player_type *creature_ptr, rc_type *rc_ptr, i
 {
     auto n = rc_ptr->menu_line + i;
     if (i < -1 || i > 1) {
-        if (n < 0 || n >= rc_ptr->size())
+        if (n < 0 || n >= rc_ptr->power_count())
             return;
     }
     if (n < 0)
-        n = rc_ptr->size() - 1;
-    if (n >= rc_ptr->size())
+        n = rc_ptr->power_count() - 1;
+    if (n >= rc_ptr->power_count())
         n = 0;
 
     auto p = n / RC_PAGE_SIZE;
@@ -199,8 +199,8 @@ static bool racial_power_select_by_menu(player_type *creature_ptr, rc_type *rc_p
     if (racial_power_interpret_menu_keys(creature_ptr, rc_ptr))
         return RC_CANCEL;
 
-    if (rc_ptr->menu_line > rc_ptr->size())
-        rc_ptr->menu_line -= rc_ptr->size();
+    if (rc_ptr->menu_line > rc_ptr->power_count())
+        rc_ptr->menu_line -= rc_ptr->power_count();
 
     return RC_CONTINUE;
 }
@@ -243,7 +243,7 @@ static void decide_racial_command(rc_type *rc_ptr)
     if (use_menu)
         return;
 
-    if (rc_ptr->choice == '\r' && rc_ptr->size() == 1)
+    if (rc_ptr->choice == '\r' && rc_ptr->power_count() == 1)
         rc_ptr->choice = 'a';
 
     if (!isalpha(rc_ptr->choice)) {
@@ -261,7 +261,7 @@ static void decide_racial_command(rc_type *rc_ptr)
 
 static bool ask_invoke_racial_power(rc_type *rc_ptr)
 {
-    if ((rc_ptr->command_code < 0) || (rc_ptr->command_code >= rc_ptr->size())) {
+    if ((rc_ptr->command_code < 0) || (rc_ptr->command_code >= rc_ptr->power_count())) {
         bell();
         return false;
     }
@@ -344,7 +344,7 @@ static bool racial_power_process_input(player_type *creature_ptr, rc_type *rc_pt
  */
 static bool racial_power_select_power(player_type *creature_ptr, rc_type *rc_ptr)
 {
-    if (repeat_pull(&rc_ptr->command_code) && rc_ptr->command_code >= 0 && rc_ptr->command_code < rc_ptr->size())
+    if (repeat_pull(&rc_ptr->command_code) && rc_ptr->command_code >= 0 && rc_ptr->command_code < rc_ptr->power_count())
         return RC_CONTINUE;
 
     screen_save();
@@ -449,12 +449,12 @@ void do_cmd_racial_power(player_type *creature_ptr)
 
     select_mutation_racial(creature_ptr, rc_ptr);
 
-    if (rc_ptr->size() == 0) {
+    if (rc_ptr->power_count() == 0) {
         msg_print(_("特殊能力はありません。", "You have no special powers."));
         return;
     }
 
-    rc_ptr->max_page = 1 + (rc_ptr->size() - 1) / RC_PAGE_SIZE;
+    rc_ptr->max_page = 1 + (rc_ptr->power_count() - 1) / RC_PAGE_SIZE;
     rc_ptr->page = use_menu ? 0 : -1;
     racial_power_make_prompt(rc_ptr);
 
