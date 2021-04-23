@@ -22501,7 +22501,7 @@ D:ゆえにそれらを求め鉄獄に至ったこともまた必然であるだ
 N:1124:撲殺の天使
 E:Dokuro, the Bludgeoning Angel
 G:A:B
-I:115:30d30:30:60:10
+I:115:30d30:20:60:20
 W:30:2:0:1300:0:0
 B:SLASH:SUPERHURT:15d2
 B:HIT:SUPERHURT:15d2
