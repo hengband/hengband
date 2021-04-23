@@ -722,6 +722,15 @@ says, 'Don't look me as I was a louse!'
 says, 'Here a louse.'
 says, 'Die. Die. Damn thing is strong!'
 
+N:1146:Ki-43 'Oscar'
+says, 'Run away, fly back the clouds!!'
+says, 'Shake off no matter what!!'
+says, 'Oops! Fuel leaks!!'
+says, 'You bastard! It's only after you see the enemy that we separated you.'
+says, 'Ha ha ha, I can still fly!!'
+says, 'I'll leave the rest!'
+says, 'Ahahaha!! He goes! goes!! He ignited all the rockets at once!!'
+
 # Some sentences are out of order
 # because the typographical error is the original story.
 # ex1. hatred => meatred
