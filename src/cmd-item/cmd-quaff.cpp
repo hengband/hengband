@@ -13,6 +13,8 @@
 #include "object/item-use-flags.h"
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
+#include "realm/realm-hex-numbers.h"
+#include "spell-realm/spells-hex.h"
 #include "status/action-setter.h"
 
 /*!
@@ -25,7 +27,7 @@ void do_cmd_quaff_potion(player_type *creature_ptr)
     if (creature_ptr->wild_mode)
         return;
 
-    if (cmd_limit_arena(creature_ptr))
+    if (!hex_spelling(creature_ptr, HEX_INHAIL) && cmd_limit_arena(creature_ptr))
         return;
 
     if (creature_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
