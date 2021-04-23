@@ -7757,7 +7757,7 @@ D:ディープワンには老化というものが無く、事故死か或いは
 D:も生き続ける。
 
 #J0#
-N:453:バジリスク
+N:453:バシリスク
 E:Basilisk
 G:R:D
 I:120:20d30:15:90:30
@@ -12253,7 +12253,7 @@ D:その恐ろしげな黒い体はまるで死が実体を持ったかのよう
 D:全ての秩序に反して無理矢理に存在しているかのようだ。
 
 #JZ#
-N:668:大バジリスク
+N:668:大バシリスク
 E:Large basilisk
 G:R:D
 I:120:50d30:25:90:15
@@ -12267,7 +12267,7 @@ F:OPEN_DOOR | BASH_DOOR | EVIL | IM_POIS | RES_DARK | DROP_CORPSE
 F:ANIMAL | NO_CONF | NO_SLEEP | CAN_SWIM | RIDING
 S:1_IN_8 | BR_POIS | BR_DARK | BR_NETH
 D:$A large basilisk, whose shape resembles that of an ancient dragon.
-D:大型のバジリスクで、古代ドラゴンに似た姿をしている。
+D:大型のバシリスクで、古代ドラゴンに似た姿をしている。
 
 #JZ#
 N:669:『カリブディス』
@@ -13147,7 +13147,7 @@ F:IM_FIRE | IM_POIS | RES_NETH | RES_TELE | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_7 | HOLD | SCARE | BR_FIRE | BR_POIS | BR_NETH
 D:$It's a winged basilisk, eager to show an adventurer like yourself
 D:$ the evil poison and power that is has stored in its body.
-D:翼のあるバジリスクだ。
+D:翼のあるバシリスクだ。
 D:その身体に蓄えた邪悪な毒と力を見せつけるべく虎視眈々と冒険者を狙っている。
 
 #JZ#
@@ -24653,11 +24653,11 @@ F:IM_FIRE | IM_POIS | RES_NETH | RES_TELE | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_6 | HOLD | SCARE | BR_FIRE | BR_POIS | BR_NETH
 D:$A mixture of dragon and basilisk, the dracolisk stares at you with deep 
 D:$piercing eyes, its evil breath burning the ground where it stands.
-D:ドラゴンとバジリスクの混血であるドラコリスクは、深く突き刺すような
+D:ドラゴンとバシリスクの混血であるドラコリスクは、深く突き刺すような
 D:視線で冒険者を睨みつける。その邪悪なブレスは、自分の足下の大地ですら燃え上
 D:がらせる。
 
-N:1243:巨大バジリスク
+N:1243:巨大バシリスク
 E:Greater basilisk
 G:R:D
 I:120:75d30:25:100:15
@@ -24671,7 +24671,7 @@ F:OPEN_DOOR | BASH_DOOR | EVIL | IM_POIS | RES_DARK | DROP_CORPSE
 F:ANIMAL | NO_CONF | NO_SLEEP | CAN_SWIM | RIDING
 S:1_IN_6 | BR_POIS | BR_DARK | BR_NETH
 D:$An extra large basilisk, whose shape resembles that of a wyrm.
-D:巨大なバジリスクで、ワイアームに似た姿をしている。
+D:巨大なバシリスクで、ワイアームに似た姿をしている。
 
 N:1244:地獄の公爵
 E:Duke of hell
