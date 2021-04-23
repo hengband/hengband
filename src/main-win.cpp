@@ -104,6 +104,7 @@
 #include "main-win/main-win-menuitem.h"
 #include "main-win/main-win-music.h"
 #include "main-win/main-win-sound.h"
+#include "main-win/read-graphics.h"
 #include "main/angband-initializer.h"
 #include "main/sound-of-music.h"
 #include "monster-floor/monster-lite.h"
@@ -228,11 +229,6 @@ static HBRUSH hbrYellow;
  * An icon
  */
 static HICON hIcon;
-
-/*
- * A palette
- */
-static HPALETTE hPal;
 
 /* bg */
 enum class bg_mode {
@@ -2647,9 +2643,7 @@ static void hook_quit(concptr str)
 
     DeleteObject(hbrYellow);
     finalize_bg();
-
-    if (hPal)
-        DeleteObject(hPal);
+    finalize_graphics();
 
     UnregisterClass(AppName, hInstance);
     if (hIcon)
