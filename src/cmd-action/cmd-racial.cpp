@@ -53,7 +53,7 @@ static void racial_power_erase_cursor(rc_type *rc_ptr)
 static void racial_power_display_list(player_type *creature_ptr, rc_type *rc_ptr)
 {
     TERM_LEN x = 11;
-    char dummy[80];
+    char dummy[256];
     strcpy(dummy, "");
 
     prt(_("                                   Lv   MP 失率 効果", "                               Lv   MP Fail Effect"), 1, x);
