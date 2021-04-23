@@ -1,4 +1,9 @@
-﻿#include "action/racial-execution.h"
+﻿/*!
+ * @file racial-execution.cpp
+ * @brief レイシャルパワー実行処理実装
+ */
+
+#include "action/racial-execution.h"
 #include "action/action-limited.h"
 #include "core/asking-player.h"
 #include "game-option/disturbance-options.h"

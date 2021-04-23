@@ -1,4 +1,8 @@
-#pragma once
+﻿#pragma once
+/*!
+ * @file activation-execution.h
+ * @brief アイテムの発動実行ヘッダ
+ */
 
 #include "system/angband.h"
 

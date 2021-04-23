@@ -1,4 +1,8 @@
 ﻿#pragma once
+/*!
+ * @file throw-util.h
+ * @brief 投擲処理関連ヘッダ
+ */
 
 #include "system/angband.h"
 #include "system/object-type-definition.h"

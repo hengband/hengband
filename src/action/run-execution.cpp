@@ -1,4 +1,9 @@
-﻿#include "action/run-execution.h"
+﻿/*!
+ * @file run-execution.cpp
+ * @brief プレイヤーの走行処理実装
+ */
+
+#include "action/run-execution.h"
 #include "action/movement-execution.h"
 #include "core/disturbance.h"
 #include "floor/cave.h"

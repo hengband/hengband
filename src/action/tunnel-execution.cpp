@@ -1,4 +1,9 @@
-﻿#include "action/tunnel-execution.h"
+﻿/*!
+ * @file tunnel-execution.cpp
+ * @brief 掘削処理実装
+ */
+
+#include "action/tunnel-execution.h"
 #include "core/player-update-types.h"
 #include "floor/cave.h"
 #include "grid/feature.h"

@@ -1,4 +1,8 @@
 ﻿#pragma once
+/*!
+ * @file movement-execution.h
+ * @brief プレイヤーの歩行処理実行ヘッダ
+ */
 
 #include "system/angband.h"
 

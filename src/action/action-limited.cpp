@@ -1,4 +1,9 @@
-﻿#include "action/action-limited.h"
+﻿/*!
+ * @file action-limited.cpp
+ * @brief プレイヤーの行動制約判定定義
+ */
+
+#include "action/action-limited.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "game-option/disturbance-options.h"
