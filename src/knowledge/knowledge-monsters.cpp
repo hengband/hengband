@@ -1,4 +1,5 @@
 ﻿/*!
+ * @file knowledge-monsters.cpp
  * @brief 既知のモンスターに関する情報を表示する
  * @date 2020/04/24
  * @author Hourier
@@ -36,17 +37,12 @@
 #include "world/world.h"
 
 /*!
- * Build a list of monster indexes in the given group.
- *
- * mode & 0x01 : check for non-empty group
- * mode & 0x02 : visual operation only
-
+ * @brief 特定の与えられた条件に応じてモンスターのIDリストを作成する / Build a list of monster indexes in the given group.
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @param grp_cur ？？？
- * @param mon_idx[] ？？？
- * @param mode ？？？
- * @return The number of monsters in the group
- * @todo 引数と戻り値について追記求む
+ * @param grp_cur グループ種別。リスト表記中の左一覧（各シンボル及び/ユニーク(-1)/騎乗可能モンスター(-2)/賞金首(-3)/アンバーの王族(-4)）を参照できる
+ * @param mon_idx[] ID一覧を返す配列参照
+ * @param mode 思い出の扱いに関するモード
+ * @return 得られたモンスターIDの数 / The number of monsters in the group
  */
 static IDX collect_monsters(player_type *creature_ptr, IDX grp_cur, IDX mon_idx[], monster_lore_mode mode)
 {
