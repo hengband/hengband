@@ -412,6 +412,7 @@ wonders if he should buy a small country.
 says, 'Where will we let you go today?  HELL!'
 cackles diabolically.
 is even buying up an apple orchard.
+says, 'Isn't it as user-free as customization? Of course, I wouldn't take responsibility for any bugs. Even if it stays the default.'
 
 N:733:Santa Claus
 says, 'Ho ho ho! You're gonna die!'
@@ -793,6 +794,8 @@ says, 'The very I listen to the opinions of users!?  Absolutely impossible!  The
 says, 'It's not worth listening to the opinions of ignorant customers!  I'm busy!'
 says, 'You'll cover the best apples I've produced!?  Impossible!!'
 says, 'Don't show the command prompt to users!  They're absolutely stupid!  That's why Gates' OS is SM-DOS!'
+says, 'Never let me take root!  Prioritize any development and prevent jailbreak!'
+says, 'I'll execute anyone who modifies this PERFECT OS and PERFECT design that I made!!'
 
 N:1258:Robo-Gandalf
 says, 'BaD EVeninG!'
