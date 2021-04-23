@@ -13735,7 +13735,7 @@ F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | AURA_ELEC | CAN_FLY
 F:ONLY_ITEM | DROP_90 | DROP_2D2 | DROP_GOOD | SELF_LITE_2
 F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE
 F:EVIL | DRAGON | IM_ELEC | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_4 | BLIND | CONF | SCARE | BR_ELEC
+S:1_IN_5 | BLIND | CONF | SCARE | BR_ELEC
 D:$It is a dragon that has accumulated great power in Oblivion
 D:$ and has returned to this world.
 D:$  The electricity produced by this dragon can light one town
@@ -14090,7 +14090,7 @@ F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | CAN_FLY | AURA_COLD
 F:ONLY_ITEM | DROP_90 | DROP_2D2 | DROP_GOOD
 F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE
 F:EVIL | DRAGON | IM_COLD | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_4 | BLIND | CONF | SCARE | BR_COLD
+S:1_IN_5 | BLIND | CONF | SCARE | BR_COLD
 D:$It is a dragon that has accumulated great power in Oblivion
 D:$ and has returned to this world.
 D:$  Be careful, this dragon can freeze your body and even your soul!
@@ -14458,7 +14458,7 @@ F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | CAN_FLY | DROP_CORPSE | SELF_LITE_1
 F:ONLY_ITEM | DROP_90 | DROP_2D2 | DROP_GOOD | SELF_LITE_2
 F:BASH_DOOR | POWERFUL | MOVE_BODY | AURA_FIRE |
 F:EVIL | DRAGON | IM_FIRE | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_4 | BLIND | CONF | SCARE | BR_FIRE
+S:1_IN_5 | BLIND | CONF | SCARE | BR_FIRE
 D:$It is a dragon that has accumulated great power in Oblivion
 D:$ and has returned to this world.
 D:$In front of this fiery flame,
@@ -15453,9 +15453,8 @@ F:IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS
 F:ONLY_ITEM | DROP_4D2 | DROP_GOOD
 F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE
 F:EVIL | DRAGON | NO_CONF | NO_SLEEP | RIDING | SELF_LITE_2
-S:1_IN_4 |
+S:1_IN_5 | CONF | SCARE | BLIND
 S:BR_POIS | BR_ELEC | BR_ACID | BR_FIRE | BR_COLD |
-S:CONF | SCARE | BLIND
 D:$It is a dragon whose scales change color.
 D:$This giant dragon can control all the elements in this world.
 D:めぐるましく鱗の色が変わるドラゴンだ。
@@ -18277,7 +18276,7 @@ F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP |
 F:ONLY_ITEM | DROP_90 | DROP_2D2 | DROP_GOOD |
 F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE | CAN_FLY |
 F:EVIL | DRAGON | IM_POIS | NO_CONF | NO_SLEEP | RIDING |
-S:1_IN_4 | BLIND | CONF | SCARE | BR_POIS
+S:1_IN_5 | BLIND | CONF | SCARE | BR_POIS
 D:$It is a dragon that has accumulated great power in Oblivion
 D:$ and has returned to this world.
 D:$  It scatters a breathtakingly ferocious miasma.
@@ -21449,7 +21448,7 @@ F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP |
 F:ONLY_ITEM | DROP_90 | DROP_2D2 | DROP_GOOD
 F:BASH_DOOR | POWERFUL | MOVE_BODY | DROP_CORPSE | RIDING | CAN_FLY
 F:EVIL | DRAGON | IM_ACID | NO_CONF | NO_SLEEP
-S:1_IN_4 | BLIND | CONF | SCARE | BR_ACID
+S:1_IN_5 | BLIND | CONF | SCARE | BR_ACID
 D:$It is a dragon that has accumulated great power in Oblivion
 D:$ and has returned to this world.
 D:$  With half-finished armor, your whole body will be melted!
@@ -24031,7 +24030,7 @@ F:UNIQUE | FORCE_MAXHP | DROP_CORPSE | DROP_SKELETON | EVIL | FRIENDLY
 F:ONLY_ITEM | DROP_1D2 | DROP_2D2 | DROP_GOOD | CAN_FLY | FRIENDLY | GOOD
 F:IM_COLD | IM_FIRE | IM_ELEC | RES_SOUN
 F:BASH_DOOR | MOVE_BODY | DRAGON | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_8 | SCARE | BA_ELEC | BR_FIRE | BR_COLD | BR_SOUN
+S:1_IN_6 | SCARE | BA_ELEC | BR_FIRE | BR_COLD | BR_SOUN
 D:$Proud, even when compared to other dragons, Odahviing is easily provoked.
 D:他のドラゴンに漏れず天より高いプライドを持ち、挑発にはすぐ乗るタチだ。
 
