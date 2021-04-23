@@ -113,7 +113,7 @@ void rd_experience(player_type *creature_ptr)
         for (int j = 0; j < max_weapon_exp_size; j++)
             rd_s16b(&creature_ptr->weapon_exp[i][j]);
 
-    for (int i = 0; i < GINOU_MAX; i++)
+    for (int i = 0; i < MAX_SKILLS; i++)
         rd_s16b(&creature_ptr->skill_exp[i]);
 }
 

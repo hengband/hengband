@@ -4860,6 +4860,9 @@
     <ClInclude Include="..\..\src\main-win\string-win.h">
       <Filter>main-win</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\system\player-type-definition.h">
+      <Filter>system</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
