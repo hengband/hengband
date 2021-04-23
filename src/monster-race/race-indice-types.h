@@ -75,6 +75,7 @@ enum monster_race_type {
     MON_SHADOWLORD = 774,
     MON_JABBERWOCK = 778,
     MON_SHAMBLER = 786,
+    MON_TIAMAT = 795,
     MON_BLACK_REAVER = 798,
     MON_NULL = 803,
     MON_UNMAKER = 815,

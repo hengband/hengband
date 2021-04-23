@@ -15593,7 +15593,7 @@ F:EVIL | DRAGON | SELF_LITE_2
 F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | NO_CONF | NO_SLEEP
 S:1_IN_2 | BLIND | CONF | SCARE
 S:BR_ACID | BR_FIRE | BR_COLD | BR_ELEC | BR_POIS
-S:S_HI_DRAGON
+S:S_DRAGON | S_HI_DRAGON | S_KIN
 D:$Usually found guarding the first plane of Hell, Tiamat is a formidable 
 D:$opponent, her five heads breathing death to all who stand against her.
 D:おもに地獄界の第一階層を防衛しているティアマットは手に負えない強敵であり、
