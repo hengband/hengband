@@ -1,4 +1,9 @@
-﻿#include "action/weapon-shield.h"
+﻿/*!
+ * @file weapon-shield.cpp
+ * @brief 手装備持ち替え処理実装
+ */
+
+#include "action/weapon-shield.h"
 #include "flavor/flavor-describer.h"
 #include "game-option/birth-options.h"
 #include "inventory/inventory-object.h"

@@ -1,4 +1,9 @@
-﻿#include "action/activation-execution.h"
+﻿/*!
+ * @file activation-execution.cpp
+ * @brief アイテムの発動実行定義
+ */
+
+#include "action/activation-execution.h"
 #include "action/action-limited.h"
 #include "artifact/random-art-effects.h"
 #include "artifact/artifact-info.h"

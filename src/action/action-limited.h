@@ -1,4 +1,8 @@
 ﻿#pragma once
+/*!
+ * @file action-limited.h
+ * @brief プレイヤーの行動制約判定ヘッダ
+ */
 
 #include "system/angband.h"
 

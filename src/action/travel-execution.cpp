@@ -1,4 +1,9 @@
-﻿#include "action/travel-execution.h"
+﻿/*!
+ * @file travel-execution.cpp
+ * @brief トラベル移動処理実装
+ */
+
+#include "action/travel-execution.h"
 #include "action/movement-execution.h"
 #include "action/run-execution.h"
 #include "core/disturbance.h"

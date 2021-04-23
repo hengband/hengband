@@ -1,4 +1,9 @@
-﻿#include "action/open-util.h"
+﻿/*!
+ * @file open-util.cpp
+ * @brief 開閉処理関連関数
+ */
+
+#include "action/open-util.h"
 #include "floor/geometry.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
