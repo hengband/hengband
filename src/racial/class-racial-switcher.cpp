@@ -306,7 +306,7 @@ void switch_class_racial(player_type *creature_ptr, rc_type *rc_ptr)
 
         rpi = rpi_type(_("静水", "Mirror Concentration"));
         rpi.info = format("%s%d", KWD_MANA, 3 + rc_ptr->lvl / 20);
-        rpi.info = _("精神を集中してMPを少し回復する。", "Concentrates deeply to heal your SP a little.");
+        rpi.text = _("精神を集中してMPを少し回復する。", "Concentrates deeply to heal your SP a little.");
         rpi.min_level = 30;
         rpi.cost = 0;
         rpi.stat = A_INT;
