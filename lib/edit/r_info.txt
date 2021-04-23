@@ -24190,6 +24190,7 @@ F:UNIQUE | FORCE_MAXHP | UNDEAD | EVIL | DEMON | MALE
 F:DROP_CORPSE | DROP_SKELETON | BASH_DOOR
 F:HURT_LITE | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS
 F:RES_NETH | RES_DARK | RES_SHAR | NO_SLEEP | NO_CONF
+F:DROP_GREAT | DROP_2D2
 S:1_IN_4 | TPORT | BA_DARK | S_UNDEAD | S_KIN | S_HI_UNDEAD | HEAL
 D:$He is a terrifying vampire trying to extinguish the sun's rays from this
 D:$ land.  For that purpose, he is also a ruthless man who easily throws away
