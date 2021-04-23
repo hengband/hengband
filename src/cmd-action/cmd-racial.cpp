@@ -218,7 +218,7 @@ static bool racial_power_interpret_choise(player_type *creature_ptr, rc_type *rc
 
     if (rc_ptr->choice == ' ' || rc_ptr->choice == '*') {
         rc_ptr->page++;
-        if (rc_ptr->page >= rc_ptr->max_page + (always_show_list ? 0 : 1))
+        if (rc_ptr->page > rc_ptr->max_page)
             rc_ptr->page = 0;
         screen_load();
         screen_save();
