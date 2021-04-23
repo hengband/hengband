@@ -18795,7 +18795,7 @@ D:地獄の軍勢の指揮官であると言われている。
 N:921:インターネット・エクスプローダー
 E:Internet Exploder
 G:e:B
-I:80:20d20:25:0:1
+I:80:20d20:25:0:200
 W:30:1:0:200:0:0
 B:EXPLODE:LOSE_INT:10d10
 F:RAND_25 | RAND_50 | STUPID | EMPTY_MIND | REFLECTING | PREVENT_SUDDEN_MAGIC | CAN_SPEAK
@@ -24722,7 +24722,7 @@ B:SPIT:CONFUSE:5d5
 B:SHOW:BLIND:5d5
 F:SMART | FRIENDS | PREVENT_SUDDEN_MAGIC | AURA_ELEC
 F:IM_POIS | RES_SOUN | RES_PLAS | RES_LITE | RES_DARK | RES_NETH
-F:NO_FEAR | NO_STUN | NO_CONF | CAN_SPEAK
+F:NO_FEAR | NO_STUN | NO_CONF | CAN_SPEAK | NONLIVING
 S:1_IN_5 | BR_SOUN | BR_PLAS
 D:$It is the supreme weapon manufactured by Jobz in response to the plan
 D:$ to conquer the world by Bull Gates' weapon "Internet Exploder".
