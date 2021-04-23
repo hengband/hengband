@@ -933,6 +933,7 @@
     <ClInclude Include="..\..\src\cmd-action\cmd-tunnel.h" />
     <ClInclude Include="..\..\src\action\movement-execution.h" />
     <ClInclude Include="..\..\src\main-win\read-graphics.h" />
+    <ClInclude Include="..\..\src\main-win\tile-info.h" />
     <ClInclude Include="..\..\src\store\cmd-store.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-floor.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-lore.h" />
@@ -1521,7 +1522,6 @@
     <ClCompile Include="..\..\src\mutation\mutation-calculator.cpp" />
     <ClCompile Include="..\..\src\object\object-info.cpp" />
     <ClCompile Include="..\..\src\racial\racial-switcher.cpp" />
-    <ClCompile Include="..\..\src\term\readdib.cpp" />
     <ClCompile Include="..\..\src\realm\realm-arcane.cpp" />
     <ClCompile Include="..\..\src\realm\realm-chaos.cpp" />
     <ClCompile Include="..\..\src\realm\realm-hex.cpp" />
@@ -1794,7 +1794,6 @@
     <ClInclude Include="..\..\src\player\player-status.h" />
     <ClInclude Include="..\..\src\dungeon\quest.h" />
     <ClInclude Include="..\..\src\racial\racial-switcher.h" />
-    <ClInclude Include="..\..\src\term\readdib.h" />
     <ClInclude Include="..\..\src\realm\realm-arcane.h" />
     <ClInclude Include="..\..\src\realm\realm-chaos.h" />
     <ClInclude Include="..\..\src\realm\realm-craft.h" />

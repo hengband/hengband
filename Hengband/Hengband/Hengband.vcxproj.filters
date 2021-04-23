@@ -491,9 +491,6 @@
     <ClCompile Include="..\..\src\birth\history.cpp">
       <Filter>birth</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\term\readdib.cpp">
-      <Filter>term</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\object\warning.cpp">
       <Filter>object</Filter>
     </ClCompile>
@@ -2792,9 +2789,6 @@
     <ClInclude Include="..\..\src\player\patron.h">
       <Filter>player</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\term\readdib.h">
-      <Filter>term</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\object\warning.h">
       <Filter>object</Filter>
     </ClInclude>
@@ -4858,6 +4852,9 @@
       <Filter>store</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\main-win\read-graphics.h">
+      <Filter>main-win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main-win\tile-info.h">
       <Filter>main-win</Filter>
     </ClInclude>
   </ItemGroup>
