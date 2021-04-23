@@ -12419,19 +12419,17 @@ D:している。その姿を見て命を永らえた者はほとんどいない
 N:676:天上界ドラゴン
 E:Ethereal dragon
 G:D:o
-I:120:21d100:25:100:15
-W:43:2:0:11000:0:0
-B:CLAW:HURT:4d12
-B:CLAW:HURT:4d12
-B:BITE:HURT:6d12
+I:120:12d100:25:100:15
+W:41:2:0:3500:30000:1281
+B:CLAW:HURT:4d10
+B:CLAW:HURT:4d10
+B:BITE:HURT:6d10
 F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | 
 F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_4D2 | 
 F:INVISIBLE | CAN_FLY |
 F:PASS_WALL | POWERFUL | MOVE_BODY | 
 F:DRAGON | RES_LITE | RES_DARK | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_5 | 
-S:BLIND | CONF | 
-S:BR_LITE | BR_DARK | BR_CONF
+S:1_IN_6 | BLIND | CONF | BR_LITE | BR_DARK | BR_CONF
 D:$A huge dragon emanating from the elemental plains, the ethereal dragon is 
 D:$a master of light and dark.  Its form disappears from sight as it cloaks 
 D:$itself in unearthly shadows.
@@ -17955,7 +17953,7 @@ B:CLAW:HURT:9d9
 B:CLAW:HURT:9d9
 B:BITE:UN_BONUS:6d6
 F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | SELF_DARK_2 |
-F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | RES_TELE
+F:DROP_2D2 | DROP_4D2 | DROP_GOOD | RES_TELE
 F:INVISIBLE | TAKE_ITEM | CAN_FLY
 F:PASS_WALL | POWERFUL | MOVE_BODY | RES_DARK | RES_NETH
 F:EVIL | DRAGON | IM_COLD | NO_CONF | NO_SLEEP | RIDING
@@ -23951,7 +23949,7 @@ B:CLAW:HURT:9d9
 B:CLAW:HURT:9d9
 B:BITE:HURT:6d14
 F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | REFLECTING | DROP_CORPSE
-F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | CAN_FLY | ATTR_CLEAR
+F:DROP_2D2 | DROP_4D2 | DROP_GOOD | CAN_FLY | ATTR_CLEAR
 F:INVISIBLE | OPEN_DOOR | BASH_DOOR | POWERFUL | MOVE_BODY | 
 F:EVIL | DRAGON | IM_COLD | NO_CONF | RES_SHAR | NO_SLEEP | RIDING
 S:1_IN_4 | SLOW | CONF | SCARE | BR_SHAR
@@ -23972,7 +23970,7 @@ B:CLAW:HURT:8d9
 B:CLAW:HURT:8d9
 B:BITE:HURT:5d14
 F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | DROP_CORPSE
-F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | CAN_FLY
+F:DROP_2D2 | DROP_4D2 | DROP_GOOD | CAN_FLY
 F:SMART | BASH_DOOR | POWERFUL | MOVE_BODY
 F:DRAGON | RES_SOUN | NO_CONF | NO_SLEEP | RIDING
 S:1_IN_4 | BLIND | CONF | SCARE | BR_SOUN
@@ -25362,3 +25360,44 @@ F:IM_FIRE | RES_CHAO | NO_FEAR | NO_CONF | NO_SLEEP
 S:1_IN_6 | BO_FIRE | BA_FIRE | BA_CHAO | TELE_AWAY | MISSILE | CONF
 D:$A high-rank crimson-garbed monk, trained in martial arts.
 D:紅色の法衣を身にまとった、拳法に熟練した高位の修行僧だ。
+
+# Please follow the rules of word order
+# IGCs in Fuctory
+# DON'T LOSE YOUR PERIOD!!
+N:1281:グレート・イクリプス・ドレイク
+E:Great Eclipse Drake
+G:D:U
+I:120:80d30:25:110:30
+W:54:2:0:18000:0:0
+B:CLAW:HURT:9d9
+B:CLAW:HURT:9d9
+B:CLAW:HURT:9d9
+B:BITE:HURT:6d14
+F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | WEIRD_MIND
+F:DROP_2D2 | DROP_4D2 | DROP_GOOD | INVISIBLE | CAN_FLY
+F:PASS_WALL | POWERFUL | MOVE_BODY
+F:DRAGON | RES_LITE | RES_DARK | NO_CONF | NO_SLEEP | RIDING
+S:1_IN_4 | BLIND | CONF | BR_LITE | BR_DARK | BR_CONF
+D:$Adventurer's recklessness.
+D:$  The regret in verge makes disintegration.
+D:$  That lament is a flow in the collective.
+D:$  You extract the level octave of light and darkness as
+D:$ the strength of the great power of this dragon.
+D:$  This evidence will face the fact that you are alive.
+D:$  This immoral dragon rules the power of Tellur and Selen
+D:$ in the depths of a deep cave.
+D:$  The glory of killing this dragon seduces adventurers,
+D:$ but caricature artists will satrize you and make a masterpiece.
+D:$  The terrifying two faces with linkage to its body see you
+D:$ as just a secular and lazy prey.
+D:$  You can tell if your future is heaven or hell by fighting.
+D:冒険者の蛮勇。
+D:後悔の境界は崩壊の慟哭を伴って、奔流の集合を展開させる。
+D:光と闇の奏でる音階はこのドラゴンの強大さを示す証拠となり、
+D:あなたの活気を失わせる。
+D:この不徳なドラゴンは深い洞窟の奥でテルースとセレーネの力を支配している。
+D:冒険者はドラゴンを斃す栄光の誘惑に駆られるだろうが、
+D:それは傑作な風刺画の材料にしかならない。
+D:胴体へ結合された二つの恐ろしげな首は
+D:あなたを単なる世俗で怠慢な獲物としか見ていない。
+D:あなたの行く末が天国か地獄かは、戦ってみれば分かるだろう。
