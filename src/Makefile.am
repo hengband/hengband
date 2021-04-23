@@ -933,7 +933,9 @@ EXTRA_hengband_SOURCES = \
 	main-win/main-win-sound.cpp main-win/main-win-sound.h \
 	main-win/main-win-tokenizer.cpp main-win/main-win-tokenizer.h \
 	main-win/main-win-windows.h \
-	term/readdib.cpp term/readdib.h wall.bmp \
+	main-win/read-graphics.cpp main-win/read-graphics.h \
+	main-win/tile-info.h \
+	wall.bmp \
 	stdafx.cpp stdafx.h
 
 EXTRA_DIST = \
