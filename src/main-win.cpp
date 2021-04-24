@@ -104,6 +104,8 @@
 #include "main-win/main-win-menuitem.h"
 #include "main-win/main-win-music.h"
 #include "main-win/main-win-sound.h"
+#include "main-win/read-graphics.h"
+#include "main-win/tile-info.h"
 #include "main/angband-initializer.h"
 #include "main/sound-of-music.h"
 #include "monster-floor/monster-lite.h"
@@ -129,17 +131,14 @@
 #include <direct.h>
 
 /*
- * Include the support for loading bitmaps
- */
-#include "term/readdib.h"
-
-/*
  * Available graphic modes
  */
-#define GRAPHICS_NONE 0
-#define GRAPHICS_ORIGINAL 1
-#define GRAPHICS_ADAM_BOLT 2
-#define GRAPHICS_HENGBAND 3
+enum graphics_mode {
+    GRAPHICS_NONE = 0,
+    GRAPHICS_ORIGINAL = 1,
+    GRAPHICS_ADAM_BOLT = 2,
+    GRAPHICS_HENGBAND = 3,
+};
 
 /*!
  * @struct term_data
@@ -229,11 +228,6 @@ static HBRUSH hbrYellow;
  */
 static HICON hIcon;
 
-/*
- * A palette
- */
-static HPALETTE hPal;
-
 /* bg */
 enum class bg_mode {
     BG_NONE = 0,
@@ -251,14 +245,14 @@ char wallpaper_file[MAIN_WIN_MAX_PATH] = ""; //!< 壁紙ファイル名。
 static byte current_graphics_mode = 0;
 
 /*
- * The global bitmap
+ * The global tile
  */
-static DIBINIT infGraph;
+static tile_info infGraph;
 
 /*
- * The global bitmap mask
+ * The global tile mask
  */
-static DIBINIT infMask;
+static tile_info infMask;
 
 /*
  * Show sub-windows even when Hengband is not in focus
@@ -615,9 +609,13 @@ static void load_prefs(void)
  */
 static bool init_graphics(void)
 {
-    char buf[1024];
+    char buf[MAIN_WIN_MAX_PATH];
     BYTE wid, hgt, twid, thgt, ox, oy;
     concptr name;
+    concptr name_mask = NULL;
+
+    infGraph.delete_bitmap();
+    infMask.delete_bitmap();
 
     if (arg_graphics == GRAPHICS_ADAM_BOLT) {
         wid = 16;
@@ -627,6 +625,7 @@ static bool init_graphics(void)
         ox = 0;
         oy = 0;
         name = "16X16.BMP";
+        name_mask = "mask.bmp";
 
         ANGBAND_GRAF = "new";
     } else if (arg_graphics == GRAPHICS_HENGBAND) {
@@ -637,6 +636,7 @@ static bool init_graphics(void)
         ox = 0;
         oy = 0;
         name = "32X32.BMP";
+        name_mask = "mask32.bmp";
 
         ANGBAND_GRAF = "ne2";
     } else {
@@ -651,7 +651,8 @@ static bool init_graphics(void)
     }
 
     path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, name);
-    if (!ReadDIB(data[0].w, buf, &infGraph)) {
+    infGraph.hBitmap = read_graphic(buf);
+    if (!infGraph.hBitmap) {
         plog_fmt(_("ビットマップ '%s' を読み込めません。", "Cannot read bitmap file '%s'"), name);
         return FALSE;
     }
@@ -663,17 +664,10 @@ static bool init_graphics(void)
     infGraph.OffsetX = ox;
     infGraph.OffsetY = oy;
 
-    if (arg_graphics == GRAPHICS_ADAM_BOLT) {
-        path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, "mask.bmp");
-        if (!ReadDIB(data[0].w, buf, &infMask)) {
-            plog_fmt("Cannot read bitmap file '%s'", buf);
-            return FALSE;
-        }
-    }
-
-    if (arg_graphics == GRAPHICS_HENGBAND) {
-        path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, "mask32.bmp");
-        if (!ReadDIB(data[0].w, buf, &infMask)) {
+    if (name_mask) {
+        path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, name_mask);
+        infMask.hBitmap = read_graphic(buf);
+        if (!infMask.hBitmap) {
             plog_fmt("Cannot read bitmap file '%s'", buf);
             return FALSE;
         }
@@ -2636,20 +2630,12 @@ static void hook_quit(concptr str)
         data[i].w = 0;
     }
 
-    if (infGraph.hPalette)
-        DeleteObject(infGraph.hPalette);
-    if (infGraph.hBitmap)
-        DeleteObject(infGraph.hBitmap);
-    if (infMask.hPalette)
-        DeleteObject(infMask.hPalette);
-    if (infMask.hBitmap)
-        DeleteObject(infMask.hBitmap);
+    infGraph.delete_bitmap();
+    infMask.delete_bitmap();
 
     DeleteObject(hbrYellow);
     finalize_bg();
-
-    if (hPal)
-        DeleteObject(hPal);
+    finalize_graphics();
 
     UnregisterClass(AppName, hInstance);
     if (hIcon)
