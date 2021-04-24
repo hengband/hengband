@@ -14,4 +14,4 @@ bool set_monster_stunned(player_type *target_ptr, MONSTER_IDX m_idx, int v);
 bool set_monster_confused(player_type *target_ptr, MONSTER_IDX m_idx, int v);
 bool set_monster_monfear(player_type *target_ptr, MONSTER_IDX m_idx, int v);
 bool set_monster_invulner(player_type *target_ptr, MONSTER_IDX m_idx, int v, bool energy_need);
-bool set_monster_timewalk(player_type *target_ptr, int num, MONSTER_IDX who, bool vs_player);
+bool set_monster_timewalk(player_type *target_ptr, int num, MONRACE_IDX who, bool vs_player);

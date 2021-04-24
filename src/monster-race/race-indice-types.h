@@ -174,4 +174,7 @@ enum monster_race_type {
     MON_CAIT_SITH = 1262,
     MON_SHIVA_BOOTS = 1264,
     MON_BIG_RAVEN = 1268,
+    MON_DOPPIO = 1290,
+    MON_DIAVOLO = 1291,
+    MON_MANIMANI = 1293,
 };

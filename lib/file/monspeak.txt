@@ -807,6 +807,24 @@ says, 'LOwEr crEAtUrEs!'
 says, 'yoU bASTARD!'
 says, 'tHIs's thE pOWEr oF maChiNE!'
 
+N:1282:Nezumi-Kozou, the Thief
+says, 'You look like Bugyosyo's man to me!'
+says, 'I bet I can steal from you...'
+says, 'Give 'til it hurts!'
+says, 'Leady-Nezumi has soiled my name!'
+
+N:1290:Vinegar Doppio
+calls, 'RIIIIIIIIIIING, RIIIIIIIIIIING'
+says, '......hello, yes, Doppio'
+
+N:1291:Diavolo
+says, ' Even if I intended to erase it... The "past" makes the true peace of human beings hard.'
+says, 'You will never go beyond the predictions of "King Crimson" with your shallow thinking... you will never go through!'
+
+N:1292:Cioccolata
+says, 'Life energy is not the enemy of this "Green Day"...'
+says, 'I'll show you! Hope is exhausted... The face of the moment when life ends!'
+
 N:*:Default lines
 cackles evilly.
 cackles diabolically.

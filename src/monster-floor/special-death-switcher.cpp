@@ -319,6 +319,18 @@ static void on_dead_big_raven(player_type *player_ptr, monster_death_type *md_pt
     msg_format(_("%sはお星さまになった！", "%^s became a constellation!"), m_name);
 }
 
+/*!
+ * @brief マニマニのあくま撃破時メッセージ
+ * @todo 死亡時の特殊メッセージを表示するだけの処理を複数作るなら、switch/case文に分けられるように汎用化すること
+ */
+static void on_dead_manimani(player_type *player_ptr, monster_death_type *md_ptr)
+{
+    if (!is_seen(player_ptr, md_ptr->m_ptr))
+        return;
+
+    msg_print(_("どこから声が聞こえる…「ハロー！　そして…グッドバイ！」", "Heard a voice from somewhere... 'Hello! And... good bye!'"));
+}
+
 static void drop_specific_item_on_dead(player_type *player_ptr, monster_death_type *md_ptr, bool (*object_hook_pf)(KIND_OBJECT_IDX k_idx))
 {
     object_type forge;
@@ -436,6 +448,8 @@ void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr)
     case MON_BIG_RAVEN:
         on_dead_big_raven(player_ptr, md_ptr);
         return;
+    case MON_MANIMANI:
+        on_dead_manimani(player_ptr, md_ptr);
     default:
         on_dead_mimics(player_ptr, md_ptr);
         return;

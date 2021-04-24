@@ -25401,3 +25401,355 @@ D:それは傑作な風刺画の材料にしかならない。
 D:胴体へ結合された二つの恐ろしげな首は
 D:あなたを単なる世俗で怠慢な獲物としか見ていない。
 D:あなたの行く末が天国か地獄かは、戦ってみれば分かるだろう。
+
+N:1282:盗賊『鼠小僧』
+E:Nezumi-Kozou, the Thief
+G:p:W
+I:120:14d12:20:30:20
+W:8:2:0:150:0:0
+B:HIT:HURT:2d6
+B:HIT:HURT:2d6
+B:TOUCH:EAT_GOLD
+B:TOUCH:EAT_ITEM
+F:UNIQUE | MALE | PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | CAN_SPEAK | HUMAN
+F:ONLY_ITEM | DROP_GOOD | DROP_GREAT | WILD_TOWN
+F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | EVIL | DROP_SKELETON | DROP_CORPSE
+F:EAT_GIVE_DEX | EAT_LOSE_WIS
+S:1_IN_5 | TRAPS
+A:221:1:5
+V:75
+D:$The legendary thief steals from the rich (you qualify).
+D:この伝説の盗賊は金持ち（あなたは合格）から金を盗む
+
+N:1283:『火蜂』
+E:Hibachi
+G:I:r
+I:135:8d1111:1200:150:0
+W:88:8:0:42541:0:0
+B:CRUSH:FIRE:15d15
+B:CRUSH:FIRE:15d15
+B:CRUSH:SUPERHURT:13d13
+F:UNIQUE | ONLY_ITEM | RES_TELE | HAS_LITE_2 | 
+F:BASH_DOOR | KILL_BODY | KILL_WALL | CAN_FLY | RAND_25 |
+F:FORCE_MAXHP | NO_CONF | NO_SLEEP | NO_STUN | NO_FEAR |
+F:STUPID | EMPTY_MIND | POWERFUL | NONLIVING |
+F:EVIL | DROP_4D2 | DROP_3D2 | DROP_GOOD | DROP_GREAT |
+F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_PLAS | 
+S:1_IN_2 | INVULNER
+S:BO_MANA | BO_PLAS | ROCKET | PSY_SPEAR
+S:BA_FIRE | BA_LITE | BR_FIRE | BR_LITE | BR_SHAR | BR_PLAS
+D:$It is a flying object in the shape of a bee in flames.
+D:$  A great person sent you to kill you.
+D:$  YOU SHALL DIE.
+D:炎に包まれた蜂の姿をした飛行物体だ。
+D:ある偉大な人物があなたを抹殺するために遣わした。
+D:死　ぬ　が　よ　い　。
+D:（怒首領蜂　ケイブ／アトラス）
+
+N:1284:イェンダーの魔法使い
+E:Wizard of Yendor
+G:p:v
+I:130:70d100:60:100:10
+W:80:16:0:30000:0:0
+B:HIT:BLIND:6d8
+B:HIT:UN_BONUS:6d8
+B:HIT:LOSE_STR:6d8
+B:CLAW:EAT_ITEM:2d12
+F:UNIQUE | MALE | DROP_CORPSE | DROP_SKELETON | HUMAN
+F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | SMART | HAS_LITE_2
+F:ONLY_ITEM | DROP_90 | DROP_GOOD | DROP_GREAT
+F:OPEN_DOOR | BASH_DOOR | TAKE_ITEM
+F:EVIL | IM_FIRE | IM_POIS | REGENERATE | CAN_FLY
+F:NO_CONF | NO_SLEEP | POWERFUL
+S:1_IN_2 | SHRIEK | BRAIN_SMASH | PSY_SPEAR | HAND_DOOM | CAUSE_4
+S:BLINK | TPORT | S_KIN | S_MONSTERS | S_HI_UNDEAD | S_HI_DRAGON
+D:$No one knows how old this mighty wizard is, or from whence he came.
+D:$  It is known that, having lived a span far greater than any normal man's,
+D:$ he grew weary of lesser mortals; and so, spurning all human company,
+D:$ he forsook the dwellings of men and went to live in the depths of the Earth.
+D:$  He took with him a dreadful artifact,
+D:$ the Book of the Dead, which is said to hold great power indeed.
+D:$  Many have sought to find the wizard and his treasure,
+D:$ but none have found him and lived to tell the tale.
+D:$  Woe be to the incautious adventurer who disturbs this mighty sorcerer!
+D:この強大な魔法使いがどれほどの年月を生き、
+D:どこからやって来たのかは誰も知らない。
+D:常人よりも遥かに長い時を生きてきた彼は、
+D:自らより劣った定命の者にうんざりしていたことが知られている。
+D:そのため、人間の仲間に留まることを拒み、人の住処を捨てて、
+D:地の底に住むようになった。
+D:彼は強大な力を秘めた恐るべきアーティファクトである死者の書を持っていった。
+D:多くの者が彼の魔法使いとその宝物を見つけようとしたが、
+D:誰も彼を見つけて生きてその顛末を語ることはなかった。
+D:この強大な魔法使いを煩わせる不用意な冒険者に災いあれ。
+
+N:1285:イェンダーの魔法使い
+E:Wizard of Yendor
+G:p:v
+I:125:30d100:60:100:10
+W:80:255:0:10000:0:0
+B:HIT:BLIND:6d8
+B:HIT:UN_BONUS:6d8
+B:HIT:LOSE_STR:6d8
+B:CLAW:EAT_ITEM:2d12
+F:UNIQUE | MALE | DROP_CORPSE | DROP_SKELETON | HUMAN
+F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | SMART | HAS_LITE_2
+F:OPEN_DOOR | BASH_DOOR | TAKE_ITEM
+F:EVIL | IM_FIRE | IM_POIS | REGENERATE | CAN_FLY
+F:NO_CONF | NO_SLEEP | POWERFUL
+S:1_IN_2 | SHRIEK | BRAIN_SMASH | BO_MANA | HAND_DOOM | CAUSE_4
+S:BLINK | TPORT | S_MONSTERS | S_HI_UNDEAD | S_HI_DRAGON
+D:$No one knows how old this mighty wizard is, or from whence he came.
+D:$  It is known that, having lived a span far greater than any normal man's,
+D:$ he grew weary of lesser mortals; and so, spurning all human company,
+D:$ he forsook the dwellings of men and went to live in the depths of the Earth.
+D:$  He took with him a dreadful artifact,
+D:$ the Book of the Dead, which is said to hold great power indeed.
+D:$  Many have sought to find the wizard and his treasure,
+D:$ but none have found him and lived to tell the tale.
+D:$  Woe be to the incautious adventurer who disturbs this mighty sorcerer!
+D:この強大な魔法使いがどれほどの年月を生き、
+D:どこからやって来たのかは誰も知らない。
+D:常人よりも遥かに長い時を生きてきた彼は、
+D:自らより劣った定命の者にうんざりしていたことが知られている。
+D:そのため、人間の仲間に留まることを拒み、人の住処を捨てて、
+D:地の底に住むようになった。
+D:彼は強大な力を秘めた恐るべきアーティファクトである死者の書を持っていった。
+D:多くの者が彼の魔法使いとその宝物を見つけようとしたが、
+D:誰も彼を見つけて生きてその顛末を語ることはなかった。
+D:この強大な魔法使いを煩わせる不用意な冒険者に災いあれ。
+
+N:1286:『サウロンのロ』
+E:The Ro of Sauron
+G:p:v
+I:120:35d100:60:100:10
+W:58:3:0:19000:0:0
+B:HIT:UN_BONUS:6d8
+B:HIT:UN_BONUS:6d8
+B:TOUCH:UN_POWER
+B:TOUCH:UN_POWER
+F:UNIQUE | MALE | DROP_CORPSE | DROP_SKELETON | HUMAN
+F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | SMART | HAS_LITE_2
+F:ONLY_ITEM | DROP_1D2 | DROP_4D2 | DROP_GOOD
+F:INVISIBLE | OPEN_DOOR | BASH_DOOR
+F:EVIL | IM_FIRE | IM_COLD | IM_ELEC | NO_CONF | NO_SLEEP
+S:1_IN_4 | 
+S:TELE_TO | HOLD | CAUSE_3 | TRAPS | ANIM_DEAD | DISPEL | PSY_SPEAR
+S:BO_PLAS | BA_DARK | BA_MANA | BA_FIRE | BA_WATE | BA_NETH
+D:$The Ro of Sauron is a mighty spell caster.
+D:$  So old that even he cannot remember his own name,
+D:$ his power and evil are undeniable.
+D:$  He believes unshakeably that he is unbeatable
+D:$ and laughs as he weaves his awesome spells.
+D:サウロンのロは強力な魔法使いだ。
+D:あまりにも長い年月を生きているので自分の名前すらも忘れてしまっているが、
+D:己の力と邪悪な使命だけは覚えている。
+D:彼はこの世界で自分が最強だという揺るぎがたい信念を持ち、
+D:恐ろしげな呪文を唱えながらも余裕で笑っている。
+
+N:1287:たこぶえ
+E:Takobue
+G:H:d
+I:110:10d20:10:30:20
+W:30:100:0:30:0:0
+B:SPIT:BLIND
+B:TOUCH:CONFUSE
+B:CRUSH:HURT:6d6
+B:CRAWL:POISON:4d4
+F:FRIENDS | ANIMAL | CAN_SWIM | WEIRD_MIND | ELDRITCH_HORROR |
+F:IM_POIS | RES_DARK | NO_FEAR | RES_WATE
+S:1_IN_10 | BR_CHAO
+D:$It's a *illegally* dangerous creature.
+D:$  It grows octopus-like legs from a mice-like head.
+D:ネズミのような頭部から蛸のような足が生えている危険な生物だ。
+
+N:1288:魔王の使い
+E:Demon at arms
+G:U:v
+I:120:15d100:20:230:80
+W:60:3:0:20000:0:0
+B:SLASH:SUPERHURT:9d1
+B:SLASH:SUPERHURT:6d5
+B:SLASH:HURT:25d1
+B:SLASH:HURT:30d1
+F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP
+F:DROP_1D2 | NONLIVING |
+F:OPEN_DOOR | BASH_DOOR | POWERFUL | MOVE_BODY | SMART | CAN_SPEAK |
+F:RES_NETH | NO_CONF | NO_SLEEP |
+F:EVIL | DEMON | UNDEAD | IM_FIRE | IM_COLD | IM_POIS |
+F:ESCORT | ESCORTS
+S:1_IN_2 | BR_FIRE | BA_FIRE | BR_COLD | BA_COLD | HOLD | HASTE
+D:$"Hee hee hee. I love burning villagees!
+D:$Wanna try it?" -Servant
+D:大魔王に仕える高位のアンデッド。4つの腕でそれぞれ異なる武器を振るう。
+
+N:1289:『ラムフォリンクス』
+E:BabyWyrm
+G:d:G
+I:119:9d9:10:8:0
+W:10:2:0:45:0:0
+B:BITE:HURT:1d10
+B:BITE:HURT:10d1
+F:BASH_DOOR | UNIQUE | FORCE_MAXHP | NO_CONF | NO_SLEEP
+F:DRAGON |CAN_FLY | CAN_SPEAK | DROP_CORPSE | EAT_SPEED
+D:$"Give me that MAGI!" -BabyWyrm
+D:新しき神々の時代、この翼竜もまた古き神々の遺産の力で神になろうとした。
+D:あなたの持つ伝説のアイテムに目をつけている……
+
+N:1290:『ヴィネガー・ドッピオ』
+E:Vinegar Doppio
+G:p:v
+I:130:10d100:0:100:10
+W:65:5:0:5555:0:0
+B:HIT:SUPERHURT:10d10
+F:UNIQUE | MALE |
+F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | SMART | CAN_SPEAK
+F:OPEN_DOOR | FRIENDLY
+S:1_IN_8 | INVULNER
+D:$He is a timid, dull and refreshing boy.
+D:$  He often makes "phone calls".
+D:臆病で鈍臭いがさっぱりした性格の少年。よく「電話」をしている。
+
+N:1291:『ディアボロ』
+E:Diavolo
+G:p:v
+I:130:50d100:20:100:10
+W:66:255:0:55555:0:0
+B:SPIT:BLIND:10d10
+B:HIT:SUPERHURT:100d2
+F:UNIQUE | MALE | PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | SMART | CAN_SPEAK
+F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | DROP_GREAT
+F:OPEN_DOOR | BASH_DOOR | KILL_BODY | EVIL | NO_CONF | REFLECTING
+S:1_IN_3 | INVULNER | WORLD | TELE_TO
+D:イタリアを中心に活動するギャング組織「パッショーネ」のボス。
+D:何人たりとも自分の過去や情報を探ることを許さず、
+D:組織にも一切顔を出さないという臆病ともとれてしまうほどの用心深さから、
+D:その正体を知る者は最高幹部も含めて全くいない。
+D:「誰だろうとわたしの永遠の絶頂をおびやかす者は許さない 決して 確実に消え去ってもらう」
+
+N:1292:『チョコラータ』
+E:Cioccolata
+G:m:g
+I:130:100d30:15:100:10
+W:53:2:0:20000:0:0
+B:HIT:UN_BONUS:8d8
+B:HIT:UN_BONUS:8d8
+B:HIT:DISEASE:10d10
+B:HIT:DISEASE:10d10
+F:UNIQUE | MALE
+F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | SMART | CAN_SPEAK | ESCORTS
+F:OPEN_DOOR | BASH_DOOR | MOVE_BODY | EVIL | IM_POIS | NO_CONF | NO_SLEEP
+S:1_IN_2 | S_KIN
+D:イタリアのギャング組織「パッショーネ」の特殊部隊
+D:「ボス親衛隊」の一人にして、ボスの切り札。
+D:食人カビを散布するスタンド「グリーン・ディ」によってローマ市民を虐殺した。
+
+N:1293:『マニマニのあくま』
+E:Evil Mani-Mani
+G:g:y
+I:120:258d10:20:100:50
+W:45:3:0:15000:0:0
+B:GAZE:LOSE_INT:6d6
+B:GAZE:LOSE_WIS:6d6
+B:GAZE:CONFUSE:6d6
+B:GAZE:DR_MANA:6d6
+F:PREVENT_SUDDEN_MAGIC | NEVER_MOVE | UNIQUE | FORCE_MAXHP |
+F:DROP_2D2 | DROP_GOOD | ONLY_ITEM | 
+F:ATTR_MULTI | ATTR_ANY |
+F:POWERFUL | EVIL | DEMON | EMPTY_MIND | SELF_LITE_2 |
+F:IM_COLD | IM_POIS | RES_NEXU | RES_CHAO |
+F:NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN |
+S:1_IN_5 | 
+S:BRAIN_SMASH | MIND_BLAST | BA_CHAO | BR_NEXU |DISPEL | CONF | HOLD
+D:$A hallucinatory machine sent by Giygas to invade the Earth.
+D:$  It is a golden statue that looks like a human being,
+D:$ and emits a strange aura and light.
+D:$(EarthBound by Nintendo)
+D:ギーグが地球侵略のために送り込んだ幻影マシーンだ。
+D:人間のような姿をした黄金の像で、異様なオーラと光を放っている。
+D:（任天堂『マザー２』）
+
+N:1294:『いなずま・あらし』
+E:Thunder and Storm
+G:v:W
+I:125:40d100:30:120:50
+W:56:3:0:15000:0:0
+B:ENGULF:ELEC:18d5
+B:ENGULF:ELEC:18d5
+B:CRUSH:SUPERHURT:13d13
+F:PREVENT_SUDDEN_MAGIC | UNIQUE | FORCE_MAXHP | RAND_25 |
+F:DROP_4D2 | DROP_GOOD | ONLY_ITEM |
+F:POWERFUL | SELF_LITE_1 | CAN_FLY |
+F:IM_COLD | IM_ELEC | AURA_ELEC | HURT_LITE |
+F:NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN |
+S:1_IN_3 | 
+S:BR_ELEC | BO_ELEC | BA_ELEC | BO_WATE | BA_WATE | PSY_SPEAR |
+S:BLINK |
+D:$Welcome.
+D:$  Here is the 6th "your place".
+D:$  But now it's my place.
+D:$  Take it back, ...if you can.
+D:$  (EarthBound by Nintendo)
+D:よくきた。
+D:ここは ６ばんめの「おまえのばしょ」だ。
+D:しかし　いまは　わたしのばしょだ。
+D:うばいかえせばよい。
+D:・・・できるものなら。
+D:（任天堂『マザー２』）
+
+N:1295:あつくもえるてき
+E:Hot burning enemy
+G:~:r
+I:130:60d30:30:6:20
+W:59:6:0:12000:0:0
+B:TOUCH:FIRE:30d7
+B:TOUCH:FIRE:30d7
+F:NEVER_MOVE | SELF_LITE_2 | FORCE_MAXHP |
+F:ONLY_GOLD | DROP_3D2 | DROP_4D2 |
+F:IM_FIRE | IM_POIS | HURT_COLD |
+F:NO_FEAR | NO_CONF | NO_SLEEP | POWERFUL |
+F:EMPTY_MIND
+S:1_IN_3 |
+S:BA_FIRE | BR_FIRE |
+D:$It is burning hot.
+D:$  (EarthBound by Nintendo)
+D:それは熱く燃えている。
+D:（任天堂『マザー２』）
+
+N:1296:屏風の虎
+E:Tiger in folding screen
+G:f:y
+I:110:20d15:15:20:15
+W:17:3:0:50:0:0
+B:BITE:HURT:3d4
+B:BITE:HURT:3d4
+F:BASH_DOOR | WILD_GRASS | ANIMAL | PASS_WALL
+D:$This terrifying tiger escapes from the folding screen
+D:$ in the mansion of a certain lord every night and eats people.
+D:$  So the lord asked the child priest to get rid of this tiger
+D:$ and kicked out the tiger from the folding screen,
+D:$ but the priest failed to catch it and ran away as it was.
+D:この恐るべき虎は、さる殿様の屋敷に飾ってある屏風から毎晩抜け出しては
+D:人を食い殺している。
+D:そこで殿様は坊主に退治を依頼して屏風からこの虎を出したが、
+D:坊主は捕まえ損ねてそのまま逃げ出してしまった。
+
+# In Japan, also, taxi in Edo era and bird cage have pronunciation, 'kago'
+# Driver and painter have same pronunciation, 'kaki'
+# A long time ago, the taxi driver was a menial job.
+# But painter was a noble job; Goph, Cezanne, Warhol and Hokusai.
+# Therefore, 'kagokaki' means both menial driver and noble painter...
+N:1297:抜け雀
+E:Passing sparrow
+G:B:U
+I:110:3d6:10:5:15
+W:3:3:0:10:0:0
+B:BITE:HURT:1d3
+B:CLAW:HURT:1d3
+F:RAND_25 | CAN_FLY | ANIMAL | PASS_WALL | WILD_GRASS
+D:$A famous painter who stayed at a certain post station drew a sparrow
+D:$ on a folding screen due to lack of accommodation charges.
+D:$  It's frustrating because it doesn't enter a cage
+D:$ so it can't have a good rest.
+D:とある宿場に泊まった高名な絵師が宿代が足りなくて屏風へ描いた雀だ。
+D:駕籠がないのでゆっくり休めずイライラしている。

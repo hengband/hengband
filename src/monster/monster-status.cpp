@@ -966,17 +966,37 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
         /* Generate treasure */
         monster_death(target_ptr, m_idx, TRUE);
 
-        /* Mega hack : replace IKETA to BIKETAL */
-        if ((m_ptr->r_idx == MON_IKETA) && !(target_ptr->current_floor_ptr->inside_arena || target_ptr->phase_out)) {
+        // @todo デッドアタック扱いにしてここから削除したい.
+        bool is_special_summon = m_ptr->r_idx == MON_IKETA;
+        is_special_summon |= m_ptr->r_idx == MON_DOPPIO;
+        if (is_special_summon && !(target_ptr->current_floor_ptr->inside_arena || target_ptr->phase_out)) {
             POSITION dummy_y = m_ptr->fy;
             POSITION dummy_x = m_ptr->fx;
             BIT_FLAGS mode = 0L;
             if (is_pet(m_ptr))
                 mode |= PM_FORCE_PET;
-            delete_monster_idx(target_ptr, m_idx);
-            if (summon_named_creature(target_ptr, 0, dummy_y, dummy_x, MON_BIKETAL, mode)) {
-                msg_print(_("「ハァッハッハッハ！！私がバイケタルだ！！」", "Uwa-hahaha!  *I* am Biketal!"));
+
+            MONRACE_IDX new_unique_idx;
+            concptr mes;
+            switch (m_ptr->r_idx) {
+            case MON_IKETA:
+                new_unique_idx = MON_BIKETAL;
+                mes = _("「ハァッハッハッハ！！私がバイケタルだ！！」", "Uwa-hahaha!  *I* am Biketal!");
+                break;
+            case MON_DOPPIO:
+                new_unique_idx = MON_DIAVOLO;
+                mes = _("「これは『試練』だ　過去に打ち勝てという『試練』とオレは受けとった」",
+                    "This is a 'trial'. I took it as a 'trial' to overcome in the past.");
+                break;
+            default: // バグでなければ入らない.
+                new_unique_idx = 0;
+                mes = "";
+                break;
             }
+
+            delete_monster_idx(target_ptr, m_idx);
+            if (summon_named_creature(target_ptr, 0, dummy_y, dummy_x, new_unique_idx, mode))
+                msg_print(mes);
         } else {
             delete_monster_idx(target_ptr, m_idx);
         }
