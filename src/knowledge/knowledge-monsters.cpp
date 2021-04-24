@@ -398,25 +398,32 @@ void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, boo
                 (attr_idx || char_idx) ? _(", 'c', 'p'でペースト", ", 'c', 'p' to paste") : _(", 'c'でコピー", ", 'c' to copy")),
             hgt - 1, 0);
 
-        monster_race *r_ptr;
-        r_ptr = &r_info[mon_idx[mon_cur]];
+        TERM_COLOR dummy_a;
+        SYMBOL_CODE dummy_c;
+        auto *attr_ptr = &dummy_a;
+        auto *char_ptr = &dummy_c;
+        if (mon_idx[0] != -1) {
+            auto *r_ptr = &r_info[mon_idx[mon_cur]];
+            attr_ptr = &r_ptr->x_attr;
+            char_ptr = &r_ptr->x_char;
 
-        if (!visual_only) {
-            if (mon_cnt)
-                monster_race_track(creature_ptr, mon_idx[mon_cur]);
-            handle_stuff(creature_ptr);
-        }
+            if (!visual_only) {
+                if (mon_cnt)
+                    monster_race_track(creature_ptr, mon_idx[mon_cur]);
+                handle_stuff(creature_ptr);
+            }
 
-        if (visual_list) {
-            place_visual_list_cursor(max + 3, 7, r_ptr->x_attr, r_ptr->x_char, attr_top, char_left);
-        } else if (!column) {
-            term_gotoxy(0, 6 + (grp_cur - grp_top));
-        } else {
-            term_gotoxy(max + 3, 6 + (mon_cur - mon_top));
+            if (visual_list) {
+                place_visual_list_cursor(max + 3, 7, r_ptr->x_attr, r_ptr->x_char, attr_top, char_left);
+            } else if (!column) {
+                term_gotoxy(0, 6 + (grp_cur - grp_top));
+            } else {
+                term_gotoxy(max + 3, 6 + (mon_cur - mon_top));
+            }
         }
 
         char ch = inkey();
-        if (visual_mode_command(ch, &visual_list, browser_rows - 1, wid - (max + 3), &attr_top, &char_left, &r_ptr->x_attr, &r_ptr->x_char, need_redraw)) {
+        if (visual_mode_command(ch, &visual_list, browser_rows - 1, wid - (max + 3), &attr_top, &char_left, attr_ptr, char_ptr, need_redraw)) {
             if (direct_r_idx >= 0) {
                 switch (ch) {
                 case '\n':
