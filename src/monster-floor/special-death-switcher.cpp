@@ -270,6 +270,16 @@ static void on_dead_totem_moai(player_type *player_ptr, monster_death_type *md_p
     summon_self(player_ptr, md_ptr, SUMMON_TOTEM_MOAI, 8, 5, _("新たなモアイが現れた！", "A new moai steps forth!"));
 }
 
+static void on_dead_demon_slayer_senior(player_type* player_ptr, monster_death_type* md_ptr)
+{
+    if (!is_seen(player_ptr, md_ptr->m_ptr))
+        return;
+
+    GAME_TEXT m_name[MAX_NLEN];
+    monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_NONE);
+    msg_format(_("あなたの闘気が%sの身体をサイコロ状に切り刻んだ！", "Your fighting spirit chopped %^s's body into dice!"), m_name);
+}
+
 static void on_dead_dragon_centipede(player_type *player_ptr, monster_death_type *md_ptr)
 {
     if (player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out)
@@ -296,7 +306,7 @@ static void on_dead_dragon_centipede(player_type *player_ptr, monster_death_type
 }
 
 /*!
- * @brief キューちゃん撃破時メッセージ
+ * @brief ビッグキューちゃん撃破時メッセージ
  * @todo 死亡時の特殊メッセージを表示するだけの処理を複数作るなら、switch/case文に分けられるように汎用化すること
  */
 static void on_dead_big_raven(player_type *player_ptr, monster_death_type *md_ptr)
@@ -307,6 +317,18 @@ static void on_dead_big_raven(player_type *player_ptr, monster_death_type *md_pt
     GAME_TEXT m_name[MAX_NLEN];
     monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_NONE);
     msg_format(_("%sはお星さまになった！", "%^s became a constellation!"), m_name);
+}
+
+/*!
+ * @brief マニマニのあくま撃破時メッセージ
+ * @todo 死亡時の特殊メッセージを表示するだけの処理を複数作るなら、switch/case文に分けられるように汎用化すること
+ */
+static void on_dead_manimani(player_type *player_ptr, monster_death_type *md_ptr)
+{
+    if (!is_seen(player_ptr, md_ptr->m_ptr))
+        return;
+
+    msg_print(_("どこから声が聞こえる…「ハロー！　そして…グッドバイ！」", "Heard a voice from somewhere... 'Hello! And... good bye!'"));
 }
 
 static void drop_specific_item_on_dead(player_type *player_ptr, monster_death_type *md_ptr, bool (*object_hook_pf)(KIND_OBJECT_IDX k_idx))
@@ -413,6 +435,9 @@ void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr)
     case MON_TOTEM_MOAI:
         on_dead_totem_moai(player_ptr, md_ptr);
         return;
+    case MON_DEMON_SLAYER_SENIOR:
+        on_dead_demon_slayer_senior(player_ptr, md_ptr);
+        return;
     case MON_DRAGON_CENTIPEDE:
     case MON_DRAGON_WORM:
         on_dead_dragon_centipede(player_ptr, md_ptr);
@@ -423,6 +448,9 @@ void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr)
     case MON_BIG_RAVEN:
         on_dead_big_raven(player_ptr, md_ptr);
         return;
+    case MON_MANIMANI:
+        on_dead_manimani(player_ptr, md_ptr);
+        break;
     default:
         on_dead_mimics(player_ptr, md_ptr);
         return;

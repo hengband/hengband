@@ -410,10 +410,15 @@ invokes a starburst.
 throw a Psyco-Spear.
 invokes the Hand of Doom!
 casts a Globe of Invulnerability.
-#が自分の傷に集中した。
-#↑これは英文の構造上ちょっと無理っぽい
+concentrates its wounds.
 magically summons Lords of Amber!
 yells 'The World! Time has stopped!'
+
+N:1291:Diavolo
+cries, 'Oh, how many times will I die !? Next... Where... I... When will I "attack"!? Will I!? Will I!!'
+
+N:1292:Cioccolata
+cries, 'What a terrible bastard!'
 
 N:*:Default lines
 says, 'I am too young to die.'

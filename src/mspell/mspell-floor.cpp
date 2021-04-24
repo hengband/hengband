@@ -70,17 +70,10 @@ MonsterSpellResult spell_RF4_SHRIEK(MONSTER_IDX m_idx, player_type *target_ptr, 
 MonsterSpellResult spell_RF6_WORLD(player_type *target_ptr, MONSTER_IDX m_idx)
 {
     monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-    MONSTER_IDX who = 0;
     GAME_TEXT m_name[MAX_NLEN];
     monster_name(target_ptr, m_idx, m_name);
-
     disturb(target_ptr, TRUE, TRUE);
-    if (m_ptr->r_idx == MON_DIO)
-        who = 1;
-    else if (m_ptr->r_idx == MON_WONG)
-        who = 3;
-
-    (void)set_monster_timewalk(target_ptr, randint1(2) + 2, who, TRUE);
+    (void)set_monster_timewalk(target_ptr, randint1(2) + 2, m_ptr->r_idx, TRUE);
 
     return MonsterSpellResult::make_valid();
 }

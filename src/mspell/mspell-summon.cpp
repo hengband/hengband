@@ -134,6 +134,9 @@ MonsterSpellResult spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION
     case MON_ZOMBI_SERPENT:
         count += summon_guardian(target_ptr, y, x, rlev, m_idx, t_idx, target_type);
         break;
+    case MON_TIAMAT:
+        count += summon_HIGHEST_DRAGON(target_ptr, y, x, m_idx);
+        break;
     case MON_CALDARM:
         count += summon_LOCKE_CLONE(target_ptr, y, x, m_idx);
         break;

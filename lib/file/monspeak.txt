@@ -412,6 +412,7 @@ wonders if he should buy a small country.
 says, 'Where will we let you go today?  HELL!'
 cackles diabolically.
 is even buying up an apple orchard.
+says, 'Isn't it as user-free as customization? Of course, I wouldn't take responsibility for any bugs. Even if it stays the default.'
 
 N:733:Santa Claus
 says, 'Ho ho ho! You're gonna die!'
@@ -722,6 +723,15 @@ says, 'Don't look me as I was a louse!'
 says, 'Here a louse.'
 says, 'Die. Die. Damn thing is strong!'
 
+N:1146:Ki-43 'Oscar'
+says, 'Run away, fly back the clouds!!'
+says, 'Shake off no matter what!!'
+says, 'Oops! Fuel leaks!!'
+says, 'You bastard! It's only after you see the enemy that we separated you.'
+says, 'Ha ha ha, I can still fly!!'
+says, 'I'll leave the rest!'
+says, 'Ahahaha!! He goes! goes!! He ignited all the rockets at once!!'
+
 # Some sentences are out of order
 # because the typographical error is the original story.
 # ex1. hatred => meatred
@@ -784,6 +794,8 @@ says, 'The very I listen to the opinions of users!?  Absolutely impossible!  The
 says, 'It's not worth listening to the opinions of ignorant customers!  I'm busy!'
 says, 'You'll cover the best apples I've produced!?  Impossible!!'
 says, 'Don't show the command prompt to users!  They're absolutely stupid!  That's why Gates' OS is SM-DOS!'
+says, 'Never let me take root!  Prioritize any development and prevent jailbreak!'
+says, 'I'll execute anyone who modifies this PERFECT OS and PERFECT design that I made!!'
 
 N:1258:Robo-Gandalf
 says, 'BaD EVeninG!'
@@ -794,6 +806,24 @@ says, 'yOu'Re noT mY fRIenD!'
 says, 'LOwEr crEAtUrEs!'
 says, 'yoU bASTARD!'
 says, 'tHIs's thE pOWEr oF maChiNE!'
+
+N:1282:Nezumi-Kozou, the Thief
+says, 'You look like Bugyosyo's man to me!'
+says, 'I bet I can steal from you...'
+says, 'Give 'til it hurts!'
+says, 'Leady-Nezumi has soiled my name!'
+
+N:1290:Vinegar Doppio
+calls, 'RIIIIIIIIIIING, RIIIIIIIIIIING'
+says, '......hello, yes, Doppio'
+
+N:1291:Diavolo
+says, ' Even if I intended to erase it... The "past" makes the true peace of human beings hard.'
+says, 'You will never go beyond the predictions of "King Crimson" with your shallow thinking... you will never go through!'
+
+N:1292:Cioccolata
+says, 'Life energy is not the enemy of this "Green Day"...'
+says, 'I'll show you! Hope is exhausted... The face of the moment when life ends!'
 
 N:*:Default lines
 cackles evilly.
