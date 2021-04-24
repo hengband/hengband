@@ -429,7 +429,7 @@ void process_command(player_type *creature_ptr)
                 else if (creature_ptr->pclass == CLASS_SNIPER)
                     do_cmd_snipe(creature_ptr);
                 else
-                    do_cmd_cast(creature_ptr);
+                    (void)do_cmd_cast(creature_ptr);
             }
         }
 
