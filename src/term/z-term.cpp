@@ -1854,14 +1854,12 @@ errr term_save(void)
     TERM_LEN w = Term->wid;
     TERM_LEN h = Term->hgt;
 
-    /* Create */
-    if (!Term->mem) {
-        /* Allocate window */
-        Term->mem = term_win::create(w, h);
-    }
+    /* Push stack */
+    Term->mem_stack.push(term_win::create(w, h));
 
     /* Grab */
-    term_win_copy(Term->mem, Term->scr, w, h);
+    term_win_copy(Term->mem_stack.top(), Term->scr, w, h);
+
     return 0;
 }
 
@@ -1870,19 +1868,25 @@ errr term_save(void)
  *
  * Every "term_save()" should match exactly one "term_load()"
  */
-errr term_load(void)
+errr term_load(bool load_all)
 {
     TERM_LEN w = Term->wid;
     TERM_LEN h = Term->hgt;
 
-    /* Create */
-    if (!Term->mem) {
-        /* Allocate window */
-        Term->mem = term_win::create(w, h);
+    if (Term->mem_stack.empty())
+        return 0;
+
+    if (load_all) {
+        // 残り1つを残して読み捨てる
+        while (Term->mem_stack.size() > 1)
+            Term->mem_stack.pop();
     }
 
     /* Load */
-    term_win_copy(Term->scr, Term->mem, w, h);
+    term_win_copy(Term->scr, Term->mem_stack.top(), w, h);
+
+    /* Pop stack */
+    Term->mem_stack.pop();
 
     /* Assume change */
     for (TERM_LEN y = 0; y < h; y++) {
@@ -1959,10 +1963,14 @@ errr term_resize(TERM_LEN w, TERM_LEN h)
     std::unique_ptr<term_win> hold_scr = std::move(Term->scr);
 
     /* Save old window */
-    std::unique_ptr<term_win> hold_mem = std::move(Term->mem);
-
-    /* Save old window */
     std::unique_ptr<term_win> hold_tmp = std::move(Term->tmp);
+
+    // 画面情報保存スタックをバックアップ(ウィンドウサイズが変わるので単純なムーブやコピーでは対応できない)
+    std::stack<std::unique_ptr<term_win>> hold_mem_stack;
+    while (!Term->mem_stack.empty()) {
+        hold_mem_stack.push(std::move(Term->mem_stack.top()));
+        Term->mem_stack.pop();
+    }
 
     /* Create new scanners */
     Term->x1 = std::vector<TERM_LEN>(h);
@@ -1981,21 +1989,26 @@ errr term_resize(TERM_LEN w, TERM_LEN h)
     term_win_copy(Term->scr, hold_scr, wid, hgt);
 
     /* If needed */
-    if (hold_mem) {
-        /* Create new window */
-        Term->mem = term_win::create(w, h);
-
-        /* Save the contents */
-        term_win_copy(Term->mem, hold_mem, wid, hgt);
-    }
-
-    /* If needed */
     if (hold_tmp) {
         /* Create new window */
         Term->tmp = term_win::create(w, h);
 
         /* Save the contents */
         term_win_copy(Term->tmp, hold_tmp, wid, hgt);
+    }
+
+    // 退避していた画面情報保存スタックをウィンドウサイズを変えながらリストア
+    while (!hold_mem_stack.empty()) {
+        Term->mem_stack.push(term_win::create(w, h));
+        auto &top = Term->mem_stack.top();
+        term_win_copy(top, hold_mem_stack.top(), wid, hgt);
+        hold_mem_stack.pop();
+
+        /* Illegal cursor */
+        if (top->cx >= w)
+            top->cu = 1;
+        if (top->cy >= h)
+            top->cu = 1;
     }
 
     /* Illegal cursor */
@@ -2009,15 +2022,6 @@ errr term_resize(TERM_LEN w, TERM_LEN h)
         Term->scr->cu = 1;
     if (Term->scr->cy >= h)
         Term->scr->cu = 1;
-
-    /* If needed */
-    if (Term->mem) {
-        /* Illegal cursor */
-        if (Term->mem->cx >= w)
-            Term->mem->cu = 1;
-        if (Term->mem->cy >= h)
-            Term->mem->cu = 1;
-    }
 
     /* If needed */
     if (Term->tmp) {
@@ -2201,8 +2205,9 @@ errr term_nuke(term_type *t)
 
     t->old.reset();
     t->scr.reset();
-    t->mem.reset();
     t->tmp.reset();
+    while (!t->mem_stack.empty())
+        t->mem_stack.pop();
 
     t->x1.clear();
     t->x2.clear();
