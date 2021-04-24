@@ -13,6 +13,7 @@
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"
 #include "spell/summon-types.h"
+#include "system/system-variables.h"
 #include "view/display-messages.h"
 
 /*!
@@ -139,13 +140,18 @@ MONSTER_NUMBER summon_MOAI(player_type *target_ptr, POSITION y, POSITION x, int 
 
 MONSTER_NUMBER summon_DEMON_SLAYER(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
 {
-    int count = 0;
-    const int num = 5;
-    for (int k = 0; k < num; k++)
+    monster_race *r_ptr = &r_info[MON_DEMON_SLAYER_MEMBER];
+    if (r_ptr->max_num == 0) {
+        msg_print(_("しかし、隊士は全滅していた…。", "However, all demon slayer members were murdered..."));
+        return 0;
+    }
+
+    auto count = 0;
+    for (auto k = 0; k < MAX_NAZGUL_NUM; k++)
         count += summon_named_creature(target_ptr, m_idx, y, x, MON_DEMON_SLAYER_MEMBER, PM_NONE);
 
     if (count == 0)
-        msg_print(_("しかし、隊士は全滅していた…。", "However, all demon slayer members were murdered..."));
+        msg_print(_("しかし、隊士は誰も来てくれなかった。", "However, no demon slayer member answered the call..."));
 
     return count;
 }
