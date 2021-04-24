@@ -5,7 +5,7 @@
  * オブジェクト基本特性トークンの定義 /
  * Object flags
  */
-std::unordered_map<std::string_view, tr_type> k_info_flags = {
+const std::unordered_map<std::string_view, tr_type> k_info_flags = {
     { "STR", TR_STR },
     { "INT", TR_INT },
     { "WIS", TR_WIS },
@@ -176,7 +176,7 @@ std::unordered_map<std::string_view, tr_type> k_info_flags = {
  * オブジェクト生成特性トークンの定義 /
  * Object flags
  */
-std::unordered_map<std::string_view, TRG> k_info_gen_flags = {
+const std::unordered_map<std::string_view, TRG> k_info_gen_flags = {
     { "INSTA_ART", TRG::INSTA_ART },
     { "QUESTITEM", TRG::QUESTITEM },
     { "XTRA_POWER", TRG::XTRA_POWER },

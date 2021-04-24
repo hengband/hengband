@@ -4,6 +4,7 @@
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "info-reader/feature-info-tokens-table.h"
+#include "info-reader/info-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "main/angband-headers.h"
 #include "room/door-definition.h"
@@ -11,30 +12,24 @@
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
-#include <string>
-#include <string_view>
 
-/*! 地形タグ情報から地形IDを得られなかった場合にTRUEを返す */
-static bool feat_tag_is_not_found = FALSE;
+/*! 地形タグ情報から地形IDを得られなかった場合にtrueを返す */
+static bool feat_tag_is_not_found = false;
 
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る（地形情報向け） /
  * Grab one flag in an feature_type from a textual string
  * @param f_ptr 地形情報を保管する先の構造体参照ポインタ
  * @param what 参照元の文字列ポインタ
- * @return エラーコード
+ * @return 見つけたらtrue
  */
-static errr grab_one_feat_flag(feature_type *f_ptr, concptr what)
+static bool grab_one_feat_flag(feature_type *f_ptr, std::string_view what)
 {
-    for (int i = 0; i < FF_FLAG_MAX; i++) {
-        if (streq(what, f_info_flags[i])) {
-            add_flag(f_ptr->flags, i);
-            return 0;
-        }
-    }
+    if (info_grab_one_flag(f_ptr->flags, f_info_flags, what))
+        return true;
 
-    msg_format(_("未知の地形フラグ '%s'。", "Unknown feature flag '%s'."), what);
-    return PARSE_ERROR_GENERIC;
+    msg_format(_("未知の地形フラグ '%s'。", "Unknown feature flag '%s'."), what.data());
+    return false;
 }
 
 /*!
@@ -43,19 +38,17 @@ static errr grab_one_feat_flag(feature_type *f_ptr, concptr what)
  * @param f_ptr 地形情報を保管する先の構造体参照ポインタ
  * @param what 参照元の文字列ポインタ
  * @param count ステートの保存先ID
- * @return エラーコード
+ * @return 見つけたらtrue
  */
-static errr grab_one_feat_action(feature_type *f_ptr, concptr what, int count)
+static bool grab_one_feat_action(feature_type *f_ptr, std::string_view what, int count)
 {
-    for (FF_FLAGS_IDX i = 0; i < FF_FLAG_MAX; i++) {
-        if (streq(what, f_info_flags[i])) {
-            f_ptr->state[count].action = i;
-            return 0;
-        }
+    if (auto it = f_info_flags.find(what); it != f_info_flags.end()) {
+        f_ptr->state[count].action = static_cast<FF_FLAGS_IDX>(it->second);
+        return true;
     }
 
-    msg_format(_("未知の地形アクション '%s'。", "Unknown feature action '%s'."), what);
-    return PARSE_ERROR_GENERIC;
+    msg_format(_("未知の地形アクション '%s'。", "Unknown feature action '%s'."), what.data());
+    return false;
 }
 
 /*!
@@ -65,172 +58,162 @@ static errr grab_one_feat_action(feature_type *f_ptr, concptr what, int count)
  * @param head ヘッダ構造体
  * @return エラーコード
  */
-errr parse_f_info(char *buf, angband_header *head)
+errr parse_f_info(std::string_view buf, angband_header *head)
 {
     static feature_type *f_ptr = NULL;
-    int i;
-    char *s, *t;
-    if (buf[0] == 'N') {
-        s = angband_strchr(buf + 2, ':');
+    const auto &tokens = str_split(buf, ':', false, 10);
 
-        if (s) {
-            *s++ = '\0';
-        }
+    if (tokens[0] == "N") {
+        // N:index:tag
+        if (tokens.size() < 3)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
 
-        i = atoi(buf + 2);
-        if (i <= error_idx)
-            return 4;
+        if (tokens[1].size() == 0 || tokens[2].size() == 0)
+            return PARSE_ERROR_GENERIC;
+
+        auto i = std::stoi(tokens[1]);
+        if (i < error_idx)
+            return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
         if (i >= head->info_num)
-            return 2;
+            return PARSE_ERROR_OUT_OF_BOUNDS;
 
         error_idx = i;
         f_ptr = &f_info[i];
-        if (s) {
-            f_ptr->tag = std::string(s);
-        }
+        f_ptr->tag = tokens[2];
 
         f_ptr->mimic = (FEAT_IDX)i;
         f_ptr->destroyed = (FEAT_IDX)i;
         for (i = 0; i < MAX_FEAT_STATES; i++)
             f_ptr->state[i].action = FF_FLAG_MAX;
-    } else if (!f_ptr) {
-        return 3;
-    }
-#ifdef JP
-    else if (buf[0] == 'J') {
-        f_ptr->name = std::string(buf + 2);
-    } else if (buf[0] == 'E') {
-    }
-#else
-    else if (buf[0] == 'J') {
-    } else if (buf[0] == 'E') {
-        f_ptr->name = std::string(buf + 2);
-    }
-#endif
-    else if (buf[0] == 'M') {
-        f_ptr->mimic_tag = std::string(buf + 2);
-    } else if (buf[0] == 'G') {
-        int j;
-        byte s_attr;
-        char char_tmp[F_LIT_MAX];
-        if (buf[1] != ':')
-            return 1;
-        if (!buf[2])
-            return 1;
-        if (buf[3] != ':')
-            return 1;
-        if (!buf[4])
-            return 1;
 
-        char_tmp[F_LIT_STANDARD] = buf[2];
-        s_attr = color_char_to_attr(buf[4]);
+    } else if (!f_ptr)
+        return PARSE_ERROR_MISSING_RECORD_HEADER;
+    else if (tokens[0] == _("J", "E")) {
+        // J:name_ja
+        // E:name_en
+        if (tokens.size() < 2 || tokens[1].size() == 0)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        f_ptr->name = tokens[1];
+    } else if (tokens[0] == _("E", "J")) {
+        //pass
+    } else if (tokens[0] == "M") {
+        // M:mimic_tag
+        if (tokens.size() < 2 || tokens[1].size() == 0)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        f_ptr->mimic_tag = tokens[1];
+    } else if (tokens[0] == "G") {
+        // G:symbol:color:lite:lite_symbol:lite_color:dark_symbol:dark_color
+        if (tokens.size() < 3)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+
+        size_t n;
+        char s_char;
+        if (tokens[1].size() == 1) {
+            s_char = tokens[1][0];
+            n = 2;
+        } else if (tokens[1].size() == 0 && tokens[2].size() == 0) {
+            if (tokens.size() < 4)
+                return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+
+            s_char = ':';
+            n = 3;
+        } else
+            return PARSE_ERROR_GENERIC;
+
+        auto s_attr = color_char_to_attr(tokens[n++][0]);
         if (s_attr > 127)
-            return 1;
+            return PARSE_ERROR_GENERIC;
 
+        f_ptr->d_char[F_LIT_STANDARD] = s_char;
         f_ptr->d_attr[F_LIT_STANDARD] = s_attr;
-        f_ptr->d_char[F_LIT_STANDARD] = char_tmp[F_LIT_STANDARD];
-        if (buf[5] == ':') {
+        if (tokens.size() == n) {
+            for (int j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++) {
+                f_ptr->d_char[j] = s_char;
+                f_ptr->d_attr[j] = s_attr;
+            }
+        } else if (tokens[n++] == "LIT") {
             apply_default_feat_lighting(f_ptr->d_attr, f_ptr->d_char);
-            if (!streq(buf + 6, "LIT")) {
-                char attr_lite_tmp[F_LIT_MAX - F_LIT_NS_BEGIN];
 
-                if ((F_LIT_MAX - F_LIT_NS_BEGIN) * 2
-                    != sscanf(buf + 6, "%c:%c:%c:%c", &char_tmp[F_LIT_LITE], &attr_lite_tmp[F_LIT_LITE - F_LIT_NS_BEGIN], &char_tmp[F_LIT_DARK],
-                        &attr_lite_tmp[F_LIT_DARK - F_LIT_NS_BEGIN]))
-                    return 1;
-                if (buf[F_LIT_MAX * 4 + 1])
-                    return 1;
+            for (int j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++) {
+                auto c_idx = n + (j - F_LIT_NS_BEGIN) * 2;
+                auto a_idx = c_idx + 1;
+                if (tokens.size() <= (size_t)a_idx)
+                    continue;
+                if (tokens[c_idx].size() != 1 || tokens[a_idx].size() != 1)
+                    continue;
 
-                for (j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++) {
-                    switch (attr_lite_tmp[j - F_LIT_NS_BEGIN]) {
-                    case '*':
-                        /* Use default lighting */
-                        break;
-                    case '-':
-                        /* No lighting support */
-                        f_ptr->d_attr[j] = f_ptr->d_attr[F_LIT_STANDARD];
-                        break;
-                    default:
-                        /* Extract the color */
-                        f_ptr->d_attr[j] = color_char_to_attr(attr_lite_tmp[j - F_LIT_NS_BEGIN]);
-                        if (f_ptr->d_attr[j] > 127)
-                            return 1;
-                        break;
-                    }
-                    f_ptr->d_char[j] = char_tmp[j];
+                f_ptr->d_char[j] = tokens[c_idx][0];
+
+                if (tokens[a_idx] == "*") {
+                    // pass
+                } else if (tokens[a_idx] == "-") {
+                    f_ptr->d_attr[j] = s_attr;
+                } else {
+                    f_ptr->d_attr[j] = color_char_to_attr(tokens[a_idx][0]);
+                    if (f_ptr->d_attr[j] > 127)
+                        return PARSE_ERROR_GENERIC;
                 }
             }
-        } else if (!buf[5]) {
-            for (j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++) {
-                f_ptr->d_attr[j] = s_attr;
-                f_ptr->d_char[j] = char_tmp[F_LIT_STANDARD];
-            }
         } else
-            return 1;
-    } else if (buf[0] == 'F') {
-        for (s = buf + 2; *s;) {
-            /* loop */
-            for (t = s; *t && (*t != ' ') && (*t != '|'); ++t)
-                ;
+            return PARSE_ERROR_GENERIC;
+    } else if (tokens[0] == "F") {
+        // F:flags
+        if (tokens.size() < 2 || tokens[1].size() == 0)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
 
-            if (*t) {
-                *t++ = '\0';
-                while (*t == ' ' || *t == '|')
-                    t++;
-            }
-
-            if (1 == sscanf(s, "SUBTYPE_%d", &i)) {
-                f_ptr->subtype = (FEAT_SUBTYPE)i;
-                s = t;
-
+        const auto &flags = str_split(tokens[1], '|', true, 10);
+        for (const auto &f : flags) {
+            if (f.size() == 0)
                 continue;
+
+            const auto &f_tokens = str_split(f, '_', false, 2);
+            if (f_tokens.size() == 2) {
+                if (f_tokens[0] == "SUBTYPE") {
+                    info_set_value(f_ptr->subtype, f_tokens[1]);
+                    continue;
+                } else if (f_tokens[0] == "POWER") {
+                    info_set_value(f_ptr->power, f_tokens[1]);
+                    continue;
+                }
             }
 
-            if (1 == sscanf(s, "POWER_%d", &i)) {
-                f_ptr->power = (FEAT_POWER)i;
-                s = t;
-                continue;
-            }
-
-            if (0 != grab_one_feat_flag(f_ptr, s))
-                return (PARSE_ERROR_INVALID_FLAG);
-
-            s = t;
+            if (!grab_one_feat_flag(f_ptr, f))
+                return PARSE_ERROR_INVALID_FLAG;
         }
-    } else if (buf[0] == 'W') {
-        int priority;
-        if (1 != sscanf(buf + 2, "%d", &priority))
-            return (PARSE_ERROR_GENERIC);
-        f_ptr->priority = (FEAT_PRIORITY)priority;
-    } else if (buf[0] == 'K') {
-        for (i = 0; i < MAX_FEAT_STATES; i++)
+    } else if (tokens[0] == "W") {
+        // W:priority
+        if (tokens.size() < 2 || tokens[1].size() == 0)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        info_set_value(f_ptr->priority, tokens[1]);
+    } else if (tokens[0] == "K") {
+        // K:state:feat
+        if (tokens.size() < 3)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        if (tokens[1].size() == 0 || tokens[2].size() == 0)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+
+        int i = 0;
+        for (; i < MAX_FEAT_STATES; i++) {
             if (f_ptr->state[i].action == FF_FLAG_MAX)
                 break;
+        }
 
         if (i == MAX_FEAT_STATES)
             return PARSE_ERROR_GENERIC;
 
-        /* loop */
-        for (s = t = buf + 2; *t && (*t != ':'); t++)
-            ;
-
-        if (*t == ':')
-            *t++ = '\0';
-
-        if (streq(s, "DESTROYED")) {
-            f_ptr->destroyed_tag = std::string(t);
-        } else {
+        if (tokens[1] == "DESTROYED")
+            f_ptr->destroyed_tag = tokens[2];
+        else {
             f_ptr->state[i].action = 0;
-            if (0 != grab_one_feat_action(f_ptr, s, i))
+            if (!grab_one_feat_action(f_ptr, tokens[1], i))
                 return PARSE_ERROR_INVALID_FLAG;
 
-            f_ptr->state[i].result_tag = std::string(t);
+            f_ptr->state[i].result_tag = tokens[2];
         }
-    } else {
-        return 6;
-    }
+    } else
+        return PARSE_ERROR_UNDEFINED_DIRECTIVE;
 
-    return 0;
+    return PARSE_ERROR_NONE;
 }
 
 /*!
@@ -393,12 +376,11 @@ errr init_feat_variables(void)
  * @param str タグ文字列
  * @return 地形ID
  */
-s16b f_tag_to_index(concptr str)
+FEAT_IDX f_tag_to_index(std::string_view str)
 {
-    for (u16b i = 0; i < f_head.info_num; i++) {
-        if (streq(f_info[i].tag.c_str(), str)) {
-            return (s16b)i;
-        }
+    for (size_t i = 0; i < f_head.info_num; i++) {
+        if (f_info[i].tag == str)
+            return (FEAT_IDX)i;
     }
 
     return -1;

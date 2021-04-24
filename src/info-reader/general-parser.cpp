@@ -2,6 +2,7 @@
 #include "dungeon/quest.h"
 #include "grid/feature.h"
 #include "info-reader/feature-reader.h"
+#include "info-reader/info-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/random-grid-effect-types.h"
 #include "io/tokenizer.h"
@@ -15,6 +16,7 @@
 #include "system/system-variables.h"
 #include "util/angband-files.h"
 #include "util/string-processor.h"
+#include <string>
 
 dungeon_grid letter[255];
 
@@ -27,7 +29,7 @@ dungeon_grid letter[255];
  * @param parse_info_txt_line パース関数
  * @return エラーコード
  */
-errr init_info_txt(FILE *fp, char *buf, angband_header *head, parse_info_txt_func parse_info_txt_line)
+errr init_info_txt(FILE *fp, char *buf, angband_header *head, std::function<errr(std::string_view, angband_header *)> parse_info_txt_line)
 {
     error_idx = -1;
     error_line = 0;
@@ -53,7 +55,7 @@ errr init_info_txt(FILE *fp, char *buf, angband_header *head, parse_info_txt_fun
             }
         }
 
-        if ((err = (*parse_info_txt_line)(buf, head)) != 0)
+        if ((err = parse_info_txt_line(buf, head)) != 0)
             return (err);
     }
 

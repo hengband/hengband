@@ -1,8 +1,9 @@
 ﻿#include "info-reader/vault-reader.h"
 #include "main/angband-headers.h"
+#include "info-reader/info-reader-util.h"
+#include "info-reader/parse-error-types.h"
 #include "room/rooms-vault.h"
 #include "util/string-processor.h"
-#include <string>
 
 /*!
  * @brief Vault情報(v_info)のパース関数 /
@@ -11,44 +12,46 @@
  * @param head ヘッダ構造体
  * @return エラーコード
  */
-errr parse_v_info(char *buf, angband_header *head)
+errr parse_v_info(std::string_view buf, angband_header *head)
 {
-    char *s;
     static vault_type *v_ptr = NULL;
+    const auto &tokens = str_split(buf, ':', false, 5);
 
-    if (buf[0] == 'N') {
-        s = angband_strchr(buf + 2, ':');
-        if (!s)
-            return 1;
+    if (tokens[0] == "N") {
+        // N:index:name
+        if (tokens.size() < 3)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        if (tokens[1].size() == 0 || tokens[2].size() == 0)
+            return PARSE_ERROR_GENERIC;
 
-        *s++ = '\0';
-        if (!*s)
-            return 1;
-
-        int i = atoi(buf + 2);
-        if (i <= error_idx)
-            return 4;
+        auto i = std::stoi(tokens[1]);
+        if (i < error_idx)
+            return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
         if (i >= head->info_num)
-            return 2;
+            return PARSE_ERROR_OUT_OF_BOUNDS;
 
         error_idx = i;
         v_ptr = &v_info[i];
-        v_ptr->name = std::string(s);
+        v_ptr->name = std::string(tokens[2]);
     } else if (!v_ptr)
-        return 3;
-    else if (buf[0] == 'D') {
-        v_ptr->text.append(buf + 2);
-    } else if (buf[0] == 'X') {
-        EFFECT_ID typ, rat, hgt, wid;
-        if (4 != sscanf(buf + 2, "%d:%d:%d:%d", &typ, &rat, &hgt, &wid))
-            return 1;
+        return PARSE_ERROR_MISSING_RECORD_HEADER;
+    else if (tokens[0] == "D") {
+        // D:MapText
+        if (tokens.size() < 2 || tokens[1].size() == 0)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
 
-        v_ptr->typ = (ROOM_IDX)typ;
-        v_ptr->rat = (PROB)rat;
-        v_ptr->hgt = (POSITION)hgt;
-        v_ptr->wid = (POSITION)wid;
+        v_ptr->text.append(buf.substr(2));
+    } else if (tokens[0] == "X") {
+        // X:type:rate:height:width
+        if (tokens.size() < 5)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+
+        info_set_value(v_ptr->typ, tokens[1]);
+        info_set_value(v_ptr->rat, tokens[2]);
+        info_set_value(v_ptr->hgt, tokens[3]);
+        info_set_value(v_ptr->wid, tokens[4]);
     } else
-        return 6;
+        return PARSE_ERROR_UNDEFINED_DIRECTIVE;
 
-    return 0;
+    return PARSE_ERROR_NONE;
 }
