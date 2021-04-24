@@ -450,6 +450,7 @@ void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr)
         return;
     case MON_MANIMANI:
         on_dead_manimani(player_ptr, md_ptr);
+        break;
     default:
         on_dead_mimics(player_ptr, md_ptr);
         return;

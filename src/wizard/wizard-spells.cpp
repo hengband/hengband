@@ -178,9 +178,9 @@ void wiz_summon_pet(player_type *summoner_ptr, MONRACE_IDX r_idx)
 }
 
 /*!
- * @brief ターゲットを指定してダメージ100万・半径0の弱魔力のボールを放つ
+ * @brief ターゲットを指定してダメージ100万・半径0の射撃のボールを放つ
  * @return なし
- * @details
+ * @details RES_ALL持ちも一撃で殺せる
  */
 void wiz_kill_enemy(player_type *caster_ptr)
 {
@@ -189,5 +189,5 @@ void wiz_kill_enemy(player_type *caster_ptr)
     if (!get_aim_dir(caster_ptr, &dir))
         return;
 
-    fire_ball(caster_ptr, GF_MISSILE, dir, 1000000, 0);
+    fire_ball(caster_ptr, GF_ARROW, dir, 1000000, 0);
 }
