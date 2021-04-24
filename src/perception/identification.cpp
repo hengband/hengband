@@ -370,21 +370,31 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それはあなたの魅力を維持する。", "It sustains your charisma.");
     }
 
-    if (has_flag(flgs, TR_IM_ACID)) {
+    if (has_flag(flgs, TR_IM_ACID))
         info[i++] = _("それは酸に対する完全な免疫を授ける。", "It provides immunity to acid.");
-    }
+    else if (has_flag(flgs, TR_VUL_ACID))
+        info[i++] = _("それは酸に対する弱点を授ける。", "It provides vulnerability to acid.");
 
-    if (has_flag(flgs, TR_IM_ELEC)) {
+    if (has_flag(flgs, TR_IM_ELEC))
         info[i++] = _("それは電撃に対する完全な免疫を授ける。", "It provides immunity to electricity.");
-    }
+    else if (has_flag(flgs, TR_VUL_ELEC))
+        info[i++] = _("それは電撃に対する弱点を授ける。", "It provides vulnerability to electricity.");
 
-    if (has_flag(flgs, TR_IM_FIRE)) {
+    if (has_flag(flgs, TR_IM_FIRE))
         info[i++] = _("それは火に対する完全な免疫を授ける。", "It provides immunity to fire.");
-    }
+    else if (has_flag(flgs, TR_VUL_FIRE))
+        info[i++] = _("それは火に対する弱点を授ける。", "It provides vulnerability to fire.");
 
-    if (has_flag(flgs, TR_IM_COLD)) {
+    if (has_flag(flgs, TR_IM_COLD))
         info[i++] = _("それは寒さに対する完全な免疫を授ける。", "It provides immunity to cold.");
-    }
+    else if (has_flag(flgs, TR_VUL_COLD))
+        info[i++] = _("それは寒さに対する弱点を授ける。", "It provides vulnerability to cold.");
+
+    if (has_flag(flgs, TR_IM_DARK))
+        info[i++] = _("それは暗黒に対する完全な免疫を授ける。", "It provides immunity to dark.");
+
+    if (has_flag(flgs, TR_VUL_LITE))
+        info[i++] = _("それは閃光に対する弱点を授ける。", "It provides vulnerability to cold.");
 
     if (has_flag(flgs, TR_THROW)) {
         info[i++] = _("それは敵に投げて大きなダメージを与えることができる。", "It is perfectly balanced for throwing.");

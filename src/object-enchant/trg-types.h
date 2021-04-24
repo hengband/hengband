@@ -31,6 +31,9 @@ enum class TRG {
     XTRA_L_ESP        = 23, //!< 種族テレパシーを得る / Extra racial esp.
     MOD_ACCURACY      = 24, //!< 命中偏重の殺戮修正にする / Adjust to-hit more than to-dam.
     MOD_VELOCITY      = 25, //!< ダメージ偏重の殺戮修正にする / Adjust to-dam more than to-hit.
+    XTRA_DICE_SIDE    = 26, //!< ダイス面を増やす / Extra dice side
+    ADD_DICE          = 27, //!< ダイス数を1増やす / Add dice number
+    DOUBLED_DICE      = 28, //!< ダイス数を2倍にする / Doubled dice number
     MAX,
 };
 // clang-format on

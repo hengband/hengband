@@ -2,206 +2,257 @@
  * @brief キャラクタの特性を表示する
  * @date 2020/02/25
  * @author Hourier
+ * @details
+ * Arranged by iks 2021/04/23
  */
 
 #include "display-characteristic.h"
 #include "flavor/flavor-util.h"
 #include "inventory/inventory-slot-types.h"
+#include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "object/object-flags.h"
+#include "perception/object-perception.h"
 #include "player/permanent-resistances.h"
 #include "player/race-resistances.h"
 #include "player/temporary-resistances.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
+#include <array>
+#include <string>
+#include <unordered_map>
 
-typedef struct {
-    BIT_FLAGS player_flags[TR_FLAG_SIZE];
-    BIT_FLAGS tim_player_flags[TR_FLAG_SIZE];
-    BIT_FLAGS player_imm[TR_FLAG_SIZE];
-    BIT_FLAGS tim_player_imm[TR_FLAG_SIZE];
-    BIT_FLAGS player_vuln[TR_FLAG_SIZE];
-    BIT_FLAGS known_obj_imm[TR_FLAG_SIZE];
-    BIT_FLAGS riding_flags[TR_FLAG_SIZE];
-    BIT_FLAGS riding_negative_flags[TR_FLAG_SIZE];
-} all_player_flags;
+struct all_player_flags {
+    BIT_FLAGS player_flags[TR_FLAG_SIZE]{};
+    BIT_FLAGS tim_player_flags[TR_FLAG_SIZE]{};
+    BIT_FLAGS player_imm[TR_FLAG_SIZE]{};
+    BIT_FLAGS tim_player_imm[TR_FLAG_SIZE]{};
+    BIT_FLAGS player_vuln[TR_FLAG_SIZE]{};
+    BIT_FLAGS known_obj_imm[TR_FLAG_SIZE]{};
+    BIT_FLAGS riding_flags[TR_FLAG_SIZE]{};
+    BIT_FLAGS riding_negative_flags[TR_FLAG_SIZE]{};
+};
 
 /*!
- * @brief 呪われた装備の表示色を変更する
- * @param mode 表示オプション
- * @param row 行数
- * @param col 列数
- * @param flags 装備品へのフラグ群
- * @param header_color 耐性等のパラメータ名 の色
- * @param o_ptr 装備品への参照ポインタ
- * @return 与えられた装備が呪われていればTRUE
+ * @brief 特徴状況構造体
  */
-static bool decide_cursed_equipment_color(u16b mode, TERM_LEN row, TERM_LEN *col, BIT_FLAGS *flags, byte *header_color, object_type *o_ptr)
-{
-    if ((mode & DP_CURSE) == 0)
-        return FALSE;
-
-    if (has_flag(flags, TR_ADD_L_CURSE) || has_flag(flags, TR_ADD_H_CURSE)) {
-        c_put_str(TERM_L_DARK, "+", row, *col);
-        *header_color = TERM_WHITE;
-    }
-
-    if (o_ptr->curse_flags & (TRC_CURSED | TRC_HEAVY_CURSE)) {
-        c_put_str(TERM_WHITE, "+", row, *col);
-        *header_color = TERM_WHITE;
-    }
-
-    if (o_ptr->curse_flags & TRC_PERMA_CURSE) {
-        c_put_str(TERM_WHITE, "*", row, *col);
-        *header_color = TERM_WHITE;
-    }
-
-    (*col)++;
-    return TRUE;
-}
+struct char_stat {
+    bool has_imm{}; //!< 免疫を持つ
+    bool has_res{}; //!< 耐性を持つ
+    bool has_tim{}; //!< 一時付加されている
+    bool has_vul{}; //!< 弱点を持つ
+    bool has_rid{}; //!< 乗馬に関係する
+    std::vector<std::string> syms; //!< 表示するシンボル
+};
 
 /*!
- * @brief 装備品の光源範囲増加/減少で表示色を変える
- * @param row 行数
- * @param col 列数
- * @param flag1 参照する特性ID
- * @param flags 装備品へのフラグ群
- * @param header_color 耐性等のパラメータ名 の色
- * @return 装備品が光源範囲に影響を及ぼすならばTRUE、そうでないならFALSE
+ * @brief 上位の属性フラグへの変換辞書
  */
-static bool decide_light_equipment_color(TERM_LEN row, TERM_LEN *col, int flag1, BIT_FLAGS *flags, byte *header_color)
-{
-    if (flag1 != TR_LITE_1)
-        return FALSE;
-
-    if (has_dark_flag(flags)) {
-        c_put_str(TERM_L_DARK, "+", row, *col);
-        *header_color = TERM_WHITE;
-    } else if (has_lite_flag(flags)) {
-        c_put_str(TERM_WHITE, "+", row, *col);
-        *header_color = TERM_WHITE;
-    }
-
-    (*col)++;
-    return TRUE;
-}
+static std::unordered_map<tr_type, tr_type> flag_to_greater_flag = {
+    { TR_RES_ACID, TR_IM_ACID },
+    { TR_RES_COLD, TR_IM_COLD },
+    { TR_RES_ELEC, TR_IM_ELEC },
+    { TR_RES_FIRE, TR_IM_FIRE },
+    { TR_RES_DARK, TR_IM_DARK },
+    { TR_SLAY_EVIL, TR_KILL_EVIL },
+    { TR_SLAY_GOOD, TR_KILL_GOOD },
+    { TR_SLAY_HUMAN, TR_KILL_HUMAN },
+    { TR_SLAY_ANIMAL, TR_KILL_ANIMAL },
+    { TR_SLAY_DRAGON, TR_KILL_DRAGON },
+    { TR_SLAY_ORC, TR_KILL_ORC },
+    { TR_SLAY_TROLL, TR_KILL_TROLL },
+    { TR_SLAY_GIANT, TR_KILL_GIANT },
+    { TR_SLAY_DEMON, TR_KILL_DEMON },
+    { TR_SLAY_UNDEAD, TR_KILL_UNDEAD },
+};
 
 /*!
- * @brief プレーヤーの弱点に応じて表示色を変える
- * @param mode 表示オプション
- * @param row 行数
- * @param col 列数
- * @param flag1 参照する特性ID
- * @param flags 装備品へのフラグ群
- * @param header_color 耐性等のパラメータ名 の色
- * @param vuln プレーヤーの弱点
+ * @brief 下位の属性フラグへの変換辞書
+ */
+static std::unordered_map<tr_type, tr_type> flag_to_lesser_flag = {
+    { TR_RES_ACID, TR_VUL_ACID },
+    { TR_RES_COLD, TR_VUL_COLD },
+    { TR_RES_ELEC, TR_VUL_ELEC },
+    { TR_RES_FIRE, TR_VUL_FIRE },
+    { TR_RES_LITE, TR_VUL_LITE },
+};
+
+/*!
+ * pbrief 光源扱いするフラグ一覧
+ */
+static std::array<tr_type, 6> lite_flags = {
+    TR_LITE_1,
+    TR_LITE_2,
+    TR_LITE_3,
+    TR_LITE_M1,
+    TR_LITE_M2,
+    TR_LITE_M3,
+};
+
+/*!
+ * @brief 装備品の呪い状況文字列を作成する
+ * @param creature_ptr プレイヤー情報への参照ポインタ
+ * @param flag 判定する特性フラグ
+ * @param f プレイヤーの特性情報への参照ポインタ
+ * @param mode 参照モード(DP_WP)
+ * @param char_stat その行の特性の状況(参照渡し)
  * @return なし
+ * その行の表示色用の判定も行う
  */
-static void decide_vulnerability_color(u16b mode, TERM_LEN row, TERM_LEN *col, int flag1, BIT_FLAGS *flags, byte *header_color, bool vuln, bool riding)
-{
-    term_color_type color = (riding ? TERM_L_GREEN : TERM_WHITE);
-    color = (vuln ? TERM_RED : color);
-    if (has_flag(flags, flag1)) {
-        c_put_str(color, (mode & DP_IMM) ? "*" : "+", row, *col);
-        *header_color = TERM_WHITE;
-    }
-
-    (*col)++;
-}
-
-/*!
- * @brief 装備品を走査し、状況に応じて耐性等の表示色を変える
- * @param creature_ptr プレーヤーへの参照ポインタ
- * @param mode 表示オプション
- * @param row 行数
- * @param col 列数
- * @param flag1 参照する特性ID
- * @param header_color 耐性等のパラメータ名 の色
- * @param vuln プレーヤーの弱点
- * @return なし
- * @details
- * max_i changes only when weapon flags need only two column
- */
-static void decide_colors(player_type *creature_ptr, u16b mode, TERM_LEN row, TERM_LEN *col, int flag1, byte *header_color, bool vuln, bool riding)
+static void process_cursed_equipment_characteristics(player_type *creature_ptr, u16b mode, char_stat &char_stat)
 {
     int max_i = (mode & DP_WP) ? INVEN_BOW + 1 : INVEN_TOTAL;
     for (int i = INVEN_MAIN_HAND; i < max_i; i++) {
         BIT_FLAGS flags[TR_FLAG_SIZE];
-        object_type *o_ptr;
-        o_ptr = &creature_ptr->inventory_list[i];
+        auto *o_ptr = &creature_ptr->inventory_list[i];
+        auto is_known = object_is_known(o_ptr);
+        auto is_sensed = is_known || o_ptr->ident & IDENT_SENSE;
         object_flags_known(creature_ptr, o_ptr, flags);
-        if (!(mode & DP_IMM)) {
-            term_color_type color = (riding ? TERM_L_GREEN : TERM_SLATE);
-            color = (vuln ? TERM_RED : color);
 
-            c_put_str(color, ".", row, *col);
+        if (has_flag(flags, TR_ADD_L_CURSE) || has_flag(flags, TR_ADD_H_CURSE)) {
+            if (is_known) {
+                char_stat.syms.emplace_back("+");
+                char_stat.has_res = true;
+                continue;
+            }
         }
 
-        if (decide_cursed_equipment_color(mode, row, col, flags, header_color, o_ptr))
-            continue;
-        if (decide_light_equipment_color(row, col, flag1, flags, header_color))
-            continue;
+        if (any_bits(o_ptr->curse_flags, TRC_PERMA_CURSE)) {
+            if (is_known) {
+                char_stat.syms.emplace_back("*");
+                char_stat.has_imm = true;
+                continue;
+            }
+        }
 
-        decide_vulnerability_color(mode, row, col, flag1, flags, header_color, vuln, riding);
+        if (any_bits(o_ptr->curse_flags, TRC_CURSED | TRC_HEAVY_CURSE | TRC_PERMA_CURSE)) {
+            if (is_sensed) {
+                char_stat.syms.emplace_back("+");
+                char_stat.has_res = true;
+                continue;
+            }
+        }
+
+        char_stat.syms.emplace_back(".");
+    }
+
+    char_stat.syms.emplace_back(".");
+}
+
+/*!
+ * @brief 装備品の光源状況文字列を作成する
+ * @param creature_ptr プレイヤー情報への参照ポインタ
+ * @param flag 判定する特性フラグ
+ * @param f プレイヤーの特性情報への参照ポインタ
+ * @param mode 参照モード(DP_WP)
+ * @param char_stat その行の特性の状況(参照渡し)
+ * @return なし
+ * @details
+ * その行の表示色用の判定も行う
+ */
+static void process_light_equipment_characteristics(player_type *creature_ptr, all_player_flags *f, u16b mode, char_stat &char_stat)
+{
+    int max_i = (mode & DP_WP) ? INVEN_BOW + 1 : INVEN_TOTAL;
+    for (int i = INVEN_MAIN_HAND; i < max_i; i++) {
+        BIT_FLAGS flags[TR_FLAG_SIZE];
+        auto *o_ptr = &creature_ptr->inventory_list[i];
+        object_flags_known(creature_ptr, o_ptr, flags);
+
+        auto b = false;
+        for (auto flg : lite_flags) {
+            if (has_flag(flags, flg)) {
+                b = true;
+                break;
+            }
+        }
+        if (b) {
+            char_stat.syms.emplace_back("+");
+            char_stat.has_res = true;
+            continue;
+        }
+
+        char_stat.syms.emplace_back(".");
+    }
+
+    for (auto flg : lite_flags) {
+        if (has_flag(f->tim_player_flags, flg)) {
+            char_stat.syms.emplace_back("#");
+            char_stat.has_tim = true;
+            return;
+        }
+        if (has_flag(f->player_flags, flg)) {
+            char_stat.syms.emplace_back("+");
+            char_stat.has_res = true;
+            return;
+        }
     }
 }
 
 /*!
- * @brief プレイヤーの特性フラグ一種を表示する
- * @param row コンソール表示位置の左上行
- * @param col コンソール表示位置の左上列
- * @param header コンソール上で表示する特性名
- * @param header_color 耐性等のパラメータ名 の色
- * @param header_col 「耐性等のパラメータ名 の色」の元々の位置
- * @param flag1 参照する特性ID
- * @param vuln プレーヤーの弱点
- * @param f プレイヤーの特性情報構造体
+ * @brief 装備品の状況文字列を作成する
+ * @param creature_ptr プレイヤー情報への参照ポインタ
+ * @param flag 判定する特性フラグ
+ * @param f プレイヤーの特性情報への参照ポインタ
+ * @param mode 参照モード(DP_WP)
+ * @param char_stat その行の特性の状況(参照渡し)
  * @return なし
+ * @details
+ * その行の表示色用の判定も行う
  */
-static void display_one_characteristic(
-    TERM_LEN row, TERM_LEN col, concptr header, byte header_color, int header_col, int flag1, bool vuln, bool riding, all_player_flags *f)
+static void process_inventory_characteristic(player_type *creature_ptr, tr_type flag, all_player_flags *f, u16b mode, char_stat &char_stat)
 {
-    term_color_type color = (riding ? TERM_L_GREEN : TERM_SLATE);
-    color = (vuln ? TERM_RED : color);
-    c_put_str(color, ".", row, col);
+    int max_i = (mode & DP_WP) ? INVEN_BOW + 1 : INVEN_TOTAL;
+    for (int i = INVEN_MAIN_HAND; i < max_i; i++) {
+        BIT_FLAGS flags[TR_FLAG_SIZE];
+        auto *o_ptr = &creature_ptr->inventory_list[i];
+        object_flags_known(creature_ptr, o_ptr, flags);
 
-    if (has_flag(f->player_flags, flag1)) {
-        color = (riding ? TERM_L_GREEN : TERM_WHITE);
-        color = (vuln ? TERM_RED : color);
-        c_put_str(color, "+", row, col);
-        header_color = riding ? color : TERM_WHITE;
-    }
+        auto f_imm = flag_to_greater_flag.find(flag);
+        if (f_imm != flag_to_greater_flag.end()) {
+            if (has_flag(flags, f_imm->second)) {
+                char_stat.syms.emplace_back("*");
+                char_stat.has_imm = true;
+                continue;
+            }
+        }
 
-    if (has_flag(f->tim_player_flags, flag1)) {
-        c_put_str((byte)(vuln ? TERM_ORANGE : TERM_YELLOW), "#", row, col);
-        header_color = TERM_WHITE;
-    }
+        auto b_vul = false;
+        auto f_vul = flag_to_lesser_flag.find(flag);
+        if (f_vul != flag_to_lesser_flag.end()) {
+            if (has_flag(flags, f_vul->second)) {
+                char_stat.has_vul = true;
+                b_vul = true;
+            }
+        }
 
-    if (has_flag(f->tim_player_imm, flag1)) {
-        c_put_str(TERM_YELLOW, "*", row, col);
-        header_color = TERM_WHITE;
-    }
+        if (has_flag(flags, flag)) {
+            char_stat.syms.emplace_back(b_vul ? "-" : "+");
+            char_stat.has_res = true;
+            continue;
+        }
 
-    if (has_flag(f->player_imm, flag1)) {
-        c_put_str(TERM_WHITE, "*", row, col);
-        header_color = TERM_WHITE;
-    }
-
-    if (riding && !vuln) {
-        c_put_str(TERM_L_GREEN, "+", row, col + 1);
-        header_color = TERM_L_GREEN;
-    }
-    if (riding && vuln) {
-        c_put_str(TERM_RED, "-", row, col + 1);
-        header_color = TERM_RED;
-    }
-    if (!riding && vuln) {
-        c_put_str(TERM_RED, "v", row, col + 1);
+        char_stat.syms.emplace_back(b_vul ? "v" : ".");
     }
 
-    c_put_str(header_color, header, row, header_col);
+    if (has_flag(f->player_imm, flag) || has_flag(f->tim_player_imm, flag)) {
+        char_stat.syms.emplace_back("*");
+        char_stat.has_imm = true;
+    } else if (has_flag(f->tim_player_flags, flag)) {
+        char_stat.syms.emplace_back("#");
+        char_stat.has_tim = true;
+    } else {
+        auto b_vul = has_flag(f->player_vuln, flag);
+        if (has_flag(f->player_flags, flag)) {
+            char_stat.syms.emplace_back(b_vul ? "-" : "+");
+            char_stat.has_res = true;
+        } else {
+            char_stat.syms.emplace_back(".");
+            if (b_vul)
+                char_stat.has_vul = true;
+        }
+    }
 }
 
 /*!
@@ -215,34 +266,52 @@ static void display_one_characteristic(
  * @param mode 表示オプション
  * @return なし
  */
-static void process_one_characteristic(player_type *creature_ptr, TERM_LEN row, TERM_LEN col, concptr header, int flag1, all_player_flags *f, u16b mode)
+static void process_one_characteristic(player_type *creature_ptr, TERM_LEN row, TERM_LEN col, std::string_view header, tr_type flag, all_player_flags *f, u16b mode)
 {
-    byte header_color = TERM_L_DARK;
-    int header_col = col;
-    bool vuln = FALSE;
-    bool riding = FALSE;
-    if (has_flag(f->player_vuln, flag1) && !(has_flag(f->known_obj_imm, flag1) || has_flag(f->player_imm, flag1) || has_flag(f->tim_player_imm, flag1))) {
-        vuln = TRUE;
-    }
-    if (has_flag(f->riding_flags, flag1)) {
-        riding = TRUE;
-    }
-    if (has_flag(f->riding_negative_flags, flag1)) {
-        riding = TRUE;
-        vuln = TRUE;
+    char_stat char_stat;
+
+    if (has_flag(f->riding_flags, flag))
+        char_stat.has_rid = true;
+    if (has_flag(f->riding_negative_flags, flag)) {
+        char_stat.has_rid = true;
+        char_stat.has_vul = true;
     }
 
-    col += strlen(header) + 1;
-    decide_colors(creature_ptr, mode, row, &col, flag1, &header_color, vuln, riding);
-    if (mode & DP_IMM) {
-        if (header_color != TERM_L_DARK) {
-            c_put_str(header_color, header, row, header_col);
-        }
+    if (mode & DP_LITE)
+        process_light_equipment_characteristics(creature_ptr, f, mode, char_stat);
+    else if (mode & DP_CURSE)
+        process_cursed_equipment_characteristics(creature_ptr, mode, char_stat);
+    else
+        process_inventory_characteristic(creature_ptr, flag, f, mode, char_stat);
 
-        return;
+    if (char_stat.has_vul && !char_stat.has_imm && !char_stat.has_res && !char_stat.has_tim)
+        char_stat.syms.emplace_back("v");
+
+    auto row_clr = char_stat.has_rid ? TERM_L_GREEN : TERM_WHITE;
+    if (!char_stat.has_imm) {
+        if (char_stat.has_res && char_stat.has_tim)
+            row_clr = char_stat.has_vul ? TERM_YELLOW : row_clr;
+        else if (char_stat.has_res || char_stat.has_tim)
+            row_clr = char_stat.has_vul ? TERM_ORANGE : row_clr;
+        else if (char_stat.has_vul)
+            row_clr = TERM_RED;
+        else
+            row_clr = TERM_L_DARK;
     }
 
-    display_one_characteristic(row, col, header, header_color, header_col, flag1, vuln, riding, f);
+    c_put_str(row_clr, header.data(), row, col);
+    col += header.length() + 1;
+
+    for (auto s : char_stat.syms) {
+        auto clr = row_clr;
+        if (s == "#")
+            clr = char_stat.has_vul && !char_stat.has_imm ? TERM_ORANGE : TERM_YELLOW;
+        if (s == "-" && !char_stat.has_imm)
+            clr = TERM_ORANGE;
+        if (s == "." && (!char_stat.has_imm && !char_stat.has_vul))
+            clr = TERM_L_DARK;
+        c_put_str(clr, s.c_str(), row, col++);
+    }
 }
 
 /*!
@@ -260,14 +329,10 @@ static void display_basic_resistance_info(
     (*display_player_equippy)(creature_ptr, row - 2, col + 8, 0);
     c_put_str(TERM_WHITE, "abcdefghijkl@", row - 1, col + 8);
 
-    process_one_characteristic(creature_ptr, row  , col, _("耐酸  :", "Acid  :"), TR_RES_ACID, f, 0);
-    process_one_characteristic(creature_ptr, row++, col, _("耐酸  :", "Acid  :"), TR_IM_ACID, f, DP_IMM);
-    process_one_characteristic(creature_ptr, row  , col, _("耐電撃:", "Elec  :"), TR_RES_ELEC, f, 0);
-    process_one_characteristic(creature_ptr, row++, col, _("耐電撃:", "Elec  :"), TR_IM_ELEC, f, DP_IMM);
-    process_one_characteristic(creature_ptr, row  , col, _("耐火炎:", "Fire  :"), TR_RES_FIRE, f, 0);
-    process_one_characteristic(creature_ptr, row++, col, _("耐火炎:", "Fire  :"), TR_IM_FIRE, f, DP_IMM);
-    process_one_characteristic(creature_ptr, row  , col, _("耐冷気:", "Cold  :"), TR_RES_COLD, f, 0);
-    process_one_characteristic(creature_ptr, row++, col, _("耐冷気:", "Cold  :"), TR_IM_COLD, f, DP_IMM);
+    process_one_characteristic(creature_ptr, row++, col, _("耐酸  :", "Acid  :"), TR_RES_ACID, f, 0);
+    process_one_characteristic(creature_ptr, row++, col, _("耐電撃:", "Elec  :"), TR_RES_ELEC, f, 0);
+    process_one_characteristic(creature_ptr, row++, col, _("耐火炎:", "Fire  :"), TR_RES_FIRE, f, 0);
+    process_one_characteristic(creature_ptr, row++, col, _("耐冷気:", "Cold  :"), TR_RES_COLD, f, 0);
     process_one_characteristic(creature_ptr, row++, col, _("耐毒  :", "Poison:"), TR_RES_POIS, f, 0);
     process_one_characteristic(creature_ptr, row++, col, _("耐閃光:", "Light :"), TR_RES_LITE, f, 0);
     process_one_characteristic(creature_ptr, row++, col, _("耐暗黒:", "Dark  :"), TR_RES_DARK, f, 0);
@@ -326,9 +391,14 @@ static void display_other_resistance_info(
     process_one_characteristic(creature_ptr, row++, col, _("急回復    :", "Regene.   :"), TR_REGEN, f, 0);
     process_one_characteristic(creature_ptr, row++, col, _("浮遊      :", "Levitation:"), TR_LEVITATION, f, 0);
     process_one_characteristic(creature_ptr, row++, col, _("反射      :", "Reflct    :"), TR_REFLECT, f, 0);
-    process_one_characteristic(creature_ptr, row++, col, _("呪い      :", "Cursed    :"), 0, f, DP_CURSE);
+    process_one_characteristic(creature_ptr, row++, col, _("呪い      :", "Cursed    :"), TR_FLAG_MAX, f, DP_CURSE);
 }
 
+/*!
+ * @brief プレイヤーの特性フラグを集計する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @todo 将来的には装備系とまとめたいが、乗馬による特性変化や一時能力変化等の扱いがあるので据え置き。
+ */
  all_player_flags get_player_state_flags(player_type *creature_ptr)
 {
     all_player_flags f;
@@ -372,26 +442,16 @@ static void display_slay_info(player_type *creature_ptr, void (*display_player_e
     (*display_player_equippy)(creature_ptr, row - 2, col + 14, DP_WP);
     c_put_str(TERM_WHITE, "abc@", row - 1, col + 14);
 
-    process_one_characteristic(creature_ptr, row  , col, _("邪悪    倍打:", "Slay Evil   :"), TR_SLAY_EVIL, f, DP_WP);
-    process_one_characteristic(creature_ptr, row++, col, _("邪悪    倍打:", "Slay Evil   :"), TR_KILL_EVIL, f, (DP_WP | DP_IMM));
-    process_one_characteristic(creature_ptr, row  , col, _("善良    倍打:", "Slay Good   :"), TR_SLAY_GOOD, f, DP_WP);
-    process_one_characteristic(creature_ptr, row++, col, _("善良    倍打:", "Slay Good   :"), TR_KILL_GOOD, f, (DP_WP | DP_IMM));
-    process_one_characteristic(creature_ptr, row  , col, _("不死    倍打:", "Slay Undead :"), TR_SLAY_UNDEAD, f, DP_WP);
-    process_one_characteristic(creature_ptr, row++, col, _("不死    倍打:", "Slay Undead :"), TR_KILL_UNDEAD, f, (DP_WP | DP_IMM));
-    process_one_characteristic(creature_ptr, row  , col, _("デーモン倍打:", "Slay Demon  :"), TR_SLAY_DEMON, f, DP_WP);
-    process_one_characteristic(creature_ptr, row++, col, _("デーモン倍打:", "Slay Demon  :"), TR_KILL_DEMON, f, (DP_WP | DP_IMM));
-    process_one_characteristic(creature_ptr, row  , col, _("ドラゴン倍打:", "Slay Dragon :"), TR_SLAY_DRAGON, f, DP_WP);
-    process_one_characteristic(creature_ptr, row++, col, _("ドラゴン倍打:", "Slay Dragon :"), TR_KILL_DRAGON, f, (DP_WP | DP_IMM));
-    process_one_characteristic(creature_ptr, row  , col, _("人間    倍打:", "Slay Human  :"), TR_SLAY_HUMAN, f, DP_WP);
-    process_one_characteristic(creature_ptr, row++, col, _("人間    倍打:", "Slay Human  :"), TR_KILL_HUMAN, f, (DP_WP | DP_IMM));
-    process_one_characteristic(creature_ptr, row  , col, _("動物    倍打:", "Slay Animal :"), TR_SLAY_ANIMAL, f, DP_WP);
-    process_one_characteristic(creature_ptr, row++, col, _("動物    倍打:", "Slay Animal :"), TR_KILL_ANIMAL, f, (DP_WP | DP_IMM));
-    process_one_characteristic(creature_ptr, row  , col, _("オーク  倍打:", "Slay Orc    :"), TR_SLAY_ORC, f, DP_WP);
-    process_one_characteristic(creature_ptr, row++, col, _("オーク  倍打:", "Slay Orc    :"), TR_KILL_ORC, f, (DP_WP | DP_IMM));
-    process_one_characteristic(creature_ptr, row  , col, _("トロル  倍打:", "Slay Troll  :"), TR_SLAY_TROLL, f, DP_WP);
-    process_one_characteristic(creature_ptr, row++, col, _("トロル  倍打:", "Slay Troll  :"), TR_KILL_TROLL, f, (DP_WP | DP_IMM));
-    process_one_characteristic(creature_ptr, row  , col, _("巨人    倍打:", "Slay Giant  :"), TR_SLAY_GIANT, f, DP_WP);
-    process_one_characteristic(creature_ptr, row++, col, _("巨人    倍打:", "Slay Giant  :"), TR_KILL_GIANT, f, (DP_WP | DP_IMM));
+    process_one_characteristic(creature_ptr, row++, col, _("邪悪    倍打:", "Slay Evil   :"), TR_SLAY_EVIL, f, DP_WP);
+    process_one_characteristic(creature_ptr, row++, col, _("善良    倍打:", "Slay Good   :"), TR_SLAY_GOOD, f, DP_WP);
+    process_one_characteristic(creature_ptr, row++, col, _("不死    倍打:", "Slay Undead :"), TR_SLAY_UNDEAD, f, DP_WP);
+    process_one_characteristic(creature_ptr, row++, col, _("デーモン倍打:", "Slay Demon  :"), TR_SLAY_DEMON, f, DP_WP);
+    process_one_characteristic(creature_ptr, row++, col, _("ドラゴン倍打:", "Slay Dragon :"), TR_SLAY_DRAGON, f, DP_WP);
+    process_one_characteristic(creature_ptr, row++, col, _("人間    倍打:", "Slay Human  :"), TR_SLAY_HUMAN, f, DP_WP);
+    process_one_characteristic(creature_ptr, row++, col, _("動物    倍打:", "Slay Animal :"), TR_SLAY_ANIMAL, f, DP_WP);
+    process_one_characteristic(creature_ptr, row++, col, _("オーク  倍打:", "Slay Orc    :"), TR_SLAY_ORC, f, DP_WP);
+    process_one_characteristic(creature_ptr, row++, col, _("トロル  倍打:", "Slay Troll  :"), TR_SLAY_TROLL, f, DP_WP);
+    process_one_characteristic(creature_ptr, row++, col, _("巨人    倍打:", "Slay Giant  :"), TR_SLAY_GIANT, f, DP_WP);
 }
 
 /*!
@@ -448,7 +508,7 @@ static void display_tval_misc_info(
     process_one_characteristic(creature_ptr, row++, col, _("追加射撃    :", "Extra Shots :"), TR_XTRA_SHOTS, f, 0);
     process_one_characteristic(creature_ptr, row++, col, _("投擲        :", "Throw       :"), TR_THROW, f, 0);
     process_one_characteristic(creature_ptr, row++, col, _("祝福        :", "Blessed     :"), TR_BLESSED, f, 0);
-    process_one_characteristic(creature_ptr, row++, col, _("永遠光源    :", "Perm Lite   :"), TR_LITE_1, f, 0);
+    process_one_characteristic(creature_ptr, row++, col, _("永遠光源    :", "Perm Lite   :"), TR_LITE_1, f, DP_LITE);
     process_one_characteristic(creature_ptr, row++, col, _("消費魔力減少:", "Econom. Mana:"), TR_DEC_MANA, f, 0);
     process_one_characteristic(creature_ptr, row++, col, _("呪文難度減少:", "Easy Spell  :"), TR_EASY_SPELL, f, 0);
     process_one_characteristic(creature_ptr, row++, col, _("発動        :", "Activate    :"), TR_ACTIVATE, f, 0);

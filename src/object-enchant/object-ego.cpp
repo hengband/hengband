@@ -113,14 +113,25 @@ static void ego_invest_extra_abilities(object_type *o_ptr, EnumClassFlagGroup<TR
         add_low_telepathy(o_ptr);
     if (gen_flags.has(TRG::XTRA_L_ESP))
         one_low_esp(o_ptr);
-    if (gen_flags.has(TRG::XTRA_DICE)) {
-        do {
-            o_ptr->dd++;
-        } while (one_in_(o_ptr->dd));
-
-        if (o_ptr->dd > 9)
-            o_ptr->dd = 9;
+    if (gen_flags.has(TRG::ADD_DICE))
+        o_ptr->dd++;
+    if (gen_flags.has(TRG::DOUBLED_DICE))
+        o_ptr->dd *= 2;
+    else {
+        if (gen_flags.has(TRG::XTRA_DICE)) {
+            do {
+                o_ptr->dd++;
+            } while (one_in_(o_ptr->dd));
+        }
+        if (gen_flags.has(TRG::XTRA_DICE_SIDE)) {
+            do {
+                o_ptr->ds++;
+            } while (one_in_(o_ptr->ds));
+        }
     }
+
+    if (o_ptr->dd > 9)
+        o_ptr->dd = 9;
 }
 
 /*!
@@ -247,6 +258,10 @@ void apply_ego(player_type *player_ptr, object_type *o_ptr, DEPTH lev)
     if (e_ptr->act_idx)
         o_ptr->xtra2 = (XTRA8)e_ptr->act_idx;
 
+    o_ptr->to_h += (HIT_PROB)e_ptr->base_to_h;
+    o_ptr->to_d += (HIT_POINT)e_ptr->base_to_d;
+    o_ptr->to_a += (ARMOUR_CLASS)e_ptr->base_to_a;
+
     auto is_powerful = e_ptr->gen_flags.has(TRG::POWERFUL);
     auto is_cursed = (object_is_cursed(o_ptr) || object_is_broken(o_ptr)) && !is_powerful;
     if (is_cursed) {
@@ -269,7 +284,7 @@ void apply_ego(player_type *player_ptr, object_type *o_ptr, DEPTH lev)
         }
 
         o_ptr->to_h += (HIT_PROB)randint1_signed(e_ptr->max_to_h);
-        o_ptr->to_d += randint1_signed(e_ptr->max_to_d);
+        o_ptr->to_d += (HIT_POINT)randint1_signed(e_ptr->max_to_d);
         o_ptr->to_a += (ARMOUR_CLASS)randint1_signed(e_ptr->max_to_a);
 
         if (gen_flags.has(TRG::MOD_ACCURACY)) {

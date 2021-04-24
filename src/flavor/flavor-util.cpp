@@ -246,6 +246,17 @@ char *get_ability_abbreviation(player_type *player_ptr, char *short_flavor, obje
 
     short_flavor = inscribe_flags_aux(flag_insc_immune, flgs, kanji, short_flavor);
 
+    if (has_flag_of(flag_insc_vuln, flgs)) {
+        if (!kanji && short_flavor != prev_ptr) {
+            add_inscription(&short_flavor, ";");
+            prev_ptr = short_flavor;
+        }
+
+        add_inscription(&short_flavor, "v");
+    }
+
+    short_flavor = inscribe_flags_aux(flag_insc_vuln, flgs, kanji, short_flavor);
+
     if (has_flag_of(flag_insc_resistance, flgs)) {
         if (kanji)
             add_inscription(&short_flavor, "r");
