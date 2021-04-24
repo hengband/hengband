@@ -4857,6 +4857,9 @@
     <ClInclude Include="..\..\src\main-win\tile-info.h">
       <Filter>main-win</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\main-win\string-win.h">
+      <Filter>main-win</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
