@@ -14,88 +14,95 @@
 #include "system/angband.h"
 #include "system/h-basic.h"
 
+#include <memory>
+
 /*!
  * @brief A term_win is a "window" for a Term
  */
-typedef struct term_win {
-    bool cu, cv; //!< Cursor Useless / Visible codes
-    TERM_LEN cx, cy; //!< Cursor Location (see "Useless")
+struct term_win {
+    term_win(TERM_LEN w, TERM_LEN h);
 
-    TERM_COLOR **a; //!< Array[h*w] -- Attribute array
-    char **c; //!< Array[h*w] -- Character array
+    bool cu{}, cv{}; //!< Cursor Useless / Visible codes
+    TERM_LEN cx{}, cy{}; //!< Cursor Location (see "Useless")
 
-    TERM_COLOR *va; //!< Array[h] -- Access to the attribute array
-    char *vc; //!< Array[h] -- Access to the character array
+    std::vector<std::vector<TERM_COLOR>> a; //!< Array[h*w] -- Attribute array
+    std::vector<std::vector<char>> c; //!< Array[h*w] -- Character array
 
-    TERM_COLOR **ta; //!< Note that the attr pair at(x, y) is a[y][x]
-    char **tc; //!< Note that the char pair at(x, y) is c[y][x]
-
-    TERM_COLOR *vta; //!< Note that the row of attr at(0, y) is a[y]
-    char *vtc; //!< Note that the row of chars at(0, y) is c[y]
-} term_win;
+    std::vector<std::vector<TERM_COLOR>> ta; //!< Note that the attr pair at(x, y) is a[y][x]
+    std::vector<std::vector<char>> tc; //!< Note that the char pair at(x, y) is c[y][x]
+};
 
 /*!
  * @brief term実装構造体 / An actual "term" structure
  */
-typedef struct term_type term_type;
-typedef struct term_type {
-    vptr user; //!< Extra "user" info (used by application)
-    vptr data; //!< Extra "data" info (used by implementation)
+struct term_type {
+    vptr user{}; //!< Extra "user" info (used by application)
+    vptr data{}; //!< Extra "data" info (used by implementation)
 
-    bool user_flag; //!< Flag "user_flag" An extra "user" flag (used by application)
-    bool data_flag; //!< Flag "data_flag" An extra "data" flag (used by implementation)
+    bool user_flag{}; //!< Flag "user_flag" An extra "user" flag (used by application)
+    bool data_flag{}; //!< Flag "data_flag" An extra "data" flag (used by implementation)
 
-    bool active_flag; //!< Flag "active_flag" This "term" is "active"
-    bool mapped_flag; //!< Flag "mapped_flag" This "term" is "mapped"
-    bool total_erase; //!< Flag "total_erase" This "term" should be fully erased
-    bool fixed_shape; //!< Flag "fixed_shape" This "term" is not allowed to resize
-    bool icky_corner; //!< Flag "icky_corner" This "term" has an "icky" corner grid
-    bool soft_cursor; //!< Flag "soft_cursor" This "term" uses a "software" cursor
-    bool always_pict; //!< Flag "always_pict" Use the "Term_pict()" routine for all text
-    bool higher_pict; //!< Flag "higher_pict" Use the "Term_pict()" routine for special text
-    bool always_text; //!< Flag "always_text" Use the "Term_text()" routine for invisible text
-    bool unused_flag; //!< Flag "unused_flag" Reserved for future use
-    bool never_bored; //!< Flag "never_bored" Never call the "TERM_XTRA_BORED" action
-    bool never_frosh; //!< Flag "never_frosh" Never call the "TERM_XTRA_FROSH" action
-    bool never_fresh; //!< Flag "never_fresh" Never redraw the Term
+    bool active_flag{}; //!< Flag "active_flag" This "term" is "active"
+    bool mapped_flag{}; //!< Flag "mapped_flag" This "term" is "mapped"
+    bool total_erase{}; //!< Flag "total_erase" This "term" should be fully erased
+    bool fixed_shape{}; //!< Flag "fixed_shape" This "term" is not allowed to resize
+    bool icky_corner{}; //!< Flag "icky_corner" This "term" has an "icky" corner grid
+    bool soft_cursor{}; //!< Flag "soft_cursor" This "term" uses a "software" cursor
+    bool always_pict{}; //!< Flag "always_pict" Use the "Term_pict()" routine for all text
+    bool higher_pict{}; //!< Flag "higher_pict" Use the "Term_pict()" routine for special text
+    bool always_text{}; //!< Flag "always_text" Use the "Term_text()" routine for invisible text
+    bool unused_flag{}; //!< Flag "unused_flag" Reserved for future use
+    bool never_bored{}; //!< Flag "never_bored" Never call the "TERM_XTRA_BORED" action
+    bool never_frosh{}; //!< Flag "never_frosh" Never call the "TERM_XTRA_FROSH" action
+    bool never_fresh{}; //!< Flag "never_fresh" Never redraw the Term
 
-    byte attr_blank; //!< Value "attr_blank" Use this "attr" value for "blank" grids
-    char char_blank; //!< Value "char_blank" Use this "char" value for "blank" grids
+    byte attr_blank{}; //!< Value "attr_blank" Use this "attr" value for "blank" grids
+    char char_blank{}; //!< Value "char_blank" Use this "char" value for "blank" grids
 
-    char *key_queue; //!< Keypress Queue -- various data / Keypress Queue -- pending keys
-    u16b key_head;
-    u16b key_tail;
-    u16b key_xtra;
-    u16b key_size;
+    std::vector<char> key_queue; //!< Keypress Queue -- various data / Keypress Queue -- pending keys
+    u16b key_head{};
+    u16b key_tail{};
+    u16b key_xtra{};
+    u16b key_size{};
 
-    TERM_LEN wid; //!< Window Width(max 255)
-    TERM_LEN hgt; //!< Window Height(max 255)
+    TERM_LEN wid{}; //!< Window Width(max 255)
+    TERM_LEN hgt{}; //!< Window Height(max 255)
 
-    TERM_LEN y1; //!< Minimum modified row
-    TERM_LEN y2; //!< Maximum modified row
+    TERM_LEN y1{}; //!< Minimum modified row
+    TERM_LEN y2{}; //!< Maximum modified row
 
-    TERM_LEN *x1; //!< Minimum modified column(per row)
-    TERM_LEN *x2; //!< Maximum modified column(per row)
+    std::vector<TERM_LEN> x1; //!< Minimum modified column(per row)
+    std::vector<TERM_LEN> x2; //!< Maximum modified column(per row)
 
-    term_win *old; //!< Displayed screen image
-    term_win *scr; //!< Requested screen image
+    std::unique_ptr<term_win> old; //!< Displayed screen image
+    std::unique_ptr<term_win> scr; //!< Requested screen image
 
-    term_win *tmp; //!< Temporary screen image
-    term_win *mem; //!< Memorized screen image
+    std::unique_ptr<term_win> tmp; //!< Temporary screen image
+    std::unique_ptr<term_win> mem; //!< Memorized screen image
 
-    void (*init_hook)(term_type *t); //!< Hook for init - ing the term
-    void (*nuke_hook)(term_type *t); //!< Hook for nuke - ing the term
+    void (*init_hook)(term_type *t){}; //!< Hook for init - ing the term
+    void (*nuke_hook)(term_type *t){}; //!< Hook for nuke - ing the term
 
-    errr (*user_hook)(int n); //!< ユーザ設定項目実装部 / Hook for user actions
-    errr (*xtra_hook)(int n, int v); //!< 拡張機能実装部 / Hook for extra actions
-    errr (*curs_hook)(TERM_LEN x, TERM_LEN y); //!< カーソル描画実装部 / Hook for placing the cursor
-    errr (*bigcurs_hook)(TERM_LEN x, TERM_LEN y); //!< 大型タイル時カーソル描画実装部 / Hook for placing the cursor on bigtile mode
-    errr (*wipe_hook)(TERM_LEN x, TERM_LEN y, int n); //!< 指定座標テキスト消去実装部 / Hook for drawing some blank spaces
-    errr (*text_hook)(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s); //!< テキスト描画実装部 / Hook for drawing a string of chars using an attr
-    void (*resize_hook)(void); //!< 画面リサイズ実装部
+    errr (*user_hook)(int n){}; //!< ユーザ設定項目実装部 / Hook for user actions
+    errr (*xtra_hook)(int n, int v){}; //!< 拡張機能実装部 / Hook for extra actions
+    errr (*curs_hook)(TERM_LEN x, TERM_LEN y){}; //!< カーソル描画実装部 / Hook for placing the cursor
+    errr (*bigcurs_hook)(TERM_LEN x, TERM_LEN y){}; //!< 大型タイル時カーソル描画実装部 / Hook for placing the cursor on bigtile mode
+    errr (*wipe_hook)(TERM_LEN x, TERM_LEN y, int n){}; //!< 指定座標テキスト消去実装部 / Hook for drawing some blank spaces
+    errr (*text_hook)(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s){}; //!< テキスト描画実装部 / Hook for drawing a string of chars using an attr
+    void (*resize_hook)(void){}; //!< 画面リサイズ実装部
     errr (*pict_hook)(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, concptr cp, const TERM_COLOR *tap,
-        concptr tcp); //!< タイル描画実装部 / Hook for drawing a sequence of special attr / char pairs
-} term_type;
+        concptr tcp){}; //!< タイル描画実装部 / Hook for drawing a sequence of special attr / char pairs
+
+    // std::unique_ptr をメンバに持つため、コピーはできない。
+    // コピーコンストラクタ/コピー代入演算子が暗黙に削除されたという
+    // MSVCの警告を避けるためコンストラクタ等を明示的に定義する。
+    term_type() = default;
+    ~term_type() = default;
+    term_type(const term_type &) = delete;
+    term_type &operator=(const term_type &) = delete;
+    term_type(term_type &&) = default;
+    term_type &operator=(term_type &&) = default;
+};
 
 /**** Available Constants ****/
 

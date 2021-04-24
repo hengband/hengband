@@ -2250,7 +2250,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         for (int i = 0; i < dy; i++) {
 #ifdef JP
             char *s;
-            char **scr = data[0].t.scr->c;
+            const auto &scr = data[0].t.scr->c;
 
             C_MAKE(s, (dx + 1), char);
             strncpy(s, &scr[oy + i][ox], dx);
