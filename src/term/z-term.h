@@ -15,6 +15,7 @@
 #include "system/h-basic.h"
 
 #include <memory>
+#include <vector>
 
 /*!
  * @brief A term_win is a "window" for a Term
