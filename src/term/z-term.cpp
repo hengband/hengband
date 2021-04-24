@@ -36,87 +36,27 @@ term_type *Term = NULL;
 /*** Local routines ***/
 
 /*
- * Nuke a term_win (see below)
- */
-errr term_win_nuke(term_win *s, TERM_LEN w, TERM_LEN h)
-{
-    /* Free the window access arrays */
-    C_KILL(s->a, h, TERM_COLOR *);
-    C_KILL(s->c, h, char *);
-
-    /* Free the window content arrays */
-    C_KILL(s->va, h * w, TERM_COLOR);
-    C_KILL(s->vc, h * w, char);
-
-    /* Free the terrain access arrays */
-    C_KILL(s->ta, h, TERM_COLOR *);
-    C_KILL(s->tc, h, char *);
-
-    /* Free the terrain content arrays */
-    C_KILL(s->vta, h * w, TERM_COLOR);
-    C_KILL(s->vtc, h * w, char);
-
-    return 0;
-}
-
-/*
  * Initialize a "term_win" (using the given window size)
  */
-static errr term_win_init(term_win *s, TERM_LEN w, TERM_LEN h)
+term_win::term_win(TERM_LEN w, TERM_LEN h)
+    : a(h, std::vector<TERM_COLOR>(w))
+    , c(h, std::vector<char>(w))
+    , ta(h, std::vector<TERM_COLOR>(w))
+    , tc(h, std::vector<char>(w))
 {
-    /* Make the window access arrays */
-    C_MAKE(s->a, h, TERM_COLOR *);
-    C_MAKE(s->c, h, char *);
-
-    /* Make the window content arrays */
-    C_MAKE(s->va, h * w, TERM_COLOR);
-    C_MAKE(s->vc, h * w, char);
-
-    /* Make the terrain access arrays */
-    C_MAKE(s->ta, h, TERM_COLOR *);
-    C_MAKE(s->tc, h, char *);
-
-    /* Make the terrain content arrays */
-    C_MAKE(s->vta, h * w, TERM_COLOR);
-    C_MAKE(s->vtc, h * w, char);
-
-    /* Prepare the window access arrays */
-    for (TERM_LEN y = 0; y < h; y++) {
-        s->a[y] = s->va + w * y;
-        s->c[y] = s->vc + w * y;
-
-        s->ta[y] = s->vta + w * y;
-        s->tc[y] = s->vtc + w * y;
-    }
-
-    return 0;
 }
 
 /*
  * Copy a "term_win" from another
  */
-static errr term_win_copy(term_win *s, term_win *f, TERM_LEN w, TERM_LEN h)
+static errr term_win_copy(std::unique_ptr<term_win> &s, const std::unique_ptr<term_win> &f, TERM_LEN w, TERM_LEN h)
 {
     /* Copy contents */
     for (TERM_LEN y = 0; y < h; y++) {
-        TERM_COLOR *f_aa = f->a[y];
-        char *f_cc = f->c[y];
-
-        TERM_COLOR *s_aa = s->a[y];
-        char *s_cc = s->c[y];
-
-        TERM_COLOR *f_taa = f->ta[y];
-        char *f_tcc = f->tc[y];
-
-        TERM_COLOR *s_taa = s->ta[y];
-        char *s_tcc = s->tc[y];
-
-        for (TERM_LEN x = 0; x < w; x++) {
-            *s_aa++ = *f_aa++;
-            *s_cc++ = *f_cc++;
-            *s_taa++ = *f_taa++;
-            *s_tcc++ = *f_tcc++;
-        }
+        std::copy_n(f->a[y].begin(), w, s->a[y].begin());
+        std::copy_n(f->c[y].begin(), w, s->c[y].begin());
+        std::copy_n(f->ta[y].begin(), w, s->ta[y].begin());
+        std::copy_n(f->tc[y].begin(), w, s->tc[y].begin());
     }
 
     /* Copy cursor */
@@ -173,7 +113,10 @@ static errr term_curs_hack(TERM_LEN x, TERM_LEN y)
 /*
  * Fake hook for "term_bigcurs()" (see above)
  */
-static errr term_bigcurs_hack(TERM_LEN x, TERM_LEN y) { return (*Term->curs_hook)(x, y); }
+static errr term_bigcurs_hack(TERM_LEN x, TERM_LEN y)
+{
+    return (*Term->curs_hook)(x, y);
+}
 
 /*
  * Fake hook for "term_wipe()" (see above)
@@ -228,7 +171,7 @@ static errr term_pict_hack(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, 
  */
 void term_queue_char(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR ta, char tc)
 {
-    term_win *scrn = Term->scr;
+    const auto &scrn = Term->scr;
 
     TERM_COLOR *scr_aa = &scrn->a[y][x];
     char *scr_cc = &scrn->c[y][x];
@@ -349,7 +292,7 @@ void term_queue_bigchar(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c, TERM_COLOR
  */
 void term_queue_line(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR *a, char *c, TERM_COLOR *ta, char *tc)
 {
-    term_win *scrn = Term->scr;
+    const auto &scrn = Term->scr;
 
     TERM_LEN x1 = -1;
     TERM_LEN x2 = -1;
@@ -421,17 +364,17 @@ static void term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concpt
 {
     TERM_LEN x1 = -1, x2 = -1;
 
-    TERM_COLOR *scr_aa = Term->scr->a[y];
+    auto &scr_aa = Term->scr->a[y];
 #ifdef JP
-    char *scr_cc = Term->scr->c[y];
+    auto &scr_cc = Term->scr->c[y];
 
-    TERM_COLOR *scr_taa = Term->scr->ta[y];
-    char *scr_tcc = Term->scr->tc[y];
+    auto &scr_taa = Term->scr->ta[y];
+    auto &scr_tcc = Term->scr->tc[y];
 #else
-    char *scr_cc = Term->scr->c[y];
+    auto &scr_cc = Term->scr->c[y];
 
-    TERM_COLOR *scr_taa = Term->scr->ta[y];
-    char *scr_tcc = Term->scr->tc[y];
+    auto &scr_taa = Term->scr->ta[y];
+    auto &scr_tcc = Term->scr->tc[y];
 #endif
 
 #ifdef JP
@@ -547,17 +490,17 @@ static void term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concpt
  */
 static void term_fresh_row_pict(TERM_LEN y, TERM_LEN x1, TERM_LEN x2)
 {
-    TERM_COLOR *old_aa = Term->old->a[y];
-    char *old_cc = Term->old->c[y];
+    auto &old_aa = Term->old->a[y];
+    auto &old_cc = Term->old->c[y];
 
-    TERM_COLOR *scr_aa = Term->scr->a[y];
-    char *scr_cc = Term->scr->c[y];
+    const auto &scr_aa = Term->scr->a[y];
+    const auto &scr_cc = Term->scr->c[y];
 
-    TERM_COLOR *old_taa = Term->old->ta[y];
-    char *old_tcc = Term->old->tc[y];
+    auto &old_taa = Term->old->ta[y];
+    auto &old_tcc = Term->old->tc[y];
 
-    TERM_COLOR *scr_taa = Term->scr->ta[y];
-    char *scr_tcc = Term->scr->tc[y];
+    const auto &scr_taa = Term->scr->ta[y];
+    const auto &scr_tcc = Term->scr->tc[y];
 
     TERM_COLOR ota;
     char otc;
@@ -668,16 +611,16 @@ static void term_fresh_row_pict(TERM_LEN y, TERM_LEN x1, TERM_LEN x2)
  */
 static void term_fresh_row_both(TERM_LEN y, int x1, int x2)
 {
-    TERM_COLOR *old_aa = Term->old->a[y];
-    char *old_cc = Term->old->c[y];
+    auto &old_aa = Term->old->a[y];
+    auto &old_cc = Term->old->c[y];
 
-    TERM_COLOR *scr_aa = Term->scr->a[y];
-    char *scr_cc = Term->scr->c[y];
+    const auto &scr_aa = Term->scr->a[y];
+    const auto &scr_cc = Term->scr->c[y];
 
-    TERM_COLOR *old_taa = Term->old->ta[y];
-    char *old_tcc = Term->old->tc[y];
-    TERM_COLOR *scr_taa = Term->scr->ta[y];
-    char *scr_tcc = Term->scr->tc[y];
+    auto &old_taa = Term->old->ta[y];
+    auto &old_tcc = Term->old->tc[y];
+    const auto &scr_taa = Term->scr->ta[y];
+    const auto &scr_tcc = Term->scr->tc[y];
 
     TERM_COLOR ota;
     char otc;
@@ -869,11 +812,11 @@ static void term_fresh_row_both(TERM_LEN y, int x1, int x2)
  */
 static void term_fresh_row_text(TERM_LEN y, TERM_LEN x1, TERM_LEN x2)
 {
-    TERM_COLOR *old_aa = Term->old->a[y];
-    char *old_cc = Term->old->c[y];
+    auto &old_aa = Term->old->a[y];
+    auto &old_cc = Term->old->c[y];
 
-    TERM_COLOR *scr_aa = Term->scr->a[y];
-    char *scr_cc = Term->scr->c[y];
+    const auto &scr_aa = Term->scr->a[y];
+    const auto &scr_cc = Term->scr->c[y];
 
     /* The "always_text" flag */
     int always_text = Term->always_text;
@@ -1032,8 +975,8 @@ errr term_fresh(void)
     int y1 = Term->y1;
     int y2 = Term->y2;
 
-    term_win *old = Term->old;
-    term_win *scr = Term->scr;
+    const auto &old = Term->old;
+    const auto &scr = Term->scr;
 
     /* Before initialize (Advice from Mr.shimitei)*/
     if (!old || !scr)
@@ -1066,20 +1009,20 @@ errr term_fresh(void)
 
         /* Wipe each row */
         for (TERM_LEN y = 0; y < h; y++) {
-            TERM_COLOR *aa = old->a[y];
-            char *cc = old->c[y];
+            auto &aa = old->a[y];
+            auto &cc = old->c[y];
 
-            TERM_COLOR *taa = old->ta[y];
-            char *tcc = old->tc[y];
+            auto &taa = old->ta[y];
+            auto &tcc = old->tc[y];
 
             /* Wipe each column */
             for (TERM_LEN x = 0; x < w; x++) {
                 /* Wipe each grid */
-                *aa++ = na;
-                *cc++ = nc;
+                aa[x] = na;
+                cc[x] = nc;
 
-                *taa++ = na;
-                *tcc++ = nc;
+                taa[x] = na;
+                tcc[x] = nc;
             }
         }
 
@@ -1105,11 +1048,11 @@ errr term_fresh(void)
             TERM_LEN tx = old->cx;
             TERM_LEN ty = old->cy;
 
-            TERM_COLOR *old_aa = old->a[ty];
-            char *old_cc = old->c[ty];
+            const auto &old_aa = old->a[ty];
+            const auto &old_cc = old->c[ty];
 
-            TERM_COLOR *old_taa = old->ta[ty];
-            char *old_tcc = old->tc[ty];
+            const auto &old_taa = old->ta[ty];
+            const auto &old_tcc = old->tc[ty];
 
             TERM_COLOR ota = old_taa[tx];
             char otc = old_tcc[tx];
@@ -1267,7 +1210,6 @@ errr term_fresh(void)
     term_xtra(TERM_XTRA_FRESH, 0);
     return 0;
 }
-
 
 /*
  * @brief never_freshの値を無視して強制的にterm_freshを行う。
@@ -1532,12 +1474,6 @@ errr term_erase(TERM_LEN x, TERM_LEN y, int n)
     int na = Term->attr_blank;
     int nc = Term->char_blank;
 
-    TERM_COLOR *scr_aa;
-    char *scr_cc;
-
-    TERM_COLOR *scr_taa;
-    char *scr_tcc;
-
     /* Place cursor */
     if (term_gotoxy(x, y))
         return -1;
@@ -1547,11 +1483,11 @@ errr term_erase(TERM_LEN x, TERM_LEN y, int n)
         n = w - x;
 
     /* Fast access */
-    scr_aa = Term->scr->a[y];
-    scr_cc = Term->scr->c[y];
+    auto &scr_aa = Term->scr->a[y];
+    auto &scr_cc = Term->scr->c[y];
 
-    scr_taa = Term->scr->ta[y];
-    scr_tcc = Term->scr->tc[y];
+    auto &scr_taa = Term->scr->ta[y];
+    auto &scr_tcc = Term->scr->tc[y];
 
 #ifdef JP
     /*
@@ -1641,11 +1577,11 @@ errr term_clear(void)
 
     /* Wipe each row */
     for (TERM_LEN y = 0; y < h; y++) {
-        TERM_COLOR *scr_aa = Term->scr->a[y];
-        char *scr_cc = Term->scr->c[y];
+        auto &scr_aa = Term->scr->a[y];
+        auto &scr_cc = Term->scr->c[y];
 
-        TERM_COLOR *scr_taa = Term->scr->ta[y];
-        char *scr_tcc = Term->scr->tc[y];
+        auto &scr_taa = Term->scr->ta[y];
+        auto &scr_tcc = Term->scr->tc[y];
 
         /* Wipe each column */
         for (TERM_LEN x = 0; x < w; x++) {
@@ -1686,8 +1622,6 @@ errr term_redraw(void)
  */
 errr term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2)
 {
-    char *g_ptr;
-
     /* Bounds checking */
     if (y2 >= Term->hgt)
         y2 = Term->hgt - 1;
@@ -1721,7 +1655,7 @@ errr term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2)
         Term->x1[i] = x1j;
         Term->x2[i] = x2j;
 
-        g_ptr = Term->old->c[i];
+        auto &g_ptr = Term->old->c[i];
 
         /* Clear the section so it is redrawn */
         for (int j = x1j; j <= x2j; j++) {
@@ -1732,7 +1666,7 @@ errr term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2)
         Term->x1[i] = x1;
         Term->x2[i] = x2;
 
-        g_ptr = Term->old->c[i];
+        auto &g_ptr = Term->old->c[i];
 
         /* Clear the section so it is redrawn */
         for (int j = x1; j <= x2; j++) {
@@ -1911,10 +1845,7 @@ errr term_save(void)
     /* Create */
     if (!Term->mem) {
         /* Allocate window */
-        MAKE(Term->mem, term_win);
-
-        /* Initialize window */
-        term_win_init(Term->mem, w, h);
+        Term->mem = std::make_unique<term_win>(w, h);
     }
 
     /* Grab */
@@ -1935,10 +1866,7 @@ errr term_load(void)
     /* Create */
     if (!Term->mem) {
         /* Allocate window */
-        MAKE(Term->mem, term_win);
-
-        /* Initialize window */
-        term_win_init(Term->mem, w, h);
+        Term->mem = std::make_unique<term_win>(w, h);
     }
 
     /* Load */
@@ -1965,21 +1893,14 @@ errr term_exchange(void)
     TERM_LEN w = Term->wid;
     TERM_LEN h = Term->hgt;
 
-    term_win *exchanger;
-
     /* Create */
     if (!Term->tmp) {
         /* Allocate window */
-        MAKE(Term->tmp, term_win);
-
-        /* Initialize window */
-        term_win_init(Term->tmp, w, h);
+        Term->tmp = std::make_unique<term_win>(w, h);
     }
 
     /* Swap */
-    exchanger = Term->scr;
-    Term->scr = Term->tmp;
-    Term->tmp = exchanger;
+    Term->scr.swap(Term->tmp);
 
     /* Assume change */
     for (TERM_LEN y = 0; y < h; y++) {
@@ -2001,14 +1922,6 @@ errr term_resize(TERM_LEN w, TERM_LEN h)
 {
     TERM_LEN wid, hgt;
 
-    TERM_LEN *hold_x1;
-    TERM_LEN *hold_x2;
-
-    term_win *hold_old;
-    term_win *hold_scr;
-    term_win *hold_mem;
-    term_win *hold_tmp;
-
     /* Resizing is forbidden */
     if (Term->fixed_shape)
         return -1;
@@ -2027,40 +1940,30 @@ errr term_resize(TERM_LEN w, TERM_LEN h)
     wid = MIN(Term->wid, w);
     hgt = MIN(Term->hgt, h);
 
-    /* Save scanners */
-    hold_x1 = Term->x1;
-    hold_x2 = Term->x2;
+    /* Save old window */
+    std::unique_ptr<term_win> hold_old = std::move(Term->old);
 
     /* Save old window */
-    hold_old = Term->old;
+    std::unique_ptr<term_win> hold_scr = std::move(Term->scr);
 
     /* Save old window */
-    hold_scr = Term->scr;
+    std::unique_ptr<term_win> hold_mem = std::move(Term->mem);
 
     /* Save old window */
-    hold_mem = Term->mem;
-
-    /* Save old window */
-    hold_tmp = Term->tmp;
+    std::unique_ptr<term_win> hold_tmp = std::move(Term->tmp);
 
     /* Create new scanners */
-    C_MAKE(Term->x1, h, TERM_LEN);
-    C_MAKE(Term->x2, h, TERM_LEN);
+    Term->x1 = std::vector<TERM_LEN>(h);
+    Term->x2 = std::vector<TERM_LEN>(h);
 
     /* Create new window */
-    MAKE(Term->old, term_win);
-
-    /* Initialize new window */
-    term_win_init(Term->old, w, h);
+    Term->old = std::make_unique<term_win>(w, h);
 
     /* Save the contents */
     term_win_copy(Term->old, hold_old, wid, hgt);
 
     /* Create new window */
-    MAKE(Term->scr, term_win);
-
-    /* Initialize new window */
-    term_win_init(Term->scr, w, h);
+    Term->scr = std::make_unique<term_win>(w, h);
 
     /* Save the contents */
     term_win_copy(Term->scr, hold_scr, wid, hgt);
@@ -2068,10 +1971,7 @@ errr term_resize(TERM_LEN w, TERM_LEN h)
     /* If needed */
     if (hold_mem) {
         /* Create new window */
-        MAKE(Term->mem, term_win);
-
-        /* Initialize new window */
-        term_win_init(Term->mem, w, h);
+        Term->mem = std::make_unique<term_win>(w, h);
 
         /* Save the contents */
         term_win_copy(Term->mem, hold_mem, wid, hgt);
@@ -2080,36 +1980,17 @@ errr term_resize(TERM_LEN w, TERM_LEN h)
     /* If needed */
     if (hold_tmp) {
         /* Create new window */
-        MAKE(Term->tmp, term_win);
-
-        /* Initialize new window */
-        term_win_init(Term->tmp, w, h);
+        Term->tmp = std::make_unique<term_win>(w, h);
 
         /* Save the contents */
         term_win_copy(Term->tmp, hold_tmp, wid, hgt);
     }
-
-    /* Free some arrays */
-    C_KILL(hold_x1, Term->hgt, TERM_LEN);
-    C_KILL(hold_x2, Term->hgt, TERM_LEN);
-
-    /* Nuke */
-    term_win_nuke(hold_old, Term->wid, Term->hgt);
-
-    /* Kill */
-    KILL(hold_old, term_win);
 
     /* Illegal cursor */
     if (Term->old->cx >= w)
         Term->old->cu = 1;
     if (Term->old->cy >= h)
         Term->old->cu = 1;
-
-    /* Nuke */
-    term_win_nuke(hold_scr, Term->wid, Term->hgt);
-
-    /* Kill */
-    KILL(hold_scr, term_win);
 
     /* Illegal cursor */
     if (Term->scr->cx >= w)
@@ -2118,13 +1999,7 @@ errr term_resize(TERM_LEN w, TERM_LEN h)
         Term->scr->cu = 1;
 
     /* If needed */
-    if (hold_mem) {
-        /* Nuke */
-        term_win_nuke(hold_mem, Term->wid, Term->hgt);
-
-        /* Kill */
-        KILL(hold_mem, term_win);
-
+    if (Term->mem) {
         /* Illegal cursor */
         if (Term->mem->cx >= w)
             Term->mem->cu = 1;
@@ -2133,13 +2008,7 @@ errr term_resize(TERM_LEN w, TERM_LEN h)
     }
 
     /* If needed */
-    if (hold_tmp) {
-        /* Nuke */
-        term_win_nuke(hold_tmp, Term->wid, Term->hgt);
-
-        /* Kill */
-        KILL(hold_tmp, term_win);
-
+    if (Term->tmp) {
         /* Illegal cursor */
         if (Term->tmp->cx >= w)
             Term->tmp->cu = 1;
@@ -2223,7 +2092,7 @@ errr term_activate(term_type *t)
 errr term_init(term_type *t, TERM_LEN w, TERM_LEN h, int k)
 {
     /* Wipe it */
-    (void)WIPE(t, term_type);
+    *t = term_type{};
 
     /* Prepare the input queue */
     t->key_head = t->key_tail = 0;
@@ -2232,27 +2101,21 @@ errr term_init(term_type *t, TERM_LEN w, TERM_LEN h, int k)
     t->key_size = (u16b)k;
 
     /* Allocate the input queue */
-    C_MAKE(t->key_queue, t->key_size, char);
+    t->key_queue.resize(t->key_size);
 
     /* Save the size */
     t->wid = w;
     t->hgt = h;
 
     /* Allocate change arrays */
-    C_MAKE(t->x1, h, TERM_LEN);
-    C_MAKE(t->x2, h, TERM_LEN);
+    t->x1.resize(h);
+    t->x2.resize(h);
 
     /* Allocate "displayed" */
-    MAKE(t->old, term_win);
-
-    /* Initialize "displayed" */
-    term_win_init(t->old, w, h);
+    t->old = std::make_unique<term_win>(w, h);
 
     /* Allocate "requested" */
-    MAKE(t->scr, term_win);
-
-    /* Initialize "requested" */
-    term_win_init(t->scr, w, h);
+    t->scr = std::make_unique<term_win>(w, h);
 
     /* Assume change */
     for (TERM_LEN y = 0; y < h; y++) {
@@ -2316,8 +2179,6 @@ errr term_putstr_v(TERM_LEN x, TERM_LEN y, int n, byte a, concptr s)
 #ifndef WINDOWS
 errr term_nuke(term_type *t)
 {
-    TERM_LEN w = t->wid;
-    TERM_LEN h = t->hgt;
     if (t->active_flag) {
         if (t->nuke_hook)
             (*t->nuke_hook)(t);
@@ -2326,23 +2187,14 @@ errr term_nuke(term_type *t)
         t->mapped_flag = FALSE;
     }
 
-    term_win_nuke(t->old, w, h);
-    KILL(t->old, term_win);
-    term_win_nuke(t->scr, w, h);
-    KILL(t->scr, term_win);
-    if (t->mem) {
-        term_win_nuke(t->mem, w, h);
-        KILL(t->mem, term_win);
-    }
+    t->old.reset();
+    t->scr.reset();
+    t->mem.reset();
+    t->tmp.reset();
 
-    if (t->tmp) {
-        term_win_nuke(t->tmp, w, h);
-        KILL(t->tmp, term_win);
-    }
-
-    C_KILL(t->x1, h, TERM_LEN);
-    C_KILL(t->x2, h, TERM_LEN);
-    C_KILL(t->key_queue, t->key_size, char);
+    t->x1.clear();
+    t->x2.clear();
+    t->key_queue.clear();
     return 0;
 }
 #endif
