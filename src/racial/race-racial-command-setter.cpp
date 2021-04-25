@@ -1,279 +1,349 @@
 ﻿#include "racial/race-racial-command-setter.h"
+#include "cmd-action/cmd-spell.h"
 #include "player/player-race.h"
 #include "racial/racial-util.h"
 
 void set_mimic_racial_command(player_type *creature_ptr, rc_type *rc_ptr)
 {
+    rpi_type rpi;
     switch (creature_ptr->mimic_form) {
     case MIMIC_DEMON:
     case MIMIC_DEMON_LORD:
-        sprintf(rc_ptr->power_desc[rc_ptr->num].racial_name, _("地獄/火炎のブレス (ダメージ %d)", "Nether or Fire Breath (dam %d)"), rc_ptr->lvl * 3);
-        rc_ptr->power_desc[rc_ptr->num].min_level = 15;
-        rc_ptr->power_desc[rc_ptr->num].cost = 10 + rc_ptr->lvl / 3;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_CON;
-        rc_ptr->power_desc[rc_ptr->num].fail = 20;
-        rc_ptr->power_desc[rc_ptr->num++].number = -1;
+        rpi = rpi_type(_("地獄/火炎のブレス", "Nether or Fire Breath"));
+        rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 3);
+        rpi.text = _("火炎または地獄のブレスを放つ。", "Fires a breath of fire or nether.");
+        rpi.min_level = 15;
+        rpi.cost = 10 + rc_ptr->lvl / 3;
+        rpi.stat = A_CON;
+        rpi.fail = 20;
+        rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
     case MIMIC_VAMPIRE:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("吸血", "Vampiric Drain"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 2;
-        rc_ptr->power_desc[rc_ptr->num].cost = 1 + (rc_ptr->lvl / 3);
-        rc_ptr->power_desc[rc_ptr->num].stat = A_CON;
-        rc_ptr->power_desc[rc_ptr->num].fail = 9;
-        rc_ptr->power_desc[rc_ptr->num++].number = -1;
+        rpi = rpi_type(_("吸血", "Vampiric Drain"));
+        rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 2);
+        rpi.text = _("隣接したモンスター1体から生命力を吸い取る。吸い取った生命力によって満腹度があがる。",
+            "Drains and transfers HP from a monster near by you. You will also gain nutritional sustenance from this.");
+        rpi.min_level = 2;
+        rpi.cost = 1 + (rc_ptr->lvl / 3);
+        rpi.stat = A_CON;
+        rpi.fail = 9;
+        rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
     }
 }
 
 void set_race_racial_command(player_type *creature_ptr, rc_type *rc_ptr)
 {
+    rpi_type rpi;
     switch (creature_ptr->prace) {
     case RACE_DWARF:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("ドアと罠 感知", "Detect Doors+Traps"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 5;
-        rc_ptr->power_desc[rc_ptr->num].cost = 5;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
-        rc_ptr->power_desc[rc_ptr->num].fail = 12;
-        rc_ptr->power_desc[rc_ptr->num++].number = -1;
+        rpi = rpi_type(_("ドアと罠 感知", "Detect Doors+Traps"));
+        rpi.text = _("近くの全ての扉と罠、階段を感知する。", "Detects traps, doors, and stairs in your vicinity.");
+        rpi.min_level = 5;
+        rpi.cost = 5;
+        rpi.stat = A_WIS;
+        rpi.fail = 12;
+        rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
     case RACE_NIBELUNG:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("ドアと罠 感知", "Detect Doors+Traps"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 10;
-        rc_ptr->power_desc[rc_ptr->num].cost = 5;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
-        rc_ptr->power_desc[rc_ptr->num].fail = 10;
-        rc_ptr->power_desc[rc_ptr->num++].number = -1;
+        rpi = rpi_type(_("ドアと罠 感知", "Detect Doors+Traps"));
+        rpi.text = _("近くの全ての扉と罠、階段を感知する。", "Detects traps, doors, and stairs in your vicinity.");
+        rpi.min_level = 10;
+        rpi.cost = 5;
+        rpi.stat = A_WIS;
+        rpi.fail = 10;
+        rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
     case RACE_HOBBIT:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("食糧生成", "Create Food"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 15;
-        rc_ptr->power_desc[rc_ptr->num].cost = 10;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_INT;
-        rc_ptr->power_desc[rc_ptr->num].fail = 10;
-        rc_ptr->power_desc[rc_ptr->num++].number = -1;
+        rpi = rpi_type(_("食糧生成", "Create Food"));
+        rpi.text = _("食料を一つ作り出す。", "Produces a Ration of Food.");
+        rpi.min_level = 15;
+        rpi.cost = 10;
+        rpi.stat = A_INT;
+        rpi.fail = 10;
+        rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
     case RACE_GNOME:
-        sprintf(rc_ptr->power_desc[rc_ptr->num].racial_name, _("ショート・テレポート", "Blink"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 5;
-        rc_ptr->power_desc[rc_ptr->num].cost = 5;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_INT;
-        rc_ptr->power_desc[rc_ptr->num].fail = 12;
-        rc_ptr->power_desc[rc_ptr->num++].number = -1;
+        rpi = rpi_type(_("ショート・テレポート", "Blink"));
+        rpi.info = format("%s%d", KWD_SPHERE, 10);
+        rpi.text = _("近距離のテレポートをする。", "Teleports you a short distance.");
+        rpi.min_level = 5;
+        rpi.cost = 5;
+        rpi.stat = A_INT;
+        rpi.fail = 12;
+        rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
     case RACE_HALF_ORC:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("恐怖除去", "Remove Fear"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 3;
-        rc_ptr->power_desc[rc_ptr->num].cost = 5;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
-        rc_ptr->power_desc[rc_ptr->num].fail = rc_ptr->is_warrior ? 5 : 10;
-        rc_ptr->power_desc[rc_ptr->num++].number = -1;
+        rpi = rpi_type(_("恐怖除去", "Remove Fear"));
+        rpi.text = _("恐怖を取り除く。", "Removes fear.");
+        rpi.min_level = 3;
+        rpi.cost = 5;
+        rpi.stat = A_WIS;
+        rpi.fail = rc_ptr->is_warrior ? 5 : 10;
+        rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
     case RACE_HALF_TROLL:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("狂戦士化", "Berserk"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 10;
-        rc_ptr->power_desc[rc_ptr->num].cost = 12;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_STR;
-        rc_ptr->power_desc[rc_ptr->num].fail = rc_ptr->is_warrior ? 6 : 12;
-        rc_ptr->power_desc[rc_ptr->num++].number = -1;
+        rpi = rpi_type(_("狂戦士化", "Berserk"));
+        rpi.info = format("%s%d+d%d", KWD_DURATION, 10, rc_ptr->lvl);
+        rpi.text = _("狂戦士化し、恐怖を除去する。防御力が少し低下する。", "Gives a bonus to hit and HP, immunity to fear for a while. But decreases AC.");
+        rpi.min_level = 10;
+        rpi.cost = 12;
+        rpi.stat = A_STR;
+        rpi.fail = rc_ptr->is_warrior ? 6 : 12;
+        rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
     case RACE_BARBARIAN:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("狂戦士化", "Berserk"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 8;
-        rc_ptr->power_desc[rc_ptr->num].cost = 10;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_STR;
-        rc_ptr->power_desc[rc_ptr->num].fail = rc_ptr->is_warrior ? 6 : 12;
-        rc_ptr->power_desc[rc_ptr->num++].number = -1;
+        rpi = rpi_type(_("狂戦士化", "Berserk"));
+        rpi.info = format("%s%d+d%d", KWD_DURATION, 10, rc_ptr->lvl);
+        rpi.text = _("狂戦士化し、恐怖を除去する。防御力が少し低下する。", "Gives a bonus to hit and HP, immunity to fear for a while. But decreases AC.");
+        rpi.min_level = 8;
+        rpi.cost = 10;
+        rpi.stat = A_STR;
+        rpi.fail = rc_ptr->is_warrior ? 6 : 12;
+        rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
     case RACE_AMBERITE:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("シャドウ・シフト", "Shadow Shifting"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 30;
-        rc_ptr->power_desc[rc_ptr->num].cost = 50;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_INT;
-        rc_ptr->power_desc[rc_ptr->num].fail = 50;
-        rc_ptr->power_desc[rc_ptr->num++].number = -1;
+        rpi = rpi_type(_("シャドウ・シフト", "Shadow Shifting"));
+        rpi.text = _("現在の階を再構成する。", "Recreates current dungeon level.");
+        rpi.min_level = 30;
+        rpi.cost = 50;
+        rpi.stat = A_INT;
+        rpi.fail = 50;
+        rc_ptr->add_power(rpi, RC_IDX_RACE_0);
 
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("パターン・ウォーク", "Pattern Mindwalking"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 40;
-        rc_ptr->power_desc[rc_ptr->num].cost = 75;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
-        rc_ptr->power_desc[rc_ptr->num].fail = 50;
-        rc_ptr->power_desc[rc_ptr->num++].number = -2;
+        rpi = rpi_type(_("パターン・ウォーク", "Pattern Mindwalking"));
+        rpi.text = _("すべてのステータスと経験値を回復する。", "Restores all stats and experience.");
+        rpi.min_level = 40;
+        rpi.cost = 75;
+        rpi.stat = A_WIS;
+        rpi.fail = 50;
+        rc_ptr->add_power(rpi, RC_IDX_RACE_1);
         break;
     case RACE_HALF_OGRE:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("爆発のルーン", "Explosive Rune"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 25;
-        rc_ptr->power_desc[rc_ptr->num].cost = 35;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_INT;
-        rc_ptr->power_desc[rc_ptr->num].fail = 15;
-        rc_ptr->power_desc[rc_ptr->num++].number = -1;
+        rpi = rpi_type(_("爆発のルーン", "Explosive Rune"));
+        rpi.text = _("自分のいる床の上に、モンスターが上を通ろうとすると爆発するルーンを描く。",
+            "Sets a rune on the floor beneath you which exprodes if a monster through upon it. Monsters can try to disarm it.");
+        rpi.min_level = 25;
+        rpi.cost = 35;
+        rpi.stat = A_INT;
+        rpi.fail = 15;
+        rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
     case RACE_HALF_GIANT:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("岩石溶解", "Stone to Mud"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 20;
-        rc_ptr->power_desc[rc_ptr->num].cost = 10;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_STR;
-        rc_ptr->power_desc[rc_ptr->num].fail = 12;
-        rc_ptr->power_desc[rc_ptr->num++].number = -1;
+        rpi = rpi_type(_("岩石溶解", "Stone to Mud"));
+        rpi.text = _("壁を溶かして床にする。", "Turns one rock square to mud.");
+        rpi.min_level = 20;
+        rpi.cost = 10;
+        rpi.stat = A_STR;
+        rpi.fail = 12;
+        rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
     case RACE_HALF_TITAN:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("スキャン・モンスター", "Probing"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 15;
-        rc_ptr->power_desc[rc_ptr->num].cost = 10;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_INT;
-        rc_ptr->power_desc[rc_ptr->num].fail = 12;
-        rc_ptr->power_desc[rc_ptr->num++].number = -1;
+        rpi = rpi_type(_("スキャン・モンスター", "Probing"));
+        rpi.text = _("モンスターの属性、残り体力、最大体力、スピード、正体を知る。", "Probes all monsters' alignment, HP, speed and their true character.");
+        rpi.min_level = 15;
+        rpi.cost = 10;
+        rpi.stat = A_INT;
+        rpi.fail = 12;
+        rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
     case RACE_CYCLOPS:
-        sprintf(rc_ptr->power_desc[rc_ptr->num].racial_name, _("岩石投げ（ダメージ %d）", "Throw Boulder (dam %d)"), (3 * rc_ptr->lvl) / 2);
-        rc_ptr->power_desc[rc_ptr->num].min_level = 20;
-        rc_ptr->power_desc[rc_ptr->num].cost = 15;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_STR;
-        rc_ptr->power_desc[rc_ptr->num].fail = 12;
-        rc_ptr->power_desc[rc_ptr->num++].number = -1;
+        rpi = rpi_type(_("岩石投げ", "Throw Boulder"));
+        rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 3 / 2);
+        rpi.text = _("弱い魔法のボールを放つ", "Fires a weak boll of magic.");
+        rpi.min_level = 20;
+        rpi.cost = 15;
+        rpi.stat = A_STR;
+        rpi.fail = 12;
+        rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
     case RACE_YEEK:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("モンスター恐慌", "Scare Monster"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 15;
-        rc_ptr->power_desc[rc_ptr->num].cost = 15;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
-        rc_ptr->power_desc[rc_ptr->num].fail = 10;
-        rc_ptr->power_desc[rc_ptr->num++].number = -1;
+        rpi = rpi_type(_("モンスター恐慌", "Scare Monster"));
+        rpi.text = _("モンスター1体を恐怖させる。抵抗されると無効。", "Attempts to scare a monster.");
+        rpi.min_level = 15;
+        rpi.cost = 15;
+        rpi.stat = A_WIS;
+        rpi.fail = 10;
+        rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
     case RACE_SPECTRE:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("モンスター恐慌", "Scare Monster"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 4;
-        rc_ptr->power_desc[rc_ptr->num].cost = 6;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_INT;
-        rc_ptr->power_desc[rc_ptr->num].fail = 3;
-        rc_ptr->power_desc[rc_ptr->num++].number = -1;
+        rpi = rpi_type(_("モンスター恐慌", "Scare Monster"));
+        rpi.text = _("モンスター1体を恐怖させる。抵抗されると無効。", "Attempts to scare a monster.");
+        rpi.min_level = 4;
+        rpi.cost = 6;
+        rpi.stat = A_INT;
+        rpi.fail = 3;
+        rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
     case RACE_KLACKON:
-        sprintf(rc_ptr->power_desc[rc_ptr->num].racial_name, _("酸の唾 (ダメージ %d)", "Spit Acid (dam %d)"), rc_ptr->lvl);
-        rc_ptr->power_desc[rc_ptr->num].min_level = 9;
-        rc_ptr->power_desc[rc_ptr->num].cost = 9;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_DEX;
-        rc_ptr->power_desc[rc_ptr->num].fail = 14;
-        rc_ptr->power_desc[rc_ptr->num++].number = -1;
+        rpi = rpi_type(_("酸の唾", "Spit Acid"));
+        rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl);
+        if (rc_ptr->lvl >= 25)
+            rpi.text = _("酸のボールを放つ", "Fires a boll of acid.");
+        else
+            rpi.text = _("酸の矢を放つ", "Fires a bolt of acid.");
+        rpi.min_level = 9;
+        rpi.cost = 9;
+        rpi.stat = A_DEX;
+        rpi.fail = 14;
+        rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
     case RACE_KOBOLD:
-        sprintf(rc_ptr->power_desc[rc_ptr->num].racial_name, _("毒のダーツ (ダメージ %d)", "Poison Dart (dam %d)"), rc_ptr->lvl);
-        rc_ptr->power_desc[rc_ptr->num].min_level = 12;
-        rc_ptr->power_desc[rc_ptr->num].cost = 8;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_DEX;
-        rc_ptr->power_desc[rc_ptr->num].fail = 14;
-        rc_ptr->power_desc[rc_ptr->num++].number = -1;
+        rpi = rpi_type(_("毒のダーツ", "Poison Dart"));
+        rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl);
+        rpi.text = _("毒の矢を放つ", "Fires a bolt of poison.");
+        rpi.min_level = 12;
+        rpi.cost = 8;
+        rpi.stat = A_DEX;
+        rpi.fail = 14;
+        rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
     case RACE_DARK_ELF:
-        sprintf(
-            rc_ptr->power_desc[rc_ptr->num].racial_name, _("マジック・ミサイル (ダメージ %dd%d)", "Magic Missile (dm %dd%d)"), 3 + ((rc_ptr->lvl - 1) / 5), 4);
-        rc_ptr->power_desc[rc_ptr->num].min_level = 2;
-        rc_ptr->power_desc[rc_ptr->num].cost = 2;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_INT;
-        rc_ptr->power_desc[rc_ptr->num].fail = 9;
-        rc_ptr->power_desc[rc_ptr->num++].number = -1;
+        rpi = rpi_type(_("マジック・ミサイル", "Magic Missile"));
+        rpi.info = format("%s%dd%d", KWD_DAM, 3 + ((rc_ptr->lvl - 1) / 5), 4);
+        rpi.text = _("弱い魔法の矢を放つ。", "Fires a weak bolt of magic.");
+        rpi.min_level = 2;
+        rpi.cost = 2;
+        rpi.stat = A_INT;
+        rpi.fail = 9;
+        rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
     case RACE_DRACONIAN:
-        sprintf(rc_ptr->power_desc[rc_ptr->num].racial_name, _("ブレス (ダメージ %d)", "Breath Weapon (dam %d)"), rc_ptr->lvl * 2);
-        rc_ptr->power_desc[rc_ptr->num].min_level = 1;
-        rc_ptr->power_desc[rc_ptr->num].cost = rc_ptr->lvl;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_CON;
-        rc_ptr->power_desc[rc_ptr->num].fail = 12;
-        rc_ptr->power_desc[rc_ptr->num++].number = -1;
+        rpi = rpi_type(_("ブレス", "Breath Weapon"));
+        rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 2);
+        rpi.text = _("元素のブレスを放つ", "Fires a breath of an element.");
+        rpi.min_level = 1;
+        rpi.cost = rc_ptr->lvl;
+        rpi.stat = A_CON;
+        rpi.fail = 12;
+        rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
     case RACE_MIND_FLAYER:
-        sprintf(rc_ptr->power_desc[rc_ptr->num].racial_name, _("精神攻撃 (ダメージ %d)", "Mind Blast (dam %d)"), rc_ptr->lvl);
-        rc_ptr->power_desc[rc_ptr->num].min_level = 15;
-        rc_ptr->power_desc[rc_ptr->num].cost = 12;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_INT;
-        rc_ptr->power_desc[rc_ptr->num].fail = 14;
-        rc_ptr->power_desc[rc_ptr->num++].number = -1;
+        rpi = rpi_type(_("精神攻撃", "Mind Blast"));
+        rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl);
+        rpi.text = _("モンスター1体に精神攻撃を行う。", "Deals a PSI damage to a monster.");
+        rpi.min_level = 15;
+        rpi.cost = 12;
+        rpi.stat = A_INT;
+        rpi.fail = 14;
+        rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
     case RACE_IMP:
-        sprintf(rc_ptr->power_desc[rc_ptr->num].racial_name, _("ファイア・ボルト/ボール (ダメージ %d)", "Fire Bolt/Ball (dam %d)"), rc_ptr->lvl);
-        rc_ptr->power_desc[rc_ptr->num].min_level = 9;
-        rc_ptr->power_desc[rc_ptr->num].cost = 15;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
-        rc_ptr->power_desc[rc_ptr->num].fail = 15;
-        rc_ptr->power_desc[rc_ptr->num++].number = -1;
+        if (rc_ptr->lvl > 30) {
+            rpi = rpi_type(_("ファイア・ボール", "Fire Ball"));
+            rpi.text = _("火炎のボールを放つ。", "Fires a ball of fire.");
+        } else {
+            rpi = rpi_type(_("ファイア・ボルト", "Fire Bolt"));
+            rpi.text = _("火炎の矢を放つ。", "Fires a bolt of fire.");
+        }
+        rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl);
+        rpi.min_level = 9;
+        rpi.cost = 15;
+        rpi.stat = A_WIS;
+        rpi.fail = 15;
+        rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
     case RACE_GOLEM:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("肌石化 (期間 1d20+30)", "Stone Skin (dur 1d20+30)"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 20;
-        rc_ptr->power_desc[rc_ptr->num].cost = 15;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_CON;
-        rc_ptr->power_desc[rc_ptr->num].fail = 8;
-        rc_ptr->power_desc[rc_ptr->num++].number = -1;
+        rpi = rpi_type(_("肌石化", "Stone Skin"));
+        rpi.info = format("%s%d+d%d", KWD_DURATION, 30, 20);
+        rpi.text = _("一定期間防御力を高める。", "Increases your AC temporary");
+        rpi.min_level = 20;
+        rpi.cost = 15;
+        rpi.stat = A_CON;
+        rpi.fail = 8;
+        rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
     case RACE_SKELETON:
     case RACE_ZOMBIE:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("経験値復活", "Restore Experience"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 30;
-        rc_ptr->power_desc[rc_ptr->num].cost = 30;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
-        rc_ptr->power_desc[rc_ptr->num].fail = 18;
-        rc_ptr->power_desc[rc_ptr->num++].number = -1;
+        rpi = rpi_type(_("経験値復活", "Restore Experience"));
+        rpi.text = _("経験値を回復する。", "Restores experience.");
+        rpi.min_level = 30;
+        rpi.cost = 30;
+        rpi.stat = A_WIS;
+        rpi.fail = 18;
+        rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
     case RACE_VAMPIRE:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("吸血", "Vampiric Drain"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 2;
-        rc_ptr->power_desc[rc_ptr->num].cost = 1 + (rc_ptr->lvl / 3);
-        rc_ptr->power_desc[rc_ptr->num].stat = A_CON;
-        rc_ptr->power_desc[rc_ptr->num].fail = 9;
-        rc_ptr->power_desc[rc_ptr->num++].number = -1;
+        rpi = rpi_type(_("吸血", "Vampiric Drain"));
+        rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 2);
+        rpi.text = _("隣接したモンスター1体から生命力を吸い取る。吸い取った生命力によって満腹度があがる。",
+            "Drains and transfers HP from a monster near by you. You will also gain nutritional sustenance from this.");
+        rpi.min_level = 2;
+        rpi.cost = 1 + (rc_ptr->lvl / 3);
+        rpi.stat = A_CON;
+        rpi.fail = 9;
+        rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
     case RACE_SPRITE:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("眠り粉", "Sleeping Dust"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 12;
-        rc_ptr->power_desc[rc_ptr->num].cost = 12;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_INT;
-        rc_ptr->power_desc[rc_ptr->num].fail = 15;
-        rc_ptr->power_desc[rc_ptr->num++].number = -1;
+        rpi = rpi_type(_("眠り粉", "Sleeping Dust"));
+        rpi.info = format("%s%d", KWD_POWER, rc_ptr->lvl);
+        rpi.text = _("モンスター1体を眠らせる。抵抗されると無効。", "Attempts to put a monster to sleep.");
+        rpi.min_level = 12;
+        rpi.cost = 12;
+        rpi.stat = A_INT;
+        rpi.fail = 15;
+        rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
     case RACE_BALROG:
-        sprintf(rc_ptr->power_desc[rc_ptr->num].racial_name, _("地獄/火炎のブレス (ダメージ %d)", "Nether or Fire Breath (dam %d)"), rc_ptr->lvl * 3);
-        rc_ptr->power_desc[rc_ptr->num].min_level = 15;
-        rc_ptr->power_desc[rc_ptr->num].cost = 10 + rc_ptr->lvl / 3;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_CON;
-        rc_ptr->power_desc[rc_ptr->num].fail = 20;
-        rc_ptr->power_desc[rc_ptr->num++].number = -1;
+        rpi = rpi_type(_("地獄/火炎のブレス", "Nether or Fire Breath"));
+        rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 3);
+        rpi.text = _("火炎または地獄のブレスを放つ。", "Fires a breath of fire or nether.");
+        rpi.min_level = 15;
+        rpi.cost = 10 + rc_ptr->lvl / 3;
+        rpi.stat = A_CON;
+        rpi.fail = 20;
+        rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
     case RACE_KUTAR:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("横に伸びる", "Expand Horizontally (dur 30+1d20)"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 20;
-        rc_ptr->power_desc[rc_ptr->num].cost = 15;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_CHR;
-        rc_ptr->power_desc[rc_ptr->num].fail = 8;
-        rc_ptr->power_desc[rc_ptr->num++].number = -1;
+        rpi = rpi_type(_("横に伸びる", "Expand Horizontally"));
+        rpi.info = format("%s%d+d%d", KWD_DURATION, 30, 20);
+        rpi.text = _("横に伸びて防御力を高める。魔法防御力は低下する。",
+            "Expands your body horizontally then increases AC, but decreases your magic resistance for curses.");
+        rpi.min_level = 20;
+        rpi.cost = 15;
+        rpi.stat = A_CHR;
+        rpi.fail = 8;
+        rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
     case RACE_ANDROID:
         if (creature_ptr->lev < 10) {
-            strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("レイガン", "Ray Gun"));
-            rc_ptr->power_desc[rc_ptr->num].min_level = 1;
-            rc_ptr->power_desc[rc_ptr->num].cost = 7;
-            rc_ptr->power_desc[rc_ptr->num].fail = 8;
+            rpi = rpi_type(_("レイガン", "Ray Gun"));
+            rpi.info = format("%s%d", KWD_DAM, (rc_ptr->lvl + 1) / 2);
+            rpi.text = _("弱い魔法の矢を放つ。", "Fires a weak bolt of magic.");
+            rpi.min_level = 1;
+            rpi.cost = 7;
+            rpi.fail = 8;
         } else if (creature_ptr->lev < 25) {
-            strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("ブラスター", "Blaster"));
-            rc_ptr->power_desc[rc_ptr->num].min_level = 10;
-            rc_ptr->power_desc[rc_ptr->num].cost = 13;
-            rc_ptr->power_desc[rc_ptr->num].fail = 10;
+            rpi = rpi_type(_("ブラスター", "Blaster"));
+            rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl);
+            rpi.text = _("弱い魔法の矢を放つ。", "Fires a weak bolt of magic.");
+            rpi.min_level = 10;
+            rpi.cost = 13;
+            rpi.fail = 10;
         } else if (creature_ptr->lev < 35) {
-            strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("バズーカ", "Bazooka"));
-            rc_ptr->power_desc[rc_ptr->num].min_level = 25;
-            rc_ptr->power_desc[rc_ptr->num].cost = 26;
-            rc_ptr->power_desc[rc_ptr->num].fail = 12;
+            rpi = rpi_type(_("バズーカ", "Bazooka"));
+            rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 2);
+            rpi.text = _("弱い魔法のボールを放つ。", "Fires a weak ball of magic.");
+            rpi.min_level = 25;
+            rpi.cost = 26;
+            rpi.fail = 12;
         } else if (creature_ptr->lev < 45) {
-            strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("ビームキャノン", "Beam Cannon"));
-            rc_ptr->power_desc[rc_ptr->num].min_level = 35;
-            rc_ptr->power_desc[rc_ptr->num].cost = 40;
-            rc_ptr->power_desc[rc_ptr->num].fail = 15;
+            rpi = rpi_type(_("ビームキャノン", "Beam Cannon"));
+            rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 2);
+            rpi.text = _("弱い魔法のビームを放つ。", "Fires a beam bolt of magic.");
+            rpi.min_level = 35;
+            rpi.cost = 40;
+            rpi.fail = 15;
         } else {
-            strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("ロケット", "Rocket"));
-            rc_ptr->power_desc[rc_ptr->num].min_level = 45;
-            rc_ptr->power_desc[rc_ptr->num].cost = 60;
-            rc_ptr->power_desc[rc_ptr->num].fail = 18;
+            rpi = rpi_type(_("ロケット", "Rocket"));
+            rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 5);
+            rpi.text = _("ロケットを放つ。", "Fires a magic rocket.");
+            rpi.min_level = 45;
+            rpi.cost = 60;
+            rpi.fail = 18;
         }
-        rc_ptr->power_desc[rc_ptr->num].stat = A_STR;
-        rc_ptr->power_desc[rc_ptr->num++].number = -1;
+        rpi.stat = A_STR;
+        rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         break;
     default:
         break;

@@ -1,4 +1,9 @@
-﻿#include "action/mutation-execution.h"
+﻿/*!
+ * @file mutation-execution.cpp
+ * @brief プレイヤーの変異能力実行定義
+ */
+
+#include "action/mutation-execution.h"
 #include "cmd-item/cmd-throw.h"
 #include "core/asking-player.h"
 #include "effect/spells-effect-util.h"

@@ -1,5 +1,6 @@
 ﻿#include "world/world.h"
 #include "player/player-race-types.h"
+#include "util/bit-flags-calculator.h"
 
 world_type world;
 world_type *current_world_ptr = &world;
@@ -57,4 +58,42 @@ void update_playtime(void)
         current_world_ptr->play_time += (tmp - current_world_ptr->start_time);
         current_world_ptr->start_time = tmp;
     }
+}
+
+/*!
+ * @brief 勝利したクラスを追加する
+ */
+void add_winner_class(player_class_type c)
+{
+    if (!current_world_ptr->noscore)
+        current_world_ptr->sf_winner.set(c);
+}
+
+/*!
+ * @brief 引退したクラスを追加する
+ */
+void add_retired_class(player_class_type c)
+{
+    if (!current_world_ptr->noscore)
+        current_world_ptr->sf_retired.set(c);
+}
+
+/*!
+ * @brief 勝利したクラスか判定する
+ */
+bool is_winner_class(player_class_type c)
+{
+    if (c == MAX_CLASS)
+        return false;
+    return current_world_ptr->sf_winner.has(c);
+}
+
+/*!
+ * @brief 引退したクラスか判定する
+ */
+bool is_retired_class(player_class_type c)
+{
+    if (c == MAX_CLASS)
+        return false;
+    return current_world_ptr->sf_retired.has(c);
 }

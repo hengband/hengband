@@ -1,4 +1,8 @@
 ﻿#pragma once
+/*!
+ * @file travel-execution.h
+ * @brief トラベル移動処理ヘッダ
+ */
 
 #include "system/angband.h"
 #include "floor/floor-base-definitions.h"

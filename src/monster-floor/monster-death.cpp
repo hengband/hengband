@@ -42,6 +42,7 @@
 #include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/system-variables.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -297,9 +298,15 @@ static void drop_items_golds(player_type *player_ptr, monster_death_type *md_ptr
         lore_treasure(player_ptr, md_ptr->m_idx, dump_item, dump_gold);
 }
 
+/*!
+ * @brief 最終ボス(混沌のサーペント)を倒したときの処理
+ * @param player_ptr プレイヤー情報への参照ポインタ
+ * @return なし
+ */
 static void on_defeat_last_boss(player_type *player_ptr)
 {
     current_world_ptr->total_winner = TRUE;
+    add_winner_class(player_ptr->pclass);
     player_ptr->redraw |= PR_TITLE;
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_FINAL_QUEST_CLEAR);
     exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, _("見事に変愚蛮怒の勝利者となった！", "finally became *WINNER* of Hengband!"));
@@ -332,6 +339,13 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
     monster_death_type *md_ptr = initialize_monster_death_type(player_ptr, &tmp_md, m_idx, drop_item);
     if (current_world_ptr->timewalk_m_idx && current_world_ptr->timewalk_m_idx == m_idx)
         current_world_ptr->timewalk_m_idx = 0;
+
+    // プレイヤーしかユニークを倒せないのでここで時間を記録
+    if (any_bits(md_ptr->r_ptr->flags1, RF1_UNIQUE)) {
+        update_playtime();
+        md_ptr->r_ptr->defeat_time = current_world_ptr->play_time;
+        md_ptr->r_ptr->defeat_level = player_ptr->lev;
+    }
 
     if (md_ptr->r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
         player_ptr->update |= PU_MON_LITE;

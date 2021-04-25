@@ -1054,7 +1054,7 @@ process_result effect_monster_elemental_genocide(player_type *caster_ptr, effect
  * @param realm 領域
  * @param lev プレイヤーレベル
  * @return 見合うならTRUE、そうでなければFALSE
- * @detail
+ * @details
  * レベルに応じて取得する耐性などの判定に使用する
  */
 bool has_element_resist(player_type *creature_ptr, ElementRealm realm, PLAYER_LEVEL lev)
@@ -1244,70 +1244,83 @@ void switch_element_racial(player_type *creature_ptr, rc_type *rc_ptr)
 {
     auto plev = creature_ptr->lev;
     auto realm = static_cast<ElementRealm>(creature_ptr->element);
+    rpi_type rpi;
     switch (realm) {
     case ElementRealm::FIRE:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("ライト・エリア", "Light area"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 3;
-        rc_ptr->power_desc[rc_ptr->num].cost = 5;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
-        rc_ptr->power_desc[rc_ptr->num].fail = 10;
-        rc_ptr->power_desc[rc_ptr->num++].number = -4;
+        rpi = rpi_type(_("ライト・エリア", "Light area"));
+        rpi.text = _("光源が照らしている範囲か部屋全体を永久に明るくする。", "Lights up nearby area and the inside of a room permanently.");
+        rpi.min_level = 3;
+        rpi.cost = 5;
+        rpi.stat = A_WIS;
+        rpi.fail = 10;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_1);
         break;
     case ElementRealm::ICE:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("周辺フリーズ", "Sleep monsters"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 10;
-        rc_ptr->power_desc[rc_ptr->num].cost = 15;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
-        rc_ptr->power_desc[rc_ptr->num].fail = 25;
-        rc_ptr->power_desc[rc_ptr->num++].number = -4;
+        rpi = rpi_type(_("周辺フリーズ", "Sleep monsters"));
+        rpi.info = format("%s%d", KWD_POWER, 20 + plev * 3 / 2);
+        rpi.text = _("視界内の全てのモンスターを眠らせる。抵抗されると無効。", "Attempts to put all monsters in sight to sleep.");
+        rpi.min_level = 10;
+        rpi.cost = 15;
+        rpi.stat = A_WIS;
+        rpi.fail = 25;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_1);
         break;
     case ElementRealm::SKY:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("魔力充填", "Recharging"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 20;
-        rc_ptr->power_desc[rc_ptr->num].cost = 15;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
-        rc_ptr->power_desc[rc_ptr->num].fail = 25;
-        rc_ptr->power_desc[rc_ptr->num++].number = -4;
+        rpi = rpi_type(_("魔力充填", "Recharging"));
+        rpi.info = format("%s%d", KWD_POWER, 120);
+        rpi.text = _("杖/魔法棒の充填回数を増やすか、充填中のロッドの充填時間を減らす。", "Recharges staffs, wands or rods.");
+        rpi.min_level = 20;
+        rpi.cost = 15;
+        rpi.stat = A_WIS;
+        rpi.fail = 25;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_1);
         break;
     case ElementRealm::SEA:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("岩石溶解", "Stone to mud"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 5;
-        rc_ptr->power_desc[rc_ptr->num].cost = 5;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
-        rc_ptr->power_desc[rc_ptr->num].fail = 10;
-        rc_ptr->power_desc[rc_ptr->num++].number = -4;
+        rpi = rpi_type(_("岩石溶解", "Stone to mud"));
+        rpi.text = _("壁を溶かして床にする。", "Turns one rock square to mud.");
+        rpi.min_level = 5;
+        rpi.cost = 5;
+        rpi.stat = A_WIS;
+        rpi.fail = 10;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_1);
         break;
     case ElementRealm::DARKNESS:
-        sprintf(rc_ptr->power_desc[rc_ptr->num].racial_name, _("闇の扉(半径%d)", "Door to darkness(rad %d)"), 15 + plev / 2);
-        rc_ptr->power_desc[rc_ptr->num].min_level = 5;
-        rc_ptr->power_desc[rc_ptr->num].cost = 5 + plev / 7;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
-        rc_ptr->power_desc[rc_ptr->num].fail = 20;
-        rc_ptr->power_desc[rc_ptr->num++].number = -4;
+        rpi = rpi_type(format(_("闇の扉", "Door to darkness"), 15 + plev / 2));
+        rpi.info = format("%s%d", KWD_SPHERE, 15 + plev / 2);
+        rpi.min_level = 5;
+        rpi.cost = 5 + plev / 7;
+        rpi.stat = A_WIS;
+        rpi.fail = 20;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_1);
         break;
     case ElementRealm::CHAOS:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("現実変容", "Alter reality"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 35;
-        rc_ptr->power_desc[rc_ptr->num].cost = 30;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
-        rc_ptr->power_desc[rc_ptr->num].fail = 40;
-        rc_ptr->power_desc[rc_ptr->num++].number = -4;
+        rpi = rpi_type(_("現実変容", "Alter reality"));
+        rpi.text = _("現在の階を再構成する。", "Recreates current dungeon level.");
+        rpi.min_level = 35;
+        rpi.cost = 30;
+        rpi.stat = A_WIS;
+        rpi.fail = 40;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_1);
         break;
     case ElementRealm::EARTH:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("地震", "Earthquake"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 25;
-        rc_ptr->power_desc[rc_ptr->num].cost = 15;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
-        rc_ptr->power_desc[rc_ptr->num].fail = 20;
-        rc_ptr->power_desc[rc_ptr->num++].number = -4;
+        rpi = rpi_type(_("地震", "Earthquake"));
+        rpi.info = format("%s%d", KWD_SPHERE, 10);
+        rpi.text
+            = _("周囲のダンジョンを揺らし、壁と床をランダムに入れ変える。", "Shakes dungeon structure, and results in random swapping of floors and walls.");
+        rpi.min_level = 25;
+        rpi.cost = 15;
+        rpi.stat = A_WIS;
+        rpi.fail = 20;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_1);
         break;
     case ElementRealm::DEATH:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("増殖阻止", "Sterilization"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 5;
-        rc_ptr->power_desc[rc_ptr->num].cost = 5;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
-        rc_ptr->power_desc[rc_ptr->num].fail = 20;
-        rc_ptr->power_desc[rc_ptr->num++].number = -4;
+        rpi = rpi_type(_("増殖阻止", "Sterilization"));
+        rpi.text = _("この階の増殖するモンスターが増殖できなくなる。", "Prevents any breeders on current level from breeding.");
+        rpi.min_level = 5;
+        rpi.cost = 5;
+        rpi.stat = A_WIS;
+        rpi.fail = 20;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_1);
         break;
     default:
         break;

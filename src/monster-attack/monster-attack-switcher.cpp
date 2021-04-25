@@ -31,7 +31,7 @@
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
  * @return なし
- * @detail 減衰の計算式がpoisではなくnukeなのは仕様 (1/3では減衰が強すぎると判断したため)
+ * @details 減衰の計算式がpoisではなくnukeなのは仕様 (1/3では減衰が強すぎると判断したため)
  */
 static void calc_blow_poison(player_type *target_ptr, monap_type *monap_ptr)
 {

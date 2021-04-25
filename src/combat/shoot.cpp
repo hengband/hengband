@@ -659,7 +659,8 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
                 /* Did we hit it (penalize range) */
                 if (test_hit_fire(shooter_ptr, chance - cur_dis, m_ptr, m_ptr->ml, o_name)) {
                     bool fear = FALSE;
-                    int tdam = tdam_base;
+                    auto tdam = tdam_base; //!< @note 実際に与えるダメージ
+                    auto base_dam = tdam; //!< @note 補正前の与えるダメージ(無傷、全ての耐性など)
 
                     /* Get extra damage from concentration */
                     if (shooter_ptr->concent)
@@ -696,9 +697,12 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
                             monster_desc(shooter_ptr, m_name, m_ptr, 0);
 
                             tdam = m_ptr->hp + 1;
+                            base_dam = tdam;
                             msg_format(_("%sの急所に突き刺さった！", "Your shot hit a fatal spot of %s!"), m_name);
-                        } else
+                        } else {
                             tdam = 1;
+                            base_dam = tdam;
+                        }
                     } else {
                         /* Apply special damage */
                         tdam = calc_shot_damage_with_slay(shooter_ptr, j_ptr, q_ptr, tdam, m_ptr, snipe_type);
@@ -709,6 +713,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
                             tdam = 0;
 
                         /* Modify the damage */
+                        base_dam = tdam;
                         tdam = mon_damage_mod(shooter_ptr, m_ptr, tdam, FALSE);
                     }
 
@@ -720,7 +725,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
                         u16b flg = (PROJECT_STOP | PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID);
 
                         sound(SOUND_EXPLODE); /* No explode sound - use breath fire instead */
-                        project(shooter_ptr, 0, ((shooter_ptr->concent + 1) / 2 + 1), ny, nx, tdam, GF_MISSILE, flg);
+                        project(shooter_ptr, 0, ((shooter_ptr->concent + 1) / 2 + 1), ny, nx, base_dam, GF_MISSILE, flg);
                         break;
                     }
 

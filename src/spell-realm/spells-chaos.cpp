@@ -95,7 +95,7 @@ void call_the_void(player_type *caster_ptr)
  * @brief 虚無招来によるフロア中の全壁除去処理 /
  * Vanish all walls in this floor
  * @param caster_ptr プレーヤーへの参照ポインタ
- * @params caster_ptr 術者の参照ポインタ
+ * @param caster_ptr 術者の参照ポインタ
  * @return 実際に処理が反映された場合TRUE
  */
 bool vanish_dungeon(player_type *caster_ptr)

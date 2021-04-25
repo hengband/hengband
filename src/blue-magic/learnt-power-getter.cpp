@@ -1,4 +1,9 @@
-﻿#include "blue-magic/learnt-power-getter.h"
+﻿/*!
+ * @file learnt-power-getter.cpp
+ * @brief 青魔法の処理実行定義
+ */
+
+#include "blue-magic/learnt-power-getter.h"
 #include "blue-magic/blue-magic-checker.h"
 #include "blue-magic/learnt-info.h"
 #include "core/asking-player.h"
@@ -35,7 +40,7 @@ typedef struct learnt_magic_type {
     char choice;
     char out_val[160];
     char comment[80];
-    FlagGroup<RF_ABILITY> ability_flags;
+    EnumClassFlagGroup<RF_ABILITY> ability_flags;
     monster_power spell;
     int menu_line;
     bool flag;
@@ -174,7 +179,7 @@ static bool sweep_learnt_spells(player_type *caster_ptr, learnt_magic_type *lm_p
     set_rf_masks(lm_ptr->ability_flags, static_cast<blue_magic_type>(lm_ptr->mode));
 
     std::vector<RF_ABILITY> spells;
-    FlagGroup<RF_ABILITY>::get_flags(lm_ptr->ability_flags, std::back_inserter(spells));
+    EnumClassFlagGroup<RF_ABILITY>::get_flags(lm_ptr->ability_flags, std::back_inserter(spells));
     std::transform(spells.begin(), spells.end(), std::back_inserter(lm_ptr->blue_magics), [](RF_ABILITY ability) { return static_cast<int>(ability); });
     lm_ptr->count = lm_ptr->ability_flags.count();
 
@@ -303,7 +308,7 @@ static void describe_blue_magic_name(player_type *caster_ptr, learnt_magic_type 
 
         lm_ptr->spell = monster_powers[lm_ptr->blue_magics[lm_ptr->blue_magic_num]];
         calculate_blue_magic_success_probability(caster_ptr, lm_ptr);
-        learnt_info(caster_ptr, lm_ptr->comment, static_cast<monster_spell_type>(lm_ptr->blue_magics[lm_ptr->blue_magic_num]));
+        learnt_info(caster_ptr, lm_ptr->comment, static_cast<RF_ABILITY>(lm_ptr->blue_magics[lm_ptr->blue_magic_num]));
         close_blue_magic_name(lm_ptr);
         strcat(lm_ptr->psi_desc, format(" %-26s %3d %3d%%%s", lm_ptr->spell.name, lm_ptr->need_mana, lm_ptr->chance, lm_ptr->comment));
         prt(lm_ptr->psi_desc, lm_ptr->y + lm_ptr->blue_magic_num + 1, lm_ptr->x);

@@ -34,7 +34,7 @@ typedef struct object_kind {
 
     BIT_FLAGS flags[TR_FLAG_SIZE]{}; /*!< ベースアイテムの基本特性ビット配列 / Flags */
 
-    FlagGroup<TRG> gen_flags; /*!< ベースアイテムの生成特性ビット配列 / flags for generate */
+    EnumClassFlagGroup<TRG> gen_flags; /*!< ベースアイテムの生成特性ビット配列 / flags for generate */
 
     DEPTH locale[4]{}; /*!< ベースアイテムの生成階テーブル / Allocation level(s) */
     PROB chance[4]{}; /*!< ベースアイテムの生成確率テーブル / Allocation chance(s) */

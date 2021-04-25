@@ -1,4 +1,9 @@
-﻿#include "blue-magic/blue-magic-summon.h"
+﻿/*!
+ * @file blue-magic-summon.cpp
+ * @brief 青魔法の召喚系スペル定義
+ */
+
+#include "blue-magic/blue-magic-summon.h"
 #include "blue-magic/blue-magic-util.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"

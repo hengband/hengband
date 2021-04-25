@@ -9,7 +9,6 @@
 #include "mind/mind-mirror-master.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
-#include "mspell/mspell-type.h"
 #include "mspell/mspell-util.h"
 #include "mspell/mspell.h"
 #include "player/attack-defense-types.h"

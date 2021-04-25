@@ -24,7 +24,7 @@ void do_cmd_view_map(player_type *player_ptr)
     if ((max_autopick == 0) || player_ptr->wild_mode) {
         put_str(_("何かキーを押すとゲームに戻ります", "Hit any key to continue"), 23, 30);
         move_cursor(cy, cx);
-        inkey();
+        inkey(true);
         screen_load();
         return;
     }
@@ -38,7 +38,7 @@ void do_cmd_view_map(player_type *player_ptr)
                     " Hit M, N(for ~), K(for !), or D(same as M+N) to display auto-picker items."),
             row_message, 1);
         move_cursor(cy, cx);
-        int i = inkey();
+        int i = inkey(true);
         byte flag;
         if ('M' == i)
             flag = (DO_AUTOPICK | DO_QUERY_AUTOPICK);

@@ -112,7 +112,6 @@ R:0:0x9A/0
 R:0:0x9B/0
 ?:[EQU $CLASS High-Mage]
 R:0:0x9C/0
-
 ?:[EQU $CLASS Tourist]
 R:0:0x98/0
 ?:[EQU $CLASS Imitator]
@@ -147,3 +146,5 @@ R:0:0x93/0
 R:0:0x95/0
 ?:[EQU $CLASS Sniper]
 R:0:0x96/0
+?:[EQU $CLASS Elementalist]
+R:0:0x9C/0

@@ -18,7 +18,6 @@
 #include "mspell/mspell-special.h"
 #include "mspell/mspell-status.h"
 #include "mspell/mspell-summon.h"
-#include "mspell/mspell-type.h"
 #include "mspell/mspell-util.h"
 #include "mspell/mspell.h"
 #include "spell/spell-types.h"
@@ -61,7 +60,7 @@ static MonsterSpellResult monspell_to_player_impl(player_type *target_ptr, RF_AB
     case RF_ABILITY::BR_GRAV: return spell_RF4_BREATH(target_ptr, GF_GRAVITY, y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF4_BR_GRAV */
     case RF_ABILITY::BR_SHAR: return spell_RF4_BREATH(target_ptr, GF_SHARDS, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_BR_SHAR */
     case RF_ABILITY::BR_PLAS: return spell_RF4_BREATH(target_ptr, GF_PLASMA, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_BR_PLAS */
-    case RF_ABILITY::BR_WALL: return spell_RF4_BREATH(target_ptr, GF_FORCE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_WALL */
+    case RF_ABILITY::BR_FORC: return spell_RF4_BREATH(target_ptr, GF_FORCE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_WALL */
     case RF_ABILITY::BR_MANA: return spell_RF4_BREATH(target_ptr, GF_MANA, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_MANA */
     case RF_ABILITY::BA_NUKE: return spell_RF4_BA_NUKE(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BA_NUKE */
     case RF_ABILITY::BR_NUKE: return spell_RF4_BREATH(target_ptr, GF_NUKE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_NUKE */
@@ -169,7 +168,7 @@ static MonsterSpellResult monspell_to_monster_impl(
     case RF_ABILITY::BR_GRAV: return spell_RF4_BREATH(target_ptr, GF_GRAVITY, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_GRAV */
     case RF_ABILITY::BR_SHAR: return spell_RF4_BREATH(target_ptr, GF_SHARDS, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_BR_SHAR */
     case RF_ABILITY::BR_PLAS: return spell_RF4_BREATH(target_ptr, GF_PLASMA, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_BR_PLAS */
-    case RF_ABILITY::BR_WALL: return spell_RF4_BREATH(target_ptr, GF_FORCE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_WALL */
+    case RF_ABILITY::BR_FORC: return spell_RF4_BREATH(target_ptr, GF_FORCE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_WALL */
     case RF_ABILITY::BR_MANA: return spell_RF4_BREATH(target_ptr, GF_MANA, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_MANA */
     case RF_ABILITY::BA_NUKE: return spell_RF4_BA_NUKE(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BA_NUKE */
     case RF_ABILITY::BR_NUKE: return spell_RF4_BREATH(target_ptr, GF_NUKE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_NUKE */

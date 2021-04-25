@@ -211,25 +211,26 @@
 /* #define MAINTAINER	"rr9@angband.org" */
 #define MAINTAINER "echizen@users.sourceforge.jp"
 
-#ifdef JP
-#ifdef USE_XFT
-#define DEFAULT_X11_FONT "monospace-24:lang=ja:spacing=90"
-#define DEFAULT_X11_FONT_SUB "sans-serif-16:lang=ja"
-#else
 /*
  * OPTION: Default font (when using X11).
  */
-#define DEFAULT_X11_FONT \
-	"-*-*-medium-r-normal--24-*-*-*-*-*-iso8859-1" \
-	",-*-*-medium-r-normal--24-*-*-*-*-*-jisx0208.1983-0"
-/*	"12x24" \
-	",kanji24"*/
-#define DEFAULT_X11_FONT_SUB \
-	"-*-*-medium-r-normal--16-*-*-*-*-*-iso8859-1" \
-	",-*-*-medium-r-normal--16-*-*-*-*-*-jisx0208.1983-0"
+#ifdef USE_XFT
+#ifdef JP
+#define DEFAULT_X11_FONT "monospace-24:lang=ja:spacing=90"
+#define DEFAULT_X11_FONT_SUB "sans-serif-16:lang=ja"
+#else
+#define DEFAULT_X11_FONT "monospace-24:lang=en:spacing=90"
+#define DEFAULT_X11_FONT_SUB "sans-serif-16:lang=en"
 #endif
-/*	"8x16" \
-	",kanji16"*/
+#else
+#ifdef JP
+#define DEFAULT_X11_FONT "-*-*-medium-r-normal--24-*-*-*-*-*-iso8859-1,-*-*-medium-r-normal--24-*-*-*-*-*-jisx0208.1983-0"
+#define DEFAULT_X11_FONT_SUB "-*-*-medium-r-normal--16-*-*-*-*-*-iso8859-1,-*-*-medium-r-normal--16-*-*-*-*-*-jisx0208.1983-0"
+#else
+#define DEFAULT_X11_FONT "-*-*-medium-r-normal--24-*-*-*-*-*-iso8859-1"
+#define DEFAULT_X11_FONT_SUB "-*-*-medium-r-normal--16-*-*-*-*-*-iso8859-1"
+#endif
+#endif
 
 /*
  * OPTION: Default fonts (when using X11)
@@ -242,22 +243,3 @@
 #define DEFAULT_X11_FONT_5		DEFAULT_X11_FONT_SUB
 #define DEFAULT_X11_FONT_6		DEFAULT_X11_FONT_SUB
 #define DEFAULT_X11_FONT_7		DEFAULT_X11_FONT_SUB
-
-#else
-/*
- * OPTION: Default font (when using X11).
- */
-#define DEFAULT_X11_FONT		"9x15"
-
-/*
- * OPTION: Default fonts (when using X11)
- */
-#define DEFAULT_X11_FONT_0		"10x20"
-#define DEFAULT_X11_FONT_1		"9x15"
-#define DEFAULT_X11_FONT_2		"9x15"
-#define DEFAULT_X11_FONT_3		"5x8"
-#define DEFAULT_X11_FONT_4		"5x8"
-#define DEFAULT_X11_FONT_5		"5x8"
-#define DEFAULT_X11_FONT_6		"5x8"
-#define DEFAULT_X11_FONT_7		"5x8"
-#endif

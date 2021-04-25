@@ -1,4 +1,8 @@
 ﻿#pragma once
+/*!
+ * @file racial-execution.h
+ * @brief レイシャルパワー実行処理ヘッダ
+ */
 
 #include "system/angband.h"
 

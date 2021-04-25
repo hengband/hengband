@@ -2,9 +2,12 @@
 
 #include "system/angband.h"
 
+#include "monster-race/race-ability-flags.h"
+#include "util/flag-group.h"
+
 extern int vault_aux_race;
 extern char vault_aux_char;
-extern FlagGroup<RF_ABILITY> vault_aux_dragon_mask4;
+extern EnumClassFlagGroup<RF_ABILITY> vault_aux_dragon_mask4;
 
 bool mon_hook_quest(player_type *player_ptr, MONRACE_IDX r_idx);
 bool mon_hook_dungeon(player_type *player_ptr, MONRACE_IDX r_idx);

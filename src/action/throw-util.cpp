@@ -1,4 +1,9 @@
-﻿#include "action/throw-util.h"
+﻿/*!
+ * @file throw-util.cpp
+ * @brief 投擲処理関連関数
+ */
+
+#include "action/throw-util.h"
 
 it_type *initialize_it_type(
     it_type *item_throw_ptr, object_type *q_ptr, const int delay_factor_val, const int mult, const bool boomerang, const OBJECT_IDX shuriken)

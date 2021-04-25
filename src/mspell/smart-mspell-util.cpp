@@ -4,7 +4,7 @@
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
 
-msr_type *initialize_msr_type(player_type *target_ptr, msr_type *msr_ptr, MONSTER_IDX m_idx, const FlagGroup<RF_ABILITY>& ability_flags)
+msr_type *initialize_msr_type(player_type *target_ptr, msr_type *msr_ptr, MONSTER_IDX m_idx, const EnumClassFlagGroup<RF_ABILITY> &ability_flags)
 {
     monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
     msr_ptr->r_ptr = &r_info[m_ptr->r_idx];

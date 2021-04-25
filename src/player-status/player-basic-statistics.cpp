@@ -36,7 +36,7 @@ s16b PlayerBasicStatistics::get_value()
 
 /*!
  * @brief 基礎ステータス補正計算 - 種族
- * @params 計算するステータスの種類
+ * @param 計算するステータスの種類
  * @return ステータス補正値
  * @details
  * * 種族によるステータス修正値。
@@ -54,7 +54,7 @@ s16b PlayerBasicStatistics::race_value()
 
 /*!
  * @brief ステータス補正計算 - 職業
- * @params 計算するステータスの種類
+ * @param 計算するステータスの種類
  * @return ステータス補正値
  * @details
  * * 職業によるステータス修正値
@@ -67,7 +67,7 @@ s16b PlayerBasicStatistics::class_value()
 
 /*!
  * @brief ステータス補正計算 - 性格
- * @params 計算するステータスの種類
+ * @param 計算するステータスの種類
  * @return ステータス補正値
  * @details
  * * 性格によるステータス修正値
@@ -112,7 +112,7 @@ void PlayerBasicStatistics::update_top_status()
 
 /*!
  * @brief ステータス現在値更新の例外処理
- * @params 通常処理されたステータスの値
+ * @param 通常処理されたステータスの値
  * @returns 例外処理されたステータスの値
  * @details
  * * owner_ptrのステータス現在値を更新する際の例外処理

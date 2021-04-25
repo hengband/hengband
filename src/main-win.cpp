@@ -37,8 +37,7 @@
  * </p>
  *
  * <p>
- * The "lib/user/font-win.prf" contains attr/char mappings for use with the
- * normal "lib/xtra/font/*.fon" font files.
+ * The "lib/user/font-win.prf" contains attr/char mappings for wall.bmp.
  * </p>
  *
  * <p>
@@ -50,9 +49,7 @@
  * <p>
  * Compiling this file, and using the resulting executable, requires
  * several extra files not distributed with the standard Angband code.
- * In any case, some "*.fon" files (including "8X13.FON" if nothing else)
- * must be placed into "lib/xtra/font/".  All of these extra files can be found
- * in the "ext-win" archive.
+ * All of these extra files can be found in the "ext-win" archive.
  * </p>
  *
  * <p>
@@ -107,6 +104,9 @@
 #include "main-win/main-win-menuitem.h"
 #include "main-win/main-win-music.h"
 #include "main-win/main-win-sound.h"
+#include "main-win/read-graphics.h"
+#include "main-win/string-win.h"
+#include "main-win/tile-info.h"
 #include "main/angband-initializer.h"
 #include "main/sound-of-music.h"
 #include "monster-floor/monster-lite.h"
@@ -132,34 +132,14 @@
 #include <direct.h>
 
 /*
- * Include the support for loading bitmaps
- */
-#include "term/readdib.h"
-
-/*
  * Available graphic modes
  */
-#define GRAPHICS_NONE 0
-#define GRAPHICS_ORIGINAL 1
-#define GRAPHICS_ADAM_BOLT 2
-#define GRAPHICS_HENGBAND 3
-
-/*
- * Foreground color bits
- */
-#define VID_BLACK 0x00
-#define VID_BLUE 0x01
-#define VID_GREEN 0x02
-#define VID_CYAN 0x03
-#define VID_RED 0x04
-#define VID_MAGENTA 0x05
-#define VID_YELLOW 0x06
-#define VID_WHITE 0x07
-
-/*
- * Bright text
- */
-#define VID_BRIGHT 0x08
+enum graphics_mode {
+    GRAPHICS_NONE = 0,
+    GRAPHICS_ORIGINAL = 1,
+    GRAPHICS_ADAM_BOLT = 2,
+    GRAPHICS_HENGBAND = 3,
+};
 
 /*!
  * @struct term_data
@@ -175,11 +155,7 @@
  * </p>
  * <p>
  * Note the use of "font_want" for the names of the font file requested by
- * the user, and the use of "font_file" for the currently active font file.
- *
- * The "font_file" is uppercased, and takes the form "8X13.FON", while
- * "font_want" can be in almost any form as long as it could be construed
- * as attempting to represent the name of a font.
+ * the user.
  * </p>
  */
 typedef struct {
@@ -205,9 +181,7 @@ typedef struct {
     bool size_hack;
     bool xtra_hack;
     bool visible;
-    bool bizarre;
     concptr font_want;
-    concptr font_file;
     HFONT font_id;
     int font_wid; //!< フォント横幅
     int font_hgt; //!< フォント縦幅
@@ -241,16 +215,6 @@ bool game_in_progress = FALSE;
 bool initialized = FALSE;
 
 /*
- * screen paletted, i.e. 256 colors
- */
-bool paletted = FALSE;
-
-/*
- * 16 colors screen, don't use RGB()
- */
-bool colors16 = FALSE;
-
-/*
  * Saved instance handle
  */
 static HINSTANCE hInstance;
@@ -265,14 +229,15 @@ static HBRUSH hbrYellow;
  */
 static HICON hIcon;
 
-/*
- * A palette
- */
-static HPALETTE hPal;
-
 /* bg */
-static int use_bg = 0; //!< 背景使用フラグ、1なら使用。
+enum class bg_mode {
+    BG_NONE = 0,
+    BG_ONE = 1,
+    BG_PRESET = 2,
+};
+bg_mode current_bg_mode = bg_mode::BG_NONE;
 #define DEFAULT_BG_FILENAME "bg.bmp"
+char wallpaper_file[MAIN_WIN_MAX_PATH] = ""; //!< 壁紙ファイル名。
 
 /*!
  * 現在使用中のタイルID(0ならば未使用)
@@ -281,14 +246,14 @@ static int use_bg = 0; //!< 背景使用フラグ、1なら使用。
 static byte current_graphics_mode = 0;
 
 /*
- * The global bitmap
+ * The global tile
  */
-static DIBINIT infGraph;
+static tile_info infGraph;
 
 /*
- * The global bitmap mask
+ * The global tile mask
  */
-static DIBINIT infMask;
+static tile_info infMask;
 
 /*
  * Show sub-windows even when Hengband is not in focus
@@ -332,32 +297,6 @@ static bool mouse_down = FALSE;
 static bool paint_rect = FALSE;
 static TERM_LEN mousex = 0, mousey = 0;
 static TERM_LEN oldx, oldy;
-
-/*!
- * @brief The "simple" color values
- * @details
- * See "main-ibm.c" for original table information
- * The entries below are taken from the "color bits" defined above.
- * Note that many of the choices below suck, but so do crappy monitors.
- */
-static BYTE win_pal[256] = {
-    VID_BLACK, /* Dark */
-    VID_WHITE, /* White */
-    VID_CYAN, /* Slate XXX */
-    VID_RED | VID_BRIGHT, /* Orange XXX */
-    VID_RED, /* Red */
-    VID_GREEN, /* Green */
-    VID_BLUE, /* Blue */
-    VID_YELLOW, /* Umber XXX */
-    VID_BLACK | VID_BRIGHT, /* Light Dark */
-    VID_CYAN | VID_BRIGHT, /* Light Slate XXX */
-    VID_MAGENTA, /* Violet XXX */
-    VID_YELLOW | VID_BRIGHT, /* Yellow */
-    VID_MAGENTA | VID_BRIGHT, /* Light Red XXX */
-    VID_GREEN | VID_BRIGHT, /* Light Green */
-    VID_BLUE | VID_BRIGHT, /* Light Blue */
-    VID_YELLOW /* Light Umber XXX */
-};
 
 /*
  * Hack -- define which keys are "special"
@@ -477,9 +416,6 @@ static void save_prefs_aux(int i)
     wsprintf(buf, "%d", td->lf.lfWeight);
     WritePrivateProfileString(sec_name, "FontWgt", buf, ini_file);
 
-    strcpy(buf, td->bizarre ? "1" : "0");
-    WritePrivateProfileString(sec_name, "Bizarre", buf, ini_file);
-
     wsprintf(buf, "%d", td->tile_wid);
     WritePrivateProfileString(sec_name, "TileWid", buf, ini_file);
 
@@ -542,9 +478,9 @@ static void save_prefs(void)
     strcpy(buf, use_pause_music_inactive ? "1" : "0");
     WritePrivateProfileString("Angband", "MusicPauseInactive", buf, ini_file);
 
-    strcpy(buf, use_bg ? "1" : "0");
+    sprintf(buf, "%d", current_bg_mode);
     WritePrivateProfileString("Angband", "BackGround", buf, ini_file);
-    WritePrivateProfileString("Angband", "BackGroundBitmap", bg_bitmap_file[0] != '\0' ? bg_bitmap_file : DEFAULT_BG_FILENAME, ini_file);
+    WritePrivateProfileString("Angband", "BackGroundBitmap", wallpaper_file[0] != '\0' ? wallpaper_file : DEFAULT_BG_FILENAME, ini_file);
 
     int path_length = strlen(ANGBAND_DIR) - 4; /* \libの4文字分を削除 */
     char tmp[1024] = "";
@@ -598,8 +534,6 @@ static void load_prefs_aux(int i)
     GetPrivateProfileString(sec_name, "Font", "Courier", tmp, 127, ini_file);
 #endif
 
-    td->bizarre = (GetPrivateProfileInt(sec_name, "Bizarre", td->bizarre, ini_file) != 0);
-
     td->font_want = string_make(tmp);
     int hgt = 15;
     int wid = 0;
@@ -647,8 +581,8 @@ static void load_prefs(void)
     arg_sound = (GetPrivateProfileInt("Angband", "Sound", 0, ini_file) != 0);
     arg_music = (GetPrivateProfileInt("Angband", "Music", 0, ini_file) != 0);
     use_pause_music_inactive = (GetPrivateProfileInt("Angband", "MusicPauseInactive", 0, ini_file) != 0);
-    use_bg = GetPrivateProfileInt("Angband", "BackGround", 0, ini_file);
-    GetPrivateProfileString("Angband", "BackGroundBitmap", DEFAULT_BG_FILENAME, bg_bitmap_file, 1023, ini_file);
+    current_bg_mode = static_cast<bg_mode>(GetPrivateProfileInt("Angband", "BackGround", 0, ini_file));
+    GetPrivateProfileString("Angband", "BackGroundBitmap", DEFAULT_BG_FILENAME, wallpaper_file, 1023, ini_file);
     GetPrivateProfileString("Angband", "SaveFile", "", savefile, 1023, ini_file);
 
     int n = strncmp(".\\", savefile, 2);
@@ -666,92 +600,6 @@ static void load_prefs(void)
     }
 }
 
-/*
- * Create the new global palette based on the bitmap palette
- * (if any), and the standard 16 entry palette derived from
- * "win_clr[]" which is used for the basic 16 Angband colors.
- *
- * This function is never called before all windows are ready.
- *
- * This function returns FALSE if the new palette could not be
- * prepared, which should normally be a fatal error.  XXX XXX
- *
- * Note that only some machines actually use a "palette".
- */
-static int new_palette(void)
-{
-    int i, nEntries;
-    int pLogPalSize;
-    int lppeSize;
-    LPLOGPALETTE pLogPal;
-    LPPALETTEENTRY lppe;
-    term_data *td;
-    if (!paletted)
-        return TRUE;
-
-    lppeSize = 0;
-    lppe = NULL;
-    nEntries = 0;
-
-    HPALETTE hBmPal = static_cast<HPALETTE>(infGraph.hPalette);
-    if (hBmPal) {
-        lppeSize = 256 * sizeof(PALETTEENTRY);
-        lppe = (LPPALETTEENTRY)std::malloc(lppeSize);
-        nEntries = GetPaletteEntries(hBmPal, 0, 255, lppe);
-        if ((nEntries == 0) || (nEntries > 220)) {
-            plog(_("画面を16ビットか24ビットカラーモードにして下さい。", "Please switch to high- or true-color mode."));
-            std::free(lppe);
-            return FALSE;
-        }
-    }
-
-    pLogPalSize = sizeof(LOGPALETTE) + (nEntries + 16) * sizeof(PALETTEENTRY);
-    pLogPal = (LPLOGPALETTE)std::malloc(pLogPalSize);
-    pLogPal->palVersion = 0x300;
-    pLogPal->palNumEntries = nEntries + 16;
-    for (i = 0; i < nEntries; i++) {
-        pLogPal->palPalEntry[i] = lppe[i];
-    }
-
-    for (i = 0; i < 16; i++) {
-        LPPALETTEENTRY p;
-        p = &(pLogPal->palPalEntry[i + nEntries]);
-        p->peRed = GetRValue(win_clr[i]);
-        p->peGreen = GetGValue(win_clr[i]);
-        p->peBlue = GetBValue(win_clr[i]);
-        p->peFlags = PC_NOCOLLAPSE;
-    }
-
-    if (lppe)
-        std::free(lppe);
-
-    HPALETTE hNewPal = CreatePalette(pLogPal);
-    if (!hNewPal)
-        quit(_("パレットを作成できません！", "Cannot create palette!"));
-
-    std::free(pLogPal);
-    td = &data[0];
-    HDC hdc = GetDC(td->w);
-    SelectPalette(hdc, hNewPal, 0);
-    i = RealizePalette(hdc);
-    ReleaseDC(td->w, hdc);
-    if (i == 0)
-        quit(_("パレットをシステムエントリにマップできません！", "Cannot realize palette!"));
-
-    for (i = 1; i < MAX_TERM_DATA; i++) {
-        td = &data[i];
-        hdc = GetDC(td->w);
-        SelectPalette(hdc, hNewPal, 0);
-        ReleaseDC(td->w, hdc);
-    }
-
-    if (hPal)
-        DeleteObject(hPal);
-
-    hPal = hNewPal;
-    return TRUE;
-}
-
 /*!
  * @brief グラフィクスを初期化する / Initialize graphics
  * @details
@@ -762,9 +610,13 @@ static int new_palette(void)
  */
 static bool init_graphics(void)
 {
-    char buf[1024];
+    char buf[MAIN_WIN_MAX_PATH];
     BYTE wid, hgt, twid, thgt, ox, oy;
     concptr name;
+    concptr name_mask = NULL;
+
+    infGraph.delete_bitmap();
+    infMask.delete_bitmap();
 
     if (arg_graphics == GRAPHICS_ADAM_BOLT) {
         wid = 16;
@@ -774,6 +626,7 @@ static bool init_graphics(void)
         ox = 0;
         oy = 0;
         name = "16X16.BMP";
+        name_mask = "mask.bmp";
 
         ANGBAND_GRAF = "new";
     } else if (arg_graphics == GRAPHICS_HENGBAND) {
@@ -784,6 +637,7 @@ static bool init_graphics(void)
         ox = 0;
         oy = 0;
         name = "32X32.BMP";
+        name_mask = "mask32.bmp";
 
         ANGBAND_GRAF = "ne2";
     } else {
@@ -798,7 +652,8 @@ static bool init_graphics(void)
     }
 
     path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, name);
-    if (!ReadDIB(data[0].w, buf, &infGraph)) {
+    infGraph.hBitmap = read_graphic(buf);
+    if (!infGraph.hBitmap) {
         plog_fmt(_("ビットマップ '%s' を読み込めません。", "Cannot read bitmap file '%s'"), name);
         return FALSE;
     }
@@ -810,29 +665,17 @@ static bool init_graphics(void)
     infGraph.OffsetX = ox;
     infGraph.OffsetY = oy;
 
-    if (arg_graphics == GRAPHICS_ADAM_BOLT) {
-        path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, "mask.bmp");
-        if (!ReadDIB(data[0].w, buf, &infMask)) {
+    if (name_mask) {
+        path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, name_mask);
+        infMask.hBitmap = read_graphic(buf);
+        if (!infMask.hBitmap) {
             plog_fmt("Cannot read bitmap file '%s'", buf);
             return FALSE;
         }
-    }
-
-    if (arg_graphics == GRAPHICS_HENGBAND) {
-        path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, "mask32.bmp");
-        if (!ReadDIB(data[0].w, buf, &infMask)) {
-            plog_fmt("Cannot read bitmap file '%s'", buf);
-            return FALSE;
-        }
-    }
-
-    if (!new_palette()) {
-        plog(_("パレットを実現できません！", "Cannot activate palette!"));
-        return FALSE;
     }
 
     current_graphics_mode = arg_graphics;
-    return current_graphics_mode != 0;
+    return (current_graphics_mode != GRAPHICS_NONE);
 }
 
 /*
@@ -878,6 +721,30 @@ static void init_background(void)
 }
 
 /*!
+ * @brief Change background mode
+ * @param new_mode bg_mode
+ * @param show_error trueに設定した場合のみ、エラーダイアログを表示する
+ * @retval true success
+ * @retval false failed
+ */
+static bool change_bg_mode(bg_mode new_mode, bool show_error = false)
+{
+    current_bg_mode = new_mode;
+    if (current_bg_mode != bg_mode::BG_NONE) {
+        init_background();
+        if (!load_bg(wallpaper_file)) {
+            current_bg_mode = bg_mode::BG_NONE;
+            if (show_error)
+                plog_fmt(_("壁紙用ファイル '%s' を読み込めません。", "Can't load the image file '%s'."), wallpaper_file);
+        }
+    } else {
+        delete_bg();
+    }
+
+    return (current_bg_mode == new_mode);
+}
+
+/*!
  * @brief Resize a window
  */
 static void term_window_resize(term_data *td)
@@ -890,18 +757,16 @@ static void term_window_resize(term_data *td)
 }
 
 /*!
- * @brief Force the use of a new "font file" for a term_data.
+ * @brief Force the use of a new font for a term_data.
  * This function may be called before the "window" is ready.
  * This function returns zero only if everything succeeds.
  * @note that the "font name" must be capitalized!!!
- * @todo 引数のpathを消す
  */
-static errr term_force_font(term_data *td, concptr path)
+static errr term_force_font(term_data *td)
 {
     if (td->font_id)
         DeleteObject(td->font_id);
 
-    (void)path;
     td->font_id = CreateFontIndirect(&(td->lf));
     int wid = td->lf.lfWidth;
     int hgt = td->lf.lfHeight;
@@ -943,8 +808,7 @@ static void term_change_font(term_data *td)
     if (!ChooseFont(&cf))
         return;
 
-    term_force_font(td, NULL);
-    td->bizarre = TRUE;
+    term_force_font(td);
     td->tile_wid = td->font_wid;
     td->tile_hgt = td->font_hgt;
     term_getsize(td);
@@ -997,33 +861,22 @@ static errr term_user_win(int n)
     return 0;
 }
 
+static void refresh_color_table()
+{
+    for (int i = 0; i < 256; i++) {
+        byte rv = angband_color_table[i][1];
+        byte gv = angband_color_table[i][2];
+        byte bv = angband_color_table[i][3];
+        win_clr[i] = PALETTERGB(rv, gv, bv);
+    }
+}
+
 /*
  * React to global changes
  */
 static errr term_xtra_win_react(player_type *player_ptr)
 {
-    if (colors16) {
-        for (int i = 0; i < 256; i++) {
-            win_pal[i] = angband_color_table[i][0];
-        }
-    } else {
-        COLORREF code;
-        byte rv, gv, bv;
-        bool change = FALSE;
-        for (int i = 0; i < 256; i++) {
-            rv = angband_color_table[i][1];
-            gv = angband_color_table[i][2];
-            bv = angband_color_table[i][3];
-            code = PALETTERGB(rv, gv, bv);
-            if (win_clr[i] != code) {
-                change = TRUE;
-                win_clr[i] = code;
-            }
-        }
-
-        if (change)
-            (void)new_palette();
-    }
+    refresh_color_table();
 
     use_sound = arg_sound;
     if (use_sound) {
@@ -1109,7 +962,7 @@ static errr term_xtra_win_clear(void)
     SelectObject(hdc, td->font_id);
     ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rc, NULL, 0, NULL);
 
-    if (use_bg) {
+    if (current_bg_mode != bg_mode::BG_NONE) {
         rc.left = 0;
         rc.top = 0;
         draw_bg(hdc, &rc);
@@ -1286,7 +1139,7 @@ static errr term_wipe_win(int x, int y, int n)
     HDC hdc = GetDC(td->w);
     SetBkColor(hdc, RGB(0, 0, 0));
     SelectObject(hdc, td->font_id);
-    if (use_bg)
+    if (current_bg_mode != bg_mode::BG_NONE)
         draw_bg(hdc, &rc);
     else
         ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rc, NULL, 0, NULL);
@@ -1320,88 +1173,75 @@ static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
         init_done = TRUE;
     }
 
-    RECT rc;
-    rc.left = x * td->tile_wid + td->size_ow1;
-    rc.right = rc.left + n * td->tile_wid;
-    rc.top = y * td->tile_hgt + td->size_oh1;
-    rc.bottom = rc.top + td->tile_hgt;
+    RECT rc{ static_cast<LONG>(x * td->tile_wid + td->size_ow1), static_cast<LONG>(y * td->tile_hgt + td->size_oh1),
+        static_cast<LONG>(rc.left + n * td->tile_wid), static_cast<LONG>(rc.top + td->tile_hgt) };
 
     HDC hdc = GetDC(td->w);
     SetBkColor(hdc, RGB(0, 0, 0));
-    if (colors16) {
-        SetTextColor(hdc, PALETTEINDEX(win_pal[a]));
-    } else if (paletted) {
-        SetTextColor(hdc, win_clr[a & 0x0F]);
-    } else {
-        SetTextColor(hdc, win_clr[a]);
-    }
+    SetTextColor(hdc, win_clr[a]);
 
     SelectObject(hdc, td->font_id);
-    if (use_bg)
+    if (current_bg_mode != bg_mode::BG_NONE)
         SetBkMode(hdc, TRANSPARENT);
 
-    if (td->bizarre || (td->tile_hgt != td->font_hgt) || (td->tile_wid != td->font_wid)) {
-        ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rc, NULL, 0, NULL);
-        if (use_bg)
-            draw_bg(hdc, &rc);
+    ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rc, NULL, 0, NULL);
+    if (current_bg_mode != bg_mode::BG_NONE)
+        draw_bg(hdc, &rc);
 
-        rc.left += ((td->tile_wid - td->font_wid) / 2);
-        rc.right = rc.left + td->font_wid;
-        rc.top += ((td->tile_hgt - td->font_hgt) / 2);
-        rc.bottom = rc.top + td->font_hgt;
+    rc.left += ((td->tile_wid - td->font_wid) / 2);
+    rc.right = rc.left + td->font_wid;
+    rc.top += ((td->tile_hgt - td->font_hgt) / 2);
+    rc.bottom = rc.top + td->font_hgt;
 
-        for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++) {
 #ifdef JP
-            if (use_bigtile && *(s + i) == "■"[0] && *(s + i + 1) == "■"[1]) {
-                rc.right += td->font_wid;
-                oldBrush = static_cast<HBRUSH>(SelectObject(hdc, myBrush));
-                oldPen = static_cast<HPEN>(SelectObject(hdc, GetStockObject(NULL_PEN)));
-                Rectangle(hdc, rc.left, rc.top, rc.right + 1, rc.bottom + 1);
-                SelectObject(hdc, oldBrush);
-                SelectObject(hdc, oldPen);
-                rc.right -= td->font_wid;
-                i++;
-                rc.left += 2 * td->tile_wid;
-                rc.right += 2 * td->tile_wid;
-            } else if (iskanji(*(s + i))) /* 2バイト文字 */
-            {
-                rc.right += td->font_wid;
-                ExtTextOut(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s + i, 2, NULL);
-                rc.right -= td->font_wid;
-                i++;
-                rc.left += 2 * td->tile_wid;
-                rc.right += 2 * td->tile_wid;
-            } else if (*(s + i) == 127) {
-                oldBrush = static_cast<HBRUSH>(SelectObject(hdc, myBrush));
-                oldPen = static_cast<HPEN>(SelectObject(hdc, GetStockObject(NULL_PEN)));
-                Rectangle(hdc, rc.left, rc.top, rc.right + 1, rc.bottom + 1);
-                SelectObject(hdc, oldBrush);
-                SelectObject(hdc, oldPen);
-                rc.left += td->tile_wid;
-                rc.right += td->tile_wid;
-            } else {
-                ExtTextOut(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s + i, 1, NULL);
-                rc.left += td->tile_wid;
-                rc.right += td->tile_wid;
-            }
-#else
-            if (*(s + i) == 127) {
-                oldBrush = static_cast<HBRUSH>(SelectObject(hdc, myBrush));
-                oldPen = static_cast<HPEN>(SelectObject(hdc, GetStockObject(NULL_PEN)));
-                Rectangle(hdc, rc.left, rc.top, rc.right + 1, rc.bottom + 1);
-                SelectObject(hdc, oldBrush);
-                SelectObject(hdc, oldPen);
-                rc.left += td->tile_wid;
-                rc.right += td->tile_wid;
-            } else {
-                ExtTextOut(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s + i, 1, NULL);
-                rc.left += td->tile_wid;
-                rc.right += td->tile_wid;
-            }
-#endif
+        if (use_bigtile && *(s + i) == "■"[0] && *(s + i + 1) == "■"[1]) {
+            rc.right += td->font_wid;
+            oldBrush = static_cast<HBRUSH>(SelectObject(hdc, myBrush));
+            oldPen = static_cast<HPEN>(SelectObject(hdc, GetStockObject(NULL_PEN)));
+            Rectangle(hdc, rc.left, rc.top, rc.right + 1, rc.bottom + 1);
+            SelectObject(hdc, oldBrush);
+            SelectObject(hdc, oldPen);
+            rc.right -= td->font_wid;
+            i++;
+            rc.left += 2 * td->tile_wid;
+            rc.right += 2 * td->tile_wid;
+        } else if (iskanji(*(s + i))) /* 2バイト文字 */
+        {
+            rc.right += td->font_wid;
+            ExtTextOut(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s + i, 2, NULL);
+            rc.right -= td->font_wid;
+            i++;
+            rc.left += 2 * td->tile_wid;
+            rc.right += 2 * td->tile_wid;
+        } else if (*(s + i) == 127) {
+            oldBrush = static_cast<HBRUSH>(SelectObject(hdc, myBrush));
+            oldPen = static_cast<HPEN>(SelectObject(hdc, GetStockObject(NULL_PEN)));
+            Rectangle(hdc, rc.left, rc.top, rc.right + 1, rc.bottom + 1);
+            SelectObject(hdc, oldBrush);
+            SelectObject(hdc, oldPen);
+            rc.left += td->tile_wid;
+            rc.right += td->tile_wid;
+        } else {
+            ExtTextOut(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s + i, 1, NULL);
+            rc.left += td->tile_wid;
+            rc.right += td->tile_wid;
         }
-    } else {
-        ExtTextOut(hdc, rc.left, rc.top, ETO_OPAQUE | ETO_CLIPPED, &rc, s, n, NULL);
+#else
+        if (*(s + i) == 127) {
+            oldBrush = static_cast<HBRUSH>(SelectObject(hdc, myBrush));
+            oldPen = static_cast<HPEN>(SelectObject(hdc, GetStockObject(NULL_PEN)));
+            Rectangle(hdc, rc.left, rc.top, rc.right + 1, rc.bottom + 1);
+            SelectObject(hdc, oldBrush);
+            SelectObject(hdc, oldPen);
+            rc.left += td->tile_wid;
+            rc.right += td->tile_wid;
+        } else {
+            ExtTextOut(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s + i, 1, NULL);
+            rc.left += td->tile_wid;
+            rc.right += td->tile_wid;
+        }
+#endif
     }
 
     ReleaseDC(td->w, hdc);
@@ -1555,7 +1395,6 @@ static void init_windows(void)
     td->pos_x = 7 * 30;
     td->pos_y = 7 * 20;
     td->posfix = FALSE;
-    td->bizarre = TRUE;
 
     for (int i = 1; i < MAX_TERM_DATA; i++) {
         td = &data[i];
@@ -1572,7 +1411,6 @@ static void init_windows(void)
         td->pos_x = (7 - i) * 30;
         td->pos_y = (7 - i) * 20;
         td->posfix = FALSE;
-        td->bizarre = TRUE;
     }
 
     load_prefs();
@@ -1596,7 +1434,7 @@ static void init_windows(void)
         strncpy(td->lf.lfFaceName, td->font_want, LF_FACESIZE);
         td->lf.lfCharSet = DEFAULT_CHARSET;
         td->lf.lfPitchAndFamily = FIXED_PITCH | FF_DONTCARE;
-        term_force_font(td, NULL);
+        term_force_font(td);
         if (!td->tile_wid)
             td->tile_wid = td->font_wid;
         if (!td->tile_hgt)
@@ -1667,7 +1505,6 @@ static void init_windows(void)
         ShowWindow(td->w, SW_SHOW);
 
     SetWindowPos(td->w, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
-    (void)new_palette();
     hbrYellow = CreateSolidBrush(win_clr[TERM_YELLOW]);
     (void)term_xtra_win_flush();
 }
@@ -1689,9 +1526,6 @@ static void setup_menus(void)
         EnableMenuItem(hm, IDM_FILE_SAVE, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
     }
 
-    EnableMenuItem(hm, IDM_FILE_SCORE, MF_BYCOMMAND | MF_ENABLED);
-    EnableMenuItem(hm, IDM_FILE_EXIT, MF_BYCOMMAND | MF_ENABLED);
-
     for (int i = 0; i < MAX_TERM_DATA; i++) {
         EnableMenuItem(hm, IDM_WINDOW_VIS_0 + i, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
         CheckMenuItem(hm, IDM_WINDOW_VIS_0 + i, (data[i].visible ? MF_CHECKED : MF_UNCHECKED));
@@ -1711,14 +1545,6 @@ static void setup_menus(void)
         CheckMenuItem(hm, IDM_WINDOW_POS_0 + i, (data[i].posfix ? MF_CHECKED : MF_UNCHECKED));
         if (data[i].visible) {
             EnableMenuItem(hm, IDM_WINDOW_POS_0 + i, MF_BYCOMMAND | MF_ENABLED);
-        }
-    }
-
-    for (int i = 0; i < MAX_TERM_DATA; i++) {
-        EnableMenuItem(hm, IDM_WINDOW_BIZ_0 + i, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
-        CheckMenuItem(hm, IDM_WINDOW_BIZ_0 + i, (data[i].bizarre ? MF_CHECKED : MF_UNCHECKED));
-        if (data[i].visible) {
-            EnableMenuItem(hm, IDM_WINDOW_BIZ_0 + i, MF_BYCOMMAND | MF_ENABLED);
         }
     }
 
@@ -1750,14 +1576,7 @@ static void setup_menus(void)
             EnableMenuItem(hm, IDM_WINDOW_D_HGT_0 + i, MF_BYCOMMAND | MF_ENABLED);
         }
     }
-    EnableMenuItem(hm, IDM_WINDOW_KEEP_SUBWINDOWS, MF_BYCOMMAND | MF_ENABLED);
     CheckMenuItem(hm, IDM_WINDOW_KEEP_SUBWINDOWS, (keep_subwindows ? MF_CHECKED : MF_UNCHECKED));
-
-    EnableMenuItem(hm, IDM_OPTIONS_NO_GRAPHICS, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
-    EnableMenuItem(hm, IDM_OPTIONS_OLD_GRAPHICS, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
-    EnableMenuItem(hm, IDM_OPTIONS_NEW_GRAPHICS, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
-    EnableMenuItem(hm, IDM_OPTIONS_BIGTILE, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
-    EnableMenuItem(hm, IDM_OPTIONS_SOUND, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 
     CheckMenuItem(hm, IDM_OPTIONS_NO_GRAPHICS, (arg_graphics == GRAPHICS_NONE ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_OLD_GRAPHICS, (arg_graphics == GRAPHICS_ORIGINAL ? MF_CHECKED : MF_UNCHECKED));
@@ -1767,13 +1586,11 @@ static void setup_menus(void)
     CheckMenuItem(hm, IDM_OPTIONS_MUSIC, (arg_music ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_MUSIC_PAUSE_INACTIVE, (use_pause_music_inactive ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_SOUND, (arg_sound ? MF_CHECKED : MF_UNCHECKED));
-    CheckMenuItem(hm, IDM_OPTIONS_BG, (use_bg ? MF_CHECKED : MF_UNCHECKED));
-
-    EnableMenuItem(hm, IDM_OPTIONS_NO_GRAPHICS, MF_ENABLED);
-    EnableMenuItem(hm, IDM_OPTIONS_OLD_GRAPHICS, MF_ENABLED);
-    EnableMenuItem(hm, IDM_OPTIONS_NEW_GRAPHICS, MF_ENABLED);
-    EnableMenuItem(hm, IDM_OPTIONS_BIGTILE, MF_ENABLED);
-    EnableMenuItem(hm, IDM_OPTIONS_SOUND, MF_ENABLED);
+    CheckMenuItem(hm, IDM_OPTIONS_NO_BG, ((current_bg_mode == bg_mode::BG_NONE) ? MF_CHECKED : MF_UNCHECKED));
+    CheckMenuItem(hm, IDM_OPTIONS_BG, ((current_bg_mode == bg_mode::BG_ONE) ? MF_CHECKED : MF_UNCHECKED));
+    CheckMenuItem(hm, IDM_OPTIONS_PRESET_BG, ((current_bg_mode == bg_mode::BG_PRESET) ? MF_CHECKED : MF_UNCHECKED));
+    // TODO IDM_OPTIONS_PRESET_BG を有効にする
+    EnableMenuItem(hm, IDM_OPTIONS_PRESET_BG, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 }
 
 /*
@@ -1989,24 +1806,6 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 
         break;
     }
-    case IDM_WINDOW_BIZ_0:
-    case IDM_WINDOW_BIZ_1:
-    case IDM_WINDOW_BIZ_2:
-    case IDM_WINDOW_BIZ_3:
-    case IDM_WINDOW_BIZ_4:
-    case IDM_WINDOW_BIZ_5:
-    case IDM_WINDOW_BIZ_6:
-    case IDM_WINDOW_BIZ_7: {
-        int i = wCmd - IDM_WINDOW_BIZ_0;
-        if ((i < 0) || (i >= MAX_TERM_DATA))
-            break;
-
-        td = &data[i];
-        td->bizarre = !td->bizarre;
-        term_getsize(td);
-        term_window_resize(td);
-        break;
-    }
     case IDM_WINDOW_I_WID_0:
     case IDM_WINDOW_I_WID_1:
     case IDM_WINDOW_I_WID_2:
@@ -2166,56 +1965,64 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
             term_xtra_win_react(player_ptr);
         break;
     }
-    case IDM_OPTIONS_BG: {
-        use_bg = !(use_bg > 0);
-        if (use_bg) {
-            init_background();
-            use_bg = init_bg();
-        } else {
-            delete_bg();
-        }
-
+    case IDM_OPTIONS_NO_BG: {
+        change_bg_mode(bg_mode::BG_NONE);
         td = &data[0];
         InvalidateRect(td->w, NULL, TRUE);
         break;
     }
+    case IDM_OPTIONS_PRESET_BG: {
+        change_bg_mode(bg_mode::BG_PRESET);
+        td = &data[0];
+        InvalidateRect(td->w, NULL, TRUE);
+        break;
+    }
+    case IDM_OPTIONS_BG: {
+        bool ret = change_bg_mode(bg_mode::BG_ONE);
+        if (ret) {
+            td = &data[0];
+            InvalidateRect(td->w, NULL, TRUE);
+            break;
+        }
+        // 壁紙の設定に失敗した（ファイルが存在しない等）場合、壁紙に使うファイルを選択させる
+    }
+        [[fallthrough]]; /* Fall through */
     case IDM_OPTIONS_OPEN_BG: {
         memset(&ofn, 0, sizeof(ofn));
         ofn.lStructSize = sizeof(ofn);
         ofn.hwndOwner = data[0].w;
         ofn.lpstrFilter = "Image Files (*.bmp;*.png;*.jpg;*.jpeg;)\0*.bmp;*.png;*.jpg;*.jpeg;\0";
         ofn.nFilterIndex = 1;
-        ofn.lpstrFile = bg_bitmap_file;
+        ofn.lpstrFile = wallpaper_file;
         ofn.nMaxFile = 1023;
         ofn.lpstrInitialDir = NULL;
         ofn.lpstrTitle = _("壁紙を選んでね。", "Choose wall paper.");
         ofn.Flags = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
 
         if (GetOpenFileName(&ofn)) {
-            init_background();
-            use_bg = init_bg();
-
+            change_bg_mode(bg_mode::BG_ONE, true);
             td = &data[0];
             InvalidateRect(td->w, NULL, TRUE);
         }
         break;
     }
     case IDM_DUMP_SCREEN_HTML: {
-        static char buf[1024] = "";
-        memset(&ofn, 0, sizeof(ofn));
-        ofn.lStructSize = sizeof(ofn);
-        ofn.hwndOwner = data[0].w;
-        ofn.lpstrFilter = "HTML Files (*.html)\0*.html\0";
-        ofn.nFilterIndex = 1;
-        ofn.lpstrFile = buf;
-        ofn.nMaxFile = 1023;
-        ofn.lpstrDefExt = "html";
-        ofn.lpstrInitialDir = NULL;
-        ofn.lpstrTitle = _("HTMLでスクリーンダンプを保存", "Save screen dump as HTML.");
-        ofn.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;
+        OPENFILENAMEW ofnw;
+        std::vector<WCHAR> buf(MAIN_WIN_MAX_PATH + 1);
+        memset(&ofnw, 0, sizeof(ofnw));
+        ofnw.lStructSize = sizeof(ofnw);
+        ofnw.hwndOwner = data[0].w;
+        ofnw.lpstrFilter = L"HTML Files (*.html)\0*.html\0";
+        ofnw.nFilterIndex = 1;
+        ofnw.lpstrFile = &buf[0];
+        ofnw.nMaxFile = MAIN_WIN_MAX_PATH;
+        ofnw.lpstrDefExt = L"html";
+        ofnw.lpstrInitialDir = NULL;
+        ofnw.lpstrTitle = _(L"HTMLでスクリーンダンプを保存", L"Save screen dump as HTML.");
+        ofnw.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;
 
-        if (GetSaveFileName(&ofn)) {
-            do_cmd_save_screen_html_aux(buf, 0);
+        if (GetSaveFileNameW(&ofnw)) {
+            do_cmd_save_screen_html_aux(to_multibyte(&buf[0]).c_str(), 0);
         }
 
         break;
@@ -2443,7 +2250,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         for (int i = 0; i < dy; i++) {
 #ifdef JP
             char *s;
-            char **scr = data[0].t.scr->c;
+            const auto &scr = data[0].t.scr->c;
 
             C_MAKE(s, (dx + 1), char);
             strncpy(s, &scr[oy + i][ox], dx);
@@ -2612,24 +2419,6 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 
         break;
     }
-    case WM_PALETTECHANGED: {
-        if ((HWND)wParam == hWnd)
-            return 0;
-    }
-        [[fallthrough]]; /* Fall through */
-    case WM_QUERYNEWPALETTE: {
-        if (!paletted)
-            return 0;
-
-        HDC hdc = GetDC(hWnd);
-        SelectPalette(hdc, hPal, FALSE);
-        int i = RealizePalette(hdc);
-        if (i)
-            InvalidateRect(hWnd, NULL, TRUE);
-
-        ReleaseDC(hWnd, hdc);
-        return 0;
-    }
     case WM_ACTIVATE: {
         if (!wParam || HIWORD(lParam))
             break;
@@ -2753,24 +2542,6 @@ LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
             term_keypress(wParam);
         return 0;
     }
-    case WM_PALETTECHANGED: {
-        if ((HWND)wParam == hWnd)
-            return FALSE;
-    }
-        [[fallthrough]]; /* Fall through */
-    case WM_QUERYNEWPALETTE: {
-        if (!paletted)
-            return 0;
-
-        HDC hdc = GetDC(hWnd);
-        SelectPalette(hdc, hPal, FALSE);
-        int i = RealizePalette(hdc);
-        if (i)
-            InvalidateRect(hWnd, NULL, TRUE);
-
-        ReleaseDC(hWnd, hdc);
-        return 0;
-    }
     case WM_NCLBUTTONDOWN: {
         if (wParam == HTCLOSE)
             wParam = HTSYSMENU;
@@ -2797,11 +2568,7 @@ LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 static void hack_plog(concptr str)
 {
     if (str) {
-#ifdef JP
-        MessageBox(NULL, str, "警告！", MB_ICONEXCLAMATION | MB_OK);
-#else
-        MessageBox(NULL, str, "Warning", MB_ICONEXCLAMATION | MB_OK);
-#endif
+        MessageBoxW(NULL, to_wchar(str).wc_str(), _(L"警告！", L"Warning"), MB_ICONEXCLAMATION | MB_OK);
     }
 }
 
@@ -2811,11 +2578,7 @@ static void hack_plog(concptr str)
 static void hack_quit(concptr str)
 {
     if (str) {
-#ifdef JP
-        MessageBox(NULL, str, "エラー！", MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
-#else
-        MessageBox(NULL, str, "Error", MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
-#endif
+        MessageBoxW(NULL, to_wchar(str).wc_str(), _(L"エラー！", L"Error"), MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
     }
 
     UnregisterClass(AppName, hInstance);
@@ -2831,11 +2594,7 @@ static void hack_quit(concptr str)
 static void hook_plog(concptr str)
 {
     if (str) {
-#ifdef JP
-        MessageBox(data[0].w, str, "警告！", MB_ICONEXCLAMATION | MB_OK);
-#else
-        MessageBox(data[0].w, str, "Warning", MB_ICONEXCLAMATION | MB_OK);
-#endif
+        MessageBoxW(data[0].w, to_wchar(str).wc_str(), _(L"警告！", L"Warning"), MB_ICONEXCLAMATION | MB_OK);
     }
 }
 
@@ -2845,16 +2604,12 @@ static void hook_plog(concptr str)
 static void hook_quit(concptr str)
 {
     if (str) {
-#ifdef JP
-        MessageBox(data[0].w, str, "エラー！", MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
-#else
-        MessageBox(data[0].w, str, "Error", MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
-#endif
+        MessageBoxW(data[0].w, to_wchar(str).wc_str(), _(L"エラー！", L"Error"), MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
     }
 
     save_prefs();
     for (int i = MAX_TERM_DATA - 1; i >= 0; --i) {
-        term_force_font(&data[i], NULL);
+        term_force_font(&data[i]);
         if (data[i].font_want)
             string_free(data[i].font_want);
         if (data[i].w)
@@ -2862,20 +2617,12 @@ static void hook_quit(concptr str)
         data[i].w = 0;
     }
 
-    if (infGraph.hPalette)
-        DeleteObject(infGraph.hPalette);
-    if (infGraph.hBitmap)
-        DeleteObject(infGraph.hBitmap);
-    if (infMask.hPalette)
-        DeleteObject(infMask.hPalette);
-    if (infMask.hBitmap)
-        DeleteObject(infMask.hBitmap);
+    infGraph.delete_bitmap();
+    infMask.delete_bitmap();
 
     DeleteObject(hbrYellow);
     finalize_bg();
-
-    if (hPal)
-        DeleteObject(hPal);
+    finalize_graphics();
 
     UnregisterClass(AppName, hInstance);
     if (hIcon)
@@ -2978,18 +2725,13 @@ static bool is_already_running(void)
 /*!
  * @brief (Windows固有)Windowsアプリケーションとしてのエントリポイント
  */
-int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
+int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPSTR lpCmdLine, [[maybe_unused]] _In_ int nCmdShow)
 {
-    WNDCLASS wc;
-    HDC hdc;
-    MSG msg;
-
     setlocale(LC_ALL, "ja_JP");
-    (void)nCmdShow;
     hInstance = hInst;
     if (is_already_running()) {
-        MessageBox(
-            NULL, _("変愚蛮怒はすでに起動しています。", "Hengband is already running."), _("エラー！", "Error"), MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
+        MessageBoxW(
+            NULL, _(L"変愚蛮怒はすでに起動しています。", L"Hengband is already running."), _(L"エラー！", L"Error"), MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
         return FALSE;
     }
 
@@ -3011,6 +2753,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPST
     }
 
     if (hPrevInst == NULL) {
+        WNDCLASS wc;
         wc.style = CS_CLASSDC;
         wc.lpfnWndProc = AngbandWndProc;
         wc.cbClsExtra = 0;
@@ -3046,29 +2789,15 @@ int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPST
         ignore_key[ignore_key_list[i]] = TRUE;
     }
 
-    hdc = GetDC(NULL);
-    colors16 = (GetDeviceCaps(hdc, BITSPIXEL) == 4);
-    paletted = ((GetDeviceCaps(hdc, RASTERCAPS) & RC_PALETTE) ? TRUE : FALSE);
+    HDC hdc = GetDC(NULL);
+    if (GetDeviceCaps(hdc, BITSPIXEL) <= 8) {
+        quit(_("画面を16ビット以上のカラーモードにして下さい。", "Please switch to High Color (16-bit) or higher color mode."));
+    }
     ReleaseDC(NULL, hdc);
 
-    for (int i = 0; i < 256; i++) {
-        byte rv = angband_color_table[i][1];
-        byte gv = angband_color_table[i][2];
-        byte bv = angband_color_table[i][3];
-        win_clr[i] = PALETTERGB(rv, gv, bv);
-        angband_color_table[i][0] = win_pal[i];
-    }
-
+    refresh_color_table();
     init_windows();
-    if (use_bg) {
-        init_background();
-        use_bg = init_bg();
-    }
-
-    use_music = arg_music;
-    if (use_music) {
-        init_music();
-    }
+    change_bg_mode(current_bg_mode, true);
 
     plog_aux = hook_plog;
     quit_aux = hook_quit;
@@ -3101,6 +2830,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPST
     check_for_save_file(p_ptr, lpCmdLine);
     prt(_("[ファイル] メニューの [新規] または [開く] を選択してください。", "[Choose 'New' or 'Open' from the 'File' menu]"), 23, _(8, 17));
     term_fresh();
+
+    use_music = arg_music;
+    if (use_music) {
+        init_music();
+    }
+
+    MSG msg;
     while (GetMessage(&msg, NULL, 0, 0)) {
         TranslateMessage(&msg);
         DispatchMessage(&msg);

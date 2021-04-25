@@ -24,7 +24,7 @@ int vault_aux_race;
 char vault_aux_char;
 
 /*! ブレス属性に基づくドラゴンpit生成時条件マスク / Breath mask for "monster pit (dragon)" */
-FlagGroup<RF_ABILITY> vault_aux_dragon_mask4;
+EnumClassFlagGroup<RF_ABILITY> vault_aux_dragon_mask4;
 
 /*!
  * @brief pit/nestの基準となる単種モンスターを決める /

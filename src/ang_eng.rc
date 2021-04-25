@@ -55,19 +55,7 @@ ANGBAND MENU
 		MENUITEM "&Always display subwindows", 280
 
 		MENUITEM SEPARATOR
-/*
-		POPUP "Bizarre Display"
-		{
-			MENUITEM "Term-0 window", 230
-			MENUITEM "Term-1 window", 231
-			MENUITEM "Term-2 window", 232
-			MENUITEM "Term-3 window", 233
-			MENUITEM "Term-4 window", 234
-			MENUITEM "Term-5 window", 235
-			MENUITEM "Term-6 window", 236
-			MENUITEM "Term-7 window", 237
-		}
-*/
+
 		POPUP "Increase Tile Width"
 		{
 			MENUITEM "Term-0 window", 240
@@ -124,14 +112,22 @@ ANGBAND MENU
 			MENUITEM "&None", 400
 			MENUITEM "&Old tiles", 401
 			MENUITEM "&Adam Bolt's tiles", 402
+			MENUITEM SEPARATOR
 			MENUITEM "&Bigtile mode", 409
+		}
+
+		POPUP "&Back ground pict"
+		{
+			MENUITEM "&None", 440
+			MENUITEM "&Selected one", 441
+			MENUITEM "&Your preset", 442
+			MENUITEM SEPARATOR
+			MENUITEM "Choose BG pict", 449
 		}
 
 		MENUITEM "&Music", 420
 		MENUITEM "&Pause music when inactive", 421
 		MENUITEM "&Sound", 410
-		MENUITEM "&Back ground pict", 440
-		MENUITEM "Choose BG pict", 441
 		MENUITEM "&HTML dump", 450
 	}
 }

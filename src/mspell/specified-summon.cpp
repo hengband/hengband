@@ -13,6 +13,7 @@
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"
 #include "spell/summon-types.h"
+#include "system/system-variables.h"
 #include "view/display-messages.h"
 
 /*!
@@ -139,13 +140,18 @@ MONSTER_NUMBER summon_MOAI(player_type *target_ptr, POSITION y, POSITION x, int 
 
 MONSTER_NUMBER summon_DEMON_SLAYER(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
 {
-    int count = 0;
-    const int num = 5;
-    for (int k = 0; k < num; k++)
+    monster_race *r_ptr = &r_info[MON_DEMON_SLAYER_MEMBER];
+    if (r_ptr->max_num == 0) {
+        msg_print(_("しかし、隊士は全滅していた…。", "However, all demon slayer members were murdered..."));
+        return 0;
+    }
+
+    auto count = 0;
+    for (auto k = 0; k < MAX_NAZGUL_NUM; k++)
         count += summon_named_creature(target_ptr, m_idx, y, x, MON_DEMON_SLAYER_MEMBER, PM_NONE);
 
     if (count == 0)
-        msg_print(_("しかし、隊士は全滅していた…。", "However, all demon slayer members were murdered..."));
+        msg_print(_("しかし、隊士は誰も来てくれなかった。", "However, no demon slayer member answered the call..."));
 
     return count;
 }
@@ -257,5 +263,31 @@ MONSTER_NUMBER summon_VESPOID(player_type *target_ptr, POSITION y, POSITION x, i
     for (int k = 0; k < num; k++)
         count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_VESPOID, PM_NONE);
 
+    return count;
+}
+
+/*!
+ * @brief イェンダーの魔法使いの召喚の処理。 /
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param y 対象の地点のy座標
+ * @param x 対象の地点のx座標
+ * @param m_idx 呪文を唱えるモンスターID
+ * @return 召喚したモンスターの数を返す。
+ */
+MONSTER_NUMBER summon_YENDER_WIZARD(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
+{
+    auto *r_ptr = &r_info[MON_YENDER_WIZARD_2];
+    if (r_ptr->max_num == 0) {
+        msg_print(_("しかし、誰も来なかった…。", "However, no kin was appeared..."));
+        return 0;
+    }
+
+    auto count = (MONSTER_NUMBER)summon_named_creature(target_ptr, m_idx, y, x, MON_YENDER_WIZARD_2, PM_NONE);
+    if (count == 0) {
+        msg_print(_("どこからか声が聞こえる…「三重苦は負わぬ。。。」", "Heard a voice from somewhere... 'I will deny the triple suffering...'"));
+        return 0;
+    }
+
+    msg_print(_("二重苦だ。。。", "THIS is double suffering..."));
     return count;
 }

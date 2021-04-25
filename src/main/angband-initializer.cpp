@@ -1,5 +1,6 @@
 ﻿/*!
- * @brief ゲームデータ初期化
+ * @file angband-initializer.cpp
+ * @brief 変愚蛮怒のシステム初期化
  * @date 2014/01/28
  * @author
  * <pre>

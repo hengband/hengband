@@ -5,7 +5,7 @@
  * @brief レイシャルパワーの説明文を表示する
  * @param creature_ptr プレイヤー情報へのポインタ
  * @param self_ptr 自己分析情報へのポインタ
- * @detail
+ * @details
  *  使用可能レベル以上を条件とする。
  */
 void set_race_ability_info(player_type *creature_ptr, self_info_type *self_ptr)

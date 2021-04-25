@@ -95,6 +95,7 @@ void py_pickup_floor(player_type *owner_ptr, bool pickup)
         disturb(owner_ptr, FALSE, FALSE);
         if (o_ptr->tval == TV_GOLD) {
             msg_format(_(" $%ld の価値がある%sを見つけた。", "You have found %ld gold pieces worth of %s."), (long)o_ptr->pval, o_name);
+            sound(SOUND_SELL);
             owner_ptr->au += o_ptr->pval;
             owner_ptr->redraw |= (PR_GOLD);
             owner_ptr->window_flags |= (PW_PLAYER);

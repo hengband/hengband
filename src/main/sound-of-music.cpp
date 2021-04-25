@@ -1,4 +1,9 @@
-﻿#include "main/sound-of-music.h"
+﻿/*!
+ * @file sound-of-music.cpp
+ * @brief BGM及び効果音のterm出力処理実装
+ */
+
+#include "main/sound-of-music.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/special-options.h"
 #include "main/scene-table.h"

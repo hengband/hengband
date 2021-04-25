@@ -1,4 +1,5 @@
 ﻿#include "racial/class-racial-switcher.h"
+#include "cmd-action/cmd-spell.h"
 #include "mind/mind-elementalist.h"
 #include "racial/racial-util.h"
 #include "realm/realm-names-table.h"
@@ -6,294 +7,343 @@
 
 void switch_class_racial(player_type *creature_ptr, rc_type *rc_ptr)
 {
+    rpi_type rpi;
     switch (creature_ptr->pclass) {
     case CLASS_WARRIOR:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("剣の舞い", "Sword Dancing"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 40;
-        rc_ptr->power_desc[rc_ptr->num].cost = 75;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_DEX;
-        rc_ptr->power_desc[rc_ptr->num].fail = 35;
-        rc_ptr->power_desc[rc_ptr->num++].number = -3;
+        rpi = rpi_type(_("剣の舞い", "Sword Dancing"));
+        rpi.text = _("ランダムな方向に数回攻撃する。", "Attacks some times to random directions.");
+        rpi.min_level = 40;
+        rpi.cost = 75;
+        rpi.stat = A_DEX;
+        rpi.fail = 35;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
         break;
     case CLASS_HIGH_MAGE:
         if (creature_ptr->realm1 == REALM_HEX) {
-            strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("詠唱をやめる", "Stop spell casting"));
-            rc_ptr->power_desc[rc_ptr->num].min_level = 1;
-            rc_ptr->power_desc[rc_ptr->num].cost = 0;
-            rc_ptr->power_desc[rc_ptr->num].stat = A_INT;
-            rc_ptr->power_desc[rc_ptr->num].fail = 0;
-            rc_ptr->power_desc[rc_ptr->num++].number = -3;
+            rpi = rpi_type(_("詠唱をやめる", "Stop spell casting"));
+            rpi.text = _("呪術の詠唱を全てやめる。", "Stops all casting hex spells.");
+            rpi.min_level = 1;
+            rpi.cost = 0;
+            rpi.stat = A_INT;
+            rpi.fail = 0;
+            rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
             break;
         }
         /* Fall through */
     case CLASS_MAGE:
     case CLASS_SORCERER:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("魔力食い", "Eat Magic"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 25;
-        rc_ptr->power_desc[rc_ptr->num].cost = 1;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_INT;
-        rc_ptr->power_desc[rc_ptr->num].fail = 25;
-        rc_ptr->power_desc[rc_ptr->num++].number = -3;
+        rpi = rpi_type(_("魔力食い", "Eat Magic"));
+        rpi.info = format("%s%d", KWD_POWER, rc_ptr->lvl * 2);
+        rpi.text = _("魔法道具から魔力を吸収してMPを回復する。", "Absorbs mana from a magic device to heal your SP.");
+        rpi.min_level = 25;
+        rpi.cost = 1;
+        rpi.stat = A_INT;
+        rpi.fail = 25;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
         break;
     case CLASS_PRIEST:
         if (is_good_realm(creature_ptr->realm1)) {
-            strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("武器祝福", "Bless Weapon"));
-            rc_ptr->power_desc[rc_ptr->num].min_level = 35;
-            rc_ptr->power_desc[rc_ptr->num].cost = 70;
-            rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
-            rc_ptr->power_desc[rc_ptr->num].fail = 50;
-            rc_ptr->power_desc[rc_ptr->num++].number = -3;
+            rpi = rpi_type(_("武器祝福", "Bless Weapon"));
+            rpi.text = _("武器を祝福する。抵抗されることがある。", "Blesses a weapon. Some weapons can resist it.");
+            rpi.min_level = 35;
+            rpi.cost = 70;
+            rpi.stat = A_WIS;
+            rpi.fail = 50;
+            rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
         } else {
-            strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("召魂", "Evocation"));
-            rc_ptr->power_desc[rc_ptr->num].min_level = 42;
-            rc_ptr->power_desc[rc_ptr->num].cost = 40;
-            rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
-            rc_ptr->power_desc[rc_ptr->num].fail = 35;
-            rc_ptr->power_desc[rc_ptr->num++].number = -3;
+            rpi = rpi_type(_("召魂", "Evocation"));
+            rpi.info = format("%s%d", KWD_POWER, rc_ptr->lvl * 4);
+            rpi.text = _("視界内の全てのモンスターにダメージを与え、恐怖させ、遠くへ飛ばす。", "Deals damage to all monster in your sight, makes them scared and tereports then away.");
+            rpi.min_level = 42;
+            rpi.cost = 40;
+            rpi.stat = A_WIS;
+            rpi.fail = 35;
+            rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
         }
 
         break;
     case CLASS_ROGUE:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("ヒット＆アウェイ", "Hit and Away"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 8;
-        rc_ptr->power_desc[rc_ptr->num].cost = 12;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_DEX;
-        rc_ptr->power_desc[rc_ptr->num].fail = 14;
-        rc_ptr->power_desc[rc_ptr->num++].number = -3;
+        rpi = rpi_type(_("ヒット＆アウェイ", "Hit and Away"));
+        rpi.info = format("%s%d", KWD_SPHERE, 30);
+        rpi.text = _("対象のモンスターを攻撃したあと短距離テレポートする。", "Attacks a monster then tereports you a short range.");
+        rpi.min_level = 8;
+        rpi.cost = 12;
+        rpi.stat = A_DEX;
+        rpi.fail = 14;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
         break;
     case CLASS_RANGER:
     case CLASS_SNIPER:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("モンスター調査", "Probe Monster"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 15;
-        rc_ptr->power_desc[rc_ptr->num].cost = 20;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_INT;
-        rc_ptr->power_desc[rc_ptr->num].fail = 12;
-        rc_ptr->power_desc[rc_ptr->num++].number = -3;
+        rpi = rpi_type(_("モンスター調査", "Probe Monster"));
+        rpi.text = _("モンスターの属性、残り体力、最大体力、スピード、正体を知る。", "Probes all monsters' alignment, HP, speed and their true character.");
+        rpi.min_level = 15;
+        rpi.cost = 20;
+        rpi.stat = A_INT;
+        rpi.fail = 12;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
         break;
     case CLASS_PALADIN:
         if (is_good_realm(creature_ptr->realm1)) {
-            strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("ホーリー・ランス", "Holy Lance"));
-            rc_ptr->power_desc[rc_ptr->num].min_level = 30;
-            rc_ptr->power_desc[rc_ptr->num].cost = 30;
-            rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
-            rc_ptr->power_desc[rc_ptr->num].fail = 30;
-            rc_ptr->power_desc[rc_ptr->num++].number = -3;
+            rpi = rpi_type(_("ホーリー・ランス", "Holy Lance"));
+            rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 3);
+            rpi.text = _("聖なる炎のビームを放つ。", "Fires a beam of holy fire.");
+            rpi.min_level = 30;
+            rpi.cost = 30;
+            rpi.stat = A_WIS;
+            rpi.fail = 30;
+            rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
         } else {
-            strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("ヘル・ランス", "Hell Lance"));
-            rc_ptr->power_desc[rc_ptr->num].min_level = 30;
-            rc_ptr->power_desc[rc_ptr->num].cost = 30;
-            rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
-            rc_ptr->power_desc[rc_ptr->num].fail = 30;
-            rc_ptr->power_desc[rc_ptr->num++].number = -3;
+            rpi = rpi_type(_("ヘル・ランス", "Hell Lance"));
+            rpi.info = format("%s%d", KWD_DAM, rc_ptr->lvl * 3);
+            rpi.text = _("地獄の業火のビームを放つ。", "Fires a beam of hell fire.");
+            rpi.min_level = 30;
+            rpi.cost = 30;
+            rpi.stat = A_WIS;
+            rpi.fail = 30;
+            rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
         }
 
         break;
     case CLASS_WARRIOR_MAGE:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("変換: ＨＰ→ＭＰ", "Convert HP to SP"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 25;
-        rc_ptr->power_desc[rc_ptr->num].cost = 0;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_INT;
-        rc_ptr->power_desc[rc_ptr->num].fail = 10;
-        rc_ptr->power_desc[rc_ptr->num++].number = -3;
+        rpi = rpi_type(_("変換: ＨＰ→ＭＰ", "Convert HP to SP"));
+        rpi.text = _("HPを少しMPに変換する。", "Transfers a few HP to SP.");
+        rpi.min_level = 25;
+        rpi.cost = 0;
+        rpi.stat = A_INT;
+        rpi.fail = 10;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
 
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("変換: ＭＰ→ＨＰ", "Convert SP to HP"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 25;
-        rc_ptr->power_desc[rc_ptr->num].cost = 0;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_INT;
-        rc_ptr->power_desc[rc_ptr->num].fail = 10;
-        rc_ptr->power_desc[rc_ptr->num++].number = -4;
+        rpi = rpi_type(_("変換: ＭＰ→ＨＰ", "Convert SP to HP"));
+        rpi.text = _("MPを少しHPに変換する。", "Transfers a few SP to HP.");
+        rpi.min_level = 25;
+        rpi.cost = 0;
+        rpi.stat = A_INT;
+        rpi.fail = 10;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_1);
         break;
     case CLASS_CHAOS_WARRIOR:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("幻惑の光", "Confusing Light"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 40;
-        rc_ptr->power_desc[rc_ptr->num].cost = 50;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_INT;
-        rc_ptr->power_desc[rc_ptr->num].fail = 25;
-        rc_ptr->power_desc[rc_ptr->num++].number = -3;
+        rpi = rpi_type(_("幻惑の光", "Confusing Light"));
+        rpi.info = format("%s%d", KWD_POWER, rc_ptr->lvl * 4);
+        rpi.text = _("周辺のモンスターを減速・朦朧・混乱・朦朧・恐怖・睡眠させようとする。抵抗されると無効。",
+            "Tries to make all monsters in your sight slowed, stuned, confused, scared, sleeped.");
+        rpi.min_level = 40;
+        rpi.cost = 50;
+        rpi.stat = A_INT;
+        rpi.fail = 25;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
         break;
     case CLASS_MONK:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("構える", "Assume a Stance"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 25;
-        rc_ptr->power_desc[rc_ptr->num].cost = 0;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_DEX;
-        rc_ptr->power_desc[rc_ptr->num].fail = 0;
-        rc_ptr->power_desc[rc_ptr->num++].number = -3;
+        rpi = rpi_type(_("構える", "Assume a Stance"));
+        rpi.text = _("型に構えて特殊な能力を得る。", "Gains extra abilities with posing a 'kata'.");
+        rpi.min_level = 25;
+        rpi.cost = 0;
+        rpi.stat = A_DEX;
+        rpi.fail = 0;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
 
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("百裂拳", "Double Attack"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 30;
-        rc_ptr->power_desc[rc_ptr->num].cost = 30;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_STR;
-        rc_ptr->power_desc[rc_ptr->num].fail = 20;
-        rc_ptr->power_desc[rc_ptr->num++].number = -4;
+        rpi = rpi_type(_("百裂拳", "Double Attack"));
+        rpi.text = _("対象に対して2回の打撃を行う。", "Melee attacks to a target monster two times.");
+        rpi.min_level = 30;
+        rpi.cost = 30;
+        rpi.stat = A_STR;
+        rpi.fail = 20;
+        rc_ptr->add_power(rpi, -4);
         break;
     case CLASS_MINDCRAFTER:
     case CLASS_FORCETRAINER:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("明鏡止水", "Clear Mind"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 15;
-        rc_ptr->power_desc[rc_ptr->num].cost = 0;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
-        rc_ptr->power_desc[rc_ptr->num].fail = 10;
-        rc_ptr->power_desc[rc_ptr->num++].number = -3;
+        rpi = rpi_type(_("明鏡止水", "Clear Mind"));
+        rpi.info = format("%s%d", KWD_MANA, 3 + rc_ptr->lvl / 20);
+        rpi.text = _("精神を集中してMPを少し回復する。", "Concentrates deeply to heal your SP a little.");
+        rpi.min_level = 15;
+        rpi.cost = 0;
+        rpi.stat = A_WIS;
+        rpi.fail = 10;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
         break;
     case CLASS_TOURIST:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("写真撮影", "Take a Photograph"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 1;
-        rc_ptr->power_desc[rc_ptr->num].cost = 0;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_DEX;
-        rc_ptr->power_desc[rc_ptr->num].fail = 0;
-        rc_ptr->power_desc[rc_ptr->num++].number = -3;
+        rpi = rpi_type(_("写真撮影", "Take a Photograph"));
+        rpi.text = _("対象のモンスター1体の写真を撮影する。", "Takes a picture of a monster.");
+        rpi.min_level = 1;
+        rpi.cost = 0;
+        rpi.stat = A_DEX;
+        rpi.fail = 0;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
 
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("真・鑑定", "Identify True"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 25;
-        rc_ptr->power_desc[rc_ptr->num].cost = 20;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_INT;
-        rc_ptr->power_desc[rc_ptr->num].fail = 20;
-        rc_ptr->power_desc[rc_ptr->num++].number = -4;
+        rpi = rpi_type(_("真・鑑定", "Identify True"));
+        rpi.text = _("アイテムの持つ能力を完全に知る。", "*Identifies* an item.");
+        rpi.min_level = 25;
+        rpi.cost = 20;
+        rpi.stat = A_INT;
+        rpi.fail = 20;
+        rc_ptr->add_power(rpi, -4);
         break;
     case CLASS_IMITATOR:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("倍返し", "Double Revenge"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 30;
-        rc_ptr->power_desc[rc_ptr->num].cost = 100;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_DEX;
-        rc_ptr->power_desc[rc_ptr->num].fail = 30;
-        rc_ptr->power_desc[rc_ptr->num++].number = -3;
+        rpi = rpi_type(_("倍返し", "Double Revenge"));
+        rpi.text = _("威力を倍にしてものまねを行う。", "Fires an imitation a damage of which you makes doubled.");
+        rpi.min_level = 30;
+        rpi.cost = 100;
+        rpi.stat = A_DEX;
+        rpi.fail = 30;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
         break;
     case CLASS_BEASTMASTER:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("生物支配", "Dominate a Living Thing"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 1;
-        rc_ptr->power_desc[rc_ptr->num].cost = (creature_ptr->lev + 3) / 4;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_CHR;
-        rc_ptr->power_desc[rc_ptr->num].fail = 10;
-        rc_ptr->power_desc[rc_ptr->num++].number = -3;
+        rpi = rpi_type(_("生物支配", "Dominate a Living Thing"));
+        rpi.info = format("%s%d", KWD_POWER, rc_ptr->lvl);
+        rpi.text = _("1体のモンスターをペットにする。抵抗されると無効。", "Attempts to charm a monster.");
+        rpi.min_level = 1;
+        rpi.cost = (creature_ptr->lev + 3) / 4;
+        rpi.stat = A_CHR;
+        rpi.fail = 10;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
 
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("真・生物支配", "Dominate Living Things"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 30;
-        rc_ptr->power_desc[rc_ptr->num].cost = (creature_ptr->lev + 20) / 2;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_CHR;
-        rc_ptr->power_desc[rc_ptr->num].fail = 10;
-        rc_ptr->power_desc[rc_ptr->num++].number = -4;
+        rpi = rpi_type(_("真・生物支配", "Dominate Living Things"));
+        rpi.info = format("%s%d", KWD_POWER, rc_ptr->lvl);
+        rpi.text = _("周辺のモンスターをペットにする。抵抗されると無効。", "Attempts to charm a monsters in your sight.");
+        rpi.min_level = 30;
+        rpi.cost = (creature_ptr->lev + 20) / 2;
+        rpi.stat = A_CHR;
+        rpi.fail = 10;
+        rc_ptr->add_power(rpi, -4);
         break;
     case CLASS_ARCHER:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("弾/矢の製造", "Create Ammo"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 1;
-        rc_ptr->power_desc[rc_ptr->num].cost = 0;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_DEX;
-        rc_ptr->power_desc[rc_ptr->num].fail = 0;
-        rc_ptr->power_desc[rc_ptr->num++].number = -3;
+        rpi = rpi_type(_("弾/矢の製造", "Create Ammo"));
+        rpi.text = _("弾または矢を製造する。原料となるアイテムが必要。", "Creates ammos from materials.");
+        rpi.min_level = 1;
+        rpi.cost = 0;
+        rpi.stat = A_DEX;
+        rpi.fail = 0;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
         break;
     case CLASS_MAGIC_EATER:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("魔力の取り込み", "Absorb Magic"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 1;
-        rc_ptr->power_desc[rc_ptr->num].cost = 0;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_INT;
-        rc_ptr->power_desc[rc_ptr->num].fail = 0;
-        rc_ptr->power_desc[rc_ptr->num++].number = -3;
+        rpi = rpi_type(_("魔力の取り込み", "Absorb Magic"));
+        rpi.text = _("魔法道具を取りこんで魔力とする。取りこんだ魔法道具は取り出せない。",
+            "Absorbs a magic device as your mana. Cannot take out it from your mana later.");
+        rpi.min_level = 1;
+        rpi.cost = 0;
+        rpi.stat = A_INT;
+        rpi.fail = 0;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
 
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("強力発動", "Powerful Activation"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 10;
-        rc_ptr->power_desc[rc_ptr->num].cost = 10 + (rc_ptr->lvl - 10) / 2;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_INT;
-        rc_ptr->power_desc[rc_ptr->num].fail = 0;
-        rc_ptr->power_desc[rc_ptr->num++].number = -4;
+        rpi = rpi_type(_("強力発動", "Powerful Activation"));
+        rpi.text = _("取りこんだ魔法道具を威力を高めて使用する。", "Activates absorbed magic device powerfully.");
+        rpi.min_level = 10;
+        rpi.cost = 10 + (rc_ptr->lvl - 10) / 2;
+        rpi.stat = A_INT;
+        rpi.fail = 0;
+        rc_ptr->add_power(rpi, -4);
         break;
     case CLASS_BARD:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("歌を止める", "Stop Singing"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 1;
-        rc_ptr->power_desc[rc_ptr->num].cost = 0;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_CHR;
-        rc_ptr->power_desc[rc_ptr->num].fail = 0;
-        rc_ptr->power_desc[rc_ptr->num++].number = -3;
+        rpi = rpi_type(_("歌を止める", "Stop Singing"));
+        rpi.text = _("現在詠唱中の歌をやめる。", "Stops singing a song.");
+        rpi.min_level = 1;
+        rpi.cost = 0;
+        rpi.stat = A_CHR;
+        rpi.fail = 0;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
         break;
     case CLASS_RED_MAGE:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("連続魔", "Double Magic"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 48;
-        rc_ptr->power_desc[rc_ptr->num].cost = 20;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_INT;
-        rc_ptr->power_desc[rc_ptr->num].fail = 0;
-        rc_ptr->power_desc[rc_ptr->num++].number = -3;
+        rpi = rpi_type(_("連続魔", "Double Magic"));
+        rpi.text = _("1回の行動で2つの呪文を詠唱する。", "Casts two spells in an action.");
+        rpi.min_level = 48;
+        rpi.cost = 20;
+        rpi.stat = A_INT;
+        rpi.fail = 0;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
         break;
     case CLASS_SAMURAI:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("気合いため", "Concentration"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 1;
-        rc_ptr->power_desc[rc_ptr->num].cost = 0;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
-        rc_ptr->power_desc[rc_ptr->num].fail = 0;
-        rc_ptr->power_desc[rc_ptr->num++].number = -3;
+        rpi = rpi_type(_("気合いため", "Concentration"));
+        rpi.text = _("気合を溜めてMPを増やす。上限値をある程度超えられる。", "Increases SP for Kendo over SP limit.");
+        rpi.min_level = 1;
+        rpi.cost = 0;
+        rpi.stat = A_WIS;
+        rpi.fail = 0;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
 
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("型", "Assume a Stance"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 25;
-        rc_ptr->power_desc[rc_ptr->num].cost = 0;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_DEX;
-        rc_ptr->power_desc[rc_ptr->num].fail = 0;
-        rc_ptr->power_desc[rc_ptr->num++].number = -4;
+        rpi = rpi_type(_("型", "Assume a Stance"));
+        rpi.text = _("型に構えて特殊な能力を得る。", "Gains extra abilities with posing a 'kata'.");
+        rpi.min_level = 25;
+        rpi.cost = 0;
+        rpi.stat = A_DEX;
+        rpi.fail = 0;
+        rc_ptr->add_power(rpi, -4);
         break;
     case CLASS_BLUE_MAGE:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("ラーニング", "Learning"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 1;
-        rc_ptr->power_desc[rc_ptr->num].cost = 0;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_INT;
-        rc_ptr->power_desc[rc_ptr->num].fail = 0;
-        rc_ptr->power_desc[rc_ptr->num++].number = -3;
+        rpi = rpi_type(_("ラーニング", "Learning"));
+        rpi.text = _("青魔法の学習を開始または終了する。学習中はMPを消費する。", "Starts or ends to learn blue magics. Pays SP for upkeep costs during it.");
+        rpi.min_level = 1;
+        rpi.cost = 0;
+        rpi.stat = A_INT;
+        rpi.fail = 0;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
         break;
     case CLASS_CAVALRY:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("荒馬ならし", "Rodeo"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 10;
-        rc_ptr->power_desc[rc_ptr->num].cost = 0;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_STR;
-        rc_ptr->power_desc[rc_ptr->num].fail = 10;
-        rc_ptr->power_desc[rc_ptr->num++].number = -3;
+        rpi = rpi_type(_("荒馬ならし", "Rodeo"));
+        rpi.text = _("対象のモンスターの無理やり乗馬しペットにする。", "Rides to target monster and tame it focibly.");
+        rpi.min_level = 10;
+        rpi.cost = 0;
+        rpi.stat = A_STR;
+        rpi.fail = 10;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
         break;
     case CLASS_BERSERKER:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("帰還", "Recall"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 10;
-        rc_ptr->power_desc[rc_ptr->num].cost = 10;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_DEX;
-        rc_ptr->power_desc[rc_ptr->num].fail = 20;
-        rc_ptr->power_desc[rc_ptr->num++].number = -3;
+        rpi = rpi_type(_("帰還", "Recall"));
+        rpi.text = _("地上にいるときはダンジョンの最深階へ、ダンジョンにいるときは地上へと移動する。",
+            "Recalls player from dungeon to town or from town to the deepest level of dungeon.");
+        rpi.min_level = 10;
+        rpi.cost = 10;
+        rpi.stat = A_DEX;
+        rpi.fail = 20;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
         break;
     case CLASS_MIRROR_MASTER:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("鏡割り", "Break Mirrors"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 1;
-        rc_ptr->power_desc[rc_ptr->num].cost = 0;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_INT;
-        rc_ptr->power_desc[rc_ptr->num].fail = 0;
-        rc_ptr->power_desc[rc_ptr->num++].number = -3;
+        rpi = rpi_type(_("鏡割り", "Break Mirrors"));
+        rpi.text = _("現在の階に設置した鏡を全て割る。割られた鏡はなくなり、破片属性のボールが発生する。", "Destroys all mirrors located in current level. They are deleted from the level.");
+        rpi.min_level = 1;
+        rpi.cost = 0;
+        rpi.stat = A_INT;
+        rpi.fail = 0;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
 
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("静水", "Mirror Concentration"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 30;
-        rc_ptr->power_desc[rc_ptr->num].cost = 0;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_INT;
-        rc_ptr->power_desc[rc_ptr->num].fail = 20;
-        rc_ptr->power_desc[rc_ptr->num++].number = -4;
+        rpi = rpi_type(_("静水", "Mirror Concentration"));
+        rpi.info = format("%s%d", KWD_MANA, 3 + rc_ptr->lvl / 20);
+        rpi.text = _("精神を集中してMPを少し回復する。", "Concentrates deeply to heal your SP a little.");
+        rpi.min_level = 30;
+        rpi.cost = 0;
+        rpi.stat = A_INT;
+        rpi.fail = 20;
+        rc_ptr->add_power(rpi, -4);
         break;
     case CLASS_SMITH:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("目利き", "Judgment"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 5;
-        rc_ptr->power_desc[rc_ptr->num].cost = 15;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_INT;
-        rc_ptr->power_desc[rc_ptr->num].fail = 20;
-        rc_ptr->power_desc[rc_ptr->num++].number = -3;
+        rpi = rpi_type(_("目利き", "Judgment"));
+        rpi.text = _("武器・矢弾・防具を鑑定する。", "Identifies an equipment or an ammo object.");
+        rpi.min_level = 5;
+        rpi.cost = 15;
+        rpi.stat = A_INT;
+        rpi.fail = 20;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
         break;
     case CLASS_NINJA:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("速駆け", "Quick Walk"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 20;
-        rc_ptr->power_desc[rc_ptr->num].cost = 0;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_DEX;
-        rc_ptr->power_desc[rc_ptr->num].fail = 0;
-        rc_ptr->power_desc[rc_ptr->num++].number = -3;
+        rpi = rpi_type(_("速駆け", "Quick Walk"));
+        rpi.text = _("身体を酷使して素早く移動する。", "Moves quickly but cannot regenerate HP naturally.");
+        rpi.min_level = 20;
+        rpi.cost = 0;
+        rpi.stat = A_DEX;
+        rpi.fail = 0;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
         break;
     case CLASS_ELEMENTALIST:
-        strcpy(rc_ptr->power_desc[rc_ptr->num].racial_name, _("明鏡止水", "Clear Mind"));
-        rc_ptr->power_desc[rc_ptr->num].min_level = 15;
-        rc_ptr->power_desc[rc_ptr->num].cost = 0;
-        rc_ptr->power_desc[rc_ptr->num].stat = A_WIS;
-        rc_ptr->power_desc[rc_ptr->num].fail = 10;
-        rc_ptr->power_desc[rc_ptr->num++].number = -3;
+        rpi = rpi_type(_("明鏡止水", "Clear Mind"));
+        rpi.info = format("%s%d", KWD_MANA, 3 + rc_ptr->lvl / 20);
+        rpi.text = _("精神を集中してMPを少し回復する。", "Concentrates deeply to heal your SP a little.");
+        rpi.min_level = 15;
+        rpi.cost = 0;
+        rpi.stat = A_WIS;
+        rpi.fail = 10;
+        rc_ptr->add_power(rpi, RC_IDX_CLASS_0);
 
         switch_element_racial(creature_ptr, rc_ptr);
         break;
     default:
-        strcpy(rc_ptr->power_desc[0].racial_name, _("(なし)", "(none)"));
         break;
     }
 }

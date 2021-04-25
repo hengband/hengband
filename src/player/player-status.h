@@ -198,7 +198,7 @@ typedef struct player_type {
 
     PATRON_IDX chaos_patron{};
 
-    FlagGroup<MUTA> muta{}; /*!< 突然変異 / mutations */
+    EnumClassFlagGroup<MUTA> muta{}; /*!< 突然変異 / mutations */
 
     s16b virtues[8]{};
     s16b vir_types[8]{};

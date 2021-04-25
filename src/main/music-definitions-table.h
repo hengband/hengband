@@ -1,4 +1,8 @@
 ﻿#pragma once
+/*!
+ * @file music-definitions-table.h
+ * @brief 設定ファイル用のBGM名定義ヘッダ
+ */
 
 enum music_type {
 	MUSIC_BASIC_NEW_GAME = 0,

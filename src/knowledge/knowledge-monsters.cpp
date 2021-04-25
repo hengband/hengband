@@ -1,4 +1,5 @@
 ﻿/*!
+ * @file knowledge-monsters.cpp
  * @brief 既知のモンスターに関する情報を表示する
  * @date 2020/04/24
  * @author Hourier
@@ -36,17 +37,12 @@
 #include "world/world.h"
 
 /*!
- * Build a list of monster indexes in the given group.
- *
- * mode & 0x01 : check for non-empty group
- * mode & 0x02 : visual operation only
-
+ * @brief 特定の与えられた条件に応じてモンスターのIDリストを作成する / Build a list of monster indexes in the given group.
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @param grp_cur ？？？
- * @param mon_idx[] ？？？
- * @param mode ？？？
- * @return The number of monsters in the group
- * @todo 引数と戻り値について追記求む
+ * @param grp_cur グループ種別。リスト表記中の左一覧（各シンボル及び/ユニーク(-1)/騎乗可能モンスター(-2)/賞金首(-3)/アンバーの王族(-4)）を参照できる
+ * @param mon_idx[] ID一覧を返す配列参照
+ * @param mode 思い出の扱いに関するモード
+ * @return 得られたモンスターIDの数 / The number of monsters in the group
  */
 static IDX collect_monsters(player_type *creature_ptr, IDX grp_cur, IDX mon_idx[], monster_lore_mode mode)
 {
@@ -197,13 +193,20 @@ void do_cmd_knowledge_kill_count(player_type *creature_ptr)
     }
 
     u16b why = 2;
+    char buf[80];
     ang_sort(creature_ptr, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
     for (int k = 0; k < n; k++) {
         monster_race *r_ptr = &r_info[who[k]];
         if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
             bool dead = (r_ptr->max_num == 0);
             if (dead) {
-                fprintf(fff, "     %s\n", r_ptr->name.c_str());
+                if (r_ptr->defeat_level && r_ptr->defeat_time)
+                    sprintf(buf, _(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), r_ptr->defeat_level, r_ptr->defeat_time / (60 * 60),
+                        (r_ptr->defeat_time / 60) % 60, r_ptr->defeat_time % 60);
+                else
+                    buf[0] = '\0';
+
+                fprintf(fff, "     %s%s\n", r_ptr->name.c_str(), buf);
                 total++;
             }
 
@@ -395,25 +398,32 @@ void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, boo
                 (attr_idx || char_idx) ? _(", 'c', 'p'でペースト", ", 'c', 'p' to paste") : _(", 'c'でコピー", ", 'c' to copy")),
             hgt - 1, 0);
 
-        monster_race *r_ptr;
-        r_ptr = &r_info[mon_idx[mon_cur]];
+        TERM_COLOR dummy_a;
+        SYMBOL_CODE dummy_c;
+        auto *attr_ptr = &dummy_a;
+        auto *char_ptr = &dummy_c;
+        if (mon_idx[0] != -1) {
+            auto *r_ptr = &r_info[mon_idx[mon_cur]];
+            attr_ptr = &r_ptr->x_attr;
+            char_ptr = &r_ptr->x_char;
 
-        if (!visual_only) {
-            if (mon_cnt)
-                monster_race_track(creature_ptr, mon_idx[mon_cur]);
-            handle_stuff(creature_ptr);
-        }
+            if (!visual_only) {
+                if (mon_cnt)
+                    monster_race_track(creature_ptr, mon_idx[mon_cur]);
+                handle_stuff(creature_ptr);
+            }
 
-        if (visual_list) {
-            place_visual_list_cursor(max + 3, 7, r_ptr->x_attr, r_ptr->x_char, attr_top, char_left);
-        } else if (!column) {
-            term_gotoxy(0, 6 + (grp_cur - grp_top));
-        } else {
-            term_gotoxy(max + 3, 6 + (mon_cur - mon_top));
+            if (visual_list) {
+                place_visual_list_cursor(max + 3, 7, r_ptr->x_attr, r_ptr->x_char, attr_top, char_left);
+            } else if (!column) {
+                term_gotoxy(0, 6 + (grp_cur - grp_top));
+            } else {
+                term_gotoxy(max + 3, 6 + (mon_cur - mon_top));
+            }
         }
 
         char ch = inkey();
-        if (visual_mode_command(ch, &visual_list, browser_rows - 1, wid - (max + 3), &attr_top, &char_left, &r_ptr->x_attr, &r_ptr->x_char, need_redraw)) {
+        if (visual_mode_command(ch, &visual_list, browser_rows - 1, wid - (max + 3), &attr_top, &char_left, attr_ptr, char_ptr, need_redraw)) {
             if (direct_r_idx >= 0) {
                 switch (ch) {
                 case '\n':

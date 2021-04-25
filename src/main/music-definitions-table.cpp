@@ -1,4 +1,9 @@
-﻿#include "system/angband.h"
+﻿/*!
+ * @file music-definitions-table.cpp
+ * @brief 設定ファイル用のBGM名定義
+ */
+
+#include "system/angband.h"
 #include "main/music-definitions-table.h"
 
 const concptr angband_music_basic_name[MUSIC_BASIC_MAX] =

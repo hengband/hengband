@@ -499,7 +499,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         fire_breath(caster_ptr, GF_PLASMA, dir, damage, (plev > 35 ? 3 : 2));
         break;
 
-    case RF_ABILITY::BR_WALL:
+    case RF_ABILITY::BR_FORC:
         if (!get_aim_dir(caster_ptr, &dir))
             return FALSE;
         else

@@ -11,6 +11,7 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
+#include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
 #include "monster/monster-processor.h"
@@ -348,11 +349,11 @@ bool set_monster_invulner(player_type *target_ptr, MONSTER_IDX m_idx, int v, boo
  * @brief モンスターの時間停止処理
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param num 時間停止を行った敵が行動できる回数
- * @param who 時間停止処理の主体ID
+ * @param who 時間停止を行う敵の種族番号
  * @param vs_player TRUEならば時間停止開始処理を行う
  * @return 時間停止が行われている状態ならばTRUEを返す
  */
-bool set_monster_timewalk(player_type *target_ptr, int num, MONSTER_IDX who, bool vs_player)
+bool set_monster_timewalk(player_type *target_ptr, int num, MONRACE_IDX who, bool vs_player)
 {
     monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[hack_m_idx];
     if (current_world_ptr->timewalk_m_idx)
@@ -362,13 +363,23 @@ bool set_monster_timewalk(player_type *target_ptr, int num, MONSTER_IDX who, boo
         GAME_TEXT m_name[MAX_NLEN];
         monster_desc(target_ptr, m_name, m_ptr, 0);
 
-        if (who == 1)
-            msg_format(_("「『ザ・ワールド』！時は止まった！」", "%s yells 'The World! Time has stopped!'"), m_name);
-        else if (who == 3)
-            msg_format(_("「時よ！」", "%s yells 'Time!'"), m_name);
-        else
-            msg_print("hek!");
+        concptr mes;
+        switch (who) {
+        case MON_DIO:
+            mes = _("「『ザ・ワールド』！　時は止まった！」", "%s yells 'The World! Time has stopped!'");
+            break;
+        case MON_WONG:
+            mes = _("「時よ！」", "%s yells 'Time!'");
+            break;
+        case MON_DIAVOLO:
+            mes = _("『キング・クリムゾン』！", "%s yells 'King Crison!'");
+            break;
+        default:
+            mes = "hek!";
+            break;
+        }
 
+        msg_format(mes, m_name);
         msg_print(NULL);
     }
 
@@ -392,7 +403,18 @@ bool set_monster_timewalk(player_type *target_ptr, int num, MONSTER_IDX who, boo
     target_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
     current_world_ptr->timewalk_m_idx = 0;
     if (vs_player || (player_has_los_bold(target_ptr, m_ptr->fy, m_ptr->fx) && projectable(target_ptr, target_ptr->y, target_ptr->x, m_ptr->fy, m_ptr->fx))) {
-        msg_print(_("「時は動きだす…」", "You feel time flowing around you once more."));
+        concptr mes;
+        switch (who) {
+        case MON_DIAVOLO:
+            mes = _("これが我が『キング・クリムゾン』の能力！　『時間を消し去って』飛び越えさせた…！！",
+                "This is the ability of my 'King Crimson'! 'Erase the time' and let it jump over... !!");
+            break;
+        default:
+            mes = _("「時は動きだす…」", "You feel time flowing around you once more.");
+            break;
+        }
+
+        msg_print(mes);
         msg_print(NULL);
     }
 

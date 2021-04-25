@@ -322,18 +322,6 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
                 break;
             }
             o_ptr->name2 = get_random_ego(INVEN_OUTER, TRUE);
-
-            switch (o_ptr->name2) {
-            case EGO_BAT:
-                o_ptr->to_d -= 6;
-                o_ptr->to_h -= 6;
-                break;
-            case EGO_NAZGUL:
-                o_ptr->to_d -= 3;
-                o_ptr->to_h -= 3;
-                break;
-            }
-
         } else if (power < -1) {
             o_ptr->name2 = get_random_ego(INVEN_OUTER, FALSE);
         }

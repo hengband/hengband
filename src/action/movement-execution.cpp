@@ -1,4 +1,9 @@
-﻿#include "action/movement-execution.h"
+﻿/*!
+ * @file movement-execution.cpp
+ * @brief プレイヤーの歩行勝利実行定義
+ */
+
+#include "action/movement-execution.h"
 #include "action/open-close-execution.h"
 #include "artifact/fixed-art-types.h"
 #include "cmd-action/cmd-attack.h"

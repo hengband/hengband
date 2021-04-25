@@ -56,19 +56,6 @@ ANGBAND MENU
 
 		MENUITEM SEPARATOR
 
-		/*  POPUP "Bizarre Display"
-		{
-			MENUITEM "メインウィンドウ", 230
-			MENUITEM "サブウィンドウ 1", 231
-			MENUITEM "サブウィンドウ 2", 232
-			MENUITEM "サブウィンドウ 3", 233
-			MENUITEM "サブウィンドウ 4", 234
-			MENUITEM "サブウィンドウ 5", 235
-			MENUITEM "サブウィンドウ 6", 236
-			MENUITEM "サブウィンドウ 7", 237
-		}
-		*/
-
 		POPUP "タイルの幅を広げる"
 		{
 			MENUITEM "メインウィンドウ", 240
@@ -126,13 +113,20 @@ ANGBAND MENU
 			MENUITEM "旧タイル(&O)", 401
 			MENUITEM "&Adam Boltさんタイル", 402
 			MENUITEM "新タイル", 403
+			MENUITEM SEPARATOR
 			MENUITEM "タイルを2倍幅で表示", 409
+		}
+		POPUP "背景(&B)"
+		{
+			MENUITEM "なし(&N)", 440
+			MENUITEM "壁紙を使う(&W)", 441
+			MENUITEM "プリセット(&P)", 442
+			MENUITEM SEPARATOR
+			MENUITEM "壁紙を選択(&O)...", 449
 		}
 		MENUITEM "BGM(&M)", 420
 		MENUITEM "アクティブ時のみBGM再生(&M)", 421
 		MENUITEM "効果音(&S)", 410
-		MENUITEM "壁紙を使う(&B)", 440
-		MENUITEM "壁紙を選択(&O)...", 441
 		MENUITEM "画面をHTMLで保存(&H)...", 450
 	}
 }

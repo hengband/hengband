@@ -52,11 +52,7 @@ static bool is_healthy_stay(player_type *customer_ptr)
 #ifdef JP
 static bool is_player_undead(player_type *customer_ptr)
 {
-	bool is_player_undead = is_specific_player_race(customer_ptr, RACE_SKELETON) ||
-		is_specific_player_race(customer_ptr, RACE_ZOMBIE) ||
-		is_specific_player_race(customer_ptr, RACE_VAMPIRE) ||
-		is_specific_player_race(customer_ptr, RACE_SPECTRE);
-	return is_player_undead;
+	return player_race_life(customer_ptr, true) == PlayerRaceLife::UNDEAD;
 }
 #endif
 

@@ -27,7 +27,7 @@ enum class RF_ABILITY {
     BR_GRAV = 23, /*!< モンスター能力: 重力のブレス / Breathe Gravity */
     BR_SHAR = 24, /*!< モンスター能力: 破片のブレス / Breathe Shards */
     BR_PLAS = 25, /*!< モンスター能力: プラズマのブレス / Breathe Plasma */
-    BR_WALL = 26, /*!< モンスター能力: フォースのブレス / Breathe Force */
+    BR_FORC = 26, /*!< モンスター能力: フォースのブレス / Breathe Force */
     BR_MANA = 27, /*!< モンスター能力: 魔力のブレス / Breathe Mana */
     BA_NUKE = 28, /*!< モンスター能力: 放射能球 / TY: Nuke Ball */
     BR_NUKE = 29, /*!< モンスター能力: 放射性廃棄物のブレス / TY: Toxic Breath */

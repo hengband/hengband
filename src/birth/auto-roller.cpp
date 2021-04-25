@@ -98,75 +98,133 @@ static s32b get_autoroller_prob(int *minval)
 }
 
 /*!
+ * @brief オートローラの初期設定値を決定する
+ * @param creature_ptr プレイヤー情報への参照ポインタ
+ * @param cval 設定能力値配列
+ * @return なし
+ * @details
+ * 純戦士系及び腕器耐が魔法の能力の職業は腕器耐17。
+ * デュアルは腕耐17で器と魔法の能力が16。
+ * 純メイジ系は耐と魔法の能力が17で腕器16。
+ * デュアルかどうかは最大攻撃回数で決定。(4回以上)
+ */
+static void decide_initial_stat(player_type *creature_ptr, int *cval)
+{
+    auto &class_ptr = class_info[creature_ptr->pclass];
+    auto &magic_ptr = m_info[creature_ptr->pclass];
+    auto is_magic_user = magic_ptr.spell_stat == A_INT || magic_ptr.spell_stat == A_WIS || magic_ptr.spell_stat == A_CHR;
+    auto is_attacker = class_ptr.num > 3;
+
+    auto num_17 = 0;
+    if (is_magic_user) {
+        auto st = magic_ptr.spell_stat;
+        if (st >= 0 && st < A_MAX) {
+            if (is_attacker)
+                cval[st] = 16;
+            else {
+                cval[st] = 17;
+                num_17++;
+            }
+        }
+    }
+
+    if (cval[A_CON] == 0) {
+        cval[A_CON] = 17;
+        if (is_magic_user)
+            num_17++;
+    }
+
+    if (cval[A_STR] == 0) {
+        cval[A_STR] = num_17 == 2 ? 16 : 17;
+        if (is_magic_user && num_17 < 2)
+            num_17++;
+    }
+
+    if (cval[A_DEX] == 0)
+        cval[A_DEX] = 17 - MAX(0, num_17 - 1);
+
+    for (int i = 0; i < A_MAX; i++)
+        if (cval[i] == 0)
+            cval[i] = 8;
+}
+
+/*!
+ * @brief オートローラの設定能力値行を作成する
+ * @param cur カーソル文字列を入れるバッファ
+ * @param cval 設定能力値配列
+ * @param cs カーソル位置(能力値番号)
+ * @return なし
+ */
+static void cursor_of_adjusted_stat(char *cur, int *cval, int cs)
+{
+    char inp[80];
+    int j = rp_ptr->r_adj[cs] + cp_ptr->c_adj[cs] + ap_ptr->a_adj[cs];
+    int m = adjust_stat(cval[cs], j);
+    if (m > 18)
+        sprintf(inp, "18/%02d", (m - 18));
+    else
+        sprintf(inp, "%2d", m);
+
+    sprintf(cur, "%6s       %2d   %+3d  %+3d  %+3d  =  %6s", stat_names[cs], cval[cs], rp_ptr->r_adj[cs], cp_ptr->c_adj[cs], ap_ptr->a_adj[cs], inp);
+}
+
+/*!
+ * @brief オートローラの確率を表示
+ * @param cval 設定能力値配列
+ * @return なし
+ */
+static void display_autoroller_chance(int *cval)
+{
+    char buf[320];
+    autoroll_chance = get_autoroller_prob(cval);
+    if (autoroll_chance == -999)
+        sprintf(buf, _("確率: 不可能(合計86超)       ", "Prob: Impossible(>86 tot stats)"));
+    else if (autoroll_chance < 1)
+        sprintf(buf, _("確率: 非常に容易(1/10000以上)", "Prob: Quite Easy(>1/10000)     "));
+    else
+        sprintf(buf, _("確率: 約 1/%8d00             ", "Prob: ~ 1/%8d00                "), autoroll_chance);
+    put_str(buf, 23, 25);
+}
+
+/*!
  * @brief オートローラで得たい能力値の基準を決める。
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 bool get_stat_limits(player_type *creature_ptr)
 {
-    int col_stat = 25;
-
     clear_from(10);
-    put_str(_("最低限得たい能力値を設定して下さい。", "Set minimum stats."), 10, 10);
+    put_str(_("能力値を抽選します。最低限得たい能力値を設定して下さい。", "Set minimum stats for picking up your charactor."), 10, 10);
     put_str(_("2/8で項目選択、4/6で値の増減、Enterで次へ", "2/8 for Select, 4/6 for Change value, Enter for Goto next"), 11, 10);
     put_str(_("         基本値  種族 職業 性格     合計値  最大値", "           Base   Rac  Cla  Per      Total  Maximum"), 13, 10);
 
-    put_str(_("確率: 非常に容易(1/10000以上)", "Prob: Quite Easy(>1/10000)"), 23, col_stat);
+    int cval[A_MAX]{};
+    decide_initial_stat(creature_ptr, cval);
 
-    int cval[6];
     char buf[320];
     char cur[160];
-    char inp[80];
     for (int i = 0; i < A_MAX; i++) {
-        cval[i] = 3;
-        int j = rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i];
-        int m = adjust_stat(17, j);
-        if (m > 18)
-            sprintf(cur, "18/%02d", (m - 18));
-        else
-            sprintf(cur, "%2d", m);
-
-        m = adjust_stat(cval[i], j);
-        if (m > 18)
-            sprintf(inp, "18/%02d", (m - 18));
-        else
-            sprintf(inp, "%2d", m);
-
-        sprintf(buf, "%6s       %2d   %+3d  %+3d  %+3d  =  %6s  %6s", stat_names[i], cval[i], rp_ptr->r_adj[i], cp_ptr->c_adj[i], ap_ptr->a_adj[i], inp, cur);
+        cursor_of_adjusted_stat(buf, cval, i);
         put_str(buf, 14 + i, 10);
     }
 
+    display_autoroller_chance(cval);
+
     int cs = 0;
-    int os = 6;
+    int os = A_MAX;
     while (TRUE) {
         if (cs != os) {
-            if (os == 7) {
-                autoroll_chance = get_autoroller_prob(cval);
-                if (autoroll_chance == -999)
-                    sprintf(buf, _("確率: 不可能(合計86超)       ", "Prob: Impossible(>86 tot stats)"));
-                else if (autoroll_chance < 1)
-                    sprintf(buf, _("確率: 非常に容易(1/10000以上)", "Prob: Quite Easy(>1/10000)     "));
-                else
-                    sprintf(buf, _("確率: 約 1/%8d00          ", "Prob: ~ 1/%8d00            "), autoroll_chance);
-                put_str(buf, 23, col_stat);
-            }
-            else if (os == 6) {
+            if (os == 7)
+                display_autoroller_chance(cval);
+            else if (os == A_MAX)
                 c_put_str(TERM_WHITE, _("決定する", "Accept"), 21, 35);
-            } else if (os < A_MAX) {
+            else if (os < A_MAX)
                 c_put_str(TERM_WHITE, cur, 14 + os, 10);
-            }
-            if (cs == 6) {
-                c_put_str(TERM_YELLOW, _("決定する", "Accept"), 21, 35);
-            } else {
-                int j = rp_ptr->r_adj[cs] + cp_ptr->c_adj[cs] + ap_ptr->a_adj[cs];
-                int m = adjust_stat(cval[cs], j);
-                if (m > 18)
-                    sprintf(inp, "18/%02d", (m - 18));
-                else
-                    sprintf(inp, "%2d", m);
 
-                sprintf(
-                    cur, "%6s       %2d   %+3d  %+3d  %+3d  =  %6s", stat_names[cs], cval[cs], rp_ptr->r_adj[cs], cp_ptr->c_adj[cs], ap_ptr->a_adj[cs], inp);
+            if (cs == A_MAX)
+                c_put_str(TERM_YELLOW, _("決定する", "Accept"), 21, 35);
+            else {
+                cursor_of_adjusted_stat(cur, cval, cs);
                 c_put_str(TERM_YELLOW, cur, 14 + cs, 10);
             }
 
@@ -185,7 +243,7 @@ bool get_stat_limits(player_type *creature_ptr)
         case ' ':
         case '\r':
         case '\n':
-            if (cs == 6)
+            if (cs == A_MAX)
                 break;
             cs++;
             c = '2';
@@ -202,7 +260,7 @@ bool get_stat_limits(player_type *creature_ptr)
             break;
         case '4':
         case 'h':
-            if (cs != 6) {
+            if (cs != A_MAX) {
                 if (cval[cs] == 3) {
                     cval[cs] = 17;
                     os = 7;
@@ -216,7 +274,7 @@ bool get_stat_limits(player_type *creature_ptr)
             break;
         case '6':
         case 'l':
-            if (cs != 6) {
+            if (cs != A_MAX) {
                 if (cval[cs] == 17) {
                     cval[cs] = 3;
                     os = 7;
@@ -229,34 +287,26 @@ bool get_stat_limits(player_type *creature_ptr)
 
             break;
         case 'm':
-            if (cs != 6) {
+            if (cs != A_MAX) {
                 cval[cs] = 17;
                 os = 7;
             }
 
             break;
         case 'n':
-            if (cs != 6) {
+            if (cs != A_MAX) {
                 cval[cs] = 3;
                 os = 7;
             }
 
             break;
         case '?':
-#ifdef JP
-            show_help(creature_ptr, "jbirth.txt#AutoRoller");
-#else
-            show_help(creature_ptr, "birth.txt#AutoRoller");
-#endif
+            show_help(creature_ptr, _("jbirth.txt#AutoRoller", "birth.txt#AutoRoller"));
             break;
         case '=':
             screen_save();
-#ifdef JP
-            do_cmd_options_aux(creature_ptr, OPT_PAGE_BIRTH, "初期オプション((*)はスコアに影響)");
-#else
-            do_cmd_options_aux(creature_ptr, OPT_PAGE_BIRTH, "Birth Options ((*)) affect score");
-#endif
-
+            do_cmd_options_aux(creature_ptr, OPT_PAGE_BIRTH,
+                _("初期オプション((*)はスコアに影響)", "Birth Options ((*)) affect score"));
             screen_load();
             break;
         default:

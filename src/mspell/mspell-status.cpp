@@ -12,6 +12,7 @@
 #include "effect/effect-processor.h"
 #include "mind/drs-types.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-ability-flags.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-indice-types.h"
@@ -122,7 +123,7 @@ MonsterSpellResult spell_RF5_DRAIN_MANA(player_type *target_ptr, POSITION y, POS
         msg_format(_("%^sは精神エネルギーを%sから吸いとった。", "%^s draws psychic energy from %s."), m_name, t_name);
     }
 
-    const auto dam = monspell_damage(target_ptr, (MS_DRAIN_MANA), m_idx, DAM_ROLL);
+    const auto dam = monspell_damage(target_ptr, RF_ABILITY::DRAIN_MANA, m_idx, DAM_ROLL);
     const auto proj_res = breath(target_ptr, y, x, m_idx, GF_DRAIN_MANA, dam, 0, FALSE, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(target_ptr, m_idx, DRS_MANA);
@@ -162,7 +163,7 @@ MonsterSpellResult spell_RF5_MIND_BLAST(player_type *target_ptr, POSITION y, POS
         msg_format(_("%^sは%sをじっと睨んだ。", "%^s gazes intently at %s."), m_name, t_name);
     }
 
-    const auto dam = monspell_damage(target_ptr, (MS_MIND_BLAST), m_idx, DAM_ROLL);
+    const auto dam = monspell_damage(target_ptr, RF_ABILITY::MIND_BLAST, m_idx, DAM_ROLL);
     const auto proj_res = breath(target_ptr, y, x, m_idx, GF_MIND_BLAST, dam, 0, FALSE, TARGET_TYPE);
 
     auto res = MonsterSpellResult::make_valid(dam);
@@ -200,7 +201,7 @@ MonsterSpellResult spell_RF5_BRAIN_SMASH(player_type *target_ptr, POSITION y, PO
         msg_format(_("%^sは%sをじっと睨んだ。", "%^s gazes intently at %s."), m_name, t_name);
     }
 
-    const auto dam = monspell_damage(target_ptr, (MS_BRAIN_SMASH), m_idx, DAM_ROLL);
+    const auto dam = monspell_damage(target_ptr, RF_ABILITY::BRAIN_SMASH, m_idx, DAM_ROLL);
     const auto proj_res = breath(target_ptr, y, x, m_idx, GF_BRAIN_SMASH, dam, 0, FALSE, TARGET_TYPE);
 
     auto res = MonsterSpellResult::make_valid(dam);
@@ -592,10 +593,19 @@ MonsterSpellResult spell_RF6_INVULNER(player_type *target_ptr, MONSTER_IDX m_idx
         _("%sは無傷の球の呪文を唱えた。", "%^s casts a Globe of Invulnerability."), !seen, TARGET_TYPE);
 
     MONRACE_IDX r_idx = m_ptr->r_idx;
-    if ((r_idx == MON_MARIO) || r_idx == MON_LUIGI) {
-        GAME_TEXT m_name[MAX_NLEN];
-        monster_desc(target_ptr, m_name, m_ptr, MD_NONE);
+    GAME_TEXT m_name[MAX_NLEN];
+    monster_desc(target_ptr, m_name, m_ptr, MD_NONE);
+    switch (r_idx) {
+    case MON_MARIO:
+    case MON_LUIGI:
         msg_format(_("%sはスターを取った！", "%^s got a star!"), m_name);
+        break;
+    case MON_DIAVOLO:
+        msg_print(_("『読める』………動きの『軌跡』が読める……", "'Read'......... I can read the 'trajectory' of movement..."));
+        break;
+    default:
+        msg_format(_("%sの身体がまばゆく輝き始めた！", "The body of %^s began to shine dazzlingly!"), m_name);
+        break;
     }
 
     if (!monster_invulner_remaining(m_ptr))

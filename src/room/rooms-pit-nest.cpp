@@ -646,7 +646,7 @@ bool build_type6(player_type *player_ptr, dun_data_type *dd_ptr)
 // clang-format off
 /*!
  * @brief 開門トラップのモンスター配置テーブル
- * @detail
+ * @details
  * 中央からの相対座標(X,Y)、モンスターの強さ
  */
 const int place_table_trapped_pit[TRAPPED_PIT_MONSTER_PLACE_MAX][3] = {

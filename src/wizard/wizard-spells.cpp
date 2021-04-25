@@ -126,12 +126,12 @@ void wiz_teleport_back(player_type *caster_ptr)
  */
 void wiz_learn_blue_magic_all(player_type *caster_ptr)
 {
-    FlagGroup<RF_ABILITY> ability_flags;
+    EnumClassFlagGroup<RF_ABILITY> ability_flags;
     for (int j = 1; j < A_MAX; j++) {
         set_rf_masks(ability_flags, static_cast<blue_magic_type>(j));
 
         std::vector<RF_ABILITY> spells;
-        FlagGroup<RF_ABILITY>::get_flags(ability_flags, std::back_inserter(spells));
+        EnumClassFlagGroup<RF_ABILITY>::get_flags(ability_flags, std::back_inserter(spells));
         for (auto spell : spells) {
             caster_ptr->magic_num2[static_cast<int>(spell)] = 1;
         }
@@ -178,9 +178,9 @@ void wiz_summon_pet(player_type *summoner_ptr, MONRACE_IDX r_idx)
 }
 
 /*!
- * @brief ターゲットを指定してダメージ100万・半径0の弱魔力のボールを放つ
+ * @brief ターゲットを指定してダメージ100万・半径0の射撃のボールを放つ
  * @return なし
- * @details
+ * @details RES_ALL持ちも一撃で殺せる
  */
 void wiz_kill_enemy(player_type *caster_ptr)
 {
@@ -189,5 +189,5 @@ void wiz_kill_enemy(player_type *caster_ptr)
     if (!get_aim_dir(caster_ptr, &dir))
         return;
 
-    fire_ball(caster_ptr, GF_MISSILE, dir, 1000000, 0);
+    fire_ball(caster_ptr, GF_ARROW, dir, 1000000, 0);
 }

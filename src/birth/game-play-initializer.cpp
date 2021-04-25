@@ -14,6 +14,7 @@
 #include "object/object-kind.h"
 #include "pet/pet-util.h"
 #include "player/player-race-types.h"
+#include "player/player-race.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/system-variables.h"
@@ -223,7 +224,7 @@ void init_dungeon_quests(player_type *creature_ptr)
  */
 void init_turn(player_type *creature_ptr)
 {
-    if ((creature_ptr->prace == RACE_VAMPIRE) || (creature_ptr->prace == RACE_SKELETON) || (creature_ptr->prace == RACE_ZOMBIE) || (creature_ptr->prace == RACE_SPECTRE)) {
+    if (player_race_life(creature_ptr) == PlayerRaceLife::UNDEAD) {
         current_world_ptr->game_turn = (TURNS_PER_TICK * 3 * TOWN_DAWN) / 4 + 1;
         current_world_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * MAX_DAYS + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
     } else {
