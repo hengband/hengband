@@ -328,7 +328,7 @@ static void on_dead_manimani(player_type *player_ptr, monster_death_type *md_ptr
     if (!is_seen(player_ptr, md_ptr->m_ptr))
         return;
 
-    msg_print(_("どこから声が聞こえる…「ハロー！　そして…グッドバイ！」", "Heard a voice from somewhere... 'Hello! And... good bye!'"));
+    msg_print(_("どこからか声が聞こえる…「ハロー！　そして…グッドバイ！」", "Heard a voice from somewhere... 'Hello! And... good bye!'"));
 }
 
 static void drop_specific_item_on_dead(player_type *player_ptr, monster_death_type *md_ptr, bool (*object_hook_pf)(KIND_OBJECT_IDX k_idx))
