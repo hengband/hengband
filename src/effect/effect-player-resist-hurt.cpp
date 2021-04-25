@@ -5,6 +5,7 @@
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
+#include "effect/effect-player-util.h"
 #include "inventory/inventory-damage.h"
 #include "inventory/inventory-slot-types.h"
 #include "mind/mind-mirror-master.h"
@@ -26,6 +27,7 @@
 #include "status/experience.h"
 #include "status/shape-changer.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

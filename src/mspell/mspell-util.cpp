@@ -1,8 +1,11 @@
 ﻿#include "mspell/mspell-util.h"
 #include "core/disturbance.h"
+#include "floor/geometry.h"
 #include "grid/grid.h"
 #include "monster/monster-info.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

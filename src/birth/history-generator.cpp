@@ -1,6 +1,7 @@
 ﻿#include "birth/history-generator.h"
 #include "birth/history.h"
 #include "player/player-race-types.h"
+#include "system/player-type-definition.h"
 #include "util/buffer-shaper.h"
 
 static int get_history_chart(player_type *creature_ptr)

@@ -1,5 +1,4 @@
 ﻿#pragma once
 
-#include "autopick/autopick-util.h"
-
+typedef struct autopick_type autopick_type;
 void describe_autopick(char *buff, autopick_type *entry);

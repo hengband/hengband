@@ -22,7 +22,7 @@
  * @struct autopick_type
  * @brief 自動拾い/破壊設定データの構造体 / A structure type for entry of auto-picker/destroyer
  */
-typedef struct {
+typedef struct autopick_type {
 	concptr name;          /*!< 自動拾い/破壊定義の名称一致基準 / Items which have 'name' as part of its name match */
 	concptr insc;          /*!< 対象となったアイテムに自動で刻む内容 / Items will be auto-inscribed as 'insc' */
 	BIT_FLAGS flag[2];       /*!< キーワードに関する汎用的な条件フラグ / Misc. keyword to be matched */
@@ -42,7 +42,7 @@ typedef struct chain_str {
 /*
  * Data struct for text editor
  */
-typedef struct {
+typedef struct text_body_type {
 	int wid, hgt;
 	int cx, cy;
 	int upper, left;

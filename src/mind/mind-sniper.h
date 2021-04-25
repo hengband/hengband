@@ -1,8 +1,9 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "system/monster-type-definition.h"
 
+typedef struct monster_type monster_type;
+typedef struct player_type player_type;
 void reset_concentration(player_type *creature_ptr, bool msg);
 void display_snipe_list(player_type *sniper_ptr);
 MULTIPLY calc_snipe_damage_with_slay(player_type *sniper_ptr, MULTIPLY mult, monster_type *m_ptr, SPELL_IDX snipe_type);

@@ -1,8 +1,7 @@
-#pragma once
-
-#include "system/angband.h"
+﻿#pragma once
 
 typedef struct monap_type monap_type;
+typedef struct player_type player_type;
 void calc_blow_disease(player_type *target_ptr, monap_type *monap_ptr);
 void calc_blow_lose_strength(player_type *target_ptr, monap_type *monap_ptr);
 void calc_blow_lose_intelligence(player_type *target_ptr, monap_type *monap_ptr);

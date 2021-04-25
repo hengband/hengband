@@ -1,6 +1,7 @@
 ﻿#include "market/building-util.h"
-
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+
 /*!
  * @brief コンソールに表示された施設に関する情報を消去する / Clear the building information
  * @details 消去は行毎にヌル文字列で行われる。

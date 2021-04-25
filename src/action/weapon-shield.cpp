@@ -12,6 +12,7 @@
 #include "object-hook/hook-weapon.h"
 #include "object/object-generator.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

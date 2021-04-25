@@ -4,12 +4,13 @@
  * @brief BGM及び効果音のterm出力処理ヘッダ
  */
 
-#include "system/angband.h"
-
 #include <vector>
+
+#include "system/angband.h"
 
 extern bool has_monster_music;
 
+typedef struct player_type player_type;
 void bell(void);
 void sound(int num);
 errr play_music(int type, int num);

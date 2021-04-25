@@ -2,6 +2,7 @@
 #include "dungeon/quest.h"
 #include "effect/effect-monster-util.h"
 #include "effect/spells-effect-util.h"
+#include "grid/grid.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
@@ -23,6 +24,9 @@
 #include "spell/spells-diceroll.h"
 #include "status/bad-status-setter.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 static void effect_monster_charm_resist(player_type *caster_ptr, effect_monster_type *em_ptr)

@@ -1,5 +1,6 @@
 ﻿#include "effect/effect-monster-resist-hurt.h"
 #include "effect/effect-monster-util.h"
+#include "grid/grid.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"
@@ -10,6 +11,9 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*!

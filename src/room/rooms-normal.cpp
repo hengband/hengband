@@ -1,6 +1,7 @@
 ﻿#include "room/rooms-normal.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
+#include "floor/geometry.h"
 #include "grid/door.h"
 #include "grid/grid.h"
 #include "grid/stair.h"
@@ -11,6 +12,7 @@
 #include "room/space-finder.h"
 #include "room/vault-builder.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief タイプ1の部屋…通常可変長方形の部屋を生成する / Type 1 -- normal rectangular rooms

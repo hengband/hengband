@@ -74,6 +74,7 @@
 #include "status/bad-status-setter.h"
 #include "status/buff-setter.h"
 #include "status/experience.h"
+#include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"

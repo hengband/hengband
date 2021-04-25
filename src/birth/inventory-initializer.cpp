@@ -28,6 +28,8 @@
 #include "sv-definition/sv-staff-types.h"
 #include "sv-definition/sv-wand-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief 所持状態にあるアイテムの中から一部枠の装備可能なものを装備させる。

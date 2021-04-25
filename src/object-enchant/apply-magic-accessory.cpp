@@ -16,6 +16,7 @@
 #include "object/object-kind.h"
 #include "sv-definition/sv-amulet-types.h"
 #include "sv-definition/sv-ring-types.h"
+#include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*!

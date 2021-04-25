@@ -4,6 +4,7 @@
 #include "spell/spells-object.h"
 #include "status/base-status.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 bool activate_muramasa(player_type *user_ptr, object_type *o_ptr)

@@ -1,10 +1,12 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "system/object-type-definition.h"
+#include "object/tval-types.h"
 
 #define OBJ_GOLD_LIST 480 /* First "gold" entry */
 
+typedef struct object_type object_type;
+typedef struct player_type player_type;
 concptr activation_explanation(player_type *owner_ptr, object_type *o_ptr);
 char index_to_label(int i);
 s16b wield_slot(player_type *owner_ptr, object_type *o_ptr);

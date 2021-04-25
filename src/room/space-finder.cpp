@@ -5,6 +5,7 @@
 #include "grid/grid.h"
 #include "system/dungeon-data-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief 指定のマスが床系地形であるかを返す / Function that sees if a square is a floor.  (Includes range checking.)

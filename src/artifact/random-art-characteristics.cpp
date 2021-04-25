@@ -6,6 +6,7 @@
 #include "object-enchant/trc-types.h"
 #include "object/object-flags.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "wizard/wizard-messages.h"
 

@@ -11,6 +11,8 @@
 #include "object/object-stack.h"
 #include "object/object-value.h"
 #include "spell-realm/spells-craft.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/object-sort.h"
 #include "view/display-messages.h"
 #include "view/object-describer.h"

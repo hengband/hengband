@@ -1,4 +1,5 @@
-﻿/*!
+﻿#pragma once
+/*!
  * @file angband-initializer.h
  * @brief 変愚蛮怒のシステム初期化処理ヘッダファイル
  * @date 2015/01/02
@@ -10,12 +11,6 @@
  * are included in all such copies.
  */
 
-#ifndef INCLUDED_INIT_H
-#define INCLUDED_INIT_H
-
-#include "system/angband.h"
-
+typedef struct player_type player_type;
 void init_angband(player_type *player_ptr, bool no_term);
 void init_file_paths(char *path, char *varpath);
-
-#endif /* INCLUDED_INIT_H */

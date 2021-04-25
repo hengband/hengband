@@ -10,6 +10,8 @@
 #include "knowledge-items.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
+#include "system/monster-race-definition.h"
+#include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "util/sort.h"
 

@@ -24,6 +24,7 @@
 #include "player-info/weapon-effect-info.h"
 #include "player/attack-defense-types.h"
 #include "player/player-status-flags.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "view/display-self-info.h"
 

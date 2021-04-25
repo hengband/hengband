@@ -28,6 +28,8 @@
 #include "player/player-move.h"
 #include "spell-kind/spells-perception.h"
 #include "system/floor-type-definition.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/target-checker.h"
 #include "view/display-messages.h"
 #include "world/world.h"

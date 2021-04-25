@@ -6,6 +6,7 @@
 #include "game-option/option-flags.h"
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
+#include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "util/int-char-converter.h"

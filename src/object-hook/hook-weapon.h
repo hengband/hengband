@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "system/angband.h"
-
+typedef struct object_type object_type;
+typedef struct player_type player_type;
 bool item_tester_hook_orthodox_melee_weapons(player_type *player_ptr, object_type *o_ptr);
 bool item_tester_hook_melee_weapon(player_type *player_ptr, object_type *o_ptr);
 bool item_tester_hook_broken_weapon(player_type *player_ptr, object_type *o_ptr);

@@ -39,6 +39,7 @@ typedef struct high_score
 
 extern int highscore_fd;
 
+typedef struct player_type player_type;
 void display_scores_aux(int from, int to, int note, high_score *score);
 void display_scores(int from, int to);
 void kingly(player_type *winner_ptr);

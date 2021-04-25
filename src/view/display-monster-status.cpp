@@ -4,6 +4,8 @@
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "monster/smart-learn-types.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
 
 /*
  * Monster health description

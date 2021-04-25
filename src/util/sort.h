@@ -2,6 +2,7 @@
 
 #include "system/angband.h"
 
+#include "system/player-type-definition.h"
 void ang_sort(player_type *player_ptr, vptr u, vptr v, int n, bool (*ang_sort_comp)(player_type *, vptr, vptr, int, int),
     void (*ang_sort_swap)(player_type *, vptr, vptr, int, int));
 

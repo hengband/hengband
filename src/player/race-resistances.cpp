@@ -7,6 +7,8 @@
 #include "player/player-race.h"
 #include "player/special-defense-types.h"
 #include "mind/mind-elementalist.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*!

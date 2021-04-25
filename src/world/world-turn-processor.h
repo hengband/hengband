@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include "system/angband.h"
-
-void process_world(player_type* player_ptr);
+typedef struct player_type player_type;
+void process_world(player_type *player_ptr);
 void print_time(player_type *player_ptr);

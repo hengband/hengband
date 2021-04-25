@@ -1,5 +1,6 @@
 ﻿#include "load/load-v1-3-0.h"
 #include "object-enchant/tr-types.h"
+#include "system/player-type-definition.h"
 
 void set_spells_old(player_type *creature_ptr)
 {

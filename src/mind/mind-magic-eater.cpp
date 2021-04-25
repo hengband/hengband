@@ -8,6 +8,7 @@
 #include "perception/object-perception.h"
 #include "sv-definition/sv-staff-types.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

@@ -11,6 +11,7 @@
 #include "mspell/mspell-util.h"
 #include "mspell/mspell.h"
 #include "spell/spell-types.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief RF4_SHOOTの処理。射撃。 /

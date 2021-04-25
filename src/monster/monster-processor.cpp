@@ -17,6 +17,7 @@
 #include "core/player-update-types.h"
 #include "core/speed-table.h"
 #include "floor/cave.h"
+#include "floor/geometry.h"
 #include "game-option/play-record-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
@@ -59,7 +60,9 @@
 #include "spell-realm/spells-hex.h"
 #include "spell/summon-types.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "view/display-messages.h"
 

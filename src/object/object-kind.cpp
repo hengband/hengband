@@ -7,7 +7,8 @@
  * Only "aware" and "tried" are saved in the savefile
  */
 
-#include "object-kind.h"
+#include "object/object-kind.h"
+#include "system/object-type-definition.h"
 
 /*
  * The object kind arrays

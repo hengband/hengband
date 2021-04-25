@@ -5,6 +5,7 @@
 #include "object/object-generator.h"
 #include "object/object-mark-types.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief プレイヤーの所持品情報を読み込む / Read the player inventory

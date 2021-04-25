@@ -3,6 +3,7 @@
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-armor.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 static bool invest_misc_ranger(object_type *o_ptr)

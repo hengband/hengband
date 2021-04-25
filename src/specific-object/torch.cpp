@@ -4,6 +4,7 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/cave.h"
+#include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
 #include "mind/mind-ninja.h"
 #include "object-enchant/object-ego.h"
@@ -13,6 +14,8 @@
 #include "specific-object/torch.h"
 #include "sv-definition/sv-lite-types.h"
 #include "system/floor-type-definition.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/point-2d.h"
 

@@ -3,6 +3,7 @@
 #include "autopick/autopick-key-flag-process.h"
 #include "autopick/autopick-keys-table.h"
 #include "autopick/autopick-methods-table.h"
+#include "autopick/autopick-util.h"
 #include "core/show-file.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
@@ -21,6 +22,8 @@
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
 #include "player/player-realm.h"
+#include "system/monster-race-definition.h"
+#include "system/player-type-definition.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"
 

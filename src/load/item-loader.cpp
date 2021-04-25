@@ -13,6 +13,7 @@
 #include "sv-definition/sv-lite-types.h"
 #include "system/artifact-type-definition.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
 

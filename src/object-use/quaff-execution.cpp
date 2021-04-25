@@ -45,6 +45,7 @@
 #include "status/sight-setter.h"
 #include "sv-definition/sv-potion-types.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 

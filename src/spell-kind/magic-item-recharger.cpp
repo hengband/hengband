@@ -23,6 +23,8 @@
 #include "object/item-use-flags.h"
 #include "object/object-kind.h"
 #include "player/player-realm.h"
+#include "system/player-type-definition.h"
+#include "system/object-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

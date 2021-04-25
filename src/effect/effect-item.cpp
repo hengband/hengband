@@ -4,6 +4,7 @@
 #include "flavor/object-flavor-types.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"
+#include "grid/grid.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster/monster-info.h"
@@ -20,6 +21,9 @@
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-scroll-types.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 

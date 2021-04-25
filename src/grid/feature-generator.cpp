@@ -4,14 +4,17 @@
 #include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "floor/dungeon-tunnel-util.h"
+#include "floor/geometry.h"
 #include "game-option/cheat-types.h"
 #include "game-option/game-play-options.h"
 #include "grid/door.h"
+#include "grid/feature-flag-types.h"
 #include "grid/grid.h"
 #include "room/lake-types.h"
 #include "room/rooms-builder.h"
 #include "system/dungeon-data-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "wizard/wizard-messages.h"
 
 /*!

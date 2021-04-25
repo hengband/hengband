@@ -1,6 +1,8 @@
 ﻿#include "market/building-service.h"
 #include "cmd-building/cmd-building.h"
 #include "realm/realm-names-table.h"
+#include "system/building-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 

@@ -11,6 +11,8 @@
 #include "monster/monster-util.h"
 #include "player/player-race.h"
 #include "spell/summon-types.h"
+#include "system/monster-race-definition.h"
+#include "system/player-type-definition.h"
 #include "util/string-processor.h"
 
 /*!

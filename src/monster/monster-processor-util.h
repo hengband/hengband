@@ -7,11 +7,10 @@
 #pragma once
 
 #include "system/angband.h"
-#include "system/monster-type-definition.h"
 #include "monster-race/race-ability-flags.h"
 #include "util/flag-group.h"
 
-typedef struct {
+typedef struct turn_flags {
 	bool see_m;
 	bool aware;
 	bool is_riding_mon;
@@ -30,7 +29,7 @@ typedef struct {
 	bool did_kill_wall;
 } turn_flags;
 
-typedef struct {
+typedef struct old_race_flags {
 	BIT_FLAGS old_r_flags1;
 	BIT_FLAGS old_r_flags2;
 	BIT_FLAGS old_r_flags3;
@@ -45,12 +44,13 @@ typedef struct {
 	byte old_r_cast_spell;
 } old_race_flags;
 
-typedef struct {
+typedef struct coordinate_candidate {
 	POSITION gy;
 	POSITION gx;
 	POSITION gdis;
 } coordinate_candidate;
 
+typedef struct monster_type monster_type;
 turn_flags *init_turn_flags(MONSTER_IDX riding_idx, MONSTER_IDX m_idx, turn_flags *turn_flags_ptr);
 old_race_flags *init_old_race_flags(old_race_flags *old_race_flags_ptr);
 coordinate_candidate init_coordinate_candidate(void);

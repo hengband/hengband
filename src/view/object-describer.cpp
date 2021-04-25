@@ -8,6 +8,7 @@
 #include "realm/realm-names-table.h"
 #include "spell/spell-info.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/term-color-types.h"
 #include "view/display-messages.h"
 

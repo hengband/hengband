@@ -8,10 +8,12 @@
 #include "mind/mind-magic-resistance.h"
 #include "mind/mind-mirror-master.h"
 #include "monster/monster-info.h"
+#include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "mspell/mspell-util.h"
 #include "mspell/mspell.h"
 #include "player/attack-defense-types.h"
+#include "player/player-race.h"
 #include "realm/realm-song-numbers.h"
 #include "spell-realm/spells-craft.h"
 #include "spell-realm/spells-crusade.h"
@@ -25,13 +27,8 @@
 #include "status/shape-changer.h"
 #include "status/sight-setter.h"
 #include "status/temporary-resistance.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
-
-#include "core/speed-table.h"
-#include "monster/monster-status-setter.h"
-#include "player/attack-defense-types.h"
-#include "player/player-race.h"
-#include "status/buff-setter.h"
 
 /*!
  * @brief プレイヤーに魔力消去効果を与える。

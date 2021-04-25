@@ -1,4 +1,5 @@
 ﻿#include "floor/floor-mode-changer.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief フロア切り替え時の処理フラグを追加する / Prepare mode flags of changing floor

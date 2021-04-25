@@ -4,6 +4,7 @@
 #include "dungeon/quest.h"
 #include "floor/wild.h"
 #include "game-option/cheat-options.h"
+#include "grid/feature.h"
 #include "grid/grid.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
@@ -14,6 +15,8 @@
 #include "spell/summon-types.h"
 #include "system/alloc-entries.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 

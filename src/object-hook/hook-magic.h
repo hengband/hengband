@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "system/angband.h"
-
+typedef struct object_type object_type;
+typedef struct player_type player_type;
 bool item_tester_hook_activate(player_type *player_ptr, object_type *o_ptr);
 bool item_tester_hook_use(player_type *player_ptr, object_type *o_ptr);
 bool item_tester_hook_recharge(player_type *player_ptr, object_type *o_ptr);

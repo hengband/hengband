@@ -26,6 +26,8 @@
 #include "status/bad-status-setter.h"
 #include "status/buff-setter.h"
 #include "system/floor-type-definition.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"

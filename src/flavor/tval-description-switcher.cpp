@@ -10,6 +10,8 @@
 #include "object-enchant/trg-types.h"
 #include "object-hook/hook-enchant.h"
 #include "object/object-kind.h"
+#include "system/monster-race-definition.h"
+#include "system/object-type-definition.h"
 #ifdef JP
 #else
 #include "locale/english.h"

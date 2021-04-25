@@ -3,10 +3,12 @@
 #include "dungeon/quest.h"
 #include "game-option/birth-options.h"
 #include "floor/cave.h"
+#include "grid/feature.h"
 #include "grid/grid.h"
 #include "object-hook/hook-enchant.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief 所定の位置に上り階段か下り階段を配置する / Place an up/down staircase at given location

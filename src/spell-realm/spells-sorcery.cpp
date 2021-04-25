@@ -11,6 +11,7 @@
 #include "object/item-use-flags.h"
 #include "object/object-value.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

@@ -15,6 +15,8 @@
 #include "view/display-messages.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*!

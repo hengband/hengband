@@ -8,6 +8,7 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/cave.h"
+#include "floor/geometry.h"
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
 #include "game-option/text-display-options.h"
@@ -50,6 +51,9 @@
 #include "spell/spells-summon.h"
 #include "status/experience.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

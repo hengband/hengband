@@ -25,6 +25,7 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags7.h"
 #include "system/angband-version.h"
+#include "system/monster-race-definition.h"
 #include "system/system-variables.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"

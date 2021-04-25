@@ -13,7 +13,8 @@
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"
 #include "spell/summon-types.h"
-#include "system/system-variables.h"
+#include "system/monster-race-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

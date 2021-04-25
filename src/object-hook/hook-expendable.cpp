@@ -12,7 +12,9 @@
 #include "player/mimic-info-table.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-other-types.h"
+#include "system/monster-race-definition.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/string-processor.h"
 
 /*!

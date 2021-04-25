@@ -10,6 +10,9 @@
 #include "object/object-value.h"
 #include "perception/object-perception.h"
 #include "player/player-realm.h"
+#include "system/monster-race-definition.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief オブジェクトを定義された基準に従いソートするための関数 /

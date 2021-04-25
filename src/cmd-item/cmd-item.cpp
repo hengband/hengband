@@ -55,6 +55,8 @@
 #include "realm/realm-hex-numbers.h"
 #include "realm/realm-types.h"
 #include "status/action-setter.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"

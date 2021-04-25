@@ -14,7 +14,6 @@
  * included in all such copies.
  */
 
-#include "floor/geometry.h"
 #include "spell/spells-util.h"
 #include "system/angband.h"
 
@@ -155,7 +154,9 @@ typedef struct grid_template_type {
 #define DOOR_CURTAIN     2
 
 // clang-format on
-
+typedef struct floor_type floor_type;
+typedef struct player_type player_type;
+typedef struct monster_race monster_race;
 extern bool new_player_spot(player_type *creature_ptr);
 
 extern void place_bound_perm_wall(player_type *player_ptr, grid_type *g_ptr);

@@ -9,6 +9,7 @@
 #include "racial/racial-android.h"
 #include "spell/spells-object.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 

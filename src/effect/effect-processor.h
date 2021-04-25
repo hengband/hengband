@@ -10,5 +10,8 @@ struct ProjectResult {
     ProjectResult() = default;
 };
 
-ProjectResult project(player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, const HIT_POINT dam, const EFFECT_ID typ,
+typedef struct effect_player_type effect_player_type;
+typedef struct player_type player_type;
+ProjectResult project(
+    player_type *caster_ptr, const MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, const HIT_POINT dam, const EFFECT_ID typ,
     BIT_FLAGS flag);

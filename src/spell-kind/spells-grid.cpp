@@ -6,9 +6,11 @@
 #include "floor/floor-save-util.h"
 #include "floor/floor-save.h"
 #include "game-option/birth-options.h"
+#include "grid/feature.h"
 #include "grid/grid.h"
 #include "grid/stair.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 

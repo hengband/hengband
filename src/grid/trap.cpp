@@ -37,6 +37,8 @@
 #include "status/base-status.h"
 #include "status/element-resistance.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"

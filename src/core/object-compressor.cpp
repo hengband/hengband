@@ -2,6 +2,7 @@
 #include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
 #include "floor/floor-object.h"
+#include "floor/geometry.h"
 #include "grid/grid.h"
 #include "object-hook/hook-checker.h"
 #include "object-hook/hook-enchant.h"
@@ -10,6 +11,7 @@
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

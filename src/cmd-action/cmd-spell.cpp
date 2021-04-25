@@ -55,6 +55,8 @@
 #include "status/base-status.h"
 #include "status/experience.h"
 #include "system/floor-type-definition.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"

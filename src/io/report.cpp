@@ -23,6 +23,7 @@
 #include "realm/realm-names-table.h"
 #include "system/angband-version.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "system/system-variables.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"

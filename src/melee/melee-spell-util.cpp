@@ -7,6 +7,9 @@
 #include "monster-race/monster-race.h"
 #include "monster/monster-info.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 
 melee_spell_type *initialize_melee_spell_type(player_type *target_ptr, melee_spell_type *ms_ptr, MONSTER_IDX m_idx)
 {

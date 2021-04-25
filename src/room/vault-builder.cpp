@@ -10,6 +10,7 @@
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/place-monster-types.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*

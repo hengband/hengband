@@ -10,6 +10,7 @@
 #include "load/dummy-loader.h"
 #include "load/load-util.h"
 #include "load/world-loader.h"
+#include "system/player-type-definition.h"
 #include "world/world.h"
 
 /*!

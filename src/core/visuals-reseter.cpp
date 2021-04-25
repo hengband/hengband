@@ -4,6 +4,8 @@
 #include "io/read-pref-file.h"
 #include "monster-race/monster-race.h"
 #include "object/object-kind.h"
+#include "system/monster-race-definition.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief オブジェクト、地形の表示シンボルなど初期化する / Reset the "visual" lists

@@ -30,7 +30,9 @@
 #include "player/player-race-types.h"
 #include "player/player-sex.h"
 #include "player/race-info-table.h"
+#include "store/store-owners.h"
 #include "store/store.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

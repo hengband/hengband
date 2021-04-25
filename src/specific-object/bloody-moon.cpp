@@ -6,6 +6,7 @@
 #include "racial/racial-android.h"
 #include "system/artifact-type-definition.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 

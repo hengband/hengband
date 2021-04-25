@@ -25,6 +25,7 @@
 #include "status/element-resistance.h"
 #include "status/experience.h"
 #include "status/shape-changer.h"
+#include "system/player-type-definition.h"
 #include "target/target-getter.h"
 
 /*!

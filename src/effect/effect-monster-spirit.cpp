@@ -2,6 +2,7 @@
 #include "core/hp-mp-processor.h"
 #include "core/player-redraw-types.h"
 #include "effect/effect-monster-util.h"
+#include "grid/grid.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
@@ -11,6 +12,9 @@
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "monster/monster-info.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 process_result effect_monster_drain_mana(player_type *caster_ptr, effect_monster_type *em_ptr)

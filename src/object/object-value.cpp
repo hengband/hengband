@@ -12,6 +12,9 @@
 #include "object/object-value-calc.h"
 #include "perception/object-perception.h"
 #include "system/artifact-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*!

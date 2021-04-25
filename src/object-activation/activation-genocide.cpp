@@ -1,5 +1,6 @@
 ﻿#include "object-activation/activation-genocide.h"
 #include "spell-kind/spells-genocide.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 bool activate_genocide(player_type *user_ptr)

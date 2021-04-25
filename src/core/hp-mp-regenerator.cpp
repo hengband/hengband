@@ -12,6 +12,9 @@
 #include "player/player-status-table.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 
 /*!<広域マップ移動時の自然回復処理カウンタ（広域マップ1マス毎に20回処理を基本とする）*/
 int wild_regen = 20;

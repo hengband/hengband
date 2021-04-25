@@ -4,6 +4,8 @@
  * @author Hourier
  */
 
+#include <vector>
+
 #include "wizard/wizard-spells.h"
 #include "blue-magic/blue-magic-checker.h"
 #include "core/asking-player.h"
@@ -23,12 +25,12 @@
 #include "spell/spells-status.h"
 #include "spell/summon-types.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/grid-selector.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
+#include "util/flag-group.h"
 #include "view/display-messages.h"
-
-#include <vector>
 
 debug_spell_command debug_spell_commands_list[SPELL_MAX] = {
     { 2, "vanish dungeon", { .spell2 = { vanish_dungeon } } },

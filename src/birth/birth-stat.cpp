@@ -9,6 +9,7 @@
 #include "player/player-skill.h"
 #include "spell/spells-status.h"
 #include "player/player-race-types.h"
+#include "system/player-type-definition.h"
 
 /*! オートロール能力値の乱数分布 / emulate 5 + 1d3 + 1d4 + 1d5 by randint0(60) */
 BASE_STATUS rand3_4_5[60] = {

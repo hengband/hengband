@@ -9,6 +9,7 @@
 #include "autopick/autopick-finder.h"
 #include "autopick/autopick-methods-table.h"
 #include "autopick/autopick-reader-writer.h"
+#include "autopick/autopick-util.h"
 #include "core/asking-player.h"
 #include "flavor/flavor-describer.h"
 #include "io/files-util.h"
@@ -16,6 +17,7 @@
 #include "object-enchant/special-object-flags.h"
 #include "object-hook/hook-enchant.h"
 #include "perception/object-perception.h"
+#include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 

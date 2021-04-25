@@ -1,6 +1,7 @@
 ﻿#include "floor/line-of-sight.h"
 #include "floor/cave.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief LOS(Line Of Sight / 視線が通っているか)の判定を行う。

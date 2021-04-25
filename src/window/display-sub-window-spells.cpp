@@ -10,6 +10,7 @@
 #include "realm/realm-names-table.h"
 #include "spell/spells-execution.h"
 #include "spell/technic-info-table.h"
+#include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"

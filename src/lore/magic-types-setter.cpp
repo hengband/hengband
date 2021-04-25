@@ -1,7 +1,10 @@
 ﻿#include "lore/magic-types-setter.h"
 #include "lore/lore-calculator.h"
+#include "lore/lore-util.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
+#include "system/monster-race-definition.h"
+#include "system/player-type-definition.h"
 #include "term/term-color-types.h"
 
 void set_breath_types(player_type *player_ptr, lore_type *lore_ptr)

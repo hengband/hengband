@@ -24,6 +24,8 @@
 #include "spell-realm/spells-hex.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"

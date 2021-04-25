@@ -4,6 +4,8 @@
  * @author Hourier
  */
 
+#include <vector>
+
 #include "io-dump/special-class-dump.h"
 #include "blue-magic/blue-magic-checker.h"
 #include "cmd-item/cmd-magiceat.h"
@@ -13,9 +15,8 @@
 #include "mspell/monster-power-table.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
+#include "system/player-type-definition.h"
 #include "util/flag-group.h"
-
-#include <vector>
 
 typedef struct {
     EnumClassFlagGroup<RF_ABILITY> ability_flags;

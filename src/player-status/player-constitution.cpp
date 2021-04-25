@@ -8,6 +8,7 @@
 #include "player/special-defense-types.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell-realm/spells-hex.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 void PlayerConstitution::set_locals()

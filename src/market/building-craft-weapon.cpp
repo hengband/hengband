@@ -19,6 +19,8 @@
 #include "realm/realm-hex-numbers.h"
 #include "spell-realm/spells-hex.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"

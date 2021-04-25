@@ -1,7 +1,10 @@
 ﻿#include "mind/mind-warrior.h"
 #include "cmd-action/cmd-attack.h"
+#include "floor/geometry.h"
+#include "grid/grid.h"
 #include "spell-kind/spells-teleport.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "view/display-messages.h"
 

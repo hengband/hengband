@@ -1,11 +1,12 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "system/monster-type-definition.h"
 
 struct ProjectResult;
 enum class RF_ABILITY;
 
+typedef struct monster_type monster_type;
+typedef struct player_type player_type;
 bool clean_shot(player_type *target_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_friend);
 bool summon_possible(player_type *target_ptr, POSITION y1, POSITION x1);
 bool raise_possible(player_type *target_ptr, monster_type *m_ptr);

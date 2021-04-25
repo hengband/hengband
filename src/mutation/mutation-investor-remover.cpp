@@ -7,6 +7,7 @@
 #include "mutation/mutation-flag-types.h"
 #include "mutation/mutation-util.h"
 #include "player-info/avatar.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 

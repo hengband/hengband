@@ -28,6 +28,7 @@
 #include "player/process-name.h"
 #include "player/player-status-table.h"
 #include "system/game-option-types.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/buffer-shaper.h"

@@ -4,6 +4,8 @@
  * @author deskull
  * @details Ego-Item indexes (see "lib/edit/e_info.txt")
  */
+#include <vector>
+
 #include "object-enchant/object-ego.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-curse.h"
@@ -13,9 +15,9 @@
 #include "object-hook/hook-weapon.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/probability-table.h"
-#include <vector>
 
 /*
  * The ego-item arrays

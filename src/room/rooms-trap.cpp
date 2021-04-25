@@ -6,6 +6,7 @@
 #include "grid/grid.h"
 #include "room/space-finder.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "wizard/wizard-messages.h"
 
 /*!

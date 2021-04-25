@@ -1,12 +1,12 @@
 ﻿#pragma once
 
-#include "system/angband.h"
-#include "system/monster-race-definition.h"
-#include "monster-race/race-ability-flags.h"
-#include "util/flag-group.h"
-
 #include <string>
 #include <unordered_map>
+
+#include "system/angband.h"
+#include "monster-attack/monster-attack-types.h"
+#include "monster-race/race-ability-flags.h"
+#include "util/flag-group.h"
 
 enum monster_sex {
     MSEX_NONE = 0,
@@ -14,6 +14,7 @@ enum monster_sex {
     MSEX_FEMALE = 2,
 };
 
+typedef struct monster_race monster_race;
 typedef struct lore_type {
 #ifdef JP
     char jverb_buf[64];

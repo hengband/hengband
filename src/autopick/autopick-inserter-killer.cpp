@@ -1,5 +1,6 @@
 ﻿#include "autopick/autopick-inserter-killer.h"
 #include "autopick/autopick-dirty-flags.h"
+#include "autopick/autopick-util.h"
 #include "cmd-io/macro-util.h"
 #include "game-option/input-options.h"
 #include "game-option/keymap-directory-getter.h"

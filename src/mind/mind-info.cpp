@@ -2,6 +2,7 @@
 #include "cmd-action/cmd-spell.h"
 #include "mind/mind-force-trainer.h"
 #include "mind/mind-types.h"
+#include "system/player-type-definition.h"
 
 static void switch_mind_mindcrafter(player_type *caster_ptr, const PLAYER_LEVEL plev, const int power, char *p)
 {

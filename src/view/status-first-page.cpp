@@ -20,6 +20,8 @@
 #include "player/player-status-flags.h"
 #include "player/special-defense-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
 

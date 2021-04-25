@@ -4,6 +4,7 @@
 #include "player/player-status-flags.h"
 #include "player/player-status-table.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief 所持/装備オブジェクトIDの部位表現を返す /

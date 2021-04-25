@@ -20,6 +20,7 @@
 #include "player/player-status-table.h"
 #include "realm/realm-types.h"
 #include "spell/spell-info.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/flag-group.h"
 #include "util/int-char-converter.h"

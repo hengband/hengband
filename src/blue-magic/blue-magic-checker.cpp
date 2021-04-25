@@ -14,11 +14,12 @@
 #include "core/player-redraw-types.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
-#include "mind/mind-blue-mage.h"
 #include "monster-race/race-ability-mask.h"
 #include "mspell/monster-power-table.h"
 #include "player/attack-defense-types.h"
 #include "status/experience.h"
+#include "system/angband.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

@@ -3,6 +3,7 @@
 #include "load/angband-version-comparer.h"
 #include "load/load-util.h"
 #include "system/angband.h"
+#include "system/system-variables.h"
 
 /*!
  * @brief クイックスタート情報を読み込む / Load quick start data

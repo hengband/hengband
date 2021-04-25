@@ -1,5 +1,6 @@
 ﻿#include "racial/racial-util.h"
 #include "io/input-key-requester.h"
+#include "system/player-type-definition.h"
 
 rc_type::rc_type(player_type *creature_ptr)
 {

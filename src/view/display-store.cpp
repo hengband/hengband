@@ -9,9 +9,11 @@
 #include "object/object-kind.h"
 #include "player/race-info-table.h"
 #include "store/pricing.h"
+#include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h" //!< @todo 相互依存している、こっちは残す？.
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"

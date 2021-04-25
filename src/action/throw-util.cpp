@@ -4,6 +4,7 @@
  */
 
 #include "action/throw-util.h"
+#include "system/object-type-definition.h"
 
 it_type *initialize_it_type(
     it_type *item_throw_ptr, object_type *q_ptr, const int delay_factor_val, const int mult, const bool boomerang, const OBJECT_IDX shuriken)

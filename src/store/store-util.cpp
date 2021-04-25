@@ -16,6 +16,7 @@
 #include "perception/object-perception.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-scroll-types.h"
+#include "system/object-type-definition.h"
 #include "world/world-object.h"
 
 int cur_store_num = 0;

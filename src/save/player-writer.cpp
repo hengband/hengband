@@ -6,6 +6,7 @@
 #include "save/save-util.h"
 #include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "world/world.h"
 
 /*!

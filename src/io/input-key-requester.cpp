@@ -15,6 +15,7 @@
 #include "save/save.h"
 #include "system/floor-type-definition.h" //!< @todo 違和感、後で調査する.
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h" //!< @todo 相互依存している、後で何とかする.
 #include "util/int-char-converter.h"
 #include "util/quarks.h"

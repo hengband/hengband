@@ -11,6 +11,7 @@
 #include "player/player-race-types.h"
 #include "player/player-race.h"
 #include "store/rumor.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

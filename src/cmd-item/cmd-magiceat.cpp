@@ -73,6 +73,7 @@
 #include "player/player-status.h"
 #include "player/player-status-table.h"
 #include "spell/spell-info.h"
+#include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"

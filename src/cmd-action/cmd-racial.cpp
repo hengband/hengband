@@ -20,6 +20,7 @@
 #include "racial/race-racial-command-setter.h"
 #include "racial/racial-util.h"
 #include "status/action-setter.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "util/buffer-shaper.h"

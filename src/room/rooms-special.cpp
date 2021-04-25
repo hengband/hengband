@@ -2,6 +2,7 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor-generator.h"
+#include "floor//geometry.h"
 #include "game-option/cheat-types.h"
 #include "grid/door.h"
 #include "grid/feature.h"
@@ -16,6 +17,7 @@
 #include "object/object-kind-hook.h"
 #include "room/space-finder.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "system/system-variables.h"
 #include "wizard/wizard-messages.h"
 

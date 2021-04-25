@@ -1,12 +1,13 @@
 ﻿#pragma once
 
+#include <vector>
+
 #include "system/angband.h"
-#include "system/monster-type-definition.h"
 #include "monster-race/race-ability-flags.h"
 #include "util/flag-group.h"
 
-#include <vector>
-
+typedef struct monster_race monster_race;
+typedef struct monster_type monster_type;
 typedef struct melee_spell_type {
     MONSTER_IDX m_idx;
     POSITION y;
@@ -32,4 +33,5 @@ typedef struct melee_spell_type {
     EnumClassFlagGroup<RF_ABILITY> ability_flags;
 } melee_spell_type;
 
+typedef struct player_type player_type;
 melee_spell_type *initialize_melee_spell_type(player_type *target_ptr, melee_spell_type *ms_ptr, MONSTER_IDX m_idx);

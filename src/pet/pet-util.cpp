@@ -1,7 +1,9 @@
 ﻿#include "pet/pet-util.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
+#include "grid/grid.h"
 #include "monster/monster-info.h"
+#include "system/player-type-definition.h"
 #include "world/world.h"
 
 /*!

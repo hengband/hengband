@@ -3,8 +3,10 @@
 #include "effect/effect-player-oldies.h"
 #include "effect/effect-player-resist-hurt.h"
 #include "effect/effect-player-spirit.h"
+#include "effect/effect-player-util.h"
 #include "player/player-damage.h"
 #include "spell/spell-types.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief

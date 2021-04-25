@@ -9,6 +9,7 @@
 #include "floor/floor-util.h"
 #include "game-option/option-flags.h"
 #include "player/player-race.h"
+#include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"

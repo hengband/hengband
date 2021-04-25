@@ -28,11 +28,6 @@ typedef struct feature_state {
     FEAT_IDX result{}; /*!< 変化先ID / Result (f_info ID) */
 } feature_state;
 
-typedef struct feat_prob {
-    FEAT_IDX feat{}; /* Feature tile */
-    PERCENTAGE percent{}; /* Chance of type */
-} feat_prob;
-
 /*!
  * @struct feature_type
  * @brief 地形情報の構造体 / Information about terrain "features"
@@ -117,6 +112,8 @@ extern FEAT_IDX feat_wall_solid;
 extern FEAT_IDX feat_ground_type[100];
 extern FEAT_IDX feat_wall_type[100];
 
+typedef struct floor_type floor_type;
+typedef struct player_type player_type;
 bool is_closed_door(player_type *player_ptr, FEAT_IDX feat);
 bool is_trap(player_type *player_ptr, FEAT_IDX feat);
 void apply_default_feat_lighting(TERM_COLOR *f_attr, SYMBOL_CODE *f_char);

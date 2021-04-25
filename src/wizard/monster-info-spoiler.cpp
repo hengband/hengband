@@ -5,6 +5,7 @@
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-flags8.h"
 #include "system/angband-version.h"
+#include "system/monster-race-definition.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"

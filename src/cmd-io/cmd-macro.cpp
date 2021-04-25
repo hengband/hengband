@@ -8,6 +8,7 @@
 #include "io/input-key-requester.h"
 #include "io/read-pref-file.h"
 #include "main/sound-of-music.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"

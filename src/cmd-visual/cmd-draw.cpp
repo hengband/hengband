@@ -10,6 +10,7 @@
 #include "player/player-race-types.h"
 #include "player/process-name.h"
 #include "racial/racial-android.h"
+#include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"

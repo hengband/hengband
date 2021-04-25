@@ -9,6 +9,7 @@
 #include "io/cursor.h"
 #include "io/screen-util.h"
 #include "main/sound-of-music.h"
+#include "system/player-type-definition.h"
 #include "target/target-checker.h"
 #include "target/target-setter.h"
 #include "target/target-types.h"

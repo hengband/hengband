@@ -6,6 +6,7 @@
 #include "io/write-diary.h"
 #include "monster/monster-status.h" // 違和感。要調査.
 #include "save/save.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"

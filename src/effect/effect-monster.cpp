@@ -10,10 +10,12 @@
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "effect/effect-characteristics.h"
+#include "effect/effect-monster-util.h"
 #include "effect/effect-monster-switcher.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "game-option/play-record-options.h"
+#include "grid/grid.h"
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
@@ -44,7 +46,10 @@
 #include "spells-effect-util.h"
 #include "sv-definition/sv-other-types.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/monster-race-definition.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

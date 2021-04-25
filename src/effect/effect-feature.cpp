@@ -5,6 +5,8 @@
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h" // 暫定、後で消す.
 #include "floor/cave.h"
+#include "floor/geometry.h"
+#include "grid/feature.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "main/sound-definitions-table.h"
@@ -16,6 +18,7 @@
 #include "room/door-definition.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"

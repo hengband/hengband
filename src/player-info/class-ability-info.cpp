@@ -2,6 +2,7 @@
 #include "player-info/self-info-util.h"
 #include "realm/realm-names-table.h"
 #include "realm/realm-types.h"
+#include "system/player-type-definition.h"
 
 void set_class_ability_info(player_type *creature_ptr, self_info_type *self_ptr)
 {

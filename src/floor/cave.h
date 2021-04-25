@@ -3,7 +3,9 @@
 #include "system/angband.h"
 
 enum feature_flag_type : int;
+typedef struct floor_type floor_type;
 typedef struct grid_type grid_type;
+typedef struct player_type player_type;
 bool in_bounds(floor_type *floor_ptr, POSITION y, POSITION x);
 bool in_bounds2(floor_type *floor_ptr, POSITION y, POSITION x);
 bool in_bounds2u(floor_type *floor_ptr, POSITION y, POSITION x);

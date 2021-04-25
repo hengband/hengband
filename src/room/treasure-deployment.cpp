@@ -6,6 +6,7 @@
 
 #include "room/treasure-deployment.h"
 #include "floor/cave.h"
+#include "floor/geometry.h"
 #include "grid/feature-flag-types.h"
 #include "grid/grid.h"
 #include "grid/object-placer.h"
@@ -14,6 +15,7 @@
 #include "monster-floor/place-monster-types.h"
 #include "object-enchant/item-apply-magic.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 
 /*
  * Routine that fills the empty areas of a room with treasure and monsters.

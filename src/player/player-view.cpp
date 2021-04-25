@@ -1,13 +1,14 @@
-﻿#include <vector>
-
-#include "core/player-update-types.h"
+﻿#include "core/player-update-types.h"
 #include "floor/cave.h"
 #include "floor/line-of-sight.h"
 #include "game-option/map-screen-options.h"
 #include "grid/grid.h"
 #include "player/player-view.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/point-2d.h"
+
+#include <vector>
 
 /*
  * Helper function for "update_view()" below

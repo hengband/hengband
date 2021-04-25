@@ -3,6 +3,7 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/cave.h"
+#include "floor/geometry.h"
 #include "game-option/map-screen-options.h"
 #include "grid/grid.h"
 #include "grid/lighting-colors-table.h"
@@ -11,6 +12,7 @@
 #include "player/special-defense-types.h"
 #include "room/door-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "world/world.h"
 

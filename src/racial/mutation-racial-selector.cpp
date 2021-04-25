@@ -2,6 +2,7 @@
 #include "cmd-action/cmd-spell.h"
 #include "mutation/mutation-flag-types.h"
 #include "racial/racial-util.h"
+#include "system/player-type-definition.h"
 
 void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
 {

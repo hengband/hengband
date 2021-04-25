@@ -17,6 +17,7 @@
 #include "player/race-info-table.h"
 #include "store/store-util.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"

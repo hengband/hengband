@@ -19,6 +19,7 @@
 #include "spell/spells-status.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 #ifdef JP
 #else

@@ -7,6 +7,8 @@
 #include "object-enchant/object-ego.h"
 #include "object-hook/hook-enchant.h"
 #include "sv-definition/sv-lite-types.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

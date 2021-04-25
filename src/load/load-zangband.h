@@ -1,8 +1,9 @@
 ﻿#pragma once
 
-#include "dungeon/quest.h"
 #include "system/angband.h"
 
+typedef struct player_type player_type;
+typedef struct quest_type quest_type;
 void load_zangband_options(void);
 void set_zangband_realm(player_type *creature_ptr);
 void set_zangband_skill(player_type *creature_ptr);

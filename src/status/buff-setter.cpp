@@ -2,20 +2,21 @@
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
-#include "core/stuff-handler.h"
 #include "core/speed-table.h"
-#include "status/buff-setter.h"
-#include "game-option/disturbance-options.h"
-#include "player-info/avatar.h"
-#include "player/player-race.h"
-#include "player/player-class.h"
-#include "player/attack-defense-types.h"
-#include "realm/realm-song-numbers.h"
-#include "view/display-messages.h"
+#include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
-#include "status/element-resistance.h"
-#include "status/base-status.h"
+#include "game-option/disturbance-options.h"
 #include "monster/monster-status-setter.h"
+#include "player-info/avatar.h"
+#include "player/attack-defense-types.h"
+#include "player/player-class.h"
+#include "player/player-race.h"
+#include "realm/realm-song-numbers.h"
+#include "status/base-status.h"
+#include "status/buff-setter.h"
+#include "status/element-resistance.h"
+#include "system/player-type-definition.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief プレイヤーの全ての時限効果をリセットする。 / reset timed flags
@@ -308,7 +309,6 @@ bool set_hero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
     handle_stuff(creature_ptr);
     return TRUE;
 }
-
 
 /*!
  * @brief 変身効果の継続時間と変身先をセットする / Set "tim_mimic", and "mimic_form", notice observable changes

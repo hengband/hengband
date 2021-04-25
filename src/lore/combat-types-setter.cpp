@@ -1,6 +1,8 @@
 ﻿#include "lore/combat-types-setter.h"
+#include "lore/lore-util.h"
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-types.h"
+#include "system/monster-race-definition.h"
 #include "term/term-color-types.h"
 
 void set_monster_blow_method(lore_type *lore_ptr, int m)

@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-#include "autopick/autopick-util.h"
 #include "system/angband.h"
 
+typedef struct text_body_type text_body_type;
 void toggle_keyword(text_body_type *tb, BIT_FLAGS flg);
 void toggle_command_letter(text_body_type *tb, byte flg);
 void add_keyword(text_body_type *tb, BIT_FLAGS flg);

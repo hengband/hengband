@@ -33,6 +33,8 @@
 #include "spell-realm/spells-hex.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 static void heal_monster_by_melee(player_type *subject_ptr, mam_type *mam_ptr)

@@ -24,7 +24,7 @@
 #include "player/player-class.h"
 #include "player/player-race.h"
 #include "realm/realm-names-table.h"
-#include "system/system-variables.h"
+#include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "util/buffer-shaper.h"
 #include "view/display-messages.h"

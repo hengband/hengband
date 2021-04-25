@@ -11,6 +11,7 @@
 #include "player/player-damage.h"
 #include "player/special-defense-types.h"
 #include "status/bad-status-setter.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 

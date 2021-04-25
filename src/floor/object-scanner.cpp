@@ -9,6 +9,7 @@
 #include "object/object-mark-types.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 

@@ -8,6 +8,7 @@
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
 #include "status/element-resistance.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

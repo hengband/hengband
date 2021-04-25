@@ -9,6 +9,7 @@
 #include "mutation/mutation-investor-remover.h"
 #include "player-info/self-info.h"
 #include "spell/spells-status.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"

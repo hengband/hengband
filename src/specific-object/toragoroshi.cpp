@@ -1,5 +1,6 @@
 ﻿#include "specific-object/toragoroshi.h"
 #include "player-attack/player-attack.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 bool activate_toragoroshi(player_type *user_ptr)

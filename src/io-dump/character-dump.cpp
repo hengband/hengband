@@ -1,4 +1,6 @@
-﻿#include "io-dump/character-dump.h"
+﻿#include <string>
+
+#include "io-dump/character-dump.h"
 #include "artifact/fixed-art-types.h"
 #include "cmd-building/cmd-building.h"
 #include "dungeon/dungeon.h"
@@ -34,11 +36,14 @@
 #include "system/angband-version.h"
 #include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/int-char-converter.h"
 #include "util/sort.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-#include <string>
 
 /*!
  * @brief プレイヤーのペット情報をファイルにダンプする

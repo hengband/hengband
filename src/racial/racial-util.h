@@ -1,9 +1,10 @@
 ﻿#pragma once
 
-#include "system/angband.h"
-#include "mutation/mutation-flag-types.h"
 #include <string>
 #include <vector>
+
+#include "mutation/mutation-flag-types.h"
+#include "system/angband.h"
 
 /*!
  * @brief レイシャル/クラスパワー呼び出し番号

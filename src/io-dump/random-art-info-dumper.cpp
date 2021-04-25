@@ -5,6 +5,7 @@
 #include "perception/object-perception.h"
 #include "store/store-util.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include "wizard/artifact-analyzer.h"

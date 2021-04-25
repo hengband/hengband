@@ -1,6 +1,7 @@
-#include "object-activation/activation-charm.h"
+﻿#include "object-activation/activation-charm.h"
 #include "spell-kind/spells-charm.h"
 #include "spell-kind/spells-sight.h"
+#include "system/player-type-definition.h"
 #include "target/target-getter.h"
 
 bool activate_charm_animal(player_type *user_ptr)

@@ -7,6 +7,7 @@
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "world/world-object.h"
 
 /*!

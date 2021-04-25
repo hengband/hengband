@@ -1,5 +1,7 @@
 ﻿#pragma once
+
 #include "system/angband.h"
+#include "system/system-variables.h"
 
 extern const byte adj_mag_study[];
 extern const byte adj_mag_mana[];

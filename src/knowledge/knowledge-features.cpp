@@ -12,6 +12,8 @@
 #include "io/input-key-acceptor.h"
 #include "knowledge/lighting-level-table.h"
 #include "monster-race/monster-race.h"
+#include "system/monster-race-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"

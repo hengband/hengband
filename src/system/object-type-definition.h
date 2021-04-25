@@ -2,8 +2,7 @@
 
 #include "object/tval-types.h"
 #include "system/angband.h"
-
-#define TR_FLAG_SIZE 5
+#include "system/system-variables.h"
 
 typedef struct object_type {
     KIND_OBJECT_IDX k_idx; /* Kind index (zero if "dead") */

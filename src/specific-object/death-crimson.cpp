@@ -5,6 +5,7 @@
 #include "floor/geometry.h"
 #include "spell/spell-types.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
 #include "view/display-messages.h"

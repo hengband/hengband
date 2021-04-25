@@ -17,6 +17,7 @@
 #include "game-option/text-display-options.h"
 #include "player/player-class.h"
 #include "player/player-race-types.h"
+#include "system/player-type-definition.h"
 #include "realm/realm-names-table.h"
 
 /*!

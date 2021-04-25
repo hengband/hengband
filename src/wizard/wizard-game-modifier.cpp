@@ -14,6 +14,8 @@
 #include "monster-race/race-flags7.h"
 #include "player-info/self-info.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/player-type-definition.h"
 #include "system/system-variables.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"

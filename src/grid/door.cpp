@@ -6,6 +6,7 @@
 #include "grid/grid.h"
 #include "room/door-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*

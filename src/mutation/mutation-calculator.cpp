@@ -13,6 +13,7 @@
 
 #include "mutation/mutation-calculator.h"
 #include "mutation/mutation-flag-types.h"
+#include "system/player-type-definition.h"
 
  /*!
  * @brief 現在プレイヤー得ている突然変異の数を返す。

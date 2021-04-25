@@ -13,6 +13,7 @@
 #include "realm/realm-song.h"
 #include "realm/realm-sorcery.h"
 #include "realm/realm-trump.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief 魔法処理のメインルーチン

@@ -18,6 +18,7 @@
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
+#include "floor/geometry.h"
 #include "inventory/inventory-slot-types.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
@@ -50,6 +51,10 @@
 #include "status/action-setter.h"
 #include "status/bad-status-setter.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 static bool check_no_blow(player_type *target_ptr, monap_type *monap_ptr)
