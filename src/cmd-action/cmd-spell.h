@@ -28,4 +28,4 @@ concptr info_weight(WEIGHT weight);
 
 void do_cmd_browse(player_type *caster_ptr);
 void do_cmd_study(player_type *caster_ptr);
-void do_cmd_cast(player_type *caster_ptr);
+bool do_cmd_cast(player_type *caster_ptr);

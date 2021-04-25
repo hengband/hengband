@@ -936,9 +936,9 @@ void do_cmd_study(player_type *caster_ptr)
  * @brief 魔法を詠唱するコマンドのメインルーチン /
  * Cast a spell
  * @param caster_ptr プレーヤーへの参照ポインタ
- * @return なし
+ * @return 詠唱したらtrue
  */
-void do_cmd_cast(player_type *caster_ptr)
+bool do_cmd_cast(player_type *caster_ptr)
 {
     OBJECT_IDX item;
     OBJECT_SUBTYPE_VALUE sval;
@@ -959,7 +959,7 @@ void do_cmd_cast(player_type *caster_ptr)
     /* Require spell ability */
     if (!caster_ptr->realm1 && (caster_ptr->pclass != CLASS_SORCERER) && (caster_ptr->pclass != CLASS_RED_MAGE)) {
         msg_print(_("呪文を唱えられない！", "You cannot cast spells!"));
-        return;
+        return false;
     }
 
     if (caster_ptr->blind || no_lite(caster_ptr)) {
@@ -969,11 +969,12 @@ void do_cmd_cast(player_type *caster_ptr)
             msg_print(_("目が見えない！", "You cannot see!"));
             flush();
         }
-        return;
+        return false;
     }
 
     if (cmd_limit_confused(caster_ptr))
-        return;
+        return false;
+
     if (caster_ptr->realm1 == REALM_HEX) {
         if (hex_spell_fully(caster_ptr)) {
             bool flag = FALSE;
@@ -982,14 +983,14 @@ void do_cmd_cast(player_type *caster_ptr)
             if (caster_ptr->lev >= 35)
                 flag = stop_hex_spell(caster_ptr);
             if (!flag)
-                return;
+                return false;
         }
     }
 
     if (caster_ptr->pclass == CLASS_FORCETRAINER) {
         if (player_has_no_spellbooks(caster_ptr)) {
             confirm_use_force(caster_ptr, FALSE);
-            return;
+            return true; //!< 錬気キャンセル時の処理がない
         }
     }
 
@@ -1003,9 +1004,9 @@ void do_cmd_cast(player_type *caster_ptr)
         if (item == INVEN_FORCE) /* the_force */
         {
             do_cmd_mind(caster_ptr);
-            return;
+            return true; //!< 錬気キャンセル時の処理がない
         }
-        return;
+        return false;
     }
 
     /* Access the item's sval */
@@ -1031,13 +1032,13 @@ void do_cmd_cast(player_type *caster_ptr)
             TRUE, realm)) {
         if (spell == -2)
             msg_format("その本には知っている%sがない。", prayer);
-        return;
+        return false;
     }
 #else
     if (!get_spell(caster_ptr, &spell, ((mp_ptr->spell_book == TV_LIFE_BOOK) ? "recite" : "cast"), sval, TRUE, realm)) {
         if (spell == -2)
             msg_format("You don't know any %ss in that book.", prayer);
-        return;
+        return false;
     }
 #endif
 
@@ -1045,7 +1046,7 @@ void do_cmd_cast(player_type *caster_ptr)
     if (use_realm == REALM_HEX) {
         if (hex_spelling(caster_ptr, spell)) {
             msg_print(_("その呪文はすでに詠唱中だ。", "You are already casting it."));
-            return;
+            return false;
         }
     }
 
@@ -1072,11 +1073,11 @@ void do_cmd_cast(player_type *caster_ptr)
 #endif
 
         if (!over_exert)
-            return;
+            return false;
 
         /* Verify */
         if (!get_check_strict(caster_ptr, _("それでも挑戦しますか? ", "Attempt it anyway? "), CHECK_OKAY_CANCEL))
-            return;
+            return false;
     }
 
     /* Spell failure chance */
@@ -1157,7 +1158,7 @@ void do_cmd_cast(player_type *caster_ptr)
     else {
         /* Canceled spells cost neither a turn nor mana */
         if (!exe_spell(caster_ptr, realm, spell, SPELL_CAST))
-            return;
+            return false;
 
         if (randint1(100) < chance)
             chg_virtue(caster_ptr, V_CHANCE, 1);
@@ -1347,4 +1348,6 @@ void do_cmd_cast(player_type *caster_ptr)
 
     caster_ptr->window_flags |= (PW_PLAYER);
     caster_ptr->window_flags |= (PW_SPELL);
+
+    return true; //!< @note 詠唱した
 }
