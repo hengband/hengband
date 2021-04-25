@@ -1,4 +1,9 @@
-﻿#include "artifact/random-art-slay.h"
+﻿/*!
+ * @file random-art-slay.cpp
+ * @brief ランダムアーティファクトのスレイ付加処理実装
+ */
+
+#include "artifact/random-art-slay.h"
 #include "artifact/random-art-bias-types.h"
 #include "object-enchant/tr-types.h"
 #include "sv-definition/sv-weapon-types.h"

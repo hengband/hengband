@@ -1,4 +1,8 @@
 ﻿#pragma once
+/*!
+ * @file artifact-info.h
+ * @brief アーティファクトの発動効果取得関数ヘッダ
+ */
 
 #include "object-enchant/activation-info-table.h"
 #include "system/angband.h"

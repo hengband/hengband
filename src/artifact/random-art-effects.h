@@ -1,4 +1,8 @@
 ﻿#pragma once
+/*!
+ * @file random-art-effects.h
+ * @brief ランダムアーティファクトの発動ID定義
+ */
 
 enum random_art_activation_type {
     ACT_SUNLIGHT = 1,

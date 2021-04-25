@@ -1,4 +1,9 @@
-﻿#include "artifact/random-art-misc.h"
+﻿/*!
+ * @file random-art-misc.cpp
+ * @brief ランダムアーティファクト生成のその他特性バイアス付け実装 / Artifact code
+ */
+
+#include "artifact/random-art-misc.h"
 #include "artifact/random-art-bias-types.h"
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-armor.h"

@@ -1,4 +1,9 @@
-﻿#include "artifact/random-art-characteristics.h"
+﻿/*!
+ * @file random-art-characteristics.cpp
+ * @brief ランダムアーティファクトのバイアス付加処理実装
+ */
+
+#include "artifact/random-art-characteristics.h"
 #include "flavor/object-flavor.h"
 #include "game-option/cheat-types.h"
 #include "io/files-util.h"

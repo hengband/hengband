@@ -1,4 +1,8 @@
 ﻿#pragma once
+/*!
+ * @file random-art-generator.h
+ * @brief ランダムアーティファクトの生成メインヘッダ / Artifact code
+ */
 
 #include "system/angband.h"
 
