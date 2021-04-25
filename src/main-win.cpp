@@ -706,6 +706,18 @@ static void init_sound(void)
     }
 }
 
+/*!
+ * @brief Change sound mode
+ * @param new_mode bool
+ */
+static void change_sound_mode(bool new_mode)
+{
+    use_sound = new_mode;
+    if (use_sound) {
+        init_sound();
+    }
+}
+
 /*
  * Initialize background
  */
@@ -877,11 +889,6 @@ static void refresh_color_table()
 static errr term_xtra_win_react(player_type *player_ptr)
 {
     refresh_color_table();
-
-    use_sound = arg_sound;
-    if (use_sound) {
-        init_sound();
-    }
 
     if (use_graphics != (arg_graphics > 0)) {
         if (arg_graphics && !init_graphics()) {
@@ -1961,8 +1968,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
     }
     case IDM_OPTIONS_SOUND: {
         arg_sound = !arg_sound;
-        if (inkey_flag)
-            term_xtra_win_react(player_ptr);
+        change_sound_mode(arg_sound);
         break;
     }
     case IDM_OPTIONS_NO_BG: {
@@ -2831,6 +2837,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPST
     prt(_("[ファイル] メニューの [新規] または [開く] を選択してください。", "[Choose 'New' or 'Open' from the 'File' menu]"), 23, _(8, 17));
     term_fresh();
 
+    change_sound_mode(arg_sound);
     use_music = arg_music;
     if (use_music) {
         init_music();
