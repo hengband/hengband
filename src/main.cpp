@@ -19,6 +19,7 @@
 #include "player/process-name.h"
 #include "system/angband-version.h"
 #include "system/angband.h"
+#include "system/player-type-definition.h"
 #include "system/system-variables.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"

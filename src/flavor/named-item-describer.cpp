@@ -20,6 +20,7 @@
 #include "locale/english.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
+#include "system/monster-race-definition.h"
 #endif
 
 static void check_object_known_aware(player_type *player_ptr, flavor_type *flavor_ptr)

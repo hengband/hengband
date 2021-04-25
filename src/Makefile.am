@@ -834,6 +834,7 @@ hengband_SOURCES = \
 	system/monster-race-definition.h \
 	system/monster-type-definition.h \
 	system/object-type-definition.h \
+	system/player-type-definition.cpp system/player-type-definition.h \
 	system/system-variables.cpp system/system-variables.h \
 	system/gamevalue.h \
 	\

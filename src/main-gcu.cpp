@@ -165,6 +165,7 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "system/angband.h"
+#include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
