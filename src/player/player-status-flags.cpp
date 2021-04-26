@@ -18,6 +18,7 @@
 #include "player-ability/player-stealth.h"
 #include "player-status/player-hand-types.h"
 #include "player/attack-defense-types.h"
+#include "player/digestion-processor.h"
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"
 #include "player/player-race-types.h"

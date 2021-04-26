@@ -16,6 +16,7 @@
 #include "object-enchant/trc-types.h"
 #include "player/attack-defense-types.h"
 #include "player-info/avatar.h"
+#include "player/digestion-processor.h"
 #include "player/player-damage.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"

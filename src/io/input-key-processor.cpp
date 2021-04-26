@@ -76,6 +76,7 @@
 #include "mind/mind-sniper.h"
 #include "mind/snipe-types.h"
 #include "player/attack-defense-types.h"
+#include "player/digestion-processor.h"
 #include "player/player-class.h"
 #include "player/special-defense-types.h"
 #include "status/action-setter.h"

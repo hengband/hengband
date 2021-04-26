@@ -10,6 +10,7 @@
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "player/attack-defense-types.h"
+#include "player/digestion-processor.h"
 #include "player/player-race.h"
 #include "player/player-skill.h"
 #include "player/player-status-flags.h"
