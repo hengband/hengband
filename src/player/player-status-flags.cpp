@@ -13,9 +13,9 @@
 #include "object-hook/hook-checker.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-flags.h"
-#include "player-status/player-basic-statistics.h"
-#include "player-status/player-speed.h"
-#include "player-status/player-stealth.h"
+#include "player-ability/player-basic-statistics.h"
+#include "player-ability/player-speed.h"
+#include "player-ability/player-stealth.h"
 #include "player/attack-defense-types.h"
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"
@@ -273,7 +273,7 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
         return has_resist_time(creature_ptr);
     case TR_RES_WATER:
         return has_resist_water(creature_ptr);
-    case TR_RES_CURSE :
+    case TR_RES_CURSE:
         return has_resist_curse(creature_ptr);
 
     case TR_SH_FIRE:
@@ -1597,7 +1597,7 @@ BIT_FLAGS has_resist_dark(player_type *creature_ptr)
     BIT_FLAGS result = 0L;
 
     if (player_race_has_flag(creature_ptr, TR_RES_DARK))
-    result |= FLAG_CAUSE_RACE;
+        result |= FLAG_CAUSE_RACE;
 
     if (creature_ptr->special_defense & KATA_MUSOU) {
         result |= FLAG_CAUSE_BATTLE_FORM;

@@ -628,31 +628,31 @@ hengband_SOURCES = \
 	player/player-view.cpp player/player-view.h \
 	player/special-defense-types.h \
 	\
+	player-ability/player-status-base.h \
+	player-ability/player-speed.h \
+	player-ability/player-stealth.h \
+	player-ability/player-basic-statistics.h \
+	player-ability/player-strength.h \
+	player-ability/player-intelligence.h \
+	player-ability/player-wisdom.h \
+	player-ability/player-dextarity.h \
+	player-ability/player-constitution.h \
+	player-ability/player-charisma.h \
+	player-ability/player-status-base.cpp \
+	player-ability/player-speed.cpp \
+	player-ability/player-stealth.cpp \
+	player-ability/player-basic-statistics.cpp \
+	player-ability/player-strength.cpp \
+	player-ability/player-intelligence.cpp \
+	player-ability/player-wisdom.cpp \
+	player-ability/player-dextarity.cpp \
+	player-ability/player-constitution.cpp \
+	player-ability/player-charisma.cpp \
+	\
 	player-attack/player-attack-util.h \
 	player-attack/attack-chaos-effect.cpp player-attack/attack-chaos-effect.h \
 	player-attack/blood-sucking-processor.cpp player-attack/blood-sucking-processor.h \
 	player-attack/player-attack.cpp player-attack/player-attack.h \
-	\
-	player-status/player-status-base.h \
-	player-status/player-speed.h \
-	player-status/player-stealth.h \
-	player-status/player-basic-statistics.h \
-	player-status/player-strength.h \
-	player-status/player-intelligence.h \
-	player-status/player-wisdom.h \
-	player-status/player-dextarity.h \
-	player-status/player-constitution.h \
-	player-status/player-charisma.h \
-	player-status/player-status-base.cpp \
-	player-status/player-speed.cpp \
-	player-status/player-stealth.cpp \
-	player-status/player-basic-statistics.cpp \
-	player-status/player-strength.cpp \
-	player-status/player-intelligence.cpp \
-	player-status/player-wisdom.cpp \
-	player-status/player-dextarity.cpp \
-	player-status/player-constitution.cpp \
-	player-status/player-charisma.cpp \
 	\
 	player-info/avatar.h player-info/avatar.cpp \
 	player-info/base-status-info.cpp player-info/base-status-info.h \

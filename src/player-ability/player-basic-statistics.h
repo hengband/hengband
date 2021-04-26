@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "player-status/player-status-base.h"
+#include "player-ability/player-status-base.h"
 
 class PlayerBasicStatistics : public PlayerStatusBase {
 public:
@@ -21,9 +21,9 @@ protected:
     virtual s16b set_exception_use_status(s16b value);
 };
 
-#include "player-status/player-strength.h"
-#include "player-status/player-intelligence.h"
-#include "player-status/player-wisdom.h"
-#include "player-status/player-dextarity.h"
-#include "player-status/player-constitution.h"
-#include "player-status/player-charisma.h"
+#include "player-ability/player-charisma.h"
+#include "player-ability/player-constitution.h"
+#include "player-ability/player-dextarity.h"
+#include "player-ability/player-intelligence.h"
+#include "player-ability/player-strength.h"
+#include "player-ability/player-wisdom.h"

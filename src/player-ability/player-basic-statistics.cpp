@@ -1,4 +1,4 @@
-﻿#include "player-status/player-basic-statistics.h"
+﻿#include "player-ability/player-basic-statistics.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
@@ -20,7 +20,7 @@
  * @details
  * * 各要素によるステータス修正値の合計
  */
-s16b PlayerBasicStatistics::modification_value() 
+s16b PlayerBasicStatistics::modification_value()
 {
     return PlayerStatusBase::get_value();
 }
@@ -96,7 +96,7 @@ void PlayerBasicStatistics::update_value()
  * @brief ステータス最大値更新処理
  * @details
  * * owner_ptrのステータス最大値を更新する
- * * 更新対象はset_locals()で設定したstatus_typeで決定される 
+ * * 更新対象はset_locals()で設定したstatus_typeで決定される
  */
 void PlayerBasicStatistics::update_top_status()
 {
@@ -110,7 +110,6 @@ void PlayerBasicStatistics::update_top_status()
     }
 }
 
-
 /*!
  * @brief ステータス現在値更新の例外処理
  * @param 通常処理されたステータスの値
@@ -119,10 +118,10 @@ void PlayerBasicStatistics::update_top_status()
  * * owner_ptrのステータス現在値を更新する際の例外処理
  * * 派生クラスでoverrideして使用する。
  */
-s16b PlayerBasicStatistics::set_exception_use_status(s16b value) 
- {
-     return value;
- }
+s16b PlayerBasicStatistics::set_exception_use_status(s16b value)
+{
+    return value;
+}
 
 /*!
  * @brief ステータス現在値更新処理

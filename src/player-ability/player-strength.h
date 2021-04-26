@@ -1,10 +1,10 @@
 ﻿#pragma once
-#include "player-status/player-basic-statistics.h"
+#include "player-ability/player-basic-statistics.h"
 
-class PlayerConstitution : public PlayerBasicStatistics {
+class PlayerStrength : public PlayerBasicStatistics {
 public:
     using PlayerBasicStatistics::PlayerBasicStatistics;
-    PlayerConstitution() = delete;
+    PlayerStrength() = delete;
 
 protected:
     void set_locals() override;

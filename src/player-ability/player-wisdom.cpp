@@ -1,4 +1,4 @@
-﻿#include "player-status/player-wisdom.h"
+﻿#include "player-ability/player-wisdom.h"
 #include "mutation/mutation-flag-types.h"
 #include "object/object-flags.h"
 #include "player/mimic-info-table.h"

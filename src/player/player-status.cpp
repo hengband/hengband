@@ -60,10 +60,10 @@
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
 #include "pet/pet-util.h"
+#include "player-ability/player-basic-statistics.h"
+#include "player-ability/player-speed.h"
+#include "player-ability/player-stealth.h"
 #include "player-info/avatar.h"
-#include "player-status/player-basic-statistics.h"
-#include "player-status/player-speed.h"
-#include "player-status/player-stealth.h"
 #include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
 #include "player/mimic-info-table.h"
@@ -96,9 +96,9 @@
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/floor-type-definition.h"
-#include "system/object-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
+#include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
@@ -1027,7 +1027,7 @@ static void update_max_mana(player_type *creature_ptr)
         case CLASS_MAGE:
         case CLASS_HIGH_MAGE:
         case CLASS_BLUE_MAGE:
-        case CLASS_ELEMENTALIST:  {
+        case CLASS_ELEMENTALIST: {
             msp -= msp * (cur_wgt - max_wgt) / 600;
             break;
         }
@@ -1992,7 +1992,6 @@ s16b calc_double_weapon_penalty(player_type *creature_ptr, INVENTORY_IDX slot)
     }
     return (s16b)penalty;
 }
-
 
 static bool is_riding_two_hands(player_type *creature_ptr)
 {
