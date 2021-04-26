@@ -4,6 +4,7 @@
 #include "load/load-util.h"
 #include "load/load-v1-5-0.h"
 #include "load/angband-version-comparer.h"
+#include "system/monster-race-definition.h"
 
 /*!
  * @brief モンスターの思い出を読み込む / Read the monster lore

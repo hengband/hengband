@@ -1,8 +1,10 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "system/monster-type-definition.h"
 
+typedef struct floor_type floor_type;
+typedef struct monster_race monster_race;
+typedef struct player_type player_type;
 MONSTER_IDX m_pop(floor_type *floor_ptr);
 
 #define GMN_ARENA 0x00000001 //!< 賭け闘技場向け生成

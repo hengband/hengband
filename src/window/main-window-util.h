@@ -15,6 +15,7 @@ extern int match_autopick;
 extern object_type *autopick_obj;
 extern int feat_priority;
 
+typedef struct player_type player_type;
 void print_field(concptr info, TERM_LEN row, TERM_LEN col);
 void print_map(player_type *player_ptr);
 void display_map(player_type *player_ptr, int *cy, int *cx);

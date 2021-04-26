@@ -4,6 +4,8 @@
  * @brief 設定ファイル用の効果音名定義ヘッダ
  */
 
+#include "system/angband.h"
+
 enum sound_type {
     SOUND_HIT = 1,
     SOUND_MISS = 2,

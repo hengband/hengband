@@ -36,6 +36,7 @@
 #include "status/shape-changer.h"
 #include "status/sight-setter.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 bool switch_activation(player_type *user_ptr, object_type **o_ptr_ptr, const activation_type *const act_ptr, concptr name)

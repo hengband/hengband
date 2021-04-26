@@ -7,6 +7,7 @@
 #include "game-option/disturbance-options.h"
 #include "game-option/special-options.h"
 #include "main/scene-table.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 
 // モンスターBGMの設定有無。設定なし時に関連処理をスキップする。

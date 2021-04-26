@@ -5,6 +5,7 @@
 #include "system/object-type-definition.h"
 #include "mimic-info-table.h"
 #include "player/race-info-table.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 const player_race *rp_ptr;

@@ -9,6 +9,7 @@
 #include "player/player-skill.h"
 #include "spell/spells-status.h"
 #include "player/player-race-types.h"
+#include "system/player-type-definition.h"
 
 /*! オートロール能力値の乱数分布 / emulate 5 + 1d3 + 1d4 + 1d5 by randint0(60) */
 BASE_STATUS rand3_4_5[60] = {
@@ -133,7 +134,7 @@ void get_extra(player_type* creature_ptr, bool roll_hitdie)
         creature_ptr->weapon_exp[TV_HAFTED - TV_WEAPON_BEGIN][SV_WHIP] = WEAPON_EXP_BEGINNER;
     }
 
-    for (int i = 0; i < GINOU_MAX; i++)
+    for (int i = 0; i < MAX_SKILLS; i++)
         creature_ptr->skill_exp[i] = s_info[creature_ptr->pclass].s_start[i];
 
     if (creature_ptr->pclass == CLASS_SORCERER)

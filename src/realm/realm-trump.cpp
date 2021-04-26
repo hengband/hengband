@@ -21,6 +21,7 @@
 #include "spell/spells-summon.h"
 #include "spell/summon-types.h"
 #include "status/sight-setter.h"
+#include "system/player-type-definition.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
 #include "target/target-setter.h"

@@ -18,4 +18,5 @@ typedef struct monster_death_type {
     u32b mo_mode;
 } monster_death_type;
 
+typedef struct player_type player_type;
 monster_death_type *initialize_monster_death_type(player_type *player_ptr, monster_death_type *md_ptr, MONSTER_IDX m_idx, bool drop_item);

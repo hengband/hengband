@@ -1,7 +1,8 @@
-#pragma once
+﻿#pragma once
 
 #include "system/angband.h"
 
+typedef struct player_type player_type;
 bool activate_resistance_elements(player_type *user_ptr);
 bool activate_resistance_acid(player_type *user_ptr, concptr name);
 bool activate_resistance_elec(player_type *user_ptr, concptr name);

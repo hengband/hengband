@@ -5,6 +5,7 @@
 #include "core/stuff-handler.h"
 #include "game-option/disturbance-options.h"
 #include "realm/realm-song-numbers.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

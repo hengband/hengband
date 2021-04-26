@@ -13,6 +13,7 @@
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
 #include "mind/mind-mirror-master.h"
+#include "monster-attack/monster-attack-util.h"
 #include "monster/monster-status.h"
 #include "object-hook/hook-enchant.h"
 #include "object/object-generator.h"
@@ -25,6 +26,9 @@
 #include "player/player-status-table.h"
 #include "status/experience.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world-object.h"
 

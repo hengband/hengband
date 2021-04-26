@@ -6,6 +6,7 @@
 #include "player/player-race.h"
 #include "player/special-defense-types.h"
 #include "realm/realm-song-numbers.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*!
@@ -224,8 +225,9 @@ bool is_oppose_elec(player_type *creature_ptr)
 
 bool is_oppose_fire(player_type *creature_ptr)
 {
-    return creature_ptr->oppose_fire || music_singing(creature_ptr, MUSIC_RESIST) || (creature_ptr->special_defense & KATA_MUSOU ||
-        (creature_ptr->mimic_form == MIMIC_DEMON) || (is_specific_player_race(creature_ptr, RACE_BALROG) && creature_ptr->lev > 44));
+    return creature_ptr->oppose_fire || music_singing(creature_ptr, MUSIC_RESIST)
+        || (creature_ptr->special_defense & KATA_MUSOU || (creature_ptr->mimic_form == MIMIC_DEMON)
+            || (is_specific_player_race(creature_ptr, RACE_BALROG) && creature_ptr->lev > 44));
 }
 
 bool is_oppose_cold(player_type *creature_ptr)
@@ -235,6 +237,6 @@ bool is_oppose_cold(player_type *creature_ptr)
 
 bool is_oppose_pois(player_type *creature_ptr)
 {
-    return creature_ptr->oppose_pois || music_singing(creature_ptr, MUSIC_RESIST) || (creature_ptr->special_defense & KATA_MUSOU ||
-        (creature_ptr->pclass == CLASS_NINJA && creature_ptr->lev > 44) );
+    return creature_ptr->oppose_pois || music_singing(creature_ptr, MUSIC_RESIST)
+        || (creature_ptr->special_defense & KATA_MUSOU || (creature_ptr->pclass == CLASS_NINJA && creature_ptr->lev > 44));
 }

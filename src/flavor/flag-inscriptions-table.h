@@ -1,7 +1,8 @@
 ﻿#pragma once
 
-#include "system/angband.h"
 #include <vector>
+
+#include "system/angband.h"
 
 #define MAX_GAME_INSCRIPTIONS 10
 

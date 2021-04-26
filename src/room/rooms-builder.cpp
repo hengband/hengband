@@ -40,10 +40,12 @@
 #include "dungeon/dungeon.h"
 #include "floor/cave.h"
 #include "grid/door.h"
+#include "grid/feature.h"
 #include "grid/grid.h"
 #include "room/cave-filler.h"
 #include "room/lake-types.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

@@ -16,6 +16,7 @@
 #include "room/rooms-vault.h"
 #include "system/dungeon-data-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/probability-table.h"
 #include "wizard/wizard-messages.h"
 

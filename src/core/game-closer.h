@@ -1,5 +1,4 @@
 ﻿#pragma once
 
-#include "system/angband.h"
-
-void close_game(player_type* player_ptr);
+typedef struct player_type player_type;
+void close_game(player_type *player_ptr);

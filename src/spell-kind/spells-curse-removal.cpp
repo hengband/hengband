@@ -7,6 +7,7 @@
 #include "object-enchant/trc-types.h"
 #include "object-hook/hook-checker.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

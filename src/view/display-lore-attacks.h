@@ -1,6 +1,4 @@
 ﻿#pragma once
 
-#include "system/angband.h"
-#include "lore/lore-util.h"
-
+typedef struct lore_type lore_type;
 void display_monster_blows(lore_type *lore_ptr);

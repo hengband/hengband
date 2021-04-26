@@ -12,5 +12,6 @@ enum scan_floor_mode {
     SCAN_FLOOR_AT_MOST_ONE = 1U << 2, /*!< 高々1つのアイテムしか取得しない */
 };
 
+typedef struct player_type player_type;
 ITEM_NUMBER scan_floor_items(player_type *owner_ptr, OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode, tval_type item_tester_tval);
 COMMAND_CODE show_floor_items(player_type *owner_ptr, int target_item, POSITION y, POSITION x, TERM_LEN *min_width, tval_type item_tester_tval);

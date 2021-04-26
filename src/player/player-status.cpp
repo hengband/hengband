@@ -23,6 +23,7 @@
 #include "game-option/birth-options.h"
 #include "game-option/text-display-options.h"
 #include "grid/feature.h"
+#include "grid/grid.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
@@ -94,8 +95,11 @@
 #include "status/base-status.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "system/angband.h"
 #include "system/floor-type-definition.h"
+#include "system/object-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
@@ -139,16 +143,6 @@ static DICE_NUMBER calc_to_weapon_dice_side(player_type *creature_ptr, INVENTORY
 static player_hand main_attack_hand(player_type *creature_ptr);
 
 /*** Player information ***/
-
-/*!
- * @brief プレイヤー用のクリーチャー構造体実体 / Static player info record
- */
-player_type p_body;
-
-/*!
- * @brief プレイヤー用のクリーチャー構造体参照ポインタ / Pointer to the player info
- */
-player_type *p_ptr = &p_body;
 
 /*!
  * @brief クリーチャーの抽象的善悪アライメントの表記名のみを返す。 / Return only alignment title

@@ -1,6 +1,7 @@
 ﻿#include "load/load-zangband.h"
 #include "cmd-building/cmd-building.h"
 #include "dungeon/dungeon.h"
+#include "dungeon/quest.h"
 #include "game-option/option-flags.h"
 #include "info-reader/fixed-map-parser.h"
 #include "load/angband-version-comparer.h"
@@ -18,6 +19,8 @@
 #include "realm/realm-types.h"
 #include "spell/spells-status.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/player-type-definition.h"
 #include "system/system-variables.h"
 #include "world/world.h"
 

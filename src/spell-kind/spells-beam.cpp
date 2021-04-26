@@ -2,6 +2,7 @@
 #include "effect/effect-characteristics.h"
 #include "spell/spell-types.h"
 #include "spell-kind/spells-launcher.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief 岩石溶解処理

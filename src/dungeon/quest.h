@@ -1,8 +1,6 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
 
 /*
  * Quest constants
@@ -86,6 +84,7 @@ extern char quest_text[10][80];
 extern int quest_text_line;
 extern int leaving_quest;
 
+typedef struct player_type player_type;
 void determine_random_questor(player_type *player_ptr, quest_type *q_ptr);
 void record_quest_final_status(quest_type *q_ptr, PLAYER_LEVEL lev, QUEST_STATUS stat);
 void complete_quest(player_type *player_ptr, QUEST_IDX quest_num);

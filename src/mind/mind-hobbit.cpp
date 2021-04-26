@@ -4,6 +4,7 @@
 #include "object/object-kind-hook.h"
 #include "sv-definition/sv-food-types.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 bool create_ration(player_type *creature_ptr)

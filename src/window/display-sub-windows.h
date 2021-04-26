@@ -5,6 +5,8 @@
 
 #include <vector>
 
+typedef struct floor_type floor_type;
+typedef struct player_type player_type;
 void fix_inventory(player_type *player_ptr, tval_type item_tester_tval);
 void print_monster_list(floor_type *floor_ptr, const std::vector<MONSTER_IDX> &monster_list, TERM_LEN x, TERM_LEN y, TERM_LEN max_lines);
 void fix_monster_list(player_type *player_ptr);

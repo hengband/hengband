@@ -4,6 +4,7 @@
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
 #include "system/angband-version.h"
+#include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"

@@ -49,6 +49,7 @@ struct nest_mon_info_type {
 };
 
 typedef struct dun_data_type dun_data_type;
+typedef struct player_type player_type;
 bool build_type5(player_type *player_ptr, dun_data_type *dd_ptr);
 bool build_type6(player_type *player_ptr, dun_data_type *dd_ptr);
 bool build_type13(player_type *player_ptr, dun_data_type *dd_ptr);

@@ -8,9 +8,11 @@
 #include "autopick/autopick-entry.h"
 #include "autopick/autopick-methods-table.h"
 #include "autopick/autopick-reader-writer.h"
+#include "autopick/autopick-util.h"
 #include "core/asking-player.h"
 #include "core/show-file.h"
 #include "io-dump/dump-util.h"
+#include "system/player-type-definition.h"
 #include "util/angband-files.h"
 
 /*!

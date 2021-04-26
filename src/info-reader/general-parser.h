@@ -19,6 +19,7 @@ typedef struct dungeon_grid {
 extern dungeon_grid letter[255];
 
 typedef struct angband_header angband_header;
+typedef struct floor_type floor_type;
 typedef errr (*parse_info_txt_func)(char *buf, angband_header *head);
 errr init_info_txt(FILE *fp, char *buf, angband_header *head, parse_info_txt_func parse_info_txt_line);
 parse_error_type parse_line_feature(floor_type *floor_ptr, char *buf);

@@ -10,6 +10,7 @@
 #include "player/player-sex.h"
 #include "player/process-name.h"
 #include "player/race-info-table.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 
 /*

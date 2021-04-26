@@ -4,6 +4,7 @@
 #include "load/load-util.h"
 #include "load/load-v1-5-0.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 
 void set_hp_old(player_type *creature_ptr)
 {

@@ -2,6 +2,7 @@
 #include "birth/birth-util.h"
 #include "io/input-key-acceptor.h"
 #include "player/player-personality.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/int-char-converter.h"

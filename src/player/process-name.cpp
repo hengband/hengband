@@ -4,6 +4,7 @@
 #include "game-option/birth-options.h"
 #include "io/files-util.h"
 #include "player/player-personality.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"

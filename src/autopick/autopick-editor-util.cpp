@@ -6,6 +6,7 @@
 #include "autopick/autopick-dirty-flags.h"
 #include "autopick/autopick-entry.h"
 #include "autopick/autopick-key-flag-process.h"
+#include "autopick/autopick-util.h"
 
 /*
  * Delete or insert string

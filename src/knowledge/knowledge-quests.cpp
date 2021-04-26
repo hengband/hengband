@@ -19,7 +19,8 @@
 #include "object/object-kind-hook.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
-#include "system/system-variables.h" // 暫定、init_flagsのため。後で消すかも.
+#include "system/monster-race-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/angband-files.h"
 #include "util/sort.h"

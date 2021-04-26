@@ -9,6 +9,8 @@
 #include "object/item-tester-hooker.h" // 暫定、このファイルへ引っ越す.
 #include "object/object-generator.h"
 #include "object/object-kind.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief オブジェクトを鑑定済にする /

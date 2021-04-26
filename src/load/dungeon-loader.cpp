@@ -11,6 +11,8 @@
 #include "monster-race/race-flags1.h"
 #include "save/floor-writer.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/player-type-definition.h"
 #include "world/world.h"
 
 /*!

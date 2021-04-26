@@ -1,9 +1,11 @@
 ﻿#include <vector>
 
+#include "target/target-setter.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
+#include "floor/geometry.h"
 #include "floor/line-of-sight.h"
 #include "game-option/cheat-options.h"
 #include "game-option/game-play-options.h"
@@ -14,11 +16,11 @@
 #include "io/screen-util.h"
 #include "main/sound-of-music.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
 #include "target/target-describer.h"
 #include "target/target-preparation.h"
-#include "target/target-setter.h"
 #include "target/target-types.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
@@ -390,8 +392,7 @@ static void describe_grid_wizard(player_type *creature_ptr, ts_type *ts_ptr)
         return;
 
     char cheatinfo[100];
-    sprintf(cheatinfo, " X:%d Y:%d LOS:%d LOP:%d SPECIAL:%d", ts_ptr->x, ts_ptr->y,
-        los(creature_ptr, creature_ptr->y, creature_ptr->x, ts_ptr->y, ts_ptr->x),
+    sprintf(cheatinfo, " X:%d Y:%d LOS:%d LOP:%d SPECIAL:%d", ts_ptr->x, ts_ptr->y, los(creature_ptr, creature_ptr->y, creature_ptr->x, ts_ptr->y, ts_ptr->x),
         projectable(creature_ptr, creature_ptr->y, creature_ptr->x, ts_ptr->y, ts_ptr->x), ts_ptr->g_ptr->special);
     strcat(ts_ptr->info, cheatinfo);
 }

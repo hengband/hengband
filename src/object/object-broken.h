@@ -2,6 +2,8 @@
 
 #include "system/angband.h"
 
+typedef struct object_type object_type;
+typedef struct player_type player_type;
 bool hates_acid(object_type *o_ptr);
 bool hates_elec(object_type *o_ptr);
 bool hates_fire(object_type *o_ptr);

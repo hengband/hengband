@@ -1,7 +1,6 @@
 ﻿#pragma once
 
-#include "system/angband.h"
-
+typedef struct player_type player_type;
 void do_cmd_redraw(player_type *creature_ptr);
 void do_cmd_player_status(player_type *creature_ptr);
 void do_cmd_message_one(void);

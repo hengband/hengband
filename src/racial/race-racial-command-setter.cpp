@@ -2,6 +2,7 @@
 #include "cmd-action/cmd-spell.h"
 #include "player/player-race.h"
 #include "racial/racial-util.h"
+#include "system/player-type-definition.h"
 
 void set_mimic_racial_command(player_type *creature_ptr, rc_type *rc_ptr)
 {

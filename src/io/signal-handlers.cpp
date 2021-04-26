@@ -14,6 +14,7 @@
 #include "game-option/cheat-options.h"
 #include "save/save.h"
 #include "system/system-variables.h"
+#include "system/player-type-definition.h"
 #include "term/term-color-types.h"
 #include "world/world.h"
 

@@ -11,8 +11,12 @@
 #include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race-hook.h"
 #include "object-enchant/tr-types.h"
+#include "player-attack/player-attack-util.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell-realm/spells-hex.h"
+#include "system/monster-type-definition.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 

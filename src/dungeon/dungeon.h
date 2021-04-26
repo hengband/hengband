@@ -1,13 +1,11 @@
 ﻿#pragma once
 
-#include "system/angband.h"
-
-#include "grid/feature.h"
-#include "monster-race/race-ability-flags.h"
-#include "util/flag-group.h"
-
 #include <string>
 #include <vector>
+
+#include "monster-race/race-ability-flags.h"
+#include "system/angband.h"
+#include "util/flag-group.h"
 
 #define DUNGEON_FEAT_PROB_NUM 3
 
@@ -31,9 +29,13 @@
 #define DUNGEON_CHAMELEON 18
 #define DUNGEON_DARKNESS 19
 
+typedef struct feat_prob {
+    FEAT_IDX feat{}; /* Feature tile */
+    PERCENTAGE percent{}; /* Chance of type */
+} feat_prob;
+
 /* A structure for the != dungeon types */
-typedef struct dungeon_type dungeon_type;
-struct dungeon_type {
+typedef struct dungeon_type {
 
 	std::string name; /* Name */
     std::string text; /* Description */
@@ -79,7 +81,7 @@ struct dungeon_type {
 	int tunnel_percent{};
 	int obj_great{};
 	int obj_good{};
-};
+} dungeon_type;
 
 extern DEPTH *max_dlv;
 extern std::vector<dungeon_type> d_info;

@@ -1,5 +1,6 @@
 ﻿#include "player/player-realm.h"
 #include "object/tval-types.h"
+#include "system/player-type-definition.h"
 
 /*!
  * 職業毎に選択可能な第一領域魔法テーブル

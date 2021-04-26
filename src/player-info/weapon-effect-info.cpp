@@ -2,6 +2,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/tr-types.h"
 #include "player-info/self-info-util.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 static void set_weapon_bless_info(self_info_type *self_ptr)

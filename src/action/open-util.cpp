@@ -10,6 +10,7 @@
 #include "perception/object-perception.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief 該当のマスに存在している箱のオブジェクトIDを返す。

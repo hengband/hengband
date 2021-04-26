@@ -3,6 +3,8 @@
 #include "object-hook/hook-enchant.h"
 #include "store/store-owners.h"
 #include "store/store-util.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief ブラックマーケット用の無価値品の排除判定 /

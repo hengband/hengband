@@ -1,4 +1,5 @@
 ﻿#include "status/experience.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*

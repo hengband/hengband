@@ -1,9 +1,10 @@
-#pragma once
+﻿#pragma once
 
 #include "system/angband.h"
-#include "autopick/autopick-util.h"
-#include "system/object-type-definition.h"
 
+typedef struct object_type object_type;
+typedef struct player_type player_type;
+typedef struct text_body_type text_body_type;
 int find_autopick_list(player_type *player_ptr, object_type *o_ptr);
 bool get_object_for_search(player_type *player_ptr, object_type **o_handle, concptr *search_strp);
 bool get_destroyed_object_for_search(player_type *player_ptr, object_type **o_handle, concptr *search_strp);

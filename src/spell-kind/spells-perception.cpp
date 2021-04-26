@@ -24,6 +24,7 @@
 #include "perception/object-perception.h"
 #include "player-info/avatar.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"

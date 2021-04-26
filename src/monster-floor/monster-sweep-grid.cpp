@@ -6,6 +6,7 @@
 
 #include "monster-floor/monster-sweep-grid.h"
 #include "floor/cave.h"
+#include "floor/geometry.h"
 #include "floor/line-of-sight.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
@@ -17,9 +18,13 @@
 #include "monster-race/race-flags3.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
+#include "monster/monster-processor-util.h"
 #include "monster/monster-status.h"
 #include "player/player-status-flags.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 
 /*!

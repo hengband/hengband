@@ -9,6 +9,7 @@
 #include "object/object-value.h"
 #include "system/angband-version.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include "wizard/spoiler-util.h"

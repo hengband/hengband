@@ -9,6 +9,7 @@
 #include "cmd-item/cmd-smith.h"
 #include "dungeon/dungeon.h"
 #include "game-option/birth-options.h"
+#include "grid/feature.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "load/angband-version-comparer.h"
@@ -39,6 +40,8 @@
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
 #include "world/world-object.h"
@@ -428,17 +431,17 @@ void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
 
     u32b tmp32u;
     rd_u32b(&tmp32u);
-    std::bitset<32> rd_bits(tmp32u);
-    for (size_t i = 0; i < std::min(m_ptr->smart.size(), rd_bits.size()); i++) {
+    std::bitset<32> rd_bits_smart(tmp32u);
+    for (size_t i = 0; i < std::min(m_ptr->smart.size(), rd_bits_smart.size()); i++) {
         auto f = static_cast<SM>(i);
-        m_ptr->smart[f] = rd_bits[i];
+        m_ptr->smart[f] = rd_bits_smart[i];
     }
 
     // 3.0.0Alpha10以前のSM_CLONED(ビット位置22)、SM_PET(23)、SM_FRIEDLY(28)をMFLAG2に移行する
     // ビット位置の定義はなくなるので、ビット位置の値をハードコードする。
-    m_ptr->mflag2[MFLAG2::CLONED] = rd_bits[22];
-    m_ptr->mflag2[MFLAG2::PET] = rd_bits[23];
-    m_ptr->mflag2[MFLAG2::FRIENDLY] = rd_bits[28];
+    m_ptr->mflag2[MFLAG2::CLONED] = rd_bits_smart[22];
+    m_ptr->mflag2[MFLAG2::PET] = rd_bits_smart[23];
+    m_ptr->mflag2[MFLAG2::FRIENDLY] = rd_bits_smart[28];
     m_ptr->smart.reset(static_cast<SM>(22)).reset(static_cast<SM>(23)).reset(static_cast<SM>(28));
 
     if (h_older_than(0, 4, 5)) {
@@ -456,10 +459,10 @@ void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
     } else {
         rd_byte(&tmp8u);
         constexpr auto base = static_cast<int>(MFLAG2::KAGE);
-        std::bitset<7> rd_bits(tmp8u);
-        for (size_t i = 0; i < std::min(m_ptr->mflag2.size(), rd_bits.size()); ++i) {
+        std::bitset<7> rd_bits_mflag2(tmp8u);
+        for (size_t i = 0; i < std::min(m_ptr->mflag2.size(), rd_bits_mflag2.size()); ++i) {
             auto f = static_cast<MFLAG2>(base + i);
-            m_ptr->mflag2[f] = rd_bits[i];
+            m_ptr->mflag2[f] = rd_bits_mflag2[i];
         }
     }
 

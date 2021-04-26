@@ -4,6 +4,7 @@
 #include "load/load-zangband.h"
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
+#include "system/player-type-definition.h"
 
 void rd_special_attack(player_type *creature_ptr)
 {

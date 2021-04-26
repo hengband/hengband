@@ -10,6 +10,7 @@
 #include "main/sound-of-music.h"
 #include "player/player-personality.h"
 #include "player/player-realm.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"

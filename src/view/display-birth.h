@@ -1,5 +1,4 @@
 ﻿#pragma once
 
-#include "system/angband.h"
-
+typedef struct player_type player_type;
 void birth_put_stats(player_type *creature_ptr);

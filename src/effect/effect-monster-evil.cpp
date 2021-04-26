@@ -6,6 +6,9 @@
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags3.h"
 #include "monster/monster-info.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 
 static bool effect_monster_away_resist(player_type *caster_ptr, effect_monster_type *em_ptr)
 {

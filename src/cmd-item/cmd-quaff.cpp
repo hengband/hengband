@@ -16,6 +16,7 @@
 #include "realm/realm-hex-numbers.h"
 #include "spell-realm/spells-hex.h"
 #include "status/action-setter.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief 薬を飲むコマンドのメインルーチン /

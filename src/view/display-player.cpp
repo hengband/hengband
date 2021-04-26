@@ -26,7 +26,8 @@
 #include "realm/realm-names-table.h"
 #include "status-first-page.h"
 #include "system/floor-type-definition.h"
-#include "system/system-variables.h" // 暫定。後で消す
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/buffer-shaper.h"

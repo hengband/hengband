@@ -3,6 +3,9 @@
 #include "object/tval-types.h"
 #include "system/angband.h"
 
+typedef struct floor_type floor_type;
+typedef struct object_type object_type;
+typedef struct player_type player_type;
 bool make_object(player_type *owner_ptr, object_type *j_ptr, BIT_FLAGS mode);
 bool make_gold(player_type *player_ptr, object_type *j_ptr);
 void delete_all_items_from_floor(player_type *owner_ptr, POSITION y, POSITION x);

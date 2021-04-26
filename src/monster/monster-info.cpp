@@ -28,6 +28,9 @@
 #include "monster/smart-learn-types.h"
 #include "player/player-status-flags.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 

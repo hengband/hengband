@@ -2256,6 +2256,9 @@
     <ClCompile Include="..\..\src\main-win\read-graphics.cpp">
       <Filter>main-win</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\system\player-type-definition.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4859,6 +4862,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\main-win\string-win.h">
       <Filter>main-win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\player-type-definition.h">
+      <Filter>system</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -6,9 +6,11 @@
 
 #include "melee/melee-switcher.h"
 #include "core/disturbance.h"
+#include "melee/melee-util.h"
 #include "monster-attack/monster-attack-effect.h"
 #include "monster/monster-status-setter.h"
 #include "spell-kind/earthquake.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 void describe_melee_method(player_type *subject_ptr, mam_type *mam_ptr)

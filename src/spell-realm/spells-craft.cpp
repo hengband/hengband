@@ -21,6 +21,7 @@
 #include "spell/spells-object.h"
 #include "sv-definition/sv-protector-types.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "view/display-messages.h"

@@ -7,6 +7,8 @@
 #include "object/object-value.h"
 #include "player-info/avatar.h"
 #include "store/store-util.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/object-sort.h"
 
 /*!

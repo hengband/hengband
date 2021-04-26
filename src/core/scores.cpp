@@ -29,6 +29,7 @@
 #include "player/race-info-table.h"
 #include "system/angband-version.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
@@ -466,6 +467,10 @@ bool send_world_score(player_type *current_player_ptr, bool do_send, display_pla
 		prt(_("完了。何かキーを押してください。", "Completed.  Hit any key."), 0, 0);
 		(void)inkey();
 	}
+#else
+    (void)current_player_ptr;
+    (void)do_send;
+    (void)display_player;
 #endif
 	return TRUE;
 }

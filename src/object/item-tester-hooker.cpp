@@ -6,6 +6,8 @@
 
 #include "object/item-tester-hooker.h"
 #include "object/object-info.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/target-describer.h"
 
 /*

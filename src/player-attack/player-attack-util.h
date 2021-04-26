@@ -2,10 +2,8 @@
 
 #include "combat/combat-options-type.h"
 #include "combat/martial-arts-table.h"
-#include "grid/grid.h"
 #include "system/angband.h"
-#include "system/monster-type-definition.h"
-#include "system/object-type-definition.h"
+#include "system/system-variables.h"
 
 /*!
  * @brief カオス効果種別
@@ -27,7 +25,10 @@ enum class MagicalBrandEffect { NONE = 0, EXTRA = 1, STUN = 2, SCARE = 3, DISPEL
 /*!
  * @brief プレイヤーの打撃に関する情報
  */
-struct player_attack_type {
+typedef struct grid_type grid_type;
+typedef struct monster_race monster_race;
+typedef struct monster_type monster_type;
+typedef struct player_attack_type {
     s16b hand{}; //!< 武器の持ち手
     grid_type *g_ptr; //!< ターゲットのいる地形情報
     MONSTER_IDX m_idx{}; //!< モンスターID
@@ -52,4 +53,4 @@ struct player_attack_type {
     int drain_result{}; //!< 吸血した累積量
     int drain_left{}; //!< 吸血できる残量(最大MAX_VAMPIRIC_DRAIN)
     bool weak{}; //!< 打撃効果でモンスターが弱くなったかどうか
-};
+} player_attack_type;

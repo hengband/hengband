@@ -1,6 +1,8 @@
 ﻿#include "lore/lore-util.h"
 #include "game-option/birth-options.h"
+#include "monster-attack/monster-attack-types.h"
 #include "monster-race/monster-race.h"
+#include "system/monster-race-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 

@@ -24,6 +24,7 @@
 #include "monster/monster-status.h"
 #include "lore/lore-store.h"
 #include "object/object-mark-types.h"
+#include "player-attack/player-attack-util.h"
 #include "player/attack-defense-types.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell-kind/spells-polymorph.h"
@@ -31,6 +32,10 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 

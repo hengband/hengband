@@ -14,6 +14,7 @@
 #include "game-option/game-play-options.h"
 #include "grid/door.h"
 #include "grid/feature-generator.h"
+#include "grid/feature.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-summon.h"
@@ -24,6 +25,7 @@
 #include "room/rooms-maze-vault.h"
 #include "system/dungeon-data-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "wizard/wizard-messages.h"
 

@@ -5,6 +5,7 @@
 #include "game-option/input-options.h"
 #include "game-option/map-screen-options.h"
 #include "io/signal-handlers.h"
+#include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "util/string-processor.h"
 #include "world/world.h"

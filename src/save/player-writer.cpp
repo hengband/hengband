@@ -6,6 +6,7 @@
 #include "save/save-util.h"
 #include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "world/world.h"
 
 /*!
@@ -77,7 +78,7 @@ void wr_player(player_type *creature_ptr)
         for (int j = 0; j < 64; j++)
             wr_s16b(creature_ptr->weapon_exp[i][j]);
 
-    for (int i = 0; i < GINOU_MAX; i++)
+    for (int i = 0; i < MAX_SKILLS; i++)
         wr_s16b(creature_ptr->skill_exp[i]);
 
     for (int i = 0; i < MAX_SPELLS; i++)

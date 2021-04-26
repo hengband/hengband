@@ -11,6 +11,8 @@
 #include "object-hook/hook-enchant.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-flags.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 

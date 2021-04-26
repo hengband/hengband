@@ -9,6 +9,8 @@
 #include "player/player-status-flags.h"
 #include "player/race-info-table.h"
 #include "spell-realm/spells-hex.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*!

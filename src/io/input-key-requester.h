@@ -16,4 +16,5 @@ extern TERM_LEN command_gap;
 extern s16b command_wrk;
 extern s16b command_new;
 
+typedef struct player_type player_type;
 void request_command(player_type *player_ptr, int shopping);

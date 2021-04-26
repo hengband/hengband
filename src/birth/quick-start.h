@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "system/system-variables.h"
 
 /*
  * A structure to hold "rolled" information
@@ -35,6 +36,7 @@ struct birther {
 
 extern birther previous_char;
 
+typedef struct player_type player_type;
 bool ask_quick_start(player_type *creature_ptr);
 void save_prev_data(player_type *creature_ptr, birther *birther_ptr);
 void load_prev_data(player_type *creature_ptr, bool swap);

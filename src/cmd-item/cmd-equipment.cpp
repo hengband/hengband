@@ -37,6 +37,7 @@
 #include "status/action-setter.h"
 #include "status/shape-changer.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "view/display-inventory.h"

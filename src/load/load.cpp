@@ -39,6 +39,7 @@
 #include "player/player-sex.h"
 #include "player/race-info-table.h"
 #include "system/angband-version.h"
+#include "system/player-type-definition.h"
 #include "system/system-variables.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"

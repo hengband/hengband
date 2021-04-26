@@ -8,6 +8,7 @@
 #include "market/bounty.h"
 #include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "world/world.h"
 
 static void rd_hengband_dungeons(void)

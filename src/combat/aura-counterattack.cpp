@@ -9,6 +9,7 @@
 #include "effect/effect-processor.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
+#include "monster-attack/monster-attack-util.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags3.h"
@@ -22,7 +23,10 @@
 #include "spell-realm/spells-hex.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 static void aura_fire_by_monster_attack(player_type *target_ptr, monap_type *monap_ptr)

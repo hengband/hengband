@@ -1,4 +1,5 @@
 ﻿#include "view/display-lore-drops.h"
+#include "lore/lore-util.h"
 #include "monster-race/race-flags1.h"
 
 void display_monster_drop_quantity(lore_type *lore_ptr)

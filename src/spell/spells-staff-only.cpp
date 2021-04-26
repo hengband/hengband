@@ -7,6 +7,7 @@
 #include "spell/spell-types.h"
 #include "status/bad-status-setter.h"
 #include "status/body-improvement.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

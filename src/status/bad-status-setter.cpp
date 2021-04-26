@@ -14,6 +14,7 @@
 #include "spell-realm/spells-hex.h"
 #include "status/base-status.h"
 #include "status/buff-setter.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

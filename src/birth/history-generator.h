@@ -1,5 +1,4 @@
 ﻿#pragma once
 
-#include "system/angband.h"
-
-void get_history(player_type* creature_ptr);
+typedef struct player_type player_type;
+void get_history(player_type *creature_ptr);

@@ -8,6 +8,7 @@
 #include "lore/lore-calculator.h" //!< @todo 少し違和感.
 #include "monster-race/race-ability-flags.h"
 #include "mspell/mspell-damage-calculator.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief モンスター魔法をプレイヤーが使用する場合の換算レベル

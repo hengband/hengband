@@ -5,6 +5,7 @@
 #include "spell-kind/spells-sight.h"
 #include "spell/spell-types.h"
 #include "status/base-status.h"
+#include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "view/display-messages.h"
 

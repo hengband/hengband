@@ -3,6 +3,7 @@
 #include "info-reader/race-info-tokens-table.h"
 #include "main/angband-headers.h"
 #include "monster-race/monster-race.h"
+#include "system/monster-race-definition.h"
 #include "term/gameterm.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"

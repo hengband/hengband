@@ -27,6 +27,8 @@
 #include "spell/spells-util.h"
 #include "system/angband-version.h"
 #include "system/object-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"

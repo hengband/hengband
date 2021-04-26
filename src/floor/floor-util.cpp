@@ -9,6 +9,7 @@
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"
 #include "floor/floor-town.h"
+#include "floor/geometry.h"
 #include "floor/line-of-sight.h"
 #include "game-option/birth-options.h"
 #include "grid/feature.h"
@@ -19,6 +20,8 @@
 #include "perception/object-perception.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "world/world.h"
 

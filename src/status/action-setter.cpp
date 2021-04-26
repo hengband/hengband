@@ -17,6 +17,7 @@
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

@@ -16,6 +16,8 @@
 #include "object/object-kind.h"
 #include "monster-race/monster-race.h"
 #include "system/game-option-types.h"
+#include "system/monster-race-definition.h"
+#include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"

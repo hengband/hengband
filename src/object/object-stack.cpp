@@ -14,6 +14,7 @@
 #include "object/object-value.h"
 #include "perception/object-perception.h"
 #include "sv-definition/sv-other-types.h"
+#include "system/object-type-definition.h"
 
 /*!
  * @brief 魔法棒やロッドのスロット分割時に使用回数を分配する /

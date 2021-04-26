@@ -3,6 +3,8 @@
 #include "game-option/text-display-options.h"
 #include "object-enchant/special-object-flags.h"
 #include "perception/object-perception.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"
 

@@ -10,6 +10,7 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "world/world.h"
 

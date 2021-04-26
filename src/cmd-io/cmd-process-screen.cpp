@@ -13,6 +13,7 @@
 #include "game-option/special-options.h"
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"
+#include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"

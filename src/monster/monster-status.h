@@ -1,8 +1,10 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "system/monster-type-definition.h"
 
+typedef struct floor_type floor_type;
+typedef struct player_type player_type;
+typedef struct monster_type monster_type;
 bool monster_is_powerful(floor_type *floor_ptr, MONSTER_IDX m_idx);
 DEPTH monster_level_idx(floor_type *floor_ptr, MONSTER_IDX m_idx);
 
