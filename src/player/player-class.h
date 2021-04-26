@@ -4,7 +4,7 @@
 #include "system/angband.h"
 
 #include "object/tval-types.h"
-#include "player/player-classes-types.h"
+#include "player/player-class-types.h"
 #include "realm/realm-types.h"
 #include "spell/technic-info-table.h"
 

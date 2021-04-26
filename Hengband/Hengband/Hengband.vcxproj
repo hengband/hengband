@@ -1462,7 +1462,7 @@
     <ClInclude Include="..\..\src\mspell\mspell-ball.h" />
     <ClInclude Include="..\..\src\player\player-personality-types.h" />
     <ClInclude Include="..\..\src\player\player-race-types.h" />
-    <ClInclude Include="..\..\src\player\player-classes-types.h" />
+    <ClInclude Include="..\..\src\player\player-class-types.h" />
     <ClInclude Include="..\..\src\spell-kind\spells-detection.h" />
     <ClInclude Include="..\..\src\system\angband-version.h" />
     <ClInclude Include="..\..\src\core\turn-compensator.h" />

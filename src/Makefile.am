@@ -611,7 +611,7 @@ hengband_SOURCES = \
 	player/permanent-resistances.cpp player/permanent-resistances.h \
 	player/temporary-resistances.cpp player/temporary-resistances.h \
 	player/digestion-processor.cpp player/digestion-processor.h \
-	player/player-classes-types.h \
+	player/player-class-types.h \
 	player/player-class.cpp player/player-class.h \
 	player/player-damage.cpp player/player-damage.h \
 	player/player-move.cpp player/player-move.h \

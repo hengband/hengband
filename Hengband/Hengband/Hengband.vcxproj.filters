@@ -3695,7 +3695,7 @@
     <ClInclude Include="..\..\src\player\player-personality-types.h">
       <Filter>player</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player\player-classes-types.h">
+    <ClInclude Include="..\..\src\player\player-class-types.h">
       <Filter>player</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\spell\spell-types.h">
