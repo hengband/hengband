@@ -230,11 +230,6 @@ static HBRUSH hbrYellow;
 static HICON hIcon;
 
 /* bg */
-enum class bg_mode {
-    BG_NONE = 0,
-    BG_ONE = 1,
-    BG_PRESET = 2,
-};
 bg_mode current_bg_mode = bg_mode::BG_NONE;
 #define DEFAULT_BG_FILENAME "bg.bmp"
 char wallpaper_file[MAIN_WIN_MAX_PATH] = ""; //!< 壁紙ファイル名。
