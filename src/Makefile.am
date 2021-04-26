@@ -629,26 +629,16 @@ hengband_SOURCES = \
 	player/special-defense-types.h \
 	\
 	player-ability/player-ability-types.h \
-	player-ability/player-status-base.h \
-	player-ability/player-speed.h \
-	player-ability/player-stealth.h \
-	player-ability/player-basic-statistics.h \
-	player-ability/player-strength.h \
-	player-ability/player-intelligence.h \
-	player-ability/player-wisdom.h \
-	player-ability/player-dexterity.h \
-	player-ability/player-constitution.h \
-	player-ability/player-charisma.h \
-	player-ability/player-status-base.cpp \
-	player-ability/player-speed.cpp \
-	player-ability/player-stealth.cpp \
-	player-ability/player-basic-statistics.cpp \
-	player-ability/player-strength.cpp \
-	player-ability/player-intelligence.cpp \
-	player-ability/player-wisdom.cpp \
-	player-ability/player-dexterity.cpp \
-	player-ability/player-constitution.cpp \
-	player-ability/player-charisma.cpp \
+	player-ability/player-basic-statistics.cpp player-ability/player-basic-statistics.h \
+	player-ability/player-charisma.cpp player-ability/player-charisma.h \
+	player-ability/player-constitution.cpp player-ability/player-constitution.h \
+	player-ability/player-dexterity.cpp player-ability/player-dexterity.h \
+	player-ability/player-intelligence.cpp player-ability/player-intelligence.h \
+	player-ability/player-speed.cpp player-ability/player-speed.h \
+	player-ability/player-status-base.cpp player-ability/player-status-base.h \
+	player-ability/player-stealth.cpp player-ability/player-stealth.h \
+	player-ability/player-strength.cpp player-ability/player-strength.h \
+	player-ability/player-wisdom.cpp player-ability/player-wisdom.h \
 	\
 	player-attack/player-attack-util.h \
 	player-attack/attack-chaos-effect.cpp player-attack/attack-chaos-effect.h \
