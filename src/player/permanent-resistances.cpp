@@ -3,7 +3,7 @@
 #include "mind/mind-elementalist.h"
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
-#include "player/player-personalities-types.h"
+#include "player/player-personality-types.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"
 #include "player/player-status-flags.h"

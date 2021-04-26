@@ -43,7 +43,7 @@
 #include "object/object-flags.h"
 #include "player-info/avatar.h"
 #include "player/player-class.h"
-#include "player/player-personalities-types.h"
+#include "player/player-personality-types.h"
 #include "player/player-race-types.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-resist.h"

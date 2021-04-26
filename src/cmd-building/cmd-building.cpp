@@ -55,7 +55,7 @@
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"
 #include "player-info/avatar.h"
-#include "player/player-personalities-types.h"
+#include "player/player-personality-types.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-perception.h"
 #include "spell-kind/spells-world.h"

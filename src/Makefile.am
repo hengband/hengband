@@ -624,7 +624,7 @@ hengband_SOURCES = \
 	player/player-status-flags.cpp player/player-status-flags.h \
 	player/player-status-table.cpp player/player-status-table.h \
 	player/player-status-resist.cpp player/player-status-resist.h \
-	player/player-personalities-types.h \
+	player/player-personality-types.h \
 	player/player-sex.cpp player/player-sex.h \
 	player/player-view.cpp player/player-view.h \
 	player/special-defense-types.h \

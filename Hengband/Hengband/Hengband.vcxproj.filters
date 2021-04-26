@@ -3692,7 +3692,7 @@
     <ClInclude Include="..\..\src\system\building-type-definition.h">
       <Filter>system</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player\player-personalities-types.h">
+    <ClInclude Include="..\..\src\player\player-personality-types.h">
       <Filter>player</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player\player-classes-types.h">
