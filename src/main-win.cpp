@@ -731,11 +731,13 @@ static void init_background(void)
  * @brief Change background mode
  * @param new_mode bg_mode
  * @param show_error trueに設定した場合のみ、エラーダイアログを表示する
+ * @param force_redraw trueの場合、モード変更に関わらずウインドウを再描画する
  * @retval true success
  * @retval false failed
  */
-static bool change_bg_mode(bg_mode new_mode, bool show_error = false)
+static bool change_bg_mode(bg_mode new_mode, bool show_error = false, bool force_redraw = false)
 {
+    bg_mode old_bg_mode = current_bg_mode;
     current_bg_mode = new_mode;
     if (current_bg_mode != bg_mode::BG_NONE) {
         init_background();
@@ -746,6 +748,16 @@ static bool change_bg_mode(bg_mode new_mode, bool show_error = false)
         }
     } else {
         delete_bg();
+    }
+
+    const bool mode_changed = (current_bg_mode != old_bg_mode);
+    if (mode_changed || force_redraw) {
+        // 全ウインドウ再描画
+        for (int i = 0; i < MAX_TERM_DATA; i++) {
+            term_data *td = &data[i];
+            if (td->visible)
+                InvalidateRect(td->w, NULL, FALSE);
+        }
     }
 
     return (current_bg_mode == new_mode);
@@ -1968,23 +1980,15 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
     }
     case IDM_OPTIONS_NO_BG: {
         change_bg_mode(bg_mode::BG_NONE);
-        td = &data[0];
-        InvalidateRect(td->w, NULL, TRUE);
         break;
     }
     case IDM_OPTIONS_PRESET_BG: {
         change_bg_mode(bg_mode::BG_PRESET);
-        td = &data[0];
-        InvalidateRect(td->w, NULL, TRUE);
         break;
     }
     case IDM_OPTIONS_BG: {
-        bool ret = change_bg_mode(bg_mode::BG_ONE);
-        if (ret) {
-            td = &data[0];
-            InvalidateRect(td->w, NULL, TRUE);
+        if (change_bg_mode(bg_mode::BG_ONE))
             break;
-        }
         // 壁紙の設定に失敗した（ファイルが存在しない等）場合、壁紙に使うファイルを選択させる
     }
         [[fallthrough]]; /* Fall through */
@@ -2001,9 +2005,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         ofn.Flags = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
 
         if (GetOpenFileName(&ofn)) {
-            change_bg_mode(bg_mode::BG_ONE, true);
-            td = &data[0];
-            InvalidateRect(td->w, NULL, TRUE);
+            change_bg_mode(bg_mode::BG_ONE, true, true);
         }
         break;
     }
