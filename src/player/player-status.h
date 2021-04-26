@@ -1,5 +1,10 @@
 ﻿#pragma once
 
+/*
+ * @file player-status.h
+ * @brief プレーヤーのステータスに関する状態取得処理ヘッダ
+ */
+
 #include "system/angband.h"
 
 /* 人畜無害なenumヘッダを先に読み込む */
@@ -12,27 +17,6 @@
 #include "player/player-classes-types.h"
 #include "player/player-personalities-types.h"
 #include "player/player-race-types.h"
-
-/*
- * Most of the "player" information goes here.
- *
- * This stucture gives us a large collection of player variables.
- *
- * This structure contains several "blocks" of information.
- *   (1) the "permanent" info
- *   (2) the "variable" info
- *   (3) the "transient" info
- *
- * All of the "permanent" info, and most of the "variable" info,
- * is saved in the savefile.  The "transient" info is recomputed
- * whenever anything important changes.
- */
-
-/*
- * Player constants
- */
-#define PY_MAX_EXP 99999999L /*!< プレイヤー経験値の最大値 / Maximum exp */
-#define PY_MAX_GOLD 999999999L /*!< プレイヤー所持金の最大値 / Maximum gold */
 
 #define MAGIC_GLOVE_REDUCE_MANA 0x0001
 #define MAGIC_FAIL_5PERCENT 0x0002
