@@ -2,6 +2,7 @@
 
 #include "player/player-classes-types.h"
 #include "player/player-personality.h"
+#include "player/player-race-types.h"
 #include "realm/realm-names-table.h"
 #include "system/angband.h"
 

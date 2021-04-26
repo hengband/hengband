@@ -7,8 +7,6 @@
 
 #include "system/angband.h"
 
-#include "player/player-race-types.h"
-
 typedef struct object_type object_type;
 typedef struct player_type player_type;
 concptr your_alignment(player_type *creature_ptr, bool with_value = false);
