@@ -84,6 +84,7 @@
 
 #include "cmd-io/cmd-process-screen.h"
 #include "cmd-io/cmd-save.h"
+#include "cmd-visual/cmd-draw.h"
 #include "core/game-play.h"
 #include "core/player-processor.h"
 #include "core/scores.h"
@@ -886,15 +887,12 @@ static errr term_xtra_win_react(player_type *player_ptr)
 {
     refresh_color_table();
 
-    if (use_graphics != (arg_graphics > 0)) {
-        if (arg_graphics && !init_graphics()) {
-            plog(_("グラフィックスを初期化できません!", "Cannot initialize graphics!"));
-            arg_graphics = GRAPHICS_NONE;
-        }
-
-        use_graphics = (arg_graphics > 0);
-        reset_visuals(player_ptr);
+    if (arg_graphics && !init_graphics()) {
+        plog(_("グラフィックスを初期化できません!", "Cannot initialize graphics!"));
+        arg_graphics = GRAPHICS_NONE;
     }
+    use_graphics = (arg_graphics > 0);
+    reset_visuals(player_ptr);
 
     for (int i = 0; i < MAX_TERM_DATA; i++) {
         term_type *old = Term;
@@ -1888,24 +1886,16 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
     case IDM_OPTIONS_NO_GRAPHICS: {
         if (arg_graphics != GRAPHICS_NONE) {
             arg_graphics = GRAPHICS_NONE;
-
-            if (inkey_flag) {
-                term_xtra_win_react(player_ptr);
-                term_key_push(KTRL('R'));
-            }
+            if (game_in_progress)
+                do_cmd_redraw(player_ptr);
         }
         break;
     }
     case IDM_OPTIONS_OLD_GRAPHICS: {
         if (arg_graphics != GRAPHICS_ORIGINAL) {
             arg_graphics = GRAPHICS_ORIGINAL;
-
-            if (inkey_flag) {
-                term_xtra_win_react(player_ptr);
-                term_key_push(KTRL('R'));
-            } else if (!init_graphics()) {
-                arg_graphics = GRAPHICS_NONE;
-            }
+            if (game_in_progress)
+                do_cmd_redraw(player_ptr);
         }
 
         break;
@@ -1913,13 +1903,8 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
     case IDM_OPTIONS_NEW_GRAPHICS: {
         if (arg_graphics != GRAPHICS_ADAM_BOLT) {
             arg_graphics = GRAPHICS_ADAM_BOLT;
-
-            if (inkey_flag) {
-                term_xtra_win_react(player_ptr);
-                term_key_push(KTRL('R'));
-            } else if (!init_graphics()) {
-                arg_graphics = GRAPHICS_NONE;
-            }
+            if (game_in_progress)
+                do_cmd_redraw(player_ptr);
         }
 
         break;
@@ -1927,13 +1912,8 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
     case IDM_OPTIONS_NEW2_GRAPHICS: {
         if (arg_graphics != GRAPHICS_HENGBAND) {
             arg_graphics = GRAPHICS_HENGBAND;
-
-            if (inkey_flag) {
-                term_xtra_win_react(player_ptr);
-                term_key_push(KTRL('R'));
-            } else if (!init_graphics()) {
-                arg_graphics = GRAPHICS_NONE;
-            }
+            if (game_in_progress)
+                do_cmd_redraw(player_ptr);
         }
 
         break;
