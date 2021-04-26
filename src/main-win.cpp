@@ -98,15 +98,14 @@
 #include "io/record-play-movie.h"
 #include "io/signal-handlers.h"
 #include "io/write-diary.h"
+#include "main-win/graphics-win.h"
 #include "main-win/main-win-bg.h"
 #include "main-win/main-win-file-utils.h"
 #include "main-win/main-win-mci.h"
 #include "main-win/main-win-menuitem.h"
 #include "main-win/main-win-music.h"
 #include "main-win/main-win-sound.h"
-#include "main-win/read-graphics.h"
 #include "main-win/string-win.h"
-#include "main-win/tile-info.h"
 #include "main/angband-initializer.h"
 #include "main/sound-of-music.h"
 #include "monster-floor/monster-lite.h"
@@ -130,16 +129,6 @@
 
 #include <commdlg.h>
 #include <direct.h>
-
-/*
- * Available graphic modes
- */
-enum graphics_mode {
-    GRAPHICS_NONE = 0,
-    GRAPHICS_ORIGINAL = 1,
-    GRAPHICS_ADAM_BOLT = 2,
-    GRAPHICS_HENGBAND = 3,
-};
 
 /*!
  * @struct term_data

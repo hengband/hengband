@@ -2253,7 +2253,7 @@
     <ClCompile Include="..\..\src\main\scene-table-monster.cpp">
       <Filter>main</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\main-win\read-graphics.cpp">
+    <ClCompile Include="..\..\src\main-win\graphics-win.cpp">
       <Filter>main-win</Filter>
     </ClCompile>
   </ItemGroup>
@@ -4851,13 +4851,10 @@
     <ClInclude Include="..\..\src\store\store-key-processor.h">
       <Filter>store</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\main-win\read-graphics.h">
-      <Filter>main-win</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\main-win\tile-info.h">
-      <Filter>main-win</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\main-win\string-win.h">
+      <Filter>main-win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main-win\graphics-win.h">
       <Filter>main-win</Filter>
     </ClInclude>
   </ItemGroup>

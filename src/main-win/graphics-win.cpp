@@ -3,7 +3,7 @@
  * @brief Windows版固有実装(イメージファイルの読み込み)
  */
 
-#include "main-win/read-graphics.h"
+#include "main-win/graphics-win.h"
 #include "main-win/main-win-define.h"
 
 #pragma warning(push)
