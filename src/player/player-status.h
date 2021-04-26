@@ -18,15 +18,6 @@
 #include "player/player-personalities-types.h"
 #include "player/player-race-types.h"
 
-/*
- * Player regeneration constants
- */
-#define PY_REGEN_NORMAL 197 /* Regen factor*2^16 when full */
-#define PY_REGEN_WEAK 98 /* Regen factor*2^16 when weak */
-#define PY_REGEN_FAINT 33 /* Regen factor*2^16 when fainting */
-#define PY_REGEN_HPBASE 1442 /* Min amount hp regen*2^16 */
-#define PY_REGEN_MNBASE 524 /* Min amount mana regen*2^16 */
-
 typedef struct object_type object_type;
 typedef struct player_type player_type;
 concptr your_alignment(player_type *creature_ptr, bool with_value = false);
