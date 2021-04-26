@@ -6,6 +6,7 @@
 #include "player/player-personalities-types.h"
 #include "system/angband.h"
 #include "system/system-variables.h"
+#include "util/flag-group.h"
 
 #define MAX_SKILLS 10
 #define MAX_MANE 16
