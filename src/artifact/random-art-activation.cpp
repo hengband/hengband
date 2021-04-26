@@ -1,4 +1,10 @@
-﻿#include "artifact/random-art-activation.h"
+﻿/*!
+ * @file random-art-activation.cpp
+ * @brief ランダムアーティファクトの発動実装定義
+ */
+
+
+#include "artifact/random-art-activation.h"
 #include "artifact/random-art-effects.h"
 #include "artifact/random-art-bias-types.h"
 #include "object-enchant/object-boost.h"

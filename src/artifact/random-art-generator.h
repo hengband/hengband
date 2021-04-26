@@ -1,4 +1,8 @@
 ﻿#pragma once
+/*!
+ * @file random-art-generator.h
+ * @brief ランダムアーティファクトの生成メインヘッダ / Artifact code
+ */
 
 typedef struct object_type object_type;
 typedef struct player_type player_type;

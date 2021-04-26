@@ -1,4 +1,9 @@
-﻿#include "artifact/random-art-resistance.h"
+﻿/*!
+ * @file random-art-resistance.cpp
+ * @brief ランダムアーティファクトの耐性付加処理実装
+ */
+
+#include "artifact/random-art-resistance.h"
 #include "artifact/random-art-bias-types.h"
 #include "object-enchant/tr-types.h"
 #include "system/object-type-definition.h"

@@ -1,4 +1,8 @@
-#pragma once
+﻿#pragma once
+/*!
+ * @file fixed-art-types.h
+ * @brief 固定アーティファクトのハードコード処理用ID定義
+ */
 
 enum fixed_artifact_type {
     ART_JUDGE = 3,

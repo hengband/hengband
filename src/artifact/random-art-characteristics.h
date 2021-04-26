@@ -1,4 +1,8 @@
 ﻿#pragma once
+/*!
+ * @file random-art-characteristics.h
+ * @brief ランダムアーティファクトのバイアス付加処理ヘッダ
+ */
 
 typedef struct object_type object_type;
 typedef struct player_type player_type;

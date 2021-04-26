@@ -1,4 +1,9 @@
-﻿#include "artifact/artifact-info.h"
+﻿/*!
+ * @file artifact-info.cpp 
+ * @brief アーティファクトの発動効果取得関数定義
+ */
+
+#include "artifact/artifact-info.h"
 #include "artifact/random-art-effects.h"
 #include "cmd-item/cmd-smith.h"
 #include "mind/mind-weaponsmith.h"

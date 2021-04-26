@@ -1,4 +1,8 @@
 ﻿#pragma once
+/*!
+ * @file artifact-info.h
+ * @brief アーティファクトの発動効果取得関数ヘッダ
+ */
 
 typedef struct activation_type activation_type;
 typedef struct object_type object_type;
