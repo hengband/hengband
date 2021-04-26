@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "player-ability/player-abillity-types.h"
 #include "player/player-race-types.h"
 #include "player/player-classes-types.h"
 #include "player/player-personalities-types.h"

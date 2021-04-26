@@ -7,7 +7,6 @@
 
 #include "system/angband.h"
 
-#include "player-ability/player-abillity-types.h"
 #include "spell/spells-util.h"
 #include "util/flag-group.h"
 

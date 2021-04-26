@@ -5070,14 +5070,14 @@
     <Filter Include="main-win">
       <UniqueIdentifier>{8175f3d1-c8b3-4f2b-8536-8631d77eb53c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="player-ability">
-      <UniqueIdentifier>{d6c9dc68-d79b-4509-bf9c-34ff9620bbf4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="player-status">
       <UniqueIdentifier>{ff73fd79-e082-4a2c-8c5b-9457c30d9e74}</UniqueIdentifier>
     </Filter>
     <Filter Include="hpmp">
       <UniqueIdentifier>{fb766b4b-8783-4d07-9474-059259afe7c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="player-ability">
+      <UniqueIdentifier>{d6c9dc68-d79b-4509-bf9c-34ff9620bbf4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
