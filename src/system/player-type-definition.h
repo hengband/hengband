@@ -9,9 +9,11 @@
 #define MAX_SKILLS 10
 #define MAX_MANE 16
 
+enum class MUTA;
+enum class RF_ABILITY;
+
 typedef struct floor_type floor_type;
 typedef struct object_type object_type;
-enum class RF_ABILITY;
 typedef struct player_type {
     int player_uid{};
     int player_euid{};

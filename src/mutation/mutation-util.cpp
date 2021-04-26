@@ -1,4 +1,5 @@
 ﻿#include "mutation/mutation-util.h"
+#include "mutation/mutation-flag-types.h"
 
 glm_type *initialize_glm_type(glm_type *gm_ptr, MUTATION_IDX choose_mut)
 {
