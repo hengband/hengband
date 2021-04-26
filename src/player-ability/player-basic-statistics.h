@@ -23,7 +23,7 @@ protected:
 
 #include "player-ability/player-charisma.h"
 #include "player-ability/player-constitution.h"
-#include "player-ability/player-dextarity.h"
+#include "player-ability/player-dexterity.h"
 #include "player-ability/player-intelligence.h"
 #include "player-ability/player-strength.h"
 #include "player-ability/player-wisdom.h"

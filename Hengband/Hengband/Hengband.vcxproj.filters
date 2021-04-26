@@ -2195,7 +2195,7 @@
     <ClCompile Include="..\..\src\player-ability\player-wisdom.cpp">
       <Filter>player-ability</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player-ability\player-dextarity.cpp">
+    <ClCompile Include="..\..\src\player-ability\player-dexterity.cpp">
       <Filter>player-ability</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\player-ability\player-constitution.cpp">
@@ -4772,7 +4772,7 @@
     <ClInclude Include="..\..\src\player-ability\player-wisdom.h">
       <Filter>player-ability</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player-ability\player-dextarity.h">
+    <ClInclude Include="..\..\src\player-ability\player-dexterity.h">
       <Filter>player-ability</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player-ability\player-constitution.h">

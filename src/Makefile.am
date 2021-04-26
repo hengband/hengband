@@ -636,7 +636,7 @@ hengband_SOURCES = \
 	player-ability/player-strength.h \
 	player-ability/player-intelligence.h \
 	player-ability/player-wisdom.h \
-	player-ability/player-dextarity.h \
+	player-ability/player-dexterity.h \
 	player-ability/player-constitution.h \
 	player-ability/player-charisma.h \
 	player-ability/player-status-base.cpp \
@@ -646,7 +646,7 @@ hengband_SOURCES = \
 	player-ability/player-strength.cpp \
 	player-ability/player-intelligence.cpp \
 	player-ability/player-wisdom.cpp \
-	player-ability/player-dextarity.cpp \
+	player-ability/player-dexterity.cpp \
 	player-ability/player-constitution.cpp \
 	player-ability/player-charisma.cpp \
 	\

@@ -398,14 +398,14 @@ static void update_bonuses(player_type *creature_ptr)
     creature_ptr->stat_add[A_STR] = PlayerStrength(creature_ptr).modification_value();
     creature_ptr->stat_add[A_INT] = PlayerIntelligence(creature_ptr).modification_value();
     creature_ptr->stat_add[A_WIS] = PlayerWisdom(creature_ptr).modification_value();
-    creature_ptr->stat_add[A_DEX] = PlayerDextarity(creature_ptr).modification_value();
+    creature_ptr->stat_add[A_DEX] = PlayerDexterity(creature_ptr).modification_value();
     creature_ptr->stat_add[A_CON] = PlayerConstitution(creature_ptr).modification_value();
     creature_ptr->stat_add[A_CHR] = PlayerCharisma(creature_ptr).modification_value();
 
     PlayerStrength(creature_ptr).update_value();
     PlayerIntelligence(creature_ptr).update_value();
     PlayerWisdom(creature_ptr).update_value();
-    PlayerDextarity(creature_ptr).update_value();
+    PlayerDexterity(creature_ptr).update_value();
     PlayerConstitution(creature_ptr).update_value();
     PlayerCharisma(creature_ptr).update_value();
 

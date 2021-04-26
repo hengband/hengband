@@ -425,7 +425,7 @@
     <ClCompile Include="..\..\src\player-ability\player-strength.cpp" />
     <ClCompile Include="..\..\src\player-ability\player-intelligence.cpp" />
     <ClCompile Include="..\..\src\player-ability\player-wisdom.cpp" />
-    <ClCompile Include="..\..\src\player-ability\player-dextarity.cpp" />
+    <ClCompile Include="..\..\src\player-ability\player-dexterity.cpp" />
     <ClCompile Include="..\..\src\player-ability\player-constitution.cpp" />
     <ClCompile Include="..\..\src\player-ability\player-charisma.cpp" />
     <ClCompile Include="..\..\src\player\player-status-resist.cpp" />
@@ -1112,7 +1112,7 @@
     <ClInclude Include="..\..\src\player-ability\player-strength.h" />
     <ClInclude Include="..\..\src\player-ability\player-intelligence.h" />
     <ClInclude Include="..\..\src\player-ability\player-wisdom.h" />
-    <ClInclude Include="..\..\src\player-ability\player-dextarity.h" />
+    <ClInclude Include="..\..\src\player-ability\player-dexterity.h" />
     <ClInclude Include="..\..\src\player-ability\player-constitution.h" />
     <ClInclude Include="..\..\src\player-ability\player-charisma.h" />
     <ClInclude Include="..\..\src\player\player-status-resist.h" />

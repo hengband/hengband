@@ -158,7 +158,7 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
     case TR_WIS:
         return PlayerWisdom(creature_ptr).get_all_flags();
     case TR_DEX:
-        return PlayerDextarity(creature_ptr).get_all_flags();
+        return PlayerDexterity(creature_ptr).get_all_flags();
     case TR_CON:
         return PlayerConstitution(creature_ptr).get_all_flags();
     case TR_CHR:
