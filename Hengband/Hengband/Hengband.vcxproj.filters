@@ -4863,6 +4863,9 @@
     <ClInclude Include="..\..\src\player-ability\player-abillity-types.h">
       <Filter>player-ability</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\player-status\player-hand-types.h">
+      <Filter>player-status</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -5069,6 +5072,9 @@
     </Filter>
     <Filter Include="player-ability">
       <UniqueIdentifier>{d6c9dc68-d79b-4509-bf9c-34ff9620bbf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="player-status">
+      <UniqueIdentifier>{ff73fd79-e082-4a2c-8c5b-9457c30d9e74}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -36,6 +36,7 @@
 #include "monster/smart-learn-types.h"
 #include "object-hook/hook-weapon.h"
 #include "pet/pet-util.h"
+#include "player-status/player-hand-types.h"
 #include "player/attack-defense-types.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"

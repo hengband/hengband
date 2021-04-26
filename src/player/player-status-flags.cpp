@@ -16,6 +16,7 @@
 #include "player-ability/player-basic-statistics.h"
 #include "player-ability/player-speed.h"
 #include "player-ability/player-stealth.h"
+#include "player-status/player-hand-types.h"
 #include "player/attack-defense-types.h"
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"

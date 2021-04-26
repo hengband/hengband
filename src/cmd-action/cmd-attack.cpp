@@ -33,6 +33,7 @@
 #include "object/item-use-flags.h"
 #include "player-attack/player-attack.h"
 #include "player-info/avatar.h"
+#include "player-status/player-hand-types.h"
 #include "player/attack-defense-types.h"
 #include "player/player-damage.h"
 #include "player/player-skill.h"

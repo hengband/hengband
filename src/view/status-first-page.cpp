@@ -17,6 +17,7 @@
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "perception/object-perception.h"
+#include "player-status/player-hand-types.h"
 #include "player/player-status-flags.h"
 #include "player/special-defense-types.h"
 #include "sv-definition/sv-weapon-types.h"

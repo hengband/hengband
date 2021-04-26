@@ -30,6 +30,7 @@
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
 #include "player-info/avatar.h"
+#include "player-status/player-hand-types.h"
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
 #include "racial/racial-android.h"

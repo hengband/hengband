@@ -7,6 +7,7 @@
 #include "monster/monster-status.h"
 #include "object-enchant/special-object-flags.h"
 #include "perception/object-perception.h"
+#include "player-status/player-hand-types.h"
 #include "player/attack-defense-types.h"
 #include "player/player-race-types.h"
 #include "player/player-skill.h"
