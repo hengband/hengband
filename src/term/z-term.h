@@ -24,6 +24,8 @@
 class term_win {
 public:
     static std::unique_ptr<term_win> create(TERM_LEN w, TERM_LEN h);
+    std::unique_ptr<term_win> clone() const;
+    void resize(TERM_LEN w, TERM_LEN h);
 
     bool cu{}, cv{}; //!< Cursor Useless / Visible codes
     TERM_LEN cx{}, cy{}; //!< Cursor Location (see "Useless")
