@@ -18,10 +18,6 @@
 #include "player/player-personalities-types.h"
 #include "player/player-race-types.h"
 
-#define MAGIC_GLOVE_REDUCE_MANA 0x0001
-#define MAGIC_FAIL_5PERCENT 0x0002
-#define MAGIC_GAIN_EXP 0x0004
-
 /* no_flowed 判定対象となるスペル */
 #define SPELL_DD_S 27
 #define SPELL_DD_T 13

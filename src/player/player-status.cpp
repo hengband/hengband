@@ -108,6 +108,8 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
+static const int extra_magic_glove_reduce_mana = 1;
+
 static bool is_martial_arts_mode(player_type *creature_ptr);
 
 static ACTION_SKILL_POWER calc_intra_vision(player_type *creature_ptr);
@@ -940,7 +942,7 @@ static void update_max_mana(player_type *creature_ptr)
             msp += msp * (25 + creature_ptr->lev) / 100;
     }
 
-    if (any_bits(mp_ptr->spell_xtra, MAGIC_GLOVE_REDUCE_MANA)) {
+    if (any_bits(mp_ptr->spell_xtra, extra_magic_glove_reduce_mana)) {
         BIT_FLAGS flgs[TR_FLAG_SIZE];
         creature_ptr->cumber_glove = FALSE;
         object_type *o_ptr;
