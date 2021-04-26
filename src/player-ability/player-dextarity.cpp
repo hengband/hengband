@@ -15,7 +15,7 @@ void PlayerDextarity::set_locals()
 {
     this->max_value = +99;
     this->min_value = -99;
-    this->status_type = A_DEX;
+    this->ability_type = A_DEX;
     this->tr_flag = TR_DEX;
     this->tr_bad_flag = TR_DEX;
 }

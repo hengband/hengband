@@ -15,7 +15,7 @@ void PlayerConstitution::set_locals()
 {
     this->max_value = +99;
     this->min_value = -99;
-    this->status_type = A_CON;
+    this->ability_type = A_CON;
     this->tr_flag = TR_CON;
     this->tr_bad_flag = TR_CON;
 }

@@ -628,6 +628,7 @@ hengband_SOURCES = \
 	player/player-view.cpp player/player-view.h \
 	player/special-defense-types.h \
 	\
+	player-ability/player-ability-types.h \
 	player-ability/player-status-base.h \
 	player-ability/player-speed.h \
 	player-ability/player-stealth.h \
@@ -656,7 +657,6 @@ hengband_SOURCES = \
 	\
 	player-info/avatar.h player-info/avatar.cpp \
 	player-info/base-status-info.cpp player-info/base-status-info.h \
-	player-info/base-status-types.h \
 	player-info/body-improvement-info.cpp player-info/body-improvement-info.h \
 	player-info/class-ability-info.cpp player-info/class-ability-info.h \
 	player-info/mutation-info.cpp player-info/mutation-info.h \

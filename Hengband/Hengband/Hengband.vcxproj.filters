@@ -4691,9 +4691,6 @@
     <ClInclude Include="..\..\src\player-info\resistance-info.h">
       <Filter>player-info</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player-info\base-status-info.h">
-      <Filter>player-info</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\view\display-self-info.h">
       <Filter>view</Filter>
     </ClInclude>
@@ -4862,6 +4859,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\system\player-type-definition.h">
       <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-ability\player-abillity-types.h">
+      <Filter>player-ability</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

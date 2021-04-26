@@ -13,7 +13,7 @@ void PlayerWisdom::set_locals()
 {
     this->max_value = +99;
     this->min_value = -99;
-    this->status_type = A_WIS;
+    this->ability_type = A_WIS;
     this->tr_flag = TR_WIS;
     this->tr_bad_flag = TR_WIS;
 }

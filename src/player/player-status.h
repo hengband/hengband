@@ -4,7 +4,7 @@
 
 /* 人畜無害なenumヘッダを先に読み込む */
 #include "mutation/mutation-flag-types.h"
-#include "player-info/base-status-types.h"
+#include "player-ability/player-abillity-types.h"
 #include "spell/spells-util.h"
 #include "util/flag-group.h"
 

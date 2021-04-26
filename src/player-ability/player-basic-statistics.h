@@ -11,7 +11,7 @@ public:
     s16b get_value() override;
 
 protected:
-    base_status_type status_type;
+    player_ability_type ability_type;
     s16b race_value() override;
     s16b class_value() override;
     s16b personality_value() override;

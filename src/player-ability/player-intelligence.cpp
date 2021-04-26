@@ -15,7 +15,7 @@ void PlayerIntelligence::set_locals()
 {
     this->max_value = +99;
     this->min_value = -99;
-    this->status_type = A_INT;
+    this->ability_type = A_INT;
     this->tr_flag = TR_INT;
     this->tr_bad_flag = TR_INT;
 }
