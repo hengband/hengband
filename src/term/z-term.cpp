@@ -46,6 +46,18 @@ term_win::term_win(TERM_LEN w, TERM_LEN h)
 {
 }
 
+std::unique_ptr<term_win> term_win::create(TERM_LEN w, TERM_LEN h)
+{
+    // privateコンストラクタを呼び出すための補助クラス
+    struct impl : term_win {
+        impl(TERM_LEN w, TERM_LEN h)
+            : term_win(w, h)
+        {
+        }
+    };
+    return std::make_unique<impl>(w, h);
+}
+
 /*
  * Copy a "term_win" from another
  */
@@ -1845,7 +1857,7 @@ errr term_save(void)
     /* Create */
     if (!Term->mem) {
         /* Allocate window */
-        Term->mem = std::make_unique<term_win>(w, h);
+        Term->mem = term_win::create(w, h);
     }
 
     /* Grab */
@@ -1866,7 +1878,7 @@ errr term_load(void)
     /* Create */
     if (!Term->mem) {
         /* Allocate window */
-        Term->mem = std::make_unique<term_win>(w, h);
+        Term->mem = term_win::create(w, h);
     }
 
     /* Load */
@@ -1896,7 +1908,7 @@ errr term_exchange(void)
     /* Create */
     if (!Term->tmp) {
         /* Allocate window */
-        Term->tmp = std::make_unique<term_win>(w, h);
+        Term->tmp = term_win::create(w, h);
     }
 
     /* Swap */
@@ -1957,13 +1969,13 @@ errr term_resize(TERM_LEN w, TERM_LEN h)
     Term->x2 = std::vector<TERM_LEN>(h);
 
     /* Create new window */
-    Term->old = std::make_unique<term_win>(w, h);
+    Term->old = term_win::create(w, h);
 
     /* Save the contents */
     term_win_copy(Term->old, hold_old, wid, hgt);
 
     /* Create new window */
-    Term->scr = std::make_unique<term_win>(w, h);
+    Term->scr = term_win::create(w, h);
 
     /* Save the contents */
     term_win_copy(Term->scr, hold_scr, wid, hgt);
@@ -1971,7 +1983,7 @@ errr term_resize(TERM_LEN w, TERM_LEN h)
     /* If needed */
     if (hold_mem) {
         /* Create new window */
-        Term->mem = std::make_unique<term_win>(w, h);
+        Term->mem = term_win::create(w, h);
 
         /* Save the contents */
         term_win_copy(Term->mem, hold_mem, wid, hgt);
@@ -1980,7 +1992,7 @@ errr term_resize(TERM_LEN w, TERM_LEN h)
     /* If needed */
     if (hold_tmp) {
         /* Create new window */
-        Term->tmp = std::make_unique<term_win>(w, h);
+        Term->tmp = term_win::create(w, h);
 
         /* Save the contents */
         term_win_copy(Term->tmp, hold_tmp, wid, hgt);
@@ -2112,10 +2124,10 @@ errr term_init(term_type *t, TERM_LEN w, TERM_LEN h, int k)
     t->x2.resize(h);
 
     /* Allocate "displayed" */
-    t->old = std::make_unique<term_win>(w, h);
+    t->old = term_win::create(w, h);
 
     /* Allocate "requested" */
-    t->scr = std::make_unique<term_win>(w, h);
+    t->scr = term_win::create(w, h);
 
     /* Assume change */
     for (TERM_LEN y = 0; y < h; y++) {

@@ -20,8 +20,9 @@
 /*!
  * @brief A term_win is a "window" for a Term
  */
-struct term_win {
-    term_win(TERM_LEN w, TERM_LEN h);
+class term_win {
+public:
+    static std::unique_ptr<term_win> create(TERM_LEN w, TERM_LEN h);
 
     bool cu{}, cv{}; //!< Cursor Useless / Visible codes
     TERM_LEN cx{}, cy{}; //!< Cursor Location (see "Useless")
@@ -31,6 +32,9 @@ struct term_win {
 
     std::vector<std::vector<TERM_COLOR>> ta; //!< Note that the attr pair at(x, y) is a[y][x]
     std::vector<std::vector<char>> tc; //!< Note that the char pair at(x, y) is c[y][x]
+
+private:
+    term_win(TERM_LEN w, TERM_LEN h);
 };
 
 /*!
