@@ -40,6 +40,9 @@
 #include "util/quarks.h"
 #include "util/string-processor.h"
 
+#define SPELL_SW 22
+#define SPELL_WALL 20
+
 BIT_FLAGS convert_inventory_slot_type_to_flag_cause(inventory_slot_type inventory_slot)
 {
     switch (inventory_slot) {

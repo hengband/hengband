@@ -18,12 +18,6 @@
 #include "player/player-personalities-types.h"
 #include "player/player-race-types.h"
 
-/* no_flowed 判定対象となるスペル */
-#define SPELL_DD_S 27
-#define SPELL_DD_T 13
-#define SPELL_SW 22
-#define SPELL_WALL 20
-
 /*
  * Player "food" crucial values
  */
