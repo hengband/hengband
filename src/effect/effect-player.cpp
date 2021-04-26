@@ -24,6 +24,7 @@
 #include "spell-realm/spells-crusade.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/spell-types.h"
+#include "spell/spells-util.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
@@ -161,8 +162,7 @@ enum ep_check_result {
  * @param monspell 効果元のモンスター魔法ID
  * @return 初期化後の構造体ポインタ
  */
-static effect_player_type *initialize_effect_player(
-    effect_player_type *ep_ptr, MONSTER_IDX who, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag)
+static effect_player_type *initialize_effect_player(effect_player_type *ep_ptr, MONSTER_IDX who, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag)
 {
     ep_ptr->rlev = 0;
     ep_ptr->m_ptr = NULL;

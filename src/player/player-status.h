@@ -7,7 +7,6 @@
 
 #include "system/angband.h"
 
-#include "spell/spells-util.h"
 #include "util/flag-group.h"
 
 // @todo 地雷、FlagGroupと強い関係がある
