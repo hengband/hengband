@@ -3417,3 +3417,8 @@ bool is_in_dungeon(player_type *creature_ptr)
 {
     return creature_ptr->current_floor_ptr->dun_level > 0;
 }
+
+bool music_singing_any(player_type* creature_ptr)
+{
+    return (creature_ptr->pclass == CLASS_BARD) && (creature_ptr->magic_num1[0] != 0);
+}
