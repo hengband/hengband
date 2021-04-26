@@ -7,8 +7,6 @@
 
 #include "system/angband.h"
 
-// @todo 地雷、FlagGroupと強い関係がある
-#include "player/player-classes-types.h"
 #include "player/player-personalities-types.h"
 #include "player/player-race-types.h"
 
