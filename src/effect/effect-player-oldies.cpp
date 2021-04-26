@@ -1,7 +1,7 @@
 ﻿#include "effect/effect-player-oldies.h"
-#include "core/hp-mp-processor.h"
 #include "effect/effect-player-util.h"
 #include "game-option/birth-options.h"
+#include "hpmp/hp-mp-processor.h"
 #include "monster-race/race-indice-types.h"
 #include "player/eldritch-horror.h"
 #include "status/bad-status-setter.h"

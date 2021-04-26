@@ -302,12 +302,6 @@
     <ClCompile Include="..\..\src\core\turn-compensator.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\hp-mp-regenerator.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\core\hp-mp-processor.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mutation\mutation-processor.cpp">
       <Filter>mutation</Filter>
     </ClCompile>
@@ -2259,6 +2253,12 @@
     <ClCompile Include="..\..\src\system\player-type-definition.cpp">
       <Filter>system</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\hpmp\hp-mp-processor.cpp">
+      <Filter>hpmp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\hpmp\hp-mp-regenerator.cpp">
+      <Filter>hpmp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -2589,12 +2589,6 @@
       <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\core\turn-compensator.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\core\hp-mp-regenerator.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\core\hp-mp-processor.h">
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mutation\mutation-processor.h">
@@ -4866,6 +4860,12 @@
     <ClInclude Include="..\..\src\player-status\player-hand-types.h">
       <Filter>player-status</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\hpmp\hp-mp-processor.h">
+      <Filter>hpmp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\hpmp\hp-mp-regenerator.h">
+      <Filter>hpmp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -5075,6 +5075,9 @@
     </Filter>
     <Filter Include="player-status">
       <UniqueIdentifier>{ff73fd79-e082-4a2c-8c5b-9457c30d9e74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hpmp">
+      <UniqueIdentifier>{fb766b4b-8783-4d07-9474-059259afe7c6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

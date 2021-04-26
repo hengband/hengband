@@ -148,8 +148,6 @@ hengband_SOURCES = \
 	core/disturbance.cpp core/disturbance.h \
 	core/game-closer.cpp core/game-closer.h \
 	core/game-play.cpp core/game-play.h \
-	core/hp-mp-processor.cpp core/hp-mp-processor.h \
-	core/hp-mp-regenerator.cpp core/hp-mp-regenerator.h \
 	core/magic-effects-timeout-reducer.cpp core/magic-effects-timeout-reducer.h \
 	core/object-compressor.cpp core/object-compressor.h \
 	core/player-processor.cpp core/player-processor.h \
@@ -255,6 +253,9 @@ hengband_SOURCES = \
 	grid/object-placer.cpp grid/object-placer.h \
 	grid/stair.cpp grid/stair.h \
 	grid/trap.cpp grid/trap.h \
+	\
+	hpmp/hp-mp-processor.cpp hpmp/hp-mp-processor.h \
+	hpmp/hp-mp-regenerator.cpp hpmp/hp-mp-regenerator.h \
 	\
 	info-reader/artifact-reader.cpp info-reader/artifact-reader.h \
 	info-reader/dungeon-info-tokens-table.cpp info-reader/dungeon-info-tokens-table.h \

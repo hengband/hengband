@@ -1,5 +1,5 @@
 ﻿#include "specific-object/blade-turner.h"
-#include "core/hp-mp-processor.h"
+#include "hpmp/hp-mp-processor.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"
 #include "status/bad-status-setter.h"

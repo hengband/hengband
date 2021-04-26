@@ -1,7 +1,7 @@
 ﻿#include "spell/spells-staff-only.h"
-#include "core/hp-mp-processor.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
+#include "hpmp/hp-mp-processor.h"
 #include "player/player-damage.h"
 #include "spell-kind/spells-sight.h"
 #include "spell/spell-types.h"
