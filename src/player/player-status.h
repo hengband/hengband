@@ -59,5 +59,6 @@ MAGIC_NUM1 get_singing_song_effect(player_type *creature_ptr);
 void set_singing_song_effect(player_type *creature_ptr, MAGIC_NUM1 magic_num);
 MAGIC_NUM1 get_interrupting_song_effect(player_type *creature_ptr);
 void set_interrupting_song_effect(player_type *creature_ptr, MAGIC_NUM1 magic_num);
-#define SINGING_COUNT(P_PTR) ((P_PTR)->magic_num1[2])
+MAGIC_NUM1 get_singing_count(player_type *creature_ptr);
+void set_singing_count(player_type *creature_ptr, MAGIC_NUM1 magic_num);
 #define SINGING_SONG_ID(P_PTR) ((P_PTR)->magic_num2[0])

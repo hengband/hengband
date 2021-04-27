@@ -3442,3 +3442,13 @@ void set_interrupting_song_effect(player_type *creature_ptr, MAGIC_NUM1 magic_nu
 {
     creature_ptr->magic_num1[1] = magic_num;
 }
+
+MAGIC_NUM1 get_singing_count(player_type* creature_ptr)
+{
+    return creature_ptr->magic_num1[2];
+}
+
+void set_singing_count(player_type* creature_ptr, MAGIC_NUM1 magic_num)
+{
+    creature_ptr->magic_num1[2] = magic_num;
+}

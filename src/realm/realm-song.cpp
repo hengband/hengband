@@ -304,7 +304,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
         if (cast) {
             msg_print(_("静かな音楽が感覚を研ぎ澄まさせた．．．", "Your quiet music sharpens your sense of hearing..."));
             /* Hack -- Initialize the turn count */
-            SINGING_COUNT(caster_ptr) = 0;
+            set_singing_count(caster_ptr, 0);
             start_singing(caster_ptr, spell, MUSIC_DETECT);
         }
 
@@ -315,14 +315,14 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_radius(rad);
 
             if (cont) {
-                int count = SINGING_COUNT(caster_ptr);
+                int count = get_singing_count(caster_ptr);
 
                 if (count >= 19)
                     wiz_lite(caster_ptr, FALSE);
                 if (count >= 11) {
                     map_area(caster_ptr, rad);
                     if (plev > 39 && count < 19)
-                        SINGING_COUNT(caster_ptr) = count + 1;
+                        set_singing_count(caster_ptr, count + 1);
                 }
                 if (count >= 6) {
                     /* There are too many hidden treasure.  So... */
@@ -331,21 +331,21 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                     detect_objects_normal(caster_ptr, rad);
 
                     if (plev > 24 && count < 11)
-                        SINGING_COUNT(caster_ptr) = count + 1;
+                        set_singing_count(caster_ptr, count + 1);
                 }
                 if (count >= 3) {
                     detect_monsters_invis(caster_ptr, rad);
                     detect_monsters_normal(caster_ptr, rad);
 
                     if (plev > 19 && count < A_MAX)
-                        SINGING_COUNT(caster_ptr) = count + 1;
+                        set_singing_count(caster_ptr, count + 1);
                 }
                 detect_traps(caster_ptr, rad, TRUE);
                 detect_doors(caster_ptr, rad);
                 detect_stairs(caster_ptr, rad);
 
                 if (plev > 14 && count < 3)
-                    SINGING_COUNT(caster_ptr) = count + 1;
+                    set_singing_count(caster_ptr, count + 1);
             }
         }
 
