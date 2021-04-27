@@ -42,20 +42,44 @@
 
 /***** Some copyright messages follow below *****/
 
-/*
+
+/*!
+ *
+ * @mainpage 変愚蛮怒仕様書
+ *
+ * @par
+ * 変愚蛮怒の仕様をangband.hをソースにDoxygenで読めるようまとめておきます。<br>
+ *
+ * @par
+ * - @ref page_basic "基本方針"
+ * - @ref page_license "Angbandソース内ライセンス記述"
+ *
+ *
+ *
+ *
+ */
+
+/*!
+ * @page page_basic リファクタリング基本方針
+ * 
+ * 現在まとめ中。
+ *
+ * @ref index "メインページへ"
+ */
+
+/*!
+ * @page page_license Angbandソース内ライセンス記述
+ *
+ * 以下、angband.hに当初から在った記述となります。
+ * <pre>
  * Note that these copyright messages apply to an ancient version
  * of Angband, as in, from pre-2.4.frog-knows days, and thus the
  * reference to "5.0" is rather misleading...
- */
-
-/*
+ * 
  * UNIX ANGBAND Version 5.0
- */
-
-
-/* Original copyright message follows. */
-
-/*
+ *
+ * Original copyright message follows.
+ *
  * ANGBAND Version 4.8	COPYRIGHT (c) Robert Alan Koeneke
  *
  *	 I lovingly dedicate this game to hackers and adventurers
@@ -78,14 +102,14 @@
  *		UC Berkeley
  *		wilson@ernie.Berkeley.EDU
  *		ucbvax!ucbernie!wilson
- */
-
-
-/*
+ * 
  *	 ANGBAND may be copied and modified freely as long as the above
  *	 credits are retained.	No one who-so-ever may sell or market
  *	 this software in any form without the expressed written consent
  *	 of the author Robert Alan Koeneke.
+ * </pre>
+ * 
+ * @ref index "メインページへ"
  */
 
 
