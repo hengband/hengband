@@ -249,12 +249,12 @@ errr play_music_scene(int val)
 /*
  * Notify event
  */
-void on_mci_notify(WPARAM wFlags, [[maybe_unused]] LONG lDevID)
+void on_mci_notify(WPARAM wFlags, LONG lDevID)
 {
     if (wFlags == MCI_NOTIFY_SUCCESSFUL) {
         // play a music (repeat)
-        mciSendCommand(mci_open_parms.wDeviceID, MCI_SEEK, MCI_SEEK_TO_START | MCI_WAIT, 0);
-        mciSendCommand(mci_open_parms.wDeviceID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mci_play_parms);
+        mciSendCommand(lDevID, MCI_SEEK, MCI_SEEK_TO_START | MCI_WAIT, 0);
+        mciSendCommand(lDevID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mci_play_parms);
     }
 }
 
