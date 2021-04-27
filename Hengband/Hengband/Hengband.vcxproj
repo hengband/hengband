@@ -421,6 +421,7 @@
     <ClCompile Include="..\..\src\player-status\player-speed.cpp" />
     <ClCompile Include="..\..\src\player-status\player-status-base.cpp" />
     <ClCompile Include="..\..\src\player-status\player-stealth.cpp" />
+    <ClCompile Include="..\..\src\player-status\player-infravision.cpp" />
     <ClCompile Include="..\..\src\player-status\player-basic-statistics.cpp" />
     <ClCompile Include="..\..\src\player-status\player-strength.cpp" />
     <ClCompile Include="..\..\src\player-status\player-intelligence.cpp" />
@@ -1109,6 +1110,7 @@
     <ClInclude Include="..\..\src\player-status\player-speed.h" />
     <ClInclude Include="..\..\src\player-status\player-status-base.h" />
     <ClInclude Include="..\..\src\player-status\player-stealth.h" />
+    <ClInclude Include="..\..\src\player-status\player-infravision.h" />
     <ClInclude Include="..\..\src\player-status\player-basic-statistics.h" />
     <ClInclude Include="..\..\src\player-status\player-strength.h" />
     <ClInclude Include="..\..\src\player-status\player-intelligence.h" />

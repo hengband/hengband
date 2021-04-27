@@ -62,6 +62,7 @@
 #include "pet/pet-util.h"
 #include "player-info/avatar.h"
 #include "player-status/player-basic-statistics.h"
+#include "player-status/player-infravision.h"
 #include "player-status/player-speed.h"
 #include "player-status/player-stealth.h"
 #include "player/attack-defense-types.h"
@@ -96,9 +97,9 @@
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/floor-type-definition.h"
-#include "system/object-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
+#include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
@@ -109,7 +110,6 @@
 
 static bool is_martial_arts_mode(player_type *creature_ptr);
 
-static ACTION_SKILL_POWER calc_intra_vision(player_type *creature_ptr);
 static ACTION_SKILL_POWER calc_disarming(player_type *creature_ptr);
 static ACTION_SKILL_POWER calc_device_ability(player_type *creature_ptr);
 static ACTION_SKILL_POWER calc_saving_throw(player_type *creature_ptr);
@@ -427,7 +427,7 @@ static void update_bonuses(player_type *creature_ptr)
     }
 
     creature_ptr->pspeed = PlayerSpeed(creature_ptr).get_value();
-    creature_ptr->see_infra = calc_intra_vision(creature_ptr);
+    creature_ptr->see_infra = PlayerInfravision(creature_ptr).get_value();
     creature_ptr->skill_stl = PlayerStealth(creature_ptr).get_value();
     creature_ptr->skill_dis = calc_disarming(creature_ptr);
     creature_ptr->skill_dev = calc_device_ability(creature_ptr);
@@ -1027,7 +1027,7 @@ static void update_max_mana(player_type *creature_ptr)
         case CLASS_MAGE:
         case CLASS_HIGH_MAGE:
         case CLASS_BLUE_MAGE:
-        case CLASS_ELEMENTALIST:  {
+        case CLASS_ELEMENTALIST: {
             msp -= msp * (cur_wgt - max_wgt) / 600;
             break;
         }
@@ -1172,50 +1172,6 @@ s16b calc_num_fire(player_type *creature_ptr, object_type *o_ptr)
     }
 
     return (s16b)num;
-}
-
-/*!
- * @brief 赤外線視力計算
- * @param creature_ptr 計算するクリーチャーの参照ポインタ
- * @return 赤外線視力
- * @details
- * * 種族による加算
- * * 変異MUT3_INFRAVISによる加算(+3)
- * * 魔法効果tim_infraによる加算(+3)
- * * 装備がTR_INFRAフラグ持ちなら加算(+pval*1)
- */
-static ACTION_SKILL_POWER calc_intra_vision(player_type *creature_ptr)
-{
-    ACTION_SKILL_POWER pow;
-    const player_race *tmp_rp_ptr;
-
-    if (creature_ptr->mimic_form)
-        tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
-    else
-        tmp_rp_ptr = &race_info[creature_ptr->prace];
-
-    pow = tmp_rp_ptr->infra;
-
-    if (creature_ptr->muta.has(MUTA::INFRAVIS)) {
-        pow += 3;
-    }
-
-    if (creature_ptr->tim_infra) {
-        pow += 3;
-    }
-
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        object_type *o_ptr;
-        BIT_FLAGS flgs[TR_FLAG_SIZE];
-        o_ptr = &creature_ptr->inventory_list[i];
-        if (!o_ptr->k_idx)
-            continue;
-        object_flags(creature_ptr, o_ptr, flgs);
-        if (has_flag(flgs, TR_INFRA))
-            pow += o_ptr->pval;
-    }
-
-    return pow;
 }
 
 /*!
@@ -1992,7 +1948,6 @@ s16b calc_double_weapon_penalty(player_type *creature_ptr, INVENTORY_IDX slot)
     }
     return (s16b)penalty;
 }
-
 
 static bool is_riding_two_hands(player_type *creature_ptr)
 {
