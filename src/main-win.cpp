@@ -84,6 +84,7 @@
 
 #include "cmd-io/cmd-process-screen.h"
 #include "cmd-io/cmd-save.h"
+#include "cmd-visual/cmd-draw.h"
 #include "core/game-play.h"
 #include "core/player-processor.h"
 #include "core/scores.h"
@@ -98,15 +99,14 @@
 #include "io/record-play-movie.h"
 #include "io/signal-handlers.h"
 #include "io/write-diary.h"
+#include "main-win/graphics-win.h"
 #include "main-win/main-win-bg.h"
 #include "main-win/main-win-file-utils.h"
 #include "main-win/main-win-mci.h"
 #include "main-win/main-win-menuitem.h"
 #include "main-win/main-win-music.h"
 #include "main-win/main-win-sound.h"
-#include "main-win/read-graphics.h"
 #include "main-win/string-win.h"
-#include "main-win/tile-info.h"
 #include "main/angband-initializer.h"
 #include "main/sound-of-music.h"
 #include "monster-floor/monster-lite.h"
@@ -131,16 +131,6 @@
 
 #include <commdlg.h>
 #include <direct.h>
-
-/*
- * Available graphic modes
- */
-enum graphics_mode {
-    GRAPHICS_NONE = 0,
-    GRAPHICS_ORIGINAL = 1,
-    GRAPHICS_ADAM_BOLT = 2,
-    GRAPHICS_HENGBAND = 3,
-};
 
 /*!
  * @struct term_data
@@ -231,11 +221,6 @@ static HBRUSH hbrYellow;
 static HICON hIcon;
 
 /* bg */
-enum class bg_mode {
-    BG_NONE = 0,
-    BG_ONE = 1,
-    BG_PRESET = 2,
-};
 bg_mode current_bg_mode = bg_mode::BG_NONE;
 #define DEFAULT_BG_FILENAME "bg.bmp"
 char wallpaper_file[MAIN_WIN_MAX_PATH] = ""; //!< 壁紙ファイル名。
@@ -707,6 +692,18 @@ static void init_sound(void)
     }
 }
 
+/*!
+ * @brief Change sound mode
+ * @param new_mode bool
+ */
+static void change_sound_mode(bool new_mode)
+{
+    use_sound = new_mode;
+    if (use_sound) {
+        init_sound();
+    }
+}
+
 /*
  * Initialize background
  */
@@ -725,11 +722,13 @@ static void init_background(void)
  * @brief Change background mode
  * @param new_mode bg_mode
  * @param show_error trueに設定した場合のみ、エラーダイアログを表示する
+ * @param force_redraw trueの場合、モード変更に関わらずウインドウを再描画する
  * @retval true success
  * @retval false failed
  */
-static bool change_bg_mode(bg_mode new_mode, bool show_error = false)
+static bool change_bg_mode(bg_mode new_mode, bool show_error = false, bool force_redraw = false)
 {
+    bg_mode old_bg_mode = current_bg_mode;
     current_bg_mode = new_mode;
     if (current_bg_mode != bg_mode::BG_NONE) {
         init_background();
@@ -740,6 +739,16 @@ static bool change_bg_mode(bg_mode new_mode, bool show_error = false)
         }
     } else {
         delete_bg();
+    }
+
+    const bool mode_changed = (current_bg_mode != old_bg_mode);
+    if (mode_changed || force_redraw) {
+        // 全ウインドウ再描画
+        for (int i = 0; i < MAX_TERM_DATA; i++) {
+            term_data *td = &data[i];
+            if (td->visible)
+                InvalidateRect(td->w, NULL, FALSE);
+        }
     }
 
     return (current_bg_mode == new_mode);
@@ -879,20 +888,12 @@ static errr term_xtra_win_react(player_type *player_ptr)
 {
     refresh_color_table();
 
-    use_sound = arg_sound;
-    if (use_sound) {
-        init_sound();
+    if (arg_graphics && !init_graphics()) {
+        plog(_("グラフィックスを初期化できません!", "Cannot initialize graphics!"));
+        arg_graphics = GRAPHICS_NONE;
     }
-
-    if (use_graphics != (arg_graphics > 0)) {
-        if (arg_graphics && !init_graphics()) {
-            plog(_("グラフィックスを初期化できません!", "Cannot initialize graphics!"));
-            arg_graphics = GRAPHICS_NONE;
-        }
-
-        use_graphics = (arg_graphics > 0);
-        reset_visuals(player_ptr);
-    }
+    use_graphics = (arg_graphics > 0);
+    reset_visuals(player_ptr);
 
     for (int i = 0; i < MAX_TERM_DATA; i++) {
         term_type *old = Term;
@@ -1886,24 +1887,16 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
     case IDM_OPTIONS_NO_GRAPHICS: {
         if (arg_graphics != GRAPHICS_NONE) {
             arg_graphics = GRAPHICS_NONE;
-
-            if (inkey_flag) {
-                term_xtra_win_react(player_ptr);
-                term_key_push(KTRL('R'));
-            }
+            if (game_in_progress)
+                do_cmd_redraw(player_ptr);
         }
         break;
     }
     case IDM_OPTIONS_OLD_GRAPHICS: {
         if (arg_graphics != GRAPHICS_ORIGINAL) {
             arg_graphics = GRAPHICS_ORIGINAL;
-
-            if (inkey_flag) {
-                term_xtra_win_react(player_ptr);
-                term_key_push(KTRL('R'));
-            } else if (!init_graphics()) {
-                arg_graphics = GRAPHICS_NONE;
-            }
+            if (game_in_progress)
+                do_cmd_redraw(player_ptr);
         }
 
         break;
@@ -1911,13 +1904,8 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
     case IDM_OPTIONS_NEW_GRAPHICS: {
         if (arg_graphics != GRAPHICS_ADAM_BOLT) {
             arg_graphics = GRAPHICS_ADAM_BOLT;
-
-            if (inkey_flag) {
-                term_xtra_win_react(player_ptr);
-                term_key_push(KTRL('R'));
-            } else if (!init_graphics()) {
-                arg_graphics = GRAPHICS_NONE;
-            }
+            if (game_in_progress)
+                do_cmd_redraw(player_ptr);
         }
 
         break;
@@ -1925,13 +1913,8 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
     case IDM_OPTIONS_NEW2_GRAPHICS: {
         if (arg_graphics != GRAPHICS_HENGBAND) {
             arg_graphics = GRAPHICS_HENGBAND;
-
-            if (inkey_flag) {
-                term_xtra_win_react(player_ptr);
-                term_key_push(KTRL('R'));
-            } else if (!init_graphics()) {
-                arg_graphics = GRAPHICS_NONE;
-            }
+            if (game_in_progress)
+                do_cmd_redraw(player_ptr);
         }
 
         break;
@@ -1962,29 +1945,20 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
     }
     case IDM_OPTIONS_SOUND: {
         arg_sound = !arg_sound;
-        if (inkey_flag)
-            term_xtra_win_react(player_ptr);
+        change_sound_mode(arg_sound);
         break;
     }
     case IDM_OPTIONS_NO_BG: {
         change_bg_mode(bg_mode::BG_NONE);
-        td = &data[0];
-        InvalidateRect(td->w, NULL, TRUE);
         break;
     }
     case IDM_OPTIONS_PRESET_BG: {
         change_bg_mode(bg_mode::BG_PRESET);
-        td = &data[0];
-        InvalidateRect(td->w, NULL, TRUE);
         break;
     }
     case IDM_OPTIONS_BG: {
-        bool ret = change_bg_mode(bg_mode::BG_ONE);
-        if (ret) {
-            td = &data[0];
-            InvalidateRect(td->w, NULL, TRUE);
+        if (change_bg_mode(bg_mode::BG_ONE))
             break;
-        }
         // 壁紙の設定に失敗した（ファイルが存在しない等）場合、壁紙に使うファイルを選択させる
     }
         [[fallthrough]]; /* Fall through */
@@ -2001,9 +1975,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         ofn.Flags = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
 
         if (GetOpenFileName(&ofn)) {
-            change_bg_mode(bg_mode::BG_ONE, true);
-            td = &data[0];
-            InvalidateRect(td->w, NULL, TRUE);
+            change_bg_mode(bg_mode::BG_ONE, true, true);
         }
         break;
     }
@@ -2832,6 +2804,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPST
     prt(_("[ファイル] メニューの [新規] または [開く] を選択してください。", "[Choose 'New' or 'Open' from the 'File' menu]"), 23, _(8, 17));
     term_fresh();
 
+    change_sound_mode(arg_sound);
     use_music = arg_music;
     if (use_music) {
         init_music();
