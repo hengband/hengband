@@ -1,5 +1,5 @@
 ﻿/*!
- * @file read-graphics.cpp
+ * @file graphics-win.cpp
  * @brief Windows版固有実装(イメージファイルの読み込み)
  */
 
