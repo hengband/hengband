@@ -1,6 +1,6 @@
 ﻿#pragma once
 /*!
- * @file read-graphics.h
+ * @file graphics-win.h
  * @brief Windows版固有実装(イメージファイルの読み込み)ヘッダ
  */
 
