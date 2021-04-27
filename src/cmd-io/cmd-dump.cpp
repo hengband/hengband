@@ -25,6 +25,7 @@
 #include "mutation/mutation-flag-types.h"
 #include "player/player-personality-types.h"
 #include "player/player-status-flags.h"
+#include "player/player-status.h"
 #include "system/angband-version.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"

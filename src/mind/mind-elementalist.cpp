@@ -39,6 +39,7 @@
 #include "player-ability/player-status-base.h"
 #include "player-info/avatar.h"
 #include "player/player-status-table.h"
+#include "player/player-status.h"
 #include "racial/racial-util.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/magic-item-recharger.h"

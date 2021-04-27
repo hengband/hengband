@@ -28,6 +28,7 @@
 #include "object/lite-processor.h"
 #include "perception/simple-perception.h"
 #include "player/digestion-processor.h"
+#include "player/player-status.h"
 #include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h"

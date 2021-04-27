@@ -13,6 +13,7 @@
 #include "player/player-skill.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-table.h"
+#include "player/player-status.h"
 #include "sv-definition/sv-bow-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"

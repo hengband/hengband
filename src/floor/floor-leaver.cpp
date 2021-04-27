@@ -29,6 +29,7 @@
 #include "object-hook/hook-checker.h"
 #include "object-hook/hook-enchant.h"
 #include "pet/pet-util.h"
+#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "save/floor-writer.h"
 #include "system/artifact-type-definition.h"

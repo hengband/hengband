@@ -23,6 +23,7 @@
 #include "player/player-race-types.h"
 #include "player/player-race.h"
 #include "player/player-status-flags.h"
+#include "player/player-status.h"
 #include "player/player-status-resist.h"
 #include "player/special-defense-types.h"
 #include "status/bad-status-setter.h"

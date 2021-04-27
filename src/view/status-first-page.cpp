@@ -19,6 +19,7 @@
 #include "perception/object-perception.h"
 #include "player-status/player-hand-types.h"
 #include "player/player-status-flags.h"
+#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/object-type-definition.h"

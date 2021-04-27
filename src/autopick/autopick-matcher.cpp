@@ -8,6 +8,7 @@
 #include "autopick/autopick-matcher.h"
 #include "autopick/autopick-flags-table.h"
 #include "autopick/autopick-key-flag-process.h"
+#include "autopick/autopick-util.h"
 #include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
@@ -27,6 +28,7 @@
 #include "player/player-realm.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
+#include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/string-processor.h"
 

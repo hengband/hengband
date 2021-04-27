@@ -7,6 +7,7 @@
 #include "game-option/special-options.h"
 #include "grid/grid.h"
 #include "monster-race/monster-race.h"
+#include "player/player-status.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/object-type-definition.h"

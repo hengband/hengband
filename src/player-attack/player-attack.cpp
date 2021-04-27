@@ -42,6 +42,7 @@
 #include "player/player-damage.h"
 #include "player/player-skill.h"
 #include "player/player-status-flags.h"
+#include "player/player-status.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell-kind/earthquake.h"
 #include "spell-realm/spells-hex.h"

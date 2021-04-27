@@ -6,6 +6,7 @@
 #include "main/scene-table-floor.h"
 #include "dungeon/quest.h"
 #include "main/music-definitions-table.h"
+#include "player/player-status.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 

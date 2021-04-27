@@ -1,6 +1,7 @@
 ﻿#include "player-info/body-improvement-info.h"
 #include "player-info/self-info-util.h"
 #include "player/player-status-flags.h"
+#include "player/player-status.h"
 #include "system/player-type-definition.h"
 
 /*!< @todo 並び順の都合で連番を付ける。まとめても良いならまとめてしまう予定 */

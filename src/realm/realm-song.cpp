@@ -7,6 +7,7 @@
 #include "hpmp/hp-mp-processor.h"
 #include "player/attack-defense-types.h"
 #include "player/player-class.h"
+#include "player/player-status.h"
 #include "realm/realm-song-numbers.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-detection.h"

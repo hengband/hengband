@@ -25,6 +25,7 @@
 #include "monster/monster-compaction.h"
 #include "monster/monster-status.h"
 #include "object/object-kind.h"
+#include "player/player-status.h"
 #include "save/floor-writer.h"
 #include "save/info-writer.h"
 #include "save/item-writer.h"

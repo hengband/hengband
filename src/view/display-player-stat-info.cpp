@@ -17,6 +17,7 @@
 #include "player/player-personality.h"
 #include "player/player-race-types.h"
 #include "player/player-status-table.h"
+#include "player/player-status.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"

@@ -27,6 +27,7 @@
 #include "player-info/avatar.h"
 #include "player/attack-defense-types.h"
 #include "player/player-move.h"
+#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"
 #include "status/action-setter.h"

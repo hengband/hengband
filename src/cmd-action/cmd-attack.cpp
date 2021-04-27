@@ -38,6 +38,7 @@
 #include "player/player-damage.h"
 #include "player/player-skill.h"
 #include "player/player-status-flags.h"
+#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "spell/spell-types.h"
 #include "status/action-setter.h"

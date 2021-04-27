@@ -7,6 +7,7 @@
 #include "player/player-race-types.h"
 #include "player/player-skill.h"
 #include "player/player-status-flags.h"
+#include "player/player-status.h"
 #include "player/race-info-table.h"
 #include "spell-realm/spells-hex.h"
 #include "system/object-type-definition.h"

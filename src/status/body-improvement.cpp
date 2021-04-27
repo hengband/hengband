@@ -7,6 +7,7 @@
 #include "core/window-redrawer.h"
 #include "game-option/disturbance-options.h"
 #include "player-info/avatar.h"
+#include "player/player-status.h"
 #include "realm/realm-song-numbers.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"

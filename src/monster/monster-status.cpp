@@ -46,6 +46,7 @@
 #include "object-enchant/object-curse.h"
 #include "player-info/avatar.h"
 #include "player/player-personality-types.h"
+#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "spell-kind/spells-random.h"
 #include "spell/spells-summon.h"

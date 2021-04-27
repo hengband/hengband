@@ -4,6 +4,7 @@
 #include "player/player-class.h"
 #include "player/player-skill.h"
 #include "player/player-status-table.h"
+#include "player/player-status.h"
 #include "realm/realm-names-table.h"
 #include "realm/realm-types.h"
 #include "spell/spells-execution.h"

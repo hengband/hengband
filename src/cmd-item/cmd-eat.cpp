@@ -32,6 +32,7 @@
 #include "player/player-damage.h"
 #include "player/player-race-types.h"
 #include "player/player-status-flags.h"
+#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/spells-status.h"

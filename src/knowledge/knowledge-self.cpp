@@ -15,6 +15,7 @@
 #include "player/player-class.h"
 #include "player/player-status-table.h"
 #include "player/race-info-table.h"
+#include "player/player-status.h"
 #include "store/store-util.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"

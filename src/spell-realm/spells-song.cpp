@@ -7,6 +7,7 @@
 #include "game-option/disturbance-options.h"
 #include "player/attack-defense-types.h"
 #include "player/player-skill.h"
+#include "player/player-status.h"
 #include "realm/realm-song-numbers.h"
 #include "spell/spell-info.h"
 #include "spell/spells-execution.h"

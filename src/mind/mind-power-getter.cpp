@@ -12,6 +12,7 @@
 #include "mind/mind-info.h"
 #include "mind/mind-types.h"
 #include "player/player-class.h"
+#include "player/player-status.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"

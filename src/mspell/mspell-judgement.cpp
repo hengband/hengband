@@ -26,6 +26,7 @@
 #include "player/player-race.h"
 #include "player/special-defense-types.h"
 #include "player/player-status-flags.h"
+#include "player/player-status.h"
 #include "realm/realm-song-numbers.h"
 #include "spell/range-calc.h"
 #include "spell/spell-types.h"

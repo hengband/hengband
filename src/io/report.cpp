@@ -20,6 +20,7 @@
 #include "player/player-class.h"
 #include "player/player-personality.h"
 #include "player/player-race.h"
+#include "player/player-status.h"
 #include "realm/realm-names-table.h"
 #include "system/angband-version.h"
 #include "system/floor-type-definition.h"

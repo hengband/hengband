@@ -8,6 +8,7 @@
 #include "object/object-kind.h"
 #include "object/object-value-calc.h"
 #include "object/object-value.h"
+#include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"
 #include "sv-definition/sv-armor-types.h"

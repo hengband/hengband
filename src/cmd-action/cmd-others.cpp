@@ -27,6 +27,7 @@
 #include "main/sound-of-music.h"
 #include "player/attack-defense-types.h"
 #include "player/player-move.h"
+#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "status/action-setter.h"
 #include "system/floor-type-definition.h"

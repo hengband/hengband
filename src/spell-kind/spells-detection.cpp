@@ -20,6 +20,7 @@
 #include "object-hook/hook-enchant.h"
 #include "object/object-mark-types.h"
 #include "object/tval-types.h"
+#include "player/player-status.h"
 #include "realm/realm-song-numbers.h"
 #include "realm/realm-song.h"
 #include "system/floor-type-definition.h"

@@ -4,6 +4,7 @@
 #include "system/system-variables.h"
 
 typedef struct object_kind object_kind;
+typedef struct object_type object_type;
 typedef struct flavor_type {
     char *buf;
     object_type *o_ptr;

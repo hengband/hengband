@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "system/object-type-definition.h"
 
 #define MAX_LINELEN 1024
 #define MAX_AUTOPICK_DEFAULT 200
@@ -42,6 +41,7 @@ typedef struct chain_str {
 /*
  * Data struct for text editor
  */
+typedef struct object_type object_type;
 typedef struct text_body_type {
 	int wid, hgt;
 	int cx, cy;
@@ -78,6 +78,7 @@ extern int max_max_autopick;
 extern autopick_type *autopick_list;
 extern object_type autopick_last_destroyed_object;
 
+typedef struct player_type player_type;
 void autopick_free_entry(autopick_type *entry);
 void free_text_lines(concptr *lines_list);
 int get_com_id(char key);

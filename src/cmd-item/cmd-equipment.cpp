@@ -32,6 +32,7 @@
 #include "player-info/avatar.h"
 #include "player-status/player-hand-types.h"
 #include "player/attack-defense-types.h"
+#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "racial/racial-android.h"
 #include "spell-kind/spells-perception.h"

@@ -37,8 +37,6 @@
  * Include the "Angband" configuration header
  */
 #include "system/gamevalue.h"
-#include "player/player-status.h"
-
 
 /***** Some copyright messages follow below *****/
 
@@ -112,8 +110,4 @@
  * @ref index "メインページへ"
  */
 
-
 #endif
-
-
-

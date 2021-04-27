@@ -15,6 +15,7 @@
 #include "player/player-damage.h"
 #include "player/player-personality.h"
 #include "player/player-sex.h"
+#include "player/player-status.h"
 #include "player/race-info-table.h"
 #include "spell/spells-status.h"
 #include "status/bad-status-setter.h"

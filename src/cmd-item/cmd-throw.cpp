@@ -46,6 +46,7 @@
 #include "object/object-stack.h"
 #include "player/attack-defense-types.h"
 #include "player/player-status-table.h"
+#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "racial/racial-android.h"
 #include "specific-object/torch.h"
