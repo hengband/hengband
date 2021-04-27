@@ -33,7 +33,7 @@ void check_music(player_type *caster_ptr)
         return;
     }
 
-    int spell = SINGING_SONG_ID(caster_ptr);
+    int spell = get_singing_song_id(caster_ptr);
     const magic_type *s_ptr;
     s_ptr = &technic_info[REALM_MUSIC - MIN_TECHNIC][spell];
 

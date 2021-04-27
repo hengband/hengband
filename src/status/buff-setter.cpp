@@ -95,7 +95,7 @@ void reset_tim_flags(player_type *creature_ptr)
 
     if (creature_ptr->pclass == CLASS_BARD) {
         set_singing_song_effect(creature_ptr, MUSIC_NONE);
-        SINGING_SONG_ID(creature_ptr) = 0;
+        set_singing_song_id(creature_ptr, 0);
     }
 }
 

@@ -3274,10 +3274,10 @@ void stop_singing(player_type *creature_ptr)
         set_action(creature_ptr, ACTION_NONE);
 
     /* Message text of each song or etc. */
-    exe_spell(creature_ptr, REALM_MUSIC, SINGING_SONG_ID(creature_ptr), SPELL_STOP);
+    exe_spell(creature_ptr, REALM_MUSIC, get_singing_song_id(creature_ptr), SPELL_STOP);
 
     set_singing_song_effect(creature_ptr, MUSIC_NONE);
-    SINGING_SONG_ID(creature_ptr) = 0;
+    set_singing_song_id(creature_ptr, 0);
     set_bits(creature_ptr->update, PU_BONUS);
     set_bits(creature_ptr->redraw, PR_STATUS);
 }
@@ -3451,4 +3451,14 @@ MAGIC_NUM1 get_singing_count(player_type* creature_ptr)
 void set_singing_count(player_type* creature_ptr, MAGIC_NUM1 magic_num)
 {
     creature_ptr->magic_num1[2] = magic_num;
+}
+
+MAGIC_NUM2 get_singing_song_id(player_type* creature_ptr)
+{
+    return creature_ptr->magic_num2[0];
+}
+
+void set_singing_song_id(player_type* creature_ptr, MAGIC_NUM2 magic_num)
+{
+    creature_ptr->magic_num2[0] = magic_num;
 }
