@@ -1940,9 +1940,21 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         use_pause_music_inactive = !use_pause_music_inactive;
         break;
     }
+    case IDM_OPTIONS_OPEN_MUSIC_DIR: {
+        std::vector<char> buf(MAIN_WIN_MAX_PATH);
+        path_build(&buf[0], MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_MUSIC, "music.cfg");
+        open_dir_in_explorer(&buf[0]);
+        break;
+    }
     case IDM_OPTIONS_SOUND: {
         arg_sound = !arg_sound;
         change_sound_mode(arg_sound);
+        break;
+    }
+    case IDM_OPTIONS_OPEN_SOUND_DIR: {
+        std::vector<char> buf(MAIN_WIN_MAX_PATH);
+        path_build(&buf[0], MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_SOUND, "sound.cfg");
+        open_dir_in_explorer(&buf[0]);
         break;
     }
     case IDM_OPTIONS_NO_BG: {

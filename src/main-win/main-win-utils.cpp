@@ -55,3 +55,12 @@ void save_screen_as_html(HWND hWnd)
         do_cmd_save_screen_html_aux(to_multibyte(&buf[0]).c_str(), 0);
     }
 }
+
+/*!
+ * @brief 対象ファイルを選択した状態でエクスプローラーを開く
+ * @param filename 対象ファイル
+ */
+void open_dir_in_explorer(char *filename) {
+    std::string str = "/select," + std::string(filename);
+    ShellExecuteW(NULL, NULL, L"explorer.exe", to_wchar(str.c_str()).wc_str(), NULL, SW_SHOWNORMAL);
+}

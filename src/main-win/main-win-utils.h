@@ -109,3 +109,4 @@ protected:
 
 bool is_already_running(void);
 void save_screen_as_html(HWND hWnd);
+void open_dir_in_explorer(char* filename);
