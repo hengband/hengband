@@ -120,8 +120,8 @@ void process_dungeon(player_type *player_ptr, bool load_game)
         }
     }
 
-    if ((player_ptr->pclass == CLASS_BARD) && (SINGING_SONG_EFFECT(player_ptr) > MUSIC_DETECT))
-        SINGING_SONG_EFFECT(player_ptr) = MUSIC_DETECT;
+    if ((player_ptr->pclass == CLASS_BARD) && (get_singing_song_effect(player_ptr) > MUSIC_DETECT))
+        set_singing_song_effect(player_ptr, MUSIC_DETECT);
 
     if (!player_ptr->playing || player_ptr->is_dead)
         return;

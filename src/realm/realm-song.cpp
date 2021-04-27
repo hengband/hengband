@@ -35,7 +35,7 @@
 static void start_singing(player_type *caster_ptr, SPELL_IDX spell, MAGIC_NUM1 song)
 {
     /* Remember the song index */
-    SINGING_SONG_EFFECT(caster_ptr) = (MAGIC_NUM1)song;
+    set_singing_song_effect(caster_ptr, song);
 
     /* Remember the index of the spell which activated the song */
     SINGING_SONG_ID(caster_ptr) = (MAGIC_NUM2)spell;

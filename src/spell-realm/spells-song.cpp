@@ -23,7 +23,7 @@ void check_music(player_type *caster_ptr)
 {
     if (caster_ptr->pclass != CLASS_BARD)
         return;
-    if (!SINGING_SONG_EFFECT(caster_ptr) && !INTERUPTING_SONG_EFFECT(caster_ptr))
+    if ((get_singing_song_effect(caster_ptr) == 0) && !INTERUPTING_SONG_EFFECT(caster_ptr))
         return;
 
     if (caster_ptr->anti_magic) {
@@ -47,7 +47,7 @@ void check_music(player_type *caster_ptr)
 
         caster_ptr->redraw |= PR_MANA;
         if (INTERUPTING_SONG_EFFECT(caster_ptr)) {
-            SINGING_SONG_EFFECT(caster_ptr) = INTERUPTING_SONG_EFFECT(caster_ptr);
+            set_singing_song_effect(caster_ptr, INTERUPTING_SONG_EFFECT(caster_ptr));
             INTERUPTING_SONG_EFFECT(caster_ptr) = MUSIC_NONE;
             msg_print(_("歌を再開した。", "You resume singing."));
             caster_ptr->action = ACTION_SING;

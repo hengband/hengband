@@ -192,7 +192,7 @@ bool switch_class_racial_execution(player_type *creature_ptr, const s32b command
 
         return (command != -4) || (!cmd_limit_cast(creature_ptr) && do_cmd_magic_eater(creature_ptr, FALSE, TRUE));
     case CLASS_BARD:
-        if (!SINGING_SONG_EFFECT(creature_ptr) && !INTERUPTING_SONG_EFFECT(creature_ptr))
+        if ((get_singing_song_effect(creature_ptr) == 0) && !INTERUPTING_SONG_EFFECT(creature_ptr))
             return FALSE;
 
         stop_singing(creature_ptr);

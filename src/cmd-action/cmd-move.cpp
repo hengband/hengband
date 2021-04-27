@@ -388,7 +388,7 @@ void do_cmd_stay(player_type *creature_ptr, bool pickup)
 void do_cmd_rest(player_type *creature_ptr)
 {
     set_action(creature_ptr, ACTION_NONE);
-    if ((creature_ptr->pclass == CLASS_BARD) && (SINGING_SONG_EFFECT(creature_ptr) || INTERUPTING_SONG_EFFECT(creature_ptr)))
+    if ((creature_ptr->pclass == CLASS_BARD) && ((get_singing_song_effect(creature_ptr) != 0)|| INTERUPTING_SONG_EFFECT(creature_ptr)))
         stop_singing(creature_ptr);
 
     if (hex_spelling_any(creature_ptr))

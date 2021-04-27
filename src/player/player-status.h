@@ -55,7 +55,8 @@ bool music_singing(player_type *caster_ptr, int music_songs);
 bool music_singing_any(player_type *creature_ptr);
 
 // @todo 後で普通の関数に直す
-#define SINGING_SONG_EFFECT(P_PTR) ((P_PTR)->magic_num1[0])
+MAGIC_NUM1 get_singing_song_effect(player_type *creature_ptr);
+void set_singing_song_effect(player_type *creature_ptr, MAGIC_NUM1 magic_num);
 #define INTERUPTING_SONG_EFFECT(P_PTR) ((P_PTR)->magic_num1[1])
 #define SINGING_COUNT(P_PTR) ((P_PTR)->magic_num1[2])
 #define SINGING_SONG_ID(P_PTR) ((P_PTR)->magic_num2[0])

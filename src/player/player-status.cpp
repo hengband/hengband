@@ -3266,7 +3266,7 @@ void stop_singing(player_type *creature_ptr)
     }
 
     /* The player is singing? */
-    if (!SINGING_SONG_EFFECT(creature_ptr))
+    if (get_singing_song_effect(creature_ptr) == 0)
         return;
 
     /* Hack -- if called from set_action(), avoid recursive loop */
@@ -3276,7 +3276,7 @@ void stop_singing(player_type *creature_ptr)
     /* Message text of each song or etc. */
     exe_spell(creature_ptr, REALM_MUSIC, SINGING_SONG_ID(creature_ptr), SPELL_STOP);
 
-    SINGING_SONG_EFFECT(creature_ptr) = MUSIC_NONE;
+    set_singing_song_effect(creature_ptr, MUSIC_NONE);
     SINGING_SONG_ID(creature_ptr) = 0;
     set_bits(creature_ptr->update, PU_BONUS);
     set_bits(creature_ptr->redraw, PR_STATUS);
@@ -3421,4 +3421,14 @@ bool is_in_dungeon(player_type *creature_ptr)
 bool music_singing_any(player_type* creature_ptr)
 {
     return (creature_ptr->pclass == CLASS_BARD) && (creature_ptr->magic_num1[0] != 0);
+}
+
+MAGIC_NUM1 get_singing_song_effect(player_type* creature_ptr)
+{
+    return creature_ptr->magic_num1[0];
+}
+
+void set_singing_song_effect(player_type* creature_ptr, MAGIC_NUM1 magic_num)
+{
+    creature_ptr->magic_num1[0] = magic_num;
 }
