@@ -31,10 +31,11 @@ void flush(void) { inkey_xtra = TRUE; }
 void screen_save()
 {
     msg_print(NULL);
-    if (screen_depth++ == 0)
-        term_save();
+
+    term_save();
 
     current_world_ptr->character_icky_depth++;
+    screen_depth++;
 }
 
 /*
@@ -42,13 +43,26 @@ void screen_save()
  *
  * This function must match exactly one call to "screen_save()".
  */
-void screen_load()
+void screen_load(SCREEN_LOAD_OPT opt)
 {
     msg_print(NULL);
-    if (--screen_depth == 0)
-        term_load();
 
-    current_world_ptr->character_icky_depth--;
+    switch (opt) {
+    case SCREEN_LOAD_OPT::ONE:
+        term_load(false);
+        current_world_ptr->character_icky_depth--;
+        screen_depth--;
+        break;
+
+    case SCREEN_LOAD_OPT::ALL:
+        term_load(true);
+        current_world_ptr->character_icky_depth -= static_cast<byte>(screen_depth);
+        screen_depth = 0;
+        break;
+
+    default:
+        break;
+    }
 }
 
 /*
