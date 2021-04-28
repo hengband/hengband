@@ -1,5 +1,4 @@
 ﻿#include "mind/mind-force-trainer.h"
-#include "cmd-action/cmd-pet.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
@@ -18,6 +17,7 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
+#include "pet/pet-util.h"
 #include "player-info/avatar.h"
 #include "player/player-damage.h"
 #include "player/player-status.h"

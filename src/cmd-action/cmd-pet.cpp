@@ -63,8 +63,6 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-int total_friends = 0;
-
 /*!
  * @brief ペットを開放するコマンドのメインルーチン
  * @return なし

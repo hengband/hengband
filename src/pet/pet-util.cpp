@@ -6,6 +6,8 @@
 #include "system/player-type-definition.h"
 #include "world/world.h"
 
+int total_friends = 0;
+
 /*!
  * @brief プレイヤーの騎乗/下馬処理判定
  * @param g_ptr プレイヤーの移動先マスの構造体参照ポインタ
