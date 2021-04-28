@@ -159,15 +159,21 @@ static void decide_initial_stat(player_type *creature_ptr, int *cval)
  */
 static void cursor_of_adjusted_stat(char *cur, int *cval, int cs)
 {
-    char inp[80];
-    int j = rp_ptr->r_adj[cs] + cp_ptr->c_adj[cs] + ap_ptr->a_adj[cs];
-    int m = adjust_stat(cval[cs], j);
+    char inp[80], maxv[80];
+    auto j = rp_ptr->r_adj[cs] + cp_ptr->c_adj[cs] + ap_ptr->a_adj[cs];
+    auto m = adjust_stat(17, j);
+    if (m > 18)
+        sprintf(maxv, "18/%02d", (m - 18));
+    else
+        sprintf(maxv, "%2d", m);
+
+    m = adjust_stat(cval[cs], j);
     if (m > 18)
         sprintf(inp, "18/%02d", (m - 18));
     else
         sprintf(inp, "%2d", m);
 
-    sprintf(cur, "%6s       %2d   %+3d  %+3d  %+3d  =  %6s", stat_names[cs], cval[cs], rp_ptr->r_adj[cs], cp_ptr->c_adj[cs], ap_ptr->a_adj[cs], inp);
+    sprintf(cur, "%6s       %2d   %+3d  %+3d  %+3d  =  %6s  %6s", stat_names[cs], cval[cs], rp_ptr->r_adj[cs], cp_ptr->c_adj[cs], ap_ptr->a_adj[cs], inp, maxv);
 }
 
 /*!
