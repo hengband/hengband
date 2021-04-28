@@ -6427,8 +6427,8 @@ F:RES_CURSE
 D:$A faded cloak carved with magical runes.
 D:魔術的なルーンの刻まれた陰気な外套だ。
 
-N:673:自己変容:青く光る
-E:Polymorph:Brilliant blue
+N:673:自己変容:虹色に輝く
+E:Self-Polymorph:Rainbow colored
 G:!:B
 I:75:54:0
 W:50:0:4:5000

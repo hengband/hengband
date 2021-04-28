@@ -402,6 +402,11 @@ bool potion_smash_effect(player_type *owner_ptr, MONSTER_IDX who, POSITION y, PO
         dam = damroll(10, 10);
         radius = 1;
         break;
+    case SV_POTION_POLY_SELF:
+        dt = GF_NEXUS;
+        dam = damroll(20, 20);
+        radius = 1;
+        break;
     default:
         break;
     }
