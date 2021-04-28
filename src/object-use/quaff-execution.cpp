@@ -58,14 +58,14 @@
  */
 static bool booze(player_type *creature_ptr)
 {
-    bool ident = FALSE;
+    bool ident = false;
     if (creature_ptr->pclass != CLASS_MONK)
         chg_virtue(creature_ptr, V_HARMONY, -1);
     else if (!has_resist_conf(creature_ptr))
         creature_ptr->special_attack |= ATTACK_SUIKEN;
 
     if (!has_resist_conf(creature_ptr) && set_confused(creature_ptr, randint0(20) + 15)) {
-        ident = TRUE;
+        ident = true;
     }
 
     if (has_resist_chaos(creature_ptr)) {
@@ -73,17 +73,17 @@ static bool booze(player_type *creature_ptr)
     }
 
     if (one_in_(2) && set_image(creature_ptr, creature_ptr->image + randint0(150) + 150)) {
-        ident = TRUE;
+        ident = true;
     }
 
     if (one_in_(13) && (creature_ptr->pclass != CLASS_MONK)) {
-        ident = TRUE;
+        ident = true;
         if (one_in_(3))
             lose_all_info(creature_ptr);
         else
             wiz_dark(creature_ptr);
 
-        (void)teleport_player_aux(creature_ptr, 100, FALSE, static_cast<teleport_flags>(TELEPORT_NONMAGICAL | TELEPORT_PASSIVE));
+        (void)teleport_player_aux(creature_ptr, 100, false, static_cast<teleport_flags>(TELEPORT_NONMAGICAL | TELEPORT_PASSIVE));
         wiz_dark(creature_ptr);
         msg_print(_("知らない場所で目が醒めた。頭痛がする。", "You wake up somewhere with a sore head..."));
         msg_print(_("何も思い出せない。どうやってここへ来たのかも分からない！", "You can't remember a thing or how you got here!"));
@@ -142,7 +142,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
     q_ptr->number = 1;
     vary_item(creature_ptr, item, -1);
     sound(SOUND_QUAFF);
-    bool ident = FALSE;
+    bool ident = false;
     DEPTH lev = k_info[q_ptr->k_idx].level;
     if (q_ptr->tval == TV_POTION) {
         switch (q_ptr->sval) {
@@ -150,24 +150,24 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
         case SV_POTION_WATER:
             msg_print(_("口の中がさっぱりした。", "That was refreshing."));
             msg_print(_("のどの渇きが少しおさまった。", "You feel less thirsty."));
-            ident = TRUE;
+            ident = true;
             break;
 
         case SV_POTION_APPLE_JUICE:
             msg_print(_("甘くてサッパリとしていて、とてもおいしい。", "It's sweet, refreshing and very tasty."));
             msg_print(_("のどの渇きが少しおさまった。", "You feel less thirsty."));
-            ident = TRUE;
+            ident = true;
             break;
 
         case SV_POTION_SLIME_MOLD:
             msg_print(_("なんとも不気味な味だ。", "That was strange."));
             msg_print(_("のどの渇きが少しおさまった。", "You feel less thirsty."));
-            ident = TRUE;
+            ident = true;
             break;
 
         case SV_POTION_SLOWNESS:
-            if (set_slow(creature_ptr, randint1(25) + 15, FALSE))
-                ident = TRUE;
+            if (set_slow(creature_ptr, randint1(25) + 15, false))
+                ident = true;
             break;
 
         case SV_POTION_SALT_WATER:
@@ -182,13 +182,13 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 
             (void)set_poisoned(creature_ptr, 0);
             (void)set_paralyzed(creature_ptr, creature_ptr->paralyzed + 4);
-            ident = TRUE;
+            ident = true;
             break;
 
         case SV_POTION_POISON:
             if (!(has_resist_pois(creature_ptr) || is_oppose_pois(creature_ptr))) {
                 if (set_poisoned(creature_ptr, creature_ptr->poisoned + randint0(15) + 10)) {
-                    ident = TRUE;
+                    ident = true;
                 }
             }
             break;
@@ -196,7 +196,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
         case SV_POTION_BLINDNESS:
             if (!has_resist_blind(creature_ptr)) {
                 if (set_blind(creature_ptr, creature_ptr->blind + randint0(100) + 100)) {
-                    ident = TRUE;
+                    ident = true;
                 }
             }
             break;
@@ -213,10 +213,10 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
                     msg_print(_("恐ろしい光景が頭に浮かんできた。", "A horrible vision enters your mind."));
 
                     /* Have some nightmares */
-                    sanity_blast(creature_ptr, NULL, FALSE);
+                    sanity_blast(creature_ptr, NULL, false);
                 }
                 if (set_paralyzed(creature_ptr, creature_ptr->paralyzed + randint0(4) + 4)) {
-                    ident = TRUE;
+                    ident = true;
                 }
             }
             break;
@@ -227,7 +227,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
                 chg_virtue(creature_ptr, V_KNOWLEDGE, -5);
 
                 lose_exp(creature_ptr, creature_ptr->exp / 4);
-                ident = TRUE;
+                ident = true;
             }
             break;
 
@@ -241,37 +241,37 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
             (void)dec_stat(creature_ptr, A_STR, 25, TRUE);
             (void)dec_stat(creature_ptr, A_CHR, 25, TRUE);
             (void)dec_stat(creature_ptr, A_INT, 25, TRUE);
-            ident = TRUE;
+            ident = true;
             break;
 
         case SV_POTION_DEC_STR:
             if (do_dec_stat(creature_ptr, A_STR))
-                ident = TRUE;
+                ident = true;
             break;
 
         case SV_POTION_DEC_INT:
             if (do_dec_stat(creature_ptr, A_INT))
-                ident = TRUE;
+                ident = true;
             break;
 
         case SV_POTION_DEC_WIS:
             if (do_dec_stat(creature_ptr, A_WIS))
-                ident = TRUE;
+                ident = true;
             break;
 
         case SV_POTION_DEC_DEX:
             if (do_dec_stat(creature_ptr, A_DEX))
-                ident = TRUE;
+                ident = true;
             break;
 
         case SV_POTION_DEC_CON:
             if (do_dec_stat(creature_ptr, A_CON))
-                ident = TRUE;
+                ident = true;
             break;
 
         case SV_POTION_DEC_CHR:
             if (do_dec_stat(creature_ptr, A_CHR))
-                ident = TRUE;
+                ident = true;
             break;
 
         case SV_POTION_DETONATIONS:
@@ -283,54 +283,54 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
             chg_virtue(creature_ptr, V_UNLIFE, 5);
             msg_print(_("死の予感が体中を駆けめぐった。", "A feeling of Death flows through your body."));
             take_hit(creature_ptr, DAMAGE_LOSELIFE, 5000, _("死の薬", "a potion of Death"));
-            ident = TRUE;
+            ident = true;
             break;
 
         case SV_POTION_INFRAVISION:
-            if (set_tim_infra(creature_ptr, creature_ptr->tim_infra + 100 + randint1(100), FALSE)) {
-                ident = TRUE;
+            if (set_tim_infra(creature_ptr, creature_ptr->tim_infra + 100 + randint1(100), false)) {
+                ident = true;
             }
             break;
 
         case SV_POTION_DETECT_INVIS:
-            if (set_tim_invis(creature_ptr, creature_ptr->tim_invis + 12 + randint1(12), FALSE)) {
-                ident = TRUE;
+            if (set_tim_invis(creature_ptr, creature_ptr->tim_invis + 12 + randint1(12), false)) {
+                ident = true;
             }
             break;
 
         case SV_POTION_SLOW_POISON:
             if (set_poisoned(creature_ptr, creature_ptr->poisoned / 2))
-                ident = TRUE;
+                ident = true;
             break;
 
         case SV_POTION_CURE_POISON:
             if (set_poisoned(creature_ptr, 0))
-                ident = TRUE;
+                ident = true;
             break;
 
         case SV_POTION_BOLDNESS:
             if (set_afraid(creature_ptr, 0))
-                ident = TRUE;
+                ident = true;
             break;
 
         case SV_POTION_SPEED:
             if (!creature_ptr->fast) {
-                if (set_fast(creature_ptr, randint1(25) + 15, FALSE))
-                    ident = TRUE;
+                if (set_fast(creature_ptr, randint1(25) + 15, false))
+                    ident = true;
             } else {
-                (void)set_fast(creature_ptr, creature_ptr->fast + 5, FALSE);
+                (void)set_fast(creature_ptr, creature_ptr->fast + 5, false);
             }
             break;
 
         case SV_POTION_RESIST_HEAT:
-            if (set_oppose_fire(creature_ptr, creature_ptr->oppose_fire + randint1(10) + 10, FALSE)) {
-                ident = TRUE;
+            if (set_oppose_fire(creature_ptr, creature_ptr->oppose_fire + randint1(10) + 10, false)) {
+                ident = true;
             }
             break;
 
         case SV_POTION_RESIST_COLD:
-            if (set_oppose_cold(creature_ptr, creature_ptr->oppose_cold + randint1(10) + 10, FALSE)) {
-                ident = TRUE;
+            if (set_oppose_cold(creature_ptr, creature_ptr->oppose_cold + randint1(10) + 10, false)) {
+                ident = true;
             }
             break;
 
@@ -372,90 +372,90 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 
         case SV_POTION_RESTORE_EXP:
             if (restore_level(creature_ptr))
-                ident = TRUE;
+                ident = true;
             break;
 
         case SV_POTION_RES_STR:
             if (do_res_stat(creature_ptr, A_STR))
-                ident = TRUE;
+                ident = true;
             break;
 
         case SV_POTION_RES_INT:
             if (do_res_stat(creature_ptr, A_INT))
-                ident = TRUE;
+                ident = true;
             break;
 
         case SV_POTION_RES_WIS:
             if (do_res_stat(creature_ptr, A_WIS))
-                ident = TRUE;
+                ident = true;
             break;
 
         case SV_POTION_RES_DEX:
             if (do_res_stat(creature_ptr, A_DEX))
-                ident = TRUE;
+                ident = true;
             break;
 
         case SV_POTION_RES_CON:
             if (do_res_stat(creature_ptr, A_CON))
-                ident = TRUE;
+                ident = true;
             break;
 
         case SV_POTION_RES_CHR:
             if (do_res_stat(creature_ptr, A_CHR))
-                ident = TRUE;
+                ident = true;
             break;
 
         case SV_POTION_INC_STR:
             if (do_inc_stat(creature_ptr, A_STR))
-                ident = TRUE;
+                ident = true;
             break;
 
         case SV_POTION_INC_INT:
             if (do_inc_stat(creature_ptr, A_INT))
-                ident = TRUE;
+                ident = true;
             break;
 
         case SV_POTION_INC_WIS:
             if (do_inc_stat(creature_ptr, A_WIS))
-                ident = TRUE;
+                ident = true;
             break;
 
         case SV_POTION_INC_DEX:
             if (do_inc_stat(creature_ptr, A_DEX))
-                ident = TRUE;
+                ident = true;
             break;
 
         case SV_POTION_INC_CON:
             if (do_inc_stat(creature_ptr, A_CON))
-                ident = TRUE;
+                ident = true;
             break;
 
         case SV_POTION_INC_CHR:
             if (do_inc_stat(creature_ptr, A_CHR))
-                ident = TRUE;
+                ident = true;
             break;
 
         case SV_POTION_AUGMENTATION:
             if (do_inc_stat(creature_ptr, A_STR))
-                ident = TRUE;
+                ident = true;
             if (do_inc_stat(creature_ptr, A_INT))
-                ident = TRUE;
+                ident = true;
             if (do_inc_stat(creature_ptr, A_WIS))
-                ident = TRUE;
+                ident = true;
             if (do_inc_stat(creature_ptr, A_DEX))
-                ident = TRUE;
+                ident = true;
             if (do_inc_stat(creature_ptr, A_CON))
-                ident = TRUE;
+                ident = true;
             if (do_inc_stat(creature_ptr, A_CHR))
-                ident = TRUE;
+                ident = true;
             break;
 
         case SV_POTION_ENLIGHTENMENT:
             msg_print(_("自分の置かれている状況が脳裏に浮かんできた...", "An image of your surroundings forms in your mind..."));
             chg_virtue(creature_ptr, V_KNOWLEDGE, 1);
             chg_virtue(creature_ptr, V_ENLIGHTEN, 1);
-            wiz_lite(creature_ptr, FALSE);
-            ident = TRUE;
+            wiz_lite(creature_ptr, false);
+            ident = true;
             break;
 
         case SV_POTION_STAR_ENLIGHTENMENT:
@@ -463,7 +463,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
             chg_virtue(creature_ptr, V_KNOWLEDGE, 1);
             chg_virtue(creature_ptr, V_ENLIGHTEN, 2);
             msg_print(NULL);
-            wiz_lite(creature_ptr, FALSE);
+            wiz_lite(creature_ptr, false);
             (void)do_inc_stat(creature_ptr, A_INT);
             (void)do_inc_stat(creature_ptr, A_WIS);
             (void)detect_traps(creature_ptr, DETECT_RAD_DEFAULT, TRUE);
@@ -474,14 +474,14 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
             (void)detect_objects_normal(creature_ptr, DETECT_RAD_DEFAULT);
             identify_pack(creature_ptr);
             self_knowledge(creature_ptr);
-            ident = TRUE;
+            ident = true;
             break;
 
         case SV_POTION_SELF_KNOWLEDGE:
             msg_print(_("自分自身のことが少しは分かった気がする...", "You begin to know yourself a little better..."));
             msg_print(NULL);
             self_knowledge(creature_ptr);
-            ident = TRUE;
+            ident = true;
             break;
 
         case SV_POTION_EXPERIENCE:
@@ -494,27 +494,27 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
                     ee = 100000L;
                 msg_print(_("更に経験を積んだような気がする。", "You feel more experienced."));
                 gain_exp(creature_ptr, ee);
-                ident = TRUE;
+                ident = true;
             }
             break;
 
         case SV_POTION_RESISTANCE:
-            (void)set_oppose_acid(creature_ptr, creature_ptr->oppose_acid + randint1(20) + 20, FALSE);
-            (void)set_oppose_elec(creature_ptr, creature_ptr->oppose_elec + randint1(20) + 20, FALSE);
-            (void)set_oppose_fire(creature_ptr, creature_ptr->oppose_fire + randint1(20) + 20, FALSE);
-            (void)set_oppose_cold(creature_ptr, creature_ptr->oppose_cold + randint1(20) + 20, FALSE);
-            (void)set_oppose_pois(creature_ptr, creature_ptr->oppose_pois + randint1(20) + 20, FALSE);
-            ident = TRUE;
+            (void)set_oppose_acid(creature_ptr, creature_ptr->oppose_acid + randint1(20) + 20, false);
+            (void)set_oppose_elec(creature_ptr, creature_ptr->oppose_elec + randint1(20) + 20, false);
+            (void)set_oppose_fire(creature_ptr, creature_ptr->oppose_fire + randint1(20) + 20, false);
+            (void)set_oppose_cold(creature_ptr, creature_ptr->oppose_cold + randint1(20) + 20, false);
+            (void)set_oppose_pois(creature_ptr, creature_ptr->oppose_pois + randint1(20) + 20, false);
+            ident = true;
             break;
 
         case SV_POTION_CURING:
             if (true_healing(creature_ptr, 50))
-                ident = TRUE;
+                ident = true;
             break;
 
         case SV_POTION_INVULNERABILITY:
-            (void)set_invuln(creature_ptr, creature_ptr->invuln + randint1(4) + 4, FALSE);
-            ident = TRUE;
+            (void)set_invuln(creature_ptr, creature_ptr->invuln + randint1(4) + 4, false);
+            ident = true;
             break;
 
         case SV_POTION_NEW_LIFE:
@@ -522,13 +522,13 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
             get_max_stats(creature_ptr);
             creature_ptr->update |= PU_BONUS;
             lose_all_mutations(creature_ptr);
-            ident = TRUE;
+            ident = true;
             break;
 
         case SV_POTION_NEO_TSUYOSHI:
             (void)set_image(creature_ptr, 0);
-            (void)set_tsuyoshi(creature_ptr, creature_ptr->tsuyoshi + randint1(100) + 100, FALSE);
-            ident = TRUE;
+            (void)set_tsuyoshi(creature_ptr, creature_ptr->tsuyoshi + randint1(100) + 100, false);
+            ident = true;
             break;
 
         case SV_POTION_TSUYOSHI:
@@ -539,7 +539,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
             if (!has_resist_chaos(creature_ptr)) {
                 (void)set_image(creature_ptr, 50 + randint1(50));
             }
-            ident = TRUE;
+            ident = true;
             break;
 
         case SV_POTION_POLYMORPH:
@@ -549,9 +549,9 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
                 do {
                     if (one_in_(2)) {
                         if (gain_mutation(creature_ptr, 0))
-                            ident = TRUE;
+                            ident = true;
                     } else if (lose_mutation(creature_ptr, 0))
-                        ident = TRUE;
+                        ident = true;
                 } while (!ident || one_in_(2));
             }
             break;
