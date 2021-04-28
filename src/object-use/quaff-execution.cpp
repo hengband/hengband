@@ -35,6 +35,7 @@
 #include "spell-kind/spells-perception.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"
+#include "spell-realm/spells-song.h"
 #include "spell/spells-status.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"

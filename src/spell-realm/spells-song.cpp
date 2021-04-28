@@ -12,8 +12,10 @@
 #include "spell/spell-info.h"
 #include "spell/spells-execution.h"
 #include "spell/technic-info-table.h"
+#include "status/action-setter.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /*!
@@ -117,4 +119,31 @@ bool set_tim_stealth(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
     creature_ptr->update |= (PU_BONUS);
     handle_stuff(creature_ptr);
     return TRUE;
+}
+
+/*!
+ * @brief 歌の停止を処理する / Stop singing if the player is a Bard
+ * @return なし
+ */
+void stop_singing(player_type *creature_ptr)
+{
+    if (creature_ptr->pclass != CLASS_BARD)
+        return;
+
+    if (get_interrupting_song_effect(creature_ptr) != 0) {
+        set_interrupting_song_effect(creature_ptr, MUSIC_NONE);
+        return;
+    }
+
+    if (get_singing_song_effect(creature_ptr) == 0)
+        return;
+
+    if (creature_ptr->action == ACTION_SING)
+        set_action(creature_ptr, ACTION_NONE);
+
+    (void)exe_spell(creature_ptr, REALM_MUSIC, get_singing_song_id(creature_ptr), SPELL_STOP);
+    set_singing_song_effect(creature_ptr, MUSIC_NONE);
+    set_singing_song_id(creature_ptr, 0);
+    set_bits(creature_ptr->update, PU_BONUS);
+    set_bits(creature_ptr->redraw, PR_STATUS);
 }

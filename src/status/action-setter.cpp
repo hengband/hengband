@@ -18,6 +18,7 @@
 #include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"
+#include "spell-realm/spells-song.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 

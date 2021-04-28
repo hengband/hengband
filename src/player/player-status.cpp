@@ -88,6 +88,7 @@
 #include "specific-object/bow.h"
 #include "specific-object/torch.h"
 #include "spell-realm/spells-hex.h"
+#include "spell-realm/spells-song.h"
 #include "spell/range-calc.h"
 #include "spell/spells-describer.h"
 #include "spell/spells-execution.h"
@@ -3203,39 +3204,6 @@ bool is_time_limit_stealth(player_type *creature_ptr)
 bool can_two_hands_wielding(player_type *creature_ptr)
 {
     return !creature_ptr->riding || any_bits(creature_ptr->pet_extra_flags, PF_TWO_HANDS);
-}
-
-/*!
- * @brief 歌の停止を処理する / Stop singing if the player is a Bard
- * @return なし
- */
-void stop_singing(player_type *creature_ptr)
-{
-    if (creature_ptr->pclass != CLASS_BARD)
-        return;
-
-    /* Are there interupted song? */
-    if (get_interrupting_song_effect(creature_ptr) != 0) {
-        /* Forget interupted song */
-        set_interrupting_song_effect(creature_ptr, MUSIC_NONE);
-        return;
-    }
-
-    /* The player is singing? */
-    if (get_singing_song_effect(creature_ptr) == 0)
-        return;
-
-    /* Hack -- if called from set_action(), avoid recursive loop */
-    if (creature_ptr->action == ACTION_SING)
-        set_action(creature_ptr, ACTION_NONE);
-
-    /* Message text of each song or etc. */
-    exe_spell(creature_ptr, REALM_MUSIC, get_singing_song_id(creature_ptr), SPELL_STOP);
-
-    set_singing_song_effect(creature_ptr, MUSIC_NONE);
-    set_singing_song_id(creature_ptr, 0);
-    set_bits(creature_ptr->update, PU_BONUS);
-    set_bits(creature_ptr->redraw, PR_STATUS);
 }
 
 /*!
