@@ -2186,6 +2186,9 @@
     <ClCompile Include="..\..\src\player-ability\player-intelligence.cpp">
       <Filter>player-ability</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player-status\player-infravision.cpp">
+      <Filter>player-status</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\player-ability\player-wisdom.cpp">
       <Filter>player-ability</Filter>
     </ClCompile>
@@ -4756,6 +4759,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player-ability\player-basic-statistics.h">
       <Filter>player-ability</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-status\player-infravision.h">
+      <Filter>player-status</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player-ability\player-strength.h">
       <Filter>player-ability</Filter>

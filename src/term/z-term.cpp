@@ -46,26 +46,46 @@ term_win::term_win(TERM_LEN w, TERM_LEN h)
 {
 }
 
-/*
- * Copy a "term_win" from another
- */
-static errr term_win_copy(std::unique_ptr<term_win> &s, const std::unique_ptr<term_win> &f, TERM_LEN w, TERM_LEN h)
+std::unique_ptr<term_win> term_win::create(TERM_LEN w, TERM_LEN h)
 {
-    /* Copy contents */
+    // privateコンストラクタを呼び出すための補助クラス
+    struct impl : term_win {
+        impl(TERM_LEN w, TERM_LEN h)
+            : term_win(w, h)
+        {
+        }
+    };
+    return std::make_unique<impl>(w, h);
+}
+
+std::unique_ptr<term_win> term_win::clone() const
+{
+    return std::make_unique<term_win>(*this);
+}
+
+void term_win::resize(TERM_LEN w, TERM_LEN h)
+{
+    /* Ignore non-changes */
+    if (this->a.size() == static_cast<size_t>(h) && this->a[0].size() == static_cast<size_t>(w))
+        return;
+
+    this->a.resize(h, std::vector<TERM_COLOR>(w));
+    this->c.resize(h, std::vector<char>(w));
+    this->ta.resize(h, std::vector<TERM_COLOR>(w));
+    this->tc.resize(h, std::vector<char>(w));
+
     for (TERM_LEN y = 0; y < h; y++) {
-        std::copy_n(f->a[y].begin(), w, s->a[y].begin());
-        std::copy_n(f->c[y].begin(), w, s->c[y].begin());
-        std::copy_n(f->ta[y].begin(), w, s->ta[y].begin());
-        std::copy_n(f->tc[y].begin(), w, s->tc[y].begin());
+        this->a[y].resize(w);
+        this->c[y].resize(w);
+        this->ta[y].resize(w);
+        this->tc[y].resize(w);
     }
 
-    /* Copy cursor */
-    s->cx = f->cx;
-    s->cy = f->cy;
-    s->cu = f->cu;
-    s->cv = f->cv;
-
-    return 0;
+    /* Illegal cursor */
+    if (this->cx >= w)
+        this->cu = 1;
+    if (this->cy >= h)
+        this->cu = 1;
 }
 
 /*** External hooks ***/
@@ -1839,17 +1859,9 @@ errr term_inkey(char *ch, bool wait, bool take)
  */
 errr term_save(void)
 {
-    TERM_LEN w = Term->wid;
-    TERM_LEN h = Term->hgt;
+    /* Push stack */
+    Term->mem_stack.push(Term->scr->clone());
 
-    /* Create */
-    if (!Term->mem) {
-        /* Allocate window */
-        Term->mem = std::make_unique<term_win>(w, h);
-    }
-
-    /* Grab */
-    term_win_copy(Term->mem, Term->scr, w, h);
     return 0;
 }
 
@@ -1858,19 +1870,26 @@ errr term_save(void)
  *
  * Every "term_save()" should match exactly one "term_load()"
  */
-errr term_load(void)
+errr term_load(bool load_all)
 {
     TERM_LEN w = Term->wid;
     TERM_LEN h = Term->hgt;
 
-    /* Create */
-    if (!Term->mem) {
-        /* Allocate window */
-        Term->mem = std::make_unique<term_win>(w, h);
+    if (Term->mem_stack.empty())
+        return 0;
+
+    if (load_all) {
+        // 残り1つを残して読み捨てる
+        while (Term->mem_stack.size() > 1)
+            Term->mem_stack.pop();
     }
 
     /* Load */
-    term_win_copy(Term->scr, Term->mem, w, h);
+    Term->scr.swap(Term->mem_stack.top());
+    Term->scr->resize(w, h);
+
+    /* Pop stack */
+    Term->mem_stack.pop();
 
     /* Assume change */
     for (TERM_LEN y = 0; y < h; y++) {
@@ -1896,7 +1915,7 @@ errr term_exchange(void)
     /* Create */
     if (!Term->tmp) {
         /* Allocate window */
-        Term->tmp = std::make_unique<term_win>(w, h);
+        Term->tmp = term_win::create(w, h);
     }
 
     /* Swap */
@@ -1920,8 +1939,6 @@ errr term_exchange(void)
  */
 errr term_resize(TERM_LEN w, TERM_LEN h)
 {
-    TERM_LEN wid, hgt;
-
     /* Resizing is forbidden */
     if (Term->fixed_shape)
         return -1;
@@ -1936,85 +1953,15 @@ errr term_resize(TERM_LEN w, TERM_LEN h)
 
     use_bigtile = arg_bigtile;
 
-    /* Minimum dimensions */
-    wid = MIN(Term->wid, w);
-    hgt = MIN(Term->hgt, h);
+    /* Resize windows */
+    Term->old->resize(w, h);
+    Term->scr->resize(w, h);
+    if (Term->tmp)
+        Term->tmp->resize(w, h);
 
-    /* Save old window */
-    std::unique_ptr<term_win> hold_old = std::move(Term->old);
-
-    /* Save old window */
-    std::unique_ptr<term_win> hold_scr = std::move(Term->scr);
-
-    /* Save old window */
-    std::unique_ptr<term_win> hold_mem = std::move(Term->mem);
-
-    /* Save old window */
-    std::unique_ptr<term_win> hold_tmp = std::move(Term->tmp);
-
-    /* Create new scanners */
-    Term->x1 = std::vector<TERM_LEN>(h);
-    Term->x2 = std::vector<TERM_LEN>(h);
-
-    /* Create new window */
-    Term->old = std::make_unique<term_win>(w, h);
-
-    /* Save the contents */
-    term_win_copy(Term->old, hold_old, wid, hgt);
-
-    /* Create new window */
-    Term->scr = std::make_unique<term_win>(w, h);
-
-    /* Save the contents */
-    term_win_copy(Term->scr, hold_scr, wid, hgt);
-
-    /* If needed */
-    if (hold_mem) {
-        /* Create new window */
-        Term->mem = std::make_unique<term_win>(w, h);
-
-        /* Save the contents */
-        term_win_copy(Term->mem, hold_mem, wid, hgt);
-    }
-
-    /* If needed */
-    if (hold_tmp) {
-        /* Create new window */
-        Term->tmp = std::make_unique<term_win>(w, h);
-
-        /* Save the contents */
-        term_win_copy(Term->tmp, hold_tmp, wid, hgt);
-    }
-
-    /* Illegal cursor */
-    if (Term->old->cx >= w)
-        Term->old->cu = 1;
-    if (Term->old->cy >= h)
-        Term->old->cu = 1;
-
-    /* Illegal cursor */
-    if (Term->scr->cx >= w)
-        Term->scr->cu = 1;
-    if (Term->scr->cy >= h)
-        Term->scr->cu = 1;
-
-    /* If needed */
-    if (Term->mem) {
-        /* Illegal cursor */
-        if (Term->mem->cx >= w)
-            Term->mem->cu = 1;
-        if (Term->mem->cy >= h)
-            Term->mem->cu = 1;
-    }
-
-    /* If needed */
-    if (Term->tmp) {
-        /* Illegal cursor */
-        if (Term->tmp->cx >= w)
-            Term->tmp->cu = 1;
-        if (Term->tmp->cy >= h)
-            Term->tmp->cu = 1;
-    }
+    /* Resize scanners */
+    Term->x1.resize(h);
+    Term->x2.resize(h);
 
     /* Save new size */
     Term->wid = w;
@@ -2112,10 +2059,10 @@ errr term_init(term_type *t, TERM_LEN w, TERM_LEN h, int k)
     t->x2.resize(h);
 
     /* Allocate "displayed" */
-    t->old = std::make_unique<term_win>(w, h);
+    t->old = term_win::create(w, h);
 
     /* Allocate "requested" */
-    t->scr = std::make_unique<term_win>(w, h);
+    t->scr = term_win::create(w, h);
 
     /* Assume change */
     for (TERM_LEN y = 0; y < h; y++) {
@@ -2189,8 +2136,9 @@ errr term_nuke(term_type *t)
 
     t->old.reset();
     t->scr.reset();
-    t->mem.reset();
     t->tmp.reset();
+    while (!t->mem_stack.empty())
+        t->mem_stack.pop();
 
     t->x1.clear();
     t->x2.clear();

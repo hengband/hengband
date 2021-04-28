@@ -428,6 +428,7 @@
     <ClCompile Include="..\..\src\player-ability\player-dexterity.cpp" />
     <ClCompile Include="..\..\src\player-ability\player-constitution.cpp" />
     <ClCompile Include="..\..\src\player-ability\player-charisma.cpp" />
+    <ClCompile Include="..\..\src\player-status\player-infravision.cpp" />
     <ClCompile Include="..\..\src\player\player-status-resist.cpp" />
     <ClCompile Include="..\..\src\room\vault-builder.cpp" />
     <ClCompile Include="..\..\src\specific-object\blade-turner.cpp" />
@@ -1117,6 +1118,7 @@
     <ClInclude Include="..\..\src\player-ability\player-dexterity.h" />
     <ClInclude Include="..\..\src\player-ability\player-constitution.h" />
     <ClInclude Include="..\..\src\player-ability\player-charisma.h" />
+    <ClInclude Include="..\..\src\player-status\player-infravision.h" />
     <ClInclude Include="..\..\src\player\player-status-resist.h" />
     <ClInclude Include="..\..\src\room\vault-builder.h" />
     <ClInclude Include="..\..\src\specific-object\blade-turner.h" />

@@ -17,6 +17,7 @@
 #include "player-ability/player-speed.h"
 #include "player-ability/player-stealth.h"
 #include "player-status/player-hand-types.h"
+#include "player-status/player-infravision.h"
 #include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
 #include "player/mimic-info-table.h"
@@ -177,7 +178,7 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
     case TR_SEARCH:
         return 0;
     case TR_INFRA:
-        return has_infra_vision(creature_ptr);
+        return PlayerInfravision(creature_ptr).get_all_flags();
     case TR_TUNNEL:
         return 0;
     case TR_SPEED:
@@ -481,35 +482,6 @@ BIT_FLAGS has_xtra_might(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
     result |= check_equipment_flags(creature_ptr, TR_XTRA_MIGHT);
-    return result;
-}
-
-/*!
- * @brief クリーチャーが赤外線視力修正を持っているかを返す。
- * @param creature_ptr 判定対象のクリーチャー参照ポインタ
- * @return 持っていたら所持前提ビットフラグを返す。
- * @details 種族修正は0より大きければTRUEとする。
- */
-BIT_FLAGS has_infra_vision(player_type *creature_ptr)
-{
-    BIT_FLAGS result = 0L;
-    const player_race *tmp_rp_ptr;
-
-    if (creature_ptr->mimic_form)
-        tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
-    else
-        tmp_rp_ptr = &race_info[creature_ptr->prace];
-
-    if (tmp_rp_ptr->infra > 0)
-        result |= FLAG_CAUSE_RACE;
-
-    if (creature_ptr->muta.has(MUTA::INFRAVIS))
-        result |= FLAG_CAUSE_MUTATION;
-
-    if (creature_ptr->tim_infra)
-        result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
-
-    result |= check_equipment_flags(creature_ptr, TR_INFRA);
     return result;
 }
 

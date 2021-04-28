@@ -658,6 +658,7 @@ hengband_SOURCES = \
 	player-info/weapon-effect-info.cpp player-info/weapon-effect-info.h \
 	\
 	player-status/player-hand-types.h \
+	player-status/player-infravision.cpp player-status/player-infravision.h \
 	\
 	racial/class-racial-switcher.cpp racial/class-racial-switcher.h \
 	racial/mutation-racial-selector.cpp racial/mutation-racial-selector.h \
