@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "player-ability/player-status-base.h"
+#include "player-status/player-status-base.h"
 
 class PlayerStealth : public PlayerStatusBase {
 public:

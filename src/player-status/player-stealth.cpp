@@ -1,4 +1,4 @@
-﻿#include "player-ability/player-stealth.h"
+﻿#include "player-status/player-stealth.h"
 #include "mind/mind-ninja.h"
 #include "mutation/mutation-flag-types.h"
 #include "player/mimic-info-table.h"

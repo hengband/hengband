@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "player-ability/player-basic-statistics.h"
+#include "player-status/player-basic-statistics.h"
 
 class PlayerIntelligence : public PlayerBasicStatistics {
 public:

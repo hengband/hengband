@@ -2168,17 +2168,17 @@
     <ClCompile Include="..\..\src\wizard\wizard-player-modifier.cpp">
       <Filter>wizard</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player-ability\player-speed.cpp">
-      <Filter>player-ability</Filter>
+    <ClCompile Include="..\..\src\player-status\player-speed.cpp">
+      <Filter>player-status</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player-ability\player-status-base.cpp">
-      <Filter>player-ability</Filter>
+    <ClCompile Include="..\..\src\player-status\player-status-base.cpp">
+      <Filter>player-status</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player-ability\player-stealth.cpp">
-      <Filter>player-ability</Filter>
+    <ClCompile Include="..\..\src\player-status\player-stealth.cpp">
+      <Filter>player-status</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player-ability\player-basic-statistics.cpp">
-      <Filter>player-ability</Filter>
+    <ClCompile Include="..\..\src\player-status\player-basic-statistics.cpp">
+      <Filter>player-status</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\player-ability\player-strength.cpp">
       <Filter>player-ability</Filter>
@@ -4748,17 +4748,17 @@
     <ClInclude Include="..\..\src\wizard\wizard-player-modifier.h">
       <Filter>wizard</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player-ability\player-speed.h">
-      <Filter>player-ability</Filter>
+    <ClInclude Include="..\..\src\player-status\player-speed.h">
+      <Filter>player-status</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player-ability\player-status-base.h">
-      <Filter>player-ability</Filter>
+    <ClInclude Include="..\..\src\player-status\player-status-base.h">
+      <Filter>player-status</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player-ability\player-stealth.h">
-      <Filter>player-ability</Filter>
+    <ClInclude Include="..\..\src\player-status\player-stealth.h">
+      <Filter>player-status</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player-ability\player-basic-statistics.h">
-      <Filter>player-ability</Filter>
+    <ClInclude Include="..\..\src\player-status\player-basic-statistics.h">
+      <Filter>player-status</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player-status\player-infravision.h">
       <Filter>player-status</Filter>

@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "player-ability/player-abillity-types.h"
-#include "player-ability/player-status-base.h"
+#include "player-status/player-status-base.h"
 
 class PlayerBasicStatistics : public PlayerStatusBase {
 public:
