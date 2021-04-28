@@ -279,6 +279,14 @@ static void on_dead_demon_slayer_senior(player_type* player_ptr, monster_death_t
     msg_format(_("あなたの闘気が%sの身体をサイコロ状に切り刻んだ！", "Your fighting spirit chopped %^s's body into dice!"), m_name);
 }
 
+static void on_dead_mirmulnir(player_type *player_ptr, monster_death_type *md_ptr)
+{
+    if (!is_seen(player_ptr, md_ptr->m_ptr))
+        return;
+
+    msg_print(_("ドヴ＠ーキン、やめろぉ！", "Dov@hkiin! No!!"));
+}
+
 static void on_dead_dragon_centipede(player_type *player_ptr, monster_death_type *md_ptr)
 {
     if (player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out)
@@ -436,6 +444,9 @@ void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr)
         return;
     case MON_DEMON_SLAYER_SENIOR:
         on_dead_demon_slayer_senior(player_ptr, md_ptr);
+        return;
+    case MON_MIRMULNIR:
+        on_dead_mirmulnir(player_ptr, md_ptr);
         return;
     case MON_DRAGON_CENTIPEDE:
     case MON_DRAGON_WORM:
