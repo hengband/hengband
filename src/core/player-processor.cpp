@@ -39,6 +39,7 @@
 #include "player/attack-defense-types.h"
 #include "player/eldritch-horror.h"
 #include "player/player-skill.h"
+#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "spell-kind/spells-random.h"
 #include "spell-realm/spells-hex.h"

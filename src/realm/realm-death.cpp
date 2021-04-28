@@ -1,8 +1,8 @@
 ﻿#include "realm/realm-death.h"
 #include "cmd-action/cmd-spell.h"
-#include "core/hp-mp-processor.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
+#include "hpmp/hp-mp-processor.h"
 #include "player-info/avatar.h"
 #include "player/digestion-processor.h"
 #include "player/player-damage.h"
@@ -237,8 +237,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
         if (name)
             return _("エントロピーの球", "Orb of Entropy");
         if (desc)
-            return _(
-                "生命のある者のHPと最大HP双方にダメージを与える効果のある球を放つ。", "Fires a ball which reduces both HP and MaxHP of living monsters.");
+            return _("生命のある者のHPと最大HP双方にダメージを与える効果のある球を放つ。", "Fires a ball which reduces both HP and MaxHP of living monsters.");
 
         {
             DICE_NUMBER dice = 3;

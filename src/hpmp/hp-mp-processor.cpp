@@ -1,6 +1,5 @@
-﻿#include "core/hp-mp-processor.h"
+﻿#include "hpmp/hp-mp-processor.h"
 #include "cmd-action/cmd-pet.h"
-#include "core/hp-mp-regenerator.h"
 #include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
@@ -8,19 +7,25 @@
 #include "floor/pattern-walk.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
+#include "hpmp/hp-mp-regenerator.h"
 #include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
 #include "object-enchant/object-ego.h"
+#include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
-#include "player/attack-defense-types.h"
+#include "object/object-flags.h"
 #include "player-info/avatar.h"
+#include "player/attack-defense-types.h"
+#include "player/digestion-processor.h"
 #include "player/player-damage.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"
-#include "player/special-defense-types.h"
 #include "player/player-status-flags.h"
+#include "player/player-status.h"
+#include "player/player-status-resist.h"
+#include "player/special-defense-types.h"
 #include "status/bad-status-setter.h"
 #include "status/element-resistance.h"
 #include "system/floor-type-definition.h"
@@ -31,10 +36,6 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-#include "player/player-status-resist.h"
-#include "util/bit-flags-calculator.h"
-#include "object/object-flags.h"
-#include "object-enchant/tr-types.h"
 
 /*!
  * @brief 地形によるダメージを与える / Deal damage from feature.
@@ -156,23 +157,23 @@ void process_player_hp_mp(player_type *creature_ptr)
     }
 
     if (has_flag(f_ptr->flags, FF_LAVA) && !is_invuln(creature_ptr) && !has_immune_fire(creature_ptr)) {
-        cave_no_regen = deal_damege_by_feat(creature_ptr, g_ptr, _("熱で火傷した！", "The heat burns you!"), _("で火傷した！", "burns you!"),
-            calc_fire_damage_rate, NULL);
+        cave_no_regen = deal_damege_by_feat(
+            creature_ptr, g_ptr, _("熱で火傷した！", "The heat burns you!"), _("で火傷した！", "burns you!"), calc_fire_damage_rate, NULL);
     }
 
     if (has_flag(f_ptr->flags, FF_COLD_PUDDLE) && !is_invuln(creature_ptr) && !has_immune_cold(creature_ptr)) {
-        cave_no_regen = deal_damege_by_feat(creature_ptr, g_ptr, _("冷気に覆われた！", "The cold engulfs you!"), _("に凍えた！", "frostbites you!"),
-            calc_cold_damage_rate, NULL);
+        cave_no_regen = deal_damege_by_feat(
+            creature_ptr, g_ptr, _("冷気に覆われた！", "The cold engulfs you!"), _("に凍えた！", "frostbites you!"), calc_cold_damage_rate, NULL);
     }
 
     if (has_flag(f_ptr->flags, FF_ELEC_PUDDLE) && !is_invuln(creature_ptr) && !has_immune_elec(creature_ptr)) {
-        cave_no_regen = deal_damege_by_feat(creature_ptr, g_ptr, _("電撃を受けた！", "The electricity shocks you!"), _("に感電した！", "shocks you!"),
-            calc_elec_damage_rate, NULL);
+        cave_no_regen = deal_damege_by_feat(
+            creature_ptr, g_ptr, _("電撃を受けた！", "The electricity shocks you!"), _("に感電した！", "shocks you!"), calc_elec_damage_rate, NULL);
     }
 
     if (has_flag(f_ptr->flags, FF_ACID_PUDDLE) && !is_invuln(creature_ptr) && !has_immune_acid(creature_ptr)) {
-        cave_no_regen = deal_damege_by_feat(creature_ptr, g_ptr, _("酸が飛び散った！", "The acid melts you!"), _("に溶かされた！", "melts you!"),
-            calc_acid_damage_rate, NULL);
+        cave_no_regen = deal_damege_by_feat(
+            creature_ptr, g_ptr, _("酸が飛び散った！", "The acid melts you!"), _("に溶かされた！", "melts you!"), calc_acid_damage_rate, NULL);
     }
 
     if (has_flag(f_ptr->flags, FF_POISON_PUDDLE) && !is_invuln(creature_ptr)) {

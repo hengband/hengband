@@ -1,6 +1,8 @@
 ﻿#pragma once
 
+#include "player/player-class-types.h"
 #include "system/angband.h"
+#include "util/flag-group.h"
 
 #define MAX_BOUNTY 20
 

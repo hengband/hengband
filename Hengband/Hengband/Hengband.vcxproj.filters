@@ -302,12 +302,6 @@
     <ClCompile Include="..\..\src\core\turn-compensator.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\hp-mp-regenerator.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\core\hp-mp-processor.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mutation\mutation-processor.cpp">
       <Filter>mutation</Filter>
     </ClCompile>
@@ -2186,26 +2180,26 @@
     <ClCompile Include="..\..\src\player-status\player-basic-statistics.cpp">
       <Filter>player-status</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player-status\player-strength.cpp">
-      <Filter>player-status</Filter>
+    <ClCompile Include="..\..\src\player-ability\player-strength.cpp">
+      <Filter>player-ability</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player-ability\player-intelligence.cpp">
+      <Filter>player-ability</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\player-status\player-infravision.cpp">
       <Filter>player-status</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player-status\player-intelligence.cpp">
-      <Filter>player-status</Filter>
+    <ClCompile Include="..\..\src\player-ability\player-wisdom.cpp">
+      <Filter>player-ability</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player-status\player-wisdom.cpp">
-      <Filter>player-status</Filter>
+    <ClCompile Include="..\..\src\player-ability\player-dexterity.cpp">
+      <Filter>player-ability</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player-status\player-dextarity.cpp">
-      <Filter>player-status</Filter>
+    <ClCompile Include="..\..\src\player-ability\player-constitution.cpp">
+      <Filter>player-ability</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player-status\player-constitution.cpp">
-      <Filter>player-status</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\player-status\player-charisma.cpp">
-      <Filter>player-status</Filter>
+    <ClCompile Include="..\..\src\player-ability\player-charisma.cpp">
+      <Filter>player-ability</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\mind\mind-elementalist.cpp">
       <Filter>mind</Filter>
@@ -2261,6 +2255,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\system\player-type-definition.cpp">
       <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\hpmp\hp-mp-processor.cpp">
+      <Filter>hpmp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\hpmp\hp-mp-regenerator.cpp">
+      <Filter>hpmp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2592,12 +2592,6 @@
       <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\core\turn-compensator.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\core\hp-mp-regenerator.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\core\hp-mp-processor.h">
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mutation\mutation-processor.h">
@@ -3701,10 +3695,10 @@
     <ClInclude Include="..\..\src\system\building-type-definition.h">
       <Filter>system</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player\player-personalities-types.h">
+    <ClInclude Include="..\..\src\player\player-personality-types.h">
       <Filter>player</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player\player-classes-types.h">
+    <ClInclude Include="..\..\src\player\player-class-types.h">
       <Filter>player</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\spell\spell-types.h">
@@ -4694,9 +4688,6 @@
     <ClInclude Include="..\..\src\player-info\resistance-info.h">
       <Filter>player-info</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player-info\base-status-info.h">
-      <Filter>player-info</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\view\display-self-info.h">
       <Filter>view</Filter>
     </ClInclude>
@@ -4766,29 +4757,29 @@
     <ClInclude Include="..\..\src\player-status\player-stealth.h">
       <Filter>player-status</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player-status\player-infravision.h">
-      <Filter>player-status</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\player-status\player-basic-statistics.h">
       <Filter>player-status</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player-status\player-strength.h">
+    <ClInclude Include="..\..\src\player-status\player-infravision.h">
       <Filter>player-status</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player-status\player-intelligence.h">
-      <Filter>player-status</Filter>
+    <ClInclude Include="..\..\src\player-ability\player-strength.h">
+      <Filter>player-ability</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player-status\player-wisdom.h">
-      <Filter>player-status</Filter>
+    <ClInclude Include="..\..\src\player-ability\player-intelligence.h">
+      <Filter>player-ability</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player-status\player-dextarity.h">
-      <Filter>player-status</Filter>
+    <ClInclude Include="..\..\src\player-ability\player-wisdom.h">
+      <Filter>player-ability</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player-status\player-constitution.h">
-      <Filter>player-status</Filter>
+    <ClInclude Include="..\..\src\player-ability\player-dexterity.h">
+      <Filter>player-ability</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player-status\player-charisma.h">
-      <Filter>player-status</Filter>
+    <ClInclude Include="..\..\src\player-ability\player-constitution.h">
+      <Filter>player-ability</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-ability\player-charisma.h">
+      <Filter>player-ability</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\util\flag-group.h">
       <Filter>util</Filter>
@@ -4868,6 +4859,18 @@
     </ClInclude>
     <ClInclude Include="..\..\src\system\player-type-definition.h">
       <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-ability\player-abillity-types.h">
+      <Filter>player-ability</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-status\player-hand-types.h">
+      <Filter>player-status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\hpmp\hp-mp-processor.h">
+      <Filter>hpmp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\hpmp\hp-mp-regenerator.h">
+      <Filter>hpmp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -5070,11 +5073,17 @@
     <Filter Include="player-info">
       <UniqueIdentifier>{9b6116c6-24e1-4d33-b3b5-3591f58fb9e1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="player-status">
-      <UniqueIdentifier>{d6c9dc68-d79b-4509-bf9c-34ff9620bbf4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="main-win">
       <UniqueIdentifier>{8175f3d1-c8b3-4f2b-8536-8631d77eb53c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="player-status">
+      <UniqueIdentifier>{ff73fd79-e082-4a2c-8c5b-9457c30d9e74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hpmp">
+      <UniqueIdentifier>{fb766b4b-8783-4d07-9474-059259afe7c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="player-ability">
+      <UniqueIdentifier>{d6c9dc68-d79b-4509-bf9c-34ff9620bbf4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

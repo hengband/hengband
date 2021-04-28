@@ -14,10 +14,12 @@
 #include "object-hook/hook-weapon.h"
 #include "object/object-flags.h"
 #include "player-status/player-basic-statistics.h"
-#include "player-status/player-infravision.h"
 #include "player-status/player-speed.h"
 #include "player-status/player-stealth.h"
+#include "player-status/player-hand-types.h"
+#include "player-status/player-infravision.h"
 #include "player/attack-defense-types.h"
+#include "player/digestion-processor.h"
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"
 #include "player/player-race-types.h"
@@ -39,6 +41,9 @@
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"
+
+#define SPELL_SW 22
+#define SPELL_WALL 20
 
 BIT_FLAGS convert_inventory_slot_type_to_flag_cause(inventory_slot_type inventory_slot)
 {
@@ -159,7 +164,7 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
     case TR_WIS:
         return PlayerWisdom(creature_ptr).get_all_flags();
     case TR_DEX:
-        return PlayerDextarity(creature_ptr).get_all_flags();
+        return PlayerDexterity(creature_ptr).get_all_flags();
     case TR_CON:
         return PlayerConstitution(creature_ptr).get_all_flags();
     case TR_CHR:

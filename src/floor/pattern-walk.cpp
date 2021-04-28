@@ -16,6 +16,7 @@
 #include "player/player-move.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"
+#include "player/player-status.h"
 #include "spell/spells-status.h"
 #include "spell-kind/spells-teleport.h"
 #include "status/bad-status-setter.h"

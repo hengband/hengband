@@ -15,6 +15,7 @@
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "player/attack-defense-types.h"
+#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"
 #include "system/player-type-definition.h"

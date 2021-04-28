@@ -148,8 +148,6 @@ hengband_SOURCES = \
 	core/disturbance.cpp core/disturbance.h \
 	core/game-closer.cpp core/game-closer.h \
 	core/game-play.cpp core/game-play.h \
-	core/hp-mp-processor.cpp core/hp-mp-processor.h \
-	core/hp-mp-regenerator.cpp core/hp-mp-regenerator.h \
 	core/magic-effects-timeout-reducer.cpp core/magic-effects-timeout-reducer.h \
 	core/object-compressor.cpp core/object-compressor.h \
 	core/player-processor.cpp core/player-processor.h \
@@ -255,6 +253,9 @@ hengband_SOURCES = \
 	grid/object-placer.cpp grid/object-placer.h \
 	grid/stair.cpp grid/stair.h \
 	grid/trap.cpp grid/trap.h \
+	\
+	hpmp/hp-mp-processor.cpp hpmp/hp-mp-processor.h \
+	hpmp/hp-mp-regenerator.cpp hpmp/hp-mp-regenerator.h \
 	\
 	info-reader/artifact-reader.cpp info-reader/artifact-reader.h \
 	info-reader/dungeon-info-tokens-table.cpp info-reader/dungeon-info-tokens-table.h \
@@ -610,7 +611,7 @@ hengband_SOURCES = \
 	player/permanent-resistances.cpp player/permanent-resistances.h \
 	player/temporary-resistances.cpp player/temporary-resistances.h \
 	player/digestion-processor.cpp player/digestion-processor.h \
-	player/player-classes-types.h \
+	player/player-class-types.h \
 	player/player-class.cpp player/player-class.h \
 	player/player-damage.cpp player/player-damage.h \
 	player/player-move.cpp player/player-move.h \
@@ -623,42 +624,26 @@ hengband_SOURCES = \
 	player/player-status-flags.cpp player/player-status-flags.h \
 	player/player-status-table.cpp player/player-status-table.h \
 	player/player-status-resist.cpp player/player-status-resist.h \
-	player/player-personalities-types.h \
+	player/player-personality-types.h \
 	player/player-sex.cpp player/player-sex.h \
 	player/player-view.cpp player/player-view.h \
 	player/special-defense-types.h \
+	\
+	player-ability/player-ability-types.h \
+	player-ability/player-charisma.cpp player-ability/player-charisma.h \
+	player-ability/player-constitution.cpp player-ability/player-constitution.h \
+	player-ability/player-dexterity.cpp player-ability/player-dexterity.h \
+	player-ability/player-intelligence.cpp player-ability/player-intelligence.h \
+	player-ability/player-strength.cpp player-ability/player-strength.h \
+	player-ability/player-wisdom.cpp player-ability/player-wisdom.h \
 	\
 	player-attack/player-attack-util.h \
 	player-attack/attack-chaos-effect.cpp player-attack/attack-chaos-effect.h \
 	player-attack/blood-sucking-processor.cpp player-attack/blood-sucking-processor.h \
 	player-attack/player-attack.cpp player-attack/player-attack.h \
 	\
-	player-status/player-status-base.h \
-	player-status/player-speed.h \
-	player-status/player-stealth.h \
-	player-status/player-infravision.h \
-	player-status/player-basic-statistics.h \
-	player-status/player-strength.h \
-	player-status/player-intelligence.h \
-	player-status/player-wisdom.h \
-	player-status/player-dextarity.h \
-	player-status/player-constitution.h \
-	player-status/player-charisma.h \
-	player-status/player-status-base.cpp \
-	player-status/player-speed.cpp \
-	player-status/player-stealth.cpp \
-	player-status/player-infravision.cpp \
-	player-status/player-basic-statistics.cpp \
-	player-status/player-strength.cpp \
-	player-status/player-intelligence.cpp \
-	player-status/player-wisdom.cpp \
-	player-status/player-dextarity.cpp \
-	player-status/player-constitution.cpp \
-	player-status/player-charisma.cpp \
-	\
 	player-info/avatar.h player-info/avatar.cpp \
 	player-info/base-status-info.cpp player-info/base-status-info.h \
-	player-info/base-status-types.h \
 	player-info/body-improvement-info.cpp player-info/body-improvement-info.h \
 	player-info/class-ability-info.cpp player-info/class-ability-info.h \
 	player-info/mutation-info.cpp player-info/mutation-info.h \
@@ -667,6 +652,13 @@ hengband_SOURCES = \
 	player-info/self-info.cpp player-info/self-info.h \
 	player-info/self-info-util.cpp player-info/self-info-util.h \
 	player-info/weapon-effect-info.cpp player-info/weapon-effect-info.h \
+	\
+	player-status/player-hand-types.h \
+	player-status/player-infravision.cpp player-status/player-infravision.h \
+	player-status/player-basic-statistics.cpp player-status/player-basic-statistics.h \
+	player-status/player-speed.cpp player-status/player-speed.h \
+	player-status/player-status-base.cpp player-status/player-status-base.h \
+	player-status/player-stealth.cpp player-status/player-stealth.h \
 	\
 	racial/class-racial-switcher.cpp racial/class-racial-switcher.h \
 	racial/mutation-racial-selector.cpp racial/mutation-racial-selector.h \

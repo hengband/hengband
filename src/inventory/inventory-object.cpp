@@ -10,6 +10,7 @@
 #include "object/object-mark-types.h"
 #include "object/object-stack.h"
 #include "object/object-value.h"
+#include "player/player-status.h"
 #include "spell-realm/spells-craft.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"

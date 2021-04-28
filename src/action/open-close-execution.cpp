@@ -17,6 +17,7 @@
 #include "main/sound-of-music.h"
 #include "perception/object-perception.h"
 #include "player/player-status-table.h"
+#include "player/player-status.h"
 #include "specific-object/chest.h"
 #include "status/bad-status-setter.h"
 #include "status/experience.h"

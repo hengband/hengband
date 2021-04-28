@@ -58,12 +58,15 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "util/bit-flags-calculator.h"
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #ifdef JP
 #include "locale/japanese.h"
 #endif
+
+static const int extra_magic_gain_exp = 4;
 
 concptr KWD_DAM = _("損傷:", "dam ");
 concptr KWD_RANGE = _("射程:", "rng ");
@@ -1278,7 +1281,7 @@ bool do_cmd_cast(player_type *caster_ptr)
                 chg_virtue(caster_ptr, V_COMPASSION, -1);
             break;
         }
-        if (mp_ptr->spell_xtra & MAGIC_GAIN_EXP) {
+        if (any_bits(mp_ptr->spell_xtra, extra_magic_gain_exp)) {
             s16b cur_exp = caster_ptr->spell_exp[(increment ? 32 : 0) + spell];
             s16b exp_gain = 0;
 

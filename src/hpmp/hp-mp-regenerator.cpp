@@ -1,4 +1,4 @@
-﻿#include "core/hp-mp-regenerator.h"
+﻿#include "hpmp/hp-mp-regenerator.h"
 #include "cmd-item/cmd-magiceat.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
@@ -8,12 +8,12 @@
 #include "monster-race/race-flags2.h"
 #include "monster/monster-status.h"
 #include "player/attack-defense-types.h"
-#include "player/special-defense-types.h"
 #include "player/player-status-table.h"
+#include "player/special-defense-types.h"
 #include "system/floor-type-definition.h"
-#include "system/object-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
+#include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 
 /*!<広域マップ移動時の自然回復処理カウンタ（広域マップ1マス毎に20回処理を基本とする）*/

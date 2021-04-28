@@ -27,6 +27,7 @@
 #include "player/player-sex.h"
 #include "player/process-name.h"
 #include "player/player-status-table.h"
+#include "player/player-status.h"
 #include "system/game-option-types.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"

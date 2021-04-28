@@ -5,6 +5,7 @@
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
 #include "player-attack/player-attack-util.h"
+#include "player/player-status.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"

@@ -2,6 +2,7 @@
 #include "birth/quick-start.h"
 #include "load/angband-version-comparer.h"
 #include "load/load-util.h"
+#include "player-ability/player-abillity-types.h"
 #include "system/angband.h"
 #include "system/system-variables.h"
 

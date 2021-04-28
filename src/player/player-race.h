@@ -1,10 +1,14 @@
 ﻿#pragma once
 
-#include "system/angband.h"
-#include "object-enchant/tr-types.h"
 #include <unordered_map>
 #include <vector>
 #include <optional>
+
+#include "object-enchant/tr-types.h"
+#include "player-ability/player-abillity-types.h"
+#include "player/player-class-types.h"
+#include "player/player-race-types.h"
+#include "system/angband.h"
 
 /*
  * Constant for kinds of mimic

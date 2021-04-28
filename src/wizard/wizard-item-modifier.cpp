@@ -43,6 +43,10 @@
 
 #define K_MAX_DEPTH 110 /*!< アイテムの階層毎生成率を表示する最大階 */
 
+/*!
+ * @brief インベントリ内のアイテムを全て*鑑定*済みにする
+ * @param catser_ptr プレイヤー情報への参照ポインタ
+ */
 void wiz_identify_full_inventory(player_type *caster_ptr)
 {
     for (int i = 0; i < INVEN_TOTAL; i++) {
@@ -50,6 +54,8 @@ void wiz_identify_full_inventory(player_type *caster_ptr)
         if (!o_ptr->k_idx)
             continue;
 
+        auto k_ptr = &k_info[o_ptr->k_idx];
+        k_ptr->aware = TRUE; //!< @note 記録には残さないためTRUEを立てるのみ
         set_bits(o_ptr->ident, IDENT_KNOWN | IDENT_FULL_KNOWN);
         set_bits(o_ptr->marked, OM_TOUCHED);
     }

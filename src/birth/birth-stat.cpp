@@ -4,7 +4,7 @@
 #include "sv-definition/sv-weapon-types.h"
 #include "player/player-class.h"
 #include "player/player-personality.h"
-#include "player/player-personalities-types.h"
+#include "player/player-personality-types.h"
 #include "player/player-race.h"
 #include "player/player-skill.h"
 #include "spell/spells-status.h"

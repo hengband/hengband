@@ -28,6 +28,7 @@
 #include "player/eldritch-horror.h"
 #include "player/mimic-info-table.h"
 #include "player/player-damage.h"
+#include "player/player-status.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-floor.h"

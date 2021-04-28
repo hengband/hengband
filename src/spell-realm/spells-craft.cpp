@@ -16,6 +16,7 @@
 #include "object/object-flags.h"
 #include "player/attack-defense-types.h"
 #include "player-info/avatar.h"
+#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "racial/racial-android.h"
 #include "spell/spells-object.h"

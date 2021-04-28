@@ -18,6 +18,7 @@
 #include "player/player-damage.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-resist.h"
+#include "player/player-status.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-equipment.h"
 #include "status/bad-status-setter.h"

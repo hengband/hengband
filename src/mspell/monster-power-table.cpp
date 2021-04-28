@@ -1,4 +1,5 @@
 ﻿#include "mspell/monster-power-table.h"
+#include "player-ability/player-abillity-types.h"
 
 /*!
  * @brief 青魔法テーブル

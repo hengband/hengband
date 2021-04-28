@@ -8,11 +8,11 @@
 #include "artifact/fixed-art-types.h"
 #include "cmd-io/cmd-save.h"
 #include "core/asking-player.h"
-#include "core/hp-mp-processor.h"
 #include "core/player-redraw-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "game-option/special-options.h"
+#include "hpmp/hp-mp-processor.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-indice-types.h"
@@ -20,6 +20,7 @@
 #include "player-attack/player-attack.h"
 #include "player-info/avatar.h"
 #include "player/player-damage.h"
+#include "player/player-status.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/magic-item-recharger.h"
 #include "spell-kind/spells-beam.h"
@@ -248,7 +249,10 @@ bool activate_fully_identification(player_type *user_ptr)
  * @param user_ptr プレーヤーへの参照ポインタ
  * @return 発動に成功したらTRUE
  */
-bool activate_identification(player_type *user_ptr) { return ident_spell(user_ptr, FALSE, TV_NONE); }
+bool activate_identification(player_type *user_ptr)
+{
+    return ident_spell(user_ptr, FALSE, TV_NONE);
+}
 
 bool activate_pesticide(player_type *user_ptr)
 {

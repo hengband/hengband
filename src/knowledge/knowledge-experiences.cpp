@@ -13,6 +13,7 @@
 #include "object/object-kind.h"
 #include "player/player-class.h"
 #include "player/player-skill.h"
+#include "player/player-status.h"
 #include "realm/realm-names-table.h"
 #include "spell/spells-execution.h"
 #include "spell/technic-info-table.h"

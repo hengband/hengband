@@ -4,6 +4,7 @@
 #include "core/stuff-handler.h"
 #include "game-option/disturbance-options.h"
 #include "player/player-race.h"
+#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "realm/realm-song-numbers.h"
 #include "system/player-type-definition.h"

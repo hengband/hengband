@@ -6,6 +6,7 @@
 #include "main/sound-of-music.h"
 #include "monster-race/race-indice-types.h"
 #include "object-enchant/item-feeling.h"
+#include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/quarks.h"
 

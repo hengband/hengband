@@ -12,6 +12,7 @@
 #include "main/sound-of-music.h"
 #include "player-info/avatar.h"
 #include "player/player-move.h"
+#include "player/player-status.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"

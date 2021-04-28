@@ -7,6 +7,7 @@
 #include "system/angband.h"
 
 typedef struct artifact_type artifact_type;
+typedef struct object_type object_type;
 typedef struct player_type player_type;
 bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, POSITION x);
 bool make_artifact(player_type *player_ptr, object_type *o_ptr);

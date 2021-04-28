@@ -41,6 +41,7 @@
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
+#include "player/player-status.h"
 #include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"

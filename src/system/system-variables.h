@@ -6,6 +6,14 @@
 #define SCREEN_BUF_MAX_SIZE (1024 * 1024) /*!< Max size of screen dump buffer */
 #define PY_MAX_LEVEL 50 /*!< プレイヤーレベルの最大値 / Maximum level */
 #define TR_FLAG_SIZE 5
+#define PY_MAX_EXP 99999999L /*!< プレイヤー経験値の最大値 / Maximum exp */
+#define MAX_SPELLS 108
+
+/*
+ * @details v3.0.0 Alpha20現在、使われていない。こんなに大量の所持金を得ることが想定されていないためか
+ * 必要に応じて復活させること
+ */
+// #define PY_MAX_GOLD 999999999L /*!< プレイヤー所持金の最大値 / Maximum gold */
 
 enum init_flags_type {
 	INIT_NAME_ONLY = 0x01,

@@ -1,4 +1,4 @@
-﻿#include "player-status/player-strength.h"
+﻿#include "player-ability/player-strength.h"
 #include "mutation/mutation-flag-types.h"
 #include "object/object-flags.h"
 #include "player/mimic-info-table.h"
@@ -11,11 +11,11 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
-void PlayerStrength::set_locals() 
+void PlayerStrength::set_locals()
 {
     this->max_value = +99;
     this->min_value = -99;
-    this->status_type = A_STR;
+    this->ability_type = A_STR;
     this->tr_flag = TR_STR;
     this->tr_bad_flag = TR_STR;
 }
@@ -71,7 +71,6 @@ s16b PlayerStrength::time_effect_value()
 
     return result;
 }
-
 
 /*!
  * @brief 腕力補正計算 - 型

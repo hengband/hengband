@@ -1,4 +1,4 @@
-﻿#include "player-status/player-dextarity.h"
+﻿#include "player-ability/player-dexterity.h"
 #include "mutation/mutation-flag-types.h"
 #include "object/object-flags.h"
 #include "player/mimic-info-table.h"
@@ -11,11 +11,11 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
-void PlayerDextarity::set_locals()
+void PlayerDexterity::set_locals()
 {
     this->max_value = +99;
     this->min_value = -99;
-    this->status_type = A_DEX;
+    this->ability_type = A_DEX;
     this->tr_flag = TR_DEX;
     this->tr_bad_flag = TR_DEX;
 }
@@ -27,7 +27,7 @@ void PlayerDextarity::set_locals()
  * * 種族による器用さ修正値。
  * * エントは別途レベル26,41,46到達ごとに減算(-1)
  */
-s16b PlayerDextarity::race_value()
+s16b PlayerDexterity::race_value()
 {
     s16b result = PlayerBasicStatistics::race_value();
 
@@ -50,7 +50,7 @@ s16b PlayerDextarity::race_value()
  * * 一時効果による器用さ修正値
  * * 呪術の肉体強化で加算(+4)
  */
-s16b PlayerDextarity::time_effect_value()
+s16b PlayerDexterity::time_effect_value()
 {
     s16b result = 0;
 
@@ -73,7 +73,7 @@ s16b PlayerDextarity::time_effect_value()
  * * 玄武の構えで減算(-2)
  * * 朱雀の構えで加算(+2)
  */
-s16b PlayerDextarity::battleform_value()
+s16b PlayerDexterity::battleform_value()
 {
     s16b result = 0;
 
@@ -101,7 +101,7 @@ s16b PlayerDextarity::battleform_value()
  * * 変異MUT3_LIMBERで加算(+3)
  * * 変異MUT3_ARTHRITISで減算(-3)
  */
-s16b PlayerDextarity::mutation_value()
+s16b PlayerDexterity::mutation_value()
 {
     s16b result = 0;
 

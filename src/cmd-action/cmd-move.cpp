@@ -27,6 +27,7 @@
 #include "player-info/avatar.h"
 #include "player/attack-defense-types.h"
 #include "player/player-move.h"
+#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"
 #include "status/action-setter.h"
@@ -388,7 +389,7 @@ void do_cmd_stay(player_type *creature_ptr, bool pickup)
 void do_cmd_rest(player_type *creature_ptr)
 {
     set_action(creature_ptr, ACTION_NONE);
-    if ((creature_ptr->pclass == CLASS_BARD) && (SINGING_SONG_EFFECT(creature_ptr) || INTERUPTING_SONG_EFFECT(creature_ptr)))
+    if ((creature_ptr->pclass == CLASS_BARD) && ((get_singing_song_effect(creature_ptr) != 0)|| (get_interrupting_song_effect(creature_ptr) != 0)))
         stop_singing(creature_ptr);
 
     if (hex_spelling_any(creature_ptr))

@@ -48,7 +48,7 @@
 #include "object/object-mark-types.h"
 #include "player-info/avatar.h"
 #include "player/player-class.h"
-#include "player/player-personalities-types.h"
+#include "player/player-personality-types.h"
 #include "player/player-skill.h"
 #include "player/player-status-table.h"
 #include "player/player-status.h"

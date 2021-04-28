@@ -7,6 +7,7 @@
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"
 #include "player/player-personality.h"
+#include "player/player-status.h"
 #include "player/race-info-table.h"
 #include "player/special-defense-types.h"
 #include "realm/realm-hex-numbers.h"
@@ -20,7 +21,7 @@
  * @details
  * * 各要素によるステータス修正値の合計
  */
-s16b PlayerBasicStatistics::modification_value() 
+s16b PlayerBasicStatistics::modification_value()
 {
     return PlayerStatusBase::get_value();
 }
@@ -32,7 +33,7 @@ s16b PlayerBasicStatistics::modification_value()
 s16b PlayerBasicStatistics::get_value()
 {
     this->set_locals();
-    return this->owner_ptr->stat_index[(int)this->status_type];
+    return this->owner_ptr->stat_index[(int)this->ability_type];
 }
 
 /*!
@@ -50,7 +51,7 @@ s16b PlayerBasicStatistics::race_value()
     else
         tmp_rp_ptr = &race_info[this->owner_ptr->prace];
 
-    return tmp_rp_ptr->r_adj[this->status_type];
+    return tmp_rp_ptr->r_adj[this->ability_type];
 }
 
 /*!
@@ -63,7 +64,7 @@ s16b PlayerBasicStatistics::race_value()
 s16b PlayerBasicStatistics::class_value()
 {
     const player_class *c_ptr = &class_info[this->owner_ptr->pclass];
-    return c_ptr->c_adj[this->status_type];
+    return c_ptr->c_adj[this->ability_type];
 }
 
 /*!
@@ -76,7 +77,7 @@ s16b PlayerBasicStatistics::class_value()
 s16b PlayerBasicStatistics::personality_value()
 {
     const player_personality *a_ptr = &personality_info[this->owner_ptr->pseikaku];
-    return a_ptr->a_adj[this->status_type];
+    return a_ptr->a_adj[this->ability_type];
 }
 
 /*!
@@ -96,11 +97,11 @@ void PlayerBasicStatistics::update_value()
  * @brief ステータス最大値更新処理
  * @details
  * * owner_ptrのステータス最大値を更新する
- * * 更新対象はset_locals()で設定したstatus_typeで決定される 
+ * * 更新対象はset_locals()で設定したstatus_typeで決定される
  */
 void PlayerBasicStatistics::update_top_status()
 {
-    int status = (int)this->status_type;
+    int status = (int)this->ability_type;
     int top = modify_stat_value(this->owner_ptr->stat_max[status], this->owner_ptr->stat_add[status]);
 
     if (this->owner_ptr->stat_top[status] != top) {
@@ -110,7 +111,6 @@ void PlayerBasicStatistics::update_top_status()
     }
 }
 
-
 /*!
  * @brief ステータス現在値更新の例外処理
  * @param 通常処理されたステータスの値
@@ -119,10 +119,10 @@ void PlayerBasicStatistics::update_top_status()
  * * owner_ptrのステータス現在値を更新する際の例外処理
  * * 派生クラスでoverrideして使用する。
  */
-s16b PlayerBasicStatistics::set_exception_use_status(s16b value) 
- {
-     return value;
- }
+s16b PlayerBasicStatistics::set_exception_use_status(s16b value)
+{
+    return value;
+}
 
 /*!
  * @brief ステータス現在値更新処理
@@ -132,7 +132,7 @@ s16b PlayerBasicStatistics::set_exception_use_status(s16b value)
  */
 void PlayerBasicStatistics::update_use_status()
 {
-    int status = (int)this->status_type;
+    int status = (int)this->ability_type;
     s16b use = modify_stat_value(this->owner_ptr->stat_cur[status], this->owner_ptr->stat_add[status]);
 
     use = this->set_exception_use_status(use);
@@ -153,7 +153,7 @@ void PlayerBasicStatistics::update_use_status()
  */
 void PlayerBasicStatistics::update_index_status()
 {
-    int status = (int)this->status_type;
+    int status = (int)this->ability_type;
     int index;
     if (this->owner_ptr->stat_use[status] <= 18)
         index = (this->owner_ptr->stat_use[status] - 3);

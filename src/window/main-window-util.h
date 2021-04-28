@@ -5,6 +5,8 @@
 #define ROW_MAP 0
 #define COL_MAP 12
 
+typedef struct object_type object_type;
+extern object_type *autopick_obj;
 extern POSITION panel_row_min;
 extern POSITION panel_row_max;
 extern POSITION panel_col_min;
@@ -12,7 +14,6 @@ extern POSITION panel_col_max;
 extern POSITION panel_col_prt;
 extern POSITION panel_row_prt;
 extern int match_autopick;
-extern object_type *autopick_obj;
 extern int feat_priority;
 
 typedef struct player_type player_type;

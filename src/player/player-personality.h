@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "player/player-personalities-types.h"
+#include "player/player-personality-types.h"
 #include "system/angband.h"
 
 typedef struct player_personality {

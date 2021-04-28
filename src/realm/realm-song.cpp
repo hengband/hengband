@@ -1,12 +1,13 @@
 ﻿#include "cmd-action/cmd-spell.h"
-#include "core/hp-mp-processor.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
+#include "hpmp/hp-mp-processor.h"
 #include "player/attack-defense-types.h"
 #include "player/player-class.h"
+#include "player/player-status.h"
 #include "realm/realm-song-numbers.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-detection.h"
@@ -35,10 +36,10 @@
 static void start_singing(player_type *caster_ptr, SPELL_IDX spell, MAGIC_NUM1 song)
 {
     /* Remember the song index */
-    SINGING_SONG_EFFECT(caster_ptr) = (MAGIC_NUM1)song;
+    set_singing_song_effect(caster_ptr, song);
 
     /* Remember the index of the spell which activated the song */
-    SINGING_SONG_ID(caster_ptr) = (MAGIC_NUM2)spell;
+    set_singing_song_id(caster_ptr, (MAGIC_NUM2)spell);
 
     /* Now the player is singing */
     set_action(caster_ptr, ACTION_SING);
@@ -304,7 +305,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
         if (cast) {
             msg_print(_("静かな音楽が感覚を研ぎ澄まさせた．．．", "Your quiet music sharpens your sense of hearing..."));
             /* Hack -- Initialize the turn count */
-            SINGING_COUNT(caster_ptr) = 0;
+            set_singing_count(caster_ptr, 0);
             start_singing(caster_ptr, spell, MUSIC_DETECT);
         }
 
@@ -315,14 +316,14 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_radius(rad);
 
             if (cont) {
-                int count = SINGING_COUNT(caster_ptr);
+                int count = get_singing_count(caster_ptr);
 
                 if (count >= 19)
                     wiz_lite(caster_ptr, FALSE);
                 if (count >= 11) {
                     map_area(caster_ptr, rad);
                     if (plev > 39 && count < 19)
-                        SINGING_COUNT(caster_ptr) = count + 1;
+                        set_singing_count(caster_ptr, count + 1);
                 }
                 if (count >= 6) {
                     /* There are too many hidden treasure.  So... */
@@ -331,21 +332,21 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                     detect_objects_normal(caster_ptr, rad);
 
                     if (plev > 24 && count < 11)
-                        SINGING_COUNT(caster_ptr) = count + 1;
+                        set_singing_count(caster_ptr, count + 1);
                 }
                 if (count >= 3) {
                     detect_monsters_invis(caster_ptr, rad);
                     detect_monsters_normal(caster_ptr, rad);
 
                     if (plev > 19 && count < A_MAX)
-                        SINGING_COUNT(caster_ptr) = count + 1;
+                        set_singing_count(caster_ptr, count + 1);
                 }
                 detect_traps(caster_ptr, rad, TRUE);
                 detect_doors(caster_ptr, rad);
                 detect_stairs(caster_ptr, rad);
 
                 if (plev > 14 && count < 3)
-                    SINGING_COUNT(caster_ptr) = count + 1;
+                    set_singing_count(caster_ptr, count + 1);
             }
         }
 
