@@ -11,6 +11,7 @@
 #include "player/attack-defense-types.h"
 #include "player/player-class.h"
 #include "player/player-race.h"
+#include "player/player-status.h"
 #include "realm/realm-song-numbers.h"
 #include "status/base-status.h"
 #include "status/buff-setter.h"
@@ -94,8 +95,8 @@ void reset_tim_flags(player_type *creature_ptr)
     }
 
     if (creature_ptr->pclass == CLASS_BARD) {
-        SINGING_SONG_EFFECT(creature_ptr) = 0;
-        SINGING_SONG_ID(creature_ptr) = 0;
+        set_singing_song_effect(creature_ptr, MUSIC_NONE);
+        set_singing_song_id(creature_ptr, 0);
     }
 }
 

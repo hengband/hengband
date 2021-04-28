@@ -1,5 +1,5 @@
 ﻿#include "birth/birth-body-spec.h"
-#include "player/player-personalities-types.h"
+#include "player/player-personality-types.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"
 #include "player/player-sex.h"

@@ -1,4 +1,6 @@
 ﻿#pragma once
+
+#include "player-ability/player-abillity-types.h"
 #include "player-status/player-status-base.h"
 
 class PlayerBasicStatistics : public PlayerStatusBase {
@@ -11,7 +13,7 @@ public:
     s16b get_value() override;
 
 protected:
-    base_status_type status_type;
+    player_ability_type ability_type;
     s16b race_value() override;
     s16b class_value() override;
     s16b personality_value() override;
@@ -21,9 +23,9 @@ protected:
     virtual s16b set_exception_use_status(s16b value);
 };
 
-#include "player-status/player-strength.h"
-#include "player-status/player-intelligence.h"
-#include "player-status/player-wisdom.h"
-#include "player-status/player-dextarity.h"
-#include "player-status/player-constitution.h"
-#include "player-status/player-charisma.h"
+#include "player-ability/player-charisma.h"
+#include "player-ability/player-constitution.h"
+#include "player-ability/player-dexterity.h"
+#include "player-ability/player-intelligence.h"
+#include "player-ability/player-strength.h"
+#include "player-ability/player-wisdom.h"

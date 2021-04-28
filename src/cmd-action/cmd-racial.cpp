@@ -13,6 +13,7 @@
 #include "mutation/mutation-flag-types.h"
 #include "player/attack-defense-types.h"
 #include "player/player-damage.h"
+#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "racial/class-racial-switcher.h"
 #include "racial/mutation-racial-selector.h"

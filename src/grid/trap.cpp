@@ -24,7 +24,7 @@
 #include "player/eldritch-horror.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
-#include "player/player-personalities-types.h"
+#include "player/player-personality-types.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"

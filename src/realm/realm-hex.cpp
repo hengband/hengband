@@ -589,7 +589,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 exe_spell(caster_ptr, REALM_HEX, spell, SPELL_STOP);
                 casting_hex_flags(caster_ptr) &= ~(1UL << spell);
                 casting_hex_num(caster_ptr)--;
-                if (!SINGING_SONG_ID(caster_ptr))
+                if (get_singing_song_id(caster_ptr) == 0)
                     set_action(caster_ptr, ACTION_NONE);
             }
         }

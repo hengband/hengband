@@ -35,7 +35,7 @@
 #include "monster/monster-status.h"
 #include "pet/pet-fall-off.h"
 #include "player/player-class.h"
-#include "player/player-personalities-types.h"
+#include "player/player-personality-types.h"
 #include "player/player-race-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"

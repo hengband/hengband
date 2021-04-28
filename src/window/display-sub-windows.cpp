@@ -20,6 +20,7 @@
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"
 #include "player/player-status-flags.h"
+#include "player/player-status.h"
 #include "spell-kind/magic-item-recharger.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"

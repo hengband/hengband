@@ -1,5 +1,6 @@
 ﻿#include "racial/racial-draconian.h"
 #include "mind/mind-elementalist.h"
+#include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"
 #include "system/player-type-definition.h"

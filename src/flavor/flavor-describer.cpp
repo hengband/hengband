@@ -27,6 +27,7 @@
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
 #include "player/player-status-table.h"
+#include "player/player-status.h"
 #include "specific-object/bow.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-weapon-types.h"

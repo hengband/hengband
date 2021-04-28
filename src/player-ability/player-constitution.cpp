@@ -1,4 +1,4 @@
-﻿#include "player-status/player-constitution.h"
+﻿#include "player-ability/player-constitution.h"
 #include "mutation/mutation-flag-types.h"
 #include "object/object-flags.h"
 #include "player/mimic-info-table.h"
@@ -15,7 +15,7 @@ void PlayerConstitution::set_locals()
 {
     this->max_value = +99;
     this->min_value = -99;
-    this->status_type = A_CON;
+    this->ability_type = A_CON;
     this->tr_flag = TR_CON;
     this->tr_bad_flag = TR_CON;
 }
@@ -62,7 +62,6 @@ s16b PlayerConstitution::time_effect_value()
 
     return result;
 }
-
 
 /*!
  * @brief 耐久力補正計算 - 型

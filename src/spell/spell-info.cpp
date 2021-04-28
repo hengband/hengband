@@ -4,6 +4,7 @@
 #include "player/player-class.h"
 #include "player/player-skill.h"
 #include "player/player-status-table.h"
+#include "player/player-status.h"
 #include "realm/realm-names-table.h"
 #include "realm/realm-types.h"
 #include "spell/spells-execution.h"
@@ -13,9 +14,13 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+
+// 5%
+static const int extra_min_magic_fail_rate = 2;
 
 /*!
  * @brief 呪文の経験値を返す /
@@ -155,7 +160,7 @@ PERCENTAGE spell_chance(player_type *caster_ptr, SPELL_IDX spell, REALM_IDX use_
         chance += 5;
 
     PERCENTAGE minfail = adj_mag_fail[caster_ptr->stat_index[mp_ptr->spell_stat]];
-    if (mp_ptr->spell_xtra & MAGIC_FAIL_5PERCENT) {
+    if (any_bits(mp_ptr->spell_xtra, extra_min_magic_fail_rate)) {
         if (minfail < 5)
             minfail = 5;
     }

@@ -47,7 +47,7 @@
 #include "player-info/self-info.h"
 #include "player/attack-defense-types.h"
 #include "player/player-class.h"
-#include "player/player-personalities-types.h"
+#include "player/player-personality-types.h"
 #include "player/player-race-types.h"
 #include "player/player-status.h"
 #include "player/special-defense-types.h"

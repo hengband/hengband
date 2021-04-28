@@ -20,6 +20,7 @@
 #include "player/player-damage.h"
 #include "player/player-race-types.h"
 #include "player/player-status-flags.h"
+#include "player/player-status.h"
 #include "spell-kind/spells-random.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/summon-types.h"

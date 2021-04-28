@@ -13,6 +13,7 @@
 #include "object/object-generator.h"
 #include "object/object-kind.h"
 #include "pet/pet-util.h"
+#include "player/digestion-processor.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"
 #include "system/artifact-type-definition.h"

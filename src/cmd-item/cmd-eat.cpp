@@ -5,12 +5,12 @@
  */
 
 #include "cmd-item/cmd-eat.h"
-#include "core/hp-mp-processor.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
+#include "hpmp/hp-mp-processor.h"
 #include "inventory/inventory-object.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
@@ -24,15 +24,16 @@
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
-#include "player/attack-defense-types.h"
 #include "player-info/avatar.h"
+#include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
 #include "player/player-race-types.h"
-#include "player/special-defense-types.h"
 #include "player/player-status-flags.h"
+#include "player/player-status.h"
+#include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/spells-status.h"
 #include "status/action-setter.h"
@@ -192,7 +193,7 @@ bool exe_eat_charge_of_magic_device(player_type *creature_ptr, object_type *o_pt
         return FALSE;
 
     if (is_specific_player_race(creature_ptr, RACE_SKELETON) || is_specific_player_race(creature_ptr, RACE_GOLEM)
-            || is_specific_player_race(creature_ptr, RACE_ZOMBIE) || is_specific_player_race(creature_ptr, RACE_SPECTRE)) {
+        || is_specific_player_race(creature_ptr, RACE_ZOMBIE) || is_specific_player_race(creature_ptr, RACE_SPECTRE)) {
         concptr staff;
 
         if (o_ptr->tval == TV_STAFF && (item < 0) && (o_ptr->number > 1)) {
@@ -342,8 +343,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 
         if (creature_ptr->food < PY_FOOD_ALERT) /* Hungry */
             msg_print(_("あなたの飢えは新鮮な血によってのみ満たされる！", "Your hunger can only be satisfied with fresh blood!"));
-    } else if (player_race_life(creature_ptr) != PlayerRaceLife::LIVING
-        || (mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING)) {
+    } else if (player_race_life(creature_ptr) != PlayerRaceLife::LIVING || (mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING)) {
         msg_print(_("生者の食物はあなたにとってほとんど栄養にならない。", "The food of mortals is poor sustenance for you."));
         set_food(creature_ptr, creature_ptr->food + ((o_ptr->pval) / 20));
     } else {

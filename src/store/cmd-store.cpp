@@ -19,6 +19,7 @@
 #include "main/sound-of-music.h"
 #include "object/object-generator.h"
 #include "object/object-info.h"
+#include "player/player-status.h"
 #include "store/cmd-store.h"
 #include "store/home.h"
 #include "store/store-key-processor.h"

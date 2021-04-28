@@ -1,8 +1,10 @@
 ﻿#pragma once
 
-#include "system/angband.h"
+#include "player/player-class-types.h"
 #include "player/player-personality.h"
+#include "player/player-race-types.h"
 #include "realm/realm-names-table.h"
+#include "system/angband.h"
 
 extern concptr race_explanations[MAX_RACES];
 extern concptr class_explanations[MAX_CLASS];

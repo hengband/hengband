@@ -5,6 +5,7 @@
 #include "monster-race/race-ability-flags.h"
 #include "monster-race/race-flags2.h"
 #include "monster/monster-status.h"
+#include "player/player-status.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"

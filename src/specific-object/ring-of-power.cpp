@@ -1,6 +1,7 @@
 ﻿#include "specific-object/ring-of-power.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
+#include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-sight.h"
 #include "spell/spell-types.h"

@@ -9,6 +9,7 @@
 #include "object-enchant/trc-types.h"
 #include "player-info/avatar.h"
 #include "player/player-damage.h"
+#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "status/bad-status-setter.h"
 #include "system/player-type-definition.h"

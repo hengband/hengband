@@ -13,6 +13,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-requester.h"
 #include "player/attack-defense-types.h"
+#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "specific-object/chest.h"
 #include "status/action-setter.h"

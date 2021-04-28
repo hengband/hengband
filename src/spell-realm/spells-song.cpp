@@ -7,6 +7,7 @@
 #include "game-option/disturbance-options.h"
 #include "player/attack-defense-types.h"
 #include "player/player-skill.h"
+#include "player/player-status.h"
 #include "realm/realm-song-numbers.h"
 #include "spell/spell-info.h"
 #include "spell/spells-execution.h"
@@ -23,7 +24,9 @@ void check_music(player_type *caster_ptr)
 {
     if (caster_ptr->pclass != CLASS_BARD)
         return;
-    if (!SINGING_SONG_EFFECT(caster_ptr) && !INTERUPTING_SONG_EFFECT(caster_ptr))
+
+    auto interupting_song_effect = get_interrupting_song_effect(caster_ptr);
+    if ((get_singing_song_effect(caster_ptr) == 0) && (interupting_song_effect == 0))
         return;
 
     if (caster_ptr->anti_magic) {
@@ -31,7 +34,7 @@ void check_music(player_type *caster_ptr)
         return;
     }
 
-    int spell = SINGING_SONG_ID(caster_ptr);
+    int spell = get_singing_song_id(caster_ptr);
     const magic_type *s_ptr;
     s_ptr = &technic_info[REALM_MUSIC - MIN_TECHNIC][spell];
 
@@ -46,9 +49,9 @@ void check_music(player_type *caster_ptr)
         s64b_sub(&(caster_ptr->csp), &(caster_ptr->csp_frac), need_mana, need_mana_frac);
 
         caster_ptr->redraw |= PR_MANA;
-        if (INTERUPTING_SONG_EFFECT(caster_ptr)) {
-            SINGING_SONG_EFFECT(caster_ptr) = INTERUPTING_SONG_EFFECT(caster_ptr);
-            INTERUPTING_SONG_EFFECT(caster_ptr) = MUSIC_NONE;
+        if (interupting_song_effect != 0) {
+            set_singing_song_effect(caster_ptr, interupting_song_effect);
+            set_interrupting_song_effect(caster_ptr, MUSIC_NONE);
             msg_print(_("歌を再開した。", "You resume singing."));
             caster_ptr->action = ACTION_SING;
             caster_ptr->update |= (PU_BONUS | PU_HP | PU_MONSTERS);

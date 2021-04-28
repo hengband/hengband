@@ -29,6 +29,7 @@
 #include "player-info/avatar.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-table.h"
+#include "player/player-status.h"
 #include "player/race-info-table.h"
 #include "realm/realm-names-table.h"
 #include "store/store-util.h"

@@ -30,6 +30,7 @@
 #include "player-attack/player-attack-util.h"
 #include "player/attack-defense-types.h"
 #include "player/player-status-flags.h"
+#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-fetcher.h"

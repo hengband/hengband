@@ -6,6 +6,7 @@
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "perception/object-perception.h"
+#include "player/player-status.h"
 #include "sv-definition/sv-staff-types.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"

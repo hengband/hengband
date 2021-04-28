@@ -62,6 +62,7 @@
 #include "pet/pet-util.h"
 #include "player-info/avatar.h"
 #include "player-status/player-basic-statistics.h"
+#include "player-status/player-hand-types.h"
 #include "player-status/player-infravision.h"
 #include "player-status/player-speed.h"
 #include "player-status/player-stealth.h"
@@ -72,7 +73,7 @@
 #include "player/player-class.h"
 #include "player/player-damage.h"
 #include "player/player-move.h"
-#include "player/player-personalities-types.h"
+#include "player/player-personality-types.h"
 #include "player/player-personality.h"
 #include "player/player-race-types.h"
 #include "player/player-skill.h"
@@ -107,6 +108,8 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+
+static const int extra_magic_glove_reduce_mana = 1;
 
 static bool is_martial_arts_mode(player_type *creature_ptr);
 
@@ -398,14 +401,14 @@ static void update_bonuses(player_type *creature_ptr)
     creature_ptr->stat_add[A_STR] = PlayerStrength(creature_ptr).modification_value();
     creature_ptr->stat_add[A_INT] = PlayerIntelligence(creature_ptr).modification_value();
     creature_ptr->stat_add[A_WIS] = PlayerWisdom(creature_ptr).modification_value();
-    creature_ptr->stat_add[A_DEX] = PlayerDextarity(creature_ptr).modification_value();
+    creature_ptr->stat_add[A_DEX] = PlayerDexterity(creature_ptr).modification_value();
     creature_ptr->stat_add[A_CON] = PlayerConstitution(creature_ptr).modification_value();
     creature_ptr->stat_add[A_CHR] = PlayerCharisma(creature_ptr).modification_value();
 
     PlayerStrength(creature_ptr).update_value();
     PlayerIntelligence(creature_ptr).update_value();
     PlayerWisdom(creature_ptr).update_value();
-    PlayerDextarity(creature_ptr).update_value();
+    PlayerDexterity(creature_ptr).update_value();
     PlayerConstitution(creature_ptr).update_value();
     PlayerCharisma(creature_ptr).update_value();
 
@@ -939,7 +942,7 @@ static void update_max_mana(player_type *creature_ptr)
             msp += msp * (25 + creature_ptr->lev) / 100;
     }
 
-    if (any_bits(mp_ptr->spell_xtra, MAGIC_GLOVE_REDUCE_MANA)) {
+    if (any_bits(mp_ptr->spell_xtra, extra_magic_glove_reduce_mana)) {
         BIT_FLAGS flgs[TR_FLAG_SIZE];
         creature_ptr->cumber_glove = FALSE;
         object_type *o_ptr;
@@ -3212,14 +3215,14 @@ void stop_singing(player_type *creature_ptr)
         return;
 
     /* Are there interupted song? */
-    if (INTERUPTING_SONG_EFFECT(creature_ptr)) {
+    if (get_interrupting_song_effect(creature_ptr) != 0) {
         /* Forget interupted song */
-        INTERUPTING_SONG_EFFECT(creature_ptr) = MUSIC_NONE;
+        set_interrupting_song_effect(creature_ptr, MUSIC_NONE);
         return;
     }
 
     /* The player is singing? */
-    if (!SINGING_SONG_EFFECT(creature_ptr))
+    if (get_singing_song_effect(creature_ptr) == 0)
         return;
 
     /* Hack -- if called from set_action(), avoid recursive loop */
@@ -3227,10 +3230,10 @@ void stop_singing(player_type *creature_ptr)
         set_action(creature_ptr, ACTION_NONE);
 
     /* Message text of each song or etc. */
-    exe_spell(creature_ptr, REALM_MUSIC, SINGING_SONG_ID(creature_ptr), SPELL_STOP);
+    exe_spell(creature_ptr, REALM_MUSIC, get_singing_song_id(creature_ptr), SPELL_STOP);
 
-    SINGING_SONG_EFFECT(creature_ptr) = MUSIC_NONE;
-    SINGING_SONG_ID(creature_ptr) = 0;
+    set_singing_song_effect(creature_ptr, MUSIC_NONE);
+    set_singing_song_id(creature_ptr, 0);
     set_bits(creature_ptr->update, PU_BONUS);
     set_bits(creature_ptr->redraw, PR_STATUS);
 }
@@ -3369,4 +3372,49 @@ static player_hand main_attack_hand(player_type *creature_ptr)
 bool is_in_dungeon(player_type *creature_ptr)
 {
     return creature_ptr->current_floor_ptr->dun_level > 0;
+}
+
+bool music_singing_any(player_type* creature_ptr)
+{
+    return (creature_ptr->pclass == CLASS_BARD) && (creature_ptr->magic_num1[0] != 0);
+}
+
+MAGIC_NUM1 get_singing_song_effect(const player_type *creature_ptr)
+{
+    return creature_ptr->magic_num1[0];
+}
+
+void set_singing_song_effect(player_type *creature_ptr, const MAGIC_NUM1 magic_num)
+{
+    creature_ptr->magic_num1[0] = magic_num;
+}
+
+MAGIC_NUM1 get_interrupting_song_effect(const player_type *creature_ptr)
+{
+    return creature_ptr->magic_num1[1];
+}
+
+void set_interrupting_song_effect(player_type *creature_ptr, const MAGIC_NUM1 magic_num)
+{
+    creature_ptr->magic_num1[1] = magic_num;
+}
+
+MAGIC_NUM1 get_singing_count(const player_type *creature_ptr)
+{
+    return creature_ptr->magic_num1[2];
+}
+
+void set_singing_count(player_type *creature_ptr, const MAGIC_NUM1 magic_num)
+{
+    creature_ptr->magic_num1[2] = magic_num;
+}
+
+MAGIC_NUM2 get_singing_song_id(const player_type *creature_ptr)
+{
+    return creature_ptr->magic_num2[0];
+}
+
+void set_singing_song_id(player_type *creature_ptr, const MAGIC_NUM2 magic_num)
+{
+    creature_ptr->magic_num2[0] = magic_num;
 }

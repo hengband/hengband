@@ -30,6 +30,7 @@
 #include "object/object-flags.h"
 #include "player-info/avatar.h"
 #include "player/player-move.h"
+#include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"

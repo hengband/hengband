@@ -7,7 +7,6 @@
 #include "spell/spells-status.h"
 #include "cmd-action/cmd-spell.h"
 #include "cmd-item/cmd-magiceat.h"
-#include "core/hp-mp-processor.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
@@ -20,6 +19,7 @@
 #include "floor/geometry.h"
 #include "grid/feature-flag-types.h"
 #include "grid/grid.h"
+#include "hpmp/hp-mp-processor.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
 #include "mind/mind-force-trainer.h"
@@ -27,8 +27,8 @@
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
-#include "player/attack-defense-types.h"
 #include "player-info/avatar.h"
+#include "player/attack-defense-types.h"
 #include "player/player-class.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
@@ -110,7 +110,10 @@ bool sleep_monster(player_type *caster_ptr, DIRECTION dir, int power)
  * @return 作用が実際にあった場合TRUEを返す
  * @details 威力はプレイヤーレベル*2に固定
  */
-bool stasis_monster(player_type *caster_ptr, DIRECTION dir) { return (fire_ball_hide(caster_ptr, GF_STASIS, dir, caster_ptr->lev * 2, 0)); }
+bool stasis_monster(player_type *caster_ptr, DIRECTION dir)
+{
+    return (fire_ball_hide(caster_ptr, GF_STASIS, dir, caster_ptr->lev * 2, 0));
+}
 
 /*!
  * @brief 邪悪なモンスター拘束(STASIS)処理
@@ -119,7 +122,10 @@ bool stasis_monster(player_type *caster_ptr, DIRECTION dir) { return (fire_ball_
  * @return 作用が実際にあった場合TRUEを返す
  * @details 威力はプレイヤーレベル*2に固定
  */
-bool stasis_evil(player_type *caster_ptr, DIRECTION dir) { return (fire_ball_hide(caster_ptr, GF_STASIS_EVIL, dir, caster_ptr->lev * 2, 0)); }
+bool stasis_evil(player_type *caster_ptr, DIRECTION dir)
+{
+    return (fire_ball_hide(caster_ptr, GF_STASIS_EVIL, dir, caster_ptr->lev * 2, 0));
+}
 
 /*!
  * @brief モンスター混乱処理

@@ -7,6 +7,7 @@
 #include "action/action-limited.h"
 #include "core/asking-player.h"
 #include "game-option/disturbance-options.h"
+#include "player/player-status.h"
 #include "racial/racial-switcher.h"
 #include "racial/racial-util.h"
 #include "system/player-type-definition.h"

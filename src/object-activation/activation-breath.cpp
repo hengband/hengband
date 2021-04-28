@@ -1,6 +1,7 @@
 ﻿#include "object-activation/activation-breath.h"
 #include "object-enchant/dragon-breaths-table.h"
 #include "object/object-flags.h"
+#include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/spell-types.h"

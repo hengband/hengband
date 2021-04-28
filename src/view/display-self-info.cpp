@@ -4,6 +4,7 @@
 #include "player-info/self-info-util.h"
 #include "player/player-race.h"
 #include "player/player-status-table.h"
+#include "player/player-status.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include <string>

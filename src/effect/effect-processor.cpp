@@ -24,6 +24,7 @@
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
 #include "pet/pet-fall-off.h"
+#include "player/player-status.h"
 #include "spell/range-calc.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"

@@ -2,6 +2,7 @@
 #include "artifact/random-art-effects.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-kind.h"
+#include "player-ability/player-abillity-types.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"

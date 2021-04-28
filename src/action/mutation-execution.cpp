@@ -30,6 +30,7 @@
 #include "object-hook/hook-checker.h"
 #include "player-info/self-info.h"
 #include "player/player-damage.h"
+#include "player/player-status.h"
 #include "racial/racial-vampire.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-charm.h"

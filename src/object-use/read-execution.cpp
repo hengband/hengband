@@ -29,6 +29,7 @@
 #include "player/digestion-processor.h"
 #include "player/player-damage.h"
 #include "player/player-status-flags.h"
+#include "player/player-status.h"
 #include "spell-kind/magic-item-recharger.h"
 #include "spell-kind/spells-curse-removal.h"
 #include "spell-kind/spells-detection.h"

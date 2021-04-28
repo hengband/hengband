@@ -4,6 +4,7 @@
 #include "game-option/option-flags.h"
 #include "game-option/option-types-table.h"
 #include "game-option/special-options.h"
+#include "player-ability/player-abillity-types.h"
 #include "save/item-writer.h"
 #include "save/save-util.h"
 #include "store/store-util.h"

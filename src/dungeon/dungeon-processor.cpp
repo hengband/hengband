@@ -2,7 +2,6 @@
 #include "cmd-building/cmd-building.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/disturbance.h"
-#include "core/hp-mp-regenerator.h"
 #include "core/object-compressor.h"
 #include "core/player-processor.h"
 #include "core/player-redraw-types.h"
@@ -15,9 +14,10 @@
 #include "floor/floor-leaver.h"
 #include "floor/floor-save-util.h"
 #include "floor/floor-save.h"
+#include "game-option/cheat-options.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/play-record-options.h"
-#include "game-option/cheat-options.h"
+#include "hpmp/hp-mp-regenerator.h"
 #include "io/cursor.h"
 #include "io/input-key-requester.h"
 #include "io/write-diary.h"
@@ -29,6 +29,7 @@
 #include "monster/monster-processor.h"
 #include "monster/monster-status.h"
 #include "monster/monster-util.h"
+#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "realm/realm-song-numbers.h"
 #include "realm/realm-song.h"
@@ -120,8 +121,8 @@ void process_dungeon(player_type *player_ptr, bool load_game)
         }
     }
 
-    if ((player_ptr->pclass == CLASS_BARD) && (SINGING_SONG_EFFECT(player_ptr) > MUSIC_DETECT))
-        SINGING_SONG_EFFECT(player_ptr) = MUSIC_DETECT;
+    if ((player_ptr->pclass == CLASS_BARD) && (get_singing_song_effect(player_ptr) > MUSIC_DETECT))
+        set_singing_song_effect(player_ptr, MUSIC_DETECT);
 
     if (!player_ptr->playing || player_ptr->is_dead)
         return;
