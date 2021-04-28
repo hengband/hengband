@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 enum pet_command {
 	PET_DISMISS = 1, /*!< ペットに関するコマンド: ペットを離す */
     PET_TARGET = 2, /*!< ペットに関するコマンド: ペットのターゲットを指定 */
@@ -43,3 +45,4 @@ extern int total_friends;
 typedef struct grid_type grid_type;
 typedef struct player_type player_type;
 bool can_player_ride_pet(player_type *creature_ptr, grid_type *g_ptr, bool now_riding);
+PERCENTAGE calculate_upkeep(player_type *creature_ptr);

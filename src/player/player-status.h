@@ -49,7 +49,6 @@ bool is_echizen(player_type *creature_ptr);
 bool is_in_dungeon(player_type *creature_ptr);
 
 void stop_mouth(player_type *caster_ptr);
-PERCENTAGE calculate_upkeep(player_type *creature_ptr);
 bool music_singing(player_type *caster_ptr, int music_songs);
 bool music_singing_any(player_type *creature_ptr);
 

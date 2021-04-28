@@ -29,6 +29,7 @@
 #include "monster/monster-processor.h"
 #include "monster/monster-status.h"
 #include "monster/monster-util.h"
+#include "pet/pet-util.h"
 #include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "realm/realm-song-numbers.h"

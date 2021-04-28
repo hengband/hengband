@@ -16,6 +16,7 @@
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "object/object-flags.h"
+#include "pet/pet-util.h"
 #include "player-info/avatar.h"
 #include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
