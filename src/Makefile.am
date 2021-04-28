@@ -630,14 +630,10 @@ hengband_SOURCES = \
 	player/special-defense-types.h \
 	\
 	player-ability/player-ability-types.h \
-	player-ability/player-basic-statistics.cpp player-ability/player-basic-statistics.h \
 	player-ability/player-charisma.cpp player-ability/player-charisma.h \
 	player-ability/player-constitution.cpp player-ability/player-constitution.h \
 	player-ability/player-dexterity.cpp player-ability/player-dexterity.h \
 	player-ability/player-intelligence.cpp player-ability/player-intelligence.h \
-	player-ability/player-speed.cpp player-ability/player-speed.h \
-	player-ability/player-status-base.cpp player-ability/player-status-base.h \
-	player-ability/player-stealth.cpp player-ability/player-stealth.h \
 	player-ability/player-strength.cpp player-ability/player-strength.h \
 	player-ability/player-wisdom.cpp player-ability/player-wisdom.h \
 	\
@@ -659,6 +655,10 @@ hengband_SOURCES = \
 	\
 	player-status/player-hand-types.h \
 	player-status/player-infravision.cpp player-status/player-infravision.h \
+	player-status/player-basic-statistics.cpp player-status/player-basic-statistics.h \
+	player-status/player-speed.cpp player-status/player-speed.h \
+	player-status/player-status-base.cpp player-status/player-status-base.h \
+	player-status/player-stealth.cpp player-status/player-stealth.h \
 	\
 	racial/class-racial-switcher.cpp racial/class-racial-switcher.h \
 	racial/mutation-racial-selector.cpp racial/mutation-racial-selector.h \

@@ -621,7 +621,7 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
 
             /* Save the character */
 #ifdef JP
-            if (iskanji(tmp[q])) {
+            if (q > 0 && iskanji(tmp[q])) {
                 if (tmp[q + 1]) {
                     buf[n++] = tmp[q++];
                 } else {
