@@ -602,15 +602,18 @@ MonsterSpellResult spell_RF6_S_DRAGON(player_type *target_ptr, POSITION y, POSIT
 
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
+    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
+    bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
     int count = 0;
-    for (int k = 0; k < 1; k++) {
-        count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_DRAGON, PM_ALLOW_GROUP);
-    }
+    if (mon_to_player)
+        count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_DRAGON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+
+    if (mon_to_mon)
+        count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_DRAGON, (PM_ALLOW_GROUP | monster_u_mode(floor_ptr, m_idx)));
 
     if (target_ptr->blind && count)
         msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
 
-    bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
     if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(target_ptr, t_idx) && count && mon_to_mon)
         floor_ptr->monster_noise = TRUE;
 
