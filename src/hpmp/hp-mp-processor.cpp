@@ -2,6 +2,7 @@
 #include "cmd-action/cmd-pet.h"
 #include "core/player-redraw-types.h"
 #include "core/window-redrawer.h"
+#include "dungeon/dungeon.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/pattern-walk.h"

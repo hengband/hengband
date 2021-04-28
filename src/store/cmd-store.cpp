@@ -3,6 +3,7 @@
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
+#include "dungeon/dungeon.h"
 #include "flavor/flavor-describer.h"
 #include "floor/cave.h"
 #include "floor/floor-events.h"

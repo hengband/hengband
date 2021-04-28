@@ -13,6 +13,7 @@
 #include <array>
 #include <stack>
 
+#include "floor/floor-generator.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
@@ -233,7 +234,7 @@ static void generate_gambling_arena(player_type *creature_ptr)
         if (!monster_is_valid(m_ptr))
             continue;
 
-        m_ptr->mflag2.set({MFLAG2::MARK, MFLAG2::SHOW});
+        m_ptr->mflag2.set({ MFLAG2::MARK, MFLAG2::SHOW });
         update_monster(creature_ptr, i, FALSE);
     }
 }

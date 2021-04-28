@@ -2,6 +2,7 @@
 #include "core/asking-player.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
+#include "dungeon/dungeon.h"
 #include "floor/geometry.h"
 #include "grid/grid.h"
 #include "hpmp/hp-mp-processor.h"
