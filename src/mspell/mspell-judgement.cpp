@@ -28,6 +28,7 @@
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
 #include "realm/realm-song-numbers.h"
+#include "spell-realm/spells-song.h"
 #include "spell/range-calc.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"

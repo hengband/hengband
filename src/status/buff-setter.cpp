@@ -13,6 +13,7 @@
 #include "player/player-race.h"
 #include "player/player-status.h"
 #include "realm/realm-song-numbers.h"
+#include "spell-realm/spells-song.h"
 #include "status/base-status.h"
 #include "status/buff-setter.h"
 #include "status/element-resistance.h"

@@ -15,6 +15,7 @@
 #include "player/attack-defense-types.h"
 #include "player/player-skill.h"
 #include "player/player-status.h"
+#include "spell-realm/spells-song.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 #include "world/world.h"

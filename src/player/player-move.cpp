@@ -34,6 +34,7 @@
 #include "player/player-status.h"
 #include "realm/realm-song-numbers.h"
 #include "spell-kind/spells-floor.h"
+#include "spell-realm/spells-song.h"
 #include "spell/spell-types.h"
 #include "status/action-setter.h"
 #include "system/floor-type-definition.h"

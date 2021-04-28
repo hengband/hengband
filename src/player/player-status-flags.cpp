@@ -32,6 +32,7 @@
 #include "realm/realm-song-numbers.h"
 #include "realm/realm-types.h"
 #include "spell-realm/spells-hex.h"
+#include "spell-realm/spells-song.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"

@@ -3219,11 +3219,6 @@ void stop_mouth(player_type *caster_ptr)
         stop_hex_spell_all(caster_ptr);
 }
 
-bool music_singing(player_type *caster_ptr, int music_songs)
-{
-    return (caster_ptr->pclass == CLASS_BARD) && (caster_ptr->magic_num1[0] == music_songs);
-}
-
 bool is_fast(player_type *creature_ptr)
 {
     return creature_ptr->fast || music_singing(creature_ptr, MUSIC_SPEED) || music_singing(creature_ptr, MUSIC_SHERO);
@@ -3289,49 +3284,4 @@ static player_hand main_attack_hand(player_type *creature_ptr)
 bool is_in_dungeon(player_type *creature_ptr)
 {
     return creature_ptr->current_floor_ptr->dun_level > 0;
-}
-
-bool music_singing_any(player_type* creature_ptr)
-{
-    return (creature_ptr->pclass == CLASS_BARD) && (creature_ptr->magic_num1[0] != 0);
-}
-
-MAGIC_NUM1 get_singing_song_effect(const player_type *creature_ptr)
-{
-    return creature_ptr->magic_num1[0];
-}
-
-void set_singing_song_effect(player_type *creature_ptr, const MAGIC_NUM1 magic_num)
-{
-    creature_ptr->magic_num1[0] = magic_num;
-}
-
-MAGIC_NUM1 get_interrupting_song_effect(const player_type *creature_ptr)
-{
-    return creature_ptr->magic_num1[1];
-}
-
-void set_interrupting_song_effect(player_type *creature_ptr, const MAGIC_NUM1 magic_num)
-{
-    creature_ptr->magic_num1[1] = magic_num;
-}
-
-MAGIC_NUM1 get_singing_count(const player_type *creature_ptr)
-{
-    return creature_ptr->magic_num1[2];
-}
-
-void set_singing_count(player_type *creature_ptr, const MAGIC_NUM1 magic_num)
-{
-    creature_ptr->magic_num1[2] = magic_num;
-}
-
-MAGIC_NUM2 get_singing_song_id(const player_type *creature_ptr)
-{
-    return creature_ptr->magic_num2[0];
-}
-
-void set_singing_song_id(player_type *creature_ptr, const MAGIC_NUM2 magic_num)
-{
-    creature_ptr->magic_num2[0] = magic_num;
 }

@@ -6,6 +6,7 @@
 #include "game-option/disturbance-options.h"
 #include "player/player-status.h"
 #include "realm/realm-song-numbers.h"
+#include "spell-realm/spells-song.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
