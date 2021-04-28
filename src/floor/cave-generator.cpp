@@ -176,11 +176,27 @@ static void make_doors(player_type *player_ptr, dun_data_type *dd_ptr, dt_type *
     }
 }
 
+static void make_only_tunnel_points(floor_type *floor_ptr, dun_data_type *dd_ptr)
+{
+    int point_num = (floor_ptr->width * floor_ptr->height) / 200 + randint1(3);
+    dd_ptr->cent_n = point_num;
+    for (int i = 0; i < point_num; i++) {
+        dd_ptr->cent[i].y = randint0(floor_ptr->height);
+        dd_ptr->cent[i].x = randint0(floor_ptr->width);
+    }
+}
+
 static bool make_one_floor(player_type *player_ptr, dun_data_type *dd_ptr, dungeon_type *d_ptr)
 {
-    if (!generate_rooms(player_ptr, dd_ptr)) {
-        *dd_ptr->why = _("部屋群の生成に失敗", "Failed to generate rooms");
-        return FALSE;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+
+    if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_ROOM) {
+        make_only_tunnel_points(floor_ptr, dd_ptr);
+    } else {
+        if (!generate_rooms(player_ptr, dd_ptr)) {
+            *dd_ptr->why = _("部屋群の生成に失敗", "Failed to generate rooms");
+            return FALSE;
+        }
     }
 
     place_cave_contents(player_ptr, dd_ptr, d_ptr);
