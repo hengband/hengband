@@ -629,7 +629,7 @@ hengband_SOURCES = \
 	player/player-view.cpp player/player-view.h \
 	player/special-defense-types.h \
 	\
-	player-ability/player-ability-types.h \
+	player-ability/player-abillity-types.h \
 	player-ability/player-charisma.cpp player-ability/player-charisma.h \
 	player-ability/player-constitution.cpp player-ability/player-constitution.h \
 	player-ability/player-dexterity.cpp player-ability/player-dexterity.h \
