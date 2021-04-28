@@ -435,6 +435,11 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
                 ident = true;
             break;
 
+        case SV_POTION_POLY_SELF:
+            do_poly_self(creature_ptr);
+            ident = true;
+            break;
+
         case SV_POTION_AUGMENTATION:
             if (do_inc_stat(creature_ptr, A_STR))
                 ident = true;
