@@ -16,8 +16,8 @@
 #include "mutation/mutation-investor-remover.h"
 #include "player/patron.h"
 #include "spell-kind/spells-detection.h"
-#include "spell-kind/spells-perception.h"
 #include "spell-kind/spells-floor.h"
+#include "spell-kind/spells-perception.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells-object.h"
@@ -29,15 +29,15 @@
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
-#include "wizard/wizard-item-modifier.h"
 #include "wizard/wizard-game-modifier.h"
+#include "wizard/wizard-item-modifier.h"
 #include "wizard/wizard-player-modifier.h"
 #include "wizard/wizard-special-process.h"
 #include "wizard/wizard-spells.h"
 #include "wizard/wizard-spoiler.h"
+#include <sstream>
 #include <string>
 #include <vector>
-#include <sstream>
 
 /*!
  * @brief デバグコマンド一覧表
@@ -70,10 +70,10 @@ std::vector<std::vector<std::string>> debug_menu_table = {
     { "P", _("プレイヤーの属性を変更", "Modify player configurations") },
     { "r", _("カオスパトロンの報酬", "Get reward of chaos patron") },
     { "s", _("フロア相当のモンスター召喚", "Summon monster which be in target depth") },
-    { "S", _("高級品獲得ドロップ", "Drop excellent object") },
+    { "S", _("特別品獲得ドロップ", "Drop special object") },
     { "t", _("テレポート", "Teleport self") },
     { "u", _("啓蒙(忍者以外)", "Wiz-lite all floor except Ninja") },
-    { "v", _("特別品獲得ドロップ", "Drop special object") },
+    { "v", _("高級品獲得ドロップ", "Drop excellent object") },
     { "w", _("啓蒙(忍者配慮)", "Wiz-lite all floor") },
     { "W", _("願い", "Wishing") },
     { "x", _("経験値を得る(指定可)", "Get experience") },
@@ -96,7 +96,7 @@ std::vector<std::vector<std::string>> debug_menu_table = {
  */
 void display_debug_menu(int page, int max_page, int page_size, int max_line)
 {
-    for (int y = 1; y < page_size + 3 ; y++)
+    for (int y = 1; y < page_size + 3; y++)
         term_erase(14, y, 64);
 
     int r = 1;
