@@ -19,8 +19,8 @@
 #include "monster/monster-update.h"
 #include "pet/pet-util.h"
 #include "player-info/avatar.h"
+#include "player-info/equipment-info.h"
 #include "player/player-damage.h"
-#include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
 #include "spell/spell-types.h"
@@ -42,7 +42,10 @@
  * @param caster_ptr プレーヤーの参照ポインタ
  * @return 現在溜まっている気の量
  */
-MAGIC_NUM1 get_current_ki(player_type *caster_ptr) { return caster_ptr->magic_num1[0]; }
+MAGIC_NUM1 get_current_ki(player_type *caster_ptr)
+{
+    return caster_ptr->magic_num1[0];
+}
 
 /*!
  * @brief 練気術師において、気を溜める

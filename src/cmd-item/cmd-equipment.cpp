@@ -30,6 +30,7 @@
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
 #include "player-info/avatar.h"
+#include "player-info/equipment-info.h"
 #include "player-status/player-energy.h"
 #include "player-status/player-hand-types.h"
 #include "player/attack-defense-types.h"
@@ -82,7 +83,6 @@ void do_cmd_equip(player_type *creature_ptr)
     command_new = 0;
     command_gap = wid - 30;
 }
-
 
 /*!
  * @brief 装備するコマンドのメインルーチン / Wield or wear a single item from the pack or floor

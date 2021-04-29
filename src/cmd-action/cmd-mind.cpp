@@ -33,6 +33,7 @@
 #include "mind/mind-numbers.h"
 #include "mind/mind-power-getter.h"
 #include "mind/mind-types.h"
+#include "player-info/equipment-info.h"
 #include "player-status/player-energy.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
@@ -47,7 +48,6 @@
 #include "term/screen-processor.h"
 #include "util/buffer-shaper.h"
 #include "view/display-messages.h"
-
 
 /*!
  * @brief 職業別特殊技能の処理用構造体

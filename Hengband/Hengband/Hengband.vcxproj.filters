@@ -2268,6 +2268,9 @@
     <ClCompile Include="..\..\src\player-info\alignment.cpp">
       <Filter>player-info</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player-info\equipment-info.cpp">
+      <Filter>player-info</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4882,6 +4885,9 @@
       <Filter>player-status</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player-info\alignment.h">
+      <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\equipment-info.h">
       <Filter>player-info</Filter>
     </ClInclude>
   </ItemGroup>

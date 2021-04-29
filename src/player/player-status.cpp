@@ -57,6 +57,7 @@
 #include "pet/pet-util.h"
 #include "player-info/alignment.h"
 #include "player-info/avatar.h"
+#include "player-info/equipment-info.h"
 #include "player-status/player-basic-statistics.h"
 #include "player-status/player-hand-types.h"
 #include "player-status/player-infravision.h"
@@ -138,8 +139,6 @@ static s16b calc_to_damage_misc(player_type *creature_ptr);
 static s16b calc_to_hit_misc(player_type *creature_ptr);
 
 static DICE_NUMBER calc_to_weapon_dice_num(player_type *creature_ptr, INVENTORY_IDX slot);
-static DICE_NUMBER calc_to_weapon_dice_side(player_type *creature_ptr, INVENTORY_IDX slot);
-
 static player_hand main_attack_hand(player_type *creature_ptr);
 
 /*** Player information ***/
@@ -386,7 +385,7 @@ static void update_bonuses(player_type *creature_ptr)
         creature_ptr->heavy_wield[i] = is_heavy_wield(creature_ptr, i);
         creature_ptr->num_blow[i] = calc_num_blow(creature_ptr, i);
         creature_ptr->to_dd[i] = calc_to_weapon_dice_num(creature_ptr, INVEN_MAIN_HAND + i);
-        creature_ptr->to_ds[i] = calc_to_weapon_dice_side(creature_ptr, INVEN_MAIN_HAND + i);
+        creature_ptr->to_ds[i] = 0;
     }
 
     creature_ptr->pspeed = PlayerSpeed(creature_ptr).get_value();
@@ -2515,13 +2514,6 @@ static DICE_NUMBER calc_to_weapon_dice_num(player_type *creature_ptr, INVENTORY_
     return dn;
 }
 
-static DICE_NUMBER calc_to_weapon_dice_side(player_type *creature_ptr, INVENTORY_IDX slot)
-{
-    (void)creature_ptr; // unused
-    (void)slot; // unused
-    return 0;
-}
-
 /*!
  * @brief プレイヤーの所持重量制限を計算する /
  * Computes current weight limit.
@@ -2533,62 +2525,6 @@ WEIGHT calc_weight_limit(player_type *creature_ptr)
     if (creature_ptr->pclass == CLASS_BERSERKER)
         i = i * 3 / 2;
     return i;
-}
-
-/*!
- * @brief プレイヤーが現在右手/左手に武器を持っているか判定する /
- * @param i 判定する手のID(右手:INVEN_MAIN_HAND 左手:INVEN_SUB_HAND)
- * @return 持っているならばTRUE
- */
-bool has_melee_weapon(player_type *creature_ptr, int slot)
-{
-    return ((creature_ptr->inventory_list[slot].k_idx) && object_is_melee_weapon(&creature_ptr->inventory_list[slot]));
-}
-
-/*!
- * @brief プレイヤーの現在開いている手の状態を返す
- * @param riding_control 乗馬中により片手を必要としている状態ならばTRUEを返す。
- * @return 開いている手のビットフラグ
- */
-BIT_FLAGS16 empty_hands(player_type *creature_ptr, bool riding_control)
-{
-    BIT_FLAGS16 status = EMPTY_HAND_NONE;
-    if (!creature_ptr->inventory_list[INVEN_MAIN_HAND].k_idx)
-        status |= EMPTY_HAND_MAIN;
-    if (!creature_ptr->inventory_list[INVEN_SUB_HAND].k_idx)
-        status |= EMPTY_HAND_SUB;
-
-    if (riding_control && (status != EMPTY_HAND_NONE) && creature_ptr->riding && none_bits(creature_ptr->pet_extra_flags, PF_TWO_HANDS)) {
-        if (any_bits(status, EMPTY_HAND_SUB))
-            reset_bits(status, EMPTY_HAND_SUB);
-        else if (any_bits(status, EMPTY_HAND_MAIN))
-            reset_bits(status, EMPTY_HAND_MAIN);
-    }
-
-    return status;
-}
-
-/*!
- * @brief プレイヤーが防具重量制限のある職業時にペナルティを受ける状態にあるかどうかを返す。
- * @return ペナルティが適用されるならばTRUE。
- */
-bool heavy_armor(player_type *creature_ptr)
-{
-    if ((creature_ptr->pclass != CLASS_MONK) && (creature_ptr->pclass != CLASS_FORCETRAINER) && (creature_ptr->pclass != CLASS_NINJA))
-        return FALSE;
-
-    WEIGHT monk_arm_wgt = 0;
-    if (creature_ptr->inventory_list[INVEN_MAIN_HAND].tval > TV_SWORD)
-        monk_arm_wgt += creature_ptr->inventory_list[INVEN_MAIN_HAND].weight;
-    if (creature_ptr->inventory_list[INVEN_SUB_HAND].tval > TV_SWORD)
-        monk_arm_wgt += creature_ptr->inventory_list[INVEN_SUB_HAND].weight;
-    monk_arm_wgt += creature_ptr->inventory_list[INVEN_BODY].weight;
-    monk_arm_wgt += creature_ptr->inventory_list[INVEN_HEAD].weight;
-    monk_arm_wgt += creature_ptr->inventory_list[INVEN_OUTER].weight;
-    monk_arm_wgt += creature_ptr->inventory_list[INVEN_ARMS].weight;
-    monk_arm_wgt += creature_ptr->inventory_list[INVEN_FEET].weight;
-
-    return (monk_arm_wgt > (100 + (creature_ptr->lev * 4)));
 }
 
 /*!
@@ -3062,11 +2998,6 @@ bool is_time_limit_esp(player_type *creature_ptr)
 bool is_time_limit_stealth(player_type *creature_ptr)
 {
     return creature_ptr->tim_stealth || music_singing(creature_ptr, MUSIC_STEALTH);
-}
-
-bool can_two_hands_wielding(player_type *creature_ptr)
-{
-    return !creature_ptr->riding || any_bits(creature_ptr->pet_extra_flags, PF_TWO_HANDS);
 }
 
 /*!

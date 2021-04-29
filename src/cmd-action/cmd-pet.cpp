@@ -11,9 +11,9 @@
 #include "floor/geometry.h"
 #include "floor/pattern-walk.h"
 #include "game-option/input-options.h"
+#include "game-option/map-screen-options.h"
 #include "game-option/play-record-options.h"
 #include "game-option/text-display-options.h"
-#include "game-option/map-screen-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
@@ -36,6 +36,7 @@
 #include "monster/smart-learn-types.h"
 #include "object-hook/hook-weapon.h"
 #include "pet/pet-util.h"
+#include "player-info/equipment-info.h"
 #include "player-status/player-energy.h"
 #include "player-status/player-hand-types.h"
 #include "player/attack-defense-types.h"
@@ -44,7 +45,6 @@
 #include "player/player-move.h"
 #include "player/player-skill.h"
 #include "player/player-status-flags.h"
-#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "status/action-setter.h"
 #include "system/floor-type-definition.h"
@@ -417,9 +417,9 @@ void do_cmd_pet(player_type *creature_ptr)
                 : "指定なし"));
 #else
     sprintf(target_buf, "specify a target of pet (now:%s)",
-        (creature_ptr->pet_t_m_idx ? (
-             creature_ptr->image ? "something strange" : r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->pet_t_m_idx].ap_r_idx].name.c_str())
-                                   : "nothing"));
+        (creature_ptr->pet_t_m_idx
+                ? (creature_ptr->image ? "something strange" : r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->pet_t_m_idx].ap_r_idx].name.c_str())
+                : "nothing"));
 #endif
     power_desc[num] = target_buf;
     powers[num++] = PET_TARGET;

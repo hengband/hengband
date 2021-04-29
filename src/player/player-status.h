@@ -18,11 +18,7 @@ WEIGHT calc_inventory_weight(player_type *creature_ptr);
 
 s16b calc_num_fire(player_type *creature_ptr, object_type *o_ptr);
 WEIGHT calc_weight_limit(player_type *creature_ptr);
-bool has_melee_weapon(player_type *creature_ptr, int i);
-
-bool heavy_armor(player_type *creature_ptr);
 void update_creature(player_type *creature_ptr);
-BIT_FLAGS16 empty_hands(player_type *creature_ptr, bool riding_control);
 bool player_has_no_spellbooks(player_type *creature_ptr);
 
 bool player_place(player_type *creature_ptr, POSITION y, POSITION x);
@@ -36,7 +32,6 @@ long calc_score(player_type *creature_ptr);
 bool is_blessed(player_type *creature_ptr);
 bool is_time_limit_esp(player_type *creature_ptr);
 bool is_time_limit_stealth(player_type *creature_ptr);
-bool can_two_hands_wielding(player_type *creature_ptr);
 bool is_fast(player_type *creature_ptr);
 bool is_invuln(player_type *creature_ptr);
 bool is_hero(player_type *creature_ptr);

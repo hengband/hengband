@@ -1,7 +1,7 @@
 ﻿#include "mind/mind-power-getter.h"
 #include "core/asking-player.h"
-#include "core/window-redrawer.h"
 #include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
 #include "game-option/text-display-options.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/command-repeater.h"
@@ -11,12 +11,12 @@
 #include "mind/mind-force-trainer.h"
 #include "mind/mind-info.h"
 #include "mind/mind-types.h"
+#include "player-info/equipment-info.h"
 #include "player/player-class.h"
-#include "player/player-status.h"
+#include "player/player-status-table.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
-#include "player/player-status-table.h"
 
 /*!
  * @brief 使用可能な特殊技能を選択する /

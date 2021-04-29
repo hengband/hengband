@@ -9,8 +9,8 @@
  * 2014 Deskull rearranged comment for Doxygen.\n
  */
 
-#include "cmd-action/cmd-spell.h"
 #include "action/action-limited.h"
+#include "cmd-action/cmd-spell.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
@@ -26,9 +26,9 @@
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race-hook.h"
 #include "object/item-use-flags.h"
+#include "player-info/equipment-info.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
-#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "spell/spells-execution.h"
 #include "spell/technic-info-table.h"
