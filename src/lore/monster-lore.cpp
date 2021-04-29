@@ -14,7 +14,7 @@
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-indice-types.h"
-#include "player-ability/player-abillity-types.h"
+#include "player-ability/player-ability-types.h"
 #include "system/angband.h"
 #include "system/monster-race-definition.h"
 #include "term/term-color-types.h"
