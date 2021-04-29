@@ -126,6 +126,7 @@
 
 #include <cstdlib>
 #include <locale>
+#include <vector>
 
 #include <commdlg.h>
 #include <direct.h>
@@ -182,7 +183,7 @@ struct term_data {
     bool posfix{};
 
     HDC hdc{}; //!< ビットマップ描画コンテキスト
-    RECT rc{}; //!< 描画バッファサイズ(デスクトップサイズを想定)
+    std::vector<RECT> rc_buf{}; //!< 描画バッファサイズ
 
     term_data() = default; //!< デフォルトコンストラクタ
     term_data(const term_data &) = delete; //!< コピー禁止
@@ -194,9 +195,10 @@ struct term_data {
      */
     void create_hdc()
     {
+        RECT rc;
         auto _hdc = GetDC(this->w);
-        GetWindowRect(this->w, &this->rc);
-        auto bmp = CreateCompatibleBitmap(_hdc, this->rc.right, this->rc.bottom);
+        GetWindowRect(this->w, &rc);
+        auto bmp = CreateCompatibleBitmap(_hdc, rc.right, rc.bottom);
         this->hdc = CreateCompatibleDC(_hdc);
         SelectObject(this->hdc, bmp);
         DeleteObject(bmp);
@@ -211,11 +213,30 @@ struct term_data {
         if (this->hdc == NULL)
             return;
 
+        RECT rc;
         auto _hdc = GetDC(this->w);
-        GetWindowRect(this->w, &this->rc);
-        auto bmp = CreateCompatibleBitmap(_hdc, this->rc.right, this->rc.bottom);
+        GetWindowRect(this->w, &rc);
+        auto bmp = CreateCompatibleBitmap(_hdc, rc.right, rc.bottom);
         DeleteObject(SelectObject(this->hdc, bmp));
         ReleaseDC(this->w, _hdc);
+        this->rc_buf.clear();
+    }
+
+    /*!
+     * @brief 描画領域を追加
+     * @param rc 描画領域
+     */
+    void add_rc(RECT& rc)
+    {
+        this->rc_buf.push_back(std::move(rc));
+    }
+
+    /*!
+     * @brief 描画領域を全領域にする
+     */
+    void set_redraw()
+    {
+        this->rc_buf.clear();
     }
 
     /*!
@@ -228,8 +249,14 @@ struct term_data {
 
         PAINTSTRUCT ps;
         auto _hdc = BeginPaint(this->w, &ps);
-        BitBlt(_hdc, 0, 0, ps.rcPaint.right, ps.rcPaint.bottom, this->hdc, 0, 0, SRCCOPY);
+        if (this->rc_buf.size() == 0 || this->rc_buf.size() > 2)
+            BitBlt(_hdc, 0, 0, ps.rcPaint.right, ps.rcPaint.bottom, this->hdc, 0, 0, SRCCOPY);
+        else {
+            for (RECT rc : this->rc_buf)
+                BitBlt(_hdc, rc.left, rc.top, rc.right, rc.bottom, this->hdc, rc.left, rc.top, SRCCOPY);
+        }
         EndPaint(this->w, &ps);
+        this->rc_buf.clear();
     }
 };
 
@@ -805,8 +832,10 @@ static bool change_bg_mode(bg_mode new_mode, bool show_error = false, bool force
         // 全ウインドウ再描画
         for (int i = 0; i < MAX_TERM_DATA; i++) {
             term_data *td = &data[i];
-            if (td->visible)
+            if (td->visible) {
+                td->set_redraw();
                 InvalidateRect(td->w, NULL, FALSE);
+            }
         }
     }
 
@@ -838,6 +867,7 @@ static void term_window_resize(term_data *td)
         return;
 
     SetWindowPos(td->w, 0, 0, 0, td->size_wid, td->size_hgt, SWP_NOMOVE | SWP_NOZORDER);
+    td->set_redraw();
     InvalidateRect(td->w, NULL, FALSE);
 }
 
@@ -898,6 +928,7 @@ static void term_change_font(term_data *td)
     td->tile_hgt = td->font_hgt;
     term_getsize(td);
     term_window_resize(td);
+    td->set_redraw();
     InvalidateRect(td->w, NULL, FALSE);
 }
 
@@ -916,6 +947,7 @@ static void term_data_redraw(term_data *td)
 {
     term_activate(&td->t);
     term_redraw();
+    td->set_redraw();
     InvalidateRect(td->w, NULL, FALSE);
     term_activate(term_screen);
 }
@@ -937,6 +969,9 @@ void term_inversed_area(HWND hWnd, int x, int y, int w, int h)
 
     SelectObject(hdc, oldBrush);
     SelectObject(hdc, oldPen);
+
+    RECT rc{ tx, ty, tx + tw, ty + th };
+    td->add_rc(rc);
     InvalidateRect(td->w, NULL, FALSE);
 }
 
@@ -980,6 +1015,7 @@ static errr term_xtra_win_react(player_type *player_ptr)
             term_activate(&td->t);
             term_resize(td->cols, td->rows);
             term_redraw();
+            td->set_redraw();
             InvalidateRect(td->w, NULL, FALSE);
             term_activate(old);
         }
@@ -1049,6 +1085,7 @@ static errr term_xtra_win_clear(void)
         draw_bg(hdc, &rc);
     }
 
+    td->set_redraw();
     InvalidateRect(td->w, NULL, FALSE);
     return 0;
 }
@@ -1102,8 +1139,9 @@ static errr term_xtra_win_scene(int v)
  */
 static int term_xtra_win_delay(int v)
 {
-    InvalidateRect(data[0].w, NULL, FALSE);
-    term_process_paint(&data[0]);
+    auto *td = &data[0];
+    InvalidateRect(td->w, NULL, FALSE);
+    term_process_paint(td);
     Sleep(v);
     return 0;
 }
@@ -1177,6 +1215,7 @@ static errr term_curs_win(int x, int y)
 
     HDC hdc = td->hdc;
     FrameRect(hdc, &rc, hbrYellow);
+    td->add_rc(rc);
     InvalidateRect(td->w, NULL, FALSE);
     return 0;
 }
@@ -1201,6 +1240,7 @@ static errr term_bigcurs_win(int x, int y)
 
     HDC hdc = td->hdc;
     FrameRect(hdc, &rc, hbrYellow);
+    td->add_rc(rc);
     InvalidateRect(td->w, NULL, FALSE);
     return 0;
 }
@@ -1227,6 +1267,7 @@ static errr term_wipe_win(int x, int y, int n)
     else
         ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rc, NULL, 0, NULL);
 
+    td->set_redraw();
     InvalidateRect(td->w, NULL, FALSE);
     return 0;
 }
@@ -1275,6 +1316,7 @@ static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
     rc.right = rc.left + td->font_wid;
     rc.top += ((td->tile_hgt - td->font_hgt) / 2);
     rc.bottom = rc.top + td->font_hgt;
+    RECT rc_start = rc;
 
     for (int i = 0; i < n; i++) {
 #ifdef JP
@@ -1327,6 +1369,9 @@ static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
 #endif
     }
 
+    rc.left = rc_start.left;
+    rc.top = rc_start.top;
+    td->add_rc(rc);
     InvalidateRect(td->w, NULL, FALSE);
     if (!initialized)
         term_process_paint(td);
@@ -1377,6 +1422,11 @@ static errr term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
         SelectObject(hdcMask, infMask.hBitmap);
     }
 
+    RECT rc;
+    rc.left = x2;
+    rc.top = y2;
+    rc.bottom = h2 * h1 / th1 - 1;
+
     for (i = 0; i < n; i++, x2 += w2) {
         TERM_COLOR a = ap[i];
         char c = cp[i];
@@ -1384,6 +1434,7 @@ static errr term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
         int col = (c & 0x7F);
         TERM_LEN x1 = col * w1;
         TERM_LEN y1 = row * h1;
+        rc.left += w2;
 
         if (arg_graphics == GRAPHICS_ADAM_BOLT || arg_graphics == GRAPHICS_HENGBAND) {
             TERM_LEN x3 = (tcp[i] & 0x7F) * w1;
@@ -1424,6 +1475,7 @@ static errr term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
         DeleteDC(hdcMask);
     }
 
+    td->add_rc(rc);
     InvalidateRect(td->w, NULL, FALSE);
     return 0;
 }
@@ -2015,6 +2067,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         arg_bigtile = !arg_bigtile;
         term_activate(&td->t);
         term_resize(td->cols, td->rows);
+        td->set_redraw();
         InvalidateRect(td->w, NULL, FALSE);
         break;
     }
@@ -2055,6 +2108,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         change_bg_mode(bg_mode::BG_NONE);
         td = &data[0];
         term_redraw();
+        td->set_redraw();
         InvalidateRect(td->w, NULL, FALSE);
         break;
     }
@@ -2062,6 +2116,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         change_bg_mode(bg_mode::BG_PRESET);
         td = &data[0];
         term_redraw();
+        td->set_redraw();
         InvalidateRect(td->w, NULL, FALSE);
         break;
     }
@@ -2070,6 +2125,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         if (ret) {
             td = &data[0];
             term_redraw();
+            td->set_redraw();
             InvalidateRect(td->w, NULL, FALSE);
             break;
         }
@@ -2092,6 +2148,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
             change_bg_mode(bg_mode::BG_ONE, true, true);
             td = &data[0];
             term_redraw();
+            td->set_redraw();
             InvalidateRect(td->w, NULL, FALSE);
         }
         break;
