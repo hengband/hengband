@@ -286,7 +286,7 @@ bool exe_mutation_power(player_type *creature_ptr, MUTA power)
     case MUTA::LAUNCHER:
         return do_cmd_throw(creature_ptr, 2 + lvl / 40, FALSE, -1);
     default:
-        free_turn(creature_ptr);
+        reset_player_turn(creature_ptr);
         msg_format(_("能力 %s は実装されていません。", "Power %s not implemented. Oops."), power);
         return TRUE;
     }

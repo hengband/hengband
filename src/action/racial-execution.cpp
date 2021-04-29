@@ -108,16 +108,16 @@ racial_level_check_result check_racial_level(player_type *creature_ptr, rpi_type
 
     if (creature_ptr->lev < min_level) {
         msg_format(_("この能力を使用するにはレベル %d に達していなければなりません。", "You need to attain level %d to use this power."), min_level);
-        free_turn(creature_ptr);
+        reset_player_turn(creature_ptr);
         return RACIAL_CANCEL;
     }
 
     if (cmd_limit_confused(creature_ptr)) {
-        free_turn(creature_ptr);
+        reset_player_turn(creature_ptr);
         return RACIAL_CANCEL;
     } else if (creature_ptr->chp < use_hp) {
         if (!get_check(_("本当に今の衰弱した状態でこの能力を使いますか？", "Really use the power in your weakened state? "))) {
-            free_turn(creature_ptr);
+            reset_player_turn(creature_ptr);
             return RACIAL_CANCEL;
         }
     }

@@ -433,7 +433,7 @@ void do_cmd_racial_power(player_type *creature_ptr)
         return;
 
     if (cmd_limit_confused(creature_ptr)) {
-        free_turn(creature_ptr);
+        reset_player_turn(creature_ptr);
         return;
     }
 
@@ -465,7 +465,7 @@ void do_cmd_racial_power(player_type *creature_ptr)
         racial_power_cast_power(creature_ptr, rc_ptr);
 
     if (!rc_ptr->cast) {
-        free_turn(creature_ptr);
+        reset_player_turn(creature_ptr);
         return;
     }
 

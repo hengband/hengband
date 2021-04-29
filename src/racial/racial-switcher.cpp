@@ -235,7 +235,7 @@ bool switch_class_racial_execution(player_type *creature_ptr, const s32b command
         return TRUE;
     case CLASS_BLUE_MAGE:
         set_action(creature_ptr, creature_ptr->action == ACTION_LEARN ? ACTION_NONE : ACTION_LEARN);
-        free_turn(creature_ptr);
+        reset_player_turn(creature_ptr);
         return TRUE;
     case CLASS_CAVALRY:
         return rodeo(creature_ptr);
@@ -446,7 +446,7 @@ bool switch_race_racial_execution(player_type *creature_ptr, const s32b command)
         return android_inside_weapon(creature_ptr);
     default:
         msg_print(_("この種族は特殊な能力を持っていません。", "This race has no bonus power."));
-        free_turn(creature_ptr);
+        reset_player_turn(creature_ptr);
         return TRUE;
     }
 }

@@ -126,7 +126,7 @@ static bool check_activation_conditions(player_type *user_ptr, ae_type *ae_ptr)
 
     if (!ae_ptr->o_ptr->xtra4 && (ae_ptr->o_ptr->tval == TV_FLASK) && ((ae_ptr->o_ptr->sval == SV_LITE_TORCH) || (ae_ptr->o_ptr->sval == SV_LITE_LANTERN))) {
         msg_print(_("燃料がない。", "It has no fuel."));
-        free_turn(user_ptr);
+        reset_player_turn(user_ptr);
         return FALSE;
     }
 

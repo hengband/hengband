@@ -883,14 +883,14 @@ bool change_wild_mode(player_type *creature_ptr, bool encount)
             continue;
 
         msg_print(_("敵がすぐ近くにいるときは広域マップに入れない！", "You cannot enter global map, since there are some monsters nearby!"));
-        free_turn(creature_ptr);
+        reset_player_turn(creature_ptr);
         return FALSE;
     }
 
     if (has_pet) {
         concptr msg = _("ペットを置いて広域マップに入りますか？", "Do you leave your pets behind? ");
         if (!get_check_strict(creature_ptr, msg, CHECK_OKAY_CANCEL)) {
-            free_turn(creature_ptr);
+            reset_player_turn(creature_ptr);
             return FALSE;
         }
     }

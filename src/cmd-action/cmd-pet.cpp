@@ -683,7 +683,7 @@ void do_cmd_pet(player_type *creature_ptr)
 
         /* Abort if needed */
         if (!flag) {
-            free_turn(creature_ptr);
+            reset_player_turn(creature_ptr);
             return;
         }
 

@@ -538,7 +538,7 @@ bool do_cmd_magic_eater(player_type *creature_ptr, bool only_browse, bool powerf
 	item = select_magic_eater(creature_ptr, only_browse);
 	if (item == -1)
 	{
-		free_turn(creature_ptr);
+		reset_player_turn(creature_ptr);
 		return FALSE;
 	}
 	if (item >= EATER_EXT*2) {tval = TV_ROD;sval = item - EATER_EXT*2;}

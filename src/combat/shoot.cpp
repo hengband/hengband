@@ -460,7 +460,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
     /* Get a direction (or cancel) */
     if (!get_aim_dir(shooter_ptr, &dir)) {
-        free_turn(shooter_ptr);
+        reset_player_turn(shooter_ptr);
 
         if (snipe_type == SP_AWAY)
             snipe_type = SP_NONE;
@@ -487,7 +487,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
     /* Don't shoot at my feet */
     if (tx == shooter_ptr->x && ty == shooter_ptr->y) {
-        free_turn(shooter_ptr);
+        reset_player_turn(shooter_ptr);
 
         /* project_length is already reset to 0 */
 

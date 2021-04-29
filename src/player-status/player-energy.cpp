@@ -14,7 +14,12 @@ void take_turn(player_type *creature_ptr, PERCENTAGE need_cost)
     creature_ptr->energy_use = (ENERGY)need_cost;
 }
 
-void free_turn(player_type *creature_ptr)
+/*
+ * @brief ターン消費をなくす (主にコマンド実行に失敗した場合)
+ * @param player_type プレーヤーへの参照ポインタ
+ * @return なし
+ */
+void reset_player_turn(player_type *creature_ptr)
 {
     creature_ptr->energy_use = 0;
 }

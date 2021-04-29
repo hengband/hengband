@@ -265,7 +265,7 @@ void process_player(player_type *creature_ptr)
         if (!command_new)
             command_see = FALSE;
 
-        free_turn(creature_ptr);
+        reset_player_turn(creature_ptr);
         if (creature_ptr->phase_out) {
             move_cursor_relative(creature_ptr->y, creature_ptr->x);
             command_cmd = SPECIAL_KEY_BUILDING;

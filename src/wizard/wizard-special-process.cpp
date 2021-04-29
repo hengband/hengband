@@ -427,7 +427,7 @@ void wiz_jump_to_dungeon(player_type *creature_ptr)
         exe_write_diary(creature_ptr, DIARY_WIZ_TELE, 0, NULL);
 
     creature_ptr->current_floor_ptr->inside_quest = 0;
-    free_turn(creature_ptr);
+    reset_player_turn(creature_ptr);
     creature_ptr->energy_need = 0;
     prepare_change_floor_mode(creature_ptr, CFM_FIRST_FLOOR);
     creature_ptr->leaving = TRUE;

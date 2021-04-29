@@ -214,7 +214,7 @@ void do_cmd_destroy(player_type *creature_ptr)
     destroy_ptr->o_ptr->number = destroy_ptr->old_number;
     take_turn(creature_ptr, 100);
     if (!can_player_destroy_object(creature_ptr, destroy_ptr->o_ptr)) {
-        free_turn(creature_ptr);
+        reset_player_turn(creature_ptr);
         msg_format(_("%sは破壊不可能だ。", "You cannot destroy %s."), destroy_ptr->o_name);
         return;
     }

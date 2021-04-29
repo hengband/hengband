@@ -340,7 +340,7 @@ void do_cmd_building(player_type *player_ptr)
 			player_ptr->current_floor_ptr->inside_arena = FALSE;
 			player_ptr->leaving = TRUE;
 			command_new = SPECIAL_KEY_BUILDING;
-			free_turn(player_ptr);
+			reset_player_turn(player_ptr);
 		}
 
 		return;
@@ -351,7 +351,7 @@ void do_cmd_building(player_type *player_ptr)
 		player_ptr->leaving = TRUE;
 		player_ptr->phase_out = FALSE;
 		command_new = SPECIAL_KEY_BUILDING;
-		free_turn(player_ptr);
+		reset_player_turn(player_ptr);
 		return;
 	}
 	else

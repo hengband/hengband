@@ -410,10 +410,10 @@ void process_command(player_type *creature_ptr)
                 }
 
                 msg_format(_("反魔法バリアが%sを邪魔した！", "An anti-magic shell disrupts your %s!"), which_power);
-                free_turn(creature_ptr);
+                reset_player_turn(creature_ptr);
             } else if (is_shero(creature_ptr) && (creature_ptr->pclass != CLASS_BERSERKER)) {
                 msg_format(_("狂戦士化していて頭が回らない！", "You cannot think directly!"));
-                free_turn(creature_ptr);
+                reset_player_turn(creature_ptr);
             } else {
                 if ((creature_ptr->pclass == CLASS_MINDCRAFTER) || (creature_ptr->pclass == CLASS_BERSERKER) || (creature_ptr->pclass == CLASS_NINJA)
                     || (creature_ptr->pclass == CLASS_MIRROR_MASTER))
