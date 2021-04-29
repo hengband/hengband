@@ -1,6 +1,9 @@
-﻿#include "cmd-action/cmd-racial.h"
+﻿#include <string>
+
+#include "cmd-action/cmd-racial.h"
 #include "action/action-limited.h"
 #include "action/mutation-execution.h"
+#include "action/racial-execution.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
@@ -11,13 +14,12 @@
 #include "io/input-key-requester.h"
 #include "main/sound-of-music.h"
 #include "mutation/mutation-flag-types.h"
+#include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/player-damage.h"
-#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "racial/class-racial-switcher.h"
 #include "racial/mutation-racial-selector.h"
-#include "action/racial-execution.h"
 #include "racial/race-racial-command-setter.h"
 #include "racial/racial-util.h"
 #include "status/action-setter.h"
@@ -27,7 +29,6 @@
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
-#include <string>
 
 #define RC_PAGE_SIZE 18
 

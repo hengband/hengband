@@ -2845,16 +2845,6 @@ bool player_has_no_spellbooks(player_type *creature_ptr)
     return TRUE;
 }
 
-void take_turn(player_type *creature_ptr, PERCENTAGE need_cost)
-{
-    creature_ptr->energy_use = (ENERGY)need_cost;
-}
-
-void free_turn(player_type *creature_ptr)
-{
-    creature_ptr->energy_use = 0;
-}
-
 /*!
  * @brief プレイヤーを指定座標に配置する / Place the player in the dungeon XXX XXX
  * @param x 配置先X座標

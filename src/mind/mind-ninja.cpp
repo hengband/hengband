@@ -29,6 +29,7 @@
 #include "object/object-kind-hook.h"
 #include "player-attack/player-attack-util.h"
 #include "player/attack-defense-types.h"
+#include "player-status/player-energy.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
 #include "player/special-defense-types.h"

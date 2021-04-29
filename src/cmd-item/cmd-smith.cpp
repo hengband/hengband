@@ -31,7 +31,7 @@
 #include "object/object-flags.h" //!< @todo 相互参照している.
 #include "object/object-generator.h"
 #include "perception/object-perception.h"
-#include "player/player-status.h"
+#include "player-status/player-energy.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"

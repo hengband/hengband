@@ -12,6 +12,7 @@
 #include "grid/grid.h"
 #include "io/input-key-requester.h"
 #include "io/write-diary.h"
+#include "player-status/player-energy.h"
 #include "player/player-damage.h"
 #include "player/player-move.h"
 #include "player/player-race-types.h"

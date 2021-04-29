@@ -25,7 +25,7 @@
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/monster-race.h"
-#include "player/player-status.h"
+#include "player-status/player-energy.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"

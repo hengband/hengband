@@ -44,6 +44,7 @@
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "object/object-stack.h"
+#include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/player-status-table.h"
 #include "player/player-status.h"

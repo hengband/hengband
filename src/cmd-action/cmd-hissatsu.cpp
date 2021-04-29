@@ -26,6 +26,7 @@
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race-hook.h"
 #include "object/item-use-flags.h"
+#include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/player-status.h"
 #include "player/special-defense-types.h"

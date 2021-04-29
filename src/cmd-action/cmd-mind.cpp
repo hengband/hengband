@@ -33,6 +33,7 @@
 #include "mind/mind-numbers.h"
 #include "mind/mind-power-getter.h"
 #include "mind/mind-types.h"
+#include "player-status/player-energy.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
 #include "player/player-status-table.h"

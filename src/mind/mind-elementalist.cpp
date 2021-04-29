@@ -37,6 +37,7 @@
 #include "monster-race/race-flags7.h"
 #include "monster/monster-describer.h"
 #include "player-info/avatar.h"
+#include "player-status/player-energy.h"
 #include "player-status/player-status-base.h"
 #include "player/player-status-table.h"
 #include "player/player-status.h"

@@ -26,9 +26,6 @@ void update_creature(player_type *creature_ptr);
 BIT_FLAGS16 empty_hands(player_type *creature_ptr, bool riding_control);
 bool player_has_no_spellbooks(player_type *creature_ptr);
 
-void take_turn(player_type *creature_ptr, PERCENTAGE need_cost);
-void free_turn(player_type *creature_ptr);
-
 bool player_place(player_type *creature_ptr, POSITION y, POSITION x);
 
 void check_experience(player_type *creature_ptr);

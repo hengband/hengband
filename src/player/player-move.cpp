@@ -29,6 +29,7 @@
 #include "mind/mind-ninja.h"
 #include "monster/monster-update.h"
 #include "perception/object-perception.h"
+#include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"

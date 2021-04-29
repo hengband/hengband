@@ -75,6 +75,7 @@
 #include "mind/mind-magic-eater.h"
 #include "mind/mind-sniper.h"
 #include "mind/snipe-types.h"
+#include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
 #include "player/player-class.h"

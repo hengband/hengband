@@ -26,7 +26,7 @@
 #include "object-hook/hook-enchant.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
-#include "player/player-status.h"
+#include "player-status/player-energy.h"
 #include "racial/racial-android.h"
 #include "specific-object/monster-ball.h"
 #include "spell-kind/spells-launcher.h"

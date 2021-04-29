@@ -25,6 +25,7 @@
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
 #include "player-info/avatar.h"
+#include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
 #include "player/player-damage.h"

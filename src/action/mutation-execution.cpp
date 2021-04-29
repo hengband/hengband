@@ -29,6 +29,7 @@
 #include "object-enchant/item-feeling.h"
 #include "object-hook/hook-checker.h"
 #include "player-info/self-info.h"
+#include "player-status/player-energy.h"
 #include "player/player-damage.h"
 #include "player/player-status.h"
 #include "racial/racial-vampire.h"

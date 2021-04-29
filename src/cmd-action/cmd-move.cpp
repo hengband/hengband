@@ -25,6 +25,7 @@
 #include "io/write-diary.h"
 #include "mind/mind-ninja.h"
 #include "player-info/avatar.h"
+#include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/player-move.h"
 #include "player/player-status.h"

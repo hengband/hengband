@@ -45,6 +45,7 @@
 #include "perception/identification.h"
 #include "perception/object-perception.h"
 #include "player-info/self-info.h"
+#include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/player-class.h"
 #include "player/player-personality-types.h"

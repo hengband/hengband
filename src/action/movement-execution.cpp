@@ -30,6 +30,7 @@
 #include "monster/monster-status.h"
 #include "mutation/mutation-flag-types.h"
 #include "object/warning.h"
+#include "player-status/player-energy.h"
 #include "player/player-move.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"

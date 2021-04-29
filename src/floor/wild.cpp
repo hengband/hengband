@@ -32,6 +32,7 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "monster/monster-util.h"
+#include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/player-status.h"
 #include "realm/realm-names-table.h"

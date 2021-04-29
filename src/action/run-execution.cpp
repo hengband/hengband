@@ -15,6 +15,7 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "object/object-mark-types.h"
+#include "player-status/player-energy.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
 #include "system/floor-type-definition.h"
