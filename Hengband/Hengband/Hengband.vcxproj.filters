@@ -4860,7 +4860,7 @@
     <ClInclude Include="..\..\src\system\player-type-definition.h">
       <Filter>system</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player-ability\player-abillity-types.h">
+    <ClInclude Include="..\..\src\player-ability\player-ability-types.h">
       <Filter>player-ability</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player-status\player-hand-types.h">
