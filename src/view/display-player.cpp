@@ -17,6 +17,7 @@
 #include "mutation/mutation-flag-types.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
+#include "player-info/alignment.h"
 #include "player/mimic-info-table.h"
 #include "player/patron.h"
 #include "player/player-class.h"
@@ -133,7 +134,8 @@ static void display_phisique(player_type *creature_ptr)
     display_player_one_line(ENTRY_WEIGHT, format("%d", (int)creature_ptr->wt), TERM_L_BLUE);
     display_player_one_line(ENTRY_SOCIAL, format("%d", (int)creature_ptr->sc), TERM_L_BLUE);
 #endif
-    std::string alg = your_alignment(creature_ptr);
+    std::unique_ptr<PlayerAlignment> alignment(new PlayerAlignment(creature_ptr));
+    std::string alg = alignment->your_alignment();
     display_player_one_line(ENTRY_ALIGN, format("%s", alg.c_str()), TERM_L_BLUE);
 }
 

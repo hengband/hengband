@@ -647,6 +647,7 @@ hengband_SOURCES = \
 	player-info/body-improvement-info.cpp player-info/body-improvement-info.h \
 	player-info/class-ability-info.cpp player-info/class-ability-info.h \
 	player-info/mutation-info.cpp player-info/mutation-info.h \
+	player-info/alignment.cpp player-info/alignment.h \
 	player-info/race-ability-info.cpp player-info/race-ability-info.h \
 	player-info/resistance-info.cpp player-info/resistance-info.h \
 	player-info/self-info.cpp player-info/self-info.h \

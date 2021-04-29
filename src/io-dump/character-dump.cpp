@@ -27,9 +27,9 @@
 #include "object/object-info.h"
 #include "pet/pet-util.h"
 #include "player-info/avatar.h"
+#include "player-info/alignment.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-table.h"
-#include "player/player-status.h"
 #include "player/race-info-table.h"
 #include "realm/realm-names-table.h"
 #include "store/store-util.h"
@@ -452,7 +452,8 @@ static void dump_aux_virtues(player_type *creature_ptr, FILE *fff)
             fprintf(fff, "%s ???\n", stat_names[v_nr]);
     }
 
-    std::string alg = your_alignment(creature_ptr);
+    std::unique_ptr<PlayerAlignment> alignment(new PlayerAlignment(creature_ptr));
+    std::string alg = alignment->your_alignment();
     fprintf(fff, _("\n属性 : %s\n", "\nYour alignment : %s\n"), alg.c_str());
     fprintf(fff, "\n");
     dump_virtues(creature_ptr, fff);

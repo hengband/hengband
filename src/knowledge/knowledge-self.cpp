@@ -4,6 +4,8 @@
  * @author Hourier
  */
 
+#include <cstdlib>
+
 #include "knowledge-self.h"
 #include "birth/birth-explanations-table.h"
 #include "core/show-file.h"
@@ -12,10 +14,10 @@
 #include "info-reader/fixed-map-parser.h"
 #include "io-dump/dump-util.h"
 #include "player-info/avatar.h"
+#include "player-info/alignment.h"
 #include "player/player-class.h"
 #include "player/player-status-table.h"
 #include "player/race-info-table.h"
-#include "player/player-status.h"
 #include "store/store-util.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
@@ -36,7 +38,8 @@ void do_cmd_knowledge_virtues(player_type *creature_ptr)
     if (!open_temporary_file(&fff, file_name))
         return;
 
-    std::string alg = your_alignment(creature_ptr);
+    std::unique_ptr<PlayerAlignment> alignment(new PlayerAlignment(creature_ptr));
+    std::string alg = alignment->your_alignment();
     fprintf(fff, _("現在の属性 : %s\n\n", "Your alignment : %s\n\n"), alg.c_str());
     dump_virtues(creature_ptr, fff);
     angband_fclose(fff);

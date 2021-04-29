@@ -9,7 +9,6 @@
 
 typedef struct object_type object_type;
 typedef struct player_type player_type;
-concptr your_alignment(player_type *creature_ptr, bool with_value = false);
 int weapon_exp_level(int weapon_exp);
 int riding_exp_level(int riding_exp);
 int spell_exp_level(int spell_exp);

@@ -2265,6 +2265,9 @@
     <ClCompile Include="..\..\src\player-status\player-energy.cpp">
       <Filter>player-status</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player-info\alignment.cpp">
+      <Filter>player-info</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4875,9 +4878,11 @@
     <ClInclude Include="..\..\src\hpmp\hp-mp-regenerator.h">
       <Filter>hpmp</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\main-win\tile-info.h" />
     <ClInclude Include="..\..\src\player-status\player-energy.h">
       <Filter>player-status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-info\alignment.h">
+      <Filter>player-info</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

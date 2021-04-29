@@ -149,43 +149,6 @@ static player_hand main_attack_hand(player_type *creature_ptr);
 /*** Player information ***/
 
 /*!
- * @brief クリーチャーの抽象的善悪アライメントの表記名のみを返す。 / Return only alignment title
- * @param creature_ptr 算出するクリーチャーの参照ポインタ。
- * @return アライメントの表記名
- */
-concptr alignment_label(player_type *creature_ptr)
-{
-    if (creature_ptr->align > 150)
-        return _("大善", "Lawful");
-    else if (creature_ptr->align > 50)
-        return _("中善", "Good");
-    else if (creature_ptr->align > 10)
-        return _("小善", "Neutral Good");
-    else if (creature_ptr->align > -11)
-        return _("中立", "Neutral");
-    else if (creature_ptr->align > -51)
-        return _("小悪", "Neutral Evil");
-    else if (creature_ptr->align > -151)
-        return _("中悪", "Evil");
-    else
-        return _("大悪", "Chaotic");
-}
-
-/*!
- * @brief クリーチャーの抽象的善悪アライメントの表記を返す。 / Return alignment title
- * @param creature_ptr 算出するクリーチャーの参照ポインタ。
- * @return アライメントの表記を返す。
- */
-concptr your_alignment(player_type *creature_ptr, bool with_value)
-{
-    auto s = alignment_label(creature_ptr);
-    if (with_value || show_actual_value)
-        return format(_("%s(%ld)", "%s (%ld)"), s, static_cast<long>(creature_ptr->align));
-
-    return s;
-}
-
-/*!
  * @brief 武器や各種スキル（騎乗以外）の抽象的表現ランクを返す。 /  Return proficiency level of weapons and misc. skills (except riding)
  * @param weapon_exp 経験値
  * @return ランク値
