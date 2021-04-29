@@ -357,7 +357,7 @@ void exe_aim_wand(player_type *creature_ptr, INVENTORY_IDX item)
     }
     target_pet = old_target_pet;
 
-    take_turn(creature_ptr, 100);
+    update_player_turn_energy(creature_ptr, 100);
 
     /* Get the level */
     lev = k_info[o_ptr->k_idx].level;

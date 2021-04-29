@@ -9,7 +9,7 @@
 #include "system/player-type-definition.h"
 
 // todo 第3引数 (演算：代入、加算、減算、他)を導入する。enumを使う
-void take_turn(player_type *creature_ptr, PERCENTAGE need_cost)
+void update_player_turn_energy(player_type *creature_ptr, PERCENTAGE need_cost)
 {
     creature_ptr->energy_use = (ENERGY)need_cost;
 }

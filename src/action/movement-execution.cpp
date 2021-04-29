@@ -136,7 +136,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
             }
 
             creature_ptr->leaving = TRUE;
-            take_turn(creature_ptr, 100);
+            update_player_turn_energy(creature_ptr, 100);
             return;
         }
 

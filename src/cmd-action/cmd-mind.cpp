@@ -300,12 +300,12 @@ static void mind_turn_passing(player_type *caster_ptr, cm_type *cm_ptr)
 {
     if (cm_ptr->on_mirror && (caster_ptr->pclass == CLASS_MIRROR_MASTER)) {
         if (cm_ptr->n == 3 || cm_ptr->n == 5 || cm_ptr->n == 7 || cm_ptr->n == 16) {
-            take_turn(caster_ptr, 50);
+            update_player_turn_energy(caster_ptr, 50);
             return;
         }
     }
 
-    take_turn(caster_ptr, 100);
+    update_player_turn_energy(caster_ptr, 100);
 }
 
 static bool judge_mind_chance(player_type *caster_ptr, cm_type *cm_ptr)

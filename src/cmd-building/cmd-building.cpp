@@ -308,7 +308,7 @@ void do_cmd_building(player_type *player_ptr)
 {
 	if (player_ptr->wild_mode) return;
 
-	take_turn(player_ptr, 100);
+	update_player_turn_energy(player_ptr, 100);
 
 	if (!cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, FF_BLDG))
 	{

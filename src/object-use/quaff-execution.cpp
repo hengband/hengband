@@ -119,7 +119,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
     object_type forge;
     object_type *q_ptr;
 
-    take_turn(creature_ptr, 100);
+    update_player_turn_energy(creature_ptr, 100);
 
     if (creature_ptr->timewalk) {
         if (flush_failure)

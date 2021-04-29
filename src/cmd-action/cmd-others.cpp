@@ -50,7 +50,7 @@ void do_cmd_search(player_type *creature_ptr)
         command_arg = 0;
     }
 
-    take_turn(creature_ptr, 100);
+    update_player_turn_energy(creature_ptr, 100);
     search(creature_ptr);
 
     if (creature_ptr->action == ACTION_SEARCH)
@@ -70,7 +70,7 @@ static bool exe_alter(player_type *creature_ptr)
     FEAT_IDX feat = get_feat_mimic(g_ptr);
     feature_type *f_ptr;
     f_ptr = &f_info[feat];
-    take_turn(creature_ptr, 100);
+    update_player_turn_energy(creature_ptr, 100);
     if (g_ptr->m_idx) {
         do_cmd_attack(creature_ptr, y, x, HISSATSU_NONE);
         return FALSE;

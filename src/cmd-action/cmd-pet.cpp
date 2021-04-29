@@ -223,7 +223,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
             return FALSE;
 
         if (g_ptr->m_idx) {
-            take_turn(creature_ptr, 100);
+            update_player_turn_energy(creature_ptr, 100);
 
             msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 
@@ -278,7 +278,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
         }
         if (r_info[m_ptr->r_idx].level > randint1((creature_ptr->skill_exp[GINOU_RIDING] / 50 + creature_ptr->lev / 2 + 20))) {
             msg_print(_("うまく乗れなかった。", "You failed to ride."));
-            take_turn(creature_ptr, 100);
+            update_player_turn_energy(creature_ptr, 100);
             return FALSE;
         }
 
@@ -299,7 +299,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
             health_track(creature_ptr, 0);
     }
 
-    take_turn(creature_ptr, 100);
+    update_player_turn_energy(creature_ptr, 100);
 
     /* Mega-Hack -- Forget the view and lite */
     creature_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);

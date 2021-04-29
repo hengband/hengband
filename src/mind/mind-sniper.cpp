@@ -525,7 +525,7 @@ static bool cast_sniper_spell(player_type *sniper_ptr, int spell)
 	{
 	case 0: /* Concentration */
 		if (!snipe_concentrate(sniper_ptr)) return FALSE;
-		take_turn(sniper_ptr, 100);
+		update_player_turn_energy(sniper_ptr, 100);
 		return TRUE;
 	case 1: snipe_type = SP_LITE; break;
 	case 2: snipe_type = SP_AWAY; break;
