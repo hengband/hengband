@@ -20,7 +20,6 @@
 #include "spell-kind/spells-perception.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
-#include "spell/spells-object.h"
 #include "spell/spells-status.h"
 #include "status/experience.h"
 #include "system/floor-type-definition.h"
@@ -52,33 +51,31 @@ std::vector<std::vector<std::string>> debug_menu_table = {
     { "d", _("全感知", "Detection all") },
     { "D", _("次元の扉", "Dimension door") },
     { "e", _("能力値変更", "Modify player status") },
+    { "E", _("青魔法を全取得", "Make all blue magic learned") },
     { "f", _("*鑑定*", "*Idenfity*") },
     { "F", _("地形ID変更", "Modify feature type under player") },
-    { "g", _("上質なアイテムドロップ", "Drop good object") },
-    { "G", _("ゲームの設定を変更", "Modify game configurations") },
+    { "G", _("ゲーム設定コマンドメニュー", "Modify game configurations") },
     { "H", _("モンスターの群れ生成", "Summon monsters") },
     { "i", _("鑑定", "Idenfity") },
-    { "I", _("インベントリ全*鑑定*", "Idenfity all objects fully in inventory") },
+    { "I", _("アイテム設定コマンドメニュー", "Modify item configurations") },
     { "j", _("指定ダンジョン階にワープ", "Jump to floor depth of target dungeon") },
-    { "l", _("指定アイテム番号まで一括鑑定", "Make objects idenfified to target object id") },
+    { "k", _("指定ダメージ・半径0の指定属性のボールを自分に放つ", "Fire a zero ball to self") },
     { "m", _("魔法の地図", "Magic mapping") },
     { "n", _("指定モンスター生成", "Summon target monster") },
     { "N", _("指定モンスターをペットとして生成", "Summon target monster as pet") },
     { "o", _("オブジェクトの能力変更", "Modift object abilities") },
     { "O", _("オプション設定をダンプ", "Dump current options") },
     { "p", _("ショート・テレポート", "Phase door") },
-    { "P", _("プレイヤーの属性を変更", "Modify player configurations") },
+    { "P", _("プレイヤー設定変更メニュー", "Modify player configurations") },
     { "r", _("カオスパトロンの報酬", "Get reward of chaos patron") },
     { "s", _("フロア相当のモンスター召喚", "Summon monster which be in target depth") },
-    { "S", _("特別品獲得ドロップ", "Drop special object") },
     { "t", _("テレポート", "Teleport self") },
     { "u", _("啓蒙(忍者以外)", "Wiz-lite all floor except Ninja") },
-    { "v", _("高級品獲得ドロップ", "Drop excellent object") },
     { "w", _("啓蒙(忍者配慮)", "Wiz-lite all floor") },
-    { "W", _("願い", "Wishing") },
     { "x", _("経験値を得る(指定可)", "Get experience") },
     { "X", _("所持品を初期状態に戻す", "Return inventory to initial") },
     { "y", _("ダメージ100万・半径0の射撃のボールを放つ", "Cast missile ball had power a million") },
+    { "Y", _("指定ダメージ・半径0の指定属性のボールを放つ", "Cast zero ball had power a thousand") },
     { "z", _("近隣のモンスター消去", "Terminate near monsters") },
     { "Z", _("フロアの全モンスター消去", "Terminate all monsters in floor") },
     { "@", _("特殊スペルの発動", "Activate specified spells") },
@@ -164,12 +161,6 @@ bool exe_cmd_debug(player_type *creature_ptr, char cmd)
     case 'F':
         wiz_create_feature(creature_ptr);
         break;
-    case 'g':
-        if (command_arg <= 0)
-            command_arg = 1;
-
-        acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, FALSE, FALSE, TRUE);
-        break;
     case 'G':
         wizard_game_modifier(creature_ptr);
         break;
@@ -180,13 +171,13 @@ bool exe_cmd_debug(player_type *creature_ptr, char cmd)
         (void)ident_spell(creature_ptr, FALSE, TV_NONE);
         break;
     case 'I':
-        wiz_identify_full_inventory(creature_ptr);
+        wizard_item_modifier(creature_ptr);
         break;
     case 'j':
         wiz_jump_to_dungeon(creature_ptr);
         break;
-    case 'l':
-        wiz_learn_items_all(creature_ptr);
+    case 'k':
+        wiz_kill_me(creature_ptr, 0, command_arg);
         break;
     case 'm':
         map_area(creature_ptr, DETECT_RAD_ALL * 3);
@@ -218,12 +209,6 @@ bool exe_cmd_debug(player_type *creature_ptr, char cmd)
 
         wiz_summon_random_enemy(creature_ptr, command_arg);
         break;
-    case 'S':
-        if (command_arg <= 0)
-            command_arg = 1;
-
-        acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, TRUE, TRUE, TRUE);
-        break;
     case 't':
         teleport_player(creature_ptr, 100, TELEPORT_SPONTANEOUS);
         break;
@@ -234,17 +219,8 @@ bool exe_cmd_debug(player_type *creature_ptr, char cmd)
 
         wiz_lite(creature_ptr, FALSE);
         break;
-    case 'v':
-        if (command_arg <= 0)
-            command_arg = 1;
-
-        acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, TRUE, FALSE, TRUE);
-        break;
     case 'w':
         wiz_lite(creature_ptr, (bool)(creature_ptr->pclass == CLASS_NINJA));
-        break;
-    case 'W':
-        do_cmd_wishing(creature_ptr, -1, TRUE, TRUE, TRUE);
         break;
     case 'x':
         gain_exp(creature_ptr, command_arg ? command_arg : (creature_ptr->exp + 1));
@@ -258,6 +234,9 @@ bool exe_cmd_debug(player_type *creature_ptr, char cmd)
         break;
     case 'y':
         wiz_kill_enemy(creature_ptr);
+        break;
+    case 'Y':
+        wiz_kill_enemy(creature_ptr, 0, command_arg);
         break;
     case 'z':
         wiz_zap_surrounding_monsters(creature_ptr);
