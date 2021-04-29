@@ -936,7 +936,6 @@
     <ClInclude Include="..\..\src\action\movement-execution.h" />
     <ClInclude Include="..\..\src\main-win\graphics-win.h" />
     <ClInclude Include="..\..\src\main-win\string-win.h" />
-    <ClInclude Include="..\..\src\main-win\tile-info.h" />
     <ClInclude Include="..\..\src\player-status\player-hand-types.h" />
     <ClInclude Include="..\..\src\store\cmd-store.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-floor.h" />
