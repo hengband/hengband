@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "spell/spell-types.h"
 
 #define SPELL_MAX 3
 
@@ -37,4 +38,5 @@ void wiz_learn_blue_magic_all(player_type *caster_ptr);
 void wiz_summon_random_enemy(player_type *caster_ptr, int num);
 void wiz_summon_specific_enemy(player_type *summoner_ptr, MONRACE_IDX r_idx);
 void wiz_summon_pet(player_type *summoner_ptr, MONRACE_IDX r_idx);
-void wiz_kill_enemy(player_type *caster_ptr);
+void wiz_kill_enemy(player_type *caster_ptr, HIT_POINT dam = 1000000, EFFECT_ID effect_idx = GF_ARROW);
+void wiz_kill_me(player_type *caster_ptr, HIT_POINT dam, EFFECT_ID effect_idx);

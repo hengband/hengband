@@ -59,6 +59,7 @@ std::vector<std::vector<std::string>> debug_menu_table = {
     { "i", _("鑑定", "Idenfity") },
     { "I", _("アイテム設定コマンドメニュー", "Modify item configurations") },
     { "j", _("指定ダンジョン階にワープ", "Jump to floor depth of target dungeon") },
+    { "k", _("指定ダメージ・半径0の指定属性のボールを自分に放つ", "Fire a zero ball to self") },
     { "m", _("魔法の地図", "Magic mapping") },
     { "n", _("指定モンスター生成", "Summon target monster") },
     { "N", _("指定モンスターをペットとして生成", "Summon target monster as pet") },
@@ -74,6 +75,7 @@ std::vector<std::vector<std::string>> debug_menu_table = {
     { "x", _("経験値を得る(指定可)", "Get experience") },
     { "X", _("所持品を初期状態に戻す", "Return inventory to initial") },
     { "y", _("ダメージ100万・半径0の射撃のボールを放つ", "Cast missile ball had power a million") },
+    { "Y", _("指定ダメージ・半径0の指定属性のボールを放つ", "Cast zero ball had power a thousand") },
     { "z", _("近隣のモンスター消去", "Terminate near monsters") },
     { "Z", _("フロアの全モンスター消去", "Terminate all monsters in floor") },
     { "@", _("特殊スペルの発動", "Activate specified spells") },
@@ -174,6 +176,9 @@ bool exe_cmd_debug(player_type *creature_ptr, char cmd)
     case 'j':
         wiz_jump_to_dungeon(creature_ptr);
         break;
+    case 'k':
+        wiz_kill_me(creature_ptr, 0, command_arg);
+        break;
     case 'm':
         map_area(creature_ptr, DETECT_RAD_ALL * 3);
         break;
@@ -229,6 +234,9 @@ bool exe_cmd_debug(player_type *creature_ptr, char cmd)
         break;
     case 'y':
         wiz_kill_enemy(creature_ptr);
+        break;
+    case 'Y':
+        wiz_kill_enemy(creature_ptr, 0, command_arg);
         break;
     case 'z':
         wiz_zap_surrounding_monsters(creature_ptr);
