@@ -21,11 +21,9 @@
 #include "floor/floor-save.h"
 #include "floor/floor-util.h"
 #include "game-option/birth-options.h"
-#include "game-option/text-display-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "inventory/inventory-object.h"
-#include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
@@ -39,10 +37,7 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
-#include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
-#include "monster/monster-info.h"
-#include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/smart-learn-types.h"
 #include "mutation/mutation-calculator.h"
@@ -60,6 +55,7 @@
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
 #include "pet/pet-util.h"
+#include "player-info/alignment.h"
 #include "player-info/avatar.h"
 #include "player-status/player-basic-statistics.h"
 #include "player-status/player-hand-types.h"
@@ -457,93 +453,6 @@ static void update_bonuses(player_type *creature_ptr)
 
     put_equipment_warning(creature_ptr);
     check_no_flowed(creature_ptr);
-}
-
-static void update_alignment(player_type *creature_ptr)
-{
-    creature_ptr->alignment = 0;
-    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
-    for (MONSTER_IDX m_idx = floor_ptr->m_max - 1; m_idx >= 1; m_idx--) {
-        monster_type *m_ptr;
-        monster_race *r_ptr;
-        m_ptr = &floor_ptr->m_list[m_idx];
-        if (!monster_is_valid(m_ptr))
-            continue;
-        r_ptr = &r_info[m_ptr->r_idx];
-
-        if (!is_pet(m_ptr))
-            continue;
-
-        if (any_bits(r_ptr->flags3, RF3_GOOD))
-            creature_ptr->alignment += r_ptr->level;
-        if (any_bits(r_ptr->flags3, RF3_EVIL))
-            creature_ptr->alignment -= r_ptr->level;
-    }
-
-    if (creature_ptr->mimic_form) {
-        switch (creature_ptr->mimic_form) {
-        case MIMIC_DEMON:
-            creature_ptr->alignment -= 200;
-            break;
-        case MIMIC_DEMON_LORD:
-            creature_ptr->alignment -= 200;
-            break;
-        }
-    } else {
-        switch (creature_ptr->prace) {
-        case RACE_ARCHON:
-            creature_ptr->alignment += 200;
-            break;
-        case RACE_BALROG:
-            creature_ptr->alignment -= 200;
-            break;
-
-        default:
-            break;
-        }
-    }
-
-    for (int i = 0; i < 2; i++) {
-        if (!has_melee_weapon(creature_ptr, INVEN_MAIN_HAND + i))
-            continue;
-        if (creature_ptr->inventory_list[INVEN_MAIN_HAND + i].name1 != ART_IRON_BALL)
-            continue;
-        creature_ptr->alignment -= 1000;
-    }
-
-    int j = 0;
-    int neutral[2];
-    for (int i = 0; i < 8; i++) {
-        switch (creature_ptr->vir_types[i]) {
-        case V_JUSTICE:
-            creature_ptr->alignment += creature_ptr->virtues[i] * 2;
-            break;
-        case V_CHANCE:
-            break;
-        case V_NATURE:
-        case V_HARMONY:
-            neutral[j++] = i;
-            break;
-        case V_UNLIFE:
-            creature_ptr->alignment -= creature_ptr->virtues[i];
-            break;
-        default:
-            creature_ptr->alignment += creature_ptr->virtues[i];
-            break;
-        }
-    }
-
-    for (int i = 0; i < j; i++) {
-        if (creature_ptr->alignment > 0) {
-            creature_ptr->alignment -= creature_ptr->virtues[neutral[i]] / 2;
-            if (creature_ptr->alignment < 0)
-                creature_ptr->alignment = 0;
-        } else if (creature_ptr->alignment < 0) {
-            creature_ptr->alignment += creature_ptr->virtues[neutral[i]] / 2;
-            if (creature_ptr->alignment > 0)
-                creature_ptr->alignment = 0;
-        }
-    }
 }
 
 /*!
@@ -2710,7 +2619,8 @@ void update_creature(player_type *creature_ptr)
 
     if (any_bits(creature_ptr->update, (PU_BONUS))) {
         reset_bits(creature_ptr->update, PU_BONUS);
-        update_alignment(creature_ptr);
+        std::unique_ptr<PlayerAlignment> alignment(new PlayerAlignment(creature_ptr));
+        alignment->update_alignment();
         update_bonuses(creature_ptr);
     }
 
