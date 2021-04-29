@@ -178,7 +178,7 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
 
     disturb(attacker_ptr, FALSE, TRUE);
 
-    update_player_turn_energy(attacker_ptr, 100, update_turn_type::ENERGY_SUBSTITUTION);
+    PlayerEnergy(attacker_ptr).update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
 
     if (!can_attack_with_main_hand(attacker_ptr) && !can_attack_with_sub_hand(attacker_ptr) && attacker_ptr->muta.has_none_of(mutation_attack_methods)) {
         msg_format(_("%s攻撃できない。", "You cannot attack."), (empty_hands(attacker_ptr, FALSE) == EMPTY_HAND_NONE) ? _("両手がふさがって", "") : "");

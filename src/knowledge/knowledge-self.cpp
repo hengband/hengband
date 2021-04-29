@@ -4,8 +4,6 @@
  * @author Hourier
  */
 
-#include <cstdlib>
-
 #include "birth/birth-explanations-table.h"
 #include "core/show-file.h"
 #include "flavor/flavor-describer.h"

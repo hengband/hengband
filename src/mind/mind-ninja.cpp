@@ -269,9 +269,10 @@ void calc_surprise_attack_damage(player_type *attacker_ptr, player_attack_type *
  */
 bool hayagake(player_type *creature_ptr)
 {
+    std::unique_ptr<PlayerEnergy> energy(new PlayerEnergy(creature_ptr));
     if (creature_ptr->action == ACTION_HAYAGAKE) {
         set_action(creature_ptr, ACTION_NONE);
-        reset_player_turn(creature_ptr);
+        energy->reset_player_turn();
         return TRUE;
     }
 
@@ -284,7 +285,7 @@ bool hayagake(player_type *creature_ptr)
         set_action(creature_ptr, ACTION_HAYAGAKE);
     }
 
-    reset_player_turn(creature_ptr);
+    energy->reset_player_turn();
     return TRUE;
 }
 
@@ -417,7 +418,7 @@ bool cast_ninja_spell(player_type *caster_ptr, mind_ninja_type spell)
             }
 
             do_cmd_throw(caster_ptr, 1, FALSE, slot);
-            update_player_turn_energy(caster_ptr, 100, update_turn_type::ENERGY_SUBSTITUTION);
+            PlayerEnergy(caster_ptr).update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
         }
 
         break;

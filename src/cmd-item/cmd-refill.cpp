@@ -40,7 +40,7 @@ static void do_cmd_refill_lamp(player_type *user_ptr)
     BIT_FLAGS flgs[TR_FLAG_SIZE], flgs2[TR_FLAG_SIZE];
     object_flags(user_ptr, o_ptr, flgs);
 
-    update_player_turn_energy(user_ptr, 50, update_turn_type::ENERGY_SUBSTITUTION);
+    PlayerEnergy(user_ptr).update_player_turn_energy(50, update_turn_type::ENERGY_SUBSTITUTION);
     j_ptr = &user_ptr->inventory_list[INVEN_LITE];
     object_flags(user_ptr, j_ptr, flgs2);
     j_ptr->xtra4 += o_ptr->xtra4;
@@ -80,7 +80,7 @@ static void do_cmd_refill_torch(player_type *user_ptr)
     BIT_FLAGS flgs[TR_FLAG_SIZE], flgs2[TR_FLAG_SIZE];
     object_flags(user_ptr, o_ptr, flgs);
 
-    update_player_turn_energy(user_ptr, 50, update_turn_type::ENERGY_SUBSTITUTION);
+    PlayerEnergy(user_ptr).update_player_turn_energy(50, update_turn_type::ENERGY_SUBSTITUTION);
     j_ptr = &user_ptr->inventory_list[INVEN_LITE];
     object_flags(user_ptr, j_ptr, flgs2);
     j_ptr->xtra4 += o_ptr->xtra4 + 5;

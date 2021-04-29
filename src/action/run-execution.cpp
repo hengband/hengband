@@ -382,7 +382,7 @@ void run_step(player_type *creature_ptr, DIRECTION dir)
     if (--creature_ptr->running <= 0)
         return;
 
-    update_player_turn_energy(creature_ptr, 100, update_turn_type::ENERGY_SUBSTITUTION);
+    PlayerEnergy(creature_ptr).update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
     exe_movement(creature_ptr, find_current, FALSE, FALSE);
     if (player_bold(creature_ptr, creature_ptr->run_py, creature_ptr->run_px)) {
         creature_ptr->run_py = 0;

@@ -324,7 +324,7 @@ void do_cmd_quest(player_type *player_ptr)
     if (player_ptr->wild_mode)
         return;
 
-    update_player_turn_energy(player_ptr, 100, update_turn_type::ENERGY_SUBSTITUTION);
+    PlayerEnergy(player_ptr).update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
 
     if (!cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, FF_QUEST_ENTER)) {
         msg_print(_("ここにはクエストの入口はない。", "You see no quest level here."));

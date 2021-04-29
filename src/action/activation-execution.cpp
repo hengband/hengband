@@ -126,7 +126,7 @@ static bool check_activation_conditions(player_type *user_ptr, ae_type *ae_ptr)
 
     if (!ae_ptr->o_ptr->xtra4 && (ae_ptr->o_ptr->tval == TV_FLASK) && ((ae_ptr->o_ptr->sval == SV_LITE_TORCH) || (ae_ptr->o_ptr->sval == SV_LITE_LANTERN))) {
         msg_print(_("燃料がない。", "It has no fuel."));
-        reset_player_turn(user_ptr);
+        PlayerEnergy(user_ptr).reset_player_turn();
         return FALSE;
     }
 
@@ -224,7 +224,7 @@ static bool activate_whistle(player_type *user_ptr, ae_type *ae_ptr)
  */
 void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 {
-    update_player_turn_energy(user_ptr, 100, update_turn_type::ENERGY_SUBSTITUTION);
+    PlayerEnergy(user_ptr).update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
     ae_type tmp_ae;
     ae_type *ae_ptr = initialize_ae_type(user_ptr, &tmp_ae, item);
     decide_activation_level(user_ptr, ae_ptr);

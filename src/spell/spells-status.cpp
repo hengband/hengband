@@ -459,7 +459,7 @@ bool fishing(player_type *creature_ptr)
         GAME_TEXT m_name[MAX_NLEN];
         monster_desc(creature_ptr, m_name, &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[y][x].m_idx], 0);
         msg_format(_("%sが邪魔だ！", "%^s is standing in your way."), m_name);
-        reset_player_turn(creature_ptr);
+        PlayerEnergy(creature_ptr).reset_player_turn();
         return FALSE;
     }
 

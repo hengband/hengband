@@ -200,9 +200,10 @@ static void reflect_inventory_by_throw(player_type *creature_ptr, it_type *it_pt
 
 static void set_class_specific_throw_params(player_type *creature_ptr, it_type *it_ptr)
 {
-    update_player_turn_energy(creature_ptr, 100, update_turn_type::ENERGY_SUBSTITUTION);
+    std::unique_ptr<PlayerEnergy> energy(new PlayerEnergy(creature_ptr));
+    energy->update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
     if ((creature_ptr->pclass == CLASS_ROGUE) || (creature_ptr->pclass == CLASS_NINJA)) {
-        update_player_turn_energy(creature_ptr, creature_ptr->lev, update_turn_type::ENERGY_SUBTRACTION);
+        energy->update_player_turn_energy(creature_ptr->lev, update_turn_type::ENERGY_SUBTRACTION);
     }
 
     it_ptr->y = creature_ptr->y;

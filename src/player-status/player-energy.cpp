@@ -8,6 +8,11 @@
 #include "player-status/player-energy.h"
 #include "system/player-type-definition.h"
 
+PlayerEnergy::PlayerEnergy(player_type *creature_ptr)
+{
+    this->creature_ptr = creature_ptr;
+}
+
 /*
  * @brief プレーヤーの行動エネルギーを更新する
  * @param creature_ptr プレーヤーの参照ポインタ
@@ -15,23 +20,23 @@
  * @param ut_type 現在値に対する演算方法
  * @return なし
  */
-void update_player_turn_energy(player_type *creature_ptr, ENERGY need_cost, update_turn_type ut_type)
+void PlayerEnergy::update_player_turn_energy(ENERGY need_cost, update_turn_type ut_type)
 {
     switch (ut_type) {
     case update_turn_type::ENERGY_SUBSTITUTION:
-        creature_ptr->energy_use = need_cost;
+        this->creature_ptr->energy_use = need_cost;
         return;
     case update_turn_type::ENERGY_ADDITION:
-        creature_ptr->energy_use += need_cost;
+        this->creature_ptr->energy_use += need_cost;
         return;
     case update_turn_type::ENERGY_SUBTRACTION:
-        creature_ptr->energy_use -= need_cost;
+        this->creature_ptr->energy_use -= need_cost;
         return;
     case update_turn_type::ENERGY_MULTIPLICATION:
-        creature_ptr->energy_use *= need_cost;
+        this->creature_ptr->energy_use *= need_cost;
         return;
     case update_turn_type::ENERGY_DIVISION:
-        creature_ptr->energy_use /= need_cost;
+        this->creature_ptr->energy_use /= need_cost;
         return;
     default:
         return;
@@ -43,7 +48,7 @@ void update_player_turn_energy(player_type *creature_ptr, ENERGY need_cost, upda
  * @param player_type プレーヤーへの参照ポインタ
  * @return なし
  */
-void reset_player_turn(player_type *creature_ptr)
+void PlayerEnergy::reset_player_turn()
 {
-    update_player_turn_energy(creature_ptr, 0, update_turn_type::ENERGY_SUBSTITUTION);
+    update_player_turn_energy(0, update_turn_type::ENERGY_SUBSTITUTION);
 }

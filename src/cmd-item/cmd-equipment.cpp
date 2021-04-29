@@ -230,7 +230,7 @@ void do_cmd_wield(player_type *creature_ptr)
         autopick_alter_item(creature_ptr, item, FALSE);
     }
 
-    update_player_turn_energy(creature_ptr, 100, update_turn_type::ENERGY_SUBSTITUTION);
+    PlayerEnergy(creature_ptr).update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
     q_ptr = &forge;
     object_copy(q_ptr, o_ptr);
     q_ptr->number = 1;
@@ -314,7 +314,9 @@ void do_cmd_takeoff(player_type *creature_ptr)
     if (!o_ptr)
         return;
 
-    if (object_is_cursed(o_ptr)) {
+    std::unique_ptr<PlayerEnergy> energy(new PlayerEnergy(creature_ptr));
+    if (object_is_cursed(o_ptr))
+    {
         if ((o_ptr->curse_flags & TRC_PERMA_CURSE) || (creature_ptr->pclass != CLASS_BERSERKER)) {
             msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
             return;
@@ -330,12 +332,12 @@ void do_cmd_takeoff(player_type *creature_ptr)
             msg_print(_("呪いを打ち破った。", "You break the curse."));
         } else {
             msg_print(_("装備を外せなかった。", "You couldn't remove the equipment."));
-            update_player_turn_energy(creature_ptr, 50, update_turn_type::ENERGY_SUBSTITUTION);
+            energy->update_player_turn_energy(50, update_turn_type::ENERGY_SUBSTITUTION);
             return;
         }
     }
 
-    update_player_turn_energy(creature_ptr, 50, update_turn_type::ENERGY_SUBSTITUTION);
+    energy->update_player_turn_energy(50, update_turn_type::ENERGY_SUBSTITUTION);
     (void)inven_takeoff(creature_ptr, item, 255);
     verify_equip_slot(creature_ptr, item);
     calc_android_exp(creature_ptr);

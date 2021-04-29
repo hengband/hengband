@@ -11,5 +11,13 @@ enum class update_turn_type {
 };
 
 typedef struct player_type player_type;
-void update_player_turn_energy(player_type *creature_ptr, ENERGY need_cost, update_turn_type ut_type);
-void reset_player_turn(player_type *creature_ptr);
+class PlayerEnergy {
+public:
+    PlayerEnergy(player_type *creature_ptr);
+    PlayerEnergy() = delete;
+    virtual ~PlayerEnergy() = default;
+    void update_player_turn_energy(ENERGY need_cost, update_turn_type ut_type);
+    void reset_player_turn();
+private:
+    player_type *creature_ptr;
+};

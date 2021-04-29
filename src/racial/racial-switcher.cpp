@@ -94,7 +94,7 @@ bool switch_class_racial_execution(player_type *creature_ptr, const s32b command
         if (creature_ptr->realm1 == REALM_HEX) {
             bool retval = stop_hex_spell(creature_ptr);
             if (retval) {
-                update_player_turn_energy(creature_ptr, 10, update_turn_type::ENERGY_SUBSTITUTION);
+                PlayerEnergy(creature_ptr).update_player_turn_energy(10, update_turn_type::ENERGY_SUBSTITUTION);
             }
 
             return retval;
@@ -200,7 +200,7 @@ bool switch_class_racial_execution(player_type *creature_ptr, const s32b command
             return FALSE;
 
         stop_singing(creature_ptr);
-        update_player_turn_energy(creature_ptr, 10, update_turn_type::ENERGY_SUBSTITUTION);
+        PlayerEnergy(creature_ptr).update_player_turn_energy(10, update_turn_type::ENERGY_SUBSTITUTION);
         return TRUE;
     case CLASS_RED_MAGE:
         if (cmd_limit_cast(creature_ptr))
@@ -237,7 +237,7 @@ bool switch_class_racial_execution(player_type *creature_ptr, const s32b command
         return TRUE;
     case CLASS_BLUE_MAGE:
         set_action(creature_ptr, creature_ptr->action == ACTION_LEARN ? ACTION_NONE : ACTION_LEARN);
-        reset_player_turn(creature_ptr);
+        PlayerEnergy(creature_ptr).reset_player_turn();
         return TRUE;
     case CLASS_CAVALRY:
         return rodeo(creature_ptr);
@@ -448,7 +448,7 @@ bool switch_race_racial_execution(player_type *creature_ptr, const s32b command)
         return android_inside_weapon(creature_ptr);
     default:
         msg_print(_("この種族は特殊な能力を持っていません。", "This race has no bonus power."));
-        reset_player_turn(creature_ptr);
+        PlayerEnergy(creature_ptr).reset_player_turn();
         return TRUE;
     }
 }

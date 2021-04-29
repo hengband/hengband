@@ -212,9 +212,10 @@ void do_cmd_destroy(player_type *creature_ptr)
     destroy_ptr->o_ptr->number = destroy_ptr->amt;
     describe_flavor(creature_ptr, destroy_ptr->o_name, destroy_ptr->o_ptr, 0);
     destroy_ptr->o_ptr->number = destroy_ptr->old_number;
-    update_player_turn_energy(creature_ptr, 100, update_turn_type::ENERGY_SUBSTITUTION);
+    std::unique_ptr<PlayerEnergy> energy(new PlayerEnergy(creature_ptr));
+    energy->update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
     if (!can_player_destroy_object(creature_ptr, destroy_ptr->o_ptr)) {
-        reset_player_turn(creature_ptr);
+        energy->reset_player_turn();
         msg_format(_("%sは破壊不可能だ。", "You cannot destroy %s."), destroy_ptr->o_name);
         return;
     }
