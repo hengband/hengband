@@ -3,12 +3,14 @@
 #include "cmd-io/cmd-save.h"
 #include "core/disturbance.h"
 #include "core/magic-effects-timeout-reducer.h"
+#include "core/player-processor.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor-events.h"
 #include "floor/floor-mode-changer.h"
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
+#include "game-option/game-play-options.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
 #include "grid/feature.h"
@@ -17,6 +19,8 @@
 #include "hpmp/hp-mp-regenerator.h"
 #include "inventory/inventory-curse.h"
 #include "inventory/recharge-processor.h"
+#include "io/input-key-acceptor.h"
+#include "io/input-key-requester.h"
 #include "io/write-diary.h"
 #include "market/arena.h"
 #include "market/bounty.h"
@@ -29,6 +33,7 @@
 #include "perception/simple-perception.h"
 #include "player/digestion-processor.h"
 #include "player/player-status.h"
+#include "save/save.h"
 #include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h"
@@ -118,6 +123,11 @@ void process_world(player_type *player_ptr)
 
     if (current_world_ptr->game_turn % TURNS_PER_TICK)
         return;
+
+    if (!macro_running() && !continuous_action_running(player_ptr) && !command_new && auto_debug_save && (!inkey_next || *inkey_next == '\0')
+        && !player_ptr->phase_out) {
+        save_player(player_ptr, SAVE_TYPE_DEBUG);
+    }
 
     if (autosave_t && autosave_freq && !player_ptr->phase_out) {
         if (!(current_world_ptr->game_turn % ((s32b)autosave_freq * TURNS_PER_TICK)))
