@@ -38,6 +38,7 @@
 #include "player-attack/blood-sucking-processor.h"
 #include "player-attack/player-attack-util.h"
 #include "player-info/avatar.h"
+#include "player-status/player-energy.h"
 #include "player-status/player-hand-types.h"
 #include "player/player-damage.h"
 #include "player/player-skill.h"
@@ -445,12 +446,17 @@ static bool check_fear_death(player_type *attacker_ptr, player_attack_type *pa_p
     *(pa_ptr->mdeath) = TRUE;
     if ((attacker_ptr->pclass == CLASS_BERSERKER) && attacker_ptr->energy_use) {
         if (can_attack_with_main_hand(attacker_ptr) && can_attack_with_sub_hand(attacker_ptr)) {
-            if (pa_ptr->hand)
-                attacker_ptr->energy_use = attacker_ptr->energy_use * 3 / 5 + attacker_ptr->energy_use * num * 2 / (attacker_ptr->num_blow[pa_ptr->hand] * 5);
-            else
-                attacker_ptr->energy_use = attacker_ptr->energy_use * num * 3 / (attacker_ptr->num_blow[pa_ptr->hand] * 5);
+            ENERGY energy_use;
+            if (pa_ptr->hand) {
+                energy_use = attacker_ptr->energy_use * 3 / 5 + attacker_ptr->energy_use * num * 2 / (attacker_ptr->num_blow[pa_ptr->hand] * 5);
+            } else {
+                energy_use = attacker_ptr->energy_use * num * 3 / (attacker_ptr->num_blow[pa_ptr->hand] * 5);
+            }
+
+            update_player_turn_energy(attacker_ptr, energy_use, update_turn_type::ENERGY_SUBSTITUTION);
         } else {
-            attacker_ptr->energy_use = attacker_ptr->energy_use * num / attacker_ptr->num_blow[pa_ptr->hand];
+            auto energy_use = (ENERGY)(attacker_ptr->energy_use * num / attacker_ptr->num_blow[pa_ptr->hand]);
+            update_player_turn_energy(attacker_ptr, energy_use, update_turn_type::ENERGY_SUBSTITUTION);
         }
     }
 

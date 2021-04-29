@@ -309,11 +309,14 @@ void do_cmd_walk(player_type *creature_ptr, bool pickup)
         if ((dir != 5) && (creature_ptr->special_defense & KATA_MUSOU))
             set_action(creature_ptr, ACTION_NONE);
 
-        if (creature_ptr->wild_mode)
-            creature_ptr->energy_use *= ((MAX_HGT + MAX_WID) / 2);
+        if (creature_ptr->wild_mode) {
+            update_player_turn_energy(creature_ptr, (MAX_HGT + MAX_WID) / 2, update_turn_type::ENERGY_MULTIPLICATION);
+        }
 
-        if (creature_ptr->action == ACTION_HAYAGAKE)
-            creature_ptr->energy_use = creature_ptr->energy_use * (45 - (creature_ptr->lev / 2)) / 100;
+        if (creature_ptr->action == ACTION_HAYAGAKE) {
+            auto energy_use = (ENERGY)(creature_ptr->energy_use * (45 - (creature_ptr->lev / 2)) / 100);
+            update_player_turn_energy(creature_ptr, energy_use, update_turn_type::ENERGY_SUBSTITUTION);
+        }
 
         exe_movement(creature_ptr, dir, pickup, FALSE);
         more = TRUE;

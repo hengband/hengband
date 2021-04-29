@@ -243,8 +243,9 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
         creature_ptr->running = 0;
         can_move = FALSE;
     } else if (has_flag(f_ptr->flags, FF_TREE) && !p_can_kill_walls) {
-        if ((creature_ptr->pclass != CLASS_RANGER) && !creature_ptr->levitation && (!creature_ptr->riding || !(riding_r_ptr->flags8 & RF8_WILD_WOOD)))
-            creature_ptr->energy_use *= 2;
+        if ((creature_ptr->pclass != CLASS_RANGER) && !creature_ptr->levitation && (!creature_ptr->riding || !(riding_r_ptr->flags8 & RF8_WILD_WOOD))) {
+            update_player_turn_energy(creature_ptr, 2, update_turn_type::ENERGY_MULTIPLICATION);
+        }
     } else if ((do_pickup != easy_disarm) && has_flag(f_ptr->flags, FF_DISARM) && !g_ptr->mimic) {
         if (!trap_can_be_ignored(creature_ptr, g_ptr->feat)) {
             (void)exe_disarm(creature_ptr, y, x, dir);
@@ -303,7 +304,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
         return;
 
     if (creature_ptr->warning && (!process_warning(creature_ptr, x, y))) {
-        creature_ptr->energy_use = 25;
+        update_player_turn_energy(creature_ptr, 25, update_turn_type::ENERGY_SUBSTITUTION);
         return;
     }
 

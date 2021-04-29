@@ -271,7 +271,7 @@ bool hayagake(player_type *creature_ptr)
 {
     if (creature_ptr->action == ACTION_HAYAGAKE) {
         set_action(creature_ptr, ACTION_NONE);
-        creature_ptr->energy_use = 0;
+        reset_player_turn(creature_ptr);
         return TRUE;
     }
 
@@ -284,7 +284,7 @@ bool hayagake(player_type *creature_ptr)
         set_action(creature_ptr, ACTION_HAYAGAKE);
     }
 
-    creature_ptr->energy_use = 0;
+    reset_player_turn(creature_ptr);
     return TRUE;
 }
 

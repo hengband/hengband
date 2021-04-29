@@ -92,8 +92,9 @@ bool switch_class_racial_execution(player_type *creature_ptr, const s32b command
     case CLASS_HIGH_MAGE:
         if (creature_ptr->realm1 == REALM_HEX) {
             bool retval = stop_hex_spell(creature_ptr);
-            if (retval)
-                creature_ptr->energy_use = 10;
+            if (retval) {
+                update_player_turn_energy(creature_ptr, 10, update_turn_type::ENERGY_SUBSTITUTION);
+            }
 
             return retval;
         }
@@ -198,7 +199,7 @@ bool switch_class_racial_execution(player_type *creature_ptr, const s32b command
             return FALSE;
 
         stop_singing(creature_ptr);
-        creature_ptr->energy_use = 10;
+        update_player_turn_energy(creature_ptr, 10, update_turn_type::ENERGY_SUBSTITUTION);
         return TRUE;
     case CLASS_RED_MAGE:
         if (cmd_limit_cast(creature_ptr))
