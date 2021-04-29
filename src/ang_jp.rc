@@ -56,6 +56,10 @@ ANGBAND MENU
 
 		MENUITEM SEPARATOR
 
+		MENUITEM "リサイズ中に再描画する", 281
+
+		MENUITEM SEPARATOR
+
 		POPUP "タイルの幅を広げる"
 		{
 			MENUITEM "メインウィンドウ", 240

@@ -1,5 +1,6 @@
 ﻿#include "wizard/wizard-item-modifier.h"
 #include "artifact/fixed-art-generator.h"
+#include "artifact/random-art-effects.h"
 #include "artifact/random-art-generator.h"
 #include "core/asking-player.h"
 #include "core/show-file.h"
@@ -12,6 +13,7 @@
 #include "game-option/cheat-options.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
+#include "io/input-key-requester.h"
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/object-ego.h"
@@ -29,19 +31,188 @@
 #include "object/object-value.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
+#include "spell-kind/spells-perception.h"
+#include "spell/spells-object.h"
 #include "system/alloc-entries.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "system/system-variables.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "view/display-messages.h"
 #include "util/bit-flags-calculator.h"
+#include "util/int-char-converter.h"
+#include "wizard/wizard-special-process.h"
 #include "world/world.h"
 #include <vector>
 
 #define K_MAX_DEPTH 110 /*!< アイテムの階層毎生成率を表示する最大階 */
+
+namespace {
+/*!
+ * @brief アイテム設定コマンド一覧表
+ */
+std::vector<std::vector<std::string>> wizard_sub_menu_table = {
+    { "a", _("アーティファクト出現フラグリセット", "Restore aware flag of fixed artifact") },
+    { "A", _("アーティファクトを出現済みにする", "Make a fixed artifact awared") },
+    { "e", _("高級品獲得ドロップ", "Drop excellent object") },
+    { "f", _("*鑑定*", "*Idenfity*") },
+    { "i", _("鑑定", "Idenfity") },
+    { "I", _("インベントリ全*鑑定*", "Idenfity all objects fully in inventory") },
+    { "l", _("指定アイテム番号まで一括鑑定", "Make objects awared to target object id") },
+    { "g", _("上質なアイテムドロップ", "Drop good object") },
+    { "s", _("特別品獲得ドロップ", "Drop special object") },
+    { "w", _("願い", "Wishing") },
+    { "U", _("発動を変更する", "Modify item activation") },
+};
+
+/*!
+ * @brief ゲーム設定コマンドの一覧を表示する
+ * @return なし
+ */
+void display_wizard_sub_menu()
+{
+    for (size_t y = 1; y <= wizard_sub_menu_table.size(); y++)
+        term_erase(14, y, 64);
+
+    int r = 1;
+    int c = 15;
+    int sz = wizard_sub_menu_table.size();
+    for (int i = 0; i < sz; i++) {
+        std::stringstream ss;
+        ss << wizard_sub_menu_table[i][0] << ") " << wizard_sub_menu_table[i][1];
+        put_str(ss.str().c_str(), r++, c);
+    }
+}
+}
+
+void wiz_restore_aware_flag_of_fixed_arfifact(ARTIFACT_IDX a_idx, bool aware = false);
+void wiz_modify_item_activation(player_type *caster_ptr);
+void wiz_identify_full_inventory(player_type *caster_ptr);
+
+/*!
+    * @brief ゲーム設定コマンドの入力を受け付ける
+    * @param creature_ptr プレイヤーの情報へのポインタ
+    * @return なし
+    */
+void wizard_item_modifier(player_type *creature_ptr)
+{
+    screen_save();
+    display_wizard_sub_menu();
+
+    char cmd;
+    get_com("Player Command: ", &cmd, FALSE);
+    screen_load();
+
+    switch (cmd) {
+    case ESCAPE:
+    case ' ':
+    case '\n':
+    case '\r':
+        break;
+    case 'a':
+        wiz_restore_aware_flag_of_fixed_arfifact(command_arg);
+        break;
+    case 'A':
+        wiz_restore_aware_flag_of_fixed_arfifact(command_arg, true);
+        break;
+    case 'e':
+        if (command_arg <= 0)
+            command_arg = 1;
+
+        acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, TRUE, FALSE, TRUE);
+        break;
+    case 'f':
+        identify_fully(creature_ptr, FALSE, TV_NONE);
+        break;
+    case 'g':
+        if (command_arg <= 0)
+            command_arg = 1;
+
+        acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, FALSE, FALSE, TRUE);
+        break;
+    case 'i':
+        (void)ident_spell(creature_ptr, FALSE, TV_NONE);
+        break;
+    case 'I':
+        wiz_identify_full_inventory(creature_ptr);
+        break;
+    case 'l':
+        wiz_learn_items_all(creature_ptr);
+        break;
+    case 's':
+        if (command_arg <= 0)
+            command_arg = 1;
+
+        acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, TRUE, TRUE, TRUE);
+        break;
+    case 'U':
+        wiz_modify_item_activation(creature_ptr);
+        break;
+    case 'w':
+        do_cmd_wishing(creature_ptr, -1, TRUE, TRUE, TRUE);
+        break;
+    }
+}
+
+/*!
+ * @brief 固定アーティファクトの出現フラグをリセットする
+ * @param a_idx 指定したアーティファクトID
+ */
+void wiz_restore_aware_flag_of_fixed_arfifact(ARTIFACT_IDX a_idx, bool aware)
+{
+    if (a_idx <= 0) {
+        char tmp[80] = "";
+        sprintf(tmp, "Artifact ID (1-%d): ", max_a_idx - 1);
+        char tmp_val[10] = "";
+        if (!get_string(tmp, tmp_val, 3))
+            return;
+
+        a_idx = (ARTIFACT_IDX)atoi(tmp_val);
+    }
+
+    if (a_idx <= 0 || a_idx >= max_a_idx) {
+        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), max_a_idx - 1);
+        return;
+    }
+
+    auto *a_ptr = &a_info[a_idx];
+    a_ptr->cur_num = aware ? 1 : 0;
+    msg_print(aware ? "Modified." : "Restored.");
+}
+
+/*!
+ * @brief オブジェクトに発動を追加する/変更する
+ * @param catser_ptr プレイヤー情報への参照ポインタ
+ */
+void wiz_modify_item_activation(player_type *caster_ptr)
+{
+    concptr q = "Which object? ";
+    concptr s = "Nothing to do with.";
+    OBJECT_IDX item;
+    auto *o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, TV_NONE);
+    if (!o_ptr)
+        return;
+
+    XTRA16 act_idx;
+    char tmp[80] = "";
+    sprintf(tmp, "Artifact ID (1-%d): ", ACT_MAX);
+    char tmp_val[10] = "";
+    if (!get_string(tmp, tmp_val, 3))
+        return;
+
+    act_idx = (XTRA16)atoi(tmp_val);
+
+    if (act_idx <= 0 || act_idx > ACT_MAX) {
+        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), ACT_MAX - 1);
+        return;
+    }
+
+    add_flag(o_ptr->art_flags, TR_ACTIVATE);
+    o_ptr->xtra2 = act_idx;
+}
 
 /*!
  * @brief インベントリ内のアイテムを全て*鑑定*済みにする
