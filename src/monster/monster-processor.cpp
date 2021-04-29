@@ -323,9 +323,9 @@ void process_angar(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m)
     GAME_TEXT m_name[MAX_NLEN];
     monster_desc(target_ptr, m_name, m_ptr, is_pet(m_ptr) ? MD_ASSUME_VISIBLE : 0);
 
-    /* When riding a hostile align pet */
+    /* When riding a hostile alignment pet */
     if (target_ptr->riding == m_idx) {
-        if (abs(target_ptr->align / 10) < randint0(target_ptr->skill_exp[GINOU_RIDING]))
+        if (abs(target_ptr->alignment / 10) < randint0(target_ptr->skill_exp[GINOU_RIDING]))
             return;
 
         msg_format(_("%^sが突然暴れだした！", "%^s suddenly begins unruly!"), m_name);

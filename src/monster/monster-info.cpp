@@ -212,9 +212,9 @@ bool monster_has_hostile_align(player_type *player_ptr, monster_type *m_ptr, int
         sub_align1 = m_ptr->sub_align;
     } else /* For player */
     {
-        if (player_ptr->align >= pa_good)
+        if (player_ptr->alignment >= pa_good)
             sub_align1 |= SUB_ALIGN_GOOD;
-        if (player_ptr->align <= pa_evil)
+        if (player_ptr->alignment <= pa_evil)
             sub_align1 |= SUB_ALIGN_EVIL;
     }
 

@@ -14,17 +14,17 @@ PlayerAlignment::PlayerAlignment(player_type *creature_ptr)
  */
 concptr PlayerAlignment::alignment_label()
 {
-    if (this->creature_ptr->align > 150)
+    if (this->creature_ptr->alignment > 150)
         return _("大善", "Lawful");
-    else if (this->creature_ptr->align > 50)
+    else if (this->creature_ptr->alignment > 50)
         return _("中善", "Good");
-    else if (this->creature_ptr->align > 10)
+    else if (this->creature_ptr->alignment > 10)
         return _("小善", "Neutral Good");
-    else if (this->creature_ptr->align > -11)
+    else if (this->creature_ptr->alignment > -11)
         return _("中立", "Neutral");
-    else if (this->creature_ptr->align > -51)
+    else if (this->creature_ptr->alignment > -51)
         return _("小悪", "Neutral Evil");
-    else if (this->creature_ptr->align > -151)
+    else if (this->creature_ptr->alignment > -151)
         return _("中悪", "Evil");
     else
         return _("大悪", "Chaotic");
@@ -35,11 +35,11 @@ concptr PlayerAlignment::alignment_label()
  * @param creature_ptr 算出するクリーチャーの参照ポインタ。
  * @return アライメントの表記を返す。
  */
-concptr PlayerAlignment::your_alignment(bool with_value)
+concptr PlayerAlignment::get_alignment(bool with_value)
 {
     auto s = alignment_label();
     if (with_value || show_actual_value)
-        return format(_("%s(%ld)", "%s (%ld)"), s, static_cast<long>(this->creature_ptr->align));
+        return format(_("%s(%ld)", "%s (%ld)"), s, static_cast<long>(this->creature_ptr->alignment));
 
     return s;
 }

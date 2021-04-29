@@ -1,6 +1,5 @@
 ﻿#include <string>
 
-#include "io-dump/character-dump.h"
 #include "artifact/fixed-art-types.h"
 #include "cmd-building/cmd-building.h"
 #include "dungeon/dungeon.h"
@@ -10,6 +9,7 @@
 #include "game-option/birth-options.h"
 #include "game-option/game-play-options.h"
 #include "inventory/inventory-slot-types.h"
+#include "io-dump/character-dump.h"
 #include "io-dump/player-status-dump.h"
 #include "io-dump/special-class-dump.h"
 #include "io/mutations-dump.h"
@@ -26,8 +26,8 @@
 #include "monster/smart-learn-types.h"
 #include "object/object-info.h"
 #include "pet/pet-util.h"
-#include "player-info/avatar.h"
 #include "player-info/alignment.h"
+#include "player-info/avatar.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-table.h"
 #include "player/race-info-table.h"
@@ -453,7 +453,7 @@ static void dump_aux_virtues(player_type *creature_ptr, FILE *fff)
     }
 
     std::unique_ptr<PlayerAlignment> alignment(new PlayerAlignment(creature_ptr));
-    std::string alg = alignment->your_alignment();
+    std::string alg = alignment->get_alignment();
     fprintf(fff, _("\n属性 : %s\n", "\nYour alignment : %s\n"), alg.c_str());
     fprintf(fff, "\n");
     dump_virtues(creature_ptr, fff);
