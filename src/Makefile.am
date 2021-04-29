@@ -658,6 +658,7 @@ hengband_SOURCES = \
 	player-status/player-hand-types.h \
 	player-status/player-infravision.cpp player-status/player-infravision.h \
 	player-status/player-basic-statistics.cpp player-status/player-basic-statistics.h \
+	player-status/player-energy.cpp player-status/player-energy.h \
 	player-status/player-speed.cpp player-status/player-speed.h \
 	player-status/player-status-base.cpp player-status/player-status-base.h \
 	player-status/player-stealth.cpp player-status/player-stealth.h \
