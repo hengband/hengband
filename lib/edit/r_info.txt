@@ -25517,6 +25517,8 @@ D:多くの者が彼の魔法使いとその宝物を見つけようとしたが
 D:誰も彼を見つけて生きてその顛末を語ることはなかった。
 D:この強大な魔法使いを煩わせる不用意な冒険者に災いあれ。
 
+# 口 (mouth in Chinese character) and
+# ロ (Ro in Japanese syllabary) are too similar!!
 N:1286:『サウロンのロ』
 E:The Ro of Sauron
 G:p:v
@@ -25751,3 +25753,15 @@ D:$  It's frustrating because it doesn't enter a cage
 D:$ so it can't have a good rest.
 D:とある宿場に泊まった高名な絵師が宿代が足りなくて屏風へ描いた雀だ。
 D:駕籠がないのでゆっくり休めずイライラしている。
+
+N:1298:ベルゼバブの四天王『サイアーク』
+E:Saiaak, the Weakest Big Four of Beelzebub
+G:h:u
+I:110:1d1:10:0:25
+W:2:1:0:35:0:0
+B:HIT:HURT:2d4
+F:UNIQUE | FORCE_MAXHP | DROP_CORPSE | MALE | DEMON
+F:DROP_3D2 | ONLY_GOLD | CAN_SPEAK | EVIL
+D:$He is the weakest man among the big four,
+D:$ and is a mess of the demons.
+D:四天王の中で最弱の男であり、魔族の面汚しだ。
