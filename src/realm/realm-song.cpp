@@ -542,7 +542,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
     case 16:
         if (name)
-            return _("分解音波", "Sound of disintegration");
+            return _("フルゥの行進曲", "Hru's March");
         if (desc)
             return _("壁を掘り進む。自分の足元のアイテムは蒸発する。", "Makes you be able to burrow into walls. Objects under your feet evaporate.");
 
@@ -568,7 +568,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
     case 17:
         if (name)
-            return _("元素耐性", "Finrod's Resistance");
+            return _("フィンロドの護り", "Finrod's Resistance");
         if (desc)
             return _("酸、電撃、炎、冷気、毒に対する耐性を得る。装備による耐性に累積する。",
                 "Gives resistance to fire, cold, electricity, acid and poison. These resistances can be added to those from equipment for more powerful "
@@ -656,7 +656,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
     case 20:
         if (name)
-            return _("退散の歌", "Dispelling chant");
+            return _("退散の歌", "Dispelling Chant");
         if (desc)
             return _("視界内の全てのモンスターにダメージを与える。邪悪なモンスターに特に大きなダメージを与える。",
                 "Damages all monsters in sight. Hurts evil monsters greatly.");
@@ -822,7 +822,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
     case 26:
         if (name)
-            return _("守りの歌", "Endurance");
+            return _("エルベレスの聖歌", "Elbereth's Chant");
         if (desc)
             return _("自分のいる床の上に、モンスターが通り抜けたり召喚されたりすることができなくなるルーンを描く。",
                 "Sets a rune on the floor beneath you. If you are on a rune, monsters cannot attack you but can try to break the rune.");
