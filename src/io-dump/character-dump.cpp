@@ -453,7 +453,7 @@ static void dump_aux_virtues(player_type *creature_ptr, FILE *fff)
     }
 
     std::unique_ptr<PlayerAlignment> alignment(new PlayerAlignment(creature_ptr));
-    std::string alg = alignment->get_alignment();
+    std::string alg = alignment->get_alignment_description();
     fprintf(fff, _("\n属性 : %s\n", "\nYour alignment : %s\n"), alg.c_str());
     fprintf(fff, "\n");
     dump_virtues(creature_ptr, fff);

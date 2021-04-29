@@ -35,7 +35,7 @@ concptr PlayerAlignment::alignment_label()
  * @param creature_ptr 算出するクリーチャーの参照ポインタ。
  * @return アライメントの表記を返す。
  */
-concptr PlayerAlignment::get_alignment(bool with_value)
+concptr PlayerAlignment::get_alignment_description(bool with_value)
 {
     auto s = alignment_label();
     if (with_value || show_actual_value)
