@@ -25,8 +25,8 @@
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/cave.h"
-#include "floor/geometry.h"
 #include "floor/floor-object.h"
+#include "floor/geometry.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-requester.h"
@@ -65,6 +65,11 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+
+#ifdef JP
+#else
+#include "player-info/equipment-info.h"
+#endif
 
 /*!
  * @brief 呪術領域の武器呪縛の対象にできる武器かどうかを返す。 / An "item_tester_hook" for offer
@@ -300,9 +305,9 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             if ((hex_revenge_turn(caster_ptr) <= 0) || (power >= 200)) {
                 msg_print(_("我慢が解かれた！", "My patience is at an end!"));
                 if (power) {
-                    project(
-                        caster_ptr, 0, rad, caster_ptr->y, caster_ptr->x, power, GF_HELL_FIRE, (PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL));
+                    project(caster_ptr, 0, rad, caster_ptr->y, caster_ptr->x, power, GF_HELL_FIRE, (PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL));
                 }
+
                 if (current_world_ptr->wizard) {
                     msg_format(_("%d点のダメージを返した。", "You return %d damage."), power);
                 }
