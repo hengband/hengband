@@ -2165,6 +2165,9 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 
         return 0;
     }
+    case WM_ERASEBKGND: {
+        return 1;
+    }
     case WM_PAINT: {
         BeginPaint(hWnd, &ps);
         if (td)
@@ -2494,6 +2497,9 @@ LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
         td->size_hack = FALSE;
         return 0;
     }
+    case WM_ERASEBKGND: {
+        return 1;
+    }
     case WM_PAINT: {
         BeginPaint(hWnd, &ps);
         if (td)
@@ -2734,7 +2740,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPST
         wc.hInstance = hInst;
         wc.hIcon = hIcon = LoadIcon(hInst, AppName);
         wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-        wc.hbrBackground = static_cast<HBRUSH>(GetStockObject(BLACK_BRUSH));
+        wc.hbrBackground = NULL;
         wc.lpszMenuName = AppName;
         wc.lpszClassName = AppName;
 
