@@ -3,7 +3,6 @@
  * @brief Windows版固有実装(メインエントリポイント含む)
  * @date 2018/03/16
  * @author Hengband Team
- * @todo main関数を含むファイルの割に長過ぎる。main-win-utils.cなどといった形で分割したい
  * @details
  *
  * <h3>概要</h3>
@@ -82,7 +81,6 @@
 
 #ifdef WINDOWS
 
-#include "cmd-io/cmd-process-screen.h"
 #include "cmd-io/cmd-save.h"
 #include "cmd-visual/cmd-draw.h"
 #include "core/game-play.h"
@@ -106,12 +104,11 @@
 #include "main-win/main-win-menuitem.h"
 #include "main-win/main-win-music.h"
 #include "main-win/main-win-sound.h"
-#include "main-win/string-win.h"
+#include "main-win/main-win-utils.h"
 #include "main/angband-initializer.h"
 #include "main/sound-of-music.h"
 #include "monster-floor/monster-lite.h"
 #include "save/save.h"
-#include "system/angband-version.h"
 #include "system/angband.h"
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
@@ -1943,9 +1940,21 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         use_pause_music_inactive = !use_pause_music_inactive;
         break;
     }
+    case IDM_OPTIONS_OPEN_MUSIC_DIR: {
+        std::vector<char> buf(MAIN_WIN_MAX_PATH);
+        path_build(&buf[0], MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_MUSIC, "music.cfg");
+        open_dir_in_explorer(&buf[0]);
+        break;
+    }
     case IDM_OPTIONS_SOUND: {
         arg_sound = !arg_sound;
         change_sound_mode(arg_sound);
+        break;
+    }
+    case IDM_OPTIONS_OPEN_SOUND_DIR: {
+        std::vector<char> buf(MAIN_WIN_MAX_PATH);
+        path_build(&buf[0], MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_SOUND, "sound.cfg");
+        open_dir_in_explorer(&buf[0]);
         break;
     }
     case IDM_OPTIONS_NO_BG: {
@@ -1980,24 +1989,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         break;
     }
     case IDM_DUMP_SCREEN_HTML: {
-        OPENFILENAMEW ofnw;
-        std::vector<WCHAR> buf(MAIN_WIN_MAX_PATH + 1);
-        memset(&ofnw, 0, sizeof(ofnw));
-        ofnw.lStructSize = sizeof(ofnw);
-        ofnw.hwndOwner = data[0].w;
-        ofnw.lpstrFilter = L"HTML Files (*.html)\0*.html\0";
-        ofnw.nFilterIndex = 1;
-        ofnw.lpstrFile = &buf[0];
-        ofnw.nMaxFile = MAIN_WIN_MAX_PATH;
-        ofnw.lpstrDefExt = L"html";
-        ofnw.lpstrInitialDir = NULL;
-        ofnw.lpstrTitle = _(L"HTMLでスクリーンダンプを保存", L"Save screen dump as HTML.");
-        ofnw.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;
-
-        if (GetSaveFileNameW(&ofnw)) {
-            do_cmd_save_screen_html_aux(to_multibyte(&buf[0]).c_str(), 0);
-        }
-
+        save_screen_as_html(data[0].w);
         break;
     }
     }
@@ -2127,7 +2119,7 @@ static void handle_app_active(HWND hWnd, UINT uMsg, WPARAM wParam, [[maybe_unuse
 }
 
 /*!
- * @todo WNDCLASSに影響があるのでplayer_type*の追加は保留
+ * @brief メインウインドウ用ウインドウプロシージャ
  */
 LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -2437,7 +2429,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 }
 
 /*!
- * @todo WNDCLASSに影響があるのでplayer_type*の追加は保留
+ * @brief サブウインドウ用ウインドウプロシージャ
  */
 LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -2684,21 +2676,6 @@ static spoiler_output_status create_debug_spoiler(LPSTR cmd_line)
     init_angband(p_ptr, TRUE);
 
     return output_all_spoilers();
-}
-
-/*!
- * @todo よく見るとhMutexはちゃんと使われていない……？
- * @brief (Windows固有)変愚蛮怒が起動済かどうかのチェック
- */
-static bool is_already_running(void)
-{
-    HANDLE hMutex;
-    hMutex = CreateMutex(NULL, TRUE, VERSION_NAME);
-    if (GetLastError() == ERROR_ALREADY_EXISTS) {
-        return TRUE;
-    }
-
-    return FALSE;
 }
 
 /*!

@@ -268,6 +268,7 @@
     <ClCompile Include="..\..\src\cmd-action\cmd-tunnel.cpp" />
     <ClCompile Include="..\..\src\action\movement-execution.cpp" />
     <ClCompile Include="..\..\src\main-win\graphics-win.cpp" />
+    <ClCompile Include="..\..\src\main-win\main-win-utils.cpp" />
     <ClCompile Include="..\..\src\store\cmd-store.cpp" />
     <ClCompile Include="..\..\src\cmd-io\cmd-floor.cpp" />
     <ClCompile Include="..\..\src\cmd-io\cmd-lore.cpp" />
@@ -937,6 +938,7 @@
     <ClInclude Include="..\..\src\main-win\graphics-win.h" />
     <ClInclude Include="..\..\src\main-win\string-win.h" />
     <ClInclude Include="..\..\src\player-status\player-hand-types.h" />
+    <ClInclude Include="..\..\src\main-win\main-win-utils.h" />
     <ClInclude Include="..\..\src\store\cmd-store.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-floor.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-lore.h" />
