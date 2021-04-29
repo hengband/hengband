@@ -83,6 +83,6 @@ bool import_magic_device(player_type *user_ptr)
     msg_format(_("%sの魔力を取り込んだ。", "You absorb magic of %s."), o_name);
 
     vary_item(user_ptr, item, -999);
-    update_player_turn_energy(user_ptr, 100);
+    update_player_turn_energy(user_ptr, 100, update_turn_type::ENERGY_SUBSTITUTION);
     return TRUE;
 }

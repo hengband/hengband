@@ -197,7 +197,7 @@ void do_cmd_store(player_type *player_ptr)
     player_ptr->town_num = old_town_num;
 
     select_floor_music(player_ptr);
-    update_player_turn_energy(player_ptr, 100);
+    update_player_turn_energy(player_ptr, 100, update_turn_type::ENERGY_SUBSTITUTION);
     current_world_ptr->character_icky_depth = 0;
     command_new = 0;
     command_see = FALSE;

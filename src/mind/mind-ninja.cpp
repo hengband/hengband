@@ -417,7 +417,7 @@ bool cast_ninja_spell(player_type *caster_ptr, mind_ninja_type spell)
             }
 
             do_cmd_throw(caster_ptr, 1, FALSE, slot);
-            update_player_turn_energy(caster_ptr, 100);
+            update_player_turn_energy(caster_ptr, 100, update_turn_type::ENERGY_SUBSTITUTION);
         }
 
         break;

@@ -230,7 +230,7 @@ void do_cmd_wield(player_type *creature_ptr)
         autopick_alter_item(creature_ptr, item, FALSE);
     }
 
-    update_player_turn_energy(creature_ptr, 100);
+    update_player_turn_energy(creature_ptr, 100, update_turn_type::ENERGY_SUBSTITUTION);
     q_ptr = &forge;
     object_copy(q_ptr, o_ptr);
     q_ptr->number = 1;
@@ -330,12 +330,12 @@ void do_cmd_takeoff(player_type *creature_ptr)
             msg_print(_("呪いを打ち破った。", "You break the curse."));
         } else {
             msg_print(_("装備を外せなかった。", "You couldn't remove the equipment."));
-            update_player_turn_energy(creature_ptr, 50);
+            update_player_turn_energy(creature_ptr, 50, update_turn_type::ENERGY_SUBSTITUTION);
             return;
         }
     }
 
-    update_player_turn_energy(creature_ptr, 50);
+    update_player_turn_energy(creature_ptr, 50, update_turn_type::ENERGY_SUBSTITUTION);
     (void)inven_takeoff(creature_ptr, item, 255);
     verify_equip_slot(creature_ptr, item);
     calc_android_exp(creature_ptr);

@@ -62,7 +62,7 @@ bool exe_tunnel(player_type *creature_ptr, POSITION y, POSITION x)
     if (!do_cmd_tunnel_test(creature_ptr->current_floor_ptr, y, x))
         return FALSE;
 
-    update_player_turn_energy(creature_ptr, 100);
+    update_player_turn_energy(creature_ptr, 100, update_turn_type::ENERGY_SUBSTITUTION);
     g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
     f_ptr = &f_info[g_ptr->feat];
     power = f_ptr->power;

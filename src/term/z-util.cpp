@@ -271,7 +271,7 @@ void s64b_div(s32b *A1, u32b *A2, s32b B1, u32b B2)
 }
 
 
-/* Reminder of division (A % B) */
+/* Reminder of ENERGY_DIVISION (A % B) */
 void s64b_mod(s32b *A1, u32b *A2, s32b B1, u32b B2)
 {
 	s32b tmp1 = (*A1);

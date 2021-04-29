@@ -271,7 +271,7 @@ void process_player(player_type *creature_ptr)
             command_cmd = SPECIAL_KEY_BUILDING;
             process_command(creature_ptr);
         } else if ((creature_ptr->paralyzed || creature_ptr->stun >= 100) && !cheat_immortal) {
-            update_player_turn_energy(creature_ptr, 100);
+            update_player_turn_energy(creature_ptr, 100, update_turn_type::ENERGY_SUBSTITUTION);
         } else if (creature_ptr->action == ACTION_REST) {
             if (creature_ptr->resting > 0) {
                 creature_ptr->resting--;
@@ -280,9 +280,9 @@ void process_player(player_type *creature_ptr)
                 creature_ptr->redraw |= (PR_STATE);
             }
 
-            update_player_turn_energy(creature_ptr, 100);
+            update_player_turn_energy(creature_ptr, 100, update_turn_type::ENERGY_SUBSTITUTION);
         } else if (creature_ptr->action == ACTION_FISH) {
-            update_player_turn_energy(creature_ptr, 100);
+            update_player_turn_energy(creature_ptr, 100, update_turn_type::ENERGY_SUBSTITUTION);
         } else if (creature_ptr->running) {
             run_step(creature_ptr, 0);
         } else if (travel.run) {

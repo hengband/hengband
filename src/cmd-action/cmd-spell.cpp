@@ -908,7 +908,7 @@ void do_cmd_study(player_type *caster_ptr)
 #endif
     }
 
-    update_player_turn_energy(caster_ptr, 100);
+    update_player_turn_energy(caster_ptr, 100, update_turn_type::ENERGY_SUBSTITUTION);
 
     switch (mp_ptr->spell_book) {
     case TV_LIFE_BOOK:
@@ -1302,7 +1302,7 @@ bool do_cmd_cast(player_type *caster_ptr)
         }
     }
 
-    update_player_turn_energy(caster_ptr, 100);
+    update_player_turn_energy(caster_ptr, 100, update_turn_type::ENERGY_SUBSTITUTION);
 
     /* Over-exert the player */
     if (over_exerted) {

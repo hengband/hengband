@@ -895,7 +895,7 @@ bool change_wild_mode(player_type *creature_ptr, bool encount)
         }
     }
 
-    update_player_turn_energy(creature_ptr, 1000);
+    update_player_turn_energy(creature_ptr, 1000, update_turn_type::ENERGY_SUBSTITUTION);
     creature_ptr->oldpx = creature_ptr->x;
     creature_ptr->oldpy = creature_ptr->y;
     if (hex_spelling_any(creature_ptr))

@@ -200,7 +200,7 @@ static void reflect_inventory_by_throw(player_type *creature_ptr, it_type *it_pt
 
 static void set_class_specific_throw_params(player_type *creature_ptr, it_type *it_ptr)
 {
-    update_player_turn_energy(creature_ptr, 100);
+    update_player_turn_energy(creature_ptr, 100, update_turn_type::ENERGY_SUBSTITUTION);
     if ((creature_ptr->pclass == CLASS_ROGUE) || (creature_ptr->pclass == CLASS_NINJA))
         creature_ptr->energy_use -= creature_ptr->lev;
 

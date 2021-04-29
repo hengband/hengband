@@ -104,7 +104,7 @@ void travel_step(player_type *creature_ptr)
         return;
     }
 
-    update_player_turn_energy(creature_ptr, 100);
+    update_player_turn_energy(creature_ptr, 100, update_turn_type::ENERGY_SUBSTITUTION);
     exe_movement(creature_ptr, travel.dir, always_pickup, FALSE);
     if ((creature_ptr->y == travel.y) && (creature_ptr->x == travel.x)) {
         travel.run = 0;

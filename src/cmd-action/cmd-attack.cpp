@@ -177,7 +177,7 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
 
     disturb(attacker_ptr, FALSE, TRUE);
 
-    update_player_turn_energy(attacker_ptr, 100);
+    update_player_turn_energy(attacker_ptr, 100, update_turn_type::ENERGY_SUBSTITUTION);
 
     if (!can_attack_with_main_hand(attacker_ptr) && !can_attack_with_sub_hand(attacker_ptr)
         && attacker_ptr->muta.has_none_of(mutation_attack_methods)) {

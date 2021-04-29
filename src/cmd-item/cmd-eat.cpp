@@ -269,7 +269,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 
     sound(SOUND_EAT);
 
-    update_player_turn_energy(creature_ptr, 100);
+    update_player_turn_energy(creature_ptr, 100, update_turn_type::ENERGY_SUBSTITUTION);
 
     /* Object level */
     int lev = k_info[o_ptr->k_idx].level;

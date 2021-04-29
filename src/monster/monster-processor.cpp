@@ -97,7 +97,7 @@ bool decide_process_continue(player_type *target_ptr, monster_type *m_ptr);
  * level.  This should prevent the level from being "swamped" by\n
  * reproducing monsters.  It also allows a large mass of mice to\n
  * prevent a louse from multiplying, but this is a small price to\n
- * pay for a simple multiplication method.\n
+ * pay for a simple ENERGY_MULTIPLICATION method.\n
  *\n
  * XXX Monster fear is slightly odd, in particular, monsters will\n
  * fixate on opening a door even if they cannot open it.  Actually,\n
