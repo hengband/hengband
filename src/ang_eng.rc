@@ -56,6 +56,10 @@ ANGBAND MENU
 
 		MENUITEM SEPARATOR
 
+		MENUITEM "Reraw during resizing window", 281
+
+		MENUITEM SEPARATOR
+
 		POPUP "Increase Tile Width"
 		{
 			MENUITEM "Term-0 window", 240
