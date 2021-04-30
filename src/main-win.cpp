@@ -222,22 +222,6 @@ bg_mode current_bg_mode = bg_mode::BG_NONE;
 #define DEFAULT_BG_FILENAME "bg.bmp"
 char wallpaper_file[MAIN_WIN_MAX_PATH] = ""; //!< 壁紙ファイル名。
 
-/*!
- * 現在使用中のタイルID(0ならば未使用)
- * Flag set once "graphics" has been initialized
- */
-static byte current_graphics_mode = 0;
-
-/*
- * The global tile
- */
-static tile_info infGraph;
-
-/*
- * The global tile mask
- */
-static tile_info infMask;
-
 /*
  * Show sub-windows even when Hengband is not in focus
  */
@@ -257,11 +241,6 @@ static concptr AppName = "ANGBAND";
  * Name of sub-window type
  */
 static concptr AngList = "AngList";
-
-/*
- * Directory names
- */
-static concptr ANGBAND_DIR_XTRA_GRAF;
 
 /*
  * The "complex" color values
@@ -558,7 +537,7 @@ static void load_prefs_aux(int i)
  */
 static void load_prefs(void)
 {
-    arg_graphics = (byte)GetPrivateProfileInt("Angband", "Graphics", GRAPHICS_NONE, ini_file);
+    arg_graphics = (byte)GetPrivateProfileInt("Angband", "Graphics", static_cast<byte>(graphics_mode::GRAPHICS_NONE), ini_file);
     arg_bigtile = (GetPrivateProfileInt("Angband", "Bigtile", FALSE, ini_file) != 0);
     use_bigtile = arg_bigtile;
     arg_sound = (GetPrivateProfileInt("Angband", "Sound", 0, ini_file) != 0);
@@ -581,84 +560,6 @@ static void load_prefs(void)
     for (int i = 0; i < MAX_TERM_DATA; ++i) {
         load_prefs_aux(i);
     }
-}
-
-/*!
- * @brief グラフィクスを初期化する / Initialize graphics
- * @details
- * <ul>
- * <li>メニュー[オプション]＞[グラフィクス]が「なし」以外の時に描画処理を初期化する。</li>
- * <li>呼び出されるタイミングはロード時、及び同メニューで「なし」以外に変更される毎になる。</li>
- * </ul>
- */
-static bool init_graphics(void)
-{
-    char buf[MAIN_WIN_MAX_PATH];
-    BYTE wid, hgt, twid, thgt, ox, oy;
-    concptr name;
-    concptr name_mask = NULL;
-
-    infGraph.delete_bitmap();
-    infMask.delete_bitmap();
-
-    if (arg_graphics == GRAPHICS_ADAM_BOLT) {
-        wid = 16;
-        hgt = 16;
-        twid = 16;
-        thgt = 16;
-        ox = 0;
-        oy = 0;
-        name = "16X16.BMP";
-        name_mask = "mask.bmp";
-
-        ANGBAND_GRAF = "new";
-    } else if (arg_graphics == GRAPHICS_HENGBAND) {
-        wid = 32;
-        hgt = 32;
-        twid = 32;
-        thgt = 32;
-        ox = 0;
-        oy = 0;
-        name = "32X32.BMP";
-        name_mask = "mask32.bmp";
-
-        ANGBAND_GRAF = "ne2";
-    } else {
-        wid = 8;
-        hgt = 8;
-        twid = 8;
-        thgt = 8;
-        ox = 0;
-        oy = 0;
-        name = "8X8.BMP";
-        ANGBAND_GRAF = "old";
-    }
-
-    path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, name);
-    infGraph.hBitmap = read_graphic(buf);
-    if (!infGraph.hBitmap) {
-        plog_fmt(_("ビットマップ '%s' を読み込めません。", "Cannot read bitmap file '%s'"), name);
-        return FALSE;
-    }
-
-    infGraph.CellWidth = wid;
-    infGraph.CellHeight = hgt;
-    infGraph.TileWidth = twid;
-    infGraph.TileHeight = thgt;
-    infGraph.OffsetX = ox;
-    infGraph.OffsetY = oy;
-
-    if (name_mask) {
-        path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_GRAF, name_mask);
-        infMask.hBitmap = read_graphic(buf);
-        if (!infMask.hBitmap) {
-            plog_fmt("Cannot read bitmap file '%s'", buf);
-            return FALSE;
-        }
-    }
-
-    current_graphics_mode = arg_graphics;
-    return (current_graphics_mode != GRAPHICS_NONE);
 }
 
 /*
@@ -885,9 +786,10 @@ static errr term_xtra_win_react(player_type *player_ptr)
 {
     refresh_color_table();
 
-    if (arg_graphics && !init_graphics()) {
+    const byte old_graphics = arg_graphics;
+    arg_graphics = static_cast<byte>(graphic.change_graphics(static_cast<graphics_mode>(arg_graphics)));
+    if (old_graphics != arg_graphics) {
         plog(_("グラフィックスを初期化できません!", "Cannot initialize graphics!"));
-        arg_graphics = GRAPHICS_NONE;
     }
     use_graphics = (arg_graphics > 0);
     reset_visuals(player_ptr);
@@ -1269,6 +1171,8 @@ static errr term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
         return (term_wipe_win(x, y, n));
     }
 
+    const tile_info &infGraph = graphic.get_tile_info();
+    const bool has_mask = (infGraph.hBitmapMask != NULL);
     TERM_LEN w1 = infGraph.CellWidth;
     TERM_LEN h1 = infGraph.CellHeight;
     TERM_LEN tw1 = infGraph.TileWidth;
@@ -1286,9 +1190,9 @@ static errr term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
     HDC hdcSrc = CreateCompatibleDC(hdc);
     HBITMAP hbmSrcOld = static_cast<HBITMAP>(SelectObject(hdcSrc, infGraph.hBitmap));
 
-    if (arg_graphics == GRAPHICS_ADAM_BOLT || arg_graphics == GRAPHICS_HENGBAND) {
+    if (has_mask) {
         hdcMask = CreateCompatibleDC(hdc);
-        SelectObject(hdcMask, infMask.hBitmap);
+        SelectObject(hdcMask, infGraph.hBitmapMask);
     }
 
     for (i = 0; i < n; i++, x2 += w2) {
@@ -1299,7 +1203,7 @@ static errr term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
         TERM_LEN x1 = col * w1;
         TERM_LEN y1 = row * h1;
 
-        if (arg_graphics == GRAPHICS_ADAM_BOLT || arg_graphics == GRAPHICS_HENGBAND) {
+        if (has_mask) {
             TERM_LEN x3 = (tcp[i] & 0x7F) * w1;
             TERM_LEN y3 = (tap[i] & 0x7F) * h1;
             tw2 = tw2 * w1 / tw1;
@@ -1333,7 +1237,7 @@ static errr term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
 
     SelectObject(hdcSrc, hbmSrcOld);
     DeleteDC(hdcSrc);
-    if (arg_graphics == GRAPHICS_ADAM_BOLT || arg_graphics == GRAPHICS_HENGBAND) {
+    if (has_mask) {
         SelectObject(hdcMask, hbmSrcOld);
         DeleteDC(hdcMask);
     }
@@ -1577,10 +1481,10 @@ static void setup_menus(void)
     }
     CheckMenuItem(hm, IDM_WINDOW_KEEP_SUBWINDOWS, (keep_subwindows ? MF_CHECKED : MF_UNCHECKED));
 
-    CheckMenuItem(hm, IDM_OPTIONS_NO_GRAPHICS, (arg_graphics == GRAPHICS_NONE ? MF_CHECKED : MF_UNCHECKED));
-    CheckMenuItem(hm, IDM_OPTIONS_OLD_GRAPHICS, (arg_graphics == GRAPHICS_ORIGINAL ? MF_CHECKED : MF_UNCHECKED));
-    CheckMenuItem(hm, IDM_OPTIONS_NEW_GRAPHICS, (arg_graphics == GRAPHICS_ADAM_BOLT ? MF_CHECKED : MF_UNCHECKED));
-    CheckMenuItem(hm, IDM_OPTIONS_NEW2_GRAPHICS, (arg_graphics == GRAPHICS_HENGBAND ? MF_CHECKED : MF_UNCHECKED));
+    CheckMenuItem(hm, IDM_OPTIONS_NO_GRAPHICS, (arg_graphics == static_cast<byte>(graphics_mode::GRAPHICS_NONE) ? MF_CHECKED : MF_UNCHECKED));
+    CheckMenuItem(hm, IDM_OPTIONS_OLD_GRAPHICS, (arg_graphics == static_cast<byte>(graphics_mode::GRAPHICS_ORIGINAL) ? MF_CHECKED : MF_UNCHECKED));
+    CheckMenuItem(hm, IDM_OPTIONS_NEW_GRAPHICS, (arg_graphics == static_cast<byte>(graphics_mode::GRAPHICS_ADAM_BOLT) ? MF_CHECKED : MF_UNCHECKED));
+    CheckMenuItem(hm, IDM_OPTIONS_NEW2_GRAPHICS, (arg_graphics == static_cast<byte>(graphics_mode::GRAPHICS_HENGBAND) ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_BIGTILE, (arg_bigtile ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_MUSIC, (arg_music ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_MUSIC_PAUSE_INACTIVE, (use_pause_music_inactive ? MF_CHECKED : MF_UNCHECKED));
@@ -1882,16 +1786,16 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         break;
     }
     case IDM_OPTIONS_NO_GRAPHICS: {
-        if (arg_graphics != GRAPHICS_NONE) {
-            arg_graphics = GRAPHICS_NONE;
+        if (arg_graphics != static_cast<byte>(graphics_mode::GRAPHICS_NONE)) {
+            arg_graphics = static_cast<byte>(graphics_mode::GRAPHICS_NONE);
             if (game_in_progress)
                 do_cmd_redraw(player_ptr);
         }
         break;
     }
     case IDM_OPTIONS_OLD_GRAPHICS: {
-        if (arg_graphics != GRAPHICS_ORIGINAL) {
-            arg_graphics = GRAPHICS_ORIGINAL;
+        if (arg_graphics != static_cast<byte>(graphics_mode::GRAPHICS_ORIGINAL)) {
+            arg_graphics = static_cast<byte>(graphics_mode::GRAPHICS_ORIGINAL);
             if (game_in_progress)
                 do_cmd_redraw(player_ptr);
         }
@@ -1899,8 +1803,8 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         break;
     }
     case IDM_OPTIONS_NEW_GRAPHICS: {
-        if (arg_graphics != GRAPHICS_ADAM_BOLT) {
-            arg_graphics = GRAPHICS_ADAM_BOLT;
+        if (arg_graphics != static_cast<byte>(graphics_mode::GRAPHICS_ADAM_BOLT)) {
+            arg_graphics = static_cast<byte>(graphics_mode::GRAPHICS_ADAM_BOLT);
             if (game_in_progress)
                 do_cmd_redraw(player_ptr);
         }
@@ -1908,8 +1812,8 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         break;
     }
     case IDM_OPTIONS_NEW2_GRAPHICS: {
-        if (arg_graphics != GRAPHICS_HENGBAND) {
-            arg_graphics = GRAPHICS_HENGBAND;
+        if (arg_graphics != static_cast<byte>(graphics_mode::GRAPHICS_HENGBAND)) {
+            arg_graphics = static_cast<byte>(graphics_mode::GRAPHICS_HENGBAND);
             if (game_in_progress)
                 do_cmd_redraw(player_ptr);
         }
@@ -2588,12 +2492,9 @@ static void hook_quit(concptr str)
         data[i].w = 0;
     }
 
-    infGraph.delete_bitmap();
-    infMask.delete_bitmap();
-
     DeleteObject(hbrYellow);
     finalize_bg();
-    finalize_graphics();
+    graphic.finalize();
 
     UnregisterClass(AppName, hInstance);
     if (hIcon)
