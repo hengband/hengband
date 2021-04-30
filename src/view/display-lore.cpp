@@ -5,6 +5,7 @@
  */
 
 #include "view/display-lore.h"
+#include "game-option/cheat-options.h"
 #include "game-option/text-display-options.h"
 #include "lore/lore-calculator.h"
 #include "lore/lore-util.h"
@@ -59,6 +60,9 @@ void roff_top(MONRACE_IDX r_idx)
         term_addstr(-1, TERM_WHITE, "The ");
     }
 #endif
+
+    if (cheat_know)
+        term_addstr(-1, TERM_WHITE, format("[%d]", r_idx));
 
     term_addstr(-1, TERM_WHITE, (r_ptr->name.c_str()));
 
