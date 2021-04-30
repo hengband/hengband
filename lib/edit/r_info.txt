@@ -25763,7 +25763,7 @@ I:110:1d1:10:0:25
 W:2:1:0:35:0:0
 B:HIT:HURT:2d4
 F:UNIQUE | FORCE_MAXHP | DROP_CORPSE | MALE | DEMON
-F:DROP_3D2 | ONLY_GOLD | CAN_SPEAK | EVIL
+F:DROP_3D2 | ONLY_GOLD | CAN_SPEAK | EVIL | DROP_SKELETON
 D:$He is the weakest man among the big four,
 D:$ and is a mess of the demons.
 D:四天王の中で最弱の男であり、魔族の面汚しだ。
@@ -25796,3 +25796,85 @@ D:リンギル。それはノルドールの上級王フィンゴルフィンの
 D:氷の柱の如く輝いている。
 D:彼は生前は少佐で、あの剣の力をいつまでも探し続けている。
 D:彼はこの剣の力を再び思い知ることになるだろう。
+
+N:1300:ハーフオーガ
+E:Half-ogre
+G:O:G
+I:110:10d15:30:50:50
+W:25:2:0:200:0:0
+B:HIT:HURT:2d8
+B:HIT:HURT:2d8
+B:HIT:HURT:2d8
+B:HIT:HURT:2d8
+F:DROP_1D2
+F:OPEN_DOOR | BASH_DOOR | DROP_CORPSE | DROP_SKELETON
+F:EVIL | GIANT | HUMAN | RES_DARK
+R:238:3d5
+S:1_IN_8 | TRAPS
+D:$A short and thin ogre.
+D:$  It has intelligence to execute trap learnt from ogre mage,
+D:$ and directs soldiers
+D:背が低く痩せたオーガだ。
+D:オーガメイジの罠を実行するだけの知能があり、雑兵に指図する。
+
+N:1301:ハーフジャイアント
+E:Half-giant
+G:P:u
+I:110:80d18:30:60:50
+W:35:3:0:1500:0:0
+B:HIT:HURT:3d8
+B:HIT:HURT:3d8
+B:HIT:HURT:3d8
+B:HIT:HURT:3d8
+F:DROP_1D2
+F:OPEN_DOOR | BASH_DOOR | DROP_CORPSE | DROP_SKELETON
+F:EVIL | GIANT | HUMAN | RES_SHAR | KILL_WALL |
+D:$This majestic humanoid is hybrid of human and giant.
+D:$  Wall of dungeon pays respect to blood of one parent,
+D:$ incarnation of nature, and pave the way.
+D:この堂々たる体躯の人型生物は、人間と巨人の混血だ。
+D:自然の顕現である片親の血に敬意を払い、ダンジョンの壁が道を開ける。
+
+N:1302:ハーフタイタン
+E:Half-titan
+G:P:W
+I:120:100d50:30:110:255
+W:49:2:0:13500:0:0
+B:SHOOT:HURT:10d10
+B:HIT:HURT:10d10
+B:HIT:HURT:10d10
+B:HIT:HURT:10d10
+F:DROP_SKELETON | DROP_CORPSE
+F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | RES_CHAO
+F:SMART | TAKE_ITEM | OPEN_DOOR | BASH_DOOR
+F:GIANT | HUMAN | CAN_FLY | INVISIBLE | REFLECTING
+R:990:1d4
+S:1_IN_4 | SHOOT
+D:$This living body looks like heroic sculpture.
+D:$  Considering you an enemy to defeat,
+D:$ it has a polished shield and hides itself.
+D:それは彫刻のような素晴らしい勇壮な姿をしている。
+D:あなたを倒すべき敵とみなして、磨き抜かれた盾を持ち、姿を隠している。
+
+N:1303:ヨグ=ソトートの落とし子
+E:Spawn of Yog-Sothoth
+G:U:s
+I:112:40d15:20:75:120
+W:32:2:0:65:0:0
+B:CRUSH:HURT:4d8
+B:CRUSH:HURT:4d8
+B:CRUSH:HURT:4d8
+B:CRUSH:HURT:4d8
+F:INVISIBLE | BASH_DOOR | DROP_90 | EVIL | DEMON | ELDRITCH_HORROR | CAN_SPEAK
+R:318:1d1
+R:1008:1d1
+D:$It is raised while being hidden from human society by mortal
+D:$ and near-mortal relatives.
+D:$  It is usually invisible, but it looks like a twisted rope,
+D:$ full of tentacles and eyeballs, resembling an octopus, a centipede,
+D:$ or a spider, and also has appearance of a mortal pedigree.
+D:$  It is raised hidden from human society by mortal and near-mortal relatives.
+D:ヨグ=ソトートと定命のものの混血児だ。
+D:それは通常は目に見えないが、綱をよじり合わせたような、触手と目玉だらけの姿で、
+D:タコかムカデかクモに似ており、そこに定命のほうの血統が現れた外見をしている。
+D:これは定命の家族や定命の血が濃い兄弟に、人間社会から隠されながら育てられている。
