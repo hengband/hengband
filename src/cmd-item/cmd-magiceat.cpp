@@ -506,9 +506,9 @@ bool do_cmd_magic_eater(player_type *creature_ptr, bool only_browse, bool powerf
         return FALSE;
 
     auto item = select_magic_eater(creature_ptr, only_browse);
-    std::unique_ptr<PlayerEnergy> energy(new PlayerEnergy(creature_ptr));
+    PlayerEnergy energy(creature_ptr);
     if (item == -1) {
-        energy->reset_player_turn();
+        energy.reset_player_turn();
         return FALSE;
     }
     if (item >= EATER_EXT * 2) {
@@ -551,7 +551,7 @@ bool do_cmd_magic_eater(player_type *creature_ptr, bool only_browse, bool powerf
         sound(SOUND_FAIL);
         if (randint1(100) >= chance)
             chg_virtue(creature_ptr, V_CHANCE, -1);
-        energy->update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+        energy.update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
 
         return TRUE;
     } else {
@@ -577,7 +577,7 @@ bool do_cmd_magic_eater(player_type *creature_ptr, bool only_browse, bool powerf
             chg_virtue(creature_ptr, V_CHANCE, 1);
     }
 
-    energy->update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+    energy.update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
     if (tval == TV_ROD)
         creature_ptr->magic_num1[item] += k_info[k_idx].pval * EATER_ROD_CHARGE;
     else

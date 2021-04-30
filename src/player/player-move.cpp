@@ -217,18 +217,18 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
         window_stuff(creature_ptr);
     }
 
-    std::unique_ptr<PlayerEnergy> energy(new PlayerEnergy(creature_ptr));
+    PlayerEnergy energy(creature_ptr);
     if (has_flag(f_ptr->flags, FF_STORE)) {
         disturb(creature_ptr, FALSE, TRUE);
-        energy->reset_player_turn();
+        energy.reset_player_turn();
         command_new = SPECIAL_KEY_STORE;
     } else if (has_flag(f_ptr->flags, FF_BLDG)) {
         disturb(creature_ptr, FALSE, TRUE);
-        energy->reset_player_turn();
+        energy.reset_player_turn();
         command_new = SPECIAL_KEY_BUILDING;
     } else if (has_flag(f_ptr->flags, FF_QUEST_ENTER)) {
         disturb(creature_ptr, FALSE, TRUE);
-        energy->reset_player_turn();
+        energy.reset_player_turn();
         command_new = SPECIAL_KEY_QUEST;
     } else if (has_flag(f_ptr->flags, FF_QUEST_EXIT)) {
         if (quest[floor_ptr->inside_quest].type == QUEST_TYPE_FIND_EXIT)

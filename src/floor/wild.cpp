@@ -871,7 +871,7 @@ bool change_wild_mode(player_type *creature_ptr, bool encount)
     }
 
     bool has_pet = FALSE;
-    std::unique_ptr<PlayerEnergy> energy(new PlayerEnergy(creature_ptr));
+    PlayerEnergy energy(creature_ptr);
     for (int i = 1; i < creature_ptr->current_floor_ptr->m_max; i++) {
         monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr))
@@ -884,19 +884,19 @@ bool change_wild_mode(player_type *creature_ptr, bool encount)
             continue;
 
         msg_print(_("敵がすぐ近くにいるときは広域マップに入れない！", "You cannot enter global map, since there are some monsters nearby!"));
-        energy->reset_player_turn();
+        energy.reset_player_turn();
         return FALSE;
     }
 
     if (has_pet) {
         concptr msg = _("ペットを置いて広域マップに入りますか？", "Do you leave your pets behind? ");
         if (!get_check_strict(creature_ptr, msg, CHECK_OKAY_CANCEL)) {
-            energy->reset_player_turn();
+            energy.reset_player_turn();
             return FALSE;
         }
     }
 
-    energy->update_player_turn_energy(1000, update_turn_type::ENERGY_SUBSTITUTION);
+    energy.update_player_turn_energy(1000, update_turn_type::ENERGY_SUBSTITUTION);
     creature_ptr->oldpx = creature_ptr->x;
     creature_ptr->oldpy = creature_ptr->y;
     if (hex_spelling_any(creature_ptr))

@@ -305,18 +305,18 @@ void do_cmd_walk(player_type *creature_ptr, bool pickup)
     bool more = FALSE;
     DIRECTION dir;
     if (get_rep_dir(creature_ptr, &dir, FALSE)) {
-        std::unique_ptr<PlayerEnergy> energy(new PlayerEnergy(creature_ptr));
-        energy->update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+        PlayerEnergy energy(creature_ptr);
+        energy.update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
         if ((dir != 5) && (creature_ptr->special_defense & KATA_MUSOU))
             set_action(creature_ptr, ACTION_NONE);
 
         if (creature_ptr->wild_mode) {
-            energy->update_player_turn_energy((MAX_HGT + MAX_WID) / 2, update_turn_type::ENERGY_MULTIPLICATION);
+            energy.update_player_turn_energy((MAX_HGT + MAX_WID) / 2, update_turn_type::ENERGY_MULTIPLICATION);
         }
 
         if (creature_ptr->action == ACTION_HAYAGAKE) {
             auto energy_use = (ENERGY)(creature_ptr->energy_use * (45 - (creature_ptr->lev / 2)) / 100);
-            energy->update_player_turn_energy(energy_use, update_turn_type::ENERGY_SUBSTITUTION);
+            energy.update_player_turn_energy(energy_use, update_turn_type::ENERGY_SUBSTITUTION);
         }
 
         exe_movement(creature_ptr, dir, pickup, FALSE);

@@ -269,10 +269,10 @@ void calc_surprise_attack_damage(player_type *attacker_ptr, player_attack_type *
  */
 bool hayagake(player_type *creature_ptr)
 {
-    std::unique_ptr<PlayerEnergy> energy(new PlayerEnergy(creature_ptr));
+    PlayerEnergy energy(creature_ptr);
     if (creature_ptr->action == ACTION_HAYAGAKE) {
         set_action(creature_ptr, ACTION_NONE);
-        energy->reset_player_turn();
+        energy.reset_player_turn();
         return TRUE;
     }
 
@@ -285,7 +285,7 @@ bool hayagake(player_type *creature_ptr)
         set_action(creature_ptr, ACTION_HAYAGAKE);
     }
 
-    energy->reset_player_turn();
+    energy.reset_player_turn();
     return TRUE;
 }
 

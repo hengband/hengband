@@ -432,10 +432,10 @@ void do_cmd_racial_power(player_type *creature_ptr)
     if (creature_ptr->wild_mode)
         return;
 
-    std::unique_ptr<PlayerEnergy> energy(new PlayerEnergy(creature_ptr));
+    PlayerEnergy energy(creature_ptr);
     if (cmd_limit_confused(creature_ptr))
     {
-        energy->reset_player_turn();
+        energy.reset_player_turn();
         return;
     }
 
@@ -467,7 +467,7 @@ void do_cmd_racial_power(player_type *creature_ptr)
         racial_power_cast_power(creature_ptr, rc_ptr);
 
     if (!rc_ptr->cast) {
-        energy->reset_player_turn();
+        energy.reset_player_turn();
         return;
     }
 

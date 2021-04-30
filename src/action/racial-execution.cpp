@@ -107,25 +107,25 @@ racial_level_check_result check_racial_level(player_type *creature_ptr, rpi_type
         use_hp = rpi_ptr->racial_cost - creature_ptr->csp;
     }
     
-    std::unique_ptr<PlayerEnergy> energy(new PlayerEnergy(creature_ptr));
+    PlayerEnergy energy(creature_ptr);
     if (creature_ptr->lev < min_level) {
         msg_format(_("この能力を使用するにはレベル %d に達していなければなりません。", "You need to attain level %d to use this power."), min_level);
-        energy->reset_player_turn();
+        energy.reset_player_turn();
         return RACIAL_CANCEL;
     }
 
     if (cmd_limit_confused(creature_ptr)) {
-        energy->reset_player_turn();
+        energy.reset_player_turn();
         return RACIAL_CANCEL;
     } else if (creature_ptr->chp < use_hp) {
         if (!get_check(_("本当に今の衰弱した状態でこの能力を使いますか？", "Really use the power in your weakened state? "))) {
-            energy->reset_player_turn();
+            energy.reset_player_turn();
             return RACIAL_CANCEL;
         }
     }
 
     adjust_racial_power_difficulty(creature_ptr, rpi_ptr, &difficulty);
-    energy->update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+    energy.update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
     if (randint1(creature_ptr->stat_cur[use_stat]) >= ((difficulty / 2) + randint1(difficulty / 2)))
         return RACIAL_SUCCESS;
 

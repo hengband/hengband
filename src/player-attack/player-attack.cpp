@@ -447,7 +447,7 @@ static bool check_fear_death(player_type *attacker_ptr, player_attack_type *pa_p
 
     *(pa_ptr->mdeath) = TRUE;
     if ((attacker_ptr->pclass == CLASS_BERSERKER) && attacker_ptr->energy_use) {
-        std::unique_ptr<PlayerEnergy> energy(new PlayerEnergy(attacker_ptr));
+        PlayerEnergy energy(attacker_ptr);
         if (can_attack_with_main_hand(attacker_ptr) && can_attack_with_sub_hand(attacker_ptr)) {
             ENERGY energy_use;
             if (pa_ptr->hand) {
@@ -456,10 +456,10 @@ static bool check_fear_death(player_type *attacker_ptr, player_attack_type *pa_p
                 energy_use = attacker_ptr->energy_use * num * 3 / (attacker_ptr->num_blow[pa_ptr->hand] * 5);
             }
 
-            energy->update_player_turn_energy(energy_use, update_turn_type::ENERGY_SUBSTITUTION);
+            energy.update_player_turn_energy(energy_use, update_turn_type::ENERGY_SUBSTITUTION);
         } else {
             auto energy_use = (ENERGY)(attacker_ptr->energy_use * num / attacker_ptr->num_blow[pa_ptr->hand]);
-            energy->update_player_turn_energy(energy_use, update_turn_type::ENERGY_SUBSTITUTION);
+            energy.update_player_turn_energy(energy_use, update_turn_type::ENERGY_SUBSTITUTION);
         }
     }
 

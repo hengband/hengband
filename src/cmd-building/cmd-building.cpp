@@ -308,8 +308,8 @@ void do_cmd_building(player_type *player_ptr)
     if (player_ptr->wild_mode)
         return;
 
-    std::unique_ptr<PlayerEnergy> energy(new PlayerEnergy(player_ptr));
-    energy->update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+    PlayerEnergy energy(player_ptr);
+    energy.update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
 
     if (!cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, FF_BLDG)) {
         msg_print(_("ここには建物はない。", "You see no building here."));
@@ -334,7 +334,7 @@ void do_cmd_building(player_type *player_ptr)
             player_ptr->current_floor_ptr->inside_arena = FALSE;
             player_ptr->leaving = TRUE;
             command_new = SPECIAL_KEY_BUILDING;
-            energy->reset_player_turn();
+            energy.reset_player_turn();
         }
 
         return;
@@ -343,7 +343,7 @@ void do_cmd_building(player_type *player_ptr)
         player_ptr->leaving = TRUE;
         player_ptr->phase_out = FALSE;
         command_new = SPECIAL_KEY_BUILDING;
-        energy->reset_player_turn();
+        energy.reset_player_turn();
         return;
     } else {
         player_ptr->oldpy = player_ptr->y;

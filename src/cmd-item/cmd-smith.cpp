@@ -904,11 +904,11 @@ static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
             o_ptr->to_d += get_to_d;
         }
         creature_ptr->magic_num1[es_ptr->essence] -= use_essence;
-        std::unique_ptr<PlayerEnergy> energy(new PlayerEnergy(creature_ptr));
+        PlayerEnergy energy(creature_ptr);
         if (es_ptr->add == ESSENCE_ATTACK) {
             if ((o_ptr->to_h >= creature_ptr->lev / 5 + 5) && (o_ptr->to_d >= creature_ptr->lev / 5 + 5)) {
                 msg_print(_("改良に失敗した。", "You failed to enchant."));
-                energy->update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+                energy.update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
                 return;
             } else {
                 if (o_ptr->to_h < creature_ptr->lev / 5 + 5)
@@ -919,7 +919,7 @@ static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
         } else if (es_ptr->add == ESSENCE_AC) {
             if (o_ptr->to_a >= creature_ptr->lev / 5 + 5) {
                 msg_print(_("改良に失敗した。", "You failed to enchant."));
-                energy->update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+                energy.update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
                 return;
             } else {
                 if (o_ptr->to_a < creature_ptr->lev / 5 + 5)

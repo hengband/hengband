@@ -265,14 +265,14 @@ void process_player(player_type *creature_ptr)
         if (!command_new)
             command_see = FALSE;
 
-        std::unique_ptr<PlayerEnergy> energy(new PlayerEnergy(creature_ptr));
-        energy->reset_player_turn();
+        PlayerEnergy energy(creature_ptr);
+        energy.reset_player_turn();
         if (creature_ptr->phase_out) {
             move_cursor_relative(creature_ptr->y, creature_ptr->x);
             command_cmd = SPECIAL_KEY_BUILDING;
             process_command(creature_ptr);
         } else if ((creature_ptr->paralyzed || creature_ptr->stun >= 100) && !cheat_immortal) {
-            energy->update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+            energy.update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
         } else if (creature_ptr->action == ACTION_REST) {
             if (creature_ptr->resting > 0) {
                 creature_ptr->resting--;
@@ -281,9 +281,9 @@ void process_player(player_type *creature_ptr)
                 creature_ptr->redraw |= (PR_STATE);
             }
 
-            energy->update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+            energy.update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
         } else if (creature_ptr->action == ACTION_FISH) {
-            energy->update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+            energy.update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
         } else if (creature_ptr->running) {
             run_step(creature_ptr, 0);
         } else if (travel.run) {

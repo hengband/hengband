@@ -314,7 +314,7 @@ void do_cmd_takeoff(player_type *creature_ptr)
     if (!o_ptr)
         return;
 
-    std::unique_ptr<PlayerEnergy> energy(new PlayerEnergy(creature_ptr));
+    PlayerEnergy energy(creature_ptr);
     if (object_is_cursed(o_ptr))
     {
         if ((o_ptr->curse_flags & TRC_PERMA_CURSE) || (creature_ptr->pclass != CLASS_BERSERKER)) {
@@ -332,12 +332,12 @@ void do_cmd_takeoff(player_type *creature_ptr)
             msg_print(_("呪いを打ち破った。", "You break the curse."));
         } else {
             msg_print(_("装備を外せなかった。", "You couldn't remove the equipment."));
-            energy->update_player_turn_energy(50, update_turn_type::ENERGY_SUBSTITUTION);
+            energy.update_player_turn_energy(50, update_turn_type::ENERGY_SUBSTITUTION);
             return;
         }
     }
 
-    energy->update_player_turn_energy(50, update_turn_type::ENERGY_SUBSTITUTION);
+    energy.update_player_turn_energy(50, update_turn_type::ENERGY_SUBSTITUTION);
     (void)inven_takeoff(creature_ptr, item, 255);
     verify_equip_slot(creature_ptr, item);
     calc_android_exp(creature_ptr);
