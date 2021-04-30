@@ -749,48 +749,56 @@ void AccessoryEnchanter::give_amulet_ego_index()
         case 18:
         case 19:
         case 20:
-            switch (this->o_ptr->sval) {
-            case SV_AMULET_TELEPORT:
-                if (m_bonus(10, this->level) > 9)
-                    this->o_ptr->name2 = EGO_AMU_D_DOOR;
-                else if (one_in_(2))
-                    this->o_ptr->name2 = EGO_AMU_JUMP;
-                else
-                    this->o_ptr->name2 = EGO_AMU_TELEPORT;
-                break;
-            case SV_AMULET_RESIST_ACID:
-                if ((m_bonus(10, this->level) > 6) && one_in_(2))
-                    this->o_ptr->name2 = EGO_AMU_RES_ACID_;
-                break;
-            case SV_AMULET_SEARCHING:
-                this->o_ptr->name2 = EGO_AMU_STEALTH;
-                break;
-            case SV_AMULET_BRILLIANCE:
-                if (!one_in_(3))
-                    break;
-                this->o_ptr->name2 = EGO_AMU_IDENT;
-                break;
-            case SV_AMULET_CHARISMA:
-                if (!one_in_(3))
-                    break;
-                this->o_ptr->name2 = EGO_AMU_CHARM;
-                break;
-            case SV_AMULET_THE_MAGI:
-                if (one_in_(2))
-                    break;
-                this->o_ptr->name2 = EGO_AMU_GREAT;
-                break;
-            case SV_AMULET_RESISTANCE:
-                if (!one_in_(5))
-                    break;
-                this->o_ptr->name2 = EGO_AMU_DEFENDER;
-                break;
-            case SV_AMULET_TELEPATHY:
-                if (!one_in_(3))
-                    break;
-                this->o_ptr->name2 = EGO_AMU_DETECTION;
-                break;
-            }
+            give_amulet_high_ego_index();
+            break;
         }
+    }
+}
+
+void AccessoryEnchanter::give_amulet_high_ego_index()
+{
+    switch (this->o_ptr->sval) {
+    case SV_AMULET_TELEPORT:
+        if (m_bonus(10, this->level) > 9)
+            this->o_ptr->name2 = EGO_AMU_D_DOOR;
+        else if (one_in_(2))
+            this->o_ptr->name2 = EGO_AMU_JUMP;
+        else
+            this->o_ptr->name2 = EGO_AMU_TELEPORT;
+        break;
+    case SV_AMULET_RESIST_ACID:
+        if ((m_bonus(10, this->level) > 6) && one_in_(2))
+            this->o_ptr->name2 = EGO_AMU_RES_ACID_;
+        break;
+    case SV_AMULET_SEARCHING:
+        this->o_ptr->name2 = EGO_AMU_STEALTH;
+        break;
+    case SV_AMULET_BRILLIANCE:
+        if (!one_in_(3))
+            break;
+        this->o_ptr->name2 = EGO_AMU_IDENT;
+        break;
+    case SV_AMULET_CHARISMA:
+        if (!one_in_(3))
+            break;
+        this->o_ptr->name2 = EGO_AMU_CHARM;
+        break;
+    case SV_AMULET_THE_MAGI:
+        if (one_in_(2))
+            break;
+        this->o_ptr->name2 = EGO_AMU_GREAT;
+        break;
+    case SV_AMULET_RESISTANCE:
+        if (!one_in_(5))
+            break;
+        this->o_ptr->name2 = EGO_AMU_DEFENDER;
+        break;
+    case SV_AMULET_TELEPATHY:
+        if (!one_in_(3))
+            break;
+        this->o_ptr->name2 = EGO_AMU_DETECTION;
+        break;
+    default:
+        break;
     }
 }
