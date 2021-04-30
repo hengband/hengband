@@ -28,6 +28,7 @@
 #include "monster/monster-info.h"
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
+#include "object-hook/hook-checker.h"
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
 #include "spell/spell-types.h"
@@ -327,35 +328,89 @@ static void on_dead_big_raven(player_type *player_ptr, monster_death_type *md_pt
     msg_format(_("%sはお星さまになった！", "%^s became a constellation!"), m_name);
 }
 
+/*
+ * @brief 装備品の生成を試みる
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param q_ptr 生成中アイテムへの参照ポインタ
+ * @param drop_mode ドロップ品の質
+ * @param is_object_hook_null アイテム種別が何でもありならtrue、指定されていればfalse
+ * @return 生成したアイテムが装備品ならtrue、それ以外ならfalse
+ * @todo 汎用的に使えそうだがどこかにいいファイルはないか？
+ */
+static bool make_equipment(player_type *player_ptr, object_type *q_ptr, const BIT_FLAGS drop_mode, const bool is_object_hook_null)
+{
+    object_wipe(q_ptr);
+    (void)make_object(player_ptr, q_ptr, drop_mode);
+    if (!is_object_hook_null) {
+        return true;
+    }
+
+    auto tval = q_ptr->tval;
+    switch (tval) {
+    case TV_BOW:
+    case TV_DIGGING:
+    case TV_HAFTED:
+    case TV_POLEARM:
+    case TV_SWORD:
+    case TV_BOOTS:
+    case TV_GLOVES:
+    case TV_HELM:
+    case TV_CROWN:
+    case TV_SHIELD:
+    case TV_CLOAK:
+    case TV_SOFT_ARMOR:
+    case TV_HARD_ARMOR:
+    case TV_DRAG_ARMOR:
+    case TV_LITE:
+    case TV_AMULET:
+    case TV_RING:
+        return true;
+    default:
+        return false;
+    }
+}
+
+/*
+ * @brief 死亡時ドロップとしてランダムアーティファクトのみを生成する
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param md_ptr モンスター撃破構造体への参照ポインタ
+ * @param object_hook_pf アイテム種別指定、特になければNULLで良い
+ * @return なし
+ * @details
+ * 最初のアイテム生成でいきなり☆が生成された場合を除き、中途半端な☆ (例：呪われている)は生成しない.
+ * このルーチンで★は生成されないので、★生成フラグのキャンセルも不要
+ */
 static void on_dead_random_artifact(player_type *player_ptr, monster_death_type *md_ptr, bool (*object_hook_pf)(KIND_OBJECT_IDX k_idx))
 {
     object_type forge;
     object_type *q_ptr = &forge;
-    object_wipe(q_ptr);
+    auto is_object_hook_null = object_hook_pf == NULL;
+    auto drop_mode = md_ptr->mo_mode | AM_NO_FIXED_ART;
     while (true) {
         // make_object() の中でアイテム種別をキャンセルしている
-        // よってループの中に入れないと杖等が選ばれ、☆になる
+        // よってこのwhileループ中へ入れないと、引数で指定していない種別のアイテムが選ばれる可能性がある
         get_obj_num_hook = object_hook_pf;
-        (void)make_object(player_ptr, q_ptr, md_ptr->mo_mode | AM_NO_FIXED_ART);
+        if (!make_equipment(player_ptr, q_ptr, drop_mode, is_object_hook_null)) {
+            continue;
+        }
+
         if (q_ptr->art_name > 0) {
             break;
         }
 
-        if ((q_ptr->name1 > 0) && q_ptr->name2 > 0) {
-            object_wipe(q_ptr);
+        if ((q_ptr->name1 != 0) && q_ptr->name2 != 0) {
             continue;
         }
 
         (void)become_random_artifact(player_ptr, q_ptr, false);
-        auto is_good_amulet = q_ptr->to_h > 0;
-        is_good_amulet &= q_ptr->to_d > 0;
-        is_good_amulet &= q_ptr->to_a > 0;
-        is_good_amulet &= q_ptr->pval > 0;
-        if (is_good_amulet) {
+        auto is_good_random_art = !object_is_cursed(q_ptr);
+        is_good_random_art &= q_ptr->to_h > 0;
+        is_good_random_art &= q_ptr->to_d > 0;
+        is_good_random_art &= q_ptr->to_a > 0;
+        is_good_random_art &= q_ptr->pval > 0;
+        if (is_good_random_art) {
             break;
         }
-
-        object_wipe(q_ptr);
     }
 
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
@@ -496,13 +551,13 @@ void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr)
     case MON_YENDOR_WIZARD_1:
     case MON_YENDOR_WIZARD_2:
         on_dead_random_artifact(player_ptr, md_ptr, kind_is_amulet);
-        break;
+        return;
     case MON_MANIMANI:
         on_dead_manimani(player_ptr, md_ptr);
-        break;
+        return;
     case MON_LOSTRINGIL:
         on_dead_random_artifact(player_ptr, md_ptr, kind_is_sword);
-        break;
+        return;
     default:
         on_dead_mimics(player_ptr, md_ptr);
         return;
