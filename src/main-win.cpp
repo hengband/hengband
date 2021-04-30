@@ -2440,32 +2440,6 @@ LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 /*
  * Display warning message (see "z-util.c")
  */
-static void hack_plog(concptr str)
-{
-    if (str) {
-        MessageBoxW(NULL, to_wchar(str).wc_str(), _(L"警告！", L"Warning"), MB_ICONEXCLAMATION | MB_OK);
-    }
-}
-
-/*
- * Display error message and quit (see "z-util.c")
- */
-static void hack_quit(concptr str)
-{
-    if (str) {
-        MessageBoxW(NULL, to_wchar(str).wc_str(), _(L"エラー！", L"Error"), MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
-    }
-
-    UnregisterClass(AppName, hInstance);
-    if (hIcon)
-        DestroyIcon(hIcon);
-
-    exit(0);
-}
-
-/*
- * Display warning message (see "z-util.c")
- */
 static void hook_plog(concptr str)
 {
     if (str) {
@@ -2508,13 +2482,12 @@ static void hook_quit(concptr str)
  */
 static void init_stuff(void)
 {
-    char path[1024];
-    GetModuleFileName(hInstance, path, 512);
-    argv0 = path;
-    strcpy(path + strlen(path) - 4, ".INI");
+    char path[MAIN_WIN_MAX_PATH];
+    DWORD path_len = GetModuleFileName(hInstance, path, MAIN_WIN_MAX_PATH);
+    strcpy(path + path_len - 4, ".INI");
     ini_file = string_make(path);
-    int i = strlen(path);
 
+    int i = path_len;
     for (; i > 0; i--) {
         if (path[i] == '\\') {
             break;
@@ -2554,6 +2527,34 @@ static void init_stuff(void)
     path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "music");
     ANGBAND_DIR_XTRA_MUSIC = string_make(path);
     validate_dir(ANGBAND_DIR_XTRA_MUSIC, FALSE);
+
+    for (i = 0; special_key_list[i]; ++i) {
+        special_key[special_key_list[i]] = TRUE;
+    }
+
+    for (i = 0; ignore_key_list[i]; ++i) {
+        ignore_key[ignore_key_list[i]] = TRUE;
+    }
+
+    ANGBAND_SYS = "win";
+    if (7 != GetKeyboardType(0))
+        ANGBAND_KEYBOARD = "0";
+    else {
+        switch (GetKeyboardType(1)) {
+        case 0x0D01:
+        case 0x0D02:
+        case 0x0D03:
+        case 0x0D04:
+        case 0x0D05:
+        case 0x0D06:
+            /* NEC PC-98x1 */
+            ANGBAND_KEYBOARD = "NEC98";
+            break;
+        default:
+            /* PC/AT */
+            ANGBAND_KEYBOARD = "JAPAN";
+        }
+    }
 }
 
 /*!
@@ -2580,9 +2581,58 @@ static spoiler_output_status create_debug_spoiler(LPSTR cmd_line)
 }
 
 /*!
+ * @brief コマンドラインオプション処理
+ * @param lpCmdLine コマンドライン文字列(WinMainの第3引数)
+ */
+static void handle_commandline(LPSTR lpCmdLine)
+{
+    switch (create_debug_spoiler(lpCmdLine)) {
+    case SPOILER_OUTPUT_SUCCESS:
+        fprintf(stdout, "Successfully created a spoiler file.");
+        quit(NULL);
+    case SPOILER_OUTPUT_FAIL_FOPEN:
+        fprintf(stderr, "Cannot create spoiler file.");
+        quit(NULL);
+    case SPOILER_OUTPUT_FAIL_FCLOSE:
+        fprintf(stderr, "Cannot close spoiler file.");
+        quit(NULL);
+    default:
+        break;
+    }
+}
+
+/*!
+ * @brief メインウインドウ、サブウインドウのウインドウクラス登録
+ */
+static void register_wndclass(void)
+{
+    WNDCLASS wc{};
+    wc.style = CS_CLASSDC;
+    wc.lpfnWndProc = AngbandWndProc;
+    wc.cbClsExtra = 0;
+    wc.cbWndExtra = 4;
+    wc.hInstance = hInstance;
+    wc.hIcon = hIcon = LoadIcon(hInstance, AppName);
+    wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wc.hbrBackground = NULL;
+    wc.lpszMenuName = AppName;
+    wc.lpszClassName = AppName;
+
+    if (!RegisterClass(&wc))
+        exit(1);
+
+    wc.lpfnWndProc = AngbandListProc;
+    wc.lpszMenuName = NULL;
+    wc.lpszClassName = AngList;
+
+    if (!RegisterClass(&wc))
+        exit(2);
+}
+
+/*!
  * @brief (Windows固有)Windowsアプリケーションとしてのエントリポイント
  */
-int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPSTR lpCmdLine, [[maybe_unused]] _In_ int nCmdShow)
+int WINAPI WinMain(_In_ HINSTANCE hInst, [[maybe_unused]] _In_opt_ HINSTANCE hPrevInst, _In_ LPSTR lpCmdLine, [[maybe_unused]] _In_ int nCmdShow)
 {
     setlocale(LC_ALL, "ja_JP");
     hInstance = hInst;
@@ -2592,59 +2642,28 @@ int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPST
         return FALSE;
     }
 
-    switch (create_debug_spoiler(lpCmdLine)) {
-    case SPOILER_OUTPUT_SUCCESS:
-        fprintf(stdout, "Successfully created a spoiler file.");
-        quit(NULL);
-        return 0;
-    case SPOILER_OUTPUT_FAIL_FOPEN:
-        fprintf(stderr, "Cannot create spoiler file.");
-        quit(NULL);
-        return 0;
-    case SPOILER_OUTPUT_FAIL_FCLOSE:
-        fprintf(stderr, "Cannot close spoiler file.");
-        quit(NULL);
-        return 0;
-    default:
-        break;
-    }
+    handle_commandline(lpCmdLine);
+    register_wndclass();
 
-    if (hPrevInst == NULL) {
-        WNDCLASS wc;
-        wc.style = CS_CLASSDC;
-        wc.lpfnWndProc = AngbandWndProc;
-        wc.cbClsExtra = 0;
-        wc.cbWndExtra = 4;
-        wc.hInstance = hInst;
-        wc.hIcon = hIcon = LoadIcon(hInst, AppName);
-        wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-        wc.hbrBackground = NULL;
-        wc.lpszMenuName = AppName;
-        wc.lpszClassName = AppName;
+    // before term_data initialize
+    plog_aux = [](concptr str) {
+        if (str)
+            MessageBoxW(NULL, to_wchar(str).wc_str(), _(L"警告！", L"Warning"), MB_ICONEXCLAMATION | MB_OK);
+    };
+    quit_aux = [](concptr str) {
+        if (str) {
+            MessageBoxW(NULL, to_wchar(str).wc_str(), _(L"エラー！", L"Error"), MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
+        }
 
-        if (!RegisterClass(&wc))
-            exit(1);
+        UnregisterClass(AppName, hInstance);
+        if (hIcon)
+            DestroyIcon(hIcon);
 
-        wc.lpfnWndProc = AngbandListProc;
-        wc.lpszMenuName = NULL;
-        wc.lpszClassName = AngList;
-
-        if (!RegisterClass(&wc))
-            exit(2);
-    }
-
-    plog_aux = hack_plog;
-    quit_aux = hack_quit;
-    core_aux = hack_quit;
+        exit(0);
+    };
+    core_aux = quit_aux;
 
     init_stuff();
-    for (int i = 0; special_key_list[i]; ++i) {
-        special_key[special_key_list[i]] = TRUE;
-    }
-
-    for (int i = 0; ignore_key_list[i]; ++i) {
-        ignore_key[ignore_key_list[i]] = TRUE;
-    }
 
     HDC hdc = GetDC(NULL);
     if (GetDeviceCaps(hdc, BITSPIXEL) <= 8) {
@@ -2656,29 +2675,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPST
     init_windows();
     change_bg_mode(current_bg_mode, true);
 
+    // after term_data initialize
     plog_aux = hook_plog;
     quit_aux = hook_quit;
     core_aux = hook_quit;
-
-    ANGBAND_SYS = "win";
-    if (7 != GetKeyboardType(0))
-        ANGBAND_KEYBOARD = "0";
-    else {
-        switch (GetKeyboardType(1)) {
-        case 0x0D01:
-        case 0x0D02:
-        case 0x0D03:
-        case 0x0D04:
-        case 0x0D05:
-        case 0x0D06:
-            /* NEC PC-98x1 */
-            ANGBAND_KEYBOARD = "NEC98";
-            break;
-        default:
-            /* PC/AT */
-            ANGBAND_KEYBOARD = "JAPAN";
-        }
-    }
 
     signals_init();
     term_activate(term_screen);
