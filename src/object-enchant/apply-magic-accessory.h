@@ -15,4 +15,5 @@ private:
     object_type *o_ptr;
     DEPTH level;
     int power;
+    void enahcnt_ring();
 };

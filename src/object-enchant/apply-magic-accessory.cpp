@@ -42,166 +42,7 @@ void AccessoryEnchanter::apply_magic_accessary()
 {
     switch (this->o_ptr->tval) {
     case TV_RING: {
-        switch (this->o_ptr->sval) {
-        case SV_RING_ATTACKS: {
-            this->o_ptr->pval = (PARAMETER_VALUE)m_bonus(2, this->level);
-            if (one_in_(15))
-                this->o_ptr->pval++;
-            if (this->o_ptr->pval < 1)
-                this->o_ptr->pval = 1;
-
-            if (this->power < 0) {
-                this->o_ptr->ident |= (IDENT_BROKEN);
-                this->o_ptr->curse_flags |= TRC_CURSED;
-                this->o_ptr->pval = 0 - (this->o_ptr->pval);
-            }
-
-            break;
-        }
-        case SV_RING_SHOTS: {
-            break;
-        }
-        case SV_RING_STR:
-        case SV_RING_CON:
-        case SV_RING_DEX: {
-            this->o_ptr->pval = 1 + (PARAMETER_VALUE)m_bonus(5, this->level);
-            if (this->power < 0) {
-                this->o_ptr->ident |= (IDENT_BROKEN);
-                this->o_ptr->curse_flags |= TRC_CURSED;
-                this->o_ptr->pval = 0 - (this->o_ptr->pval);
-            }
-
-            break;
-        }
-        case SV_RING_SPEED: {
-            this->o_ptr->pval = randint1(5) + (PARAMETER_VALUE)m_bonus(5, this->level);
-            while (randint0(100) < 50)
-                this->o_ptr->pval++;
-
-            if (this->power < 0) {
-                this->o_ptr->ident |= (IDENT_BROKEN);
-                this->o_ptr->curse_flags |= TRC_CURSED;
-                this->o_ptr->pval = 0 - (this->o_ptr->pval);
-                break;
-            }
-
-            break;
-        }
-        case SV_RING_LORDLY: {
-            do {
-                one_lordly_high_resistance(this->o_ptr);
-            } while (one_in_(4));
-
-            this->o_ptr->to_a = 10 + randint1(5) + (ARMOUR_CLASS)m_bonus(10, this->level);
-            break;
-        }
-        case SV_RING_WARNING: {
-            if (one_in_(3))
-                one_low_esp(this->o_ptr);
-            break;
-        }
-        case SV_RING_SEARCHING: {
-            this->o_ptr->pval = 1 + (PARAMETER_VALUE)m_bonus(5, this->level);
-            if (this->power < 0) {
-                this->o_ptr->ident |= (IDENT_BROKEN);
-                this->o_ptr->curse_flags |= TRC_CURSED;
-                this->o_ptr->pval = 0 - (this->o_ptr->pval);
-            }
-
-            break;
-        }
-        case SV_RING_FLAMES:
-        case SV_RING_ACID:
-        case SV_RING_ICE:
-        case SV_RING_ELEC: {
-            this->o_ptr->to_a = 5 + randint1(5) + (ARMOUR_CLASS)m_bonus(10, this->level);
-            break;
-        }
-        case SV_RING_WEAKNESS:
-        case SV_RING_STUPIDITY: {
-            this->o_ptr->ident |= (IDENT_BROKEN);
-            this->o_ptr->curse_flags |= TRC_CURSED;
-            this->o_ptr->pval = 0 - (1 + (PARAMETER_VALUE)m_bonus(5, this->level));
-            if (this->power > 0)
-                this->power = 0 - this->power;
-
-            break;
-        }
-        case SV_RING_WOE: {
-            this->o_ptr->ident |= (IDENT_BROKEN);
-            this->o_ptr->curse_flags |= TRC_CURSED;
-            this->o_ptr->to_a = 0 - (5 + (ARMOUR_CLASS)m_bonus(10, this->level));
-            this->o_ptr->pval = 0 - (1 + (PARAMETER_VALUE)m_bonus(5, this->level));
-            if (this->power > 0)
-                this->power = 0 - this->power;
-
-            break;
-        }
-        case SV_RING_DAMAGE: {
-            this->o_ptr->to_d = 1 + randint1(5) + (HIT_POINT)m_bonus(16, this->level);
-            if (this->power < 0) {
-                this->o_ptr->ident |= (IDENT_BROKEN);
-                this->o_ptr->curse_flags |= TRC_CURSED;
-                this->o_ptr->to_d = 0 - this->o_ptr->to_d;
-            }
-
-            break;
-        }
-        case SV_RING_ACCURACY: {
-            this->o_ptr->to_h = 1 + randint1(5) + (HIT_PROB)m_bonus(16, this->level);
-            if (this->power < 0) {
-                this->o_ptr->ident |= (IDENT_BROKEN);
-                this->o_ptr->curse_flags |= TRC_CURSED;
-                this->o_ptr->to_h = 0 - this->o_ptr->to_h;
-            }
-
-            break;
-        }
-        case SV_RING_PROTECTION: {
-            this->o_ptr->to_a = 5 + randint1(8) + (ARMOUR_CLASS)m_bonus(10, this->level);
-            if (this->power < 0) {
-                this->o_ptr->ident |= (IDENT_BROKEN);
-                this->o_ptr->curse_flags |= TRC_CURSED;
-                this->o_ptr->to_a = 0 - this->o_ptr->to_a;
-            }
-
-            break;
-        }
-        case SV_RING_SLAYING: {
-            this->o_ptr->to_d = randint1(5) + (HIT_POINT)m_bonus(12, this->level);
-            this->o_ptr->to_h = randint1(5) + (HIT_PROB)m_bonus(12, this->level);
-
-            if (this->power < 0) {
-                this->o_ptr->ident |= (IDENT_BROKEN);
-                this->o_ptr->curse_flags |= TRC_CURSED;
-                this->o_ptr->to_h = 0 - this->o_ptr->to_h;
-                this->o_ptr->to_d = 0 - this->o_ptr->to_d;
-            }
-
-            break;
-        }
-        case SV_RING_MUSCLE: {
-            this->o_ptr->pval = 1 + (PARAMETER_VALUE)m_bonus(3, this->level);
-            if (one_in_(4))
-                this->o_ptr->pval++;
-
-            if (this->power < 0) {
-                this->o_ptr->ident |= (IDENT_BROKEN);
-                this->o_ptr->curse_flags |= TRC_CURSED;
-                this->o_ptr->pval = 0 - this->o_ptr->pval;
-            }
-
-            break;
-        }
-        case SV_RING_AGGRAVATION: {
-            this->o_ptr->ident |= (IDENT_BROKEN);
-            this->o_ptr->curse_flags |= TRC_CURSED;
-            if (this->power > 0)
-                this->power = 0 - this->power;
-            break;
-        }
-        }
-
+        enahcnt_ring();
         /* this->power > 2 is debug only */
         if ((one_in_(400) && (this->power > 0) && !object_is_cursed(this->o_ptr) && (this->level > 79)) || (this->power > 2)) {
             this->o_ptr->pval = MIN(this->o_ptr->pval, 4);
@@ -693,6 +534,166 @@ void AccessoryEnchanter::apply_magic_accessary()
         break;
     }
 
+    default:
+        break;
+    }
+}
+
+void AccessoryEnchanter::enahcnt_ring()
+{
+    switch (this->o_ptr->sval) {
+    case SV_RING_ATTACKS:
+        this->o_ptr->pval = (PARAMETER_VALUE)m_bonus(2, this->level);
+        if (one_in_(15)) {
+            this->o_ptr->pval++;
+        }
+
+        if (this->o_ptr->pval < 1) {
+            this->o_ptr->pval = 1;
+        }
+
+        if (this->power < 0) {
+            this->o_ptr->ident |= (IDENT_BROKEN);
+            this->o_ptr->curse_flags |= TRC_CURSED;
+            this->o_ptr->pval = 0 - (this->o_ptr->pval);
+        }
+
+        break;
+    case SV_RING_SHOTS:
+        break;
+    case SV_RING_STR:
+    case SV_RING_CON:
+    case SV_RING_DEX:
+        this->o_ptr->pval = 1 + (PARAMETER_VALUE)m_bonus(5, this->level);
+        if (this->power < 0) {
+            this->o_ptr->ident |= (IDENT_BROKEN);
+            this->o_ptr->curse_flags |= TRC_CURSED;
+            this->o_ptr->pval = 0 - (this->o_ptr->pval);
+        }
+
+        break;
+    case SV_RING_SPEED:
+        this->o_ptr->pval = randint1(5) + (PARAMETER_VALUE)m_bonus(5, this->level);
+        while (randint0(100) < 50) {
+            this->o_ptr->pval++;
+        }
+
+        if (this->power < 0) {
+            this->o_ptr->ident |= (IDENT_BROKEN);
+            this->o_ptr->curse_flags |= TRC_CURSED;
+            this->o_ptr->pval = 0 - (this->o_ptr->pval);
+            break;
+        }
+
+        break;
+    case SV_RING_LORDLY:
+        do {
+            one_lordly_high_resistance(this->o_ptr);
+        } while (one_in_(4));
+
+        this->o_ptr->to_a = 10 + randint1(5) + (ARMOUR_CLASS)m_bonus(10, this->level);
+        break;
+    case SV_RING_WARNING:
+        if (one_in_(3)) {
+            one_low_esp(this->o_ptr);
+        }
+
+        break;
+    case SV_RING_SEARCHING:
+        this->o_ptr->pval = 1 + (PARAMETER_VALUE)m_bonus(5, this->level);
+        if (this->power < 0) {
+            this->o_ptr->ident |= (IDENT_BROKEN);
+            this->o_ptr->curse_flags |= TRC_CURSED;
+            this->o_ptr->pval = 0 - (this->o_ptr->pval);
+        }
+
+        break;
+    case SV_RING_FLAMES:
+    case SV_RING_ACID:
+    case SV_RING_ICE:
+    case SV_RING_ELEC:
+        this->o_ptr->to_a = 5 + randint1(5) + (ARMOUR_CLASS)m_bonus(10, this->level);
+        break;
+    case SV_RING_WEAKNESS:
+    case SV_RING_STUPIDITY:
+        this->o_ptr->ident |= (IDENT_BROKEN);
+        this->o_ptr->curse_flags |= TRC_CURSED;
+        this->o_ptr->pval = 0 - (1 + (PARAMETER_VALUE)m_bonus(5, this->level));
+        if (this->power > 0) {
+            this->power = 0 - this->power;
+        }
+
+        break;
+    case SV_RING_WOE:
+        this->o_ptr->ident |= (IDENT_BROKEN);
+        this->o_ptr->curse_flags |= TRC_CURSED;
+        this->o_ptr->to_a = 0 - (5 + (ARMOUR_CLASS)m_bonus(10, this->level));
+        this->o_ptr->pval = 0 - (1 + (PARAMETER_VALUE)m_bonus(5, this->level));
+        if (this->power > 0) {
+            this->power = 0 - this->power;
+        }
+
+        break;
+    case SV_RING_DAMAGE:
+        this->o_ptr->to_d = 1 + randint1(5) + (HIT_POINT)m_bonus(16, this->level);
+        if (this->power < 0) {
+            this->o_ptr->ident |= (IDENT_BROKEN);
+            this->o_ptr->curse_flags |= TRC_CURSED;
+            this->o_ptr->to_d = 0 - this->o_ptr->to_d;
+        }
+
+        break;
+    case SV_RING_ACCURACY:
+        this->o_ptr->to_h = 1 + randint1(5) + (HIT_PROB)m_bonus(16, this->level);
+        if (this->power < 0) {
+            this->o_ptr->ident |= (IDENT_BROKEN);
+            this->o_ptr->curse_flags |= TRC_CURSED;
+            this->o_ptr->to_h = 0 - this->o_ptr->to_h;
+        }
+
+        break;
+    case SV_RING_PROTECTION:
+        this->o_ptr->to_a = 5 + randint1(8) + (ARMOUR_CLASS)m_bonus(10, this->level);
+        if (this->power < 0) {
+            this->o_ptr->ident |= (IDENT_BROKEN);
+            this->o_ptr->curse_flags |= TRC_CURSED;
+            this->o_ptr->to_a = 0 - this->o_ptr->to_a;
+        }
+
+        break;
+    case SV_RING_SLAYING:
+        this->o_ptr->to_d = randint1(5) + (HIT_POINT)m_bonus(12, this->level);
+        this->o_ptr->to_h = randint1(5) + (HIT_PROB)m_bonus(12, this->level);
+
+        if (this->power < 0) {
+            this->o_ptr->ident |= (IDENT_BROKEN);
+            this->o_ptr->curse_flags |= TRC_CURSED;
+            this->o_ptr->to_h = 0 - this->o_ptr->to_h;
+            this->o_ptr->to_d = 0 - this->o_ptr->to_d;
+        }
+
+        break;
+    case SV_RING_MUSCLE:
+        this->o_ptr->pval = 1 + (PARAMETER_VALUE)m_bonus(3, this->level);
+        if (one_in_(4)) {
+            this->o_ptr->pval++;
+        }
+
+        if (this->power < 0) {
+            this->o_ptr->ident |= (IDENT_BROKEN);
+            this->o_ptr->curse_flags |= TRC_CURSED;
+            this->o_ptr->pval = 0 - this->o_ptr->pval;
+        }
+
+        break;
+    case SV_RING_AGGRAVATION:
+        this->o_ptr->ident |= (IDENT_BROKEN);
+        this->o_ptr->curse_flags |= TRC_CURSED;
+        if (this->power > 0) {
+            this->power = 0 - this->power;
+        }
+
+        break;
     default:
         break;
     }
