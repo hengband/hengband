@@ -301,7 +301,7 @@ typedef struct player_type {
     bool sutemi{};
     bool counter{};
 
-    ALIGNMENT align{}; /* Good/evil/neutral */
+    ALIGNMENT alignment{}; /* Good/evil/neutral */
     POSITION run_py{};
     POSITION run_px{};
     DIRECTION fishing_dir{};

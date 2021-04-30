@@ -171,7 +171,7 @@ void Rand_state_restore(u32b *backup_state)
 }
 
 /*
- * Extract a "random" number from 0 to m-1, via "division"
+ * Extract a "random" number from 0 to m-1, via "ENERGY_DIVISION"
  */
 static s32b Rand_div_impl(s32b m, u32b *state)
 {

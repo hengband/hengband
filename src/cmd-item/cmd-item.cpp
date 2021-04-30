@@ -45,6 +45,7 @@
 #include "perception/identification.h"
 #include "perception/object-perception.h"
 #include "player-info/self-info.h"
+#include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/player-class.h"
 #include "player/player-personality-types.h"
@@ -130,7 +131,7 @@ void do_cmd_drop(player_type *creature_ptr)
             return;
     }
 
-    take_turn(creature_ptr, 50);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(50);
     drop_from_inventory(creature_ptr, item, amt);
     if (item >= INVEN_MAIN_HAND) {
         verify_equip_slot(creature_ptr, item);

@@ -56,6 +56,7 @@
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
 #include "player-info/self-info.h"
+#include "player-status/player-energy.h"
 #include "player/digestion-processor.h"
 #include "player/patron.h"
 #include "player/player-class.h"
@@ -426,7 +427,7 @@ void wiz_jump_to_dungeon(player_type *creature_ptr)
         exe_write_diary(creature_ptr, DIARY_WIZ_TELE, 0, NULL);
 
     creature_ptr->current_floor_ptr->inside_quest = 0;
-    free_turn(creature_ptr);
+    PlayerEnergy(creature_ptr).reset_player_turn();
     creature_ptr->energy_need = 0;
     prepare_change_floor_mode(creature_ptr, CFM_FIRST_FLOOR);
     creature_ptr->leaving = TRUE;

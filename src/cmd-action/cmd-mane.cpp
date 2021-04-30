@@ -35,8 +35,8 @@
 #include "monster/monster-processor.h"
 #include "monster/monster-status.h"
 #include "mspell/monster-power-table.h"
+#include "player-status/player-energy.h"
 #include "player/player-status-table.h"
-#include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
 #include "spell-kind/spells-neighbor.h"
@@ -1137,7 +1137,7 @@ bool do_cmd_mane(player_type *creature_ptr, bool baigaesi)
         creature_ptr->mane_dam[j] = creature_ptr->mane_dam[j + 1];
     }
 
-    take_turn(creature_ptr, 100);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
 
     creature_ptr->redraw |= (PR_IMITATION);
     creature_ptr->window_flags |= (PW_PLAYER);

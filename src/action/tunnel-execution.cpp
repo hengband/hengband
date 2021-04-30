@@ -11,8 +11,8 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "player-info/avatar.h"
+#include "player-status/player-energy.h"
 #include "player/player-move.h"
-#include "player/player-status.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
@@ -62,7 +62,7 @@ bool exe_tunnel(player_type *creature_ptr, POSITION y, POSITION x)
     if (!do_cmd_tunnel_test(creature_ptr->current_floor_ptr, y, x))
         return FALSE;
 
-    take_turn(creature_ptr, 100);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
     f_ptr = &f_info[g_ptr->feat];
     power = f_ptr->power;

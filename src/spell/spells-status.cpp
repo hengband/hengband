@@ -28,9 +28,9 @@
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "player-info/avatar.h"
+#include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/player-class.h"
-#include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
@@ -459,7 +459,7 @@ bool fishing(player_type *creature_ptr)
         GAME_TEXT m_name[MAX_NLEN];
         monster_desc(creature_ptr, m_name, &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[y][x].m_idx], 0);
         msg_format(_("%sが邪魔だ！", "%^s is standing in your way."), m_name);
-        free_turn(creature_ptr);
+        PlayerEnergy(creature_ptr).reset_player_turn();
         return FALSE;
     }
 

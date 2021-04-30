@@ -133,7 +133,7 @@ HIT_POINT mon_damage_mod(player_type *target_ptr, monster_type *m_ptr, HIT_POINT
  * @details
  * <pre>
  * Even the 64 bit operation is not big enough to avoid overflaw
- * unless we carefully choose orders of multiplication and division.
+ * unless we carefully choose orders of ENERGY_MULTIPLICATION and ENERGY_DIVISION.
  * Get the coefficient first, and multiply (potentially huge) base
  * experience point of a monster later.
  * </pre>
@@ -176,7 +176,7 @@ static void get_exp_from_mon(player_type *target_ptr, HIT_POINT dam, monster_typ
     if (!target_ptr->current_floor_ptr->dun_level && (!(r_ptr->flags8 & RF8_WILD_ONLY) || !(r_ptr->flags1 & RF1_UNIQUE)))
         s64b_mul(&div_h, &div_l, 0, 5);
 
-    /* Do division first to prevent overflaw */
+    /* Do ENERGY_DIVISION first to prevent overflaw */
     s64b_div(&new_exp, &new_exp_frac, div_h, div_l);
 
     /* Special penalty for mutiply-monster */

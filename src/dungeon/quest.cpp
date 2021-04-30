@@ -26,6 +26,7 @@
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/trg-types.h"
 #include "object/object-generator.h"
+#include "player-status/player-energy.h"
 #include "player/player-personality-types.h"
 #include "player/player-status.h"
 #include "system/artifact-type-definition.h"
@@ -323,7 +324,7 @@ void do_cmd_quest(player_type *player_ptr)
     if (player_ptr->wild_mode)
         return;
 
-    take_turn(player_ptr, 100);
+    PlayerEnergy(player_ptr).set_player_turn_energy(100);
 
     if (!cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, FF_QUEST_ENTER)) {
         msg_print(_("ここにはクエストの入口はない。", "You see no quest level here."));

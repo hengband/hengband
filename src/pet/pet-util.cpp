@@ -2,15 +2,26 @@
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "grid/grid.h"
+#include "monster-race/monster-race.h"
+#include "monster-race/race-flags1.h"
+#include "monster-race/race-flags7.h"
 #include "monster/monster-info.h"
+#include "monster/monster-status.h"
+#include "player/player-class.h"
+#include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
+#include "util/bit-flags-calculator.h"
 #include "world/world.h"
+
+int total_friends = 0;
 
 /*!
  * @brief プレイヤーの騎乗/下馬処理判定
  * @param g_ptr プレイヤーの移動先マスの構造体参照ポインタ
- * @param now_riding TRUEなら下馬処理、FALSEならば騎乗処理
- * @return 可能ならばTRUEを返す
+ * @param now_riding trueなら下馬処理、falseならば騎乗処理
+ * @return 可能ならばtrueを返す
  */
 bool can_player_ride_pet(player_type *creature_ptr, grid_type *g_ptr, bool now_riding)
 {
@@ -18,15 +29,15 @@ bool can_player_ride_pet(player_type *creature_ptr, grid_type *g_ptr, bool now_r
     MONSTER_IDX old_riding = creature_ptr->riding;
     bool old_riding_two_hands = creature_ptr->riding_ryoute;
     bool old_old_riding_two_hands = creature_ptr->old_riding_ryoute;
-    bool old_pf_two_hands = (creature_ptr->pet_extra_flags & PF_TWO_HANDS) ? TRUE : FALSE;
-    current_world_ptr->character_xtra = TRUE;
+    bool old_pf_two_hands = (creature_ptr->pet_extra_flags & PF_TWO_HANDS) ? true : false;
+    current_world_ptr->character_xtra = true;
 
     if (now_riding)
         creature_ptr->riding = g_ptr->m_idx;
     else {
         creature_ptr->riding = 0;
         creature_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
-        creature_ptr->riding_ryoute = creature_ptr->old_riding_ryoute = FALSE;
+        creature_ptr->riding_ryoute = creature_ptr->old_riding_ryoute = false;
     }
 
     creature_ptr->update |= PU_BONUS;
@@ -46,4 +57,60 @@ bool can_player_ride_pet(player_type *creature_ptr, grid_type *g_ptr, bool now_r
 
     current_world_ptr->character_xtra = old_character_xtra;
     return p_can_enter;
+}
+
+/*!
+ * @brief ペットの維持コスト計算
+ * @return 維持コスト(%)
+ */
+PERCENTAGE calculate_upkeep(player_type *creature_ptr)
+{
+    bool has_a_unique = false;
+    DEPTH total_friend_levels = 0;
+    total_friends = 0;
+    for (auto m_idx = creature_ptr->current_floor_ptr->m_max - 1; m_idx >= 1; m_idx--) {
+        auto *m_ptr = &creature_ptr->current_floor_ptr->m_list[m_idx];
+        if (!monster_is_valid(m_ptr))
+            continue;
+        auto *r_ptr = &r_info[m_ptr->r_idx];
+
+        if (!is_pet(m_ptr)) {
+            continue;
+        }
+
+        total_friends++;
+        if (none_bits(r_ptr->flags1, RF1_UNIQUE)) {
+            total_friend_levels += r_ptr->level;
+            continue;
+        }
+
+        if (creature_ptr->pclass != CLASS_CAVALRY) {
+            total_friend_levels += (r_ptr->level + 5) * 10;
+            continue;
+        }
+
+        if (creature_ptr->riding == m_idx)
+            total_friend_levels += (r_ptr->level + 5) * 2;
+        else if (!has_a_unique && any_bits(r_info[m_ptr->r_idx].flags7, RF7_RIDING))
+            total_friend_levels += (r_ptr->level + 5) * 7 / 2;
+        else
+            total_friend_levels += (r_ptr->level + 5) * 10;
+
+        has_a_unique = true;
+    }
+
+    if (total_friends == 0) {
+        return 0;
+    }
+
+    int upkeep_factor = (total_friend_levels - (creature_ptr->lev * 80 / (cp_ptr->pet_upkeep_div)));
+    if (upkeep_factor < 0) {
+        upkeep_factor = 0;
+    }
+
+    if (upkeep_factor > 1000) {
+        upkeep_factor = 1000;
+    }
+
+    return upkeep_factor;
 }

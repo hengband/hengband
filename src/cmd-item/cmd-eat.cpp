@@ -24,6 +24,7 @@
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
+#include "player-status/player-energy.h"
 #include "player-info/avatar.h"
 #include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
@@ -32,9 +33,9 @@
 #include "player/player-damage.h"
 #include "player/player-race-types.h"
 #include "player/player-status-flags.h"
-#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"
+#include "spell-realm/spells-song.h"
 #include "spell/spells-status.h"
 #include "status/action-setter.h"
 #include "status/bad-status-setter.h"
@@ -268,7 +269,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 
     sound(SOUND_EAT);
 
-    take_turn(creature_ptr, 100);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
 
     /* Object level */
     int lev = k_info[o_ptr->k_idx].level;

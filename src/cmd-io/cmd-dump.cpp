@@ -12,6 +12,7 @@
 #include "cmd-io/cmd-dump.h"
 #include "cmd-io/feeling-table.h"
 #include "core/asking-player.h"
+#include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor-town.h"
 #include "io-dump/dump-remover.h"

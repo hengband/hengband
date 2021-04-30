@@ -14,10 +14,11 @@
 #include "status/action-setter.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
+#include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
-#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"
+#include "spell-realm/spells-song.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
@@ -68,7 +69,7 @@ void set_action(player_type *creature_ptr, ACTION_IDX typ)
     }
     case ACTION_HAYAGAKE: {
         msg_print(_("足が重くなった。", "You are no longer walking extremely fast."));
-        take_turn(creature_ptr, 100);
+        PlayerEnergy(creature_ptr).set_player_turn_energy(100);
         break;
     }
     case ACTION_SPELL: {

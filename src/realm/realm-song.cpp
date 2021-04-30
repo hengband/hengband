@@ -18,6 +18,7 @@
 #include "spell-kind/spells-neighbor.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-world.h"
+#include "spell-realm/spells-song.h"
 #include "spell/spell-types.h"
 #include "spell/spells-status.h"
 #include "status/action-setter.h"

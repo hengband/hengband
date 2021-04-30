@@ -20,21 +20,22 @@
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
-#include "player-info/self-info.h"
-#include "player/attack-defense-types.h"
 #include "player-info/avatar.h"
-#include "player/player-status-flags.h"
+#include "player-info/self-info.h"
+#include "player-status/player-energy.h"
+#include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
 #include "player/eldritch-horror.h"
 #include "player/mimic-info-table.h"
 #include "player/player-damage.h"
-#include "player/player-status.h"
+#include "player/player-status-flags.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-perception.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"
+#include "spell-realm/spells-song.h"
 #include "spell/spells-status.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
@@ -118,7 +119,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
     object_type forge;
     object_type *q_ptr;
 
-    take_turn(creature_ptr, 100);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
 
     if (creature_ptr->timewalk) {
         if (flush_failure)

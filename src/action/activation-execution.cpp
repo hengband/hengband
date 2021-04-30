@@ -26,12 +26,13 @@
 #include "object-hook/hook-enchant.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
-#include "player/player-status.h"
+#include "player-status/player-energy.h"
 #include "racial/racial-android.h"
 #include "specific-object/monster-ball.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"
+#include "spell-realm/spells-song.h"
 #include "spell/spell-types.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-ring-types.h"
@@ -125,7 +126,7 @@ static bool check_activation_conditions(player_type *user_ptr, ae_type *ae_ptr)
 
     if (!ae_ptr->o_ptr->xtra4 && (ae_ptr->o_ptr->tval == TV_FLASK) && ((ae_ptr->o_ptr->sval == SV_LITE_TORCH) || (ae_ptr->o_ptr->sval == SV_LITE_LANTERN))) {
         msg_print(_("燃料がない。", "It has no fuel."));
-        free_turn(user_ptr);
+        PlayerEnergy(user_ptr).reset_player_turn();
         return FALSE;
     }
 
@@ -223,7 +224,7 @@ static bool activate_whistle(player_type *user_ptr, ae_type *ae_ptr)
  */
 void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 {
-    take_turn(user_ptr, 100);
+    PlayerEnergy(user_ptr).set_player_turn_energy(100);
     ae_type tmp_ae;
     ae_type *ae_ptr = initialize_ae_type(user_ptr, &tmp_ae, item);
     decide_activation_level(user_ptr, ae_ptr);

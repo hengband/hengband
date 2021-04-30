@@ -16,8 +16,8 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "perception/object-perception.h"
+#include "player-status/player-energy.h"
 #include "player/player-status-table.h"
-#include "player/player-status.h"
 #include "specific-object/chest.h"
 #include "status/bad-status-setter.h"
 #include "status/experience.h"
@@ -39,7 +39,7 @@ bool exe_open(player_type *creature_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
-    take_turn(creature_ptr, 100);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     if (!has_flag(f_ptr->flags, FF_OPEN)) {
         msg_format(_("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck."), f_info[get_feat_mimic(g_ptr)].name.c_str());
         return FALSE;
@@ -95,7 +95,7 @@ bool exe_close(player_type *creature_ptr, POSITION y, POSITION x)
     grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
     FEAT_IDX old_feat = g_ptr->feat;
     bool more = FALSE;
-    take_turn(creature_ptr, 100);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     if (!has_flag(f_info[old_feat].flags, FF_CLOSE))
         return more;
 
@@ -188,7 +188,7 @@ bool exe_disarm_chest(player_type *creature_ptr, POSITION y, POSITION x, OBJECT_
 {
     bool more = FALSE;
     object_type *o_ptr = &creature_ptr->current_floor_ptr->o_list[o_idx];
-    take_turn(creature_ptr, 100);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     int i = creature_ptr->skill_dis;
     if (creature_ptr->blind || no_lite(creature_ptr))
         i = i / 10;
@@ -248,7 +248,7 @@ bool exe_disarm(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir
     int power = f_ptr->power;
     bool more = FALSE;
     int i = creature_ptr->skill_dis;
-    take_turn(creature_ptr, 100);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     if (creature_ptr->blind || no_lite(creature_ptr))
         i = i / 10;
 
@@ -300,7 +300,7 @@ bool exe_bash(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir)
     int temp = f_ptr->power;
     bool more = FALSE;
     concptr name = f_info[get_feat_mimic(g_ptr)].name.c_str();
-    take_turn(creature_ptr, 100);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     msg_format(_("%sに体当たりをした！", "You smash into the %s!"), name);
     temp = (bash - (temp * 10));
     if (creature_ptr->pclass == CLASS_BERSERKER)

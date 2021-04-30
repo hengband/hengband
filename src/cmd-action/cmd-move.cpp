@@ -25,11 +25,13 @@
 #include "io/write-diary.h"
 #include "mind/mind-ninja.h"
 #include "player-info/avatar.h"
+#include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/player-move.h"
 #include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"
+#include "spell-realm/spells-song.h"
 #include "status/action-setter.h"
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
@@ -102,7 +104,7 @@ void do_cmd_go_up(player_type *creature_ptr)
         creature_ptr->leaving = TRUE;
         creature_ptr->oldpx = 0;
         creature_ptr->oldpy = 0;
-        take_turn(creature_ptr, 100);
+        PlayerEnergy(creature_ptr).set_player_turn_energy(100);
         return;
     }
 
@@ -114,7 +116,7 @@ void do_cmd_go_up(player_type *creature_ptr)
     if (!go_up)
         return;
 
-    take_turn(creature_ptr, 100);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
 
     if (autosave_l)
         do_cmd_save_game(creature_ptr, TRUE);
@@ -213,7 +215,7 @@ void do_cmd_go_down(player_type *creature_ptr)
         creature_ptr->leaving = TRUE;
         creature_ptr->oldpx = 0;
         creature_ptr->oldpy = 0;
-        take_turn(creature_ptr, 100);
+        PlayerEnergy(creature_ptr).set_player_turn_energy(100);
         return;
     }
 
@@ -238,7 +240,7 @@ void do_cmd_go_down(player_type *creature_ptr)
         prepare_change_floor_mode(creature_ptr, CFM_FIRST_FLOOR);
     }
 
-    take_turn(creature_ptr, 100);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     if (autosave_l)
         do_cmd_save_game(creature_ptr, TRUE);
 
@@ -303,15 +305,19 @@ void do_cmd_walk(player_type *creature_ptr, bool pickup)
     bool more = FALSE;
     DIRECTION dir;
     if (get_rep_dir(creature_ptr, &dir, FALSE)) {
-        take_turn(creature_ptr, 100);
+        PlayerEnergy energy(creature_ptr);
+        energy.set_player_turn_energy(100);
         if ((dir != 5) && (creature_ptr->special_defense & KATA_MUSOU))
             set_action(creature_ptr, ACTION_NONE);
 
-        if (creature_ptr->wild_mode)
-            creature_ptr->energy_use *= ((MAX_HGT + MAX_WID) / 2);
+        if (creature_ptr->wild_mode) {
+            energy.mul_player_turn_energy((MAX_HGT + MAX_WID) / 2);
+        }
 
-        if (creature_ptr->action == ACTION_HAYAGAKE)
-            creature_ptr->energy_use = creature_ptr->energy_use * (45 - (creature_ptr->lev / 2)) / 100;
+        if (creature_ptr->action == ACTION_HAYAGAKE) {
+            auto energy_use = (ENERGY)(creature_ptr->energy_use * (45 - (creature_ptr->lev / 2)) / 100);
+            energy.set_player_turn_energy(energy_use);
+        }
 
         exe_movement(creature_ptr, dir, pickup, FALSE);
         more = TRUE;
@@ -327,7 +333,7 @@ void do_cmd_walk(player_type *creature_ptr, bool pickup)
             creature_ptr->oldpy = randint1(MAX_HGT - 2);
             creature_ptr->oldpx = randint1(MAX_WID - 2);
             change_wild_mode(creature_ptr, TRUE);
-            take_turn(creature_ptr, 100);
+            PlayerEnergy(creature_ptr).set_player_turn_energy(100);
         }
     }
 
@@ -373,7 +379,7 @@ void do_cmd_stay(player_type *creature_ptr, bool pickup)
         command_arg = 0;
     }
 
-    take_turn(creature_ptr, 100);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     if (pickup)
         mpe_mode |= MPE_DO_PICKUP;
 
@@ -419,7 +425,7 @@ void do_cmd_rest(player_type *creature_ptr)
     if (creature_ptr->special_defense & NINJA_S_STEALTH)
         set_superstealth(creature_ptr, FALSE);
 
-    take_turn(creature_ptr, 100);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     if (command_arg > 100)
         chg_virtue(creature_ptr, V_DILIGENCE, -1);
 

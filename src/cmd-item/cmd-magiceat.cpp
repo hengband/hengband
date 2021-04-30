@@ -66,13 +66,13 @@
 #include "main/sound-of-music.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
-#include "sv-definition/sv-other-types.h"
-#include "sv-definition/sv-rod-types.h"
 #include "player-info/avatar.h"
+#include "player-status/player-energy.h"
 #include "player/player-class.h"
-#include "player/player-status.h"
 #include "player/player-status-table.h"
 #include "spell/spell-info.h"
+#include "sv-definition/sv-other-types.h"
+#include "sv-definition/sv-rod-types.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
@@ -88,433 +88,406 @@
  */
 static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool only_browse)
 {
-	OBJECT_SUBTYPE_VALUE ext = 0;
-	char choice;
-	bool flag, request_list;
-	tval_type tval = TV_NONE;
-	int             ask = TRUE;
-	OBJECT_SUBTYPE_VALUE i = 0;
-	char            out_val[160];
+    OBJECT_SUBTYPE_VALUE ext = 0;
+    char choice;
+    bool flag, request_list;
+    tval_type tval = TV_NONE;
+    int ask = TRUE;
+    OBJECT_SUBTYPE_VALUE i = 0;
+    char out_val[160];
 
-	int menu_line = (use_menu ? 1 : 0);
+    int menu_line = (use_menu ? 1 : 0);
 
-	COMMAND_CODE sn;
-	if (repeat_pull(&sn))
-	{
-		/* Verify the spell */
-		if (sn >= EATER_EXT*2 && !(creature_ptr->magic_num1[sn] > k_info[lookup_kind(TV_ROD, sn-EATER_EXT*2)].pval * (creature_ptr->magic_num2[sn] - 1) * EATER_ROD_CHARGE))
-			return sn;
-		else if (sn < EATER_EXT*2 && !(creature_ptr->magic_num1[sn] < EATER_CHARGE))
-			return sn;
-	}
-	
-	for (i = 0; i < MAX_SPELLS; i++)
-	{
-		if (creature_ptr->magic_num2[i]) break;
-	}
+    COMMAND_CODE sn;
+    if (repeat_pull(&sn)) {
+        /* Verify the spell */
+        if (sn >= EATER_EXT * 2
+            && !(creature_ptr->magic_num1[sn] > k_info[lookup_kind(TV_ROD, sn - EATER_EXT * 2)].pval * (creature_ptr->magic_num2[sn] - 1) * EATER_ROD_CHARGE))
+            return sn;
+        else if (sn < EATER_EXT * 2 && !(creature_ptr->magic_num1[sn] < EATER_CHARGE))
+            return sn;
+    }
 
-	if (i == MAX_SPELLS)
-	{
-		msg_print(_("魔法を覚えていない！", "You don't have any magic!"));
-		return -1;
-	}
+    for (i = 0; i < MAX_SPELLS; i++) {
+        if (creature_ptr->magic_num2[i])
+            break;
+    }
 
-	if (use_menu)
-	{
-		screen_save();
+    if (i == MAX_SPELLS) {
+        msg_print(_("魔法を覚えていない！", "You don't have any magic!"));
+        return -1;
+    }
 
-		while(!tval)
-		{
+    if (use_menu) {
+        screen_save();
+
+        while (!tval) {
 #ifdef JP
-			prt(format(" %s 杖", (menu_line == 1) ? "》" : "  "), 2, 14);
-			prt(format(" %s 魔法棒", (menu_line == 2) ? "》" : "  "), 3, 14);
-			prt(format(" %s ロッド", (menu_line == 3) ? "》" : "  "), 4, 14);
+            prt(format(" %s 杖", (menu_line == 1) ? "》" : "  "), 2, 14);
+            prt(format(" %s 魔法棒", (menu_line == 2) ? "》" : "  "), 3, 14);
+            prt(format(" %s ロッド", (menu_line == 3) ? "》" : "  "), 4, 14);
 #else
-			prt(format(" %s staff", (menu_line == 1) ? "> " : "  "), 2, 14);
-			prt(format(" %s wand", (menu_line == 2) ? "> " : "  "), 3, 14);
-			prt(format(" %s rod", (menu_line == 3) ? "> " : "  "), 4, 14);
+            prt(format(" %s staff", (menu_line == 1) ? "> " : "  "), 2, 14);
+            prt(format(" %s wand", (menu_line == 2) ? "> " : "  "), 3, 14);
+            prt(format(" %s rod", (menu_line == 3) ? "> " : "  "), 4, 14);
 #endif
 
-			if (only_browse) prt(_("どの種類の魔法を見ますか？", "Which type of magic do you browse?"), 0, 0);
-			else prt(_("どの種類の魔法を使いますか？", "Which type of magic do you use?"), 0, 0);
+            if (only_browse)
+                prt(_("どの種類の魔法を見ますか？", "Which type of magic do you browse?"), 0, 0);
+            else
+                prt(_("どの種類の魔法を使いますか？", "Which type of magic do you use?"), 0, 0);
 
-			choice = inkey();
-			switch(choice)
-			{
-			case ESCAPE:
-			case 'z':
-			case 'Z':
-				screen_load();
-				return -1;
-			case '2':
-			case 'j':
-			case 'J':
-				menu_line++;
-				break;
-			case '8':
-			case 'k':
-			case 'K':
-				menu_line+= 2;
-				break;
-			case '\r':
-			case 'x':
-			case 'X':
-				ext = (menu_line-1)*EATER_EXT;
-				if (menu_line == 1) tval = TV_STAFF;
-				else if (menu_line == 2) tval = TV_WAND;
-				else tval = TV_ROD;
-				break;
-			}
-			if (menu_line > 3) menu_line -= 3;
-		}
-		screen_load();
-	}
-	else
-	{
-	while (TRUE)
-	{
-		if (!get_com(_("[A] 杖, [B] 魔法棒, [C] ロッド:", "[A] staff, [B] wand, [C] rod:"), &choice, TRUE))
-		{
-			return -1;
-		}
-		if (choice == 'A' || choice == 'a')
-		{
-			ext = 0;
-			tval = TV_STAFF;
-			break;
-		}
-		if (choice == 'B' || choice == 'b')
-		{
-			ext = EATER_EXT;
-			tval = TV_WAND;
-			break;
-		}
-		if (choice == 'C' || choice == 'c')
-		{
-			ext = EATER_EXT*2;
-			tval = TV_ROD;
-			break;
-		}
-	}
-	}
-	for (i = ext; i < ext + EATER_EXT; i++)
-	{
-		if (creature_ptr->magic_num2[i])
-		{
-			if (use_menu) menu_line = i-ext+1;
-			break;
-		}
-	}
-	if (i == ext+EATER_EXT)
-	{
-		msg_print(_("その種類の魔法は覚えていない！", "You don't have that type of magic!"));
-		return -1;
-	}
+            choice = inkey();
+            switch (choice) {
+            case ESCAPE:
+            case 'z':
+            case 'Z':
+                screen_load();
+                return -1;
+            case '2':
+            case 'j':
+            case 'J':
+                menu_line++;
+                break;
+            case '8':
+            case 'k':
+            case 'K':
+                menu_line += 2;
+                break;
+            case '\r':
+            case 'x':
+            case 'X':
+                ext = (menu_line - 1) * EATER_EXT;
+                if (menu_line == 1)
+                    tval = TV_STAFF;
+                else if (menu_line == 2)
+                    tval = TV_WAND;
+                else
+                    tval = TV_ROD;
+                break;
+            }
+            if (menu_line > 3)
+                menu_line -= 3;
+        }
+        screen_load();
+    } else {
+        while (TRUE) {
+            if (!get_com(_("[A] 杖, [B] 魔法棒, [C] ロッド:", "[A] staff, [B] wand, [C] rod:"), &choice, TRUE)) {
+                return -1;
+            }
+            if (choice == 'A' || choice == 'a') {
+                ext = 0;
+                tval = TV_STAFF;
+                break;
+            }
+            if (choice == 'B' || choice == 'b') {
+                ext = EATER_EXT;
+                tval = TV_WAND;
+                break;
+            }
+            if (choice == 'C' || choice == 'c') {
+                ext = EATER_EXT * 2;
+                tval = TV_ROD;
+                break;
+            }
+        }
+    }
+    for (i = ext; i < ext + EATER_EXT; i++) {
+        if (creature_ptr->magic_num2[i]) {
+            if (use_menu)
+                menu_line = i - ext + 1;
+            break;
+        }
+    }
+    if (i == ext + EATER_EXT) {
+        msg_print(_("その種類の魔法は覚えていない！", "You don't have that type of magic!"));
+        return -1;
+    }
 
-	/* Nothing chosen yet */
-	flag = FALSE;
+    /* Nothing chosen yet */
+    flag = FALSE;
 
-	if (only_browse) strnfmt(out_val, 78, _("('*'で一覧, ESCで中断) どの魔力を見ますか？",
-											"(*=List, ESC=exit) Browse which power? "));
-	else strnfmt(out_val, 78, _("('*'で一覧, ESCで中断) どの魔力を使いますか？",
-								"(*=List, ESC=exit) Use which power? "));
-	screen_save();
+    if (only_browse)
+        strnfmt(out_val, 78, _("('*'で一覧, ESCで中断) どの魔力を見ますか？", "(*=List, ESC=exit) Browse which power? "));
+    else
+        strnfmt(out_val, 78, _("('*'で一覧, ESCで中断) どの魔力を使いますか？", "(*=List, ESC=exit) Use which power? "));
+    screen_save();
 
-	request_list = always_show_list;
+    request_list = always_show_list;
 
-	while (!flag)
-	{
-		/* Show the list */
-		if (request_list || use_menu)
-		{
-			byte y, x = 0;
-			OBJECT_SUBTYPE_VALUE ctr;
-			PERCENTAGE chance;
-			KIND_OBJECT_IDX k_idx;
-			char dummy[80];
-			POSITION x1, y1;
-			DEPTH level;
-			byte col;
+    while (!flag) {
+        /* Show the list */
+        if (request_list || use_menu) {
+            byte y, x = 0;
+            OBJECT_SUBTYPE_VALUE ctr;
+            PERCENTAGE chance;
+            KIND_OBJECT_IDX k_idx;
+            char dummy[80];
+            POSITION x1, y1;
+            DEPTH level;
+            byte col;
 
-			strcpy(dummy, "");
+            strcpy(dummy, "");
 
-			for (y = 1; y < 20; y++)
-				prt("", y, x);
+            for (y = 1; y < 20; y++)
+                prt("", y, x);
 
-			y = 1;
+            y = 1;
 
-			/* Print header(s) */
+            /* Print header(s) */
 #ifdef JP
-			prt(format("                           %s 失率                           %s 失率", (tval == TV_ROD ? "  状態  " : "使用回数"), (tval == TV_ROD ? "  状態  " : "使用回数")), y++, x);
+            prt(format("                           %s 失率                           %s 失率", (tval == TV_ROD ? "  状態  " : "使用回数"),
+                    (tval == TV_ROD ? "  状態  " : "使用回数")),
+                y++, x);
 #else
-			prt(format("                           %s Fail                           %s Fail", (tval == TV_ROD ? "  Stat  " : " Charges"), (tval == TV_ROD ? "  Stat  " : " Charges")), y++, x);
+            prt(format("                           %s Fail                           %s Fail", (tval == TV_ROD ? "  Stat  " : " Charges"),
+                    (tval == TV_ROD ? "  Stat  " : " Charges")),
+                y++, x);
 #endif
 
-			/* Print list */
-			for (ctr = 0; ctr < EATER_EXT; ctr++)
-			{
-				if (!creature_ptr->magic_num2[ctr+ext]) continue;
+            /* Print list */
+            for (ctr = 0; ctr < EATER_EXT; ctr++) {
+                if (!creature_ptr->magic_num2[ctr + ext])
+                    continue;
 
-				k_idx = lookup_kind(tval, ctr);
+                k_idx = lookup_kind(tval, ctr);
 
-				if (use_menu)
-				{
-					if (ctr == (menu_line-1))
-						strcpy(dummy, _("》", "> "));
-					else
-						strcpy(dummy, "  ");
-				}
-				/* letter/number for power selection */
-				else
-				{
-					char letter;
-					if (ctr < 26)
-						letter = I2A(ctr);
-					else
-						letter = '0' + ctr - 26;
-					sprintf(dummy, "%c)",letter);
-				}
-				x1 = ((ctr < EATER_EXT/2) ? x : x + 40);
-				y1 = ((ctr < EATER_EXT/2) ? y + ctr : y + ctr - EATER_EXT/2);
-				level = (tval == TV_ROD ? k_info[k_idx].level * 5 / 6 - 5 : k_info[k_idx].level);
-				chance = level * 4 / 5 + 20;
-				chance -= 3 * (adj_mag_stat[creature_ptr->stat_index[mp_ptr->spell_stat]] - 1);
-				level /= 2;
-				if (creature_ptr->lev > level)
-				{
-					chance -= 3 * (creature_ptr->lev - level);
-				}
-				chance = mod_spell_chance_1(creature_ptr, chance);
-				chance = MAX(chance, adj_mag_fail[creature_ptr->stat_index[mp_ptr->spell_stat]]);
-				/* Stunning makes spells harder */
-				if (creature_ptr->stun > 50) chance += 25;
-				else if (creature_ptr->stun) chance += 15;
+                if (use_menu) {
+                    if (ctr == (menu_line - 1))
+                        strcpy(dummy, _("》", "> "));
+                    else
+                        strcpy(dummy, "  ");
+                }
+                /* letter/number for power selection */
+                else {
+                    char letter;
+                    if (ctr < 26)
+                        letter = I2A(ctr);
+                    else
+                        letter = '0' + ctr - 26;
+                    sprintf(dummy, "%c)", letter);
+                }
+                x1 = ((ctr < EATER_EXT / 2) ? x : x + 40);
+                y1 = ((ctr < EATER_EXT / 2) ? y + ctr : y + ctr - EATER_EXT / 2);
+                level = (tval == TV_ROD ? k_info[k_idx].level * 5 / 6 - 5 : k_info[k_idx].level);
+                chance = level * 4 / 5 + 20;
+                chance -= 3 * (adj_mag_stat[creature_ptr->stat_index[mp_ptr->spell_stat]] - 1);
+                level /= 2;
+                if (creature_ptr->lev > level) {
+                    chance -= 3 * (creature_ptr->lev - level);
+                }
+                chance = mod_spell_chance_1(creature_ptr, chance);
+                chance = MAX(chance, adj_mag_fail[creature_ptr->stat_index[mp_ptr->spell_stat]]);
+                /* Stunning makes spells harder */
+                if (creature_ptr->stun > 50)
+                    chance += 25;
+                else if (creature_ptr->stun)
+                    chance += 15;
 
-				if (chance > 95) chance = 95;
+                if (chance > 95)
+                    chance = 95;
 
-				chance = mod_spell_chance_2(creature_ptr, chance);
+                chance = mod_spell_chance_2(creature_ptr, chance);
 
-				col = TERM_WHITE;
+                col = TERM_WHITE;
 
-				if (k_idx)
-				{
-					if (tval == TV_ROD)
-					{
-						strcat(dummy, format(
-							       _(" %-22.22s 充填:%2d/%2d%3d%%", " %-22.22s   (%2d/%2d) %3d%%"),
-							       k_info[k_idx].name.c_str(), 
-							       creature_ptr->magic_num1[ctr+ext] ? 
-							       (creature_ptr->magic_num1[ctr+ext] - 1) / (EATER_ROD_CHARGE * k_info[k_idx].pval) +1 : 0, 
-							       creature_ptr->magic_num2[ctr+ext], chance));
-						if (creature_ptr->magic_num1[ctr+ext] > k_info[k_idx].pval * (creature_ptr->magic_num2[ctr+ext]-1) * EATER_ROD_CHARGE) col = TERM_RED;
-					}
-					else
-					{
-						strcat(dummy, format(" %-22.22s    %2d/%2d %3d%%", k_info[k_idx].name.c_str(), (s16b)(creature_ptr->magic_num1[ctr+ext]/EATER_CHARGE), creature_ptr->magic_num2[ctr+ext], chance));
-						if (creature_ptr->magic_num1[ctr+ext] < EATER_CHARGE) col = TERM_RED;
-					}
-				}
-				else
-					strcpy(dummy, "");
-				c_prt(col, dummy, y1, x1);
-			}
-		}
+                if (k_idx) {
+                    if (tval == TV_ROD) {
+                        strcat(dummy,
+                            format(_(" %-22.22s 充填:%2d/%2d%3d%%", " %-22.22s   (%2d/%2d) %3d%%"), k_info[k_idx].name.c_str(),
+                                creature_ptr->magic_num1[ctr + ext] ? (creature_ptr->magic_num1[ctr + ext] - 1) / (EATER_ROD_CHARGE * k_info[k_idx].pval) + 1
+                                                                    : 0,
+                                creature_ptr->magic_num2[ctr + ext], chance));
+                        if (creature_ptr->magic_num1[ctr + ext] > k_info[k_idx].pval * (creature_ptr->magic_num2[ctr + ext] - 1) * EATER_ROD_CHARGE)
+                            col = TERM_RED;
+                    } else {
+                        strcat(dummy,
+                            format(" %-22.22s    %2d/%2d %3d%%", k_info[k_idx].name.c_str(), (s16b)(creature_ptr->magic_num1[ctr + ext] / EATER_CHARGE),
+                                creature_ptr->magic_num2[ctr + ext], chance));
+                        if (creature_ptr->magic_num1[ctr + ext] < EATER_CHARGE)
+                            col = TERM_RED;
+                    }
+                } else
+                    strcpy(dummy, "");
+                c_prt(col, dummy, y1, x1);
+            }
+        }
 
-		if (!get_com(out_val, &choice, FALSE)) break;
+        if (!get_com(out_val, &choice, FALSE))
+            break;
 
-		if (use_menu && choice != ' ')
-		{
-			switch (choice)
-			{
-				case '0':
-				{
-					screen_load();
-					return 0;
-				}
+        if (use_menu && choice != ' ') {
+            switch (choice) {
+            case '0': {
+                screen_load();
+                return 0;
+            }
 
-				case '8':
-				case 'k':
-				case 'K':
-				{
-					do
-					{
-						menu_line += EATER_EXT - 1;
-						if (menu_line > EATER_EXT) menu_line -= EATER_EXT;
-					} while(!creature_ptr->magic_num2[menu_line+ext-1]);
-					break;
-				}
+            case '8':
+            case 'k':
+            case 'K': {
+                do {
+                    menu_line += EATER_EXT - 1;
+                    if (menu_line > EATER_EXT)
+                        menu_line -= EATER_EXT;
+                } while (!creature_ptr->magic_num2[menu_line + ext - 1]);
+                break;
+            }
 
-				case '2':
-				case 'j':
-				case 'J':
-				{
-					do
-					{
-						menu_line++;
-						if (menu_line > EATER_EXT) menu_line -= EATER_EXT;
-					} while(!creature_ptr->magic_num2[menu_line+ext-1]);
-					break;
-				}
+            case '2':
+            case 'j':
+            case 'J': {
+                do {
+                    menu_line++;
+                    if (menu_line > EATER_EXT)
+                        menu_line -= EATER_EXT;
+                } while (!creature_ptr->magic_num2[menu_line + ext - 1]);
+                break;
+            }
 
-				case '4':
-				case 'h':
-				case 'H':
-				case '6':
-				case 'l':
-				case 'L':
-				{
-					bool reverse = FALSE;
-					if ((choice == '4') || (choice == 'h') || (choice == 'H')) reverse = TRUE;
-					if (menu_line > EATER_EXT/2)
-					{
-						menu_line -= EATER_EXT/2;
-						reverse = TRUE;
-					}
-					else menu_line+=EATER_EXT/2;
-					while(!creature_ptr->magic_num2[menu_line+ext-1])
-					{
-						if (reverse)
-						{
-							menu_line--;
-							if (menu_line < 2) reverse = FALSE;
-						}
-						else
-						{
-							menu_line++;
-							if (menu_line > EATER_EXT-1) reverse = TRUE;
-						}
-					}
-					break;
-				}
+            case '4':
+            case 'h':
+            case 'H':
+            case '6':
+            case 'l':
+            case 'L': {
+                bool reverse = FALSE;
+                if ((choice == '4') || (choice == 'h') || (choice == 'H'))
+                    reverse = TRUE;
+                if (menu_line > EATER_EXT / 2) {
+                    menu_line -= EATER_EXT / 2;
+                    reverse = TRUE;
+                } else
+                    menu_line += EATER_EXT / 2;
+                while (!creature_ptr->magic_num2[menu_line + ext - 1]) {
+                    if (reverse) {
+                        menu_line--;
+                        if (menu_line < 2)
+                            reverse = FALSE;
+                    } else {
+                        menu_line++;
+                        if (menu_line > EATER_EXT - 1)
+                            reverse = TRUE;
+                    }
+                }
+                break;
+            }
 
-				case 'x':
-				case 'X':
-				case '\r':
-				{
-					i = menu_line - 1;
-					ask = FALSE;
-					break;
-				}
-			}
-		}
+            case 'x':
+            case 'X':
+            case '\r': {
+                i = menu_line - 1;
+                ask = FALSE;
+                break;
+            }
+            }
+        }
 
-		/* Request redraw */
-		if (use_menu && ask) continue;
+        /* Request redraw */
+        if (use_menu && ask)
+            continue;
 
-		/* Request redraw */
-		if (!use_menu && ((choice == ' ') || (choice == '*') || (choice == '?')))
-		{
-			/* Hide the list */
-			if (request_list)
-			{
-				/* Hide list */
-				request_list = FALSE;
-								screen_load();
-				screen_save();
-			}
-			else
-				request_list = TRUE;
+        /* Request redraw */
+        if (!use_menu && ((choice == ' ') || (choice == '*') || (choice == '?'))) {
+            /* Hide the list */
+            if (request_list) {
+                /* Hide list */
+                request_list = FALSE;
+                screen_load();
+                screen_save();
+            } else
+                request_list = TRUE;
 
-			/* Redo asking */
-			continue;
-		}
+            /* Redo asking */
+            continue;
+        }
 
-		if (!use_menu)
-		{
-			if (isalpha(choice))
-			{
-				/* Note verify */
-				ask = (isupper(choice));
+        if (!use_menu) {
+            if (isalpha(choice)) {
+                /* Note verify */
+                ask = (isupper(choice));
 
-				/* Lowercase */
-				if (ask) choice = (char)tolower(choice);
+                /* Lowercase */
+                if (ask)
+                    choice = (char)tolower(choice);
 
-				/* Extract request */
-				i = (islower(choice) ? A2I(choice) : -1);
-			}
-			else
-			{
-				ask = FALSE; /* Can't uppercase digits */
+                /* Extract request */
+                i = (islower(choice) ? A2I(choice) : -1);
+            } else {
+                ask = FALSE; /* Can't uppercase digits */
 
-				i = choice - '0' + 26;
-			}
-		}
+                i = choice - '0' + 26;
+            }
+        }
 
-		/* Totally Illegal */
-		if ((i < 0) || (i > EATER_EXT) || !creature_ptr->magic_num2[i+ext])
-		{
-			bell();
-			continue;
-		}
+        /* Totally Illegal */
+        if ((i < 0) || (i > EATER_EXT) || !creature_ptr->magic_num2[i + ext]) {
+            bell();
+            continue;
+        }
 
-		if (!only_browse)
-		{
-			/* Verify it */
-			if (ask)
-			{
-				char tmp_val[160];
+        if (!only_browse) {
+            /* Verify it */
+            if (ask) {
+                char tmp_val[160];
 
-				/* Prompt */
-				(void) strnfmt(tmp_val, 78, _("%sを使いますか？ ", "Use %s? "), k_info[lookup_kind(tval ,i)].name.c_str());
+                /* Prompt */
+                (void)strnfmt(tmp_val, 78, _("%sを使いますか？ ", "Use %s? "), k_info[lookup_kind(tval, i)].name.c_str());
 
-				/* Belay that order */
-				if (!get_check(tmp_val)) continue;
-			}
-			if (tval == TV_ROD)
-			{
-				if (creature_ptr->magic_num1[ext+i]  > k_info[lookup_kind(tval, i)].pval * (creature_ptr->magic_num2[ext+i] - 1) * EATER_ROD_CHARGE)
-				{
-					msg_print(_("その魔法はまだ充填している最中だ。", "The magic is still charging."));
-					msg_print(NULL);
-					if (use_menu) ask = TRUE;
-					continue;
-				}
-			}
-			else
-			{
-				if (creature_ptr->magic_num1[ext+i] < EATER_CHARGE)
-				{
-					msg_print(_("その魔法は使用回数が切れている。", "The magic has no charges left."));
-					msg_print(NULL);
-					if (use_menu) ask = TRUE;
-					continue;
-				}
-			}
-		}
+                /* Belay that order */
+                if (!get_check(tmp_val))
+                    continue;
+            }
+            if (tval == TV_ROD) {
+                if (creature_ptr->magic_num1[ext + i] > k_info[lookup_kind(tval, i)].pval * (creature_ptr->magic_num2[ext + i] - 1) * EATER_ROD_CHARGE) {
+                    msg_print(_("その魔法はまだ充填している最中だ。", "The magic is still charging."));
+                    msg_print(NULL);
+                    if (use_menu)
+                        ask = TRUE;
+                    continue;
+                }
+            } else {
+                if (creature_ptr->magic_num1[ext + i] < EATER_CHARGE) {
+                    msg_print(_("その魔法は使用回数が切れている。", "The magic has no charges left."));
+                    msg_print(NULL);
+                    if (use_menu)
+                        ask = TRUE;
+                    continue;
+                }
+            }
+        }
 
-		/* Browse */
-		else
-		{
-			int line, j;
-			char temp[70 * 20];
+        /* Browse */
+        else {
+            int line, j;
+            char temp[70 * 20];
 
-			/* Clear lines, position cursor  (really should use strlen here) */
-			term_erase(7, 23, 255);
-			term_erase(7, 22, 255);
-			term_erase(7, 21, 255);
-			term_erase(7, 20, 255);
+            /* Clear lines, position cursor  (really should use strlen here) */
+            term_erase(7, 23, 255);
+            term_erase(7, 22, 255);
+            term_erase(7, 21, 255);
+            term_erase(7, 20, 255);
 
-			shape_buffer(k_info[lookup_kind(tval, i)].text.c_str(), 62, temp, sizeof(temp));
-			for (j = 0, line = 21; temp[j]; j += 1 + strlen(&temp[j]))
-			{
-				prt(&temp[j], line, 10);
-				line++;
-			}
+            shape_buffer(k_info[lookup_kind(tval, i)].text.c_str(), 62, temp, sizeof(temp));
+            for (j = 0, line = 21; temp[j]; j += 1 + strlen(&temp[j])) {
+                prt(&temp[j], line, 10);
+                line++;
+            }
 
-			continue;
-		}
+            continue;
+        }
 
-		/* Stop the loop */
-		flag = TRUE;
-	}
-	screen_load();
+        /* Stop the loop */
+        flag = TRUE;
+    }
+    screen_load();
 
-	if (!flag) return -1;
+    if (!flag)
+        return -1;
 
-	repeat_push(ext+i);
-	return ext+i;
+    repeat_push(ext + i);
+    return ext + i;
 }
-
 
 /*!
  * @brief 取り込んだ魔力を利用するコマンドのメインルーチン /
@@ -525,84 +498,90 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
  */
 bool do_cmd_magic_eater(player_type *creature_ptr, bool only_browse, bool powerful)
 {
-	OBJECT_SUBTYPE_VALUE item;
-	PERCENTAGE chance;
-	DEPTH level;
-	KIND_OBJECT_IDX k_idx;
-	tval_type tval;
-	OBJECT_SUBTYPE_VALUE sval;
-	bool use_charge = TRUE;
+    tval_type tval;
+    OBJECT_SUBTYPE_VALUE sval;
+    bool use_charge = TRUE;
 
-	if (cmd_limit_confused(creature_ptr)) return FALSE;
+    if (cmd_limit_confused(creature_ptr))
+        return FALSE;
 
-	item = select_magic_eater(creature_ptr, only_browse);
-	if (item == -1)
-	{
-		free_turn(creature_ptr);
-		return FALSE;
-	}
-	if (item >= EATER_EXT*2) {tval = TV_ROD;sval = item - EATER_EXT*2;}
-	else if (item >= EATER_EXT) {tval = TV_WAND;sval = item - EATER_EXT;}
-	else {tval = TV_STAFF; sval = item;}
-	k_idx = lookup_kind(tval, sval);
+    auto item = select_magic_eater(creature_ptr, only_browse);
+    PlayerEnergy energy(creature_ptr);
+    if (item == -1) {
+        energy.reset_player_turn();
+        return FALSE;
+    }
+    if (item >= EATER_EXT * 2) {
+        tval = TV_ROD;
+        sval = item - EATER_EXT * 2;
+    } else if (item >= EATER_EXT) {
+        tval = TV_WAND;
+        sval = item - EATER_EXT;
+    } else {
+        tval = TV_STAFF;
+        sval = item;
+    }
+    
+    auto k_idx = lookup_kind(tval, sval);
+    auto level = (tval == TV_ROD ? k_info[k_idx].level * 5 / 6 - 5 : k_info[k_idx].level);
+    auto chance = level * 4 / 5 + 20;
+    chance -= 3 * (adj_mag_stat[creature_ptr->stat_index[mp_ptr->spell_stat]] - 1);
+    level /= 2;
+    if (creature_ptr->lev > level) {
+        chance -= 3 * (creature_ptr->lev - level);
+    }
+    chance = mod_spell_chance_1(creature_ptr, chance);
+    chance = MAX(chance, adj_mag_fail[creature_ptr->stat_index[mp_ptr->spell_stat]]);
+    /* Stunning makes spells harder */
+    if (creature_ptr->stun > 50)
+        chance += 25;
+    else if (creature_ptr->stun)
+        chance += 15;
 
-	level = (tval == TV_ROD ? k_info[k_idx].level * 5 / 6 - 5 : k_info[k_idx].level);
-	chance = level * 4 / 5 + 20;
-	chance -= 3 * (adj_mag_stat[creature_ptr->stat_index[mp_ptr->spell_stat]] - 1);
-	level /= 2;
-	if (creature_ptr->lev > level)
-	{
-		chance -= 3 * (creature_ptr->lev - level);
-	}
-	chance = mod_spell_chance_1(creature_ptr, chance);
-	chance = MAX(chance, adj_mag_fail[creature_ptr->stat_index[mp_ptr->spell_stat]]);
-	/* Stunning makes spells harder */
-	if (creature_ptr->stun > 50) chance += 25;
-	else if (creature_ptr->stun) chance += 15;
+    if (chance > 95)
+        chance = 95;
 
-	if (chance > 95) chance = 95;
+    chance = mod_spell_chance_2(creature_ptr, chance);
 
-	chance = mod_spell_chance_2(creature_ptr, chance);
+    if (randint0(100) < chance) {
+        if (flush_failure)
+            flush();
 
-	if (randint0(100) < chance)
-	{
-		if (flush_failure) flush();
-		
-		msg_print(_("呪文をうまく唱えられなかった！", "You failed to get the magic off!"));
-		sound(SOUND_FAIL);
-		if (randint1(100) >= chance)
-			chg_virtue(creature_ptr, V_CHANCE,-1);
-		take_turn(creature_ptr, 100);
+        msg_print(_("呪文をうまく唱えられなかった！", "You failed to get the magic off!"));
+        sound(SOUND_FAIL);
+        if (randint1(100) >= chance)
+            chg_virtue(creature_ptr, V_CHANCE, -1);
+        energy.set_player_turn_energy(100);
 
-		return TRUE;
-	}
-	else
-	{
-		DIRECTION dir = 0;
+        return TRUE;
+    } else {
+        DIRECTION dir = 0;
 
-		if (tval == TV_ROD)
-		{
-			if ((sval >= SV_ROD_MIN_DIRECTION) && (sval != SV_ROD_HAVOC) && (sval != SV_ROD_AGGRAVATE) && (sval != SV_ROD_PESTICIDE))
-				if (!get_aim_dir(creature_ptr, &dir)) return FALSE;
-			rod_effect(creature_ptr, sval, dir, &use_charge, powerful, TRUE);
-			if (!use_charge) return FALSE;
-		}
-		else if (tval == TV_WAND)
-		{
-			if (!get_aim_dir(creature_ptr, &dir)) return FALSE;
-			wand_effect(creature_ptr, sval, dir, powerful, TRUE);
-		}
-		else
-		{
-			staff_effect(creature_ptr, sval, &use_charge, powerful, TRUE, TRUE);
-			if (!use_charge) return FALSE;
-		}
-		if (randint1(100) < chance)
-			chg_virtue(creature_ptr, V_CHANCE,1);
-	}
-	take_turn(creature_ptr, 100);
-	if (tval == TV_ROD) creature_ptr->magic_num1[item] += k_info[k_idx].pval * EATER_ROD_CHARGE;
-	else creature_ptr->magic_num1[item] -= EATER_CHARGE;
+        if (tval == TV_ROD) {
+            if ((sval >= SV_ROD_MIN_DIRECTION) && (sval != SV_ROD_HAVOC) && (sval != SV_ROD_AGGRAVATE) && (sval != SV_ROD_PESTICIDE))
+                if (!get_aim_dir(creature_ptr, &dir))
+                    return FALSE;
+            rod_effect(creature_ptr, sval, dir, &use_charge, powerful, TRUE);
+            if (!use_charge)
+                return FALSE;
+        } else if (tval == TV_WAND) {
+            if (!get_aim_dir(creature_ptr, &dir))
+                return FALSE;
+            wand_effect(creature_ptr, sval, dir, powerful, TRUE);
+        } else {
+            staff_effect(creature_ptr, sval, &use_charge, powerful, TRUE, TRUE);
+            if (!use_charge)
+                return FALSE;
+        }
+        if (randint1(100) < chance)
+            chg_virtue(creature_ptr, V_CHANCE, 1);
+    }
 
-	return TRUE;
+    energy.set_player_turn_energy(100);
+    if (tval == TV_ROD)
+        creature_ptr->magic_num1[item] += k_info[k_idx].pval * EATER_ROD_CHARGE;
+    else
+        creature_ptr->magic_num1[item] -= EATER_CHARGE;
+
+    return TRUE;
 }

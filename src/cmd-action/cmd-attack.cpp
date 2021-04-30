@@ -33,6 +33,8 @@
 #include "object/item-use-flags.h"
 #include "player-attack/player-attack.h"
 #include "player-info/avatar.h"
+#include "player-info/equipment-info.h"
+#include "player-status/player-energy.h"
 #include "player-status/player-hand-types.h"
 #include "player/attack-defense-types.h"
 #include "player/player-damage.h"
@@ -176,10 +178,9 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
 
     disturb(attacker_ptr, FALSE, TRUE);
 
-    take_turn(attacker_ptr, 100);
+    PlayerEnergy(attacker_ptr).set_player_turn_energy(100);
 
-    if (!can_attack_with_main_hand(attacker_ptr) && !can_attack_with_sub_hand(attacker_ptr)
-        && attacker_ptr->muta.has_none_of(mutation_attack_methods)) {
+    if (!can_attack_with_main_hand(attacker_ptr) && !can_attack_with_sub_hand(attacker_ptr) && attacker_ptr->muta.has_none_of(mutation_attack_methods)) {
         msg_format(_("%s攻撃できない。", "You cannot attack."), (empty_hands(attacker_ptr, FALSE) == EMPTY_HAND_NONE) ? _("両手がふさがって", "") : "");
         return FALSE;
     }

@@ -13,8 +13,8 @@
 #include "game-option/special-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
+#include "player-status/player-energy.h"
 #include "player/player-move.h"
-#include "player/player-status.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
@@ -104,7 +104,7 @@ void travel_step(player_type *creature_ptr)
         return;
     }
 
-    take_turn(creature_ptr, 100);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     exe_movement(creature_ptr, travel.dir, always_pickup, FALSE);
     if ((creature_ptr->y == travel.y) && (creature_ptr->x == travel.x)) {
         travel.run = 0;

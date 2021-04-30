@@ -7,7 +7,7 @@
 #include "action/action-limited.h"
 #include "core/asking-player.h"
 #include "game-option/disturbance-options.h"
-#include "player/player-status.h"
+#include "player-status/player-energy.h"
 #include "racial/racial-switcher.h"
 #include "racial/racial-util.h"
 #include "system/player-type-definition.h"
@@ -103,27 +103,29 @@ racial_level_check_result check_racial_level(player_type *creature_ptr, rpi_type
     int difficulty = rpi_ptr->fail;
     int use_hp = 0;
     rpi_ptr->racial_cost = rpi_ptr->cost;
-    if (creature_ptr->csp < rpi_ptr->racial_cost)
+    if (creature_ptr->csp < rpi_ptr->racial_cost) {
         use_hp = rpi_ptr->racial_cost - creature_ptr->csp;
-
+    }
+    
+    PlayerEnergy energy(creature_ptr);
     if (creature_ptr->lev < min_level) {
         msg_format(_("この能力を使用するにはレベル %d に達していなければなりません。", "You need to attain level %d to use this power."), min_level);
-        free_turn(creature_ptr);
+        energy.reset_player_turn();
         return RACIAL_CANCEL;
     }
 
     if (cmd_limit_confused(creature_ptr)) {
-        free_turn(creature_ptr);
+        energy.reset_player_turn();
         return RACIAL_CANCEL;
     } else if (creature_ptr->chp < use_hp) {
         if (!get_check(_("本当に今の衰弱した状態でこの能力を使いますか？", "Really use the power in your weakened state? "))) {
-            free_turn(creature_ptr);
+            energy.reset_player_turn();
             return RACIAL_CANCEL;
         }
     }
 
     adjust_racial_power_difficulty(creature_ptr, rpi_ptr, &difficulty);
-    take_turn(creature_ptr, 100);
+    energy.set_player_turn_energy(100);
     if (randint1(creature_ptr->stat_cur[use_stat]) >= ((difficulty / 2) + randint1(difficulty / 2)))
         return RACIAL_SUCCESS;
 

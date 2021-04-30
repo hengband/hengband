@@ -174,18 +174,18 @@ PERCENTAGE spell_chance(player_type *caster_ptr, SPELL_IDX spell, REALM_IDX use_
     PERCENTAGE penalty = (mp_ptr->spell_stat == A_WIS) ? 10 : 4;
     switch (use_realm) {
     case REALM_NATURE:
-        if ((caster_ptr->align > 50) || (caster_ptr->align < -50))
+        if ((caster_ptr->alignment > 50) || (caster_ptr->alignment < -50))
             chance += penalty;
         break;
     case REALM_LIFE:
     case REALM_CRUSADE:
-        if (caster_ptr->align < -20)
+        if (caster_ptr->alignment < -20)
             chance += penalty;
         break;
     case REALM_DEATH:
     case REALM_DAEMON:
     case REALM_HEX:
-        if (caster_ptr->align > 20)
+        if (caster_ptr->alignment > 20)
             chance += penalty;
         break;
     }

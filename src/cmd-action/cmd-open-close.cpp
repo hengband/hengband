@@ -12,8 +12,8 @@
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-requester.h"
+#include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
-#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "specific-object/chest.h"
 #include "status/action-setter.h"
@@ -41,7 +41,7 @@ static bool exe_open_chest(player_type *creature_ptr, POSITION y, POSITION x, OB
     bool flag = TRUE;
     bool more = FALSE;
     object_type *o_ptr = &creature_ptr->current_floor_ptr->o_list[o_idx];
-    take_turn(creature_ptr, 100);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     if (o_ptr->pval > 0) {
         flag = FALSE;
         int i = creature_ptr->skill_dis;
@@ -122,7 +122,7 @@ void do_cmd_open(player_type *creature_ptr)
         if (!has_flag(f_info[feat].flags, FF_OPEN) && !o_idx) {
             msg_print(_("そこには開けるものが見当たらない。", "You see nothing there to open."));
         } else if (g_ptr->m_idx && creature_ptr->riding != g_ptr->m_idx) {
-            take_turn(creature_ptr, 100);
+            PlayerEnergy(creature_ptr).set_player_turn_energy(100);
             msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
             do_cmd_attack(creature_ptr, y, x, HISSATSU_NONE);
         } else if (o_idx) {
@@ -173,7 +173,7 @@ void do_cmd_close(player_type *creature_ptr)
         if (!has_flag(f_info[feat].flags, FF_CLOSE)) {
             msg_print(_("そこには閉じるものが見当たらない。", "You see nothing there to close."));
         } else if (g_ptr->m_idx) {
-            take_turn(creature_ptr, 100);
+            PlayerEnergy(creature_ptr).set_player_turn_energy(100);
             msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
             do_cmd_attack(creature_ptr, y, x, HISSATSU_NONE);
         } else {
@@ -287,7 +287,7 @@ void do_cmd_bash(player_type *creature_ptr)
         if (!has_flag(f_info[feat].flags, FF_BASH)) {
             msg_print(_("そこには体当たりするものが見当たらない。", "You see nothing there to bash."));
         } else if (g_ptr->m_idx) {
-            take_turn(creature_ptr, 100);
+            PlayerEnergy(creature_ptr).set_player_turn_energy(100);
             msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
             do_cmd_attack(creature_ptr, y, x, HISSATSU_NONE);
         } else {
@@ -359,11 +359,11 @@ void do_cmd_spike(player_type *creature_ptr)
     } else if (!get_spike(creature_ptr, &item)) {
         msg_print(_("くさびを持っていない！", "You have no spikes!"));
     } else if (g_ptr->m_idx) {
-        take_turn(creature_ptr, 100);
+        PlayerEnergy(creature_ptr).set_player_turn_energy(100);
         msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
         do_cmd_attack(creature_ptr, y, x, HISSATSU_NONE);
     } else {
-        take_turn(creature_ptr, 100);
+        PlayerEnergy(creature_ptr).set_player_turn_energy(100);
         msg_format(_("%sにくさびを打ち込んだ。", "You jam the %s with a spike."), f_info[feat].name.c_str());
         cave_alter_feat(creature_ptr, y, x, FF_SPIKE);
         vary_item(creature_ptr, item, -1);

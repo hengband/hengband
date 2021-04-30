@@ -15,7 +15,7 @@
  * @return 算出されたボーナス値
  * @details
  * To avoid floating point but still provide a smooth distribution of bonuses,\n
- * we simply round the results of division in such a way as to "average" the\n
+ * we simply round the results of ENERGY_DIVISION in such a way as to "average" the\n
  * correct floating point value.\n
  *\n
  * This function has been changed.  It uses "randnor()" to choose values from\n

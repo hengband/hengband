@@ -47,11 +47,11 @@
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"
 #include "player-info/avatar.h"
+#include "player-status/player-energy.h"
 #include "player/player-class.h"
 #include "player/player-personality-types.h"
 #include "player/player-skill.h"
 #include "player/player-status-table.h"
-#include "player/player-status.h"
 #include "spell/spell-types.h"
 #include "sv-definition/sv-bow-types.h"
 #include "system/artifact-type-definition.h"
@@ -434,7 +434,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
     else
         chance = (shooter_ptr->skill_thb + ((shooter_ptr->weapon_exp[0][j_ptr->sval] - (WEAPON_EXP_MASTER / 2)) / 200 + bonus) * BTH_PLUS_ADJ);
 
-    shooter_ptr->energy_use = bow_energy(j_ptr->sval);
+    PlayerEnergy(shooter_ptr).set_player_turn_energy(bow_energy(j_ptr->sval));
     tmul = bow_tmul(j_ptr->sval);
 
     /* Get extra "power" from "extra might" */
@@ -460,7 +460,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
     /* Get a direction (or cancel) */
     if (!get_aim_dir(shooter_ptr, &dir)) {
-        free_turn(shooter_ptr);
+        PlayerEnergy(shooter_ptr).reset_player_turn();
 
         if (snipe_type == SP_AWAY)
             snipe_type = SP_NONE;
@@ -487,7 +487,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
     /* Don't shoot at my feet */
     if (tx == shooter_ptr->x && ty == shooter_ptr->y) {
-        free_turn(shooter_ptr);
+        PlayerEnergy(shooter_ptr).reset_player_turn();
 
         /* project_length is already reset to 0 */
 
@@ -495,7 +495,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
     }
 
     /* Take a (partial) turn */
-    shooter_ptr->energy_use = (shooter_ptr->energy_use / thits);
+    PlayerEnergy(shooter_ptr).div_player_turn_energy((ENERGY)thits);
     shooter_ptr->is_fired = TRUE;
 
     /* Sniper - Difficult to shot twice at 1 turn */

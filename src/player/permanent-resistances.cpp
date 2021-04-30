@@ -3,11 +3,11 @@
 #include "mind/mind-elementalist.h"
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
+#include "player-info/equipment-info.h"
 #include "player/player-personality-types.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"
 #include "player/player-status-flags.h"
-#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
@@ -161,7 +161,7 @@ static void add_mutation_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 
     if (creature_ptr->muta.has(MUTA::FLESH_ROT))
         remove_flag(flags, TR_REGEN);
-    if (creature_ptr->muta.has_any_of({MUTA::XTRA_FAT, MUTA::XTRA_LEGS, MUTA::SHORT_LEG}))
+    if (creature_ptr->muta.has_any_of({ MUTA::XTRA_FAT, MUTA::XTRA_LEGS, MUTA::SHORT_LEG }))
         add_flag(flags, TR_SPEED);
     if (creature_ptr->muta.has(MUTA::ELEC_TOUC))
         add_flag(flags, TR_SH_ELEC);

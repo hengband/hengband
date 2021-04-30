@@ -38,11 +38,12 @@
 #include "player-attack/blood-sucking-processor.h"
 #include "player-attack/player-attack-util.h"
 #include "player-info/avatar.h"
+#include "player-info/equipment-info.h"
+#include "player-status/player-energy.h"
 #include "player-status/player-hand-types.h"
 #include "player/player-damage.h"
 #include "player/player-skill.h"
 #include "player/player-status-flags.h"
-#include "player/player-status.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell-kind/earthquake.h"
 #include "spell-realm/spells-hex.h"
@@ -263,7 +264,7 @@ static MagicalBrandEffect select_magical_brand_effect(player_type *attacker_ptr,
  * @param pa_ptr プレイヤー攻撃情報への参照ポインタ
  * @return ダイス数
  */
-static DICE_NUMBER magical_brand_extra_dice(player_attack_type* pa_ptr)
+static DICE_NUMBER magical_brand_extra_dice(player_attack_type *pa_ptr)
 {
     switch (pa_ptr->magical_effect) {
     case MagicalBrandEffect::NONE:
@@ -312,7 +313,8 @@ static bool does_equip_cause_earthquake(player_type *attacker_ptr, player_attack
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @return 持つならtrue、持たないならfalse
  */
-static bool does_weapon_has_flag(BIT_FLAGS &attacker_flags, player_attack_type *pa_ptr) {
+static bool does_weapon_has_flag(BIT_FLAGS &attacker_flags, player_attack_type *pa_ptr)
+{
     if (!attacker_flags)
         return false;
 
@@ -346,7 +348,8 @@ static void process_weapon_attack(player_type *attacker_ptr, player_attack_type 
 
     auto do_impact = does_weapon_has_flag(attacker_ptr->impact, pa_ptr);
     if ((!(o_ptr->tval == TV_SWORD) || !(o_ptr->sval == SV_POISON_NEEDLE)) && !(pa_ptr->mode == HISSATSU_KYUSHO))
-        pa_ptr->attack_damage = critical_norm(attacker_ptr, o_ptr->weight, o_ptr->to_h, pa_ptr->attack_damage, attacker_ptr->to_h[pa_ptr->hand], pa_ptr->mode, do_impact);
+        pa_ptr->attack_damage
+            = critical_norm(attacker_ptr, o_ptr->weight, o_ptr->to_h, pa_ptr->attack_damage, attacker_ptr->to_h[pa_ptr->hand], pa_ptr->mode, do_impact);
 
     pa_ptr->drain_result = pa_ptr->attack_damage;
     process_vorpal_attack(attacker_ptr, pa_ptr, vorpal_cut, vorpal_chance);
@@ -444,13 +447,19 @@ static bool check_fear_death(player_type *attacker_ptr, player_attack_type *pa_p
 
     *(pa_ptr->mdeath) = TRUE;
     if ((attacker_ptr->pclass == CLASS_BERSERKER) && attacker_ptr->energy_use) {
+        PlayerEnergy energy(attacker_ptr);
         if (can_attack_with_main_hand(attacker_ptr) && can_attack_with_sub_hand(attacker_ptr)) {
-            if (pa_ptr->hand)
-                attacker_ptr->energy_use = attacker_ptr->energy_use * 3 / 5 + attacker_ptr->energy_use * num * 2 / (attacker_ptr->num_blow[pa_ptr->hand] * 5);
-            else
-                attacker_ptr->energy_use = attacker_ptr->energy_use * num * 3 / (attacker_ptr->num_blow[pa_ptr->hand] * 5);
+            ENERGY energy_use;
+            if (pa_ptr->hand) {
+                energy_use = attacker_ptr->energy_use * 3 / 5 + attacker_ptr->energy_use * num * 2 / (attacker_ptr->num_blow[pa_ptr->hand] * 5);
+            } else {
+                energy_use = attacker_ptr->energy_use * num * 3 / (attacker_ptr->num_blow[pa_ptr->hand] * 5);
+            }
+
+            energy.set_player_turn_energy(energy_use);
         } else {
-            attacker_ptr->energy_use = attacker_ptr->energy_use * num / attacker_ptr->num_blow[pa_ptr->hand];
+            auto energy_use = (ENERGY)(attacker_ptr->energy_use * num / attacker_ptr->num_blow[pa_ptr->hand]);
+            energy.set_player_turn_energy(energy_use);
         }
     }
 

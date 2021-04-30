@@ -4,7 +4,9 @@
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
+#include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
@@ -100,4 +102,13 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
 	C_KILL(dun, current_world_ptr->max_d_idx, DUNGEON_IDX);
 
 	return select_dungeon;
+}
+
+/*!
+ * @brief プレイヤーが現在ダンジョンに潜っているかどうかを返す。
+ * @memo 現在はdun_levelが0でないかそうでないかに限るが可読性を高めるため。
+ */
+bool is_in_dungeon(player_type *creature_ptr)
+{
+    return creature_ptr->current_floor_ptr->dun_level > 0;
 }

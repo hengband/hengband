@@ -30,6 +30,7 @@
 #include "monster/monster-status.h"
 #include "mutation/mutation-flag-types.h"
 #include "object/warning.h"
+#include "player-status/player-energy.h"
 #include "player/player-move.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
@@ -135,7 +136,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
             }
 
             creature_ptr->leaving = TRUE;
-            take_turn(creature_ptr, 100);
+            PlayerEnergy(creature_ptr).set_player_turn_energy(100);
             return;
         }
 
@@ -178,7 +179,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
                 do_past = TRUE;
             } else {
                 msg_format(_("%^sが邪魔だ！", "%^s is in your way!"), m_name);
-                free_turn(creature_ptr);
+                PlayerEnergy(creature_ptr).reset_player_turn();
                 can_move = FALSE;
             }
         } else {
@@ -189,10 +190,11 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
 
     monster_type *riding_m_ptr = &floor_ptr->m_list[creature_ptr->riding];
     monster_race *riding_r_ptr = &r_info[creature_ptr->riding ? riding_m_ptr->r_idx : 0];
+    PlayerEnergy energy(creature_ptr);
     if (can_move && creature_ptr->riding) {
         if (riding_r_ptr->flags1 & RF1_NEVER_MOVE) {
             msg_print(_("動けない！", "Can't move!"));
-            free_turn(creature_ptr);
+            energy.reset_player_turn();
             can_move = FALSE;
             disturb(creature_ptr, FALSE, TRUE);
         } else if (monster_fear_remaining(riding_m_ptr)) {
@@ -211,17 +213,17 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
         } else if (has_flag(f_ptr->flags, FF_WATER) && !(riding_r_ptr->flags7 & RF7_AQUATIC)
             && (has_flag(f_ptr->flags, FF_DEEP) || (riding_r_ptr->flags2 & RF2_AURA_FIRE))) {
             msg_format(_("%sの上に行けない。", "Can't swim."), f_info[get_feat_mimic(g_ptr)].name.c_str());
-            free_turn(creature_ptr);
+            energy.reset_player_turn();
             can_move = FALSE;
             disturb(creature_ptr, FALSE, TRUE);
         } else if (!has_flag(f_ptr->flags, FF_WATER) && (riding_r_ptr->flags7 & RF7_AQUATIC)) {
             msg_format(_("%sから上がれない。", "Can't land."), f_info[get_feat_mimic(&floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name.c_str());
-            free_turn(creature_ptr);
+            energy.reset_player_turn();
             can_move = FALSE;
             disturb(creature_ptr, FALSE, TRUE);
         } else if (has_flag(f_ptr->flags, FF_LAVA) && !(riding_r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK)) {
             msg_format(_("%sの上に行けない。", "Too hot to go through."), f_info[get_feat_mimic(g_ptr)].name.c_str());
-            free_turn(creature_ptr);
+            energy.reset_player_turn();
             can_move = FALSE;
             disturb(creature_ptr, FALSE, TRUE);
         }
@@ -238,12 +240,13 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
     if (!can_move) {
     } else if (!has_flag(f_ptr->flags, FF_MOVE) && has_flag(f_ptr->flags, FF_CAN_FLY) && !creature_ptr->levitation) {
         msg_format(_("空を飛ばないと%sの上には行けない。", "You need to fly to go through the %s."), f_info[get_feat_mimic(g_ptr)].name.c_str());
-        free_turn(creature_ptr);
+        energy.reset_player_turn();
         creature_ptr->running = 0;
         can_move = FALSE;
     } else if (has_flag(f_ptr->flags, FF_TREE) && !p_can_kill_walls) {
-        if ((creature_ptr->pclass != CLASS_RANGER) && !creature_ptr->levitation && (!creature_ptr->riding || !(riding_r_ptr->flags8 & RF8_WILD_WOOD)))
-            creature_ptr->energy_use *= 2;
+        if ((creature_ptr->pclass != CLASS_RANGER) && !creature_ptr->levitation && (!creature_ptr->riding || !(riding_r_ptr->flags8 & RF8_WILD_WOOD))) {
+            energy.mul_player_turn_energy(2);
+        }
     } else if ((do_pickup != easy_disarm) && has_flag(f_ptr->flags, FF_DISARM) && !g_ptr->mimic) {
         if (!trap_can_be_ignored(creature_ptr, g_ptr->feat)) {
             (void)exe_disarm(creature_ptr, y, x, dir);
@@ -270,7 +273,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
             if (boundary_floor(g_ptr, f_ptr, mimic_f_ptr)) {
                 msg_print(_("それ以上先には進めない。", "You cannot go any more."));
                 if (!(creature_ptr->confused || creature_ptr->stun || creature_ptr->image))
-                    free_turn(creature_ptr);
+                    energy.reset_player_turn();
             } else {
                 if (easy_open && is_closed_door(creature_ptr, feat) && easy_open_door(creature_ptr, y, x))
                     return;
@@ -281,7 +284,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
                 msg_format("There is %s %s blocking your way.", is_a_vowel(name[0]) ? "an" : "a", name);
 #endif
                 if (!(creature_ptr->confused || creature_ptr->stun || creature_ptr->image))
-                    free_turn(creature_ptr);
+                    energy.reset_player_turn();
             }
         }
 
@@ -292,7 +295,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
 
     if (can_move && !pattern_seq(creature_ptr, creature_ptr->y, creature_ptr->x, y, x)) {
         if (!(creature_ptr->confused || creature_ptr->stun || creature_ptr->image))
-            free_turn(creature_ptr);
+            energy.reset_player_turn();
 
         disturb(creature_ptr, FALSE, TRUE);
         can_move = FALSE;
@@ -302,7 +305,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
         return;
 
     if (creature_ptr->warning && (!process_warning(creature_ptr, x, y))) {
-        creature_ptr->energy_use = 25;
+        energy.set_player_turn_energy(25);
         return;
     }
 

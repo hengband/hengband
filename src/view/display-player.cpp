@@ -17,6 +17,7 @@
 #include "mutation/mutation-flag-types.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
+#include "player-info/alignment.h"
 #include "player/mimic-info-table.h"
 #include "player/patron.h"
 #include "player/player-class.h"
@@ -133,7 +134,7 @@ static void display_phisique(player_type *creature_ptr)
     display_player_one_line(ENTRY_WEIGHT, format("%d", (int)creature_ptr->wt), TERM_L_BLUE);
     display_player_one_line(ENTRY_SOCIAL, format("%d", (int)creature_ptr->sc), TERM_L_BLUE);
 #endif
-    std::string alg = your_alignment(creature_ptr);
+    std::string alg = PlayerAlignment(creature_ptr).get_alignment_description();
     display_player_one_line(ENTRY_ALIGN, format("%s", alg.c_str()), TERM_L_BLUE);
 }
 
@@ -352,11 +353,10 @@ void display_player(player_type *creature_ptr, int mode)
  */
 void display_player_equippy(player_type *creature_ptr, TERM_LEN y, TERM_LEN x, BIT_FLAGS16 mode)
 {
-	int max_i = (mode & DP_WP) ? INVEN_BOW + 1 : INVEN_TOTAL;
-	for (int i = INVEN_MAIN_HAND; i < max_i; i++)
-	{
-		object_type *o_ptr;
-		o_ptr = &creature_ptr->inventory_list[i];
+    int max_i = (mode & DP_WP) ? INVEN_BOW + 1 : INVEN_TOTAL;
+    for (int i = INVEN_MAIN_HAND; i < max_i; i++) {
+        object_type *o_ptr;
+        o_ptr = &creature_ptr->inventory_list[i];
 
         TERM_COLOR a = object_attr(o_ptr);
         SYMBOL_CODE c = object_char(o_ptr);

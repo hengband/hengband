@@ -32,6 +32,7 @@
 #include "object/item-use-flags.h"
 #include "player-info/avatar.h"
 #include "player-info/self-info.h"
+#include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/eldritch-horror.h"
 #include "player/player-class.h"
@@ -907,7 +908,7 @@ void do_cmd_study(player_type *caster_ptr)
 #endif
     }
 
-    take_turn(caster_ptr, 100);
+    PlayerEnergy(caster_ptr).set_player_turn_energy(100);
 
     switch (mp_ptr->spell_book) {
     case TV_LIFE_BOOK:
@@ -1301,7 +1302,7 @@ bool do_cmd_cast(player_type *caster_ptr)
         }
     }
 
-    take_turn(caster_ptr, 100);
+    PlayerEnergy(caster_ptr).set_player_turn_energy(100);
 
     /* Over-exert the player */
     if (over_exerted) {

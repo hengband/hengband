@@ -30,6 +30,7 @@
 #include "system/angband-version.h"
 #include "system/artifact-type-definition.h"
 #include "system/monster-race-definition.h"
+#include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include "world/world.h"

@@ -12,8 +12,8 @@
 #include "monster-race/race-ability-mask.h"
 #include "mspell/monster-power-table.h"
 #include "player-info/avatar.h"
+#include "player-status/player-energy.h"
 #include "player/player-status-table.h"
-#include "player/player-status.h"
 #include "realm/realm-types.h"
 #include "spell/spell-info.h"
 #include "status/bad-status-setter.h"
@@ -111,7 +111,7 @@ bool do_cmd_cast_learned(player_type *caster_ptr)
         }
     }
 
-    take_turn(caster_ptr, 100);
+    PlayerEnergy(caster_ptr).set_player_turn_energy(100);
     caster_ptr->redraw |= PR_MANA;
     caster_ptr->window_flags |= PW_PLAYER | PW_SPELL;
     return TRUE;

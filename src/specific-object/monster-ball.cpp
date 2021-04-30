@@ -8,7 +8,7 @@
 #include "monster/monster-info.h"
 #include "monster/monster-util.h"
 #include "object-activation/activation-util.h"
-#include "player/player-status.h"
+#include "pet/pet-util.h"
 #include "racial/racial-android.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"

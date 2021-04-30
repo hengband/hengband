@@ -87,7 +87,7 @@ static int calc_death_scythe_reflection_magnification(player_type *attacker_ptr)
  */
 static void compensate_death_scythe_reflection_magnification(player_type *attacker_ptr, int *magnification, BIT_FLAGS *death_scythe_flags)
 {
-    if ((attacker_ptr->align < 0) && (*magnification < 20))
+    if ((attacker_ptr->alignment < 0) && (*magnification < 20))
         *magnification = 20;
 
     if (!(has_resist_acid(attacker_ptr) || is_oppose_acid(attacker_ptr) || has_immune_acid(attacker_ptr)) && (*magnification < 25))

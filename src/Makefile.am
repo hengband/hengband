@@ -646,7 +646,9 @@ hengband_SOURCES = \
 	player-info/base-status-info.cpp player-info/base-status-info.h \
 	player-info/body-improvement-info.cpp player-info/body-improvement-info.h \
 	player-info/class-ability-info.cpp player-info/class-ability-info.h \
+	player-info/equipment-info.cpp player-info/equipment-info.h \
 	player-info/mutation-info.cpp player-info/mutation-info.h \
+	player-info/alignment.cpp player-info/alignment.h \
 	player-info/race-ability-info.cpp player-info/race-ability-info.h \
 	player-info/resistance-info.cpp player-info/resistance-info.h \
 	player-info/self-info.cpp player-info/self-info.h \
@@ -656,6 +658,7 @@ hengband_SOURCES = \
 	player-status/player-hand-types.h \
 	player-status/player-infravision.cpp player-status/player-infravision.h \
 	player-status/player-basic-statistics.cpp player-status/player-basic-statistics.h \
+	player-status/player-energy.cpp player-status/player-energy.h \
 	player-status/player-speed.cpp player-status/player-speed.h \
 	player-status/player-status-base.cpp player-status/player-status-base.h \
 	player-status/player-stealth.cpp player-status/player-stealth.h \

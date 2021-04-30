@@ -29,11 +29,13 @@
 #include "mind/mind-ninja.h"
 #include "monster/monster-update.h"
 #include "perception/object-perception.h"
+#include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
 #include "realm/realm-song-numbers.h"
 #include "spell-kind/spells-floor.h"
+#include "spell-realm/spells-song.h"
 #include "spell/spell-types.h"
 #include "status/action-setter.h"
 #include "system/floor-type-definition.h"
@@ -215,17 +217,18 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
         window_stuff(creature_ptr);
     }
 
+    PlayerEnergy energy(creature_ptr);
     if (has_flag(f_ptr->flags, FF_STORE)) {
         disturb(creature_ptr, FALSE, TRUE);
-        free_turn(creature_ptr);
+        energy.reset_player_turn();
         command_new = SPECIAL_KEY_STORE;
     } else if (has_flag(f_ptr->flags, FF_BLDG)) {
         disturb(creature_ptr, FALSE, TRUE);
-        free_turn(creature_ptr);
+        energy.reset_player_turn();
         command_new = SPECIAL_KEY_BUILDING;
     } else if (has_flag(f_ptr->flags, FF_QUEST_ENTER)) {
         disturb(creature_ptr, FALSE, TRUE);
-        free_turn(creature_ptr);
+        energy.reset_player_turn();
         command_new = SPECIAL_KEY_QUEST;
     } else if (has_flag(f_ptr->flags, FF_QUEST_EXIT)) {
         if (quest[floor_ptr->inside_quest].type == QUEST_TYPE_FIND_EXIT)

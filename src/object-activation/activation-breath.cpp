@@ -4,6 +4,7 @@
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-realm/spells-hex.h"
+#include "spell-realm/spells-song.h"
 #include "spell/spell-types.h"
 #include "status/element-resistance.h"
 #include "sv-definition/sv-ring-types.h"

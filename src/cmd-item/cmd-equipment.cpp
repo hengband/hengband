@@ -30,6 +30,8 @@
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
 #include "player-info/avatar.h"
+#include "player-info/equipment-info.h"
+#include "player-status/player-energy.h"
 #include "player-status/player-hand-types.h"
 #include "player/attack-defense-types.h"
 #include "player/player-status.h"
@@ -81,7 +83,6 @@ void do_cmd_equip(player_type *creature_ptr)
     command_new = 0;
     command_gap = wid - 30;
 }
-
 
 /*!
  * @brief 装備するコマンドのメインルーチン / Wield or wear a single item from the pack or floor
@@ -229,7 +230,7 @@ void do_cmd_wield(player_type *creature_ptr)
         autopick_alter_item(creature_ptr, item, FALSE);
     }
 
-    take_turn(creature_ptr, 100);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     q_ptr = &forge;
     object_copy(q_ptr, o_ptr);
     q_ptr->number = 1;
@@ -313,7 +314,9 @@ void do_cmd_takeoff(player_type *creature_ptr)
     if (!o_ptr)
         return;
 
-    if (object_is_cursed(o_ptr)) {
+    PlayerEnergy energy(creature_ptr);
+    if (object_is_cursed(o_ptr))
+    {
         if ((o_ptr->curse_flags & TRC_PERMA_CURSE) || (creature_ptr->pclass != CLASS_BERSERKER)) {
             msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
             return;
@@ -329,12 +332,12 @@ void do_cmd_takeoff(player_type *creature_ptr)
             msg_print(_("呪いを打ち破った。", "You break the curse."));
         } else {
             msg_print(_("装備を外せなかった。", "You couldn't remove the equipment."));
-            take_turn(creature_ptr, 50);
+            energy.set_player_turn_energy(50);
             return;
         }
     }
 
-    take_turn(creature_ptr, 50);
+    energy.set_player_turn_energy(50);
     (void)inven_takeoff(creature_ptr, item, 255);
     verify_equip_slot(creature_ptr, item);
     calc_android_exp(creature_ptr);

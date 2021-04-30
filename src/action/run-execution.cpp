@@ -15,6 +15,7 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "object/object-mark-types.h"
+#include "player-status/player-energy.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
 #include "system/floor-type-definition.h"
@@ -381,7 +382,7 @@ void run_step(player_type *creature_ptr, DIRECTION dir)
     if (--creature_ptr->running <= 0)
         return;
 
-    take_turn(creature_ptr, 100);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     exe_movement(creature_ptr, find_current, FALSE, FALSE);
     if (player_bold(creature_ptr, creature_ptr->run_py, creature_ptr->run_px)) {
         creature_ptr->run_py = 0;

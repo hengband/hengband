@@ -44,9 +44,10 @@
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "object/object-stack.h"
+#include "player-info/equipment-info.h"
+#include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/player-status-table.h"
-#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "racial/racial-android.h"
 #include "specific-object/torch.h"
@@ -199,9 +200,11 @@ static void reflect_inventory_by_throw(player_type *creature_ptr, it_type *it_pt
 
 static void set_class_specific_throw_params(player_type *creature_ptr, it_type *it_ptr)
 {
-    take_turn(creature_ptr, 100);
-    if ((creature_ptr->pclass == CLASS_ROGUE) || (creature_ptr->pclass == CLASS_NINJA))
-        creature_ptr->energy_use -= creature_ptr->lev;
+    PlayerEnergy energy(creature_ptr);
+    energy.set_player_turn_energy(100);
+    if ((creature_ptr->pclass == CLASS_ROGUE) || (creature_ptr->pclass == CLASS_NINJA)) {
+        energy.sub_player_turn_energy(creature_ptr->lev);
+    }
 
     it_ptr->y = creature_ptr->y;
     it_ptr->x = creature_ptr->x;

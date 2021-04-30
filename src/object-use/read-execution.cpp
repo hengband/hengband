@@ -25,11 +25,12 @@
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
 #include "player-info/avatar.h"
+#include "player-info/equipment-info.h"
+#include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
 #include "player/player-damage.h"
 #include "player/player-status-flags.h"
-#include "player/player-status.h"
 #include "spell-kind/magic-item-recharger.h"
 #include "spell-kind/spells-curse-removal.h"
 #include "spell-kind/spells-detection.h"
@@ -45,6 +46,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
+#include "spell-realm/spells-song.h"
 #include "spell/spell-types.h"
 #include "spell/spells-object.h"
 #include "spell/spells-summon.h"
@@ -82,7 +84,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
     int k, used_up, ident, lev;
     object_type *o_ptr;
     o_ptr = ref_item(creature_ptr, item);
-    take_turn(creature_ptr, 100);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     if (cmd_limit_time_walk(creature_ptr))
         return;
 

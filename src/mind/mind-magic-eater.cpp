@@ -6,7 +6,7 @@
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "perception/object-perception.h"
-#include "player/player-status.h"
+#include "player-status/player-energy.h"
 #include "sv-definition/sv-staff-types.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
@@ -83,6 +83,6 @@ bool import_magic_device(player_type *user_ptr)
     msg_format(_("%sの魔力を取り込んだ。", "You absorb magic of %s."), o_name);
 
     vary_item(user_ptr, item, -999);
-    take_turn(user_ptr, 100);
+    PlayerEnergy(user_ptr).set_player_turn_energy(100);
     return TRUE;
 }

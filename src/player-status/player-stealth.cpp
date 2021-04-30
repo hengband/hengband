@@ -1,6 +1,7 @@
 ﻿#include "player-status/player-stealth.h"
 #include "mind/mind-ninja.h"
 #include "mutation/mutation-flag-types.h"
+#include "player-info/equipment-info.h"
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"
 #include "player/player-personality.h"

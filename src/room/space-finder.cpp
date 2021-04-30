@@ -166,7 +166,7 @@ static bool find_space_aux(dun_data_type *dd_ptr, POSITION blocks_high, POSITION
  * the room calling this function.\n
  *\n
  * We allocate space in 11x11 blocks, but want to make sure that rooms\n
- * align neatly on the standard screen.  Therefore, we make them use\n
+ * alignment neatly on the standard screen.  Therefore, we make them use\n
  * blocks in few 11x33 rectangles as possible.\n
  *\n
  * Be careful to include the edges of the room in height and width!\n

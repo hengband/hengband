@@ -46,6 +46,8 @@
 #include "mind/stances-table.h"
 #include "mutation/mutation-flag-types.h"
 #include "object/item-tester-hooker.h"
+#include "player-info/equipment-info.h"
+#include "player-status/player-energy.h"
 #include "player-status/player-hand-types.h"
 #include "player/attack-defense-types.h"
 #include "player/player-class.h"
@@ -69,6 +71,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
+#include "spell-realm/spells-song.h"
 #include "spell/spell-types.h"
 #include "spell/spells-status.h"
 #include "status/action-setter.h"
@@ -90,8 +93,9 @@ bool switch_class_racial_execution(player_type *creature_ptr, const s32b command
     case CLASS_HIGH_MAGE:
         if (creature_ptr->realm1 == REALM_HEX) {
             bool retval = stop_hex_spell(creature_ptr);
-            if (retval)
-                creature_ptr->energy_use = 10;
+            if (retval) {
+                PlayerEnergy(creature_ptr).set_player_turn_energy(10);
+            }
 
             return retval;
         }
@@ -196,7 +200,7 @@ bool switch_class_racial_execution(player_type *creature_ptr, const s32b command
             return FALSE;
 
         stop_singing(creature_ptr);
-        creature_ptr->energy_use = 10;
+        PlayerEnergy(creature_ptr).set_player_turn_energy(10);
         return TRUE;
     case CLASS_RED_MAGE:
         if (cmd_limit_cast(creature_ptr))
@@ -233,7 +237,7 @@ bool switch_class_racial_execution(player_type *creature_ptr, const s32b command
         return TRUE;
     case CLASS_BLUE_MAGE:
         set_action(creature_ptr, creature_ptr->action == ACTION_LEARN ? ACTION_NONE : ACTION_LEARN);
-        free_turn(creature_ptr);
+        PlayerEnergy(creature_ptr).reset_player_turn();
         return TRUE;
     case CLASS_CAVALRY:
         return rodeo(creature_ptr);
@@ -444,7 +448,7 @@ bool switch_race_racial_execution(player_type *creature_ptr, const s32b command)
         return android_inside_weapon(creature_ptr);
     default:
         msg_print(_("この種族は特殊な能力を持っていません。", "This race has no bonus power."));
-        free_turn(creature_ptr);
+        PlayerEnergy(creature_ptr).reset_player_turn();
         return TRUE;
     }
 }

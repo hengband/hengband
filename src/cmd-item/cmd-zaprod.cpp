@@ -13,8 +13,8 @@
 #include "perception/object-perception.h"
 #include "player/attack-defense-types.h"
 #include "player-info/avatar.h"
+#include "player-status/player-energy.h"
 #include "player/player-class.h"
-#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "spell-kind/spells-beam.h"
 #include "spell-kind/spells-detection.h"
@@ -315,7 +315,7 @@ void exe_zap_rod(player_type *creature_ptr, INVENTORY_IDX item)
             return;
     }
 
-    take_turn(creature_ptr, 100);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
 
     lev = k_info[o_ptr->k_idx].level;
 

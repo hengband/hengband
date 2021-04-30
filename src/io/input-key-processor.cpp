@@ -75,6 +75,7 @@
 #include "mind/mind-magic-eater.h"
 #include "mind/mind-sniper.h"
 #include "mind/snipe-types.h"
+#include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
 #include "player/player-class.h"
@@ -374,67 +375,79 @@ void process_command(player_type *creature_ptr)
         break;
     }
     case 'm': {
-        if (!creature_ptr->wild_mode) {
-            if ((creature_ptr->pclass == CLASS_WARRIOR) || (creature_ptr->pclass == CLASS_ARCHER) || (creature_ptr->pclass == CLASS_CAVALRY)) {
-                msg_print(_("呪文を唱えられない！", "You cannot cast spells!"));
-            } else if (floor_ptr->dun_level && (d_info[creature_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC) && (creature_ptr->pclass != CLASS_BERSERKER)
-                && (creature_ptr->pclass != CLASS_SMITH)) {
-                msg_print(_("ダンジョンが魔法を吸収した！", "The dungeon absorbs all attempted magic!"));
-                msg_print(NULL);
-            } else if (creature_ptr->anti_magic && (creature_ptr->pclass != CLASS_BERSERKER) && (creature_ptr->pclass != CLASS_SMITH)) {
-                concptr which_power = _("魔法", "magic");
-                switch (creature_ptr->pclass) {
-                case CLASS_MINDCRAFTER:
-                    which_power = _("超能力", "psionic powers");
-                    break;
-                case CLASS_IMITATOR:
-                    which_power = _("ものまね", "imitation");
-                    break;
-                case CLASS_SAMURAI:
-                    which_power = _("必殺剣", "hissatsu");
-                    break;
-                case CLASS_MIRROR_MASTER:
-                    which_power = _("鏡魔法", "mirror magic");
-                    break;
-                case CLASS_NINJA:
-                    which_power = _("忍術", "ninjutsu");
-                    break;
-                case CLASS_ELEMENTALIST:
-                    which_power = _("元素魔法", "magic");
-                    break;
-                default:
-                    if (mp_ptr->spell_book == TV_LIFE_BOOK)
-                        which_power = _("祈り", "prayer");
-                    break;
-                }
-
-                msg_format(_("反魔法バリアが%sを邪魔した！", "An anti-magic shell disrupts your %s!"), which_power);
-                free_turn(creature_ptr);
-            } else if (is_shero(creature_ptr) && (creature_ptr->pclass != CLASS_BERSERKER)) {
-                msg_format(_("狂戦士化していて頭が回らない！", "You cannot think directly!"));
-                free_turn(creature_ptr);
-            } else {
-                if ((creature_ptr->pclass == CLASS_MINDCRAFTER) || (creature_ptr->pclass == CLASS_BERSERKER) || (creature_ptr->pclass == CLASS_NINJA)
-                    || (creature_ptr->pclass == CLASS_MIRROR_MASTER))
-                    do_cmd_mind(creature_ptr);
-                else if (creature_ptr->pclass == CLASS_ELEMENTALIST)
-                    do_cmd_element(creature_ptr);
-                else if (creature_ptr->pclass == CLASS_IMITATOR)
-                    do_cmd_mane(creature_ptr, FALSE);
-                else if (creature_ptr->pclass == CLASS_MAGIC_EATER)
-                    do_cmd_magic_eater(creature_ptr, FALSE, FALSE);
-                else if (creature_ptr->pclass == CLASS_SAMURAI)
-                    do_cmd_hissatsu(creature_ptr);
-                else if (creature_ptr->pclass == CLASS_BLUE_MAGE)
-                    do_cmd_cast_learned(creature_ptr);
-                else if (creature_ptr->pclass == CLASS_SMITH)
-                    do_cmd_kaji(creature_ptr, FALSE);
-                else if (creature_ptr->pclass == CLASS_SNIPER)
-                    do_cmd_snipe(creature_ptr);
-                else
-                    (void)do_cmd_cast(creature_ptr);
-            }
+        if (creature_ptr->wild_mode) {
+            break;
         }
+
+        if ((creature_ptr->pclass == CLASS_WARRIOR) || (creature_ptr->pclass == CLASS_ARCHER) || (creature_ptr->pclass == CLASS_CAVALRY)) {
+            msg_print(_("呪文を唱えられない！", "You cannot cast spells!"));
+            break;
+        }
+        
+        if (floor_ptr->dun_level && (d_info[creature_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC) && (creature_ptr->pclass != CLASS_BERSERKER)
+            && (creature_ptr->pclass != CLASS_SMITH)) {
+            msg_print(_("ダンジョンが魔法を吸収した！", "The dungeon absorbs all attempted magic!"));
+            msg_print(NULL);
+            break;
+        }
+        
+        if (creature_ptr->anti_magic && (creature_ptr->pclass != CLASS_BERSERKER) && (creature_ptr->pclass != CLASS_SMITH)) {
+            concptr which_power = _("魔法", "magic");
+            switch (creature_ptr->pclass) {
+            case CLASS_MINDCRAFTER:
+                which_power = _("超能力", "psionic powers");
+                break;
+            case CLASS_IMITATOR:
+                which_power = _("ものまね", "imitation");
+                break;
+            case CLASS_SAMURAI:
+                which_power = _("必殺剣", "hissatsu");
+                break;
+            case CLASS_MIRROR_MASTER:
+                which_power = _("鏡魔法", "mirror magic");
+                break;
+            case CLASS_NINJA:
+                which_power = _("忍術", "ninjutsu");
+                break;
+            case CLASS_ELEMENTALIST:
+                which_power = _("元素魔法", "magic");
+                break;
+            default:
+                if (mp_ptr->spell_book == TV_LIFE_BOOK)
+                    which_power = _("祈り", "prayer");
+                break;
+            }
+
+            msg_format(_("反魔法バリアが%sを邪魔した！", "An anti-magic shell disrupts your %s!"), which_power);
+            PlayerEnergy(creature_ptr).reset_player_turn();
+            break;
+        }
+        
+        if (is_shero(creature_ptr) && (creature_ptr->pclass != CLASS_BERSERKER)) {
+            msg_format(_("狂戦士化していて頭が回らない！", "You cannot think directly!"));
+            PlayerEnergy(creature_ptr).reset_player_turn();
+            break;
+        }
+
+        if ((creature_ptr->pclass == CLASS_MINDCRAFTER) || (creature_ptr->pclass == CLASS_BERSERKER) || (creature_ptr->pclass == CLASS_NINJA)
+            || (creature_ptr->pclass == CLASS_MIRROR_MASTER))
+            do_cmd_mind(creature_ptr);
+        else if (creature_ptr->pclass == CLASS_ELEMENTALIST)
+            do_cmd_element(creature_ptr);
+        else if (creature_ptr->pclass == CLASS_IMITATOR)
+            do_cmd_mane(creature_ptr, FALSE);
+        else if (creature_ptr->pclass == CLASS_MAGIC_EATER)
+            do_cmd_magic_eater(creature_ptr, FALSE, FALSE);
+        else if (creature_ptr->pclass == CLASS_SAMURAI)
+            do_cmd_hissatsu(creature_ptr);
+        else if (creature_ptr->pclass == CLASS_BLUE_MAGE)
+            do_cmd_cast_learned(creature_ptr);
+        else if (creature_ptr->pclass == CLASS_SMITH)
+            do_cmd_kaji(creature_ptr, FALSE);
+        else if (creature_ptr->pclass == CLASS_SNIPER)
+            do_cmd_snipe(creature_ptr);
+        else
+            (void)do_cmd_cast(creature_ptr);
 
         break;
     }

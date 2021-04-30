@@ -1,5 +1,4 @@
 ﻿#include "mind/mind-mirror-master.h"
-#include "cmd-action/cmd-pet.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
@@ -21,6 +20,7 @@
 #include "io/screen-util.h"
 #include "mind/mind-magic-resistance.h"
 #include "mind/mind-numbers.h"
+#include "pet/pet-util.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-launcher.h"

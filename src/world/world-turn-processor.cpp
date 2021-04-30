@@ -27,8 +27,8 @@
 #include "mutation/mutation-processor.h"
 #include "object/lite-processor.h"
 #include "perception/simple-perception.h"
+#include "player-status/player-energy.h"
 #include "player/digestion-processor.h"
-#include "player/player-status.h"
 #include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h"
@@ -219,7 +219,7 @@ void process_world(player_type *player_ptr)
                 player_ptr->oldpy = randint1(MAX_HGT - 2);
                 player_ptr->oldpx = randint1(MAX_WID - 2);
                 change_wild_mode(player_ptr, TRUE);
-                take_turn(player_ptr, 100);
+                PlayerEnergy(player_ptr).set_player_turn_energy(100);
             }
 
             player_ptr->invoking_midnight_curse = TRUE;

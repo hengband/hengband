@@ -6,6 +6,7 @@
 #include "monster-race/monster-race.h"
 #include "player/attack-defense-types.h"
 #include "player/player-skill.h"
+#include "spell-realm/spells-song.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell/spell-info.h"
 #include "spell/spells-execution.h"
