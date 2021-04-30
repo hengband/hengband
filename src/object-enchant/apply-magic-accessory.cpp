@@ -49,53 +49,15 @@ void AccessoryEnchanter::apply_magic_accessary()
             become_random_artifact(this->owner_ptr, this->o_ptr, FALSE);
             break;
         }
-        
+
         if ((this->power == 2) && one_in_(2)) {
             give_ring_ego_index();
             this->o_ptr->curse_flags = 0L;
             break;
         }
-        
-        if ((this->power == -2) && one_in_(2)) {
-            if (this->o_ptr->to_h > 0)
-                this->o_ptr->to_h = 0 - this->o_ptr->to_h;
-            if (this->o_ptr->to_d > 0)
-                this->o_ptr->to_d = 0 - this->o_ptr->to_d;
-            if (this->o_ptr->to_a > 0)
-                this->o_ptr->to_a = 0 - this->o_ptr->to_a;
-            if (this->o_ptr->pval > 0)
-                this->o_ptr->pval = 0 - this->o_ptr->pval;
-            this->o_ptr->art_flags[0] = 0;
-            this->o_ptr->art_flags[1] = 0;
-            while (!this->o_ptr->name2) {
-                object_kind *k_ptr = &k_info[this->o_ptr->k_idx];
-                switch (randint1(5)) {
-                case 1:
-                    if (has_flag(k_ptr->flags, TR_DRAIN_EXP))
-                        break;
-                    this->o_ptr->name2 = EGO_RING_DRAIN_EXP;
-                    break;
-                case 2:
-                    this->o_ptr->name2 = EGO_RING_NO_MELEE;
-                    break;
-                case 3:
-                    if (has_flag(k_ptr->flags, TR_AGGRAVATE))
-                        break;
-                    this->o_ptr->name2 = EGO_RING_AGGRAVATE;
-                    break;
-                case 4:
-                    if (has_flag(k_ptr->flags, TR_TY_CURSE))
-                        break;
-                    this->o_ptr->name2 = EGO_RING_TY_CURSE;
-                    break;
-                case 5:
-                    this->o_ptr->name2 = EGO_RING_ALBINO;
-                    break;
-                }
-            }
 
-            this->o_ptr->ident |= (IDENT_BROKEN);
-            this->o_ptr->curse_flags |= (TRC_CURSED | TRC_HEAVY_CURSE);
+        if ((this->power == -2) && one_in_(2)) {
+            give_ring_cursed();
         }
 
         break;
@@ -772,4 +734,55 @@ void AccessoryEnchanter::give_ring_high_ego_index()
     default:
         break;
     }
+}
+
+void AccessoryEnchanter::give_ring_cursed()
+{
+    if (this->o_ptr->to_h > 0) {
+        this->o_ptr->to_h = 0 - this->o_ptr->to_h;
+    }
+
+    if (this->o_ptr->to_d > 0) {
+        this->o_ptr->to_d = 0 - this->o_ptr->to_d;
+    }
+
+    if (this->o_ptr->to_a > 0) {
+        this->o_ptr->to_a = 0 - this->o_ptr->to_a;
+    }
+
+    if (this->o_ptr->pval > 0) {
+        this->o_ptr->pval = 0 - this->o_ptr->pval;
+    }
+
+    this->o_ptr->art_flags[0] = 0;
+    this->o_ptr->art_flags[1] = 0;
+    while (!this->o_ptr->name2) {
+        object_kind *k_ptr = &k_info[this->o_ptr->k_idx];
+        switch (randint1(5)) {
+        case 1:
+            if (has_flag(k_ptr->flags, TR_DRAIN_EXP))
+                break;
+            this->o_ptr->name2 = EGO_RING_DRAIN_EXP;
+            break;
+        case 2:
+            this->o_ptr->name2 = EGO_RING_NO_MELEE;
+            break;
+        case 3:
+            if (has_flag(k_ptr->flags, TR_AGGRAVATE))
+                break;
+            this->o_ptr->name2 = EGO_RING_AGGRAVATE;
+            break;
+        case 4:
+            if (has_flag(k_ptr->flags, TR_TY_CURSE))
+                break;
+            this->o_ptr->name2 = EGO_RING_TY_CURSE;
+            break;
+        case 5:
+            this->o_ptr->name2 = EGO_RING_ALBINO;
+            break;
+        }
+    }
+
+    set_bits(this->o_ptr->ident, IDENT_BROKEN);
+    set_bits(this->o_ptr->curse_flags, TRC_CURSED | TRC_HEAVY_CURSE);
 }

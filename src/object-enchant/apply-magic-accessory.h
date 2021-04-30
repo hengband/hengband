@@ -18,4 +18,5 @@ private:
     void enahcnt_ring();
     void give_ring_ego_index();
     void give_ring_high_ego_index();
+    void give_ring_cursed();
 };
