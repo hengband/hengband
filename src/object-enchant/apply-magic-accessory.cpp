@@ -47,10 +47,16 @@ void AccessoryEnchanter::apply_magic_accessary()
         if ((one_in_(400) && (this->power > 0) && !object_is_cursed(this->o_ptr) && (this->level > 79)) || (this->power > 2)) {
             this->o_ptr->pval = MIN(this->o_ptr->pval, 4);
             become_random_artifact(this->owner_ptr, this->o_ptr, FALSE);
-        } else if ((this->power == 2) && one_in_(2)) {
+            break;
+        }
+        
+        if ((this->power == 2) && one_in_(2)) {
             give_ring_ego_index();
             this->o_ptr->curse_flags = 0L;
-        } else if ((this->power == -2) && one_in_(2)) {
+            break;
+        }
+        
+        if ((this->power == -2) && one_in_(2)) {
             if (this->o_ptr->to_h > 0)
                 this->o_ptr->to_h = 0 - this->o_ptr->to_h;
             if (this->o_ptr->to_d > 0)
@@ -521,106 +527,156 @@ void AccessoryEnchanter::give_ring_ego_index()
             break;
         case 3:
         case 4:
-            if (has_flag(k_ptr->flags, TR_REGEN))
+            if (has_flag(k_ptr->flags, TR_REGEN)) {
                 break;
+            }
+
             this->o_ptr->name2 = EGO_RING_REGEN;
             break;
         case 5:
         case 6:
-            if (has_flag(k_ptr->flags, TR_LITE_1))
+            if (has_flag(k_ptr->flags, TR_LITE_1)) {
                 break;
+            }
+
             this->o_ptr->name2 = EGO_RING_LITE;
             break;
         case 7:
         case 8:
-            if (has_flag(k_ptr->flags, TR_TELEPORT))
+            if (has_flag(k_ptr->flags, TR_TELEPORT)) {
                 break;
+            }
+
             this->o_ptr->name2 = EGO_RING_TELEPORT;
             break;
         case 9:
         case 10:
-            if (this->o_ptr->to_h)
+            if (this->o_ptr->to_h) {
                 break;
+            }
+
             this->o_ptr->name2 = EGO_RING_TO_H;
             break;
         case 11:
         case 12:
-            if (this->o_ptr->to_d)
+            if (this->o_ptr->to_d) {
                 break;
+            }
+
             this->o_ptr->name2 = EGO_RING_TO_D;
             break;
         case 13:
-            if ((this->o_ptr->to_h) || (this->o_ptr->to_d))
+            if ((this->o_ptr->to_h) || (this->o_ptr->to_d)) {
                 break;
+            }
+
             this->o_ptr->name2 = EGO_RING_SLAY;
             break;
         case 14:
-            if ((has_flag(k_ptr->flags, TR_STR)) || this->o_ptr->to_h || this->o_ptr->to_d)
+            if ((has_flag(k_ptr->flags, TR_STR)) || this->o_ptr->to_h || this->o_ptr->to_d) {
                 break;
+            }
+
             this->o_ptr->name2 = EGO_RING_WIZARD;
             break;
         case 15:
-            if (has_flag(k_ptr->flags, TR_ACTIVATE))
+            if (has_flag(k_ptr->flags, TR_ACTIVATE)) {
                 break;
+            }
+
             this->o_ptr->name2 = EGO_RING_HERO;
             break;
         case 16:
-            if (has_flag(k_ptr->flags, TR_ACTIVATE))
+            if (has_flag(k_ptr->flags, TR_ACTIVATE)) {
                 break;
-            if (tmp > 8)
+            }
+
+            if (tmp > 8) {
                 this->o_ptr->name2 = EGO_RING_MANA_BALL;
-            else if (tmp > 4)
+            } else if (tmp > 4) {
                 this->o_ptr->name2 = EGO_RING_MANA_BOLT;
-            else
+            } else {
                 this->o_ptr->name2 = EGO_RING_MAGIC_MIS;
+            }
+
             break;
         case 17:
-            if (has_flag(k_ptr->flags, TR_ACTIVATE))
+            if (has_flag(k_ptr->flags, TR_ACTIVATE)) {
                 break;
+            }
+
             if (!(has_flag(k_ptr->flags, TR_RES_FIRE))
-                && (has_flag(k_ptr->flags, TR_RES_COLD) || has_flag(k_ptr->flags, TR_RES_ELEC) || has_flag(k_ptr->flags, TR_RES_ACID)))
+                && (has_flag(k_ptr->flags, TR_RES_COLD) || has_flag(k_ptr->flags, TR_RES_ELEC) || has_flag(k_ptr->flags, TR_RES_ACID))) {
                 break;
-            if (tmp > 7)
+            }
+
+            if (tmp > 7) {
                 this->o_ptr->name2 = EGO_RING_DRAGON_F;
-            else if (tmp > 3)
+                break;
+            }
+
+            if (tmp > 3) {
                 this->o_ptr->name2 = EGO_RING_FIRE_BALL;
-            else
-                this->o_ptr->name2 = EGO_RING_FIRE_BOLT;
+                break;
+            }
+
+            this->o_ptr->name2 = EGO_RING_FIRE_BOLT;
             break;
         case 18:
-            if (has_flag(k_ptr->flags, TR_ACTIVATE))
+            if (has_flag(k_ptr->flags, TR_ACTIVATE)) {
                 break;
+            }
+
             if (!(has_flag(k_ptr->flags, TR_RES_COLD))
-                && (has_flag(k_ptr->flags, TR_RES_FIRE) || has_flag(k_ptr->flags, TR_RES_ELEC) || has_flag(k_ptr->flags, TR_RES_ACID)))
+                && (has_flag(k_ptr->flags, TR_RES_FIRE) || has_flag(k_ptr->flags, TR_RES_ELEC) || has_flag(k_ptr->flags, TR_RES_ACID))) {
                 break;
-            if (tmp > 7)
+            }
+
+            if (tmp > 7) {
                 this->o_ptr->name2 = EGO_RING_DRAGON_C;
-            else if (tmp > 3)
+                break;
+            }
+
+            if (tmp > 3) {
                 this->o_ptr->name2 = EGO_RING_COLD_BALL;
-            else
-                this->o_ptr->name2 = EGO_RING_COLD_BOLT;
+                break;
+            }
+
+            this->o_ptr->name2 = EGO_RING_COLD_BOLT;
             break;
         case 19:
-            if (has_flag(k_ptr->flags, TR_ACTIVATE))
+            if (has_flag(k_ptr->flags, TR_ACTIVATE)) {
                 break;
+            }
+
             if (!(has_flag(k_ptr->flags, TR_RES_ELEC))
-                && (has_flag(k_ptr->flags, TR_RES_COLD) || has_flag(k_ptr->flags, TR_RES_FIRE) || has_flag(k_ptr->flags, TR_RES_ACID)))
+                && (has_flag(k_ptr->flags, TR_RES_COLD) || has_flag(k_ptr->flags, TR_RES_FIRE) || has_flag(k_ptr->flags, TR_RES_ACID))) {
                 break;
-            if (tmp > 4)
+            }
+
+            if (tmp > 4) {
                 this->o_ptr->name2 = EGO_RING_ELEC_BALL;
-            else
-                this->o_ptr->name2 = EGO_RING_ELEC_BOLT;
+                break;
+            }
+
+            this->o_ptr->name2 = EGO_RING_ELEC_BOLT;
             break;
         case 20:
-            if (has_flag(k_ptr->flags, TR_ACTIVATE))
+            if (has_flag(k_ptr->flags, TR_ACTIVATE)) {
                 break;
+            }
+
             if (!(has_flag(k_ptr->flags, TR_RES_ACID))
-                && (has_flag(k_ptr->flags, TR_RES_COLD) || has_flag(k_ptr->flags, TR_RES_ELEC) || has_flag(k_ptr->flags, TR_RES_FIRE)))
+                && (has_flag(k_ptr->flags, TR_RES_COLD) || has_flag(k_ptr->flags, TR_RES_ELEC) || has_flag(k_ptr->flags, TR_RES_FIRE))) {
                 break;
-            if (tmp > 4)
+            }
+
+            if (tmp > 4) {
                 this->o_ptr->name2 = EGO_RING_ACID_BALL;
-            else
-                this->o_ptr->name2 = EGO_RING_ACID_BOLT;
+                break;
+            }
+
+            this->o_ptr->name2 = EGO_RING_ACID_BOLT;
             break;
         case 21:
         case 22:
@@ -628,78 +684,92 @@ void AccessoryEnchanter::give_ring_ego_index()
         case 24:
         case 25:
         case 26:
-            switch (this->o_ptr->sval) {
-            case SV_RING_SPEED:
-                if (!one_in_(3))
-                    break;
-                this->o_ptr->name2 = EGO_RING_D_SPEED;
-                break;
-            case SV_RING_DAMAGE:
-            case SV_RING_ACCURACY:
-            case SV_RING_SLAYING:
-                if (one_in_(2))
-                    break;
-                if (one_in_(2))
-                    this->o_ptr->name2 = EGO_RING_HERO;
-                else {
-                    this->o_ptr->name2 = EGO_RING_BERSERKER;
-                    this->o_ptr->to_h -= 2 + randint1(4);
-                    this->o_ptr->to_d += 2 + randint1(4);
-                }
-
-                break;
-            case SV_RING_PROTECTION:
-                this->o_ptr->name2 = EGO_RING_SUPER_AC;
-                this->o_ptr->to_a += 7 + m_bonus(5, this->level);
-                break;
-            case SV_RING_RES_FEAR:
-                this->o_ptr->name2 = EGO_RING_HERO;
-                break;
-            case SV_RING_SHOTS:
-                if (one_in_(2))
-                    break;
-                this->o_ptr->name2 = EGO_RING_HUNTER;
-                break;
-            case SV_RING_SEARCHING:
-                this->o_ptr->name2 = EGO_RING_STEALTH;
-                break;
-            case SV_RING_TELEPORTATION:
-                this->o_ptr->name2 = EGO_RING_TELE_AWAY;
-                break;
-            case SV_RING_RES_BLINDNESS:
-                if (one_in_(2))
-                    this->o_ptr->name2 = EGO_RING_RES_LITE;
-                else
-                    this->o_ptr->name2 = EGO_RING_RES_DARK;
-                break;
-            case SV_RING_LORDLY:
-                if (!one_in_(20))
-                    break;
-                one_lordly_high_resistance(this->o_ptr);
-                one_lordly_high_resistance(this->o_ptr);
-                this->o_ptr->name2 = EGO_RING_TRUE;
-                break;
-            case SV_RING_FLAMES:
-                if (!one_in_(2))
-                    break;
-                this->o_ptr->name2 = EGO_RING_DRAGON_F;
-                break;
-            case SV_RING_ICE:
-                if (!one_in_(2))
-                    break;
-                this->o_ptr->name2 = EGO_RING_DRAGON_C;
-                break;
-            case SV_RING_WARNING:
-                if (!one_in_(2))
-                    break;
-                this->o_ptr->name2 = EGO_RING_M_DETECT;
-                break;
-            default:
-                break;
-            }
-
+            give_ring_high_ego_index();
             break;
         }
     }
 }
 
+void AccessoryEnchanter::give_ring_high_ego_index()
+{
+    switch (this->o_ptr->sval) {
+    case SV_RING_SPEED:
+        if (!one_in_(3)) {
+            break;
+        }
+
+        this->o_ptr->name2 = EGO_RING_D_SPEED;
+        break;
+    case SV_RING_DAMAGE:
+    case SV_RING_ACCURACY:
+    case SV_RING_SLAYING:
+        if (next_bool()) {
+            break;
+        }
+
+        if (one_in_(2)) {
+            this->o_ptr->name2 = EGO_RING_HERO;
+            break;
+        }
+
+        this->o_ptr->name2 = EGO_RING_BERSERKER;
+        this->o_ptr->to_h -= 2 + randint1(4);
+        this->o_ptr->to_d += 2 + randint1(4);
+        break;
+    case SV_RING_PROTECTION:
+        this->o_ptr->name2 = EGO_RING_SUPER_AC;
+        this->o_ptr->to_a += 7 + m_bonus(5, this->level);
+        break;
+    case SV_RING_RES_FEAR:
+        this->o_ptr->name2 = EGO_RING_HERO;
+        break;
+    case SV_RING_SHOTS:
+        if (next_bool()) {
+            break;
+        }
+
+        this->o_ptr->name2 = EGO_RING_HUNTER;
+        break;
+    case SV_RING_SEARCHING:
+        this->o_ptr->name2 = EGO_RING_STEALTH;
+        break;
+    case SV_RING_TELEPORTATION:
+        this->o_ptr->name2 = EGO_RING_TELE_AWAY;
+        break;
+    case SV_RING_RES_BLINDNESS:
+        this->o_ptr->name2 = next_bool() ? EGO_RING_RES_LITE : EGO_RING_RES_DARK;
+        break;
+    case SV_RING_LORDLY:
+        if (!one_in_(20)) {
+            break;
+        }
+
+        one_lordly_high_resistance(this->o_ptr);
+        one_lordly_high_resistance(this->o_ptr);
+        this->o_ptr->name2 = EGO_RING_TRUE;
+        break;
+    case SV_RING_FLAMES:
+        if (next_bool()) {
+            break;
+        }
+
+        this->o_ptr->name2 = EGO_RING_DRAGON_F;
+        break;
+    case SV_RING_ICE:
+        if (next_bool()) {
+            break;
+        }
+
+        this->o_ptr->name2 = EGO_RING_DRAGON_C;
+        break;
+    case SV_RING_WARNING:
+        if (next_bool()) {
+            break;
+        }
+
+        this->o_ptr->name2 = EGO_RING_M_DETECT;
+        break;
+    default:
+        break;
+    }
+}
