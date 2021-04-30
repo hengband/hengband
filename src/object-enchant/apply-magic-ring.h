@@ -1,16 +1,16 @@
 ﻿#pragma once
 
-#include "object-enchant/accessory-enchanter-base.h"
+#include "object-enchant/enchanter-base.h"
 #include "system/angband.h"
 
 struct object_type;
 struct player_type;
-class RingEnchanter : AccessoryEnchanterBase {
+class RingEnchanter : EnchanterBase {
 public:
     RingEnchanter(player_type *owner_ptr, object_type *o_ptr, DEPTH level, int power);
     RingEnchanter() = delete;
     virtual ~RingEnchanter() = default;
-    void apply_magic_accessary() override;
+    void apply_magic() override;
 
 protected:
     void enchant() override;

@@ -564,7 +564,6 @@ hengband_SOURCES = \
 	object-activation/activation-teleport.cpp object-activation/activation-teleport.h \
 	object-activation/activation-util.cpp object-activation/activation-util.h \
 	\
-	object-enchant/accessory-enchanter-base.h \
 	object-enchant/activation-info-table.cpp object-enchant/activation-info-table.h \
 	object-enchant/apply-magic.cpp object-enchant/apply-magic.h \
 	object-enchant/apply-magic-amulet.cpp object-enchant/apply-magic-amulet.h \
@@ -573,6 +572,7 @@ hengband_SOURCES = \
 	object-enchant/apply-magic-ring.cpp object-enchant/apply-magic-ring.h \
 	object-enchant/apply-magic-weapon.cpp object-enchant/apply-magic-weapon.h \
 	object-enchant/dragon-breaths-table.cpp object-enchant/dragon-breaths-table.h \
+	object-enchant/enchanter-base.h \
 	object-enchant/object-boost.cpp object-enchant/object-boost.h \
 	object-enchant/object-curse.cpp object-enchant/object-curse.h \
 	object-enchant/object-ego.cpp object-enchant/object-ego.h \

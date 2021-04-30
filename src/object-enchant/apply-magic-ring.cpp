@@ -35,7 +35,7 @@ RingEnchanter::RingEnchanter(player_type *owner_ptr, object_type *o_ptr, DEPTH l
  * @return なし
  * @details power > 2 is debug only
  */
-void RingEnchanter::apply_magic_accessary()
+void RingEnchanter::apply_magic()
 {
     enchant();
     if ((one_in_(400) && (this->power > 0) && !object_is_cursed(this->o_ptr) && (this->level > 79)) || (this->power > 2)) {

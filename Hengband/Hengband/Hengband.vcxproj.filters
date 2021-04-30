@@ -3230,7 +3230,7 @@
     <ClInclude Include="..\..\src\object-enchant\apply-magic-armor.h">
       <Filter>object-enchant</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object-enchant\accessory-enchanter-base.h">
+    <ClInclude Include="..\..\src\object-enchant\enchanter-base.h">
       <Filter>object-enchant</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object-enchant\apply-magic-others.h">

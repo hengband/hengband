@@ -44,7 +44,7 @@
  * @details
  * エゴ＆アーティファクトの生成、呪い、pval強化
  */
-void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
+void apply_magic_to_object(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
 {
     if (owner_ptr->pseikaku == PERSONALITY_MUNCHKIN)
         lev += randint0(owner_ptr->lev / 2 + 10);
@@ -159,14 +159,14 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
             power = -1;
         }
 
-        RingEnchanter(owner_ptr, o_ptr, lev, power).apply_magic_accessary();
+        RingEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
         break;
     case TV_AMULET: {
         if (!power && (randint0(100) < 50)) {
             power = -1;
         }
 
-        AmuletEnchanter(owner_ptr, o_ptr, lev, power).apply_magic_accessary();
+        AmuletEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
         break;
     }
     default: {

@@ -147,7 +147,7 @@ void amusement(player_type *creature_ptr, POSITION y1, POSITION x1, int num, boo
         object_prep(creature_ptr, i_ptr, k_idx);
         if (a_idx)
             i_ptr->name1 = a_idx;
-        apply_magic(creature_ptr, i_ptr, 1, AM_NO_FIXED_ART);
+        apply_magic_to_object(creature_ptr, i_ptr, 1, AM_NO_FIXED_ART);
 
         if (amuse_info[i].flag & AMS_NO_UNIQUE) {
             if (r_info[i_ptr->pval].flags1 & RF1_UNIQUE)

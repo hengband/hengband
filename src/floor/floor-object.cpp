@@ -121,7 +121,7 @@ bool make_object(player_type *owner_ptr, object_type *j_ptr, BIT_FLAGS mode)
         object_prep(owner_ptr, j_ptr, k_idx);
     }
 
-    apply_magic(owner_ptr, j_ptr, floor_ptr->object_level, mode);
+    apply_magic_to_object(owner_ptr, j_ptr, floor_ptr->object_level, mode);
     switch (j_ptr->tval) {
     case TV_SPIKE:
     case TV_SHOT:

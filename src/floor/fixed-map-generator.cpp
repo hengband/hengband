@@ -182,7 +182,7 @@ static void parse_qtw_D(player_type *player_ptr, qtwg_type *qtwg_ptr, char *s)
                 coin_type = 0;
             }
 
-            apply_magic(player_ptr, o_ptr, floor_ptr->base_level, AM_NO_FIXED_ART | AM_GOOD);
+            apply_magic_to_object(player_ptr, o_ptr, floor_ptr->base_level, AM_NO_FIXED_ART | AM_GOOD);
             drop_here(floor_ptr, o_ptr, *qtwg_ptr->y, *qtwg_ptr->x);
         }
 
