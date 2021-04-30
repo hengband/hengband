@@ -1,7 +1,7 @@
 ﻿#pragma once
 /*!
- * @file string-win.h
- * @brief Windows版固有実装(文字列)ヘッダ
+ * @file main-win-utils.h
+ * @brief Windows版固有実装(ユーティリティー)ヘッダ
  */
 
 #include "term/z-virt.h"
@@ -9,7 +9,7 @@
 #include <windows.h>
 
 /*!
- * @brief 文字列をワイド文字列へ変換するクラス
+ * @brief マルチバイト文字列をワイド文字列へ変換するクラス
  */
 class to_wchar {
 public:
@@ -106,3 +106,7 @@ protected:
         }
     }
 };
+
+bool is_already_running(void);
+void save_screen_as_html(HWND hWnd);
+void open_dir_in_explorer(char* filename);

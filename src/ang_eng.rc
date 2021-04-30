@@ -125,9 +125,14 @@ ANGBAND MENU
 			MENUITEM "Choose BG pict", 449
 		}
 
+		MENUITEM SEPARATOR
 		MENUITEM "&Music", 420
 		MENUITEM "&Pause music when inactive", 421
+		MENUITEM "&Open music folder", 422
+		MENUITEM SEPARATOR
 		MENUITEM "&Sound", 410
+		MENUITEM "&Open sound folder", 411
+		MENUITEM SEPARATOR
 		MENUITEM "&HTML dump", 450
 	}
 }

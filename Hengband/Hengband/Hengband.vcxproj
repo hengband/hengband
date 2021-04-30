@@ -271,6 +271,7 @@
     <ClCompile Include="..\..\src\player-info\alignment.cpp" />
     <ClCompile Include="..\..\src\player-info\equipment-info.cpp" />
     <ClCompile Include="..\..\src\player-status\player-energy.cpp" />
+    <ClCompile Include="..\..\src\main-win\main-win-utils.cpp" />
     <ClCompile Include="..\..\src\store\cmd-store.cpp" />
     <ClCompile Include="..\..\src\cmd-io\cmd-floor.cpp" />
     <ClCompile Include="..\..\src\cmd-io\cmd-lore.cpp" />
@@ -943,6 +944,7 @@
     <ClInclude Include="..\..\src\player-info\equipment-info.h" />
     <ClInclude Include="..\..\src\player-status\player-energy.h" />
     <ClInclude Include="..\..\src\player-status\player-hand-types.h" />
+    <ClInclude Include="..\..\src\main-win\main-win-utils.h" />
     <ClInclude Include="..\..\src\store\cmd-store.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-floor.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-lore.h" />

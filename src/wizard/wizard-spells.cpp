@@ -10,6 +10,7 @@
 #include "blue-magic/blue-magic-checker.h"
 #include "core/asking-player.h"
 #include "effect/effect-characteristics.h"
+#include "effect/effect-processor.h"
 #include "floor/cave.h"
 #include "floor/floor-util.h"
 #include "mind/mind-blue-mage.h"
@@ -21,7 +22,6 @@
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-chaos.h"
-#include "spell/spell-types.h"
 #include "spell/spells-status.h"
 #include "spell/summon-types.h"
 #include "system/floor-type-definition.h"
@@ -180,16 +180,80 @@ void wiz_summon_pet(player_type *summoner_ptr, MONRACE_IDX r_idx)
 }
 
 /*!
- * @brief ターゲットを指定してダメージ100万・半径0の射撃のボールを放つ
+ * @brief ターゲットを指定して指定ダメージ・指定属性・半径0のボールを放つ
+ * @param dam ダメージ量
+ * @param effect_idx 属性ID
  * @return なし
- * @details RES_ALL持ちも一撃で殺せる
+ * @details デフォルトは100万・GF_ARROW(射撃)。RES_ALL持ちも一撃で殺せる。
  */
-void wiz_kill_enemy(player_type *caster_ptr)
+void wiz_kill_enemy(player_type *caster_ptr, HIT_POINT dam, EFFECT_ID effect_idx)
 {
+    if (dam <= 0) {
+        char tmp[80] = "";
+        sprintf(tmp, "Damage (1-999999): ");
+        char tmp_val[10] = "1000";
+        if (!get_string(tmp, tmp_val, 6))
+            return;
+
+        dam = (HIT_POINT)atoi(tmp_val);
+    }
+
+    if (effect_idx <= GF_NONE) {
+        char tmp[80] = "";
+        sprintf(tmp, "Effect ID (1-%d): ", MAX_GF - 1);
+        char tmp_val[10] = "";
+        if (!get_string(tmp, tmp_val, 3))
+            return;
+
+        effect_idx = (EFFECT_ID)atoi(tmp_val);
+    }
+
+
+    if (effect_idx <= GF_NONE || effect_idx >= MAX_GF) {
+        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), MAX_GF - 1);
+        return;
+    }
+
     DIRECTION dir;
 
     if (!get_aim_dir(caster_ptr, &dir))
         return;
 
-    fire_ball(caster_ptr, GF_ARROW, dir, 1000000, 0);
+    fire_ball(caster_ptr, effect_idx, dir, dam, 0);
+}
+
+/*!
+ * @brief 自分に指定ダメージ・指定属性・半径0のボールを放つ
+ * @param dam ダメージ量
+ * @param effect_idx 属性ID
+ * @return なし
+ */
+void wiz_kill_me(player_type *caster_ptr, HIT_POINT dam, EFFECT_ID effect_idx)
+{
+    if (dam <= 0) {
+        char tmp[80] = "";
+        sprintf(tmp, "Damage (1-999999): ");
+        char tmp_val[10] = "1000";
+        if (!get_string(tmp, tmp_val, 6))
+            return;
+
+        dam = (HIT_POINT)atoi(tmp_val);
+    }
+
+    if (effect_idx <= GF_NONE) {
+        char tmp[80] = "";
+        sprintf(tmp, "Effect ID (1-%d): ", MAX_GF - 1);
+        char tmp_val[10] = "1";
+        if (!get_string(tmp, tmp_val, 3))
+            return;
+
+        effect_idx = (EFFECT_ID)atoi(tmp_val);
+    }
+
+    if (effect_idx <= GF_NONE || effect_idx >= MAX_GF) {
+        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), MAX_GF - 1);
+        return;
+    }
+
+    project(caster_ptr, -1, 0, caster_ptr->y, caster_ptr->x, dam, effect_idx, PROJECT_KILL | PROJECT_PLAYER);
 }
