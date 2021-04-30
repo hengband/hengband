@@ -34,16 +34,14 @@ AccessoryEnchanter::AccessoryEnchanter(player_type *owner_ptr, object_type *o_pt
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
  * @param level 生成基準階
  * @param power 生成ランク
- * @details
- * Hack -- note special "pval boost" code for ring of speed\n
- * Hack -- note that some items must be cursed (or blessed)\n
+ * @return なし
+ * @details power > 2 is debug only
  */
 void AccessoryEnchanter::apply_magic_accessary()
 {
     switch (this->o_ptr->tval) {
-    case TV_RING: {
+    case TV_RING:
         enahcnt_ring();
-        /* this->power > 2 is debug only */
         if ((one_in_(400) && (this->power > 0) && !object_is_cursed(this->o_ptr) && (this->level > 79)) || (this->power > 2)) {
             this->o_ptr->pval = MIN(this->o_ptr->pval, 4);
             become_random_artifact(this->owner_ptr, this->o_ptr, FALSE);
@@ -61,89 +59,8 @@ void AccessoryEnchanter::apply_magic_accessary()
         }
 
         break;
-    }
     case TV_AMULET: {
-        switch (this->o_ptr->sval) {
-        case SV_AMULET_INTELLIGENCE:
-        case SV_AMULET_WISDOM:
-        case SV_AMULET_CHARISMA: {
-            this->o_ptr->pval = 1 + (PARAMETER_VALUE)m_bonus(5, this->level);
-            if (this->power < 0) {
-                this->o_ptr->ident |= (IDENT_BROKEN);
-                this->o_ptr->curse_flags |= (TRC_CURSED);
-                this->o_ptr->pval = 0 - this->o_ptr->pval;
-            }
-
-            break;
-        }
-        case SV_AMULET_BRILLIANCE: {
-            this->o_ptr->pval = 1 + m_bonus(3, this->level);
-            if (one_in_(4))
-                this->o_ptr->pval++;
-
-            if (this->power < 0) {
-                this->o_ptr->ident |= (IDENT_BROKEN);
-                this->o_ptr->curse_flags |= (TRC_CURSED);
-                this->o_ptr->pval = 0 - this->o_ptr->pval;
-            }
-
-            break;
-        }
-        case SV_AMULET_NO_MAGIC:
-        case SV_AMULET_NO_TELE: {
-            if (this->power < 0) {
-                this->o_ptr->curse_flags |= (TRC_CURSED);
-            }
-
-            break;
-        }
-        case SV_AMULET_RESISTANCE: {
-            if (one_in_(5))
-                one_high_resistance(this->o_ptr);
-            if (one_in_(5))
-                add_flag(this->o_ptr->art_flags, TR_RES_POIS);
-            break;
-        }
-        case SV_AMULET_SEARCHING: {
-            this->o_ptr->pval = 2 + randint1(6);
-            if (this->power < 0) {
-                this->o_ptr->ident |= (IDENT_BROKEN);
-                this->o_ptr->curse_flags |= (TRC_CURSED);
-                this->o_ptr->pval = 0 - (this->o_ptr->pval);
-            } else {
-                add_esp_weak(this->o_ptr, FALSE);
-            }
-            break;
-        }
-        case SV_AMULET_THE_MAGI: {
-            this->o_ptr->pval = randint1(5) + (PARAMETER_VALUE)m_bonus(5, this->level);
-            this->o_ptr->to_a = randint1(5) + (ARMOUR_CLASS)m_bonus(5, this->level);
-            add_esp_weak(this->o_ptr, FALSE);
-            break;
-        }
-        case SV_AMULET_DOOM: {
-            this->o_ptr->ident |= (IDENT_BROKEN);
-            this->o_ptr->curse_flags |= (TRC_CURSED);
-            this->o_ptr->pval = 0 - (randint1(5) + (PARAMETER_VALUE)m_bonus(5, this->level));
-            this->o_ptr->to_a = 0 - (randint1(5) + (ARMOUR_CLASS)m_bonus(5, this->level));
-            if (this->power > 0)
-                this->power = 0 - this->power;
-
-            break;
-        }
-        case SV_AMULET_MAGIC_MASTERY: {
-            this->o_ptr->pval = 1 + (PARAMETER_VALUE)m_bonus(4, this->level);
-            if (this->power < 0) {
-                this->o_ptr->ident |= (IDENT_BROKEN);
-                this->o_ptr->curse_flags |= (TRC_CURSED);
-                this->o_ptr->pval = 0 - this->o_ptr->pval;
-            }
-
-            break;
-        }
-        }
-
-        /* this->power > 2 is debug only */
+        enchant_amulet();
         if ((one_in_(150) && (this->power > 0) && !object_is_cursed(this->o_ptr) && (this->level > 79)) || (this->power > 2)) {
             this->o_ptr->pval = MIN(this->o_ptr->pval, 4);
             become_random_artifact(owner_ptr, this->o_ptr, FALSE);
@@ -555,12 +472,15 @@ void AccessoryEnchanter::give_ring_ego_index()
 
             if (tmp > 8) {
                 this->o_ptr->name2 = EGO_RING_MANA_BALL;
-            } else if (tmp > 4) {
-                this->o_ptr->name2 = EGO_RING_MANA_BOLT;
-            } else {
-                this->o_ptr->name2 = EGO_RING_MAGIC_MIS;
+                break;
             }
-
+            
+            if (tmp > 4) {
+                this->o_ptr->name2 = EGO_RING_MANA_BOLT;
+                break;
+            }
+            
+            this->o_ptr->name2 = EGO_RING_MAGIC_MIS;            
             break;
         case 17:
             if (has_flag(k_ptr->flags, TR_ACTIVATE)) {
@@ -785,4 +705,87 @@ void AccessoryEnchanter::give_ring_cursed()
 
     set_bits(this->o_ptr->ident, IDENT_BROKEN);
     set_bits(this->o_ptr->curse_flags, TRC_CURSED | TRC_HEAVY_CURSE);
+}
+
+void AccessoryEnchanter::enchant_amulet()
+{
+    switch (this->o_ptr->sval) {
+    case SV_AMULET_INTELLIGENCE:
+    case SV_AMULET_WISDOM:
+    case SV_AMULET_CHARISMA:
+        this->o_ptr->pval = 1 + (PARAMETER_VALUE)m_bonus(5, this->level);
+        if (this->power < 0) {
+            set_bits(this->o_ptr->ident, IDENT_BROKEN);
+            set_bits(this->o_ptr->curse_flags, TRC_CURSED);
+            this->o_ptr->pval = 0 - this->o_ptr->pval;
+        }
+
+        break;
+    case SV_AMULET_BRILLIANCE:
+        this->o_ptr->pval = 1 + m_bonus(3, this->level);
+        if (one_in_(4)) {
+            this->o_ptr->pval++;
+        }
+
+        if (this->power < 0) {
+            set_bits(this->o_ptr->ident, IDENT_BROKEN);
+            set_bits(this->o_ptr->curse_flags, TRC_CURSED);
+            this->o_ptr->pval = 0 - this->o_ptr->pval;
+        }
+
+        break;
+    case SV_AMULET_NO_MAGIC:
+    case SV_AMULET_NO_TELE:
+        if (this->power < 0) {
+            set_bits(this->o_ptr->curse_flags, TRC_CURSED);
+        }
+
+        break;
+    case SV_AMULET_RESISTANCE:
+        if (one_in_(5)) {
+            one_high_resistance(this->o_ptr);
+        }
+
+        if (one_in_(5)) {
+            add_flag(this->o_ptr->art_flags, TR_RES_POIS);
+        }
+
+        break;
+    case SV_AMULET_SEARCHING:
+        this->o_ptr->pval = 2 + randint1(6);
+        if (this->power >= 0) {
+            add_esp_weak(this->o_ptr, FALSE);
+            break;
+        }
+
+        set_bits(this->o_ptr->ident, IDENT_BROKEN);
+        set_bits(this->o_ptr->curse_flags, TRC_CURSED);
+        this->o_ptr->pval = 0 - (this->o_ptr->pval);
+        break;
+    case SV_AMULET_THE_MAGI:
+        this->o_ptr->pval = randint1(5) + (PARAMETER_VALUE)m_bonus(5, this->level);
+        this->o_ptr->to_a = randint1(5) + (ARMOUR_CLASS)m_bonus(5, this->level);
+        add_esp_weak(this->o_ptr, FALSE);
+        break;
+    case SV_AMULET_DOOM:
+        set_bits(this->o_ptr->ident, IDENT_BROKEN);
+        set_bits(this->o_ptr->curse_flags, TRC_CURSED);
+        this->o_ptr->pval = 0 - (randint1(5) + (PARAMETER_VALUE)m_bonus(5, this->level));
+        this->o_ptr->to_a = 0 - (randint1(5) + (ARMOUR_CLASS)m_bonus(5, this->level));
+        if (this->power > 0) {
+            this->power = 0 - this->power;
+        }
+
+        break;
+    case SV_AMULET_MAGIC_MASTERY:
+        this->o_ptr->pval = 1 + (PARAMETER_VALUE)m_bonus(4, this->level);
+        if (this->power >= 0) {
+            break;
+        }
+
+        set_bits(this->o_ptr->ident, IDENT_BROKEN);
+        set_bits(this->o_ptr->curse_flags, TRC_CURSED);
+        this->o_ptr->pval = 0 - this->o_ptr->pval;
+        break;
+    }
 }

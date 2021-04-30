@@ -19,4 +19,5 @@ private:
     void give_ring_ego_index();
     void give_ring_high_ego_index();
     void give_ring_cursed();
+    void enchant_amulet();
 };
