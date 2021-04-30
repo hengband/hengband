@@ -3432,7 +3432,7 @@ E:Dispel Evil:Rosewood
 G:_:r
 I:55:24:8
 W:50:0:50:1200
-A:50/1
+A:35/1:50/1
 P:0:1d2:0:0:0
 D:$It does 80 damage to all evil monsters in sight when you use it.
 D:それは使うと視界内の邪悪なモンスターに80のダメージを与える。
@@ -3476,7 +3476,7 @@ E:Power:Walnut
 G:_:u
 I:55:25:5
 W:70:0:50:4000
-A:70/2
+A:50/4:60:4:70/2
 P:0:1d2:0:0:0
 D:$It does 150 damage to all monsters in sight when you use it.
 D:それは使うと視界内のモンスターに150のダメージを与える。
@@ -6427,3 +6427,15 @@ F:RES_CURSE
 D:$A faded cloak carved with magical runes.
 D:魔術的なルーンの刻まれた陰気な外套だ。
 
+N:673:自己変容:虹色に輝く
+E:Self-Polymorph:Rainbow colored
+G:!:B
+I:75:54:0
+W:50:0:4:5000
+A:50/4
+P:0:1d1:0:0:0
+D:$Twice the calories, twice the carbs, twice the caffeine,
+D:$ and twice the delicious!
+D:$  It causes polymorph when drunk. 
+D:二倍のカロリー、二倍の炭水化物、二倍のカフェイン、そして二倍おいしい！
+D:それは飲むと自己変容を起こす。
