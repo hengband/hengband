@@ -17,23 +17,26 @@ static const int SV_BOOK_MIN_GOOD = 2;
 
 /*!
  * @brief オブジェクトがクロークかどうかを判定する /
- * Hack -- determine if a template is Cloak
  * @param k_idx 判定したいオブジェクトのベースアイテムID
  * @return オブジェクトがクロークならばTRUEを返す
  */
-bool kind_is_cloak(KIND_OBJECT_IDX k_idx) { return k_info[k_idx].tval == TV_CLOAK; }
+bool kind_is_cloak(KIND_OBJECT_IDX k_idx)
+{
+    return k_info[k_idx].tval == TV_CLOAK;
+}
 
 /*!
  * @brief オブジェクトが竿状武器かどうかを判定する /
- * Hack -- determine if a template is Polearm
  * @param k_idx 判定したいオブジェクトのベースアイテムID
  * @return オブジェクトが竿状武器ならばTRUEを返す
  */
-bool kind_is_polearm(KIND_OBJECT_IDX k_idx) { return k_info[k_idx].tval == TV_POLEARM; }
+bool kind_is_polearm(KIND_OBJECT_IDX k_idx)
+{
+    return k_info[k_idx].tval == TV_POLEARM;
+}
 
 /*!
  * @brief オブジェクトが剣かどうかを判定する /
- * Hack -- determine if a template is Sword
  * @param k_idx 判定したいオブジェクトのベースアイテムID
  * @return オブジェクトが剣ならばTRUEを返す
  */
@@ -45,7 +48,6 @@ bool kind_is_sword(KIND_OBJECT_IDX k_idx)
 
 /*!
  * @brief オブジェクトが魔法書かどうかを判定する /
- * Hack -- determine if a template is Book
  * @param k_idx 判定したいオブジェクトのベースアイテムID
  * @return オブジェクトが魔法書ならばTRUEを返す
  */
@@ -57,7 +59,6 @@ bool kind_is_book(KIND_OBJECT_IDX k_idx)
 
 /*!
  * @brief オブジェクトがベースアイテム時点でGOODかどうかを判定する /
- * Hack -- determine if a template is Good book
  * @param k_idx 判定したいオブジェクトのベースアイテムID
  * @return オブジェクトがベースアイテム時点でGOODなアイテムならばTRUEを返す
  */
@@ -69,35 +70,53 @@ bool kind_is_good_book(KIND_OBJECT_IDX k_idx)
 
 /*!
  * @brief オブジェクトが鎧かどうかを判定する /
- * Hack -- determine if a template is Armor
  * @param k_idx 判定したいオブジェクトのベースアイテムID
  * @return オブジェクトが鎧ならばTRUEを返す
  */
-bool kind_is_armor(KIND_OBJECT_IDX k_idx) { return k_info[k_idx].tval == TV_HARD_ARMOR; }
+bool kind_is_armor(KIND_OBJECT_IDX k_idx)
+{
+    return k_info[k_idx].tval == TV_HARD_ARMOR;
+}
 
 /*!
  * @brief オブジェクトが打撃武器かどうかを判定する /
- * Hack -- determine if a template is hafted weapon
  * @param k_idx 判定したいオブジェクトのベースアイテムID
  * @return オブジェクトが打撃武器ならばTRUEを返す
  */
-bool kind_is_hafted(KIND_OBJECT_IDX k_idx) { return k_info[k_idx].tval == TV_HAFTED; }
+bool kind_is_hafted(KIND_OBJECT_IDX k_idx)
+{
+    return k_info[k_idx].tval == TV_HAFTED;
+}
 
 /*!
  * @brief オブジェクトが薬かどうかを判定する /
- * Hack -- determine if a template is hafted weapon
  * @param k_idx 判定したいオブジェクトのベースアイテムID
  * @return オブジェクトが薬ならばTRUEを返す
  */
-bool kind_is_potion(KIND_OBJECT_IDX k_idx) { return k_info[k_idx].tval == TV_POTION; }
+bool kind_is_potion(KIND_OBJECT_IDX k_idx)
+{
+    return k_info[k_idx].tval == TV_POTION;
+}
 
 /*!
  * @brief オブジェクトが靴かどうかを判定する /
- * Hack -- determine if a template is hafted weapon
  * @param k_idx 判定したいオブジェクトのベースアイテムID
  * @return オブジェクトが靴ならばTRUEを返す
  */
-bool kind_is_boots(KIND_OBJECT_IDX k_idx) { return k_info[k_idx].tval == TV_BOOTS; }
+bool kind_is_boots(KIND_OBJECT_IDX k_idx)
+{
+    return k_info[k_idx].tval == TV_BOOTS;
+}
+
+/*!
+ * @brief オブジェクトがアミュレットかどうかを判定する /
+ * @param k_idx 判定したいオブジェクトのベースアイテムID
+ * @return オブジェクトがアミュレットならばTRUEを返す
+ */
+bool kind_is_amulet(KIND_OBJECT_IDX k_idx)
+{
+    return k_info[k_idx].tval == TV_AMULET;
+}
 
 /*!
  * @brief ベースアイテムが上質として扱われるかどうかを返す。

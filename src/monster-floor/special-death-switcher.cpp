@@ -7,12 +7,13 @@
 #include "monster-floor/special-death-switcher.h"
 #include "artifact/fixed-art-generator.h"
 #include "artifact/fixed-art-types.h"
+#include "artifact/random-art-generator.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
-#include "floor/geometry.h"
 #include "floor/floor-object.h"
 #include "floor/floor-util.h"
+#include "floor/geometry.h"
 #include "game-option/birth-options.h"
 #include "grid/grid.h"
 #include "main/sound-definitions-table.h"
@@ -269,7 +270,7 @@ static void on_dead_totem_moai(player_type *player_ptr, monster_death_type *md_p
     summon_self(player_ptr, md_ptr, SUMMON_TOTEM_MOAI, 8, 5, _("新たなモアイが現れた！", "A new moai steps forth!"));
 }
 
-static void on_dead_demon_slayer_senior(player_type* player_ptr, monster_death_type* md_ptr)
+static void on_dead_demon_slayer_senior(player_type *player_ptr, monster_death_type *md_ptr)
 {
     if (!is_seen(player_ptr, md_ptr->m_ptr))
         return;
@@ -324,6 +325,40 @@ static void on_dead_big_raven(player_type *player_ptr, monster_death_type *md_pt
     GAME_TEXT m_name[MAX_NLEN];
     monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_NONE);
     msg_format(_("%sはお星さまになった！", "%^s became a constellation!"), m_name);
+}
+
+static void on_dead_random_artifact(player_type *player_ptr, monster_death_type *md_ptr, bool (*object_hook_pf)(KIND_OBJECT_IDX k_idx))
+{
+    object_type forge;
+    object_type *q_ptr = &forge;
+    object_wipe(q_ptr);
+    while (true) {
+        // make_object() の中でアイテム種別をキャンセルしている
+        // よってループの中に入れないと杖等が選ばれ、☆になる
+        get_obj_num_hook = object_hook_pf;
+        (void)make_object(player_ptr, q_ptr, md_ptr->mo_mode | AM_NO_FIXED_ART);
+        if (q_ptr->art_name > 0) {
+            break;
+        }
+
+        if ((q_ptr->name1 > 0) && q_ptr->name2 > 0) {
+            object_wipe(q_ptr);
+            continue;
+        }
+
+        (void)become_random_artifact(player_ptr, q_ptr, false);
+        auto is_good_amulet = q_ptr->to_h > 0;
+        is_good_amulet &= q_ptr->to_d > 0;
+        is_good_amulet &= q_ptr->to_a > 0;
+        is_good_amulet &= q_ptr->pval > 0;
+        if (is_good_amulet) {
+            break;
+        }
+
+        object_wipe(q_ptr);
+    }
+
+    (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
 
 /*!
@@ -458,6 +493,10 @@ void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr)
     case MON_BIG_RAVEN:
         on_dead_big_raven(player_ptr, md_ptr);
         return;
+    case MON_YENDOR_WIZARD_1:
+    case MON_YENDOR_WIZARD_2:
+        on_dead_random_artifact(player_ptr, md_ptr, kind_is_amulet);
+        break;
     case MON_MANIMANI:
         on_dead_manimani(player_ptr, md_ptr);
         break;
