@@ -54,30 +54,30 @@ void PlayerAlignment::update_alignment()
             continue;
 
         if (any_bits(r_ptr->flags3, RF3_GOOD)) {
-            this->set_alignment(r_ptr->level, update_alignment_type::ALIGNMENT_ADDITION);
+            this->bias_good_alignment(r_ptr->level);
         }
 
         if (any_bits(r_ptr->flags3, RF3_EVIL)) {
-            this->set_alignment(r_ptr->level, update_alignment_type::ALIGNMENT_SUBTRACTION);
+            this->bias_evil_alignment(r_ptr->level);
         }
     }
 
     if (creature_ptr->mimic_form) {
         switch (creature_ptr->mimic_form) {
         case MIMIC_DEMON:
-            this->set_alignment(200, update_alignment_type::ALIGNMENT_SUBTRACTION);
+            this->bias_evil_alignment(200);
             break;
         case MIMIC_DEMON_LORD:
-            this->set_alignment(200, update_alignment_type::ALIGNMENT_SUBTRACTION);
+            this->bias_evil_alignment(200);
             break;
         }
     } else {
         switch (creature_ptr->prace) {
         case RACE_ARCHON:
-            this->set_alignment(200, update_alignment_type::ALIGNMENT_ADDITION);
+            this->bias_good_alignment(200);
             break;
         case RACE_BALROG:
-            this->set_alignment(200, update_alignment_type::ALIGNMENT_SUBTRACTION);
+            this->bias_evil_alignment(200);
             break;
 
         default:
@@ -89,7 +89,7 @@ void PlayerAlignment::update_alignment()
         if (!has_melee_weapon(creature_ptr, INVEN_MAIN_HAND + i) || (creature_ptr->inventory_list[INVEN_MAIN_HAND + i].name1 != ART_IRON_BALL))
             continue;
 
-        this->set_alignment(1000, update_alignment_type::ALIGNMENT_SUBTRACTION);
+        this->bias_evil_alignment(1000);
     }
 
     int j = 0;
@@ -97,7 +97,7 @@ void PlayerAlignment::update_alignment()
     for (int i = 0; i < 8; i++) {
         switch (creature_ptr->vir_types[i]) {
         case V_JUSTICE:
-            this->set_alignment(creature_ptr->virtues[i] * 2, update_alignment_type::ALIGNMENT_ADDITION);
+            this->bias_good_alignment(creature_ptr->virtues[i] * 2);
             break;
         case V_CHANCE:
             break;
@@ -106,47 +106,40 @@ void PlayerAlignment::update_alignment()
             neutral[j++] = i;
             break;
         case V_UNLIFE:
-            this->set_alignment(creature_ptr->virtues[i], update_alignment_type::ALIGNMENT_SUBTRACTION);
+            this->bias_evil_alignment(creature_ptr->virtues[i]);
             break;
         default:
-            this->set_alignment(creature_ptr->virtues[i], update_alignment_type::ALIGNMENT_ADDITION);
+            this->bias_good_alignment(creature_ptr->virtues[i]);
             break;
         }
     }
 
     for (int i = 0; i < j; i++) {
         if (creature_ptr->alignment > 0) {
-            this->set_alignment(creature_ptr->virtues[neutral[i]] / 2, update_alignment_type::ALIGNMENT_SUBTRACTION);
+            this->bias_evil_alignment(creature_ptr->virtues[neutral[i]] / 2);
             if (creature_ptr->alignment < 0)
                 this->reset_alignment();
         } else if (creature_ptr->alignment < 0) {
-            this->set_alignment(creature_ptr->virtues[neutral[i]] / 2, update_alignment_type::ALIGNMENT_ADDITION);
+            this->bias_good_alignment(creature_ptr->virtues[neutral[i]] / 2);
             if (creature_ptr->alignment > 0)
                 this->reset_alignment();
         }
     }
 }
 
-void PlayerAlignment::set_alignment(int value, update_alignment_type ua_type)
+void PlayerAlignment::bias_good_alignment(int value)
 {
-    switch (ua_type) {
-    case update_alignment_type::ALIGNMENT_SUBSTITUTION:
-        this->creature_ptr->alignment = value;
-        return;
-    case update_alignment_type::ALIGNMENT_ADDITION:
-        this->creature_ptr->alignment += value;
-        return;
-    case update_alignment_type::ALIGNMENT_SUBTRACTION:
-        this->creature_ptr->alignment -= value;
-        return;
-    default:
-        return;
-    }
+    this->creature_ptr->alignment += value;
+}
+
+void PlayerAlignment::bias_evil_alignment(int value)
+{
+    this->creature_ptr->alignment -= value;
 }
 
 void PlayerAlignment::reset_alignment()
 {
-    this->set_alignment(0, update_alignment_type::ALIGNMENT_SUBSTITUTION);
+    this->creature_ptr->alignment = 0;
 }
 
 /*!

@@ -2,12 +2,6 @@
 
 #include "system/angband.h"
 
-enum class update_alignment_type {
-    ALIGNMENT_SUBSTITUTION,
-    ALIGNMENT_ADDITION,
-    ALIGNMENT_SUBTRACTION,
-};
-
 struct player_type;
 class PlayerAlignment {
 public:
@@ -19,6 +13,7 @@ public:
 private:
     player_type *creature_ptr;
     concptr alignment_label();
-    void set_alignment(int value, update_alignment_type ua_type);
+    void bias_good_alignment(int value);
+    void bias_evil_alignment(int value);
     void reset_alignment();
 };
