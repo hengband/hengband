@@ -5,6 +5,7 @@
 
 #include "main-win/graphics-win.h"
 #include "main-win/main-win-define.h"
+#include "main-win/main-win-utils.h"
 #include "system/system-variables.h"
 #include "util/angband-files.h"
 
@@ -61,9 +62,7 @@ HBITMAP read_graphic(char *filename)
     HBITMAP result = NULL;
     init_gdi_plus();
 
-    wchar_t wc[MAIN_WIN_MAX_PATH] = L"";
-    ::mbstowcs(wc, filename, MAIN_WIN_MAX_PATH - 1);
-    Gdiplus::Bitmap bitmap(wc);
+    Gdiplus::Bitmap bitmap(to_wchar(filename).wc_str());
 
     COLORREF bgcolor = RGB(0x00, 0x00, 0x00);
     bitmap.GetHBITMAP(bgcolor, &result);
