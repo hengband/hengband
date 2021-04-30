@@ -46,6 +46,7 @@
 #include "util/int-char-converter.h"
 #include "wizard/wizard-special-process.h"
 #include "world/world.h"
+#include <sstream>
 #include <vector>
 
 #define K_MAX_DEPTH 110 /*!< アイテムの階層毎生成率を表示する最大階 */
