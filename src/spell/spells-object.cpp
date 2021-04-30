@@ -351,7 +351,7 @@ void brand_bolts(player_type *caster_ptr)
 
         /* Ego-item */
         o_ptr->name2 = EGO_FLAME;
-        enchant(caster_ptr, o_ptr, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
+        enchant_equipment(caster_ptr, o_ptr, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
         return;
     }
 
@@ -445,7 +445,7 @@ static void break_curse(object_type *o_ptr)
  * the larger the pile, the lower the chance of success.
  * </pre>
  */
-bool enchant(player_type *caster_ptr, object_type *o_ptr, int n, int eflag)
+bool enchant_equipment(player_type *caster_ptr, object_type *o_ptr, int n, int eflag)
 {
     /* Large piles resist enchantment */
     int prob = o_ptr->number * 100;
@@ -577,11 +577,11 @@ bool enchant_spell(player_type *caster_ptr, HIT_PROB num_hit, HIT_POINT num_dam,
 
     /* Enchant */
     bool is_enchant_successful = FALSE;
-    if (enchant(caster_ptr, o_ptr, num_hit, ENCH_TOHIT))
+    if (enchant_equipment(caster_ptr, o_ptr, num_hit, ENCH_TOHIT))
         is_enchant_successful = TRUE;
-    if (enchant(caster_ptr, o_ptr, num_dam, ENCH_TODAM))
+    if (enchant_equipment(caster_ptr, o_ptr, num_dam, ENCH_TODAM))
         is_enchant_successful = TRUE;
-    if (enchant(caster_ptr, o_ptr, num_ac, ENCH_TOAC))
+    if (enchant_equipment(caster_ptr, o_ptr, num_ac, ENCH_TOAC))
         is_enchant_successful = TRUE;
 
     if (!is_enchant_successful) {
@@ -725,7 +725,7 @@ void brand_weapon(player_type *caster_ptr, int brand_type)
     }
 
     msg_format(_("あなたの%s%s", "Your %s %s"), o_name, act);
-    enchant(caster_ptr, o_ptr, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
+    enchant_equipment(caster_ptr, o_ptr, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
     o_ptr->discount = 99;
     chg_virtue(caster_ptr, V_ENCHANT, 2);
     calc_android_exp(caster_ptr);

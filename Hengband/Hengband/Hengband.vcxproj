@@ -269,6 +269,8 @@
     <ClCompile Include="..\..\src\action\movement-execution.cpp" />
     <ClCompile Include="..\..\src\main-win\commandline-win.cpp" />
     <ClCompile Include="..\..\src\main-win\graphics-win.cpp" />
+    <ClCompile Include="..\..\src\object-enchant\apply-magic-amulet.cpp" />
+    <ClCompile Include="..\..\src\object-enchant\apply-magic-ring.cpp" />
     <ClCompile Include="..\..\src\player-info\alignment.cpp" />
     <ClCompile Include="..\..\src\player-info\equipment-info.cpp" />
     <ClCompile Include="..\..\src\player-status\player-energy.cpp" />
@@ -629,7 +631,6 @@
     <ClCompile Include="..\..\src\mind\mind-samurai.cpp" />
     <ClCompile Include="..\..\src\mind\mind-warrior.cpp" />
     <ClCompile Include="..\..\src\racial\racial-vampire.cpp" />
-    <ClCompile Include="..\..\src\object-enchant\apply-magic-accessory.cpp" />
     <ClCompile Include="..\..\src\object-enchant\apply-magic-armor.cpp" />
     <ClCompile Include="..\..\src\object-enchant\apply-magic-others.cpp" />
     <ClCompile Include="..\..\src\object-enchant\apply-magic-weapon.cpp" />
@@ -941,6 +942,8 @@
     <ClInclude Include="..\..\src\action\movement-execution.h" />
     <ClInclude Include="..\..\src\main-win\commandline-win.h" />
     <ClInclude Include="..\..\src\main-win\graphics-win.h" />
+    <ClInclude Include="..\..\src\object-enchant\apply-magic-amulet.h" />
+    <ClInclude Include="..\..\src\object-enchant\apply-magic-ring.h" />
     <ClInclude Include="..\..\src\player-info\alignment.h" />
     <ClInclude Include="..\..\src\player-info\equipment-info.h" />
     <ClInclude Include="..\..\src\player-status\player-energy.h" />
@@ -1349,7 +1352,7 @@
     <ClInclude Include="..\..\src\mind\mind-samurai.h" />
     <ClInclude Include="..\..\src\mind\mind-warrior.h" />
     <ClInclude Include="..\..\src\racial\racial-vampire.h" />
-    <ClInclude Include="..\..\src\object-enchant\apply-magic-accessory.h" />
+    <ClInclude Include="..\..\src\object-enchant\accessory-enchanter-base.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic-armor.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic-others.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic-weapon.h" />

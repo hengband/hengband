@@ -10,9 +10,10 @@
 #include "artifact/fixed-art-generator.h"
 #include "dungeon/dungeon.h"
 #include "mutation/mutation-flag-types.h"
-#include "object-enchant/apply-magic-accessory.h"
+#include "object-enchant/apply-magic-amulet.h"
 #include "object-enchant/apply-magic-armor.h"
 #include "object-enchant/apply-magic-others.h"
+#include "object-enchant/apply-magic-ring.h"
 #include "object-enchant/apply-magic-weapon.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/object-curse.h"
@@ -154,10 +155,18 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
         break;
     }
     case TV_RING:
-    case TV_AMULET: {
-        if (!power && (randint0(100) < 50))
+        if (!power && (randint0(100) < 50)) {
             power = -1;
-        AccessoryEnchanter(owner_ptr, o_ptr, lev, power).apply_magic_accessary();
+        }
+
+        RingEnchanter(owner_ptr, o_ptr, lev, power).apply_magic_accessary();
+        break;
+    case TV_AMULET: {
+        if (!power && (randint0(100) < 50)) {
+            power = -1;
+        }
+
+        AmuletEnchanter(owner_ptr, o_ptr, lev, power).apply_magic_accessary();
         break;
     }
     default: {
