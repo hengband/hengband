@@ -59,23 +59,28 @@ void AccessoryEnchanter::apply_magic_accessary()
         }
 
         break;
-    case TV_AMULET: {
+    case TV_AMULET:
         enchant_amulet();
         if ((one_in_(150) && (this->power > 0) && !object_is_cursed(this->o_ptr) && (this->level > 79)) || (this->power > 2)) {
             this->o_ptr->pval = MIN(this->o_ptr->pval, 4);
             become_random_artifact(owner_ptr, this->o_ptr, FALSE);
-        } else if ((this->power == 2) && one_in_(2)) {
+            return;
+        }
+        
+        if ((this->power == 2) && one_in_(2)) {
             give_amulet_ego_index();
             this->o_ptr->curse_flags = 0L;
-        } else if ((this->power == -2) && one_in_(2)) {
+            return;
+        }
+        
+        if ((this->power == -2) && one_in_(2)) {
             give_amulet_cursed();
+            return;
         }
 
-        break;
-    }
-
+        return;
     default:
-        break;
+        return;
     }
 }
 
