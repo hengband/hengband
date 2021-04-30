@@ -16,4 +16,5 @@ private:
     DEPTH level;
     int power;
     void enahcnt_ring();
+    void give_ring_ego_index();
 };
