@@ -25458,7 +25458,6 @@ B:HIT:LOSE_STR:6d8
 B:CLAW:EAT_ITEM:2d12
 F:UNIQUE | MALE | DROP_CORPSE | DROP_SKELETON | HUMAN
 F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | SMART | HAS_LITE_2
-F:ONLY_ITEM | DROP_90 | DROP_GOOD | DROP_GREAT
 F:OPEN_DOOR | BASH_DOOR | TAKE_ITEM
 F:EVIL | IM_FIRE | IM_POIS | REGENERATE | CAN_FLY
 F:NO_CONF | NO_SLEEP | POWERFUL
@@ -25768,3 +25767,32 @@ F:DROP_3D2 | ONLY_GOLD | CAN_SPEAK | EVIL
 D:$He is the weakest man among the big four,
 D:$ and is a mess of the demons.
 D:四天王の中で最弱の男であり、魔族の面汚しだ。
+
+N:1299:『ロストリンギル大佐』
+E:The Colonel Lostringil
+G:p:D
+I:115:40d100:20:150:20
+W:60:5:0:20000:0:0
+B:SLASH:TIME:100d1
+B:SLASH:TIME:100d1
+B:SLASH:EAT_ITEM:5d5
+B:SLASH:EAT_ITEM:5d5
+F:UNIQUE | FORCE_MAXHP | GOOD | HUMAN | MALE | UNDEAD | COLD_BLOOD
+F:BASH_DOOR | CAN_SWIM | CAN_FLY | FRIENDLY | CAN_SPEAK | DROP_CORPSE
+F:IM_ACID | IM_ELEC | IM_FIRE | IM_POIS | RES_DARK | RES_NETH | RES_WATE
+F:RES_PLAS | RES_SHAR | RES_SOUN | RES_CHAO | RES_DISE | RES_NEXU | RES_WALL
+F:RES_INER | RES_TIME | RES_GRAV | RES_TELE
+F:NO_CONF | NO_STUN | HAS_DARK_1
+F:WILD_TOWN | WILD_SHORE | WILD_OCEAN | WILD_WASTE | WILD_WOOD
+F:WILD_VOLCANO | WILD_MOUNTAIN | WILD_GRASS
+S:1_IN_6 | INVULNER | SCARE | TELE_TO | BR_TIME
+D:$Ringil.
+D:$  The weapon of Fingolfin, High King of the Noldor;
+D:$ it shines like a column of ice lit by light unquenchable.
+D:$  He was a major in his lifetime.
+D:$  He has been searching for the power of that sword forever. 
+D:$  He will remind him of its might should he meet it again.
+D:リンギル。それはノルドールの上級王フィンゴルフィンの武器。
+D:氷の柱の如く輝いている。
+D:彼は生前は少佐で、あの剣の力をいつまでも探し続けている。
+D:彼はこの剣の力を再び思い知ることになるだろう。

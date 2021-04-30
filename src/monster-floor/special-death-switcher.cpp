@@ -500,6 +500,9 @@ void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr)
     case MON_MANIMANI:
         on_dead_manimani(player_ptr, md_ptr);
         break;
+    case MON_LOSTRINGIL:
+        on_dead_random_artifact(player_ptr, md_ptr, kind_is_sword);
+        break;
     default:
         on_dead_mimics(player_ptr, md_ptr);
         return;

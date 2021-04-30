@@ -180,4 +180,5 @@ enum monster_race_type {
     MON_DOPPIO = 1290,
     MON_DIAVOLO = 1291,
     MON_MANIMANI = 1293,
+    MON_LOSTRINGIL = 1299,
 };
