@@ -2555,8 +2555,7 @@ void update_creature(player_type *creature_ptr)
 
     if (any_bits(creature_ptr->update, (PU_BONUS))) {
         reset_bits(creature_ptr->update, PU_BONUS);
-        std::unique_ptr<PlayerAlignment> alignment(new PlayerAlignment(creature_ptr));
-        alignment->update_alignment();
+        PlayerAlignment(creature_ptr).update_alignment();
         update_bonuses(creature_ptr);
     }
 

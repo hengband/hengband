@@ -134,8 +134,7 @@ static void display_phisique(player_type *creature_ptr)
     display_player_one_line(ENTRY_WEIGHT, format("%d", (int)creature_ptr->wt), TERM_L_BLUE);
     display_player_one_line(ENTRY_SOCIAL, format("%d", (int)creature_ptr->sc), TERM_L_BLUE);
 #endif
-    std::unique_ptr<PlayerAlignment> alignment(new PlayerAlignment(creature_ptr));
-    std::string alg = alignment->get_alignment_description();
+    std::string alg = PlayerAlignment(creature_ptr).get_alignment_description();
     display_player_one_line(ENTRY_ALIGN, format("%s", alg.c_str()), TERM_L_BLUE);
 }
 

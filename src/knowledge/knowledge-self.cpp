@@ -36,8 +36,7 @@ void do_cmd_knowledge_virtues(player_type *creature_ptr)
     if (!open_temporary_file(&fff, file_name))
         return;
 
-    std::unique_ptr<PlayerAlignment> alignment(new PlayerAlignment(creature_ptr));
-    std::string alg = alignment->get_alignment_description();
+    std::string alg = PlayerAlignment(creature_ptr).get_alignment_description();
     fprintf(fff, _("現在の属性 : %s\n\n", "Your alignment : %s\n\n"), alg.c_str());
     dump_virtues(creature_ptr, fff);
     angband_fclose(fff);

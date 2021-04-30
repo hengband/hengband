@@ -35,8 +35,7 @@ void display_max_base_status(player_type *creature_ptr, self_info_type *self_ptr
 void display_virtue(player_type *creature_ptr, self_info_type *self_ptr)
 {
     self_ptr->info[self_ptr->line++] = "";
-    std::unique_ptr<PlayerAlignment> alignment(new PlayerAlignment(creature_ptr));
-    std::string alg = alignment->get_alignment_description(true);
+    std::string alg = PlayerAlignment(creature_ptr).get_alignment_description(true);
     sprintf(self_ptr->plev_buf, _("現在の属性 : %s", "Your alignment : %s"), alg.c_str());
     strcpy(self_ptr->buf[1], self_ptr->plev_buf);
     self_ptr->info[self_ptr->line++] = self_ptr->buf[1];
