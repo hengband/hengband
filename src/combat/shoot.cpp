@@ -434,7 +434,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
     else
         chance = (shooter_ptr->skill_thb + ((shooter_ptr->weapon_exp[0][j_ptr->sval] - (WEAPON_EXP_MASTER / 2)) / 200 + bonus) * BTH_PLUS_ADJ);
 
-    PlayerEnergy(shooter_ptr).update_player_turn_energy(bow_energy(j_ptr->sval), update_turn_type::ENERGY_SUBSTITUTION);
+    PlayerEnergy(shooter_ptr).set_player_turn_energy(bow_energy(j_ptr->sval));
     tmul = bow_tmul(j_ptr->sval);
 
     /* Get extra "power" from "extra might" */
@@ -495,7 +495,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
     }
 
     /* Take a (partial) turn */
-    PlayerEnergy(shooter_ptr).update_player_turn_energy((ENERGY)thits, update_turn_type::ENERGY_DIVISION);
+    PlayerEnergy(shooter_ptr).div_player_turn_energy((ENERGY)thits);
     shooter_ptr->is_fired = TRUE;
 
     /* Sniper - Difficult to shot twice at 1 turn */

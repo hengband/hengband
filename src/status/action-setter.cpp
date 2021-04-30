@@ -69,7 +69,7 @@ void set_action(player_type *creature_ptr, ACTION_IDX typ)
     }
     case ACTION_HAYAGAKE: {
         msg_print(_("足が重くなった。", "You are no longer walking extremely fast."));
-        PlayerEnergy(creature_ptr).update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+        PlayerEnergy(creature_ptr).set_player_turn_energy(100);
         break;
     }
     case ACTION_SPELL: {

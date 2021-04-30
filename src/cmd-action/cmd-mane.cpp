@@ -1137,7 +1137,7 @@ bool do_cmd_mane(player_type *creature_ptr, bool baigaesi)
         creature_ptr->mane_dam[j] = creature_ptr->mane_dam[j + 1];
     }
 
-    PlayerEnergy(creature_ptr).update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
 
     creature_ptr->redraw |= (PR_IMITATION);
     creature_ptr->window_flags |= (PW_PLAYER);

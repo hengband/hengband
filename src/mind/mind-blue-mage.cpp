@@ -111,7 +111,7 @@ bool do_cmd_cast_learned(player_type *caster_ptr)
         }
     }
 
-    PlayerEnergy(caster_ptr).update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+    PlayerEnergy(caster_ptr).set_player_turn_energy(100);
     caster_ptr->redraw |= PR_MANA;
     caster_ptr->window_flags |= PW_PLAYER | PW_SPELL;
     return TRUE;

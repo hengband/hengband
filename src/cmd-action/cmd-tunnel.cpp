@@ -60,7 +60,7 @@ void do_cmd_tunnel(player_type *creature_ptr)
     else if (!has_flag(f_info[feat].flags, FF_TUNNEL))
         msg_print(_("そこは掘れない。", "You can't tunnel through that."));
     else if (g_ptr->m_idx) {
-        PlayerEnergy(creature_ptr).update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+        PlayerEnergy(creature_ptr).set_player_turn_energy(100);
         msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
         do_cmd_attack(creature_ptr, y, x, HISSATSU_NONE);
     } else

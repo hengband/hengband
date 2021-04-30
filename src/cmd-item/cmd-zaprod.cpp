@@ -315,7 +315,7 @@ void exe_zap_rod(player_type *creature_ptr, INVENTORY_IDX item)
             return;
     }
 
-    PlayerEnergy(creature_ptr).update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
 
     lev = k_info[o_ptr->k_idx].level;
 

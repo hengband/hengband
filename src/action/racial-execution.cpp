@@ -125,7 +125,7 @@ racial_level_check_result check_racial_level(player_type *creature_ptr, rpi_type
     }
 
     adjust_racial_power_difficulty(creature_ptr, rpi_ptr, &difficulty);
-    energy.update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+    energy.set_player_turn_energy(100);
     if (randint1(creature_ptr->stat_cur[use_stat]) >= ((difficulty / 2) + randint1(difficulty / 2)))
         return RACIAL_SUCCESS;
 

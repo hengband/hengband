@@ -213,7 +213,7 @@ void do_cmd_destroy(player_type *creature_ptr)
     describe_flavor(creature_ptr, destroy_ptr->o_name, destroy_ptr->o_ptr, 0);
     destroy_ptr->o_ptr->number = destroy_ptr->old_number;
     PlayerEnergy energy(creature_ptr);
-    energy.update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+    energy.set_player_turn_energy(100);
     if (!can_player_destroy_object(creature_ptr, destroy_ptr->o_ptr)) {
         energy.reset_player_turn();
         msg_format(_("%sは破壊不可能だ。", "You cannot destroy %s."), destroy_ptr->o_name);

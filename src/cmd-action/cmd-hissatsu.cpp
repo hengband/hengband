@@ -348,7 +348,7 @@ void do_cmd_hissatsu(player_type *creature_ptr)
     if (!exe_spell(creature_ptr, REALM_HISSATSU, n, SPELL_CAST))
         return;
 
-    PlayerEnergy(creature_ptr).update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
 
     /* Use some mana */
     creature_ptr->csp -= spell.smana;
@@ -422,7 +422,7 @@ void do_cmd_gain_hissatsu(player_type *creature_ptr)
     if (!gain) {
         msg_print(_("何も覚えられなかった。", "You were not able to learn any special attacks."));
     } else {
-        PlayerEnergy(creature_ptr).update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+        PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     }
 
     creature_ptr->update |= (PU_SPELLS);

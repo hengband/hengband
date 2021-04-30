@@ -880,7 +880,7 @@ static bool try_cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx,
             PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM);
         caster_ptr->csp = MAX(0, caster_ptr->csp - caster_ptr->msp * 10 / (20 + randint1(10)));
 
-        PlayerEnergy(caster_ptr).update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+        PlayerEnergy(caster_ptr).set_player_turn_energy(100);
         set_bits(caster_ptr->redraw, PR_MANA);
         set_bits(caster_ptr->window_flags, PW_PLAYER | PW_SPELL);
 
@@ -927,7 +927,7 @@ void do_cmd_element(player_type *caster_ptr)
         }
     }
 
-    PlayerEnergy(caster_ptr).update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+    PlayerEnergy(caster_ptr).set_player_turn_energy(100);
     set_bits(caster_ptr->redraw, PR_MANA);
     set_bits(caster_ptr->window_flags, PW_PLAYER | PW_SPELL);
 }

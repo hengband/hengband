@@ -20,27 +20,29 @@ PlayerEnergy::PlayerEnergy(player_type *creature_ptr)
  * @param ut_type 現在値に対する演算方法
  * @return なし
  */
-void PlayerEnergy::update_player_turn_energy(ENERGY need_cost, update_turn_type ut_type)
+void PlayerEnergy::set_player_turn_energy(ENERGY need_cost)
 {
-    switch (ut_type) {
-    case update_turn_type::ENERGY_SUBSTITUTION:
-        this->creature_ptr->energy_use = need_cost;
-        return;
-    case update_turn_type::ENERGY_ADDITION:
-        this->creature_ptr->energy_use += need_cost;
-        return;
-    case update_turn_type::ENERGY_SUBTRACTION:
-        this->creature_ptr->energy_use -= need_cost;
-        return;
-    case update_turn_type::ENERGY_MULTIPLICATION:
-        this->creature_ptr->energy_use *= need_cost;
-        return;
-    case update_turn_type::ENERGY_DIVISION:
-        this->creature_ptr->energy_use /= need_cost;
-        return;
-    default:
-        return;
-    }
+    this->creature_ptr->energy_use = need_cost;
+}
+
+void PlayerEnergy::add_player_turn_energy(ENERGY need_cost)
+{
+    this->creature_ptr->energy_use += need_cost;
+}
+
+void PlayerEnergy::sub_player_turn_energy(ENERGY need_cost)
+{
+    this->creature_ptr->energy_use -= need_cost;
+}
+
+void PlayerEnergy::mul_player_turn_energy(ENERGY need_cost)
+{
+    this->creature_ptr->energy_use *= need_cost;
+}
+
+void PlayerEnergy::div_player_turn_energy(ENERGY need_cost)
+{
+    this->creature_ptr->energy_use /= need_cost;
 }
 
 /*
@@ -50,5 +52,5 @@ void PlayerEnergy::update_player_turn_energy(ENERGY need_cost, update_turn_type 
  */
 void PlayerEnergy::reset_player_turn()
 {
-    update_player_turn_energy(0, update_turn_type::ENERGY_SUBSTITUTION);
+    set_player_turn_energy(0);
 }

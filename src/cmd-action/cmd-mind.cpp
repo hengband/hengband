@@ -301,12 +301,12 @@ static void mind_turn_passing(player_type *caster_ptr, cm_type *cm_ptr)
     PlayerEnergy energy(caster_ptr);
     if (cm_ptr->on_mirror && (caster_ptr->pclass == CLASS_MIRROR_MASTER)) {
         if (cm_ptr->n == 3 || cm_ptr->n == 5 || cm_ptr->n == 7 || cm_ptr->n == 16) {
-            energy.update_player_turn_energy(50, update_turn_type::ENERGY_SUBSTITUTION);
+            energy.set_player_turn_energy(50);
             return;
         }
     }
 
-    energy.update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+    energy.set_player_turn_energy(100);
 }
 
 static bool judge_mind_chance(player_type *caster_ptr, cm_type *cm_ptr)

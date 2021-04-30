@@ -309,7 +309,7 @@ void do_cmd_building(player_type *player_ptr)
         return;
 
     PlayerEnergy energy(player_ptr);
-    energy.update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+    energy.set_player_turn_energy(100);
 
     if (!cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, FF_BLDG)) {
         msg_print(_("ここには建物はない。", "You see no building here."));

@@ -551,7 +551,7 @@ bool do_cmd_magic_eater(player_type *creature_ptr, bool only_browse, bool powerf
         sound(SOUND_FAIL);
         if (randint1(100) >= chance)
             chg_virtue(creature_ptr, V_CHANCE, -1);
-        energy.update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+        energy.set_player_turn_energy(100);
 
         return TRUE;
     } else {
@@ -577,7 +577,7 @@ bool do_cmd_magic_eater(player_type *creature_ptr, bool only_browse, bool powerf
             chg_virtue(creature_ptr, V_CHANCE, 1);
     }
 
-    energy.update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+    energy.set_player_turn_energy(100);
     if (tval == TV_ROD)
         creature_ptr->magic_num1[item] += k_info[k_idx].pval * EATER_ROD_CHARGE;
     else

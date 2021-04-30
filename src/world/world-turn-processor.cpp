@@ -219,7 +219,7 @@ void process_world(player_type *player_ptr)
                 player_ptr->oldpy = randint1(MAX_HGT - 2);
                 player_ptr->oldpx = randint1(MAX_WID - 2);
                 change_wild_mode(player_ptr, TRUE);
-                PlayerEnergy(player_ptr).update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+                PlayerEnergy(player_ptr).set_player_turn_energy(100);
             }
 
             player_ptr->invoking_midnight_curse = TRUE;

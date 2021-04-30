@@ -131,7 +131,7 @@ void do_cmd_drop(player_type *creature_ptr)
             return;
     }
 
-    PlayerEnergy(creature_ptr).update_player_turn_energy(50, update_turn_type::ENERGY_SUBSTITUTION);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(50);
     drop_from_inventory(creature_ptr, item, amt);
     if (item >= INVEN_MAIN_HAND) {
         verify_equip_slot(creature_ptr, item);

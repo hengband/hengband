@@ -456,10 +456,10 @@ static bool check_fear_death(player_type *attacker_ptr, player_attack_type *pa_p
                 energy_use = attacker_ptr->energy_use * num * 3 / (attacker_ptr->num_blow[pa_ptr->hand] * 5);
             }
 
-            energy.update_player_turn_energy(energy_use, update_turn_type::ENERGY_SUBSTITUTION);
+            energy.set_player_turn_energy(energy_use);
         } else {
             auto energy_use = (ENERGY)(attacker_ptr->energy_use * num / attacker_ptr->num_blow[pa_ptr->hand]);
-            energy.update_player_turn_energy(energy_use, update_turn_type::ENERGY_SUBSTITUTION);
+            energy.set_player_turn_energy(energy_use);
         }
     }
 

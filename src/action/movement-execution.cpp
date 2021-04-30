@@ -136,7 +136,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
             }
 
             creature_ptr->leaving = TRUE;
-            PlayerEnergy(creature_ptr).update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+            PlayerEnergy(creature_ptr).set_player_turn_energy(100);
             return;
         }
 
@@ -245,7 +245,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
         can_move = FALSE;
     } else if (has_flag(f_ptr->flags, FF_TREE) && !p_can_kill_walls) {
         if ((creature_ptr->pclass != CLASS_RANGER) && !creature_ptr->levitation && (!creature_ptr->riding || !(riding_r_ptr->flags8 & RF8_WILD_WOOD))) {
-            energy.update_player_turn_energy(2, update_turn_type::ENERGY_MULTIPLICATION);
+            energy.mul_player_turn_energy(2);
         }
     } else if ((do_pickup != easy_disarm) && has_flag(f_ptr->flags, FF_DISARM) && !g_ptr->mimic) {
         if (!trap_can_be_ignored(creature_ptr, g_ptr->feat)) {
@@ -305,7 +305,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
         return;
 
     if (creature_ptr->warning && (!process_warning(creature_ptr, x, y))) {
-        energy.update_player_turn_energy(25, update_turn_type::ENERGY_SUBSTITUTION);
+        energy.set_player_turn_energy(25);
         return;
     }
 

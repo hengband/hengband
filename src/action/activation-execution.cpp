@@ -224,7 +224,7 @@ static bool activate_whistle(player_type *user_ptr, ae_type *ae_ptr)
  */
 void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 {
-    PlayerEnergy(user_ptr).update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+    PlayerEnergy(user_ptr).set_player_turn_energy(100);
     ae_type tmp_ae;
     ae_type *ae_ptr = initialize_ae_type(user_ptr, &tmp_ae, item);
     decide_activation_level(user_ptr, ae_ptr);

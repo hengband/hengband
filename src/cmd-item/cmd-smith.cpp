@@ -261,7 +261,7 @@ static void drain_essence(player_type *creature_ptr)
             return;
     }
 
-    PlayerEnergy(creature_ptr).update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
 
     object_flags(creature_ptr, o_ptr, old_flgs);
     if (has_flag(old_flgs, TR_KILL_DRAGON))
@@ -908,7 +908,7 @@ static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
         if (es_ptr->add == ESSENCE_ATTACK) {
             if ((o_ptr->to_h >= creature_ptr->lev / 5 + 5) && (o_ptr->to_d >= creature_ptr->lev / 5 + 5)) {
                 msg_print(_("改良に失敗した。", "You failed to enchant."));
-                energy.update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+                energy.set_player_turn_energy(100);
                 return;
             } else {
                 if (o_ptr->to_h < creature_ptr->lev / 5 + 5)
@@ -919,7 +919,7 @@ static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
         } else if (es_ptr->add == ESSENCE_AC) {
             if (o_ptr->to_a >= creature_ptr->lev / 5 + 5) {
                 msg_print(_("改良に失敗した。", "You failed to enchant."));
-                energy.update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+                energy.set_player_turn_energy(100);
                 return;
             } else {
                 if (o_ptr->to_a < creature_ptr->lev / 5 + 5)
@@ -983,7 +983,7 @@ static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
         }
     }
 
-    PlayerEnergy(creature_ptr).update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     _(msg_format("%sに%sの能力を付加しました。", o_name, es_ptr->add_name), msg_format("You have added ability of %s to %s.", es_ptr->add_name, o_name));
     creature_ptr->update |= (PU_COMBINE | PU_REORDER);
     creature_ptr->window_flags |= (PW_INVEN);
@@ -1014,7 +1014,7 @@ static void erase_essence(player_type *creature_ptr)
     if (!get_check(format(_("よろしいですか？ [%s]", "Are you sure? [%s]"), o_name)))
         return;
 
-    PlayerEnergy(creature_ptr).update_player_turn_energy(100, update_turn_type::ENERGY_SUBSTITUTION);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
 
     if (o_ptr->xtra3 == 1 + ESSENCE_SLAY_GLOVE) {
         o_ptr->to_h -= (o_ptr->xtra4 >> 8);
