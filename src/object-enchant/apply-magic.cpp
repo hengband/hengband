@@ -157,7 +157,7 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
     case TV_AMULET: {
         if (!power && (randint0(100) < 50))
             power = -1;
-        apply_magic_accessary(owner_ptr, o_ptr, lev, power);
+        AccessoryEnchanter(owner_ptr, o_ptr, lev, power).apply_magic_accessary();
         break;
     }
     default: {
