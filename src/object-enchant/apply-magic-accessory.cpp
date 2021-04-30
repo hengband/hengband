@@ -65,124 +65,7 @@ void AccessoryEnchanter::apply_magic_accessary()
             this->o_ptr->pval = MIN(this->o_ptr->pval, 4);
             become_random_artifact(owner_ptr, this->o_ptr, FALSE);
         } else if ((this->power == 2) && one_in_(2)) {
-            while (!this->o_ptr->name2) {
-                object_kind *k_ptr = &k_info[this->o_ptr->k_idx];
-                switch (randint1(21)) {
-                case 1:
-                case 2:
-                    if (has_flag(k_ptr->flags, TR_SLOW_DIGEST))
-                        break;
-                    this->o_ptr->name2 = EGO_AMU_SLOW_D;
-                    break;
-                case 3:
-                case 4:
-                    if (this->o_ptr->pval)
-                        break;
-                    this->o_ptr->name2 = EGO_AMU_INFRA;
-                    break;
-                case 5:
-                case 6:
-                    if (has_flag(k_ptr->flags, TR_SEE_INVIS))
-                        break;
-                    this->o_ptr->name2 = EGO_AMU_SEE_INVIS;
-                    break;
-                case 7:
-                case 8:
-                    if (has_flag(k_ptr->flags, TR_HOLD_EXP))
-                        break;
-                    this->o_ptr->name2 = EGO_AMU_HOLD_EXP;
-                    break;
-                case 9:
-                    if (has_flag(k_ptr->flags, TR_LEVITATION))
-                        break;
-                    this->o_ptr->name2 = EGO_AMU_LEVITATION;
-                    break;
-                case 10:
-                case 11:
-                case 21:
-                    this->o_ptr->name2 = EGO_AMU_AC;
-                    break;
-                case 12:
-                    if (has_flag(k_ptr->flags, TR_RES_FIRE))
-                        break;
-                    if (m_bonus(10, this->level) > 8)
-                        this->o_ptr->name2 = EGO_AMU_RES_FIRE_;
-                    else
-                        this->o_ptr->name2 = EGO_AMU_RES_FIRE;
-                    break;
-                case 13:
-                    if (has_flag(k_ptr->flags, TR_RES_COLD))
-                        break;
-                    if (m_bonus(10, this->level) > 8)
-                        this->o_ptr->name2 = EGO_AMU_RES_COLD_;
-                    else
-                        this->o_ptr->name2 = EGO_AMU_RES_COLD;
-                    break;
-                case 14:
-                    if (has_flag(k_ptr->flags, TR_RES_ELEC))
-                        break;
-                    if (m_bonus(10, this->level) > 8)
-                        this->o_ptr->name2 = EGO_AMU_RES_ELEC_;
-                    else
-                        this->o_ptr->name2 = EGO_AMU_RES_ELEC;
-                    break;
-                case 15:
-                    if (has_flag(k_ptr->flags, TR_RES_ACID))
-                        break;
-                    if (m_bonus(10, this->level) > 8)
-                        this->o_ptr->name2 = EGO_AMU_RES_ACID_;
-                    else
-                        this->o_ptr->name2 = EGO_AMU_RES_ACID;
-                    break;
-                case 16:
-                case 17:
-                case 18:
-                case 19:
-                case 20:
-                    switch (this->o_ptr->sval) {
-                    case SV_AMULET_TELEPORT:
-                        if (m_bonus(10, this->level) > 9)
-                            this->o_ptr->name2 = EGO_AMU_D_DOOR;
-                        else if (one_in_(2))
-                            this->o_ptr->name2 = EGO_AMU_JUMP;
-                        else
-                            this->o_ptr->name2 = EGO_AMU_TELEPORT;
-                        break;
-                    case SV_AMULET_RESIST_ACID:
-                        if ((m_bonus(10, this->level) > 6) && one_in_(2))
-                            this->o_ptr->name2 = EGO_AMU_RES_ACID_;
-                        break;
-                    case SV_AMULET_SEARCHING:
-                        this->o_ptr->name2 = EGO_AMU_STEALTH;
-                        break;
-                    case SV_AMULET_BRILLIANCE:
-                        if (!one_in_(3))
-                            break;
-                        this->o_ptr->name2 = EGO_AMU_IDENT;
-                        break;
-                    case SV_AMULET_CHARISMA:
-                        if (!one_in_(3))
-                            break;
-                        this->o_ptr->name2 = EGO_AMU_CHARM;
-                        break;
-                    case SV_AMULET_THE_MAGI:
-                        if (one_in_(2))
-                            break;
-                        this->o_ptr->name2 = EGO_AMU_GREAT;
-                        break;
-                    case SV_AMULET_RESISTANCE:
-                        if (!one_in_(5))
-                            break;
-                        this->o_ptr->name2 = EGO_AMU_DEFENDER;
-                        break;
-                    case SV_AMULET_TELEPATHY:
-                        if (!one_in_(3))
-                            break;
-                        this->o_ptr->name2 = EGO_AMU_DETECTION;
-                        break;
-                    }
-                }
-            }
+            give_amulet_ego_index();
             this->o_ptr->curse_flags = 0L;
         } else if ((this->power == -2) && one_in_(2)) {
             if (this->o_ptr->to_h > 0)
@@ -787,5 +670,127 @@ void AccessoryEnchanter::enchant_amulet()
         set_bits(this->o_ptr->curse_flags, TRC_CURSED);
         this->o_ptr->pval = 0 - this->o_ptr->pval;
         break;
+    }
+}
+
+void AccessoryEnchanter::give_amulet_ego_index()
+{
+    while (!this->o_ptr->name2) {
+        object_kind *k_ptr = &k_info[this->o_ptr->k_idx];
+        switch (randint1(21)) {
+        case 1:
+        case 2:
+            if (has_flag(k_ptr->flags, TR_SLOW_DIGEST))
+                break;
+            this->o_ptr->name2 = EGO_AMU_SLOW_D;
+            break;
+        case 3:
+        case 4:
+            if (this->o_ptr->pval)
+                break;
+            this->o_ptr->name2 = EGO_AMU_INFRA;
+            break;
+        case 5:
+        case 6:
+            if (has_flag(k_ptr->flags, TR_SEE_INVIS))
+                break;
+            this->o_ptr->name2 = EGO_AMU_SEE_INVIS;
+            break;
+        case 7:
+        case 8:
+            if (has_flag(k_ptr->flags, TR_HOLD_EXP))
+                break;
+            this->o_ptr->name2 = EGO_AMU_HOLD_EXP;
+            break;
+        case 9:
+            if (has_flag(k_ptr->flags, TR_LEVITATION))
+                break;
+            this->o_ptr->name2 = EGO_AMU_LEVITATION;
+            break;
+        case 10:
+        case 11:
+        case 21:
+            this->o_ptr->name2 = EGO_AMU_AC;
+            break;
+        case 12:
+            if (has_flag(k_ptr->flags, TR_RES_FIRE))
+                break;
+            if (m_bonus(10, this->level) > 8)
+                this->o_ptr->name2 = EGO_AMU_RES_FIRE_;
+            else
+                this->o_ptr->name2 = EGO_AMU_RES_FIRE;
+            break;
+        case 13:
+            if (has_flag(k_ptr->flags, TR_RES_COLD))
+                break;
+            if (m_bonus(10, this->level) > 8)
+                this->o_ptr->name2 = EGO_AMU_RES_COLD_;
+            else
+                this->o_ptr->name2 = EGO_AMU_RES_COLD;
+            break;
+        case 14:
+            if (has_flag(k_ptr->flags, TR_RES_ELEC))
+                break;
+            if (m_bonus(10, this->level) > 8)
+                this->o_ptr->name2 = EGO_AMU_RES_ELEC_;
+            else
+                this->o_ptr->name2 = EGO_AMU_RES_ELEC;
+            break;
+        case 15:
+            if (has_flag(k_ptr->flags, TR_RES_ACID))
+                break;
+            if (m_bonus(10, this->level) > 8)
+                this->o_ptr->name2 = EGO_AMU_RES_ACID_;
+            else
+                this->o_ptr->name2 = EGO_AMU_RES_ACID;
+            break;
+        case 16:
+        case 17:
+        case 18:
+        case 19:
+        case 20:
+            switch (this->o_ptr->sval) {
+            case SV_AMULET_TELEPORT:
+                if (m_bonus(10, this->level) > 9)
+                    this->o_ptr->name2 = EGO_AMU_D_DOOR;
+                else if (one_in_(2))
+                    this->o_ptr->name2 = EGO_AMU_JUMP;
+                else
+                    this->o_ptr->name2 = EGO_AMU_TELEPORT;
+                break;
+            case SV_AMULET_RESIST_ACID:
+                if ((m_bonus(10, this->level) > 6) && one_in_(2))
+                    this->o_ptr->name2 = EGO_AMU_RES_ACID_;
+                break;
+            case SV_AMULET_SEARCHING:
+                this->o_ptr->name2 = EGO_AMU_STEALTH;
+                break;
+            case SV_AMULET_BRILLIANCE:
+                if (!one_in_(3))
+                    break;
+                this->o_ptr->name2 = EGO_AMU_IDENT;
+                break;
+            case SV_AMULET_CHARISMA:
+                if (!one_in_(3))
+                    break;
+                this->o_ptr->name2 = EGO_AMU_CHARM;
+                break;
+            case SV_AMULET_THE_MAGI:
+                if (one_in_(2))
+                    break;
+                this->o_ptr->name2 = EGO_AMU_GREAT;
+                break;
+            case SV_AMULET_RESISTANCE:
+                if (!one_in_(5))
+                    break;
+                this->o_ptr->name2 = EGO_AMU_DEFENDER;
+                break;
+            case SV_AMULET_TELEPATHY:
+                if (!one_in_(3))
+                    break;
+                this->o_ptr->name2 = EGO_AMU_DETECTION;
+                break;
+            }
+        }
     }
 }
