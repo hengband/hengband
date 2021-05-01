@@ -286,7 +286,9 @@ static void on_dead_mirmulnir(player_type *player_ptr, monster_death_type *md_pt
     if (!is_seen(player_ptr, md_ptr->m_ptr))
         return;
 
-    msg_print(_("ドヴ＠ーキン、やめろぉ！", "Dov@hkiin! No!!"));
+    GAME_TEXT m_name[MAX_NLEN];
+    monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_NONE);
+    msg_format(_("%s「ドヴ＠ーキン、やめろぉ！」", "%^s says, 'Dov@hkiin! No!!'"), m_name);
 }
 
 static void on_dead_dragon_centipede(player_type *player_ptr, monster_death_type *md_ptr)
