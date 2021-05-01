@@ -218,7 +218,6 @@ bool time_walk(player_type *creature_ptr)
  * @brief プレイヤーのヒットダイスを振る / Role Hitpoints
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param options スペル共通オプション
- * @return なし
  */
 void roll_hitdice(player_type *creature_ptr, spell_operation options)
 {
@@ -524,7 +523,6 @@ bool cosmic_cast_off(player_type *creature_ptr, object_type **o_ptr_ptr)
 /*!
  * @brief プレイヤーの因果混乱処理 / Apply Nexus
  * @param m_ptr 因果混乱をプレイヤーに与えたモンスターの情報参照ポインタ
- * @return なし
  */
 void apply_nexus(monster_type *m_ptr, player_type *target_ptr)
 {
@@ -568,7 +566,6 @@ void apply_nexus(monster_type *m_ptr, player_type *target_ptr)
 /*!
  * @brief プレイヤーのステータスシャッフル処理
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void status_shuffle(player_type *creature_ptr)
 {

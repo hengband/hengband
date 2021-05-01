@@ -15,7 +15,6 @@
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param y 配置を試みたいマスのY座標
  * @param x 配置を試みたいマスのX座標
- * @return なし
  */
 void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x)
 {

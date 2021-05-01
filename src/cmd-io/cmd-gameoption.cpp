@@ -87,7 +87,6 @@ static s16b toggle_frequency(s16b current)
 /*!
  * @brief 自動セーブオプションを変更するコマンドのメインルーチン
  * @param info 表示メッセージ
- * @return なし
  */
 static void do_cmd_options_autosave(player_type *player_ptr, concptr info)
 {
@@ -185,7 +184,6 @@ static bool has_window_flag(int x, int y)
  * @brief 指定のサブウィンドウに指定のウィンドウフラグをセットする
  * @param x ウィンドウ番号
  * @param y ウィンドウフラグ番号
- * @return なし
  * @details
  * 未使用フラグはセットしない。
  */
@@ -199,7 +197,6 @@ static void set_window_flag(int x, int y)
 /*!
  * @brief 指定のウィンドウフラグをサブウィンドウからクリアする
  * @param y ウィンドウフラグ番号
- * @return なし
  */
 static void clear_window_flag(int x, int y)
 {
@@ -214,7 +211,6 @@ static void clear_window_flag(int x, int y)
 /*!
  * @brief ウィンドウオプションを変更するコマンドのメインルーチン /
  * Modify the "window" options
- * @return なし
  */
 static void do_cmd_options_win(player_type *player_ptr)
 {
@@ -320,7 +316,6 @@ static void do_cmd_options_win(player_type *player_ptr)
  * @brief チートオプションを変更するコマンドのメインルーチン
  * Interact with some options for cheating
  * @param info 表示メッセージ
- * @return なし
  */
 static void do_cmd_options_cheat(player_type *player_ptr, concptr info)
 {
@@ -406,7 +401,6 @@ static void do_cmd_options_cheat(player_type *player_ptr, concptr info)
 
 /*!
  * @brief ビットセットからゲームオプションを展開する / Extract option variables from bit sets
- * @return なし
  */
 void extract_option_vars(void)
 {
@@ -426,7 +420,6 @@ void extract_option_vars(void)
 /*!
  * @brief 標準オプションを変更するコマンドのメインルーチン /
  * Set or unset various options.
- * @return なし
  * @details
  * <pre>
  * The user must use the "Ctrl-R" command to "adapt" to changes
@@ -641,7 +634,6 @@ void do_cmd_options(player_type *player_ptr)
  * Interact with some options
  * @param page オプションページ番号
  * @param info 表示メッセージ
- * @return なし
  */
 void do_cmd_options_aux(player_type *player_ptr, game_option_types page, concptr info)
 {

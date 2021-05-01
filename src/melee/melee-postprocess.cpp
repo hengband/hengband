@@ -130,7 +130,6 @@ static bool process_all_resistances(mam_pp_type *mam_pp_ptr)
  * @brief モンスター死亡時のメッセージ表示
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param mam_pp_ptr 標的モンスター構造体への参照ポインタ
- * @return なし
  * @details
  * 見えない位置で死んだら何も表示しない
  * 爆発して粉々になった等ならその旨を、残りは生命か無生命かで分岐
@@ -191,7 +190,6 @@ static bool check_monster_hp(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
  * @brief 死亡等で恐慌状態をキャンセルする
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param mam_pp_ptr 標的モンスター構造体への参照ポインタ
- * @return なし
  */
 static void cancel_fear_by_pain(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
 {
@@ -206,7 +204,6 @@ static void cancel_fear_by_pain(player_type *player_ptr, mam_pp_type *mam_pp_ptr
  * @biref HP残量などに応じてモンスターを恐慌状態にする
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param mam_pp_ptr 標的モンスター構造体への参照ポインタ
- * @return なし
  */
 static void make_monster_fear(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
 {
@@ -228,7 +225,6 @@ static void make_monster_fear(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
  * @brief モンスター同士の乱闘による落馬処理
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param mam_pp_ptr 標的モンスター構造体への参照ポインタ
- * @return なし
  */
 static void fall_off_horse_by_melee(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
 {
@@ -252,7 +248,6 @@ static void fall_off_horse_by_melee(player_type *player_ptr, mam_pp_type *mam_pp
  * @param fear 目標となったモンスターの恐慌状態を返す参照ポインタ
  * @param note 目標モンスターが死亡した場合の特別メッセージ(NULLならば標準表示を行う)
  * @param who 打撃を行ったモンスターの参照ID
- * @return なし
  * @todo 打撃が当たった時の後処理 (爆発持ちのモンスターを爆発させる等)なので、関数名を変更する必要あり
  */
 void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, concptr note, MONSTER_IDX who)

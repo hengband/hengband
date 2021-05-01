@@ -89,7 +89,6 @@ int virtue_number(player_type *creature_ptr, int type)
 /*!
  * @brief プレイヤーの職業や種族に依存しないランダムな徳を取得する / Aux function
  * @param which 確認したい徳のID
- * @return なし
  */
 static void get_random_virtue(player_type *creature_ptr, int which)
 {
@@ -211,7 +210,6 @@ static VIRTUES_IDX get_realm_virtues(player_type *creature_ptr, REALM_IDX realm)
 /*!
  * @brief 作成中のプレイヤーキャラクターに徳8種類を与える。 / Select virtues & reset values for a new character
  * @details 職業に応じて1～4種が固定、種族に応じて1種類が与えられ、後は重複なくランダムに選択される。
- * @return なし
  */
 void get_virtues(player_type *creature_ptr)
 {
@@ -442,7 +440,6 @@ void get_virtues(player_type *creature_ptr)
  * @details 範囲は-125～125、基本的に絶対値が大きいほど絶対値が上がり辛くなる。
  * @param virtue 徳のID
  * @param amount 加減量
- * @return なし
  */
 void chg_virtue(player_type *creature_ptr, int virtue_id, int amount)
 {
@@ -501,7 +498,6 @@ void chg_virtue(player_type *creature_ptr, int virtue_id, int amount)
  * @brief 対応する徳をプレイヤーがスロットに登録している場合に固定値をセットする
  * @param virtue 徳のID
  * @param amount セットしたい値
- * @return なし
  */
 void set_virtue(player_type *creature_ptr, int virtue_id, int amount)
 {
@@ -515,7 +511,6 @@ void set_virtue(player_type *creature_ptr, int virtue_id, int amount)
 /*!
  * @brief 徳のダンプ表示を行う
  * @param out_file ファイルポインタ
- * @return なし
  */
 void dump_virtues(player_type *creature_ptr, FILE *out_file)
 {

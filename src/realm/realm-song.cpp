@@ -32,7 +32,6 @@
  * @brief 歌の開始を処理する / Start singing if the player is a Bard
  * @param spell 領域魔法としてのID
  * @param song 魔法効果のID
- * @return なし
  */
 static void start_singing(player_type *caster_ptr, SPELL_IDX spell, MAGIC_NUM1 song)
 {

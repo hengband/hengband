@@ -25,7 +25,6 @@
  * @param chance 生成機会を返すバッファ参照ポインタ
  * @param val 価値を返すバッファ参照ポインタ
  * @param k ベースアイテムID
- * @return なし
  */
 static void kind_info(player_type *player_ptr, char *buf, char *dam, char *wgt, char *chance, DEPTH *lev, PRICE *val, OBJECT_IDX k)
 {

@@ -57,7 +57,6 @@ POSITION temp2_y[MAX_SHORT];
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param y 対象となるマスのY座標
  * @param x 対象となるマスのX座標
- * @return なし
  */
 static void discover_hidden_things(player_type *creature_ptr, POSITION y, POSITION x)
 {
@@ -96,7 +95,6 @@ static void discover_hidden_things(player_type *creature_ptr, POSITION y, POSITI
 /*!
  * @brief プレイヤーの探索処理判定
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void search(player_type *creature_ptr)
 {

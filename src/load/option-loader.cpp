@@ -11,7 +11,6 @@
 
 /*!
  * @brief ゲームオプションを読み込む / Read options (ignore most pre-2.8.0 options)
- * @return なし
  * @details
  * Note that the normal options are now stored as a set of 256 bit flags,
  * plus a set of 256 bit masks to indicate which bit flags were defined

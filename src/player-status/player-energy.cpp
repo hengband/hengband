@@ -18,7 +18,6 @@ PlayerEnergy::PlayerEnergy(player_type *creature_ptr)
  * @param creature_ptr プレーヤーの参照ポインタ
  * @param need_cost 行動エネルギー
  * @param ut_type 現在値に対する演算方法
- * @return なし
  */
 void PlayerEnergy::set_player_turn_energy(ENERGY need_cost)
 {
@@ -48,7 +47,6 @@ void PlayerEnergy::div_player_turn_energy(ENERGY need_cost)
 /*
  * @brief ターン消費をなくす (主にコマンド実行に失敗した場合)
  * @param player_type プレーヤーへの参照ポインタ
- * @return なし
  */
 void PlayerEnergy::reset_player_turn()
 {

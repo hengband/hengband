@@ -12,7 +12,6 @@
 
 /*!
  * @brief 突然変異表示コマンドの実装 / List mutations we have...
- * @return なし
  */
 void do_cmd_knowledge_mutations(player_type *creature_ptr)
 {

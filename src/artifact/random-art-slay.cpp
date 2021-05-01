@@ -196,7 +196,6 @@ static bool switch_random_art_slay(object_type *o_ptr)
  * *ドラゴンスレイ*、人間スレイ、切れ味、地震、理力。
  * @attention オブジェクトのtval、svalに依存したハードコーディング処理がある。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return なし
  */
 void random_slay(object_type *o_ptr)
 {

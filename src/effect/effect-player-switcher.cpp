@@ -13,7 +13,6 @@
  * 魔法の効果によって様々なメッセーを出力したり与えるダメージの増減を行ったりする
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param em_ptr プレーヤー効果構造体への参照ポインタ
- * @return なし
  */
 void switch_effects_player(player_type *target_ptr, effect_player_type *ep_ptr)
 {

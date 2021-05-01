@@ -90,7 +90,6 @@ static int compensate_special_race(player_type *creature_ptr, int stat_num)
  * @param stat_num 能力値番号
  * @param row 行数
  * @param stat_col 列数
- * @return なし
  */
 static void display_basic_stat_name(player_type *creature_ptr, int stat_num, int row, int stat_col)
 {
@@ -109,7 +108,6 @@ static void display_basic_stat_name(player_type *creature_ptr, int stat_num, int
  * @param row 行数
  * @param stat_col 列数
  * @param buf 能力値の数値
- * @return なし
  */
 static void display_basic_stat_value(player_type *creature_ptr, int stat_num, int r_adj, int e_adj, int row, int stat_col, char *buf)
 {
@@ -139,7 +137,6 @@ static void display_basic_stat_value(player_type *creature_ptr, int stat_num, in
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param row 行数
  * @param stat_col 列数
- * @return なし
  */
 static void process_stats(player_type *creature_ptr, int row, int stat_col)
 {
@@ -170,7 +167,6 @@ static void process_stats(player_type *creature_ptr, int row, int stat_col)
  * @param o_ptr 装備品への参照ポインタ
  * @param stat 能力値番号
  * @param flags 装備品に立っているフラグ
- * @return なし
  */
 static void compensate_stat_by_weapon(char *c, TERM_COLOR *a, object_type *o_ptr, int stat, BIT_FLAGS *flags)
 {
@@ -199,7 +195,6 @@ static void compensate_stat_by_weapon(char *c, TERM_COLOR *a, object_type *o_ptr
  * @param flags 装備品に立っているフラグ
  * @param row 行数
  * @param col 列数
- * @return なし
  */
 static void display_equipments_compensation(player_type *creature_ptr, BIT_FLAGS *flags, int row, int *col)
 {
@@ -228,7 +223,6 @@ static void display_equipments_compensation(player_type *creature_ptr, BIT_FLAGS
  * @brief 各能力値の補正
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param stat 能力値番号
- * @return なし
  */
 static int compensation_stat_by_mutation(player_type *creature_ptr, int stat)
 {
@@ -300,7 +294,6 @@ static int compensation_stat_by_mutation(player_type *creature_ptr, int stat)
  * @param stat 能力値番号
  * @param c 補正後の表示記号
  * @param a 表示色
- * @return なし
  */
 static void change_display_by_mutation(player_type *creature_ptr, int stat, char *c, TERM_COLOR *a)
 {
@@ -328,7 +321,6 @@ static void change_display_by_mutation(player_type *creature_ptr, int stat, char
  * @param stat 能力値番号
  * @param col 列数
  * @param row 行数
- * @return なし
  */
 static void display_mutation_compensation(player_type *creature_ptr, BIT_FLAGS *flags, int row, int col)
 {
@@ -350,7 +342,6 @@ static void display_mutation_compensation(player_type *creature_ptr, BIT_FLAGS *
  * @brief プレイヤーの特性フラグ一覧表示2b /
  * Special display, part 2b
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  * <pre>
  * How to print out the modifications and sustains.

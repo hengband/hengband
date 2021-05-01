@@ -358,7 +358,6 @@ static bool run_test(player_type *creature_ptr)
  * Take one step along the current "run" path
  * @param creature_ptr	プレーヤーへの参照ポインタ
  * @param dir 移動を試みる方向ID
- * @return なし
  */
 void run_step(player_type *creature_ptr, DIRECTION dir)
 {

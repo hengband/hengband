@@ -66,7 +66,6 @@
 
 /*!
  * @brief ペットを開放するコマンドのメインルーチン
- * @return なし
  */
 void do_cmd_pet_dismiss(player_type *creature_ptr)
 {
@@ -314,7 +313,6 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
 
 /*!
  * @brief ペットに名前をつけるコマンドのメインルーチン
- * @return なし
  */
 static void do_name_pet(player_type *creature_ptr)
 {
@@ -381,7 +379,6 @@ static void do_name_pet(player_type *creature_ptr)
 /*!
  * @brief ペットに関するコマンドリストのメインルーチン /
  * Issue a pet command
- * @return なし
  */
 void do_cmd_pet(player_type *creature_ptr)
 {

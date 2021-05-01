@@ -74,7 +74,6 @@ bool is_member(player_type *player_ptr, building_type *bldg)
  * @brief 施設のサービス一覧を表示する / Display a building.
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param bldg 施設構造体の参照ポインタ
- * @return なし
  */
 void display_buikding_service(player_type *player_ptr, building_type *bldg)
 {

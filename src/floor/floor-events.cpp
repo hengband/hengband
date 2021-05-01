@@ -228,7 +228,6 @@ static byte get_dungeon_feeling(player_type *subject_ptr)
 /*!
  * @brief ダンジョンの雰囲気を更新し、変化があった場合メッセージを表示する
  * / Update dungeon feeling, and announce it if changed
- * @return なし
  */
 void update_dungeon_feeling(player_type *subject_ptr)
 {

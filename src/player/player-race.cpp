@@ -81,7 +81,6 @@ bool player_race_has_flag(player_type *creature_ptr, tr_type flag, bool base_rac
  * @param creature_ptr プレイヤー情報への参照ポインタ
  * @param flags フラグ配列へのポインタ
  * @param base_race ベース種族の情報を返すならtrue、ミミック擬態中の種族を返すならfalse
- * @return なし
  */
 void add_player_race_flags(player_type *creature_ptr, BIT_FLAGS *flags, bool base_race)
 {

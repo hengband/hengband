@@ -40,7 +40,6 @@
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
  * @param lev 生成基準階
  * @param mode 生成オプション
- * @return なし
  * @details
  * エゴ＆アーティファクトの生成、呪い、pval強化
  */

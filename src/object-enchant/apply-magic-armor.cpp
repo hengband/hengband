@@ -27,7 +27,6 @@
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
  * @param level 生成基準階
  * @param power 生成ランク
- * @return なし
  * @details
  * Hack -- note special processing for crown/helm\n
  * Hack -- note special processing for robe of permanence\n

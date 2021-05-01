@@ -15,7 +15,6 @@
 /*!
  * @brief セーブデータに店舗情報を書き込む / Write a "store" record
  * @param store_ptr 店舗情報の参照ポインタ
- * @return なし
  */
 void wr_store(store_type *store_ptr)
 {
@@ -33,7 +32,6 @@ void wr_store(store_type *store_ptr)
 /*!
  * @brief セーブデータに乱数情報を書き込む / Write RNG state
  * @param なし
- * @return なし
  */
 void wr_randomizer(void)
 {
@@ -45,7 +43,6 @@ void wr_randomizer(void)
 
 /*!
  * @brief ゲームオプション情報を書き込む / Write the "options"
- * @return なし
  */
 void wr_options(save_type type)
 {
@@ -130,7 +127,6 @@ void wr_options(save_type type)
 
 /*!
  * @brief ダミー情報スキップを書き込む / Hack -- Write the "ghost" info
- * @return なし
  */
 void wr_ghost(void)
 {
@@ -141,7 +137,6 @@ void wr_ghost(void)
 
 /*!
  * @brief クイック・スタート情報を書き込む / Save quick start data
- * @return なし
  */
 void save_quick_start(void)
 {

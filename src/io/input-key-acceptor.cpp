@@ -44,7 +44,6 @@ static bool parse_under = FALSE;
 
 /*!
  * @brief 全てのウィンドウの再描画を行う
- * @return なし
  * @details
  * カーソル位置がずれるので戻す。
  */
@@ -421,7 +420,6 @@ int inkey_special(bool numpad_cursor)
 
 /*!
  * @brief 全てのウィンドウの描画を止める
- * @return なし
  */
 void stop_term_fresh(void)
 {
@@ -433,7 +431,6 @@ void stop_term_fresh(void)
 
 /*!
  * @brief 全てのウィンドウの描画を再開する
- * @return なし
  */
 void start_term_fresh(void)
 {

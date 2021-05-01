@@ -95,7 +95,6 @@ static bool deal_damege_by_feat(player_type *creature_ptr, grid_type *g_ptr, con
 /*!
  * @brief 10ゲームターンが進行するごとにプレイヤーのHPとMPの増減処理を行う。
  *  / Handle timed damage and regeneration every 10 game turns
- * @return なし
  */
 void process_player_hp_mp(player_type *creature_ptr)
 {

@@ -20,7 +20,6 @@
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param questnum クエストのID
  * @param do_init クエストの開始処理か(TRUE)、結果処理か(FALSE)
- * @return なし
  */
 static void get_questinfo(player_type *player_ptr, IDX questnum, bool do_init)
 {
@@ -47,7 +46,6 @@ static void get_questinfo(player_type *player_ptr, IDX questnum, bool do_init)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param questnum クエストのID
  * @param do_init クエストの開始処理か(TRUE)、結果処理か(FALSE)
- * @return なし
  */
 void print_questinfo(player_type *player_ptr, IDX questnum, bool do_init)
 {
@@ -66,7 +64,6 @@ void print_questinfo(player_type *player_ptr, IDX questnum, bool do_init)
 /*!
  * @brief クエスト処理のメインルーチン / Request a quest from the Lord.
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void castle_quest(player_type *player_ptr)
 {

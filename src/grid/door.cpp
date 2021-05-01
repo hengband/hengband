@@ -58,7 +58,6 @@ void add_door(player_type *player_ptr, POSITION x, POSITION y)
  * @param y 配置したいフロアのY座標
  * @param x 配置したいフロアのX座標
  * @param type DOOR_DEFAULT / DOOR_DOOR / DOOR_GLASS_DOOR / DOOR_CURTAIN のいずれか
- * @return なし
  */
 void place_secret_door(player_type *player_ptr, POSITION y, POSITION x, int type)
 {
@@ -96,7 +95,6 @@ void place_secret_door(player_type *player_ptr, POSITION y, POSITION x, int type
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param y 配置したいフロアのY座標
  * @param x 配置したいフロアのX座標
- * @return なし
  */
 void place_locked_door(player_type *player_ptr, POSITION y, POSITION x)
 {
@@ -117,7 +115,6 @@ void place_locked_door(player_type *player_ptr, POSITION y, POSITION x)
  * @param y ドアの配置を試みたいマスのY座標
  * @param x ドアの配置を試みたいマスのX座標
  * @param room 部屋に接している場合向けのドア生成か否か
- * @return なし
  */
 void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool room)
 {
@@ -176,7 +173,6 @@ void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool roo
  * @param y ドアの配置を試みたいマスのY座標
  * @param x ドアの配置を試みたいマスのX座標
  * @param type ドアの地形ID
- * @return なし
  */
 void place_closed_door(player_type *player_ptr, POSITION y, POSITION x, int type)
 {

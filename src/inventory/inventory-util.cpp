@@ -282,7 +282,6 @@ bool verify(player_type *owner_ptr, concptr prompt, INVENTORY_IDX item)
  * @param owner_ptr プレーヤーへの参照ポインタ
  * @param label ラベルリストを取得する文字列参照ポインタ
  * @param mode 所持品リストか装備品リストかの切り替え
- * @return なし
  */
 void prepare_label_string(player_type *owner_ptr, char *label, BIT_FLAGS mode, tval_type tval)
 {

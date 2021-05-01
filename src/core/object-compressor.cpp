@@ -19,7 +19,6 @@
  * Move an object from index i1 to index i2 in the object list
  * @param i1 整理したい配列の始点
  * @param i2 整理したい配列の終点
- * @return なし
  */
 static void compact_objects_aux(floor_type *floor_ptr, OBJECT_IDX i1, OBJECT_IDX i2)
 {
@@ -61,7 +60,6 @@ static void compact_objects_aux(floor_type *floor_ptr, OBJECT_IDX i1, OBJECT_IDX
  * Compact and Reorder the object list.
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param size 最低でも減らしたいオブジェクト数の水準
- * @return なし
  * @details
  * （危険なので使用には注意すること）
  * This function can be very dangerous, use with caution!\n

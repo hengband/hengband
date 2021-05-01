@@ -42,7 +42,6 @@ static const convert_key s2j_table[] = { { "mb", "nb" }, { "mp", "np" }, { "mv",
  * @brief シンダリンを日本語の読みに変換する
  * @param kana 変換後の日本語文字列ポインタ
  * @param sindarin 変換前のシンダリン文字列ポインタ
- * @return なし
  * @details
  */
 void sindarin_to_kana(char *kana, concptr sindarin)
@@ -135,7 +134,6 @@ static const struct jverb_table_t {
  * @param in 変換元文字列ポインタ
  * @param out 変換先文字列ポインタ
  * @param flag 変換種類を指定(JVERB_AND/JVERB_TO/JVERB_OR)
- * @return なし
  * @details
  */
 void jverb(concptr in, char *out, int flag)
@@ -160,7 +158,6 @@ void jverb(concptr in, char *out, int flag)
 /*!
  * @brief 文字コードをSJISからEUCに変換する / Convert SJIS string to EUC string
  * @param str 変換する文字列のポインタ
- * @return なし
  * @details
  */
 void sjis2euc(char *str)
@@ -199,7 +196,6 @@ void sjis2euc(char *str)
 /*!
  * @brief 文字コードをEUCからSJISに変換する / Convert EUC string to SJIS string
  * @param str 変換する文字列のポインタ
- * @return なし
  * @details
  */
 void euc2sjis(char *str)
@@ -514,7 +510,6 @@ static bool utf8_to_sys(char *utf8_str, char *sys_str_buffer, size_t sys_str_buf
  *               バッファは変換した文字列で上書きされる。
  *               UTF-8からSJISもしくはEUCへの変換を想定しているのでバッファの長さが足りなくなることはない。
  * @param buflen バッファの長さ。
- * @return なし
  */
 void guess_convert_to_system_encoding(char *strbuf, int buflen)
 {

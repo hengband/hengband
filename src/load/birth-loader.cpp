@@ -8,7 +8,6 @@
 
 /*!
  * @brief クイックスタート情報を読み込む / Load quick start data
- * @return なし
  */
 void load_quick_start(void)
 {

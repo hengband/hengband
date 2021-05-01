@@ -16,7 +16,6 @@
  * Save the game
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param is_autosave オートセーブ中の処理ならばTRUE
- * @return なし
  * @details
  */
 void do_cmd_save_game(player_type *creature_ptr, int is_autosave)
@@ -45,7 +44,6 @@ void do_cmd_save_game(player_type *creature_ptr, int is_autosave)
 /*!
  * @brief セーブ後にゲーム中断フラグを立てる/
  * Save the game and exit
- * @return なし
  * @details
  */
 void do_cmd_save_and_exit(player_type *creature_ptr)

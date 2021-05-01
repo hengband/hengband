@@ -79,7 +79,6 @@ bool reinit_wilderness = FALSE;
 /*!
  * @brief 町に関するヘルプを表示する / Display town history
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 static void town_history(player_type *player_ptr)
 {
@@ -93,7 +92,6 @@ static void town_history(player_type *player_ptr)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param bldg 施設構造体の参照ポインタ
  * @param i 実行したい施設のサービステーブルの添字
- * @return なし
  */
 static void bldg_process_command(player_type *player_ptr, building_type *bldg, int i)
 {
@@ -301,7 +299,6 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 /*!
  * @brief 施設入り口にプレイヤーが乗った際の処理 / Do building commands
  * @param プレーヤーへの参照ポインタ
- * @return なし
  */
 void do_cmd_building(player_type *player_ptr)
 {

@@ -22,7 +22,6 @@ birther previous_char;
 
 /*!
  * @brief クイックスタート処理の問い合わせと実行を行う。/Ask whether the player use Quick Start or not.
- * @return なし
  */
 bool ask_quick_start(player_type *creature_ptr)
 {

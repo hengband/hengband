@@ -21,7 +21,6 @@
 /*!
  * @brief 10ゲームターンが進行するごとに魔法効果の残りターンを減らしていく処理
  * / Handle timeout every 10 game turns
- * @return なし
  */
 void reduce_magic_effects_timeout(player_type *creature_ptr)
 {

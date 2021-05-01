@@ -48,7 +48,6 @@ void rd_version_info(void)
 
 /*!
  * @brief 乱数状態を読み込む / Read RNG state (added in 2.8.0)
- * @return なし
  */
 void rd_randomizer(void)
 {
@@ -61,7 +60,6 @@ void rd_randomizer(void)
 
 /*!
  * @brief メッセージログを読み込む / Read the saved messages
- * @return なし
  */
 void rd_messages(void)
 {

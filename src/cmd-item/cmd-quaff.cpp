@@ -21,7 +21,6 @@
 /*!
  * @brief 薬を飲むコマンドのメインルーチン /
  * Quaff some potion (from the pack or floor)
- * @return なし
  */
 void do_cmd_quaff_potion(player_type *creature_ptr)
 {

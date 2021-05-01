@@ -38,7 +38,6 @@
  * @brief Check the status of "artifacts"
  * @param player_ptr プレーヤーへの参照ポインタ
  * @todo okay = 既知のアーティファクト？ と思われるが確証がない分かりやすい変数名へ変更求む＆万が一未知である旨の配列なら負論理なのでゴソッと差し替えるべき
- * @return なし
  */
 void do_cmd_knowledge_artifacts(player_type *player_ptr)
 {

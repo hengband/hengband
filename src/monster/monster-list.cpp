@@ -276,7 +276,6 @@ static bool monster_hook_chameleon(player_type *player_ptr, MONRACE_IDX r_idx)
  * @param m_idx 変身処理を受けるモンスター情報のID
  * @param born 生成時の初変身先指定ならばtrue
  * @param r_idx 旧モンスター種族のID
- * @return なし
  */
 void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx)
 {

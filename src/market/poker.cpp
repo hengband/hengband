@@ -44,7 +44,6 @@ static int cards[5];
  /*!
  * @brief ポーカーの山札を切る
  * @param deck デッキの配列
- * @return なし
  */
 static void reset_deck(int deck[])
 {
@@ -319,7 +318,6 @@ static int poker_hand_check(void)
  * @brief ポーカーの捨てる/残すインターフェイスの表示を更新する。
  * @param hoge カーソルの現在位置
  * @param kaeruka カードの捨てる/残すフラグ配列
- * @return なし
  */
 static void display_kaeruka(int hoge, int kaeruka[])
 {
@@ -348,7 +346,6 @@ static void display_kaeruka(int hoge, int kaeruka[])
 /*!
  * @brief ポーカーの手札を表示する
  * @param なし
- * @return なし
  * @todo _() でまとめる
  */
 static void display_cards(void)

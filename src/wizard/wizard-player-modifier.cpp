@@ -34,7 +34,6 @@ std::vector<std::vector<std::string>> wizard_player_modifier_menu_table = {
 
 /*!
  * @brief プレイヤー設定コマンドの一覧を表示する
- * @return なし
  */
 void display_wizard_player_modifier_menu()
 {
@@ -54,7 +53,6 @@ void display_wizard_player_modifier_menu()
 /*!
  * @brief プレイヤー設定コマンドの入力を受け付ける
  * @param creature_ptr プレイヤーの情報へのポインタ
- * @return なし
  */
 void wizard_player_modifier(player_type *creature_ptr)
 {

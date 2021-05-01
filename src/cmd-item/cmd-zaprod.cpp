@@ -278,7 +278,6 @@ int rod_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION d
  * Activate (zap) a Rod
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param item 使うオブジェクトの所持品ID
- * @return なし
  * @details
  * <pre>
  * Unstack fully charged rods as needed.
@@ -409,7 +408,6 @@ void exe_zap_rod(player_type *creature_ptr, INVENTORY_IDX item)
 /*!
  * @brief ロッドを使うコマンドのメインルーチン /
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void do_cmd_zap_rod(player_type *creature_ptr)
 {

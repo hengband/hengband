@@ -21,7 +21,6 @@
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param typ 破損判定関数ポインタ
  * @param perc 基本確率
- * @return なし
  * @details
  * Note that missiles are no longer necessarily all destroyed
  * Destruction taken from "melee.c" code for "stealing".

@@ -21,7 +21,6 @@
  * @brief 持ち替え処理
  * @param owner_ptr プレーヤーへの参照ポインタ
  * @param item 持ち替えを行いたい装備部位ID
- * @return なし
  */
 void verify_equip_slot(player_type *owner_ptr, INVENTORY_IDX item)
 {

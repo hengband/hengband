@@ -101,7 +101,6 @@ static void handle_signal_simple(int sig)
  * @brief OSからのシグナルを受けて強制終了する /
  * Handle signal -- abort, kill, etc
  * @param sig 受け取ったシグナル
- * @return なし
  * @details
  * <pre>
  * This function was causing a *huge* number of problems, so it has
@@ -154,7 +153,6 @@ static void handle_signal_abort(int sig)
 /*!
  * @brief OSからのSIGTSTPシグナルを無視する関数 /
  * Ignore SIGTSTP signals (keyboard suspend)
- * @return なし
  * @details
  */
 void signals_ignore_tstp(void)
@@ -167,7 +165,6 @@ void signals_ignore_tstp(void)
 /*!
  * @brief OSからのSIGTSTPシグナルハンドラ /
  * Handle SIGTSTP signals (keyboard suspend)
- * @return なし
  * @details
  */
 void signals_handle_tstp(void)
@@ -180,7 +177,6 @@ void signals_handle_tstp(void)
 /*!
  * @brief OSからのシグナルハンドルを初期化する /
  * Prepare to handle the relevant signals
- * @return なし
  * @details
  */
 void signals_init(void)

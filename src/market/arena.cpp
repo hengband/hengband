@@ -139,7 +139,6 @@ static void see_arena_poster(player_type *player_ptr)
  * @brief 闘技場に入るコマンドの処理 / on_defeat_arena_monster commands
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param cmd 闘技場処理のID
- * @return なし
  */
 void arena_comm(player_type *player_ptr, int cmd)
 {
@@ -163,7 +162,6 @@ void arena_comm(player_type *player_ptr, int cmd)
 /*!
  * @brief モンスター闘技場に参加するモンスターを更新する。
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void update_gambling_monsters(player_type *player_ptr)
 {

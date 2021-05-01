@@ -260,7 +260,6 @@ bool new_player_spot(player_type *creature_ptr)
 /*!
  * @brief マスにフロア端用の永久壁を配置する / Set boundary mimic and add "solid" perma-wall
  * @param g_ptr 永久壁を配置したいマス構造体の参照ポインタ
- * @return なし
  */
 void place_bound_perm_wall(player_type *player_ptr, grid_type *g_ptr)
 {
@@ -355,7 +354,6 @@ bool check_local_illumination(player_type *creature_ptr, POSITION y, POSITION x)
  * @param creature_ptr 視界元のクリーチャー
  * @param y 視界先y座標
  * @param x 視界先x座標
- * @return なし
  */
 void update_local_illumination(player_type *creature_ptr, POSITION y, POSITION x)
 {

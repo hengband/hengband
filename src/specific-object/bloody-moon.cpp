@@ -14,7 +14,6 @@
  * @brief 固定アーティファクト『ブラッディムーン』の特性を変更する。
  * @details スレイ2d2種、及びone_resistance()による耐性1d2種、pval2種を得る。
  * @param o_ptr 対象のオブジェクト構造体 (ブラッディムーン)のポインタ
- * @return なし
  */
 void get_bloody_moon_flags(object_type *o_ptr)
 {

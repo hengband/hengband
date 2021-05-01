@@ -70,7 +70,6 @@ static int damage;
  * @param p 情報を返す文字列参照ポインタ
  * @param power ものまねの効力の種類
  * @param dam ものまねの威力
- * @return なし
  */
 static void mane_info(player_type *caster_ptr, char *p, RF_ABILITY power, HIT_POINT dam)
 {

@@ -121,7 +121,6 @@ bool find_safety(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSIT
  * @param y_offsets
  * @param x_offsets
  * @param candidate 隠れられる地点の候補地
- * @return なし
  */
 static void sweep_hiding_candidate(
     player_type *target_ptr, monster_type *m_ptr, const POSITION *y_offsets, const POSITION *x_offsets, coordinate_candidate *candidate)

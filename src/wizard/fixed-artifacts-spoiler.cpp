@@ -16,7 +16,6 @@
  * @param header ヘッダに出力するフラグ群の名前
  * @param list フラグ名リスト
  * @param separator フラグ表示の区切り記号
- * @return なし
  * @todo 固定アーティファクトとランダムアーティファクトで共用、ここに置くべきかは要調整.
  */
 void spoiler_outlist(concptr header, concptr *list, char separator)
@@ -67,7 +66,6 @@ void spoiler_outlist(concptr header, concptr *list, char separator)
 
 /*!
  * @brief バッファにアーティファクト出力情報ヘッダを収める /
- * @return なし
  */
 static void print_header(void)
 {
@@ -112,7 +110,6 @@ static bool make_fake_artifact(player_type *player_ptr, object_type *o_ptr, ARTI
  * @brief アーティファクト一件をスポイラー出力する /
  * Create a spoiler file entry for an artifact
  * @param art_ptr アーティファクト情報をまとめた構造体の参照ポインタ
- * @return なし
  */
 static void spoiler_print_art(obj_desc_list *art_ptr)
 {

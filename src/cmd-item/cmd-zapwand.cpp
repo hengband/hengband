@@ -315,7 +315,6 @@ bool wand_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION
  * @brief 魔法棒を使うコマンドのサブルーチン /
  * Aim a wand (from the pack or floor).
  * @param item 使うオブジェクトの所持品ID
- * @return なし
  * @details
  * <pre>
  * Use a single charge from a single item.
@@ -446,7 +445,6 @@ void exe_aim_wand(player_type *creature_ptr, INVENTORY_IDX item)
 
 /*!
  * @brief 魔法棒を使うコマンドのメインルーチン /
- * @return なし
  */
 void do_cmd_aim_wand(player_type *creature_ptr)
 {

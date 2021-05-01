@@ -256,7 +256,6 @@ bool exe_eat_charge_of_magic_device(player_type *creature_ptr, object_type *o_pt
 /*!
  * @brief 食料を食べるコマンドのサブルーチン
  * @param item 食べるオブジェクトの所持品ID
- * @return なし
  */
 void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 {
@@ -364,7 +363,6 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 /*!
  * @brief 食料を食べるコマンドのメインルーチン /
  * Eat some food (from the pack or floor)
- * @return なし
  */
 void do_cmd_eat_food(player_type *creature_ptr)
 {

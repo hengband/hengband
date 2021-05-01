@@ -114,7 +114,6 @@ static void record_pet_diary(player_type *master_ptr)
 /*!
  * @brief フロア移動時のペット保存処理 / Preserve_pets
  * @param master_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 static void preserve_pet(player_type *master_ptr)
 {
@@ -142,7 +141,6 @@ static void preserve_pet(player_type *master_ptr)
 /*!
  * @brief 新フロアに移動元フロアに繋がる階段を配置する / Virtually teleport onto the stairs that is connecting between two floors.
  * @param sf_ptr 移動元の保存フロア構造体参照ポインタ
- * @return なし
  */
 static void locate_connected_stairs(player_type *creature_ptr, floor_type *floor_ptr, saved_floor_type *sf_ptr, BIT_FLAGS floor_mode)
 {
@@ -207,7 +205,6 @@ static void locate_connected_stairs(player_type *creature_ptr, floor_type *floor
 
 /*!
  * @brief フロア移動時、プレイヤーの移動先モンスターが既にいた場合ランダムな近隣に移動させる / When a monster is at a place where player will return,
- * @return なし
  */
 static void get_out_monster(player_type *protected_ptr)
 {
@@ -247,7 +244,6 @@ static void get_out_monster(player_type *protected_ptr)
 /*!
  * @brief クエスト・フロア内のモンスター・インベントリ情報を保存する
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 static void preserve_info(player_type *creature_ptr)
 {
@@ -405,7 +401,6 @@ static void exe_leave_floor(player_type *creature_ptr, saved_floor_type *sf_ptr)
  * @brief 現在のフロアを離れるに伴って行なわれる保存処理
  * / Maintain quest monsters, mark next floor_id at stairs, save current floor, and prepare to enter next floor.
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void leave_floor(player_type *creature_ptr)
 {

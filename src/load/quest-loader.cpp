@@ -16,7 +16,6 @@
 /*!
  * @brief ランダムクエスト情報の読み込み
  * @param なし
- * @return なし
  * @details MAX_TRIES: ランダムクエストのモンスターを確定するために試行する回数 /
  * Maximum number of tries for selection of a proper quest monster
  */

@@ -893,7 +893,6 @@ static bool try_cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx,
 /*!
  * @brief 元素魔法コマンドのメインルーチン
  * @param caster_ptr プレイヤー情報への参照ポインタ
- * @return なし
  */
 void do_cmd_element(player_type *caster_ptr)
 {
@@ -935,7 +934,6 @@ void do_cmd_element(player_type *caster_ptr)
 /*!
  * @brief 現在プレイヤーが使用可能な元素魔法の一覧表示
  * @param caster_ptr プレイヤー情報への参照ポインタ
- * @return なし
  */
 void do_cmd_element_browse(player_type *caster_ptr)
 {
@@ -1074,7 +1072,6 @@ bool has_element_resist(player_type *creature_ptr, ElementRealm realm, PLAYER_LE
  * @param i 位置
  * @param n 最後尾の位置
  * @param color 表示色
- * @return なし
  */
 static void display_realm_cursor(int i, int n, term_color_type color)
 {
@@ -1241,7 +1238,6 @@ byte select_element_realm(player_type *creature_ptr)
  * @brief クラスパワー情報を追加
  * @param creature_ptr プレイヤー情報への参照ポインタ
  * @param rc_ptr レイシャルパワー情報への参照ポインタ
- * @return なし
  */
 void switch_element_racial(player_type *creature_ptr, rc_type *rc_ptr)
 {

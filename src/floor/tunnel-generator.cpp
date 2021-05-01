@@ -11,7 +11,6 @@
  * @brief build_tunnel用に通路を掘るための方向をランダムに決める / Pick a random direction
  * @param rdir Y方向に取るべきベクトル値を返す参照ポインタ
  * @param cdir X方向に取るべきベクトル値を返す参照ポインタ
- * @return なし
  */
 static void rand_dir(POSITION *rdir, POSITION *cdir)
 {
@@ -28,7 +27,6 @@ static void rand_dir(POSITION *rdir, POSITION *cdir)
  * @param x1 始点X座標
  * @param y2 終点Y座標
  * @param x2 終点X座標
- * @return なし
  */
 static void correct_dir(POSITION *rdir, POSITION *cdir, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
@@ -157,7 +155,6 @@ bool build_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, dt_type *dt_pt
  * @param x 基準点を指定するX座標の参照ポインタ、適時値が修正される。
  * @param y 基準点を指定するY座標の参照ポインタ、適時値が修正される。
  * @param affectwall (調査中)
- * @return なし
  * @todo 特に詳細な処理の意味を調査すべし
  */
 static bool set_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, POSITION *x, POSITION *y, bool affectwall)
@@ -231,7 +228,6 @@ static bool set_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, POSITION 
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param x 基準点のX座標
  * @param y 基準点のY座標
- * @return なし
  */
 static void create_cata_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, POSITION x, POSITION y)
 {
@@ -255,7 +251,6 @@ static void create_cata_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, P
 /*!
  * @brief トンネル生成処理（詳細調査中）/ This routine does the bulk of the work in creating the new types of tunnels.
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @todo 詳細用調査
  */
 static void short_seg_hack(
@@ -343,7 +338,6 @@ static void short_seg_hack(
 
 /*!
  * @brief 特定の壁(永久壁など)を避けながら部屋間の通路を作成する / This routine maps a path from (x1, y1) to (x2, y2) avoiding SOLID walls.
- * @return なし
  * @todo 詳細要調査
  */
 bool build_tunnel2(player_type *player_ptr, dun_data_type *dd_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type, int cutoff)

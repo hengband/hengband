@@ -83,7 +83,6 @@ static int calc_death_scythe_reflection_magnification(player_type *attacker_ptr)
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param magnification ダメージ倍率
  * @param death_scythe_flags 死の大鎌に関するオブジェクトフラグ配列
- * @return なし
  */
 static void compensate_death_scythe_reflection_magnification(player_type *attacker_ptr, int *magnification, BIT_FLAGS *death_scythe_flags)
 {
@@ -115,7 +114,6 @@ static void compensate_death_scythe_reflection_magnification(player_type *attack
 /*!
  * @brief 死の大鎌による反射ダメージ倍率を更に上げる
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @return なし
  */
 static void death_scythe_reflection_critial_hit(player_attack_type *pa_ptr)
 {
@@ -134,7 +132,6 @@ static void death_scythe_reflection_critial_hit(player_attack_type *pa_ptr)
  * @brief 死の大鎌によるダメージ反射のメインルーチン
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @return なし
  */
 void process_death_scythe_reflection(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {

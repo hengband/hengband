@@ -27,7 +27,6 @@
  * @param typ 継続行動のID\n
  * #ACTION_NONE / #ACTION_SEARCH / #ACTION_REST / #ACTION_LEARN / #ACTION_FISH / #ACTION_KAMAE / #ACTION_KATA / #ACTION_SING / #ACTION_HAYAGAKE / #ACTION_SPELL
  * から選択。
- * @return なし
  */
 void set_action(player_type *creature_ptr, ACTION_IDX typ)
 {

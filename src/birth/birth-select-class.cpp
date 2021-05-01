@@ -170,7 +170,6 @@ static bool select_class(player_type *creature_ptr, char *cur, char *sym, int *k
 
 /*!
  * @brief プレイヤーの職業選択を行う / Player class
- * @return なし
  */
 bool get_player_class(player_type *creature_ptr)
 {

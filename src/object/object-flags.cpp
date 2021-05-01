@@ -17,7 +17,6 @@
  * Obtain the "flags" for an item
  * @param o_ptr フラグ取得元のオブジェクト構造体ポインタ
  * @param flgs フラグ情報を受け取る配列
- * @return なし
  */
 void object_flags(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
 {
@@ -97,7 +96,6 @@ void object_flags(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS flgs[TR
  * Obtain the "flags" for an item which are known to the player
  * @param o_ptr フラグ取得元のオブジェクト構造体ポインタ
  * @param flgs フラグ情報を受け取る配列
- * @return なし
  */
 void object_flags_known(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
 {

@@ -22,7 +22,6 @@ int wild_regen = 20;
 /*!
  * @brief プレイヤーのHP自然回復処理 / Regenerate hit points -RAK-
  * @param percent 回復比率
- * @return なし
  */
 void regenhp(player_type *creature_ptr, int percent)
 {
@@ -58,7 +57,6 @@ void regenhp(player_type *creature_ptr, int percent)
  * @brief プレイヤーのMP自然回復処理(regen_magic()のサブセット) / Regenerate mana points
  * @param upkeep_factor ペット維持によるMPコスト量
  * @param regen_amount 回復量
- * @return なし
  */
 void regenmana(player_type *creature_ptr, MANA_POINT upkeep_factor, MANA_POINT regen_amount)
 {
@@ -115,7 +113,6 @@ void regenmana(player_type *creature_ptr, MANA_POINT upkeep_factor, MANA_POINT r
 /*!
  * @brief プレイヤーのMP自然回復処理 / Regenerate magic regen_amount: PY_REGEN_NORMAL * 2 (if resting) * 2 (if having regenarate)
  * @param regen_amount 回復量
- * @return なし
  */
 void regenmagic(player_type *creature_ptr, int regen_amount)
 {
@@ -161,7 +158,6 @@ void regenmagic(player_type *creature_ptr, int regen_amount)
 /*!
  * @brief 100ゲームターン毎のモンスターのHP自然回復処理 / Regenerate the monsters (once per 100 game turns)
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @note Should probably be done during monster turns.
  */
 void regenerate_monsters(player_type *player_ptr)
@@ -197,7 +193,6 @@ void regenerate_monsters(player_type *player_ptr)
 /*!
  * @brief 30ゲームターン毎のボール中モンスターのHP自然回復処理 / Regenerate the captured monsters (once per 30 game turns)
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @note Should probably be done during monster turns.
  */
 void regenerate_captured_monsters(player_type *creature_ptr)

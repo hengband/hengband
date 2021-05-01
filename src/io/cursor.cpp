@@ -34,7 +34,6 @@ void move_cursor_relative(int row, int col)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param y 目標地点のY座標
  * @param x 目標地点のX座標
- * @return なし
  */
 void print_path(player_type *player_ptr, POSITION y, POSITION x)
 {
@@ -137,7 +136,6 @@ bool change_panel(player_type *player_ptr, POSITION dy, POSITION dx)
 /*!
  * @brief コンソール上におけるマップ表示の左上位置を返す /
  * Calculates current boundaries Called below and from "do_cmd_locate()".
- * @return なし
  */
 void panel_bounds_center(void)
 {

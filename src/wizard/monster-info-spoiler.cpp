@@ -163,7 +163,6 @@ spoiler_output_status spoil_mon_desc(concptr fname, std::function<bool(const mon
  * Hook function used in spoil_mon_info()
  * @param attr 未使用
  * @param str 文字列参照ポインタ
- * @return なし
  */
 static void roff_func(TERM_COLOR attr, concptr str)
 {
@@ -175,7 +174,6 @@ static void roff_func(TERM_COLOR attr, concptr str)
  * @brief モンスター詳細情報をスポイラー出力するメインルーチン /
  * Create a spoiler file for monsters (-SHAWN-)
  * @param fname ファイル名
- * @return なし
  */
 spoiler_output_status spoil_mon_info(concptr fname)
 {

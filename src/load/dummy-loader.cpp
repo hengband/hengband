@@ -9,7 +9,6 @@
 /*!
  * @brief ダミーバイトを読み込む
  * @param なし
- * @return なし
  * @details もはや何に使われていたのか不明
  */
 void rd_dummy1(void)
@@ -25,7 +24,6 @@ void rd_dummy1(void)
 /*!
  * @brief ダミーバイトを読み込む
  * @param なし
- * @return なし
  * @details もはや何に使われていたのか不明
  */
 void rd_dummy2(void)
@@ -40,7 +38,6 @@ void rd_dummy2(void)
 /*!
  * @brief 変愚蛮怒 v1.5.0より大きなバージョンにおいて、ダミーでモンスターを読み込む
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details もはや何に使われていたのか不明
  */
 void rd_dummy_monsters(player_type *creature_ptr)
@@ -58,7 +55,6 @@ void rd_dummy_monsters(player_type *creature_ptr)
 
 /*!
  * @brief ダミー情報スキップ / Strip the "ghost" info
- * @return なし
  * @details
  * This is such a nasty hack it hurts.
  */

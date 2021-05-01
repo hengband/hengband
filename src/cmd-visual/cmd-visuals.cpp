@@ -55,7 +55,6 @@ static bool cmd_visuals_aux(int i, IDX *num, IDX max)
 /*!
  * @brief キャラクタの変更メニュー表示
  * @param choice_msg 選択メッセージ
- * @return なし
  */
 static void print_visuals_menu(concptr choice_msg)
 {

@@ -96,7 +96,6 @@ static void generate_fill_perm_bold(player_type *player_ptr, POSITION y1, POSITI
 /*!
  * @brief タイプ16の部屋…地下都市生成のサブルーチン / Actually create buildings
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @param ltcy 生成基準Y座標
  * @param ltcx 生成基準X座標
  * @param stotes[] 生成する店舗のリスト
@@ -163,7 +162,6 @@ static void build_stores(player_type *player_ptr, POSITION ltcy, POSITION ltcx, 
 
 /*!
  * @brief タイプ16の部屋…地下都市の生成 / Type 16 -- Underground Arcade
- * @return なし
  * @details
  * Town logic flow for generation of new town\n
  * Originally from Vanilla 3.0.3\n

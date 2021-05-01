@@ -20,7 +20,6 @@
 /*!
  * @brief アイテムオブジェクトを読み込む(現版) / Read an object (New method)
  * @param o_ptr アイテムオブジェクト保存先ポインタ
- * @return なし
  */
 void rd_item(player_type *player_ptr, object_type *o_ptr)
 {

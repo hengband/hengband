@@ -189,7 +189,6 @@ std::vector<nest_pit_type> nest_types = {
 /*!
  * @brief タイプ5の部屋…nestを生成する / Type 5 -- Monster nests
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  * A monster nest is a "big" room, with an "inner" room, containing\n
  * a "collection" of monsters of a given type strewn about the room.\n
@@ -399,7 +398,6 @@ std::vector<nest_pit_type> pit_types = {
 
 /*!
  * @brief タイプ6の部屋…pitを生成する / Type 6 -- Monster pits
- * @return なし
  * @details
  * A monster pit is a "big" room, with an "inner" room, containing\n
  * a "collection" of monsters of a given type organized in the room.\n
@@ -693,7 +691,6 @@ static bool vault_aux_trapped_pit(player_type *player_ptr, MONRACE_IDX r_idx)
 
 /*!
  * @brief タイプ13の部屋…開門トラップpitの生成 / Type 13 -- Trapped monster pits
- * @return なし
  * @details
  * A trapped monster pit is a "big" room with a straight corridor in\n
  * which wall opening traps are placed, and with two "inner" rooms\n

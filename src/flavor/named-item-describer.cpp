@@ -73,7 +73,6 @@ static void describe_prefix_ja(flavor_type *flavor_ptr)
 /*!
  * @brief アーティファクトの表記処理
  * @param アイテム表記への参照ポインタ
- * @return なし
  * @details 英語の場合アーティファクトは The が付くので分かるが、日本語では分からないのでマークをつける.
  */
 static void describe_artifact_prefix_ja(flavor_type *flavor_ptr)
@@ -90,7 +89,6 @@ static void describe_artifact_prefix_ja(flavor_type *flavor_ptr)
 /*!
  * @brief アーティファクトの説明表記
  * @param flavor_ptr アイテム表記への参照ポインタ
- * @return なし
  * @details ランダムアーティファクト、固定アーティファクト、エゴの順に評価する
  */
 static void describe_artifact_ja(flavor_type *flavor_ptr)
@@ -187,7 +185,6 @@ static void describe_ego_body_ja(flavor_type *flavor_ptr)
 /*!
  * @brief アーティファクトのアイテム名を表記する
  * @param flavor_ptr アイテム表記への参照ポインタ
- * @return なし
  * @details '『'から始まる伝説のアイテムの名前は最後に付加する
  */
 static void describe_artifact_body_ja(flavor_type *flavor_ptr)
@@ -318,7 +315,6 @@ static void describe_artifact_body_en(flavor_type *flavor_ptr)
 /*!
  * @brief 銘を表記する
  * @param flavor_ptr アイテム表記への参照ポインタ
- * @return なし
  * @details ランダムアーティファクト、固定アーティファクト、エゴの順に評価する
  */
 static void describe_inscription(flavor_type *flavor_ptr)

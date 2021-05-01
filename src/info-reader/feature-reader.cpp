@@ -445,7 +445,6 @@ static FEAT_IDX search_real_feat(std::string feat)
  * @brief 地形情報の各種タグからIDへ変換して結果を収める /
  * Retouch fake tags of f_info
  * @param head ヘッダ構造体
- * @return なし
  */
 void retouch_f_info(angband_header *head)
 {

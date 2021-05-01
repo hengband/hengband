@@ -40,7 +40,6 @@ static MONSTER_NUMBER count_all_hostile_monsters(floor_type *floor_ptr)
  * Check for "Quest" completion when a quest monster is killed or charmed.
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param m_ptr 撃破したモンスターの構造体参照ポインタ
- * @return なし
  */
 void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
 {

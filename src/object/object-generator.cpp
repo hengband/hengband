@@ -11,7 +11,6 @@
  * @brief オブジェクトを初期化する
  * Wipe an object clean.
  * @param o_ptr 初期化したいオブジェクトの構造体参照ポインタ
- * @return なし
  */
 void object_wipe(object_type *o_ptr) { (void)WIPE(o_ptr, object_type); }
 
@@ -20,7 +19,6 @@ void object_wipe(object_type *o_ptr) { (void)WIPE(o_ptr, object_type); }
  * Wipe an object clean.
  * @param o_ptr 複製元のオブジェクトの構造体参照ポインタ
  * @param j_ptr 複製先のオブジェクトの構造体参照ポインタ
- * @return なし
  */
 void object_copy(object_type *o_ptr, object_type *j_ptr) { (void)COPY(o_ptr, j_ptr, object_type); }
 
@@ -29,7 +27,6 @@ void object_copy(object_type *o_ptr, object_type *j_ptr) { (void)COPY(o_ptr, j_p
  * Prepare an object based on an object kind.
  * @param o_ptr 代入したいオブジェクトの構造体参照ポインタ
  * @param k_idx 新たに作成したいベースアイテム情報のID
- * @return なし
  */
 void object_prep(player_type *player_ptr, object_type *o_ptr, KIND_OBJECT_IDX k_idx)
 {

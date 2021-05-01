@@ -22,7 +22,6 @@
  * @param linestr
  * @param menu_key 自動拾いエディタのメニューで入力したキー
  * @param max_len
- * @return なし
  */
 static void redraw_edit_command_menu(bool *redraw, int level, int start, char *linestr, byte *menu_key, int max_len)
 {

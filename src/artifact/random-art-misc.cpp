@@ -245,7 +245,6 @@ static void invest_misc_weak_esps(object_type *o_ptr)
  * 乱テレポート、反魔法、反テレポート、警告、テレパシー、各種ESP、一部装備に殺戮修正。
  * @attention オブジェクトのtval、svalに依存したハードコーディング処理がある。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return なし
  */
 void random_misc(player_type *player_ptr, object_type *o_ptr)
 {

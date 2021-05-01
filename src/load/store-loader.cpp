@@ -17,7 +17,6 @@
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param store_ptr 店舗の参照ポインタ
  * @param o_ptr アイテムオブジェクト参照ポインタ
- * @return なし
  * @details
  * In all cases, return the slot (or -1) where the object was placed
  *

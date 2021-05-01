@@ -31,7 +31,6 @@
 /*!
  * @brief パターン終点到達時のテレポート処理を行う
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 static void pattern_teleport(player_type *creature_ptr)
 {

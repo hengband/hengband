@@ -156,7 +156,6 @@ static bool enter_debug_mode(player_type *player_ptr)
  * @brief プレイヤーから受けた入力コマンドの分岐処理。
  * / Parse and execute the current command Give "Warning" on illegal commands.
  * @todo Make some "blocks"
- * @return なし
  */
 void process_command(player_type *creature_ptr)
 {

@@ -28,7 +28,6 @@
 /*!
  * @brief コンソールを再描画する /
  * Redraw a term when it is resized
- * @return なし
  * @todo ここにplayer_type を追加するとz-termに影響が行くので保留
  */
 void redraw_window(void)
@@ -45,7 +44,6 @@ void redraw_window(void)
 /*!
  * @brief 現在のマップ名を描画する / Print dungeon
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 static void print_dungeon(player_type *creature_ptr)
 {
@@ -60,7 +58,6 @@ static void print_dungeon(player_type *creature_ptr)
 
 /*!
  * @brief redraw のフラグに応じた更新をまとめて行う / Handle "redraw"
- * @return なし
  * @details 更新処理の対象はゲーム中の全描画処理
  */
 void redraw_stuff(player_type *creature_ptr)
@@ -222,7 +219,6 @@ void redraw_stuff(player_type *creature_ptr)
 /*!
  * @brief player_ptr->window のフラグに応じた更新をまとめて行う / Handle "player_ptr->window"
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details 更新処理の対象はサブウィンドウ全般
  */
 void window_stuff(player_type *player_ptr)

@@ -44,7 +44,6 @@
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param can_resist レベルで抵抗可能ならTRUE、できないならFALSE
- * @return なし
  * @details
  * カオス属性や混乱の手
  */
@@ -75,7 +74,6 @@ static void attack_confuse(player_type *attacker_ptr, player_attack_type *pa_ptr
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param can_resist レベルで抵抗可能ならTRUE、できないならFALSE
- * @return なし
  * @details
  * 魔術属性
  */
@@ -99,7 +97,6 @@ static void attack_stun(player_type *attacker_ptr, player_attack_type *pa_ptr, b
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param can_resist レベルで抵抗可能ならTRUE、できないならFALSE
- * @return なし
  * @details
  * 魔術属性
  */
@@ -122,7 +119,6 @@ static void attack_scare(player_type *attacker_ptr, player_attack_type *pa_ptr, 
  * @brief 打撃でモンスターを無力化する処理
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @return なし
  * @details
  * 魔術属性
  */
@@ -151,7 +147,6 @@ static void attack_dispel(player_type *attacker_ptr, player_attack_type *pa_ptr)
  * @brief 打撃でモンスターを調査する処理
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @return なし
  * @details
  * 魔術属性
  */
@@ -202,7 +197,6 @@ static bool judge_tereprt_resistance(player_type *attacker_ptr, player_attack_ty
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param num 現在の攻撃回数 (テレポートしてしまったら追加攻撃できないのでその補正)
- * @return なし
  */
 static void attack_teleport_away(player_type *attacker_ptr, player_attack_type *pa_ptr, int *num)
 {
@@ -221,7 +215,6 @@ static void attack_teleport_away(player_type *attacker_ptr, player_attack_type *
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param y モンスターのY座標
  * @param x モンスターのX座標
- * @return なし
  */
 static void attack_polymorph(player_type *attacker_ptr, player_attack_type *pa_ptr, POSITION y, POSITION x)
 {
@@ -244,7 +237,6 @@ static void attack_polymorph(player_type *attacker_ptr, player_attack_type *pa_p
  * @brief ゴールデンハンマーによるアイテム奪取処理
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @return なし
  */
 static void attack_golden_hammer(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {
@@ -271,7 +263,6 @@ static void attack_golden_hammer(player_type *attacker_ptr, player_attack_type *
  * @param y モンスターのY座標
  * @param x モンスターのX座標
  * @param num 現在の攻撃回数
- * @return なし
  */
 void change_monster_stat(player_type *attacker_ptr, player_attack_type *pa_ptr, const POSITION y, const POSITION x, int *num)
 {

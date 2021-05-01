@@ -32,7 +32,6 @@
  * @param dir 魔法の発動方向
  * @param wgt 許容重量
  * @param require_los 射線の通りを要求するならばTRUE
- * @return なし
  */
 void fetch_item(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
 {

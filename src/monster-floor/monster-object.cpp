@@ -101,7 +101,6 @@ static void update_object_flags(BIT_FLAGS *flgs, BIT_FLAGS *flg2, BIT_FLAGS *flg
  * @param m_name モンスター名
  * @param o_name アイテム名
  * @param this_o_idx モンスターが乗ったオブジェクトID
- * @return なし
  */
 static void monster_pickup_object(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, object_type *o_ptr, bool is_special_object,
     POSITION ny, POSITION nx, GAME_TEXT *m_name, GAME_TEXT *o_name, OBJECT_IDX this_o_idx)
@@ -189,7 +188,6 @@ void update_object_by_monster_movement(player_type *target_ptr, turn_flags *turn
  * @brief モンスターが盗みや拾いで確保していたアイテムを全てドロップさせる / Drop all items carried by a monster
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param m_ptr モンスター参照ポインタ
- * @return なし
  */
 void monster_drop_carried_objects(player_type *player_ptr, monster_type *m_ptr)
 {

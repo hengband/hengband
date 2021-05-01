@@ -213,7 +213,6 @@ static bool activate_whistle(player_type *user_ptr, ae_type *ae_ptr)
  * Activate a wielded object.  Wielded objects never stack.
  * And even if they did, activatable objects never stack.
  * @param item 発動するオブジェクトの所持品ID
- * @return なし
  * @details
  * <pre>
  * Currently, only (some) artifacts, and Dragon Scale Mail, can be activated.

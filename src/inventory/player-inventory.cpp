@@ -78,7 +78,6 @@ static bool py_pickup_floor_aux(player_type *owner_ptr)
 /*!
  * @brief 床上のアイテムを拾うメイン処理
  * @param pickup FALSEなら金銭の自動拾いのみを行う/ FALSE then only gold will be picked up
- * @return なし
  * @details
  * This is called by py_pickup() when easy_floor is TRUE.
  */
@@ -166,7 +165,6 @@ void py_pickup_floor(player_type *owner_ptr, bool pickup)
  * Helper routine for py_pickup() and py_pickup_floor().
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param o_idx 取得したオブジェクトの参照ID
- * @return なし
  * @details
  * アイテムを拾った際に「２つのケーキを持っている」
  * "You have two cakes." とアイテムを拾った後の合計のみの表示がオリジナルだが、
@@ -237,7 +235,6 @@ void describe_pickup_item(player_type *owner_ptr, OBJECT_IDX o_idx)
  * @brief プレイヤーがオブジェクト上に乗った際の表示処理 / Player "wants" to pick up an object or gold.
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param pickup 自動拾い処理を行うならばTRUEとする
- * @return なし
  */
 void carry(player_type *creature_ptr, bool pickup)
 {

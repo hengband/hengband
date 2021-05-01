@@ -71,7 +71,6 @@ concptr message_str(int age)
 /*!
  * @brief ゲームメッセージをログに追加する。 / Add a new message, with great efficiency
  * @param str 保存したいメッセージ
- * @return なし
  */
 void message_add(concptr str)
 {

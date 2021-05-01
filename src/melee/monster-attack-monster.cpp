@@ -263,7 +263,6 @@ static void explode_monster_by_melee(player_type *subject_ptr, mam_type *mam_ptr
  * @brief r_infoで定義した攻撃回数の分だけ、モンスターからモンスターへの直接攻撃処理を繰り返す
  * @param subject_ptr プレーヤーへの参照ポインタ
  * @param mam_ptr モンスター乱闘構造体への参照ポインタ
- * @return なし
  */
 void repeat_melee(player_type *subject_ptr, mam_type *mam_ptr)
 {

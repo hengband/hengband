@@ -63,7 +63,6 @@ byte get_random_ego(byte slot, bool good)
  * @param player_ptr プレイヤー情報への参照ポインタ
  * @param o_ptr オブジェクト情報への参照ポインタ
  * @param gen_flags 生成フラグ(参照渡し)
- * @return なし
  */
 static void ego_invest_curse(player_type *player_ptr, object_type *o_ptr, EnumClassFlagGroup<TRG> &gen_flags)
 {
@@ -85,7 +84,6 @@ static void ego_invest_curse(player_type *player_ptr, object_type *o_ptr, EnumCl
  * @brief エゴオブジェクトに追加能力/耐性を付加する
  * @param o_ptr オブジェクト情報への参照ポインタ
  * @param gen_flags 生成フラグ(参照渡し)
- * @return なし
  */
 static void ego_invest_extra_abilities(object_type *o_ptr, EnumClassFlagGroup<TRG> &gen_flags)
 {
@@ -142,7 +140,6 @@ static void ego_invest_extra_abilities(object_type *o_ptr, EnumClassFlagGroup<TR
  * @param o_ptr オブジェクト情報への参照ポインタ
  * @param e_ptr エゴアイテム情報への参照ポインタ
  * @param gen_flags 生成フラグ(参照渡し)
- * @return なし
  */
 static void ego_interpret_extra_abilities(object_type *o_ptr, ego_item_type *e_ptr, EnumClassFlagGroup<TRG> &gen_flags)
 {
@@ -204,7 +201,6 @@ static bool ego_has_flag(object_type *o_ptr, ego_item_type *e_ptr, tr_type flag)
  * @param o_ptr オブジェクト情報への参照ポインタ
  * @param e_ptr エゴアイテム情報への参照ポインタ
  * @param lev 生成階
- * @return なし
  */
 void ego_invest_extra_attack(player_type *player_ptr, object_type *o_ptr, ego_item_type *e_ptr, DEPTH lev)
 {
@@ -242,7 +238,6 @@ void ego_invest_extra_attack(player_type *player_ptr, object_type *o_ptr, ego_it
  * @param player_ptr プレイヤー情報への参照ポインタ
  * @param o_ptr オブジェクト情報への参照ポインタ
  * @param lev 生成階
- * @return なし
  */
 void apply_ego(player_type *player_ptr, object_type *o_ptr, DEPTH lev)
 {

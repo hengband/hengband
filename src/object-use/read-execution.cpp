@@ -71,7 +71,6 @@
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param item 読むオブジェクトの所持品ID
  * @param known 判明済ならばTRUE
- * @return なし
  * @details
  * <pre>
  * Certain scrolls can be "aborted" without losing the scroll.  These

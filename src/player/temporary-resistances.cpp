@@ -18,7 +18,6 @@
  * Prints ratings on certain abilities
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param flags フラグを保管する配列
- * @return なし
  * @todo
  * xtra1.c周りと多重実装になっているのを何とかする
  */

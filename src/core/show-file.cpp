@@ -19,7 +19,6 @@
  * @param str 出力する文字列
  * @param cy コンソールの行
  * @param shower 確認中
- * @return なし
  * @details
  * <pre>
  * You can insert some special color tag to change text color.
@@ -118,7 +117,6 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
  * @param what 内容キャプションの文字列
  * @param line 表示の現在行
  * @param mode オプション
- * @return なし
  * @details
  * <pre>
  * Process various special text in the input file, including

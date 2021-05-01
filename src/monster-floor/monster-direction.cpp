@@ -59,7 +59,6 @@ static bool decide_pet_approch_direction(player_type *target_ptr, monster_type *
  * @param plus モンスターIDの増減 (1/2 の確率で+1、1/2の確率で-1)
  * @param y モンスターの移動方向Y
  * @param x モンスターの移動方向X
- * @return なし
  */
 static void decide_enemy_approch_direction(player_type *target_ptr, MONSTER_IDX m_idx, int start, int plus, POSITION *y, POSITION *x)
 {

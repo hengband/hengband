@@ -16,7 +16,6 @@
  * @param dice_mult ダイス倍率
  * @param dice_div ダイス除数
  * @param msg 文字列を格納するポインタ
- * @return なし
  */
 void dice_to_string(int base_damage, int dice_num, int dice_side, int dice_mult, int dice_div, char *msg)
 {
@@ -111,7 +110,6 @@ bool know_damage(MONRACE_IDX r_idx, int i)
  * @param r_idx モンスターの種族ID
  * @param SPELL_NUM 呪文番号
  * @param msg 表示する文字列
- * @return なし
  */
 void set_damage(player_type *player_ptr, lore_type *lore_ptr, RF_ABILITY ms_type, concptr msg)
 {

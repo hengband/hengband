@@ -63,7 +63,6 @@ ITEM_NUMBER scan_floor_items(player_type *owner_ptr, OBJECT_IDX *items, POSITION
  * @param label ラベルリストを取得する文字列参照ポインタ
  * @param floor_list 床上アイテムの配列
  * @param floor_num  床上アイテムの配列ID
- * @return なし
  */
 /*
  */
