@@ -262,6 +262,8 @@ void delete_object_idx(player_type *player_ptr, OBJECT_IDX o_idx)
 
     object_wipe(j_ptr);
     floor_ptr->o_cnt--;
+
+    set_bits(player_ptr->window_flags, PW_FLOOR_ITEM_LIST);
 }
 
 /*!
