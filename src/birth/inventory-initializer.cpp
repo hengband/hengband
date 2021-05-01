@@ -33,7 +33,6 @@
 
 /*!
  * @brief 所持状態にあるアイテムの中から一部枠の装備可能なものを装備させる。
- * @return なし
  */
 void wield_all(player_type *creature_ptr)
 {
@@ -75,7 +74,6 @@ void wield_all(player_type *creature_ptr)
  * @brief 初期所持アイテムの処理 / Add an outfit object
  * @details アイテムを既知のものとした上でwield_all()関数により装備させる。
  * @param o_ptr 処理したいオブジェクト構造体の参照ポインタ
- * @return なし
  */
 void add_outfit(player_type *creature_ptr, object_type *o_ptr)
 {
@@ -139,7 +137,6 @@ static void decide_initial_items(player_type *creature_ptr, object_type *q_ptr)
 /*!
  * @brief 種族/職業/性格などに基づき初期所持アイテムを設定するメインセット関数。 / Init players with some belongings
  * @details Having an item makes the player "aware" of its purpose.
- * @return なし
  */
 void player_outfit(player_type *creature_ptr)
 {

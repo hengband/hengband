@@ -13,7 +13,6 @@
 /*!
  * @brief 生い立ちメッセージを編集する。/Character background edit-mode
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void edit_history(player_type *creature_ptr)
 {

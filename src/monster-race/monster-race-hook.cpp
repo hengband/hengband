@@ -32,7 +32,6 @@ EnumClassFlagGroup<RF_ABILITY> vault_aux_dragon_mask4;
 /*!
  * @brief pit/nestの基準となる単種モンスターを決める /
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void vault_prep_clone(player_type *player_ptr)
 {
@@ -44,7 +43,6 @@ void vault_prep_clone(player_type *player_ptr)
 /*!
  * @brief pit/nestの基準となるモンスターシンボルを決める /
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void vault_prep_symbol(player_type *player_ptr)
 {
@@ -57,7 +55,6 @@ void vault_prep_symbol(player_type *player_ptr)
 /*!
  * @brief pit/nestの基準となるドラゴンの種類を決める /
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void vault_prep_dragon(player_type *player_ptr)
 {

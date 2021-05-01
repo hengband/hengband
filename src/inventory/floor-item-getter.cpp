@@ -158,7 +158,6 @@ static bool check_floor_item_tag(player_type *owner_ptr, fis_type *fis_ptr, char
  * @brief インベントリ内のアイテムが妥当かを判定する
  * @param owner_ptr プレーヤーへの参照ポインタ
  * @param fis_ptr 床上アイテムへの参照ポインタ
- * @return なし
  */
 static void test_inventory_floor(player_type *owner_ptr, fis_type *fis_ptr)
 {
@@ -179,7 +178,6 @@ static void test_inventory_floor(player_type *owner_ptr, fis_type *fis_ptr)
  * @brief 装備品がが妥当かを判定する
  * @param owner_ptr プレーヤーへの参照ポインタ
  * @param fis_ptr 床上アイテムへの参照ポインタ
- * @return なし
  */
 static void test_equipment_floor(player_type *owner_ptr, fis_type *fis_ptr)
 {

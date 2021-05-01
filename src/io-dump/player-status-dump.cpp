@@ -9,7 +9,6 @@
  * @param start_y
  * @param end_y
  * @param change_color バッファへ詰める文字の変更有無
- * @return なし
  */
 static void dump_player_status_with_screen_num(
 	player_type *creature_ptr, FILE *fff, display_player_pf display_player,
@@ -51,7 +50,6 @@ static void dump_player_status_with_screen_num(
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param fff ファイルポインタ
  * @param display_player 画面表示へのコールバック
- * @return なし
  */
 void dump_aux_player_status(player_type *creature_ptr, FILE *fff, display_player_pf display_player)
 {

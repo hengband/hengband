@@ -27,7 +27,6 @@ PLAYER_LEVEL get_pseudo_monstetr_level(player_type *caster_ptr)
  * @param plev プレイヤーレベル
  * @param msg 表示する文字列
  * @param tmp 返すメッセージを格納する配列
- * @return なし
  */
 static void set_bluemage_damage(player_type *learner_type, RF_ABILITY ms_type, PLAYER_LEVEL plev, concptr msg, char *tmp)
 {
@@ -46,7 +45,6 @@ static void set_bluemage_damage(player_type *learner_type, RF_ABILITY ms_type, P
  * @param learner_ptr プレーヤーへの参照ポインタ
  * @param p 情報を返す文字列参照ポインタ
  * @param power モンスター魔法のID
- * @return なし
  */
 void learnt_info(player_type *learner_ptr, char *p, RF_ABILITY power)
 {

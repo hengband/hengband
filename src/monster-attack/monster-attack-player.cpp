@@ -157,7 +157,6 @@ static void describe_silly_attacks(monap_type *monap_ptr)
 /*!
  * @brief 切り傷と朦朧が同時に発生した時、片方を無効にする
  * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
- * @return なし
  */
 static void select_cut_stun(monap_type *monap_ptr)
 {
@@ -335,7 +334,6 @@ static bool process_monster_attack_hit(player_type *target_ptr, monap_type *mona
  * @brief 一部の打撃種別の場合のみ、避けた旨のメッセージ表示と盾技能スキル向上を行う
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
- * @return なし
  */
 static void process_monster_attack_evasion(player_type *target_ptr, monap_type *monap_ptr)
 {
@@ -366,7 +364,6 @@ static void process_monster_attack_evasion(player_type *target_ptr, monap_type *
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
  * @param ap_cnt モンスターの打撃 N回目
- * @return なし
  */
 static void increase_blow_type_seen(player_type *target_ptr, monap_type *monap_ptr, const int ap_cnt)
 {
@@ -458,7 +455,6 @@ static bool process_monster_blows(player_type *target_ptr, monap_type *monap_ptr
  * @brief 呪術「目には目を」の効果処理
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
- * @return なし
  */
 static void eyes_on_eyes(player_type *target_ptr, monap_type *monap_ptr)
 {

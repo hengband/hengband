@@ -11,7 +11,6 @@
  * @brief モンスターを読み込む(現版) / Read a monster (New method)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param m_ptr モンスター保存先ポインタ
- * @return なし
  */
 void rd_monster(player_type *player_ptr, monster_type *m_ptr)
 {

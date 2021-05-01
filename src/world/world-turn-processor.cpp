@@ -47,7 +47,6 @@
  * @brief 10ゲームターンが進行する毎にゲーム世界全体の処理を行う。
  * / Handle certain things once every 10 game turns
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void process_world(player_type *player_ptr)
 {
@@ -242,7 +241,6 @@ void process_world(player_type *player_ptr)
 /*!
  * @brief ゲーム時刻を表示する /
  * Print time
- * @return なし
  */
 void print_time(player_type *player_ptr)
 {

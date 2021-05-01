@@ -79,7 +79,6 @@ bool wiz_debug_spell(player_type *creature_ptr)
 /*!
  * @brief 必ず成功するウィザードモード用次元の扉処理 / Wizard Dimension Door
  * @param caster_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void wiz_dimension_door(player_type *caster_ptr)
 {
@@ -93,7 +92,6 @@ void wiz_dimension_door(player_type *caster_ptr)
 /*!
  * @brief ウィザードモード用モンスターの群れ生成 / Summon a horde of monsters
  * @param caster_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void wiz_summon_horde(player_type *caster_ptr)
 {
@@ -111,7 +109,6 @@ void wiz_summon_horde(player_type *caster_ptr)
 
 /*!
  * @brief ウィザードモード用処理としてターゲット中の相手をテレポートバックする / Hack -- Teleport to the target
- * @return なし
  */
 void wiz_teleport_back(player_type *caster_ptr)
 {
@@ -124,7 +121,6 @@ void wiz_teleport_back(player_type *caster_ptr)
 /*!
  * @brief 青魔導師の魔法を全て習得済みにする /
  * debug command for blue mage
- * @return なし
  */
 void wiz_learn_blue_magic_all(player_type *caster_ptr)
 {
@@ -145,7 +141,6 @@ void wiz_learn_blue_magic_all(player_type *caster_ptr)
  * Summon some creatures
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param num 生成処理回数
- * @return なし
  */
 void wiz_summon_random_enemy(player_type *caster_ptr, int num)
 {
@@ -157,7 +152,6 @@ void wiz_summon_random_enemy(player_type *caster_ptr, int num)
  * @brief モンスターを種族IDを指定して敵対的に召喚する /
  * Summon a creature of the specified type
  * @param r_idx モンスター種族ID
- * @return なし
  * @details
  * This function is rather dangerous
  */
@@ -170,7 +164,6 @@ void wiz_summon_specific_enemy(player_type *summoner_ptr, MONRACE_IDX r_idx)
  * @brief モンスターを種族IDを指定してペット召喚する /
  * Summon a creature of the specified type
  * @param r_idx モンスター種族ID
- * @return なし
  * @details
  * This function is rather dangerous
  */
@@ -183,7 +176,6 @@ void wiz_summon_pet(player_type *summoner_ptr, MONRACE_IDX r_idx)
  * @brief ターゲットを指定して指定ダメージ・指定属性・半径0のボールを放つ
  * @param dam ダメージ量
  * @param effect_idx 属性ID
- * @return なし
  * @details デフォルトは100万・GF_ARROW(射撃)。RES_ALL持ちも一撃で殺せる。
  */
 void wiz_kill_enemy(player_type *caster_ptr, HIT_POINT dam, EFFECT_ID effect_idx)
@@ -226,7 +218,6 @@ void wiz_kill_enemy(player_type *caster_ptr, HIT_POINT dam, EFFECT_ID effect_idx
  * @brief 自分に指定ダメージ・指定属性・半径0のボールを放つ
  * @param dam ダメージ量
  * @param effect_idx 属性ID
- * @return なし
  */
 void wiz_kill_me(player_type *caster_ptr, HIT_POINT dam, EFFECT_ID effect_idx)
 {

@@ -31,7 +31,6 @@
  * @brief モンスターから直接攻撃を受けた時に落馬するかどうかを判定し、判定アウトならば落馬させる
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
- * @return なし
  */
 void check_fall_off_horse(player_type *creature_ptr, monap_type *monap_ptr)
 {

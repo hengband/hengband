@@ -52,7 +52,6 @@
  * @param feat1 中央部地形ID
  * @param feat2 境界部地形ID
  * @param width 基本幅
- * @return なし
  */
 static void recursive_river(floor_type *floor_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2, FEAT_IDX feat1, FEAT_IDX feat2, POSITION width)
 {
@@ -161,7 +160,6 @@ static void recursive_river(floor_type *floor_ptr, POSITION x1, POSITION y1, POS
  * Places water /lava through dungeon.
  * @param feat1 中央部地形ID
  * @param feat2 境界部地形ID
- * @return なし
  */
 void add_river(floor_type *floor_ptr, dun_data_type *dd_ptr)
 {
@@ -267,7 +265,6 @@ void add_river(floor_type *floor_ptr, dun_data_type *dd_ptr)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param feat ストリーマー地形ID
  * @param chance 生成密度
- * @return なし
  * @details
  * <pre>
  * Note that their are actually six different terrain features used
@@ -412,7 +409,6 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
  * Places "streamers" of rock through dungeon
  * @param x 指定X座標
  * @param y 指定Y座標
- * @return なし
  * @details
  * <pre>
  * Put trees near a hole in the dungeon roof  (rubble on ground + up stairway)
@@ -470,7 +466,6 @@ void place_trees(player_type *player_ptr, POSITION x, POSITION y)
 /*!
  * @brief ダンジョンに＊破壊＊済み地形ランダムに施す /
  * Build a destroyed level
- * @return なし
  */
 void destroy_level(player_type *player_ptr)
 {

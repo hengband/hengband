@@ -175,7 +175,6 @@ static void set_esp_info(player_type *creature_ptr, self_info_type *self_ptr)
 
 /*!
  * @brief 自己分析処理(Nethackからのアイデア) / self-knowledge... idea from nethack.
- * @return なし
  * @details
  * <pre>
  * Useful for determining powers and
@@ -260,7 +259,6 @@ static concptr report_magic_durations[] = { _("ごく短い間", "for a short ti
 
 /*!
  * @brief 現在の一時的効果一覧を返す / Report all currently active magical effects.
- * @return なし
  */
 void report_magics(player_type *creature_ptr)
 {

@@ -20,7 +20,6 @@
 /*!
  * @brief 日記のタイトル表記と内容出力
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 static void display_diary(player_type *creature_ptr)
 {
@@ -50,7 +49,6 @@ static void display_diary(player_type *creature_ptr)
 
 /*!
  * @brief 日記に任意の内容を表記するコマンドのメインルーチン /
- * @return なし
  */
 static void add_diary_note(player_type *creature_ptr)
 {
@@ -64,7 +62,6 @@ static void add_diary_note(player_type *creature_ptr)
 
 /*!
  * @brief 最後に取得したアイテムの情報を日記に追加するメインルーチン /
- * @return なし
  */
 static void do_cmd_last_get(player_type *creaute_ptr)
 {
@@ -85,7 +82,6 @@ static void do_cmd_last_get(player_type *creaute_ptr)
 
 /*!
  * @brief ファイル中の全日記記録を消去する /
- * @return なし
  */
 static void do_cmd_erase_diary(void)
 {
@@ -113,7 +109,6 @@ static void do_cmd_erase_diary(void)
 /*!
  * @brief 日記コマンド
  * @param crerature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void do_cmd_diary(player_type *creature_ptr)
 {

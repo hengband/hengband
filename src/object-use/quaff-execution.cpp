@@ -111,7 +111,6 @@ static bool detonation(player_type *creature_ptr)
  * Quaff a potion (from the pack or the floor)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param item 飲む薬オブジェクトの所持品ID
- * @return なし
  */
 void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 {

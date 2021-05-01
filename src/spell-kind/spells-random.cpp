@@ -235,7 +235,6 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
  * @brief 運命の輪、並びにカオス的な効果の発動
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param spell ランダムな効果を選択するための基準ID
- * @return なし
  */
 void wild_magic(player_type *caster_ptr, int spell)
 {
@@ -341,7 +340,6 @@ void wild_magic(player_type *caster_ptr, int spell)
  * @brief 「ワンダー」のランダムな効果を決定して処理する。
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dir 方向ID
- * @return なし
  * @details
  * This spell should become more useful (more controlled) as the\n
  * player gains experience levels.  Thus, add 1/5 of the player's\n

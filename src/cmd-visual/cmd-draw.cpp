@@ -24,7 +24,6 @@
  * @brief 画面を再描画するコマンドのメインルーチン
  * Hack -- redraw the screen
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  * <pre>
  * This command performs various low level updates, clears all the "extra"
@@ -71,7 +70,6 @@ void do_cmd_redraw(player_type *creature_ptr)
 
 /*!
  * @brief プレイヤーのステータス表示
- * @return なし
  */
 void do_cmd_player_status(player_type *creature_ptr)
 {
@@ -132,7 +130,6 @@ void do_cmd_player_status(player_type *creature_ptr)
 /*!
  * @brief 最近表示されたメッセージを再表示するコマンドのメインルーチン
  * Recall the most recent message
- * @return なし
  */
 void do_cmd_message_one(void)
 {
@@ -143,7 +140,6 @@ void do_cmd_message_one(void)
 /*!
  * @brief メッセージのログを表示するコマンドのメインルーチン
  * Recall the most recent message
- * @return なし
  * @details
  * <pre>
  * Show previous messages to the user	-BEN-

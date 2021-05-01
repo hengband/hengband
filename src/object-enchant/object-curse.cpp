@@ -58,7 +58,6 @@ BIT_FLAGS get_curse(player_type *owner_ptr, int power, object_type *o_ptr)
  * @param owner_ptr プレーヤーへの参照ポインタ
  * @param chance 呪いの基本確率
  * @param heavy_chance さらに重い呪いとなる確率
- * @return なし
  */
 void curse_equipment(player_type *owner_ptr, PERCENTAGE chance, PERCENTAGE heavy_chance)
 {

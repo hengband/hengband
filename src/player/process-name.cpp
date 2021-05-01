@@ -16,7 +16,6 @@
  * Process the player name.
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param sf セーブファイル名に合わせた修正を行うならばTRUE
- * @return なし
  * @details
  * Extract a clean "base name".
  * Build the savefile name if needed.
@@ -123,7 +122,6 @@ void process_player_name(player_type *creature_ptr, bool is_new_savefile)
  * @brief プレイヤーの名前を変更するコマンドのメインルーチン
  * Gets a name for the character, reacting to name changes.
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  * <pre>
  * Assumes that "display_player()" has just been called

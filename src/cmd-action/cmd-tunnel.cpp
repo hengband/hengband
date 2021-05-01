@@ -20,7 +20,6 @@
 /*!
  * @brief 「掘る」動作コマンドのメインルーチン /
  * Tunnels through "walls" (including rubble and closed doors)
- * @return なし
  * @details
  * <pre>
  * Note that you must tunnel in order to hit invisible monsters

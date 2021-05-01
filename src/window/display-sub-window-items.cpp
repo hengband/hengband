@@ -46,7 +46,6 @@ void display_item_discount(flavor_type *flavor_ptr)
 /*!
  * @brief 呪いの有無や割引率等を表示する
  * @param flavor_ptr アイテム表記への参照ポインタ
- * @return なし
  */
 void display_item_fake_inscription(flavor_type *flavor_ptr)
 {

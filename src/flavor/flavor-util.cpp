@@ -40,7 +40,6 @@ flavor_type *initialize_flavor_type(flavor_type *flavor_ptr, char *buf, object_t
  * @brief 対象文字配列に一文字だけをコピーする。
  * @param t 保管先文字列ポインタ
  * @param c 保管したい1文字
- * @return なし
  * @details
  * Print a char "c" into a string "t", as if by sprintf(t, "%c", c),\n
  * and return a pointer to the terminator (t + 1).\n
@@ -74,7 +73,6 @@ char *object_desc_str(char *t, concptr s)
  * @brief 対象文字配列に符号なし整数値をコピーする。
  * @param t 保管先文字列ポインタ
  * @param n コピーしたい数値
- * @return なし
  * @details
  * Print an unsigned number "n" into a string "t", as if by
  * sprintf(t, "%u", n), and return a pointer to the terminator.
@@ -100,7 +98,6 @@ char *object_desc_num(char *t, uint n)
  * @brief 対象文字配列に符号あり整数値をコピーする。
  * @param t 保管先文字列ポインタ
  * @param v コピーしたい数値
- * @return なし
  * @details
  * Print an signed number "v" into a string "t", as if by
  * sprintf(t, "%+d", n), and return a pointer to the terminator.
@@ -135,7 +132,6 @@ char *object_desc_int(char *t, int v)
  * @brief オブジェクトフラグを追加する
  * @param short_flavor フラグの短縮表現 (反魔法/アンチテレポの"["、耐性の"r"、耐混乱の"乱" 等)
  * @param ptr 特性短縮表記を格納する文字列ポインタ
- * @return なし
  */
 static void add_inscription(char **short_flavor, concptr str) { *short_flavor = object_desc_str(*short_flavor, str); }
 
@@ -325,7 +321,6 @@ char *get_ability_abbreviation(player_type *player_ptr, char *short_flavor, obje
  * @brief オブジェクト名の特性短縮表記＋刻み内容を提示する。 / Get object inscription with auto inscription of object flags.
  * @param buff 特性短縮表記を格納する文字列ポインタ
  * @param o_ptr 特性短縮表記を得たいオブジェクト構造体の参照ポインタ
- * @return なし
  */
 void get_inscription(player_type *player_ptr, char *buff, object_type *o_ptr)
 {
@@ -386,7 +381,6 @@ void get_inscription(player_type *player_ptr, char *buff, object_type *o_ptr)
  * @brief 日本語の個数表示ルーチン
  * @param t 保管先文字列ポインタ
  * @param o_ptr 記述したいオブジェクトの構造体参照ポインタ
- * @return なし
  * @details
  * cmd1.c で流用するために object_desc_japanese から移動した。
  */

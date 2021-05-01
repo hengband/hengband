@@ -129,7 +129,6 @@ HIT_POINT mon_damage_mod(player_type *target_ptr, monster_type *m_ptr, HIT_POINT
  * Calculate experience point to be get
  * @param dam 与えたダメージ量
  * @param m_ptr ダメージを与えたモンスターの構造体参照ポインタ
- * @return なし
  * @details
  * <pre>
  * Even the 64 bit operation is not big enough to avoid overflaw
@@ -231,7 +230,6 @@ int get_mproc_idx(floor_type *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
  * @param floor_ptr 現在フロアへの参照ポインタ
  * @return m_idx モンスターの参照ID
  * @return mproc_type 追加したいモンスターの時限ステータスID
- * @return なし
  */
 void mproc_add(floor_type *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
 {
@@ -243,7 +241,6 @@ void mproc_add(floor_type *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
 /*!
  * @brief モンスターの時限ステータスリストを初期化する / Initialize monster process
  * @param floor_ptr 現在フロアへの参照ポインタ
- * @return なし
  */
 void mproc_init(floor_type *floor_ptr)
 {
@@ -275,7 +272,6 @@ static u32b csleep_noise;
  * @param floor_ptr 現在フロアへの参照ポインタ
  * @param m_idx モンスター参照ID
  * @param mtimed_idx 更新するモンスターの時限ステータスID
- * @return なし
  */
 static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_idx, int mtimed_idx)
 {
@@ -455,7 +451,6 @@ static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_i
  * @brief 全モンスターの各種状態値を時間経過により更新するメインルーチン
  * @param mtimed_idx 更新するモンスターの時限ステータスID
  * @param target_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  * Process the counters of monsters (once per 10 game turns)\n
  * These functions are to process monsters' counters same as player's.
@@ -479,7 +474,6 @@ void process_monsters_mtimed(player_type *target_ptr, int mtimed_idx)
  * @brief モンスターへの魔力消去処理
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_idx 魔力消去を受けるモンスターの参照ID
- * @return なし
  */
 void dispel_monster_status(player_type *target_ptr, MONSTER_IDX m_idx)
 {
@@ -508,7 +502,6 @@ void dispel_monster_status(player_type *target_ptr, MONSTER_IDX m_idx)
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_idx 経験値を得るモンスターの参照ID
  * @param s_idx 撃破されたモンスター種族の参照ID
- * @return なし
  */
 void monster_gain_exp(player_type *target_ptr, MONSTER_IDX m_idx, MONRACE_IDX s_idx)
 {
@@ -633,7 +626,6 @@ void monster_gain_exp(player_type *target_ptr, MONSTER_IDX m_idx, MONRACE_IDX s_
  * @param m_idx ダメージを与えたモンスターのID
  * @param fear ダメージによってモンスターが恐慌状態に陥ったならばTRUEを返す
  * @param note モンスターが倒された際の特別なメッセージ述語
- * @return なし
  * @details
  * <pre>
  * We return TRUE if the monster has been killed (and deleted).

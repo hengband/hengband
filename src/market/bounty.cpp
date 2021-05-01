@@ -196,7 +196,6 @@ bool exchange_cash(player_type *player_ptr)
 /*!
  * @brief 本日の賞金首情報を表示する。
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void today_target(player_type *player_ptr)
 {
@@ -216,7 +215,6 @@ void today_target(player_type *player_ptr)
 
 /*!
  * @brief ツチノコの賞金首情報を表示する。
- * @return なし
  */
 void tsuchinoko(void)
 {
@@ -230,7 +228,6 @@ void tsuchinoko(void)
 
 /*!
  * @brief 通常の賞金首情報を表示する。
- * @return なし
  */
 void show_bounty(void)
 {
@@ -269,7 +266,6 @@ void show_bounty(void)
 /*!
  * @brief 今日の賞金首を確定する / Determine today's bounty monster
  * @param player_type プレーヤーへの参照ポインタ
- * @return なし
  * @note conv_old is used if loaded 0.0.3 or older save file
  */
 void determine_daily_bounty(player_type *player_ptr, bool conv_old)
@@ -317,7 +313,6 @@ void determine_daily_bounty(player_type *player_ptr, bool conv_old)
 /*!
  * @brief 賞金首となるユニークを確定する / Determine bounty uniques
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void determine_bounty_uniques(player_type *player_ptr)
 {

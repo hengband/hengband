@@ -27,7 +27,6 @@
 /*!
  * @brief 虚無招来処理 /
  * @param caster_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  * Sorry, it becomes not (void)...
  */
@@ -189,7 +188,6 @@ bool vanish_dungeon(player_type *caster_ptr)
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dam ダメージ
  * @param rad 効力の半径
- * @return なし
  * @details このファイルにいるのは、spells-trump.c と比べて行数が少なかったため。それ以上の意図はない
  */
 void cast_meteor(player_type *caster_ptr, HIT_POINT dam, POSITION rad)

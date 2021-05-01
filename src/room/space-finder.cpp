@@ -30,7 +30,6 @@ static bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param x 地形を変えたいマスのX座標
  * @param y 地形を変えたいマスのY座標
- * @return なし
  */
 static void set_floor(player_type *player_ptr, POSITION x, POSITION y)
 {
@@ -54,7 +53,6 @@ static void set_floor(player_type *player_ptr, POSITION x, POSITION y)
  * @param y1 範囲の上端
  * @param x2 範囲の右端
  * @param y2 範囲の下端
- * @return なし
  */
 static void check_room_boundary(player_type *player_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2)
 {
@@ -113,7 +111,6 @@ static void check_room_boundary(player_type *player_ptr, POSITION x1, POSITION y
  * @param blocks_wide 範囲の幅
  * @param block_y 範囲の上端
  * @param block_x 範囲の左端
- * @return なし
  */
 static bool find_space_aux(dun_data_type *dd_ptr, POSITION blocks_high, POSITION blocks_wide, POSITION block_y, POSITION block_x)
 {

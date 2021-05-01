@@ -119,7 +119,6 @@ static void write_monster_info(monster_type *m_ptr, const BIT_FLAGS flags)
 /*!
  * @brief モンスター情報を書き込む / Write a "monster" record
  * @param m_ptr モンスター情報保存元ポインタ
- * @return なし
  */
 void wr_monster(monster_type *m_ptr)
 {
@@ -151,7 +150,6 @@ void wr_monster(monster_type *m_ptr)
 /*!
  * @brief モンスターの思い出を書き込む / Write a "lore" record
  * @param r_idx モンスター種族ID
- * @return なし
  */
 void wr_lore(MONRACE_IDX r_idx)
 {

@@ -52,7 +52,6 @@ MAGIC_NUM1 get_current_ki(player_type *caster_ptr)
  * @param caster_ptr プレーヤーの参照ポインタ
  * @param is_reset TRUEなら気の量をkiにセットし、FALSEなら加減算を行う
  * @param ki 気の量
- * @return なし
  */
 void set_current_ki(player_type *caster_ptr, bool is_reset, MAGIC_NUM1 ki)
 {
@@ -87,7 +86,6 @@ bool clear_mind(player_type *creature_ptr)
  * @brief 光速移動の継続時間をセットする / Set "lightspeed", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
- * @return なし
  */
 void set_lightspeed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {

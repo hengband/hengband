@@ -49,7 +49,6 @@ static concptr simplify_list[][2] = {
  * @param info 表示文字列
  * @param row 描画列
  * @param col 描画行
- * @return なし
  */
 void print_field(concptr info, TERM_LEN row, TERM_LEN col)
 {
@@ -181,7 +180,6 @@ static void display_shortened_item_name(player_type *player_ptr, object_type *o_
  * @param player_ptr プレイヤー情報への参照ポインタ
  * @param cy 縮小マップ上のプレイヤーのy座標
  * @param cx 縮小マップ上のプレイヤーのx座標
- * @return なし
  * @details
  * メインウィンドウ('M'コマンド)、サブウィンドウ兼(縮小図)用。
  */

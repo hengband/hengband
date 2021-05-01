@@ -23,7 +23,6 @@
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param i1 配列移動元添字
  * @param i2 配列移動先添字
- * @return なし
  */
 static void compact_monsters_aux(player_type *player_ptr, MONSTER_IDX i1, MONSTER_IDX i2)
 {
@@ -85,7 +84,6 @@ static void compact_monsters_aux(player_type *player_ptr, MONSTER_IDX i1, MONSTE
  * @brief モンスター情報配列を圧縮する / Compact and Reorder the monster list
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param size 圧縮後のモンスター件数目標
- * @return なし
  * @details
  * This function can be very dangerous, use with caution!
  *

@@ -86,7 +86,6 @@ bool decide_process_continue(player_type *target_ptr, monster_type *m_ptr);
  * Process a monster
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_idx 行動モンスターの参照ID
- * @return なし
  * @details
  * The monster is known to be within 100 grids of the player\n
  *\n
@@ -214,7 +213,6 @@ bool process_stealth(player_type *target_ptr, MONSTER_IDX m_idx)
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param is_riding_mon 騎乗中であればTRUE
- * @return なし
  */
 void decide_drop_from_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon)
 {
@@ -302,7 +300,6 @@ bool awake_monster(player_type *target_ptr, MONSTER_IDX m_idx)
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param see_m モンスターが視界内にいたらTRUE
- * @return なし
  */
 void process_angar(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m)
 {
@@ -363,7 +360,6 @@ bool explode_grenade(player_type *target_ptr, MONSTER_IDX m_idx)
  * @brief モンスター依存の特別な行動を取らせる
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスターID
- * @return なし
  */
 void process_special(player_type *target_ptr, MONSTER_IDX m_idx)
 {
@@ -491,7 +487,6 @@ bool process_monster_fear(player_type *target_ptr, turn_flags *turn_flags_ptr, M
 /*!
  * @brief 全モンスターのターン管理メインルーチン /
  * Process all the "live" monsters, once per game turn.
- * @return なし
  * @details
  * During each game current game turn, we scan through the list of all the "live" monsters,\n
  * (backwards, so we can excise any "freshly dead" monsters), energizing each\n

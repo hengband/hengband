@@ -10,7 +10,6 @@
  * @brief モンスターの思い出を読み込む / Read the monster lore
  * @param r_ptr 読み込み先モンスター種族情報へのポインタ
  * @param r_idx 読み込み先モンスターID(種族特定用)
- * @return なし
  */
 void rd_lore(monster_race *r_ptr, MONRACE_IDX r_idx)
 {

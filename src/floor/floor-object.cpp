@@ -71,7 +71,6 @@ static errr get_obj_num_prep(void)
  * @brief デバッグ時にアイテム生成情報をメッセージに出力する / Cheat -- describe a created object for the user
  * @param owner_ptr プレーヤーへの参照ポインタ
  * @param o_ptr デバッグ出力するオブジェクトの構造体参照ポインタ
- * @return なし
  */
 static void object_mention(player_type *owner_ptr, object_type *o_ptr)
 {
@@ -177,7 +176,6 @@ bool make_gold(player_type *player_ptr, object_type *j_ptr)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param y 削除したフロアマスのY座標
  * @param x 削除したフロアマスのX座標
- * @return なし
  */
 void delete_all_items_from_floor(player_type *player_ptr, POSITION y, POSITION x)
 {
@@ -206,7 +204,6 @@ void delete_all_items_from_floor(player_type *player_ptr, POSITION y, POSITION x
  * @param owner_ptr プレイヤーへの参照ポインタ
  * @param item 増やしたいアイテムの所持スロット
  * @param num 増やしたいアイテムの数
- * @return なし
  */
 void floor_item_increase(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
 {
@@ -230,7 +227,6 @@ void floor_item_increase(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER
  * Optimize an item on the floor (destroy "empty" items)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param item 消去したいアイテムの所持スロット
- * @return なし
  */
 void floor_item_optimize(player_type *owner_ptr, INVENTORY_IDX item)
 {
@@ -250,7 +246,6 @@ void floor_item_optimize(player_type *owner_ptr, INVENTORY_IDX item)
  * Delete a dungeon object
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_idx 削除対象のオブジェクト構造体ポインタ
- * @return なし
  * @details
  * Handle "stacks" of objects correctly.
  */
@@ -275,7 +270,6 @@ void delete_object_idx(player_type *player_ptr, OBJECT_IDX o_idx)
  * @brief 床上、モンスター所持でスタックされたアイテムを削除しスタックを補完する / Excise a dungeon object from any stacks
  * @param floo_ptr 現在フロアへの参照ポインタ
  * @param o_idx 削除対象のオブジェクト構造体ポインタ
- * @return なし
  */
 void excise_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx)
 {
@@ -582,7 +576,6 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
  * Describe the charges on an item on the floor.
  * @param floo_ptr 現在フロアへの参照ポインタ
  * @param item メッセージの対象にしたいアイテム所持スロット
- * @return なし
  */
 void floor_item_charges(floor_type *floor_ptr, INVENTORY_IDX item)
 {
@@ -612,7 +605,6 @@ void floor_item_charges(floor_type *floor_ptr, INVENTORY_IDX item)
  * Describe the charges on an item on the floor.
  * @param floo_ptr 現在フロアへの参照ポインタ
  * @param item メッセージの対象にしたいアイテム所持スロット
- * @return なし
  */
 void floor_item_describe(player_type *owner_ptr, INVENTORY_IDX item)
 {

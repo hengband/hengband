@@ -117,7 +117,6 @@ void forget_flow(floor_type *floor_ptr)
  * we know we are clearing every object.  Technically, we only
  * clear those fields for grids/monsters containing objects,
  * and we clear it once for every such object.
- * @return なし
  */
 void wipe_o_list(floor_type *floor_ptr)
 {

@@ -97,7 +97,6 @@ bool continuous_action_running(player_type *creature_ptr)
 
 /*!
  * @brief プレイヤーの行動処理 / Process the player
- * @return なし
  * @note
  * Notice the annoying code to handle "pack overflow", which\n
  * must come first just in case somebody manages to corrupt\n
@@ -410,7 +409,6 @@ void process_player(player_type *creature_ptr)
 
 /*!
  * @brief プレイヤーの行動エネルギーが充填される（＝プレイヤーのターンが回る）毎に行われる処理  / process the effects per 100 energy at player speed.
- * @return なし
  */
 void process_upkeep_with_speed(player_type *creature_ptr)
 {

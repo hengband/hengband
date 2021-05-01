@@ -395,7 +395,6 @@ static void process_game_turn(player_type *player_ptr)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param new_game 新規にゲームを始めたかどうか
  * @param browsing_movie ムービーモードか
- * @return なし
  * @note
  * If the "new_game" parameter is true, then, after loading the
  * savefile, we will commit suicide, if necessary, to allow the

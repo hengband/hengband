@@ -82,7 +82,6 @@ static std::optional<PRICE> prompt_to_sell(player_type *player_ptr, object_type 
  * @brief 店からの売却処理のメインルーチン /
  * Sell an item to the store (or home)
  * @param owner_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void store_sell(player_type *owner_ptr)
 {

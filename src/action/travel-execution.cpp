@@ -89,7 +89,6 @@ static DIRECTION travel_test(player_type *creature_ptr, DIRECTION prev_dir)
  * @brief トラベル機能の実装 /
  * Travel command
  * @param creature_ptr	プレーヤーへの参照ポインタ
- * @return なし
  */
 void travel_step(player_type *creature_ptr)
 {
@@ -118,7 +117,6 @@ void travel_step(player_type *creature_ptr)
 /*!
  * @brief トラベル処理の記憶配列を初期化する Hack: forget the "flow" information
  * @param creature_ptr	プレーヤーへの参照ポインタ
- * @return なし
  */
 void forget_travel_flow(floor_type *floor_ptr)
 {

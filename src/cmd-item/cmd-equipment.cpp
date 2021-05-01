@@ -49,7 +49,6 @@
 
 /*!
  * @brief 装備一覧を表示するコマンドのメインルーチン / Display equipment
- * @return なし
  */
 void do_cmd_equip(player_type *creature_ptr)
 {
@@ -87,7 +86,6 @@ void do_cmd_equip(player_type *creature_ptr)
 /*!
  * @brief 装備するコマンドのメインルーチン / Wield or wear a single item from the pack or floor
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void do_cmd_wield(player_type *creature_ptr)
 {
@@ -299,7 +297,6 @@ void do_cmd_wield(player_type *creature_ptr)
 
 /*!
  * @brief 装備を外すコマンドのメインルーチン / Take off an item
- * @return なし
  */
 void do_cmd_takeoff(player_type *creature_ptr)
 {

@@ -360,7 +360,6 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
  * Fire an object from the pack or floor.
  * @param item 射撃するオブジェクトの所持ID
  * @param bow_ptr 射撃武器のオブジェクト参照ポインタ
- * @return なし
  * @details
  * <pre>
  * You may only fire items that "match" your missile launcher.

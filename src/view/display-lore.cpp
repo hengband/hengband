@@ -40,7 +40,6 @@
  * @brief モンスター情報のヘッダを記述する
  * Hack -- Display the "name" and "attr/chars" of a monster race
  * @param r_idx モンスターの種族ID
- * @return なし
  */
 void roff_top(MONRACE_IDX r_idx)
 {
@@ -89,7 +88,6 @@ void roff_top(MONRACE_IDX r_idx)
  * Hack -- describe the given monster race at the top of the screen
  * @param r_idx モンスターの種族ID
  * @param mode 表示オプション
- * @return なし
  */
 void screen_roff(player_type *player_ptr, MONRACE_IDX r_idx, monster_lore_mode mode)
 {
@@ -104,7 +102,6 @@ void screen_roff(player_type *player_ptr, MONRACE_IDX r_idx, monster_lore_mode m
  * @brief モンスター情報の現在のウィンドウに表示する /
  * Hack -- describe the given monster race in the current "term" window
  * @param r_idx モンスターの種族ID
- * @return なし
  */
 void display_roff(player_type *player_ptr)
 {
@@ -125,7 +122,6 @@ void display_roff(player_type *player_ptr)
  * @param r_idx モンスターの種族ID
  * @param roff_func 出力処理を行う関数ポインタ
  * @todo ここのroff_funcの引数にFILE* を追加しないとspoiler_file をローカル関数化することができないと判明した、保留.
- * @return なし
  */
 void output_monster_spoiler(MONRACE_IDX r_idx, void (*roff_func)(TERM_COLOR attr, concptr str))
 {
@@ -200,7 +196,6 @@ static void display_no_killed(lore_type *lore_ptr)
 /*!
  * @brief 生存数制限のあるモンスターの最大生存数を表示する
  * @param lore_ptr モンスターの思い出構造体への参照ポインタ
- * @return なし
  * @details
  * 一度も倒したことのないモンスターの情報は不明。
  */
@@ -561,7 +556,6 @@ void display_monster_collective(lore_type *lore_ptr)
  * Display monster launching information
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param lore_ptr モンスターの思い出構造体への参照ポインタ
- * @return なし
  * @details
  * This function should only be called when display/dump a recall of
  * a monster.

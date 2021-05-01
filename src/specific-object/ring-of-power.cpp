@@ -15,7 +15,6 @@
  * Hack -- activate the ring of power
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dir 発動の方向ID
- * @return なし
  */
 static void exe_ring_of_power(player_type *caster_ptr, DIRECTION dir)
 {

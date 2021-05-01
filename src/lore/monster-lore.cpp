@@ -113,7 +113,6 @@ static void set_race_flags(lore_type *lore_ptr)
  * Hack -- display monster information using "hooked_roff()"
  * @param r_idx モンスターの種族ID
  * @param mode 表示オプション
- * @return なし
  * @details
  * This function should only be called with the cursor placed at the
  * left edge of the screen, on a cleared line, in which the recall is

@@ -94,7 +94,6 @@ static bool is_partial_tree(int *tree, int *partial_tree)
  * @brief 進化ツリーをスポイラー出力するメインルーチン /
  * Print monsters' evolution information to file
  * @param fname 出力ファイル名
- * @return なし
  */
 static spoiler_output_status spoil_mon_evol(concptr fname)
 {
@@ -283,7 +282,6 @@ static spoiler_output_status spoil_player_spell(concptr fname)
 /*!
  * @brief スポイラー出力を行うコマンドのメインルーチン /
  * Create Spoiler files -BEN-
- * @return なし
  */
 void exe_output_spoilers(void)
 {

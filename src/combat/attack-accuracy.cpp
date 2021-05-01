@@ -108,7 +108,6 @@ bool check_hit_from_monster_to_monster(int power, DEPTH level, ARMOUR_CLASS ac, 
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param chance 基本命中値
- * @return なし
  */
 static bool decide_attack_hit(player_type *attacker_ptr, player_attack_type *pa_ptr, int chance)
 {

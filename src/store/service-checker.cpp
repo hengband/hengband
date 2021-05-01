@@ -406,7 +406,6 @@ static DISCOUNT_RATE decide_discount_rate(const PRICE cost)
  * @brief 安価な消耗品の販売数を増やし、低確率で割引にする /
  * Certain "cheap" objects should be created in "piles"
  * @param o_ptr 店舗に並べるオブジェクト構造体の参照ポインタ
- * @return なし
  * @details
  * <pre>
  * Some objects can be sold at a "discount" (in small piles)

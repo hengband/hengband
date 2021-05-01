@@ -21,7 +21,6 @@
 /*!
  * @brief 読むコマンドのメインルーチン /
  * Eat some food (from the pack or floor)
- * @return なし
  */
 void do_cmd_read_scroll(player_type *creature_ptr)
 {

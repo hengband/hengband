@@ -33,7 +33,6 @@
 
 /*!
  * @brief プレイヤーに魔力消去効果を与える。
- * @return なし
  */
 static void dispel_player(player_type *creature_ptr)
 {

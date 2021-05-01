@@ -304,7 +304,6 @@ static int get_hissatsu_power(player_type *creature_ptr, SPELL_IDX *sn)
 
 /*!
  * @brief 剣術コマンドのメインルーチン
- * @return なし
  */
 void do_cmd_hissatsu(player_type *creature_ptr)
 {
@@ -362,7 +361,6 @@ void do_cmd_hissatsu(player_type *creature_ptr)
 
 /*!
  * @brief 剣術コマンドの学習
- * @return なし
  */
 void do_cmd_gain_hissatsu(player_type *creature_ptr)
 {

@@ -22,7 +22,6 @@ byte kanji_code = 0;
 /*!
  * @brief ゲームスクリーンにメッセージを表示する / Hack -- Show information on the screen, one line at a time.
  * @param msg 表示文字列
- * @return なし
  * @details
  * Avoid the top two lines, to avoid interference with "msg_print()".
  */
@@ -57,14 +56,12 @@ byte sf_get(void)
 /*!
  * @brief ロードファイルポインタから1バイトを読み込んでポインタに渡す
  * @param ip 読み込みポインタ
- * @return なし
  */
 void rd_byte(byte *ip) { *ip = sf_get(); }
 
 /*!
  * @brief ロードファイルポインタから符号なし16bit値を読み込んでポインタに渡す
  * @param ip 読み込みポインタ
- * @return なし
  */
 void rd_u16b(u16b *ip)
 {
@@ -75,14 +72,12 @@ void rd_u16b(u16b *ip)
 /*!
  * @brief ロードファイルポインタから符号つき16bit値を読み込んでポインタに渡す
  * @param ip 読み込みポインタ
- * @return なし
  */
 void rd_s16b(s16b *ip) { rd_u16b((u16b *)ip); }
 
 /*!
  * @brief ロードファイルポインタから符号なし32bit値を読み込んでポインタに渡す
  * @param ip 読み込みポインタ
- * @return なし
  */
 void rd_u32b(u32b *ip)
 {
@@ -95,7 +90,6 @@ void rd_u32b(u32b *ip)
 /*!
  * @brief ロードファイルポインタから符号つき32bit値を読み込んでポインタに渡す
  * @param ip 読み込みポインタ
- * @return なし
  */
 void rd_s32b(s32b *ip) { rd_u32b((u32b *)ip); }
 
@@ -103,7 +97,6 @@ void rd_s32b(s32b *ip) { rd_u32b((u32b *)ip); }
  * @brief ロードファイルポインタから文字列を読み込んでポインタに渡す / Hack -- read a string
  * @param str 読み込みポインタ
  * @param max 最大読み取りバイト数
- * @return なし
  */
 void rd_string(char *str, int max)
 {
@@ -150,7 +143,6 @@ void rd_string(char *str, int max)
 /*!
  * @brief ロードファイルポインタを指定バイト分飛ばして進める / Hack -- strip some bytes
  * @param n スキップバイト数
- * @return なし
  */
 void strip_bytes(int n)
 {

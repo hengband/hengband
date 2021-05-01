@@ -296,7 +296,6 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
  * @brief 杖を使うコマンドのサブルーチン /
  * Use a staff.			-RAK-
  * @param item 使うオブジェクトの所持品ID
- * @return なし
  * @details
  * One charge of one staff disappears.
  * Hack -- staffs of identify can be "cancelled".
@@ -432,7 +431,6 @@ void exe_use_staff(player_type *creature_ptr, INVENTORY_IDX item)
 
 /*!
  * @brief 杖を使うコマンドのメインルーチン /
- * @return なし
  */
 void do_cmd_use_staff(player_type *creature_ptr)
 {

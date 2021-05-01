@@ -23,7 +23,6 @@
 /*!
  * @brief ランタンに燃料を加えるコマンドのメインルーチン
  * Refill the players lamp (from the pack or floor)
- * @return なし
  */
 static void do_cmd_refill_lamp(player_type *user_ptr)
 {
@@ -63,7 +62,6 @@ static void do_cmd_refill_lamp(player_type *user_ptr)
 /*!
  * @brief 松明を束ねるコマンドのメインルーチン
  * Refuel the players torch (from the pack or floor)
- * @return なし
  */
 static void do_cmd_refill_torch(player_type *user_ptr)
 {
@@ -104,7 +102,6 @@ static void do_cmd_refill_torch(player_type *user_ptr)
 /*!
  * @brief 燃料を補充するコマンドのメインルーチン
  * Refill the players lamp, or restock his torches
- * @return なし
  */
 void do_cmd_refill(player_type *user_ptr)
 {

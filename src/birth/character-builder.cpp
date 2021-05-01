@@ -39,7 +39,6 @@
 /*!
  * @brief プレーヤーキャラの作成結果を日記に書く
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 static void write_birth_diary(player_type *creature_ptr)
 {
@@ -82,7 +81,6 @@ static void write_birth_diary(player_type *creature_ptr)
  * @details
  * Note that we may be called with "junk" leftover in the various
  * fields, so we must be sure to clear them first.
- * @return なし
  */
 void player_birth(player_type *creature_ptr)
 {

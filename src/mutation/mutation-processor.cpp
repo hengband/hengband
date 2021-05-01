@@ -112,7 +112,6 @@ static bool get_hack_dir(player_type *creature_ptr, DIRECTION *dp)
 /*!
  * @brief 10ゲームターンが進行するごとに突然変異の発動判定を行う処理
  * / Handle mutation effects once every 10 game turns
- * @return なし
  */
 void process_world_aux_mutation(player_type *creature_ptr)
 {

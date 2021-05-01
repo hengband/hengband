@@ -79,7 +79,6 @@ object_type *choose_warning_item(player_type *creature_ptr)
  * @param typ 効果属性のID
  * @param dam 基本ダメージ
  * @param max 算出した最大ダメージを返すポインタ
- * @return なし
  */
 static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_ID typ, HIT_POINT dam, int *max)
 {
@@ -251,7 +250,6 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
  * @param typ 効果属性のID
  * @param m_idx 魔法を行使するモンスターのID
  * @param max 算出した最大ダメージを返すポインタ
- * @return なし
  */
 static void spell_damcalc_by_spellnum(player_type *creature_ptr, RF_ABILITY ms_type, EFFECT_ID typ, MONSTER_IDX m_idx, int *max)
 {

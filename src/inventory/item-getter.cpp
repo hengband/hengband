@@ -31,7 +31,6 @@
 /*!
  * @brief オブジェクト選択のモード設定
  * @param item_selection_ptr アイテム選択への参照ポインタ
- * @return なし
  */
 static void check_item_selection_mode(item_selection_type *item_selection_ptr)
 {
@@ -145,7 +144,6 @@ static bool check_item_tag(player_type *owner_ptr, item_selection_type *item_sel
  * @brief インベントリ内のアイテムが妥当かを判定する
  * @param owner_ptr プレーヤーへの参照ポインタ
  * @param fis_ptr アイテム選択への参照ポインタ
- * @return なし
  */
 static void test_inventory(player_type *owner_ptr, item_selection_type *item_selection_ptr)
 {
@@ -166,7 +164,6 @@ static void test_inventory(player_type *owner_ptr, item_selection_type *item_sel
  * @brief 装備品が妥当かを判定する
  * @param owner_ptr プレーヤーへの参照ポインタ
  * @param fis_ptr アイテム選択への参照ポインタ
- * @return なし
  */
 static void test_equipment(player_type *owner_ptr, item_selection_type *item_selection_ptr)
 {

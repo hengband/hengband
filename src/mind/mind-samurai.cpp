@@ -60,7 +60,6 @@ static samurai_slaying_type *initialize_samurai_slaying_type(
  * @nrief 焔霊 (焼棄スレイ)
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param samurai_slaying_ptr スレイ計算に必要なパラメータ群への参照ポインタ
- * @return なし
  */
 static void hissatsu_burning_strike(player_type *attacker_ptr, samurai_slaying_type *samurai_slaying_ptr)
 {
@@ -104,7 +103,6 @@ static void hissatsu_burning_strike(player_type *attacker_ptr, samurai_slaying_t
  * @brief サーペンツタン (毒殺スレイ)
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param samurai_slaying_ptr スレイ計算に必要なパラメータ群への参照ポインタ
- * @return なし
  */
 static void hissatsu_serpent_tongue(player_type *attacker_ptr, samurai_slaying_type *samurai_slaying_ptr)
 {
@@ -130,7 +128,6 @@ static void hissatsu_serpent_tongue(player_type *attacker_ptr, samurai_slaying_t
 /*!
  * @brief 二重の極み^h^h^h^h^h 斬魔剣弐の太刀 (邪悪無生命スレイ)
  * @param samurai_slaying_ptr スレイ計算に必要なパラメータ群への参照ポインタ
- * @return なし
  */
 static void hissatsu_zanma_ken(samurai_slaying_type *samurai_slaying_ptr)
 {
@@ -149,7 +146,6 @@ static void hissatsu_zanma_ken(samurai_slaying_type *samurai_slaying_ptr)
  * @brief 破岩斬 (岩石スレイ)
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param samurai_slaying_ptr スレイ計算に必要なパラメータ群への参照ポインタ
- * @return なし
  */
 static void hissatsu_rock_smash(player_type *attacker_ptr, samurai_slaying_type *samurai_slaying_ptr)
 {
@@ -171,7 +167,6 @@ static void hissatsu_rock_smash(player_type *attacker_ptr, samurai_slaying_type 
  * @brief 乱れ雪月花 (冷気スレイ)
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param samurai_slaying_ptr スレイ計算に必要なパラメータ群への参照ポインタ
- * @return なし
  */
 static void hissatsu_midare_setsugetsuka(player_type *attacker_ptr, samurai_slaying_type *samurai_slaying_ptr)
 {
@@ -214,7 +209,6 @@ static void hissatsu_midare_setsugetsuka(player_type *attacker_ptr, samurai_slay
  * @brief 雷撃鷲爪斬
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param samurai_slaying_ptr スレイ計算に必要なパラメータ群への参照ポインタ
- * @return なし
  */
 static void hissatsu_lightning_eagle(player_type *attacker_ptr, samurai_slaying_type *samurai_slaying_ptr)
 {
@@ -241,7 +235,6 @@ static void hissatsu_lightning_eagle(player_type *attacker_ptr, samurai_slaying_
  * @brief 赤流渦 (ペインバッカー)
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param samurai_slaying_ptr スレイ計算に必要なパラメータ群への参照ポインタ
- * @return なし
  */
 static void hissatsu_bloody_maelstroem(player_type *attacker_ptr, samurai_slaying_type *samurai_slaying_ptr)
 {
@@ -256,7 +249,6 @@ static void hissatsu_bloody_maelstroem(player_type *attacker_ptr, samurai_slayin
  * @brief 慶雲鬼忍剣 (アンデッドスレイ)
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param samurai_slaying_ptr スレイ計算に必要なパラメータ群への参照ポインタ
- * @return なし
  */
 static void hissatsu_keiun_kininken(player_type *attacker_ptr, samurai_slaying_type *samurai_slaying_ptr)
 {
@@ -443,7 +435,6 @@ int calc_attack_quality(player_type *attacker_ptr, player_attack_type *pa_ptr)
  * @brief 峰打ちの効果処理
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @return なし
  */
 void mineuchi(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {
@@ -473,7 +464,6 @@ void mineuchi(player_type *attacker_ptr, player_attack_type *pa_ptr)
  * @brief 無想による反撃処理
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @return なし
  */
 void musou_counterattack(player_type *attacker_ptr, monap_type *monap_ptr)
 {

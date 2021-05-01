@@ -197,7 +197,6 @@ static concptr const kaji_tips[5] = {
 
 /*!
  * @brief 所持しているエッセンス一覧を表示する
- * @return なし
  */
 static void display_essence(player_type *creature_ptr)
 {
@@ -223,7 +222,6 @@ static void display_essence(player_type *creature_ptr)
 /*!
  * @brief エッセンスの抽出処理
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 static void drain_essence(player_type *creature_ptr)
 {
@@ -545,7 +543,6 @@ static COMMAND_CODE choose_essence(void)
 /*!
  * @brief エッセンスを実際に付加する
  * @param mode エッセンスの大別ID
- * @return なし
  */
 static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
 {
@@ -991,7 +988,6 @@ static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
 
 /*!
  * @brief エッセンスを消去する
- * @return なし
  */
 static void erase_essence(player_type *creature_ptr)
 {
@@ -1037,7 +1033,6 @@ static void erase_essence(player_type *creature_ptr)
 /*!
  * @brief 鍛冶コマンドのメインルーチン
  * @param only_browse TRUEならばエッセンス一覧の表示のみを行う
- * @return なし
  */
 void do_cmd_kaji(player_type *creature_ptr, bool only_browse)
 {

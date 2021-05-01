@@ -8,7 +8,6 @@
  * @param row シンボルを表示する行の上端
  * @param col シンボルを表示する行の左端
  * @param fruit 表示するシンボルID
- * @return なし
  */
 void display_fruit(int row, int col, int fruit)
 {

@@ -12,7 +12,6 @@
 /*!
  * @brief セーブデータに領域情報を書き込む / Write player realms
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 static void wr_relams(player_type *creature_ptr)
 {
@@ -26,7 +25,6 @@ static void wr_relams(player_type *creature_ptr)
 /*!
  * @brief セーブデータにプレーヤー情報を書き込む / Write some "player" info
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void wr_player(player_type *creature_ptr)
 {

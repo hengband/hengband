@@ -16,7 +16,6 @@
  * @brief オブジェクトを鑑定済にする /
  * Known is true when the "attributes" of an object are "known".
  * @param o_ptr 鑑定済にするオブジェクトの構造体参照ポインタ
- * @return なし
  * These include tohit, todam, toac, cost, and pval (charges).\n
  *\n
  * Note that "knowing" an object gives you everything that an "awareness"\n
@@ -43,7 +42,6 @@ void object_known(object_type *o_ptr)
  * The player is now aware of the effects of the given object.
  * @param owner_ptr プレーヤーへの参照ポインタ
  * @param o_ptr ＊鑑定＊済にするオブジェクトの構造体参照ポインタ
- * @return なし
  */
 void object_aware(player_type *owner_ptr, object_type *o_ptr)
 {
@@ -84,7 +82,6 @@ void object_aware(player_type *owner_ptr, object_type *o_ptr)
  * @brief オブジェクトを試行済にする /
  * Something has been "sampled"
  * @param o_ptr 試行済にするオブジェクトの構造体参照ポインタ
- * @return なし
  */
 void object_tried(object_type *o_ptr) { k_info[o_ptr->k_idx].tried = TRUE; }
 

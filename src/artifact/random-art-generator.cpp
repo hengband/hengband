@@ -252,7 +252,6 @@ static void strengthen_pval(object_type *o_ptr)
  * @brief 防具ならばAC修正、武具なら殺戮修正を付与する
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr ランダムアーティファクトを示すアイテムへの参照ポインタ
- * @return なし
  */
 static void invest_positive_modified_value(player_type *player_ptr, object_type *o_ptr)
 {
@@ -274,7 +273,6 @@ static void invest_positive_modified_value(player_type *player_ptr, object_type 
  * @brief 防具のAC修正が高すぎた場合に弱化させる
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr ランダムアーティファクトを示すアイテムへの参照ポインタ
- * @return なし
  */
 static void invest_negative_modified_value(player_type *player_ptr, object_type *o_ptr)
 {

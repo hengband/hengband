@@ -7,7 +7,6 @@
 
 /*!
  * @brief プレイヤーの身長体重を決める / Get character's height and weight
- * @return なし
  */
 void get_height_weight(player_type *creature_ptr)
 {
@@ -30,7 +29,6 @@ void get_height_weight(player_type *creature_ptr)
 /*!
  * @brief プレイヤーの年齢を決める。 / Computes character's age, height, and weight by henkma
  * @details 内部でget_height_weight()も呼び出している。
- * @return なし
  */
 void get_ahw(player_type *creature_ptr)
 {
@@ -41,7 +39,6 @@ void get_ahw(player_type *creature_ptr)
 /*!
  * @brief プレイヤーの初期所持金を決める。 / Get the player's starting money
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void get_money(player_type *creature_ptr)
 {

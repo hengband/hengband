@@ -20,7 +20,6 @@
 /*!
  * @brief フロアに洞窟や湖を配置する / Generate various caverns and lakes
  * @details There were moved from cave_gen().
- * @return なし
  */
 void gen_caverns_and_lakes(player_type *owner_ptr, dungeon_type *dungeon_ptr, dun_data_type *dd_ptr)
 {
@@ -156,7 +155,6 @@ static bool possible_doorway(floor_type *floor_ptr, POSITION y, POSITION x)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param y 設置を行いたいマスのY座標
  * @param x 設置を行いたいマスのX座標
- * @return なし
  */
 void try_door(player_type *player_ptr, dt_type *dt_ptr, POSITION y, POSITION x)
 {

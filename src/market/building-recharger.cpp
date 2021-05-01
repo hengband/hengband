@@ -30,7 +30,6 @@
  * for recharging wands and staffs are dependent on the cost of\n
  * the base-item.\n
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void building_recharge(player_type *player_ptr)
 {
@@ -174,7 +173,6 @@ void building_recharge(player_type *player_ptr)
  * for recharging wands and staffs are dependent on the cost of\n
  * the base-item.\n
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void building_recharge_all(player_type *player_ptr)
 {

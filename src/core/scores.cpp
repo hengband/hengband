@@ -158,7 +158,6 @@ static int highscore_add(high_score *score)
  * @param to 順位末尾
  * @param note 黄色表示でハイライトする順位
  * @param score スコア配列参照ポインタ
- * @return なし
  * @details
  * <pre>
  * Assumes the high score list is already open.
@@ -399,7 +398,6 @@ void display_scores_aux(int from, int to, int note, high_score *score)
  * @brief スコア表示処理メインルーチン / Hack -- Display the scores in a given range and quit.
  * @param from 順位先頭
  * @param to 順位末尾
- * @return なし
  * @details
  * <pre>
  * This function is only called from "main.c" when the user asks
@@ -662,7 +660,6 @@ errr predict_score(player_type *current_player_ptr)
 /*!
  * @brief スコアランキングの簡易表示 /
  * show_highclass - selectively list highscores based on class -KMW-
- * @return なし
  */
 void show_highclass(player_type *current_player_ptr)
 {
@@ -734,7 +731,6 @@ void show_highclass(player_type *current_player_ptr)
  * @brief スコアランキングの簡易表示(種族毎)サブルーチン /
  * Race Legends -KMW-
  * @param race_num 種族ID
- * @return なし
  */
 void race_score(player_type *current_player_ptr, int race_num)
 {
@@ -818,7 +814,6 @@ void race_score(player_type *current_player_ptr, int race_num)
 /*!
  * @brief スコアランキングの簡易表示(種族毎)メインルーチン /
  * Race Legends -KMW-
- * @return なし
  */
 void race_legends(player_type *current_player_ptr)
 {
@@ -836,7 +831,6 @@ void race_legends(player_type *current_player_ptr)
 /*!
  * @brief 勝利者用の引退演出処理 /
  * Change the player into a King! -RAK-
- * @return なし
  */
 void kingly(player_type *winner_ptr)
 {
@@ -910,7 +904,6 @@ void kingly(player_type *winner_ptr)
 /*!
  * @brief スコアファイル出力
  * Display some character info
- * @return なし
  */
 bool check_score(player_type *current_player_ptr)
 {

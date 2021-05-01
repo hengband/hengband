@@ -40,7 +40,6 @@
 
 /*!
  * @brief 探索コマンドのメインルーチン / Simple command to "search" for one turn
- * @return なし
  */
 void do_cmd_search(player_type *creature_ptr)
 {
@@ -97,7 +96,6 @@ static bool exe_alter(player_type *creature_ptr)
 
 /*!
  * @brief 特定のマスに影響を及ぼすための汎用的コマンド / Manipulate an adjacent grid in some way
- * @return なし
  * @details
  */
 void do_cmd_alter(player_type *creature_ptr)
@@ -153,7 +151,6 @@ static void accept_winner_message(player_type *creature_ptr)
 /*!
  * @brief 自殺するコマンドのメインルーチン
  * commit suicide
- * @return なし
  * @details
  */
 void do_cmd_suicide(player_type *creature_ptr)

@@ -156,7 +156,6 @@ static bool sweep_ranged_attack_grid(player_type *target_ptr, MONSTER_IDX m_idx,
  * @param yp 移動先のマスのY座標を返す参照ポインタ
  * @param xp 移動先のマスのX座標を返す参照ポインタ
  * @param no_flow モンスターにFLOWフラグが経っていない状態でTRUE
- * @return なし
  * @details
  * Note that ghosts and rock-eaters are never allowed to "flow",\n
  * since they should move directly towards the player.\n

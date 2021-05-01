@@ -24,7 +24,6 @@
  * Torches have special abilities when they are flaming.
  * @param o_ptr 投擲するオブジェクトの構造体参照ポインタ
  * @param flgs 特別に追加するフラグを返す参照ポインタ
- * @return なし
  */
 void torch_flags(object_type *o_ptr, BIT_FLAGS *flgs)
 {
@@ -42,7 +41,6 @@ void torch_flags(object_type *o_ptr, BIT_FLAGS *flgs)
  * @param o_ptr 投擲するオブジェクトの構造体参照ポインタ
  * @param dd 特別なダイス数を返す参照ポインタ
  * @param ds 特別なダイス面数を返す参照ポインタ
- * @return なし
  */
 void torch_dice(object_type *o_ptr, DICE_NUMBER *dd, DICE_SID *ds)
 {
@@ -57,7 +55,6 @@ void torch_dice(object_type *o_ptr, DICE_NUMBER *dd, DICE_SID *ds)
  * @brief 投擲時命中したたいまつの寿命を縮める。
  * Torches have special abilities when they are flaming.
  * @param o_ptr 投擲するオブジェクトの構造体参照ポインタ
- * @return なし
  */
 void torch_lost_fuel(object_type *o_ptr)
 {
@@ -71,7 +68,6 @@ void torch_lost_fuel(object_type *o_ptr)
 
 /*!
  * @brief プレイヤーの光源半径を計算する / Extract and set the current "lite radius"
- * @return なし
  * @details
  * SWD: Experimental modification: multiple light sources have additive effect.
  */

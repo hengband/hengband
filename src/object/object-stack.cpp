@@ -22,7 +22,6 @@
  * @param o_ptr 分割元オブジェクトの構造体参照ポインタ source item
  * @param q_ptr 分割先オブジェクトの構造体参照ポインタ target item, must be of the same type as o_ptr
  * @param amt 分割したい回数量 number of items that are transfered
- * @return なし
  * @details
  * Hack -- If rods or wands are dropped, the total maximum timeout or\n
  * charges need to be allocated between the two stacks.  If all the items\n
@@ -54,7 +53,6 @@ void distribute_charges(object_type *o_ptr, object_type *q_ptr, int amt)
  * @brief 魔法棒やロッドの使用回数を減らす /
  * @param o_ptr オブジェクトの構造体参照ポインタ source item
  * @param amt 減らしたい回数量 number of items that are transfered
- * @return なし
  * @details
  * Hack -- If rods or wand are destroyed, the total maximum timeout or\n
  * charges of the stack needs to be reduced, unless all the items are\n
@@ -234,7 +232,6 @@ bool object_similar(object_type *o_ptr, object_type *j_ptr)
  * Allow one item to "absorb" another, assuming they are similar
  * @param o_ptr 重ね合わせ先のオブジェクトの構造体参照ポインタ
  * @param j_ptr 重ね合わせ元のオブジェクトの構造体参照ポインタ
- * @return なし
  */
 void object_absorb(object_type *o_ptr, object_type *j_ptr)
 {

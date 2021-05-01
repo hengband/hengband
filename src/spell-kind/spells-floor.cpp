@@ -59,7 +59,6 @@
  * @brief 啓蒙/陽光召喚処理
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param ninja 忍者かどうか
- * @return なし
  */
 void wiz_lite(player_type *caster_ptr, bool ninja)
 {

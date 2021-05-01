@@ -23,7 +23,6 @@
  * @brief 10ゲームターンが進行するごとに帰還の残り時間カウントダウンと発動を処理する。
  * / Handle involuntary movement once every 10 game turns
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  * Autosave BEFORE resetting the recall counter (rr9)
  * The player is yanked up/down as soon as he loads the autosaved game.
@@ -118,7 +117,6 @@ void execute_recall(player_type *creature_ptr)
  * @brief 10ゲームターンが進行するごとにフロア・リセット/現実変容の残り時間カウントダウンと発動を処理する。
  * / Handle involuntary movement once every 10 game turns
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void execute_floor_reset(player_type *creature_ptr)
 {

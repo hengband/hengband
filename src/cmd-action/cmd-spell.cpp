@@ -549,7 +549,6 @@ static void confirm_use_force(player_type *caster_ptr, bool browse_only)
 /*!
  * @brief プレイヤーの魔法と技能を閲覧するコマンドのメインルーチン /
  * Peruse the spells/prayers in a book
- * @return なし
  * @details
  * <pre>
  * Note that *all* spells in the book are listed
@@ -677,7 +676,6 @@ void do_cmd_browse(player_type *caster_ptr)
  * @brief プレイヤーの第二魔法領域を変更する /
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param next_realm 変更先の魔法領域ID
- * @return なし
  */
 static void change_realm2(player_type *caster_ptr, REALM_IDX next_realm)
 {
@@ -715,7 +713,6 @@ static void change_realm2(player_type *caster_ptr, REALM_IDX next_realm)
 /*!
  * @brief 魔法を学習するコマンドのメインルーチン /
  * Study a book to gain a new spell/prayer
- * @return なし
  */
 void do_cmd_study(player_type *caster_ptr)
 {

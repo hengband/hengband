@@ -367,7 +367,6 @@ static void process_hard_concentration(player_type *caster_ptr, cm_type *cm_ptr)
 
 /*!
  * @brief 特殊技能コマンドのメインルーチン /
- * @return なし
  */
 void do_cmd_mind(player_type *caster_ptr)
 {
@@ -418,7 +417,6 @@ static mind_kind_type decide_use_mind_browse(player_type *caster_ptr)
 
 /*!
  * @brief 現在プレイヤーが使用可能な特殊技能の一覧表示 /
- * @return なし
  */
 void do_cmd_mind_browse(player_type *caster_ptr)
 {

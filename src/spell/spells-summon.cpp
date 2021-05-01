@@ -442,7 +442,6 @@ int activate_hi_summon(player_type *caster_ptr, POSITION y, POSITION x, bool can
  * @brief 「悪霊召喚」のランダムな効果を決定して処理する。
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dir 方向ID
- * @return なし
  */
 void cast_invoke_spirits(player_type *caster_ptr, DIRECTION dir)
 {

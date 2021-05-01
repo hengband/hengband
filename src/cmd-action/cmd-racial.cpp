@@ -96,7 +96,6 @@ static void racial_power_display_list(player_type *creature_ptr, rc_type *rc_ptr
 /*!
  * @brief レイシャルパワー選択用のプロンプトを作成する
  * @param rc_ptr レイシャルパワー情報への参照ポインタ
- * @return なし
  */
 static void racial_power_make_prompt(rc_type *rc_ptr)
 {
@@ -116,7 +115,6 @@ static void racial_power_make_prompt(rc_type *rc_ptr)
  * @param creature_ptr プレイヤー情報への参照ポインタ
  * @param rc_ptr レイシャルパワー情報への参照ポインタ
  * @param i カーソル増分
- * @return なし
  */
 static void racial_power_add_index(player_type *creature_ptr, rc_type *rc_ptr, int i)
 {
@@ -370,7 +368,6 @@ static bool racial_power_select_power(player_type *creature_ptr, rc_type *rc_ptr
  * @brief レイシャルパワーの使用を試みる
  * @param creature_ptr プレイヤー情報への参照ポインタ
  * @param rc_ptr レイシャルパワー情報への参照ポインタ
- * @return なし
  * @details
  * 戻り値の代わりにrc_ptr->castに使用の有無を入れる。
  */
@@ -425,7 +422,6 @@ static bool racial_power_reduce_mana(player_type *creature_ptr, rc_type *rc_ptr)
 /*!
  * @brief レイシャル・パワーコマンドのメインルーチン / Allow user to choose a power (racial / mutation) to activate
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void do_cmd_racial_power(player_type *creature_ptr)
 {
