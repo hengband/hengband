@@ -126,6 +126,7 @@
 
 #include <cstdlib>
 #include <locale>
+#include <string>
 
 #include <commdlg.h>
 #include <direct.h>
@@ -1498,20 +1499,20 @@ static void setup_menus(void)
 }
 
 /*
- * Check for double clicked (or dragged) savefile
- *
+ * @brief Check for double clicked (or dragged) savefile
+ * @details
  * Apparently, Windows copies the entire filename into the first
  * piece of the "command line string".  Perhaps we should extract
  * the "basename" of that filename and append it to the "save" dir.
+ * @param player_ptr pointer of player_type
+ * @param savefile_option savefile path
  */
-static void check_for_save_file(player_type *player_ptr, LPSTR cmd_line)
+static void check_for_save_file(player_type *player_ptr, const std::string &savefile_option)
 {
-    char *s;
-    s = cmd_line;
-    if (!*s)
+    if (savefile_option.empty())
         return;
 
-    strcpy(savefile, s);
+    strcpy(savefile, savefile_option.c_str());
     validate_file(savefile);
     game_in_progress = TRUE;
     play_game(player_ptr, FALSE, FALSE);
@@ -2665,7 +2666,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInst, [[maybe_unused]] _In_opt_ HINSTANCE hPr
     term_activate(term_screen);
     init_angband(p_ptr, FALSE);
     initialized = TRUE;
-    check_for_save_file(p_ptr, lpCmdLine);
+    check_for_save_file(p_ptr, command_line.get_savefile_option());
     prt(_("[ファイル] メニューの [新規] または [開く] を選択してください。", "[Choose 'New' or 'Open' from the 'File' menu]"), 23, _(8, 17));
     term_fresh();
 
