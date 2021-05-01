@@ -141,7 +141,6 @@ void map_info(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, S
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-    OBJECT_IDX this_o_idx, next_o_idx = 0;
     FEAT_IDX feat = get_feat_mimic(g_ptr);
     feature_type *f_ptr = &f_info[feat];
     TERM_COLOR a;
@@ -244,10 +243,9 @@ void map_info(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, S
     if (player_ptr->image && one_in_(256))
         image_random(ap, cp);
 
-    for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx) {
+    for (const auto this_o_idx : g_ptr->o_idx_list) {
         object_type *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
-        next_o_idx = o_ptr->next_o_idx;
         if (!(o_ptr->marked & OM_FOUND))
             continue;
 

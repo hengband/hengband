@@ -40,7 +40,6 @@ typedef struct object_type {
 
     BIT_FLAGS art_flags[TR_FLAG_SIZE]; /* Extra Flags for ego and artifacts */
     BIT_FLAGS curse_flags; /* Flags for curse */
-    OBJECT_IDX next_o_idx; /* Next object in stack (if any) */
     MONSTER_IDX held_m_idx; /*!< アイテムを所持しているモンスターID (いないなら 0) / Monster holding us (if any) */
     ARTIFACT_BIAS_IDX artifact_bias; /*!< ランダムアーティファクト生成時のバイアスID */
 } object_type;

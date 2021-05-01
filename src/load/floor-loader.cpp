@@ -1,5 +1,6 @@
 ﻿#include "load/floor-loader.h"
 #include "floor/floor-generator.h"
+#include "floor/floor-object.h"
 #include "floor/floor-save-util.h"
 #include "game-option/birth-options.h"
 #include "grid/feature.h"
@@ -8,9 +9,9 @@
 #include "io/uid-checker.h"
 #include "load/angband-version-comparer.h"
 #include "load/item-loader.h"
-#include "load/monster-loader.h"
 #include "load/load-util.h"
 #include "load/load-v1-5-0.h"
+#include "load/monster-loader.h"
 #include "load/old-feature-types.h"
 #include "monster-race/monster-race.h"
 #include "monster/monster-info.h"
@@ -193,16 +194,8 @@ errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
         o_ptr = &floor_ptr->o_list[o_idx];
         rd_item(player_ptr, o_ptr);
 
-        if (object_is_held_monster(o_ptr)) {
-            monster_type *m_ptr;
-            m_ptr = &floor_ptr->m_list[o_ptr->held_m_idx];
-            o_ptr->next_o_idx = m_ptr->hold_o_idx;
-            m_ptr->hold_o_idx = o_idx;
-        } else {
-            grid_type *g_ptr = &floor_ptr->grid_array[o_ptr->iy][o_ptr->ix];
-            o_ptr->next_o_idx = g_ptr->o_idx;
-            g_ptr->o_idx = o_idx;
-        }
+        auto &list = get_o_idx_list_contains(floor_ptr, o_idx);
+        list.push_front(o_idx);
     }
 
     rd_u16b(&limit);

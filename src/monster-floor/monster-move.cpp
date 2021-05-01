@@ -417,7 +417,7 @@ bool process_monster_movement(player_type *target_ptr, turn_flags *turn_flags_pt
                 disturb(target_ptr, FALSE, TRUE);
         }
 
-        bool is_takable_or_killable = g_ptr->o_idx > 0;
+        bool is_takable_or_killable = !g_ptr->o_idx_list.empty();
         is_takable_or_killable &= (r_ptr->flags2 & (RF2_TAKE_ITEM | RF2_KILL_ITEM)) != 0;
 
         bool is_pickup_items = (target_ptr->pet_extra_flags & PF_PICKUP_ITEMS) != 0;

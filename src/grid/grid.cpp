@@ -473,7 +473,6 @@ void print_rel(player_type *subject_ptr, SYMBOL_CODE c, TERM_COLOR a, POSITION y
 void note_spot(player_type *player_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    OBJECT_IDX this_o_idx, next_o_idx = 0;
 
     /* Blind players see nothing */
     if (player_ptr->blind)
@@ -494,9 +493,8 @@ void note_spot(player_type *player_ptr, POSITION y, POSITION x)
     }
 
     /* Hack -- memorize objects */
-    for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx) {
+    for (const auto this_o_idx : g_ptr->o_idx_list) {
         object_type *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
-        next_o_idx = o_ptr->next_o_idx;
 
         /* Memorize objects */
         o_ptr->marked |= OM_FOUND;

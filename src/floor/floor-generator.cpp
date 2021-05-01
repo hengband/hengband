@@ -350,7 +350,7 @@ void clear_cave(player_type *player_ptr)
             grid_type *g_ptr = &floor_ptr->grid_array[y][x];
             g_ptr->info = 0;
             g_ptr->feat = 0;
-            g_ptr->o_idx = 0;
+            g_ptr->o_idx_list.clear();
             g_ptr->m_idx = 0;
             g_ptr->special = 0;
             g_ptr->mimic = 0;

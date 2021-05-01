@@ -181,10 +181,10 @@ bool ang_sort_comp_importance(player_type *player_ptr, vptr u, vptr v, int a, in
     }
 
     /* An object get higher priority */
-    if (player_ptr->current_floor_ptr->grid_array[y[a]][x[a]].o_idx && !player_ptr->current_floor_ptr->grid_array[y[b]][x[b]].o_idx)
+    if (!player_ptr->current_floor_ptr->grid_array[y[a]][x[a]].o_idx_list.empty() && player_ptr->current_floor_ptr->grid_array[y[b]][x[b]].o_idx_list.empty())
         return TRUE;
 
-    if (!player_ptr->current_floor_ptr->grid_array[y[a]][x[a]].o_idx && player_ptr->current_floor_ptr->grid_array[y[b]][x[b]].o_idx)
+    if (player_ptr->current_floor_ptr->grid_array[y[a]][x[a]].o_idx_list.empty() && !player_ptr->current_floor_ptr->grid_array[y[b]][x[b]].o_idx_list.empty())
         return FALSE;
 
     /* Priority from the terrain */

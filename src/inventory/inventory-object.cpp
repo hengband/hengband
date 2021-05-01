@@ -331,7 +331,6 @@ s16b store_item_to_inventory(player_type *owner_ptr, object_type *o_ptr)
 
     object_copy(&owner_ptr->inventory_list[i], o_ptr);
     j_ptr = &owner_ptr->inventory_list[i];
-    j_ptr->next_o_idx = 0;
     j_ptr->held_m_idx = 0;
     j_ptr->iy = j_ptr->ix = 0;
     j_ptr->marked = OM_TOUCHED;

@@ -17,6 +17,8 @@
 #include "spell/spells-util.h"
 #include "system/angband.h"
 
+#include <list>
+
 /*
  * A single "grid" in a Cave
  *
@@ -50,24 +52,24 @@ enum flow_type {
 };
 
 struct grid_type {
-    BIT_FLAGS info; /* Hack -- grid flags */
+    BIT_FLAGS info{}; /* Hack -- grid flags */
 
-    FEAT_IDX feat; /* Hack -- feature type */
-    OBJECT_IDX o_idx; /* Object in this grid */
-    MONSTER_IDX m_idx; /* Monster in this grid */
+    FEAT_IDX feat{}; /* Hack -- feature type */
+    std::list<OBJECT_IDX> o_idx_list; /* Object list in this grid */
+    MONSTER_IDX m_idx{}; /* Monster in this grid */
 
     /*! 地形の特別な情報を保存する / Special grid info
      * 具体的な使用一覧はクエスト行き階段の移行先クエストID、
      * 各ダンジョン入口の移行先ダンジョンID、
      *
      */
-    s16b special;
+    s16b special{};
 
-    FEAT_IDX mimic; /* Feature to mimic */
+    FEAT_IDX mimic{}; /* Feature to mimic */
 
-    byte costs[FLOW_MAX]; /* Hack -- cost of flowing */
-    byte dists[FLOW_MAX]; /* Hack -- distance from player */
-    byte when; /* Hack -- when cost was computed */
+    byte costs[FLOW_MAX]{}; /* Hack -- cost of flowing */
+    byte dists[FLOW_MAX]{}; /* Hack -- distance from player */
+    byte when{}; /* Hack -- when cost was computed */
 };
 
 /*  A structure type for terrain template of saving dungeon floor */

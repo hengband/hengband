@@ -83,16 +83,16 @@ static bool py_pickup_floor_aux(player_type *owner_ptr)
  */
 void py_pickup_floor(player_type *owner_ptr, bool pickup)
 {
-    OBJECT_IDX this_o_idx, next_o_idx = 0;
     GAME_TEXT o_name[MAX_NLEN];
     object_type *o_ptr;
     int floor_num = 0;
     OBJECT_IDX floor_o_idx = 0;
     int can_pickup = 0;
-    for (this_o_idx = owner_ptr->current_floor_ptr->grid_array[owner_ptr->y][owner_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx) {
+    auto &o_idx_list = owner_ptr->current_floor_ptr->grid_array[owner_ptr->y][owner_ptr->x].o_idx_list;
+    for (auto it = o_idx_list.begin(); it != o_idx_list.end();) {
+        const OBJECT_IDX this_o_idx = *it++;
         o_ptr = &owner_ptr->current_floor_ptr->o_list[this_o_idx];
         describe_flavor(owner_ptr, o_name, o_ptr, 0);
-        next_o_idx = o_ptr->next_o_idx;
         disturb(owner_ptr, FALSE, FALSE);
         if (o_ptr->tval == TV_GOLD) {
             msg_format(_(" $%ld の価値がある%sを見つけた。", "You have found %ld gold pieces worth of %s."), (long)o_ptr->pval, o_name);
@@ -250,13 +250,12 @@ void carry(player_type *creature_ptr, bool pickup)
         return;
     }
 
-    OBJECT_IDX next_o_idx = 0;
-    for (OBJECT_IDX this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx) {
+    for (auto it = g_ptr->o_idx_list.begin(); it != g_ptr->o_idx_list.end();) {
+        const OBJECT_IDX this_o_idx = *it++;
         object_type *o_ptr;
         o_ptr = &creature_ptr->current_floor_ptr->o_list[this_o_idx];
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(creature_ptr, o_name, o_ptr, 0);
-        next_o_idx = o_ptr->next_o_idx;
         disturb(creature_ptr, FALSE, FALSE);
         if (o_ptr->tval == TV_GOLD) {
             int value = (long)o_ptr->pval;

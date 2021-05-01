@@ -237,11 +237,10 @@ static void describe_monster_person(eg_type *eg_ptr)
 
 static u16b describe_monster_item(player_type *subject_ptr, eg_type *eg_ptr)
 {
-    for (OBJECT_IDX this_o_idx = eg_ptr->m_ptr->hold_o_idx; this_o_idx; this_o_idx = eg_ptr->next_o_idx) {
+    for (const auto this_o_idx : eg_ptr->m_ptr->hold_o_idx_list) {
         GAME_TEXT o_name[MAX_NLEN];
         object_type *o_ptr;
         o_ptr = &subject_ptr->current_floor_ptr->o_list[this_o_idx];
-        eg_ptr->next_o_idx = o_ptr->next_o_idx;
         describe_flavor(subject_ptr, o_name, o_ptr, 0);
 #ifdef JP
         sprintf(eg_ptr->out_val, "%s%s%s%s[%s]", eg_ptr->s1, o_name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
@@ -352,16 +351,14 @@ static char describe_footing_many_items(player_type *subject_ptr, eg_type *eg_pt
         if (eg_ptr->query != '\n' && eg_ptr->query != '\r')
             return eg_ptr->query;
 
-        OBJECT_IDX o_idx = eg_ptr->g_ptr->o_idx;
-        if (!(o_idx && subject_ptr->current_floor_ptr->o_list[o_idx].next_o_idx))
+        OBJECT_IDX o_idx = 0;
+        if (!eg_ptr->g_ptr->o_idx_list.empty())
+            o_idx = eg_ptr->g_ptr->o_idx_list.front();
+        if (eg_ptr->g_ptr->o_idx_list.size() < 2)
             continue;
 
-        excise_object_idx(subject_ptr->current_floor_ptr, o_idx);
-        int i = eg_ptr->g_ptr->o_idx;
-        while (subject_ptr->current_floor_ptr->o_list[i].next_o_idx)
-            i = subject_ptr->current_floor_ptr->o_list[i].next_o_idx;
-
-        subject_ptr->current_floor_ptr->o_list[i].next_o_idx = o_idx;
+        eg_ptr->g_ptr->o_idx_list.pop_front();
+        eg_ptr->g_ptr->o_idx_list.push_back(o_idx);
     }
 }
 
@@ -421,10 +418,9 @@ static s16b describe_footing_sight(player_type *subject_ptr, eg_type *eg_ptr, ob
 
 static s16b sweep_footing_items(player_type *subject_ptr, eg_type *eg_ptr)
 {
-    for (OBJECT_IDX this_o_idx = eg_ptr->g_ptr->o_idx; this_o_idx; this_o_idx = eg_ptr->next_o_idx) {
+    for (const auto this_o_idx : eg_ptr->g_ptr->o_idx_list) {
         object_type *o_ptr;
         o_ptr = &subject_ptr->current_floor_ptr->o_list[this_o_idx];
-        eg_ptr->next_o_idx = o_ptr->next_o_idx;
         s16b ret = describe_footing_sight(subject_ptr, eg_ptr, o_ptr);
         if (within_char_util(ret))
             return (char)ret;
