@@ -41,7 +41,7 @@
  *
  * <p>
  * The "lib/user/graf-win.prf" contains attr/char mappings for use with the
- * special "lib/xtra/graf/*.bmp" bitmap files, which are activated by a menu
+ * special bitmap files in "lib/xtra/graf", which are activated by a menu
  * item.
  * </p>
  *
@@ -283,8 +283,8 @@ static byte ignore_key_list[] = {
     VK_SHIFT, VK_CONTROL, VK_MENU, VK_LWIN, VK_RWIN, VK_LSHIFT, VK_RSHIFT, VK_LCONTROL, VK_RCONTROL, VK_LMENU, VK_RMENU, 0 /* End of List */
 };
 
-/*
- * Validate a file
+/*!
+ * @brief Validate a file
  */
 static void validate_file(concptr s)
 {
@@ -294,8 +294,8 @@ static void validate_file(concptr s)
     quit_fmt(_("必要なファイル[%s]が見あたりません。", "Cannot find required file:\n%s"), s);
 }
 
-/*
- * Validate a directory
+/*!
+ * @brief Validate a directory
  */
 static void validate_dir(concptr s, bool vital)
 {
@@ -344,8 +344,8 @@ static void term_getsize(term_data *td)
     }
 }
 
-/*
- * Write the "prefs" for a single term
+/*!
+ * @brief Write the "prefs" for a single term
  */
 static void save_prefs_aux(int i)
 {
@@ -419,8 +419,8 @@ static void save_prefs_aux(int i)
     }
 }
 
-/*
- * Write the "prefs"
+/*!
+ * @brief Write the "prefs"
  * We assume that the windows have all been initialized
  */
 static void save_prefs(void)
@@ -465,8 +465,8 @@ static void save_prefs(void)
     }
 }
 
-/*
- * callback for EnumDisplayMonitors API
+/*!
+ * @brief callback for EnumDisplayMonitors API
  */
 BOOL CALLBACK monitorenumproc([[maybe_unused]] HMONITOR hMon, [[maybe_unused]] HDC hdcMon, [[maybe_unused]] LPRECT lpMon, LPARAM dwDate)
 {
@@ -475,8 +475,8 @@ BOOL CALLBACK monitorenumproc([[maybe_unused]] HMONITOR hMon, [[maybe_unused]] H
     return FALSE;
 }
 
-/*
- * Load the "prefs" for a single term
+/*!
+ * @brief Load the "prefs" for a single term
  */
 static void load_prefs_aux(int i)
 {
@@ -532,8 +532,8 @@ static void load_prefs_aux(int i)
     }
 }
 
-/*
- * Load the "prefs"
+/*!
+ * @brief Load the "prefs"
  */
 static void load_prefs(void)
 {
@@ -562,8 +562,8 @@ static void load_prefs(void)
     }
 }
 
-/*
- * Initialize music
+/*!
+ * @brief Initialize music
  */
 static void init_music(void)
 {
@@ -576,8 +576,8 @@ static void init_music(void)
     }
 }
 
-/*
- * Initialize sound
+/*!
+ * @brief Initialize sound
  */
 static void init_sound(void)
 {
@@ -602,8 +602,8 @@ static void change_sound_mode(bool new_mode)
     }
 }
 
-/*
- * Initialize background
+/*!
+ * @brief Initialize background
  */
 static void init_background(void)
 {
@@ -702,8 +702,8 @@ static errr term_force_font(term_data *td)
     return 0;
 }
 
-/*
- * Allow the user to change the font for this window.
+/*!
+ * @brief Allow the user to change the font for this window.
  */
 static void term_change_font(term_data *td)
 {
@@ -723,16 +723,16 @@ static void term_change_font(term_data *td)
     term_window_resize(td);
 }
 
-/*
- * Allow the user to lock this window.
+/*!
+ * @brief Allow the user to lock this window.
  */
 static void term_window_pos(term_data *td, HWND hWnd)
 {
     SetWindowPos(td->w, hWnd, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
 }
 
-/*
- * Hack -- redraw a term_data
+/*!
+ * @brief Hack -- redraw a term_data
  */
 static void term_data_redraw(term_data *td)
 {
@@ -741,6 +741,9 @@ static void term_data_redraw(term_data *td)
     term_activate(term_screen);
 }
 
+/*!
+ * @brief termの反転色表示
+ */
 void term_inversed_area(HWND hWnd, int x, int y, int w, int h)
 {
     term_data *td = (term_data *)GetWindowLong(hWnd, 0);
@@ -761,7 +764,7 @@ void term_inversed_area(HWND hWnd, int x, int y, int w, int h)
 }
 
 /*!
- * @brief //!< Windows版ユーザ設定項目実装部(実装必須) /Interact with the User
+ * @brief Windows版ユーザ設定項目実装部(実装必須) /Interact with the User
  */
 static errr term_user_win(int n)
 {
@@ -769,6 +772,10 @@ static errr term_user_win(int n)
     return 0;
 }
 
+
+/*!
+ * @brief カラーパレットの変更？
+ */
 static void refresh_color_table()
 {
     for (int i = 0; i < 256; i++) {
@@ -779,8 +786,8 @@ static void refresh_color_table()
     }
 }
 
-/*
- * React to global changes
+/*!
+ * @brief React to global changes
  */
 static errr term_xtra_win_react(player_type *player_ptr)
 {
@@ -808,8 +815,8 @@ static errr term_xtra_win_react(player_type *player_ptr)
     return 0;
 }
 
-/*
- * Process at least one event
+/*!
+ * @brief Process at least one event
  */
 static errr term_xtra_win_event(int v)
 {
@@ -829,8 +836,8 @@ static errr term_xtra_win_event(int v)
     return 0;
 }
 
-/*
- * Process all pending events
+/*!
+ * @brief Process all pending events
  */
 static errr term_xtra_win_flush(void)
 {
@@ -843,9 +850,9 @@ static errr term_xtra_win_flush(void)
     return 0;
 }
 
-/*
- * Hack -- clear the screen
- *
+/*!
+ * @brief Hack -- clear the screen
+ * @details
  * Make this more efficient
  */
 static errr term_xtra_win_clear(void)
@@ -873,8 +880,8 @@ static errr term_xtra_win_clear(void)
     return 0;
 }
 
-/*
- * Hack -- make a noise
+/*!
+ * @brief Hack -- make a noise
  */
 static errr term_xtra_win_noise(void)
 {
@@ -882,8 +889,8 @@ static errr term_xtra_win_noise(void)
     return 0;
 }
 
-/*
- * Hack -- make a sound
+/*!
+ * @brief Hack -- make a sound
  */
 static errr term_xtra_win_sound(int v)
 {
@@ -892,8 +899,8 @@ static errr term_xtra_win_sound(int v)
     return play_sound(v);
 }
 
-/*
- * Hack -- play a music
+/*!
+ * @brief Hack -- play a music
  */
 static errr term_xtra_win_music(int n, int v)
 {
@@ -904,8 +911,8 @@ static errr term_xtra_win_music(int n, int v)
     return main_win_music::play_music(n, v);
 }
 
-/*
- * Hack -- play a music matches a situation
+/*!
+ * @brief Hack -- play a music matches a situation
  */
 static errr term_xtra_win_scene(int v)
 {
@@ -917,8 +924,8 @@ static errr term_xtra_win_scene(int v)
     return main_win_music::play_music_scene(v);
 }
 
-/*
- * Delay for "x" milliseconds
+/*!
+ * @brief Delay for "x" milliseconds
  */
 static int term_xtra_win_delay(int v)
 {
@@ -975,9 +982,9 @@ static errr term_xtra_win(int n, int v)
     return 1;
 }
 
-/*
- * Low level graphics (Assumes valid input).
- *
+/*!
+ * @brief Low level graphics (Assumes valid input).
+ * @details
  * Draw a "cursor" at (x,y), using a "yellow box".
  */
 static errr term_curs_win(int x, int y)
@@ -999,9 +1006,9 @@ static errr term_curs_win(int x, int y)
     return 0;
 }
 
-/*
- * Low level graphics (Assumes valid input).
- *
+/*!
+ * @brief Low level graphics (Assumes valid input).
+ * @details
  * Draw a "big cursor" at (x,y), using a "yellow box".
  */
 static errr term_bigcurs_win(int x, int y)
@@ -1023,9 +1030,9 @@ static errr term_bigcurs_win(int x, int y)
     return 0;
 }
 
-/*
- * Low level graphics (Assumes valid input).
- *
+/*!
+ * @brief Low level graphics (Assumes valid input).
+ * @details
  * Erase a "block" of "n" characters starting at (x,y).
  */
 static errr term_wipe_win(int x, int y, int n)
@@ -1049,9 +1056,9 @@ static errr term_wipe_win(int x, int y, int n)
     return 0;
 }
 
-/*
- * Low level graphics.  Assumes valid input.
- *
+/*!
+ * @brief Low level graphics.  Assumes valid input.
+ * @details
  * Draw several ("n") chars, with an attr, at a given location.
  *
  * All "graphic" data is handled by "term_pict_win()", below.
@@ -1149,9 +1156,9 @@ static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
     return 0;
 }
 
-/*
- * Low level graphics.  Assumes valid input.
- *
+/*!
+ * @brief Low level graphics.  Assumes valid input.
+ * @details
  * Draw an array of "special" attr/char pairs at the given location.
  *
  * We use the "term_pict_win()" function for "graphic" data, which are
@@ -1246,8 +1253,8 @@ static errr term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
     return 0;
 }
 
-/*
- * Create and initialize a "term_data" given a title
+/*!
+ * @brief Create and initialize a "term_data" given a title
  */
 static void term_data_link(term_data *td)
 {
@@ -1267,9 +1274,9 @@ static void term_data_link(term_data *td)
     t->data = (vptr)(td);
 }
 
-/*
- * Create the windows
- *
+/*!
+ * @brief Create the windows
+ * @details
  * First, instantiate the "default" values, then read the "ini_file"
  * to over-ride selected values, then create the windows, and fonts.
  *
@@ -1412,8 +1419,8 @@ static void init_windows(void)
     (void)term_xtra_win_flush();
 }
 
-/*
- * Prepare the menus
+/*!
+ * @brief Prepare the menus
  */
 static void setup_menus(void)
 {
@@ -1496,9 +1503,9 @@ static void setup_menus(void)
     EnableMenuItem(hm, IDM_OPTIONS_PRESET_BG, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 }
 
-/*
- * Check for double clicked (or dragged) savefile
- *
+/*!
+ * @brief Check for double clicked (or dragged) savefile
+ * @details
  * Apparently, Windows copies the entire filename into the first
  * piece of the "command line string".  Perhaps we should extract
  * the "basename" of that filename and append it to the "save" dir.
@@ -1516,8 +1523,8 @@ static void check_for_save_file(player_type *player_ptr, LPSTR cmd_line)
     play_game(player_ptr, FALSE, FALSE);
 }
 
-/*
- * Process a menu command
+/*!
+ * @brief Process a menu command
  */
 static void process_menus(player_type *player_ptr, WORD wCmd)
 {
@@ -1899,8 +1906,8 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
     }
 }
 
-/*
- * Add a keypress to the "queue"
+/*!
+ * @brief Add a keypress to the "queue"
  */
 static errr term_keypress(int k)
 {
@@ -1921,6 +1928,9 @@ static errr term_keypress(int k)
     return 1;
 }
 
+/*!
+ * @brief キーダウンのハンドラ
+ */
 static bool process_keydown(WPARAM wParam, LPARAM lParam)
 {
     bool mc = FALSE;
@@ -2000,6 +2010,9 @@ static bool process_keydown(WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
+/*!
+ * @brief ウィンドウのアクティブ/非アクティブのハンドラ 
+ */
 static void handle_app_active(HWND hWnd, UINT uMsg, WPARAM wParam, [[maybe_unused]] LPARAM lParam)
 {
     switch (uMsg) {
@@ -2437,8 +2450,8 @@ LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
     return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
-/*
- * Display warning message (see "z-util.c")
+/*!
+ * @brief Display warning message (see "z-util.c")
  */
 static void hack_plog(concptr str)
 {
@@ -2447,8 +2460,8 @@ static void hack_plog(concptr str)
     }
 }
 
-/*
- * Display error message and quit (see "z-util.c")
+/*!
+ * @brief Display error message and quit (see "z-util.c")
  */
 static void hack_quit(concptr str)
 {
@@ -2463,8 +2476,8 @@ static void hack_quit(concptr str)
     exit(0);
 }
 
-/*
- * Display warning message (see "z-util.c")
+/*!
+ * @brief Display warning message (see "z-util.c")
  */
 static void hook_plog(concptr str)
 {
@@ -2473,8 +2486,8 @@ static void hook_plog(concptr str)
     }
 }
 
-/*
- * Display error message and quit (see "z-util.c")
+/*!
+ * @brief Display error message and quit (see "z-util.c")
  */
 static void hook_quit(concptr str)
 {
@@ -2503,8 +2516,8 @@ static void hook_quit(concptr str)
     exit(0);
 }
 
-/*
- * Init some stuff
+/*!
+ * @brief Init some stuff
  */
 static void init_stuff(void)
 {
