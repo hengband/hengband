@@ -613,19 +613,14 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
         case '\n':
         case '\r':
         case '+': {
-            OBJECT_IDX o_idx = 0;
             grid_type *g_ptr = &owner_ptr->current_floor_ptr->grid_array[owner_ptr->y][owner_ptr->x];
             if (command_wrk != (USE_FLOOR))
                 break;
 
-            if (!g_ptr->o_idx_list.empty())
-                o_idx = g_ptr->o_idx_list.front();
-
             if (g_ptr->o_idx_list.size() < 2)
                 break;
 
-            g_ptr->o_idx_list.pop_front();
-            g_ptr->o_idx_list.push_back(o_idx);
+            g_ptr->o_idx_list.rotate();
 
             fis_ptr->floor_num
                 = scan_floor_items(owner_ptr, fis_ptr->floor_list, owner_ptr->y, owner_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, fis_ptr->tval);

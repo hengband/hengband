@@ -14,10 +14,10 @@
  * included in all such copies.
  */
 
-#include "spell/spells-util.h"
 #include "system/angband.h"
 
-#include <list>
+#include "spell/spells-util.h"
+#include "object/object-index-list.h"
 
 /*
  * A single "grid" in a Cave
@@ -55,7 +55,7 @@ struct grid_type {
     BIT_FLAGS info{}; /* Hack -- grid flags */
 
     FEAT_IDX feat{}; /* Hack -- feature type */
-    std::list<OBJECT_IDX> o_idx_list; /* Object list in this grid */
+    ObjectIndexList o_idx_list; /* Object list in this grid */
     MONSTER_IDX m_idx{}; /* Monster in this grid */
 
     /*! 地形の特別な情報を保存する / Special grid info

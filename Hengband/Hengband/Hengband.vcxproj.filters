@@ -2286,6 +2286,9 @@
     <ClCompile Include="..\..\src\system\object-type-definition.cpp">
       <Filter>system</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object\object-index-list.cpp">
+      <Filter>object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4919,6 +4922,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\dungeon\dungeon-flag-mask.h">
       <Filter>dungeon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\object-index-list.h">
+      <Filter>object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

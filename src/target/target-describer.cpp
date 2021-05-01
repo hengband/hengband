@@ -351,14 +351,10 @@ static char describe_footing_many_items(player_type *subject_ptr, eg_type *eg_pt
         if (eg_ptr->query != '\n' && eg_ptr->query != '\r')
             return eg_ptr->query;
 
-        OBJECT_IDX o_idx = 0;
-        if (!eg_ptr->g_ptr->o_idx_list.empty())
-            o_idx = eg_ptr->g_ptr->o_idx_list.front();
         if (eg_ptr->g_ptr->o_idx_list.size() < 2)
             continue;
 
-        eg_ptr->g_ptr->o_idx_list.pop_front();
-        eg_ptr->g_ptr->o_idx_list.push_back(o_idx);
+        eg_ptr->g_ptr->o_idx_list.rotate();
     }
 }
 
