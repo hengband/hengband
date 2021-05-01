@@ -97,6 +97,7 @@
 #include "io/record-play-movie.h"
 #include "io/signal-handlers.h"
 #include "io/write-diary.h"
+#include "main-win/commandline-win.h"
 #include "main-win/graphics-win.h"
 #include "main-win/main-win-bg.h"
 #include "main-win/main-win-file-utils.h"
@@ -2558,47 +2559,27 @@ static void init_stuff(void)
 }
 
 /*!
- * @brief コマンドラインから全スポイラー出力を行う
- * Create Spoiler files from Command Line
- * @return spoiler_output_status
+ * @brief 全スポイラー出力を行う
+ * Create Spoiler files
+ * @details スポイラー出力処理の成功、失敗に関わらずプロセスを終了する。
  */
-static spoiler_output_status create_debug_spoiler(LPSTR cmd_line)
+void create_debug_spoiler(void)
 {
-    char *s;
-    concptr option;
-    s = cmd_line;
-    if (!*s)
-        return SPOILER_OUTPUT_CANCEL;
-    option = "--output-spoilers";
-
-    if (strncmp(s, option, strlen(option)) != 0)
-        return SPOILER_OUTPUT_CANCEL;
-
     init_stuff();
     init_angband(p_ptr, TRUE);
 
-    return output_all_spoilers();
-}
-
-/*!
- * @brief コマンドラインオプション処理
- * @param lpCmdLine コマンドライン文字列(WinMainの第3引数)
- */
-static void handle_commandline(LPSTR lpCmdLine)
-{
-    switch (create_debug_spoiler(lpCmdLine)) {
+    switch (output_all_spoilers()) {
     case SPOILER_OUTPUT_SUCCESS:
         fprintf(stdout, "Successfully created a spoiler file.");
-        quit(NULL);
     case SPOILER_OUTPUT_FAIL_FOPEN:
         fprintf(stderr, "Cannot create spoiler file.");
-        quit(NULL);
     case SPOILER_OUTPUT_FAIL_FCLOSE:
         fprintf(stderr, "Cannot close spoiler file.");
-        quit(NULL);
     default:
         break;
     }
+
+    quit(NULL);
 }
 
 /*!
@@ -2642,7 +2623,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInst, [[maybe_unused]] _In_opt_ HINSTANCE hPr
         return FALSE;
     }
 
-    handle_commandline(lpCmdLine);
+    command_line.handle();
     register_wndclass();
 
     // before term_data initialize
