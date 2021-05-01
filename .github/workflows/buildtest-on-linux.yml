@@ -47,8 +47,8 @@ jobs:
       - name: Clean source tree
         run: make clean
 
-      - name: Configure for compiling with clang
-        run: ./configure
+      - name: Configure for compiling with clang (without using pre-compiled headers)
+        run: ./configure --disable-pch
         env:
           CXX: clang++-11
           CXXFLAGS: "-pipe -O3 -Werror -Wall -Wextra -Wno-unused-const-variable -Wno-invalid-source-encoding"
