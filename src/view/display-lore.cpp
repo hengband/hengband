@@ -60,8 +60,11 @@ void roff_top(MONRACE_IDX r_idx)
     }
 #endif
 
-    if (cheat_know)
-        term_addstr(-1, TERM_WHITE, format("[%d]", r_idx));
+    if (current_world_ptr->wizard || cheat_know) {
+        term_addstr(-1, TERM_WHITE, "[");
+        term_addstr(-1, TERM_L_BLUE, format("%d", r_idx));
+        term_addstr(-1, TERM_WHITE, "] ");
+    }
 
     term_addstr(-1, TERM_WHITE, (r_ptr->name.c_str()));
 
@@ -72,15 +75,6 @@ void roff_top(MONRACE_IDX r_idx)
     term_addstr(-1, TERM_WHITE, "/('");
     term_add_bigch(a2, c2);
     term_addstr(-1, TERM_WHITE, "'):");
-
-    if (!current_world_ptr->wizard)
-        return;
-
-    char buf[16];
-    sprintf(buf, "%d", r_idx);
-    term_addstr(-1, TERM_WHITE, " (");
-    term_addstr(-1, TERM_L_BLUE, buf);
-    term_addch(TERM_WHITE, ')');
 }
 
 /*!
