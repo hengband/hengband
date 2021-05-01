@@ -267,6 +267,7 @@
     <ClCompile Include="..\..\src\cmd-action\cmd-travel.cpp" />
     <ClCompile Include="..\..\src\cmd-action\cmd-tunnel.cpp" />
     <ClCompile Include="..\..\src\action\movement-execution.cpp" />
+    <ClCompile Include="..\..\src\main-win\commandline-win.cpp" />
     <ClCompile Include="..\..\src\main-win\graphics-win.cpp" />
     <ClCompile Include="..\..\src\player-info\alignment.cpp" />
     <ClCompile Include="..\..\src\player-info\equipment-info.cpp" />
@@ -938,6 +939,7 @@
     <ClInclude Include="..\..\src\cmd-action\cmd-travel.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-tunnel.h" />
     <ClInclude Include="..\..\src\action\movement-execution.h" />
+    <ClInclude Include="..\..\src\main-win\commandline-win.h" />
     <ClInclude Include="..\..\src\main-win\graphics-win.h" />
     <ClInclude Include="..\..\src\player-info\alignment.h" />
     <ClInclude Include="..\..\src\player-info\equipment-info.h" />

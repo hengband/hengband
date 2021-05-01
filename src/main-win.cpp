@@ -97,6 +97,7 @@
 #include "io/record-play-movie.h"
 #include "io/signal-handlers.h"
 #include "io/write-diary.h"
+#include "main-win/commandline-win.h"
 #include "main-win/graphics-win.h"
 #include "main-win/main-win-bg.h"
 #include "main-win/main-win-file-utils.h"
@@ -125,6 +126,7 @@
 
 #include <cstdlib>
 #include <locale>
+#include <string>
 
 #include <commdlg.h>
 #include <direct.h>
@@ -1497,20 +1499,20 @@ static void setup_menus(void)
 }
 
 /*
- * Check for double clicked (or dragged) savefile
- *
+ * @brief Check for double clicked (or dragged) savefile
+ * @details
  * Apparently, Windows copies the entire filename into the first
  * piece of the "command line string".  Perhaps we should extract
  * the "basename" of that filename and append it to the "save" dir.
+ * @param player_ptr pointer of player_type
+ * @param savefile_option savefile path
  */
-static void check_for_save_file(player_type *player_ptr, LPSTR cmd_line)
+static void check_for_save_file(player_type *player_ptr, const std::string &savefile_option)
 {
-    char *s;
-    s = cmd_line;
-    if (!*s)
+    if (savefile_option.empty())
         return;
 
-    strcpy(savefile, s);
+    strcpy(savefile, savefile_option.c_str());
     validate_file(savefile);
     game_in_progress = TRUE;
     play_game(player_ptr, FALSE, FALSE);
@@ -2440,32 +2442,6 @@ LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 /*
  * Display warning message (see "z-util.c")
  */
-static void hack_plog(concptr str)
-{
-    if (str) {
-        MessageBoxW(NULL, to_wchar(str).wc_str(), _(L"警告！", L"Warning"), MB_ICONEXCLAMATION | MB_OK);
-    }
-}
-
-/*
- * Display error message and quit (see "z-util.c")
- */
-static void hack_quit(concptr str)
-{
-    if (str) {
-        MessageBoxW(NULL, to_wchar(str).wc_str(), _(L"エラー！", L"Error"), MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
-    }
-
-    UnregisterClass(AppName, hInstance);
-    if (hIcon)
-        DestroyIcon(hIcon);
-
-    exit(0);
-}
-
-/*
- * Display warning message (see "z-util.c")
- */
 static void hook_plog(concptr str)
 {
     if (str) {
@@ -2508,13 +2484,12 @@ static void hook_quit(concptr str)
  */
 static void init_stuff(void)
 {
-    char path[1024];
-    GetModuleFileName(hInstance, path, 512);
-    argv0 = path;
-    strcpy(path + strlen(path) - 4, ".INI");
+    char path[MAIN_WIN_MAX_PATH];
+    DWORD path_len = GetModuleFileName(hInstance, path, MAIN_WIN_MAX_PATH);
+    strcpy(path + path_len - 4, ".INI");
     ini_file = string_make(path);
-    int i = strlen(path);
 
+    int i = path_len;
     for (; i > 0; i--) {
         if (path[i] == '\\') {
             break;
@@ -2554,111 +2529,14 @@ static void init_stuff(void)
     path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "music");
     ANGBAND_DIR_XTRA_MUSIC = string_make(path);
     validate_dir(ANGBAND_DIR_XTRA_MUSIC, FALSE);
-}
 
-/*!
- * @brief コマンドラインから全スポイラー出力を行う
- * Create Spoiler files from Command Line
- * @return spoiler_output_status
- */
-static spoiler_output_status create_debug_spoiler(LPSTR cmd_line)
-{
-    char *s;
-    concptr option;
-    s = cmd_line;
-    if (!*s)
-        return SPOILER_OUTPUT_CANCEL;
-    option = "--output-spoilers";
-
-    if (strncmp(s, option, strlen(option)) != 0)
-        return SPOILER_OUTPUT_CANCEL;
-
-    init_stuff();
-    init_angband(p_ptr, TRUE);
-
-    return output_all_spoilers();
-}
-
-/*!
- * @brief (Windows固有)Windowsアプリケーションとしてのエントリポイント
- */
-int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPSTR lpCmdLine, [[maybe_unused]] _In_ int nCmdShow)
-{
-    setlocale(LC_ALL, "ja_JP");
-    hInstance = hInst;
-    if (is_already_running()) {
-        MessageBoxW(
-            NULL, _(L"変愚蛮怒はすでに起動しています。", L"Hengband is already running."), _(L"エラー！", L"Error"), MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
-        return FALSE;
-    }
-
-    switch (create_debug_spoiler(lpCmdLine)) {
-    case SPOILER_OUTPUT_SUCCESS:
-        fprintf(stdout, "Successfully created a spoiler file.");
-        quit(NULL);
-        return 0;
-    case SPOILER_OUTPUT_FAIL_FOPEN:
-        fprintf(stderr, "Cannot create spoiler file.");
-        quit(NULL);
-        return 0;
-    case SPOILER_OUTPUT_FAIL_FCLOSE:
-        fprintf(stderr, "Cannot close spoiler file.");
-        quit(NULL);
-        return 0;
-    default:
-        break;
-    }
-
-    if (hPrevInst == NULL) {
-        WNDCLASS wc;
-        wc.style = CS_CLASSDC;
-        wc.lpfnWndProc = AngbandWndProc;
-        wc.cbClsExtra = 0;
-        wc.cbWndExtra = 4;
-        wc.hInstance = hInst;
-        wc.hIcon = hIcon = LoadIcon(hInst, AppName);
-        wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-        wc.hbrBackground = NULL;
-        wc.lpszMenuName = AppName;
-        wc.lpszClassName = AppName;
-
-        if (!RegisterClass(&wc))
-            exit(1);
-
-        wc.lpfnWndProc = AngbandListProc;
-        wc.lpszMenuName = NULL;
-        wc.lpszClassName = AngList;
-
-        if (!RegisterClass(&wc))
-            exit(2);
-    }
-
-    plog_aux = hack_plog;
-    quit_aux = hack_quit;
-    core_aux = hack_quit;
-
-    init_stuff();
-    for (int i = 0; special_key_list[i]; ++i) {
+    for (i = 0; special_key_list[i]; ++i) {
         special_key[special_key_list[i]] = TRUE;
     }
 
-    for (int i = 0; ignore_key_list[i]; ++i) {
+    for (i = 0; ignore_key_list[i]; ++i) {
         ignore_key[ignore_key_list[i]] = TRUE;
     }
-
-    HDC hdc = GetDC(NULL);
-    if (GetDeviceCaps(hdc, BITSPIXEL) <= 8) {
-        quit(_("画面を16ビット以上のカラーモードにして下さい。", "Please switch to High Color (16-bit) or higher color mode."));
-    }
-    ReleaseDC(NULL, hdc);
-
-    refresh_color_table();
-    init_windows();
-    change_bg_mode(current_bg_mode, true);
-
-    plog_aux = hook_plog;
-    quit_aux = hook_quit;
-    core_aux = hook_quit;
 
     ANGBAND_SYS = "win";
     if (7 != GetKeyboardType(0))
@@ -2679,12 +2557,116 @@ int WINAPI WinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInst, _In_ LPST
             ANGBAND_KEYBOARD = "JAPAN";
         }
     }
+}
+
+/*!
+ * @brief 全スポイラー出力を行う
+ * Create Spoiler files
+ * @details スポイラー出力処理の成功、失敗に関わらずプロセスを終了する。
+ */
+void create_debug_spoiler(void)
+{
+    init_stuff();
+    init_angband(p_ptr, TRUE);
+
+    switch (output_all_spoilers()) {
+    case SPOILER_OUTPUT_SUCCESS:
+        fprintf(stdout, "Successfully created a spoiler file.");
+    case SPOILER_OUTPUT_FAIL_FOPEN:
+        fprintf(stderr, "Cannot create spoiler file.");
+    case SPOILER_OUTPUT_FAIL_FCLOSE:
+        fprintf(stderr, "Cannot close spoiler file.");
+    default:
+        break;
+    }
+
+    quit(NULL);
+}
+
+/*!
+ * @brief メインウインドウ、サブウインドウのウインドウクラス登録
+ */
+static void register_wndclass(void)
+{
+    WNDCLASS wc{};
+    wc.style = CS_CLASSDC;
+    wc.lpfnWndProc = AngbandWndProc;
+    wc.cbClsExtra = 0;
+    wc.cbWndExtra = 4;
+    wc.hInstance = hInstance;
+    wc.hIcon = hIcon = LoadIcon(hInstance, AppName);
+    wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wc.hbrBackground = NULL;
+    wc.lpszMenuName = AppName;
+    wc.lpszClassName = AppName;
+
+    if (!RegisterClass(&wc))
+        exit(1);
+
+    wc.lpfnWndProc = AngbandListProc;
+    wc.lpszMenuName = NULL;
+    wc.lpszClassName = AngList;
+
+    if (!RegisterClass(&wc))
+        exit(2);
+}
+
+/*!
+ * @brief (Windows固有)Windowsアプリケーションとしてのエントリポイント
+ */
+int WINAPI WinMain(_In_ HINSTANCE hInst, [[maybe_unused]] _In_opt_ HINSTANCE hPrevInst, _In_ LPSTR lpCmdLine, [[maybe_unused]] _In_ int nCmdShow)
+{
+    setlocale(LC_ALL, "ja_JP");
+    hInstance = hInst;
+    if (is_already_running()) {
+        MessageBoxW(
+            NULL, _(L"変愚蛮怒はすでに起動しています。", L"Hengband is already running."), _(L"エラー！", L"Error"), MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
+        return FALSE;
+    }
+
+    command_line.handle();
+    register_wndclass();
+
+    // before term_data initialize
+    plog_aux = [](concptr str) {
+        if (str)
+            MessageBoxW(NULL, to_wchar(str).wc_str(), _(L"警告！", L"Warning"), MB_ICONEXCLAMATION | MB_OK);
+    };
+    quit_aux = [](concptr str) {
+        if (str) {
+            MessageBoxW(NULL, to_wchar(str).wc_str(), _(L"エラー！", L"Error"), MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
+        }
+
+        UnregisterClass(AppName, hInstance);
+        if (hIcon)
+            DestroyIcon(hIcon);
+
+        exit(0);
+    };
+    core_aux = quit_aux;
+
+    init_stuff();
+
+    HDC hdc = GetDC(NULL);
+    if (GetDeviceCaps(hdc, BITSPIXEL) <= 8) {
+        quit(_("画面を16ビット以上のカラーモードにして下さい。", "Please switch to High Color (16-bit) or higher color mode."));
+    }
+    ReleaseDC(NULL, hdc);
+
+    refresh_color_table();
+    init_windows();
+    change_bg_mode(current_bg_mode, true);
+
+    // after term_data initialize
+    plog_aux = hook_plog;
+    quit_aux = hook_quit;
+    core_aux = hook_quit;
 
     signals_init();
     term_activate(term_screen);
     init_angband(p_ptr, FALSE);
     initialized = TRUE;
-    check_for_save_file(p_ptr, lpCmdLine);
+    check_for_save_file(p_ptr, command_line.get_savefile_option());
     prt(_("[ファイル] メニューの [新規] または [開く] を選択してください。", "[Choose 'New' or 'Open' from the 'File' menu]"), 23, _(8, 17));
     term_fresh();
 
