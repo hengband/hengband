@@ -336,13 +336,11 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
                 delete_monster(player_ptr, ty, tx);
             }
 
-            if (g_ptr->o_idx && !has_flag(streamer_ptr->flags, FF_DROP)) {
-                OBJECT_IDX this_o_idx, next_o_idx = 0;
+            if (!g_ptr->o_idx_list.empty() && !has_flag(streamer_ptr->flags, FF_DROP)) {
 
                 /* Scan all objects in the grid */
-                for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx) {
+                for (const auto this_o_idx : g_ptr->o_idx_list) {
                     object_type *o_ptr = &floor_ptr->o_list[this_o_idx];
-                    next_o_idx = o_ptr->next_o_idx;
 
                     /* Hack -- Preserve unknown artifacts */
                     if (object_is_fixed_artifact(o_ptr)) {
@@ -430,7 +428,7 @@ void place_trees(player_type *player_ptr, POSITION x, POSITION y)
 
             if (g_ptr->info & CAVE_ICKY)
                 continue;
-            if (g_ptr->o_idx)
+            if (!g_ptr->o_idx_list.empty())
                 continue;
 
             /* Want square to be in the circle and accessable. */

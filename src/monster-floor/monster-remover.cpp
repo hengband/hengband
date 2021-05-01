@@ -67,11 +67,8 @@ void delete_monster_idx(player_type *player_ptr, MONSTER_IDX i)
         player_ptr->riding = 0;
 
     floor_ptr->grid_array[y][x].m_idx = 0;
-    OBJECT_IDX next_o_idx = 0;
-    for (OBJECT_IDX this_o_idx = m_ptr->hold_o_idx; this_o_idx; this_o_idx = next_o_idx) {
-        object_type *o_ptr;
-        o_ptr = &floor_ptr->o_list[this_o_idx];
-        next_o_idx = o_ptr->next_o_idx;
+    for (auto it = m_ptr->hold_o_idx_list.begin(); it != m_ptr->hold_o_idx_list.end();) {
+        const OBJECT_IDX this_o_idx = *it++;
         delete_object_idx(player_ptr, this_o_idx);
     }
 

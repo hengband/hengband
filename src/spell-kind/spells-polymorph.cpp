@@ -83,8 +83,7 @@ bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x)
     if (new_r_idx == old_r_idx)
         return FALSE;
 
-    bool preserve_hold_objects = back_m.hold_o_idx ? TRUE : FALSE;
-    OBJECT_IDX this_o_idx, next_o_idx = 0;
+    bool preserve_hold_objects = !back_m.hold_o_idx_list.empty();
 
     BIT_FLAGS mode = 0L;
     if (is_friendly(m_ptr))
@@ -94,13 +93,13 @@ bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x)
     if (m_ptr->mflag2.has(MFLAG2::NOPET))
         mode |= PM_NO_PET;
 
-    m_ptr->hold_o_idx = 0;
+    m_ptr->hold_o_idx_list.clear();
     delete_monster_idx(caster_ptr, g_ptr->m_idx);
     bool polymorphed = FALSE;
     if (place_monster_aux(caster_ptr, 0, y, x, new_r_idx, mode)) {
         floor_ptr->m_list[hack_m_idx_ii].nickname = back_m.nickname;
         floor_ptr->m_list[hack_m_idx_ii].parent_m_idx = back_m.parent_m_idx;
-        floor_ptr->m_list[hack_m_idx_ii].hold_o_idx = back_m.hold_o_idx;
+        floor_ptr->m_list[hack_m_idx_ii].hold_o_idx_list = back_m.hold_o_idx_list;
         polymorphed = TRUE;
     } else {
         if (place_monster_aux(caster_ptr, 0, y, x, old_r_idx, (mode | PM_NO_KAGE | PM_IGNORE_TERRAIN))) {
@@ -111,14 +110,13 @@ bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x)
     }
 
     if (preserve_hold_objects) {
-        for (this_o_idx = back_m.hold_o_idx; this_o_idx; this_o_idx = next_o_idx) {
+        for (const auto this_o_idx : back_m.hold_o_idx_list) {
             object_type *o_ptr = &floor_ptr->o_list[this_o_idx];
-            next_o_idx = o_ptr->next_o_idx;
             o_ptr->held_m_idx = hack_m_idx_ii;
         }
-    } else if (back_m.hold_o_idx) {
-        for (this_o_idx = back_m.hold_o_idx; this_o_idx; this_o_idx = next_o_idx) {
-            next_o_idx = floor_ptr->o_list[this_o_idx].next_o_idx;
+    } else {
+        for (auto it = back_m.hold_o_idx_list.begin(); it != back_m.hold_o_idx_list.end();) {
+            OBJECT_IDX this_o_idx = *it++;
             delete_object_idx(caster_ptr, this_o_idx);
         }
     }

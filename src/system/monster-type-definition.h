@@ -5,6 +5,8 @@
 #include "monster/smart-learn-types.h"
 #include "util/flag-group.h"
 
+#include <list>
+
 /*!
  * @brief Monster information, for a specific monster.
  * @Note
@@ -38,7 +40,7 @@ typedef struct monster_type {
 	EnumClassFlagGroup<MFLAG> mflag{};	/*!< モンスター個体に与えられた特殊フラグ1 (セーブ不要) / Extra monster flags */
 	EnumClassFlagGroup<MFLAG2> mflag2{};	/*!< モンスター個体に与えられた特殊フラグ2 (セーブ必要) / Extra monster flags */
 	bool ml{};		/*!< モンスターがプレイヤーにとって視認できるか(処理のためのテンポラリ変数) Monster is "visible" */
-	OBJECT_IDX hold_o_idx{};	/*!< モンスターが盗み処理により保持しているアイテム(object_type構造体自身がリスト構造を持つ) Object being held (if any) */
+	std::list<OBJECT_IDX> hold_o_idx_list{};	/*!< モンスターが所持しているアイテムのリスト / Object list being held (if any) */
 	POSITION target_y{};		/*!< モンスターの攻撃目標対象Y座標 / Can attack !los player */
 	POSITION target_x{};		/*!< モンスターの攻撃目標対象X座標 /  Can attack !los player */
 	STR_OFFSET nickname{};	/*!< ペットに与えられた名前の保存先文字列オフセット Monster's Nickname */

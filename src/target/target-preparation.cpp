@@ -83,11 +83,9 @@ static bool target_set_accept(player_type *creature_ptr, POSITION y, POSITION x)
             return TRUE;
     }
 
-    OBJECT_IDX next_o_idx = 0;
-    for (OBJECT_IDX this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx) {
+    for (const auto this_o_idx : g_ptr->o_idx_list) {
         object_type *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
-        next_o_idx = o_ptr->next_o_idx;
         if (o_ptr->marked & OM_FOUND)
             return TRUE;
     }

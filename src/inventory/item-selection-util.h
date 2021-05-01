@@ -43,8 +43,6 @@ typedef struct item_selection_type {
     COMMAND_CODE *cp;
     BIT_FLAGS mode;
     tval_type tval;
-    OBJECT_IDX this_o_idx;
-    OBJECT_IDX next_o_idx;
     char which;
     OBJECT_IDX k;
     OBJECT_IDX i1;

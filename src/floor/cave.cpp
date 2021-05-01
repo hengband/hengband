@@ -117,7 +117,7 @@ bool cave_has_flag_grid(grid_type *grid_ptr, int feature_flags) { return has_fla
 bool cave_clean_bold(floor_type *floor_ptr, POSITION y, POSITION x)
 {
     return cave_has_flag_bold(floor_ptr, y, x, FF_FLOOR) && ((floor_ptr->grid_array[y][x].info & CAVE_OBJECT) == 0)
-        && (floor_ptr->grid_array[y][x].o_idx == 0);
+        && floor_ptr->grid_array[y][x].o_idx_list.empty();
 }
 
 /*

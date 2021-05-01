@@ -62,21 +62,17 @@ static void autopick_delayed_alter_aux(player_type *player_ptr, INVENTORY_IDX it
  */
 void autopick_delayed_alter(player_type *owner_ptr)
 {
-    INVENTORY_IDX item;
-
     /*
      * Scan inventry in reverse order to prevent
      * skipping after inven_item_optimize()
      */
-    for (item = INVEN_TOTAL - 1; item >= 0; item--)
+    for (INVENTORY_IDX item = INVEN_TOTAL - 1; item >= 0; item--)
         autopick_delayed_alter_aux(owner_ptr, item);
 
-    floor_type *floor_ptr = owner_ptr->current_floor_ptr;
-    item = floor_ptr->grid_array[owner_ptr->y][owner_ptr->x].o_idx;
-    while (item) {
-        OBJECT_IDX next = floor_ptr->o_list[item].next_o_idx;
+    auto &grid = owner_ptr->current_floor_ptr->grid_array[owner_ptr->y][owner_ptr->x];
+    for (auto it = grid.o_idx_list.begin(); it != grid.o_idx_list.end();) {
+        INVENTORY_IDX item = *it++;
         autopick_delayed_alter_aux(owner_ptr, -item);
-        item = next;
     }
 
     // PW_FLOOR_ITEM_LISTは遅れるので即時更新
@@ -104,10 +100,9 @@ void autopick_alter_item(player_type *player_ptr, INVENTORY_IDX item, bool destr
  */
 void autopick_pickup_items(player_type *player_ptr, grid_type *g_ptr)
 {
-    OBJECT_IDX this_o_idx, next_o_idx = 0;
-    for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx) {
+    for (auto it = g_ptr->o_idx_list.begin(); it != g_ptr->o_idx_list.end();) {
+        OBJECT_IDX this_o_idx = *it++;
         object_type *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
-        next_o_idx = o_ptr->next_o_idx;
         int idx = find_autopick_list(player_ptr, o_ptr);
         auto_inscribe_item(player_ptr, o_ptr, idx);
         if ((idx < 0) || (autopick_list[idx].action & (DO_AUTOPICK | DO_QUERY_AUTOPICK)) == 0) {

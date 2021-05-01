@@ -180,21 +180,19 @@ bool make_gold(player_type *player_ptr, object_type *j_ptr)
 void delete_all_items_from_floor(player_type *player_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr;
-    OBJECT_IDX this_o_idx, next_o_idx = 0;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!in_bounds(floor_ptr, y, x))
         return;
 
     g_ptr = &floor_ptr->grid_array[y][x];
-    for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx) {
+    for (const auto this_o_idx : g_ptr->o_idx_list) {
         object_type *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
-        next_o_idx = o_ptr->next_o_idx;
         object_wipe(o_ptr);
         floor_ptr->o_cnt--;
     }
 
-    g_ptr->o_idx = 0;
+    g_ptr->o_idx_list.clear();
     lite_spot(player_ptr, y, x);
 }
 
@@ -273,61 +271,24 @@ void delete_object_idx(player_type *player_ptr, OBJECT_IDX o_idx)
  */
 void excise_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx)
 {
-    OBJECT_IDX this_o_idx, next_o_idx = 0;
-    OBJECT_IDX prev_o_idx = 0;
-    object_type *j_ptr;
-    j_ptr = &floor_ptr->o_list[o_idx];
+    auto &list = get_o_idx_list_contains(floor_ptr, o_idx);
+    list.remove(o_idx);
+}
 
-    if (object_is_held_monster(j_ptr)) {
-        monster_type *m_ptr;
-        m_ptr = &floor_ptr->m_list[j_ptr->held_m_idx];
-        for (this_o_idx = m_ptr->hold_o_idx; this_o_idx; this_o_idx = next_o_idx) {
-            object_type *o_ptr;
-            o_ptr = &floor_ptr->o_list[this_o_idx];
-            next_o_idx = o_ptr->next_o_idx;
-            if (this_o_idx != o_idx) {
-                prev_o_idx = this_o_idx;
-                continue;
-            }
+/*!
+ * @brief 指定したOBJECT_IDXを含むリスト(モンスター所持リスト or 床上スタックリスト)への参照を得る
+ * @param floo_ptr 現在フロアへの参照ポインタ
+ * @param o_idx 参照を得るリストに含まれるOBJECT_IDX
+ * @return o_idxを含む std::list<OBJECT_IDX> への参照
+ */
+std::list<OBJECT_IDX> &get_o_idx_list_contains(floor_type *floor_ptr, OBJECT_IDX o_idx)
+{
+    object_type *o_ptr = &floor_ptr->o_list[o_idx];
 
-            if (prev_o_idx == 0) {
-                m_ptr->hold_o_idx = next_o_idx;
-            } else {
-                object_type *k_ptr;
-                k_ptr = &floor_ptr->o_list[prev_o_idx];
-                k_ptr->next_o_idx = next_o_idx;
-            }
-
-            o_ptr->next_o_idx = 0;
-            break;
-        }
-
-        return;
-    }
-
-    grid_type *g_ptr;
-    POSITION y = j_ptr->iy;
-    POSITION x = j_ptr->ix;
-    g_ptr = &floor_ptr->grid_array[y][x];
-    for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx) {
-        object_type *o_ptr;
-        o_ptr = &floor_ptr->o_list[this_o_idx];
-        next_o_idx = o_ptr->next_o_idx;
-        if (this_o_idx != o_idx) {
-            prev_o_idx = this_o_idx;
-            continue;
-        }
-
-        if (prev_o_idx == 0) {
-            g_ptr->o_idx = next_o_idx;
-        } else {
-            object_type *k_ptr;
-            k_ptr = &floor_ptr->o_list[prev_o_idx];
-            k_ptr->next_o_idx = next_o_idx;
-        }
-
-        o_ptr->next_o_idx = 0;
-        break;
+    if (object_is_held_monster(o_ptr)) {
+        return floor_ptr->m_list[o_ptr->held_m_idx].hold_o_idx_list;
+    } else {
+        return floor_ptr->grid_array[o_ptr->iy][o_ptr->ix].o_idx_list;
     }
 }
 
@@ -360,7 +321,6 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
     POSITION dy, dx;
     POSITION ty, tx = 0;
     OBJECT_IDX o_idx = 0;
-    OBJECT_IDX this_o_idx, next_o_idx = 0;
     grid_type *g_ptr;
     GAME_TEXT o_name[MAX_NLEN];
     bool flag = FALSE;
@@ -407,10 +367,9 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
                 continue;
 
             k = 0;
-            for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx) {
+            for (const auto this_o_idx : g_ptr->o_idx_list) {
                 object_type *o_ptr;
                 o_ptr = &floor_ptr->o_list[this_o_idx];
-                next_o_idx = o_ptr->next_o_idx;
                 if (object_similar(o_ptr, j_ptr))
                     comb = TRUE;
 
@@ -515,10 +474,9 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
     }
 
     g_ptr = &floor_ptr->grid_array[by][bx];
-    for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx) {
+    for (const auto this_o_idx : g_ptr->o_idx_list) {
         object_type *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
-        next_o_idx = o_ptr->next_o_idx;
         if (object_similar(o_ptr, j_ptr)) {
             object_absorb(o_ptr, j_ptr);
             done = TRUE;
@@ -551,9 +509,7 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
         j_ptr->iy = by;
         j_ptr->ix = bx;
         j_ptr->held_m_idx = 0;
-        j_ptr->next_o_idx = g_ptr->o_idx;
-
-        g_ptr->o_idx = o_idx;
+        g_ptr->o_idx_list.push_front(o_idx);
         done = TRUE;
     }
 

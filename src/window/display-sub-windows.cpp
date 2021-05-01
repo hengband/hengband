@@ -544,12 +544,11 @@ static void display_floor_item_list(player_type *player_ptr, const int y, const 
 
     // (y,x) のアイテムを1行に1個ずつ書く。
     TERM_LEN term_y = 1;
-    for (OBJECT_IDX o_idx = g_ptr->o_idx; o_idx > 0;) {
+    for (const auto o_idx : g_ptr->o_idx_list) {
         object_type *const o_ptr = &floor_ptr->o_list[o_idx];
 
         // 未発見アイテムおよび金は対象外。
         if (none_bits(o_ptr->marked, OM_FOUND) || o_ptr->tval == TV_GOLD) {
-            o_idx = o_ptr->next_o_idx;
             continue;
         }
 
@@ -569,7 +568,6 @@ static void display_floor_item_list(player_type *player_ptr, const int y, const 
             term_addstr(-1, attr, line);
         }
 
-        o_idx = o_ptr->next_o_idx;
         ++term_y;
     }
 }
