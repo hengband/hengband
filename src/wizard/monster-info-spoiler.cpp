@@ -129,6 +129,8 @@ spoiler_output_status spoil_mon_desc(concptr fname, std::function<bool(const mon
 
         if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
             sprintf(nam, "[U] %s", name_buf);
+        } else if (any_bits(r_ptr->flags7, RF7_NAZGUL)) {
+            sprintf(nam, "[N] %s", name_buf);
         } else {
             sprintf(nam, _("    %s", "The %s"), name_buf);
         }
@@ -214,6 +216,8 @@ spoiler_output_status spoil_mon_info(concptr fname)
         BIT_FLAGS flags1 = r_ptr->flags1;
         if (any_bits(flags1, RF1_UNIQUE)) {
             spoil_out("[U] ");
+        } else if (any_bits(r_ptr->flags7, RF7_NAZGUL)) {
+            spoil_out("[N] ");
         } else {
 #ifdef JP
 #else
