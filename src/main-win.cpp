@@ -2297,7 +2297,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
             td->size_hack = TRUE;
             for (int i = 1; i < MAX_TERM_DATA; i++) {
                 if (data[i].visible)
-                    ShowWindow(data[i].w, SW_SHOW);
+                    ShowWindow(data[i].w, SW_SHOWNA);
             }
 
             td->size_hack = FALSE;
@@ -2327,7 +2327,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         for (int i = 1; i < MAX_TERM_DATA; i++) {
             if (data[i].visible) {
                 if (wParam == TRUE) {
-                    ShowWindow(data[i].w, SW_SHOW);
+                    ShowWindow(data[i].w, SW_SHOWNA);
                 } else {
                     ShowWindow(data[i].w, SW_HIDE);
                 }
@@ -2337,9 +2337,9 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         [[fallthrough]]; /* Fall through */
     case WM_ENABLE: {
         if (wParam == FALSE && keep_subwindows) {
-            for (int i = 0; i < MAX_TERM_DATA; i++) {
+            for (int i = 1; i < MAX_TERM_DATA; i++) {
                 if (data[i].visible) {
-                    ShowWindow(data[i].w, SW_SHOW);
+                    ShowWindow(data[i].w, SW_SHOWNA);
                 }
             }
         }
