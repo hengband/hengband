@@ -401,7 +401,7 @@ void exe_use_staff(player_type *creature_ptr, INVENTORY_IDX item)
         object_type forge;
         object_type *q_ptr;
         q_ptr = &forge;
-        q_ptr->object_copy(o_ptr);
+        q_ptr->copy_from(o_ptr);
 
         /* Modify quantity */
         q_ptr->number = 1;

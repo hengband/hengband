@@ -93,7 +93,7 @@ static bool exe_combine_store_items(object_type *o_ptr, object_type *j_ptr, cons
     for (k = i; k < st_ptr->stock_num; k++)
         st_ptr->stock[k] = st_ptr->stock[k + 1];
 
-    (&st_ptr->stock[k])->object_wipe();
+    (&st_ptr->stock[k])->wipe();
     *combined = TRUE;
     return TRUE;
 }
@@ -150,11 +150,11 @@ static void exe_reorder_store_item(player_type *player_ptr, bool *flag)
         object_type *j_ptr;
         object_type forge;
         j_ptr = &forge;
-        j_ptr->object_copy(&st_ptr->stock[i]);
+        j_ptr->copy_from(&st_ptr->stock[i]);
         for (int k = i; k > j; k--)
-            (&st_ptr->stock[k])->object_copy(&st_ptr->stock[k - 1]);
+            (&st_ptr->stock[k])->copy_from(&st_ptr->stock[k - 1]);
 
-        (&st_ptr->stock[j])->object_copy(j_ptr);
+        (&st_ptr->stock[j])->copy_from(j_ptr);
     }
 }
 

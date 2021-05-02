@@ -172,7 +172,7 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
     object_type *o_ptr;
     for (int i = 0; i < (floor_ptr->dun_level / 15) + 1; i++) {
         o_ptr = &forge;
-        o_ptr->object_wipe();
+        o_ptr->wipe();
         make_object(player_ptr, o_ptr, AM_GOOD | AM_GREAT);
         (void)drop_near(player_ptr, o_ptr, -1, y, x);
     }

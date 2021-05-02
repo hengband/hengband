@@ -175,7 +175,7 @@ static void process_destroy_magic_book(player_type *creature_ptr, destroy_type *
 
 static void exe_destroy_item(player_type *creature_ptr, destroy_type *destroy_ptr)
 {
-    destroy_ptr->q_ptr->object_copy(destroy_ptr->o_ptr);
+    destroy_ptr->q_ptr->copy_from(destroy_ptr->o_ptr);
     msg_format(_("%sを壊した。", "You destroy %s."), destroy_ptr->o_name);
     sound(SOUND_DESTITEM);
     reduce_charges(destroy_ptr->o_ptr, destroy_ptr->amt);

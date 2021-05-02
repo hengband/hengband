@@ -33,7 +33,7 @@ void place_gold(player_type *player_ptr, POSITION y, POSITION x)
     object_type forge;
     object_type *q_ptr;
     q_ptr = &forge;
-    q_ptr->object_wipe();
+    q_ptr->wipe();
     if (!make_gold(player_ptr, q_ptr))
         return;
 
@@ -43,7 +43,7 @@ void place_gold(player_type *player_ptr, POSITION y, POSITION x)
 
     object_type *o_ptr;
     o_ptr = &floor_ptr->o_list[o_idx];
-    o_ptr->object_copy(q_ptr);
+    o_ptr->copy_from(q_ptr);
 
     o_ptr->iy = y;
     o_ptr->ix = x;
@@ -76,7 +76,7 @@ void place_object(player_type *owner_ptr, POSITION y, POSITION x, BIT_FLAGS mode
         return;
 
     q_ptr = &forge;
-    q_ptr->object_wipe();
+    q_ptr->wipe();
     if (!make_object(owner_ptr, q_ptr, mode))
         return;
 
@@ -91,7 +91,7 @@ void place_object(player_type *owner_ptr, POSITION y, POSITION x, BIT_FLAGS mode
 
     object_type *o_ptr;
     o_ptr = &floor_ptr->o_list[o_idx];
-    o_ptr->object_copy(q_ptr);
+    o_ptr->copy_from(q_ptr);
 
     o_ptr->iy = y;
     o_ptr->ix = x;

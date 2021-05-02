@@ -105,7 +105,7 @@ static void move_item_to_monster(player_type *target_ptr, monap_type *monap_ptr,
 
     object_type *j_ptr;
     j_ptr = &target_ptr->current_floor_ptr->o_list[o_idx];
-    j_ptr->object_copy(monap_ptr->o_ptr);
+    j_ptr->copy_from(monap_ptr->o_ptr);
     j_ptr->number = 1;
     if ((monap_ptr->o_ptr->tval == TV_ROD) || (monap_ptr->o_ptr->tval == TV_WAND)) {
         j_ptr->pval = monap_ptr->o_ptr->pval / monap_ptr->o_ptr->number;

@@ -62,7 +62,7 @@ void store_item_optimize(INVENTORY_IDX item)
     for (int j = item; j < st_ptr->stock_num; j++)
         st_ptr->stock[j] = st_ptr->stock[j + 1];
 
-    (&st_ptr->stock[st_ptr->stock_num])->object_wipe();
+    (&st_ptr->stock[st_ptr->stock_num])->wipe();
 }
 
 /*!
@@ -152,7 +152,7 @@ void store_create(
         object_type forge;
         object_type *q_ptr;
         q_ptr = &forge;
-        q_ptr->object_prep(player_ptr, k_idx);
+        q_ptr->prep(player_ptr, k_idx);
         apply_magic_to_object(player_ptr, q_ptr, level, AM_NO_FIXED_ART);
         if (!(*store_will_buy)(player_ptr, q_ptr))
             continue;

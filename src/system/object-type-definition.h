@@ -44,7 +44,7 @@ typedef struct object_type {
     MONSTER_IDX held_m_idx; /*!< アイテムを所持しているモンスターID (いないなら 0) / Monster holding us (if any) */
     ARTIFACT_BIAS_IDX artifact_bias; /*!< ランダムアーティファクト生成時のバイアスID */
 
-    void object_wipe();
-    void object_copy(object_type *j_ptr);
-    void object_prep(player_type *player_ptr, KIND_OBJECT_IDX ko_idx);
+    void wipe();
+    void copy_from(object_type *j_ptr);
+    void prep(player_type *player_ptr, KIND_OBJECT_IDX ko_idx);
 } object_type;

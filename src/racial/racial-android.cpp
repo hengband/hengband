@@ -73,8 +73,8 @@ void calc_android_exp(player_type *creature_ptr)
         if (!o_ptr->k_idx)
             continue;
 
-        q_ptr->object_wipe();
-        q_ptr->object_copy(o_ptr);
+        q_ptr->wipe();
+        q_ptr->copy_from(o_ptr);
         q_ptr->discount = 0;
         q_ptr->curse_flags = 0L;
 

@@ -77,7 +77,7 @@ bool eat_magic(player_type *caster_ptr, int power)
                     object_type forge;
                     object_type *q_ptr;
                     q_ptr = &forge;
-                    q_ptr->object_copy(o_ptr);
+                    q_ptr->copy_from(o_ptr);
 
                     q_ptr->number = 1;
                     o_ptr->pval++;

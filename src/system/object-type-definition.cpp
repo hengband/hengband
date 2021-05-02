@@ -11,7 +11,7 @@
  * Wipe an object clean.
  * @param o_ptr 初期化したいオブジェクトの構造体参照ポインタ
  */
-void object_type::object_wipe()
+void object_type::wipe()
 {
     (void)WIPE(this, object_type);
 }
@@ -22,7 +22,7 @@ void object_type::object_wipe()
  * @param o_ptr 複製元のオブジェクトの構造体参照ポインタ
  * @param j_ptr 複製先のオブジェクトの構造体参照ポインタ
  */
-void object_type::object_copy(object_type *j_ptr)
+void object_type::copy_from(object_type *j_ptr)
 {
     (void)COPY(this, j_ptr, object_type);
 }
@@ -33,10 +33,10 @@ void object_type::object_copy(object_type *j_ptr)
  * @param o_ptr 代入したいオブジェクトの構造体参照ポインタ
  * @param k_idx 新たに作成したいベースアイテム情報のID
  */
-void object_type::object_prep(player_type *player_ptr, KIND_OBJECT_IDX ko_idx)
+void object_type::prep(player_type *player_ptr, KIND_OBJECT_IDX ko_idx)
 {
     object_kind *k_ptr = &k_info[ko_idx];
-    object_wipe();
+    wipe();
     this->k_idx = ko_idx;
     this->tval = k_ptr->tval;
     this->sval = k_ptr->sval;

@@ -69,7 +69,7 @@ void object_aware(player_type *owner_ptr, object_type *o_ptr)
     GAME_TEXT o_name[MAX_NLEN];
 
     q_ptr = &forge;
-    q_ptr->object_copy(o_ptr);
+    q_ptr->copy_from(o_ptr);
 
     q_ptr->number = 1;
     describe_flavor(owner_ptr, o_name, q_ptr, OD_NAME_ONLY);

@@ -37,7 +37,7 @@ static errr rd_inventory(player_type *player_ptr)
         object_type forge;
         object_type *q_ptr;
         q_ptr = &forge;
-        q_ptr->object_wipe();
+        q_ptr->wipe();
 
         rd_item(player_ptr, q_ptr);
         if (!q_ptr->k_idx)
@@ -45,7 +45,7 @@ static errr rd_inventory(player_type *player_ptr)
 
         if (n >= INVEN_MAIN_HAND) {
             q_ptr->marked |= OM_TOUCHED;
-            (&player_ptr->inventory_list[n])->object_copy(q_ptr);
+            (&player_ptr->inventory_list[n])->copy_from(q_ptr);
             player_ptr->equip_cnt++;
             continue;
         }
@@ -57,7 +57,7 @@ static errr rd_inventory(player_type *player_ptr)
 
         n = slot++;
         q_ptr->marked |= OM_TOUCHED;
-        (&player_ptr->inventory_list[n])->object_copy(q_ptr);
+        (&player_ptr->inventory_list[n])->copy_from(q_ptr);
         player_ptr->inven_cnt++;
     }
 

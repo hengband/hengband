@@ -195,7 +195,7 @@ void monster_drop_carried_objects(player_type *player_ptr, monster_type *m_ptr)
         const OBJECT_IDX this_o_idx = *it++;
         o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
         q_ptr = &forge;
-        q_ptr->object_copy(o_ptr);
+        q_ptr->copy_from(o_ptr);
         q_ptr->held_m_idx = 0;
         delete_object_idx(player_ptr, this_o_idx);
         (void)drop_near(player_ptr, q_ptr, -1, m_ptr->fy, m_ptr->fx);

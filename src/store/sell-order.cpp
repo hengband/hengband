@@ -127,7 +127,7 @@ void store_sell(player_type *owner_ptr)
 
     object_type forge;
     object_type *q_ptr = &forge;
-    q_ptr->object_copy(o_ptr);
+    q_ptr->copy_from(o_ptr);
     q_ptr->number = amt;
 
     if ((o_ptr->tval == TV_ROD) || (o_ptr->tval == TV_WAND))
@@ -169,7 +169,7 @@ void store_sell(player_type *owner_ptr)
 
             identify_item(owner_ptr, o_ptr);
             q_ptr = &forge;
-            q_ptr->object_copy(o_ptr);
+            q_ptr->copy_from(o_ptr);
             q_ptr->number = amt;
             q_ptr->ident |= IDENT_STORE;
 

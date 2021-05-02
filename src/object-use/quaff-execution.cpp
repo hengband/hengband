@@ -138,7 +138,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 
     o_ptr = ref_item(creature_ptr, item);
     q_ptr = &forge;
-    q_ptr->object_copy(o_ptr);
+    q_ptr->copy_from(o_ptr);
     q_ptr->number = 1;
     vary_item(creature_ptr, item, -1);
     sound(SOUND_QUAFF);

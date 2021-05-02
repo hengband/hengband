@@ -170,7 +170,7 @@ void do_cmd_store(player_type *player_ptr)
                 GAME_TEXT o_name[MAX_NLEN];
                 msg_print(_("ザックからアイテムがあふれてしまった！", "Your pack overflows!"));
                 q_ptr = &forge;
-                q_ptr->object_copy(o_ptr);
+                q_ptr->copy_from(o_ptr);
                 describe_flavor(player_ptr, o_name, q_ptr, 0);
                 msg_format(_("%sが落ちた。(%c)", "You drop %s (%c)."), o_name, index_to_label(item));
                 vary_item(player_ptr, item, -255);

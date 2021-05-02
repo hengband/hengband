@@ -133,7 +133,7 @@ void wipe_o_list(floor_type *floor_ptr)
 
         auto &list = get_o_idx_list_contains(floor_ptr, i);
         list.clear();
-        o_ptr->object_wipe();
+        o_ptr->wipe();
     }
 
     floor_ptr->o_max = 1;

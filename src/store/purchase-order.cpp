@@ -209,7 +209,7 @@ void store_purchase(player_type *player_ptr)
     ITEM_NUMBER amt = 1;
     object_type forge;
     object_type *j_ptr = &forge;
-    j_ptr->object_copy(o_ptr);
+    j_ptr->copy_from(o_ptr);
 
     /*
      * If a rod or wand, allocate total maximum timeouts or charges
@@ -234,7 +234,7 @@ void store_purchase(player_type *player_ptr)
     }
 
     j_ptr = &forge;
-    j_ptr->object_copy(o_ptr);
+    j_ptr->copy_from(o_ptr);
 
     /*
      * If a rod or wand, allocate total maximum timeouts or charges

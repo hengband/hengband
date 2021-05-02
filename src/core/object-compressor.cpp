@@ -34,7 +34,7 @@ static void compact_objects_aux(floor_type *floor_ptr, OBJECT_IDX i1, OBJECT_IDX
 
     // 要素番号i1のオブジェクトを要素番号i2に移動
     floor_ptr->o_list[i2] = floor_ptr->o_list[i1];
-    o_ptr->object_wipe();
+    o_ptr->wipe();
 }
 
 /*!

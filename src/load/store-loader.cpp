@@ -97,7 +97,7 @@ static errr rd_store(player_type *player_ptr, int town_number, int store_number)
         object_type forge;
         object_type *q_ptr;
         q_ptr = &forge;
-        q_ptr->object_wipe();
+        q_ptr->wipe();
 
         rd_item(player_ptr, q_ptr);
 
@@ -109,7 +109,7 @@ static errr rd_store(player_type *player_ptr, int town_number, int store_number)
             home_carry_load(player_ptr, store_ptr, q_ptr);
         } else {
             int k = store_ptr->stock_num++;
-            (&store_ptr->stock[k])->object_copy(q_ptr);
+            (&store_ptr->stock[k])->copy_from(q_ptr);
         }
     }
 

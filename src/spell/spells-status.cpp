@@ -489,7 +489,7 @@ bool cosmic_cast_off(player_type *creature_ptr, object_type **o_ptr_ptr)
         return FALSE;
 
     object_type forge;
-    (&forge)->object_copy(o_ptr);
+    (&forge)->copy_from(o_ptr);
     inven_item_increase(creature_ptr, slot, (0 - o_ptr->number));
     inven_item_optimize(creature_ptr, slot);
 

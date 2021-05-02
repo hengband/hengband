@@ -332,7 +332,7 @@ static void drain_essence(player_type *creature_ptr)
     marked = o_ptr->marked;
     number = o_ptr->number;
 
-    o_ptr->object_prep(creature_ptr, o_ptr->k_idx);
+    o_ptr->prep(creature_ptr, o_ptr->k_idx);
 
     o_ptr->iy = iy;
     o_ptr->ix = ix;

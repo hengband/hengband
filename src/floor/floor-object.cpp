@@ -117,7 +117,7 @@ bool make_object(player_type *owner_ptr, object_type *j_ptr, BIT_FLAGS mode)
         if (!k_idx)
             return FALSE;
 
-        j_ptr->object_prep(owner_ptr, k_idx);
+        j_ptr->prep(owner_ptr, k_idx);
     }
 
     apply_magic_to_object(owner_ptr, j_ptr, floor_ptr->object_level, mode);
@@ -162,7 +162,7 @@ bool make_gold(player_type *player_ptr, object_type *j_ptr)
         i = coin_type;
     if (i >= MAX_GOLD)
         i = MAX_GOLD - 1;
-    j_ptr->object_prep(player_ptr, OBJ_GOLD_LIST + i);
+    j_ptr->prep(player_ptr, OBJ_GOLD_LIST + i);
 
     s32b base = k_info[OBJ_GOLD_LIST + i].cost;
     j_ptr->pval = (base + (8L * randint1(base)) + randint1(8));
@@ -188,7 +188,7 @@ void delete_all_items_from_floor(player_type *player_ptr, POSITION y, POSITION x
     for (const auto this_o_idx : g_ptr->o_idx_list) {
         object_type *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
-        o_ptr->object_wipe();
+        o_ptr->wipe();
         floor_ptr->o_cnt--;
     }
 
@@ -260,7 +260,7 @@ void delete_object_idx(player_type *player_ptr, OBJECT_IDX o_idx)
         lite_spot(player_ptr, y, x);
     }
 
-    j_ptr->object_wipe();
+    j_ptr->wipe();
     floor_ptr->o_cnt--;
 
     set_bits(player_ptr->window_flags, PW_FLOOR_ITEM_LIST);
@@ -506,7 +506,7 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
     }
 
     if (!done) {
-        (&floor_ptr->o_list[o_idx])->object_copy(j_ptr);
+        (&floor_ptr->o_list[o_idx])->copy_from(j_ptr);
         j_ptr = &floor_ptr->o_list[o_idx];
         j_ptr->iy = by;
         j_ptr->ix = bx;

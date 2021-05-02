@@ -246,7 +246,7 @@ bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, P
 
     object_type forge;
     auto q_ptr = &forge;
-    q_ptr->object_prep(player_ptr, i);
+    q_ptr->prep(player_ptr, i);
     q_ptr->name1 = a_idx;
 
     (void)apply_artifact(player_ptr, q_ptr);
@@ -377,7 +377,7 @@ bool make_artifact_special(player_type *player_ptr, object_type *o_ptr)
 
         /*! @note 前述の条件を満たしたら、後のIDのアーティファクトはチェックせずすぐ確定し生成処理に移す /
          * Assign the template. Mega-Hack -- mark the item as an artifact. Hack: Some artifacts get random extra powers. Success. */
-        o_ptr->object_prep(player_ptr, k_idx);
+        o_ptr->prep(player_ptr, k_idx);
 
         o_ptr->name1 = i;
         return true;

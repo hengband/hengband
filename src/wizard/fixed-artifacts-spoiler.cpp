@@ -92,7 +92,7 @@ static bool make_fake_artifact(player_type *player_ptr, object_type *o_ptr, ARTI
     if (!i)
         return FALSE;
 
-    o_ptr->object_prep(player_ptr, i);
+    o_ptr->prep(player_ptr, i);
     o_ptr->name1 = name1;
     o_ptr->pval = a_ptr->pval;
     o_ptr->ac = a_ptr->ac;
@@ -168,7 +168,7 @@ spoiler_output_status spoil_fixed_artifact(concptr fname)
                 continue;
 
             q_ptr = &forge;
-            q_ptr->object_wipe();
+            q_ptr->wipe();
             if (!make_fake_artifact(&dummy, q_ptr, j))
                 continue;
 

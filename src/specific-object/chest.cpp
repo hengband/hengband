@@ -89,7 +89,7 @@ void chest_death(player_type *owner_ptr, bool scatter, POSITION y, POSITION x, O
 	for (; number > 0; --number)
 	{
 		q_ptr = &forge;
-        q_ptr->object_wipe();
+        q_ptr->wipe();
 
 		/* Small chests often drop gold */
 		if (small && (randint0(100) < 25))

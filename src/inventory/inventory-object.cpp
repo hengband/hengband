@@ -83,7 +83,7 @@ void inven_item_optimize(player_type *owner_ptr, INVENTORY_IDX item)
 
     if (item >= INVEN_MAIN_HAND) {
         owner_ptr->equip_cnt--;
-        (&owner_ptr->inventory_list[item])->object_wipe();
+        (&owner_ptr->inventory_list[item])->wipe();
         owner_ptr->update |= PU_BONUS;
         owner_ptr->update |= PU_TORCH;
         owner_ptr->update |= PU_MANA;
@@ -99,7 +99,7 @@ void inven_item_optimize(player_type *owner_ptr, INVENTORY_IDX item)
         owner_ptr->inventory_list[i] = owner_ptr->inventory_list[i + 1];
     }
 
-    (&owner_ptr->inventory_list[i])->object_wipe();
+    (&owner_ptr->inventory_list[i])->wipe();
     owner_ptr->window_flags |= PW_INVEN;
     owner_ptr->window_flags |= PW_SPELL;
 }
@@ -132,7 +132,7 @@ void drop_from_inventory(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER
     }
 
     q_ptr = &forge;
-    q_ptr->object_copy(o_ptr);
+    q_ptr->copy_from(o_ptr);
     distribute_charges(o_ptr, q_ptr, amt);
 
     q_ptr->number = amt;
@@ -187,7 +187,7 @@ void combine_pack(player_type *owner_ptr)
                         owner_ptr->inventory_list[k] = owner_ptr->inventory_list[k + 1];
                     }
 
-                    (&owner_ptr->inventory_list[k])->object_wipe();
+                    (&owner_ptr->inventory_list[k])->wipe();
                 } else {
                     int old_num = o_ptr->number;
                     int remain = j_ptr->number + o_ptr->number - max_num;
@@ -249,12 +249,12 @@ void reorder_pack(player_type *owner_ptr)
 
         flag = TRUE;
         q_ptr = &forge;
-        q_ptr->object_copy(&owner_ptr->inventory_list[i]);
+        q_ptr->copy_from(&owner_ptr->inventory_list[i]);
         for (k = i; k > j; k--) {
-            (&owner_ptr->inventory_list[k])->object_copy(&owner_ptr->inventory_list[k - 1]);
+            (&owner_ptr->inventory_list[k])->copy_from(&owner_ptr->inventory_list[k - 1]);
         }
 
-        (&owner_ptr->inventory_list[j])->object_copy(q_ptr);
+        (&owner_ptr->inventory_list[j])->copy_from(q_ptr);
         owner_ptr->window_flags |= (PW_INVEN);
     }
 
@@ -322,13 +322,13 @@ s16b store_item_to_inventory(player_type *owner_ptr, object_type *o_ptr)
 
         i = j;
         for (k = n; k >= i; k--) {
-            (&owner_ptr->inventory_list[k + 1])->object_copy(&owner_ptr->inventory_list[k]);
+            (&owner_ptr->inventory_list[k + 1])->copy_from(&owner_ptr->inventory_list[k]);
         }
 
-        (&owner_ptr->inventory_list[i])->object_wipe();
+        (&owner_ptr->inventory_list[i])->wipe();
     }
 
-    (&owner_ptr->inventory_list[i])->object_copy(o_ptr);
+    (&owner_ptr->inventory_list[i])->copy_from(o_ptr);
     j_ptr = &owner_ptr->inventory_list[i];
     j_ptr->held_m_idx = 0;
     j_ptr->iy = j_ptr->ix = 0;
@@ -396,7 +396,7 @@ INVENTORY_IDX inven_takeoff(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUM
     if (amt > o_ptr->number)
         amt = o_ptr->number;
     q_ptr = &forge;
-    q_ptr->object_copy(o_ptr);
+    q_ptr->copy_from(o_ptr);
     q_ptr->number = amt;
     describe_flavor(owner_ptr, o_name, q_ptr, 0);
     if (((item == INVEN_MAIN_HAND) || (item == INVEN_SUB_HAND)) && object_is_melee_weapon(o_ptr)) {
