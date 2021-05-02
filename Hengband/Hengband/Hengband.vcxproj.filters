@@ -2280,6 +2280,9 @@
     <ClCompile Include="..\..\src\core\score-util.cpp">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\view\display-scores.cpp">
+      <Filter>view</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4904,6 +4907,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\core\score-util.h">
       <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\display-scores.h">
+      <Filter>view</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

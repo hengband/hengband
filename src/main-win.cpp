@@ -121,6 +121,7 @@
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include "view/display-scores.h"
 #include "wizard/spoiler-util.h"
 #include "wizard/wizard-spoiler.h"
 #include "world/world.h"

@@ -25,6 +25,7 @@
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
 #include "util/string-processor.h"
+#include "view/display-scores.h"
 #include "wizard/wizard-spoiler.h"
 
 /*

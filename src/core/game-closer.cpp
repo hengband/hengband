@@ -29,6 +29,7 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "view/display-player.h"
+#include "view/display-scores.h"
 #include "world/world.h"
 
 static void clear_floor(player_type *player_ptr)
