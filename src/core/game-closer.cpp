@@ -1,4 +1,11 @@
-﻿#include "core/game-closer.h"
+﻿/*
+ * @file game-closer.cpp
+ * @brief ゲーム終了処理
+ * @author Hourier
+ * @date 2020/03/09
+ */
+
+#include "core/game-closer.h"
 #include "cmd-io/cmd-save.h"
 #include "core/asking-player.h"
 #include "core/scores.h"
@@ -72,33 +79,22 @@ static bool check_death(player_type *player_ptr)
  */
 static void kingly(player_type *winner_ptr)
 {
-    TERM_LEN wid, hgt;
-    TERM_LEN cx, cy;
     bool seppuku = streq(winner_ptr->died_from, "Seppuku");
-
-    /* Hack -- retire in town */
     winner_ptr->current_floor_ptr->dun_level = 0;
-
-    /* Fake death */
-    if (!seppuku)
+    if (!seppuku) {
         /* 引退したときの識別文字 */
         (void)strcpy(winner_ptr->died_from, _("ripe", "Ripe Old Age"));
+    }
 
-    /* Restore the experience */
     winner_ptr->exp = winner_ptr->max_exp;
-
-    /* Restore the level */
     winner_ptr->lev = winner_ptr->max_plv;
-
+    TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
-    cy = hgt / 2;
-    cx = wid / 2;
-
-    /* Hack -- Instant Gold */
+    auto cy = hgt / 2;
+    auto cx = wid / 2;
     winner_ptr->au += 10000000L;
     term_clear();
 
-    /* Display a crown */
     put_str("#", cy - 11, cx - 1);
     put_str("#####", cy - 10, cx - 3);
     put_str("#", cy - 9, cx - 1);
@@ -112,7 +108,6 @@ static void kingly(player_type *winner_ptr)
     put_str("*#########*#########*", cy - 1, cx - 11);
     put_str("*#########*#########*", cy, cx - 11);
 
-    /* Display a message */
 #ifdef JP
     put_str("Veni, Vidi, Vici!", cy + 3, cx - 9);
     put_str("来た、見た、勝った！", cy + 4, cx - 10);
@@ -123,17 +118,13 @@ static void kingly(player_type *winner_ptr)
     put_str(format("All Hail the Mighty %s!", sp_ptr->winner), cy + 5, cx - 13);
 #endif
 
-    /* If player did Seppuku, that is already written in playrecord */
     if (!seppuku) {
         exe_write_diary(winner_ptr, DIARY_DESCRIPTION, 0, _("ダンジョンの探索から引退した。", "retired exploring dungeons."));
         exe_write_diary(winner_ptr, DIARY_GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
         exe_write_diary(winner_ptr, DIARY_DESCRIPTION, 1, "\n\n\n\n");
     }
 
-    /* Flush input */
     flush();
-
-    /* Wait for response */
     pause_line(hgt - 1);
 }
 
