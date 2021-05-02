@@ -286,7 +286,7 @@ bool pulish_shield(player_type *caster_ptr)
         msg_format("%s %s shine%s!", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "" : "s"));
 #endif
         o_ptr->name2 = EGO_REFLECTION;
-        enchant(caster_ptr, o_ptr, randint0(3) + 4, ENCH_TOAC);
+        enchant_equipment(caster_ptr, o_ptr, randint0(3) + 4, ENCH_TOAC);
         o_ptr->discount = 99;
         chg_virtue(caster_ptr, V_ENCHANT, 2);
         return TRUE;

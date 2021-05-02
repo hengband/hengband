@@ -10,9 +10,10 @@
 #include "artifact/fixed-art-generator.h"
 #include "dungeon/dungeon.h"
 #include "mutation/mutation-flag-types.h"
-#include "object-enchant/apply-magic-accessory.h"
+#include "object-enchant/apply-magic-amulet.h"
 #include "object-enchant/apply-magic-armor.h"
 #include "object-enchant/apply-magic-others.h"
+#include "object-enchant/apply-magic-ring.h"
 #include "object-enchant/apply-magic-weapon.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/object-curse.h"
@@ -43,7 +44,7 @@
  * @details
  * エゴ＆アーティファクトの生成、呪い、pval強化
  */
-void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
+void apply_magic_to_object(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
 {
     if (owner_ptr->pseikaku == PERSONALITY_MUNCHKIN)
         lev += randint0(owner_ptr->lev / 2 + 10);
@@ -154,10 +155,18 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
         break;
     }
     case TV_RING:
-    case TV_AMULET: {
-        if (!power && (randint0(100) < 50))
+        if (!power && (randint0(100) < 50)) {
             power = -1;
-        apply_magic_accessary(owner_ptr, o_ptr, lev, power);
+        }
+
+        RingEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
+        break;
+    case TV_AMULET: {
+        if (!power && (randint0(100) < 50)) {
+            power = -1;
+        }
+
+        AmuletEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
         break;
     }
     default: {

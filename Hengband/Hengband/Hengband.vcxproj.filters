@@ -824,9 +824,6 @@
     <ClCompile Include="..\..\src\object-enchant\apply-magic-armor.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-enchant\apply-magic-accessory.cpp">
-      <Filter>object-enchant</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\object-enchant\apply-magic-others.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
@@ -2277,6 +2274,12 @@
     <ClCompile Include="..\..\src\main-win\commandline-win.cpp">
       <Filter>main-win</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\apply-magic-ring.cpp">
+      <Filter>object-enchant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\apply-magic-amulet.cpp">
+      <Filter>object-enchant</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3227,7 +3230,7 @@
     <ClInclude Include="..\..\src\object-enchant\apply-magic-armor.h">
       <Filter>object-enchant</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object-enchant\apply-magic-accessory.h">
+    <ClInclude Include="..\..\src\object-enchant\enchanter-base.h">
       <Filter>object-enchant</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object-enchant\apply-magic-others.h">
@@ -4898,6 +4901,13 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player-info\equipment-info.h">
       <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main-win\string-win.h" />
+    <ClInclude Include="..\..\src\object-enchant\apply-magic-ring.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\apply-magic-amulet.h">
+      <Filter>object-enchant</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

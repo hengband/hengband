@@ -122,7 +122,7 @@ static void decide_initial_items(player_type *creature_ptr, object_type *q_ptr)
     case RACE_ANDROID:
         /* Flasks of oil */
         object_prep(creature_ptr, q_ptr, lookup_kind(TV_FLASK, SV_ANY));
-        apply_magic(creature_ptr, q_ptr, 1, AM_NO_FIXED_ART);
+        apply_magic_to_object(creature_ptr, q_ptr, 1, AM_NO_FIXED_ART);
         q_ptr->number = (ITEM_NUMBER)rand_range(7, 12);
         add_outfit(creature_ptr, q_ptr);
         break;

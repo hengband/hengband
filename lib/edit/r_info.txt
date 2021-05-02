@@ -523,9 +523,8 @@ I:110:1d2:2:1:0
 W:1:1:0:3:0:0
 B:SPORE:CONFUSE:1d6
 F:NEVER_MOVE | 
-F:STUPID | EMPTY_MIND | 
-F:IM_POIS | DROP_CORPSE | EAT_CONF |
-F:NO_CONF | NO_SLEEP | NO_FEAR
+F:STUPID | EMPTY_MIND | IM_POIS | DROP_CORPSE | EAT_CONF
+F:NO_CONF | NO_SLEEP | NO_FEAR | RAND_25 | QUANTUM
 S:1_IN_2 |
 S:BLINK
 D:$Is it there or is it not? 
@@ -818,9 +817,9 @@ E:Novice warrior
 G:p:U
 I:110:9d4:20:16:5
 W:2:1:0:8:70:216
-B:HIT:HURT:1d8
-B:HIT:HURT:1d8
-B:HIT:HURT:1d7
+B:SLASH:HURT:1d8
+B:SLASH:HURT:1d8
+B:SLASH:HURT:1d7
 F:MALE | HAS_LITE_1 |
 F:DROP_60 | WILD_ALL | DROP_SKELETON | DROP_CORPSE | HUMAN |
 F:OPEN_DOOR | BASH_DOOR | EAT_GIVE_STR | EAT_LOSE_INT | EAT_LOSE_WIS
@@ -2366,7 +2365,8 @@ G:.:d
 I:110:21d8:30:14:20
 W:8:2:0:28:0:0
 B:HIT:TERRIFY:1d5
-F:PASS_WALL | NO_CONF | NO_SLEEP | NONLIVING | IM_ACID | RES_DARK | CAN_FLY
+F:PASS_WALL | NO_CONF | NO_SLEEP | NONLIVING | CAN_FLY | QUANTUM
+F:IM_ACID | RES_DARK | RAND_25
 D:$A black hole in the fabric of reality. 
 D:現実という生地に空いた黒い穴だ。
 
@@ -3565,8 +3565,8 @@ E:Swordsman
 G:p:U
 I:110:12d8:20:34:20
 W:12:1:0:40:400:372
-B:HIT:HURT:3d6
-B:HIT:HURT:3d6
+B:SLASH:HURT:3d6
+B:SLASH:HURT:3d6
 F:MALE | HUMAN | WILD_ALL | HAS_LITE_2 |
 F:DROP_1D2 | DROP_SKELETON | DROP_CORPSE
 F:OPEN_DOOR | BASH_DOOR
@@ -6232,8 +6232,8 @@ E:Hardened warrior
 G:p:u
 I:110:15d11:20:40:40
 W:23:1:0:60:2500:532
-B:HIT:HURT:3d5
-B:HIT:SUPERHURT:3d5
+B:SLASH:HURT:3d5
+B:SLASH:SUPERHURT:3d5
 F:MALE | HAS_LITE_2 | HUMAN |
 F:DROP_1D2 | 
 F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
@@ -9325,10 +9325,10 @@ E:Dagashi
 G:p:y
 I:120:13d25:20:70:10
 W:35:4:0:500:0:0
-B:HIT:POISON:3d4
-B:HIT:LOSE_STR:3d4
-B:HIT:LOSE_STR:3d4
-B:HIT:POISON:3d4
+B:SLASH:POISON:3d4
+B:SLASH:LOSE_STR:3d4
+B:SLASH:LOSE_STR:3d4
+B:SLASH:POISON:3d4
 F:MALE | 
 F:DROP_1D2 | 
 F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
@@ -12487,7 +12487,7 @@ I:120:12d100:20:100:10
 W:43:2:0:8000:0:0
 B:TOUCH:LOSE_ALL:7d6
 B:TOUCH:LOSE_ALL:7d6
-F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | RAND_25 | 
+F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | RAND_25 | QUANTUM
 F:INVISIBLE | PASS_WALL | CAN_FLY | 
 F:ONLY_ITEM | DROP_1D2 | DROP_4D2 | ATTR_MULTI | ATTR_ANY |
 F:CHAR_CLEAR | SMART | COLD_BLOOD | EVIL | 
@@ -18934,8 +18934,8 @@ B:SHOW:SHATTER:1d200
 B:INSULT:EXP_VAMP:1d200
 B:DROOL:UN_POWER:1d100
 B:WAIL:DR_MANA:1d100
-F:DROP_SKELETON | DROP_CORPSE | PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | ELDRITCH_HORROR |
-F:ATTR_MULTI | RAND_25 | RAND_50 | RIDING |
+F:DROP_SKELETON | DROP_CORPSE | PREVENT_SUDDEN_MAGIC | FORCE_MAXHP
+F:ATTR_MULTI | RAND_25 | RAND_50 | RIDING | ELDRITCH_HORROR | QUANTUM
 F:ONLY_ITEM | DROP_60 | DROP_90 | DROP_1D2 | DROP_2D2 | DROP_3D2 | DROP_4D2 |
 F:DROP_GOOD | STUPID | SMART | CAN_SPEAK | REFLECTING | INVISIBLE | COLD_BLOOD |
 F:EMPTY_MIND | WEIRD_MIND | REGENERATE | SHAPECHANGER | ATTR_ANY | POWERFUL |
@@ -21185,12 +21185,11 @@ W:29:6:0:400:0:0
 B:HIT:HURT:3d5
 B:HIT:HURT:3d5
 B:HIT:HURT:3d5
-F:FORCE_MAXHP | PREVENT_SUDDEN_MAGIC | NO_FEAR | EVIL |
-F:ONLY_ITEM | DROP_2D2 | NONLIVING | 
+F:FORCE_MAXHP | PREVENT_SUDDEN_MAGIC | NO_FEAR | EVIL
+F:ONLY_ITEM | DROP_2D2 | NONLIVING | RAND_25 | QUANTUM
 F:SMART | TAKE_ITEM | OPEN_DOOR | BASH_DOOR | POWERFUL | 
 F:IM_FIRE | IM_COLD | IM_POIS | NO_CONF | NO_SLEEP | RES_TELE | 
-S:1_IN_3 | 
-S:HEAL | HASTE | BLIND | CONF | SCARE | TPORT | BLINK
+S:1_IN_3 | HEAL | HASTE | BLIND | CONF | SCARE | TPORT | BLINK
 D:$A shabby humanoid with wrinkled skin. It seems to shift 
 D:$in and out of existance as you watch. 
 D:しわくちゃの肌を持つみすぼらしい姿の人間型モンスターだ。
@@ -22974,7 +22973,7 @@ W:45:2:0:2000:0:0
 B:CRUSH:HURT:5d10
 B:CRUSH:HURT:5d10
 F:FORCE_MAXHP | COLD_BLOOD | CAN_FLY | GOOD | UNDEAD
-F:NO_CONF | NO_SLEEP | NO_FEAR
+F:NO_CONF | NO_SLEEP | NO_FEAR | CAN_SPEAK
 S:1_IN_5 | ROCKET
 R:1147:5d5
 D:$It is a ghost of those who made human life a part,
@@ -24106,7 +24105,7 @@ F:UNIQUE | FORCE_MAXHP | DROP_CORPSE | DROP_SKELETON | ATTR_MULTI
 F:DROP_3D2 | DROP_4D2 | DROP_GREAT | ONLY_ITEM | CAN_FLY | EVIL
 F:IM_COLD | IM_FIRE | IM_ELEC | RES_SOUN
 F:BASH_DOOR | KILL_BODY | DRAGON | NO_CONF | NO_SLEEP | NO_FEAR | RIDING
-S:1_IN_3 | SHRIEK | S_KIN | ANIM_DEAD
+S:1_IN_3 | SHRIEK | S_DRAGON | S_HI_DRAGON | S_KIN | ANIM_DEAD
 S:BR_ELEC | BR_FIRE | BR_COLD | BR_SOUN | BR_FORC | BR_MANA
 D:$It is the first dragon born in the worlds.
 D:$  It destroyed the last world to usher in this one.
@@ -24185,7 +24184,7 @@ B:CRUSH:LOSE_WIS:10d11
 B:SLASH:EXP_VAMP:10d11
 B:SLASH:EXP_VAMP:10d11
 F:UNIQUE | FORCE_MAXHP | UNDEAD | EVIL | DEMON | MALE
-F:DROP_CORPSE | DROP_SKELETON | BASH_DOOR
+F:DROP_CORPSE | DROP_SKELETON | BASH_DOOR | KILL_BODY
 F:HURT_LITE | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS
 F:RES_NETH | RES_DARK | RES_SHAR | NO_SLEEP | NO_CONF
 F:DROP_GREAT | DROP_2D2
@@ -24203,7 +24202,7 @@ I:110:10d9:15:20:30
 W:8:1:0:25:150:1215
 B:HIT:HURT:1d10
 F:UNDEAD | DROP_CORPSE | HURT_FIRE | HURT_LITE | IM_COLD | IM_POIS | RES_NETH
-F:DROP_60 | FRIENDS | NO_FEAR
+F:DROP_60 | FRIENDS | NO_FEAR | COLD_BLOOD
 D:$It is a warrior buried in ancient times.
 D:$  It does not forgive treasure-seeking intruders.
 D:太古に埋葬された戦士だ。財宝を狙う侵入者を容赦しない。
@@ -24217,8 +24216,8 @@ B:SHOOT:HURT:7d7
 B:HIT:HURT:2d6
 B:SLASH:HURT:2d6
 F:UNDEAD | EVIL | DROP_CORPSE
-F:HURT_FIRE | HURT_LITE | IM_COLD | IM_POIS | RES_NETH
-F:DROP_90 | FRIENDS | NO_FEAR
+F:HURT_FIRE | HURT_LITE | IM_COLD | IM_POIS | RES_NETH | COLD_BLOOD
+F:DROP_90 | FRIENDS | NO_FEAR | COLD_BLOOD
 S:1_IN_9 | SHOOT | BA_COLD
 D:$It is a warrior buried in ancient times.
 D:$  It never forgives treasure-seeking intruders.
@@ -24233,8 +24232,8 @@ B:SHOOT:HURT:8d9
 B:HIT:HURT:4d6
 B:SLASH:HURT:4d6
 B:CRUSH:HURT:4d6
-F:UNDEAD | EVIL | DROP_CORPSE
-F:HURT_LITE | IM_COLD | IM_POIS | RES_NETH | DROP_90 | FRIENDS | NO_FEAR
+F:UNDEAD | EVIL | DROP_CORPSE | NO_FEAR | COLD_BLOOD
+F:HURT_LITE | IM_COLD | IM_POIS | RES_NETH | DROP_90 | FRIENDS
 S:1_IN_8 | SHOOT | BA_COLD
 D:$This warrior has continued to protect its tomb for a long time.
 D:$  It may conscript you as an assistant guard!
@@ -24250,7 +24249,7 @@ B:HIT:HURT:7d6
 B:SLASH:HURT:7d6
 B:CRUSH:HURT:7d6
 F:UNDEAD | EVIL | DROP_CORPSE | HURT_LITE | IM_COLD | IM_POIS | RES_NETH
-F:DROP_90 | DROP_1D2 | ONLY_ITEM | FRIENDS | NO_FEAR | BASH_DOOR
+F:DROP_90 | DROP_1D2 | ONLY_ITEM | FRIENDS | NO_FEAR | BASH_DOOR | COLD_BLOOD
 S:1_IN_6 | SHOOT | SCARE | BA_COLD | BR_COLD | BR_SOUN
 D:$It is a draugr that has acquired a unique cry
 D:$ and will warn all nearby of the presence of an intruder.
@@ -24266,7 +24265,7 @@ B:HIT:SUPERHURT:8d8
 B:SLASH:SUPERHURT:8d8
 B:CRUSH:HURT:8d9
 F:FORCE_MAXHP | UNDEAD | EVIL | ESCORT | DROP_CORPSE
-F:NO_CONF | BASH_DOOR | MOVE_BODY | NO_FEAR
+F:NO_CONF | BASH_DOOR | MOVE_BODY | NO_FEAR | COLD_BLOOD
 F:HURT_LITE | IM_COLD | IM_POIS | RES_NETH | DROP_2D2 | ONLY_ITEM
 S:1_IN_5 | SHOOT | SCARE | BA_COLD | BR_COLD | BR_SOUN | S_UNDEAD
 D:$It is a warrior buried in ancient times.
@@ -24285,7 +24284,7 @@ B:SLASH:SUPERHURT:12d11
 B:CRUSH:HURT:8d11
 F:NAZGUL | FORCE_MAXHP | EVIL | UNDEAD | NO_SLEEP | NO_CONF | NO_FEAR
 F:ESCORT | ESCORTS | BASH_DOOR | MOVE_BODY
-F:IM_COLD | IM_POIS | RES_NETH | RES_TELE | NO_CONF
+F:IM_COLD | IM_POIS | RES_NETH | RES_TELE | NO_CONF | COLD_BLOOD
 F:DROP_90 | DROP_3D2 | DROP_GOOD | ONLY_ITEM | DROP_CORPSE
 S:1_IN_5 | SHOOT | SCARE | HOLD | BA_POIS | BA_COLD | BR_COLD | BR_SOUN
 S:S_UNDEAD | S_KIN
@@ -24549,8 +24548,8 @@ D:ファルメルに飼われている姿をよく見かける。
 N:1237:バーゲスト
 E:Barghest
 G:C:G
-I:115:25d23:30:45:15
-W:23:2:0:350:0:0
+I:115:15d23:20:45:15
+W:23:3:0:350:0:0
 B:BITE:FIRE:6d5
 B:BITE:FIRE:6d5
 B:CLAW:FIRE:6d5
@@ -24600,13 +24599,12 @@ D:$Communication with the adventurer is not established properly.
 D:それとは冒険者とのコミュニケーションがまともに成立しない。
 
 N:1240:ソードマスター『ヤマト』
-E:Yamato, the sword master
+E:Yamato, the Sword Master
 G:p:s
 I:120:25d12:15:40:20
 W:15:1:0:350:0:0
-B:SLASH:HURT:2d11
 B:CRUSH:HURT:1d13
-B:SLASH:FIRE:3d11
+B:SLASH:FIRE:4d11
 F:UNIQUE | FORCE_MAXHP | HUMAN | MALE | GOOD | NO_FEAR | CAN_SPEAK
 F:ONLY_ITEM | DROP_4D2
 S:1_IN_7 | HASTE
@@ -24935,7 +24933,7 @@ N:1257:百足龍虫
 E:Dragon centipede
 G:c:v
 I:120:100d20:30:150:10
-W:61:3:0:8500:0:0
+W:61:2:0:8500:0:0
 B:CRUSH:HURT:5d12
 B:CRUSH:HURT:5d12
 B:GAZE:ACID:7d14
@@ -25367,7 +25365,7 @@ D:紅色の法衣を身にまとった、拳法に熟練した高位の修行僧
 N:1281:グレート・イクリプス・ドレイク
 E:Great Eclipse Drake
 G:D:U
-I:120:80d30:25:110:30
+I:120:80d30:25:110:15
 W:54:2:0:18000:0:0
 B:CLAW:HURT:9d9
 B:CLAW:HURT:9d9
@@ -25377,30 +25375,33 @@ F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | WEIRD_MIND
 F:DROP_2D2 | DROP_4D2 | DROP_GOOD | INVISIBLE | CAN_FLY
 F:PASS_WALL | POWERFUL | MOVE_BODY
 F:DRAGON | RES_LITE | RES_DARK | NO_CONF | NO_SLEEP | RIDING
-S:1_IN_4 | BLIND | CONF | BR_LITE | BR_DARK | BR_CONF
+S:1_IN_4 | BLIND | CONF | SCARE | BR_LITE | BR_DARK | BR_CONF
 D:$Adventurer's recklessness.
 D:$  The regret in verge makes disintegration.
 D:$  That lament is a flow in the collective.
 D:$  You extract the level octave of light and darkness as
 D:$ the strength of the great power of this dragon.
 D:$  This evidence will face the fact that you are alive.
-D:$  This immoral dragon rules the power of Tellur and Selen
+D:$  This sensitive dragon rules the power of Uran and Selen
 D:$ in the depths of a deep cave.
-D:$  The glory of killing this dragon seduces adventurers,
+D:$  The glory of killing this immoral dragon seduces adventurers,
 D:$ but caricature artists will satrize you and make a masterpiece.
 D:$  The terrifying two faces with linkage to its body see you
 D:$ as just a secular and lazy prey.
 D:$  You can tell if your future is heaven or hell by fighting.
+D:$  May your grave marker be accompanied by a lythrum.
 D:冒険者の蛮勇。
 D:後悔の境界は崩壊の慟哭を伴って、奔流の集合を展開させる。
 D:光と闇の奏でる音階はこのドラゴンの強大さを示す証拠となり、
 D:あなたの活気を失わせる。
-D:この不徳なドラゴンは深い洞窟の奥でテルースとセレーネの力を支配している。
-D:冒険者はドラゴンを斃す栄光の誘惑に駆られるだろうが、
+D:この餌の匂いに敏感なドラゴンは深い洞窟の奥で
+D:ウラヌスとセレーネの力を支配している。
+D:冒険者はこの不徳なドラゴンを斃す栄光の誘惑に駆られるだろうが、
 D:それは傑作な風刺画の材料にしかならない。
 D:胴体へ結合された二つの恐ろしげな首は
 D:あなたを単なる世俗で怠慢な獲物としか見ていない。
 D:あなたの行く末が天国か地獄かは、戦ってみれば分かるだろう。
+D:あなたの墓標に一輪の千屈菜が添えられんことを。
 
 N:1282:盗賊『鼠小僧』
 E:Nezumi-Kozou, the Thief
@@ -25457,7 +25458,6 @@ B:HIT:LOSE_STR:6d8
 B:CLAW:EAT_ITEM:2d12
 F:UNIQUE | MALE | DROP_CORPSE | DROP_SKELETON | HUMAN
 F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | SMART | HAS_LITE_2
-F:ONLY_ITEM | DROP_90 | DROP_GOOD | DROP_GREAT
 F:OPEN_DOOR | BASH_DOOR | TAKE_ITEM
 F:EVIL | IM_FIRE | IM_POIS | REGENERATE | CAN_FLY
 F:NO_CONF | NO_SLEEP | POWERFUL
@@ -25519,6 +25519,8 @@ D:多くの者が彼の魔法使いとその宝物を見つけようとしたが
 D:誰も彼を見つけて生きてその顛末を語ることはなかった。
 D:この強大な魔法使いを煩わせる不用意な冒険者に災いあれ。
 
+# 口 (mouth in Chinese character) and
+# ロ (Ro in Japanese syllabary) are too similar!!
 N:1286:『サウロンのロ』
 E:The Ro of Sauron
 G:p:v
@@ -25599,7 +25601,7 @@ D:あなたの持つ伝説のアイテムに目をつけている……
 N:1290:『ヴィネガー・ドッピオ』
 E:Vinegar Doppio
 G:p:v
-I:130:10d100:0:100:10
+I:130:10d100:20:100:10
 W:65:5:0:5555:0:0
 B:HIT:SUPERHURT:10d10
 F:UNIQUE | MALE |
@@ -25753,3 +25755,126 @@ D:$  It's frustrating because it doesn't enter a cage
 D:$ so it can't have a good rest.
 D:とある宿場に泊まった高名な絵師が宿代が足りなくて屏風へ描いた雀だ。
 D:駕籠がないのでゆっくり休めずイライラしている。
+
+N:1298:ベルゼバブの四天王『サイアーク』
+E:Saiaak, the Weakest Big Four of Beelzebub
+G:h:u
+I:110:1d1:10:0:25
+W:2:1:0:35:0:0
+B:HIT:HURT:2d4
+F:UNIQUE | FORCE_MAXHP | DROP_CORPSE | MALE | DEMON
+F:DROP_3D2 | ONLY_GOLD | CAN_SPEAK | EVIL | DROP_SKELETON
+D:$He is the weakest man among the big four,
+D:$ and is a mess of the demons.
+D:四天王の中で最弱の男であり、魔族の面汚しだ。
+
+N:1299:『ロストリンギル大佐』
+E:The Colonel Lostringil
+G:p:D
+I:115:40d100:20:150:20
+W:60:5:0:20000:0:0
+B:SLASH:TIME:100d1
+B:SLASH:TIME:100d1
+B:SLASH:EAT_ITEM:5d5
+B:SLASH:EAT_ITEM:5d5
+F:UNIQUE | FORCE_MAXHP | GOOD | HUMAN | MALE | UNDEAD | COLD_BLOOD
+F:BASH_DOOR | CAN_SWIM | CAN_FLY | FRIENDLY | CAN_SPEAK | DROP_CORPSE
+F:IM_ACID | IM_ELEC | IM_FIRE | IM_POIS | RES_DARK | RES_NETH | RES_WATE
+F:RES_PLAS | RES_SHAR | RES_SOUN | RES_CHAO | RES_DISE | RES_NEXU | RES_WALL
+F:RES_INER | RES_TIME | RES_GRAV | RES_TELE
+F:NO_CONF | NO_STUN | HAS_DARK_1
+F:WILD_TOWN | WILD_SHORE | WILD_OCEAN | WILD_WASTE | WILD_WOOD
+F:WILD_VOLCANO | WILD_MOUNTAIN | WILD_GRASS
+S:1_IN_6 | INVULNER | SCARE | TELE_TO | BR_TIME
+D:$Ringil.
+D:$  The weapon of Fingolfin, High King of the Noldor;
+D:$ it shines like a column of ice lit by light unquenchable.
+D:$  He was a major in his lifetime.
+D:$  He has been searching for the power of that sword forever. 
+D:$  He will remind him of its might should he meet it again.
+D:リンギル。それはノルドールの上級王フィンゴルフィンの武器。
+D:氷の柱の如く輝いている。
+D:彼は生前は少佐で、あの剣の力をいつまでも探し続けている。
+D:彼はこの剣の力を再び思い知ることになるだろう。
+
+N:1300:ハーフオーガ
+E:Half-ogre
+G:O:G
+I:110:10d15:30:50:50
+W:25:2:0:200:0:0
+B:HIT:HURT:2d8
+B:HIT:HURT:2d8
+B:HIT:HURT:2d8
+B:HIT:HURT:2d8
+F:DROP_1D2
+F:OPEN_DOOR | BASH_DOOR | DROP_CORPSE | DROP_SKELETON
+F:EVIL | GIANT | HUMAN | RES_DARK
+R:238:3d5
+S:1_IN_8 | TRAPS
+D:$A short and thin ogre.
+D:$  It has intelligence to execute trap learnt from ogre mage,
+D:$ and directs soldiers
+D:背が低く痩せたオーガだ。
+D:オーガメイジの罠を実行するだけの知能があり、雑兵に指図する。
+
+N:1301:ハーフジャイアント
+E:Half-giant
+G:P:u
+I:110:80d18:30:60:50
+W:35:3:0:1500:0:0
+B:HIT:HURT:3d8
+B:HIT:HURT:3d8
+B:HIT:HURT:3d8
+B:HIT:HURT:3d8
+F:DROP_1D2
+F:OPEN_DOOR | BASH_DOOR | DROP_CORPSE | DROP_SKELETON
+F:EVIL | GIANT | HUMAN | RES_SHAR | KILL_WALL |
+D:$This majestic humanoid is hybrid of human and giant.
+D:$  Wall of dungeon pays respect to blood of one parent,
+D:$ incarnation of nature, and pave the way.
+D:この堂々たる体躯の人型生物は、人間と巨人の混血だ。
+D:自然の顕現である片親の血に敬意を払い、ダンジョンの壁が道を開ける。
+
+N:1302:ハーフタイタン
+E:Half-titan
+G:P:W
+I:120:100d50:30:110:255
+W:49:2:0:13500:0:0
+B:SHOOT:HURT:10d10
+B:HIT:HURT:10d10
+B:HIT:HURT:10d10
+B:HIT:HURT:10d10
+F:DROP_SKELETON | DROP_CORPSE
+F:ONLY_ITEM | DROP_4D2 | DROP_GOOD | RES_CHAO
+F:SMART | TAKE_ITEM | OPEN_DOOR | BASH_DOOR
+F:GIANT | HUMAN | CAN_FLY | INVISIBLE | REFLECTING
+R:990:1d4
+S:1_IN_4 | SHOOT
+D:$This living body looks like heroic sculpture.
+D:$  Considering you an enemy to defeat,
+D:$ it has a polished shield and hides itself.
+D:それは彫刻のような素晴らしい勇壮な姿をしている。
+D:あなたを倒すべき敵とみなして、磨き抜かれた盾を持ち、姿を隠している。
+
+N:1303:ヨグ=ソトートの落とし子
+E:Spawn of Yog-Sothoth
+G:U:s
+I:112:40d15:20:75:120
+W:32:2:0:65:0:0
+B:CRUSH:HURT:4d8
+B:CRUSH:HURT:4d8
+B:CRUSH:HURT:4d8
+B:CRUSH:HURT:4d8
+F:INVISIBLE | BASH_DOOR | DROP_90 | EVIL | DEMON | ELDRITCH_HORROR | CAN_SPEAK
+R:318:1d1
+R:1008:1d1
+D:$It is raised while being hidden from human society by mortal
+D:$ and near-mortal relatives.
+D:$  It is usually invisible, but it looks like a twisted rope,
+D:$ full of tentacles and eyeballs, resembling an octopus, a centipede,
+D:$ or a spider, and also has appearance of a mortal pedigree.
+D:$  It is raised hidden from human society by mortal and near-mortal relatives.
+D:ヨグ=ソトートと定命のものの混血児だ。
+D:それは通常は目に見えないが、綱をよじり合わせたような、触手と目玉だらけの姿で、
+D:タコかムカデかクモに似ており、そこに定命のほうの血統が現れた外見をしている。
+D:これは定命の家族や定命の血が濃い兄弟に、人間社会から隠されながら育てられている。
