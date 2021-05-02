@@ -31,14 +31,9 @@
  */
 void display_scores_aux(int from, int to, int note, high_score *score)
 {
-    int i, j, k, n, place;
-    TERM_COLOR attr;
-    high_score the_score;
-    GAME_TEXT out_val[256];
-    GAME_TEXT tmp_val[160];
-    TERM_LEN wid, hgt, per_screen;
+    TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
-    per_screen = (hgt - 4) / 4;
+    auto per_screen = (hgt - 4) / 4;
     if (highscore_fd < 0) {
         return;
     }
@@ -59,7 +54,9 @@ void display_scores_aux(int from, int to, int note, high_score *score)
         return;
     }
     
-    for (i = 0; i < MAX_HISCORES; i++) {
+    auto i = 0;
+    high_score the_score;
+    for (; i < MAX_HISCORES; i++) {
         if (highscore_read(&the_score)) {
             break;
         }
@@ -73,18 +70,18 @@ void display_scores_aux(int from, int to, int note, high_score *score)
         i = to;
     }
 
-    for (k = from, place = k + 1; k < i; k += per_screen) {
+    for (auto k = from, place = k + 1; k < i; k += per_screen) {
         term_clear();
         put_str(_("                変愚蛮怒: 勇者の殿堂", "                Hengband Hall of Fame"), 0, 0);
+        GAME_TEXT tmp_val[160];
         if (k > 0) {
             sprintf(tmp_val, _("( %d 位以下 )", "(from position %d)"), k + 1);
             put_str(tmp_val, 0, 40);
         }
 
-        for (j = k, n = 0; j < i && n < per_screen; place++, j++, n++) {
-            int pr, pc, pa, clev, mlev, cdun, mdun;
-            concptr user, gold, when, aged;
-            attr = (j == note) ? TERM_YELLOW : TERM_WHITE;
+        auto j = k;
+        for (auto n = 0; j < i && n < per_screen; place++, j++, n++) {
+            auto attr = (j == note) ? TERM_YELLOW : TERM_WHITE;
             if ((note == j) && score) {
                 the_score = (*score);
                 attr = TERM_L_GREEN;
@@ -95,21 +92,28 @@ void display_scores_aux(int from, int to, int note, high_score *score)
                 break;
             }
 
-            pr = atoi(the_score.p_r);
-            pc = atoi(the_score.p_c);
-            pa = atoi(the_score.p_a);
+            auto pr = atoi(the_score.p_r);
+            auto pc = atoi(the_score.p_c);
+            auto pa = atoi(the_score.p_a);
 
-            clev = atoi(the_score.cur_lev);
-            mlev = atoi(the_score.max_lev);
-            cdun = atoi(the_score.cur_dun);
-            mdun = atoi(the_score.max_dun);
+            auto clev = atoi(the_score.cur_lev);
+            auto mlev = atoi(the_score.max_lev);
+            auto cdun = atoi(the_score.cur_dun);
+            auto mdun = atoi(the_score.max_dun);
 
+            concptr user;
             for (user = the_score.uid; iswspace(*user); user++) /* loop */
                 ;
+
+            concptr when;            
             for (when = the_score.day; iswspace(*when); when++) /* loop */
                 ;
+
+            concptr gold;
             for (gold = the_score.gold; iswspace(*gold); gold++) /* loop */
                 ;
+
+            concptr aged;
             for (aged = the_score.turns; iswspace(*aged); aged++) /* loop */
                 ;
 
@@ -118,6 +122,7 @@ void display_scores_aux(int from, int to, int note, high_score *score)
                 when = tmp_val;
             }
 
+            GAME_TEXT out_val[256];
 #ifdef JP
             /*sprintf(out_val, "%3d.%9s  %s%s%sという名の%sの%s (レベル %d)", */
             sprintf(out_val, "%3d.%9s  %s%s%s - %s%s (レベル %d)", place, the_score.pts, personality_info[pa].title, (personality_info[pa].no ? "の" : ""),
@@ -167,18 +172,15 @@ void display_scores_aux(int from, int to, int note, high_score *score)
 #endif
             c_put_str(attr, out_val, n * 4 + 3, 0);
 #ifdef JP
-            {
-                char buf[11];
+            char buf[11];
 
-                /* 日付を 19yy/mm/dd の形式に変更する */
-                if (strlen(when) == 8 && when[2] == '/' && when[5] == '/') {
-                    sprintf(buf, "%d%s/%.5s", 19 + (when[6] < '8'), when + 6, when);
-                    when = buf;
-                }
-
-                sprintf(out_val, "        (ユーザー:%s, 日付:%s, 所持金:%s, ターン:%s)", user, when, gold, aged);
+            /* 日付を 19yy/mm/dd の形式に変更する */
+            if (strlen(when) == 8 && when[2] == '/' && when[5] == '/') {
+                sprintf(buf, "%d%s/%.5s", 19 + (when[6] < '8'), when + 6, when);
+                when = buf;
             }
 
+            sprintf(out_val, "        (ユーザー:%s, 日付:%s, 所持金:%s, ターン:%s)", user, when, gold, aged);
 #else
             sprintf(out_val, "               (User %s, Date %s, Gold %s, Turn %s).", user, when, gold, aged);
 #endif
