@@ -2,10 +2,12 @@
 #include <algorithm>
 #include <array>
 #include <bitset>
-#include <iterator>
 #include <functional>
+#include <iterator>
+#include <list>
 #include <map>
 #include <memory>
+#include <optional>
 #include <queue>
 #include <sstream>
 #include <stack>
