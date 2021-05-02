@@ -8,6 +8,7 @@
 #include "core/game-closer.h"
 #include "cmd-io/cmd-save.h"
 #include "core/asking-player.h"
+#include "core/score-util.h"
 #include "core/scores.h"
 #include "core/stuff-handler.h"
 #include "floor/floor-save.h"

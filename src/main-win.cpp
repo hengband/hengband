@@ -85,6 +85,7 @@
 #include "cmd-visual/cmd-draw.h"
 #include "core/game-play.h"
 #include "core/player-processor.h"
+#include "core/score-util.h"
 #include "core/scores.h"
 #include "core/special-internal-keys.h"
 #include "core/stuff-handler.h"

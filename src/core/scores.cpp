@@ -13,6 +13,7 @@
 #include "core/scores.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/asking-player.h"
+#include "core/score-util.h"
 #include "core/turn-compensator.h"
 #include "dungeon/dungeon.h"
 #include "game-option/birth-options.h"
@@ -39,33 +40,6 @@
 #ifdef JP
 #include "locale/japanese.h"
 #endif
-
-/*
- * The "highscore" file descriptor, if available.
- */
-int highscore_fd = -1;
-
-/*!
- * @brief i番目のスコア情報にバッファ位置をシークする / Seek score 'i' in the highscore file
- * @param i スコア情報ID
- * @return 問題がなければ0を返す
- */
-static int highscore_seek(int i)
-{
-    /* Seek for the requested record */
-    return (fd_seek(highscore_fd, (huge)(i) * sizeof(high_score)));
-}
-
-/*!
- * @brief 所定ポインタからスコア情報を読み取る / Read one score from the highscore file
- * @param score スコア情報参照ポインタ
- * @return エラーコード
- */
-static errr highscore_read(high_score *score)
-{
-    /* Read the record, note failure */
-    return (fd_read(highscore_fd, (char *)(score), sizeof(high_score)));
-}
 
 /*!
  * @brief 所定ポインタへスコア情報を書き込む / Write one score to the highscore file

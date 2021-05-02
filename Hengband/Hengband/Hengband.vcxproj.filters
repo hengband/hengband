@@ -2277,6 +2277,9 @@
     <ClCompile Include="..\..\src\main-win\commandline-win.cpp">
       <Filter>main-win</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\score-util.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4898,6 +4901,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player-info\equipment-info.h">
       <Filter>player-info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\score-util.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
