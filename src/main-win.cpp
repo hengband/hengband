@@ -1614,7 +1614,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         } else {
             screen_save();
             term_clear();
-            display_scores_aux(0, MAX_HISCORES, -1, NULL);
+            display_scores(0, MAX_HISCORES, -1, NULL);
             (void)fd_close(highscore_fd);
             highscore_fd = -1;
             screen_load();

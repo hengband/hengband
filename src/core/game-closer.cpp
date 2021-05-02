@@ -178,7 +178,7 @@ void close_game(player_type *player_ptr)
         if (!player_ptr->wait_report_score)
             (void)top_twenty(player_ptr);
     } else if (highscore_fd >= 0) {
-        display_scores_aux(0, 10, -1, NULL);
+        display_scores(0, 10, -1, NULL);
     }
 
     clear_floor(player_ptr);

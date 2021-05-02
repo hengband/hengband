@@ -29,7 +29,7 @@
  * Mega-Hack -- allow "fake" entry at the given position.
  * </pre>
  */
-void display_scores_aux(int from, int to, int note, high_score *score)
+void display_scores(int from, int to, int note, high_score *score)
 {
     TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
@@ -197,15 +197,15 @@ void display_scores_aux(int from, int to, int note, high_score *score)
     }
 }
 
+#ifndef WINDOWS
 /*!
- * @brief スコア表示処理メインルーチン / Hack -- Display the scores in a given range and quit.
+ * @brief スコア表示処理メインルーチン / Display the scores in a given range and quit.
  * @param from 順位先頭
  * @param to 順位末尾
  * @details
- * <pre>
- * This function is only called from "main.c" when the user asks
- * to see the "high scores".
- * </pre>
+ * スコア表示した後、或いは表示に失敗したら終了する (Windows版は表示処理の中で終了することはない)
+ * main.cpp からしか呼ばれていない。暫定でプリプロで包んでおく
+ * 取り敢えずWindows版はオーバーロード解決できている。他は不明
  */
 void display_scores(int from, int to)
 {
@@ -217,8 +217,9 @@ void display_scores(int from, int to)
     }
     
     term_clear();
-    display_scores_aux(from, to, -1, NULL);
+    display_scores(from, to, -1, NULL);
     (void)fd_close(highscore_fd);
     highscore_fd = -1;
     quit(NULL);
 }
+#endif

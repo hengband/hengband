@@ -269,13 +269,13 @@ errr top_twenty(player_type *current_player_ptr)
 
     /* Hack -- Display the top fifteen scores */
     if (j < 10) {
-        display_scores_aux(0, 15, j, NULL);
+        display_scores(0, 15, j, NULL);
         return 0;
     }
 
     /* Display the scores surrounding the player */
-    display_scores_aux(0, 5, j, NULL);
-    display_scores_aux(j - 2, j + 7, j, NULL);
+    display_scores(0, 5, j, NULL);
+    display_scores(j - 2, j + 7, j, NULL);
     return 0;
 }
 
@@ -339,12 +339,12 @@ errr predict_score(player_type *current_player_ptr)
 
     /* Hack -- Display the top fifteen scores */
     if (j < 10) {
-        display_scores_aux(0, 15, j, &the_score);
+        display_scores(0, 15, j, &the_score);
         return 0;
     }
 
-    display_scores_aux(0, 5, -1, NULL);
-    display_scores_aux(j - 2, j + 7, j, &the_score);
+    display_scores(0, 5, -1, NULL);
+    display_scores(j - 2, j + 7, j, &the_score);
     return 0;
 }
 
