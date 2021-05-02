@@ -22,14 +22,17 @@
  */
 static concptr attr_to_text(monster_race *r_ptr)
 {
-    if (any_bits(r_ptr->flags1, RF1_ATTR_CLEAR))
+    if (any_bits(r_ptr->flags1, RF1_ATTR_CLEAR)) {
         return _("透明な", "Clear");
+    }
 
-    if (any_bits(r_ptr->flags1, RF1_ATTR_MULTI))
+    if (any_bits(r_ptr->flags1, RF1_ATTR_MULTI)) {
         return _("万色の", "Multi");
+    }
 
-    if (any_bits(r_ptr->flags1, RF1_ATTR_SEMIRAND))
+    if (any_bits(r_ptr->flags1, RF1_ATTR_SEMIRAND)) {
         return _("準ランダムな", "S.Rand");
+    }
 
     switch (r_ptr->d_attr) {
     case TERM_DARK:
@@ -85,7 +88,7 @@ spoiler_output_status spoil_mon_desc(concptr fname, std::function<bool(const mon
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
     if (!spoiler_file) {
-        return SPOILER_OUTPUT_FAIL_FOPEN;
+        return spoiler_output_status::SPOILER_OUTPUT_FAIL_FOPEN;
     }
 
     char title[200];
@@ -102,42 +105,50 @@ spoiler_output_status spoil_mon_desc(concptr fname, std::function<bool(const mon
         "---", "---", "---", "-----", "-----", "-------------------");
 
     int n = 0;
-    for (int i = 1; i < max_r_idx; i++) {
+    for (auto i = 1; i < max_r_idx; i++) {
         monster_race *r_ptr = &r_info[i];
         if (!r_ptr->name.empty())
             who[n++] = (s16b)i;
     }
 
     ang_sort(&dummy, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
-    for (int i = 0; i < n; i++) {
+    for (auto i = 0; i < n; i++) {
         monster_race *r_ptr = &r_info[who[i]];
         concptr name = r_ptr->name.c_str();
-        if (filter_monster && !filter_monster(r_ptr))
+        if (filter_monster && !filter_monster(r_ptr)) {
             continue;
+        }
 
         char name_buf[41];
         angband_strcpy(name_buf, name, sizeof(name_buf));
         name += strlen(name_buf);
 
-        if (any_bits(r_ptr->flags7, RF7_KAGE))
+        if (any_bits(r_ptr->flags7, RF7_KAGE)) {
             continue;
-        else if (any_bits(r_ptr->flags1, (RF1_UNIQUE)))
+        }
+
+        if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
             sprintf(nam, "[U] %s", name_buf);
-        else
+        } else if (any_bits(r_ptr->flags7, RF7_NAZGUL)) {
+            sprintf(nam, "[N] %s", name_buf);
+        } else {
             sprintf(nam, _("    %s", "The %s"), name_buf);
+        }
 
         sprintf(lev, "%d", (int)r_ptr->level);
         sprintf(rar, "%d", (int)r_ptr->rarity);
-        if (r_ptr->speed >= 110)
+        if (r_ptr->speed >= 110) {
             sprintf(spd, "+%d", (r_ptr->speed - 110));
-        else
+        } else {
             sprintf(spd, "-%d", (110 - r_ptr->speed));
+        }
 
         sprintf(ac, "%d", r_ptr->ac);
-        if (any_bits(r_ptr->flags1, RF1_FORCE_MAXHP) || (r_ptr->hside == 1))
+        if (any_bits(r_ptr->flags1, RF1_FORCE_MAXHP) || (r_ptr->hside == 1)) {
             sprintf(hp, "%d", r_ptr->hdice * r_ptr->hside);
-        else
+        } else {
             sprintf(hp, "%dd%d", r_ptr->hdice, r_ptr->hside);
+        }
 
         sprintf(symbol, "%ld", (long)(r_ptr->mexp));
         sprintf(symbol, "%s '%c'", attr_to_text(r_ptr), r_ptr->d_char);
@@ -152,10 +163,8 @@ spoiler_output_status spoil_mon_desc(concptr fname, std::function<bool(const mon
 
     fprintf(spoiler_file, "\n");
     C_KILL(who, max_r_idx, s16b);
-    if (ferror(spoiler_file) || angband_fclose(spoiler_file)) {
-        return SPOILER_OUTPUT_FAIL_FCLOSE;
-    }
-    return SPOILER_OUTPUT_SUCCESS;
+    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? spoiler_output_status::SPOILER_OUTPUT_FAIL_FCLOSE
+                                                                : spoiler_output_status::SPOILER_OUTPUT_SUCCESS;
 }
 
 /*!
@@ -182,7 +191,7 @@ spoiler_output_status spoil_mon_info(concptr fname)
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
     if (!spoiler_file) {
-        return SPOILER_OUTPUT_FAIL_FOPEN;
+        return spoiler_output_status::SPOILER_OUTPUT_FAIL_FOPEN;
     }
 
     char title[200];
@@ -207,6 +216,8 @@ spoiler_output_status spoil_mon_info(concptr fname)
         BIT_FLAGS flags1 = r_ptr->flags1;
         if (any_bits(flags1, RF1_UNIQUE)) {
             spoil_out("[U] ");
+        } else if (any_bits(r_ptr->flags7, RF7_NAZGUL)) {
+            spoil_out("[N] ");
         } else {
 #ifdef JP
 #else
@@ -227,16 +238,18 @@ spoiler_output_status spoil_mon_info(concptr fname)
         spoil_out(buf);
         sprintf(buf, "Rar:%d  ", r_ptr->rarity);
         spoil_out(buf);
-        if (r_ptr->speed >= 110)
+        if (r_ptr->speed >= 110) {
             sprintf(buf, "Spd:+%d  ", (r_ptr->speed - 110));
-        else
+        } else {
             sprintf(buf, "Spd:-%d  ", (110 - r_ptr->speed));
+        }
 
         spoil_out(buf);
-        if (any_bits(flags1, RF1_FORCE_MAXHP) || (r_ptr->hside == 1))
+        if (any_bits(flags1, RF1_FORCE_MAXHP) || (r_ptr->hside == 1)) {
             sprintf(buf, "Hp:%d  ", r_ptr->hdice * r_ptr->hside);
-        else
+        } else {
             sprintf(buf, "Hp:%dd%d  ", r_ptr->hdice, r_ptr->hside);
+        }
 
         spoil_out(buf);
         sprintf(buf, "Ac:%d  ", r_ptr->ac);
@@ -248,8 +261,6 @@ spoiler_output_status spoil_mon_info(concptr fname)
     }
 
     C_KILL(who, max_r_idx, s16b);
-    if (ferror(spoiler_file) || angband_fclose(spoiler_file)) {
-        return SPOILER_OUTPUT_FAIL_FCLOSE;
-    }
-    return SPOILER_OUTPUT_SUCCESS;
+    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? spoiler_output_status::SPOILER_OUTPUT_FAIL_FCLOSE
+                                                                : spoiler_output_status::SPOILER_OUTPUT_SUCCESS;
 }

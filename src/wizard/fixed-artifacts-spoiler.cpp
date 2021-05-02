@@ -152,7 +152,7 @@ spoiler_output_status spoil_fixed_artifact(concptr fname)
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
     if (!spoiler_file) {
-        return SPOILER_OUTPUT_FAIL_FOPEN;
+        return spoiler_output_status::SPOILER_OUTPUT_FAIL_FOPEN;
     }
 
     print_header();
@@ -178,8 +178,6 @@ spoiler_output_status spoil_fixed_artifact(concptr fname)
         }
     }
 
-    if (ferror(spoiler_file) || angband_fclose(spoiler_file)) {
-        return SPOILER_OUTPUT_FAIL_FCLOSE;
-    }
-    return SPOILER_OUTPUT_SUCCESS;
+    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? spoiler_output_status::SPOILER_OUTPUT_FAIL_FCLOSE
+                                                                : spoiler_output_status::SPOILER_OUTPUT_SUCCESS;
 }

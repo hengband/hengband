@@ -26,8 +26,8 @@
 #include "spell/spells-execution.h"
 #include "spell/spells-util.h"
 #include "system/angband-version.h"
-#include "system/object-type-definition.h"
 #include "system/monster-race-definition.h"
+#include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/angband-files.h"
@@ -105,7 +105,7 @@ static spoiler_output_status spoil_mon_evol(concptr fname)
     path_build(buf, sizeof buf, ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
     if (!spoiler_file) {
-        return SPOILER_OUTPUT_FAIL_FOPEN;
+        return spoiler_output_status::SPOILER_OUTPUT_FAIL_FOPEN;
     }
 
     char title[200];
@@ -163,6 +163,7 @@ static spoiler_output_status spoil_mon_evol(concptr fname)
             fprintf(spoiler_file, "%*s-(%ld)-> ", n * 2, "", (long int)r_ptr->next_exp);
             fprintf(spoiler_file, "[%d]: ", r_ptr->next_r_idx);
             r_ptr = &r_info[r_ptr->next_r_idx];
+
             fprintf(spoiler_file, _("%s (レベル%d, '%c')\n", "%s (Level %d, '%c')\n"), r_ptr->name.c_str(), (int)r_ptr->level, r_ptr->d_char);
         }
 
@@ -171,36 +172,52 @@ static spoiler_output_status spoil_mon_evol(concptr fname)
 
     C_KILL(evol_tree_zero, max_r_idx * (max_evolution_depth + 1), int);
     C_KILL(evol_tree, max_r_idx, int *);
-    if (ferror(spoiler_file) || angband_fclose(spoiler_file)) {
-        return SPOILER_OUTPUT_FAIL_FCLOSE;
-    }
-    return SPOILER_OUTPUT_SUCCESS;
+    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? spoiler_output_status::SPOILER_OUTPUT_FAIL_FCLOSE
+                                                                : spoiler_output_status::SPOILER_OUTPUT_SUCCESS;
 }
 
 spoiler_output_status spoil_categorized_mon_desc()
 {
-    spoiler_output_status status = spoil_mon_desc("mon-desc-ridable.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags7, RF7_RIDING); });
-
-    if (status == SPOILER_OUTPUT_SUCCESS)
+    auto status = spoil_mon_desc("mon-desc-ridable.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags7, RF7_RIDING); });
+    if (status == spoiler_output_status::SPOILER_OUTPUT_SUCCESS) {
         status = spoil_mon_desc("mon-desc-wildonly.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_ONLY); });
-    if (status == SPOILER_OUTPUT_SUCCESS)
+    }
+
+    if (status == spoiler_output_status::SPOILER_OUTPUT_SUCCESS) {
         status = spoil_mon_desc("mon-desc-town.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_TOWN); });
-    if (status == SPOILER_OUTPUT_SUCCESS)
+    }
+
+    if (status == spoiler_output_status::SPOILER_OUTPUT_SUCCESS) {
         status = spoil_mon_desc("mon-desc-shore.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_SHORE); });
-    if (status == SPOILER_OUTPUT_SUCCESS)
+    }
+
+    if (status == spoiler_output_status::SPOILER_OUTPUT_SUCCESS) {
         status = spoil_mon_desc("mon-desc-ocean.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_OCEAN); });
-    if (status == SPOILER_OUTPUT_SUCCESS)
+    }
+
+    if (status == spoiler_output_status::SPOILER_OUTPUT_SUCCESS) {
         status = spoil_mon_desc("mon-desc-waste.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_WASTE); });
-    if (status == SPOILER_OUTPUT_SUCCESS)
+    }
+
+    if (status == spoiler_output_status::SPOILER_OUTPUT_SUCCESS) {
         status = spoil_mon_desc("mon-desc-wood.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_WOOD); });
-    if (status == SPOILER_OUTPUT_SUCCESS)
+    }
+
+    if (status == spoiler_output_status::SPOILER_OUTPUT_SUCCESS) {
         status = spoil_mon_desc("mon-desc-volcano.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_VOLCANO); });
-    if (status == SPOILER_OUTPUT_SUCCESS)
+    }
+
+    if (status == spoiler_output_status::SPOILER_OUTPUT_SUCCESS) {
         status = spoil_mon_desc("mon-desc-mountain.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_MOUNTAIN); });
-    if (status == SPOILER_OUTPUT_SUCCESS)
+    }
+
+    if (status == spoiler_output_status::SPOILER_OUTPUT_SUCCESS) {
         status = spoil_mon_desc("mon-desc-grass.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_GRASS); });
-    if (status == SPOILER_OUTPUT_SUCCESS)
+    }
+
+    if (status == spoiler_output_status::SPOILER_OUTPUT_SUCCESS) {
         status = spoil_mon_desc("mon-desc-wildall.txt", [](const monster_race *r_ptr) { return any_bits(r_ptr->flags8, RF8_WILD_ALL); });
+    }
 
     return status;
 }
@@ -221,7 +238,7 @@ static spoiler_output_status spoil_player_spell(concptr fname)
     path_build(buf, sizeof buf, ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
     if (!spoiler_file) {
-        return SPOILER_OUTPUT_FAIL_FOPEN;
+        return spoiler_output_status::SPOILER_OUTPUT_FAIL_FOPEN;
     }
 
     char title[200];
@@ -249,9 +266,9 @@ static spoiler_output_status spoil_player_spell(concptr fname)
             char *s = angband_strchr(book_name, '[');
             *s = '\0';
         }
-        sprintf(buf, "BookType:%s Stat:%s Xtra:%x Type:%d Weight:%d\n",
-            book_name, wiz_spell_stat[magic_ptr->spell_stat].data(),
-            magic_ptr->spell_xtra, magic_ptr->spell_type, magic_ptr->spell_weight);
+
+        sprintf(buf, "BookType:%s Stat:%s Xtra:%x Type:%d Weight:%d\n", book_name, wiz_spell_stat[magic_ptr->spell_stat].data(), magic_ptr->spell_xtra,
+            magic_ptr->spell_type, magic_ptr->spell_weight);
         spoil_out(buf);
         if (!magic_ptr->spell_book) {
             spoil_out(_("呪文なし\n\n", "No spells.\n\n"));
@@ -265,18 +282,15 @@ static spoiler_output_status spoil_player_spell(concptr fname)
             for (SPELL_IDX i = 0; i < 32; i++) {
                 auto spell_ptr = &magic_ptr->info[r][i];
                 auto spell_name = exe_spell(&dummy_p, r, i, SPELL_NAME);
-                sprintf(buf, "%-24s %2d %3d %3d %3d\n", spell_name,
-                    spell_ptr->slevel, spell_ptr->smana, spell_ptr->sfail, spell_ptr->sexp);
+                sprintf(buf, "%-24s %2d %3d %3d %3d\n", spell_name, spell_ptr->slevel, spell_ptr->smana, spell_ptr->sfail, spell_ptr->sexp);
                 spoil_out(buf);
             }
             spoil_out("\n");
         }
     }
 
-    if (ferror(spoiler_file) || angband_fclose(spoiler_file)) {
-        return SPOILER_OUTPUT_FAIL_FCLOSE;
-    }
-    return SPOILER_OUTPUT_SUCCESS;
+    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? spoiler_output_status::SPOILER_OUTPUT_FAIL_FCLOSE
+                                                                : spoiler_output_status::SPOILER_OUTPUT_SUCCESS;
 }
 
 /*!
@@ -287,7 +301,7 @@ void exe_output_spoilers(void)
 {
     screen_save();
     while (TRUE) {
-        spoiler_output_status status = SPOILER_OUTPUT_CANCEL;
+        auto status = spoiler_output_status::SPOILER_OUTPUT_CANCEL;
         term_clear();
         prt("Create a spoiler file.", 2, 0);
         prt("(1) Brief Object Info (obj-desc.txt)", 5, 5);
@@ -329,16 +343,16 @@ void exe_output_spoilers(void)
         }
 
         switch (status) {
-        case SPOILER_OUTPUT_FAIL_FOPEN:
+        case spoiler_output_status::SPOILER_OUTPUT_FAIL_FOPEN:
             msg_print("Cannot create spoiler file.");
             break;
-        case SPOILER_OUTPUT_FAIL_FCLOSE:
+        case spoiler_output_status::SPOILER_OUTPUT_FAIL_FCLOSE:
             msg_print("Cannot close spoiler file.");
             break;
-        case SPOILER_OUTPUT_SUCCESS:
+        case spoiler_output_status::SPOILER_OUTPUT_SUCCESS:
             msg_print("Successfully created a spoiler file.");
             break;
-        case SPOILER_OUTPUT_CANCEL:
+        case spoiler_output_status::SPOILER_OUTPUT_CANCEL:
             break;
         }
         msg_erase();
@@ -352,30 +366,29 @@ void exe_output_spoilers(void)
  */
 spoiler_output_status output_all_spoilers(void)
 {
-    spoiler_output_status status;
-    status = spoil_obj_desc("obj-desc.txt");
-    if (status != SPOILER_OUTPUT_SUCCESS)
+    auto status = spoil_obj_desc("obj-desc.txt");
+    if (status != spoiler_output_status::SPOILER_OUTPUT_SUCCESS)
         return status;
 
     status = spoil_fixed_artifact("artifact.txt");
-    if (status != SPOILER_OUTPUT_SUCCESS)
+    if (status != spoiler_output_status::SPOILER_OUTPUT_SUCCESS)
         return status;
 
     status = spoil_mon_desc("mon-desc.txt");
-    if (status != SPOILER_OUTPUT_SUCCESS)
+    if (status != spoiler_output_status::SPOILER_OUTPUT_SUCCESS)
         return status;
 
     status = spoil_categorized_mon_desc();
-    if (status != SPOILER_OUTPUT_SUCCESS)
+    if (status != spoiler_output_status::SPOILER_OUTPUT_SUCCESS)
         return status;
 
     status = spoil_mon_info("mon-info.txt");
-    if (status != SPOILER_OUTPUT_SUCCESS)
+    if (status != spoiler_output_status::SPOILER_OUTPUT_SUCCESS)
         return status;
 
     status = spoil_mon_evol("mon-evol.txt");
-    if (status != SPOILER_OUTPUT_SUCCESS)
+    if (status != spoiler_output_status::SPOILER_OUTPUT_SUCCESS)
         return status;
 
-    return SPOILER_OUTPUT_SUCCESS;
+    return spoiler_output_status::SPOILER_OUTPUT_SUCCESS;
 }
