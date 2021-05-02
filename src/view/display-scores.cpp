@@ -54,23 +54,23 @@ void display_scores(int from, int to, int note, high_score *score)
         return;
     }
     
-    auto i = 0;
+    auto num_scores = 0;
     high_score the_score;
-    for (; i < MAX_HISCORES; i++) {
+    for (; num_scores < MAX_HISCORES; num_scores++) {
         if (highscore_read(&the_score)) {
             break;
         }
     }
 
-    if ((note == i) && score) {
-        i++;
+    if ((note == num_scores) && score) {
+        num_scores++;
     }
 
-    if (i > to) {
-        i = to;
+    if (num_scores > to) {
+        num_scores = to;
     }
 
-    for (auto k = from, place = k + 1; k < i; k += per_screen) {
+    for (auto k = from, place = k + 1; k < num_scores; k += per_screen) {
         term_clear();
         put_str(_("                変愚蛮怒: 勇者の殿堂", "                Hengband Hall of Fame"), 0, 0);
         GAME_TEXT tmp_val[160];
@@ -79,8 +79,7 @@ void display_scores(int from, int to, int note, high_score *score)
             put_str(tmp_val, 0, 40);
         }
 
-        auto j = k;
-        for (auto n = 0; j < i && n < per_screen; place++, j++, n++) {
+        for (auto n = 0, j = k; (j < num_scores) && (n < per_screen); place++, j++, n++) {
             auto attr = (j == note) ? TERM_YELLOW : TERM_WHITE;
             if ((note == j) && score) {
                 the_score = (*score);
@@ -189,9 +188,9 @@ void display_scores(int from, int to, int note, high_score *score)
         }
 
         prt(_("[ ESCで中断, その他のキーで続けます ]", "[Press ESC to quit, any other key to continue.]"), hgt - 1, _(21, 17));
-        j = inkey();
+        auto key = inkey();
         prt("", hgt - 1, 0);
-        if (j == ESCAPE) {
+        if (key == ESCAPE) {
             break;
         }
     }
