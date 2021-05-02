@@ -33,7 +33,7 @@ void display_scores(int from, int to, int note, high_score *score)
 {
     TERM_LEN wid, hgt;
     term_get_size(&wid, &hgt);
-    auto per_screen = (hgt - 4) / 4;
+    auto per_screen = (TERM_LEN)((hgt - 4) / 4);
     if (highscore_fd < 0) {
         return;
     }
