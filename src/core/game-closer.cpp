@@ -8,10 +8,13 @@
 #include "io/input-key-acceptor.h"
 #include "io/signal-handlers.h"
 #include "io/uid-checker.h"
+#include "io/write-diary.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-of-music.h"
+#include "player/player-sex.h"
 #include "player/process-death.h"
 #include "save/save.h"
+#include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/angband-files.h"
@@ -61,6 +64,77 @@ static bool check_death(player_type *player_ptr)
 
     clear_floor(player_ptr);
     return FALSE;
+}
+
+/*!
+ * @brief 勝利者用の引退演出処理 /
+ * Change the player into a King! -RAK-
+ */
+static void kingly(player_type *winner_ptr)
+{
+    TERM_LEN wid, hgt;
+    TERM_LEN cx, cy;
+    bool seppuku = streq(winner_ptr->died_from, "Seppuku");
+
+    /* Hack -- retire in town */
+    winner_ptr->current_floor_ptr->dun_level = 0;
+
+    /* Fake death */
+    if (!seppuku)
+        /* 引退したときの識別文字 */
+        (void)strcpy(winner_ptr->died_from, _("ripe", "Ripe Old Age"));
+
+    /* Restore the experience */
+    winner_ptr->exp = winner_ptr->max_exp;
+
+    /* Restore the level */
+    winner_ptr->lev = winner_ptr->max_plv;
+
+    term_get_size(&wid, &hgt);
+    cy = hgt / 2;
+    cx = wid / 2;
+
+    /* Hack -- Instant Gold */
+    winner_ptr->au += 10000000L;
+    term_clear();
+
+    /* Display a crown */
+    put_str("#", cy - 11, cx - 1);
+    put_str("#####", cy - 10, cx - 3);
+    put_str("#", cy - 9, cx - 1);
+    put_str(",,,  $$$  ,,,", cy - 8, cx - 7);
+    put_str(",,=$   \"$$$$$\"   $=,,", cy - 7, cx - 11);
+    put_str(",$$        $$$        $$,", cy - 6, cx - 13);
+    put_str("*>         <*>         <*", cy - 5, cx - 13);
+    put_str("$$         $$$         $$", cy - 4, cx - 13);
+    put_str("\"$$        $$$        $$\"", cy - 3, cx - 13);
+    put_str("\"$$       $$$       $$\"", cy - 2, cx - 12);
+    put_str("*#########*#########*", cy - 1, cx - 11);
+    put_str("*#########*#########*", cy, cx - 11);
+
+    /* Display a message */
+#ifdef JP
+    put_str("Veni, Vidi, Vici!", cy + 3, cx - 9);
+    put_str("来た、見た、勝った！", cy + 4, cx - 10);
+    put_str(format("偉大なる%s万歳！", sp_ptr->winner), cy + 5, cx - 11);
+#else
+    put_str("Veni, Vidi, Vici!", cy + 3, cx - 9);
+    put_str("I came, I saw, I conquered!", cy + 4, cx - 14);
+    put_str(format("All Hail the Mighty %s!", sp_ptr->winner), cy + 5, cx - 13);
+#endif
+
+    /* If player did Seppuku, that is already written in playrecord */
+    if (!seppuku) {
+        exe_write_diary(winner_ptr, DIARY_DESCRIPTION, 0, _("ダンジョンの探索から引退した。", "retired exploring dungeons."));
+        exe_write_diary(winner_ptr, DIARY_GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
+        exe_write_diary(winner_ptr, DIARY_DESCRIPTION, 1, "\n\n\n\n");
+    }
+
+    /* Flush input */
+    flush();
+
+    /* Wait for response */
+    pause_line(hgt - 1);
 }
 
 /*!
