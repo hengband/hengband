@@ -1,4 +1,11 @@
-﻿#include "system/object-type-definition.h"
+﻿/*
+ * @file object-type-definition.h
+ * @brief アイテム定義の構造体とエンティティ処理実装
+ * @author Hourier
+ * @date 2021/05/02
+ */
+
+#include "system/object-type-definition.h"
 #include "object-enchant/object-curse.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/trc-types.h"
@@ -9,7 +16,6 @@
 /*!
  * @brief オブジェクトを初期化する
  * Wipe an object clean.
- * @param o_ptr 初期化したいオブジェクトの構造体参照ポインタ
  */
 void object_type::wipe()
 {
@@ -19,8 +25,7 @@ void object_type::wipe()
 /*!
  * @brief オブジェクトを複製する
  * Wipe an object clean.
- * @param o_ptr 複製元のオブジェクトの構造体参照ポインタ
- * @param j_ptr 複製先のオブジェクトの構造体参照ポインタ
+ * @param j_ptr 複製元のオブジェクトの構造体参照ポインタ
  */
 void object_type::copy_from(object_type *j_ptr)
 {
@@ -30,7 +35,7 @@ void object_type::copy_from(object_type *j_ptr)
 /*!
  * @brief オブジェクト構造体にベースアイテムを作成する
  * Prepare an object based on an object kind.
- * @param o_ptr 代入したいオブジェクトの構造体参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param k_idx 新たに作成したいベースアイテム情報のID
  */
 void object_type::prep(player_type *player_ptr, KIND_OBJECT_IDX ko_idx)

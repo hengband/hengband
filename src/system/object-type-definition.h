@@ -1,5 +1,12 @@
 ﻿#pragma once
 
+/*
+ * @file object-type-definition.h
+ * @brief アイテム定義の構造体とエンティティ処理定義
+ * @author Hourier
+ * @date 2021/05/02
+ */
+
 #include "object/tval-types.h"
 #include "system/angband.h"
 #include "system/system-variables.h"
