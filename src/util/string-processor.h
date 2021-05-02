@@ -33,5 +33,5 @@ int strrncmp(const char *s1, const char *s2, int len);
 std::string str_trim(std::string_view str);
 std::string str_rtrim(std::string_view str);
 std::string str_ltrim(std::string_view str);
-std::vector<std::string> str_split(std::string_view str, char delim, bool trim = false);
+std::vector<std::string> str_split(std::string_view str, char delim, bool trim = false, int num = 0);
 std::string str_erase(std::string str, std::string_view erase_chars);
