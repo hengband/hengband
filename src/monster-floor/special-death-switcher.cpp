@@ -7,12 +7,13 @@
 #include "monster-floor/special-death-switcher.h"
 #include "artifact/fixed-art-generator.h"
 #include "artifact/fixed-art-types.h"
+#include "artifact/random-art-generator.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
-#include "floor/geometry.h"
 #include "floor/floor-object.h"
 #include "floor/floor-util.h"
+#include "floor/geometry.h"
 #include "game-option/birth-options.h"
 #include "grid/grid.h"
 #include "main/sound-definitions-table.h"
@@ -27,6 +28,7 @@
 #include "monster/monster-info.h"
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
+#include "object-hook/hook-checker.h"
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
 #include "spell/spell-types.h"
@@ -102,7 +104,7 @@ static void on_dead_bloodletter(player_type *player_ptr, monster_death_type *md_
     object_type forge;
     object_type *q_ptr = &forge;
     object_prep(player_ptr, q_ptr, lookup_kind(TV_SWORD, SV_BLADE_OF_CHAOS));
-    apply_magic(player_ptr, q_ptr, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART | md_ptr->mo_mode);
+    apply_magic_to_object(player_ptr, q_ptr, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART | md_ptr->mo_mode);
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
 
@@ -189,12 +191,12 @@ static void on_dead_serpent(player_type *player_ptr, monster_death_type *md_ptr)
     object_type *q_ptr = &forge;
     object_prep(player_ptr, q_ptr, lookup_kind(TV_HAFTED, SV_GROND));
     q_ptr->name1 = ART_GROND;
-    apply_magic(player_ptr, q_ptr, -1, AM_GOOD | AM_GREAT);
+    apply_magic_to_object(player_ptr, q_ptr, -1, AM_GOOD | AM_GREAT);
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
     q_ptr = &forge;
     object_prep(player_ptr, q_ptr, lookup_kind(TV_CROWN, SV_CHAOS));
     q_ptr->name1 = ART_CHAOS;
-    apply_magic(player_ptr, q_ptr, -1, AM_GOOD | AM_GREAT);
+    apply_magic_to_object(player_ptr, q_ptr, -1, AM_GOOD | AM_GREAT);
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
 
@@ -221,7 +223,7 @@ static void on_dead_can_angel(player_type *player_ptr, monster_death_type *md_pt
     object_type forge;
     object_type *q_ptr = &forge;
     object_prep(player_ptr, q_ptr, lookup_kind(TV_CHEST, SV_CHEST_KANDUME));
-    apply_magic(player_ptr, q_ptr, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART);
+    apply_magic_to_object(player_ptr, q_ptr, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART);
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
 
@@ -269,7 +271,7 @@ static void on_dead_totem_moai(player_type *player_ptr, monster_death_type *md_p
     summon_self(player_ptr, md_ptr, SUMMON_TOTEM_MOAI, 8, 5, _("新たなモアイが現れた！", "A new moai steps forth!"));
 }
 
-static void on_dead_demon_slayer_senior(player_type* player_ptr, monster_death_type* md_ptr)
+static void on_dead_demon_slayer_senior(player_type *player_ptr, monster_death_type *md_ptr)
 {
     if (!is_seen(player_ptr, md_ptr->m_ptr))
         return;
@@ -277,6 +279,16 @@ static void on_dead_demon_slayer_senior(player_type* player_ptr, monster_death_t
     GAME_TEXT m_name[MAX_NLEN];
     monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_NONE);
     msg_format(_("あなたの闘気が%sの身体をサイコロ状に切り刻んだ！", "Your fighting spirit chopped %^s's body into dice!"), m_name);
+}
+
+static void on_dead_mirmulnir(player_type *player_ptr, monster_death_type *md_ptr)
+{
+    if (!is_seen(player_ptr, md_ptr->m_ptr))
+        return;
+
+    GAME_TEXT m_name[MAX_NLEN];
+    monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_NONE);
+    msg_format(_("%s「ドヴ＠ーキン、やめろぉ！」", "%^s says, 'Dov@hkiin! No!!'"), m_name);
 }
 
 static void on_dead_dragon_centipede(player_type *player_ptr, monster_death_type *md_ptr)
@@ -316,6 +328,94 @@ static void on_dead_big_raven(player_type *player_ptr, monster_death_type *md_pt
     GAME_TEXT m_name[MAX_NLEN];
     monster_desc(player_ptr, m_name, md_ptr->m_ptr, MD_NONE);
     msg_format(_("%sはお星さまになった！", "%^s became a constellation!"), m_name);
+}
+
+/*
+ * @brief 装備品の生成を試みる
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param q_ptr 生成中アイテムへの参照ポインタ
+ * @param drop_mode ドロップ品の質
+ * @param is_object_hook_null アイテム種別が何でもありならtrue、指定されていればfalse
+ * @return 生成したアイテムが装備品ならtrue、それ以外ならfalse
+ * @todo 汎用的に使えそうだがどこかにいいファイルはないか？
+ */
+static bool make_equipment(player_type *player_ptr, object_type *q_ptr, const BIT_FLAGS drop_mode, const bool is_object_hook_null)
+{
+    object_wipe(q_ptr);
+    (void)make_object(player_ptr, q_ptr, drop_mode);
+    if (!is_object_hook_null) {
+        return true;
+    }
+
+    auto tval = q_ptr->tval;
+    switch (tval) {
+    case TV_BOW:
+    case TV_DIGGING:
+    case TV_HAFTED:
+    case TV_POLEARM:
+    case TV_SWORD:
+    case TV_BOOTS:
+    case TV_GLOVES:
+    case TV_HELM:
+    case TV_CROWN:
+    case TV_SHIELD:
+    case TV_CLOAK:
+    case TV_SOFT_ARMOR:
+    case TV_HARD_ARMOR:
+    case TV_DRAG_ARMOR:
+    case TV_LITE:
+    case TV_AMULET:
+    case TV_RING:
+        return true;
+    default:
+        return false;
+    }
+}
+
+/*
+ * @brief 死亡時ドロップとしてランダムアーティファクトのみを生成する
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param md_ptr モンスター撃破構造体への参照ポインタ
+ * @param object_hook_pf アイテム種別指定、特になければNULLで良い
+ * @return なし
+ * @details
+ * 最初のアイテム生成でいきなり☆が生成された場合を除き、中途半端な☆ (例：呪われている)は生成しない.
+ * このルーチンで★は生成されないので、★生成フラグのキャンセルも不要
+ */
+static void on_dead_random_artifact(player_type *player_ptr, monster_death_type *md_ptr, bool (*object_hook_pf)(KIND_OBJECT_IDX k_idx))
+{
+    object_type forge;
+    object_type *q_ptr = &forge;
+    auto is_object_hook_null = object_hook_pf == NULL;
+    auto drop_mode = md_ptr->mo_mode | AM_NO_FIXED_ART;
+    while (true) {
+        // make_object() の中でアイテム種別をキャンセルしている
+        // よってこのwhileループ中へ入れないと、引数で指定していない種別のアイテムが選ばれる可能性がある
+        get_obj_num_hook = object_hook_pf;
+        if (!make_equipment(player_ptr, q_ptr, drop_mode, is_object_hook_null)) {
+            continue;
+        }
+
+        if (q_ptr->art_name > 0) {
+            break;
+        }
+
+        if ((q_ptr->name1 != 0) && q_ptr->name2 != 0) {
+            continue;
+        }
+
+        (void)become_random_artifact(player_ptr, q_ptr, false);
+        auto is_good_random_art = !object_is_cursed(q_ptr);
+        is_good_random_art &= q_ptr->to_h > 0;
+        is_good_random_art &= q_ptr->to_d > 0;
+        is_good_random_art &= q_ptr->to_a > 0;
+        is_good_random_art &= q_ptr->pval > 0;
+        if (is_good_random_art) {
+            break;
+        }
+    }
+
+    (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
 
 /*!
@@ -437,6 +537,9 @@ void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr)
     case MON_DEMON_SLAYER_SENIOR:
         on_dead_demon_slayer_senior(player_ptr, md_ptr);
         return;
+    case MON_MIRMULNIR:
+        on_dead_mirmulnir(player_ptr, md_ptr);
+        return;
     case MON_DRAGON_CENTIPEDE:
     case MON_DRAGON_WORM:
         on_dead_dragon_centipede(player_ptr, md_ptr);
@@ -447,9 +550,16 @@ void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr)
     case MON_BIG_RAVEN:
         on_dead_big_raven(player_ptr, md_ptr);
         return;
+    case MON_YENDOR_WIZARD_1:
+    case MON_YENDOR_WIZARD_2:
+        on_dead_random_artifact(player_ptr, md_ptr, kind_is_amulet);
+        return;
     case MON_MANIMANI:
         on_dead_manimani(player_ptr, md_ptr);
-        break;
+        return;
+    case MON_LOSTRINGIL:
+        on_dead_random_artifact(player_ptr, md_ptr, kind_is_sword);
+        return;
     default:
         on_dead_mimics(player_ptr, md_ptr);
         return;

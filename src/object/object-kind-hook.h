@@ -12,6 +12,7 @@ bool kind_is_armor(KIND_OBJECT_IDX k_idx);
 bool kind_is_hafted(KIND_OBJECT_IDX k_idx);
 bool kind_is_potion(KIND_OBJECT_IDX k_idx);
 bool kind_is_boots(KIND_OBJECT_IDX k_idx);
+bool kind_is_amulet(KIND_OBJECT_IDX k_idx);
 bool kind_is_good(KIND_OBJECT_IDX k_idx);
 
 KIND_OBJECT_IDX lookup_kind(tval_type tval, OBJECT_SUBTYPE_VALUE sval);

@@ -825,6 +825,16 @@ N:1292:Cioccolata
 says, 'Life energy is not the enemy of this "Green Day"...'
 says, 'I'll show you! Hope is exhausted... The face of the moment when life ends!'
 
+N:1299:The Colonel Lostringil
+says, 'Hey, do you know where my Ringil is?'
+is looking for the ground.
+perceives the sword on hand from one end.
+is muttering with hollow eyes.
+
+N:1303:Spawn of Yog-Sothoth
+makes an unpleasant sound.
+gives off an unpleasant stench.
+
 N:*:Default lines
 cackles evilly.
 cackles diabolically.

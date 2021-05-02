@@ -125,7 +125,7 @@ bool create_ammo(player_type *creature_ptr)
         q_ptr->number = (byte)rand_range(15, 30);
         object_aware(creature_ptr, q_ptr);
         object_known(q_ptr);
-        apply_magic(creature_ptr, q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
+        apply_magic_to_object(creature_ptr, q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
         q_ptr->discount = 99;
         s16b slot = store_item_to_inventory(creature_ptr, q_ptr);
         GAME_TEXT o_name[MAX_NLEN];
@@ -153,7 +153,7 @@ bool create_ammo(player_type *creature_ptr)
         q_ptr->number = (byte)rand_range(5, 10);
         object_aware(creature_ptr, q_ptr);
         object_known(q_ptr);
-        apply_magic(creature_ptr, q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
+        apply_magic_to_object(creature_ptr, q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
         q_ptr->discount = 99;
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(creature_ptr, o_name, q_ptr, 0);
@@ -180,7 +180,7 @@ bool create_ammo(player_type *creature_ptr)
         q_ptr->number = (byte)rand_range(4, 8);
         object_aware(creature_ptr, q_ptr);
         object_known(q_ptr);
-        apply_magic(creature_ptr, q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
+        apply_magic_to_object(creature_ptr, q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
         q_ptr->discount = 99;
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(creature_ptr, o_name, q_ptr, 0);

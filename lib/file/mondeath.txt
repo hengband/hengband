@@ -59,7 +59,13 @@ N:1291:Diavolo
 says, 'Don't get close to me Ahhhhhhh!!!!!!'
 
 N:1292:Cioccolata
-shouted "Yadder Baaaaaaaaaaaa!!! " and was thrown into a garbage truck.
+shouted, "Yadder Baaaaaaaaaaaa!!!" and was thrown into a garbage truck.
+
+N:1299:The Colonel Lostringil
+shouted, "Ringil! My Ringil!!"
+
+N:1303:Spawn of Yog-Sothoth
+says, 'Please help me, Father, Father Yog-Sothoth!'
 
 N:*:Default
 shouts, 'AAAARRRGGGHHH!!!'

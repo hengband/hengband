@@ -204,7 +204,7 @@ void wiz_create_item(player_type *caster_ptr)
     object_type *q_ptr;
     q_ptr = &forge;
     object_prep(caster_ptr, q_ptr, k_idx);
-    apply_magic(caster_ptr, q_ptr, caster_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
+    apply_magic_to_object(caster_ptr, q_ptr, caster_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
     (void)drop_near(caster_ptr, q_ptr, -1, caster_ptr->y, caster_ptr->x);
     msg_print("Allocated.");
 }

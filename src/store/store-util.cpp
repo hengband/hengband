@@ -154,7 +154,7 @@ void store_create(
         object_type *q_ptr;
         q_ptr = &forge;
         object_prep(player_ptr, q_ptr, k_idx);
-        apply_magic(player_ptr, q_ptr, level, AM_NO_FIXED_ART);
+        apply_magic_to_object(player_ptr, q_ptr, level, AM_NO_FIXED_ART);
         if (!(*store_will_buy)(player_ptr, q_ptr))
             continue;
 

@@ -277,13 +277,13 @@ MONSTER_NUMBER summon_VESPOID(player_type *target_ptr, POSITION y, POSITION x, i
  */
 MONSTER_NUMBER summon_YENDER_WIZARD(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
 {
-    auto *r_ptr = &r_info[MON_YENDER_WIZARD_2];
+    auto *r_ptr = &r_info[MON_YENDOR_WIZARD_2];
     if (r_ptr->max_num == 0) {
         msg_print(_("しかし、誰も来なかった…。", "However, no kin was appeared..."));
         return 0;
     }
 
-    auto count = (MONSTER_NUMBER)summon_named_creature(target_ptr, m_idx, y, x, MON_YENDER_WIZARD_2, PM_NONE);
+    auto count = (MONSTER_NUMBER)summon_named_creature(target_ptr, m_idx, y, x, MON_YENDOR_WIZARD_2, PM_NONE);
     if (count == 0) {
         msg_print(_("どこからか声が聞こえる…「三重苦は負わぬ。。。」", "Heard a voice from somewhere... 'I will deny the triple suffering...'"));
         return 0;

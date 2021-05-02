@@ -511,32 +511,32 @@ static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
         /* Apply bad magic, but first clear object */
         case 'w':
             object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
-            apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT | AM_CURSED);
+            apply_magic_to_object(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT | AM_CURSED);
             break;
         /* Apply bad magic, but first clear object */
         case 'c':
             object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
-            apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_CURSED);
+            apply_magic_to_object(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_CURSED);
             break;
         /* Apply normal magic, but first clear object */
         case 'n':
             object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
-            apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
+            apply_magic_to_object(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
             break;
         /* Apply good magic, but first clear object */
         case 'g':
             object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
-            apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD);
+            apply_magic_to_object(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD);
             break;
         /* Apply great magic, but first clear object */
         case 'e':
             object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
-            apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT);
+            apply_magic_to_object(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT);
             break;
         /* Apply special magic, but first clear object */
         case 's':
             object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
-            apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_GOOD | AM_GREAT | AM_SPECIAL);
+            apply_magic_to_object(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_GOOD | AM_GREAT | AM_SPECIAL);
             if (!object_is_artifact(q_ptr))
                 become_random_artifact(owner_ptr, q_ptr, FALSE);
 
@@ -1016,7 +1016,7 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
             if (must || ok_art) {
                 do {
                     object_prep(caster_ptr, o_ptr, k_idx);
-                    apply_magic(caster_ptr, o_ptr, k_ptr->level, (AM_SPECIAL | AM_NO_FIXED_ART));
+                    apply_magic_to_object(caster_ptr, o_ptr, k_ptr->level, (AM_SPECIAL | AM_NO_FIXED_ART));
                 } while (!o_ptr->art_name || o_ptr->name1 || o_ptr->name2 || object_is_cursed(o_ptr));
 
                 if (o_ptr->art_name)
@@ -1039,7 +1039,7 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
                     int i = 0;
                     for (i = 0; i < max_roll; i++) {
                         object_prep(caster_ptr, o_ptr, k_idx);
-                        (void)apply_magic(caster_ptr, o_ptr, k_ptr->level, (AM_GREAT | AM_NO_FIXED_ART));
+                        (void)apply_magic_to_object(caster_ptr, o_ptr, k_ptr->level, (AM_GREAT | AM_NO_FIXED_ART));
 
                         if (o_ptr->name1 || o_ptr->art_name)
                             continue;
@@ -1072,7 +1072,7 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
         } else {
             for (int i = 0; i < 100; i++) {
                 object_prep(caster_ptr, o_ptr, k_idx);
-                apply_magic(caster_ptr, o_ptr, 0, (AM_NO_FIXED_ART));
+                apply_magic_to_object(caster_ptr, o_ptr, 0, (AM_NO_FIXED_ART));
                 if (!object_is_cursed(o_ptr))
                     break;
             }
