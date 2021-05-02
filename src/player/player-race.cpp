@@ -112,3 +112,15 @@ PlayerRaceLife player_race_life(player_type *creature_ptr, bool base_race)
     auto race_ptr = get_player_race_info(creature_ptr, base_race);
     return race_ptr->life;
 }
+
+/*!
+ * @brief 種族の食料形態を返す
+ * @param creature_ptr プレイヤー情報への参照ポインタ
+ * @param base_race ミミック中も元種族の情報を返すならtrue
+ * @return 食料形態
+ */
+PlayerRaceFood player_race_food(player_type *creature_ptr, bool base_race)
+{
+    auto race_ptr = get_player_race_info(creature_ptr, base_race);
+    return race_ptr->food;
+}

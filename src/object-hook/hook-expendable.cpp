@@ -28,11 +28,11 @@ bool item_tester_hook_eatable(player_type *player_ptr, object_type *o_ptr)
     if (o_ptr->tval == TV_FOOD)
         return TRUE;
 
-    if (is_specific_player_race(player_ptr, RACE_SKELETON) || is_specific_player_race(player_ptr, RACE_GOLEM)
-        || is_specific_player_race(player_ptr, RACE_ZOMBIE) || is_specific_player_race(player_ptr, RACE_SPECTRE)) {
+    auto food_type = player_race_food(player_ptr);
+    if (food_type == PlayerRaceFood::MANA) {
         if (o_ptr->tval == TV_STAFF || o_ptr->tval == TV_WAND)
             return TRUE;
-    } else if (is_specific_player_race(player_ptr, RACE_BALROG) || (mimic_info[player_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON)) {
+    } else if (food_type == PlayerRaceFood::CORPSE) {
         if (o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_CORPSE && angband_strchr("pht", r_info[o_ptr->pval].d_char))
             return TRUE;
     }
@@ -51,7 +51,7 @@ bool item_tester_hook_quaff(player_type *player_ptr, object_type *o_ptr)
     if (o_ptr->tval == TV_POTION)
         return TRUE;
 
-    if (is_specific_player_race(player_ptr, RACE_ANDROID) && (o_ptr->tval == TV_FLASK) && (o_ptr->sval == SV_FLASK_OIL))
+    if (player_race_food(player_ptr) == PlayerRaceFood::OIL && o_ptr->tval == TV_FLASK && o_ptr->sval == SV_FLASK_OIL)
         return TRUE;
 
     return FALSE;

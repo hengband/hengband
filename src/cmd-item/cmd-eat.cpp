@@ -193,8 +193,7 @@ bool exe_eat_charge_of_magic_device(player_type *creature_ptr, object_type *o_pt
     if (o_ptr->tval != TV_STAFF && o_ptr->tval != TV_WAND)
         return FALSE;
 
-    if (is_specific_player_race(creature_ptr, RACE_SKELETON) || is_specific_player_race(creature_ptr, RACE_GOLEM)
-        || is_specific_player_race(creature_ptr, RACE_ZOMBIE) || is_specific_player_race(creature_ptr, RACE_SPECTRE)) {
+    if (player_race_food(creature_ptr) == PlayerRaceFood::MANA) {
         concptr staff;
 
         if (o_ptr->tval == TV_STAFF && (item < 0) && (o_ptr->number > 1)) {
@@ -310,9 +309,10 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
         return;
     }
 
+    auto food_type = player_race_food(creature_ptr);
+
     /* Balrogs change humanoid corpses to energy */
-    if ((is_specific_player_race(creature_ptr, RACE_BALROG) || (mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON))
-        && (o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_CORPSE && angband_strchr("pht", r_info[o_ptr->pval].d_char))) {
+    if (food_type == PlayerRaceFood::CORPSE && (o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_CORPSE && angband_strchr("pht", r_info[o_ptr->pval].d_char))) {
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         msg_format(_("%sは燃え上り灰になった。精力を吸収した気がする。", "%^s is burnt to ashes.  You absorb its vitality!"), o_name);
@@ -336,14 +336,17 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
         } else {
             msg_print(_("食べ物がアゴを素通りして落ち、消えた！", "The food falls through your jaws and vanishes!"));
         }
-    } else if (is_specific_player_race(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE)) {
+    } else if (food_type == PlayerRaceFood::BLOOD) {
         /* Vampires are filled only by bloods, so reduced nutritional benefit */
         (void)set_food(creature_ptr, creature_ptr->food + (o_ptr->pval / 10));
         msg_print(_("あなたのような者にとって食糧など僅かな栄養にしかならない。", "Mere victuals hold scant sustenance for a being such as yourself."));
 
         if (creature_ptr->food < PY_FOOD_ALERT) /* Hungry */
             msg_print(_("あなたの飢えは新鮮な血によってのみ満たされる！", "Your hunger can only be satisfied with fresh blood!"));
-    } else if (player_race_life(creature_ptr) != PlayerRaceLife::LIVING || (mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING)) {
+    } else if (food_type == PlayerRaceFood::WATER) {
+        msg_print(_("動物の食物はあなたにとってほとんど栄養にならない。", "The food of animals is poor sustenance for you."));
+        set_food(creature_ptr, creature_ptr->food + ((o_ptr->pval) / 20));
+    } else if (food_type != PlayerRaceFood::RATION) {
         msg_print(_("生者の食物はあなたにとってほとんど栄養にならない。", "The food of mortals is poor sustenance for you."));
         set_food(creature_ptr, creature_ptr->food + ((o_ptr->pval) / 20));
     } else {

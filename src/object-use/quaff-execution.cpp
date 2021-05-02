@@ -111,6 +111,8 @@ static bool detonation(player_type *creature_ptr)
  * Quaff a potion (from the pack or the floor)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param item 飲む薬オブジェクトの所持品ID
+ * @details
+ * 効果発動のあと、食料タイプによって空腹度を少し充足する。
  */
 void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 {
@@ -172,11 +174,14 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
         case SV_POTION_SALT_WATER:
             msg_print(_("うぇ！思わず吐いてしまった。", "The potion makes you vomit!"));
 
-            if (!(is_specific_player_race(creature_ptr, RACE_GOLEM) || is_specific_player_race(creature_ptr, RACE_ZOMBIE)
-                    || is_specific_player_race(creature_ptr, RACE_BALROG) || is_specific_player_race(creature_ptr, RACE_ANDROID)
-                    || is_specific_player_race(creature_ptr, RACE_SPECTRE) || (mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING))) {
-                /* Only living creatures get thirsty */
+            switch (player_race_food(creature_ptr)) {
+            case PlayerRaceFood::RATION:
+            case PlayerRaceFood::WATER:
+            case PlayerRaceFood::BLOOD:
                 (void)set_food(creature_ptr, PY_FOOD_STARVE - 1);
+                break;
+            default:
+                break;
             }
 
             (void)set_poisoned(creature_ptr, 0);
@@ -585,45 +590,28 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 
     creature_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
-    /* Potions can feed the player */
-    switch (creature_ptr->mimic_form) {
-    case MIMIC_NONE:
-        switch (creature_ptr->prace) {
-        case RACE_VAMPIRE:
-            (void)set_food(creature_ptr, creature_ptr->food + (q_ptr->pval / 10));
-            break;
-        case RACE_SKELETON:
-            /* Do nothing */
-            break;
-        case RACE_GOLEM:
-        case RACE_ZOMBIE:
-        case RACE_BALROG:
-        case RACE_SPECTRE:
+    if (is_specific_player_race(creature_ptr, RACE_SKELETON))
+        return; //!< @note スケルトンは水分で飢えを満たせない
+
+    switch (player_race_food(creature_ptr)) {
+    case PlayerRaceFood::WATER:
+        msg_print(_("水分を取り込んだ。", "You are moistened."));
+        set_food(creature_ptr, MIN(creature_ptr->food + q_ptr->pval + MAX(0, q_ptr->pval * 10) + 2000, PY_FOOD_MAX - 1));
+        break;
+    case PlayerRaceFood::OIL:
+        if (q_ptr->tval == TV_FLASK) {
+            msg_print(_("オイルを補給した。", "You replenish yourself with the oil."));
+            set_food(creature_ptr, creature_ptr->food + 5000);
+        } else {
             set_food(creature_ptr, creature_ptr->food + ((q_ptr->pval) / 20));
-            break;
-        case RACE_ANDROID:
-            if (q_ptr->tval == TV_FLASK) {
-                msg_print(_("オイルを補給した。", "You replenish yourself with the oil."));
-                set_food(creature_ptr, creature_ptr->food + 5000);
-            } else {
-                set_food(creature_ptr, creature_ptr->food + ((q_ptr->pval) / 20));
-            }
-            break;
-        case RACE_ENT:
-            msg_print(_("水分を取り込んだ。", "You are moistened."));
-            set_food(creature_ptr, MIN(creature_ptr->food + q_ptr->pval + MAX(0, q_ptr->pval * 10) + 2000, PY_FOOD_MAX - 1));
-            break;
-        default:
-            (void)set_food(creature_ptr, creature_ptr->food + q_ptr->pval);
-            break;
         }
         break;
-    case MIMIC_DEMON:
-    case MIMIC_DEMON_LORD:
-        set_food(creature_ptr, creature_ptr->food + ((q_ptr->pval) / 20));
-        break;
-    case MIMIC_VAMPIRE:
+    case PlayerRaceFood::BLOOD:
         (void)set_food(creature_ptr, creature_ptr->food + (q_ptr->pval / 10));
+        break;
+    case PlayerRaceFood::MANA:
+    case PlayerRaceFood::CORPSE:
+        set_food(creature_ptr, creature_ptr->food + ((q_ptr->pval) / 20));
         break;
     default:
         (void)set_food(creature_ptr, creature_ptr->food + q_ptr->pval);
