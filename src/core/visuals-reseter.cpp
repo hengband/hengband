@@ -10,7 +10,6 @@
 /*!
  * @brief オブジェクト、地形の表示シンボルなど初期化する / Reset the "visual" lists
  * @param owner_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void reset_visuals(player_type *owner_ptr)
 {

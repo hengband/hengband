@@ -112,7 +112,6 @@ void process_stun_attack(player_type *target_ptr, monap_type *monap_ptr)
  * @brief 時間逆転攻撃による能力低下
  * @param target_ptr プレーヤーへの参照ポインタ
  * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
- * @return なし
  */
 static void describe_disability(player_type *target_ptr, monap_type *monap_ptr)
 {

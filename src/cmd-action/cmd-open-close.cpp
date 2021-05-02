@@ -79,7 +79,6 @@ static bool exe_open_chest(player_type *creature_ptr, POSITION y, POSITION x, OB
 /*!
  * @brief 「開ける」コマンドのメインルーチン /
  * Open a closed/locked/jammed door or a closed/locked chest.
- * @return なし
  * @details
  * Unlocking a locked door/chest is worth one experience point.
  */
@@ -139,7 +138,6 @@ void do_cmd_open(player_type *creature_ptr)
 /*!
  * @brief 「閉じる」コマンドのメインルーチン /
  * Close an open door.
- * @return なし
  * @details
  * Unlocking a locked door/chest is worth one experience point.
  */
@@ -188,7 +186,6 @@ void do_cmd_close(player_type *creature_ptr)
 /*!
  * @brief 箱、床のトラップ解除処理双方の統合メインルーチン /
  * Disarms a trap, or chest
- * @return なし
  */
 void do_cmd_disarm(player_type *creature_ptr)
 {
@@ -245,7 +242,6 @@ void do_cmd_disarm(player_type *creature_ptr)
 /*!
  * @brief 「打ち破る」動作コマンドのメインルーチン /
  * Bash open a door, success based on character strength
- * @return なし
  * @details
  * <pre>
  * For a closed door, pval is positive if locked; negative if stuck.
@@ -330,7 +326,6 @@ static bool get_spike(player_type *creature_ptr, INVENTORY_IDX *ip)
  * @brief 「くさびを打つ」動作コマンドのメインルーチン /
  * Jam a closed door with a spike
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  * <pre>
  * This command may NOT be repeated

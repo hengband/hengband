@@ -33,7 +33,6 @@ item_selection_type *initialize_item_selection_type(item_selection_type *item_se
     item_selection_ptr->cp = cp;
     item_selection_ptr->mode = mode;
     item_selection_ptr->tval = tval;
-    item_selection_ptr->next_o_idx = 0;
     item_selection_ptr->which = ' ';
     item_selection_ptr->oops = FALSE;
     item_selection_ptr->equip = FALSE;

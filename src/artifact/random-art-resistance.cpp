@@ -352,7 +352,6 @@ static void set_weird_bias_aura_cold(object_type *o_ptr)
  * 戦士系バイアスのみ反魔もつく。
  * @attention オブジェクトのtval、svalに依存したハードコーディング処理がある。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return なし
  */
 void random_resistance(object_type *o_ptr)
 {

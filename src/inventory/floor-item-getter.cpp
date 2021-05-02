@@ -158,7 +158,6 @@ static bool check_floor_item_tag(player_type *owner_ptr, fis_type *fis_ptr, char
  * @brief インベントリ内のアイテムが妥当かを判定する
  * @param owner_ptr プレーヤーへの参照ポインタ
  * @param fis_ptr 床上アイテムへの参照ポインタ
- * @return なし
  */
 static void test_inventory_floor(player_type *owner_ptr, fis_type *fis_ptr)
 {
@@ -179,7 +178,6 @@ static void test_inventory_floor(player_type *owner_ptr, fis_type *fis_ptr)
  * @brief 装備品がが妥当かを判定する
  * @param owner_ptr プレーヤーへの参照ポインタ
  * @param fis_ptr 床上アイテムへの参照ポインタ
- * @return なし
  */
 static void test_equipment_floor(player_type *owner_ptr, fis_type *fis_ptr)
 {
@@ -615,22 +613,20 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
         case '\n':
         case '\r':
         case '+': {
-            int i;
-            OBJECT_IDX o_idx;
+            OBJECT_IDX o_idx = 0;
             grid_type *g_ptr = &owner_ptr->current_floor_ptr->grid_array[owner_ptr->y][owner_ptr->x];
             if (command_wrk != (USE_FLOOR))
                 break;
 
-            o_idx = g_ptr->o_idx;
-            if (!(o_idx && owner_ptr->current_floor_ptr->o_list[o_idx].next_o_idx))
+            if (!g_ptr->o_idx_list.empty())
+                o_idx = g_ptr->o_idx_list.front();
+
+            if (g_ptr->o_idx_list.size() < 2)
                 break;
 
-            excise_object_idx(owner_ptr->current_floor_ptr, o_idx);
-            i = g_ptr->o_idx;
-            while (owner_ptr->current_floor_ptr->o_list[i].next_o_idx)
-                i = owner_ptr->current_floor_ptr->o_list[i].next_o_idx;
+            g_ptr->o_idx_list.pop_front();
+            g_ptr->o_idx_list.push_back(o_idx);
 
-            owner_ptr->current_floor_ptr->o_list[i].next_o_idx = o_idx;
             fis_ptr->floor_num
                 = scan_floor_items(owner_ptr, fis_ptr->floor_list, owner_ptr->y, owner_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, fis_ptr->tval);
             if (command_see) {

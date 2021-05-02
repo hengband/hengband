@@ -20,7 +20,6 @@
 
 /*!
  * @brief プレイヤーの歌に関する継続処理
- * @return なし
  */
 void check_music(player_type *caster_ptr)
 {
@@ -123,7 +122,6 @@ bool set_tim_stealth(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 /*!
  * @brief 歌の停止を処理する / Stop singing if the player is a Bard
- * @return なし
  */
 void stop_singing(player_type *creature_ptr)
 {

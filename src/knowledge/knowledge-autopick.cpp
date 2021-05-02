@@ -18,7 +18,6 @@
 /*!
  * @brief 自動拾い設定ファイルをロードするコマンドのメインルーチン /
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void do_cmd_reload_autopick(player_type *creature_ptr)
 {

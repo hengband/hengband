@@ -69,7 +69,6 @@ void do_cmd_knowledge_weapon_exp(player_type *creature_ptr)
 /*!
  * @brief 魔法の経験値を表示するコマンドのメインルーチン
  * Display spell-exp
- * @return なし
  */
 void do_cmd_knowledge_spell_exp(player_type *creature_ptr)
 {
@@ -151,7 +150,6 @@ void do_cmd_knowledge_spell_exp(player_type *creature_ptr)
 /*!
  * @brief スキル情報を表示するコマンドのメインルーチン /
  * Display skill-exp
- * @return なし
  */
 void do_cmd_knowledge_skill_exp(player_type *creature_ptr)
 {

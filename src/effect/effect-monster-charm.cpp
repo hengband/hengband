@@ -369,7 +369,6 @@ static HIT_POINT calcutate_capturable_hp(player_type *caster_ptr, monster_type *
  * @brief モンスターボールで捕らえた処理
  * @param caster_ptr プレイヤー情報への参照ポインタ
  * @param em_ptr 効果情報への参照ポインタ
- * @return なし
  */
 static void effect_monster_captured(player_type *caster_ptr, effect_monster_type *em_ptr)
 {

@@ -183,7 +183,6 @@ static bool select_personality(player_type *creature_ptr, int *k, concptr *str, 
 
 /*!
  * @brief プレイヤーの性格選択を行う / Player Player seikaku
- * @return なし
  */
 bool get_player_personality(player_type *creature_ptr)
 {

@@ -15,7 +15,6 @@
  * @brief ヴォーパル武器で攻撃した時のメッセージ表示
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param int 倍率
- * @return なし
  */
 static void print_vorpal_message(player_attack_type *pa_ptr, const int magnification)
 {
@@ -47,7 +46,6 @@ static void print_vorpal_message(player_attack_type *pa_ptr, const int magnifica
 /*!
  * @brief チェンソーのノイズ音を表示する
  * @param o_ptr チェンソーへの参照ポインタ
- * @return なし
  */
 static void print_chainsword_noise(object_type *o_ptr)
 {
@@ -65,7 +63,6 @@ static void print_chainsword_noise(object_type *o_ptr)
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param vorpal_cut メッタ斬りにできるかどうか
  * @param vorpal_chance ヴォーパル倍率上昇の機会値
- * @return なし
  */
 void process_vorpal_attack(player_type *attacker_ptr, player_attack_type *pa_ptr, const bool vorpal_cut, const int vorpal_chance)
 {

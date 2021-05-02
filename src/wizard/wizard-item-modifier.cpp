@@ -71,7 +71,6 @@ std::vector<std::vector<std::string>> wizard_sub_menu_table = {
 
 /*!
  * @brief ゲーム設定コマンドの一覧を表示する
- * @return なし
  */
 void display_wizard_sub_menu()
 {
@@ -96,8 +95,7 @@ void wiz_identify_full_inventory(player_type *caster_ptr);
 /*!
     * @brief ゲーム設定コマンドの入力を受け付ける
     * @param creature_ptr プレイヤーの情報へのポインタ
-    * @return なし
-    */
+       */
 void wizard_item_modifier(player_type *creature_ptr)
 {
     screen_save();
@@ -245,7 +243,6 @@ void wiz_identify_full_inventory(player_type *caster_ptr)
  * @param sval ベースアイテムの小項目ID
  * @param row 表示列
  * @param col 表示行
- * @return なし
  */
 static void prt_alloc(tval_type tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row, TERM_LEN col)
 {
@@ -307,7 +304,6 @@ static void prt_alloc(tval_type tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row, T
 
 /*!
  * @brief 32ビット変数のビット配列を並べて描画する / Output a long int in binary format.
- * @return なし
  */
 static void prt_binary(BIT_FLAGS flags, const int row, int col)
 {
@@ -324,7 +320,6 @@ static void prt_binary(BIT_FLAGS flags, const int row, int col)
  * Change various "permanent" player variables.
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 詳細を表示するアイテム情報の参照ポインタ
- * @return なし
  */
 static void wiz_display_item(player_type *player_ptr, object_type *o_ptr)
 {
@@ -383,7 +378,6 @@ static void wiz_display_item(player_type *player_ptr, object_type *o_ptr)
  * Try to create an item again. Output some statistics.    -Bernd-
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 生成テストの基準となるアイテム情報の参照ポインタ
- * @return なし
  * The statistics are correct now.  We acquire a clean grid, and then
  * repeatedly place an object in this grid, copying it into an item
  * holder, and then deleting the object.  We fiddle with the artifact
@@ -478,7 +472,6 @@ static void wiz_statistics(player_type *caster_ptr, object_type *o_ptr)
  * @brief アイテムの質を選択して再生成する /
  * Apply magic to an item or turn it into an artifact. -Bernd-
  * @param o_ptr 再生成の対象となるアイテム情報の参照ポインタ
- * @return なし
  */
 static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
 {
@@ -554,7 +547,6 @@ static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
 
         q_ptr->iy = o_ptr->iy;
         q_ptr->ix = o_ptr->ix;
-        q_ptr->next_o_idx = o_ptr->next_o_idx;
         q_ptr->marked = o_ptr->marked;
     }
 
@@ -570,7 +562,6 @@ static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
  * @briefアイテムの基礎能力値を調整する / Tweak an item
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 調整するアイテムの参照ポインタ
- * @return なし
  */
 static void wiz_tweak_item(player_type *player_ptr, object_type *o_ptr)
 {
@@ -613,7 +604,6 @@ static void wiz_tweak_item(player_type *player_ptr, object_type *o_ptr)
  * Change the quantity of a the item
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 変更するアイテム情報構造体の参照ポインタ
- * @return なし
  */
 static void wiz_quantity_item(object_type *o_ptr)
 {
@@ -641,7 +631,6 @@ static void wiz_quantity_item(object_type *o_ptr)
 /*!
  * @brief アイテムを弄るデバッグコマンド
  * Play with an item. Options include:
- * @return なし
  * @details
  *   - Output statistics (via wiz_roll_item)<br>
  *   - Reroll item (via wiz_reroll_item)<br>

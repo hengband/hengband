@@ -270,7 +270,6 @@ static void build_cave_vault(player_type *player_ptr, POSITION x0, POSITION y0, 
  * @param xoffset Vault生成時の基準X座標
  * @param yoffset Vault生成時の基準Y座標
  * @param transno 処理ID
- * @return なし
  */
 static void coord_trans(POSITION *x, POSITION *y, POSITION xoffset, POSITION yoffset, int transno)
 {
@@ -314,7 +313,6 @@ static void coord_trans(POSITION *x, POSITION *y, POSITION xoffset, POSITION yof
  * @param xoffset 変換基準X座標
  * @param yoffset 変換基準Y座標
  * @param transno 変換ID
- * @return なし
  */
 static void build_vault(
     player_type *player_ptr, POSITION yval, POSITION xval, POSITION ymax, POSITION xmax, concptr data, POSITION xoffset, POSITION yoffset, int transno)
@@ -605,7 +603,6 @@ static void build_vault(
 
 /*!
  * @brief タイプ7の部屋…v_info.txtより小型vaultを生成する / Type 7 -- simple vaults (see "v_info.txt")
- * @return なし
  */
 bool build_type7(player_type *player_ptr, dun_data_type *dd_ptr)
 {
@@ -674,7 +671,6 @@ bool build_type7(player_type *player_ptr, dun_data_type *dd_ptr)
 
 /*!
  * @brief タイプ8の部屋…v_info.txtより大型vaultを生成する / Type 8 -- greater vaults (see "v_info.txt")
- * @return なし
  */
 bool build_type8(player_type *player_ptr, dun_data_type *dd_ptr)
 {
@@ -1086,7 +1082,6 @@ static void build_castle_vault(player_type *player_ptr, POSITION x0, POSITION y0
 /*!
  * @brief タイプ10の部屋…ランダム生成vault / Type 10 -- Random vaults
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 bool build_type10(player_type *player_ptr, dun_data_type *dd_ptr)
 {
@@ -1149,7 +1144,6 @@ bool build_type10(player_type *player_ptr, dun_data_type *dd_ptr)
 
 /*!
  * @brief タイプ17の部屋…v_info.txtより固定特殊部屋を生成する / Type 17 -- fixed special room (see "v_info.txt")
- * @return なし
  */
 bool build_type17(player_type *player_ptr, dun_data_type *dd_ptr)
 {

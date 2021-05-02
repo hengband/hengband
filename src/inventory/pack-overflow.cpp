@@ -13,7 +13,6 @@
 
 /*!
  * @brief アイテムの所持種類数が超えた場合にアイテムを床に落とす処理
- * @return なし
  */
 void pack_overflow(player_type *owner_ptr)
 {

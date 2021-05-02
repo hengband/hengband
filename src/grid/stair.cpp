@@ -15,7 +15,6 @@
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param y 配置を試みたいマスのY座標
  * @param x 配置を試みたいマスのX座標
- * @return なし
  */
 void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x)
 {
@@ -24,7 +23,7 @@ void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x)
     grid_type *g_ptr;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     g_ptr = &floor_ptr->grid_array[y][x];
-    if (!is_floor_grid(g_ptr) || g_ptr->o_idx)
+    if (!is_floor_grid(g_ptr) || !g_ptr->o_idx_list.empty())
         return;
 
     if (!floor_ptr->dun_level)
@@ -67,11 +66,9 @@ bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x)
     if (cave_has_flag_grid(g_ptr, FF_PERMANENT))
         return FALSE;
 
-    OBJECT_IDX next_o_idx = 0;
-    for (OBJECT_IDX this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx) {
+    for (const auto this_o_idx : g_ptr->o_idx_list) {
         object_type *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
-        next_o_idx = o_ptr->next_o_idx;
         if (object_is_artifact(o_ptr))
             return FALSE;
     }

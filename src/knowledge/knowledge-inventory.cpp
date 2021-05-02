@@ -41,7 +41,6 @@ static concptr inven_res_label = _(
  * @param resistance 4元素耐性
  * @param flags 耐性配列へのポインタ
  * @param fff 一時ファイルへのポインタ
- * @return なし
  */
 static void print_im_or_res_flag(int immunity, int resistance, BIT_FLAGS *flags, FILE *fff)
 {
@@ -53,7 +52,6 @@ static void print_im_or_res_flag(int immunity, int resistance, BIT_FLAGS *flags,
  * @param tr 耐性
  * @param flags 耐性配列へのポインタ
  * @param fff 一時ファイルへのポインタ
- * @return なし
  */
 static void print_flag(int tr, BIT_FLAGS *flags, FILE *fff) { fputs(has_flag(flags, tr) ? HAS_FLAG_STR : NO_FLAG_STR, fff); }
 
@@ -97,7 +95,6 @@ static bool check_item_knowledge(object_type *o_ptr, tval_type tval)
  * @brief 鑑定済アイテムの耐性を表示する
  * @param o_ptr アイテムへの参照ポインタ
  * @param fff 一時ファイルへの参照ポインタ
- * @return なし
  * @todo ここの関数から表示用の関数に移したい
  */
 static void display_identified_resistances_flag(player_type *creature_ptr, object_type *o_ptr, FILE *fff)
@@ -141,7 +138,6 @@ static void display_identified_resistances_flag(player_type *creature_ptr, objec
  * @param fff 一時ファイルへの参照ポインタ
  * @param o_ptr アイテムへの参照ポインタ
  * @param where アイテムの場所 (手持ち、家等) を示す文字列への参照ポインタ
- * @return なし
  */
 static void do_cmd_knowledge_inventory_aux(player_type *creature_ptr, FILE *fff, object_type *o_ptr, char *where)
 {
@@ -179,7 +175,6 @@ static void do_cmd_knowledge_inventory_aux(player_type *creature_ptr, FILE *fff,
  * @brief 9行おきにラベルを追加する
  * @param label_number 現在の行数
  * @param fff 一時ファイルへの参照ポインタ
- * @return なし
  */
 static void add_res_label(int *label_number, FILE *fff)
 {
@@ -194,7 +189,6 @@ static void add_res_label(int *label_number, FILE *fff)
  * @brief 9行ごとに行数をリセットする
  * @param label_number 現在の行数
  * @param fff 一時ファイルへの参照ポインタ
- * @return なし
  */
 static void reset_label_number(int *label_number, FILE *fff)
 {
@@ -215,7 +209,6 @@ static void reset_label_number(int *label_number, FILE *fff)
  * @param tval アイテム主分類番号
  * @param label_number 現在の行数
  * @param fff ファイルへの参照ポインタ
- * @return なし
  */
 static void show_wearing_equipment_resistances(player_type *creature_ptr, tval_type tval, int *label_number, FILE *fff)
 {
@@ -237,7 +230,6 @@ static void show_wearing_equipment_resistances(player_type *creature_ptr, tval_t
  * @param tval アイテム主分類番号
  * @param label_number 現在の行数
  * @param fff ファイルへの参照ポインタ
- * @return なし
  */
 static void show_holding_equipment_resistances(player_type *creature_ptr, tval_type tval, int *label_number, FILE *fff)
 {
@@ -259,7 +251,6 @@ static void show_holding_equipment_resistances(player_type *creature_ptr, tval_t
  * @param tval アイテム主分類番号
  * @param label_number 現在の行数
  * @param fff ファイルへの参照ポインタ
- * @return なし
  */
 static void show_home_equipment_resistances(player_type *creature_ptr, tval_type tval, int *label_number, FILE *fff)
 {
@@ -280,7 +271,6 @@ static void show_home_equipment_resistances(player_type *creature_ptr, tval_type
 /*
  * @brief Display *ID* ed weapons/armors's resistances
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void do_cmd_knowledge_inventory(player_type *creature_ptr)
 {

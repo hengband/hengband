@@ -78,22 +78,21 @@ static bool py_pickup_floor_aux(player_type *owner_ptr)
 /*!
  * @brief 床上のアイテムを拾うメイン処理
  * @param pickup FALSEなら金銭の自動拾いのみを行う/ FALSE then only gold will be picked up
- * @return なし
  * @details
  * This is called by py_pickup() when easy_floor is TRUE.
  */
 void py_pickup_floor(player_type *owner_ptr, bool pickup)
 {
-    OBJECT_IDX this_o_idx, next_o_idx = 0;
     GAME_TEXT o_name[MAX_NLEN];
     object_type *o_ptr;
     int floor_num = 0;
     OBJECT_IDX floor_o_idx = 0;
     int can_pickup = 0;
-    for (this_o_idx = owner_ptr->current_floor_ptr->grid_array[owner_ptr->y][owner_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx) {
+    auto &o_idx_list = owner_ptr->current_floor_ptr->grid_array[owner_ptr->y][owner_ptr->x].o_idx_list;
+    for (auto it = o_idx_list.begin(); it != o_idx_list.end();) {
+        const OBJECT_IDX this_o_idx = *it++;
         o_ptr = &owner_ptr->current_floor_ptr->o_list[this_o_idx];
         describe_flavor(owner_ptr, o_name, o_ptr, 0);
-        next_o_idx = o_ptr->next_o_idx;
         disturb(owner_ptr, FALSE, FALSE);
         if (o_ptr->tval == TV_GOLD) {
             msg_format(_(" $%ld の価値がある%sを見つけた。", "You have found %ld gold pieces worth of %s."), (long)o_ptr->pval, o_name);
@@ -166,7 +165,6 @@ void py_pickup_floor(player_type *owner_ptr, bool pickup)
  * Helper routine for py_pickup() and py_pickup_floor().
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param o_idx 取得したオブジェクトの参照ID
- * @return なし
  * @details
  * アイテムを拾った際に「２つのケーキを持っている」
  * "You have two cakes." とアイテムを拾った後の合計のみの表示がオリジナルだが、
@@ -237,7 +235,6 @@ void describe_pickup_item(player_type *owner_ptr, OBJECT_IDX o_idx)
  * @brief プレイヤーがオブジェクト上に乗った際の表示処理 / Player "wants" to pick up an object or gold.
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param pickup 自動拾い処理を行うならばTRUEとする
- * @return なし
  */
 void carry(player_type *creature_ptr, bool pickup)
 {
@@ -253,13 +250,12 @@ void carry(player_type *creature_ptr, bool pickup)
         return;
     }
 
-    OBJECT_IDX next_o_idx = 0;
-    for (OBJECT_IDX this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx) {
+    for (auto it = g_ptr->o_idx_list.begin(); it != g_ptr->o_idx_list.end();) {
+        const OBJECT_IDX this_o_idx = *it++;
         object_type *o_ptr;
         o_ptr = &creature_ptr->current_floor_ptr->o_list[this_o_idx];
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(creature_ptr, o_name, o_ptr, 0);
-        next_o_idx = o_ptr->next_o_idx;
         disturb(creature_ptr, FALSE, FALSE);
         if (o_ptr->tval == TV_GOLD) {
             int value = (long)o_ptr->pval;

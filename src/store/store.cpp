@@ -198,7 +198,6 @@ int get_stock(COMMAND_CODE *com_val, concptr pmt, int i, int j)
 /*!
  * @brief 店のアイテムを調べるコマンドのメインルーチン /
  * Examine an item in a store			   -JDL-
- * @return なし
  */
 void store_examine(player_type *player_ptr)
 {
@@ -241,7 +240,6 @@ void store_examine(player_type *player_ptr)
  * @brief 現在の町の店主を交代させる /
  * Shuffle one of the stores.
  * @param which 店舗種類のID
- * @return なし
  */
 void store_shuffle(player_type *player_ptr, int which)
 {
@@ -293,7 +291,6 @@ void store_shuffle(player_type *player_ptr, int which)
  * @param town_num 町のID
  * @param store_num 店舗種類のID
  * @param chance 更新商品数
- * @return なし
  */
 void store_maintenance(player_type *player_ptr, int town_num, int store_num, int chance)
 {
@@ -363,7 +360,6 @@ void store_maintenance(player_type *player_ptr, int town_num, int store_num, int
  * Initialize the stores
  * @param town_num 町のID
  * @param store_num 店舗種類のID
- * @return なし
  */
 void store_init(int town_num, int store_num)
 {

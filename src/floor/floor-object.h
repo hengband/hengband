@@ -3,6 +3,8 @@
 #include "object/tval-types.h"
 #include "system/angband.h"
 
+#include <list>
+
 typedef struct floor_type floor_type;
 typedef struct object_type object_type;
 typedef struct player_type player_type;
@@ -13,6 +15,7 @@ void floor_item_increase(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER
 void floor_item_optimize(player_type *owner_ptr, INVENTORY_IDX item);
 void delete_object_idx(player_type *owner_ptr, OBJECT_IDX o_idx);
 void excise_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx);
+std::list<OBJECT_IDX> &get_o_idx_list_contains(floor_type *floor_ptr, OBJECT_IDX o_idx);
 OBJECT_IDX drop_near(player_type *owner_type, object_type *o_ptr, PERCENTAGE chance, POSITION y, POSITION x);
 void floor_item_charges(floor_type *owner_ptr, INVENTORY_IDX item);
 void floor_item_describe(player_type *player_ptr, INVENTORY_IDX item);

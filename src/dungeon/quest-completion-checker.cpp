@@ -40,7 +40,6 @@ static MONSTER_NUMBER count_all_hostile_monsters(floor_type *floor_ptr)
  * Check for "Quest" completion when a quest monster is killed or charmed.
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param m_ptr 撃破したモンスターの構造体参照ポインタ
- * @return なし
  */
 void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
 {
@@ -156,7 +155,7 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
 
     if (create_stairs) {
         POSITION ny, nx;
-        while (cave_has_flag_bold(floor_ptr, y, x, FF_PERMANENT) || floor_ptr->grid_array[y][x].o_idx || (floor_ptr->grid_array[y][x].info & CAVE_OBJECT)) {
+        while (cave_has_flag_bold(floor_ptr, y, x, FF_PERMANENT) || !floor_ptr->grid_array[y][x].o_idx_list.empty() || (floor_ptr->grid_array[y][x].info & CAVE_OBJECT)) {
             scatter(player_ptr, &ny, &nx, y, x, 1, PROJECT_NONE);
             y = ny;
             x = nx;

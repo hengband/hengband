@@ -62,7 +62,6 @@ static bool is_player_undead(player_type *customer_ptr)
  * @brief 宿屋に泊まったことを日記に残す
  * @param customer_ptr プレーヤーへの参照ポインタ
  * @param prev_hour 宿屋に入った直後のゲーム内時刻
- * @return なし
  */
 static void write_diary_stay_inn(player_type *customer_ptr, int prev_hour)
 {
@@ -81,7 +80,6 @@ static void write_diary_stay_inn(player_type *customer_ptr, int prev_hour)
 /*!
  * @brief 宿泊によってゲーム内ターンを経過させる
  * @param なし
- * @return なし
  */
 static void pass_game_turn_by_stay(void)
 {
@@ -124,7 +122,6 @@ static bool has_a_nightmare(player_type *customer_ptr)
 /*!
  * @brief 体調を元に戻す
  * @param customer_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 static void back_to_health(player_type *customer_ptr)
 {
@@ -139,7 +136,6 @@ static void back_to_health(player_type *customer_ptr)
 /*!
  * @brief 魔力喰いの残り回数回復(本当？ 要調査)
  * @param customer_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 static void charge_magic_eating_energy(player_type *customer_ptr)
 {

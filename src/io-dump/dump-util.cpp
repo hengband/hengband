@@ -163,7 +163,6 @@ bool open_temporary_file(FILE **fff, char *file_name)
  * @param group_text グループ名の文字列配列
  * @param grp_cur 現在の選択ID
  * @param grp_top 現在の選択リスト最上部ID
- * @return なし
  */
 void display_group_list(int col, int row, int wid, int per_page, IDX grp_idx[], concptr group_text[], int grp_cur, int grp_top)
 {

@@ -253,7 +253,6 @@ static ep_check_result check_continue_player_effect(player_type *target_ptr, eff
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param ep_ptr プレーヤー効果構造体への参照ポインタ
  * @param who_name モンスター名
- * @return なし
  */
 static void describe_effect_source(player_type *target_ptr, effect_player_type *ep_ptr, concptr who_name)
 {

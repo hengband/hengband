@@ -11,7 +11,6 @@
  * @brief プレイヤーの特性フラグ一覧表示2a /
  * @param creature_ptr プレーヤーへの参照ポインタ
  * Special display, part 2a
- * @return なし
  */
 void display_player_misc_info(player_type *creature_ptr)
 {

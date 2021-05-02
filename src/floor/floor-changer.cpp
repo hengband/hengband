@@ -47,7 +47,6 @@
 
 /*!
  * @brief 階段移動先のフロアが生成できない時に簡単な行き止まりマップを作成する / Builds the dead end
- * @return なし
  */
 static void build_dead_end(player_type *creature_ptr)
 {
@@ -108,7 +107,7 @@ static void set_pet_params(player_type *master_ptr, monster_race **r_ptr, const 
     m_ptr->current_floor_ptr = master_ptr->current_floor_ptr;
     m_ptr->ml = TRUE;
     m_ptr->mtimed[MTIMED_CSLEEP] = 0;
-    m_ptr->hold_o_idx = 0;
+    m_ptr->hold_o_idx_list.clear();
     m_ptr->target_y = 0;
     if (((*r_ptr)->flags1 & RF1_PREVENT_SUDDEN_MAGIC) && !ironman_nightmare) {
         m_ptr->mflag.set(MFLAG::PREVENT_MAGIC);
@@ -118,7 +117,6 @@ static void set_pet_params(player_type *master_ptr, monster_race **r_ptr, const 
 /*!
  * @brief 移動先のフロアに伴ったペットを配置する / Place preserved pet monsters on new floor
  * @param master_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 static void place_pet(player_type *master_ptr)
 {
@@ -159,7 +157,6 @@ static void place_pet(player_type *master_ptr)
 /*!
  * @brief ユニークモンスターやアーティファクトの所在フロアを更新する / Hack -- Update location of unique monsters and artifacts
  * @param cur_floor_id 現在のフロアID
- * @return なし
  * @details
  * The r_ptr->floor_id and a_ptr->floor_id are not updated correctly\n
  * while new floor creation since dungeons may be re-created by\n
@@ -365,7 +362,6 @@ static void update_floor(player_type *creature_ptr)
 /*!
  * @brief フロアの切り替え処理 / Enter new floor.
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  * If the floor is an old saved floor, it will be\n
  * restored from the temporary file.  If the floor is new one, new floor\n

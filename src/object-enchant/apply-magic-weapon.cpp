@@ -25,7 +25,6 @@
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
  * @param level 生成基準階
  * @param power 生成ランク
- * @return なし
  * @details
  * Hack -- note special base damage dice boosting\n
  * Hack -- note special processing for weapon/digger\n

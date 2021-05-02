@@ -304,7 +304,6 @@ static void drop_items_golds(player_type *player_ptr, monster_death_type *md_ptr
 /*!
  * @brief 最終ボス(混沌のサーペント)を倒したときの処理
  * @param player_ptr プレイヤー情報への参照ポインタ
- * @return なし
  */
 static void on_defeat_last_boss(player_type *player_ptr)
 {

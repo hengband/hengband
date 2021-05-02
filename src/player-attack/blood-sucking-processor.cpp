@@ -24,7 +24,6 @@
  * @brief 生命のあるモンスターから吸血できるか判定する
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @return なし
  */
 void decide_blood_sucking(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {
@@ -41,7 +40,6 @@ void decide_blood_sucking(player_type *attacker_ptr, player_attack_type *pa_ptr)
 /*!
  * @brief 吸血量を計算する
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @return なし
  */
 void calc_drain(player_attack_type *pa_ptr)
 {
@@ -57,7 +55,6 @@ void calc_drain(player_attack_type *pa_ptr)
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param is_human モンスターが人間かどうか
- * @return なし
  */
 static void drain_muramasa(player_type *attacker_ptr, player_attack_type *pa_ptr, const bool is_human)
 {
@@ -96,7 +93,6 @@ static void drain_muramasa(player_type *attacker_ptr, player_attack_type *pa_ptr
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param drain_msg 吸血をした旨のメッセージを表示するかどうか
- * @return なし
  * @details 1行目の5がマジックナンバーで良く分からなかったので、取り敢えず元々あったコメントをベースに定数宣言しておいた
  */
 static void drain_result(player_type *attacker_ptr, player_attack_type *pa_ptr, bool *drain_msg)
@@ -139,7 +135,6 @@ static void drain_result(player_type *attacker_ptr, player_attack_type *pa_ptr, 
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param is_human 人間かどうか(村正用フラグ)
  * @param drain_msg 吸血をした旨のメッセージを表示するかどうか
- * @return なし
  * @details モンスターが死んだ場合、(ゲームのフレーバー的に)吸血しない
  */
 void process_drain(player_type *attacker_ptr, player_attack_type *pa_ptr, const bool is_human, bool *drain_msg)

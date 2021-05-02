@@ -89,7 +89,6 @@ std::vector<std::vector<std::string>> debug_menu_table = {
  * @param max_page ページ数
  * @param page_size 1ページ行数
  * @param max_line コマンド数
- * @return なし
  */
 void display_debug_menu(int page, int max_page, int page_size, int max_line)
 {
@@ -269,7 +268,6 @@ bool exe_cmd_debug(player_type *creature_ptr, char cmd)
  * Ask for and parse a "debug command"
  * The "command_arg" may have been set.
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  * 番号を指定するには、それをN及びデバッグコマンドをXとしてとして「0N^aX」とする
  */

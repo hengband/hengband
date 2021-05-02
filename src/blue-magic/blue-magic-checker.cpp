@@ -25,7 +25,6 @@
 /*!
  * @brief 青魔法のラーニング判定と成功した場合のラーニング処理
  * @param monspell ラーニングを試みるモンスター攻撃のID
- * @return なし
  */
 void learn_spell(player_type *learner_ptr, int monspell)
 {
@@ -54,7 +53,6 @@ void learn_spell(player_type *learner_ptr, int monspell)
  * @param f5 モンスター特殊能力の5番目のフラグ配列
  * @param f6 モンスター特殊能力の6番目のフラグ配列
  * @param mode 抜き出したい条件
- * @return なし
  * @todo f4, f5, f6を構造体にまとめ直す
  */
 void set_rf_masks(EnumClassFlagGroup<RF_ABILITY> &ability_flags, blue_magic_type mode)

@@ -57,7 +57,7 @@ static bool alloc_stairs_aux(player_type *player_ptr, POSITION y, POSITION x, in
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-    if (!is_floor_grid(g_ptr) || pattern_tile(floor_ptr, y, x) || (g_ptr->o_idx != 0) || (g_ptr->m_idx != 0) || next_to_walls(floor_ptr, y, x) < walls)
+    if (!is_floor_grid(g_ptr) || pattern_tile(floor_ptr, y, x) || !g_ptr->o_idx_list.empty() || (g_ptr->m_idx != 0) || next_to_walls(floor_ptr, y, x) < walls)
         return FALSE;
 
     return TRUE;
@@ -164,7 +164,7 @@ void alloc_object(player_type *owner_ptr, dap_type set, EFFECT_ID typ, int num)
             y = randint0(floor_ptr->height);
             x = randint0(floor_ptr->width);
             g_ptr = &floor_ptr->grid_array[y][x];
-            if (!is_floor_grid(g_ptr) || g_ptr->o_idx || g_ptr->m_idx)
+            if (!is_floor_grid(g_ptr) || !g_ptr->o_idx_list.empty() || g_ptr->m_idx)
                 continue;
 
             if (player_bold(owner_ptr, y, x))

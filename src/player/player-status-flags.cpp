@@ -676,7 +676,6 @@ void check_no_flowed(player_type *creature_ptr)
 {
     object_type *o_ptr;
     bool has_sw = FALSE, has_kabe = FALSE;
-    OBJECT_IDX this_o_idx, next_o_idx = 0;
 
     creature_ptr->no_flowed = FALSE;
 
@@ -697,9 +696,8 @@ void check_no_flowed(player_type *creature_ptr)
             has_kabe = TRUE;
     }
 
-    for (this_o_idx = creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx) {
+    for (const auto this_o_idx : creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].o_idx_list) {
         o_ptr = &creature_ptr->current_floor_ptr->o_list[this_o_idx];
-        next_o_idx = o_ptr->next_o_idx;
 
         if ((o_ptr->tval == TV_NATURE_BOOK) && (o_ptr->sval == 2))
             has_sw = TRUE;

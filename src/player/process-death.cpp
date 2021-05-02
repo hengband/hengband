@@ -37,7 +37,6 @@
 /*!
  * @brief 墓石の真ん中に文字列を書き込む /
  * Centers a string within a GRAVE_LINE_WIDTH character string		-JWT-
- * @return なし
  * @details
  */
 static void center_string(char *buf, concptr str)
@@ -51,7 +50,6 @@ static void center_string(char *buf, concptr str)
  * @brief 墓に基本情報を表示
  * @param dead_ptr プレーヤーへの参照ポインタ
  * @param buf 墓テンプレ
- * @return なし
  */
 static void show_basic_params(player_type *dead_ptr, char *buf)
 {
@@ -121,7 +119,6 @@ static int show_killing_monster(player_type *dead_ptr, char *buf, char *tomb_mes
  * @param buf 墓テンプレ
  * @param tomb_message 表示する文字列
  * @param extra_line 追加の行数
- * @return なし
  */
 static void show_dead_place(player_type *dead_ptr, char *buf, char *tomb_message, int extra_line)
 {
@@ -151,7 +148,6 @@ static void show_dead_place(player_type *dead_ptr, char *buf, char *tomb_message
  * @brief 墓に刻む言葉を細かく表示 (日本語版専用)
  * @param dead_ptr プレーヤーへの参照ポインタ
  * @param buf 墓テンプレ
- * @return なし
  */
 static void show_tomb_detail(player_type *dead_ptr, char *buf)
 {
@@ -212,7 +208,6 @@ static void show_tomb_detail(player_type *dead_ptr, char *buf)
  * @brief 墓石のアスキーアート表示 /
  * Display a "tomb-stone"
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void print_tomb(player_type *dead_ptr)
 {
@@ -251,7 +246,6 @@ void print_tomb(player_type *dead_ptr)
 /*!
  * @brief 死亡/引退/切腹時にインベントリ内のアイテムを*鑑定*する
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 static void inventory_aware(player_type *creature_ptr)
 {
@@ -269,7 +263,6 @@ static void inventory_aware(player_type *creature_ptr)
 /*!
  * @brief 死亡/引退/切腹時に我が家のアイテムを*鑑定*する
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 static void home_aware(player_type *creature_ptr)
 {
@@ -318,7 +311,6 @@ static bool show_dead_player_items(player_type *creature_ptr)
 /*!
  * @brief 我が家にあったアイテムを表示する
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 static void show_dead_home_items(player_type *creature_ptr)
 {
@@ -352,7 +344,6 @@ static void show_dead_home_items(player_type *creature_ptr)
  * @brief キャラクタ情報をファイルに書き出す
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param file_character ステータスダンプへのコールバック
- * @return なし
  */
 static void export_player_info(player_type *creature_ptr, display_player_pf display_player)
 {
@@ -375,7 +366,6 @@ static void export_player_info(player_type *creature_ptr, display_player_pf disp
 
 /*!
  * @brief 自動的にプレイヤーステータスをファイルダンプ出力する
- * @return なし
  */
 static void file_character_auto(player_type *creature_ptr, display_player_pf display_player)
 {
@@ -397,7 +387,6 @@ static void file_character_auto(player_type *creature_ptr, display_player_pf dis
  * @brief 死亡、引退時の簡易ステータス表示
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param display_player ステータス表示へのコールバック
- * @return なし
  */
 void show_death_info(player_type *creature_ptr, display_player_pf display_player)
 {

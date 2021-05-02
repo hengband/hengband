@@ -64,7 +64,6 @@ static int travel_flow_cost(player_type *creature_ptr, POSITION y, POSITION x)
  * @param x 目標地点のX座標
  * @param n 現在のコスト
  * @param wall プレイヤーが壁の中にいるならばTRUE
- * @return なし
  */
 static void travel_flow_aux(player_type *creature_ptr, POSITION y, POSITION x, int n, bool wall)
 {
@@ -109,7 +108,6 @@ static void travel_flow_aux(player_type *creature_ptr, POSITION y, POSITION x, i
  * @param creature_ptr	プレーヤーへの参照ポインタ
  * @param ty 目標地点のY座標
  * @param tx 目標地点のX座標
- * @return なし
  */
 static void travel_flow(player_type *creature_ptr, POSITION ty, POSITION tx)
 {
@@ -136,7 +134,6 @@ static void travel_flow(player_type *creature_ptr, POSITION ty, POSITION tx)
 
 /*!
  * @brief トラベル処理のメインルーチン
- * @return なし
  */
 void do_cmd_travel(player_type *creature_ptr)
 {

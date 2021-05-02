@@ -67,7 +67,6 @@
 
 /*!
  * @brief 持ち物一覧を表示するコマンドのメインルーチン / Display inventory_list
- * @return なし
  */
 void do_cmd_inven(player_type *creature_ptr)
 {
@@ -104,7 +103,6 @@ void do_cmd_inven(player_type *creature_ptr)
 
 /*!
  * @brief アイテムを落とすコマンドのメインルーチン / Drop an item
- * @return なし
  */
 void do_cmd_drop(player_type *creature_ptr)
 {
@@ -143,7 +141,6 @@ void do_cmd_drop(player_type *creature_ptr)
 
 /*!
  * @brief アイテムを調査するコマンドのメインルーチン / Observe an item which has been *identify*-ed
- * @return なし
  */
 void do_cmd_observe(player_type *creature_ptr)
 {
@@ -170,7 +167,6 @@ void do_cmd_observe(player_type *creature_ptr)
 /*!
  * @brief アイテムの銘を消すコマンドのメインルーチン
  * Remove the inscription from an object XXX Mention item (when done)?
- * @return なし
  */
 void do_cmd_uninscribe(player_type *creature_ptr)
 {
@@ -197,7 +193,6 @@ void do_cmd_uninscribe(player_type *creature_ptr)
 /*!
  * @brief アイテムの銘を刻むコマンドのメインルーチン
  * Inscribe an object with a comment
- * @return なし
  */
 void do_cmd_inscribe(player_type *creature_ptr)
 {
@@ -229,7 +224,6 @@ void do_cmd_inscribe(player_type *creature_ptr)
 /*!
  * @brief アイテムを汎用的に「使う」コマンドのメインルーチン /
  * Use an item
- * @return なし
  * @details
  * XXX - Add actions for other item types
  */
@@ -289,7 +283,6 @@ void do_cmd_use(player_type *creature_ptr)
 /*!
  * @brief 装備を発動するコマンドのメインルーチン /
  * @param user_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void do_cmd_activate(player_type *user_ptr)
 {

@@ -126,7 +126,6 @@ const int chest_traps[64] = {
 
 /*!
  * @brief タグに従って、基本トラップテーブルを初期化する / Initialize arrays for normal traps
- * @return なし
  */
 void init_normal_traps(void)
 {
@@ -196,7 +195,6 @@ FEAT_IDX choose_random_trap(player_type *trapped_ptr)
  * @param player
  * @param y 秘匿したいマスのY座標
  * @param x 秘匿したいマスのX座標
- * @return なし
  */
 void disclose_grid(player_type *trapped_ptr, POSITION y, POSITION x)
 {
@@ -285,7 +283,6 @@ static int check_hit_from_monster_to_player(player_type *target_ptr, int power)
 /*!
  * @brief 落とし穴系トラップの判定とプレイヤーの被害処理
  * @param trap_feat_type トラップの種別ID
- * @return なし
  */
 static void hit_trap_pit(player_type *trapped_ptr, int trap_feat_type)
 {
@@ -362,7 +359,6 @@ static bool hit_trap_dart(player_type *target_ptr)
 /*!
  * @brief ダーツ系トラップ（通常ダメージ＋能力値減少）の判定とプレイヤーの被害処理
  * @param stat 低下する能力値ID
- * @return なし
  */
 static void hit_trap_lose_stat(player_type *target_ptr, int stat)
 {
@@ -373,7 +369,6 @@ static void hit_trap_lose_stat(player_type *target_ptr, int stat)
 
 /*!
  * @brief ダーツ系トラップ（通常ダメージ＋減速）の判定とプレイヤーの被害処理
- * @return なし
  */
 static void hit_trap_slow(player_type *target_ptr)
 {
@@ -388,7 +383,6 @@ static void hit_trap_slow(player_type *target_ptr)
  * @param resist 状態異常に抵抗する判定が出たならTRUE
  * @param set_status 状態異常を指定する関数ポインタ
  * @param turn_aux 状態異常の追加ターン量
- * @return なし
  */
 static void hit_trap_set_abnormal_status_p(player_type *trapped_ptr, concptr trap_message, bool resist, bool (*set_status)(player_type *, IDX), IDX turn_aux)
 {
@@ -402,7 +396,6 @@ static void hit_trap_set_abnormal_status_p(player_type *trapped_ptr, concptr tra
  * @brief プレイヤーへのトラップ作動処理メインルーチン /
  * Handle player hitting a real trap
  * @param break_trap 作動後のトラップ破壊が確定しているならばTRUE
- * @return なし
  * @todo cmd-save.h への依存あり。コールバックで何とかしたい
  */
 void hit_trap(player_type *trapped_ptr, bool break_trap)

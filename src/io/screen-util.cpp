@@ -42,7 +42,6 @@
  * @brief コンソールのリサイズに合わせてマップを再描画する /
  * Map resizing whenever the main term changes size
  * @todo ここにplayer_type を追加するとz-termに影響が行くので保留
- * @return なし
  */
 void resize_map()
 {
@@ -75,7 +74,6 @@ void resize_map()
  * Get term size and calculate screen size
  * @param wid_p コンソールの表示幅文字数を返す
  * @param hgt_p コンソールの表示行数を返す
- * @return なし
  */
 void get_screen_size(TERM_LEN *wid_p, TERM_LEN *hgt_p)
 {

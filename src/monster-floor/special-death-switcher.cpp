@@ -51,7 +51,6 @@
  * @param probability 召喚確率 (計算式：1 - 1/probability)
  * @param radius 召喚半径 (モンスターが死亡した座標から半径何マス以内に召喚させるか)
  * @param message 召喚時のメッセージ
- * @return なし
  */
 static void summon_self(player_type *player_ptr, monster_death_type *md_ptr, summon_type type, int probability, POSITION radius, concptr message)
 {
@@ -129,7 +128,6 @@ static void on_dead_raal(player_type *player_ptr, monster_death_type *md_ptr)
  * @brief 6/7の確率で、20マス以内に暁の戦士自身を召喚する
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param md_ptr モンスター撃破構造体への参照ポインタ
- * @return なし
  */
 static void on_dead_dawn(player_type *player_ptr, monster_death_type *md_ptr)
 {
@@ -265,7 +263,6 @@ static void on_dead_aqua_illusion(player_type *player_ptr, monster_death_type *m
  * @brief 7/8の確率で、5マス以内にトーテムモアイ自身を召喚する
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param md_ptr モンスター撃破構造体への参照ポインタ
- * @return なし
  */
 static void on_dead_totem_moai(player_type *player_ptr, monster_death_type *md_ptr)
 {

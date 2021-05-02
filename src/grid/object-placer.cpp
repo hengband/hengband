@@ -28,7 +28,7 @@ void place_gold(player_type *player_ptr, POSITION y, POSITION x)
         return;
     if (!cave_drop_bold(floor_ptr, y, x))
         return;
-    if (g_ptr->o_idx)
+    if (!g_ptr->o_idx_list.empty())
         return;
 
     object_type forge;
@@ -48,9 +48,8 @@ void place_gold(player_type *player_ptr, POSITION y, POSITION x)
 
     o_ptr->iy = y;
     o_ptr->ix = x;
-    o_ptr->next_o_idx = g_ptr->o_idx;
+    g_ptr->o_idx_list.push_front(o_idx);
 
-    g_ptr->o_idx = o_idx;
     note_spot(player_ptr, y, x);
     lite_spot(player_ptr, y, x);
 }
@@ -74,7 +73,7 @@ void place_object(player_type *owner_ptr, POSITION y, POSITION x, BIT_FLAGS mode
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
     object_type forge;
     object_type *q_ptr;
-    if (!in_bounds(floor_ptr, y, x) || !cave_drop_bold(floor_ptr, y, x) || (g_ptr->o_idx != 0))
+    if (!in_bounds(floor_ptr, y, x) || !cave_drop_bold(floor_ptr, y, x) || !g_ptr->o_idx_list.empty())
         return;
 
     q_ptr = &forge;
@@ -97,9 +96,8 @@ void place_object(player_type *owner_ptr, POSITION y, POSITION x, BIT_FLAGS mode
 
     o_ptr->iy = y;
     o_ptr->ix = x;
-    o_ptr->next_o_idx = g_ptr->o_idx;
+    g_ptr->o_idx_list.push_front(o_idx);
 
-    g_ptr->o_idx = o_idx;
     note_spot(owner_ptr, y, x);
     lite_spot(owner_ptr, y, x);
 }

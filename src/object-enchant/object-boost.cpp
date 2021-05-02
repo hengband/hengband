@@ -95,7 +95,6 @@ int m_bonus(int max, DEPTH level)
  * @brief 対象のオブジェクトにランダムな能力維持を一つ付加する。/ Choose one random sustain
  * @details 重複の抑止はない。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return なし
  */
 void one_sustain(object_type *o_ptr)
 {
@@ -150,7 +149,6 @@ bool add_esp_strong(object_type *o_ptr)
  * @brief オブジェクトにランダムな弱いESPを与える
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
  * @param extra TRUEならばESPの最大付与数が増える(TRUE -> 3+1d6 / FALSE -> 1d3)
- * @return なし
  */
 void add_esp_weak(object_type *o_ptr, bool extra)
 {
@@ -182,7 +180,6 @@ void add_esp_weak(object_type *o_ptr, bool extra)
 /*!
  * @brief 高級なテレパシー群を付ける
  * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return なし
  * @details
  * テレパシーの冠など。
  * ESPまたは邪ESPは1d3の種族ESPを得る。
@@ -199,7 +196,6 @@ void add_high_telepathy(object_type* o_ptr)
 /*!
  * @brief テレパシー群を付ける
  * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return なし
  * @details
  * 鋭敏の帽子など。
  * ESP、邪ESP、無ESPまたは1d3の種族ESP。
@@ -216,7 +212,6 @@ void add_low_telepathy(object_type *o_ptr)
  * @brief 対象のオブジェクトに元素耐性を一つ付加する。/ Choose one random element resistance
  * @details 候補は火炎、冷気、電撃、酸のいずれかであり、重複の抑止はない。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return なし
  */
 void one_ele_resistance(object_type *o_ptr)
 {
@@ -240,7 +235,6 @@ void one_ele_resistance(object_type *o_ptr)
  * @brief 対象のオブジェクトにドラゴン装備向け元素耐性を一つ付加する。/ Choose one random element or poison resistance
  * @details 候補は1/7の確率で毒、6/7の確率で火炎、冷気、電撃、酸のいずれか(one_ele_resistance()のコール)であり、重複の抑止はない。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return なし
  */
 void one_dragon_ele_resistance(object_type *o_ptr)
 {
@@ -255,7 +249,6 @@ void one_dragon_ele_resistance(object_type *o_ptr)
  * @brief 対象のオブジェクトにランダムな上位耐性を一つ付加する。/ Choose one random high resistance
  * @details 重複の抑止はない。候補は毒、閃光、暗黒、破片、盲目、混乱、地獄、因果混乱、カオス、劣化、恐怖のいずれか。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return なし
  */
 void one_high_resistance(object_type *o_ptr)
 {
@@ -302,7 +295,6 @@ void one_high_resistance(object_type *o_ptr)
 /*!
  * @brief ドラゴン装備にランダムな耐性を与える
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
- * @return なし
  */
 void dragon_resist(object_type *o_ptr)
 {
@@ -319,7 +311,6 @@ void dragon_resist(object_type *o_ptr)
  * @details 1/3で元素耐性(one_ele_resistance())、2/3で上位耐性(one_high_resistance)
  * をコールする。重複の抑止はない。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return なし
  */
 void one_resistance(object_type *o_ptr)
 {
@@ -335,7 +326,6 @@ void one_resistance(object_type *o_ptr)
  * @details 候補は浮遊、永久光源+1、透明視、警告、遅消化、急回復、麻痺知らず、経験値維持のいずれか。
  * 重複の抑止はない。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return なし
  */
 void one_ability(object_type *o_ptr)
 {
@@ -376,7 +366,6 @@ void one_ability(object_type *o_ptr)
  * @details 候補は動物、アンデッド、悪魔、オーク、トロル、巨人、
  * ドラゴン、人間、善良、ユニークESPのいずれかであり、重複の抑止はない。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return なし
  */
 void one_low_esp(object_type *o_ptr)
 {
@@ -419,7 +408,6 @@ void one_low_esp(object_type *o_ptr)
  * @details 候補多数。ランダムアーティファクトのバイアスには一切依存せず、
  * whileループによる構造で能力的に強力なものほど確率を落としている。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return なし
  */
 void one_activation(object_type *o_ptr)
 {
@@ -539,7 +527,6 @@ void one_activation(object_type *o_ptr)
  * 王者の指輪にあらかじめついている耐性をone_high_resistance()から除外したものである。
  * ランダム付加そのものに重複の抑止はない。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return なし
  */
 void one_lordly_high_resistance(object_type *o_ptr)
 {
@@ -586,7 +573,6 @@ void one_lordly_high_resistance(object_type *o_ptr)
 /*!
  * @brief オブジェクトの重量を軽くする
  * @param o_ptr オブジェクト情報への参照ポインタ
- * @return なし
  */
 void make_weight_ligten(object_type* o_ptr)
 {
@@ -596,7 +582,6 @@ void make_weight_ligten(object_type* o_ptr)
 /*!
  * @brief オブジェクトの重量を重くする
  * @param o_ptr オブジェクト情報への参照ポインタ
- * @return なし
  */
 void make_weight_heavy(object_type *o_ptr)
 {
@@ -606,7 +591,6 @@ void make_weight_heavy(object_type *o_ptr)
 /*!
  * @brief オブジェクトのベースACを増やす
  * @param o_ptr オブジェクト情報への参照ポインタ
- * @return なし
  * @details
  * 1/4を加算。最低+5を保証。
  */

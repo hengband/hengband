@@ -202,7 +202,6 @@ bool rush_attack(player_type *attacker_ptr, bool *mdeath)
  * @brief 盗賊と忍者における不意打ち
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @return なし
  */
 void process_surprise_attack(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {
@@ -244,7 +243,6 @@ void print_surprise_attack(player_attack_type *pa_ptr)
  * @brief 盗賊と忍者における不意打ちのダメージ計算
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @return なし
  */
 void calc_surprise_attack_damage(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {

@@ -24,7 +24,6 @@
 
 /*!
  * @brief ベースアイテム構造体の鑑定済みフラグをリセットする。
- * @return なし
  * @details
  * 不具合対策で0からリセットする(セーブは0から)
  */
@@ -40,7 +39,6 @@ static void k_info_reset(void)
 /*!
  * @brief プレイヤー構造体の内容を初期値で消去する(名前を除く) / Clear all the global "character" data (without name)
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details 少し長いが、これ1つで処理が完結しているので分割は見送る
  */
 void player_wipe_without_name(player_type *creature_ptr)
@@ -186,7 +184,6 @@ void player_wipe_without_name(player_type *creature_ptr)
 /*!
  * @brief ダンジョン内部のクエストを初期化する / Initialize random quests and final quests
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void init_dungeon_quests(player_type *creature_ptr)
 {
@@ -220,7 +217,6 @@ void init_dungeon_quests(player_type *creature_ptr)
 /*!
  * @brief ゲームターンを初期化する / Reset turn
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details アンデッド系種族は開始時刻を夜からにする / Undead start just sunset
  * @details
  */

@@ -34,7 +34,6 @@
  * Identify everything being carried.
  * Done by a potion of "self knowledge".
  * @param target_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void identify_pack(player_type *target_ptr)
 {

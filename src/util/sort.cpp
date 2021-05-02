@@ -19,7 +19,6 @@
  * @param b 比較対象のID2
  * @param ang_sort_comp 比較用の関数ポインタ
  * @param ang_sort_swap スワップ用の関数ポインタ
- * @return なし
  */
 static void exe_ang_sort(player_type *player_ptr, vptr u, vptr v, int p, int q, bool (*ang_sort_comp)(player_type *, vptr, vptr, int, int),
     void (*ang_sort_swap)(player_type *, vptr, vptr, int, int))
@@ -62,7 +61,6 @@ static void exe_ang_sort(player_type *player_ptr, vptr u, vptr v, int p, int q, 
  * @param b 比較対象のID2
  * @param ang_sort_comp 比較用の関数ポインタ
  * @param ang_sort_swap スワップ用の関数ポインタ
- * @return なし
  */
 void ang_sort(player_type *player_ptr, vptr u, vptr v, int n, bool (*ang_sort_comp)(player_type *, vptr, vptr, int, int),
     void (*ang_sort_swap)(player_type *, vptr, vptr, int, int))
@@ -183,10 +181,10 @@ bool ang_sort_comp_importance(player_type *player_ptr, vptr u, vptr v, int a, in
     }
 
     /* An object get higher priority */
-    if (player_ptr->current_floor_ptr->grid_array[y[a]][x[a]].o_idx && !player_ptr->current_floor_ptr->grid_array[y[b]][x[b]].o_idx)
+    if (!player_ptr->current_floor_ptr->grid_array[y[a]][x[a]].o_idx_list.empty() && player_ptr->current_floor_ptr->grid_array[y[b]][x[b]].o_idx_list.empty())
         return TRUE;
 
-    if (!player_ptr->current_floor_ptr->grid_array[y[a]][x[a]].o_idx && player_ptr->current_floor_ptr->grid_array[y[b]][x[b]].o_idx)
+    if (player_ptr->current_floor_ptr->grid_array[y[a]][x[a]].o_idx_list.empty() && !player_ptr->current_floor_ptr->grid_array[y[b]][x[b]].o_idx_list.empty())
         return FALSE;
 
     /* Priority from the terrain */
@@ -467,7 +465,6 @@ bool ang_sort_comp_hook(player_type *player_ptr, vptr u, vptr v, int a, int b)
  * @param v 未使用
  * @param a スワップするモンスター種族のID1
  * @param b スワップするモンスター種族のID2
- * @return なし
  * @details
  * We use "u" to point to array of monster indexes,
  * and "v" to select the type of sorting to perform.
@@ -608,7 +605,6 @@ bool ang_sort_comp_cave_temp(player_type *player_ptr, vptr u, vptr v, int a, int
  * @param v 未使用
  * @param a スワップするモンスター種族のID1
  * @param b スワップするモンスター種族のID2
- * @return なし
  */
 void ang_sort_swap_cave_temp(player_type *player_ptr, vptr u, vptr v, int a, int b)
 {

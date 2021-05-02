@@ -48,7 +48,6 @@ void do_cmd_knowledge_virtues(player_type *creature_ptr)
  * @brief 自分に関する情報を画面に表示する
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param fff ファイルポインタ
- * @return なし
  */
 static void dump_yourself(player_type *creature_ptr, FILE *fff)
 {
@@ -126,7 +125,6 @@ static void dump_yourself(player_type *creature_ptr, FILE *fff)
 /*!
  * @brief 勝利済みの職業をダンプする
  * @param fff ファイルストリームのポインタ
- * @return なし
  */
 static void dump_winner_classes(FILE *fff)
 {
@@ -207,7 +205,6 @@ void do_cmd_knowledge_stat(player_type *creature_ptr)
 /*
  * List my home
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void do_cmd_knowledge_home(player_type *player_ptr)
 {

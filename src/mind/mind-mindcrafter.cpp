@@ -42,7 +42,6 @@
 /*!
  * @brief 超能力者のサイコメトリー処理/ Forcibly pseudo-identify an object in the inventory (or on the floor)
  * @param caster_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @note
  * currently this function allows pseudo-id of any object,
  * including silly ones like potions & scrolls, which always

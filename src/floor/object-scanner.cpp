@@ -34,12 +34,10 @@ ITEM_NUMBER scan_floor_items(player_type *owner_ptr, OBJECT_IDX *items, POSITION
     if (!in_bounds(floor_ptr, y, x))
         return 0;
 
-    OBJECT_IDX this_o_idx, next_o_idx;
     ITEM_NUMBER num = 0;
-    for (this_o_idx = floor_ptr->grid_array[y][x].o_idx; this_o_idx; this_o_idx = next_o_idx) {
+    for (const auto this_o_idx : floor_ptr->grid_array[y][x].o_idx_list) {
         object_type *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
-        next_o_idx = o_ptr->next_o_idx;
         if ((mode & SCAN_FLOOR_ITEM_TESTER) && !item_tester_okay(owner_ptr, o_ptr, item_tester_tval))
             continue;
 
@@ -63,7 +61,6 @@ ITEM_NUMBER scan_floor_items(player_type *owner_ptr, OBJECT_IDX *items, POSITION
  * @param label ラベルリストを取得する文字列参照ポインタ
  * @param floor_list 床上アイテムの配列
  * @param floor_num  床上アイテムの配列ID
- * @return なし
  */
 /*
  */

@@ -94,7 +94,6 @@ static u32b calc_expect_dice(
  * \n
  * Only accurate for the current weapon, because it includes\n
  * the current +dam of the player.\n
- * @return なし
  */
 static void show_weapon_dmg(int r, int c, int mindice, int maxdice, int blows, int dam_bonus, concptr attr, byte color)
 {
@@ -116,7 +115,6 @@ static void show_weapon_dmg(int r, int c, int mindice, int maxdice, int blows, i
  * \n
  * Only accurate for the current weapon, because it includes\n
  * the current number of blows for the player.\n
- * @return なし
  */
 static void compare_weapon_aux(player_type *owner_ptr, object_type *o_ptr, int col, int r)
 {
@@ -307,7 +305,6 @@ static void compare_weapon_aux(player_type *owner_ptr, object_type *o_ptr, int c
  *
  * Only accurate for the current weapon, because it includes
  * various info about the player's +to_dam and number of blows.
- * @return なし
  */
 static void list_weapon(player_type *player_ptr, object_type *o_ptr, TERM_LEN row, TERM_LEN col)
 {

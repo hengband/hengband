@@ -7,7 +7,6 @@
  * @brief ヘルプを表示するコマンドのメインルーチン
  * Peruse the On-Line-Help
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  */
 void do_cmd_help(player_type *creature_ptr)

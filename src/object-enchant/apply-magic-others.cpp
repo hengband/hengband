@@ -35,7 +35,6 @@
  * @param owner_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
  * @param power 生成ランク
- * @return なし
  * @details
  * Hack -- note the special code for various items
  */

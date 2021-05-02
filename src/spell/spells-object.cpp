@@ -62,7 +62,6 @@ typedef struct {
  * @brief 装備強化処理の失敗率定数（千分率） /
  * Used by the "enchant" function (chance of failure)
  * (modified for Zangband, we need better stuff there...) -- TY
- * @return なし
  */
 static int enchant_table[16] = { 0, 10, 50, 100, 200, 300, 400, 500, 650, 800, 950, 987, 993, 995, 998, 1000 };
 
@@ -92,7 +91,6 @@ static amuse_type amuse_info[]
  * @param x1 配置したいフロアのX座標
  * @param num 誰得の処理回数
  * @param known TRUEならばオブジェクトが必ず＊鑑定＊済になる
- * @return なし
  */
 void amusement(player_type *creature_ptr, POSITION y1, POSITION x1, int num, bool known)
 {
@@ -186,7 +184,6 @@ void amusement(player_type *creature_ptr, POSITION y1, POSITION x1, int num, boo
  * @param great TRUEならば必ず高級品以上を落とす
  * @param special TRUEならば必ず特別品を落とす
  * @param known TRUEならばオブジェクトが必ず＊鑑定＊済になる
- * @return なし
  */
 void acquirement(player_type *caster_ptr, POSITION y1, POSITION x1, int num, bool great, bool special, bool known)
 {
@@ -327,7 +324,6 @@ bool curse_weapon_object(player_type *owner_ptr, bool force, object_type *o_ptr)
  * @brief ボルトのエゴ化処理(火炎エゴのみ) /
  * Enchant some bolts
  * @param caster_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void brand_bolts(player_type *caster_ptr)
 {
@@ -410,7 +406,6 @@ bool perilous_secrets(player_type *user_ptr)
  * @brief 呪いの打ち破り処理 /
  * Break the curse of an item
  * @param o_ptr 呪い装備情報の参照ポインタ
- * @return なし
  */
 static void break_curse(object_type *o_ptr)
 {
@@ -609,7 +604,6 @@ bool enchant_spell(player_type *caster_ptr, HIT_PROB num_hit, HIT_POINT num_dam,
  * Brand the current weapon
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param brand_type エゴ化ID(e_info.txtとは連動していない)
- * @return なし
  */
 void brand_weapon(player_type *caster_ptr, int brand_type)
 {

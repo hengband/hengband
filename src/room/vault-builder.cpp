@@ -35,7 +35,6 @@ static bool is_cave_empty_grid(player_type *player_ptr, grid_type *g_ptr)
  * @param y1 モンスターを配置したいマスの中心Y座標
  * @param x1 モンスターを配置したいマスの中心X座標
  * @param num 配置したいモンスターの数
- * @return なし
  * @details
  * Only really called by some of the "vault" routines.
  */
@@ -65,7 +64,6 @@ void vault_monsters(player_type *player_ptr, POSITION y1, POSITION x1, int num)
  * @param y 配置したい中心マスのY座標
  * @param x 配置したい中心マスのX座標
  * @param num 配置したい数
- * @return なし
  * @details
  * Only really called by some of the "vault" routines.
  */
@@ -91,7 +89,7 @@ void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int num)
 
             grid_type *g_ptr;
             g_ptr = &floor_ptr->grid_array[j][k];
-            if (!is_floor_grid(g_ptr) || g_ptr->o_idx)
+            if (!is_floor_grid(g_ptr) || !g_ptr->o_idx_list.empty())
                 continue;
 
             if (randint0(100) < 75) {
@@ -111,7 +109,6 @@ void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int num)
  * @param x トラップを配置したいマスの中心X座標
  * @param yd Y方向の配置分散マス数
  * @param xd X方向の配置分散マス数
- * @return なし
  * @details
  * Only really called by some of the "vault" routines.
  */
@@ -136,7 +133,7 @@ static void vault_trap_aux(player_type *player_ptr, POSITION y, POSITION x, POSI
         }
 
         g_ptr = &floor_ptr->grid_array[y1][x1];
-        if (!is_floor_grid(g_ptr) || g_ptr->o_idx || g_ptr->m_idx)
+        if (!is_floor_grid(g_ptr) || !g_ptr->o_idx_list.empty() || g_ptr->m_idx)
             continue;
 
         place_trap(player_ptr, y1, x1);
@@ -152,7 +149,6 @@ static void vault_trap_aux(player_type *player_ptr, POSITION y, POSITION x, POSI
  * @param yd Y方向の配置分散マス数
  * @param xd X方向の配置分散マス数
  * @param num 配置したいトラップの数
- * @return なし
  * @details
  * Only really called by some of the "vault" routines.
  * @todo rooms-normal からしか呼ばれていない、要調整

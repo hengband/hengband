@@ -31,7 +31,6 @@
 /*!
  * @brief オブジェクト選択のモード設定
  * @param item_selection_ptr アイテム選択への参照ポインタ
- * @return なし
  */
 static void check_item_selection_mode(item_selection_type *item_selection_ptr)
 {
@@ -145,7 +144,6 @@ static bool check_item_tag(player_type *owner_ptr, item_selection_type *item_sel
  * @brief インベントリ内のアイテムが妥当かを判定する
  * @param owner_ptr プレーヤーへの参照ポインタ
  * @param fis_ptr アイテム選択への参照ポインタ
- * @return なし
  */
 static void test_inventory(player_type *owner_ptr, item_selection_type *item_selection_ptr)
 {
@@ -166,7 +164,6 @@ static void test_inventory(player_type *owner_ptr, item_selection_type *item_sel
  * @brief 装備品が妥当かを判定する
  * @param owner_ptr プレーヤーへの参照ポインタ
  * @param fis_ptr アイテム選択への参照ポインタ
- * @return なし
  */
 static void test_equipment(player_type *owner_ptr, item_selection_type *item_selection_ptr)
 {
@@ -240,11 +237,9 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
     }
 
     if (item_selection_ptr->floor) {
-        for (item_selection_ptr->this_o_idx = owner_ptr->current_floor_ptr->grid_array[owner_ptr->y][owner_ptr->x].o_idx; item_selection_ptr->this_o_idx;
-             item_selection_ptr->this_o_idx = item_selection_ptr->next_o_idx) {
+        for (const auto this_o_idx : owner_ptr->current_floor_ptr->grid_array[owner_ptr->y][owner_ptr->x].o_idx_list) {
             object_type *o_ptr;
-            o_ptr = &owner_ptr->current_floor_ptr->o_list[item_selection_ptr->this_o_idx];
-            item_selection_ptr->next_o_idx = o_ptr->next_o_idx;
+            o_ptr = &owner_ptr->current_floor_ptr->o_list[this_o_idx];
             if ((item_tester_okay(owner_ptr, o_ptr, item_selection_ptr->tval) || (item_selection_ptr->mode & USE_FULL)) && (o_ptr->marked & OM_FOUND))
                 item_selection_ptr->allow_floor = TRUE;
         }
@@ -471,15 +466,13 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         }
         case '-': {
             if (item_selection_ptr->allow_floor) {
-                for (item_selection_ptr->this_o_idx = owner_ptr->current_floor_ptr->grid_array[owner_ptr->y][owner_ptr->x].o_idx;
-                     item_selection_ptr->this_o_idx; item_selection_ptr->this_o_idx = item_selection_ptr->next_o_idx) {
+                for (const auto this_o_idx : owner_ptr->current_floor_ptr->grid_array[owner_ptr->y][owner_ptr->x].o_idx_list) {
                     object_type *o_ptr;
-                    o_ptr = &owner_ptr->current_floor_ptr->o_list[item_selection_ptr->this_o_idx];
-                    item_selection_ptr->next_o_idx = o_ptr->next_o_idx;
+                    o_ptr = &owner_ptr->current_floor_ptr->o_list[this_o_idx];
                     if (!item_tester_okay(owner_ptr, o_ptr, item_selection_ptr->tval) && !(item_selection_ptr->mode & USE_FULL))
                         continue;
 
-                    item_selection_ptr->k = 0 - item_selection_ptr->this_o_idx;
+                    item_selection_ptr->k = 0 - this_o_idx;
                     if ((other_query_flag && !verify(owner_ptr, _("本当に", "Try"), item_selection_ptr->k))
                         || !get_item_allow(owner_ptr, item_selection_ptr->k))
                         continue;

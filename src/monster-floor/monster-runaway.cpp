@@ -33,7 +33,6 @@
  * @param m_ptr モンスターへの参照ポインタ
  * @param m_name モンスター名称
  * @param see_m モンスターが視界内にいたらTRUE
- * @return なし
  */
 static void escape_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, GAME_TEXT *m_name)
 {

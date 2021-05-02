@@ -211,7 +211,6 @@ static bool run_test(player_type *creature_ptr)
     DIRECTION check_dir = 0;
     int option = 0, option2 = 0;
     for (int i = -max; i <= max; i++) {
-        OBJECT_IDX this_o_idx, next_o_idx = 0;
         DIRECTION new_dir = cycle[chome[prev_dir] + i];
         int row = creature_ptr->y + ddy[new_dir];
         int col = creature_ptr->x + ddx[new_dir];
@@ -226,10 +225,9 @@ static bool run_test(player_type *creature_ptr)
                 return TRUE;
         }
 
-        for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx) {
+        for (const auto this_o_idx : g_ptr->o_idx_list) {
             object_type *o_ptr;
             o_ptr = &floor_ptr->o_list[this_o_idx];
-            next_o_idx = o_ptr->next_o_idx;
             if (o_ptr->marked & OM_FOUND)
                 return TRUE;
         }
@@ -358,7 +356,6 @@ static bool run_test(player_type *creature_ptr)
  * Take one step along the current "run" path
  * @param creature_ptr	プレーヤーへの参照ポインタ
  * @param dir 移動を試みる方向ID
- * @return なし
  */
 void run_step(player_type *creature_ptr, DIRECTION dir)
 {

@@ -96,7 +96,6 @@ static void display_player_basic_info(player_type *creature_ptr)
 /*!
  * @brief 魔法領域を表示する
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 static void display_magic_realms(player_type *creature_ptr)
 {
@@ -117,7 +116,6 @@ static void display_magic_realms(player_type *creature_ptr)
 /*!
  * @ brief 年齢、身長、体重、社会的地位を表示する
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  * 日本語版では、身長はcmに、体重はkgに変更してある
  */
@@ -241,7 +239,6 @@ static bool decide_death_in_quest(player_type *creature_ptr, char *statmsg)
  * @brief 現在いるフロアを、または死んでいたらどこでどう死んだかをバッファに詰める
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param statmsg メッセージバッファ
- * @return なし
  */
 static void decide_current_floor(player_type *creature_ptr, char *statmsg)
 {
@@ -269,7 +266,6 @@ static void decide_current_floor(player_type *creature_ptr, char *statmsg)
 /*!
  * @brief 今いる、または死亡した場所を表示する
  * @param statmsg メッセージバッファ
- * @return なし
  */
 static void display_current_floor(char *statmsg)
 {
@@ -291,7 +287,6 @@ static void display_current_floor(char *statmsg)
  * Display the character on the screen (various modes)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param mode 表示モードID
- * @return なし
  * @details
  * <pre>
  * The top one and bottom two lines are left blank.
@@ -348,7 +343,6 @@ void display_player(player_type *creature_ptr, int mode)
  * @param y 表示するコンソールの行
  * @param x 表示するコンソールの列
  * @param mode オプション
- * @return なし
  * @todo y = 6、x = 0、mode = 0で固定。何とかする
  */
 void display_player_equippy(player_type *creature_ptr, TERM_LEN y, TERM_LEN x, BIT_FLAGS16 mode)

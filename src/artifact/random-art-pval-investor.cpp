@@ -139,7 +139,6 @@ static bool random_art_bias_decrease_mana(object_type *o_ptr)
  * 原則的候補は腕力、知力、賢さ、器用さ、耐久、魅力、探索、隠密、赤外線視力、加速。武器のみ採掘、追加攻撃も候補に入る。
  * @attention オブジェクトのtval、svalに依存したハードコーディング処理がある。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return なし
  */
 void random_plus(object_type *o_ptr)
 {

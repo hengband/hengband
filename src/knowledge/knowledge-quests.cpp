@@ -29,7 +29,6 @@
 /*!
  * @brief Check on the status of an active quest
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void do_cmd_checkquest(player_type *creature_ptr)
 {
@@ -41,7 +40,6 @@ void do_cmd_checkquest(player_type *creature_ptr)
 /*!
  * @brief Print all active quests
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @todo player_typeではなくQUEST_IDXを引数にすべきかもしれない
  */
 static void do_cmd_knowledge_quests_current(player_type *creature_ptr, FILE *fff)
@@ -220,7 +218,6 @@ static bool do_cmd_knowledge_quests_aux(player_type *player_ptr, FILE *fff, IDX 
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param fff セーブファイル (展開済？)
  * @param quest_num[] 受注したことのあるクエスト群
- * @return なし
  */
 void do_cmd_knowledge_quests_completed(player_type *creature_ptr, FILE *fff, QUEST_IDX quest_num[])
 {
@@ -244,7 +241,6 @@ void do_cmd_knowledge_quests_completed(player_type *creature_ptr, FILE *fff, QUE
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param fff セーブファイル (展開済？)
  * @param quest_num[] 受注したことのあるクエスト群
- * @return なし
  */
 void do_cmd_knowledge_quests_failed(player_type *creature_ptr, FILE *fff, QUEST_IDX quest_num[])
 {
@@ -289,7 +285,6 @@ static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
 /*
  * Print quest status of all active quests
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void do_cmd_knowledge_quests(player_type *creature_ptr)
 {

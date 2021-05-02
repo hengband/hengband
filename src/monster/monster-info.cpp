@@ -37,7 +37,6 @@
 /*!
  * @brief モンスターを友好的にする
  * @param m_ptr モンスター情報構造体の参照ポインタ
- * @return なし
  */
 void set_friendly(monster_type *m_ptr) { m_ptr->mflag2.set(MFLAG2::FRIENDLY); }
 

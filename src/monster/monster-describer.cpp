@@ -22,7 +22,6 @@
  * @param desc 記述出力先の文字列参照ポインタ
  * @param m_ptr モンスターの参照ポインタ
  * @param mode 呼称オプション
- * @return なし
  */
 void monster_desc(player_type *player_ptr, char *desc, monster_type *m_ptr, BIT_FLAGS mode)
 {
@@ -248,7 +247,6 @@ void monster_desc(player_type *player_ptr, char *desc, monster_type *m_ptr, BIT_
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスター情報ID
  * @param dam 与えたダメージ
- * @return なし
  * @details
  * Technically should attempt to treat "Beholder"'s as jelly's
  */

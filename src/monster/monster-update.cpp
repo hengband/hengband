@@ -92,7 +92,6 @@ bool update_riding_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, 
  * @brief updateフィールドを更新する
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
- * @return なし
  */
 void update_player_type(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_race *r_ptr)
 {
@@ -113,7 +112,6 @@ void update_player_type(player_type *target_ptr, turn_flags *turn_flags_ptr, mon
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_ptr モンスターへの参照ポインタ
- * @return なし
  */
 void update_monster_race_flags(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr)
 {
@@ -148,7 +146,6 @@ void update_monster_race_flags(player_type *target_ptr, turn_flags *turn_flags_p
  * @param monster_race_idx モンスターID
  * @param window ウィンドウフラグ
  * @param old_race_flags_ptr モンスターフラグへの参照ポインタ
- * @return なし
  */
 void update_player_window(player_type *target_ptr, old_race_flags *old_race_flags_ptr)
 {
@@ -385,7 +382,6 @@ static bool check_invisible(player_type *subject_ptr, um_type *um_ptr)
  * @brief テレパシー・赤外線視力・可視透明によってモンスターを感知できるかどうかの判定
  * @param subject_ptr プレーヤーへの参照ポインタ
  * @param um_ptr モンスター情報アップデート構造体への参照ポインタ
- * @return なし
  */
 static void decide_sight_invisible_monster(player_type *subject_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
 {
@@ -428,7 +424,6 @@ static void decide_sight_invisible_monster(player_type *subject_ptr, um_type *um
  * @param subject_ptr プレーヤーへの参照ポインタ
  * @param um_ptr モンスター情報アップデート構造体への参照ポインタ
  * @param m_idx フロアのモンスター番号
- * @return なし
  * @details 感知した結果、エルドリッチホラー持ちがいたら精神を破壊する
  */
 static void update_invisible_monster(player_type *subject_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
@@ -501,7 +496,6 @@ static bool update_clear_monster(player_type *subject_ptr, um_type *um_ptr)
  * @brief モンスターの各情報を更新する / This function updates the monster record of the given monster
  * @param m_idx 更新するモンスター情報のID
  * @param full プレイヤーとの距離更新を行うならばtrue
- * @return なし
  */
 void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
 {
@@ -534,7 +528,6 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @brief 単純に生存している全モンスターの更新処理を行う / This function simply updates all the (non-dead) monsters (see above).
  * @param full 距離更新を行うならtrue
- * @return なし
  * @todo モンスターの感知状況しか更新していないように見える。関数名変更を検討する
  */
 void update_monsters(player_type *player_ptr, bool full)
@@ -553,7 +546,6 @@ void update_monsters(player_type *player_ptr, bool full)
  * @brief SMART(適格に攻撃を行う)モンスターの学習状況を更新する / Learn about an "observed" resistance.
  * @param m_idx 更新を行う「モンスター情報ID
  * @param what 学習対象ID
- * @return なし
  */
 void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
 {

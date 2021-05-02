@@ -412,7 +412,6 @@ static HIT_POINT monspell_damage_base(
  * @param r_ptr モンスター種族への参照ポインタ
  * @param dd ダイス数への参照ポインタ
  * @param ds ダイス面への参照ポインタ
- * @return なし
  */
 void monspell_shoot_dice(monster_race *r_ptr, int *dd, int *ds)
 {

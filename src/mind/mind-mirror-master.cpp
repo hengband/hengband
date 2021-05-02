@@ -80,7 +80,6 @@ bool mirror_concentration(player_type *creature_ptr)
  * @brief 全鏡の消去 / Remove all mirrors in this floor
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param explode 爆発処理を伴うならばTRUE
- * @return なし
  */
 void remove_all_mirrors(player_type *caster_ptr, bool explode)
 {

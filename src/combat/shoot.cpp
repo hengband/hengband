@@ -360,7 +360,6 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
  * Fire an object from the pack or floor.
  * @param item 射撃するオブジェクトの所持ID
  * @param bow_ptr 射撃武器のオブジェクト参照ポインタ
- * @return なし
  * @details
  * <pre>
  * You may only fire items that "match" your missile launcher.
@@ -864,11 +863,8 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
             /* Memorize monster */
             o_ptr->held_m_idx = m_idx;
 
-            /* Build a stack */
-            o_ptr->next_o_idx = m_ptr->hold_o_idx;
-
             /* Carry object */
-            m_ptr->hold_o_idx = o_idx;
+            m_ptr->hold_o_idx_list.push_front(o_idx);
         } else if (cave_has_flag_bold(shooter_ptr->current_floor_ptr, y, x, FF_PROJECT)) {
             /* Drop (or break) near that location */
             (void)drop_near(shooter_ptr, q_ptr, j, y, x);

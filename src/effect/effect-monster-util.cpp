@@ -27,7 +27,6 @@
  * @param effect_type 効果属性 / Type of damage to apply to monsters (and objects)
  * @param flag 効果フラグ
  * @param see_s_msg TRUEならばメッセージを表示する
- * @return なし
  */
 static void substitute_effect_monster(effect_monster_type *em_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag, bool see_s_msg)
 {
@@ -54,7 +53,6 @@ static void substitute_effect_monster(effect_monster_type *em_ptr, MONSTER_IDX w
  * @param effect_type 効果属性 / Type of damage to apply to monsters (and objects)
  * @param flag 効果フラグ
  * @param see_s_msg TRUEならばメッセージを表示する
- * @return なし
  */
 effect_monster_type *initialize_effect_monster(player_type *caster_ptr, effect_monster_type *em_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag, bool see_s_msg)
 {

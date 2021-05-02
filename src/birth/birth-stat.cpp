@@ -55,7 +55,6 @@ int adjust_stat(int value, int amount)
 /*!
  * @brief プレイヤーの能力値を一通りロールする。 / Roll for a characters stats
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  * calc_bonuses()による、独立ステータスからの副次ステータス算出も行っている。
  * For efficiency, we include a chunk of "calc_bonuses()".\n
@@ -88,7 +87,6 @@ void get_stats(player_type* creature_ptr)
 
 /*!
  * @brief 経験値修正の合計値を計算
- * @return なし
  */
 u16b get_expfact(player_type *creature_ptr)
 {
@@ -105,7 +103,6 @@ u16b get_expfact(player_type *creature_ptr)
 
 /*!
  * @brief その他「オートローラ中は算出の対象にしない」副次ステータスを処理する / Roll for some info that the auto-roller ignores
- * @return なし
  */
 void get_extra(player_type* creature_ptr, bool roll_hitdie)
 {
@@ -151,7 +148,6 @@ void get_extra(player_type* creature_ptr, bool roll_hitdie)
 /*!
  * @brief プレイヤーの限界ステータスを決める。
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details 新生の薬やステータスシャッフルでもこの関数が呼ばれる
  */
 void get_max_stats(player_type* creature_ptr)

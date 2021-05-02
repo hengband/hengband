@@ -2274,6 +2274,9 @@
     <ClCompile Include="..\..\src\main-win\main-win-utils.cpp">
       <Filter>main-win</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\main-win\commandline-win.cpp">
+      <Filter>main-win</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4864,6 +4867,9 @@
       <Filter>store</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\main-win\main-win-utils.h">
+      <Filter>main-win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main-win\commandline-win.h">
       <Filter>main-win</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\main-win\graphics-win.h">

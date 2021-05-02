@@ -12,7 +12,6 @@
  * @brief 博物館のアイテムを除去するコマンドのメインルーチン /
  * Remove an item from museum (Originally from TOband)
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void museum_remove_object(player_type *player_ptr)
 {

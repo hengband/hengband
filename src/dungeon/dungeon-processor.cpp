@@ -46,7 +46,6 @@
  * process_player()、process_world() をcore.c から移設するのが先.
  * process_upkeep_with_speed() はこの関数と同じところでOK
  * @brief 現在プレイヤーがいるダンジョンの全体処理 / Interact with the current dungeon level.
- * @return なし
  * @details
  * <p>
  * この関数から現在の階層を出る、プレイヤーがキャラが死ぬ、

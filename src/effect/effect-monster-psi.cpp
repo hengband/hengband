@@ -89,7 +89,6 @@ static bool reflects_psi_with_currupted_mind(player_type *caster_ptr, effect_mon
  * @brief モンスターがPsi攻撃をダメージ反射した場合のプレイヤーへの追加効果を発動する
  * @param caster_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果への参照ポインタ
- * @return なし
  * @details
  * 効果は、混乱、朦朧、恐怖、麻痺
  * 3/4の確率または影分身時はダメージ及び追加効果はない。
@@ -126,7 +125,6 @@ static void effect_monster_psi_reflect_extra_effect(player_type *caster_ptr, eff
  * @brief モンスターのPsi攻撃に対する耐性を発動する
  * @param caster_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果への参照ポインタ
- * @return なし
  * @details
  * 耐性を発動した精神の堕落したモンスターは効力を跳ね返すことがある。
  */
@@ -157,7 +155,6 @@ static void effect_monster_psi_resist(player_type *caster_ptr, effect_monster_ty
  * @brief モンスターへのPsi攻撃の追加効果を発動する
  * @param caster_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果への参照ポインタ
- * @return なし
  * @details
  * 効果は、混乱、朦朧、恐怖、麻痺(各耐性無効)
  * ダメージがないか3/4の確率で効果なし
@@ -215,7 +212,6 @@ process_result effect_monster_psi(player_type *caster_ptr, effect_monster_type *
  * @brief モンスターのPsi攻撃(GF_PSI_DRAIN)に対する耐性を発動する
  * @param caster_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果への参照ポインタ
- * @return なし
  * @details
  * 耐性を発動した精神の堕落したモンスターは効力を跳ね返すことがある。
  */
@@ -257,7 +253,6 @@ static void effect_monster_psi_drain_resist(player_type *caster_ptr, effect_mons
  * @brief モンスターへのPsi攻撃(GF_PSI_DRAIN)のダメージをMPに変換する
  * @param caster_ptr プレイヤーへの参照ポインタ
  * @param em_ptr モンスター効果への参照ポインタ
- * @return なし
  */
 static void effect_monster_psi_drain_change_power(player_type *caster_ptr, effect_monster_type *em_ptr)
 {

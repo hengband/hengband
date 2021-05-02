@@ -30,7 +30,6 @@
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param hand 武器の装備部位ID
  * @param hand_entry 項目ID
- * @return なし
  */
 static void display_player_melee_bonus(player_type *creature_ptr, int hand, int hand_entry)
 {
@@ -59,7 +58,6 @@ static void display_player_melee_bonus(player_type *creature_ptr, int hand, int 
 /*!
  * @brief 右手に比べて左手の表示ルーチンが複雑なので分離
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 static void display_sub_hand(player_type *creature_ptr)
 {
@@ -90,7 +88,6 @@ static void display_sub_hand(player_type *creature_ptr)
 /*!
  * @brief 武器による命中率とダメージの補正を表示する
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 static void display_hit_damage(player_type *creature_ptr)
 {
@@ -115,7 +112,6 @@ static void display_hit_damage(player_type *creature_ptr)
 /*!
  * @brief 射撃武器倍率を表示する
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 static void display_shoot_magnification(player_type *creature_ptr)
 {
@@ -190,7 +186,6 @@ static int calc_temporary_speed(player_type *creature_ptr)
  * @param attr 表示色
  * @param base_speed プレーヤーの素の速度
  * @param tmp_speed アイテム等で一時的に変化した速度量
- * @return なし
  */
 static void display_player_speed(player_type *creature_ptr, TERM_COLOR attr, int base_speed, int tmp_speed)
 {
@@ -219,7 +214,6 @@ static void display_player_speed(player_type *creature_ptr, TERM_COLOR attr, int
 /*!
  * @brief プレーヤーの現在経験値・最大経験値・次のレベルまでに必要な経験値を表示する
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 static void display_player_exp(player_type *creature_ptr)
 {
@@ -245,7 +239,6 @@ static void display_player_exp(player_type *creature_ptr)
 /*!
  * @brief ゲーム内の経過時間を表示する
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 static void display_playtime_in_game(player_type *creature_ptr)
 {
@@ -292,7 +285,6 @@ static void display_real_playtime(void)
  * @brief プレイヤーステータス表示の中央部分を表示するサブルーチン
  * @param creature_ptr プレーヤーへの参照ポインタ
  * Prints the following information on the screen.
- * @return なし
  */
 void display_player_middle(player_type *creature_ptr)
 {

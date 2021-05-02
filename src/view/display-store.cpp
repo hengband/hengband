@@ -22,7 +22,6 @@
  * @brief プレイヤーの所持金を表示する /
  * Displays players gold					-RAK-
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  */
 void store_prt_gold(player_type *player_ptr)
@@ -38,7 +37,6 @@ void store_prt_gold(player_type *player_ptr)
  * Re-displays a single store entry
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param pos 表示行
- * @return なし
  */
 void display_entry(player_type *player_ptr, int pos)
 {
@@ -118,7 +116,6 @@ void display_entry(player_type *player_ptr, int pos)
  * @brief 店の商品リストを表示する /
  * Displays a store's inventory -RAK-
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  * All prices are listed as "per individual object".  -BEN-
  */
@@ -154,7 +151,6 @@ void display_store_inventory(player_type *player_ptr)
  * @brief 店舗情報全体を表示するメインルーチン /
  * Displays store (after clearing screen)		-RAK-
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  */
 void display_store(player_type *player_ptr)

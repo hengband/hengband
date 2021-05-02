@@ -21,7 +21,6 @@
 
 /*!
  * @brief プレイヤーの称号を表示する / Prints "title", including "wizard" or "winner" as needed.
- * @return なし
  */
 void print_title(player_type *creature_ptr)
 {
@@ -45,7 +44,6 @@ void print_title(player_type *creature_ptr)
 
 /*!
  * @brief プレイヤーのレベルを表示する / Prints level
- * @return なし
  */
 void print_level(player_type *creature_ptr)
 {
@@ -62,7 +60,6 @@ void print_level(player_type *creature_ptr)
 
 /*!
  * @brief プレイヤーの経験値を表示する / Display the experience
- * @return なし
  */
 void print_exp(player_type *creature_ptr)
 {
@@ -92,7 +89,6 @@ void print_exp(player_type *creature_ptr)
 
 /*!
  * @brief プレイヤーのACを表示する / Prints current AC
- * @return なし
  */
 void print_ac(player_type *creature_ptr)
 {
@@ -112,7 +108,6 @@ void print_ac(player_type *creature_ptr)
 
 /*!
  * @brief プレイヤーのHPを表示する / Prints Cur/Max hit points
- * @return なし
  */
 void print_hp(player_type *creature_ptr)
 {
@@ -137,7 +132,6 @@ void print_hp(player_type *creature_ptr)
 
 /*!
  * @brief プレイヤーのMPを表示する / Prints players max/cur spell points
- * @return なし
  */
 void print_sp(player_type *creature_ptr)
 {
@@ -166,7 +160,6 @@ void print_sp(player_type *creature_ptr)
 /*!
  * @brief プレイヤーの所持金を表示する / Prints current gold
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void print_gold(player_type *creature_ptr)
 {
@@ -179,7 +172,6 @@ void print_gold(player_type *creature_ptr)
 /*!
  * @brief 現在のフロアの深さを表示する / Prints depth in stat area
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void print_depth(player_type *creature_ptr)
 {
@@ -251,7 +243,6 @@ void print_depth(player_type *creature_ptr)
 /*!
  * @brief プレイヤーのステータスを一括表示する（左側部分） / Display basic info (mostly left of map)
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void print_frame_basic(player_type *creature_ptr)
 {
@@ -281,7 +272,6 @@ void print_frame_basic(player_type *creature_ptr)
 /*!
  * @brief モンスターの体力ゲージを表示する
  * @param riding TRUEならば騎乗中のモンスターの体力、FALSEならターゲットモンスターの体力を表示する。表示位置は固定。
- * @return なし
  * @details
  * <pre>
  * Redraw the "monster health bar"	-DRS-

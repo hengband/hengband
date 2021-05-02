@@ -59,7 +59,6 @@
  * @brief 啓蒙/陽光召喚処理
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param ninja 忍者かどうか
- * @return なし
  */
 void wiz_lite(player_type *caster_ptr, bool ninja)
 {
@@ -330,13 +329,10 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
 
             /* During generation, destroyed artifacts are "preserved" */
             if (preserve_mode || in_generate) {
-                OBJECT_IDX this_o_idx, next_o_idx = 0;
-
                 /* Scan all objects in the grid */
-                for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx) {
+                for (const auto this_o_idx : g_ptr->o_idx_list) {
                     object_type *o_ptr;
                     o_ptr = &floor_ptr->o_list[this_o_idx];
-                    next_o_idx = o_ptr->next_o_idx;
 
                     /* Hack -- Preserve unknown artifacts */
                     if (object_is_fixed_artifact(o_ptr) && (!object_is_known(o_ptr) || in_generate)) {

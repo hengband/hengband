@@ -67,7 +67,6 @@ static bool check_death(player_type *player_ptr)
  * @brief ゲーム終了処理 /
  * Close up the current game (player may or may not be dead)
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  * <pre>
  * This function is called only from "main.c" and "signals.c".

@@ -205,7 +205,6 @@ int spell_exp_level(int spell_exp)
  * @details update_view(), update_lite(), update_mon_lite() においてのみ更新すること / Only used if update_view(), update_lite() or update_mon_lite() was called
  * @param player_ptr 主観となるプレイヤー構造体参照ポインタ
  * @todo 将来独自インターフェース実装にはz-term系に追い出すべきか？
- * @return なし
  */
 static void delayed_visual_update(player_type *player_ptr)
 {
@@ -265,7 +264,6 @@ WEIGHT calc_inventory_weight(player_type *creature_ptr)
  * Calculate the players current "state", taking into account
  * not only race/class intrinsics, but also objects being worn
  * and temporary spell effects.
- * @return なし
  * @details
  * <pre>
  * See also update_max_mana() and update_max_hitpoints().
@@ -458,7 +456,6 @@ static void update_bonuses(player_type *creature_ptr)
  * @brief プレイヤーの最大HPを更新する /
  * Update the players maximal hit points
  * Adjust current hitpoints if necessary
- * @return なし
  * @details
  */
 static void update_max_hitpoints(player_type *creature_ptr)
@@ -524,7 +521,6 @@ static void update_max_hitpoints(player_type *creature_ptr)
  * @brief プレイヤーの現在学習可能な魔法数を計算し、増減に応じて魔法の忘却、再学習を処置する。 /
  * Calculate number of spells player should have, and forget,
  * or remember, spells until that number is properly reflected.
- * @return なし
  * @details
  * Note that this function induces various "status" messages,
  * which must be bypasses until the character is created.
@@ -772,7 +768,6 @@ static void update_num_of_spells(player_type *creature_ptr)
  * @brief プレイヤーの最大MPを更新する /
  * Update maximum mana.  You do not need to know any spells.
  * Note that mana is lowered by heavy (or inappropriate) armor.
- * @return なし
  * @details
  * This function induces status messages.
  */
@@ -2529,7 +2524,6 @@ WEIGHT calc_weight_limit(player_type *creature_ptr)
 
 /*!
  * @brief update のフラグに応じた更新をまとめて行う / Handle "update"
- * @return なし
  * @details 更新処理の対象はプレイヤーの能力修正/光源寿命/HP/MP/魔法の学習状態、他多数の外界の状態判定。
  */
 void update_creature(player_type *creature_ptr)
@@ -2644,8 +2638,8 @@ bool player_has_no_spellbooks(player_type *creature_ptr)
     }
 
     floor_type *floor_ptr = creature_ptr->current_floor_ptr;
-    for (int i = floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].o_idx; i; i = o_ptr->next_o_idx) {
-        o_ptr = &floor_ptr->o_list[i];
+    for (const auto this_o_idx : floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].o_idx_list) {
+        o_ptr = &floor_ptr->o_list[this_o_idx];
         if (o_ptr->k_idx && any_bits(o_ptr->marked, OM_FOUND) && check_book_realm(creature_ptr, o_ptr->tval, o_ptr->sval))
             return FALSE;
     }
@@ -2672,7 +2666,6 @@ bool player_place(player_type *creature_ptr, POSITION y, POSITION x)
 
 /*!
  * @brief 種族アンバライトが出血時パターンの上に乗った際のペナルティ処理
- * @return なし
  */
 void wreck_the_pattern(player_type *creature_ptr)
 {
@@ -2703,7 +2696,6 @@ void wreck_the_pattern(player_type *creature_ptr)
 /*!
  * @brief プレイヤーの経験値について整合性のためのチェックと調整を行う /
  * Advance experience levels and print experience
- * @return なし
  */
 void check_experience(player_type *creature_ptr)
 {
@@ -2839,7 +2831,6 @@ void check_experience(player_type *creature_ptr)
  * @brief 現在の修正後能力値を3～17及び18/xxx形式に変換する / Converts stat num into a six-char (right justified) string
  * @param val 能力値
  * @param out_val 出力先文字列ポインタ
- * @return なし
  */
 void cnv_stat(int val, char *out_val)
 {
@@ -2898,7 +2889,6 @@ s16b modify_stat_value(int value, int amount)
 /*!
  * @brief スコアを計算する /
  * Hack -- Calculates the total number of points earned		-JWT-
- * @return なし
  * @details
  */
 long calc_score(player_type *creature_ptr)
@@ -3002,7 +2992,6 @@ bool is_time_limit_stealth(player_type *creature_ptr)
 /*!
  * @brief 口を使う継続的な処理を中断する
  * @param caster_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void stop_mouth(player_type *caster_ptr)
 {

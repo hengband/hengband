@@ -22,7 +22,6 @@
 
 /*!
  * @brief プレイヤーの全ての時限効果をリセットする。 / reset timed flags
- * @return なし
  */
 void reset_tim_flags(player_type *creature_ptr)
 {

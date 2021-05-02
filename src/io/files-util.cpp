@@ -303,7 +303,6 @@ errr counts_write(player_type *creature_ptr, int where, u32b count)
  * @brief 墓のアスキーアートテンプレを読み込む
  * @param buf テンプレへのバッファ
  * @param buf_size バッファの長さ
- * @return なし
  */
 void read_dead_file(char *buf, size_t buf_size)
 {

@@ -59,7 +59,6 @@
  * @param attack 変異要素による攻撃要素の種類
  * @param fear 攻撃を受けたモンスターが恐慌状態に陥ったかを返す参照ポインタ
  * @param mdeath 攻撃を受けたモンスターが死亡したかを返す参照ポインタ
- * @return なし
  */
 static void natural_attack(player_type *attacker_ptr, MONSTER_IDX m_idx, MUTA attack, bool *fear, bool *mdeath)
 {

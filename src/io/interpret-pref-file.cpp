@@ -522,7 +522,6 @@ errr interpret_pref_file(player_type *creature_ptr, char *buf)
 
 /*!
  * @brief 生い立ちメッセージの内容をバッファに加える。 / Hook function for reading the histpref.prf file.
- * @return なし
  */
 void add_history_from_pref_line(concptr t)
 {

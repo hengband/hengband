@@ -166,7 +166,6 @@ bool kind_is_good(KIND_OBJECT_IDX k_idx)
  * Find the index of the object_kind with the given tval and sval
  * @param tval 検索したいベースアイテムのtval
  * @param sval 検索したいベースアイテムのsval
- * @return なし
  */
 KIND_OBJECT_IDX lookup_kind(tval_type tval, OBJECT_SUBTYPE_VALUE sval)
 {

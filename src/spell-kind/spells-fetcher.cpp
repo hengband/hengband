@@ -32,7 +32,6 @@
  * @param dir 魔法の発動方向
  * @param wgt 許容重量
  * @param require_los 射線の通りを要求するならばTRUE
- * @return なし
  */
 void fetch_item(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
 {
@@ -40,7 +39,7 @@ void fetch_item(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require
     object_type *o_ptr;
     GAME_TEXT o_name[MAX_NLEN];
 
-    if (caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].o_idx) {
+    if (!caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].o_idx_list.empty()) {
         msg_print(_("自分の足の下にある物は取れません。", "You can't fetch when you're already standing on something."));
         return;
     }
@@ -56,7 +55,7 @@ void fetch_item(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require
         }
 
         g_ptr = &caster_ptr->current_floor_ptr->grid_array[ty][tx];
-        if (!g_ptr->o_idx) {
+        if (g_ptr->o_idx_list.empty()) {
             msg_print(_("そこには何もありません。", "There is no object there."));
             return;
         }
@@ -80,7 +79,7 @@ void fetch_item(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require
         tx = caster_ptr->x;
         bool is_first_loop = TRUE;
         g_ptr = &caster_ptr->current_floor_ptr->grid_array[ty][tx];
-        while (is_first_loop || !g_ptr->o_idx) {
+        while (is_first_loop || g_ptr->o_idx_list.empty()) {
             is_first_loop = FALSE;
             ty += ddy[dir];
             tx += ddx[dir];
@@ -92,17 +91,16 @@ void fetch_item(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require
         }
     }
 
-    o_ptr = &caster_ptr->current_floor_ptr->o_list[g_ptr->o_idx];
+    o_ptr = &caster_ptr->current_floor_ptr->o_list[g_ptr->o_idx_list.front()];
     if (o_ptr->weight > wgt) {
         msg_print(_("そのアイテムは重過ぎます。", "The object is too heavy."));
         return;
     }
 
-    OBJECT_IDX i = g_ptr->o_idx;
-    g_ptr->o_idx = o_ptr->next_o_idx;
-    caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].o_idx = i; /* 'move' it */
+    OBJECT_IDX i = g_ptr->o_idx_list.front();
+    g_ptr->o_idx_list.pop_front();
+    caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].o_idx_list.push_front(i); /* 'move' it */
 
-    o_ptr->next_o_idx = 0;
     o_ptr->iy = caster_ptr->y;
     o_ptr->ix = caster_ptr->x;
 

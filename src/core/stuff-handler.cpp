@@ -8,7 +8,6 @@
 /*!
  * @brief 全更新処理をチェックして処理していく
  * Handle "player_ptr->update" and "player_ptr->redraw" and "player_ptr->window"
- * @return なし
  */
 void handle_stuff(player_type* player_ptr)
 {

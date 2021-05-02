@@ -49,7 +49,6 @@ static concptr simplify_list[][2] = {
  * @param info 表示文字列
  * @param row 描画列
  * @param col 描画行
- * @return なし
  */
 void print_field(concptr info, TERM_LEN row, TERM_LEN col)
 {
@@ -181,9 +180,9 @@ static void display_shortened_item_name(player_type *player_ptr, object_type *o_
  * @param player_ptr プレイヤー情報への参照ポインタ
  * @param cy 縮小マップ上のプレイヤーのy座標
  * @param cx 縮小マップ上のプレイヤーのx座標
- * @return なし
  * @details
  * メインウィンドウ('M'コマンド)、サブウィンドウ兼(縮小図)用。
+ * use_bigtile時に横の描画列数は1/2になる。
  */
 void display_map(player_type *player_ptr, int *cy, int *cx)
 {
@@ -196,12 +195,14 @@ void display_map(player_type *player_ptr, int *cy, int *cx)
 
     bool old_view_special_lite = view_special_lite;
     bool old_view_granite_lite = view_granite_lite;
+
+    TERM_LEN border_width = use_bigtile ? 2 : 1; //!< @note 枠線幅
     TERM_LEN hgt, wid, yrat, xrat;
     term_get_size(&wid, &hgt);
     hgt -= 2;
-    wid -= 14;
+    wid -= 12 + border_width * 2; //!< @note 描画桁数(枠線抜)
     if (use_bigtile)
-        wid /= 2;
+        wid = wid / 2 - 1;
 
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     yrat = (floor_ptr->height + hgt - 1) / hgt;

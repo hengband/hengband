@@ -8,6 +8,7 @@
 #include "load/load-v1-5-0.h"
 #include "cmd-item/cmd-smith.h"
 #include "dungeon/dungeon.h"
+#include "floor/floor-object.h"
 #include "game-option/birth-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
@@ -39,8 +40,8 @@
 #include "sv-definition/sv-lite-types.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
-#include "system/object-type-definition.h"
 #include "system/monster-race-definition.h"
+#include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
@@ -57,7 +58,6 @@ const int QUEST_ROYAL_CRYPT = 28; // 王家の墓.
 /*!
  * @brief アイテムオブジェクト1件を読み込む / Read an object
  * @param o_ptr アイテムオブジェクト読み取り先ポインタ
- * @return なし
  */
 void rd_item_old(player_type *player_ptr, object_type *o_ptr)
 {
@@ -337,7 +337,6 @@ void rd_item_old(player_type *player_ptr, object_type *o_ptr)
  * @brief モンスターを読み込む / Read a monster
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param m_ptr モンスター保存先ポインタ
- * @return なし
  */
 void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
 {
@@ -542,7 +541,6 @@ void set_old_lore(monster_race *r_ptr, BIT_FLAGS f4, const MONRACE_IDX r_idx)
 /*!
  * @brief ダンジョン情報を読み込む / Read the dungeon (old method)
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  * The monsters/objects must be loaded in the same order
  * that they were stored, since the actual indexes matter.
@@ -753,18 +751,9 @@ errr rd_dungeon_old(player_type *player_ptr)
         object_type *o_ptr;
         o_ptr = &floor_ptr->o_list[o_idx];
         rd_item(player_ptr, o_ptr);
-        if (object_is_held_monster(o_ptr)) {
-            monster_type *m_ptr;
-            m_ptr = &floor_ptr->m_list[o_ptr->held_m_idx];
-            o_ptr->next_o_idx = m_ptr->hold_o_idx;
-            m_ptr->hold_o_idx = o_idx;
-            continue;
-        }
 
-        grid_type *g_ptr;
-        g_ptr = &floor_ptr->grid_array[o_ptr->iy][o_ptr->ix];
-        o_ptr->next_o_idx = g_ptr->o_idx;
-        g_ptr->o_idx = o_idx;
+        auto &list = get_o_idx_list_contains(floor_ptr, o_idx);
+        list.push_front(o_idx);
     }
 
     rd_u16b(&limit);

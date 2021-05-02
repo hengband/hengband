@@ -105,7 +105,6 @@ static QUEST_IDX write_floor(player_type *creature_ptr, concptr *note_level, cha
  * @param fff 日記ファイル
  * @param num 日記へ追加する内容番号
  * @param note 日記内容のIDに応じた文字列参照ポインタ
- * @return なし
  */
 static void write_diary_pet(FILE *fff, int num, concptr note)
 {

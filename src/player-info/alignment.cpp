@@ -38,7 +38,6 @@ concptr PlayerAlignment::get_alignment_description(bool with_value)
 /*
  * @brief アライメント情報の更新
  * @param なし
- * @return なし
  */
 void PlayerAlignment::update_alignment()
 {

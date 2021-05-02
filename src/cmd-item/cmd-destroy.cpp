@@ -192,7 +192,6 @@ static void exe_destroy_item(player_type *creature_ptr, destroy_type *destroy_pt
 /*!
  * @brief アイテムを破壊するコマンドのメインルーチン / Destroy an item
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void do_cmd_destroy(player_type *creature_ptr)
 {

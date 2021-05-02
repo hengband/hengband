@@ -144,7 +144,6 @@ static bool snipe_concentrate(player_type *creature_ptr)
 /*!
  * @brief スナイパーの集中度リセット
  * @param msg TRUEならばメッセージを表示する
- * @return なし
  */
 void reset_concentration(player_type *creature_ptr, bool msg)
 {
@@ -174,7 +173,6 @@ int boost_concentration_damage(player_type *creature_ptr, int tdam)
 
 /*!
  * @brief スナイパーの技能リストを表示する
- * @return なし
  */
 void display_snipe_list(player_type *sniper_ptr)
 {
@@ -566,7 +564,6 @@ static bool cast_sniper_spell(player_type *sniper_ptr, int spell)
 
 /*!
  * @brief スナイパー技能コマンドのメインルーチン /
- * @return なし
  */
 void do_cmd_snipe(player_type *sniper_ptr)
 {
@@ -595,7 +592,6 @@ void do_cmd_snipe(player_type *sniper_ptr)
 
 /*!
  * @brief スナイパー技能コマンドの表示 /
- * @return なし
  */
 void do_cmd_snipe_browse(player_type *sniper_ptr)
 {

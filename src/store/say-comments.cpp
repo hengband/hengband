@@ -14,7 +14,6 @@
  * ブラックマーケットのときは別のメッセージを出す
  * Successful haggle.
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void store_owner_says_comment(player_type *player_ptr)
 {
@@ -36,7 +35,6 @@ void store_owner_says_comment(player_type *player_ptr)
  * @param price アイテムの取引額
  * @param value アイテムの実際価値
  * @param guess 店主が当初予想していた価値
- * @return なし
  * @details
  * We paid "price", it was worth "value", and we thought it was worth "guess"
  */

@@ -20,7 +20,6 @@
 
 /*!
  * @brief ペット爆破処理 /
- * @return なし
  */
 void discharge_minion(player_type *caster_ptr)
 {

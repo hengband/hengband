@@ -18,7 +18,6 @@
  * @param d1 ダメージダイス数
  * @param d2 ダメージダイス面
  * @param m 打撃の何番目か
- * @return なし
  */
 static void display_monster_blow_jp(lore_type *lore_ptr, int attack_numbers, int d1, int d2, int m)
 {
@@ -66,7 +65,6 @@ static void display_monster_blow_jp(lore_type *lore_ptr, int attack_numbers, int
  * @param d1 ダメージダイス数
  * @param d2 ダメージダイス面
  * @param m 打撃の何番目か
- * @return なし
  */
 static void display_monster_blow_en(lore_type *lore_ptr, int attack_numbers, int d1, int d2, int m)
 {
@@ -100,7 +98,6 @@ static void display_monster_blow_en(lore_type *lore_ptr, int attack_numbers, int
  * @param lore_ptr 思い出情報へのポインタ
  * @param m 打撃の何番目か
  * @param attack_numbers 打撃の最大回数
- * @return なし
  */
 void display_monster_blow(lore_type *lore_ptr, int m, int attack_numbers)
 {
@@ -113,7 +110,6 @@ void display_monster_blow(lore_type *lore_ptr, int m, int attack_numbers)
 /*!
  * @brief モンスターの思い出に打撃に関する情報を出力する
  * @param lore_ptr 思い出情報へのポインタ
- * @return なし
  */
 void display_monster_blows(lore_type *lore_ptr)
 {

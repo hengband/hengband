@@ -442,7 +442,6 @@ static void describe_lamp_life(flavor_type *flavor_ptr)
 /*!
  * @brief 杖や光源等、寿命のあるアイテムの残り回数やターン表記
  * @param アイテム表記への参照ポインタ
- * @return なし
  */
 static void describe_remaining(flavor_type *flavor_ptr)
 {

@@ -14,44 +14,26 @@
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
+#include <algorithm>
+
 /*!
- * @brief グローバルオブジェクト配列に対し指定範囲のオブジェクトを整理してIDの若い順に寄せる /
+ * @brief グローバルオブジェクト配列の要素番号i1のオブジェクトを要素番号i2に移動する /
  * Move an object from index i1 to index i2 in the object list
- * @param i1 整理したい配列の始点
- * @param i2 整理したい配列の終点
- * @return なし
+ * @param i1 オブジェクト移動元の要素番号
+ * @param i2 オブジェクト移動先の要素番号
  */
 static void compact_objects_aux(floor_type *floor_ptr, OBJECT_IDX i1, OBJECT_IDX i2)
 {
     if (i1 == i2)
         return;
 
-    object_type *o_ptr;
-    for (OBJECT_IDX i = 1; i < floor_ptr->o_max; i++) {
-        o_ptr = &floor_ptr->o_list[i];
-        if (!o_ptr->k_idx)
-            continue;
+    object_type *o_ptr = &floor_ptr->o_list[i1];
 
-        if (o_ptr->next_o_idx == i1)
-            o_ptr->next_o_idx = i2;
-    }
+    // モンスター所為アイテムリストもしくは床上アイテムリストの要素番号i1をi2に書き換える
+    auto &list = get_o_idx_list_contains(floor_ptr, i1);
+    std::replace(list.begin(), list.end(), i1, i2);
 
-    o_ptr = &floor_ptr->o_list[i1];
-
-    if (object_is_held_monster(o_ptr)) {
-        monster_type *m_ptr;
-        m_ptr = &floor_ptr->m_list[o_ptr->held_m_idx];
-        if (m_ptr->hold_o_idx == i1)
-            m_ptr->hold_o_idx = i2;
-    } else {
-        POSITION y = o_ptr->iy;
-        POSITION x = o_ptr->ix;
-        grid_type *g_ptr;
-        g_ptr = &floor_ptr->grid_array[y][x];
-        if (g_ptr->o_idx == i1)
-            g_ptr->o_idx = i2;
-    }
-
+    // 要素番号i1のオブジェクトを要素番号i2に移動
     floor_ptr->o_list[i2] = floor_ptr->o_list[i1];
     object_wipe(o_ptr);
 }
@@ -61,7 +43,6 @@ static void compact_objects_aux(floor_type *floor_ptr, OBJECT_IDX i1, OBJECT_IDX
  * Compact and Reorder the object list.
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param size 最低でも減らしたいオブジェクト数の水準
- * @return なし
  * @details
  * （危険なので使用には注意すること）
  * This function can be very dangerous, use with caution!\n

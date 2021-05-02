@@ -36,7 +36,6 @@ char image_monster_hack[MAX_IMAGE_MONSTER_HACK] = "abcdefghijklmnopqrstuvwxyzABC
  * @brief オブジェクトの表示を幻覚状態に差し替える / Hallucinatory object
  * @param ap 本来の色
  * @param cp 本来のシンボル
- * @return なし
  */
 static void image_object(TERM_COLOR *ap, SYMBOL_CODE *cp)
 {
@@ -56,7 +55,6 @@ static void image_object(TERM_COLOR *ap, SYMBOL_CODE *cp)
  * @brief モンスターの表示を幻覚状態に差し替える / Mega-Hack -- Hallucinatory monster
  * @param ap 本来の色
  * @param cp 本来のシンボル
- * @return なし
  */
 static void image_monster(TERM_COLOR *ap, SYMBOL_CODE *cp)
 {
@@ -75,7 +73,6 @@ static void image_monster(TERM_COLOR *ap, SYMBOL_CODE *cp)
  * @brief オブジェクト＆モンスターの表示を幻覚状態に差し替える / Hack -- Random hallucination
  * @param ap 本来の色
  * @param cp 本来のシンボル
- * @return なし
  */
 static void image_random(TERM_COLOR *ap, SYMBOL_CODE *cp)
 {
@@ -139,13 +136,11 @@ static bool is_revealed_wall(floor_type *floor_ptr, feature_type *f_ptr, POSITIO
  * @param cp 文字種属性
  * @param tap 文字色属性(タイル)
  * @param tcp 文字種属性(タイル)
- * @return なし
  */
 void map_info(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLOR *tap, SYMBOL_CODE *tcp)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-    OBJECT_IDX this_o_idx, next_o_idx = 0;
     FEAT_IDX feat = get_feat_mimic(g_ptr);
     feature_type *f_ptr = &f_info[feat];
     TERM_COLOR a;
@@ -248,10 +243,9 @@ void map_info(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, S
     if (player_ptr->image && one_in_(256))
         image_random(ap, cp);
 
-    for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx) {
+    for (const auto this_o_idx : g_ptr->o_idx_list) {
         object_type *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
-        next_o_idx = o_ptr->next_o_idx;
         if (!(o_ptr->marked & OM_FOUND))
             continue;
 

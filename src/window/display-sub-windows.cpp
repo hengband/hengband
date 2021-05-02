@@ -50,7 +50,6 @@
 /*!
  * @brief サブウィンドウに所持品一覧を表示する / Hack -- display inventory in sub-windows
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void fix_inventory(player_type *player_ptr, tval_type item_tester_tval)
 {
@@ -83,7 +82,6 @@ void fix_inventory(player_type *player_ptr, tval_type item_tester_tval)
  *  LV  : monster lv if known
  *  name: name of monster
  * </pre>
- * @return なし
  */
 static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type *m_ptr, int n_same)
 {
@@ -184,7 +182,6 @@ void print_monster_list(floor_type *floor_ptr, const std::vector<MONSTER_IDX> &m
 /*!
  * @brief 出現中モンスターのリストをサブウィンドウに表示する / Hack -- display monster list in sub-windows
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void fix_monster_list(player_type *player_ptr)
 {
@@ -218,7 +215,6 @@ void fix_monster_list(player_type *player_ptr)
 /*!
  * @brief 装備アイテム一覧を表示する /
  * Choice window "shadow" of the "show_equip()" function
- * @return なし
  */
 static void display_equipment(player_type *owner_ptr, tval_type tval)
 {
@@ -293,7 +289,6 @@ static void display_equipment(player_type *owner_ptr, tval_type tval)
  * @brief 現在の装備品をサブウィンドウに表示する /
  * Hack -- display equipment in sub-windows
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void fix_equip(player_type *player_ptr, tval_type item_tester_tval)
 {
@@ -315,7 +310,6 @@ void fix_equip(player_type *player_ptr, tval_type item_tester_tval)
  * @brief 現在のプレイヤーステータスをサブウィンドウに表示する /
  * @param player_ptr プレーヤーへの参照ポインタ
  * Hack -- display character in sub-windows
- * @return なし
  */
 void fix_player(player_type *player_ptr)
 {
@@ -339,7 +333,6 @@ void fix_player(player_type *player_ptr)
  * @brief ゲームメッセージ履歴をサブウィンドウに表示する /
  * Hack -- display recent messages in sub-windows
  * Adjust for width and split messages
- * @return なし
  */
 void fix_message(void)
 {
@@ -371,7 +364,6 @@ void fix_message(void)
  * Hack -- display overhead view in sub-windows
  * Adjust for width and split messages
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  * Note that the "player" symbol does NOT appear on the map.
  */
@@ -401,7 +393,6 @@ void fix_overhead(player_type *player_ptr)
 /*!
  * @brief 自分の周辺の地形をTermに表示する
  * @param プレイヤー情報への参照ポインタ
- * @return なし
  */
 static void display_dungeon(player_type *player_ptr)
 {
@@ -439,7 +430,6 @@ static void display_dungeon(player_type *player_ptr)
 /*!
  * @brief 自分の周辺のダンジョンの地形をサブウィンドウに表示する / display dungeon view around player in a sub window
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void fix_dungeon(player_type *player_ptr)
 {
@@ -462,7 +452,6 @@ void fix_dungeon(player_type *player_ptr)
  * @brief モンスターの思い出をサブウィンドウに表示する /
  * Hack -- display dungeon view in sub-windows
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void fix_monster(player_type *player_ptr)
 {
@@ -487,7 +476,6 @@ void fix_monster(player_type *player_ptr)
  * @brief ベースアイテム情報をサブウィンドウに表示する /
  * Hack -- display object recall in sub-windows
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void fix_object(player_type *player_ptr)
 {
@@ -556,12 +544,11 @@ static void display_floor_item_list(player_type *player_ptr, const int y, const 
 
     // (y,x) のアイテムを1行に1個ずつ書く。
     TERM_LEN term_y = 1;
-    for (OBJECT_IDX o_idx = g_ptr->o_idx; o_idx > 0;) {
+    for (const auto o_idx : g_ptr->o_idx_list) {
         object_type *const o_ptr = &floor_ptr->o_list[o_idx];
 
         // 未発見アイテムおよび金は対象外。
         if (none_bits(o_ptr->marked, OM_FOUND) || o_ptr->tval == TV_GOLD) {
-            o_idx = o_ptr->next_o_idx;
             continue;
         }
 
@@ -581,7 +568,6 @@ static void display_floor_item_list(player_type *player_ptr, const int y, const 
             term_addstr(-1, attr, line);
         }
 
-        o_idx = o_ptr->next_o_idx;
         ++term_y;
     }
 }
@@ -612,7 +598,6 @@ void fix_floor_item_list(player_type *player_ptr, const int y, const int x)
 /*!
  * @brief サブウィンドウに所持品、装備品リストの表示を行う /
  * Flip "inven" and "equip" in any sub-windows
- * @return なし
  */
 void toggle_inventory_equipment(player_type *owner_ptr)
 {

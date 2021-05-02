@@ -57,7 +57,6 @@ static concptr find_quest[] = {
 /*!
  * @brief ランダムクエストの討伐ユニークを決める / Determine the random quest uniques
  * @param q_ptr クエスト構造体の参照ポインタ
- * @return なし
  */
 void determine_random_questor(player_type *player_ptr, quest_type *q_ptr)
 {
@@ -104,7 +103,6 @@ void determine_random_questor(player_type *player_ptr, quest_type *q_ptr)
  * @param player_type プレイヤー情報への参照ポインタ
  * @param q_ptr クエスト情報への参照ポインタ
  * @param stat ステータス(成功or失敗)
- * @return なし
  */
 void record_quest_final_status(quest_type *q_ptr, PLAYER_LEVEL lev, QUEST_STATUS stat)
 {
@@ -118,7 +116,6 @@ void record_quest_final_status(quest_type *q_ptr, PLAYER_LEVEL lev, QUEST_STATUS
  * @brief クエストを達成状態にする /
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param quest_num 達成状態にしたいクエストのID
- * @return なし
  */
 void complete_quest(player_type *player_ptr, QUEST_IDX quest_num)
 {
@@ -150,7 +147,6 @@ void complete_quest(player_type *player_ptr, QUEST_IDX quest_num)
  * Check for "Quest" completion when a quest monster is killed or charmed.
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 入手したオブジェクトの構造体参照ポインタ
- * @return なし
  */
 void check_find_art_quest_completion(player_type *player_ptr, object_type *o_ptr)
 {
@@ -250,7 +246,6 @@ QUEST_IDX random_quest_number(player_type *player_ptr, DEPTH level)
 /*!
  * @brief クエスト階層から離脱する際の処理
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void leave_quest_check(player_type *player_ptr)
 {
@@ -295,7 +290,6 @@ void leave_quest_check(player_type *player_ptr)
 
 /*!
  * @brief 「塔」クエストの各階層から離脱する際の処理
- * @return なし
  */
 void leave_tower_check(player_type *player_ptr)
 {
@@ -317,7 +311,6 @@ void leave_tower_check(player_type *player_ptr)
 /*!
  * @brief クエスト入り口にプレイヤーが乗った際の処理 / Do building commands
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void do_cmd_quest(player_type *player_ptr)
 {

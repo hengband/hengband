@@ -7,7 +7,6 @@
 
 /*!
  * @brief プレイヤー作成を中断して変愚蛮怒を終了する
- * @return なし
  */
 void birth_quit(void)
 {
@@ -18,7 +17,6 @@ void birth_quit(void)
  * @brief 指定されたヘルプファイルを表示する / Show specific help file
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param helpfile ファイル名
- * @return なし
  */
 void show_help(player_type* creature_ptr, concptr helpfile)
 {
