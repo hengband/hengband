@@ -542,6 +542,7 @@
     <ClCompile Include="..\..\src\store\sell-order.cpp" />
     <ClCompile Include="..\..\src\store\service-checker.cpp" />
     <ClCompile Include="..\..\src\system\angband-version.cpp" />
+    <ClCompile Include="..\..\src\system\object-type-definition.cpp" />
     <ClCompile Include="..\..\src\system\player-type-definition.cpp" />
     <ClCompile Include="..\..\src\target\grid-selector.cpp" />
     <ClCompile Include="..\..\src\target\projection-path-calculator.cpp" />
@@ -642,7 +643,6 @@
     <ClCompile Include="..\..\src\object\object-stack.cpp" />
     <ClCompile Include="..\..\src\object\object-value-calc.cpp" />
     <ClCompile Include="..\..\src\perception\object-perception.cpp" />
-    <ClCompile Include="..\..\src\object\object-generator.cpp" />
     <ClCompile Include="..\..\src\object\object-value.cpp" />
     <ClCompile Include="..\..\src\pet\pet-fall-off.cpp" />
     <ClCompile Include="..\..\src\mspell\mspell-floor.cpp" />
@@ -1366,7 +1366,6 @@
     <ClInclude Include="..\..\src\object\object-stack.h" />
     <ClInclude Include="..\..\src\object\object-value-calc.h" />
     <ClInclude Include="..\..\src\perception\object-perception.h" />
-    <ClInclude Include="..\..\src\object\object-generator.h" />
     <ClInclude Include="..\..\src\object\object-value.h" />
     <ClInclude Include="..\..\src\pet\pet-fall-off.h" />
     <ClInclude Include="..\..\src\pet\pet-util.h" />

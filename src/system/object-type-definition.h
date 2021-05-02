@@ -4,6 +4,7 @@
 #include "system/angband.h"
 #include "system/system-variables.h"
 
+struct player_type;
 typedef struct object_type {
     KIND_OBJECT_IDX k_idx; /* Kind index (zero if "dead") */
     POSITION iy; /* Y-position on map, or zero */
@@ -42,4 +43,8 @@ typedef struct object_type {
     BIT_FLAGS curse_flags; /* Flags for curse */
     MONSTER_IDX held_m_idx; /*!< アイテムを所持しているモンスターID (いないなら 0) / Monster holding us (if any) */
     ARTIFACT_BIAS_IDX artifact_bias; /*!< ランダムアーティファクト生成時のバイアスID */
+
+    void object_wipe();
+    void object_copy(object_type *j_ptr);
+    void object_prep(player_type *player_ptr, KIND_OBJECT_IDX ko_idx);
 } object_type;

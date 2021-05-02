@@ -20,7 +20,6 @@
 #include "object-hook/hook-checker.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "object/object-generator.h"
 #include "object/object-info.h"
 #include "object/object-stack.h"
 #include "object/object-value.h"
@@ -128,7 +127,7 @@ void store_sell(player_type *owner_ptr)
 
     object_type forge;
     object_type *q_ptr = &forge;
-    object_copy(q_ptr, o_ptr);
+    q_ptr->object_copy(o_ptr);
     q_ptr->number = amt;
 
     if ((o_ptr->tval == TV_ROD) || (o_ptr->tval == TV_WAND))
@@ -170,7 +169,7 @@ void store_sell(player_type *owner_ptr)
 
             identify_item(owner_ptr, o_ptr);
             q_ptr = &forge;
-            object_copy(q_ptr, o_ptr);
+            q_ptr->object_copy(o_ptr);
             q_ptr->number = amt;
             q_ptr->ident |= IDENT_STORE;
 

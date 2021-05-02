@@ -542,7 +542,6 @@ hengband_SOURCES = \
 	object/item-tester-hooker.cpp object/item-tester-hooker.h \
 	object/object-broken.cpp object/object-broken.h \
 	object/object-flags.cpp object/object-flags.h \
-	object/object-generator.cpp object/object-generator.h \
 	object/object-info.cpp object/object-info.h \
 	object/object-kind.cpp object/object-kind.h \
 	object/object-kind-hook.cpp object/object-kind-hook.h \
@@ -833,7 +832,7 @@ hengband_SOURCES = \
 	system/h-define.h system/h-system.h system/h-type.h \
 	system/monster-race-definition.h \
 	system/monster-type-definition.h \
-	system/object-type-definition.h \
+	system/object-type-definition.cpp system/object-type-definition.h \
 	system/player-type-definition.cpp system/player-type-definition.h \
 	system/system-variables.cpp system/system-variables.h \
 	system/gamevalue.h \

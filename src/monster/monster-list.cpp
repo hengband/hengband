@@ -32,7 +32,6 @@
 #include "monster/monster-info.h"
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
-#include "object/object-generator.h"
 #include "pet/pet-fall-off.h"
 #include "player/player-status.h"
 #include "system/alloc-entries.h"
