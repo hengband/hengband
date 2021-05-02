@@ -1,6 +1,14 @@
-﻿#include "core/game-closer.h"
+﻿/*
+ * @file game-closer.cpp
+ * @brief ゲーム終了処理
+ * @author Hourier
+ * @date 2020/03/09
+ */
+
+#include "core/game-closer.h"
 #include "cmd-io/cmd-save.h"
 #include "core/asking-player.h"
+#include "core/score-util.h"
 #include "core/scores.h"
 #include "core/stuff-handler.h"
 #include "floor/floor-save.h"
@@ -8,16 +16,20 @@
 #include "io/input-key-acceptor.h"
 #include "io/signal-handlers.h"
 #include "io/uid-checker.h"
+#include "io/write-diary.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-of-music.h"
+#include "player/player-sex.h"
 #include "player/process-death.h"
 #include "save/save.h"
+#include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "view/display-player.h"
+#include "view/display-scores.h"
 #include "world/world.h"
 
 static void clear_floor(player_type *player_ptr)
@@ -61,6 +73,61 @@ static bool check_death(player_type *player_ptr)
 
     clear_floor(player_ptr);
     return FALSE;
+}
+
+/*!
+ * @brief 勝利者用の引退演出処理 /
+ * Change the player into a King! -RAK-
+ */
+static void kingly(player_type *winner_ptr)
+{
+    bool seppuku = streq(winner_ptr->died_from, "Seppuku");
+    winner_ptr->current_floor_ptr->dun_level = 0;
+    if (!seppuku) {
+        /* 引退したときの識別文字 */
+        (void)strcpy(winner_ptr->died_from, _("ripe", "Ripe Old Age"));
+    }
+
+    winner_ptr->exp = winner_ptr->max_exp;
+    winner_ptr->lev = winner_ptr->max_plv;
+    TERM_LEN wid, hgt;
+    term_get_size(&wid, &hgt);
+    auto cy = hgt / 2;
+    auto cx = wid / 2;
+    winner_ptr->au += 10000000L;
+    term_clear();
+
+    put_str("#", cy - 11, cx - 1);
+    put_str("#####", cy - 10, cx - 3);
+    put_str("#", cy - 9, cx - 1);
+    put_str(",,,  $$$  ,,,", cy - 8, cx - 7);
+    put_str(",,=$   \"$$$$$\"   $=,,", cy - 7, cx - 11);
+    put_str(",$$        $$$        $$,", cy - 6, cx - 13);
+    put_str("*>         <*>         <*", cy - 5, cx - 13);
+    put_str("$$         $$$         $$", cy - 4, cx - 13);
+    put_str("\"$$        $$$        $$\"", cy - 3, cx - 13);
+    put_str("\"$$       $$$       $$\"", cy - 2, cx - 12);
+    put_str("*#########*#########*", cy - 1, cx - 11);
+    put_str("*#########*#########*", cy, cx - 11);
+
+#ifdef JP
+    put_str("Veni, Vidi, Vici!", cy + 3, cx - 9);
+    put_str("来た、見た、勝った！", cy + 4, cx - 10);
+    put_str(format("偉大なる%s万歳！", sp_ptr->winner), cy + 5, cx - 11);
+#else
+    put_str("Veni, Vidi, Vici!", cy + 3, cx - 9);
+    put_str("I came, I saw, I conquered!", cy + 4, cx - 14);
+    put_str(format("All Hail the Mighty %s!", sp_ptr->winner), cy + 5, cx - 13);
+#endif
+
+    if (!seppuku) {
+        exe_write_diary(winner_ptr, DIARY_DESCRIPTION, 0, _("ダンジョンの探索から引退した。", "retired exploring dungeons."));
+        exe_write_diary(winner_ptr, DIARY_GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
+        exe_write_diary(winner_ptr, DIARY_DESCRIPTION, 1, "\n\n\n\n");
+    }
+
+    flush();
+    pause_line(hgt - 1);
 }
 
 /*!
@@ -111,7 +178,7 @@ void close_game(player_type *player_ptr)
         if (!player_ptr->wait_report_score)
             (void)top_twenty(player_ptr);
     } else if (highscore_fd >= 0) {
-        display_scores_aux(0, 10, -1, NULL);
+        display_scores(0, 10, -1, NULL);
     }
 
     clear_floor(player_ptr);

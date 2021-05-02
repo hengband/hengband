@@ -2274,6 +2274,12 @@
     <ClCompile Include="..\..\src\main-win\commandline-win.cpp">
       <Filter>main-win</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\score-util.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\view\display-scores.cpp">
+      <Filter>view</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\object-enchant\apply-magic-ring.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
@@ -4902,7 +4908,12 @@
     <ClInclude Include="..\..\src\player-info\equipment-info.h">
       <Filter>player-info</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\main-win\string-win.h" />
+    <ClInclude Include="..\..\src\core\score-util.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\display-scores.h">
+      <Filter>view</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\object-enchant\apply-magic-ring.h">
       <Filter>object-enchant</Filter>
     </ClInclude>

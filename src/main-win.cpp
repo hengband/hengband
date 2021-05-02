@@ -85,6 +85,7 @@
 #include "cmd-visual/cmd-draw.h"
 #include "core/game-play.h"
 #include "core/player-processor.h"
+#include "core/score-util.h"
 #include "core/scores.h"
 #include "core/special-internal-keys.h"
 #include "core/stuff-handler.h"
@@ -120,6 +121,7 @@
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include "view/display-scores.h"
 #include "wizard/spoiler-util.h"
 #include "wizard/wizard-spoiler.h"
 #include "world/world.h"
@@ -1619,7 +1621,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         } else {
             screen_save();
             term_clear();
-            display_scores_aux(0, MAX_HISCORES, -1, NULL);
+            display_scores(0, MAX_HISCORES, -1, NULL);
             (void)fd_close(highscore_fd);
             highscore_fd = -1;
             screen_load();
