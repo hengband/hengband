@@ -188,6 +188,8 @@ static void process_light_equipment_characteristics(player_type *creature_ptr, a
             return;
         }
     }
+
+    char_stat.syms.emplace_back(".");
 }
 
 /*!
