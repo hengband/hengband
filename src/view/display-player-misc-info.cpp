@@ -2,6 +2,7 @@
 #include "player/player-class.h"
 #include "player/player-personality.h"
 #include "player/player-sex.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "view/display-player-stat-info.h"
@@ -10,7 +11,6 @@
  * @brief プレイヤーの特性フラグ一覧表示2a /
  * @param creature_ptr プレーヤーへの参照ポインタ
  * Special display, part 2a
- * @return なし
  */
 void display_player_misc_info(player_type *creature_ptr)
 {

@@ -9,7 +9,9 @@
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
+#include "player-info/equipment-info.h"
 #include "player/attack-defense-types.h"
+#include "player/digestion-processor.h"
 #include "player/player-race.h"
 #include "player/player-skill.h"
 #include "player/player-status-flags.h"
@@ -19,6 +21,10 @@
 #include "realm/realm-types.h"
 #include "spell-realm/spells-hex.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*

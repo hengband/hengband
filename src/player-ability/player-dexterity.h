@@ -1,10 +1,10 @@
 ﻿#pragma once
 #include "player-status/player-basic-statistics.h"
 
-class PlayerDextarity : public PlayerBasicStatistics {
+class PlayerDexterity : public PlayerBasicStatistics {
 public:
     using PlayerBasicStatistics::PlayerBasicStatistics;
-    PlayerDextarity() = delete;
+    PlayerDexterity() = delete;
 
 protected:
     void set_locals() override;

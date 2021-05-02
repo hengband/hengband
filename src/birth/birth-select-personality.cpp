@@ -2,6 +2,7 @@
 #include "birth/birth-util.h"
 #include "io/input-key-acceptor.h"
 #include "player/player-personality.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/int-char-converter.h"
@@ -182,7 +183,6 @@ static bool select_personality(player_type *creature_ptr, int *k, concptr *str, 
 
 /*!
  * @brief プレイヤーの性格選択を行う / Player Player seikaku
- * @return なし
  */
 bool get_player_personality(player_type *creature_ptr)
 {

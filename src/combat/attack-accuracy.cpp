@@ -1,13 +1,19 @@
 ﻿#include "combat/attack-accuracy.h"
+#include "combat/combat-options-type.h"
 #include "inventory/inventory-slot-types.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
+#include "player-attack/player-attack-util.h"
 #include "player/attack-defense-types.h"
 #include "player/player-status-flags.h"
 #include "specific-object/death-scythe.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*!
@@ -102,7 +108,6 @@ bool check_hit_from_monster_to_monster(int power, DEPTH level, ARMOUR_CLASS ac, 
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param chance 基本命中値
- * @return なし
  */
 static bool decide_attack_hit(player_type *attacker_ptr, player_attack_type *pa_ptr, int chance)
 {

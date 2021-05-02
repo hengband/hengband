@@ -21,7 +21,6 @@
 /*!
  * @brief 保存フロアの書き込み / Actually write a saved floor data using effectively compressed format.
  * @param sf_ptr 保存したいフロアの参照ポインタ
- * @return なし
  */
 void wr_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 {
@@ -225,7 +224,6 @@ bool wr_dungeon(player_type *player_ptr)
  * @brief ゲームプレイ中のフロア一時保存出力処理サブルーチン / Actually write a temporary saved floor file
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param sf_ptr 保存フロア参照ポインタ
- * @return なし
  */
 static bool save_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
 {
@@ -251,7 +249,6 @@ static bool save_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param sf_ptr 保存フロア参照ポインタ
  * @param mode 保存オプション
- * @return なし
  */
 bool save_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode)
 {

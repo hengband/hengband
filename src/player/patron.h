@@ -44,5 +44,6 @@
 
 extern const concptr chaos_patrons[MAX_PATRON];
 
+typedef struct player_type player_type;
 void gain_level_reward(player_type *creature_ptr, int chosen_reward);
 void admire_from_patron(player_type *creature_ptr);

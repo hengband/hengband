@@ -7,6 +7,7 @@
 #include "io/input-key-requester.h"
 #include "player/attack-defense-types.h"
 #include "status/action-setter.h"
+#include "system/player-type-definition.h"
 #include "target/target-checker.h"
 #include "term/screen-processor.h"
 

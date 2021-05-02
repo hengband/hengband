@@ -10,6 +10,7 @@
 #include "spell-realm/spells-hex.h"
 #include "status/element-resistance.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*!
@@ -17,7 +18,6 @@
  * Prints ratings on certain abilities
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param flags フラグを保管する配列
- * @return なし
  * @todo
  * xtra1.c周りと多重実装になっているのを何とかする
  */

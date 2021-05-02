@@ -1,6 +1,8 @@
 ﻿#include "lore/lore-util.h"
 #include "game-option/birth-options.h"
+#include "monster-attack/monster-attack-types.h"
 #include "monster-race/monster-race.h"
+#include "system/monster-race-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 
@@ -56,6 +58,5 @@ lore_type *initialize_lore_type(lore_type *lore_ptr, MONRACE_IDX r_idx, monster_
 /*!
  * @brief モンスターの思い出メッセージをあらかじめ指定された関数ポインタに基づき出力する
  * @param str 出力文字列
- * @return なし
  */
 void hooked_roff(concptr str) { hook_c_roff(TERM_WHITE, str); }

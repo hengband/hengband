@@ -24,7 +24,7 @@ enum choosable_realm {
 extern const u32b realm_choices1[];
 extern const u32b realm_choices2[];
 
-/* Magic-books for the realms */
+typedef struct player_type player_type;
 REALM_IDX get_realm1_book(player_type *player_ptr);
 REALM_IDX get_realm2_book(player_type *player_ptr);
 bool is_wizard_class(player_type *player_ptr);

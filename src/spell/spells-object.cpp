@@ -44,6 +44,9 @@
 #include "sv-definition/sv-weapon-types.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -59,7 +62,6 @@ typedef struct {
  * @brief 装備強化処理の失敗率定数（千分率） /
  * Used by the "enchant" function (chance of failure)
  * (modified for Zangband, we need better stuff there...) -- TY
- * @return なし
  */
 static int enchant_table[16] = { 0, 10, 50, 100, 200, 300, 400, 500, 650, 800, 950, 987, 993, 995, 998, 1000 };
 
@@ -89,7 +91,6 @@ static amuse_type amuse_info[]
  * @param x1 配置したいフロアのX座標
  * @param num 誰得の処理回数
  * @param known TRUEならばオブジェクトが必ず＊鑑定＊済になる
- * @return なし
  */
 void amusement(player_type *creature_ptr, POSITION y1, POSITION x1, int num, bool known)
 {
@@ -146,7 +147,7 @@ void amusement(player_type *creature_ptr, POSITION y1, POSITION x1, int num, boo
         object_prep(creature_ptr, i_ptr, k_idx);
         if (a_idx)
             i_ptr->name1 = a_idx;
-        apply_magic(creature_ptr, i_ptr, 1, AM_NO_FIXED_ART);
+        apply_magic_to_object(creature_ptr, i_ptr, 1, AM_NO_FIXED_ART);
 
         if (amuse_info[i].flag & AMS_NO_UNIQUE) {
             if (r_info[i_ptr->pval].flags1 & RF1_UNIQUE)
@@ -183,7 +184,6 @@ void amusement(player_type *creature_ptr, POSITION y1, POSITION x1, int num, boo
  * @param great TRUEならば必ず高級品以上を落とす
  * @param special TRUEならば必ず特別品を落とす
  * @param known TRUEならばオブジェクトが必ず＊鑑定＊済になる
- * @return なし
  */
 void acquirement(player_type *caster_ptr, POSITION y1, POSITION x1, int num, bool great, bool special, bool known)
 {
@@ -324,7 +324,6 @@ bool curse_weapon_object(player_type *owner_ptr, bool force, object_type *o_ptr)
  * @brief ボルトのエゴ化処理(火炎エゴのみ) /
  * Enchant some bolts
  * @param caster_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void brand_bolts(player_type *caster_ptr)
 {
@@ -352,7 +351,7 @@ void brand_bolts(player_type *caster_ptr)
 
         /* Ego-item */
         o_ptr->name2 = EGO_FLAME;
-        enchant(caster_ptr, o_ptr, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
+        enchant_equipment(caster_ptr, o_ptr, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
         return;
     }
 
@@ -407,7 +406,6 @@ bool perilous_secrets(player_type *user_ptr)
  * @brief 呪いの打ち破り処理 /
  * Break the curse of an item
  * @param o_ptr 呪い装備情報の参照ポインタ
- * @return なし
  */
 static void break_curse(object_type *o_ptr)
 {
@@ -447,7 +445,7 @@ static void break_curse(object_type *o_ptr)
  * the larger the pile, the lower the chance of success.
  * </pre>
  */
-bool enchant(player_type *caster_ptr, object_type *o_ptr, int n, int eflag)
+bool enchant_equipment(player_type *caster_ptr, object_type *o_ptr, int n, int eflag)
 {
     /* Large piles resist enchantment */
     int prob = o_ptr->number * 100;
@@ -579,11 +577,11 @@ bool enchant_spell(player_type *caster_ptr, HIT_PROB num_hit, HIT_POINT num_dam,
 
     /* Enchant */
     bool is_enchant_successful = FALSE;
-    if (enchant(caster_ptr, o_ptr, num_hit, ENCH_TOHIT))
+    if (enchant_equipment(caster_ptr, o_ptr, num_hit, ENCH_TOHIT))
         is_enchant_successful = TRUE;
-    if (enchant(caster_ptr, o_ptr, num_dam, ENCH_TODAM))
+    if (enchant_equipment(caster_ptr, o_ptr, num_dam, ENCH_TODAM))
         is_enchant_successful = TRUE;
-    if (enchant(caster_ptr, o_ptr, num_ac, ENCH_TOAC))
+    if (enchant_equipment(caster_ptr, o_ptr, num_ac, ENCH_TOAC))
         is_enchant_successful = TRUE;
 
     if (!is_enchant_successful) {
@@ -606,7 +604,6 @@ bool enchant_spell(player_type *caster_ptr, HIT_PROB num_hit, HIT_POINT num_dam,
  * Brand the current weapon
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param brand_type エゴ化ID(e_info.txtとは連動していない)
- * @return なし
  */
 void brand_weapon(player_type *caster_ptr, int brand_type)
 {
@@ -728,7 +725,7 @@ void brand_weapon(player_type *caster_ptr, int brand_type)
     }
 
     msg_format(_("あなたの%s%s", "Your %s %s"), o_name, act);
-    enchant(caster_ptr, o_ptr, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
+    enchant_equipment(caster_ptr, o_ptr, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
     o_ptr->discount = 99;
     chg_virtue(caster_ptr, V_ENCHANT, 2);
     calc_android_exp(caster_ptr);

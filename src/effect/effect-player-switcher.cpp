@@ -3,15 +3,16 @@
 #include "effect/effect-player-oldies.h"
 #include "effect/effect-player-resist-hurt.h"
 #include "effect/effect-player-spirit.h"
+#include "effect/effect-player-util.h"
 #include "player/player-damage.h"
 #include "spell/spell-types.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief
  * 魔法の効果によって様々なメッセーを出力したり与えるダメージの増減を行ったりする
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param em_ptr プレーヤー効果構造体への参照ポインタ
- * @return なし
  */
 void switch_effects_player(player_type *target_ptr, effect_player_type *ep_ptr)
 {

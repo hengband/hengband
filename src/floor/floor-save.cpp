@@ -18,7 +18,9 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 
@@ -47,7 +49,6 @@ static void check_saved_tmp_files(const int fd, bool *force)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param force テンポラリファイルが残っていた場合も警告なしで強制的に削除するフラグ
  * @details Make sure that old temporary files are not remaining as gurbages.
- * @return なし
  */
 void init_saved_floors(player_type *creature_ptr, bool force)
 {
@@ -78,7 +79,6 @@ void init_saved_floors(player_type *creature_ptr, bool force)
  * @brief 保存フロア用テンポラリファイルを削除する / Kill temporary files
  * @details Should be called just before the game quit.
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void clear_saved_floor_files(player_type *creature_ptr)
 {
@@ -118,7 +118,6 @@ saved_floor_type *get_sf_ptr(FLOOR_IDX floor_id)
  * @brief 参照ポインタ先の保存フロアを抹消する / kill a saved floor and get an empty space
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param sf_ptr 保存フロアの参照ポインタ
- * @return なし
  */
 void kill_saved_floor(player_type *creature_ptr, saved_floor_type *sf_ptr)
 {
@@ -197,7 +196,6 @@ FLOOR_IDX get_new_floor_id(player_type *creature_ptr)
 /*!
  * @brief フロア移動時にペットを伴った場合の準備処理 / Pre-calculate the racial counters of preserved pets
  * @param master_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  * To prevent multiple generation of unique monster who is the minion of player
  */

@@ -4,6 +4,7 @@
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "game-option/disturbance-options.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

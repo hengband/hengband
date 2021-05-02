@@ -1,7 +1,6 @@
 ﻿#pragma once
 
-#include "system/angband.h"
-
+typedef struct player_type player_type;
 void print_stat(player_type *creature_ptr, int stat);
 void print_cut(player_type *creature_ptr);
 void print_stun(player_type *creature_ptr);

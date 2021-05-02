@@ -3,12 +3,12 @@
 #include "inventory/inventory-slot-types.h"
 #include "sv-definition/sv-lite-types.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*!
  * @brief 寿命つき光源の燃素追加処理 /
  * Charge a lite (torch or latern)
- * @return なし
  */
 void phlogiston(player_type *caster_ptr)
 {

@@ -1,10 +1,12 @@
 ﻿#include "specific-object/ring-of-power.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
+#include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-sight.h"
 #include "spell/spell-types.h"
 #include "status/base-status.h"
+#include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "view/display-messages.h"
 
@@ -13,7 +15,6 @@
  * Hack -- activate the ring of power
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dir 発動の方向ID
- * @return なし
  */
 static void exe_ring_of_power(player_type *caster_ptr, DIRECTION dir)
 {

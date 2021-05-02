@@ -13,10 +13,10 @@
 #include "mutation/mutation-investor-remover.h"
 #include "object-enchant/object-curse.h"
 #include "object/object-kind-hook.h"
+#include "player-info/equipment-info.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
 #include "player/player-race-types.h"
-#include "player/player-status.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-genocide.h"
 #include "spell-kind/spells-launcher.h"
@@ -32,6 +32,7 @@
 #include "status/shape-changer.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 #ifdef JP

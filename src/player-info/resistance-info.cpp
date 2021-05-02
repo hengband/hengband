@@ -1,8 +1,9 @@
 ﻿#include "player-info/resistance-info.h"
 #include "player-info/self-info-util.h"
 #include "player/player-race.h"
-#include "status/element-resistance.h"
 #include "player/player-status-flags.h"
+#include "status/element-resistance.h"
+#include "system/player-type-definition.h"
 
 void set_element_resistance_info(player_type* creature_ptr, self_info_type* self_ptr)
 {

@@ -16,6 +16,7 @@
 #include "perception/object-perception.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-scroll-types.h"
+#include "system/object-type-definition.h"
 #include "world/world-object.h"
 
 int cur_store_num = 0;
@@ -26,7 +27,6 @@ store_type *st_ptr = NULL;
  * Add the item "o_ptr" to a real stores inventory.
  * @param item 増やしたいアイテムのID
  * @param num 増やしたい数
- * @return なし
  * @details
  * <pre>
  * Increase, by a given amount, the number of a certain item
@@ -51,7 +51,6 @@ void store_item_increase(INVENTORY_IDX item, ITEM_NUMBER num)
  * @brief 店舗のオブジェクト数を削除する /
  * Remove a slot if it is empty
  * @param item 削除したいアイテムのID
- * @return なし
  */
 void store_item_optimize(INVENTORY_IDX item)
 {
@@ -70,7 +69,6 @@ void store_item_optimize(INVENTORY_IDX item)
 /*!
  * @brief 店舗の品揃え変化のためにアイテムを削除する /
  * Attempt to delete (some of) a random item from the store
- * @return なし
  * @details
  * <pre>
  * Hack -- we attempt to "maintain" piles of items when possible.
@@ -120,7 +118,6 @@ static std::vector<PARAMETER_VALUE> store_same_magic_device_pvals(object_type *j
  * @brief 店舗の品揃え変化のためにアイテムを追加する /
  * Creates a random item and gives it to a store
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  * <pre>
  * This algorithm needs to be rethought.  A lot.
@@ -157,7 +154,7 @@ void store_create(
         object_type *q_ptr;
         q_ptr = &forge;
         object_prep(player_ptr, q_ptr, k_idx);
-        apply_magic(player_ptr, q_ptr, level, AM_NO_FIXED_ART);
+        apply_magic_to_object(player_ptr, q_ptr, level, AM_NO_FIXED_ART);
         if (!(*store_will_buy)(player_ptr, q_ptr))
             continue;
 

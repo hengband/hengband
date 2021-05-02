@@ -10,6 +10,7 @@
 #include "core/speed-table.h"
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"
+#include "floor/geometry.h"
 #include "floor/line-of-sight.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
@@ -29,9 +30,14 @@
 #include "object/object-flags.h"
 #include "player-info/avatar.h"
 #include "player/player-move.h"
+#include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/grid-selector.h"
 #include "target/target-checker.h"
 #include "util/bit-flags-calculator.h"
@@ -192,7 +198,6 @@ bool teleport_away(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION dis, tel
  * @param tx 目安X座標
  * @param power テレポート成功確率
  * @param mode オプション
- * @return なし
  */
 void teleport_monster_to(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power, teleport_flags mode)
 {
@@ -366,7 +371,6 @@ bool teleport_player_aux(player_type *creature_ptr, POSITION dis, bool is_quantu
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param dis 基本移動距離
  * @param mode オプション
- * @return なし
  */
 void teleport_player(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode)
 {
@@ -400,7 +404,6 @@ void teleport_player(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode)
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param dis テレポート距離
  * @param is_quantum_effect 量子的効果によるテレポートアウェイならばTRUE
- * @return なし
  */
 void teleport_player_away(MONSTER_IDX m_idx, player_type *target_ptr, POSITION dis, bool is_quantum_effect)
 {
@@ -440,7 +443,6 @@ void teleport_player_away(MONSTER_IDX m_idx, player_type *target_ptr, POSITION d
  * @param ny 目標Y座標
  * @param nx 目標X座標
  * @param mode オプションフラグ
- * @return なし
  * @details
  * <pre>
  * This function is slightly obsessive about correctness.

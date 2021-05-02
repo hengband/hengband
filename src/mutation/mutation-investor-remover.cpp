@@ -7,6 +7,7 @@
 #include "mutation/mutation-flag-types.h"
 #include "mutation/mutation-util.h"
 #include "player-info/avatar.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -200,7 +201,6 @@ static void neutralize_other_status(player_type *creature_ptr, glm_type *gm_ptr)
 /*!
  * @brief プレイヤーに突然変異を与える
  * @param choose_mut 与えたい突然変異のID、0ならばランダムに選択
- * @return なし
  */
 bool gain_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
 {
@@ -250,7 +250,6 @@ static void sweep_lose_mutation(player_type *creature_ptr, glm_type *glm_ptr)
 /*!
  * @brief プレイヤーから突然変異を取り除く
  * @param choose_mut 取り除きたい突然変異のID、0ならばランダムに消去
- * @return なし
  */
 bool lose_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
 {

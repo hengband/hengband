@@ -114,7 +114,6 @@ static struct
  * @param entry 項目ID
  * @param val 値を保管した文字列ポインタ
  * @param attr 項目表示の色
- * @return なし
  */
 void display_player_one_line(int entry, concptr val, TERM_COLOR attr)
 {

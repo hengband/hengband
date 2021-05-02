@@ -1,10 +1,11 @@
 ﻿#include "specific-object/blade-turner.h"
-#include "core/hp-mp-processor.h"
+#include "hpmp/hp-mp-processor.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"
 #include "status/bad-status-setter.h"
 #include "status/buff-setter.h"
 #include "status/element-resistance.h"
+#include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "view/display-messages.h"
 

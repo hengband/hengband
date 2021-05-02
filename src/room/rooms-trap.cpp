@@ -1,17 +1,19 @@
-﻿#include "dungeon/dungeon-flag-types.h"
+﻿#include "room/rooms-trap.h"
+#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor-generator.h"
 #include "game-option/cheat-types.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "room/space-finder.h"
+#include "system/dungeon-data-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "wizard/wizard-messages.h"
 
 /*!
  * @brief タイプ14の部屋…特殊トラップ部屋の生成 / Type 14 -- trapped rooms
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  * A special trap is placed at center of the room
  */

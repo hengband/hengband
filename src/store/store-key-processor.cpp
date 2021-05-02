@@ -29,6 +29,7 @@
 #include "store/sell-order.h"
 #include "store/store-util.h"
 #include "store/store.h"
+#include "system/player-type-definition.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "view/display-store.h"
@@ -41,7 +42,6 @@ bool leave_store = FALSE;
  * @brief 店舗処理コマンド選択のメインルーチン /
  * Process a command in a store
  * @param client_ptr 顧客となるクリーチャーの参照ポインタ
- * @return なし
  * @note
  * <pre>
  * Note that we must allow the use of a few "special" commands

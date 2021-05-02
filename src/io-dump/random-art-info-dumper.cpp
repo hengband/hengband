@@ -5,6 +5,7 @@
 #include "perception/object-perception.h"
 #include "store/store-util.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include "wizard/artifact-analyzer.h"
@@ -17,7 +18,6 @@
  * @param o_ptr ランダムアーティファクトのオブジェクト構造体参照ポインタ
  * @param art_ptr 記述内容を収めた構造体参照ポインタ
  * Fill in an object description structure for a given object
- * @return なし
  */
 static void spoiler_print_randart(object_type *o_ptr, obj_desc_list *art_ptr)
 {
@@ -51,7 +51,6 @@ static void spoiler_print_randart(object_type *o_ptr, obj_desc_list *art_ptr)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr ランダムアーティファクトのオブジェクト構造体参照ポインタ
  * @param i 出力したい記録ランダムアーティファクトID
- * @return なし
  */
 static void spoil_random_artifact_aux(player_type *player_ptr, object_type *o_ptr, int i)
 {
@@ -67,7 +66,6 @@ static void spoil_random_artifact_aux(player_type *player_ptr, object_type *o_pt
  * @brief ランダムアーティファクト内容をスポイラー出力するメインルーチン /
  * Create a list file for random artifacts
  * @param fname 出力ファイル名
- * @return なし
  */
 void spoil_random_artifact(player_type *creature_ptr, concptr fname)
 {

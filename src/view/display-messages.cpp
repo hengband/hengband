@@ -6,6 +6,7 @@
 #include "game-option/option-flags.h"
 #include "io/input-key-acceptor.h"
 #include "main/sound-of-music.h"
+#include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "util/int-char-converter.h"
@@ -70,7 +71,6 @@ concptr message_str(int age)
 /*!
  * @brief ゲームメッセージをログに追加する。 / Add a new message, with great efficiency
  * @param str 保存したいメッセージ
- * @return なし
  */
 void message_add(concptr str)
 {

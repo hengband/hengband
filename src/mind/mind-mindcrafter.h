@@ -1,7 +1,6 @@
 ﻿#pragma once
 
-#include "system/angband.h"
-
+typedef struct player_type player_type;
 bool psychometry(player_type *caster_ptr);
 
 enum mind_mindcrafter_type : int;

@@ -8,6 +8,7 @@
 #include "market/bounty.h"
 #include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "world/world.h"
 
 static void rd_hengband_dungeons(void)
@@ -37,7 +38,6 @@ void rd_dungeons(player_type *creature_ptr)
 /*!
  * @brief 現実変容処理の有無及びその残りターン数を読み込む
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void rd_alter_reality(player_type *creature_ptr)
 {

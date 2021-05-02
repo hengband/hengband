@@ -3,6 +3,7 @@
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
+#include "dungeon/dungeon.h"
 #include "flavor/flavor-describer.h"
 #include "floor/cave.h"
 #include "floor/floor-events.h"
@@ -19,12 +20,16 @@
 #include "main/sound-of-music.h"
 #include "object/object-generator.h"
 #include "object/object-info.h"
+#include "player-status/player-energy.h"
 #include "store/cmd-store.h"
 #include "store/home.h"
 #include "store/store-key-processor.h"
+#include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/floor-type-definition.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 #include "view/display-store.h"
@@ -36,7 +41,6 @@
  * @brief 店舗処理全体のメインルーチン /
  * Enter a store, and interact with it. *
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @note
  * <pre>
  * Note that we use the standard "request_command()" function
@@ -192,7 +196,7 @@ void do_cmd_store(player_type *player_ptr)
     player_ptr->town_num = old_town_num;
 
     select_floor_music(player_ptr);
-    take_turn(player_ptr, 100);
+    PlayerEnergy(player_ptr).set_player_turn_energy(100);
     current_world_ptr->character_icky_depth = 0;
     command_new = 0;
     command_see = FALSE;

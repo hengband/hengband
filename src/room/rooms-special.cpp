@@ -2,6 +2,7 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor-generator.h"
+#include "floor//geometry.h"
 #include "game-option/cheat-types.h"
 #include "grid/door.h"
 #include "grid/feature.h"
@@ -16,13 +17,13 @@
 #include "object/object-kind-hook.h"
 #include "room/space-finder.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "system/system-variables.h"
 #include "wizard/wizard-messages.h"
 
 /*!
  * @brief タイプ15の部屋…ガラス部屋の生成 / Type 15 -- glass rooms
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 bool build_type15(player_type *player_ptr, dun_data_type *dd_ptr)
 {

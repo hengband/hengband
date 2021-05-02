@@ -13,10 +13,14 @@
 #include "object-hook/hook-checker.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-flags.h"
+#include "player-info/equipment-info.h"
 #include "player-status/player-basic-statistics.h"
+#include "player-status/player-hand-types.h"
+#include "player-status/player-infravision.h"
 #include "player-status/player-speed.h"
 #include "player-status/player-stealth.h"
 #include "player/attack-defense-types.h"
+#include "player/digestion-processor.h"
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"
 #include "player/player-race-types.h"
@@ -29,13 +33,19 @@
 #include "realm/realm-song-numbers.h"
 #include "realm/realm-types.h"
 #include "spell-realm/spells-hex.h"
+#include "spell-realm/spells-song.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"
+
+#define SPELL_SW 22
+#define SPELL_WALL 20
 
 BIT_FLAGS convert_inventory_slot_type_to_flag_cause(inventory_slot_type inventory_slot)
 {
@@ -156,7 +166,7 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
     case TR_WIS:
         return PlayerWisdom(creature_ptr).get_all_flags();
     case TR_DEX:
-        return PlayerDextarity(creature_ptr).get_all_flags();
+        return PlayerDexterity(creature_ptr).get_all_flags();
     case TR_CON:
         return PlayerConstitution(creature_ptr).get_all_flags();
     case TR_CHR:
@@ -170,7 +180,7 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
     case TR_SEARCH:
         return 0;
     case TR_INFRA:
-        return has_infra_vision(creature_ptr);
+        return PlayerInfravision(creature_ptr).get_all_flags();
     case TR_TUNNEL:
         return 0;
     case TR_SPEED:
@@ -271,7 +281,7 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
         return has_resist_time(creature_ptr);
     case TR_RES_WATER:
         return has_resist_water(creature_ptr);
-    case TR_RES_CURSE :
+    case TR_RES_CURSE:
         return has_resist_curse(creature_ptr);
 
     case TR_SH_FIRE:
@@ -478,35 +488,6 @@ BIT_FLAGS has_xtra_might(player_type *creature_ptr)
 }
 
 /*!
- * @brief クリーチャーが赤外線視力修正を持っているかを返す。
- * @param creature_ptr 判定対象のクリーチャー参照ポインタ
- * @return 持っていたら所持前提ビットフラグを返す。
- * @details 種族修正は0より大きければTRUEとする。
- */
-BIT_FLAGS has_infra_vision(player_type *creature_ptr)
-{
-    BIT_FLAGS result = 0L;
-    const player_race *tmp_rp_ptr;
-
-    if (creature_ptr->mimic_form)
-        tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
-    else
-        tmp_rp_ptr = &race_info[creature_ptr->prace];
-
-    if (tmp_rp_ptr->infra > 0)
-        result |= FLAG_CAUSE_RACE;
-
-    if (creature_ptr->muta.has(MUTA::INFRAVIS))
-        result |= FLAG_CAUSE_MUTATION;
-
-    if (creature_ptr->tim_infra)
-        result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
-
-    result |= check_equipment_flags(creature_ptr, TR_INFRA);
-    return result;
-}
-
-/*!
  * @brief クリーチャーが邪悪感知を持っているかを返す。
  * @param creature_ptr 判定対象のクリーチャー参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
@@ -695,7 +676,6 @@ void check_no_flowed(player_type *creature_ptr)
 {
     object_type *o_ptr;
     bool has_sw = FALSE, has_kabe = FALSE;
-    OBJECT_IDX this_o_idx, next_o_idx = 0;
 
     creature_ptr->no_flowed = FALSE;
 
@@ -716,9 +696,8 @@ void check_no_flowed(player_type *creature_ptr)
             has_kabe = TRUE;
     }
 
-    for (this_o_idx = creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx) {
+    for (const auto this_o_idx : creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].o_idx_list) {
         o_ptr = &creature_ptr->current_floor_ptr->o_list[this_o_idx];
-        next_o_idx = o_ptr->next_o_idx;
 
         if ((o_ptr->tval == TV_NATURE_BOOK) && (o_ptr->sval == 2))
             has_sw = TRUE;
@@ -1595,7 +1574,7 @@ BIT_FLAGS has_resist_dark(player_type *creature_ptr)
     BIT_FLAGS result = 0L;
 
     if (player_race_has_flag(creature_ptr, TR_RES_DARK))
-    result |= FLAG_CAUSE_RACE;
+        result |= FLAG_CAUSE_RACE;
 
     if (creature_ptr->special_defense & KATA_MUSOU) {
         result |= FLAG_CAUSE_BATTLE_FORM;

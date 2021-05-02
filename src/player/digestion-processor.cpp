@@ -9,15 +9,16 @@
 #include "object-enchant/trc-types.h"
 #include "player-info/avatar.h"
 #include "player/player-damage.h"
+#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "status/bad-status-setter.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
 /*!
  * @brief 10ゲームターンが進行するごとにプレイヤーの腹を減らす
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void starve_player(player_type *creature_ptr)
 {

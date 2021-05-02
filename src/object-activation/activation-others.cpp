@@ -8,11 +8,11 @@
 #include "artifact/fixed-art-types.h"
 #include "cmd-io/cmd-save.h"
 #include "core/asking-player.h"
-#include "core/hp-mp-processor.h"
 #include "core/player-redraw-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "game-option/special-options.h"
+#include "hpmp/hp-mp-processor.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-indice-types.h"
@@ -20,6 +20,7 @@
 #include "player-attack/player-attack.h"
 #include "player-info/avatar.h"
 #include "player/player-damage.h"
+#include "player/player-status.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/magic-item-recharger.h"
 #include "spell-kind/spells-beam.h"
@@ -37,13 +38,17 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
+#include "spell-realm/spells-song.h"
 #include "spell/spell-types.h"
 #include "spell/spells-status.h"
 #include "status/bad-status-setter.h"
 #include "status/body-improvement.h"
 #include "status/buff-setter.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
@@ -245,7 +250,10 @@ bool activate_fully_identification(player_type *user_ptr)
  * @param user_ptr プレーヤーへの参照ポインタ
  * @return 発動に成功したらTRUE
  */
-bool activate_identification(player_type *user_ptr) { return ident_spell(user_ptr, FALSE, TV_NONE); }
+bool activate_identification(player_type *user_ptr)
+{
+    return ident_spell(user_ptr, FALSE, TV_NONE);
+}
 
 bool activate_pesticide(player_type *user_ptr)
 {

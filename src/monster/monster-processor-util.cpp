@@ -11,6 +11,8 @@
 #include "game-option/birth-options.h"
 #include "monster-race/monster-race.h"
 #include "monster/monster-status.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
 
  /*!
   * @brief ターン経過フラグ構造体の初期化
@@ -137,7 +139,6 @@ void store_enemy_approch_direction(int *mm, POSITION y, POSITION x)
  * @param mm 移動方向
  * @param y 移動先Y座標
  * @param x 移動先X座標
- * @return なし
  */
 void store_moves_val(int *mm, int y, int x)
 {
@@ -325,7 +326,6 @@ void store_moves_val(int *mm, int y, int x)
  * @brief 古いモンスター情報の保存
  * @param monster_race_idx モンスターID
  * @param old_race_flags_ptr モンスターフラグへの参照ポインタ
- * @return なし
  */
 void save_old_race_flags(MONRACE_IDX monster_race_idx, old_race_flags *old_race_flags_ptr)
 {

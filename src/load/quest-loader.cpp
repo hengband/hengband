@@ -10,12 +10,12 @@
 #include "object-enchant/trg-types.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
-#include "system/system-variables.h"
+#include "system/monster-race-definition.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief ランダムクエスト情報の読み込み
  * @param なし
- * @return なし
  * @details MAX_TRIES: ランダムクエストのモンスターを確定するために試行する回数 /
  * Maximum number of tries for selection of a proper quest monster
  */

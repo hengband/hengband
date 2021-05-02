@@ -24,7 +24,7 @@
 #include "player/player-class.h"
 #include "player/player-race.h"
 #include "realm/realm-names-table.h"
-#include "system/system-variables.h"
+#include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "util/buffer-shaper.h"
 #include "view/display-messages.h"
@@ -251,7 +251,6 @@ bool open_auto_dump(FILE **fpp, concptr buf, concptr mark)
 /*!
  * @brief prfファイルをファイルクローズする /
  * Append foot part and close auto dump.
- * @return なし
  */
 void close_auto_dump(FILE **fpp, concptr auto_dump_mark)
 {
@@ -267,7 +266,6 @@ void close_auto_dump(FILE **fpp, concptr auto_dump_mark)
 /*!
  * @brief 全ユーザプロファイルをロードする / Load some "user pref files"
  * @paaram player_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @note
  * Modified by Arcum Dagsson to support
  * separate macro files for different realms.
@@ -300,7 +298,6 @@ void load_all_pref_files(player_type *player_ptr)
 
 /*!
  * @brief 生い立ちメッセージをファイルからロードする。
- * @return なし
  */
 bool read_histpref(player_type *creature_ptr)
 {

@@ -3,6 +3,7 @@
 #include "object-hook/hook-weapon.h"
 #include "perception/object-perception.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief アイテムが並の価値のアイテムかどうか判定する /

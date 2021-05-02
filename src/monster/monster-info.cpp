@@ -28,13 +28,15 @@
 #include "monster/smart-learn-types.h"
 #include "player/player-status-flags.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 
 /*!
  * @brief モンスターを友好的にする
  * @param m_ptr モンスター情報構造体の参照ポインタ
- * @return なし
  */
 void set_friendly(monster_type *m_ptr) { m_ptr->mflag2.set(MFLAG2::FRIENDLY); }
 
@@ -209,9 +211,9 @@ bool monster_has_hostile_align(player_type *player_ptr, monster_type *m_ptr, int
         sub_align1 = m_ptr->sub_align;
     } else /* For player */
     {
-        if (player_ptr->align >= pa_good)
+        if (player_ptr->alignment >= pa_good)
             sub_align1 |= SUB_ALIGN_GOOD;
-        if (player_ptr->align <= pa_evil)
+        if (player_ptr->alignment <= pa_evil)
             sub_align1 |= SUB_ALIGN_EVIL;
     }
 

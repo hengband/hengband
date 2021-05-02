@@ -33,18 +33,21 @@
 #include "mind/mind-numbers.h"
 #include "mind/mind-power-getter.h"
 #include "mind/mind-types.h"
+#include "player-info/equipment-info.h"
+#include "player-status/player-energy.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
 #include "player/player-status-table.h"
+#include "player/player-status.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spell-types.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/buffer-shaper.h"
 #include "view/display-messages.h"
-
 
 /*!
  * @brief 職業別特殊技能の処理用構造体
@@ -295,14 +298,15 @@ static bool switch_mind_class(player_type *caster_ptr, cm_type *cm_ptr)
 
 static void mind_turn_passing(player_type *caster_ptr, cm_type *cm_ptr)
 {
+    PlayerEnergy energy(caster_ptr);
     if (cm_ptr->on_mirror && (caster_ptr->pclass == CLASS_MIRROR_MASTER)) {
         if (cm_ptr->n == 3 || cm_ptr->n == 5 || cm_ptr->n == 7 || cm_ptr->n == 16) {
-            take_turn(caster_ptr, 50);
+            energy.set_player_turn_energy(50);
             return;
         }
     }
 
-    take_turn(caster_ptr, 100);
+    energy.set_player_turn_energy(100);
 }
 
 static bool judge_mind_chance(player_type *caster_ptr, cm_type *cm_ptr)
@@ -363,7 +367,6 @@ static void process_hard_concentration(player_type *caster_ptr, cm_type *cm_ptr)
 
 /*!
  * @brief 特殊技能コマンドのメインルーチン /
- * @return なし
  */
 void do_cmd_mind(player_type *caster_ptr)
 {
@@ -414,7 +417,6 @@ static mind_kind_type decide_use_mind_browse(player_type *caster_ptr)
 
 /*!
  * @brief 現在プレイヤーが使用可能な特殊技能の一覧表示 /
- * @return なし
  */
 void do_cmd_mind_browse(player_type *caster_ptr)
 {

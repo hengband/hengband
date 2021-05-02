@@ -6,9 +6,11 @@
 #include "flavor/flavor-describer.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"
+#include "floor/geometry.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "inventory/inventory-object.h"
+#include "io/command-repeater.h"
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/object-boost.h"
@@ -20,6 +22,7 @@
 #include "perception/object-perception.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -31,6 +34,57 @@ enum ammo_creation_type {
     AMMO_BOLT = 3,
 };
 
+static bool select_ammo_creation_type(ammo_creation_type &type, PLAYER_LEVEL plev)
+{
+    COMMAND_CODE code;
+    if (repeat_pull(&code)) {
+        type = static_cast<ammo_creation_type>(code);
+        switch (type) {
+        case AMMO_SHOT:
+        case AMMO_ARROW:
+        case AMMO_BOLT:
+            return true;
+        case AMMO_NONE:
+        default:
+            break;
+        }
+    }
+
+    concptr com;
+    if (plev >= 20)
+        com = _("[S]弾, [A]矢, [B]クロスボウの矢 :", "Create [S]hots, Create [A]rrow or Create [B]olt ?");
+    else if (plev >= 10)
+        com = _("[S]弾, [A]矢:", "Create [S]hots or Create [A]rrow ?");
+    else
+        com = _("[S]弾:", "Create [S]hots ?");
+
+    while (type == AMMO_NONE) {
+        char ch;
+
+        if (!get_com(com, &ch, TRUE)) {
+            return false;
+        }
+
+        if (ch == 'S' || ch == 's') {
+            type = AMMO_SHOT;
+            break;
+        }
+
+        if ((ch == 'A' || ch == 'a') && (plev >= 10)) {
+            type = AMMO_ARROW;
+            break;
+        }
+
+        if ((ch == 'B' || ch == 'b') && (plev >= 20)) {
+            type = AMMO_BOLT;
+            break;
+        }
+    }
+
+    repeat_push(static_cast<COMMAND_CODE>(type));
+    return true;
+}
+
 /*!
  * @brief「弾/矢の製造」処理 / do_cmd_cast calls this function if the player's class is 'archer'.
  * Hook to determine if an object is contertible in an arrow/bolt
@@ -38,39 +92,13 @@ enum ammo_creation_type {
  */
 bool create_ammo(player_type *creature_ptr)
 {
-    char com[80];
-    if (creature_ptr->lev >= 20)
-        sprintf(com, _("[S]弾, [A]矢, [B]クロスボウの矢 :", "Create [S]hots, Create [A]rrow or Create [B]olt ?"));
-    else if (creature_ptr->lev >= 10)
-        sprintf(com, _("[S]弾, [A]矢:", "Create [S]hots or Create [A]rrow ?"));
-    else
-        sprintf(com, _("[S]弾:", "Create [S]hots ?"));
-
     if (cmd_limit_confused(creature_ptr) || cmd_limit_blind(creature_ptr))
         return FALSE;
 
     ammo_creation_type ext = AMMO_NONE;
-    char ch;
-    while (TRUE) {
-        if (!get_com(com, &ch, TRUE)) {
-            return FALSE;
-        }
 
-        if (ch == 'S' || ch == 's') {
-            ext = AMMO_SHOT;
-            break;
-        }
-
-        if ((ch == 'A' || ch == 'a') && (creature_ptr->lev >= 10)) {
-            ext = AMMO_ARROW;
-            break;
-        }
-
-        if ((ch == 'B' || ch == 'b') && (creature_ptr->lev >= 20)) {
-            ext = AMMO_BOLT;
-            break;
-        }
-    }
+    if (!select_ammo_creation_type(ext, creature_ptr->lev))
+        return false;
 
     switch (ext) {
     case AMMO_SHOT: {
@@ -97,7 +125,7 @@ bool create_ammo(player_type *creature_ptr)
         q_ptr->number = (byte)rand_range(15, 30);
         object_aware(creature_ptr, q_ptr);
         object_known(q_ptr);
-        apply_magic(creature_ptr, q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
+        apply_magic_to_object(creature_ptr, q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
         q_ptr->discount = 99;
         s16b slot = store_item_to_inventory(creature_ptr, q_ptr);
         GAME_TEXT o_name[MAX_NLEN];
@@ -125,7 +153,7 @@ bool create_ammo(player_type *creature_ptr)
         q_ptr->number = (byte)rand_range(5, 10);
         object_aware(creature_ptr, q_ptr);
         object_known(q_ptr);
-        apply_magic(creature_ptr, q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
+        apply_magic_to_object(creature_ptr, q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
         q_ptr->discount = 99;
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(creature_ptr, o_name, q_ptr, 0);
@@ -152,7 +180,7 @@ bool create_ammo(player_type *creature_ptr)
         q_ptr->number = (byte)rand_range(4, 8);
         object_aware(creature_ptr, q_ptr);
         object_known(q_ptr);
-        apply_magic(creature_ptr, q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
+        apply_magic_to_object(creature_ptr, q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
         q_ptr->discount = 99;
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(creature_ptr, o_name, q_ptr, 0);

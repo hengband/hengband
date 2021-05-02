@@ -13,6 +13,7 @@
 #include <array>
 #include <stack>
 
+#include "floor/floor-generator.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
@@ -41,9 +42,13 @@
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
+#include "player/player-status.h"
 #include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
-#include "system/system-variables.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "window/main-window-util.h"
@@ -53,7 +58,6 @@
 /*!
  * @brief 闘技場用のアリーナ地形を作成する / Builds the on_defeat_arena_monster after it is entered -KMW-
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 static void build_arena(player_type *player_ptr, POSITION *start_y, POSITION *start_x)
 {
@@ -105,7 +109,6 @@ static void build_arena(player_type *player_ptr, POSITION *start_y, POSITION *st
 
 /*!
  * @brief 挑戦時闘技場への入場処理 / Town logic flow for generation of on_defeat_arena_monster -KMW-
- * @return なし
  */
 static void generate_challenge_arena(player_type *challanger_ptr)
 {
@@ -139,7 +142,6 @@ static void generate_challenge_arena(player_type *challanger_ptr)
 /*!
  * @brief モンスター闘技場のフロア生成 / Builds the on_defeat_arena_monster after it is entered -KMW-
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 static void build_battle(player_type *player_ptr, POSITION *y, POSITION *x)
 {
@@ -199,7 +201,6 @@ static void build_battle(player_type *player_ptr, POSITION *y, POSITION *x)
 
 /*!
  * @brief モンスター闘技場への導入処理 / Town logic flow for generation of on_defeat_arena_monster -KMW-
- * @return なし
  */
 static void generate_gambling_arena(player_type *creature_ptr)
 {
@@ -229,7 +230,7 @@ static void generate_gambling_arena(player_type *creature_ptr)
         if (!monster_is_valid(m_ptr))
             continue;
 
-        m_ptr->mflag2.set({MFLAG2::MARK, MFLAG2::SHOW});
+        m_ptr->mflag2.set({ MFLAG2::MARK, MFLAG2::SHOW });
         update_monster(creature_ptr, i, FALSE);
     }
 }
@@ -237,7 +238,6 @@ static void generate_gambling_arena(player_type *creature_ptr)
 /*!
  * @brief 固定マップクエストのフロア生成 / Generate a quest level
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 static void generate_fixed_floor(player_type *player_ptr)
 {
@@ -311,7 +311,6 @@ static bool level_gen(player_type *player_ptr, concptr *why)
 
 /*!
  * @brief フロアに存在する全マスの記憶状態を初期化する / Wipe all unnecessary flags after grid_array generation
- * @return なし
  */
 void wipe_generate_random_floor_flags(floor_type *floor_ptr)
 {
@@ -328,7 +327,6 @@ void wipe_generate_random_floor_flags(floor_type *floor_ptr)
 /*!
  * @brief フロアの全情報を初期化する / Clear and empty floor.
  * @parama player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void clear_cave(player_type *player_ptr)
 {
@@ -352,7 +350,7 @@ void clear_cave(player_type *player_ptr)
             grid_type *g_ptr = &floor_ptr->grid_array[y][x];
             g_ptr->info = 0;
             g_ptr->feat = 0;
-            g_ptr->o_idx = 0;
+            g_ptr->o_idx_list.clear();
             g_ptr->m_idx = 0;
             g_ptr->special = 0;
             g_ptr->mimic = 0;
@@ -453,7 +451,6 @@ static bool floor_is_connected(const floor_type *const floor_ptr, const IsWallFu
 /*!
  * ダンジョンのランダムフロアを生成する / Generates a random dungeon level -RAK-
  * @parama player_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @note Hack -- regenerate any "overflow" levels
  */
 void generate_floor(player_type *player_ptr)

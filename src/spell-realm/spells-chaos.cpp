@@ -6,6 +6,7 @@
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
+#include "floor/geometry.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "monster/monster-describer.h"
@@ -17,6 +18,8 @@
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -24,7 +27,6 @@
 /*!
  * @brief 虚無招来処理 /
  * @param caster_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  * Sorry, it becomes not (void)...
  */
@@ -186,7 +188,6 @@ bool vanish_dungeon(player_type *caster_ptr)
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dam ダメージ
  * @param rad 効力の半径
- * @return なし
  * @details このファイルにいるのは、spells-trump.c と比べて行数が少なかったため。それ以上の意図はない
  */
 void cast_meteor(player_type *caster_ptr, HIT_POINT dam, POSITION rad)

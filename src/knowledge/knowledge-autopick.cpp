@@ -8,15 +8,16 @@
 #include "autopick/autopick-entry.h"
 #include "autopick/autopick-methods-table.h"
 #include "autopick/autopick-reader-writer.h"
+#include "autopick/autopick-util.h"
 #include "core/asking-player.h"
 #include "core/show-file.h"
 #include "io-dump/dump-util.h"
+#include "system/player-type-definition.h"
 #include "util/angband-files.h"
 
 /*!
  * @brief 自動拾い設定ファイルをロードするコマンドのメインルーチン /
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void do_cmd_reload_autopick(player_type *creature_ptr)
 {

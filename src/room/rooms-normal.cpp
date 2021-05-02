@@ -1,6 +1,7 @@
 ﻿#include "room/rooms-normal.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
+#include "floor/geometry.h"
 #include "grid/door.h"
 #include "grid/grid.h"
 #include "grid/stair.h"
@@ -11,11 +12,11 @@
 #include "room/space-finder.h"
 #include "room/vault-builder.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief タイプ1の部屋…通常可変長方形の部屋を生成する / Type 1 -- normal rectangular rooms
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 bool build_type1(player_type *player_ptr, dun_data_type *dd_ptr)
 {
@@ -189,7 +190,6 @@ bool build_type1(player_type *player_ptr, dun_data_type *dd_ptr)
 /*!
  * @brief タイプ2の部屋…二重長方形の部屋を生成する / Type 2 -- Overlapping rectangular rooms
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 bool build_type2(player_type *player_ptr, dun_data_type *dd_ptr)
 {
@@ -291,7 +291,6 @@ bool build_type2(player_type *player_ptr, dun_data_type *dd_ptr)
 /*!
  * @brief タイプ3の部屋…十字型の部屋を生成する / Type 3 -- Cross shaped rooms
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  * Builds a room at a row, column coordinate\n
  *\n
@@ -531,7 +530,6 @@ bool build_type3(player_type *player_ptr, dun_data_type *dd_ptr)
 /*!
  * @brief タイプ4の部屋…固定サイズの二重構造部屋を生成する / Type 4 -- Large room with inner features
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  * Possible sub-types:\n
  *	1 - Just an inner room with one door\n
@@ -866,7 +864,6 @@ bool build_type4(player_type *player_ptr, dun_data_type *dd_ptr)
 /*!
  * @brief タイプ11の部屋…円形部屋の生成 / Type 11 -- Build an vertical oval room.
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  * For every grid in the possible square, check the distance.\n
  * If it's less than the radius, make it a room square.\n
@@ -911,7 +908,6 @@ bool build_type11(player_type *player_ptr, dun_data_type *dd_ptr)
 /*!
  * @brief タイプ12の部屋…ドーム型部屋の生成 / Type 12 -- Build crypt room.
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  * For every grid in the possible square, check the (fake) distance.\n
  * If it's less than the radius, make it a room square.\n

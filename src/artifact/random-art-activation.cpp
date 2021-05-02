@@ -1,4 +1,10 @@
-﻿#include "artifact/random-art-activation.h"
+﻿/*!
+ * @file random-art-activation.cpp
+ * @brief ランダムアーティファクトの発動実装定義
+ */
+
+
+#include "artifact/random-art-activation.h"
 #include "artifact/random-art-effects.h"
 #include "artifact/random-art-bias-types.h"
 #include "object-enchant/object-boost.h"
@@ -167,7 +173,6 @@ static int invest_activation_ranger(void)
  * @brief ランダムアーティファクト生成中、対象のオブジェクトにバイアスに依存した発動を与える。/ Add one activaton of randam artifact depend on bias.
  * @details バイアスが無い場合、一部のバイアスの確率によっては one_ability() に処理が移行する。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return なし
  */
 void give_activation_power(object_type *o_ptr)
 {

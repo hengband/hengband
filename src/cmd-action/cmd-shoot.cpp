@@ -11,6 +11,7 @@
 #include "status/bad-status-setter.h"
 #include "sv-definition/sv-bow-types.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 
@@ -18,7 +19,6 @@
  * @brief 射撃処理のメインルーチン
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param snipe_type ？？？
- * @return なし
  * @todo Doxygenの加筆求む
  */
 void do_cmd_fire(player_type *creature_ptr, SPELL_IDX snipe_type)

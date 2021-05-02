@@ -5,6 +5,7 @@
 #include <iterator>
 #include <functional>
 #include <map>
+#include <memory>
 #include <queue>
 #include <sstream>
 #include <stack>

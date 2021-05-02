@@ -34,6 +34,7 @@ enum pit_type : int {
 };
 
 /*! pit/nest型情報の構造体定義 */
+typedef struct player_type player_type;
 struct nest_pit_type {
     concptr name; //<! 部屋名
     bool (*hook_func)(player_type *player_ptr, MONRACE_IDX r_idx); //<! モンスターフィルタ関数

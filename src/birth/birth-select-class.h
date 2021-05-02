@@ -1,5 +1,4 @@
-#pragma once
+﻿#pragma once
 
-#include "system/angband.h"
-
+typedef struct player_type player_type;
 bool get_player_class(player_type *creature_ptr);

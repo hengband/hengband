@@ -1,4 +1,9 @@
-﻿#include "artifact/random-art-slay.h"
+﻿/*!
+ * @file random-art-slay.cpp
+ * @brief ランダムアーティファクトのスレイ付加処理実装
+ */
+
+#include "artifact/random-art-slay.h"
 #include "artifact/random-art-bias-types.h"
 #include "object-enchant/tr-types.h"
 #include "sv-definition/sv-weapon-types.h"
@@ -191,7 +196,6 @@ static bool switch_random_art_slay(object_type *o_ptr)
  * *ドラゴンスレイ*、人間スレイ、切れ味、地震、理力。
  * @attention オブジェクトのtval、svalに依存したハードコーディング処理がある。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return なし
  */
 void random_slay(object_type *o_ptr)
 {

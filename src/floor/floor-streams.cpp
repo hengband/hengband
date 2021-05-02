@@ -21,6 +21,7 @@
 #include "floor/floor-generator-util.h"
 #include "floor/floor-generator.h"
 #include "floor/floor-object.h"
+#include "floor/geometry.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
 #include "game-option/cheat-types.h"
@@ -34,6 +35,9 @@
 #include "system/artifact-type-definition.h"
 #include "system/dungeon-data-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
@@ -48,7 +52,6 @@
  * @param feat1 中央部地形ID
  * @param feat2 境界部地形ID
  * @param width 基本幅
- * @return なし
  */
 static void recursive_river(floor_type *floor_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2, FEAT_IDX feat1, FEAT_IDX feat2, POSITION width)
 {
@@ -157,7 +160,6 @@ static void recursive_river(floor_type *floor_ptr, POSITION x1, POSITION y1, POS
  * Places water /lava through dungeon.
  * @param feat1 中央部地形ID
  * @param feat2 境界部地形ID
- * @return なし
  */
 void add_river(floor_type *floor_ptr, dun_data_type *dd_ptr)
 {
@@ -263,7 +265,6 @@ void add_river(floor_type *floor_ptr, dun_data_type *dd_ptr)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param feat ストリーマー地形ID
  * @param chance 生成密度
- * @return なし
  * @details
  * <pre>
  * Note that their are actually six different terrain features used
@@ -335,13 +336,11 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
                 delete_monster(player_ptr, ty, tx);
             }
 
-            if (g_ptr->o_idx && !has_flag(streamer_ptr->flags, FF_DROP)) {
-                OBJECT_IDX this_o_idx, next_o_idx = 0;
+            if (!g_ptr->o_idx_list.empty() && !has_flag(streamer_ptr->flags, FF_DROP)) {
 
                 /* Scan all objects in the grid */
-                for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx) {
+                for (const auto this_o_idx : g_ptr->o_idx_list) {
                     object_type *o_ptr = &floor_ptr->o_list[this_o_idx];
-                    next_o_idx = o_ptr->next_o_idx;
 
                     /* Hack -- Preserve unknown artifacts */
                     if (object_is_fixed_artifact(o_ptr)) {
@@ -408,7 +407,6 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
  * Places "streamers" of rock through dungeon
  * @param x 指定X座標
  * @param y 指定Y座標
- * @return なし
  * @details
  * <pre>
  * Put trees near a hole in the dungeon roof  (rubble on ground + up stairway)
@@ -430,7 +428,7 @@ void place_trees(player_type *player_ptr, POSITION x, POSITION y)
 
             if (g_ptr->info & CAVE_ICKY)
                 continue;
-            if (g_ptr->o_idx)
+            if (!g_ptr->o_idx_list.empty())
                 continue;
 
             /* Want square to be in the circle and accessable. */
@@ -466,7 +464,6 @@ void place_trees(player_type *player_ptr, POSITION x, POSITION y)
 /*!
  * @brief ダンジョンに＊破壊＊済み地形ランダムに施す /
  * Build a destroyed level
- * @return なし
  */
 void destroy_level(player_type *player_ptr)
 {

@@ -4,16 +4,23 @@
 #include "player/player-class.h"
 #include "player/player-skill.h"
 #include "player/player-status-table.h"
+#include "player/player-status.h"
 #include "realm/realm-names-table.h"
 #include "realm/realm-types.h"
 #include "spell/spells-execution.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+
+// 5%
+static const int extra_min_magic_fail_rate = 2;
 
 /*!
  * @brief 呪文の経験値を返す /
@@ -153,7 +160,7 @@ PERCENTAGE spell_chance(player_type *caster_ptr, SPELL_IDX spell, REALM_IDX use_
         chance += 5;
 
     PERCENTAGE minfail = adj_mag_fail[caster_ptr->stat_index[mp_ptr->spell_stat]];
-    if (mp_ptr->spell_xtra & MAGIC_FAIL_5PERCENT) {
+    if (any_bits(mp_ptr->spell_xtra, extra_min_magic_fail_rate)) {
         if (minfail < 5)
             minfail = 5;
     }
@@ -167,18 +174,18 @@ PERCENTAGE spell_chance(player_type *caster_ptr, SPELL_IDX spell, REALM_IDX use_
     PERCENTAGE penalty = (mp_ptr->spell_stat == A_WIS) ? 10 : 4;
     switch (use_realm) {
     case REALM_NATURE:
-        if ((caster_ptr->align > 50) || (caster_ptr->align < -50))
+        if ((caster_ptr->alignment > 50) || (caster_ptr->alignment < -50))
             chance += penalty;
         break;
     case REALM_LIFE:
     case REALM_CRUSADE:
-        if (caster_ptr->align < -20)
+        if (caster_ptr->alignment < -20)
             chance += penalty;
         break;
     case REALM_DEATH:
     case REALM_DAEMON:
     case REALM_HEX:
-        if (caster_ptr->align > 20)
+        if (caster_ptr->alignment > 20)
             chance += penalty;
         break;
     }
@@ -216,7 +223,6 @@ PERCENTAGE spell_chance(player_type *caster_ptr, SPELL_IDX spell, REALM_IDX use_
  * @param y 表示メッセージ左上Y座標
  * @param x 表示メッセージ左上X座標
  * @param use_realm 魔法領域ID
- * @return なし
  */
 void print_spells(player_type *caster_ptr, SPELL_IDX target_spell, SPELL_IDX *spells, int num, TERM_LEN y, TERM_LEN x, REALM_IDX use_realm)
 {

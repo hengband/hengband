@@ -24,15 +24,6 @@ enum wt_type {
 	MAX_WILDERNESS = 12, /* Maximum wilderness index */
 };
 
-void set_floor_and_wall(DUNGEON_IDX type);
-void wilderness_gen(player_type *creature_ptr);
-void wilderness_gen_small(player_type *creature_ptr);
-errr init_wilderness(void);
-void init_wilderness_terrains(void);
-void seed_wilderness(void);
-parse_error_type parse_line_wilderness(player_type *creature_ptr, char *buf, int xmin, int xmax, int *y, int *x);
-bool change_wild_mode(player_type *creature_ptr, bool encount);
-
 /*
  * A structure describing a wilderness area with a terrain or a town
  */
@@ -46,3 +37,13 @@ typedef struct wilderness_type {
 } wilderness_type;
 
 extern wilderness_type **wilderness;
+
+typedef struct player_type player_type;
+void set_floor_and_wall(DUNGEON_IDX type);
+void wilderness_gen(player_type *creature_ptr);
+void wilderness_gen_small(player_type *creature_ptr);
+errr init_wilderness(void);
+void init_wilderness_terrains(void);
+void seed_wilderness(void);
+parse_error_type parse_line_wilderness(player_type *creature_ptr, char *buf, int xmin, int xmax, int *y, int *x);
+bool change_wild_mode(player_type *creature_ptr, bool encount);

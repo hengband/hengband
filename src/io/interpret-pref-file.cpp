@@ -16,6 +16,8 @@
 #include "object/object-kind.h"
 #include "monster-race/monster-race.h"
 #include "system/game-option-types.h"
+#include "system/monster-race-definition.h"
+#include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"
@@ -520,7 +522,6 @@ errr interpret_pref_file(player_type *creature_ptr, char *buf)
 
 /*!
  * @brief 生い立ちメッセージの内容をバッファに加える。 / Hook function for reading the histpref.prf file.
- * @return なし
  */
 void add_history_from_pref_line(concptr t)
 {

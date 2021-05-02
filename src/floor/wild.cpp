@@ -32,12 +32,15 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "monster/monster-util.h"
+#include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/player-status.h"
 #include "realm/realm-names-table.h"
 #include "spell-realm/spells-hex.h"
 #include "status/action-setter.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "system/system-variables.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -64,7 +67,6 @@ typedef struct border_type {
  * @brief 地形生成確率を決める要素100の配列を確率テーブルから作成する
  * @param feat_type 非一様確率を再現するための要素数100の配列
  * @param prob 元の確率テーブル
- * @return なし
  */
 static void set_floor_and_wall_aux(s16b feat_type[100], feat_prob prob[DUNGEON_FEAT_PROB_NUM])
 {
@@ -89,7 +91,6 @@ static void set_floor_and_wall_aux(s16b feat_type[100], feat_prob prob[DUNGEON_F
  * @brief ダンジョンの地形を指定確率に応じて各マスへランダムに敷き詰める
  * / Fill the arrays of floors and walls in the good proportions
  * @param type ダンジョンID
- * @return なし
  */
 void set_floor_and_wall(DUNGEON_IDX type)
 {
@@ -119,7 +120,6 @@ void set_floor_and_wall(DUNGEON_IDX type)
  * @param ymid 中央座標Y
  * @param rough ランダム幅
  * @param depth_max 深みの最大値
- * @return なし
  */
 static void perturb_point_mid(
     floor_type *floor_ptr, FEAT_IDX x1, FEAT_IDX x2, FEAT_IDX x3, FEAT_IDX x4, POSITION xmid, POSITION ymid, FEAT_IDX rough, FEAT_IDX depth_max)
@@ -149,7 +149,6 @@ static void perturb_point_mid(
  * @param ymid 最終末端部座標Y
  * @param rough ランダム幅
  * @param depth_max 深みの最大値
- * @return なし
  */
 static void perturb_point_end(floor_type *floor_ptr, FEAT_IDX x1, FEAT_IDX x2, FEAT_IDX x3, POSITION xmid, POSITION ymid, FEAT_IDX rough, FEAT_IDX depth_max)
 {
@@ -177,7 +176,6 @@ static void perturb_point_end(floor_type *floor_ptr, FEAT_IDX x1, FEAT_IDX x2, F
  * @param y2 処理範囲の右下Y座標
  * @param depth_max 深みの最大値
  * @param rough ランダム幅
- * @return なし
  * @details
  * <pre>
  * A generic function to generate the plasma fractal.
@@ -219,7 +217,6 @@ static s16b terrain_table[MAX_WILDERNESS][MAX_FEAT_IN_TERRAIN];
  * @param seed 乱数の固定シード
  * @param border 未使用
  * @param corner 広域マップの角部分としての生成ならばTRUE
- * @return なし
  */
 static void generate_wilderness_area(floor_type *floor_ptr, int terrain, u32b seed, bool corner)
 {
@@ -278,7 +275,6 @@ static void generate_wilderness_area(floor_type *floor_ptr, int terrain, u32b se
  * @param x 広域X座標
  * @param border 広域マップの辺部分としての生成ならばTRUE
  * @param corner 広域マップの角部分としての生成ならばTRUE
- * @return なし
  * @details
  * <pre>
  * x and y are the coordinates of the area in the wilderness.
@@ -377,7 +373,6 @@ static border_type border;
  * Build the wilderness area outside of the town.
  * @todo 広域マップは恒常生成にする予定、player_typeによる処理分岐は最終的に排除する。
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void wilderness_gen(player_type *creature_ptr)
 {
@@ -555,7 +550,6 @@ static s16b conv_terrain2feat[MAX_WILDERNESS];
 /*!
  * @brief 広域マップの生成(簡易処理版) /
  * Build the wilderness area. -DG-
- * @return なし
  */
 void wilderness_gen_small(player_type *creature_ptr)
 {
@@ -627,7 +621,6 @@ static wilderness_grid w_letter[255];
  * @param xmax 広域地形マップを読み込みたいx座標の終了位置
  * @param y 広域マップの高さを返す参照ポインタ
  * @param x 広域マップの幅を返す参照ポインタ
- * @return なし
  */
 parse_error_type parse_line_wilderness(player_type *creature_ptr, char *buf, int xmin, int xmax, int *y, int *x)
 {
@@ -745,7 +738,6 @@ parse_error_type parse_line_wilderness(player_type *creature_ptr, char *buf, int
 /*!
  * @brief ゲーム開始時に各荒野フロアの乱数シードを指定する /
  * Generate the random seeds for the wilderness
- * @return なし
  */
 void seed_wilderness(void)
 {
@@ -781,7 +773,6 @@ errr init_wilderness(void)
  * @param terrain 初期化したい地勢ID
  * @param feat_global 基本的な地形ID
  * @param fmt 地勢内の地形数を参照するための独自フォーマット
- * @return なし
  */
 static void init_terrain_table(int terrain, s16b feat_global, concptr fmt, ...)
 {
@@ -817,7 +808,6 @@ static void init_terrain_table(int terrain, s16b feat_global, concptr fmt, ...)
 /*!
  * @brief 荒野の地勢設定全体を初期化するメインルーチン /
  * Initialize arrays for wilderness terrains
- * @return なし
  */
 void init_wilderness_terrains(void)
 {
@@ -868,6 +858,7 @@ bool change_wild_mode(player_type *creature_ptr, bool encount)
     }
 
     bool has_pet = FALSE;
+    PlayerEnergy energy(creature_ptr);
     for (int i = 1; i < creature_ptr->current_floor_ptr->m_max; i++) {
         monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr))
@@ -880,19 +871,19 @@ bool change_wild_mode(player_type *creature_ptr, bool encount)
             continue;
 
         msg_print(_("敵がすぐ近くにいるときは広域マップに入れない！", "You cannot enter global map, since there are some monsters nearby!"));
-        free_turn(creature_ptr);
+        energy.reset_player_turn();
         return FALSE;
     }
 
     if (has_pet) {
         concptr msg = _("ペットを置いて広域マップに入りますか？", "Do you leave your pets behind? ");
         if (!get_check_strict(creature_ptr, msg, CHECK_OKAY_CANCEL)) {
-            free_turn(creature_ptr);
+            energy.reset_player_turn();
             return FALSE;
         }
     }
 
-    take_turn(creature_ptr, 1000);
+    energy.set_player_turn_energy(1000);
     creature_ptr->oldpx = creature_ptr->x;
     creature_ptr->oldpy = creature_ptr->y;
     if (hex_spelling_any(creature_ptr))

@@ -3,6 +3,8 @@
 #include "game-option/text-display-options.h"
 #include "object-enchant/special-object-flags.h"
 #include "perception/object-perception.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"
 
@@ -44,7 +46,6 @@ void display_item_discount(flavor_type *flavor_ptr)
 /*!
  * @brief 呪いの有無や割引率等を表示する
  * @param flavor_ptr アイテム表記への参照ポインタ
- * @return なし
  */
 void display_item_fake_inscription(flavor_type *flavor_ptr)
 {

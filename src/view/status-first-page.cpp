@@ -17,9 +17,13 @@
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "perception/object-perception.h"
+#include "player-info/equipment-info.h"
+#include "player-status/player-hand-types.h"
 #include "player/player-status-flags.h"
 #include "player/special-defense-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
 
@@ -31,7 +35,6 @@ static TERM_COLOR likert_color = TERM_WHITE;
  * @param o_ptr 装備中の弓への参照ポインタ
  * @param shots 射撃回数
  * @param shot_frac 射撃速度
- * @return なし
  */
 static void calc_shot_params(player_type *creature_ptr, object_type *o_ptr, int *shots, int *shot_frac)
 {
@@ -152,7 +155,6 @@ static int strengthen_basedam(player_type *creature_ptr, object_type *o_ptr, int
  * Returns a "rating" of x depending on y
  * @param x 技能値
  * @param y 技能値に対するランク基準比
- * @return なし
  */
 static concptr likert(int x, int y)
 {
@@ -238,7 +240,6 @@ static concptr likert(int x, int y)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param damage 直接攻撃のダメージ
  * @param to_h 命中補正
- * @return なし
  */
 static void calc_two_hands(player_type *creature_ptr, int *damage, int *to_h)
 {
@@ -289,7 +290,6 @@ static void calc_two_hands(player_type *creature_ptr, int *damage, int *to_h)
  * @param shots 射撃回数
  * @param shot_frac 射撃速度
  * @param display_player_one_line 1行表示用のコールバック関数
- * @return なし
  */
 static void display_first_page(player_type *creature_ptr, int xthb, int *damage, int shots, int shot_frac)
 {
@@ -368,7 +368,6 @@ static void display_first_page(player_type *creature_ptr, int xthb, int *damage,
  * Prints ratings on certain abilities
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param display_player_one_line 1行表示用のコールバック関数
- * @return なし
  * @details
  * This code is "imitated" elsewhere to "dump" a character sheet.
  */

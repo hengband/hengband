@@ -21,7 +21,8 @@ extern concptr ANGBAND_DIR_DEBUG_SAVE;
 extern concptr ANGBAND_DIR_USER;
 extern concptr ANGBAND_DIR_XTRA;
 
-typedef void(*display_player_pf)(player_type*, int);
+typedef struct player_type player_type;
+typedef void (*display_player_pf)(player_type *, int);
 typedef void(*update_playtime_pf)(void);
 
 extern errr file_character(player_type *creature_ptr, concptr name, display_player_pf display_player);

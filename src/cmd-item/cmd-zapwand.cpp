@@ -15,8 +15,8 @@
 #include "perception/object-perception.h"
 #include "player/attack-defense-types.h"
 #include "player-info/avatar.h"
+#include "player-status/player-energy.h"
 #include "player/player-class.h"
-#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "spell-kind/spells-beam.h"
 #include "spell-kind/spells-charm.h"
@@ -30,6 +30,8 @@
 #include "status/action-setter.h"
 #include "status/experience.h"
 #include "sv-definition/sv-wand-types.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
@@ -313,7 +315,6 @@ bool wand_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION
  * @brief 魔法棒を使うコマンドのサブルーチン /
  * Aim a wand (from the pack or floor).
  * @param item 使うオブジェクトの所持品ID
- * @return なし
  * @details
  * <pre>
  * Use a single charge from a single item.
@@ -355,7 +356,7 @@ void exe_aim_wand(player_type *creature_ptr, INVENTORY_IDX item)
     }
     target_pet = old_target_pet;
 
-    take_turn(creature_ptr, 100);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
 
     /* Get the level */
     lev = k_info[o_ptr->k_idx].level;
@@ -444,7 +445,6 @@ void exe_aim_wand(player_type *creature_ptr, INVENTORY_IDX item)
 
 /*!
  * @brief 魔法棒を使うコマンドのメインルーチン /
- * @return なし
  */
 void do_cmd_aim_wand(player_type *creature_ptr)
 {

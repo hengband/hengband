@@ -4,6 +4,7 @@
 #include "player/player-status-flags.h"
 #include "object/object-flags.h"
 #include "object-enchant/tr-types.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 void set_equipment_influence(player_type *creature_ptr, self_info_type *self_ptr)

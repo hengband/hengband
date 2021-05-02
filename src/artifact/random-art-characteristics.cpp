@@ -1,4 +1,9 @@
-﻿#include "artifact/random-art-characteristics.h"
+﻿/*!
+ * @file random-art-characteristics.cpp
+ * @brief ランダムアーティファクトのバイアス付加処理実装
+ */
+
+#include "artifact/random-art-characteristics.h"
 #include "flavor/object-flavor.h"
 #include "game-option/cheat-types.h"
 #include "io/files-util.h"
@@ -6,6 +11,7 @@
 #include "object-enchant/trc-types.h"
 #include "object/object-flags.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "wizard/wizard-messages.h"
 
@@ -64,7 +70,6 @@ static void add_negative_flags(object_type *o_ptr)
  * @attention プレイヤーの職業依存処理あり。
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return なし
  */
 void curse_artifact(player_type *player_ptr, object_type *o_ptr)
 {
@@ -127,7 +132,6 @@ static concptr get_random_art_filename(const bool armour, const int power)
  * @param return_name 名前を返すための文字列参照ポインタ
  * @param armour 対象のオブジェクトが防具が否か
  * @param power 銘の基準となるオブジェクトの価値レベル(0=呪い、1=低位、2=中位、3以上=高位)
- * @return なし
  */
 void get_random_name(object_type *o_ptr, char *return_name, bool armour, int power)
 {

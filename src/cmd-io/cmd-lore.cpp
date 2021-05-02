@@ -4,9 +4,12 @@
 #include "game-option/cheat-options.h"
 #include "game-option/game-play-options.h"
 #include "io/input-key-acceptor.h"
+#include "lore/lore-util.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
+#include "system/monster-race-definition.h"
+#include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -19,7 +22,6 @@
  * @brief モンスターの思い出を見るコマンドのメインルーチン
  * Identify a character, allow recall of monsters
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  * <pre>
  * Several "special" responses recall "multiple" monsters:

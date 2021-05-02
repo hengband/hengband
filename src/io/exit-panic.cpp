@@ -12,6 +12,7 @@
 #include "player/player-move.h"
 #include "io/signal-handlers.h"
 #include "save/save.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 

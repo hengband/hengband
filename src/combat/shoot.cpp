@@ -10,6 +10,7 @@
 #include "flavor/object-flavor-types.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"
+#include "floor/geometry.h"
 #include "game-option/cheat-types.h"
 #include "game-option/special-options.h"
 #include "grid/feature-flag-types.h"
@@ -46,15 +47,18 @@
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"
 #include "player-info/avatar.h"
+#include "player-status/player-energy.h"
 #include "player/player-class.h"
-#include "player/player-personalities-types.h"
+#include "player/player-personality-types.h"
 #include "player/player-skill.h"
 #include "player/player-status-table.h"
-#include "player/player-status.h"
 #include "spell/spell-types.h"
 #include "sv-definition/sv-bow-types.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
@@ -356,7 +360,6 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
  * Fire an object from the pack or floor.
  * @param item 射撃するオブジェクトの所持ID
  * @param bow_ptr 射撃武器のオブジェクト参照ポインタ
- * @return なし
  * @details
  * <pre>
  * You may only fire items that "match" your missile launcher.
@@ -430,7 +433,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
     else
         chance = (shooter_ptr->skill_thb + ((shooter_ptr->weapon_exp[0][j_ptr->sval] - (WEAPON_EXP_MASTER / 2)) / 200 + bonus) * BTH_PLUS_ADJ);
 
-    shooter_ptr->energy_use = bow_energy(j_ptr->sval);
+    PlayerEnergy(shooter_ptr).set_player_turn_energy(bow_energy(j_ptr->sval));
     tmul = bow_tmul(j_ptr->sval);
 
     /* Get extra "power" from "extra might" */
@@ -456,7 +459,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
     /* Get a direction (or cancel) */
     if (!get_aim_dir(shooter_ptr, &dir)) {
-        free_turn(shooter_ptr);
+        PlayerEnergy(shooter_ptr).reset_player_turn();
 
         if (snipe_type == SP_AWAY)
             snipe_type = SP_NONE;
@@ -483,7 +486,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
     /* Don't shoot at my feet */
     if (tx == shooter_ptr->x && ty == shooter_ptr->y) {
-        free_turn(shooter_ptr);
+        PlayerEnergy(shooter_ptr).reset_player_turn();
 
         /* project_length is already reset to 0 */
 
@@ -491,7 +494,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
     }
 
     /* Take a (partial) turn */
-    shooter_ptr->energy_use = (shooter_ptr->energy_use / thits);
+    PlayerEnergy(shooter_ptr).div_player_turn_energy((ENERGY)thits);
     shooter_ptr->is_fired = TRUE;
 
     /* Sniper - Difficult to shot twice at 1 turn */
@@ -860,11 +863,8 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
             /* Memorize monster */
             o_ptr->held_m_idx = m_idx;
 
-            /* Build a stack */
-            o_ptr->next_o_idx = m_ptr->hold_o_idx;
-
             /* Carry object */
-            m_ptr->hold_o_idx = o_idx;
+            m_ptr->hold_o_idx_list.push_front(o_idx);
         } else if (cave_has_flag_bold(shooter_ptr->current_floor_ptr, y, x, FF_PROJECT)) {
             /* Drop (or break) near that location */
             (void)drop_near(shooter_ptr, q_ptr, j, y, x);

@@ -25,8 +25,9 @@
 #include "mspell/mspell-status.h"
 #include "mspell/mspell-util.h"
 #include "mspell/mspell.h"
-#include "player/player-personalities-types.h"
+#include "player/player-personality-types.h"
 #include "player/player-status-flags.h"
+#include "player/player-status.h"
 #include "spell-kind/spells-lite.h"
 #include "spell-kind/spells-neighbor.h"
 #include "spell-kind/spells-sight.h"
@@ -35,6 +36,9 @@
 #include "spell-realm/spells-hex.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

@@ -12,7 +12,6 @@
 #include "action/action-limited.h"
 #include "cmd-action/cmd-spell.h"
 #include "core/asking-player.h"
-#include "core/hp-mp-processor.h"
 #include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
@@ -21,12 +20,14 @@
 #include "game-option/disturbance-options.h"
 #include "game-option/text-display-options.h"
 #include "grid/grid.h"
+#include "hpmp/hp-mp-processor.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-mage.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-ability-flags.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"
 #include "monster/monster-describer.h"
@@ -34,8 +35,8 @@
 #include "monster/monster-processor.h"
 #include "monster/monster-status.h"
 #include "mspell/monster-power-table.h"
+#include "player-status/player-energy.h"
 #include "player/player-status-table.h"
-#include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
 #include "spell-kind/spells-neighbor.h"
@@ -50,6 +51,9 @@
 #include "status/body-improvement.h"
 #include "status/buff-setter.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
@@ -66,7 +70,6 @@ static int damage;
  * @param p 情報を返す文字列参照ポインタ
  * @param power ものまねの効力の種類
  * @param dam ものまねの威力
- * @return なし
  */
 static void mane_info(player_type *caster_ptr, char *p, RF_ABILITY power, HIT_POINT dam)
 {
@@ -1133,7 +1136,7 @@ bool do_cmd_mane(player_type *creature_ptr, bool baigaesi)
         creature_ptr->mane_dam[j] = creature_ptr->mane_dam[j + 1];
     }
 
-    take_turn(creature_ptr, 100);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
 
     creature_ptr->redraw |= (PR_IMITATION);
     creature_ptr->window_flags |= (PW_PLAYER);

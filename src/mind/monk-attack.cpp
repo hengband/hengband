@@ -10,7 +10,9 @@
 #include "combat/attack-criticality.h"
 #include "core/speed-table.h"
 #include "core/stuff-handler.h"
+#include "floor/geometry.h"
 #include "game-option/cheat-options.h"
+#include "grid/grid.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-force-trainer.h"
@@ -19,9 +21,13 @@
 #include "monster-race/race-flags3.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
+#include "player-attack/player-attack-util.h"
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -168,7 +174,6 @@ static WEIGHT calc_monk_attack_weight(player_type *attacker_ptr)
  * @param stun_effect 朦朧の残りターン
  * @param resist_stun 朦朧への抵抗値
  * @param special_effect 技を繰り出した時の追加効果
- * @return なし
  */
 static void process_attack_vital_spot(player_type *attacker_ptr, player_attack_type *pa_ptr, int *stun_effect, int *resist_stun, const int special_effect)
 {
@@ -195,7 +200,6 @@ static void process_attack_vital_spot(player_type *attacker_ptr, player_attack_t
  * @param g_ptr グリッドへの参照ポインタ
  * @param stun_effect 朦朧の残りターン
  * @param resist_stun 朦朧への抵抗値
- * @return なし
  */
 static void print_stun_effect(player_type *attacker_ptr, player_attack_type *pa_ptr, const int stun_effect, const int resist_stun)
 {
@@ -216,7 +220,6 @@ static void print_stun_effect(player_type *attacker_ptr, player_attack_type *pa_
  * @param attacker_ptr プレーヤーの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param g_ptr グリッドへの参照ポインタ
- * @return なし
  */
 void process_monk_attack(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {

@@ -8,8 +8,10 @@
 #include "player/player-personality.h"
 #include "player/player-race.h"
 #include "player/player-sex.h"
+#include "player/player-status.h"
 #include "player/process-name.h"
 #include "player/race-info-table.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 
 /*
@@ -20,7 +22,6 @@ birther previous_char;
 
 /*!
  * @brief クイックスタート処理の問い合わせと実行を行う。/Ask whether the player use Quick Start or not.
- * @return なし
  */
 bool ask_quick_start(player_type *creature_ptr)
 {

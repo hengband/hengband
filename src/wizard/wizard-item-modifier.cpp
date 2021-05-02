@@ -1,5 +1,6 @@
 ﻿#include "wizard/wizard-item-modifier.h"
 #include "artifact/fixed-art-generator.h"
+#include "artifact/random-art-effects.h"
 #include "artifact/random-art-generator.h"
 #include "core/asking-player.h"
 #include "core/show-file.h"
@@ -12,6 +13,7 @@
 #include "game-option/cheat-options.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
+#include "io/input-key-requester.h"
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/object-ego.h"
@@ -29,19 +31,192 @@
 #include "object/object-value.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
+#include "spell-kind/spells-perception.h"
+#include "spell/spells-object.h"
 #include "system/alloc-entries.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
+#include "system/system-variables.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "view/display-messages.h"
 #include "util/bit-flags-calculator.h"
+#include "util/int-char-converter.h"
+#include "wizard/wizard-special-process.h"
 #include "world/world.h"
+#include <sstream>
 #include <vector>
 
 #define K_MAX_DEPTH 110 /*!< アイテムの階層毎生成率を表示する最大階 */
 
+namespace {
+/*!
+ * @brief アイテム設定コマンド一覧表
+ */
+std::vector<std::vector<std::string>> wizard_sub_menu_table = {
+    { "a", _("アーティファクト出現フラグリセット", "Restore aware flag of fixed artifact") },
+    { "A", _("アーティファクトを出現済みにする", "Make a fixed artifact awared") },
+    { "e", _("高級品獲得ドロップ", "Drop excellent object") },
+    { "f", _("*鑑定*", "*Idenfity*") },
+    { "i", _("鑑定", "Idenfity") },
+    { "I", _("インベントリ全*鑑定*", "Idenfity all objects fully in inventory") },
+    { "l", _("指定アイテム番号まで一括鑑定", "Make objects awared to target object id") },
+    { "g", _("上質なアイテムドロップ", "Drop good object") },
+    { "s", _("特別品獲得ドロップ", "Drop special object") },
+    { "w", _("願い", "Wishing") },
+    { "U", _("発動を変更する", "Modify item activation") },
+};
+
+/*!
+ * @brief ゲーム設定コマンドの一覧を表示する
+ */
+void display_wizard_sub_menu()
+{
+    for (size_t y = 1; y <= wizard_sub_menu_table.size(); y++)
+        term_erase(14, y, 64);
+
+    int r = 1;
+    int c = 15;
+    int sz = wizard_sub_menu_table.size();
+    for (int i = 0; i < sz; i++) {
+        std::stringstream ss;
+        ss << wizard_sub_menu_table[i][0] << ") " << wizard_sub_menu_table[i][1];
+        put_str(ss.str().c_str(), r++, c);
+    }
+}
+}
+
+void wiz_restore_aware_flag_of_fixed_arfifact(ARTIFACT_IDX a_idx, bool aware = false);
+void wiz_modify_item_activation(player_type *caster_ptr);
+void wiz_identify_full_inventory(player_type *caster_ptr);
+
+/*!
+    * @brief ゲーム設定コマンドの入力を受け付ける
+    * @param creature_ptr プレイヤーの情報へのポインタ
+       */
+void wizard_item_modifier(player_type *creature_ptr)
+{
+    screen_save();
+    display_wizard_sub_menu();
+
+    char cmd;
+    get_com("Player Command: ", &cmd, FALSE);
+    screen_load();
+
+    switch (cmd) {
+    case ESCAPE:
+    case ' ':
+    case '\n':
+    case '\r':
+        break;
+    case 'a':
+        wiz_restore_aware_flag_of_fixed_arfifact(command_arg);
+        break;
+    case 'A':
+        wiz_restore_aware_flag_of_fixed_arfifact(command_arg, true);
+        break;
+    case 'e':
+        if (command_arg <= 0)
+            command_arg = 1;
+
+        acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, TRUE, FALSE, TRUE);
+        break;
+    case 'f':
+        identify_fully(creature_ptr, FALSE, TV_NONE);
+        break;
+    case 'g':
+        if (command_arg <= 0)
+            command_arg = 1;
+
+        acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, FALSE, FALSE, TRUE);
+        break;
+    case 'i':
+        (void)ident_spell(creature_ptr, FALSE, TV_NONE);
+        break;
+    case 'I':
+        wiz_identify_full_inventory(creature_ptr);
+        break;
+    case 'l':
+        wiz_learn_items_all(creature_ptr);
+        break;
+    case 's':
+        if (command_arg <= 0)
+            command_arg = 1;
+
+        acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, TRUE, TRUE, TRUE);
+        break;
+    case 'U':
+        wiz_modify_item_activation(creature_ptr);
+        break;
+    case 'w':
+        do_cmd_wishing(creature_ptr, -1, TRUE, TRUE, TRUE);
+        break;
+    }
+}
+
+/*!
+ * @brief 固定アーティファクトの出現フラグをリセットする
+ * @param a_idx 指定したアーティファクトID
+ */
+void wiz_restore_aware_flag_of_fixed_arfifact(ARTIFACT_IDX a_idx, bool aware)
+{
+    if (a_idx <= 0) {
+        char tmp[80] = "";
+        sprintf(tmp, "Artifact ID (1-%d): ", max_a_idx - 1);
+        char tmp_val[10] = "";
+        if (!get_string(tmp, tmp_val, 3))
+            return;
+
+        a_idx = (ARTIFACT_IDX)atoi(tmp_val);
+    }
+
+    if (a_idx <= 0 || a_idx >= max_a_idx) {
+        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), max_a_idx - 1);
+        return;
+    }
+
+    auto *a_ptr = &a_info[a_idx];
+    a_ptr->cur_num = aware ? 1 : 0;
+    msg_print(aware ? "Modified." : "Restored.");
+}
+
+/*!
+ * @brief オブジェクトに発動を追加する/変更する
+ * @param catser_ptr プレイヤー情報への参照ポインタ
+ */
+void wiz_modify_item_activation(player_type *caster_ptr)
+{
+    concptr q = "Which object? ";
+    concptr s = "Nothing to do with.";
+    OBJECT_IDX item;
+    auto *o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, TV_NONE);
+    if (!o_ptr)
+        return;
+
+    XTRA16 act_idx;
+    char tmp[80] = "";
+    sprintf(tmp, "Artifact ID (1-%d): ", ACT_MAX);
+    char tmp_val[10] = "";
+    if (!get_string(tmp, tmp_val, 3))
+        return;
+
+    act_idx = (XTRA16)atoi(tmp_val);
+
+    if (act_idx <= 0 || act_idx > ACT_MAX) {
+        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), ACT_MAX - 1);
+        return;
+    }
+
+    add_flag(o_ptr->art_flags, TR_ACTIVATE);
+    o_ptr->xtra2 = act_idx;
+}
+
+/*!
+ * @brief インベントリ内のアイテムを全て*鑑定*済みにする
+ * @param catser_ptr プレイヤー情報への参照ポインタ
+ */
 void wiz_identify_full_inventory(player_type *caster_ptr)
 {
     for (int i = 0; i < INVEN_TOTAL; i++) {
@@ -49,6 +224,8 @@ void wiz_identify_full_inventory(player_type *caster_ptr)
         if (!o_ptr->k_idx)
             continue;
 
+        auto k_ptr = &k_info[o_ptr->k_idx];
+        k_ptr->aware = TRUE; //!< @note 記録には残さないためTRUEを立てるのみ
         set_bits(o_ptr->ident, IDENT_KNOWN | IDENT_FULL_KNOWN);
         set_bits(o_ptr->marked, OM_TOUCHED);
     }
@@ -66,7 +243,6 @@ void wiz_identify_full_inventory(player_type *caster_ptr)
  * @param sval ベースアイテムの小項目ID
  * @param row 表示列
  * @param col 表示行
- * @return なし
  */
 static void prt_alloc(tval_type tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row, TERM_LEN col)
 {
@@ -128,7 +304,6 @@ static void prt_alloc(tval_type tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row, T
 
 /*!
  * @brief 32ビット変数のビット配列を並べて描画する / Output a long int in binary format.
- * @return なし
  */
 static void prt_binary(BIT_FLAGS flags, const int row, int col)
 {
@@ -145,7 +320,6 @@ static void prt_binary(BIT_FLAGS flags, const int row, int col)
  * Change various "permanent" player variables.
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 詳細を表示するアイテム情報の参照ポインタ
- * @return なし
  */
 static void wiz_display_item(player_type *player_ptr, object_type *o_ptr)
 {
@@ -204,7 +378,6 @@ static void wiz_display_item(player_type *player_ptr, object_type *o_ptr)
  * Try to create an item again. Output some statistics.    -Bernd-
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 生成テストの基準となるアイテム情報の参照ポインタ
- * @return なし
  * The statistics are correct now.  We acquire a clean grid, and then
  * repeatedly place an object in this grid, copying it into an item
  * holder, and then deleting the object.  We fiddle with the artifact
@@ -299,7 +472,6 @@ static void wiz_statistics(player_type *caster_ptr, object_type *o_ptr)
  * @brief アイテムの質を選択して再生成する /
  * Apply magic to an item or turn it into an artifact. -Bernd-
  * @param o_ptr 再生成の対象となるアイテム情報の参照ポインタ
- * @return なし
  */
 static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
 {
@@ -339,32 +511,32 @@ static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
         /* Apply bad magic, but first clear object */
         case 'w':
             object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
-            apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT | AM_CURSED);
+            apply_magic_to_object(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT | AM_CURSED);
             break;
         /* Apply bad magic, but first clear object */
         case 'c':
             object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
-            apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_CURSED);
+            apply_magic_to_object(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_CURSED);
             break;
         /* Apply normal magic, but first clear object */
         case 'n':
             object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
-            apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
+            apply_magic_to_object(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
             break;
         /* Apply good magic, but first clear object */
         case 'g':
             object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
-            apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD);
+            apply_magic_to_object(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD);
             break;
         /* Apply great magic, but first clear object */
         case 'e':
             object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
-            apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT);
+            apply_magic_to_object(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT);
             break;
         /* Apply special magic, but first clear object */
         case 's':
             object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
-            apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_GOOD | AM_GREAT | AM_SPECIAL);
+            apply_magic_to_object(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_GOOD | AM_GREAT | AM_SPECIAL);
             if (!object_is_artifact(q_ptr))
                 become_random_artifact(owner_ptr, q_ptr, FALSE);
 
@@ -375,7 +547,6 @@ static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
 
         q_ptr->iy = o_ptr->iy;
         q_ptr->ix = o_ptr->ix;
-        q_ptr->next_o_idx = o_ptr->next_o_idx;
         q_ptr->marked = o_ptr->marked;
     }
 
@@ -391,7 +562,6 @@ static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
  * @briefアイテムの基礎能力値を調整する / Tweak an item
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 調整するアイテムの参照ポインタ
- * @return なし
  */
 static void wiz_tweak_item(player_type *player_ptr, object_type *o_ptr)
 {
@@ -434,7 +604,6 @@ static void wiz_tweak_item(player_type *player_ptr, object_type *o_ptr)
  * Change the quantity of a the item
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 変更するアイテム情報構造体の参照ポインタ
- * @return なし
  */
 static void wiz_quantity_item(object_type *o_ptr)
 {
@@ -462,7 +631,6 @@ static void wiz_quantity_item(object_type *o_ptr)
 /*!
  * @brief アイテムを弄るデバッグコマンド
  * Play with an item. Options include:
- * @return なし
  * @details
  *   - Output statistics (via wiz_roll_item)<br>
  *   - Reroll item (via wiz_reroll_item)<br>
@@ -848,7 +1016,7 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
             if (must || ok_art) {
                 do {
                     object_prep(caster_ptr, o_ptr, k_idx);
-                    apply_magic(caster_ptr, o_ptr, k_ptr->level, (AM_SPECIAL | AM_NO_FIXED_ART));
+                    apply_magic_to_object(caster_ptr, o_ptr, k_ptr->level, (AM_SPECIAL | AM_NO_FIXED_ART));
                 } while (!o_ptr->art_name || o_ptr->name1 || o_ptr->name2 || object_is_cursed(o_ptr));
 
                 if (o_ptr->art_name)
@@ -871,7 +1039,7 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
                     int i = 0;
                     for (i = 0; i < max_roll; i++) {
                         object_prep(caster_ptr, o_ptr, k_idx);
-                        (void)apply_magic(caster_ptr, o_ptr, k_ptr->level, (AM_GREAT | AM_NO_FIXED_ART));
+                        (void)apply_magic_to_object(caster_ptr, o_ptr, k_ptr->level, (AM_GREAT | AM_NO_FIXED_ART));
 
                         if (o_ptr->name1 || o_ptr->art_name)
                             continue;
@@ -904,7 +1072,7 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
         } else {
             for (int i = 0; i < 100; i++) {
                 object_prep(caster_ptr, o_ptr, k_idx);
-                apply_magic(caster_ptr, o_ptr, 0, (AM_NO_FIXED_ART));
+                apply_magic_to_object(caster_ptr, o_ptr, 0, (AM_NO_FIXED_ART));
                 if (!object_is_cursed(o_ptr))
                     break;
             }

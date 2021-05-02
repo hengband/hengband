@@ -2,8 +2,6 @@
 #include "cmd-building/cmd-building.h"
 #include "cmd-io/cmd-save.h"
 #include "core/disturbance.h"
-#include "core/hp-mp-processor.h"
-#include "core/hp-mp-regenerator.h"
 #include "core/magic-effects-timeout-reducer.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor-events.h"
@@ -13,7 +11,10 @@
 #include "game-option/cheat-options.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
+#include "grid/feature.h"
 #include "grid/grid.h"
+#include "hpmp/hp-mp-processor.h"
+#include "hpmp/hp-mp-regenerator.h"
 #include "inventory/inventory-curse.h"
 #include "inventory/recharge-processor.h"
 #include "io/write-diary.h"
@@ -26,10 +27,14 @@
 #include "mutation/mutation-processor.h"
 #include "object/lite-processor.h"
 #include "perception/simple-perception.h"
+#include "player-status/player-energy.h"
 #include "player/digestion-processor.h"
+#include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
@@ -42,7 +47,6 @@
  * @brief 10ゲームターンが進行する毎にゲーム世界全体の処理を行う。
  * / Handle certain things once every 10 game turns
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void process_world(player_type *player_ptr)
 {
@@ -214,7 +218,7 @@ void process_world(player_type *player_ptr)
                 player_ptr->oldpy = randint1(MAX_HGT - 2);
                 player_ptr->oldpx = randint1(MAX_WID - 2);
                 change_wild_mode(player_ptr, TRUE);
-                take_turn(player_ptr, 100);
+                PlayerEnergy(player_ptr).set_player_turn_energy(100);
             }
 
             player_ptr->invoking_midnight_curse = TRUE;
@@ -237,7 +241,6 @@ void process_world(player_type *player_ptr)
 /*!
  * @brief ゲーム時刻を表示する /
  * Print time
- * @return なし
  */
 void print_time(player_type *player_ptr)
 {

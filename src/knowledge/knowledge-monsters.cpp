@@ -15,6 +15,7 @@
 #include "io/input-key-acceptor.h"
 #include "knowledge/monster-group-table.h"
 #include "locale/english.h"
+#include "lore/lore-util.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags3.h"
@@ -24,7 +25,11 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"
+#include "pet/pet-util.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
@@ -103,7 +108,6 @@ static IDX collect_monsters(player_type *creature_ptr, IDX grp_cur, IDX mon_idx[
  * @brief 現在のペットを表示するコマンドのメインルーチン /
  * Display current pets
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void do_cmd_knowledge_pets(player_type *creature_ptr)
 {
@@ -144,7 +148,6 @@ void do_cmd_knowledge_pets(player_type *creature_ptr)
  * @brief 現在までに倒したモンスターを表示するコマンドのメインルーチン /
  * @param creature_ptr プレーヤーへの参照ポインタ
  * Total kill count
- * @return なし
  * @note the player ghosts are ignored.
  */
 void do_cmd_knowledge_kill_count(player_type *creature_ptr)
@@ -290,7 +293,6 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
  * @param visual_only ？？？
  * @param direct_r_idx モンスターID
  * @todo 引数の詳細について加筆求む
- * @return なし
  */
 void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, bool visual_only, IDX direct_r_idx)
 {
@@ -470,7 +472,6 @@ void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, boo
 /*
  * List wanted monsters
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void do_cmd_knowledge_bounty(player_type *creature_ptr)
 {

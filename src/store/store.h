@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "store/store-owners.h"
 #include "store/store-util.h"
 
  /* Store constants */
@@ -12,6 +11,7 @@
 #define STORE_SHUFFLE   21              /* 1/Chance (per day) of an owner changing */
 #define STORE_TICKS     1000            /* Number of ticks between turnovers */
 
+typedef struct owner_type owner_type;
 extern int store_top;
 extern int store_bottom;
 extern int xtra_stock;
@@ -22,6 +22,7 @@ extern s16b inner_town_num;
 extern int cur_store_feat;
 extern bool allow_inc;
 
+typedef struct player_type player_type;
 s16b store_get_stock_max(STORE_TYPE_IDX store_idx, bool powerup = true);
 void store_shuffle(player_type *player_ptr, int which);
 void store_maintenance(player_type *player_ptr, int town_num, int store_num, int chance);

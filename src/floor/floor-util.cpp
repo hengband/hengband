@@ -8,7 +8,9 @@
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"
+#include "floor/floor-object.h"
 #include "floor/floor-town.h"
+#include "floor/geometry.h"
 #include "floor/line-of-sight.h"
 #include "game-option/birth-options.h"
 #include "grid/feature.h"
@@ -19,6 +21,8 @@
 #include "perception/object-perception.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "world/world.h"
 
@@ -114,7 +118,6 @@ void forget_flow(floor_type *floor_ptr)
  * we know we are clearing every object.  Technically, we only
  * clear those fields for grids/monsters containing objects,
  * and we clear it once for every such object.
- * @return なし
  */
 void wipe_o_list(floor_type *floor_ptr)
 {
@@ -129,20 +132,8 @@ void wipe_o_list(floor_type *floor_ptr)
             }
         }
 
-        if (object_is_held_monster(o_ptr)) {
-            monster_type *m_ptr;
-            m_ptr = &floor_ptr->m_list[o_ptr->held_m_idx];
-            m_ptr->hold_o_idx = 0;
-            object_wipe(o_ptr);
-            continue;
-        }
-
-        grid_type *g_ptr;
-        POSITION y = o_ptr->iy;
-        POSITION x = o_ptr->ix;
-
-        g_ptr = &floor_ptr->grid_array[y][x];
-        g_ptr->o_idx = 0;
+        auto &list = get_o_idx_list_contains(floor_ptr, i);
+        list.clear();
         object_wipe(o_ptr);
     }
 

@@ -10,7 +10,10 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "io/screen-util.h"
+#include "player/player-status.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "term/term-color-types.h"
 #include "view/display-map.h"
@@ -31,7 +34,6 @@ void move_cursor_relative(int row, int col)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param y 目標地点のY座標
  * @param x 目標地点のX座標
- * @return なし
  */
 void print_path(player_type *player_ptr, POSITION y, POSITION x)
 {
@@ -134,7 +136,6 @@ bool change_panel(player_type *player_ptr, POSITION dy, POSITION dx)
 /*!
  * @brief コンソール上におけるマップ表示の左上位置を返す /
  * Calculates current boundaries Called below and from "do_cmd_locate()".
- * @return なし
  */
 void panel_bounds_center(void)
 {

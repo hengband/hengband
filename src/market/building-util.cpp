@@ -1,12 +1,12 @@
 ﻿#include "market/building-util.h"
-
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+
 /*!
  * @brief コンソールに表示された施設に関する情報を消去する / Clear the building information
  * @details 消去は行毎にヌル文字列で行われる。
  * @param min_row 開始行番号
  * @param max_row 末尾行番号
- * @return なし
  */
 void clear_bldg(int min_row, int max_row)
 {
@@ -19,7 +19,6 @@ void clear_bldg(int min_row, int max_row)
 /*!
  * @brief 所持金を表示する。
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void building_prt_gold(player_type *player_ptr)
 {

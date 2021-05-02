@@ -14,6 +14,9 @@
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-indice-types.h"
+#include "player-ability/player-ability-types.h"
+#include "system/angband.h"
+#include "system/monster-race-definition.h"
 #include "term/term-color-types.h"
 #include "view/display-lore-attacks.h"
 #include "view/display-lore-drops.h"
@@ -110,7 +113,6 @@ static void set_race_flags(lore_type *lore_ptr)
  * Hack -- display monster information using "hooked_roff()"
  * @param r_idx モンスターの種族ID
  * @param mode 表示オプション
- * @return なし
  * @details
  * This function should only be called with the cursor placed at the
  * left edge of the screen, on a cleared line, in which the recall is

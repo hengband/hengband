@@ -1,4 +1,4 @@
-﻿#include "player-status/player-charisma.h"
+﻿#include "player-ability/player-charisma.h"
 #include "mutation/mutation-flag-types.h"
 #include "object/object-flags.h"
 #include "player/mimic-info-table.h"
@@ -8,13 +8,14 @@
 #include "player/special-defense-types.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell-realm/spells-hex.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 void PlayerCharisma::set_locals()
 {
     this->max_value = +99;
     this->min_value = -99;
-    this->status_type = A_CHR;
+    this->ability_type = A_CHR;
     this->tr_flag = TR_CHR;
     this->tr_bad_flag = TR_CHR;
 }

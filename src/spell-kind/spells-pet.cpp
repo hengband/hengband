@@ -13,11 +13,13 @@
 #include "monster/smart-learn-types.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*!
  * @brief ペット爆破処理 /
- * @return なし
  */
 void discharge_minion(player_type *caster_ptr)
 {

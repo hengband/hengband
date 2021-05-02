@@ -23,6 +23,8 @@
 #include "object/object-info.h"
 #include "perception/object-perception.h"
 #include "player-info/avatar.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 #include "player/player-status-flags.h"
 
@@ -31,7 +33,6 @@
  * @param slot 擬似鑑定を行うプレイヤーの所持リストID
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param heavy 重度の擬似鑑定を行うならばTRUE
- * @return なし
  */
 static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, bool heavy)
 {
@@ -118,7 +119,6 @@ static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, b
 
 /*!
  * @brief 1プレイヤーターン毎に武器、防具の擬似鑑定が行われるかを判定する。
- * @return なし
  * @details
  * Sense the inventory\n
  *\n
@@ -300,7 +300,6 @@ void sense_inventory1(player_type *creature_ptr)
 
 /*!
  * @brief 1プレイヤーターン毎に武器、防具以外の擬似鑑定が行われるかを判定する。
- * @return なし
  */
 void sense_inventory2(player_type *creature_ptr)
 {

@@ -6,11 +6,13 @@
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
 #include "object/object-info.h"
+#include "player/player-status.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*!
  * @brief アイテムの所持種類数が超えた場合にアイテムを床に落とす処理
- * @return なし
  */
 void pack_overflow(player_type *owner_ptr)
 {

@@ -2,6 +2,7 @@
 #include "effect/effect-characteristics.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief チャーム・モンスター(1体)

@@ -5,9 +5,9 @@
  */
 
 #include "spell-kind/spells-random.h"
-#include "core/hp-mp-processor.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
+#include "hpmp/hp-mp-processor.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "mutation/mutation-investor-remover.h"
@@ -32,6 +32,7 @@
 #include "status/base-status.h"
 #include "status/experience.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "view/display-messages.h"
 
@@ -159,7 +160,8 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
         case 8:
         case 9:
         case 18:
-            (*count) += summon_specific(target_ptr, 0, target_ptr->y, target_ptr->x, floor_ptr->dun_level, SUMMON_NONE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+            (*count) += summon_specific(
+                target_ptr, 0, target_ptr->y, target_ptr->x, floor_ptr->dun_level, SUMMON_NONE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
             if (!one_in_(6))
                 break;
             /* Fall through */
@@ -233,7 +235,6 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
  * @brief 運命の輪、並びにカオス的な効果の発動
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param spell ランダムな効果を選択するための基準ID
- * @return なし
  */
 void wild_magic(player_type *caster_ptr, int spell)
 {
@@ -315,7 +316,8 @@ void wild_magic(player_type *caster_ptr, int spell)
     case 34:
     case 35:
         for (int counter = 0; counter < 8; counter++) {
-            (void)summon_specific(caster_ptr, 0, caster_ptr->y, caster_ptr->x, (floor_ptr->dun_level * 3) / 2, static_cast<summon_type>(type), (PM_ALLOW_GROUP | PM_NO_PET));
+            (void)summon_specific(
+                caster_ptr, 0, caster_ptr->y, caster_ptr->x, (floor_ptr->dun_level * 3) / 2, static_cast<summon_type>(type), (PM_ALLOW_GROUP | PM_NO_PET));
         }
 
         break;
@@ -338,7 +340,6 @@ void wild_magic(player_type *caster_ptr, int spell)
  * @brief 「ワンダー」のランダムな効果を決定して処理する。
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param dir 方向ID
- * @return なし
  * @details
  * This spell should become more useful (more controlled) as the\n
  * player gains experience levels.  Thus, add 1/5 of the player's\n

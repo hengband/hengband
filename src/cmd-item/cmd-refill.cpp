@@ -8,6 +8,7 @@
 #include "object-hook/hook-expendable.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
+#include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
 #include "status/action-setter.h"
@@ -15,12 +16,13 @@
 #include "view/display-messages.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*!
  * @brief ランタンに燃料を加えるコマンドのメインルーチン
  * Refill the players lamp (from the pack or floor)
- * @return なし
  */
 static void do_cmd_refill_lamp(player_type *user_ptr)
 {
@@ -37,7 +39,7 @@ static void do_cmd_refill_lamp(player_type *user_ptr)
     BIT_FLAGS flgs[TR_FLAG_SIZE], flgs2[TR_FLAG_SIZE];
     object_flags(user_ptr, o_ptr, flgs);
 
-    take_turn(user_ptr, 50);
+    PlayerEnergy(user_ptr).set_player_turn_energy(50);
     j_ptr = &user_ptr->inventory_list[INVEN_LITE];
     object_flags(user_ptr, j_ptr, flgs2);
     j_ptr->xtra4 += o_ptr->xtra4;
@@ -60,7 +62,6 @@ static void do_cmd_refill_lamp(player_type *user_ptr)
 /*!
  * @brief 松明を束ねるコマンドのメインルーチン
  * Refuel the players torch (from the pack or floor)
- * @return なし
  */
 static void do_cmd_refill_torch(player_type *user_ptr)
 {
@@ -77,7 +78,7 @@ static void do_cmd_refill_torch(player_type *user_ptr)
     BIT_FLAGS flgs[TR_FLAG_SIZE], flgs2[TR_FLAG_SIZE];
     object_flags(user_ptr, o_ptr, flgs);
 
-    take_turn(user_ptr, 50);
+    PlayerEnergy(user_ptr).set_player_turn_energy(50);
     j_ptr = &user_ptr->inventory_list[INVEN_LITE];
     object_flags(user_ptr, j_ptr, flgs2);
     j_ptr->xtra4 += o_ptr->xtra4 + 5;
@@ -101,7 +102,6 @@ static void do_cmd_refill_torch(player_type *user_ptr)
 /*!
  * @brief 燃料を補充するコマンドのメインルーチン
  * Refill the players lamp, or restock his torches
- * @return なし
  */
 void do_cmd_refill(player_type *user_ptr)
 {

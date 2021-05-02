@@ -1,9 +1,11 @@
 ﻿#include "mutation/mutation-processor.h"
 #include "core/asking-player.h"
 #include "core/disturbance.h"
-#include "core/hp-mp-processor.h"
 #include "core/player-redraw-types.h"
+#include "dungeon/dungeon.h"
+#include "floor/geometry.h"
 #include "grid/grid.h"
+#include "hpmp/hp-mp-processor.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-requester.h"
@@ -17,6 +19,7 @@
 #include "object-hook/hook-checker.h"
 #include "object-hook/hook-enchant.h"
 #include "object/lite-processor.h"
+#include "player-info/equipment-info.h"
 #include "player/digestion-processor.h"
 #include "player/player-damage.h"
 #include "player/player-status-flags.h"
@@ -27,6 +30,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
+#include "spell-realm/spells-song.h"
 #include "spell/spell-types.h"
 #include "spell/summon-types.h"
 #include "status/bad-status-setter.h"
@@ -39,6 +43,10 @@
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/target-checker.h"
 #include "target/target-setter.h"
 #include "target/target-types.h"
@@ -104,7 +112,6 @@ static bool get_hack_dir(player_type *creature_ptr, DIRECTION *dp)
 /*!
  * @brief 10ゲームターンが進行するごとに突然変異の発動判定を行う処理
  * / Handle mutation effects once every 10 game turns
- * @return なし
  */
 void process_world_aux_mutation(player_type *creature_ptr)
 {

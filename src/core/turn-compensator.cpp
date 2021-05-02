@@ -5,6 +5,7 @@
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "world/world.h"
 
 /*!

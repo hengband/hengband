@@ -6,6 +6,7 @@
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "floor/cave.h"
+#include "floor/geometry.h"
 #include "game-option/game-play-options.h"
 #include "game-option/input-options.h"
 #include "game-option/keymap-directory-getter.h"
@@ -127,7 +128,6 @@ struct tgt_pt_info {
  * @brief 指定した記号のシンボルのグリッドにカーソルを移動する
  * @param creature_ptr プレイヤー情報への参照ポインタ
  * @param info 位置ターゲット指定情報構造体(参照渡し)
- * @return なし
  */
 void tgt_pt_move_to_symbol(player_type *creature_ptr, tgt_pt_info& info)
 {

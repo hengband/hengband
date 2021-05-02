@@ -18,6 +18,8 @@
 #include "io/uid-checker.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
+#include "system/monster-race-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
@@ -301,7 +303,6 @@ errr counts_write(player_type *creature_ptr, int where, u32b count)
  * @brief 墓のアスキーアートテンプレを読み込む
  * @param buf テンプレへのバッファ
  * @param buf_size バッファの長さ
- * @return なし
  */
 void read_dead_file(char *buf, size_t buf_size)
 {

@@ -4,7 +4,7 @@
  * Pointer to the player tables
  * (sex, race, class, magic)
  */
-const player_sex *sp_ptr;
+const player_sex_type *sp_ptr;
 
 /*!
  * @brief 性別表記 /
@@ -15,7 +15,7 @@ const player_sex *sp_ptr;
  *      Winner
  * </pre>
  */
-const player_sex sex_info[MAX_SEXES] =
+const player_sex_type sex_info[MAX_SEXES] =
 {
 	{
 #ifdef JP

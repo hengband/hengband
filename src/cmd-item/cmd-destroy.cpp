@@ -20,14 +20,16 @@
 #include "object/object-generator.h"
 #include "object/object-stack.h"
 #include "object/object-value.h"
-#include "player/attack-defense-types.h"
 #include "player-info/avatar.h"
+#include "player-status/player-energy.h"
+#include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
 #include "racial/racial-android.h"
 #include "realm/realm-names-table.h"
 #include "status/action-setter.h"
 #include "status/experience.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
@@ -110,10 +112,10 @@ static bool decide_magic_book_exp(player_type *creature_ptr, destroy_type *destr
 {
     if (creature_ptr->prace == RACE_ANDROID)
         return FALSE;
-    
+
     if ((creature_ptr->pclass == CLASS_WARRIOR) || (creature_ptr->pclass == CLASS_BERSERKER))
         return TRUE;
-    
+
     if (creature_ptr->pclass != CLASS_PALADIN)
         return FALSE;
 
@@ -190,7 +192,6 @@ static void exe_destroy_item(player_type *creature_ptr, destroy_type *destroy_pt
 /*!
  * @brief アイテムを破壊するコマンドのメインルーチン / Destroy an item
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void do_cmd_destroy(player_type *creature_ptr)
 {
@@ -210,9 +211,10 @@ void do_cmd_destroy(player_type *creature_ptr)
     destroy_ptr->o_ptr->number = destroy_ptr->amt;
     describe_flavor(creature_ptr, destroy_ptr->o_name, destroy_ptr->o_ptr, 0);
     destroy_ptr->o_ptr->number = destroy_ptr->old_number;
-    take_turn(creature_ptr, 100);
+    PlayerEnergy energy(creature_ptr);
+    energy.set_player_turn_energy(100);
     if (!can_player_destroy_object(creature_ptr, destroy_ptr->o_ptr)) {
-        free_turn(creature_ptr);
+        energy.reset_player_turn();
         msg_format(_("%sは破壊不可能だ。", "You cannot destroy %s."), destroy_ptr->o_name);
         return;
     }

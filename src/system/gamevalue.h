@@ -63,20 +63,6 @@
 #define DUN_CAVERN  20	/*!< 洞窟状のダンジョンが生成される基本確率(1/定数) / 1/chance of having a cavern level */
 
 /*
- * Dungeon tunnel generation values
- */
-#define DUN_TUN_RND_MIN	 5 /* Chance of random direction (was 10) */
-#define DUN_TUN_RND_MAX	20
-#define DUN_TUN_CHG_MIN	20 /* Chance of changing direction (was 30) */
-#define DUN_TUN_CHG_MAX	60
-#define DUN_TUN_CON_MIN 10 /* Chance of extra tunneling (was 15) */
-#define DUN_TUN_CON_MAX	40
-#define DUN_TUN_PEN_MIN 30 /* Chance of doors at room entrances (was 25) */
-#define DUN_TUN_PEN_MAX 70
-#define DUN_TUN_JCT_MIN 60 /* Chance of doors at tunnel junctions (was 90) */
-#define DUN_TUN_JCT_MAX 90
-
-/*
  * Dungeon streamer generation values
  */
 #define DUN_STR_DEN     5	/* Density of streamers */
@@ -142,7 +128,7 @@
 #define BREAK_RUNE_PROTECTION       550     /*!< 守りのルーンの強靭度 / Rune of protection resistance */
 #define BREAK_RUNE_EXPLOSION 299     /*!< 爆発のルーンの発動しやすさ / For explosive runes */
 #define BTH_PLUS_ADJ      3       /*!< 武器経験値及びプレイヤーの打撃/射撃能力に応じた修正値倍率 / Adjust BTH per plus-to-hit */
-#define MON_MULT_ADJ      8       /*!< モンスターの増殖しにくさの基本倍率 / High value slows multiplication */
+#define MON_MULT_ADJ      8       /*!< モンスターの増殖しにくさの基本倍率 / High value slows ENERGY_MULTIPLICATION */
 #define MON_SUMMON_ADJ    2       /*!< 現在未使用 Adjust level of summoned creatures */
 #define MON_DRAIN_LIFE    2       /*!< モンスターの打撃によるプレイヤーの経験値吸収基本倍率(%) / Percent of player exp drained per hit */
 #define USE_DEVICE        3       /*!< 魔道具の最低失敗基準値 x> Harder devices x< Easier devices     */

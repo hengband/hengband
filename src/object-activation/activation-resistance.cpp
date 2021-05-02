@@ -1,5 +1,5 @@
 ﻿#include "object-activation/activation-resistance.h"
-#include "core/hp-mp-processor.h"
+#include "hpmp/hp-mp-processor.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"
 #include "status/bad-status-setter.h"
@@ -8,6 +8,7 @@
 #include "status/temporary-resistance.h"
 #include "sv-definition/sv-ring-types.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "view/display-messages.h"
 

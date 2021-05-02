@@ -21,6 +21,7 @@
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
 #include "status/shape-changer.h"
+#include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "view/display-messages.h"
 

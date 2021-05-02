@@ -3,19 +3,20 @@
 #include "mind/mind-elementalist.h"
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
-#include "player/player-personalities-types.h"
+#include "player-info/equipment-info.h"
+#include "player/player-personality-types.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"
 #include "player/player-status-flags.h"
 #include "player/special-defense-types.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*!
  * @brief プレーヤーの職業による耐性フラグを返す
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param flags 耐性フラグの配列
- * @return なし
  * @todo 最終的にplayer-status系列と統合する
  */
 static void add_class_flags(player_type *creature_ptr, BIT_FLAGS *flags)
@@ -149,7 +150,6 @@ static void add_class_flags(player_type *creature_ptr, BIT_FLAGS *flags)
  * @brief 突然変異による耐性フラグを返す
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param flags 耐性フラグの配列
- * @return なし
  * @todo 最終的にplayer-status系列と統合する
  */
 static void add_mutation_flags(player_type *creature_ptr, BIT_FLAGS *flags)
@@ -159,7 +159,7 @@ static void add_mutation_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 
     if (creature_ptr->muta.has(MUTA::FLESH_ROT))
         remove_flag(flags, TR_REGEN);
-    if (creature_ptr->muta.has_any_of({MUTA::XTRA_FAT, MUTA::XTRA_LEGS, MUTA::SHORT_LEG}))
+    if (creature_ptr->muta.has_any_of({ MUTA::XTRA_FAT, MUTA::XTRA_LEGS, MUTA::SHORT_LEG }))
         add_flag(flags, TR_SPEED);
     if (creature_ptr->muta.has(MUTA::ELEC_TOUC))
         add_flag(flags, TR_SH_ELEC);
@@ -184,7 +184,6 @@ static void add_mutation_flags(player_type *creature_ptr, BIT_FLAGS *flags)
  * @brief 性格による耐性フラグを返す
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param flags 耐性フラグの配列
- * @return なし
  * @todo 最終的にplayer-status系列と統合する
  */
 static void add_personality_flags(player_type *creature_ptr, BIT_FLAGS *flags)
@@ -211,7 +210,6 @@ static void add_personality_flags(player_type *creature_ptr, BIT_FLAGS *flags)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param flags 耐性フラグの配列
  * @todo 最終的にplayer-status系列と統合する
- * @return なし
  */
 static void add_kata_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 {
@@ -272,7 +270,6 @@ static void add_kata_flags(player_type *creature_ptr, BIT_FLAGS *flags)
  * Prints ratings on certain abilities
  * @param creature_ptr 参照元クリーチャーポインタ
  * @param flags フラグを保管する配列
- * @return なし
  * @details
  * Obtain the "flags" for the player as if he was an item
  * @todo 最終的にplayer-status系列と統合する

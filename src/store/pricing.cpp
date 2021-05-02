@@ -2,8 +2,11 @@
 #include "object/object-value.h"
 #include "player/player-status-table.h"
 #include "store/gold-magnification-table.h"
+#include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief 店舗価格を決定する. 無料にはならない /

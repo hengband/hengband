@@ -1,10 +1,11 @@
 ﻿#include "effect/effect-player-resist-hurt.h"
 #include "artifact/fixed-art-types.h"
 #include "blue-magic/blue-magic-checker.h"
-#include "core/hp-mp-processor.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
+#include "effect/effect-player-util.h"
+#include "hpmp/hp-mp-processor.h"
 #include "inventory/inventory-damage.h"
 #include "inventory/inventory-slot-types.h"
 #include "mind/mind-mirror-master.h"
@@ -26,6 +27,7 @@
 #include "status/experience.h"
 #include "status/shape-changer.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -147,7 +149,6 @@ void effect_player_plasma(player_type *target_ptr, effect_player_type *ep_ptr)
  * @brief 地獄属性によるダメージを受ける
  * @param target_ptr プレイヤー情報への参照ポインタ
  * @param em_ptr プレイヤー効果情報への参照ポインタ
- * @return なし
  * @details
  * 幽霊は回復する。追加効果で経験値吸収。
  */
@@ -180,7 +181,6 @@ void effect_player_nether(player_type *target_ptr, effect_player_type *ep_ptr)
  * @brief 水流属性によるダメージを受ける
  * @param target_ptr プレイヤー情報への参照ポインタ
  * @param em_ptr プレイヤー効果情報への参照ポインタ
- * @return なし
  * @details
  * 追加効果で朦朧と混乱、冷気同様のインベントリ破壊。
  */
@@ -490,7 +490,6 @@ static void effect_player_time_addition(player_type *target_ptr)
  * @brief 時間逆転属性によるダメージを受ける
  * @param target_ptr プレイヤー情報への参照ポインタ
  * @param em_ptr プレイヤー効果情報への参照ポインタ
- * @return なし
  */
 void effect_player_time(player_type *target_ptr, effect_player_type *ep_ptr)
 {

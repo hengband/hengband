@@ -6,6 +6,7 @@
 #include "market/building-util.h"
 #include "market/poker.h"
 #include "player-info/avatar.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "view/display-fruit.h"

@@ -15,6 +15,8 @@
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
 #include "spell-kind/spells-perception.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 
@@ -28,7 +30,6 @@
  * for recharging wands and staffs are dependent on the cost of\n
  * the base-item.\n
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void building_recharge(player_type *player_ptr)
 {
@@ -172,7 +173,6 @@ void building_recharge(player_type *player_ptr)
  * for recharging wands and staffs are dependent on the cost of\n
  * the base-item.\n
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void building_recharge_all(player_type *player_ptr)
 {

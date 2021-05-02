@@ -9,6 +9,7 @@
 #include "object/object-value.h"
 #include "system/angband-version.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include "wizard/spoiler-util.h"
@@ -24,7 +25,6 @@
  * @param chance 生成機会を返すバッファ参照ポインタ
  * @param val 価値を返すバッファ参照ポインタ
  * @param k ベースアイテムID
- * @return なし
  */
 static void kind_info(player_type *player_ptr, char *buf, char *dam, char *wgt, char *chance, DEPTH *lev, PRICE *val, OBJECT_IDX k)
 {
@@ -94,7 +94,7 @@ spoiler_output_status spoil_obj_desc(concptr fname)
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
     if (!spoiler_file) {
-        return SPOILER_OUTPUT_FAIL_FOPEN;
+        return spoiler_output_status::SPOILER_OUTPUT_FAIL_FOPEN;
     }
 
     char title[200];
@@ -159,8 +159,6 @@ spoiler_output_status spoil_obj_desc(concptr fname)
         }
     }
 
-    if (ferror(spoiler_file) || angband_fclose(spoiler_file)) {
-        return SPOILER_OUTPUT_FAIL_FCLOSE;
-    }
-    return SPOILER_OUTPUT_SUCCESS;
+    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? spoiler_output_status::SPOILER_OUTPUT_FAIL_FCLOSE
+                                                                : spoiler_output_status::SPOILER_OUTPUT_SUCCESS;
 }

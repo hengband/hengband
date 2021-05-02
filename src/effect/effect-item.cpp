@@ -4,6 +4,7 @@
 #include "flavor/object-flavor-types.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"
+#include "grid/grid.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster/monster-info.h"
@@ -20,6 +21,9 @@
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-scroll-types.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -42,8 +46,8 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
     bool known = player_has_los_bold(caster_ptr, y, x);
     who = who ? who : 0;
     dam = (dam + r) / (r + 1);
-    OBJECT_IDX next_o_idx = 0;
-    for (OBJECT_IDX this_o_idx = g_ptr->o_idx; this_o_idx != 0; this_o_idx = next_o_idx) {
+    for (auto it = g_ptr->o_idx_list.begin(); it != g_ptr->o_idx_list.end();) {
+        const OBJECT_IDX this_o_idx = *it++;
         object_type *o_ptr = &caster_ptr->current_floor_ptr->o_list[this_o_idx];
         bool ignore = FALSE;
         bool do_kill = FALSE;
@@ -53,7 +57,6 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
 #else
         bool plural = (o_ptr->number > 1);
 #endif
-        next_o_idx = o_ptr->next_o_idx;
         BIT_FLAGS flags[TR_FLAG_SIZE];
         object_flags(caster_ptr, o_ptr, flags);
         bool is_artifact = object_is_artifact(o_ptr);

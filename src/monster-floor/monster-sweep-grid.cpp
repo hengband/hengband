@@ -6,6 +6,7 @@
 
 #include "monster-floor/monster-sweep-grid.h"
 #include "floor/cave.h"
+#include "floor/geometry.h"
 #include "floor/line-of-sight.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
@@ -17,9 +18,13 @@
 #include "monster-race/race-flags3.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
+#include "monster/monster-processor-util.h"
 #include "monster/monster-status.h"
 #include "player/player-status-flags.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 
 /*!
@@ -151,7 +156,6 @@ static bool sweep_ranged_attack_grid(player_type *target_ptr, MONSTER_IDX m_idx,
  * @param yp 移動先のマスのY座標を返す参照ポインタ
  * @param xp 移動先のマスのX座標を返す参照ポインタ
  * @param no_flow モンスターにFLOWフラグが経っていない状態でTRUE
- * @return なし
  * @details
  * Note that ghosts and rock-eaters are never allowed to "flow",\n
  * since they should move directly towards the player.\n

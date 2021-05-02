@@ -13,13 +13,13 @@
 #include "sv-definition/sv-lite-types.h"
 #include "system/artifact-type-definition.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
 
 /*!
  * @brief アイテムオブジェクトを読み込む(現版) / Read an object (New method)
  * @param o_ptr アイテムオブジェクト保存先ポインタ
- * @return なし
  */
 void rd_item(player_type *player_ptr, object_type *o_ptr)
 {

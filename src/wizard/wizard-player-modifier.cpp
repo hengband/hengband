@@ -9,6 +9,7 @@
 #include "mutation/mutation-investor-remover.h"
 #include "player-info/self-info.h"
 #include "spell/spells-status.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
@@ -33,7 +34,6 @@ std::vector<std::vector<std::string>> wizard_player_modifier_menu_table = {
 
 /*!
  * @brief プレイヤー設定コマンドの一覧を表示する
- * @return なし
  */
 void display_wizard_player_modifier_menu()
 {
@@ -53,7 +53,6 @@ void display_wizard_player_modifier_menu()
 /*!
  * @brief プレイヤー設定コマンドの入力を受け付ける
  * @param creature_ptr プレイヤーの情報へのポインタ
- * @return なし
  */
 void wizard_player_modifier(player_type *creature_ptr)
 {
@@ -71,7 +70,7 @@ void wizard_player_modifier(player_type *creature_ptr)
     case '\r':
         break;
     case 'a':
-        msg_format("Your alignment is %d.", creature_ptr->align);
+        msg_format("Your alignment is %d.", creature_ptr->alignment);
         break;
     case 'c':
         wiz_reset_class(creature_ptr);

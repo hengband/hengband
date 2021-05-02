@@ -10,6 +10,7 @@
 #include "realm/realm-names-table.h"
 #include "spell/spells-execution.h"
 #include "spell/technic-info-table.h"
+#include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -173,7 +174,6 @@ static void display_spell_list(player_type *caster_ptr)
  * @brief 現在の習得済魔法をサブウィンドウに表示する /
  * @param player_ptr プレーヤーへの参照ポインタ
  * Hack -- display spells in sub-windows
- * @return なし
  */
 void fix_spell(player_type *player_ptr)
 {

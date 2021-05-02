@@ -1,6 +1,8 @@
-#include "object-activation/activation-util.h"
+﻿#include "object-activation/activation-util.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 
 ae_type *initialize_ae_type(player_type *user_ptr, ae_type *ae_ptr, const INVENTORY_IDX item)
 {

@@ -96,7 +96,6 @@ static bool object_easy_know(int i)
 /*!
  * @brief 各種語彙からランダムな名前を作成する / Create a name from random parts.
  * @param out_string 作成した名を保管する参照ポインタ
- * @return なし
  * @details 日本語の場合 aname_j.txt 英語の場合確率に応じて
  * syllables 配列と elvish.txt を組み合わせる。\n
  */
@@ -142,7 +141,6 @@ void get_table_name_aux(char *out_string)
 /*!
  * @brief ランダムな名前をアーティファクト銘として整形する。 / Create a name from random parts with quotes.
  * @param out_string 作成した名を保管する参照ポインタ
- * @return なし
  * @details get_table_name_aux()ほぼ完全に実装を依存している。
  */
 void get_table_name(char *out_string)
@@ -155,7 +153,6 @@ void get_table_name(char *out_string)
 /*!
  * @brief ランダムなシンダリン銘を作成する / Make random Sindarin name
  * @param out_string 作成した名を保管する参照ポインタ
- * @return なし
  * @details sname.txtが語幹の辞書となっている。
  */
 void get_table_sindarin_aux(char *out_string)
@@ -179,7 +176,6 @@ void get_table_sindarin_aux(char *out_string)
 /*!
  * @brief シンダリン銘をアーティファクト用に整形する。 / Make random Sindarin name with quotes
  * @param out_string 作成した名を保管する参照ポインタ
- * @return なし
  * @details get_table_sindarin_aux()ほぼ完全に実装を依存している。
  */
 void get_table_sindarin(char *out_string)
@@ -192,7 +188,6 @@ void get_table_sindarin(char *out_string)
 /*!
  * @brief ベースアイテムの未確定名を共通tval間でシャッフルする / Shuffle flavor indices of a group of objects with given tval
  * @param tval シャッフルしたいtval
- * @return なし
  * @details 巻物、各種魔道具などに利用される。
  */
 static void shuffle_flavors(tval_type tval)
@@ -229,7 +224,6 @@ static void shuffle_flavors(tval_type tval)
 /*!
  * @brief ゲーム開始時に行われるベースアイテムの初期化ルーチン / Prepare the "variable" part of the "k_info" array.
  * @param なし
- * @return なし
  */
 void flavor_init(void)
 {
@@ -269,7 +263,6 @@ void flavor_init(void)
  * @brief nameバッファ内からベースアイテム名を返す / Strip an "object name" into a buffer
  * @param buf ベースアイテム格納先の参照ポインタ
  * @param k_idx ベースアイテムID
- * @return なし
  */
 void strip_name(char *buf, KIND_OBJECT_IDX k_idx)
 {

@@ -10,8 +10,10 @@
 #include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "floor/floor-util.h"
+#include "floor/geometry.h"
 #include "game-option/disturbance-options.h"
 #include "grid/feature.h"
+#include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
 #include "mind/mind-mirror-master.h"
 #include "mind/mind-numbers.h"
@@ -25,6 +27,9 @@
 #include "object-enchant/trc-types.h"
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
+#include "player-attack/player-attack-util.h"
+#include "player-info/equipment-info.h"
+#include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/player-status-flags.h"
 #include "player/special-defense-types.h"
@@ -43,6 +48,10 @@
 #include "status/element-resistance.h"
 #include "status/temporary-resistance.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
@@ -193,7 +202,6 @@ bool rush_attack(player_type *attacker_ptr, bool *mdeath)
  * @brief 盗賊と忍者における不意打ち
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @return なし
  */
 void process_surprise_attack(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {
@@ -235,7 +243,6 @@ void print_surprise_attack(player_attack_type *pa_ptr)
  * @brief 盗賊と忍者における不意打ちのダメージ計算
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @return なし
  */
 void calc_surprise_attack_damage(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {
@@ -260,9 +267,10 @@ void calc_surprise_attack_damage(player_type *attacker_ptr, player_attack_type *
  */
 bool hayagake(player_type *creature_ptr)
 {
+    PlayerEnergy energy(creature_ptr);
     if (creature_ptr->action == ACTION_HAYAGAKE) {
         set_action(creature_ptr, ACTION_NONE);
-        creature_ptr->energy_use = 0;
+        energy.reset_player_turn();
         return TRUE;
     }
 
@@ -275,7 +283,7 @@ bool hayagake(player_type *creature_ptr)
         set_action(creature_ptr, ACTION_HAYAGAKE);
     }
 
-    creature_ptr->energy_use = 0;
+    energy.reset_player_turn();
     return TRUE;
 }
 
@@ -408,7 +416,7 @@ bool cast_ninja_spell(player_type *caster_ptr, mind_ninja_type spell)
             }
 
             do_cmd_throw(caster_ptr, 1, FALSE, slot);
-            take_turn(caster_ptr, 100);
+            PlayerEnergy(caster_ptr).set_player_turn_energy(100);
         }
 
         break;

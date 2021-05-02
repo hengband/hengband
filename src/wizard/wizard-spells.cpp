@@ -4,10 +4,13 @@
  * @author Hourier
  */
 
+#include <vector>
+
 #include "wizard/wizard-spells.h"
 #include "blue-magic/blue-magic-checker.h"
 #include "core/asking-player.h"
 #include "effect/effect-characteristics.h"
+#include "effect/effect-processor.h"
 #include "floor/cave.h"
 #include "floor/floor-util.h"
 #include "mind/mind-blue-mage.h"
@@ -19,16 +22,15 @@
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-chaos.h"
-#include "spell/spell-types.h"
 #include "spell/spells-status.h"
 #include "spell/summon-types.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/grid-selector.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
+#include "util/flag-group.h"
 #include "view/display-messages.h"
-
-#include <vector>
 
 debug_spell_command debug_spell_commands_list[SPELL_MAX] = {
     { 2, "vanish dungeon", { .spell2 = { vanish_dungeon } } },
@@ -77,7 +79,6 @@ bool wiz_debug_spell(player_type *creature_ptr)
 /*!
  * @brief 必ず成功するウィザードモード用次元の扉処理 / Wizard Dimension Door
  * @param caster_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void wiz_dimension_door(player_type *caster_ptr)
 {
@@ -91,7 +92,6 @@ void wiz_dimension_door(player_type *caster_ptr)
 /*!
  * @brief ウィザードモード用モンスターの群れ生成 / Summon a horde of monsters
  * @param caster_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void wiz_summon_horde(player_type *caster_ptr)
 {
@@ -109,7 +109,6 @@ void wiz_summon_horde(player_type *caster_ptr)
 
 /*!
  * @brief ウィザードモード用処理としてターゲット中の相手をテレポートバックする / Hack -- Teleport to the target
- * @return なし
  */
 void wiz_teleport_back(player_type *caster_ptr)
 {
@@ -122,7 +121,6 @@ void wiz_teleport_back(player_type *caster_ptr)
 /*!
  * @brief 青魔導師の魔法を全て習得済みにする /
  * debug command for blue mage
- * @return なし
  */
 void wiz_learn_blue_magic_all(player_type *caster_ptr)
 {
@@ -143,7 +141,6 @@ void wiz_learn_blue_magic_all(player_type *caster_ptr)
  * Summon some creatures
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param num 生成処理回数
- * @return なし
  */
 void wiz_summon_random_enemy(player_type *caster_ptr, int num)
 {
@@ -155,7 +152,6 @@ void wiz_summon_random_enemy(player_type *caster_ptr, int num)
  * @brief モンスターを種族IDを指定して敵対的に召喚する /
  * Summon a creature of the specified type
  * @param r_idx モンスター種族ID
- * @return なし
  * @details
  * This function is rather dangerous
  */
@@ -168,7 +164,6 @@ void wiz_summon_specific_enemy(player_type *summoner_ptr, MONRACE_IDX r_idx)
  * @brief モンスターを種族IDを指定してペット召喚する /
  * Summon a creature of the specified type
  * @param r_idx モンスター種族ID
- * @return なし
  * @details
  * This function is rather dangerous
  */
@@ -178,16 +173,78 @@ void wiz_summon_pet(player_type *summoner_ptr, MONRACE_IDX r_idx)
 }
 
 /*!
- * @brief ターゲットを指定してダメージ100万・半径0の射撃のボールを放つ
- * @return なし
- * @details RES_ALL持ちも一撃で殺せる
+ * @brief ターゲットを指定して指定ダメージ・指定属性・半径0のボールを放つ
+ * @param dam ダメージ量
+ * @param effect_idx 属性ID
+ * @details デフォルトは100万・GF_ARROW(射撃)。RES_ALL持ちも一撃で殺せる。
  */
-void wiz_kill_enemy(player_type *caster_ptr)
+void wiz_kill_enemy(player_type *caster_ptr, HIT_POINT dam, EFFECT_ID effect_idx)
 {
+    if (dam <= 0) {
+        char tmp[80] = "";
+        sprintf(tmp, "Damage (1-999999): ");
+        char tmp_val[10] = "1000";
+        if (!get_string(tmp, tmp_val, 6))
+            return;
+
+        dam = (HIT_POINT)atoi(tmp_val);
+    }
+
+    if (effect_idx <= GF_NONE) {
+        char tmp[80] = "";
+        sprintf(tmp, "Effect ID (1-%d): ", MAX_GF - 1);
+        char tmp_val[10] = "";
+        if (!get_string(tmp, tmp_val, 3))
+            return;
+
+        effect_idx = (EFFECT_ID)atoi(tmp_val);
+    }
+
+
+    if (effect_idx <= GF_NONE || effect_idx >= MAX_GF) {
+        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), MAX_GF - 1);
+        return;
+    }
+
     DIRECTION dir;
 
     if (!get_aim_dir(caster_ptr, &dir))
         return;
 
-    fire_ball(caster_ptr, GF_ARROW, dir, 1000000, 0);
+    fire_ball(caster_ptr, effect_idx, dir, dam, 0);
+}
+
+/*!
+ * @brief 自分に指定ダメージ・指定属性・半径0のボールを放つ
+ * @param dam ダメージ量
+ * @param effect_idx 属性ID
+ */
+void wiz_kill_me(player_type *caster_ptr, HIT_POINT dam, EFFECT_ID effect_idx)
+{
+    if (dam <= 0) {
+        char tmp[80] = "";
+        sprintf(tmp, "Damage (1-999999): ");
+        char tmp_val[10] = "1000";
+        if (!get_string(tmp, tmp_val, 6))
+            return;
+
+        dam = (HIT_POINT)atoi(tmp_val);
+    }
+
+    if (effect_idx <= GF_NONE) {
+        char tmp[80] = "";
+        sprintf(tmp, "Effect ID (1-%d): ", MAX_GF - 1);
+        char tmp_val[10] = "1";
+        if (!get_string(tmp, tmp_val, 3))
+            return;
+
+        effect_idx = (EFFECT_ID)atoi(tmp_val);
+    }
+
+    if (effect_idx <= GF_NONE || effect_idx >= MAX_GF) {
+        msg_format(_("番号は1から%dの間で指定して下さい。", "ID must be between 1 to %d."), MAX_GF - 1);
+        return;
+    }
+
+    project(caster_ptr, -1, 0, caster_ptr->y, caster_ptr->x, dam, effect_idx, PROJECT_KILL | PROJECT_PLAYER);
 }

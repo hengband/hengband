@@ -1,6 +1,7 @@
 ﻿#include "mutation/gain-mutation-switcher.h"
 #include "mutation/mutation-flag-types.h"
 #include "mutation/mutation-util.h"
+#include "system/player-type-definition.h"
 
 void switch_gain_mutation(player_type *creature_ptr, glm_type *glm_ptr)
 {

@@ -14,6 +14,7 @@
 #include "autopick/autopick-pref-processor.h"
 #include "io/input-key-acceptor.h"
 #include "io/read-pref-file.h"
+#include "system/object-type-definition.h"
 #include "util/int-char-converter.h"
 #include "term/screen-processor.h"
 #include "world/world.h"

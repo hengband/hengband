@@ -16,6 +16,7 @@
 #include "dungeon/dungeon.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"
+#include "floor/geometry.h"
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
@@ -33,8 +34,12 @@
 #include "monster/monster-util.h"
 #include "object/object-generator.h"
 #include "pet/pet-fall-off.h"
+#include "player/player-status.h"
 #include "system/alloc-entries.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/probability-table.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -271,7 +276,6 @@ static bool monster_hook_chameleon(player_type *player_ptr, MONRACE_IDX r_idx)
  * @param m_idx 変身処理を受けるモンスター情報のID
  * @param born 生成時の初変身先指定ならばtrue
  * @param r_idx 旧モンスター種族のID
- * @return なし
  */
 void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx)
 {

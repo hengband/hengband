@@ -1,5 +1,4 @@
 ﻿#pragma once
 
-#include "system/angband.h"
-
+typedef struct player_type player_type;
 bool research_mon(player_type *player_ptr);

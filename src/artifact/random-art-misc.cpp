@@ -1,8 +1,14 @@
-﻿#include "artifact/random-art-misc.h"
+﻿/*!
+ * @file random-art-misc.cpp
+ * @brief ランダムアーティファクト生成のその他特性バイアス付け実装 / Artifact code
+ */
+
+#include "artifact/random-art-misc.h"
 #include "artifact/random-art-bias-types.h"
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-armor.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 static bool invest_misc_ranger(object_type *o_ptr)
@@ -239,7 +245,6 @@ static void invest_misc_weak_esps(object_type *o_ptr)
  * 乱テレポート、反魔法、反テレポート、警告、テレパシー、各種ESP、一部装備に殺戮修正。
  * @attention オブジェクトのtval、svalに依存したハードコーディング処理がある。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return なし
  */
 void random_misc(player_type *player_ptr, object_type *o_ptr)
 {

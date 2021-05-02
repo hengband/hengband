@@ -18,13 +18,13 @@
 #include "status/buff-setter.h"
 #include "status/experience.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "view/display-messages.h"
 
 /*!
  * @brief トランプ領域の「シャッフル」の効果をランダムに決めて処理する。
  * @param caster_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void cast_shuffle(player_type *caster_ptr)
 {

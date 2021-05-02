@@ -31,6 +31,7 @@
 #include "game-option/option-types-table.h"
 #include "game-option/play-record-options.h"
 #include "game-option/special-options.h"
+#include "grid/feature.h"
 #include "grid/grid.h"
 #include "info-reader/fixed-map-parser.h"
 #include "inventory/inventory-object.h"
@@ -55,6 +56,7 @@
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
 #include "player-info/self-info.h"
+#include "player-status/player-energy.h"
 #include "player/digestion-processor.h"
 #include "player/patron.h"
 #include "player/player-class.h"
@@ -75,6 +77,8 @@
 #include "system/angband-version.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/grid-selector.h"
 #include "term/screen-processor.h"
 #include "util/angband-files.h"
@@ -91,7 +95,6 @@
 /*!
  * @brief プレイヤーを完全回復する /
  * Cure everything instantly
- * @return なし
  */
 void wiz_cure_all(player_type *creature_ptr)
 {
@@ -170,7 +173,6 @@ KIND_OBJECT_IDX wiz_create_itemtype(void)
 /*!
  * @brief 任意のベースアイテム生成のメインルーチン /
  * Wizard routine for creating objects		-RAK-
- * @return なし
  * @details
  * Heavily modified to allow magification and artifactification  -Bernd-
  *
@@ -202,7 +204,7 @@ void wiz_create_item(player_type *caster_ptr)
     object_type *q_ptr;
     q_ptr = &forge;
     object_prep(caster_ptr, q_ptr, k_idx);
-    apply_magic(caster_ptr, q_ptr, caster_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
+    apply_magic_to_object(caster_ptr, q_ptr, caster_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
     (void)drop_near(caster_ptr, q_ptr, -1, caster_ptr->y, caster_ptr->x);
     msg_print("Allocated.");
 }
@@ -210,7 +212,6 @@ void wiz_create_item(player_type *caster_ptr)
 /*!
  * @brief 指定されたIDの固定アーティファクトを生成する / Create the artifact of the specified number
  * @param caster_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void wiz_create_named_art(player_type *caster_ptr, ARTIFACT_IDX a_idx)
 {
@@ -236,7 +237,6 @@ void wiz_create_named_art(player_type *caster_ptr, ARTIFACT_IDX a_idx)
 /*!
  * @brief プレイヤーの現能力値を調整する / Change various "permanent" player variables.
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void wiz_change_status(player_type *creature_ptr)
 {
@@ -320,7 +320,6 @@ void wiz_change_status(player_type *creature_ptr)
  * @brief 指定された地点の地形IDを変更する /
  * Create desired feature
  * @param creaturer_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void wiz_create_feature(player_type *creature_ptr)
 {
@@ -375,7 +374,6 @@ void wiz_create_feature(player_type *creature_ptr)
 /*!
  * @brief 任意のダンジョン及び階層に飛ぶ /
  * Go to any level
- * @return なし
  */
 void wiz_jump_to_dungeon(player_type *creature_ptr)
 {
@@ -423,7 +421,7 @@ void wiz_jump_to_dungeon(player_type *creature_ptr)
         exe_write_diary(creature_ptr, DIARY_WIZ_TELE, 0, NULL);
 
     creature_ptr->current_floor_ptr->inside_quest = 0;
-    free_turn(creature_ptr);
+    PlayerEnergy(creature_ptr).reset_player_turn();
     creature_ptr->energy_need = 0;
     prepare_change_floor_mode(creature_ptr, CFM_FIRST_FLOOR);
     creature_ptr->leaving = TRUE;
@@ -433,7 +431,6 @@ void wiz_jump_to_dungeon(player_type *creature_ptr)
  * @brief 全ベースアイテムを鑑定済みにする /
  * Become aware of a lot of objects
  * @param caster_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void wiz_learn_items_all(player_type *caster_ptr)
 {
@@ -451,7 +448,6 @@ void wiz_learn_items_all(player_type *caster_ptr)
 
 /*!
  * @brief プレイヤーの種族を変更する
- * @return なし
  */
 void wiz_reset_race(player_type *creature_ptr)
 {
@@ -479,7 +475,6 @@ void wiz_reset_race(player_type *creature_ptr)
 
 /*!
  * @brief プレイヤーの職業を変更する
- * @return なし
  * @todo 魔法領域の再選択などがまだ不完全、要実装。
  */
 void wiz_reset_class(player_type *creature_ptr)
@@ -508,7 +503,6 @@ void wiz_reset_class(player_type *creature_ptr)
 
 /*!
  * @brief プレイヤーの領域を変更する
- * @return なし
  * @todo 存在有無などは未判定。そのうちすべき。
  */
 void wiz_reset_realms(player_type *creature_ptr)
@@ -539,7 +533,6 @@ void wiz_reset_realms(player_type *creature_ptr)
  * @brief 現在のオプション設定をダンプ出力する /
  * @param creature_ptr プレーヤーへの参照ポインタ
  * Hack -- Dump option bits usage
- * @return なし
  */
 void wiz_dump_options(void)
 {
@@ -613,7 +606,6 @@ void set_gametime(void)
 
 /*!
  * @brief プレイヤー近辺の全モンスターを消去する / Delete all nearby monsters
- * @return なし
  */
 void wiz_zap_surrounding_monsters(player_type *caster_ptr)
 {
@@ -636,7 +628,6 @@ void wiz_zap_surrounding_monsters(player_type *caster_ptr)
 /*!
  * @brief フロアに存在する全モンスターを消去する / Delete all monsters
  * @param caster_ptr 術者の参照ポインタ
- * @return なし
  */
 void wiz_zap_floor_monsters(player_type *caster_ptr)
 {

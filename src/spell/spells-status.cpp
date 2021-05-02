@@ -7,7 +7,6 @@
 #include "spell/spells-status.h"
 #include "cmd-action/cmd-spell.h"
 #include "cmd-item/cmd-magiceat.h"
-#include "core/hp-mp-processor.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
@@ -17,8 +16,10 @@
 #include "flavor/object-flavor-types.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"
+#include "floor/geometry.h"
 #include "grid/feature-flag-types.h"
 #include "grid/grid.h"
+#include "hpmp/hp-mp-processor.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
 #include "mind/mind-force-trainer.h"
@@ -26,10 +27,10 @@
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
-#include "player/attack-defense-types.h"
 #include "player-info/avatar.h"
+#include "player-status/player-energy.h"
+#include "player/attack-defense-types.h"
 #include "player/player-class.h"
-#include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
@@ -43,6 +44,9 @@
 #include "status/shape-changer.h"
 #include "status/sight-setter.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -106,7 +110,10 @@ bool sleep_monster(player_type *caster_ptr, DIRECTION dir, int power)
  * @return 作用が実際にあった場合TRUEを返す
  * @details 威力はプレイヤーレベル*2に固定
  */
-bool stasis_monster(player_type *caster_ptr, DIRECTION dir) { return (fire_ball_hide(caster_ptr, GF_STASIS, dir, caster_ptr->lev * 2, 0)); }
+bool stasis_monster(player_type *caster_ptr, DIRECTION dir)
+{
+    return (fire_ball_hide(caster_ptr, GF_STASIS, dir, caster_ptr->lev * 2, 0));
+}
 
 /*!
  * @brief 邪悪なモンスター拘束(STASIS)処理
@@ -115,7 +122,10 @@ bool stasis_monster(player_type *caster_ptr, DIRECTION dir) { return (fire_ball_
  * @return 作用が実際にあった場合TRUEを返す
  * @details 威力はプレイヤーレベル*2に固定
  */
-bool stasis_evil(player_type *caster_ptr, DIRECTION dir) { return (fire_ball_hide(caster_ptr, GF_STASIS_EVIL, dir, caster_ptr->lev * 2, 0)); }
+bool stasis_evil(player_type *caster_ptr, DIRECTION dir)
+{
+    return (fire_ball_hide(caster_ptr, GF_STASIS_EVIL, dir, caster_ptr->lev * 2, 0));
+}
 
 /*!
  * @brief モンスター混乱処理
@@ -208,7 +218,6 @@ bool time_walk(player_type *creature_ptr)
  * @brief プレイヤーのヒットダイスを振る / Role Hitpoints
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param options スペル共通オプション
- * @return なし
  */
 void roll_hitdice(player_type *creature_ptr, spell_operation options)
 {
@@ -449,7 +458,7 @@ bool fishing(player_type *creature_ptr)
         GAME_TEXT m_name[MAX_NLEN];
         monster_desc(creature_ptr, m_name, &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[y][x].m_idx], 0);
         msg_format(_("%sが邪魔だ！", "%^s is standing in your way."), m_name);
-        free_turn(creature_ptr);
+        PlayerEnergy(creature_ptr).reset_player_turn();
         return FALSE;
     }
 
@@ -514,7 +523,6 @@ bool cosmic_cast_off(player_type *creature_ptr, object_type **o_ptr_ptr)
 /*!
  * @brief プレイヤーの因果混乱処理 / Apply Nexus
  * @param m_ptr 因果混乱をプレイヤーに与えたモンスターの情報参照ポインタ
- * @return なし
  */
 void apply_nexus(monster_type *m_ptr, player_type *target_ptr)
 {
@@ -558,7 +566,6 @@ void apply_nexus(monster_type *m_ptr, player_type *target_ptr)
 /*!
  * @brief プレイヤーのステータスシャッフル処理
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void status_shuffle(player_type *creature_ptr)
 {

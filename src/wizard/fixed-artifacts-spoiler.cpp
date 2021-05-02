@@ -5,6 +5,7 @@
 #include "system/angband-version.h"
 #include "system/artifact-type-definition.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include "wizard/artifact-analyzer.h"
@@ -15,7 +16,6 @@
  * @param header ヘッダに出力するフラグ群の名前
  * @param list フラグ名リスト
  * @param separator フラグ表示の区切り記号
- * @return なし
  * @todo 固定アーティファクトとランダムアーティファクトで共用、ここに置くべきかは要調整.
  */
 void spoiler_outlist(concptr header, concptr *list, char separator)
@@ -66,7 +66,6 @@ void spoiler_outlist(concptr header, concptr *list, char separator)
 
 /*!
  * @brief バッファにアーティファクト出力情報ヘッダを収める /
- * @return なし
  */
 static void print_header(void)
 {
@@ -111,7 +110,6 @@ static bool make_fake_artifact(player_type *player_ptr, object_type *o_ptr, ARTI
  * @brief アーティファクト一件をスポイラー出力する /
  * Create a spoiler file entry for an artifact
  * @param art_ptr アーティファクト情報をまとめた構造体の参照ポインタ
- * @return なし
  */
 static void spoiler_print_art(obj_desc_list *art_ptr)
 {
@@ -154,7 +152,7 @@ spoiler_output_status spoil_fixed_artifact(concptr fname)
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
     if (!spoiler_file) {
-        return SPOILER_OUTPUT_FAIL_FOPEN;
+        return spoiler_output_status::SPOILER_OUTPUT_FAIL_FOPEN;
     }
 
     print_header();
@@ -180,8 +178,6 @@ spoiler_output_status spoil_fixed_artifact(concptr fname)
         }
     }
 
-    if (ferror(spoiler_file) || angband_fclose(spoiler_file)) {
-        return SPOILER_OUTPUT_FAIL_FCLOSE;
-    }
-    return SPOILER_OUTPUT_SUCCESS;
+    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? spoiler_output_status::SPOILER_OUTPUT_FAIL_FCLOSE
+                                                                : spoiler_output_status::SPOILER_OUTPUT_SUCCESS;
 }

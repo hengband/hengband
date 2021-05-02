@@ -13,7 +13,6 @@ FILE *spoiler_file = NULL;
  * Write out `n' of the character `c' to the spoiler file
  * @param n 出力する数
  * @param c 出力するキャラクタ
- * @return なし
  */
 static void spoiler_out_n_chars(int n, char c)
 {
@@ -25,7 +24,6 @@ static void spoiler_out_n_chars(int n, char c)
  * @brief ファイルポインタ先に改行を複数出力する /
  * Write out `n' blank lines to the spoiler file
  * @param n 改行を出力する数
- * @return なし
  */
 void spoiler_blanklines(int n) { spoiler_out_n_chars(n, '\n'); }
 
@@ -33,7 +31,6 @@ void spoiler_blanklines(int n) { spoiler_out_n_chars(n, '\n'); }
  * @brief ファイルポインタ先に複数のハイフンで装飾した文字列を出力する /
  * Write a line to the spoiler file and then "underline" it with hypens
  * @param str 出力したい文字列
- * @return なし
  */
 void spoiler_underline(concptr str)
 {
@@ -47,7 +44,6 @@ void spoiler_underline(concptr str)
  * Buffer text to the given file. (-SHAWN-)
  * This is basically c_roff() from mon-desc.c with a few changes.
  * @param str 文字列参照ポインタ
- * @return なし
  */
 void spoil_out(concptr str)
 {

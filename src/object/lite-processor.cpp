@@ -7,13 +7,14 @@
 #include "object-enchant/object-ego.h"
 #include "object-hook/hook-enchant.h"
 #include "sv-definition/sv-lite-types.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
 /*!
  * @brief 10ゲームターンが進行する毎に光源の寿命を減らす処理
  * / Handle burning fuel every 10 game turns
- * @return なし
  */
 void reduce_lite_life(player_type* creature_ptr)
 {
@@ -37,7 +38,6 @@ void reduce_lite_life(player_type* creature_ptr)
  * @brief 寿命つき光源の警告メッセージ処理
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 現在光源として使っているオブジェクトの構造体参照ポインタ
- * @return なし
  */
 void notice_lite_change(player_type* creature_ptr, object_type* o_ptr)
 {

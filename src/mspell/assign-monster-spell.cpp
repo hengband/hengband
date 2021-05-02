@@ -21,6 +21,7 @@
 #include "mspell/mspell-util.h"
 #include "mspell/mspell.h"
 #include "spell/spell-types.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief SPELL_IDX を monster_spell_type に変換する。

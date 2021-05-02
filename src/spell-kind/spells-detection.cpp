@@ -3,7 +3,9 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/cave.h"
+#include "floor/geometry.h"
 #include "floor/floor-save-util.h"
+#include "grid/feature.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "monster-race/monster-race.h"
@@ -20,8 +22,11 @@
 #include "object/tval-types.h"
 #include "realm/realm-song-numbers.h"
 #include "realm/realm-song.h"
+#include "spell-realm/spells-song.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 
@@ -88,7 +93,7 @@ bool detect_traps(player_type *caster_ptr, POSITION range, bool known)
     if (known || detect)
         caster_ptr->dtrap = TRUE;
 
-    if (music_singing(caster_ptr, MUSIC_DETECT) && SINGING_COUNT(caster_ptr) > 0)
+    if (music_singing(caster_ptr, MUSIC_DETECT) && get_singing_count(caster_ptr) > 0)
         detect = FALSE;
 
     if (detect)
@@ -107,7 +112,7 @@ bool detect_doors(player_type *caster_ptr, POSITION range)
 {
     bool detect = detect_feat_flag(caster_ptr, range, FF_DOOR, TRUE);
 
-    if (music_singing(caster_ptr, MUSIC_DETECT) && SINGING_COUNT(caster_ptr) > 0)
+    if (music_singing(caster_ptr, MUSIC_DETECT) && get_singing_count(caster_ptr) > 0)
         detect = FALSE;
     if (detect) {
         msg_print(_("ドアの存在を感じとった！", "You sense the presence of doors!"));
@@ -126,7 +131,7 @@ bool detect_stairs(player_type *caster_ptr, POSITION range)
 {
     bool detect = detect_feat_flag(caster_ptr, range, FF_STAIRS, TRUE);
 
-    if (music_singing(caster_ptr, MUSIC_DETECT) && SINGING_COUNT(caster_ptr) > 0)
+    if (music_singing(caster_ptr, MUSIC_DETECT) && get_singing_count(caster_ptr) > 0)
         detect = FALSE;
     if (detect) {
         msg_print(_("階段の存在を感じとった！", "You sense the presence of stairs!"));
@@ -145,7 +150,7 @@ bool detect_treasure(player_type *caster_ptr, POSITION range)
 {
     bool detect = detect_feat_flag(caster_ptr, range, FF_HAS_GOLD, TRUE);
 
-    if (music_singing(caster_ptr, MUSIC_DETECT) && SINGING_COUNT(caster_ptr) > 6)
+    if (music_singing(caster_ptr, MUSIC_DETECT) && get_singing_count(caster_ptr) > 6)
         detect = FALSE;
     if (detect) {
         msg_print(_("埋蔵された財宝の存在を感じとった！", "You sense the presence of buried treasure!"));
@@ -188,7 +193,7 @@ bool detect_objects_gold(player_type *caster_ptr, POSITION range)
         }
     }
 
-    if (music_singing(caster_ptr, MUSIC_DETECT) && SINGING_COUNT(caster_ptr) > 6)
+    if (music_singing(caster_ptr, MUSIC_DETECT) && get_singing_count(caster_ptr) > 6)
         detect = FALSE;
     if (detect) {
         msg_print(_("財宝の存在を感じとった！", "You sense the presence of treasure!"));
@@ -235,7 +240,7 @@ bool detect_objects_normal(player_type *caster_ptr, POSITION range)
         }
     }
 
-    if (music_singing(caster_ptr, MUSIC_DETECT) && SINGING_COUNT(caster_ptr) > 6)
+    if (music_singing(caster_ptr, MUSIC_DETECT) && get_singing_count(caster_ptr) > 6)
         detect = FALSE;
     if (detect) {
         msg_print(_("アイテムの存在を感じとった！", "You sense the presence of objects!"));
@@ -332,7 +337,7 @@ bool detect_monsters_normal(player_type *caster_ptr, POSITION range)
         }
     }
 
-    if (music_singing(caster_ptr, MUSIC_DETECT) && SINGING_COUNT(caster_ptr) > 3)
+    if (music_singing(caster_ptr, MUSIC_DETECT) && get_singing_count(caster_ptr) > 3)
         flag = FALSE;
     if (flag) {
         msg_print(_("モンスターの存在を感じとった！", "You sense the presence of monsters!"));
@@ -377,7 +382,7 @@ bool detect_monsters_invis(player_type *caster_ptr, POSITION range)
         }
     }
 
-    if (music_singing(caster_ptr, MUSIC_DETECT) && SINGING_COUNT(caster_ptr) > 3)
+    if (music_singing(caster_ptr, MUSIC_DETECT) && get_singing_count(caster_ptr) > 3)
         flag = FALSE;
     if (flag) {
         msg_print(_("透明な生物の存在を感じとった！", "You sense the presence of invisible creatures!"));
@@ -549,7 +554,7 @@ bool detect_monsters_string(player_type *caster_ptr, POSITION range, concptr Mat
         }
     }
 
-    if (music_singing(caster_ptr, MUSIC_DETECT) && SINGING_COUNT(caster_ptr) > 3)
+    if (music_singing(caster_ptr, MUSIC_DETECT) && get_singing_count(caster_ptr) > 3)
         flag = FALSE;
     if (flag) {
         msg_print(_("モンスターの存在を感じとった！", "You sense the presence of monsters!"));

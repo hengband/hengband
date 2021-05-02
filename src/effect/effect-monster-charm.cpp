@@ -2,6 +2,7 @@
 #include "dungeon/quest.h"
 #include "effect/effect-monster-util.h"
 #include "effect/spells-effect-util.h"
+#include "grid/grid.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
@@ -16,13 +17,16 @@
 #include "monster/monster-status.h"
 #include "object-enchant/trc-types.h"
 #include "pet/pet-fall-off.h"
+#include "pet/pet-util.h"
 #include "player-info/avatar.h"
-#include "player/player-status.h"
 #include "player/player-status-flags.h"
 #include "util/bit-flags-calculator.h"
 #include "spell/spells-diceroll.h"
 #include "status/bad-status-setter.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 static void effect_monster_charm_resist(player_type *caster_ptr, effect_monster_type *em_ptr)
@@ -365,7 +369,6 @@ static HIT_POINT calcutate_capturable_hp(player_type *caster_ptr, monster_type *
  * @brief モンスターボールで捕らえた処理
  * @param caster_ptr プレイヤー情報への参照ポインタ
  * @param em_ptr 効果情報への参照ポインタ
- * @return なし
  */
 static void effect_monster_captured(player_type *caster_ptr, effect_monster_type *em_ptr)
 {

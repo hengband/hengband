@@ -420,6 +420,12 @@ cries, 'Oh, how many times will I die !? Next... Where... I... When will I "atta
 N:1292:Cioccolata
 cries, 'What a terrible bastard!'
 
+N:1299:The Colonel Lostringil
+shouted, "Ringil is not here! Retreat!!"
+
+N:1303:Spawn of Yog-Sothoth
+screamed in the middle of the sound, in the middle of consciousness.
+
 N:*:Default lines
 says, 'I am too young to die.'
 says, 'Ok, ok! I get: no more pals.'

@@ -8,6 +8,7 @@
 #include "realm/realm-names-table.h"
 #include "spell/spell-info.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/term-color-types.h"
 #include "view/display-messages.h"
 
@@ -16,7 +17,6 @@
  * Describe the charges on an item in the inventory.
  * @param owner_ptr プレーヤーへの参照ポインタ
  * @param item 残量を表示したいプレイヤーのアイテム所持スロット
- * @return なし
  */
 void inven_item_charges(player_type *owner_ptr, INVENTORY_IDX item)
 {
@@ -48,7 +48,6 @@ void inven_item_charges(player_type *owner_ptr, INVENTORY_IDX item)
  * Describe an item in the inventory.
  * @param owner_ptr プレーヤーへの参照ポインタ
  * @param item 残量を表示したいプレイヤーのアイテム所持スロット
- * @return なし
  */
 void inven_item_describe(player_type *owner_ptr, INVENTORY_IDX item)
 {
@@ -71,7 +70,6 @@ void inven_item_describe(player_type *owner_ptr, INVENTORY_IDX item)
  * Hack -- display an object kind in the current window
  * @param owner_ptr プレーヤーへの参照ポインタ
  * @param k_idx ベースアイテムの参照ID
- * @return なし
  * @details
  * Include list of usable spells for readible books
  */

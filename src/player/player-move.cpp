@@ -18,6 +18,7 @@
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
+#include "floor/geometry.h"
 #include "floor/floor-util.h"
 #include "game-option/disturbance-options.h"
 #include "grid/feature.h"
@@ -28,14 +29,19 @@
 #include "mind/mind-ninja.h"
 #include "monster/monster-update.h"
 #include "perception/object-perception.h"
+#include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/player-status-flags.h"
+#include "player/player-status.h"
 #include "realm/realm-song-numbers.h"
 #include "spell-kind/spells-floor.h"
+#include "spell-realm/spells-song.h"
 #include "spell/spell-types.h"
 #include "status/action-setter.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/target-checker.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -51,7 +57,6 @@ POSITION temp2_y[MAX_SHORT];
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param y 対象となるマスのY座標
  * @param x 対象となるマスのX座標
- * @return なし
  */
 static void discover_hidden_things(player_type *creature_ptr, POSITION y, POSITION x)
 {
@@ -70,11 +75,9 @@ static void discover_hidden_things(player_type *creature_ptr, POSITION y, POSITI
         disturb(creature_ptr, FALSE, FALSE);
     }
 
-    OBJECT_IDX next_o_idx = 0;
-    for (OBJECT_IDX this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx) {
+    for (const auto this_o_idx : g_ptr->o_idx_list) {
         object_type *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
-        next_o_idx = o_ptr->next_o_idx;
         if (o_ptr->tval != TV_CHEST)
             continue;
         if (!chest_traps[o_ptr->pval])
@@ -90,7 +93,6 @@ static void discover_hidden_things(player_type *creature_ptr, POSITION y, POSITI
 /*!
  * @brief プレイヤーの探索処理判定
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void search(player_type *creature_ptr)
 {
@@ -211,17 +213,18 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
         window_stuff(creature_ptr);
     }
 
+    PlayerEnergy energy(creature_ptr);
     if (has_flag(f_ptr->flags, FF_STORE)) {
         disturb(creature_ptr, FALSE, TRUE);
-        free_turn(creature_ptr);
+        energy.reset_player_turn();
         command_new = SPECIAL_KEY_STORE;
     } else if (has_flag(f_ptr->flags, FF_BLDG)) {
         disturb(creature_ptr, FALSE, TRUE);
-        free_turn(creature_ptr);
+        energy.reset_player_turn();
         command_new = SPECIAL_KEY_BUILDING;
     } else if (has_flag(f_ptr->flags, FF_QUEST_ENTER)) {
         disturb(creature_ptr, FALSE, TRUE);
-        free_turn(creature_ptr);
+        energy.reset_player_turn();
         command_new = SPECIAL_KEY_QUEST;
     } else if (has_flag(f_ptr->flags, FF_QUEST_EXIT)) {
         if (quest[floor_ptr->inside_quest].type == QUEST_TYPE_FIND_EXIT)

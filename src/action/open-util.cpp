@@ -10,6 +10,7 @@
 #include "perception/object-perception.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief 該当のマスに存在している箱のオブジェクトIDを返す。
@@ -21,11 +22,9 @@
 OBJECT_IDX chest_check(floor_type *floor_ptr, POSITION y, POSITION x, bool trapped)
 {
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-    OBJECT_IDX this_o_idx, next_o_idx = 0;
-    for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx) {
+    for (const auto this_o_idx : g_ptr->o_idx_list) {
         object_type *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
-        next_o_idx = o_ptr->next_o_idx;
         if ((o_ptr->tval == TV_CHEST)
             && (((!trapped) && (o_ptr->pval)) || /* non empty */
                 ((trapped) && (o_ptr->pval > 0)))) /* trapped only */

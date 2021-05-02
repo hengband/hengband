@@ -13,6 +13,7 @@
 #include "game-option/special-options.h"
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"
+#include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -62,7 +63,6 @@ static void read_temporary_file(FILE *fff, FILE *tmpfff, char buf[], size_t buf_
  * @param wid 幅
  * @param y 現在の行位置
  * @param fff 記念撮影ファイルへの参照ポインタ
- * @return なし
  */
 static void screen_dump_one_line(int wid, int y, FILE *fff)
 {
@@ -107,7 +107,6 @@ static void screen_dump_one_line(int wid, int y, FILE *fff)
  * @param wid 幅
  * @param hgt 高さ
  * @param fff 記念撮影ファイルへの参照ポインタ
- * @return なし
  */
 static void screen_dump_lines(int wid, int hgt, FILE *fff)
 {
@@ -216,7 +215,6 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 /*!
  * @brief HTML方式で記念撮影する / Save a screen dump to a file
  * @param なし
- * @return なし
  */
 static void do_cmd_save_screen_html(void)
 {
@@ -353,7 +351,6 @@ static bool update_use_graphics(player_type *creature_ptr)
 /*
  * Save a screen dump to a file
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void do_cmd_save_screen(player_type *creature_ptr)
 {
@@ -424,7 +421,6 @@ static bool draw_white_characters(char buf[], FILE *fff, int wid, int hgt)
  * @param hgt 高さ
  * @param 白文字が途中で読み込めなくなっていたらTRUE
  * @todo 目的は不明瞭
- * @return なし
  */
 static void draw_colored_characters(char buf[], FILE *fff, int wid, int hgt, bool okay)
 {
@@ -456,7 +452,6 @@ static void draw_colored_characters(char buf[], FILE *fff, int wid, int hgt, boo
 /*
  * @brief Load a screen dump from a file
  * @param なし
- * @return なし
  */
 void do_cmd_load_screen(void)
 {

@@ -13,8 +13,8 @@
 #include "perception/object-perception.h"
 #include "player/attack-defense-types.h"
 #include "player-info/avatar.h"
+#include "player-status/player-energy.h"
 #include "player/player-class.h"
-#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "spell-kind/spells-beam.h"
 #include "spell-kind/spells-detection.h"
@@ -36,6 +36,8 @@
 #include "status/shape-changer.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-rod-types.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
@@ -276,7 +278,6 @@ int rod_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION d
  * Activate (zap) a Rod
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param item 使うオブジェクトの所持品ID
- * @return なし
  * @details
  * <pre>
  * Unstack fully charged rods as needed.
@@ -313,7 +314,7 @@ void exe_zap_rod(player_type *creature_ptr, INVENTORY_IDX item)
             return;
     }
 
-    take_turn(creature_ptr, 100);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
 
     lev = k_info[o_ptr->k_idx].level;
 
@@ -407,7 +408,6 @@ void exe_zap_rod(player_type *creature_ptr, INVENTORY_IDX item)
 /*!
  * @brief ロッドを使うコマンドのメインルーチン /
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void do_cmd_zap_rod(player_type *creature_ptr)
 {

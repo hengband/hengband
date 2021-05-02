@@ -176,7 +176,6 @@ static void write_item_info(object_type *o_ptr, const BIT_FLAGS flags)
 /*!
  * @brief アイテムオブジェクトを書き込む / Write an "item" record
  * @param o_ptr アイテムオブジェクト保存元ポインタ
- * @return なし
  */
 void wr_item(object_type *o_ptr)
 {
@@ -206,7 +205,6 @@ void wr_item(object_type *o_ptr)
 /*!
  * @brief セーブデータにアイテムの鑑定情報を書き込む / Write an "perception" record
  * @param k_idx ベースアイテムのID
- * @return なし
  */
 void wr_perception(KIND_OBJECT_IDX k_idx)
 {

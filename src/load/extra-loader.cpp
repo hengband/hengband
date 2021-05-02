@@ -10,12 +10,12 @@
 #include "load/dummy-loader.h"
 #include "load/load-util.h"
 #include "load/world-loader.h"
+#include "system/player-type-definition.h"
 #include "world/world.h"
 
 /*!
  * @brief その他の情報を読み込む / Read the "extra" information
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void rd_extra(player_type *creature_ptr)
 {

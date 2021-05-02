@@ -1,5 +1,6 @@
 ﻿#include "world/world.h"
 #include "player/player-race-types.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 world_type world;

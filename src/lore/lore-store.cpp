@@ -10,7 +10,9 @@
 #include "monster-race/monster-race.h"
 #include "monster/monster-info.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h" //!< @todo 違和感、m_ptr は外から与えることとしたい.
+#include "system/player-type-definition.h"
 
 /*!
  * @brief モンスターの調査による思い出補完処理 / Learn about a monster (by "probing" it)
@@ -93,7 +95,6 @@ int lore_do_probe(player_type *player_ptr, MONRACE_IDX r_idx)
  * @param m_idx モンスター情報のID
  * @param num_item 手に入れたアイテム数
  * @param num_gold 手に入れた財宝の単位数
- * @return なし
  */
 void lore_treasure(player_type *player_ptr, MONSTER_IDX m_idx, ITEM_NUMBER num_item, ITEM_NUMBER num_gold)
 {

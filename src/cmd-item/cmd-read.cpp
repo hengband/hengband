@@ -16,11 +16,11 @@
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
 #include "status/action-setter.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief 読むコマンドのメインルーチン /
  * Eat some food (from the pack or floor)
- * @return なし
  */
 void do_cmd_read_scroll(player_type *creature_ptr)
 {

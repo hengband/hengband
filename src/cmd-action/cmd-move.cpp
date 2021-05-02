@@ -18,19 +18,23 @@
 #include "game-option/play-record-options.h"
 #include "game-option/special-options.h"
 #include "game-option/map-screen-options.h"
+#include "grid/feature.h"
 #include "grid/grid.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io/input-key-requester.h"
 #include "io/write-diary.h"
 #include "mind/mind-ninja.h"
 #include "player-info/avatar.h"
+#include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/player-move.h"
+#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"
+#include "spell-realm/spells-song.h"
 #include "status/action-setter.h"
 #include "system/floor-type-definition.h"
-#include "system/system-variables.h"
+#include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -56,7 +60,6 @@ static bool confirm_leave_level(player_type *creature_ptr, bool down_stair)
 
 /*!
  * @brief 階段を使って階層を昇る処理 / Go up one level
- * @return なし
  */
 void do_cmd_go_up(player_type *creature_ptr)
 {
@@ -100,7 +103,7 @@ void do_cmd_go_up(player_type *creature_ptr)
         creature_ptr->leaving = TRUE;
         creature_ptr->oldpx = 0;
         creature_ptr->oldpy = 0;
-        take_turn(creature_ptr, 100);
+        PlayerEnergy(creature_ptr).set_player_turn_energy(100);
         return;
     }
 
@@ -112,7 +115,7 @@ void do_cmd_go_up(player_type *creature_ptr)
     if (!go_up)
         return;
 
-    take_turn(creature_ptr, 100);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
 
     if (autosave_l)
         do_cmd_save_game(creature_ptr, TRUE);
@@ -158,7 +161,6 @@ void do_cmd_go_up(player_type *creature_ptr)
 /*!
  * @brief 階段を使って階層を降りる処理 / Go down one level
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void do_cmd_go_down(player_type *creature_ptr)
 {
@@ -211,7 +213,7 @@ void do_cmd_go_down(player_type *creature_ptr)
         creature_ptr->leaving = TRUE;
         creature_ptr->oldpx = 0;
         creature_ptr->oldpy = 0;
-        take_turn(creature_ptr, 100);
+        PlayerEnergy(creature_ptr).set_player_turn_energy(100);
         return;
     }
 
@@ -236,7 +238,7 @@ void do_cmd_go_down(player_type *creature_ptr)
         prepare_change_floor_mode(creature_ptr, CFM_FIRST_FLOOR);
     }
 
-    take_turn(creature_ptr, 100);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     if (autosave_l)
         do_cmd_save_game(creature_ptr, TRUE);
 
@@ -288,7 +290,6 @@ void do_cmd_go_down(player_type *creature_ptr)
  * Support code for the "Walk" and "Jump" commands
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param pickup アイテムの自動拾いを行うならTRUE
- * @return なし
  */
 void do_cmd_walk(player_type *creature_ptr, bool pickup)
 {
@@ -301,15 +302,19 @@ void do_cmd_walk(player_type *creature_ptr, bool pickup)
     bool more = FALSE;
     DIRECTION dir;
     if (get_rep_dir(creature_ptr, &dir, FALSE)) {
-        take_turn(creature_ptr, 100);
+        PlayerEnergy energy(creature_ptr);
+        energy.set_player_turn_energy(100);
         if ((dir != 5) && (creature_ptr->special_defense & KATA_MUSOU))
             set_action(creature_ptr, ACTION_NONE);
 
-        if (creature_ptr->wild_mode)
-            creature_ptr->energy_use *= ((MAX_HGT + MAX_WID) / 2);
+        if (creature_ptr->wild_mode) {
+            energy.mul_player_turn_energy((MAX_HGT + MAX_WID) / 2);
+        }
 
-        if (creature_ptr->action == ACTION_HAYAGAKE)
-            creature_ptr->energy_use = creature_ptr->energy_use * (45 - (creature_ptr->lev / 2)) / 100;
+        if (creature_ptr->action == ACTION_HAYAGAKE) {
+            auto energy_use = (ENERGY)(creature_ptr->energy_use * (45 - (creature_ptr->lev / 2)) / 100);
+            energy.set_player_turn_energy(energy_use);
+        }
 
         exe_movement(creature_ptr, dir, pickup, FALSE);
         more = TRUE;
@@ -325,7 +330,7 @@ void do_cmd_walk(player_type *creature_ptr, bool pickup)
             creature_ptr->oldpy = randint1(MAX_HGT - 2);
             creature_ptr->oldpx = randint1(MAX_WID - 2);
             change_wild_mode(creature_ptr, TRUE);
-            take_turn(creature_ptr, 100);
+            PlayerEnergy(creature_ptr).set_player_turn_energy(100);
         }
     }
 
@@ -337,7 +342,6 @@ void do_cmd_walk(player_type *creature_ptr, bool pickup)
  * @brief 「走る」動作コマンドのメインルーチン /
  * Start running.
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void do_cmd_run(player_type *creature_ptr)
 {
@@ -360,7 +364,6 @@ void do_cmd_run(player_type *creature_ptr)
  * Pick up treasure if "pickup" is true.
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param pickup アイテムの自動拾いを行うならTRUE
- * @return なし
  */
 void do_cmd_stay(player_type *creature_ptr, bool pickup)
 {
@@ -371,7 +374,7 @@ void do_cmd_stay(player_type *creature_ptr, bool pickup)
         command_arg = 0;
     }
 
-    take_turn(creature_ptr, 100);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     if (pickup)
         mpe_mode |= MPE_DO_PICKUP;
 
@@ -382,12 +385,11 @@ void do_cmd_stay(player_type *creature_ptr, bool pickup)
  * @brief 「休む」動作コマンドのメインルーチン /
  * Resting allows a player to safely restore his hp	-RAK-
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void do_cmd_rest(player_type *creature_ptr)
 {
     set_action(creature_ptr, ACTION_NONE);
-    if ((creature_ptr->pclass == CLASS_BARD) && (SINGING_SONG_EFFECT(creature_ptr) || INTERUPTING_SONG_EFFECT(creature_ptr)))
+    if ((creature_ptr->pclass == CLASS_BARD) && ((get_singing_song_effect(creature_ptr) != 0)|| (get_interrupting_song_effect(creature_ptr) != 0)))
         stop_singing(creature_ptr);
 
     if (hex_spelling_any(creature_ptr))
@@ -417,7 +419,7 @@ void do_cmd_rest(player_type *creature_ptr)
     if (creature_ptr->special_defense & NINJA_S_STEALTH)
         set_superstealth(creature_ptr, FALSE);
 
-    take_turn(creature_ptr, 100);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     if (command_arg > 100)
         chg_virtue(creature_ptr, V_DILIGENCE, -1);
 

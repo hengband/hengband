@@ -5,6 +5,7 @@
 #include "io/input-key-acceptor.h"
 #include "mind/mind-elementalist.h"
 #include "player/player-realm.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/buffer-shaper.h"

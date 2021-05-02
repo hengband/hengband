@@ -1,6 +1,5 @@
 ﻿#include "mind/mind-mindcrafter.h"
 #include "autopick/autopick.h"
-#include "core/hp-mp-processor.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "effect/effect-characteristics.h"
@@ -10,6 +9,7 @@
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "game-option/auto-destruction-options.h"
+#include "hpmp/hp-mp-processor.h"
 #include "mind/mind-mindcrafter.h"
 #include "mind/mind-numbers.h"
 #include "object-enchant/item-feeling.h"
@@ -19,6 +19,7 @@
 #include "perception/object-perception.h"
 #include "perception/simple-perception.h"
 #include "player-info/avatar.h"
+#include "player/player-status.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-fetcher.h"
 #include "spell-kind/spells-floor.h"
@@ -33,6 +34,7 @@
 #include "status/element-resistance.h"
 #include "status/sight-setter.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -40,7 +42,6 @@
 /*!
  * @brief 超能力者のサイコメトリー処理/ Forcibly pseudo-identify an object in the inventory (or on the floor)
  * @param caster_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @note
  * currently this function allows pseudo-id of any object,
  * including silly ones like potions & scrolls, which always

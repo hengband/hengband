@@ -1,4 +1,5 @@
 ﻿#include "io/uid-checker.h"
+#include "system/player-type-definition.h"
 #ifdef SET_UID
 #ifdef SAFE_SETUID
 #ifdef SAFE_SETUID_POSIX

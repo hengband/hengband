@@ -5,6 +5,7 @@
 #include "grid/grid.h"
 #include "system/dungeon-data-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief 指定のマスが床系地形であるかを返す / Function that sees if a square is a floor.  (Includes range checking.)
@@ -29,7 +30,6 @@ static bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param x 地形を変えたいマスのX座標
  * @param y 地形を変えたいマスのY座標
- * @return なし
  */
 static void set_floor(player_type *player_ptr, POSITION x, POSITION y)
 {
@@ -53,7 +53,6 @@ static void set_floor(player_type *player_ptr, POSITION x, POSITION y)
  * @param y1 範囲の上端
  * @param x2 範囲の右端
  * @param y2 範囲の下端
- * @return なし
  */
 static void check_room_boundary(player_type *player_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2)
 {
@@ -112,7 +111,6 @@ static void check_room_boundary(player_type *player_ptr, POSITION x1, POSITION y
  * @param blocks_wide 範囲の幅
  * @param block_y 範囲の上端
  * @param block_x 範囲の左端
- * @return なし
  */
 static bool find_space_aux(dun_data_type *dd_ptr, POSITION blocks_high, POSITION blocks_wide, POSITION block_y, POSITION block_x)
 {
@@ -165,7 +163,7 @@ static bool find_space_aux(dun_data_type *dd_ptr, POSITION blocks_high, POSITION
  * the room calling this function.\n
  *\n
  * We allocate space in 11x11 blocks, but want to make sure that rooms\n
- * align neatly on the standard screen.  Therefore, we make them use\n
+ * alignment neatly on the standard screen.  Therefore, we make them use\n
  * blocks in few 11x33 rectangles as possible.\n
  *\n
  * Be careful to include the edges of the room in height and width!\n

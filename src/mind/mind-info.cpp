@@ -2,6 +2,8 @@
 #include "cmd-action/cmd-spell.h"
 #include "mind/mind-force-trainer.h"
 #include "mind/mind-types.h"
+#include "player-info/equipment-info.h"
+#include "system/player-type-definition.h"
 
 static void switch_mind_mindcrafter(player_type *caster_ptr, const PLAYER_LEVEL plev, const int power, char *p)
 {
@@ -216,7 +218,6 @@ static void switch_mind_ninja(const PLAYER_LEVEL plev, const int power, char *p)
  * @param p 情報を返す文字列参照ポインタ
  * @param use_mind 職業毎の特殊技能ID
  * @param power モンスター魔法のID
- * @return なし
  */
 void mindcraft_info(player_type *caster_ptr, char *p, int use_mind, int power)
 {

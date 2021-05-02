@@ -3,6 +3,7 @@
 #include "object/object-flags.h"
 #include "player/player-status.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*!
@@ -258,7 +259,7 @@ s16b PlayerStatusBase::class_value()
 s16b PlayerStatusBase::class_base_value()
 {
     return 0;
-} 
+}
 s16b PlayerStatusBase::personality_value()
 {
     return 0;

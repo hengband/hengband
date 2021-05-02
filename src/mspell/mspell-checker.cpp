@@ -19,6 +19,7 @@
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
+#include "floor/geometry.h"
 #include "floor/line-of-sight.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-move.h"
@@ -48,6 +49,10 @@
 #include "spell/range-calc.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -106,10 +111,8 @@ bool raise_possible(player_type *target_ptr, monster_type *m_ptr)
                 continue;
 
             g_ptr = &floor_ptr->grid_array[yy][xx];
-            OBJECT_IDX this_o_idx, next_o_idx = 0;
-            for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx) {
+            for (const auto this_o_idx : g_ptr->o_idx_list) {
                 object_type *o_ptr = &floor_ptr->o_list[this_o_idx];
-                next_o_idx = o_ptr->next_o_idx;
                 if (o_ptr->tval == TV_CORPSE) {
                     if (!monster_has_hostile_align(target_ptr, m_ptr, 0, 0, &r_info[o_ptr->pval]))
                         return TRUE;

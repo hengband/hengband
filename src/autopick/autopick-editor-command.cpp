@@ -16,12 +16,14 @@
 #include "autopick/autopick-inserter-killer.h"
 #include "autopick/autopick-methods-table.h"
 #include "autopick/autopick-reader-writer.h"
+#include "autopick/autopick-util.h"
 #include "core/asking-player.h"
 #include "core/show-file.h"
 #include "game-option/input-options.h"
 #include "game-option/keymap-directory-getter.h"
 #include "player/player-class.h"
 #include "player/player-race.h"
+#include "system/player-type-definition.h"
 #include "term/term-color-types.h"
 
 /*

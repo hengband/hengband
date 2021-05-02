@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "player/player-status.h"
 
 enum rate_calc_type_mode {
 	CALC_RAND = 0,
@@ -10,7 +9,7 @@ enum rate_calc_type_mode {
     CALC_MAX = 3,
 };
 
-
+typedef struct player_type player_type;
 PERCENTAGE calc_acid_damage_rate(player_type *creature_ptr);
 PERCENTAGE calc_elec_damage_rate(player_type *creature_ptr);
 PERCENTAGE calc_fire_damage_rate(player_type *creature_ptr);

@@ -14,9 +14,12 @@
 #include "main/sound-of-music.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
+#include "player-attack/player-attack-util.h"
 #include "player/player-damage.h"
 #include "player/player-race.h"
 #include "status/element-resistance.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "player/player-status-flags.h"
@@ -80,11 +83,10 @@ static int calc_death_scythe_reflection_magnification(player_type *attacker_ptr)
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param magnification ダメージ倍率
  * @param death_scythe_flags 死の大鎌に関するオブジェクトフラグ配列
- * @return なし
  */
 static void compensate_death_scythe_reflection_magnification(player_type *attacker_ptr, int *magnification, BIT_FLAGS *death_scythe_flags)
 {
-    if ((attacker_ptr->align < 0) && (*magnification < 20))
+    if ((attacker_ptr->alignment < 0) && (*magnification < 20))
         *magnification = 20;
 
     if (!(has_resist_acid(attacker_ptr) || is_oppose_acid(attacker_ptr) || has_immune_acid(attacker_ptr)) && (*magnification < 25))
@@ -112,7 +114,6 @@ static void compensate_death_scythe_reflection_magnification(player_type *attack
 /*!
  * @brief 死の大鎌による反射ダメージ倍率を更に上げる
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @return なし
  */
 static void death_scythe_reflection_critial_hit(player_attack_type *pa_ptr)
 {
@@ -131,7 +132,6 @@ static void death_scythe_reflection_critial_hit(player_attack_type *pa_ptr)
  * @brief 死の大鎌によるダメージ反射のメインルーチン
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @return なし
  */
 void process_death_scythe_reflection(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {

@@ -1,4 +1,5 @@
 ﻿#pragma once
+
 #include "save/save.h"
 
 typedef struct store_type store_type;

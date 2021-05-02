@@ -2,6 +2,7 @@
 #include "system/angband.h"
 #include "player/player-status-flags.h"
 
+typedef struct player_type player_type;
 class PlayerStatusBase {
 public:
     PlayerStatusBase(player_type *owner_ptr);
@@ -35,5 +36,3 @@ protected:
     virtual BIT_FLAGS equipments_flags(tr_type check_flag);
     virtual BIT_FLAGS equipments_bad_flags(tr_type check_flag);
 };
-
-

@@ -5,6 +5,7 @@
 #include "system/object-type-definition.h"
 #include "mimic-info-table.h"
 #include "player/race-info-table.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 const player_race *rp_ptr;
@@ -80,7 +81,6 @@ bool player_race_has_flag(player_type *creature_ptr, tr_type flag, bool base_rac
  * @param creature_ptr プレイヤー情報への参照ポインタ
  * @param flags フラグ配列へのポインタ
  * @param base_race ベース種族の情報を返すならtrue、ミミック擬態中の種族を返すならfalse
- * @return なし
  */
 void add_player_race_flags(player_type *creature_ptr, BIT_FLAGS *flags, bool base_race)
 {
@@ -111,4 +111,16 @@ PlayerRaceLife player_race_life(player_type *creature_ptr, bool base_race)
 {
     auto race_ptr = get_player_race_info(creature_ptr, base_race);
     return race_ptr->life;
+}
+
+/*!
+ * @brief 種族の食料形態を返す
+ * @param creature_ptr プレイヤー情報への参照ポインタ
+ * @param base_race ミミック中も元種族の情報を返すならtrue
+ * @return 食料形態
+ */
+PlayerRaceFood player_race_food(player_type *creature_ptr, bool base_race)
+{
+    auto race_ptr = get_player_race_info(creature_ptr, base_race);
+    return race_ptr->food;
 }

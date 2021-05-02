@@ -1,6 +1,7 @@
 ﻿#include "dungeon/quest-monster-placer.h"
 #include "dungeon/quest.h"
 #include "floor/floor-generator-util.h"
+#include "floor/geometry.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-generator.h"
@@ -9,6 +10,8 @@
 #include "monster-race/race-flags1.h"
 #include "monster/monster-info.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*!

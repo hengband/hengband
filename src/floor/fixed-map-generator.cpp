@@ -30,7 +30,9 @@
 #include "sv-definition/sv-scroll-types.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
-#include "system/system-variables.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "window/main-window-util.h"
 #include "world/world-object.h"
 #include "world/world.h"
@@ -69,8 +71,7 @@ static void drop_here(floor_type *floor_ptr, object_type *j_ptr, POSITION y, POS
     o_ptr->ix = x;
     o_ptr->held_m_idx = 0;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-    o_ptr->next_o_idx = g_ptr->o_idx;
-    g_ptr->o_idx = o_idx;
+    g_ptr->o_idx_list.push_front(o_idx);
 }
 
 static void generate_artifact(player_type *player_ptr, qtwg_type *qtwg_ptr, const ARTIFACT_IDX artifact_index)
@@ -181,7 +182,7 @@ static void parse_qtw_D(player_type *player_ptr, qtwg_type *qtwg_ptr, char *s)
                 coin_type = 0;
             }
 
-            apply_magic(player_ptr, o_ptr, floor_ptr->base_level, AM_NO_FIXED_ART | AM_GOOD);
+            apply_magic_to_object(player_ptr, o_ptr, floor_ptr->base_level, AM_NO_FIXED_ART | AM_GOOD);
             drop_here(floor_ptr, o_ptr, *qtwg_ptr->y, *qtwg_ptr->x);
         }
 

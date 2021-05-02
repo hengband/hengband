@@ -8,6 +8,7 @@
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
+#include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
@@ -43,10 +44,11 @@
 #include "object/object-flags.h"
 #include "player-info/avatar.h"
 #include "player/player-class.h"
-#include "player/player-personalities-types.h"
+#include "player/player-personality-types.h"
 #include "player/player-race-types.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-resist.h"
+#include "player/player-status.h"
 #include "player/race-info-table.h"
 #include "player/special-defense-types.h"
 #include "racial/racial-android.h"
@@ -55,6 +57,10 @@
 #include "status/element-resistance.h"
 #include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
@@ -547,7 +553,6 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
  * @param aura_flag オーラフラグ配列
  * @param dam_func ダメージ処理を行う関数の参照ポインタ
  * @param message オーラダメージを受けた際のメッセージ
- * @return なし
  */
 static void process_aura_damage(monster_type *m_ptr, player_type *touched_ptr, bool immune, int flags_offset, int r_flags_offset, u32b aura_flag,
     HIT_POINT (*dam_func)(player_type *creature_type, HIT_POINT dam, concptr kb_str, bool aura), concptr message)
@@ -573,7 +578,6 @@ static void process_aura_damage(monster_type *m_ptr, player_type *touched_ptr, b
  * @brief 敵オーラによるプレイヤーのダメージ処理
  * @param m_ptr オーラを持つモンスターの構造体参照ポインタ
  * @param touched_ptr オーラを持つ相手に振れたクリーチャーの参照ポインタ
- * @return なし
  */
 void touch_zap_player(monster_type *m_ptr, player_type *touched_ptr)
 {

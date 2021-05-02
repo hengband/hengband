@@ -1,4 +1,5 @@
 ﻿#include "cmd-io/cmd-menu-content-table.h"
+#include "player/player-class-types.h"
 #include "util/int-char-converter.h"
 
 special_menu_content special_menu_info[MAX_SPECIAL_MENU_NUM] = {

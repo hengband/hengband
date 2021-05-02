@@ -8,11 +8,12 @@
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "effect/spells-effect-util.h"
+#include "floor/geometry.h"
 #include "floor/pattern-walk.h"
 #include "game-option/input-options.h"
+#include "game-option/map-screen-options.h"
 #include "game-option/play-record-options.h"
 #include "game-option/text-display-options.h"
-#include "game-option/map-screen-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
@@ -35,16 +36,22 @@
 #include "monster/smart-learn-types.h"
 #include "object-hook/hook-weapon.h"
 #include "pet/pet-util.h"
+#include "player-info/equipment-info.h"
+#include "player-status/player-energy.h"
+#include "player-status/player-hand-types.h"
 #include "player/attack-defense-types.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
 #include "player/player-move.h"
 #include "player/player-skill.h"
 #include "player/player-status-flags.h"
-#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "status/action-setter.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
 #include "target/target-setter.h"
@@ -57,11 +64,8 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-int total_friends = 0;
-
 /*!
  * @brief ペットを開放するコマンドのメインルーチン
- * @return なし
  */
 void do_cmd_pet_dismiss(player_type *creature_ptr)
 {
@@ -218,7 +222,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
             return FALSE;
 
         if (g_ptr->m_idx) {
-            take_turn(creature_ptr, 100);
+            PlayerEnergy(creature_ptr).set_player_turn_energy(100);
 
             msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 
@@ -273,7 +277,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
         }
         if (r_info[m_ptr->r_idx].level > randint1((creature_ptr->skill_exp[GINOU_RIDING] / 50 + creature_ptr->lev / 2 + 20))) {
             msg_print(_("うまく乗れなかった。", "You failed to ride."));
-            take_turn(creature_ptr, 100);
+            PlayerEnergy(creature_ptr).set_player_turn_energy(100);
             return FALSE;
         }
 
@@ -294,7 +298,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
             health_track(creature_ptr, 0);
     }
 
-    take_turn(creature_ptr, 100);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
 
     /* Mega-Hack -- Forget the view and lite */
     creature_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
@@ -309,7 +313,6 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
 
 /*!
  * @brief ペットに名前をつけるコマンドのメインルーチン
- * @return なし
  */
 static void do_name_pet(player_type *creature_ptr)
 {
@@ -376,7 +379,6 @@ static void do_name_pet(player_type *creature_ptr)
 /*!
  * @brief ペットに関するコマンドリストのメインルーチン /
  * Issue a pet command
- * @return なし
  */
 void do_cmd_pet(player_type *creature_ptr)
 {
@@ -412,9 +414,9 @@ void do_cmd_pet(player_type *creature_ptr)
                 : "指定なし"));
 #else
     sprintf(target_buf, "specify a target of pet (now:%s)",
-        (creature_ptr->pet_t_m_idx ? (
-             creature_ptr->image ? "something strange" : r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->pet_t_m_idx].ap_r_idx].name.c_str())
-                                   : "nothing"));
+        (creature_ptr->pet_t_m_idx
+                ? (creature_ptr->image ? "something strange" : r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->pet_t_m_idx].ap_r_idx].name.c_str())
+                : "nothing"));
 #endif
     power_desc[num] = target_buf;
     powers[num++] = PET_TARGET;
@@ -678,7 +680,7 @@ void do_cmd_pet(player_type *creature_ptr)
 
         /* Abort if needed */
         if (!flag) {
-            free_turn(creature_ptr);
+            PlayerEnergy(creature_ptr).reset_player_turn();
             return;
         }
 

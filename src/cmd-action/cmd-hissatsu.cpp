@@ -9,8 +9,8 @@
  * 2014 Deskull rearranged comment for Doxygen.\n
  */
 
-#include "cmd-action/cmd-spell.h"
 #include "action/action-limited.h"
+#include "cmd-action/cmd-spell.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
@@ -26,13 +26,15 @@
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race-hook.h"
 #include "object/item-use-flags.h"
+#include "player-info/equipment-info.h"
+#include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
-#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "spell/spells-execution.h"
 #include "spell/technic-info-table.h"
 #include "status/action-setter.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
@@ -302,7 +304,6 @@ static int get_hissatsu_power(player_type *creature_ptr, SPELL_IDX *sn)
 
 /*!
  * @brief 剣術コマンドのメインルーチン
- * @return なし
  */
 void do_cmd_hissatsu(player_type *creature_ptr)
 {
@@ -346,7 +347,7 @@ void do_cmd_hissatsu(player_type *creature_ptr)
     if (!exe_spell(creature_ptr, REALM_HISSATSU, n, SPELL_CAST))
         return;
 
-    take_turn(creature_ptr, 100);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
 
     /* Use some mana */
     creature_ptr->csp -= spell.smana;
@@ -360,7 +361,6 @@ void do_cmd_hissatsu(player_type *creature_ptr)
 
 /*!
  * @brief 剣術コマンドの学習
- * @return なし
  */
 void do_cmd_gain_hissatsu(player_type *creature_ptr)
 {
@@ -420,7 +420,7 @@ void do_cmd_gain_hissatsu(player_type *creature_ptr)
     if (!gain) {
         msg_print(_("何も覚えられなかった。", "You were not able to learn any special attacks."));
     } else {
-        take_turn(creature_ptr, 100);
+        PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     }
 
     creature_ptr->update |= (PU_SPELLS);

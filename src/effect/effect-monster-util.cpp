@@ -5,11 +5,16 @@
  */
 
 #include "effect/effect-monster-util.h"
+#include "floor/geometry.h"
+#include "grid/grid.h"
 #include "monster-floor/monster-death.h"
 #include "monster-race/monster-race.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief affect_monster() に亘ってきた引数をeffect_monster_type構造体に代入する
@@ -22,7 +27,6 @@
  * @param effect_type 効果属性 / Type of damage to apply to monsters (and objects)
  * @param flag 効果フラグ
  * @param see_s_msg TRUEならばメッセージを表示する
- * @return なし
  */
 static void substitute_effect_monster(effect_monster_type *em_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag, bool see_s_msg)
 {
@@ -49,7 +53,6 @@ static void substitute_effect_monster(effect_monster_type *em_ptr, MONSTER_IDX w
  * @param effect_type 効果属性 / Type of damage to apply to monsters (and objects)
  * @param flag 効果フラグ
  * @param see_s_msg TRUEならばメッセージを表示する
- * @return なし
  */
 effect_monster_type *initialize_effect_monster(player_type *caster_ptr, effect_monster_type *em_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag, bool see_s_msg)
 {

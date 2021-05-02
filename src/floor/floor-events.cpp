@@ -8,6 +8,7 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
+#include "floor/geometry.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
 #include "game-option/disturbance-options.h"
@@ -35,6 +36,10 @@
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-ring-types.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -223,7 +228,6 @@ static byte get_dungeon_feeling(player_type *subject_ptr)
 /*!
  * @brief ダンジョンの雰囲気を更新し、変化があった場合メッセージを表示する
  * / Update dungeon feeling, and announce it if changed
- * @return なし
  */
 void update_dungeon_feeling(player_type *subject_ptr)
 {

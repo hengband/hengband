@@ -8,6 +8,7 @@
 #include "io/input-key-requester.h"
 #include "io/read-pref-file.h"
 #include "main/sound-of-music.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
@@ -18,7 +19,6 @@
 /*!
  * @brief マクロ情報をprefファイルに保存する /
  * @param fname ファイル名
- * @return なし
  */
 static void macro_dump(FILE **fpp, concptr fname)
 {
@@ -46,7 +46,6 @@ static void macro_dump(FILE **fpp, concptr fname)
  * @brief マクロのトリガーキーを取得する /
  * Hack -- ask for a "trigger" (see below)
  * @param buf キー表記を保管するバッファ
- * @return なし
  * @details
  * <pre>
  * Note the complex use of the "inkey()" function from "util.c".
@@ -80,7 +79,6 @@ static void do_cmd_macro_aux(char *buf)
  * @brief マクロのキー表記からアスキーコードを得てターミナルに表示する /
  * Hack -- ask for a keymap "trigger" (see below)
  * @param buf キー表記を取得するバッファ
- * @return なし
  * @details
  * <pre>
  * Note that both "flush()" calls are extremely important.  This may
@@ -148,7 +146,6 @@ static errr keymap_dump(concptr fname)
 /*!
  * @brief マクロを設定するコマンドのメインルーチン /
  * Interact with "macros"
- * @return なし
  * @details
  * <pre>
  * Note that the macro "action" must be defined before the trigger.

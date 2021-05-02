@@ -13,6 +13,9 @@
 #include "mspell/mspell.h"
 #include "spell-kind/spells-teleport.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*!
@@ -20,7 +23,6 @@
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param see_m モンスターが視界内にいたらTRUE
- * @return なし
  */
 static void vanish_nonunique(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m)
 {
@@ -42,7 +44,6 @@ static void vanish_nonunique(player_type *target_ptr, MONSTER_IDX m_idx, bool se
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param see_m モンスターが視界内にいたらTRUE
- * @return なし
  * @details
  * プレーヤーが量子生物を観測しているか、量子生物がプレーヤーを観測している場合、互いの相対的な位置を確定させる
  * 波動関数の収縮はテレポートではないので反テレポート無効

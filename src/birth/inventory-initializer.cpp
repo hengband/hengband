@@ -15,7 +15,7 @@
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
-#include "player/player-personalities-types.h"
+#include "player/player-personality-types.h"
 #include "player/player-race-types.h"
 #include "realm/realm-types.h"
 #include "sv-definition/sv-bow-types.h"
@@ -28,10 +28,11 @@
 #include "sv-definition/sv-staff-types.h"
 #include "sv-definition/sv-wand-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief 所持状態にあるアイテムの中から一部枠の装備可能なものを装備させる。
- * @return なし
  */
 void wield_all(player_type *creature_ptr)
 {
@@ -73,7 +74,6 @@ void wield_all(player_type *creature_ptr)
  * @brief 初期所持アイテムの処理 / Add an outfit object
  * @details アイテムを既知のものとした上でwield_all()関数により装備させる。
  * @param o_ptr 処理したいオブジェクト構造体の参照ポインタ
- * @return なし
  */
 void add_outfit(player_type *creature_ptr, object_type *o_ptr)
 {
@@ -122,7 +122,7 @@ static void decide_initial_items(player_type *creature_ptr, object_type *q_ptr)
     case RACE_ANDROID:
         /* Flasks of oil */
         object_prep(creature_ptr, q_ptr, lookup_kind(TV_FLASK, SV_ANY));
-        apply_magic(creature_ptr, q_ptr, 1, AM_NO_FIXED_ART);
+        apply_magic_to_object(creature_ptr, q_ptr, 1, AM_NO_FIXED_ART);
         q_ptr->number = (ITEM_NUMBER)rand_range(7, 12);
         add_outfit(creature_ptr, q_ptr);
         break;
@@ -137,7 +137,6 @@ static void decide_initial_items(player_type *creature_ptr, object_type *q_ptr)
 /*!
  * @brief 種族/職業/性格などに基づき初期所持アイテムを設定するメインセット関数。 / Init players with some belongings
  * @details Having an item makes the player "aware" of its purpose.
- * @return なし
  */
 void player_outfit(player_type *creature_ptr)
 {

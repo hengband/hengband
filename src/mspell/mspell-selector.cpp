@@ -13,8 +13,11 @@
 #include "monster/monster-status.h"
 #include "mspell/mspell-attack-util.h"
 #include "mspell/mspell-judgement.h"
+#include "player/player-status.h"
 #include "system/monster-type-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/player-type-definition.h"
 #include "world/world.h"
 
 /*!

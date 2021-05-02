@@ -26,8 +26,11 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
+#include "player/player-status.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
 #include "target/target-setter.h"
@@ -60,7 +63,6 @@ bool is_teleport_level_ineffective(player_type *caster_ptr, MONSTER_IDX idx)
  * Teleport the player one level up or down (random when legal)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param m_idx テレポートの対象となるモンスターID(0ならばプレイヤー) / If m_idx <= 0, target is player.
- * @return なし
  * @todo cmd-save.h への依存あり。コールバックで何とかしたい
  */
 void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
@@ -315,7 +317,6 @@ bool tele_town(player_type *caster_ptr)
 /*!
  * @brief 現実変容処理
  * @param caster_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void reserve_alter_reality(player_type *caster_ptr, TIME_EFFECT turns)
 {

@@ -31,9 +31,11 @@
 #include "store/pricing.h"
 #include "store/say-comments.h"
 #include "store/service-checker.h"
+#include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -80,7 +82,6 @@ static std::optional<PRICE> prompt_to_sell(player_type *player_ptr, object_type 
  * @brief 店からの売却処理のメインルーチン /
  * Sell an item to the store (or home)
  * @param owner_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void store_sell(player_type *owner_ptr)
 {

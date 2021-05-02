@@ -21,4 +21,6 @@
 #define ESSENCE_SLAY_GLOVE    (MIN_SPECIAL_ESSENCE + 11)
 
 extern concptr essence_name[];
+
+typedef struct player_type player_type;
 void do_cmd_kaji(player_type *creature_ptr, bool only_browse);

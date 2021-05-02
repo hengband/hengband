@@ -4,11 +4,12 @@
 #include "sv-definition/sv-weapon-types.h"
 #include "player/player-class.h"
 #include "player/player-personality.h"
-#include "player/player-personalities-types.h"
+#include "player/player-personality-types.h"
 #include "player/player-race.h"
 #include "player/player-skill.h"
 #include "spell/spells-status.h"
 #include "player/player-race-types.h"
+#include "system/player-type-definition.h"
 
 /*! オートロール能力値の乱数分布 / emulate 5 + 1d3 + 1d4 + 1d5 by randint0(60) */
 BASE_STATUS rand3_4_5[60] = {
@@ -54,7 +55,6 @@ int adjust_stat(int value, int amount)
 /*!
  * @brief プレイヤーの能力値を一通りロールする。 / Roll for a characters stats
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  * calc_bonuses()による、独立ステータスからの副次ステータス算出も行っている。
  * For efficiency, we include a chunk of "calc_bonuses()".\n
@@ -87,7 +87,6 @@ void get_stats(player_type* creature_ptr)
 
 /*!
  * @brief 経験値修正の合計値を計算
- * @return なし
  */
 u16b get_expfact(player_type *creature_ptr)
 {
@@ -104,7 +103,6 @@ u16b get_expfact(player_type *creature_ptr)
 
 /*!
  * @brief その他「オートローラ中は算出の対象にしない」副次ステータスを処理する / Roll for some info that the auto-roller ignores
- * @return なし
  */
 void get_extra(player_type* creature_ptr, bool roll_hitdie)
 {
@@ -133,7 +131,7 @@ void get_extra(player_type* creature_ptr, bool roll_hitdie)
         creature_ptr->weapon_exp[TV_HAFTED - TV_WEAPON_BEGIN][SV_WHIP] = WEAPON_EXP_BEGINNER;
     }
 
-    for (int i = 0; i < GINOU_MAX; i++)
+    for (int i = 0; i < MAX_SKILLS; i++)
         creature_ptr->skill_exp[i] = s_info[creature_ptr->pclass].s_start[i];
 
     if (creature_ptr->pclass == CLASS_SORCERER)
@@ -150,7 +148,6 @@ void get_extra(player_type* creature_ptr, bool roll_hitdie)
 /*!
  * @brief プレイヤーの限界ステータスを決める。
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details 新生の薬やステータスシャッフルでもこの関数が呼ばれる
  */
 void get_max_stats(player_type* creature_ptr)

@@ -1,5 +1,4 @@
 ﻿#include "mind/mind-force-trainer.h"
-#include "cmd-action/cmd-pet.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
@@ -18,7 +17,9 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
+#include "pet/pet-util.h"
 #include "player-info/avatar.h"
+#include "player-info/equipment-info.h"
 #include "player/player-damage.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
@@ -26,6 +27,9 @@
 #include "spell/summon-types.h"
 #include "status/temporary-resistance.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
@@ -38,14 +42,16 @@
  * @param caster_ptr プレーヤーの参照ポインタ
  * @return 現在溜まっている気の量
  */
-MAGIC_NUM1 get_current_ki(player_type *caster_ptr) { return caster_ptr->magic_num1[0]; }
+MAGIC_NUM1 get_current_ki(player_type *caster_ptr)
+{
+    return caster_ptr->magic_num1[0];
+}
 
 /*!
  * @brief 練気術師において、気を溜める
  * @param caster_ptr プレーヤーの参照ポインタ
  * @param is_reset TRUEなら気の量をkiにセットし、FALSEなら加減算を行う
  * @param ki 気の量
- * @return なし
  */
 void set_current_ki(player_type *caster_ptr, bool is_reset, MAGIC_NUM1 ki)
 {
@@ -80,7 +86,6 @@ bool clear_mind(player_type *creature_ptr)
  * @brief 光速移動の継続時間をセットする / Set "lightspeed", notice observable changes
  * @param v 継続時間
  * @param do_dec 現在の継続時間より長い値のみ上書きする
- * @return なし
  */
 void set_lightspeed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {

@@ -4,7 +4,6 @@
  * @brief プレイヤーの変異能力実行ヘッダ
  */
 
-#include "system/angband.h"
-
 enum class MUTA;
+typedef struct player_type player_type;
 bool exe_mutation_power(player_type *creature_ptr, MUTA power);

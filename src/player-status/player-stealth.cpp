@@ -1,14 +1,18 @@
 ﻿#include "player-status/player-stealth.h"
 #include "mind/mind-ninja.h"
 #include "mutation/mutation-flag-types.h"
+#include "player-info/equipment-info.h"
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"
 #include "player/player-personality.h"
 #include "player/player-race-types.h"
 #include "player/player-skill.h"
 #include "player/player-status-flags.h"
+#include "player/player-status.h"
 #include "player/race-info-table.h"
 #include "spell-realm/spells-hex.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*!

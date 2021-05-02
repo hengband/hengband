@@ -6,9 +6,11 @@
 #include "floor/floor-save-util.h"
 #include "floor/floor-save.h"
 #include "game-option/birth-options.h"
+#include "grid/feature.h"
 #include "grid/grid.h"
 #include "grid/stair.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -57,7 +59,6 @@ bool create_rune_explosion(player_type *caster_ptr, POSITION y, POSITION x)
 /*!
  * @brief プレイヤーの手による能動的な階段生成処理 /
  * Create stairs at or move previously created stairs into the player location.
- * @return なし
  */
 void stair_creation(player_type *caster_ptr)
 {

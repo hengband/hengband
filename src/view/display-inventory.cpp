@@ -10,6 +10,7 @@
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -124,7 +125,6 @@ COMMAND_CODE show_inventory(player_type *owner_ptr, int target_item, BIT_FLAGS m
 /*!
  * @brief 所持アイテム一覧を表示する /
  * Choice window "shadow" of the "show_inven()" function
- * @return なし
  */
 void display_inventory(player_type *owner_ptr, tval_type tval)
 {

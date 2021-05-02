@@ -1,9 +1,11 @@
 ﻿#include "mspell/element-resistance-checker.h"
 #include "game-option/birth-options.h"
+#include "monster-race/race-ability-flags.h"
 #include "monster/smart-learn-types.h"
 #include "mspell/smart-mspell-util.h"
 #include "player/player-status-flags.h"
 #include "status/element-resistance.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 void add_cheat_remove_flags_element(player_type *target_ptr, msr_type *msr_ptr)

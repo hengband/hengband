@@ -24,6 +24,9 @@
 #include "player-info/avatar.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
@@ -173,7 +176,6 @@ bool crusade(player_type *caster_ptr) { return (project_all_los(caster_ptr, GF_C
  * @brief 視界内モンスターを怒らせる処理 / Wake up all monsters, and speed up "los" monsters.
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param who 怒らせる原因を起こしたモンスター(0ならばプレイヤー)
- * @return なし
  */
 void aggravate_monsters(player_type *caster_ptr, MONSTER_IDX who)
 {
@@ -296,7 +298,6 @@ bool deathray_monsters(player_type *caster_ptr) { return (project_all_los(caster
  * @param caster_ptr プレーヤー情報への参照ポインタ
  * @param m_ptr モンスター情報への参照ポインタ
  * @param r_ptr モンスター種族への参照ポインタ
- * @return なし
  */
 void probed_monster_info(char *buf, player_type *caster_ptr, monster_type *m_ptr, monster_race *r_ptr)
 {

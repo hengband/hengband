@@ -3,6 +3,7 @@
 #include "player/player-class.h"
 #include "player/player-race.h"
 #include "io/input-key-acceptor.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/int-char-converter.h"
@@ -169,7 +170,6 @@ static bool select_class(player_type *creature_ptr, char *cur, char *sym, int *k
 
 /*!
  * @brief プレイヤーの職業選択を行う / Player class
- * @return なし
  */
 bool get_player_class(player_type *creature_ptr)
 {

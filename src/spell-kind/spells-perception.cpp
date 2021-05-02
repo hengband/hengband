@@ -24,6 +24,7 @@
 #include "perception/object-perception.h"
 #include "player-info/avatar.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -33,7 +34,6 @@
  * Identify everything being carried.
  * Done by a potion of "self knowledge".
  * @param target_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void identify_pack(player_type *target_ptr)
 {

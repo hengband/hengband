@@ -45,7 +45,6 @@ static concptr *spoiler_flag_aux(const BIT_FLAGS art_flags[TR_FLAG_SIZE], const 
  * Acquire a "basic" description "The Cloak of Death [1,+10]"
  * @param o_ptr 記述を得たいオブジェクトの参照ポインタ
  * @param desc_ptr 記述内容を返すための文字列参照ポインタ
- * @return なし
  */
 static void analyze_general(player_type *player_ptr, object_type *o_ptr, char *desc_ptr)
 {
@@ -58,7 +57,6 @@ static void analyze_general(player_type *player_ptr, object_type *o_ptr, char *d
  * speed, infravision, tunneling, stealth, searching, and extra attacks.
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param pi_ptr pval修正構造体の参照ポインタ
- * @return なし
  */
 static void analyze_pval(player_type *player_ptr, object_type *o_ptr, pval_info_type *pi_ptr)
 {
@@ -89,7 +87,6 @@ static void analyze_pval(player_type *player_ptr, object_type *o_ptr, pval_info_
  * Note the slaying specialties of a weapon
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param slay_list 種族スレイ構造体の参照ポインタ
- * @return なし
  */
 static void analyze_slay(player_type *player_ptr, object_type *o_ptr, concptr *slay_list)
 {
@@ -104,7 +101,6 @@ static void analyze_slay(player_type *player_ptr, object_type *o_ptr, concptr *s
  * Note an object's elemental brands
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param brand_list 属性ブランド構造体の参照ポインタ
- * @return なし
  */
 static void analyze_brand(player_type *player_ptr, object_type *o_ptr, concptr *brand_list)
 {
@@ -119,7 +115,6 @@ static void analyze_brand(player_type *player_ptr, object_type *o_ptr, concptr *
  * Note an object's elemental brands
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param resist_list 通常耐性構造体の参照ポインタ
- * @return なし
  */
 static void analyze_resist(player_type *player_ptr, object_type *o_ptr, concptr *resist_list)
 {
@@ -134,7 +129,6 @@ static void analyze_resist(player_type *player_ptr, object_type *o_ptr, concptr 
  * Note the immunities granted by an object
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param immune_list 免疫構造体の参照ポインタ
- * @return なし
  */
 static void analyze_immune(player_type *player_ptr, object_type *o_ptr, concptr *immune_list)
 {
@@ -149,7 +143,6 @@ static void analyze_immune(player_type *player_ptr, object_type *o_ptr, concptr 
  * Note which stats an object sustains
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param sustain_list 維持特性構造体の参照ポインタ
- * @return なし
  */
 static void analyze_sustains(player_type *player_ptr, object_type *o_ptr, concptr *sustain_list)
 {
@@ -172,7 +165,6 @@ static void analyze_sustains(player_type *player_ptr, object_type *o_ptr, concpt
  * free action, permanent light, etc.
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param misc_list その他の特性構造体の参照ポインタ
- * @return なし
  */
 static void analyze_misc_magic(player_type *player_ptr, object_type *o_ptr, concptr *misc_list)
 {
@@ -242,7 +234,6 @@ static void analyze_misc_magic(player_type *player_ptr, object_type *o_ptr, conc
  * Note additional ability and/or resistance of fixed artifacts
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param addition 追加ランダム耐性構造体の参照ポインタ
- * @return なし
  */
 static void analyze_addition(object_type *o_ptr, char *addition)
 {
@@ -275,7 +266,6 @@ static void analyze_addition(object_type *o_ptr, char *addition)
  * and its value in gold pieces
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param misc_desc 基本情報を収める文字列参照ポインタ
- * @return なし
  */
 static void analyze_misc(object_type *o_ptr, char *misc_desc)
 {
@@ -291,7 +281,6 @@ static void analyze_misc(object_type *o_ptr, char *misc_desc)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param desc_ptr 全アーティファクト情報を収める文字列参照ポインタ
- * @return なし
  */
 void object_analyze(player_type *player_ptr, object_type *o_ptr, obj_desc_list *desc_ptr)
 {
@@ -314,7 +303,6 @@ void object_analyze(player_type *player_ptr, object_type *o_ptr, obj_desc_list *
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr ランダムアーティファクトのオブジェクト構造体参照ポインタ
  * @param desc_ptr 記述内容を収める構造体参照ポインタ
- * @return なし
  */
 void random_artifact_analyze(player_type *player_ptr, object_type *o_ptr, obj_desc_list *desc_ptr)
 {

@@ -7,12 +7,16 @@
 #include "monster-attack/monster-attack-status.h"
 #include "core/player-update-types.h"
 #include "mind/mind-mirror-master.h"
+#include "monster-attack/monster-attack-util.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-indice-types.h"
+#include "player/player-status-flags.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
 #include "status/experience.h"
-#include "player/player-status-flags.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 void process_blind_attack(player_type *target_ptr, monap_type *monap_ptr)
@@ -108,7 +112,6 @@ void process_stun_attack(player_type *target_ptr, monap_type *monap_ptr)
  * @brief 時間逆転攻撃による能力低下
  * @param target_ptr プレーヤーへの参照ポインタ
  * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
- * @return なし
  */
 static void describe_disability(player_type *target_ptr, monap_type *monap_ptr)
 {

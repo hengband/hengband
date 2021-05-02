@@ -32,6 +32,7 @@
 #include "object/item-use-flags.h"
 #include "player-info/avatar.h"
 #include "player-info/self-info.h"
+#include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/eldritch-horror.h"
 #include "player/player-class.h"
@@ -55,13 +56,18 @@
 #include "status/base-status.h"
 #include "status/experience.h"
 #include "system/floor-type-definition.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "util/bit-flags-calculator.h"
 #include "util/buffer-shaper.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #ifdef JP
 #include "locale/japanese.h"
 #endif
+
+static const int extra_magic_gain_exp = 4;
 
 concptr KWD_DAM = _("損傷:", "dam ");
 concptr KWD_RANGE = _("射程:", "rng ");
@@ -543,7 +549,6 @@ static void confirm_use_force(player_type *caster_ptr, bool browse_only)
 /*!
  * @brief プレイヤーの魔法と技能を閲覧するコマンドのメインルーチン /
  * Peruse the spells/prayers in a book
- * @return なし
  * @details
  * <pre>
  * Note that *all* spells in the book are listed
@@ -671,7 +676,6 @@ void do_cmd_browse(player_type *caster_ptr)
  * @brief プレイヤーの第二魔法領域を変更する /
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param next_realm 変更先の魔法領域ID
- * @return なし
  */
 static void change_realm2(player_type *caster_ptr, REALM_IDX next_realm)
 {
@@ -709,7 +713,6 @@ static void change_realm2(player_type *caster_ptr, REALM_IDX next_realm)
 /*!
  * @brief 魔法を学習するコマンドのメインルーチン /
  * Study a book to gain a new spell/prayer
- * @return なし
  */
 void do_cmd_study(player_type *caster_ptr)
 {
@@ -902,7 +905,7 @@ void do_cmd_study(player_type *caster_ptr)
 #endif
     }
 
-    take_turn(caster_ptr, 100);
+    PlayerEnergy(caster_ptr).set_player_turn_energy(100);
 
     switch (mp_ptr->spell_book) {
     case TV_LIFE_BOOK:
@@ -1276,7 +1279,7 @@ bool do_cmd_cast(player_type *caster_ptr)
                 chg_virtue(caster_ptr, V_COMPASSION, -1);
             break;
         }
-        if (mp_ptr->spell_xtra & MAGIC_GAIN_EXP) {
+        if (any_bits(mp_ptr->spell_xtra, extra_magic_gain_exp)) {
             s16b cur_exp = caster_ptr->spell_exp[(increment ? 32 : 0) + spell];
             s16b exp_gain = 0;
 
@@ -1296,7 +1299,7 @@ bool do_cmd_cast(player_type *caster_ptr)
         }
     }
 
-    take_turn(caster_ptr, 100);
+    PlayerEnergy(caster_ptr).set_player_turn_energy(100);
 
     /* Over-exert the player */
     if (over_exerted) {

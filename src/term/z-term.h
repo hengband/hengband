@@ -15,13 +15,17 @@
 #include "system/h-basic.h"
 
 #include <memory>
+#include <stack>
 #include <vector>
 
 /*!
  * @brief A term_win is a "window" for a Term
  */
-struct term_win {
-    term_win(TERM_LEN w, TERM_LEN h);
+class term_win {
+public:
+    static std::unique_ptr<term_win> create(TERM_LEN w, TERM_LEN h);
+    std::unique_ptr<term_win> clone() const;
+    void resize(TERM_LEN w, TERM_LEN h);
 
     bool cu{}, cv{}; //!< Cursor Useless / Visible codes
     TERM_LEN cx{}, cy{}; //!< Cursor Location (see "Useless")
@@ -31,6 +35,9 @@ struct term_win {
 
     std::vector<std::vector<TERM_COLOR>> ta; //!< Note that the attr pair at(x, y) is a[y][x]
     std::vector<std::vector<char>> tc; //!< Note that the char pair at(x, y) is c[y][x]
+
+private:
+    term_win(TERM_LEN w, TERM_LEN h);
 };
 
 /*!
@@ -79,7 +86,7 @@ struct term_type {
     std::unique_ptr<term_win> scr; //!< Requested screen image
 
     std::unique_ptr<term_win> tmp; //!< Temporary screen image
-    std::unique_ptr<term_win> mem; //!< Memorized screen image
+    std::stack<std::unique_ptr<term_win>> mem_stack; //!< Memorized screen image stack
 
     void (*init_hook)(term_type *t){}; //!< Hook for init - ing the term
     void (*nuke_hook)(term_type *t){}; //!< Hook for nuke - ing the term
@@ -181,7 +188,7 @@ errr term_key_push(int k);
 errr term_inkey(char *ch, bool wait, bool take);
 
 errr term_save(void);
-errr term_load(void);
+errr term_load(bool load_all);
 
 errr term_exchange(void);
 

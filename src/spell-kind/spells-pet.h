@@ -1,5 +1,4 @@
 ﻿#pragma once
 
-#include "system/angband.h"
-
+typedef struct player_type player_type;
 void discharge_minion(player_type *caster_ptr);

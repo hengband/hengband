@@ -13,10 +13,12 @@
 #include "object/object-kind.h"
 #include "player/player-class.h"
 #include "player/player-skill.h"
+#include "player/player-status.h"
 #include "realm/realm-names-table.h"
 #include "spell/spells-execution.h"
 #include "spell/technic-info-table.h"
 #include "sv-definition/sv-bow-types.h"
+#include "system/player-type-definition.h"
 #include "util/angband-files.h"
 
 /*
@@ -67,7 +69,6 @@ void do_cmd_knowledge_weapon_exp(player_type *creature_ptr)
 /*!
  * @brief 魔法の経験値を表示するコマンドのメインルーチン
  * Display spell-exp
- * @return なし
  */
 void do_cmd_knowledge_spell_exp(player_type *creature_ptr)
 {
@@ -149,7 +150,6 @@ void do_cmd_knowledge_spell_exp(player_type *creature_ptr)
 /*!
  * @brief スキル情報を表示するコマンドのメインルーチン /
  * Display skill-exp
- * @return なし
  */
 void do_cmd_knowledge_skill_exp(player_type *creature_ptr)
 {

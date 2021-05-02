@@ -8,15 +8,20 @@
 #include "core/disturbance.h"
 #include "floor/cave.h"
 #include "floor/floor-util.h"
+#include "floor/geometry.h"
 #include "game-option/disturbance-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "object/object-mark-types.h"
+#include "player-status/player-energy.h"
 #include "player/player-status-flags.h"
+#include "player/player-status.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -206,7 +211,6 @@ static bool run_test(player_type *creature_ptr)
     DIRECTION check_dir = 0;
     int option = 0, option2 = 0;
     for (int i = -max; i <= max; i++) {
-        OBJECT_IDX this_o_idx, next_o_idx = 0;
         DIRECTION new_dir = cycle[chome[prev_dir] + i];
         int row = creature_ptr->y + ddy[new_dir];
         int col = creature_ptr->x + ddx[new_dir];
@@ -221,10 +225,9 @@ static bool run_test(player_type *creature_ptr)
                 return TRUE;
         }
 
-        for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx) {
+        for (const auto this_o_idx : g_ptr->o_idx_list) {
             object_type *o_ptr;
             o_ptr = &floor_ptr->o_list[this_o_idx];
-            next_o_idx = o_ptr->next_o_idx;
             if (o_ptr->marked & OM_FOUND)
                 return TRUE;
         }
@@ -353,7 +356,6 @@ static bool run_test(player_type *creature_ptr)
  * Take one step along the current "run" path
  * @param creature_ptr	プレーヤーへの参照ポインタ
  * @param dir 移動を試みる方向ID
- * @return なし
  */
 void run_step(player_type *creature_ptr, DIRECTION dir)
 {
@@ -377,7 +379,7 @@ void run_step(player_type *creature_ptr, DIRECTION dir)
     if (--creature_ptr->running <= 0)
         return;
 
-    take_turn(creature_ptr, 100);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     exe_movement(creature_ptr, find_current, FALSE, FALSE);
     if (player_bold(creature_ptr, creature_ptr->run_py, creature_ptr->run_px)) {
         creature_ptr->run_py = 0;

@@ -9,6 +9,7 @@
 #include "grid/grid.h"
 #include "spell-kind/earthquake.h"
 #include "spell/spell-types.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*!

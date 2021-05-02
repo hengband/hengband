@@ -2,6 +2,7 @@
 #include "autopick/autopick-methods-table.h"
 #include "autopick/autopick-util.h"
 #include "io/input-key-acceptor.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "view/display-map.h"
 #include "window/main-window-util.h"

@@ -3,12 +3,16 @@
 #include "mind/stances-table.h"
 #include "monster/monster-status.h"
 #include "player/attack-defense-types.h"
+#include "player/digestion-processor.h"
 #include "player/player-status-table.h"
+#include "player/player-status.h"
 #include "realm/realm-hex-numbers.h"
 #include "realm/realm-types.h"
 #include "spell-realm/spells-hex.h"
 #include "status/element-resistance.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "window/main-window-row-column.h"
@@ -18,7 +22,6 @@
 /*!
  * @brief 32ビット変数配列の指定位置のビットフラグを1にする。
  * @param FLG フラグ位置(ビット)
- * @return なし
  */
 #define ADD_BAR_FLAG(FLG) (bar_flags[FLG / 32] |= (1UL << (FLG % 32)))
 
@@ -32,7 +35,6 @@
 /*!
  * @brief プレイヤー能力値を描画する / Print character stat in given row, column
  * @param stat 描画するステータスのID
- * @return なし
  */
 void print_stat(player_type *creature_ptr, int stat)
 {
@@ -60,7 +62,6 @@ void print_stat(player_type *creature_ptr, int stat)
 
 /*!
  * @brief プレイヤーの負傷状態を表示する
- * @return なし
  */
 void print_cut(player_type *creature_ptr)
 {
@@ -105,7 +106,6 @@ void print_cut(player_type *creature_ptr)
 
 /*!
  * @brief プレイヤーの朦朧状態を表示する
- * @return なし
  */
 void print_stun(player_type *creature_ptr)
 {
@@ -131,7 +131,6 @@ void print_stun(player_type *creature_ptr)
 /*!
  * @brief プレイヤーの空腹状態を表示する / Prints status of hunger
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void print_hunger(player_type *player_ptr)
 {
@@ -169,7 +168,6 @@ void print_hunger(player_type *player_ptr)
 /*!
  * @brief プレイヤーの行動状態を表示する / Prints Searching, Resting, Paralysis, or 'count' status
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  * Display is always exactly 10 characters wide (see below)
  * This function was a major bottleneck when resting, so a lot of
@@ -273,7 +271,6 @@ void print_state(player_type *player_ptr)
 /*!
  * @brief プレイヤーの行動速度を表示する / Prints the speed_value of a character.			-CJS-
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void print_speed(player_type *player_ptr)
 {
@@ -331,7 +328,6 @@ void print_speed(player_type *player_ptr)
 /*!
  * @brief プレイヤーの呪文学習可能状態を表示する
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void print_study(player_type *player_ptr)
 {
@@ -350,7 +346,6 @@ void print_study(player_type *player_ptr)
 /*!
  * @brief プレイヤーのものまね可能状態を表示する
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void print_imitation(player_type *player_ptr)
 {
@@ -373,7 +368,6 @@ void print_imitation(player_type *player_ptr)
 
 /*!
  * @brief 下部に状態表示を行う / Show status bar
- * @return なし
  */
 void print_status(player_type *creature_ptr)
 {
@@ -635,7 +629,6 @@ void print_status(player_type *creature_ptr)
 /*!
  * @brief プレイヤーのステータスを一括表示する（下部分） / Display extra info (mostly below map)
  * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void print_frame_extra(player_type *player_ptr)
 {

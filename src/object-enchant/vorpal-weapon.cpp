@@ -4,13 +4,17 @@
 #include "io/files-util.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
+#include "player-attack/player-attack-util.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*!
  * @brief ヴォーパル武器で攻撃した時のメッセージ表示
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param int 倍率
- * @return なし
  */
 static void print_vorpal_message(player_attack_type *pa_ptr, const int magnification)
 {
@@ -42,7 +46,6 @@ static void print_vorpal_message(player_attack_type *pa_ptr, const int magnifica
 /*!
  * @brief チェンソーのノイズ音を表示する
  * @param o_ptr チェンソーへの参照ポインタ
- * @return なし
  */
 static void print_chainsword_noise(object_type *o_ptr)
 {
@@ -60,7 +63,6 @@ static void print_chainsword_noise(object_type *o_ptr)
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param vorpal_cut メッタ斬りにできるかどうか
  * @param vorpal_chance ヴォーパル倍率上昇の機会値
- * @return なし
  */
 void process_vorpal_attack(player_type *attacker_ptr, player_attack_type *pa_ptr, const bool vorpal_cut, const int vorpal_chance)
 {

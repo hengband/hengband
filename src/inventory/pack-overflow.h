@@ -1,5 +1,4 @@
 ﻿#pragma once
 
-#include "system/angband.h"
-
-void pack_overflow(player_type* owner_ptr);
+typedef struct player_type player_type;
+void pack_overflow(player_type *owner_ptr);

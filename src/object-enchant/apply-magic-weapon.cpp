@@ -14,6 +14,7 @@
 #include "object-enchant/trc-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/floor-type-definition.h"
+#include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -24,7 +25,6 @@
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
  * @param level 生成基準階
  * @param power 生成ランク
- * @return なし
  * @details
  * Hack -- note special base damage dice boosting\n
  * Hack -- note special processing for weapon/digger\n

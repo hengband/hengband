@@ -4,7 +4,7 @@
  */
 
 #include "main-win/main-win-bg.h"
-#include "main-win/read-graphics.h"
+#include "main-win/graphics-win.h"
 #include "system/h-define.h"
 
 HBITMAP hBG = NULL;
@@ -43,7 +43,7 @@ void draw_bg(HDC hdc, RECT *r)
     int x = r->left, y = r->top;
     int nx = x;
     int ny = y;
-    BITMAP bm;
+    BITMAP bm{};
     GetObject(hBG, sizeof(bm), &bm);
     int swid = bm.bmWidth;
     int shgt = bm.bmHeight;

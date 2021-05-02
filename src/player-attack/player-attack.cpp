@@ -13,8 +13,10 @@
 #include "combat/slaying.h"
 #include "core/player-update-types.h"
 #include "floor/cave.h"
+#include "floor/geometry.h"
 #include "game-option/cheat-types.h"
 #include "grid/feature-flag-types.h"
+#include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
@@ -31,10 +33,14 @@
 #include "object-enchant/vorpal-weapon.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-flags.h"
+#include "object/tval-types.h"
 #include "player-attack/attack-chaos-effect.h"
 #include "player-attack/blood-sucking-processor.h"
 #include "player-attack/player-attack-util.h"
 #include "player-info/avatar.h"
+#include "player-info/equipment-info.h"
+#include "player-status/player-energy.h"
+#include "player-status/player-hand-types.h"
 #include "player/player-damage.h"
 #include "player/player-skill.h"
 #include "player/player-status-flags.h"
@@ -43,6 +49,10 @@
 #include "spell-realm/spells-hex.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
@@ -76,7 +86,6 @@ static player_attack_type *initialize_player_attack_type(
  * @brief 一部職業で攻撃に倍率がかかったりすることの処理
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @return なし
  */
 static void attack_classify(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {
@@ -100,7 +109,6 @@ static void attack_classify(player_type *attacker_ptr, player_attack_type *pa_pt
  * @brief マーシャルアーツの技能値を増加させる
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @return なし
  */
 static void get_bare_knuckle_exp(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {
@@ -125,7 +133,6 @@ static void get_bare_knuckle_exp(player_type *attacker_ptr, player_attack_type *
  * @brief 装備している武器の技能値を増加させる
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @return なし
  */
 static void get_weapon_exp(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {
@@ -153,7 +160,6 @@ static void get_weapon_exp(player_type *attacker_ptr, player_attack_type *pa_ptr
  * @brief 直接攻撃に伴う技能値の上昇処理
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @return なし
  */
 static void get_attack_exp(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {
@@ -174,7 +180,6 @@ static void get_attack_exp(player_type *attacker_ptr, player_attack_type *pa_ptr
  * @brief 攻撃回数を決定する
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @return なし
  * @details 毒針は確定で1回
  */
 static void calc_num_blow(player_type *attacker_ptr, player_attack_type *pa_ptr)
@@ -254,7 +259,7 @@ static MagicalBrandEffect select_magical_brand_effect(player_type *attacker_ptr,
  * @param pa_ptr プレイヤー攻撃情報への参照ポインタ
  * @return ダイス数
  */
-static DICE_NUMBER magical_brand_extra_dice(player_attack_type* pa_ptr)
+static DICE_NUMBER magical_brand_extra_dice(player_attack_type *pa_ptr)
 {
     switch (pa_ptr->magical_effect) {
     case MagicalBrandEffect::NONE:
@@ -303,7 +308,8 @@ static bool does_equip_cause_earthquake(player_type *attacker_ptr, player_attack
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @return 持つならtrue、持たないならfalse
  */
-static bool does_weapon_has_flag(BIT_FLAGS &attacker_flags, player_attack_type *pa_ptr) {
+static bool does_weapon_has_flag(BIT_FLAGS &attacker_flags, player_attack_type *pa_ptr)
+{
     if (!attacker_flags)
         return false;
 
@@ -337,7 +343,8 @@ static void process_weapon_attack(player_type *attacker_ptr, player_attack_type 
 
     auto do_impact = does_weapon_has_flag(attacker_ptr->impact, pa_ptr);
     if ((!(o_ptr->tval == TV_SWORD) || !(o_ptr->sval == SV_POISON_NEEDLE)) && !(pa_ptr->mode == HISSATSU_KYUSHO))
-        pa_ptr->attack_damage = critical_norm(attacker_ptr, o_ptr->weight, o_ptr->to_h, pa_ptr->attack_damage, attacker_ptr->to_h[pa_ptr->hand], pa_ptr->mode, do_impact);
+        pa_ptr->attack_damage
+            = critical_norm(attacker_ptr, o_ptr->weight, o_ptr->to_h, pa_ptr->attack_damage, attacker_ptr->to_h[pa_ptr->hand], pa_ptr->mode, do_impact);
 
     pa_ptr->drain_result = pa_ptr->attack_damage;
     process_vorpal_attack(attacker_ptr, pa_ptr, vorpal_cut, vorpal_chance);
@@ -352,7 +359,6 @@ static void process_weapon_attack(player_type *attacker_ptr, player_attack_type 
  * @param do_quake 攻撃の結果、地震を起こすことになったらTRUE、それ以外はFALSE
  * @param vorpal_cut メッタ斬りにできるかどうか
  * @param vorpal_change ヴォーパル倍率上昇の機会値
- * @return なし
  * @details 取り敢えず素手と仮定し1とする.
  */
 static void calc_attack_damage(player_type *attacker_ptr, player_attack_type *pa_ptr, bool *do_quake, const bool vorpal_cut, const int vorpal_chance)
@@ -373,7 +379,6 @@ static void calc_attack_damage(player_type *attacker_ptr, player_attack_type *pa
  * @brief 武器のダメージボーナスや剣術家の技によってダメージにボーナスを与える
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @return なし
  */
 static void apply_damage_bonus(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {
@@ -435,13 +440,19 @@ static bool check_fear_death(player_type *attacker_ptr, player_attack_type *pa_p
 
     *(pa_ptr->mdeath) = TRUE;
     if ((attacker_ptr->pclass == CLASS_BERSERKER) && attacker_ptr->energy_use) {
+        PlayerEnergy energy(attacker_ptr);
         if (can_attack_with_main_hand(attacker_ptr) && can_attack_with_sub_hand(attacker_ptr)) {
-            if (pa_ptr->hand)
-                attacker_ptr->energy_use = attacker_ptr->energy_use * 3 / 5 + attacker_ptr->energy_use * num * 2 / (attacker_ptr->num_blow[pa_ptr->hand] * 5);
-            else
-                attacker_ptr->energy_use = attacker_ptr->energy_use * num * 3 / (attacker_ptr->num_blow[pa_ptr->hand] * 5);
+            ENERGY energy_use;
+            if (pa_ptr->hand) {
+                energy_use = attacker_ptr->energy_use * 3 / 5 + attacker_ptr->energy_use * num * 2 / (attacker_ptr->num_blow[pa_ptr->hand] * 5);
+            } else {
+                energy_use = attacker_ptr->energy_use * num * 3 / (attacker_ptr->num_blow[pa_ptr->hand] * 5);
+            }
+
+            energy.set_player_turn_energy(energy_use);
         } else {
-            attacker_ptr->energy_use = attacker_ptr->energy_use * num / attacker_ptr->num_blow[pa_ptr->hand];
+            auto energy_use = (ENERGY)(attacker_ptr->energy_use * num / attacker_ptr->num_blow[pa_ptr->hand]);
+            energy.set_player_turn_energy(energy_use);
         }
     }
 
@@ -459,7 +470,6 @@ static bool check_fear_death(player_type *attacker_ptr, player_attack_type *pa_p
  * @param do_quake 攻撃後に地震を起こすかどうか
  * @param is_zantetsu_nullified 斬鉄剣で切れないならばTRUE
  * @param is_ej_nullified 蜘蛛相手ならばTRUE
- * @return なし
  */
 static void apply_actual_attack(
     player_type *attacker_ptr, player_attack_type *pa_ptr, bool *do_quake, const bool is_zantetsu_nullified, const bool is_ej_nullified)
@@ -498,7 +508,6 @@ static void apply_actual_attack(
  * @param do_quake 攻撃後に地震を起こすかどうか
  * @param y モンスターのY座標
  * @param x モンスターのX座標
- * @return なし
  */
 static void cause_earthquake(player_type *attacker_ptr, player_attack_type *pa_ptr, const bool do_quake, const POSITION y, const POSITION x)
 {
@@ -519,7 +528,6 @@ static void cause_earthquake(player_type *attacker_ptr, player_attack_type *pa_p
  * @param mdeath 攻撃を受けたモンスターが死亡したかを返す参照ポインタ
  * @param hand 攻撃を行うための武器を持つ手
  * @param mode 発動中の剣術ID
- * @return なし
  * @details
  * If no "weapon" is available, then "punch" the monster one time.
  */
@@ -583,7 +591,6 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
 /*!
  * @brief 皆殺し(全方向攻撃)処理
  * @param caster_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void massacre(player_type *caster_ptr)
 {

@@ -4,6 +4,8 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
 

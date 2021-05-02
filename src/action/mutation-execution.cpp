@@ -7,6 +7,7 @@
 #include "cmd-item/cmd-throw.h"
 #include "core/asking-player.h"
 #include "effect/spells-effect-util.h"
+#include "floor/geometry.h"
 #include "game-option/play-record-options.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
@@ -28,7 +29,9 @@
 #include "object-enchant/item-feeling.h"
 #include "object-hook/hook-checker.h"
 #include "player-info/self-info.h"
+#include "player-status/player-energy.h"
 #include "player/player-damage.h"
+#include "player/player-status.h"
 #include "racial/racial-vampire.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-charm.h"
@@ -46,7 +49,10 @@
 #include "status/element-resistance.h"
 #include "status/shape-changer.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "view/display-messages.h"
 
@@ -280,7 +286,7 @@ bool exe_mutation_power(player_type *creature_ptr, MUTA power)
     case MUTA::LAUNCHER:
         return do_cmd_throw(creature_ptr, 2 + lvl / 40, FALSE, -1);
     default:
-        free_turn(creature_ptr);
+        PlayerEnergy(creature_ptr).reset_player_turn();
         msg_format(_("能力 %s は実装されていません。", "Power %s not implemented. Oops."), power);
         return TRUE;
     }

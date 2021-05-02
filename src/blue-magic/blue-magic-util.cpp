@@ -5,6 +5,7 @@
 
 #include "blue-magic/blue-magic-util.h"
 #include "monster-floor/place-monster-types.h"
+#include "system/player-type-definition.h"
 
 bmc_type *initialize_blue_magic_type(
     player_type *caster_ptr, bmc_type *bmc_ptr, const bool success, get_pseudo_monstetr_level_pf get_pseudo_monstetr_level)

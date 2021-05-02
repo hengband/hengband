@@ -12,8 +12,10 @@
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
+#include "floor/geometry.h"
 #include "game-option/disturbance-options.h"
 #include "grid/feature.h"
+#include "grid/grid.h"
 #include "io/files-util.h"
 #include "monster-attack/monster-attack-processor.h"
 #include "monster-floor/monster-object.h"
@@ -26,12 +28,16 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
+#include "monster/monster-processor-util.h"
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "pet/pet-util.h"
 #include "player/player-status-flags.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -130,7 +136,6 @@ static bool bash_normal_door(player_type *target_ptr, turn_flags *turn_flags_ptr
  * @param m_ptr モンスターへの参照ポインタ
  * @param g_ptr グリッドへの参照ポインタ
  * @param f_ptr 地形への参照ポインタ
- * @return なし
  */
 static void bash_glass_door(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, feature_type *f_ptr, bool may_bash)
 {
@@ -412,7 +417,7 @@ bool process_monster_movement(player_type *target_ptr, turn_flags *turn_flags_pt
                 disturb(target_ptr, FALSE, TRUE);
         }
 
-        bool is_takable_or_killable = g_ptr->o_idx > 0;
+        bool is_takable_or_killable = !g_ptr->o_idx_list.empty();
         is_takable_or_killable &= (r_ptr->flags2 & (RF2_TAKE_ITEM | RF2_KILL_ITEM)) != 0;
 
         bool is_pickup_items = (target_ptr->pet_extra_flags & PF_PICKUP_ITEMS) != 0;
@@ -443,7 +448,6 @@ bool process_monster_movement(player_type *target_ptr, turn_flags *turn_flags_pt
  * @param oy モンスターが元々いたY座標
  * @param ox モンスターが元々いたX座標
  * @param aware モンスターがプレーヤーに気付いているならばTRUE、超隠密状態ならばFALSE
- * @return なし
  */
 void process_speak_sound(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, bool aware)
 {
@@ -490,7 +494,6 @@ void process_speak_sound(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy
  * @param m_ptr モンスターの参照ポインタ
  * @param y 目標y座標
  * @param x 目標x座標
- * @return なし
  */
 void set_target(monster_type *m_ptr, POSITION y, POSITION x)
 {
@@ -501,6 +504,5 @@ void set_target(monster_type *m_ptr, POSITION y, POSITION x)
 /*!
  * @brief モンスターの目標地点をリセットする / Reset the target of counter attack
  * @param m_ptr モンスターの参照ポインタ
- * @return なし
  */
 void reset_target(monster_type *m_ptr) { set_target(m_ptr, 0, 0); }

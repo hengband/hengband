@@ -10,6 +10,7 @@
 #include "player-info/avatar.h"
 #include "racial/racial-android.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*!

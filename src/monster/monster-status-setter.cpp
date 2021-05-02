@@ -20,7 +20,9 @@
 #include "monster/smart-learn-types.h"
 #include "player-info/avatar.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -29,7 +31,6 @@
  * @brief モンスターをペットにする
  * @param player_type プレーヤーへの参照ポインタ
  * @param m_ptr モンスター情報構造体の参照ポインタ
- * @return なし
  */
 void set_pet(player_type *player_ptr, monster_type *m_ptr)
 {
@@ -43,7 +44,6 @@ void set_pet(player_type *player_ptr, monster_type *m_ptr)
  * @brief モンスターを敵に回す
  * Makes the monster hostile towards the player
  * @param m_ptr モンスター情報構造体の参照ポインタ
- * @return なし
  */
 void set_hostile(player_type *player_ptr, monster_type *m_ptr)
 {
@@ -57,7 +57,6 @@ void set_hostile(player_type *player_ptr, monster_type *m_ptr)
  * @brief モンスターを怒らせる
  * Anger the monster
  * @param m_ptr モンスター情報構造体の参照ポインタ
- * @return なし
  */
 void anger_monster(player_type *player_ptr, monster_type *m_ptr)
 {
@@ -79,7 +78,6 @@ void anger_monster(player_type *player_ptr, monster_type *m_ptr)
  * @param floor_ptr 現在フロアへの参照ポインタ
  * @return m_idx モンスターの参照ID
  * @return mproc_type 削除したいモンスターの時限ステータスID
- * @return なし
  */
 static void mproc_remove(floor_type *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
 {

@@ -4,6 +4,7 @@
 #include "cmd-action/cmd-attack.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
+#include "floor/geometry.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/input-options.h"
 #include "grid/feature.h"
@@ -11,6 +12,7 @@
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-requester.h"
+#include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
 #include "specific-object/chest.h"
@@ -18,6 +20,7 @@
 #include "status/experience.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
@@ -38,7 +41,7 @@ static bool exe_open_chest(player_type *creature_ptr, POSITION y, POSITION x, OB
     bool flag = TRUE;
     bool more = FALSE;
     object_type *o_ptr = &creature_ptr->current_floor_ptr->o_list[o_idx];
-    take_turn(creature_ptr, 100);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     if (o_ptr->pval > 0) {
         flag = FALSE;
         int i = creature_ptr->skill_dis;
@@ -76,7 +79,6 @@ static bool exe_open_chest(player_type *creature_ptr, POSITION y, POSITION x, OB
 /*!
  * @brief 「開ける」コマンドのメインルーチン /
  * Open a closed/locked/jammed door or a closed/locked chest.
- * @return なし
  * @details
  * Unlocking a locked door/chest is worth one experience point.
  */
@@ -119,7 +121,7 @@ void do_cmd_open(player_type *creature_ptr)
         if (!has_flag(f_info[feat].flags, FF_OPEN) && !o_idx) {
             msg_print(_("そこには開けるものが見当たらない。", "You see nothing there to open."));
         } else if (g_ptr->m_idx && creature_ptr->riding != g_ptr->m_idx) {
-            take_turn(creature_ptr, 100);
+            PlayerEnergy(creature_ptr).set_player_turn_energy(100);
             msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
             do_cmd_attack(creature_ptr, y, x, HISSATSU_NONE);
         } else if (o_idx) {
@@ -136,7 +138,6 @@ void do_cmd_open(player_type *creature_ptr)
 /*!
  * @brief 「閉じる」コマンドのメインルーチン /
  * Close an open door.
- * @return なし
  * @details
  * Unlocking a locked door/chest is worth one experience point.
  */
@@ -170,7 +171,7 @@ void do_cmd_close(player_type *creature_ptr)
         if (!has_flag(f_info[feat].flags, FF_CLOSE)) {
             msg_print(_("そこには閉じるものが見当たらない。", "You see nothing there to close."));
         } else if (g_ptr->m_idx) {
-            take_turn(creature_ptr, 100);
+            PlayerEnergy(creature_ptr).set_player_turn_energy(100);
             msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
             do_cmd_attack(creature_ptr, y, x, HISSATSU_NONE);
         } else {
@@ -185,7 +186,6 @@ void do_cmd_close(player_type *creature_ptr)
 /*!
  * @brief 箱、床のトラップ解除処理双方の統合メインルーチン /
  * Disarms a trap, or chest
- * @return なし
  */
 void do_cmd_disarm(player_type *creature_ptr)
 {
@@ -242,7 +242,6 @@ void do_cmd_disarm(player_type *creature_ptr)
 /*!
  * @brief 「打ち破る」動作コマンドのメインルーチン /
  * Bash open a door, success based on character strength
- * @return なし
  * @details
  * <pre>
  * For a closed door, pval is positive if locked; negative if stuck.
@@ -284,7 +283,7 @@ void do_cmd_bash(player_type *creature_ptr)
         if (!has_flag(f_info[feat].flags, FF_BASH)) {
             msg_print(_("そこには体当たりするものが見当たらない。", "You see nothing there to bash."));
         } else if (g_ptr->m_idx) {
-            take_turn(creature_ptr, 100);
+            PlayerEnergy(creature_ptr).set_player_turn_energy(100);
             msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
             do_cmd_attack(creature_ptr, y, x, HISSATSU_NONE);
         } else {
@@ -327,7 +326,6 @@ static bool get_spike(player_type *creature_ptr, INVENTORY_IDX *ip)
  * @brief 「くさびを打つ」動作コマンドのメインルーチン /
  * Jam a closed door with a spike
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  * <pre>
  * This command may NOT be repeated
@@ -356,11 +354,11 @@ void do_cmd_spike(player_type *creature_ptr)
     } else if (!get_spike(creature_ptr, &item)) {
         msg_print(_("くさびを持っていない！", "You have no spikes!"));
     } else if (g_ptr->m_idx) {
-        take_turn(creature_ptr, 100);
+        PlayerEnergy(creature_ptr).set_player_turn_energy(100);
         msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
         do_cmd_attack(creature_ptr, y, x, HISSATSU_NONE);
     } else {
-        take_turn(creature_ptr, 100);
+        PlayerEnergy(creature_ptr).set_player_turn_energy(100);
         msg_format(_("%sにくさびを打ち込んだ。", "You jam the %s with a spike."), f_info[feat].name.c_str());
         cave_alter_feat(creature_ptr, y, x, FF_SPIKE);
         vary_item(creature_ptr, item, -1);

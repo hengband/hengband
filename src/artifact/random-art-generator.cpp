@@ -1,5 +1,6 @@
 ﻿/*!
- * @brief ランダムアーティファクトの生成 / Artifact code
+ * @file random-art-generator.cpp
+ * @brief ランダムアーティファクトの生成メイン定義 / Artifact code
  * @date 2020/07/14
  * @author Hourier
  */
@@ -29,6 +30,8 @@
 #include "perception/object-perception.h"
 #include "player-info/avatar.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/quarks.h"
 #include "view/display-messages.h"
@@ -249,7 +252,6 @@ static void strengthen_pval(object_type *o_ptr)
  * @brief 防具ならばAC修正、武具なら殺戮修正を付与する
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr ランダムアーティファクトを示すアイテムへの参照ポインタ
- * @return なし
  */
 static void invest_positive_modified_value(player_type *player_ptr, object_type *o_ptr)
 {
@@ -271,7 +273,6 @@ static void invest_positive_modified_value(player_type *player_ptr, object_type 
  * @brief 防具のAC修正が高すぎた場合に弱化させる
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr ランダムアーティファクトを示すアイテムへの参照ポインタ
- * @return なし
  */
 static void invest_negative_modified_value(player_type *player_ptr, object_type *o_ptr)
 {

@@ -1,11 +1,16 @@
 ﻿#include "mspell/mspell-damage-calculator.h"
-#include "inventory/inventory-slot-types.h"
 #include "game-option/birth-options.h"
+#include "inventory/inventory-slot-types.h"
 #include "monster-race/monster-race.h"
+#include "monster-race/race-ability-flags.h"
 #include "monster-race/race-flags2.h"
 #include "monster/monster-status.h"
+#include "player-info/equipment-info.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 
 /*!
  * @brief モンスターの使う呪文の威力を決定する /
@@ -407,7 +412,6 @@ static HIT_POINT monspell_damage_base(
  * @param r_ptr モンスター種族への参照ポインタ
  * @param dd ダイス数への参照ポインタ
  * @param ds ダイス面への参照ポインタ
- * @return なし
  */
 void monspell_shoot_dice(monster_race *r_ptr, int *dd, int *ds)
 {

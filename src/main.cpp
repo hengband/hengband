@@ -19,11 +19,13 @@
 #include "player/process-name.h"
 #include "system/angband-version.h"
 #include "system/angband.h"
+#include "system/player-type-definition.h"
 #include "system/system-variables.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
 #include "util/string-processor.h"
+#include "view/display-scores.h"
 #include "wizard/wizard-spoiler.h"
 
 /*
@@ -280,31 +282,36 @@ static void display_usage(const char *program)
     quit(NULL);
 }
 
+/*
+ * @brief 2文字以上のコマンドライン引数 (オプション)を実行する
+ * @param opt コマンドライン引数
+ * @return Usageを表示する必要がある (TRUE)か否か (FALSE)
+ * @details v3.0.0 Alpha21時点では、スポイラー出力モードの判定及び実行を行う
+ */
 static bool parse_long_opt(const char *opt)
 {
-    bool is_usage_needed = TRUE;
-
-    if (strcmp(opt + 2, "output-spoilers") == 0) {
-        init_stuff();
-        init_angband(p_ptr, TRUE);
-        switch (output_all_spoilers()) {
-        case SPOILER_OUTPUT_SUCCESS:
-            puts("Successfully created a spoiler file.");
-            quit(NULL);
-            break;
-        case SPOILER_OUTPUT_FAIL_FOPEN:
-            quit("Cannot create spoiler file.");
-            break;
-        case SPOILER_OUTPUT_FAIL_FCLOSE:
-            quit("Cannot close spoiler file.");
-            break;
-        default:
-            break;
-        }
-        is_usage_needed = FALSE;
+    if (strcmp(opt + 2, "output-spoilers") != 0) {
+        return TRUE;
     }
 
-    return is_usage_needed;
+    init_stuff();
+    init_angband(p_ptr, TRUE);
+    switch (output_all_spoilers()) {
+    case spoiler_output_status::SPOILER_OUTPUT_SUCCESS:
+        puts("Successfully created a spoiler file.");
+        quit(NULL);
+        break;
+    case spoiler_output_status::SPOILER_OUTPUT_FAIL_FOPEN:
+        quit("Cannot create spoiler file.");
+        break;
+    case spoiler_output_status::SPOILER_OUTPUT_FAIL_FCLOSE:
+        quit("Cannot close spoiler file.");
+        break;
+    default:
+        break;
+    }
+
+    return FALSE;
 }
 
 /*

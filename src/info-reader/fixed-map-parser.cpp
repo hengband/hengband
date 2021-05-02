@@ -17,7 +17,7 @@
 #include "player/player-race.h"
 #include "realm/realm-names-table.h"
 #include "system/floor-type-definition.h"
-#include "system/system-variables.h"
+#include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"

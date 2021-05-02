@@ -8,10 +8,13 @@
 #include "mind/mind-magic-resistance.h"
 #include "mind/mind-mirror-master.h"
 #include "monster/monster-info.h"
+#include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "mspell/mspell-util.h"
 #include "mspell/mspell.h"
 #include "player/attack-defense-types.h"
+#include "player/player-race.h"
+#include "player/player-status.h"
 #include "realm/realm-song-numbers.h"
 #include "spell-realm/spells-craft.h"
 #include "spell-realm/spells-crusade.h"
@@ -25,17 +28,11 @@
 #include "status/shape-changer.h"
 #include "status/sight-setter.h"
 #include "status/temporary-resistance.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
-
-#include "core/speed-table.h"
-#include "monster/monster-status-setter.h"
-#include "player/attack-defense-types.h"
-#include "player/player-race.h"
-#include "status/buff-setter.h"
 
 /*!
  * @brief プレイヤーに魔力消去効果を与える。
- * @return なし
  */
 static void dispel_player(player_type *creature_ptr)
 {
@@ -86,8 +83,8 @@ static void dispel_player(player_type *creature_ptr)
 
     if (music_singing_any(creature_ptr) || hex_spelling_any(creature_ptr)) {
         concptr str = (music_singing_any(creature_ptr)) ? _("歌", "singing") : _("呪文", "casting");
-        INTERUPTING_SONG_EFFECT(creature_ptr) = SINGING_SONG_EFFECT(creature_ptr);
-        SINGING_SONG_EFFECT(creature_ptr) = MUSIC_NONE;
+        set_interrupting_song_effect(creature_ptr, get_singing_song_effect(creature_ptr));
+        set_singing_song_effect(creature_ptr, MUSIC_NONE);
         msg_format(_("%sが途切れた。", "Your %s is interrupted."), str);
 
         creature_ptr->action = ACTION_NONE;

@@ -2,24 +2,26 @@
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
-#include "core/stuff-handler.h"
 #include "core/speed-table.h"
-#include "status/buff-setter.h"
-#include "game-option/disturbance-options.h"
-#include "player-info/avatar.h"
-#include "player/player-race.h"
-#include "player/player-class.h"
-#include "player/attack-defense-types.h"
-#include "realm/realm-song-numbers.h"
-#include "view/display-messages.h"
+#include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
-#include "status/element-resistance.h"
-#include "status/base-status.h"
+#include "game-option/disturbance-options.h"
 #include "monster/monster-status-setter.h"
+#include "player-info/avatar.h"
+#include "player/attack-defense-types.h"
+#include "player/player-class.h"
+#include "player/player-race.h"
+#include "player/player-status.h"
+#include "realm/realm-song-numbers.h"
+#include "spell-realm/spells-song.h"
+#include "status/base-status.h"
+#include "status/buff-setter.h"
+#include "status/element-resistance.h"
+#include "system/player-type-definition.h"
+#include "view/display-messages.h"
 
 /*!
  * @brief プレイヤーの全ての時限効果をリセットする。 / reset timed flags
- * @return なし
  */
 void reset_tim_flags(player_type *creature_ptr)
 {
@@ -93,8 +95,8 @@ void reset_tim_flags(player_type *creature_ptr)
     }
 
     if (creature_ptr->pclass == CLASS_BARD) {
-        SINGING_SONG_EFFECT(creature_ptr) = 0;
-        SINGING_SONG_ID(creature_ptr) = 0;
+        set_singing_song_effect(creature_ptr, MUSIC_NONE);
+        set_singing_song_id(creature_ptr, 0);
     }
 }
 
@@ -308,7 +310,6 @@ bool set_hero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
     handle_stuff(creature_ptr);
     return TRUE;
 }
-
 
 /*!
  * @brief 変身効果の継続時間と変身先をセットする / Set "tim_mimic", and "mimic_form", notice observable changes

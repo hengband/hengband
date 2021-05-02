@@ -9,6 +9,7 @@
 #include "io/cursor.h"
 #include "io/screen-util.h"
 #include "main/sound-of-music.h"
+#include "system/player-type-definition.h"
 #include "target/target-checker.h"
 #include "target/target-setter.h"
 #include "target/target-types.h"
@@ -19,7 +20,6 @@
 /*!
  * @brief ターゲットを設定するコマンドのメインルーチン
  * Target command
- * @return なし
  */
 void do_cmd_target(player_type *creature_ptr)
 {
@@ -35,7 +35,6 @@ void do_cmd_target(player_type *creature_ptr)
 /*!
  * @brief 周囲を見渡すコマンドのメインルーチン
  * Look command
- * @return なし
  */
 void do_cmd_look(player_type *creature_ptr)
 {
@@ -48,7 +47,6 @@ void do_cmd_look(player_type *creature_ptr)
 /*!
  * @brief 位置を確認するコマンドのメインルーチン
  * Allow the player to examine other sectors on the map
- * @return なし
  */
 void do_cmd_locate(player_type *creature_ptr)
 {

@@ -1,4 +1,8 @@
 ﻿#pragma once
+/*!
+ * @file random-art-bias-types.h
+ * @brief ランダムアーティファクトのバイアス定義
+ */
 
 enum random_art_bias_type {
     BIAS_NONE = 0,

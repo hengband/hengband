@@ -5,6 +5,7 @@
 #include "grid/feature-flag-types.h"
 #include "grid/grid.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 
 typedef struct projection_path_type {
     u16b *gp;

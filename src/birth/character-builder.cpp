@@ -30,14 +30,15 @@
 #include "player/player-race-types.h"
 #include "player/player-sex.h"
 #include "player/race-info-table.h"
+#include "store/store-owners.h"
 #include "store/store.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
 /*!
  * @brief プレーヤーキャラの作成結果を日記に書く
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 static void write_birth_diary(player_type *creature_ptr)
 {
@@ -80,7 +81,6 @@ static void write_birth_diary(player_type *creature_ptr)
  * @details
  * Note that we may be called with "junk" leftover in the various
  * fields, so we must be sure to clear them first.
- * @return なし
  */
 void player_birth(player_type *creature_ptr)
 {

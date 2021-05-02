@@ -13,7 +13,9 @@
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"
+#include "floor/geometry.h"
 #include "floor/line-of-sight.h"
+#include "grid/feature-flag-types.h"
 #include "grid/grid.h"
 #include "main/sound-definitions-table.h"
 #include "monster-race/monster-race.h"
@@ -24,10 +26,15 @@
 #include "player/player-race.h"
 #include "player/special-defense-types.h"
 #include "player/player-status-flags.h"
+#include "player/player-status.h"
 #include "realm/realm-song-numbers.h"
+#include "spell-realm/spells-song.h"
 #include "spell/range-calc.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 
 /*!
@@ -177,7 +184,6 @@ bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POSITION y
  * @param ty 目標Y座標を返す参照ポインタ
  * @param tx 目標X座標を返す参照ポインタ
  * @param flg 判定のフラグ配列
- * @return なし
  */
 void get_project_point(player_type *target_ptr, POSITION sy, POSITION sx, POSITION *ty, POSITION *tx, BIT_FLAGS flg)
 {

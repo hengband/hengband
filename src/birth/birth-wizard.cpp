@@ -27,7 +27,9 @@
 #include "player/player-sex.h"
 #include "player/process-name.h"
 #include "player/player-status-table.h"
+#include "player/player-status.h"
 #include "system/game-option-types.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/buffer-shaper.h"
@@ -62,7 +64,6 @@ static void display_initial_birth_message(player_type *creature_ptr)
  * @prief 性別選択画面でヘルプを表示させる
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param c 入力したコマンド
- * @return なし
  * @details 他の関数名と被りそうだったので少し眺め
  */
 static void display_help_on_sex_select(player_type *creature_ptr, char c)
@@ -524,7 +525,6 @@ static bool display_auto_roller(player_type *creature_ptr, chara_limit_type char
 /*!
  * @brief 名前と生い立ちを設定する
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details ついでにステータス限界もここで決めている
  */
 static void set_name_history(player_type *creature_ptr)
@@ -544,7 +544,6 @@ static void set_name_history(player_type *creature_ptr)
  * The delay may be reduced, but is recommended to keep players
  * from continuously rolling up characters, which can be VERY
  * expensive CPU wise.  And it cuts down on player stupidity.
- * @return なし
  */
 bool player_birth_wizard(player_type *creature_ptr)
 {

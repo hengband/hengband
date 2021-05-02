@@ -16,6 +16,7 @@
 #include "object-enchant/trc-types.h"
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-protector-types.h"
+#include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -26,7 +27,6 @@
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
  * @param level 生成基準階
  * @param power 生成ランク
- * @return なし
  * @details
  * Hack -- note special processing for crown/helm\n
  * Hack -- note special processing for robe of permanence\n

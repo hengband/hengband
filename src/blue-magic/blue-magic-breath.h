@@ -4,10 +4,8 @@
  * @brief 青魔法のブレス系呪文ヘッダ
  */
 
-
-#include "system/angband.h"
-
 typedef struct bmc_type bmc_type;
+typedef struct player_type player_type;
 bool cast_blue_breath_acid(player_type *caster_ptr, bmc_type *bmc_ptr);
 bool cast_blue_breath_elec(player_type *caster_ptr, bmc_type *bmc_ptr);
 bool cast_blue_breath_fire(player_type *caster_ptr, bmc_type *bmc_ptr);

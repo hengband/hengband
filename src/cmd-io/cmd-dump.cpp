@@ -12,6 +12,7 @@
 #include "cmd-io/cmd-dump.h"
 #include "cmd-io/feeling-table.h"
 #include "core/asking-player.h"
+#include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor-town.h"
 #include "io-dump/dump-remover.h"
@@ -23,10 +24,12 @@
 #include "locale/english.h"
 #include "main/sound-of-music.h"
 #include "mutation/mutation-flag-types.h"
-#include "player/player-personalities-types.h"
+#include "player/player-personality-types.h"
 #include "player/player-status-flags.h"
+#include "player/player-status.h"
 #include "system/angband-version.h"
 #include "system/floor-type-definition.h"
+#include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -40,7 +43,6 @@
  * @brief 画面を再描画するコマンドのメインルーチン
  * Hack -- redraw the screen
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  * @details
  * Allow absolute file names?
  */
@@ -237,7 +239,6 @@ void do_cmd_feeling(player_type *creature_ptr)
 /*
  * Display the time and date
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
  */
 void do_cmd_time(player_type *creature_ptr)
 {

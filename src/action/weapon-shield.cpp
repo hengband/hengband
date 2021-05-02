@@ -11,14 +11,16 @@
 #include "object-hook/hook-checker.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-generator.h"
+#include "player-info/equipment-info.h"
+#include "player-status/player-hand-types.h"
 #include "system/object-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 /*!
  * @brief 持ち替え処理
  * @param owner_ptr プレーヤーへの参照ポインタ
  * @param item 持ち替えを行いたい装備部位ID
- * @return なし
  */
 void verify_equip_slot(player_type *owner_ptr, INVENTORY_IDX item)
 {

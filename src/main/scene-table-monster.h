@@ -6,8 +6,8 @@
 
 #include "main/scene-table.h"
 #include "system/angband.h"
-#include "system/monster-race-definition.h"
 
+typedef struct player_type player_type;
 void clear_scene_target_monster();
 void set_temp_mute_scene_monster(int sec);
 int get_scene_monster_count();

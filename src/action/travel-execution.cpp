@@ -7,13 +7,17 @@
 #include "action/movement-execution.h"
 #include "action/run-execution.h"
 #include "core/disturbance.h"
+#include "floor/geometry.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/input-options.h"
 #include "game-option/special-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
+#include "player-status/player-energy.h"
 #include "player/player-move.h"
 #include "system/floor-type-definition.h"
+#include "system/monster-type-definition.h"
+#include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
 travel_type travel;
@@ -85,7 +89,6 @@ static DIRECTION travel_test(player_type *creature_ptr, DIRECTION prev_dir)
  * @brief トラベル機能の実装 /
  * Travel command
  * @param creature_ptr	プレーヤーへの参照ポインタ
- * @return なし
  */
 void travel_step(player_type *creature_ptr)
 {
@@ -100,7 +103,7 @@ void travel_step(player_type *creature_ptr)
         return;
     }
 
-    take_turn(creature_ptr, 100);
+    PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     exe_movement(creature_ptr, travel.dir, always_pickup, FALSE);
     if ((creature_ptr->y == travel.y) && (creature_ptr->x == travel.x)) {
         travel.run = 0;
@@ -114,7 +117,6 @@ void travel_step(player_type *creature_ptr)
 /*!
  * @brief トラベル処理の記憶配列を初期化する Hack: forget the "flow" information
  * @param creature_ptr	プレーヤーへの参照ポインタ
- * @return なし
  */
 void forget_travel_flow(floor_type *floor_ptr)
 {
