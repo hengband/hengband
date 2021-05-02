@@ -511,7 +511,7 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
         j_ptr->iy = by;
         j_ptr->ix = bx;
         j_ptr->held_m_idx = 0;
-        g_ptr->o_idx_list.add(o_idx);
+        g_ptr->o_idx_list.add(floor_ptr, o_idx);
         done = TRUE;
     }
 

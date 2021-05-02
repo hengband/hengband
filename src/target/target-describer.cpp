@@ -354,7 +354,7 @@ static char describe_footing_many_items(player_type *subject_ptr, eg_type *eg_pt
         if (eg_ptr->g_ptr->o_idx_list.size() < 2)
             continue;
 
-        eg_ptr->g_ptr->o_idx_list.rotate();
+        eg_ptr->g_ptr->o_idx_list.rotate(subject_ptr->current_floor_ptr);
     }
 }
 

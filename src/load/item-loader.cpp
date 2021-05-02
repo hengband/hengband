@@ -201,6 +201,11 @@ void rd_item(player_type *player_ptr, object_type *o_ptr)
     else
         o_ptr->feeling = 0;
 
+    if (flags & SAVE_ITEM_STACK_IDX)
+        rd_s16b(&o_ptr->stack_idx);
+    else
+        o_ptr->stack_idx = 0;
+
     if (flags & SAVE_ITEM_INSCRIPTION) {
         char buf[128];
         rd_string(buf, sizeof(buf));

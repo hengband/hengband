@@ -94,6 +94,9 @@ static void write_item_flags(object_type *o_ptr, BIT_FLAGS *flags)
     if (o_ptr->art_name)
         *flags |= SAVE_ITEM_ART_NAME;
 
+    if (o_ptr->stack_idx)
+        *flags |= SAVE_ITEM_STACK_IDX;
+
     wr_u32b(*flags);
 }
 
@@ -171,6 +174,9 @@ static void write_item_info(object_type *o_ptr, const BIT_FLAGS flags)
 
     if (flags & SAVE_ITEM_FEELING)
         wr_byte(o_ptr->feeling);
+
+    if (flags & SAVE_ITEM_STACK_IDX)
+        wr_s16b(o_ptr->stack_idx);
 }
 
 /*!
