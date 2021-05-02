@@ -2570,11 +2570,11 @@ void create_debug_spoiler(void)
     init_angband(p_ptr, TRUE);
 
     switch (output_all_spoilers()) {
-    case SPOILER_OUTPUT_SUCCESS:
+    case spoiler_output_status::SPOILER_OUTPUT_SUCCESS:
         fprintf(stdout, "Successfully created a spoiler file.");
-    case SPOILER_OUTPUT_FAIL_FOPEN:
+    case spoiler_output_status::SPOILER_OUTPUT_FAIL_FOPEN:
         fprintf(stderr, "Cannot create spoiler file.");
-    case SPOILER_OUTPUT_FAIL_FCLOSE:
+    case spoiler_output_status::SPOILER_OUTPUT_FAIL_FCLOSE:
         fprintf(stderr, "Cannot close spoiler file.");
     default:
         break;
@@ -2614,7 +2614,8 @@ static void register_wndclass(void)
 /*!
  * @brief (Windows固有)Windowsアプリケーションとしてのエントリポイント
  */
-int WINAPI WinMain(_In_ HINSTANCE hInst, [[maybe_unused]] _In_opt_ HINSTANCE hPrevInst, _In_ LPSTR lpCmdLine, [[maybe_unused]] _In_ int nCmdShow)
+int WINAPI WinMain(
+    _In_ HINSTANCE hInst, [[maybe_unused]] _In_opt_ HINSTANCE hPrevInst, [[maybe_unused]] _In_ LPSTR lpCmdLine, [[maybe_unused]] _In_ int nCmdShow)
 {
     setlocale(LC_ALL, "ja_JP");
     hInstance = hInst;

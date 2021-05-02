@@ -88,7 +88,7 @@ spoiler_output_status spoil_mon_desc(concptr fname, std::function<bool(const mon
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
     if (!spoiler_file) {
-        return SPOILER_OUTPUT_FAIL_FOPEN;
+        return spoiler_output_status::SPOILER_OUTPUT_FAIL_FOPEN;
     }
 
     char title[200];
@@ -161,7 +161,8 @@ spoiler_output_status spoil_mon_desc(concptr fname, std::function<bool(const mon
 
     fprintf(spoiler_file, "\n");
     C_KILL(who, max_r_idx, s16b);
-    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? SPOILER_OUTPUT_FAIL_FCLOSE : SPOILER_OUTPUT_SUCCESS;
+    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? spoiler_output_status::SPOILER_OUTPUT_FAIL_FCLOSE
+                                                                : spoiler_output_status::SPOILER_OUTPUT_SUCCESS;
 }
 
 /*!
@@ -188,7 +189,7 @@ spoiler_output_status spoil_mon_info(concptr fname)
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
     spoiler_file = angband_fopen(buf, "w");
     if (!spoiler_file) {
-        return SPOILER_OUTPUT_FAIL_FOPEN;
+        return spoiler_output_status::SPOILER_OUTPUT_FAIL_FOPEN;
     }
 
     char title[200];
@@ -256,5 +257,6 @@ spoiler_output_status spoil_mon_info(concptr fname)
     }
 
     C_KILL(who, max_r_idx, s16b);
-    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? SPOILER_OUTPUT_FAIL_FCLOSE : SPOILER_OUTPUT_SUCCESS;
+    return ferror(spoiler_file) || angband_fclose(spoiler_file) ? spoiler_output_status::SPOILER_OUTPUT_FAIL_FCLOSE
+                                                                : spoiler_output_status::SPOILER_OUTPUT_SUCCESS;
 }
