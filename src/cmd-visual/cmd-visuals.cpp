@@ -153,9 +153,9 @@ void do_cmd_visuals(player_type *creature_ptr)
                 if (!k_ptr->flavor) {
                     strip_name(o_name, k_idx);
                 } else {
-                    object_type forge;
-                    (&forge)->prep(creature_ptr, k_idx);
-                    describe_flavor(creature_ptr, o_name, &forge, OD_FORCE_FLAVOR);
+                    object_type dummy;
+                    dummy.prep(creature_ptr, k_idx);
+                    describe_flavor(creature_ptr, o_name, &dummy, OD_FORCE_FLAVOR);
                 }
 
                 auto_dump_printf(auto_dump_stream, "# %s\n", o_name);
