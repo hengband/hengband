@@ -25878,3 +25878,77 @@ D:ヨグ=ソトートと定命のものの混血児だ。
 D:それは通常は目に見えないが、綱をよじり合わせたような、触手と目玉だらけの姿で、
 D:タコかムカデかクモに似ており、そこに定命のほうの血統が現れた外見をしている。
 D:これは定命の家族や定命の血が濃い兄弟に、人間社会から隠されながら育てられている。
+
+N:1304:ネプト竜
+E:Nepto dragon
+G:l:B
+I:125:250d100:5:200:255
+W:79:3:0:20000:0:0
+B:CRAWL:SUPERHURT:1d255
+B:CLAW:SUPERHURT:1d255
+B:BITE:SUPERHURT:1d255
+B:CRUSH:INERTIA:1d255
+F:DRAGON | FORCE_MAXHP | DROP_CORPSE | AQUATIC | CAN_SWIM
+F:WILD_ONLY | WILD_OCEAN
+F:RES_WATE | ONLY_GOLD | DROP_4D2 | DROP_3D2 | DROP_2D2
+F:REGENERATE
+D:$It prevents the adventurer from advancing wherever.
+D:それは冒険者の進軍をどこまでも阻む。
+
+N:1305:スーパーモンキー『孫悟空』
+E:Sun Wukong, the Punkiest Monkey
+G:Y:u
+I:120:30d50:30:80:10
+W:38:3:0:3300:0:0
+B:SPIT:HURT:7d9
+B:HIT:HURT:7d9
+B:CLAW:HURT:7d9
+B:BITE:HURT:7d9
+F:UNIQUE | FORCE_MAXHP | ANIMAL | MALE | GOOD | FRIENDLY
+F:CAN_SPEAK | NO_FEAR | CAN_FLY | DROP_CORPSE
+F:DROP_GOOD | DROP_3D2
+S:1_IN_3 | BLINK | TELE_TO | TELE_AWAY | TRAPS | FORGET | S_KIN
+S:BA_ACID | BA_ELEC | BA_FIRE | BA_COLD | DISPEL | BA_POIS | BA_WATE | BA_LITE
+S:BO_ACID | BO_ELEC | BO_FIRE | BO_COLD | BO_WATE | BO_MANA | BO_PLAS | BO_ICEE
+S:MISSILE | SCARE | BLIND | CONF | SLOW | HOLD | HASTE | HEAL | BLINK | TPORT
+S:DRAIN_MANA | MIND_BLAST
+D:$He was under the Ngu-Hanh-Son until just before you landed here.
+D:$  He is good at magics and has been converted by touching Buddhism.
+D:彼はあなたがこの地に降り立つ直前まで、五行山の下敷きになっていた。
+D:彼は術を能くし、仏法に触れて改心している。
+
+# 'Li' in Chinese pronunciation means 'Lee'.
+# 'nus' in Japanese pronunciation, 'nasu', means 'eggplant'.
+# Furthermore, 'eggplant' is translated to 'qiezi' in Chinese.
+# He is 李茄子. He is from China, never Finland!!
+N:1306:ソーシャルディスタンスの王者『リー・ナス』
+E:Lee Qiezi, the King of Social Distance and Fucking Fucker who Fucks
+G:p:y
+I:120:80d60:10:100:1
+W:62:4:0:19000:0:0
+B:INSULT:SUPERHURT:11d11
+B:INSULT:SUPERHURT:11d11
+B:INSULT:SUPERHURT:11d11
+B:INSULT:SUPERHURT:11d11
+F:UNIQUE | FORCE_MAXHP | HUMAN | MALE | EVIL | GOOD
+F:CAN_SPEAK | DROP_CORPSE | ONLY_ITEM | DROP_4D2 | DROP_3D2 | DROP_2D2
+F:IM_FIRE | IM_POIS | RES_SOUN | RES_DISE
+S:1_IN_8 | SHRIEK | DISPEL | FORGET | TELE_AWAY | MIND_BLAST | BRAIN_SMASH
+D:$No one in the world deserves to be called a naked king like this man.
+D:$  He could only speak dirty words and believed that it was justice.
+D:$  At last, he lost all of friends and colleagues.
+D:$  Angband is the final place where he arrived. 
+D:この男ほど裸の王様と呼ぶに相応しい人間はこの世にもあの世にもいない。
+D:彼は汚い言葉しか発することができず、またそれが正義だと信じていた。
+D:とうとう彼の周囲には誰もいなくなり、そうして流れ着いた場所がここである。
+
+N:1307:チンピラウサギ
+E:Thug rabbit
+G:r:v
+I:110:3d6:20:10:20
+W:3:2:0:12:0:0
+B:CRUSH:HURT:3d6
+F:WILD_ONLY | FRIENDS | ANIMAL | EVIL | WILD_ALL
+D:$It is an annoying runaway tribe that interferes with traffic
+D:$ on a stolen motorcycle under the autumn full moon.
+D:十五夜になると盗難バイクで往来の邪魔をする迷惑系暴走族だ。
