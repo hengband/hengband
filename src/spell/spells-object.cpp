@@ -29,7 +29,6 @@
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "object/object-generator.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
@@ -115,7 +114,7 @@ void amusement(player_type *creature_ptr, POSITION y1, POSITION x1, int num, boo
                 break;
         }
         i_ptr = &object_type_body;
-        object_wipe(i_ptr);
+        i_ptr->wipe();
         k_idx = lookup_kind(amuse_info[i].tval, amuse_info[i].sval);
 
         /* Paranoia - reroll if nothing */
@@ -144,7 +143,7 @@ void amusement(player_type *creature_ptr, POSITION y1, POSITION x1, int num, boo
         }
 
         /* Make an object (if possible) */
-        object_prep(creature_ptr, i_ptr, k_idx);
+        i_ptr->prep(creature_ptr, k_idx);
         if (a_idx)
             i_ptr->name1 = a_idx;
         apply_magic_to_object(creature_ptr, i_ptr, 1, AM_NO_FIXED_ART);
@@ -194,7 +193,7 @@ void acquirement(player_type *caster_ptr, POSITION y1, POSITION x1, int num, boo
     /* Acquirement */
     while (num--) {
         i_ptr = &object_type_body;
-        object_wipe(i_ptr);
+        i_ptr->wipe();
 
         /* Make a good (or great) object (if possible) */
         if (!make_object(caster_ptr, i_ptr, mode))

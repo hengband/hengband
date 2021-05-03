@@ -29,7 +29,6 @@
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "object/object-flags.h" //!< @todo 相互参照している.
-#include "object/object-generator.h"
 #include "perception/object-perception.h"
 #include "player-status/player-energy.h"
 #include "system/object-type-definition.h"
@@ -333,7 +332,7 @@ static void drain_essence(player_type *creature_ptr)
     marked = o_ptr->marked;
     number = o_ptr->number;
 
-    object_prep(creature_ptr, o_ptr, o_ptr->k_idx);
+    o_ptr->prep(creature_ptr, o_ptr->k_idx);
 
     o_ptr->iy = iy;
     o_ptr->ix = ix;

@@ -24,7 +24,6 @@
 #include "inventory/inventory-slot-types.h"
 #include "mind/mind-force-trainer.h"
 #include "monster/monster-describer.h"
-#include "object/object-generator.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "player-info/avatar.h"
@@ -490,7 +489,7 @@ bool cosmic_cast_off(player_type *creature_ptr, object_type **o_ptr_ptr)
         return FALSE;
 
     object_type forge;
-    object_copy(&forge, o_ptr);
+    (&forge)->copy_from(o_ptr);
     inven_item_increase(creature_ptr, slot, (0 - o_ptr->number));
     inven_item_optimize(creature_ptr, slot);
 

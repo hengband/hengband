@@ -19,7 +19,6 @@
 #include "main/sound-of-music.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-hook/hook-enchant.h"
-#include "object/object-generator.h"
 #include "object/object-stack.h"
 #include "perception/identification.h"
 #include "perception/object-perception.h"
@@ -387,5 +386,5 @@ void store_init(int town_num, int store_num)
     st_ptr->stock_num = 0;
     st_ptr->last_visit = -10L * TURNS_PER_TICK * STORE_TICKS;
     for (int k = 0; k < st_ptr->stock_size; k++)
-        object_wipe(&st_ptr->stock[k]);
+        (&st_ptr->stock[k])->wipe();
 }

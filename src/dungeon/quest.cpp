@@ -25,7 +25,6 @@
 #include "monster/smart-learn-types.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/trg-types.h"
-#include "object/object-generator.h"
 #include "player-status/player-energy.h"
 #include "player/player-personality-types.h"
 #include "player/player-status.h"

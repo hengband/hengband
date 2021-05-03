@@ -1,5 +1,4 @@
 ﻿#include "load/store-loader.h"
-#include "object/object-generator.h"
 #include "floor/floor-town.h"
 #include "load/angband-version-comparer.h"
 #include "load/item-loader.h"
@@ -98,7 +97,7 @@ static errr rd_store(player_type *player_ptr, int town_number, int store_number)
         object_type forge;
         object_type *q_ptr;
         q_ptr = &forge;
-        object_wipe(q_ptr);
+        q_ptr->wipe();
 
         rd_item(player_ptr, q_ptr);
 
@@ -110,7 +109,7 @@ static errr rd_store(player_type *player_ptr, int town_number, int store_number)
             home_carry_load(player_ptr, store_ptr, q_ptr);
         } else {
             int k = store_ptr->stock_num++;
-            object_copy(&store_ptr->stock[k], q_ptr);
+            (&store_ptr->stock[k])->copy_from(q_ptr);
         }
     }
 

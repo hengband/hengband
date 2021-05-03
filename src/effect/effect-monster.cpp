@@ -35,7 +35,6 @@
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "object-enchant/special-object-flags.h"
-#include "object/object-generator.h"
 #include "object/object-kind-hook.h"
 #include "player-info/avatar.h"
 #include "util/bit-flags-calculator.h"
@@ -591,7 +590,7 @@ static void postprocess_by_taking_photo(player_type *caster_ptr, effect_monster_
     object_type *q_ptr;
     object_type forge;
     q_ptr = &forge;
-    object_prep(caster_ptr, q_ptr, lookup_kind(TV_STATUE, SV_PHOTO));
+    q_ptr->prep(caster_ptr, lookup_kind(TV_STATUE, SV_PHOTO));
     q_ptr->pval = em_ptr->photo;
     q_ptr->ident |= (IDENT_FULL_KNOWN);
     (void)drop_near(caster_ptr, q_ptr, -1, caster_ptr->y, caster_ptr->x);

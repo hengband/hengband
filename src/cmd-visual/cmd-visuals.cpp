@@ -15,7 +15,6 @@
 #include "knowledge/lighting-level-table.h"
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
-#include "object/object-generator.h"
 #include "object/object-kind.h"
 #include "system/monster-race-definition.h"
 #include "system/object-type-definition.h"
@@ -154,9 +153,9 @@ void do_cmd_visuals(player_type *creature_ptr)
                 if (!k_ptr->flavor) {
                     strip_name(o_name, k_idx);
                 } else {
-                    object_type forge;
-                    object_prep(creature_ptr, &forge, k_idx);
-                    describe_flavor(creature_ptr, o_name, &forge, OD_FORCE_FLAVOR);
+                    object_type dummy;
+                    dummy.prep(creature_ptr, k_idx);
+                    describe_flavor(creature_ptr, o_name, &dummy, OD_FORCE_FLAVOR);
                 }
 
                 auto_dump_printf(auto_dump_stream, "# %s\n", o_name);

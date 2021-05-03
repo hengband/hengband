@@ -25,7 +25,6 @@
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "object-enchant/trc-types.h"
-#include "object/object-generator.h"
 #include "object/object-kind-hook.h"
 #include "player-attack/player-attack-util.h"
 #include "player-info/equipment-info.h"
@@ -87,9 +86,9 @@ bool kawarimi(player_type *caster_ptr, bool success)
     POSITION x = caster_ptr->x;
 
     teleport_player(caster_ptr, 10 + randint1(90), TELEPORT_SPONTANEOUS);
-    object_wipe(q_ptr);
+    q_ptr->wipe();
     const int SV_WOODEN_STATUE = 0;
-    object_prep(caster_ptr, q_ptr, lookup_kind(TV_STATUE, SV_WOODEN_STATUE));
+    q_ptr->prep(caster_ptr, lookup_kind(TV_STATUE, SV_WOODEN_STATUE));
 
     q_ptr->pval = MON_NINJA;
     (void)drop_near(caster_ptr, q_ptr, -1, y, x);

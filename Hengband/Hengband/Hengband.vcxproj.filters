@@ -806,9 +806,6 @@
     <ClCompile Include="..\..\src\world\world-object.cpp">
       <Filter>world</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\object-generator.cpp">
-      <Filter>object</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\object-enchant\object-boost.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
@@ -2286,6 +2283,9 @@
     <ClCompile Include="..\..\src\object-enchant\apply-magic-amulet.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\system\object-type-definition.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3151,9 +3151,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\world\world-object.h">
       <Filter>world</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\object-generator.h">
-      <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\sv-definition\sv-armor-types.h">
       <Filter>sv-definition</Filter>

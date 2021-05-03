@@ -22,7 +22,6 @@
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/trg-types.h"
-#include "object/object-generator.h"
 #include "object/object-info.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
@@ -66,7 +65,7 @@ static void drop_here(floor_type *floor_ptr, object_type *j_ptr, POSITION y, POS
     OBJECT_IDX o_idx = o_pop(floor_ptr);
     object_type *o_ptr;
     o_ptr = &floor_ptr->o_list[o_idx];
-    object_copy(o_ptr, j_ptr);
+    o_ptr->copy_from(j_ptr);
     o_ptr->iy = y;
     o_ptr->ix = x;
     o_ptr->held_m_idx = 0;
@@ -87,7 +86,7 @@ static void generate_artifact(player_type *player_ptr, qtwg_type *qtwg_ptr, cons
     KIND_OBJECT_IDX k_idx = lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT);
     object_type forge;
     object_type *q_ptr = &forge;
-    object_prep(player_ptr, q_ptr, k_idx);
+    q_ptr->prep(player_ptr, k_idx);
     drop_here(player_ptr->current_floor_ptr, q_ptr, *qtwg_ptr->y, *qtwg_ptr->x);
 }
 
@@ -175,7 +174,7 @@ static void parse_qtw_D(player_type *player_ptr, qtwg_type *qtwg_ptr, char *s)
         } else if (object_index) {
             object_type tmp_object;
             object_type *o_ptr = &tmp_object;
-            object_prep(player_ptr, o_ptr, object_index);
+            o_ptr->prep(player_ptr, object_index);
             if (o_ptr->tval == TV_GOLD) {
                 coin_type = object_index - OBJ_GOLD_LIST;
                 make_gold(player_ptr, o_ptr);

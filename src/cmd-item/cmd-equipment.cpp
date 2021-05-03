@@ -25,7 +25,6 @@
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "object/object-generator.h"
 #include "object/object-info.h"
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
@@ -214,9 +213,9 @@ void do_cmd_wield(player_type *creature_ptr)
         object_type *otmp_ptr = &object_tmp;
         GAME_TEXT switch_name[MAX_NLEN];
         describe_flavor(creature_ptr, switch_name, switch_o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-        object_copy(otmp_ptr, switch_o_ptr);
-        object_copy(switch_o_ptr, slot_o_ptr);
-        object_copy(slot_o_ptr, otmp_ptr);
+        otmp_ptr->copy_from(switch_o_ptr);
+        switch_o_ptr->copy_from(slot_o_ptr);
+        slot_o_ptr->copy_from(otmp_ptr);
         msg_format(_("%sを%sに構えなおした。", "You wield %s at %s hand."), switch_name,
             (slot == INVEN_MAIN_HAND) ? (left_hander ? _("左手", "left") : _("右手", "right")) : (left_hander ? _("右手", "right") : _("左手", "left")));
         slot = need_switch_wielding;
@@ -230,7 +229,7 @@ void do_cmd_wield(player_type *creature_ptr)
 
     PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     q_ptr = &forge;
-    object_copy(q_ptr, o_ptr);
+    q_ptr->copy_from(o_ptr);
     q_ptr->number = 1;
     if (item >= 0) {
         inven_item_increase(creature_ptr, item, -1);
@@ -244,7 +243,7 @@ void do_cmd_wield(player_type *creature_ptr)
     if (o_ptr->k_idx)
         (void)inven_takeoff(creature_ptr, slot, 255);
 
-    object_copy(o_ptr, q_ptr);
+    o_ptr->copy_from(q_ptr);
     o_ptr->marked |= OM_TOUCHED;
     creature_ptr->equip_cnt++;
 

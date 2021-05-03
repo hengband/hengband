@@ -12,7 +12,6 @@
 #include "monster-floor/place-monster-types.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/item-use-flags.h"
-#include "object/object-generator.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
@@ -402,7 +401,7 @@ void exe_use_staff(player_type *creature_ptr, INVENTORY_IDX item)
         object_type forge;
         object_type *q_ptr;
         q_ptr = &forge;
-        object_copy(q_ptr, o_ptr);
+        q_ptr->copy_from(o_ptr);
 
         /* Modify quantity */
         q_ptr->number = 1;

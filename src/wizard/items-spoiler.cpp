@@ -4,7 +4,6 @@
 #include "io/files-util.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/trg-types.h"
-#include "object/object-generator.h"
 #include "object/object-kind.h"
 #include "object/object-value.h"
 #include "system/angband-version.h"
@@ -30,7 +29,7 @@ static void kind_info(player_type *player_ptr, char *buf, char *dam, char *wgt, 
 {
     object_type forge;
     object_type *q_ptr = &forge;
-    object_prep(player_ptr, q_ptr, k);
+    q_ptr->prep(player_ptr, k);
     q_ptr->ident |= IDENT_KNOWN;
     q_ptr->pval = 0;
     q_ptr->to_a = 0;

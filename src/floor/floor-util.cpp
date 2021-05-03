@@ -17,7 +17,6 @@
 #include "grid/grid.h"
 #include "object-hook/hook-checker.h"
 #include "object-hook/hook-enchant.h"
-#include "object/object-generator.h"
 #include "perception/object-perception.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
@@ -134,7 +133,7 @@ void wipe_o_list(floor_type *floor_ptr)
 
         auto &list = get_o_idx_list_contains(floor_ptr, i);
         list.clear();
-        object_wipe(o_ptr);
+        o_ptr->wipe();
     }
 
     floor_ptr->o_max = 1;

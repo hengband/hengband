@@ -22,7 +22,6 @@
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-enchant.h"
 #include "object/object-flags.h"
-#include "object/object-generator.h"
 #include "object/object-mark-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -196,7 +195,7 @@ void monster_drop_carried_objects(player_type *player_ptr, monster_type *m_ptr)
         const OBJECT_IDX this_o_idx = *it++;
         o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
         q_ptr = &forge;
-        object_copy(q_ptr, o_ptr);
+        q_ptr->copy_from(o_ptr);
         q_ptr->held_m_idx = 0;
         delete_object_idx(player_ptr, this_o_idx);
         (void)drop_near(player_ptr, q_ptr, -1, m_ptr->fy, m_ptr->fx);

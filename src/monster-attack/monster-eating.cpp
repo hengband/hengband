@@ -16,7 +16,6 @@
 #include "monster-attack/monster-attack-util.h"
 #include "monster/monster-status.h"
 #include "object-hook/hook-enchant.h"
-#include "object/object-generator.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"
@@ -106,7 +105,7 @@ static void move_item_to_monster(player_type *target_ptr, monap_type *monap_ptr,
 
     object_type *j_ptr;
     j_ptr = &target_ptr->current_floor_ptr->o_list[o_idx];
-    object_copy(j_ptr, monap_ptr->o_ptr);
+    j_ptr->copy_from(monap_ptr->o_ptr);
     j_ptr->number = 1;
     if ((monap_ptr->o_ptr->tval == TV_ROD) || (monap_ptr->o_ptr->tval == TV_WAND)) {
         j_ptr->pval = monap_ptr->o_ptr->pval / monap_ptr->o_ptr->number;

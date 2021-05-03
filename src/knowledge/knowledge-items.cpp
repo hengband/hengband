@@ -18,7 +18,6 @@
 #include "knowledge/object-group-table.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-hook/hook-enchant.h"
-#include "object/object-generator.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "perception/identification.h"
@@ -107,7 +106,7 @@ void do_cmd_knowledge_artifacts(player_type *player_ptr)
             object_type forge;
             object_type *q_ptr;
             q_ptr = &forge;
-            object_prep(player_ptr, q_ptr, z);
+            q_ptr->prep(player_ptr, z);
             q_ptr->name1 = who[k];
             q_ptr->ident |= IDENT_STORE;
             describe_flavor(player_ptr, base_name, q_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -228,8 +227,8 @@ static void desc_obj_fake(player_type *creature_ptr, KIND_OBJECT_IDX k_idx)
     object_type *o_ptr;
     object_type object_type_body;
     o_ptr = &object_type_body;
-    object_wipe(o_ptr);
-    object_prep(creature_ptr, o_ptr, k_idx);
+    o_ptr->wipe();
+    o_ptr->prep(creature_ptr, k_idx);
 
     o_ptr->ident |= IDENT_KNOWN;
     handle_stuff(creature_ptr);

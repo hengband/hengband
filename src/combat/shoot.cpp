@@ -42,7 +42,6 @@
 #include "object-hook/hook-enchant.h"
 #include "object/object-broken.h"
 #include "object/object-flags.h"
-#include "object/object-generator.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"
@@ -507,7 +506,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
         y = shooter_ptr->y;
         x = shooter_ptr->x;
         q_ptr = &forge;
-        object_copy(q_ptr, o_ptr);
+        q_ptr->copy_from(o_ptr);
 
         /* Single object */
         q_ptr->number = 1;
@@ -852,7 +851,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
             }
 
             o_ptr = &shooter_ptr->current_floor_ptr->o_list[o_idx];
-            object_copy(o_ptr, q_ptr);
+            o_ptr->copy_from(q_ptr);
 
             /* Forget mark */
             reset_bits(o_ptr->marked, OM_TOUCHED);

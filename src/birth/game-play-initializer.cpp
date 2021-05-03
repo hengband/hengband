@@ -10,7 +10,6 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
-#include "object/object-generator.h"
 #include "object/object-kind.h"
 #include "pet/pet-util.h"
 #include "player/digestion-processor.h"
@@ -78,7 +77,7 @@ void player_wipe_without_name(player_type *creature_ptr)
     creature_ptr->inven_cnt = 0;
     creature_ptr->equip_cnt = 0;
     for (int i = 0; i < INVEN_TOTAL; i++)
-        object_wipe(&creature_ptr->inventory_list[i]);
+        (&creature_ptr->inventory_list[i])->wipe();
 
     for (int i = 0; i < max_a_idx; i++) {
         artifact_type *a_ptr = &a_info[i];

@@ -23,7 +23,6 @@
 #include "object-hook/hook-checker.h"
 #include "object/item-use-flags.h"
 #include "object/object-flags.h"
-#include "object/object-generator.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "object/object-kind-hook.h"
@@ -439,7 +438,7 @@ static void wiz_statistics(player_type *caster_ptr, object_type *o_ptr)
 
             object_type forge;
             object_type *q_ptr = &forge;
-            object_wipe(q_ptr);
+            q_ptr->wipe();
             make_object(caster_ptr, q_ptr, mode);
             if (object_is_fixed_artifact(q_ptr))
                 a_info[q_ptr->name1].cur_num = 0;
@@ -481,7 +480,7 @@ static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
     object_type forge;
     object_type *q_ptr;
     q_ptr = &forge;
-    object_copy(q_ptr, o_ptr);
+    q_ptr->copy_from(o_ptr);
 
     char ch;
     bool changed = FALSE;
@@ -510,32 +509,32 @@ static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
         switch (tolower(ch)) {
         /* Apply bad magic, but first clear object */
         case 'w':
-            object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
+            q_ptr->prep(owner_ptr, o_ptr->k_idx);
             apply_magic_to_object(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT | AM_CURSED);
             break;
         /* Apply bad magic, but first clear object */
         case 'c':
-            object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
+            q_ptr->prep(owner_ptr, o_ptr->k_idx);
             apply_magic_to_object(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_CURSED);
             break;
         /* Apply normal magic, but first clear object */
         case 'n':
-            object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
+            q_ptr->prep(owner_ptr, o_ptr->k_idx);
             apply_magic_to_object(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
             break;
         /* Apply good magic, but first clear object */
         case 'g':
-            object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
+            q_ptr->prep(owner_ptr, o_ptr->k_idx);
             apply_magic_to_object(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD);
             break;
         /* Apply great magic, but first clear object */
         case 'e':
-            object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
+            q_ptr->prep(owner_ptr, o_ptr->k_idx);
             apply_magic_to_object(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT);
             break;
         /* Apply special magic, but first clear object */
         case 's':
-            object_prep(owner_ptr, q_ptr, o_ptr->k_idx);
+            q_ptr->prep(owner_ptr, o_ptr->k_idx);
             apply_magic_to_object(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_GOOD | AM_GREAT | AM_SPECIAL);
             if (!object_is_artifact(q_ptr))
                 become_random_artifact(owner_ptr, q_ptr, FALSE);
@@ -553,7 +552,7 @@ static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
     if (!changed)
         return;
 
-    object_copy(o_ptr, q_ptr);
+    o_ptr->copy_from(q_ptr);
     set_bits(owner_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
     set_bits(owner_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_FLOOR_ITEM_LIST);
 }
@@ -652,7 +651,7 @@ void wiz_modify_item(player_type *creature_ptr)
     object_type forge;
     object_type *q_ptr;
     q_ptr = &forge;
-    object_copy(q_ptr, o_ptr);
+    q_ptr->copy_from(o_ptr);
     char ch;
     bool changed = FALSE;
     while (TRUE) {
@@ -688,7 +687,7 @@ void wiz_modify_item(player_type *creature_ptr)
     if (changed) {
         msg_print("Changes accepted.");
 
-        object_copy(o_ptr, q_ptr);
+        o_ptr->copy_from(q_ptr);
         set_bits(creature_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
         set_bits(creature_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_FLOOR_ITEM_LIST);
     } else {
@@ -844,7 +843,7 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
             if (k_ptr->name.empty())
                 continue;
 
-            object_prep(caster_ptr, o_ptr, k);
+            o_ptr->prep(caster_ptr, k);
             describe_flavor(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
 #ifndef JP
             str_tolower(o_name);
@@ -864,7 +863,7 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
 
         if (allow_ego && k_ids.size() == 1) {
             KIND_OBJECT_IDX k_idx = k_ids.back();
-            object_prep(caster_ptr, o_ptr, k_idx);
+            o_ptr->prep(caster_ptr, k_idx);
 
             for (EGO_IDX k = 1; k < max_e_idx; k++) {
                 ego_item_type *e_ptr = &e_info[k];
@@ -905,7 +904,7 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
             if (!k_idx)
                 continue;
 
-            object_prep(caster_ptr, o_ptr, k_idx);
+            o_ptr->prep(caster_ptr, k_idx);
             o_ptr->name1 = i;
 
             describe_flavor(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
@@ -1015,7 +1014,7 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
         if (wish_randart) {
             if (must || ok_art) {
                 do {
-                    object_prep(caster_ptr, o_ptr, k_idx);
+                    o_ptr->prep(caster_ptr, k_idx);
                     apply_magic_to_object(caster_ptr, o_ptr, k_ptr->level, (AM_SPECIAL | AM_NO_FIXED_ART));
                 } while (!o_ptr->art_name || o_ptr->name1 || o_ptr->name2 || object_is_cursed(o_ptr));
 
@@ -1031,14 +1030,14 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
         if (allow_ego && (wish_ego || e_ids.size() > 0)) {
             if (must || ok_ego) {
                 if (e_ids.size() > 0) {
-                    object_prep(caster_ptr, o_ptr, k_idx);
+                    o_ptr->prep(caster_ptr, k_idx);
                     o_ptr->name2 = e_ids[0];
                     apply_ego(caster_ptr, o_ptr, caster_ptr->current_floor_ptr->base_level);
                 } else {
                     int max_roll = 1000;
                     int i = 0;
                     for (i = 0; i < max_roll; i++) {
-                        object_prep(caster_ptr, o_ptr, k_idx);
+                        o_ptr->prep(caster_ptr, k_idx);
                         (void)apply_magic_to_object(caster_ptr, o_ptr, k_ptr->level, (AM_GREAT | AM_NO_FIXED_ART));
 
                         if (o_ptr->name1 || o_ptr->art_name)
@@ -1071,7 +1070,7 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
             res = WishResult::EGO;
         } else {
             for (int i = 0; i < 100; i++) {
-                object_prep(caster_ptr, o_ptr, k_idx);
+                o_ptr->prep(caster_ptr, k_idx);
                 apply_magic_to_object(caster_ptr, o_ptr, 0, (AM_NO_FIXED_ART));
                 if (!object_is_cursed(o_ptr))
                     break;
