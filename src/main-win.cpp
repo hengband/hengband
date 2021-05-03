@@ -1528,7 +1528,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
     }
 
     term_data *td;
-    OPENFILENAME ofn;
+    OPENFILENAMEW ofn;
     switch (wCmd) {
     case IDM_FILE_NEW: {
         if (game_in_progress) {
@@ -1550,14 +1550,11 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
             memset(&ofn, 0, sizeof(ofn));
             ofn.lStructSize = sizeof(ofn);
             ofn.hwndOwner = data[0].w;
-            ofn.lpstrFilter = "Save Files (*.)\0*\0";
+            ofn.lpstrFilter = L"Save Files (*.)\0*\0";
             ofn.nFilterIndex = 1;
-            ofn.lpstrFile = savefile;
-            ofn.nMaxFile = 1024;
-            ofn.lpstrInitialDir = ANGBAND_DIR_SAVE;
             ofn.Flags = OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR | OFN_HIDEREADONLY;
 
-            if (GetOpenFileName(&ofn)) {
+            if (get_open_filename(&ofn, ANGBAND_DIR_SAVE, savefile, MAIN_WIN_MAX_PATH)) {
                 validate_file(savefile);
                 game_in_progress = TRUE;
                 term_flush();
@@ -1627,14 +1624,11 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
             memset(&ofn, 0, sizeof(ofn));
             ofn.lStructSize = sizeof(ofn);
             ofn.hwndOwner = data[0].w;
-            ofn.lpstrFilter = "Angband Movie Files (*.amv)\0*.amv\0";
+            ofn.lpstrFilter = L"Angband Movie Files (*.amv)\0*.amv\0";
             ofn.nFilterIndex = 1;
-            ofn.lpstrFile = savefile;
-            ofn.nMaxFile = 1024;
-            ofn.lpstrInitialDir = ANGBAND_DIR_USER;
             ofn.Flags = OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
 
-            if (GetOpenFileName(&ofn)) {
+            if (get_open_filename(&ofn, ANGBAND_DIR_USER, savefile, MAIN_WIN_MAX_PATH)) {
                 prepare_browse_movie_without_path_build(savefile);
                 play_game(player_ptr, FALSE, TRUE);
                 quit(NULL);
@@ -1880,15 +1874,12 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         memset(&ofn, 0, sizeof(ofn));
         ofn.lStructSize = sizeof(ofn);
         ofn.hwndOwner = data[0].w;
-        ofn.lpstrFilter = "Image Files (*.bmp;*.png;*.jpg;*.jpeg;)\0*.bmp;*.png;*.jpg;*.jpeg;\0";
+        ofn.lpstrFilter = L"Image Files (*.bmp;*.png;*.jpg;*.jpeg;)\0*.bmp;*.png;*.jpg;*.jpeg;\0";
         ofn.nFilterIndex = 1;
-        ofn.lpstrFile = wallpaper_file;
-        ofn.nMaxFile = 1023;
-        ofn.lpstrInitialDir = NULL;
-        ofn.lpstrTitle = _("壁紙を選んでね。", "Choose wall paper.");
+        ofn.lpstrTitle = _(L"壁紙を選んでね。", L"Choose wall paper.");
         ofn.Flags = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
 
-        if (GetOpenFileName(&ofn)) {
+        if (get_open_filename(&ofn, NULL, wallpaper_file, MAIN_WIN_MAX_PATH)) {
             change_bg_mode(bg_mode::BG_ONE, true, true);
         }
         break;
