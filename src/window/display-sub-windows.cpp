@@ -43,9 +43,9 @@
 #include "window/main-window-equipments.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
-#include <string>
-#include <sstream>
 #include <mutex>
+#include <sstream>
+#include <string>
 
 /*!
  * @brief サブウィンドウに所持品一覧を表示する / Hack -- display inventory in sub-windows
@@ -520,9 +520,11 @@ static void display_floor_item_list(player_type *player_ptr, const int y, const 
     else if (g_ptr->m_idx > 0) {
         const monster_type *const m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
 
-        if (m_ptr->r_idx == 0)
+        if (player_ptr->image) {
+            sprintf(line, _("(X:%03d Y:%03d) 何か奇妙な物の足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under something strange"), x, y);
+        } else if (m_ptr->r_idx == 0) {
             sprintf(line, _("(X:%03d Y:%03d) 奇妙な物体の足元のアイテム一覧", "Items at (%03d,%03d) under an odd object"), x, y);
-        else {
+        } else {
             const monster_race *const r_ptr = &r_info[m_ptr->r_idx];
             sprintf(line, _("(X:%03d Y:%03d) %sの足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under %s"), x, y, r_ptr->name.c_str());
         }
@@ -538,7 +540,6 @@ static void display_floor_item_list(player_type *player_ptr, const int y, const 
         else
             sprintf(buf, _("%s", "on %s"), fn);
         sprintf(line, _("(X:%03d Y:%03d) %sの上の発見済みアイテム一覧", "Found items at (X:%03d Y:%03d) %s"), x, y, buf);
-
     }
     term_addstr(-1, TERM_WHITE, line);
 
