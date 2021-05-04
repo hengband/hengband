@@ -13,6 +13,8 @@
 #include "world/world.h"
 
 #include <deque>
+#include <map>
+#include <memory>
 #include <string>
 
 /* Used in msg_print() for "buffering" */
@@ -21,7 +23,43 @@ bool msg_flag;
 COMMAND_CODE now_message;
 
 namespace {
-std::deque<std::string> message_history;
+using msg_sp = std::shared_ptr<const std::string>;
+using msg_wp = std::weak_ptr<const std::string>;
+
+/** メッセージが同一かどうかを比較するためのラムダ式 */
+auto string_ptr_cmp = [](const std::string *a, const std::string *b) { return *a < *b; };
+
+/** 同一メッセージの検索に使用するmapオブジェクト。
+ * 同一メッセージがあるかどうかを検索し、ヒットしたらweak_ptrからshared_ptrを作成しメッセージを共有する。
+ * message_historyのカスタムデリータの中で参照するので、message_historyより先に宣言しなければならない事に注意。
+ */
+std::map<const std::string *, msg_wp, decltype(string_ptr_cmp)> message_map(string_ptr_cmp);
+
+/** メッセージ履歴 */
+std::deque<msg_sp> message_history;
+
+/**
+ * @brief メッセージを保持する msg_sp オブジェクトを生成する
+ *
+ * @tparam T メッセージの型。std::string / std::string_view / const char* 等
+ * @param str メッセージ
+ * @return 生成した msg_sp オブジェクト
+ */
+template <typename T>
+msg_sp make_message(T &&str)
+{
+    /** std::stringオブジェクトと同時にmessage_mapのエントリも削除するカスタムデリータ */
+    auto deleter = [](std::string *s) {
+        message_map.erase(s);
+        delete s;
+    };
+
+    // 新たにメッセージを保持する msg_sp オブジェクトを生成し、検索用mapオブジェクトにも追加する
+    auto new_msg = msg_sp(new std::string(std::forward<T>(str)), std::move(deleter));
+    message_map.emplace(new_msg.get(), std::weak_ptr(new_msg));
+
+    return new_msg;
+}
 }
 
 /*!
@@ -43,7 +81,7 @@ concptr message_str(int age)
     if ((age < 0) || (age >= message_num()))
         return ("");
 
-    return message_history[age].c_str();
+    return message_history[age]->c_str();
 }
 
 static void message_add_aux(std::string str)
@@ -80,7 +118,7 @@ static void message_add_aux(std::string str)
     // 直前と同じメッセージの場合、「～ <xNN>」と表示する
     if (!message_history.empty()) {
         const char *t;
-        std::string_view last_message = message_history.front();
+        std::string_view last_message = *message_history.front();
 #ifdef JP
         for (t = last_message.data(); *t && (*t != '<' || (*(t + 1) != 'x')); t++)
             if (iskanji(*t))
@@ -109,7 +147,19 @@ static void message_add_aux(std::string str)
         }
     }
 
-    message_history.push_front(std::move(str));
+    msg_sp add_msg;
+
+    // メッセージ履歴から同一のメッセージを探す
+    if (const auto &it = message_map.find(&str); it != message_map.end()) {
+        // 同一のメッセージが見つかったならそのメッセージの msg_sp オブジェクトを複製
+        add_msg = it->second.lock();
+    } else {
+        // 見つからなかった場合は新たに msg_sp オブジェクトを作成
+        add_msg = make_message(std::move(str));
+    }
+
+    // メッセージ履歴に追加
+    message_history.push_front(std::move(add_msg));
 
     if (message_history.size() == MESSAGE_MAX)
         message_history.pop_back();
@@ -186,7 +236,10 @@ static void msg_flush(player_type *player_ptr, int x)
     term_erase(0, 0, 255);
 }
 
-void msg_erase(void) { msg_print(NULL); }
+void msg_erase(void)
+{
+    msg_print(NULL);
+}
 
 /*!
  * @briefOutput a message to the top line of the screen.
