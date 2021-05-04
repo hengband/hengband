@@ -101,7 +101,7 @@ static bool wr_savefile_new(player_type *player_ptr, save_type type)
 
     wr_u32b(tmp32u);
     for (int i = tmp32u - 1; i >= 0; i--)
-        wr_string(message_str((s16b)i));
+        wr_string(message_str(i));
 
     u16b tmp16u = max_r_idx;
     wr_u16b(tmp16u);
