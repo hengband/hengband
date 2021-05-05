@@ -797,13 +797,16 @@ static errr term_xtra_win_react(player_type *player_ptr)
 {
     refresh_color_table();
 
-    const byte old_graphics = arg_graphics;
-    arg_graphics = static_cast<byte>(graphic.change_graphics(static_cast<graphics_mode>(arg_graphics)));
-    if (old_graphics != arg_graphics) {
-        plog(_("グラフィックスを初期化できません!", "Cannot initialize graphics!"));
+    const byte current_mode = static_cast<byte>(graphic.get_mode());
+    if (current_mode != arg_graphics) {
+        const byte old_graphics = arg_graphics;
+        arg_graphics = static_cast<byte>(graphic.change_graphics(static_cast<graphics_mode>(arg_graphics)));
+        if (old_graphics != arg_graphics) {
+            plog(_("グラフィクスを初期化できません!", "Cannot initialize graphics!"));
+        }
+        use_graphics = (arg_graphics > 0);
+        reset_visuals(player_ptr);
     }
-    use_graphics = (arg_graphics > 0);
-    reset_visuals(player_ptr);
 
     for (int i = 0; i < MAX_TERM_DATA; i++) {
         term_type *old = Term;
