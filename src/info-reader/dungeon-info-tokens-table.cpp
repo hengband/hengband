@@ -20,7 +20,7 @@ concptr d_info_flags1[NUM_D_FLAGS] = {
 	"ARCADE",
 	"LAKE_ACID",
 	"LAKE_POISONOUS",
-	"XXX",
+	"NO_ROOM",
 	"FORGET",
 	"LAKE_WATER",
 	"LAKE_LAVA",
