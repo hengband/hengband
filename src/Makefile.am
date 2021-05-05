@@ -164,6 +164,7 @@ hengband_SOURCES = \
 	core/window-redrawer.cpp core/window-redrawer.h \
 	\
 	dungeon/dungeon.cpp dungeon/dungeon.h \
+	dungeon/dungeon-flag-mask.h \
 	dungeon/dungeon-flag-types.h \
 	dungeon/dungeon-processor.cpp dungeon/dungeon-processor.h \
 	dungeon/quest.h dungeon/quest.cpp \

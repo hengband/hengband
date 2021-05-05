@@ -471,7 +471,7 @@ bool generate_lake(player_type *player_ptr, POSITION y0, POSITION x0, POSITION x
 
             floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY | CAVE_ROOM);
             if (cave_has_flag_bold(floor_ptr, y0 + y - yhsize, x0 + x - xhsize, FF_LAVA)) {
-                if (!(d_info[floor_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
+                if (d_info[floor_ptr->dungeon_idx].flags.has_not(DF::DARKNESS))
                     floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info |= CAVE_GLOW;
             }
         }

@@ -163,7 +163,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
         if ((!creature_ptr->blind && !no_lite(creature_ptr)) || !is_trap(creature_ptr, g_ptr->feat))
             g_ptr->info &= ~(CAVE_UNSAFE);
 
-        if (floor_ptr->dun_level && (d_info[creature_ptr->dungeon_idx].flags1 & DF1_FORGET))
+        if (floor_ptr->dun_level && d_info[creature_ptr->dungeon_idx].flags.has(DF::FORGET))
             wiz_dark(creature_ptr);
 
         if (mpe_mode & MPE_HANDLE_STUFF)

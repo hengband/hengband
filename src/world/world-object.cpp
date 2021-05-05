@@ -73,7 +73,7 @@ OBJECT_IDX get_obj_num(player_type *owner_ptr, DEPTH level, BIT_FLAGS mode)
     if (level > MAX_DEPTH - 1)
         level = MAX_DEPTH - 1;
 
-    if ((level > 0) && !(d_info[owner_ptr->dungeon_idx].flags1 & DF1_BEGINNER)) {
+    if ((level > 0) && d_info[owner_ptr->dungeon_idx].flags.has_not(DF::BEGINNER)) {
         if (one_in_(GREAT_OBJ)) {
             level = 1 + (level * MAX_DEPTH / randint1(MAX_DEPTH));
         }

@@ -383,7 +383,7 @@ void process_command(player_type *creature_ptr)
             break;
         }
         
-        if (floor_ptr->dun_level && (d_info[creature_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC) && (creature_ptr->pclass != CLASS_BERSERKER)
+        if (floor_ptr->dun_level && d_info[creature_ptr->dungeon_idx].flags.has(DF::NO_MAGIC) && (creature_ptr->pclass != CLASS_BERSERKER)
             && (creature_ptr->pclass != CLASS_SMITH)) {
             msg_print(_("ダンジョンが魔法を吸収した！", "The dungeon absorbs all attempted magic!"));
             msg_print(NULL);

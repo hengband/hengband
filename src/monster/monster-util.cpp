@@ -56,17 +56,17 @@ static bool restrict_monster_to_dungeon(player_type *player_ptr, MONRACE_IDX r_i
     dungeon_type *d_ptr = &d_info[d_idx];
     monster_race *r_ptr = &r_info[r_idx];
 
-    if (d_ptr->flags1 & DF1_CHAMELEON) {
+    if (d_ptr->flags.has(DF::CHAMELEON)) {
         if (chameleon_change_m_idx)
             return TRUE;
     }
 
-    if (d_ptr->flags1 & DF1_NO_MAGIC) {
+    if (d_ptr->flags.has(DF::NO_MAGIC)) {
         if (r_idx != MON_CHAMELEON && r_ptr->freq_spell && r_ptr->ability_flags.has_none_of(RF_ABILITY_NOMAGIC_MASK))
             return FALSE;
     }
 
-    if (d_ptr->flags1 & DF1_NO_MELEE) {
+    if (d_ptr->flags.has(DF::NO_MELEE)) {
         if (r_idx == MON_CHAMELEON)
             return TRUE;
         if (r_ptr->ability_flags.has_none_of(RF_ABILITY_BOLT_MASK | RF_ABILITY_BEAM_MASK | RF_ABILITY_BALL_MASK)
@@ -76,14 +76,14 @@ static bool restrict_monster_to_dungeon(player_type *player_ptr, MONRACE_IDX r_i
     }
 
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (d_ptr->flags1 & DF1_BEGINNER) {
+    if (d_ptr->flags.has(DF::BEGINNER)) {
         if (r_ptr->level > floor_ptr->dun_level)
             return FALSE;
     }
 
     if (d_ptr->special_div >= 64)
         return TRUE;
-    if (summon_specific_type && !(d_ptr->flags1 & DF1_CHAMELEON))
+    if (summon_specific_type && d_ptr->flags.has_not(DF::CHAMELEON))
         return TRUE;
 
     byte a;
