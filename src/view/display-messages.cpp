@@ -12,28 +12,55 @@
 #include "util/int-char-converter.h"
 #include "world/world.h"
 
-/* The next "free" index to use */
-u32b message__next;
-
-/* The index of the oldest message (none yet) */
-u32b message__last;
-
-/* The next "free" offset */
-u32b message__head;
-
-/* The offset to the oldest used char (none yet) */
-u32b message__tail;
-
-/* The array of offsets, by index [MESSAGE_MAX] */
-u32b *message__ptr;
-
-/* The array of chars, by offset [MESSAGE_BUF] */
-char *message__buf;
+#include <deque>
+#include <map>
+#include <memory>
+#include <string>
 
 /* Used in msg_print() for "buffering" */
 bool msg_flag;
 
 COMMAND_CODE now_message;
+
+namespace {
+using msg_sp = std::shared_ptr<const std::string>;
+using msg_wp = std::weak_ptr<const std::string>;
+
+/** メッセージが同一かどうかを比較するためのラムダ式 */
+auto string_ptr_cmp = [](const std::string *a, const std::string *b) { return *a < *b; };
+
+/** 同一メッセージの検索に使用するmapオブジェクト。
+ * 同一メッセージがあるかどうかを検索し、ヒットしたらweak_ptrからshared_ptrを作成しメッセージを共有する。
+ * message_historyのカスタムデリータの中で参照するので、message_historyより先に宣言しなければならない事に注意。
+ */
+std::map<const std::string *, msg_wp, decltype(string_ptr_cmp)> message_map(string_ptr_cmp);
+
+/** メッセージ履歴 */
+std::deque<msg_sp> message_history;
+
+/**
+ * @brief メッセージを保持する msg_sp オブジェクトを生成する
+ *
+ * @tparam T メッセージの型。std::string / std::string_view / const char* 等
+ * @param str メッセージ
+ * @return 生成した msg_sp オブジェクト
+ */
+template <typename T>
+msg_sp make_message(T &&str)
+{
+    /** std::stringオブジェクトと同時にmessage_mapのエントリも削除するカスタムデリータ */
+    auto deleter = [](std::string *s) {
+        message_map.erase(s);
+        delete s;
+    };
+
+    // 新たにメッセージを保持する msg_sp オブジェクトを生成し、検索用mapオブジェクトにも追加する
+    auto new_msg = msg_sp(new std::string(std::forward<T>(str)), std::move(deleter));
+    message_map.emplace(new_msg.get(), std::weak_ptr(new_msg));
+
+    return new_msg;
+}
+}
 
 /*!
  * @brief 保存中の過去ゲームメッセージの数を返す。 / How many messages are "available"?
@@ -41,15 +68,7 @@ COMMAND_CODE now_message;
  */
 s32b message_num(void)
 {
-    int n;
-    int last = message__last;
-    int next = message__next;
-
-    if (next < last)
-        next += MESSAGE_MAX;
-
-    n = (next - last);
-    return (n);
+    return message_history.size();
 }
 
 /*!
@@ -62,37 +81,22 @@ concptr message_str(int age)
     if ((age < 0) || (age >= message_num()))
         return ("");
 
-    s32b x = (message__next + MESSAGE_MAX - (age + 1)) % MESSAGE_MAX;
-    s32b o = message__ptr[x];
-    concptr s = &message__buf[o];
-    return (s);
+    return message_history[age]->c_str();
 }
 
-/*!
- * @brief ゲームメッセージをログに追加する。 / Add a new message, with great efficiency
- * @param str 保存したいメッセージ
- */
-void message_add(concptr str)
+static void message_add_aux(std::string str)
 {
-    u32b i;
-    int x, m;
-    char u[4096];
-    char splitted1[81];
-    concptr splitted2;
+    std::string splitted;
 
-    if (!str)
+    if (str.empty())
         return;
 
-    u32b n = strlen(str);
-    if (n >= MESSAGE_BUF / 4)
-        return;
-
-    if (n > 80) {
+    // 80桁を超えるメッセージは80桁ずつ分割する
+    if (str.length() > 80) {
+        int n;
 #ifdef JP
-        concptr t = str;
-        for (n = 0; n < 80; n++, t++) {
-            if (iskanji(*t)) {
-                t++;
+        for (n = 0; n < 80; n++) {
+            if (iskanji(str[n])) {
                 n++;
             }
         }
@@ -107,53 +111,33 @@ void message_add(concptr str)
         if (n == 60)
             n = 80;
 #endif
-        splitted2 = str + n;
-        strncpy(splitted1, str, n);
-        splitted1[n] = '\0';
-        str = splitted1;
-    } else {
-        splitted2 = NULL;
+        splitted = str.substr(n);
+        str = str.substr(0, n);
     }
 
-    m = message_num();
-    int k = m / 4;
-    if (k > MESSAGE_MAX / 32)
-        k = MESSAGE_MAX / 32;
-    for (i = message__next; m; m--) {
-        int j = 1;
-        char buf[1024];
-        char *t;
-        concptr old;
-        if (i-- == 0)
-            i = MESSAGE_MAX - 1;
-
-        old = &message__buf[message__ptr[i]];
-        if (!old)
-            continue;
-
-        strcpy(buf, old);
+    // 直前と同じメッセージの場合、「～ <xNN>」と表示する
+    if (!message_history.empty()) {
+        const char *t;
+        std::string_view last_message = *message_history.front();
 #ifdef JP
-        for (t = buf; *t && (*t != '<' || (*(t + 1) != 'x')); t++)
+        for (t = last_message.data(); *t && (*t != '<' || (*(t + 1) != 'x')); t++)
             if (iskanji(*t))
                 t++;
 #else
-        for (t = buf; *t && (*t != '<'); t++)
+        for (t = last_message.data(); *t && (*t != '<'); t++)
             ;
 #endif
-        if (*t) {
-            if (strlen(buf) < A_MAX)
-                break;
-
-            *(t - 1) = '\0';
-            j = atoi(t + 2);
+        int j = 1;
+        if (*t && t != last_message.data()) {
+            if (last_message.length() >= sizeof(" <xN>") - 1) {
+                last_message = last_message.substr(0, t - last_message.data() - 1);
+                j = atoi(t + 2);
+            }
         }
 
-        if (streq(buf, str) && (j < 1000)) {
-            j++;
-            message__next = i;
-            str = u;
-            sprintf(u, "%s <x%d>", buf, j);
-            n = strlen(str);
+        if (str == last_message && (j < 1000)) {
+            str = format("%s <x%d>", str.c_str(), j + 1);
+            message_history.pop_front();
             if (!now_message)
                 now_message++;
         } else {
@@ -161,97 +145,37 @@ void message_add(concptr str)
             num_more++;
             now_message++;
         }
-
-        break;
     }
 
-    for (i = message__next; k; k--) {
-        int q;
-        concptr old;
+    msg_sp add_msg;
 
-        if (i-- == 0)
-            i = MESSAGE_MAX - 1;
-
-        if (i == message__last)
-            break;
-
-        q = (message__head + MESSAGE_BUF - message__ptr[i]) % MESSAGE_BUF;
-
-        if (q > MESSAGE_BUF / 2)
-            continue;
-
-        old = &message__buf[message__ptr[i]];
-        if (!streq(old, str))
-            continue;
-
-        x = message__next++;
-        if (message__next == MESSAGE_MAX)
-            message__next = 0;
-        if (message__next == message__last)
-            message__last++;
-        if (message__last == MESSAGE_MAX)
-            message__last = 0;
-
-        message__ptr[x] = message__ptr[i];
-        if (splitted2 != NULL) {
-            message_add(splitted2);
-        }
-
-        return;
+    // メッセージ履歴から同一のメッセージを探す
+    if (const auto &it = message_map.find(&str); it != message_map.end()) {
+        // 同一のメッセージが見つかったならそのメッセージの msg_sp オブジェクトを複製
+        add_msg = it->second.lock();
+    } else {
+        // 見つからなかった場合は新たに msg_sp オブジェクトを作成
+        add_msg = make_message(std::move(str));
     }
 
-    if (message__head + n + 1 >= MESSAGE_BUF) {
-        for (i = message__last; TRUE; i++) {
-            if (i == MESSAGE_MAX)
-                i = 0;
-            if (i == message__next)
-                break;
-            if (message__ptr[i] >= message__head) {
-                message__last = i + 1;
-            }
-        }
+    // メッセージ履歴に追加
+    message_history.push_front(std::move(add_msg));
 
-        if (message__tail >= message__head)
-            message__tail = 0;
+    if (message_history.size() == MESSAGE_MAX)
+        message_history.pop_back();
 
-        message__head = 0;
+    if (!splitted.empty()) {
+        message_add_aux(std::move(splitted));
     }
+}
 
-    if (message__head + n + 1 > message__tail) {
-        message__tail = message__head + n + 1;
-        while (message__buf[message__tail - 1])
-            message__tail++;
-
-        for (i = message__last; TRUE; i++) {
-            if (i == MESSAGE_MAX)
-                i = 0;
-            if (i == message__next)
-                break;
-            if ((message__ptr[i] >= message__head) && (message__ptr[i] < message__tail)) {
-                message__last = i + 1;
-            }
-        }
-    }
-
-    x = message__next++;
-    if (message__next == MESSAGE_MAX)
-        message__next = 0;
-    if (message__next == message__last)
-        message__last++;
-    if (message__last == MESSAGE_MAX)
-        message__last = 0;
-
-    message__ptr[x] = message__head;
-    for (i = 0; i < n; i++) {
-        message__buf[message__head + i] = str[i];
-    }
-
-    message__buf[message__head + i] = '\0';
-    message__head += n + 1;
-
-    if (splitted2 != NULL) {
-        message_add(splitted2);
-    }
+/*!
+ * @brief ゲームメッセージをログに追加する。 / Add a new message, with great efficiency
+ * @param msg 保存したいメッセージ
+ */
+void message_add(concptr msg)
+{
+    message_add_aux(msg);
 }
 
 bool is_msg_window_flowed(void)
@@ -312,7 +236,10 @@ static void msg_flush(player_type *player_ptr, int x)
     term_erase(0, 0, 255);
 }
 
-void msg_erase(void) { msg_print(NULL); }
+void msg_erase(void)
+{
+    msg_print(NULL);
+}
 
 /*!
  * @briefOutput a message to the top line of the screen.
