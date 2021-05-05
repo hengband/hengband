@@ -14,7 +14,7 @@
 
 bool vampirism(player_type *caster_ptr)
 {
-    if (d_info[caster_ptr->dungeon_idx].flags1 & DF1_NO_MELEE) {
+    if (d_info[caster_ptr->dungeon_idx].flags.has(DF::NO_MELEE)) {
         msg_print(_("なぜか攻撃することができない。", "Something prevents you from attacking."));
         return FALSE;
     }

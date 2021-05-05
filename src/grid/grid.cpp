@@ -993,7 +993,7 @@ void remove_mirror(player_type *caster_ptr, POSITION y, POSITION x)
     g_ptr->info &= ~(CAVE_OBJECT);
     g_ptr->mimic = 0;
 
-    if (d_info[caster_ptr->dungeon_idx].flags1 & DF1_DARKNESS) {
+    if (d_info[caster_ptr->dungeon_idx].flags.has(DF::DARKNESS)) {
         g_ptr->info &= ~(CAVE_GLOW);
         if (!view_torch_grids)
             g_ptr->info &= ~(CAVE_MARK);

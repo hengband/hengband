@@ -4917,6 +4917,9 @@
     <ClInclude Include="..\..\src\object-enchant\apply-magic-amulet.h">
       <Filter>object-enchant</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\dungeon\dungeon-flag-mask.h">
+      <Filter>dungeon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

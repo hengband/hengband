@@ -47,7 +47,7 @@ void exe_monster_attack_to_player(player_type *target_ptr, turn_flags *turn_flag
         turn_flags_ptr->do_move = FALSE;
     }
 
-    if (turn_flags_ptr->do_move && ((d_info[target_ptr->dungeon_idx].flags1 & DF1_NO_MELEE) != 0) && !monster_confused_remaining(m_ptr)) {
+    if (turn_flags_ptr->do_move && d_info[target_ptr->dungeon_idx].flags.has(DF::NO_MELEE) && !monster_confused_remaining(m_ptr)) {
         if (!(r_ptr->flags2 & RF2_STUPID))
             turn_flags_ptr->do_move = FALSE;
         else if (is_original_ap_and_seen(target_ptr, m_ptr))
@@ -86,7 +86,7 @@ static bool exe_monster_attack_to_monster(player_type *target_ptr, MONSTER_IDX m
         return FALSE;
     if (monst_attack_monst(target_ptr, m_idx, g_ptr->m_idx))
         return TRUE;
-    if ((d_info[target_ptr->dungeon_idx].flags1 & DF1_NO_MELEE) == 0)
+    if (d_info[target_ptr->dungeon_idx].flags.has_not(DF::NO_MELEE))
         return FALSE;
     if (monster_confused_remaining(m_ptr))
         return TRUE;

@@ -200,7 +200,7 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
         }
     }
 
-    if (d_info[attacker_ptr->dungeon_idx].flags1 & DF1_NO_MELEE) {
+    if (d_info[attacker_ptr->dungeon_idx].flags.has(DF::NO_MELEE)) {
         msg_print(_("なぜか攻撃することができない。", "Something prevents you from attacking."));
         return FALSE;
     }

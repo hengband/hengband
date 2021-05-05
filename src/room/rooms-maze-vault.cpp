@@ -98,7 +98,7 @@ void build_maze_vault(player_type *player_ptr, POSITION x0, POSITION y0, POSITIO
 {
     msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("迷路ランダムVaultを生成しました。", "Maze Vault."));
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    bool light = ((floor_ptr->dun_level <= randint1(25)) && is_vault && !(d_info[floor_ptr->dungeon_idx].flags1 & DF1_DARKNESS));
+    bool light = ((floor_ptr->dun_level <= randint1(25)) && is_vault && d_info[floor_ptr->dungeon_idx].flags.has_not(DF::DARKNESS));
     POSITION dy = ysize / 2 - 1;
     POSITION dx = xsize / 2 - 1;
     POSITION y1 = y0 - dy;

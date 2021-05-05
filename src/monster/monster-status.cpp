@@ -796,7 +796,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 #endif
         }
 
-        if (!(d_info[target_ptr->dungeon_idx].flags1 & DF1_BEGINNER)) {
+        if (d_info[target_ptr->dungeon_idx].flags.has_not(DF::BEGINNER)) {
             if (!target_ptr->current_floor_ptr->dun_level && !target_ptr->ambush_flag && !target_ptr->current_floor_ptr->inside_arena) {
                 chg_virtue(target_ptr, V_VALOUR, -1);
             } else if (r_ptr->level > target_ptr->current_floor_ptr->dun_level) {

@@ -63,7 +63,7 @@ static bool check_no_blow(player_type *target_ptr, monap_type *monap_ptr)
     if (r_ptr->flags1 & (RF1_NEVER_BLOW))
         return FALSE;
 
-    if (d_info[target_ptr->dungeon_idx].flags1 & DF1_NO_MELEE)
+    if (d_info[target_ptr->dungeon_idx].flags.has(DF::NO_MELEE))
         return FALSE;
 
     if (!is_hostile(monap_ptr->m_ptr))

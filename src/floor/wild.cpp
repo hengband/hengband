@@ -350,7 +350,7 @@ static void generate_area(player_type *player_ptr, POSITION y, POSITION x, bool 
 
     bool is_winner = wilderness[y][x].entrance > 0;
     is_winner &= (wilderness[y][x].town == 0);
-    bool is_wild_winner = (d_info[wilderness[y][x].entrance].flags1 & DF1_WINNER) == 0;
+    bool is_wild_winner = d_info[wilderness[y][x].entrance].flags.has_not(DF::WINNER);
     is_winner &= ((current_world_ptr->total_winner != 0) || is_wild_winner);
     if (!is_winner)
         return;
@@ -574,7 +574,7 @@ void wilderness_gen_small(player_type *creature_ptr)
                 continue;
             }
 
-            if (wilderness[j][i].entrance && (current_world_ptr->total_winner || !(d_info[wilderness[j][i].entrance].flags1 & DF1_WINNER))) {
+            if (wilderness[j][i].entrance && (current_world_ptr->total_winner || d_info[wilderness[j][i].entrance].flags.has_not(DF::WINNER))) {
                 floor_ptr->grid_array[j][i].feat = feat_entrance;
                 floor_ptr->grid_array[j][i].special = (byte)wilderness[j][i].entrance;
                 floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_MARK);
