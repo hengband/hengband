@@ -15,6 +15,7 @@
 #include "monster-race/race-flags1.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
+#include "monster/monster-status.h"
 #include "object/item-tester-hooker.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
@@ -496,6 +497,32 @@ void fix_object(player_type *player_ptr)
     }
 }
 
+/*!
+ * @brief 床上のモンスター情報を返す
+ * @param floor_ptr 階の情報への参照ポインタ
+ * @param grid_prt 座標グリッドの情報への参照ポインタ
+ * @return モンスターが見える場合にはモンスター情報への参照ポインタ、それ以外はNULL
+ * @details
+ * Lookコマンドでカーソルを合わせた場合に合わせてミミックは考慮しない。
+ */
+static monster_type *monster_on_floor_items(const floor_type *floor_ptr, const grid_type *g_ptr)
+{
+    if (g_ptr->m_idx == 0)
+        return NULL;
+
+    monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
+    if (!monster_is_valid(m_ptr) || !m_ptr->ml)
+        return NULL;
+
+    return m_ptr;
+}
+
+/*!
+ * @brief 床上のアイテム一覧を作成し、表示する
+ * @param プレイヤー情報への参照ポインタ
+ * @param y 参照する座標グリッドのy座標
+ * @param x 参照する座標グリッドのx座標
+ */
 static void display_floor_item_list(player_type *player_ptr, const int y, const int x)
 {
     // Term の行数を取得。
@@ -510,20 +537,16 @@ static void display_floor_item_list(player_type *player_ptr, const int y, const 
     term_clear();
     term_gotoxy(0, 0);
 
-    const floor_type *const floor_ptr = player_ptr->current_floor_ptr;
-    const grid_type *const g_ptr = &floor_ptr->grid_array[y][x];
+    const auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto *g_ptr = &floor_ptr->grid_array[y][x];
     char line[1024];
 
     // 先頭行を書く。
     if (player_bold(player_ptr, y, x))
         sprintf(line, _("(X:%03d Y:%03d) あなたの足元のアイテム一覧", "Items at (%03d,%03d) under you"), x, y);
-    else if (g_ptr->m_idx > 0) {
-        const monster_type *const m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
-
+    else if (const auto *m_ptr = monster_on_floor_items(floor_ptr, g_ptr); m_ptr != NULL) {
         if (player_ptr->image) {
             sprintf(line, _("(X:%03d Y:%03d) 何か奇妙な物の足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under something strange"), x, y);
-        } else if (m_ptr->r_idx == 0) {
-            sprintf(line, _("(X:%03d Y:%03d) 奇妙な物体の足元のアイテム一覧", "Items at (%03d,%03d) under an odd object"), x, y);
         } else {
             const monster_race *const r_ptr = &r_info[m_ptr->r_idx];
             sprintf(line, _("(X:%03d Y:%03d) %sの足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under %s"), x, y, r_ptr->name.c_str());
