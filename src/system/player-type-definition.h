@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "mutation/mutation-flag-types.h"
 #include "player-ability/player-ability-types.h"
 #include "player/player-race-types.h"
 #include "player/player-class-types.h"
@@ -11,7 +12,6 @@
 #define MAX_SKILLS 10
 #define MAX_MANE 16
 
-enum class MUTA;
 enum class RF_ABILITY;
 
 typedef struct floor_type floor_type;

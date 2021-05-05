@@ -2,8 +2,6 @@
 
 #include <bitset>
 
-#include "mutation/mutation-flag-types.h"
-
 /**
  * @brief フラグ集合を扱う、FlagGroupクラス
  *
