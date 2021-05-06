@@ -864,10 +864,7 @@ static errr term_xtra_win_clear(void)
     term_data *td = (term_data *)(Term->data);
 
     RECT rc;
-    rc.left = td->size_ow1;
-    rc.right = rc.left + td->cols * td->tile_wid;
-    rc.top = td->size_oh1;
-    rc.bottom = rc.top + td->rows * td->tile_hgt;
+    GetClientRect(td->w, &rc);
 
     HDC hdc = GetDC(td->w);
     SetBkColor(hdc, RGB(0, 0, 0));
@@ -2279,8 +2276,8 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         }
         case SIZE_MAXIMIZED:
         case SIZE_RESTORED: {
-            TERM_LEN cols = (LOWORD(lParam) - td->size_ow1) / td->tile_wid;
-            TERM_LEN rows = (HIWORD(lParam) - td->size_oh1) / td->tile_hgt;
+            TERM_LEN cols = (LOWORD(lParam) - td->size_ow1 - td->size_ow2) / td->tile_wid;
+            TERM_LEN rows = (HIWORD(lParam) - td->size_oh1 - td->size_oh2) / td->tile_hgt;
             if ((td->cols != cols) || (td->rows != rows)) {
                 td->cols = cols;
                 td->rows = rows;
@@ -2393,8 +2390,8 @@ LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 
         td->size_hack = TRUE;
 
-        TERM_LEN cols = (LOWORD(lParam) - td->size_ow1) / td->tile_wid;
-        TERM_LEN rows = (HIWORD(lParam) - td->size_oh1) / td->tile_hgt;
+        TERM_LEN cols = (LOWORD(lParam) - td->size_ow1 - td->size_ow2) / td->tile_wid;
+        TERM_LEN rows = (HIWORD(lParam) - td->size_oh1 - td->size_oh2) / td->tile_hgt;
         if ((td->cols != cols) || (td->rows != rows)) {
             term_type *old_term = Term;
             td->cols = cols;
