@@ -1156,7 +1156,7 @@ static ACTION_SKILL_POWER calc_saving_throw(player_type *creature_ptr)
     if (has_resist_curse(creature_ptr))
         pow += 30;
 
-    if (creature_ptr->blessed)
+    if (creature_ptr->bless_blade)
         pow += 6 + (creature_ptr->lev - 1) / 10;
 
     pow += adj_wis_sav[creature_ptr->stat_index[A_WIS]];
