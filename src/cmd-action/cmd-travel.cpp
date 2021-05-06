@@ -10,8 +10,8 @@
 #include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/grid-selector.h"
-#include "view/display-messages.h"
 #include "util/bit-flags-calculator.h"
+#include "view/display-messages.h"
 
 #define TRAVEL_UNABLE 9999
 
@@ -138,7 +138,8 @@ static void travel_flow(player_type *creature_ptr, POSITION ty, POSITION tx)
 void do_cmd_travel(player_type *creature_ptr)
 {
     POSITION x, y;
-    if (travel.x != 0 && travel.y != 0 && get_check(_("トラベルを継続しますか？", "Do you continue to travel? "))) {
+    if ((travel.x != 0) && (travel.y != 0) && (travel.x != creature_ptr->x) && (travel.y != creature_ptr->y)
+        && get_check(_("トラベルを継続しますか？", "Do you continue to travel? "))) {
         y = travel.y;
         x = travel.x;
     } else if (!tgt_pt(creature_ptr, &x, &y))
@@ -153,8 +154,7 @@ void do_cmd_travel(player_type *creature_ptr)
     feature_type *f_ptr;
     f_ptr = &f_info[floor_ptr->grid_array[y][x].feat];
     if ((floor_ptr->grid_array[y][x].info & CAVE_MARK)
-        && (has_flag(f_ptr->flags, FF_WALL) || has_flag(f_ptr->flags, FF_CAN_DIG)
-            || (has_flag(f_ptr->flags, FF_DOOR) && floor_ptr->grid_array[y][x].mimic))) {
+        && (has_flag(f_ptr->flags, FF_WALL) || has_flag(f_ptr->flags, FF_CAN_DIG) || (has_flag(f_ptr->flags, FF_DOOR) && floor_ptr->grid_array[y][x].mimic))) {
         msg_print(_("そこには行くことができません！", "You cannot travel there!"));
         return;
     }
