@@ -282,14 +282,14 @@ s16b PlayerSpeed::riding_value()
     }
 
     if (riding_m_ptr->mspeed > 110) {
-        result = (s16b)((speed - 110) * (this->owner_ptr->skill_exp[GINOU_RIDING] * 3 + this->owner_ptr->lev * 160L - 10000L) / (22000L));
+        result = (s16b)((speed - 110) * (this->owner_ptr->skill_exp[SKILL_RIDING] * 3 + this->owner_ptr->lev * 160L - 10000L) / (22000L));
         if (result < 0)
             result = 0;
     } else {
         result = speed - 110;
     }
 
-    result += (this->owner_ptr->skill_exp[GINOU_RIDING] + this->owner_ptr->lev * 160L) / 3200;
+    result += (this->owner_ptr->skill_exp[SKILL_RIDING] + this->owner_ptr->lev * 160L) / 3200;
 
     if (monster_fast_remaining(riding_m_ptr))
         result += 10;
@@ -317,8 +317,8 @@ s16b PlayerSpeed::inventory_weight_value()
         monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
         count = 1500 + riding_r_ptr->level * 25;
 
-        if (this->owner_ptr->skill_exp[GINOU_RIDING] < RIDING_EXP_SKILLED) {
-            weight += (this->owner_ptr->wt * 3 * (RIDING_EXP_SKILLED - this->owner_ptr->skill_exp[GINOU_RIDING])) / RIDING_EXP_SKILLED;
+        if (this->owner_ptr->skill_exp[SKILL_RIDING] < RIDING_EXP_SKILLED) {
+            weight += (this->owner_ptr->wt * 3 * (RIDING_EXP_SKILLED - this->owner_ptr->skill_exp[SKILL_RIDING])) / RIDING_EXP_SKILLED;
         }
 
         if (weight > count) {

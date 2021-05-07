@@ -322,7 +322,7 @@ void process_angar(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m)
 
     /* When riding a hostile alignment pet */
     if (target_ptr->riding == m_idx) {
-        if (abs(target_ptr->alignment / 10) < randint0(target_ptr->skill_exp[GINOU_RIDING]))
+        if (abs(target_ptr->alignment / 10) < randint0(target_ptr->skill_exp[SKILL_RIDING]))
             return;
 
         msg_format(_("%^sが突然暴れだした！", "%^s suddenly begins unruly!"), m_name);
