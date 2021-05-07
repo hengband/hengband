@@ -58,7 +58,7 @@ void apply_magic_weapon(player_type *owner_ptr, object_type *o_ptr, DEPTH level,
         }
 
         if (o_ptr->to_h + o_ptr->to_d < 0)
-            o_ptr->curse_flags |= TRC_CURSED;
+            o_ptr->curse_flags.set(TRC::CURSED);
     }
 
     if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DIAMOND_EDGE))

@@ -61,15 +61,15 @@ void object_type::prep(player_type *player_ptr, KIND_OBJECT_IDX ko_idx)
         this->ident |= (IDENT_BROKEN);
 
     if (k_ptr->gen_flags.has(TRG::CURSED))
-        this->curse_flags |= (TRC_CURSED);
+        this->curse_flags.set(TRC::CURSED);
     if (k_ptr->gen_flags.has(TRG::HEAVY_CURSE))
-        this->curse_flags |= (TRC_HEAVY_CURSE);
+        this->curse_flags.set(TRC::HEAVY_CURSE);
     if (k_ptr->gen_flags.has(TRG::PERMA_CURSE))
-        this->curse_flags |= (TRC_PERMA_CURSE);
+        this->curse_flags.set(TRC::PERMA_CURSE);
     if (k_ptr->gen_flags.has(TRG::RANDOM_CURSE0))
-        this->curse_flags |= get_curse(player_ptr, 0, this);
+        this->curse_flags.set(get_curse(player_ptr, 0, this));
     if (k_ptr->gen_flags.has(TRG::RANDOM_CURSE1))
-        this->curse_flags |= get_curse(player_ptr, 1, this);
+        this->curse_flags.set(get_curse(player_ptr, 1, this));
     if (k_ptr->gen_flags.has(TRG::RANDOM_CURSE2))
-        this->curse_flags |= get_curse(player_ptr, 2, this);
+        this->curse_flags.set(get_curse(player_ptr, 2, this));
 }

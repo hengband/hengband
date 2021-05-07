@@ -153,10 +153,21 @@ void rd_item(player_type *player_ptr, object_type *o_ptr)
     else
         o_ptr->art_flags[4] = 0;
 
-    if (flags & SAVE_ITEM_CURSE_FLAGS)
-        rd_u32b(&o_ptr->curse_flags);
-    else
-        o_ptr->curse_flags = 0;
+    if (flags & SAVE_ITEM_CURSE_FLAGS) {
+        if (loading_savefile_version_is_older_than(5)) {
+            u32b tmp32u;
+            rd_u32b(&tmp32u);
+            std::bitset<32> rd_bits_cursed_flags(tmp32u);
+            for (size_t i = 0; i < std::min(o_ptr->curse_flags.size(), rd_bits_cursed_flags.size()); i++) {
+                auto f = static_cast<TRC>(i);
+                o_ptr->curse_flags[f] = rd_bits_cursed_flags[i];
+            }
+        } else {
+            rd_FlagGroup(o_ptr->curse_flags, rd_byte);
+        }
+    } else {
+        o_ptr->curse_flags.clear();
+    }
 
     /* Monster holding object */
     if (flags & SAVE_ITEM_HELD_M_IDX)

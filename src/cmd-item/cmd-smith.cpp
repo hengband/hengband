@@ -288,7 +288,7 @@ static void drain_essence(player_type *creature_ptr)
     old_pval = o_ptr->pval;
     old_name2 = o_ptr->name2;
     old_timeout = o_ptr->timeout;
-    if (o_ptr->curse_flags & (TRC_CURSED | TRC_HEAVY_CURSE | TRC_PERMA_CURSE))
+    if (o_ptr->curse_flags.has_any_of({ TRC::CURSED, TRC::HEAVY_CURSE, TRC::PERMA_CURSE }))
         dec--;
     if (has_flag(old_flgs, TR_ADD_L_CURSE))
         dec--;

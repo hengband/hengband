@@ -128,30 +128,36 @@ void rd_item_old(player_type *player_ptr, object_type *o_ptr)
     }
 
     if (h_older_than(1, 0, 11)) {
-        o_ptr->curse_flags = 0L;
+        o_ptr->curse_flags.clear();
         if (o_ptr->ident & 0x40) {
-            o_ptr->curse_flags |= TRC_CURSED;
+            o_ptr->curse_flags.set(TRC::CURSED);
             if (o_ptr->art_flags[2] & 0x40000000L)
-                o_ptr->curse_flags |= TRC_HEAVY_CURSE;
+                o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
             if (o_ptr->art_flags[2] & 0x80000000L)
-                o_ptr->curse_flags |= TRC_PERMA_CURSE;
+                o_ptr->curse_flags.set(TRC::PERMA_CURSE);
             if (object_is_fixed_artifact(o_ptr)) {
                 artifact_type *a_ptr = &a_info[o_ptr->name1];
                 if (a_ptr->gen_flags.has(TRG::HEAVY_CURSE))
-                    o_ptr->curse_flags |= TRC_HEAVY_CURSE;
+                    o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
                 if (a_ptr->gen_flags.has(TRG::PERMA_CURSE))
-                    o_ptr->curse_flags |= TRC_PERMA_CURSE;
+                    o_ptr->curse_flags.set(TRC::PERMA_CURSE);
             } else if (object_is_ego(o_ptr)) {
                 ego_item_type *e_ptr = &e_info[o_ptr->name2];
                 if (e_ptr->gen_flags.has(TRG::HEAVY_CURSE))
-                    o_ptr->curse_flags |= TRC_HEAVY_CURSE;
+                    o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
                 if (e_ptr->gen_flags.has(TRG::PERMA_CURSE))
-                    o_ptr->curse_flags |= TRC_PERMA_CURSE;
+                    o_ptr->curse_flags.set(TRC::PERMA_CURSE);
             }
         }
         o_ptr->art_flags[2] &= (0x1FFFFFFFL);
     } else {
-        rd_u32b(&o_ptr->curse_flags);
+        u32b tmp32u;
+        rd_u32b(&tmp32u);
+        std::bitset<32> rd_bits_cursed_flags(tmp32u);
+        for (size_t i = 0; i < std::min(o_ptr->curse_flags.size(), rd_bits_cursed_flags.size()); i++) {
+            auto f = static_cast<TRC>(i);
+            o_ptr->curse_flags[f] = rd_bits_cursed_flags[i];
+        }
     }
 
     rd_s16b(&o_ptr->held_m_idx);

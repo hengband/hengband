@@ -595,9 +595,9 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
     }
 
     if (object_is_cursed(o_ptr)) {
-        if (o_ptr->curse_flags & TRC_PERMA_CURSE) {
+        if (o_ptr->curse_flags.has(TRC::PERMA_CURSE)) {
             info[i++] = _("それは永遠の呪いがかけられている。", "It is permanently cursed.");
-        } else if (o_ptr->curse_flags & TRC_HEAVY_CURSE) {
+        } else if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {
             info[i++] = _("それは強力な呪いがかけられている。", "It is heavily cursed.");
         } else {
             info[i++] = _("それは呪われている。", "It is cursed.");
@@ -610,78 +610,78 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         }
     }
 
-    if ((has_flag(flgs, TR_TY_CURSE)) || (o_ptr->curse_flags & TRC_TY_CURSE)) {
+    if ((has_flag(flgs, TR_TY_CURSE)) || o_ptr->curse_flags.has(TRC::TY_CURSE)) {
         info[i++] = _("それは太古の禍々しい怨念が宿っている。", "It carries an ancient foul curse.");
     }
 
-    if ((has_flag(flgs, TR_AGGRAVATE)) || (o_ptr->curse_flags & TRC_AGGRAVATE)) {
+    if ((has_flag(flgs, TR_AGGRAVATE)) || o_ptr->curse_flags.has(TRC::AGGRAVATE)) {
         info[i++] = _("それは付近のモンスターを怒らせる。", "It aggravates nearby creatures.");
     }
 
-    if ((has_flag(flgs, TR_DRAIN_EXP)) || (o_ptr->curse_flags & TRC_DRAIN_EXP)) {
+    if ((has_flag(flgs, TR_DRAIN_EXP)) || o_ptr->curse_flags.has(TRC::DRAIN_EXP)) {
         info[i++] = _("それは経験値を吸い取る。", "It drains experience.");
     }
 
-    if (o_ptr->curse_flags & TRC_SLOW_REGEN) {
+    if (o_ptr->curse_flags.has(TRC::SLOW_REGEN)) {
         info[i++] = _("それは回復力を弱める。", "It slows your regenerative powers.");
     }
 
-    if ((o_ptr->curse_flags & TRC_ADD_L_CURSE) || has_flag(flgs, TR_ADD_L_CURSE)) {
+    if (o_ptr->curse_flags.has(TRC::ADD_L_CURSE) || has_flag(flgs, TR_ADD_L_CURSE)) {
         info[i++] = _("それは弱い呪いを増やす。", "It adds weak curses.");
     }
 
-    if ((o_ptr->curse_flags & TRC_ADD_H_CURSE) || has_flag(flgs, TR_ADD_H_CURSE)) {
+    if (o_ptr->curse_flags.has(TRC::ADD_H_CURSE) || has_flag(flgs, TR_ADD_H_CURSE)) {
         info[i++] = _("それは強力な呪いを増やす。", "It adds heavy curses.");
     }
 
-    if ((has_flag(flgs, TR_CALL_ANIMAL)) || (o_ptr->curse_flags & TRC_CALL_ANIMAL)) {
+    if ((has_flag(flgs, TR_CALL_ANIMAL)) || o_ptr->curse_flags.has(TRC::CALL_ANIMAL)) {
         info[i++] = _("それは動物を呼び寄せる。", "It attracts animals.");
     }
 
-    if ((has_flag(flgs, TR_CALL_DEMON)) || (o_ptr->curse_flags & TRC_CALL_DEMON)) {
+    if ((has_flag(flgs, TR_CALL_DEMON)) || o_ptr->curse_flags.has(TRC::CALL_DEMON)) {
         info[i++] = _("それは悪魔を呼び寄せる。", "It attracts demons.");
     }
 
-    if ((has_flag(flgs, TR_CALL_DRAGON)) || (o_ptr->curse_flags & TRC_CALL_DRAGON)) {
+    if ((has_flag(flgs, TR_CALL_DRAGON)) || o_ptr->curse_flags.has(TRC::CALL_DRAGON)) {
         info[i++] = _("それはドラゴンを呼び寄せる。", "It attracts dragons.");
     }
 
-    if ((has_flag(flgs, TR_CALL_UNDEAD)) || (o_ptr->curse_flags & TRC_CALL_UNDEAD)) {
+    if ((has_flag(flgs, TR_CALL_UNDEAD)) || o_ptr->curse_flags.has(TRC::CALL_UNDEAD)) {
         info[i++] = _("それは死霊を呼び寄せる。", "It attracts undead.");
     }
 
-    if ((has_flag(flgs, TR_COWARDICE)) || (o_ptr->curse_flags & TRC_COWARDICE)) {
+    if ((has_flag(flgs, TR_COWARDICE)) || o_ptr->curse_flags.has(TRC::COWARDICE)) {
         info[i++] = _("それは恐怖感を引き起こす。", "It makes you subject to cowardice.");
     }
 
     if (has_flag(flgs, TR_BERS_RAGE))
         info[i++] = _("それは狂戦士化の発作を引き起こす。", "It makes you subject to berserker fits.");
 
-    if ((has_flag(flgs, TR_TELEPORT)) || (o_ptr->curse_flags & TRC_TELEPORT)) {
+    if ((has_flag(flgs, TR_TELEPORT)) || o_ptr->curse_flags.has(TRC::TELEPORT)) {
         info[i++] = _("それはランダムなテレポートを引き起こす。", "It induces random teleportation.");
     }
 
-    if ((has_flag(flgs, TR_LOW_MELEE)) || o_ptr->curse_flags & TRC_LOW_MELEE) {
+    if ((has_flag(flgs, TR_LOW_MELEE)) || o_ptr->curse_flags.has(TRC::LOW_MELEE)) {
         info[i++] = _("それは攻撃を外しやすい。", "It causes you to miss blows.");
     }
 
-    if ((has_flag(flgs, TR_LOW_AC)) || (o_ptr->curse_flags & TRC_LOW_AC)) {
+    if ((has_flag(flgs, TR_LOW_AC)) || o_ptr->curse_flags.has(TRC::LOW_AC)) {
         info[i++] = _("それは攻撃を受けやすい。", "It helps your enemies' blows.");
     }
 
-    if ((has_flag(flgs, TR_HARD_SPELL)) || (o_ptr->curse_flags & TRC_HARD_SPELL)) {
+    if ((has_flag(flgs, TR_HARD_SPELL)) || o_ptr->curse_flags.has(TRC::HARD_SPELL)) {
         info[i++] = _("それは魔法を唱えにくくする。", "It encumbers you while spellcasting.");
     }
 
-    if ((has_flag(flgs, TR_FAST_DIGEST)) || (o_ptr->curse_flags & TRC_FAST_DIGEST)) {
+    if ((has_flag(flgs, TR_FAST_DIGEST)) || o_ptr->curse_flags.has(TRC::FAST_DIGEST)) {
         info[i++] = _("それはあなたの新陳代謝を速くする。", "It speeds your metabolism.");
     }
 
-    if ((has_flag(flgs, TR_DRAIN_HP)) || (o_ptr->curse_flags & TRC_DRAIN_HP)) {
+    if ((has_flag(flgs, TR_DRAIN_HP)) || o_ptr->curse_flags.has(TRC::DRAIN_HP)) {
         info[i++] = _("それはあなたの体力を吸い取る。", "It drains you.");
     }
 
-    if ((has_flag(flgs, TR_DRAIN_MANA)) || (o_ptr->curse_flags & TRC_DRAIN_MANA)) {
+    if ((has_flag(flgs, TR_DRAIN_MANA)) || o_ptr->curse_flags.has(TRC::DRAIN_MANA)) {
         info[i++] = _("それはあなたの魔力を吸い取る。", "It drains your mana.");
     }
 

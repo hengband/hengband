@@ -33,7 +33,7 @@ static void pval_subtraction(object_type *o_ptr)
 static void add_negative_flags(object_type *o_ptr)
 {
     if (one_in_(4))
-        o_ptr->curse_flags |= TRC_PERMA_CURSE;
+        o_ptr->curse_flags.set(TRC::PERMA_CURSE);
 
     if (one_in_(3))
         add_flag(o_ptr->art_flags, TR_TY_CURSE);
@@ -74,7 +74,7 @@ static void add_negative_flags(object_type *o_ptr)
 void curse_artifact(player_type *player_ptr, object_type *o_ptr)
 {
     pval_subtraction(o_ptr);
-    o_ptr->curse_flags |= (TRC_HEAVY_CURSE | TRC_CURSED);
+    o_ptr->curse_flags.set({ TRC::HEAVY_CURSE, TRC::CURSED });
     remove_flag(o_ptr->art_flags, TR_BLESSED);
     add_negative_flags(o_ptr);
     if ((player_ptr->pclass != CLASS_WARRIOR) && (player_ptr->pclass != CLASS_ARCHER) && (player_ptr->pclass != CLASS_CAVALRY)

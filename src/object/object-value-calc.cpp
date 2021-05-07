@@ -437,15 +437,15 @@ PRICE flag_cost(player_type *player_ptr, object_type *o_ptr, int plusses)
         total -= 10000;
     if (has_flag(flgs, TR_BLESSED))
         total += 750;
-    if (o_ptr->curse_flags & TR_ADD_L_CURSE)
+    if (o_ptr->curse_flags.has(TRC::ADD_L_CURSE))
         total -= 5000;
-    if (o_ptr->curse_flags & TR_ADD_H_CURSE)
+    if (o_ptr->curse_flags.has(TRC::ADD_H_CURSE))
         total -= 12500;
-    if (o_ptr->curse_flags & TRC_CURSED)
+    if (o_ptr->curse_flags.has(TRC::CURSED))
         total -= 5000;
-    if (o_ptr->curse_flags & TRC_HEAVY_CURSE)
+    if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE))
         total -= 12500;
-    if (o_ptr->curse_flags & TRC_PERMA_CURSE)
+    if (o_ptr->curse_flags.has(TRC::PERMA_CURSE))
         total -= 15000;
 
     /* Also, give some extra for activatable powers... */
