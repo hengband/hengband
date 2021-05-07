@@ -152,6 +152,11 @@ graphics_mode change_graphics(graphics_mode arg)
 }
 }
 
+graphics_mode Graphics::get_mode(void)
+{
+    return current_graphics_mode;
+}
+
 graphics_mode Graphics::change_graphics(graphics_mode arg)
 {
     return Impl::change_graphics(arg);

@@ -52,11 +52,17 @@ struct tile_info {
 };
 
 /*!
- * @brief グラフィックスのモード、タイル情報管理
+ * @brief グラフィクスのモード、タイル情報管理
  */
 class Graphics {
 public:
-    Graphics() {}
+    Graphics() = default;
+
+    /*!
+     * @brief 現在のモードを取得する
+     * @return 現在のモード
+     */
+    graphics_mode get_mode(void);
 
     /*!
      * @brief 指定モードのタイルに変更する / Change graphics (tile)
