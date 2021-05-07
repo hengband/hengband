@@ -53,7 +53,7 @@ summon_type summon_specific_type = SUMMON_NONE;
  */
 static bool restrict_monster_to_dungeon(player_type *player_ptr, MONRACE_IDX r_idx)
 {
-    DUNGEON_IDX d_idx = player_ptr->dungeon_idx;
+    enum dungeon_idx d_idx = player_ptr->dungeon_idx;
     dungeon_type *d_ptr = &d_info[d_idx];
     monster_race *r_ptr = &r_info[r_idx];
 

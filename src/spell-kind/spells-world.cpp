@@ -375,7 +375,7 @@ bool recall_player(player_type *creature_ptr, TIME_EFFECT turns)
     }
 
     if (!is_in_dungeon(creature_ptr)) {
-        DUNGEON_IDX select_dungeon;
+        enum dungeon_idx select_dungeon;
         select_dungeon = choose_dungeon(_("に帰還", "recall"), 2, 14);
         if (!select_dungeon)
             return FALSE;
@@ -390,7 +390,7 @@ bool recall_player(player_type *creature_ptr, TIME_EFFECT turns)
 
 bool free_level_recall(player_type *creature_ptr)
 {
-    DUNGEON_IDX select_dungeon = choose_dungeon(_("にテレポート", "teleport"), 4, 0);
+    enum dungeon_idx select_dungeon = choose_dungeon(_("にテレポート", "teleport"), 4, 0);
     if (!select_dungeon)
         return FALSE;
 

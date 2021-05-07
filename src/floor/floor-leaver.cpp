@@ -248,7 +248,7 @@ static void get_out_monster(player_type *protected_ptr)
 static void preserve_info(player_type *creature_ptr)
 {
     MONRACE_IDX quest_r_idx = 0;
-    for (DUNGEON_IDX i = 0; i < max_q_idx; i++) {
+    for (enum dungeon_idx i = DUNGEON_NONE; i < max_q_idx; i++) {
         if ((quest[i].status == QUEST_STATUS_TAKEN) && ((quest[i].type == QUEST_TYPE_KILL_LEVEL) || (quest[i].type == QUEST_TYPE_RANDOM))
             && (quest[i].level == creature_ptr->current_floor_ptr->dun_level) && (creature_ptr->dungeon_idx == quest[i].dungeon)
             && !(quest[i].flags & QUEST_FLAG_PRESET)) {
@@ -256,7 +256,7 @@ static void preserve_info(player_type *creature_ptr)
         }
     }
 
-    for (DUNGEON_IDX i = 1; i < creature_ptr->current_floor_ptr->m_max; i++) {
+    for (enum dungeon_idx i = 1; i < creature_ptr->current_floor_ptr->m_max; i++) {
         monster_race *r_ptr;
         monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr) || (quest_r_idx != m_ptr->r_idx))
@@ -269,7 +269,7 @@ static void preserve_info(player_type *creature_ptr)
         delete_monster_idx(creature_ptr, i);
     }
 
-    for (DUNGEON_IDX i = 0; i < INVEN_PACK; i++) {
+    for (enum dungeon_idx i = 0; i < INVEN_PACK; i++) {
         object_type *o_ptr = &creature_ptr->inventory_list[i];
         if (!object_is_valid(o_ptr))
             continue;
@@ -338,7 +338,7 @@ static void exit_to_wilderness(player_type *creature_ptr)
 static void kill_saved_floors(player_type *creature_ptr, saved_floor_type *sf_ptr)
 {
     if (!(creature_ptr->change_floor_mode & CFM_SAVE_FLOORS)) {
-        for (DUNGEON_IDX i = 0; i < MAX_SAVED_FLOORS; i++)
+        for (enum dungeon_idx i = 0; i < MAX_SAVED_FLOORS; i++)
             kill_saved_floor(creature_ptr, &saved_floors[i]);
 
         latest_visit_mark = 1;

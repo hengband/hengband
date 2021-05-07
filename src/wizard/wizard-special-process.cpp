@@ -379,13 +379,13 @@ void wiz_jump_to_dungeon(player_type *creature_ptr)
     if (command_arg <= 0) {
         char ppp[80];
         char tmp_val[160];
-        DUNGEON_IDX tmp_dungeon_type;
+        enum dungeon_idx tmp_dungeon_type;
         sprintf(ppp, "Jump which dungeon : ");
         sprintf(tmp_val, "%d", creature_ptr->dungeon_idx);
         if (!get_string(ppp, tmp_val, 2))
             return;
 
-        tmp_dungeon_type = (DUNGEON_IDX)atoi(tmp_val);
+        tmp_dungeon_type = (enum dungeon_idx)atoi(tmp_val);
         if (!d_info[tmp_dungeon_type].maxdepth || (tmp_dungeon_type > current_world_ptr->max_d_idx))
             tmp_dungeon_type = DUNGEON_ANGBAND;
 
@@ -411,7 +411,7 @@ void wiz_jump_to_dungeon(player_type *creature_ptr)
     creature_ptr->current_floor_ptr->dun_level = command_arg;
     prepare_change_floor_mode(creature_ptr, CFM_RAND_PLACE);
     if (!is_in_dungeon(creature_ptr))
-        creature_ptr->dungeon_idx = 0;
+        creature_ptr->dungeon_idx = DUNGEON_NONE;
 
     creature_ptr->current_floor_ptr->inside_arena = FALSE;
     creature_ptr->wild_mode = FALSE;
@@ -672,7 +672,7 @@ void cheat_death(player_type *creature_ptr)
     floor_ptr->inside_quest = 0;
     if (creature_ptr->dungeon_idx)
         creature_ptr->recall_dungeon = creature_ptr->dungeon_idx;
-    creature_ptr->dungeon_idx = 0;
+    creature_ptr->dungeon_idx = DUNGEON_NONE;
     if (lite_town || vanilla_town) {
         creature_ptr->wilderness_y = 1;
         creature_ptr->wilderness_x = 1;

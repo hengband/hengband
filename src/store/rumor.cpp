@@ -95,7 +95,7 @@ void display_rumor(player_type *player_ptr, bool ex)
             r_ptr->r_sights++;
         }
     } else if (strcmp(zz[0], "DUNGEON") == 0) {
-        DUNGEON_IDX d_idx;
+        enum dungeon_idx d_idx;
         dungeon_type *d_ptr;
         while (TRUE) {
             d_idx = rumor_num(zz[1], current_world_ptr->max_d_idx);

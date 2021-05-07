@@ -92,9 +92,9 @@ static void set_floor_and_wall_aux(s16b feat_type[100], feat_prob prob[DUNGEON_F
  * / Fill the arrays of floors and walls in the good proportions
  * @param type ダンジョンID
  */
-void set_floor_and_wall(DUNGEON_IDX type)
+void set_floor_and_wall(enum dungeon_idx type)
 {
-    DUNGEON_IDX cur_type = 255;
+    enum dungeon_idx cur_type = 255;
     if (cur_type == type)
         return;
 
@@ -539,7 +539,7 @@ void wilderness_gen(player_type *creature_ptr)
         creature_ptr->ambush_flag = TRUE;
 
     generate_encounter = FALSE;
-    set_floor_and_wall(0);
+    set_floor_and_wall(DUNGEON_NONE);
     for (int i = 0; i < max_q_idx; i++)
         if (quest[i].status == QUEST_STATUS_REWARDED)
             quest[i].status = QUEST_STATUS_FINISHED;

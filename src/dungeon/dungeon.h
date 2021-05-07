@@ -11,6 +11,7 @@
 #define DUNGEON_FEAT_PROB_NUM 3
 
 enum dungeon_idx {
+    DUNGEON_NONE = 0,
     DUNGEON_ANGBAND = 1,
 	DUNGEON_GALGALS = 2,
 	DUNGEON_ORC = 3,
@@ -90,5 +91,5 @@ extern DEPTH *max_dlv;
 extern std::vector<dungeon_type> d_info;
 
 typedef struct player_type player_type;
-DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x);
+enum dungeon_idx choose_dungeon(concptr note, POSITION y, POSITION x);
 bool is_in_dungeon(player_type *creature_ptr);

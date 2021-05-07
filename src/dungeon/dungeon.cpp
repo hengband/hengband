@@ -30,12 +30,12 @@ DEPTH *max_dlv;
  * @param x コンソールX座標
  * @return 選択されたダンジョンID
  */
-DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
+enum dungeon_idx choose_dungeon(concptr note, POSITION y, POSITION x)
 {
-	DUNGEON_IDX select_dungeon;
-	DUNGEON_IDX i;
+	enum dungeon_idx select_dungeon;
+	enum dungeon_idx i;
 	int num = 0;
-	DUNGEON_IDX *dun;
+	enum dungeon_idx *dun;
 
 	/* Hack -- No need to choose dungeon in some case */
 	if (lite_town || vanilla_town || ironman_downward)
@@ -50,7 +50,7 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
 	}
 
 	/* Allocate the "dun" array */
-	C_MAKE(dun, current_world_ptr->max_d_idx, DUNGEON_IDX);
+	C_MAKE(dun, current_world_ptr->max_d_idx, enum dungeon_idx);
 
 	screen_save();
 	for (i = 1; i < current_world_ptr->max_d_idx; i++)
@@ -84,7 +84,7 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
 		if ((i == ESCAPE) || !num)
 		{
 			/* Free the "dun" array */
-			C_KILL(dun, current_world_ptr->max_d_idx, DUNGEON_IDX);
+			C_KILL(dun, current_world_ptr->max_d_idx, enum dungeon_idx);
 
 			screen_load();
 			return 0;
@@ -99,7 +99,7 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
 	screen_load();
 
 	/* Free the "dun" array */
-	C_KILL(dun, current_world_ptr->max_d_idx, DUNGEON_IDX);
+	C_KILL(dun, current_world_ptr->max_d_idx, enum dungeon_idx);
 
 	return select_dungeon;
 }

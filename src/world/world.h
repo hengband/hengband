@@ -64,7 +64,7 @@ struct world_type {
     OBJECT_IDX max_o_idx{}; /*!< Maximum number of objects in the level */
     MONSTER_IDX max_m_idx{}; /*!< Maximum number of monsters in the level */
 
-    DUNGEON_IDX max_d_idx{};
+    enum dungeon_idx max_d_idx{};
 };
 
 extern world_type *current_world_ptr;
