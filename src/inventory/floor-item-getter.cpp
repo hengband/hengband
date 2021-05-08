@@ -620,7 +620,9 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
             if (g_ptr->o_idx_list.size() < 2)
                 break;
 
-            g_ptr->o_idx_list.rotate(owner_ptr->current_floor_ptr);
+            const auto next_o_idx = fis_ptr->floor_list[1];
+            while (g_ptr->o_idx_list.front() != next_o_idx)
+                g_ptr->o_idx_list.rotate(owner_ptr->current_floor_ptr);
 
             owner_ptr->window_flags |= PW_FLOOR_ITEM_LIST;
             window_stuff(owner_ptr);
