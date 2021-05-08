@@ -342,7 +342,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
         current_world_ptr->timewalk_m_idx = 0;
 
     // プレイヤーしかユニークを倒せないのでここで時間を記録
-    if (any_bits(md_ptr->r_ptr->flags1, RF1_UNIQUE)) {
+    if (any_bits(md_ptr->r_ptr->flags1, RF1_UNIQUE) && md_ptr->m_ptr->mflag2.has_not(MFLAG2::CLONED)) {
         update_playtime();
         md_ptr->r_ptr->defeat_time = current_world_ptr->play_time;
         md_ptr->r_ptr->defeat_level = player_ptr->lev;
