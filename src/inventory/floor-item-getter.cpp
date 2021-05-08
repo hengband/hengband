@@ -622,6 +622,9 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 
             g_ptr->o_idx_list.rotate(owner_ptr->current_floor_ptr);
 
+            owner_ptr->window_flags |= PW_FLOOR_ITEM_LIST;
+            window_stuff(owner_ptr);
+
             fis_ptr->floor_num
                 = scan_floor_items(owner_ptr, fis_ptr->floor_list, owner_ptr->y, owner_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, fis_ptr->tval);
             if (command_see) {
