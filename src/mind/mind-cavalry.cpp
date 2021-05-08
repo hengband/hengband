@@ -55,7 +55,7 @@ bool rodeo(player_type *creature_ptr)
         rlev = rlev * 3 / 2;
     if (rlev > 60)
         rlev = 60 + (rlev - 60) / 2;
-    if ((randint1(creature_ptr->skill_exp[GINOU_RIDING] / 120 + creature_ptr->lev * 2 / 3) > rlev) && one_in_(2)
+    if ((randint1(creature_ptr->skill_exp[SKILL_RIDING] / 120 + creature_ptr->lev * 2 / 3) > rlev) && one_in_(2)
         && !creature_ptr->current_floor_ptr->inside_arena && !creature_ptr->phase_out && !(r_ptr->flags7 & (RF7_GUARDIAN)) && !(r_ptr->flags1 & (RF1_QUESTOR))
         && (rlev < creature_ptr->lev * 3 / 2 + randint0(creature_ptr->lev / 5))) {
         msg_format(_("%sを手なずけた。", "You tame %s."), m_name);

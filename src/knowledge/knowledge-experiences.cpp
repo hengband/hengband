@@ -153,7 +153,7 @@ void do_cmd_knowledge_spell_exp(player_type *creature_ptr)
  */
 void do_cmd_knowledge_skill_exp(player_type *creature_ptr)
 {
-    char skill_name[GINOU_TEMPMAX][20] = { _("マーシャルアーツ", "Martial Arts    "), _("二刀流          ", "Dual Wielding   "),
+    char skill_name[SKILL_MAX][20] = { _("マーシャルアーツ", "Martial Arts    "), _("二刀流          ", "Dual Wielding   "),
         _("乗馬            ", "Riding          "), _("盾              ", "Shield          ") };
 
     FILE *fff = NULL;
@@ -161,7 +161,7 @@ void do_cmd_knowledge_skill_exp(player_type *creature_ptr)
     if (!open_temporary_file(&fff, file_name))
         return;
 
-    for (int i = 0; i < GINOU_TEMPMAX; i++) {
+    for (int i = 0; i < SKILL_MAX; i++) {
         SUB_EXP skill_exp = creature_ptr->skill_exp[i];
         SUB_EXP skill_max = s_info[creature_ptr->pclass].s_max[i];
         fprintf(fff, "%-20s ", skill_name[i]);
@@ -171,7 +171,7 @@ void do_cmd_knowledge_skill_exp(player_type *creature_ptr)
             fprintf(fff, "!");
         else
             fprintf(fff, " ");
-        fprintf(fff, "%s", exp_level_str[(i == GINOU_RIDING) ? riding_exp_level(skill_exp) : weapon_exp_level(skill_exp)]);
+        fprintf(fff, "%s", exp_level_str[(i == SKILL_RIDING) ? riding_exp_level(skill_exp) : weapon_exp_level(skill_exp)]);
         if (cheat_xtra)
             fprintf(fff, " %d", skill_exp);
         fprintf(fff, "\n");

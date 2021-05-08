@@ -248,24 +248,24 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
     }
 
     if (can_attack_with_main_hand(attacker_ptr) && can_attack_with_sub_hand(attacker_ptr)) {
-        if ((attacker_ptr->skill_exp[GINOU_NITOURYU] < s_info[attacker_ptr->pclass].s_max[GINOU_NITOURYU])
-            && ((attacker_ptr->skill_exp[GINOU_NITOURYU] - 1000) / 200 < r_ptr->level)) {
-            if (attacker_ptr->skill_exp[GINOU_NITOURYU] < WEAPON_EXP_BEGINNER)
-                attacker_ptr->skill_exp[GINOU_NITOURYU] += 80;
-            else if (attacker_ptr->skill_exp[GINOU_NITOURYU] < WEAPON_EXP_SKILLED)
-                attacker_ptr->skill_exp[GINOU_NITOURYU] += 4;
-            else if (attacker_ptr->skill_exp[GINOU_NITOURYU] < WEAPON_EXP_EXPERT)
-                attacker_ptr->skill_exp[GINOU_NITOURYU] += 1;
-            else if (attacker_ptr->skill_exp[GINOU_NITOURYU] < WEAPON_EXP_MASTER)
+        if ((attacker_ptr->skill_exp[SKILL_TWO_WEAPON] < s_info[attacker_ptr->pclass].s_max[SKILL_TWO_WEAPON])
+            && ((attacker_ptr->skill_exp[SKILL_TWO_WEAPON] - 1000) / 200 < r_ptr->level)) {
+            if (attacker_ptr->skill_exp[SKILL_TWO_WEAPON] < WEAPON_EXP_BEGINNER)
+                attacker_ptr->skill_exp[SKILL_TWO_WEAPON] += 80;
+            else if (attacker_ptr->skill_exp[SKILL_TWO_WEAPON] < WEAPON_EXP_SKILLED)
+                attacker_ptr->skill_exp[SKILL_TWO_WEAPON] += 4;
+            else if (attacker_ptr->skill_exp[SKILL_TWO_WEAPON] < WEAPON_EXP_EXPERT)
+                attacker_ptr->skill_exp[SKILL_TWO_WEAPON] += 1;
+            else if (attacker_ptr->skill_exp[SKILL_TWO_WEAPON] < WEAPON_EXP_MASTER)
                 if (one_in_(3))
-                    attacker_ptr->skill_exp[GINOU_NITOURYU] += 1;
+                    attacker_ptr->skill_exp[SKILL_TWO_WEAPON] += 1;
             attacker_ptr->update |= (PU_BONUS);
         }
     }
 
     if (attacker_ptr->riding) {
-        int cur = attacker_ptr->skill_exp[GINOU_RIDING];
-        int max = s_info[attacker_ptr->pclass].s_max[GINOU_RIDING];
+        int cur = attacker_ptr->skill_exp[SKILL_RIDING];
+        int max = s_info[attacker_ptr->pclass].s_max[SKILL_RIDING];
 
         if (cur < max) {
             DEPTH ridinglevel = r_info[attacker_ptr->current_floor_ptr->m_list[attacker_ptr->riding].r_idx].level;
@@ -282,7 +282,7 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
                     inc += 1;
             }
 
-            attacker_ptr->skill_exp[GINOU_RIDING] = MIN(max, cur + inc);
+            attacker_ptr->skill_exp[SKILL_RIDING] = MIN(max, cur + inc);
             attacker_ptr->update |= (PU_BONUS);
         }
     }

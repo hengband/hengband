@@ -57,8 +57,8 @@ static bool calc_fall_off_possibility(player_type *creature_ptr, const HIT_POINT
     if (force)
         return TRUE;
 
-    int cur = creature_ptr->skill_exp[GINOU_RIDING];
-    int max = s_info[creature_ptr->pclass].s_max[GINOU_RIDING];
+    int cur = creature_ptr->skill_exp[SKILL_RIDING];
+    int max = s_info[creature_ptr->pclass].s_max[SKILL_RIDING];
     int ridinglevel = r_ptr->level;
 
     int fall_off_level = r_ptr->level;
@@ -72,7 +72,7 @@ static bool calc_fall_off_possibility(player_type *creature_ptr, const HIT_POINT
         else
             inc += 1;
 
-        creature_ptr->skill_exp[GINOU_RIDING] = MIN(max, cur + inc);
+        creature_ptr->skill_exp[SKILL_RIDING] = MIN(max, cur + inc);
     }
 
     if (randint0(dam / 2 + fall_off_level * 2) >= cur / 30 + 10)
