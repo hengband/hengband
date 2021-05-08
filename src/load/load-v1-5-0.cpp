@@ -753,7 +753,7 @@ errr rd_dungeon_old(player_type *player_ptr)
         rd_item(player_ptr, o_ptr);
 
         auto &list = get_o_idx_list_contains(floor_ptr, o_idx);
-        list.push_front(o_idx);
+        list.add(floor_ptr, o_idx);
     }
 
     rd_u16b(&limit);

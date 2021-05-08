@@ -99,7 +99,7 @@ void fetch_item(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require
 
     OBJECT_IDX i = g_ptr->o_idx_list.front();
     g_ptr->o_idx_list.pop_front();
-    caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].o_idx_list.push_front(i); /* 'move' it */
+    caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].o_idx_list.add(caster_ptr->current_floor_ptr, i); /* 'move' it */
 
     o_ptr->iy = caster_ptr->y;
     o_ptr->ix = caster_ptr->x;

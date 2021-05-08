@@ -127,7 +127,7 @@ static void monster_pickup_object(player_type *target_ptr, turn_flags *turn_flag
         o_ptr->marked &= OM_TOUCHED;
         o_ptr->iy = o_ptr->ix = 0;
         o_ptr->held_m_idx = m_idx;
-        m_ptr->hold_o_idx_list.push_front(this_o_idx);
+        m_ptr->hold_o_idx_list.add(target_ptr->current_floor_ptr, this_o_idx);
         return;
     }
 

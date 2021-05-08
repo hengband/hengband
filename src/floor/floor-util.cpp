@@ -120,7 +120,7 @@ void forget_flow(floor_type *floor_ptr)
  */
 void wipe_o_list(floor_type *floor_ptr)
 {
-    for (int i = 1; i < floor_ptr->o_max; i++) {
+    for (OBJECT_IDX i = 1; i < floor_ptr->o_max; i++) {
         object_type *o_ptr = &floor_ptr->o_list[i];
         if (!object_is_valid(o_ptr))
             continue;

@@ -281,9 +281,9 @@ void excise_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx)
  * @brief 指定したOBJECT_IDXを含むリスト(モンスター所持リスト or 床上スタックリスト)への参照を得る
  * @param floo_ptr 現在フロアへの参照ポインタ
  * @param o_idx 参照を得るリストに含まれるOBJECT_IDX
- * @return o_idxを含む std::list<OBJECT_IDX> への参照
+ * @return o_idxを含む ObjectIndexList への参照
  */
-std::list<OBJECT_IDX> &get_o_idx_list_contains(floor_type *floor_ptr, OBJECT_IDX o_idx)
+ObjectIndexList &get_o_idx_list_contains(floor_type *floor_ptr, OBJECT_IDX o_idx)
 {
     object_type *o_ptr = &floor_ptr->o_list[o_idx];
 
@@ -511,7 +511,7 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
         j_ptr->iy = by;
         j_ptr->ix = bx;
         j_ptr->held_m_idx = 0;
-        g_ptr->o_idx_list.push_front(o_idx);
+        g_ptr->o_idx_list.add(floor_ptr, o_idx);
         done = TRUE;
     }
 

@@ -37,6 +37,7 @@
 #include "view/display-lore.h"
 #include "view/display-messages.h"
 #include "view/display-monster-status.h"
+#include "window/display-sub-windows.h"
 #include "world/world.h"
 #ifdef JP
 #else
@@ -351,14 +352,13 @@ static char describe_footing_many_items(player_type *subject_ptr, eg_type *eg_pt
         if (eg_ptr->query != '\n' && eg_ptr->query != '\r')
             return eg_ptr->query;
 
-        OBJECT_IDX o_idx = 0;
-        if (!eg_ptr->g_ptr->o_idx_list.empty())
-            o_idx = eg_ptr->g_ptr->o_idx_list.front();
         if (eg_ptr->g_ptr->o_idx_list.size() < 2)
             continue;
 
-        eg_ptr->g_ptr->o_idx_list.pop_front();
-        eg_ptr->g_ptr->o_idx_list.push_back(o_idx);
+        eg_ptr->g_ptr->o_idx_list.rotate(subject_ptr->current_floor_ptr);
+
+        // ターゲットしている床の座標を渡す必要があるので、window_stuff経由ではなく直接呼び出す
+        fix_floor_item_list(subject_ptr, eg_ptr->y, eg_ptr->x);
     }
 }
 

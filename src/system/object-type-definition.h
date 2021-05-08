@@ -16,6 +16,7 @@ typedef struct object_type {
     KIND_OBJECT_IDX k_idx; /* Kind index (zero if "dead") */
     POSITION iy; /* Y-position on map, or zero */
     POSITION ix; /* X-position on map, or zero */
+    IDX stack_idx; /*!< このアイテムを含むアイテムリスト内の位置(降順) */
     tval_type tval; /* Item type (from kind) */
 
     OBJECT_SUBTYPE_VALUE sval; /* Item sub-type (from kind) */

@@ -114,7 +114,7 @@ static void move_item_to_monster(player_type *target_ptr, monap_type *monap_ptr,
 
     j_ptr->marked = OM_TOUCHED;
     j_ptr->held_m_idx = monap_ptr->m_idx;
-    monap_ptr->m_ptr->hold_o_idx_list.push_front(o_idx);
+    monap_ptr->m_ptr->hold_o_idx_list.add(target_ptr->current_floor_ptr, o_idx);
 }
 
 /*!

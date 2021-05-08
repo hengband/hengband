@@ -70,7 +70,7 @@ static void drop_here(floor_type *floor_ptr, object_type *j_ptr, POSITION y, POS
     o_ptr->ix = x;
     o_ptr->held_m_idx = 0;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-    g_ptr->o_idx_list.push_front(o_idx);
+    g_ptr->o_idx_list.add(floor_ptr, o_idx);
 }
 
 static void generate_artifact(player_type *player_ptr, qtwg_type *qtwg_ptr, const ARTIFACT_IDX artifact_index)

@@ -47,7 +47,7 @@ void place_gold(player_type *player_ptr, POSITION y, POSITION x)
 
     o_ptr->iy = y;
     o_ptr->ix = x;
-    g_ptr->o_idx_list.push_front(o_idx);
+    g_ptr->o_idx_list.add(floor_ptr, o_idx);
 
     note_spot(player_ptr, y, x);
     lite_spot(player_ptr, y, x);
@@ -95,7 +95,7 @@ void place_object(player_type *owner_ptr, POSITION y, POSITION x, BIT_FLAGS mode
 
     o_ptr->iy = y;
     o_ptr->ix = x;
-    g_ptr->o_idx_list.push_front(o_idx);
+    g_ptr->o_idx_list.add(floor_ptr, o_idx);
 
     note_spot(owner_ptr, y, x);
     lite_spot(owner_ptr, y, x);
