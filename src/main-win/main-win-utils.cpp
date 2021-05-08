@@ -60,7 +60,41 @@ void save_screen_as_html(HWND hWnd)
  * @brief 対象ファイルを選択した状態でエクスプローラーを開く
  * @param filename 対象ファイル
  */
-void open_dir_in_explorer(char *filename) {
+void open_dir_in_explorer(char *filename)
+{
     std::string str = "/select," + std::string(filename);
     ShellExecuteW(NULL, NULL, L"explorer.exe", to_wchar(str.c_str()).wc_str(), NULL, SW_SHOWNORMAL);
+}
+
+/*!
+ * @brief GetOpenFileNameW APIのラッパー
+ * @details
+ * ワイド文字列版のAPIを使用するが、選択ファイルのパスをマルチバイト文字列で受け取る。
+ * @param ofn GetOpenFileNameWに指定するOPENFILENAMEW構造体へのポインタ。
+ * lpstrFile、nMaxFileメンバの設定は無視される（関数内で上書きするため）。
+ * @param dirname GetOpenFileNameWに指定する初期フォルダパス。
+ * NULL以外を指定した場合、ワイド文字列に変換しlpstrInitialDirに設定される。
+ * @param filename 選択ファイルパス設定先バッファへのポインタ
+ * @param max_name_size filenameのバッファサイズ
+ * @retval true filenameに選択されたファイルのパスが設定されている。
+ * @retval false ファイル選択がキャンセルされた。
+ */
+bool get_open_filename(OPENFILENAMEW *ofn, concptr dirname, char *filename, DWORD max_name_size)
+{
+    std::vector<WCHAR> buf(max_name_size);
+    to_wchar wc_dir(dirname);
+
+    // Overwrite struct data
+    ofn->lpstrFile = &buf[0];
+    ofn->nMaxFile = max_name_size - 1;
+    ofn->lpstrInitialDir = wc_dir.wc_str();
+
+    // call API
+    if (GetOpenFileNameW(ofn)) {
+        // to multibyte
+        strncpy_s(filename, max_name_size, to_multibyte(&buf[0]).c_str(), _TRUNCATE);
+        return true;
+    }
+    
+    return false;
 }

@@ -180,7 +180,7 @@ typedef struct {
     int tile_wid; //!< タイル横幅
     int tile_hgt; //!< タイル縦幅
 
-    LOGFONT lf;
+    LOGFONTW lf;
 
     bool posfix;
 } term_data;
@@ -367,13 +367,8 @@ static void save_prefs_aux(int i)
         WritePrivateProfileString(sec_name, "Visible", buf, ini_file);
     }
 
-#ifdef JP
-    strcpy(buf, td->lf.lfFaceName[0] != '\0' ? td->lf.lfFaceName : "ＭＳ ゴシック");
-#else
-    strcpy(buf, td->lf.lfFaceName[0] != '\0' ? td->lf.lfFaceName : "Courier");
-#endif
-
-    WritePrivateProfileString(sec_name, "Font", buf, ini_file);
+    auto pwchar = td->lf.lfFaceName[0] != '\0' ? td->lf.lfFaceName : _(L"ＭＳ ゴシック", L"Courier");
+    WritePrivateProfileString(sec_name, "Font", to_multibyte(pwchar).c_str(), ini_file);
 
     wsprintf(buf, "%d", td->lf.lfWidth);
     WritePrivateProfileString(sec_name, "FontWid", buf, ini_file);
@@ -489,16 +484,11 @@ static void load_prefs_aux(int i)
     char tmp[1024];
 
     sprintf(sec_name, "Term-%d", i);
-    sprintf(sec_name, "Term-%d", i);
     if (i > 0) {
         td->visible = (GetPrivateProfileInt(sec_name, "Visible", td->visible, ini_file) != 0);
     }
 
-#ifdef JP
-    GetPrivateProfileString(sec_name, "Font", "ＭＳ ゴシック", tmp, 127, ini_file);
-#else
-    GetPrivateProfileString(sec_name, "Font", "Courier", tmp, 127, ini_file);
-#endif
+    GetPrivateProfileString(sec_name, "Font", _("ＭＳ ゴシック", "Courier"), tmp, 127, ini_file);
 
     td->font_want = string_make(tmp);
     int hgt = 15;
@@ -679,7 +669,7 @@ static errr term_force_font(term_data *td)
     if (td->font_id)
         DeleteObject(td->font_id);
 
-    td->font_id = CreateFontIndirect(&(td->lf));
+    td->font_id = CreateFontIndirectW(&(td->lf));
     int wid = td->lf.lfWidth;
     int hgt = td->lf.lfHeight;
     if (!td->font_id)
@@ -711,13 +701,13 @@ static errr term_force_font(term_data *td)
  */
 static void term_change_font(term_data *td)
 {
-    CHOOSEFONT cf;
+    CHOOSEFONTW cf;
     memset(&cf, 0, sizeof(cf));
     cf.lStructSize = sizeof(cf);
     cf.Flags = CF_SCREENFONTS | CF_FIXEDPITCHONLY | CF_NOVERTFONTS | CF_INITTOLOGFONTSTRUCT;
     cf.lpLogFont = &(td->lf);
 
-    if (!ChooseFont(&cf))
+    if (!ChooseFontW(&cf))
         return;
 
     term_force_font(td);
@@ -1345,8 +1335,8 @@ static void init_windows(void)
     /* Font of each window */
     for (int i = 0; i < MAX_TERM_DATA; i++) {
         td = &data[i];
-        strncpy(td->lf.lfFaceName, td->font_want, LF_FACESIZE);
-        td->lf.lfCharSet = DEFAULT_CHARSET;
+        wcsncpy(td->lf.lfFaceName, to_wchar(td->font_want).wc_str(), LF_FACESIZE);
+        td->lf.lfCharSet = _(SHIFTJIS_CHARSET, DEFAULT_CHARSET);
         td->lf.lfPitchAndFamily = FIXED_PITCH | FF_DONTCARE;
         term_force_font(td);
         if (!td->tile_wid)
@@ -1538,7 +1528,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
     }
 
     term_data *td;
-    OPENFILENAME ofn;
+    OPENFILENAMEW ofn;
     switch (wCmd) {
     case IDM_FILE_NEW: {
         if (game_in_progress) {
@@ -1560,14 +1550,11 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
             memset(&ofn, 0, sizeof(ofn));
             ofn.lStructSize = sizeof(ofn);
             ofn.hwndOwner = data[0].w;
-            ofn.lpstrFilter = "Save Files (*.)\0*\0";
+            ofn.lpstrFilter = L"Save Files (*.)\0*\0";
             ofn.nFilterIndex = 1;
-            ofn.lpstrFile = savefile;
-            ofn.nMaxFile = 1024;
-            ofn.lpstrInitialDir = ANGBAND_DIR_SAVE;
             ofn.Flags = OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR | OFN_HIDEREADONLY;
 
-            if (GetOpenFileName(&ofn)) {
+            if (get_open_filename(&ofn, ANGBAND_DIR_SAVE, savefile, MAIN_WIN_MAX_PATH)) {
                 validate_file(savefile);
                 game_in_progress = TRUE;
                 term_flush();
@@ -1637,14 +1624,11 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
             memset(&ofn, 0, sizeof(ofn));
             ofn.lStructSize = sizeof(ofn);
             ofn.hwndOwner = data[0].w;
-            ofn.lpstrFilter = "Angband Movie Files (*.amv)\0*.amv\0";
+            ofn.lpstrFilter = L"Angband Movie Files (*.amv)\0*.amv\0";
             ofn.nFilterIndex = 1;
-            ofn.lpstrFile = savefile;
-            ofn.nMaxFile = 1024;
-            ofn.lpstrInitialDir = ANGBAND_DIR_USER;
             ofn.Flags = OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
 
-            if (GetOpenFileName(&ofn)) {
+            if (get_open_filename(&ofn, ANGBAND_DIR_USER, savefile, MAIN_WIN_MAX_PATH)) {
                 prepare_browse_movie_without_path_build(savefile);
                 play_game(player_ptr, FALSE, TRUE);
                 quit(NULL);
@@ -1890,15 +1874,12 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         memset(&ofn, 0, sizeof(ofn));
         ofn.lStructSize = sizeof(ofn);
         ofn.hwndOwner = data[0].w;
-        ofn.lpstrFilter = "Image Files (*.bmp;*.png;*.jpg;*.jpeg;)\0*.bmp;*.png;*.jpg;*.jpeg;\0";
+        ofn.lpstrFilter = L"Image Files (*.bmp;*.png;*.jpg;*.jpeg;)\0*.bmp;*.png;*.jpg;*.jpeg;\0";
         ofn.nFilterIndex = 1;
-        ofn.lpstrFile = wallpaper_file;
-        ofn.nMaxFile = 1023;
-        ofn.lpstrInitialDir = NULL;
-        ofn.lpstrTitle = _("壁紙を選んでね。", "Choose wall paper.");
+        ofn.lpstrTitle = _(L"壁紙を選んでね。", L"Choose wall paper.");
         ofn.Flags = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
 
-        if (GetOpenFileName(&ofn)) {
+        if (get_open_filename(&ofn, NULL, wallpaper_file, MAIN_WIN_MAX_PATH)) {
             change_bg_mode(bg_mode::BG_ONE, true, true);
         }
         break;
