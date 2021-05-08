@@ -55,58 +55,58 @@ static void set_bad_status_info(player_type *creature_ptr, self_info_type *self_
 
 static void set_curse_info(player_type *creature_ptr, self_info_type *self_ptr)
 {
-    if (creature_ptr->cursed & TRC_TY_CURSE)
+    if (creature_ptr->cursed.has(TRC::TY_CURSE))
         self_ptr->info[self_ptr->line++] = _("あなたは邪悪な怨念に包まれている。", "You carry an ancient foul curse.");
 
     if (has_aggravate(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたはモンスターを怒らせている。", "You aggravate monsters.");
 
-    if (creature_ptr->cursed & TRC_DRAIN_EXP)
+    if (creature_ptr->cursed.has(TRC::DRAIN_EXP))
         self_ptr->info[self_ptr->line++] = _("あなたは経験値を吸われている。", "You occasionally lose experience for no reason.");
 
-    if (creature_ptr->cursed & TRC_SLOW_REGEN)
+    if (creature_ptr->cursed.has(TRC::SLOW_REGEN))
         self_ptr->info[self_ptr->line++] = _("あなたの回復力は非常に遅い。", "You regenerate slowly.");
 
-    if (creature_ptr->cursed & TRC_ADD_L_CURSE)
+    if (creature_ptr->cursed.has(TRC::ADD_L_CURSE))
         self_ptr->info[self_ptr->line++] = _("あなたの弱い呪いは増える。", "Your weak curses multiply."); /* 暫定的 -- henkma */
 
-    if (creature_ptr->cursed & TRC_ADD_H_CURSE)
+    if (creature_ptr->cursed.has(TRC::ADD_H_CURSE))
         self_ptr->info[self_ptr->line++] = _("あなたの強い呪いは増える。", "Your heavy curses multiply."); /* 暫定的 -- henkma */
 
-    if (creature_ptr->cursed & TRC_CALL_ANIMAL)
+    if (creature_ptr->cursed.has(TRC::CALL_ANIMAL))
         self_ptr->info[self_ptr->line++] = _("あなたは動物に狙われている。", "You attract animals.");
 
-    if (creature_ptr->cursed & TRC_CALL_DEMON)
+    if (creature_ptr->cursed.has(TRC::CALL_DEMON))
         self_ptr->info[self_ptr->line++] = _("あなたは悪魔に狙われている。", "You attract demons.");
 
-    if (creature_ptr->cursed & TRC_CALL_DRAGON)
+    if (creature_ptr->cursed.has(TRC::CALL_DRAGON))
         self_ptr->info[self_ptr->line++] = _("あなたはドラゴンに狙われている。", "You attract dragons.");
 
-    if (creature_ptr->cursed & TRC_COWARDICE)
+    if (creature_ptr->cursed.has(TRC::COWARDICE))
         self_ptr->info[self_ptr->line++] = _("あなたは時々臆病になる。", "You are subject to cowardice.");
 
-    if (creature_ptr->cursed & TRC_BERS_RAGE)
+    if (creature_ptr->cursed.has(TRC::BERS_RAGE))
         self_ptr->info[self_ptr->line++] = _("あなたは狂戦士化の発作を起こす。", "You are subject to berserker fits.");
 
-    if (creature_ptr->cursed & TRC_TELEPORT)
+    if (creature_ptr->cursed.has(TRC::TELEPORT))
         self_ptr->info[self_ptr->line++] = _("あなたの位置はひじょうに不安定だ。", "Your position is very uncertain.");
 
-    if (creature_ptr->cursed & TRC_LOW_MELEE)
+    if (creature_ptr->cursed.has(TRC::LOW_MELEE))
         self_ptr->info[self_ptr->line++] = _("あなたの武器は攻撃を外しやすい。", "Your weapon causes you to miss blows.");
 
-    if (creature_ptr->cursed & TRC_LOW_AC)
+    if (creature_ptr->cursed.has(TRC::LOW_AC))
         self_ptr->info[self_ptr->line++] = _("あなたは攻撃を受けやすい。", "You are subject to be hit.");
 
-    if (creature_ptr->cursed & TRC_HARD_SPELL)
+    if (creature_ptr->cursed.has(TRC::HARD_SPELL))
         self_ptr->info[self_ptr->line++] = _("あなたは魔法を失敗しやすい。", "Your spells fail more frequently.");
 
-    if (creature_ptr->cursed & TRC_FAST_DIGEST)
+    if (creature_ptr->cursed.has(TRC::FAST_DIGEST))
         self_ptr->info[self_ptr->line++] = _("あなたはすぐお腹がへる。", "You have a good appetite.");
 
-    if (creature_ptr->cursed & TRC_DRAIN_HP)
+    if (creature_ptr->cursed.has(TRC::DRAIN_HP))
         self_ptr->info[self_ptr->line++] = _("あなたは体力を吸われている。", "You occasionally lose hit points for no reason.");
 
-    if (creature_ptr->cursed & TRC_DRAIN_MANA)
+    if (creature_ptr->cursed.has(TRC::DRAIN_MANA))
         self_ptr->info[self_ptr->line++] = _("あなたは魔力を吸われている。", "You occasionally lose spell points for no reason.");
 }
 

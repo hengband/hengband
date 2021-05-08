@@ -1559,7 +1559,7 @@ static s16b calc_num_blow(player_type *creature_ptr, int i)
  * * 性格きれものなら減算(-3)
  * * 性格ちからじまんとがまんづよいなら加算(+1)
  * * 性格チャージマンなら加算(+5)
- * * 装備品にTRC_HARD_SPELLがあるなら加算(軽い呪いなら+3/重い呪いなら+10)
+ * * 装備品にTRC::HARD_SPELLがあるなら加算(軽い呪いなら+3/重い呪いなら+10)
  */
 static s16b calc_to_magic_chance(player_type *creature_ptr)
 {
@@ -1581,8 +1581,8 @@ static s16b calc_to_magic_chance(player_type *creature_ptr)
         if (!o_ptr->k_idx)
             continue;
         object_flags(creature_ptr, o_ptr, flgs);
-        if (any_bits(o_ptr->curse_flags, TRC_HARD_SPELL)) {
-            if (any_bits(o_ptr->curse_flags, TRC_HEAVY_CURSE)) {
+        if (o_ptr->curse_flags.has(TRC::HARD_SPELL)) {
+            if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {
                 chance += 10;
             } else {
                 chance += 3;
@@ -1652,8 +1652,8 @@ static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_real_value)
         if (is_real_value || object_is_known(o_ptr))
             ac += o_ptr->to_a;
 
-        if (any_bits(o_ptr->curse_flags, TRC_LOW_AC)) {
-            if (any_bits(o_ptr->curse_flags, TRC_HEAVY_CURSE)) {
+        if (o_ptr->curse_flags.has(TRC::LOW_AC)) {
+            if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {
                 if (is_real_value || object_is_fully_known(o_ptr))
                     ac -= 30;
             } else {
@@ -1730,11 +1730,11 @@ static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_real_value)
                 continue;
             if (!object_is_cursed(o_ptr))
                 continue;
-            if (any_bits(o_ptr->curse_flags, TRC_CURSED))
+            if (o_ptr->curse_flags.has(TRC::CURSED))
                 ac += 5;
-            if (any_bits(o_ptr->curse_flags, TRC_HEAVY_CURSE))
+            if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE))
                 ac += 7;
-            if (any_bits(o_ptr->curse_flags, TRC_PERMA_CURSE))
+            if (o_ptr->curse_flags.has(TRC::PERMA_CURSE))
                 ac += 13;
         }
     }
@@ -2006,13 +2006,13 @@ static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool i
 
     if ((creature_ptr->realm1 == REALM_HEX) && object_is_cursed(o_ptr)) {
         if (hex_spelling(creature_ptr, HEX_RUNESWORD)) {
-            if (any_bits(o_ptr->curse_flags, (TRC_CURSED))) {
+            if (o_ptr->curse_flags.has(TRC::CURSED)) {
                 damage += 5;
             }
-            if (any_bits(o_ptr->curse_flags, (TRC_HEAVY_CURSE))) {
+            if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {
                 damage += 7;
             }
-            if (any_bits(o_ptr->curse_flags, (TRC_PERMA_CURSE))) {
+            if (o_ptr->curse_flags.has(TRC::PERMA_CURSE)) {
                 damage += 13;
             }
         }
@@ -2184,8 +2184,8 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_r
         }
 
         /* Low melee penalty */
-        if ((object_is_fully_known(o_ptr) || is_real_value) && any_bits(o_ptr->curse_flags, TRC_LOW_MELEE)) {
-            if (any_bits(o_ptr->curse_flags, TRC_HEAVY_CURSE)) {
+        if ((object_is_fully_known(o_ptr) || is_real_value) && o_ptr->curse_flags.has(TRC::LOW_MELEE)) {
+            if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {
                 hit -= 15;
             } else {
                 hit -= 5;
@@ -2235,16 +2235,16 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_r
 
         /* Hex realm bonuses */
         if ((creature_ptr->realm1 == REALM_HEX) && object_is_cursed(o_ptr)) {
-            if (any_bits(o_ptr->curse_flags, (TRC_CURSED))) {
+            if (o_ptr->curse_flags.has(TRC::CURSED)) {
                 hit += 5;
             }
-            if (any_bits(o_ptr->curse_flags, (TRC_HEAVY_CURSE))) {
+            if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {
                 hit += 7;
             }
-            if (any_bits(o_ptr->curse_flags, (TRC_PERMA_CURSE))) {
+            if (o_ptr->curse_flags.has(TRC::PERMA_CURSE)) {
                 hit += 13;
             }
-            if (any_bits(o_ptr->curse_flags, (TRC_TY_CURSE))) {
+            if (o_ptr->curse_flags.has(TRC::TY_CURSE)) {
                 hit += 5;
             }
         }
@@ -2347,8 +2347,8 @@ static s16b calc_to_hit_bow(player_type *creature_ptr, bool is_real_value)
         if (o_ptr->k_idx) {
             object_flags(creature_ptr, o_ptr, flgs);
 
-            if (any_bits(o_ptr->curse_flags, TRC_LOW_MELEE)) {
-                if (any_bits(o_ptr->curse_flags, TRC_HEAVY_CURSE)) {
+            if (o_ptr->curse_flags.has(TRC::LOW_MELEE)) {
+                if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {
                     pow -= 15;
                 } else {
                     pow -= 5;

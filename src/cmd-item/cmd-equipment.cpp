@@ -313,15 +313,15 @@ void do_cmd_takeoff(player_type *creature_ptr)
     PlayerEnergy energy(creature_ptr);
     if (object_is_cursed(o_ptr))
     {
-        if ((o_ptr->curse_flags & TRC_PERMA_CURSE) || (creature_ptr->pclass != CLASS_BERSERKER)) {
+        if (o_ptr->curse_flags.has(TRC::PERMA_CURSE) || (creature_ptr->pclass != CLASS_BERSERKER)) {
             msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
             return;
         }
 
-        if (((o_ptr->curse_flags & TRC_HEAVY_CURSE) && one_in_(7)) || one_in_(4)) {
+        if ((o_ptr->curse_flags.has(TRC::HEAVY_CURSE) && one_in_(7)) || one_in_(4)) {
             msg_print(_("呪われた装備を力づくで剥がした！", "You tore off a piece of cursed equipment by sheer strength!"));
             o_ptr->ident |= (IDENT_SENSE);
-            o_ptr->curse_flags = 0L;
+            o_ptr->curse_flags.clear();
             o_ptr->feeling = FEEL_NONE;
             creature_ptr->update |= PU_BONUS;
             creature_ptr->window_flags |= PW_EQUIP;

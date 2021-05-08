@@ -67,17 +67,17 @@ byte get_random_ego(byte slot, bool good)
 static void ego_invest_curse(player_type *player_ptr, object_type *o_ptr, EnumClassFlagGroup<TRG> &gen_flags)
 {
     if (gen_flags.has(TRG::CURSED))
-        o_ptr->curse_flags |= (TRC_CURSED);
+        o_ptr->curse_flags.set(TRC::CURSED);
     if (gen_flags.has(TRG::HEAVY_CURSE))
-        o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
+        o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
     if (gen_flags.has(TRG::PERMA_CURSE))
-        o_ptr->curse_flags |= (TRC_PERMA_CURSE);
+        o_ptr->curse_flags.set(TRC::PERMA_CURSE);
     if (gen_flags.has(TRG::RANDOM_CURSE0))
-        o_ptr->curse_flags |= get_curse(player_ptr, 0, o_ptr);
+        o_ptr->curse_flags.set(get_curse(player_ptr, 0, o_ptr));
     if (gen_flags.has(TRG::RANDOM_CURSE1))
-        o_ptr->curse_flags |= get_curse(player_ptr, 1, o_ptr);
+        o_ptr->curse_flags.set(get_curse(player_ptr, 1, o_ptr));
     if (gen_flags.has(TRG::RANDOM_CURSE2))
-        o_ptr->curse_flags |= get_curse(player_ptr, 2, o_ptr);
+        o_ptr->curse_flags.set(get_curse(player_ptr, 2, o_ptr));
 }
 
 /*!

@@ -46,7 +46,7 @@ void AmuletEnchanter::apply_magic()
 
     if ((this->power == 2) && one_in_(2)) {
         give_ego_index();
-        this->o_ptr->curse_flags = 0L;
+        this->o_ptr->curse_flags.clear();
         return;
     }
 
@@ -65,7 +65,7 @@ void AmuletEnchanter::enchant()
         this->o_ptr->pval = 1 + (PARAMETER_VALUE)m_bonus(5, this->level);
         if (this->power < 0) {
             set_bits(this->o_ptr->ident, IDENT_BROKEN);
-            set_bits(this->o_ptr->curse_flags, TRC_CURSED);
+            this->o_ptr->curse_flags.set(TRC::CURSED);
             this->o_ptr->pval = 0 - this->o_ptr->pval;
         }
 
@@ -78,7 +78,7 @@ void AmuletEnchanter::enchant()
 
         if (this->power < 0) {
             set_bits(this->o_ptr->ident, IDENT_BROKEN);
-            set_bits(this->o_ptr->curse_flags, TRC_CURSED);
+            this->o_ptr->curse_flags.set(TRC::CURSED);
             this->o_ptr->pval = 0 - this->o_ptr->pval;
         }
 
@@ -86,7 +86,7 @@ void AmuletEnchanter::enchant()
     case SV_AMULET_NO_MAGIC:
     case SV_AMULET_NO_TELE:
         if (this->power < 0) {
-            set_bits(this->o_ptr->curse_flags, TRC_CURSED);
+            this->o_ptr->curse_flags.set(TRC::CURSED);
         }
 
         break;
@@ -108,7 +108,7 @@ void AmuletEnchanter::enchant()
         }
 
         set_bits(this->o_ptr->ident, IDENT_BROKEN);
-        set_bits(this->o_ptr->curse_flags, TRC_CURSED);
+        this->o_ptr->curse_flags.set(TRC::CURSED);
         this->o_ptr->pval = 0 - (this->o_ptr->pval);
         break;
     case SV_AMULET_THE_MAGI:
@@ -118,7 +118,7 @@ void AmuletEnchanter::enchant()
         break;
     case SV_AMULET_DOOM:
         set_bits(this->o_ptr->ident, IDENT_BROKEN);
-        set_bits(this->o_ptr->curse_flags, TRC_CURSED);
+        this->o_ptr->curse_flags.set(TRC::CURSED);
         this->o_ptr->pval = 0 - (randint1(5) + (PARAMETER_VALUE)m_bonus(5, this->level));
         this->o_ptr->to_a = 0 - (randint1(5) + (ARMOUR_CLASS)m_bonus(5, this->level));
         if (this->power > 0) {
@@ -133,7 +133,7 @@ void AmuletEnchanter::enchant()
         }
 
         set_bits(this->o_ptr->ident, IDENT_BROKEN);
-        set_bits(this->o_ptr->curse_flags, TRC_CURSED);
+        this->o_ptr->curse_flags.set(TRC::CURSED);
         this->o_ptr->pval = 0 - this->o_ptr->pval;
         break;
     }
@@ -366,5 +366,5 @@ void AmuletEnchanter::give_cursed()
     }
 
     set_bits(this->o_ptr->ident, IDENT_BROKEN);
-    set_bits(this->o_ptr->curse_flags, TRC_CURSED | TRC_HEAVY_CURSE);
+    this->o_ptr->curse_flags.set({ TRC::CURSED, TRC::HEAVY_CURSE });
 }

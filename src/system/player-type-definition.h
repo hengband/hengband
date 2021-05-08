@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "mutation/mutation-flag-types.h"
+#include "object-enchant/trc-types.h"
 #include "player-ability/player-ability-types.h"
 #include "player/player-race-types.h"
 #include "player/player-class-types.h"
@@ -324,7 +325,8 @@ typedef struct player_type {
     BIT_FLAGS anti_magic{}; /* Anti-magic */
     BIT_FLAGS anti_tele{}; /* Prevent teleportation */
 
-    BIT_FLAGS cursed{}; /* Player is cursed */
+    EnumClassFlagGroup<TRC> cursed{}; /* Player is cursed */
+    EnumClassFlagGroup<TRCS> cursed_special{}; /* Player is special type cursed */
 
     bool can_swim{}; /* No damage falling */
     BIT_FLAGS levitation{}; /* No damage falling */

@@ -26,14 +26,14 @@ static int exe_curse_removal(player_type *creature_ptr, int all)
             continue;
         if (!object_is_cursed(o_ptr))
             continue;
-        if (!all && (o_ptr->curse_flags & TRC_HEAVY_CURSE))
+        if (!all && o_ptr->curse_flags.has(TRC::HEAVY_CURSE))
             continue;
-        if (o_ptr->curse_flags & TRC_PERMA_CURSE) {
-            o_ptr->curse_flags &= (TRC_CURSED | TRC_HEAVY_CURSE | TRC_PERMA_CURSE);
+        if (o_ptr->curse_flags.has(TRC::PERMA_CURSE)) {
+            o_ptr->curse_flags &= {TRC::CURSED, TRC::HEAVY_CURSE, TRC::PERMA_CURSE};
             continue;
         }
 
-        o_ptr->curse_flags = 0L;
+        o_ptr->curse_flags.clear();
         o_ptr->ident |= IDENT_SENSE;
         o_ptr->feeling = FEEL_NONE;
 

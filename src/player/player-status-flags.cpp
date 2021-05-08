@@ -1186,10 +1186,11 @@ void update_curses(player_type *creature_ptr)
 {
     object_type *o_ptr;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
-    creature_ptr->cursed = 0L;
+    creature_ptr->cursed.clear();
+    creature_ptr->cursed_special.clear();
 
     if (creature_ptr->pseikaku == PERSONALITY_SEXY)
-        creature_ptr->cursed |= (TRC_AGGRAVATE);
+        creature_ptr->cursed.set(TRC::AGGRAVATE);
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &creature_ptr->inventory_list[i];
@@ -1197,63 +1198,65 @@ void update_curses(player_type *creature_ptr)
             continue;
         object_flags(creature_ptr, o_ptr, flgs);
         if (has_flag(flgs, TR_AGGRAVATE))
-            creature_ptr->cursed |= TRC_AGGRAVATE;
+            creature_ptr->cursed.set(TRC::AGGRAVATE);
         if (has_flag(flgs, TR_DRAIN_EXP))
-            creature_ptr->cursed |= TRC_DRAIN_EXP;
+            creature_ptr->cursed.set(TRC::DRAIN_EXP);
         if (has_flag(flgs, TR_TY_CURSE))
-            creature_ptr->cursed |= TRC_TY_CURSE;
+            creature_ptr->cursed.set(TRC::TY_CURSE);
         if (has_flag(flgs, TR_ADD_L_CURSE))
-            creature_ptr->cursed |= TRC_ADD_L_CURSE;
+            creature_ptr->cursed.set(TRC::ADD_L_CURSE);
         if (has_flag(flgs, TR_ADD_H_CURSE))
-            creature_ptr->cursed |= TRC_ADD_H_CURSE;
+            creature_ptr->cursed.set(TRC::ADD_H_CURSE);
         if (has_flag(flgs, TR_DRAIN_HP))
-            creature_ptr->cursed |= TRC_DRAIN_HP;
+            creature_ptr->cursed.set(TRC::DRAIN_HP);
         if (has_flag(flgs, TR_DRAIN_MANA))
-            creature_ptr->cursed |= TRC_DRAIN_MANA;
+            creature_ptr->cursed.set(TRC::DRAIN_MANA);
         if (has_flag(flgs, TR_CALL_ANIMAL))
-            creature_ptr->cursed |= TRC_CALL_ANIMAL;
+            creature_ptr->cursed.set(TRC::CALL_ANIMAL);
         if (has_flag(flgs, TR_CALL_DEMON))
-            creature_ptr->cursed |= TRC_CALL_DEMON;
+            creature_ptr->cursed.set(TRC::CALL_DEMON);
         if (has_flag(flgs, TR_CALL_DRAGON))
-            creature_ptr->cursed |= TRC_CALL_DRAGON;
+            creature_ptr->cursed.set(TRC::CALL_DRAGON);
         if (has_flag(flgs, TR_CALL_UNDEAD))
-            creature_ptr->cursed |= TRC_CALL_UNDEAD;
+            creature_ptr->cursed.set(TRC::CALL_UNDEAD);
         if (has_flag(flgs, TR_COWARDICE))
-            creature_ptr->cursed |= TRC_COWARDICE;
+            creature_ptr->cursed.set(TRC::COWARDICE);
         if (has_flag(flgs, TR_LOW_MELEE))
-            creature_ptr->cursed |= TRC_LOW_MELEE;
+            creature_ptr->cursed.set(TRC::LOW_MELEE);
         if (has_flag(flgs, TR_LOW_AC))
-            creature_ptr->cursed |= TRC_LOW_AC;
+            creature_ptr->cursed.set(TRC::LOW_AC);
         if (has_flag(flgs, TR_HARD_SPELL))
-            creature_ptr->cursed |= TRC_HARD_SPELL;
+            creature_ptr->cursed.set(TRC::HARD_SPELL);
         if (has_flag(flgs, TR_FAST_DIGEST))
-            creature_ptr->cursed |= TRC_FAST_DIGEST;
+            creature_ptr->cursed.set(TRC::FAST_DIGEST);
         if (has_flag(flgs, TR_SLOW_REGEN))
-            creature_ptr->cursed |= TRC_SLOW_REGEN;
+            creature_ptr->cursed.set(TRC::SLOW_REGEN);
         if (has_flag(flgs, TR_BERS_RAGE))
-            creature_ptr->cursed |= TRC_BERS_RAGE;
+            creature_ptr->cursed.set(TRC::BERS_RAGE);
 
-        creature_ptr->cursed |= (o_ptr->curse_flags & (0xFFFFFFF0L));
+        auto obj_curse_flags = o_ptr->curse_flags;
+        obj_curse_flags.reset({ TRC::CURSED, TRC::HEAVY_CURSE, TRC::PERMA_CURSE });
+        creature_ptr->cursed.set(obj_curse_flags);
         if (o_ptr->name1 == ART_CHAINSWORD)
-            creature_ptr->cursed |= TRC_CHAINSWORD;
+            creature_ptr->cursed_special.set(TRCS::CHAINSWORD);
 
         if (has_flag(flgs, TR_TELEPORT)) {
             if (object_is_cursed(o_ptr))
-                creature_ptr->cursed |= TRC_TELEPORT;
+                creature_ptr->cursed.set(TRC::TELEPORT);
             else {
                 concptr insc = quark_str(o_ptr->inscription);
 
                 /* {.} will stop random teleportation. */
                 if (o_ptr->inscription && angband_strchr(insc, '.')) {
                 } else {
-                    creature_ptr->cursed |= TRC_TELEPORT_SELF;
+                    creature_ptr->cursed_special.set(TRCS::TELEPORT_SELF);
                 }
             }
         }
     }
 
-    if (creature_ptr->cursed & TRC_TELEPORT)
-        creature_ptr->cursed &= ~(TRC_TELEPORT_SELF);
+    if (creature_ptr->cursed.has(TRC::TELEPORT))
+        creature_ptr->cursed_special.reset(TRCS::TELEPORT_SELF);
 }
 
 BIT_FLAGS has_impact(player_type *creature_ptr)
@@ -2090,7 +2093,7 @@ bool has_good_luck(player_type *creature_ptr)
 
 BIT_FLAGS player_aggravate_state(player_type *creature_ptr)
 {
-    if (creature_ptr->cursed & TRC_AGGRAVATE) {
+    if (creature_ptr->cursed.has(TRC::AGGRAVATE)) {
         if ((is_specific_player_race(creature_ptr, RACE_S_FAIRY)) && (creature_ptr->pseikaku != PERSONALITY_SEXY)) {
             return AGGRAVATE_S_FAIRY;
         }

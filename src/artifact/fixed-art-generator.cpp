@@ -53,8 +53,8 @@ static bool invest_terror_mask(player_type *player_ptr, object_type *o_ptr)
     default:
         add_flag(o_ptr->art_flags, TR_AGGRAVATE);
         add_flag(o_ptr->art_flags, TR_TY_CURSE);
-        o_ptr->curse_flags |= (TRC_CURSED | TRC_HEAVY_CURSE);
-        o_ptr->curse_flags |= get_curse(player_ptr, 2, o_ptr);
+        o_ptr->curse_flags.set({ TRC::CURSED, TRC::HEAVY_CURSE });
+        o_ptr->curse_flags.set(get_curse(player_ptr, 2, o_ptr));
         return false;
     }
 }
@@ -94,7 +94,7 @@ static void invest_special_artifact_abilities(player_type *player_ptr, object_ty
     case ART_MURAMASA:
         if (player_ptr->pclass != CLASS_SAMURAI) {
             add_flag(o_ptr->art_flags, TR_NO_MAGIC);
-            o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
+            o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
         }
         return;
     case ART_ROBINTON:
@@ -179,22 +179,22 @@ static void invest_curse_to_fixed_artifact(player_type *player_ptr, artifact_typ
         set_bits(o_ptr->ident, IDENT_BROKEN);
 
     if (a_ptr->gen_flags.has(TRG::CURSED))
-        set_bits(o_ptr->curse_flags, TRC_CURSED);
+        o_ptr->curse_flags.set(TRC::CURSED);
 
     if (a_ptr->gen_flags.has(TRG::HEAVY_CURSE))
-        set_bits(o_ptr->curse_flags, TRC_HEAVY_CURSE);
+        o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
 
     if (a_ptr->gen_flags.has(TRG::PERMA_CURSE))
-        set_bits(o_ptr->curse_flags, TRC_PERMA_CURSE);
+        o_ptr->curse_flags.set(TRC::PERMA_CURSE);
 
     if (a_ptr->gen_flags.has(TRG::RANDOM_CURSE0))
-        set_bits(o_ptr->curse_flags, get_curse(player_ptr, 0, o_ptr));
+        o_ptr->curse_flags.set(get_curse(player_ptr, 0, o_ptr));
 
     if (a_ptr->gen_flags.has(TRG::RANDOM_CURSE1))
-        set_bits(o_ptr->curse_flags, get_curse(player_ptr, 1, o_ptr));
+        o_ptr->curse_flags.set(get_curse(player_ptr, 1, o_ptr));
 
     if (a_ptr->gen_flags.has(TRG::RANDOM_CURSE2))
-        set_bits(o_ptr->curse_flags, get_curse(player_ptr, 2, o_ptr));
+        o_ptr->curse_flags.set(get_curse(player_ptr, 2, o_ptr));
 }
 
 /*!

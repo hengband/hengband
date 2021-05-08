@@ -275,7 +275,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         if (creature_ptr->special_defense & (KAMAE_MASK | KATA_MASK)) {
             regen_amount /= 2;
         }
-        if (creature_ptr->cursed & TRC_SLOW_REGEN) {
+        if (creature_ptr->cursed.has(TRC::SLOW_REGEN)) {
             regen_amount /= 5;
         }
     }

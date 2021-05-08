@@ -213,11 +213,11 @@ static void analyze_misc_magic(player_type *player_ptr, object_type *o_ptr, conc
     if (has_flag(flgs, TR_TY_CURSE))
         *misc_list++ = _("太古の怨念", "Ancient Curse");
 
-    if (o_ptr->curse_flags & TRC_PERMA_CURSE)
+    if (o_ptr->curse_flags.has(TRC::PERMA_CURSE))
         *misc_list++ = _("永遠の呪い", "Permanently Cursed");
-    else if (o_ptr->curse_flags & TRC_HEAVY_CURSE)
+    else if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE))
         *misc_list++ = _("強力な呪い", "Heavily Cursed");
-    else if (o_ptr->curse_flags & TRC_CURSED)
+    else if (o_ptr->curse_flags.has(TRC::CURSED))
         *misc_list++ = _("呪い", "Cursed");
 
     if (has_flag(flgs, TR_ADD_L_CURSE))

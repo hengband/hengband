@@ -120,7 +120,7 @@ static void process_cursed_equipment_characteristics(player_type *creature_ptr, 
             }
         }
 
-        if (any_bits(o_ptr->curse_flags, TRC_PERMA_CURSE)) {
+        if (o_ptr->curse_flags.has(TRC::PERMA_CURSE)) {
             if (is_known) {
                 char_stat.syms.emplace_back("*");
                 char_stat.has_imm = true;
@@ -128,7 +128,7 @@ static void process_cursed_equipment_characteristics(player_type *creature_ptr, 
             }
         }
 
-        if (any_bits(o_ptr->curse_flags, TRC_CURSED | TRC_HEAVY_CURSE | TRC_PERMA_CURSE)) {
+        if (o_ptr->curse_flags.has_any_of({ TRC::CURSED, TRC::HEAVY_CURSE, TRC::PERMA_CURSE })) {
             if (is_sensed) {
                 char_stat.syms.emplace_back("+");
                 char_stat.has_res = true;

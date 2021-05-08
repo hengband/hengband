@@ -76,7 +76,7 @@ void calc_android_exp(player_type *creature_ptr)
         q_ptr->wipe();
         q_ptr->copy_from(o_ptr);
         q_ptr->discount = 0;
-        q_ptr->curse_flags = 0L;
+        q_ptr->curse_flags.clear();
 
         if (object_is_fixed_artifact(o_ptr)) {
             level = (level + MAX(a_info[o_ptr->name1].level - 8, 5)) / 2;

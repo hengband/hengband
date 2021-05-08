@@ -255,7 +255,7 @@ bool curse_armor(player_type *owner_ptr)
         o_ptr->art_flags[i] = 0;
 
     /* Curse it */
-    o_ptr->curse_flags = TRC_CURSED;
+    o_ptr->curse_flags.set(TRC::CURSED);
 
     /* Break it */
     o_ptr->ident |= (IDENT_BROKEN);
@@ -310,7 +310,7 @@ bool curse_weapon_object(player_type *owner_ptr, bool force, object_type *o_ptr)
         o_ptr->art_flags[i] = 0;
 
     /* Curse it */
-    o_ptr->curse_flags = TRC_CURSED;
+    o_ptr->curse_flags.set(TRC::CURSED);
 
     /* Break it */
     o_ptr->ident |= (IDENT_BROKEN);
@@ -409,14 +409,14 @@ bool perilous_secrets(player_type *user_ptr)
 static void break_curse(object_type *o_ptr)
 {
     BIT_FLAGS is_curse_broken
-        = object_is_cursed(o_ptr) && !(o_ptr->curse_flags & TRC_PERMA_CURSE) && !(o_ptr->curse_flags & TRC_HEAVY_CURSE) && (randint0(100) < 25);
+        = object_is_cursed(o_ptr) && o_ptr->curse_flags.has_not(TRC::PERMA_CURSE) && o_ptr->curse_flags.has_not(TRC::HEAVY_CURSE) && (randint0(100) < 25);
     if (!is_curse_broken) {
         return;
     }
 
     msg_print(_("かけられていた呪いが打ち破られた！", "The curse is broken!"));
 
-    o_ptr->curse_flags = 0L;
+    o_ptr->curse_flags.clear();
     o_ptr->ident |= (IDENT_SENSE);
     o_ptr->feeling = FEEL_NONE;
 }

@@ -43,8 +43,8 @@ bool bless_weapon(player_type *caster_ptr)
     object_flags(caster_ptr, o_ptr, flgs);
 
     if (object_is_cursed(o_ptr)) {
-        if (((o_ptr->curse_flags & TRC_HEAVY_CURSE) && (randint1(100) < 33)) || has_flag(flgs, TR_ADD_L_CURSE) || has_flag(flgs, TR_ADD_H_CURSE)
-            || (o_ptr->curse_flags & TRC_PERMA_CURSE)) {
+        if ((o_ptr->curse_flags.has(TRC::HEAVY_CURSE) && (randint1(100) < 33)) || has_flag(flgs, TR_ADD_L_CURSE) || has_flag(flgs, TR_ADD_H_CURSE)
+            || o_ptr->curse_flags.has(TRC::PERMA_CURSE)) {
 #ifdef JP
             msg_format("%sを覆う黒いオーラは祝福を跳ね返した！", o_name);
 #else
@@ -59,7 +59,7 @@ bool bless_weapon(player_type *caster_ptr)
 #else
         msg_format("A malignant aura leaves %s %s.", ((item >= 0) ? "your" : "the"), o_name);
 #endif
-        o_ptr->curse_flags = 0L;
+        o_ptr->curse_flags.clear();
         set_bits(o_ptr->ident, IDENT_SENSE);
         set_bits(o_ptr->feeling, FEEL_NONE);
         set_bits(caster_ptr->update, PU_BONUS);
