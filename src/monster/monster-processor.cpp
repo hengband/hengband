@@ -567,7 +567,7 @@ void sweep_monster_process(player_type *target_ptr)
         process_monster(target_ptr, i);
         reset_target(m_ptr);
         if (target_ptr->no_flowed && one_in_(3))
-            m_ptr->mflag2.has(MFLAG2::NOFLOW);
+            m_ptr->mflag2.set(MFLAG2::NOFLOW);
 
         if (!target_ptr->playing || target_ptr->is_dead || target_ptr->leaving)
             return;
