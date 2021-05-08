@@ -95,3 +95,17 @@ void add_autopick_list(autopick_type *entry)
     autopick_list[max_autopick] = *entry;
     max_autopick++;
 }
+
+/*!
+ * @brief 行数をカウントする
+ * @param tb text_body_type
+ * @return 行数
+ */
+int count_line(text_body_type *tb)
+{
+    int num_lines;
+    for (num_lines = 0; tb->lines_list[num_lines]; num_lines++)
+        ;
+
+    return num_lines;
+}

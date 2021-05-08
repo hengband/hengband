@@ -23,6 +23,19 @@ void check_expression_line(text_body_type *tb, int y)
     }
 }
 
+/*!
+ * @brief 行を追加可能かチェックする
+ * @param tb text_body_type
+ * @param add_num 追加する行数
+ * @retval true 追加可能
+ * @retval false 最大行数を超えるため追加不可
+ */
+bool can_insert_line(text_body_type *tb, int add_num)
+{
+    const int count = count_line(tb);
+    return !is_greater_autopick_max_line(count + add_num);
+}
+
 /*
  * Insert return code and split the line
  */
@@ -31,11 +44,10 @@ bool insert_return_code(text_body_type *tb)
     char buf[MAX_LINELEN];
     int i, j, num_lines;
 
-    for (num_lines = 0; tb->lines_list[num_lines]; num_lines++)
-        ;
+    num_lines = count_line(tb);
+    if (is_greater_autopick_max_line(num_lines))
+        return false;
 
-    if (num_lines >= MAX_LINES - 2)
-        return FALSE;
     num_lines--;
 
     for (; tb->cy < num_lines; num_lines--) {
@@ -65,6 +77,8 @@ bool insert_return_code(text_body_type *tb)
  */
 bool insert_macro_line(text_body_type *tb)
 {
+    if (!can_insert_line(tb, 2))
+        return false;
     int i, n = 0;
     flush();
     inkey_base = TRUE;
@@ -109,6 +123,8 @@ bool insert_macro_line(text_body_type *tb)
  */
 bool insert_keymap_line(text_body_type *tb)
 {
+    if (!can_insert_line(tb, 2))
+        return false;
     BIT_FLAGS mode;
     if (rogue_like_commands) {
         mode = KEYMAP_MODE_ROGUE;

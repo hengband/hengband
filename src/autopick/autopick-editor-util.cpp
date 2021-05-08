@@ -188,12 +188,8 @@ void add_keyword(text_body_type *tb, BIT_FLAGS flg)
  */
 bool add_empty_line(text_body_type *tb)
 {
-    int num_lines;
-    for (num_lines = 0; tb->lines_list[num_lines]; num_lines++)
-        ;
+    int num_lines = count_line(tb);
 
-    if (num_lines >= MAX_LINES - 2)
-        return FALSE;
     if (!tb->lines_list[num_lines - 1][0])
         return FALSE;
 

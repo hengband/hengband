@@ -73,7 +73,7 @@ static concptr *read_text_lines(concptr filename)
     C_MAKE(lines_list, MAX_LINES, concptr);
     while (angband_fgets(fff, buf, sizeof(buf)) == 0) {
         lines_list[lines++] = string_make(buf);
-        if (lines >= MAX_LINES - 1)
+        if (is_greater_autopick_max_line(lines))
             break;
     }
 
