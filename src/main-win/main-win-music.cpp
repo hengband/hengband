@@ -142,7 +142,7 @@ void load_music_prefs()
 {
     CfgReader reader(ANGBAND_DIR_XTRA_MUSIC, { "music_debug.cfg", "music.cfg" });
 
-    GetPrivateProfileString("Device", "type", "MPEGVideo", mci_device_type, _countof(mci_device_type), reader.get_cfg_path());
+    GetPrivateProfileStringA("Device", "type", "MPEGVideo", mci_device_type, _countof(mci_device_type), reader.get_cfg_path());
 
     // clang-format off
     music_cfg_data = reader.read_sections({
@@ -170,8 +170,8 @@ void load_music_prefs()
  */
 errr stop_music(void)
 {
-    mciSendCommand(mci_open_parms.wDeviceID, MCI_STOP, MCI_WAIT, 0);
-    mciSendCommand(mci_open_parms.wDeviceID, MCI_CLOSE, MCI_WAIT, 0);
+    mciSendCommandA(mci_open_parms.wDeviceID, MCI_STOP, MCI_WAIT, 0);
+    mciSendCommandA(mci_open_parms.wDeviceID, MCI_CLOSE, MCI_WAIT, 0);
     current_music_type = TERM_XTRA_MUSIC_MUTE;
     current_music_id = 0;
     strcpy(current_music_path, "\0");
@@ -206,9 +206,9 @@ errr play_music(int type, int val)
 
     mci_open_parms.lpstrDeviceType = mci_device_type;
     mci_open_parms.lpstrElementName = buf;
-    mciSendCommand(mci_open_parms.wDeviceID, MCI_STOP, MCI_WAIT, 0);
-    mciSendCommand(mci_open_parms.wDeviceID, MCI_CLOSE, MCI_WAIT, 0);
-    mciSendCommand(mci_open_parms.wDeviceID, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT | MCI_NOTIFY, (DWORD)&mci_open_parms);
+    mciSendCommandA(mci_open_parms.wDeviceID, MCI_STOP, MCI_WAIT, 0);
+    mciSendCommandA(mci_open_parms.wDeviceID, MCI_CLOSE, MCI_WAIT, 0);
+    mciSendCommandA(mci_open_parms.wDeviceID, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT | MCI_NOTIFY, (DWORD)&mci_open_parms);
     // Send MCI_PLAY in the notification event once MCI_OPEN is completed
     return 0;
 }
@@ -218,7 +218,7 @@ errr play_music(int type, int val)
  */
 void pause_music(void)
 {
-    mciSendCommand(mci_open_parms.wDeviceID, MCI_PAUSE, MCI_WAIT, 0);
+    mciSendCommandA(mci_open_parms.wDeviceID, MCI_PAUSE, MCI_WAIT, 0);
 }
 
 /*
@@ -226,7 +226,7 @@ void pause_music(void)
  */
 void resume_music(void)
 {
-    mciSendCommand(mci_open_parms.wDeviceID, MCI_RESUME, MCI_WAIT, 0);
+    mciSendCommandA(mci_open_parms.wDeviceID, MCI_RESUME, MCI_WAIT, 0);
 }
 
 /*
@@ -253,8 +253,8 @@ void on_mci_notify(WPARAM wFlags, LONG lDevID)
 {
     if (wFlags == MCI_NOTIFY_SUCCESSFUL) {
         // play a music (repeat)
-        mciSendCommand(lDevID, MCI_SEEK, MCI_SEEK_TO_START | MCI_WAIT, 0);
-        mciSendCommand(lDevID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mci_play_parms);
+        mciSendCommandA(lDevID, MCI_SEEK, MCI_SEEK_TO_START | MCI_WAIT, 0);
+        mciSendCommandA(lDevID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mci_play_parms);
     }
 }
 

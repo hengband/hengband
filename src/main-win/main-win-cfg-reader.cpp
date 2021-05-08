@@ -106,7 +106,7 @@ CfgData *CfgReader::read_sections(std::initializer_list<cfg_section> sections)
         int index = 0;
         concptr read_key;
         while ((read_key = section.key_at(index, key_buf)) != NULL) {
-            GetPrivateProfileString(section.section_name, read_key, "", buf, MAIN_WIN_MAX_PATH, this->cfg_path.c_str());
+            GetPrivateProfileStringA(section.section_name, read_key, "", buf, MAIN_WIN_MAX_PATH, this->cfg_path.c_str());
             if (*buf != '\0') {
                 cfg_values *filenames = new cfg_values();
                 const int num = tokenize_whitespace(buf, SAMPLE_MAX, tokens);
