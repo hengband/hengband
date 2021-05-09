@@ -196,16 +196,16 @@ void apply_magic_to_object(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
             o_ptr->ident |= (IDENT_BROKEN);
 
         if (k_ptr->gen_flags.has(TRG::CURSED))
-            o_ptr->curse_flags |= (TRC_CURSED);
+            o_ptr->curse_flags.set(TRC::CURSED);
         if (k_ptr->gen_flags.has(TRG::HEAVY_CURSE))
-            o_ptr->curse_flags |= TRC_HEAVY_CURSE;
+            o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
         if (k_ptr->gen_flags.has(TRG::PERMA_CURSE))
-            o_ptr->curse_flags |= TRC_PERMA_CURSE;
+            o_ptr->curse_flags.set(TRC::PERMA_CURSE);
         if (k_ptr->gen_flags.has(TRG::RANDOM_CURSE0))
-            o_ptr->curse_flags |= get_curse(owner_ptr, 0, o_ptr);
+            o_ptr->curse_flags.set(get_curse(owner_ptr, 0, o_ptr));
         if (k_ptr->gen_flags.has(TRG::RANDOM_CURSE1))
-            o_ptr->curse_flags |= get_curse(owner_ptr, 1, o_ptr);
+            o_ptr->curse_flags.set(get_curse(owner_ptr, 1, o_ptr));
         if (k_ptr->gen_flags.has(TRG::RANDOM_CURSE2))
-            o_ptr->curse_flags |= get_curse(owner_ptr, 2, o_ptr);
+            o_ptr->curse_flags.set(get_curse(owner_ptr, 2, o_ptr));
     }
 }

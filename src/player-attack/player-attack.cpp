@@ -113,18 +113,18 @@ static void attack_classify(player_type *attacker_ptr, player_attack_type *pa_pt
 static void get_bare_knuckle_exp(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {
     monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
-    if ((r_ptr->level + 10) <= attacker_ptr->lev || (attacker_ptr->skill_exp[GINOU_SUDE] >= s_info[attacker_ptr->pclass].s_max[GINOU_SUDE]))
+    if ((r_ptr->level + 10) <= attacker_ptr->lev || (attacker_ptr->skill_exp[SKILL_MARTIAL_ARTS] >= s_info[attacker_ptr->pclass].s_max[SKILL_MARTIAL_ARTS]))
         return;
 
-    if (attacker_ptr->skill_exp[GINOU_SUDE] < WEAPON_EXP_BEGINNER)
-        attacker_ptr->skill_exp[GINOU_SUDE] += 40;
-    else if ((attacker_ptr->skill_exp[GINOU_SUDE] < WEAPON_EXP_SKILLED))
-        attacker_ptr->skill_exp[GINOU_SUDE] += 5;
-    else if ((attacker_ptr->skill_exp[GINOU_SUDE] < WEAPON_EXP_EXPERT) && (attacker_ptr->lev > 19))
-        attacker_ptr->skill_exp[GINOU_SUDE] += 1;
+    if (attacker_ptr->skill_exp[SKILL_MARTIAL_ARTS] < WEAPON_EXP_BEGINNER)
+        attacker_ptr->skill_exp[SKILL_MARTIAL_ARTS] += 40;
+    else if ((attacker_ptr->skill_exp[SKILL_MARTIAL_ARTS] < WEAPON_EXP_SKILLED))
+        attacker_ptr->skill_exp[SKILL_MARTIAL_ARTS] += 5;
+    else if ((attacker_ptr->skill_exp[SKILL_MARTIAL_ARTS] < WEAPON_EXP_EXPERT) && (attacker_ptr->lev > 19))
+        attacker_ptr->skill_exp[SKILL_MARTIAL_ARTS] += 1;
     else if ((attacker_ptr->lev > 34))
         if (one_in_(3))
-            attacker_ptr->skill_exp[GINOU_SUDE] += 1;
+            attacker_ptr->skill_exp[SKILL_MARTIAL_ARTS] += 1;
 
     attacker_ptr->update |= (PU_BONUS);
 }

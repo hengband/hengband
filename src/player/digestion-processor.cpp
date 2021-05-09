@@ -33,7 +33,7 @@ void starve_player(player_type *creature_ptr)
             digestion += 20;
         if (creature_ptr->special_defense & (KAMAE_MASK | KATA_MASK))
             digestion += 20;
-        if (creature_ptr->cursed & TRC_FAST_DIGEST)
+        if (creature_ptr->cursed.has(TRC::FAST_DIGEST))
             digestion += 30;
 
         if (creature_ptr->slow_digest)

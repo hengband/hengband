@@ -30,6 +30,7 @@ enum savedata_item_flag_type {
 	SAVE_ITEM_INSCRIPTION = 0x04000000,
 	SAVE_ITEM_ART_NAME = 0x08000000,
 	SAVE_ITEM_ART_FLAGS4 = 0x10000000,
+	SAVE_ITEM_STACK_IDX = 0x20000000,
 };
 
 enum savedata_monster_flag_type {

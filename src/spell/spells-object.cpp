@@ -29,7 +29,6 @@
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "object/object-generator.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
@@ -115,7 +114,7 @@ void amusement(player_type *creature_ptr, POSITION y1, POSITION x1, int num, boo
                 break;
         }
         i_ptr = &object_type_body;
-        object_wipe(i_ptr);
+        i_ptr->wipe();
         k_idx = lookup_kind(amuse_info[i].tval, amuse_info[i].sval);
 
         /* Paranoia - reroll if nothing */
@@ -144,7 +143,7 @@ void amusement(player_type *creature_ptr, POSITION y1, POSITION x1, int num, boo
         }
 
         /* Make an object (if possible) */
-        object_prep(creature_ptr, i_ptr, k_idx);
+        i_ptr->prep(creature_ptr, k_idx);
         if (a_idx)
             i_ptr->name1 = a_idx;
         apply_magic_to_object(creature_ptr, i_ptr, 1, AM_NO_FIXED_ART);
@@ -194,7 +193,7 @@ void acquirement(player_type *caster_ptr, POSITION y1, POSITION x1, int num, boo
     /* Acquirement */
     while (num--) {
         i_ptr = &object_type_body;
-        object_wipe(i_ptr);
+        i_ptr->wipe();
 
         /* Make a good (or great) object (if possible) */
         if (!make_object(caster_ptr, i_ptr, mode))
@@ -256,7 +255,7 @@ bool curse_armor(player_type *owner_ptr)
         o_ptr->art_flags[i] = 0;
 
     /* Curse it */
-    o_ptr->curse_flags = TRC_CURSED;
+    o_ptr->curse_flags.set(TRC::CURSED);
 
     /* Break it */
     o_ptr->ident |= (IDENT_BROKEN);
@@ -311,7 +310,7 @@ bool curse_weapon_object(player_type *owner_ptr, bool force, object_type *o_ptr)
         o_ptr->art_flags[i] = 0;
 
     /* Curse it */
-    o_ptr->curse_flags = TRC_CURSED;
+    o_ptr->curse_flags.set(TRC::CURSED);
 
     /* Break it */
     o_ptr->ident |= (IDENT_BROKEN);
@@ -410,14 +409,14 @@ bool perilous_secrets(player_type *user_ptr)
 static void break_curse(object_type *o_ptr)
 {
     BIT_FLAGS is_curse_broken
-        = object_is_cursed(o_ptr) && !(o_ptr->curse_flags & TRC_PERMA_CURSE) && !(o_ptr->curse_flags & TRC_HEAVY_CURSE) && (randint0(100) < 25);
+        = object_is_cursed(o_ptr) && o_ptr->curse_flags.has_not(TRC::PERMA_CURSE) && o_ptr->curse_flags.has_not(TRC::HEAVY_CURSE) && (randint0(100) < 25);
     if (!is_curse_broken) {
         return;
     }
 
     msg_print(_("かけられていた呪いが打ち破られた！", "The curse is broken!"));
 
-    o_ptr->curse_flags = 0L;
+    o_ptr->curse_flags.clear();
     o_ptr->ident |= (IDENT_SENSE);
     o_ptr->feeling = FEEL_NONE;
 }

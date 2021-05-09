@@ -90,9 +90,9 @@ void set_zangband_realm(player_type* creature_ptr)
 void set_zangband_skill(player_type *creature_ptr)
 {
     if (creature_ptr->pclass != CLASS_BEASTMASTER)
-        creature_ptr->skill_exp[GINOU_RIDING] /= 2;
+        creature_ptr->skill_exp[SKILL_RIDING] /= 2;
 
-    creature_ptr->skill_exp[GINOU_RIDING] = MIN(creature_ptr->skill_exp[GINOU_RIDING], s_info[creature_ptr->pclass].s_max[GINOU_RIDING]);
+    creature_ptr->skill_exp[SKILL_RIDING] = MIN(creature_ptr->skill_exp[SKILL_RIDING], s_info[creature_ptr->pclass].s_max[SKILL_RIDING]);
 }
 
 void set_zangband_spells(player_type* creature_ptr)

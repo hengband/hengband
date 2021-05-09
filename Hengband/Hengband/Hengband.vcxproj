@@ -272,6 +272,7 @@
     <ClCompile Include="..\..\src\main-win\graphics-win.cpp" />
     <ClCompile Include="..\..\src\object-enchant\apply-magic-amulet.cpp" />
     <ClCompile Include="..\..\src\object-enchant\apply-magic-ring.cpp" />
+    <ClCompile Include="..\..\src\object\object-index-list.cpp" />
     <ClCompile Include="..\..\src\player-info\alignment.cpp" />
     <ClCompile Include="..\..\src\player-info\equipment-info.cpp" />
     <ClCompile Include="..\..\src\player-status\player-energy.cpp" />
@@ -542,6 +543,7 @@
     <ClCompile Include="..\..\src\store\sell-order.cpp" />
     <ClCompile Include="..\..\src\store\service-checker.cpp" />
     <ClCompile Include="..\..\src\system\angband-version.cpp" />
+    <ClCompile Include="..\..\src\system\object-type-definition.cpp" />
     <ClCompile Include="..\..\src\system\player-type-definition.cpp" />
     <ClCompile Include="..\..\src\target\grid-selector.cpp" />
     <ClCompile Include="..\..\src\target\projection-path-calculator.cpp" />
@@ -642,7 +644,6 @@
     <ClCompile Include="..\..\src\object\object-stack.cpp" />
     <ClCompile Include="..\..\src\object\object-value-calc.cpp" />
     <ClCompile Include="..\..\src\perception\object-perception.cpp" />
-    <ClCompile Include="..\..\src\object\object-generator.cpp" />
     <ClCompile Include="..\..\src\object\object-value.cpp" />
     <ClCompile Include="..\..\src\pet\pet-fall-off.cpp" />
     <ClCompile Include="..\..\src\mspell\mspell-floor.cpp" />
@@ -943,10 +944,12 @@
     <ClInclude Include="..\..\src\cmd-action\cmd-tunnel.h" />
     <ClInclude Include="..\..\src\action\movement-execution.h" />
     <ClInclude Include="..\..\src\core\score-util.h" />
+    <ClInclude Include="..\..\src\dungeon\dungeon-flag-mask.h" />
     <ClInclude Include="..\..\src\main-win\commandline-win.h" />
     <ClInclude Include="..\..\src\main-win\graphics-win.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic-amulet.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic-ring.h" />
+    <ClInclude Include="..\..\src\object\object-index-list.h" />
     <ClInclude Include="..\..\src\player-info\alignment.h" />
     <ClInclude Include="..\..\src\player-info\equipment-info.h" />
     <ClInclude Include="..\..\src\player-status\player-energy.h" />
@@ -1366,7 +1369,6 @@
     <ClInclude Include="..\..\src\object\object-stack.h" />
     <ClInclude Include="..\..\src\object\object-value-calc.h" />
     <ClInclude Include="..\..\src\perception\object-perception.h" />
-    <ClInclude Include="..\..\src\object\object-generator.h" />
     <ClInclude Include="..\..\src\object\object-value.h" />
     <ClInclude Include="..\..\src\pet\pet-fall-off.h" />
     <ClInclude Include="..\..\src\pet\pet-util.h" />

@@ -17,7 +17,6 @@
 #include "object-hook/hook-expendable.h"
 #include "object-hook/hook-magic.h"
 #include "object/item-use-flags.h"
-#include "object/object-generator.h"
 #include "object/object-stack.h"
 #include "object/object-value.h"
 #include "player-info/avatar.h"
@@ -176,7 +175,7 @@ static void process_destroy_magic_book(player_type *creature_ptr, destroy_type *
 
 static void exe_destroy_item(player_type *creature_ptr, destroy_type *destroy_ptr)
 {
-    object_copy(destroy_ptr->q_ptr, destroy_ptr->o_ptr);
+    destroy_ptr->q_ptr->copy_from(destroy_ptr->o_ptr);
     msg_format(_("%sを壊した。", "You destroy %s."), destroy_ptr->o_name);
     sound(SOUND_DESTITEM);
     reduce_charges(destroy_ptr->o_ptr, destroy_ptr->amt);

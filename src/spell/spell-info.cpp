@@ -149,7 +149,7 @@ PERCENTAGE spell_chance(player_type *caster_ptr, SPELL_IDX spell, REALM_IDX use_
     chance -= 3 * (caster_ptr->lev - s_ptr->slevel);
     chance -= 3 * (adj_mag_stat[caster_ptr->stat_index[mp_ptr->spell_stat]] - 1);
     if (caster_ptr->riding)
-        chance += (MAX(r_info[caster_ptr->current_floor_ptr->m_list[caster_ptr->riding].r_idx].level - caster_ptr->skill_exp[GINOU_RIDING] / 100 - 10, 0));
+        chance += (MAX(r_info[caster_ptr->current_floor_ptr->m_list[caster_ptr->riding].r_idx].level - caster_ptr->skill_exp[SKILL_RIDING] / 100 - 10, 0));
 
     MANA_POINT need_mana = mod_need_mana(caster_ptr, s_ptr->smana, spell, use_realm);
     if (need_mana > caster_ptr->csp) {

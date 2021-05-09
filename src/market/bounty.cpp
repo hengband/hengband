@@ -23,7 +23,6 @@
 #include "monster/monster-util.h"
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
-#include "object/object-generator.h"
 #include "object/object-info.h"
 #include "object/object-kind-hook.h"
 #include "perception/object-perception.h"
@@ -164,7 +163,7 @@ bool exchange_cash(player_type *player_ptr)
 
             msg_format(_("これで合計 %d ポイント獲得しました。", "You earned %d point%s total."), num, (num > 1 ? "s" : ""));
 
-            object_prep(player_ptr, &forge, lookup_kind(prize_list[num - 1].tval, prize_list[num - 1].sval));
+            (&forge)->prep(player_ptr, lookup_kind(prize_list[num - 1].tval, prize_list[num - 1].sval));
             apply_magic_to_object(player_ptr, &forge, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART);
 
             object_aware(player_ptr, &forge);

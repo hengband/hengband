@@ -595,20 +595,22 @@ MonsterSpellResult spell_RF6_INVULNER(player_type *target_ptr, MONSTER_IDX m_idx
         _("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."), _("%sは無傷の球の呪文を唱えた。", "%^s casts a Globe of Invulnerability."),
         _("%sは無傷の球の呪文を唱えた。", "%^s casts a Globe of Invulnerability."), !seen, TARGET_TYPE);
 
-    MONRACE_IDX r_idx = m_ptr->r_idx;
-    GAME_TEXT m_name[MAX_NLEN];
-    monster_desc(target_ptr, m_name, m_ptr, MD_NONE);
-    switch (r_idx) {
-    case MON_MARIO:
-    case MON_LUIGI:
-        msg_format(_("%sはスターを取った！", "%^s got a star!"), m_name);
-        break;
-    case MON_DIAVOLO:
-        msg_print(_("『読める』………動きの『軌跡』が読める……", "'Read'......... I can read the 'trajectory' of movement..."));
-        break;
-    default:
-        msg_format(_("%sの身体がまばゆく輝き始めた！", "The body of %^s began to shine dazzlingly!"), m_name);
-        break;
+    if (m_ptr->ml) {
+        MONRACE_IDX r_idx = m_ptr->r_idx;
+        GAME_TEXT m_name[MAX_NLEN];
+        monster_desc(target_ptr, m_name, m_ptr, MD_NONE);
+        switch (r_idx) {
+        case MON_MARIO:
+        case MON_LUIGI:
+            msg_format(_("%sはスターを取った！", "%^s got a star!"), m_name);
+            break;
+        case MON_DIAVOLO:
+            msg_print(_("『読める』………動きの『軌跡』が読める……", "'Read'......... I can read the 'trajectory' of movement..."));
+            break;
+        default:
+            msg_format(_("%sの身体がまばゆく輝き始めた！", "The body of %^s began to shine dazzlingly!"), m_name);
+            break;
+        }
     }
 
     if (!monster_invulner_remaining(m_ptr))

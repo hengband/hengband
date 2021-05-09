@@ -16,7 +16,6 @@
 #include "main/sound-of-music.h"
 #include "mutation/mutation-investor-remover.h"
 #include "object/object-broken.h"
-#include "object/object-generator.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
@@ -139,7 +138,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 
     o_ptr = ref_item(creature_ptr, item);
     q_ptr = &forge;
-    object_copy(q_ptr, o_ptr);
+    q_ptr->copy_from(o_ptr);
     q_ptr->number = 1;
     vary_item(creature_ptr, item, -1);
     sound(SOUND_QUAFF);

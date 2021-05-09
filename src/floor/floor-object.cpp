@@ -25,7 +25,6 @@
 #include "object-enchant/special-object-flags.h"
 #include "object-hook/hook-checker.h"
 #include "object-hook/hook-enchant.h"
-#include "object/object-generator.h"
 #include "object/object-info.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
@@ -118,7 +117,7 @@ bool make_object(player_type *owner_ptr, object_type *j_ptr, BIT_FLAGS mode)
         if (!k_idx)
             return FALSE;
 
-        object_prep(owner_ptr, j_ptr, k_idx);
+        j_ptr->prep(owner_ptr, k_idx);
     }
 
     apply_magic_to_object(owner_ptr, j_ptr, floor_ptr->object_level, mode);
@@ -163,7 +162,7 @@ bool make_gold(player_type *player_ptr, object_type *j_ptr)
         i = coin_type;
     if (i >= MAX_GOLD)
         i = MAX_GOLD - 1;
-    object_prep(player_ptr, j_ptr, OBJ_GOLD_LIST + i);
+    j_ptr->prep(player_ptr, OBJ_GOLD_LIST + i);
 
     s32b base = k_info[OBJ_GOLD_LIST + i].cost;
     j_ptr->pval = (base + (8L * randint1(base)) + randint1(8));
@@ -189,7 +188,7 @@ void delete_all_items_from_floor(player_type *player_ptr, POSITION y, POSITION x
     for (const auto this_o_idx : g_ptr->o_idx_list) {
         object_type *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
-        object_wipe(o_ptr);
+        o_ptr->wipe();
         floor_ptr->o_cnt--;
     }
 
@@ -261,7 +260,7 @@ void delete_object_idx(player_type *player_ptr, OBJECT_IDX o_idx)
         lite_spot(player_ptr, y, x);
     }
 
-    object_wipe(j_ptr);
+    j_ptr->wipe();
     floor_ptr->o_cnt--;
 
     set_bits(player_ptr->window_flags, PW_FLOOR_ITEM_LIST);
@@ -282,9 +281,9 @@ void excise_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx)
  * @brief 指定したOBJECT_IDXを含むリスト(モンスター所持リスト or 床上スタックリスト)への参照を得る
  * @param floo_ptr 現在フロアへの参照ポインタ
  * @param o_idx 参照を得るリストに含まれるOBJECT_IDX
- * @return o_idxを含む std::list<OBJECT_IDX> への参照
+ * @return o_idxを含む ObjectIndexList への参照
  */
-std::list<OBJECT_IDX> &get_o_idx_list_contains(floor_type *floor_ptr, OBJECT_IDX o_idx)
+ObjectIndexList &get_o_idx_list_contains(floor_type *floor_ptr, OBJECT_IDX o_idx)
 {
     object_type *o_ptr = &floor_ptr->o_list[o_idx];
 
@@ -507,12 +506,12 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
     }
 
     if (!done) {
-        object_copy(&floor_ptr->o_list[o_idx], j_ptr);
+        (&floor_ptr->o_list[o_idx])->copy_from(j_ptr);
         j_ptr = &floor_ptr->o_list[o_idx];
         j_ptr->iy = by;
         j_ptr->ix = bx;
         j_ptr->held_m_idx = 0;
-        g_ptr->o_idx_list.push_front(o_idx);
+        g_ptr->o_idx_list.add(floor_ptr, o_idx);
         done = TRUE;
     }
 

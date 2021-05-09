@@ -34,18 +34,37 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 
-#define TRC_P_FLAG_MASK                                                                                                                                        \
-    (TRC_TELEPORT_SELF | TRC_CHAINSWORD | TRC_TY_CURSE | TRC_DRAIN_EXP | TRC_ADD_L_CURSE | TRC_ADD_H_CURSE | TRC_CALL_ANIMAL | TRC_CALL_DEMON                  \
-        | TRC_CALL_DRAGON | TRC_COWARDICE | TRC_TELEPORT | TRC_DRAIN_HP | TRC_DRAIN_MANA | TRC_CALL_UNDEAD | TRC_BERS_RAGE)
-
-static bool is_specific_curse(BIT_FLAGS flag)
-{
-    return (flag == TRC_ADD_L_CURSE) || (flag == TRC_ADD_H_CURSE) || (flag == TRC_DRAIN_HP) || (flag == TRC_DRAIN_MANA) || (flag == TRC_CALL_ANIMAL)
-        || (flag == TRC_CALL_DEMON) || (flag == TRC_CALL_DRAGON) || (flag == TRC_CALL_UNDEAD) || (flag == TRC_COWARDICE) || (flag == TRC_LOW_MELEE)
-        || (flag == TRC_LOW_AC) || (flag == TRC_HARD_SPELL) || (flag == TRC_FAST_DIGEST) || (flag == TRC_SLOW_REGEN || flag == TRC_BERS_RAGE);
+namespace {
+const EnumClassFlagGroup<TRC> TRC_P_FLAG_MASK({ TRC::TY_CURSE, TRC::DRAIN_EXP, TRC::ADD_L_CURSE, TRC::ADD_H_CURSE, TRC::CALL_ANIMAL, TRC::CALL_DEMON, TRC::CALL_DRAGON,
+    TRC::COWARDICE, TRC::TELEPORT, TRC::DRAIN_HP, TRC::DRAIN_MANA, TRC::CALL_UNDEAD, TRC::BERS_RAGE });
+const EnumClassFlagGroup<TRCS> TRCS_P_FLAG_MASK({ TRCS::TELEPORT_SELF, TRCS::CHAINSWORD });
 }
 
-static void choise_cursed_item(player_type *creature_ptr, BIT_FLAGS flag, object_type *o_ptr, int *choices, int *number, int item_num)
+static bool is_specific_curse(TRC flag)
+{
+    switch (flag) {
+    case TRC::ADD_L_CURSE:
+    case TRC::ADD_H_CURSE:
+    case TRC::DRAIN_HP:
+    case TRC::DRAIN_MANA:
+    case TRC::CALL_ANIMAL:
+    case TRC::CALL_DEMON:
+    case TRC::CALL_DRAGON:
+    case TRC::CALL_UNDEAD:
+    case TRC::COWARDICE:
+    case TRC::LOW_MELEE:
+    case TRC::LOW_AC:
+    case TRC::HARD_SPELL:
+    case TRC::FAST_DIGEST:
+    case TRC::SLOW_REGEN:
+    case TRC::BERS_RAGE:
+        return true;
+    default:
+        return false;
+    }
+}
+
+static void choise_cursed_item(player_type *creature_ptr, TRC flag, object_type *o_ptr, int *choices, int *number, int item_num)
 {
     if (!is_specific_curse(flag))
         return;
@@ -54,49 +73,49 @@ static void choise_cursed_item(player_type *creature_ptr, BIT_FLAGS flag, object
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     object_flags(creature_ptr, o_ptr, flgs);
     switch (flag) {
-    case TRC_ADD_L_CURSE:
+    case TRC::ADD_L_CURSE:
         cf = TR_ADD_L_CURSE;
         break;
-    case TRC_ADD_H_CURSE:
+    case TRC::ADD_H_CURSE:
         cf = TR_ADD_H_CURSE;
         break;
-    case TRC_DRAIN_HP:
+    case TRC::DRAIN_HP:
         cf = TR_DRAIN_HP;
         break;
-    case TRC_DRAIN_MANA:
+    case TRC::DRAIN_MANA:
         cf = TR_DRAIN_MANA;
         break;
-    case TRC_CALL_ANIMAL:
+    case TRC::CALL_ANIMAL:
         cf = TR_CALL_ANIMAL;
         break;
-    case TRC_CALL_DEMON:
+    case TRC::CALL_DEMON:
         cf = TR_CALL_DEMON;
         break;
-    case TRC_CALL_DRAGON:
+    case TRC::CALL_DRAGON:
         cf = TR_CALL_DRAGON;
         break;
-    case TRC_CALL_UNDEAD:
+    case TRC::CALL_UNDEAD:
         cf = TR_CALL_UNDEAD;
         break;
-    case TRC_COWARDICE:
+    case TRC::COWARDICE:
         cf = TR_COWARDICE;
         break;
-    case TRC_LOW_MELEE:
+    case TRC::LOW_MELEE:
         cf = TR_LOW_MELEE;
         break;
-    case TRC_LOW_AC:
+    case TRC::LOW_AC:
         cf = TR_LOW_AC;
         break;
-    case TRC_HARD_SPELL:
+    case TRC::HARD_SPELL:
         cf = TR_HARD_SPELL;
         break;
-    case TRC_FAST_DIGEST:
+    case TRC::FAST_DIGEST:
         cf = TR_FAST_DIGEST;
         break;
-    case TRC_SLOW_REGEN:
+    case TRC::SLOW_REGEN:
         cf = TR_SLOW_REGEN;
         break;
-    case TRC_BERS_RAGE:
+    case TRC::BERS_RAGE:
         cf = TR_BERS_RAGE;
         break;
     default:
@@ -116,16 +135,16 @@ static void choise_cursed_item(player_type *creature_ptr, BIT_FLAGS flag, object
  * @return 該当の呪いが一つでもあった場合にランダムに選ばれた装備品のオブジェクト構造体参照ポインタを返す。\n
  * 呪いがない場合NULLを返す。
  */
-object_type *choose_cursed_obj_name(player_type *creature_ptr, BIT_FLAGS flag)
+object_type *choose_cursed_obj_name(player_type *creature_ptr, TRC flag)
 {
     int choices[INVEN_TOTAL - INVEN_MAIN_HAND];
     int number = 0;
-    if (!(creature_ptr->cursed & flag))
+    if (creature_ptr->cursed.has_not(flag))
         return NULL;
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         object_type *o_ptr = &creature_ptr->inventory_list[i];
-        if (o_ptr->curse_flags & flag) {
+        if (o_ptr->curse_flags.has(flag)) {
             choices[number] = i;
             number++;
             continue;
@@ -143,7 +162,7 @@ object_type *choose_cursed_obj_name(player_type *creature_ptr, BIT_FLAGS flag)
  */
 static void curse_teleport(player_type *creature_ptr)
 {
-    if (((creature_ptr->cursed & TRC_TELEPORT_SELF) == 0) || !one_in_(200))
+    if ((creature_ptr->cursed_special.has_not(TRCS::TELEPORT_SELF)) || !one_in_(200))
         return;
 
     GAME_TEXT o_name[MAX_NLEN];
@@ -185,7 +204,7 @@ static void curse_teleport(player_type *creature_ptr)
  */
 static void occur_chainsword_effect(player_type *creature_ptr)
 {
-    if (((creature_ptr->cursed & TRC_CHAINSWORD) == 0) || !one_in_(CHAINSWORD_NOISE))
+    if ((creature_ptr->cursed_special.has_not(TRCS::CHAINSWORD)) || !one_in_(CHAINSWORD_NOISE))
         return;
 
     char noise[1024];
@@ -196,7 +215,7 @@ static void occur_chainsword_effect(player_type *creature_ptr)
 
 static void curse_drain_exp(player_type *creature_ptr)
 {
-    if ((creature_ptr->prace == RACE_ANDROID) || ((creature_ptr->cursed & TRC_DRAIN_EXP) == 0) || !one_in_(4))
+    if ((creature_ptr->prace == RACE_ANDROID) || (creature_ptr->cursed.has_not(TRC::DRAIN_EXP)) || !one_in_(4))
         return;
 
     creature_ptr->exp -= (creature_ptr->lev + 1) / 2;
@@ -212,18 +231,18 @@ static void curse_drain_exp(player_type *creature_ptr)
 
 static void multiply_low_curse(player_type *creature_ptr)
 {
-    if (((creature_ptr->cursed & TRC_ADD_L_CURSE) == 0) || !one_in_(2000))
+    if ((creature_ptr->cursed.has_not(TRC::ADD_L_CURSE)) || !one_in_(2000))
         return;
 
     object_type *o_ptr;
-    o_ptr = choose_cursed_obj_name(creature_ptr, TRC_ADD_L_CURSE);
-    BIT_FLAGS new_curse = get_curse(creature_ptr, 0, o_ptr);
-    if ((o_ptr->curse_flags & new_curse))
+    o_ptr = choose_cursed_obj_name(creature_ptr, TRC::ADD_L_CURSE);
+    auto new_curse = get_curse(creature_ptr, 0, o_ptr);
+    if (o_ptr->curse_flags.has(new_curse))
         return;
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-    o_ptr->curse_flags |= new_curse;
+    o_ptr->curse_flags.set(new_curse);
     msg_format(_("悪意に満ちた黒いオーラが%sをとりまいた...", "There is a malignant black aura surrounding your %s..."), o_name);
     o_ptr->feeling = FEEL_NONE;
     creature_ptr->update |= (PU_BONUS);
@@ -231,18 +250,18 @@ static void multiply_low_curse(player_type *creature_ptr)
 
 static void multiply_high_curse(player_type *creature_ptr)
 {
-    if (((creature_ptr->cursed & TRC_ADD_H_CURSE) == 0) || !one_in_(2000))
+    if ((creature_ptr->cursed.has_not(TRC::ADD_H_CURSE)) || !one_in_(2000))
         return;
 
     object_type *o_ptr;
-    o_ptr = choose_cursed_obj_name(creature_ptr, TRC_ADD_H_CURSE);
-    BIT_FLAGS new_curse = get_curse(creature_ptr, 1, o_ptr);
-    if ((o_ptr->curse_flags & new_curse))
+    o_ptr = choose_cursed_obj_name(creature_ptr, TRC::ADD_H_CURSE);
+    auto new_curse = get_curse(creature_ptr, 1, o_ptr);
+    if (o_ptr->curse_flags.has(new_curse))
         return;
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-    o_ptr->curse_flags |= new_curse;
+    o_ptr->curse_flags.set(new_curse);
     msg_format(_("悪意に満ちた黒いオーラが%sをとりまいた...", "There is a malignant black aura surrounding your %s..."), o_name);
     o_ptr->feeling = FEEL_NONE;
     creature_ptr->update |= (PU_BONUS);
@@ -253,37 +272,37 @@ static void curse_call_monster(player_type *creature_ptr)
     const int call_type = PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET;
     const int obj_desc_type = OD_OMIT_PREFIX | OD_NAME_ONLY;
     floor_type *floor_ptr = creature_ptr->current_floor_ptr;
-    if ((creature_ptr->cursed & TRC_CALL_ANIMAL) && one_in_(2500)) {
+    if (creature_ptr->cursed.has(TRC::CALL_ANIMAL) && one_in_(2500)) {
         if (summon_specific(creature_ptr, 0, creature_ptr->y, creature_ptr->x, floor_ptr->dun_level, SUMMON_ANIMAL, call_type)) {
             GAME_TEXT o_name[MAX_NLEN];
-            describe_flavor(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC_CALL_ANIMAL), obj_desc_type);
+            describe_flavor(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC::CALL_ANIMAL), obj_desc_type);
             msg_format(_("%sが動物を引き寄せた！", "Your %s has attracted an animal!"), o_name);
             disturb(creature_ptr, FALSE, TRUE);
         }
     }
 
-    if ((creature_ptr->cursed & TRC_CALL_DEMON) && one_in_(1111)) {
+    if (creature_ptr->cursed.has(TRC::CALL_DEMON) && one_in_(1111)) {
         if (summon_specific(creature_ptr, 0, creature_ptr->y, creature_ptr->x, floor_ptr->dun_level, SUMMON_DEMON, call_type)) {
             GAME_TEXT o_name[MAX_NLEN];
-            describe_flavor(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC_CALL_DEMON), obj_desc_type);
+            describe_flavor(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC::CALL_DEMON), obj_desc_type);
             msg_format(_("%sが悪魔を引き寄せた！", "Your %s has attracted a demon!"), o_name);
             disturb(creature_ptr, FALSE, TRUE);
         }
     }
 
-    if ((creature_ptr->cursed & TRC_CALL_DRAGON) && one_in_(800)) {
+    if (creature_ptr->cursed.has(TRC::CALL_DRAGON) && one_in_(800)) {
         if (summon_specific(creature_ptr, 0, creature_ptr->y, creature_ptr->x, floor_ptr->dun_level, SUMMON_DRAGON, call_type)) {
             GAME_TEXT o_name[MAX_NLEN];
-            describe_flavor(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC_CALL_DRAGON), obj_desc_type);
+            describe_flavor(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC::CALL_DRAGON), obj_desc_type);
             msg_format(_("%sがドラゴンを引き寄せた！", "Your %s has attracted a dragon!"), o_name);
             disturb(creature_ptr, FALSE, TRUE);
         }
     }
 
-    if ((creature_ptr->cursed & TRC_CALL_UNDEAD) && one_in_(1111)) {
+    if (creature_ptr->cursed.has(TRC::CALL_UNDEAD) && one_in_(1111)) {
         if (summon_specific(creature_ptr, 0, creature_ptr->y, creature_ptr->x, floor_ptr->dun_level, SUMMON_UNDEAD, call_type)) {
             GAME_TEXT o_name[MAX_NLEN];
-            describe_flavor(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC_CALL_UNDEAD), obj_desc_type);
+            describe_flavor(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC::CALL_UNDEAD), obj_desc_type);
             msg_format(_("%sが死霊を引き寄せた！", "Your %s has attracted an undead!"), o_name);
             disturb(creature_ptr, FALSE, TRUE);
         }
@@ -292,7 +311,7 @@ static void curse_call_monster(player_type *creature_ptr)
 
 static void curse_cowardice(player_type *creature_ptr)
 {
-    if (((creature_ptr->cursed & TRC_COWARDICE) == 0) || !one_in_(1500))
+    if ((creature_ptr->cursed.has_not(TRC::COWARDICE)) || !one_in_(1500))
         return;
 
     if (has_resist_fear(creature_ptr))
@@ -309,7 +328,7 @@ static void curse_cowardice(player_type *creature_ptr)
  */
 static void curse_berserk_rage(player_type *creature_ptr)
 {
-    if (((creature_ptr->cursed & TRC_BERS_RAGE) == 0) || !one_in_(1500))
+    if ((creature_ptr->cursed.has_not(TRC::BERS_RAGE)) || !one_in_(1500))
         return;
 
     disturb(creature_ptr, FALSE, TRUE);
@@ -321,22 +340,22 @@ static void curse_berserk_rage(player_type *creature_ptr)
 
 static void curse_drain_hp(player_type *creature_ptr)
 {
-    if (((creature_ptr->cursed & TRC_DRAIN_HP) == 0) || !one_in_(666))
+    if ((creature_ptr->cursed.has_not(TRC::DRAIN_HP)) || !one_in_(666))
         return;
 
     GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC_DRAIN_HP), (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    describe_flavor(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC::DRAIN_HP), (OD_OMIT_PREFIX | OD_NAME_ONLY));
     msg_format(_("%sはあなたの体力を吸収した！", "Your %s drains HP from you!"), o_name);
     take_hit(creature_ptr, DAMAGE_LOSELIFE, MIN(creature_ptr->lev * 2, 100), o_name);
 }
 
 static void curse_drain_mp(player_type *creature_ptr)
 {
-    if (((creature_ptr->cursed & TRC_DRAIN_MANA) == 0) || (creature_ptr->csp == 0) || !one_in_(666))
+    if ((creature_ptr->cursed.has_not(TRC::DRAIN_MANA)) || (creature_ptr->csp == 0) || !one_in_(666))
         return;
 
     GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC_DRAIN_MANA), (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    describe_flavor(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC::DRAIN_MANA), (OD_OMIT_PREFIX | OD_NAME_ONLY));
     msg_format(_("%sはあなたの魔力を吸収した！", "Your %s drains mana from you!"), o_name);
     creature_ptr->csp -= MIN(creature_ptr->lev, 50);
     if (creature_ptr->csp < 0) {
@@ -349,12 +368,12 @@ static void curse_drain_mp(player_type *creature_ptr)
 
 static void occur_curse_effects(player_type *creature_ptr)
 {
-    if (((creature_ptr->cursed & TRC_P_FLAG_MASK) == 0) || creature_ptr->phase_out || creature_ptr->wild_mode)
+    if ((creature_ptr->cursed.has_none_of(TRC_P_FLAG_MASK) && creature_ptr->cursed_special.has_none_of(TRCS_P_FLAG_MASK)) || creature_ptr->phase_out || creature_ptr->wild_mode)
         return;
 
     curse_teleport(creature_ptr);
     occur_chainsword_effect(creature_ptr);
-    if ((creature_ptr->cursed & TRC_TY_CURSE) && one_in_(TY_CURSE_CHANCE)) {
+    if (creature_ptr->cursed.has(TRC::TY_CURSE) && one_in_(TY_CURSE_CHANCE)) {
         int count = 0;
         (void)activate_ty_curse(creature_ptr, FALSE, &count);
     }
@@ -365,7 +384,7 @@ static void occur_curse_effects(player_type *creature_ptr)
     curse_call_monster(creature_ptr);
     curse_cowardice(creature_ptr);
     curse_berserk_rage(creature_ptr);
-    if ((creature_ptr->cursed & TRC_TELEPORT) && one_in_(200) && !creature_ptr->anti_tele) {
+    if (creature_ptr->cursed.has(TRC::TELEPORT) && one_in_(200) && !creature_ptr->anti_tele) {
         disturb(creature_ptr, FALSE, TRUE);
         teleport_player(creature_ptr, 40, TELEPORT_PASSIVE);
     }

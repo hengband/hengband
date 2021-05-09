@@ -13,7 +13,6 @@
 #include "main/sound-of-music.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"
-#include "object/object-generator.h"
 #include "object/object-info.h"
 #include "object/object-stack.h"
 #include "object/object-value.h"
@@ -210,7 +209,7 @@ void store_purchase(player_type *player_ptr)
     ITEM_NUMBER amt = 1;
     object_type forge;
     object_type *j_ptr = &forge;
-    object_copy(j_ptr, o_ptr);
+    j_ptr->copy_from(o_ptr);
 
     /*
      * If a rod or wand, allocate total maximum timeouts or charges
@@ -235,7 +234,7 @@ void store_purchase(player_type *player_ptr)
     }
 
     j_ptr = &forge;
-    object_copy(j_ptr, o_ptr);
+    j_ptr->copy_from(o_ptr);
 
     /*
      * If a rod or wand, allocate total maximum timeouts or charges

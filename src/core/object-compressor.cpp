@@ -6,7 +6,6 @@
 #include "grid/grid.h"
 #include "object-hook/hook-checker.h"
 #include "object-hook/hook-enchant.h"
-#include "object/object-generator.h"
 #include "object/object-kind.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"
@@ -35,7 +34,7 @@ static void compact_objects_aux(floor_type *floor_ptr, OBJECT_IDX i1, OBJECT_IDX
 
     // 要素番号i1のオブジェクトを要素番号i2に移動
     floor_ptr->o_list[i2] = floor_ptr->o_list[i1];
-    object_wipe(o_ptr);
+    o_ptr->wipe();
 }
 
 /*!

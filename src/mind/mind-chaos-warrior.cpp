@@ -2,7 +2,6 @@
 #include "floor/floor-object.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-ego.h"
-#include "object/object-generator.h"
 #include "object/object-kind-hook.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/floor-type-definition.h"
@@ -113,7 +112,7 @@ void acquire_chaos_weapon(player_type *creature_ptr)
         dummy2 = SV_BLADE_OF_CHAOS;
     }
 
-    object_prep(creature_ptr, q_ptr, lookup_kind(dummy, dummy2));
+    q_ptr->prep(creature_ptr, lookup_kind(dummy, dummy2));
     q_ptr->to_h = 3 + randint1(creature_ptr->current_floor_ptr->dun_level) % 10;
     q_ptr->to_d = 3 + randint1(creature_ptr->current_floor_ptr->dun_level) % 10;
     one_resistance(q_ptr);

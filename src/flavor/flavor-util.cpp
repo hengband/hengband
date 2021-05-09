@@ -74,24 +74,18 @@ char *object_desc_str(char *t, concptr s)
  * @param t 保管先文字列ポインタ
  * @param n コピーしたい数値
  * @details
- * Print an unsigned number "n" into a string "t", as if by
+ * Print an unsigned number "n" into a string "t", actually by
  * sprintf(t, "%u", n), and return a pointer to the terminator.
  */
 char *object_desc_num(char *t, uint n)
 {
-    /* loop */
-    uint p;
-    for (p = 1; n >= p * 10; p = p * 10)
-        ;
-
-    while (p >= 1) {
-        *t++ = '0' + n / p;
-        n = n % p;
-        p = p / 10;
+    int ret = sprintf(t, "%u", n);
+    if (ret < 0) {
+        // error
+        ret = 0;
+        *t = '\0';
     }
-
-    *t = '\0';
-    return t;
+    return t + ret;
 }
 
 /*!

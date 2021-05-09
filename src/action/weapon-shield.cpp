@@ -10,7 +10,6 @@
 #include "inventory/inventory-slot-types.h"
 #include "object-hook/hook-checker.h"
 #include "object-hook/hook-weapon.h"
-#include "object/object-generator.h"
 #include "player-info/equipment-info.h"
 #include "player-status/player-hand-types.h"
 #include "system/object-type-definition.h"
@@ -41,7 +40,7 @@ void verify_equip_slot(player_type *owner_ptr, INVENTORY_IDX item)
         }
 
         new_o_ptr = &owner_ptr->inventory_list[INVEN_MAIN_HAND];
-        object_copy(new_o_ptr, o_ptr);
+        new_o_ptr->copy_from(o_ptr);
         inven_item_increase(owner_ptr, INVEN_SUB_HAND, -((int)o_ptr->number));
         inven_item_optimize(owner_ptr, INVEN_SUB_HAND);
         if (object_allow_two_hands_wielding(o_ptr) && can_two_hands_wielding(owner_ptr))
@@ -69,7 +68,7 @@ void verify_equip_slot(player_type *owner_ptr, INVENTORY_IDX item)
         return;
 
     new_o_ptr = &owner_ptr->inventory_list[INVEN_SUB_HAND];
-    object_copy(new_o_ptr, o_ptr);
+    new_o_ptr->copy_from(o_ptr);
     inven_item_increase(owner_ptr, INVEN_MAIN_HAND, -((int)o_ptr->number));
     inven_item_optimize(owner_ptr, INVEN_MAIN_HAND);
     msg_format(_("%sを持ち替えた。", "You switched hand of %s."), o_name);

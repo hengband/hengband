@@ -46,7 +46,7 @@ void RingEnchanter::apply_magic()
 
     if ((this->power == 2) && one_in_(2)) {
         give_ego_index();
-        this->o_ptr->curse_flags = 0L;
+        this->o_ptr->curse_flags.clear();
         return;
     }
 
@@ -70,7 +70,7 @@ void RingEnchanter::enchant()
 
         if (this->power < 0) {
             set_bits(this->o_ptr->ident, IDENT_BROKEN);
-            set_bits(this->o_ptr->curse_flags, TRC_CURSED);
+            this->o_ptr->curse_flags.set(TRC::CURSED);
             this->o_ptr->pval = 0 - (this->o_ptr->pval);
         }
 
@@ -83,7 +83,7 @@ void RingEnchanter::enchant()
         this->o_ptr->pval = 1 + (PARAMETER_VALUE)m_bonus(5, this->level);
         if (this->power < 0) {
             set_bits(this->o_ptr->ident, IDENT_BROKEN);
-            set_bits(this->o_ptr->curse_flags, TRC_CURSED);
+            this->o_ptr->curse_flags.set(TRC::CURSED);
             this->o_ptr->pval = 0 - (this->o_ptr->pval);
         }
 
@@ -96,7 +96,7 @@ void RingEnchanter::enchant()
 
         if (this->power < 0) {
             set_bits(this->o_ptr->ident, IDENT_BROKEN);
-            set_bits(this->o_ptr->curse_flags, TRC_CURSED);
+            this->o_ptr->curse_flags.set(TRC::CURSED);
             this->o_ptr->pval = 0 - (this->o_ptr->pval);
             break;
         }
@@ -119,7 +119,7 @@ void RingEnchanter::enchant()
         this->o_ptr->pval = 1 + (PARAMETER_VALUE)m_bonus(5, this->level);
         if (this->power < 0) {
             set_bits(this->o_ptr->ident, IDENT_BROKEN);
-            set_bits(this->o_ptr->curse_flags, TRC_CURSED);
+            this->o_ptr->curse_flags.set(TRC::CURSED);
             this->o_ptr->pval = 0 - (this->o_ptr->pval);
         }
 
@@ -133,7 +133,7 @@ void RingEnchanter::enchant()
     case SV_RING_WEAKNESS:
     case SV_RING_STUPIDITY:
         set_bits(this->o_ptr->ident, IDENT_BROKEN);
-        set_bits(this->o_ptr->curse_flags, TRC_CURSED);
+        this->o_ptr->curse_flags.set(TRC::CURSED);
         this->o_ptr->pval = 0 - (1 + (PARAMETER_VALUE)m_bonus(5, this->level));
         if (this->power > 0) {
             this->power = 0 - this->power;
@@ -142,7 +142,7 @@ void RingEnchanter::enchant()
         break;
     case SV_RING_WOE:
         set_bits(this->o_ptr->ident, IDENT_BROKEN);
-        set_bits(this->o_ptr->curse_flags, TRC_CURSED);
+        this->o_ptr->curse_flags.set(TRC::CURSED);
         this->o_ptr->to_a = 0 - (5 + (ARMOUR_CLASS)m_bonus(10, this->level));
         this->o_ptr->pval = 0 - (1 + (PARAMETER_VALUE)m_bonus(5, this->level));
         if (this->power > 0) {
@@ -154,7 +154,7 @@ void RingEnchanter::enchant()
         this->o_ptr->to_d = 1 + randint1(5) + (HIT_POINT)m_bonus(16, this->level);
         if (this->power < 0) {
             set_bits(this->o_ptr->ident, IDENT_BROKEN);
-            set_bits(this->o_ptr->curse_flags, TRC_CURSED);
+            this->o_ptr->curse_flags.set(TRC::CURSED);
             this->o_ptr->to_d = 0 - this->o_ptr->to_d;
         }
 
@@ -163,7 +163,7 @@ void RingEnchanter::enchant()
         this->o_ptr->to_h = 1 + randint1(5) + (HIT_PROB)m_bonus(16, this->level);
         if (this->power < 0) {
             set_bits(this->o_ptr->ident, IDENT_BROKEN);
-            set_bits(this->o_ptr->curse_flags, TRC_CURSED);
+            this->o_ptr->curse_flags.set(TRC::CURSED);
             this->o_ptr->to_h = 0 - this->o_ptr->to_h;
         }
 
@@ -172,7 +172,7 @@ void RingEnchanter::enchant()
         this->o_ptr->to_a = 5 + randint1(8) + (ARMOUR_CLASS)m_bonus(10, this->level);
         if (this->power < 0) {
             set_bits(this->o_ptr->ident, IDENT_BROKEN);
-            set_bits(this->o_ptr->curse_flags, TRC_CURSED);
+            this->o_ptr->curse_flags.set(TRC::CURSED);
             this->o_ptr->to_a = 0 - this->o_ptr->to_a;
         }
 
@@ -183,7 +183,7 @@ void RingEnchanter::enchant()
 
         if (this->power < 0) {
             set_bits(this->o_ptr->ident, IDENT_BROKEN);
-            set_bits(this->o_ptr->curse_flags, TRC_CURSED);
+            this->o_ptr->curse_flags.set(TRC::CURSED);
             this->o_ptr->to_h = 0 - this->o_ptr->to_h;
             this->o_ptr->to_d = 0 - this->o_ptr->to_d;
         }
@@ -197,14 +197,14 @@ void RingEnchanter::enchant()
 
         if (this->power < 0) {
             set_bits(this->o_ptr->ident, IDENT_BROKEN);
-            set_bits(this->o_ptr->curse_flags, TRC_CURSED);
+            this->o_ptr->curse_flags.set(TRC::CURSED);
             this->o_ptr->pval = 0 - this->o_ptr->pval;
         }
 
         break;
     case SV_RING_AGGRAVATION:
         set_bits(this->o_ptr->ident, IDENT_BROKEN);
-        set_bits(this->o_ptr->curse_flags, TRC_CURSED);
+        this->o_ptr->curse_flags.set(TRC::CURSED);
         if (this->power > 0) {
             this->power = 0 - this->power;
         }
@@ -525,5 +525,5 @@ void RingEnchanter::give_cursed()
     }
 
     set_bits(this->o_ptr->ident, IDENT_BROKEN);
-    set_bits(this->o_ptr->curse_flags, TRC_CURSED | TRC_HEAVY_CURSE);
+    this->o_ptr->curse_flags.set({ TRC::CURSED, TRC::HEAVY_CURSE });
 }

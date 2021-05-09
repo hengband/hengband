@@ -17,7 +17,6 @@
 #include "grid/grid.h"
 #include "object-hook/hook-checker.h"
 #include "object-hook/hook-enchant.h"
-#include "object/object-generator.h"
 #include "perception/object-perception.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
@@ -121,7 +120,7 @@ void forget_flow(floor_type *floor_ptr)
  */
 void wipe_o_list(floor_type *floor_ptr)
 {
-    for (int i = 1; i < floor_ptr->o_max; i++) {
+    for (OBJECT_IDX i = 1; i < floor_ptr->o_max; i++) {
         object_type *o_ptr = &floor_ptr->o_list[i];
         if (!object_is_valid(o_ptr))
             continue;
@@ -134,7 +133,7 @@ void wipe_o_list(floor_type *floor_ptr)
 
         auto &list = get_o_idx_list_contains(floor_ptr, i);
         list.clear();
-        object_wipe(o_ptr);
+        o_ptr->wipe();
     }
 
     floor_ptr->o_max = 1;

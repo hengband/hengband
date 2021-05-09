@@ -16,9 +16,10 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
-#define MAX_CURSE 18
-#define TRC_SPECIAL_MASK (TRC_TY_CURSE | TRC_AGGRAVATE)
-#define TRC_HEAVY_MASK (TRC_TY_CURSE | TRC_AGGRAVATE | TRC_DRAIN_EXP | TRC_ADD_H_CURSE | TRC_CALL_DEMON | TRC_CALL_DRAGON | TRC_CALL_UNDEAD | TRC_TELEPORT)
+namespace {
+const EnumClassFlagGroup<TRC> TRC_SPECIAL_MASK({TRC::TY_CURSE, TRC::AGGRAVATE});
+const EnumClassFlagGroup<TRC> TRC_HEAVY_MASK({TRC::TY_CURSE, TRC::AGGRAVATE, TRC::DRAIN_EXP, TRC::ADD_H_CURSE, TRC::CALL_DEMON, TRC::CALL_DRAGON, TRC::CALL_UNDEAD, TRC::TELEPORT});
+}
 
 /*!
  * @brief アイテムに付加される可能性のある呪いを指定する。
@@ -26,26 +27,26 @@
  * @param o_ptr 呪いをかけられる装備オブジェクトの構造体参照ポインタ
  * @return 与える呪いのID
  */
-BIT_FLAGS get_curse(player_type *owner_ptr, int power, object_type *o_ptr)
+TRC get_curse(player_type *owner_ptr, int power, object_type *o_ptr)
 {
-    BIT_FLAGS new_curse;
+    TRC new_curse;
 
     while (TRUE) {
-        new_curse = (1U << (randint0(MAX_CURSE) + 4));
+        new_curse = static_cast<TRC>(rand_range(static_cast<int>(TRC::TY_CURSE), static_cast<int>(TRC::MAX) - 1));
         if (power == 2) {
-            if (!(new_curse & TRC_HEAVY_MASK))
+            if (TRC_HEAVY_MASK.has_not(new_curse))
                 continue;
         } else if (power == 1) {
-            if (new_curse & TRC_SPECIAL_MASK)
+            if (TRC_SPECIAL_MASK.has(new_curse))
                 continue;
         } else if (power == 0) {
-            if (new_curse & TRC_HEAVY_MASK)
+            if (TRC_HEAVY_MASK.has(new_curse))
                 continue;
         }
 
-        if (new_curse == TRC_LOW_MELEE && !object_is_weapon(owner_ptr, o_ptr))
+        if (new_curse == TRC::LOW_MELEE && !object_is_weapon(owner_ptr, o_ptr))
             continue;
-        if (new_curse == TRC_LOW_AC && !object_is_armour(owner_ptr, o_ptr))
+        if (new_curse == TRC::LOW_AC && !object_is_armour(owner_ptr, o_ptr))
             continue;
         break;
     }
@@ -86,24 +87,24 @@ void curse_equipment(player_type *owner_ptr, PERCENTAGE chance, PERCENTAGE heavy
     bool changed = FALSE;
     int curse_power = 0;
     if ((randint1(100) <= heavy_chance) && (object_is_artifact(o_ptr) || object_is_ego(o_ptr))) {
-        if (!(o_ptr->curse_flags & TRC_HEAVY_CURSE))
+        if (o_ptr->curse_flags.has_not(TRC::HEAVY_CURSE))
             changed = TRUE;
-        o_ptr->curse_flags |= TRC_HEAVY_CURSE;
-        o_ptr->curse_flags |= TRC_CURSED;
+        o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
+        o_ptr->curse_flags.set(TRC::CURSED);
         curse_power++;
     } else {
         if (!object_is_cursed(o_ptr))
             changed = TRUE;
-        o_ptr->curse_flags |= TRC_CURSED;
+        o_ptr->curse_flags.set(TRC::CURSED);
     }
 
     if (heavy_chance >= 50)
         curse_power++;
 
-    BIT_FLAGS new_curse = get_curse(owner_ptr, curse_power, o_ptr);
-    if (!(o_ptr->curse_flags & new_curse)) {
+    auto new_curse = get_curse(owner_ptr, curse_power, o_ptr);
+    if (o_ptr->curse_flags.has_not(new_curse)) {
         changed = TRUE;
-        o_ptr->curse_flags |= new_curse;
+        o_ptr->curse_flags.set(new_curse);
     }
 
     if (changed) {

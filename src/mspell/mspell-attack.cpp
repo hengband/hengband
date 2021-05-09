@@ -50,7 +50,7 @@ static void set_no_magic_mask(msa_type *msa_ptr)
 static void check_mspell_stupid(player_type *target_ptr, msa_type *msa_ptr)
 {
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
-    msa_ptr->in_no_magic_dungeon = (d_info[target_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC) && floor_ptr->dun_level
+    msa_ptr->in_no_magic_dungeon = d_info[target_ptr->dungeon_idx].flags.has(DF::NO_MAGIC) && floor_ptr->dun_level
         && (!floor_ptr->inside_quest || is_fixed_quest_idx(floor_ptr->inside_quest));
     if (!msa_ptr->in_no_magic_dungeon || ((msa_ptr->r_ptr->flags2 & RF2_STUPID) != 0))
         return;

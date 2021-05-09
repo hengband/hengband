@@ -15,7 +15,6 @@
 #include "object-hook/hook-magic.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "object/object-generator.h"
 #include "object/object-kind.h"
 #include "player/player-realm.h"
 #include "system/object-type-definition.h"
@@ -78,7 +77,7 @@ bool eat_magic(player_type *caster_ptr, int power)
                     object_type forge;
                     object_type *q_ptr;
                     q_ptr = &forge;
-                    object_copy(q_ptr, o_ptr);
+                    q_ptr->copy_from(o_ptr);
 
                     q_ptr->number = 1;
                     o_ptr->pval++;

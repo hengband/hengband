@@ -29,7 +29,6 @@
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-hook/hook-checker.h"
-#include "object/object-generator.h"
 #include "object/object-kind-hook.h"
 #include "spell/spell-types.h"
 #include "spell/summon-types.h"
@@ -103,7 +102,7 @@ static void on_dead_bloodletter(player_type *player_ptr, monster_death_type *md_
 
     object_type forge;
     object_type *q_ptr = &forge;
-    object_prep(player_ptr, q_ptr, lookup_kind(TV_SWORD, SV_BLADE_OF_CHAOS));
+    q_ptr->prep(player_ptr, lookup_kind(TV_SWORD, SV_BLADE_OF_CHAOS));
     apply_magic_to_object(player_ptr, q_ptr, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART | md_ptr->mo_mode);
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
@@ -116,7 +115,7 @@ static void on_dead_raal(player_type *player_ptr, monster_death_type *md_ptr)
 
     object_type forge;
     object_type *q_ptr = &forge;
-    object_wipe(q_ptr);
+    q_ptr->wipe();
     if ((floor_ptr->dun_level > 49) && one_in_(5))
         get_obj_num_hook = kind_is_good_book;
     else
@@ -189,12 +188,12 @@ static void on_dead_serpent(player_type *player_ptr, monster_death_type *md_ptr)
 
     object_type forge;
     object_type *q_ptr = &forge;
-    object_prep(player_ptr, q_ptr, lookup_kind(TV_HAFTED, SV_GROND));
+    q_ptr->prep(player_ptr, lookup_kind(TV_HAFTED, SV_GROND));
     q_ptr->name1 = ART_GROND;
     apply_magic_to_object(player_ptr, q_ptr, -1, AM_GOOD | AM_GREAT);
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
     q_ptr = &forge;
-    object_prep(player_ptr, q_ptr, lookup_kind(TV_CROWN, SV_CHAOS));
+    q_ptr->prep(player_ptr, lookup_kind(TV_CROWN, SV_CHAOS));
     q_ptr->name1 = ART_CHAOS;
     apply_magic_to_object(player_ptr, q_ptr, -1, AM_GOOD | AM_GREAT);
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
@@ -207,7 +206,7 @@ static void on_dead_death_sword(player_type *player_ptr, monster_death_type *md_
 
     object_type forge;
     object_type *q_ptr = &forge;
-    object_prep(player_ptr, q_ptr, lookup_kind(TV_SWORD, randint1(2)));
+    q_ptr->prep(player_ptr, lookup_kind(TV_SWORD, randint1(2)));
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
 
@@ -222,7 +221,7 @@ static void on_dead_can_angel(player_type *player_ptr, monster_death_type *md_pt
 
     object_type forge;
     object_type *q_ptr = &forge;
-    object_prep(player_ptr, q_ptr, lookup_kind(TV_CHEST, SV_CHEST_KANDUME));
+    q_ptr->prep(player_ptr, lookup_kind(TV_CHEST, SV_CHEST_KANDUME));
     apply_magic_to_object(player_ptr, q_ptr, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART);
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
@@ -341,7 +340,7 @@ static void on_dead_big_raven(player_type *player_ptr, monster_death_type *md_pt
  */
 static bool make_equipment(player_type *player_ptr, object_type *q_ptr, const BIT_FLAGS drop_mode, const bool is_object_hook_null)
 {
-    object_wipe(q_ptr);
+    q_ptr->wipe();
     (void)make_object(player_ptr, q_ptr, drop_mode);
     if (!is_object_hook_null) {
         return true;
@@ -434,7 +433,7 @@ static void drop_specific_item_on_dead(player_type *player_ptr, monster_death_ty
 {
     object_type forge;
     object_type *q_ptr = &forge;
-    object_wipe(q_ptr);
+    q_ptr->wipe();
     get_obj_num_hook = object_hook_pf;
     (void)make_object(player_ptr, q_ptr, md_ptr->mo_mode);
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);

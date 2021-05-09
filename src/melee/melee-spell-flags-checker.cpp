@@ -102,7 +102,7 @@ static void check_darkness(player_type *target_ptr, melee_spell_type *ms_ptr)
     if ((ms_ptr->r_ptr->flags2 & RF2_STUPID) != 0)
         return;
 
-    if (d_info[target_ptr->dungeon_idx].flags1 & DF1_DARKNESS) {
+    if (d_info[target_ptr->dungeon_idx].flags.has(DF::DARKNESS)) {
         ms_ptr->ability_flags.reset(RF_ABILITY::DARKNESS);
         return;
     }

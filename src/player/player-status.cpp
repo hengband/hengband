@@ -1156,7 +1156,7 @@ static ACTION_SKILL_POWER calc_saving_throw(player_type *creature_ptr)
     if (has_resist_curse(creature_ptr))
         pow += 30;
 
-    if (creature_ptr->blessed)
+    if (creature_ptr->bless_blade)
         pow += 6 + (creature_ptr->lev - 1) / 10;
 
     pow += adj_wis_sav[creature_ptr->stat_index[A_WIS]];
@@ -1559,7 +1559,7 @@ static s16b calc_num_blow(player_type *creature_ptr, int i)
  * * 性格きれものなら減算(-3)
  * * 性格ちからじまんとがまんづよいなら加算(+1)
  * * 性格チャージマンなら加算(+5)
- * * 装備品にTRC_HARD_SPELLがあるなら加算(軽い呪いなら+3/重い呪いなら+10)
+ * * 装備品にTRC::HARD_SPELLがあるなら加算(軽い呪いなら+3/重い呪いなら+10)
  */
 static s16b calc_to_magic_chance(player_type *creature_ptr)
 {
@@ -1581,8 +1581,8 @@ static s16b calc_to_magic_chance(player_type *creature_ptr)
         if (!o_ptr->k_idx)
             continue;
         object_flags(creature_ptr, o_ptr, flgs);
-        if (any_bits(o_ptr->curse_flags, TRC_HARD_SPELL)) {
-            if (any_bits(o_ptr->curse_flags, TRC_HEAVY_CURSE)) {
+        if (o_ptr->curse_flags.has(TRC::HARD_SPELL)) {
+            if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {
                 chance += 10;
             } else {
                 chance += 3;
@@ -1608,7 +1608,7 @@ static ARMOUR_CLASS calc_base_ac(player_type *creature_ptr)
 
     if (object_is_armour(creature_ptr, &creature_ptr->inventory_list[INVEN_MAIN_HAND])
         || object_is_armour(creature_ptr, &creature_ptr->inventory_list[INVEN_SUB_HAND])) {
-        ac += creature_ptr->skill_exp[GINOU_SHIELD] * (1 + creature_ptr->lev / 22) / 2000;
+        ac += creature_ptr->skill_exp[SKILL_SHIELD] * (1 + creature_ptr->lev / 22) / 2000;
     }
 
     return ac;
@@ -1652,8 +1652,8 @@ static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_real_value)
         if (is_real_value || object_is_known(o_ptr))
             ac += o_ptr->to_a;
 
-        if (any_bits(o_ptr->curse_flags, TRC_LOW_AC)) {
-            if (any_bits(o_ptr->curse_flags, TRC_HEAVY_CURSE)) {
+        if (o_ptr->curse_flags.has(TRC::LOW_AC)) {
+            if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {
                 if (is_real_value || object_is_fully_known(o_ptr))
                     ac -= 30;
             } else {
@@ -1730,11 +1730,11 @@ static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_real_value)
                 continue;
             if (!object_is_cursed(o_ptr))
                 continue;
-            if (any_bits(o_ptr->curse_flags, TRC_CURSED))
+            if (o_ptr->curse_flags.has(TRC::CURSED))
                 ac += 5;
-            if (any_bits(o_ptr->curse_flags, TRC_HEAVY_CURSE))
+            if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE))
                 ac += 7;
-            if (any_bits(o_ptr->curse_flags, TRC_PERMA_CURSE))
+            if (o_ptr->curse_flags.has(TRC::PERMA_CURSE))
                 ac += 13;
         }
     }
@@ -1794,7 +1794,7 @@ s16b calc_double_weapon_penalty(player_type *creature_ptr, INVENTORY_IDX slot)
     if (has_melee_weapon(creature_ptr, INVEN_MAIN_HAND) && has_melee_weapon(creature_ptr, INVEN_SUB_HAND)) {
         object_flags(creature_ptr, &creature_ptr->inventory_list[INVEN_SUB_HAND], flags);
 
-        penalty = ((100 - creature_ptr->skill_exp[GINOU_NITOURYU] / 160) - (130 - creature_ptr->inventory_list[slot].weight) / 8);
+        penalty = ((100 - creature_ptr->skill_exp[SKILL_TWO_WEAPON] / 160) - (130 - creature_ptr->inventory_list[slot].weight) / 8);
         if (((creature_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_QUICKTHORN) && (creature_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_TINYTHORN))
             || ((creature_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_ICINGDEATH)
                 && (creature_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_TWINKLE))) {
@@ -1856,7 +1856,7 @@ static s16b calc_riding_bow_penalty(player_type *creature_ptr)
         if (creature_ptr->tval_ammo != TV_ARROW)
             penalty = 5;
     } else {
-        penalty = r_info[floor_ptr->m_list[creature_ptr->riding].r_idx].level - creature_ptr->skill_exp[GINOU_RIDING] / 80;
+        penalty = r_info[floor_ptr->m_list[creature_ptr->riding].r_idx].level - creature_ptr->skill_exp[SKILL_RIDING] / 80;
         penalty += 30;
         if (penalty < 30)
             penalty = 30;
@@ -2006,13 +2006,13 @@ static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool i
 
     if ((creature_ptr->realm1 == REALM_HEX) && object_is_cursed(o_ptr)) {
         if (hex_spelling(creature_ptr, HEX_RUNESWORD)) {
-            if (any_bits(o_ptr->curse_flags, (TRC_CURSED))) {
+            if (o_ptr->curse_flags.has(TRC::CURSED)) {
                 damage += 5;
             }
-            if (any_bits(o_ptr->curse_flags, (TRC_HEAVY_CURSE))) {
+            if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {
                 damage += 7;
             }
-            if (any_bits(o_ptr->curse_flags, (TRC_PERMA_CURSE))) {
+            if (o_ptr->curse_flags.has(TRC::PERMA_CURSE)) {
                 damage += 13;
             }
         }
@@ -2151,7 +2151,7 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_r
                 break;
             /* fall through */
         case MELEE_TYPE_BAREHAND_TWO:
-            hit += (creature_ptr->skill_exp[GINOU_SUDE] - WEAPON_EXP_BEGINNER) / 200;
+            hit += (creature_ptr->skill_exp[SKILL_MARTIAL_ARTS] - WEAPON_EXP_BEGINNER) / 200;
             break;
 
         default:
@@ -2184,8 +2184,8 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_r
         }
 
         /* Low melee penalty */
-        if ((object_is_fully_known(o_ptr) || is_real_value) && any_bits(o_ptr->curse_flags, TRC_LOW_MELEE)) {
-            if (any_bits(o_ptr->curse_flags, TRC_HEAVY_CURSE)) {
+        if ((object_is_fully_known(o_ptr) || is_real_value) && o_ptr->curse_flags.has(TRC::LOW_MELEE)) {
+            if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {
                 hit -= 15;
             } else {
                 hit -= 5;
@@ -2205,7 +2205,7 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_r
             if ((creature_ptr->pclass == CLASS_BEASTMASTER) || (creature_ptr->pclass == CLASS_CAVALRY)) {
                 penalty = 5;
             } else {
-                penalty = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level - creature_ptr->skill_exp[GINOU_RIDING] / 80;
+                penalty = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level - creature_ptr->skill_exp[SKILL_RIDING] / 80;
                 penalty += 30;
                 if (penalty < 30)
                     penalty = 30;
@@ -2235,16 +2235,16 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_r
 
         /* Hex realm bonuses */
         if ((creature_ptr->realm1 == REALM_HEX) && object_is_cursed(o_ptr)) {
-            if (any_bits(o_ptr->curse_flags, (TRC_CURSED))) {
+            if (o_ptr->curse_flags.has(TRC::CURSED)) {
                 hit += 5;
             }
-            if (any_bits(o_ptr->curse_flags, (TRC_HEAVY_CURSE))) {
+            if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {
                 hit += 7;
             }
-            if (any_bits(o_ptr->curse_flags, (TRC_PERMA_CURSE))) {
+            if (o_ptr->curse_flags.has(TRC::PERMA_CURSE)) {
                 hit += 13;
             }
-            if (any_bits(o_ptr->curse_flags, (TRC_TY_CURSE))) {
+            if (o_ptr->curse_flags.has(TRC::TY_CURSE)) {
                 hit += 5;
             }
         }
@@ -2347,8 +2347,8 @@ static s16b calc_to_hit_bow(player_type *creature_ptr, bool is_real_value)
         if (o_ptr->k_idx) {
             object_flags(creature_ptr, o_ptr, flgs);
 
-            if (any_bits(o_ptr->curse_flags, TRC_LOW_MELEE)) {
-                if (any_bits(o_ptr->curse_flags, TRC_HEAVY_CURSE)) {
+            if (o_ptr->curse_flags.has(TRC::LOW_MELEE)) {
+                if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {
                     pow -= 15;
                 } else {
                     pow -= 5;

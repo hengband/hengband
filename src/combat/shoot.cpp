@@ -1,5 +1,6 @@
 ﻿#include "combat/shoot.h"
 #include "artifact/fixed-art-types.h"
+#include "combat/attack-criticality.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
@@ -42,7 +43,6 @@
 #include "object-hook/hook-enchant.h"
 #include "object/object-broken.h"
 #include "object/object-flags.h"
-#include "object/object-generator.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"
@@ -507,7 +507,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
         y = shooter_ptr->y;
         x = shooter_ptr->x;
         q_ptr = &forge;
-        object_copy(q_ptr, o_ptr);
+        q_ptr->copy_from(o_ptr);
 
         /* Single object */
         q_ptr->number = 1;
@@ -650,11 +650,11 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
                 }
 
                 if (shooter_ptr->riding) {
-                    if ((shooter_ptr->skill_exp[GINOU_RIDING] < s_info[shooter_ptr->pclass].s_max[GINOU_RIDING])
-                        && ((shooter_ptr->skill_exp[GINOU_RIDING] - (RIDING_EXP_BEGINNER * 2)) / 200
+                    if ((shooter_ptr->skill_exp[SKILL_RIDING] < s_info[shooter_ptr->pclass].s_max[SKILL_RIDING])
+                        && ((shooter_ptr->skill_exp[SKILL_RIDING] - (RIDING_EXP_BEGINNER * 2)) / 200
                             < r_info[shooter_ptr->current_floor_ptr->m_list[shooter_ptr->riding].r_idx].level)
                         && one_in_(2)) {
-                        shooter_ptr->skill_exp[GINOU_RIDING] += 1;
+                        shooter_ptr->skill_exp[SKILL_RIDING] += 1;
                         set_bits(shooter_ptr->update, PU_BONUS);
                     }
                 }
@@ -852,7 +852,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
             }
 
             o_ptr = &shooter_ptr->current_floor_ptr->o_list[o_idx];
-            object_copy(o_ptr, q_ptr);
+            o_ptr->copy_from(q_ptr);
 
             /* Forget mark */
             reset_bits(o_ptr->marked, OM_TOUCHED);
@@ -864,7 +864,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
             o_ptr->held_m_idx = m_idx;
 
             /* Carry object */
-            m_ptr->hold_o_idx_list.push_front(o_idx);
+            m_ptr->hold_o_idx_list.add(shooter_ptr->current_floor_ptr, o_idx);
         } else if (cave_has_flag_bold(shooter_ptr->current_floor_ptr, y, x, FF_PROJECT)) {
             /* Drop (or break) near that location */
             (void)drop_near(shooter_ptr, q_ptr, j, y, x);
@@ -1178,11 +1178,11 @@ HIT_POINT calc_expect_crit_shot(player_type *shooter_ptr, WEIGHT weight, int plu
  * @param dam 基本ダメージ
  * @param meichuu 命中値
  * @param dokubari 毒針処理か否か
+ * @param impact 強撃かどうか
  * @return ダメージ期待値
  */
-HIT_POINT calc_expect_crit(player_type *shooter_ptr, WEIGHT weight, int plus, HIT_POINT dam, s16b meichuu, bool dokubari)
+HIT_POINT calc_expect_crit(player_type *shooter_ptr, WEIGHT weight, int plus, HIT_POINT dam, s16b meichuu, bool dokubari, bool impact)
 {
-    u32b k, num;
     if (dokubari)
         return dam;
 
@@ -1190,30 +1190,34 @@ HIT_POINT calc_expect_crit(player_type *shooter_ptr, WEIGHT weight, int plus, HI
     if (i < 0)
         i = 0;
 
-    k = weight;
-    num = 0;
+    // 通常ダメージdam、武器重量weightでクリティカルが発生した時のクリティカルダメージ期待値
+    auto calc_weight_expect_dam = [](HIT_POINT dam, WEIGHT weight) {
+        HIT_POINT sum = 0;
+        for (int d = 1; d <= 650; ++d) {
+            int k = weight + d;
+            sum += std::get<0>(apply_critical_norm_damage(k, dam));
+        }
+        return sum / 650;
+    };
 
-    if (k < 400)
-        num += (2 * dam + 5) * (400 - k);
-    if (k < 700)
-        num += (2 * dam + 10) * (MIN(700, k + 650) - MAX(400, k));
-    if (k > (700 - 650) && k < 900)
-        num += (3 * dam + 15) * (MIN(900, k + 650) - MAX(700, k));
-    if (k > (900 - 650) && k < 1300)
-        num += (3 * dam + 20) * (MIN(1300, k + 650) - MAX(900, k));
-    if (k > (1300 - 650))
-        num += (7 * dam / 2 + 25) * MIN(650, k - (1300 - 650));
+    u32b num = 0;
 
-    num /= 650;
-    if (shooter_ptr->pclass == CLASS_NINJA) {
-        num *= i;
-        num += (4444 - i) * dam;
-        num /= 4444;
+    if (impact) {
+        for (int d = 1; d <= 650; ++d) {
+            num += calc_weight_expect_dam(dam, weight + d);
+        }
+        num /= 650;
     } else {
-        num *= i;
-        num += (5000 - i) * dam;
-        num /= 5000;
+        num += calc_weight_expect_dam(dam, weight);
     }
+
+    int pow = (shooter_ptr->pclass == CLASS_NINJA) ? 4444 : 5000;
+    if (impact)
+        pow /= 2;
+
+    num *= i;
+    num += (pow - i) * dam;
+    num /= pow;
 
     return num;
 }

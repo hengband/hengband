@@ -47,7 +47,7 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
         }
 
         if (o_ptr->to_a < 0)
-            o_ptr->curse_flags |= TRC_CURSED;
+            o_ptr->curse_flags.set(TRC::CURSED);
     }
 
     switch (o_ptr->tval) {

@@ -20,7 +20,6 @@
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "object-enchant/trg-types.h"
-#include "object/object-generator.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "player/player-sex.h"
@@ -54,8 +53,8 @@ static bool invest_terror_mask(player_type *player_ptr, object_type *o_ptr)
     default:
         add_flag(o_ptr->art_flags, TR_AGGRAVATE);
         add_flag(o_ptr->art_flags, TR_TY_CURSE);
-        o_ptr->curse_flags |= (TRC_CURSED | TRC_HEAVY_CURSE);
-        o_ptr->curse_flags |= get_curse(player_ptr, 2, o_ptr);
+        o_ptr->curse_flags.set({ TRC::CURSED, TRC::HEAVY_CURSE });
+        o_ptr->curse_flags.set(get_curse(player_ptr, 2, o_ptr));
         return false;
     }
 }
@@ -95,7 +94,7 @@ static void invest_special_artifact_abilities(player_type *player_ptr, object_ty
     case ART_MURAMASA:
         if (player_ptr->pclass != CLASS_SAMURAI) {
             add_flag(o_ptr->art_flags, TR_NO_MAGIC);
-            o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
+            o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
         }
         return;
     case ART_ROBINTON:
@@ -180,22 +179,22 @@ static void invest_curse_to_fixed_artifact(player_type *player_ptr, artifact_typ
         set_bits(o_ptr->ident, IDENT_BROKEN);
 
     if (a_ptr->gen_flags.has(TRG::CURSED))
-        set_bits(o_ptr->curse_flags, TRC_CURSED);
+        o_ptr->curse_flags.set(TRC::CURSED);
 
     if (a_ptr->gen_flags.has(TRG::HEAVY_CURSE))
-        set_bits(o_ptr->curse_flags, TRC_HEAVY_CURSE);
+        o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
 
     if (a_ptr->gen_flags.has(TRG::PERMA_CURSE))
-        set_bits(o_ptr->curse_flags, TRC_PERMA_CURSE);
+        o_ptr->curse_flags.set(TRC::PERMA_CURSE);
 
     if (a_ptr->gen_flags.has(TRG::RANDOM_CURSE0))
-        set_bits(o_ptr->curse_flags, get_curse(player_ptr, 0, o_ptr));
+        o_ptr->curse_flags.set(get_curse(player_ptr, 0, o_ptr));
 
     if (a_ptr->gen_flags.has(TRG::RANDOM_CURSE1))
-        set_bits(o_ptr->curse_flags, get_curse(player_ptr, 1, o_ptr));
+        o_ptr->curse_flags.set(get_curse(player_ptr, 1, o_ptr));
 
     if (a_ptr->gen_flags.has(TRG::RANDOM_CURSE2))
-        set_bits(o_ptr->curse_flags, get_curse(player_ptr, 2, o_ptr));
+        o_ptr->curse_flags.set(get_curse(player_ptr, 2, o_ptr));
 }
 
 /*!
@@ -247,7 +246,7 @@ bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, P
 
     object_type forge;
     auto q_ptr = &forge;
-    object_prep(player_ptr, q_ptr, i);
+    q_ptr->prep(player_ptr, i);
     q_ptr->name1 = a_idx;
 
     (void)apply_artifact(player_ptr, q_ptr);
@@ -378,7 +377,7 @@ bool make_artifact_special(player_type *player_ptr, object_type *o_ptr)
 
         /*! @note 前述の条件を満たしたら、後のIDのアーティファクトはチェックせずすぐ確定し生成処理に移す /
          * Assign the template. Mega-Hack -- mark the item as an artifact. Hack: Some artifacts get random extra powers. Success. */
-        object_prep(player_ptr, o_ptr, k_idx);
+        o_ptr->prep(player_ptr, k_idx);
 
         o_ptr->name1 = i;
         return true;

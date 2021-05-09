@@ -317,7 +317,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
     }
     case GF_LITE_WEAK:
     case GF_LITE: {
-        if ((d_info[caster_ptr->dungeon_idx].flags1 & DF1_DARKNESS) != 0)
+        if (d_info[caster_ptr->dungeon_idx].flags.has(DF::DARKNESS))
             break;
 
         g_ptr->info |= (CAVE_GLOW);

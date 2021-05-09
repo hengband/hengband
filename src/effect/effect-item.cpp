@@ -27,6 +27,8 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
+#include <set>
+
 /*!
  * @brief 汎用的なビーム/ボルト/ボール系によるアイテムオブジェクトへの効果処理 / Handle a beam/bolt/ball causing damage to a monster.
  * @param caster_ptr プレーヤーへの参照ポインタ
@@ -46,8 +48,15 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
     bool known = player_has_los_bold(caster_ptr, y, x);
     who = who ? who : 0;
     dam = (dam + r) / (r + 1);
+    std::set<OBJECT_IDX> processed_list;
     for (auto it = g_ptr->o_idx_list.begin(); it != g_ptr->o_idx_list.end();) {
         const OBJECT_IDX this_o_idx = *it++;
+
+        if (auto pit = processed_list.find(this_o_idx); pit != processed_list.end())
+            continue;
+
+        processed_list.insert(this_o_idx);
+
         object_type *o_ptr = &caster_ptr->current_floor_ptr->o_list[this_o_idx];
         bool ignore = FALSE;
         bool do_kill = FALSE;
@@ -254,8 +263,13 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
         KIND_OBJECT_IDX k_idx = o_ptr->k_idx;
         bool is_potion = object_is_potion(o_ptr);
         delete_object_idx(caster_ptr, this_o_idx);
-        if (is_potion)
+        if (is_potion) {
             (void)potion_smash_effect(caster_ptr, who, y, x, k_idx);
+
+            // 薬の破壊効果によりリストの次のアイテムが破壊された可能性があるのでリストの最初から処理をやり直す
+            // 処理済みのアイテムは processed_list に登録されており、スキップされる
+            it = g_ptr->o_idx_list.begin();
+        }
 
         lite_spot(caster_ptr, y, x);
     }

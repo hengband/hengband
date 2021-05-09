@@ -8,7 +8,6 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "object-enchant/item-apply-magic.h"
-#include "object/object-generator.h"
 #include "perception/object-perception.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
@@ -90,7 +89,7 @@ void chest_death(player_type *owner_ptr, bool scatter, POSITION y, POSITION x, O
 	for (; number > 0; --number)
 	{
 		q_ptr = &forge;
-		object_wipe(q_ptr);
+        q_ptr->wipe();
 
 		/* Small chests often drop gold */
 		if (small && (randint0(100) < 25))

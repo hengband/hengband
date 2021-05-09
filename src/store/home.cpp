@@ -2,7 +2,6 @@
 #include "floor/floor-town.h"
 #include "game-option/birth-options.h"
 #include "game-option/game-play-options.h"
-#include "object/object-generator.h"
 #include "object/object-stack.h"
 #include "object/object-value.h"
 #include "player-info/avatar.h"
@@ -94,7 +93,7 @@ static bool exe_combine_store_items(object_type *o_ptr, object_type *j_ptr, cons
     for (k = i; k < st_ptr->stock_num; k++)
         st_ptr->stock[k] = st_ptr->stock[k + 1];
 
-    object_wipe(&st_ptr->stock[k]);
+    (&st_ptr->stock[k])->wipe();
     *combined = TRUE;
     return TRUE;
 }
@@ -151,11 +150,11 @@ static void exe_reorder_store_item(player_type *player_ptr, bool *flag)
         object_type *j_ptr;
         object_type forge;
         j_ptr = &forge;
-        object_copy(j_ptr, &st_ptr->stock[i]);
+        j_ptr->copy_from(&st_ptr->stock[i]);
         for (int k = i; k > j; k--)
-            object_copy(&st_ptr->stock[k], &st_ptr->stock[k - 1]);
+            (&st_ptr->stock[k])->copy_from(&st_ptr->stock[k - 1]);
 
-        object_copy(&st_ptr->stock[j], j_ptr);
+        (&st_ptr->stock[j])->copy_from(j_ptr);
     }
 }
 

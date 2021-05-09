@@ -64,7 +64,7 @@ static bool summon_specific_okay(player_type *player_ptr, MONRACE_IDX r_idx)
         && monster_has_hostile_align(player_ptr, NULL, 10, -10, r_ptr))
         return FALSE;
 
-    if ((r_ptr->flags7 & RF7_CHAMELEON) && (d_info[player_ptr->dungeon_idx].flags1 & DF1_CHAMELEON))
+    if ((r_ptr->flags7 & RF7_CHAMELEON) && d_info[player_ptr->dungeon_idx].flags.has(DF::CHAMELEON))
         return TRUE;
 
     if (summon_specific_who > 0) {

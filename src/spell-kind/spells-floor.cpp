@@ -96,7 +96,7 @@ void wiz_lite(player_type *caster_ptr, bool ninja)
                 f_ptr = &f_info[get_feat_mimic(g_ptr)];
 
                 /* Perma-lite the grid */
-                if (!(d_info[caster_ptr->dungeon_idx].flags1 & DF1_DARKNESS) && !ninja) {
+                if (d_info[caster_ptr->dungeon_idx].flags.has_not(DF::DARKNESS) && !ninja) {
                     g_ptr->info |= (CAVE_GLOW);
                 }
 
@@ -184,7 +184,7 @@ void wiz_dark(player_type *caster_ptr)
  */
 void map_area(player_type *caster_ptr, POSITION range)
 {
-    if (d_info[caster_ptr->dungeon_idx].flags1 & DF1_DARKNESS)
+    if (d_info[caster_ptr->dungeon_idx].flags.has(DF::DARKNESS))
         range /= 3;
 
     /* Scan that area */
@@ -421,7 +421,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
                 continue;
             }
 
-            if ((d_info[floor_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
+            if (d_info[floor_ptr->dungeon_idx].flags.has(DF::DARKNESS))
                 continue;
 
             DIRECTION i;

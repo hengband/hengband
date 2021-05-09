@@ -12,7 +12,6 @@
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "object/object-generator.h"
 #include "player-info/avatar.h"
 #include "racial/racial-android.h"
 #include "system/object-type-definition.h"
@@ -140,7 +139,7 @@ bool mundane_spell(player_type *owner_ptr, bool only_equip)
     byte marked = o_ptr->marked;
     u16b inscription = o_ptr->inscription;
 
-    object_prep(owner_ptr, o_ptr, o_ptr->k_idx);
+    o_ptr->prep(owner_ptr, o_ptr->k_idx);
 
     o_ptr->iy = iy;
     o_ptr->ix = ix;

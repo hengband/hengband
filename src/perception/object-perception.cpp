@@ -7,7 +7,6 @@
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/trg-types.h"
 #include "object/item-tester-hooker.h" // 暫定、このファイルへ引っ越す.
-#include "object/object-generator.h"
 #include "object/object-kind.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
@@ -70,7 +69,7 @@ void object_aware(player_type *owner_ptr, object_type *o_ptr)
     GAME_TEXT o_name[MAX_NLEN];
 
     q_ptr = &forge;
-    object_copy(q_ptr, o_ptr);
+    q_ptr->copy_from(o_ptr);
 
     q_ptr->number = 1;
     describe_flavor(owner_ptr, o_name, q_ptr, OD_NAME_ONLY);

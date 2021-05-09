@@ -19,7 +19,6 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-flags8.h"
-#include "object/object-generator.h"
 #include "object/object-kind-hook.h"
 #include "player/player-class.h"
 #include "realm/realm-names-table.h"
@@ -260,7 +259,7 @@ static spoiler_output_status spoil_player_spell(concptr fname)
         if (magic_ptr->spell_book != 0) {
             object_type book;
             auto o_ptr = &book;
-            object_prep(&dummy_p, o_ptr, lookup_kind(magic_ptr->spell_book, 0));
+            o_ptr->prep(&dummy_p, lookup_kind(magic_ptr->spell_book, 0));
             describe_flavor(&dummy_p, title, o_ptr, OD_NAME_ONLY);
             book_name = title;
             char *s = angband_strchr(book_name, '[');

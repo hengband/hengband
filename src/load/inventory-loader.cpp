@@ -2,7 +2,6 @@
 #include "inventory/inventory-slot-types.h"
 #include "load/item-loader.h"
 #include "load/load-util.h"
-#include "object/object-generator.h"
 #include "object/object-mark-types.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
@@ -38,7 +37,7 @@ static errr rd_inventory(player_type *player_ptr)
         object_type forge;
         object_type *q_ptr;
         q_ptr = &forge;
-        object_wipe(q_ptr);
+        q_ptr->wipe();
 
         rd_item(player_ptr, q_ptr);
         if (!q_ptr->k_idx)
@@ -46,7 +45,7 @@ static errr rd_inventory(player_type *player_ptr)
 
         if (n >= INVEN_MAIN_HAND) {
             q_ptr->marked |= OM_TOUCHED;
-            object_copy(&player_ptr->inventory_list[n], q_ptr);
+            (&player_ptr->inventory_list[n])->copy_from(q_ptr);
             player_ptr->equip_cnt++;
             continue;
         }
@@ -58,7 +57,7 @@ static errr rd_inventory(player_type *player_ptr)
 
         n = slot++;
         q_ptr->marked |= OM_TOUCHED;
-        object_copy(&player_ptr->inventory_list[n], q_ptr);
+        (&player_ptr->inventory_list[n])->copy_from(q_ptr);
         player_ptr->inven_cnt++;
     }
 

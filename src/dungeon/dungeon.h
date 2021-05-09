@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 
+#include "dungeon/dungeon-flag-types.h"
 #include "monster-race/race-ability-flags.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
@@ -60,7 +61,7 @@ typedef struct dungeon_type {
 	int min_m_alloc_level{};	/* Minimal number of monsters per level */
 	int max_m_alloc_chance{};	/* There is a 1/max_m_alloc_chance chance per round of creating a new monster */
 
-	BIT_FLAGS flags1{};		/* Flags 1 */
+	EnumClassFlagGroup<DF> flags{};	/* Dungeon Flags */
 
 	BIT_FLAGS mflags1{};		/* The monster flags that are allowed */
 	BIT_FLAGS mflags2{};

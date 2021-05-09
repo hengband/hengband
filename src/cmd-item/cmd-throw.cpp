@@ -40,7 +40,6 @@
 #include "object/item-use-flags.h"
 #include "object/object-broken.h"
 #include "object/object-flags.h"
-#include "object/object-generator.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "object/object-stack.h"
@@ -137,7 +136,7 @@ static bool check_can_throw(player_type *creature_ptr, it_type *it_ptr)
 
 static void calc_throw_range(player_type *creature_ptr, it_type *it_ptr)
 {
-    object_copy(it_ptr->q_ptr, it_ptr->o_ptr);
+    it_ptr->q_ptr->copy_from(it_ptr->o_ptr);
     object_flags(creature_ptr, it_ptr->q_ptr, it_ptr->obj_flags);
     torch_flags(it_ptr->q_ptr, it_ptr->obj_flags);
     distribute_charges(it_ptr->o_ptr, it_ptr->q_ptr, 1);
@@ -482,7 +481,7 @@ static void process_boomerang_back(player_type *creature_ptr, it_type *it_ptr)
         }
 
         it_ptr->o_ptr = &creature_ptr->inventory_list[it_ptr->item];
-        object_copy(it_ptr->o_ptr, it_ptr->q_ptr);
+        it_ptr->o_ptr->copy_from(it_ptr->q_ptr);
         creature_ptr->equip_cnt++;
         creature_ptr->update |= PU_BONUS | PU_TORCH | PU_MANA;
         creature_ptr->window_flags |= PW_EQUIP;

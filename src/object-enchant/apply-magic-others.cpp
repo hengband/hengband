@@ -148,7 +148,7 @@ void apply_magic_others(player_type *owner_ptr, object_type *o_ptr, int power)
 
         o_ptr->pval = i;
         if (one_in_(6))
-            o_ptr->curse_flags |= TRC_CURSED;
+            o_ptr->curse_flags.set(TRC::CURSED);
 
         break;
     }

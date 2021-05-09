@@ -70,10 +70,6 @@ errr init_other(player_type *player_ptr)
     C_MAKE(macro__buf, FILE_READ_BUFF_SIZE, char);
     quark_init();
 
-    C_MAKE(message__ptr, MESSAGE_MAX, u32b);
-    C_MAKE(message__buf, MESSAGE_BUF, char);
-    message__tail = MESSAGE_BUF;
-
     for (int i = 0; option_info[i].o_desc; i++) {
         int os = option_info[i].o_set;
         int ob = option_info[i].o_bit;
