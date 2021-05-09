@@ -14,6 +14,30 @@
 #include "view/display-messages.h"
 
 /*!
+ * @brief クリティカルダメージを適用する
+ *
+ * @param k クリティカルの強度を決定する値
+ * @param base_dam クリティカル適用前のダメージ
+ * @return クリティカルを適用したダメージと、クリティカル発生時に表示するメッセージのタプルを返す
+ */
+std::tuple<HIT_POINT, concptr> apply_critical_norm_damage(int k, HIT_POINT base_dam)
+{
+    if (k < 400) {
+        return { 2 * base_dam + 5, _("手ごたえがあった！", "It was a good hit!") };
+    }
+    if (k < 700) {
+        return { 2 * base_dam + 10, _("かなりの手ごたえがあった！", "It was a great hit!") };
+    }
+    if (k < 900) {
+        return { 3 * base_dam + 15, _("会心の一撃だ！", "It was a superb hit!") };
+    }
+    if (k < 1300) {
+        return { 3 * base_dam + 20, _("最高の会心の一撃だ！", "It was a *GREAT* hit!") };
+    }
+    return { ((7 * base_dam) / 2) + 25, _("比類なき最高の会心の一撃だ！", "It was a *SUPERB* hit!") };
+}
+
+/*!
  * @brief プレイヤーからモンスターへの打撃クリティカル判定 /
  * Critical hits (by player) Factor in weapon weight, total plusses, player melee bonus
  * @param weight 矢弾の重量
@@ -43,34 +67,9 @@ HIT_POINT critical_norm(player_type *attacker_ptr, WEIGHT weight, int plus, HIT_
     if (impact || (mode == HISSATSU_MAJIN) || (mode == HISSATSU_3DAN))
         k += randint1(650);
 
-    if (k < 400) {
-        msg_print(_("手ごたえがあった！", "It was a good hit!"));
-
-        dam = 2 * dam + 5;
-        return dam;
-    }
-
-    if (k < 700) {
-        msg_print(_("かなりの手ごたえがあった！", "It was a great hit!"));
-        dam = 2 * dam + 10;
-        return dam;
-    }
-
-    if (k < 900) {
-        msg_print(_("会心の一撃だ！", "It was a superb hit!"));
-        dam = 3 * dam + 15;
-        return dam;
-    }
-
-    if (k < 1300) {
-        msg_print(_("最高の会心の一撃だ！", "It was a *GREAT* hit!"));
-        dam = 3 * dam + 20;
-        return dam;
-    }
-
-    msg_print(_("比類なき最高の会心の一撃だ！", "It was a *SUPERB* hit!"));
-    dam = ((7 * dam) / 2) + 25;
-    return dam;
+    auto [critical_dam, msg] = apply_critical_norm_damage(k, dam);
+    msg_print(msg);
+    return critical_dam;
 }
 
 /*!

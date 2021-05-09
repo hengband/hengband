@@ -272,7 +272,8 @@ static void calc_two_hands(player_type *creature_ptr, int *damage, int *to_h)
         basedam = ((o_ptr->dd + creature_ptr->to_dd[i]) * (o_ptr->ds + creature_ptr->to_ds[i] + 1)) * 50;
         object_flags_known(creature_ptr, o_ptr, flgs);
 
-        basedam = calc_expect_crit(creature_ptr, o_ptr->weight, to_h[i], basedam, creature_ptr->dis_to_h[i], poison_needle);
+        bool impact = creature_ptr->impact != 0;
+        basedam = calc_expect_crit(creature_ptr, o_ptr->weight, to_h[i], basedam, creature_ptr->dis_to_h[i], poison_needle, impact);
         basedam = strengthen_basedam(creature_ptr, o_ptr, basedam, flgs);
         damage[i] += basedam;
         if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
