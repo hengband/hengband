@@ -82,6 +82,7 @@ void open_dir_in_explorer(char *filename)
 bool get_open_filename(OPENFILENAMEW *ofn, concptr dirname, char *filename, DWORD max_name_size)
 {
     std::vector<WCHAR> buf(max_name_size);
+    wcscpy(&buf[0], to_wchar(filename).wc_str());
     to_wchar wc_dir(dirname);
 
     // Overwrite struct data
