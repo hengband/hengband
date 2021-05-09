@@ -20,7 +20,7 @@ public:
      *
      * @return フラグ集合に含まれるフラグの種類数
      */
-    constexpr size_t size() const noexcept
+    [[nodiscard]] constexpr size_t size() const noexcept
     {
         return FLAG_TYPE_MAX;
     };
@@ -190,7 +190,7 @@ public:
      * @param f 調べるフラグを指定する
      * @return 指定したフラグがONならtrue、OFFならfalse
      */
-    bool has(FlagType f) const
+    [[nodiscard]] bool has(FlagType f) const
     {
         return bs_.test(static_cast<size_t>(f));
     }
@@ -201,7 +201,7 @@ public:
      * @param f 調べるフラグを指定する
      * @return 指定したフラグがOFFならtrue、ONならfalse
      */
-    bool has_not(FlagType f) const
+    [[nodiscard]] bool has_not(FlagType f) const
     {
         return !has(f);
     }
@@ -212,7 +212,7 @@ public:
      * @return フラグ集合のいずれかのフラグがONならtrue
      *         フラグ集合のすべてのフラグがOFFならfalse
      */
-    bool any() const noexcept
+    [[nodiscard]] bool any() const noexcept
     {
         return bs_.any();
     }
@@ -223,7 +223,7 @@ public:
      * @return フラグ集合のすべてのフラグがOFFならtrue
      *         フラグ集合のいずれかのフラグがONならfalse
      */
-    bool none() const noexcept
+    [[nodiscard]] bool none() const noexcept
     {
         return bs_.none();
     }
@@ -237,7 +237,7 @@ public:
      * @return すべてのフラグがONであればtrue、そうでなければfalse
      */
     template <typename InputIter>
-    bool has_all_of(InputIter first, InputIter last) const
+    [[nodiscard]] bool has_all_of(InputIter first, InputIter last) const
     {
         static_assert(std::is_same<typename std::iterator_traits<InputIter>::value_type, FlagType>::value, "Iterator value type is invalid");
 
@@ -256,7 +256,7 @@ public:
      * @param list 調べるフラグを列挙したinitializer_list
      * @return すべてのフラグがONであればtrue、そうでなければfalse
      */
-    bool has_all_of(std::initializer_list<FlagType> list) const
+    [[nodiscard]] bool has_all_of(std::initializer_list<FlagType> list) const
     {
         return has_all_of(std::begin(list), std::end(list));
     }
@@ -267,7 +267,7 @@ public:
      * @param rhs FlagGroupのインスタンス
      * @return すべてのフラグがONであればtrue、そうでなければfalse
      */
-    bool has_all_of(const FlagGroup<FlagType, MAX> &rhs) const
+    [[nodiscard]] bool has_all_of(const FlagGroup<FlagType, MAX> &rhs) const
     {
         return (bs_ & rhs.bs_) == rhs.bs_;
     }
@@ -281,7 +281,7 @@ public:
      * @return いずれかのフラグがONであればtrue、そうでなければfalse
      */
     template <typename InputIter>
-    bool has_any_of(InputIter first, InputIter last) const
+    [[nodiscard]] bool has_any_of(InputIter first, InputIter last) const
     {
         static_assert(std::is_same<typename std::iterator_traits<InputIter>::value_type, FlagType>::value, "Iterator value type is invalid");
 
@@ -300,7 +300,7 @@ public:
      * @param list 調べるフラグを列挙したinitializer_list
      * @return いずれかのフラグがONであればtrue、そうでなければfalse
      */
-    bool has_any_of(std::initializer_list<FlagType> list) const
+    [[nodiscard]] bool has_any_of(std::initializer_list<FlagType> list) const
     {
         return has_any_of(std::begin(list), std::end(list));
     }
@@ -311,7 +311,7 @@ public:
      * @param rhs FlagGroupのインスタンス
      * @return いずれかのフラグがONであればtrue、そうでなければfalse
      */
-    bool has_any_of(const FlagGroup<FlagType, MAX> &rhs) const
+    [[nodiscard]] bool has_any_of(const FlagGroup<FlagType, MAX> &rhs) const
     {
         return (bs_ & rhs.bs_).any();
     }
@@ -325,7 +325,7 @@ public:
      * @return すべてのフラグがOFFであればtrue、そうでなければfalse
      */
     template <typename InputIter>
-    bool has_none_of(InputIter first, InputIter last) const
+    [[nodiscard]] bool has_none_of(InputIter first, InputIter last) const
     {
         static_assert(std::is_same<typename std::iterator_traits<InputIter>::value_type, FlagType>::value, "Iterator value type is invalid");
 
@@ -338,7 +338,7 @@ public:
      * @param list 調べるフラグを列挙したinitializer_list
      * @return すべてのフラグがOFFであればtrue、そうでなければfalse
      */
-    bool has_none_of(std::initializer_list<FlagType> list) const
+    [[nodiscard]] bool has_none_of(std::initializer_list<FlagType> list) const
     {
         return !has_any_of(list);
     }
@@ -349,7 +349,7 @@ public:
      * @param rhs FlagGroupのインスタンス
      * @return すべてのフラグがOFFであればtrue、そうでなければfalse
      */
-    bool has_none_of(const FlagGroup<FlagType, MAX> &rhs) const
+    [[nodiscard]] bool has_none_of(const FlagGroup<FlagType, MAX> &rhs) const
     {
         return !has_any_of(rhs);
     }
@@ -359,7 +359,7 @@ public:
      *
      * @return ONになっているフラグの数
      */
-    size_t count() const noexcept
+    [[nodiscard]] size_t count() const noexcept
     {
         return bs_.count();
     }
@@ -372,7 +372,7 @@ public:
      *
      * @return フラグ集合の状態を表した文字列
      */
-    std::string str() const
+    [[nodiscard]] std::string str() const
     {
         return bs_.to_string();
     }
@@ -383,7 +383,7 @@ public:
      * @param rhs 比較するフラグ集合
      * @return すべてのフラグの状態が等しければtrue、そうでなければfalse
      */
-    bool operator==(const FlagGroup<FlagType, MAX> &rhs) const noexcept
+    [[nodiscard]] bool operator==(const FlagGroup<FlagType, MAX> &rhs) const noexcept
     {
         return bs_ == rhs.bs_;
     }
@@ -394,7 +394,7 @@ public:
      * @param rhs 比較するフラグ集合
      * @return いずれかのフラグの状態が等しくなければtrue、そうでなければfalse
      */
-    bool operator!=(const FlagGroup<FlagType, MAX> &rhs) const noexcept
+    [[nodiscard]] bool operator!=(const FlagGroup<FlagType, MAX> &rhs) const noexcept
     {
         return bs_ != rhs.bs_;
     }
@@ -542,7 +542,7 @@ private:
             return *this;
         }
 
-        operator bool() const
+        [[nodiscard]] operator bool() const
         {
             return bs_[pos_];
         }
@@ -559,7 +559,7 @@ public:
      * @param f プロキシオブジェクトを取得するフラグ
      * @return 指定したフラグへのアクセスを提供するプロキシオブジェクト
      */
-    reference operator[](FlagType f)
+    [[nodiscard]] reference operator[](FlagType f)
     {
         return reference(bs_, static_cast<size_t>(f));
     }
@@ -590,7 +590,7 @@ using EnumClassFlagGroup = FlagGroup<FlagType, FlagType::MAX>;
  * @return lhs と rhs の論理積を取ったフラグ集合
  */
 template <typename FlagType, FlagType MAX>
-FlagGroup<FlagType, MAX> operator&(const FlagGroup<FlagType, MAX> &lhs, const FlagGroup<FlagType, MAX> &rhs) noexcept
+[[nodiscard]] FlagGroup<FlagType, MAX> operator&(const FlagGroup<FlagType, MAX> &lhs, const FlagGroup<FlagType, MAX> &rhs) noexcept
 {
     return FlagGroup<FlagType, MAX>(lhs) &= rhs;
 }
@@ -606,7 +606,7 @@ FlagGroup<FlagType, MAX> operator&(const FlagGroup<FlagType, MAX> &lhs, const Fl
  * @return lhs と rhs の論理積を取ったフラグ集合
  */
 template <typename FlagType, FlagType MAX>
-FlagGroup<FlagType, MAX> operator|(const FlagGroup<FlagType, MAX> &lhs, const FlagGroup<FlagType, MAX> &rhs) noexcept
+[[nodiscard]] FlagGroup<FlagType, MAX> operator|(const FlagGroup<FlagType, MAX> &lhs, const FlagGroup<FlagType, MAX> &rhs) noexcept
 {
     return FlagGroup<FlagType, MAX>(lhs) |= rhs;
 }
