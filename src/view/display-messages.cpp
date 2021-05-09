@@ -56,7 +56,7 @@ msg_sp make_message(T &&str)
 
     // 新たにメッセージを保持する msg_sp オブジェクトを生成し、検索用mapオブジェクトにも追加する
     auto new_msg = msg_sp(new std::string(std::forward<T>(str)), std::move(deleter));
-    message_map.emplace(new_msg.get(), std::weak_ptr(new_msg));
+    message_map.emplace(new_msg.get(), msg_wp(new_msg));
 
     return new_msg;
 }
