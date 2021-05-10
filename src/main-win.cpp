@@ -133,6 +133,11 @@
 #include <commdlg.h>
 #include <direct.h>
 
+/*
+ * Window names
+ */
+LPCWSTR win_term_name[] = { L"Hengband", L"Term-1", L"Term-2", L"Term-3", L"Term-4", L"Term-5", L"Term-6", L"Term-7" };
+
 /*!
  * @struct term_data
  * @brief ターム情報構造体 / Extra "term" data
@@ -152,7 +157,7 @@
  */
 typedef struct {
     term_type t;
-    concptr s;
+    LPCWSTR name;
     HWND w;
     DWORD dwStyle;
     DWORD dwExStyle;
@@ -239,12 +244,12 @@ static concptr ini_file = NULL;
 /*
  * Name of application
  */
-static concptr AppName = "ANGBAND";
+static LPCWSTR AppName = L"ANGBAND";
 
 /*
  * Name of sub-window type
  */
-static concptr AngList = "AngList";
+static LPCWSTR AngList = L"AngList";
 
 /*
  * The "complex" color values
@@ -360,28 +365,28 @@ static void save_prefs_aux(int i)
     if (!td->w)
         return;
 
-    sprintf(sec_name, "Term-%d", i);
+    wsprintfA(sec_name, "Term-%d", i);
 
     if (i > 0) {
         strcpy(buf, td->visible ? "1" : "0");
-        WritePrivateProfileString(sec_name, "Visible", buf, ini_file);
+        WritePrivateProfileStringA(sec_name, "Visible", buf, ini_file);
     }
 
     auto pwchar = td->lf.lfFaceName[0] != '\0' ? td->lf.lfFaceName : _(L"ＭＳ ゴシック", L"Courier");
-    WritePrivateProfileString(sec_name, "Font", to_multibyte(pwchar).c_str(), ini_file);
+    WritePrivateProfileStringA(sec_name, "Font", to_multibyte(pwchar).c_str(), ini_file);
 
-    wsprintf(buf, "%d", td->lf.lfWidth);
-    WritePrivateProfileString(sec_name, "FontWid", buf, ini_file);
-    wsprintf(buf, "%d", td->lf.lfHeight);
-    WritePrivateProfileString(sec_name, "FontHgt", buf, ini_file);
-    wsprintf(buf, "%d", td->lf.lfWeight);
-    WritePrivateProfileString(sec_name, "FontWgt", buf, ini_file);
+    wsprintfA(buf, "%d", td->lf.lfWidth);
+    WritePrivateProfileStringA(sec_name, "FontWid", buf, ini_file);
+    wsprintfA(buf, "%d", td->lf.lfHeight);
+    WritePrivateProfileStringA(sec_name, "FontHgt", buf, ini_file);
+    wsprintfA(buf, "%d", td->lf.lfWeight);
+    WritePrivateProfileStringA(sec_name, "FontWgt", buf, ini_file);
 
-    wsprintf(buf, "%d", td->tile_wid);
-    WritePrivateProfileString(sec_name, "TileWid", buf, ini_file);
+    wsprintfA(buf, "%d", td->tile_wid);
+    WritePrivateProfileStringA(sec_name, "TileWid", buf, ini_file);
 
-    wsprintf(buf, "%d", td->tile_hgt);
-    WritePrivateProfileString(sec_name, "TileHgt", buf, ini_file);
+    wsprintfA(buf, "%d", td->tile_hgt);
+    WritePrivateProfileStringA(sec_name, "TileHgt", buf, ini_file);
 
     WINDOWPLACEMENT lpwndpl;
     lpwndpl.length = sizeof(WINDOWPLACEMENT);
@@ -389,32 +394,32 @@ static void save_prefs_aux(int i)
 
     RECT rc = lpwndpl.rcNormalPosition;
     if (i == 0)
-        wsprintf(buf, "%d", normsize.x);
+        wsprintfA(buf, "%d", normsize.x);
     else
-        wsprintf(buf, "%d", td->cols);
+        wsprintfA(buf, "%d", td->cols);
 
-    WritePrivateProfileString(sec_name, "NumCols", buf, ini_file);
+    WritePrivateProfileStringA(sec_name, "NumCols", buf, ini_file);
 
     if (i == 0)
-        wsprintf(buf, "%d", normsize.y);
+        wsprintfA(buf, "%d", normsize.y);
     else
-        wsprintf(buf, "%d", td->rows);
+        wsprintfA(buf, "%d", td->rows);
 
-    WritePrivateProfileString(sec_name, "NumRows", buf, ini_file);
+    WritePrivateProfileStringA(sec_name, "NumRows", buf, ini_file);
     if (i == 0) {
         strcpy(buf, IsZoomed(td->w) ? "1" : "0");
-        WritePrivateProfileString(sec_name, "Maximized", buf, ini_file);
+        WritePrivateProfileStringA(sec_name, "Maximized", buf, ini_file);
     }
 
     GetWindowRect(td->w, &rc);
-    wsprintf(buf, "%d", rc.left);
-    WritePrivateProfileString(sec_name, "PositionX", buf, ini_file);
+    wsprintfA(buf, "%d", rc.left);
+    WritePrivateProfileStringA(sec_name, "PositionX", buf, ini_file);
 
-    wsprintf(buf, "%d", rc.top);
-    WritePrivateProfileString(sec_name, "PositionY", buf, ini_file);
+    wsprintfA(buf, "%d", rc.top);
+    WritePrivateProfileStringA(sec_name, "PositionY", buf, ini_file);
     if (i > 0) {
         strcpy(buf, td->posfix ? "1" : "0");
-        WritePrivateProfileString(sec_name, "PositionFix", buf, ini_file);
+        WritePrivateProfileStringA(sec_name, "PositionFix", buf, ini_file);
     }
 }
 
@@ -425,23 +430,23 @@ static void save_prefs_aux(int i)
 static void save_prefs(void)
 {
     char buf[128];
-    sprintf(buf, "%d", arg_graphics);
-    WritePrivateProfileString("Angband", "Graphics", buf, ini_file);
+    wsprintfA(buf, "%d", arg_graphics);
+    WritePrivateProfileStringA("Angband", "Graphics", buf, ini_file);
 
     strcpy(buf, arg_bigtile ? "1" : "0");
-    WritePrivateProfileString("Angband", "Bigtile", buf, ini_file);
+    WritePrivateProfileStringA("Angband", "Bigtile", buf, ini_file);
 
     strcpy(buf, arg_sound ? "1" : "0");
-    WritePrivateProfileString("Angband", "Sound", buf, ini_file);
+    WritePrivateProfileStringA("Angband", "Sound", buf, ini_file);
 
     strcpy(buf, arg_music ? "1" : "0");
-    WritePrivateProfileString("Angband", "Music", buf, ini_file);
+    WritePrivateProfileStringA("Angband", "Music", buf, ini_file);
     strcpy(buf, use_pause_music_inactive ? "1" : "0");
-    WritePrivateProfileString("Angband", "MusicPauseInactive", buf, ini_file);
+    WritePrivateProfileStringA("Angband", "MusicPauseInactive", buf, ini_file);
 
-    sprintf(buf, "%d", current_bg_mode);
-    WritePrivateProfileString("Angband", "BackGround", buf, ini_file);
-    WritePrivateProfileString("Angband", "BackGroundBitmap", wallpaper_file[0] != '\0' ? wallpaper_file : DEFAULT_BG_FILENAME, ini_file);
+    wsprintfA(buf, "%d", current_bg_mode);
+    WritePrivateProfileStringA("Angband", "BackGround", buf, ini_file);
+    WritePrivateProfileStringA("Angband", "BackGroundBitmap", wallpaper_file[0] != '\0' ? wallpaper_file : DEFAULT_BG_FILENAME, ini_file);
 
     int path_length = strlen(ANGBAND_DIR) - 4; /* \libの4文字分を削除 */
     char tmp[1024] = "";
@@ -451,13 +456,13 @@ static void save_prefs(void)
     if (n == 0) {
         char relative_path[1024] = "";
         snprintf(relative_path, sizeof(relative_path), ".\\%s", (savefile + path_length));
-        WritePrivateProfileString("Angband", "SaveFile", relative_path, ini_file);
+        WritePrivateProfileStringA("Angband", "SaveFile", relative_path, ini_file);
     } else {
-        WritePrivateProfileString("Angband", "SaveFile", savefile, ini_file);
+        WritePrivateProfileStringA("Angband", "SaveFile", savefile, ini_file);
     }
 
     strcpy(buf, keep_subwindows ? "1" : "0");
-    WritePrivateProfileString("Angband", "KeepSubwindows", buf, ini_file);
+    WritePrivateProfileStringA("Angband", "KeepSubwindows", buf, ini_file);
 
     for (int i = 0; i < MAX_TERM_DATA; ++i) {
         save_prefs_aux(i);
@@ -483,34 +488,34 @@ static void load_prefs_aux(int i)
     GAME_TEXT sec_name[128];
     char tmp[1024];
 
-    sprintf(sec_name, "Term-%d", i);
+    wsprintfA(sec_name, "Term-%d", i);
     if (i > 0) {
-        td->visible = (GetPrivateProfileInt(sec_name, "Visible", td->visible, ini_file) != 0);
+        td->visible = (GetPrivateProfileIntA(sec_name, "Visible", td->visible, ini_file) != 0);
     }
 
-    GetPrivateProfileString(sec_name, "Font", _("ＭＳ ゴシック", "Courier"), tmp, 127, ini_file);
+    GetPrivateProfileStringA(sec_name, "Font", _("ＭＳ ゴシック", "Courier"), tmp, 127, ini_file);
 
     td->font_want = string_make(tmp);
     int hgt = 15;
     int wid = 0;
-    td->lf.lfWidth = GetPrivateProfileInt(sec_name, "FontWid", wid, ini_file);
-    td->lf.lfHeight = GetPrivateProfileInt(sec_name, "FontHgt", hgt, ini_file);
-    td->lf.lfWeight = GetPrivateProfileInt(sec_name, "FontWgt", 0, ini_file);
+    td->lf.lfWidth = GetPrivateProfileIntA(sec_name, "FontWid", wid, ini_file);
+    td->lf.lfHeight = GetPrivateProfileIntA(sec_name, "FontHgt", hgt, ini_file);
+    td->lf.lfWeight = GetPrivateProfileIntA(sec_name, "FontWgt", 0, ini_file);
 
-    td->tile_wid = GetPrivateProfileInt(sec_name, "TileWid", td->lf.lfWidth, ini_file);
-    td->tile_hgt = GetPrivateProfileInt(sec_name, "TileHgt", td->lf.lfHeight, ini_file);
+    td->tile_wid = GetPrivateProfileIntA(sec_name, "TileWid", td->lf.lfWidth, ini_file);
+    td->tile_hgt = GetPrivateProfileIntA(sec_name, "TileHgt", td->lf.lfHeight, ini_file);
 
-    td->cols = GetPrivateProfileInt(sec_name, "NumCols", td->cols, ini_file);
-    td->rows = GetPrivateProfileInt(sec_name, "NumRows", td->rows, ini_file);
+    td->cols = GetPrivateProfileIntA(sec_name, "NumCols", td->cols, ini_file);
+    td->rows = GetPrivateProfileIntA(sec_name, "NumRows", td->rows, ini_file);
     normsize.x = td->cols;
     normsize.y = td->rows;
 
     if (i == 0) {
-        win_maximized = (GetPrivateProfileInt(sec_name, "Maximized", win_maximized, ini_file) != 0);
+        win_maximized = (GetPrivateProfileIntA(sec_name, "Maximized", win_maximized, ini_file) != 0);
     }
 
-    int posx = GetPrivateProfileInt(sec_name, "PositionX", 0, ini_file);
-    int posy = GetPrivateProfileInt(sec_name, "PositionY", 0, ini_file);
+    int posx = GetPrivateProfileIntA(sec_name, "PositionX", 0, ini_file);
+    int posy = GetPrivateProfileIntA(sec_name, "PositionY", 0, ini_file);
     // 保存座標がモニタ内の領域にあるかチェック
     RECT rect = { posx, posy, posx + 128, posy + 128 };
     bool in_any_monitor = false;
@@ -522,7 +527,7 @@ static void load_prefs_aux(int i)
     }
 
     if (i > 0) {
-        td->posfix = (GetPrivateProfileInt(sec_name, "PositionFix", td->posfix, ini_file) != 0);
+        td->posfix = (GetPrivateProfileIntA(sec_name, "PositionFix", td->posfix, ini_file) != 0);
     }
 }
 
@@ -531,15 +536,15 @@ static void load_prefs_aux(int i)
  */
 static void load_prefs(void)
 {
-    arg_graphics = (byte)GetPrivateProfileInt("Angband", "Graphics", static_cast<byte>(graphics_mode::GRAPHICS_NONE), ini_file);
-    arg_bigtile = (GetPrivateProfileInt("Angband", "Bigtile", FALSE, ini_file) != 0);
+    arg_graphics = (byte)GetPrivateProfileIntA("Angband", "Graphics", static_cast<byte>(graphics_mode::GRAPHICS_NONE), ini_file);
+    arg_bigtile = (GetPrivateProfileIntA("Angband", "Bigtile", FALSE, ini_file) != 0);
     use_bigtile = arg_bigtile;
-    arg_sound = (GetPrivateProfileInt("Angband", "Sound", 0, ini_file) != 0);
-    arg_music = (GetPrivateProfileInt("Angband", "Music", 0, ini_file) != 0);
-    use_pause_music_inactive = (GetPrivateProfileInt("Angband", "MusicPauseInactive", 0, ini_file) != 0);
-    current_bg_mode = static_cast<bg_mode>(GetPrivateProfileInt("Angband", "BackGround", 0, ini_file));
-    GetPrivateProfileString("Angband", "BackGroundBitmap", DEFAULT_BG_FILENAME, wallpaper_file, 1023, ini_file);
-    GetPrivateProfileString("Angband", "SaveFile", "", savefile, 1023, ini_file);
+    arg_sound = (GetPrivateProfileIntA("Angband", "Sound", 0, ini_file) != 0);
+    arg_music = (GetPrivateProfileIntA("Angband", "Music", 0, ini_file) != 0);
+    use_pause_music_inactive = (GetPrivateProfileIntA("Angband", "MusicPauseInactive", 0, ini_file) != 0);
+    current_bg_mode = static_cast<bg_mode>(GetPrivateProfileIntA("Angband", "BackGround", 0, ini_file));
+    GetPrivateProfileStringA("Angband", "BackGroundBitmap", DEFAULT_BG_FILENAME, wallpaper_file, 1023, ini_file);
+    GetPrivateProfileStringA("Angband", "SaveFile", "", savefile, 1023, ini_file);
 
     int n = strncmp(".\\", savefile, 2);
     if (n == 0) {
@@ -550,7 +555,7 @@ static void load_prefs(void)
         strncpy(savefile, tmp, strlen(tmp));
     }
 
-    keep_subwindows = (GetPrivateProfileInt("Angband", "KeepSubwindows", 0, ini_file) != 0);
+    keep_subwindows = (GetPrivateProfileIntA("Angband", "KeepSubwindows", 0, ini_file) != 0);
     for (int i = 0; i < MAX_TERM_DATA; ++i) {
         load_prefs_aux(i);
     }
@@ -765,7 +770,6 @@ static errr term_user_win(int n)
     (void)n;
     return 0;
 }
-
 
 /*!
  * @brief カラーパレットの変更？
@@ -1070,7 +1074,7 @@ static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
     static bool init_done = FALSE;
 
     if (!init_done) {
-        WALL = LoadBitmap(hInstance, AppName);
+        WALL = LoadBitmapW(hInstance, AppName);
         myBrush = CreatePatternBrush(WALL);
         init_done = TRUE;
     }
@@ -1111,7 +1115,7 @@ static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
         } else if (iskanji(*(s + i))) /* 2バイト文字 */
         {
             rc.right += td->font_wid;
-            ExtTextOut(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s + i, 2, NULL);
+            ExtTextOutA(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s + i, 2, NULL);
             rc.right -= td->font_wid;
             i++;
             rc.left += 2 * td->tile_wid;
@@ -1125,7 +1129,7 @@ static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
             rc.left += td->tile_wid;
             rc.right += td->tile_wid;
         } else {
-            ExtTextOut(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s + i, 1, NULL);
+            ExtTextOutA(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s + i, 1, NULL);
             rc.left += td->tile_wid;
             rc.right += td->tile_wid;
         }
@@ -1139,7 +1143,7 @@ static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
             rc.left += td->tile_wid;
             rc.right += td->tile_wid;
         } else {
-            ExtTextOut(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s + i, 1, NULL);
+            ExtTextOutA(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s + i, 1, NULL);
             rc.left += td->tile_wid;
             rc.right += td->tile_wid;
         }
@@ -1282,11 +1286,7 @@ static void init_windows(void)
     term_data *td;
     td = &data[0];
     WIPE(td, term_data);
-#ifdef JP
-    td->s = "変愚蛮怒";
-#else
-    td->s = angband_term_name[0];
-#endif
+    td->name = win_term_name[0];
 
     td->keys = 1024;
     td->rows = 24;
@@ -1303,7 +1303,7 @@ static void init_windows(void)
     for (int i = 1; i < MAX_TERM_DATA; i++) {
         td = &data[i];
         WIPE(td, term_data);
-        td->s = angband_term_name[i];
+        td->name = win_term_name[i];
         td->keys = 16;
         td->rows = 24;
         td->cols = 80;
@@ -1352,8 +1352,8 @@ static void init_windows(void)
         td = &data[i];
 
         my_td = td;
-        td->w
-            = CreateWindowEx(td->dwExStyle, AngList, td->s, td->dwStyle, td->pos_x, td->pos_y, td->size_wid, td->size_hgt, HWND_DESKTOP, NULL, hInstance, NULL);
+        td->w = CreateWindowExW(
+            td->dwExStyle, AngList, td->name, td->dwStyle, td->pos_x, td->pos_y, td->size_wid, td->size_hgt, HWND_DESKTOP, NULL, hInstance, NULL);
         my_td = NULL;
 
         if (!td->w)
@@ -1386,7 +1386,8 @@ static void init_windows(void)
     /* Create main window */
     td = &data[0];
     my_td = td;
-    td->w = CreateWindowEx(td->dwExStyle, AppName, td->s, td->dwStyle, td->pos_x, td->pos_y, td->size_wid, td->size_hgt, HWND_DESKTOP, NULL, hInstance, NULL);
+    td->w = CreateWindowExW(
+        td->dwExStyle, AppName, _(L"変愚蛮怒", td->name), td->dwStyle, td->pos_x, td->pos_y, td->size_wid, td->size_hgt, HWND_DESKTOP, NULL, hInstance, NULL);
     my_td = NULL;
 
     if (!td->w)
@@ -1914,6 +1915,22 @@ static errr term_keypress(int k)
 }
 
 /*!
+ * @brief Add a keypress to the "queue"
+ * @details マルチバイト文字をkey_queueに追加する。
+ * @param str マルチバイト文字列
+ */
+static void term_keypress(char *str)
+{
+    if (str) {
+        char *psrc = str;
+        while (*psrc) {
+            term_keypress(*psrc);
+            ++psrc;
+        }
+    }
+}
+
+/*!
  * @brief キーダウンのハンドラ
  */
 static bool process_keydown(WPARAM wParam, LPARAM lParam)
@@ -1996,7 +2013,7 @@ static bool process_keydown(WPARAM wParam, LPARAM lParam)
 }
 
 /*!
- * @brief ウィンドウのアクティブ/非アクティブのハンドラ 
+ * @brief ウィンドウのアクティブ/非アクティブのハンドラ
  */
 static void handle_app_active(HWND hWnd, UINT uMsg, WPARAM wParam, [[maybe_unused]] LPARAM lParam)
 {
@@ -2082,10 +2099,13 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         break;
     }
     case WM_CHAR: {
+        // wParam is WCHAR because using RegisterClassW
         if (term_no_press)
             term_no_press = FALSE;
-        else
-            term_keypress(wParam);
+        else {
+            WCHAR wc[2] = { (WCHAR)wParam , '\0'};
+            term_keypress(to_multibyte(wc).c_str());
+        }
         return 0;
     }
     case WM_LBUTTONDOWN: {
@@ -2409,10 +2429,13 @@ LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
         break;
     }
     case WM_CHAR: {
+        // wParam is WCHAR because using RegisterClassW
         if (term_no_press)
             term_no_press = FALSE;
-        else
-            term_keypress(wParam);
+        else {
+            WCHAR wc[2] = { (WCHAR)wParam, '\0' };
+            term_keypress(to_multibyte(wc).c_str());
+        }
         return 0;
     }
     case WM_NCLBUTTONDOWN: {
@@ -2468,7 +2491,7 @@ static void hook_quit(concptr str)
     finalize_bg();
     graphic.finalize();
 
-    UnregisterClass(AppName, hInstance);
+    UnregisterClassW(AppName, hInstance);
     if (hIcon)
         DestroyIcon(hIcon);
 
@@ -2481,7 +2504,7 @@ static void hook_quit(concptr str)
 static void init_stuff(void)
 {
     char path[MAIN_WIN_MAX_PATH];
-    DWORD path_len = GetModuleFileName(hInstance, path, MAIN_WIN_MAX_PATH);
+    DWORD path_len = GetModuleFileNameA(hInstance, path, MAIN_WIN_MAX_PATH);
     strcpy(path + path_len - 4, ".INI");
     ini_file = string_make(path);
 
@@ -2584,26 +2607,26 @@ void create_debug_spoiler(void)
  */
 static void register_wndclass(void)
 {
-    WNDCLASS wc{};
+    WNDCLASSW wc{};
     wc.style = CS_CLASSDC;
     wc.lpfnWndProc = AngbandWndProc;
     wc.cbClsExtra = 0;
     wc.cbWndExtra = 4;
     wc.hInstance = hInstance;
-    wc.hIcon = hIcon = LoadIcon(hInstance, AppName);
+    wc.hIcon = hIcon = LoadIconW(hInstance, AppName);
     wc.hCursor = LoadCursor(NULL, IDC_ARROW);
     wc.hbrBackground = NULL;
     wc.lpszMenuName = AppName;
     wc.lpszClassName = AppName;
 
-    if (!RegisterClass(&wc))
+    if (!RegisterClassW(&wc))
         exit(1);
 
     wc.lpfnWndProc = AngbandListProc;
     wc.lpszMenuName = NULL;
     wc.lpszClassName = AngList;
 
-    if (!RegisterClass(&wc))
+    if (!RegisterClassW(&wc))
         exit(2);
 }
 
@@ -2634,7 +2657,7 @@ int WINAPI WinMain(
             MessageBoxW(NULL, to_wchar(str).wc_str(), _(L"エラー！", L"Error"), MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
         }
 
-        UnregisterClass(AppName, hInstance);
+        UnregisterClassW(AppName, hInstance);
         if (hIcon)
             DestroyIcon(hIcon);
 

@@ -20,7 +20,7 @@
  */
 bool is_already_running(void)
 {
-    [[maybe_unused]] HANDLE hMutex = CreateMutex(NULL, TRUE, VERSION_NAME);
+    [[maybe_unused]] HANDLE hMutex = CreateMutexW(NULL, TRUE, L"" VERSION_NAME);
     if (GetLastError() == ERROR_ALREADY_EXISTS) {
         return true;
     }
