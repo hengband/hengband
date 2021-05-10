@@ -1915,6 +1915,22 @@ static errr term_keypress(int k)
 }
 
 /*!
+ * @brief Add a keypress to the "queue"
+ * @details マルチバイト文字をkey_queueに追加する。
+ * @param str マルチバイト文字列
+ */
+static void term_keypress(char *str)
+{
+    if (str) {
+        char *psrc = str;
+        while (*psrc) {
+            term_keypress(*psrc);
+            ++psrc;
+        }
+    }
+}
+
+/*!
  * @brief キーダウンのハンドラ
  */
 static bool process_keydown(WPARAM wParam, LPARAM lParam)
@@ -2083,10 +2099,13 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         break;
     }
     case WM_CHAR: {
+        // wParam is WCHAR because using RegisterClassW
         if (term_no_press)
             term_no_press = FALSE;
-        else
-            term_keypress(wParam);
+        else {
+            WCHAR wc[2] = { (WCHAR)wParam , '\0'};
+            term_keypress(to_multibyte(wc).c_str());
+        }
         return 0;
     }
     case WM_LBUTTONDOWN: {
@@ -2410,10 +2429,13 @@ LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
         break;
     }
     case WM_CHAR: {
+        // wParam is WCHAR because using RegisterClassW
         if (term_no_press)
             term_no_press = FALSE;
-        else
-            term_keypress(wParam);
+        else {
+            WCHAR wc[2] = { (WCHAR)wParam, '\0' };
+            term_keypress(to_multibyte(wc).c_str());
+        }
         return 0;
     }
     case WM_NCLBUTTONDOWN: {
