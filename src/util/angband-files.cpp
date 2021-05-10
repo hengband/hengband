@@ -243,6 +243,11 @@ errr angband_fgets(FILE *fff, char *buf, huge n)
     huge i = 0;
     char *s;
 
+    if (n <= 1)
+        return 1;
+    // Reserve for null termination
+    --n;
+
     if (fgets(file_read__tmp, FILE_READ_BUFF_SIZE, fff)) {
 #ifdef JP
         guess_convert_to_system_encoding(file_read__tmp, FILE_READ_BUFF_SIZE);
@@ -261,6 +266,8 @@ errr angband_fgets(FILE *fff, char *buf, huge n)
             }
 #ifdef JP
             else if (iskanji(*s)) {
+                if (i + 1 >= n)
+                    break;
                 if (!s[1])
                     break;
                 buf[i++] = *s++;
