@@ -157,7 +157,10 @@ void do_cmd_macros(player_type *creature_ptr)
         term_clear();
         prt(_("[ マクロの設定 ]", "Interact with Macros"), 2, 0);
         prt(_("マクロ行動が(もしあれば)下に表示されます:", "Current action (if any) shown below:"), 20, 0);
-        ascii_to_text(buf, macro__buf);
+        // too long macro must die
+        strncpy(tmp, macro__buf, 80);
+        tmp[80] = '\0';
+        ascii_to_text(buf, tmp);
         prt(buf, 22, 0);
 
         prt(_("(1) ユーザー設定ファイルのロード", "(1) Load a user pref file"), 4, 5);
@@ -207,8 +210,10 @@ void do_cmd_macros(player_type *creature_ptr)
             if (k < 0) {
                 msg_print(_("そのキーにはマクロは定義されていません。", "Found no macro."));
             } else {
-                strcpy(macro__buf, macro__act[k]);
-                ascii_to_text(buf, macro__buf);
+                // too long macro must die
+                strncpy(tmp, macro__act[k], 80);
+                tmp[80] = '\0';
+                ascii_to_text(buf, tmp);
                 prt(buf, 22, 0);
                 msg_print(_("マクロを確認しました。", "Found a macro."));
             }
@@ -251,8 +256,10 @@ void do_cmd_macros(player_type *creature_ptr)
             if (!act) {
                 msg_print(_("キー配置は定義されていません。", "Found no keymap."));
             } else {
-                strcpy(macro__buf, act);
-                ascii_to_text(buf, macro__buf);
+                // too long macro must die
+                strncpy(tmp, act, 80);
+                tmp[80] = '\0';
+                ascii_to_text(buf, tmp);
                 prt(buf, 22, 0);
                 msg_print(_("キー配置を確認しました。", "Found a keymap."));
             }
