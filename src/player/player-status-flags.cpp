@@ -1275,6 +1275,9 @@ void update_extra_blows(player_type *creature_ptr)
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     creature_ptr->extra_blows[0] = creature_ptr->extra_blows[1] = 0;
 
+    const melee_type melee_type = player_melee_type(creature_ptr);
+    const bool two_handed = (melee_type == MELEE_TYPE_WEAPON_TWOHAND || melee_type == MELEE_TYPE_BAREHAND_TWO);
+
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
@@ -1282,9 +1285,9 @@ void update_extra_blows(player_type *creature_ptr)
 
         object_flags(creature_ptr, o_ptr, flgs);
         if (has_flag(flgs, TR_BLOWS)) {
-            if ((i == INVEN_MAIN_HAND || i == INVEN_MAIN_RING) && !has_two_handed_weapons(creature_ptr))
+            if ((i == INVEN_MAIN_HAND || i == INVEN_MAIN_RING) && !two_handed)
                 creature_ptr->extra_blows[0] += o_ptr->pval;
-            else if ((i == INVEN_SUB_HAND || i == INVEN_SUB_RING) && !has_two_handed_weapons(creature_ptr))
+            else if ((i == INVEN_SUB_HAND || i == INVEN_SUB_RING) && !two_handed)
                 creature_ptr->extra_blows[1] += o_ptr->pval;
             else {
                 creature_ptr->extra_blows[0] += o_ptr->pval;
