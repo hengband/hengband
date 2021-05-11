@@ -493,7 +493,7 @@ static bool utf8_to_sys(char *utf8_str, char *sys_str_buffer, size_t sys_str_buf
     }
 
     /* UTF-8 -> SJIS(CP932) */
-    if (WideCharToMultiByte(CP_ACP, 0, utf16buf, -1, sys_str_buffer, sys_str_buflen, NULL, NULL) == 0) {
+    if (WideCharToMultiByte(932, 0, utf16buf, -1, sys_str_buffer, sys_str_buflen, NULL, NULL) == 0) {
         C_KILL(utf16buf, input_len, WCHAR);
         return FALSE;
     }

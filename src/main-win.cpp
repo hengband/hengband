@@ -1114,8 +1114,12 @@ static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
             rc.right += 2 * td->tile_wid;
         } else if (iskanji(*(s + i))) /* 2バイト文字 */
         {
+            const auto *buf = to_wchar(s + i).wc_str();
             rc.right += td->font_wid;
-            ExtTextOutA(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s + i, 2, NULL);
+            if (buf == NULL)
+                ExtTextOutA(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s + i, 2, NULL);
+            else
+                ExtTextOutW(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, buf, wcslen(buf), NULL);
             rc.right -= td->font_wid;
             i++;
             rc.left += 2 * td->tile_wid;
