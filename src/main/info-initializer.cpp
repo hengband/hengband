@@ -12,6 +12,7 @@
 #include "info-reader/feature-reader.h"
 #include "info-reader/fixed-map-parser.h"
 #include "info-reader/general-parser.h"
+#include "info-reader/info-reader-util.h"
 #include "info-reader/kind-reader.h"
 #include "info-reader/magic-reader.h"
 #include "info-reader/race-reader.h"
@@ -38,6 +39,7 @@
 #ifndef WINDOWS
 #include <sys/types.h>
 #endif
+#include <string_view>
 
 /*!
  * @brief 基本情報読み込みのメインルーチン /
@@ -73,7 +75,8 @@ static void init_header(angband_header *head, IDX num)
  * even if the string happens to be empty (everyone has a unique '\0').
  */
 template <typename InfoType>
-static errr init_info(concptr filename, angband_header &head, std::vector<InfoType> &info, parse_info_txt_func parser, void (*retouch)(angband_header *head))
+static errr init_info(concptr filename, angband_header &head, std::vector<InfoType> &info, std::function<errr(std::string_view, angband_header *)> parser,
+    void (*retouch)(angband_header *head))
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_EDIT, format("%s.txt", filename));

@@ -12,5 +12,6 @@ enum race_flags8 : uint32_t {
     RF8_XXX8X08 = 0x00000100,
     RF8_WILD_MOUNTAIN = 0x00000200,
     RF8_WILD_GRASS = 0x00000400,
+    RF8_WILD_SWAMP = 0x00000800, //!< 沼地に生息(未使用)
     RF8_WILD_ALL = 0x80000000,
 };

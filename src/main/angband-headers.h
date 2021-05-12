@@ -9,9 +9,6 @@
 /*!
  * @brief 各初期データ用ヘッダ構造体 / Template file header information (see "init.c").
  */
-typedef struct angband_header angband_header;
-typedef errr (*parse_info_txt_func)(char *buf, angband_header *head);
-
 struct angband_header {
     byte checksum; //!< Checksum of "info" records
     u16b info_num; //!< このinfoのデータ数

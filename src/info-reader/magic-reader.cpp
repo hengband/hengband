@@ -1,8 +1,35 @@
 ﻿#include "info-reader/magic-reader.h"
+#include "info-reader/info-reader-util.h"
+#include "info-reader/parse-error-types.h"
 #include "main/angband-headers.h"
 #include "player-ability/player-ability-types.h"
 #include "player/player-class.h"
 #include "util/string-processor.h"
+
+namespace {
+/*!
+ * @brief 魔法タイプ名とtvalの対応表
+ */
+const std::unordered_map<std::string_view, tval_type> name_to_tval = {
+    { "SORCERY", TV_SORCERY_BOOK },
+    { "LIFE", TV_LIFE_BOOK },
+    { "MUSIC", TV_MUSIC_BOOK },
+    { "HISSATSU", TV_HISSATSU_BOOK },
+    { "NONE", TV_NONE },
+};
+
+/*!
+ * @brief 魔法必須能力とenumの対応表
+ */
+const std::unordered_map<std::string_view, int> name_to_stat = {
+    { "STR", A_STR },
+    { "INT", A_INT },
+    { "WIS", A_WIS },
+    { "DEX", A_DEX },
+    { "CON", A_CON },
+    { "CHR", A_CHR },
+};
+}
 
 /*!
  * @brief 職業魔法情報(m_info)のパース関数 /
@@ -11,99 +38,69 @@
  * @param head ヘッダ構造体
  * @return エラーコード
  */
-errr parse_m_info(char *buf, angband_header *head)
+errr parse_m_info(std::string_view buf, angband_header *head)
 {
     static player_magic *m_ptr = NULL;
     static int realm, magic_idx = 0, readable = 0;
+    const auto &tokens = str_split(buf, ':', false, 7);
 
-    if (buf[0] == 'N') {
-        int i = atoi(buf + 2);
+    if (tokens[0] == "N") {
+        // N:class-index
+        if (tokens.size() < 2 && tokens[1].size() == 0)
+            return PARSE_ERROR_GENERIC;
 
-        if (i <= error_idx)
-            return 4;
+        auto i = std::stoi(tokens[1]);
+        if (i < error_idx)
+            return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
         if (i >= head->info_num)
-            return 2;
+            return PARSE_ERROR_OUT_OF_BOUNDS;
 
         error_idx = i;
         m_ptr = &m_info[i];
-    } else if (!m_ptr) {
-        return 3;
-    } else if (buf[0] == 'I') {
-        char *book, *stat;
-        int xtra, type, first, weight;
-        char *s;
-        s = angband_strchr(buf + 2, ':');
+    } else if (!m_ptr)
+        return PARSE_ERROR_MISSING_RECORD_HEADER;
+    else if (tokens[0] == "I") {
+        if (tokens.size() < 7 || tokens[1].size() == 0)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
 
-        /* Verify that colon */
-        if (!s)
-            return 1;
+        const auto tval = name_to_tval.find(tokens[1]);
+        if (tval == name_to_tval.end())
+            return PARSE_ERROR_INVALID_FLAG;
 
-        /* Nuke the colon, advance to the name */
-        *s++ = '\0';
+        m_ptr->spell_book = tval->second;
 
-        book = buf + 2;
+        const auto stat = name_to_stat.find(tokens[2]);
+        if (stat == name_to_stat.end())
+            return PARSE_ERROR_INVALID_FLAG;
 
-        if (streq(book, "SORCERY"))
-            m_ptr->spell_book = TV_SORCERY_BOOK;
-        else if (streq(book, "LIFE"))
-            m_ptr->spell_book = TV_LIFE_BOOK;
-        else if (streq(book, "MUSIC"))
-            m_ptr->spell_book = TV_MUSIC_BOOK;
-        else if (streq(book, "HISSATSU"))
-            m_ptr->spell_book = TV_HISSATSU_BOOK;
-        else if (streq(book, "NONE"))
-            m_ptr->spell_book = TV_NONE;
-        else
-            return 5;
+        m_ptr->spell_stat = stat->second;
 
-        stat = s;
-        s = angband_strchr(s, ':');
-        if (!s)
-            return 1;
-        *s++ = '\0';
+        info_set_value(m_ptr->spell_xtra, tokens[3]);
+        info_set_value(m_ptr->spell_type, tokens[4]);
+        info_set_value(m_ptr->spell_first, tokens[5]);
+        info_set_value(m_ptr->spell_weight, tokens[6]);
+    } else if (tokens[0] == "R") {
+        if (tokens.size() < 3)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
 
-        if (streq(stat, "STR"))
-            m_ptr->spell_stat = A_STR;
-        else if (streq(stat, "INT"))
-            m_ptr->spell_stat = A_INT;
-        else if (streq(stat, "WIS"))
-            m_ptr->spell_stat = A_WIS;
-        else if (streq(stat, "DEX"))
-            m_ptr->spell_stat = A_DEX;
-        else if (streq(stat, "CON"))
-            m_ptr->spell_stat = A_CON;
-        else if (streq(stat, "CHR"))
-            m_ptr->spell_stat = A_CHR;
-        else
-            return 5;
-
-        if (4 != sscanf(s, "%x:%d:%d:%d", (uint *)&xtra, &type, &first, &weight))
-            return 1;
-
-        m_ptr->spell_xtra = xtra;
-        m_ptr->spell_type = type;
-        m_ptr->spell_first = first;
-        m_ptr->spell_weight = weight;
-    } else if (buf[0] == 'R') {
-        if (2 != sscanf(buf + 2, "%d:%d", &realm, &readable))
-            return 1;
-
+        info_set_value(realm, tokens[1]);
+        info_set_value(readable, tokens[2]);
         magic_idx = 0;
-    } else if (buf[0] == 'T') {
-        int level, mana, fail, exp;
-
+    } else if (tokens[0] == "T") {
         if (!readable)
-            return 1;
-        if (4 != sscanf(buf + 2, "%d:%d:%d:%d", &level, &mana, &fail, &exp))
-            return 1;
+            return PARSE_ERROR_GENERIC;
 
-        m_ptr->info[realm][magic_idx].slevel = (PLAYER_LEVEL)level;
-        m_ptr->info[realm][magic_idx].smana = (MANA_POINT)mana;
-        m_ptr->info[realm][magic_idx].sfail = (PERCENTAGE)fail;
-        m_ptr->info[realm][magic_idx].sexp = (EXP)exp;
+        if (tokens.size() < 5)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+
+        auto &magic = m_ptr->info[realm][magic_idx];
+        info_set_value(magic.slevel, tokens[1]);
+        info_set_value(magic.smana, tokens[2]);
+        info_set_value(magic.sfail, tokens[3]);
+        info_set_value(magic.sexp, tokens[4]);
         magic_idx++;
     } else
-        return 6;
+        return PARSE_ERROR_UNDEFINED_DIRECTIVE;
 
-    return 0;
+    return PARSE_ERROR_NONE;
 }

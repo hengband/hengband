@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "parse-error-types.h"
-#include "info-reader/info-reader-util.h"
+#include <string_view>
 
-errr parse_e_info(char *buf, angband_header *head);
+struct angband_header;
+errr parse_e_info(std::string_view buf, angband_header *head);

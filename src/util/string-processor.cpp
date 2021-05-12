@@ -18,12 +18,18 @@ concptr macro_trigger_keycode[2][MAX_MACRO_TRIG]; /*!< マクロの内容 */
 /*
  * Convert a decimal to a single digit octal number
  */
-static char octify(uint i) { return (hexsym[i % 8]); }
+static char octify(uint i)
+{
+    return (hexsym[i % 8]);
+}
 
 /*
  * Convert a decimal to a single digit hex number
  */
-static char hexify(uint i) { return (hexsym[i % 16]); }
+static char hexify(uint i)
+{
+    return (hexsym[i % 16]);
+}
 
 /*
  * Convert a octal-digit into a decimal
@@ -49,7 +55,10 @@ static int dehex(char c)
     return 0;
 }
 
-static char force_upper(char a) { return (islower(a)) ? toupper(a) : a; }
+static char force_upper(char a)
+{
+    return (islower(a)) ? toupper(a) : a;
+}
 
 static int angband_stricmp(concptr a, concptr b)
 {
@@ -611,11 +620,14 @@ std::string str_ltrim(std::string_view str)
  * @param str 操作の対象とする文字列
  * @param delim 文字列を分割する文字
  * @param trim trueの場合、分割した文字列の両端の空白を削除する
+ * @param num 1以上の場合、事前にvectorサイズを予約しておく(速度向上)
  * @return std::vector<std::string> 分割した文字列を要素とする配列
  */
-std::vector<std::string> str_split(std::string_view str, char delim, bool trim)
+std::vector<std::string> str_split(std::string_view str, char delim, bool trim, int num)
 {
     std::vector<std::string> result;
+    if (num > 0)
+        result.reserve(num);
 
     auto make_str = [trim](std::string_view sv) { return trim ? str_trim(sv) : std::string(sv); };
 
