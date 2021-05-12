@@ -204,7 +204,12 @@ bool win_maximized = FALSE;
 /*
  * game in progress
  */
-bool game_in_progress = FALSE;
+bool game_in_progress = false;
+
+/*
+ * movie in progress
+ */
+bool movie_in_progress = false;
 
 /*
  * note when "open"/"new" become valid
@@ -1508,18 +1513,16 @@ static void setup_menus(void)
  * Apparently, Windows copies the entire filename into the first
  * piece of the "command line string".  Perhaps we should extract
  * the "basename" of that filename and append it to the "save" dir.
- * @param player_ptr pointer of player_type
  * @param savefile_option savefile path
  */
-static void check_for_save_file(player_type *player_ptr, const std::string &savefile_option)
+static void check_for_save_file(const std::string &savefile_option)
 {
     if (savefile_option.empty())
         return;
 
     strcpy(savefile, savefile_option.c_str());
     validate_file(savefile);
-    game_in_progress = TRUE;
-    play_game(player_ptr, FALSE, FALSE);
+    game_in_progress = true;
 }
 
 /*!
@@ -1536,20 +1539,17 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
     OPENFILENAMEW ofn;
     switch (wCmd) {
     case IDM_FILE_NEW: {
-        if (game_in_progress) {
+        if (game_in_progress || movie_in_progress) {
             plog(_("プレイ中は新しいゲームを始めることができません！", "You can't start a new game while you're still playing!"));
         } else {
-            game_in_progress = TRUE;
-            term_flush();
-            strcpy(savefile, "");
-            play_game(player_ptr, TRUE, FALSE);
-            quit(NULL);
+            game_in_progress = true;
+            savefile[0] = '\0';
         }
 
         break;
     }
     case IDM_FILE_OPEN: {
-        if (game_in_progress) {
+        if (game_in_progress || movie_in_progress) {
             plog(_("プレイ中はゲームをロードすることができません！", "You can't open a new game while you're still playing!"));
         } else {
             memset(&ofn, 0, sizeof(ofn));
@@ -1561,10 +1561,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 
             if (get_open_filename(&ofn, ANGBAND_DIR_SAVE, savefile, MAIN_WIN_MAX_PATH)) {
                 validate_file(savefile);
-                game_in_progress = TRUE;
-                term_flush();
-                play_game(player_ptr, FALSE, FALSE);
-                quit(NULL);
+                game_in_progress = true;
             }
         }
 
@@ -1623,7 +1620,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         break;
     }
     case IDM_FILE_MOVIE: {
-        if (game_in_progress) {
+        if (game_in_progress || movie_in_progress) {
             plog(_("プレイ中はムービーをロードすることができません！", "You can't open a movie while you're playing!"));
         } else {
             memset(&ofn, 0, sizeof(ofn));
@@ -1635,9 +1632,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 
             if (get_open_filename(&ofn, ANGBAND_DIR_USER, savefile, MAIN_WIN_MAX_PATH)) {
                 prepare_browse_movie_without_path_build(savefile);
-                play_game(player_ptr, FALSE, TRUE);
-                quit(NULL);
-                return;
+                movie_in_progress = true;
             }
         }
 
@@ -2107,7 +2102,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         if (term_no_press)
             term_no_press = FALSE;
         else {
-            WCHAR wc[2] = { (WCHAR)wParam , '\0'};
+            WCHAR wc[2] = { (WCHAR)wParam, '\0' };
             term_keypress(to_multibyte(wc).c_str());
         }
         return 0;
@@ -2690,7 +2685,8 @@ int WINAPI WinMain(
     term_activate(term_screen);
     init_angband(p_ptr, FALSE);
     initialized = TRUE;
-    check_for_save_file(p_ptr, command_line.get_savefile_option());
+
+    check_for_save_file(command_line.get_savefile_option());
     prt(_("[ファイル] メニューの [新規] または [開く] を選択してください。", "[Choose 'New' or 'Open' from the 'File' menu]"), 23, _(8, 17));
     term_fresh();
 
@@ -2700,10 +2696,26 @@ int WINAPI WinMain(
         init_music();
     }
 
+    // ユーザーがゲーム開始を選択するまで待つループ
     MSG msg;
     while (GetMessage(&msg, NULL, 0, 0)) {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
+        if (game_in_progress || movie_in_progress)
+            break;
+    }
+
+    term_flush();
+    if (movie_in_progress) {
+        // selected movie
+        play_game(p_ptr, FALSE, TRUE);
+    } else if (savefile[0] == '\0') {
+        // new game
+        play_game(p_ptr, TRUE, FALSE);
+    }
+    else {
+        // selected savefile
+        play_game(p_ptr, FALSE, FALSE);
     }
 
     quit(NULL);
