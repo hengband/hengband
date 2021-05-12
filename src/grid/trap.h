@@ -19,33 +19,35 @@
 #define CHEST_ALARM             0x0800 /*!< 箱のトラップ: 警報装置 */
 
 /* Types of normal traps */
-#define NOT_TRAP        -1
-#define TRAP_TRAPDOOR    0
-#define TRAP_PIT         1
-#define TRAP_SPIKED_PIT  2
-#define TRAP_POISON_PIT  3
-#define TRAP_TY_CURSE    4
-#define TRAP_TELEPORT    5
-#define TRAP_FIRE        6
-#define TRAP_ACID        7
-#define TRAP_SLOW        8
+enum trap_type {
+    NOT_TRAP = -1,
+    TRAP_TRAPDOOR = 0,
+    TRAP_PIT = 1,
+    TRAP_SPIKED_PIT = 2,
+    TRAP_POISON_PIT = 3,
+    TRAP_TY_CURSE = 4,
+    TRAP_TELEPORT = 5,
+    TRAP_FIRE = 6,
+    TRAP_ACID = 7,
+    TRAP_SLOW = 8,
 
-#define TRAP_LOSE_STR    9
-#define TRAP_LOSE_DEX   10
-#define TRAP_LOSE_CON   11
-#define TRAP_BLIND      12
-#define TRAP_CONFUSE    13
-#define TRAP_POISON     14
-#define TRAP_SLEEP      15
-#define TRAP_TRAPS      16
-#define TRAP_ALARM      17
+    TRAP_LOSE_STR = 9,
+    TRAP_LOSE_DEX = 10,
+    TRAP_LOSE_CON = 11,
+    TRAP_BLIND = 12,
+    TRAP_CONFUSE = 13,
+    TRAP_POISON = 14,
+    TRAP_SLEEP = 15,
+    TRAP_TRAPS = 16,
+    TRAP_ALARM = 17,
 
-#define MAX_NORMAL_TRAPS 18
+    /* Types of special traps */
+    TRAP_OPEN = 18,
+    TRAP_ARMAGEDDON = 19,
+    TRAP_PIRANHA = 20,
 
-/* Types of special traps */
-#define TRAP_OPEN       18
-#define TRAP_ARMAGEDDON 19
-#define TRAP_PIRANHA    20
+};
+const int MAX_NORMAL_TRAPS = TRAP_ALARM + 1;
 
 extern const int chest_traps[64];
 

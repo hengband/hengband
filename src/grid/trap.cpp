@@ -284,7 +284,7 @@ static int check_hit_from_monster_to_player(player_type *target_ptr, int power)
  * @brief 落とし穴系トラップの判定とプレイヤーの被害処理
  * @param trap_feat_type トラップの種別ID
  */
-static void hit_trap_pit(player_type *trapped_ptr, int trap_feat_type)
+static void hit_trap_pit(player_type *trapped_ptr, enum trap_type trap_feat_type)
 {
     HIT_POINT dam;
     concptr trap_name = "";
@@ -404,7 +404,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
     POSITION x = trapped_ptr->x, y = trapped_ptr->y;
     grid_type *g_ptr = &trapped_ptr->current_floor_ptr->grid_array[y][x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
-    int trap_feat_type = has_flag(f_ptr->flags, FF_TRAP) ? f_ptr->subtype : NOT_TRAP;
+    enum trap_type trap_feat_type = has_flag(f_ptr->flags, FF_TRAP) ? (enum trap_type)f_ptr->subtype : NOT_TRAP;
     concptr name = _("トラップ", "a trap");
 
     disturb(trapped_ptr, FALSE, TRUE);
@@ -622,6 +622,9 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
         }
         break;
     }
+
+    default:
+        break;
     }
 
     if (break_trap && is_trap(trapped_ptr, g_ptr->feat)) {
