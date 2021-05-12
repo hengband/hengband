@@ -349,11 +349,9 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
     if (creature_ptr->chp < 0 && !cheat_immortal) {
         bool android = (creature_ptr->prace == RACE_ANDROID ? TRUE : FALSE);
 
-#ifdef JP
         /* 死んだ時に強制終了して死を回避できなくしてみた by Habu */
         if (!cheat_save && !save_player(creature_ptr, SAVE_TYPE_CLOSE_GAME))
-            msg_print("セーブ失敗！");
-#endif
+            msg_print(_("セーブ失敗！", "death save failed!"));
 
         sound(SOUND_DEATH);
         chg_virtue(creature_ptr, V_SACRIFICE, 10);
