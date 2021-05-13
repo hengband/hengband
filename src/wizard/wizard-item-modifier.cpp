@@ -46,6 +46,7 @@
 #include "wizard/wizard-special-process.h"
 #include "world/world.h"
 #include <algorithm>
+#include <limits>
 #include <sstream>
 #include <vector>
 
