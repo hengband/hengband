@@ -15,8 +15,6 @@ sound_files = \
 	se_maoudamashii_battle07.wav \
 	se_maoudamashii_retro22.wav \
 	se_maoudamashii_se_drink01.wav \
-	se_maoudamashii_se_footstep01.wav \
 	sword-clash1-r.wav \
-	sword-drawn1-r.wav \
 	sword-gesture3-r.wav \
 	sword-slash3-r.wav
