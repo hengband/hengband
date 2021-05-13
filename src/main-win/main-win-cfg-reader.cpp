@@ -3,6 +3,7 @@
  * @brief Windows版固有実装(.cfgファイル処理)
  */
 
+#include "locale/japanese.h"
 #include "main-win/main-win-cfg-reader.h"
 #include "main-win/main-win-define.h"
 #include "main-win/main-win-file-utils.h"
@@ -109,6 +110,8 @@ CfgData *CfgReader::read_sections(std::initializer_list<cfg_section> sections)
             GetPrivateProfileStringA(section.section_name, read_key, "", buf, MAIN_WIN_MAX_PATH, this->cfg_path.c_str());
             if (*buf != '\0') {
                 cfg_values *filenames = new cfg_values();
+                // .cfg (UTF-8) to Shift-JIS
+                guess_convert_to_system_encoding(buf, MAIN_WIN_MAX_PATH);
                 const int num = tokenize_whitespace(buf, SAMPLE_MAX, tokens);
                 for (int j = 0; j < num; j++) {
                     path_build(path, MAIN_WIN_MAX_PATH, dir, tokens[j]);
