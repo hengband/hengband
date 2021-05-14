@@ -587,8 +587,8 @@ void display_monster_launching(player_type *player_ptr, lore_type *lore_ptr)
         return;
 
     if (know_armour(lore_ptr->r_idx, lore_ptr->know_everything))
-        sprintf(lore_ptr->tmp_msg[lore_ptr->vn], _("威力 %dd%d の射撃をする", "fire an arrow (Power:%dd%d)"), lore_ptr->r_ptr->blow[p].d_side,
-            lore_ptr->r_ptr->blow[p].d_dice);
+        sprintf(lore_ptr->tmp_msg[lore_ptr->vn], _("威力 %dd%d の射撃をする", "fire an arrow (Power:%dd%d)"), lore_ptr->r_ptr->blow[p].d_dice,
+            lore_ptr->r_ptr->blow[p].d_side);
     else
         sprintf(lore_ptr->tmp_msg[lore_ptr->vn], _("射撃をする", "fire an arrow"));
 
