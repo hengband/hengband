@@ -25633,7 +25633,7 @@ D:「誰だろうとわたしの永遠の絶頂をおびやかす者は許さな
 N:1292:『チョコラータ』
 E:Cioccolata
 G:m:g
-I:130:100d30:15:100:10
+I:130:100d30:20:100:10
 W:53:2:0:20000:0:0
 B:HIT:UN_BONUS:8d8
 B:HIT:UN_BONUS:8d8
@@ -26142,3 +26142,195 @@ F:ONLY_GOLD | DROP_4D2 | DROP_CORPSE
 S:1_IN_6 | BLINK | TPORT
 D:$Capitalism can never obey this great dog!!
 D:彼女は決して資本の犬ではない。
+
+N:1321:殺戮の暴君
+E:Carnage Tyrant
+G:R:g
+I:120:60d50:30:125:50
+W:45:3:0:10000:0:0
+B:CRUSH:SUPERHURT:10d8
+B:CRUSH:SUPERHURT:10d8
+B:BITE:HURT:8d8
+B:BITE:HURT:8d8
+F:FORCE_MAXHP | PREVENT_SUDDEN_MAGIC | ANIMAL | POWERFUL | REGENERATE | RIDING |
+F:MOVE_BODY | CAN_SWIM | OPEN_DOOR | BASH_DOOR | KILL_WALL | KILL_BODY | KILL_ITEM
+F:DROP_GOOD | ONLY_ITEM | DROP_4D2 | DROP_SKELETON | DROP_CORPSE |
+F:IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS |
+F:RES_SHAR | RES_SOUN | RES_DISE | RES_PLAS | RES_WATE | RES_GRAV |
+F:REFLECTING | RES_TELE | NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP |
+D:$Sun Empire commanders are well versed in advanced martial strategy.
+D:$Still, the correct maneuver is usually to deploy the giant, implacable death lizard.(M:tG)
+D:太陽帝国の指揮官たちは高度な軍事戦略に精通している。
+D:とは言え普通は、巨大でしつこい死を呼ぶトカゲを投入することが適切な戦術になる。(M:tG)
+
+N:1322:溶岩の怪物『ヨガン』
+E:Magman,Lava monster
+G:~:R
+I:107:30d100:20:110:70:0
+W:50:4:0:15000:0:0
+B:TOUCH:FIRE:12d8
+B:TOUCH:FIRE:12d8
+F:UNIQUE | PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | ONLY_GOLD | AURA_FIRE
+F:NO_CONF | NO_STUN | RES_TELE| EMPTY_MIND | COLD_BLOOD
+F:NO_SLEEP |IM_FIRE | NONLIVING | DROP_4D2 | DROP_3D2 | BASH_DOOR 
+S:1_IN_3 | 
+S:BR_FIRE | BA_FIRE |
+D:$It is a monster whose whole body is made of lava, hidden in the volcano of Neo Star.
+D:コレカラスターの火山内に潜む、全身が溶岩で出来た怪物だ。
+
+#護衛はバーサーカー4d3 メイジ1d3
+N:1323:狂戦士『バストラル』
+E:Bastral, the berserker
+G:p:U
+I:121:19d100:18:110:20
+W:37:4:0:2500:0:0
+B:HIT:HURT:7d7
+B:HIT:SUPERHURT:6d6
+B:HIT:SUPERHURT:7d7
+B:HIT:SUPERHURT:7d7
+F:UNIQUE | MALE | FORCE_MAXHP | PREVENT_SUDDEN_MAGIC | 
+F:ONLY_ITEM | DROP_60 | DROP_3D2 | DROP_GOOD | CAN_SPEAK |
+F:OPEN_DOOR | BASH_DOOR | MOVE_BODY |
+F:HUMAN | EVIL | NO_STUN | NO_CONF | NO_SLEEP |
+F:CAN_SWIM | HAS_LITE_1 | DROP_CORPSE |
+F:IM_FIRE | IM_COLD | IM_ELEC | RES_LITE
+S:1_IN_7 | DISPEL
+R:293:4d3
+R:449:1d3
+D:$Bastral is the strongest berserker. He has never lost a single combat　 
+D:$since he got Windberg the legendary battle ax.
+D:最強の狂戦士バストラルは、伝説のバトル・アックス、
+D:ウィンドバーグを手にして以来、一度も一騎討ちに敗れたことはない。
+
+#護衛はレッド・ドラゴン3d3 バジリスク3d2
+N:1324:巨龍『ベルフレイム』
+E:Belflame, the queen dragon
+G:D:R
+I:116:18d100:20:100:70
+W:41:2:0:7000:0:0
+B:CLAW:HURT:4d9
+B:CLAW:HURT:4d9
+B:CLAW:HURT:4d9
+B:BITE:HURT:6d12
+F:UNIQUE | FEMALE | FORCE_MAXHP | PREVENT_SUDDEN_MAGIC |
+F:ONLY_ITEM | DROP_3D2 | DROP_4D2 | DROP_GOOD | 
+F:BASH_DOOR | MOVE_BODY | 
+F:EVIL | DRAGON | NO_CONF | NO_SLEEP | CAN_FLY | RIDING |
+F:SELF_LITE_1 | DROP_CORPSE | 
+F:IM_FIRE | IM_ELEC | IM_POIS
+S:1_IN_4 | BR_FIRE | BA_FIRE | BA_ELEC | MISSILE | HASTE | HEAL
+R:589:3d3
+R:453:3d2
+D:$She is the queen of the dragons , who once fought against the Demon King 
+D:$Klimt and lost her life. She will show her appearance again in the sky 
+D:$in response to the power of darkness.
+D:かつて魔王クリムトと戦い命を落としたドラゴン族の女王。
+D:暗黒の力に呼応して再びその姿を天空に示すこととなった。
+
+#護衛はリッチ3d2 バンパイア3d3
+N:1325:死の『バルマー卿』
+E:Lord Ballmer, the undead
+G:L:D
+I:120:21d100:20:90:10
+W:43:2:0:12000:0:0
+B:GAZE:TERRIFY
+B:GAZE:PARALYZE
+B:SLASH:EXP_VAMP:4d11
+B:SLASH:EXP_VAMP:4d11
+F:UNIQUE | MALE | FORCE_MAXHP | PREVENT_SUDDEN_MAGIC | REGENERATE
+F:ONLY_ITEM | DROP_2D2 | DROP_3D2 | DROP_GOOD | DROP_60
+F:SMART | COLD_BLOOD | OPEN_DOOR | BASH_DOOR | MOVE_BODY
+F:EVIL | UNDEAD | NO_FEAR | NO_CONF | NO_SLEEP | SELF_DARK_1
+F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_LITE | RES_NETH
+S:1_IN_3 | 
+S:DISPEL | BA_POIS | MIND_BLAST | CAUSE_3 | BO_MANA | MISSILE
+S:SCARE | HOLD | S_MONSTER | S_DEMON | S_UNDEAD | ANIM_DEAD
+R:518:3d2
+R:432:3d3
+D:$Lord Ballmer, the hero who defeated the Demon King Klimt, 
+D:$is a horrible undead now.
+D:魔王クリムトを倒した英雄バルマー卿だが、現在は
+D:恐ろしいアンデッドと成り果てている。
+
+N:1326:セーヌの狼王『コートード』
+E:Courtaud, the king wolf of Seine
+G:C:o
+I:120:22d10:30:30:20
+W:13:2:0:150:0:0
+B:BITE:HURT:1d12
+B:BITE:HURT:1d12
+B:BITE:HURT:1d5
+F:UNIQUE | FORCE_MAXHP | ESCORT | BASH_DOOR
+F:ANIMAL | NO_FEAR | NO_SLEEP | WILD_WOOD | DROP_CORPSE
+D:$It is the boss of the pack of man-eating wolves 
+D:$that plunged the city of Paris into the depths of fear.
+D:$It has reddish hair, a large body, and a short tail like a stump.
+D:パリの街を恐怖のどん底に陥れた、人喰い狼の群れのボスだ。
+D:赤みがかった体毛、大きな体、切り株のような短い尻尾を持つ。
+
+N:1327:パックンフラワー
+E:Piranha Plant
+G:#:r
+I:115:20d10:20:20:10
+W:22:2:0:300:0:0
+B:BITE:SUPERHURT:5d4
+B:BITE:SUPERHURT:5d4
+F:DROP_CORPSE | ANIMAL | HURT_FIRE | NEVER_MOVE
+F:| DROP_90 | IM_POIS | RES_WATE | CAN_SWIM | CAN_FLY
+S:1_IN_4 | SHOOT | BO_FIRE | BA_POIS
+D:食虫植物が意思を持った凶暴な人喰い花で、鋭い牙を生やしている。
+D:おもに土管の中に潜んでおり、時々顔を出して愚かにも自分を踏もうとした人間を捕食する。
+D:口から炎や毒ガスやシューリンガンなどを吐き出して攻撃してくる個体もいる。
+
+N:1328:ピカチャウ (ルルイエのすがた)
+E:Electric rat (Ruruie's figure)
+G:r:G
+I:130:80d30:30:90:0
+W:80:3:0:5500:0:0
+B:CLAW:ACID:1d20
+B:CLAW:ELEC:1d20
+B:CRUSH:ELEC:3d33
+B:CRUSH:ELEC:3d33
+F:AURA_ELEC | SELF_LITE_1 | ELDRITCH_HORROR
+F:EVIL | ANIMAL | DROP_1D2 | DROP_90 | ONLY_ITEM
+F:FRIENDS | CAN_SWIM | NO_CONF | NO_SLEEP
+F:IM_POIS | IM_COLD | IM_ACID | IM_ELEC
+S:1_IN_5 | BR_ACID | BR_ELEC | BA_ELEC | BA_ACID | S_KIN 
+D:$It's shockingly unnamable, for a rat.
+D:名状しがたい外見をしているが、油断すると思わぬ衝撃を受けるだろう。
+
+N:1329:『金のスニッチ』
+E:Golden Snitch
+G:*:y
+I:155:1d2:200:10000:0
+W:29:6:0:500:0:0
+B:CRUSH:HURT:1d10
+F:UNIQUE | FORCE_MAXHP | RAND_25 | RAND_50
+F:PREVENT_SUDDEN_MAGIC | NEVER_BLOW
+F:ONLY_ITEM | DROP_60 | DROP_90 | DROP_GREAT
+F:NONLIVING | COLD_BLOOD | RES_ALL | SELF_LITE_2 | CAN_FLY
+F:NO_CONF | NO_SLEEP | NO_STUN | EMPTY_MIND | RES_TELE
+S:1_IN_4 | HASTE | BLINK | TPORT
+D:$It is used for playing Quidditch in the wizarding world
+D:魔法界のスポーツで使われる道具だ。
+D:この球体を捕ったものは大きな点数と称賛を手にするであろう
+
+N:1330:闇の帝王『ヴォルデモート』
+E:The Dark Lord "Voldemort"
+G:p:D
+I:120:50d100:20:100:0
+W:61:4:0:30000:0:0
+F:UNIQUE | MALE | REFLECTING | ESCORT | ESCORTS |
+F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | HUMAN | DROP_CORPSE |
+F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GREAT |
+F:SMART | OPEN_DOOR | BASH_DOOR | CAN_FLY | 
+F:EVIL | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_DARK |
+F:NO_CONF | NO_SLEEP | NO_FEAR | RES_TELE | POWERFUL |
+S:1_IN_2 | BLIND | CONF | HOLD | HEAL
+S:BA_ELEC | BA_FIRE | BA_COLD | BA_WATE | BA_DARK |
+S:MIND_BLAST |BRAIN_SMASH | CAUSE_3 | BO_MANA | BO_ICEE
+S:BLINK | TPORT | TELE_TO | TELE_AWAY | TELE_LEVEL |
+S:DARKNESS | FORGET | S_KIN | S_UNDEAD | S_HI_UNDEAD |
+R:638:10d2
+R:1271:3d2
+D:彼は史上もっとも強力かつ危険な闇の魔法使いだ。従者である死喰い人や、追放されていた闇の生物を率いて魔法界を支配しようとしている！
