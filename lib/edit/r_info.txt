@@ -25701,7 +25701,7 @@ D:・・・できるものなら。
 D:（任天堂『マザー２』）
 
 N:1295:あつくもえるてき
-E:Hot burning enemy
+E:Soul Consuming Flame
 G:~:r
 I:130:60d30:30:6:20
 W:59:6:0:12000:0:0
