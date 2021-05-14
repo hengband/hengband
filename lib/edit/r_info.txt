@@ -23213,17 +23213,19 @@ D:バクテリアン軍が放った強大な刺客だ。それは大量のプチ
 
 # テストプレイした結果、戦士＆レンジャーなら毒針なしでも刺さった
 # メイジ系は塔2F＆クローン地獄に毒針必須かも
+# → 魔獣使い？ 等で無理めパターンが出たらしいので調整
 N:1163:クリスタル・キューブ
 E:Crystal cube
 G:g:B
-I:135:1d3:10:200:30
-W:50:3:0:2500:0:0
-B:CRUSH:SHATTER:10d6
+I:125:1d3:10:200:30
+W:50:4:0:2500:0:0
 B:CRUSH:SHATTER:10d7
-B:CRUSH:SHATTER:10d8
-B:CRUSH:SHATTER:10d9
+B:CRUSH:SHATTER:10d7
+B:CRUSH:SHATTER:10d7
+B:CRUSH:SHATTER:10d7
 F:RES_ALL | FRIENDS | NONLIVING | RAND_25 | RAND_50
 F:NO_CONF | NO_STUN | NO_SLEEP | NO_FEAR
+S:1_IN_5 | HASTE
 D:$If you can dodge them, you are an expert!
 D:避けきれたら君も上級者だ！
 
