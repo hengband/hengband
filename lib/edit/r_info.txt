@@ -18810,20 +18810,19 @@ D:かつてはブル・ゲイツの究極兵器であり、
 D:全ての多元世界に破滅をもたらす恐怖の存在だった。
 D:弱点はCSSにJavaScriptと呼ばれる電脳兵器だが、どちらもこの世界には存在しない。
 
-N:922:ピカチャウ
-E:Electric rat
+N:922:ピチャウ
+E:Small electric rat
 G:r:y
-I:110:20d10:20:10:40
-W:24:2:0:200:0:0
+I:115:10d10:20:10:40
+W:14:2:0:45:320:1317
 B:CLAW:ELEC:1d5
-B:CLAW:ELEC:1d5
-B:BITE:ELEC:1d4
-F:DROP_CORPSE | ONLY_GOLD | DROP_1D2 | IM_ELEC | ANIMAL | AURA_ELEC |
-F:SELF_LITE_1 |
-S:1_IN_5 | 
-S:BR_ELEC | BO_ELEC
-D:$It's shockingly pretty, for a rat.
-D:かわいらしい外見をしているが、油断すると思わぬ衝撃を受けるだろう。
+B:CLAW:ELEC:1d4
+F:DROP_CORPSE | ONLY_GOLD | DROP_2D2 | IM_ELEC | ANIMAL | AURA_ELEC
+F:SELF_LITE_1 | RAND_25 | RAND_50
+S:1_IN_6 | BR_ELEC | BO_ELEC
+D:$It's a cute mouse.
+D:$ However, static electricity is accumulated.
+D:可愛いネズミだ。しかし静電気が溜まっている。
 
 N:923:雪女
 E:Yukionna
@@ -26077,3 +26076,54 @@ B:BITE:HURT:1d6
 F:WILD_GRASS | WILD_WASTE | FRIENDS | ANIMAL | DROP_CORPSE | DROP_SKELETON
 D:$It is called as the king of beasts.
 D:百獣の王だ。
+
+N:1317:ピカチャウ
+E:Electric rat
+G:r:y
+I:110:20d10:20:10:40
+W:24:2:0:200:0:0
+B:CLAW:ELEC:1d5
+B:CLAW:ELEC:1d5
+B:BITE:ELEC:1d4
+F:DROP_CORPSE | ONLY_GOLD | DROP_1D2 | IM_ELEC | ANIMAL | AURA_ELEC |
+F:SELF_LITE_1 |
+S:1_IN_5 | BR_ELEC | BO_ELEC
+D:$It's shockingly pretty, for a rat.
+D:かわいらしい外見をしているが、油断すると思わぬ衝撃を受けるだろう。
+
+N:1318:ナマチャウ
+E:Draft beer rat
+G:r:y
+I:115:23d15:20:45:15
+W:29:3:0:350:4000:1319
+B:BITE:ELEC:6d5
+B:BITE:ELEC:6d5
+B:CLAW:ELEC:6d5
+F:DROP_CORPSE | ONLY_GOLD | DROP_2D2 | IM_ELEC | ANIMAL | AURA_ELEC
+F:SELF_LITE_1 | RAND_25
+S:1_IN_5 | BR_ELEC | BO_ELEC
+D:$It is a character of a "Famous Key Monster" (Fakemon for short),
+D:$ a game that is very popular all over the world.
+D:$  It drinks secretly not only at home but also at work.
+D:世界中で大人気のゲーム、パチパチモンスター略してパチモンのキャラだ。
+D:それは家だけでなく職場でもこっそり酒を飲んでいる。
+
+N:1319:アルチャウ
+E:Alcoholism rat
+G:r:y
+I:120:28d20:20:10:40
+W:34:3:0:200:0:0
+B:BITE:ELEC:6d10
+B:BITE:ELEC:6d10
+B:CLAW:ELEC:6d10
+F:DROP_CORPSE | ONLY_GOLD | DROP_3D2 | IM_ELEC | ANIMAL | AURA_ELEC
+F:SELF_LITE_1 | RAND_25 | RAND_50
+S:1_IN_5 | BR_ELEC | BO_ELEC
+D:$It is a character of a "Famous Key Monster" (Fakemon for short),
+D:$ a game that is very popular all over the world.
+D:$  Its hands are usually shaking.
+D:$  If it drinks even one drop, it can't stop drinking until I go to bed. 
+D:世界中で大人気のゲーム、パチパチモンスター略してパチモンのキャラだ。
+D:普段は前足が震えている。
+D:一滴でも飲んだら寝るまで飲むのを止められない。
+
