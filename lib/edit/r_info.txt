@@ -25952,3 +25952,55 @@ F:WILD_ONLY | FRIENDS | ANIMAL | EVIL | WILD_ALL
 D:$It is an annoying runaway tribe that interferes with traffic
 D:$ on a stolen motorcycle under the autumn full moon.
 D:十五夜になると盗難バイクで往来の邪魔をする迷惑系暴走族だ。
+
+N:1308:気狂いピエロ『ドネルド・マクドネルド』
+E:Doneld McDoneld, the Mad Pierrot
+G:h:v
+I:120:50d30:20:80:20
+W:36:3:0:3000:0:0
+B:SHOW:CONFUSE:6d9
+B:CHARGE:FIRE:6d9
+B:CHARGE:COLD:6d9
+B:CHARGE:POISON:6d9
+F:UNIQUE | FORCE_MAXHP | MALE | EVIL | ATTR_MULTI | DROP_GREAT | DROP_90
+F:STUPID | CAN_SPEAK | WEIRD_MIND | ELDRITCH_HORROR | BASH_DOOR | KILL_BODY
+F:IM_FIRE | IM_COLD | IM_POIS | RES_CHAO
+F:TAKE_ITEM | CAN_SWIM | NO_CONF | NO_FEAR
+S:1_IN_5 | SCARE | HOLD | CONF | BLIND | BR_CHAO
+D:$He is a terrorist at McDoneld's,
+D:$ one of the largest military-industrial complexes in the world.
+D:$  He has driven various people to gradual death
+D:$ due to arteriosclerosis.
+D:世界で最も巨大な軍産複合体の一つ、
+D:マクドネルド社に籍を置くテロリストだ。
+D:彼は様々な人々を動脈硬化によって緩やかな死へと追いやった。
+
+# Tigers hasn't won baseball league since a rioter had thrown his statue into the river.
+# After a while, he was salvaged but both ankles and glasses were still missing...
+N:1309:足なんて飾り『サンダーズ大佐』
+E:Colonel Thunders, the Legless Fryer
+G:p:y
+I:120:50d30:20:80:20
+W:36:3:0:3000:0:0
+B:MOAN:HURT:4d10
+B:CRAWL:HURT:4d10
+F:UNIQUE | FORCE_MAXHP | HUMAN | MALE | UNDEAD | COLD_BLOOD | FRIENDLY
+F:DROP_GOOD | DROP_4D2 | DROP_3D2 | DROP_2D2 | DROP_1D2 | DROP_60 | DROP_90
+F:DROP_CORPSE | SMART | IM_ELEC | IM_COLD | IM_POIS | RES_NETH | RES_WATE
+S:1_IN_5 | S_KIN | BO_ELEC | BA_ELEC | BR_ELEC
+D:$He still resents being submerged in the bottom of the sludge.
+D:彼は汚泥の底に沈められたことを未だに恨んでいる。
+
+N:1310:麦畑の魔物
+E:Beast in wheat fields
+G:E:w
+I:120:15d15:15:35:1
+W:20:4:0:200:0:0
+B:SLASH:HURT:5d5
+B:SLASH:HURT:5d5
+F:NAZGUL | FORCE_MAXHP | NONLIVING | WEIRD_MIND | CAN_FLY | INVISIBLE
+F:PASS_WALL | KILL_BODY | IM_COLD | RES_NETH | NO_FEAR | NO_CONF | NO_STUN
+D:$It is a spiritual shadow that wanders in search of the girl in the cage.
+D:$  You will learn the importance of avoiding.
+D:主を求めてさまよう霊的な影だ。
+D:あなたはよけることの大切さを学ぶだろう。
