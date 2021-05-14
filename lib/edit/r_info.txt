@@ -25749,7 +25749,7 @@ I:110:3d6:10:5:15
 W:3:3:0:10:0:0
 B:BITE:HURT:1d3
 B:CLAW:HURT:1d3
-F:RAND_25 | CAN_FLY | ANIMAL | PASS_WALL | WILD_GRASS
+F:RAND_25 | CAN_FLY | ANIMAL | PASS_WALL | WILD_GRASS | FRIENDS
 D:$A famous painter who stayed at a certain post station drew a sparrow
 D:$ on a folding screen due to lack of accommodation charges.
 D:$  It's frustrating because it doesn't enter a cage
