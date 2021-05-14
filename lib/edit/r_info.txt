@@ -25987,7 +25987,7 @@ B:CRAWL:HURT:4d10
 F:UNIQUE | FORCE_MAXHP | HUMAN | MALE | UNDEAD | COLD_BLOOD | FRIENDLY
 F:DROP_GOOD | DROP_4D2 | DROP_3D2 | DROP_2D2 | DROP_1D2 | DROP_60 | DROP_90
 F:DROP_CORPSE | SMART | IM_ELEC | IM_COLD | IM_POIS | RES_NETH | RES_WATE
-S:1_IN_5 | S_KIN | BO_ELEC | BA_ELEC | BR_ELEC
+S:1_IN_8 | S_KIN | BO_ELEC | BA_ELEC | BR_ELEC
 D:$He still resents being submerged in the bottom of the sludge.
 D:彼は汚泥の底に沈められたことを未だに恨んでいる。
 
@@ -26004,3 +26004,76 @@ D:$It is a spiritual shadow that wanders in search of the girl in the cage.
 D:$  You will learn the importance of avoiding.
 D:主を求めてさまよう霊的な影だ。
 D:あなたはよけることの大切さを学ぶだろう。
+
+N:1311:バファロー
+E:Buffalo
+G:q:u
+I:110:20d15:20:70:0
+W:18:2:0:180:0:0
+B:BUTT:HURT:2d4
+B:BUTT:HURT:2d4
+B:BUTT:HURT:8d4
+F:BASH_DOOR | RAND_25 | CAN_SWIM | NO_FEAR | FRIENDS | WILD_SWAMP
+F:ANIMAL | DROP_SKELETON | DROP_CORPSE | RIDING
+D:$Big water buffalo!
+D:$  This big horn may penetrate you.
+D:巨大な水牛だ。その角はあなたの肉体を貫くかもしれない。
+
+N:1312:イヌワシ
+E:Golden eagle
+G:B:U
+I:120:7d100:20:65:20
+W:35:2:0:350:0:0
+B:CLAW:HURT:6d3
+B:CLAW:HURT:6d3
+B:BITE:HURT:3d6
+F:CAN_FLY | WILD_MOUNTAIN | WILD_VOLCANO
+F:ANIMAL | DROP_CORPSE
+D:$It is a kind of extremely ferocious bird of prey.
+D:極めて獰猛な猛禽の一種だ。
+
+N:1313:つばめ
+E:Swallow
+G:B:B
+I:110:3d6:20:10:25
+W:4:2:0:15:0:0
+B:CLAW:HURT:1d4
+B:CLAW:HURT:1d4
+F:RAND_25 | CAN_FLY | WILD_GRASS | FRIENDS | ANIMAL | DROP_SKELETON
+D:$It swallows yaklut everyday.
+D:それは毎日の乳酸菌摂取を欠かさない。
+
+N:1314:ファイター
+E:Fighter
+G:p:W
+I:110:16d21:20:50:20
+W:23:2:0:200:0:0
+B:PUNCH:HURT:5d5
+B:PUNCH:HURT:5d5
+F:HUMAN | MALE | DROP_CORPSE | DROP_SKELETON
+F:DROP_60 | DROP_1D2 | OPEN_DOOR | BASH_DOOR | IM_FIRE | IM_POIS
+F:NO_FEAR | NO_CONF | NO_SLEEP
+D:$He is a rough man who has been in a fight in the city.
+D:街で喧嘩に明け暮れていた荒くれ者だ。
+
+N:1315:タカ
+E:Hawk
+G:B:u
+I:110:4d6:20:10:25
+W:5:2:0:18:0:0
+B:CLAW:HURT:1d4
+B:CLAW:HURT:1d5
+F:CAN_FLY | WILD_GRASS | ANIMAL | DROP_SKELETON
+D:$It emits strange microwaves.
+D:それは奇妙な電波を飛ばしている。
+
+N:1316:ライオン
+E:Lion
+G:f:U
+I:110:8d7:20:12:25
+W:11:2:0:35:0:0
+B:CLAW:HURT:2d6
+B:BITE:HURT:1d6
+F:WILD_GRASS | WILD_WASTE | FRIENDS | ANIMAL | DROP_CORPSE | DROP_SKELETON
+D:$It is called as the king of beasts.
+D:百獣の王だ。

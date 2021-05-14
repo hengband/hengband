@@ -52,4 +52,5 @@ enum summon_type : int {
     SUMMON_APOCRYPHA_FOLLOWERS = 68, /*!< 召喚タイプ: 信者 */
     SUMMON_APOCRYPHA_DRAGONS = 69, /*!< 召喚タイプ: 強力な古代ドラゴン */
     SUMMON_VESPOID = 70, /*!< 召喚タイプ: ランゴスタ */
+    SUMMON_ANTI_TIGERS = 71, /*!< 召喚タイプ: トラ以外 */
 };

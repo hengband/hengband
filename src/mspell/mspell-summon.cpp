@@ -170,6 +170,9 @@ MonsterSpellResult spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION
     case MON_YENDOR_WIZARD_1:
         count += summon_YENDER_WIZARD(target_ptr, y, x, m_idx);
         break;
+    case MON_THUNDERS:
+        count += summon_THUNDERS(target_ptr, y, x, rlev, m_idx);
+        break;
     default:
         count += summon_Kin(target_ptr, y, x, rlev, m_idx);
         break;

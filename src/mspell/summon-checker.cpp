@@ -181,6 +181,14 @@ bool check_summon_specific(player_type *player_ptr, MONRACE_IDX summoner_idx, MO
         break;
     case SUMMON_VESPOID:
         is_match = r_idx == MON_VESPOID;
+        break;
+    case SUMMON_ANTI_TIGERS:
+        is_match = one_in_(32) ? (r_ptr->d_char == 'P') : false;
+        is_match |= one_in_(48) ? (r_ptr->d_char == 'd') : false;
+        is_match |= one_in_(16) ? (r_ptr->d_char == 'l') : false;
+        is_match |= (r_idx == MON_STAR_VAMPIRE) || (r_idx == MON_SWALLOW) || (r_idx == MON_HAWK);
+        is_match |= (r_idx == MON_LION) || (r_idx == MON_BUFFALO) || (r_idx == MON_FIGHTER) || (r_idx == MON_GOLDEN_EAGLE);
+        break;
     default:
         break;
     }
