@@ -236,7 +236,7 @@ FILE *angband_fopen_temp(char *buf, int max)
  *
  * Read a string, without a newline, to a file
  *
- * Process tabs, strip internal non-printables
+ * Process tabs, replace internal non-printables with '?'
  */
 errr angband_fgets(FILE *fff, char *buf, huge n)
 {
@@ -281,6 +281,10 @@ errr angband_fgets(FILE *fff, char *buf, huge n)
 #endif
             else if (isprint((unsigned char)*s)) {
                 buf[i++] = *s;
+                if (i >= n)
+                    break;
+            } else {
+                buf[i++] = '?';
                 if (i >= n)
                     break;
             }
