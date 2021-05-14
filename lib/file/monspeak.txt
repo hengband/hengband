@@ -98,6 +98,7 @@ says, 'foo are yu?'
 N:53:Grip, Farmer Maggot's dog
 N:54:Wolf, Farmer Maggot's dog
 N:55:Fang, Farmer Maggot's dog
+N:1320:Laika, the greatest beast of USSR
 chases its tail.
 barks loudly.
 froths at the mouth.

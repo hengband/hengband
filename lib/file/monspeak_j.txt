@@ -121,20 +121,15 @@ N:1083:Hato Poppo
 
 #N:19:Martti Ihrasaari
 
-N:53:Grip, Farmer Maggot's dog
-N:54:Wolf, Farmer Maggot's dog
-N:55:Fang, Farmer Maggot's dog
-#chases its tail.
+N:53:農夫マゴットの飼犬『くいつき』
+N:54:農夫マゴットの飼犬『おおかみ』
+N:55:農夫マゴットの飼犬『きば』
+N:1320:偉大なる祖国の『ライカ』
 は自分の尻尾を追いかけた。
-#barks loudly.
 はうるさく吠えた。
-#froths at the mouth.
 は泡をふいている。
-#wags its tail.
 は尻尾をふっている。
-#rolls over.
 はごろんと寝ころんだ。
-#growls.
 はうなった。
 
 #スメアゴル語は 日本の第一人者 Tessi さんに監修していただきました。

@@ -26129,3 +26129,16 @@ D:世界中で大人気のゲーム、パチパチモンスター略してパチ
 D:普段は前足が震えている。
 D:一滴でも飲んだら寝るまで飲むのを止められない。
 
+N:1320:偉大なる祖国の『ライカ』
+E:Laika, the greatest beast of USSR
+G:C:W
+I:115:4d5:20:5:10
+W:0:3:0:20:0:0
+B:BITE:HURT:1d4
+B:BITE:HURT:1d4
+F:UNIQUE | FORCE_MAXHP | ANIMAL | FEMALE
+F:WILD_TOWN | CAN_SPEAK | CAN_FLY | FRIENDLY | RES_GRAV
+F:ONLY_GOLD | DROP_4D2 | DROP_CORPSE
+S:1_IN_6 | BLINK | TPORT
+D:$Capitalism can never obey this great dog!!
+D:彼女は決して資本の犬ではない。
