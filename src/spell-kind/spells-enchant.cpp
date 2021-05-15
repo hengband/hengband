@@ -126,8 +126,8 @@ bool mundane_spell(player_type *owner_ptr, bool only_equip)
 
     OBJECT_IDX item;
     object_type *o_ptr;
-    concptr q = _("どれを使いますか？", "Use which item? ");
-    concptr s = _("使えるものがありません。", "You have nothing you can use.");
+    concptr q = _("どのアイテムを凡庸化しますか？", "Mundanify which item? ");
+    concptr s = _("凡庸化できるアイテムがない。", "You have nothing to mundanify.");
 
     o_ptr = choose_object(owner_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), TV_NONE);
     if (!o_ptr)
