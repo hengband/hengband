@@ -235,7 +235,7 @@ errr parse_r_info(std::string_view buf, angband_header *head)
                 RARITY i;
                 info_set_value(i, s_tokens[2]);
                 r_ptr->freq_spell = 100 / i;
-                return PARSE_ERROR_NONE;
+                continue;
             }
 
             if (!grab_one_spell_flag(r_ptr, f))
