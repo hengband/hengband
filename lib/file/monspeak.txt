@@ -98,6 +98,7 @@ says, 'foo are yu?'
 N:53:Grip, Farmer Maggot's dog
 N:54:Wolf, Farmer Maggot's dog
 N:55:Fang, Farmer Maggot's dog
+N:1320:Laika, the greatest beast of USSR
 chases its tail.
 barks loudly.
 froths at the mouth.
@@ -834,6 +835,27 @@ is muttering with hollow eyes.
 N:1303:Spawn of Yog-Sothoth
 makes an unpleasant sound.
 gives off an unpleasant stench.
+
+N:1305:Sun Wukong, the Punkiest Monkey
+says, 'We left Pigsy. He seemed to be very busy.'
+says, 'Both Tripitaka and Sandy has been dead...'
+
+N:1306:Lee Qiezi, the King of Social Distance and Fucking Fucker who Fucks
+says, 'Who the fuck implemented this fucking item!?'
+says, 'Who the fuck implemented this fucking ego!?'
+says, 'Who the fuck implemented this fucking artifact!?'
+says, 'Who the fuck implemented this fucking monster!?'
+says, 'Who the fuck implemented this fucking unique!?'
+says, 'Who the fuck implemented this fucking code!?'
+says, 'I accept ONLY non-fucking codes in my kernel!!'
+says, 'Source code is fucking private!? Don't install such a fucking software!!'
+says, 'Source code is fucking private!? Don't install such a fucking driver!!'
+says, 'C++ is a fucking language! C++ extends only fucking asshole!!'
+says, 'If Moria is elder than the kernel, then Moria has more fucking code! '
+says, 'FUCK YOU!!'
+says, 'FUCK! FUCK!! FUCK!!!'
+magically summons Cyberdemons!
+is sticking the middle finger!
 
 N:*:Default lines
 cackles evilly.
