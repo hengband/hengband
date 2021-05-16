@@ -67,7 +67,7 @@ errr play_sound(int val)
     char buf[MAIN_WIN_MAX_PATH];
     path_build(buf, MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_SOUND, filename);
 
-    if (::PlaySound(buf, 0, SND_FILENAME | SND_ASYNC)) {
+    if (::PlaySoundA(buf, 0, SND_FILENAME | SND_ASYNC)) {
         return 0;
     }
     return -1;

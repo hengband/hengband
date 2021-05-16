@@ -17,3 +17,4 @@ MONSTER_NUMBER summon_PYRAMID(player_type *target_ptr, POSITION y, POSITION x, i
 MONSTER_NUMBER summon_EYE_PHORN(player_type *target_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx);
 MONSTER_NUMBER summon_VESPOID(player_type *target_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx);
 MONSTER_NUMBER summon_YENDER_WIZARD(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx);
+MONSTER_NUMBER summon_THUNDERS(player_type *target_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx);

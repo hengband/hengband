@@ -1,5 +1,7 @@
 ﻿#include "info-reader/kind-reader.h"
+#include "info-reader/info-reader-util.h"
 #include "info-reader/kind-info-tokens-table.h"
+#include "info-reader/parse-error-types.h"
 #include "main/angband-headers.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-kind.h"
@@ -7,27 +9,24 @@
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
-#include <string>
 
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る(ベースアイテム用) /
  * Grab one flag in an object_kind from a textual string
  * @param k_ptr 保管先のベースアイテム構造体参照ポインタ
  * @param what 参照元の文字列ポインタ
- * @return エラーコード
+ * @return 見つけたらtrue
  */
-static errr grab_one_kind_flag(object_kind *k_ptr, concptr what)
+static bool grab_one_kind_flag(object_kind *k_ptr, std::string_view what)
 {
-    if (k_info_flags.find(what) != k_info_flags.end()) {
-        add_flag(k_ptr->flags, k_info_flags[what]);
-        return 0;
-    }
+    if (info_grab_one_flag(k_ptr->flags, k_info_flags, what))
+        return true;
 
     if (EnumClassFlagGroup<TRG>::grab_one_flag(k_ptr->gen_flags, k_info_gen_flags, what))
-        return 0;
+        return true;
 
-    msg_format(_("未知のアイテム・フラグ '%s'。", "Unknown object flag '%s'."), what);
-    return 1;
+    msg_format(_("未知のアイテム・フラグ '%s'。", "Unknown object flag '%s'."), what.data());
+    return false;
 }
 
 /*!
@@ -37,163 +36,136 @@ static errr grab_one_kind_flag(object_kind *k_ptr, concptr what)
  * @param head ヘッダ構造体
  * @return エラーコード
  */
-errr parse_k_info(char *buf, angband_header *head)
+errr parse_k_info(std::string_view buf, angband_header *head)
 {
     static object_kind *k_ptr = NULL;
+    const auto &tokens = str_split(buf, ':', false, 10);
 
-    char *s, *t;
-    if (buf[0] == 'N') {
-#ifdef JP
-        char *flavor;
-#endif
-        s = angband_strchr(buf + 2, ':');
-        if (!s)
-            return 1;
+    if (tokens[0] == "N") {
+        // N:index:name_ja
+        if (tokens.size() < 3 || tokens[1].size() == 0)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
 
-        *s++ = '\0';
-        int i = atoi(buf + 2);
-
-        if (i <= error_idx)
-            return 4;
+        auto i = std::stoi(tokens[1]);
+        if (i < error_idx)
+            return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
         if (i >= head->info_num)
-            return 2;
+            return PARSE_ERROR_OUT_OF_BOUNDS;
 
         error_idx = i;
         k_ptr = &k_info[i];
-
 #ifdef JP
-        if (!*s)
-            return 1;
-
-        flavor = angband_strchr(s, ':');
-        if (flavor) {
-            *flavor++ = '\0';
-            k_ptr->flavor_name = std::string(flavor);
-        }
-
-        k_ptr->name = std::string(s);
+        k_ptr->name = tokens[2];
 #endif
-    } else if (!k_ptr) {
-        return 3;
-    }
+        if (tokens.size() > 3)
+            k_ptr->flavor_name = tokens[3];
+
+    } else if (!k_ptr)
+        return PARSE_ERROR_MISSING_RECORD_HEADER;
+    else if (tokens[0] == "E") {
+        // E:name_en
+#ifndef JP
+        if (tokens.size() < 2 || tokens[1].size() == 0)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        k_ptr->name = tokens[1];
+
+        if (tokens.size() > 2)
+            k_ptr->flavor_name = tokens[2];
+#endif
+    } else if (tokens[0] == "D") {
+        // D:text_ja
+        // D:$text_en
+        if (tokens.size() < 2 || tokens[1].size() == 0)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
 #ifdef JP
-    /* 英語名を読むルーチンを追加 */
-    /* 'E' から始まる行は英語名としている */
-    else if (buf[0] == 'E') {
-        /* nothing to do */
-    }
+        if (tokens[1][0] == '$')
+            return PARSE_ERROR_NONE;
+        k_ptr->text.append(buf.substr(2));
 #else
-    else if (buf[0] == 'E') {
-        char *flavor;
-        s = buf + 2;
-        flavor = angband_strchr(s, ':');
-        if (flavor) {
-            *flavor++ = '\0';
-            k_ptr->flavor_name = std::string(flavor);
-        }
-
-        k_ptr->name = std::string(s);
-    }
+        if (tokens[1][0] != '$')
+            return PARSE_ERROR_NONE;
+        k_ptr->text.append(buf.substr(3));
 #endif
-    else if (buf[0] == 'D') {
-#ifdef JP
-        if (buf[2] == '$')
-            return 0;
-        s = buf + 2;
-#else
-        if (buf[2] != '$')
-            return 0;
-        s = buf + 3;
-#endif
-        k_ptr->text.append(s);
-    } else if (buf[0] == 'G') {
-        char sym;
-        byte tmp;
-        if (buf[1] != ':')
-            return 1;
-        if (!buf[2])
-            return 1;
-        if (buf[3] != ':')
-            return 1;
-        if (!buf[4])
-            return 1;
+    } else if (tokens[0] == "G") {
+        // G:color:symbol
+        if (tokens.size() < 3 || tokens[1].size() == 0 || tokens[2].size() == 0)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
 
-        sym = buf[2];
-        tmp = color_char_to_attr(buf[4]);
-        if (tmp > 127)
-            return 1;
+        auto a = color_char_to_attr(tokens[2][0]);
+        if (a > 127)
+            return PARSE_ERROR_GENERIC;
 
-        k_ptr->d_attr = tmp;
-        k_ptr->d_char = sym;
-    } else if (buf[0] == 'I') {
-        int tval, sval, pval;
-        if (3 != sscanf(buf + 2, "%d:%d:%d", &tval, &sval, &pval))
-            return 1;
+        k_ptr->d_attr = a;
+        k_ptr->d_char = tokens[1][0];
+    } else if (tokens[0] == "I") {
+        // I:tval:sval:pval
+        if (tokens.size() < 4)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
 
-        k_ptr->tval = (tval_type)tval;
-        k_ptr->sval = (OBJECT_SUBTYPE_VALUE)sval;
-        k_ptr->pval = (PARAMETER_VALUE)pval;
-    } else if (buf[0] == 'W') {
-        int level, extra, wgt;
-        long cost;
-        if (4 != sscanf(buf + 2, "%d:%d:%d:%ld", &level, &extra, &wgt, &cost))
-            return 1;
+        info_set_value(k_ptr->tval, tokens[1]);
+        info_set_value(k_ptr->sval, tokens[2]);
+        info_set_value(k_ptr->pval, tokens[3]);
+    } else if (tokens[0] == "W") {
+        // W:level:extra:weight:cost
+        if (tokens.size() < 5)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
 
-        k_ptr->level = (DEPTH)level;
-        k_ptr->extra = (BIT_FLAGS8)extra;
-        k_ptr->weight = (WEIGHT)wgt;
-        k_ptr->cost = (PRICE)cost;
-    } else if (buf[0] == 'A') {
-        int i = 0;
-        for (s = buf + 1; s && (s[0] == ':') && s[1]; ++i) {
-            k_ptr->chance[i] = 1;
-            k_ptr->locale[i] = atoi(s + 1);
-            t = angband_strchr(s + 1, '/');
-            s = angband_strchr(s + 1, ':');
-            if (t && (!s || t < s)) {
-                int chance = atoi(t + 1);
-                if (chance > 0)
-                    k_ptr->chance[i] = (PROB)chance;
-            }
+        info_set_value(k_ptr->level, tokens[1]);
+        info_set_value(k_ptr->extra, tokens[2]);
+        info_set_value(k_ptr->weight, tokens[3]);
+        info_set_value(k_ptr->cost, tokens[4]);
+    } else if (tokens[0] == "A") {
+        // A:level/chance(:level/chance:level/chance:level/chance)
+        if (tokens.size() < 2 || tokens.size() > 5)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+
+        auto i = 0;
+        for (auto t = tokens.begin() + 1; t != tokens.end(); t++) {
+            const auto &rarity = str_split(*t, '/', false, 2);
+            if (rarity.size() != 2 || rarity[0].size() == 0 || rarity[1].size() == 0)
+                return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
+            info_set_value(k_ptr->locale[i], rarity[0]);
+            info_set_value(k_ptr->chance[i], rarity[1]);
+            i++;
         }
-    } else if (buf[0] == 'P') {
-        int ac, hd1, hd2, th, td, ta;
-        if (6 != sscanf(buf + 2, "%d:%dd%d:%d:%d:%d", &ac, &hd1, &hd2, &th, &td, &ta))
-            return 1;
+    } else if (tokens[0] == "P") {
+        // P:ac:dd:ds:to_h:to_d:to_a
+        if (tokens.size() < 6)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
 
-        k_ptr->ac = (ARMOUR_CLASS)ac;
-        k_ptr->dd = (DICE_NUMBER)hd1;
-        k_ptr->ds = (DICE_SID)hd2;
-        k_ptr->to_h = (HIT_PROB)th;
-        k_ptr->to_d = (HIT_POINT)td;
-        k_ptr->to_a = (ARMOUR_CLASS)ta;
-    } else if (buf[0] == 'U') {
-        byte n;
-        n = grab_one_activation_flag(buf + 2);
-        if (n > 0) {
-            k_ptr->act_idx = n;
-        } else {
-            return 5;
+        const auto &dice = str_split(tokens[2], 'd', false, 2);
+        if (dice.size() != 2)
+            return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
+
+        info_set_value(k_ptr->ac, tokens[1]);
+        info_set_value(k_ptr->dd, dice[0]);
+        info_set_value(k_ptr->ds, dice[1]);
+        info_set_value(k_ptr->to_h, tokens[3]);
+        info_set_value(k_ptr->to_d, tokens[4]);
+        info_set_value(k_ptr->to_a, tokens[5]);
+    } else if (tokens[0] == "U") {
+        // U:activation_flag
+        if (tokens.size() < 2 || tokens[1].size() == 0)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        auto n = grab_one_activation_flag(tokens[1].c_str());
+        if (n <= 0)
+            return PARSE_ERROR_INVALID_FLAG;
+
+        k_ptr->act_idx = (IDX)n;
+    } else if (tokens[0] == "F") {
+        // F:flags
+        if (tokens.size() < 2 || tokens[1].size() == 0)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+
+        const auto &flags = str_split(tokens[1], '|', true, 10);
+        for (const auto &f : flags) {
+            if (f.size() == 0)
+                continue;
+            if (!grab_one_kind_flag(k_ptr, f))
+                return PARSE_ERROR_INVALID_FLAG;
         }
-    } else if (buf[0] == 'F') {
-        for (s = buf + 2; *s;) {
-            /* loop */
-            for (t = s; *t && (*t != ' ') && (*t != '|'); ++t)
-                ;
+    } else
+        return PARSE_ERROR_UNDEFINED_DIRECTIVE;
 
-            if (*t) {
-                *t++ = '\0';
-                while (*t == ' ' || *t == '|')
-                    t++;
-            }
-
-            if (0 != grab_one_kind_flag(k_ptr, s))
-                return 5;
-            s = t;
-        }
-    } else {
-        return 6;
-    }
-
-    return 0;
+    return PARSE_ERROR_NONE;
 }

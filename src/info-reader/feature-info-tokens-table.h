@@ -1,6 +1,8 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "grid/feature-flag-types.h"
+#include <string_view>
+#include <unordered_map>
 
-#define NUM_F_FLAGS 113
-extern concptr f_info_flags[NUM_F_FLAGS];
+extern const std::unordered_map<std::string_view, feature_flag_type> f_info_flags;

@@ -267,6 +267,17 @@ MONSTER_NUMBER summon_VESPOID(player_type *target_ptr, POSITION y, POSITION x, i
     return count;
 }
 
+MONSTER_NUMBER summon_THUNDERS(player_type *target_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
+{
+    auto count = (MONSTER_NUMBER)0;
+    auto num = 11;
+    for (auto k = 0; k < num; k++) {
+        count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_ANTI_TIGERS, PM_NONE);
+    }
+    
+    return count;
+}
+
 /*!
  * @brief イェンダーの魔法使いの召喚の処理。 /
  * @param target_ptr プレーヤーへの参照ポインタ

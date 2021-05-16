@@ -153,7 +153,7 @@ static void get_random_virtue(player_type *creature_ptr, int which)
  * @param realm 魔法領域のID
  * @return 対応する徳のID
  */
-static VIRTUES_IDX get_realm_virtues(player_type *creature_ptr, REALM_IDX realm)
+static enum virtue_idx get_realm_virtues(player_type *creature_ptr, REALM_IDX realm)
 {
     switch (realm) {
     case REALM_LIFE:
@@ -181,7 +181,7 @@ static VIRTUES_IDX get_realm_virtues(player_type *creature_ptr, REALM_IDX realm)
     case REALM_TRUMP:
         return V_KNOWLEDGE;
     case REALM_ARCANE:
-        return 0;
+        return V_NONE;
     case REALM_CRAFT:
         if (virtue_number(creature_ptr, V_ENCHANT))
             return V_INDIVIDUALISM;
@@ -203,7 +203,7 @@ static VIRTUES_IDX get_realm_virtues(player_type *creature_ptr, REALM_IDX realm)
         else
             return V_COMPASSION;
     default:
-        return 0;
+        return V_NONE;
     };
 }
 

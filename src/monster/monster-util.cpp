@@ -9,6 +9,7 @@
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-ability-mask.h"
+#include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
@@ -334,6 +335,10 @@ static errr do_get_mon_num_prep(player_type *player_ptr, const monsterrace_hook_
 
             // RF1_FORCE_DEPTH フラグ持ちは指定階未満では生成禁止。
             if ((r_ptr->flags1 & RF1_FORCE_DEPTH) && (r_ptr->level > floor_ptr->dun_level))
+                continue;
+
+            // クエスト内でRES_ALLの生成を禁止する (殲滅系クエストの詰み防止)
+            if (player_ptr->current_floor_ptr->inside_quest && any_bits(r_ptr->flagsr, RFR_RES_ALL))
                 continue;
         }
 

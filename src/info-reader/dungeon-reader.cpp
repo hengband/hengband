@@ -3,28 +3,28 @@
 #include "grid/feature.h"
 #include "info-reader/dungeon-info-tokens-table.h"
 #include "info-reader/feature-reader.h"
+#include "info-reader/info-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/race-info-tokens-table.h"
 #include "io/tokenizer.h"
 #include "main/angband-headers.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
-#include <string>
 
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る(ダンジョン用) /
  * Grab one flag for a dungeon type from a textual string
  * @param d_ptr 保管先のダンジョン構造体参照ポインタ
  * @param what 参照元の文字列ポインタ
- * @return エラーコード
+ * @return 見つけたらtrue
  */
-static errr grab_one_dungeon_flag(dungeon_type *d_ptr, concptr what)
+static bool grab_one_dungeon_flag(dungeon_type *d_ptr, std::string_view what)
 {
     if (EnumClassFlagGroup<DF>::grab_one_flag(d_ptr->flags, d_info_flags, what))
-        return 0;
+        return true;
 
-    msg_format(_("未知のダンジョン・フラグ '%s'。", "Unknown dungeon type flag '%s'."), what);
-    return 1;
+    msg_format(_("未知のダンジョン・フラグ '%s'。", "Unknown dungeon type flag '%s'."), what.data());
+    return false;
 }
 
 /*!
@@ -32,33 +32,33 @@ static errr grab_one_dungeon_flag(dungeon_type *d_ptr, concptr what)
  * Grab one (basic) flag in a monster_race from a textual string
  * @param d_ptr 保管先のダンジョン構造体参照ポインタ
  * @param what 参照元の文字列ポインタ
- * @return エラーコード
+ * @return 見つけたらtrue
  */
-static errr grab_one_basic_monster_flag(dungeon_type *d_ptr, concptr what)
+static bool grab_one_basic_monster_flag(dungeon_type *d_ptr, std::string_view what)
 {
-    if (grab_one_flag(&d_ptr->mflags1, r_info_flags1, what) == 0)
-        return 0;
+    if (info_grab_one_flag(d_ptr->mflags1, r_info_flags1, what))
+        return true;
 
-    if (grab_one_flag(&d_ptr->mflags2, r_info_flags2, what) == 0)
-        return 0;
+    if (info_grab_one_flag(d_ptr->mflags2, r_info_flags2, what))
+        return true;
 
-    if (grab_one_flag(&d_ptr->mflags3, r_info_flags3, what) == 0)
-        return 0;
+    if (info_grab_one_flag(d_ptr->mflags3, r_info_flags3, what))
+        return true;
 
-    if (grab_one_flag(&d_ptr->mflags7, r_info_flags7, what) == 0)
-        return 0;
+    if (info_grab_one_flag(d_ptr->mflags7, r_info_flags7, what))
+        return true;
 
-    if (grab_one_flag(&d_ptr->mflags8, r_info_flags8, what) == 0)
-        return 0;
+    if (info_grab_one_flag(d_ptr->mflags8, r_info_flags8, what))
+        return true;
 
-    if (grab_one_flag(&d_ptr->mflags9, r_info_flags9, what) == 0)
-        return 0;
+    if (info_grab_one_flag(d_ptr->mflags9, r_info_flags9, what))
+        return true;
 
-    if (grab_one_flag(&d_ptr->mflagsr, r_info_flagsr, what) == 0)
-        return 0;
+    if (info_grab_one_flag(d_ptr->mflagsr, r_info_flagsr, what))
+        return true;
 
-    msg_format(_("未知のモンスター・フラグ '%s'。", "Unknown monster flag '%s'."), what);
-    return 1;
+    msg_format(_("未知のモンスター・フラグ '%s'。", "Unknown monster flag '%s'."), what.data());
+    return false;
 }
 
 /*!
@@ -66,15 +66,15 @@ static errr grab_one_basic_monster_flag(dungeon_type *d_ptr, concptr what)
  * Grab one (spell) flag in a monster_race from a textual string
  * @param d_ptr 保管先のダンジョン構造体参照ポインタ
  * @param what 参照元の文字列ポインタ
- * @return エラーコード
+ * @return 見つけたらtrue
  */
-static errr grab_one_spell_monster_flag(dungeon_type *d_ptr, concptr what)
+static bool grab_one_spell_monster_flag(dungeon_type *d_ptr, std::string_view what)
 {
     if (EnumClassFlagGroup<RF_ABILITY>::grab_one_flag(d_ptr->m_ability_flags, r_info_ability_flags, what))
-        return 0;
+        return true;
 
-    msg_format(_("未知のモンスター・フラグ '%s'。", "Unknown monster flag '%s'."), what);
-    return 1;
+    msg_format(_("未知のモンスター・フラグ '%s'。", "Unknown monster flag '%s'."), what.data());
+    return false;
 }
 
 /*!
@@ -84,220 +84,203 @@ static errr grab_one_spell_monster_flag(dungeon_type *d_ptr, concptr what)
  * @param head ヘッダ構造体
  * @return エラーコード
  */
-errr parse_d_info(char *buf, angband_header *head)
+errr parse_d_info(std::string_view buf, angband_header *head)
 {
     static dungeon_type *d_ptr = NULL;
-    char *s, *t;
-    if (buf[0] == 'N') {
-        s = angband_strchr(buf + 2, ':');
-        if (!s)
-            return 1;
+    const auto &tokens = str_split(buf, ':', false);
 
-        *s++ = '\0';
-#ifdef JP
-        if (!*s)
-            return 1;
-#endif
+    if (tokens[0] == "N") {
+        // N:index:name_ja
+        if (tokens.size() < 3 || tokens[1].size() == 0)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
 
-        int i = atoi(buf + 2);
+        auto i = std::stoi(tokens[1]);
         if (i < error_idx)
-            return 4;
+            return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
         if (i >= head->info_num)
-            return 2;
+            return PARSE_ERROR_OUT_OF_BOUNDS;
 
         error_idx = i;
         d_ptr = &d_info[i];
 #ifdef JP
-        d_ptr->name = std::string(s);
+        d_ptr->name = tokens[2];
 #endif
-    }
+    } else if (!d_ptr)
+        return PARSE_ERROR_MISSING_RECORD_HEADER;
+    else if (tokens[0] == "E") {
+        // E:name_en
+#ifndef JP
+        if (tokens.size() < 2 || tokens[1].size() == 0)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        d_ptr->name = tokens[1];
+#endif
+    } else if (tokens[0] == "D") {
+        // D:text_ja
+        // D:$text_en
+        if (tokens.size() < 2 || tokens[1].size() == 0)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
 #ifdef JP
-    else if (buf[0] == 'E')
-        return 0;
+        if (tokens[1][0] == '$')
+            return PARSE_ERROR_NONE;
+        d_ptr->text.append(buf.substr(2));
 #else
-    else if (buf[0] == 'E') {
-        /* Acquire the Text */
-        s = buf + 2;
-
-        /* Store the name */
-        d_ptr->name = std::string(s);
-    }
+        if (tokens[1][0] != '$')
+            return PARSE_ERROR_NONE;
+        d_ptr->text.append(buf.substr(3));
 #endif
-    else if (buf[0] == 'D') {
-#ifdef JP
-        if (buf[2] == '$')
-            return 0;
-        s = buf + 2;
-#else
-        if (buf[2] != '$')
-            return 0;
-        s = buf + 3;
-#endif
-        d_ptr->text.append(s);
-    } else if (buf[0] == 'W') {
-        int min_lev, max_lev;
-        int min_plev, mode;
-        int min_alloc, max_chance;
-        int obj_good, obj_great;
-        int pit, nest;
+    } else if (tokens[0] == "W") {
+        // W:min_level:max_level:(1):mode:(2):(3):(4):(5):prob_pit:prob_nest
+        // (1)minimum player level (unused)
+        // (2)minimum level of allocating monster
+        // (3)maximum probability of level boost of allocation monster
+        // (4)maximum probability of dropping good objects
+        // (5)maximum probability of dropping great objects
+        if (tokens.size() < 11)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
 
-        if (10
-            != sscanf(buf + 2, "%d:%d:%d:%d:%d:%d:%d:%d:%x:%x", &min_lev, &max_lev, &min_plev, &mode, &min_alloc, &max_chance, &obj_good, &obj_great,
-                (unsigned int *)&pit, (unsigned int *)&nest))
-            return 1;
+        info_set_value(d_ptr->mindepth, tokens[1]);
+        info_set_value(d_ptr->maxdepth, tokens[2]);
+        info_set_value(d_ptr->min_plev, tokens[3]);
+        info_set_value(d_ptr->mode, tokens[4]);
+        info_set_value(d_ptr->min_m_alloc_level, tokens[5]);
+        info_set_value(d_ptr->max_m_alloc_chance, tokens[6]);
+        info_set_value(d_ptr->obj_good, tokens[7]);
+        info_set_value(d_ptr->obj_great, tokens[8]);
+        info_set_value(d_ptr->pit, tokens[9]);
+        info_set_value(d_ptr->nest, tokens[10]);
+    } else if (tokens[0] == "P") {
+        // P:wild_y:wild_x
+        if (tokens.size() < 3)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
 
-        d_ptr->mindepth = (DEPTH)min_lev;
-        d_ptr->maxdepth = (DEPTH)max_lev;
-        d_ptr->min_plev = (PLAYER_LEVEL)min_plev;
-        d_ptr->mode = (BIT_FLAGS8)mode;
-        d_ptr->min_m_alloc_level = min_alloc;
-        d_ptr->max_m_alloc_chance = max_chance;
-        d_ptr->obj_good = obj_good;
-        d_ptr->obj_great = obj_great;
-        d_ptr->pit = (BIT_FLAGS16)pit;
-        d_ptr->nest = (BIT_FLAGS16)nest;
-    } else if (buf[0] == 'P') {
-        int dy, dx;
-        if (2 != sscanf(buf + 2, "%d:%d", &dy, &dx))
-            return 1;
+        info_set_value(d_ptr->dy, tokens[1]);
+        info_set_value(d_ptr->dx, tokens[2]);
+    } else if (tokens[0] == "L") {
+        // L:floor_1:prob_1:floor_2:prob_2:floor_3:prob_3:tunnel_prob
+        if (tokens.size() < DUNGEON_FEAT_PROB_NUM * 2 + 2)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
 
-        d_ptr->dy = dy;
-        d_ptr->dx = dx;
-    } else if (buf[0] == 'L') {
-        char *zz[16];
-        if (tokenize(buf + 2, DUNGEON_FEAT_PROB_NUM * 2 + 1, zz, 0) != (DUNGEON_FEAT_PROB_NUM * 2 + 1))
-            return 1;
-
-        for (int i = 0; i < DUNGEON_FEAT_PROB_NUM; i++) {
-            d_ptr->floor[i].feat = f_tag_to_index(zz[i * 2]);
+        for (size_t i = 0; i < DUNGEON_FEAT_PROB_NUM; i++) {
+            auto feat_idx = i * 2 + 1;
+            auto per_idx = feat_idx + 1;
+            d_ptr->floor[i].feat = f_tag_to_index(tokens[feat_idx]);
             if (d_ptr->floor[i].feat < 0)
                 return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
 
-            d_ptr->floor[i].percent = (PERCENTAGE)atoi(zz[i * 2 + 1]);
+            info_set_value(d_ptr->floor[i].percent, tokens[per_idx]);
         }
 
-        d_ptr->tunnel_percent = atoi(zz[DUNGEON_FEAT_PROB_NUM * 2]);
-    } else if (buf[0] == 'A') {
-        char *zz[16];
-        if (tokenize(buf + 2, DUNGEON_FEAT_PROB_NUM * 2 + 4, zz, 0) != (DUNGEON_FEAT_PROB_NUM * 2 + 4))
-            return 1;
+        auto tunnel_idx = DUNGEON_FEAT_PROB_NUM * 2 + 1;
+        info_set_value(d_ptr->tunnel_percent, tokens[tunnel_idx]);
+    } else if (tokens[0] == "A") {
+        // A:wall_1:prob_1:wall_2:prob_2:wall_3:prob_3:outer_wall:inner_wall:stream_1:stream_2
+        if (tokens.size() < DUNGEON_FEAT_PROB_NUM * 2 + 5)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
 
         for (int i = 0; i < DUNGEON_FEAT_PROB_NUM; i++) {
-            d_ptr->fill[i].feat = f_tag_to_index(zz[i * 2]);
+            auto feat_idx = i * 2 + 1;
+            auto prob_idx = feat_idx + 1;
+            d_ptr->fill[i].feat = f_tag_to_index(tokens[feat_idx]);
             if (d_ptr->fill[i].feat < 0)
                 return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
 
-            d_ptr->fill[i].percent = (PERCENTAGE)atoi(zz[i * 2 + 1]);
+            info_set_value(d_ptr->fill[i].percent, tokens[prob_idx]);
         }
 
-        d_ptr->outer_wall = f_tag_to_index(zz[DUNGEON_FEAT_PROB_NUM * 2]);
+        auto idx = DUNGEON_FEAT_PROB_NUM * 2 + 1;
+        d_ptr->outer_wall = f_tag_to_index(tokens[idx++]);
         if (d_ptr->outer_wall < 0)
             return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
 
-        d_ptr->inner_wall = f_tag_to_index(zz[DUNGEON_FEAT_PROB_NUM * 2 + 1]);
+        d_ptr->inner_wall = f_tag_to_index(tokens[idx++]);
         if (d_ptr->inner_wall < 0)
             return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
 
-        d_ptr->stream1 = f_tag_to_index(zz[DUNGEON_FEAT_PROB_NUM * 2 + 2]);
+        d_ptr->stream1 = f_tag_to_index(tokens[idx++]);
         if (d_ptr->stream1 < 0)
             return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
 
-        d_ptr->stream2 = f_tag_to_index(zz[DUNGEON_FEAT_PROB_NUM * 2 + 3]);
+        d_ptr->stream2 = f_tag_to_index(tokens[idx]);
         if (d_ptr->stream2 < 0)
             return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
-    } else if (buf[0] == 'F') {
-        int artif = 0, monst = 0;
+    } else if (tokens[0] == "F") {
+        // F:flags
+        if (tokens.size() < 2)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
 
-        for (s = buf + 2; *s;) {
-            /* loop */
-            for (t = s; *t && (*t != ' ') && (*t != '|'); ++t)
-                ;
-
-            if (*t) {
-                *t++ = '\0';
-                while (*t == ' ' || *t == '|')
-                    t++;
-            }
-
-            if (1 == sscanf(s, "FINAL_ARTIFACT_%d", &artif)) {
-                d_ptr->final_artifact = (ARTIFACT_IDX)artif;
-                s = t;
+        const auto &flags = str_split(tokens[1], '|', true);
+        for (const auto &f : flags) {
+            if (f.size() == 0)
                 continue;
+
+            const auto &f_tokens = str_split(f, '_');
+            if (f_tokens.size() == 3) {
+                if (f_tokens[0] == "FINAL" && f_tokens[1] == "ARTIFACT") {
+                    info_set_value(d_ptr->final_artifact, f_tokens[2]);
+                    continue;
+                }
+                if (f_tokens[0] == "FINAL" && f_tokens[1] == "OBJECT") {
+                    info_set_value(d_ptr->final_object, f_tokens[2]);
+                    continue;
+                }
+                if (f_tokens[0] == "FINAL" && f_tokens[1] == "GUARDIAN") {
+                    info_set_value(d_ptr->final_guardian, f_tokens[2]);
+                    continue;
+                }
+                if (f_tokens[0] == "MONSTER" && f_tokens[1] == "DIV") {
+                    info_set_value(d_ptr->special_div, f_tokens[2]);
+                    continue;
+                }
             }
 
-            if (1 == sscanf(s, "FINAL_OBJECT_%d", &artif)) {
-                d_ptr->final_object = (KIND_OBJECT_IDX)artif;
-                s = t;
-                continue;
-            }
-
-            if (1 == sscanf(s, "FINAL_GUARDIAN_%d", &monst)) {
-                d_ptr->final_guardian = (MONRACE_IDX)monst;
-                s = t;
-                continue;
-            }
-
-            if (1 == sscanf(s, "MONSTER_DIV_%d", &monst)) {
-                d_ptr->special_div = (PROB)monst;
-                s = t;
-                continue;
-            }
-
-            if (0 != grab_one_dungeon_flag(d_ptr, s))
-                return 5;
-
-            s = t;
+            if (!grab_one_dungeon_flag(d_ptr, f))
+                return PARSE_ERROR_INVALID_FLAG;
         }
-    } else if (buf[0] == 'M') {
-        for (s = buf + 2; *s;) {
-            /* loop */
-            for (t = s; *t && (*t != ' ') && (*t != '|'); ++t)
-                ;
+    } else if (tokens[0] == "M") {
+        // M:monsterflags
+        if (tokens.size() < 2)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
 
-            if (*t) {
-                *t++ = '\0';
-                while (*t == ' ' || *t == '|')
-                    t++;
-            }
+        const auto &flags = str_split(tokens[1], '|', true);
+        for (const auto &f : flags) {
+            if (f.size() == 0)
+                continue;
 
-            if (!strncmp(s, "R_CHAR_", 7)) {
-                s += 7;
-                angband_strcpy(d_ptr->r_char, s, sizeof(d_ptr->r_char));
-                s = t;
+            const auto &m_tokens = str_split(f, '_');
+            if (m_tokens[0] == "R" && m_tokens[1] == "CHAR") {
+                if (m_tokens[2].size() > 4)
+                    return PARSE_ERROR_GENERIC;
+
+                strcpy(d_ptr->r_char, m_tokens[2].c_str());
                 continue;
             }
 
-            if (0 != grab_one_basic_monster_flag(d_ptr, s))
-                return 5;
-
-            s = t;
+            if (!grab_one_basic_monster_flag(d_ptr, f))
+                return PARSE_ERROR_INVALID_FLAG;
         }
-    } else if (buf[0] == 'S') {
-        for (s = buf + 2; *s;) {
-            /* loop */
-            for (t = s; *t && (*t != ' ') && (*t != '|'); ++t)
-                ;
+    } else if (tokens[0] == "S") {
+        // S: flags
+        if (tokens.size() < 2)
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
 
-            if (*t) {
-                *t++ = '\0';
-                while ((*t == ' ') || (*t == '|'))
-                    t++;
-            }
-
-            int i;
-            if (1 == sscanf(s, "1_IN_%d", &i)) {
-                s = t;
+        const auto &flags = str_split(tokens[1], '|', true);
+        for (const auto &f : flags) {
+            if (f.size() == 0)
                 continue;
+
+            const auto &s_tokens = str_split(f, '_');
+            if (s_tokens.size() == 3 && s_tokens[1] == "IN") {
+                if (s_tokens[0] != "1")
+                    return PARSE_ERROR_GENERIC;
+                continue; //!< r_info.txtからのコピペ対策
             }
 
-            if (0 != grab_one_spell_monster_flag(d_ptr, s))
-                return 5;
-
-            s = t;
+            if (!grab_one_spell_monster_flag(d_ptr, f))
+                return PARSE_ERROR_INVALID_FLAG;
         }
-    } else {
-        return 6;
     }
+    else
+        return PARSE_ERROR_UNDEFINED_DIRECTIVE;
 
     return 0;
 }

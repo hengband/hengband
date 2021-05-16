@@ -236,12 +236,17 @@ FILE *angband_fopen_temp(char *buf, int max)
  *
  * Read a string, without a newline, to a file
  *
- * Process tabs, strip internal non-printables
+ * Process tabs, replace internal non-printables with '?'
  */
 errr angband_fgets(FILE *fff, char *buf, huge n)
 {
     huge i = 0;
     char *s;
+
+    if (n <= 1)
+        return 1;
+    // Reserve for null termination
+    --n;
 
     if (fgets(file_read__tmp, FILE_READ_BUFF_SIZE, fff)) {
 #ifdef JP
@@ -261,6 +266,8 @@ errr angband_fgets(FILE *fff, char *buf, huge n)
             }
 #ifdef JP
             else if (iskanji(*s)) {
+                if (i + 1 >= n)
+                    break;
                 if (!s[1])
                     break;
                 buf[i++] = *s++;
@@ -274,6 +281,10 @@ errr angband_fgets(FILE *fff, char *buf, huge n)
 #endif
             else if (isprint((unsigned char)*s)) {
                 buf[i++] = *s;
+                if (i >= n)
+                    break;
+            } else {
+                buf[i++] = '?';
                 if (i >= n)
                     break;
             }

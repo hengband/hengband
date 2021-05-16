@@ -266,23 +266,30 @@ void flavor_init(void)
  */
 void strip_name(char *buf, KIND_OBJECT_IDX k_idx)
 {
-    object_kind *k_ptr = &k_info[k_idx];
-    concptr str = k_ptr->name.c_str();
-    while ((*str == ' ') || (*str == '&') || (*str == '#'))
-        str++;
-
-    char *t;
-    for (t = buf; *str; str++) {
-#ifdef JP
-        if (iskanji(*str)) {
-            *t++ = *str++;
-            *t++ = *str;
+    auto k_ptr = &k_info[k_idx];
+    auto tok = str_split(k_ptr->name, ' ');
+    std::string name = "";
+    for (auto s : tok) {
+        if (s == "" || s == "~" || s == "&" || s == "#")
             continue;
-        }
+
+        auto offset = 0;
+        auto endpos = s.size();
+        auto is_kanji = false;
+
+        if (s[0] == '~' || s[0] == '#')
+            offset++;
+#ifdef JP
+        if (s.size() > 2)
+            is_kanji = iskanji(s[endpos - 2]);
+
 #endif
-        if (*str != '~' && *str != '#')
-            *t++ = *str;
+        if (!is_kanji && (s[endpos - 1] == '~' || s[endpos - 1] == '#'))
+            endpos--;
+
+        name += s.substr(offset, endpos);
     }
 
-    *t = '\0';
+    name += " ";
+    strcpy(buf, name.c_str());
 }

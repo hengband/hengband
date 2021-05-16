@@ -15,7 +15,7 @@ bool check_file(concptr s)
 {
     char path[MAIN_WIN_MAX_PATH];
     strcpy(path, s);
-    DWORD attrib = GetFileAttributes(path);
+    DWORD attrib = GetFileAttributesA(path);
     if (attrib == INVALID_FILE_NAME)
         return FALSE;
     if (attrib & FILE_ATTRIBUTE_DIRECTORY)
@@ -35,7 +35,7 @@ bool check_dir(concptr s)
     if (i && (path[i - 1] == '\\'))
         path[--i] = '\0';
 
-    DWORD attrib = GetFileAttributes(path);
+    DWORD attrib = GetFileAttributesA(path);
     if (attrib == INVALID_FILE_NAME)
         return FALSE;
     if (!(attrib & FILE_ATTRIBUTE_DIRECTORY))
