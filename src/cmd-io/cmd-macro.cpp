@@ -227,7 +227,7 @@ void do_cmd_macros(player_type *creature_ptr)
                     "Press Left/Right arrow keys to move cursor. Backspace/Delete to delete a char."),
                 22, 0);
             prt(_("マクロ行動: ", "Action: "), 20, 0);
-            ascii_to_text(tmp, macro__buf);
+            tmp[0] = '\0';
             if (askfor(tmp, 80)) {
                 text_to_ascii(macro__buf, tmp);
                 macro_add(buf, macro__buf);
@@ -273,7 +273,7 @@ void do_cmd_macros(player_type *creature_ptr)
                     "Press Left/Right arrow keys to move cursor. Backspace/Delete to delete a char."),
                 22, 0);
             prt(_("行動: ", "Action: "), 20, 0);
-            ascii_to_text(tmp, macro__buf);
+            tmp[0] = '\0';
             if (askfor(tmp, 80)) {
                 text_to_ascii(macro__buf, tmp);
                 string_free(keymap_act[mode][(byte)(buf[0])]);
