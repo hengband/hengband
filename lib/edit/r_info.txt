@@ -26115,12 +26115,12 @@ N:1319:アルチャウ
 E:Alchau
 G:r:y
 I:120:28d20:20:10:40
-W:34:3:0:200:0:0
+W:34:3:0:200:8000:1331
 B:BITE:ELEC:6d10
 B:BITE:ELEC:6d10
 B:CLAW:ELEC:6d10
 F:DROP_CORPSE | ONLY_GOLD | DROP_3D2 | IM_ELEC | ANIMAL | AURA_ELEC
-F:SELF_LITE_1 | RAND_25 | RAND_50
+F:SELF_LITE_1 | RAND_50
 S:1_IN_5 | BR_ELEC | BO_ELEC
 D:$It is a character of a "Famous Key Monster" (Fakemon for short),
 D:$ a game that is very popular all over the world.
@@ -26317,7 +26317,7 @@ D:魔法界のスポーツで使われる道具だ。
 D:この球体を捕ったものは大きな点数と称賛を手にするであろう。
 
 N:1330:闇の帝王『ヴォルデモート』
-E:The Dark Lord "Voldemort"
+E:Voldemort, the Dark Lord
 G:p:D
 I:120:50d100:20:100:0
 W:61:4:0:30000:0:0
