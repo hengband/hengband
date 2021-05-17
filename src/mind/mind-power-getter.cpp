@@ -93,7 +93,6 @@ bool MindPowerGetter::get_mind_power(SPELL_IDX *sn, bool only_browse)
 
         if ((this->choice == ' ') || (this->choice == '*') || (this->choice == '?') || (use_menu && this->ask)) {
             if (!this->redraw || use_menu) {
-                char psi_desc[80];
                 this->redraw = true;
                 if (!only_browse && !use_menu)
                     screen_save();
@@ -102,31 +101,7 @@ bool MindPowerGetter::get_mind_power(SPELL_IDX *sn, bool only_browse)
                 put_str(_("名前", "Name"), y, x + 5);
                 put_str(format(_("Lv   %s   失率 効果", "Lv   %s   Fail Info"), ((this->use_mind == MIND_BERSERKER) || (this->use_mind == MIND_NINJUTSU)) ? "HP" : "MP"), y,
                     x + 35);
-                bool has_weapon[2];
-                has_weapon[0] = has_melee_weapon(this->caster_ptr, INVEN_MAIN_HAND);
-                has_weapon[1] = has_melee_weapon(this->caster_ptr, INVEN_SUB_HAND);
-                for (this->index = 0; this->index < MAX_MIND_POWERS; this->index++) {
-                    this->spell = &mind_ptr->info[this->index];
-                    if (this->spell->min_lev > this->caster_ptr->lev)
-                        break;
-
-                    calculate_mind_chance(has_weapon);
-                    char comment[80];
-                    mindcraft_info(this->caster_ptr, comment, this->use_mind, this->index);
-                    if (use_menu) {
-                        if (this->index == (this->menu_line - 1))
-                            strcpy(psi_desc, _("  》 ", "  >  "));
-                        else
-                            strcpy(psi_desc, "     ");
-                    } else
-                        sprintf(psi_desc, "  %c) ", I2A(this->index));
-
-                    strcat(psi_desc,
-                        format("%-30s%2d %4d%s %3d%%%s", this->spell->name, this->spell->min_lev, mana_cost,
-                            (((this->use_mind == MIND_MINDCRAFTER) && (this->index == 13)) ? _("～", "~ ") : "  "), chance, comment));
-                    prt(psi_desc, y + this->index + 1, x);
-                }
-
+                display_each_mind_chance();
                 prt("", y + this->index + 1, x);
             } else if (!only_browse) {
                 this->redraw = false;
@@ -263,6 +238,38 @@ bool MindPowerGetter::interpret_mind_key_input(const bool only_browse)
     }
 
     return true;
+}
+
+void MindPowerGetter::display_each_mind_chance()
+{
+    bool has_weapon[2];
+    has_weapon[0] = has_melee_weapon(this->caster_ptr, INVEN_MAIN_HAND);
+    has_weapon[1] = has_melee_weapon(this->caster_ptr, INVEN_SUB_HAND);
+    for (this->index = 0; this->index < MAX_MIND_POWERS; this->index++) {
+        this->spell = &mind_ptr->info[this->index];
+        if (this->spell->min_lev > this->caster_ptr->lev) {
+            break;
+        }
+
+        calculate_mind_chance(has_weapon);
+        char comment[80];
+        mindcraft_info(this->caster_ptr, comment, this->use_mind, this->index);
+        char psi_desc[80];
+        if (use_menu) {
+            if (this->index == (this->menu_line - 1)) {
+                strcpy(psi_desc, _("  》 ", "  >  "));
+            } else {
+                strcpy(psi_desc, "     ");
+            }
+        } else {
+            sprintf(psi_desc, "  %c) ", I2A(this->index));
+        }
+
+        strcat(psi_desc,
+            format("%-30s%2d %4d%s %3d%%%s", this->spell->name, this->spell->min_lev, mana_cost,
+                (((this->use_mind == MIND_MINDCRAFTER) && (this->index == 13)) ? _("～", "~ ") : "  "), chance, comment));
+        prt(psi_desc, y + this->index + 1, x);
+    }
 }
 
 void MindPowerGetter::calculate_mind_chance(bool *has_weapon)

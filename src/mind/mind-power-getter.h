@@ -32,6 +32,7 @@ private:
     void select_mind_description();
     bool select_spell_index(SPELL_IDX *sn);
     bool interpret_mind_key_input(const bool only_browse);
+    void display_each_mind_chance();
     void calculate_mind_chance(bool *has_weapon); // 配列.
     void calculate_ki_chance(bool *has_weapon); // 配列.
     void add_ki_chance();
