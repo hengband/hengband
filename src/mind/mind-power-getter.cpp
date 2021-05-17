@@ -116,30 +116,26 @@ bool MindPowerGetter::get_mind_power(SPELL_IDX *sn, bool only_browse)
                         this->chance -= 3 * (this->caster_ptr->lev - this->spell->min_lev);
                         this->chance -= 3 * (adj_mag_stat[this->caster_ptr->stat_index[mp_ptr->spell_stat]] - 1);
                         calculate_ki_chance(has_weapon);
-                        if ((this->use_mind != MIND_BERSERKER) && (this->use_mind != MIND_NINJUTSU) && (this->mana_cost > this->caster_ptr->csp))
+                        if ((this->use_mind != MIND_BERSERKER) && (this->use_mind != MIND_NINJUTSU) && (this->mana_cost > this->caster_ptr->csp)) {
                             this->chance += 5 * (this->mana_cost - this->caster_ptr->csp);
-
+                        }
+                        
                         this->chance += this->caster_ptr->to_m_chance;
                         PERCENTAGE minfail = adj_mag_fail[this->caster_ptr->stat_index[mp_ptr->spell_stat]];
-                        if (this->chance < minfail)
+                        if (this->chance < minfail) {
                             this->chance = minfail;
-
-                        if (this->caster_ptr->stun > 50)
-                            this->chance += 25;
-                        else if (this->caster_ptr->stun)
-                            this->chance += 15;
-
-                        if (this->use_mind == MIND_KI) {
-                            if (heavy_armor(this->caster_ptr))
-                                this->chance += 5;
-                            if (this->caster_ptr->icky_wield[0])
-                                this->chance += 5;
-                            if (this->caster_ptr->icky_wield[1])
-                                this->chance += 5;
                         }
-
-                        if (this->chance > 95)
+                        
+                        if (this->caster_ptr->stun > 50) {
+                            this->chance += 25;
+                        } else if (this->caster_ptr->stun) {
+                            this->chance += 15;
+                        }
+                        
+                        add_ki_chance();
+                        if (this->chance > 95) {
                             this->chance = 95;
+                        }
                     }
 
                     char comment[80];
@@ -321,5 +317,24 @@ void MindPowerGetter::calculate_ki_chance(bool *has_weapon)
         for (auto j = 0; j < get_current_ki(this->caster_ptr) / 50; j++) {
             this->mana_cost += (j + 1) * 3 / 2;
         }
+    }
+}
+
+void MindPowerGetter::add_ki_chance()
+{
+    if (this->use_mind != MIND_KI) {
+        return;
+    }
+
+    if (heavy_armor(this->caster_ptr)) {
+        this->chance += 5;
+    }
+
+    if (this->caster_ptr->icky_wield[0]) {
+        this->chance += 5;
+    }
+
+    if (this->caster_ptr->icky_wield[1]) {
+        this->chance += 5;
     }
 }

@@ -33,4 +33,5 @@ private:
     bool select_spell_index(SPELL_IDX *sn);
     bool interpret_mind_key_input(const bool only_browse);
     void calculate_ki_chance(bool *has_weapon); // 配列.
+    void add_ki_chance();
 };
