@@ -2,6 +2,7 @@
 
 #include "system/angband.h"
 
+struct mind_type;
 struct player_type;
 class MindPowerGetter {
 public:
@@ -11,4 +12,16 @@ public:
 
 private:
     player_type *caster_ptr;
+    SPELL_IDX index;
+    int num;
+    TERM_LEN y;
+    TERM_LEN x;
+    bool ask;
+    char choice;
+    concptr mind_description;
+    const mind_type *spell;
+    bool flag;
+    bool redraw;
+    int use_mind;
+    int menu_line;
 };
