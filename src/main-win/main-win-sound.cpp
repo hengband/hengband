@@ -8,6 +8,7 @@
 #include "main-win/main-win-define.h"
 #include "main-win/main-win-file-utils.h"
 #include "main-win/main-win-mmsystem.h"
+#include "main-win/main-win-utils.h"
 #include "util/angband-files.h"
 
 #include "main/sound-definitions-table.h"
@@ -67,7 +68,7 @@ errr play_sound(int val)
     char buf[MAIN_WIN_MAX_PATH];
     path_build(buf, MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_SOUND, filename);
 
-    if (::PlaySoundA(buf, 0, SND_FILENAME | SND_ASYNC)) {
+    if (::PlaySoundW(to_wchar(buf).wc_str(), 0, SND_FILENAME | SND_ASYNC)) {
         return 0;
     }
     return -1;
