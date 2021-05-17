@@ -153,16 +153,10 @@ void do_cmd_macros(player_type *creature_ptr)
     FILE *auto_dump_stream;
     BIT_FLAGS mode = rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG;
     screen_save();
-    while (TRUE) {
+
+    auto print_macro_menu = [] {
         term_clear();
         prt(_("[ マクロの設定 ]", "Interact with Macros"), 2, 0);
-        prt(_("マクロ行動が(もしあれば)下に表示されます:", "Current action (if any) shown below:"), 20, 0);
-        // too long macro must die
-        strncpy(tmp, macro__buf, 80);
-        tmp[80] = '\0';
-        ascii_to_text(buf, tmp);
-        prt(buf, 22, 0);
-
         prt(_("(1) ユーザー設定ファイルのロード", "(1) Load a user pref file"), 4, 5);
         prt(_("(2) ファイルにマクロを追加", "(2) Append macros to a file"), 5, 5);
         prt(_("(3) マクロの確認", "(3) Query a macro"), 6, 5);
@@ -173,13 +167,18 @@ void do_cmd_macros(player_type *creature_ptr)
         prt(_("(8) キー配置の作成", "(8) Create a keymap"), 11, 5);
         prt(_("(9) キー配置の削除", "(9) Remove a keymap"), 12, 5);
         prt(_("(0) マクロ行動の入力", "(0) Enter a new action"), 13, 5);
+    };
+    print_macro_menu();
 
-        prt(_("コマンド: ", "Command: "), 16, 0);
-        int i = inkey();
-        if (i == ESCAPE)
+    while (true) {
+        msg_print(_("コマンド: ", "Command: "));
+        const int key = inkey();
+        if (key == ESCAPE)
             break;
+        msg_erase();
+        print_macro_menu();
 
-        else if (i == '1') {
+        if (key == '1') {
             prt(_("コマンド: ユーザー設定ファイルのロード", "Command: Load a user pref file"), 16, 0);
             prt(_("ファイル: ", "File: "), 18, 0);
             sprintf(tmp, "%s.prf", creature_ptr->base_name);
@@ -193,7 +192,7 @@ void do_cmd_macros(player_type *creature_ptr)
                 msg_format(_("'%s'の読み込みに失敗しました！", "Failed to load '%s'!"), tmp);
             else
                 msg_format(_("'%s'を読み込みました。", "Loaded '%s'."), tmp);
-        } else if (i == '2') {
+        } else if (key == '2') {
             prt(_("コマンド: マクロをファイルに追加する", "Command: Append macros to a file"), 16, 0);
             prt(_("ファイル: ", "File: "), 18, 0);
             sprintf(tmp, "%s.prf", creature_ptr->base_name);
@@ -202,8 +201,9 @@ void do_cmd_macros(player_type *creature_ptr)
 
             macro_dump(&auto_dump_stream, tmp);
             msg_print(_("マクロを追加しました。", "Appended macros."));
-        } else if (i == '3') {
+        } else if (key == '3') {
             prt(_("コマンド: マクロの確認", "Command: Query a macro"), 16, 0);
+            prt(_("マクロ行動が(もしあれば)下に表示されます:", "Current action (if any) shown below:"), 20, 0);
             prt(_("トリガーキー: ", "Trigger: "), 18, 0);
             do_cmd_macro_aux(buf);
             int k = macro_find_exact(buf);
@@ -217,11 +217,10 @@ void do_cmd_macros(player_type *creature_ptr)
                 prt(buf, 22, 0);
                 msg_print(_("マクロを確認しました。", "Found a macro."));
             }
-        } else if (i == '4') {
+        } else if (key == '4') {
             prt(_("コマンド: マクロの作成", "Command: Create a macro"), 16, 0);
             prt(_("トリガーキー: ", "Trigger: "), 18, 0);
             do_cmd_macro_aux(buf);
-            clear_from(20);
             c_prt(TERM_L_RED,
                 _("カーソルキーの左右でカーソル位置を移動。BackspaceかDeleteで一文字削除。",
                     "Press Left/Right arrow keys to move cursor. Backspace/Delete to delete a char."),
@@ -233,13 +232,13 @@ void do_cmd_macros(player_type *creature_ptr)
                 macro_add(buf, macro__buf);
                 msg_print(_("マクロを追加しました。", "Added a macro."));
             }
-        } else if (i == '5') {
+        } else if (key == '5') {
             prt(_("コマンド: マクロの削除", "Command: Remove a macro"), 16, 0);
             prt(_("トリガーキー: ", "Trigger: "), 18, 0);
             do_cmd_macro_aux(buf);
             macro_add(buf, buf);
             msg_print(_("マクロを削除しました。", "Removed a macro."));
-        } else if (i == '6') {
+        } else if (key == '6') {
             prt(_("コマンド: キー配置をファイルに追加する", "Command: Append keymaps to a file"), 16, 0);
             prt(_("ファイル: ", "File: "), 18, 0);
             sprintf(tmp, "%s.prf", creature_ptr->base_name);
@@ -248,8 +247,9 @@ void do_cmd_macros(player_type *creature_ptr)
 
             (void)keymap_dump(tmp);
             msg_print(_("キー配置を追加しました。", "Appended keymaps."));
-        } else if (i == '7') {
+        } else if (key == '7') {
             prt(_("コマンド: キー配置の確認", "Command: Query a keymap"), 16, 0);
+            prt(_("マクロ行動が(もしあれば)下に表示されます:", "Current action (if any) shown below:"), 20, 0);
             prt(_("押すキー: ", "Keypress: "), 18, 0);
             do_cmd_macro_aux_keymap(buf);
             concptr act = keymap_act[mode][(byte)(buf[0])];
@@ -263,11 +263,10 @@ void do_cmd_macros(player_type *creature_ptr)
                 prt(buf, 22, 0);
                 msg_print(_("キー配置を確認しました。", "Found a keymap."));
             }
-        } else if (i == '8') {
+        } else if (key == '8') {
             prt(_("コマンド: キー配置の作成", "Command: Create a keymap"), 16, 0);
             prt(_("押すキー: ", "Keypress: "), 18, 0);
             do_cmd_macro_aux_keymap(buf);
-            clear_from(20);
             c_prt(TERM_L_RED,
                 _("カーソルキーの左右でカーソル位置を移動。BackspaceかDeleteで一文字削除。",
                     "Press Left/Right arrow keys to move cursor. Backspace/Delete to delete a char."),
@@ -280,22 +279,21 @@ void do_cmd_macros(player_type *creature_ptr)
                 keymap_act[mode][(byte)(buf[0])] = string_make(macro__buf);
                 msg_print(_("キー配置を追加しました。", "Added a keymap."));
             }
-        } else if (i == '9') {
+        } else if (key == '9') {
             prt(_("コマンド: キー配置の削除", "Command: Remove a keymap"), 16, 0);
             prt(_("押すキー: ", "Keypress: "), 18, 0);
             do_cmd_macro_aux_keymap(buf);
             string_free(keymap_act[mode][(byte)(buf[0])]);
             keymap_act[mode][(byte)(buf[0])] = NULL;
             msg_print(_("キー配置を削除しました。", "Removed a keymap."));
-        } else if (i == '0') {
+        } else if (key == '0') {
             prt(_("コマンド: マクロ行動の入力", "Command: Enter a new action"), 16, 0);
-            clear_from(20);
             c_prt(TERM_L_RED,
                 _("カーソルキーの左右でカーソル位置を移動。BackspaceかDeleteで一文字削除。",
                     "Press Left/Right arrow keys to move cursor. Backspace/Delete to delete a char."),
                 22, 0);
             prt(_("マクロ行動: ", "Action: "), 20, 0);
-            tmp[80] = '\0';
+            buf[0] = '\0';
             if (!askfor(buf, 80))
                 continue;
 
@@ -303,8 +301,6 @@ void do_cmd_macros(player_type *creature_ptr)
         } else {
             bell();
         }
-
-        msg_erase();
     }
 
     screen_load();
