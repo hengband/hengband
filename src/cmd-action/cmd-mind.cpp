@@ -372,7 +372,7 @@ void do_cmd_mind(player_type *caster_ptr)
 {
     cm_type tmp_cm;
     cm_type *cm_ptr = initialize_cm_type(caster_ptr, &tmp_cm);
-    if (cmd_limit_confused(caster_ptr) || !get_mind_power(caster_ptr, &cm_ptr->n, FALSE))
+    if (cmd_limit_confused(caster_ptr) || !MindPowerGetter(caster_ptr).get_mind_power(&cm_ptr->n, FALSE))
         return;
 
     switch_mind_kind(caster_ptr, cm_ptr);
@@ -425,7 +425,7 @@ void do_cmd_mind_browse(player_type *caster_ptr)
     mind_kind_type use_mind = decide_use_mind_browse(caster_ptr);
     screen_save();
     while (TRUE) {
-        if (!get_mind_power(caster_ptr, &n, TRUE)) {
+        if (!MindPowerGetter(caster_ptr).get_mind_power(&n, TRUE)) {
             screen_load();
             return;
         }

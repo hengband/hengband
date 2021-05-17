@@ -18,6 +18,11 @@
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 
+MindPowerGetter::MindPowerGetter(player_type *caster_ptr)
+{
+    this->caster_ptr = caster_ptr;
+}
+
 /*!
  * @brief 使用可能な特殊技能を選択する /
  * Allow user to choose a mindcrafter power.
@@ -36,14 +41,14 @@
  * when you run it. It's probably easy to fix but I haven't tried,\n
  * sorry.\n
  */
-bool get_mind_power(player_type *caster_ptr, SPELL_IDX *sn, bool only_browse)
+bool MindPowerGetter::get_mind_power(SPELL_IDX *sn, bool only_browse)
 {
     SPELL_IDX i;
     int num = 0;
     TERM_LEN y = 1;
     TERM_LEN x = 10;
     PERCENTAGE minfail = 0;
-    PLAYER_LEVEL plev = caster_ptr->lev;
+    PLAYER_LEVEL plev = this->caster_ptr->lev;
     PERCENTAGE chance = 0;
     int ask = TRUE;
     char choice;
@@ -57,7 +62,7 @@ bool get_mind_power(player_type *caster_ptr, SPELL_IDX *sn, bool only_browse)
     int use_mind;
     int menu_line = (use_menu ? 1 : 0);
 
-    switch (caster_ptr->pclass) {
+    switch (this->caster_ptr->pclass) {
     case CLASS_MINDCRAFTER: {
         use_mind = MIND_MINDCRAFTER;
         p = _("超能力", "mindcraft");
@@ -172,8 +177,8 @@ bool get_mind_power(player_type *caster_ptr, SPELL_IDX *sn, bool only_browse)
                 put_str(_("名前", "Name"), y, x + 5);
                 put_str(format(_("Lv   %s   失率 効果", "Lv   %s   Fail Info"), ((use_mind == MIND_BERSERKER) || (use_mind == MIND_NINJUTSU)) ? "HP" : "MP"), y,
                     x + 35);
-                has_weapon[0] = has_melee_weapon(caster_ptr, INVEN_MAIN_HAND);
-                has_weapon[1] = has_melee_weapon(caster_ptr, INVEN_SUB_HAND);
+                has_weapon[0] = has_melee_weapon(this->caster_ptr, INVEN_MAIN_HAND);
+                has_weapon[1] = has_melee_weapon(this->caster_ptr, INVEN_SUB_HAND);
                 for (i = 0; i < MAX_MIND_POWERS; i++) {
                     int mana_cost;
                     spell = mind_ptr->info[i];
@@ -184,47 +189,47 @@ bool get_mind_power(player_type *caster_ptr, SPELL_IDX *sn, bool only_browse)
                     mana_cost = spell.mana_cost;
                     if (chance) {
                         chance -= 3 * (plev - spell.min_lev);
-                        chance -= 3 * (adj_mag_stat[caster_ptr->stat_index[mp_ptr->spell_stat]] - 1);
+                        chance -= 3 * (adj_mag_stat[this->caster_ptr->stat_index[mp_ptr->spell_stat]] - 1);
                         if (use_mind == MIND_KI) {
-                            if (heavy_armor(caster_ptr))
+                            if (heavy_armor(this->caster_ptr))
                                 chance += 20;
 
-                            if (caster_ptr->icky_wield[0])
+                            if (this->caster_ptr->icky_wield[0])
                                 chance += 20;
                             else if (has_weapon[0])
 
                                 chance += 10;
-                            if (caster_ptr->icky_wield[1])
+                            if (this->caster_ptr->icky_wield[1])
                                 chance += 20;
                             else if (has_weapon[1])
                                 chance += 10;
 
                             if (i == 5) {
                                 int j;
-                                for (j = 0; j < get_current_ki(caster_ptr) / 50; j++)
+                                for (j = 0; j < get_current_ki(this->caster_ptr) / 50; j++)
                                     mana_cost += (j + 1) * 3 / 2;
                             }
                         }
 
-                        if ((use_mind != MIND_BERSERKER) && (use_mind != MIND_NINJUTSU) && (mana_cost > caster_ptr->csp))
-                            chance += 5 * (mana_cost - caster_ptr->csp);
+                        if ((use_mind != MIND_BERSERKER) && (use_mind != MIND_NINJUTSU) && (mana_cost > this->caster_ptr->csp))
+                            chance += 5 * (mana_cost - this->caster_ptr->csp);
 
-                        chance += caster_ptr->to_m_chance;
-                        minfail = adj_mag_fail[caster_ptr->stat_index[mp_ptr->spell_stat]];
+                        chance += this->caster_ptr->to_m_chance;
+                        minfail = adj_mag_fail[this->caster_ptr->stat_index[mp_ptr->spell_stat]];
                         if (chance < minfail)
                             chance = minfail;
 
-                        if (caster_ptr->stun > 50)
+                        if (this->caster_ptr->stun > 50)
                             chance += 25;
-                        else if (caster_ptr->stun)
+                        else if (this->caster_ptr->stun)
                             chance += 15;
 
                         if (use_mind == MIND_KI) {
-                            if (heavy_armor(caster_ptr))
+                            if (heavy_armor(this->caster_ptr))
                                 chance += 5;
-                            if (caster_ptr->icky_wield[0])
+                            if (this->caster_ptr->icky_wield[0])
                                 chance += 5;
-                            if (caster_ptr->icky_wield[1])
+                            if (this->caster_ptr->icky_wield[1])
                                 chance += 5;
                         }
 
@@ -232,7 +237,7 @@ bool get_mind_power(player_type *caster_ptr, SPELL_IDX *sn, bool only_browse)
                             chance = 95;
                     }
 
-                    mindcraft_info(caster_ptr, comment, use_mind, i);
+                    mindcraft_info(this->caster_ptr, comment, use_mind, i);
                     if (use_menu) {
                         if (i == (menu_line - 1))
                             strcpy(psi_desc, _("  》 ", "  >  "));
@@ -283,8 +288,8 @@ bool get_mind_power(player_type *caster_ptr, SPELL_IDX *sn, bool only_browse)
     if (redraw && !only_browse)
         screen_load();
 
-    caster_ptr->window_flags |= PW_SPELL;
-    handle_stuff(caster_ptr);
+    this->caster_ptr->window_flags |= PW_SPELL;
+    handle_stuff(this->caster_ptr);
     if (!flag)
         return FALSE;
 

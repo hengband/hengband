@@ -2,5 +2,13 @@
 
 #include "system/angband.h"
 
-typedef struct player_type player_type;
-bool get_mind_power(player_type *caster_ptr, SPELL_IDX *sn, bool only_browse);
+struct player_type;
+class MindPowerGetter {
+public:
+    MindPowerGetter(player_type *caster_ptr);
+    virtual ~MindPowerGetter() = default;
+    bool get_mind_power(SPELL_IDX *sn, bool only_browse);
+
+private:
+    player_type *caster_ptr;
+};
