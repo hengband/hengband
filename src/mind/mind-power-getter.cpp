@@ -110,34 +110,7 @@ bool MindPowerGetter::get_mind_power(SPELL_IDX *sn, bool only_browse)
                     if (this->spell->min_lev > this->caster_ptr->lev)
                         break;
 
-                    this->chance = this->spell->fail;
-                    this->mana_cost = this->spell->mana_cost;
-                    if (this->chance) {
-                        this->chance -= 3 * (this->caster_ptr->lev - this->spell->min_lev);
-                        this->chance -= 3 * (adj_mag_stat[this->caster_ptr->stat_index[mp_ptr->spell_stat]] - 1);
-                        calculate_ki_chance(has_weapon);
-                        if ((this->use_mind != MIND_BERSERKER) && (this->use_mind != MIND_NINJUTSU) && (this->mana_cost > this->caster_ptr->csp)) {
-                            this->chance += 5 * (this->mana_cost - this->caster_ptr->csp);
-                        }
-                        
-                        this->chance += this->caster_ptr->to_m_chance;
-                        PERCENTAGE minfail = adj_mag_fail[this->caster_ptr->stat_index[mp_ptr->spell_stat]];
-                        if (this->chance < minfail) {
-                            this->chance = minfail;
-                        }
-                        
-                        if (this->caster_ptr->stun > 50) {
-                            this->chance += 25;
-                        } else if (this->caster_ptr->stun) {
-                            this->chance += 15;
-                        }
-                        
-                        add_ki_chance();
-                        if (this->chance > 95) {
-                            this->chance = 95;
-                        }
-                    }
-
+                    calculate_mind_chance(has_weapon);
                     char comment[80];
                     mindcraft_info(this->caster_ptr, comment, this->use_mind, this->index);
                     if (use_menu) {
@@ -290,6 +263,39 @@ bool MindPowerGetter::interpret_mind_key_input(const bool only_browse)
     }
 
     return true;
+}
+
+void MindPowerGetter::calculate_mind_chance(bool *has_weapon)
+{
+    this->chance = this->spell->fail;
+    this->mana_cost = this->spell->mana_cost;
+    if (this->chance == 0) {
+        return;
+    }
+
+    this->chance -= 3 * (this->caster_ptr->lev - this->spell->min_lev);
+    this->chance -= 3 * (adj_mag_stat[this->caster_ptr->stat_index[mp_ptr->spell_stat]] - 1);
+    calculate_ki_chance(has_weapon);
+    if ((this->use_mind != MIND_BERSERKER) && (this->use_mind != MIND_NINJUTSU) && (this->mana_cost > this->caster_ptr->csp)) {
+        this->chance += 5 * (this->mana_cost - this->caster_ptr->csp);
+    }
+
+    this->chance += this->caster_ptr->to_m_chance;
+    PERCENTAGE minfail = adj_mag_fail[this->caster_ptr->stat_index[mp_ptr->spell_stat]];
+    if (this->chance < minfail) {
+        this->chance = minfail;
+    }
+
+    if (this->caster_ptr->stun > 50) {
+        this->chance += 25;
+    } else if (this->caster_ptr->stun) {
+        this->chance += 15;
+    }
+
+    add_ki_chance();
+    if (this->chance > 95) {
+        this->chance = 95;
+    }
 }
 
 void MindPowerGetter::calculate_ki_chance(bool *has_weapon)
