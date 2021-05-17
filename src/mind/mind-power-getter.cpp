@@ -81,38 +81,7 @@ bool MindPowerGetter::get_mind_power(SPELL_IDX *sn, bool only_browse)
         screen_save();
 
     this->choice = (always_show_list || use_menu) ? ESCAPE : 1;
-    while (!this->flag) {
-        if (this->choice == ESCAPE) {
-            this->choice = ' ';
-        } else if (!get_com(out_val, &this->choice, true)) {
-            break;
-        }
-
-        if (!interpret_mind_key_input(only_browse)) {
-            return false;
-        }
-
-        if (display_minds_chance(only_browse)) {
-            continue;
-        }
-
-        make_choice_lower();
-        if ((this->index < 0) || (this->index >= this->num)) {
-            bell();
-            continue;
-        }
-
-        this->spell = &mind_ptr->info[this->index];
-        if (this->ask) {
-            char tmp_val[160];
-            (void)strnfmt(tmp_val, 78, _("%sを使いますか？", "Use %s? "), this->spell->name);
-            if (!get_check(tmp_val))
-                continue;
-        }
-
-        this->flag = true;
-    }
-
+    decide_mind_choice(out_val, only_browse);
     if (this->redraw && !only_browse)
         screen_load();
 
@@ -175,6 +144,44 @@ bool MindPowerGetter::select_spell_index(SPELL_IDX *sn)
 
     *sn = (SPELL_IDX)code;
     return mind_ptr->info[*sn].min_lev <= this->caster_ptr->lev;
+}
+
+bool MindPowerGetter::decide_mind_choice(char *out_val, const bool only_browse)
+{
+    while (!this->flag) {
+        if (this->choice == ESCAPE) {
+            this->choice = ' ';
+        } else if (!get_com(out_val, &this->choice, true)) {
+            break;
+        }
+
+        if (!interpret_mind_key_input(only_browse)) {
+            return false;
+        }
+
+        if (display_minds_chance(only_browse)) {
+            continue;
+        }
+
+        make_choice_lower();
+        if ((this->index < 0) || (this->index >= this->num)) {
+            bell();
+            continue;
+        }
+
+        this->spell = &mind_ptr->info[this->index];
+        if (this->ask) {
+            char tmp_val[160];
+            (void)strnfmt(tmp_val, 78, _("%sを使いますか？", "Use %s? "), this->spell->name);
+            if (!get_check(tmp_val)) {
+                continue;
+            }
+        }
+
+        this->flag = true;
+    }
+
+    return true;
 }
 
 bool MindPowerGetter::interpret_mind_key_input(const bool only_browse)
