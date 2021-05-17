@@ -33,6 +33,7 @@ MindPowerGetter::MindPowerGetter(player_type *caster_ptr)
     this->redraw = false;
     this->use_mind = 0;
     this->menu_line = (use_menu ? 1 : 0);
+    this->mind_ptr = NULL;
 }
 
 /*!
@@ -56,17 +57,8 @@ MindPowerGetter::MindPowerGetter(player_type *caster_ptr)
 bool MindPowerGetter::get_mind_power(SPELL_IDX *sn, bool only_browse)
 {
     select_mind_description();
-    COMMAND_CODE code;
-    const mind_power *mind_ptr = &mind_powers[this->use_mind];
-    *sn = -1;
-    if (repeat_pull(&code)) {
-        *sn = (SPELL_IDX)code;
-        if (*sn == INVEN_FORCE)
-            repeat_pull(&code);
-
-        *sn = (SPELL_IDX)code;
-        if (mind_ptr->info[*sn].min_lev <= this->caster_ptr->lev)
-            return true;
+    if (select_spell_index(sn)) {
+        return true;
     }
 
     for (this->index = 0; this->index < MAX_MIND_POWERS; this->index++)
@@ -290,4 +282,22 @@ void MindPowerGetter::select_mind_description()
         this->mind_description = _("超能力", "mindcraft");
         break;
     }
+}
+
+bool MindPowerGetter::select_spell_index(SPELL_IDX *sn)
+{
+    COMMAND_CODE code;
+    this->mind_ptr = &mind_powers[this->use_mind];
+    *sn = -1;
+    if (!repeat_pull(&code)) {
+        return false;    
+    }
+
+    *sn = (SPELL_IDX)code;
+    if (*sn == INVEN_FORCE) {
+        (void)repeat_pull(&code);
+    }
+    
+    *sn = (SPELL_IDX)code;
+    return mind_ptr->info[*sn].min_lev <= this->caster_ptr->lev;
 }

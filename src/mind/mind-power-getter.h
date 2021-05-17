@@ -2,6 +2,7 @@
 
 #include "system/angband.h"
 
+struct mind_power;
 struct mind_type;
 struct player_type;
 class MindPowerGetter {
@@ -24,6 +25,8 @@ private:
     bool redraw;
     int use_mind;
     int menu_line;
+    const mind_power *mind_ptr;
 
     void select_mind_description();
+    bool select_spell_index(SPELL_IDX *sn);
 };
