@@ -8,11 +8,12 @@
 #include "main-win/main-win-define.h"
 #include "main-win/main-win-file-utils.h"
 #include "main-win/main-win-tokenizer.h"
-#include "main-win/main-win-windows.h"
 #include "term/z-term.h"
 #include "util/angband-files.h"
 
 #include "main/sound-definitions-table.h"
+
+#include <windows.h>
 
 // 1つの項目に設定可能な最大ファイル数
 #define SAMPLE_MAX 16

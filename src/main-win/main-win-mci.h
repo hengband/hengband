@@ -1,7 +1,6 @@
 ﻿#pragma once
 
-#include "main-win/main-win-windows.h"
-
+#include <windows.h>
 #include <mciapi.h>
 
 extern MCI_OPEN_PARMSA mci_open_parms;

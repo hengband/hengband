@@ -5,8 +5,9 @@
 
 #include "main-win/main-win-file-utils.h"
 #include "main-win/main-win-define.h"
-#include "main-win/main-win-windows.h"
 #include "util/angband-files.h"
+
+#include <windows.h>
 
 /*
  * Check for existance of a file
