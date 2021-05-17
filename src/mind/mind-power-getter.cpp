@@ -82,10 +82,11 @@ bool MindPowerGetter::get_mind_power(SPELL_IDX *sn, bool only_browse)
 
     this->choice = (always_show_list || use_menu) ? ESCAPE : 1;
     while (!this->flag) {
-        if (this->choice == ESCAPE)
+        if (this->choice == ESCAPE) {
             this->choice = ' ';
-        else if (!get_com(out_val, &this->choice, true))
+        } else if (!get_com(out_val, &this->choice, true)) {
             break;
+        }
 
         if (!interpret_mind_key_input(only_browse)) {
             return false;
@@ -95,14 +96,7 @@ bool MindPowerGetter::get_mind_power(SPELL_IDX *sn, bool only_browse)
             continue;
         }
 
-        if (!use_menu) {
-            this->ask = (bool)isupper(this->choice);
-            if (this->ask)
-                this->choice = (char)tolower(this->choice);
-
-            this->index = (islower(this->choice) ? A2I(this->choice) : -1);
-        }
-
+        make_choice_lower();
         if ((this->index < 0) || (this->index >= this->num)) {
             bell();
             continue;
@@ -245,9 +239,9 @@ bool MindPowerGetter::display_minds_chance(const bool only_browse)
         prt("", y + this->index + 1, x);
         return true;
     }
-    
+
     if (only_browse) {
-        return true;    
+        return true;
     }
 
     this->redraw = false;
@@ -365,4 +359,18 @@ void MindPowerGetter::add_ki_chance()
     if (this->caster_ptr->icky_wield[1]) {
         this->chance += 5;
     }
+}
+
+void MindPowerGetter::make_choice_lower()
+{
+    if (use_menu) {
+        return;
+    }
+
+    this->ask = (bool)isupper(this->choice);
+    if (this->ask) {
+        this->choice = (char)tolower(this->choice);
+    }
+
+    this->index = (islower(this->choice) ? A2I(this->choice) : -1);
 }

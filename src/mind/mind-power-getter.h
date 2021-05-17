@@ -37,4 +37,5 @@ private:
     void calculate_mind_chance(bool *has_weapon); // 配列.
     void calculate_ki_chance(bool *has_weapon); // 配列.
     void add_ki_chance();
+    void make_choice_lower();
 };
