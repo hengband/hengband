@@ -34,6 +34,8 @@ MindPowerGetter::MindPowerGetter(player_type *caster_ptr)
     this->use_mind = 0;
     this->menu_line = (use_menu ? 1 : 0);
     this->mind_ptr = NULL;
+    this->chance = 0;
+    this->mana_cost = 0;
 }
 
 /*!
@@ -92,7 +94,6 @@ bool MindPowerGetter::get_mind_power(SPELL_IDX *sn, bool only_browse)
         if ((this->choice == ' ') || (this->choice == '*') || (this->choice == '?') || (use_menu && this->ask)) {
             if (!this->redraw || use_menu) {
                 char psi_desc[80];
-                bool has_weapon[2];
                 this->redraw = true;
                 if (!only_browse && !use_menu)
                     screen_save();
@@ -101,64 +102,44 @@ bool MindPowerGetter::get_mind_power(SPELL_IDX *sn, bool only_browse)
                 put_str(_("名前", "Name"), y, x + 5);
                 put_str(format(_("Lv   %s   失率 効果", "Lv   %s   Fail Info"), ((this->use_mind == MIND_BERSERKER) || (this->use_mind == MIND_NINJUTSU)) ? "HP" : "MP"), y,
                     x + 35);
+                bool has_weapon[2];
                 has_weapon[0] = has_melee_weapon(this->caster_ptr, INVEN_MAIN_HAND);
                 has_weapon[1] = has_melee_weapon(this->caster_ptr, INVEN_SUB_HAND);
                 for (this->index = 0; this->index < MAX_MIND_POWERS; this->index++) {
-                    int mana_cost;
                     this->spell = &mind_ptr->info[this->index];
                     if (this->spell->min_lev > this->caster_ptr->lev)
                         break;
 
-                    PERCENTAGE chance = this->spell->fail;
-                    mana_cost = this->spell->mana_cost;
-                    if (chance) {
-                        chance -= 3 * (this->caster_ptr->lev - this->spell->min_lev);
-                        chance -= 3 * (adj_mag_stat[this->caster_ptr->stat_index[mp_ptr->spell_stat]] - 1);
-                        if (this->use_mind == MIND_KI) {
-                            if (heavy_armor(this->caster_ptr))
-                                chance += 20;
+                    this->chance = this->spell->fail;
+                    this->mana_cost = this->spell->mana_cost;
+                    if (this->chance) {
+                        this->chance -= 3 * (this->caster_ptr->lev - this->spell->min_lev);
+                        this->chance -= 3 * (adj_mag_stat[this->caster_ptr->stat_index[mp_ptr->spell_stat]] - 1);
+                        calculate_ki_chance(has_weapon);
+                        if ((this->use_mind != MIND_BERSERKER) && (this->use_mind != MIND_NINJUTSU) && (this->mana_cost > this->caster_ptr->csp))
+                            this->chance += 5 * (this->mana_cost - this->caster_ptr->csp);
 
-                            if (this->caster_ptr->icky_wield[0])
-                                chance += 20;
-                            else if (has_weapon[0])
-
-                                chance += 10;
-                            if (this->caster_ptr->icky_wield[1])
-                                chance += 20;
-                            else if (has_weapon[1])
-                                chance += 10;
-
-                            if (this->index == 5) {
-                                int j;
-                                for (j = 0; j < get_current_ki(this->caster_ptr) / 50; j++)
-                                    mana_cost += (j + 1) * 3 / 2;
-                            }
-                        }
-
-                        if ((this->use_mind != MIND_BERSERKER) && (this->use_mind != MIND_NINJUTSU) && (mana_cost > this->caster_ptr->csp))
-                            chance += 5 * (mana_cost - this->caster_ptr->csp);
-
-                        chance += this->caster_ptr->to_m_chance;
+                        this->chance += this->caster_ptr->to_m_chance;
                         PERCENTAGE minfail = adj_mag_fail[this->caster_ptr->stat_index[mp_ptr->spell_stat]];
-                        if (chance < minfail)
-                            chance = minfail;
+                        if (this->chance < minfail)
+                            this->chance = minfail;
 
                         if (this->caster_ptr->stun > 50)
-                            chance += 25;
+                            this->chance += 25;
                         else if (this->caster_ptr->stun)
-                            chance += 15;
+                            this->chance += 15;
 
                         if (this->use_mind == MIND_KI) {
                             if (heavy_armor(this->caster_ptr))
-                                chance += 5;
+                                this->chance += 5;
                             if (this->caster_ptr->icky_wield[0])
-                                chance += 5;
+                                this->chance += 5;
                             if (this->caster_ptr->icky_wield[1])
-                                chance += 5;
+                                this->chance += 5;
                         }
 
-                        if (chance > 95)
-                            chance = 95;
+                        if (this->chance > 95)
+                            this->chance = 95;
                     }
 
                     char comment[80];
@@ -313,4 +294,32 @@ bool MindPowerGetter::interpret_mind_key_input(const bool only_browse)
     }
 
     return true;
+}
+
+void MindPowerGetter::calculate_ki_chance(bool *has_weapon)
+{
+    if (this->use_mind != MIND_KI) {
+        return;    
+    }
+
+    if (heavy_armor(this->caster_ptr))
+        this->chance += 20;
+
+    if (this->caster_ptr->icky_wield[0]) {
+        this->chance += 20;
+    } else if (has_weapon[0]) {
+        this->chance += 10;
+    }
+
+    if (this->caster_ptr->icky_wield[1]) {
+        chance += 20;
+    } else if (has_weapon[1]) {
+        this->chance += 10;
+    }
+
+    if (this->index == 5) {
+        for (auto j = 0; j < get_current_ki(this->caster_ptr) / 50; j++) {
+            this->mana_cost += (j + 1) * 3 / 2;
+        }
+    }
 }

@@ -26,8 +26,11 @@ private:
     int use_mind;
     int menu_line;
     const mind_power *mind_ptr;
+    PERCENTAGE chance;
+    int mana_cost;
 
     void select_mind_description();
     bool select_spell_index(SPELL_IDX *sn);
     bool interpret_mind_key_input(const bool only_browse);
+    void calculate_ki_chance(bool *has_weapon); // 配列.
 };
