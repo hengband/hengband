@@ -66,16 +66,16 @@ bool MindPowerGetter::get_mind_power(SPELL_IDX *sn, bool only_browse)
     for (this->index = 0; this->index < MAX_MIND_POWERS; this->index++) {
         if (mind_ptr->info[this->index].min_lev <= this->caster_ptr->lev) {
             this->num++;
-        }        
+        }
     }
-    
+
     char out_val[160];
     if (only_browse)
-        (void)strnfmt(out_val, 78, _("(%^s %c-%c, '*'で一覧, ESC) どの%sについて知りますか？", "(%^ss %c-%c, *=List, ESC=exit) Use which %s? "), this->mind_description, I2A(0),
-            I2A(this->num - 1), this->mind_description);
+        (void)strnfmt(out_val, 78, _("(%^s %c-%c, '*'で一覧, ESC) どの%sについて知りますか？", "(%^ss %c-%c, *=List, ESC=exit) Use which %s? "),
+            this->mind_description, I2A(0), I2A(this->num - 1), this->mind_description);
     else
-        (void)strnfmt(
-            out_val, 78, _("(%^s %c-%c, '*'で一覧, ESC) どの%sを使いますか？", "(%^ss %c-%c, *=List, ESC=exit) Use which %s? "), this->mind_description, I2A(0), I2A(this->num - 1), this->mind_description);
+        (void)strnfmt(out_val, 78, _("(%^s %c-%c, '*'で一覧, ESC) どの%sを使いますか？", "(%^ss %c-%c, *=List, ESC=exit) Use which %s? "),
+            this->mind_description, I2A(0), I2A(this->num - 1), this->mind_description);
 
     if (use_menu && !only_browse)
         screen_save();
@@ -91,23 +91,7 @@ bool MindPowerGetter::get_mind_power(SPELL_IDX *sn, bool only_browse)
             return false;
         }
 
-        if ((this->choice == ' ') || (this->choice == '*') || (this->choice == '?') || (use_menu && this->ask)) {
-            if (!this->redraw || use_menu) {
-                this->redraw = true;
-                if (!only_browse && !use_menu)
-                    screen_save();
-
-                prt("", y, x);
-                put_str(_("名前", "Name"), y, x + 5);
-                put_str(format(_("Lv   %s   失率 効果", "Lv   %s   Fail Info"), ((this->use_mind == MIND_BERSERKER) || (this->use_mind == MIND_NINJUTSU)) ? "HP" : "MP"), y,
-                    x + 35);
-                display_each_mind_chance();
-                prt("", y + this->index + 1, x);
-            } else if (!only_browse) {
-                this->redraw = false;
-                screen_load();
-            }
-
+        if (display_minds_chance(only_browse)) {
             continue;
         }
 
@@ -187,14 +171,14 @@ bool MindPowerGetter::select_spell_index(SPELL_IDX *sn)
     this->mind_ptr = &mind_powers[this->use_mind];
     *sn = -1;
     if (!repeat_pull(&code)) {
-        return false;    
+        return false;
     }
 
     *sn = (SPELL_IDX)code;
     if (*sn == INVEN_FORCE) {
         (void)repeat_pull(&code);
     }
-    
+
     *sn = (SPELL_IDX)code;
     return mind_ptr->info[*sn].min_lev <= this->caster_ptr->lev;
 }
@@ -237,6 +221,37 @@ bool MindPowerGetter::interpret_mind_key_input(const bool only_browse)
         this->menu_line -= this->num;
     }
 
+    return true;
+}
+
+bool MindPowerGetter::display_minds_chance(const bool only_browse)
+{
+    if ((this->choice != ' ') && (this->choice != '*') && (this->choice != '?') && (!use_menu || !this->ask)) {
+        return false;
+    }
+
+    if (!this->redraw || use_menu) {
+        this->redraw = true;
+        if (!only_browse && !use_menu) {
+            screen_save();
+        }
+
+        prt("", y, x);
+        put_str(_("名前", "Name"), y, x + 5);
+        put_str(
+            format(_("Lv   %s   失率 効果", "Lv   %s   Fail Info"), ((this->use_mind == MIND_BERSERKER) || (this->use_mind == MIND_NINJUTSU)) ? "HP" : "MP"), y,
+            x + 35);
+        display_each_mind_chance();
+        prt("", y + this->index + 1, x);
+        return true;
+    }
+    
+    if (only_browse) {
+        return true;    
+    }
+
+    this->redraw = false;
+    screen_load();
     return true;
 }
 
@@ -308,7 +323,7 @@ void MindPowerGetter::calculate_mind_chance(bool *has_weapon)
 void MindPowerGetter::calculate_ki_chance(bool *has_weapon)
 {
     if (this->use_mind != MIND_KI) {
-        return;    
+        return;
     }
 
     if (heavy_armor(this->caster_ptr))
