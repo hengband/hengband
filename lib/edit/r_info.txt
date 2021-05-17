@@ -18811,7 +18811,7 @@ D:全ての多元世界に破滅をもたらす恐怖の存在だった。
 D:弱点はCSSにJavaScriptと呼ばれる電脳兵器だが、どちらもこの世界には存在しない。
 
 N:922:ピチャウ
-E:Small electric rat
+E:Pichau
 G:r:y
 I:115:10d10:20:10:40
 W:14:2:0:45:320:1317
@@ -26080,7 +26080,7 @@ D:$It is called as the king of beasts.
 D:百獣の王だ。
 
 N:1317:ピカチャウ
-E:Electric rat
+E:Pikachau
 G:r:y
 I:110:20d10:20:10:40
 W:24:2:0:200:0:0
@@ -26094,7 +26094,7 @@ D:$It's shockingly pretty, for a rat.
 D:かわいらしい外見をしているが、油断すると思わぬ衝撃を受けるだろう。
 
 N:1318:ナマチャウ
-E:Draft beer rat
+E:Beerchau
 G:r:y
 I:115:23d15:20:45:15
 W:29:3:0:350:4000:1319
@@ -26111,7 +26111,7 @@ D:世界中で大人気のゲーム、パチパチモンスター略してパチ
 D:それは家だけでなく職場でもこっそり酒を飲んでいる。
 
 N:1319:アルチャウ
-E:Alcoholism rat
+E:Alchau
 G:r:y
 I:120:28d20:20:10:40
 W:34:3:0:200:0:0
@@ -26283,7 +26283,7 @@ D:おもに土管の中に潜んでおり、時々顔を出して愚かにも自
 D:口から炎や毒ガスやシューリンガンなどを吐き出して攻撃してくる個体もいる。
 
 N:1328:ピカチャウ (ルルイエのすがた)
-E:Electric rat (Ruruie's figure)
+E:Pikachau (R'lyehian Form)
 G:r:G
 I:130:80d30:30:90:0
 W:80:3:0:5500:0:0
@@ -26313,7 +26313,7 @@ F:NO_CONF | NO_SLEEP | NO_STUN | EMPTY_MIND | RES_TELE
 S:1_IN_4 | HASTE | BLINK | TPORT
 D:$It is used for playing Quidditch in the wizarding world
 D:魔法界のスポーツで使われる道具だ。
-D:この球体を捕ったものは大きな点数と称賛を手にするであろう
+D:この球体を捕ったものは大きな点数と称賛を手にするであろう。
 
 N:1330:闇の帝王『ヴォルデモート』
 E:The Dark Lord "Voldemort"
