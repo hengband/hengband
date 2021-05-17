@@ -23255,7 +23255,7 @@ F:DROP_60
 B:SHOOT:HURT:7d7
 B:SLASH:HURT:2d10
 B:HIT:HURT:1d12
-S:1_IN_6
+S:1_IN_6 | SHOOT
 D:$These corps are the ghosts killed by Rui.
 D:累に殺された者たちの亡霊だ。
 
@@ -26000,7 +26000,8 @@ W:20:4:0:200:0:0
 B:SLASH:HURT:5d5
 B:SLASH:HURT:5d5
 F:NAZGUL | FORCE_MAXHP | NONLIVING | WEIRD_MIND | CAN_FLY | INVISIBLE
-F:PASS_WALL | KILL_BODY | IM_COLD | RES_NETH | NO_FEAR | NO_CONF | NO_STUN
+F:PASS_WALL | KILL_BODY | IM_COLD | RES_NETH | RES_DARK
+F:NO_FEAR | NO_CONF | NO_STUN
 D:$It is a spiritual shadow that wanders in search of the girl in the cage.
 D:$  You will learn the importance of avoiding.
 D:主を求めてさまよう霊的な影だ。
