@@ -61,10 +61,12 @@ bool MindPowerGetter::get_mind_power(SPELL_IDX *sn, bool only_browse)
         return true;
     }
 
-    for (this->index = 0; this->index < MAX_MIND_POWERS; this->index++)
-        if (mind_ptr->info[this->index].min_lev <= this->caster_ptr->lev)
+    for (this->index = 0; this->index < MAX_MIND_POWERS; this->index++) {
+        if (mind_ptr->info[this->index].min_lev <= this->caster_ptr->lev) {
             this->num++;
-
+        }        
+    }
+    
     char out_val[160];
     if (only_browse)
         (void)strnfmt(out_val, 78, _("(%^s %c-%c, '*'で一覧, ESC) どの%sについて知りますか？", "(%^ss %c-%c, *=List, ESC=exit) Use which %s? "), this->mind_description, I2A(0),
@@ -83,38 +85,8 @@ bool MindPowerGetter::get_mind_power(SPELL_IDX *sn, bool only_browse)
         else if (!get_com(out_val, &this->choice, true))
             break;
 
-        if (use_menu && this->choice != ' ') {
-            switch (this->choice) {
-            case '0': {
-                if (!only_browse)
-                    screen_load();
-
-                return false;
-            }
-            case '8':
-            case 'k':
-            case 'K': {
-                this->menu_line += (this->num - 1);
-                break;
-            }
-            case '2':
-            case 'j':
-            case 'J': {
-                this->menu_line++;
-                break;
-            }
-            case 'x':
-            case 'X':
-            case '\r':
-            case '\n': {
-                this->index = this->menu_line - 1;
-                this->ask = false;
-                break;
-            }
-            }
-
-            if (this->menu_line > this->num)
-                this->menu_line -= this->num;
+        if (!interpret_mind_key_input(only_browse)) {
+            return false;
         }
 
         if ((this->choice == ' ') || (this->choice == '*') || (this->choice == '?') || (use_menu && this->ask)) {
@@ -300,4 +272,45 @@ bool MindPowerGetter::select_spell_index(SPELL_IDX *sn)
     
     *sn = (SPELL_IDX)code;
     return mind_ptr->info[*sn].min_lev <= this->caster_ptr->lev;
+}
+
+bool MindPowerGetter::interpret_mind_key_input(const bool only_browse)
+{
+    if (!use_menu || this->choice == ' ') {
+        return true;
+    }
+
+    switch (this->choice) {
+    case '0':
+        if (!only_browse) {
+            screen_load();
+        }
+
+        return false;
+    case '8':
+    case 'k':
+    case 'K':
+        this->menu_line += (this->num - 1);
+        break;
+    case '2':
+    case 'j':
+    case 'J':
+        this->menu_line++;
+        break;
+    case 'x':
+    case 'X':
+    case '\r':
+    case '\n':
+        this->index = this->menu_line - 1;
+        this->ask = false;
+        break;
+    default:
+        break;
+    }
+
+    if (this->menu_line > this->num) {
+        this->menu_line -= this->num;
+    }
+
+    return true;
 }
