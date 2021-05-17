@@ -55,39 +55,7 @@ MindPowerGetter::MindPowerGetter(player_type *caster_ptr)
  */
 bool MindPowerGetter::get_mind_power(SPELL_IDX *sn, bool only_browse)
 {
-    switch (this->caster_ptr->pclass) {
-    case CLASS_MINDCRAFTER: {
-        this->use_mind = (int)MIND_MINDCRAFTER;
-        this->mind_description = _("超能力", "mindcraft");
-        break;
-    }
-    case CLASS_FORCETRAINER: {
-        this->use_mind = (int)MIND_KI;
-        this->mind_description = _("練気術", "Force");
-        break;
-    }
-    case CLASS_BERSERKER: {
-        this->use_mind = (int)MIND_BERSERKER;
-        this->mind_description = _("技", "brutal power");
-        break;
-    }
-    case CLASS_MIRROR_MASTER: {
-        this->use_mind = (int)MIND_MIRROR_MASTER;
-        this->mind_description = _("鏡魔法", "magic");
-        break;
-    }
-    case CLASS_NINJA: {
-        this->use_mind = (int)MIND_NINJUTSU;
-        this->mind_description = _("忍術", "ninjutsu");
-        break;
-    }
-    default: {
-        this->use_mind = 0;
-        this->mind_description = _("超能力", "mindcraft");
-        break;
-    }
-    }
-
+    select_mind_description();
     COMMAND_CODE code;
     const mind_power *mind_ptr = &mind_powers[this->use_mind];
     *sn = -1;
@@ -289,4 +257,37 @@ bool MindPowerGetter::get_mind_power(SPELL_IDX *sn, bool only_browse)
     *sn = this->index;
     repeat_push((COMMAND_CODE)this->index);
     return true;
+}
+
+/*
+ * @brief 職業ごとの特殊技能表記を取得する
+ */
+void MindPowerGetter::select_mind_description()
+{
+    switch (this->caster_ptr->pclass)
+    case CLASS_MINDCRAFTER: {
+        this->use_mind = (int)MIND_MINDCRAFTER;
+        this->mind_description = _("超能力", "mindcraft");
+        break;
+    case CLASS_FORCETRAINER:
+        this->use_mind = (int)MIND_KI;
+        this->mind_description = _("練気術", "Force");
+        break;
+    case CLASS_BERSERKER:
+        this->use_mind = (int)MIND_BERSERKER;
+        this->mind_description = _("技", "brutal power");
+        break;
+    case CLASS_MIRROR_MASTER:
+        this->use_mind = (int)MIND_MIRROR_MASTER;
+        this->mind_description = _("鏡魔法", "magic");
+        break;
+    case CLASS_NINJA:
+        this->use_mind = (int)MIND_NINJUTSU;
+        this->mind_description = _("忍術", "ninjutsu");
+        break;
+    default:
+        this->use_mind = 0;
+        this->mind_description = _("超能力", "mindcraft");
+        break;
+    }
 }

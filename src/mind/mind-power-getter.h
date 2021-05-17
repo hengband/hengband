@@ -24,4 +24,6 @@ private:
     bool redraw;
     int use_mind;
     int menu_line;
+
+    void select_mind_description();
 };
