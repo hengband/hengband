@@ -26312,7 +26312,7 @@ F:ONLY_ITEM | DROP_60 | DROP_90 | DROP_GREAT
 F:NONLIVING | COLD_BLOOD | RES_ALL | SELF_LITE_2 | CAN_FLY
 F:NO_CONF | NO_SLEEP | NO_STUN | EMPTY_MIND | RES_TELE
 S:1_IN_4 | HASTE | BLINK | TPORT
-D:$It is used for playing Quidditch in the wizarding world
+D:$It is used for playing Quidditch in the wizarding world.
 D:魔法界のスポーツで使われる道具だ。
 D:この球体を捕ったものは大きな点数と称賛を手にするであろう。
 
@@ -26334,4 +26334,9 @@ S:BLINK | TPORT | TELE_TO | TELE_AWAY | TELE_LEVEL |
 S:DARKNESS | FORGET | S_KIN | S_UNDEAD | S_HI_UNDEAD |
 R:638:10d2
 R:1271:3d2
-D:彼は史上もっとも強力かつ危険な闇の魔法使いだ。従者である死喰い人や、追放されていた闇の生物を率いて魔法界を支配しようとしている！
+D:$He is the most powerful and dangerous dark wizard in history.
+D:$  He is trying to rule the magical world with his followers,
+D:$ the Death Eaters and the exiled dark creatures!
+D:彼は史上もっとも強力かつ危険な闇の魔法使いだ。
+D:従者である死喰い人や、追放されていた闇の生物を率いて
+D:魔法界を支配しようとしている！
