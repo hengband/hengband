@@ -26072,10 +26072,10 @@ D:それは奇妙な電波を飛ばしている。
 N:1316:ライオン
 E:Lion
 G:f:U
-I:110:8d7:20:12:25
-W:11:2:0:35:0:0
-B:CLAW:HURT:2d6
-B:BITE:HURT:1d6
+I:120:16d15:20:12:25
+W:18:2:0:55:0:0
+B:CLAW:HURT:2d9
+B:BITE:HURT:2d9
 F:WILD_GRASS | WILD_WASTE | FRIENDS | ANIMAL | DROP_CORPSE | DROP_SKELETON
 D:$It is called as the king of beasts.
 D:百獣の王だ。
