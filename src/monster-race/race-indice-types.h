@@ -182,6 +182,7 @@ enum monster_race_type {
     MON_DIAVOLO = 1291,
     MON_MANIMANI = 1293,
     MON_LOSTRINGIL = 1299,
+    MON_LEE_QIEZI = 1306,
     MON_THUNDERS = 1309,
     MON_BUFFALO = 1311,
     MON_GOLDEN_EAGLE = 1312,
