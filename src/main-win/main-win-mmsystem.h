@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "main-win/main-win-windows.h"
+#include <windows.h>
 
 /*
  * Exclude parts of MMSYSTEM.H that are not needed

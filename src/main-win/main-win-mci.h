@@ -1,12 +1,12 @@
 ﻿#pragma once
 
-#include "main-win/main-win-windows.h"
-
+#include <windows.h>
 #include <mciapi.h>
 
-extern MCI_OPEN_PARMSA mci_open_parms;
+#include <string>
+
+extern MCI_OPEN_PARMSW mci_open_parms;
 extern MCI_PLAY_PARMS mci_play_parms;
-#define MCI_DEVICE_TYPE_MAX_LENGTH 256
-extern char mci_device_type[MCI_DEVICE_TYPE_MAX_LENGTH];
+extern std::wstring mci_device_type;
 
 void setup_mci(HWND hWnd);

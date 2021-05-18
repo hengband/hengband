@@ -5,9 +5,9 @@
 
 #include "main-win/main-win-mci.h"
 
-MCI_OPEN_PARMSA mci_open_parms;
+MCI_OPEN_PARMSW mci_open_parms;
 MCI_PLAY_PARMS mci_play_parms;
-char mci_device_type[MCI_DEVICE_TYPE_MAX_LENGTH];
+std::wstring mci_device_type;
 
 /*!
  * @brief MCI用設定の初期化
