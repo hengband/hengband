@@ -550,8 +550,10 @@ void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr)
         on_dead_big_raven(player_ptr, md_ptr);
         return;
     case MON_YENDOR_WIZARD_1:
-    case MON_YENDOR_WIZARD_2:
         on_dead_random_artifact(player_ptr, md_ptr, kind_is_amulet);
+        return;
+    case MON_YENDOR_WIZARD_2:
+        drop_specific_item_on_dead(player_ptr, md_ptr, kind_is_amulet);
         return;
     case MON_MANIMANI:
         on_dead_manimani(player_ptr, md_ptr);
