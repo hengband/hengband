@@ -188,6 +188,7 @@ bool check_summon_specific(player_type *player_ptr, MONRACE_IDX summoner_idx, MO
         is_match |= one_in_(16) ? (r_ptr->d_char == 'l') : false;
         is_match |= (r_idx == MON_STAR_VAMPIRE) || (r_idx == MON_SWALLOW) || (r_idx == MON_HAWK);
         is_match |= (r_idx == MON_LION) || (r_idx == MON_BUFFALO) || (r_idx == MON_FIGHTER) || (r_idx == MON_GOLDEN_EAGLE);
+        is_match |= (r_idx == MON_SHALLOW_PUDDLE) || (r_idx == MON_DEEP_PUDDLE) || (r_idx == MON_SKY_WHALE);
         break;
     default:
         break;
