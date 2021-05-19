@@ -162,7 +162,6 @@ typedef struct {
     DWORD dwStyle;
     DWORD dwExStyle;
 
-    uint keys;
     TERM_LEN rows; /* int -> uint */
     TERM_LEN cols;
 
@@ -176,7 +175,6 @@ typedef struct {
     uint size_oh2;
 
     bool size_hack;
-    bool xtra_hack;
     bool visible;
     concptr font_want;
     HFONT font_id;
@@ -1297,7 +1295,6 @@ static void init_windows(void)
     WIPE(td, term_data);
     td->name = win_term_name[0];
 
-    td->keys = 1024;
     td->rows = 24;
     td->cols = 80;
     td->visible = TRUE;
@@ -1313,7 +1310,6 @@ static void init_windows(void)
         td = &data[i];
         WIPE(td, term_data);
         td->name = win_term_name[i];
-        td->keys = 16;
         td->rows = 24;
         td->cols = 80;
         td->visible = FALSE;
