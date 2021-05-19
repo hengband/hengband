@@ -56,7 +56,7 @@ bool info_grab_one_flag(u32b *flags, const std::unordered_map<sview, T> &names, 
  * @val 値
  */
 template <typename T>
-void info_set_value(T &arg, const std::string &val)
+void info_set_value(T &arg, const std::string &val, int base = 10)
 {
-    arg = static_cast<T>(std::stoi(val));
+    arg = static_cast<T>(std::stoi(val, nullptr, base));
 }
