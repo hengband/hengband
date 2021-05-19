@@ -13,21 +13,21 @@ public:
 
 private:
     player_type *caster_ptr;
-    SPELL_IDX index;
-    int num;
-    TERM_LEN y;
-    TERM_LEN x;
-    bool ask;
-    char choice;
-    concptr mind_description;
-    const mind_type *spell;
-    bool flag;
-    bool redraw;
-    int use_mind;
+    SPELL_IDX index = 0;
+    int num = 0;
+    TERM_LEN y = 1;
+    TERM_LEN x = 10;
+    bool ask = true;
+    char choice = 0;
+    concptr mind_description = "";
+    const mind_type *spell = nullptr;
+    bool flag = false;
+    bool redraw = false;
+    int use_mind = 0;
     int menu_line;
-    const mind_power *mind_ptr;
-    PERCENTAGE chance;
-    int mana_cost;
+    const mind_power *mind_ptr = nullptr;
+    PERCENTAGE chance = 0;
+    int mana_cost = 0;
 
     void select_mind_description();
     bool select_spell_index(SPELL_IDX *sn);

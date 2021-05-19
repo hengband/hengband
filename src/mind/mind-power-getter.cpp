@@ -19,23 +19,9 @@
 #include "util/int-char-converter.h"
 
 MindPowerGetter::MindPowerGetter(player_type *caster_ptr)
+    : caster_ptr(caster_ptr)
+    , menu_line(use_menu ? 1 : 0)
 {
-    this->caster_ptr = caster_ptr;
-    this->index = 0;
-    this->num = 0;
-    this->y = 1;
-    this->x = 10;
-    this->ask = true;
-    this->choice = 0;
-    this->mind_description = "";
-    this->spell = NULL;
-    this->flag = false;
-    this->redraw = false;
-    this->use_mind = 0;
-    this->menu_line = (use_menu ? 1 : 0);
-    this->mind_ptr = NULL;
-    this->chance = 0;
-    this->mana_cost = 0;
 }
 
 /*!
@@ -77,11 +63,11 @@ bool MindPowerGetter::get_mind_power(SPELL_IDX *sn, bool only_browse)
         (void)strnfmt(out_val, 78, _("(%^s %c-%c, '*'で一覧, ESC) どの%sを使いますか？", "(%^ss %c-%c, *=List, ESC=exit) Use which %s? "),
             this->mind_description, I2A(0), I2A(this->num - 1), this->mind_description);
     }
-    
+
     if (use_menu && !only_browse) {
         screen_save();
     }
-    
+
     this->choice = (always_show_list || use_menu) ? ESCAPE : 1;
     decide_mind_choice(out_val, only_browse);
     if (this->redraw && !only_browse) {
@@ -93,7 +79,7 @@ bool MindPowerGetter::get_mind_power(SPELL_IDX *sn, bool only_browse)
     if (!this->flag) {
         return false;
     }
-    
+
     *sn = this->index;
     repeat_push((COMMAND_CODE)this->index);
     return true;
