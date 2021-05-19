@@ -84,7 +84,7 @@ void do_cmd_colors(player_type *creature_ptr)
             if (!askfor(tmp, 70))
                 continue;
 
-            (void)process_pref_file(creature_ptr, tmp);
+            (void)process_pref_file(creature_ptr, tmp, true);
             term_xtra(TERM_XTRA_REACT, 0);
             term_redraw();
         } else if (i == '2') {

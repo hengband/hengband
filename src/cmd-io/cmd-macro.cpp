@@ -185,7 +185,7 @@ void do_cmd_macros(player_type *creature_ptr)
             if (!askfor(tmp, 80))
                 continue;
 
-            errr err = process_pref_file(creature_ptr, tmp);
+            errr err = process_pref_file(creature_ptr, tmp, true);
             if (-2 == err)
                 msg_format(_("標準の設定ファイル'%s'を読み込みました。", "Loaded default '%s'."), tmp);
             else if (err)
