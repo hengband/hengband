@@ -140,6 +140,7 @@ static errr process_pref_file_aux(player_type *creature_ptr, concptr name, int p
  * Process the "user pref file" with the given name
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param name 読み込むファイル名
+ * @param only_user_dir trueを指定するとANGBAND_DIR_USERからの読み込みのみ行う
  * @return エラーコード
  * @details
  * <pre>
@@ -148,14 +149,17 @@ static errr process_pref_file_aux(player_type *creature_ptr, concptr name, int p
  * allow conditional evaluation and filename inclusion.
  * </pre>
  */
-errr process_pref_file(player_type *creature_ptr, concptr name)
+errr process_pref_file(player_type *creature_ptr, concptr name, bool only_user_dir)
 {
     char buf[1024];
-    path_build(buf, sizeof(buf), ANGBAND_DIR_PREF, name);
+    errr err1 = 0;
+    if (!only_user_dir) {
+        path_build(buf, sizeof(buf), ANGBAND_DIR_PREF, name);
 
-    errr err1 = process_pref_file_aux(creature_ptr, buf, PREF_TYPE_NORMAL);
-    if (err1 > 0)
-        return err1;
+        err1 = process_pref_file_aux(creature_ptr, buf, PREF_TYPE_NORMAL);
+        if (err1 > 0)
+            return err1;
+    }
 
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
     errr err2 = process_pref_file_aux(creature_ptr, buf, PREF_TYPE_NORMAL);
