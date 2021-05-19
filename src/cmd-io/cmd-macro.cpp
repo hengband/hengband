@@ -153,9 +153,9 @@ void do_cmd_macros(player_type *creature_ptr)
     FILE *auto_dump_stream;
     BIT_FLAGS mode = rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG;
     screen_save();
+    term_clear();
 
     auto print_macro_menu = [] {
-        term_clear();
         prt(_("[ マクロの設定 ]", "Interact with Macros"), 2, 0);
         prt(_("(1) ユーザー設定ファイルのロード", "(1) Load a user pref file"), 4, 5);
         prt(_("(2) ファイルにマクロを追加", "(2) Append macros to a file"), 5, 5);
@@ -175,7 +175,7 @@ void do_cmd_macros(player_type *creature_ptr)
         const int key = inkey();
         if (key == ESCAPE)
             break;
-        msg_erase();
+        clear_from(1);
         print_macro_menu();
 
         if (key == '1') {
@@ -210,8 +210,10 @@ void do_cmd_macros(player_type *creature_ptr)
             if (k < 0) {
                 msg_print(_("そのキーにはマクロは定義されていません。", "Found no macro."));
             } else {
+                // マクロの作成時に参照するためmacro__bufにコピーする
+                strcpy(macro__buf, macro__act[k]);
                 // too long macro must die
-                strncpy(tmp, macro__act[k], 80);
+                strncpy(tmp, macro__buf, 80);
                 tmp[80] = '\0';
                 ascii_to_text(buf, tmp);
                 prt(buf, 22, 0);
@@ -226,7 +228,9 @@ void do_cmd_macros(player_type *creature_ptr)
                     "Press Left/Right arrow keys to move cursor. Backspace/Delete to delete a char."),
                 22, 0);
             prt(_("マクロ行動: ", "Action: "), 20, 0);
-            tmp[0] = '\0';
+            // 最後に参照したマクロデータを元に作成する（コピーを行えるように）
+            macro__buf[80] = '\0';
+            ascii_to_text(tmp, macro__buf);
             if (askfor(tmp, 80)) {
                 text_to_ascii(macro__buf, tmp);
                 macro_add(buf, macro__buf);
@@ -256,8 +260,10 @@ void do_cmd_macros(player_type *creature_ptr)
             if (!act) {
                 msg_print(_("キー配置は定義されていません。", "Found no keymap."));
             } else {
+                // マクロの作成時に参照するためmacro__bufにコピーする
+                strcpy(macro__buf, act);
                 // too long macro must die
-                strncpy(tmp, act, 80);
+                strncpy(tmp, macro__buf, 80);
                 tmp[80] = '\0';
                 ascii_to_text(buf, tmp);
                 prt(buf, 22, 0);
@@ -272,7 +278,9 @@ void do_cmd_macros(player_type *creature_ptr)
                     "Press Left/Right arrow keys to move cursor. Backspace/Delete to delete a char."),
                 22, 0);
             prt(_("行動: ", "Action: "), 20, 0);
-            tmp[0] = '\0';
+            // 最後に参照したマクロデータを元に作成する（コピーを行えるように）
+            macro__buf[80] = '\0';
+            ascii_to_text(tmp, macro__buf);
             if (askfor(tmp, 80)) {
                 text_to_ascii(macro__buf, tmp);
                 string_free(keymap_act[mode][(byte)(buf[0])]);
@@ -301,6 +309,8 @@ void do_cmd_macros(player_type *creature_ptr)
         } else {
             bell();
         }
+
+        msg_erase();
     }
 
     screen_load();
