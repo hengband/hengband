@@ -26082,7 +26082,7 @@ D:一滴でも飲んだら寝るまで飲むのを止められない。
 
 N:1320:偉大なる祖国の『ライカ』
 E:Laika, the greatest beast of USSR
-G:C:W
+G:C:R
 I:115:4d5:20:5:10
 W:0:3:0:20:0:0
 B:BITE:HURT:1d4
