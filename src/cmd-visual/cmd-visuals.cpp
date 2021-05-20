@@ -101,7 +101,7 @@ void do_cmd_visuals(player_type *creature_ptr)
             if (!askfor(tmp, 70))
                 continue;
 
-            (void)process_pref_file(creature_ptr, tmp);
+            (void)process_pref_file(creature_ptr, tmp, true);
             need_redraw = TRUE;
             break;
         }
