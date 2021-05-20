@@ -26304,15 +26304,15 @@ D:名状しがたい外見をしているが、油断すると思わぬ衝撃を
 N:1329:『金のスニッチ』
 E:Golden Snitch
 G:*:y
-I:155:1d2:200:10000:0
+I:135:50d10:200:80:0
 W:29:6:0:500:0:0
 B:CRUSH:HURT:1d10
 F:UNIQUE | FORCE_MAXHP | RAND_25 | RAND_50
 F:PREVENT_SUDDEN_MAGIC | NEVER_BLOW
-F:ONLY_ITEM | DROP_60 | DROP_90 | DROP_GREAT
-F:NONLIVING | COLD_BLOOD | RES_ALL | SELF_LITE_2 | CAN_FLY
+F:DROP_60 | DROP_90 | DROP_GREAT
+F:NONLIVING | COLD_BLOOD | SELF_LITE_2 | CAN_FLY | IM_FIRE | IM_POIS
 F:NO_CONF | NO_SLEEP | NO_STUN | EMPTY_MIND | RES_TELE
-S:1_IN_4 | HASTE | BLINK | TPORT
+S:1_IN_4 | HASTE | BLINK | TPORT | S_KIN | CONF
 D:$It is used for playing Quidditch in the wizarding world.
 D:魔法界のスポーツで使われる道具だ。
 D:この球体を捕ったものは大きな点数と称賛を手にするであろう。
