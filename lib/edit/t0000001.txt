@@ -400,10 +400,10 @@ F:@:FLOOR:3:0:0:0:141
 F:a:BUILDING_0:3
 F:@:FLOOR:3:0:0:0:148
 
-# Quest 27 rewarding (Warrior and Berserker get The Glaive of Pain)
+# Quest 27 rewarding (Warrior and Berserker get 'Dragon Slayer')
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Warrior Berserker] ]
 F:a:BUILDING_0:3
-F:@:FLOOR:3:0:0:0:94
+F:@:FLOOR:3:0:0:0:266
 
 # Quest 27 rewarding (Cavalry gets Don Quixote)
 ?:[AND [EQU $QUEST27 3] [EQU $CLASS Cavalry] ]
