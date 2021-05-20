@@ -56,6 +56,7 @@ enum monster_race_type {
     MON_STAR_VAMPIRE = 536,
     MON_RAAL = 557,
     MON_NIGHTBLADE = 564,
+    MON_PLASMA_VORTEX = 588,
     MON_SKY_WHALE = 594,
     MON_BARON_HELL = 609,
     MON_ANCIENT_CRISTAL_DRAGON = 646,
@@ -193,4 +194,5 @@ enum monster_race_type {
     MON_FIGHTER = 1314,
     MON_HAWK = 1315,
     MON_LION = 1316,
+    MON_OOTSUKI = 1333,
 };

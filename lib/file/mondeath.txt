@@ -67,5 +67,8 @@ shouted, "Ringil! My Ringil!!"
 N:1303:Spawn of Yog-Sothoth
 says, 'Please help me, Father, Father Yog-Sothoth!'
 
+N:1333:Professor Ootsuki
+Why... my plasma power loses... even though I remodeled my whole body...
+
 N:*:Default
 shouts, 'AAAARRRGGGHHH!!!'

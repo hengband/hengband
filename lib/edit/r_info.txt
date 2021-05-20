@@ -26374,3 +26374,25 @@ F:MOVE_BODY | KILL_WALL | NO_STUN | NO_CONF | NO_SLEEP
 F:BASH_DOOR | DROP_CORPSE
 D:$It is a legendary beast that swallowed a transport ship full of treasure.
 D:財宝満載の輸送船を丸呑みにしたという伝説の巨獣だ。
+
+N:1333:『プロフェッサー・オオツキ』
+E:Professor Ootsuki
+G:p:R
+I:124:22d88:300:100:50
+W:43:2:0:7000:0:0
+B:PUNCH:HURT:5d5
+B:HIT:ELEC:5d5
+B:KICK:SUPERHURT:6d6
+F:UNIQUE | MALE | CAN_SPEAK | FORCE_MAXHP | FRIENDLY
+F:IM_ELEC | IM_FIRE | RES_PLAS
+F:WEIRD_MIND | BASH_DOOR | MOVE_BODY | HUMAN | NONLIVING | HAS_LITE_2
+F:NO_STUN | NO_SLEEP | NO_CONF | DROP_GOOD | DROP_4D2
+S:1_IN_4 | BR_PLAS | BO_PLAS | S_KIN
+D:$A professor who boasted that plasma can explain
+D:$ all the paranormal phenomena in the world.
+D:$  The whole body has been remodeled with plasma,
+D:$ making it hard to say that it is a human being.
+D:$  The Serpent of Chaos are also a type of plasma for him.
+D:この世すべての超常現象はプラズマで説明できると豪語する教授だ。
+D:全身にプラズマ改造を施し、もはや人間とは言い難いものになっている。
+D:混沌のサーペントも彼にとってはプラズマの一種である。

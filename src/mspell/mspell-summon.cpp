@@ -176,6 +176,9 @@ MonsterSpellResult spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION
     case MON_THUNDERS:
         count += summon_THUNDERS(target_ptr, y, x, rlev, m_idx);
         break;
+    case MON_OOTSUKI:
+        count += summon_PLASMA(target_ptr, y, x, rlev, m_idx);
+        break;
     default:
         count += summon_Kin(target_ptr, y, x, rlev, m_idx);
         break;
