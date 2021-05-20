@@ -26341,3 +26341,36 @@ D:$ the Death Eaters and the exiled dark creatures!
 D:彼は史上もっとも強力かつ危険な闇の魔法使いだ。
 D:従者である死喰い人や、追放されていた闇の生物を率いて
 D:魔法界を支配しようとしている！
+
+N:1331:ポンチャウ
+E:Dependenchau
+G:r:y
+I:130:38d20:20:10:40
+W:39:4:0:450:0:0
+B:BITE:ELEC:6d10
+B:BITE:ELEC:6d10
+B:CLAW:ELEC:6d10
+F:DROP_CORPSE | ONLY_GOLD | DROP_60 | IM_ELEC | ANIMAL | AURA_ELEC
+F:SELF_LITE_1 | RAND_25 | RAND_50
+S:1_IN_5 | BR_ELEC | BO_ELEC
+D:$It's Fakemon who has finally reached out to stimulants.
+D:$  It is always fighting the sensation of bugs crawling.
+D:とうとうスピードに手を出してしまったパチモンだ。
+D:それは常に虫が這いずる感覚と戦っている。
+
+# スピードが-10なので、同階層のユニークよりHPが多くてもOKとする
+# 出典「カツブシ岩」
+N:1332:巨獣『ヅガッダグドマネング』
+E:The Zguddagdmanaing Gigantic-Beast
+G:H:s
+I:100:111d111:90:111:255
+W:67:3:0:25000:0:0
+B:BITE:HURT:20d10
+B:CRUSH:HURT:20d7
+B:CRUSH:HURT:20d7
+B:CRUSH:HURT:20d7
+F:UNIQUE | NO_FEAR | FORCE_MAXHP | CAN_FLY
+F:MOVE_BODY | KILL_WALL | NO_STUN | NO_CONF | NO_SLEEP
+F:BASH_DOOR | DROP_CORPSE
+D:$It is a legendary beast that swallowed a transport ship full of treasure.
+D:財宝満載の輸送船を丸呑みにしたという伝説の巨獣だ。
