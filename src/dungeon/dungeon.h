@@ -29,6 +29,7 @@
 #define DUNGEON_NO_MELEE 17
 #define DUNGEON_CHAMELEON 18
 #define DUNGEON_DARKNESS 19
+#define DUNGEON_MAX 19
 
 typedef struct feat_prob {
     FEAT_IDX feat{}; /* Feature tile */
