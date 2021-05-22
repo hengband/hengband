@@ -788,6 +788,19 @@ static void refresh_color_table()
 }
 
 /*!
+ * @brief グラフィクスのモード変更
+ */
+static void change_graphics_mode(graphics_mode mode)
+{
+    graphics_mode ret = graphic.change_graphics(mode);
+    if (ret != mode) {
+        plog(_("グラフィクスを初期化できません!", "Cannot initialize graphics!"));
+    }
+    arg_graphics = static_cast<byte>(ret);
+    use_graphics = (arg_graphics > 0);
+}
+
+/*!
  * @brief React to global changes
  */
 static errr term_xtra_win_react(player_type *player_ptr)
@@ -796,12 +809,7 @@ static errr term_xtra_win_react(player_type *player_ptr)
 
     const byte current_mode = static_cast<byte>(graphic.get_mode());
     if (current_mode != arg_graphics) {
-        const byte old_graphics = arg_graphics;
-        arg_graphics = static_cast<byte>(graphic.change_graphics(static_cast<graphics_mode>(arg_graphics)));
-        if (old_graphics != arg_graphics) {
-            plog(_("グラフィクスを初期化できません!", "Cannot initialize graphics!"));
-        }
-        use_graphics = (arg_graphics > 0);
+        change_graphics_mode(static_cast<graphics_mode>(arg_graphics));
         reset_visuals(player_ptr);
     }
 
@@ -2674,6 +2682,7 @@ int WINAPI WinMain(
 
     refresh_color_table();
     init_windows();
+    change_graphics_mode(static_cast<graphics_mode>(arg_graphics));
     change_bg_mode(current_bg_mode, true);
 
     // after term_data initialize
