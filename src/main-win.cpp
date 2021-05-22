@@ -2104,6 +2104,8 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         return 0;
     }
     case WM_LBUTTONDOWN: {
+        if (macro_running())
+            return 0;
         mousex = MIN(LOWORD(lParam) / td->tile_wid, td->cols - 1);
         mousey = MIN(HIWORD(lParam) / td->tile_hgt, td->rows - 1);
         mouse_down = TRUE;
@@ -2112,6 +2114,8 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         return 0;
     }
     case WM_LBUTTONUP: {
+        if (!mouse_down)
+            return 0;
         HGLOBAL hGlobal;
         LPSTR lpStr;
         TERM_LEN dx = abs(oldx - mousex) + 1;
