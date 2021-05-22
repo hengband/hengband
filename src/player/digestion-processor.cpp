@@ -6,6 +6,8 @@
 #include "core/stuff-handler.h"
 #include "floor/wild.h"
 #include "game-option/disturbance-options.h"
+#include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "object-enchant/trc-types.h"
 #include "player-info/avatar.h"
 #include "player/player-damage.h"
@@ -159,12 +161,15 @@ bool set_food(player_type *creature_ptr, TIME_EFFECT v)
     } else if (new_aux < old_aux) {
         switch (new_aux) {
         case 0:
+            sound(SOUND_FAINT);
             msg_print(_("あまりにも空腹で気を失ってしまった！", "You are getting faint from hunger!"));
             break;
         case 1:
+            sound(SOUND_WEAK);
             msg_print(_("お腹が空いて倒れそうだ。", "You are getting weak from hunger!"));
             break;
         case 2:
+            sound(SOUND_HUNGRY);
             msg_print(_("お腹が空いてきた。", "You are getting hungry."));
             break;
         case 3:

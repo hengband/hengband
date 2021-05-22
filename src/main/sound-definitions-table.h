@@ -73,7 +73,22 @@ enum sound_type {
     SOUND_EXPLODE = 64, /*!< Something (or somebody) explodes */
     SOUND_GLASS = 65, /*!< A glass feature was crashed */
     SOUND_REFLECT = 66, /*!< A bolt was reflected */
-    SOUND_MAX = 67, /*!< 効果音定義の最大数 / Maximum numbers of sound effect */
+    SOUND_HUNGRY = 67, /*!< getting hungry */
+    SOUND_WEAK = 68, /*!< getting weak from hunger */
+    SOUND_FAINT = 69, /*!< getting faint from hunger */
+    SOUND_GOOD_HIT = 70, /*!< critical hit - good */
+    SOUND_GREAT_HIT = 71, /*!< critical hit - great */
+    SOUND_SUPERB_HIT = 72, /*!< critical hit - superb */
+    SOUND_STAR_GREAT_HIT = 73, /*!< critical hit - *great* */
+    SOUND_STAR_SUPERB_HIT = 74, /*!< critical hit - *superb* */
+    SOUND_GOUGE_HIT = 75, /*!< vorpal hit - gouge */
+    SOUND_MAIM_HIT = 76, /*!< vorpal hit - maim */
+    SOUND_CARVE_HIT = 77, /*!< vorpal hit - carve */
+    SOUND_CLEAVE_HIT = 78, /*!< vorpal hit - cleave */
+    SOUND_SMITE_HIT = 79, /*!< vorpal hit - smite */
+    SOUND_EVISCERATE_HIT = 80, /*!< vorpal hit - eviscerate */
+    SOUND_SHRED_HIT = 81, /*!< vorpal hit - shred */
+    SOUND_MAX = 82, /*!< 効果音定義の最大数 / Maximum numbers of sound effect */
 };
 
 extern const concptr angband_sound_name[SOUND_MAX];
