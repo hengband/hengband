@@ -26263,6 +26263,7 @@ F:DROP_60 | DROP_90 | DROP_GREAT
 F:NONLIVING | COLD_BLOOD | SELF_LITE_2 | CAN_FLY | IM_FIRE | IM_POIS
 F:NO_CONF | NO_SLEEP | NO_STUN | EMPTY_MIND | RES_TELE
 S:1_IN_4 | HASTE | BLINK | TPORT | S_KIN | CONF
+R:1334:2d1
 D:$It is used for playing Quidditch in the wizarding world.
 D:魔法界のスポーツで使われる道具だ。
 D:この球体を捕ったものは大きな点数と称賛を手にするであろう。
@@ -26346,3 +26347,18 @@ D:$  The Serpent of Chaos are also a type of plasma for him.
 D:この世すべての超常現象はプラズマで説明できると豪語する教授だ。
 D:全身にプラズマ改造を施し、もはや人間とは言い難いものになっている。
 D:混沌のサーペントも彼にとってはプラズマの一種である。
+
+N:1334:ブラッジャー
+E:Bludger
+G:*:D
+I:120:60d10:220:80:0
+W:24:4:0:600:0:0
+B:CRUSH:HURT:3d6
+B:CRUSH:HURT:3d6
+B:CRUSH:HURT:3d6
+F:BASH_DOOR | KILL_BODY | NONLIVING | COLD_BLOOD | CAN_FLY | IM_FIRE | IM_POIS
+F:NO_CONF | NO_SLEEP | NO_STUN | EMPTY_MIND | RES_TELE
+D:$You got yourself a rogue Bludger.
+D:$That has been tampered with.
+D:なんてこった、チンピラブラッジャーのお出ましだ。
+D:誰かが細工してこちらに差し向けたのだろう。
