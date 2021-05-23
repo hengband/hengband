@@ -469,6 +469,9 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
         return;
     }
 
+    if (snipe_type != SP_NONE)
+        sound(SOUND_ZAP);
+
     /* Predict the "target" location */
     tx = shooter_ptr->x + 99 * ddx[dir];
     ty = shooter_ptr->y + 99 * ddy[dir];
