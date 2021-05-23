@@ -426,8 +426,11 @@ shouted, "Ringil is not here! Retreat!!"
 N:1303:Spawn of Yog-Sothoth
 screamed in the middle of the sound, in the middle of consciousness.
 
-N:1324:Bastral, the berserker
+N:1323:Bastral, the berserker
 says, 'Dean! Brother! Help me! Help me!'
+
+N:1333:Professor Ootsuki
+says, 'Show me... the scientific evidence for losing...'
 
 N:*:Default lines
 says, 'I am too young to die.'
