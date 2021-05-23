@@ -23195,13 +23195,13 @@ D:金のためだけに鬼を狩るプライドのない男だ。
 D:この愚かな者は敵の力量を見極めることができない。
 
 N:1165:鬼殺隊の隊士
-E:Members of Demon Slayer Corps
+E:Member of Demon Slayer Corps
 G:p:U
 I:110:5d25:10:30:100
 W:11:2:0:200:0:0
 F:NAZGUL | FORCE_MAXHP | HUMAN | MALE | UNDEAD
 F:DROP_60
-B:SHOOT:HURT:7d7
+B:SHOOT:HURT:6d7
 B:SLASH:HURT:2d10
 B:HIT:HURT:1d12
 S:1_IN_6 | SHOOT
