@@ -370,32 +370,96 @@ void wiz_create_feature(player_type *creature_ptr)
     prev_mimic = tmp_mimic;
 }
 
+/*
+ * @brief 選択したダンジョンの任意フロアを選択する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param dungeon_type ダンジョン番号
+ * @return フロアを選択したらtrue、キャンセルならfalse
+ * @details 0を指定すると地上に飛ぶが、元いた場所にしか飛ばない
+ * @todo 可能ならダンジョンの入口 (例：ルルイエなら大洋の真ん中)へ飛べるようにしたい
+ */
+static bool select_debugging_floor(player_type *creature_ptr, int dungeon_type)
+{
+    auto max_depth = d_info[dungeon_type].maxdepth;
+    if ((max_depth == 0) || (dungeon_type > current_world_ptr->max_d_idx)) {
+        dungeon_type = DUNGEON_ANGBAND;
+    }
+
+    auto min_depth = (int)d_info[dungeon_type].mindepth;
+    while (true) {
+        char ppp[80];
+        char tmp_val[160];
+        sprintf(ppp, "Jump to level (0, %d-%d): ", min_depth, max_depth);
+        sprintf(tmp_val, "%d", (int)creature_ptr->current_floor_ptr->dun_level);
+        if (!get_string(ppp, tmp_val, 10)) {
+            return false;
+        }
+
+        auto tmp_command_arg = (COMMAND_ARG)atoi(tmp_val);
+        if (tmp_command_arg == 0) {
+            command_arg = tmp_command_arg;
+            break;
+        }
+
+        auto is_valid_floor = tmp_command_arg > 0;
+        is_valid_floor &= tmp_command_arg >= min_depth;
+        is_valid_floor &= tmp_command_arg <= max_depth;
+        if (is_valid_floor) {
+            command_arg = tmp_command_arg;
+            break;
+        }
+
+        msg_print("Invalid floor. Please re-input.");
+        continue;
+    }
+
+    creature_ptr->dungeon_idx = (DUNGEON_IDX)dungeon_type;
+    return true;
+}
+
+/*!
+ * @brief デバッグ帰還のダンジョンを選ぶ
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @details 範囲外の値が選択されたら再入力を促す
+ */
+static bool select_debugging_dungeon(player_type *creature_ptr, int *dungeon_type)
+{
+    if (command_arg > 0) {
+        return true;    
+    }
+
+    while (true) {
+        char ppp[80];
+        char tmp_val[160];
+        sprintf(ppp, "Jump which dungeon : ");
+        sprintf(tmp_val, "%d", creature_ptr->dungeon_idx);
+        if (!get_string(ppp, tmp_val, 2)) {
+            return false;
+        }
+
+        *dungeon_type = atoi(tmp_val);
+        if ((*dungeon_type < DUNGEON_ANGBAND) || (*dungeon_type > DUNGEON_MAX)) {
+            msg_print("Invalid dungeon. Please re-input.");
+            continue;
+        }
+
+        return true;
+    }
+}
+
 /*!
  * @brief 任意のダンジョン及び階層に飛ぶ /
  * Go to any level
  */
 void wiz_jump_to_dungeon(player_type *creature_ptr)
 {
-    if (command_arg <= 0) {
-        char ppp[80];
-        char tmp_val[160];
-        DUNGEON_IDX tmp_dungeon_type;
-        sprintf(ppp, "Jump which dungeon : ");
-        sprintf(tmp_val, "%d", creature_ptr->dungeon_idx);
-        if (!get_string(ppp, tmp_val, 2))
-            return;
+    int dungeon_type;
+    if (!select_debugging_dungeon(creature_ptr, &dungeon_type)) {
+        return;
+    }
 
-        tmp_dungeon_type = (DUNGEON_IDX)atoi(tmp_val);
-        if (!d_info[tmp_dungeon_type].maxdepth || (tmp_dungeon_type > current_world_ptr->max_d_idx))
-            tmp_dungeon_type = DUNGEON_ANGBAND;
-
-        sprintf(ppp, "Jump to level (0, %d-%d): ", (int)d_info[tmp_dungeon_type].mindepth, (int)d_info[tmp_dungeon_type].maxdepth);
-        sprintf(tmp_val, "%d", (int)creature_ptr->current_floor_ptr->dun_level);
-        if (!get_string(ppp, tmp_val, 10))
-            return;
-
-        command_arg = (COMMAND_ARG)atoi(tmp_val);
-        creature_ptr->dungeon_idx = tmp_dungeon_type;
+    if (!select_debugging_floor(creature_ptr, dungeon_type)) {
+        return;
     }
 
     if (command_arg < d_info[creature_ptr->dungeon_idx].mindepth)

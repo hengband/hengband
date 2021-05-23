@@ -26,29 +26,18 @@
 #
 # Entries by Matt Graham, Andrew Hill, and Topi Ylinen
 
-N:8:Farmer Maggot
-#seems sad about something.
+N:8:農夫『マゴット』
 は何か悲しそうだ。
-#asks if you have seen his dogs.
 は彼の犬を見なかったかと聞いている。
-#tells you to get off his land.
 は「わしの土地から出ていけ」と言っている。
-#says, "Grip! Fang! Wolf! Come on, lads!"
 「くいつき！きば！おおかみ！みんな来い！」
-#says, "They won't harm you -- not unless I tell 'em to!"
 「あいつらは噛みついたりせんよ。わしが命令せんかぎりな！」
-#says, "Here, Grip! Fang! Heel!"
 「ここだ、くいつき！きば！来い！」
-exclaims, "Well, if that isn't queerer than ever?"
-#asks, "Were you coming to visit me?"
+は「ま、それが今までより妙ちきりんじゃなきゃ？」と叫んでいる。
 「わしに会いにきたのかい？」
-#says, "I'll not light my lanterns till I turn for home."
 「わしは家に帰るまでランターンに火を灯さないようにしよう。」
-#says, "I see you are in some kind of trouble."
 「何かやっかい事に巻き込まれたようじゃな。」
-#yells, "Hallo there!"
 「やあ、お若いの！」
-#says, "It's been a queer day, and no mistake."
 「今日はろくでもない日じゃ、間違いない！」
 
 N:19:Lion Heart
@@ -69,7 +58,7 @@ N:19:Lion Heart
 「構造改革なくして景気回復はありえない。」
 「今の痛みに耐えて、明日の豊かさ米百俵の精神。」
 
-N:1059:Noborta Kesyta
+N:1059:イークの大統領『ノボータ・ケシータ』
 「わすの一億ゴールドでカズノ建てなはったさながどげなっちょますかいの」
 「わすはげんごめーりょ、えめふめーですけんの」
 
@@ -212,73 +201,46 @@ says, 'He'll eastus all the world if he getsitses it.'
 「もし見つけたら、わしらに返しなよ。」
 
 N:135:Mughash the Kobold Lord
-#says, 'I may be a kobold, but I'll kick your arse!'
 「俺はコボルドかもしれないが貴様を叩きのめしてやるぞ！」
-#says, 'Feel my wrath, fool!'
 「俺の怒りを思い知れ！バカめ！」
-#says, 'Death and destruction make me happy!'
 「死と破壊こそが我が喜びだ！」
-#snickers evilly.
 は邪悪に笑った。
 
 N:137:Wormtongue, Agent of Saruman
-#whines and sniggers.
 は卑屈に笑っている。
-#whispers nasty things.
 は卑劣な事を呟いた。
-#says, 'I'll slaughter you slowly...'
 「ゆっくり殺してやる、、、」
-#says, 'Lathspell I name you, Ill-news; and Ill-news is an ill guest they say.'
 「ひとつあんたのことをラススペルとお呼びしよう。つまり凶報ということですな。」
-#says, 'Forbid his staff!'
 「その者に杖を持たせるな！」
-#yells, 'You lie!'
 は「うそだ！」と叫んだ。
-#says, 'Let me go, let me go!  I know the way!'
 「行かせて下さい、行かせて下さい！どうやって行くかわかってます！」
-#says, 'My messages are useless now!'
 「わたくしのことずかった用件は今となってはむだです。」
-#says, 'No no!'
 「いやだ！いやだ！」
-#hisses, 'You told me to; you made me do it!'
 「あんたがいいつけたんだ、あんたがさせたんだ！」
 
 N:138:Robin Hood, the Outlaw
 はあなたの財布を物欲しそうに見つめている。
-#says, 'You look like Nottingham's man to me!'
 「お前はノッティンガムの者のようだな！」
-#says, 'I bet I can shoot better than you...'
 「絶対お前より上手く矢を射ってやるぜ...」
-says, 'Give 'til it hurts!'
-#says, 'Don't force me to put an arrow in your skull...'
+「よこせ、ぶっとばされんうちにな」
 「俺にお前の頭を射抜かせないでくれ...」
-#says, 'Kevin Costner has soiled my name!'
 「ケビン・コスナーは俺の名前を地に落とした！」
 
 #N:169:Brodda, the Easterling
 #N:291:Ulfast, Son of Ulfang
 
-N:180:Orfax, Son of Boldor
-N:237:Boldor, King of the Yeeks
-#wonders aloud about your sexual orientation.
+N:180:ボルドールの息子『オルファックス』
+N:237:イークの大王『ボルドール』
 はあなたを変態呼ばわりしてわめいている。
-#spouts torrents of obscenities.
 はひわいな言葉をまくしたてた。
-#shouts, 'YEEK! YEEK! YEEK!'
 「イーク！イーク！イーク！」
-#says, 'I'll teach you to respect Yeeks!
 「イークもバカにできないってことを教えてやろう！」'
-#says, 'Feel lucky, punk?'
 はダーティーハリーの真似をして「命を賭けてみるか、チンピラ野郎」と言っている。
 
-N:200:Hobbes the Tiger
-#says, 'Why were people put here? TIGER FOOD!'
+N:200:『トラのホッブス』
 「人間は何のためにいるのかな？虎の餌でーす！」
-#says, 'Yum! Adventurer sandwiches!'
 「うまそう！冒険者サンドイッチ！」
-#says, 'I killed Calvin, now I'll kill YOU!'
 「カルヴィンを殺しちゃったから、次は君だ！」
-#says, 'I'll make your short life nasty and brutish!'
 「君の短い人生を酷くて惨めなものにしてあげよう！」
 
 N:140:Lagduf, the Snaga
@@ -988,7 +950,7 @@ N:1018:Raou the Conqueror
 「全ての拳士はこの拳王の前にひれ伏すのだ。」
 「おまえなどこの親指一本で十分！」 
 
-N:1029:Baby satan
+N:1029:ベビーサタン
 がサイバーデーモンを召喚した！しかしMPが足りない！
 が魔法で特別な強敵を召喚した！しかしMPが足りない！
 が魔力の嵐の呪文を念じた。しかしMPが足りない！
@@ -1175,8 +1137,36 @@ N:1306:ソーシャルディスタンスの王者『リー・ナス』
 「モリアがカーネルより年上なら、ファッキンコードの量もモリアの方が多いな！」
 「ファッキュー！！」
 「ファック！　ファック！　ファック！」
-はサイバーデーモンを召喚した！
 は中指を突き立てている！
+がダンジョンの主を召喚した。しかし、誰も来てくれなかった…。
+がサイバーデーモンを召喚した！　しかし、ロケットしか飛んでこなかった…。
+が魔法で仲間を召喚した！　しかし、彼に仲間はいなかった…。
+が魔法でモンスターを召喚した！　しかし、誰も彼に従ってくれなかった…。
+が魔法でアリを召喚した。しかし、一匹も来てくれなかった…。
+が魔法でクモを召喚した。しかし、一匹も来てくれなかった…。
+が魔法でハウンドを召喚した。しかし、一匹も来てくれなかった…。
+が魔法でヒドラを召喚した。しかし、一匹も来てくれなかった…。
+が魔法で天使を召喚した！　しかし、天使も堕天使も来てくれなかった…。
+は魔法で混沌の宮廷から悪魔を召喚した！　しかし、最弱のインプすらも応じてくれなかった…。
+が魔法で強力なアンデッドを召喚した！　しかし、屍は応じてくれなかった…。
+が魔法でアンデッドの強敵を召喚した！　しかし、屍は応じてくれなかった…。
+が魔法でアンデッドを召喚した。しかし、骨一本たりとも応じてくれなかった…。
+が魔法でドラゴンを召喚した！　しかし、ドラゴンはつばを吐きかけて逃げていった…。
+が魔法で古代ドラゴンを召喚した！　しかし、古代ドラゴンは彼に侮蔑の目線を向けただけだった…。
+がアンバーの王族を召喚した！　しかし、アンバーの王族は誰もパターンを渡ってこなかった…。
+が魔法で特別な強敵を召喚した！　しかしカリスマが足りない！
+
+N:1323:狂戦士『バストラル』
+「どうやら、生き残ったのは、俺達だけのようだな。」
+「ディーンよ、手出しは無用だ。こいつは俺が仕留める！」
+「バインドアウト帝国を、俺は再興する！」
+は、雄叫びを上げながら、あなたに近づいてくる。
+
+N:1333:『プロフェッサー・オオツキ』
+「私もプラズマ・パワーを見せてやる！！」
+「パターンウォーク、あれもプラズマで説明できる！」
+「お前が混沌のサーペントを倒せる科学的根拠はないのだ！」
+「私のプラズマ・パワーはついに限界を超えた！！絶対に負けん！！」
 
 N:*:Default lines
 #cackles evilly.

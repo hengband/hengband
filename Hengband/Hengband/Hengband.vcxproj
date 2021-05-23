@@ -1063,7 +1063,6 @@
     <ClInclude Include="..\..\src\main\info-initializer.h" />
     <ClInclude Include="..\..\src\main\init-error-messages-table.h" />
     <ClInclude Include="..\..\src\main-win\main-win-bg.h" />
-    <ClInclude Include="..\..\src\main-win\main-win-windows.h" />
     <ClInclude Include="..\..\src\main\scene-table-floor.h" />
     <ClInclude Include="..\..\src\main\scene-table-monster.h" />
     <ClInclude Include="..\..\src\main\scene-table.h" />

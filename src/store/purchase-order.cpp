@@ -1,4 +1,6 @@
 ﻿#include "store/purchase-order.h"
+#include "autopick/autopick-finder.h"
+#include "autopick/autopick-util.h"
 #include "autopick/autopick.h"
 #include "core/asking-player.h"
 #include "core/stuff-handler.h"
@@ -308,13 +310,16 @@ void store_purchase(player_type *player_ptr)
     j_ptr->inscription = 0;
     j_ptr->feeling = FEEL_NONE;
     j_ptr->ident &= ~(IDENT_STORE);
+
+    const auto idx = find_autopick_list(player_ptr, j_ptr);
+    auto_inscribe_item(player_ptr, j_ptr, idx);
+
     item_new = store_item_to_inventory(player_ptr, j_ptr);
     handle_stuff(player_ptr);
 
     describe_flavor(player_ptr, o_name, &player_ptr->inventory_list[item_new], 0);
     msg_format(_("%s(%c)を手に入れた。", "You have %s (%c)."), o_name, index_to_label(item_new));
 
-    autopick_alter_item(player_ptr, item_new, FALSE);
     if ((o_ptr->tval == TV_ROD) || (o_ptr->tval == TV_WAND))
         o_ptr->pval -= j_ptr->pval;
 

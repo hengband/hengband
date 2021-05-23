@@ -76,6 +76,7 @@ void auto_inscribe_item(player_type *player_ptr, object_type *o_ptr, int idx)
 
     player_ptr->window_flags |= (PW_EQUIP | PW_INVEN);
     player_ptr->update |= (PU_BONUS);
+    player_ptr->update |= (PU_COMBINE);
 }
 
 /*

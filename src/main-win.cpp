@@ -162,7 +162,6 @@ typedef struct {
     DWORD dwStyle;
     DWORD dwExStyle;
 
-    uint keys;
     TERM_LEN rows; /* int -> uint */
     TERM_LEN cols;
 
@@ -176,7 +175,6 @@ typedef struct {
     uint size_oh2;
 
     bool size_hack;
-    bool xtra_hack;
     bool visible;
     concptr font_want;
     HFONT font_id;
@@ -790,6 +788,19 @@ static void refresh_color_table()
 }
 
 /*!
+ * @brief グラフィクスのモード変更
+ */
+static void change_graphics_mode(graphics_mode mode)
+{
+    graphics_mode ret = graphic.change_graphics(mode);
+    if (ret != mode) {
+        plog(_("グラフィクスを初期化できません!", "Cannot initialize graphics!"));
+    }
+    arg_graphics = static_cast<byte>(ret);
+    use_graphics = (arg_graphics > 0);
+}
+
+/*!
  * @brief React to global changes
  */
 static errr term_xtra_win_react(player_type *player_ptr)
@@ -798,12 +809,7 @@ static errr term_xtra_win_react(player_type *player_ptr)
 
     const byte current_mode = static_cast<byte>(graphic.get_mode());
     if (current_mode != arg_graphics) {
-        const byte old_graphics = arg_graphics;
-        arg_graphics = static_cast<byte>(graphic.change_graphics(static_cast<graphics_mode>(arg_graphics)));
-        if (old_graphics != arg_graphics) {
-            plog(_("グラフィクスを初期化できません!", "Cannot initialize graphics!"));
-        }
-        use_graphics = (arg_graphics > 0);
+        change_graphics_mode(static_cast<graphics_mode>(arg_graphics));
         reset_visuals(player_ptr);
     }
 
@@ -1297,7 +1303,6 @@ static void init_windows(void)
     WIPE(td, term_data);
     td->name = win_term_name[0];
 
-    td->keys = 1024;
     td->rows = 24;
     td->cols = 80;
     td->visible = TRUE;
@@ -1313,7 +1318,6 @@ static void init_windows(void)
         td = &data[i];
         WIPE(td, term_data);
         td->name = win_term_name[i];
-        td->keys = 16;
         td->rows = 24;
         td->cols = 80;
         td->visible = FALSE;
@@ -2108,6 +2112,8 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         return 0;
     }
     case WM_LBUTTONDOWN: {
+        if (macro_running())
+            return 0;
         mousex = MIN(LOWORD(lParam) / td->tile_wid, td->cols - 1);
         mousey = MIN(HIWORD(lParam) / td->tile_hgt, td->rows - 1);
         mouse_down = TRUE;
@@ -2116,6 +2122,8 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         return 0;
     }
     case WM_LBUTTONUP: {
+        if (!mouse_down)
+            return 0;
         HGLOBAL hGlobal;
         LPSTR lpStr;
         TERM_LEN dx = abs(oldx - mousex) + 1;
@@ -2674,6 +2682,7 @@ int WINAPI WinMain(
 
     refresh_color_table();
     init_windows();
+    change_graphics_mode(static_cast<graphics_mode>(arg_graphics));
     change_bg_mode(current_bg_mode, true);
 
     // after term_data initialize

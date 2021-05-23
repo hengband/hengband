@@ -75,7 +75,7 @@ errr parse_m_info(std::string_view buf, angband_header *head)
 
         m_ptr->spell_stat = stat->second;
 
-        info_set_value(m_ptr->spell_xtra, tokens[3]);
+        info_set_value(m_ptr->spell_xtra, tokens[3], 16);
         info_set_value(m_ptr->spell_type, tokens[4]);
         info_set_value(m_ptr->spell_first, tokens[5]);
         info_set_value(m_ptr->spell_weight, tokens[6]);

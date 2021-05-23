@@ -8,11 +8,12 @@
 #include "main-win/main-win-define.h"
 #include "main-win/main-win-file-utils.h"
 #include "main-win/main-win-tokenizer.h"
-#include "main-win/main-win-windows.h"
 #include "term/z-term.h"
 #include "util/angband-files.h"
 
 #include "main/sound-definitions-table.h"
+
+#include <windows.h>
 
 // 1つの項目に設定可能な最大ファイル数
 #define SAMPLE_MAX 16
@@ -110,8 +111,10 @@ CfgData *CfgReader::read_sections(std::initializer_list<cfg_section> sections)
             GetPrivateProfileStringA(section.section_name, read_key, "", buf, MAIN_WIN_MAX_PATH, this->cfg_path.c_str());
             if (*buf != '\0') {
                 cfg_values *filenames = new cfg_values();
+#ifdef JP
                 // .cfg (UTF-8) to Shift-JIS
                 guess_convert_to_system_encoding(buf, MAIN_WIN_MAX_PATH);
+#endif
                 const int num = tokenize_whitespace(buf, SAMPLE_MAX, tokens);
                 for (int j = 0; j < num; j++) {
                     path_build(path, MAIN_WIN_MAX_PATH, dir, tokens[j]);

@@ -4814,9 +4814,6 @@
     <ClInclude Include="..\..\src\main-win\main-win-bg.h">
       <Filter>main-win</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\main-win\main-win-windows.h">
-      <Filter>main-win</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\main-win\main-win-music.h">
       <Filter>main-win</Filter>
     </ClInclude>

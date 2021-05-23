@@ -1,6 +1,7 @@
 ﻿#include "combat/attack-criticality.h"
 #include "combat/combat-options-type.h"
 #include "inventory/inventory-slot-types.h"
+#include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
@@ -18,23 +19,23 @@
  *
  * @param k クリティカルの強度を決定する値
  * @param base_dam クリティカル適用前のダメージ
- * @return クリティカルを適用したダメージと、クリティカル発生時に表示するメッセージのタプルを返す
+ * @return クリティカルを適用したダメージと、クリティカル発生時に表示するメッセージと、クリティカル効果音のタプルを返す
  */
-std::tuple<HIT_POINT, concptr> apply_critical_norm_damage(int k, HIT_POINT base_dam)
+std::tuple<HIT_POINT, concptr, sound_type> apply_critical_norm_damage(int k, HIT_POINT base_dam)
 {
     if (k < 400) {
-        return { 2 * base_dam + 5, _("手ごたえがあった！", "It was a good hit!") };
+        return { 2 * base_dam + 5, _("手ごたえがあった！", "It was a good hit!"), SOUND_GOOD_HIT };
     }
     if (k < 700) {
-        return { 2 * base_dam + 10, _("かなりの手ごたえがあった！", "It was a great hit!") };
+        return { 2 * base_dam + 10, _("かなりの手ごたえがあった！", "It was a great hit!"), SOUND_GREAT_HIT };
     }
     if (k < 900) {
-        return { 3 * base_dam + 15, _("会心の一撃だ！", "It was a superb hit!") };
+        return { 3 * base_dam + 15, _("会心の一撃だ！", "It was a superb hit!"), SOUND_SUPERB_HIT };
     }
     if (k < 1300) {
-        return { 3 * base_dam + 20, _("最高の会心の一撃だ！", "It was a *GREAT* hit!") };
+        return { 3 * base_dam + 20, _("最高の会心の一撃だ！", "It was a *GREAT* hit!"), SOUND_STAR_GREAT_HIT };
     }
-    return { ((7 * base_dam) / 2) + 25, _("比類なき最高の会心の一撃だ！", "It was a *SUPERB* hit!") };
+    return { ((7 * base_dam) / 2) + 25, _("比類なき最高の会心の一撃だ！", "It was a *SUPERB* hit!"), SOUND_STAR_SUPERB_HIT };
 }
 
 /*!
@@ -67,7 +68,8 @@ HIT_POINT critical_norm(player_type *attacker_ptr, WEIGHT weight, int plus, HIT_
     if (impact || (mode == HISSATSU_MAJIN) || (mode == HISSATSU_3DAN))
         k += randint1(650);
 
-    auto [critical_dam, msg] = apply_critical_norm_damage(k, dam);
+    auto [critical_dam, msg, battle_sound] = apply_critical_norm_damage(k, dam);
+    sound(battle_sound);
     msg_print(msg);
     return critical_dam;
 }

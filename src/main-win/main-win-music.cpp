@@ -11,6 +11,7 @@
 #include "main-win/main-win-mci.h"
 #include "main-win/main-win-mmsystem.h"
 #include "main-win/main-win-tokenizer.h"
+#include "main-win/main-win-utils.h"
 #include "main/scene-table.h"
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
@@ -142,7 +143,9 @@ void load_music_prefs()
 {
     CfgReader reader(ANGBAND_DIR_XTRA_MUSIC, { "music_debug.cfg", "music.cfg" });
 
-    GetPrivateProfileStringA("Device", "type", "MPEGVideo", mci_device_type, _countof(mci_device_type), reader.get_cfg_path());
+    char device_type[256];
+    GetPrivateProfileStringA("Device", "type", "MPEGVideo", device_type, _countof(device_type), reader.get_cfg_path());
+    mci_device_type = to_wchar(device_type).wc_str();
 
     // clang-format off
     music_cfg_data = reader.read_sections({
@@ -170,8 +173,8 @@ void load_music_prefs()
  */
 errr stop_music(void)
 {
-    mciSendCommandA(mci_open_parms.wDeviceID, MCI_STOP, MCI_WAIT, 0);
-    mciSendCommandA(mci_open_parms.wDeviceID, MCI_CLOSE, MCI_WAIT, 0);
+    mciSendCommandW(mci_open_parms.wDeviceID, MCI_STOP, MCI_WAIT, 0);
+    mciSendCommandW(mci_open_parms.wDeviceID, MCI_CLOSE, MCI_WAIT, 0);
     current_music_type = TERM_XTRA_MUSIC_MUTE;
     current_music_id = 0;
     strcpy(current_music_path, "\0");
@@ -204,11 +207,12 @@ errr play_music(int type, int val)
     current_music_id = val;
     strcpy(current_music_path, buf);
 
-    mci_open_parms.lpstrDeviceType = mci_device_type;
-    mci_open_parms.lpstrElementName = buf;
-    mciSendCommandA(mci_open_parms.wDeviceID, MCI_STOP, MCI_WAIT, 0);
-    mciSendCommandA(mci_open_parms.wDeviceID, MCI_CLOSE, MCI_WAIT, 0);
-    mciSendCommandA(mci_open_parms.wDeviceID, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT | MCI_NOTIFY, (DWORD)&mci_open_parms);
+    to_wchar path(buf);
+    mci_open_parms.lpstrDeviceType = mci_device_type.c_str();
+    mci_open_parms.lpstrElementName = path.wc_str();
+    mciSendCommandW(mci_open_parms.wDeviceID, MCI_STOP, MCI_WAIT, 0);
+    mciSendCommandW(mci_open_parms.wDeviceID, MCI_CLOSE, MCI_WAIT, 0);
+    mciSendCommandW(mci_open_parms.wDeviceID, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT | MCI_NOTIFY, (DWORD)&mci_open_parms);
     // Send MCI_PLAY in the notification event once MCI_OPEN is completed
     return 0;
 }
@@ -218,7 +222,7 @@ errr play_music(int type, int val)
  */
 void pause_music(void)
 {
-    mciSendCommandA(mci_open_parms.wDeviceID, MCI_PAUSE, MCI_WAIT, 0);
+    mciSendCommandW(mci_open_parms.wDeviceID, MCI_PAUSE, MCI_WAIT, 0);
 }
 
 /*
@@ -226,7 +230,7 @@ void pause_music(void)
  */
 void resume_music(void)
 {
-    mciSendCommandA(mci_open_parms.wDeviceID, MCI_RESUME, MCI_WAIT, 0);
+    mciSendCommandW(mci_open_parms.wDeviceID, MCI_RESUME, MCI_WAIT, 0);
 }
 
 /*
@@ -253,8 +257,8 @@ void on_mci_notify(WPARAM wFlags, LONG lDevID)
 {
     if (wFlags == MCI_NOTIFY_SUCCESSFUL) {
         // play a music (repeat)
-        mciSendCommandA(lDevID, MCI_SEEK, MCI_SEEK_TO_START | MCI_WAIT, 0);
-        mciSendCommandA(lDevID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mci_play_parms);
+        mciSendCommandW(lDevID, MCI_SEEK, MCI_SEEK_TO_START | MCI_WAIT, 0);
+        mciSendCommandW(lDevID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mci_play_parms);
     }
 }
 

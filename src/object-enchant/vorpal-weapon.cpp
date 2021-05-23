@@ -2,6 +2,8 @@
 #include "artifact/fixed-art-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/files-util.h"
+#include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "player-attack/player-attack-util.h"
@@ -21,24 +23,31 @@ static void print_vorpal_message(player_attack_type *pa_ptr, const int magnifica
     switch (magnification) {
     case 2:
         msg_format(_("%sを斬った！", "You gouge %s!"), pa_ptr->m_name);
+        sound(SOUND_GOUGE_HIT);
         break;
     case 3:
         msg_format(_("%sをぶった斬った！", "You maim %s!"), pa_ptr->m_name);
+        sound(SOUND_MAIM_HIT);
         break;
     case 4:
         msg_format(_("%sをメッタ斬りにした！", "You carve %s!"), pa_ptr->m_name);
+        sound(SOUND_CARVE_HIT);
         break;
     case 5:
         msg_format(_("%sをメッタメタに斬った！", "You cleave %s!"), pa_ptr->m_name);
+        sound(SOUND_CLEAVE_HIT);
         break;
     case 6:
         msg_format(_("%sを刺身にした！", "You smite %s!"), pa_ptr->m_name);
+        sound(SOUND_SMITE_HIT);
         break;
     case 7:
         msg_format(_("%sを斬って斬って斬りまくった！", "You eviscerate %s!"), pa_ptr->m_name);
+        sound(SOUND_EVISCERATE_HIT);
         break;
     default:
         msg_format(_("%sを細切れにした！", "You shred %s!"), pa_ptr->m_name);
+        sound(SOUND_SHRED_HIT);
         break;
     }
 }
