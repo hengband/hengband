@@ -62,7 +62,7 @@ void process_world(player_type *player_ptr)
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (ironman_downward && (player_ptr->dungeon_idx != DUNGEON_ANGBAND && player_ptr->dungeon_idx != 0)) {
         floor_ptr->dun_level = 0;
-        player_ptr->dungeon_idx = 0;
+        player_ptr->dungeon_idx = DUNGEON_NONE;
         prepare_change_floor_mode(player_ptr, CFM_FIRST_FLOOR | CFM_RAND_PLACE);
         floor_ptr->inside_arena = FALSE;
         player_ptr->wild_mode = FALSE;

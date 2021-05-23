@@ -562,7 +562,7 @@ errr rd_dungeon_old(player_type *player_ptr)
     else {
         byte tmp8u;
         rd_byte(&tmp8u);
-        player_ptr->dungeon_idx = (IDX)tmp8u;
+        player_ptr->dungeon_idx = (enum dungeon_idx)tmp8u;
     }
 
     floor_ptr->base_level = floor_ptr->dun_level;

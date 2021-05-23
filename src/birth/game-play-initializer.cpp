@@ -166,7 +166,7 @@ void player_wipe_without_name(player_type *creature_ptr)
     for (int i = 0; i < 8; i++)
         creature_ptr->virtues[i] = 0;
 
-    creature_ptr->dungeon_idx = 0;
+    creature_ptr->dungeon_idx = DUNGEON_NONE;
     if (vanilla_town || ironman_downward) {
         creature_ptr->recall_dungeon = DUNGEON_ANGBAND;
     } else {

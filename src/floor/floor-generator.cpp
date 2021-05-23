@@ -267,7 +267,7 @@ static void generate_fixed_floor(player_type *player_ptr)
 static bool level_gen(player_type *player_ptr, concptr *why)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    DUNGEON_IDX d_idx = floor_ptr->dungeon_idx;
+    enum dungeon_idx d_idx = floor_ptr->dungeon_idx;
     if ((always_small_levels || ironman_small_levels || (one_in_(SMALL_LEVEL) && small_levels) || d_info[d_idx].flags.has(DF::BEGINNER)
             || d_info[d_idx].flags.has(DF::SMALLEST))
         && d_info[d_idx].flags.has_not(DF::BIG)) {

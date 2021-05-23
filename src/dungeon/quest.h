@@ -72,7 +72,7 @@ typedef struct quest_type {
 	MONSTER_NUMBER num_mon; /*!< QUEST_TYPE_KILL_NUMBER時の目標撃破数 number of monsters on level */
 
 	BIT_FLAGS flags;             /*!< クエストに関するフラグビット / quest flags */
-	DUNGEON_IDX dungeon;           /*!< クエスト対象のダンジョンID / quest dungeon */
+	enum dungeon_idx dungeon;           /*!< クエスト対象のダンジョンID / quest dungeon */
 
 	PLAYER_LEVEL complev;           /*!< クリア時プレイヤーレベル / player level (complete) */
 	REAL_TIME comptime;          /*!< クリア時ゲーム時間 /  quest clear time*/

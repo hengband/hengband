@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "dungeon/dungeon.h"
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/trc-types.h"
 #include "player-ability/player-ability-types.h"
@@ -59,7 +60,7 @@ typedef struct player_type {
     s16b arena_number{}; /* monster number in on_defeat_arena_monster -KMW- */
     bool phase_out{}; /*!< フェイズアウト状態(闘技場観戦状態などに利用、NPCの処理の対象にならず自身もほとんどの行動ができない) */
 
-    DUNGEON_IDX dungeon_idx{}; /* current dungeon index */
+    enum dungeon_idx dungeon_idx{}; /* current dungeon index */
     POSITION wilderness_x{}; /* Coordinates in the wilderness */
     POSITION wilderness_y{};
     bool wild_mode{};
@@ -154,7 +155,7 @@ typedef struct player_type {
 
     TIME_EFFECT word_recall{}; /* Word of recall counter */
     TIME_EFFECT alter_reality{}; /* Alter reality counter */
-    DUNGEON_IDX recall_dungeon{}; /* Dungeon set to be recalled */
+    enum dungeon_idx recall_dungeon{}; /* Dungeon set to be recalled */
 
     ENERGY energy_need{}; /* Energy needed for next move */
     ENERGY enchant_energy_need{}; /* Energy needed for next upkeep effect	 */

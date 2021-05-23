@@ -52,7 +52,7 @@ static void build_dead_end(player_type *creature_ptr)
 {
     clear_cave(creature_ptr);
     creature_ptr->x = creature_ptr->y = 0;
-    set_floor_and_wall(0);
+    set_floor_and_wall(DUNGEON_NONE);
     creature_ptr->current_floor_ptr->height = SCREEN_HGT;
     creature_ptr->current_floor_ptr->width = SCREEN_WID;
     for (POSITION y = 0; y < MAX_HGT; y++)

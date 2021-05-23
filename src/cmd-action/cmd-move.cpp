@@ -217,7 +217,7 @@ void do_cmd_go_down(player_type *creature_ptr)
         return;
     }
 
-    DUNGEON_IDX target_dungeon = 0;
+    enum dungeon_idx target_dungeon = DUNGEON_NONE;
     if (!is_in_dungeon(creature_ptr)) {
         target_dungeon = has_flag(f_ptr->flags, FF_ENTRANCE) ? g_ptr->special : DUNGEON_ANGBAND;
         if (ironman_downward && (target_dungeon != DUNGEON_ANGBAND)) {

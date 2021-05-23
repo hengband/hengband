@@ -9,7 +9,7 @@ typedef struct grid_type grid_type;
 typedef struct object_type object_type;
 typedef struct monster_type monster_type;
 typedef struct floor_type {
-    DUNGEON_IDX dungeon_idx;
+    enum dungeon_idx dungeon_idx;
     grid_type *grid_array[MAX_HGT];
     DEPTH dun_level; /*!< 現在の実ダンジョン階層 base_level の参照元となる / Current dungeon level */
     DEPTH base_level; /*!< 基本生成レベル、後述のobject_level, monster_levelの参照元となる / Base dungeon level */

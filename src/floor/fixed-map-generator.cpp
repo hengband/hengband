@@ -211,7 +211,7 @@ static bool parse_qtw_QQ(quest_type *q_ptr, char **zz, int num)
     q_ptr->level = (DEPTH)atoi(zz[6]);
     q_ptr->r_idx = (MONRACE_IDX)atoi(zz[7]);
     q_ptr->k_idx = (KIND_OBJECT_IDX)atoi(zz[8]);
-    q_ptr->dungeon = (DUNGEON_IDX)atoi(zz[9]);
+    q_ptr->dungeon = (enum dungeon_idx)atoi(zz[9]);
 
     if (num > 10)
         q_ptr->flags = atoi(zz[10]);
@@ -376,7 +376,7 @@ static bool parse_qtw_M(qtwg_type *qtwg_ptr, char **zz)
     } else if (zz[0][0] == 'E') {
         max_e_idx = (EGO_IDX)atoi(zz[1]);
     } else if (zz[0][0] == 'D') {
-        current_world_ptr->max_d_idx = (DUNGEON_IDX)atoi(zz[1]);
+        current_world_ptr->max_d_idx = (enum dungeon_idx)atoi(zz[1]);
     } else if (zz[0][0] == 'O') {
         current_world_ptr->max_o_idx = (OBJECT_IDX)atoi(zz[1]);
     } else if (zz[0][0] == 'M') {

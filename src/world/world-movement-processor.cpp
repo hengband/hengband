@@ -50,7 +50,7 @@ void execute_recall(player_type *creature_ptr)
             exe_write_diary(creature_ptr, DIARY_RECALL, floor_ptr->dun_level, NULL);
 
         floor_ptr->dun_level = 0;
-        creature_ptr->dungeon_idx = 0;
+        creature_ptr->dungeon_idx = DUNGEON_NONE;
         leave_quest_check(creature_ptr);
         leave_tower_check(creature_ptr);
         creature_ptr->current_floor_ptr->inside_quest = 0;

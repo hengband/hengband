@@ -40,7 +40,7 @@ static errr rd_dungeon(player_type *player_ptr)
     rd_s16b(&max_floor_id);
     byte tmp8u;
     rd_byte(&tmp8u);
-    player_ptr->dungeon_idx = (DUNGEON_IDX)tmp8u;
+    player_ptr->dungeon_idx = (enum dungeon_idx)tmp8u;
     byte num;
     rd_byte(&num);
     if (num == 0) {
