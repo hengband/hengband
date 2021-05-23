@@ -1,6 +1,7 @@
-N:53:Grip, Farmer Maggot's dog
-N:54:Wolf, Farmer Maggot's dog
-N:55:Fang, Farmer Maggot's dog
+N:53:農夫マゴットの飼犬『くいつき』
+N:54:農夫マゴットの飼犬『おおかみ』
+N:55:農夫マゴットの飼犬『きば』
+N:1320:偉大なる祖国の『ライカ』
 
 N:63:Smeagol
 「にくむ、にくむ、にくむぅぅぅ！」
