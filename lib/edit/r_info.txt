@@ -26019,9 +26019,10 @@ F:CAN_FLY | WILD_GRASS | ANIMAL | DROP_SKELETON
 D:$It emits strange microwaves.
 D:それは奇妙な電波を飛ばしている。
 
+# It's OK that lion is white.
 N:1316:ライオン
 E:Lion
-G:f:U
+G:f:w
 I:120:16d15:20:55:5
 W:23:2:0:160:0:0
 B:CLAW:HURT:2d9
