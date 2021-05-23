@@ -26129,11 +26129,11 @@ S:BR_FIRE | BA_FIRE |
 D:$It is a monster whose whole body is made of lava, hidden in the volcano of Neo Star.
 D:コレカラスターの火山内に潜む、全身が溶岩で出来た怪物だ。
 
-#護衛はバーサーカー4d3 メイジ1d3
+#護衛はバーサーカー4d2 メイジ1d3
 N:1323:狂戦士『バストラル』
 E:Bastral, the berserker
 G:p:U
-I:121:19d100:18:110:20
+I:121:19d100:18:90:20
 W:37:4:0:2500:0:0
 B:HIT:HURT:7d7
 B:HIT:SUPERHURT:6d6
@@ -26146,14 +26146,14 @@ F:HUMAN | NO_STUN | NO_CONF | NO_SLEEP
 F:CAN_SWIM | HAS_LITE_1 | DROP_CORPSE
 F:IM_FIRE | IM_COLD | IM_ELEC | RES_LITE
 S:1_IN_7 | DISPEL
-R:293:4d3
+R:293:4d2
 R:449:1d3
 D:$Bastral is the strongest berserker. He has never lost a single combat　 
 D:$since he got Windberg the legendary battle ax.
 D:最強の狂戦士バストラルは、伝説のバトル・アックス、
 D:ウィンドバーグを手にして以来、一度も一騎討ちに敗れたことはない。
 
-#護衛はレッド・ドラゴン3d3 バジリスク3d2
+#護衛はレッド・ドラゴン3d3 バジリスク1d3 リザードマン1d2
 N:1324:巨龍『ベルフレイム』
 E:Belflame, the queen dragon
 G:D:R
@@ -26170,15 +26170,16 @@ F:EVIL | DRAGON | NO_CONF | NO_SLEEP | CAN_FLY | RIDING |
 F:SELF_LITE_1 | DROP_CORPSE | 
 F:IM_FIRE | IM_ELEC | IM_POIS
 S:1_IN_4 | BR_FIRE | BA_FIRE | BA_ELEC | MISSILE | HASTE | HEAL
-R:589:3d3
-R:453:3d2
+R:589:3d2
+R:453:1d3
+R:290:1d2
 D:$She is the queen of the dragons , who once fought against the Demon King 
 D:$Klimt and lost her life. She will show her appearance again in the sky 
 D:$in response to the power of darkness.
 D:かつて魔王クリムトと戦い命を落としたドラゴン族の女王。
 D:暗黒の力に呼応して再びその姿を天空に示すこととなった。
 
-#護衛はリッチ3d2 バンパイア3d3
+#護衛はリッチ2d2 バンパイア1d3 ミイラ1d2 ゾンビ1d1 スケルトン1d1
 N:1325:死の『バルマー卿』
 E:Lord Ballmer, the undead
 G:L:D
@@ -26196,8 +26197,11 @@ F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_LITE | RES_NETH
 S:1_IN_3 | 
 S:DISPEL | BA_POIS | MIND_BLAST | CAUSE_3 | BO_MANA | MISSILE
 S:SCARE | HOLD | S_MONSTER | S_DEMON | S_UNDEAD | ANIM_DEAD
-R:518:3d2
-R:432:3d3
+R:518:2d2
+R:432:1d3
+R:390:1d2
+R:229:1d1
+R:228:1d1
 D:$Lord Ballmer, the hero who defeated the Demon King Klimt, 
 D:$is a horrible undead now.
 D:魔王クリムトを倒した英雄バルマー卿だが、現在は

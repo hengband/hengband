@@ -875,6 +875,12 @@ magically summons ancient dragons!  However, that dragons saw him with insulting
 magically summons Lords of Amber!  However, none of lord of Amber has crossed the pattern...
 magically summons special opponents!  However, he lacks charisma!!
 
+N:1323:Bastral, the berserker
+says, 'Apparently, you and we were the only ones who survived.'
+says, 'Dean, you don't have to do anything. This enemy I can kill!'
+says, 'I will revive the Bindout Empire!'
+approaches you with a war cry.
+
 N:1333:Professor Ootsuki
 says, 'I also show you the power of plasma!!'
 says, 'I can explain even the pattern walk as plasma!!'
