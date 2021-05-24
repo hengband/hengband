@@ -1125,7 +1125,9 @@ static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
             rc.right += 2 * td->tile_wid;
         } else if (iskanji(*(s + i))) /* 2バイト文字 */
         {
-            const auto *buf = to_wchar(s + i).wc_str();
+            char tmp[] = { *(s + i), *(s + i + 1), '\0' };
+            to_wchar wc(tmp);
+            const auto *buf = wc.wc_str();
             rc.right += td->font_wid;
             if (buf == NULL)
                 ExtTextOutA(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s + i, 2, NULL);
