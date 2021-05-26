@@ -75,23 +75,7 @@ void WorldTurnProcessor::process_world()
     }
 
     process_change_daytime_night();
-    decide_alloc_monster();
-    if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 10)) && !this->player_ptr->phase_out) {
-        regenerate_monsters(this->player_ptr);
-    }
-
-    if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 3))) {
-        regenerate_captured_monsters(this->player_ptr);
-    }
-    
-    if (!this->player_ptr->leaving) {
-        for (int i = 0; i < MAX_MTIMED; i++) {
-            if (floor_ptr->mproc_max[i] > 0) {
-                process_monsters_mtimed(this->player_ptr, i);
-            }
-        }
-    }
-
+    process_world_monsters();
     if (!this->hour && !this->min) {
         if (this->min != prev_min) {
             exe_write_diary(this->player_ptr, DIARY_DIALY, 0, NULL);
@@ -258,6 +242,26 @@ void WorldTurnProcessor::process_change_daytime_night()
     }
 
     shuffle_shopkeeper();
+}
+
+void WorldTurnProcessor::process_world_monsters()
+{
+    decide_alloc_monster();
+    if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 10)) && !this->player_ptr->phase_out) {
+        regenerate_monsters(this->player_ptr);
+    }
+
+    if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 3))) {
+        regenerate_captured_monsters(this->player_ptr);
+    }
+
+    if (!this->player_ptr->leaving) {
+        for (int i = 0; i < MAX_MTIMED; i++) {
+            if (this->player_ptr->current_floor_ptr->mproc_max[i] > 0) {
+                process_monsters_mtimed(this->player_ptr, i);
+            }
+        }
+    }
 }
 
 void WorldTurnProcessor::shuffle_shopkeeper()

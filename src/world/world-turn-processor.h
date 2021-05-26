@@ -19,6 +19,7 @@ private:
     void process_monster_arena_draw();
     void decide_auto_save();
     void process_change_daytime_night();
+    void process_world_monsters();
     void decide_alloc_monster();
     void shuffle_shopkeeper();
     void ring_nightmare_bell(int prev_min);
