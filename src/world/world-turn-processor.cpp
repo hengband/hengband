@@ -239,7 +239,10 @@ void WorldTurnProcessor::process_monster_arena()
         msg_print(NULL);
         this->player_ptr->energy_need = 0;
         update_gambling_monsters(this->player_ptr);
-    } else if ((number_mon - 1) == 0) {
+        return;
+    }
+    
+    if (number_mon == 1) {
         GAME_TEXT m_name[MAX_NLEN];
         auto *wm_ptr = &floor_ptr->m_list[win_m_idx];
         monster_desc(this->player_ptr, m_name, wm_ptr, 0);
@@ -257,11 +260,16 @@ void WorldTurnProcessor::process_monster_arena()
         msg_print(NULL);
         this->player_ptr->energy_need = 0;
         update_gambling_monsters(this->player_ptr);
-    } else if (current_world_ptr->game_turn - floor_ptr->generated_turn == 150 * TURNS_PER_TICK) {
-        msg_print(_("申し訳ありませんが、この勝負は引き分けとさせていただきます。", "Sorry, but this battle ended in a draw."));
-        this->player_ptr->au += kakekin;
-        msg_print(NULL);
-        this->player_ptr->energy_need = 0;
-        update_gambling_monsters(this->player_ptr);
+        return;
     }
+    
+    if (current_world_ptr->game_turn - floor_ptr->generated_turn != 150 * TURNS_PER_TICK) {
+        return;    
+    }
+
+    msg_print(_("申し訳ありませんが、この勝負は引き分けとさせていただきます。", "Sorry, but this battle ended in a draw."));
+    this->player_ptr->au += kakekin;
+    msg_print(NULL);
+    this->player_ptr->energy_need = 0;
+    update_gambling_monsters(this->player_ptr);
 }
