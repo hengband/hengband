@@ -77,41 +77,7 @@ void WorldTurnProcessor::process_world()
         msg_print(_("何かが聞こえた。", "You hear noise."));
     }
 
-    if (!floor_ptr->dun_level && !floor_ptr->inside_quest && !this->player_ptr->phase_out && !floor_ptr->inside_arena) {
-        if (!(current_world_ptr->game_turn % ((TURNS_PER_TICK * TOWN_DAWN) / 2))) {
-            bool dawn = (!(current_world_ptr->game_turn % (TURNS_PER_TICK * TOWN_DAWN)));
-            if (dawn)
-                day_break(this->player_ptr);
-            else
-                night_falls(this->player_ptr);
-        }
-    } else if ((vanilla_town || (lite_town && !floor_ptr->inside_quest && !this->player_ptr->phase_out && !floor_ptr->inside_arena)) && floor_ptr->dun_level) {
-        if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * STORE_TICKS))) {
-            if (one_in_(STORE_SHUFFLE)) {
-                int n;
-                do {
-                    n = randint0(MAX_STORES);
-                } while ((n == STORE_HOME) || (n == STORE_MUSEUM));
-
-                for (FEAT_IDX i = 1; i < max_f_idx; i++) {
-                    feature_type *f_ptr = &f_info[i];
-                    if (f_ptr->name.empty())
-                        continue;
-                    if (!has_flag(f_ptr->flags, FF_STORE))
-                        continue;
-
-                    if (f_ptr->subtype == n) {
-                        if (cheat_xtra)
-                            msg_format(_("%sの店主をシャッフルします。", "Shuffle a Shopkeeper of %s."), f_ptr->name.c_str());
-
-                        store_shuffle(this->player_ptr, n);
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
+    process_change_daytime_night();
     if (one_in_(d_info[this->player_ptr->dungeon_idx].max_m_alloc_chance) && !floor_ptr->inside_arena && !floor_ptr->inside_quest && !this->player_ptr->phase_out) {
         (void)alloc_monster(this->player_ptr, MAX_SIGHT + 5, 0, summon_specific);
     }
@@ -289,4 +255,43 @@ void WorldTurnProcessor::process_monster_arena_draw()
     msg_print(NULL);
     this->player_ptr->energy_need = 0;
     update_gambling_monsters(this->player_ptr);
+}
+
+void WorldTurnProcessor::process_change_daytime_night()
+{
+    auto *floor_ptr = this->player_ptr->current_floor_ptr;
+    if (!floor_ptr->dun_level && !floor_ptr->inside_quest && !this->player_ptr->phase_out && !floor_ptr->inside_arena) {
+        if (!(current_world_ptr->game_turn % ((TURNS_PER_TICK * TOWN_DAWN) / 2))) {
+            bool dawn = (!(current_world_ptr->game_turn % (TURNS_PER_TICK * TOWN_DAWN)));
+            if (dawn)
+                day_break(this->player_ptr);
+            else
+                night_falls(this->player_ptr);
+        }
+    } else if ((vanilla_town || (lite_town && !floor_ptr->inside_quest && !this->player_ptr->phase_out && !floor_ptr->inside_arena)) && floor_ptr->dun_level) {
+        if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * STORE_TICKS))) {
+            if (one_in_(STORE_SHUFFLE)) {
+                int n;
+                do {
+                    n = randint0(MAX_STORES);
+                } while ((n == STORE_HOME) || (n == STORE_MUSEUM));
+
+                for (FEAT_IDX i = 1; i < max_f_idx; i++) {
+                    feature_type *f_ptr = &f_info[i];
+                    if (f_ptr->name.empty())
+                        continue;
+                    if (!has_flag(f_ptr->flags, FF_STORE))
+                        continue;
+
+                    if (f_ptr->subtype == n) {
+                        if (cheat_xtra)
+                            msg_format(_("%sの店主をシャッフルします。", "Shuffle a Shopkeeper of %s."), f_ptr->name.c_str());
+
+                        store_shuffle(this->player_ptr, n);
+                        break;
+                    }
+                }
+            }
+        }
+    }
 }
