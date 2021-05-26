@@ -503,6 +503,7 @@ static bool cast_sniper_spell(player_type *sniper_ptr, int spell)
     /* spell code */
     switch (spell) {
     case 0: /* Concentration */
+        sound(SOUND_ZAP);
         if (!snipe_concentrate(sniper_ptr))
             return FALSE;
         PlayerEnergy(sniper_ptr).set_player_turn_energy(100);
@@ -580,7 +581,6 @@ void do_cmd_snipe(player_type *sniper_ptr)
     if (!get_snipe_power(sniper_ptr, &n, FALSE))
         return;
 
-    sound(SOUND_SHOOT);
     cast = cast_sniper_spell(sniper_ptr, n);
 
     if (!cast)

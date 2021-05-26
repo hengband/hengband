@@ -6,7 +6,6 @@
 #include "main/sound-definitions-table.h"
 
 const concptr angband_sound_name[SOUND_MAX] = {
-    "dummy",
     "hit",
     "miss",
     "flee",
@@ -87,5 +86,5 @@ const concptr angband_sound_name[SOUND_MAX] = {
     "cleave_hit",
     "smite_hit",
     "eviscerate_hit",
-    "shred_hit ",
+    "shred_hit",
 };
