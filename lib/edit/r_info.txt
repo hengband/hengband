@@ -26377,3 +26377,19 @@ D:$You got yourself a rogue Bludger.
 D:$  That has been tampered with.
 D:なんてこった、チンピラブラッジャーのお出ましだ。
 D:誰かが細工してこちらに差し向けたのだろう。
+
+N:1335:メメクラゲ
+E:Jellyfish
+G:l:B
+I:110:12d12:10:40:20
+W:20:4:0:100:0:0
+B:STING:HURT:7d5
+B:SLASH:HURT:7d5
+B:SLASH:HURT:7d5
+F:ATTR_MULTI | CAN_SWIM | RES_WATE | EMPTY_MIND
+F:AQUATIC | WILD_SHORE | WILD_OCEAN
+D:$It can cut human veins.
+D:$  There are only eye doctors in the habitat of this jellyfish.
+D:$  Be careful!
+D:それは人間の静脈を切断できる。
+D:このクラゲの生息範囲は目医者ばかりだ、気をつけろ！
