@@ -221,12 +221,12 @@ void WorldTurnProcessor::process_monster_arena()
         return;
     }
 
-    int win_m_idx = 0;
-    int number_mon = 0;
+    auto win_m_idx = 0;
+    auto number_mon = 0;
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    for (int x = 0; x < floor_ptr->width; ++x) {
-        for (int y = 0; y < floor_ptr->height; y++) {
-            grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+    for (auto x = 0; x < floor_ptr->width; ++x) {
+        for (auto y = 0; y < floor_ptr->height; y++) {
+            auto *g_ptr = &floor_ptr->grid_array[y][x];
             if ((g_ptr->m_idx > 0) && (g_ptr->m_idx != this->player_ptr->riding)) {
                 number_mon++;
                 win_m_idx = g_ptr->m_idx;
@@ -241,8 +241,7 @@ void WorldTurnProcessor::process_monster_arena()
         update_gambling_monsters(this->player_ptr);
     } else if ((number_mon - 1) == 0) {
         GAME_TEXT m_name[MAX_NLEN];
-        monster_type *wm_ptr;
-        wm_ptr = &floor_ptr->m_list[win_m_idx];
+        auto *wm_ptr = &floor_ptr->m_list[win_m_idx];
         monster_desc(this->player_ptr, m_name, wm_ptr, 0);
         msg_format(_("%sが勝利した！", "%s won!"), m_name);
         msg_print(NULL);
