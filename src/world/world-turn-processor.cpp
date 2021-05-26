@@ -72,6 +72,7 @@ void WorldTurnProcessor::process_world()
             do_cmd_save_game(this->player_ptr, TRUE);
     }
 
+    auto *floor_ptr = this->player_ptr->current_floor_ptr;
     if (floor_ptr->monster_noise && !ignore_unview) {
         msg_print(_("何かが聞こえた。", "You hear noise."));
     }
@@ -207,15 +208,17 @@ void WorldTurnProcessor::print_time()
 void WorldTurnProcessor::process_downward()
 {
     /* 帰還無しモード時のレベルテレポバグ対策 / Fix for level teleport bugs on ironman_downward.*/
-    floor_type *floor_ptr = this->player_ptr->current_floor_ptr;
-    if (ironman_downward && (this->player_ptr->dungeon_idx != DUNGEON_ANGBAND && this->player_ptr->dungeon_idx != 0)) {
-        floor_ptr->dun_level = 0;
-        this->player_ptr->dungeon_idx = 0;
-        prepare_change_floor_mode(this->player_ptr, CFM_FIRST_FLOOR | CFM_RAND_PLACE);
-        floor_ptr->inside_arena = FALSE;
-        this->player_ptr->wild_mode = FALSE;
-        this->player_ptr->leaving = TRUE;
+    if (!ironman_downward || (this->player_ptr->dungeon_idx == DUNGEON_ANGBAND) || (this->player_ptr->dungeon_idx == 0)) {
+        return;    
     }
+
+    auto *floor_ptr = this->player_ptr->current_floor_ptr;
+    floor_ptr->dun_level = 0;
+    this->player_ptr->dungeon_idx = 0;
+    prepare_change_floor_mode(this->player_ptr, CFM_FIRST_FLOOR | CFM_RAND_PLACE);
+    floor_ptr->inside_arena = FALSE;
+    this->player_ptr->wild_mode = FALSE;
+    this->player_ptr->leaving = TRUE;
 }
 
 void WorldTurnProcessor::process_monster_arena()
