@@ -255,11 +255,13 @@ void WorldTurnProcessor::process_world_monsters()
         regenerate_captured_monsters(this->player_ptr);
     }
 
-    if (!this->player_ptr->leaving) {
-        for (int i = 0; i < MAX_MTIMED; i++) {
-            if (this->player_ptr->current_floor_ptr->mproc_max[i] > 0) {
-                process_monsters_mtimed(this->player_ptr, i);
-            }
+    if (this->player_ptr->leaving) {
+        return;    
+    }
+
+    for (auto i = 0; i < MAX_MTIMED; i++) {
+        if (this->player_ptr->current_floor_ptr->mproc_max[i] > 0) {
+            process_monsters_mtimed(this->player_ptr, i);
         }
     }
 }
