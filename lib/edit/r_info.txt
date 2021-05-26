@@ -25883,7 +25883,7 @@ B:INSULT:SUPERHURT:10d10
 F:UNIQUE | FORCE_MAXHP | HUMAN | MALE | EVIL | GOOD
 F:CAN_SPEAK | DROP_CORPSE | ONLY_ITEM | DROP_4D2 | DROP_3D2 | DROP_2D2
 F:IM_FIRE | IM_POIS | RES_SOUN | RES_DISE
-S:1_IN_8 | SHRIEK | DISPEL | FORGET | TELE_AWAY
+S:1_IN_3 | SHRIEK | DISPEL | FORGET | TELE_AWAY
 S:MIND_BLAST | BRAIN_SMASH | S_KIN
 D:$No one in the world deserves to be called a naked king like this man.
 D:$  He could only speak dirty words and believed that it was justice.

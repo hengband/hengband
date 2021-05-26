@@ -50,18 +50,25 @@
  *
  * ラーニング不可。
  */
-MonsterSpellResult spell_RF4_SHRIEK(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
+MonsterSpellResult spell_RF4_SHRIEK(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int target_type)
 {
     simple_monspell_message(target_ptr, m_idx, t_idx, _("%^sがかん高い金切り声をあげた。", "%^s makes a high pitched shriek."),
-        _("%^sが%sに向かって叫んだ。", "%^s shrieks at %s."), TARGET_TYPE);
+        _("%^sが%sに向かって叫んだ。", "%^s shrieks at %s."), target_type);
 
-    if (TARGET_TYPE == MONSTER_TO_PLAYER) {
+    auto *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+    auto result = MonsterSpellResult::make_valid();
+    if (m_ptr->r_idx == MON_LEE_QIEZI) {
+        msg_print(_("しかし、その声は誰の心にも響かなかった…。", "However, that voice didn't touch anyone's heart..."));
+        return result;
+    }
+
+    if (target_type == MONSTER_TO_PLAYER) {
         aggravate_monsters(target_ptr, m_idx);
-    } else if (TARGET_TYPE == MONSTER_TO_MONSTER) {
+    } else if (target_type == MONSTER_TO_MONSTER) {
         set_monster_csleep(target_ptr, t_idx, 0);
     }
 
-    return MonsterSpellResult::make_valid();
+    return result;
 }
 
 /*!
