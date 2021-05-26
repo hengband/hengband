@@ -246,16 +246,8 @@ void WorldTurnProcessor::process_monster_arena()
         process_monster_arena_winner(win_m_idx);
         return;
     }
-    
-    if (current_world_ptr->game_turn - floor_ptr->generated_turn != 150 * TURNS_PER_TICK) {
-        return;    
-    }
 
-    msg_print(_("申し訳ありませんが、この勝負は引き分けとさせていただきます。", "Sorry, but this battle ended in a draw."));
-    this->player_ptr->au += kakekin;
-    msg_print(NULL);
-    this->player_ptr->energy_need = 0;
-    update_gambling_monsters(this->player_ptr);
+    process_monster_arena_draw();
 }
 
 void WorldTurnProcessor::process_monster_arena_winner(int win_m_idx)
@@ -274,6 +266,20 @@ void WorldTurnProcessor::process_monster_arena_winner(int win_m_idx)
         msg_print(_("残念でした。", "You lost gold."));
     }
 
+    msg_print(NULL);
+    this->player_ptr->energy_need = 0;
+    update_gambling_monsters(this->player_ptr);
+}
+
+void WorldTurnProcessor::process_monster_arena_draw()
+{
+    auto turn = this->player_ptr->current_floor_ptr->generated_turn;
+    if (current_world_ptr->game_turn - turn != 150 * TURNS_PER_TICK) {
+        return;
+    }
+
+    msg_print(_("申し訳ありませんが、この勝負は引き分けとさせていただきます。", "Sorry, but this battle ended in a draw."));
+    this->player_ptr->au += kakekin;
     msg_print(NULL);
     this->player_ptr->energy_need = 0;
     update_gambling_monsters(this->player_ptr);
