@@ -62,18 +62,7 @@ void WorldTurnProcessor::process_world()
     int dummy_day;
     extract_day_hour_min(this->player_ptr, &dummy_day, &this->hour, &this->min);
     update_dungeon_feeling(this->player_ptr);
-
-    /* 帰還無しモード時のレベルテレポバグ対策 / Fix for level teleport bugs on ironman_downward.*/
-    floor_type *floor_ptr = this->player_ptr->current_floor_ptr;
-    if (ironman_downward && (this->player_ptr->dungeon_idx != DUNGEON_ANGBAND && this->player_ptr->dungeon_idx != 0)) {
-        floor_ptr->dun_level = 0;
-        this->player_ptr->dungeon_idx = 0;
-        prepare_change_floor_mode(this->player_ptr, CFM_FIRST_FLOOR | CFM_RAND_PLACE);
-        floor_ptr->inside_arena = FALSE;
-        this->player_ptr->wild_mode = FALSE;
-        this->player_ptr->leaving = TRUE;
-    }
-
+    process_downward();
     process_monster_arena();
     if (current_world_ptr->game_turn % TURNS_PER_TICK)
         return;
@@ -213,6 +202,20 @@ void WorldTurnProcessor::print_time()
         c_put_str(TERM_WHITE, _("***日目", "Day***"), ROW_DAY, COL_DAY);
 
     c_put_str(TERM_WHITE, format("%2d:%02d", this->hour, this->min), ROW_DAY, COL_DAY + 7);
+}
+
+void WorldTurnProcessor::process_downward()
+{
+    /* 帰還無しモード時のレベルテレポバグ対策 / Fix for level teleport bugs on ironman_downward.*/
+    floor_type *floor_ptr = this->player_ptr->current_floor_ptr;
+    if (ironman_downward && (this->player_ptr->dungeon_idx != DUNGEON_ANGBAND && this->player_ptr->dungeon_idx != 0)) {
+        floor_ptr->dun_level = 0;
+        this->player_ptr->dungeon_idx = 0;
+        prepare_change_floor_mode(this->player_ptr, CFM_FIRST_FLOOR | CFM_RAND_PLACE);
+        floor_ptr->inside_arena = FALSE;
+        this->player_ptr->wild_mode = FALSE;
+        this->player_ptr->leaving = TRUE;
+    }
 }
 
 void WorldTurnProcessor::process_monster_arena()

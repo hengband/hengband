@@ -13,6 +13,8 @@ private:
     int hour = 0;
     int min = 0;
 
+    void process_downward();
+
     void process_monster_arena();
     void process_monster_arena_winner(int win_m_idx);
     void process_monster_arena_draw();
