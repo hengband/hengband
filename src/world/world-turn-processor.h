@@ -10,4 +10,6 @@ public:
 
 private:
     player_type *player_ptr;
+    int hour = 0;
+    int min = 0;
 };

@@ -55,12 +55,12 @@ WorldTurnProcessor::WorldTurnProcessor(player_type *player_ptr)
  */
 void WorldTurnProcessor::process_world()
 {
-    const s32b A_DAY = TURNS_PER_TICK * TOWN_DAWN;
-    s32b prev_turn_in_today = ((current_world_ptr->game_turn - TURNS_PER_TICK) % A_DAY + A_DAY / 4) % A_DAY;
-    int prev_min = (1440 * prev_turn_in_today / A_DAY) % 60;
+    const s32b a_day = TURNS_PER_TICK * TOWN_DAWN;
+    s32b prev_turn_in_today = ((current_world_ptr->game_turn - TURNS_PER_TICK) % a_day + a_day / 4) % a_day;
+    int prev_min = (1440 * prev_turn_in_today / a_day) % 60;
 
-    int day, hour, min;
-    extract_day_hour_min(this->player_ptr, &day, &hour, &min);
+    int dummy_day;
+    extract_day_hour_min(this->player_ptr, &dummy_day, &this->hour, &this->min);
     update_dungeon_feeling(this->player_ptr);
 
     /* 帰還無しモード時のレベルテレポバグ対策 / Fix for level teleport bugs on ironman_downward.*/
@@ -77,9 +77,9 @@ void WorldTurnProcessor::process_world()
     if (this->player_ptr->phase_out && !this->player_ptr->leaving) {
         int win_m_idx = 0;
         int number_mon = 0;
-        for (int i2 = 0; i2 < floor_ptr->width; ++i2) {
-            for (int j2 = 0; j2 < floor_ptr->height; j2++) {
-                grid_type *g_ptr = &floor_ptr->grid_array[j2][i2];
+        for (int x = 0; x < floor_ptr->width; ++x) {
+            for (int y = 0; y < floor_ptr->height; y++) {
+                grid_type *g_ptr = &floor_ptr->grid_array[y][x];
                 if ((g_ptr->m_idx > 0) && (g_ptr->m_idx != this->player_ptr->riding)) {
                     number_mon++;
                     win_m_idx = g_ptr->m_idx;
@@ -183,8 +183,8 @@ void WorldTurnProcessor::process_world()
         }
     }
 
-    if (!hour && !min) {
-        if (min != prev_min) {
+    if (!this->hour && !this->min) {
+        if (this->min != prev_min) {
             exe_write_diary(this->player_ptr, DIARY_DIALY, 0, NULL);
             determine_daily_bounty(this->player_ptr, FALSE);
         }
@@ -194,10 +194,10 @@ void WorldTurnProcessor::process_world()
      * Nightmare mode activates the TY_CURSE at midnight
      * Require exact minute -- Don't activate multiple times in a minute
      */
-    if (ironman_nightmare && (min != prev_min)) {
-        if ((hour == 23) && !(min % 15)) {
+    if (ironman_nightmare && (this->min != prev_min)) {
+        if ((this->hour == 23) && !(this->min % 15)) {
             disturb(this->player_ptr, FALSE, TRUE);
-            switch (min / 15) {
+            switch (this->min / 15) {
             case 0:
                 msg_print(_("遠くで不気味な鐘の音が鳴った。", "You hear a distant bell toll ominously."));
                 break;
@@ -216,7 +216,7 @@ void WorldTurnProcessor::process_world()
             }
         }
 
-        if (!hour && !min) {
+        if (!this->hour && !this->min) {
             disturb(this->player_ptr, TRUE, TRUE);
             msg_print(_("遠くで鐘が何回も鳴り、死んだような静けさの中へ消えていった。", "A distant bell tolls many times, fading into an deathly silence."));
             if (this->player_ptr->wild_mode) {
@@ -249,13 +249,13 @@ void WorldTurnProcessor::process_world()
  */
 void WorldTurnProcessor::print_time()
 {
-    int day, hour, min;
+    int day;
     c_put_str(TERM_WHITE, "             ", ROW_DAY, COL_DAY);
-    extract_day_hour_min(this->player_ptr, &day, &hour, &min);
+    extract_day_hour_min(this->player_ptr, &day, &this->hour, &this->min);
     if (day < 1000)
         c_put_str(TERM_WHITE, format(_("%2d日目", "Day%3d"), day), ROW_DAY, COL_DAY);
     else
         c_put_str(TERM_WHITE, _("***日目", "Day***"), ROW_DAY, COL_DAY);
 
-    c_put_str(TERM_WHITE, format("%2d:%02d", hour, min), ROW_DAY, COL_DAY + 7);
+    c_put_str(TERM_WHITE, format("%2d:%02d", this->hour, this->min), ROW_DAY, COL_DAY + 7);
 }
