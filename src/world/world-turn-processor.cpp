@@ -296,39 +296,43 @@ void WorldTurnProcessor::shuffle_shopkeeper()
  */
 void WorldTurnProcessor::ring_nightmare_bell(int prev_min)
 {
-    if (ironman_nightmare && (this->min != prev_min)) {
-        if ((this->hour == 23) && !(this->min % 15)) {
-            disturb(this->player_ptr, false, true);
-            switch (this->min / 15) {
-            case 0:
-                msg_print(_("遠くで不気味な鐘の音が鳴った。", "You hear a distant bell toll ominously."));
-                break;
+    if (!ironman_nightmare || (this->min == prev_min)) {
+        return;    
+    }
 
-            case 1:
-                msg_print(_("遠くで鐘が二回鳴った。", "A distant bell sounds twice."));
-                break;
+    if ((this->hour == 23) && !(this->min % 15)) {
+        disturb(this->player_ptr, false, true);
+        switch (this->min / 15) {
+        case 0:
+            msg_print(_("遠くで不気味な鐘の音が鳴った。", "You hear a distant bell toll ominously."));
+            break;
 
-            case 2:
-                msg_print(_("遠くで鐘が三回鳴った。", "A distant bell sounds three times."));
-                break;
+        case 1:
+            msg_print(_("遠くで鐘が二回鳴った。", "A distant bell sounds twice."));
+            break;
 
-            case 3:
-                msg_print(_("遠くで鐘が四回鳴った。", "A distant bell tolls four times."));
-                break;
-            }
-        }
+        case 2:
+            msg_print(_("遠くで鐘が三回鳴った。", "A distant bell sounds three times."));
+            break;
 
-        if (!this->hour && !this->min) {
-            disturb(this->player_ptr, true, true);
-            msg_print(_("遠くで鐘が何回も鳴り、死んだような静けさの中へ消えていった。", "A distant bell tolls many times, fading into an deathly silence."));
-            if (this->player_ptr->wild_mode) {
-                this->player_ptr->oldpy = randint1(MAX_HGT - 2);
-                this->player_ptr->oldpx = randint1(MAX_WID - 2);
-                change_wild_mode(this->player_ptr, true);
-                PlayerEnergy(this->player_ptr).set_player_turn_energy(100);
-            }
-
-            this->player_ptr->invoking_midnight_curse = true;
+        case 3:
+            msg_print(_("遠くで鐘が四回鳴った。", "A distant bell tolls four times."));
+            break;
         }
     }
+
+    if ((this->hour > 0) || (this->min > 0)) {
+        return;    
+    }
+
+    disturb(this->player_ptr, true, true);
+    msg_print(_("遠くで鐘が何回も鳴り、死んだような静けさの中へ消えていった。", "A distant bell tolls many times, fading into an deathly silence."));
+    if (this->player_ptr->wild_mode) {
+        this->player_ptr->oldpy = randint1(MAX_HGT - 2);
+        this->player_ptr->oldpx = randint1(MAX_WID - 2);
+        change_wild_mode(this->player_ptr, true);
+        PlayerEnergy(this->player_ptr).set_player_turn_energy(100);
+    }
+
+    this->player_ptr->invoking_midnight_curse = true;
 }
