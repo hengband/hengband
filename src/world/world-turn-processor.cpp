@@ -75,10 +75,7 @@ void WorldTurnProcessor::process_world()
     }
 
     process_change_daytime_night();
-    if (one_in_(d_info[this->player_ptr->dungeon_idx].max_m_alloc_chance) && !floor_ptr->inside_arena && !floor_ptr->inside_quest && !this->player_ptr->phase_out) {
-        (void)alloc_monster(this->player_ptr, MAX_SIGHT + 5, 0, summon_specific);
-    }
-
+    decide_alloc_monster();
     if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 10)) && !this->player_ptr->phase_out) {
         regenerate_monsters(this->player_ptr);
     }
@@ -292,6 +289,18 @@ void WorldTurnProcessor::shuffle_shopkeeper()
 
         store_shuffle(this->player_ptr, n);
         break;
+    }
+}
+
+void WorldTurnProcessor::decide_alloc_monster()
+{
+    auto *floor_ptr = this->player_ptr->current_floor_ptr;
+    auto should_alloc = one_in_(d_info[this->player_ptr->dungeon_idx].max_m_alloc_chance);
+    should_alloc &= !floor_ptr->inside_arena;
+    should_alloc &= floor_ptr->inside_quest == 0;
+    should_alloc &= !this->player_ptr->phase_out;
+    if (should_alloc) {
+        (void)alloc_monster(this->player_ptr, MAX_SIGHT + 5, 0, summon_specific);
     }
 }
 
