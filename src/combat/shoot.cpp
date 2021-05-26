@@ -617,6 +617,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
             /* Monster here, Try to hit it */
             if (shooter_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
+                sound(SOUND_SHOOT_HIT);
                 grid_type *c_mon_ptr = &shooter_ptr->current_floor_ptr->grid_array[y][x];
 
                 monster_type *m_ptr = &shooter_ptr->current_floor_ptr->m_list[c_mon_ptr->m_idx];
