@@ -64,9 +64,10 @@ void WorldTurnProcessor::process_world()
     update_dungeon_feeling(this->player_ptr);
     process_downward();
     process_monster_arena();
-    if (current_world_ptr->game_turn % TURNS_PER_TICK)
+    if (current_world_ptr->game_turn % TURNS_PER_TICK) {
         return;
-
+    }
+    
     decide_auto_save();
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     if (floor_ptr->monster_noise && !ignore_unview) {
@@ -78,15 +79,19 @@ void WorldTurnProcessor::process_world()
         (void)alloc_monster(this->player_ptr, MAX_SIGHT + 5, 0, summon_specific);
     }
 
-    if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 10)) && !this->player_ptr->phase_out)
+    if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 10)) && !this->player_ptr->phase_out) {
         regenerate_monsters(this->player_ptr);
-    if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 3)))
-        regenerate_captured_monsters(this->player_ptr);
+    }
 
+    if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 3))) {
+        regenerate_captured_monsters(this->player_ptr);
+    }
+    
     if (!this->player_ptr->leaving) {
         for (int i = 0; i < MAX_MTIMED; i++) {
-            if (floor_ptr->mproc_max[i] > 0)
+            if (floor_ptr->mproc_max[i] > 0) {
                 process_monsters_mtimed(this->player_ptr, i);
+            }
         }
     }
 
