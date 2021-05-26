@@ -43,39 +43,44 @@
 #include "world/world-movement-processor.h"
 #include "world/world.h"
 
+WorldTurnProcessor::WorldTurnProcessor(player_type *player_ptr)
+    : player_ptr(player_ptr)
+{
+}
+
 /*!
  * @brief 10ゲームターンが進行する毎にゲーム世界全体の処理を行う。
  * / Handle certain things once every 10 game turns
  * @param player_ptr プレーヤーへの参照ポインタ
  */
-void process_world(player_type *player_ptr)
+void WorldTurnProcessor::process_world()
 {
     const s32b A_DAY = TURNS_PER_TICK * TOWN_DAWN;
     s32b prev_turn_in_today = ((current_world_ptr->game_turn - TURNS_PER_TICK) % A_DAY + A_DAY / 4) % A_DAY;
     int prev_min = (1440 * prev_turn_in_today / A_DAY) % 60;
 
     int day, hour, min;
-    extract_day_hour_min(player_ptr, &day, &hour, &min);
-    update_dungeon_feeling(player_ptr);
+    extract_day_hour_min(this->player_ptr, &day, &hour, &min);
+    update_dungeon_feeling(this->player_ptr);
 
     /* 帰還無しモード時のレベルテレポバグ対策 / Fix for level teleport bugs on ironman_downward.*/
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (ironman_downward && (player_ptr->dungeon_idx != DUNGEON_ANGBAND && player_ptr->dungeon_idx != 0)) {
+    floor_type *floor_ptr = this->player_ptr->current_floor_ptr;
+    if (ironman_downward && (this->player_ptr->dungeon_idx != DUNGEON_ANGBAND && this->player_ptr->dungeon_idx != 0)) {
         floor_ptr->dun_level = 0;
-        player_ptr->dungeon_idx = 0;
-        prepare_change_floor_mode(player_ptr, CFM_FIRST_FLOOR | CFM_RAND_PLACE);
+        this->player_ptr->dungeon_idx = 0;
+        prepare_change_floor_mode(this->player_ptr, CFM_FIRST_FLOOR | CFM_RAND_PLACE);
         floor_ptr->inside_arena = FALSE;
-        player_ptr->wild_mode = FALSE;
-        player_ptr->leaving = TRUE;
+        this->player_ptr->wild_mode = FALSE;
+        this->player_ptr->leaving = TRUE;
     }
 
-    if (player_ptr->phase_out && !player_ptr->leaving) {
+    if (this->player_ptr->phase_out && !this->player_ptr->leaving) {
         int win_m_idx = 0;
         int number_mon = 0;
         for (int i2 = 0; i2 < floor_ptr->width; ++i2) {
             for (int j2 = 0; j2 < floor_ptr->height; j2++) {
                 grid_type *g_ptr = &floor_ptr->grid_array[j2][i2];
-                if ((g_ptr->m_idx > 0) && (g_ptr->m_idx != player_ptr->riding)) {
+                if ((g_ptr->m_idx > 0) && (g_ptr->m_idx != this->player_ptr->riding)) {
                     number_mon++;
                     win_m_idx = g_ptr->m_idx;
                 }
@@ -85,57 +90,57 @@ void process_world(player_type *player_ptr)
         if (number_mon == 0) {
             msg_print(_("相打ちに終わりました。", "Nothing survived."));
             msg_print(NULL);
-            player_ptr->energy_need = 0;
-            update_gambling_monsters(player_ptr);
+            this->player_ptr->energy_need = 0;
+            update_gambling_monsters(this->player_ptr);
         } else if ((number_mon - 1) == 0) {
             GAME_TEXT m_name[MAX_NLEN];
             monster_type *wm_ptr;
             wm_ptr = &floor_ptr->m_list[win_m_idx];
-            monster_desc(player_ptr, m_name, wm_ptr, 0);
+            monster_desc(this->player_ptr, m_name, wm_ptr, 0);
             msg_format(_("%sが勝利した！", "%s won!"), m_name);
             msg_print(NULL);
 
             if (win_m_idx == (sel_monster + 1)) {
                 msg_print(_("おめでとうございます。", "Congratulations."));
                 msg_format(_("%d＄を受け取った。", "You received %d gold."), battle_odds);
-                player_ptr->au += battle_odds;
+                this->player_ptr->au += battle_odds;
             } else {
                 msg_print(_("残念でした。", "You lost gold."));
             }
 
             msg_print(NULL);
-            player_ptr->energy_need = 0;
-            update_gambling_monsters(player_ptr);
+            this->player_ptr->energy_need = 0;
+            update_gambling_monsters(this->player_ptr);
         } else if (current_world_ptr->game_turn - floor_ptr->generated_turn == 150 * TURNS_PER_TICK) {
             msg_print(_("申し訳ありませんが、この勝負は引き分けとさせていただきます。", "Sorry, but this battle ended in a draw."));
-            player_ptr->au += kakekin;
+            this->player_ptr->au += kakekin;
             msg_print(NULL);
-            player_ptr->energy_need = 0;
-            update_gambling_monsters(player_ptr);
+            this->player_ptr->energy_need = 0;
+            update_gambling_monsters(this->player_ptr);
         }
     }
 
     if (current_world_ptr->game_turn % TURNS_PER_TICK)
         return;
 
-    if (autosave_t && autosave_freq && !player_ptr->phase_out) {
+    if (autosave_t && autosave_freq && !this->player_ptr->phase_out) {
         if (!(current_world_ptr->game_turn % ((s32b)autosave_freq * TURNS_PER_TICK)))
-            do_cmd_save_game(player_ptr, TRUE);
+            do_cmd_save_game(this->player_ptr, TRUE);
     }
 
     if (floor_ptr->monster_noise && !ignore_unview) {
         msg_print(_("何かが聞こえた。", "You hear noise."));
     }
 
-    if (!floor_ptr->dun_level && !floor_ptr->inside_quest && !player_ptr->phase_out && !floor_ptr->inside_arena) {
+    if (!floor_ptr->dun_level && !floor_ptr->inside_quest && !this->player_ptr->phase_out && !floor_ptr->inside_arena) {
         if (!(current_world_ptr->game_turn % ((TURNS_PER_TICK * TOWN_DAWN) / 2))) {
             bool dawn = (!(current_world_ptr->game_turn % (TURNS_PER_TICK * TOWN_DAWN)));
             if (dawn)
-                day_break(player_ptr);
+                day_break(this->player_ptr);
             else
-                night_falls(player_ptr);
+                night_falls(this->player_ptr);
         }
-    } else if ((vanilla_town || (lite_town && !floor_ptr->inside_quest && !player_ptr->phase_out && !floor_ptr->inside_arena)) && floor_ptr->dun_level) {
+    } else if ((vanilla_town || (lite_town && !floor_ptr->inside_quest && !this->player_ptr->phase_out && !floor_ptr->inside_arena)) && floor_ptr->dun_level) {
         if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * STORE_TICKS))) {
             if (one_in_(STORE_SHUFFLE)) {
                 int n;
@@ -154,7 +159,7 @@ void process_world(player_type *player_ptr)
                         if (cheat_xtra)
                             msg_format(_("%sの店主をシャッフルします。", "Shuffle a Shopkeeper of %s."), f_ptr->name.c_str());
 
-                        store_shuffle(player_ptr, n);
+                        store_shuffle(this->player_ptr, n);
                         break;
                     }
                 }
@@ -162,26 +167,26 @@ void process_world(player_type *player_ptr)
         }
     }
 
-    if (one_in_(d_info[player_ptr->dungeon_idx].max_m_alloc_chance) && !floor_ptr->inside_arena && !floor_ptr->inside_quest && !player_ptr->phase_out) {
-        (void)alloc_monster(player_ptr, MAX_SIGHT + 5, 0, summon_specific);
+    if (one_in_(d_info[this->player_ptr->dungeon_idx].max_m_alloc_chance) && !floor_ptr->inside_arena && !floor_ptr->inside_quest && !this->player_ptr->phase_out) {
+        (void)alloc_monster(this->player_ptr, MAX_SIGHT + 5, 0, summon_specific);
     }
 
-    if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 10)) && !player_ptr->phase_out)
-        regenerate_monsters(player_ptr);
+    if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 10)) && !this->player_ptr->phase_out)
+        regenerate_monsters(this->player_ptr);
     if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 3)))
-        regenerate_captured_monsters(player_ptr);
+        regenerate_captured_monsters(this->player_ptr);
 
-    if (!player_ptr->leaving) {
+    if (!this->player_ptr->leaving) {
         for (int i = 0; i < MAX_MTIMED; i++) {
             if (floor_ptr->mproc_max[i] > 0)
-                process_monsters_mtimed(player_ptr, i);
+                process_monsters_mtimed(this->player_ptr, i);
         }
     }
 
     if (!hour && !min) {
         if (min != prev_min) {
-            exe_write_diary(player_ptr, DIARY_DIALY, 0, NULL);
-            determine_daily_bounty(player_ptr, FALSE);
+            exe_write_diary(this->player_ptr, DIARY_DIALY, 0, NULL);
+            determine_daily_bounty(this->player_ptr, FALSE);
         }
     }
 
@@ -191,7 +196,7 @@ void process_world(player_type *player_ptr)
      */
     if (ironman_nightmare && (min != prev_min)) {
         if ((hour == 23) && !(min % 15)) {
-            disturb(player_ptr, FALSE, TRUE);
+            disturb(this->player_ptr, FALSE, TRUE);
             switch (min / 15) {
             case 0:
                 msg_print(_("遠くで不気味な鐘の音が鳴った。", "You hear a distant bell toll ominously."));
@@ -212,41 +217,41 @@ void process_world(player_type *player_ptr)
         }
 
         if (!hour && !min) {
-            disturb(player_ptr, TRUE, TRUE);
+            disturb(this->player_ptr, TRUE, TRUE);
             msg_print(_("遠くで鐘が何回も鳴り、死んだような静けさの中へ消えていった。", "A distant bell tolls many times, fading into an deathly silence."));
-            if (player_ptr->wild_mode) {
-                player_ptr->oldpy = randint1(MAX_HGT - 2);
-                player_ptr->oldpx = randint1(MAX_WID - 2);
-                change_wild_mode(player_ptr, TRUE);
-                PlayerEnergy(player_ptr).set_player_turn_energy(100);
+            if (this->player_ptr->wild_mode) {
+                this->player_ptr->oldpy = randint1(MAX_HGT - 2);
+                this->player_ptr->oldpx = randint1(MAX_WID - 2);
+                change_wild_mode(this->player_ptr, TRUE);
+                PlayerEnergy(this->player_ptr).set_player_turn_energy(100);
             }
 
-            player_ptr->invoking_midnight_curse = TRUE;
+            this->player_ptr->invoking_midnight_curse = TRUE;
         }
     }
 
-    starve_player(player_ptr);
-    process_player_hp_mp(player_ptr);
-    reduce_magic_effects_timeout(player_ptr);
-    reduce_lite_life(player_ptr);
-    process_world_aux_mutation(player_ptr);
-    execute_cursed_items_effect(player_ptr);
-    recharge_magic_items(player_ptr);
-    sense_inventory1(player_ptr);
-    sense_inventory2(player_ptr);
-    execute_recall(player_ptr);
-    execute_floor_reset(player_ptr);
+    starve_player(this->player_ptr);
+    process_player_hp_mp(this->player_ptr);
+    reduce_magic_effects_timeout(this->player_ptr);
+    reduce_lite_life(this->player_ptr);
+    process_world_aux_mutation(this->player_ptr);
+    execute_cursed_items_effect(this->player_ptr);
+    recharge_magic_items(this->player_ptr);
+    sense_inventory1(this->player_ptr);
+    sense_inventory2(this->player_ptr);
+    execute_recall(this->player_ptr);
+    execute_floor_reset(this->player_ptr);
 }
 
 /*!
  * @brief ゲーム時刻を表示する /
  * Print time
  */
-void print_time(player_type *player_ptr)
+void WorldTurnProcessor::print_time()
 {
     int day, hour, min;
     c_put_str(TERM_WHITE, "             ", ROW_DAY, COL_DAY);
-    extract_day_hour_min(player_ptr, &day, &hour, &min);
+    extract_day_hour_min(this->player_ptr, &day, &hour, &min);
     if (day < 1000)
         c_put_str(TERM_WHITE, format(_("%2d日目", "Day%3d"), day), ROW_DAY, COL_DAY);
     else

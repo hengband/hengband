@@ -1,5 +1,13 @@
 ﻿#pragma once
 
-typedef struct player_type player_type;
-void process_world(player_type *player_ptr);
-void print_time(player_type *player_ptr);
+struct player_type;
+class WorldTurnProcessor {
+public:
+    WorldTurnProcessor(player_type *player_ptr);
+    virtual ~WorldTurnProcessor() = default;
+    void process_world();
+    void print_time();
+
+private:
+    player_type *player_ptr;
+};
