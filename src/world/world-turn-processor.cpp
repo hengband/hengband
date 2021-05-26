@@ -284,8 +284,13 @@ void WorldTurnProcessor::process_change_daytime_night()
         return;    
     }
 
+    shuffle_shopkeeper();
+}
+
+void WorldTurnProcessor::shuffle_shopkeeper()
+{
     if (!one_in_(STORE_SHUFFLE)) {
-        return;    
+        return;
     }
 
     int n;
@@ -302,13 +307,13 @@ void WorldTurnProcessor::process_change_daytime_night()
             continue;
 
         if (f_ptr->subtype != n) {
-            continue;        
+            continue;
         }
 
         if (cheat_xtra) {
             msg_format(_("%sの店主をシャッフルします。", "Shuffle a Shopkeeper of %s."), f_ptr->name.c_str());
         }
-        
+
         store_shuffle(this->player_ptr, n);
         break;
     }
