@@ -12,4 +12,6 @@ private:
     player_type *player_ptr;
     int hour = 0;
     int min = 0;
+
+    void process_monster_arena();
 };

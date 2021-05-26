@@ -74,52 +74,7 @@ void WorldTurnProcessor::process_world()
         this->player_ptr->leaving = TRUE;
     }
 
-    if (this->player_ptr->phase_out && !this->player_ptr->leaving) {
-        int win_m_idx = 0;
-        int number_mon = 0;
-        for (int x = 0; x < floor_ptr->width; ++x) {
-            for (int y = 0; y < floor_ptr->height; y++) {
-                grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-                if ((g_ptr->m_idx > 0) && (g_ptr->m_idx != this->player_ptr->riding)) {
-                    number_mon++;
-                    win_m_idx = g_ptr->m_idx;
-                }
-            }
-        }
-
-        if (number_mon == 0) {
-            msg_print(_("相打ちに終わりました。", "Nothing survived."));
-            msg_print(NULL);
-            this->player_ptr->energy_need = 0;
-            update_gambling_monsters(this->player_ptr);
-        } else if ((number_mon - 1) == 0) {
-            GAME_TEXT m_name[MAX_NLEN];
-            monster_type *wm_ptr;
-            wm_ptr = &floor_ptr->m_list[win_m_idx];
-            monster_desc(this->player_ptr, m_name, wm_ptr, 0);
-            msg_format(_("%sが勝利した！", "%s won!"), m_name);
-            msg_print(NULL);
-
-            if (win_m_idx == (sel_monster + 1)) {
-                msg_print(_("おめでとうございます。", "Congratulations."));
-                msg_format(_("%d＄を受け取った。", "You received %d gold."), battle_odds);
-                this->player_ptr->au += battle_odds;
-            } else {
-                msg_print(_("残念でした。", "You lost gold."));
-            }
-
-            msg_print(NULL);
-            this->player_ptr->energy_need = 0;
-            update_gambling_monsters(this->player_ptr);
-        } else if (current_world_ptr->game_turn - floor_ptr->generated_turn == 150 * TURNS_PER_TICK) {
-            msg_print(_("申し訳ありませんが、この勝負は引き分けとさせていただきます。", "Sorry, but this battle ended in a draw."));
-            this->player_ptr->au += kakekin;
-            msg_print(NULL);
-            this->player_ptr->energy_need = 0;
-            update_gambling_monsters(this->player_ptr);
-        }
-    }
-
+    process_monster_arena();
     if (current_world_ptr->game_turn % TURNS_PER_TICK)
         return;
 
@@ -258,4 +213,56 @@ void WorldTurnProcessor::print_time()
         c_put_str(TERM_WHITE, _("***日目", "Day***"), ROW_DAY, COL_DAY);
 
     c_put_str(TERM_WHITE, format("%2d:%02d", this->hour, this->min), ROW_DAY, COL_DAY + 7);
+}
+
+void WorldTurnProcessor::process_monster_arena()
+{
+    if (!this->player_ptr->phase_out || this->player_ptr->leaving) {
+        return;
+    }
+
+    int win_m_idx = 0;
+    int number_mon = 0;
+    auto *floor_ptr = this->player_ptr->current_floor_ptr;
+    for (int x = 0; x < floor_ptr->width; ++x) {
+        for (int y = 0; y < floor_ptr->height; y++) {
+            grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+            if ((g_ptr->m_idx > 0) && (g_ptr->m_idx != this->player_ptr->riding)) {
+                number_mon++;
+                win_m_idx = g_ptr->m_idx;
+            }
+        }
+    }
+
+    if (number_mon == 0) {
+        msg_print(_("相打ちに終わりました。", "Nothing survived."));
+        msg_print(NULL);
+        this->player_ptr->energy_need = 0;
+        update_gambling_monsters(this->player_ptr);
+    } else if ((number_mon - 1) == 0) {
+        GAME_TEXT m_name[MAX_NLEN];
+        monster_type *wm_ptr;
+        wm_ptr = &floor_ptr->m_list[win_m_idx];
+        monster_desc(this->player_ptr, m_name, wm_ptr, 0);
+        msg_format(_("%sが勝利した！", "%s won!"), m_name);
+        msg_print(NULL);
+
+        if (win_m_idx == (sel_monster + 1)) {
+            msg_print(_("おめでとうございます。", "Congratulations."));
+            msg_format(_("%d＄を受け取った。", "You received %d gold."), battle_odds);
+            this->player_ptr->au += battle_odds;
+        } else {
+            msg_print(_("残念でした。", "You lost gold."));
+        }
+
+        msg_print(NULL);
+        this->player_ptr->energy_need = 0;
+        update_gambling_monsters(this->player_ptr);
+    } else if (current_world_ptr->game_turn - floor_ptr->generated_turn == 150 * TURNS_PER_TICK) {
+        msg_print(_("申し訳ありませんが、この勝負は引き分けとさせていただきます。", "Sorry, but this battle ended in a draw."));
+        this->player_ptr->au += kakekin;
+        msg_print(NULL);
+        this->player_ptr->energy_need = 0;
+        update_gambling_monsters(this->player_ptr);
+    }
 }
