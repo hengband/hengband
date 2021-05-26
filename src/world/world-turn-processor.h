@@ -14,4 +14,5 @@ private:
     int min = 0;
 
     void process_monster_arena();
+    void process_monster_arena_winner(int win_m_idx);
 };

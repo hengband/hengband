@@ -243,23 +243,7 @@ void WorldTurnProcessor::process_monster_arena()
     }
     
     if (number_mon == 1) {
-        GAME_TEXT m_name[MAX_NLEN];
-        auto *wm_ptr = &floor_ptr->m_list[win_m_idx];
-        monster_desc(this->player_ptr, m_name, wm_ptr, 0);
-        msg_format(_("%sが勝利した！", "%s won!"), m_name);
-        msg_print(NULL);
-
-        if (win_m_idx == (sel_monster + 1)) {
-            msg_print(_("おめでとうございます。", "Congratulations."));
-            msg_format(_("%d＄を受け取った。", "You received %d gold."), battle_odds);
-            this->player_ptr->au += battle_odds;
-        } else {
-            msg_print(_("残念でした。", "You lost gold."));
-        }
-
-        msg_print(NULL);
-        this->player_ptr->energy_need = 0;
-        update_gambling_monsters(this->player_ptr);
+        process_monster_arena_winner(win_m_idx);
         return;
     }
     
@@ -269,6 +253,27 @@ void WorldTurnProcessor::process_monster_arena()
 
     msg_print(_("申し訳ありませんが、この勝負は引き分けとさせていただきます。", "Sorry, but this battle ended in a draw."));
     this->player_ptr->au += kakekin;
+    msg_print(NULL);
+    this->player_ptr->energy_need = 0;
+    update_gambling_monsters(this->player_ptr);
+}
+
+void WorldTurnProcessor::process_monster_arena_winner(int win_m_idx)
+{
+    GAME_TEXT m_name[MAX_NLEN];
+    auto *wm_ptr = &this->player_ptr->current_floor_ptr->m_list[win_m_idx];
+    monster_desc(this->player_ptr, m_name, wm_ptr, 0);
+    msg_format(_("%sが勝利した！", "%s won!"), m_name);
+    msg_print(NULL);
+
+    if (win_m_idx == (sel_monster + 1)) {
+        msg_print(_("おめでとうございます。", "Congratulations."));
+        msg_format(_("%d＄を受け取った。", "You received %d gold."), battle_odds);
+        this->player_ptr->au += battle_odds;
+    } else {
+        msg_print(_("残念でした。", "You lost gold."));
+    }
+
     msg_print(NULL);
     this->player_ptr->energy_need = 0;
     update_gambling_monsters(this->player_ptr);
