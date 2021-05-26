@@ -69,7 +69,7 @@ void WorldTurnProcessor::process_world()
 
     if (autosave_t && autosave_freq && !this->player_ptr->phase_out) {
         if (!(current_world_ptr->game_turn % ((s32b)autosave_freq * TURNS_PER_TICK)))
-            do_cmd_save_game(this->player_ptr, TRUE);
+            do_cmd_save_game(this->player_ptr, true);
     }
 
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
@@ -97,7 +97,7 @@ void WorldTurnProcessor::process_world()
     if (!this->hour && !this->min) {
         if (this->min != prev_min) {
             exe_write_diary(this->player_ptr, DIARY_DIALY, 0, NULL);
-            determine_daily_bounty(this->player_ptr, FALSE);
+            determine_daily_bounty(this->player_ptr, false);
         }
     }
 
@@ -107,7 +107,7 @@ void WorldTurnProcessor::process_world()
      */
     if (ironman_nightmare && (this->min != prev_min)) {
         if ((this->hour == 23) && !(this->min % 15)) {
-            disturb(this->player_ptr, FALSE, TRUE);
+            disturb(this->player_ptr, false, true);
             switch (this->min / 15) {
             case 0:
                 msg_print(_("遠くで不気味な鐘の音が鳴った。", "You hear a distant bell toll ominously."));
@@ -128,16 +128,16 @@ void WorldTurnProcessor::process_world()
         }
 
         if (!this->hour && !this->min) {
-            disturb(this->player_ptr, TRUE, TRUE);
+            disturb(this->player_ptr, true, true);
             msg_print(_("遠くで鐘が何回も鳴り、死んだような静けさの中へ消えていった。", "A distant bell tolls many times, fading into an deathly silence."));
             if (this->player_ptr->wild_mode) {
                 this->player_ptr->oldpy = randint1(MAX_HGT - 2);
                 this->player_ptr->oldpx = randint1(MAX_WID - 2);
-                change_wild_mode(this->player_ptr, TRUE);
+                change_wild_mode(this->player_ptr, true);
                 PlayerEnergy(this->player_ptr).set_player_turn_energy(100);
             }
 
-            this->player_ptr->invoking_midnight_curse = TRUE;
+            this->player_ptr->invoking_midnight_curse = true;
         }
     }
 
@@ -182,9 +182,9 @@ void WorldTurnProcessor::process_downward()
     floor_ptr->dun_level = 0;
     this->player_ptr->dungeon_idx = 0;
     prepare_change_floor_mode(this->player_ptr, CFM_FIRST_FLOOR | CFM_RAND_PLACE);
-    floor_ptr->inside_arena = FALSE;
-    this->player_ptr->wild_mode = FALSE;
-    this->player_ptr->leaving = TRUE;
+    floor_ptr->inside_arena = false;
+    this->player_ptr->wild_mode = false;
+    this->player_ptr->leaving = true;
 }
 
 void WorldTurnProcessor::process_monster_arena()
