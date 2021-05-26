@@ -67,11 +67,7 @@ void WorldTurnProcessor::process_world()
     if (current_world_ptr->game_turn % TURNS_PER_TICK)
         return;
 
-    if (autosave_t && autosave_freq && !this->player_ptr->phase_out) {
-        if (!(current_world_ptr->game_turn % ((s32b)autosave_freq * TURNS_PER_TICK)))
-            do_cmd_save_game(this->player_ptr, true);
-    }
-
+    decide_auto_save();
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     if (floor_ptr->monster_noise && !ignore_unview) {
         msg_print(_("何かが聞こえた。", "You hear noise."));
@@ -255,6 +251,20 @@ void WorldTurnProcessor::process_monster_arena_draw()
     msg_print(NULL);
     this->player_ptr->energy_need = 0;
     update_gambling_monsters(this->player_ptr);
+}
+
+void WorldTurnProcessor::decide_auto_save()
+{
+    if (autosave_freq == 0) {
+        return;
+    }
+
+    auto should_save = autosave_t;
+    should_save &= !this->player_ptr->phase_out;
+    should_save &= current_world_ptr->game_turn % ((s32b)autosave_freq * TURNS_PER_TICK) == 0;
+    if (should_save) {
+        do_cmd_save_game(this->player_ptr, true);
+    }
 }
 
 void WorldTurnProcessor::process_change_daytime_night()
