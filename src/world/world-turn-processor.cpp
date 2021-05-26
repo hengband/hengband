@@ -262,7 +262,7 @@ void WorldTurnProcessor::process_change_daytime_night()
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     if (!floor_ptr->dun_level && !floor_ptr->inside_quest && !this->player_ptr->phase_out && !floor_ptr->inside_arena) {
         if (!(current_world_ptr->game_turn % ((TURNS_PER_TICK * TOWN_DAWN) / 2))) {
-            bool dawn = (!(current_world_ptr->game_turn % (TURNS_PER_TICK * TOWN_DAWN)));
+            auto dawn = !(current_world_ptr->game_turn % (TURNS_PER_TICK * TOWN_DAWN));
             if (dawn)
                 day_break(this->player_ptr);
             else
@@ -276,8 +276,8 @@ void WorldTurnProcessor::process_change_daytime_night()
                     n = randint0(MAX_STORES);
                 } while ((n == STORE_HOME) || (n == STORE_MUSEUM));
 
-                for (FEAT_IDX i = 1; i < max_f_idx; i++) {
-                    feature_type *f_ptr = &f_info[i];
+                for (auto i = 1; i < max_f_idx; i++) {
+                    auto *f_ptr = &f_info[i];
                     if (f_ptr->name.empty())
                         continue;
                     if (!has_flag(f_ptr->flags, FF_STORE))
