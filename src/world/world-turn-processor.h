@@ -20,4 +20,5 @@ private:
     void decide_auto_save();
     void process_change_daytime_night();
     void shuffle_shopkeeper();
+    void ring_nightmare_bell(int prev_min);
 };

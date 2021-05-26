@@ -97,46 +97,7 @@ void WorldTurnProcessor::process_world()
         }
     }
 
-    /*
-     * Nightmare mode activates the TY_CURSE at midnight
-     * Require exact minute -- Don't activate multiple times in a minute
-     */
-    if (ironman_nightmare && (this->min != prev_min)) {
-        if ((this->hour == 23) && !(this->min % 15)) {
-            disturb(this->player_ptr, false, true);
-            switch (this->min / 15) {
-            case 0:
-                msg_print(_("遠くで不気味な鐘の音が鳴った。", "You hear a distant bell toll ominously."));
-                break;
-
-            case 1:
-                msg_print(_("遠くで鐘が二回鳴った。", "A distant bell sounds twice."));
-                break;
-
-            case 2:
-                msg_print(_("遠くで鐘が三回鳴った。", "A distant bell sounds three times."));
-                break;
-
-            case 3:
-                msg_print(_("遠くで鐘が四回鳴った。", "A distant bell tolls four times."));
-                break;
-            }
-        }
-
-        if (!this->hour && !this->min) {
-            disturb(this->player_ptr, true, true);
-            msg_print(_("遠くで鐘が何回も鳴り、死んだような静けさの中へ消えていった。", "A distant bell tolls many times, fading into an deathly silence."));
-            if (this->player_ptr->wild_mode) {
-                this->player_ptr->oldpy = randint1(MAX_HGT - 2);
-                this->player_ptr->oldpx = randint1(MAX_WID - 2);
-                change_wild_mode(this->player_ptr, true);
-                PlayerEnergy(this->player_ptr).set_player_turn_energy(100);
-            }
-
-            this->player_ptr->invoking_midnight_curse = true;
-        }
-    }
-
+    ring_nightmare_bell(prev_min);
     starve_player(this->player_ptr);
     process_player_hp_mp(this->player_ptr);
     reduce_magic_effects_timeout(this->player_ptr);
@@ -326,5 +287,48 @@ void WorldTurnProcessor::shuffle_shopkeeper()
 
         store_shuffle(this->player_ptr, n);
         break;
+    }
+}
+
+/*
+ * Nightmare mode activates the TY_CURSE at midnight
+ * Require exact minute -- Don't activate multiple times in a minute
+ */
+void WorldTurnProcessor::ring_nightmare_bell(int prev_min)
+{
+    if (ironman_nightmare && (this->min != prev_min)) {
+        if ((this->hour == 23) && !(this->min % 15)) {
+            disturb(this->player_ptr, false, true);
+            switch (this->min / 15) {
+            case 0:
+                msg_print(_("遠くで不気味な鐘の音が鳴った。", "You hear a distant bell toll ominously."));
+                break;
+
+            case 1:
+                msg_print(_("遠くで鐘が二回鳴った。", "A distant bell sounds twice."));
+                break;
+
+            case 2:
+                msg_print(_("遠くで鐘が三回鳴った。", "A distant bell sounds three times."));
+                break;
+
+            case 3:
+                msg_print(_("遠くで鐘が四回鳴った。", "A distant bell tolls four times."));
+                break;
+            }
+        }
+
+        if (!this->hour && !this->min) {
+            disturb(this->player_ptr, true, true);
+            msg_print(_("遠くで鐘が何回も鳴り、死んだような静けさの中へ消えていった。", "A distant bell tolls many times, fading into an deathly silence."));
+            if (this->player_ptr->wild_mode) {
+                this->player_ptr->oldpy = randint1(MAX_HGT - 2);
+                this->player_ptr->oldpx = randint1(MAX_WID - 2);
+                change_wild_mode(this->player_ptr, true);
+                PlayerEnergy(this->player_ptr).set_player_turn_energy(100);
+            }
+
+            this->player_ptr->invoking_midnight_curse = true;
+        }
     }
 }
