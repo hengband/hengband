@@ -10,6 +10,7 @@
  */
 
 #include "action/action-limited.h"
+#include "artifact/fixed-art-types.h"
 #include "cmd-action/cmd-spell.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
@@ -21,6 +22,7 @@
 #include "game-option/text-display-options.h"
 #include "grid/grid.h"
 #include "hpmp/hp-mp-processor.h"
+#include "inventory/inventory-slot-types.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-mage.h"
@@ -53,6 +55,7 @@
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
+#include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
@@ -195,6 +198,10 @@ static int get_mane_power(player_type *caster_ptr, int *sn, bool baigaesi)
                         chance = chance * (baigaesi ? caster_ptr->mane_dam[i] * 2 : caster_ptr->mane_dam[i]) / spell.manedam;
 
                     chance += caster_ptr->to_m_chance;
+
+                    if (caster_ptr->inventory_list[INVEN_NECK].name1 == ART_GOGO_PENDANT) {
+                        chance -= 10;
+                    }
 
                     /* Extract the minimum failure rate */
                     minfail = adj_mag_fail[caster_ptr->stat_index[spell.use_stat]];
