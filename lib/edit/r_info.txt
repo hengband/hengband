@@ -26393,3 +26393,36 @@ D:$  There are only eye doctors in the habitat of this jellyfish.
 D:$  Be careful!
 D:それは人間の静脈を切断できる。
 D:このクラゲの生息範囲は目医者ばかりだ、気をつけろ！
+
+N:1336:『死神ももえ』 
+E:Momoe Shinigami
+G:p:W
+I:190:35d100:100:50:0
+W:78:3:0:558:0:0
+B:SHOOT:HURT:13d13
+B:SLASH:HURT:13d13
+B:SLASH:UN_POWER:13d13
+B:ENGULF:CONFUSE:13d13
+F:UNIQUE | FEMALE | DROP_1D2 | DROP_2D2 | DROP_3D2 | DROP_GREAT
+F:OPEN_DOOR | BASH_DOOR | DROP_CORPSE | DROP_SKELETON | FORCE_MAXHP
+F:EVIL | GOOD | GIANT | HUMAN | ANGEL | NONLIVING | ANIMAL | SMART
+F:REGENERATE | REFLECTING
+F:IM_COLD | IM_FIRE | IM_ELEC | RES_NEXU | RES_CHAO | NO_CONF | NO_STUN
+F:NO_SLEEP | RES_TELE | RES_NETH | RES_TIME | POWERFUL | CAN_FLY
+R:904:3d5
+S:1_IN_5 | SHOOT | BR_NEXU | BR_CHAO | TPORT | BLIND | TELE_TO
+S:HOLD | BLINK | HEAL | HASTE | CONF | BRAIN_SMASH | BO_MANA | PSY_SPEAR
+D:$Whatever she slays will be hers. Flee while you can!
+D:彼女が斬ったものはすべて彼女に肩代わりされる。今のうちに逃げろ！
+
+# シンボルはgと迷ったが、フロアの近いUncovered coreと似てるのでカエルとする
+N:1337:『パクマン』
+E:Pakuman
+G:R:g
+I:115:10d8:15:15:20
+W:6:2:0:40:0:0
+F:UNIQUE | MALE | FORCE_MAXHP | NONLIVING | OPEN_DOOR | RES_CHAO | COLD_BLOOD
+B:PUNCH:ELEC:3d7
+D:$It has the personality that puts all dried vegetable
+D:$ and soup powder packages the cup noodles first.
+D:それはカップ麺のかやくを最初に全部入れるタイプだ。
