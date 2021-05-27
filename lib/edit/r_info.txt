@@ -19546,13 +19546,9 @@ B:GAZE:CONFUSE:2d3
 B:CLAW:POISON:3d4
 B:CLAW:POISON:3d4
 B:SPIT:BLIND:2d3
-F:CHAR_MULTI | 
-F:PREVENT_SUDDEN_MAGIC | NEVER_MOVE | 
-F:EMPTY_MIND | COLD_BLOOD |
+F:CHAR_MULTI | PREVENT_SUDDEN_MAGIC | NEVER_MOVE | EMPTY_MIND | COLD_BLOOD
 F:NO_CONF | NO_SLEEP | NO_FEAR
-S:1_IN_5 | 
-S:BLIND | CONF | SCARE | CAUSE_2 | BA_POIS |
-S:S_MONSTER
+S:1_IN_5 | BLIND | CONF | SCARE | CAUSE_2 | BA_POIS | S_MONSTER
 D:$This strange creature, transformed into an image of a strange creature
 D:$ that is transformed into an abandoned box, waits for a stupid adventurer
 D:$ to get close to its poisonous claws.
@@ -26433,3 +26429,63 @@ B:PUNCH:ELEC:3d7
 D:$It has the personality that puts all dried vegetable
 D:$ and soup powder packages the cup noodles first.
 D:それはカップ麺のかやくを最初に全部入れるタイプだ。
+
+N:1339:ミミック(ミミック(ミミック(箱)の像)の像)
+E:Statue of Chest mimic mimic mimic
+G:`:W
+I:110:20d14:30:40:0
+W:26:6:0:280:0:0
+B:GAZE:CONFUSE:3d4
+B:CLAW:POISON:4d5
+B:CLAW:POISON:4d5
+B:SPIT:BLIND:3d4
+F:CHAR_MULTI | PREVENT_SUDDEN_MAGIC | NEVER_MOVE | EMPTY_MIND | COLD_BLOOD
+F:NO_CONF | NO_SLEEP | NO_FEAR | DROP_1D2 | ONLY_ITEM
+S:1_IN_5 | BLIND | CONF | SCARE | CAUSE_2 | BA_POIS | S_MONSTER
+D:$This strange creature, transformed into an image of a strange creature
+D:$ that is transformed into an abandoned box, waits for a stupid adventurer
+D:$ to get close to its poisonous claws.
+D:放置された箱に化けている奇妙な生物の像に化けている
+D:奇妙な生物に化けている奇妙な生物で、
+D:愚かな冒険者がその毒のある爪の射程に入るのを待ち構えている。
+
+N:1340:ミミック(ミミック(ミミック(ミミック(箱)の像)の像)の像)
+E:Statue of Chest mimic mimic mimic mimic mimic
+G:`:W
+I:110:30d14:30:40:0
+W:31:6:0:560:0:0
+B:GAZE:CONFUSE:4d5
+B:CLAW:POISON:5d6
+B:CLAW:POISON:5d6
+B:SPIT:BLIND:4d5
+F:CHAR_MULTI | PREVENT_SUDDEN_MAGIC | NEVER_MOVE | EMPTY_MIND | COLD_BLOOD
+F:NO_CONF | NO_SLEEP | NO_FEAR | DROP_2D2 | ONLY_ITEM
+S:1_IN_4 | BLIND | CONF | SCARE | CAUSE_2 | BA_POIS | S_MONSTER
+D:$This strange creature, transformed into an image of a strange creature
+D:$ that is transformed into an abandoned box, waits for a stupid adventurer
+D:$ to get close to its poisonous claws.
+D:放置された箱に化けている奇妙な生物の像に化けている
+D:奇妙な生物に化けている奇妙な生物に化けている奇妙な生物で、
+D:愚かな冒険者がその毒のある爪の射程に入るのを待ち構えている。
+
+N:1341:ミミック(ミミック(ミミック(ミミック(ミミック(ミミック(ミミック(ミミック(ミミック(ミミック(ミミック(箱)の像)の像)の像)の像)の像)の像)の像)の像)の像)の像)の像)
+E:Statue of Chest mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic
+G:`:W
+I:110:60d14:30:40:0
+W:41:6:0:1750:0:0
+B:GAZE:CONFUSE:5d6
+B:CLAW:POISON:6d7
+B:CLAW:POISON:6d7
+B:SPIT:BLIND:5d6
+F:CHAR_MULTI | PREVENT_SUDDEN_MAGIC | NEVER_MOVE | EMPTY_MIND | COLD_BLOOD
+F:NO_CONF | NO_SLEEP | NO_FEAR | DROP_3D2 | ONLY_ITEM
+S:1_IN_3 | BLIND | CONF | SCARE | CAUSE_2 | BA_POIS | S_MONSTER
+D:$This strange creature, transformed into an image of a strange creature
+D:$ that is transformed into an abandoned box, waits for a stupid adventurer
+D:$ to get close to its poisonous claws.
+D:放置された箱に化けている奇妙な生物の像に化けている
+D:奇妙な生物に化けている奇妙な生物に化けている奇妙な生物に
+D:化けている奇妙な生物に化けている奇妙な生物に化けている奇妙な生物に
+D:化けている奇妙な生物に化けている奇妙な生物に化けている奇妙な生物に
+D:化けている奇妙な生物で、
+D:愚かな冒険者がその毒のある爪の射程に入るのを待ち構えている。
