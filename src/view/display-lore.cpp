@@ -561,6 +561,7 @@ void display_monster_launching(player_type *player_ptr, lore_type *lore_ptr)
         set_damage(player_ptr, lore_ptr, RF_ABILITY::ROCKET, _("ロケット%sを発射する", "shoot a rocket%s"));
         lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
         lore_ptr->color[lore_ptr->vn++] = TERM_UMBER;
+        lore_ptr->rocket = true;
     }
 
     if (lore_ptr->ability_flags.has_not(RF_ABILITY::SHOOT))
@@ -594,6 +595,7 @@ void display_monster_launching(player_type *player_ptr, lore_type *lore_ptr)
 
     lore_ptr->vp[lore_ptr->vn] = lore_ptr->tmp_msg[lore_ptr->vn];
     lore_ptr->color[lore_ptr->vn++] = TERM_UMBER;
+    lore_ptr->shoot = true;
 }
 
 void display_monster_sometimes(lore_type *lore_ptr)
