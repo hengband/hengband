@@ -43,6 +43,7 @@
 #include "status/buff-setter.h"
 #include "status/experience.h"
 #include "status/shape-changer.h"
+#include "status/sight-setter.h"
 #include "sv-definition/sv-staff-types.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
@@ -175,7 +176,7 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
     }
 
     case SV_STAFF_DETECT_INVIS: {
-        if (detect_monsters_invis(creature_ptr, detect_rad))
+        if (set_tim_invis(creature_ptr, creature_ptr->tim_invis + 12 + randint1(12), false))
             ident = TRUE;
         break;
     }
