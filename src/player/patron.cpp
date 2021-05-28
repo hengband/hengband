@@ -84,7 +84,7 @@ const int chaos_stats[MAX_PATRON] = {
 /*!
  * @brief カオスパトロンの報酬テーブル
  */
-const int chaos_rewards[MAX_PATRON][20] = {
+const patron_reward chaos_rewards[MAX_PATRON][20] = {
     /* Slortar the Old: */
     { REW_WRATH, REW_CURSE_WP, REW_CURSE_AR, REW_RUIN_ABL, REW_LOSE_ABL, REW_IGNORE, REW_IGNORE, REW_IGNORE, REW_POLY_WND, REW_POLY_SLF, REW_POLY_SLF,
         REW_POLY_SLF, REW_GAIN_ABL, REW_GAIN_ABL, REW_GAIN_EXP, REW_GOOD_OBJ, REW_CHAOS_WP, REW_GREA_OBJ, REW_AUGM_ABL, REW_AUGM_ABL },
