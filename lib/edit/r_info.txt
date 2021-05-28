@@ -26489,3 +26489,76 @@ D:化けている奇妙な生物に化けている奇妙な生物に化けてい
 D:化けている奇妙な生物に化けている奇妙な生物に化けている奇妙な生物に
 D:化けている奇妙な生物で、
 D:愚かな冒険者がその毒のある爪の射程に入るのを待ち構えている。
+
+N:1342:第一の乗り手『ペスティレンス』
+E:Pestilence, the first rider
+G:U:W
+I:130:100d80:60:75:10
+W:80:16:0:30000:0:0
+B:GAZE:PARALYZE
+B:GAZE:CONFUSE
+B:HIT:STUN:8d8
+B:HIT:DISEASE:8d8
+F:UNIQUE | MALE | DROP_CORPSE
+F:ONLY_ITEM | DROP_4D2 | DROP_GREAT
+F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | SMART
+F:OPEN_DOOR | BASH_DOOR
+F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | REGENERATE | CAN_FLY | RES_DARK | RES_NETH
+F:NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN | POWERFUL | MOVE_BODY | INVISIBLE
+S:1_IN_2 | BR_NUKE | TPORT
+D:$And I saw when the Lamb opened one of the seals,
+D:$and I heard, as it were the noise of thunder, one of the four
+D:$beasts saying, Come and see. And I saw, and behold a white
+D:$horse: and he that sat on him had a bow; and a crown was given
+D:$unto him: and he went forth conquering, and to conquer.
+D:白い馬に乗った「災厄」そのものだ。あなたを病に苦しめるだろう。
+
+# 第二の乗り手は欠番
+# It's OK that the second rider is missing.
+N:1343:第三の乗り手『フェミン』
+E:Famine, the third rider
+G:U:D
+I:130:100d80:60:75:10
+W:80:16:0:30000:0:0
+B:GAZE:PARALYZE
+B:GAZE:CONFUSE
+B:HIT:EAT_FOOD:8d8
+B:HIT:STUN:8d8
+F:UNIQUE | MALE | DROP_CORPSE
+F:ONLY_ITEM | DROP_4D2 | DROP_GREAT
+F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | SMART
+F:OPEN_DOOR | BASH_DOOR
+F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | REGENERATE | CAN_FLY | RES_DARK | RES_NETH
+F:NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN | POWERFUL | MOVE_BODY | INVISIBLE
+S:1_IN_2 | TPORT | BR_INER
+D:$And when he had opened the third seal, I heard the
+D:$third beast say, Come and see. And I beheld, and lo a black
+D:$horse; and he that sat on him had a pair of balances in his
+D:$hand. And I heard a voice in the midst of the four beasts say,
+D:$A measure of wheat for a penny, and three measures of barley
+D:$for a penny; and see thou hurt not the oil and the wine.
+D:黒い馬に乗り秤を持った「飢餓」そのものだ。あなたを飢えに苦しめるだろう。
+
+N:1344:第四の乗り手『デス』
+E:Death, the fourth rider
+G:U:b
+I:130:100d80:60:75:10
+W:80:16:0:30000:0:0
+B:GAZE:PARALYZE
+B:GAZE:CONFUSE
+B:HIT:LOSE_ALL:8d8
+B:HIT:EXP_80:8d8
+F:UNIQUE | MALE | DROP_CORPSE | NONLIVING
+F:ONLY_ITEM | DROP_4D2 | DROP_GREAT
+F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | SMART
+F:OPEN_DOOR | BASH_DOOR
+F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | REGENERATE | CAN_FLY | RES_DARK | RES_NETH
+F:NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN | POWERFUL | MOVE_BODY | INVISIBLE
+S:1_IN_2 | HAND_DOOM | TPORT | BR_NETH
+D:$And when he had opened the fourth seal, I heard the
+D:$voice of the fourth beast say, Come and see. And I looked, and
+D:$behold a pale horse: and his name that sat on him was Death,
+D:$and Hell followed with him. And power was given unto them over
+D:$the fourth part of the earth, to kill with sword, and with
+D:$hunger, and with death, and with the beasts of the earth.
+D:蒼ざめた馬に乗った「死」そのものだ。あなたを死に至らしめるだろう。
