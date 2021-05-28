@@ -17,6 +17,7 @@ enum sound_type {
     SOUND_STUDY,
     SOUND_TELEPORT,
     SOUND_SHOOT,
+    SOUND_SHOOT_HIT,
     SOUND_QUAFF,
     SOUND_ZAP,
     SOUND_WALK, /*!< unused */

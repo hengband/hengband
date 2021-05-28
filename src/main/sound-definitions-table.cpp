@@ -16,6 +16,7 @@ const concptr angband_sound_name[SOUND_MAX] = {
     "study",
     "teleport",
     "shoot",
+    "shoot_hit",
     "quaff",
     "zap",
     "walk",

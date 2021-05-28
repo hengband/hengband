@@ -8,6 +8,8 @@
 #include "hpmp/hp-mp-processor.h"
 #include "inventory/inventory-damage.h"
 #include "inventory/inventory-slot-types.h"
+#include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "mind/mind-mirror-master.h"
 #include "monster-race/race-indice-types.h"
 #include "mutation/mutation-investor-remover.h"
@@ -116,6 +118,7 @@ void effect_player_hell_fire(player_type *target_ptr, effect_player_type *ep_ptr
 void effect_player_arrow(player_type *target_ptr, effect_player_type *ep_ptr)
 {
     if (target_ptr->blind) {
+        sound(SOUND_SHOOT_HIT);
         msg_print(_("何か鋭いもので攻撃された！", "You are hit by something sharp!"));
         ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
         return;
@@ -126,6 +129,7 @@ void effect_player_arrow(player_type *target_ptr, effect_player_type *ep_ptr)
         return;
     }
 
+    sound(SOUND_SHOOT_HIT);
     ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
 }
 
