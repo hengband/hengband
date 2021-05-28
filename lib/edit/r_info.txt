@@ -25488,11 +25488,13 @@ D:$  So old that even he cannot remember his own name,
 D:$ his power and evil are undeniable.
 D:$  He believes unshakeably that he is unbeatable
 D:$ and laughs as he weaves his awesome spells.
+D:$  Hmm, wait a minute...?
 D:サウロンのロは強力な魔法使いだ。
 D:あまりにも長い年月を生きているので自分の名前すらも忘れてしまっているが、
 D:己の力と邪悪な使命だけは覚えている。
 D:彼はこの世界で自分が最強だという揺るぎがたい信念を持ち、
 D:恐ろしげな呪文を唱えながらも余裕で笑っている。
+D:おや、ちょっと待てよ……？
 
 N:1287:たこぶえ
 E:Takobue
