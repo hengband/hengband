@@ -24,11 +24,19 @@ void process_blind_attack(player_type *target_ptr, monap_type *monap_ptr)
     if (has_resist_blind(target_ptr) || check_multishadow(target_ptr))
         return;
 
+    auto is_dio = monap_ptr->m_ptr->r_idx == MON_DIO;
+    auto dio_msg = _("どうだッ！この血の目潰しはッ！", "How is it! This blood-blinding!");
+    if (is_dio && target_ptr->prace == RACE_SKELETON) {
+        msg_print(dio_msg);
+        msg_print(_("しかし、あなたには元々目はなかった！", "However, you don't have eyes!"));
+        return;
+    }
+
     if (!set_blind(target_ptr, target_ptr->blind + 10 + randint1(monap_ptr->rlev)))
         return;
 
-    if (monap_ptr->m_ptr->r_idx == MON_DIO)
-        msg_print(_("どうだッ！この血の目潰しはッ！", "How is it! This blood-blinding!"));
+    if (is_dio)
+        msg_print(dio_msg);
 
     monap_ptr->obvious = TRUE;
 }
