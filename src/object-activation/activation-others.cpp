@@ -389,3 +389,9 @@ bool activate_animate_dead(player_type *user_ptr, object_type *o_ptr)
 
     return animate_dead(user_ptr, 0, user_ptr->y, user_ptr->x);
 }
+
+bool activate_detect_treasure(player_type *user_ptr)
+{
+    msg_print(_("金と銀に彩られている...", "It shines with gold and silver..."));
+    return detect_treasure(user_ptr, DETECT_RAD_DEFAULT);
+}
