@@ -340,6 +340,10 @@ bool switch_activation(player_type *user_ptr, object_type **o_ptr_ptr, const act
         return activate_all_monsters_detection(user_ptr);
     case ACT_ULTIMATE_RESIST:
         return activate_ultimate_resistance(user_ptr);
+    case ACT_ELBERETH:
+        return activate_protection_elbereth(user_ptr);
+    case ACT_DETECT_TREASURE:
+        return activate_detect_treasure(user_ptr);
     case ACT_CAST_OFF:
         (void)cosmic_cast_off(user_ptr, o_ptr_ptr);
         return true;
@@ -365,8 +369,6 @@ bool switch_activation(player_type *user_ptr, object_type **o_ptr_ptr, const act
         return activate_bloody_moon(user_ptr, o_ptr);
     case ACT_CRIMSON:
         return activate_crimson(user_ptr, o_ptr);
-    case ACT_ELBERETH:
-        return activate_protection_elbereth(user_ptr);
     default:
         msg_format(_("Unknown activation effect: %d.", "Unknown activation effect: %d."), act_ptr->index);
         return false;
