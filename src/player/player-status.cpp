@@ -1074,9 +1074,9 @@ static ACTION_SKILL_POWER calc_disarming(player_type *creature_ptr)
 }
 
 /*!
- * @brief 魔法防御計算
+ * @brief 魔道具使用能力計算
  * @param creature_ptr 計算するクリーチャーの参照ポインタ
- * @return 魔法防御
+ * @return 魔道具使用能力
  * @details
  * * 種族/職業/性格による加算
  * * 職業と性格とレベルによる追加加算
