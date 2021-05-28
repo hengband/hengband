@@ -91,8 +91,10 @@ static void on_dead_pink_horror(player_type *player_ptr, monster_death_type *md_
             notice = true;
     }
 
-    if (notice)
+    if (notice) {
+        sound(SOUND_SUMMON);
         msg_print(_("ピンク・ホラーは分裂した！", "The Pink horror divides!"));
+    }
 }
 
 static void on_dead_bloodletter(player_type *player_ptr, monster_death_type *md_ptr)
