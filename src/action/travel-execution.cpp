@@ -99,7 +99,7 @@ void travel_step(player_type *creature_ptr)
             travel.y = travel.x = 0;
         }
 
-        disturb(creature_ptr, FALSE, true);
+        disturb(creature_ptr, false, true);
         return;
     }
 

@@ -97,7 +97,7 @@
  */
 void wiz_cure_all(player_type *creature_ptr)
 {
-    (void)life_stream(creature_ptr, FALSE, false);
+    (void)life_stream(creature_ptr, false, false);
     (void)restore_mana(creature_ptr, true);
     (void)set_food(creature_ptr, PY_FOOD_MAX - 1);
 }
@@ -125,7 +125,7 @@ KIND_OBJECT_IDX wiz_create_itemtype(void)
     }
 
     int max_num = num;
-    if (!get_com("Get what type of object? ", &ch, FALSE))
+    if (!get_com("Get what type of object? ", &ch, false))
         return 0;
 
     for (num = 0; num < max_num; num++)
@@ -156,7 +156,7 @@ KIND_OBJECT_IDX wiz_create_itemtype(void)
     }
 
     max_num = num;
-    if (!get_com(format("What Kind of %s? ", tval_desc), &ch, FALSE))
+    if (!get_com(format("What Kind of %s? ", tval_desc), &ch, false))
         return 0;
 
     for (num = 0; num < max_num; num++)
@@ -720,7 +720,7 @@ void cheat_death(player_type *creature_ptr)
     msg_print(NULL);
 
     creature_ptr->is_dead = false;
-    (void)life_stream(creature_ptr, FALSE, false);
+    (void)life_stream(creature_ptr, false, false);
     (void)restore_mana(creature_ptr, true);
     (void)recall_player(creature_ptr, 0);
     reserve_alter_reality(creature_ptr, 0);

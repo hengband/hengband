@@ -182,7 +182,7 @@ bool exe_monster_capture(player_type *user_ptr, ae_type *ae_ptr)
     }
 
     ae_ptr->success = false;
-    if (!get_direction(user_ptr, &ae_ptr->dir, FALSE, FALSE))
+    if (!get_direction(user_ptr, &ae_ptr->dir, false, false))
         return true;
 
     check_monster_ball_use(user_ptr, ae_ptr);

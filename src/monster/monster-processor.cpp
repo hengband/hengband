@@ -120,7 +120,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 
     decide_drop_from_monster(target_ptr, m_idx, turn_flags_ptr->is_riding_mon);
     if (m_ptr->mflag2.has(MFLAG2::CHAMELEON) && one_in_(13) && !monster_csleep_remaining(m_ptr)) {
-        choose_new_monster(target_ptr, m_idx, FALSE, 0);
+        choose_new_monster(target_ptr, m_idx, false, 0);
         r_ptr = &r_info[m_ptr->r_idx];
     }
 
@@ -221,7 +221,7 @@ void decide_drop_from_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool i
     if (!is_riding_mon || ((r_ptr->flags7 & RF7_RIDING) != 0))
         return;
 
-    if (process_fall_off_horse(target_ptr, 0, TRUE)) {
+    if (process_fall_off_horse(target_ptr, 0, true)) {
 #ifdef JP
         msg_print("地面に落とされた。");
 #else
@@ -326,7 +326,7 @@ void process_angar(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m)
             return;
 
         msg_format(_("%^sが突然暴れだした！", "%^s suddenly begins unruly!"), m_name);
-        if (!process_fall_off_horse(target_ptr, 1, TRUE))
+        if (!process_fall_off_horse(target_ptr, 1, true))
             return;
 
         msg_format(_("あなたは振り落とされた。", "You have fallen."));
@@ -414,7 +414,7 @@ bool decide_monster_multiplication(player_type *target_ptr, MONSTER_IDX m_idx, P
         k = 8;
 
     if ((k < 4) && (!k || !randint0(k * MON_MULT_ADJ))) {
-        if (multiply_monster(target_ptr, m_idx, FALSE, (is_pet(m_ptr) ? PM_FORCE_PET : 0))) {
+        if (multiply_monster(target_ptr, m_idx, false, (is_pet(m_ptr) ? PM_FORCE_PET : 0))) {
             if (target_ptr->current_floor_ptr->m_list[hack_m_idx_ii].ml && is_original_ap_and_seen(target_ptr, m_ptr))
                 r_ptr->r_flags2 |= RF2_MULTIPLY;
 

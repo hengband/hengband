@@ -448,7 +448,7 @@ bool alloc_guardian(player_type *player_ptr, bool def_val)
  */
 bool alloc_monster(player_type *player_ptr, POSITION dis, BIT_FLAGS mode, summon_specific_pf summon_specific)
 {
-    if (alloc_guardian(player_ptr, FALSE))
+    if (alloc_guardian(player_ptr, false))
         return true;
 
     floor_type *floor_ptr = player_ptr->current_floor_ptr;

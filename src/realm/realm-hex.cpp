@@ -384,7 +384,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 #ifdef JP
             msg_print("あなたの武器が黒く輝いた。");
 #else
-            if (!empty_hands(caster_ptr, FALSE))
+            if (!empty_hands(caster_ptr, false))
                 msg_print("Your weapons glow bright black.");
             else
                 msg_print("Your weapon glows bright black.");
@@ -394,7 +394,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 #ifdef JP
             msg_print("武器の輝きが消え去った。");
 #else
-            msg_format("Your weapon%s.", (empty_hands(caster_ptr, FALSE)) ? " no longer glows" : "s no longer glow");
+            msg_format("Your weapon%s.", (empty_hands(caster_ptr, false)) ? " no longer glows" : "s no longer glow");
 #endif
         }
         break;
@@ -746,7 +746,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 #ifdef JP
             msg_print("あなたの武器が血を欲している。");
 #else
-            if (!empty_hands(caster_ptr, FALSE))
+            if (!empty_hands(caster_ptr, false))
                 msg_print("Your weapons want more blood now.");
             else
                 msg_print("Your weapon wants more blood now.");
@@ -756,7 +756,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 #ifdef JP
             msg_print("武器の渇望が消え去った。");
 #else
-            msg_format("Your weapon%s less thirsty now.", (empty_hands(caster_ptr, FALSE)) ? " is" : "s are");
+            msg_format("Your weapon%s less thirsty now.", (empty_hands(caster_ptr, false)) ? " is" : "s are");
 #endif
         }
         break;

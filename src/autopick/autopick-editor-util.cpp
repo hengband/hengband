@@ -89,7 +89,7 @@ void toggle_command_letter(text_body_type *tb, byte flg)
     for (int y = by1; y <= by2; y++) {
         int wid = 0;
 
-        if (!autopick_new_entry(entry, tb->lines_list[y], FALSE))
+        if (!autopick_new_entry(entry, tb->lines_list[y], false))
             continue;
 
         string_free(tb->lines_list[y]);
@@ -161,7 +161,7 @@ void add_keyword(text_body_type *tb, BIT_FLAGS flg)
 
     for (int y = by1; y <= by2; y++) {
         autopick_type an_entry, *entry = &an_entry;
-        if (!autopick_new_entry(entry, tb->lines_list[y], FALSE))
+        if (!autopick_new_entry(entry, tb->lines_list[y], false))
             continue;
 
         if (IS_FLG(flg)) {

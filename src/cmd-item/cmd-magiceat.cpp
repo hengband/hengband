@@ -172,7 +172,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
         screen_load();
     } else {
         while (true) {
-            if (!get_com(_("[A] 杖, [B] 魔法棒, [C] ロッド:", "[A] staff, [B] wand, [C] rod:"), &choice, TRUE)) {
+            if (!get_com(_("[A] 杖, [B] 魔法棒, [C] ロッド:", "[A] staff, [B] wand, [C] rod:"), &choice, true)) {
                 return -1;
             }
             if (choice == 'A' || choice == 'a') {
@@ -313,7 +313,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
             }
         }
 
-        if (!get_com(out_val, &choice, FALSE))
+        if (!get_com(out_val, &choice, false))
             break;
 
         if (use_menu && choice != ' ') {
@@ -569,7 +569,7 @@ bool do_cmd_magic_eater(player_type *creature_ptr, bool only_browse, bool powerf
                 return false;
             wand_effect(creature_ptr, sval, dir, powerful, true);
         } else {
-            staff_effect(creature_ptr, sval, &use_charge, powerful, TRUE, true);
+            staff_effect(creature_ptr, sval, &use_charge, powerful, true, true);
             if (!use_charge)
                 return false;
         }

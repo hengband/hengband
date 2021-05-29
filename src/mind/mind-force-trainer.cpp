@@ -121,7 +121,7 @@ void set_lightspeed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
         return;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, false);
+        disturb(creature_ptr, false, false);
     creature_ptr->update |= (PU_BONUS);
     handle_stuff(creature_ptr);
 }
@@ -162,7 +162,7 @@ bool set_tim_sh_force(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, false);
+        disturb(creature_ptr, false, false);
     handle_stuff(creature_ptr);
     return true;
 }
@@ -275,7 +275,7 @@ bool cast_force_spell(player_type *caster_ptr, mind_force_trainer_type spell)
         break;
     case IMPROVE_FORCE:
         msg_print(_("気を練った。", "You improved the Force."));
-        set_current_ki(caster_ptr, FALSE, 70 + plev);
+        set_current_ki(caster_ptr, false, 70 + plev);
         caster_ptr->update |= (PU_BONUS);
         if (randint1(get_current_ki(caster_ptr)) > (plev * 4 + 120)) {
             msg_print(_("気が暴走した！", "The Force exploded!"));
@@ -338,7 +338,7 @@ bool cast_force_spell(player_type *caster_ptr, mind_force_trainer_type spell)
         msg_print(_("なに？", "Zap?"));
     }
 
-    set_current_ki(caster_ptr, TRUE, 0);
+    set_current_ki(caster_ptr, true, 0);
     caster_ptr->update |= PU_BONUS;
     return true;
 }

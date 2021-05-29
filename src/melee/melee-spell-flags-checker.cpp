@@ -185,19 +185,19 @@ static void check_melee_spell_breath(player_type *target_ptr, melee_spell_type *
         return;
 
     POSITION rad = (ms_ptr->r_ptr->flags2 & RF2_POWERFUL) ? 3 : 2;
-    if (!breath_direct(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, rad, 0, TRUE)) {
+    if (!breath_direct(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, rad, 0, true)) {
         ms_ptr->ability_flags.reset(RF_ABILITY_BREATH_MASK);
         return;
     }
 
     if (ms_ptr->ability_flags.has(RF_ABILITY::BR_LITE)
-        && !breath_direct(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, rad, GF_LITE, TRUE)) {
+        && !breath_direct(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, rad, GF_LITE, true)) {
         ms_ptr->ability_flags.reset(RF_ABILITY::BR_LITE);
         return;
     }
 
     if (ms_ptr->ability_flags.has(RF_ABILITY::BR_DISI)
-        && !breath_direct(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, rad, GF_DISINTEGRATE, TRUE)) {
+        && !breath_direct(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, rad, GF_DISINTEGRATE, true)) {
         ms_ptr->ability_flags.reset(RF_ABILITY::BR_DISI);
     }
 }

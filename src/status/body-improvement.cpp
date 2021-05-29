@@ -49,7 +49,7 @@ bool set_protevil(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, false);
+        disturb(creature_ptr, false, false);
 
     handle_stuff(creature_ptr);
     return true;
@@ -108,7 +108,7 @@ bool set_invuln(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, false);
+        disturb(creature_ptr, false, false);
 
     creature_ptr->update |= (PU_BONUS);
     handle_stuff(creature_ptr);
@@ -151,7 +151,7 @@ bool set_tim_regen(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, false);
+        disturb(creature_ptr, false, false);
 
     creature_ptr->update |= (PU_BONUS);
     handle_stuff(creature_ptr);
@@ -194,7 +194,7 @@ bool set_tim_reflect(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, false);
+        disturb(creature_ptr, false, false);
 
     creature_ptr->update |= (PU_BONUS);
     handle_stuff(creature_ptr);
@@ -237,7 +237,7 @@ bool set_pass_wall(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, false);
+        disturb(creature_ptr, false, false);
 
     creature_ptr->update |= (PU_BONUS);
     handle_stuff(creature_ptr);

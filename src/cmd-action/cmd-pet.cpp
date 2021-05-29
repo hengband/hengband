@@ -202,7 +202,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
     grid_type *g_ptr;
     monster_type *m_ptr;
 
-    if (!get_direction(creature_ptr, &dir, FALSE, FALSE))
+    if (!get_direction(creature_ptr, &dir, false, false))
         return false;
     y = creature_ptr->y + ddy[dir];
     x = creature_ptr->x + ddx[dir];
@@ -213,7 +213,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
 
     if (creature_ptr->riding) {
         /* Skip non-empty grids */
-        if (!can_player_ride_pet(creature_ptr, g_ptr, FALSE)) {
+        if (!can_player_ride_pet(creature_ptr, g_ptr, false)) {
             msg_print(_("そちらには降りられません。", "You cannot go that direction."));
             return false;
         }
@@ -255,7 +255,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
         if (!pattern_seq(creature_ptr, creature_ptr->y, creature_ptr->x, y, x))
             return false;
 
-        if (!can_player_ride_pet(creature_ptr, g_ptr, TRUE)) {
+        if (!can_player_ride_pet(creature_ptr, g_ptr, true)) {
             /* Feature code (applying "mimic" field) */
             feature_type *f_ptr = &f_info[get_feat_mimic(g_ptr)];
 #ifdef JP
@@ -498,9 +498,9 @@ void do_cmd_pet(player_type *creature_ptr)
     powers[num++] = PET_NAME;
 
     if (creature_ptr->riding) {
-        if ((can_attack_with_main_hand(creature_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_SUB)
+        if ((can_attack_with_main_hand(creature_ptr) && (empty_hands(creature_ptr, false) == EMPTY_HAND_SUB)
                 && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_MAIN_HAND]))
-            || (can_attack_with_sub_hand(creature_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_MAIN)
+            || (can_attack_with_sub_hand(creature_ptr) && (empty_hands(creature_ptr, false) == EMPTY_HAND_MAIN)
                 && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_SUB_HAND]))) {
             if (creature_ptr->pet_extra_flags & PF_TWO_HANDS) {
                 power_desc[num] = _("武器を片手で持つ", "use one hand to control the pet you are riding");
@@ -514,7 +514,7 @@ void do_cmd_pet(player_type *creature_ptr)
             case CLASS_MONK:
             case CLASS_FORCETRAINER:
             case CLASS_BERSERKER:
-                if (empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_MAIN | EMPTY_HAND_SUB)) {
+                if (empty_hands(creature_ptr, false) == (EMPTY_HAND_MAIN | EMPTY_HAND_SUB)) {
                     if (creature_ptr->pet_extra_flags & PF_TWO_HANDS) {
                         power_desc[num] = _("片手で格闘する", "use one hand to control the pet you are riding");
                     } else {
@@ -522,7 +522,7 @@ void do_cmd_pet(player_type *creature_ptr)
                     }
 
                     powers[num++] = PET_TWO_HANDS;
-                } else if ((empty_hands(creature_ptr, FALSE) != EMPTY_HAND_NONE) && !has_melee_weapon(creature_ptr, INVEN_MAIN_HAND)
+                } else if ((empty_hands(creature_ptr, false) != EMPTY_HAND_NONE) && !has_melee_weapon(creature_ptr, INVEN_MAIN_HAND)
                     && !has_melee_weapon(creature_ptr, INVEN_SUB_HAND)) {
                     if (creature_ptr->pet_extra_flags & PF_TWO_HANDS) {
                         power_desc[num] = _("格闘を行わない", "use one hand to control the pet you are riding");
@@ -560,7 +560,7 @@ void do_cmd_pet(player_type *creature_ptr)
 
             if (choice == ESCAPE)
                 choice = ' ';
-            else if (!get_com(out_val, &choice, TRUE))
+            else if (!get_com(out_val, &choice, true))
                 break;
 
             if (use_menu && (choice != ' ')) {

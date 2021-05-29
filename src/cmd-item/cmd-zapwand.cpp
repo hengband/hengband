@@ -404,7 +404,7 @@ void exe_aim_wand(player_type *creature_ptr, INVENTORY_IDX item)
 
     sound(SOUND_ZAP);
 
-    ident = wand_effect(creature_ptr, o_ptr->sval, dir, FALSE, false);
+    ident = wand_effect(creature_ptr, o_ptr->sval, dir, false, false);
 
     /*
      * Temporarily remove the flags for updating the inventory so

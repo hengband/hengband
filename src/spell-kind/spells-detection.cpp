@@ -629,7 +629,7 @@ bool detect_monsters_xxx(player_type *caster_ptr, POSITION range, u32b match_fla
 bool detect_all(player_type *caster_ptr, POSITION range)
 {
     bool detect = false;
-    if (detect_traps(caster_ptr, range, TRUE))
+    if (detect_traps(caster_ptr, range, true))
         detect = true;
     if (detect_doors(caster_ptr, range))
         detect = true;

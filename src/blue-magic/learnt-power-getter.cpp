@@ -130,7 +130,7 @@ static bool select_blue_magic_kind_command(learnt_magic_type *lm_ptr)
     sprintf(lm_ptr->comment, _("[A]ボルト, [B]ボール, [C]ブレス, [D]召喚, [E]その他:", "[A] bolt, [B] ball, [C] breath, [D] summoning, [E] others:"));
     while (true) {
         char ch;
-        if (!get_com(lm_ptr->comment, &ch, TRUE))
+        if (!get_com(lm_ptr->comment, &ch, true))
             return false;
 
         if (ch == 'A' || ch == 'a') {
@@ -365,7 +365,7 @@ static bool select_learnt_spells(player_type *caster_ptr, learnt_magic_type *lm_
     while (!lm_ptr->flag) {
         if (lm_ptr->choice == ESCAPE)
             lm_ptr->choice = ' ';
-        else if (!get_com(lm_ptr->out_val, &lm_ptr->choice, TRUE))
+        else if (!get_com(lm_ptr->out_val, &lm_ptr->choice, true))
             break;
 
         if (use_menu && (lm_ptr->choice != ' ') && !switch_blue_magic_choice(caster_ptr, lm_ptr))

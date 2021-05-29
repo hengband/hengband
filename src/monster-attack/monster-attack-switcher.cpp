@@ -278,7 +278,7 @@ static void calc_blow_inertia(player_type *target_ptr, monap_type *monap_ptr)
     if (target_ptr->is_dead || check_multishadow(target_ptr))
         return;
 
-    if (set_slow(target_ptr, (target_ptr->slow + 4 + randint0(monap_ptr->rlev / 10)), FALSE))
+    if (set_slow(target_ptr, (target_ptr->slow + 4 + randint0(monap_ptr->rlev / 10)), false))
         monap_ptr->obvious = true;
 }
 

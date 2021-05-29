@@ -167,7 +167,7 @@ int get_stock(COMMAND_CODE *com_val, concptr pmt, int i, int j)
 
     char command;
     while (true) {
-        if (!get_com(out_val, &command, FALSE))
+        if (!get_com(out_val, &command, false))
             break;
 
         COMMAND_CODE k;

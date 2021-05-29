@@ -291,7 +291,7 @@ static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJ
     if (repeat_pull(&code)) {
         *sn = (SPELL_IDX)code;
         /* Verify the spell */
-        if (spell_okay(caster_ptr, *sn, learned, FALSE, use_realm)) {
+        if (spell_okay(caster_ptr, *sn, learned, false, use_realm)) {
             /* Success */
             return true;
         }
@@ -317,7 +317,7 @@ static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJ
     /* Check for "okay" spells */
     for (i = 0; i < num; i++) {
         /* Look for "okay" spells */
-        if (spell_okay(caster_ptr, spells[i], learned, FALSE, use_realm))
+        if (spell_okay(caster_ptr, spells[i], learned, false, use_realm))
             okay = true;
     }
 
@@ -353,7 +353,7 @@ static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJ
     while (!flag) {
         if (choice == ESCAPE)
             choice = ' ';
-        else if (!get_com(out_val, &choice, TRUE))
+        else if (!get_com(out_val, &choice, true))
             break;
 
         if (use_menu && choice != ' ') {
@@ -439,7 +439,7 @@ static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJ
         spell = spells[i];
 
         /* Require "okay" spells */
-        if (!spell_okay(caster_ptr, spell, learned, FALSE, use_realm)) {
+        if (!spell_okay(caster_ptr, spell, learned, false, use_realm)) {
             bell();
 #ifdef JP
             msg_format("その%sを%sことはできません。", p, prompt);
@@ -636,7 +636,7 @@ void do_cmd_browse(player_type *caster_ptr)
     /* Keep browsing spells.  Exit browsing on cancel. */
     while (true) {
         /* Ask for a spell, allow cancel */
-        if (!get_spell(caster_ptr, &spell, _("読む", "browse"), o_ptr->sval, TRUE, use_realm)) {
+        if (!get_spell(caster_ptr, &spell, _("読む", "browse"), o_ptr->sval, true, use_realm)) {
             /* If cancelled, leave immediately. */
             if (spell == -1)
                 break;
@@ -793,7 +793,7 @@ void do_cmd_study(player_type *caster_ptr)
     /* Mage -- Learn a selected spell */
     if (mp_ptr->spell_book != TV_LIFE_BOOK) {
         /* Ask for a spell, allow cancel */
-        if (!get_spell(caster_ptr, &spell, _("学ぶ", "study"), sval, FALSE, o_ptr->tval - TV_LIFE_BOOK + 1) && (spell == -1))
+        if (!get_spell(caster_ptr, &spell, _("学ぶ", "study"), sval, false, o_ptr->tval - TV_LIFE_BOOK + 1) && (spell == -1))
             return;
     }
 
@@ -807,7 +807,7 @@ void do_cmd_study(player_type *caster_ptr)
             /* Check spells in the book */
             if ((fake_spell_flags[sval] & (1UL << spell))) {
                 /* Skip non "okay" prayers */
-                if (!spell_okay(caster_ptr, spell, FALSE, TRUE, (increment ? caster_ptr->realm2 : caster_ptr->realm1)))
+                if (!spell_okay(caster_ptr, spell, false, true, (increment ? caster_ptr->realm2 : caster_ptr->realm1)))
                     continue;
 
                 /* Hack -- Prepare the randomizer */
@@ -1038,7 +1038,7 @@ bool do_cmd_cast(player_type *caster_ptr)
         return false;
     }
 #else
-    if (!get_spell(caster_ptr, &spell, ((mp_ptr->spell_book == TV_LIFE_BOOK) ? "recite" : "cast"), sval, TRUE, realm)) {
+    if (!get_spell(caster_ptr, &spell, ((mp_ptr->spell_book == TV_LIFE_BOOK) ? "recite" : "cast"), sval, true, realm)) {
         if (spell == -2)
             msg_format("You don't know any %ss in that book.", prayer);
         return false;

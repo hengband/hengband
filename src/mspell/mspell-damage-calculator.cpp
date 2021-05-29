@@ -507,5 +507,5 @@ HIT_POINT monspell_bluemage_damage(player_type *target_ptr, RF_ABILITY ms_type, 
         shoot_base = o_ptr->to_d;
     }
 
-    return monspell_damage_base(target_ptr, ms_type, hp, plev * 2, FALSE, shoot_dd, shoot_ds, shoot_base, TYPE);
+    return monspell_damage_base(target_ptr, ms_type, hp, plev * 2, false, shoot_dd, shoot_ds, shoot_base, TYPE);
 }

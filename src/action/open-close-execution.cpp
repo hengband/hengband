@@ -318,7 +318,7 @@ bool exe_bash(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir)
             cave_alter_feat(creature_ptr, y, x, FF_OPEN);
         }
 
-        exe_movement(creature_ptr, dir, FALSE, false);
+        exe_movement(creature_ptr, dir, false, false);
     } else if (randint0(100) < adj_dex_safe[creature_ptr->stat_index[A_DEX]] + creature_ptr->lev) {
         msg_format(_("この%sは頑丈だ。", "The %s holds firm."), name);
         more = true;

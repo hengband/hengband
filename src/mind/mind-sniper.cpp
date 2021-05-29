@@ -273,7 +273,7 @@ static int get_snipe_power(player_type *sniper_ptr, COMMAND_CODE *sn, bool only_
     while (!flag) {
         if (choice == ESCAPE)
             choice = ' ';
-        else if (!get_com(out_val, &choice, FALSE))
+        else if (!get_com(out_val, &choice, false))
             break;
 
         /* Request redraw */
@@ -578,7 +578,7 @@ void do_cmd_snipe(player_type *sniper_ptr)
     if (cmd_limit_stun(sniper_ptr))
         return;
 
-    if (!get_snipe_power(sniper_ptr, &n, FALSE))
+    if (!get_snipe_power(sniper_ptr, &n, false))
         return;
 
     cast = cast_sniper_spell(sniper_ptr, n);
@@ -602,7 +602,7 @@ void do_cmd_snipe_browse(player_type *sniper_ptr)
     screen_save();
 
     while (true) {
-        if (!get_snipe_power(sniper_ptr, &n, TRUE)) {
+        if (!get_snipe_power(sniper_ptr, &n, true)) {
             screen_load();
             return;
         }

@@ -76,7 +76,7 @@ MonsterSpellResult spell_RF6_WORLD(player_type *target_ptr, MONSTER_IDX m_idx)
     monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
     GAME_TEXT m_name[MAX_NLEN];
     monster_name(target_ptr, m_idx, m_name);
-    disturb(target_ptr, TRUE, true);
+    disturb(target_ptr, true, true);
     (void)set_monster_timewalk(target_ptr, randint1(2) + 2, m_ptr->r_idx, true);
 
     return MonsterSpellResult::make_valid();
@@ -99,7 +99,7 @@ MonsterSpellResult spell_RF6_BLINK(player_type *target_ptr, MONSTER_IDX m_idx, i
     monster_name(target_ptr, m_idx, m_name);
 
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
-        disturb(target_ptr, TRUE, true);
+        disturb(target_ptr, true, true);
 
     if (!is_quantum_effect && teleport_barrier(target_ptr, m_idx)) {
         if (see_monster(target_ptr, m_idx))
@@ -134,7 +134,7 @@ MonsterSpellResult spell_RF6_TPORT(player_type *target_ptr, MONSTER_IDX m_idx, i
     monster_name(target_ptr, m_idx, m_name);
 
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
-        disturb(target_ptr, TRUE, true);
+        disturb(target_ptr, true, true);
     if (teleport_barrier(target_ptr, m_idx)) {
         if (see_monster(target_ptr, m_idx))
             msg_format(_("魔法のバリアが%^sのテレポートを邪魔した。", "Magic barrier obstructs teleporting of %^s."), m_name);
@@ -419,7 +419,7 @@ MonsterSpellResult spell_RF6_TRAPS(player_type *target_ptr, POSITION y, POSITION
 {
     GAME_TEXT m_name[MAX_NLEN];
     monster_name(target_ptr, m_idx, m_name);
-    disturb(target_ptr, TRUE, true);
+    disturb(target_ptr, true, true);
 
     if (target_ptr->blind)
         msg_format(_("%^sが何かをつぶやいて邪悪に微笑んだ。", "%^s mumbles, and then cackles evilly."), m_name);

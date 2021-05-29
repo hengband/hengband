@@ -149,7 +149,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(player_type *target_ptr, POSITION 
     GAME_TEXT m_name[MAX_NLEN];
     monster_name(target_ptr, m_idx, m_name);
 
-    disturb(target_ptr, TRUE, true);
+    disturb(target_ptr, true, true);
     if (one_in_(3) || !direct) {
         simple_monspell_message(target_ptr, m_idx, t_idx, _("%^sは突然視界から消えた!", "You lose sight of %s!"),
             _("%^sは突然急上昇して視界から消えた!", "You lose sight of %s!"), TARGET_TYPE);
@@ -218,7 +218,7 @@ MonsterSpellResult spell_RF6_SPECIAL(player_type *target_ptr, POSITION y, POSITI
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-    disturb(target_ptr, TRUE, true);
+    disturb(target_ptr, true, true);
     switch (m_ptr->r_idx) {
     case MON_OHMU:
         return MonsterSpellResult::make_invalid();

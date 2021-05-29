@@ -97,7 +97,7 @@ static void attack_classify(player_type *attacker_ptr, player_attack_type *pa_pt
     case CLASS_MONK:
     case CLASS_FORCETRAINER:
     case CLASS_BERSERKER:
-        if ((empty_hands(attacker_ptr, TRUE) & EMPTY_HAND_MAIN) && !attacker_ptr->riding)
+        if ((empty_hands(attacker_ptr, true) & EMPTY_HAND_MAIN) && !attacker_ptr->riding)
             pa_ptr->monk_attack = true;
         return;
     default:

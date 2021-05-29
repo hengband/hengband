@@ -86,7 +86,7 @@ static void process_fishing(player_type *creature_ptr)
             msg_print(_("餌だけ食われてしまった！くっそ～！", "Damn!  The fish stole your bait!"));
         }
 
-        disturb(creature_ptr, FALSE, true);
+        disturb(creature_ptr, false, true);
     }
 }
 
@@ -112,7 +112,7 @@ void process_player(player_type *creature_ptr)
 
     if (creature_ptr->invoking_midnight_curse) {
         int count = 0;
-        activate_ty_curse(creature_ptr, FALSE, &count);
+        activate_ty_curse(creature_ptr, false, &count);
         creature_ptr->invoking_midnight_curse = false;
     }
 
@@ -163,7 +163,7 @@ void process_player(player_type *creature_ptr)
             inkey_scan = true;
             if (inkey()) {
                 flush();
-                disturb(creature_ptr, FALSE, true);
+                disturb(creature_ptr, false, true);
                 msg_print(_("中断しました。", "Canceled."));
             }
         }
@@ -215,9 +215,9 @@ void process_player(player_type *creature_ptr)
 
     if ((creature_ptr->pclass == CLASS_FORCETRAINER) && get_current_ki(creature_ptr)) {
         if (get_current_ki(creature_ptr) < 40)
-            set_current_ki(creature_ptr, TRUE, 0);
+            set_current_ki(creature_ptr, true, 0);
         else
-            set_current_ki(creature_ptr, FALSE, -40);
+            set_current_ki(creature_ptr, false, -40);
         creature_ptr->update |= (PU_BONUS);
     }
 

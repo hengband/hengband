@@ -638,7 +638,7 @@ bool affect_monster(
     make_description_of_affecred_monster(caster_ptr, em_ptr);
 
     if (caster_ptr->riding && (em_ptr->g_ptr->m_idx == caster_ptr->riding))
-        disturb(caster_ptr, TRUE, true);
+        disturb(caster_ptr, true, true);
 
     process_result result = exe_affect_monster_by_effect(caster_ptr, em_ptr);
     if (result != PROCESS_CONTINUE)

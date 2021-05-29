@@ -266,7 +266,7 @@ static void short_seg_hack(
         for (int i = 0; i <= length; i++) {
             x = x1 + i * (x2 - x1) / length;
             y = y1 + i * (y2 - y1) / length;
-            if (!set_tunnel(player_ptr, dd_ptr, &x, &y, TRUE)) {
+            if (!set_tunnel(player_ptr, dd_ptr, &x, &y, true)) {
                 if (count > 50) {
                     *fail = false;
                     return;
@@ -287,7 +287,7 @@ static void short_seg_hack(
         for (int i = x1; i <= x2; i++) {
             x = i;
             y = y1;
-            if (!set_tunnel(player_ptr, dd_ptr, &x, &y, TRUE)) {
+            if (!set_tunnel(player_ptr, dd_ptr, &x, &y, true)) {
                 short_seg_hack(player_ptr, dd_ptr, x, y, i - 1, y1, 1, count, fail);
                 short_seg_hack(player_ptr, dd_ptr, x, y, i + 1, y1, 1, count, fail);
             }
@@ -299,7 +299,7 @@ static void short_seg_hack(
         for (int i = x2; i <= x1; i++) {
             x = i;
             y = y1;
-            if (!set_tunnel(player_ptr, dd_ptr, &x, &y, TRUE)) {
+            if (!set_tunnel(player_ptr, dd_ptr, &x, &y, true)) {
                 short_seg_hack(player_ptr, dd_ptr, x, y, i - 1, y1, 1, count, fail);
                 short_seg_hack(player_ptr, dd_ptr, x, y, i + 1, y1, 1, count, fail);
             }
@@ -313,7 +313,7 @@ static void short_seg_hack(
         for (int i = y1; i <= y2; i++) {
             x = x2;
             y = i;
-            if (!set_tunnel(player_ptr, dd_ptr, &x, &y, TRUE)) {
+            if (!set_tunnel(player_ptr, dd_ptr, &x, &y, true)) {
                 short_seg_hack(player_ptr, dd_ptr, x, y, x2, i - 1, 1, count, fail);
                 short_seg_hack(player_ptr, dd_ptr, x, y, x2, i + 1, 1, count, fail);
             }
@@ -325,7 +325,7 @@ static void short_seg_hack(
         for (int i = y2; i <= y1; i++) {
             x = x2;
             y = i;
-            if (!set_tunnel(player_ptr, dd_ptr, &x, &y, TRUE)) {
+            if (!set_tunnel(player_ptr, dd_ptr, &x, &y, true)) {
                 short_seg_hack(player_ptr, dd_ptr, x, y, x2, i - 1, 1, count, fail);
                 short_seg_hack(player_ptr, dd_ptr, x, y, x2, i + 1, 1, count, fail);
             }

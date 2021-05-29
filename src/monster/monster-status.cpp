@@ -433,7 +433,7 @@ static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_i
 
     case MTIMED_INVULNER: {
         /* Reduce by one, note if expires */
-        if (!set_monster_invulner(target_ptr, m_idx, monster_invulner_remaining(m_ptr) - 1, TRUE))
+        if (!set_monster_invulner(target_ptr, m_idx, monster_invulner_remaining(m_ptr) - 1, true))
             break;
 
         if (is_seen(target_ptr, m_ptr)) {
@@ -481,7 +481,7 @@ void dispel_monster_status(player_type *target_ptr, MONSTER_IDX m_idx)
     GAME_TEXT m_name[MAX_NLEN];
 
     monster_desc(target_ptr, m_name, m_ptr, 0);
-    if (set_monster_invulner(target_ptr, m_idx, 0, TRUE)) {
+    if (set_monster_invulner(target_ptr, m_idx, 0, true)) {
         if (m_ptr->ml)
             msg_format(_("%sはもう無敵ではない。", "%^s is no longer invulnerable."), m_name);
     }

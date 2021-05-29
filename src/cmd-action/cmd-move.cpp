@@ -76,7 +76,7 @@ void do_cmd_go_up(player_type *creature_ptr)
     }
 
     if (has_flag(f_ptr->flags, FF_QUEST)) {
-        if (!confirm_leave_level(creature_ptr, FALSE))
+        if (!confirm_leave_level(creature_ptr, false))
             return;
 
         if (is_echizen(creature_ptr))
@@ -185,7 +185,7 @@ void do_cmd_go_down(player_type *creature_ptr)
     }
 
     if (has_flag(f_ptr->flags, FF_QUEST)) {
-        if (!confirm_leave_level(creature_ptr, TRUE))
+        if (!confirm_leave_level(creature_ptr, true))
             return;
 
         if (is_echizen(creature_ptr))
@@ -301,7 +301,7 @@ void do_cmd_walk(player_type *creature_ptr, bool pickup)
 
     bool more = false;
     DIRECTION dir;
-    if (get_rep_dir(creature_ptr, &dir, FALSE)) {
+    if (get_rep_dir(creature_ptr, &dir, false)) {
         PlayerEnergy energy(creature_ptr);
         energy.set_player_turn_energy(100);
         if ((dir != 5) && (creature_ptr->special_defense & KATA_MUSOU))
@@ -335,7 +335,7 @@ void do_cmd_walk(player_type *creature_ptr, bool pickup)
     }
 
     if (!more)
-        disturb(creature_ptr, FALSE, false);
+        disturb(creature_ptr, false, false);
 }
 
 /*!
@@ -352,7 +352,7 @@ void do_cmd_run(player_type *creature_ptr)
     if (creature_ptr->special_defense & KATA_MUSOU)
         set_action(creature_ptr, ACTION_NONE);
 
-    if (get_rep_dir(creature_ptr, &dir, FALSE)) {
+    if (get_rep_dir(creature_ptr, &dir, false)) {
         creature_ptr->running = (command_arg ? command_arg : 1000);
         run_step(creature_ptr, dir);
     }

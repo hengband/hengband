@@ -249,7 +249,7 @@ static void calc_two_hands(player_type *creature_ptr, int *damage, int *to_h)
     for (int i = 0; i < 2; i++) {
         int basedam;
         damage[i] = creature_ptr->dis_to_d[i] * 100;
-        if (((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER)) && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_MAIN)) {
+        if (((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER)) && (empty_hands(creature_ptr, true) & EMPTY_HAND_MAIN)) {
             if (!calc_weapon_damage_limit(creature_ptr, i, damage, &basedam, o_ptr))
                 break;
 

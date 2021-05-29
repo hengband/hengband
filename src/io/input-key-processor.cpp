@@ -365,7 +365,7 @@ void process_command(player_type *creature_ptr)
         else if (creature_ptr->pclass == CLASS_SMITH)
             do_cmd_kaji(creature_ptr, true);
         else if (creature_ptr->pclass == CLASS_MAGIC_EATER)
-            do_cmd_magic_eater(creature_ptr, TRUE, false);
+            do_cmd_magic_eater(creature_ptr, true, false);
         else if (creature_ptr->pclass == CLASS_SNIPER)
             do_cmd_snipe_browse(creature_ptr);
         else
@@ -436,7 +436,7 @@ void process_command(player_type *creature_ptr)
         else if (creature_ptr->pclass == CLASS_IMITATOR)
             do_cmd_mane(creature_ptr, false);
         else if (creature_ptr->pclass == CLASS_MAGIC_EATER)
-            do_cmd_magic_eater(creature_ptr, FALSE, false);
+            do_cmd_magic_eater(creature_ptr, false, false);
         else if (creature_ptr->pclass == CLASS_SAMURAI)
             do_cmd_hissatsu(creature_ptr);
         else if (creature_ptr->pclass == CLASS_BLUE_MAGE)
@@ -479,7 +479,7 @@ void process_command(player_type *creature_ptr)
         break;
     }
     case 'v': {
-        do_cmd_throw(creature_ptr, 1, FALSE, -1);
+        do_cmd_throw(creature_ptr, 1, false, -1);
         break;
     }
     case 'a': {

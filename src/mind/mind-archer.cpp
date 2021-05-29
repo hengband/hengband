@@ -60,7 +60,7 @@ static bool select_ammo_creation_type(ammo_creation_type &type, PLAYER_LEVEL ple
     while (type == AMMO_NONE) {
         char ch;
 
-        if (!get_com(com, &ch, TRUE)) {
+        if (!get_com(com, &ch, true)) {
             return false;
         }
 
@@ -102,7 +102,7 @@ bool create_ammo(player_type *creature_ptr)
     switch (ext) {
     case AMMO_SHOT: {
         DIRECTION dir;
-        if (!get_rep_dir(creature_ptr, &dir, FALSE))
+        if (!get_rep_dir(creature_ptr, &dir, false))
             return false;
 
         POSITION y = creature_ptr->y + ddy[dir];

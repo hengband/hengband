@@ -387,43 +387,43 @@ void wilderness_gen(player_type *creature_ptr)
     get_mon_num_prep(creature_ptr, get_monster_hook(creature_ptr), NULL);
 
     /* North border */
-    generate_area(creature_ptr, y - 1, x, TRUE, false);
+    generate_area(creature_ptr, y - 1, x, true, false);
     for (int i = 1; i < MAX_WID - 1; i++)
         border.north[i] = floor_ptr->grid_array[MAX_HGT - 2][i].feat;
 
     /* South border */
-    generate_area(creature_ptr, y + 1, x, TRUE, false);
+    generate_area(creature_ptr, y + 1, x, true, false);
     for (int i = 1; i < MAX_WID - 1; i++)
         border.south[i] = floor_ptr->grid_array[1][i].feat;
     
     /* West border */
-    generate_area(creature_ptr, y, x - 1, TRUE, false);
+    generate_area(creature_ptr, y, x - 1, true, false);
     for (int i = 1; i < MAX_HGT - 1; i++)
         border.west[i] = floor_ptr->grid_array[i][MAX_WID - 2].feat;
 
     /* East border */
-    generate_area(creature_ptr, y, x + 1, TRUE, false);
+    generate_area(creature_ptr, y, x + 1, true, false);
     for (int i = 1; i < MAX_HGT - 1; i++)
         border.east[i] = floor_ptr->grid_array[i][1].feat;
 
     /* North west corner */
-    generate_area(creature_ptr, y - 1, x - 1, FALSE, true);
+    generate_area(creature_ptr, y - 1, x - 1, false, true);
     border.north_west = floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat;
 
     /* North east corner */
-    generate_area(creature_ptr, y - 1, x + 1, FALSE, true);
+    generate_area(creature_ptr, y - 1, x + 1, false, true);
     border.north_east = floor_ptr->grid_array[MAX_HGT - 2][1].feat;
 
     /* South west corner */
-    generate_area(creature_ptr, y + 1, x - 1, FALSE, true);
+    generate_area(creature_ptr, y + 1, x - 1, false, true);
     border.south_west = floor_ptr->grid_array[1][MAX_WID - 2].feat;
 
     /* South east corner */
-    generate_area(creature_ptr, y + 1, x + 1, FALSE, true);
+    generate_area(creature_ptr, y + 1, x + 1, false, true);
     border.south_east = floor_ptr->grid_array[1][1].feat;
 
     /* Create terrain of the current area */
-    generate_area(creature_ptr, y, x, FALSE, false);
+    generate_area(creature_ptr, y, x, false, false);
 
     /* Special boundary walls -- North */
     for (int i = 0; i < MAX_WID; i++) {

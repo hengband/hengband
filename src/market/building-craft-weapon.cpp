@@ -151,8 +151,8 @@ static void compare_weapon_aux(player_type *owner_ptr, object_type *o_ptr, int c
             vorpal_div = 9;
         }
 
-        mindam = calc_expect_dice(owner_ptr, mindice, 1, 1, FALSE, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, impact, vorpal_mult, vorpal_div);
-        maxdam = calc_expect_dice(owner_ptr, maxdice, 1, 1, FALSE, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, impact, vorpal_mult, vorpal_div);
+        mindam = calc_expect_dice(owner_ptr, mindice, 1, 1, false, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, impact, vorpal_mult, vorpal_div);
+        maxdam = calc_expect_dice(owner_ptr, maxdice, 1, 1, false, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, impact, vorpal_mult, vorpal_div);
         show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("切れ味:", "Vorpal:"), TERM_L_RED);
     }
 

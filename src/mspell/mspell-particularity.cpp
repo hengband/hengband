@@ -37,7 +37,7 @@ MonsterSpellResult spell_RF4_ROCKET(player_type *target_ptr, POSITION y, POSITIO
         _("%^sが%sにロケットを発射した。", "%^s fires a rocket at %s."), TARGET_TYPE);
 
     const auto dam = monspell_damage(target_ptr, RF_ABILITY::ROCKET, m_idx, DAM_ROLL);
-    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_ROCKET, dam, 2, FALSE, TARGET_TYPE);
+    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_ROCKET, dam, 2, false, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(target_ptr, m_idx, DRS_SHARD);
 
@@ -66,10 +66,10 @@ MonsterSpellResult spell_RF6_HAND_DOOM(player_type *target_ptr, POSITION y, POSI
     ProjectResult proj_res;
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
         const auto dam = monspell_damage(target_ptr, RF_ABILITY::HAND_DOOM, m_idx, DAM_ROLL);
-        proj_res = breath(target_ptr, y, x, m_idx, GF_HAND_DOOM, dam, 0, FALSE, MONSTER_TO_PLAYER);
+        proj_res = breath(target_ptr, y, x, m_idx, GF_HAND_DOOM, dam, 0, false, MONSTER_TO_PLAYER);
     } else if (TARGET_TYPE == MONSTER_TO_MONSTER) {
         const auto dam = 20; /* Dummy power */
-        proj_res = breath(target_ptr, y, x, m_idx, GF_HAND_DOOM, dam, 0, FALSE, MONSTER_TO_MONSTER);
+        proj_res = breath(target_ptr, y, x, m_idx, GF_HAND_DOOM, dam, 0, false, MONSTER_TO_MONSTER);
     }
 
     auto res = MonsterSpellResult::make_valid();

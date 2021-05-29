@@ -35,7 +35,7 @@ bool cast_berserk_spell(player_type *caster_ptr, mind_berserker_type spell)
             return false;
         }
 
-        if (!get_direction(caster_ptr, &dir, FALSE, FALSE) || (dir == 5))
+        if (!get_direction(caster_ptr, &dir, false, false) || (dir == 5))
             return false;
 
         y = caster_ptr->y + ddy[dir];
@@ -61,7 +61,7 @@ bool cast_berserk_spell(player_type *caster_ptr, mind_berserker_type spell)
         break;
     }
     case SMASH_TRAP: {
-        if (!get_direction(caster_ptr, &dir, FALSE, FALSE))
+        if (!get_direction(caster_ptr, &dir, false, false))
             return false;
 
         y = caster_ptr->y + ddy[dir];

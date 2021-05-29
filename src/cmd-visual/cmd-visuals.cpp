@@ -254,7 +254,7 @@ void do_cmd_visuals(player_type *creature_ptr)
                     need_redraw = true;
                     break;
                 case 'v':
-                    do_cmd_knowledge_monsters(creature_ptr, &need_redraw, TRUE, r);
+                    do_cmd_knowledge_monsters(creature_ptr, &need_redraw, true, r);
                     term_clear();
                     print_visuals_menu(choice_msg);
                     break;
@@ -324,7 +324,7 @@ void do_cmd_visuals(player_type *creature_ptr)
                     need_redraw = true;
                     break;
                 case 'v':
-                    do_cmd_knowledge_objects(creature_ptr, &need_redraw, TRUE, k);
+                    do_cmd_knowledge_objects(creature_ptr, &need_redraw, true, k);
                     term_clear();
                     print_visuals_menu(choice_msg);
                     break;
@@ -404,7 +404,7 @@ void do_cmd_visuals(player_type *creature_ptr)
                     need_redraw = true;
                     break;
                 case 'v':
-                    do_cmd_knowledge_features(&need_redraw, TRUE, f, &lighting_level);
+                    do_cmd_knowledge_features(&need_redraw, true, f, &lighting_level);
                     term_clear();
                     print_visuals_menu(choice_msg);
                     break;
@@ -414,14 +414,14 @@ void do_cmd_visuals(player_type *creature_ptr)
             break;
         }
         case '7':
-            do_cmd_knowledge_monsters(creature_ptr, &need_redraw, TRUE, -1);
+            do_cmd_knowledge_monsters(creature_ptr, &need_redraw, true, -1);
             break;
         case '8':
-            do_cmd_knowledge_objects(creature_ptr, &need_redraw, TRUE, -1);
+            do_cmd_knowledge_objects(creature_ptr, &need_redraw, true, -1);
             break;
         case '9': {
             IDX lighting_level = F_LIT_STANDARD;
-            do_cmd_knowledge_features(&need_redraw, TRUE, -1, &lighting_level);
+            do_cmd_knowledge_features(&need_redraw, true, -1, &lighting_level);
             break;
         }
         case 'R':

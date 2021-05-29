@@ -83,7 +83,7 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
     }
 
     case SV_STAFF_SLOWNESS: {
-        if (set_slow(creature_ptr, creature_ptr->slow + randint1(30) + 15, FALSE))
+        if (set_slow(creature_ptr, creature_ptr->slow + randint1(30) + 15, false))
             ident = true;
         break;
     }
@@ -113,10 +113,10 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
 
     case SV_STAFF_IDENTIFY: {
         if (powerful) {
-            if (!identify_fully(creature_ptr, FALSE, TV_NONE))
+            if (!identify_fully(creature_ptr, false, TV_NONE))
                 *use_charge = false;
         } else {
-            if (!ident_spell(creature_ptr, FALSE, TV_NONE))
+            if (!ident_spell(creature_ptr, false, TV_NONE))
                 *use_charge = false;
         }
         ident = true;
@@ -194,7 +194,7 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
 
     case SV_STAFF_CURING: {
         ident = true_healing(creature_ptr, 0);
-        if (set_shero(creature_ptr, 0, TRUE))
+        if (set_shero(creature_ptr, 0, true))
             ident = true;
         break;
     }
@@ -209,7 +209,7 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
         if (do_res_stat(creature_ptr, A_INT))
             ident = true;
         ident |= restore_mana(creature_ptr, false);
-        if (set_shero(creature_ptr, 0, TRUE))
+        if (set_shero(creature_ptr, 0, true))
             ident = true;
         break;
     }
@@ -227,7 +227,7 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
     }
 
     case SV_STAFF_SPEED: {
-        if (set_fast(creature_ptr, randint1(30) + (powerful ? 30 : 15), FALSE))
+        if (set_fast(creature_ptr, randint1(30) + (powerful ? 30 : 15), false))
             ident = true;
         break;
     }
@@ -362,7 +362,7 @@ void exe_use_staff(player_type *creature_ptr, INVENTORY_IDX item)
 
     sound(SOUND_ZAP);
 
-    ident = staff_effect(creature_ptr, o_ptr->sval, &use_charge, FALSE, FALSE, object_is_aware(o_ptr));
+    ident = staff_effect(creature_ptr, o_ptr->sval, &use_charge, false, FALSE, object_is_aware(o_ptr));
 
     if (!(object_is_aware(o_ptr))) {
         chg_virtue(creature_ptr, V_PATIENCE, -1);

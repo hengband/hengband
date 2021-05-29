@@ -164,6 +164,6 @@ void do_cmd_knowledge_uniques(player_type *creature_ptr, bool is_alive)
     angband_fclose(fff);
     concptr title_desc
         = unique_list_ptr->is_alive ? _("まだ生きているユニーク・モンスター", "Alive Uniques") : _("もう撃破したユニーク・モンスター", "Dead Uniques");
-    (void)show_file(creature_ptr, TRUE, file_name, title_desc, 0, 0);
+    (void)show_file(creature_ptr, true, file_name, title_desc, 0, 0);
     fd_kill(file_name);
 }

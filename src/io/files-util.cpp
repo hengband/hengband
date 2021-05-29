@@ -250,7 +250,7 @@ u32b counts_read(player_type *creature_ptr, int where)
     int fd = fd_open(buf, O_RDONLY);
 
     u32b count = 0;
-    if (counts_seek(creature_ptr, fd, where, FALSE) || fd_read(fd, (char *)(&count), sizeof(u32b)))
+    if (counts_seek(creature_ptr, fd, where, false) || fd_read(fd, (char *)(&count), sizeof(u32b)))
         count = 0;
 
     (void)fd_close(fd);

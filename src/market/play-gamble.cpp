@@ -33,7 +33,7 @@ bool gamble_comm(player_type *player_ptr, int cmd)
 
 	if (cmd == BACT_GAMBLE_RULES)
 	{
-		(void)show_file(player_ptr, TRUE, _("jgambling.txt", "gambling.txt"), NULL, 0, 0);
+		(void)show_file(player_ptr, true, _("jgambling.txt", "gambling.txt"), NULL, 0, 0);
 		screen_load();
 		return true;
 	}

@@ -257,7 +257,7 @@ void update_dungeon_feeling(player_type *subject_ptr)
     select_floor_music(subject_ptr);
     subject_ptr->redraw |= PR_DEPTH;
     if (disturb_minor)
-        disturb(subject_ptr, FALSE, false);
+        disturb(subject_ptr, false, false);
 }
 
 /*

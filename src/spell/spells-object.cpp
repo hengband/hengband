@@ -369,7 +369,7 @@ void brand_bolts(player_type *caster_ptr)
  */
 bool perilous_secrets(player_type *user_ptr)
 {
-    if (!ident_spell(user_ptr, FALSE, TV_NONE))
+    if (!ident_spell(user_ptr, false, TV_NONE))
         return false;
 
     if (user_ptr->msp > 0) {

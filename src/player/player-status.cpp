@@ -1416,7 +1416,7 @@ static ACTION_SKILL_POWER calc_skill_dig(player_type *creature_ptr)
 static bool is_martial_arts_mode(player_type *creature_ptr)
 {
     return ((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER) || (creature_ptr->pclass == CLASS_BERSERKER))
-        && (any_bits(empty_hands(creature_ptr, TRUE), EMPTY_HAND_MAIN)) && !can_attack_with_sub_hand(creature_ptr);
+        && (any_bits(empty_hands(creature_ptr, true), EMPTY_HAND_MAIN)) && !can_attack_with_sub_hand(creature_ptr);
 }
 
 static bool is_heavy_wield(player_type *creature_ptr, int i)
@@ -1825,14 +1825,14 @@ static bool is_riding_two_hands(player_type *creature_ptr)
         return false;
     }
 
-    if (has_two_handed_weapons(creature_ptr) || (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_NONE))
+    if (has_two_handed_weapons(creature_ptr) || (empty_hands(creature_ptr, false) == EMPTY_HAND_NONE))
         return true;
     else if (any_bits(creature_ptr->pet_extra_flags, PF_TWO_HANDS)) {
         switch (creature_ptr->pclass) {
         case CLASS_MONK:
         case CLASS_FORCETRAINER:
         case CLASS_BERSERKER:
-            if ((empty_hands(creature_ptr, FALSE) != EMPTY_HAND_NONE) && !has_melee_weapon(creature_ptr, INVEN_MAIN_HAND)
+            if ((empty_hands(creature_ptr, false) != EMPTY_HAND_NONE) && !has_melee_weapon(creature_ptr, INVEN_MAIN_HAND)
                 && !has_melee_weapon(creature_ptr, INVEN_SUB_HAND))
                 return true;
 
@@ -1929,13 +1929,13 @@ void put_equipment_warning(player_type *creature_ptr)
     if (creature_ptr->riding && (creature_ptr->old_riding_ryoute != creature_ptr->riding_ryoute)) {
         if (creature_ptr->riding_ryoute) {
 #ifdef JP
-            msg_format("%s馬を操れない。", (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_NONE) ? "両手がふさがっていて" : "");
+            msg_format("%s馬を操れない。", (empty_hands(creature_ptr, false) == EMPTY_HAND_NONE) ? "両手がふさがっていて" : "");
 #else
             msg_print("You are using both hand for fighting, and you can't control the pet you're riding.");
 #endif
         } else {
 #ifdef JP
-            msg_format("%s馬を操れるようになった。", (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_NONE) ? "手が空いて" : "");
+            msg_format("%s馬を操れるようになった。", (empty_hands(creature_ptr, false) == EMPTY_HAND_NONE) ? "手が空いて" : "");
 #else
             msg_print("You began to control the pet you're riding with one hand.");
 #endif
@@ -2079,7 +2079,7 @@ static s16b calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, bool i
     }
 
     if (main_attack_hand(creature_ptr) == calc_hand) {
-        if ((is_martial_arts_mode(creature_ptr) && empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_MAIN | EMPTY_HAND_SUB))
+        if ((is_martial_arts_mode(creature_ptr) && empty_hands(creature_ptr, false) == (EMPTY_HAND_MAIN | EMPTY_HAND_SUB))
             || !has_disable_two_handed_bonus(creature_ptr, calc_hand)) {
             int bonus_to_d = 0;
             bonus_to_d = ((int)(adj_str_td[creature_ptr->stat_index[A_STR]]) - 128) / 2;
@@ -2158,7 +2158,7 @@ static s16b calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool is_r
             break;
         }
 
-        if ((is_martial_arts_mode(creature_ptr) && empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_MAIN | EMPTY_HAND_SUB))
+        if ((is_martial_arts_mode(creature_ptr) && empty_hands(creature_ptr, false) == (EMPTY_HAND_MAIN | EMPTY_HAND_SUB))
             || !has_disable_two_handed_bonus(creature_ptr, calc_hand)) {
             int bonus_to_h = 0;
             bonus_to_h = ((int)(adj_str_th[creature_ptr->stat_index[A_STR]]) - 128) + ((int)(adj_dex_th[creature_ptr->stat_index[A_DEX]]) - 128);

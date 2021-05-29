@@ -83,7 +83,7 @@ bool reinit_wilderness = false;
 static void town_history(player_type *player_ptr)
 {
     screen_save();
-    (void)show_file(player_ptr, TRUE, _("jbldg.txt", "bldg.txt"), NULL, 0, 0);
+    (void)show_file(player_ptr, true, _("jbldg.txt", "bldg.txt"), NULL, 0, 0);
     screen_load();
 }
 
@@ -124,7 +124,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
         /* Do nothing */
         break;
     case BACT_RESEARCH_ITEM:
-        paid = identify_fully(player_ptr, FALSE, TV_NONE);
+        paid = identify_fully(player_ptr, false, TV_NONE);
         break;
     case BACT_TOWN_HISTORY:
         town_history(player_ptr);
@@ -187,7 +187,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
         paid = true;
         break;
     case BACT_IDENT_ONE:
-        paid = ident_spell(player_ptr, FALSE, TV_NONE);
+        paid = ident_spell(player_ptr, false, TV_NONE);
         break;
     case BACT_LEARN:
         do_cmd_study(player_ptr);

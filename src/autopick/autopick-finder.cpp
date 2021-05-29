@@ -308,7 +308,7 @@ void search_for_object(player_type *player_ptr, text_body_type *tb, object_type 
                 break;
         }
 
-        if (!autopick_new_entry(entry, tb->lines_list[i], FALSE))
+        if (!autopick_new_entry(entry, tb->lines_list[i], false))
             continue;
 
         match = is_autopick_match(player_ptr, o_ptr, entry, o_name);

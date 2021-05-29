@@ -235,7 +235,7 @@ void seal_of_mirror(player_type *caster_ptr, HIT_POINT dam)
             if (!is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]))
                 continue;
 
-            if (!affect_monster(caster_ptr, 0, 0, y, x, dam, GF_GENOCIDE, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), TRUE))
+            if (!affect_monster(caster_ptr, 0, 0, y, x, dam, GF_GENOCIDE, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), true))
                 continue;
 
             if (!caster_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
@@ -337,7 +337,7 @@ bool set_multishadow(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, false);
+        disturb(creature_ptr, false, false);
     creature_ptr->update |= (PU_BONUS);
     handle_stuff(creature_ptr);
     return true;
@@ -379,7 +379,7 @@ bool set_dustrobe(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, false);
+        disturb(creature_ptr, false, false);
     creature_ptr->update |= (PU_BONUS);
     handle_stuff(creature_ptr);
     return true;

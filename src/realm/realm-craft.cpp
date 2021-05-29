@@ -469,7 +469,7 @@ concptr do_craft_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
         {
             if (cast) {
-                if (!mundane_spell(caster_ptr, TRUE))
+                if (!mundane_spell(caster_ptr, true))
                     return NULL;
             }
         }
@@ -495,7 +495,7 @@ concptr do_craft_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
         {
             if (cast) {
-                if (!identify_fully(caster_ptr, FALSE, TV_NONE))
+                if (!identify_fully(caster_ptr, false, TV_NONE))
                     return NULL;
             }
         }

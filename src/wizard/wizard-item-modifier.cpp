@@ -133,19 +133,19 @@ void wizard_item_modifier(player_type *creature_ptr)
         if (command_arg <= 0)
             command_arg = 1;
 
-        acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, TRUE, FALSE, true);
+        acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, true, false, true);
         break;
     case 'f':
-        identify_fully(creature_ptr, FALSE, TV_NONE);
+        identify_fully(creature_ptr, false, TV_NONE);
         break;
     case 'g':
         if (command_arg <= 0)
             command_arg = 1;
 
-        acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, FALSE, FALSE, true);
+        acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, false, FALSE, true);
         break;
     case 'i':
-        (void)ident_spell(creature_ptr, FALSE, TV_NONE);
+        (void)ident_spell(creature_ptr, false, TV_NONE);
         break;
     case 'I':
         wiz_identify_full_inventory(creature_ptr);
@@ -157,13 +157,13 @@ void wizard_item_modifier(player_type *creature_ptr)
         if (command_arg <= 0)
             command_arg = 1;
 
-        acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, TRUE, TRUE, true);
+        acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, true, TRUE, true);
         break;
     case 'U':
         wiz_modify_item_activation(creature_ptr);
         break;
     case 'w':
-        do_cmd_wishing(creature_ptr, -1, TRUE, TRUE, true);
+        do_cmd_wishing(creature_ptr, -1, true, TRUE, true);
         break;
     }
 }
@@ -413,7 +413,7 @@ static void wiz_statistics(player_type *caster_ptr, object_type *o_ptr)
     while (true) {
         concptr pmt = "Roll for [n]ormal, [g]ood, or [e]xcellent treasure? ";
         wiz_display_item(caster_ptr, o_ptr);
-        if (!get_com(pmt, &ch, FALSE))
+        if (!get_com(pmt, &ch, false))
             break;
 
         if (ch == 'n' || ch == 'N') {
@@ -499,7 +499,7 @@ static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
     bool changed = false;
     while (true) {
         wiz_display_item(owner_ptr, q_ptr);
-        if (!get_com("[a]ccept, [w]orthless, [c]ursed, [n]ormal, [g]ood, [e]xcellent, [s]pecial? ", &ch, FALSE)) {
+        if (!get_com("[a]ccept, [w]orthless, [c]ursed, [n]ormal, [g]ood, [e]xcellent, [s]pecial? ", &ch, false)) {
             if (object_is_fixed_artifact(q_ptr)) {
                 a_info[q_ptr->name1].cur_num = 0;
                 q_ptr->name1 = 0;
@@ -669,7 +669,7 @@ void wiz_modify_item(player_type *creature_ptr)
     bool changed = false;
     while (true) {
         wiz_display_item(creature_ptr, q_ptr);
-        if (!get_com("[a]ccept [s]tatistics [r]eroll [t]weak [q]uantity? ", &ch, FALSE)) {
+        if (!get_com("[a]ccept [s]tatistics [r]eroll [t]weak [q]uantity? ", &ch, false)) {
             changed = false;
             break;
         }

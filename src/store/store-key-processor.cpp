@@ -156,7 +156,7 @@ void store_process_command(player_type *client_ptr)
         else if (client_ptr->pclass == CLASS_SMITH)
             do_cmd_kaji(client_ptr, true);
         else if (client_ptr->pclass == CLASS_MAGIC_EATER)
-            do_cmd_magic_eater(client_ptr, TRUE, false);
+            do_cmd_magic_eater(client_ptr, true, false);
         else if (client_ptr->pclass == CLASS_SNIPER)
             do_cmd_snipe_browse(client_ptr);
         else

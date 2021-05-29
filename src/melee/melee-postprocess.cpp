@@ -235,7 +235,7 @@ static void fall_off_horse_by_melee(player_type *player_ptr, mam_pp_type *mam_pp
     if (mam_pp_ptr->m_ptr->hp > mam_pp_ptr->m_ptr->maxhp / 3)
         mam_pp_ptr->dam = (mam_pp_ptr->dam + 1) / 2;
 
-    if (process_fall_off_horse(player_ptr, (mam_pp_ptr->dam > 200) ? 200 : mam_pp_ptr->dam, FALSE))
+    if (process_fall_off_horse(player_ptr, (mam_pp_ptr->dam > 200) ? 200 : mam_pp_ptr->dam, false))
         msg_format(_("%^sに振り落とされた！", "You have been thrown off from %s!"), mam_pp_ptr->m_name);
 }
 
@@ -261,7 +261,7 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
     (void)set_monster_csleep(player_ptr, m_idx, 0);
 
     if (player_ptr->riding && (m_idx == player_ptr->riding))
-        disturb(player_ptr, TRUE, true);
+        disturb(player_ptr, true, true);
 
     if (process_invulnerability(mam_pp_ptr) || process_all_resistances(mam_pp_ptr))
         return;

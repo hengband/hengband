@@ -85,7 +85,7 @@ bool stop_hex_spell(player_type *caster_ptr)
                 }
             }
 
-            if (!get_com(out_val, &choice, TRUE))
+            if (!get_com(out_val, &choice, true))
                 break;
             if (isupper(choice))
                 choice = (char)tolower(choice);

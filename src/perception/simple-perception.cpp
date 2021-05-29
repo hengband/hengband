@@ -90,7 +90,7 @@ static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, b
     }
 
     if (disturb_minor)
-        disturb(creature_ptr, FALSE, false);
+        disturb(creature_ptr, false, false);
 
     describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     if (slot >= INVEN_MAIN_HAND) {

@@ -242,7 +242,7 @@ void process_monk_attack(player_type *attacker_ptr, player_attack_type *pa_ptr)
 bool double_attack(player_type *creature_ptr)
 {
     DIRECTION dir;
-    if (!get_rep_dir(creature_ptr, &dir, FALSE))
+    if (!get_rep_dir(creature_ptr, &dir, false))
         return false;
     POSITION y = creature_ptr->y + ddy[dir];
     POSITION x = creature_ptr->x + ddx[dir];

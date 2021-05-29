@@ -131,7 +131,7 @@ bool symbol_genocide(player_type *caster_ptr, int power, bool player_cast)
     }
 
     char typ;
-    while (!get_com(_("どの種類(文字)のモンスターを抹殺しますか: ", "Choose a monster race (by symbol) to genocide: "), &typ, FALSE))
+    while (!get_com(_("どの種類(文字)のモンスターを抹殺しますか: ", "Choose a monster race (by symbol) to genocide: "), &typ, false))
         ;
     bool result = false;
     for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++) {

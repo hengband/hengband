@@ -44,7 +44,7 @@ static void display_diary(player_type *creature_ptr)
     sprintf(diary_title, "Legend of %s %s '%s'", ap_ptr->title, creature_ptr->name, tmp);
 #endif
 
-    (void)show_file(creature_ptr, FALSE, buf, diary_title, -1, 0);
+    (void)show_file(creature_ptr, false, buf, diary_title, -1, 0);
 }
 
 /*!

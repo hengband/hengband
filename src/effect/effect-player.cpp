@@ -218,7 +218,7 @@ static bool process_bolt_reflection(player_type *target_ptr, effect_player_type 
     }
 
     (*project)(target_ptr, 0, 0, t_y, t_x, ep_ptr->dam, ep_ptr->effect_type, (PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE));
-    disturb(target_ptr, TRUE, true);
+    disturb(target_ptr, true, true);
     return true;
 }
 
@@ -236,7 +236,7 @@ static ep_check_result check_continue_player_effect(player_type *target_ptr, eff
         return EP_CHECK_FALSE;
 
     if (((target_ptr->special_defense & NINJA_KAWARIMI) != 0) && (ep_ptr->dam > 0) && (randint0(55) < (target_ptr->lev * 3 / 5 + 20)) && (ep_ptr->who > 0)
-        && (ep_ptr->who != target_ptr->riding) && kawarimi(target_ptr, TRUE))
+        && (ep_ptr->who != target_ptr->riding) && kawarimi(target_ptr, true))
         return EP_CHECK_FALSE;
 
     if ((ep_ptr->who == 0) || (ep_ptr->who == target_ptr->riding))
@@ -322,7 +322,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
         rakubadam_p = (ep_ptr->dam > 200) ? 200 : ep_ptr->dam;
     }
 
-    disturb(target_ptr, TRUE, true);
+    disturb(target_ptr, true, true);
     if ((target_ptr->special_defense & NINJA_KAWARIMI) && ep_ptr->dam && ep_ptr->who && (ep_ptr->who != target_ptr->riding)) {
         (void)kawarimi(target_ptr, false);
     }

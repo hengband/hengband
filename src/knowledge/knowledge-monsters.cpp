@@ -140,7 +140,7 @@ void do_cmd_knowledge_pets(player_type *creature_ptr)
     fprintf(fff, _(" 維持コスト: %d%% MP\n", "   Upkeep: %d%% mana.\n"), show_upkeep);
 
     angband_fclose(fff);
-    (void)show_file(creature_ptr, TRUE, file_name, _("現在のペット", "Current Pets"), 0, 0);
+    (void)show_file(creature_ptr, true, file_name, _("現在のペット", "Current Pets"), 0, 0);
     fd_kill(file_name);
 }
 
@@ -249,7 +249,7 @@ void do_cmd_knowledge_kill_count(player_type *creature_ptr)
 
     C_KILL(who, max_r_idx, s16b);
     angband_fclose(fff);
-    (void)show_file(creature_ptr, TRUE, file_name, _("倒した敵の数", "Kill Count"), 0, 0);
+    (void)show_file(creature_ptr, true, file_name, _("倒した敵の数", "Kill Count"), 0, 0);
     fd_kill(file_name);
 }
 
@@ -498,6 +498,6 @@ void do_cmd_knowledge_bounty(player_type *creature_ptr)
         fprintf(fff, "\n%s\n", _("賞金首はもう残っていません。", "There are no more wanted monster."));
 
     angband_fclose(fff);
-    (void)show_file(creature_ptr, TRUE, file_name, _("賞金首の一覧", "Wanted monsters"), 0, 0);
+    (void)show_file(creature_ptr, true, file_name, _("賞金首の一覧", "Wanted monsters"), 0, 0);
     fd_kill(file_name);
 }

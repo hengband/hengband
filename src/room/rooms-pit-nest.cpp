@@ -342,7 +342,7 @@ bool build_type5(player_type *player_ptr, dun_data_type *dd_ptr)
     }
 
     msg_format_wizard(
-        player_ptr, CHEAT_DUNGEON, _("モンスター部屋(nest)(%s%s)を生成します。", "Monster nest (%s%s)"), n_ptr->name, pit_subtype_string(cur_nest_type, TRUE));
+        player_ptr, CHEAT_DUNGEON, _("モンスター部屋(nest)(%s%s)を生成します。", "Monster nest (%s%s)"), n_ptr->name, pit_subtype_string(cur_nest_type, true));
 
     /* Place some monsters */
     for (y = yval - 2; y <= yval + 2; y++) {
@@ -586,7 +586,7 @@ bool build_type6(player_type *player_ptr, dun_data_type *dd_ptr)
     }
 
     msg_format_wizard(
-        player_ptr, CHEAT_DUNGEON, _("モンスター部屋(pit)(%s%s)を生成します。", "Monster pit (%s%s)"), n_ptr->name, pit_subtype_string(cur_pit_type, FALSE));
+        player_ptr, CHEAT_DUNGEON, _("モンスター部屋(pit)(%s%s)を生成します。", "Monster pit (%s%s)"), n_ptr->name, pit_subtype_string(cur_pit_type, false));
 
     /* Select the entries */
     for (i = 0; i < 8; i++) {
@@ -907,7 +907,7 @@ bool build_type13(player_type *player_ptr, dun_data_type *dd_ptr)
     }
 
     msg_format_wizard(
-        player_ptr, CHEAT_DUNGEON, _("%s%sの罠ピットが生成されました。", "Trapped monster pit (%s%s)"), n_ptr->name, pit_subtype_string(cur_pit_type, FALSE));
+        player_ptr, CHEAT_DUNGEON, _("%s%sの罠ピットが生成されました。", "Trapped monster pit (%s%s)"), n_ptr->name, pit_subtype_string(cur_pit_type, false));
 
     /* Select the entries */
     for (i = 0; i < 8; i++) {

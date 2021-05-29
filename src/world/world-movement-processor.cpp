@@ -40,7 +40,7 @@ void execute_recall(player_type *creature_ptr)
     if (creature_ptr->word_recall != 0)
         return;
 
-    disturb(creature_ptr, FALSE, true);
+    disturb(creature_ptr, false, true);
     floor_type *floor_ptr = creature_ptr->current_floor_ptr;
     if (floor_ptr->dun_level || creature_ptr->current_floor_ptr->inside_quest || creature_ptr->enter_dungeon) {
         msg_print(_("上に引っ張りあげられる感じがする！", "You feel yourself yanked upwards!"));
@@ -132,7 +132,7 @@ void execute_floor_reset(player_type *creature_ptr)
     if (creature_ptr->alter_reality != 0)
         return;
 
-    disturb(creature_ptr, FALSE, true);
+    disturb(creature_ptr, false, true);
     if (!quest_number(creature_ptr, floor_ptr->dun_level) && floor_ptr->dun_level) {
         msg_print(_("世界が変わった！", "The world changes!"));
 

@@ -231,7 +231,7 @@ bool exe_mutation_power(player_type *creature_ptr, MUTA power)
     case MUTA::RECALL:
         return recall_player(creature_ptr, randint0(21) + 15);
     case MUTA::BANISH: {
-        if (!get_direction(creature_ptr, &dir, FALSE, FALSE))
+        if (!get_direction(creature_ptr, &dir, false, false))
             return false;
 
         POSITION y = creature_ptr->y + ddy[dir];
@@ -268,7 +268,7 @@ bool exe_mutation_power(player_type *creature_ptr, MUTA power)
         return true;
     }
     case MUTA::COLD_TOUCH: {
-        if (!get_direction(creature_ptr, &dir, FALSE, FALSE))
+        if (!get_direction(creature_ptr, &dir, false, false))
             return false;
 
         POSITION y = creature_ptr->y + ddy[dir];
@@ -284,7 +284,7 @@ bool exe_mutation_power(player_type *creature_ptr, MUTA power)
         return true;
     }
     case MUTA::LAUNCHER:
-        return do_cmd_throw(creature_ptr, 2 + lvl / 40, FALSE, -1);
+        return do_cmd_throw(creature_ptr, 2 + lvl / 40, false, -1);
     default:
         PlayerEnergy(creature_ptr).reset_player_turn();
         msg_format(_("能力 %s は実装されていません。", "Power %s not implemented. Oops."), power);

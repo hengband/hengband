@@ -196,16 +196,16 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
             msg_print(_("動けない！", "Can't move!"));
             energy.reset_player_turn();
             can_move = false;
-            disturb(creature_ptr, FALSE, true);
+            disturb(creature_ptr, false, true);
         } else if (monster_fear_remaining(riding_m_ptr)) {
             GAME_TEXT steed_name[MAX_NLEN];
             monster_desc(creature_ptr, steed_name, riding_m_ptr, 0);
             msg_format(_("%sが恐怖していて制御できない。", "%^s is too scared to control."), steed_name);
             can_move = false;
-            disturb(creature_ptr, FALSE, true);
+            disturb(creature_ptr, false, true);
         } else if (creature_ptr->riding_ryoute) {
             can_move = false;
-            disturb(creature_ptr, FALSE, true);
+            disturb(creature_ptr, false, true);
         } else if (has_flag(f_ptr->flags, FF_CAN_FLY) && (riding_r_ptr->flags7 & RF7_CAN_FLY)) {
             /* Allow moving */
         } else if (has_flag(f_ptr->flags, FF_CAN_SWIM) && (riding_r_ptr->flags7 & RF7_CAN_SWIM)) {
@@ -215,17 +215,17 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
             msg_format(_("%sの上に行けない。", "Can't swim."), f_info[get_feat_mimic(g_ptr)].name.c_str());
             energy.reset_player_turn();
             can_move = false;
-            disturb(creature_ptr, FALSE, true);
+            disturb(creature_ptr, false, true);
         } else if (!has_flag(f_ptr->flags, FF_WATER) && (riding_r_ptr->flags7 & RF7_AQUATIC)) {
             msg_format(_("%sから上がれない。", "Can't land."), f_info[get_feat_mimic(&floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name.c_str());
             energy.reset_player_turn();
             can_move = false;
-            disturb(creature_ptr, FALSE, true);
+            disturb(creature_ptr, false, true);
         } else if (has_flag(f_ptr->flags, FF_LAVA) && !(riding_r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK)) {
             msg_format(_("%sの上に行けない。", "Too hot to go through."), f_info[get_feat_mimic(g_ptr)].name.c_str());
             energy.reset_player_turn();
             can_move = false;
-            disturb(creature_ptr, FALSE, true);
+            disturb(creature_ptr, false, true);
         }
 
         if (can_move && monster_stunned_remaining(riding_m_ptr) && one_in_(2)) {
@@ -233,7 +233,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
             monster_desc(creature_ptr, steed_name, riding_m_ptr, 0);
             msg_format(_("%sが朦朧としていてうまく動けない！", "You cannot control stunned %s!"), steed_name);
             can_move = false;
-            disturb(creature_ptr, FALSE, true);
+            disturb(creature_ptr, false, true);
         }
     }
 
@@ -288,7 +288,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
             }
         }
 
-        disturb(creature_ptr, FALSE, true);
+        disturb(creature_ptr, false, true);
         if (!boundary_floor(g_ptr, f_ptr, mimic_f_ptr))
             sound(SOUND_HITWALL);
     }
@@ -297,7 +297,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
         if (!(creature_ptr->confused || creature_ptr->stun || creature_ptr->image))
             energy.reset_player_turn();
 
-        disturb(creature_ptr, FALSE, true);
+        disturb(creature_ptr, false, true);
         can_move = false;
     }
 

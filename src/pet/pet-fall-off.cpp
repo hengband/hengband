@@ -39,7 +39,7 @@ void check_fall_off_horse(player_type *creature_ptr, monap_type *monap_ptr)
 
     char m_steed_name[MAX_NLEN];
     monster_desc(creature_ptr, m_steed_name, &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding], 0);
-    if (process_fall_off_horse(creature_ptr, (monap_ptr->damage > 200) ? 200 : monap_ptr->damage, FALSE))
+    if (process_fall_off_horse(creature_ptr, (monap_ptr->damage > 200) ? 200 : monap_ptr->damage, false))
         msg_format(_("%^sから落ちてしまった！", "You have fallen from %s."), m_steed_name);
 }
 
@@ -121,7 +121,7 @@ bool process_fall_off_horse(player_type *creature_ptr, HIT_POINT dam, bool force
 
             /* Skip non-empty grids */
             if (!cave_has_flag_grid(g_ptr, FF_MOVE) && !cave_has_flag_grid(g_ptr, FF_CAN_FLY)) {
-                if (!can_player_ride_pet(creature_ptr, g_ptr, FALSE))
+                if (!can_player_ride_pet(creature_ptr, g_ptr, false))
                     continue;
             }
 

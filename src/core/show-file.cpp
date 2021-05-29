@@ -330,7 +330,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
         switch (skey) {
         case '?':
             if (strcmp(name, _("jhelpinfo.txt", "helpinfo.txt")) != 0)
-                show_file(creature_ptr, TRUE, _("jhelpinfo.txt", "helpinfo.txt"), NULL, 0, mode);
+                show_file(creature_ptr, true, _("jhelpinfo.txt", "helpinfo.txt"), NULL, 0, mode);
             break;
         case '=':
             prt(_("強調: ", "Show: "), hgt - 1, 0);
@@ -388,7 +388,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
             strcpy(tmp, _("jhelp.hlp", "help.hlp"));
 
             if (askfor(tmp, 80)) {
-                if (!show_file(creature_ptr, TRUE, tmp, NULL, 0, mode))
+                if (!show_file(creature_ptr, true, tmp, NULL, 0, mode))
                     skey = 'q';
             }
 
@@ -444,7 +444,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
 
             if ((key > -1) && hook[key][0]) {
                 /* Recurse on that file */
-                if (!show_file(creature_ptr, TRUE, hook[key], NULL, 0, mode))
+                if (!show_file(creature_ptr, true, hook[key], NULL, 0, mode))
                     skey = 'q';
             }
         }

@@ -241,7 +241,7 @@ ProjectResult project(player_type *caster_ptr, const MONSTER_IDX who, POSITION r
             for (j = last_i; j <= i; j++) {
                 y = get_grid_y(path_g[j]);
                 x = get_grid_x(path_g[j]);
-                if (affect_monster(caster_ptr, 0, 0, y, x, dam, GF_SEEKER, flag, TRUE))
+                if (affect_monster(caster_ptr, 0, 0, y, x, dam, GF_SEEKER, flag, true))
                     res.notice = true;
                 if (!who && (project_m_n == 1) && !jump && (caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0)) {
                     monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
@@ -262,7 +262,7 @@ ProjectResult project(player_type *caster_ptr, const MONSTER_IDX who, POSITION r
             POSITION py, px;
             py = get_grid_y(path_g[i]);
             px = get_grid_x(path_g[i]);
-            if (affect_monster(caster_ptr, 0, 0, py, px, dam, GF_SEEKER, flag, TRUE))
+            if (affect_monster(caster_ptr, 0, 0, py, px, dam, GF_SEEKER, flag, true))
                 res.notice = true;
             if (!who && (project_m_n == 1) && !jump) {
                 if (caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0) {
@@ -795,13 +795,13 @@ ProjectResult project(player_type *caster_ptr, const MONSTER_IDX who, POSITION r
         GAME_TEXT m_name[MAX_NLEN];
         monster_desc(caster_ptr, m_name, &caster_ptr->current_floor_ptr->m_list[caster_ptr->riding], 0);
         if (rakubadam_m > 0) {
-            if (process_fall_off_horse(caster_ptr, rakubadam_m, FALSE)) {
+            if (process_fall_off_horse(caster_ptr, rakubadam_m, false)) {
                 msg_format(_("%^sに振り落とされた！", "%^s has thrown you off!"), m_name);
             }
         }
 
         if (caster_ptr->riding && rakubadam_p > 0) {
-            if (process_fall_off_horse(caster_ptr, rakubadam_p, FALSE)) {
+            if (process_fall_off_horse(caster_ptr, rakubadam_p, false)) {
                 msg_format(_("%^sから落ちてしまった！", "You have fallen from %s."), m_name);
             }
         }

@@ -324,7 +324,7 @@ bool set_superstealth(player_type *creature_ptr, bool set)
     creature_ptr->redraw |= (PR_STATUS);
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, false);
+        disturb(creature_ptr, false, false);
     return true;
 }
 
@@ -385,7 +385,7 @@ bool cast_ninja_spell(player_type *caster_ptr, mind_ninja_type spell)
         (void)stasis_monster(caster_ptr, dir);
         break;
     case ANCIENT_KNOWLEDGE:
-        return ident_spell(caster_ptr, FALSE, TV_NONE);
+        return ident_spell(caster_ptr, false, TV_NONE);
     case FLOATING:
         set_tim_levitation(caster_ptr, randint1(20) + 20, false);
         break;
@@ -414,7 +414,7 @@ bool cast_ninja_spell(player_type *caster_ptr, mind_ninja_type spell)
                 return false;
             }
 
-            do_cmd_throw(caster_ptr, 1, FALSE, slot);
+            do_cmd_throw(caster_ptr, 1, false, slot);
             PlayerEnergy(caster_ptr).set_player_turn_energy(100);
         }
 

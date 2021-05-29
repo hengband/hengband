@@ -55,7 +55,7 @@ void do_cmd_query_symbol(player_type *creature_ptr)
 
     if (!get_com(_("知りたい文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^R乗馬,^M名前): ",
                      "Enter character to be identified(^A:All,^U:Uniqs,^N:Non uniqs,^M:Name): "),
-            &sym, FALSE))
+            &sym, false))
         return;
 
     for (i = 0; ident_info[i]; ++i) {

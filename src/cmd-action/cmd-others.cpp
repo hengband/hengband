@@ -59,7 +59,7 @@ void do_cmd_search(player_type *creature_ptr)
 static bool exe_alter(player_type *creature_ptr)
 {
     DIRECTION dir;
-    if (!get_rep_dir(creature_ptr, &dir, TRUE))
+    if (!get_rep_dir(creature_ptr, &dir, true))
         return false;
 
     POSITION y = creature_ptr->y + ddy[dir];
@@ -110,7 +110,7 @@ void do_cmd_alter(player_type *creature_ptr)
     }
 
     if (!exe_alter(creature_ptr))
-        disturb(creature_ptr, FALSE, false);
+        disturb(creature_ptr, false, false);
 }
 
 /*!

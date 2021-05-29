@@ -116,7 +116,7 @@ void auto_destroy_item(player_type *player_ptr, object_type *o_ptr, int autopick
     if (!destroy)
         return;
 
-    disturb(player_ptr, FALSE, false);
+    disturb(player_ptr, false, false);
     if (!can_player_destroy_object(player_ptr, o_ptr)) {
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(player_ptr, o_name, o_ptr, 0);

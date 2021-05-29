@@ -81,7 +81,7 @@ static void decide_summon_kin_caster(
     }
 
     if (mon_to_player || (mon_to_mon && known && see_either))
-        disturb(target_ptr, TRUE, true);
+        disturb(target_ptr, true, true);
 
     if (target_ptr->blind) {
         if (mon_to_player)
@@ -120,7 +120,7 @@ MonsterSpellResult spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION
     monster_name(target_ptr, t_idx, t_name);
     monster_desc(target_ptr, m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 
-    disturb(target_ptr, TRUE, true);
+    disturb(target_ptr, true, true);
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
     decide_summon_kin_caster(target_ptr, m_idx, t_idx, target_type, m_name, m_poss, known);
     int count = 0;
@@ -648,7 +648,7 @@ MonsterSpellResult spell_RF6_S_HI_UNDEAD(player_type *target_ptr, POSITION y, PO
     GAME_TEXT m_name[MAX_NLEN];
     monster_name(target_ptr, m_idx, m_name);
 
-    disturb(target_ptr, TRUE, true);
+    disturb(target_ptr, true, true);
 
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];

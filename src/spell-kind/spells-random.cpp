@@ -330,7 +330,7 @@ void wild_magic(player_type *caster_ptr, int spell)
         break;
     default: {
         int count = 0;
-        (void)activate_ty_curse(caster_ptr, FALSE, &count);
+        (void)activate_ty_curse(caster_ptr, false, &count);
         break;
     }
     }

@@ -1923,13 +1923,13 @@ melee_type player_melee_type(player_type *creature_ptr)
     if (has_melee_weapon(creature_ptr, INVEN_SUB_HAND))
         return MELEE_TYPE_WEAPON_SUB;
 
-    if (empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_MAIN | EMPTY_HAND_SUB))
+    if (empty_hands(creature_ptr, false) == (EMPTY_HAND_MAIN | EMPTY_HAND_SUB))
         return MELEE_TYPE_BAREHAND_TWO;
 
-    if (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_MAIN)
+    if (empty_hands(creature_ptr, false) == EMPTY_HAND_MAIN)
         return MELEE_TYPE_BAREHAND_MAIN;
 
-    if (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_SUB)
+    if (empty_hands(creature_ptr, false) == EMPTY_HAND_SUB)
         return MELEE_TYPE_BAREHAND_SUB;
 
     return MELEE_TYPE_SHIELD_DOUBLE;
@@ -1946,7 +1946,7 @@ bool can_attack_with_main_hand(player_type *creature_ptr)
     if (has_melee_weapon(creature_ptr, INVEN_MAIN_HAND))
         return true;
 
-    if ((empty_hands(creature_ptr, TRUE) & EMPTY_HAND_MAIN) && !can_attack_with_sub_hand(creature_ptr))
+    if ((empty_hands(creature_ptr, true) & EMPTY_HAND_MAIN) && !can_attack_with_sub_hand(creature_ptr))
         return true;
 
     return false;
@@ -1968,10 +1968,10 @@ bool can_attack_with_sub_hand(player_type *creature_ptr)
 bool has_two_handed_weapons(player_type *creature_ptr)
 {
     if (can_two_hands_wielding(creature_ptr)) {
-        if (can_attack_with_main_hand(creature_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_SUB)
+        if (can_attack_with_main_hand(creature_ptr) && (empty_hands(creature_ptr, false) == EMPTY_HAND_SUB)
             && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_MAIN_HAND])) {
             return true;
-        } else if (can_attack_with_sub_hand(creature_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_MAIN)
+        } else if (can_attack_with_sub_hand(creature_ptr) && (empty_hands(creature_ptr, false) == EMPTY_HAND_MAIN)
             && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_SUB_HAND])) {
             return true;
         }

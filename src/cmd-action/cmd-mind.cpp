@@ -258,7 +258,7 @@ static void check_mind_class(player_type *caster_ptr, cm_type *cm_ptr)
 
     if ((cm_ptr->use_mind == MIND_KI) && (cm_ptr->n != 5) && get_current_ki(caster_ptr)) {
         msg_print(_("気が散ってしまった．．．", "Your improved Force has gone away..."));
-        set_current_ki(caster_ptr, TRUE, 0);
+        set_current_ki(caster_ptr, true, 0);
     }
 
     if (randint1(100) >= (cm_ptr->chance / 2))
@@ -372,7 +372,7 @@ void do_cmd_mind(player_type *caster_ptr)
 {
     cm_type tmp_cm;
     cm_type *cm_ptr = initialize_cm_type(caster_ptr, &tmp_cm);
-    if (cmd_limit_confused(caster_ptr) || !MindPowerGetter(caster_ptr).get_mind_power(&cm_ptr->n, FALSE))
+    if (cmd_limit_confused(caster_ptr) || !MindPowerGetter(caster_ptr).get_mind_power(&cm_ptr->n, false))
         return;
 
     switch_mind_kind(caster_ptr, cm_ptr);
@@ -425,7 +425,7 @@ void do_cmd_mind_browse(player_type *caster_ptr)
     mind_kind_type use_mind = decide_use_mind_browse(caster_ptr);
     screen_save();
     while (true) {
-        if (!MindPowerGetter(caster_ptr).get_mind_power(&n, TRUE)) {
+        if (!MindPowerGetter(caster_ptr).get_mind_power(&n, true)) {
             screen_load();
             return;
         }

@@ -39,7 +39,7 @@ static void escape_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, 
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     if (turn_flags_ptr->is_riding_mon) {
         msg_format(_("%sはあなたの束縛から脱出した。", "%^s succeeded to escape from your restriction!"), m_name);
-        if (process_fall_off_horse(target_ptr, -1, FALSE)) {
+        if (process_fall_off_horse(target_ptr, -1, false)) {
             msg_print(_("地面に落とされた。", "You have fallen from the pet you were riding."));
         }
     }
@@ -54,7 +54,7 @@ static void escape_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, 
         msg_format(_("%^sが消え去った。", "%^s disappears."), m_name);
     }
 
-    if (turn_flags_ptr->is_riding_mon && process_fall_off_horse(target_ptr, -1, FALSE)) {
+    if (turn_flags_ptr->is_riding_mon && process_fall_off_horse(target_ptr, -1, false)) {
         msg_print(_("地面に落とされた。", "You have fallen from the pet you were riding."));
     }
 }
@@ -93,7 +93,7 @@ bool runaway_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTE
         msg_format(
             _("%sは傷の痛さの余りあなたの束縛から逃れようとしている。", "%^s seems to be in so much pain and tries to escape from your restriction."), m_name);
         riding_pinch++;
-        disturb(target_ptr, TRUE, true);
+        disturb(target_ptr, true, true);
         return false;
     }
 

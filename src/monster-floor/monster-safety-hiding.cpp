@@ -133,7 +133,7 @@ static void sweep_hiding_candidate(
             continue;
         if (!monster_can_enter(target_ptr, y, x, r_ptr, 0))
             continue;
-        if (projectable(target_ptr, target_ptr->y, target_ptr->x, y, x) || !clean_shot(target_ptr, m_ptr->fy, m_ptr->fx, y, x, FALSE))
+        if (projectable(target_ptr, target_ptr->y, target_ptr->x, y, x) || !clean_shot(target_ptr, m_ptr->fy, m_ptr->fx, y, x, false))
             continue;
 
         POSITION dis = distance(y, x, target_ptr->y, target_ptr->x);

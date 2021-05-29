@@ -38,7 +38,7 @@ static void recharged_notice(player_type *owner_ptr, object_type *o_ptr)
             else
                 msg_format("Your %s is recharged.", o_name);
 #endif
-            disturb(owner_ptr, FALSE, false);
+            disturb(owner_ptr, false, false);
             return;
         }
 

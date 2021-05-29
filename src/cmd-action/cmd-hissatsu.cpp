@@ -110,7 +110,7 @@ static int get_hissatsu_power(player_type *creature_ptr, SPELL_IDX *sn)
     while (!flag) {
         if (choice == ESCAPE)
             choice = ' ';
-        else if (!get_com(out_val, &choice, FALSE))
+        else if (!get_com(out_val, &choice, false))
             break;
 
         if (use_menu && choice != ' ') {

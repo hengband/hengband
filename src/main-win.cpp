@@ -306,7 +306,7 @@ static void term_getsize(term_data *td)
         rc.right = wid;
         rc.top = 0;
         rc.bottom = hgt;
-        AdjustWindowRectEx(&rc, td->dwStyle, TRUE, td->dwExStyle);
+        AdjustWindowRectEx(&rc, td->dwStyle, true, td->dwExStyle);
         td->size_wid = rc.right - rc.left;
         td->size_hgt = rc.bottom - rc.top;
     }
@@ -496,7 +496,7 @@ static void load_prefs_aux(int i)
 static void load_prefs(void)
 {
     arg_graphics = (byte)GetPrivateProfileIntA("Angband", "Graphics", static_cast<byte>(graphics_mode::GRAPHICS_NONE), ini_file);
-    arg_bigtile = (GetPrivateProfileIntA("Angband", "Bigtile", FALSE, ini_file) != 0);
+    arg_bigtile = (GetPrivateProfileIntA("Angband", "Bigtile", false, ini_file) != 0);
     use_bigtile = arg_bigtile;
     arg_sound = (GetPrivateProfileIntA("Angband", "Sound", 0, ini_file) != 0);
     arg_music = (GetPrivateProfileIntA("Angband", "Music", 0, ini_file) != 0);
@@ -2085,7 +2085,7 @@ static bool handle_window_resize(term_data *td, UINT uMsg, WPARAM wParam, LPARAM
         const LONG w = min_cols * td->tile_wid + td->size_ow1 + td->size_ow2;
         const LONG h = min_rows * td->tile_hgt + td->size_oh1 + td->size_oh2 + 1;
         RECT rc{ 0, 0, w, h };
-        AdjustWindowRectEx(&rc, td->dwStyle, TRUE, td->dwExStyle);
+        AdjustWindowRectEx(&rc, td->dwStyle, true, td->dwExStyle);
 
         MINMAXINFO *lpmmi = (MINMAXINFO *)lParam;
         lpmmi->ptMinTrackSize.x = rc.right - rc.left;
@@ -2717,13 +2717,13 @@ int WINAPI WinMain(
     term_flush();
     if (movie_in_progress) {
         // selected movie
-        play_game(p_ptr, FALSE, true);
+        play_game(p_ptr, false, true);
     } else if (savefile[0] == '\0') {
         // new game
-        play_game(p_ptr, TRUE, false);
+        play_game(p_ptr, true, false);
     } else {
         // selected savefile
-        play_game(p_ptr, FALSE, false);
+        play_game(p_ptr, false, false);
     }
 
     quit(NULL);

@@ -73,7 +73,7 @@ void do_cmd_knowledge(player_type *creature_ptr)
             do_cmd_knowledge_artifacts(creature_ptr);
             break;
         case '2': /* Objects */
-            do_cmd_knowledge_objects(creature_ptr, &need_redraw, FALSE, -1);
+            do_cmd_knowledge_objects(creature_ptr, &need_redraw, false, -1);
             break;
         case '3': /* Uniques */
             do_cmd_knowledge_uniques(creature_ptr, true);
@@ -82,7 +82,7 @@ void do_cmd_knowledge(player_type *creature_ptr)
             do_cmd_knowledge_uniques(creature_ptr, false);
             break;
         case '5': /* Monsters */
-            do_cmd_knowledge_monsters(creature_ptr, &need_redraw, FALSE, -1);
+            do_cmd_knowledge_monsters(creature_ptr, &need_redraw, false, -1);
             break;
         case '6': /* Kill count  */
             do_cmd_knowledge_kill_count(creature_ptr);
@@ -104,7 +104,7 @@ void do_cmd_knowledge(player_type *creature_ptr)
         case 'a': /* Feature list */
         {
             IDX lighting_level = F_LIT_STANDARD;
-            do_cmd_knowledge_features(&need_redraw, FALSE, -1, &lighting_level);
+            do_cmd_knowledge_features(&need_redraw, false, -1, &lighting_level);
             break;
         }
         case 'b': /* Max stat */

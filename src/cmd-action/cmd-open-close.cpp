@@ -70,7 +70,7 @@ static bool exe_open_chest(player_type *creature_ptr, POSITION y, POSITION x, OB
 
     if (flag) {
         chest_trap(creature_ptr, y, x, o_idx);
-        chest_death(creature_ptr, FALSE, y, x, o_idx);
+        chest_death(creature_ptr, false, y, x, o_idx);
     }
 
     return more;
@@ -110,7 +110,7 @@ void do_cmd_open(player_type *creature_ptr)
         command_arg = 0;
     }
 
-    if (get_rep_dir(creature_ptr, &dir, TRUE)) {
+    if (get_rep_dir(creature_ptr, &dir, true)) {
         FEAT_IDX feat;
         grid_type *g_ptr;
         y = creature_ptr->y + ddy[dir];
@@ -132,7 +132,7 @@ void do_cmd_open(player_type *creature_ptr)
     }
 
     if (!more)
-        disturb(creature_ptr, FALSE, false);
+        disturb(creature_ptr, false, false);
 }
 
 /*!
@@ -152,7 +152,7 @@ void do_cmd_close(player_type *creature_ptr)
     if (creature_ptr->special_defense & KATA_MUSOU)
         set_action(creature_ptr, ACTION_NONE);
 
-    if (easy_open && (count_dt(creature_ptr, &y, &x, is_open, FALSE) == 1))
+    if (easy_open && (count_dt(creature_ptr, &y, &x, is_open, false) == 1))
         command_dir = coords_to_dir(creature_ptr, y, x);
 
     if (command_arg) {
@@ -161,7 +161,7 @@ void do_cmd_close(player_type *creature_ptr)
         command_arg = 0;
     }
 
-    if (get_rep_dir(creature_ptr, &dir, FALSE)) {
+    if (get_rep_dir(creature_ptr, &dir, false)) {
         grid_type *g_ptr;
         FEAT_IDX feat;
         y = creature_ptr->y + ddy[dir];
@@ -180,7 +180,7 @@ void do_cmd_close(player_type *creature_ptr)
     }
 
     if (!more)
-        disturb(creature_ptr, FALSE, false);
+        disturb(creature_ptr, false, false);
 }
 
 /*!
@@ -215,7 +215,7 @@ void do_cmd_disarm(player_type *creature_ptr)
         command_arg = 0;
     }
 
-    if (get_rep_dir(creature_ptr, &dir, TRUE)) {
+    if (get_rep_dir(creature_ptr, &dir, true)) {
         grid_type *g_ptr;
         FEAT_IDX feat;
         y = creature_ptr->y + ddy[dir];
@@ -236,7 +236,7 @@ void do_cmd_disarm(player_type *creature_ptr)
     }
 
     if (!more)
-        disturb(creature_ptr, FALSE, false);
+        disturb(creature_ptr, false, false);
 }
 
 /*!
@@ -274,7 +274,7 @@ void do_cmd_bash(player_type *creature_ptr)
         command_arg = 0;
     }
 
-    if (get_rep_dir(creature_ptr, &dir, FALSE)) {
+    if (get_rep_dir(creature_ptr, &dir, false)) {
         FEAT_IDX feat;
         y = creature_ptr->y + ddy[dir];
         x = creature_ptr->x + ddx[dir];
@@ -292,7 +292,7 @@ void do_cmd_bash(player_type *creature_ptr)
     }
 
     if (!more)
-        disturb(creature_ptr, FALSE, false);
+        disturb(creature_ptr, false, false);
 }
 
 
@@ -340,7 +340,7 @@ void do_cmd_spike(player_type *creature_ptr)
     if (creature_ptr->special_defense & KATA_MUSOU)
         set_action(creature_ptr, ACTION_NONE);
 
-    if (!get_rep_dir(creature_ptr, &dir, FALSE))
+    if (!get_rep_dir(creature_ptr, &dir, false))
         return;
 
     POSITION y = creature_ptr->y + ddy[dir];

@@ -345,7 +345,7 @@ void chest_trap(player_type *target_ptr, POSITION y, POSITION x, OBJECT_IDX o_id
 	if ((trap & (CHEST_SCATTER)) && o_ptr->k_idx)
 	{
 		msg_print(_("宝箱の中身はダンジョンじゅうに散乱した！", "The contents of the chest scatter all over the dungeon!"));
-		chest_death(target_ptr, TRUE, y, x, o_idx);
+		chest_death(target_ptr, true, y, x, o_idx);
 		o_ptr->pval = 0;
 	}
 }

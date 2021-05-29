@@ -329,7 +329,7 @@ static bool allocate_dungeon_data(player_type *player_ptr, dun_data_type *dd_ptr
     alloc_object(player_ptr, ALLOC_SET_BOTH, ALLOC_TYP_OBJECT, randnor(DUN_AMT_ITEM, 3));
     alloc_object(player_ptr, ALLOC_SET_BOTH, ALLOC_TYP_GOLD, randnor(DUN_AMT_GOLD, 3));
     floor_ptr->object_level = floor_ptr->base_level;
-    if (alloc_guardian(player_ptr, TRUE))
+    if (alloc_guardian(player_ptr, true))
         return true;
 
     *dd_ptr->why = _("ダンジョンの主配置に失敗", "Failed to place a dungeon guardian");

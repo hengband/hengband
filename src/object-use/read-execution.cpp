@@ -133,7 +133,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
             } else if (has_melee_weapon(creature_ptr, INVEN_SUB_HAND))
                 k = INVEN_SUB_HAND;
 
-            if (k && curse_weapon_object(creature_ptr, FALSE, &creature_ptr->inventory_list[k]))
+            if (k && curse_weapon_object(creature_ptr, false, &creature_ptr->inventory_list[k]))
                 ident = true;
 
             break;
@@ -200,14 +200,14 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
             break;
         }
         case SV_SCROLL_IDENTIFY: {
-            if (!ident_spell(creature_ptr, FALSE, TV_NONE))
+            if (!ident_spell(creature_ptr, false, TV_NONE))
                 used_up = false;
 
             ident = true;
             break;
         }
         case SV_SCROLL_STAR_IDENTIFY: {
-            if (!identify_fully(creature_ptr, FALSE, TV_NONE))
+            if (!identify_fully(creature_ptr, false, TV_NONE))
                 used_up = false;
 
             ident = true;
@@ -269,7 +269,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
         }
         case SV_SCROLL_MUNDANITY: {
             ident = true;
-            if (!mundane_spell(creature_ptr, FALSE))
+            if (!mundane_spell(creature_ptr, false))
                 used_up = false;
 
             break;
@@ -322,19 +322,19 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
             break;
         }
         case SV_SCROLL_BLESSING: {
-            if (set_blessed(creature_ptr, creature_ptr->blessed + randint1(12) + 6, FALSE))
+            if (set_blessed(creature_ptr, creature_ptr->blessed + randint1(12) + 6, false))
                 ident = true;
 
             break;
         }
         case SV_SCROLL_HOLY_CHANT: {
-            if (set_blessed(creature_ptr, creature_ptr->blessed + randint1(24) + 12, FALSE))
+            if (set_blessed(creature_ptr, creature_ptr->blessed + randint1(24) + 12, false))
                 ident = true;
             break;
         }
 
         case SV_SCROLL_HOLY_PRAYER: {
-            if (set_blessed(creature_ptr, creature_ptr->blessed + randint1(48) + 24, FALSE))
+            if (set_blessed(creature_ptr, creature_ptr->blessed + randint1(48) + 24, false))
                 ident = true;
 
             break;
@@ -351,7 +351,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
         }
         case SV_SCROLL_PROTECTION_FROM_EVIL: {
             k = 3 * creature_ptr->lev;
-            if (set_protevil(creature_ptr, creature_ptr->protevil + randint1(25) + k, FALSE))
+            if (set_protevil(creature_ptr, creature_ptr->protevil + randint1(25) + k, false))
                 ident = true;
 
             break;
@@ -368,7 +368,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
             break;
         }
         case SV_SCROLL_STAR_DESTRUCTION: {
-            if (destroy_area(creature_ptr, creature_ptr->y, creature_ptr->x, 13 + randint0(5), FALSE))
+            if (destroy_area(creature_ptr, creature_ptr->y, creature_ptr->x, 13 + randint0(5), false))
                 ident = true;
             else
                 msg_print(_("ダンジョンが揺れた...", "The dungeon trembles..."));
@@ -405,12 +405,12 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
             break;
         }
         case SV_SCROLL_ACQUIREMENT: {
-            acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, 1, TRUE, FALSE, false);
+            acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, 1, true, false, false);
             ident = true;
             break;
         }
         case SV_SCROLL_STAR_ACQUIREMENT: {
-            acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, randint1(2) + 1, TRUE, FALSE, false);
+            acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, randint1(2) + 1, true, false, false);
             ident = true;
             break;
         }
@@ -493,7 +493,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
         q = format("book-%d_jp.txt", o_ptr->sval);
         describe_flavor(creature_ptr, o_name, o_ptr, OD_NAME_ONLY);
         path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, q);
-        (void)show_file(creature_ptr, TRUE, buf, o_name, 0, 0);
+        (void)show_file(creature_ptr, true, buf, o_name, 0, 0);
         screen_load();
         used_up = false;
     }

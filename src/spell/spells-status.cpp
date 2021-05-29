@@ -298,7 +298,7 @@ bool heroism(player_type *creature_ptr, int base)
     bool ident = false;
     if (set_afraid(creature_ptr, 0))
         ident = true;
-    if (set_hero(creature_ptr, creature_ptr->hero + randint1(base) + base, FALSE))
+    if (set_hero(creature_ptr, creature_ptr->hero + randint1(base) + base, false))
         ident = true;
     if (hp_player(creature_ptr, 10))
         ident = true;
@@ -310,7 +310,7 @@ bool berserk(player_type *creature_ptr, int base)
     bool ident = false;
     if (set_afraid(creature_ptr, 0))
         ident = true;
-    if (set_shero(creature_ptr, creature_ptr->shero + randint1(base) + base, FALSE))
+    if (set_shero(creature_ptr, creature_ptr->shero + randint1(base) + base, false))
         ident = true;
     if (hp_player(creature_ptr, 30))
         ident = true;
@@ -326,7 +326,7 @@ bool cure_light_wounds(player_type *creature_ptr, DICE_NUMBER dice, DICE_SID sid
         ident = true;
     if (set_cut(creature_ptr, creature_ptr->cut - 10))
         ident = true;
-    if (set_shero(creature_ptr, 0, TRUE))
+    if (set_shero(creature_ptr, 0, true))
         ident = true;
     return ident;
 }
@@ -342,7 +342,7 @@ bool cure_serious_wounds(player_type *creature_ptr, DICE_NUMBER dice, DICE_SID s
         ident = true;
     if (set_cut(creature_ptr, (creature_ptr->cut / 2) - 50))
         ident = true;
-    if (set_shero(creature_ptr, 0, TRUE))
+    if (set_shero(creature_ptr, 0, true))
         ident = true;
     return ident;
 }
@@ -362,7 +362,7 @@ bool cure_critical_wounds(player_type *creature_ptr, HIT_POINT pow)
         ident = true;
     if (set_cut(creature_ptr, 0))
         ident = true;
-    if (set_shero(creature_ptr, 0, TRUE))
+    if (set_shero(creature_ptr, 0, true))
         ident = true;
     return ident;
 }
@@ -443,7 +443,7 @@ bool restore_all_status(player_type *creature_ptr)
 bool fishing(player_type *creature_ptr)
 {
     DIRECTION dir;
-    if (!get_direction(creature_ptr, &dir, FALSE, FALSE))
+    if (!get_direction(creature_ptr, &dir, false, false))
         return false;
     POSITION y = creature_ptr->y + ddy[dir];
     POSITION x = creature_ptr->x + ddx[dir];
@@ -512,7 +512,7 @@ bool cosmic_cast_off(player_type *creature_ptr, object_type **o_ptr_ptr)
     (void)set_fast(creature_ptr, creature_ptr->fast + t, false);
     (void)set_shero(creature_ptr, creature_ptr->shero + t, false);
     if (creature_ptr->pclass == CLASS_FORCETRAINER) {
-        set_current_ki(creature_ptr, TRUE, creature_ptr->lev * 5 + 190);
+        set_current_ki(creature_ptr, true, creature_ptr->lev * 5 + 190);
         msg_print(_("気が爆発寸前になった。", "Your force absorbs the explosion."));
     }
 

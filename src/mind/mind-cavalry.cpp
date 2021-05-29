@@ -38,7 +38,7 @@ bool rodeo(player_type *creature_ptr)
         return false;
     }
 
-    if (!do_cmd_riding(creature_ptr, TRUE))
+    if (!do_cmd_riding(creature_ptr, true))
         return true;
 
     m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];

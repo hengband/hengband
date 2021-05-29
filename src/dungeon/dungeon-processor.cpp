@@ -74,7 +74,7 @@ void process_dungeon(player_type *player_ptr, bool load_game)
     player_ptr->ambush_flag = false;
     health_track(player_ptr, 0);
 
-    disturb(player_ptr, TRUE, true);
+    disturb(player_ptr, true, true);
     int quest_num = quest_number(player_ptr, floor_ptr->dun_level);
     if (quest_num) {
         r_info[quest[quest_num].r_idx].flags1 |= RF1_QUESTOR;

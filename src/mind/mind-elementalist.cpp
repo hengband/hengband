@@ -717,7 +717,7 @@ bool get_element_power(player_type *caster_ptr, SPELL_IDX *sn, bool only_browse)
     while (!flag) {
         if (choice == ESCAPE)
             choice = ' ';
-        else if (!get_com(out_val, &choice, TRUE))
+        else if (!get_com(out_val, &choice, true))
             break;
 
         if (use_menu && choice != ' ') {
@@ -897,7 +897,7 @@ static bool try_cast_element_spell(player_type *caster_ptr, SPELL_IDX spell_idx,
 void do_cmd_element(player_type *caster_ptr)
 {
     SPELL_IDX i;
-    if (cmd_limit_confused(caster_ptr) || !get_element_power(caster_ptr, &i, FALSE))
+    if (cmd_limit_confused(caster_ptr) || !get_element_power(caster_ptr, &i, false))
         return;
 
     mind_type spell = get_elemental_info(caster_ptr, i);
@@ -942,7 +942,7 @@ void do_cmd_element_browse(player_type *caster_ptr)
 
     screen_save();
     while (true) {
-        if (!get_element_power(caster_ptr, &n, TRUE)) {
+        if (!get_element_power(caster_ptr, &n, true)) {
             screen_load();
             return;
         }

@@ -164,7 +164,7 @@ static int get_mane_power(player_type *caster_ptr, int *sn, bool baigaesi)
     while (!flag) {
         if (choice == ESCAPE)
             choice = ' ';
-        else if (!get_com(out_val, &choice, TRUE))
+        else if (!get_com(out_val, &choice, true))
             break;
 
         /* Request redraw */

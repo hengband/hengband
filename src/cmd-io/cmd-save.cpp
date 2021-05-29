@@ -23,7 +23,7 @@ void do_cmd_save_game(player_type *creature_ptr, int is_autosave)
     if (is_autosave)
         msg_print(_("自動セーブ中", "Autosaving the game..."));
     else
-        disturb(creature_ptr, TRUE, true);
+        disturb(creature_ptr, true, true);
 
     msg_print(NULL);
     handle_stuff(creature_ptr);

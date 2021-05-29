@@ -16,7 +16,7 @@
 bool hit_and_away(player_type *caster_ptr)
 {
     DIRECTION dir;
-    if (!get_direction(caster_ptr, &dir, FALSE, FALSE))
+    if (!get_direction(caster_ptr, &dir, false, false))
         return false;
     POSITION y = caster_ptr->y + ddy[dir];
     POSITION x = caster_ptr->x + ddx[dir];

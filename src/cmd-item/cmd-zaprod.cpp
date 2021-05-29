@@ -81,10 +81,10 @@ int rod_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION d
 
     case SV_ROD_IDENTIFY: {
         if (powerful) {
-            if (!identify_fully(creature_ptr, FALSE, TV_NONE))
+            if (!identify_fully(creature_ptr, false, TV_NONE))
                 *use_charge = false;
         } else {
-            if (!ident_spell(creature_ptr, FALSE, TV_NONE))
+            if (!ident_spell(creature_ptr, false, TV_NONE))
                 *use_charge = false;
         }
         ident = true;
@@ -125,7 +125,7 @@ int rod_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION d
     case SV_ROD_CURING: {
         if (true_healing(creature_ptr, 0))
             ident = true;
-        if (set_shero(creature_ptr, 0, TRUE))
+        if (set_shero(creature_ptr, 0, true))
             ident = true;
         break;
     }
@@ -145,7 +145,7 @@ int rod_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION d
     }
 
     case SV_ROD_SPEED: {
-        if (set_fast(creature_ptr, randint1(30) + (powerful ? 30 : 15), FALSE))
+        if (set_fast(creature_ptr, randint1(30) + (powerful ? 30 : 15), false))
             ident = true;
         break;
     }
@@ -380,7 +380,7 @@ void exe_zap_rod(player_type *creature_ptr, INVENTORY_IDX item)
 
     sound(SOUND_ZAP);
 
-    ident = rod_effect(creature_ptr, o_ptr->sval, dir, &use_charge, FALSE, false);
+    ident = rod_effect(creature_ptr, o_ptr->sval, dir, &use_charge, false, false);
 
     /* Increase the timeout by the rod kind's pval. -LM- */
     if (use_charge)

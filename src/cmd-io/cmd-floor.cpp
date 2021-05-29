@@ -71,7 +71,7 @@ void do_cmd_locate(player_type *creature_ptr)
         dir = 0;
         while (!dir) {
             char command;
-            if (!get_com(out_val, &command, TRUE))
+            if (!get_com(out_val, &command, true))
                 break;
 
             dir = get_keymap_dir(command);

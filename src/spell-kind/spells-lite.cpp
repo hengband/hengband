@@ -254,7 +254,7 @@ static void cave_temp_room_aux(
  */
 static void cave_temp_lite_room_aux(player_type *caster_ptr, std::vector<Pos2D> &points, const POSITION y, const POSITION x)
 {
-    cave_temp_room_aux(caster_ptr, points, y, x, FALSE, cave_los_bold);
+    cave_temp_room_aux(caster_ptr, points, y, x, false, cave_los_bold);
 }
 
 /*!
@@ -274,7 +274,7 @@ static bool cave_pass_dark_bold(floor_type *floor_ptr, POSITION y, POSITION x) {
  */
 static void cave_temp_unlite_room_aux(player_type *caster_ptr, std::vector<Pos2D> &points, const POSITION y, const POSITION x)
 {
-    cave_temp_room_aux(caster_ptr, points, y, x, TRUE, cave_pass_dark_bold);
+    cave_temp_room_aux(caster_ptr, points, y, x, true, cave_pass_dark_bold);
 }
 
 /*!

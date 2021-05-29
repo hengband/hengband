@@ -153,7 +153,7 @@ void arena_comm(player_type *player_ptr, int cmd)
         screen_save();
 
         /* Peruse the on_defeat_arena_monster help file */
-        (void)show_file(player_ptr, TRUE, _("arena_j.txt", "arena.txt"), NULL, 0, 0);
+        (void)show_file(player_ptr, true, _("arena_j.txt", "arena.txt"), NULL, 0, 0);
         screen_load();
         break;
     }

@@ -191,7 +191,7 @@ void process_world(player_type *player_ptr)
      */
     if (ironman_nightmare && (min != prev_min)) {
         if ((hour == 23) && !(min % 15)) {
-            disturb(player_ptr, FALSE, true);
+            disturb(player_ptr, false, true);
             switch (min / 15) {
             case 0:
                 msg_print(_("遠くで不気味な鐘の音が鳴った。", "You hear a distant bell toll ominously."));
@@ -212,7 +212,7 @@ void process_world(player_type *player_ptr)
         }
 
         if (!hour && !min) {
-            disturb(player_ptr, TRUE, true);
+            disturb(player_ptr, true, true);
             msg_print(_("遠くで鐘が何回も鳴り、死んだような静けさの中へ消えていった。", "A distant bell tolls many times, fading into an deathly silence."));
             if (player_ptr->wild_mode) {
                 player_ptr->oldpy = randint1(MAX_HGT - 2);

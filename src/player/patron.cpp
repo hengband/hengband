@@ -240,7 +240,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
             msg_format(_("%sの声がささやいた:", "The voice of %s whispers:"), chaos_patrons[creature_ptr->chaos_patron]);
             msg_print(_("「我が与えし物を賢明に使うべし。」", "'Use my gift wisely.'"));
 
-            acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, 1, FALSE, FALSE, false);
+            acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, 1, false, FALSE, false);
             reward = _("上質なアイテムを手に入れた。", "a good item");
             break;
 
@@ -249,7 +249,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
             msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[creature_ptr->chaos_patron]);
             msg_print(_("「我が与えし物を賢明に使うべし。」", "'Use my gift wisely.'"));
 
-            acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, 1, TRUE, FALSE, false);
+            acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, 1, true, false, false);
             reward = _("高級品のアイテムを手に入れた。", "an excellent item");
             break;
 
@@ -265,7 +265,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
             msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[creature_ptr->chaos_patron]);
             msg_print(_("「汝の行いは貴き報いに値せり。」", "'Thy deed hath earned thee a worthy reward.'"));
 
-            acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, randint1(2) + 1, FALSE, FALSE, false);
+            acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, randint1(2) + 1, false, FALSE, false);
             reward = _("上質なアイテムを手に入れた。", "good items");
             break;
 
@@ -274,7 +274,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
             msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[creature_ptr->chaos_patron]);
             msg_print(_("「下僕よ、汝の献身への我が惜しみ無き報いを見るがよい。」", "'Behold, mortal, how generously I reward thy loyalty.'"));
 
-            acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, randint1(2) + 1, TRUE, FALSE, false);
+            acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, randint1(2) + 1, true, false, false);
             reward = _("高級品のアイテムを手に入れた。", "excellent items");
             break;
 
@@ -282,7 +282,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
             msg_format(_("%sの声が轟き渡った:", "The voice of %s thunders:"), chaos_patrons[creature_ptr->chaos_patron]);
             msg_print(_("「下僕よ、汝傲慢なり。」", "'Thou art growing arrogant, mortal.'"));
 
-            (void)activate_ty_curse(creature_ptr, FALSE, &count);
+            (void)activate_ty_curse(creature_ptr, false, &count);
             reward = _("禍々しい呪いをかけられた。", "cursing");
             break;
 
@@ -402,7 +402,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
                     slot = INVEN_MAIN_HAND;
             }
             describe_flavor(creature_ptr, o_name, &creature_ptr->inventory_list[slot], OD_NAME_ONLY);
-            (void)curse_weapon_object(creature_ptr, FALSE, &creature_ptr->inventory_list[slot]);
+            (void)curse_weapon_object(creature_ptr, false, &creature_ptr->inventory_list[slot]);
             reward = format(_("%sが破壊された。", "destroying %s"), o_name);
             break;
         }
@@ -426,7 +426,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 
             switch (randint1(4)) {
             case 1:
-                (void)activate_ty_curse(creature_ptr, FALSE, &count);
+                (void)activate_ty_curse(creature_ptr, false, &count);
                 reward = _("禍々しい呪いをかけられた。", "cursing");
                 break;
             case 2:
@@ -445,7 +445,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
                             slot = INVEN_MAIN_HAND;
                     }
                     describe_flavor(creature_ptr, o_name, &creature_ptr->inventory_list[slot], OD_NAME_ONLY);
-                    (void)curse_weapon_object(creature_ptr, FALSE, &creature_ptr->inventory_list[slot]);
+                    (void)curse_weapon_object(creature_ptr, false, &creature_ptr->inventory_list[slot]);
                     reward = format(_("%sが破壊された。", "destroying %s"), o_name);
                 } else {
                     if (!creature_ptr->inventory_list[INVEN_BODY].k_idx)
@@ -474,7 +474,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
                 (void)dec_stat(creature_ptr, stat, 10 + randint1(15), false);
             }
             activate_hi_summon(creature_ptr, creature_ptr->y, creature_ptr->x, false);
-            (void)activate_ty_curse(creature_ptr, FALSE, &count);
+            (void)activate_ty_curse(creature_ptr, false, &count);
             if (one_in_(2)) {
                 inventory_slot_type slot = INVEN_NONE;
 
@@ -486,7 +486,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
                     slot = INVEN_SUB_HAND;
 
                 if (slot)
-                    (void)curse_weapon_object(creature_ptr, FALSE, &creature_ptr->inventory_list[slot]);
+                    (void)curse_weapon_object(creature_ptr, false, &creature_ptr->inventory_list[slot]);
             }
             if (one_in_(2))
                 (void)curse_armor(creature_ptr);

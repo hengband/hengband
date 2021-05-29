@@ -301,7 +301,7 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
     }
 
     if (r_ptr->flags7 & RF7_CHAMELEON) {
-        choose_new_monster(player_ptr, g_ptr->m_idx, TRUE, 0);
+        choose_new_monster(player_ptr, g_ptr->m_idx, true, 0);
         r_ptr = &r_info[m_ptr->r_idx];
         m_ptr->mflag2.set(MFLAG2::CHAMELEON);
         if ((r_ptr->flags1 & RF1_UNIQUE) && (who <= 0))

@@ -262,7 +262,7 @@ static void describe_attack_evasion(player_type *target_ptr, monap_type *monap_p
     if (!monap_ptr->m_ptr->ml)
         return;
 
-    disturb(target_ptr, TRUE, true);
+    disturb(target_ptr, true, true);
 #ifdef JP
     if (monap_ptr->abbreviate)
         msg_format("%sかわした。", (target_ptr->special_attack & ATTACK_SUIKEN) ? "奇妙な動きで" : "");
@@ -308,7 +308,7 @@ static void gain_armor_exp(player_type *target_ptr, monap_type *monap_ptr)
  */
 static bool process_monster_attack_hit(player_type *target_ptr, monap_type *monap_ptr)
 {
-    disturb(target_ptr, TRUE, true);
+    disturb(target_ptr, true, true);
     if (effect_protecion_from_evil(target_ptr, monap_ptr))
         return false;
 
@@ -437,7 +437,7 @@ static bool process_monster_blows(player_type *target_ptr, monap_type *monap_ptr
             check_fall_off_horse(target_ptr, monap_ptr);
             if (target_ptr->special_defense & NINJA_KAWARIMI) {
                 // 変わり身のテレポートが成功したら攻撃を打ち切り、プレイヤーが離脱した旨を返す。
-                if (kawarimi(target_ptr, FALSE))
+                if (kawarimi(target_ptr, false))
                     return true;
             }
         } else {
@@ -528,7 +528,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
     }
 
     if ((target_ptr->special_defense & NINJA_KAWARIMI) && (randint0(55) < (target_ptr->lev * 3 / 5 + 20))) {
-        if (kawarimi(target_ptr, TRUE))
+        if (kawarimi(target_ptr, true))
             return true;
     }
 

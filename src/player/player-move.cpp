@@ -66,13 +66,13 @@ static void discover_hidden_things(player_type *creature_ptr, POSITION y, POSITI
     if (g_ptr->mimic && is_trap(creature_ptr, g_ptr->feat)) {
         disclose_grid(creature_ptr, y, x);
         msg_print(_("トラップを発見した。", "You have found a trap."));
-        disturb(creature_ptr, FALSE, true);
+        disturb(creature_ptr, false, true);
     }
 
     if (is_hidden_door(creature_ptr, g_ptr)) {
         msg_print(_("隠しドアを発見した。", "You have found a secret door."));
         disclose_grid(creature_ptr, y, x);
-        disturb(creature_ptr, FALSE, false);
+        disturb(creature_ptr, false, false);
     }
 
     for (const auto this_o_idx : g_ptr->o_idx_list) {
@@ -85,7 +85,7 @@ static void discover_hidden_things(player_type *creature_ptr, POSITION y, POSITI
         if (!object_is_known(o_ptr)) {
             msg_print(_("箱に仕掛けられたトラップを発見した！", "You have discovered a trap on the chest!"));
             object_known(o_ptr);
-            disturb(creature_ptr, FALSE, false);
+            disturb(creature_ptr, false, false);
         }
     }
 }
@@ -215,15 +215,15 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 
     PlayerEnergy energy(creature_ptr);
     if (has_flag(f_ptr->flags, FF_STORE)) {
-        disturb(creature_ptr, FALSE, true);
+        disturb(creature_ptr, false, true);
         energy.reset_player_turn();
         command_new = SPECIAL_KEY_STORE;
     } else if (has_flag(f_ptr->flags, FF_BLDG)) {
-        disturb(creature_ptr, FALSE, true);
+        disturb(creature_ptr, false, true);
         energy.reset_player_turn();
         command_new = SPECIAL_KEY_BUILDING;
     } else if (has_flag(f_ptr->flags, FF_QUEST_ENTER)) {
-        disturb(creature_ptr, FALSE, true);
+        disturb(creature_ptr, false, true);
         energy.reset_player_turn();
         command_new = SPECIAL_KEY_QUEST;
     } else if (has_flag(f_ptr->flags, FF_QUEST_EXIT)) {
@@ -239,7 +239,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
         creature_ptr->oldpy = 0;
         creature_ptr->leaving = true;
     } else if (has_flag(f_ptr->flags, FF_HIT_TRAP) && !(mpe_mode & MPE_STAYING)) {
-        disturb(creature_ptr, FALSE, true);
+        disturb(creature_ptr, false, true);
         if (g_ptr->mimic || has_flag(f_ptr->flags, FF_SECRET)) {
             msg_print(_("トラップだ！", "You found a trap!"));
             disclose_grid(creature_ptr, creature_ptr->y, creature_ptr->x);
@@ -257,7 +257,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
                 msg_print(_("* 注意:この先はトラップの感知範囲外です！ *", "*Leaving trap detect region!*"));
 
             if (disturb_trap_detect)
-                disturb(creature_ptr, FALSE, true);
+                disturb(creature_ptr, false, true);
         }
     }
 

@@ -456,7 +456,7 @@ static void update_invisible_monster(player_type *subject_ptr, um_type *um_ptr, 
         && (projectable(subject_ptr, um_ptr->m_ptr->fy, um_ptr->m_ptr->fx, subject_ptr->y, subject_ptr->x)
             && projectable(subject_ptr, subject_ptr->y, subject_ptr->x, um_ptr->m_ptr->fy, um_ptr->m_ptr->fx))) {
         if (disturb_pets || is_hostile(um_ptr->m_ptr))
-            disturb(subject_ptr, TRUE, true);
+            disturb(subject_ptr, true, true);
     }
 }
 
@@ -475,7 +475,7 @@ static void update_visible_monster(player_type *subject_ptr, um_type *um_ptr, MO
         subject_ptr->redraw |= PR_UHEALTH;
 
     if (um_ptr->do_disturb && (disturb_pets || is_hostile(um_ptr->m_ptr)))
-        disturb(subject_ptr, TRUE, true);
+        disturb(subject_ptr, true, true);
 }
 
 static bool update_clear_monster(player_type *subject_ptr, um_type *um_ptr)
@@ -486,7 +486,7 @@ static bool update_clear_monster(player_type *subject_ptr, um_type *um_ptr)
     if (um_ptr->m_ptr->mflag.has_not(MFLAG::VIEW)) {
         um_ptr->m_ptr->mflag.set(MFLAG::VIEW);
         if (um_ptr->do_disturb && (disturb_pets || is_hostile(um_ptr->m_ptr)))
-            disturb(subject_ptr, TRUE, true);
+            disturb(subject_ptr, true, true);
     }
 
     return true;
@@ -521,7 +521,7 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
 
     um_ptr->m_ptr->mflag.reset(MFLAG::VIEW);
     if (um_ptr->do_disturb && (disturb_pets || is_hostile(um_ptr->m_ptr)))
-        disturb(subject_ptr, TRUE, true);
+        disturb(subject_ptr, true, true);
 }
 
 /*!

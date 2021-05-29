@@ -518,7 +518,7 @@ static COMMAND_CODE choose_essence(void)
             for (i = 0; i < mode_max; i++)
                 prt(format("  %c) %s", 'a' + i, menu_name[i]), 2 + i, 14);
 
-            if (!get_com(_("何を付加しますか:", "Command :"), &choice, TRUE)) {
+            if (!get_com(_("何を付加しますか:", "Command :"), &choice, true)) {
                 screen_load();
                 return 0;
             }
@@ -579,7 +579,7 @@ static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
         while (!flag) {
             if (choice == ESCAPE)
                 choice = ' ';
-            else if (!get_com(out_val, &choice, FALSE))
+            else if (!get_com(out_val, &choice, false))
                 break;
 
             if (use_menu && choice != ' ') {
@@ -1106,9 +1106,9 @@ void do_cmd_kaji(player_type *creature_ptr, bool only_browse)
                     prt(_("  d) エッセンス付加", "  d) Add essence"), 5, 14);
                     prt(_("  e) 武器/防具強化", "  e) Enchant weapon/armor"), 6, 14);
 #ifdef JP
-                    if (!get_com(format("どの能力を%sますか:", only_browse ? "調べ" : "使い"), &choice, TRUE))
+                    if (!get_com(format("どの能力を%sますか:", only_browse ? "調べ" : "使い"), &choice, true))
 #else
-                    if (!get_com("Command :", &choice, TRUE))
+                    if (!get_com("Command :", &choice, true))
 #endif
                     {
                         screen_load();

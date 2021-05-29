@@ -287,7 +287,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
         damage = (damage + 1) / 2;
 
     if (damage_type != DAMAGE_USELIFE) {
-        disturb(creature_ptr, TRUE, true);
+        disturb(creature_ptr, true, true);
         if (auto_more) {
             creature_ptr->now_damaged = true;
         }

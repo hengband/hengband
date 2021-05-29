@@ -407,7 +407,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
     enum trap_type trap_feat_type = has_flag(f_ptr->flags, FF_TRAP) ? (enum trap_type)f_ptr->subtype : NOT_TRAP;
     concptr name = _("トラップ", "a trap");
 
-    disturb(trapped_ptr, FALSE, true);
+    disturb(trapped_ptr, false, true);
 
     cave_alter_feat(trapped_ptr, y, x, FF_HIT_TRAP);
 

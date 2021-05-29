@@ -373,7 +373,7 @@ static HIT_POINT calcutate_capturable_hp(player_type *caster_ptr, monster_type *
 static void effect_monster_captured(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->m_ptr->mflag2.has(MFLAG2::CHAMELEON))
-        choose_new_monster(caster_ptr, em_ptr->g_ptr->m_idx, FALSE, MON_CHAMELEON);
+        choose_new_monster(caster_ptr, em_ptr->g_ptr->m_idx, false, MON_CHAMELEON);
 
     msg_format(_("%sを捕えた！", "You capture %^s!"), em_ptr->m_name);
     cap_mon = em_ptr->m_ptr->r_idx;
@@ -381,7 +381,7 @@ static void effect_monster_captured(player_type *caster_ptr, effect_monster_type
     cap_hp = em_ptr->m_ptr->hp;
     cap_maxhp = em_ptr->m_ptr->max_maxhp;
     cap_nickname = em_ptr->m_ptr->nickname;
-    if ((em_ptr->g_ptr->m_idx == caster_ptr->riding) && process_fall_off_horse(caster_ptr, -1, FALSE))
+    if ((em_ptr->g_ptr->m_idx == caster_ptr->riding) && process_fall_off_horse(caster_ptr, -1, false))
         msg_format(_("地面に落とされた。", "You have fallen from %s."), em_ptr->m_name);
 
     delete_monster_idx(caster_ptr, em_ptr->g_ptr->m_idx);

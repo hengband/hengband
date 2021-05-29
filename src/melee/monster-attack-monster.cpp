@@ -312,7 +312,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
         subject_ptr->current_floor_ptr->monster_noise = true;
 
     if (subject_ptr->riding && (m_idx == subject_ptr->riding))
-        disturb(subject_ptr, TRUE, true);
+        disturb(subject_ptr, true, true);
 
     repeat_melee(subject_ptr, mam_ptr);
     explode_monster_by_melee(subject_ptr, mam_ptr);

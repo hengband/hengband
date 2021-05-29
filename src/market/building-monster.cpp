@@ -42,7 +42,7 @@ bool research_mon(player_type *player_ptr)
     char sym;
     if (!get_com(
             _("モンスターの文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^M名前):", "Enter character to be identified(^A:All,^U:Uniqs,^N:Non uniqs,^M:Name): "),
-            &sym, FALSE))
+            &sym, false))
 
     {
         screen_load();

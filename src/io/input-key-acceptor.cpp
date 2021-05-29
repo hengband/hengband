@@ -67,7 +67,7 @@ static void forget_macro_action(void)
 
     while (true) {
         char ch;
-        if (term_inkey(&ch, FALSE, TRUE))
+        if (term_inkey(&ch, false, true))
             break;
         if (ch == 0)
             break;
@@ -104,11 +104,11 @@ static char inkey_aux(void)
     num_more = 0;
 
     if (parse_macro) {
-        if (term_inkey(&ch, FALSE, TRUE)) {
+        if (term_inkey(&ch, false, true)) {
             parse_macro = false;
         }
     } else {
-        (void)(term_inkey(&ch, TRUE, TRUE));
+        (void)(term_inkey(&ch, true, true));
     }
 
     if (ch == 30)
@@ -133,7 +133,7 @@ static char inkey_aux(void)
         if (k < 0)
             break;
 
-        if (0 == term_inkey(&ch, FALSE, TRUE)) {
+        if (0 == term_inkey(&ch, false, true)) {
             buf[p++] = ch;
             buf[p] = '\0';
             w = 0;
@@ -153,7 +153,7 @@ static char inkey_aux(void)
                 return 0;
         }
 
-        (void)term_inkey(&ch, TRUE, true);
+        (void)term_inkey(&ch, true, true);
         return (ch);
     }
 
@@ -216,11 +216,11 @@ char inkey(bool do_all_term_refresh)
     auto x = angband_term[0]->scr->cx;
     char kk;
     while (!ch) {
-        if (!inkey_base && inkey_scan && (0 != term_inkey(&kk, FALSE, FALSE))) {
+        if (!inkey_base && inkey_scan && (0 != term_inkey(&kk, false, false))) {
             break;
         }
 
-        if (!done && (0 != term_inkey(&kk, FALSE, FALSE))) {
+        if (!done && (0 != term_inkey(&kk, false, false))) {
             start_term_fresh();
             if (do_all_term_refresh)
                 all_term_fresh(x, y);
@@ -235,7 +235,7 @@ char inkey(bool do_all_term_refresh)
         if (inkey_base) {
             int w = 0;
             if (!inkey_scan) {
-                if (0 == term_inkey(&ch, TRUE, TRUE)) {
+                if (0 == term_inkey(&ch, true, true)) {
                     break;
                 }
 
@@ -243,7 +243,7 @@ char inkey(bool do_all_term_refresh)
             }
 
             while (true) {
-                if (0 == term_inkey(&ch, FALSE, TRUE)) {
+                if (0 == term_inkey(&ch, false, true)) {
                     break;
                 } else {
                     w += 10;
