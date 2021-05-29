@@ -1032,7 +1032,7 @@ bool do_cmd_cast(player_type *caster_ptr)
         /* Ask for a spell */
 #ifdef JP
     if (!get_spell(caster_ptr, &spell, ((mp_ptr->spell_book == TV_LIFE_BOOK) ? "詠唱する" : (mp_ptr->spell_book == TV_MUSIC_BOOK) ? "歌う" : "唱える"), sval,
-            TRUE, realm)) {
+            true, realm)) {
         if (spell == -2)
             msg_format("その本には知っている%sがない。", prayer);
         return false;

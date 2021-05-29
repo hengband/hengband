@@ -56,7 +56,7 @@ int home_carry(player_type *player_ptr, object_type *o_ptr)
      * 隠し機能: オプション powerup_home が設定されていると
      *           我が家が 20 ページまで使える
      */
-    if ((cur_store_num != STORE_HOME) || (powerup_home == TRUE)) {
+    if ((cur_store_num != STORE_HOME) || powerup_home) {
         if (st_ptr->stock_num >= st_ptr->stock_size) {
             return -1;
         }

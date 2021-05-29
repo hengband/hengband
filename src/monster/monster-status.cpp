@@ -654,7 +654,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
     monster_type exp_mon;
 
     /* Innocent until proven otherwise */
-    bool innocent = TRUE, thief = false;
+    bool innocent = true, thief = false;
     int i;
     HIT_POINT expdam;
 

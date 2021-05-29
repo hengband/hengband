@@ -526,7 +526,7 @@ void wilderness_gen(player_type *creature_ptr)
     }
 
     player_place(creature_ptr, creature_ptr->oldpy, creature_ptr->oldpx);
-    int lim = (generate_encounter == TRUE) ? 40 : MIN_M_ALLOC_TN;
+    int lim = generate_encounter ? 40 : MIN_M_ALLOC_TN;
     for (int i = 0; i < lim; i++) {
         BIT_FLAGS mode = 0;
         if (!(generate_encounter || (one_in_(2) && (!creature_ptr->town_num))))

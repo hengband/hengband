@@ -2374,7 +2374,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 
         for (int i = 1; i < MAX_TERM_DATA; i++) {
             if (data[i].visible) {
-                if (wParam == TRUE) {
+                if (wParam == 1) {
                     ShowWindow(data[i].w, SW_SHOWNA);
                 } else {
                     ShowWindow(data[i].w, SW_HIDE);

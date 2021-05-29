@@ -266,7 +266,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
     }
 
     /* 追加オプション(always_show_list)が設定されている場合は常に一覧を表示する */
-    if ((always_show_list == TRUE) || use_menu)
+    if (always_show_list || use_menu)
         command_see = true;
 
     if (command_see)

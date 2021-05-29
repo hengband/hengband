@@ -66,7 +66,7 @@ int rod_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION d
     /* Analyze the rod */
     switch (sval) {
     case SV_ROD_DETECT_TRAP: {
-        if (detect_traps(creature_ptr, detect_rad, (bool)(dir ? FALSE : TRUE)))
+        if (detect_traps(creature_ptr, detect_rad, dir == 0))
             ident = true;
         break;
     }
