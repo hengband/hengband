@@ -556,7 +556,7 @@ ProjectResult project(player_type *caster_ptr, const MONSTER_IDX who, POSITION r
 
     if (flag & PROJECT_KILL) {
         see_s_msg = (who > 0) ? is_seen(caster_ptr, &caster_ptr->current_floor_ptr->m_list[who])
-                              : (!who ? TRUE : (player_can_see_bold(caster_ptr, y1, x1) && projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y1, x1)));
+                              : (!who ? true : (player_can_see_bold(caster_ptr, y1, x1) && projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y1, x1)));
     }
 
     if (flag & (PROJECT_GRID)) {

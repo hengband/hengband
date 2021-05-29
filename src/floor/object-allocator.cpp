@@ -170,7 +170,7 @@ void alloc_object(player_type *owner_ptr, dap_type set, EFFECT_ID typ, int num)
             if (player_bold(owner_ptr, y, x))
                 continue;
 
-            bool room = (floor_ptr->grid_array[y][x].info & CAVE_ROOM) ? TRUE : false;
+            bool room = (floor_ptr->grid_array[y][x].info & CAVE_ROOM) ? true : false;
             if (((set == ALLOC_SET_CORR) && room) || ((set == ALLOC_SET_ROOM) && !room))
                 continue;
 

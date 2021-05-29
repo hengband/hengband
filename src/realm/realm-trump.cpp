@@ -37,11 +37,11 @@
  */
 concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 {
-    bool name = (mode == SPELL_NAME) ? TRUE : false;
-    bool desc = (mode == SPELL_DESC) ? TRUE : false;
-    bool info = (mode == SPELL_INFO) ? TRUE : false;
-    bool cast = (mode == SPELL_CAST) ? TRUE : false;
-    bool fail = (mode == SPELL_FAIL) ? TRUE : false;
+    bool name = (mode == SPELL_NAME) ? true : false;
+    bool desc = (mode == SPELL_DESC) ? true : false;
+    bool info = (mode == SPELL_INFO) ? true : false;
+    bool cast = (mode == SPELL_CAST) ? true : false;
+    bool fail = (mode == SPELL_FAIL) ? true : false;
 
     DIRECTION dir;
     PLAYER_LEVEL plev = caster_ptr->lev;

@@ -70,8 +70,8 @@ bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x)
     monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
     MONRACE_IDX new_r_idx;
     MONRACE_IDX old_r_idx = m_ptr->r_idx;
-    bool targeted = (target_who == g_ptr->m_idx) ? TRUE : false;
-    bool health_tracked = (caster_ptr->health_who == g_ptr->m_idx) ? TRUE : false;
+    bool targeted = (target_who == g_ptr->m_idx) ? true : false;
+    bool health_tracked = (caster_ptr->health_who == g_ptr->m_idx) ? true : false;
 
     if (floor_ptr->inside_arena || caster_ptr->phase_out)
         return false;

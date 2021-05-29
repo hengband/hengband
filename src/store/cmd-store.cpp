@@ -147,7 +147,7 @@ void do_cmd_store(player_type *player_ptr)
         request_command(player_ptr, true);
         store_process_command(player_ptr);
 
-        bool need_redraw_store_inv = (player_ptr->update & PU_BONUS) ? TRUE : false;
+        bool need_redraw_store_inv = (player_ptr->update & PU_BONUS) ? true : false;
         current_world_ptr->character_icky_depth = 1;
         handle_stuff(player_ptr);
         if (player_ptr->inventory_list[INVEN_PACK].k_idx) {

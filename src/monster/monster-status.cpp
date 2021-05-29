@@ -68,7 +68,7 @@ bool monster_is_powerful(floor_type *floor_ptr, MONSTER_IDX m_idx)
 {
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    bool powerful = r_ptr->flags2 & RF2_POWERFUL ? TRUE : false;
+    bool powerful = r_ptr->flags2 & RF2_POWERFUL ? true : false;
     return powerful;
 }
 

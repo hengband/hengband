@@ -1943,9 +1943,9 @@ static bool process_keydown(WPARAM wParam, LPARAM lParam)
     if (GetKeyState(VK_MENU) & 0x8000)
         ma = true;
 
-    term_no_press = (ma) ? TRUE : false;
+    term_no_press = (ma) ? true : false;
     if (special_key[(byte)(wParam)] || (ma && !ignore_key[(byte)(wParam)])) {
-        bool ext_key = (lParam & 0x1000000L) ? TRUE : false;
+        bool ext_key = (lParam & 0x1000000L) ? true : false;
         bool numpad = false;
 
         term_keypress(31);
