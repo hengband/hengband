@@ -675,7 +675,7 @@ BIT_FLAGS has_invuln_arrow(player_type *creature_ptr)
 void check_no_flowed(player_type *creature_ptr)
 {
     object_type *o_ptr;
-    bool has_sw = FALSE, has_kabe = false;
+    bool has_sw = false, has_kabe = false;
 
     creature_ptr->no_flowed = false;
 

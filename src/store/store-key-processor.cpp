@@ -71,7 +71,7 @@ void store_process_command(player_type *client_ptr)
             if (store_top < 0)
                 store_top = ((st_ptr->stock_num - 1) / store_bottom) * store_bottom;
 
-            if ((cur_store_num == STORE_HOME) && (powerup_home == FALSE))
+            if ((cur_store_num == STORE_HOME) && !powerup_home)
                 if (store_top >= store_bottom)
                     store_top = store_bottom;
 
