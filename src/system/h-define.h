@@ -13,12 +13,6 @@
  * The constants "TRUE" and "FALSE"
  */
 
-#undef TRUE
-#define TRUE	1 /*!< コンパイル環境に定義がない場合のTRUE定義 */
-
-#undef FALSE
-#define FALSE	0 /*!< コンパイル環境に定義がない場合のFALSE定義 */
-
 /**** Simple "Macros" ****/
 #ifdef JP
 #define lbtokg(x) ((int)((x)*5)) /*!< 変愚蛮怒基準のポンド→キログラム変換定義(全体) */

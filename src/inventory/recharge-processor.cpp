@@ -55,7 +55,7 @@ void recharge_magic_items(player_type *creature_ptr)
     int i;
     bool changed;
 
-    for (changed = FALSE, i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (changed = false, i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         object_type *o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
@@ -79,7 +79,7 @@ void recharge_magic_items(player_type *creature_ptr)
      * and each charging rod in a stack decreases the stack's timeout by
      * one per turn. -LM-
      */
-    for (changed = FALSE, i = 0; i < INVEN_PACK; i++) {
+    for (changed = false, i = 0; i < INVEN_PACK; i++) {
         object_type *o_ptr = &creature_ptr->inventory_list[i];
         object_kind *k_ptr = &k_info[o_ptr->k_idx];
         if (!o_ptr->k_idx)
