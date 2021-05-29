@@ -28,11 +28,11 @@ void exit_game_panic(player_type *creature_ptr)
 {
 	if (!current_world_ptr->character_generated || current_world_ptr->character_saved)
 		quit(_("緊急事態", "panic"));
-	msg_flag = FALSE;
+	msg_flag = false;
 
 	prt("", 0, 0);
-	disturb(creature_ptr, TRUE, TRUE);
-	if (creature_ptr->chp < 0) creature_ptr->is_dead = FALSE;
+	disturb(creature_ptr, true, true);
+	if (creature_ptr->chp < 0) creature_ptr->is_dead = false;
 
 	creature_ptr->panic_save = 1;
 	signals_ignore_tstp();
