@@ -741,7 +741,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         trivial_info = 0;
 
     if (i <= trivial_info)
-        return FALSE;
+        return false;
 
     screen_save();
     int wid, hgt;
@@ -781,5 +781,5 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
     prt(_("[何かキーを押すとゲームに戻ります]", "[Press any key to continue]"), k, 15);
     inkey();
     screen_load();
-    return TRUE;
+    return true;
 }

@@ -64,7 +64,7 @@ void recharge_magic_items(player_type *creature_ptr)
             o_ptr->timeout--;
             if (!o_ptr->timeout) {
                 recharged_notice(creature_ptr, o_ptr);
-                changed = TRUE;
+                changed = true;
             }
         }
     }
@@ -96,9 +96,9 @@ void recharge_magic_items(player_type *creature_ptr)
 
             if (!(o_ptr->timeout)) {
                 recharged_notice(creature_ptr, o_ptr);
-                changed = TRUE;
+                changed = true;
             } else if (o_ptr->timeout % k_ptr->pval) {
-                changed = TRUE;
+                changed = true;
             }
         }
     }

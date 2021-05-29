@@ -337,16 +337,16 @@ bool choose_kata(player_type *creature_ptr)
     char buf[80];
 
     if (cmd_limit_confused(creature_ptr))
-        return FALSE;
+        return false;
 
     if (creature_ptr->stun) {
         msg_print(_("意識がはっきりとしない。", "You are not clear-headed"));
-        return FALSE;
+        return false;
     }
 
     if (creature_ptr->afraid) {
         msg_print(_("体が震えて構えられない！", "You are trembling with fear!"));
-        return FALSE;
+        return false;
     }
 
     screen_save();
@@ -361,19 +361,19 @@ bool choose_kata(player_type *creature_ptr)
     prt("", 1, 0);
     prt(_("        どの型で構えますか？", "        Choose Stance: "), 1, 14);
 
-    while (TRUE) {
+    while (true) {
         choice = inkey();
 
         if (choice == ESCAPE) {
             screen_load();
-            return FALSE;
+            return false;
         } else if ((choice == 'a') || (choice == 'A')) {
             if (creature_ptr->action == ACTION_KATA) {
                 set_action(creature_ptr, ACTION_NONE);
             } else
                 msg_print(_("もともと構えていない。", "You are not in a special stance."));
             screen_load();
-            return TRUE;
+            return true;
         } else if ((choice == 'b') || (choice == 'B')) {
             new_kata = 0;
             break;
@@ -401,7 +401,7 @@ bool choose_kata(player_type *creature_ptr)
 
     creature_ptr->redraw |= (PR_STATE | PR_STATUS);
     screen_load();
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -476,6 +476,6 @@ void musou_counterattack(player_type *attacker_ptr, monap_type *monap_ptr)
     attacker_ptr->csp -= 7;
     msg_format(_("%^sに反撃した！", "You counterattacked %s!"), m_target_name);
     do_cmd_attack(attacker_ptr, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, HISSATSU_COUNTER);
-    monap_ptr->fear = FALSE;
+    monap_ptr->fear = false;
     attacker_ptr->redraw |= (PR_MANA);
 }

@@ -42,7 +42,7 @@ void reduce_magic_effects_timeout(player_type *creature_ptr)
     }
 
     if (creature_ptr->suppress_multi_reward) {
-        creature_ptr->suppress_multi_reward = FALSE;
+        creature_ptr->suppress_multi_reward = false;
     }
 
     if (creature_ptr->tim_esp) {

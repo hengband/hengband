@@ -28,7 +28,7 @@ void do_cmd_fire(player_type *creature_ptr, SPELL_IDX snipe_type)
     if (creature_ptr->wild_mode)
         return;
 
-    creature_ptr->is_fired = FALSE;
+    creature_ptr->is_fired = false;
     j_ptr = &creature_ptr->inventory_list[INVEN_BOW];
     if (!j_ptr->tval) {
         msg_print(_("射撃用の武器を持っていない。", "You have nothing to fire with."));

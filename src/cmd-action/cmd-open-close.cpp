@@ -38,12 +38,12 @@
  */
 static bool exe_open_chest(player_type *creature_ptr, POSITION y, POSITION x, OBJECT_IDX o_idx)
 {
-    bool flag = TRUE;
-    bool more = FALSE;
+    bool flag = true;
+    bool more = false;
     object_type *o_ptr = &creature_ptr->current_floor_ptr->o_list[o_idx];
     PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     if (o_ptr->pval > 0) {
-        flag = FALSE;
+        flag = false;
         int i = creature_ptr->skill_dis;
         if (creature_ptr->blind || no_lite(creature_ptr))
             i = i / 10;
@@ -58,9 +58,9 @@ static bool exe_open_chest(player_type *creature_ptr, POSITION y, POSITION x, OB
         if (randint0(100) < j) {
             msg_print(_("鍵をはずした。", "You have picked the lock."));
             gain_exp(creature_ptr, 1);
-            flag = TRUE;
+            flag = true;
         } else {
-            more = TRUE;
+            more = true;
             if (flush_failure)
                 flush();
 
@@ -87,7 +87,7 @@ void do_cmd_open(player_type *creature_ptr)
     POSITION y, x;
     DIRECTION dir;
     OBJECT_IDX o_idx;
-    bool more = FALSE;
+    bool more = false;
     if (creature_ptr->wild_mode)
         return;
 
@@ -145,7 +145,7 @@ void do_cmd_close(player_type *creature_ptr)
 {
     POSITION y, x;
     DIRECTION dir;
-    bool more = FALSE;
+    bool more = false;
     if (creature_ptr->wild_mode)
         return;
 
@@ -192,7 +192,7 @@ void do_cmd_disarm(player_type *creature_ptr)
     POSITION y, x;
     DIRECTION dir;
     OBJECT_IDX o_idx;
-    bool more = FALSE;
+    bool more = false;
     if (creature_ptr->wild_mode)
         return;
 
@@ -261,7 +261,7 @@ void do_cmd_bash(player_type *creature_ptr)
     POSITION y, x;
     DIRECTION dir;
     grid_type *g_ptr;
-    bool more = FALSE;
+    bool more = false;
     if (creature_ptr->wild_mode)
         return;
 
@@ -315,11 +315,11 @@ static bool get_spike(player_type *creature_ptr, INVENTORY_IDX *ip)
 
         if (o_ptr->tval == TV_SPIKE) {
             *ip = i;
-            return TRUE;
+            return true;
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 /*!

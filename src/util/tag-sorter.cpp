@@ -70,7 +70,7 @@ static void quicksort(tag_type elements[], int left, int right)
         int i = left;
         int j = right - 1;
 
-        while (TRUE) {
+        while (true) {
             while (elements[++i].tag < pivot.tag)
                 ;
             while (elements[--j].tag > pivot.tag)

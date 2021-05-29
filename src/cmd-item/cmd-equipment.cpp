@@ -52,7 +52,7 @@
 void do_cmd_equip(player_type *creature_ptr)
 {
     char out_val[160];
-    command_wrk = TRUE;
+    command_wrk = true;
     if (easy_floor)
         command_wrk = USE_EQUIP;
 
@@ -72,7 +72,7 @@ void do_cmd_equip(player_type *creature_ptr)
     screen_load();
 
     if (command_new != ESCAPE) {
-        command_see = TRUE;
+        command_see = true;
         return;
     }
 
@@ -161,13 +161,13 @@ void do_cmd_wield(player_type *creature_ptr)
             q = _("どちらの手に装備しますか?", "Equip which hand? ");
 
         s = _("おっと。", "Oops.");
-        creature_ptr->select_ring_slot = TRUE;
+        creature_ptr->select_ring_slot = true;
         if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), TV_NONE)) {
-            creature_ptr->select_ring_slot = FALSE;
+            creature_ptr->select_ring_slot = false;
             return;
         }
 
-        creature_ptr->select_ring_slot = FALSE;
+        creature_ptr->select_ring_slot = false;
         break;
 
     default:

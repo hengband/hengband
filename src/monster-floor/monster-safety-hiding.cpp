@@ -108,10 +108,10 @@ bool find_safety(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSIT
         *yp = m_ptr->fy - candidate.gy;
         *xp = m_ptr->fx - candidate.gx;
 
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -178,8 +178,8 @@ bool find_hiding(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSIT
 
         *yp = m_ptr->fy - candidate.gy;
         *xp = m_ptr->fx - candidate.gx;
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }

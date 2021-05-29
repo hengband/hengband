@@ -194,7 +194,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
         if (music_singing(creature_ptr, MUSIC_WALL)) {
             (void)project(creature_ptr, 0, 0, creature_ptr->y, creature_ptr->x, (60 + creature_ptr->lev), GF_DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM);
             if (!player_bold(creature_ptr, ny, nx) || creature_ptr->is_dead || creature_ptr->leaving)
-                return FALSE;
+                return false;
         }
 
         if ((creature_ptr->skill_fos >= 50) || (0 == randint0(50 - creature_ptr->skill_fos)))
@@ -237,7 +237,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
             creature_ptr->word_recall = 0;
         creature_ptr->oldpx = 0;
         creature_ptr->oldpy = 0;
-        creature_ptr->leaving = TRUE;
+        creature_ptr->leaving = true;
     } else if (has_flag(f_ptr->flags, FF_HIT_TRAP) && !(mpe_mode & MPE_STAYING)) {
         disturb(creature_ptr, FALSE, TRUE);
         if (g_ptr->mimic || has_flag(f_ptr->flags, FF_SECRET)) {
@@ -247,11 +247,11 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 
         hit_trap(creature_ptr, (mpe_mode & MPE_BREAK_TRAP) ? TRUE : FALSE);
         if (!player_bold(creature_ptr, ny, nx) || creature_ptr->is_dead || creature_ptr->leaving)
-            return FALSE;
+            return false;
     }
 
     if (!(mpe_mode & MPE_STAYING) && (disturb_trap_detect || alert_trap_detect) && creature_ptr->dtrap && !(g_ptr->info & CAVE_IN_DETECT)) {
-        creature_ptr->dtrap = FALSE;
+        creature_ptr->dtrap = false;
         if (!(g_ptr->info & CAVE_UNSAFE)) {
             if (alert_trap_detect)
                 msg_print(_("* 注意:この先はトラップの感知範囲外です！ *", "*Leaving trap detect region!*"));
@@ -274,7 +274,7 @@ bool trap_can_be_ignored(player_type *creature_ptr, FEAT_IDX feat)
 {
     feature_type *f_ptr = &f_info[feat];
     if (!has_flag(f_ptr->flags, FF_TRAP))
-        return TRUE;
+        return true;
 
     switch (f_ptr->subtype) {
     case TRAP_TRAPDOOR:
@@ -282,37 +282,37 @@ bool trap_can_be_ignored(player_type *creature_ptr, FEAT_IDX feat)
     case TRAP_SPIKED_PIT:
     case TRAP_POISON_PIT:
         if (creature_ptr->levitation)
-            return TRUE;
+            return true;
         break;
     case TRAP_TELEPORT:
         if (creature_ptr->anti_tele)
-            return TRUE;
+            return true;
         break;
     case TRAP_FIRE:
         if (has_immune_fire(creature_ptr))
-            return TRUE;
+            return true;
         break;
     case TRAP_ACID:
         if (has_immune_acid(creature_ptr))
-            return TRUE;
+            return true;
         break;
     case TRAP_BLIND:
         if (has_resist_blind(creature_ptr))
-            return TRUE;
+            return true;
         break;
     case TRAP_CONFUSE:
         if (has_resist_conf(creature_ptr))
-            return TRUE;
+            return true;
         break;
     case TRAP_POISON:
         if (has_resist_pois(creature_ptr))
-            return TRUE;
+            return true;
         break;
     case TRAP_SLEEP:
         if (creature_ptr->free_act)
-            return TRUE;
+            return true;
         break;
     }
 
-    return FALSE;
+    return false;
 }

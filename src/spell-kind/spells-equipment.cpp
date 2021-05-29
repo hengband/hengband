@@ -54,13 +54,13 @@ bool apply_disenchant(player_type *target_ptr, BIT_FLAGS mode)
     object_type *o_ptr;
     o_ptr = &target_ptr->inventory_list[t];
     if (!o_ptr->k_idx)
-        return FALSE;
+        return false;
 
     if (!object_is_weapon_armour_ammo(target_ptr, o_ptr))
-        return FALSE;
+        return false;
 
     if ((o_ptr->to_h <= 0) && (o_ptr->to_d <= 0) && (o_ptr->to_a <= 0) && (o_ptr->pval <= 1)) {
-        return FALSE;
+        return false;
     }
 
     GAME_TEXT o_name[MAX_NLEN];
@@ -71,7 +71,7 @@ bool apply_disenchant(player_type *target_ptr, BIT_FLAGS mode)
 #else
         msg_format("Your %s (%c) resist%s disenchantment!", o_name, index_to_label(t), ((o_ptr->number != 1) ? "" : "s"));
 #endif
-        return TRUE;
+        return true;
     }
 
     int to_h = o_ptr->to_h;
@@ -102,7 +102,7 @@ bool apply_disenchant(player_type *target_ptr, BIT_FLAGS mode)
     is_actually_disenchanted |= to_a != o_ptr->to_a;
     is_actually_disenchanted |= pval != o_ptr->pval;
     if (!is_actually_disenchanted)
-        return TRUE;
+        return true;
 
 #ifdef JP
     msg_format("%s(%c)は劣化してしまった！", o_name, index_to_label(t));
@@ -115,5 +115,5 @@ bool apply_disenchant(player_type *target_ptr, BIT_FLAGS mode)
     target_ptr->window_flags |= (PW_EQUIP | PW_PLAYER);
 
     calc_android_exp(target_ptr);
-    return TRUE;
+    return true;
 }

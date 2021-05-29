@@ -113,7 +113,7 @@ static void do_cmd_erase_diary(void)
 void do_cmd_diary(player_type *creature_ptr)
 {
     screen_save();
-    while (TRUE) {
+    while (true) {
         term_clear();
         prt(_("[ 記録の設定 ]", "[ Play Record ]"), 2, 0);
         prt(_("(1) 記録を見る", "(1) Display your record"), 4, 5);

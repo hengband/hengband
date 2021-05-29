@@ -505,7 +505,7 @@ void wilderness_gen(player_type *creature_ptr)
             }
         }
 
-        creature_ptr->teleport_town = FALSE;
+        creature_ptr->teleport_town = false;
     } else if (creature_ptr->leaving_dungeon) {
         for (y = 0; y < floor_ptr->height; y++) {
             for (x = 0; x < floor_ptr->width; x++) {
@@ -522,7 +522,7 @@ void wilderness_gen(player_type *creature_ptr)
             }
         }
 
-        creature_ptr->teleport_town = FALSE;
+        creature_ptr->teleport_town = false;
     }
 
     player_place(creature_ptr, creature_ptr->oldpy, creature_ptr->oldpx);
@@ -536,9 +536,9 @@ void wilderness_gen(player_type *creature_ptr)
     }
 
     if (generate_encounter)
-        creature_ptr->ambush_flag = TRUE;
+        creature_ptr->ambush_flag = true;
 
-    generate_encounter = FALSE;
+    generate_encounter = false;
     set_floor_and_wall(0);
     for (int i = 0; i < max_q_idx; i++)
         if (quest[i].status == QUEST_STATUS_REWARDED)
@@ -763,7 +763,7 @@ errr init_wilderness(void)
     for (int i = 1; i < current_world_ptr->max_wild_y; i++)
         wilderness[i] = wilderness[0] + i * current_world_ptr->max_wild_x;
 
-    generate_encounter = FALSE;
+    generate_encounter = false;
     return 0;
 }
 
@@ -841,23 +841,23 @@ bool change_wild_mode(player_type *creature_ptr, bool encount)
 {
     generate_encounter = encount;
     if (creature_ptr->leaving)
-        return FALSE;
+        return false;
 
     if (lite_town || vanilla_town) {
         msg_print(_("荒野なんてない。", "No global map."));
-        return FALSE;
+        return false;
     }
 
     if (creature_ptr->wild_mode) {
         creature_ptr->wilderness_x = creature_ptr->x;
         creature_ptr->wilderness_y = creature_ptr->y;
         creature_ptr->energy_need = 0;
-        creature_ptr->wild_mode = FALSE;
-        creature_ptr->leaving = TRUE;
-        return TRUE;
+        creature_ptr->wild_mode = false;
+        creature_ptr->leaving = true;
+        return true;
     }
 
-    bool has_pet = FALSE;
+    bool has_pet = false;
     PlayerEnergy energy(creature_ptr);
     for (int i = 1; i < creature_ptr->current_floor_ptr->m_max; i++) {
         monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[i];
@@ -865,21 +865,21 @@ bool change_wild_mode(player_type *creature_ptr, bool encount)
             continue;
 
         if (is_pet(m_ptr) && i != creature_ptr->riding)
-            has_pet = TRUE;
+            has_pet = true;
 
         if (monster_csleep_remaining(m_ptr) || (m_ptr->cdis > MAX_SIGHT) || !is_hostile(m_ptr))
             continue;
 
         msg_print(_("敵がすぐ近くにいるときは広域マップに入れない！", "You cannot enter global map, since there are some monsters nearby!"));
         energy.reset_player_turn();
-        return FALSE;
+        return false;
     }
 
     if (has_pet) {
         concptr msg = _("ペットを置いて広域マップに入りますか？", "Do you leave your pets behind? ");
         if (!get_check_strict(creature_ptr, msg, CHECK_OKAY_CANCEL)) {
             energy.reset_player_turn();
-            return FALSE;
+            return false;
         }
     }
 
@@ -890,7 +890,7 @@ bool change_wild_mode(player_type *creature_ptr, bool encount)
         stop_hex_spell_all(creature_ptr);
 
     set_action(creature_ptr, ACTION_NONE);
-    creature_ptr->wild_mode = TRUE;
-    creature_ptr->leaving = TRUE;
-    return TRUE;
+    creature_ptr->wild_mode = true;
+    creature_ptr->leaving = true;
+    return true;
 }

@@ -54,7 +54,7 @@ void execute_recall(player_type *creature_ptr)
         leave_quest_check(creature_ptr);
         leave_tower_check(creature_ptr);
         creature_ptr->current_floor_ptr->inside_quest = 0;
-        creature_ptr->leaving = TRUE;
+        creature_ptr->leaving = true;
         sound(SOUND_TPLEVEL);
         return;
     }
@@ -85,14 +85,14 @@ void execute_recall(player_type *creature_ptr)
         creature_ptr->oldpy = creature_ptr->y;
     }
 
-    creature_ptr->wild_mode = FALSE;
+    creature_ptr->wild_mode = false;
 
     /*
      * Clear all saved floors
      * and create a first saved floor
      */
     prepare_change_floor_mode(creature_ptr, CFM_FIRST_FLOOR);
-    creature_ptr->leaving = TRUE;
+    creature_ptr->leaving = true;
 
     if (creature_ptr->dungeon_idx != DUNGEON_ANGBAND) {
         sound(SOUND_TPLEVEL);
@@ -141,7 +141,7 @@ void execute_floor_reset(player_type *creature_ptr)
          * and create a first saved floor
          */
         prepare_change_floor_mode(creature_ptr, CFM_FIRST_FLOOR);
-        creature_ptr->leaving = TRUE;
+        creature_ptr->leaving = true;
     } else {
         msg_print(_("世界が少しの間変化したようだ。", "The world seems to change for a moment!"));
     }

@@ -41,7 +41,7 @@ static void check_saved_tmp_files(const int fd, bool *force)
     if (!get_check(_("強制的に削除してもよろしいですか？", "Do you delete the old temporary files? ")))
         quit(_("実行中止", "Aborted."));
 
-    *force = TRUE;
+    *force = true;
 }
 
 /*!

@@ -84,7 +84,7 @@ void spell_badstatus_message(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER
         if (see_either) {
             msg_format(msg1, m_name, t_name);
         } else {
-            floor_ptr->monster_noise = TRUE;
+            floor_ptr->monster_noise = true;
         }
     }
 

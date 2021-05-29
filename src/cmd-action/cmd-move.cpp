@@ -55,7 +55,7 @@ static bool confirm_leave_level(player_type *creature_ptr, bool down_stair)
         return get_check(_("本当にこの階を去りますか？", "Really leave this floor? "));
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -63,7 +63,7 @@ static bool confirm_leave_level(player_type *creature_ptr, bool down_stair)
  */
 void do_cmd_go_up(player_type *creature_ptr)
 {
-    bool go_up = FALSE;
+    bool go_up = false;
     grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
     int up_num = 0;
@@ -100,7 +100,7 @@ void do_cmd_go_up(player_type *creature_ptr)
             creature_ptr->word_recall = 0;
         }
 
-        creature_ptr->leaving = TRUE;
+        creature_ptr->leaving = true;
         creature_ptr->oldpx = 0;
         creature_ptr->oldpy = 0;
         PlayerEnergy(creature_ptr).set_player_turn_energy(100);
@@ -108,7 +108,7 @@ void do_cmd_go_up(player_type *creature_ptr)
     }
 
     if (!is_in_dungeon(creature_ptr))
-        go_up = TRUE;
+        go_up = true;
     else
         go_up = confirm_leave_level(creature_ptr, FALSE);
 
@@ -155,7 +155,7 @@ void do_cmd_go_up(player_type *creature_ptr)
     else
         msg_print(_("階段を上って新たなる迷宮へと足を踏み入れた。", "You enter a maze of up staircases."));
 
-    creature_ptr->leaving = TRUE;
+    creature_ptr->leaving = true;
 }
 
 /*!
@@ -164,7 +164,7 @@ void do_cmd_go_up(player_type *creature_ptr)
  */
 void do_cmd_go_down(player_type *creature_ptr)
 {
-    bool fall_trap = FALSE;
+    bool fall_trap = false;
     int down_num = 0;
     if (creature_ptr->special_defense & KATA_MUSOU)
         set_action(creature_ptr, ACTION_NONE);
@@ -177,7 +177,7 @@ void do_cmd_go_down(player_type *creature_ptr)
     }
 
     if (has_flag(f_ptr->flags, FF_TRAP))
-        fall_trap = TRUE;
+        fall_trap = true;
 
     if (has_flag(f_ptr->flags, FF_QUEST_ENTER)) {
         do_cmd_quest(creature_ptr);
@@ -210,7 +210,7 @@ void do_cmd_go_down(player_type *creature_ptr)
             creature_ptr->word_recall = 0;
         }
 
-        creature_ptr->leaving = TRUE;
+        creature_ptr->leaving = true;
         creature_ptr->oldpx = 0;
         creature_ptr->oldpy = 0;
         PlayerEnergy(creature_ptr).set_player_turn_energy(100);
@@ -248,7 +248,7 @@ void do_cmd_go_down(player_type *creature_ptr)
         down_num += 1;
 
     if (!is_in_dungeon(creature_ptr)) {
-        creature_ptr->enter_dungeon = TRUE;
+        creature_ptr->enter_dungeon = true;
         down_num = d_info[creature_ptr->dungeon_idx].mindepth;
     }
 
@@ -272,7 +272,7 @@ void do_cmd_go_down(player_type *creature_ptr)
         }
     }
 
-    creature_ptr->leaving = TRUE;
+    creature_ptr->leaving = true;
 
     if (fall_trap) {
         prepare_change_floor_mode(creature_ptr, CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
@@ -299,7 +299,7 @@ void do_cmd_walk(player_type *creature_ptr, bool pickup)
         command_arg = 0;
     }
 
-    bool more = FALSE;
+    bool more = false;
     DIRECTION dir;
     if (get_rep_dir(creature_ptr, &dir, FALSE)) {
         PlayerEnergy energy(creature_ptr);
@@ -317,7 +317,7 @@ void do_cmd_walk(player_type *creature_ptr, bool pickup)
         }
 
         exe_movement(creature_ptr, dir, pickup, FALSE);
-        more = TRUE;
+        more = true;
     }
 
     if (creature_ptr->wild_mode && !cave_has_flag_bold(creature_ptr->current_floor_ptr, creature_ptr->y, creature_ptr->x, FF_TOWN)) {

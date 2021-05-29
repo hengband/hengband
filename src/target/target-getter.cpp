@@ -85,7 +85,7 @@ bool get_aim_dir(player_type *creature_ptr, DIRECTION *dp)
 
     if (!dir) {
         project_length = 0;
-        return FALSE;
+        return false;
     }
 
     command_dir = dir;
@@ -97,7 +97,7 @@ bool get_aim_dir(player_type *creature_ptr, DIRECTION *dp)
 
     *dp = dir;
     repeat_push((COMMAND_CODE)command_dir);
-    return TRUE;
+    return true;
 }
 
 bool get_direction(player_type *creature_ptr, DIRECTION *dp, bool allow_under, bool with_steed)
@@ -130,7 +130,7 @@ bool get_direction(player_type *creature_ptr, DIRECTION *dp, bool allow_under, b
         dir = 0;
 
     if (!dir)
-        return FALSE;
+        return false;
 
     command_dir = dir;
     if (creature_ptr->confused) {
@@ -167,7 +167,7 @@ bool get_direction(player_type *creature_ptr, DIRECTION *dp, bool allow_under, b
 
     *dp = dir;
     repeat_push((COMMAND_CODE)command_dir);
-    return TRUE;
+    return true;
 }
 
 /*
@@ -215,7 +215,7 @@ bool get_rep_dir(player_type *creature_ptr, DIRECTION *dp, bool under)
         dir = 0;
 
     if (!dir)
-        return FALSE;
+        return false;
 
     command_dir = dir;
     if (creature_ptr->confused) {
@@ -249,5 +249,5 @@ bool get_rep_dir(player_type *creature_ptr, DIRECTION *dp, bool under)
 
     *dp = dir;
     repeat_push((COMMAND_CODE)command_dir);
-    return TRUE;
+    return true;
 }

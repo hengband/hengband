@@ -28,7 +28,7 @@ static errr rd_inventory(player_type *player_ptr)
     C_MAKE(player_ptr->inventory_list, INVEN_TOTAL, object_type);
 
     int slot = 0;
-    while (TRUE) {
+    while (true) {
         u16b n;
         rd_u16b(&n);
 

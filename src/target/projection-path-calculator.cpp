@@ -90,7 +90,7 @@ static void calc_frac(projection_path_type *pp_ptr, bool is_vertical)
 static void calc_projection_to_target(player_type *player_ptr, projection_path_type *pp_ptr, bool is_vertical)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    while (TRUE) {
+    while (true) {
         pp_ptr->gp[pp_ptr->n++] = location_to_grid(pp_ptr->y, pp_ptr->x);
         if ((pp_ptr->n + (pp_ptr->k >> 1)) >= pp_ptr->range)
             break;
@@ -130,7 +130,7 @@ static void calc_projection_to_target(player_type *player_ptr, projection_path_t
 static bool calc_vertical_projection(player_type *player_ptr, projection_path_type *pp_ptr)
 {
     if (pp_ptr->ay <= pp_ptr->ax)
-        return FALSE;
+        return false;
 
     pp_ptr->m = pp_ptr->ax * pp_ptr->ax * 2;
     pp_ptr->y = pp_ptr->y1 + pp_ptr->sy;
@@ -143,13 +143,13 @@ static bool calc_vertical_projection(player_type *player_ptr, projection_path_ty
     }
 
     calc_projection_to_target(player_ptr, pp_ptr, TRUE);
-    return TRUE;
+    return true;
 }
 
 static bool calc_horizontal_projection(player_type *player_ptr, projection_path_type *pp_ptr)
 {
     if (pp_ptr->ax <= pp_ptr->ay)
-        return FALSE;
+        return false;
 
     pp_ptr->m = pp_ptr->ay * pp_ptr->ay * 2;
     pp_ptr->y = pp_ptr->y1;
@@ -162,13 +162,13 @@ static bool calc_horizontal_projection(player_type *player_ptr, projection_path_
     }
 
     calc_projection_to_target(player_ptr, pp_ptr, FALSE);
-    return TRUE;
+    return true;
 }
 
 static void calc_projection_others(player_type *player_ptr, projection_path_type *pp_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    while (TRUE) {
+    while (true) {
         pp_ptr->gp[pp_ptr->n++] = location_to_grid(pp_ptr->y, pp_ptr->x);
         if ((pp_ptr->n + (pp_ptr->n >> 1)) >= pp_ptr->range)
             break;
@@ -248,14 +248,14 @@ bool projectable(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2,
     u16b grid_g[512];
     int grid_n = projection_path(player_ptr, grid_g, (project_length ? project_length : get_max_range(player_ptr)), y1, x1, y2, x2, 0);
     if (!grid_n)
-        return TRUE;
+        return true;
 
     POSITION y = get_grid_y(grid_g[grid_n - 1]);
     POSITION x = get_grid_x(grid_g[grid_n - 1]);
     if ((y != y2) || (x != x2))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*!

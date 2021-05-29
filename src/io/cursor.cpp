@@ -121,7 +121,7 @@ bool change_panel(player_type *player_ptr, POSITION dy, POSITION dx)
         x = 0;
 
     if ((y == panel_row_min) && (x == panel_col_min))
-        return FALSE;
+        return false;
 
     panel_row_min = y;
     panel_col_min = x;
@@ -130,7 +130,7 @@ bool change_panel(player_type *player_ptr, POSITION dy, POSITION dx)
     player_ptr->update |= (PU_MONSTERS);
     player_ptr->redraw |= (PR_MAP);
     handle_stuff(player_ptr);
-    return TRUE;
+    return true;
 }
 
 /*!

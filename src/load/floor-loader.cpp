@@ -247,23 +247,23 @@ static bool load_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
     u32b tmp32u;
     rd_u32b(&tmp32u);
     if (saved_floor_file_sign != tmp32u)
-        return FALSE;
+        return false;
 
     if (rd_saved_floor(player_ptr, sf_ptr))
-        return FALSE;
+        return false;
 
     n_v_check = v_check;
     rd_u32b(&o_v_check);
 
     if (o_v_check != n_v_check)
-        return FALSE;
+        return false;
 
     n_x_check = x_check;
     rd_u32b(&o_x_check);
 
     if (o_x_check != n_x_check)
-        return FALSE;
-    return TRUE;
+        return false;
+    return true;
 }
 
 /*!
@@ -318,14 +318,14 @@ bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
     loading_savefile = angband_fopen(floor_savefile, "rb");
     safe_setuid_drop();
 
-    bool is_save_successful = TRUE;
+    bool is_save_successful = true;
     if (!loading_savefile)
-        is_save_successful = FALSE;
+        is_save_successful = false;
 
     if (is_save_successful) {
         is_save_successful = load_floor_aux(player_ptr, sf_ptr);
         if (ferror(loading_savefile))
-            is_save_successful = FALSE;
+            is_save_successful = false;
 
         angband_fclose(loading_savefile);
         safe_setuid_grab(player_ptr);

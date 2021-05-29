@@ -95,10 +95,10 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type *m_ptr, int 
     if (!r_ptr)
         return;
     if (r_ptr->flags1 & RF1_UNIQUE) {
-        bool is_bounty = FALSE;
+        bool is_bounty = false;
         for (int i = 0; i < MAX_BOUNTY; i++) {
             if (current_world_ptr->bounty_r_idx[i] == r_idx) {
-                is_bounty = TRUE;
+                is_bounty = true;
                 break;
             }
         }

@@ -64,9 +64,9 @@
  */
 concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 {
-    bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
-    bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
-    bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
+    bool name = (mode == SPELL_NAME) ? TRUE : false;
+    bool desc = (mode == SPELL_DESC) ? TRUE : false;
+    bool cast = (mode == SPELL_CAST) ? TRUE : false;
 
     DIRECTION dir;
     PLAYER_LEVEL plev = caster_ptr->lev;
@@ -222,7 +222,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
                 return NULL;
             }
             msg_print(_("相手の攻撃に対して身構えた。", "You prepare to counterattack."));
-            caster_ptr->counter = TRUE;
+            caster_ptr->counter = true;
         }
         break;
 
@@ -538,7 +538,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
                 msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
                 return NULL;
             }
-            caster_ptr->sutemi = TRUE;
+            caster_ptr->sutemi = true;
         }
         break;
 
@@ -826,7 +826,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
 
         if (cast) {
             const int mana_cost_per_monster = 8;
-            bool is_new = TRUE;
+            bool is_new = true;
             bool mdeath;
 
             do {
@@ -835,7 +835,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
                 if (is_new) {
                     /* Reserve needed mana point */
                     caster_ptr->csp -= technic_info[REALM_HISSATSU - MIN_TECHNIC][26].smana;
-                    is_new = FALSE;
+                    is_new = false;
                 } else
                     caster_ptr->csp -= mana_cost_per_monster;
 
@@ -1010,7 +1010,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
                 return NULL;
             if (current_world_ptr->total_winner) {
                 take_hit(caster_ptr, DAMAGE_FORCE, 9999, "Seppuku");
-                current_world_ptr->total_winner = TRUE;
+                current_world_ptr->total_winner = true;
             } else {
                 msg_print(_("武士道とは、死ぬことと見つけたり。", "The meaning of bushido is found in death."));
                 take_hit(caster_ptr, DAMAGE_FORCE, 9999, "Seppuku");

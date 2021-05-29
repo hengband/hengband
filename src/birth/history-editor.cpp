@@ -37,7 +37,7 @@ void edit_history(player_type *creature_ptr)
     put_str(_("[ カーソルキーで移動、Enterで終了、Ctrl-Aでファイル読み込み ]", "[ Cursor key for Move, Enter for End, Ctrl-A for Read pref ]"), 17, 10);
     TERM_LEN y = 0;
     TERM_LEN x = 0;
-    while (TRUE) {
+    while (true) {
         char c;
 
         for (int i = 0; i < 4; i++) {
@@ -52,7 +52,7 @@ void edit_history(player_type *creature_ptr)
             c_put_str(TERM_L_BLUE, format("%c", creature_ptr->history[y][x]), y + 12, x + 10);
 
         term_gotoxy(x + 10, y + 12);
-        int skey = inkey_special(TRUE);
+        int skey = inkey_special(true);
         if (!(skey & SKEY_MASK))
             c = (char)skey;
         else

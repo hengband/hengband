@@ -56,15 +56,15 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
 	for (i = 1; i < current_world_ptr->max_d_idx; i++)
 	{
 		char buf[80];
-		bool seiha = FALSE;
+		bool seiha = false;
 
 		if (!d_info[i].maxdepth) continue;
 		if (!max_dlv[i]) continue;
 		if (d_info[i].final_guardian)
 		{
-			if (!r_info[d_info[i].final_guardian].max_num) seiha = TRUE;
+			if (!r_info[d_info[i].final_guardian].max_num) seiha = true;
 		}
-		else if (max_dlv[i] == d_info[i].maxdepth) seiha = TRUE;
+		else if (max_dlv[i] == d_info[i].maxdepth) seiha = true;
 
 		sprintf(buf, _("      %c) %c%-12s : 最大 %d 階", "      %c) %c%-16s : Max level %d"),
 			'a' + num, seiha ? '!' : ' ', d_info[i].name.c_str(), (int)max_dlv[i]);
@@ -78,7 +78,7 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
 	}
 
 	prt(format(_("どのダンジョン%sしますか:", "Which dungeon do you %s?: "), note), 0, 0);
-	while (TRUE)
+	while (true)
 	{
 		i = inkey();
 		if ((i == ESCAPE) || !num)

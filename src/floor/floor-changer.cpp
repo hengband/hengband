@@ -105,7 +105,7 @@ static void set_pet_params(player_type *master_ptr, monster_race **r_ptr, const 
     m_ptr->fy = cy;
     m_ptr->fx = cx;
     m_ptr->current_floor_ptr = master_ptr->current_floor_ptr;
-    m_ptr->ml = TRUE;
+    m_ptr->ml = true;
     m_ptr->mtimed[MTIMED_CSLEEP] = 0;
     m_ptr->hold_o_idx_list.clear();
     m_ptr->target_y = 0;
@@ -190,7 +190,7 @@ static void check_visited_floor(player_type *creature_ptr, saved_floor_type *sf_
     if ((sf_ptr->last_visit == 0) || !load_floor(creature_ptr, sf_ptr, 0))
         return;
 
-    *loaded = TRUE;
+    *loaded = true;
     if ((creature_ptr->change_floor_mode & CFM_NO_RETURN) == 0)
         return;
 
@@ -350,7 +350,7 @@ static void update_floor(player_type *creature_ptr)
         new_floor_id = get_new_floor_id(creature_ptr);
 
     saved_floor_type *sf_ptr;
-    bool loaded = FALSE;
+    bool loaded = false;
     sf_ptr = get_sf_ptr(new_floor_id);
     check_visited_floor(creature_ptr, sf_ptr, &loaded);
     update_floor_id(creature_ptr, sf_ptr);
@@ -369,19 +369,19 @@ static void update_floor(player_type *creature_ptr)
  */
 void change_floor(player_type *creature_ptr)
 {
-    current_world_ptr->character_dungeon = FALSE;
-    creature_ptr->dtrap = FALSE;
+    current_world_ptr->character_dungeon = false;
+    creature_ptr->dtrap = false;
     panel_row_min = 0;
     panel_row_max = 0;
     panel_col_min = 0;
     panel_col_max = 0;
-    creature_ptr->ambush_flag = FALSE;
+    creature_ptr->ambush_flag = false;
     update_floor(creature_ptr);
     place_pet(creature_ptr);
     forget_travel_flow(creature_ptr->current_floor_ptr);
     update_unique_artifact(creature_ptr->current_floor_ptr, new_floor_id);
     creature_ptr->floor_id = new_floor_id;
-    current_world_ptr->character_dungeon = TRUE;
+    current_world_ptr->character_dungeon = true;
     if (creature_ptr->pseikaku == PERSONALITY_MUNCHKIN)
         wiz_lite(creature_ptr, (bool)(creature_ptr->pclass == CLASS_NINJA));
 

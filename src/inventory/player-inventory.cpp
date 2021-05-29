@@ -48,7 +48,7 @@ bool can_get_item(player_type *owner_ptr, tval_type tval)
 {
     for (int j = 0; j < INVEN_TOTAL; j++)
         if (item_tester_okay(owner_ptr, &owner_ptr->inventory_list[j], tval))
-            return TRUE;
+            return true;
 
     OBJECT_IDX floor_list[23];
     ITEM_NUMBER floor_num = scan_floor_items(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, tval);
@@ -69,10 +69,10 @@ static bool py_pickup_floor_aux(player_type *owner_ptr)
     if (choose_object(owner_ptr, &item, q, s, (USE_FLOOR), TV_NONE))
         this_o_idx = 0 - item;
     else
-        return FALSE;
+        return false;
 
     describe_pickup_item(owner_ptr, this_o_idx);
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -283,7 +283,7 @@ void carry(player_type *creature_ptr, bool pickup)
             continue;
         }
 
-        int is_pickup_successful = TRUE;
+        int is_pickup_successful = true;
         if (carry_query_flag) {
             char out_val[MAX_NLEN + 20];
             sprintf(out_val, _("%sを拾いますか? ", "Pick up %s? "), o_name);

@@ -120,16 +120,16 @@ void verify_panel(player_type *creature_ptr)
 bool target_okay(player_type *creature_ptr)
 {
     if (target_who < 0)
-        return TRUE;
+        return true;
 
     if (target_who <= 0)
-        return FALSE;
+        return false;
 
     if (!target_able(creature_ptr, target_who))
-        return FALSE;
+        return false;
 
     monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[target_who];
     target_row = m_ptr->fy;
     target_col = m_ptr->fx;
-    return TRUE;
+    return true;
 }

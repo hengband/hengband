@@ -57,13 +57,13 @@ static void start_singing(player_type *caster_ptr, SPELL_IDX spell, MAGIC_NUM1 s
  */
 concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 {
-    bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
-    bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
-    bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
-    bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
-    bool fail = (mode == SPELL_FAIL) ? TRUE : FALSE;
-    bool cont = (mode == SPELL_CONT) ? TRUE : FALSE;
-    bool stop = (mode == SPELL_STOP) ? TRUE : FALSE;
+    bool name = (mode == SPELL_NAME) ? TRUE : false;
+    bool desc = (mode == SPELL_DESC) ? TRUE : false;
+    bool info = (mode == SPELL_INFO) ? TRUE : false;
+    bool cast = (mode == SPELL_CAST) ? TRUE : false;
+    bool fail = (mode == SPELL_FAIL) ? TRUE : false;
+    bool cont = (mode == SPELL_CONT) ? TRUE : false;
+    bool stop = (mode == SPELL_STOP) ? TRUE : false;
 
     DIRECTION dir;
     PLAYER_LEVEL plev = caster_ptr->lev;

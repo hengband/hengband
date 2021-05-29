@@ -80,7 +80,7 @@ static void on_dead_pink_horror(player_type *player_ptr, monster_death_type *md_
     if (player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out)
         return;
 
-    bool notice = FALSE;
+    bool notice = false;
     const int blue_horrors = 2;
     for (int i = 0; i < blue_horrors; i++) {
         POSITION wy = md_ptr->md_y;
@@ -88,7 +88,7 @@ static void on_dead_pink_horror(player_type *player_ptr, monster_death_type *md_
         bool pet = is_pet(md_ptr->m_ptr);
         BIT_FLAGS mode = pet ? PM_FORCE_PET : PM_NONE;
         if (summon_specific(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, 100, SUMMON_BLUE_HORROR, mode) && player_can_see_bold(player_ptr, wy, wx))
-            notice = TRUE;
+            notice = true;
     }
 
     if (notice)
@@ -242,7 +242,7 @@ static void on_dead_aqua_illusion(player_type *player_ptr, monster_death_type *m
     if (player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out)
         return;
 
-    bool notice = FALSE;
+    bool notice = false;
     const int popped_bubbles = 4;
     for (int i = 0; i < popped_bubbles; i++) {
         POSITION wy = md_ptr->md_y;
@@ -251,7 +251,7 @@ static void on_dead_aqua_illusion(player_type *player_ptr, monster_death_type *m
         BIT_FLAGS mode = pet ? PM_FORCE_PET : PM_NONE;
         MONSTER_IDX smaller_bubble = md_ptr->m_ptr->r_idx - 1;
         if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, smaller_bubble, mode) && player_can_see_bold(player_ptr, wy, wx))
-            notice = TRUE;
+            notice = true;
     }
 
     if (notice) {
@@ -295,7 +295,7 @@ static void on_dead_dragon_centipede(player_type *player_ptr, monster_death_type
     if (player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out)
         return;
 
-    bool notice = FALSE;
+    bool notice = false;
     const int reproduced_centipede = 2;
     for (int i = 0; i < reproduced_centipede; i++) {
         POSITION wy = md_ptr->md_y;
@@ -304,7 +304,7 @@ static void on_dead_dragon_centipede(player_type *player_ptr, monster_death_type
         BIT_FLAGS mode = pet ? PM_FORCE_PET : PM_NONE;
         MONSTER_IDX smaller_centipede = md_ptr->m_ptr->r_idx - 1;
         if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, smaller_centipede, mode) && player_can_see_bold(player_ptr, wy, wx))
-            notice = TRUE;
+            notice = true;
     }
 
     GAME_TEXT m_name[MAX_NLEN];

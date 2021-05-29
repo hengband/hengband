@@ -89,7 +89,7 @@ static void decide_chance_fail(player_type *user_ptr, ae_type *ae_ptr)
 static void decide_activation_success(player_type *user_ptr, ae_type *ae_ptr)
 {
     if (user_ptr->pclass == CLASS_BERSERKER) {
-        ae_ptr->success = FALSE;
+        ae_ptr->success = false;
         return;
     }
 
@@ -104,33 +104,33 @@ static void decide_activation_success(player_type *user_ptr, ae_type *ae_ptr)
 static bool check_activation_success(ae_type *ae_ptr)
 {
     if (ae_ptr->success)
-        return TRUE;
+        return true;
 
     if (flush_failure)
         flush();
 
     msg_print(_("うまく始動させることができなかった。", "You failed to activate it properly."));
     sound(SOUND_FAIL);
-    return FALSE;
+    return false;
 }
 
 static bool check_activation_conditions(player_type *user_ptr, ae_type *ae_ptr)
 {
     if (!check_activation_success(ae_ptr))
-        return FALSE;
+        return false;
 
     if (ae_ptr->o_ptr->timeout) {
         msg_print(_("それは微かに音を立て、輝き、消えた...", "It whines, glows and fades..."));
-        return FALSE;
+        return false;
     }
 
     if (!ae_ptr->o_ptr->xtra4 && (ae_ptr->o_ptr->tval == TV_FLASK) && ((ae_ptr->o_ptr->sval == SV_LITE_TORCH) || (ae_ptr->o_ptr->sval == SV_LITE_LANTERN))) {
         msg_print(_("燃料がない。", "It has no fuel."));
         PlayerEnergy(user_ptr).reset_player_turn();
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -145,42 +145,42 @@ static bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
     const activation_type *const act_ptr = find_activation_info(user_ptr, o_ptr);
     if (!act_ptr) {
         msg_print("Activation information is not found.");
-        return FALSE;
+        return false;
     }
 
     if (!switch_activation(user_ptr, &o_ptr, act_ptr, name))
-        return FALSE;
+        return false;
 
     if (act_ptr->timeout.constant >= 0) {
         o_ptr->timeout = (s16b)act_ptr->timeout.constant;
         if (act_ptr->timeout.dice > 0)
             o_ptr->timeout += randint1(act_ptr->timeout.dice);
 
-        return TRUE;
+        return true;
     }
 
     switch (act_ptr->index) {
     case ACT_BR_FIRE:
         o_ptr->timeout = ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES)) ? 200 : 250;
-        return TRUE;
+        return true;
     case ACT_BR_COLD:
         o_ptr->timeout = ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE)) ? 200 : 250;
-        return TRUE;
+        return true;
     case ACT_TERROR:
         o_ptr->timeout = 3 * (user_ptr->lev + 10);
-        return TRUE;
+        return true;
     case ACT_MURAMASA:
-        return TRUE;
+        return true;
     default:
         msg_format("Special timeout is not implemented: %d.", act_ptr->index);
-        return FALSE;
+        return false;
     }
 }
 
 static bool activate_whistle(player_type *user_ptr, ae_type *ae_ptr)
 {
     if (ae_ptr->o_ptr->tval != TV_WHISTLE)
-        return FALSE;
+        return false;
 
     if (music_singing_any(user_ptr))
         stop_singing(user_ptr);
@@ -205,7 +205,7 @@ static bool activate_whistle(player_type *user_ptr, ae_type *ae_ptr)
 
     C_KILL(who, current_world_ptr->max_m_idx, MONSTER_IDX);
     ae_ptr->o_ptr->timeout = 100 + randint1(100);
-    return TRUE;
+    return true;
 }
 
 /*!

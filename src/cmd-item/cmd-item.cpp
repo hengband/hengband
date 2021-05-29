@@ -71,7 +71,7 @@
 void do_cmd_inven(player_type *creature_ptr)
 {
     char out_val[160];
-    command_wrk = FALSE;
+    command_wrk = false;
     if (easy_floor)
         command_wrk = USE_INVEN;
 
@@ -91,7 +91,7 @@ void do_cmd_inven(player_type *creature_ptr)
     command_new = inkey();
     screen_load();
     if (command_new != ESCAPE) {
-        command_see = TRUE;
+        command_see = true;
         return;
     }
 

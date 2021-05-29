@@ -47,7 +47,7 @@ static bool precalc_ugarcade(int town_hgt, int town_wid, int n)
             for (abort = FALSE, y = cur_ugbldg->y0; (y <= cur_ugbldg->y1) && !abort; y++) {
                 for (x = cur_ugbldg->x0; x <= cur_ugbldg->x1; x++) {
                     if (ugarcade_used[y][x]) {
-                        abort = TRUE;
+                        abort = true;
                         break;
                     }
                 }
@@ -61,7 +61,7 @@ static bool precalc_ugarcade(int town_hgt, int town_wid, int n)
 
         for (y = cur_ugbldg->y0 - 1; y <= cur_ugbldg->y1 + 1; y++) {
             for (x = cur_ugbldg->x0 - 1; x <= cur_ugbldg->x1 + 1; x++) {
-                ugarcade_used[y][x] = TRUE;
+                ugarcade_used[y][x] = true;
             }
         }
     }
@@ -189,7 +189,7 @@ bool build_type16(player_type *player_ptr, dun_data_type *dd_ptr)
     POSITION i, y, x, y1, x1, yval, xval;
     int town_hgt = rand_range(MIN_TOWN_HGT, MAX_TOWN_HGT);
     int town_wid = rand_range(MIN_TOWN_WID, MAX_TOWN_WID);
-    bool prevent_bm = FALSE;
+    bool prevent_bm = false;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     for (y = 0; (y < floor_ptr->height) && !prevent_bm; y++) {
         for (x = 0; x < floor_ptr->width; x++) {
@@ -205,17 +205,17 @@ bool build_type16(player_type *player_ptr, dun_data_type *dd_ptr)
             stores[i] = stores[--n];
 
     if (!n)
-        return FALSE;
+        return false;
 
     C_MAKE(ugbldg, n, ugbldg_type);
     if (!precalc_ugarcade(town_hgt, town_wid, n)) {
         C_KILL(ugbldg, n, ugbldg_type);
-        return FALSE;
+        return false;
     }
 
     if (!find_space(player_ptr, dd_ptr, &yval, &xval, town_hgt + 4, town_wid + 4)) {
         C_KILL(ugbldg, n, ugbldg_type);
-        return FALSE;
+        return false;
     }
 
     y1 = yval - (town_hgt / 2);
@@ -224,5 +224,5 @@ bool build_type16(player_type *player_ptr, dun_data_type *dd_ptr)
     build_stores(player_ptr, y1, x1, stores, n);
     msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("地下街を生成しました", "Underground arcade was generated."));
     C_KILL(ugbldg, n, ugbldg_type);
-    return TRUE;
+    return true;
 }

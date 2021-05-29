@@ -267,5 +267,5 @@ void player_outfit(player_type *creature_ptr)
         add_outfit(creature_ptr, q_ptr);
     }
 
-    k_info[lookup_kind(TV_POTION, SV_POTION_WATER)].aware = TRUE;
+    k_info[lookup_kind(TV_POTION, SV_POTION_WATER)].aware = true;
 }

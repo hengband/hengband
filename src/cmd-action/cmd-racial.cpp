@@ -248,7 +248,7 @@ static void decide_racial_command(rc_type *rc_ptr)
         rc_ptr->choice = 'a';
 
     if (!isalpha(rc_ptr->choice)) {
-        rc_ptr->ask = FALSE;
+        rc_ptr->ask = false;
         rc_ptr->command_code = rc_ptr->choice - '0' + 26;
         return;
     }

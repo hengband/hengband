@@ -228,18 +228,18 @@ static bool spell_okay(player_type *caster_ptr, int spell, bool learned, bool st
 
     /* Spell is illegal */
     if (s_ptr->slevel > caster_ptr->lev)
-        return FALSE;
+        return false;
 
     /* Spell is forgotten */
     if ((use_realm == caster_ptr->realm2) ? (caster_ptr->spell_forgotten2 & (1UL << spell)) : (caster_ptr->spell_forgotten1 & (1UL << spell))) {
         /* Never okay */
-        return FALSE;
+        return false;
     }
 
     if (caster_ptr->pclass == CLASS_SORCERER)
-        return TRUE;
+        return true;
     if (caster_ptr->pclass == CLASS_RED_MAGE)
-        return TRUE;
+        return true;
 
     /* Spell is learned */
     if ((use_realm == caster_ptr->realm2) ? (caster_ptr->spell_learned2 & (1UL << spell)) : (caster_ptr->spell_learned1 & (1UL << spell))) {
@@ -273,7 +273,7 @@ static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJ
     int i;
     SPELL_IDX spell = -1;
     int num = 0;
-    int ask = TRUE;
+    int ask = true;
     MANA_POINT need_mana;
     SPELL_IDX spells[64];
     bool flag, redraw, okay;
@@ -293,7 +293,7 @@ static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJ
         /* Verify the spell */
         if (spell_okay(caster_ptr, *sn, learned, FALSE, use_realm)) {
             /* Success */
-            return TRUE;
+            return true;
         }
     }
 
@@ -309,7 +309,7 @@ static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJ
     }
 
     /* Assume no usable spells */
-    okay = FALSE;
+    okay = false;
 
     /* Assume no spells available */
     (*sn) = -2;
@@ -318,25 +318,25 @@ static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJ
     for (i = 0; i < num; i++) {
         /* Look for "okay" spells */
         if (spell_okay(caster_ptr, spells[i], learned, FALSE, use_realm))
-            okay = TRUE;
+            okay = true;
     }
 
     /* No "okay" spells */
     if (!okay)
-        return FALSE;
+        return false;
     if (((use_realm) != caster_ptr->realm1) && ((use_realm) != caster_ptr->realm2) && (caster_ptr->pclass != CLASS_SORCERER)
         && (caster_ptr->pclass != CLASS_RED_MAGE))
-        return FALSE;
+        return false;
     if (((caster_ptr->pclass == CLASS_SORCERER) || (caster_ptr->pclass == CLASS_RED_MAGE)) && !is_magic(use_realm))
-        return FALSE;
+        return false;
     if ((caster_ptr->pclass == CLASS_RED_MAGE) && ((use_realm) != REALM_ARCANE) && (sval > 1))
-        return FALSE;
+        return false;
 
     /* Assume cancelled */
     *sn = (-1);
 
-    flag = FALSE;
-    redraw = FALSE;
+    flag = false;
+    redraw = false;
 
     caster_ptr->window_flags |= (PW_SPELL);
     handle_stuff(caster_ptr);
@@ -360,7 +360,7 @@ static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJ
             switch (choice) {
             case '0': {
                 screen_load();
-                return FALSE;
+                return false;
             }
 
             case '8':
@@ -382,7 +382,7 @@ static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJ
             case '\r':
             case '\n': {
                 i = menu_line - 1;
-                ask = FALSE;
+                ask = false;
                 break;
             }
             }
@@ -397,7 +397,7 @@ static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJ
             if ((choice == ' ') || (choice == '*') || (choice == '?')) {
                 /* Show the list */
                 if (!redraw) {
-                    redraw = TRUE;
+                    redraw = true;
                     screen_save();
 
                     /* Display a list of spells */
@@ -410,7 +410,7 @@ static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJ
                         continue;
 
                     /* Hide list */
-                    redraw = FALSE;
+                    redraw = false;
                     screen_load();
                 }
 
@@ -485,7 +485,7 @@ static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJ
         }
 
         /* Stop the loop */
-        flag = TRUE;
+        flag = true;
     }
 
     if (redraw)
@@ -496,7 +496,7 @@ static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJ
 
     /* Abort if needed */
     if (!flag)
-        return FALSE;
+        return false;
 
     /* Save the choice */
     (*sn) = spell;
@@ -504,7 +504,7 @@ static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJ
     repeat_push((COMMAND_CODE)spell);
 
     /* Success */
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -526,7 +526,7 @@ static void confirm_use_force(player_type *caster_ptr, bool browse_only)
     /* Show the prompt */
     prt(_("('w'練気術, ESC) 'w'かESCを押してください。 ", "(w for the Force, ESC) Hit 'w' or ESC. "), 0, 0);
 
-    while (TRUE) {
+    while (true) {
         /* Get a key */
         which = inkey();
 
@@ -634,7 +634,7 @@ void do_cmd_browse(player_type *caster_ptr)
     prt("", 0, 0);
 
     /* Keep browsing spells.  Exit browsing on cancel. */
-    while (TRUE) {
+    while (true) {
         /* Ask for a spell, allow cancel */
         if (!get_spell(caster_ptr, &spell, _("読む", "browse"), o_ptr->sval, TRUE, use_realm)) {
             /* If cancelled, leave immediately. */
@@ -720,7 +720,7 @@ void do_cmd_study(player_type *caster_ptr)
     OBJECT_IDX item;
     OBJECT_SUBTYPE_VALUE sval;
     int increment = 0;
-    bool learned = FALSE;
+    bool learned = false;
 
     /* Spells of realm2 will have an increment of +32 */
     SPELL_IDX spell = -1;
@@ -837,12 +837,12 @@ void do_cmd_study(player_type *caster_ptr)
     /* Learn the spell */
     if (spell < 32) {
         if (caster_ptr->spell_learned1 & (1UL << spell))
-            learned = TRUE;
+            learned = true;
         else
             caster_ptr->spell_learned1 |= (1UL << spell);
     } else {
         if (caster_ptr->spell_learned2 & (1UL << (spell - 32)))
-            learned = TRUE;
+            learned = true;
         else
             caster_ptr->spell_learned2 |= (1UL << (spell - 32));
     }
@@ -957,7 +957,7 @@ bool do_cmd_cast(player_type *caster_ptr)
     const magic_type *s_ptr;
     concptr q, s;
 
-    bool over_exerted = FALSE;
+    bool over_exerted = false;
 
     /* Require spell ability */
     if (!caster_ptr->realm1 && (caster_ptr->pclass != CLASS_SORCERER) && (caster_ptr->pclass != CLASS_RED_MAGE)) {
@@ -980,7 +980,7 @@ bool do_cmd_cast(player_type *caster_ptr)
 
     if (caster_ptr->realm1 == REALM_HEX) {
         if (hex_spell_fully(caster_ptr)) {
-            bool flag = FALSE;
+            bool flag = false;
             msg_print(_("これ以上新しい呪文を詠唱することはできない。", "Can not cast more spells."));
             flush();
             if (caster_ptr->lev >= 35)
@@ -1091,7 +1091,7 @@ bool do_cmd_cast(player_type *caster_ptr)
         /* Use some mana */
         caster_ptr->csp -= need_mana;
     } else
-        over_exerted = TRUE;
+        over_exerted = true;
     caster_ptr->redraw |= (PR_MANA);
 
     /* Failed spell */

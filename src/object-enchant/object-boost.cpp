@@ -127,7 +127,7 @@ void one_sustain(object_type *o_ptr)
  */
 bool add_esp_strong(object_type *o_ptr)
 {
-    bool nonliv = FALSE;
+    bool nonliv = false;
 
     switch (randint1(3)) {
     case 1:
@@ -138,7 +138,7 @@ bool add_esp_strong(object_type *o_ptr)
         break;
     case 3:
         add_flag(o_ptr->art_flags, TR_ESP_NONLIVING);
-        nonliv = TRUE;
+        nonliv = true;
         break;
     }
 

@@ -123,7 +123,7 @@ bool exe_cmd_debug(player_type *creature_ptr, char cmd)
     case '<':
     case '>':
     case KTRL('a'):
-        return FALSE;
+        return false;
     case ESCAPE:
     case '\n':
     case '\r':
@@ -260,7 +260,7 @@ bool exe_cmd_debug(player_type *creature_ptr, char cmd)
         break;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -282,7 +282,7 @@ void do_cmd_debug(player_type *creature_ptr)
     int page = 0;
     char cmd;
 
-    while (TRUE) {
+    while (true) {
         screen_save();
         display_debug_menu(page, max_page, page_size, max_line);
         get_com("Debug Command: ", &cmd, FALSE);

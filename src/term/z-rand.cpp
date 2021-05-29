@@ -360,14 +360,14 @@ s32b div_round(s32b n, s32b d)
  */
 s32b Rand_external(s32b m)
 {
-    static bool initialized = FALSE;
+    static bool initialized = false;
     static u32b Rand_state_external[4];
 
     if (!initialized) {
         /* Initialize with new seed */
         u32b seed = (u32b)time(NULL);
         Rand_seed(seed, Rand_state_external);
-        initialized = TRUE;
+        initialized = true;
     }
 
     return Rand_div_impl(m, Rand_state_external);

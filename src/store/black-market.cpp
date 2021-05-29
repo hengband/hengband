@@ -21,16 +21,16 @@
 bool black_market_crap(player_type *player_ptr, object_type *o_ptr)
 {
     if (object_is_ego(o_ptr))
-        return FALSE;
+        return false;
 
     if (o_ptr->to_a > 0)
-        return FALSE;
+        return false;
 
     if (o_ptr->to_h > 0)
-        return FALSE;
+        return false;
 
     if (o_ptr->to_d > 0)
-        return FALSE;
+        return false;
 
     for (int i = 0; i < MAX_STORES; i++) {
         if (i == STORE_HOME)
@@ -41,9 +41,9 @@ bool black_market_crap(player_type *player_ptr, object_type *o_ptr)
         for (int j = 0; j < town_info[player_ptr->town_num].store[i].stock_num; j++) {
             object_type *j_ptr = &town_info[player_ptr->town_num].store[i].stock[j];
             if (o_ptr->k_idx == j_ptr->k_idx)
-                return TRUE;
+                return true;
         }
     }
 
-    return FALSE;
+    return false;
 }

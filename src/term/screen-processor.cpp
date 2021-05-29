@@ -21,7 +21,7 @@ void move_cursor(int row, int col) { term_gotoxy(col, row); }
  * This is not only more efficient, but also necessary to make sure
  * that various "inkey()" codes are not "lost" along the way.
  */
-void flush(void) { inkey_xtra = TRUE; }
+void flush(void) { inkey_xtra = true; }
 
 /*
  * Save the screen, and increase the "icky" depth.

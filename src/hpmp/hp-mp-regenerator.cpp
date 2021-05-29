@@ -197,7 +197,7 @@ void regenerate_monsters(player_type *player_ptr)
  */
 void regenerate_captured_monsters(player_type *creature_ptr)
 {
-    bool heal = FALSE;
+    bool heal = false;
     for (int i = 0; i < INVEN_TOTAL; i++) {
         monster_race *r_ptr;
         object_type *o_ptr = &creature_ptr->inventory_list[i];
@@ -208,7 +208,7 @@ void regenerate_captured_monsters(player_type *creature_ptr)
         if (!o_ptr->pval)
             continue;
 
-        heal = TRUE;
+        heal = true;
         r_ptr = &r_info[o_ptr->pval];
         if (o_ptr->xtra4 < o_ptr->xtra5) {
             int frac = o_ptr->xtra5 / 100;

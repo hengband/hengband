@@ -67,7 +67,7 @@ bool place_quest_monsters(player_type *creature_ptr)
                 }
 
                 if (l == 0)
-                    return FALSE;
+                    return false;
 
                 if (place_monster_aux(creature_ptr, 0, y, x, quest[i].r_idx, mode))
                     break;
@@ -76,9 +76,9 @@ bool place_quest_monsters(player_type *creature_ptr)
             }
 
             if (k == SAFE_MAX_ATTEMPTS)
-                return FALSE;
+                return false;
         }
     }
 
-    return TRUE;
+    return true;
 }

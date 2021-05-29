@@ -58,7 +58,7 @@ void do_cmd_locate(player_type *creature_ptr)
     get_screen_size(&wid, &hgt);
     POSITION y2 = y1 = panel_row_min;
     POSITION x2 = x1 = panel_col_min;
-    while (TRUE) {
+    while (true) {
         if ((y2 == y1) && (x2 == x1))
             strcpy(tmp_val, _("真上", "\0"));
         else

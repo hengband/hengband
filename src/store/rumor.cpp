@@ -65,7 +65,7 @@ void display_rumor(player_type *player_ptr, bool ex)
     if (strcmp(zz[0], "ARTIFACT") == 0) {
         ARTIFACT_IDX a_idx;
         artifact_type *a_ptr;
-        while (TRUE) {
+        while (true) {
             a_idx = rumor_num(zz[1], max_a_idx);
 
             a_ptr = &a_info[a_idx];
@@ -82,7 +82,7 @@ void display_rumor(player_type *player_ptr, bool ex)
         describe_flavor(player_ptr, fullname, q_ptr, OD_NAME_ONLY);
     } else if (strcmp(zz[0], "MONSTER") == 0) {
         monster_race *r_ptr;
-        while (TRUE) {
+        while (true) {
             MONRACE_IDX r_idx = rumor_num(zz[1], max_r_idx);
             r_ptr = &r_info[r_idx];
             if (!r_ptr->name.empty())
@@ -97,7 +97,7 @@ void display_rumor(player_type *player_ptr, bool ex)
     } else if (strcmp(zz[0], "DUNGEON") == 0) {
         DUNGEON_IDX d_idx;
         dungeon_type *d_ptr;
-        while (TRUE) {
+        while (true) {
             d_idx = rumor_num(zz[1], current_world_ptr->max_d_idx);
             d_ptr = &d_info[d_idx];
             if (!d_ptr->name.empty())
@@ -112,7 +112,7 @@ void display_rumor(player_type *player_ptr, bool ex)
         }
     } else if (strcmp(zz[0], "TOWN") == 0) {
         IDX t_idx;
-        while (TRUE) {
+        while (true) {
             t_idx = rumor_num(zz[1], NO_TOWN);
             if (town_info[t_idx].name[0] != '\0')
                 break;

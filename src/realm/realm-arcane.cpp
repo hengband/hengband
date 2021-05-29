@@ -34,10 +34,10 @@
  */
 concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 {
-    bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
-    bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
-    bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
-    bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
+    bool name = (mode == SPELL_NAME) ? TRUE : false;
+    bool desc = (mode == SPELL_DESC) ? TRUE : false;
+    bool info = (mode == SPELL_INFO) ? TRUE : false;
+    bool cast = (mode == SPELL_CAST) ? TRUE : false;
 
     DIRECTION dir;
     PLAYER_LEVEL plev = caster_ptr->lev;

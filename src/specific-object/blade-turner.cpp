@@ -13,7 +13,7 @@ bool activate_bladeturner(player_type *user_ptr)
 {
     DIRECTION dir;
     if (!get_aim_dir(user_ptr, &dir))
-        return FALSE;
+        return false;
 
     msg_print(_("あなたはエレメントのブレスを吐いた。", "You breathe the elements."));
     fire_breath(user_ptr, GF_MISSILE, dir, 300, 4);
@@ -27,5 +27,5 @@ bool activate_bladeturner(player_type *user_ptr)
     (void)set_oppose_fire(user_ptr, randint1(50) + 50, FALSE);
     (void)set_oppose_cold(user_ptr, randint1(50) + 50, FALSE);
     (void)set_oppose_pois(user_ptr, randint1(50) + 50, FALSE);
-    return TRUE;
+    return true;
 }

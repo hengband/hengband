@@ -477,8 +477,8 @@ void wiz_jump_to_dungeon(player_type *creature_ptr)
     if (!is_in_dungeon(creature_ptr))
         creature_ptr->dungeon_idx = 0;
 
-    creature_ptr->current_floor_ptr->inside_arena = FALSE;
-    creature_ptr->wild_mode = FALSE;
+    creature_ptr->current_floor_ptr->inside_arena = false;
+    creature_ptr->wild_mode = false;
     leave_quest_check(creature_ptr);
     if (record_stair)
         exe_write_diary(creature_ptr, DIARY_WIZ_TELE, 0, NULL);
@@ -487,7 +487,7 @@ void wiz_jump_to_dungeon(player_type *creature_ptr)
     PlayerEnergy(creature_ptr).reset_player_turn();
     creature_ptr->energy_need = 0;
     prepare_change_floor_mode(creature_ptr, CFM_FIRST_FLOOR);
-    creature_ptr->leaving = TRUE;
+    creature_ptr->leaving = true;
 }
 
 /*!
@@ -719,7 +719,7 @@ void cheat_death(player_type *creature_ptr)
     msg_print(_("ウィザードモードに念を送り、死を欺いた。", "You invoke wizard mode and cheat death."));
     msg_print(NULL);
 
-    creature_ptr->is_dead = FALSE;
+    creature_ptr->is_dead = false;
     (void)life_stream(creature_ptr, FALSE, FALSE);
     (void)restore_mana(creature_ptr, TRUE);
     (void)recall_player(creature_ptr, 0);
@@ -730,8 +730,8 @@ void cheat_death(player_type *creature_ptr)
 
     floor_type *floor_ptr = creature_ptr->current_floor_ptr;
     floor_ptr->dun_level = 0;
-    floor_ptr->inside_arena = FALSE;
-    creature_ptr->phase_out = FALSE;
+    floor_ptr->inside_arena = false;
+    creature_ptr->phase_out = false;
     leaving_quest = 0;
     floor_ptr->inside_quest = 0;
     if (creature_ptr->dungeon_idx)
@@ -754,8 +754,8 @@ void cheat_death(player_type *creature_ptr)
         creature_ptr->oldpx = 131;
     }
 
-    creature_ptr->wild_mode = FALSE;
-    creature_ptr->leaving = TRUE;
+    creature_ptr->wild_mode = false;
+    creature_ptr->leaving = true;
 
     exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, _("                            しかし、生き返った。", "                            but revived."));
     leave_floor(creature_ptr);

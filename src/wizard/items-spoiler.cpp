@@ -104,7 +104,7 @@ spoiler_output_status spoil_obj_desc(concptr fname)
     int n = 0;
     int group_start = 0;
     OBJECT_IDX who[200];
-    for (int i = 0; TRUE; i++) {
+    for (int i = 0; true; i++) {
         if (group_item[i].name) {
             if (n) {
                 for (int s = 0; s < n - 1; s++) {

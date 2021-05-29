@@ -167,7 +167,7 @@ FEAT_IDX choose_random_trap(player_type *trapped_ptr)
 
     /* Pick a trap */
     floor_type *floor_ptr = trapped_ptr->current_floor_ptr;
-    while (TRUE) {
+    while (true) {
         /* Hack -- pick a trap */
         feat = normal_traps[randint0(MAX_NORMAL_TRAPS)];
 
@@ -263,21 +263,21 @@ static int check_hit_from_monster_to_player(player_type *target_ptr, int power)
 
     if (target_ptr->pseikaku == PERSONALITY_LAZY)
         if (one_in_(20))
-            return TRUE;
+            return true;
 
     /* Paranoia -- No power */
     if (power <= 0)
-        return FALSE;
+        return false;
 
     /* Total armor */
     ac = target_ptr->ac + target_ptr->to_a;
 
     /* Power competes against Armor */
     if (randint1(power) > ((ac * 3) / 4))
-        return TRUE;
+        return true;
 
     /* Assume miss */
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -342,13 +342,13 @@ static void hit_trap_pit(player_type *trapped_ptr, enum trap_type trap_feat_type
  */
 static bool hit_trap_dart(player_type *target_ptr)
 {
-    bool hit = FALSE;
+    bool hit = false;
 
     if (check_hit_from_monster_to_player(target_ptr, 125)) {
         msg_print(_("小さなダーツが飛んできて刺さった！", "A small dart hits you!"));
         take_hit(target_ptr, DAMAGE_ATTACK, damroll(1, 4), _("ダーツの罠", "a dart trap"));
         if (!check_multishadow(target_ptr))
-            hit = TRUE;
+            hit = true;
     } else {
         msg_print(_("小さなダーツが飛んできた！が、運良く当たらなかった。", "A small dart barely misses you."));
     }
@@ -435,7 +435,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 
             exe_write_diary(trapped_ptr, DIARY_DESCRIPTION, 0, _("落とし戸に落ちた", "fell through a trap door!"));
             prepare_change_floor_mode(trapped_ptr, CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
-            trapped_ptr->leaving = TRUE;
+            trapped_ptr->leaving = true;
         }
         break;
     }
@@ -456,7 +456,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 
         if (trapped_ptr->current_floor_ptr->dun_level > randint1(100)) /* No nasty effect for low levels */
         {
-            bool stop_ty = FALSE;
+            bool stop_ty = false;
             int count = 0;
 
             do {

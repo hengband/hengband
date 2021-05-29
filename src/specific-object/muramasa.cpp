@@ -10,10 +10,10 @@
 bool activate_muramasa(player_type *user_ptr, object_type *o_ptr)
 {
     if (o_ptr->name1 != ART_MURAMASA)
-        return FALSE;
+        return false;
 
     if (!get_check(_("本当に使いますか？", "Are you sure?! ")))
-        return TRUE;
+        return true;
 
     msg_print(_("村正が震えた．．．", "The Muramasa pulsates..."));
     do_inc_stat(user_ptr, A_STR);
@@ -22,5 +22,5 @@ bool activate_muramasa(player_type *user_ptr, object_type *o_ptr)
         curse_weapon_object(user_ptr, TRUE, o_ptr);
     }
 
-    return TRUE;
+    return true;
 }

@@ -118,7 +118,7 @@ static bool select_personality(player_type *creature_ptr, int *k, concptr *str, 
     sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
     int cs = creature_ptr->pseikaku;
     int os = MAX_PERSONALITIES;
-    while (TRUE) {
+    while (true) {
         display_personality_stat(cs, &os, str, cur, sym);
         if (*k >= 0)
             break;
@@ -132,7 +132,7 @@ static bool select_personality(player_type *creature_ptr, int *k, concptr *str, 
             birth_quit();
 
         if (c == 'S')
-            return FALSE;
+            return false;
 
         if (c == ' ' || c == '\r' || c == '\n') {
             if (cs == MAX_PERSONALITIES) {
@@ -178,7 +178,7 @@ static bool select_personality(player_type *creature_ptr, int *k, concptr *str, 
         birth_help_option(creature_ptr, c, BK_PERSONALITY);
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -196,7 +196,7 @@ bool get_player_personality(player_type *creature_ptr)
     enumerate_personality_list(creature_ptr, &str, sym);
     int k = -1;
     if (!select_personality(creature_ptr, &k, &str, sym))
-        return FALSE;
+        return false;
 
     creature_ptr->pseikaku = (player_personality_type)k;
     ap_ptr = &personality_info[creature_ptr->pseikaku];
@@ -211,5 +211,5 @@ bool get_player_personality(player_type *creature_ptr)
 #endif
     strcat(tmp, creature_ptr->name);
     c_put_str(TERM_L_BLUE, tmp, 1, 34);
-    return TRUE;
+    return true;
 }

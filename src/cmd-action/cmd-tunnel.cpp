@@ -31,7 +31,7 @@
  */
 void do_cmd_tunnel(player_type *creature_ptr)
 {
-    bool more = FALSE;
+    bool more = false;
     if (creature_ptr->special_defense & KATA_MUSOU)
         set_action(creature_ptr, ACTION_NONE);
 

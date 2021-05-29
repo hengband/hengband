@@ -182,7 +182,7 @@ static bool hack_isnt_wall(player_type *player_ptr, POSITION y, POSITION x, int 
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->grid_array[y][x].info & CAVE_ICKY)
-        return FALSE;
+        return false;
 
     floor_ptr->grid_array[y][x].info |= (CAVE_ICKY);
     if (floor_ptr->grid_array[y][x].feat <= c1) {
@@ -190,12 +190,12 @@ static bool hack_isnt_wall(player_type *player_ptr, POSITION y, POSITION x, int 
             floor_ptr->grid_array[y][x].feat = feat1;
             floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
             floor_ptr->grid_array[y][x].info |= info1;
-            return TRUE;
+            return true;
         } else {
             floor_ptr->grid_array[y][x].feat = feat2;
             floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
             floor_ptr->grid_array[y][x].info |= info2;
-            return TRUE;
+            return true;
         }
     }
 
@@ -204,12 +204,12 @@ static bool hack_isnt_wall(player_type *player_ptr, POSITION y, POSITION x, int 
             floor_ptr->grid_array[y][x].feat = feat2;
             floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
             floor_ptr->grid_array[y][x].info |= info2;
-            return TRUE;
+            return true;
         } else {
             floor_ptr->grid_array[y][x].feat = feat1;
             floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
             floor_ptr->grid_array[y][x].info |= info1;
-            return TRUE;
+            return true;
         }
     }
 
@@ -217,11 +217,11 @@ static bool hack_isnt_wall(player_type *player_ptr, POSITION y, POSITION x, int 
         floor_ptr->grid_array[y][x].feat = feat3;
         floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
         floor_ptr->grid_array[y][x].info |= info3;
-        return TRUE;
+        return true;
     }
 
     place_bold(player_ptr, y, x, GB_OUTER);
-    return FALSE;
+    return false;
 }
 
 /*
@@ -288,7 +288,7 @@ bool generate_fracave(player_type *player_ptr, POSITION y0, POSITION x0, POSITIO
             }
         }
 
-        return FALSE;
+        return false;
     }
 
     for (int i = 0; i <= xsize; ++i) {
@@ -378,7 +378,7 @@ bool generate_fracave(player_type *player_ptr, POSITION y0, POSITION x0, POSITIO
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 bool generate_lake(player_type *player_ptr, POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int c1, int c2, int c3, int type)
@@ -423,7 +423,7 @@ bool generate_lake(player_type *player_ptr, POSITION y0, POSITION x0, POSITION x
         feat3 = feat_shallow_lava;
         break;
     default:
-        return FALSE;
+        return false;
     }
 
     fill_data.c1 = c1;
@@ -447,7 +447,7 @@ bool generate_lake(player_type *player_ptr, POSITION y0, POSITION x0, POSITION x
             }
         }
 
-        return FALSE;
+        return false;
     }
 
     for (int i = 0; i <= xsize; ++i) {
@@ -477,5 +477,5 @@ bool generate_lake(player_type *player_ptr, POSITION y0, POSITION x0, POSITION x
         }
     }
 
-    return TRUE;
+    return true;
 }

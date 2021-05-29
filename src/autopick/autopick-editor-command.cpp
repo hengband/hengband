@@ -56,7 +56,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
         tb->dirty_flags |= DIRTY_ALL | DIRTY_MODE | DIRTY_EXPRESSION;
         tb->cx = tb->cy = 0;
         tb->mark = 0;
-        tb->changed = FALSE;
+        tb->changed = false;
         break;
     }
     case EC_HELP: {
@@ -168,7 +168,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
         tb->cy = 0;
         break;
     case EC_BOTTOM:
-        while (TRUE) {
+        while (true) {
             if (!tb->lines_list[tb->cy + 1]) {
                 if (!add_empty_line(tb))
                     break;
@@ -206,7 +206,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
 
         tb->mark = 0;
         tb->dirty_flags |= DIRTY_ALL;
-        tb->changed = TRUE;
+        tb->changed = true;
         break;
     }
     case EC_COPY: {
@@ -293,7 +293,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
 
         tb->dirty_flags |= DIRTY_ALL;
         tb->dirty_flags |= DIRTY_EXPRESSION;
-        tb->changed = TRUE;
+        tb->changed = true;
         break;
     }
     case EC_BLOCK: {
@@ -348,7 +348,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
         if (tb->yank_eol)
             add_str_to_yank(tb, "");
 
-        tb->yank_eol = TRUE;
+        tb->yank_eol = true;
         do_editor_command(player_ptr, tb, EC_DELETE_CHAR);
         break;
     }
@@ -409,7 +409,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
             tb->cy--;
             tb->dirty_flags |= DIRTY_ALL;
             tb->dirty_flags |= DIRTY_EXPRESSION;
-            tb->changed = TRUE;
+            tb->changed = true;
             break;
         }
 
@@ -436,7 +436,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
         tb->lines_list[tb->cy] = string_make(buf);
         tb->dirty_line = tb->cy;
         check_expression_line(tb, tb->cy);
-        tb->changed = TRUE;
+        tb->changed = true;
         break;
     }
     case EC_SEARCH_STR: {
@@ -525,7 +525,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
         string_free(tb->lines_list[tb->cy]);
         tb->lines_list[tb->cy] = string_make(tb->last_destroyed);
         tb->dirty_flags |= DIRTY_ALL;
-        tb->changed = TRUE;
+        tb->changed = true;
         break;
     }
     case EC_INSERT_BLOCK: {
@@ -548,7 +548,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
         string_free(tb->lines_list[tb->cy]);
         tb->lines_list[tb->cy] = string_make("?:1");
         tb->dirty_flags |= DIRTY_ALL;
-        tb->changed = TRUE;
+        tb->changed = true;
         break;
     }
     case EC_INSERT_MACRO: {
@@ -560,7 +560,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
 
         tb->cx = 2;
         tb->dirty_flags |= DIRTY_ALL;
-        tb->changed = TRUE;
+        tb->changed = true;
         break;
     }
     case EC_INSERT_KEYMAP: {
@@ -574,7 +574,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
 
         tb->cx = 2;
         tb->dirty_flags |= DIRTY_ALL;
-        tb->changed = TRUE;
+        tb->changed = true;
         break;
     }
     case EC_CL_AUTOPICK:

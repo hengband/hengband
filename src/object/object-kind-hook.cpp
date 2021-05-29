@@ -151,7 +151,7 @@ bool kind_is_good(KIND_OBJECT_IDX k_idx)
     /* Ammo -- Arrows/Bolts are good */
     case TV_BOLT:
     case TV_ARROW:
-        return TRUE;
+        return true;
 
     /* Books -- High level books are good (except Arcane books) */
     case TV_LIFE_BOOK:
@@ -176,7 +176,7 @@ bool kind_is_good(KIND_OBJECT_IDX k_idx)
     case TV_AMULET:
         return (k_ptr->sval == SV_AMULET_THE_MAGI) || (k_ptr->sval == SV_AMULET_RESISTANCE);
     default:
-        return FALSE;
+        return false;
     }
 }
 

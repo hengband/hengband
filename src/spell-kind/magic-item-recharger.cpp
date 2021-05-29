@@ -58,7 +58,7 @@ bool recharge(player_type *caster_ptr, int power)
     object_type *o_ptr;
     o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_NONE);
     if (!o_ptr)
-        return FALSE;
+        return false;
 
     object_kind *k_ptr;
     k_ptr = &k_info[o_ptr->k_idx];
@@ -66,11 +66,11 @@ bool recharge(player_type *caster_ptr, int power)
 
     TIME_EFFECT recharge_amount;
     int recharge_strength;
-    bool is_recharge_successful = TRUE;
+    bool is_recharge_successful = true;
     if (o_ptr->tval == TV_ROD) {
         recharge_strength = ((power > lev / 2) ? (power - lev / 2) : 0) / 5;
         if (one_in_(recharge_strength)) {
-            is_recharge_successful = FALSE;
+            is_recharge_successful = false;
         } else {
             recharge_amount = (power * damroll(3, 2));
             if (o_ptr->timeout > recharge_amount)
@@ -88,7 +88,7 @@ bool recharge(player_type *caster_ptr, int power)
             recharge_strength = 0;
 
         if (one_in_(recharge_strength)) {
-            is_recharge_successful = FALSE;
+            is_recharge_successful = false;
         } else {
             recharge_amount = randint1(1 + k_ptr->pval / 2);
             if ((o_ptr->tval == TV_WAND) && (o_ptr->number > 1)) {

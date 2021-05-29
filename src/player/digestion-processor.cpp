@@ -95,7 +95,7 @@ bool set_food(player_type *creature_ptr, TIME_EFFECT v)
 {
     int old_aux, new_aux;
 
-    bool notice = FALSE;
+    bool notice = false;
     v = (v > 20000) ? 20000 : (v < 0) ? 0 : v;
     if (creature_ptr->food < PY_FOOD_FAINT) {
         old_aux = 0;
@@ -157,7 +157,7 @@ bool set_food(player_type *creature_ptr, TIME_EFFECT v)
             break;
         }
 
-        notice = TRUE;
+        notice = true;
     } else if (new_aux < old_aux) {
         switch (new_aux) {
         case 0:
@@ -184,12 +184,12 @@ bool set_food(player_type *creature_ptr, TIME_EFFECT v)
             change_wild_mode(creature_ptr, FALSE);
         }
 
-        notice = TRUE;
+        notice = true;
     }
 
     creature_ptr->food = v;
     if (!notice)
-        return FALSE;
+        return false;
 
     if (disturb_state)
         disturb(creature_ptr, FALSE, FALSE);
@@ -197,5 +197,5 @@ bool set_food(player_type *creature_ptr, TIME_EFFECT v)
     creature_ptr->redraw |= (PR_HUNGER);
     handle_stuff(creature_ptr);
 
-    return TRUE;
+    return true;
 }

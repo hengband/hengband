@@ -53,16 +53,16 @@
 static bool int_n_cmp(int *a, int *b, int length)
 {
     if (!length)
-        return TRUE;
+        return true;
 
     do {
         if (*a != *(b++))
-            return FALSE;
+            return false;
         if (!(*(a++)))
             break;
     } while (--length);
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -82,11 +82,11 @@ static bool is_partial_tree(int *tree, int *partial_tree)
     while (*tree) {
         if (*(tree++) == pt_head) {
             if (int_n_cmp(tree, partial_tree, pt_len))
-                return TRUE;
+                return true;
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -299,7 +299,7 @@ static spoiler_output_status spoil_player_spell(concptr fname)
 void exe_output_spoilers(void)
 {
     screen_save();
-    while (TRUE) {
+    while (true) {
         auto status = spoiler_output_status::SPOILER_OUTPUT_CANCEL;
         term_clear();
         prt("Create a spoiler file.", 2, 0);

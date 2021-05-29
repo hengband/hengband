@@ -30,7 +30,7 @@ void process_blind_attack(player_type *target_ptr, monap_type *monap_ptr)
     if (monap_ptr->m_ptr->r_idx == MON_DIO)
         msg_print(_("どうだッ！この血の目潰しはッ！", "How is it! This blood-blinding!"));
 
-    monap_ptr->obvious = TRUE;
+    monap_ptr->obvious = true;
 }
 
 void process_terrify_attack(player_type *target_ptr, monap_type *monap_ptr)
@@ -41,18 +41,18 @@ void process_terrify_attack(player_type *target_ptr, monap_type *monap_ptr)
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     if (has_resist_fear(target_ptr)) {
         msg_print(_("しかし恐怖に侵されなかった！", "You stand your ground!"));
-        monap_ptr->obvious = TRUE;
+        monap_ptr->obvious = true;
         return;
     }
 
     if (randint0(100 + r_ptr->level / 2) < target_ptr->skill_sav) {
         msg_print(_("しかし恐怖に侵されなかった！", "You stand your ground!"));
-        monap_ptr->obvious = TRUE;
+        monap_ptr->obvious = true;
         return;
     }
 
     if (set_afraid(target_ptr, target_ptr->afraid + 3 + randint1(monap_ptr->rlev)))
-        monap_ptr->obvious = TRUE;
+        monap_ptr->obvious = true;
 }
 
 void process_paralyze_attack(player_type *target_ptr, monap_type *monap_ptr)
@@ -63,39 +63,39 @@ void process_paralyze_attack(player_type *target_ptr, monap_type *monap_ptr)
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     if (target_ptr->free_act) {
         msg_print(_("しかし効果がなかった！", "You are unaffected!"));
-        monap_ptr->obvious = TRUE;
+        monap_ptr->obvious = true;
         return;
     }
 
     if (randint0(100 + r_ptr->level / 2) < target_ptr->skill_sav) {
         msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
-        monap_ptr->obvious = TRUE;
+        monap_ptr->obvious = true;
         return;
     }
 
     if (!target_ptr->paralyzed && set_paralyzed(target_ptr, 3 + randint1(monap_ptr->rlev)))
-        monap_ptr->obvious = TRUE;
+        monap_ptr->obvious = true;
 }
 
 void process_lose_all_attack(player_type *target_ptr, monap_type *monap_ptr)
 {
     if (do_dec_stat(target_ptr, A_STR))
-        monap_ptr->obvious = TRUE;
+        monap_ptr->obvious = true;
 
     if (do_dec_stat(target_ptr, A_DEX))
-        monap_ptr->obvious = TRUE;
+        monap_ptr->obvious = true;
 
     if (do_dec_stat(target_ptr, A_CON))
-        monap_ptr->obvious = TRUE;
+        monap_ptr->obvious = true;
 
     if (do_dec_stat(target_ptr, A_INT))
-        monap_ptr->obvious = TRUE;
+        monap_ptr->obvious = true;
 
     if (do_dec_stat(target_ptr, A_WIS))
-        monap_ptr->obvious = TRUE;
+        monap_ptr->obvious = true;
 
     if (do_dec_stat(target_ptr, A_CHR))
-        monap_ptr->obvious = TRUE;
+        monap_ptr->obvious = true;
 }
 
 void process_stun_attack(player_type *target_ptr, monap_type *monap_ptr)
@@ -105,7 +105,7 @@ void process_stun_attack(player_type *target_ptr, monap_type *monap_ptr)
 
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     if (set_stun(target_ptr, target_ptr->stun + 10 + randint1(r_ptr->level / 4)))
-        monap_ptr->obvious = TRUE;
+        monap_ptr->obvious = true;
 }
 
 /*!

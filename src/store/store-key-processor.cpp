@@ -36,7 +36,7 @@
 #include "window/display-sub-windows.h"
 
 /* Set this to leave the store */
-bool leave_store = FALSE;
+bool leave_store = false;
 
 /*!
  * @brief 店舗処理コマンド選択のメインルーチン /
@@ -58,7 +58,7 @@ void store_process_command(player_type *client_ptr)
 
     switch (command_cmd) {
     case ESCAPE: {
-        leave_store = TRUE;
+        leave_store = true;
         break;
     }
     case '-': {

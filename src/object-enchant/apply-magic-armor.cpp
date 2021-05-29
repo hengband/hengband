@@ -80,19 +80,19 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
                 break;
             }
 
-            while (TRUE) {
-                bool okay_flag = TRUE;
+            while (true) {
+                bool okay_flag = true;
                 o_ptr->name2 = get_random_ego(INVEN_BODY, TRUE);
                 switch (o_ptr->name2) {
                 case EGO_DWARVEN:
                     if (o_ptr->tval != TV_HARD_ARMOR) {
-                        okay_flag = FALSE;
+                        okay_flag = false;
                     }
 
                     break;
                 case EGO_DRUID:
                     if (o_ptr->tval != TV_SOFT_ARMOR) {
-                        okay_flag = FALSE;
+                        okay_flag = false;
                     }
 
                     break;
@@ -104,8 +104,8 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
                     break;
             }
         } else if (power < -1) {
-            while (TRUE) {
-                bool okay_flag = TRUE;
+            while (true) {
+                bool okay_flag = true;
                 o_ptr->name2 = get_random_ego(INVEN_BODY, FALSE);
 
                 switch (o_ptr->name2) {
@@ -139,7 +139,7 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
                 break;
             }
 
-            while (TRUE) {
+            while (true) {
                 o_ptr->name2 = get_random_ego(INVEN_SUB_HAND, TRUE);
                 if (o_ptr->sval != SV_SMALL_METAL_SHIELD && o_ptr->sval != SV_LARGE_METAL_SHIELD && o_ptr->name2 == EGO_S_DWARVEN) {
                     continue;
@@ -210,8 +210,8 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
                 break;
             }
 
-            while (TRUE) {
-                bool ok_flag = TRUE;
+            while (true) {
+                bool ok_flag = true;
                 o_ptr->name2 = get_random_ego(INVEN_HEAD, TRUE);
 
                 switch (o_ptr->name2) {
@@ -228,7 +228,7 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
                     break;
                 default:
                     /* not existing crown (wisdom,lite, etc...) */
-                    ok_flag = FALSE;
+                    ok_flag = false;
                 }
 
                 if (ok_flag)
@@ -237,8 +237,8 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
 
             break;
         } else if (power < -1) {
-            while (TRUE) {
-                bool ok_flag = TRUE;
+            while (true) {
+                bool ok_flag = true;
                 o_ptr->name2 = get_random_ego(INVEN_HEAD, FALSE);
 
                 switch (o_ptr->name2) {
@@ -270,8 +270,8 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
                 break;
             }
 
-            while (TRUE) {
-                bool ok_flag = TRUE;
+            while (true) {
+                bool ok_flag = true;
                 o_ptr->name2 = get_random_ego(INVEN_HEAD, TRUE);
                 switch (o_ptr->name2) {
                 case EGO_BRILLIANCE:
@@ -286,7 +286,7 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
                     break;
                 default:
                     /* not existing helm (Magi, Might, etc...)*/
-                    ok_flag = FALSE;
+                    ok_flag = false;
                 }
 
                 if (ok_flag)
@@ -295,13 +295,13 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
 
             break;
         } else if (power < -1) {
-            while (TRUE) {
-                bool ok_flag = TRUE;
+            while (true) {
+                bool ok_flag = true;
                 o_ptr->name2 = get_random_ego(INVEN_HEAD, FALSE);
 
                 switch (o_ptr->name2) {
                 case EGO_ANCIENT_CURSE:
-                    ok_flag = FALSE;
+                    ok_flag = false;
                     break;
                 default:
                     break;

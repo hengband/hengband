@@ -11,7 +11,7 @@ process_result effect_monster_lite_weak(player_type *caster_ptr, effect_monster_
 {
 	if (!em_ptr->dam)
 	{
-		em_ptr->skipped = TRUE;
+		em_ptr->skipped = true;
 		return PROCESS_CONTINUE;
 	}
 
@@ -21,7 +21,7 @@ process_result effect_monster_lite_weak(player_type *caster_ptr, effect_monster_
 		return PROCESS_CONTINUE;
 	}
 
-	if (em_ptr->seen) em_ptr->obvious = TRUE;
+	if (em_ptr->seen) em_ptr->obvious = true;
 
 	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
 		em_ptr->r_ptr->r_flags3 |= (RF3_HURT_LITE);
@@ -34,7 +34,7 @@ process_result effect_monster_lite_weak(player_type *caster_ptr, effect_monster_
 
 process_result effect_monster_lite(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
-	if (em_ptr->seen) em_ptr->obvious = TRUE;
+	if (em_ptr->seen) em_ptr->obvious = true;
 
 	if (em_ptr->r_ptr->flagsr & RFR_RES_LITE)
 	{
@@ -59,7 +59,7 @@ process_result effect_monster_lite(player_type *caster_ptr, effect_monster_type 
 
 process_result effect_monster_dark(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
-	if (em_ptr->seen) em_ptr->obvious = TRUE;
+	if (em_ptr->seen) em_ptr->obvious = true;
 
 	if ((em_ptr->r_ptr->flagsr & RFR_RES_DARK) == 0)
 		return PROCESS_CONTINUE;

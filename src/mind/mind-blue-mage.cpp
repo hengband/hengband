@@ -38,20 +38,20 @@ bool do_cmd_cast_learned(player_type *caster_ptr)
     MANA_POINT need_mana;
 
     if (cmd_limit_confused(caster_ptr))
-        return FALSE;
+        return false;
 
     if (!get_learned_power(caster_ptr, &n))
-        return FALSE;
+        return false;
 
     spell = monster_powers[n];
     need_mana = mod_need_mana(caster_ptr, spell.smana, 0, REALM_NONE);
     if (need_mana > caster_ptr->csp) {
         msg_print(_("ＭＰが足りません。", "You do not have enough mana to use this power."));
         if (!over_exert)
-            return FALSE;
+            return false;
 
         if (!get_check(_("それでも挑戦しますか? ", "Attempt it anyway? ")))
-            return FALSE;
+            return false;
     }
 
     chance = spell.fail;
@@ -92,7 +92,7 @@ bool do_cmd_cast_learned(player_type *caster_ptr)
         sound(SOUND_ZAP);
         cast = cast_learned_spell(caster_ptr, spell_type, TRUE);
         if (!cast)
-            return FALSE;
+            return false;
     }
 
     if (need_mana <= caster_ptr->csp) {
@@ -114,5 +114,5 @@ bool do_cmd_cast_learned(player_type *caster_ptr)
     PlayerEnergy(caster_ptr).set_player_turn_energy(100);
     caster_ptr->redraw |= PR_MANA;
     caster_ptr->window_flags |= PW_PLAYER | PW_SPELL;
-    return TRUE;
+    return true;
 }

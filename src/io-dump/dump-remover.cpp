@@ -13,8 +13,8 @@
 void remove_auto_dump(concptr orig_file, concptr auto_dump_mark)
 {
 	char buf[1024];
-	bool between_mark = FALSE;
-	bool changed = FALSE;
+	bool between_mark = false;
+	bool changed = false;
 	int line_num = 0;
 	long header_location = 0;
 	char header_mark_str[80];
@@ -32,14 +32,14 @@ void remove_auto_dump(concptr orig_file, concptr auto_dump_mark)
 	char tmp_file[FILE_NAME_SIZE];
 	if (!open_temporary_file(&tmp_fff, tmp_file)) return;
 
-	while (TRUE)
+	while (true)
 	{
 		if (angband_fgets(orig_fff, buf, sizeof(buf)))
 		{
 			if (between_mark)
 			{
 				fseek(orig_fff, header_location, SEEK_SET);
-				between_mark = FALSE;
+				between_mark = false;
 				continue;
 			}
 			else
@@ -54,8 +54,8 @@ void remove_auto_dump(concptr orig_file, concptr auto_dump_mark)
 			{
 				header_location = ftell(orig_fff);
 				line_num = 0;
-				between_mark = TRUE;
-				changed = TRUE;
+				between_mark = true;
+				changed = true;
 			}
 			else
 			{
@@ -74,7 +74,7 @@ void remove_auto_dump(concptr orig_file, concptr auto_dump_mark)
 				fseek(orig_fff, header_location, SEEK_SET);
 			}
 
-			between_mark = FALSE;
+			between_mark = false;
 			continue;
 		}
 

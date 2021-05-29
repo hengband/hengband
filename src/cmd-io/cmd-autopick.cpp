@@ -93,7 +93,7 @@ void do_cmd_edit_autopick(player_type *player_ptr)
 
 	text_body_type text_body;
 	text_body_type *tb = &text_body;
-	tb->changed = FALSE;
+	tb->changed = false;
 	tb->cx = cx_save;
 	tb->cy = cy_save;
 	tb->upper = tb->left = 0;
@@ -165,7 +165,7 @@ void do_cmd_edit_autopick(player_type *player_ptr)
 		tb->old_wid = tb->wid;
 		tb->old_hgt = tb->hgt;
 
-		key = inkey_special(TRUE);
+		key = inkey_special(true);
 
 		if (key & SKEY_MASK)
 		{

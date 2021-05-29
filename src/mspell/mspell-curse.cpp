@@ -52,7 +52,7 @@ static MonsterSpellResult spell_RF5_CAUSE(player_type *target_ptr, int GF_TYPE, 
         if (see_monster(target_ptr, m_idx)) {
             msg_format(msg3, m_name, t_name);
         } else {
-            target_ptr->current_floor_ptr->monster_noise = TRUE;
+            target_ptr->current_floor_ptr->monster_noise = true;
         }
     }
 

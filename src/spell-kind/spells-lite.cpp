@@ -121,7 +121,7 @@ static void cave_temp_room_unlite(player_type *caster_ptr, const std::vector<Pos
                     grid_type *cc_ptr = &caster_ptr->current_floor_ptr->grid_array[by][bx];
 
                     if (has_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW)) {
-                        do_dark = FALSE;
+                        do_dark = false;
                         break;
                     }
                 }
@@ -393,7 +393,7 @@ bool starlight(player_type *caster_ptr, bool magic)
             (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL | PROJECT_LOS));
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -407,7 +407,7 @@ bool lite_area(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 {
     if (d_info[caster_ptr->dungeon_idx].flags.has(DF::DARKNESS)) {
         msg_print(_("ダンジョンが光を吸収した。", "The darkness of this dungeon absorbs your light."));
-        return FALSE;
+        return false;
     }
 
     if (!caster_ptr->blind) {
@@ -419,7 +419,7 @@ bool lite_area(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 
     lite_room(caster_ptr, caster_ptr->y, caster_ptr->x);
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -440,7 +440,7 @@ bool unlite_area(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 
     unlite_room(caster_ptr, caster_ptr->y, caster_ptr->x);
 
-    return TRUE;
+    return true;
 }
 
 /*!

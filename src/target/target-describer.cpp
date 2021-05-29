@@ -46,7 +46,7 @@
 
 static const s16b CONTINUOUS_DESCRIPTION = 256;
 
-bool show_gold_on_floor = FALSE;
+bool show_gold_on_floor = false;
 
 // Examine grid
 typedef struct eg_type {
@@ -75,7 +75,7 @@ static eg_type *initialize_eg_type(player_type *subject_ptr, eg_type *eg_ptr, PO
 {
     eg_ptr->y = y;
     eg_ptr->x = x;
-    eg_ptr->boring = TRUE;
+    eg_ptr->boring = true;
     eg_ptr->mode = mode;
     eg_ptr->info = info;
     eg_ptr->s1 = "";
@@ -188,16 +188,16 @@ static bool describe_grid_lore(player_type *subject_ptr, eg_type *eg_ptr)
 
 static void describe_grid_monster(player_type *subject_ptr, eg_type *eg_ptr)
 {
-    bool recall = FALSE;
+    bool recall = false;
     GAME_TEXT m_name[MAX_NLEN];
     monster_desc(subject_ptr, m_name, eg_ptr->m_ptr, MD_INDEF_VISIBLE);
-    while (TRUE) {
+    while (true) {
         char acount[10];
         if (recall) {
             if (describe_grid_lore(subject_ptr, eg_ptr))
                 return;
 
-            recall = FALSE;
+            recall = false;
             continue;
         }
 
@@ -215,7 +215,7 @@ static void describe_grid_monster(player_type *subject_ptr, eg_type *eg_ptr)
         if (eg_ptr->query != 'r')
             return;
 
-        recall = TRUE;
+        recall = true;
     }
 }
 
@@ -270,7 +270,7 @@ static s16b describe_grid(player_type *subject_ptr, eg_type *eg_ptr)
     if ((eg_ptr->g_ptr->m_idx == 0) || !subject_ptr->current_floor_ptr->m_list[eg_ptr->g_ptr->m_idx].ml)
         return CONTINUOUS_DESCRIPTION;
 
-    eg_ptr->boring = FALSE;
+    eg_ptr->boring = false;
     monster_race_track(subject_ptr, eg_ptr->m_ptr->ap_r_idx);
     health_track(subject_ptr, eg_ptr->g_ptr->m_idx);
     handle_stuff(subject_ptr);
@@ -336,11 +336,11 @@ static s16b describe_footing_items(eg_type *eg_ptr)
 
 static char describe_footing_many_items(player_type *subject_ptr, eg_type *eg_ptr, int *min_width)
 {
-    while (TRUE) {
+    while (true) {
         screen_save();
-        show_gold_on_floor = TRUE;
+        show_gold_on_floor = true;
         (void)show_floor_items(subject_ptr, 0, eg_ptr->y, eg_ptr->x, min_width, TV_NONE);
-        show_gold_on_floor = FALSE;
+        show_gold_on_floor = false;
 #ifdef JP
         sprintf(eg_ptr->out_val, "%s %d個のアイテム%s%s [Enterで次へ, %s]", eg_ptr->s1, (int)eg_ptr->floor_num, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);
 #else
@@ -368,7 +368,7 @@ static s16b loop_describing_grid(player_type *subject_ptr, eg_type *eg_ptr)
         return CONTINUOUS_DESCRIPTION;
 
     int min_width = 0;
-    while (TRUE) {
+    while (true) {
         s16b footing_description = describe_footing(subject_ptr, eg_ptr);
         if (within_char_util(footing_description))
             return (char)footing_description;
@@ -387,7 +387,7 @@ static s16b describe_footing_sight(player_type *subject_ptr, eg_type *eg_ptr, ob
         return CONTINUOUS_DESCRIPTION;
 
     GAME_TEXT o_name[MAX_NLEN];
-    eg_ptr->boring = FALSE;
+    eg_ptr->boring = false;
     describe_flavor(subject_ptr, o_name, o_ptr, 0);
 #ifdef JP
     sprintf(eg_ptr->out_val, "%s%s%s%s[%s]", eg_ptr->s1, o_name, eg_ptr->s2, eg_ptr->s3, eg_ptr->info);

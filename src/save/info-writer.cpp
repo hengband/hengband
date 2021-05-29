@@ -172,7 +172,7 @@ void save_quick_start(void)
     /* UNUSED : Was number of random quests */
     wr_byte(0);
     if (current_world_ptr->noscore)
-        previous_char.quick_ok = FALSE;
+        previous_char.quick_ok = false;
 
     wr_byte((byte)previous_char.quick_ok);
 }

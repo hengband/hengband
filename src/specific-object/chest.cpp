@@ -71,7 +71,7 @@ void chest_death(player_type *owner_ptr, bool scatter, POSITION y, POSITION x, O
 	if (o_ptr->sval == SV_CHEST_KANDUME)
 	{
 		number = 5;
-		small = FALSE;
+		small = false;
 		mode |= AM_GREAT;
 		floor_ptr->object_level = o_ptr->xtra3;
 	}

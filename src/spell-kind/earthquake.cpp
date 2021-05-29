@@ -52,7 +52,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 {
     floor_type *floor_ptr = caster_ptr->current_floor_ptr;
     if ((floor_ptr->inside_quest && is_fixed_quest_idx(floor_ptr->inside_quest)) || !floor_ptr->dun_level) {
-        return FALSE;
+        return false;
     }
 
     if (r > 12)
@@ -61,12 +61,12 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
     bool map[32][32];
     for (POSITION y = 0; y < 32; y++) {
         for (POSITION x = 0; x < 32; x++) {
-            map[y][x] = FALSE;
+            map[y][x] = false;
         }
     }
 
     int damage = 0;
-    bool hurt = FALSE;
+    bool hurt = false;
     for (POSITION dy = -r; dy <= r; dy++) {
         for (POSITION dx = -r; dx <= r; dx++) {
             POSITION yy = cy + dy;
@@ -88,9 +88,9 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
             if (randint0(100) < 85)
                 continue;
 
-            map[16 + yy - cy][16 + xx - cx] = TRUE;
+            map[16 + yy - cy][16 + xx - cx] = true;
             if (player_bold(caster_ptr, yy, xx))
-                hurt = TRUE;
+                hurt = true;
         }
     }
 
@@ -159,7 +159,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
             (void)move_player_effect(caster_ptr, sy, sx, MPE_DONT_PICKUP);
         }
 
-        map[16 + caster_ptr->y - cy][16 + caster_ptr->x - cx] = FALSE;
+        map[16 + caster_ptr->y - cy][16 + caster_ptr->x - cx] = false;
         if (damage) {
             concptr killer;
 
@@ -194,7 +194,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
             monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
             monster_race *r_ptr = &r_info[m_ptr->r_idx];
             if (r_ptr->flags1 & RF1_QUESTOR) {
-                map[16 + yy - cy][16 + xx - cx] = FALSE;
+                map[16 + yy - cy][16 + xx - cx] = false;
                 continue;
             }
 
@@ -351,5 +351,5 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
             set_superstealth(caster_ptr, FALSE);
     }
 
-    return TRUE;
+    return true;
 }

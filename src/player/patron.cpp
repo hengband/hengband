@@ -164,7 +164,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
         if (creature_ptr->suppress_multi_reward)
             return;
         else
-            creature_ptr->suppress_multi_reward = TRUE;
+            creature_ptr->suppress_multi_reward = true;
     }
 
     if (creature_ptr->lev == 13)

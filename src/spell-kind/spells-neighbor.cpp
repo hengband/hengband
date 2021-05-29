@@ -149,7 +149,7 @@ void wall_breaker(player_type *caster_ptr)
 
     int num = damroll(5, 3);
     for (int i = 0; i < num; i++) {
-        while (TRUE) {
+        while (true) {
             scatter(caster_ptr, &y, &x, caster_ptr->y, caster_ptr->x, 10, PROJECT_NONE);
 
             if (!player_bold(caster_ptr, y, x))

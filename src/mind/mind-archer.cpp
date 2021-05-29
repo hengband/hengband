@@ -92,7 +92,7 @@ static bool select_ammo_creation_type(ammo_creation_type &type, PLAYER_LEVEL ple
 bool create_ammo(player_type *creature_ptr)
 {
     if (cmd_limit_confused(creature_ptr) || cmd_limit_blind(creature_ptr))
-        return FALSE;
+        return false;
 
     ammo_creation_type ext = AMMO_NONE;
 
@@ -103,19 +103,19 @@ bool create_ammo(player_type *creature_ptr)
     case AMMO_SHOT: {
         DIRECTION dir;
         if (!get_rep_dir(creature_ptr, &dir, FALSE))
-            return FALSE;
+            return false;
 
         POSITION y = creature_ptr->y + ddy[dir];
         POSITION x = creature_ptr->x + ddx[dir];
         grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
         if (!has_flag(f_info[get_feat_mimic(g_ptr)].flags, FF_CAN_DIG)) {
             msg_print(_("そこには岩石がない。", "You need a pile of rubble."));
-            return FALSE;
+            return false;
         }
 
         if (!cave_has_flag_grid(g_ptr, FF_CAN_DIG) || !cave_has_flag_grid(g_ptr, FF_HURT_ROCK)) {
             msg_print(_("硬すぎて崩せなかった。", "You failed to make ammo."));
-            return TRUE;
+            return true;
         }
 
         object_type forge;
@@ -135,7 +135,7 @@ bool create_ammo(player_type *creature_ptr)
 
         cave_alter_feat(creature_ptr, y, x, FF_HURT_ROCK);
         creature_ptr->update |= PU_FLOW;
-        return TRUE;
+        return true;
     }
     case AMMO_ARROW: {
         item_tester_hook = item_tester_hook_convertible;
@@ -144,7 +144,7 @@ bool create_ammo(player_type *creature_ptr)
         OBJECT_IDX item;
         object_type *q_ptr = choose_object(creature_ptr, &item, q, s, USE_INVEN | USE_FLOOR, TV_NONE);
         if (!q_ptr)
-            return FALSE;
+            return false;
 
         object_type forge;
         q_ptr = &forge;
@@ -162,7 +162,7 @@ bool create_ammo(player_type *creature_ptr)
         if (slot >= 0)
             autopick_alter_item(creature_ptr, slot, FALSE);
 
-        return TRUE;
+        return true;
     }
     case AMMO_BOLT: {
         item_tester_hook = item_tester_hook_convertible;
@@ -171,7 +171,7 @@ bool create_ammo(player_type *creature_ptr)
         OBJECT_IDX item;
         object_type *q_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_NONE);
         if (!q_ptr)
-            return FALSE;
+            return false;
 
         object_type forge;
         q_ptr = &forge;
@@ -189,9 +189,9 @@ bool create_ammo(player_type *creature_ptr)
         if (slot >= 0)
             autopick_alter_item(creature_ptr, slot, FALSE);
 
-        return TRUE;
+        return true;
     }
     default:
-        return TRUE;
+        return true;
     }
 }

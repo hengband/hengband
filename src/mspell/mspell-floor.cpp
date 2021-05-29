@@ -179,7 +179,7 @@ MonsterSpellResult spell_RF6_TELE_TO(player_type *target_ptr, MONSTER_IDX m_idx,
     if (TARGET_TYPE != MONSTER_TO_MONSTER)
         return res;
 
-    bool resists_tele = FALSE;
+    bool resists_tele = false;
     GAME_TEXT t_name[MAX_NLEN];
     monster_name(target_ptr, t_idx, t_name);
 
@@ -190,14 +190,14 @@ MonsterSpellResult spell_RF6_TELE_TO(player_type *target_ptr, MONSTER_IDX m_idx,
             if (see_monster(target_ptr, t_idx)) {
                 msg_format(_("%^sには効果がなかった。", "%^s is unaffected!"), t_name);
             }
-            resists_tele = TRUE;
+            resists_tele = true;
         } else if (tr_ptr->level > randint1(100)) {
             if (is_original_ap_and_seen(target_ptr, t_ptr))
                 tr_ptr->r_flagsr |= RFR_RES_TELE;
             if (see_monster(target_ptr, t_idx)) {
                 msg_format(_("%^sは耐性を持っている！", "%^s resists!"), t_name);
             }
-            resists_tele = TRUE;
+            resists_tele = true;
         }
     }
 
@@ -253,7 +253,7 @@ MonsterSpellResult spell_RF6_TELE_AWAY(player_type *target_ptr, MONSTER_IDX m_id
     if (TARGET_TYPE != MONSTER_TO_MONSTER)
         return res;
 
-    bool resists_tele = FALSE;
+    bool resists_tele = false;
     GAME_TEXT t_name[MAX_NLEN];
     monster_name(target_ptr, t_idx, t_name);
 
@@ -264,14 +264,14 @@ MonsterSpellResult spell_RF6_TELE_AWAY(player_type *target_ptr, MONSTER_IDX m_id
             if (see_monster(target_ptr, t_idx)) {
                 msg_format(_("%^sには効果がなかった。", "%^s is unaffected!"), t_name);
             }
-            resists_tele = TRUE;
+            resists_tele = true;
         } else if (tr_ptr->level > randint1(100)) {
             if (is_original_ap_and_seen(target_ptr, t_ptr))
                 tr_ptr->r_flagsr |= RFR_RES_TELE;
             if (see_monster(target_ptr, t_idx)) {
                 msg_format(_("%^sは耐性を持っている！", "%^s resists!"), t_name);
             }
-            resists_tele = TRUE;
+            resists_tele = true;
         }
     }
 
@@ -356,17 +356,17 @@ MonsterSpellResult spell_RF6_DARKNESS(player_type *target_ptr, POSITION y, POSIT
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     monster_type *t_ptr = &floor_ptr->m_list[t_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    bool can_use_lite_area = FALSE;
+    bool can_use_lite_area = false;
     bool monster_to_monster = TARGET_TYPE == MONSTER_TO_MONSTER;
     bool monster_to_player = TARGET_TYPE == MONSTER_TO_PLAYER;
     GAME_TEXT t_name[MAX_NLEN];
     monster_name(target_ptr, t_idx, t_name);
 
     if ((target_ptr->pclass == CLASS_NINJA) && !(r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) && !(r_ptr->flags7 & RF7_DARK_MASK))
-        can_use_lite_area = TRUE;
+        can_use_lite_area = true;
 
     if (monster_to_monster && !is_hostile(t_ptr))
-        can_use_lite_area = FALSE;
+        can_use_lite_area = false;
 
     auto res = MonsterSpellResult::make_valid();
     res.learnable = monster_to_player && !can_use_lite_area;

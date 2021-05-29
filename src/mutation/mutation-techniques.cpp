@@ -29,7 +29,7 @@ bool eat_rock(player_type *caster_ptr)
 {
     DIRECTION dir;
     if (!get_direction(caster_ptr, &dir, FALSE, FALSE))
-        return FALSE;
+        return false;
 
     POSITION y = caster_ptr->y + ddy[dir];
     POSITION x = caster_ptr->x + ddx[dir];
@@ -65,5 +65,5 @@ bool eat_rock(player_type *caster_ptr)
 
     cave_alter_feat(caster_ptr, y, x, FF_HURT_ROCK);
     (void)move_player_effect(caster_ptr, y, x, MPE_DONT_PICKUP);
-    return TRUE;
+    return true;
 }

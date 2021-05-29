@@ -89,7 +89,7 @@ void player_birth(player_type *creature_ptr)
     player_wipe_without_name(creature_ptr);
     if (!ask_quick_start(creature_ptr)) {
         play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_NEW_GAME);
-        while (TRUE) {
+        while (true) {
             if (player_birth_wizard(creature_ptr))
                 break;
 
@@ -106,9 +106,9 @@ void player_birth(player_type *creature_ptr)
 
     seed_wilderness();
     if (creature_ptr->prace == RACE_BEASTMAN)
-        creature_ptr->hack_mutation = TRUE;
+        creature_ptr->hack_mutation = true;
     else
-        creature_ptr->hack_mutation = FALSE;
+        creature_ptr->hack_mutation = false;
 
     if (!window_flag[1])
         window_flag[1] |= PW_MESSAGE;

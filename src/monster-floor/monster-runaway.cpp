@@ -75,7 +75,7 @@ bool runaway_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTE
     can_runaway &= ((r_ptr->flags1 & RF1_UNIQUE) != 0) || ((r_ptr->flags7 & RF7_NAZGUL) != 0);
     can_runaway &= !target_ptr->phase_out;
     if (!can_runaway)
-        return FALSE;
+        return false;
 
     static int riding_pinch = 0;
 
@@ -84,7 +84,7 @@ bool runaway_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTE
         if (turn_flags_ptr->is_riding_mon)
             riding_pinch = 0;
 
-        return FALSE;
+        return false;
     }
 
     GAME_TEXT m_name[MAX_NLEN];
@@ -94,11 +94,11 @@ bool runaway_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTE
             _("%sは傷の痛さの余りあなたの束縛から逃れようとしている。", "%^s seems to be in so much pain and tries to escape from your restriction."), m_name);
         riding_pinch++;
         disturb(target_ptr, TRUE, TRUE);
-        return FALSE;
+        return false;
     }
 
     escape_monster(target_ptr, turn_flags_ptr, m_ptr, m_name);
     check_quest_completion(target_ptr, m_ptr);
     delete_monster_idx(target_ptr, m_idx);
-    return TRUE;
+    return true;
 }

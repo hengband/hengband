@@ -31,7 +31,7 @@ void do_cmd_view_map(player_type *player_ptr)
     }
 
     display_autopick = ITEM_DISPLAY;
-    while (TRUE) {
+    while (true) {
         int wid, hgt;
         term_get_size(&wid, &hgt);
         int row_message = hgt - 1;

@@ -61,11 +61,11 @@ errr load_quest_info(u16b *max_quests_load, byte *max_rquests_load)
 static bool check_quest_index(int loading_quest_index)
 {
     if (loading_quest_index < max_q_idx)
-        return FALSE;
+        return false;
 
     strip_bytes(2);
     strip_bytes(2);
-    return TRUE;
+    return true;
 }
 
 static void load_quest_completion(quest_type *q_ptr)

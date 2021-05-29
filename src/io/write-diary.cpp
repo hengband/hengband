@@ -60,12 +60,12 @@ static bool open_diary_file(FILE **fff, bool *disable_diary)
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
 	*fff = angband_fopen(buf, "a");
-	if (*fff) return TRUE;
+	if (*fff) return true;
 
 	msg_format(_("%s を開くことができませんでした。プレイ記録を一時停止します。", "Failed to open %s. Play-Record is disabled temporarily."), buf);
 	msg_format(NULL);
-	*disable_diary = TRUE;
-	return FALSE;
+	*disable_diary = true;
+	return false;
 }
 
 
@@ -172,7 +172,7 @@ static void write_diary_pet(FILE *fff, int num, concptr note)
  */
 errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 {
-	static bool disable_diary = FALSE;
+	static bool disable_diary = false;
 
 	int day, hour, min;
 	extract_day_hour_min(creature_ptr, &day, &hour, &min);
@@ -199,7 +199,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
     char note_level_buf[40];
 	QUEST_IDX q_idx = write_floor(creature_ptr, &note_level, note_level_buf);
 
-	bool do_level = TRUE;
+	bool do_level = true;
 	switch (type)
 	{
 	case DIARY_DIALY:
@@ -209,7 +209,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		else
 			fputs(_("*****日目\n", "Day *****\n"), fff);
 
-		do_level = FALSE;
+		do_level = false;
 		break;
 	}
 	case DIARY_DESCRIPTION:
@@ -217,7 +217,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		if (num)
 		{
 			fprintf(fff, "%s\n", note);
-			do_level = FALSE;
+			do_level = false;
 		}
 		else
 			fprintf(fff, " %2d:%02d %20s %s\n", hour, min, note_level, note);
@@ -350,7 +350,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		{
 			fprintf(fff, _("                 闘技場のすべての敵に勝利し、チャンピオンとなった。\n",
 				"                 won all fights to become a Champion.\n"));
-			do_level = FALSE;
+			do_level = false;
 		}
 
 		break;
@@ -386,7 +386,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 	case DIARY_GAMESTART:
 	{
 		time_t ct = time((time_t*)0);
-		do_level = FALSE;
+		do_level = false;
 		if (num)
 			fprintf(fff, "%s %s", note, ctime(&ct));
 		else
@@ -408,7 +408,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 	}
 
 	angband_fclose(fff);
-	if (do_level) write_level = FALSE;
+	if (do_level) write_level = false;
 
 	return 0;
 }

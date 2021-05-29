@@ -396,7 +396,7 @@ s16b f_tag_to_index_in_init(concptr str)
     FEAT_IDX feat = f_tag_to_index(str);
 
     if (feat < 0)
-        feat_tag_is_not_found = TRUE;
+        feat_tag_is_not_found = true;
 
     return feat;
 }

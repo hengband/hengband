@@ -35,11 +35,11 @@ bool rodeo(player_type *creature_ptr)
 
     if (creature_ptr->riding) {
         msg_print(_("今は乗馬中だ。", "You ARE riding."));
-        return FALSE;
+        return false;
     }
 
     if (!do_cmd_riding(creature_ptr, TRUE))
-        return TRUE;
+        return true;
 
     m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
     r_ptr = &r_info[m_ptr->r_idx];
@@ -47,7 +47,7 @@ bool rodeo(player_type *creature_ptr)
     msg_format(_("%sに乗った。", "You ride on %s."), m_name);
 
     if (is_pet(m_ptr))
-        return TRUE;
+        return true;
 
     rlev = r_ptr->level;
 
@@ -68,5 +68,5 @@ bool rodeo(player_type *creature_ptr)
         creature_ptr->riding = 0;
     }
 
-    return TRUE;
+    return true;
 }

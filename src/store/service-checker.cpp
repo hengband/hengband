@@ -50,9 +50,9 @@ static bool check_store_general(object_type *o_ptr)
     case TV_STATUE:
     case TV_CAPTURE:
     case TV_CARD:
-        return TRUE;
+        return true;
     default:
-        return FALSE;
+        return false;
     }
 }
 
@@ -68,9 +68,9 @@ static bool check_store_armoury(object_type *o_ptr)
     case TV_SOFT_ARMOR:
     case TV_HARD_ARMOR:
     case TV_DRAG_ARMOR:
-        return TRUE;
+        return true;
     default:
-        return FALSE;
+        return false;
     }
 }
 
@@ -85,11 +85,11 @@ static bool check_store_weapon(object_type *o_ptr)
     case TV_POLEARM:
     case TV_SWORD:
     case TV_HISSATSU_BOOK:
-        return TRUE;
+        return true;
     case TV_HAFTED:
         return o_ptr->sval != SV_WIZSTAFF;
     default:
-        return FALSE;
+        return false;
     }
 }
 
@@ -101,23 +101,23 @@ static bool check_store_temple(player_type *player_ptr, object_type *o_ptr)
     case TV_SCROLL:
     case TV_POTION:
     case TV_HAFTED:
-        return TRUE;
+        return true;
     case TV_FIGURINE:
     case TV_STATUE: {
         monster_race *r_ptr = &r_info[o_ptr->pval];
         if (!(r_ptr->flags3 & RF3_EVIL))
             if (((r_ptr->flags3 & RF3_GOOD) != 0) || ((r_ptr->flags3 & RF3_ANIMAL) != 0) || (angband_strchr("?!", r_ptr->d_char) != NULL))
-                return TRUE;
+                return true;
     }
         /* Fall through */
     case TV_POLEARM:
     case TV_SWORD:
         if (is_blessed_item(player_ptr, o_ptr))
-            return TRUE;
+            return true;
 
         /* Fall through */
     default:
-        return FALSE;
+        return false;
     }
 }
 
@@ -126,9 +126,9 @@ static bool check_store_alchemist(object_type *o_ptr)
     switch (o_ptr->tval) {
     case TV_SCROLL:
     case TV_POTION:
-        return TRUE;
+        return true;
     default:
-        return FALSE;
+        return false;
     }
 }
 
@@ -153,11 +153,11 @@ static bool check_store_magic(object_type *o_ptr)
     case TV_SCROLL:
     case TV_POTION:
     case TV_FIGURINE:
-        return TRUE;
+        return true;
     case TV_HAFTED:
         return o_ptr->sval == SV_WIZSTAFF;
     default:
-        return FALSE;
+        return false;
     }
 }
 
@@ -176,9 +176,9 @@ static bool check_store_book(object_type *o_ptr)
     case TV_CRUSADE_BOOK:
     case TV_MUSIC_BOOK:
     case TV_HEX_BOOK:
-        return TRUE;
+        return true;
     default:
-        return FALSE;
+        return false;
     }
 }
 
@@ -200,7 +200,7 @@ static bool switch_store_check(player_type *player_ptr, object_type *o_ptr)
     case STORE_BOOK:
         return check_store_book(o_ptr);
     default:
-        return TRUE;
+        return true;
     }
 }
 
@@ -215,10 +215,10 @@ static bool switch_store_check(player_type *player_ptr, object_type *o_ptr)
 bool store_will_buy(player_type *player_ptr, object_type *o_ptr)
 {
     if ((cur_store_num == STORE_HOME) || (cur_store_num == STORE_MUSEUM))
-        return TRUE;
+        return true;
 
     if (!switch_store_check(player_ptr, o_ptr))
-        return FALSE;
+        return false;
 
     return object_value(player_ptr, o_ptr) > 0;
 }

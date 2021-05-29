@@ -52,7 +52,7 @@ bool askfor_aux(char *buf, int len, bool numpad_cursor)
     buf[len] = '\0';
 
     int pos = 0;
-    while (TRUE) {
+    while (true) {
         term_erase(x, y, len);
         term_putstr(x, y, -1, color, buf);
 
@@ -67,7 +67,7 @@ bool askfor_aux(char *buf, int len, bool numpad_cursor)
 
             if (0 == pos)
                 break;
-            while (TRUE) {
+            while (true) {
                 int next_pos = i + 1;
 #ifdef JP
                 if (iskanji(buf[i]))
@@ -101,18 +101,18 @@ bool askfor_aux(char *buf, int len, bool numpad_cursor)
 
         case ESCAPE:
             buf[0] = '\0';
-            return FALSE;
+            return false;
 
         case '\n':
         case '\r':
-            return TRUE;
+            return true;
 
         case '\010': {
             int i = 0;
             color = TERM_WHITE;
             if (0 == pos)
                 break;
-            while (TRUE) {
+            while (true) {
                 int next_pos = i + 1;
 #ifdef JP
                 if (iskanji(buf[i]))
@@ -159,7 +159,7 @@ bool askfor_aux(char *buf, int len, bool numpad_cursor)
             strcpy(tmp, buf + pos);
 #ifdef JP
             if (iskanji(c)) {
-                inkey_base = TRUE;
+                inkey_base = true;
                 char next = inkey();
                 if (pos + 1 < len) {
                     buf[pos++] = c;
@@ -267,37 +267,37 @@ bool get_check_strict(player_type *player_ptr, concptr prompt, BIT_FLAGS mode)
         handle_stuff(player_ptr);
     }
 
-    bool flag = FALSE;
-    while (TRUE) {
+    bool flag = false;
+    while (true) {
         int i = inkey();
 
         if (!(mode & CHECK_NO_ESCAPE)) {
             if (i == ESCAPE) {
-                flag = FALSE;
+                flag = false;
                 break;
             }
         }
 
         if (mode & CHECK_OKAY_CANCEL) {
             if (i == 'o' || i == 'O') {
-                flag = TRUE;
+                flag = true;
                 break;
             } else if (i == 'c' || i == 'C') {
-                flag = FALSE;
+                flag = false;
                 break;
             }
         } else {
             if (i == 'y' || i == 'Y') {
-                flag = TRUE;
+                flag = true;
                 break;
             } else if (i == 'n' || i == 'N') {
-                flag = FALSE;
+                flag = false;
                 break;
             }
         }
 
         if (mode & CHECK_DEFAULT_Y) {
-            flag = TRUE;
+            flag = true;
             break;
         }
 
@@ -326,11 +326,11 @@ bool get_com(concptr prompt, char *command, bool z_escape)
 
     prt("", 0, 0);
     if (*command == ESCAPE)
-        return FALSE;
+        return false;
     if (z_escape && ((*command == 'z') || (*command == 'Z')))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*

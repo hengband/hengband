@@ -191,7 +191,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 bool process_stealth(player_type *target_ptr, MONSTER_IDX m_idx)
 {
     if ((target_ptr->special_defense & NINJA_S_STEALTH) == 0)
-        return TRUE;
+        return true;
 
     monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -244,11 +244,11 @@ bool vanish_summoned_children(player_type *target_ptr, MONSTER_IDX m_idx, bool s
     monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 
     if (m_ptr->parent_m_idx == 0)
-        return FALSE;
+        return false;
 
     // parent_m_idxが自分自身を指している場合は召喚主は消滅している
     if (m_ptr->parent_m_idx != m_idx && (target_ptr->current_floor_ptr->m_list[m_ptr->parent_m_idx].r_idx > 0))
-        return FALSE;
+        return false;
 
     if (see_m) {
         GAME_TEXT m_name[MAX_NLEN];
@@ -263,7 +263,7 @@ bool vanish_summoned_children(player_type *target_ptr, MONSTER_IDX m_idx, bool s
     }
 
     delete_monster_idx(target_ptr, m_idx);
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -277,10 +277,10 @@ bool awake_monster(player_type *target_ptr, MONSTER_IDX m_idx)
     monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     if (!monster_csleep_remaining(m_ptr))
-        return TRUE;
+        return true;
 
     if (!has_aggravate(target_ptr))
-        return FALSE;
+        return false;
 
     (void)set_monster_csleep(target_ptr, m_idx, 0);
     if (m_ptr->ml) {
@@ -292,7 +292,7 @@ bool awake_monster(player_type *target_ptr, MONSTER_IDX m_idx)
     if (is_original_ap_and_seen(target_ptr, m_ptr) && (r_ptr->r_wake < MAX_UCHAR))
         r_ptr->r_wake++;
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -305,14 +305,14 @@ void process_angar(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m)
 {
     monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    bool gets_angry = FALSE;
+    bool gets_angry = false;
     if (is_friendly(m_ptr) && has_aggravate(target_ptr))
-        gets_angry = TRUE;
+        gets_angry = true;
 
     if (is_pet(m_ptr)
         && ((((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) && monster_has_hostile_align(target_ptr, NULL, 10, -10, r_ptr))
             || (r_ptr->flagsr & RFR_RES_ALL)))
-        gets_angry = TRUE;
+        gets_angry = true;
 
     if (target_ptr->phase_out || !gets_angry)
         return;
@@ -349,7 +349,7 @@ bool explode_grenade(player_type *target_ptr, MONSTER_IDX m_idx)
 {
     monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
     if (m_ptr->r_idx != MON_GRENADE)
-        return FALSE;
+        return false;
 
     bool fear, dead;
     mon_take_hit_mon(target_ptr, m_idx, 1, &dead, &fear, _("は爆発して粉々になった。", " explodes into tiny shreds."), m_idx);
@@ -397,7 +397,7 @@ bool decide_monster_multiplication(player_type *target_ptr, MONSTER_IDX m_idx, P
     monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     if (((r_ptr->flags2 & RF2_MULTIPLY) == 0) || (target_ptr->current_floor_ptr->num_repro >= MAX_REPRO))
-        return FALSE;
+        return false;
 
     int k = 0;
     for (POSITION y = oy - 1; y <= oy + 1; y++) {
@@ -418,11 +418,11 @@ bool decide_monster_multiplication(player_type *target_ptr, MONSTER_IDX m_idx, P
             if (target_ptr->current_floor_ptr->m_list[hack_m_idx_ii].ml && is_original_ap_and_seen(target_ptr, m_ptr))
                 r_ptr->r_flags2 |= RF2_MULTIPLY;
 
-            return TRUE;
+            return true;
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -437,26 +437,26 @@ bool cast_spell(player_type *target_ptr, MONSTER_IDX m_idx, bool aware)
     monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     if ((r_ptr->freq_spell == 0) || (randint1(100) > r_ptr->freq_spell))
-        return FALSE;
+        return false;
 
-    bool counterattack = FALSE;
+    bool counterattack = false;
     if (m_ptr->target_y) {
         MONSTER_IDX t_m_idx = target_ptr->current_floor_ptr->grid_array[m_ptr->target_y][m_ptr->target_x].m_idx;
         if (t_m_idx && are_enemies(target_ptr, m_ptr, &target_ptr->current_floor_ptr->m_list[t_m_idx])
             && projectable(target_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x)) {
-            counterattack = TRUE;
+            counterattack = true;
         }
     }
 
     if (counterattack) {
         if (monst_spell_monst(target_ptr, m_idx) || (aware && make_attack_spell(target_ptr, m_idx)))
-            return TRUE;
+            return true;
     } else {
         if ((aware && make_attack_spell(target_ptr, m_idx)) || monst_spell_monst(target_ptr, m_idx))
-            return TRUE;
+            return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -472,16 +472,16 @@ bool process_monster_fear(player_type *target_ptr, turn_flags *turn_flags_ptr, M
     monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
     bool is_battle_determined = !turn_flags_ptr->do_turn && !turn_flags_ptr->do_move && monster_fear_remaining(m_ptr) && turn_flags_ptr->aware;
     if (!is_battle_determined)
-        return FALSE;
+        return false;
 
     (void)set_monster_monfear(target_ptr, m_idx, 0);
     if (!turn_flags_ptr->see_m)
-        return TRUE;
+        return true;
 
     GAME_TEXT m_name[MAX_NLEN];
     monster_desc(target_ptr, m_name, m_ptr, 0);
     msg_format(_("%^sは戦いを決意した！", "%^s turns to fight!"), m_name);
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -521,7 +521,7 @@ void process_monsters(player_type *target_ptr)
 {
     old_race_flags tmp_flags;
     old_race_flags *old_race_flags_ptr = init_old_race_flags(&tmp_flags);
-    target_ptr->current_floor_ptr->monster_noise = FALSE;
+    target_ptr->current_floor_ptr->monster_noise = false;
     MONRACE_IDX old_monster_race_idx = target_ptr->monster_race_idx;
     save_old_race_flags(target_ptr->monster_race_idx, old_race_flags_ptr);
     sweep_monster_process(target_ptr);
@@ -589,13 +589,13 @@ bool decide_process_continue(player_type *target_ptr, monster_type *m_ptr)
     }
 
     if (m_ptr->cdis <= (is_pet(m_ptr) ? (r_ptr->aaf > MAX_SIGHT ? MAX_SIGHT : r_ptr->aaf) : r_ptr->aaf))
-        return TRUE;
+        return true;
 
     if ((m_ptr->cdis <= MAX_SIGHT || target_ptr->phase_out) && (player_has_los_bold(target_ptr, m_ptr->fy, m_ptr->fx) || has_aggravate(target_ptr)))
-        return TRUE;
+        return true;
 
     if (m_ptr->target_y)
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }

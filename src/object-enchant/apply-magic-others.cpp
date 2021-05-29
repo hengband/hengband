@@ -70,15 +70,15 @@ void apply_magic_others(player_type *owner_ptr, object_type *o_ptr, int power)
             become_random_artifact(owner_ptr, o_ptr, FALSE);
         } else if ((power == 2) || ((power == 1) && one_in_(3))) {
             while (!o_ptr->name2) {
-                while (TRUE) {
-                    bool okay_flag = TRUE;
+                while (true) {
+                    bool okay_flag = true;
 
                     o_ptr->name2 = get_random_ego(INVEN_LITE, TRUE);
 
                     switch (o_ptr->name2) {
                     case EGO_LITE_LONG:
                         if (o_ptr->sval == SV_LITE_FEANOR)
-                            okay_flag = FALSE;
+                            okay_flag = false;
                     }
 
                     if (okay_flag)
@@ -126,7 +126,7 @@ void apply_magic_others(player_type *owner_ptr, object_type *o_ptr, int power)
         PARAMETER_VALUE i = 1;
         int check;
         monster_race *r_ptr;
-        while (TRUE) {
+        while (true) {
             i = randint1(max_r_idx - 1);
 
             if (!item_monster_okay(owner_ptr, i))
@@ -164,7 +164,7 @@ void apply_magic_others(player_type *owner_ptr, object_type *o_ptr, int power)
         }
 
         get_mon_num_prep(owner_ptr, item_monster_okay, NULL);
-        while (TRUE) {
+        while (true) {
             i = get_mon_num(owner_ptr, 0, floor_ptr->dun_level, 0);
             r_ptr = &r_info[i];
             check = (floor_ptr->dun_level < r_ptr->level) ? (r_ptr->level - floor_ptr->dun_level) : 0;
@@ -186,7 +186,7 @@ void apply_magic_others(player_type *owner_ptr, object_type *o_ptr, int power)
     case TV_STATUE: {
         PARAMETER_VALUE i = 1;
         monster_race *r_ptr;
-        while (TRUE) {
+        while (true) {
             i = randint1(max_r_idx - 1);
             r_ptr = &r_info[i];
             if (!r_ptr->rarity)

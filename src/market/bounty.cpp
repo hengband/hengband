@@ -44,7 +44,7 @@
  */
 bool exchange_cash(player_type *player_ptr)
 {
-    bool change = FALSE;
+    bool change = false;
     GAME_TEXT o_name[MAX_NLEN];
     object_type *o_ptr;
 
@@ -61,7 +61,7 @@ bool exchange_cash(player_type *player_ptr)
                 vary_item(player_ptr, i, -o_ptr->number);
             }
 
-            change = TRUE;
+            change = true;
         }
     }
 
@@ -78,7 +78,7 @@ bool exchange_cash(player_type *player_ptr)
                 vary_item(player_ptr, i, -o_ptr->number);
             }
 
-            change = TRUE;
+            change = true;
         }
     }
 
@@ -95,7 +95,7 @@ bool exchange_cash(player_type *player_ptr)
                 vary_item(player_ptr, i, -o_ptr->number);
             }
 
-            change = TRUE;
+            change = true;
         }
     }
 
@@ -113,7 +113,7 @@ bool exchange_cash(player_type *player_ptr)
                 vary_item(player_ptr, i, -o_ptr->number);
             }
 
-            change = TRUE;
+            change = true;
         }
     }
 
@@ -132,7 +132,7 @@ bool exchange_cash(player_type *player_ptr)
                 vary_item(player_ptr, i, -o_ptr->number);
             }
 
-            change = TRUE;
+            change = true;
         }
     }
 
@@ -180,16 +180,16 @@ bool exchange_cash(player_type *player_ptr)
 
             autopick_alter_item(player_ptr, item_new, FALSE);
             handle_stuff(player_ptr);
-            change = TRUE;
+            change = true;
         }
     }
 
     if (change)
-        return TRUE;
+        return true;
 
     msg_print(_("賞金を得られそうなものは持っていなかった。", "You have nothing."));
     msg_print(NULL);
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -283,7 +283,7 @@ void determine_daily_bounty(player_type *player_ptr, bool conv_old)
 
     get_mon_num_prep_bounty(player_ptr);
 
-    while (TRUE) {
+    while (true) {
         current_world_ptr->today_mon = get_mon_num(player_ptr, MIN(max_dl / 2, 40), max_dl, GMN_ARENA);
         monster_race *r_ptr;
         r_ptr = &r_info[current_world_ptr->today_mon];
@@ -318,7 +318,7 @@ void determine_bounty_uniques(player_type *player_ptr)
     get_mon_num_prep_bounty(player_ptr);
 
     for (int i = 0; i < MAX_BOUNTY; i++) {
-        while (TRUE) {
+        while (true) {
             current_world_ptr->bounty_r_idx[i] = get_mon_num(player_ptr, 0, MAX_DEPTH - 1, GMN_ARENA);
             monster_race *r_ptr;
             r_ptr = &r_info[current_world_ptr->bounty_r_idx[i]];

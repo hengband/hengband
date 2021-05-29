@@ -48,7 +48,7 @@ bool wiz_debug_spell(player_type *creature_ptr)
     int tmp_int;
 
     if (!get_string("SPELL: ", tmp_val, 32))
-        return FALSE;
+        return false;
 
     for (int i = 0; i < SPELL_MAX; i++) {
         if (strcmp(tmp_val, debug_spell_commands_list[i].command_name) != 0)
@@ -57,15 +57,15 @@ bool wiz_debug_spell(player_type *creature_ptr)
         switch (debug_spell_commands_list[i].type) {
         case 2:
             (*(debug_spell_commands_list[i].command_function.spell2.spell_function))(creature_ptr);
-            return TRUE;
+            return true;
             break;
         case 3:
             tmp_val[0] = '\0';
             if (!get_string("POWER:", tmp_val, 32))
-                return FALSE;
+                return false;
             tmp_int = atoi(tmp_val);
             (*(debug_spell_commands_list[i].command_function.spell3.spell_function))(creature_ptr, tmp_int);
-            return TRUE;
+            return true;
             break;
         default:
             break;
@@ -73,7 +73,7 @@ bool wiz_debug_spell(player_type *creature_ptr)
     }
 
     msg_format("Command not found.");
-    return FALSE;
+    return false;
 }
 
 /*!

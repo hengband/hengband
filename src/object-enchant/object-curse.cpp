@@ -31,7 +31,7 @@ TRC get_curse(player_type *owner_ptr, int power, object_type *o_ptr)
 {
     TRC new_curse;
 
-    while (TRUE) {
+    while (true) {
         new_curse = static_cast<TRC>(rand_range(static_cast<int>(TRC::TY_CURSE), static_cast<int>(TRC::MAX) - 1));
         if (power == 2) {
             if (TRC_HEAVY_MASK.has_not(new_curse))
@@ -84,17 +84,17 @@ void curse_equipment(player_type *owner_ptr, PERCENTAGE chance, PERCENTAGE heavy
         return;
     }
 
-    bool changed = FALSE;
+    bool changed = false;
     int curse_power = 0;
     if ((randint1(100) <= heavy_chance) && (object_is_artifact(o_ptr) || object_is_ego(o_ptr))) {
         if (o_ptr->curse_flags.has_not(TRC::HEAVY_CURSE))
-            changed = TRUE;
+            changed = true;
         o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
         o_ptr->curse_flags.set(TRC::CURSED);
         curse_power++;
     } else {
         if (!object_is_cursed(o_ptr))
-            changed = TRUE;
+            changed = true;
         o_ptr->curse_flags.set(TRC::CURSED);
     }
 
@@ -103,7 +103,7 @@ void curse_equipment(player_type *owner_ptr, PERCENTAGE chance, PERCENTAGE heavy
 
     auto new_curse = get_curse(owner_ptr, curse_power, o_ptr);
     if (o_ptr->curse_flags.has_not(new_curse)) {
-        changed = TRUE;
+        changed = true;
         o_ptr->curse_flags.set(new_curse);
     }
 

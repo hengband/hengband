@@ -55,15 +55,15 @@
 #include "window/display-sub-windows.h"
 #include "world/world-turn-processor.h"
 
-bool load = TRUE;
-bool can_save = FALSE;
+bool load = true;
+bool can_save = false;
 
 static void process_fishing(player_type *creature_ptr)
 {
     term_xtra(TERM_XTRA_DELAY, 10);
     if (one_in_(1000)) {
         MONRACE_IDX r_idx;
-        bool success = FALSE;
+        bool success = false;
         get_mon_num_prep(creature_ptr, monster_is_fishing_target, NULL);
         r_idx = get_mon_num(creature_ptr, 0,
             is_in_dungeon(creature_ptr) ? creature_ptr->current_floor_ptr->dun_level
@@ -78,7 +78,7 @@ static void process_fishing(player_type *creature_ptr)
                 GAME_TEXT m_name[MAX_NLEN];
                 monster_desc(creature_ptr, m_name, &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[y][x].m_idx], 0);
                 msg_format(_("%sが釣れた！", "You have a good catch!"), m_name);
-                success = TRUE;
+                success = true;
             }
         }
 
@@ -107,13 +107,13 @@ void process_player(player_type *creature_ptr)
     if (creature_ptr->hack_mutation) {
         msg_print(_("何か変わった気がする！", "You feel different!"));
         (void)gain_mutation(creature_ptr, 0);
-        creature_ptr->hack_mutation = FALSE;
+        creature_ptr->hack_mutation = false;
     }
 
     if (creature_ptr->invoking_midnight_curse) {
         int count = 0;
         activate_ty_curse(creature_ptr, FALSE, &count);
-        creature_ptr->invoking_midnight_curse = FALSE;
+        creature_ptr->invoking_midnight_curse = false;
     }
 
     if (creature_ptr->phase_out) {
@@ -160,7 +160,7 @@ void process_player(player_type *creature_ptr)
 
     if (check_abort) {
         if (continuous_action_running(creature_ptr)) {
-            inkey_scan = TRUE;
+            inkey_scan = true;
             if (inkey()) {
                 flush();
                 disturb(creature_ptr, FALSE, TRUE);
@@ -209,7 +209,7 @@ void process_player(player_type *creature_ptr)
         handle_stuff(creature_ptr);
     }
 
-    load = FALSE;
+    load = false;
     if (creature_ptr->lightspeed)
         set_lightspeed(creature_ptr, creature_ptr->lightspeed - 1, TRUE);
 
@@ -250,9 +250,9 @@ void process_player(player_type *creature_ptr)
     /*** Handle actual user input ***/
     while (creature_ptr->energy_need <= 0) {
         creature_ptr->window_flags |= PW_PLAYER;
-        creature_ptr->sutemi = FALSE;
-        creature_ptr->counter = FALSE;
-        creature_ptr->now_damaged = FALSE;
+        creature_ptr->sutemi = false;
+        creature_ptr->counter = false;
+        creature_ptr->now_damaged = false;
 
         update_monsters(creature_ptr, FALSE);
         handle_stuff(creature_ptr);
@@ -262,7 +262,7 @@ void process_player(player_type *creature_ptr)
 
         pack_overflow(creature_ptr);
         if (!command_new)
-            command_see = FALSE;
+            command_see = false;
 
         PlayerEnergy energy(creature_ptr);
         energy.reset_player_turn();
@@ -291,7 +291,7 @@ void process_player(player_type *creature_ptr)
             command_rep--;
             creature_ptr->redraw |= (PR_STATE);
             handle_stuff(creature_ptr);
-            msg_flag = FALSE;
+            msg_flag = false;
             prt("", 0, 0);
             process_command(creature_ptr);
         } else {
@@ -300,9 +300,9 @@ void process_player(player_type *creature_ptr)
             creature_ptr->window_flags |= PW_MONSTER_LIST;
             window_stuff(creature_ptr);
 
-            can_save = TRUE;
+            can_save = true;
             request_command(creature_ptr, FALSE);
-            can_save = FALSE;
+            can_save = false;
             process_command(creature_ptr);
         }
 
@@ -348,7 +348,7 @@ void process_player(player_type *creature_ptr)
                         m_ptr->mflag2.reset(MFLAG2::SHOW);
                     } else {
                         m_ptr->mflag2.reset(MFLAG2::MARK);
-                        m_ptr->ml = FALSE;
+                        m_ptr->ml = false;
                         update_monster(creature_ptr, m_idx, FALSE);
                         if (creature_ptr->health_who == m_idx)
                             creature_ptr->redraw |= (PR_HEALTH);
@@ -369,12 +369,12 @@ void process_player(player_type *creature_ptr)
                     }
                 }
 
-                creature_ptr->new_mane = FALSE;
+                creature_ptr->new_mane = false;
                 creature_ptr->redraw |= (PR_IMITATION);
             }
 
             if (creature_ptr->action == ACTION_LEARN) {
-                creature_ptr->new_mane = FALSE;
+                creature_ptr->new_mane = false;
                 creature_ptr->redraw |= (PR_STATE);
             }
 
@@ -385,7 +385,7 @@ void process_player(player_type *creature_ptr)
 
                 msg_print(_("「時は動きだす…」", "You feel time flowing around you once more."));
                 msg_print(NULL);
-                creature_ptr->timewalk = FALSE;
+                creature_ptr->timewalk = false;
                 creature_ptr->energy_need = ENERGY_NEED();
 
                 handle_stuff(creature_ptr);
@@ -393,7 +393,7 @@ void process_player(player_type *creature_ptr)
         }
 
         if (!creature_ptr->playing || creature_ptr->is_dead) {
-            creature_ptr->timewalk = FALSE;
+            creature_ptr->timewalk = false;
             break;
         }
 

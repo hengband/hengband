@@ -168,12 +168,12 @@ void load_wilderness_info(player_type *creature_ptr)
     }
 
     if (h_older_than(0, 3, 7))
-        creature_ptr->wild_mode = FALSE;
+        creature_ptr->wild_mode = false;
     else
         rd_byte((byte *)&creature_ptr->wild_mode);
 
     if (h_older_than(0, 3, 7))
-        creature_ptr->ambush_flag = FALSE;
+        creature_ptr->ambush_flag = false;
     else
         rd_byte((byte *)&creature_ptr->ambush_flag);
 }

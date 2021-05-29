@@ -96,7 +96,7 @@ static bool get_hack_dir(player_type *creature_ptr, DIRECTION *dp)
     }
 
     if (!dir)
-        return FALSE;
+        return false;
 
     command_dir = dir;
     if (creature_ptr->confused)
@@ -106,7 +106,7 @@ static bool get_hack_dir(player_type *creature_ptr, DIRECTION *dp)
         msg_print(_("あなたは混乱している。", "You are confused."));
 
     *dp = dir;
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -323,36 +323,36 @@ void process_world_aux_mutation(player_type *creature_ptr)
 
     if (creature_ptr->muta.has(MUTA::WASTING) && one_in_(3000)) {
         int which_stat = randint0(A_MAX);
-        int sustained = FALSE;
+        int sustained = false;
 
         switch (which_stat) {
         case A_STR:
             if (has_sustain_str(creature_ptr))
-                sustained = TRUE;
+                sustained = true;
             break;
         case A_INT:
             if (has_sustain_int(creature_ptr))
-                sustained = TRUE;
+                sustained = true;
             break;
         case A_WIS:
             if (has_sustain_wis(creature_ptr))
-                sustained = TRUE;
+                sustained = true;
             break;
         case A_DEX:
             if (has_sustain_dex(creature_ptr))
-                sustained = TRUE;
+                sustained = true;
             break;
         case A_CON:
             if (has_sustain_con(creature_ptr))
-                sustained = TRUE;
+                sustained = true;
             break;
         case A_CHR:
             if (has_sustain_chr(creature_ptr))
-                sustained = TRUE;
+                sustained = true;
             break;
         default:
             msg_print(_("不正な状態！", "Invalid stat chosen!"));
-            sustained = TRUE;
+            sustained = true;
         }
 
         if (!sustained) {
@@ -476,7 +476,7 @@ bool drop_weapons(player_type *creature_ptr)
     object_type *o_ptr = NULL;
 
     if (creature_ptr->wild_mode)
-        return FALSE;
+        return false;
 
     msg_print(NULL);
     if (has_melee_weapon(creature_ptr, INVEN_MAIN_HAND)) {
@@ -493,9 +493,9 @@ bool drop_weapons(player_type *creature_ptr)
     }
 
     if ((slot == 0) || object_is_cursed(o_ptr))
-        return FALSE;
+        return false;
 
     msg_print(_("武器を落としてしまった！", "You drop your weapon!"));
     drop_from_inventory(creature_ptr, slot, 1);
-    return TRUE;
+    return true;
 }

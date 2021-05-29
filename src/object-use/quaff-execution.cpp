@@ -102,7 +102,7 @@ static bool detonation(player_type *creature_ptr)
     take_hit(creature_ptr, DAMAGE_NOESCAPE, damroll(50, 20), _("爆発の薬", "a potion of Detonation"));
     (void)set_stun(creature_ptr, creature_ptr->stun + 75);
     (void)set_cut(creature_ptr, creature_ptr->cut + 5000);
-    return TRUE;
+    return true;
 }
 
 /*!

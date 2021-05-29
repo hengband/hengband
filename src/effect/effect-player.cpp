@@ -186,7 +186,7 @@ static bool process_bolt_reflection(player_type *target_ptr, effect_player_type 
     can_bolt_hit &= (ep_ptr->flag & PROJECT_REFLECTABLE) != 0;
     can_bolt_hit &= !one_in_(10);
     if (!can_bolt_hit)
-        return FALSE;
+        return false;
 
     POSITION t_y, t_x;
     int max_attempts = 10;
@@ -219,7 +219,7 @@ static bool process_bolt_reflection(player_type *target_ptr, effect_player_type 
 
     (*project)(target_ptr, 0, 0, t_y, t_x, ep_ptr->dam, ep_ptr->effect_type, (PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE));
     disturb(target_ptr, TRUE, TRUE);
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -327,5 +327,5 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
         (void)kawarimi(target_ptr, FALSE);
     }
 
-    return TRUE;
+    return true;
 }

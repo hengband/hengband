@@ -237,7 +237,7 @@ void wiz_identify_full_inventory(player_type *caster_ptr)
             continue;
 
         auto k_ptr = &k_info[o_ptr->k_idx];
-        k_ptr->aware = TRUE; //!< @note 記録には残さないためTRUEを立てるのみ
+        k_ptr->aware = true; //!< @note 記録には残さないためTRUEを立てるのみ
         set_bits(o_ptr->ident, IDENT_KNOWN | IDENT_FULL_KNOWN);
         set_bits(o_ptr->marked, OM_TOUCHED);
     }
@@ -410,7 +410,7 @@ static void wiz_statistics(player_type *caster_ptr, object_type *o_ptr)
     char ch;
     concptr quality;
     BIT_FLAGS mode;
-    while (TRUE) {
+    while (true) {
         concptr pmt = "Roll for [n]ormal, [g]ood, or [e]xcellent treasure? ";
         wiz_display_item(caster_ptr, o_ptr);
         if (!get_com(pmt, &ch, FALSE))
@@ -439,7 +439,7 @@ static void wiz_statistics(player_type *caster_ptr, object_type *o_ptr)
         correct = matches = better = worse = other = 0;
         for (i = 0; i <= test_roll; i++) {
             if ((i < 100) || (i % 100 == 0)) {
-                inkey_scan = TRUE;
+                inkey_scan = true;
                 if (inkey()) {
                     flush();
                     break; // stop rolling
@@ -496,8 +496,8 @@ static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
     q_ptr->copy_from(o_ptr);
 
     char ch;
-    bool changed = FALSE;
-    while (TRUE) {
+    bool changed = false;
+    while (true) {
         wiz_display_item(owner_ptr, q_ptr);
         if (!get_com("[a]ccept, [w]orthless, [c]ursed, [n]ormal, [g]ood, [e]xcellent, [s]pecial? ", &ch, FALSE)) {
             if (object_is_fixed_artifact(q_ptr)) {
@@ -505,12 +505,12 @@ static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
                 q_ptr->name1 = 0;
             }
 
-            changed = FALSE;
+            changed = false;
             break;
         }
 
         if (ch == 'A' || ch == 'a') {
-            changed = TRUE;
+            changed = true;
             break;
         }
 
@@ -666,16 +666,16 @@ void wiz_modify_item(player_type *creature_ptr)
     q_ptr = &forge;
     q_ptr->copy_from(o_ptr);
     char ch;
-    bool changed = FALSE;
-    while (TRUE) {
+    bool changed = false;
+    while (true) {
         wiz_display_item(creature_ptr, q_ptr);
         if (!get_com("[a]ccept [s]tatistics [r]eroll [t]weak [q]uantity? ", &ch, FALSE)) {
-            changed = FALSE;
+            changed = false;
             break;
         }
 
         if (ch == 'A' || ch == 'a') {
-            changed = TRUE;
+            changed = true;
             break;
         }
 
@@ -767,15 +767,15 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
     object_type *o_ptr = &forge;
     char o_name[MAX_NLEN];
 
-    bool wish_art = FALSE;
-    bool wish_randart = FALSE;
-    bool wish_ego = FALSE;
-    bool exam_base = TRUE;
-    bool ok_art = (randint0(100) < prob) ? TRUE : FALSE;
-    bool ok_ego = (randint0(100) < 50 + prob) ? TRUE : FALSE;
-    bool must = (prob < 0) ? TRUE : FALSE;
-    bool blessed = FALSE;
-    bool fixed = TRUE;
+    bool wish_art = false;
+    bool wish_randart = false;
+    bool wish_ego = false;
+    bool exam_base = true;
+    bool ok_art = (randint0(100) < prob) ? TRUE : false;
+    bool ok_ego = (randint0(100) < 50 + prob) ? TRUE : false;
+    bool must = (prob < 0) ? TRUE : false;
+    bool blessed = false;
+    bool fixed = true;
 
     while (1) {
         if (get_string(_("何をお望み？ ", "For what do you wish?"), buf, (MAX_NLEN - 1)))
@@ -801,14 +801,14 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
 
     if (!strncmp(str, _("祝福された", "blessed"), _(10, 7))) {
         str = ltrim(str + _(10, 7));
-        blessed = TRUE;
+        blessed = true;
     }
 
     for (int i = 0; fixed_str[i] != NULL; i++) {
         int len = strlen(fixed_str[i]);
         if (!strncmp(str, fixed_str[i], len)) {
             str = ltrim(str + len);
-            fixed = TRUE;
+            fixed = true;
             break;
         }
     }
@@ -816,21 +816,21 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
 #ifdef JP
     if (!strncmp(str, "★", 2)) {
         str = ltrim(str + 2);
-        wish_art = TRUE;
-        exam_base = FALSE;
+        wish_art = true;
+        exam_base = false;
     } else
 #endif
 
     if (!strncmp(str, _("☆", "The "), _(2, 4))) {
         str = ltrim(str + _(2, 4));
-        wish_art = TRUE;
-        wish_randart = TRUE;
+        wish_art = true;
+        wish_randart = true;
     }
 
     /* wishing random ego ? */
     else if (!strncmp(str, _("高級な", "excellent "), _(6, 9))) {
         str = ltrim(str + _(6, 9));
-        wish_ego = TRUE;
+        wish_ego = true;
     }
 
     if (strlen(str) < 1) {

@@ -74,7 +74,7 @@ void monspell_message_base(player_type* target_ptr, MONSTER_IDX m_idx, MONSTER_I
     }
 
     if (mon_to_mon && known && !see_either)
-        floor_ptr->monster_noise = TRUE;
+        floor_ptr->monster_noise = true;
 }
 
 /*!

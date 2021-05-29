@@ -105,14 +105,14 @@ bool enter_wizard_mode(player_type *player_ptr)
     if (!current_world_ptr->noscore) {
         if (!allow_debug_opts || arg_wizard) {
             msg_print(_("ウィザードモードは許可されていません。 ", "Wizard mode is not permitted."));
-            return FALSE;
+            return false;
         }
 
         msg_print(_("ウィザードモードはデバッグと実験のためのモードです。 ", "Wizard mode is for debugging and experimenting."));
         msg_print(_("一度ウィザードモードに入るとスコアは記録されません。", "The game will not be scored if you enter wizard mode."));
         msg_print(NULL);
         if (!get_check(_("本当にウィザードモードに入りたいのですか? ", "Are you sure you want to enter wizard mode? "))) {
-            return FALSE;
+            return false;
         }
 
         exe_write_diary(
@@ -120,7 +120,7 @@ bool enter_wizard_mode(player_type *player_ptr)
         current_world_ptr->noscore |= 0x0002;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -134,14 +134,14 @@ static bool enter_debug_mode(player_type *player_ptr)
     if (!current_world_ptr->noscore) {
         if (!allow_debug_opts) {
             msg_print(_("デバッグコマンドは許可されていません。 ", "Use of debug command is not permitted."));
-            return FALSE;
+            return false;
         }
 
         msg_print(_("デバッグ・コマンドはデバッグと実験のためのコマンドです。 ", "The debug commands are for debugging and experimenting."));
         msg_print(_("デバッグ・コマンドを使うとスコアは記録されません。", "The game will not be scored if you use debug commands."));
         msg_print(NULL);
         if (!get_check(_("本当にデバッグ・コマンドを使いますか? ", "Are you sure you want to use debug commands? "))) {
-            return FALSE;
+            return false;
         }
 
         exe_write_diary(
@@ -149,7 +149,7 @@ static bool enter_debug_mode(player_type *player_ptr)
         current_world_ptr->noscore |= 0x0008;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -163,7 +163,7 @@ void process_command(player_type *creature_ptr)
     repeat_check();
     now_message = 0;
     if ((creature_ptr->pclass == CLASS_SNIPER) && (creature_ptr->concent))
-        creature_ptr->reset_concent = TRUE;
+        creature_ptr->reset_concent = true;
 
     floor_type *floor_ptr = creature_ptr->current_floor_ptr;
     switch (command_cmd) {
@@ -176,10 +176,10 @@ void process_command(player_type *creature_ptr)
     }
     case KTRL('W'): {
         if (current_world_ptr->wizard) {
-            current_world_ptr->wizard = FALSE;
+            current_world_ptr->wizard = false;
             msg_print(_("ウィザードモード解除。", "Wizard mode off."));
         } else if (enter_wizard_mode(creature_ptr)) {
-            current_world_ptr->wizard = TRUE;
+            current_world_ptr->wizard = true;
             msg_print(_("ウィザードモード突入。", "Wizard mode on."));
         }
 

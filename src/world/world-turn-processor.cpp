@@ -64,9 +64,9 @@ void process_world(player_type *player_ptr)
         floor_ptr->dun_level = 0;
         player_ptr->dungeon_idx = 0;
         prepare_change_floor_mode(player_ptr, CFM_FIRST_FLOOR | CFM_RAND_PLACE);
-        floor_ptr->inside_arena = FALSE;
-        player_ptr->wild_mode = FALSE;
-        player_ptr->leaving = TRUE;
+        floor_ptr->inside_arena = false;
+        player_ptr->wild_mode = false;
+        player_ptr->leaving = true;
     }
 
     if (player_ptr->phase_out && !player_ptr->leaving) {
@@ -221,7 +221,7 @@ void process_world(player_type *player_ptr)
                 PlayerEnergy(player_ptr).set_player_turn_energy(100);
             }
 
-            player_ptr->invoking_midnight_curse = TRUE;
+            player_ptr->invoking_midnight_curse = true;
         }
     }
 

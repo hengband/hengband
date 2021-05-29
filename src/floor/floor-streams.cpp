@@ -104,7 +104,7 @@ static void recursive_river(floor_type *floor_ptr, POSITION x1, POSITION y1, POS
             x = x1 + l * (x2 - x1) / length;
             y = y1 + l * (y2 - y1) / length;
 
-            done = FALSE;
+            done = false;
 
             while (!done) {
                 for (ty = y - width - 1; ty <= y + width + 1; ty++) {
@@ -149,7 +149,7 @@ static void recursive_river(floor_type *floor_ptr, POSITION x1, POSITION y1, POS
                     }
                 }
 
-                done = TRUE;
+                done = true;
             }
         }
     }
@@ -304,7 +304,7 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
             int d = DUN_STR_RNG;
 
             /* Pick a nearby grid */
-            while (TRUE) {
+            while (true) {
                 ty = rand_spread(y, d);
                 tx = rand_spread(x, d);
                 if (!in_bounds2(floor_ptr, ty, tx))

@@ -80,15 +80,15 @@ static bool determine_spcial_item_type(object_type *o_ptr, tval_type tval)
 static bool check_item_knowledge(object_type *o_ptr, tval_type tval)
 {
     if (o_ptr->k_idx == 0)
-        return FALSE;
+        return false;
     if (o_ptr->tval != tval)
-        return FALSE;
+        return false;
     if (!object_is_known(o_ptr))
-        return FALSE;
+        return false;
     if (!determine_spcial_item_type(o_ptr, tval))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*!
