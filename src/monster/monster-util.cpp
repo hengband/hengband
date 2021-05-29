@@ -394,7 +394,7 @@ static errr do_get_mon_num_prep(player_type *player_ptr, const monsterrace_hook_
  */
 errr get_mon_num_prep(player_type *player_ptr, const monsterrace_hook_type hook1, const monsterrace_hook_type hook2)
 {
-    return do_get_mon_num_prep(player_ptr, hook1, hook2, TRUE);
+    return do_get_mon_num_prep(player_ptr, hook1, hook2, true);
 }
 
 /*!
@@ -405,5 +405,5 @@ errr get_mon_num_prep(player_type *player_ptr, const monsterrace_hook_type hook1
  */
 errr get_mon_num_prep_bounty(player_type *player_ptr)
 {
-    return do_get_mon_num_prep(player_ptr, NULL, NULL, FALSE);
+    return do_get_mon_num_prep(player_ptr, NULL, NULL, false);
 }

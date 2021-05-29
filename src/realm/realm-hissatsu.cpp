@@ -376,7 +376,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
                     m_ptr->fy = ty;
                     m_ptr->fx = tx;
 
-                    update_monster(caster_ptr, m_idx, TRUE);
+                    update_monster(caster_ptr, m_idx, true);
                     lite_spot(caster_ptr, oy, ox);
                     lite_spot(caster_ptr, ty, tx);
 
@@ -755,7 +755,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
                 m_ptr->fy = ny;
                 m_ptr->fx = nx;
 
-                update_monster(caster_ptr, m_idx, TRUE);
+                update_monster(caster_ptr, m_idx, true);
 
                 /* Redraw the old spot */
                 lite_spot(caster_ptr, y, x);

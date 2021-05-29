@@ -405,9 +405,9 @@ static void exe_leave_floor(player_type *creature_ptr, saved_floor_type *sf_ptr)
 void leave_floor(player_type *creature_ptr)
 {
     preserve_pet(creature_ptr);
-    remove_all_mirrors(creature_ptr, FALSE);
+    remove_all_mirrors(creature_ptr, false);
     if (creature_ptr->special_defense & NINJA_S_STEALTH)
-        set_superstealth(creature_ptr, FALSE);
+        set_superstealth(creature_ptr, false);
 
     new_floor_id = 0;
 

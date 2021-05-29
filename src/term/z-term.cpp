@@ -1823,7 +1823,7 @@ errr term_inkey(char *ch, bool wait, bool take)
         /* Process pending events while necessary */
         while (Term->key_head == Term->key_tail) {
             /* Process events (wait for one) */
-            term_xtra(TERM_XTRA_EVENT, TRUE);
+            term_xtra(TERM_XTRA_EVENT, true);
         }
     }
 
@@ -1832,7 +1832,7 @@ errr term_inkey(char *ch, bool wait, bool take)
         /* Process pending events if necessary */
         if (Term->key_head == Term->key_tail) {
             /* Process events (do not wait) */
-            term_xtra(TERM_XTRA_EVENT, FALSE);
+            term_xtra(TERM_XTRA_EVENT, false);
         }
     }
 

@@ -110,7 +110,7 @@ void do_cmd_go_up(player_type *creature_ptr)
     if (!is_in_dungeon(creature_ptr))
         go_up = true;
     else
-        go_up = confirm_leave_level(creature_ptr, FALSE);
+        go_up = confirm_leave_level(creature_ptr, false);
 
     if (!go_up)
         return;
@@ -118,7 +118,7 @@ void do_cmd_go_up(player_type *creature_ptr)
     PlayerEnergy(creature_ptr).set_player_turn_energy(100);
 
     if (autosave_l)
-        do_cmd_save_game(creature_ptr, TRUE);
+        do_cmd_save_game(creature_ptr, true);
 
     if (creature_ptr->current_floor_ptr->inside_quest && quest[creature_ptr->current_floor_ptr->inside_quest].type == QUEST_TYPE_RANDOM) {
         leave_quest_check(creature_ptr);
@@ -240,7 +240,7 @@ void do_cmd_go_down(player_type *creature_ptr)
 
     PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     if (autosave_l)
-        do_cmd_save_game(creature_ptr, TRUE);
+        do_cmd_save_game(creature_ptr, true);
 
     if (has_flag(f_ptr->flags, FF_SHAFT))
         down_num += 2;
@@ -316,7 +316,7 @@ void do_cmd_walk(player_type *creature_ptr, bool pickup)
             energy.set_player_turn_energy(energy_use);
         }
 
-        exe_movement(creature_ptr, dir, pickup, FALSE);
+        exe_movement(creature_ptr, dir, pickup, false);
         more = true;
     }
 
@@ -329,13 +329,13 @@ void do_cmd_walk(player_type *creature_ptr, bool pickup)
             msg_print(_("襲撃だ！", "You are ambushed !"));
             creature_ptr->oldpy = randint1(MAX_HGT - 2);
             creature_ptr->oldpx = randint1(MAX_WID - 2);
-            change_wild_mode(creature_ptr, TRUE);
+            change_wild_mode(creature_ptr, true);
             PlayerEnergy(creature_ptr).set_player_turn_energy(100);
         }
     }
 
     if (!more)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
 }
 
 /*!
@@ -417,7 +417,7 @@ void do_cmd_rest(player_type *creature_ptr)
         command_arg = 9999;
 
     if (creature_ptr->special_defense & NINJA_S_STEALTH)
-        set_superstealth(creature_ptr, FALSE);
+        set_superstealth(creature_ptr, false);
 
     PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     if (command_arg > 100)

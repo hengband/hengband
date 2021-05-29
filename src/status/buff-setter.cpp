@@ -91,7 +91,7 @@ void reset_tim_flags(player_type *creature_ptr)
     if (creature_ptr->riding) {
         (void)set_monster_fast(creature_ptr, creature_ptr->riding, 0);
         (void)set_monster_slow(creature_ptr, creature_ptr->riding, 0);
-        (void)set_monster_invulner(creature_ptr, creature_ptr->riding, 0, FALSE);
+        (void)set_monster_invulner(creature_ptr, creature_ptr->riding, 0, false);
     }
 
     if (creature_ptr->pclass == CLASS_BARD) {
@@ -136,7 +136,7 @@ bool set_fast(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
     creature_ptr->update |= (PU_BONUS);
     handle_stuff(creature_ptr);
     return true;
@@ -178,7 +178,7 @@ bool set_shield(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
     creature_ptr->update |= (PU_BONUS);
     handle_stuff(creature_ptr);
     return true;
@@ -220,7 +220,7 @@ bool set_magicdef(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
     creature_ptr->update |= (PU_BONUS);
     handle_stuff(creature_ptr);
     return true;
@@ -262,7 +262,7 @@ bool set_blessed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
     creature_ptr->update |= (PU_BONUS);
     handle_stuff(creature_ptr);
     return true;
@@ -304,7 +304,7 @@ bool set_hero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
     creature_ptr->update |= (PU_BONUS);
     creature_ptr->update |= (PU_HP);
     handle_stuff(creature_ptr);
@@ -341,7 +341,7 @@ bool set_mimic(player_type *creature_ptr, TIME_EFFECT v, MIMIC_RACE_IDX p, bool 
         if (creature_ptr->tim_mimic) {
             msg_print(_("変身が解けた。", "You are no longer transformed."));
             if (creature_ptr->mimic_form == MIMIC_DEMON)
-                set_oppose_fire(creature_ptr, 0, TRUE);
+                set_oppose_fire(creature_ptr, 0, true);
             creature_ptr->mimic_form = 0;
             notice = true;
             p = 0;
@@ -353,7 +353,7 @@ bool set_mimic(player_type *creature_ptr, TIME_EFFECT v, MIMIC_RACE_IDX p, bool 
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, TRUE);
+        disturb(creature_ptr, FALSE, true);
 
     creature_ptr->redraw |= (PR_BASIC | PR_STATUS);
     creature_ptr->update |= (PU_BONUS | PU_HP);
@@ -403,7 +403,7 @@ bool set_shero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
     creature_ptr->update |= (PU_BONUS);
     creature_ptr->update |= (PU_HP);
     handle_stuff(creature_ptr);
@@ -460,7 +460,7 @@ bool set_wraith_form(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
     creature_ptr->update |= (PU_BONUS);
     handle_stuff(creature_ptr);
     return true;
@@ -493,8 +493,8 @@ bool set_tsuyoshi(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
         if (creature_ptr->tsuyoshi) {
             msg_print(_("肉体が急速にしぼんでいった。", "Your body has quickly shriveled."));
 
-            (void)dec_stat(creature_ptr, A_CON, 20, TRUE);
-            (void)dec_stat(creature_ptr, A_STR, 20, TRUE);
+            (void)dec_stat(creature_ptr, A_CON, 20, true);
+            (void)dec_stat(creature_ptr, A_STR, 20, true);
 
             notice = true;
             chg_virtue(creature_ptr, V_VITALITY, -3);
@@ -508,7 +508,7 @@ bool set_tsuyoshi(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
     creature_ptr->update |= (PU_BONUS);
     creature_ptr->update |= (PU_HP);
     handle_stuff(creature_ptr);

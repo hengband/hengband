@@ -380,7 +380,7 @@ void exe_zap_rod(player_type *creature_ptr, INVENTORY_IDX item)
 
     sound(SOUND_ZAP);
 
-    ident = rod_effect(creature_ptr, o_ptr->sval, dir, &use_charge, FALSE, FALSE);
+    ident = rod_effect(creature_ptr, o_ptr->sval, dir, &use_charge, FALSE, false);
 
     /* Increase the timeout by the rod kind's pval. -LM- */
     if (use_charge)

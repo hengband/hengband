@@ -477,6 +477,6 @@ void destroy_level(player_type *player_ptr)
         x1 = rand_range(5, floor_ptr->width - 1 - 5);
         y1 = rand_range(5, floor_ptr->height - 1 - 5);
 
-        (void)destroy_area(player_ptr, y1, x1, 15, TRUE);
+        (void)destroy_area(player_ptr, y1, x1, 15, true);
     }
 }

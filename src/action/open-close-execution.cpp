@@ -263,7 +263,7 @@ bool exe_disarm(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir
         msg_format(_("%sを解除した。", "You have disarmed the %s."), name);
         gain_exp(creature_ptr, power);
         cave_alter_feat(creature_ptr, y, x, FF_DISARM);
-        exe_movement(creature_ptr, dir, easy_disarm, FALSE);
+        exe_movement(creature_ptr, dir, easy_disarm, false);
     } else if ((i > 5) && (randint1(i) > 5)) {
         if (flush_failure)
             flush();
@@ -272,7 +272,7 @@ bool exe_disarm(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir
         more = true;
     } else {
         msg_format(_("%sを作動させてしまった！", "You set off the %s!"), name);
-        exe_movement(creature_ptr, dir, easy_disarm, FALSE);
+        exe_movement(creature_ptr, dir, easy_disarm, false);
     }
 
     return more;
@@ -318,7 +318,7 @@ bool exe_bash(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir)
             cave_alter_feat(creature_ptr, y, x, FF_OPEN);
         }
 
-        exe_movement(creature_ptr, dir, FALSE, FALSE);
+        exe_movement(creature_ptr, dir, FALSE, false);
     } else if (randint0(100) < adj_dex_safe[creature_ptr->stat_index[A_DEX]] + creature_ptr->lev) {
         msg_format(_("この%sは頑丈だ。", "The %s holds firm."), name);
         more = true;

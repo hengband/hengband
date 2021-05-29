@@ -64,7 +64,7 @@ bool activate_breath_fire(player_type *user_ptr, object_type *o_ptr)
 
     fire_breath(user_ptr, GF_FIRE, dir, 200, 2);
     if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES))
-        (void)set_oppose_fire(user_ptr, randint1(20) + 20, FALSE);
+        (void)set_oppose_fire(user_ptr, randint1(20) + 20, false);
 
     return true;
 }
@@ -77,7 +77,7 @@ bool activate_breath_cold(player_type *user_ptr, object_type *o_ptr)
 
     fire_breath(user_ptr, GF_COLD, dir, 200, 2);
     if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE))
-        (void)set_oppose_cold(user_ptr, randint1(20) + 20, FALSE);
+        (void)set_oppose_cold(user_ptr, randint1(20) + 20, false);
 
     return true;
 }

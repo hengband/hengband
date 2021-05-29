@@ -286,7 +286,7 @@ bool life_stream(player_type *creature_ptr, bool message, bool virtue_change)
     (void)set_cut(creature_ptr, 0);
     (void)set_paralyzed(creature_ptr, 0);
     (void)restore_all_status(creature_ptr);
-    (void)set_shero(creature_ptr, 0, TRUE);
+    (void)set_shero(creature_ptr, 0, true);
     handle_stuff(creature_ptr);
     hp_player(creature_ptr, 5000);
 
@@ -505,12 +505,12 @@ bool cosmic_cast_off(player_type *creature_ptr, object_type **o_ptr_ptr)
     int t = 20 + randint1(20);
     (void)set_blind(creature_ptr, creature_ptr->blind + t);
     (void)set_afraid(creature_ptr, 0);
-    (void)set_tim_esp(creature_ptr, creature_ptr->tim_esp + t, FALSE);
-    (void)set_tim_regen(creature_ptr, creature_ptr->tim_regen + t, FALSE);
-    (void)set_hero(creature_ptr, creature_ptr->hero + t, FALSE);
-    (void)set_blessed(creature_ptr, creature_ptr->blessed + t, FALSE);
-    (void)set_fast(creature_ptr, creature_ptr->fast + t, FALSE);
-    (void)set_shero(creature_ptr, creature_ptr->shero + t, FALSE);
+    (void)set_tim_esp(creature_ptr, creature_ptr->tim_esp + t, false);
+    (void)set_tim_regen(creature_ptr, creature_ptr->tim_regen + t, false);
+    (void)set_hero(creature_ptr, creature_ptr->hero + t, false);
+    (void)set_blessed(creature_ptr, creature_ptr->blessed + t, false);
+    (void)set_fast(creature_ptr, creature_ptr->fast + t, false);
+    (void)set_shero(creature_ptr, creature_ptr->shero + t, false);
     if (creature_ptr->pclass == CLASS_FORCETRAINER) {
         set_current_ki(creature_ptr, TRUE, creature_ptr->lev * 5 + 190);
         msg_print(_("気が爆発寸前になった。", "Your force absorbs the explosion."));

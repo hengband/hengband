@@ -216,7 +216,7 @@ bool exe_cmd_debug(player_type *creature_ptr, char cmd)
             for (int x = 0; x < creature_ptr->current_floor_ptr->width; x++)
                 creature_ptr->current_floor_ptr->grid_array[y][x].info |= CAVE_GLOW | CAVE_MARK;
 
-        wiz_lite(creature_ptr, FALSE);
+        wiz_lite(creature_ptr, false);
         break;
     case 'w':
         wiz_lite(creature_ptr, (bool)(creature_ptr->pclass == CLASS_NINJA));
@@ -285,7 +285,7 @@ void do_cmd_debug(player_type *creature_ptr)
     while (true) {
         screen_save();
         display_debug_menu(page, max_page, page_size, max_line);
-        get_com("Debug Command: ", &cmd, FALSE);
+        get_com("Debug Command: ", &cmd, false);
         screen_load();
 
         if (exe_cmd_debug(creature_ptr, cmd))

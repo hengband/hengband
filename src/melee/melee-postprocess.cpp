@@ -180,7 +180,7 @@ static bool check_monster_hp(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
     *(mam_pp_ptr->dead) = true;
     print_monster_dead_by_monster(player_ptr, mam_pp_ptr);
     monster_gain_exp(player_ptr, mam_pp_ptr->who, mam_pp_ptr->m_ptr->r_idx);
-    monster_death(player_ptr, mam_pp_ptr->m_idx, FALSE);
+    monster_death(player_ptr, mam_pp_ptr->m_idx, false);
     delete_monster_idx(player_ptr, mam_pp_ptr->m_idx);
     *(mam_pp_ptr->fear) = false;
     return true;
@@ -261,7 +261,7 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
     (void)set_monster_csleep(player_ptr, m_idx, 0);
 
     if (player_ptr->riding && (m_idx == player_ptr->riding))
-        disturb(player_ptr, TRUE, TRUE);
+        disturb(player_ptr, TRUE, true);
 
     if (process_invulnerability(mam_pp_ptr) || process_all_resistances(mam_pp_ptr))
         return;

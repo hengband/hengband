@@ -95,7 +95,7 @@ bool exe_mutation_power(player_type *creature_ptr, MUTA power)
             return false;
 
         msg_print(_("集中している...", "You concentrate..."));
-        fetch_item(creature_ptr, dir, lvl * 10, TRUE);
+        fetch_item(creature_ptr, dir, lvl * 10, true);
         return true;
     case MUTA::VTELEPORT:
         msg_print(_("集中している...", "You concentrate..."));
@@ -176,27 +176,27 @@ bool exe_mutation_power(player_type *creature_ptr, MUTA power)
         int num = lvl / 10;
         TIME_EFFECT dur = randint1(20) + 20;
         if (randint0(5) < num) {
-            (void)set_oppose_acid(creature_ptr, dur, FALSE);
+            (void)set_oppose_acid(creature_ptr, dur, false);
             num--;
         }
 
         if (randint0(4) < num) {
-            (void)set_oppose_elec(creature_ptr, dur, FALSE);
+            (void)set_oppose_elec(creature_ptr, dur, false);
             num--;
         }
 
         if (randint0(3) < num) {
-            (void)set_oppose_fire(creature_ptr, dur, FALSE);
+            (void)set_oppose_fire(creature_ptr, dur, false);
             num--;
         }
 
         if (randint0(2) < num) {
-            (void)set_oppose_cold(creature_ptr, dur, FALSE);
+            (void)set_oppose_cold(creature_ptr, dur, false);
             num--;
         }
 
         if (num != 0) {
-            (void)set_oppose_pois(creature_ptr, dur, FALSE);
+            (void)set_oppose_pois(creature_ptr, dur, false);
             num--;
         }
 

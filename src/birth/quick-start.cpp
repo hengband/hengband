@@ -48,7 +48,7 @@ bool ask_quick_start(player_type *creature_ptr)
             return false;
     }
 
-    load_prev_data(creature_ptr, FALSE);
+    load_prev_data(creature_ptr, false);
     init_turn(creature_ptr);
     init_dungeon_quests(creature_ptr);
 
@@ -58,7 +58,7 @@ bool ask_quick_start(player_type *creature_ptr)
     mp_ptr = &m_info[creature_ptr->pclass];
     ap_ptr = &personality_info[creature_ptr->pseikaku];
 
-    get_extra(creature_ptr, FALSE);
+    get_extra(creature_ptr, false);
     creature_ptr->update |= (PU_BONUS | PU_HP);
     update_creature(creature_ptr);
     creature_ptr->chp = creature_ptr->mhp;

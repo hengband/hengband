@@ -39,7 +39,7 @@ static MonsterSpellResult spell_RF5_CAUSE(player_type *target_ptr, int GF_TYPE, 
     monster_name(target_ptr, t_idx, t_name);
 
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
-        disturb(target_ptr, TRUE, TRUE);
+        disturb(target_ptr, TRUE, true);
         if (target_ptr->blind)
             msg_format(msg1, m_name);
         else

@@ -364,14 +364,14 @@ void run_step(player_type *creature_ptr, DIRECTION dir)
         if (see_wall(creature_ptr, dir, creature_ptr->y, creature_ptr->x)) {
             sound(SOUND_HITWALL);
             msg_print(_("その方向には走れません。", "You cannot run in that direction."));
-            disturb(creature_ptr, FALSE, FALSE);
+            disturb(creature_ptr, FALSE, false);
             return;
         }
 
         run_init(creature_ptr, dir);
     } else {
         if (run_test(creature_ptr)) {
-            disturb(creature_ptr, FALSE, FALSE);
+            disturb(creature_ptr, FALSE, false);
             return;
         }
     }
@@ -380,10 +380,10 @@ void run_step(player_type *creature_ptr, DIRECTION dir)
         return;
 
     PlayerEnergy(creature_ptr).set_player_turn_energy(100);
-    exe_movement(creature_ptr, find_current, FALSE, FALSE);
+    exe_movement(creature_ptr, find_current, FALSE, false);
     if (player_bold(creature_ptr, creature_ptr->run_py, creature_ptr->run_px)) {
         creature_ptr->run_py = 0;
         creature_ptr->run_px = 0;
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
     }
 }

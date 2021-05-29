@@ -159,7 +159,7 @@ static void effect_damage_killed_pet(player_type *caster_ptr, effect_monster_typ
     if (em_ptr->who > 0)
         monster_gain_exp(caster_ptr, em_ptr->who, em_ptr->m_ptr->r_idx);
 
-    monster_death(caster_ptr, em_ptr->g_ptr->m_idx, FALSE);
+    monster_death(caster_ptr, em_ptr->g_ptr->m_idx, false);
     delete_monster_idx(caster_ptr, em_ptr->g_ptr->m_idx);
     if (sad)
         msg_print(_("少し悲しい気分がした。", "You feel sad for a moment."));
@@ -638,7 +638,7 @@ bool affect_monster(
     make_description_of_affecred_monster(caster_ptr, em_ptr);
 
     if (caster_ptr->riding && (em_ptr->g_ptr->m_idx == caster_ptr->riding))
-        disturb(caster_ptr, TRUE, TRUE);
+        disturb(caster_ptr, TRUE, true);
 
     process_result result = exe_affect_monster_by_effect(caster_ptr, em_ptr);
     if (result != PROCESS_CONTINUE)
@@ -651,7 +651,7 @@ bool affect_monster(
 
     update_phase_out_stat(caster_ptr, em_ptr);
     if (em_ptr->m_ptr->r_idx)
-        update_monster(caster_ptr, em_ptr->g_ptr->m_idx, FALSE);
+        update_monster(caster_ptr, em_ptr->g_ptr->m_idx, false);
 
     lite_spot(caster_ptr, em_ptr->y, em_ptr->x);
     if ((caster_ptr->monster_race_idx == em_ptr->m_ptr->r_idx) && (em_ptr->seen || !em_ptr->m_ptr->r_idx))

@@ -371,7 +371,7 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
         player_ptr->update |= (PU_MON_LITE);
     else if ((r_ptr->flags7 & RF7_HAS_LD_MASK) && !monster_csleep_remaining(m_ptr))
         player_ptr->update |= (PU_MON_LITE);
-    update_monster(player_ptr, g_ptr->m_idx, TRUE);
+    update_monster(player_ptr, g_ptr->m_idx, true);
 
     real_r_ptr(m_ptr)->cur_num++;
 

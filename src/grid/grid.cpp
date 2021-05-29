@@ -341,7 +341,7 @@ bool check_local_illumination(player_type *creature_ptr, POSITION y, POSITION x)
         if (player_has_los_bold((C), (Y), (X))) {                                                                                                              \
             /* Update the monster */                                                                                                                           \
             if ((C)->current_floor_ptr->grid_array[(Y)][(X)].m_idx)                                                                                            \
-                update_monster((C), (C)->current_floor_ptr->grid_array[(Y)][(X)].m_idx, FALSE);                                                                \
+                update_monster((C), (C)->current_floor_ptr->grid_array[(Y)][(X)].m_idx, false);                                                                \
                                                                                                                                                                \
             /* Notice and redraw */                                                                                                                            \
             note_spot((C), (Y), (X));                                                                                                                          \
@@ -998,7 +998,7 @@ void remove_mirror(player_type *caster_ptr, POSITION y, POSITION x)
         if (!view_torch_grids)
             g_ptr->info &= ~(CAVE_MARK);
         if (g_ptr->m_idx)
-            update_monster(caster_ptr, g_ptr->m_idx, FALSE);
+            update_monster(caster_ptr, g_ptr->m_idx, false);
 
         update_local_illumination(caster_ptr, y, x);
     }

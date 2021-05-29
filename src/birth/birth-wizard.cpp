@@ -458,7 +458,7 @@ static bool display_auto_roller_result(player_type *creature_ptr, bool prev, cha
             break;
 
         if (prev && (*c == 'p')) {
-            load_prev_data(creature_ptr, TRUE);
+            load_prev_data(creature_ptr, true);
             continue;
         }
 
@@ -503,7 +503,7 @@ static bool display_auto_roller(player_type *creature_ptr, chara_limit_type char
 
         flush();
 
-        get_extra(creature_ptr, TRUE);
+        get_extra(creature_ptr, true);
         get_money(creature_ptr);
         creature_ptr->chaos_patron = (s16b)randint0(MAX_PATRON);
 

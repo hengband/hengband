@@ -120,7 +120,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
                 exe_write_diary(creature_ptr, DIARY_TELEPORT_LEVEL, 1, NULL);
 
             if (autosave_l)
-                do_cmd_save_game(creature_ptr, TRUE);
+                do_cmd_save_game(creature_ptr, true);
 
             if (!is_in_dungeon(creature_ptr)) {
                 creature_ptr->current_floor_ptr->dun_level = d_info[creature_ptr->dungeon_idx].mindepth;
@@ -146,7 +146,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
                 exe_write_diary(creature_ptr, DIARY_TELEPORT_LEVEL, -1, NULL);
 
             if (autosave_l)
-                do_cmd_save_game(creature_ptr, TRUE);
+                do_cmd_save_game(creature_ptr, true);
 
             prepare_change_floor_mode(creature_ptr, CFM_SAVE_FLOORS | CFM_UP | CFM_RAND_PLACE | CFM_RAND_CONNECT);
 
@@ -168,7 +168,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
                 exe_write_diary(creature_ptr, DIARY_TELEPORT_LEVEL, -1, NULL);
 
             if (autosave_l)
-                do_cmd_save_game(creature_ptr, TRUE);
+                do_cmd_save_game(creature_ptr, true);
 
             prepare_change_floor_mode(creature_ptr, CFM_SAVE_FLOORS | CFM_UP | CFM_RAND_PLACE | CFM_RAND_CONNECT);
             creature_ptr->leaving = true;
@@ -186,7 +186,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
             if (record_stair)
                 exe_write_diary(creature_ptr, DIARY_TELEPORT_LEVEL, 1, NULL);
             if (autosave_l)
-                do_cmd_save_game(creature_ptr, TRUE);
+                do_cmd_save_game(creature_ptr, true);
 
             prepare_change_floor_mode(creature_ptr, CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
             creature_ptr->leaving = true;

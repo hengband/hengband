@@ -166,7 +166,7 @@ bool rush_attack(player_type *attacker_ptr, bool *mdeath)
 
         if (!player_bold(attacker_ptr, ty, tx))
             teleport_player_to(attacker_ptr, ty, tx, TELEPORT_NONMAGICAL);
-        update_monster(attacker_ptr, floor_ptr->grid_array[ny][nx].m_idx, TRUE);
+        update_monster(attacker_ptr, floor_ptr->grid_array[ny][nx].m_idx, true);
 
         m_ptr = &floor_ptr->m_list[floor_ptr->grid_array[ny][nx].m_idx];
         if (tm_idx != floor_ptr->grid_array[ny][nx].m_idx) {
@@ -324,7 +324,7 @@ bool set_superstealth(player_type *creature_ptr, bool set)
     creature_ptr->redraw |= (PR_STATUS);
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
     return true;
 }
 
@@ -346,11 +346,11 @@ bool cast_ninja_spell(player_type *caster_ptr, mind_ninja_type spell)
         break;
     case DETECT_NEAR:
         if (plev > 44)
-            wiz_lite(caster_ptr, TRUE);
+            wiz_lite(caster_ptr, true);
 
         detect_monsters_normal(caster_ptr, DETECT_RAD_DEFAULT);
         if (plev > 4) {
-            detect_traps(caster_ptr, DETECT_RAD_DEFAULT, TRUE);
+            detect_traps(caster_ptr, DETECT_RAD_DEFAULT, true);
             detect_doors(caster_ptr, DETECT_RAD_DEFAULT);
             detect_stairs(caster_ptr, DETECT_RAD_DEFAULT);
         }
@@ -387,12 +387,12 @@ bool cast_ninja_spell(player_type *caster_ptr, mind_ninja_type spell)
     case ANCIENT_KNOWLEDGE:
         return ident_spell(caster_ptr, FALSE, TV_NONE);
     case FLOATING:
-        set_tim_levitation(caster_ptr, randint1(20) + 20, FALSE);
+        set_tim_levitation(caster_ptr, randint1(20) + 20, false);
         break;
     case HIDE_FLAMES:
         fire_ball(caster_ptr, GF_FIRE, 0, 50 + plev, plev / 10 + 2);
         teleport_player(caster_ptr, 30, TELEPORT_SPONTANEOUS);
-        set_oppose_fire(caster_ptr, (TIME_EFFECT)plev, FALSE);
+        set_oppose_fire(caster_ptr, (TIME_EFFECT)plev, false);
         break;
     case NYUSIN:
         return rush_attack(caster_ptr, NULL);
@@ -443,8 +443,8 @@ bool cast_ninja_spell(player_type *caster_ptr, mind_ninja_type spell)
         create_rune_explosion(caster_ptr, caster_ptr->y, caster_ptr->x);
         break;
     case HIDE_MUD:
-        (void)set_pass_wall(caster_ptr, randint1(plev / 2) + plev / 2, FALSE);
-        set_oppose_acid(caster_ptr, (TIME_EFFECT)plev, FALSE);
+        (void)set_pass_wall(caster_ptr, randint1(plev / 2) + plev / 2, false);
+        set_oppose_acid(caster_ptr, (TIME_EFFECT)plev, false);
         break;
     case HIDE_MIST:
         fire_ball(caster_ptr, GF_POIS, 0, 75 + plev * 2 / 3, plev / 5 + 2);
@@ -469,7 +469,7 @@ bool cast_ninja_spell(player_type *caster_ptr, mind_ninja_type spell)
         break;
     }
     case ALTER_EGO:
-        set_multishadow(caster_ptr, 6 + randint1(6), FALSE);
+        set_multishadow(caster_ptr, 6 + randint1(6), false);
         break;
     default:
         msg_print(_("なに？", "Zap?"));

@@ -131,7 +131,7 @@ bool create_ammo(player_type *creature_ptr)
         describe_flavor(creature_ptr, o_name, q_ptr, 0);
         msg_format(_("%sを作った。", "You make some ammo."), o_name);
         if (slot >= 0)
-            autopick_alter_item(creature_ptr, slot, FALSE);
+            autopick_alter_item(creature_ptr, slot, false);
 
         cave_alter_feat(creature_ptr, y, x, FF_HURT_ROCK);
         creature_ptr->update |= PU_FLOW;
@@ -160,7 +160,7 @@ bool create_ammo(player_type *creature_ptr)
         vary_item(creature_ptr, item, -1);
         s16b slot = store_item_to_inventory(creature_ptr, q_ptr);
         if (slot >= 0)
-            autopick_alter_item(creature_ptr, slot, FALSE);
+            autopick_alter_item(creature_ptr, slot, false);
 
         return true;
     }
@@ -187,7 +187,7 @@ bool create_ammo(player_type *creature_ptr)
         vary_item(creature_ptr, item, -1);
         s16b slot = store_item_to_inventory(creature_ptr, q_ptr);
         if (slot >= 0)
-            autopick_alter_item(creature_ptr, slot, FALSE);
+            autopick_alter_item(creature_ptr, slot, false);
 
         return true;
     }

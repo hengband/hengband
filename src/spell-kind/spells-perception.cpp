@@ -43,7 +43,7 @@ void identify_pack(player_type *target_ptr)
             continue;
 
         identify_item(target_ptr, o_ptr);
-        autopick_alter_item(target_ptr, i, FALSE);
+        autopick_alter_item(target_ptr, i, false);
     }
 }
 

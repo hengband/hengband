@@ -788,7 +788,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         sleep_monster(caster_ptr, dir, plev);
         break;
     case RF_ABILITY::HASTE:
-        (void)set_fast(caster_ptr, randint1(20 + plev) + plev, FALSE);
+        (void)set_fast(caster_ptr, randint1(20 + plev) + plev, false);
         break;
     case RF_ABILITY::HAND_DOOM: {
         if (!get_aim_dir(caster_ptr, &dir))
@@ -807,7 +807,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         break;
     case RF_ABILITY::INVULNER:
         msg_print(_("無傷の球の呪文を唱えた。", "You cast a Globe of Invulnerability."));
-        (void)set_invuln(caster_ptr, randint1(7) + 7, FALSE);
+        (void)set_invuln(caster_ptr, randint1(7) + 7, false);
         break;
     case RF_ABILITY::BLINK:
         teleport_player(caster_ptr, 10, TELEPORT_SPONTANEOUS);

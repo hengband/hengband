@@ -141,7 +141,7 @@ static void make_walls(player_type *player_ptr, dun_data_type *dd_ptr, dungeon_t
         g_ptr->mimic = 0;
         place_grid(player_ptr, g_ptr, GB_FLOOR);
         if ((randint0(100) < dt_ptr->dun_tun_pen) && d_ptr->flags.has_not(DF::NO_DOORS))
-            place_random_door(player_ptr, dd_ptr->tunnel_y, dd_ptr->tunnel_x, TRUE);
+            place_random_door(player_ptr, dd_ptr->tunnel_y, dd_ptr->tunnel_x, true);
     }
 }
 
@@ -223,7 +223,7 @@ static bool switch_making_floor(player_type *player_ptr, dun_data_type *dd_ptr, 
 {
     if (d_ptr->flags.has(DF::MAZE)) {
         floor_type *floor_ptr = player_ptr->current_floor_ptr;
-        build_maze_vault(player_ptr, floor_ptr->width / 2 - 1, floor_ptr->height / 2 - 1, floor_ptr->width - 4, floor_ptr->height - 4, FALSE);
+        build_maze_vault(player_ptr, floor_ptr->width / 2 - 1, floor_ptr->height / 2 - 1, floor_ptr->width - 4, floor_ptr->height - 4, false);
         if (!alloc_stairs(player_ptr, feat_down_stair, rand_range(2, 3), 3)) {
             *dd_ptr->why = _("迷宮ダンジョンの下り階段生成に失敗", "Failed to alloc up stairs in maze dungeon.");
             return false;

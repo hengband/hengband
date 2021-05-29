@@ -67,13 +67,13 @@ void apply_magic_others(player_type *owner_ptr, object_type *o_ptr, int power)
 
         /* power > 2 is debug only */
         if (power > 2) {
-            become_random_artifact(owner_ptr, o_ptr, FALSE);
+            become_random_artifact(owner_ptr, o_ptr, false);
         } else if ((power == 2) || ((power == 1) && one_in_(3))) {
             while (!o_ptr->name2) {
                 while (true) {
                     bool okay_flag = true;
 
-                    o_ptr->name2 = get_random_ego(INVEN_LITE, TRUE);
+                    o_ptr->name2 = get_random_ego(INVEN_LITE, true);
 
                     switch (o_ptr->name2) {
                     case EGO_LITE_LONG:
@@ -86,7 +86,7 @@ void apply_magic_others(player_type *owner_ptr, object_type *o_ptr, int power)
                 }
             }
         } else if (power == -2) {
-            o_ptr->name2 = get_random_ego(INVEN_LITE, FALSE);
+            o_ptr->name2 = get_random_ego(INVEN_LITE, false);
             switch (o_ptr->name2) {
             case EGO_LITE_DARKNESS:
                 o_ptr->xtra4 = 0;

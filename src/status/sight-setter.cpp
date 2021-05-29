@@ -46,7 +46,7 @@ bool set_tim_esp(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
     creature_ptr->update |= (PU_BONUS);
     creature_ptr->update |= (PU_MONSTERS);
     handle_stuff(creature_ptr);
@@ -89,7 +89,7 @@ bool set_tim_invis(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
     creature_ptr->update |= (PU_BONUS);
     creature_ptr->update |= (PU_MONSTERS);
     handle_stuff(creature_ptr);
@@ -132,7 +132,7 @@ bool set_tim_infra(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
     creature_ptr->update |= (PU_BONUS);
     creature_ptr->update |= (PU_MONSTERS);
     handle_stuff(creature_ptr);

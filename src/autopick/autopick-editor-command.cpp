@@ -188,7 +188,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
             if (bx2 > len)
                 bx2 = len;
 
-            kill_line_segment(tb, tb->cy, bx1, bx2, TRUE);
+            kill_line_segment(tb, tb->cy, bx1, bx2, true);
             tb->cx = bx1;
         } else {
             int by1 = MIN(tb->my, tb->cy);
@@ -197,7 +197,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
             for (int y = by2; y >= by1; y--) {
                 int len = strlen(tb->lines_list[y]);
 
-                kill_line_segment(tb, y, 0, len, TRUE);
+                kill_line_segment(tb, y, 0, len, true);
             }
 
             tb->cy = by1;
@@ -340,7 +340,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
 
         if (tb->cx < len) {
             add_str_to_yank(tb, &(tb->lines_list[tb->cy][tb->cx]));
-            kill_line_segment(tb, tb->cy, tb->cx, len, FALSE);
+            kill_line_segment(tb, tb->cy, tb->cx, len, false);
             tb->dirty_line = tb->cy;
             break;
         }
@@ -456,12 +456,12 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
     }
     case EC_SEARCH_FORW:
         if (tb->search_o_ptr) {
-            search_for_object(player_ptr, tb, tb->search_o_ptr, TRUE);
+            search_for_object(player_ptr, tb, tb->search_o_ptr, true);
             break;
         }
 
         if (tb->search_str && tb->search_str[0]) {
-            search_for_string(tb, tb->search_str, TRUE);
+            search_for_string(tb, tb->search_str, true);
             break;
         }
 
@@ -470,12 +470,12 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
 
     case EC_SEARCH_BACK: {
         if (tb->search_o_ptr) {
-            search_for_object(player_ptr, tb, tb->search_o_ptr, FALSE);
+            search_for_object(player_ptr, tb, tb->search_o_ptr, false);
             break;
         }
 
         if (tb->search_str && tb->search_str[0]) {
-            search_for_string(tb, tb->search_str, FALSE);
+            search_for_string(tb, tb->search_str, false);
             break;
         }
 

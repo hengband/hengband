@@ -32,7 +32,7 @@ static bool try_melee_spell(player_type *target_ptr, melee_spell_type *ms_ptr)
     if (spell_is_inate(ms_ptr->thrown_spell) || (!ms_ptr->in_no_magic_dungeon && (!monster_stunned_remaining(ms_ptr->m_ptr) || one_in_(2))))
         return false;
 
-    disturb(target_ptr, TRUE, TRUE);
+    disturb(target_ptr, TRUE, true);
     if (ms_ptr->see_m)
         msg_format(_("%^sは呪文を唱えようとしたが失敗した。", "%^s tries to cast a spell, but fails."), ms_ptr->m_name);
 
@@ -122,13 +122,13 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
     describe_melee_spell(target_ptr, ms_ptr);
     ms_ptr->thrown_spell = ms_ptr->spells[randint0(ms_ptr->spells.size())];
     if (target_ptr->riding && (m_idx == target_ptr->riding))
-        disturb(target_ptr, TRUE, TRUE);
+        disturb(target_ptr, TRUE, true);
 
     if (try_melee_spell(target_ptr, ms_ptr) || disturb_melee_spell(target_ptr, ms_ptr))
         return true;
 
     ms_ptr->can_remember = is_original_ap_and_seen(target_ptr, ms_ptr->m_ptr);
-    const auto res = monspell_to_monster(target_ptr, ms_ptr->thrown_spell, ms_ptr->y, ms_ptr->x, m_idx, ms_ptr->target_idx, FALSE);
+    const auto res = monspell_to_monster(target_ptr, ms_ptr->thrown_spell, ms_ptr->y, ms_ptr->x, m_idx, ms_ptr->target_idx, false);
     if (!res.valid)
         return false;
 

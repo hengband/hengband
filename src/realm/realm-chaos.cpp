@@ -355,7 +355,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
             DICE_SID sides = 4;
 
             if (cast) {
-                destroy_area(caster_ptr, caster_ptr->y, caster_ptr->x, base + randint1(sides), FALSE);
+                destroy_area(caster_ptr, caster_ptr->y, caster_ptr->x, base + randint1(sides), false);
             }
         }
         break;

@@ -231,7 +231,7 @@ static void generate_gambling_arena(player_type *creature_ptr)
             continue;
 
         m_ptr->mflag2.set({ MFLAG2::MARK, MFLAG2::SHOW });
-        update_monster(creature_ptr, i, FALSE);
+        update_monster(creature_ptr, i, false);
     }
 }
 

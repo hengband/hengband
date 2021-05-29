@@ -178,7 +178,7 @@ bool exchange_cash(player_type *player_ptr)
             describe_flavor(player_ptr, o_name, &forge, 0);
             msg_format(_("%s(%c)を貰った。", "You get %s (%c). "), o_name, index_to_label(item_new));
 
-            autopick_alter_item(player_ptr, item_new, FALSE);
+            autopick_alter_item(player_ptr, item_new, false);
             handle_stuff(player_ptr);
             change = true;
         }

@@ -131,7 +131,7 @@ static void place_pet(player_type *master_ptr)
         if (m_idx != 0) {
             monster_race *r_ptr;
             set_pet_params(master_ptr, &r_ptr, current_monster, m_idx, cy, cx);
-            update_monster(master_ptr, m_idx, TRUE);
+            update_monster(master_ptr, m_idx, true);
             lite_spot(master_ptr, cy, cx);
             if (r_ptr->flags2 & RF2_MULTIPLY)
                 master_ptr->current_floor_ptr->num_repro++;
@@ -243,7 +243,7 @@ static void reset_unique_by_floor_change(player_type *creature_ptr)
             (void)set_monster_stunned(creature_ptr, i, 0);
             (void)set_monster_confused(creature_ptr, i, 0);
             (void)set_monster_monfear(creature_ptr, i, 0);
-            (void)set_monster_invulner(creature_ptr, i, 0, FALSE);
+            (void)set_monster_invulner(creature_ptr, i, 0, false);
         }
 
         r_ptr = real_r_ptr(m_ptr);

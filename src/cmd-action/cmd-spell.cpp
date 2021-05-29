@@ -586,7 +586,7 @@ void do_cmd_browse(player_type *caster_ptr)
 
     if (caster_ptr->pclass == CLASS_FORCETRAINER) {
         if (player_has_no_spellbooks(caster_ptr)) {
-            confirm_use_force(caster_ptr, TRUE);
+            confirm_use_force(caster_ptr, true);
             return;
         }
     }
@@ -707,7 +707,7 @@ static void change_realm2(player_type *caster_ptr, REALM_IDX next_realm)
     handle_stuff(caster_ptr);
 
     /* Load an autopick preference file */
-    autopick_load_pref(caster_ptr, FALSE);
+    autopick_load_pref(caster_ptr, false);
 }
 
 /*!
@@ -967,7 +967,7 @@ bool do_cmd_cast(player_type *caster_ptr)
 
     if (caster_ptr->blind || no_lite(caster_ptr)) {
         if (caster_ptr->pclass == CLASS_FORCETRAINER)
-            confirm_use_force(caster_ptr, FALSE);
+            confirm_use_force(caster_ptr, false);
         else {
             msg_print(_("目が見えない！", "You cannot see!"));
             flush();
@@ -992,7 +992,7 @@ bool do_cmd_cast(player_type *caster_ptr)
 
     if (caster_ptr->pclass == CLASS_FORCETRAINER) {
         if (player_has_no_spellbooks(caster_ptr)) {
-            confirm_use_force(caster_ptr, FALSE);
+            confirm_use_force(caster_ptr, false);
             return true; //!< 錬気キャンセル時の処理がない
         }
     }
@@ -1141,7 +1141,7 @@ bool do_cmd_cast(player_type *caster_ptr)
             wild_magic(caster_ptr, spell);
         } else if ((o_ptr->tval == TV_DEATH_BOOK) && (randint1(100) < spell)) {
             if ((sval == 3) && one_in_(2)) {
-                sanity_blast(caster_ptr, 0, TRUE);
+                sanity_blast(caster_ptr, 0, true);
             } else {
                 msg_print(_("痛い！", "It hurts!"));
                 take_hit(caster_ptr, DAMAGE_LOSELIFE, damroll(o_ptr->sval + 1, 6), _("暗黒魔法の逆流", "a miscast Death spell"));

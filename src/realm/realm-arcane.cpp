@@ -201,7 +201,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_radius(rad);
 
             if (cast) {
-                detect_traps(caster_ptr, rad, TRUE);
+                detect_traps(caster_ptr, rad, true);
                 detect_doors(caster_ptr, rad);
                 detect_stairs(caster_ptr, rad);
             }
@@ -303,7 +303,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_duration(base, base);
 
             if (cast) {
-                set_oppose_cold(caster_ptr, randint1(base) + base, FALSE);
+                set_oppose_cold(caster_ptr, randint1(base) + base, false);
             }
         }
         break;
@@ -322,7 +322,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_duration(base, base);
 
             if (cast) {
-                set_oppose_fire(caster_ptr, randint1(base) + base, FALSE);
+                set_oppose_fire(caster_ptr, randint1(base) + base, false);
             }
         }
         break;
@@ -341,7 +341,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_duration(base, base);
 
             if (cast) {
-                set_oppose_elec(caster_ptr, randint1(base) + base, FALSE);
+                set_oppose_elec(caster_ptr, randint1(base) + base, false);
             }
         }
         break;
@@ -360,7 +360,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_duration(base, base);
 
             if (cast) {
-                set_oppose_acid(caster_ptr, randint1(base) + base, FALSE);
+                set_oppose_acid(caster_ptr, randint1(base) + base, false);
             }
         }
         break;
@@ -486,7 +486,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 return info_duration(base, base);
 
             if (cast) {
-                set_tim_invis(caster_ptr, randint1(base) + base, FALSE);
+                set_tim_invis(caster_ptr, randint1(base) + base, false);
             }
         }
         break;
@@ -638,10 +638,10 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 chg_virtue(caster_ptr, V_KNOWLEDGE, 1);
                 chg_virtue(caster_ptr, V_ENLIGHTEN, 1);
 
-                wiz_lite(caster_ptr, FALSE);
+                wiz_lite(caster_ptr, false);
 
                 if (!caster_ptr->telepathy) {
-                    set_tim_esp(caster_ptr, randint1(sides) + base, FALSE);
+                    set_tim_esp(caster_ptr, randint1(sides) + base, false);
                 }
             }
         }

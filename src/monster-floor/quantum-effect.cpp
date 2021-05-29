@@ -33,7 +33,7 @@ static void vanish_nonunique(player_type *target_ptr, MONSTER_IDX m_idx, bool se
         msg_format(_("%sは消え去った！", "%^s disappears!"), m_name);
     }
 
-    monster_death(target_ptr, m_idx, FALSE);
+    monster_death(target_ptr, m_idx, false);
     delete_monster_idx(target_ptr, m_idx);
     if (is_pet(m_ptr) && !(m_ptr->ml))
         msg_print(_("少しの間悲しい気分になった。", "You feel sad for a moment."));
@@ -67,9 +67,9 @@ static void produce_quantum_effect(player_type *target_ptr, MONSTER_IDX m_idx, b
 
     bool target = one_in_(2);
     if (target)
-        (void)monspell_to_monster(target_ptr, RF_ABILITY::BLINK, m_ptr->fy, m_ptr->fx, m_idx, m_idx, TRUE);
+        (void)monspell_to_monster(target_ptr, RF_ABILITY::BLINK, m_ptr->fy, m_ptr->fx, m_idx, m_idx, true);
     else
-        teleport_player_away(m_idx, target_ptr, 10, TRUE);
+        teleport_player_away(m_idx, target_ptr, 10, true);
 }
 
 /*!

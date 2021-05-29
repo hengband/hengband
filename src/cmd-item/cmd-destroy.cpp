@@ -77,7 +77,7 @@ static bool check_destory_item(player_type *creature_ptr, destroy_type *destroy_
             continue;
 
         if (autopick_autoregister(creature_ptr, destroy_ptr->o_ptr))
-            autopick_alter_item(creature_ptr, destroy_ptr->item, TRUE);
+            autopick_alter_item(creature_ptr, destroy_ptr->item, true);
 
         return false;
     }

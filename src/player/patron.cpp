@@ -240,7 +240,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
             msg_format(_("%sの声がささやいた:", "The voice of %s whispers:"), chaos_patrons[creature_ptr->chaos_patron]);
             msg_print(_("「我が与えし物を賢明に使うべし。」", "'Use my gift wisely.'"));
 
-            acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, 1, FALSE, FALSE, FALSE);
+            acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, 1, FALSE, FALSE, false);
             reward = _("上質なアイテムを手に入れた。", "a good item");
             break;
 
@@ -249,7 +249,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
             msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[creature_ptr->chaos_patron]);
             msg_print(_("「我が与えし物を賢明に使うべし。」", "'Use my gift wisely.'"));
 
-            acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, 1, TRUE, FALSE, FALSE);
+            acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, 1, TRUE, FALSE, false);
             reward = _("高級品のアイテムを手に入れた。", "an excellent item");
             break;
 
@@ -265,7 +265,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
             msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[creature_ptr->chaos_patron]);
             msg_print(_("「汝の行いは貴き報いに値せり。」", "'Thy deed hath earned thee a worthy reward.'"));
 
-            acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, randint1(2) + 1, FALSE, FALSE, FALSE);
+            acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, randint1(2) + 1, FALSE, FALSE, false);
             reward = _("上質なアイテムを手に入れた。", "good items");
             break;
 
@@ -274,7 +274,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
             msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[creature_ptr->chaos_patron]);
             msg_print(_("「下僕よ、汝の献身への我が惜しみ無き報いを見るがよい。」", "'Behold, mortal, how generously I reward thy loyalty.'"));
 
-            acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, randint1(2) + 1, TRUE, FALSE, FALSE);
+            acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, randint1(2) + 1, TRUE, FALSE, false);
             reward = _("高級品のアイテムを手に入れた。", "excellent items");
             break;
 
@@ -303,7 +303,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
             msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[creature_ptr->chaos_patron]);
             msg_print(_("「汝、より強き敵を必要とせり！」", "'Thou needst worthier opponents!'"));
 
-            activate_hi_summon(creature_ptr, creature_ptr->y, creature_ptr->x, FALSE);
+            activate_hi_summon(creature_ptr, creature_ptr->y, creature_ptr->x, false);
             reward = _("モンスターを召喚された。", "summoning many hostile monsters");
             break;
 
@@ -344,7 +344,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
             msg_print(_("あなたは以前より弱くなった！", "You feel less powerful!"));
 
             for (int stat = 0; stat < A_MAX; stat++) {
-                (void)dec_stat(creature_ptr, stat, 10 + randint1(15), TRUE);
+                (void)dec_stat(creature_ptr, stat, 10 + randint1(15), true);
             }
             reward = _("全能力値が下がった。", "decreasing all stats");
             break;
@@ -430,7 +430,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
                 reward = _("禍々しい呪いをかけられた。", "cursing");
                 break;
             case 2:
-                activate_hi_summon(creature_ptr, creature_ptr->y, creature_ptr->x, FALSE);
+                activate_hi_summon(creature_ptr, creature_ptr->y, creature_ptr->x, false);
                 reward = _("モンスターを召喚された。", "summoning hostile monsters");
                 break;
             case 3:
@@ -457,7 +457,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
                 break;
             default:
                 for (int stat = 0; stat < A_MAX; stat++) {
-                    (void)dec_stat(creature_ptr, stat, 10 + randint1(15), TRUE);
+                    (void)dec_stat(creature_ptr, stat, 10 + randint1(15), true);
                 }
                 reward = _("全能力値が下がった。", "decreasing all stats");
                 break;
@@ -471,9 +471,9 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 
             take_hit(creature_ptr, DAMAGE_LOSELIFE, creature_ptr->lev * 4, wrath_reason);
             for (int stat = 0; stat < A_MAX; stat++) {
-                (void)dec_stat(creature_ptr, stat, 10 + randint1(15), FALSE);
+                (void)dec_stat(creature_ptr, stat, 10 + randint1(15), false);
             }
-            activate_hi_summon(creature_ptr, creature_ptr->y, creature_ptr->x, FALSE);
+            activate_hi_summon(creature_ptr, creature_ptr->y, creature_ptr->x, false);
             (void)activate_ty_curse(creature_ptr, FALSE, &count);
             if (one_in_(2)) {
                 inventory_slot_type slot = INVEN_NONE;
@@ -497,7 +497,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
             msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[creature_ptr->chaos_patron]);
             msg_print(_("「死と破壊こそ我が喜びなり！」", "'Death and destruction! This pleaseth me!'"));
 
-            (void)destroy_area(creature_ptr, creature_ptr->y, creature_ptr->x, 25, FALSE);
+            (void)destroy_area(creature_ptr, creature_ptr->y, creature_ptr->x, 25, false);
             reward = _("ダンジョンが*破壊*された。", "*destruct*ing dungeon");
             break;
 
@@ -505,7 +505,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
 
             msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[creature_ptr->chaos_patron]);
             msg_print(_("「我、汝の敵を抹殺せん！」", "'Let me relieve thee of thine oppressors!'"));
-            (void)symbol_genocide(creature_ptr, 0, FALSE);
+            (void)symbol_genocide(creature_ptr, 0, false);
             reward = _("モンスターが抹殺された。", "genociding monsters");
             break;
 
@@ -514,7 +514,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
             msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[creature_ptr->chaos_patron]);
             msg_print(_("「我、汝の敵を抹殺せん！」", "'Let me relieve thee of thine oppressors!'"));
 
-            (void)mass_genocide(creature_ptr, 0, FALSE);
+            (void)mass_genocide(creature_ptr, 0, false);
             reward = _("モンスターが抹殺された。", "genociding nearby monsters");
             break;
 

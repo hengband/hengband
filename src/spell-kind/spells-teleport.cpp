@@ -179,7 +179,7 @@ bool teleport_away(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION dis, tel
     m_ptr->fx = nx;
 
     reset_target(m_ptr);
-    update_monster(caster_ptr, m_idx, TRUE);
+    update_monster(caster_ptr, m_idx, true);
     lite_spot(caster_ptr, oy, ox);
     lite_spot(caster_ptr, ny, nx);
 
@@ -252,7 +252,7 @@ void teleport_monster_to(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION ty
     m_ptr->fy = ny;
     m_ptr->fx = nx;
 
-    update_monster(caster_ptr, m_idx, TRUE);
+    update_monster(caster_ptr, m_idx, true);
     lite_spot(caster_ptr, oy, ox);
     lite_spot(caster_ptr, ny, nx);
 

@@ -53,13 +53,13 @@ static void dump_player_status_with_screen_num(
  */
 void dump_aux_player_status(player_type *creature_ptr, FILE *fff, display_player_pf display_player)
 {
-	dump_player_status_with_screen_num(creature_ptr, fff, display_player, 0, 1, 22, FALSE);
-	dump_player_status_with_screen_num(creature_ptr, fff, display_player, 1, 10, 19, FALSE);
+	dump_player_status_with_screen_num(creature_ptr, fff, display_player, 0, 1, 22, false);
+	dump_player_status_with_screen_num(creature_ptr, fff, display_player, 1, 10, 19, false);
 	fprintf(fff, "\n");
-	dump_player_status_with_screen_num(creature_ptr, fff, display_player, 2, 2, 22, TRUE);
+	dump_player_status_with_screen_num(creature_ptr, fff, display_player, 2, 2, 22, true);
 	fprintf(fff, "\n");
-	dump_player_status_with_screen_num(creature_ptr, fff, display_player, 3, 1, 18, TRUE);
+	dump_player_status_with_screen_num(creature_ptr, fff, display_player, 3, 1, 18, true);
 	fprintf(fff, "\n");
-    dump_player_status_with_screen_num(creature_ptr, fff, display_player, 4, 1, 19, TRUE);
+    dump_player_status_with_screen_num(creature_ptr, fff, display_player, 4, 1, 19, true);
     fprintf(fff, "\n");
 }

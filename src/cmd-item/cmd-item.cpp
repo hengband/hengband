@@ -267,7 +267,7 @@ void do_cmd_use(player_type *creature_ptr)
         if (cmd_limit_blind(creature_ptr) || cmd_limit_confused(creature_ptr))
             return;
 
-        exe_read(creature_ptr, item, TRUE);
+        exe_read(creature_ptr, item, true);
         break;
     case TV_SHOT:
     case TV_ARROW:

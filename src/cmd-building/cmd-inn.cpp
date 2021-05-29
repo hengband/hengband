@@ -109,7 +109,7 @@ static bool has_a_nightmare(player_type *customer_ptr)
 
 	while (true)
 	{
-		sanity_blast(customer_ptr, NULL, FALSE);
+		sanity_blast(customer_ptr, NULL, false);
 		if (!one_in_(3)) break;
 	}
 
@@ -199,7 +199,7 @@ static bool stay_inn(player_type *customer_ptr)
 	prevent_turn_overflow(customer_ptr);
 
 	if ((prev_hour >= 18) && (prev_hour <= 23)) {
-		determine_daily_bounty(customer_ptr, FALSE); /* Update daily bounty */
+		determine_daily_bounty(customer_ptr, false); /* Update daily bounty */
 		exe_write_diary(customer_ptr, DIARY_DIALY, 0, NULL);
 	}
 
@@ -237,7 +237,7 @@ bool inn_comm(player_type *customer_ptr, int cmd)
 	case BACT_REST:
 		return stay_inn(customer_ptr);
 	case BACT_RUMORS:
-		display_rumor(customer_ptr, TRUE);
+		display_rumor(customer_ptr, true);
 		return true;
 	default:
 		//!< @todo リファクタリング前のコードもTRUEだった、FALSEにすべきでは.

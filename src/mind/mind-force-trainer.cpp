@@ -121,7 +121,7 @@ void set_lightspeed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
         return;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
     creature_ptr->update |= (PU_BONUS);
     handle_stuff(creature_ptr);
 }
@@ -162,7 +162,7 @@ bool set_tim_sh_force(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
     handle_stuff(creature_ptr);
     return true;
 }
@@ -226,7 +226,7 @@ bool shock_power(player_type *caster_ptr)
     m_ptr->fy = ty;
     m_ptr->fx = tx;
 
-    update_monster(caster_ptr, m_idx, TRUE);
+    update_monster(caster_ptr, m_idx, true);
     lite_spot(caster_ptr, oy, ox);
     lite_spot(caster_ptr, ty, tx);
 
@@ -261,7 +261,7 @@ bool cast_force_spell(player_type *caster_ptr, mind_force_trainer_type spell)
         (void)lite_area(caster_ptr, damroll(2, (plev / 2)), (plev / 10) + 1);
         break;
     case FLYING_TECHNIQUE:
-        set_tim_levitation(caster_ptr, randint1(30) + 30 + boost / 5, FALSE);
+        set_tim_levitation(caster_ptr, randint1(30) + 30 + boost / 5, false);
         break;
     case KAMEHAMEHA:
         project_length = plev / 8 + 3;
@@ -271,7 +271,7 @@ bool cast_force_spell(player_type *caster_ptr, mind_force_trainer_type spell)
         fire_beam(caster_ptr, GF_MISSILE, dir, damroll(5 + ((plev - 1) / 5) + boost / 10, 5));
         break;
     case MAGIC_RESISTANCE:
-        set_resist_magic(caster_ptr, randint1(20) + 20 + boost / 5, FALSE);
+        set_resist_magic(caster_ptr, randint1(20) + 20 + boost / 5, false);
         break;
     case IMPROVE_FORCE:
         msg_print(_("気を練った。", "You improved the Force."));
@@ -286,7 +286,7 @@ bool cast_force_spell(player_type *caster_ptr, mind_force_trainer_type spell)
 
         break;
     case AURA_OF_FORCE:
-        set_tim_sh_force(caster_ptr, randint1(plev / 2) + 15 + boost / 7, FALSE);
+        set_tim_sh_force(caster_ptr, randint1(plev / 2) + 15 + boost / 7, false);
         break;
     case SHOCK_POWER:
         return shock_power(caster_ptr);
@@ -332,7 +332,7 @@ bool cast_force_spell(player_type *caster_ptr, mind_force_trainer_type spell)
         fire_beam(caster_ptr, GF_MANA, dir, damroll(10 + (plev / 2) + boost * 3 / 10, 15));
         break;
     case LIGHT_SPEED:
-        set_lightspeed(caster_ptr, randint1(16) + 16 + boost / 20, FALSE);
+        set_lightspeed(caster_ptr, randint1(16) + 16 + boost / 20, false);
         break;
     default:
         msg_print(_("なに？", "Zap?"));

@@ -373,7 +373,7 @@ static void hit_trap_lose_stat(player_type *target_ptr, int stat)
 static void hit_trap_slow(player_type *target_ptr)
 {
     if (hit_trap_dart(target_ptr)) {
-        set_slow(target_ptr, target_ptr->slow + randint0(20) + 20, FALSE);
+        set_slow(target_ptr, target_ptr->slow + randint0(20) + 20, false);
     }
 }
 
@@ -407,7 +407,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
     enum trap_type trap_feat_type = has_flag(f_ptr->flags, FF_TRAP) ? (enum trap_type)f_ptr->subtype : NOT_TRAP;
     concptr name = _("トラップ", "a trap");
 
-    disturb(trapped_ptr, FALSE, TRUE);
+    disturb(trapped_ptr, FALSE, true);
 
     cave_alter_feat(trapped_ptr, y, x, FF_HIT_TRAP);
 
@@ -431,7 +431,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 
             /* Still alive and autosave enabled */
             if (autosave_l && (trapped_ptr->chp >= 0))
-                do_cmd_save_game(trapped_ptr, TRUE);
+                do_cmd_save_game(trapped_ptr, true);
 
             exe_write_diary(trapped_ptr, DIARY_DESCRIPTION, 0, _("落とし戸に落ちた", "fell through a trap door!"));
             prepare_change_floor_mode(trapped_ptr, CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
@@ -475,14 +475,14 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
     case TRAP_FIRE: {
         msg_print(_("炎に包まれた！", "You are enveloped in flames!"));
         dam = damroll(4, 6);
-        (void)fire_dam(trapped_ptr, dam, _("炎のトラップ", "a fire trap"), FALSE);
+        (void)fire_dam(trapped_ptr, dam, _("炎のトラップ", "a fire trap"), false);
         break;
     }
 
     case TRAP_ACID: {
         msg_print(_("酸が吹きかけられた！", "You are splashed with acid!"));
         dam = damroll(4, 6);
-        (void)acid_dam(trapped_ptr, dam, _("酸のトラップ", "an acid trap"), FALSE);
+        (void)acid_dam(trapped_ptr, dam, _("酸のトラップ", "an acid trap"), false);
         break;
     }
 
@@ -533,7 +533,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
                 msg_print(_("身の毛もよだつ光景が頭に浮かんだ。", "A horrible vision enters your mind."));
 
                 /* Have some nightmares */
-                sanity_blast(trapped_ptr, NULL, FALSE);
+                sanity_blast(trapped_ptr, NULL, false);
             }
             (void)set_paralyzed(trapped_ptr, trapped_ptr->paralyzed + randint0(10) + 5);
         }

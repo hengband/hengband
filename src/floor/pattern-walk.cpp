@@ -74,7 +74,7 @@ static void pattern_teleport(player_type *creature_ptr)
 
     msg_format(_("%d 階にテレポートしました。", "You teleport to dungeon level %d."), command_arg);
     if (autosave_l)
-        do_cmd_save_game(creature_ptr, TRUE);
+        do_cmd_save_game(creature_ptr, true);
 
     creature_ptr->current_floor_ptr->dun_level = command_arg;
     leave_quest_check(creature_ptr);

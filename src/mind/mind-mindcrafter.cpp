@@ -141,7 +141,7 @@ bool cast_mindcrafter_spell(player_type *caster_ptr, mind_mindcrafter_type spell
         if (plev > 44) {
             chg_virtue(caster_ptr, V_KNOWLEDGE, 1);
             chg_virtue(caster_ptr, V_ENLIGHTEN, 1);
-            wiz_lite(caster_ptr, FALSE);
+            wiz_lite(caster_ptr, false);
         } else if (plev > 19)
             map_area(caster_ptr, DETECT_RAD_MAP);
 
@@ -150,7 +150,7 @@ bool cast_mindcrafter_spell(player_type *caster_ptr, mind_mindcrafter_type spell
             if (plev > 14)
                 b |= detect_monsters_invis(caster_ptr, DETECT_RAD_DEFAULT);
             if (plev > 4) {
-                b |= detect_traps(caster_ptr, DETECT_RAD_DEFAULT, TRUE);
+                b |= detect_traps(caster_ptr, DETECT_RAD_DEFAULT, true);
                 b |= detect_doors(caster_ptr, DETECT_RAD_DEFAULT);
             }
         } else {
@@ -158,7 +158,7 @@ bool cast_mindcrafter_spell(player_type *caster_ptr, mind_mindcrafter_type spell
         }
 
         if ((plev > 24) && (plev < 40))
-            set_tim_esp(caster_ptr, (TIME_EFFECT)plev, FALSE);
+            set_tim_esp(caster_ptr, (TIME_EFFECT)plev, false);
 
         if (!b)
             msg_print(_("安全な気がする。", "You feel safe."));
@@ -197,17 +197,17 @@ bool cast_mindcrafter_spell(player_type *caster_ptr, mind_mindcrafter_type spell
         fire_ball(caster_ptr, GF_TELEKINESIS, dir, damroll(8 + ((plev - 5) / 4), 8), (plev > 20 ? (plev - 20) / 8 + 1 : 0));
         break;
     case CHARACTER_ARMOR:
-        set_shield(caster_ptr, (TIME_EFFECT)plev, FALSE);
+        set_shield(caster_ptr, (TIME_EFFECT)plev, false);
         if (plev > 14)
-            set_oppose_acid(caster_ptr, (TIME_EFFECT)plev, FALSE);
+            set_oppose_acid(caster_ptr, (TIME_EFFECT)plev, false);
         if (plev > 19)
-            set_oppose_fire(caster_ptr, (TIME_EFFECT)plev, FALSE);
+            set_oppose_fire(caster_ptr, (TIME_EFFECT)plev, false);
         if (plev > 24)
-            set_oppose_cold(caster_ptr, (TIME_EFFECT)plev, FALSE);
+            set_oppose_cold(caster_ptr, (TIME_EFFECT)plev, false);
         if (plev > 29)
-            set_oppose_elec(caster_ptr, (TIME_EFFECT)plev, FALSE);
+            set_oppose_elec(caster_ptr, (TIME_EFFECT)plev, false);
         if (plev > 34)
-            set_oppose_pois(caster_ptr, (TIME_EFFECT)plev, FALSE);
+            set_oppose_pois(caster_ptr, (TIME_EFFECT)plev, false);
 
         break;
     case PSYCHOMETRY:
@@ -230,14 +230,14 @@ bool cast_mindcrafter_spell(player_type *caster_ptr, mind_mindcrafter_type spell
             hp_player(caster_ptr, plev);
 
         t = 10 + randint1((plev * 3) / 2);
-        set_hero(caster_ptr, t, FALSE);
-        (void)set_fast(caster_ptr, t, FALSE);
+        set_hero(caster_ptr, t, false);
+        (void)set_fast(caster_ptr, t, false);
         break;
     case TELEKINESIS:
         if (!get_aim_dir(caster_ptr, &dir))
             return false;
 
-        fetch_item(caster_ptr, dir, plev * 15, FALSE);
+        fetch_item(caster_ptr, dir, plev * 15, false);
         break;
     case PSYCHIC_DRAIN:
         if (!get_aim_dir(caster_ptr, &dir))

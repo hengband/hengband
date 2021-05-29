@@ -24,7 +24,7 @@ void do_cmd_reload_autopick(player_type *creature_ptr)
     if (!get_check(_("自動拾い設定ファイルをロードしますか? ", "Reload auto-pick preference file? ")))
         return;
 
-    autopick_load_pref(creature_ptr, TRUE);
+    autopick_load_pref(creature_ptr, true);
 }
 
 /*

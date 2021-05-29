@@ -60,7 +60,7 @@ void cast_shuffle(player_type *caster_ptr)
         msg_print(_("なんてこった！《死》だ！", "Oh no! It's Death!"));
 
         for (i = 0; i < randint1(3); i++) {
-            activate_hi_summon(caster_ptr, caster_ptr->y, caster_ptr->x, FALSE);
+            activate_hi_summon(caster_ptr, caster_ptr->y, caster_ptr->x, false);
         }
 
         return;
@@ -119,7 +119,7 @@ void cast_shuffle(player_type *caster_ptr)
 
     if (die < 42) {
         msg_print(_("《正義》だ。", "It's Justice."));
-        set_blessed(caster_ptr, caster_ptr->lev, FALSE);
+        set_blessed(caster_ptr, caster_ptr->lev, false);
         return;
     }
 
@@ -204,7 +204,7 @@ void cast_shuffle(player_type *caster_ptr)
         msg_print(_("《太陽》だ。", "It's the Sun."));
         chg_virtue(caster_ptr, V_KNOWLEDGE, 1);
         chg_virtue(caster_ptr, V_ENLIGHTEN, 1);
-        wiz_lite(caster_ptr, FALSE);
+        wiz_lite(caster_ptr, false);
         return;
     }
 

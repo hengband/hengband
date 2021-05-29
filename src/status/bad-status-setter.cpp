@@ -65,7 +65,7 @@ bool set_blind(player_type *creature_ptr, TIME_EFFECT v)
     if (!notice)
         return false;
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
 
     creature_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE);
     creature_ptr->redraw |= (PR_MAP);
@@ -116,7 +116,7 @@ bool set_confused(player_type *creature_ptr, TIME_EFFECT v)
 
             /* Sniper */
             if (creature_ptr->concent)
-                reset_concentration(creature_ptr, TRUE);
+                reset_concentration(creature_ptr, true);
 
             if (hex_spelling_any(creature_ptr))
                 stop_hex_spell_all(creature_ptr);
@@ -140,7 +140,7 @@ bool set_confused(player_type *creature_ptr, TIME_EFFECT v)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
     handle_stuff(creature_ptr);
     return true;
 }
@@ -177,7 +177,7 @@ bool set_poisoned(player_type *creature_ptr, TIME_EFFECT v)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
     handle_stuff(creature_ptr);
     return true;
 }
@@ -227,7 +227,7 @@ bool set_afraid(player_type *creature_ptr, TIME_EFFECT v)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
     handle_stuff(creature_ptr);
     return true;
 }
@@ -249,7 +249,7 @@ bool set_paralyzed(player_type *creature_ptr, TIME_EFFECT v)
         if (!creature_ptr->paralyzed) {
             msg_print(_("体が麻痺してしまった！", "You are paralyzed!"));
             if (creature_ptr->concent)
-                reset_concentration(creature_ptr, TRUE);
+                reset_concentration(creature_ptr, true);
             if (hex_spelling_any(creature_ptr))
                 stop_hex_spell_all(creature_ptr);
 
@@ -270,7 +270,7 @@ bool set_paralyzed(player_type *creature_ptr, TIME_EFFECT v)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
     creature_ptr->redraw |= (PR_STATE);
     handle_stuff(creature_ptr);
     return true;
@@ -293,13 +293,13 @@ bool set_image(player_type *creature_ptr, TIME_EFFECT v)
         v = 0;
 
     if (v) {
-        set_tsuyoshi(creature_ptr, 0, TRUE);
+        set_tsuyoshi(creature_ptr, 0, true);
         if (!creature_ptr->image) {
             msg_print(_("ワーオ！何もかも虹色に見える！", "Oh, wow! Everything looks so cosmic now!"));
 
             /* Sniper */
             if (creature_ptr->concent)
-                reset_concentration(creature_ptr, TRUE);
+                reset_concentration(creature_ptr, true);
 
             creature_ptr->counter = false;
             notice = true;
@@ -318,7 +318,7 @@ bool set_image(player_type *creature_ptr, TIME_EFFECT v)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, TRUE);
+        disturb(creature_ptr, FALSE, true);
 
     creature_ptr->redraw |= (PR_MAP | PR_HEALTH | PR_UHEALTH);
     creature_ptr->update |= (PU_MONSTERS);
@@ -361,7 +361,7 @@ bool set_slow(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
     creature_ptr->update |= (PU_BONUS);
     handle_stuff(creature_ptr);
     return true;
@@ -445,7 +445,7 @@ bool set_stun(player_type *creature_ptr, TIME_EFFECT v)
         }
 
         if (creature_ptr->concent)
-            reset_concentration(creature_ptr, TRUE);
+            reset_concentration(creature_ptr, true);
         if (hex_spelling_any(creature_ptr))
             stop_hex_spell_all(creature_ptr);
 
@@ -454,7 +454,7 @@ bool set_stun(player_type *creature_ptr, TIME_EFFECT v)
         if (new_aux == 0) {
             msg_print(_("やっと朦朧状態から回復した。", "You are no longer stunned."));
             if (disturb_state)
-                disturb(creature_ptr, FALSE, FALSE);
+                disturb(creature_ptr, FALSE, false);
         }
 
         notice = true;
@@ -466,7 +466,7 @@ bool set_stun(player_type *creature_ptr, TIME_EFFECT v)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
     creature_ptr->update |= (PU_BONUS);
     creature_ptr->redraw |= (PR_STUN);
     handle_stuff(creature_ptr);
@@ -565,7 +565,7 @@ bool set_cut(player_type *creature_ptr, TIME_EFFECT v)
         if (new_aux == 0) {
             msg_format(_("やっと%s。", "You are no longer %s."), creature_ptr->prace == RACE_ANDROID ? _("怪我が直った", "leaking fluid") : _("出血が止まった", "bleeding"));
             if (disturb_state)
-                disturb(creature_ptr, FALSE, FALSE);
+                disturb(creature_ptr, FALSE, false);
         }
 
         notice = true;
@@ -576,7 +576,7 @@ bool set_cut(player_type *creature_ptr, TIME_EFFECT v)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
     creature_ptr->update |= (PU_BONUS);
     creature_ptr->redraw |= (PR_CUT);
     handle_stuff(creature_ptr);

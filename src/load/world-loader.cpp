@@ -117,7 +117,7 @@ static void rd_world_info(player_type *creature_ptr)
         rd_s32b(&current_world_ptr->arena_start_turn);
 
     if (h_older_than(0, 0, 3))
-        determine_daily_bounty(creature_ptr, TRUE);
+        determine_daily_bounty(creature_ptr, true);
     else {
         rd_s16b(&current_world_ptr->today_mon);
         rd_s16b(&creature_ptr->today_mon);

@@ -273,7 +273,7 @@ void request_command(player_type *player_ptr, int shopping)
         }
 
         if (cmd == '\\') {
-            (void)get_com(_("コマンド: ", "Command: "), (char *)&cmd, FALSE);
+            (void)get_com(_("コマンド: ", "Command: "), (char *)&cmd, false);
             if (!inkey_next)
                 inkey_next = "";
         }

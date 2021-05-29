@@ -321,7 +321,7 @@ void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, M
 
     m_ptr->r_idx = r_idx;
     m_ptr->ap_r_idx = r_idx;
-    update_monster(player_ptr, m_idx, FALSE);
+    update_monster(player_ptr, m_idx, false);
     lite_spot(player_ptr, m_ptr->fy, m_ptr->fx);
 
     int old_r_idx = m_ptr->r_idx;

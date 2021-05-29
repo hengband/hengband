@@ -287,7 +287,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
         damage = (damage + 1) / 2;
 
     if (damage_type != DAMAGE_USELIFE) {
-        disturb(creature_ptr, TRUE, TRUE);
+        disturb(creature_ptr, TRUE, true);
         if (auto_more) {
             creature_ptr->now_damaged = true;
         }
@@ -347,7 +347,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
     }
 
     if (creature_ptr->chp < 0 && !cheat_immortal) {
-        bool android = (creature_ptr->prace == RACE_ANDROID ? TRUE : FALSE);
+        bool android = (creature_ptr->prace == RACE_ANDROID ? TRUE : false);
 
         /* 死んだ時に強制終了して死を回避できなくしてみた by Habu */
         if (!cheat_save && !save_player(creature_ptr, SAVE_TYPE_CLOSE_GAME))
@@ -537,7 +537,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
     }
 
     if (creature_ptr->wild_mode && !creature_ptr->leaving && (creature_ptr->chp < MAX(warning, creature_ptr->mhp / 5)))
-        change_wild_mode(creature_ptr, FALSE);
+        change_wild_mode(creature_ptr, false);
 
     return damage;
 }
@@ -564,7 +564,7 @@ static void process_aura_damage(monster_type *m_ptr, player_type *touched_ptr, b
 
     monster_desc(touched_ptr, mon_name, m_ptr, MD_WRONGDOER_NAME);
     msg_print(message);
-    dam_func(touched_ptr, aura_damage, mon_name, TRUE);
+    dam_func(touched_ptr, aura_damage, mon_name, true);
 
     if (is_original_ap_and_seen(touched_ptr, m_ptr))
         atoffset(BIT_FLAGS, r_ptr, r_flags_offset) |= aura_flag;

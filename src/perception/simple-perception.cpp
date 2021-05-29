@@ -90,7 +90,7 @@ static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, b
     }
 
     if (disturb_minor)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
 
     describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     if (slot >= INVEN_MAIN_HAND) {
@@ -395,7 +395,7 @@ void sense_inventory2(player_type *creature_ptr)
         if ((i < INVEN_MAIN_HAND) && (0 != randint0(5)))
             continue;
 
-        sense_inventory_aux(creature_ptr, i, TRUE);
+        sense_inventory_aux(creature_ptr, i, true);
     }
 }
 

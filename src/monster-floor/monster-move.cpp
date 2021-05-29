@@ -153,7 +153,7 @@ static void bash_glass_door(player_type *target_ptr, turn_flags *turn_flags_ptr,
         msg_print(_("ドアを叩き開ける音がした！", "You hear a door burst open!"));
 
     if (disturb_minor)
-        disturb(target_ptr, FALSE, FALSE);
+        disturb(target_ptr, FALSE, false);
 
     turn_flags_ptr->did_bash_door = true;
     turn_flags_ptr->do_move = true;
@@ -414,7 +414,7 @@ bool process_monster_movement(player_type *target_ptr, turn_flags *turn_flags_pt
             && (disturb_move || (disturb_near && m_ptr->mflag.has(MFLAG::VIEW) && projectable(target_ptr, target_ptr->y, target_ptr->x, m_ptr->fy, m_ptr->fx))
                 || (disturb_high && ap_r_ptr->r_tkills && ap_r_ptr->level >= target_ptr->lev))) {
             if (is_hostile(m_ptr))
-                disturb(target_ptr, FALSE, TRUE);
+                disturb(target_ptr, FALSE, true);
         }
 
         bool is_takable_or_killable = !g_ptr->o_idx_list.empty();
@@ -458,7 +458,7 @@ void process_speak_sound(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy
     monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
     if (m_ptr->ap_r_idx == MON_CYBER && one_in_(CYBERNOISE) && !m_ptr->ml && (m_ptr->cdis <= MAX_SIGHT)) {
         if (disturb_minor)
-            disturb(target_ptr, FALSE, FALSE);
+            disturb(target_ptr, FALSE, false);
         msg_print(_("重厚な足音が聞こえた。", "You hear heavy steps."));
     }
 

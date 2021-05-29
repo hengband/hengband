@@ -224,7 +224,7 @@ void do_cmd_wield(player_type *creature_ptr)
     check_find_art_quest_completion(creature_ptr, o_ptr);
     if (creature_ptr->pseikaku == PERSONALITY_MUNCHKIN) {
         identify_item(creature_ptr, o_ptr);
-        autopick_alter_item(creature_ptr, item, FALSE);
+        autopick_alter_item(creature_ptr, item, false);
     }
 
     PlayerEnergy(creature_ptr).set_player_turn_energy(100);

@@ -54,7 +54,7 @@ void starve_player(player_type *creature_ptr)
 
     if (!creature_ptr->paralyzed && (randint0(100) < 10)) {
         msg_print(_("あまりにも空腹で気絶してしまった。", "You faint from the lack of food."));
-        disturb(creature_ptr, TRUE, TRUE);
+        disturb(creature_ptr, TRUE, true);
         (void)set_paralyzed(creature_ptr, creature_ptr->paralyzed + 1 + randint0(5));
     }
 
@@ -181,7 +181,7 @@ bool set_food(player_type *creature_ptr, TIME_EFFECT v)
         }
 
         if (creature_ptr->wild_mode && (new_aux < 2)) {
-            change_wild_mode(creature_ptr, FALSE);
+            change_wild_mode(creature_ptr, false);
         }
 
         notice = true;
@@ -192,7 +192,7 @@ bool set_food(player_type *creature_ptr, TIME_EFFECT v)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
     creature_ptr->update |= (PU_BONUS);
     creature_ptr->redraw |= (PR_HUNGER);
     handle_stuff(creature_ptr);

@@ -188,9 +188,9 @@ void add_esp_weak(object_type *o_ptr, bool extra)
 void add_high_telepathy(object_type* o_ptr)
 {
     if (add_esp_strong(o_ptr))
-        add_esp_weak(o_ptr, TRUE);
+        add_esp_weak(o_ptr, true);
     else
-        add_esp_weak(o_ptr, FALSE);
+        add_esp_weak(o_ptr, false);
 }
 
 /*!
@@ -205,7 +205,7 @@ void add_low_telepathy(object_type *o_ptr)
     if (one_in_(2))
         add_esp_strong(o_ptr);
     else
-        add_esp_weak(o_ptr, FALSE);
+        add_esp_weak(o_ptr, false);
 }
 
 /*!

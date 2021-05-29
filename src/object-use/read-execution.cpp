@@ -395,22 +395,22 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
             break;
         }
         case SV_SCROLL_GENOCIDE: {
-            (void)symbol_genocide(creature_ptr, 300, TRUE);
+            (void)symbol_genocide(creature_ptr, 300, true);
             ident = true;
             break;
         }
         case SV_SCROLL_MASS_GENOCIDE: {
-            (void)mass_genocide(creature_ptr, 300, TRUE);
+            (void)mass_genocide(creature_ptr, 300, true);
             ident = true;
             break;
         }
         case SV_SCROLL_ACQUIREMENT: {
-            acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, 1, TRUE, FALSE, FALSE);
+            acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, 1, TRUE, FALSE, false);
             ident = true;
             break;
         }
         case SV_SCROLL_STAR_ACQUIREMENT: {
-            acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, randint1(2) + 1, TRUE, FALSE, FALSE);
+            acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, randint1(2) + 1, TRUE, FALSE, false);
             ident = true;
             break;
         }
@@ -441,7 +441,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
         case SV_SCROLL_RUMOR: {
             msg_print(_("巻物にはメッセージが書かれている:", "There is message on the scroll. It says:"));
             msg_print(NULL);
-            display_rumor(creature_ptr, TRUE);
+            display_rumor(creature_ptr, true);
             msg_print(NULL);
             msg_print(_("巻物は煙を立てて消え去った！", "The scroll disappears in a puff of smoke!"));
             ident = true;
@@ -463,12 +463,12 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
         }
         case SV_SCROLL_AMUSEMENT: {
             ident = true;
-            amusement(creature_ptr, creature_ptr->y, creature_ptr->x, 1, FALSE);
+            amusement(creature_ptr, creature_ptr->y, creature_ptr->x, 1, false);
             break;
         }
         case SV_SCROLL_STAR_AMUSEMENT: {
             ident = true;
-            amusement(creature_ptr, creature_ptr->y, creature_ptr->x, randint1(2) + 1, FALSE);
+            amusement(creature_ptr, creature_ptr->y, creature_ptr->x, randint1(2) + 1, false);
             break;
         }
         }

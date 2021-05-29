@@ -74,7 +74,7 @@ void process_dungeon(player_type *player_ptr, bool load_game)
     player_ptr->ambush_flag = false;
     health_track(player_ptr, 0);
 
-    disturb(player_ptr, TRUE, TRUE);
+    disturb(player_ptr, TRUE, true);
     int quest_num = quest_number(player_ptr, floor_ptr->dun_level);
     if (quest_num) {
         r_info[quest[quest_num].r_idx].flags1 |= RF1_QUESTOR;
@@ -143,7 +143,7 @@ void process_dungeon(player_type *player_ptr, bool load_game)
     }
 
     if (!load_game && (player_ptr->special_defense & NINJA_S_STEALTH))
-        set_superstealth(player_ptr, FALSE);
+        set_superstealth(player_ptr, false);
 
     floor_ptr->monster_level = floor_ptr->base_level;
     floor_ptr->object_level = floor_ptr->base_level;

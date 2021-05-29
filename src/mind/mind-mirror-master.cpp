@@ -209,7 +209,7 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
                 && centersign * ((point_x[1] - x) * (point_y[2] - y) - (point_y[1] - y) * (point_x[2] - x)) >= 0
                 && centersign * ((point_x[2] - x) * (point_y[0] - y) - (point_y[2] - y) * (point_x[0] - x)) >= 0) {
                 if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y, x)) {
-                    (void)affect_monster(caster_ptr, 0, 0, y, x, dam, GF_MANA, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), TRUE);
+                    (void)affect_monster(caster_ptr, 0, 0, y, x, dam, GF_MANA, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), true);
                 }
             }
         }
@@ -337,7 +337,7 @@ bool set_multishadow(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
     creature_ptr->update |= (PU_BONUS);
     handle_stuff(creature_ptr);
     return true;
@@ -379,7 +379,7 @@ bool set_dustrobe(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
         return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
     creature_ptr->update |= (PU_BONUS);
     handle_stuff(creature_ptr);
     return true;
@@ -423,7 +423,7 @@ bool cast_mirror_spell(player_type *caster_ptr, mind_mirror_master_type spell)
         if (plev + tmp > 18)
             detect_monsters_invis(caster_ptr, DETECT_RAD_DEFAULT);
         if (plev + tmp > 28)
-            set_tim_esp(caster_ptr, (TIME_EFFECT)plev, FALSE);
+            set_tim_esp(caster_ptr, (TIME_EFFECT)plev, false);
         if (plev + tmp > 38)
             map_area(caster_ptr, DETECT_RAD_MAP);
         if (tmp == 0 && plev < 5) {
@@ -457,7 +457,7 @@ bool cast_mirror_spell(player_type *caster_ptr, mind_mirror_master_type spell)
         teleport_player(caster_ptr, plev * 5, TELEPORT_SPONTANEOUS);
         break;
     case ROBE_DUST:
-        set_dustrobe(caster_ptr, 20 + randint1(20), FALSE);
+        set_dustrobe(caster_ptr, 20 + randint1(20), false);
         break;
     case BANISHING_MIRROR:
         if (!get_aim_dir(caster_ptr, &dir))
@@ -490,12 +490,12 @@ bool cast_mirror_spell(player_type *caster_ptr, mind_mirror_master_type spell)
         break;
     case WATER_SHIELD:
         t = 20 + randint1(20);
-        set_shield(caster_ptr, t, FALSE);
+        set_shield(caster_ptr, t, false);
         if (plev > 31)
-            set_tim_reflect(caster_ptr, t, FALSE);
+            set_tim_reflect(caster_ptr, t, false);
 
         if (plev > 39)
-            set_resist_magic(caster_ptr, t, FALSE);
+            set_resist_magic(caster_ptr, t, false);
 
         break;
     case SUPER_RAY:
@@ -526,7 +526,7 @@ bool cast_mirror_spell(player_type *caster_ptr, mind_mirror_master_type spell)
     case RECALL_MIRROR:
         return recall_player(caster_ptr, randint0(21) + 15);
     case MULTI_SHADOW:
-        set_multishadow(caster_ptr, 6 + randint1(6), FALSE);
+        set_multishadow(caster_ptr, 6 + randint1(6), false);
         break;
     case BINDING_FIELD:
         if (!binding_field(caster_ptr, plev * 11 + 5))
@@ -534,7 +534,7 @@ bool cast_mirror_spell(player_type *caster_ptr, mind_mirror_master_type spell)
 
         break;
     case RUFFNOR_MIRROR:
-        (void)set_invuln(caster_ptr, randint1(4) + 4, FALSE);
+        (void)set_invuln(caster_ptr, randint1(4) + 4, false);
         break;
     default:
         msg_print(_("なに？", "Zap?"));

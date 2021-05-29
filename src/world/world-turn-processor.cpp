@@ -120,7 +120,7 @@ void process_world(player_type *player_ptr)
 
     if (autosave_t && autosave_freq && !player_ptr->phase_out) {
         if (!(current_world_ptr->game_turn % ((s32b)autosave_freq * TURNS_PER_TICK)))
-            do_cmd_save_game(player_ptr, TRUE);
+            do_cmd_save_game(player_ptr, true);
     }
 
     if (floor_ptr->monster_noise && !ignore_unview) {
@@ -181,7 +181,7 @@ void process_world(player_type *player_ptr)
     if (!hour && !min) {
         if (min != prev_min) {
             exe_write_diary(player_ptr, DIARY_DIALY, 0, NULL);
-            determine_daily_bounty(player_ptr, FALSE);
+            determine_daily_bounty(player_ptr, false);
         }
     }
 
@@ -191,7 +191,7 @@ void process_world(player_type *player_ptr)
      */
     if (ironman_nightmare && (min != prev_min)) {
         if ((hour == 23) && !(min % 15)) {
-            disturb(player_ptr, FALSE, TRUE);
+            disturb(player_ptr, FALSE, true);
             switch (min / 15) {
             case 0:
                 msg_print(_("遠くで不気味な鐘の音が鳴った。", "You hear a distant bell toll ominously."));
@@ -212,12 +212,12 @@ void process_world(player_type *player_ptr)
         }
 
         if (!hour && !min) {
-            disturb(player_ptr, TRUE, TRUE);
+            disturb(player_ptr, TRUE, true);
             msg_print(_("遠くで鐘が何回も鳴り、死んだような静けさの中へ消えていった。", "A distant bell tolls many times, fading into an deathly silence."));
             if (player_ptr->wild_mode) {
                 player_ptr->oldpy = randint1(MAX_HGT - 2);
                 player_ptr->oldpx = randint1(MAX_WID - 2);
-                change_wild_mode(player_ptr, TRUE);
+                change_wild_mode(player_ptr, true);
                 PlayerEnergy(player_ptr).set_player_turn_energy(100);
             }
 

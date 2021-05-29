@@ -99,12 +99,12 @@ void travel_step(player_type *creature_ptr)
             travel.y = travel.x = 0;
         }
 
-        disturb(creature_ptr, FALSE, TRUE);
+        disturb(creature_ptr, FALSE, true);
         return;
     }
 
     PlayerEnergy(creature_ptr).set_player_turn_energy(100);
-    exe_movement(creature_ptr, travel.dir, always_pickup, FALSE);
+    exe_movement(creature_ptr, travel.dir, always_pickup, false);
     if ((creature_ptr->y == travel.y) && (creature_ptr->x == travel.x)) {
         travel.run = 0;
         travel.y = travel.x = 0;

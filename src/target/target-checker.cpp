@@ -105,7 +105,7 @@ void verify_panel(player_type *creature_ptr)
     panel_row_min = prow_min;
     panel_col_min = pcol_min;
     if (disturb_panel && !center_player)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
 
     panel_bounds_center();
     creature_ptr->update |= PU_MONSTERS;

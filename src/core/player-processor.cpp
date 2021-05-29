@@ -86,7 +86,7 @@ static void process_fishing(player_type *creature_ptr)
             msg_print(_("餌だけ食われてしまった！くっそ～！", "Damn!  The fish stole your bait!"));
         }
 
-        disturb(creature_ptr, FALSE, TRUE);
+        disturb(creature_ptr, FALSE, true);
     }
 }
 
@@ -123,7 +123,7 @@ void process_player(player_type *creature_ptr)
                 continue;
 
             m_ptr->mflag2.set({MFLAG2::MARK, MFLAG2::SHOW});
-            update_monster(creature_ptr, m_idx, FALSE);
+            update_monster(creature_ptr, m_idx, false);
         }
 
         print_time(creature_ptr);
@@ -163,7 +163,7 @@ void process_player(player_type *creature_ptr)
             inkey_scan = true;
             if (inkey()) {
                 flush();
-                disturb(creature_ptr, FALSE, TRUE);
+                disturb(creature_ptr, FALSE, true);
                 msg_print(_("中断しました。", "Canceled."));
             }
         }
@@ -211,7 +211,7 @@ void process_player(player_type *creature_ptr)
 
     load = false;
     if (creature_ptr->lightspeed)
-        set_lightspeed(creature_ptr, creature_ptr->lightspeed - 1, TRUE);
+        set_lightspeed(creature_ptr, creature_ptr->lightspeed - 1, true);
 
     if ((creature_ptr->pclass == CLASS_FORCETRAINER) && get_current_ki(creature_ptr)) {
         if (get_current_ki(creature_ptr) < 40)
@@ -254,7 +254,7 @@ void process_player(player_type *creature_ptr)
         creature_ptr->counter = false;
         creature_ptr->now_damaged = false;
 
-        update_monsters(creature_ptr, FALSE);
+        update_monsters(creature_ptr, false);
         handle_stuff(creature_ptr);
         move_cursor_relative(creature_ptr->y, creature_ptr->x);
         if (fresh_before)
@@ -301,7 +301,7 @@ void process_player(player_type *creature_ptr)
             window_stuff(creature_ptr);
 
             can_save = true;
-            request_command(creature_ptr, FALSE);
+            request_command(creature_ptr, false);
             can_save = false;
             process_command(creature_ptr);
         }
@@ -338,7 +338,7 @@ void process_player(player_type *creature_ptr)
 
                 if (m_ptr->mflag.has(MFLAG::SANITY_BLAST)) {
                     m_ptr->mflag.reset(MFLAG::SANITY_BLAST);
-                    sanity_blast(creature_ptr, m_ptr, FALSE);
+                    sanity_blast(creature_ptr, m_ptr, false);
                 }
 
                 // 感知中のモンスターのフラグを落とす処理
@@ -349,7 +349,7 @@ void process_player(player_type *creature_ptr)
                     } else {
                         m_ptr->mflag2.reset(MFLAG2::MARK);
                         m_ptr->ml = false;
-                        update_monster(creature_ptr, m_idx, FALSE);
+                        update_monster(creature_ptr, m_idx, false);
                         if (creature_ptr->health_who == m_idx)
                             creature_ptr->redraw |= (PR_HEALTH);
                         if (creature_ptr->riding == m_idx)
@@ -398,7 +398,7 @@ void process_player(player_type *creature_ptr)
         }
 
         if (creature_ptr->energy_use && creature_ptr->reset_concent)
-            reset_concentration(creature_ptr, TRUE);
+            reset_concentration(creature_ptr, true);
 
         if (creature_ptr->leaving)
             break;

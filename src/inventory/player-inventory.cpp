@@ -93,7 +93,7 @@ void py_pickup_floor(player_type *owner_ptr, bool pickup)
         const OBJECT_IDX this_o_idx = *it++;
         o_ptr = &owner_ptr->current_floor_ptr->o_list[this_o_idx];
         describe_flavor(owner_ptr, o_name, o_ptr, 0);
-        disturb(owner_ptr, FALSE, FALSE);
+        disturb(owner_ptr, FALSE, false);
         if (o_ptr->tval == TV_GOLD) {
             msg_format(_(" $%ld の価値がある%sを見つけた。", "You have found %ld gold pieces worth of %s."), (long)o_ptr->pval, o_name);
             sound(SOUND_SELL);
@@ -256,7 +256,7 @@ void carry(player_type *creature_ptr, bool pickup)
         o_ptr = &creature_ptr->current_floor_ptr->o_list[this_o_idx];
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(creature_ptr, o_name, o_ptr, 0);
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
         if (o_ptr->tval == TV_GOLD) {
             int value = (long)o_ptr->pval;
             delete_object_idx(creature_ptr, this_o_idx);

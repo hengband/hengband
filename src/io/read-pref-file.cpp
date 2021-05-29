@@ -297,7 +297,7 @@ void load_all_pref_files(player_type *player_ptr)
         process_pref_file(player_ptr, buf);
     }
 
-    autopick_load_pref(player_ptr, FALSE);
+    autopick_load_pref(player_ptr, false);
 }
 
 /*!

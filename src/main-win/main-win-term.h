@@ -100,7 +100,7 @@ struct term_data {
      */
     void refresh(const RECT *lpRect = NULL)
     {
-        InvalidateRect(this->w, lpRect, FALSE);
+        InvalidateRect(this->w, lpRect, false);
     };
     /*!
      * @brief オフスクリーン内容を表示画面に描画する

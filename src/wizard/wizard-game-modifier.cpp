@@ -69,7 +69,7 @@ void wizard_game_modifier(player_type *creature_ptr)
     display_wizard_game_modifier_menu();
 
     char cmd;
-    get_com("Player Command: ", &cmd, FALSE);
+    get_com("Player Command: ", &cmd, false);
     screen_load();
 
     switch (cmd) {

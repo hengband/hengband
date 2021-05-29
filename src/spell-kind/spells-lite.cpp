@@ -64,7 +64,7 @@ static void cave_temp_room_lite(player_type *caster_ptr, const std::vector<Pos2D
             PERCENTAGE chance = 25;
             monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
             monster_race *r_ptr = &r_info[m_ptr->r_idx];
-            update_monster(caster_ptr, g_ptr->m_idx, FALSE);
+            update_monster(caster_ptr, g_ptr->m_idx, false);
             if (r_ptr->flags2 & (RF2_STUPID))
                 chance = 10;
             if (r_ptr->flags2 & (RF2_SMART))
@@ -139,7 +139,7 @@ static void cave_temp_room_unlite(player_type *caster_ptr, const std::vector<Pos
         }
 
         if (g_ptr->m_idx) {
-            update_monster(caster_ptr, g_ptr->m_idx, FALSE);
+            update_monster(caster_ptr, g_ptr->m_idx, false);
         }
 
         lite_spot(caster_ptr, y, x);
@@ -320,7 +320,7 @@ void lite_room(player_type *caster_ptr, const POSITION y1, const POSITION x1)
     // 超隠密状態の更新。
     if (caster_ptr->special_defense & NINJA_S_STEALTH) {
         if (floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info & CAVE_GLOW)
-            set_superstealth(caster_ptr, FALSE);
+            set_superstealth(caster_ptr, false);
     }
 }
 

@@ -93,7 +93,7 @@ void describe_melee_method(player_type *subject_ptr, mam_type *mam_ptr)
     }
     case RBM_EXPLODE: {
         if (mam_ptr->see_either)
-            disturb(subject_ptr, TRUE, TRUE);
+            disturb(subject_ptr, TRUE, true);
 
         mam_ptr->act = _("爆発した。", "explodes.");
         mam_ptr->explode = true;

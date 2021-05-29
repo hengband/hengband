@@ -66,7 +66,7 @@ bool cast_berserk_spell(player_type *caster_ptr, mind_berserker_type spell)
 
         y = caster_ptr->y + ddy[dir];
         x = caster_ptr->x + ddx[dir];
-        exe_movement(caster_ptr, dir, easy_disarm, TRUE);
+        exe_movement(caster_ptr, dir, easy_disarm, true);
         break;
     }
     case QUAKE:

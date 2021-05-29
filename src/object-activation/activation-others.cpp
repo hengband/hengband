@@ -124,12 +124,12 @@ bool activate_judgement(player_type *user_ptr, concptr name)
     msg_format(_("%sは赤く明るく光った！", "The %s flashes bright red!"), name);
     chg_virtue(user_ptr, V_KNOWLEDGE, 1);
     chg_virtue(user_ptr, V_ENLIGHTEN, 1);
-    wiz_lite(user_ptr, FALSE);
+    wiz_lite(user_ptr, false);
 
     msg_format(_("%sはあなたの体力を奪った...", "The %s drains your vitality..."), name);
     take_hit(user_ptr, DAMAGE_LOSELIFE, damroll(3, 8), _("審判の宝石", "the Jewel of Judgement"));
 
-    (void)detect_traps(user_ptr, DETECT_RAD_DEFAULT, TRUE);
+    (void)detect_traps(user_ptr, DETECT_RAD_DEFAULT, true);
     (void)detect_doors(user_ptr, DETECT_RAD_DEFAULT);
     (void)detect_stairs(user_ptr, DETECT_RAD_DEFAULT);
 
@@ -146,7 +146,7 @@ bool activate_telekinesis(player_type *user_ptr, concptr name)
         return false;
 
     msg_format(_("%sを伸ばした。", "You stretched your %s."), name);
-    fetch_item(user_ptr, dir, 500, TRUE);
+    fetch_item(user_ptr, dir, 500, true);
     return true;
 }
 
@@ -317,7 +317,7 @@ bool activate_shikofumi(player_type *user_ptr)
 {
     msg_print(_("力強く四股を踏んだ。", "You stamp. (as if you are in a ring.)"));
     (void)set_afraid(user_ptr, 0);
-    (void)set_hero(user_ptr, randint1(20) + 20, FALSE);
+    (void)set_hero(user_ptr, randint1(20) + 20, false);
     (void)dispel_evil(user_ptr, user_ptr->lev * 3);
     return true;
 }

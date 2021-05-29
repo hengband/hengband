@@ -196,7 +196,7 @@ bool askfor_aux(char *buf, int len, bool numpad_cursor)
  *
  * Allow to use numpad keys as cursor keys.
  */
-bool askfor(char *buf, int len) { return askfor_aux(buf, len, TRUE); }
+bool askfor(char *buf, int len) { return askfor_aux(buf, len, true); }
 
 /*
  * Get a string from the user
@@ -320,7 +320,7 @@ bool get_com(concptr prompt, char *command, bool z_escape)
     msg_print(NULL);
     prt(prompt, 0, 0);
     if (get_com_no_macros)
-        *command = (char)inkey_special(FALSE);
+        *command = (char)inkey_special(false);
     else
         *command = inkey();
 
@@ -380,7 +380,7 @@ QUANTITY get_quantity(concptr prompt, QUANTITY max)
      * Ask for a quantity
      * Don't allow to use numpad as cursor key.
      */
-    res = askfor_aux(buf, 6, FALSE);
+    res = askfor_aux(buf, 6, false);
 
     prt("", 0, 0);
     if (!res)

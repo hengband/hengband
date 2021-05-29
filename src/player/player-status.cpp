@@ -222,7 +222,7 @@ static void delayed_visual_update(player_type *player_ptr)
 
         lite_spot(player_ptr, y, x);
         if (g_ptr->m_idx)
-            update_monster(player_ptr, g_ptr->m_idx, FALSE);
+            update_monster(player_ptr, g_ptr->m_idx, false);
 
         reset_bits(g_ptr->info, (CAVE_NOTE | CAVE_REDRAW));
     }
@@ -285,7 +285,7 @@ WEIGHT calc_inventory_weight(player_type *creature_ptr)
  */
 static void update_bonuses(player_type *creature_ptr)
 {
-    int empty_hands_status = empty_hands(creature_ptr, TRUE);
+    int empty_hands_status = empty_hands(creature_ptr, true);
     object_type *o_ptr;
 
     /* Save the old vision stuff */
@@ -398,24 +398,24 @@ static void update_bonuses(player_type *creature_ptr)
     creature_ptr->skill_thb = calc_to_hit_shoot(creature_ptr);
     creature_ptr->skill_tht = calc_to_hit_throw(creature_ptr);
     creature_ptr->riding_ryoute = is_riding_two_hands(creature_ptr);
-    creature_ptr->to_d[0] = calc_to_damage(creature_ptr, INVEN_MAIN_HAND, TRUE);
-    creature_ptr->to_d[1] = calc_to_damage(creature_ptr, INVEN_SUB_HAND, TRUE);
-    creature_ptr->dis_to_d[0] = calc_to_damage(creature_ptr, INVEN_MAIN_HAND, FALSE);
-    creature_ptr->dis_to_d[1] = calc_to_damage(creature_ptr, INVEN_SUB_HAND, FALSE);
-    creature_ptr->to_h[0] = calc_to_hit(creature_ptr, INVEN_MAIN_HAND, TRUE);
-    creature_ptr->to_h[1] = calc_to_hit(creature_ptr, INVEN_SUB_HAND, TRUE);
-    creature_ptr->dis_to_h[0] = calc_to_hit(creature_ptr, INVEN_MAIN_HAND, FALSE);
-    creature_ptr->dis_to_h[1] = calc_to_hit(creature_ptr, INVEN_SUB_HAND, FALSE);
-    creature_ptr->to_h_b = calc_to_hit_bow(creature_ptr, TRUE);
-    creature_ptr->dis_to_h_b = calc_to_hit_bow(creature_ptr, FALSE);
+    creature_ptr->to_d[0] = calc_to_damage(creature_ptr, INVEN_MAIN_HAND, true);
+    creature_ptr->to_d[1] = calc_to_damage(creature_ptr, INVEN_SUB_HAND, true);
+    creature_ptr->dis_to_d[0] = calc_to_damage(creature_ptr, INVEN_MAIN_HAND, false);
+    creature_ptr->dis_to_d[1] = calc_to_damage(creature_ptr, INVEN_SUB_HAND, false);
+    creature_ptr->to_h[0] = calc_to_hit(creature_ptr, INVEN_MAIN_HAND, true);
+    creature_ptr->to_h[1] = calc_to_hit(creature_ptr, INVEN_SUB_HAND, true);
+    creature_ptr->dis_to_h[0] = calc_to_hit(creature_ptr, INVEN_MAIN_HAND, false);
+    creature_ptr->dis_to_h[1] = calc_to_hit(creature_ptr, INVEN_SUB_HAND, false);
+    creature_ptr->to_h_b = calc_to_hit_bow(creature_ptr, true);
+    creature_ptr->dis_to_h_b = calc_to_hit_bow(creature_ptr, false);
     creature_ptr->to_d_m = calc_to_damage_misc(creature_ptr);
     creature_ptr->to_h_m = calc_to_hit_misc(creature_ptr);
     creature_ptr->skill_dig = calc_skill_dig(creature_ptr);
     creature_ptr->to_m_chance = calc_to_magic_chance(creature_ptr);
     creature_ptr->ac = calc_base_ac(creature_ptr);
-    creature_ptr->to_a = calc_to_ac(creature_ptr, TRUE);
+    creature_ptr->to_a = calc_to_ac(creature_ptr, true);
     creature_ptr->dis_ac = calc_base_ac(creature_ptr);
-    creature_ptr->dis_to_a = calc_to_ac(creature_ptr, FALSE);
+    creature_ptr->dis_to_a = calc_to_ac(creature_ptr, false);
 
     if (old_mighty_throw != creature_ptr->mighty_throw) {
         creature_ptr->window_flags |= PW_INVEN;
@@ -2605,7 +2605,7 @@ void update_creature(player_type *creature_ptr)
     if (any_bits(creature_ptr->update, (PU_DISTANCE))) {
         reset_bits(creature_ptr->update, PU_DISTANCE);
 
-        update_monsters(creature_ptr, TRUE);
+        update_monsters(creature_ptr, true);
     }
 
     if (any_bits(creature_ptr->update, (PU_MON_LITE))) {
@@ -2620,7 +2620,7 @@ void update_creature(player_type *creature_ptr)
 
     if (any_bits(creature_ptr->update, (PU_MONSTERS))) {
         reset_bits(creature_ptr->update, PU_MONSTERS);
-        update_monsters(creature_ptr, FALSE);
+        update_monsters(creature_ptr, false);
     }
 }
 
@@ -2721,7 +2721,7 @@ void check_experience(player_type *creature_ptr)
     set_bits(creature_ptr->redraw, PR_EXP);
     handle_stuff(creature_ptr);
 
-    bool android = (creature_ptr->prace == RACE_ANDROID ? TRUE : FALSE);
+    bool android = (creature_ptr->prace == RACE_ANDROID ? TRUE : false);
     PLAYER_LEVEL old_lev = creature_ptr->lev;
     while ((creature_ptr->lev > 1) && (creature_ptr->exp < ((android ? player_exp_a : player_exp)[creature_ptr->lev - 2] * creature_ptr->expfact / 100L))) {
         creature_ptr->lev--;
@@ -2824,7 +2824,7 @@ void check_experience(player_type *creature_ptr)
     }
 
     if (old_lev != creature_ptr->lev)
-        autopick_load_pref(creature_ptr, FALSE);
+        autopick_load_pref(creature_ptr, false);
 }
 
 /*!

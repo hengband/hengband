@@ -355,7 +355,7 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
 
         monap_ptr->obvious = true;
         msg_print(_("酸を浴びせられた！", "You are covered in acid!"));
-        monap_ptr->get_damage += acid_dam(target_ptr, monap_ptr->damage, monap_ptr->ddesc, FALSE);
+        monap_ptr->get_damage += acid_dam(target_ptr, monap_ptr->damage, monap_ptr->ddesc, false);
         update_creature(target_ptr);
         update_smart_learn(target_ptr, monap_ptr->m_idx, DRS_ACID);
         break;
@@ -366,7 +366,7 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
 
         monap_ptr->obvious = true;
         msg_print(_("電撃を浴びせられた！", "You are struck by electricity!"));
-        monap_ptr->get_damage += elec_dam(target_ptr, monap_ptr->damage, monap_ptr->ddesc, FALSE);
+        monap_ptr->get_damage += elec_dam(target_ptr, monap_ptr->damage, monap_ptr->ddesc, false);
         update_smart_learn(target_ptr, monap_ptr->m_idx, DRS_ELEC);
         break;
     }
@@ -376,7 +376,7 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
 
         monap_ptr->obvious = true;
         msg_print(_("全身が炎に包まれた！", "You are enveloped in flames!"));
-        monap_ptr->get_damage += fire_dam(target_ptr, monap_ptr->damage, monap_ptr->ddesc, FALSE);
+        monap_ptr->get_damage += fire_dam(target_ptr, monap_ptr->damage, monap_ptr->ddesc, false);
         update_smart_learn(target_ptr, monap_ptr->m_idx, DRS_FIRE);
         break;
     }
@@ -386,7 +386,7 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
 
         monap_ptr->obvious = true;
         msg_print(_("全身が冷気で覆われた！", "You are covered with frost!"));
-        monap_ptr->get_damage += cold_dam(target_ptr, monap_ptr->damage, monap_ptr->ddesc, FALSE);
+        monap_ptr->get_damage += cold_dam(target_ptr, monap_ptr->damage, monap_ptr->ddesc, false);
         update_smart_learn(target_ptr, monap_ptr->m_idx, DRS_COLD);
         break;
     }

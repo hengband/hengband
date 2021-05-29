@@ -299,7 +299,7 @@ static bool switch_cast_blue_magic(player_type *caster_ptr, bmc_type *bmc_ptr, R
     case RF_ABILITY::HOLD:
         return cast_blue_sleep(caster_ptr, bmc_ptr);
     case RF_ABILITY::HASTE:
-        (void)set_fast(caster_ptr, randint1(20 + bmc_ptr->plev) + bmc_ptr->plev, FALSE);
+        (void)set_fast(caster_ptr, randint1(20 + bmc_ptr->plev) + bmc_ptr->plev, false);
         return true;
     case RF_ABILITY::HAND_DOOM:
         return cast_blue_hand_doom(caster_ptr, bmc_ptr);
@@ -311,7 +311,7 @@ static bool switch_cast_blue_magic(player_type *caster_ptr, bmc_type *bmc_ptr, R
         return true;
     case RF_ABILITY::INVULNER:
         msg_print(_("無傷の球の呪文を唱えた。", "You cast a Globe of Invulnerability."));
-        (void)set_invuln(caster_ptr, randint1(4) + 4, FALSE);
+        (void)set_invuln(caster_ptr, randint1(4) + 4, false);
         return true;
     case RF_ABILITY::BLINK:
         teleport_player(caster_ptr, 10, TELEPORT_SPONTANEOUS);

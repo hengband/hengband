@@ -174,7 +174,7 @@ bool switch_class_racial_execution(player_type *creature_ptr, const s32b command
         return (command != -4) || identify_fully(creature_ptr, FALSE, TV_NONE);
     case CLASS_IMITATOR:
         handle_stuff(creature_ptr);
-        return do_cmd_mane(creature_ptr, TRUE);
+        return do_cmd_mane(creature_ptr, true);
     case CLASS_BEASTMASTER:
         if (command == -3) {
             if (!get_aim_dir(creature_ptr, &dir))
@@ -250,7 +250,7 @@ bool switch_class_racial_execution(player_type *creature_ptr, const s32b command
         return identify_fully(creature_ptr, TRUE, TV_NONE);
     case CLASS_MIRROR_MASTER:
         if (command == -3) {
-            remove_all_mirrors(creature_ptr, TRUE);
+            remove_all_mirrors(creature_ptr, true);
             return true;
         }
 
@@ -292,7 +292,7 @@ bool switch_race_racial_execution(player_type *creature_ptr, const s32b command)
     switch (creature_ptr->prace) {
     case RACE_DWARF:
         msg_print(_("周囲を調べた。", "You examine your surroundings."));
-        (void)detect_traps(creature_ptr, DETECT_RAD_DEFAULT, TRUE);
+        (void)detect_traps(creature_ptr, DETECT_RAD_DEFAULT, true);
         (void)detect_doors(creature_ptr, DETECT_RAD_DEFAULT);
         (void)detect_stairs(creature_ptr, DETECT_RAD_DEFAULT);
         return true;
@@ -379,7 +379,7 @@ bool switch_race_racial_execution(player_type *creature_ptr, const s32b command)
         return true;
     case RACE_NIBELUNG:
         msg_print(_("周囲を調査した。", "You examine your surroundings."));
-        (void)detect_traps(creature_ptr, DETECT_RAD_DEFAULT, TRUE);
+        (void)detect_traps(creature_ptr, DETECT_RAD_DEFAULT, true);
         (void)detect_doors(creature_ptr, DETECT_RAD_DEFAULT);
         (void)detect_stairs(creature_ptr, DETECT_RAD_DEFAULT);
         return true;
@@ -413,7 +413,7 @@ bool switch_race_racial_execution(player_type *creature_ptr, const s32b command)
 
         return true;
     case RACE_GOLEM:
-        (void)set_shield(creature_ptr, randint1(20) + 30, FALSE);
+        (void)set_shield(creature_ptr, randint1(20) + 30, false);
         return true;
     case RACE_SKELETON:
     case RACE_ZOMBIE:
@@ -442,7 +442,7 @@ bool switch_race_racial_execution(player_type *creature_ptr, const s32b command)
     case RACE_BALROG:
         return demonic_breath(creature_ptr);
     case RACE_KUTAR:
-        (void)set_leveling(creature_ptr, randint1(20) + 30, FALSE);
+        (void)set_leveling(creature_ptr, randint1(20) + 30, false);
         return true;
     case RACE_ANDROID:
         return android_inside_weapon(creature_ptr);

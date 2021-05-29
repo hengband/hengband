@@ -144,7 +144,7 @@ void do_cmd_store(player_type *player_ptr)
             prt(_("w/t) 装備する/はずす", "w/t) Wear/Take off equipment"), 22 + xtra_stock, 56);
 
         prt(_("コマンド:", "You may: "), 20 + xtra_stock, 0);
-        request_command(player_ptr, TRUE);
+        request_command(player_ptr, true);
         store_process_command(player_ptr);
 
         bool need_redraw_store_inv = (player_ptr->update & PU_BONUS) ? TRUE : false;

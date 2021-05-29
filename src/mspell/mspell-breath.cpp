@@ -191,7 +191,7 @@ MonsterSpellResult spell_RF4_BREATH(player_type *target_ptr, int GF_TYPE, POSITI
     }
 
     if (mon_to_player || (mon_to_mon && known && see_either))
-        disturb(target_ptr, TRUE, TRUE);
+        disturb(target_ptr, TRUE, true);
 
     if (!spell_RF4_BREATH_special_message(m_ptr->r_idx, GF_TYPE, m_name)) {
         if (target_ptr->blind) {

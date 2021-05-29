@@ -112,7 +112,7 @@ static void build_stores(player_type *player_ptr, POSITION ltcy, POSITION ltcx, 
 
     for (i = 0; i < n; i++) {
         cur_ugbldg = &ugbldg[i];
-        generate_room_floor(player_ptr, ltcy + cur_ugbldg->y0 - 2, ltcx + cur_ugbldg->x0 - 2, ltcy + cur_ugbldg->y1 + 2, ltcx + cur_ugbldg->x1 + 2, FALSE);
+        generate_room_floor(player_ptr, ltcy + cur_ugbldg->y0 - 2, ltcx + cur_ugbldg->x0 - 2, ltcy + cur_ugbldg->y1 + 2, ltcx + cur_ugbldg->x1 + 2, false);
     }
 
     for (i = 0; i < n; i++) {
@@ -220,7 +220,7 @@ bool build_type16(player_type *player_ptr, dun_data_type *dd_ptr)
 
     y1 = yval - (town_hgt / 2);
     x1 = xval - (town_wid / 2);
-    generate_room_floor(player_ptr, y1 + town_hgt / 3, x1 + town_wid / 3, y1 + town_hgt * 2 / 3, x1 + town_wid * 2 / 3, FALSE);
+    generate_room_floor(player_ptr, y1 + town_hgt / 3, x1 + town_wid / 3, y1 + town_hgt * 2 / 3, x1 + town_wid * 2 / 3, false);
     build_stores(player_ptr, y1, x1, stores, n);
     msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("地下街を生成しました", "Underground arcade was generated."));
     C_KILL(ugbldg, n, ugbldg_type);

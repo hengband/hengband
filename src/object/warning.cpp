@@ -482,7 +482,7 @@ bool process_warning(player_type *creature_ptr, POSITION xx, POSITION yy)
                 strcpy(o_name, _("体", "body")); /* Warning ability without item */
             msg_format(_("%sが鋭く震えた！", "Your %s pulsates sharply!"), o_name);
 
-            disturb(creature_ptr, FALSE, TRUE);
+            disturb(creature_ptr, FALSE, true);
             return get_check(_("本当にこのまま進むか？", "Really want to go ahead? "));
         }
     } else
@@ -500,6 +500,6 @@ bool process_warning(player_type *creature_ptr, POSITION xx, POSITION yy)
     else
         strcpy(o_name, _("体", "body")); /* Warning ability without item */
     msg_format(_("%sが鋭く震えた！", "Your %s pulsates sharply!"), o_name);
-    disturb(creature_ptr, FALSE, TRUE);
+    disturb(creature_ptr, FALSE, true);
     return get_check(_("本当にこのまま進むか？", "Really want to go ahead? "));
 }

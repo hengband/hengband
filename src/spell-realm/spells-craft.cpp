@@ -87,7 +87,7 @@ bool set_ele_attack(player_type *creature_ptr, u32b attack_type, TIME_EFFECT v)
     }
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
     creature_ptr->redraw |= (PR_STATUS);
     creature_ptr->update |= (PU_BONUS);
     handle_stuff(creature_ptr);
@@ -146,7 +146,7 @@ bool set_ele_immune(player_type *creature_ptr, u32b immune_type, TIME_EFFECT v)
     }
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
     creature_ptr->redraw |= (PR_STATUS);
     creature_ptr->update |= (PU_BONUS);
     handle_stuff(creature_ptr);

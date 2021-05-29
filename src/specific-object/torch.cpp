@@ -137,7 +137,7 @@ void update_lite_radius(player_type *creature_ptr)
     creature_ptr->old_lite = creature_ptr->cur_lite;
 
     if ((creature_ptr->cur_lite > 0) && (creature_ptr->special_defense & NINJA_S_STEALTH))
-        set_superstealth(creature_ptr, FALSE);
+        set_superstealth(creature_ptr, false);
 }
 
 /*

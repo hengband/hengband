@@ -153,7 +153,7 @@ static char inkey_aux(void)
                 return 0;
         }
 
-        (void)term_inkey(&ch, TRUE, TRUE);
+        (void)term_inkey(&ch, TRUE, true);
         return (ch);
     }
 

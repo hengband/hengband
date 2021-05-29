@@ -68,7 +68,7 @@ void building_recharge(player_type *player_ptr)
             describe_flavor(player_ptr, tmp_str, o_ptr, 0);
             msg_format(_("%s です。", "You have: %s."), tmp_str);
 
-            autopick_alter_item(player_ptr, item, FALSE);
+            autopick_alter_item(player_ptr, item, false);
             building_prt_gold(player_ptr);
         }
 
@@ -246,7 +246,7 @@ void building_recharge_all(player_type *player_ptr)
 
         if (!object_is_known(o_ptr)) {
             identify_item(player_ptr, o_ptr);
-            autopick_alter_item(player_ptr, i, FALSE);
+            autopick_alter_item(player_ptr, i, false);
         }
 
         switch (o_ptr->tval) {

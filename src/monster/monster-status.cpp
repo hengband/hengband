@@ -612,7 +612,7 @@ void monster_gain_exp(player_type *target_ptr, MONSTER_IDX m_idx, MONRACE_IDX s_
         m_ptr->parent_m_idx = 0;
     }
 
-    update_monster(target_ptr, m_idx, FALSE);
+    update_monster(target_ptr, m_idx, false);
     lite_spot(target_ptr, m_ptr->fy, m_ptr->fx);
 
     if (m_idx == target_ptr->riding)
@@ -678,7 +678,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 
     /* Hack - Cancel any special player stealth magics. -LM- */
     if (target_ptr->special_defense & NINJA_S_STEALTH) {
-        set_superstealth(target_ptr, FALSE);
+        set_superstealth(target_ptr, false);
     }
 
     /* Genocided by chaos patron */
@@ -961,7 +961,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
         }
 
         /* Generate treasure */
-        monster_death(target_ptr, m_idx, TRUE);
+        monster_death(target_ptr, m_idx, true);
 
         // @todo デッドアタック扱いにしてここから削除したい.
         bool is_special_summon = m_ptr->r_idx == MON_IKETA;

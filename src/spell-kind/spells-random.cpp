@@ -124,7 +124,7 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
                 msg_print(_("周囲の空間が歪んだ！", "Space warps about you!"));
                 teleport_player(target_ptr, damroll(10, 10), TELEPORT_PASSIVE);
                 if (randint0(13))
-                    (*count) += activate_hi_summon(target_ptr, target_ptr->y, target_ptr->x, FALSE);
+                    (*count) += activate_hi_summon(target_ptr, target_ptr->y, target_ptr->x, false);
                 if (!one_in_(6))
                     break;
             }
@@ -152,7 +152,7 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
         case 4:
         case 5:
         case 6:
-            (*count) += activate_hi_summon(target_ptr, target_ptr->y, target_ptr->x, FALSE);
+            (*count) += activate_hi_summon(target_ptr, target_ptr->y, target_ptr->x, false);
             if (!one_in_(6))
                 break;
             /* Fall through */
@@ -323,7 +323,7 @@ void wild_magic(player_type *caster_ptr, int spell)
         break;
     case 36:
     case 37:
-        activate_hi_summon(caster_ptr, caster_ptr->y, caster_ptr->x, FALSE);
+        activate_hi_summon(caster_ptr, caster_ptr->y, caster_ptr->x, false);
         break;
     case 38:
         (void)summon_cyber(caster_ptr, -1, caster_ptr->y, caster_ptr->x);
@@ -466,12 +466,12 @@ void cast_wonder(player_type *caster_ptr, DIRECTION dir)
     }
 
     if (die < 106) {
-        (void)destroy_area(caster_ptr, caster_ptr->y, caster_ptr->x, 13 + randint0(5), FALSE);
+        (void)destroy_area(caster_ptr, caster_ptr->y, caster_ptr->x, 13 + randint0(5), false);
         return;
     }
 
     if (die < 108) {
-        symbol_genocide(caster_ptr, plev + 50, TRUE);
+        symbol_genocide(caster_ptr, plev + 50, true);
         return;
     }
 

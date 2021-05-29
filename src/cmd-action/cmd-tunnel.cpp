@@ -44,7 +44,7 @@ void do_cmd_tunnel(player_type *creature_ptr)
     DIRECTION dir;
     if (!get_rep_dir(creature_ptr, &dir, FALSE)) {
         if (!more)
-            disturb(creature_ptr, FALSE, FALSE);
+            disturb(creature_ptr, FALSE, false);
 
         return;
     }
@@ -66,5 +66,5 @@ void do_cmd_tunnel(player_type *creature_ptr)
         more = exe_tunnel(creature_ptr, y, x);
 
     if (!more)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
 }

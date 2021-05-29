@@ -208,7 +208,7 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
     case SV_STAFF_THE_MAGI: {
         if (do_res_stat(creature_ptr, A_INT))
             ident = true;
-        ident |= restore_mana(creature_ptr, FALSE);
+        ident |= restore_mana(creature_ptr, false);
         if (set_shero(creature_ptr, 0, TRUE))
             ident = true;
         break;
@@ -253,7 +253,7 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
     }
 
     case SV_STAFF_GENOCIDE: {
-        ident = symbol_genocide(creature_ptr, (magic ? lev + 50 : 200), TRUE);
+        ident = symbol_genocide(creature_ptr, (magic ? lev + 50 : 200), true);
         break;
     }
 
@@ -267,7 +267,7 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
     }
 
     case SV_STAFF_DESTRUCTION: {
-        ident = destroy_area(creature_ptr, creature_ptr->y, creature_ptr->x, (powerful ? 18 : 13) + randint0(5), FALSE);
+        ident = destroy_area(creature_ptr, creature_ptr->y, creature_ptr->x, (powerful ? 18 : 13) + randint0(5), false);
         break;
     }
 

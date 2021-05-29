@@ -151,9 +151,9 @@ static void init_random_seed(player_type *player_ptr, bool new_game)
         new_game = true;
         current_world_ptr->character_dungeon = false;
         init_random_seed = true;
-        init_saved_floors(player_ptr, FALSE);
+        init_saved_floors(player_ptr, false);
     } else if (new_game)
-        init_saved_floors(player_ptr, TRUE);
+        init_saved_floors(player_ptr, true);
 
     if (!new_game)
         process_player_name(player_ptr);
@@ -178,7 +178,7 @@ static void init_world_floor_info(player_type *player_ptr)
     player_ptr->count = 0;
     load = false;
     determine_bounty_uniques(player_ptr);
-    determine_daily_bounty(player_ptr, FALSE);
+    determine_daily_bounty(player_ptr, false);
     wipe_o_list(floor_ptr);
 }
 
@@ -225,7 +225,7 @@ static void set_wizard_mode_by_argument(player_type *player_ptr)
     if (enter_wizard_mode(player_ptr)) {
         current_world_ptr->wizard = true;
         if (player_ptr->is_dead || !player_ptr->y || !player_ptr->x) {
-            init_saved_floors(player_ptr, TRUE);
+            init_saved_floors(player_ptr, true);
             player_ptr->current_floor_ptr->inside_quest = 0;
             player_ptr->y = player_ptr->x = 10;
         }

@@ -76,10 +76,10 @@ void do_cmd_knowledge(player_type *creature_ptr)
             do_cmd_knowledge_objects(creature_ptr, &need_redraw, FALSE, -1);
             break;
         case '3': /* Uniques */
-            do_cmd_knowledge_uniques(creature_ptr, TRUE);
+            do_cmd_knowledge_uniques(creature_ptr, true);
             break;
         case '4': /* Uniques */
-            do_cmd_knowledge_uniques(creature_ptr, FALSE);
+            do_cmd_knowledge_uniques(creature_ptr, false);
             break;
         case '5': /* Monsters */
             do_cmd_knowledge_monsters(creature_ptr, &need_redraw, FALSE, -1);

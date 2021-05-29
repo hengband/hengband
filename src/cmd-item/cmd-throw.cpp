@@ -289,7 +289,7 @@ static void calc_racial_power_damage(player_type *creature_ptr, it_type *it_ptr)
     int ds = it_ptr->q_ptr->ds;
     torch_dice(it_ptr->q_ptr, &dd, &ds);
     it_ptr->tdam = damroll(dd, ds);
-    it_ptr->tdam = calc_attack_damage_with_slay(creature_ptr, it_ptr->q_ptr, it_ptr->tdam, it_ptr->m_ptr, HISSATSU_NONE, TRUE);
+    it_ptr->tdam = calc_attack_damage_with_slay(creature_ptr, it_ptr->q_ptr, it_ptr->tdam, it_ptr->m_ptr, HISSATSU_NONE, true);
     it_ptr->tdam = critical_shot(creature_ptr, it_ptr->q_ptr->weight, it_ptr->q_ptr->to_h, 0, it_ptr->tdam);
     if (it_ptr->q_ptr->to_d > 0)
         it_ptr->tdam += it_ptr->q_ptr->to_d;
@@ -312,7 +312,7 @@ static void calc_racial_power_damage(player_type *creature_ptr, it_type *it_ptr)
     if (it_ptr->tdam < 0)
         it_ptr->tdam = 0;
 
-    it_ptr->tdam = mon_damage_mod(creature_ptr, it_ptr->m_ptr, it_ptr->tdam, FALSE);
+    it_ptr->tdam = mon_damage_mod(creature_ptr, it_ptr->m_ptr, it_ptr->tdam, false);
 }
 
 static void attack_racial_power(player_type *creature_ptr, it_type *it_ptr)

@@ -253,7 +253,7 @@ static void explode_monster_by_melee(player_type *subject_ptr, mam_type *mam_ptr
         return;
 
     sound(SOUND_EXPLODE);
-    (void)set_monster_invulner(subject_ptr, mam_ptr->m_idx, 0, FALSE);
+    (void)set_monster_invulner(subject_ptr, mam_ptr->m_idx, 0, false);
     mon_take_hit_mon(subject_ptr, mam_ptr->m_idx, mam_ptr->m_ptr->hp + 1, &mam_ptr->dead, &mam_ptr->fear,
         _("は爆発して粉々になった。", " explodes into tiny shreds."), mam_ptr->m_idx);
     mam_ptr->blinked = false;
@@ -312,7 +312,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
         subject_ptr->current_floor_ptr->monster_noise = true;
 
     if (subject_ptr->riding && (m_idx == subject_ptr->riding))
-        disturb(subject_ptr, TRUE, TRUE);
+        disturb(subject_ptr, TRUE, true);
 
     repeat_melee(subject_ptr, mam_ptr);
     explode_monster_by_melee(subject_ptr, mam_ptr);

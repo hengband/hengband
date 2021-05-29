@@ -15,11 +15,11 @@
 bool activate_resistance_elements(player_type *user_ptr)
 {
     msg_print(_("様々な色に輝いている...", "It glows many colours..."));
-    (void)set_oppose_acid(user_ptr, randint1(40) + 40, FALSE);
-    (void)set_oppose_elec(user_ptr, randint1(40) + 40, FALSE);
-    (void)set_oppose_fire(user_ptr, randint1(40) + 40, FALSE);
-    (void)set_oppose_cold(user_ptr, randint1(40) + 40, FALSE);
-    (void)set_oppose_pois(user_ptr, randint1(40) + 40, FALSE);
+    (void)set_oppose_acid(user_ptr, randint1(40) + 40, false);
+    (void)set_oppose_elec(user_ptr, randint1(40) + 40, false);
+    (void)set_oppose_fire(user_ptr, randint1(40) + 40, false);
+    (void)set_oppose_cold(user_ptr, randint1(40) + 40, false);
+    (void)set_oppose_pois(user_ptr, randint1(40) + 40, false);
     return true;
 }
 
@@ -38,7 +38,7 @@ bool activate_acid_ball_and_resistance(player_type *user_ptr, concptr name)
         return false;
 
     (void)fire_ball(user_ptr, GF_ACID, dir, 100, 2);
-    (void)set_oppose_acid(user_ptr, randint1(20) + 20, FALSE);
+    (void)set_oppose_acid(user_ptr, randint1(20) + 20, false);
 
     return true;
 }
@@ -58,7 +58,7 @@ bool activate_elec_ball_and_resistance(player_type *user_ptr, concptr name)
         return false;
 
     (void)fire_ball(user_ptr, GF_ELEC, dir, 100, 2);
-    (void)set_oppose_elec(user_ptr, randint1(20) + 20, FALSE);
+    (void)set_oppose_elec(user_ptr, randint1(20) + 20, false);
 
     return true;
 }
@@ -78,7 +78,7 @@ bool activate_fire_ball_and_resistance(player_type *user_ptr, concptr name)
         return false;
 
     (void)fire_ball(user_ptr, GF_FIRE, dir, 100, 2);
-    (void)set_oppose_fire(user_ptr, randint1(20) + 20, FALSE);
+    (void)set_oppose_fire(user_ptr, randint1(20) + 20, false);
 
     return true;
 }
@@ -98,7 +98,7 @@ bool activate_cold_ball_and_resistance(player_type *user_ptr, concptr name)
         return false;
 
     (void)fire_ball(user_ptr, GF_COLD, dir, 100, 2);
-    (void)set_oppose_cold(user_ptr, randint1(20) + 20, FALSE);
+    (void)set_oppose_cold(user_ptr, randint1(20) + 20, false);
 
     return true;
 }
@@ -118,7 +118,7 @@ bool activate_pois_ball_and_resistance(player_type *user_ptr, concptr name)
         return false;
 
     (void)fire_ball(user_ptr, GF_POIS, dir, 100, 2);
-    (void)set_oppose_pois(user_ptr, randint1(20) + 20, FALSE);
+    (void)set_oppose_pois(user_ptr, randint1(20) + 20, false);
 
     return true;
 }
@@ -132,7 +132,7 @@ bool activate_pois_ball_and_resistance(player_type *user_ptr, concptr name)
 bool activate_resistance_acid(player_type *user_ptr, concptr name)
 {
     msg_format(_("%sが黒く輝いた...", "The %s grows black."), name);
-    (void)set_oppose_acid(user_ptr, randint1(20) + 20, FALSE);
+    (void)set_oppose_acid(user_ptr, randint1(20) + 20, false);
     return true;
 }
 
@@ -145,7 +145,7 @@ bool activate_resistance_acid(player_type *user_ptr, concptr name)
 bool activate_resistance_elec(player_type *user_ptr, concptr name)
 {
     msg_format(_("%sが青く輝いた...", "The %s grows blue."), name);
-    (void)set_oppose_elec(user_ptr, randint1(20) + 20, FALSE);
+    (void)set_oppose_elec(user_ptr, randint1(20) + 20, false);
     return true;
 }
 
@@ -158,7 +158,7 @@ bool activate_resistance_elec(player_type *user_ptr, concptr name)
 bool activate_resistance_fire(player_type *user_ptr, concptr name)
 {
     msg_format(_("%sが赤く輝いた...", "The %s grows red."), name);
-    (void)set_oppose_fire(user_ptr, randint1(20) + 20, FALSE);
+    (void)set_oppose_fire(user_ptr, randint1(20) + 20, false);
     return true;
 }
 
@@ -171,7 +171,7 @@ bool activate_resistance_fire(player_type *user_ptr, concptr name)
 bool activate_resistance_cold(player_type *user_ptr, concptr name)
 {
     msg_format(_("%sが白く輝いた...", "The %s grows white."), name);
-    (void)set_oppose_cold(user_ptr, randint1(20) + 20, FALSE);
+    (void)set_oppose_cold(user_ptr, randint1(20) + 20, false);
     return true;
 }
 
@@ -184,7 +184,7 @@ bool activate_resistance_cold(player_type *user_ptr, concptr name)
 bool activate_resistance_pois(player_type *user_ptr, concptr name)
 {
     msg_format(_("%sが緑に輝いた...", "The %s grows green."), name);
-    (void)set_oppose_pois(user_ptr, randint1(20) + 20, FALSE);
+    (void)set_oppose_pois(user_ptr, randint1(20) + 20, false);
     return true;
 }
 
@@ -192,14 +192,14 @@ bool activate_ultimate_resistance(player_type *user_ptr)
 {
     TIME_EFFECT v = randint1(25) + 25;
     (void)set_afraid(user_ptr, 0);
-    (void)set_hero(user_ptr, v, FALSE);
+    (void)set_hero(user_ptr, v, false);
     (void)hp_player(user_ptr, 10);
-    (void)set_blessed(user_ptr, v, FALSE);
-    (void)set_oppose_acid(user_ptr, v, FALSE);
-    (void)set_oppose_elec(user_ptr, v, FALSE);
-    (void)set_oppose_fire(user_ptr, v, FALSE);
-    (void)set_oppose_cold(user_ptr, v, FALSE);
-    (void)set_oppose_pois(user_ptr, v, FALSE);
-    (void)set_ultimate_res(user_ptr, v, FALSE);
+    (void)set_blessed(user_ptr, v, false);
+    (void)set_oppose_acid(user_ptr, v, false);
+    (void)set_oppose_elec(user_ptr, v, false);
+    (void)set_oppose_fire(user_ptr, v, false);
+    (void)set_oppose_cold(user_ptr, v, false);
+    (void)set_oppose_pois(user_ptr, v, false);
+    (void)set_ultimate_res(user_ptr, v, false);
     return true;
 }

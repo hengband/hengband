@@ -79,7 +79,7 @@ void castle_quest(player_type *player_ptr)
     q_ptr = &quest[q_index];
     if (q_ptr->status == QUEST_STATUS_COMPLETED) {
         q_ptr->status = QUEST_STATUS_REWARDED;
-        print_questinfo(player_ptr, q_index, FALSE);
+        print_questinfo(player_ptr, q_index, false);
         reinit_wilderness = true;
         return;
     }
@@ -108,7 +108,7 @@ void castle_quest(player_type *player_ptr)
     }
 
     if (q_ptr->status == QUEST_STATUS_FAILED) {
-        print_questinfo(player_ptr, q_index, FALSE);
+        print_questinfo(player_ptr, q_index, false);
         q_ptr->status = QUEST_STATUS_FAILED_DONE;
         reinit_wilderness = true;
         return;
@@ -120,7 +120,7 @@ void castle_quest(player_type *player_ptr)
     q_ptr->status = QUEST_STATUS_TAKEN;
     reinit_wilderness = true;
     if (q_ptr->type != QUEST_TYPE_KILL_ANY_LEVEL) {
-        print_questinfo(player_ptr, q_index, TRUE);
+        print_questinfo(player_ptr, q_index, true);
         return;
     }
 
@@ -149,5 +149,5 @@ void castle_quest(player_type *player_ptr)
 #else
     msg_format("Your quest: kill %d %s", q_ptr->max_num, name);
 #endif
-    print_questinfo(player_ptr, q_index, TRUE);
+    print_questinfo(player_ptr, q_index, true);
 }

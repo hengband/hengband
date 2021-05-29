@@ -68,7 +68,7 @@ void do_cmd_fire(player_type *creature_ptr, SPELL_IDX snipe_type)
 
     if (snipe_type == SP_FINAL) {
         msg_print(_("射撃の反動が体を襲った。", "The weapon's recoil stuns you. "));
-        (void)set_slow(creature_ptr, creature_ptr->slow + randint0(7) + 7, FALSE);
+        (void)set_slow(creature_ptr, creature_ptr->slow + randint0(7) + 7, false);
         (void)set_stun(creature_ptr, creature_ptr->stun + randint1(25));
     }
 }

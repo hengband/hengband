@@ -74,7 +74,7 @@ static u32b calc_expect_dice(
 {
     dam = calc_slaydam(dam, mult, div, force);
     dam = calc_expect_crit(owner_ptr, weight, plus, dam, meichuu, dokubari, impact);
-    dam = calc_slaydam(dam, vorpal_mult, vorpal_div, FALSE);
+    dam = calc_slaydam(dam, vorpal_mult, vorpal_div, false);
     return dam;
 }
 

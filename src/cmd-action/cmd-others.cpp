@@ -110,7 +110,7 @@ void do_cmd_alter(player_type *creature_ptr)
     }
 
     if (!exe_alter(creature_ptr))
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
 }
 
 /*!

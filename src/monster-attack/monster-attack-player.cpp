@@ -262,7 +262,7 @@ static void describe_attack_evasion(player_type *target_ptr, monap_type *monap_p
     if (!monap_ptr->m_ptr->ml)
         return;
 
-    disturb(target_ptr, TRUE, TRUE);
+    disturb(target_ptr, TRUE, true);
 #ifdef JP
     if (monap_ptr->abbreviate)
         msg_format("%sかわした。", (target_ptr->special_attack & ATTACK_SUIKEN) ? "奇妙な動きで" : "");
@@ -308,7 +308,7 @@ static void gain_armor_exp(player_type *target_ptr, monap_type *monap_ptr)
  */
 static bool process_monster_attack_hit(player_type *target_ptr, monap_type *monap_ptr)
 {
-    disturb(target_ptr, TRUE, TRUE);
+    disturb(target_ptr, TRUE, true);
     if (effect_protecion_from_evil(target_ptr, monap_ptr))
         return false;
 
@@ -470,7 +470,7 @@ static void eyes_on_eyes(player_type *target_ptr, monap_type *monap_ptr)
 #endif
     project(target_ptr, 0, 0, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, monap_ptr->get_damage, GF_MISSILE, PROJECT_KILL);
     if (target_ptr->tim_eyeeye)
-        set_tim_eyeeye(target_ptr, target_ptr->tim_eyeeye - 5, TRUE);
+        set_tim_eyeeye(target_ptr, target_ptr->tim_eyeeye - 5, true);
 }
 
 static void thief_teleport(player_type *target_ptr, monap_type *monap_ptr)

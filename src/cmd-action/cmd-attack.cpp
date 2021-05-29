@@ -127,7 +127,7 @@ static void natural_attack(player_type *attacker_ptr, MONSTER_IDX m_idx, MUTA at
     if (k < 0)
         k = 0;
 
-    k = mon_damage_mod(attacker_ptr, m_ptr, k, FALSE);
+    k = mon_damage_mod(attacker_ptr, m_ptr, k, false);
     msg_format_wizard(attacker_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), k, m_ptr->hp - k,
         m_ptr->maxhp, m_ptr->max_maxhp);
     if (k > 0)
@@ -175,7 +175,7 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
 
     const std::initializer_list<MUTA> mutation_attack_methods = { MUTA::HORNS, MUTA::BEAK, MUTA::SCOR_TAIL, MUTA::TRUNK, MUTA::TENTACLES };
 
-    disturb(attacker_ptr, FALSE, TRUE);
+    disturb(attacker_ptr, FALSE, true);
 
     PlayerEnergy(attacker_ptr).set_player_turn_energy(100);
 

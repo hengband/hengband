@@ -328,11 +328,11 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
         if (player_can_see_bold(caster_ptr, y, x))
             obvious = true;
         if (g_ptr->m_idx)
-            update_monster(caster_ptr, g_ptr->m_idx, FALSE);
+            update_monster(caster_ptr, g_ptr->m_idx, false);
 
         if (caster_ptr->special_defense & NINJA_S_STEALTH) {
             if (player_bold(caster_ptr, y, x))
-                set_superstealth(caster_ptr, FALSE);
+                set_superstealth(caster_ptr, false);
         }
 
         break;
@@ -379,7 +379,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
         if (player_can_see_bold(caster_ptr, y, x))
             obvious = true;
         if (g_ptr->m_idx)
-            update_monster(caster_ptr, g_ptr->m_idx, FALSE);
+            update_monster(caster_ptr, g_ptr->m_idx, false);
 
         break;
     }

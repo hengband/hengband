@@ -185,7 +185,7 @@ bool switch_activation(player_type *user_ptr, object_type **o_ptr_ptr, const act
     case ACT_CHOIR_SINGS:
         msg_print(_("天国の歌が聞こえる...", "A heavenly choir sings..."));
         (void)cure_critical_wounds(user_ptr, 777);
-        (void)set_hero(user_ptr, randint1(25) + 25, FALSE);
+        (void)set_hero(user_ptr, randint1(25) + 25, false);
         return true;
     case ACT_CURE_LW:
         return activate_cure_lw(user_ptr);
@@ -223,39 +223,39 @@ bool switch_activation(player_type *user_ptr, object_type **o_ptr_ptr, const act
         return true;
     case ACT_CURE_MANA_FULL:
         msg_format(_("%sが青白く光った．．．", "The %s glows palely..."), name);
-        restore_mana(user_ptr, TRUE);
+        restore_mana(user_ptr, true);
         return true;
     case ACT_ESP:
-        (void)set_tim_esp(user_ptr, randint1(30) + 25, FALSE);
+        (void)set_tim_esp(user_ptr, randint1(30) + 25, false);
         return true;
     case ACT_BERSERK:
         (void)berserk(user_ptr, randint1(25) + 25);
         return true;
     case ACT_PROT_EVIL:
         msg_format(_("%sから鋭い音が流れ出た...", "The %s lets out a shrill wail..."), name);
-        (void)set_protevil(user_ptr, randint1(25) + user_ptr->lev * 3, FALSE);
+        (void)set_protevil(user_ptr, randint1(25) + user_ptr->lev * 3, false);
         return true;
     case ACT_RESIST_ALL:
         return activate_resistance_elements(user_ptr);
     case ACT_SPEED:
         msg_print(_("明るく緑色に輝いている...", "It glows bright green..."));
-        (void)set_fast(user_ptr, randint1(20) + 20, FALSE);
+        (void)set_fast(user_ptr, randint1(20) + 20, false);
         return true;
     case ACT_XTRA_SPEED:
         msg_print(_("明るく輝いている...", "It glows brightly..."));
-        (void)set_fast(user_ptr, randint1(75) + 75, FALSE);
+        (void)set_fast(user_ptr, randint1(75) + 75, false);
         return true;
     case ACT_WRAITH:
-        set_wraith_form(user_ptr, randint1(user_ptr->lev / 2) + (user_ptr->lev / 2), FALSE);
+        set_wraith_form(user_ptr, randint1(user_ptr->lev / 2) + (user_ptr->lev / 2), false);
         return true;
     case ACT_INVULN:
-        (void)set_invuln(user_ptr, randint1(8) + 8, FALSE);
+        (void)set_invuln(user_ptr, randint1(8) + 8, false);
         return true;
     case ACT_HERO:
         (void)heroism(user_ptr, 25);
         return true;
     case ACT_HERO_SPEED:
-        (void)set_fast(user_ptr, randint1(50) + 50, FALSE);
+        (void)set_fast(user_ptr, randint1(50) + 50, false);
         (void)heroism(user_ptr, 50);
         return true;
     case ACT_ACID_BALL_AND_RESISTANCE:
@@ -352,7 +352,7 @@ bool switch_activation(player_type *user_ptr, object_type **o_ptr_ptr, const act
     case ACT_STRAIN_HASTE:
         msg_format(_("%sはあなたの体力を奪った...", "The %s drains your vitality..."), name);
         take_hit(user_ptr, DAMAGE_LOSELIFE, damroll(3, 8), _("加速した疲労", "the strain of haste"));
-        (void)set_fast(user_ptr, user_ptr->fast + 25 + randint1(25), FALSE);
+        (void)set_fast(user_ptr, user_ptr->fast + 25 + randint1(25), false);
         return true;
     case ACT_FISHING:
         return fishing(user_ptr);

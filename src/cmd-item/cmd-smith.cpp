@@ -443,7 +443,7 @@ static void drain_essence(player_type *creature_ptr)
     }
 
     /* Apply autodestroy/inscription to the drained item */
-    autopick_alter_item(creature_ptr, item, TRUE);
+    autopick_alter_item(creature_ptr, item, true);
     creature_ptr->update |= (PU_COMBINE | PU_REORDER);
     creature_ptr->window_flags |= (PW_INVEN);
 }

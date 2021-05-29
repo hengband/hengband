@@ -145,7 +145,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_duration(base, sides);
 
             if (cast) {
-                set_tim_esp(caster_ptr, randint1(sides) + base, FALSE);
+                set_tim_esp(caster_ptr, randint1(sides) + base, false);
             }
         }
         break;
@@ -206,7 +206,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 if (!get_aim_dir(caster_ptr, &dir))
                     return NULL;
 
-                fetch_item(caster_ptr, dir, weight, FALSE);
+                fetch_item(caster_ptr, dir, weight, false);
             }
         }
         break;

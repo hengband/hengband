@@ -270,7 +270,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
             floor_ptr->grid_array[sy][sx].m_idx = m_idx_aux;
             m_ptr->fy = sy;
             m_ptr->fx = sx;
-            update_monster(caster_ptr, m_idx_aux, TRUE);
+            update_monster(caster_ptr, m_idx_aux, true);
             lite_spot(caster_ptr, yy, xx);
             lite_spot(caster_ptr, sy, sx);
         }
@@ -348,7 +348,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
     caster_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
     if (caster_ptr->special_defense & NINJA_S_STEALTH) {
         if (floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info & CAVE_GLOW)
-            set_superstealth(caster_ptr, FALSE);
+            set_superstealth(caster_ptr, false);
     }
 
     return true;

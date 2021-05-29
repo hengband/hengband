@@ -194,7 +194,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
         }
         case GF_IDENTIFY: {
             identify_item(caster_ptr, o_ptr);
-            autopick_alter_item(caster_ptr, (-this_o_idx), FALSE);
+            autopick_alter_item(caster_ptr, (-this_o_idx), false);
             break;
         }
         case GF_KILL_TRAP:

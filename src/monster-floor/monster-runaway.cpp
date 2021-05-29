@@ -93,7 +93,7 @@ bool runaway_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTE
         msg_format(
             _("%sは傷の痛さの余りあなたの束縛から逃れようとしている。", "%^s seems to be in so much pain and tries to escape from your restriction."), m_name);
         riding_pinch++;
-        disturb(target_ptr, TRUE, TRUE);
+        disturb(target_ptr, TRUE, true);
         return false;
     }
 

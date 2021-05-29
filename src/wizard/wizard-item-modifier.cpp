@@ -114,7 +114,7 @@ void wizard_item_modifier(player_type *creature_ptr)
     display_wizard_sub_menu();
 
     char cmd;
-    get_com("Player Command: ", &cmd, FALSE);
+    get_com("Player Command: ", &cmd, false);
     screen_load();
 
     switch (cmd) {
@@ -133,7 +133,7 @@ void wizard_item_modifier(player_type *creature_ptr)
         if (command_arg <= 0)
             command_arg = 1;
 
-        acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, TRUE, FALSE, TRUE);
+        acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, TRUE, FALSE, true);
         break;
     case 'f':
         identify_fully(creature_ptr, FALSE, TV_NONE);
@@ -142,7 +142,7 @@ void wizard_item_modifier(player_type *creature_ptr)
         if (command_arg <= 0)
             command_arg = 1;
 
-        acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, FALSE, FALSE, TRUE);
+        acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, FALSE, FALSE, true);
         break;
     case 'i':
         (void)ident_spell(creature_ptr, FALSE, TV_NONE);
@@ -157,13 +157,13 @@ void wizard_item_modifier(player_type *creature_ptr)
         if (command_arg <= 0)
             command_arg = 1;
 
-        acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, TRUE, TRUE, TRUE);
+        acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, TRUE, TRUE, true);
         break;
     case 'U':
         wiz_modify_item_activation(creature_ptr);
         break;
     case 'w':
-        do_cmd_wishing(creature_ptr, -1, TRUE, TRUE, TRUE);
+        do_cmd_wishing(creature_ptr, -1, TRUE, TRUE, true);
         break;
     }
 }
@@ -550,7 +550,7 @@ static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
             q_ptr->prep(owner_ptr, o_ptr->k_idx);
             apply_magic_to_object(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_GOOD | AM_GREAT | AM_SPECIAL);
             if (!object_is_artifact(q_ptr))
-                become_random_artifact(owner_ptr, q_ptr, FALSE);
+                become_random_artifact(owner_ptr, q_ptr, false);
 
             break;
         default:

@@ -1117,7 +1117,7 @@ bool build_type10(player_type *player_ptr, dun_data_type *dd_ptr)
         break;
     case 4:
     case 12:
-        build_maze_vault(player_ptr, x0, y0, xsize, ysize, TRUE);
+        build_maze_vault(player_ptr, x0, y0, xsize, ysize, true);
         break;
     case 5:
     case 13:

@@ -721,7 +721,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
                         /* Modify the damage */
                         base_dam = tdam;
-                        tdam = mon_damage_mod(shooter_ptr, m_ptr, tdam, FALSE);
+                        tdam = mon_damage_mod(shooter_ptr, m_ptr, tdam, false);
                     }
 
                     msg_format_wizard(shooter_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), tdam,
@@ -808,7 +808,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
                                 m_ptr->fx = nx;
                                 m_ptr->fy = ny;
 
-                                update_monster(shooter_ptr, m_idx, TRUE);
+                                update_monster(shooter_ptr, m_idx, true);
 
                                 if (msec > 0) {
                                     lite_spot(shooter_ptr, ny, nx);
@@ -882,7 +882,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
     /* Sniper - Loose his/her concentration after any shot */
     if (shooter_ptr->concent)
-        reset_concentration(shooter_ptr, FALSE);
+        reset_concentration(shooter_ptr, false);
 }
 
 /*!

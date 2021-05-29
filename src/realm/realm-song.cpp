@@ -319,7 +319,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 int count = get_singing_count(caster_ptr);
 
                 if (count >= 19)
-                    wiz_lite(caster_ptr, FALSE);
+                    wiz_lite(caster_ptr, false);
                 if (count >= 11) {
                     map_area(caster_ptr, rad);
                     if (plev > 39 && count < 19)
@@ -341,7 +341,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                     if (plev > 19 && count < A_MAX)
                         set_singing_count(caster_ptr, count + 1);
                 }
-                detect_traps(caster_ptr, rad, TRUE);
+                detect_traps(caster_ptr, rad, true);
                 detect_doors(caster_ptr, rad);
                 detect_stairs(caster_ptr, rad);
 

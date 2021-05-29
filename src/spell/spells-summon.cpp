@@ -514,9 +514,9 @@ void cast_invoke_spirits(player_type *caster_ptr, DIRECTION dir)
     } else if (die < 104) {
         earthquake(caster_ptr, caster_ptr->y, caster_ptr->x, 12, 0);
     } else if (die < 106) {
-        (void)destroy_area(caster_ptr, caster_ptr->y, caster_ptr->x, 13 + randint0(5), FALSE);
+        (void)destroy_area(caster_ptr, caster_ptr->y, caster_ptr->x, 13 + randint0(5), false);
     } else if (die < 108) {
-        symbol_genocide(caster_ptr, plev + 50, TRUE);
+        symbol_genocide(caster_ptr, plev + 50, true);
     } else if (die < 110) {
         dispel_monsters(caster_ptr, 120);
     } else {

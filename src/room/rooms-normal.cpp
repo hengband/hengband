@@ -179,7 +179,7 @@ bool build_type1(player_type *player_ptr, dun_data_type *dd_ptr)
             place_bold(player_ptr, y2 + 1, xval, GB_SOLID);
         }
 
-        place_random_door(player_ptr, yval, xval, TRUE);
+        place_random_door(player_ptr, yval, xval, true);
         if (curtain2)
             floor_ptr->grid_array[yval][xval].feat = feat_door[DOOR_CURTAIN].closed;
     }

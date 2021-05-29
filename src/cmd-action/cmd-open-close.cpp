@@ -95,8 +95,8 @@ void do_cmd_open(player_type *creature_ptr)
         set_action(creature_ptr, ACTION_NONE);
 
     if (easy_open) {
-        int num_doors = count_dt(creature_ptr, &y, &x, is_closed_door, FALSE);
-        int num_chests = count_chests(creature_ptr, &y, &x, FALSE);
+        int num_doors = count_dt(creature_ptr, &y, &x, is_closed_door, false);
+        int num_chests = count_chests(creature_ptr, &y, &x, false);
         if (num_doors || num_chests) {
             bool too_many = (num_doors && num_chests) || (num_doors > 1) || (num_chests > 1);
             if (!too_many)
@@ -117,7 +117,7 @@ void do_cmd_open(player_type *creature_ptr)
         x = creature_ptr->x + ddx[dir];
         g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
         feat = get_feat_mimic(g_ptr);
-        o_idx = chest_check(creature_ptr->current_floor_ptr, y, x, FALSE);
+        o_idx = chest_check(creature_ptr->current_floor_ptr, y, x, false);
         if (!has_flag(f_info[feat].flags, FF_OPEN) && !o_idx) {
             msg_print(_("そこには開けるものが見当たらない。", "You see nothing there to open."));
         } else if (g_ptr->m_idx && creature_ptr->riding != g_ptr->m_idx) {
@@ -132,7 +132,7 @@ void do_cmd_open(player_type *creature_ptr)
     }
 
     if (!more)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
 }
 
 /*!
@@ -180,7 +180,7 @@ void do_cmd_close(player_type *creature_ptr)
     }
 
     if (!more)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
 }
 
 /*!
@@ -200,8 +200,8 @@ void do_cmd_disarm(player_type *creature_ptr)
         set_action(creature_ptr, ACTION_NONE);
 
     if (easy_disarm) {
-        int num_traps = count_dt(creature_ptr, &y, &x, is_trap, TRUE);
-        int num_chests = count_chests(creature_ptr, &y, &x, TRUE);
+        int num_traps = count_dt(creature_ptr, &y, &x, is_trap, true);
+        int num_chests = count_chests(creature_ptr, &y, &x, true);
         if (num_traps || num_chests) {
             bool too_many = (num_traps && num_chests) || (num_traps > 1) || (num_chests > 1);
             if (!too_many)
@@ -222,7 +222,7 @@ void do_cmd_disarm(player_type *creature_ptr)
         x = creature_ptr->x + ddx[dir];
         g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
         feat = get_feat_mimic(g_ptr);
-        o_idx = chest_check(creature_ptr->current_floor_ptr, y, x, TRUE);
+        o_idx = chest_check(creature_ptr->current_floor_ptr, y, x, true);
         if (!is_trap(creature_ptr, feat) && !o_idx) {
             msg_print(_("そこには解除するものが見当たらない。", "You see nothing there to disarm."));
         } else if (g_ptr->m_idx && creature_ptr->riding != g_ptr->m_idx) {
@@ -236,7 +236,7 @@ void do_cmd_disarm(player_type *creature_ptr)
     }
 
     if (!more)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
 }
 
 /*!
@@ -292,7 +292,7 @@ void do_cmd_bash(player_type *creature_ptr)
     }
 
     if (!more)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, FALSE, false);
 }
 
 

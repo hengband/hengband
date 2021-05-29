@@ -114,7 +114,7 @@ void build_cavern(player_type *player_ptr)
         int roug = randint1(8) * randint1(4);
         int cutoff = xsize / 2;
         generate_hmap(floor_ptr, y0 + 1, x0 + 1, xsize, ysize, grd, roug, cutoff);
-        done = generate_fracave(player_ptr, y0 + 1, x0 + 1, xsize, ysize, cutoff, light, FALSE);
+        done = generate_fracave(player_ptr, y0 + 1, x0 + 1, xsize, ysize, cutoff, light, false);
     }
 }
 

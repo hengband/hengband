@@ -381,9 +381,9 @@ process_result switch_effects_monster(player_type *caster_ptr, effect_monster_ty
     case GF_OLD_SLEEP:
         return effect_monster_old_sleep(caster_ptr, em_ptr);
     case GF_STASIS_EVIL:
-        return effect_monster_stasis(em_ptr, TRUE);
+        return effect_monster_stasis(em_ptr, true);
     case GF_STASIS:
-        return effect_monster_stasis(em_ptr, FALSE);
+        return effect_monster_stasis(em_ptr, false);
     case GF_CHARM:
         return effect_monster_charm(caster_ptr, em_ptr);
     case GF_CONTROL_UNDEAD:

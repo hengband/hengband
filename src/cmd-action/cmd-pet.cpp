@@ -805,7 +805,7 @@ void do_cmd_pet(player_type *creature_ptr)
     }
 
     case PET_RIDING: {
-        (void)do_cmd_riding(creature_ptr, FALSE);
+        (void)do_cmd_riding(creature_ptr, false);
         break;
     }
 

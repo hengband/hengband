@@ -142,7 +142,7 @@ static bool calc_vertical_projection(player_type *player_ptr, projection_path_ty
         pp_ptr->k++;
     }
 
-    calc_projection_to_target(player_ptr, pp_ptr, TRUE);
+    calc_projection_to_target(player_ptr, pp_ptr, true);
     return true;
 }
 
@@ -161,7 +161,7 @@ static bool calc_horizontal_projection(player_type *player_ptr, projection_path_
         pp_ptr->k++;
     }
 
-    calc_projection_to_target(player_ptr, pp_ptr, FALSE);
+    calc_projection_to_target(player_ptr, pp_ptr, false);
     return true;
 }
 

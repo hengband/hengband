@@ -233,19 +233,19 @@ static void create_cata_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, P
 {
     POSITION x1 = x - 1;
     POSITION y1 = y;
-    set_tunnel(player_ptr, dd_ptr, &x1, &y1, FALSE);
+    set_tunnel(player_ptr, dd_ptr, &x1, &y1, false);
 
     x1 = x + 1;
     y1 = y;
-    set_tunnel(player_ptr, dd_ptr, &x1, &y1, FALSE);
+    set_tunnel(player_ptr, dd_ptr, &x1, &y1, false);
 
     x1 = x;
     y1 = y - 1;
-    set_tunnel(player_ptr, dd_ptr, &x1, &y1, FALSE);
+    set_tunnel(player_ptr, dd_ptr, &x1, &y1, false);
 
     x1 = x;
     y1 = y + 1;
-    set_tunnel(player_ptr, dd_ptr, &x1, &y1, FALSE);
+    set_tunnel(player_ptr, dd_ptr, &x1, &y1, false);
 }
 
 /*!
@@ -422,7 +422,7 @@ bool build_tunnel2(player_type *player_ptr, dun_data_type *dd_ptr, POSITION x1, 
     }
 
     if (firstsuccede)
-        set_tunnel(player_ptr, dd_ptr, &x3, &y3, TRUE);
+        set_tunnel(player_ptr, dd_ptr, &x3, &y3, true);
 
     return retval;
 }

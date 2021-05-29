@@ -286,7 +286,7 @@ errr counts_write(player_type *creature_ptr, int where, u32b count)
     if (err)
         return 1;
 
-    counts_seek(creature_ptr, fd, where, TRUE);
+    counts_seek(creature_ptr, fd, where, true);
     fd_write(fd, (char *)(&count), sizeof(u32b));
     safe_setuid_grab(creature_ptr);
     err = fd_lock(fd, F_UNLCK);

@@ -1575,7 +1575,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
             }
 
             msg_flag = false;
-            do_cmd_save_game(player_ptr, FALSE);
+            do_cmd_save_game(player_ptr, false);
         } else {
             plog(_("今、セーブすることは出来ません。", "You may not do that right now."));
         }
@@ -2523,38 +2523,38 @@ static void init_stuff(void)
     }
 
     strcpy(path + i + 1, "lib\\");
-    validate_dir(path, TRUE);
+    validate_dir(path, true);
     init_file_paths(path, path);
-    validate_dir(ANGBAND_DIR_APEX, FALSE);
-    validate_dir(ANGBAND_DIR_BONE, FALSE);
+    validate_dir(ANGBAND_DIR_APEX, false);
+    validate_dir(ANGBAND_DIR_BONE, false);
     if (!check_dir(ANGBAND_DIR_EDIT)) {
-        validate_dir(ANGBAND_DIR_DATA, TRUE);
+        validate_dir(ANGBAND_DIR_DATA, true);
     } else {
-        validate_dir(ANGBAND_DIR_DATA, FALSE);
+        validate_dir(ANGBAND_DIR_DATA, false);
     }
 
-    validate_dir(ANGBAND_DIR_FILE, TRUE);
-    validate_dir(ANGBAND_DIR_HELP, FALSE);
-    validate_dir(ANGBAND_DIR_INFO, FALSE);
-    validate_dir(ANGBAND_DIR_PREF, TRUE);
-    validate_dir(ANGBAND_DIR_SAVE, FALSE);
-    validate_dir(ANGBAND_DIR_DEBUG_SAVE, FALSE);
-    validate_dir(ANGBAND_DIR_USER, TRUE);
-    validate_dir(ANGBAND_DIR_XTRA, TRUE);
+    validate_dir(ANGBAND_DIR_FILE, true);
+    validate_dir(ANGBAND_DIR_HELP, false);
+    validate_dir(ANGBAND_DIR_INFO, false);
+    validate_dir(ANGBAND_DIR_PREF, true);
+    validate_dir(ANGBAND_DIR_SAVE, false);
+    validate_dir(ANGBAND_DIR_DEBUG_SAVE, false);
+    validate_dir(ANGBAND_DIR_USER, true);
+    validate_dir(ANGBAND_DIR_XTRA, true);
     path_build(path, sizeof(path), ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
 
     validate_file(path);
     path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "graf");
     ANGBAND_DIR_XTRA_GRAF = string_make(path);
-    validate_dir(ANGBAND_DIR_XTRA_GRAF, TRUE);
+    validate_dir(ANGBAND_DIR_XTRA_GRAF, true);
 
     path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "sound");
     ANGBAND_DIR_XTRA_SOUND = string_make(path);
-    validate_dir(ANGBAND_DIR_XTRA_SOUND, FALSE);
+    validate_dir(ANGBAND_DIR_XTRA_SOUND, false);
 
     path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "music");
     ANGBAND_DIR_XTRA_MUSIC = string_make(path);
-    validate_dir(ANGBAND_DIR_XTRA_MUSIC, FALSE);
+    validate_dir(ANGBAND_DIR_XTRA_MUSIC, false);
 
     for (i = 0; special_key_list[i]; ++i) {
         special_key[special_key_list[i]] = true;
@@ -2593,7 +2593,7 @@ static void init_stuff(void)
 void create_debug_spoiler(void)
 {
     init_stuff();
-    init_angband(p_ptr, TRUE);
+    init_angband(p_ptr, true);
 
     switch (output_all_spoilers()) {
     case spoiler_output_status::SPOILER_OUTPUT_SUCCESS:
@@ -2692,7 +2692,7 @@ int WINAPI WinMain(
 
     signals_init();
     term_activate(term_screen);
-    init_angband(p_ptr, FALSE);
+    init_angband(p_ptr, false);
     initialized = true;
 
     check_for_save_file(command_line.get_savefile_option());
@@ -2717,13 +2717,13 @@ int WINAPI WinMain(
     term_flush();
     if (movie_in_progress) {
         // selected movie
-        play_game(p_ptr, FALSE, TRUE);
+        play_game(p_ptr, FALSE, true);
     } else if (savefile[0] == '\0') {
         // new game
-        play_game(p_ptr, TRUE, FALSE);
+        play_game(p_ptr, TRUE, false);
     } else {
         // selected savefile
-        play_game(p_ptr, FALSE, FALSE);
+        play_game(p_ptr, FALSE, false);
     }
 
     quit(NULL);

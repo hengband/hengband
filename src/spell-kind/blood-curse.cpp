@@ -55,7 +55,7 @@ void blood_curse_to_enemy(player_type *caster_ptr, MONSTER_IDX m_idx)
                 if (m_ptr->r_idx)
                     teleport_away(caster_ptr, g_ptr->m_idx, damroll(10, 10), TELEPORT_PASSIVE);
                 if (one_in_(13))
-                    count += activate_hi_summon(caster_ptr, m_ptr->fy, m_ptr->fx, TRUE);
+                    count += activate_hi_summon(caster_ptr, m_ptr->fy, m_ptr->fx, true);
                 if (!one_in_(6))
                     break;
             }
@@ -79,7 +79,7 @@ void blood_curse_to_enemy(player_type *caster_ptr, MONSTER_IDX m_idx)
             /* Fall through */
         case 17:
         case 18:
-            count += activate_hi_summon(caster_ptr, m_ptr->fy, m_ptr->fx, TRUE);
+            count += activate_hi_summon(caster_ptr, m_ptr->fy, m_ptr->fx, true);
             if (!one_in_(6))
                 break;
             /* Fall through */

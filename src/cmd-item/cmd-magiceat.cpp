@@ -561,15 +561,15 @@ bool do_cmd_magic_eater(player_type *creature_ptr, bool only_browse, bool powerf
             if ((sval >= SV_ROD_MIN_DIRECTION) && (sval != SV_ROD_HAVOC) && (sval != SV_ROD_AGGRAVATE) && (sval != SV_ROD_PESTICIDE))
                 if (!get_aim_dir(creature_ptr, &dir))
                     return false;
-            rod_effect(creature_ptr, sval, dir, &use_charge, powerful, TRUE);
+            rod_effect(creature_ptr, sval, dir, &use_charge, powerful, true);
             if (!use_charge)
                 return false;
         } else if (tval == TV_WAND) {
             if (!get_aim_dir(creature_ptr, &dir))
                 return false;
-            wand_effect(creature_ptr, sval, dir, powerful, TRUE);
+            wand_effect(creature_ptr, sval, dir, powerful, true);
         } else {
-            staff_effect(creature_ptr, sval, &use_charge, powerful, TRUE, TRUE);
+            staff_effect(creature_ptr, sval, &use_charge, powerful, TRUE, true);
             if (!use_charge)
                 return false;
         }

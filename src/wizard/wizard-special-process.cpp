@@ -97,8 +97,8 @@
  */
 void wiz_cure_all(player_type *creature_ptr)
 {
-    (void)life_stream(creature_ptr, FALSE, FALSE);
-    (void)restore_mana(creature_ptr, TRUE);
+    (void)life_stream(creature_ptr, FALSE, false);
+    (void)restore_mana(creature_ptr, true);
     (void)set_food(creature_ptr, PY_FOOD_MAX - 1);
 }
 
@@ -470,7 +470,7 @@ void wiz_jump_to_dungeon(player_type *creature_ptr)
 
     msg_format("You jump to dungeon level %d.", command_arg);
     if (autosave_l)
-        do_cmd_save_game(creature_ptr, TRUE);
+        do_cmd_save_game(creature_ptr, true);
 
     creature_ptr->current_floor_ptr->dun_level = command_arg;
     prepare_change_floor_mode(creature_ptr, CFM_RAND_PLACE);
@@ -720,8 +720,8 @@ void cheat_death(player_type *creature_ptr)
     msg_print(NULL);
 
     creature_ptr->is_dead = false;
-    (void)life_stream(creature_ptr, FALSE, FALSE);
-    (void)restore_mana(creature_ptr, TRUE);
+    (void)life_stream(creature_ptr, FALSE, false);
+    (void)restore_mana(creature_ptr, true);
     (void)recall_player(creature_ptr, 0);
     reserve_alter_reality(creature_ptr, 0);
 

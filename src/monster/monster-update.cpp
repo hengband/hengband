@@ -75,13 +75,13 @@ bool update_riding_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, 
     if (g_ptr->m_idx) {
         y_ptr->fy = oy;
         y_ptr->fx = ox;
-        update_monster(target_ptr, g_ptr->m_idx, TRUE);
+        update_monster(target_ptr, g_ptr->m_idx, true);
     }
 
     g_ptr->m_idx = m_idx;
     m_ptr->fy = ny;
     m_ptr->fx = nx;
-    update_monster(target_ptr, m_idx, TRUE);
+    update_monster(target_ptr, m_idx, true);
 
     lite_spot(target_ptr, oy, ox);
     lite_spot(target_ptr, ny, nx);
@@ -456,7 +456,7 @@ static void update_invisible_monster(player_type *subject_ptr, um_type *um_ptr, 
         && (projectable(subject_ptr, um_ptr->m_ptr->fy, um_ptr->m_ptr->fx, subject_ptr->y, subject_ptr->x)
             && projectable(subject_ptr, subject_ptr->y, subject_ptr->x, um_ptr->m_ptr->fy, um_ptr->m_ptr->fx))) {
         if (disturb_pets || is_hostile(um_ptr->m_ptr))
-            disturb(subject_ptr, TRUE, TRUE);
+            disturb(subject_ptr, TRUE, true);
     }
 }
 
@@ -475,7 +475,7 @@ static void update_visible_monster(player_type *subject_ptr, um_type *um_ptr, MO
         subject_ptr->redraw |= PR_UHEALTH;
 
     if (um_ptr->do_disturb && (disturb_pets || is_hostile(um_ptr->m_ptr)))
-        disturb(subject_ptr, TRUE, TRUE);
+        disturb(subject_ptr, TRUE, true);
 }
 
 static bool update_clear_monster(player_type *subject_ptr, um_type *um_ptr)
@@ -486,7 +486,7 @@ static bool update_clear_monster(player_type *subject_ptr, um_type *um_ptr)
     if (um_ptr->m_ptr->mflag.has_not(MFLAG::VIEW)) {
         um_ptr->m_ptr->mflag.set(MFLAG::VIEW);
         if (um_ptr->do_disturb && (disturb_pets || is_hostile(um_ptr->m_ptr)))
-            disturb(subject_ptr, TRUE, TRUE);
+            disturb(subject_ptr, TRUE, true);
     }
 
     return true;
@@ -521,7 +521,7 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
 
     um_ptr->m_ptr->mflag.reset(MFLAG::VIEW);
     if (um_ptr->do_disturb && (disturb_pets || is_hostile(um_ptr->m_ptr)))
-        disturb(subject_ptr, TRUE, TRUE);
+        disturb(subject_ptr, TRUE, true);
 }
 
 /*!
