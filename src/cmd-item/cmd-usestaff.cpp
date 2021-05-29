@@ -362,7 +362,7 @@ void exe_use_staff(player_type *creature_ptr, INVENTORY_IDX item)
 
     sound(SOUND_ZAP);
 
-    ident = staff_effect(creature_ptr, o_ptr->sval, &use_charge, false, FALSE, object_is_aware(o_ptr));
+    ident = staff_effect(creature_ptr, o_ptr->sval, &use_charge, false, false, object_is_aware(o_ptr));
 
     if (!(object_is_aware(o_ptr))) {
         chg_virtue(creature_ptr, V_PATIENCE, -1);

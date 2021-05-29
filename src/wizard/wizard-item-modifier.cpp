@@ -142,7 +142,7 @@ void wizard_item_modifier(player_type *creature_ptr)
         if (command_arg <= 0)
             command_arg = 1;
 
-        acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, false, FALSE, true);
+        acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, false, false, true);
         break;
     case 'i':
         (void)ident_spell(creature_ptr, false, TV_NONE);
@@ -157,13 +157,13 @@ void wizard_item_modifier(player_type *creature_ptr)
         if (command_arg <= 0)
             command_arg = 1;
 
-        acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, true, TRUE, true);
+        acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, true, true, true);
         break;
     case 'U':
         wiz_modify_item_activation(creature_ptr);
         break;
     case 'w':
-        do_cmd_wishing(creature_ptr, -1, true, TRUE, true);
+        do_cmd_wishing(creature_ptr, -1, true, true, true);
         break;
     }
 }

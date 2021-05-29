@@ -240,7 +240,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
             msg_format(_("%sの声がささやいた:", "The voice of %s whispers:"), chaos_patrons[creature_ptr->chaos_patron]);
             msg_print(_("「我が与えし物を賢明に使うべし。」", "'Use my gift wisely.'"));
 
-            acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, 1, false, FALSE, false);
+            acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, 1, false, false, false);
             reward = _("上質なアイテムを手に入れた。", "a good item");
             break;
 
@@ -265,7 +265,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
             msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[creature_ptr->chaos_patron]);
             msg_print(_("「汝の行いは貴き報いに値せり。」", "'Thy deed hath earned thee a worthy reward.'"));
 
-            acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, randint1(2) + 1, false, FALSE, false);
+            acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, randint1(2) + 1, false, false, false);
             reward = _("上質なアイテムを手に入れた。", "good items");
             break;
 
