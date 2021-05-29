@@ -548,7 +548,7 @@ static void display_floor_item_list(player_type *player_ptr, const int y, const 
         if (player_ptr->image) {
             sprintf(line, _("(X:%03d Y:%03d) 何か奇妙な物の足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under something strange"), x, y);
         } else {
-            const monster_race *const r_ptr = &r_info[m_ptr->r_idx];
+            const monster_race *const r_ptr = &r_info[m_ptr->ap_r_idx];
             sprintf(line, _("(X:%03d Y:%03d) %sの足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under %s"), x, y, r_ptr->name.c_str());
         }
     } else {
