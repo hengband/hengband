@@ -63,11 +63,11 @@ bool adjacent_grid_check(player_type *target_ptr, monster_type *m_ptr, POSITION 
         if (path_check(target_ptr, m_ptr->fy, m_ptr->fx, next_y, next_x)) {
             *yp = next_y;
             *xp = next_x;
-            return TRUE;
+            return true;
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 void decide_lite_range(player_type *target_ptr, msa_type *msa_ptr)
@@ -112,14 +112,14 @@ static void check_lite_area_by_mspell(player_type *target_ptr, msa_type *msa_ptr
         && in_disintegration_range(target_ptr->current_floor_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x)
         && (one_in_(10) || (projectable(target_ptr, msa_ptr->y, msa_ptr->x, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx) && one_in_(2)))) {
         msa_ptr->do_spell = DO_SPELL_BR_DISI;
-        msa_ptr->success = TRUE;
+        msa_ptr->success = true;
         return;
     }
 
     if (msa_ptr->ability_flags.has(RF_ABILITY::BR_LITE) && (msa_ptr->m_ptr->cdis < get_max_range(target_ptr) / 2)
         && los(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x) && one_in_(5)) {
         msa_ptr->do_spell = DO_SPELL_BR_LITE;
-        msa_ptr->success = TRUE;
+        msa_ptr->success = true;
         return;
     }
 
@@ -130,7 +130,7 @@ static void check_lite_area_by_mspell(player_type *target_ptr, msa_type *msa_ptr
     get_project_point(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, &by, &bx, 0L);
     if ((distance(by, bx, msa_ptr->y, msa_ptr->x) <= 3) && los(target_ptr, by, bx, msa_ptr->y, msa_ptr->x) && one_in_(5)) {
         msa_ptr->do_spell = DO_SPELL_BA_LITE;
-        msa_ptr->success = TRUE;
+        msa_ptr->success = true;
     }
 }
 
@@ -143,7 +143,7 @@ static void decide_lite_breath(player_type *target_ptr, msa_type *msa_ptr)
         msa_ptr->y = msa_ptr->m_ptr->target_y;
         msa_ptr->x = msa_ptr->m_ptr->target_x;
         msa_ptr->ability_flags &= RF_ABILITY_INDIRECT_MASK;
-        msa_ptr->success = TRUE;
+        msa_ptr->success = true;
     }
 
     if ((msa_ptr->y_br_lite == 0) || (msa_ptr->x_br_lite == 0) || (msa_ptr->m_ptr->cdis > get_max_range(target_ptr) / 2) || !one_in_(5))
@@ -157,17 +157,17 @@ static void decide_lite_breath(player_type *target_ptr, msa_type *msa_ptr)
     msa_ptr->y = msa_ptr->y_br_lite;
     msa_ptr->x = msa_ptr->x_br_lite;
     msa_ptr->do_spell = DO_SPELL_BR_LITE;
-    msa_ptr->success = TRUE;
+    msa_ptr->success = true;
 }
 
 bool decide_lite_projection(player_type *target_ptr, msa_type *msa_ptr)
 {
     if (projectable(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y, msa_ptr->x)) {
         feature_projection(target_ptr->current_floor_ptr, msa_ptr);
-        return TRUE;
+        return true;
     }
 
-    msa_ptr->success = FALSE;
+    msa_ptr->success = false;
     check_lite_area_by_mspell(target_ptr, msa_ptr);
     if (!msa_ptr->success)
         msa_ptr->success = adjacent_grid_check(target_ptr, msa_ptr->m_ptr, &msa_ptr->y, &msa_ptr->x, FF_PROJECT, projectable);

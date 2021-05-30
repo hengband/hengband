@@ -81,7 +81,7 @@ static void on_defeat_arena_monster(player_type *player_ptr, monster_death_type 
     if (!floor_ptr->inside_arena || is_pet(md_ptr->m_ptr))
         return;
 
-    player_ptr->exit_bldg = TRUE;
+    player_ptr->exit_bldg = true;
     if (player_ptr->arena_number > MAX_ARENA_MONS)
         msg_print(_("素晴らしい！君こそ真の勝利者だ。", "You are a Genuine Champion!"));
     else
@@ -117,18 +117,18 @@ static void drop_corpse(player_type *player_ptr, monster_death_type *md_ptr)
     if (!is_drop_corpse)
         return;
 
-    bool corpse = FALSE;
+    bool corpse = false;
     if (!(md_ptr->r_ptr->flags9 & RF9_DROP_SKELETON))
-        corpse = TRUE;
+        corpse = true;
     else if ((md_ptr->r_ptr->flags9 & RF9_DROP_CORPSE) && (md_ptr->r_ptr->flags1 & RF1_UNIQUE))
-        corpse = TRUE;
+        corpse = true;
     else if (md_ptr->r_ptr->flags9 & RF9_DROP_CORPSE) {
         if ((0 - ((md_ptr->m_ptr->maxhp) / 4)) > md_ptr->m_ptr->hp) {
             if (one_in_(5))
-                corpse = TRUE;
+                corpse = true;
         } else {
             if (!one_in_(5))
-                corpse = TRUE;
+                corpse = true;
         }
     }
 
@@ -306,7 +306,7 @@ static void drop_items_golds(player_type *player_ptr, monster_death_type *md_ptr
  */
 static void on_defeat_last_boss(player_type *player_ptr)
 {
-    current_world_ptr->total_winner = TRUE;
+    current_world_ptr->total_winner = true;
     add_winner_class(player_ptr->pclass);
     player_ptr->redraw |= PR_TITLE;
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_FINAL_QUEST_CLEAR);
@@ -354,13 +354,13 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
     write_pet_death(player_ptr, md_ptr);
     on_dead_explosion(player_ptr, md_ptr);
     if (md_ptr->m_ptr->mflag2.has(MFLAG2::CHAMELEON)) {
-        choose_new_monster(player_ptr, m_idx, TRUE, MON_CHAMELEON);
+        choose_new_monster(player_ptr, m_idx, true, MON_CHAMELEON);
         md_ptr->r_ptr = &r_info[md_ptr->m_ptr->r_idx];
     }
 
     check_quest_completion(player_ptr, md_ptr->m_ptr);
     on_defeat_arena_monster(player_ptr, md_ptr);
-    if (m_idx == player_ptr->riding && process_fall_off_horse(player_ptr, -1, FALSE))
+    if (m_idx == player_ptr->riding && process_fall_off_horse(player_ptr, -1, false))
         msg_print(_("地面に落とされた。", "You have fallen from the pet you were riding."));
 
     drop_corpse(player_ptr, md_ptr);

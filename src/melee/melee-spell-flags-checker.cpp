@@ -63,7 +63,7 @@ static void decide_indirection_melee_spell(player_type *target_ptr, melee_spell_
 static bool check_melee_spell_projection(player_type *target_ptr, melee_spell_type *ms_ptr)
 {
     if (ms_ptr->target_idx != 0)
-        return TRUE;
+        return true;
 
     int start;
     int plus = 1;
@@ -86,10 +86,10 @@ static bool check_melee_spell_projection(player_type *target_ptr, melee_spell_ty
             || !projectable(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx))
             continue;
 
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 static void check_darkness(player_type *target_ptr, melee_spell_type *ms_ptr)
@@ -185,19 +185,19 @@ static void check_melee_spell_breath(player_type *target_ptr, melee_spell_type *
         return;
 
     POSITION rad = (ms_ptr->r_ptr->flags2 & RF2_POWERFUL) ? 3 : 2;
-    if (!breath_direct(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, rad, 0, TRUE)) {
+    if (!breath_direct(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, rad, 0, true)) {
         ms_ptr->ability_flags.reset(RF_ABILITY_BREATH_MASK);
         return;
     }
 
     if (ms_ptr->ability_flags.has(RF_ABILITY::BR_LITE)
-        && !breath_direct(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, rad, GF_LITE, TRUE)) {
+        && !breath_direct(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, rad, GF_LITE, true)) {
         ms_ptr->ability_flags.reset(RF_ABILITY::BR_LITE);
         return;
     }
 
     if (ms_ptr->ability_flags.has(RF_ABILITY::BR_DISI)
-        && !breath_direct(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, rad, GF_DISINTEGRATE, TRUE)) {
+        && !breath_direct(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, rad, GF_DISINTEGRATE, true)) {
         ms_ptr->ability_flags.reset(RF_ABILITY::BR_DISI);
     }
 }
@@ -301,7 +301,7 @@ static void check_smart(player_type *target_ptr, melee_spell_type *ms_ptr)
 static bool set_melee_spell_set(player_type *target_ptr, melee_spell_type *ms_ptr)
 {
     if (ms_ptr->ability_flags.none())
-        return FALSE;
+        return false;
 
     EnumClassFlagGroup<RF_ABILITY>::get_flags(ms_ptr->ability_flags, std::back_inserter(ms_ptr->spells));
 
@@ -311,13 +311,13 @@ static bool set_melee_spell_set(player_type *target_ptr, melee_spell_type *ms_pt
 bool check_melee_spell_set(player_type *target_ptr, melee_spell_type *ms_ptr)
 {
     if (monster_confused_remaining(ms_ptr->m_ptr))
-        return FALSE;
+        return false;
 
     ms_ptr->ability_flags = ms_ptr->r_ptr->ability_flags;
     decide_melee_spell_target(target_ptr, ms_ptr);
     decide_indirection_melee_spell(target_ptr, ms_ptr);
     if (!check_melee_spell_projection(target_ptr, ms_ptr))
-        return FALSE;
+        return false;
 
     ms_ptr->y = ms_ptr->t_ptr->fy;
     ms_ptr->x = ms_ptr->t_ptr->fx;

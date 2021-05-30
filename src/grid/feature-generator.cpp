@@ -26,7 +26,7 @@ void gen_caverns_and_lakes(player_type *owner_ptr, dungeon_type *dungeon_ptr, du
 {
     floor_type *floor_ptr = owner_ptr->current_floor_ptr;
     if ((floor_ptr->dun_level > 30) && one_in_(DUN_DEST * 2) && small_levels && dungeon_ptr->flags.has(DF::DESTROY)) {
-        dd_ptr->destroyed = TRUE;
+        dd_ptr->destroyed = true;
         build_lake(owner_ptr, one_in_(2) ? LAKE_T_CAVE : LAKE_T_EARTH_VAULT);
     }
 
@@ -88,13 +88,13 @@ void gen_caverns_and_lakes(player_type *owner_ptr, dungeon_type *dungeon_ptr, du
 
     if ((floor_ptr->dun_level > DUN_CAVERN) && !dd_ptr->empty_level && dungeon_ptr->flags.has(DF::CAVERN) && !dd_ptr->laketype && !dd_ptr->destroyed
         && (randint1(1000) < floor_ptr->dun_level)) {
-        dd_ptr->cavern = TRUE;
+        dd_ptr->cavern = true;
         msg_print_wizard(owner_ptr, CHEAT_DUNGEON, _("洞窟を生成。", "Cavern on level."));
         build_cavern(owner_ptr);
     }
 
     if (quest_number(owner_ptr, floor_ptr->dun_level))
-        dd_ptr->destroyed = FALSE;
+        dd_ptr->destroyed = false;
 }
 
 bool has_river_flag(dungeon_type *dungeon_ptr)
@@ -140,15 +140,15 @@ static int next_to_corr(floor_type *floor_ptr, POSITION y1, POSITION x1)
 static bool possible_doorway(floor_type *floor_ptr, POSITION y, POSITION x)
 {
     if (next_to_corr(floor_ptr, y, x) < 2)
-        return FALSE;
+        return false;
 
     if (cave_has_flag_bold(floor_ptr, y - 1, x, FF_WALL) && cave_has_flag_bold(floor_ptr, y + 1, x, FF_WALL))
-        return TRUE;
+        return true;
 
     if (cave_has_flag_bold(floor_ptr, y, x - 1, FF_WALL) && cave_has_flag_bold(floor_ptr, y, x + 1, FF_WALL))
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -167,5 +167,5 @@ void try_door(player_type *player_ptr, dt_type *dt_ptr, POSITION y, POSITION x)
     can_place_door &= possible_doorway(floor_ptr, y, x);
     can_place_door &= d_info[player_ptr->dungeon_idx].flags.has_not(DF::NO_DOORS);
     if (can_place_door)
-        place_random_door(player_ptr, y, x, FALSE);
+        place_random_door(player_ptr, y, x, false);
 }

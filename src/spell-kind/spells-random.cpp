@@ -47,9 +47,9 @@ void call_chaos(player_type *caster_ptr)
         GF_ROCKET, GF_NUKE, GF_HELL_FIRE, GF_DISINTEGRATE, GF_PSY_SPEAR };
 
     int chaos_type = hurt_types[randint0(31)];
-    bool line_chaos = FALSE;
+    bool line_chaos = false;
     if (one_in_(4))
-        line_chaos = TRUE;
+        line_chaos = true;
 
     int dir;
     if (one_in_(6)) {
@@ -93,10 +93,10 @@ void call_chaos(player_type *caster_ptr)
 bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
 {
     BIT_FLAGS flg = (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP);
-    bool is_first_curse = TRUE;
+    bool is_first_curse = true;
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     while (is_first_curse || (one_in_(3) && !stop_ty)) {
-        is_first_curse = FALSE;
+        is_first_curse = false;
         switch (randint1(34)) {
         case 28:
         case 29:
@@ -124,7 +124,7 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
                 msg_print(_("周囲の空間が歪んだ！", "Space warps about you!"));
                 teleport_player(target_ptr, damroll(10, 10), TELEPORT_PASSIVE);
                 if (randint0(13))
-                    (*count) += activate_hi_summon(target_ptr, target_ptr->y, target_ptr->x, FALSE);
+                    (*count) += activate_hi_summon(target_ptr, target_ptr->y, target_ptr->x, false);
                 if (!one_in_(6))
                     break;
             }
@@ -152,7 +152,7 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
         case 4:
         case 5:
         case 6:
-            (*count) += activate_hi_summon(target_ptr, target_ptr->y, target_ptr->x, FALSE);
+            (*count) += activate_hi_summon(target_ptr, target_ptr->y, target_ptr->x, false);
             if (!one_in_(6))
                 break;
             /* Fall through */
@@ -187,7 +187,7 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
                     set_paralyzed(target_ptr, target_ptr->paralyzed + randint1(3));
                 else
                     set_paralyzed(target_ptr, target_ptr->paralyzed + randint1(13));
-                stop_ty = TRUE;
+                stop_ty = true;
             }
 
             if (!one_in_(6))
@@ -210,7 +210,7 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
         case 25:
             if ((floor_ptr->dun_level > 65) && !stop_ty) {
                 (*count) += summon_cyber(target_ptr, -1, target_ptr->y, target_ptr->x);
-                stop_ty = TRUE;
+                stop_ty = true;
                 break;
             }
 
@@ -219,9 +219,9 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
             /* Fall through */
         default:
             for (int i = 0; i < A_MAX; i++) {
-                bool is_first_dec_stat = TRUE;
+                bool is_first_dec_stat = true;
                 while (is_first_dec_stat || one_in_(2)) {
-                    is_first_dec_stat = FALSE;
+                    is_first_dec_stat = false;
                     (void)do_dec_stat(target_ptr, i);
                 }
             }
@@ -323,14 +323,14 @@ void wild_magic(player_type *caster_ptr, int spell)
         break;
     case 36:
     case 37:
-        activate_hi_summon(caster_ptr, caster_ptr->y, caster_ptr->x, FALSE);
+        activate_hi_summon(caster_ptr, caster_ptr->y, caster_ptr->x, false);
         break;
     case 38:
         (void)summon_cyber(caster_ptr, -1, caster_ptr->y, caster_ptr->x);
         break;
     default: {
         int count = 0;
-        (void)activate_ty_curse(caster_ptr, FALSE, &count);
+        (void)activate_ty_curse(caster_ptr, false, &count);
         break;
     }
     }
@@ -466,12 +466,12 @@ void cast_wonder(player_type *caster_ptr, DIRECTION dir)
     }
 
     if (die < 106) {
-        (void)destroy_area(caster_ptr, caster_ptr->y, caster_ptr->x, 13 + randint0(5), FALSE);
+        (void)destroy_area(caster_ptr, caster_ptr->y, caster_ptr->x, 13 + randint0(5), false);
         return;
     }
 
     if (die < 108) {
-        symbol_genocide(caster_ptr, plev + 50, TRUE);
+        symbol_genocide(caster_ptr, plev + 50, true);
         return;
     }
 

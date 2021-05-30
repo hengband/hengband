@@ -53,18 +53,18 @@ static bool mon_will_run(player_type *target_ptr, MONSTER_IDX m_idx)
     }
 
     if (m_ptr->cdis > MAX_SIGHT + 5)
-        return FALSE;
+        return false;
     if (monster_fear_remaining(m_ptr))
-        return TRUE;
+        return true;
     if (m_ptr->cdis <= 5)
-        return FALSE;
+        return false;
 
     PLAYER_LEVEL p_lev = target_ptr->lev;
     DEPTH m_lev = r_ptr->level + (m_idx & 0x08) + 25;
     if (m_lev > p_lev + 4)
-        return FALSE;
+        return false;
     if (m_lev + 4 <= p_lev)
-        return TRUE;
+        return true;
 
     HIT_POINT p_chp = target_ptr->chp;
     HIT_POINT p_mhp = target_ptr->mhp;
@@ -73,9 +73,9 @@ static bool mon_will_run(player_type *target_ptr, MONSTER_IDX m_idx)
     u32b p_val = (p_lev * p_mhp) + (p_chp << 2);
     u32b m_val = (m_lev * m_mhp) + (m_chp << 2);
     if (p_val * m_mhp > m_val * p_mhp)
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -97,15 +97,15 @@ static bool sweep_ranged_attack_grid(player_type *target_ptr, MONSTER_IDX m_idx,
     POSITION x1 = m_ptr->fx;
 
     if (projectable(target_ptr, y1, x1, target_ptr->y, target_ptr->x))
-        return FALSE;
+        return false;
 
     int now_cost = grid_cost(&floor_ptr->grid_array[y1][x1], r_ptr);
     if (now_cost == 0)
         now_cost = 999;
 
-    bool can_open_door = FALSE;
+    bool can_open_door = false;
     if (r_ptr->flags2 & (RF2_BASH_DOOR | RF2_OPEN_DOOR)) {
-        can_open_door = TRUE;
+        can_open_door = true;
     }
 
     int best = 999;
@@ -115,7 +115,7 @@ static bool sweep_ranged_attack_grid(player_type *target_ptr, MONSTER_IDX m_idx,
         if (!in_bounds2(floor_ptr, y, x))
             continue;
         if (player_bold(target_ptr, y, x))
-            return FALSE;
+            return false;
 
         grid_type *g_ptr;
         g_ptr = &floor_ptr->grid_array[y][x];
@@ -144,9 +144,9 @@ static bool sweep_ranged_attack_grid(player_type *target_ptr, MONSTER_IDX m_idx,
     }
 
     if (best == 999)
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -208,14 +208,14 @@ static void sweep_movable_grid(player_type *target_ptr, MONSTER_IDX m_idx, POSIT
     }
 
     int best;
-    bool use_scent = FALSE;
+    bool use_scent = false;
     if (grid_cost(g_ptr, r_ptr)) {
         best = 999;
     } else if (g_ptr->when) {
         if (floor_ptr->grid_array[target_ptr->y][target_ptr->x].when - g_ptr->when > 127)
             return;
 
-        use_scent = TRUE;
+        use_scent = true;
         best = 0;
     } else {
         return;
@@ -299,12 +299,12 @@ static bool sweep_runnable_away_grid(floor_type *floor_ptr, MONSTER_IDX m_idx, P
     }
 
     if (score == -1)
-        return FALSE;
+        return false;
 
     (*yp) = fy - gy;
     (*xp) = fx - gx;
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -324,7 +324,7 @@ bool get_movable_grid(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
     POSITION y = 0, x = 0;
     POSITION y2 = target_ptr->y;
     POSITION x2 = target_ptr->x;
-    bool done = FALSE;
+    bool done = false;
     bool will_run = mon_will_run(target_ptr, m_idx);
     grid_type *g_ptr;
     bool no_flow = m_ptr->mflag2.has(MFLAG2::NOFLOW) && grid_cost(&floor_ptr->grid_array[m_ptr->fy][m_ptr->fx], r_ptr) > 2;
@@ -337,7 +337,7 @@ bool get_movable_grid(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
             && projectable(target_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x)) {
             y = m_ptr->fy - m_ptr->target_y;
             x = m_ptr->fx - m_ptr->target_x;
-            done = TRUE;
+            done = true;
         }
     }
 
@@ -366,7 +366,7 @@ bool get_movable_grid(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
 
             if (room < (8 * (target_ptr->chp + target_ptr->csp)) / (target_ptr->mhp + target_ptr->msp)) {
                 if (find_hiding(target_ptr, m_idx, &y, &x))
-                    done = TRUE;
+                    done = true;
             }
         }
 
@@ -390,7 +390,7 @@ bool get_movable_grid(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
 
             y = m_ptr->fy - y2;
             x = m_ptr->fx - x2;
-            done = TRUE;
+            done = true;
         }
     }
 
@@ -408,7 +408,7 @@ bool get_movable_grid(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
             int tmp_y = (-y);
             if (find_safety(target_ptr, m_idx, &y, &x) && !no_flow) {
                 if (sweep_runnable_away_grid(target_ptr->current_floor_ptr, m_idx, &y, &x))
-                    done = TRUE;
+                    done = true;
             }
 
             if (!done) {
@@ -419,8 +419,8 @@ bool get_movable_grid(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
     }
 
     if (!x && !y)
-        return FALSE;
+        return false;
 
     store_moves_val(mm, y, x);
-    return TRUE;
+    return true;
 }

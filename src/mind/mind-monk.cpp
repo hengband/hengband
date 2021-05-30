@@ -34,7 +34,7 @@ static void set_stance(player_type *creature_ptr, const int new_stance)
 bool choose_monk_stance(player_type *creature_ptr)
 {
     if (cmd_limit_confused(creature_ptr))
-        return FALSE;
+        return false;
 
     screen_save();
     prt(_(" a) 構えをとく", " a) No form"), 2, 20);
@@ -50,11 +50,11 @@ bool choose_monk_stance(player_type *creature_ptr)
     prt(_("        どの構えをとりますか？", "        Choose Stance: "), 1, 14);
 
     int new_stance = 0;
-    while (TRUE) {
+    while (true) {
         char choice = inkey();
         if (choice == ESCAPE) {
             screen_load();
-            return FALSE;
+            return false;
         }
         
         if ((choice == 'a') || (choice == 'A')) {
@@ -63,7 +63,7 @@ bool choose_monk_stance(player_type *creature_ptr)
             } else
                 msg_print(_("もともと構えていない。", "You are not in a special stance."));
             screen_load();
-            return TRUE;
+            return true;
         }
         
         if ((choice == 'b') || (choice == 'B')) {
@@ -84,5 +84,5 @@ bool choose_monk_stance(player_type *creature_ptr)
     set_stance(creature_ptr, new_stance);
     creature_ptr->redraw |= PR_STATE;
     screen_load();
-    return TRUE;
+    return true;
 }

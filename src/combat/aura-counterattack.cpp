@@ -43,11 +43,11 @@ static void aura_fire_by_monster_attack(player_type *target_ptr, monap_type *mon
     }
 
     HIT_POINT dam = damroll(2, 6);
-    dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
+    dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, false);
     msg_format(_("%^sは突然熱くなった！", "%^s is suddenly very hot!"), monap_ptr->m_name);
     if (mon_take_hit(target_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, _("は灰の山になった。", " turns into a pile of ash."))) {
-        monap_ptr->blinked = FALSE;
-        monap_ptr->alive = FALSE;
+        monap_ptr->blinked = false;
+        monap_ptr->alive = false;
     }
 }
 
@@ -65,11 +65,11 @@ static void aura_elec_by_monster_attack(player_type *target_ptr, monap_type *mon
     }
 
     HIT_POINT dam = damroll(2, 6);
-    dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
+    dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, false);
     msg_format(_("%^sは電撃をくらった！", "%^s gets zapped!"), monap_ptr->m_name);
     if (mon_take_hit(target_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, _("は燃え殻の山になった。", " turns into a pile of cinders."))) {
-        monap_ptr->blinked = FALSE;
-        monap_ptr->alive = FALSE;
+        monap_ptr->blinked = false;
+        monap_ptr->alive = false;
     }
 }
 
@@ -87,11 +87,11 @@ static void aura_cold_by_monster_attack(player_type *target_ptr, monap_type *mon
     }
 
     HIT_POINT dam = damroll(2, 6);
-    dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
+    dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, false);
     msg_format(_("%^sは冷気をくらった！", "%^s is very cold!"), monap_ptr->m_name);
     if (mon_take_hit(target_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, _("は凍りついた。", " was frozen."))) {
-        monap_ptr->blinked = FALSE;
-        monap_ptr->alive = FALSE;
+        monap_ptr->blinked = false;
+        monap_ptr->alive = false;
     }
 }
 
@@ -106,11 +106,11 @@ static void aura_shards_by_monster_attack(player_type *target_ptr, monap_type *m
             r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_RES_SHAR_MASK);
     } else {
         HIT_POINT dam = damroll(2, 6);
-        dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
+        dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, false);
         msg_format(_("%^sは鏡の破片をくらった！", "%^s gets sliced!"), monap_ptr->m_name);
         if (mon_take_hit(target_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, _("はズタズタになった。", " is torn to pieces."))) {
-            monap_ptr->blinked = FALSE;
-            monap_ptr->alive = FALSE;
+            monap_ptr->blinked = false;
+            monap_ptr->alive = false;
         }
     }
 
@@ -135,11 +135,11 @@ static void aura_holy_by_monster_attack(player_type *target_ptr, monap_type *mon
     }
 
     HIT_POINT dam = damroll(2, 6);
-    dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
+    dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, false);
     msg_format(_("%^sは聖なるオーラで傷ついた！", "%^s is injured by holy power!"), monap_ptr->m_name);
     if (mon_take_hit(target_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, _("は倒れた。", " is destroyed."))) {
-        monap_ptr->blinked = FALSE;
-        monap_ptr->alive = FALSE;
+        monap_ptr->blinked = false;
+        monap_ptr->alive = false;
     }
 
     if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
@@ -160,11 +160,11 @@ static void aura_force_by_monster_attack(player_type *target_ptr, monap_type *mo
     }
 
     HIT_POINT dam = damroll(2, 6);
-    dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
+    dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, false);
     msg_format(_("%^sが鋭い闘気のオーラで傷ついた！", "%^s is injured by the Force"), monap_ptr->m_name);
     if (mon_take_hit(target_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, _("は倒れた。", " is destroyed."))) {
-        monap_ptr->blinked = FALSE;
-        monap_ptr->alive = FALSE;
+        monap_ptr->blinked = false;
+        monap_ptr->alive = false;
     }
 }
 
@@ -192,11 +192,11 @@ static void aura_shadow_by_monster_attack(player_type *target_ptr, monap_type *m
     if ((o_armed_ptr->k_idx) && object_is_cursed(o_armed_ptr))
         dam *= 2;
 
-    dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
+    dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, false);
     msg_format(_("影のオーラが%^sに反撃した！", "Enveloping shadows attack %^s."), monap_ptr->m_name);
     if (mon_take_hit(target_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, _("は倒れた。", " is destroyed."))) {
-        monap_ptr->blinked = FALSE;
-        monap_ptr->alive = FALSE;
+        monap_ptr->blinked = false;
+        monap_ptr->alive = false;
         return;
     }
 

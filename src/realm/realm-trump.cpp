@@ -37,11 +37,11 @@
  */
 concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 {
-    bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
-    bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
-    bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
-    bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
-    bool fail = (mode == SPELL_FAIL) ? TRUE : FALSE;
+    bool name = (mode == SPELL_NAME) ? true : false;
+    bool desc = (mode == SPELL_DESC) ? true : false;
+    bool info = (mode == SPELL_INFO) ? true : false;
+    bool cast = (mode == SPELL_CAST) ? true : false;
+    bool fail = (mode == SPELL_FAIL) ? true : false;
 
     DIRECTION dir;
     PLAYER_LEVEL plev = caster_ptr->lev;
@@ -145,7 +145,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_duration(base, sides);
 
             if (cast) {
-                set_tim_esp(caster_ptr, randint1(sides) + base, FALSE);
+                set_tim_esp(caster_ptr, randint1(sides) + base, false);
             }
         }
         break;
@@ -206,7 +206,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 if (!get_aim_dir(caster_ptr, &dir))
                     return NULL;
 
-                fetch_item(caster_ptr, dir, weight, FALSE);
+                fetch_item(caster_ptr, dir, weight, false);
             }
         }
         break;
@@ -278,7 +278,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
                 /* Temporary enable target_pet option */
                 bool old_target_pet = target_pet;
-                target_pet = TRUE;
+                target_pet = true;
 
                 result = get_aim_dir(caster_ptr, &dir);
 
@@ -539,7 +539,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
         {
             if (cast) {
-                if (!identify_fully(caster_ptr, FALSE, TV_NONE))
+                if (!identify_fully(caster_ptr, false, TV_NONE))
                     return NULL;
             }
         }
@@ -562,7 +562,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
                 /* Temporary enable target_pet option */
                 bool old_target_pet = target_pet;
-                target_pet = TRUE;
+                target_pet = true;
 
                 result = get_aim_dir(caster_ptr, &dir);
 

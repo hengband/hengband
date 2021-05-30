@@ -22,7 +22,7 @@ static bool fire_crimson(player_type *shooter_ptr)
 {
     DIRECTION dir;
     if (!get_aim_dir(shooter_ptr, &dir))
-        return FALSE;
+        return false;
 
     POSITION tx = shooter_ptr->x + 99 * ddx[dir];
     POSITION ty = shooter_ptr->y + 99 * ddy[dir];
@@ -47,13 +47,13 @@ static bool fire_crimson(player_type *shooter_ptr)
     for (int i = 0; i < num; i++)
         (void)project(shooter_ptr, 0, shooter_ptr->lev / 20 + 1, ty, tx, shooter_ptr->lev * shooter_ptr->lev * 6 / 50, GF_ROCKET, flg);
 
-    return TRUE;
+    return true;
 }
 
 bool activate_crimson(player_type *user_ptr, object_type *o_ptr)
 {
     if (o_ptr->name1 != ART_CRIMSON)
-        return FALSE;
+        return false;
 
     msg_print(_("せっかくだから『クリムゾン』をぶっぱなすぜ！", "I'll fire CRIMSON! SEKKAKUDAKARA!"));
     return fire_crimson(user_ptr);

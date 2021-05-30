@@ -100,7 +100,7 @@ void rd_s32b(s32b *ip) { rd_u32b((u32b *)ip); }
  */
 void rd_string(char *str, int max)
 {
-    for (int i = 0; TRUE; i++) {
+    for (int i = 0; true; i++) {
         byte tmp8u;
         rd_byte(&tmp8u);
         if (i < max)

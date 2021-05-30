@@ -61,7 +61,7 @@ static errr process_pref_file_aux(player_type *creature_ptr, concptr name, int p
 
     int line = -1;
     errr err = 0;
-    bool bypass = FALSE;
+    bool bypass = false;
     while (angband_fgets(fp, file_read__buf, FILE_READ_BUFF_SIZE) == 0) {
         line++;
         if (!file_read__buf[0])
@@ -198,7 +198,7 @@ errr process_histpref_file(player_type *creature_ptr, concptr name)
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
 
     /* Hack -- prevent modification birth options in this file */
-    current_world_ptr->character_xtra = TRUE;
+    current_world_ptr->character_xtra = true;
     errr err = process_pref_file_aux(creature_ptr, buf, PREF_TYPE_HISTPREF);
     current_world_ptr->character_xtra = old_character_xtra;
     return err;
@@ -241,7 +241,7 @@ bool open_auto_dump(FILE **fpp, concptr buf, concptr mark)
     if (!fpp) {
         msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), buf);
         msg_print(NULL);
-        return FALSE;
+        return false;
     }
 
     fprintf(*fpp, "%s\n", header_mark_str);
@@ -249,7 +249,7 @@ bool open_auto_dump(FILE **fpp, concptr buf, concptr mark)
     auto_dump_printf(*fpp, _("# *警告!!* 以降の行は自動生成されたものです。\n", "# *Warning!*  The lines below are an automatic dump.\n"));
     auto_dump_printf(
         *fpp, _("# *警告!!* 後で自動的に削除されるので編集しないでください。\n", "# Don't edit them; changes will be deleted and replaced automatically.\n"));
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -297,7 +297,7 @@ void load_all_pref_files(player_type *player_ptr)
         process_pref_file(player_ptr, buf);
     }
 
-    autopick_load_pref(player_ptr, FALSE);
+    autopick_load_pref(player_ptr, false);
 }
 
 /*!
@@ -313,7 +313,7 @@ bool read_histpref(player_type *creature_ptr)
     char histbuf[HISTPREF_LIMIT];
 
     if (!get_check(_("生い立ち設定ファイルをロードしますか? ", "Load background history preference file? ")))
-        return FALSE;
+        return false;
 
     histbuf[0] = '\0';
     histpref_buf = histbuf;
@@ -330,12 +330,12 @@ bool read_histpref(player_type *creature_ptr)
         msg_print(_("生い立ち設定ファイルの読み込みに失敗しました。", "Failed to load background history preference."));
         msg_print(NULL);
         histpref_buf = NULL;
-        return FALSE;
+        return false;
     } else if (!histpref_buf[0]) {
         msg_print(_("有効な生い立ち設定はこのファイルにありません。", "There does not exist valid background history preference."));
         msg_print(NULL);
         histpref_buf = NULL;
-        return FALSE;
+        return false;
     }
 
     for (i = 0; i < 4; i++)
@@ -371,5 +371,5 @@ bool read_histpref(player_type *creature_ptr)
     }
 
     histpref_buf = NULL;
-    return TRUE;
+    return true;
 }

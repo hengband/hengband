@@ -97,8 +97,8 @@ static void attack_classify(player_type *attacker_ptr, player_attack_type *pa_pt
     case CLASS_MONK:
     case CLASS_FORCETRAINER:
     case CLASS_BERSERKER:
-        if ((empty_hands(attacker_ptr, TRUE) & EMPTY_HAND_MAIN) && !attacker_ptr->riding)
-            pa_ptr->monk_attack = TRUE;
+        if ((empty_hands(attacker_ptr, true) & EMPTY_HAND_MAIN) && !attacker_ptr->riding)
+            pa_ptr->monk_attack = true;
         return;
     default:
         return;
@@ -335,11 +335,11 @@ static void process_weapon_attack(player_type *attacker_ptr, player_attack_type 
     object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
     auto dd = o_ptr->dd + attacker_ptr->to_dd[pa_ptr->hand] + magical_brand_extra_dice(pa_ptr);
     pa_ptr->attack_damage = damroll(dd, o_ptr->ds + attacker_ptr->to_ds[pa_ptr->hand]);
-    pa_ptr->attack_damage = calc_attack_damage_with_slay(attacker_ptr, o_ptr, pa_ptr->attack_damage, pa_ptr->m_ptr, pa_ptr->mode, FALSE);
+    pa_ptr->attack_damage = calc_attack_damage_with_slay(attacker_ptr, o_ptr, pa_ptr->attack_damage, pa_ptr->m_ptr, pa_ptr->mode, false);
     calc_surprise_attack_damage(attacker_ptr, pa_ptr);
 
     if (does_equip_cause_earthquake(attacker_ptr, pa_ptr) || (pa_ptr->chaos_effect == CE_QUAKE) || (pa_ptr->mode == HISSATSU_QUAKE))
-        *do_quake = TRUE;
+        *do_quake = true;
 
     auto do_impact = does_weapon_has_flag(attacker_ptr->impact, pa_ptr);
     if ((!(o_ptr->tval == TV_SWORD) || !(o_ptr->sval == SV_POISON_NEEDLE)) && !(pa_ptr->mode == HISSATSU_KYUSHO))
@@ -436,9 +436,9 @@ static void apply_damage_negative_effect(player_attack_type *pa_ptr, bool is_zan
 static bool check_fear_death(player_type *attacker_ptr, player_attack_type *pa_ptr, const int num, const bool is_lowlevel)
 {
     if (!mon_take_hit(attacker_ptr, pa_ptr->m_idx, pa_ptr->attack_damage, pa_ptr->fear, NULL))
-        return FALSE;
+        return false;
 
-    *(pa_ptr->mdeath) = TRUE;
+    *(pa_ptr->mdeath) = true;
     if ((attacker_ptr->pclass == CLASS_BERSERKER) && attacker_ptr->energy_use) {
         PlayerEnergy energy(attacker_ptr);
         if (can_attack_with_main_hand(attacker_ptr) && can_attack_with_sub_hand(attacker_ptr)) {
@@ -460,7 +460,7 @@ static bool check_fear_death(player_type *attacker_ptr, player_attack_type *pa_p
     if ((o_ptr->name1 == ART_ZANTETSU) && is_lowlevel)
         msg_print(_("またつまらぬものを斬ってしまった．．．", "Sigh... Another trifling thing I've cut...."));
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -516,7 +516,7 @@ static void cause_earthquake(player_type *attacker_ptr, player_attack_type *pa_p
 
     earthquake(attacker_ptr, attacker_ptr->y, attacker_ptr->x, 10, 0);
     if (attacker_ptr->current_floor_ptr->grid_array[y][x].m_idx == 0)
-        *(pa_ptr->mdeath) = TRUE;
+        *(pa_ptr->mdeath) = true;
 }
 
 /*!
@@ -533,8 +533,8 @@ static void cause_earthquake(player_type *attacker_ptr, player_attack_type *pa_p
  */
 void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITION x, bool *fear, bool *mdeath, s16b hand, combat_options mode)
 {
-    bool do_quake = FALSE;
-    bool drain_msg = TRUE;
+    bool do_quake = false;
+    bool drain_msg = true;
 
     player_attack_type tmp_attack;
     auto pa_ptr = initialize_player_attack_type(&tmp_attack, attacker_ptr, y, x, hand, mode, fear, mdeath);
@@ -572,11 +572,11 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
 
         touch_zap_player(pa_ptr->m_ptr, attacker_ptr);
         process_drain(attacker_ptr, pa_ptr, is_human, &drain_msg);
-        pa_ptr->can_drain = FALSE;
+        pa_ptr->can_drain = false;
         pa_ptr->drain_result = 0;
         change_monster_stat(attacker_ptr, pa_ptr, y, x, &num);
-        pa_ptr->backstab = FALSE;
-        pa_ptr->surprise_attack = FALSE;
+        pa_ptr->backstab = false;
+        pa_ptr->surprise_attack = false;
     }
 
     if (pa_ptr->weak && !(*mdeath))

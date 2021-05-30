@@ -108,7 +108,7 @@ static void monster_pickup_object(player_type *target_ptr, turn_flags *turn_flag
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     if (is_special_object) {
         if (turn_flags_ptr->do_take && (r_ptr->flags2 & RF2_STUPID)) {
-            turn_flags_ptr->did_take_item = TRUE;
+            turn_flags_ptr->did_take_item = true;
             if (m_ptr->ml && player_can_see_bold(target_ptr, ny, nx)) {
                 msg_format(_("%^sは%sを拾おうとしたが、だめだった。", "%^s tries to pick up %s, but fails."), m_name, o_name);
             }
@@ -118,7 +118,7 @@ static void monster_pickup_object(player_type *target_ptr, turn_flags *turn_flag
     }
 
     if (turn_flags_ptr->do_take) {
-        turn_flags_ptr->did_take_item = TRUE;
+        turn_flags_ptr->did_take_item = true;
         if (player_can_see_bold(target_ptr, ny, nx)) {
             msg_format(_("%^sが%sを拾った。", "%^s picks up %s."), m_name, o_name);
         }
@@ -134,7 +134,7 @@ static void monster_pickup_object(player_type *target_ptr, turn_flags *turn_flag
     if (is_pet(m_ptr))
         return;
 
-    turn_flags_ptr->did_kill_item = TRUE;
+    turn_flags_ptr->did_kill_item = true;
     if (player_has_los_bold(target_ptr, ny, nx)) {
         msg_format(_("%^sが%sを破壊した。", "%^s destroys %s."), m_name, o_name);
     }

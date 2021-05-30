@@ -167,7 +167,7 @@ FEAT_IDX choose_random_trap(player_type *trapped_ptr)
 
     /* Pick a trap */
     floor_type *floor_ptr = trapped_ptr->current_floor_ptr;
-    while (TRUE) {
+    while (true) {
         /* Hack -- pick a trap */
         feat = normal_traps[randint0(MAX_NORMAL_TRAPS)];
 
@@ -263,21 +263,21 @@ static int check_hit_from_monster_to_player(player_type *target_ptr, int power)
 
     if (target_ptr->pseikaku == PERSONALITY_LAZY)
         if (one_in_(20))
-            return TRUE;
+            return true;
 
     /* Paranoia -- No power */
     if (power <= 0)
-        return FALSE;
+        return false;
 
     /* Total armor */
     ac = target_ptr->ac + target_ptr->to_a;
 
     /* Power competes against Armor */
     if (randint1(power) > ((ac * 3) / 4))
-        return TRUE;
+        return true;
 
     /* Assume miss */
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -342,13 +342,13 @@ static void hit_trap_pit(player_type *trapped_ptr, enum trap_type trap_feat_type
  */
 static bool hit_trap_dart(player_type *target_ptr)
 {
-    bool hit = FALSE;
+    bool hit = false;
 
     if (check_hit_from_monster_to_player(target_ptr, 125)) {
         msg_print(_("小さなダーツが飛んできて刺さった！", "A small dart hits you!"));
         take_hit(target_ptr, DAMAGE_ATTACK, damroll(1, 4), _("ダーツの罠", "a dart trap"));
         if (!check_multishadow(target_ptr))
-            hit = TRUE;
+            hit = true;
     } else {
         msg_print(_("小さなダーツが飛んできた！が、運良く当たらなかった。", "A small dart barely misses you."));
     }
@@ -373,7 +373,7 @@ static void hit_trap_lose_stat(player_type *target_ptr, int stat)
 static void hit_trap_slow(player_type *target_ptr)
 {
     if (hit_trap_dart(target_ptr)) {
-        set_slow(target_ptr, target_ptr->slow + randint0(20) + 20, FALSE);
+        set_slow(target_ptr, target_ptr->slow + randint0(20) + 20, false);
     }
 }
 
@@ -407,7 +407,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
     enum trap_type trap_feat_type = has_flag(f_ptr->flags, FF_TRAP) ? (enum trap_type)f_ptr->subtype : NOT_TRAP;
     concptr name = _("トラップ", "a trap");
 
-    disturb(trapped_ptr, FALSE, TRUE);
+    disturb(trapped_ptr, false, true);
 
     cave_alter_feat(trapped_ptr, y, x, FF_HIT_TRAP);
 
@@ -431,11 +431,11 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 
             /* Still alive and autosave enabled */
             if (autosave_l && (trapped_ptr->chp >= 0))
-                do_cmd_save_game(trapped_ptr, TRUE);
+                do_cmd_save_game(trapped_ptr, true);
 
             exe_write_diary(trapped_ptr, DIARY_DESCRIPTION, 0, _("落とし戸に落ちた", "fell through a trap door!"));
             prepare_change_floor_mode(trapped_ptr, CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
-            trapped_ptr->leaving = TRUE;
+            trapped_ptr->leaving = true;
         }
         break;
     }
@@ -456,7 +456,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 
         if (trapped_ptr->current_floor_ptr->dun_level > randint1(100)) /* No nasty effect for low levels */
         {
-            bool stop_ty = FALSE;
+            bool stop_ty = false;
             int count = 0;
 
             do {
@@ -475,14 +475,14 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
     case TRAP_FIRE: {
         msg_print(_("炎に包まれた！", "You are enveloped in flames!"));
         dam = damroll(4, 6);
-        (void)fire_dam(trapped_ptr, dam, _("炎のトラップ", "a fire trap"), FALSE);
+        (void)fire_dam(trapped_ptr, dam, _("炎のトラップ", "a fire trap"), false);
         break;
     }
 
     case TRAP_ACID: {
         msg_print(_("酸が吹きかけられた！", "You are splashed with acid!"));
         dam = damroll(4, 6);
-        (void)acid_dam(trapped_ptr, dam, _("酸のトラップ", "an acid trap"), FALSE);
+        (void)acid_dam(trapped_ptr, dam, _("酸のトラップ", "an acid trap"), false);
         break;
     }
 
@@ -533,7 +533,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
                 msg_print(_("身の毛もよだつ光景が頭に浮かんだ。", "A horrible vision enters your mind."));
 
                 /* Have some nightmares */
-                sanity_blast(trapped_ptr, NULL, FALSE);
+                sanity_blast(trapped_ptr, NULL, false);
             }
             (void)set_paralyzed(trapped_ptr, trapped_ptr->paralyzed + randint0(10) + 5);
         }

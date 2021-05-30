@@ -124,7 +124,7 @@ void wiz_lite(player_type *caster_ptr, bool ninja)
 
     if (caster_ptr->special_defense & NINJA_S_STEALTH) {
         if (caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info & CAVE_GLOW)
-            set_superstealth(caster_ptr, FALSE);
+            set_superstealth(caster_ptr, false);
     }
 }
 
@@ -251,7 +251,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
     /* Prevent destruction of quest levels and town */
     floor_type *floor_ptr = caster_ptr->current_floor_ptr;
     if ((floor_ptr->inside_quest && is_fixed_quest_idx(floor_ptr->inside_quest)) || !floor_ptr->dun_level) {
-        return FALSE;
+        return false;
     }
 
     /* Lose monster light */
@@ -259,7 +259,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
         clear_mon_lite(floor_ptr);
 
     /* Big area of affect */
-    bool flag = FALSE;
+    bool flag = false;
     for (POSITION y = (y1 - r); y <= (y1 + r); y++) {
         for (POSITION x = (x1 - r); x <= (x1 + r); x++) {
             if (!in_bounds(floor_ptr, y, x))
@@ -288,7 +288,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
                 /* Hack -- Notice player affect */
                 if (player_bold(caster_ptr, y, x)) {
                     /* Hurt the player later */
-                    flag = TRUE;
+                    flag = true;
 
                     /* Do not hurt this grid */
                     continue;
@@ -399,7 +399,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
     }
 
     if (in_generate)
-        return TRUE;
+        return true;
 
     /* Process "re-glowing" */
     for (POSITION y = (y1 - r); y <= (y1 + r); y++) {
@@ -462,8 +462,8 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
 
     if (caster_ptr->special_defense & NINJA_S_STEALTH) {
         if (floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info & CAVE_GLOW)
-            set_superstealth(caster_ptr, FALSE);
+            set_superstealth(caster_ptr, false);
     }
 
-    return TRUE;
+    return true;
 }

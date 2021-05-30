@@ -47,7 +47,7 @@
  */
 static std::optional<PRICE> prompt_to_buy(player_type *player_ptr, object_type *o_ptr)
 {
-    auto price_ask = price_item(player_ptr, o_ptr, ot_ptr->inflate, FALSE);
+    auto price_ask = price_item(player_ptr, o_ptr, ot_ptr->inflate, false);
     auto is_low_price = price_ask < LOW_PRICE_THRESHOLD;
 
     if (!is_low_price)
@@ -224,7 +224,7 @@ void store_purchase(player_type *player_ptr)
         return;
     }
 
-    PRICE best = price_item(player_ptr, j_ptr, ot_ptr->inflate, FALSE);
+    PRICE best = price_item(player_ptr, j_ptr, ot_ptr->inflate, false);
     if (o_ptr->number > 1) {
         if ((cur_store_num != STORE_HOME) && (o_ptr->ident & IDENT_FIXED)) {
             msg_format(_("一つにつき $%ldです。", "That costs %ld gold per item."), (long)(best));

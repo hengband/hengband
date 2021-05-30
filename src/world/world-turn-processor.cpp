@@ -67,7 +67,7 @@ void WorldTurnProcessor::process_world()
     if (current_world_ptr->game_turn % TURNS_PER_TICK) {
         return;
     }
-    
+
     decide_auto_save();
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     if (floor_ptr->monster_noise && !ignore_unview) {
@@ -118,7 +118,7 @@ void WorldTurnProcessor::process_downward()
 {
     /* 帰還無しモード時のレベルテレポバグ対策 / Fix for level teleport bugs on ironman_downward.*/
     if (!ironman_downward || (this->player_ptr->dungeon_idx == DUNGEON_ANGBAND) || (this->player_ptr->dungeon_idx == 0)) {
-        return;    
+        return;
     }
 
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
@@ -156,7 +156,7 @@ void WorldTurnProcessor::process_monster_arena()
         update_gambling_monsters(this->player_ptr);
         return;
     }
-    
+
     if (number_mon == 1) {
         process_monster_arena_winner(win_m_idx);
         return;
@@ -229,16 +229,16 @@ void WorldTurnProcessor::process_change_daytime_night()
 
         return;
     }
-    
+
     auto is_in_dungeon = vanilla_town;
     is_in_dungeon |= lite_town && (floor_ptr->inside_quest == 0) && !this->player_ptr->phase_out && !floor_ptr->inside_arena;
     is_in_dungeon &= floor_ptr->dun_level != 0;
     if (!is_in_dungeon) {
-        return;    
+        return;
     }
 
     if ((current_world_ptr->game_turn % (TURNS_PER_TICK * STORE_TICKS)) != 0) {
-        return;    
+        return;
     }
 
     shuffle_shopkeeper();
@@ -256,7 +256,7 @@ void WorldTurnProcessor::process_world_monsters()
     }
 
     if (this->player_ptr->leaving) {
-        return;    
+        return;
     }
 
     for (auto i = 0; i < MAX_MTIMED; i++) {
@@ -317,7 +317,7 @@ void WorldTurnProcessor::decide_alloc_monster()
 void WorldTurnProcessor::ring_nightmare_bell(int prev_min)
 {
     if (!ironman_nightmare || (this->min == prev_min)) {
-        return;    
+        return;
     }
 
     if ((this->hour == 23) && !(this->min % 15)) {
@@ -342,7 +342,7 @@ void WorldTurnProcessor::ring_nightmare_bell(int prev_min)
     }
 
     if ((this->hour > 0) || (this->min > 0)) {
-        return;    
+        return;
     }
 
     disturb(this->player_ptr, true, true);

@@ -79,7 +79,7 @@ void add_outfit(player_type *creature_ptr, object_type *o_ptr)
     object_aware(creature_ptr, o_ptr);
     object_known(o_ptr);
     s16b slot = store_item_to_inventory(creature_ptr, o_ptr);
-    autopick_alter_item(creature_ptr, slot, FALSE);
+    autopick_alter_item(creature_ptr, slot, false);
     wield_all(creature_ptr);
 }
 
@@ -267,5 +267,5 @@ void player_outfit(player_type *creature_ptr)
         add_outfit(creature_ptr, q_ptr);
     }
 
-    k_info[lookup_kind(TV_POTION, SV_POTION_WATER)].aware = TRUE;
+    k_info[lookup_kind(TV_POTION, SV_POTION_WATER)].aware = true;
 }

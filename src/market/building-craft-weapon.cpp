@@ -74,7 +74,7 @@ static u32b calc_expect_dice(
 {
     dam = calc_slaydam(dam, mult, div, force);
     dam = calc_expect_crit(owner_ptr, weight, plus, dam, meichuu, dokubari, impact);
-    dam = calc_slaydam(dam, vorpal_mult, vorpal_div, FALSE);
+    dam = calc_slaydam(dam, vorpal_mult, vorpal_div, false);
     return dam;
 }
 
@@ -120,8 +120,8 @@ static void compare_weapon_aux(player_type *owner_ptr, object_type *o_ptr, int c
 {
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     int blow = owner_ptr->num_blow[0];
-    bool force = FALSE;
-    bool dokubari = FALSE;
+    bool force = false;
+    bool dokubari = false;
 
     int eff_dd = o_ptr->dd + owner_ptr->to_dd[0];
     int eff_ds = o_ptr->ds + owner_ptr->to_ds[0];
@@ -136,7 +136,7 @@ static void compare_weapon_aux(player_type *owner_ptr, object_type *o_ptr, int c
 
     object_flags(owner_ptr, o_ptr, flgs);
     if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
-        dokubari = TRUE;
+        dokubari = true;
 
     bool impact = has_flag(flgs, TR_IMPACT) || (owner_ptr->impact != 0);
     mindam = calc_expect_crit(owner_ptr, o_ptr->weight, o_ptr->to_h, mindice, owner_ptr->to_h[0], dokubari, impact);
@@ -151,13 +151,13 @@ static void compare_weapon_aux(player_type *owner_ptr, object_type *o_ptr, int c
             vorpal_div = 9;
         }
 
-        mindam = calc_expect_dice(owner_ptr, mindice, 1, 1, FALSE, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, impact, vorpal_mult, vorpal_div);
-        maxdam = calc_expect_dice(owner_ptr, maxdice, 1, 1, FALSE, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, impact, vorpal_mult, vorpal_div);
+        mindam = calc_expect_dice(owner_ptr, mindice, 1, 1, false, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, impact, vorpal_mult, vorpal_div);
+        maxdam = calc_expect_dice(owner_ptr, maxdice, 1, 1, false, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, impact, vorpal_mult, vorpal_div);
         show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("切れ味:", "Vorpal:"), TERM_L_RED);
     }
 
     if ((owner_ptr->pclass != CLASS_SAMURAI) && has_flag(flgs, TR_FORCE_WEAPON) && (owner_ptr->csp > (o_ptr->dd * o_ptr->ds / 5))) {
-        force = TRUE;
+        force = true;
 
         mindam = calc_expect_dice(owner_ptr, mindice, 1, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, impact, vorpal_mult, vorpal_div);
         maxdam = calc_expect_dice(owner_ptr, maxdice, 1, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, impact, vorpal_mult, vorpal_div);
@@ -377,9 +377,9 @@ PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
     int n = 1;
     total = bcost;
 
-    while (TRUE) {
+    while (true) {
         clear_bldg(0, 22);
-        current_world_ptr->character_xtra = TRUE;
+        current_world_ptr->character_xtra = true;
         for (int i = 0; i < n; i++) {
             int col = (wid * i + mgn);
             if (o_ptr[i] != i_ptr)

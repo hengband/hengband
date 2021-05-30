@@ -171,14 +171,14 @@ static bool judge_tereprt_resistance(player_type *attacker_ptr, player_attack_ty
 {
     monster_race *r_ptr = pa_ptr->r_ptr;
     if ((r_ptr->flagsr & RFR_RES_TELE) == 0)
-        return FALSE;
+        return false;
 
     if (r_ptr->flags1 & RF1_UNIQUE) {
         if (is_original_ap_and_seen(attacker_ptr, pa_ptr->m_ptr))
             r_ptr->r_flagsr |= RFR_RES_TELE;
 
         msg_format(_("%^sには効果がなかった。", "%^s is unaffected!"), pa_ptr->m_name);
-        return TRUE;
+        return true;
     }
 
     if (r_ptr->level > randint1(100)) {
@@ -186,10 +186,10 @@ static bool judge_tereprt_resistance(player_type *attacker_ptr, player_attack_ty
             r_ptr->r_flagsr |= RFR_RES_TELE;
 
         msg_format(_("%^sは抵抗力を持っている！", "%^s resists!"), pa_ptr->m_name);
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -206,7 +206,7 @@ static void attack_teleport_away(player_type *attacker_ptr, player_attack_type *
     msg_format(_("%^sは消えた！", "%^s disappears!"), pa_ptr->m_name);
     teleport_away(attacker_ptr, pa_ptr->m_idx, 50, TELEPORT_PASSIVE);
     *num = pa_ptr->num_blow + 1;
-    *(pa_ptr->mdeath) = TRUE;
+    *(pa_ptr->mdeath) = true;
 }
 
 /*!
@@ -224,8 +224,8 @@ static void attack_polymorph(player_type *attacker_ptr, player_attack_type *pa_p
 
     if (polymorph_monster(attacker_ptr, y, x)) {
         msg_format(_("%^sは変化した！", "%^s changes!"), pa_ptr->m_name);
-        *(pa_ptr->fear) = FALSE;
-        pa_ptr->weak = FALSE;
+        *(pa_ptr->fear) = false;
+        pa_ptr->weak = false;
     } else
         msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), pa_ptr->m_name);
 

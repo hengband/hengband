@@ -22,24 +22,24 @@ bool object_is_bounty(player_type *player_ptr, object_type *o_ptr)
     int i;
 
     if (o_ptr->tval != TV_CORPSE)
-        return FALSE;
+        return false;
 
     if (vanilla_town)
-        return FALSE;
+        return false;
 
     if (player_ptr->today_mon > 0 && (streq(r_info[o_ptr->pval].name.c_str(), r_info[current_world_ptr->today_mon].name.c_str())))
-        return TRUE;
+        return true;
 
     if (o_ptr->pval == MON_TSUCHINOKO)
-        return TRUE;
+        return true;
 
     for (i = 0; i < MAX_BOUNTY; i++)
         if (o_ptr->pval == current_world_ptr->bounty_r_idx[i])
             break;
     if (i < MAX_BOUNTY)
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -50,15 +50,15 @@ bool object_is_bounty(player_type *player_ptr, object_type *o_ptr)
 bool object_is_quest_target(QUEST_IDX quest_idx, object_type *o_ptr)
 {
     if (quest_idx == 0)
-        return FALSE;
+        return false;
 
     ARTIFACT_IDX a_idx = quest[quest_idx].k_idx;
     if (a_idx == 0)
-        return FALSE;
+        return false;
 
     artifact_type *a_ptr = &a_info[a_idx];
     if (a_ptr->gen_flags.has(TRG::INSTA_ART))
-        return FALSE;
+        return false;
 
     return (o_ptr->tval == a_ptr->tval) && (o_ptr->sval == a_ptr->sval);
 }

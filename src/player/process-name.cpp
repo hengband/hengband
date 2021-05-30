@@ -98,7 +98,7 @@ void process_player_name(player_type *creature_ptr, bool is_new_savefile)
 
     if (is_modified  || !savefile_base[0]) {
         concptr s = savefile;
-        while (TRUE) {
+        while (true) {
             concptr t;
             t = angband_strstr(s, PATH_SEP);
             if (!t)
@@ -114,7 +114,7 @@ void process_player_name(player_type *creature_ptr, bool is_new_savefile)
     }
 
     if (current_world_ptr->character_generated && !streq(old_player_base, creature_ptr->base_name)) {
-        autopick_load_pref(creature_ptr, FALSE);
+        autopick_load_pref(creature_ptr, false);
     }
 }
 

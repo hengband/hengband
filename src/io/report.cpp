@@ -170,10 +170,10 @@ size_t read_callback(char *buffer, size_t size, size_t nitems, void *userdata)
  */
 static bool http_post(concptr url, BUF *buf)
 {
-    bool succeeded = FALSE;
+    bool succeeded = false;
     CURL *curl = curl_easy_init();
     if (curl == NULL) {
-        return FALSE;
+        return false;
     }
 
     struct curl_slist *slist = NULL;
@@ -219,7 +219,7 @@ static bool http_post(concptr url, BUF *buf)
         long response_code;
         curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
         if (response_code == 200) {
-            succeeded = TRUE;
+            succeeded = true;
         }
     }
 
@@ -301,7 +301,7 @@ concptr make_screen_dump(player_type *creature_ptr)
         /* Clear -more- prompt first */
         msg_print(NULL);
 
-        use_graphics = FALSE;
+        use_graphics = false;
         reset_visuals(creature_ptr);
 
         creature_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
@@ -390,7 +390,7 @@ concptr make_screen_dump(player_type *creature_ptr)
     if (!old_use_graphics)
         return ret;
 
-    use_graphics = TRUE;
+    use_graphics = true;
     reset_visuals(creature_ptr);
 
     creature_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
@@ -451,7 +451,7 @@ errr report_score(player_type *creature_ptr, display_player_pf display_player)
 
     term_clear();
 
-    bool succeeded = FALSE;
+    bool succeeded = false;
     while (!succeeded) {
         term_fresh();
 
@@ -459,7 +459,7 @@ errr report_score(player_type *creature_ptr, display_player_pf display_player)
         term_fresh();
 
         if (http_post(SCORE_PATH, score)) {
-            succeeded = TRUE;
+            succeeded = true;
         } else {
             prt(_("スコア・サーバへの送信に失敗しました。", "Failed to send to the score server."), 0, 0);
             (void)inkey();

@@ -45,32 +45,32 @@ bool hates_acid(object_type *o_ptr)
     case TV_SOFT_ARMOR:
     case TV_HARD_ARMOR:
     case TV_DRAG_ARMOR: {
-        return TRUE;
+        return true;
     }
 
     /* Staffs/Scrolls are wood/paper */
     case TV_STAFF:
     case TV_SCROLL: {
-        return TRUE;
+        return true;
     }
 
     /* Ouch */
     case TV_CHEST: {
-        return TRUE;
+        return true;
     }
 
     /* Junk is useless */
     case TV_SKELETON:
     case TV_BOTTLE:
     case TV_JUNK: {
-        return TRUE;
+        return true;
     }
 
     default:
         break;
     }
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -84,14 +84,14 @@ bool hates_elec(object_type *o_ptr)
     switch (o_ptr->tval) {
     case TV_RING:
     case TV_WAND: {
-        return TRUE;
+        return true;
     }
 
     default:
         break;
     }
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -117,7 +117,7 @@ bool hates_fire(object_type *o_ptr)
     case TV_GLOVES:
     case TV_CLOAK:
     case TV_SOFT_ARMOR: {
-        return TRUE;
+        return true;
     }
 
     /* Books */
@@ -134,25 +134,25 @@ bool hates_fire(object_type *o_ptr)
     case TV_MUSIC_BOOK:
     case TV_HISSATSU_BOOK:
     case TV_HEX_BOOK: {
-        return TRUE;
+        return true;
     }
 
     /* Chests */
     case TV_CHEST: {
-        return TRUE;
+        return true;
     }
 
     /* Staffs/Scrolls burn */
     case TV_STAFF:
     case TV_SCROLL: {
-        return TRUE;
+        return true;
     }
 
     default:
         break;
     }
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -167,14 +167,14 @@ bool hates_cold(object_type *o_ptr)
     case TV_POTION:
     case TV_FLASK:
     case TV_BOTTLE: {
-        return TRUE;
+        return true;
     }
 
     default:
         break;
     }
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -188,11 +188,11 @@ int set_acid_destroy(player_type *owner_ptr, object_type *o_ptr)
 {
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     if (!hates_acid(o_ptr))
-        return FALSE;
+        return false;
     object_flags(owner_ptr, o_ptr, flgs);
     if (has_flag(flgs, TR_IGNORE_ACID))
-        return FALSE;
-    return TRUE;
+        return false;
+    return true;
 }
 
 /*!
@@ -206,11 +206,11 @@ int set_elec_destroy(player_type *owner_ptr, object_type *o_ptr)
 {
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     if (!hates_elec(o_ptr))
-        return FALSE;
+        return false;
     object_flags(owner_ptr, o_ptr, flgs);
     if (has_flag(flgs, TR_IGNORE_ELEC))
-        return FALSE;
-    return TRUE;
+        return false;
+    return true;
 }
 
 /*!
@@ -224,11 +224,11 @@ int set_fire_destroy(player_type *owner_ptr, object_type *o_ptr)
 {
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     if (!hates_fire(o_ptr))
-        return FALSE;
+        return false;
     object_flags(owner_ptr, o_ptr, flgs);
     if (has_flag(flgs, TR_IGNORE_FIRE))
-        return FALSE;
-    return TRUE;
+        return false;
+    return true;
 }
 
 /*!
@@ -242,11 +242,11 @@ int set_cold_destroy(player_type *owner_ptr, object_type *o_ptr)
 {
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     if (!hates_cold(o_ptr))
-        return FALSE;
+        return false;
     object_flags(owner_ptr, o_ptr, flgs);
     if (has_flag(flgs, TR_IGNORE_COLD))
-        return FALSE;
-    return TRUE;
+        return false;
+    return true;
 }
 
 /*!
@@ -281,7 +281,7 @@ bool potion_smash_effect(player_type *owner_ptr, MONSTER_IDX who, POSITION y, PO
     int radius = 2;
     int dt = 0;
     int dam = 0;
-    bool angry = FALSE;
+    bool angry = false;
     object_kind *k_ptr = &k_info[k_idx];
     switch (k_ptr->sval) {
     case SV_POTION_SALT_WATER:
@@ -295,7 +295,7 @@ bool potion_smash_effect(player_type *owner_ptr, MONSTER_IDX who, POSITION y, PO
     case SV_POTION_DEC_CHR:
     case SV_POTION_WATER: /* perhaps a 'water' attack? */
     case SV_POTION_APPLE_JUICE:
-        return TRUE;
+        return true;
 
     case SV_POTION_INFRAVISION:
     case SV_POTION_DETECT_INVIS:
@@ -327,39 +327,39 @@ bool potion_smash_effect(player_type *owner_ptr, MONSTER_IDX who, POSITION y, PO
     case SV_POTION_INVULNERABILITY:
     case SV_POTION_NEW_LIFE:
         /* All of the above potions have no effect when shattered */
-        return FALSE;
+        return false;
     case SV_POTION_SLOWNESS:
         dt = GF_OLD_SLOW;
         dam = 5;
-        angry = TRUE;
+        angry = true;
         break;
     case SV_POTION_POISON:
         dt = GF_POIS;
         dam = 3;
-        angry = TRUE;
+        angry = true;
         break;
     case SV_POTION_BLINDNESS:
         dt = GF_DARK;
-        angry = TRUE;
+        angry = true;
         break;
     case SV_POTION_BOOZE:
         dt = GF_OLD_CONF;
-        angry = TRUE;
+        angry = true;
         break;
     case SV_POTION_SLEEP:
         dt = GF_OLD_SLEEP;
-        angry = TRUE;
+        angry = true;
         break;
     case SV_POTION_RUINATION:
     case SV_POTION_DETONATIONS:
         dt = GF_SHARDS;
         dam = damroll(25, 25);
-        angry = TRUE;
+        angry = true;
         break;
     case SV_POTION_DEATH:
         dt = GF_DEATH_RAY;
         dam = k_ptr->level * 10;
-        angry = TRUE;
+        angry = true;
         radius = 1;
         break;
     case SV_POTION_SPEED:

@@ -23,13 +23,13 @@
  */
 void discharge_minion(player_type *caster_ptr)
 {
-    bool okay = TRUE;
+    bool okay = true;
     for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++) {
         monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
         if (!m_ptr->r_idx || !is_pet(m_ptr))
             continue;
         if (m_ptr->nickname)
-            okay = FALSE;
+            okay = false;
     }
 
     if (!okay || caster_ptr->riding) {

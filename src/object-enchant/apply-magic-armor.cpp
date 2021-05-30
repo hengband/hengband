@@ -54,7 +54,7 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
     case TV_DRAG_ARMOR: {
         /* power > 2 is debug only */
         if (one_in_(50) || (power > 2))
-            become_random_artifact(owner_ptr, o_ptr, FALSE);
+            become_random_artifact(owner_ptr, o_ptr, false);
         break;
     }
     case TV_HARD_ARMOR:
@@ -76,23 +76,23 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
 
             /* power > 2 is debug only */
             if (one_in_(20) || (power > 2)) {
-                become_random_artifact(owner_ptr, o_ptr, FALSE);
+                become_random_artifact(owner_ptr, o_ptr, false);
                 break;
             }
 
-            while (TRUE) {
-                bool okay_flag = TRUE;
-                o_ptr->name2 = get_random_ego(INVEN_BODY, TRUE);
+            while (true) {
+                bool okay_flag = true;
+                o_ptr->name2 = get_random_ego(INVEN_BODY, true);
                 switch (o_ptr->name2) {
                 case EGO_DWARVEN:
                     if (o_ptr->tval != TV_HARD_ARMOR) {
-                        okay_flag = FALSE;
+                        okay_flag = false;
                     }
 
                     break;
                 case EGO_DRUID:
                     if (o_ptr->tval != TV_SOFT_ARMOR) {
-                        okay_flag = FALSE;
+                        okay_flag = false;
                     }
 
                     break;
@@ -104,9 +104,9 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
                     break;
             }
         } else if (power < -1) {
-            while (TRUE) {
-                bool okay_flag = TRUE;
-                o_ptr->name2 = get_random_ego(INVEN_BODY, FALSE);
+            while (true) {
+                bool okay_flag = true;
+                o_ptr->name2 = get_random_ego(INVEN_BODY, false);
 
                 switch (o_ptr->name2) {
                 case EGO_A_DEMON:
@@ -135,12 +135,12 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
         if (power > 1) {
             /* power > 2 is debug only */
             if (one_in_(20) || (power > 2)) {
-                become_random_artifact(owner_ptr, o_ptr, FALSE);
+                become_random_artifact(owner_ptr, o_ptr, false);
                 break;
             }
 
-            while (TRUE) {
-                o_ptr->name2 = get_random_ego(INVEN_SUB_HAND, TRUE);
+            while (true) {
+                o_ptr->name2 = get_random_ego(INVEN_SUB_HAND, true);
                 if (o_ptr->sval != SV_SMALL_METAL_SHIELD && o_ptr->sval != SV_LARGE_METAL_SHIELD && o_ptr->name2 == EGO_S_DWARVEN) {
                     continue;
                 }
@@ -170,12 +170,12 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
         if (power > 1) {
             /* power > 2 is debug only */
             if (one_in_(20) || (power > 2)) {
-                become_random_artifact(owner_ptr, o_ptr, FALSE);
+                become_random_artifact(owner_ptr, o_ptr, false);
                 break;
             }
-            o_ptr->name2 = get_random_ego(INVEN_ARMS, TRUE);
+            o_ptr->name2 = get_random_ego(INVEN_ARMS, true);
         } else if (power < -1) {
-            o_ptr->name2 = get_random_ego(INVEN_ARMS, FALSE);
+            o_ptr->name2 = get_random_ego(INVEN_ARMS, false);
         }
 
         break;
@@ -191,13 +191,13 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
         if (power > 1) {
             /* power > 2 is debug only */
             if (one_in_(20) || (power > 2)) {
-                become_random_artifact(owner_ptr, o_ptr, FALSE);
+                become_random_artifact(owner_ptr, o_ptr, false);
                 break;
             }
 
-            o_ptr->name2 = get_random_ego(INVEN_FEET, TRUE);
+            o_ptr->name2 = get_random_ego(INVEN_FEET, true);
         } else if (power < -1) {
-            o_ptr->name2 = get_random_ego(INVEN_FEET, FALSE);
+            o_ptr->name2 = get_random_ego(INVEN_FEET, false);
         }
 
         break;
@@ -206,13 +206,13 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
         if (power > 1) {
             /* power > 2 is debug only */
             if (one_in_(20) || (power > 2)) {
-                become_random_artifact(owner_ptr, o_ptr, FALSE);
+                become_random_artifact(owner_ptr, o_ptr, false);
                 break;
             }
 
-            while (TRUE) {
-                bool ok_flag = TRUE;
-                o_ptr->name2 = get_random_ego(INVEN_HEAD, TRUE);
+            while (true) {
+                bool ok_flag = true;
+                o_ptr->name2 = get_random_ego(INVEN_HEAD, true);
 
                 switch (o_ptr->name2) {
                 case EGO_TELEPATHY:
@@ -228,7 +228,7 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
                     break;
                 default:
                     /* not existing crown (wisdom,lite, etc...) */
-                    ok_flag = FALSE;
+                    ok_flag = false;
                 }
 
                 if (ok_flag)
@@ -237,9 +237,9 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
 
             break;
         } else if (power < -1) {
-            while (TRUE) {
-                bool ok_flag = TRUE;
-                o_ptr->name2 = get_random_ego(INVEN_HEAD, FALSE);
+            while (true) {
+                bool ok_flag = true;
+                o_ptr->name2 = get_random_ego(INVEN_HEAD, false);
 
                 switch (o_ptr->name2) {
                 case EGO_H_DEMON:
@@ -266,13 +266,13 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
         if (power > 1) {
             /* power > 2 is debug only */
             if (one_in_(20) || (power > 2)) {
-                become_random_artifact(owner_ptr, o_ptr, FALSE);
+                become_random_artifact(owner_ptr, o_ptr, false);
                 break;
             }
 
-            while (TRUE) {
-                bool ok_flag = TRUE;
-                o_ptr->name2 = get_random_ego(INVEN_HEAD, TRUE);
+            while (true) {
+                bool ok_flag = true;
+                o_ptr->name2 = get_random_ego(INVEN_HEAD, true);
                 switch (o_ptr->name2) {
                 case EGO_BRILLIANCE:
                 case EGO_DARK:  
@@ -286,7 +286,7 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
                     break;
                 default:
                     /* not existing helm (Magi, Might, etc...)*/
-                    ok_flag = FALSE;
+                    ok_flag = false;
                 }
 
                 if (ok_flag)
@@ -295,13 +295,13 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
 
             break;
         } else if (power < -1) {
-            while (TRUE) {
-                bool ok_flag = TRUE;
-                o_ptr->name2 = get_random_ego(INVEN_HEAD, FALSE);
+            while (true) {
+                bool ok_flag = true;
+                o_ptr->name2 = get_random_ego(INVEN_HEAD, false);
 
                 switch (o_ptr->name2) {
                 case EGO_ANCIENT_CURSE:
-                    ok_flag = FALSE;
+                    ok_flag = false;
                     break;
                 default:
                     break;
@@ -318,12 +318,12 @@ void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, 
         if (power > 1) {
             /* power > 2 is debug only */
             if (one_in_(20) || (power > 2)) {
-                become_random_artifact(owner_ptr, o_ptr, FALSE);
+                become_random_artifact(owner_ptr, o_ptr, false);
                 break;
             }
-            o_ptr->name2 = get_random_ego(INVEN_OUTER, TRUE);
+            o_ptr->name2 = get_random_ego(INVEN_OUTER, true);
         } else if (power < -1) {
-            o_ptr->name2 = get_random_ego(INVEN_OUTER, FALSE);
+            o_ptr->name2 = get_random_ego(INVEN_OUTER, false);
         }
 
         break;

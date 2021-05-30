@@ -168,7 +168,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
         }
     } else {
         tval_type tval = (one_in_(5) ? mo_ptr->tval : TV_SWORD);
-        while (TRUE) {
+        while (true) {
             object_kind *ck_ptr;
             k_idx = lookup_kind(tval, SV_ANY);
             ck_ptr = &k_info[k_idx];

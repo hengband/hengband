@@ -25,22 +25,22 @@ bool common_saving_throw_charm(player_type *operator_ptr, HIT_POINT pow, monster
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	if (operator_ptr->current_floor_ptr->inside_arena) return TRUE;
+	if (operator_ptr->current_floor_ptr->inside_arena) return true;
 
 	/* Memorize a flag */
 	if (r_ptr->flagsr & RFR_RES_ALL)
 	{
 		if (is_original_ap_and_seen(operator_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
-		return TRUE;
+		return true;
 	}
 
 	if (r_ptr->flags3 & RF3_NO_CONF)
 	{
 		if (is_original_ap_and_seen(operator_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
-		return TRUE;
+		return true;
 	}
 
-	if (r_ptr->flags1 & RF1_QUESTOR || m_ptr->mflag2.has(MFLAG2::NOPET)) return TRUE;
+	if (r_ptr->flags1 & RF1_QUESTOR || m_ptr->mflag2.has(MFLAG2::NOPET)) return true;
 
 	pow += (adj_chr_chm[operator_ptr->stat_index[A_CHR]] - 1);
 	if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) pow = pow * 2 / 3;
@@ -57,16 +57,16 @@ bool common_saving_throw_control(player_type *operator_ptr, HIT_POINT pow, monst
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	if (operator_ptr->current_floor_ptr->inside_arena) return TRUE;
+	if (operator_ptr->current_floor_ptr->inside_arena) return true;
 
 	/* Memorize a flag */
 	if (r_ptr->flagsr & RFR_RES_ALL)
 	{
 		if (is_original_ap_and_seen(operator_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
-		return TRUE;
+		return true;
 	}
 
-	if (r_ptr->flags1 & RF1_QUESTOR || m_ptr->mflag2.has(MFLAG2::NOPET)) return TRUE;
+	if (r_ptr->flags1 & RF1_QUESTOR || m_ptr->mflag2.has(MFLAG2::NOPET)) return true;
 
 	pow += adj_chr_chm[operator_ptr->stat_index[A_CHR]] - 1;
 	if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) pow = pow * 2 / 3;

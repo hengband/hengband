@@ -39,12 +39,12 @@ static MonsterSpellResult spell_RF5_CAUSE(player_type *target_ptr, int GF_TYPE, 
     monster_name(target_ptr, t_idx, t_name);
 
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
-        disturb(target_ptr, TRUE, TRUE);
+        disturb(target_ptr, true, true);
         if (target_ptr->blind)
             msg_format(msg1, m_name);
         else
             msg_format(msg2, m_name);
-        breath(target_ptr, y, x, m_idx, GF_TYPE, dam, 0, FALSE, TARGET_TYPE);
+        breath(target_ptr, y, x, m_idx, GF_TYPE, dam, 0, false, TARGET_TYPE);
         return res;
     }
 
@@ -52,11 +52,11 @@ static MonsterSpellResult spell_RF5_CAUSE(player_type *target_ptr, int GF_TYPE, 
         if (see_monster(target_ptr, m_idx)) {
             msg_format(msg3, m_name, t_name);
         } else {
-            target_ptr->current_floor_ptr->monster_noise = TRUE;
+            target_ptr->current_floor_ptr->monster_noise = true;
         }
     }
 
-    breath(target_ptr, y, x, m_idx, GF_TYPE, dam, 0, FALSE, TARGET_TYPE);
+    breath(target_ptr, y, x, m_idx, GF_TYPE, dam, 0, false, TARGET_TYPE);
 
     return res;
 }

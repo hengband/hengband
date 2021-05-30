@@ -68,7 +68,7 @@ bool is_teleport_level_ineffective(player_type *caster_ptr, MONSTER_IDX idx)
 void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 {
     GAME_TEXT m_name[160];
-    bool see_m = TRUE;
+    bool see_m = true;
     if (m_idx <= 0) {
         strcpy(m_name, _("あなた", "you"));
     } else {
@@ -90,15 +90,15 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 
     bool go_up;
     if (randint0(100) < 50)
-        go_up = TRUE;
+        go_up = true;
     else
-        go_up = FALSE;
+        go_up = false;
 
     if ((m_idx <= 0) && current_world_ptr->wizard) {
         if (get_check("Force to go up? "))
-            go_up = TRUE;
+            go_up = true;
         else if (get_check("Force to go down? "))
-            go_up = FALSE;
+            go_up = false;
     }
 
     if ((ironman_downward && (m_idx <= 0)) || (creature_ptr->current_floor_ptr->dun_level <= d_info[creature_ptr->dungeon_idx].mindepth)) {
@@ -120,7 +120,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
                 exe_write_diary(creature_ptr, DIARY_TELEPORT_LEVEL, 1, NULL);
 
             if (autosave_l)
-                do_cmd_save_game(creature_ptr, TRUE);
+                do_cmd_save_game(creature_ptr, true);
 
             if (!is_in_dungeon(creature_ptr)) {
                 creature_ptr->current_floor_ptr->dun_level = d_info[creature_ptr->dungeon_idx].mindepth;
@@ -129,7 +129,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
                 prepare_change_floor_mode(creature_ptr, CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
             }
 
-            creature_ptr->leaving = TRUE;
+            creature_ptr->leaving = true;
         }
     } else if (quest_number(creature_ptr, creature_ptr->current_floor_ptr->dun_level)
         || (creature_ptr->current_floor_ptr->dun_level >= d_info[creature_ptr->dungeon_idx].maxdepth)) {
@@ -146,13 +146,13 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
                 exe_write_diary(creature_ptr, DIARY_TELEPORT_LEVEL, -1, NULL);
 
             if (autosave_l)
-                do_cmd_save_game(creature_ptr, TRUE);
+                do_cmd_save_game(creature_ptr, true);
 
             prepare_change_floor_mode(creature_ptr, CFM_SAVE_FLOORS | CFM_UP | CFM_RAND_PLACE | CFM_RAND_CONNECT);
 
             leave_quest_check(creature_ptr);
             creature_ptr->current_floor_ptr->inside_quest = 0;
-            creature_ptr->leaving = TRUE;
+            creature_ptr->leaving = true;
         }
     } else if (go_up) {
 #ifdef JP
@@ -168,10 +168,10 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
                 exe_write_diary(creature_ptr, DIARY_TELEPORT_LEVEL, -1, NULL);
 
             if (autosave_l)
-                do_cmd_save_game(creature_ptr, TRUE);
+                do_cmd_save_game(creature_ptr, true);
 
             prepare_change_floor_mode(creature_ptr, CFM_SAVE_FLOORS | CFM_UP | CFM_RAND_PLACE | CFM_RAND_CONNECT);
-            creature_ptr->leaving = TRUE;
+            creature_ptr->leaving = true;
         }
     } else {
 #ifdef JP
@@ -186,10 +186,10 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
             if (record_stair)
                 exe_write_diary(creature_ptr, DIARY_TELEPORT_LEVEL, 1, NULL);
             if (autosave_l)
-                do_cmd_save_game(creature_ptr, TRUE);
+                do_cmd_save_game(creature_ptr, true);
 
             prepare_change_floor_mode(creature_ptr, CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
-            creature_ptr->leaving = TRUE;
+            creature_ptr->leaving = true;
         }
     }
 
@@ -214,14 +214,14 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 bool teleport_level_other(player_type *caster_ptr)
 {
     if (!target_set(caster_ptr, TARGET_KILL))
-        return FALSE;
+        return false;
     MONSTER_IDX target_m_idx = caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
     if (!target_m_idx)
-        return TRUE;
+        return true;
     if (!player_has_los_bold(caster_ptr, target_row, target_col))
-        return TRUE;
+        return true;
     if (!projectable(caster_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col))
-        return TRUE;
+        return true;
 
     monster_type *m_ptr;
     monster_race *r_ptr;
@@ -238,7 +238,7 @@ bool teleport_level_other(player_type *caster_ptr)
         teleport_level(caster_ptr, target_m_idx);
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -250,12 +250,12 @@ bool tele_town(player_type *caster_ptr)
 {
     if (caster_ptr->current_floor_ptr->dun_level) {
         msg_print(_("この魔法は地上でしか使えない！", "This spell can only be used on the surface!"));
-        return FALSE;
+        return false;
     }
 
     if (caster_ptr->current_floor_ptr->inside_arena || caster_ptr->phase_out) {
         msg_print(_("この魔法は外でしか使えない！", "This spell can only be used outside!"));
-        return FALSE;
+        return false;
     }
 
     screen_save();
@@ -278,16 +278,16 @@ bool tele_town(player_type *caster_ptr)
         msg_print(_("まだ行けるところがない。", "You have not yet visited any town."));
         msg_print(NULL);
         screen_load();
-        return FALSE;
+        return false;
     }
 
     prt(_("どこに行きますか:", "Where do you want to go: "), 0, 0);
-    while (TRUE) {
+    while (true) {
         i = inkey();
 
         if (i == ESCAPE) {
             screen_load();
-            return FALSE;
+            return false;
         }
 
         else if ((i < 'a') || (i > ('a' + max_towns - 2)))
@@ -307,11 +307,11 @@ bool tele_town(player_type *caster_ptr)
         }
     }
 
-    caster_ptr->leaving = TRUE;
-    caster_ptr->leave_bldg = TRUE;
-    caster_ptr->teleport_town = TRUE;
+    caster_ptr->leaving = true;
+    caster_ptr->leave_bldg = true;
+    caster_ptr->teleport_town = true;
     screen_load();
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -352,7 +352,7 @@ bool recall_player(player_type *creature_ptr, TIME_EFFECT turns)
      */
     if (creature_ptr->current_floor_ptr->inside_arena || ironman_downward) {
         msg_print(_("何も起こらなかった。", "Nothing happens."));
-        return TRUE;
+        return true;
     }
 
     bool is_special_floor = is_in_dungeon(creature_ptr);
@@ -371,28 +371,28 @@ bool recall_player(player_type *creature_ptr, TIME_EFFECT turns)
         creature_ptr->word_recall = 0;
         msg_print(_("張りつめた大気が流れ去った...", "A tension leaves the air around you..."));
         creature_ptr->redraw |= (PR_STATUS);
-        return TRUE;
+        return true;
     }
 
     if (!is_in_dungeon(creature_ptr)) {
         DUNGEON_IDX select_dungeon;
         select_dungeon = choose_dungeon(_("に帰還", "recall"), 2, 14);
         if (!select_dungeon)
-            return FALSE;
+            return false;
         creature_ptr->recall_dungeon = select_dungeon;
     }
 
     creature_ptr->word_recall = turns;
     msg_print(_("回りの大気が張りつめてきた...", "The air about you becomes charged..."));
     creature_ptr->redraw |= (PR_STATUS);
-    return TRUE;
+    return true;
 }
 
 bool free_level_recall(player_type *creature_ptr)
 {
     DUNGEON_IDX select_dungeon = choose_dungeon(_("にテレポート", "teleport"), 4, 0);
     if (!select_dungeon)
-        return FALSE;
+        return false;
 
     DEPTH max_depth = d_info[select_dungeon].maxdepth;
     if (select_dungeon == DUNGEON_ANGBAND) {
@@ -405,7 +405,7 @@ bool free_level_recall(player_type *creature_ptr)
     QUANTITY amt = get_quantity(
         format(_("%sの何階にテレポートしますか？", "Teleport to which level of %s? "), d_info[select_dungeon].name.c_str()), (QUANTITY)max_depth);
     if (amt <= 0) {
-        return FALSE;
+        return false;
     }
 
     creature_ptr->word_recall = 1;
@@ -419,7 +419,7 @@ bool free_level_recall(player_type *creature_ptr)
     msg_print(_("回りの大気が張りつめてきた...", "The air about you becomes charged..."));
 
     creature_ptr->redraw |= PR_STATUS;
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -436,16 +436,16 @@ bool reset_recall(player_type *caster_ptr)
     select_dungeon = choose_dungeon(_("をセット", "reset"), 2, 14);
     if (ironman_downward) {
         msg_print(_("何も起こらなかった。", "Nothing happens."));
-        return TRUE;
+        return true;
     }
 
     if (!select_dungeon)
-        return FALSE;
+        return false;
     sprintf(ppp, _("何階にセットしますか (%d-%d):", "Reset to which level (%d-%d): "), (int)d_info[select_dungeon].mindepth, (int)max_dlv[select_dungeon]);
     sprintf(tmp_val, "%d", (int)MAX(caster_ptr->current_floor_ptr->dun_level, 1));
 
     if (!get_string(ppp, tmp_val, 10)) {
-        return FALSE;
+        return false;
     }
 
     dummy = atoi(tmp_val);
@@ -465,5 +465,5 @@ bool reset_recall(player_type *caster_ptr)
 #else
     msg_format("Recall depth set to level %d (%d').", dummy, dummy * 50);
 #endif
-    return TRUE;
+    return true;
 }

@@ -40,10 +40,10 @@
  */
 concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 {
-    bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
-    bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
-    bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
-    bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
+    bool name = (mode == SPELL_NAME) ? true : false;
+    bool desc = (mode == SPELL_DESC) ? true : false;
+    bool info = (mode == SPELL_INFO) ? true : false;
+    bool cast = (mode == SPELL_CAST) ? true : false;
 
     DIRECTION dir;
     PLAYER_LEVEL plev = caster_ptr->lev;
@@ -263,7 +263,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_duration(base, base);
 
             if (cast) {
-                set_tim_invis(caster_ptr, randint1(base) + base, FALSE);
+                set_tim_invis(caster_ptr, randint1(base) + base, false);
             }
         }
         break;
@@ -282,7 +282,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_duration(base, sides);
 
             if (cast) {
-                set_protevil(caster_ptr, randint1(sides) + base, FALSE);
+                set_protevil(caster_ptr, randint1(sides) + base, false);
             }
         }
         break;
@@ -381,7 +381,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_duration(base, base);
 
             if (cast) {
-                set_tim_sh_holy(caster_ptr, randint1(base) + base, FALSE);
+                set_tim_sh_holy(caster_ptr, randint1(base) + base, false);
             }
         }
         break;
@@ -548,7 +548,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
             DICE_SID sides = 4;
 
             if (cast) {
-                destroy_area(caster_ptr, caster_ptr->y, caster_ptr->x, base + randint1(sides), FALSE);
+                destroy_area(caster_ptr, caster_ptr->y, caster_ptr->x, base + randint1(sides), false);
             }
         }
         break;
@@ -567,7 +567,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                 return info_duration(base, base);
 
             if (cast) {
-                set_tim_eyeeye(caster_ptr, randint1(base) + base, FALSE);
+                set_tim_eyeeye(caster_ptr, randint1(base) + base, false);
             }
         }
         break;
@@ -653,10 +653,10 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
                         continue;
                     summon_specific(caster_ptr, -1, my, mx, plev, SUMMON_KNIGHTS, (PM_ALLOW_GROUP | PM_FORCE_PET | PM_HASTE));
                 }
-                set_hero(caster_ptr, randint1(base) + base, FALSE);
-                set_blessed(caster_ptr, randint1(base) + base, FALSE);
-                set_fast(caster_ptr, randint1(sp_sides) + sp_base, FALSE);
-                set_protevil(caster_ptr, randint1(base) + base, FALSE);
+                set_hero(caster_ptr, randint1(base) + base, false);
+                set_blessed(caster_ptr, randint1(base) + base, false);
+                set_fast(caster_ptr, randint1(sp_sides) + sp_base, false);
+                set_protevil(caster_ptr, randint1(base) + base, false);
                 set_afraid(caster_ptr, 0);
             }
         }

@@ -13,46 +13,46 @@
 bool cast_blue_scare(player_type *caster_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
-        return FALSE;
+        return false;
 
     msg_print(_("恐ろしげな幻覚を作り出した。", "You cast a fearful illusion."));
     fear_monster(caster_ptr, bmc_ptr->dir, bmc_ptr->plev + 10);
-    return TRUE;
+    return true;
 }
 
 bool cast_blue_blind(player_type *caster_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
-        return FALSE;
+        return false;
 
     confuse_monster(caster_ptr, bmc_ptr->dir, bmc_ptr->plev * 2);
-    return TRUE;
+    return true;
 }
 
 bool cast_blue_confusion(player_type *caster_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
-        return FALSE;
+        return false;
 
     msg_print(_("誘惑的な幻覚をつくり出した。", "You cast a mesmerizing illusion."));
     confuse_monster(caster_ptr, bmc_ptr->dir, bmc_ptr->plev * 2);
-    return TRUE;
+    return true;
 }
 
 bool cast_blue_slow(player_type *caster_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
-        return FALSE;
+        return false;
 
     slow_monster(caster_ptr, bmc_ptr->dir, bmc_ptr->plev);
-    return TRUE;
+    return true;
 }
 
 bool cast_blue_sleep(player_type *caster_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
-        return FALSE;
+        return false;
 
     sleep_monster(caster_ptr, bmc_ptr->dir, bmc_ptr->plev);
-    return TRUE;
+    return true;
 }

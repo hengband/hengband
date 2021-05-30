@@ -59,11 +59,11 @@ static bool monster_hook_tanuki(player_type *player_ptr, MONRACE_IDX r_idx)
     unselectable |= (r_ptr->flags7 & (RF7_FRIENDLY | RF7_CHAMELEON)) != 0;
     unselectable |= (r_ptr->flags7 & RF7_AQUATIC) != 0;
     if (unselectable)
-        return FALSE;
+        return false;
 
     for (int i = 0; i < 4; i++)
         if (r_ptr->blow[i].method == RBM_EXPLODE)
-            return FALSE;
+            return false;
 
     return (*(get_monster_hook(player_ptr)))(player_ptr, r_idx);
 }
@@ -104,30 +104,30 @@ static MONRACE_IDX initial_r_appearance(player_type *player_ptr, MONRACE_IDX r_i
 static bool check_unique_placeable(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     if (player_ptr->phase_out)
-        return TRUE;
+        return true;
 
     monster_race *r_ptr = &r_info[r_idx];
     if (((r_ptr->flags1 & (RF1_UNIQUE)) || (r_ptr->flags7 & (RF7_NAZGUL))) && (r_ptr->cur_num >= r_ptr->max_num)) {
-        return FALSE;
+        return false;
     }
 
     if ((r_ptr->flags7 & (RF7_UNIQUE2)) && (r_ptr->cur_num >= 1)) {
-        return FALSE;
+        return false;
     }
 
     if (r_idx == MON_BANORLUPART) {
         if (r_info[MON_BANOR].cur_num > 0)
-            return FALSE;
+            return false;
         if (r_info[MON_LUPART].cur_num > 0)
-            return FALSE;
+            return false;
     }
 
     if ((r_ptr->flags1 & (RF1_FORCE_DEPTH)) && (player_ptr->current_floor_ptr->dun_level < r_ptr->level)
         && (!ironman_nightmare || (r_ptr->flags1 & (RF1_QUESTOR)))) {
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -140,14 +140,14 @@ static bool check_quest_placeable(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (quest_number(player_ptr, floor_ptr->dun_level) == 0)
-        return TRUE;
+        return true;
 
     int hoge = quest_number(player_ptr, floor_ptr->dun_level);
     if ((quest[hoge].type != QUEST_TYPE_KILL_LEVEL) && (quest[hoge].type != QUEST_TYPE_RANDOM))
-        return TRUE;
+        return true;
 
     if (r_idx != quest[hoge].r_idx)
-        return TRUE;
+        return true;
 
     int number_mon = 0;
     for (int i2 = 0; i2 < floor_ptr->width; ++i2)
@@ -156,9 +156,9 @@ static bool check_quest_placeable(player_type *player_ptr, MONRACE_IDX r_idx)
                 number_mon++;
 
     if (number_mon + quest[hoge].cur_num >= quest[hoge].max_num)
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -173,11 +173,11 @@ static bool check_procection_rune(player_type *player_ptr, MONRACE_IDX r_idx, PO
 {
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     if (!is_rune_protection_grid(g_ptr))
-        return TRUE;
+        return true;
 
     monster_race *r_ptr = &r_info[r_idx];
     if (randint1(BREAK_RUNE_PROTECTION) >= (r_ptr->level + 20))
-        return FALSE;
+        return false;
 
     if (g_ptr->info & CAVE_MARK)
         msg_print(_("守りのルーンが壊れた！", "The rune of protection is broken!"));
@@ -186,7 +186,7 @@ static bool check_procection_rune(player_type *player_ptr, MONRACE_IDX r_idx, PO
     g_ptr->info &= ~(CAVE_OBJECT);
     g_ptr->mimic = 0;
     note_spot(player_ptr, y, x);
-    return TRUE;
+    return true;
 }
 
 static void warn_unique_generation(player_type *player_ptr, MONRACE_IDX r_idx)
@@ -241,13 +241,13 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
     concptr name = r_ptr->name.c_str();
 
     if (player_ptr->wild_mode || !in_bounds(floor_ptr, y, x) || (r_idx == 0) || r_ptr->name.empty())
-        return FALSE;
+        return false;
 
     if (((mode & PM_IGNORE_TERRAIN) == 0) && (pattern_tile(floor_ptr, y, x) || !monster_can_enter(player_ptr, y, x, r_ptr, 0)))
-        return FALSE;
+        return false;
 
     if (!check_unique_placeable(player_ptr, r_idx) || !check_quest_placeable(player_ptr, r_idx) || !check_procection_rune(player_ptr, r_idx, y, x))
-        return FALSE;
+        return false;
 
     msg_format_wizard(player_ptr, CHEAT_MONSTER, _("%s(Lv%d)を生成しました。", "%s(Lv%d) was generated."), name, r_ptr->level);
     if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL) || (r_ptr->level < 10))
@@ -256,7 +256,7 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
     g_ptr->m_idx = m_pop(floor_ptr);
     hack_m_idx_ii = g_ptr->m_idx;
     if (!g_ptr->m_idx)
-        return FALSE;
+        return false;
 
     monster_type *m_ptr;
     m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
@@ -301,7 +301,7 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
     }
 
     if (r_ptr->flags7 & RF7_CHAMELEON) {
-        choose_new_monster(player_ptr, g_ptr->m_idx, TRUE, 0);
+        choose_new_monster(player_ptr, g_ptr->m_idx, true, 0);
         r_ptr = &r_info[m_ptr->r_idx];
         m_ptr->mflag2.set(MFLAG2::CHAMELEON);
         if ((r_ptr->flags1 & RF1_UNIQUE) && (who <= 0))
@@ -314,7 +314,7 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
     if (mode & PM_NO_PET)
         m_ptr->mflag2.set(MFLAG2::NOPET);
 
-    m_ptr->ml = FALSE;
+    m_ptr->ml = false;
     if (mode & PM_FORCE_PET) {
         set_pet(player_ptr, m_ptr);
     } else if ((r_ptr->flags7 & RF7_FRIENDLY) || (mode & PM_FORCE_FRIENDLY) || is_friendly_idx(player_ptr, who)) {
@@ -371,7 +371,7 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
         player_ptr->update |= (PU_MON_LITE);
     else if ((r_ptr->flags7 & RF7_HAS_LD_MASK) && !monster_csleep_remaining(m_ptr))
         player_ptr->update |= (PU_MON_LITE);
-    update_monster(player_ptr, g_ptr->m_idx, TRUE);
+    update_monster(player_ptr, g_ptr->m_idx, true);
 
     real_r_ptr(m_ptr)->cur_num++;
 
@@ -387,7 +387,7 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
 
     warn_unique_generation(player_ptr, r_idx);
     if (!is_rune_explosion_grid(g_ptr))
-        return TRUE;
+        return true;
 
     if (randint1(BREAK_RUNE_EXPLOSION) > r_ptr->level) {
         if (g_ptr->info & CAVE_MARK) {
@@ -406,5 +406,5 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
     note_spot(player_ptr, y, x);
     lite_spot(player_ptr, y, x);
 
-    return TRUE;
+    return true;
 }

@@ -66,13 +66,13 @@ static void discover_hidden_things(player_type *creature_ptr, POSITION y, POSITI
     if (g_ptr->mimic && is_trap(creature_ptr, g_ptr->feat)) {
         disclose_grid(creature_ptr, y, x);
         msg_print(_("トラップを発見した。", "You have found a trap."));
-        disturb(creature_ptr, FALSE, TRUE);
+        disturb(creature_ptr, false, true);
     }
 
     if (is_hidden_door(creature_ptr, g_ptr)) {
         msg_print(_("隠しドアを発見した。", "You have found a secret door."));
         disclose_grid(creature_ptr, y, x);
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, false, false);
     }
 
     for (const auto this_o_idx : g_ptr->o_idx_list) {
@@ -85,7 +85,7 @@ static void discover_hidden_things(player_type *creature_ptr, POSITION y, POSITI
         if (!object_is_known(o_ptr)) {
             msg_print(_("箱に仕掛けられたトラップを発見した！", "You have discovered a trap on the chest!"));
             object_known(o_ptr);
-            disturb(creature_ptr, FALSE, FALSE);
+            disturb(creature_ptr, false, false);
         }
     }
 }
@@ -138,14 +138,14 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
                 monster_type *om_ptr = &floor_ptr->m_list[om_idx];
                 om_ptr->fy = ny;
                 om_ptr->fx = nx;
-                update_monster(creature_ptr, om_idx, TRUE);
+                update_monster(creature_ptr, om_idx, true);
             }
 
             if (nm_idx > 0) {
                 monster_type *nm_ptr = &floor_ptr->m_list[nm_idx];
                 nm_ptr->fy = oy;
                 nm_ptr->fx = ox;
-                update_monster(creature_ptr, nm_idx, TRUE);
+                update_monster(creature_ptr, nm_idx, true);
             }
         }
 
@@ -171,9 +171,9 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 
         if (creature_ptr->pclass == CLASS_NINJA) {
             if (g_ptr->info & (CAVE_GLOW))
-                set_superstealth(creature_ptr, FALSE);
+                set_superstealth(creature_ptr, false);
             else if (creature_ptr->cur_lite <= 0)
-                set_superstealth(creature_ptr, TRUE);
+                set_superstealth(creature_ptr, true);
         }
 
         if ((creature_ptr->action == ACTION_HAYAGAKE)
@@ -194,7 +194,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
         if (music_singing(creature_ptr, MUSIC_WALL)) {
             (void)project(creature_ptr, 0, 0, creature_ptr->y, creature_ptr->x, (60 + creature_ptr->lev), GF_DISINTEGRATE, PROJECT_KILL | PROJECT_ITEM);
             if (!player_bold(creature_ptr, ny, nx) || creature_ptr->is_dead || creature_ptr->leaving)
-                return FALSE;
+                return false;
         }
 
         if ((creature_ptr->skill_fos >= 50) || (0 == randint0(50 - creature_ptr->skill_fos)))
@@ -205,7 +205,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
     }
 
     if (!(mpe_mode & MPE_DONT_PICKUP))
-        carry(creature_ptr, (mpe_mode & MPE_DO_PICKUP) ? TRUE : FALSE);
+        carry(creature_ptr, (mpe_mode & MPE_DO_PICKUP) ? true : false);
 
     if (!creature_ptr->running) {
         // 自動拾い/自動破壊により床上のアイテムリストが変化した可能性があるので表示を更新
@@ -215,15 +215,15 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 
     PlayerEnergy energy(creature_ptr);
     if (has_flag(f_ptr->flags, FF_STORE)) {
-        disturb(creature_ptr, FALSE, TRUE);
+        disturb(creature_ptr, false, true);
         energy.reset_player_turn();
         command_new = SPECIAL_KEY_STORE;
     } else if (has_flag(f_ptr->flags, FF_BLDG)) {
-        disturb(creature_ptr, FALSE, TRUE);
+        disturb(creature_ptr, false, true);
         energy.reset_player_turn();
         command_new = SPECIAL_KEY_BUILDING;
     } else if (has_flag(f_ptr->flags, FF_QUEST_ENTER)) {
-        disturb(creature_ptr, FALSE, TRUE);
+        disturb(creature_ptr, false, true);
         energy.reset_player_turn();
         command_new = SPECIAL_KEY_QUEST;
     } else if (has_flag(f_ptr->flags, FF_QUEST_EXIT)) {
@@ -237,27 +237,27 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
             creature_ptr->word_recall = 0;
         creature_ptr->oldpx = 0;
         creature_ptr->oldpy = 0;
-        creature_ptr->leaving = TRUE;
+        creature_ptr->leaving = true;
     } else if (has_flag(f_ptr->flags, FF_HIT_TRAP) && !(mpe_mode & MPE_STAYING)) {
-        disturb(creature_ptr, FALSE, TRUE);
+        disturb(creature_ptr, false, true);
         if (g_ptr->mimic || has_flag(f_ptr->flags, FF_SECRET)) {
             msg_print(_("トラップだ！", "You found a trap!"));
             disclose_grid(creature_ptr, creature_ptr->y, creature_ptr->x);
         }
 
-        hit_trap(creature_ptr, (mpe_mode & MPE_BREAK_TRAP) ? TRUE : FALSE);
+        hit_trap(creature_ptr, (mpe_mode & MPE_BREAK_TRAP) ? true : false);
         if (!player_bold(creature_ptr, ny, nx) || creature_ptr->is_dead || creature_ptr->leaving)
-            return FALSE;
+            return false;
     }
 
     if (!(mpe_mode & MPE_STAYING) && (disturb_trap_detect || alert_trap_detect) && creature_ptr->dtrap && !(g_ptr->info & CAVE_IN_DETECT)) {
-        creature_ptr->dtrap = FALSE;
+        creature_ptr->dtrap = false;
         if (!(g_ptr->info & CAVE_UNSAFE)) {
             if (alert_trap_detect)
                 msg_print(_("* 注意:この先はトラップの感知範囲外です！ *", "*Leaving trap detect region!*"));
 
             if (disturb_trap_detect)
-                disturb(creature_ptr, FALSE, TRUE);
+                disturb(creature_ptr, false, true);
         }
     }
 
@@ -274,7 +274,7 @@ bool trap_can_be_ignored(player_type *creature_ptr, FEAT_IDX feat)
 {
     feature_type *f_ptr = &f_info[feat];
     if (!has_flag(f_ptr->flags, FF_TRAP))
-        return TRUE;
+        return true;
 
     switch (f_ptr->subtype) {
     case TRAP_TRAPDOOR:
@@ -282,37 +282,37 @@ bool trap_can_be_ignored(player_type *creature_ptr, FEAT_IDX feat)
     case TRAP_SPIKED_PIT:
     case TRAP_POISON_PIT:
         if (creature_ptr->levitation)
-            return TRUE;
+            return true;
         break;
     case TRAP_TELEPORT:
         if (creature_ptr->anti_tele)
-            return TRUE;
+            return true;
         break;
     case TRAP_FIRE:
         if (has_immune_fire(creature_ptr))
-            return TRUE;
+            return true;
         break;
     case TRAP_ACID:
         if (has_immune_acid(creature_ptr))
-            return TRUE;
+            return true;
         break;
     case TRAP_BLIND:
         if (has_resist_blind(creature_ptr))
-            return TRUE;
+            return true;
         break;
     case TRAP_CONFUSE:
         if (has_resist_conf(creature_ptr))
-            return TRUE;
+            return true;
         break;
     case TRAP_POISON:
         if (has_resist_pois(creature_ptr))
-            return TRUE;
+            return true;
         break;
     case TRAP_SLEEP:
         if (creature_ptr->free_act)
-            return TRUE;
+            return true;
         break;
     }
 
-    return FALSE;
+    return false;
 }

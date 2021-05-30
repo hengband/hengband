@@ -21,7 +21,7 @@ void birth_quit(void)
 void show_help(player_type* creature_ptr, concptr helpfile)
 {
     screen_save();
-    (void)show_file(creature_ptr, TRUE, helpfile, NULL, 0, 0);
+    (void)show_file(creature_ptr, true, helpfile, NULL, 0, 0);
     screen_load();
 }
 

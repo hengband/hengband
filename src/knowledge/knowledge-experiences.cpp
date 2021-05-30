@@ -62,7 +62,7 @@ void do_cmd_knowledge_weapon_exp(player_type *creature_ptr)
     }
 
     angband_fclose(fff);
-    (void)show_file(creature_ptr, TRUE, file_name, _("武器の経験値", "Weapon Proficiency"), 0, 0);
+    (void)show_file(creature_ptr, true, file_name, _("武器の経験値", "Weapon Proficiency"), 0, 0);
     fd_kill(file_name);
 }
 
@@ -143,7 +143,7 @@ void do_cmd_knowledge_spell_exp(player_type *creature_ptr)
     }
 
     angband_fclose(fff);
-    (void)show_file(creature_ptr, TRUE, file_name, _("魔法の経験値", "Spell Proficiency"), 0, 0);
+    (void)show_file(creature_ptr, true, file_name, _("魔法の経験値", "Spell Proficiency"), 0, 0);
     fd_kill(file_name);
 }
 
@@ -178,6 +178,6 @@ void do_cmd_knowledge_skill_exp(player_type *creature_ptr)
     }
 
     angband_fclose(fff);
-    (void)show_file(creature_ptr, TRUE, file_name, _("技能の経験値", "Miscellaneous Proficiency"), 0, 0);
+    (void)show_file(creature_ptr, true, file_name, _("技能の経験値", "Miscellaneous Proficiency"), 0, 0);
     fd_kill(file_name);
 }

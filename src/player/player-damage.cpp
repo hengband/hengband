@@ -106,7 +106,7 @@ static bool acid_minus_ac(player_type *creature_ptr)
     }
 
     if ((o_ptr == NULL) || (o_ptr->k_idx == 0) || !object_is_armour(creature_ptr, o_ptr))
-        return FALSE;
+        return false;
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(creature_ptr, o_name, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
@@ -114,12 +114,12 @@ static bool acid_minus_ac(player_type *creature_ptr)
     object_flags(creature_ptr, o_ptr, flgs);
     if (o_ptr->ac + o_ptr->to_a <= 0) {
         msg_format(_("%sは既にボロボロだ！", "Your %s is already fully corroded!"), o_name);
-        return FALSE;
+        return false;
     }
 
     if (has_flag(flgs, TR_IGNORE_ACID)) {
         msg_format(_("しかし%sには効果がなかった！", "Your %s is unaffected!"), o_name);
-        return TRUE;
+        return true;
     }
 
     msg_format(_("%sが酸で腐食した！", "Your %s is corroded!"), o_name);
@@ -127,7 +127,7 @@ static bool acid_minus_ac(player_type *creature_ptr)
     creature_ptr->update |= PU_BONUS;
     creature_ptr->window_flags |= PW_EQUIP | PW_PLAYER;
     calc_android_exp(creature_ptr);
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -287,9 +287,9 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
         damage = (damage + 1) / 2;
 
     if (damage_type != DAMAGE_USELIFE) {
-        disturb(creature_ptr, TRUE, TRUE);
+        disturb(creature_ptr, true, true);
         if (auto_more) {
-            creature_ptr->now_damaged = TRUE;
+            creature_ptr->now_damaged = true;
         }
     }
 
@@ -347,7 +347,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
     }
 
     if (creature_ptr->chp < 0 && !cheat_immortal) {
-        bool android = (creature_ptr->prace == RACE_ANDROID ? TRUE : FALSE);
+        bool android = (creature_ptr->prace == RACE_ANDROID ? true : false);
 
         /* 死んだ時に強制終了して死を回避できなくしてみた by Habu */
         if (!cheat_save && !save_player(creature_ptr, SAVE_TYPE_CLOSE_GAME))
@@ -356,8 +356,8 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
         sound(SOUND_DEATH);
         chg_virtue(creature_ptr, V_SACRIFICE, 10);
         handle_stuff(creature_ptr);
-        creature_ptr->leaving = TRUE;
-        if(!cheat_immortal) creature_ptr->is_dead = TRUE;
+        creature_ptr->leaving = true;
+        if(!cheat_immortal) creature_ptr->is_dead = true;
         if (creature_ptr->current_floor_ptr->inside_arena) {
             concptr m_name = r_info[arena_info[creature_ptr->arena_number].r_idx].name.c_str();
             msg_format(_("あなたは%sの前に敗れ去った。", "You are beaten by %s."), m_name);
@@ -391,7 +391,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
                 angband_strcpy(creature_ptr->died_from, dummy, sizeof creature_ptr->died_from);
             }
 
-            current_world_ptr->total_winner = FALSE;
+            current_world_ptr->total_winner = false;
             if (winning_seppuku) {
                 add_retired_class(creature_ptr->pclass);
                 exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 0, _("勝利の後切腹した。", "committed seppuku after the winning."));
@@ -529,7 +529,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
         }
 
         if (auto_more)
-            creature_ptr->now_damaged = TRUE;
+            creature_ptr->now_damaged = true;
 
         msg_print(_("*** 警告:低ヒット・ポイント！ ***", "*** LOW HITPOINT WARNING! ***"));
         msg_print(NULL);
@@ -537,7 +537,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
     }
 
     if (creature_ptr->wild_mode && !creature_ptr->leaving && (creature_ptr->chp < MAX(warning, creature_ptr->mhp / 5)))
-        change_wild_mode(creature_ptr, FALSE);
+        change_wild_mode(creature_ptr, false);
 
     return damage;
 }
@@ -564,7 +564,7 @@ static void process_aura_damage(monster_type *m_ptr, player_type *touched_ptr, b
 
     monster_desc(touched_ptr, mon_name, m_ptr, MD_WRONGDOER_NAME);
     msg_print(message);
-    dam_func(touched_ptr, aura_damage, mon_name, TRUE);
+    dam_func(touched_ptr, aura_damage, mon_name, true);
 
     if (is_original_ap_and_seen(touched_ptr, m_ptr))
         atoffset(BIT_FLAGS, r_ptr, r_flags_offset) |= aura_flag;

@@ -15,24 +15,24 @@
  */
 bool set_tim_sh_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
-    bool notice = FALSE;
+    bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
     if (creature_ptr->is_dead)
-        return FALSE;
+        return false;
 
     if (v) {
         if (creature_ptr->tim_sh_fire && !do_dec) {
             if (creature_ptr->tim_sh_fire > v)
-                return FALSE;
+                return false;
         } else if (!creature_ptr->tim_sh_fire) {
             msg_print(_("体が炎のオーラで覆われた。", "You are enveloped by a fiery aura!"));
-            notice = TRUE;
+            notice = true;
         }
     } else {
         if (creature_ptr->tim_sh_fire) {
             msg_print(_("炎のオーラが消えた。", "The fiery aura disappeared."));
-            notice = TRUE;
+            notice = true;
         }
     }
 
@@ -40,11 +40,11 @@ bool set_tim_sh_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
     creature_ptr->redraw |= (PR_STATUS);
 
     if (!notice)
-        return FALSE;
+        return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, false, false);
     creature_ptr->update |= (PU_BONUS);
     handle_stuff(creature_ptr);
-    return TRUE;
+    return true;
 }

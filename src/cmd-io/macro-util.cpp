@@ -16,7 +16,7 @@ concptr *macro__act;
 s16b macro__num;
 
 /* Expand macros in "get_com" or not */
-bool get_com_no_macros = FALSE;
+bool get_com_no_macros = false;
 
 /* Determine if any macros have ever started with a given character */
 static bool macro__use[256];
@@ -134,6 +134,6 @@ errr macro_add(concptr pat, concptr act)
     }
 
     macro__act[n] = string_make(act);
-    macro__use[(byte)(pat[0])] = TRUE;
+    macro__use[(byte)(pat[0])] = true;
     return 0;
 }

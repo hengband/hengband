@@ -52,16 +52,16 @@ void spoil_out(concptr str)
     static char roff_waiting_buf[256];
 
 #ifdef JP
-    bool iskanji_flag = FALSE;
+    bool iskanji_flag = false;
 #endif
 
     static char *roff_p = roff_buf;
     static char *roff_s = NULL;
-    static bool waiting_output = FALSE;
+    static bool waiting_output = false;
     if (!str) {
         if (waiting_output) {
             fputs(roff_waiting_buf, spoiler_file);
-            waiting_output = FALSE;
+            waiting_output = false;
         }
 
         if (roff_p != roff_buf)
@@ -105,26 +105,26 @@ void spoil_out(concptr str)
             if (!wrap)
                 fputc('\n', spoiler_file);
 
-            waiting_output = FALSE;
+            waiting_output = false;
         }
 
         if (!wrap) {
 #ifdef JP
             if (roff_p >= roff_buf + (iskanji_flag ? 74 : 75))
-                wrap = TRUE;
+                wrap = true;
             else if ((ch == ' ') && (roff_p >= roff_buf + (iskanji_flag ? 72 : 73)))
-                wrap = TRUE;
+                wrap = true;
 #else
             if (roff_p >= roff_buf + 75)
-                wrap = TRUE;
+                wrap = true;
             else if ((ch == ' ') && (roff_p >= roff_buf + 73))
-                wrap = TRUE;
+                wrap = true;
 #endif
 
             if (wrap) {
 #ifdef JP
                 bool k_flag_local;
-                bool iskanji_flag_local = FALSE;
+                bool iskanji_flag_local = false;
                 concptr tail = str + (iskanji_flag ? 2 : 1);
 #else
                 concptr tail = str + 1;
@@ -147,7 +147,7 @@ void spoil_out(concptr str)
                 }
 
                 if (!*tail)
-                    waiting_output = TRUE;
+                    waiting_output = true;
             }
         }
 

@@ -32,17 +32,17 @@ bool cast_berserk_spell(player_type *caster_ptr, mind_berserker_type spell)
     case CHARGE: {
         if (caster_ptr->riding) {
             msg_print(_("乗馬中には無理だ。", "You cannot do it when riding."));
-            return FALSE;
+            return false;
         }
 
-        if (!get_direction(caster_ptr, &dir, FALSE, FALSE) || (dir == 5))
-            return FALSE;
+        if (!get_direction(caster_ptr, &dir, false, false) || (dir == 5))
+            return false;
 
         y = caster_ptr->y + ddy[dir];
         x = caster_ptr->x + ddx[dir];
         if (!caster_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
             msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
-            return FALSE;
+            return false;
         }
 
         do_cmd_attack(caster_ptr, y, x, HISSATSU_NONE);
@@ -61,12 +61,12 @@ bool cast_berserk_spell(player_type *caster_ptr, mind_berserker_type spell)
         break;
     }
     case SMASH_TRAP: {
-        if (!get_direction(caster_ptr, &dir, FALSE, FALSE))
-            return FALSE;
+        if (!get_direction(caster_ptr, &dir, false, false))
+            return false;
 
         y = caster_ptr->y + ddy[dir];
         x = caster_ptr->x + ddx[dir];
-        exe_movement(caster_ptr, dir, easy_disarm, TRUE);
+        exe_movement(caster_ptr, dir, easy_disarm, true);
         break;
     }
     case QUAKE:
@@ -80,5 +80,5 @@ bool cast_berserk_spell(player_type *caster_ptr, mind_berserker_type spell)
         break;
     }
 
-    return TRUE;
+    return true;
 }

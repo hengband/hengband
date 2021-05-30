@@ -112,10 +112,10 @@ static void travel_flow_aux(player_type *creature_ptr, POSITION y, POSITION x, i
 static void travel_flow(player_type *creature_ptr, POSITION ty, POSITION tx)
 {
     flow_head = flow_tail = 0;
-    bool wall = FALSE;
+    bool wall = false;
     feature_type *f_ptr = &f_info[creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat];
     if (!has_flag(f_ptr->flags, FF_MOVE))
-        wall = TRUE;
+        wall = true;
 
     travel_flow_aux(creature_ptr, ty, tx, 0, wall);
     POSITION x, y;

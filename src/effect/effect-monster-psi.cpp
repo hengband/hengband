@@ -30,14 +30,14 @@
 static bool resisted_psi_because_empty_mind(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (none_bits(em_ptr->r_ptr->flags2, RF2_EMPTY_MIND))
-        return FALSE;
+        return false;
 
     em_ptr->dam = 0;
     em_ptr->note = _("には完全な耐性がある！", " is immune.");
     if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
         set_bits(em_ptr->r_ptr->r_flags2, RF2_EMPTY_MIND);
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -55,11 +55,11 @@ static bool resisted_psi_because_weird_mind_or_powerful(effect_monster_type *em_
     bool has_resistance = any_bits(em_ptr->r_ptr->flags2, RF2_STUPID | RF2_WEIRD_MIND) || any_bits(em_ptr->r_ptr->flags3, RF3_ANIMAL)
         || (em_ptr->r_ptr->level > randint1(3 * em_ptr->dam));
     if (!has_resistance)
-        return FALSE;
+        return false;
 
     em_ptr->note = _("には耐性がある！", " resists!");
     em_ptr->dam /= 3;
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -76,13 +76,13 @@ static bool reflects_psi_with_currupted_mind(player_type *caster_ptr, effect_mon
 {
     bool is_corrupted = any_bits(em_ptr->r_ptr->flags3, RF3_UNDEAD | RF3_DEMON) && (em_ptr->r_ptr->level > caster_ptr->lev / 2) && one_in_(2);
     if (!is_corrupted)
-        return FALSE;
+        return false;
 
     em_ptr->note = NULL;
     msg_format(_("%^sの堕落した精神は攻撃を跳ね返した！",
                    (em_ptr->seen ? "%^s's corrupted mind backlashes your attack!" : "%^ss corrupted mind backlashes your attack!")),
         em_ptr->m_name);
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -193,12 +193,12 @@ static void effect_monster_psi_extra_effect(effect_monster_type *em_ptr)
 process_result effect_monster_psi(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
-        em_ptr->obvious = TRUE;
+        em_ptr->obvious = true;
     if (!(los(caster_ptr, em_ptr->m_ptr->fy, em_ptr->m_ptr->fx, caster_ptr->y, caster_ptr->x))) {
         if (em_ptr->seen_msg)
             msg_format(_("%sはあなたが見えないので影響されない！", "%^s can't see you, and isn't affected!"), em_ptr->m_name);
 
-        em_ptr->skipped = TRUE;
+        em_ptr->skipped = true;
         return PROCESS_CONTINUE;
     }
 
@@ -278,7 +278,7 @@ static void effect_monster_psi_drain_change_power(player_type *caster_ptr, effec
 process_result effect_monster_psi_drain(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
-        em_ptr->obvious = TRUE;
+        em_ptr->obvious = true;
 
     effect_monster_psi_drain_resist(caster_ptr, em_ptr);
     if (em_ptr->dam > 0)
@@ -299,7 +299,7 @@ process_result effect_monster_psi_drain(player_type *caster_ptr, effect_monster_
 process_result effect_monster_telekinesis(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
-        em_ptr->obvious = TRUE;
+        em_ptr->obvious = true;
     if (one_in_(4)) {
         if (caster_ptr->riding && (em_ptr->g_ptr->m_idx == caster_ptr->riding))
             em_ptr->do_dist = 0;
@@ -310,7 +310,7 @@ process_result effect_monster_telekinesis(player_type *caster_ptr, effect_monste
     em_ptr->do_stun = damroll((em_ptr->caster_lev / 20) + 3, em_ptr->dam) + 1;
     if (any_bits(em_ptr->r_ptr->flags1, RF1_UNIQUE) || (em_ptr->r_ptr->level > 5 + randint1(em_ptr->dam))) {
         em_ptr->do_stun = 0;
-        em_ptr->obvious = FALSE;
+        em_ptr->obvious = false;
     }
 
     return PROCESS_CONTINUE;

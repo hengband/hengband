@@ -23,17 +23,17 @@
 turn_flags *init_turn_flags(MONSTER_IDX riding_idx, MONSTER_IDX m_idx, turn_flags *turn_flags_ptr)
 {
 	turn_flags_ptr->is_riding_mon = (m_idx == riding_idx);
-	turn_flags_ptr->do_turn = FALSE;
-	turn_flags_ptr->do_move = FALSE;
-	turn_flags_ptr->do_view = FALSE;
-	turn_flags_ptr->must_alter_to_move = FALSE;
-	turn_flags_ptr->did_open_door = FALSE;
-	turn_flags_ptr->did_bash_door = FALSE;
-	turn_flags_ptr->did_take_item = FALSE;
-	turn_flags_ptr->did_kill_item = FALSE;
-	turn_flags_ptr->did_move_body = FALSE;
-	turn_flags_ptr->did_pass_wall = FALSE;
-	turn_flags_ptr->did_kill_wall = FALSE;
+	turn_flags_ptr->do_turn = false;
+	turn_flags_ptr->do_move = false;
+	turn_flags_ptr->do_view = false;
+	turn_flags_ptr->must_alter_to_move = false;
+	turn_flags_ptr->did_open_door = false;
+	turn_flags_ptr->did_bash_door = false;
+	turn_flags_ptr->did_take_item = false;
+	turn_flags_ptr->did_kill_item = false;
+	turn_flags_ptr->did_move_body = false;
+	turn_flags_ptr->did_pass_wall = false;
+	turn_flags_ptr->did_kill_wall = false;
 	return turn_flags_ptr;
 }
 

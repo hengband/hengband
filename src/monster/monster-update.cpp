@@ -75,17 +75,17 @@ bool update_riding_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, 
     if (g_ptr->m_idx) {
         y_ptr->fy = oy;
         y_ptr->fx = ox;
-        update_monster(target_ptr, g_ptr->m_idx, TRUE);
+        update_monster(target_ptr, g_ptr->m_idx, true);
     }
 
     g_ptr->m_idx = m_idx;
     m_ptr->fy = ny;
     m_ptr->fx = nx;
-    update_monster(target_ptr, m_idx, TRUE);
+    update_monster(target_ptr, m_idx, true);
 
     lite_spot(target_ptr, oy, ox);
     lite_spot(target_ptr, ny, nx);
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -166,8 +166,8 @@ static um_type *initialize_um_type(player_type *subject_ptr, um_type *um_ptr, MO
     um_ptr->do_disturb = disturb_move;
     um_ptr->fy = um_ptr->m_ptr->fy;
     um_ptr->fx = um_ptr->m_ptr->fx;
-    um_ptr->flag = FALSE;
-    um_ptr->easy = FALSE;
+    um_ptr->flag = false;
+    um_ptr->easy = false;
     um_ptr->in_darkness = d_info[subject_ptr->dungeon_idx].flags.has(DF::DARKNESS) && !subject_ptr->see_nocto;
     um_ptr->full = full;
     return um_ptr;
@@ -211,26 +211,26 @@ static bool update_weird_telepathy(player_type *subject_ptr, um_type *um_ptr, MO
 {
     monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
     if ((r_ptr->flags2 & RF2_WEIRD_MIND) == 0)
-        return FALSE;
+        return false;
 
     if ((m_idx % 10) != (current_world_ptr->game_turn % 10))
-        return TRUE;
+        return true;
 
-    um_ptr->flag = TRUE;
+    um_ptr->flag = true;
     um_ptr->m_ptr->mflag.set(MFLAG::ESP);
     if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image) {
         r_ptr->r_flags2 |= RF2_WEIRD_MIND;
         update_smart_stupid_flags(r_ptr);
     }
 
-    return TRUE;
+    return true;
 }
 
 static void update_telepathy_sight(player_type *subject_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
 {
     monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
     if (subject_ptr->special_defense & KATA_MUSOU) {
-        um_ptr->flag = TRUE;
+        um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MFLAG::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             update_smart_stupid_flags(r_ptr);
@@ -251,7 +251,7 @@ static void update_telepathy_sight(player_type *subject_ptr, um_type *um_ptr, MO
     if (update_weird_telepathy(subject_ptr, um_ptr, m_idx))
         return;
 
-    um_ptr->flag = TRUE;
+    um_ptr->flag = true;
     um_ptr->m_ptr->mflag.set(MFLAG::ESP);
     if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
         update_smart_stupid_flags(r_ptr);
@@ -261,84 +261,84 @@ static void update_specific_race_telepathy(player_type *subject_ptr, um_type *um
 {
     monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
     if ((subject_ptr->esp_animal) && (r_ptr->flags3 & RF3_ANIMAL)) {
-        um_ptr->flag = TRUE;
+        um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MFLAG::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags3 |= RF3_ANIMAL;
     }
 
     if ((subject_ptr->esp_undead) && (r_ptr->flags3 & RF3_UNDEAD)) {
-        um_ptr->flag = TRUE;
+        um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MFLAG::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags3 |= RF3_UNDEAD;
     }
 
     if ((subject_ptr->esp_demon) && (r_ptr->flags3 & RF3_DEMON)) {
-        um_ptr->flag = TRUE;
+        um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MFLAG::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags3 |= RF3_DEMON;
     }
 
     if ((subject_ptr->esp_orc) && (r_ptr->flags3 & RF3_ORC)) {
-        um_ptr->flag = TRUE;
+        um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MFLAG::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags3 |= RF3_ORC;
     }
 
     if ((subject_ptr->esp_troll) && (r_ptr->flags3 & RF3_TROLL)) {
-        um_ptr->flag = TRUE;
+        um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MFLAG::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags3 |= RF3_TROLL;
     }
 
     if ((subject_ptr->esp_giant) && (r_ptr->flags3 & RF3_GIANT)) {
-        um_ptr->flag = TRUE;
+        um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MFLAG::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags3 |= RF3_GIANT;
     }
 
     if ((subject_ptr->esp_dragon) && (r_ptr->flags3 & RF3_DRAGON)) {
-        um_ptr->flag = TRUE;
+        um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MFLAG::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags3 |= RF3_DRAGON;
     }
 
     if ((subject_ptr->esp_human) && (r_ptr->flags2 & RF2_HUMAN)) {
-        um_ptr->flag = TRUE;
+        um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MFLAG::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags2 |= RF2_HUMAN;
     }
 
     if ((subject_ptr->esp_evil) && (r_ptr->flags3 & RF3_EVIL)) {
-        um_ptr->flag = TRUE;
+        um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MFLAG::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags3 |= RF3_EVIL;
     }
 
     if ((subject_ptr->esp_good) && (r_ptr->flags3 & RF3_GOOD)) {
-        um_ptr->flag = TRUE;
+        um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MFLAG::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags3 |= RF3_GOOD;
     }
 
     if ((subject_ptr->esp_nonliving) && ((r_ptr->flags3 & (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING)) == RF3_NONLIVING)) {
-        um_ptr->flag = TRUE;
+        um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MFLAG::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags3 |= RF3_NONLIVING;
     }
 
     if ((subject_ptr->esp_unique) && (r_ptr->flags1 & RF1_UNIQUE)) {
-        um_ptr->flag = TRUE;
+        um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MFLAG::ESP);
         if (is_original_ap(um_ptr->m_ptr) && !subject_ptr->image)
             r_ptr->r_flags1 |= RF1_UNIQUE;
@@ -348,34 +348,34 @@ static void update_specific_race_telepathy(player_type *subject_ptr, um_type *um
 static bool check_cold_blood(player_type *subject_ptr, um_type *um_ptr, const POSITION distance)
 {
     if (distance > subject_ptr->see_infra)
-        return FALSE;
+        return false;
 
     monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
     if ((r_ptr->flags2 & (RF2_COLD_BLOOD | RF2_AURA_FIRE)) == RF2_COLD_BLOOD)
-        return FALSE;
+        return false;
 
-    um_ptr->easy = TRUE;
-    um_ptr->flag = TRUE;
-    return TRUE;
+    um_ptr->easy = true;
+    um_ptr->flag = true;
+    return true;
 }
 
 static bool check_invisible(player_type *subject_ptr, um_type *um_ptr)
 {
     if (!player_can_see_bold(subject_ptr, um_ptr->fy, um_ptr->fx))
-        return FALSE;
+        return false;
 
     monster_race *r_ptr = &r_info[um_ptr->m_ptr->r_idx];
     if (r_ptr->flags2 & RF2_INVISIBLE) {
         if (subject_ptr->see_inv) {
-            um_ptr->easy = TRUE;
-            um_ptr->flag = TRUE;
+            um_ptr->easy = true;
+            um_ptr->flag = true;
         }
     } else {
-        um_ptr->easy = TRUE;
-        um_ptr->flag = TRUE;
+        um_ptr->easy = true;
+        um_ptr->flag = true;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -402,8 +402,8 @@ static void decide_sight_invisible_monster(player_type *subject_ptr, um_type *um
         return;
 
     if (subject_ptr->concent >= CONCENT_RADAR_THRESHOLD) {
-        um_ptr->easy = TRUE;
-        um_ptr->flag = TRUE;
+        um_ptr->easy = true;
+        um_ptr->flag = true;
     }
 
     bool do_cold_blood = check_cold_blood(subject_ptr, um_ptr, distance);
@@ -431,7 +431,7 @@ static void update_invisible_monster(player_type *subject_ptr, um_type *um_ptr, 
     if (um_ptr->m_ptr->ml)
         return;
 
-    um_ptr->m_ptr->ml = TRUE;
+    um_ptr->m_ptr->ml = true;
     lite_spot(subject_ptr, um_ptr->fy, um_ptr->fx);
 
     if (subject_ptr->health_who == m_idx)
@@ -456,7 +456,7 @@ static void update_invisible_monster(player_type *subject_ptr, um_type *um_ptr, 
         && (projectable(subject_ptr, um_ptr->m_ptr->fy, um_ptr->m_ptr->fx, subject_ptr->y, subject_ptr->x)
             && projectable(subject_ptr, subject_ptr->y, subject_ptr->x, um_ptr->m_ptr->fy, um_ptr->m_ptr->fx))) {
         if (disturb_pets || is_hostile(um_ptr->m_ptr))
-            disturb(subject_ptr, TRUE, TRUE);
+            disturb(subject_ptr, true, true);
     }
 }
 
@@ -465,7 +465,7 @@ static void update_visible_monster(player_type *subject_ptr, um_type *um_ptr, MO
     if (!um_ptr->m_ptr->ml)
         return;
 
-    um_ptr->m_ptr->ml = FALSE;
+    um_ptr->m_ptr->ml = false;
     lite_spot(subject_ptr, um_ptr->fy, um_ptr->fx);
 
     if (subject_ptr->health_who == m_idx)
@@ -475,21 +475,21 @@ static void update_visible_monster(player_type *subject_ptr, um_type *um_ptr, MO
         subject_ptr->redraw |= PR_UHEALTH;
 
     if (um_ptr->do_disturb && (disturb_pets || is_hostile(um_ptr->m_ptr)))
-        disturb(subject_ptr, TRUE, TRUE);
+        disturb(subject_ptr, true, true);
 }
 
 static bool update_clear_monster(player_type *subject_ptr, um_type *um_ptr)
 {
     if (!um_ptr->easy)
-        return FALSE;
+        return false;
 
     if (um_ptr->m_ptr->mflag.has_not(MFLAG::VIEW)) {
         um_ptr->m_ptr->mflag.set(MFLAG::VIEW);
         if (um_ptr->do_disturb && (disturb_pets || is_hostile(um_ptr->m_ptr)))
-            disturb(subject_ptr, TRUE, TRUE);
+            disturb(subject_ptr, true, true);
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -504,11 +504,11 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
     if (disturb_high) {
         monster_race *ap_r_ptr = &r_info[um_ptr->m_ptr->ap_r_idx];
         if (ap_r_ptr->r_tkills && ap_r_ptr->level >= subject_ptr->lev)
-            um_ptr->do_disturb = TRUE;
+            um_ptr->do_disturb = true;
     }
 
     if (um_ptr->m_ptr->mflag2.has(MFLAG2::MARK))
-        um_ptr->flag = TRUE;
+        um_ptr->flag = true;
 
     decide_sight_invisible_monster(subject_ptr, um_ptr, m_idx);
     if (um_ptr->flag)
@@ -521,7 +521,7 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
 
     um_ptr->m_ptr->mflag.reset(MFLAG::VIEW);
     if (um_ptr->do_disturb && (disturb_pets || is_hostile(um_ptr->m_ptr)))
-        disturb(subject_ptr, TRUE, TRUE);
+        disturb(subject_ptr, true, true);
 }
 
 /*!

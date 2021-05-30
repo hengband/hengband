@@ -96,11 +96,11 @@ void build_small_room(player_type *player_ptr, POSITION x0, POSITION y0)
  */
 void build_cavern(player_type *player_ptr)
 {
-    bool light = FALSE;
-    bool done = FALSE;
+    bool light = false;
+    bool done = false;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if ((floor_ptr->dun_level <= randint1(50)) && d_info[floor_ptr->dungeon_idx].flags.has_not(DF::DARKNESS))
-        light = TRUE;
+        light = true;
 
     POSITION xsize = floor_ptr->width - 1;
     POSITION ysize = floor_ptr->height - 1;
@@ -114,7 +114,7 @@ void build_cavern(player_type *player_ptr)
         int roug = randint1(8) * randint1(4);
         int cutoff = xsize / 2;
         generate_hmap(floor_ptr, y0 + 1, x0 + 1, xsize, ysize, grd, roug, cutoff);
-        done = generate_fracave(player_ptr, y0 + 1, x0 + 1, xsize, ysize, cutoff, light, FALSE);
+        done = generate_fracave(player_ptr, y0 + 1, x0 + 1, xsize, ysize, cutoff, light, false);
     }
 }
 
@@ -135,7 +135,7 @@ void build_lake(player_type *player_ptr, int type)
     int y0 = ysize / 2;
     xsize = x0 * 2;
     ysize = y0 * 2;
-    bool done = FALSE;
+    bool done = false;
     while (!done) {
         int grd = randint1(3) + 4;
         int roug = randint1(8) * randint1(4);

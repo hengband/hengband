@@ -55,7 +55,7 @@ static bool confirm_leave_level(player_type *creature_ptr, bool down_stair)
         return get_check(_("本当にこの階を去りますか？", "Really leave this floor? "));
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -63,7 +63,7 @@ static bool confirm_leave_level(player_type *creature_ptr, bool down_stair)
  */
 void do_cmd_go_up(player_type *creature_ptr)
 {
-    bool go_up = FALSE;
+    bool go_up = false;
     grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
     int up_num = 0;
@@ -76,7 +76,7 @@ void do_cmd_go_up(player_type *creature_ptr)
     }
 
     if (has_flag(f_ptr->flags, FF_QUEST)) {
-        if (!confirm_leave_level(creature_ptr, FALSE))
+        if (!confirm_leave_level(creature_ptr, false))
             return;
 
         if (is_echizen(creature_ptr))
@@ -100,7 +100,7 @@ void do_cmd_go_up(player_type *creature_ptr)
             creature_ptr->word_recall = 0;
         }
 
-        creature_ptr->leaving = TRUE;
+        creature_ptr->leaving = true;
         creature_ptr->oldpx = 0;
         creature_ptr->oldpy = 0;
         PlayerEnergy(creature_ptr).set_player_turn_energy(100);
@@ -108,9 +108,9 @@ void do_cmd_go_up(player_type *creature_ptr)
     }
 
     if (!is_in_dungeon(creature_ptr))
-        go_up = TRUE;
+        go_up = true;
     else
-        go_up = confirm_leave_level(creature_ptr, FALSE);
+        go_up = confirm_leave_level(creature_ptr, false);
 
     if (!go_up)
         return;
@@ -118,7 +118,7 @@ void do_cmd_go_up(player_type *creature_ptr)
     PlayerEnergy(creature_ptr).set_player_turn_energy(100);
 
     if (autosave_l)
-        do_cmd_save_game(creature_ptr, TRUE);
+        do_cmd_save_game(creature_ptr, true);
 
     if (creature_ptr->current_floor_ptr->inside_quest && quest[creature_ptr->current_floor_ptr->inside_quest].type == QUEST_TYPE_RANDOM) {
         leave_quest_check(creature_ptr);
@@ -155,7 +155,7 @@ void do_cmd_go_up(player_type *creature_ptr)
     else
         msg_print(_("階段を上って新たなる迷宮へと足を踏み入れた。", "You enter a maze of up staircases."));
 
-    creature_ptr->leaving = TRUE;
+    creature_ptr->leaving = true;
 }
 
 /*!
@@ -164,7 +164,7 @@ void do_cmd_go_up(player_type *creature_ptr)
  */
 void do_cmd_go_down(player_type *creature_ptr)
 {
-    bool fall_trap = FALSE;
+    bool fall_trap = false;
     int down_num = 0;
     if (creature_ptr->special_defense & KATA_MUSOU)
         set_action(creature_ptr, ACTION_NONE);
@@ -177,7 +177,7 @@ void do_cmd_go_down(player_type *creature_ptr)
     }
 
     if (has_flag(f_ptr->flags, FF_TRAP))
-        fall_trap = TRUE;
+        fall_trap = true;
 
     if (has_flag(f_ptr->flags, FF_QUEST_ENTER)) {
         do_cmd_quest(creature_ptr);
@@ -185,7 +185,7 @@ void do_cmd_go_down(player_type *creature_ptr)
     }
 
     if (has_flag(f_ptr->flags, FF_QUEST)) {
-        if (!confirm_leave_level(creature_ptr, TRUE))
+        if (!confirm_leave_level(creature_ptr, true))
             return;
 
         if (is_echizen(creature_ptr))
@@ -210,7 +210,7 @@ void do_cmd_go_down(player_type *creature_ptr)
             creature_ptr->word_recall = 0;
         }
 
-        creature_ptr->leaving = TRUE;
+        creature_ptr->leaving = true;
         creature_ptr->oldpx = 0;
         creature_ptr->oldpy = 0;
         PlayerEnergy(creature_ptr).set_player_turn_energy(100);
@@ -240,7 +240,7 @@ void do_cmd_go_down(player_type *creature_ptr)
 
     PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     if (autosave_l)
-        do_cmd_save_game(creature_ptr, TRUE);
+        do_cmd_save_game(creature_ptr, true);
 
     if (has_flag(f_ptr->flags, FF_SHAFT))
         down_num += 2;
@@ -248,7 +248,7 @@ void do_cmd_go_down(player_type *creature_ptr)
         down_num += 1;
 
     if (!is_in_dungeon(creature_ptr)) {
-        creature_ptr->enter_dungeon = TRUE;
+        creature_ptr->enter_dungeon = true;
         down_num = d_info[creature_ptr->dungeon_idx].mindepth;
     }
 
@@ -272,7 +272,7 @@ void do_cmd_go_down(player_type *creature_ptr)
         }
     }
 
-    creature_ptr->leaving = TRUE;
+    creature_ptr->leaving = true;
 
     if (fall_trap) {
         prepare_change_floor_mode(creature_ptr, CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
@@ -299,9 +299,9 @@ void do_cmd_walk(player_type *creature_ptr, bool pickup)
         command_arg = 0;
     }
 
-    bool more = FALSE;
+    bool more = false;
     DIRECTION dir;
-    if (get_rep_dir(creature_ptr, &dir, FALSE)) {
+    if (get_rep_dir(creature_ptr, &dir, false)) {
         PlayerEnergy energy(creature_ptr);
         energy.set_player_turn_energy(100);
         if ((dir != 5) && (creature_ptr->special_defense & KATA_MUSOU))
@@ -316,8 +316,8 @@ void do_cmd_walk(player_type *creature_ptr, bool pickup)
             energy.set_player_turn_energy(energy_use);
         }
 
-        exe_movement(creature_ptr, dir, pickup, FALSE);
-        more = TRUE;
+        exe_movement(creature_ptr, dir, pickup, false);
+        more = true;
     }
 
     if (creature_ptr->wild_mode && !cave_has_flag_bold(creature_ptr->current_floor_ptr, creature_ptr->y, creature_ptr->x, FF_TOWN)) {
@@ -329,13 +329,13 @@ void do_cmd_walk(player_type *creature_ptr, bool pickup)
             msg_print(_("襲撃だ！", "You are ambushed !"));
             creature_ptr->oldpy = randint1(MAX_HGT - 2);
             creature_ptr->oldpx = randint1(MAX_WID - 2);
-            change_wild_mode(creature_ptr, TRUE);
+            change_wild_mode(creature_ptr, true);
             PlayerEnergy(creature_ptr).set_player_turn_energy(100);
         }
     }
 
     if (!more)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, false, false);
 }
 
 /*!
@@ -352,7 +352,7 @@ void do_cmd_run(player_type *creature_ptr)
     if (creature_ptr->special_defense & KATA_MUSOU)
         set_action(creature_ptr, ACTION_NONE);
 
-    if (get_rep_dir(creature_ptr, &dir, FALSE)) {
+    if (get_rep_dir(creature_ptr, &dir, false)) {
         creature_ptr->running = (command_arg ? command_arg : 1000);
         run_step(creature_ptr, dir);
     }
@@ -417,7 +417,7 @@ void do_cmd_rest(player_type *creature_ptr)
         command_arg = 9999;
 
     if (creature_ptr->special_defense & NINJA_S_STEALTH)
-        set_superstealth(creature_ptr, FALSE);
+        set_superstealth(creature_ptr, false);
 
     PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     if (command_arg > 100)

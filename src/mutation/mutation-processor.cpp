@@ -62,7 +62,7 @@ static bool get_hack_dir(player_type *creature_ptr, DIRECTION *dp)
         concptr p = target_okay(creature_ptr)
             ? _("方向 ('5'でターゲットへ, '*'でターゲット再選択, ESCで中断)? ", "Direction ('5' for target, '*' to re-target, Escape to cancel)? ")
             : _("方向 ('*'でターゲット選択, ESCで中断)? ", "Direction ('*' to choose a target, Escape to cancel)? ");
-        if (!get_com(p, &command, TRUE))
+        if (!get_com(p, &command, true))
             break;
 
         if (use_menu && (command == '\r'))
@@ -96,7 +96,7 @@ static bool get_hack_dir(player_type *creature_ptr, DIRECTION *dp)
     }
 
     if (!dir)
-        return FALSE;
+        return false;
 
     command_dir = dir;
     if (creature_ptr->confused)
@@ -106,7 +106,7 @@ static bool get_hack_dir(player_type *creature_ptr, DIRECTION *dp)
         msg_print(_("あなたは混乱している。", "You are confused."));
 
     *dp = dir;
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -119,16 +119,16 @@ void process_world_aux_mutation(player_type *creature_ptr)
         return;
 
     if (creature_ptr->muta.has(MUTA::BERS_RAGE) && one_in_(3000)) {
-        disturb(creature_ptr, FALSE, TRUE);
+        disturb(creature_ptr, false, true);
         msg_print(_("ウガァァア！", "RAAAAGHH!"));
         msg_print(_("激怒の発作に襲われた！", "You feel a fit of rage coming over you!"));
-        (void)set_shero(creature_ptr, 10 + randint1(creature_ptr->lev), FALSE);
+        (void)set_shero(creature_ptr, 10 + randint1(creature_ptr->lev), false);
         (void)set_afraid(creature_ptr, 0);
     }
 
     if (creature_ptr->muta.has(MUTA::COWARDICE) && (randint1(3000) == 13)) {
         if (!has_resist_fear(creature_ptr)) {
-            disturb(creature_ptr, FALSE, TRUE);
+            disturb(creature_ptr, false, true);
             msg_print(_("とても暗い... とても恐い！", "It's so dark... so scary!"));
             set_afraid(creature_ptr, creature_ptr->afraid + 13 + randint1(26));
         }
@@ -136,7 +136,7 @@ void process_world_aux_mutation(player_type *creature_ptr)
 
     if (creature_ptr->muta.has(MUTA::RTELEPORT) && (randint1(5000) == 88)) {
         if (!has_resist_nexus(creature_ptr) && creature_ptr->muta.has_not(MUTA::VTELEPORT) && !creature_ptr->anti_tele) {
-            disturb(creature_ptr, FALSE, TRUE);
+            disturb(creature_ptr, false, true);
             msg_print(_("あなたの位置は突然ひじょうに不確定になった...", "Your position suddenly seems very uncertain..."));
             msg_print(NULL);
             teleport_player(creature_ptr, 40, TELEPORT_PASSIVE);
@@ -145,7 +145,7 @@ void process_world_aux_mutation(player_type *creature_ptr)
 
     if (creature_ptr->muta.has(MUTA::ALCOHOL) && (randint1(6400) == 321)) {
         if (!has_resist_conf(creature_ptr) && !has_resist_chaos(creature_ptr)) {
-            disturb(creature_ptr, FALSE, TRUE);
+            disturb(creature_ptr, false, true);
             creature_ptr->redraw |= PR_EXTRA;
             msg_print(_("いひきがもーろーとひてきたきがふる...ヒック！", "You feel a SSSCHtupor cOmINg over yOu... *HIC*!"));
         }
@@ -161,7 +161,7 @@ void process_world_aux_mutation(player_type *creature_ptr)
                     lose_all_info(creature_ptr);
                 else
                     wiz_dark(creature_ptr);
-                (void)teleport_player_aux(creature_ptr, 100, FALSE, static_cast<teleport_flags>(TELEPORT_NONMAGICAL | TELEPORT_PASSIVE));
+                (void)teleport_player_aux(creature_ptr, 100, false, static_cast<teleport_flags>(TELEPORT_NONMAGICAL | TELEPORT_PASSIVE));
                 wiz_dark(creature_ptr);
                 msg_print(_("あなたは見知らぬ場所で目が醒めた...頭が痛い。", "You wake up somewhere with a sore head..."));
                 msg_print(_("何も覚えていない。どうやってここに来たかも分からない！", "You can't remember a thing or how you got here!"));
@@ -176,14 +176,14 @@ void process_world_aux_mutation(player_type *creature_ptr)
 
     if (creature_ptr->muta.has(MUTA::HALLU) && (randint1(6400) == 42)) {
         if (!has_resist_chaos(creature_ptr)) {
-            disturb(creature_ptr, FALSE, TRUE);
+            disturb(creature_ptr, false, true);
             creature_ptr->redraw |= PR_EXTRA;
             (void)set_image(creature_ptr, creature_ptr->image + randint0(50) + 20);
         }
     }
 
     if (creature_ptr->muta.has(MUTA::FLATULENT) && (randint1(3000) == 13)) {
-        disturb(creature_ptr, FALSE, TRUE);
+        disturb(creature_ptr, false, true);
         msg_print(_("ブゥーーッ！おっと。", "BRRAAAP! Oops."));
         msg_print(NULL);
         fire_ball(creature_ptr, GF_POIS, 0, creature_ptr->lev, 3);
@@ -191,7 +191,7 @@ void process_world_aux_mutation(player_type *creature_ptr)
 
     if (creature_ptr->muta.has(MUTA::PROD_MANA) && !creature_ptr->anti_magic && one_in_(9000)) {
         int dire = 0;
-        disturb(creature_ptr, FALSE, TRUE);
+        disturb(creature_ptr, false, true);
         msg_print(_("魔法のエネルギーが突然あなたの中に流れ込んできた！エネルギーを解放しなければならない！",
             "Magical energy flows through you! You must release it!"));
 
@@ -212,27 +212,27 @@ void process_world_aux_mutation(player_type *creature_ptr)
 
         if (summon_specific(creature_ptr, (pet ? -1 : 0), creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_DEMON, mode)) {
             msg_print(_("あなたはデーモンを引き寄せた！", "You have attracted a demon!"));
-            disturb(creature_ptr, FALSE, TRUE);
+            disturb(creature_ptr, false, true);
         }
     }
 
     if (creature_ptr->muta.has(MUTA::SPEED_FLUX) && one_in_(6000)) {
-        disturb(creature_ptr, FALSE, TRUE);
+        disturb(creature_ptr, false, true);
         if (one_in_(2)) {
             msg_print(_("精力的でなくなった気がする。", "You feel less energetic."));
 
             if (creature_ptr->fast > 0) {
-                set_fast(creature_ptr, 0, TRUE);
+                set_fast(creature_ptr, 0, true);
             } else {
-                set_slow(creature_ptr, randint1(30) + 10, FALSE);
+                set_slow(creature_ptr, randint1(30) + 10, false);
             }
         } else {
             msg_print(_("精力的になった気がする。", "You feel more energetic."));
 
             if (creature_ptr->slow > 0) {
-                set_slow(creature_ptr, 0, TRUE);
+                set_slow(creature_ptr, 0, true);
             } else {
-                set_fast(creature_ptr, randint1(30) + 10, FALSE);
+                set_fast(creature_ptr, randint1(30) + 10, false);
             }
         }
 
@@ -240,7 +240,7 @@ void process_world_aux_mutation(player_type *creature_ptr)
     }
 
     if (creature_ptr->muta.has(MUTA::BANISH_ALL) && one_in_(9000)) {
-        disturb(creature_ptr, FALSE, TRUE);
+        disturb(creature_ptr, false, true);
         msg_print(_("突然ほとんど孤独になった気がする。", "You suddenly feel almost lonely."));
 
         banish_monsters(creature_ptr, 100);
@@ -295,12 +295,12 @@ void process_world_aux_mutation(player_type *creature_ptr)
 
         if (summon_specific(creature_ptr, (pet ? -1 : 0), creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_ANIMAL, mode)) {
             msg_print(_("動物を引き寄せた！", "You have attracted an animal!"));
-            disturb(creature_ptr, FALSE, TRUE);
+            disturb(creature_ptr, false, true);
         }
     }
 
     if (creature_ptr->muta.has(MUTA::RAW_CHAOS) && !creature_ptr->anti_magic && one_in_(8000)) {
-        disturb(creature_ptr, FALSE, TRUE);
+        disturb(creature_ptr, false, true);
         msg_print(_("周りの空間が歪んでいる気がする！", "You feel the world warping around you!"));
         msg_print(NULL);
         fire_ball(creature_ptr, GF_CHAOS, 0, creature_ptr->lev, 8);
@@ -312,10 +312,10 @@ void process_world_aux_mutation(player_type *creature_ptr)
     }
 
     if (creature_ptr->muta.has(MUTA::WRAITH) && !creature_ptr->anti_magic && one_in_(3000)) {
-        disturb(creature_ptr, FALSE, TRUE);
+        disturb(creature_ptr, false, true);
         msg_print(_("非物質化した！", "You feel insubstantial!"));
         msg_print(NULL);
-        set_wraith_form(creature_ptr, randint1(creature_ptr->lev / 2) + (creature_ptr->lev / 2), FALSE);
+        set_wraith_form(creature_ptr, randint1(creature_ptr->lev / 2) + (creature_ptr->lev / 2), false);
     }
 
     if (creature_ptr->muta.has(MUTA::POLY_WOUND) && one_in_(3000))
@@ -323,40 +323,40 @@ void process_world_aux_mutation(player_type *creature_ptr)
 
     if (creature_ptr->muta.has(MUTA::WASTING) && one_in_(3000)) {
         int which_stat = randint0(A_MAX);
-        int sustained = FALSE;
+        int sustained = false;
 
         switch (which_stat) {
         case A_STR:
             if (has_sustain_str(creature_ptr))
-                sustained = TRUE;
+                sustained = true;
             break;
         case A_INT:
             if (has_sustain_int(creature_ptr))
-                sustained = TRUE;
+                sustained = true;
             break;
         case A_WIS:
             if (has_sustain_wis(creature_ptr))
-                sustained = TRUE;
+                sustained = true;
             break;
         case A_DEX:
             if (has_sustain_dex(creature_ptr))
-                sustained = TRUE;
+                sustained = true;
             break;
         case A_CON:
             if (has_sustain_con(creature_ptr))
-                sustained = TRUE;
+                sustained = true;
             break;
         case A_CHR:
             if (has_sustain_chr(creature_ptr))
-                sustained = TRUE;
+                sustained = true;
             break;
         default:
             msg_print(_("不正な状態！", "Invalid stat chosen!"));
-            sustained = TRUE;
+            sustained = true;
         }
 
         if (!sustained) {
-            disturb(creature_ptr, FALSE, TRUE);
+            disturb(creature_ptr, false, true);
             msg_print(_("自分が衰弱していくのが分かる！", "You can feel yourself wasting away!"));
             msg_print(NULL);
             (void)dec_stat(creature_ptr, which_stat, randint1(6) + 6, one_in_(3));
@@ -373,22 +373,22 @@ void process_world_aux_mutation(player_type *creature_ptr)
 
         if (summon_specific(creature_ptr, (pet ? -1 : 0), creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_DRAGON, mode)) {
             msg_print(_("ドラゴンを引き寄せた！", "You have attracted a dragon!"));
-            disturb(creature_ptr, FALSE, TRUE);
+            disturb(creature_ptr, false, true);
         }
     }
 
     if (creature_ptr->muta.has(MUTA::WEIRD_MIND) && !creature_ptr->anti_magic && one_in_(3000)) {
         if (creature_ptr->tim_esp > 0) {
             msg_print(_("精神にもやがかかった！", "Your mind feels cloudy!"));
-            set_tim_esp(creature_ptr, 0, TRUE);
+            set_tim_esp(creature_ptr, 0, true);
         } else {
             msg_print(_("精神が広がった！", "Your mind expands!"));
-            set_tim_esp(creature_ptr, creature_ptr->lev, FALSE);
+            set_tim_esp(creature_ptr, creature_ptr->lev, false);
         }
     }
 
     if (creature_ptr->muta.has(MUTA::NAUSEA) && !creature_ptr->slow_digest && one_in_(9000)) {
-        disturb(creature_ptr, FALSE, TRUE);
+        disturb(creature_ptr, false, true);
         msg_print(_("胃が痙攣し、食事を失った！", "Your stomach roils, and you lose your lunch!"));
         msg_print(NULL);
         set_food(creature_ptr, PY_FOOD_WEAK);
@@ -430,10 +430,10 @@ void process_world_aux_mutation(player_type *creature_ptr)
     }
 
     if (creature_ptr->muta.has(MUTA::INVULN) && !creature_ptr->anti_magic && one_in_(5000)) {
-        disturb(creature_ptr, FALSE, TRUE);
+        disturb(creature_ptr, false, true);
         msg_print(_("無敵な気がする！", "You feel invincible!"));
         msg_print(NULL);
-        (void)set_invuln(creature_ptr, randint1(8) + 8, FALSE);
+        (void)set_invuln(creature_ptr, randint1(8) + 8, false);
     }
 
     if (creature_ptr->muta.has(MUTA::SP_TO_HP) && one_in_(2000)) {
@@ -463,7 +463,7 @@ void process_world_aux_mutation(player_type *creature_ptr)
     }
 
     if (creature_ptr->muta.has(MUTA::DISARM) && one_in_(10000)) {
-        disturb(creature_ptr, FALSE, TRUE);
+        disturb(creature_ptr, false, true);
         msg_print(_("足がもつれて転んだ！", "You trip over your own feet!"));
         take_hit(creature_ptr, DAMAGE_NOESCAPE, randint1(creature_ptr->wt / 6), _("転倒", "tripping"));
         drop_weapons(creature_ptr);
@@ -476,7 +476,7 @@ bool drop_weapons(player_type *creature_ptr)
     object_type *o_ptr = NULL;
 
     if (creature_ptr->wild_mode)
-        return FALSE;
+        return false;
 
     msg_print(NULL);
     if (has_melee_weapon(creature_ptr, INVEN_MAIN_HAND)) {
@@ -493,9 +493,9 @@ bool drop_weapons(player_type *creature_ptr)
     }
 
     if ((slot == 0) || object_is_cursed(o_ptr))
-        return FALSE;
+        return false;
 
     msg_print(_("武器を落としてしまった！", "You drop your weapon!"));
     drop_from_inventory(creature_ptr, slot, 1);
-    return TRUE;
+    return true;
 }

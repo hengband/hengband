@@ -11,7 +11,7 @@ bool comvert_hp_to_mp(player_type *creature_ptr)
     if (!gain_sp) {
         msg_print(_("変換に失敗した。", "You failed to convert."));
         creature_ptr->redraw |= (PR_HP | PR_MANA);
-        return TRUE;
+        return true;
     }
 
     creature_ptr->csp += gain_sp;
@@ -21,7 +21,7 @@ bool comvert_hp_to_mp(player_type *creature_ptr)
     }
 
     creature_ptr->redraw |= (PR_HP | PR_MANA);
-    return TRUE;
+    return true;
 }
 
 bool comvert_mp_to_hp(player_type *creature_ptr)
@@ -34,5 +34,5 @@ bool comvert_mp_to_hp(player_type *creature_ptr)
     }
 
     creature_ptr->redraw |= (PR_HP | PR_MANA);
-    return TRUE;
+    return true;
 }

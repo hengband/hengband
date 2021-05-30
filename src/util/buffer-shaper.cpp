@@ -11,7 +11,7 @@ void shape_buffer(concptr str, int maxlen, char *tbuf, size_t bufsize)
 
     while (str[read_pt]) {
 #ifdef JP
-        bool kinsoku = FALSE;
+        bool kinsoku = false;
         bool kanji;
 #endif
         int ch_len = 1;
@@ -25,7 +25,7 @@ void shape_buffer(concptr str, int maxlen, char *tbuf, size_t bufsize)
             ch_len = 2;
 
             if (strcmp(ch, "。") == 0 || strcmp(ch, "、") == 0 || strcmp(ch, "ィ") == 0 || strcmp(ch, "ー") == 0)
-                kinsoku = TRUE;
+                kinsoku = true;
         } else if (!isprint(ch[0]))
             ch[0] = ' ';
 #else

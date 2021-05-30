@@ -86,7 +86,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
     floor_type *floor_ptr = creature_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
     bool p_can_enter = player_can_enter(creature_ptr, g_ptr->feat, CEM_P_CAN_ENTER_PATTERN);
-    bool stormbringer = FALSE;
+    bool stormbringer = false;
     if (!floor_ptr->dun_level && !creature_ptr->wild_mode && ((x == 0) || (x == MAX_WID - 1) || (y == 0) || (y == MAX_HGT - 1))) {
         if (g_ptr->mimic && player_can_enter(creature_ptr, g_ptr->mimic, 0)) {
             if ((y == 0) && (x == 0)) {
@@ -94,69 +94,69 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
                 creature_ptr->wilderness_x--;
                 creature_ptr->oldpy = floor_ptr->height - 2;
                 creature_ptr->oldpx = floor_ptr->width - 2;
-                creature_ptr->ambush_flag = FALSE;
+                creature_ptr->ambush_flag = false;
             } else if ((y == 0) && (x == MAX_WID - 1)) {
                 creature_ptr->wilderness_y--;
                 creature_ptr->wilderness_x++;
                 creature_ptr->oldpy = floor_ptr->height - 2;
                 creature_ptr->oldpx = 1;
-                creature_ptr->ambush_flag = FALSE;
+                creature_ptr->ambush_flag = false;
             } else if ((y == MAX_HGT - 1) && (x == 0)) {
                 creature_ptr->wilderness_y++;
                 creature_ptr->wilderness_x--;
                 creature_ptr->oldpy = 1;
                 creature_ptr->oldpx = floor_ptr->width - 2;
-                creature_ptr->ambush_flag = FALSE;
+                creature_ptr->ambush_flag = false;
             } else if ((y == MAX_HGT - 1) && (x == MAX_WID - 1)) {
                 creature_ptr->wilderness_y++;
                 creature_ptr->wilderness_x++;
                 creature_ptr->oldpy = 1;
                 creature_ptr->oldpx = 1;
-                creature_ptr->ambush_flag = FALSE;
+                creature_ptr->ambush_flag = false;
             } else if (y == 0) {
                 creature_ptr->wilderness_y--;
                 creature_ptr->oldpy = floor_ptr->height - 2;
                 creature_ptr->oldpx = x;
-                creature_ptr->ambush_flag = FALSE;
+                creature_ptr->ambush_flag = false;
             } else if (y == MAX_HGT - 1) {
                 creature_ptr->wilderness_y++;
                 creature_ptr->oldpy = 1;
                 creature_ptr->oldpx = x;
-                creature_ptr->ambush_flag = FALSE;
+                creature_ptr->ambush_flag = false;
             } else if (x == 0) {
                 creature_ptr->wilderness_x--;
                 creature_ptr->oldpx = floor_ptr->width - 2;
                 creature_ptr->oldpy = y;
-                creature_ptr->ambush_flag = FALSE;
+                creature_ptr->ambush_flag = false;
             } else if (x == MAX_WID - 1) {
                 creature_ptr->wilderness_x++;
                 creature_ptr->oldpx = 1;
                 creature_ptr->oldpy = y;
-                creature_ptr->ambush_flag = FALSE;
+                creature_ptr->ambush_flag = false;
             }
 
-            creature_ptr->leaving = TRUE;
+            creature_ptr->leaving = true;
             PlayerEnergy(creature_ptr).set_player_turn_energy(100);
             return;
         }
 
-        p_can_enter = FALSE;
+        p_can_enter = false;
     }
 
     monster_type *m_ptr;
     m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
     if (creature_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_STORMBRINGER)
-        stormbringer = TRUE;
+        stormbringer = true;
 
     if (creature_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_STORMBRINGER)
-        stormbringer = TRUE;
+        stormbringer = true;
 
     feature_type *f_ptr = &f_info[g_ptr->feat];
     bool p_can_kill_walls = has_kill_wall(creature_ptr) && has_flag(f_ptr->flags, FF_HURT_DISI) && (!p_can_enter || !has_flag(f_ptr->flags, FF_LOS))
         && !has_flag(f_ptr->flags, FF_PERMANENT);
     GAME_TEXT m_name[MAX_NLEN];
-    bool can_move = TRUE;
-    bool do_past = FALSE;
+    bool can_move = true;
+    bool do_past = false;
     if (g_ptr->m_idx && (m_ptr->ml || p_can_enter || p_can_kill_walls)) {
         monster_race *r_ptr = &r_info[m_ptr->r_idx];
         if (!is_hostile(m_ptr)
@@ -174,17 +174,17 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
 
             if ((stormbringer && (randint1(1000) > 666)) || (creature_ptr->pclass == CLASS_BERSERKER)) {
                 do_cmd_attack(creature_ptr, y, x, HISSATSU_NONE);
-                can_move = FALSE;
+                can_move = false;
             } else if (monster_can_cross_terrain(creature_ptr, floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat, r_ptr, 0)) {
-                do_past = TRUE;
+                do_past = true;
             } else {
                 msg_format(_("%^sが邪魔だ！", "%^s is in your way!"), m_name);
                 PlayerEnergy(creature_ptr).reset_player_turn();
-                can_move = FALSE;
+                can_move = false;
             }
         } else {
             do_cmd_attack(creature_ptr, y, x, HISSATSU_NONE);
-            can_move = FALSE;
+            can_move = false;
         }
     }
 
@@ -195,17 +195,17 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
         if (riding_r_ptr->flags1 & RF1_NEVER_MOVE) {
             msg_print(_("動けない！", "Can't move!"));
             energy.reset_player_turn();
-            can_move = FALSE;
-            disturb(creature_ptr, FALSE, TRUE);
+            can_move = false;
+            disturb(creature_ptr, false, true);
         } else if (monster_fear_remaining(riding_m_ptr)) {
             GAME_TEXT steed_name[MAX_NLEN];
             monster_desc(creature_ptr, steed_name, riding_m_ptr, 0);
             msg_format(_("%sが恐怖していて制御できない。", "%^s is too scared to control."), steed_name);
-            can_move = FALSE;
-            disturb(creature_ptr, FALSE, TRUE);
+            can_move = false;
+            disturb(creature_ptr, false, true);
         } else if (creature_ptr->riding_ryoute) {
-            can_move = FALSE;
-            disturb(creature_ptr, FALSE, TRUE);
+            can_move = false;
+            disturb(creature_ptr, false, true);
         } else if (has_flag(f_ptr->flags, FF_CAN_FLY) && (riding_r_ptr->flags7 & RF7_CAN_FLY)) {
             /* Allow moving */
         } else if (has_flag(f_ptr->flags, FF_CAN_SWIM) && (riding_r_ptr->flags7 & RF7_CAN_SWIM)) {
@@ -214,26 +214,26 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
             && (has_flag(f_ptr->flags, FF_DEEP) || (riding_r_ptr->flags2 & RF2_AURA_FIRE))) {
             msg_format(_("%sの上に行けない。", "Can't swim."), f_info[get_feat_mimic(g_ptr)].name.c_str());
             energy.reset_player_turn();
-            can_move = FALSE;
-            disturb(creature_ptr, FALSE, TRUE);
+            can_move = false;
+            disturb(creature_ptr, false, true);
         } else if (!has_flag(f_ptr->flags, FF_WATER) && (riding_r_ptr->flags7 & RF7_AQUATIC)) {
             msg_format(_("%sから上がれない。", "Can't land."), f_info[get_feat_mimic(&floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name.c_str());
             energy.reset_player_turn();
-            can_move = FALSE;
-            disturb(creature_ptr, FALSE, TRUE);
+            can_move = false;
+            disturb(creature_ptr, false, true);
         } else if (has_flag(f_ptr->flags, FF_LAVA) && !(riding_r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK)) {
             msg_format(_("%sの上に行けない。", "Too hot to go through."), f_info[get_feat_mimic(g_ptr)].name.c_str());
             energy.reset_player_turn();
-            can_move = FALSE;
-            disturb(creature_ptr, FALSE, TRUE);
+            can_move = false;
+            disturb(creature_ptr, false, true);
         }
 
         if (can_move && monster_stunned_remaining(riding_m_ptr) && one_in_(2)) {
             GAME_TEXT steed_name[MAX_NLEN];
             monster_desc(creature_ptr, steed_name, riding_m_ptr, 0);
             msg_format(_("%sが朦朧としていてうまく動けない！", "You cannot control stunned %s!"), steed_name);
-            can_move = FALSE;
-            disturb(creature_ptr, FALSE, TRUE);
+            can_move = false;
+            disturb(creature_ptr, false, true);
         }
     }
 
@@ -242,7 +242,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
         msg_format(_("空を飛ばないと%sの上には行けない。", "You need to fly to go through the %s."), f_info[get_feat_mimic(g_ptr)].name.c_str());
         energy.reset_player_turn();
         creature_ptr->running = 0;
-        can_move = FALSE;
+        can_move = false;
     } else if (has_flag(f_ptr->flags, FF_TREE) && !p_can_kill_walls) {
         if ((creature_ptr->pclass != CLASS_RANGER) && !creature_ptr->levitation && (!creature_ptr->riding || !(riding_r_ptr->flags8 & RF8_WILD_WOOD))) {
             energy.mul_player_turn_energy(2);
@@ -256,7 +256,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
         FEAT_IDX feat = get_feat_mimic(g_ptr);
         feature_type *mimic_f_ptr = &f_info[feat];
         concptr name = mimic_f_ptr->name.c_str();
-        can_move = FALSE;
+        can_move = false;
         if (!(g_ptr->info & CAVE_MARK) && !player_can_see_bold(creature_ptr, y, x)) {
             if (boundary_floor(g_ptr, f_ptr, mimic_f_ptr))
                 msg_print(_("それ以上先には進めないようだ。", "You feel you cannot go any more."));
@@ -288,7 +288,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
             }
         }
 
-        disturb(creature_ptr, FALSE, TRUE);
+        disturb(creature_ptr, false, true);
         if (!boundary_floor(g_ptr, f_ptr, mimic_f_ptr))
             sound(SOUND_HITWALL);
     }
@@ -297,8 +297,8 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
         if (!(creature_ptr->confused || creature_ptr->stun || creature_ptr->image))
             energy.reset_player_turn();
 
-        disturb(creature_ptr, FALSE, TRUE);
-        can_move = FALSE;
+        disturb(creature_ptr, false, true);
+        can_move = false;
     }
 
     if (!can_move)

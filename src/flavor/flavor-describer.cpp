@@ -105,16 +105,16 @@ static void describe_chest(flavor_type *flavor_ptr)
 static void decide_tval_show(player_type *player_ptr, flavor_type *flavor_ptr)
 {
     if (has_flag(flavor_ptr->tr_flags, TR_SHOW_MODS))
-        flavor_ptr->show_weapon = TRUE;
+        flavor_ptr->show_weapon = true;
 
     if (object_is_smith(player_ptr, flavor_ptr->o_ptr) && (flavor_ptr->o_ptr->xtra3 == 1 + ESSENCE_SLAY_GLOVE))
-        flavor_ptr->show_weapon = TRUE;
+        flavor_ptr->show_weapon = true;
 
     if (flavor_ptr->o_ptr->to_h && flavor_ptr->o_ptr->to_d)
-        flavor_ptr->show_weapon = TRUE;
+        flavor_ptr->show_weapon = true;
 
     if (flavor_ptr->o_ptr->ac)
-        flavor_ptr->show_armour = TRUE;
+        flavor_ptr->show_armour = true;
 }
 
 static void describe_weapon_dice(player_type *player_ptr, flavor_type *flavor_ptr)

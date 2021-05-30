@@ -20,11 +20,11 @@ bool cast_blue_summon_kin(player_type *caster_ptr, bmc_type *bmc_ptr)
             if (!bmc_ptr->pet)
                 msg_print(_("召喚された仲間は怒っている！", "The summoned companion is angry!"));
         } else {
-            bmc_ptr->no_trump = TRUE;
+            bmc_ptr->no_trump = true;
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 bool cast_blue_summon_cyber(player_type *caster_ptr, bmc_type *bmc_ptr)
@@ -35,11 +35,11 @@ bool cast_blue_summon_cyber(player_type *caster_ptr, bmc_type *bmc_ptr)
             if (!bmc_ptr->pet)
                 msg_print(_("召喚されたサイバーデーモンは怒っている！", "The summoned Cyberdemon is angry!"));
         } else {
-            bmc_ptr->no_trump = TRUE;
+            bmc_ptr->no_trump = true;
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 bool cast_blue_summon_monster(player_type *caster_ptr, bmc_type *bmc_ptr)
@@ -50,11 +50,11 @@ bool cast_blue_summon_monster(player_type *caster_ptr, bmc_type *bmc_ptr)
             if (!bmc_ptr->pet)
                 msg_print(_("召喚されたモンスターは怒っている！", "The summoned monster is angry!"));
         } else {
-            bmc_ptr->no_trump = TRUE;
+            bmc_ptr->no_trump = true;
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 bool cast_blue_summon_monsters(player_type *caster_ptr, bmc_type *bmc_ptr)
@@ -65,11 +65,11 @@ bool cast_blue_summon_monsters(player_type *caster_ptr, bmc_type *bmc_ptr)
             if (!bmc_ptr->pet)
                 msg_print(_("召喚されたモンスターは怒っている！", "The summoned monsters are angry!"));
         } else {
-            bmc_ptr->no_trump = TRUE;
+            bmc_ptr->no_trump = true;
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 bool cast_blue_summon_ant(player_type *caster_ptr, bmc_type *bmc_ptr)
@@ -80,10 +80,10 @@ bool cast_blue_summon_ant(player_type *caster_ptr, bmc_type *bmc_ptr)
         if (!bmc_ptr->pet)
             msg_print(_("召喚されたアリは怒っている！", "The summoned ants are angry!"));
     } else {
-        bmc_ptr->no_trump = TRUE;
+        bmc_ptr->no_trump = true;
     }
 
-    return TRUE;
+    return true;
 }
 
 bool cast_blue_summon_spider(player_type *caster_ptr, bmc_type *bmc_ptr)
@@ -94,10 +94,10 @@ bool cast_blue_summon_spider(player_type *caster_ptr, bmc_type *bmc_ptr)
         if (!bmc_ptr->pet)
             msg_print(_("召喚された蜘蛛は怒っている！", "The summoned spiders are angry!"));
     } else {
-        bmc_ptr->no_trump = TRUE;
+        bmc_ptr->no_trump = true;
     }
 
-    return TRUE;
+    return true;
 }
 
 bool cast_blue_summon_hound(player_type *caster_ptr, bmc_type *bmc_ptr)
@@ -108,10 +108,10 @@ bool cast_blue_summon_hound(player_type *caster_ptr, bmc_type *bmc_ptr)
         if (!bmc_ptr->pet)
             msg_print(_("召喚されたハウンドは怒っている！", "The summoned hounds are angry!"));
     } else {
-        bmc_ptr->no_trump = TRUE;
+        bmc_ptr->no_trump = true;
     }
 
-    return TRUE;
+    return true;
 }
 
 bool cast_blue_summon_hydra(player_type *caster_ptr, bmc_type *bmc_ptr)
@@ -122,10 +122,10 @@ bool cast_blue_summon_hydra(player_type *caster_ptr, bmc_type *bmc_ptr)
         if (!bmc_ptr->pet)
             msg_print(_("召喚されたヒドラは怒っている！", "The summoned hydras are angry!"));
     } else {
-        bmc_ptr->no_trump = TRUE;
+        bmc_ptr->no_trump = true;
     }
 
-    return TRUE;
+    return true;
 }
 
 bool cast_blue_summon_angel(player_type *caster_ptr, bmc_type *bmc_ptr)
@@ -136,10 +136,10 @@ bool cast_blue_summon_angel(player_type *caster_ptr, bmc_type *bmc_ptr)
         if (!bmc_ptr->pet)
             msg_print(_("召喚された天使は怒っている！", "The summoned angel is angry!"));
     } else {
-        bmc_ptr->no_trump = TRUE;
+        bmc_ptr->no_trump = true;
     }
 
-    return TRUE;
+    return true;
 }
 
 bool cast_blue_summon_demon(player_type *caster_ptr, bmc_type *bmc_ptr)
@@ -150,10 +150,10 @@ bool cast_blue_summon_demon(player_type *caster_ptr, bmc_type *bmc_ptr)
         if (!bmc_ptr->pet)
             msg_print(_("召喚されたデーモンは怒っている！", "The summoned demon is angry!"));
     } else {
-        bmc_ptr->no_trump = TRUE;
+        bmc_ptr->no_trump = true;
     }
 
-    return TRUE;
+    return true;
 }
 
 bool cast_blue_summon_undead(player_type *caster_ptr, bmc_type *bmc_ptr)
@@ -164,10 +164,10 @@ bool cast_blue_summon_undead(player_type *caster_ptr, bmc_type *bmc_ptr)
         if (!bmc_ptr->pet)
             msg_print(_("召喚されたアンデッドは怒っている！", "The summoned undead is angry!"));
     } else {
-        bmc_ptr->no_trump = TRUE;
+        bmc_ptr->no_trump = true;
     }
 
-    return TRUE;
+    return true;
 }
 
 bool cast_blue_summon_dragon(player_type *caster_ptr, bmc_type *bmc_ptr)
@@ -178,10 +178,10 @@ bool cast_blue_summon_dragon(player_type *caster_ptr, bmc_type *bmc_ptr)
         if (!bmc_ptr->pet)
             msg_print(_("召喚されたドラゴンは怒っている！", "The summoned dragon is angry!"));
     } else {
-        bmc_ptr->no_trump = TRUE;
+        bmc_ptr->no_trump = true;
     }
 
-    return TRUE;
+    return true;
 }
 
 bool cast_blue_summon_high_undead(player_type *caster_ptr, bmc_type *bmc_ptr)
@@ -192,10 +192,10 @@ bool cast_blue_summon_high_undead(player_type *caster_ptr, bmc_type *bmc_ptr)
         if (!bmc_ptr->pet)
             msg_print(_("召喚された上級アンデッドは怒っている！", "The summoned greater undead is angry!"));
     } else {
-        bmc_ptr->no_trump = TRUE;
+        bmc_ptr->no_trump = true;
     }
 
-    return TRUE;
+    return true;
 }
 
 bool cast_blue_summon_high_dragon(player_type *caster_ptr, bmc_type *bmc_ptr)
@@ -206,10 +206,10 @@ bool cast_blue_summon_high_dragon(player_type *caster_ptr, bmc_type *bmc_ptr)
         if (!bmc_ptr->pet)
             msg_print(_("召喚された古代ドラゴンは怒っている！", "The summoned ancient dragon is angry!"));
     } else {
-        bmc_ptr->no_trump = TRUE;
+        bmc_ptr->no_trump = true;
     }
 
-    return TRUE;
+    return true;
 }
 
 bool cast_blue_summon_amberite(player_type *caster_ptr, bmc_type *bmc_ptr)
@@ -220,10 +220,10 @@ bool cast_blue_summon_amberite(player_type *caster_ptr, bmc_type *bmc_ptr)
         if (!bmc_ptr->pet)
             msg_print(_("召喚されたアンバーの王族は怒っている！", "The summoned Lord of Amber is angry!"));
     } else {
-        bmc_ptr->no_trump = TRUE;
+        bmc_ptr->no_trump = true;
     }
 
-    return TRUE;
+    return true;
 }
 
 bool cast_blue_summon_unique(player_type *caster_ptr, bmc_type *bmc_ptr)
@@ -249,7 +249,7 @@ bool cast_blue_summon_unique(player_type *caster_ptr, bmc_type *bmc_ptr)
     }
 
     if (!count)
-        bmc_ptr->no_trump = TRUE;
+        bmc_ptr->no_trump = true;
 
-    return TRUE;
+    return true;
 }

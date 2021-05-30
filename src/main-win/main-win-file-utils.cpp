@@ -20,11 +20,11 @@ bool check_file(concptr s)
 {
     DWORD attrib = GetFileAttributesW(to_wchar(s).wc_str());
     if (attrib == INVALID_FILE_NAME)
-        return FALSE;
+        return false;
     if (attrib & FILE_ATTRIBUTE_DIRECTORY)
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*
@@ -43,11 +43,11 @@ bool check_dir(concptr s)
 
     DWORD attrib = GetFileAttributesW(to_wchar(path).wc_str());
     if (attrib == INVALID_FILE_NAME)
-        return FALSE;
+        return false;
     if (!(attrib & FILE_ATTRIBUTE_DIRECTORY))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*!

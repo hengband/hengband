@@ -41,18 +41,18 @@ bool eat_magic(player_type *caster_ptr, int power)
     OBJECT_IDX item;
     o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_NONE);
     if (!o_ptr)
-        return FALSE;
+        return false;
 
     object_kind *k_ptr;
     k_ptr = &k_info[o_ptr->k_idx];
     DEPTH lev = k_info[o_ptr->k_idx].level;
 
     int recharge_strength = 0;
-    bool is_eating_successful = TRUE;
+    bool is_eating_successful = true;
     if (o_ptr->tval == TV_ROD) {
         recharge_strength = ((power > lev / 2) ? (power - lev / 2) : 0) / 5;
         if (one_in_(recharge_strength)) {
-            is_eating_successful = FALSE;
+            is_eating_successful = false;
         } else {
             if (o_ptr->timeout > (o_ptr->number - 1) * k_ptr->pval) {
                 msg_print(_("充填中のロッドから魔力を吸収することはできません。", "You can't absorb energy from a discharged rod."));
@@ -67,7 +67,7 @@ bool eat_magic(player_type *caster_ptr, int power)
             recharge_strength = 0;
 
         if (one_in_(recharge_strength)) {
-            is_eating_successful = FALSE;
+            is_eating_successful = false;
         } else {
             if (o_ptr->pval > 0) {
                 caster_ptr->csp += lev / 2;

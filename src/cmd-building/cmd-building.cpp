@@ -74,7 +74,7 @@ int battle_odds;
 PRICE kakekin;
 int sel_monster;
 
-bool reinit_wilderness = FALSE;
+bool reinit_wilderness = false;
 
 /*!
  * @brief 町に関するヘルプを表示する / Display town history
@@ -83,7 +83,7 @@ bool reinit_wilderness = FALSE;
 static void town_history(player_type *player_ptr)
 {
     screen_save();
-    (void)show_file(player_ptr, TRUE, _("jbldg.txt", "bldg.txt"), NULL, 0, 0);
+    (void)show_file(player_ptr, true, _("jbldg.txt", "bldg.txt"), NULL, 0, 0);
     screen_load();
 }
 
@@ -95,7 +95,7 @@ static void town_history(player_type *player_ptr)
  */
 static void bldg_process_command(player_type *player_ptr, building_type *bldg, int i)
 {
-    msg_flag = FALSE;
+    msg_flag = false;
     msg_erase();
 
     PRICE bcost;
@@ -118,13 +118,13 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
         return;
     }
 
-    bool paid = FALSE;
+    bool paid = false;
     switch (bact) {
     case BACT_NOTHING:
         /* Do nothing */
         break;
     case BACT_RESEARCH_ITEM:
-        paid = identify_fully(player_ptr, FALSE, TV_NONE);
+        paid = identify_fully(player_ptr, false, TV_NONE);
         break;
     case BACT_TOWN_HISTORY:
         town_history(player_ptr);
@@ -162,7 +162,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
         paid = research_mon(player_ptr);
         break;
     case BACT_COMPARE_WEAPONS:
-        paid = TRUE;
+        paid = true;
         bcost = compare_weapons(player_ptr, bcost);
         break;
     case BACT_ENCHANT_WEAPON:
@@ -184,10 +184,10 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
             break;
         identify_pack(player_ptr);
         msg_print(_(" 持ち物全てが鑑定されました。", "Your possessions have been identified."));
-        paid = TRUE;
+        paid = true;
         break;
     case BACT_IDENT_ONE:
-        paid = ident_spell(player_ptr, FALSE, TV_NONE);
+        paid = ident_spell(player_ptr, false, TV_NONE);
         break;
     case BACT_LEARN:
         do_cmd_study(player_ptr);
@@ -208,7 +208,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 
     case BACT_RECALL:
         if (recall_player(player_ptr, 1))
-            paid = TRUE;
+            paid = true;
         break;
 
     case BACT_TELEPORT_LEVEL:
@@ -225,7 +225,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
         if (muta.any()) {
             while (!lose_mutation(player_ptr, 0))
                 ;
-            paid = TRUE;
+            paid = true;
             break;
         }
 
@@ -275,7 +275,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
         set_virtue(player_ptr, V_VALOUR, 0);
         set_virtue(player_ptr, V_INDIVIDUALISM, 0);
         get_virtues(player_ptr);
-        paid = TRUE;
+        paid = true;
         break;
 
     case BACT_TELE_TOWN:
@@ -287,7 +287,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
         break;
 
     case BACT_BROKEN_WEAPON:
-        paid = TRUE;
+        paid = true;
         bcost = repair_broken_weapon(player_ptr, bcost);
         break;
     }
@@ -318,7 +318,7 @@ void do_cmd_building(player_type *player_ptr)
     building_type *bldg;
     bldg = &building[which];
 
-    reinit_wilderness = FALSE;
+    reinit_wilderness = false;
 
     if ((which == 2) && (player_ptr->arena_number < 0)) {
         msg_print(_("「敗者に用はない。」", "'There's no place here for a LOSER like you!'"));
@@ -328,8 +328,8 @@ void do_cmd_building(player_type *player_ptr)
             prt(_("ゲートは閉まっている。モンスターがあなたを待っている！", "The gates are closed.  The monster awaits!"), 0, 0);
         } else {
             prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_NO_RETURN);
-            player_ptr->current_floor_ptr->inside_arena = FALSE;
-            player_ptr->leaving = TRUE;
+            player_ptr->current_floor_ptr->inside_arena = false;
+            player_ptr->leaving = true;
             command_new = SPECIAL_KEY_BUILDING;
             energy.reset_player_turn();
         }
@@ -337,8 +337,8 @@ void do_cmd_building(player_type *player_ptr)
         return;
     } else if (player_ptr->phase_out) {
         prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_NO_RETURN);
-        player_ptr->leaving = TRUE;
-        player_ptr->phase_out = FALSE;
+        player_ptr->leaving = true;
+        player_ptr->phase_out = false;
         command_new = SPECIAL_KEY_BUILDING;
         energy.reset_player_turn();
         return;
@@ -356,12 +356,12 @@ void do_cmd_building(player_type *player_ptr)
     command_new = 0;
 
     display_buikding_service(player_ptr, bldg);
-    player_ptr->leave_bldg = FALSE;
+    player_ptr->leave_bldg = false;
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BUILD);
 
     bool validcmd;
     while (!player_ptr->leave_bldg) {
-        validcmd = FALSE;
+        validcmd = false;
         prt("", 1, 0);
 
         building_prt_gold(player_ptr);
@@ -369,16 +369,16 @@ void do_cmd_building(player_type *player_ptr)
         char command = inkey();
 
         if (command == ESCAPE) {
-            player_ptr->leave_bldg = TRUE;
-            player_ptr->current_floor_ptr->inside_arena = FALSE;
-            player_ptr->phase_out = FALSE;
+            player_ptr->leave_bldg = true;
+            player_ptr->current_floor_ptr->inside_arena = false;
+            player_ptr->phase_out = false;
             break;
         }
 
         int i;
         for (i = 0; i < 8; i++) {
             if (bldg->letters[i] && (bldg->letters[i] == command)) {
-                validcmd = TRUE;
+                validcmd = true;
                 break;
             }
         }
@@ -391,11 +391,11 @@ void do_cmd_building(player_type *player_ptr)
 
     select_floor_music(player_ptr);
 
-    msg_flag = FALSE;
+    msg_flag = false;
     msg_erase();
 
     if (reinit_wilderness)
-        player_ptr->leaving = TRUE;
+        player_ptr->leaving = true;
 
     current_world_ptr->character_icky_depth--;
     term_clear();

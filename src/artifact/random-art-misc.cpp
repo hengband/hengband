@@ -14,7 +14,7 @@
 static bool invest_misc_ranger(object_type *o_ptr)
 {
     if (has_flag(o_ptr->art_flags, TR_SUST_CON))
-        return FALSE;
+        return false;
 
     add_flag(o_ptr->art_flags, TR_SUST_CON);
     return one_in_(2);
@@ -23,7 +23,7 @@ static bool invest_misc_ranger(object_type *o_ptr)
 static bool invest_misc_strength(object_type *o_ptr)
 {
     if (has_flag(o_ptr->art_flags, TR_SUST_STR))
-        return FALSE;
+        return false;
 
     add_flag(o_ptr->art_flags, TR_SUST_STR);
     return one_in_(2);
@@ -32,7 +32,7 @@ static bool invest_misc_strength(object_type *o_ptr)
 static bool invest_misc_wisdom(object_type *o_ptr)
 {
     if (has_flag(o_ptr->art_flags, TR_SUST_WIS))
-        return FALSE;
+        return false;
 
     add_flag(o_ptr->art_flags, TR_SUST_WIS);
     return one_in_(2);
@@ -41,7 +41,7 @@ static bool invest_misc_wisdom(object_type *o_ptr)
 static bool invest_misc_intelligence(object_type *o_ptr)
 {
     if (has_flag(o_ptr->art_flags, TR_SUST_INT))
-        return FALSE;
+        return false;
 
     add_flag(o_ptr->art_flags, TR_SUST_INT);
     return one_in_(2);
@@ -50,7 +50,7 @@ static bool invest_misc_intelligence(object_type *o_ptr)
 static bool invest_misc_dexterity(object_type *o_ptr)
 {
     if (has_flag(o_ptr->art_flags, TR_SUST_DEX))
-        return FALSE;
+        return false;
 
     add_flag(o_ptr->art_flags, TR_SUST_DEX);
     return one_in_(2);
@@ -59,7 +59,7 @@ static bool invest_misc_dexterity(object_type *o_ptr)
 static bool invest_misc_constitution(object_type *o_ptr)
 {
     if (has_flag(o_ptr->art_flags, TR_SUST_CON))
-        return FALSE;
+        return false;
 
     add_flag(o_ptr->art_flags, TR_SUST_CON);
     return one_in_(2);
@@ -68,7 +68,7 @@ static bool invest_misc_constitution(object_type *o_ptr)
 static bool invest_misc_charisma(object_type *o_ptr)
 {
     if (has_flag(o_ptr->art_flags, TR_SUST_CHR))
-        return FALSE;
+        return false;
 
     add_flag(o_ptr->art_flags, TR_SUST_CHR);
     return one_in_(2);
@@ -77,7 +77,7 @@ static bool invest_misc_charisma(object_type *o_ptr)
 static bool invest_misc_chaos(object_type *o_ptr)
 {
     if (has_flag(o_ptr->art_flags, TR_TELEPORT))
-        return FALSE;
+        return false;
 
     add_flag(o_ptr->art_flags, TR_TELEPORT);
     return one_in_(2);
@@ -86,7 +86,7 @@ static bool invest_misc_chaos(object_type *o_ptr)
 static bool invest_misc_res_curse(object_type* o_ptr)
 {
     if (has_flag(o_ptr->art_flags, TR_RES_CURSE))
-        return FALSE;
+        return false;
 
     add_flag(o_ptr->art_flags, TR_RES_CURSE);
     return one_in_(2);
@@ -120,9 +120,9 @@ static bool switch_misc_bias(object_type *o_ptr)
         if (!(has_flag(o_ptr->art_flags, TR_LITE_1)))
             add_flag(o_ptr->art_flags, TR_LITE_1);
 
-        return FALSE;
+        return false;
     default:
-        return FALSE;
+        return false;
     }
 }
 

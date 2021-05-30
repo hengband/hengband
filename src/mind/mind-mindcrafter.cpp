@@ -59,11 +59,11 @@ bool psychometry(player_type *caster_ptr)
     OBJECT_IDX item;
     o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), TV_NONE);
     if (!o_ptr)
-        return FALSE;
+        return false;
 
     if (object_is_known(o_ptr)) {
         msg_print(_("何も新しいことは判らなかった。", "You cannot find out anything more about that."));
-        return TRUE;
+        return true;
     }
 
     item_feel_type feel = pseudo_value_check_heavy(o_ptr);
@@ -72,7 +72,7 @@ bool psychometry(player_type *caster_ptr)
 
     if (!feel) {
         msg_format(_("%sからは特に変わった事は感じとれなかった。", "You do not perceive anything unusual about the %s."), o_name);
-        return TRUE;
+        return true;
     }
 
 #ifdef JP
@@ -88,7 +88,7 @@ bool psychometry(player_type *caster_ptr)
     set_bits(caster_ptr->update, PU_COMBINE | PU_REORDER);
     set_bits(caster_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST);
 
-    bool okay = FALSE;
+    bool okay = false;
     switch (o_ptr->tval) {
     case TV_SHOT:
     case TV_ARROW:
@@ -112,7 +112,7 @@ bool psychometry(player_type *caster_ptr)
     case TV_AMULET:
     case TV_LITE:
     case TV_FIGURINE:
-        okay = TRUE;
+        okay = true;
         break;
 
     default:
@@ -120,7 +120,7 @@ bool psychometry(player_type *caster_ptr)
     }
 
     autopick_alter_item(caster_ptr, item, (bool)(okay && destroy_feeling));
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -131,7 +131,7 @@ bool psychometry(player_type *caster_ptr)
  */
 bool cast_mindcrafter_spell(player_type *caster_ptr, mind_mindcrafter_type spell)
 {
-    bool b = FALSE;
+    bool b = false;
     int dam = 0;
     DIRECTION dir;
     TIME_EFFECT t;
@@ -141,7 +141,7 @@ bool cast_mindcrafter_spell(player_type *caster_ptr, mind_mindcrafter_type spell
         if (plev > 44) {
             chg_virtue(caster_ptr, V_KNOWLEDGE, 1);
             chg_virtue(caster_ptr, V_ENLIGHTEN, 1);
-            wiz_lite(caster_ptr, FALSE);
+            wiz_lite(caster_ptr, false);
         } else if (plev > 19)
             map_area(caster_ptr, DETECT_RAD_MAP);
 
@@ -150,7 +150,7 @@ bool cast_mindcrafter_spell(player_type *caster_ptr, mind_mindcrafter_type spell
             if (plev > 14)
                 b |= detect_monsters_invis(caster_ptr, DETECT_RAD_DEFAULT);
             if (plev > 4) {
-                b |= detect_traps(caster_ptr, DETECT_RAD_DEFAULT, TRUE);
+                b |= detect_traps(caster_ptr, DETECT_RAD_DEFAULT, true);
                 b |= detect_doors(caster_ptr, DETECT_RAD_DEFAULT);
             }
         } else {
@@ -158,7 +158,7 @@ bool cast_mindcrafter_spell(player_type *caster_ptr, mind_mindcrafter_type spell
         }
 
         if ((plev > 24) && (plev < 40))
-            set_tim_esp(caster_ptr, (TIME_EFFECT)plev, FALSE);
+            set_tim_esp(caster_ptr, (TIME_EFFECT)plev, false);
 
         if (!b)
             msg_print(_("安全な気がする。", "You feel safe."));
@@ -166,7 +166,7 @@ bool cast_mindcrafter_spell(player_type *caster_ptr, mind_mindcrafter_type spell
         break;
     case NEURAL_BLAST:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
 
         if (randint1(100) < plev * 2)
             fire_beam(caster_ptr, GF_PSI, dir, damroll(3 + ((plev - 1) / 4), (3 + plev / 15)));
@@ -182,7 +182,7 @@ bool cast_mindcrafter_spell(player_type *caster_ptr, mind_mindcrafter_type spell
     case DOMINATION:
         if (plev < 30) {
             if (!get_aim_dir(caster_ptr, &dir))
-                return FALSE;
+                return false;
 
             fire_ball(caster_ptr, GF_DOMINATION, dir, plev, 0);
         } else {
@@ -192,29 +192,29 @@ bool cast_mindcrafter_spell(player_type *caster_ptr, mind_mindcrafter_type spell
         break;
     case PLUVERISE:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
 
         fire_ball(caster_ptr, GF_TELEKINESIS, dir, damroll(8 + ((plev - 5) / 4), 8), (plev > 20 ? (plev - 20) / 8 + 1 : 0));
         break;
     case CHARACTER_ARMOR:
-        set_shield(caster_ptr, (TIME_EFFECT)plev, FALSE);
+        set_shield(caster_ptr, (TIME_EFFECT)plev, false);
         if (plev > 14)
-            set_oppose_acid(caster_ptr, (TIME_EFFECT)plev, FALSE);
+            set_oppose_acid(caster_ptr, (TIME_EFFECT)plev, false);
         if (plev > 19)
-            set_oppose_fire(caster_ptr, (TIME_EFFECT)plev, FALSE);
+            set_oppose_fire(caster_ptr, (TIME_EFFECT)plev, false);
         if (plev > 24)
-            set_oppose_cold(caster_ptr, (TIME_EFFECT)plev, FALSE);
+            set_oppose_cold(caster_ptr, (TIME_EFFECT)plev, false);
         if (plev > 29)
-            set_oppose_elec(caster_ptr, (TIME_EFFECT)plev, FALSE);
+            set_oppose_elec(caster_ptr, (TIME_EFFECT)plev, false);
         if (plev > 34)
-            set_oppose_pois(caster_ptr, (TIME_EFFECT)plev, FALSE);
+            set_oppose_pois(caster_ptr, (TIME_EFFECT)plev, false);
 
         break;
     case PSYCHOMETRY:
         if (plev < 25)
             return psychometry(caster_ptr);
         else
-            return ident_spell(caster_ptr, FALSE, TV_NONE);
+            return ident_spell(caster_ptr, false, TV_NONE);
     case MIND_WAVE:
         msg_print(_("精神を捻じ曲げる波動を発生させた！", "Mind-warping forces emanate from your brain!"));
         if (plev < 25)
@@ -230,18 +230,18 @@ bool cast_mindcrafter_spell(player_type *caster_ptr, mind_mindcrafter_type spell
             hp_player(caster_ptr, plev);
 
         t = 10 + randint1((plev * 3) / 2);
-        set_hero(caster_ptr, t, FALSE);
-        (void)set_fast(caster_ptr, t, FALSE);
+        set_hero(caster_ptr, t, false);
+        (void)set_fast(caster_ptr, t, false);
         break;
     case TELEKINESIS:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
 
-        fetch_item(caster_ptr, dir, plev * 15, FALSE);
+        fetch_item(caster_ptr, dir, plev * 15, false);
         break;
     case PSYCHIC_DRAIN:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
 
         dam = damroll(plev / 2, 6);
         if (fire_ball(caster_ptr, GF_PSI_DRAIN, dir, dam, 0))
@@ -250,7 +250,7 @@ bool cast_mindcrafter_spell(player_type *caster_ptr, mind_mindcrafter_type spell
         break;
     case PSYCHO_SPEAR:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
 
         fire_beam(caster_ptr, GF_PSY_SPEAR, dir, randint1(plev * 3) + plev * 3);
         break;
@@ -261,5 +261,5 @@ bool cast_mindcrafter_spell(player_type *caster_ptr, mind_mindcrafter_type spell
         msg_print(_("なに？", "Zap?"));
     }
 
-    return TRUE;
+    return true;
 }

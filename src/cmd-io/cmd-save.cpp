@@ -23,7 +23,7 @@ void do_cmd_save_game(player_type *creature_ptr, int is_autosave)
     if (is_autosave)
         msg_print(_("自動セーブ中", "Autosaving the game..."));
     else
-        disturb(creature_ptr, TRUE, TRUE);
+        disturb(creature_ptr, true, true);
 
     msg_print(NULL);
     handle_stuff(creature_ptr);
@@ -48,7 +48,7 @@ void do_cmd_save_game(player_type *creature_ptr, int is_autosave)
  */
 void do_cmd_save_and_exit(player_type *creature_ptr)
 {
-    creature_ptr->playing = FALSE;
-    creature_ptr->leaving = TRUE;
+    creature_ptr->playing = false;
+    creature_ptr->leaving = true;
     exe_write_diary(creature_ptr, DIARY_GAMESTART, 0, _("----ゲーム中断----", "--- Saved and Exited Game ---"));
 }

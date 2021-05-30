@@ -77,10 +77,10 @@ void fetch_item(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require
     } else {
         ty = caster_ptr->y;
         tx = caster_ptr->x;
-        bool is_first_loop = TRUE;
+        bool is_first_loop = true;
         g_ptr = &caster_ptr->current_floor_ptr->grid_array[ty][tx];
         while (is_first_loop || g_ptr->o_idx_list.empty()) {
-            is_first_loop = FALSE;
+            is_first_loop = false;
             ty += ddy[dir];
             tx += ddx[dir];
             g_ptr = &caster_ptr->current_floor_ptr->grid_array[ty][tx];
@@ -122,17 +122,17 @@ bool fetch_monster(player_type *caster_ptr)
     POSITION ty, tx;
 
     if (!target_set(caster_ptr, TARGET_KILL))
-        return FALSE;
+        return false;
 
     m_idx = caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
     if (!m_idx)
-        return FALSE;
+        return false;
     if (m_idx == caster_ptr->riding)
-        return FALSE;
+        return false;
     if (!player_has_los_bold(caster_ptr, target_row, target_col))
-        return FALSE;
+        return false;
     if (!projectable(caster_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col))
-        return FALSE;
+        return false;
 
     m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
     monster_desc(caster_ptr, m_name, m_ptr, 0);
@@ -156,7 +156,7 @@ bool fetch_monster(player_type *caster_ptr)
     m_ptr->fy = ty;
     m_ptr->fx = tx;
     (void)set_monster_csleep(caster_ptr, m_idx, 0);
-    update_monster(caster_ptr, m_idx, TRUE);
+    update_monster(caster_ptr, m_idx, true);
     lite_spot(caster_ptr, target_row, target_col);
     lite_spot(caster_ptr, ty, tx);
     if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
@@ -169,5 +169,5 @@ bool fetch_monster(player_type *caster_ptr)
         health_track(caster_ptr, m_idx);
     }
 
-    return TRUE;
+    return true;
 }

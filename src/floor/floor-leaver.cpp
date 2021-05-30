@@ -51,7 +51,7 @@ static void check_riding_preservation(player_type *master_ptr)
     if (m_ptr->parent_m_idx) {
         master_ptr->riding = 0;
         master_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
-        master_ptr->riding_ryoute = master_ptr->old_riding_ryoute = FALSE;
+        master_ptr->riding_ryoute = master_ptr->old_riding_ryoute = false;
     } else {
         (void)COPY(&party_mon[0], m_ptr, monster_type);
         delete_monster_idx(master_ptr, master_ptr->riding);
@@ -61,22 +61,22 @@ static void check_riding_preservation(player_type *master_ptr)
 static bool check_pet_preservation_conditions(player_type *master_ptr, monster_type *m_ptr)
 {
     if (reinit_wilderness)
-        return FALSE;
+        return false;
 
     POSITION dis = distance(master_ptr->y, master_ptr->x, m_ptr->fy, m_ptr->fx);
     if (monster_confused_remaining(m_ptr) || monster_stunned_remaining(m_ptr) || monster_csleep_remaining(m_ptr) || (m_ptr->parent_m_idx != 0))
-        return TRUE;
+        return true;
 
     if (m_ptr->nickname
         && ((player_has_los_bold(master_ptr, m_ptr->fy, m_ptr->fx) && projectable(master_ptr, master_ptr->y, master_ptr->x, m_ptr->fy, m_ptr->fx))
             || (los(master_ptr, m_ptr->fy, m_ptr->fx, master_ptr->y, master_ptr->x)
                 && projectable(master_ptr, m_ptr->fy, m_ptr->fx, master_ptr->y, master_ptr->x)))) {
         if (dis > 3)
-            return TRUE;
+            return true;
     } else if (dis > 1)
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 static void sweep_preserving_pet(player_type *master_ptr)
@@ -153,10 +153,10 @@ static void locate_connected_stairs(player_type *creature_ptr, floor_type *floor
         for (POSITION x = 0; x < floor_ptr->width; x++) {
             grid_type *g_ptr = &floor_ptr->grid_array[y][x];
             feature_type *f_ptr = &f_info[g_ptr->feat];
-            bool ok = FALSE;
+            bool ok = false;
             if (floor_mode & CFM_UP) {
                 if (has_flag(f_ptr->flags, FF_LESS) && has_flag(f_ptr->flags, FF_STAIRS) && !has_flag(f_ptr->flags, FF_SPECIAL)) {
-                    ok = TRUE;
+                    ok = true;
                     if (g_ptr->special && g_ptr->special == sf_ptr->upper_floor_id) {
                         sx = x;
                         sy = y;
@@ -164,7 +164,7 @@ static void locate_connected_stairs(player_type *creature_ptr, floor_type *floor
                 }
             } else if (floor_mode & CFM_DOWN) {
                 if (has_flag(f_ptr->flags, FF_MORE) && has_flag(f_ptr->flags, FF_STAIRS) && !has_flag(f_ptr->flags, FF_SPECIAL)) {
-                    ok = TRUE;
+                    ok = true;
                     if (g_ptr->special && g_ptr->special == sf_ptr->lower_floor_id) {
                         sx = x;
                         sy = y;
@@ -172,7 +172,7 @@ static void locate_connected_stairs(player_type *creature_ptr, floor_type *floor
                 }
             } else {
                 if (has_flag(f_ptr->flags, FF_BLDG)) {
-                    ok = TRUE;
+                    ok = true;
                 }
             }
 
@@ -217,7 +217,7 @@ static void get_out_monster(player_type *protected_ptr)
     if (m_idx == 0)
         return;
 
-    while (TRUE) {
+    while (true) {
         monster_type *m_ptr;
         POSITION ny = rand_spread(oy, dis);
         POSITION nx = rand_spread(ox, dis);
@@ -323,7 +323,7 @@ static void exit_to_wilderness(player_type *creature_ptr)
     if (is_in_dungeon(creature_ptr) || (creature_ptr->dungeon_idx == 0))
         return;
 
-    creature_ptr->leaving_dungeon = TRUE;
+    creature_ptr->leaving_dungeon = true;
     if (!vanilla_town && !lite_town) {
         creature_ptr->wilderness_y = d_info[creature_ptr->dungeon_idx].dy;
         creature_ptr->wilderness_x = d_info[creature_ptr->dungeon_idx].dx;
@@ -405,9 +405,9 @@ static void exe_leave_floor(player_type *creature_ptr, saved_floor_type *sf_ptr)
 void leave_floor(player_type *creature_ptr)
 {
     preserve_pet(creature_ptr);
-    remove_all_mirrors(creature_ptr, FALSE);
+    remove_all_mirrors(creature_ptr, false);
     if (creature_ptr->special_defense & NINJA_S_STEALTH)
-        set_superstealth(creature_ptr, FALSE);
+        set_superstealth(creature_ptr, false);
 
     new_floor_id = 0;
 

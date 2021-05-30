@@ -44,22 +44,22 @@ bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool pl
     monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     if (is_pet(m_ptr) && !player_cast)
-        return FALSE;
+        return false;
 
-    bool resist = FALSE;
+    bool resist = false;
     if (r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR))
-        resist = TRUE;
+        resist = true;
     else if (r_ptr->flags7 & RF7_UNIQUE2)
-        resist = TRUE;
+        resist = true;
     else if (m_idx == caster_ptr->riding)
-        resist = TRUE;
+        resist = true;
     else if ((caster_ptr->current_floor_ptr->inside_quest && !random_quest_number(caster_ptr, caster_ptr->current_floor_ptr->dun_level))
         || caster_ptr->current_floor_ptr->inside_arena || caster_ptr->phase_out)
-        resist = TRUE;
+        resist = true;
     else if (player_cast && (r_ptr->level > randint0(power)))
-        resist = TRUE;
+        resist = true;
     else if (player_cast && m_ptr->mflag2.has(MFLAG2::NOGENO))
-        resist = TRUE;
+        resist = true;
     else {
         if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname) {
             GAME_TEXT m_name[MAX_NLEN];
@@ -127,13 +127,13 @@ bool symbol_genocide(player_type *caster_ptr, int power, bool player_cast)
     is_special_floor |= caster_ptr->phase_out;
     if (is_special_floor) {
         msg_print(_("何も起きないようだ……", "Nothing seems to happen..."));
-        return FALSE;
+        return false;
     }
 
     char typ;
-    while (!get_com(_("どの種類(文字)のモンスターを抹殺しますか: ", "Choose a monster race (by symbol) to genocide: "), &typ, FALSE))
+    while (!get_com(_("どの種類(文字)のモンスターを抹殺しますか: ", "Choose a monster race (by symbol) to genocide: "), &typ, false))
         ;
-    bool result = FALSE;
+    bool result = false;
     for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++) {
         monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
         monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -166,10 +166,10 @@ bool mass_genocide(player_type *caster_ptr, int power, bool player_cast)
     is_special_floor |= caster_ptr->current_floor_ptr->inside_arena;
     is_special_floor |= caster_ptr->phase_out;
     if (is_special_floor) {
-        return FALSE;
+        return false;
     }
 
-    bool result = FALSE;
+    bool result = false;
     for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++) {
         monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr))
@@ -201,10 +201,10 @@ bool mass_genocide_undead(player_type *caster_ptr, int power, bool player_cast)
     is_special_floor |= caster_ptr->current_floor_ptr->inside_arena;
     is_special_floor |= caster_ptr->phase_out;
     if (is_special_floor) {
-        return FALSE;
+        return false;
     }
 
-    bool result = FALSE;
+    bool result = false;
     for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++) {
         monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
         monster_race *r_ptr = &r_info[m_ptr->r_idx];

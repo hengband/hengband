@@ -18,28 +18,28 @@
  */
 bool cleansing_nova(player_type *creature_ptr, bool magic, bool powerful)
 {
-    bool ident = FALSE;
+    bool ident = false;
     if (dispel_evil(creature_ptr, powerful ? 225 : 150))
-        ident = TRUE;
+        ident = true;
 
     int k = 3 * creature_ptr->lev;
-    if (set_protevil(creature_ptr, (magic ? 0 : creature_ptr->protevil) + randint1(25) + k, FALSE))
-        ident = TRUE;
+    if (set_protevil(creature_ptr, (magic ? 0 : creature_ptr->protevil) + randint1(25) + k, false))
+        ident = true;
 
     if (set_poisoned(creature_ptr, 0))
-        ident = TRUE;
+        ident = true;
 
     if (set_afraid(creature_ptr, 0))
-        ident = TRUE;
+        ident = true;
 
     if (hp_player(creature_ptr, 50))
-        ident = TRUE;
+        ident = true;
 
     if (set_stun(creature_ptr, 0))
-        ident = TRUE;
+        ident = true;
 
     if (set_cut(creature_ptr, 0))
-        ident = TRUE;
+        ident = true;
 
     return ident;
 }
@@ -64,5 +64,5 @@ bool unleash_mana_storm(player_type *creature_ptr, bool powerful)
     if (is_special_class)
         (void)take_hit(creature_ptr, DAMAGE_NOESCAPE, 50, _("コントロールし難い強力な魔力の解放", "unleashing magics too mighty to control"));
 
-    return TRUE;
+    return true;
 }

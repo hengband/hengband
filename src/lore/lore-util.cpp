@@ -33,7 +33,7 @@ lore_type *initialize_lore_type(lore_type *lore_ptr, MONRACE_IDX r_idx, monster_
 {
 #ifdef JP
 #else
-    lore_ptr->sin = FALSE;
+    lore_ptr->sin = false;
 #endif
     lore_ptr->r_idx = r_idx;
     lore_ptr->nightmare = ironman_nightmare && (mode != MONSTER_LORE_DEBUG);
@@ -47,10 +47,10 @@ lore_type *initialize_lore_type(lore_type *lore_ptr, MONRACE_IDX r_idx, monster_
     lore_ptr->ability_flags = (lore_ptr->r_ptr->ability_flags & lore_ptr->r_ptr->r_ability_flags);
     lore_ptr->flags7 = (lore_ptr->r_ptr->flags7 & lore_ptr->r_ptr->flags7);
     lore_ptr->flagsr = (lore_ptr->r_ptr->flagsr & lore_ptr->r_ptr->r_flagsr);
-    lore_ptr->reinforce = FALSE;
-    lore_ptr->know_everything = FALSE;
+    lore_ptr->reinforce = false;
+    lore_ptr->know_everything = false;
     lore_ptr->mode = mode;
-    lore_ptr->old = FALSE;
+    lore_ptr->old = false;
     lore_ptr->count = 0;
     return lore_ptr;
 }

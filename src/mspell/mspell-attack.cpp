@@ -86,13 +86,13 @@ static void check_mspell_arena(player_type *target_ptr, msa_type *msa_ptr)
 static bool check_mspell_non_stupid(player_type *target_ptr, msa_type *msa_ptr)
 {
     if ((msa_ptr->r_ptr->flags2 & RF2_STUPID) != 0)
-        return TRUE;
+        return true;
 
     if (!target_ptr->csp)
         msa_ptr->ability_flags.reset(RF_ABILITY::DRAIN_MANA);
 
     if (msa_ptr->ability_flags.has_any_of(RF_ABILITY_BOLT_MASK)
-        && !clean_shot(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, target_ptr->y, target_ptr->x, FALSE)) {
+        && !clean_shot(target_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, target_ptr->y, target_ptr->x, false)) {
         msa_ptr->ability_flags.reset(RF_ABILITY_BOLT_MASK);
     }
 
@@ -138,41 +138,41 @@ static bool switch_do_spell(player_type *target_ptr, msa_type *msa_ptr)
                 break;
         }
 
-        return TRUE;
+        return true;
     }
     case DO_SPELL_BR_LITE:
         msa_ptr->thrown_spell = RF_ABILITY::BR_LITE;
-        return TRUE;
+        return true;
     case DO_SPELL_BR_DISI:
         msa_ptr->thrown_spell = RF_ABILITY::BR_DISI;
-        return TRUE;
+        return true;
     case DO_SPELL_BA_LITE:
         msa_ptr->thrown_spell = RF_ABILITY::BA_LITE;
-        return TRUE;
+        return true;
     default:
-        return FALSE;
+        return false;
     }
 }
 
 static bool check_mspell_continuation(player_type *target_ptr, msa_type *msa_ptr)
 {
     if (msa_ptr->ability_flags.none())
-        return FALSE;
+        return false;
 
     remove_bad_spells(msa_ptr->m_idx, target_ptr, msa_ptr->ability_flags);
     check_mspell_arena(target_ptr, msa_ptr);
     if (msa_ptr->ability_flags.none() || !check_mspell_non_stupid(target_ptr, msa_ptr))
-        return FALSE;
+        return false;
 
     set_mspell_list(msa_ptr);
     if (msa_ptr->mspells.empty() || !target_ptr->playing || target_ptr->is_dead || target_ptr->leaving)
-        return FALSE;
+        return false;
 
     describe_mspell_monster(target_ptr, msa_ptr);
     if (!switch_do_spell(target_ptr, msa_ptr) || (msa_ptr->thrown_spell == RF_ABILITY::MAX))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 static bool check_mspell_unexploded(player_type *target_ptr, msa_type *msa_ptr)
@@ -183,17 +183,17 @@ static bool check_mspell_unexploded(player_type *target_ptr, msa_type *msa_ptr)
 
     if (!spell_is_inate(msa_ptr->thrown_spell)
         && (msa_ptr->in_no_magic_dungeon || (monster_stunned_remaining(msa_ptr->m_ptr) && one_in_(2)) || (randint0(100) < fail_rate))) {
-        disturb(target_ptr, TRUE, TRUE);
+        disturb(target_ptr, true, true);
         msg_format(_("%^sは呪文を唱えようとしたが失敗した。", "%^s tries to cast a spell, but fails."), msa_ptr->m_name);
-        return TRUE;
+        return true;
     }
 
     if (!spell_is_inate(msa_ptr->thrown_spell) && magic_barrier(target_ptr, msa_ptr->m_idx)) {
         msg_format(_("反魔法バリアが%^sの呪文をかき消した。", "Anti magic barrier cancels the spell which %^s casts."), msa_ptr->m_name);
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -210,7 +210,7 @@ static bool check_thrown_mspell(player_type *target_ptr, msa_type *msa_ptr)
     // ターゲットがプレイヤー位置なら直接射線が通っているので常に届く。
     bool direct = player_bold(target_ptr, msa_ptr->y, msa_ptr->x);
     if (direct)
-        return TRUE;
+        return true;
 
     // ターゲットがプレイヤー位置からずれているとき、直接の射線を必要とする特技
     // (ボルト系など)は届かないものとみなす。
@@ -246,9 +246,9 @@ static bool check_thrown_mspell(player_type *target_ptr, msa_type *msa_ptr)
     case RF_ABILITY::PSY_SPEAR:
     case RF_ABILITY::DARKNESS:
     case RF_ABILITY::FORGET:
-        return FALSE;
+        return false;
     default:
-        return TRUE;
+        return true;
     }
 }
 
@@ -274,7 +274,7 @@ static void check_mspell_imitation(player_type *target_ptr, msa_type *msa_ptr)
     target_ptr->mane_spell[target_ptr->mane_num] = msa_ptr->thrown_spell;
     target_ptr->mane_dam[target_ptr->mane_num] = msa_ptr->dam;
     target_ptr->mane_num++;
-    target_ptr->new_mane = TRUE;
+    target_ptr->new_mane = true;
     target_ptr->redraw |= PR_IMITATION;
 }
 
@@ -301,16 +301,16 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
     msa_type *msa_ptr = initialize_msa_type(target_ptr, &tmp_msa, m_idx);
     if (monster_confused_remaining(msa_ptr->m_ptr)) {
         reset_target(msa_ptr->m_ptr);
-        return FALSE;
+        return false;
     }
 
     if (msa_ptr->m_ptr->mflag.has(MFLAG::PREVENT_MAGIC) || !is_hostile(msa_ptr->m_ptr)
         || ((msa_ptr->m_ptr->cdis > get_max_range(target_ptr)) && !msa_ptr->m_ptr->target_y))
-        return FALSE;
+        return false;
 
     decide_lite_range(target_ptr, msa_ptr);
     if (!decide_lite_projection(target_ptr, msa_ptr))
-        return FALSE;
+        return false;
 
     reset_target(msa_ptr->m_ptr);
     msa_ptr->rlev = ((msa_ptr->r_ptr->level >= 1) ? msa_ptr->r_ptr->level : 1);
@@ -319,19 +319,19 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
     check_mspell_stupid(target_ptr, msa_ptr);
     check_mspell_smart(target_ptr, msa_ptr);
     if (!check_mspell_continuation(target_ptr, msa_ptr))
-        return FALSE;
+        return false;
 
     if (check_mspell_unexploded(target_ptr, msa_ptr))
-        return TRUE;
+        return true;
 
     // 特技がプレイヤーに届かないなら使わない。
     if (!check_thrown_mspell(target_ptr, msa_ptr))
-        return FALSE;
+        return false;
 
     // 特技を使う。
     const auto monspell_res = monspell_to_player(target_ptr, msa_ptr->thrown_spell, msa_ptr->y, msa_ptr->x, m_idx);
     if (!monspell_res.valid)
-        return FALSE;
+        return false;
 
     msa_ptr->dam = monspell_res.dam;
     check_mspell_imitation(target_ptr, msa_ptr);
@@ -339,5 +339,5 @@ bool make_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx)
     if (target_ptr->is_dead && (msa_ptr->r_ptr->r_deaths < MAX_SHORT) && !target_ptr->current_floor_ptr->inside_arena)
         msa_ptr->r_ptr->r_deaths++;
 
-    return TRUE;
+    return true;
 }

@@ -47,7 +47,7 @@ void set_action(player_type *creature_ptr, ACTION_IDX typ)
     }
     case ACTION_LEARN: {
         msg_print(_("学習をやめた。", "You stop learning."));
-        creature_ptr->new_mane = FALSE;
+        creature_ptr->new_mane = false;
         break;
     }
     case ACTION_KAMAE: {

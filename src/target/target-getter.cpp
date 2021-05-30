@@ -50,7 +50,7 @@ bool get_aim_dir(player_type *creature_ptr, DIRECTION *dp)
         else
             p = _("方向 ('5'でターゲットへ, '*'でターゲット再選択, ESCで中断)? ", "Direction ('5' for target, '*' to re-target, Escape to cancel)? ");
 
-        if (!get_com(p, &command, TRUE))
+        if (!get_com(p, &command, true))
             break;
 
         if (use_menu && (command == '\r'))
@@ -85,7 +85,7 @@ bool get_aim_dir(player_type *creature_ptr, DIRECTION *dp)
 
     if (!dir) {
         project_length = 0;
-        return FALSE;
+        return false;
     }
 
     command_dir = dir;
@@ -97,7 +97,7 @@ bool get_aim_dir(player_type *creature_ptr, DIRECTION *dp)
 
     *dp = dir;
     repeat_push((COMMAND_CODE)command_dir);
-    return TRUE;
+    return true;
 }
 
 bool get_direction(player_type *creature_ptr, DIRECTION *dp, bool allow_under, bool with_steed)
@@ -113,7 +113,7 @@ bool get_direction(player_type *creature_ptr, DIRECTION *dp, bool allow_under, b
 
     while (!dir) {
         char ch;
-        if (!get_com(prompt, &ch, TRUE))
+        if (!get_com(prompt, &ch, true))
             break;
 
         if ((allow_under) && ((ch == '5') || (ch == '-') || (ch == '.'))) {
@@ -130,7 +130,7 @@ bool get_direction(player_type *creature_ptr, DIRECTION *dp, bool allow_under, b
         dir = 0;
 
     if (!dir)
-        return FALSE;
+        return false;
 
     command_dir = dir;
     if (creature_ptr->confused) {
@@ -167,7 +167,7 @@ bool get_direction(player_type *creature_ptr, DIRECTION *dp, bool allow_under, b
 
     *dp = dir;
     repeat_push((COMMAND_CODE)command_dir);
-    return TRUE;
+    return true;
 }
 
 /*
@@ -198,7 +198,7 @@ bool get_rep_dir(player_type *creature_ptr, DIRECTION *dp, bool under)
         = under ? _("方向 ('.'足元, ESCで中断)? ", "Direction ('.' at feet, Escape to cancel)? ") : _("方向 (ESCで中断)? ", "Direction (Escape to cancel)? ");
     while (!dir) {
         char ch;
-        if (!get_com(prompt, &ch, TRUE))
+        if (!get_com(prompt, &ch, true))
             break;
 
         if ((under) && ((ch == '5') || (ch == '-') || (ch == '.'))) {
@@ -215,7 +215,7 @@ bool get_rep_dir(player_type *creature_ptr, DIRECTION *dp, bool under)
         dir = 0;
 
     if (!dir)
-        return FALSE;
+        return false;
 
     command_dir = dir;
     if (creature_ptr->confused) {
@@ -249,5 +249,5 @@ bool get_rep_dir(player_type *creature_ptr, DIRECTION *dp, bool under)
 
     *dp = dir;
     repeat_push((COMMAND_CODE)command_dir);
-    return TRUE;
+    return true;
 }

@@ -70,7 +70,7 @@
 void do_cmd_pet_dismiss(player_type *creature_ptr)
 {
     monster_type *m_ptr;
-    bool all_pets = FALSE;
+    bool all_pets = false;
     MONSTER_IDX pet_ctr;
     int i;
     int Dismissed = 0;
@@ -105,7 +105,7 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
         pet_ctr = who[i];
         m_ptr = &creature_ptr->current_floor_ptr->m_list[pet_ctr];
 
-        delete_this = FALSE;
+        delete_this = false;
         kakunin = ((pet_ctr == creature_ptr->riding) || (m_ptr->nickname));
         monster_desc(creature_ptr, friend_name, m_ptr, MD_ASSUME_VISIBLE);
 
@@ -119,23 +119,23 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
             if (m_ptr->ml)
                 move_cursor_relative(m_ptr->fy, m_ptr->fx);
 
-            while (TRUE) {
+            while (true) {
                 char ch = inkey();
 
                 if (ch == 'Y' || ch == 'y') {
-                    delete_this = TRUE;
+                    delete_this = true;
 
                     if (kakunin) {
                         msg_format(_("本当によろしいですか？ (%s) ", "Are you sure? (%s) "), friend_name);
                         ch = inkey();
                         if (ch != 'Y' && ch != 'y')
-                            delete_this = FALSE;
+                            delete_this = false;
                     }
                     break;
                 }
 
                 if (ch == 'U' || ch == 'u') {
-                    all_pets = TRUE;
+                    all_pets = true;
                     break;
                 }
 
@@ -202,8 +202,8 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
     grid_type *g_ptr;
     monster_type *m_ptr;
 
-    if (!get_direction(creature_ptr, &dir, FALSE, FALSE))
-        return FALSE;
+    if (!get_direction(creature_ptr, &dir, false, false))
+        return false;
     y = creature_ptr->y + ddy[dir];
     x = creature_ptr->x + ddx[dir];
     g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
@@ -213,13 +213,13 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
 
     if (creature_ptr->riding) {
         /* Skip non-empty grids */
-        if (!can_player_ride_pet(creature_ptr, g_ptr, FALSE)) {
+        if (!can_player_ride_pet(creature_ptr, g_ptr, false)) {
             msg_print(_("そちらには降りられません。", "You cannot go that direction."));
-            return FALSE;
+            return false;
         }
 
         if (!pattern_seq(creature_ptr, creature_ptr->y, creature_ptr->x, y, x))
-            return FALSE;
+            return false;
 
         if (g_ptr->m_idx) {
             PlayerEnergy(creature_ptr).set_player_turn_energy(100);
@@ -227,35 +227,35 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
             msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));
 
             do_cmd_attack(creature_ptr, y, x, HISSATSU_NONE);
-            return FALSE;
+            return false;
         }
 
         creature_ptr->riding = 0;
         creature_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
-        creature_ptr->riding_ryoute = creature_ptr->old_riding_ryoute = FALSE;
+        creature_ptr->riding_ryoute = creature_ptr->old_riding_ryoute = false;
     } else {
         if (cmd_limit_confused(creature_ptr))
-            return FALSE;
+            return false;
 
         m_ptr = &creature_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
         if (!g_ptr->m_idx || !m_ptr->ml) {
             msg_print(_("その場所にはモンスターはいません。", "There is no monster here."));
-            return FALSE;
+            return false;
         }
         if (!is_pet(m_ptr) && !force) {
             msg_print(_("そのモンスターはペットではありません。", "That monster is not a pet."));
-            return FALSE;
+            return false;
         }
         if (!(r_info[m_ptr->r_idx].flags7 & RF7_RIDING)) {
             msg_print(_("そのモンスターには乗れなさそうだ。", "This monster doesn't seem suitable for riding."));
-            return FALSE;
+            return false;
         }
 
         if (!pattern_seq(creature_ptr, creature_ptr->y, creature_ptr->x, y, x))
-            return FALSE;
+            return false;
 
-        if (!can_player_ride_pet(creature_ptr, g_ptr, TRUE)) {
+        if (!can_player_ride_pet(creature_ptr, g_ptr, true)) {
             /* Feature code (applying "mimic" field) */
             feature_type *f_ptr = &f_info[get_feat_mimic(g_ptr)];
 #ifdef JP
@@ -273,12 +273,12 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
                 f_ptr->name.c_str());
 #endif
 
-            return FALSE;
+            return false;
         }
         if (r_info[m_ptr->r_idx].level > randint1((creature_ptr->skill_exp[SKILL_RIDING] / 50 + creature_ptr->lev / 2 + 20))) {
             msg_print(_("うまく乗れなかった。", "You failed to ride."));
             PlayerEnergy(creature_ptr).set_player_turn_energy(100);
-            return FALSE;
+            return false;
         }
 
         if (monster_csleep_remaining(m_ptr)) {
@@ -308,7 +308,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
 
     (void)move_player_effect(creature_ptr, y, x, MPE_HANDLE_STUFF | MPE_ENERGY_USE | MPE_DONT_PICKUP | MPE_DONT_SWAP_MON);
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -319,10 +319,10 @@ static void do_name_pet(player_type *creature_ptr)
     monster_type *m_ptr;
     char out_val[20];
     GAME_TEXT m_name[MAX_NLEN];
-    bool old_name = FALSE;
+    bool old_name = false;
     bool old_target_pet = target_pet;
 
-    target_pet = TRUE;
+    target_pet = true;
     if (!target_set(creature_ptr, TARGET_KILL)) {
         target_pet = old_target_pet;
         return;
@@ -353,7 +353,7 @@ static void do_name_pet(player_type *creature_ptr)
         if (m_ptr->nickname) {
             /* Start with the old inscription */
             strcpy(out_val, quark_str(m_ptr->nickname));
-            old_name = TRUE;
+            old_name = true;
         }
 
         /* Get a new inscription (possibly empty) */
@@ -498,9 +498,9 @@ void do_cmd_pet(player_type *creature_ptr)
     powers[num++] = PET_NAME;
 
     if (creature_ptr->riding) {
-        if ((can_attack_with_main_hand(creature_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_SUB)
+        if ((can_attack_with_main_hand(creature_ptr) && (empty_hands(creature_ptr, false) == EMPTY_HAND_SUB)
                 && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_MAIN_HAND]))
-            || (can_attack_with_sub_hand(creature_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_MAIN)
+            || (can_attack_with_sub_hand(creature_ptr) && (empty_hands(creature_ptr, false) == EMPTY_HAND_MAIN)
                 && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_SUB_HAND]))) {
             if (creature_ptr->pet_extra_flags & PF_TWO_HANDS) {
                 power_desc[num] = _("武器を片手で持つ", "use one hand to control the pet you are riding");
@@ -514,7 +514,7 @@ void do_cmd_pet(player_type *creature_ptr)
             case CLASS_MONK:
             case CLASS_FORCETRAINER:
             case CLASS_BERSERKER:
-                if (empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_MAIN | EMPTY_HAND_SUB)) {
+                if (empty_hands(creature_ptr, false) == (EMPTY_HAND_MAIN | EMPTY_HAND_SUB)) {
                     if (creature_ptr->pet_extra_flags & PF_TWO_HANDS) {
                         power_desc[num] = _("片手で格闘する", "use one hand to control the pet you are riding");
                     } else {
@@ -522,7 +522,7 @@ void do_cmd_pet(player_type *creature_ptr)
                     }
 
                     powers[num++] = PET_TWO_HANDS;
-                } else if ((empty_hands(creature_ptr, FALSE) != EMPTY_HAND_NONE) && !has_melee_weapon(creature_ptr, INVEN_MAIN_HAND)
+                } else if ((empty_hands(creature_ptr, false) != EMPTY_HAND_NONE) && !has_melee_weapon(creature_ptr, INVEN_MAIN_HAND)
                     && !has_melee_weapon(creature_ptr, INVEN_SUB_HAND)) {
                     if (creature_ptr->pet_extra_flags & PF_TWO_HANDS) {
                         power_desc[num] = _("格闘を行わない", "use one hand to control the pet you are riding");
@@ -541,8 +541,8 @@ void do_cmd_pet(player_type *creature_ptr)
     }
 
     if (!(repeat_pull(&i) && (i >= 0) && (i < num))) {
-        flag = FALSE;
-        redraw = FALSE;
+        flag = false;
+        redraw = false;
 
         if (use_menu) {
             screen_save();
@@ -556,11 +556,11 @@ void do_cmd_pet(player_type *creature_ptr)
 
         /* Get a command from the user */
         while (!flag) {
-            int ask = TRUE;
+            int ask = true;
 
             if (choice == ESCAPE)
                 choice = ' ';
-            else if (!get_com(out_val, &choice, TRUE))
+            else if (!get_com(out_val, &choice, true))
                 break;
 
             if (use_menu && (choice != ' ')) {
@@ -598,7 +598,7 @@ void do_cmd_pet(player_type *creature_ptr)
                 case '\r':
                 case '\n':
                     i = menu_line - 1;
-                    ask = FALSE;
+                    ask = false;
                     break;
                 }
                 if (menu_line > num)
@@ -611,7 +611,7 @@ void do_cmd_pet(player_type *creature_ptr)
                 if (!redraw || use_menu) {
                     byte y = 1, x = 0;
                     PET_COMMAND_IDX ctr = 0;
-                    redraw = TRUE;
+                    redraw = true;
                     if (!use_menu)
                         screen_save();
 
@@ -636,7 +636,7 @@ void do_cmd_pet(player_type *creature_ptr)
                 /* Hide the list */
                 else {
                     /* Hide list */
-                    redraw = FALSE;
+                    redraw = false;
                     screen_load();
                 }
 
@@ -673,7 +673,7 @@ void do_cmd_pet(player_type *creature_ptr)
             }
 
             /* Stop the loop */
-            flag = TRUE;
+            flag = true;
         }
         if (redraw)
             screen_load();
@@ -805,7 +805,7 @@ void do_cmd_pet(player_type *creature_ptr)
     }
 
     case PET_RIDING: {
-        (void)do_cmd_riding(creature_ptr, FALSE);
+        (void)do_cmd_riding(creature_ptr, false);
         break;
     }
 

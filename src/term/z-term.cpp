@@ -1024,7 +1024,7 @@ errr term_fresh(void)
         term_xtra(TERM_XTRA_CLEAR, 0);
 
         /* clear all "cursor" data */
-        old->cv = old->cu = FALSE;
+        old->cv = old->cu = false;
         old->cx = old->cy = 0;
 
         /* Wipe each row */
@@ -1057,7 +1057,7 @@ errr term_fresh(void)
         }
 
         /* Forget "total erase" */
-        Term->total_erase = FALSE;
+        Term->total_erase = false;
     }
 
     /* Cursor update -- Erase old Cursor */
@@ -1237,7 +1237,7 @@ errr term_fresh(void)
 errr term_fresh_force(void)
 {
     bool old = Term->never_fresh;
-    Term->never_fresh = FALSE;
+    Term->never_fresh = false;
     errr err = term_fresh();
     Term->never_fresh = old;
     return err;
@@ -1622,7 +1622,7 @@ errr term_clear(void)
     Term->y2 = h - 1;
 
     /* Force "total erase" */
-    Term->total_erase = TRUE;
+    Term->total_erase = true;
     return 0;
 }
 
@@ -1632,7 +1632,7 @@ errr term_clear(void)
 errr term_redraw(void)
 {
     /* Force "total erase" */
-    Term->total_erase = TRUE;
+    Term->total_erase = true;
     term_fresh();
     return 0;
 }
@@ -1823,7 +1823,7 @@ errr term_inkey(char *ch, bool wait, bool take)
         /* Process pending events while necessary */
         while (Term->key_head == Term->key_tail) {
             /* Process events (wait for one) */
-            term_xtra(TERM_XTRA_EVENT, TRUE);
+            term_xtra(TERM_XTRA_EVENT, true);
         }
     }
 
@@ -1832,7 +1832,7 @@ errr term_inkey(char *ch, bool wait, bool take)
         /* Process pending events if necessary */
         if (Term->key_head == Term->key_tail) {
             /* Process events (do not wait) */
-            term_xtra(TERM_XTRA_EVENT, FALSE);
+            term_xtra(TERM_XTRA_EVENT, false);
         }
     }
 
@@ -1968,7 +1968,7 @@ errr term_resize(TERM_LEN w, TERM_LEN h)
     Term->hgt = h;
 
     /* Force "total erase" */
-    Term->total_erase = TRUE;
+    Term->total_erase = true;
 
     /* Assume change */
     for (int i = 0; i < h; i++) {
@@ -2014,10 +2014,10 @@ errr term_activate(term_type *t)
             (*t->init_hook)(t);
 
         /* Remember */
-        t->active_flag = TRUE;
+        t->active_flag = true;
 
         /* Assume mapped */
-        t->mapped_flag = TRUE;
+        t->mapped_flag = true;
     }
 
     /* Remember the Term */
@@ -2076,7 +2076,7 @@ errr term_init(term_type *t, TERM_LEN w, TERM_LEN h, int k)
     t->y2 = h - 1;
 
     /* Force "total erase" */
-    t->total_erase = TRUE;
+    t->total_erase = true;
 
     /* Default "blank" */
     t->attr_blank = 0;
@@ -2130,8 +2130,8 @@ errr term_nuke(term_type *t)
         if (t->nuke_hook)
             (*t->nuke_hook)(t);
 
-        t->active_flag = FALSE;
-        t->mapped_flag = FALSE;
+        t->active_flag = false;
+        t->mapped_flag = false;
     }
 
     t->old.reset();

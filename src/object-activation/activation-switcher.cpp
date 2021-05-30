@@ -162,16 +162,16 @@ bool switch_activation(player_type *user_ptr, object_type **o_ptr_ptr, const act
         return activate_charm_others(user_ptr);
     case ACT_SUMMON_ANIMAL:
         (void)summon_specific(user_ptr, -1, user_ptr->y, user_ptr->x, user_ptr->lev, SUMMON_ANIMAL_RANGER, PM_ALLOW_GROUP | PM_FORCE_PET);
-        return TRUE;
+        return true;
     case ACT_SUMMON_PHANTOM:
         msg_print(_("幻霊を召喚した。", "You summon a phantasmal servant."));
         (void)summon_specific(user_ptr, -1, user_ptr->y, user_ptr->x, user_ptr->current_floor_ptr->dun_level, SUMMON_PHANTOM, PM_ALLOW_GROUP | PM_FORCE_PET);
-        return TRUE;
+        return true;
     case ACT_SUMMON_ELEMENTAL:
         return cast_summon_elemental(user_ptr, (user_ptr->lev * 3) / 2);
     case ACT_SUMMON_DEMON:
         cast_summon_demon(user_ptr, (user_ptr->lev * 3) / 2);
-        return TRUE;
+        return true;
     case ACT_SUMMON_UNDEAD:
         return cast_summon_undead(user_ptr, (user_ptr->lev * 3) / 2);
     case ACT_SUMMON_HOUND:
@@ -179,85 +179,85 @@ bool switch_activation(player_type *user_ptr, object_type **o_ptr_ptr, const act
     case ACT_SUMMON_DAWN:
         msg_print(_("暁の師団を召喚した。", "You summon the Legion of the Dawn."));
         (void)summon_specific(user_ptr, -1, user_ptr->y, user_ptr->x, user_ptr->current_floor_ptr->dun_level, SUMMON_DAWN, PM_ALLOW_GROUP | PM_FORCE_PET);
-        return TRUE;
+        return true;
     case ACT_SUMMON_OCTOPUS:
         return cast_summon_octopus(user_ptr);
     case ACT_CHOIR_SINGS:
         msg_print(_("天国の歌が聞こえる...", "A heavenly choir sings..."));
         (void)cure_critical_wounds(user_ptr, 777);
-        (void)set_hero(user_ptr, randint1(25) + 25, FALSE);
-        return TRUE;
+        (void)set_hero(user_ptr, randint1(25) + 25, false);
+        return true;
     case ACT_CURE_LW:
         return activate_cure_lw(user_ptr);
     case ACT_CURE_MW:
         msg_print(_("深紫色の光を発している...", "It radiates deep purple..."));
         (void)cure_serious_wounds(user_ptr, 4, 8);
-        return TRUE;
+        return true;
     case ACT_CURE_POISON:
         msg_print(_("深青色に輝いている...", "It glows deep blue..."));
         (void)set_afraid(user_ptr, 0);
         (void)set_poisoned(user_ptr, 0);
-        return TRUE;
+        return true;
     case ACT_REST_EXP:
         msg_print(_("深紅に輝いている...", "It glows a deep red..."));
         restore_level(user_ptr);
-        return TRUE;
+        return true;
     case ACT_REST_ALL:
         msg_print(_("濃緑色に輝いている...", "It glows a deep green..."));
         (void)restore_all_status(user_ptr);
         (void)restore_level(user_ptr);
-        return TRUE;
+        return true;
     case ACT_CURE_700:
         msg_print(_("深青色に輝いている...", "It glows deep blue..."));
         msg_print(_("体内に暖かい鼓動が感じられる...", "You feel a warm tingling inside..."));
         (void)cure_critical_wounds(user_ptr, 700);
-        return TRUE;
+        return true;
     case ACT_CURE_1000:
         msg_print(_("白く明るく輝いている...", "It glows a bright white..."));
         msg_print(_("ひじょうに気分がよい...", "You feel much better..."));
         (void)cure_critical_wounds(user_ptr, 1000);
-        return TRUE;
+        return true;
     case ACT_CURING:
         msg_format(_("%sの優しさに癒される...", "the %s cures you affectionately ..."), name);
         true_healing(user_ptr, 0);
-        return TRUE;
+        return true;
     case ACT_CURE_MANA_FULL:
         msg_format(_("%sが青白く光った．．．", "The %s glows palely..."), name);
-        restore_mana(user_ptr, TRUE);
-        return TRUE;
+        restore_mana(user_ptr, true);
+        return true;
     case ACT_ESP:
-        (void)set_tim_esp(user_ptr, randint1(30) + 25, FALSE);
-        return TRUE;
+        (void)set_tim_esp(user_ptr, randint1(30) + 25, false);
+        return true;
     case ACT_BERSERK:
         (void)berserk(user_ptr, randint1(25) + 25);
-        return TRUE;
+        return true;
     case ACT_PROT_EVIL:
         msg_format(_("%sから鋭い音が流れ出た...", "The %s lets out a shrill wail..."), name);
-        (void)set_protevil(user_ptr, randint1(25) + user_ptr->lev * 3, FALSE);
-        return TRUE;
+        (void)set_protevil(user_ptr, randint1(25) + user_ptr->lev * 3, false);
+        return true;
     case ACT_RESIST_ALL:
         return activate_resistance_elements(user_ptr);
     case ACT_SPEED:
         msg_print(_("明るく緑色に輝いている...", "It glows bright green..."));
-        (void)set_fast(user_ptr, randint1(20) + 20, FALSE);
-        return TRUE;
+        (void)set_fast(user_ptr, randint1(20) + 20, false);
+        return true;
     case ACT_XTRA_SPEED:
         msg_print(_("明るく輝いている...", "It glows brightly..."));
-        (void)set_fast(user_ptr, randint1(75) + 75, FALSE);
-        return TRUE;
+        (void)set_fast(user_ptr, randint1(75) + 75, false);
+        return true;
     case ACT_WRAITH:
-        set_wraith_form(user_ptr, randint1(user_ptr->lev / 2) + (user_ptr->lev / 2), FALSE);
-        return TRUE;
+        set_wraith_form(user_ptr, randint1(user_ptr->lev / 2) + (user_ptr->lev / 2), false);
+        return true;
     case ACT_INVULN:
-        (void)set_invuln(user_ptr, randint1(8) + 8, FALSE);
-        return TRUE;
+        (void)set_invuln(user_ptr, randint1(8) + 8, false);
+        return true;
     case ACT_HERO:
         (void)heroism(user_ptr, 25);
-        return TRUE;
+        return true;
     case ACT_HERO_SPEED:
-        (void)set_fast(user_ptr, randint1(50) + 50, FALSE);
+        (void)set_fast(user_ptr, randint1(50) + 50, false);
         (void)heroism(user_ptr, 50);
-        return TRUE;
+        return true;
     case ACT_ACID_BALL_AND_RESISTANCE:
         return activate_acid_ball_and_resistance(user_ptr, name);
     case ACT_FIRE_BALL_AND_RESISTANCE:
@@ -296,7 +296,7 @@ bool switch_activation(player_type *user_ptr, object_type **o_ptr_ptr, const act
         return activate_protection_rune(user_ptr);
     case ACT_SATIATE:
         (void)set_food(user_ptr, PY_FOOD_MAX - 1);
-        return TRUE;
+        return true;
     case ACT_DEST_DOOR:
         return activate_door_destroy(user_ptr);
     case ACT_STONE_MUD:
@@ -306,7 +306,7 @@ bool switch_activation(player_type *user_ptr, object_type **o_ptr_ptr, const act
     case ACT_ALCHEMY:
         msg_print(_("明るい黄色に輝いている...", "It glows bright yellow..."));
         (void)alchemy(user_ptr);
-        return TRUE;
+        return true;
     case ACT_DIM_DOOR:
         return activate_dimension_door(user_ptr);
     case ACT_TELEPORT:
@@ -326,7 +326,7 @@ bool switch_activation(player_type *user_ptr, object_type **o_ptr_ptr, const act
     case ACT_BRAND_FIRE_BOLTS:
         msg_format(_("%sが深紅に輝いた...", "Your %s glows deep red..."), name);
         brand_bolts(user_ptr);
-        return TRUE;
+        return true;
     case ACT_RECHARGE_XTRA:
         return activate_recharge_extra(user_ptr, name);
     case ACT_LORE:
@@ -342,7 +342,7 @@ bool switch_activation(player_type *user_ptr, object_type **o_ptr_ptr, const act
         return activate_ultimate_resistance(user_ptr);
     case ACT_CAST_OFF:
         (void)cosmic_cast_off(user_ptr, o_ptr_ptr);
-        return TRUE;
+        return true;
     case ACT_FALLING_STAR:
         return activate_toragoroshi(user_ptr);
     case ACT_GRAND_CROSS:
@@ -352,13 +352,13 @@ bool switch_activation(player_type *user_ptr, object_type **o_ptr_ptr, const act
     case ACT_STRAIN_HASTE:
         msg_format(_("%sはあなたの体力を奪った...", "The %s drains your vitality..."), name);
         take_hit(user_ptr, DAMAGE_LOSELIFE, damroll(3, 8), _("加速した疲労", "the strain of haste"));
-        (void)set_fast(user_ptr, user_ptr->fast + 25 + randint1(25), FALSE);
-        return TRUE;
+        (void)set_fast(user_ptr, user_ptr->fast + 25 + randint1(25), false);
+        return true;
     case ACT_FISHING:
         return fishing(user_ptr);
     case ACT_INROU:
         mitokohmon(user_ptr);
-        return TRUE;
+        return true;
     case ACT_MURAMASA:
         return activate_muramasa(user_ptr, o_ptr);
     case ACT_BLOODY_MOON:
@@ -369,6 +369,6 @@ bool switch_activation(player_type *user_ptr, object_type **o_ptr_ptr, const act
         return activate_protection_elbereth(user_ptr);
     default:
         msg_format(_("Unknown activation effect: %d.", "Unknown activation effect: %d."), act_ptr->index);
-        return FALSE;
+        return false;
     }
 }

@@ -124,11 +124,11 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, monster_lo
     lore_type *lore_ptr = initialize_lore_type(&tmp_lore, r_idx, mode);
     for (int n = 0; n < A_MAX; n++) {
         if (lore_ptr->r_ptr->reinforce_id[n] > 0)
-            lore_ptr->reinforce = TRUE;
+            lore_ptr->reinforce = true;
     }
 
     if (cheat_know || (mode == MONSTER_LORE_RESEARCH) || (mode == MONSTER_LORE_DEBUG))
-        lore_ptr->know_everything = TRUE;
+        lore_ptr->know_everything = true;
 
     set_drop_flags(lore_ptr);
     set_msex_flags(lore_ptr);
@@ -153,7 +153,7 @@ void process_monster_lore(player_type *player_ptr, MONRACE_IDX r_idx, monster_lo
     display_monster_never_move(lore_ptr);
     if (lore_ptr->old) {
         hooked_roff(_("。", ".  "));
-        lore_ptr->old = FALSE;
+        lore_ptr->old = false;
     }
 
     display_lore_this(player_ptr, lore_ptr);

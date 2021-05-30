@@ -43,7 +43,7 @@ void identify_pack(player_type *target_ptr)
             continue;
 
         identify_item(target_ptr, o_ptr);
-        autopick_alter_item(target_ptr, i, FALSE);
+        autopick_alter_item(target_ptr, i, false);
     }
 }
 
@@ -59,9 +59,9 @@ bool identify_item(player_type *owner_ptr, object_type *o_ptr)
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(owner_ptr, o_name, o_ptr, 0);
 
-    bool old_known = FALSE;
+    bool old_known = false;
     if (any_bits(o_ptr->ident, IDENT_KNOWN))
-        old_known = TRUE;
+        old_known = true;
 
     if (!object_is_fully_known(o_ptr)) {
         if (object_is_artifact(o_ptr) || one_in_(5))
@@ -122,7 +122,7 @@ bool ident_spell(player_type *caster_ptr, bool only_equip, tval_type item_tester
     object_type *o_ptr;
     o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), TV_NONE);
     if (!o_ptr)
-        return FALSE;
+        return false;
 
     bool old_known = identify_item(caster_ptr, o_ptr);
 
@@ -137,7 +137,7 @@ bool ident_spell(player_type *caster_ptr, bool only_equip, tval_type item_tester
     }
 
     autopick_alter_item(caster_ptr, item, (bool)(destroy_identify && !old_known));
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -175,7 +175,7 @@ bool identify_fully(player_type *caster_ptr, bool only_equip, tval_type item_tes
     object_type *o_ptr;
     o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), TV_NONE);
     if (!o_ptr)
-        return FALSE;
+        return false;
 
     bool old_known = identify_item(caster_ptr, o_ptr);
 
@@ -198,5 +198,5 @@ bool identify_fully(player_type *caster_ptr, bool only_equip, tval_type item_tes
 
     (void)screen_object(caster_ptr, o_ptr, 0L);
     autopick_alter_item(caster_ptr, item, (bool)(destroy_identify && !old_known));
-    return TRUE;
+    return true;
 }

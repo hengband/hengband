@@ -58,17 +58,17 @@ bool know_armour(MONRACE_IDX r_idx, const bool know_everything)
     DEPTH level = r_ptr->level;
     MONSTER_NUMBER kills = r_ptr->r_tkills;
 
-    bool known = (r_ptr->r_cast_spell == MAX_UCHAR) ? TRUE : FALSE;
+    bool known = (r_ptr->r_cast_spell == MAX_UCHAR) ? true : false;
 
     if (know_everything || known)
-        return TRUE;
+        return true;
     if (kills > 304 / (4 + level))
-        return TRUE;
+        return true;
     if (!(r_ptr->flags1 & RF1_UNIQUE))
-        return FALSE;
+        return false;
     if (kills > 304 / (38 + (5 * level) / 4))
-        return TRUE;
-    return FALSE;
+        return true;
+    return false;
 }
 
 /*!
@@ -96,13 +96,13 @@ bool know_damage(MONRACE_IDX r_idx, int i)
     if (d >= ((4 + level) * MAX_UCHAR) / 80)
         d = ((4 + level) * MAX_UCHAR - 1) / 80;
     if ((4 + level) * a > 80 * d)
-        return TRUE;
+        return true;
     if (!(r_ptr->flags1 & RF1_UNIQUE))
-        return FALSE;
+        return false;
     if ((4 + level) * (2 * a) > 80 * d)
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 /*!

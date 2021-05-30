@@ -105,6 +105,7 @@
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
+#include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 
@@ -1078,7 +1079,7 @@ static void react_keypress(XKeyEvent *xev)
     char msg[128];
 
 #ifdef USE_XIM
-    int valid_keysym = TRUE;
+    int valid_keysym = true;
 #endif
 
 #ifdef USE_XIM
@@ -1090,7 +1091,7 @@ static void react_keypress(XKeyEvent *xev)
             return;
         }
         if (status != XLookupKeySym && status != XLookupBoth) {
-            valid_keysym = FALSE;
+            valid_keysym = false;
         }
     } else {
         n = XLookupString(ev, buf, 125, &ks, NULL);
@@ -1102,7 +1103,7 @@ static void react_keypress(XKeyEvent *xev)
     buf[n] = '\0';
 
 #ifdef USE_XIM
-    if (!valid_keysym) { /* XIMからの入力時のみ FALSE になる */
+    if (!valid_keysym) { /* XIMからの入力時のみ false になる */
 #ifdef JP
         char euc_buf[sizeof(buf)];
         /* strlen + 1 を渡して文字列終端('\0')を含めて変換する */
@@ -1119,10 +1120,10 @@ static void react_keypress(XKeyEvent *xev)
         return;
 
     ks1 = (uint)(ks);
-    mc = (ev->state & ControlMask) ? TRUE : FALSE;
-    ms = (ev->state & ShiftMask) ? TRUE : FALSE;
-    mo = (ev->state & Mod1Mask) ? TRUE : FALSE;
-    mx = (ev->state & Mod2Mask) ? TRUE : FALSE;
+    mc = any_bits(ev->state, ControlMask);
+    ms = any_bits(ev->state, ShiftMask);
+    mo = any_bits(ev->state, Mod1Mask);
+    mx = any_bits(ev->state, Mod2Mask);
     if (n && !mo && !mx && !IsSpecialKey(ks)) {
         send_keys(buf);
         return;
@@ -1251,7 +1252,7 @@ static void mark_selection(void)
  */
 static void copy_x11_release(void)
 {
-    s_ptr->select = FALSE;
+    s_ptr->select = false;
     mark_selection();
 }
 
@@ -1282,7 +1283,7 @@ static void copy_x11_cont(int x, int y, unsigned int buttons)
     if (x == s_ptr->old.x && y == s_ptr->old.y && s_ptr->select)
         return;
 
-    s_ptr->select = TRUE;
+    s_ptr->select = true;
     s_ptr->cur.x = x;
     s_ptr->cur.y = y;
     mark_selection();
@@ -1302,7 +1303,7 @@ static void copy_x11_end(const Time time)
     s_ptr->time = time;
     XSetSelectionOwner(Metadpy->dpy, XA_PRIMARY, Infowin->win, time);
     if (XGetSelectionOwner(Metadpy->dpy, XA_PRIMARY) != Infowin->win) {
-        s_ptr->select = FALSE;
+        s_ptr->select = false;
         mark_selection();
     }
 }
@@ -1374,7 +1375,7 @@ static void paste_x11_accept(const XSelectionEvent *ptr)
         return;
     }
 
-    if (XGetWindowProperty(Metadpy->dpy, Infowin->win, property, offset, length, TRUE, request_target, &xtextproperty.encoding, &xtextproperty.format,
+    if (XGetWindowProperty(Metadpy->dpy, Infowin->win, property, offset, length, true, request_target, &xtextproperty.encoding, &xtextproperty.format,
             &xtextproperty.nitems, &left, &xtextproperty.value)
         != Success) {
         return;
@@ -1425,7 +1426,7 @@ static bool paste_x11_send_text(XSelectionRequestEvent *rq)
 
     sort_co_ord(&min, &max, &s_ptr->init, &s_ptr->cur);
     if (XGetSelectionOwner(DPY, XA_PRIMARY) != WIN) {
-        return FALSE;
+        return false;
     }
 
     for (y = 0; y < Term->hgt; y++) {
@@ -1493,7 +1494,7 @@ static bool paste_x11_send_text(XSelectionRequestEvent *rq)
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 /*
@@ -1528,7 +1529,7 @@ static void paste_x11_send(XSelectionRequestEvent *rq)
         ptr->property = None;
     }
 
-    XSendEvent(DPY, rq->requestor, FALSE, NoEventMask, &event);
+    XSendEvent(DPY, rq->requestor, false, NoEventMask, &event);
 }
 
 /*
@@ -1640,7 +1641,7 @@ static errr CheckEvent(bool wait)
         break;
     }
     case SelectionClear: {
-        s_ptr->select = FALSE;
+        s_ptr->select = false;
         mark_selection();
         break;
     }
@@ -1665,12 +1666,12 @@ static errr CheckEvent(bool wait)
     }
     case MapNotify: {
         Infowin->mapped = 1;
-        Term->mapped_flag = TRUE;
+        Term->mapped_flag = true;
         break;
     }
     case UnmapNotify: {
         Infowin->mapped = 0;
-        Term->mapped_flag = FALSE;
+        Term->mapped_flag = false;
         break;
     }
     case ConfigureNotify: {
@@ -1742,10 +1743,10 @@ static bool check_file(concptr s)
 
     fff = fopen(s, "r");
     if (!fff)
-        return (FALSE);
+        return false;
 
     fclose(fff);
-    return (TRUE);
+    return true;
 }
 
 /*
@@ -1765,7 +1766,7 @@ static void init_sound(void)
             sound_file[i] = string_make(buf);
     }
 
-    use_sound = TRUE;
+    use_sound = true;
     return;
 }
 
@@ -1851,14 +1852,14 @@ static errr Term_xtra_x11(int n, int v)
     case TERM_XTRA_EVENT:
         return (CheckEvent(v));
     case TERM_XTRA_FLUSH:
-        while (!CheckEvent(FALSE))
+        while (!CheckEvent(false))
             ;
         return (0);
     case TERM_XTRA_LEVEL:
         return (Term_xtra_x11_level(v));
     case TERM_XTRA_CLEAR:
         Infowin_wipe();
-        s_ptr->drawn = FALSE;
+        s_ptr->drawn = false;
         return (0);
     case TERM_XTRA_DELAY:
         usleep(1000 * v);
@@ -1924,7 +1925,7 @@ static errr Term_wipe_x11(int x, int y, int n)
 {
     Infoclr_set(clr[TERM_DARK]);
     Infofnt_text_non(x, y, "", n);
-    s_ptr->drawn = FALSE;
+    s_ptr->drawn = false;
     return (0);
 }
 
@@ -1935,7 +1936,7 @@ static errr Term_text_x11(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s
 {
     Infoclr_set(clr[a]);
     Infofnt_text_std(x, y, s, n);
-    s_ptr->drawn = FALSE;
+    s_ptr->drawn = false;
     return (0);
 }
 
@@ -2000,7 +2001,7 @@ static errr Term_pict_x11(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
         }
     }
 
-    s_ptr->drawn = FALSE;
+    s_ptr->drawn = false;
     return (0);
 }
 #endif
@@ -2274,7 +2275,7 @@ static errr term_data_init(term_data *td, int i)
         Infowin_impell(x, y);
 
     term_init(t, cols, rows, num);
-    t->soft_cursor = TRUE;
+    t->soft_cursor = true;
     t->attr_blank = TERM_WHITE;
     t->char_blank = ' ';
     t->xtra_hook = Term_xtra_x11;
@@ -2313,7 +2314,7 @@ errr init_x11(int argc, char *argv[])
 
 #ifndef USE_XFT
         if (prefix(argv[i], "-s")) {
-            smoothRescaling = FALSE;
+            smoothRescaling = false;
             continue;
         }
 
@@ -2329,7 +2330,7 @@ errr init_x11(int argc, char *argv[])
 #endif
 
         if (prefix(argv[i], "-b")) {
-            arg_bigtile = use_bigtile = TRUE;
+            arg_bigtile = use_bigtile = true;
             continue;
         }
 
@@ -2427,7 +2428,7 @@ errr init_x11(int argc, char *argv[])
     case GRAPHICS_ORIGINAL:
         path_build(filename, sizeof(filename), ANGBAND_DIR_XTRA, "graf/8x8.bmp");
         if (0 == fd_close(fd_open(filename, O_RDONLY))) {
-            use_graphics = TRUE;
+            use_graphics = true;
             pict_wid = pict_hgt = 8;
             ANGBAND_GRAF = "old";
         }
@@ -2435,7 +2436,7 @@ errr init_x11(int argc, char *argv[])
     case GRAPHICS_ADAM_BOLT:
         path_build(filename, sizeof(filename), ANGBAND_DIR_XTRA, "graf/16x16.bmp");
         if (0 == fd_close(fd_open(filename, O_RDONLY))) {
-            use_graphics = TRUE;
+            use_graphics = true;
             pict_wid = pict_hgt = 16;
             ANGBAND_GRAF = "new";
         }
@@ -2450,7 +2451,7 @@ errr init_x11(int argc, char *argv[])
             term_data *td = &data[i];
             term_type *t = &td->t;
             t->pict_hook = Term_pict_x11;
-            t->higher_pict = TRUE;
+            t->higher_pict = true;
             td->tiles = ResizeImage(dpy, tiles_raw, pict_wid, pict_hgt, td->fnt->twid, td->fnt->hgt);
         }
 

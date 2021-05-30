@@ -248,7 +248,7 @@ static void decide_racial_command(rc_type *rc_ptr)
         rc_ptr->choice = 'a';
 
     if (!isalpha(rc_ptr->choice)) {
-        rc_ptr->ask = FALSE;
+        rc_ptr->ask = false;
         rc_ptr->command_code = rc_ptr->choice - '0' + 26;
         return;
     }
@@ -314,7 +314,7 @@ static bool racial_power_process_input(player_type *creature_ptr, rc_type *rc_pt
     while (true) {
         if (rc_ptr->choice == ESCAPE)
             rc_ptr->choice = ' ';
-        else if (!get_com(rc_ptr->out_val, &rc_ptr->choice, FALSE))
+        else if (!get_com(rc_ptr->out_val, &rc_ptr->choice, false))
             return RC_CANCEL;
 
         if (racial_power_select_by_menu(creature_ptr, rc_ptr) == RC_CANCEL)

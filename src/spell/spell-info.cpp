@@ -253,7 +253,7 @@ void print_spells(player_type *caster_ptr, SPELL_IDX target_spell, SPELL_IDX *sp
     char info[80];
     char out_val[160];
     char ryakuji[5];
-    bool max = FALSE;
+    bool max = false;
     for (i = 0; i < num; i++) {
         SPELL_IDX spell = spells[i];
 
@@ -274,15 +274,15 @@ void print_spells(player_type *caster_ptr, SPELL_IDX target_spell, SPELL_IDX *sp
             else
                 exp_level = spell_exp_level(exp);
 
-            max = FALSE;
+            max = false;
             if (!increment && (exp_level == EXP_LEVEL_MASTER))
-                max = TRUE;
+                max = true;
             else if ((increment == 32) && (exp_level >= EXP_LEVEL_EXPERT))
-                max = TRUE;
+                max = true;
             else if (s_ptr->slevel >= 99)
-                max = TRUE;
+                max = true;
             else if ((caster_ptr->pclass == CLASS_RED_MAGE) && (exp_level >= EXP_LEVEL_SKILLED))
-                max = TRUE;
+                max = true;
 
             strncpy(ryakuji, exp_level_str[exp_level], 4);
             ryakuji[3] = ']';

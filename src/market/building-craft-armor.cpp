@@ -79,5 +79,5 @@ bool eval_ac(ARMOUR_CLASS iAC)
     (void)inkey();
     screen_load();
 
-    return TRUE;
+    return true;
 }

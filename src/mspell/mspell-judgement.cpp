@@ -54,9 +54,9 @@ bool direct_beam(player_type *target_ptr, POSITION y1, POSITION x1, POSITION y2,
     u16b grid_g[512];
     int grid_n = projection_path(target_ptr, grid_g, get_max_range(target_ptr), y1, x1, y2, x2, PROJECT_THRU);
     if (!grid_n)
-        return FALSE;
+        return false;
 
-    bool hit2 = FALSE;
+    bool hit2 = false;
     POSITION y, x;
     bool is_friend = is_pet(m_ptr);
     for (int i = 0; i < grid_n; i++) {
@@ -64,18 +64,18 @@ bool direct_beam(player_type *target_ptr, POSITION y1, POSITION x1, POSITION y2,
         x = get_grid_x(grid_g[i]);
 
         if (y == y2 && x == x2)
-            hit2 = TRUE;
+            hit2 = true;
         else if (is_friend && floor_ptr->grid_array[y][x].m_idx > 0 && !are_enemies(target_ptr, m_ptr, &floor_ptr->m_list[floor_ptr->grid_array[y][x].m_idx])) {
-            return FALSE;
+            return false;
         }
 
         if (is_friend && player_bold(target_ptr, y, x))
-            return FALSE;
+            return false;
     }
 
     if (!hit2)
-        return FALSE;
-    return TRUE;
+        return false;
+    return true;
 }
 
 /*!
@@ -131,25 +131,25 @@ bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POSITION y
     }
 
     grid_n = i;
-    bool hit2 = FALSE;
-    bool hityou = FALSE;
+    bool hit2 = false;
+    bool hityou = false;
     if (!grid_n) {
         if (flg & PROJECT_DISI) {
             if (in_disintegration_range(master_ptr->current_floor_ptr, y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad))
-                hit2 = TRUE;
+                hit2 = true;
             if (in_disintegration_range(master_ptr->current_floor_ptr, y1, x1, master_ptr->y, master_ptr->x)
                 && (distance(y1, x1, master_ptr->y, master_ptr->x) <= rad))
-                hityou = TRUE;
+                hityou = true;
         } else if (flg & PROJECT_LOS) {
             if (los(master_ptr, y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad))
-                hit2 = TRUE;
+                hit2 = true;
             if (los(master_ptr, y1, x1, master_ptr->y, master_ptr->x) && (distance(y1, x1, master_ptr->y, master_ptr->x) <= rad))
-                hityou = TRUE;
+                hityou = true;
         } else {
             if (projectable(master_ptr, y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad))
-                hit2 = TRUE;
+                hit2 = true;
             if (projectable(master_ptr, y1, x1, master_ptr->y, master_ptr->x) && (distance(y1, x1, master_ptr->y, master_ptr->x) <= rad))
-                hityou = TRUE;
+                hityou = true;
         }
     } else {
         int grids = 0;
@@ -161,18 +161,18 @@ bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POSITION y
             y = gy[i];
             x = gx[i];
             if ((y == y2) && (x == x2))
-                hit2 = TRUE;
+                hit2 = true;
             if (player_bold(master_ptr, y, x))
-                hityou = TRUE;
+                hityou = true;
         }
     }
 
     if (!hit2)
-        return FALSE;
+        return false;
     if (is_friend && hityou)
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -214,15 +214,15 @@ bool dispel_check_monster(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_ID
 {
     monster_type *t_ptr = &target_ptr->current_floor_ptr->m_list[t_idx];
     if (monster_invulner_remaining(t_ptr))
-        return TRUE;
+        return true;
 
     if ((t_ptr->mspeed < 135) && monster_fast_remaining(t_ptr))
-        return TRUE;
+        return true;
 
     if ((t_idx == target_ptr->riding) && dispel_check(target_ptr, m_idx))
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -234,103 +234,103 @@ bool dispel_check_monster(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_ID
 bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
 {
     if (is_invuln(creature_ptr))
-        return TRUE;
+        return true;
 
     if (creature_ptr->wraith_form)
-        return TRUE;
+        return true;
 
     if (creature_ptr->shield)
-        return TRUE;
+        return true;
 
     if (creature_ptr->magicdef)
-        return TRUE;
+        return true;
 
     if (creature_ptr->multishadow)
-        return TRUE;
+        return true;
 
     if (creature_ptr->dustrobe)
-        return TRUE;
+        return true;
 
     if (creature_ptr->shero && (creature_ptr->pclass != CLASS_BERSERKER))
-        return TRUE;
+        return true;
 
     if (creature_ptr->mimic_form == MIMIC_DEMON_LORD)
-        return TRUE;
+        return true;
 
     monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     if (r_ptr->ability_flags.has(RF_ABILITY::BR_ACID)) {
         if (!has_immune_acid(creature_ptr) && (creature_ptr->oppose_acid || music_singing(creature_ptr, MUSIC_RESIST)))
-            return TRUE;
+            return true;
 
         if (creature_ptr->special_defense & DEFENSE_ACID)
-            return TRUE;
+            return true;
     }
 
     if (r_ptr->ability_flags.has(RF_ABILITY::BR_FIRE)) {
         if (!((creature_ptr->prace == RACE_BALROG) && creature_ptr->lev > 44)) {
             if (!has_immune_fire(creature_ptr) && (creature_ptr->oppose_fire || music_singing(creature_ptr, MUSIC_RESIST)))
-                return TRUE;
+                return true;
 
             if (creature_ptr->special_defense & DEFENSE_FIRE)
-                return TRUE;
+                return true;
         }
     }
 
     if (r_ptr->ability_flags.has(RF_ABILITY::BR_ELEC)) {
         if (!has_immune_elec(creature_ptr) && (creature_ptr->oppose_elec || music_singing(creature_ptr, MUSIC_RESIST)))
-            return TRUE;
+            return true;
 
         if (creature_ptr->special_defense & DEFENSE_ELEC)
-            return TRUE;
+            return true;
     }
 
     if (r_ptr->ability_flags.has(RF_ABILITY::BR_COLD)) {
         if (!has_immune_cold(creature_ptr) && (creature_ptr->oppose_cold || music_singing(creature_ptr, MUSIC_RESIST)))
-            return TRUE;
+            return true;
 
         if (creature_ptr->special_defense & DEFENSE_COLD)
-            return TRUE;
+            return true;
     }
 
     if (r_ptr->ability_flags.has_any_of({ RF_ABILITY::BR_POIS, RF_ABILITY::BR_NUKE }) && !((creature_ptr->pclass == CLASS_NINJA) && (creature_ptr->lev > 44))) {
         if (creature_ptr->oppose_pois || music_singing(creature_ptr, MUSIC_RESIST))
-            return TRUE;
+            return true;
 
         if (creature_ptr->special_defense & DEFENSE_POIS)
-            return TRUE;
+            return true;
     }
 
     if (creature_ptr->ult_res)
-        return TRUE;
+        return true;
 
     if (creature_ptr->tsuyoshi)
-        return TRUE;
+        return true;
 
     if ((creature_ptr->special_attack & ATTACK_ACID) && !(r_ptr->flagsr & RFR_EFF_IM_ACID_MASK))
-        return TRUE;
+        return true;
 
     if ((creature_ptr->special_attack & ATTACK_FIRE) && !(r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK))
-        return TRUE;
+        return true;
 
     if ((creature_ptr->special_attack & ATTACK_ELEC) && !(r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK))
-        return TRUE;
+        return true;
 
     if ((creature_ptr->special_attack & ATTACK_COLD) && !(r_ptr->flagsr & RFR_EFF_IM_COLD_MASK))
-        return TRUE;
+        return true;
 
     if ((creature_ptr->special_attack & ATTACK_POIS) && !(r_ptr->flagsr & RFR_EFF_IM_POIS_MASK))
-        return TRUE;
+        return true;
 
     if ((creature_ptr->pspeed < 145) && is_fast(creature_ptr))
-        return TRUE;
+        return true;
 
     if (creature_ptr->lightspeed && (m_ptr->mspeed < 136))
-        return TRUE;
+        return true;
 
     if (creature_ptr->riding && (creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].mspeed < 135)
         && monster_fast_remaining(&creature_ptr->current_floor_ptr->m_list[creature_ptr->riding]))
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }

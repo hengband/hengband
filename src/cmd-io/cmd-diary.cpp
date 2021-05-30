@@ -44,7 +44,7 @@ static void display_diary(player_type *creature_ptr)
     sprintf(diary_title, "Legend of %s %s '%s'", ap_ptr->title, creature_ptr->name, tmp);
 #endif
 
-    (void)show_file(creature_ptr, FALSE, buf, diary_title, -1, 0);
+    (void)show_file(creature_ptr, false, buf, diary_title, -1, 0);
 }
 
 /*!
@@ -113,7 +113,7 @@ static void do_cmd_erase_diary(void)
 void do_cmd_diary(player_type *creature_ptr)
 {
     screen_save();
-    while (TRUE) {
+    while (true) {
         term_clear();
         prt(_("[ 記録の設定 ]", "[ Play Record ]"), 2, 0);
         prt(_("(1) 記録を見る", "(1) Display your record"), 4, 5);

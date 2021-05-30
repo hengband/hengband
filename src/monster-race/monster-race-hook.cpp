@@ -96,18 +96,18 @@ bool mon_hook_quest(player_type *player_ptr, MONRACE_IDX r_idx)
 
     monster_race *r_ptr = &r_info[r_idx];
     if (any_bits(r_ptr->flags8, RF8_WILD_ONLY))
-        return FALSE;
+        return false;
 
     if (any_bits(r_ptr->flags7, RF7_AQUATIC))
-        return FALSE;
+        return false;
 
     if (any_bits(r_ptr->flags2, RF2_MULTIPLY))
-        return FALSE;
+        return false;
 
     if (any_bits(r_ptr->flags7, RF7_FRIENDLY))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -126,7 +126,7 @@ bool mon_hook_quest(player_type *player_ptr, MONRACE_IDX r_idx)
 bool mon_hook_dungeon(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     if (!is_in_dungeon(player_ptr) && !player_ptr->current_floor_ptr->inside_quest)
-        return TRUE;
+        return true;
 
     monster_race *r_ptr = &r_info[r_idx];
     dungeon_type *d_ptr = &d_info[player_ptr->dungeon_idx];
@@ -261,7 +261,7 @@ bool mon_hook_deep_water(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
     if (!mon_hook_dungeon(player_ptr, r_idx))
-        return FALSE;
+        return false;
 
     return any_bits(r_ptr->flags7, RF7_AQUATIC);
 }
@@ -275,7 +275,7 @@ bool mon_hook_shallow_water(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
     if (!mon_hook_dungeon(player_ptr, r_idx))
-        return FALSE;
+        return false;
 
     return none_bits(r_ptr->flags2, RF2_AURA_FIRE);
 }
@@ -289,7 +289,7 @@ bool mon_hook_lava(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
     if (!mon_hook_dungeon(player_ptr, r_idx))
-        return FALSE;
+        return false;
 
     return (any_bits(r_ptr->flagsr, RFR_EFF_IM_FIRE_MASK) || any_bits(r_ptr->flags7, RF7_CAN_FLY)) && none_bits(r_ptr->flags3, RF3_AURA_COLD);
 }
@@ -306,9 +306,9 @@ bool mon_hook_floor(player_type *player_ptr, MONRACE_IDX r_idx)
 
     monster_race *r_ptr = &r_info[r_idx];
     if (none_bits(r_ptr->flags7, RF7_AQUATIC) || any_bits(r_ptr->flags7, RF7_CAN_FLY))
-        return TRUE;
+        return true;
     else
-        return FALSE;
+        return false;
 }
 
 /*
@@ -321,18 +321,18 @@ bool vault_aux_lite(player_type *player_ptr, MONRACE_IDX r_idx)
 
     monster_race *r_ptr = &r_info[r_idx];
     if (!vault_monster_okay(player_ptr, r_idx))
-        return FALSE;
+        return false;
 
     if (r_ptr->ability_flags.has_none_of({ RF_ABILITY::BR_LITE, RF_ABILITY::BA_LITE }))
-        return FALSE;
+        return false;
 
     if (any_bits(r_ptr->flags2, (RF2_PASS_WALL | RF2_KILL_WALL)))
-        return FALSE;
+        return false;
 
     if (r_ptr->ability_flags.has(RF_ABILITY::BR_DISI))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*
@@ -342,12 +342,12 @@ bool vault_aux_shards(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
     if (!vault_monster_okay(player_ptr, r_idx))
-        return FALSE;
+        return false;
 
     if (r_ptr->ability_flags.has_not(RF_ABILITY::BR_SHAR))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -374,18 +374,18 @@ bool vault_aux_jelly(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
     if (!vault_monster_okay(player_ptr, r_idx))
-        return FALSE;
+        return false;
 
     if (any_bits(r_ptr->flags2, RF2_KILL_BODY) && none_bits(r_ptr->flags1, RF1_NEVER_BLOW))
-        return FALSE;
+        return false;
 
     if (any_bits(r_ptr->flags3, RF3_EVIL))
-        return FALSE;
+        return false;
 
     if (!angband_strchr("ijm,", r_ptr->d_char))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -398,12 +398,12 @@ bool vault_aux_animal(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
     if (!vault_monster_okay(player_ptr, r_idx))
-        return FALSE;
+        return false;
 
     if (none_bits(r_ptr->flags3, RF3_ANIMAL))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -416,12 +416,12 @@ bool vault_aux_undead(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
     if (!vault_monster_okay(player_ptr, r_idx))
-        return FALSE;
+        return false;
 
     if (none_bits(r_ptr->flags3, RF3_UNDEAD))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -437,22 +437,22 @@ bool vault_aux_chapel_g(player_type *player_ptr, MONRACE_IDX r_idx)
 
     monster_race *r_ptr = &r_info[r_idx];
     if (!vault_monster_okay(player_ptr, r_idx))
-        return FALSE;
+        return false;
 
     if (any_bits(r_ptr->flags3, RF3_EVIL))
-        return FALSE;
+        return false;
 
     if ((r_idx == MON_A_GOLD) || (r_idx == MON_A_SILVER))
-        return FALSE;
+        return false;
 
     if (r_ptr->d_char == 'A')
-        return TRUE;
+        return true;
 
     for (int i = 0; chapel_list[i]; i++)
         if (r_idx == chapel_list[i])
-            return TRUE;
+            return true;
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -465,12 +465,12 @@ bool vault_aux_kennel(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
     if (!vault_monster_okay(player_ptr, r_idx))
-        return FALSE;
+        return false;
 
     if (!angband_strchr("CZ", r_ptr->d_char))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -483,12 +483,12 @@ bool vault_aux_mimic(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
     if (!vault_monster_okay(player_ptr, r_idx))
-        return FALSE;
+        return false;
 
     if (!angband_strchr("!$&(/=?[\\|][`~>+", r_ptr->d_char))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -500,7 +500,7 @@ bool vault_aux_mimic(player_type *player_ptr, MONRACE_IDX r_idx)
 bool vault_aux_clone(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     if (!vault_monster_okay(player_ptr, r_idx))
-        return FALSE;
+        return false;
 
     return (r_idx == vault_aux_race);
 }
@@ -515,18 +515,18 @@ bool vault_aux_symbol_e(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
     if (!vault_monster_okay(player_ptr, r_idx))
-        return FALSE;
+        return false;
 
     if (any_bits(r_ptr->flags2, RF2_KILL_BODY) && none_bits(r_ptr->flags1, RF1_NEVER_BLOW))
-        return FALSE;
+        return false;
 
     if (any_bits(r_ptr->flags3, RF3_GOOD))
-        return FALSE;
+        return false;
 
     if (r_ptr->d_char != vault_aux_char)
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -539,18 +539,18 @@ bool vault_aux_symbol_g(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
     if (!vault_monster_okay(player_ptr, r_idx))
-        return FALSE;
+        return false;
 
     if (any_bits(r_ptr->flags2, RF2_KILL_BODY) && none_bits(r_ptr->flags1, RF1_NEVER_BLOW))
-        return FALSE;
+        return false;
 
     if (any_bits(r_ptr->flags3, RF3_EVIL))
-        return FALSE;
+        return false;
 
     if (r_ptr->d_char != vault_aux_char)
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -563,15 +563,15 @@ bool vault_aux_orc(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
     if (!vault_monster_okay(player_ptr, r_idx))
-        return FALSE;
+        return false;
 
     if (none_bits(r_ptr->flags3, RF3_ORC))
-        return FALSE;
+        return false;
 
     if (any_bits(r_ptr->flags3, RF3_UNDEAD))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -584,15 +584,15 @@ bool vault_aux_troll(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
     if (!vault_monster_okay(player_ptr, r_idx))
-        return FALSE;
+        return false;
 
     if (none_bits(r_ptr->flags3, RF3_TROLL))
-        return FALSE;
+        return false;
 
     if (any_bits(r_ptr->flags3, RF3_UNDEAD))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -605,18 +605,18 @@ bool vault_aux_giant(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
     if (!vault_monster_okay(player_ptr, r_idx))
-        return FALSE;
+        return false;
 
     if (none_bits(r_ptr->flags3, RF3_GIANT))
-        return FALSE;
+        return false;
 
     if (any_bits(r_ptr->flags3, RF3_GOOD))
-        return FALSE;
+        return false;
 
     if (any_bits(r_ptr->flags3, RF3_UNDEAD))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -629,21 +629,21 @@ bool vault_aux_dragon(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
     if (!vault_monster_okay(player_ptr, r_idx))
-        return FALSE;
+        return false;
 
     if (none_bits(r_ptr->flags3, RF3_DRAGON))
-        return FALSE;
+        return false;
 
     if (any_bits(r_ptr->flags3, RF3_UNDEAD))
-        return FALSE;
+        return false;
 
     auto flags = RF_ABILITY_BREATH_MASK;
     flags.reset(vault_aux_dragon_mask4);
 
     if (r_ptr->ability_flags.has_any_of(flags) || !r_ptr->ability_flags.has_all_of(vault_aux_dragon_mask4))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -656,15 +656,15 @@ bool vault_aux_demon(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
     if (!vault_monster_okay(player_ptr, r_idx))
-        return FALSE;
+        return false;
 
     if (any_bits(r_ptr->flags2, RF2_KILL_BODY) && none_bits(r_ptr->flags1, RF1_NEVER_BLOW))
-        return FALSE;
+        return false;
 
     if (none_bits(r_ptr->flags3, RF3_DEMON))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -677,15 +677,15 @@ bool vault_aux_cthulhu(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
     if (!vault_monster_okay(player_ptr, r_idx))
-        return FALSE;
+        return false;
 
     if ((r_ptr->flags2 & RF2_KILL_BODY) && !(r_ptr->flags1 & RF1_NEVER_BLOW))
-        return FALSE;
+        return false;
 
     if (!(r_ptr->flags2 & (RF2_ELDRITCH_HORROR)))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -711,13 +711,13 @@ bool vault_aux_dark_elf(player_type *player_ptr, MONRACE_IDX r_idx)
     };
 
     if (!vault_monster_okay(player_ptr, r_idx))
-        return FALSE;
+        return false;
 
     for (int i = 0; dark_elf_list[i]; i++)
         if (r_idx == dark_elf_list[i])
-            return TRUE;
+            return true;
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -753,9 +753,9 @@ bool no_questor_or_bounty_uniques(MONRACE_IDX r_idx)
     case MON_BANORLUPART:
     case MON_BANOR:
     case MON_LUPART:
-        return TRUE;
+        return true;
     default:
-        return FALSE;
+        return false;
     }
 }
 
@@ -771,12 +771,12 @@ bool monster_hook_human(player_type *player_ptr, MONRACE_IDX r_idx)
 
     monster_race *r_ptr = &r_info[r_idx];
     if (any_bits(r_ptr->flags1, RF1_UNIQUE))
-        return FALSE;
+        return false;
 
     if (angband_strchr("pht", r_ptr->d_char))
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -788,12 +788,12 @@ bool get_nightmare(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
     if (none_bits(r_ptr->flags2, RF2_ELDRITCH_HORROR))
-        return FALSE;
+        return false;
 
     if (r_ptr->level <= player_ptr->lev)
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -808,9 +808,9 @@ bool monster_is_fishing_target(player_type *player_ptr, MONRACE_IDX r_idx)
 
     monster_race *r_ptr = &r_info[r_idx];
     if (any_bits(r_ptr->flags7, RF7_AQUATIC) && none_bits(r_ptr->flags1, RF1_UNIQUE) && angband_strchr("Jjlw", r_ptr->d_char))
-        return TRUE;
+        return true;
     else
-        return FALSE;
+        return false;
 }
 
 /*!
@@ -833,20 +833,20 @@ bool monster_can_entry_arena(player_type *player_ptr, MONRACE_IDX r_idx)
     unselectable |= any_bits(r_ptr->flags7, RF7_AQUATIC);
     unselectable |= any_bits(r_ptr->flags7, RF7_CHAMELEON);
     if (unselectable)
-        return FALSE;
+        return false;
 
     for (int i = 0; i < 4; i++) {
         if (r_ptr->blow[i].method == RBM_EXPLODE)
-            return FALSE;
+            return false;
 
         if (r_ptr->blow[i].effect != RBE_DR_MANA)
             dam += r_ptr->blow[i].d_dice;
     }
 
     if (!dam && r_ptr->ability_flags.has_none_of(RF_ABILITY_BOLT_MASK | RF_ABILITY_BEAM_MASK | RF_ABILITY_BALL_MASK | RF_ABILITY_BREATH_MASK))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -861,24 +861,24 @@ bool item_monster_okay(player_type *player_ptr, MONRACE_IDX r_idx)
 
     monster_race *r_ptr = &r_info[r_idx];
     if (any_bits(r_ptr->flags1, RF1_UNIQUE))
-        return FALSE;
+        return false;
 
     if (any_bits(r_ptr->flags7, RF7_KAGE))
-        return FALSE;
+        return false;
 
     if (any_bits(r_ptr->flagsr, RFR_RES_ALL))
-        return FALSE;
+        return false;
 
     if (any_bits(r_ptr->flags7, RF7_NAZGUL))
-        return FALSE;
+        return false;
 
     if (any_bits(r_ptr->flags1, RF1_FORCE_DEPTH))
-        return FALSE;
+        return false;
 
     if (any_bits(r_ptr->flags7, RF7_UNIQUE2))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*!

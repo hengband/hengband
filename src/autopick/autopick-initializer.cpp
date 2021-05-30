@@ -22,6 +22,6 @@ void init_autopick(void)
         autopick_free_entry(&autopick_list[i]);
 
     max_autopick = 0;
-    autopick_new_entry(&entry, easy_autopick_inscription, TRUE);
+    autopick_new_entry(&entry, easy_autopick_inscription, true);
     autopick_list[max_autopick++] = entry;
 }

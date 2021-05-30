@@ -40,7 +40,7 @@ void do_cmd_knowledge_virtues(player_type *creature_ptr)
     fprintf(fff, _("現在の属性 : %s\n\n", "Your alignment : %s\n\n"), alg.c_str());
     dump_virtues(creature_ptr, fff);
     angband_fclose(fff);
-    (void)show_file(creature_ptr, TRUE, file_name, _("八つの徳", "Virtues"), 0, 0);
+    (void)show_file(creature_ptr, true, file_name, _("八つの徳", "Virtues"), 0, 0);
     fd_kill(file_name);
 }
 
@@ -198,7 +198,7 @@ void do_cmd_knowledge_stat(player_type *creature_ptr)
     dump_winner_classes(fff);
     angband_fclose(fff);
 
-    (void)show_file(creature_ptr, TRUE, file_name, _("自分に関する情報", "HP-rate & Max stat"), 0, 0);
+    (void)show_file(creature_ptr, true, file_name, _("自分に関する情報", "HP-rate & Max stat"), 0, 0);
     fd_kill(file_name);
 }
 
@@ -256,6 +256,6 @@ void do_cmd_knowledge_home(player_type *player_ptr)
     }
 
     angband_fclose(fff);
-    (void)show_file(player_ptr, TRUE, file_name, _("我が家のアイテム", "Home Inventory"), 0, 0);
+    (void)show_file(player_ptr, true, file_name, _("我が家のアイテム", "Home Inventory"), 0, 0);
     fd_kill(file_name);
 }

@@ -64,9 +64,9 @@
  */
 concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 {
-    bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
-    bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
-    bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
+    bool name = (mode == SPELL_NAME) ? true : false;
+    bool desc = (mode == SPELL_DESC) ? true : false;
+    bool cast = (mode == SPELL_CAST) ? true : false;
 
     DIRECTION dir;
     PLAYER_LEVEL plev = caster_ptr->lev;
@@ -97,7 +97,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
             DIRECTION cdir;
             POSITION y, x;
 
-            if (!get_direction(caster_ptr, &dir, FALSE, FALSE))
+            if (!get_direction(caster_ptr, &dir, false, false))
                 return NULL;
             if (dir == 5)
                 return NULL;
@@ -141,7 +141,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
                 "武器を手元に戻ってくるように投げる。戻ってこないこともある。", "Throws current weapon. It'll return to your hand unless the action failed.");
 
         if (cast) {
-            if (!do_cmd_throw(caster_ptr, 1, TRUE, -1))
+            if (!do_cmd_throw(caster_ptr, 1, true, -1))
                 return NULL;
         }
         break;
@@ -155,7 +155,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(caster_ptr, &dir, FALSE, FALSE))
+            if (!get_direction(caster_ptr, &dir, false, false))
                 return NULL;
             if (dir == 5)
                 return NULL;
@@ -192,7 +192,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(caster_ptr, &dir, FALSE, FALSE))
+            if (!get_direction(caster_ptr, &dir, false, false))
                 return NULL;
             if (dir == 5)
                 return NULL;
@@ -222,7 +222,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
                 return NULL;
             }
             msg_print(_("相手の攻撃に対して身構えた。", "You prepare to counterattack."));
-            caster_ptr->counter = TRUE;
+            caster_ptr->counter = true;
         }
         break;
 
@@ -241,7 +241,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
                 return NULL;
             }
 
-            if (!get_direction(caster_ptr, &dir, FALSE, FALSE))
+            if (!get_direction(caster_ptr, &dir, false, false))
                 return NULL;
 
             if (dir == 5)
@@ -280,7 +280,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(caster_ptr, &dir, FALSE, FALSE))
+            if (!get_direction(caster_ptr, &dir, false, false))
                 return NULL;
             if (dir == 5)
                 return NULL;
@@ -307,7 +307,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(caster_ptr, &dir, FALSE, FALSE))
+            if (!get_direction(caster_ptr, &dir, false, false))
                 return NULL;
             if (dir == 5)
                 return NULL;
@@ -333,7 +333,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(caster_ptr, &dir, FALSE, FALSE))
+            if (!get_direction(caster_ptr, &dir, false, false))
                 return NULL;
             if (dir == 5)
                 return NULL;
@@ -376,7 +376,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
                     m_ptr->fy = ty;
                     m_ptr->fx = tx;
 
-                    update_monster(caster_ptr, m_idx, TRUE);
+                    update_monster(caster_ptr, m_idx, true);
                     lite_spot(caster_ptr, oy, ox);
                     lite_spot(caster_ptr, ty, tx);
 
@@ -396,10 +396,10 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
 
         if (cast) {
             if (plev > 44) {
-                if (!identify_fully(caster_ptr, TRUE, TV_NONE))
+                if (!identify_fully(caster_ptr, true, TV_NONE))
                     return NULL;
             } else {
-                if (!ident_spell(caster_ptr, TRUE, TV_NONE))
+                if (!ident_spell(caster_ptr, true, TV_NONE))
                     return NULL;
             }
         }
@@ -414,7 +414,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(caster_ptr, &dir, FALSE, FALSE))
+            if (!get_direction(caster_ptr, &dir, false, false))
                 return NULL;
             if (dir == 5)
                 return NULL;
@@ -444,7 +444,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(caster_ptr, &dir, FALSE, FALSE))
+            if (!get_direction(caster_ptr, &dir, false, false))
                 return NULL;
             if (dir == 5)
                 return NULL;
@@ -471,7 +471,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(caster_ptr, &dir, FALSE, FALSE))
+            if (!get_direction(caster_ptr, &dir, false, false))
                 return NULL;
             if (dir == 5)
                 return NULL;
@@ -497,7 +497,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(caster_ptr, &dir, FALSE, FALSE))
+            if (!get_direction(caster_ptr, &dir, false, false))
                 return NULL;
             if (dir == 5)
                 return NULL;
@@ -524,7 +524,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(caster_ptr, &dir, FALSE, FALSE))
+            if (!get_direction(caster_ptr, &dir, false, false))
                 return NULL;
             if (dir == 5)
                 return NULL;
@@ -538,7 +538,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
                 msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
                 return NULL;
             }
-            caster_ptr->sutemi = TRUE;
+            caster_ptr->sutemi = true;
         }
         break;
 
@@ -551,7 +551,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(caster_ptr, &dir, FALSE, FALSE))
+            if (!get_direction(caster_ptr, &dir, false, false))
                 return NULL;
             if (dir == 5)
                 return NULL;
@@ -627,7 +627,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(caster_ptr, &dir, FALSE, FALSE))
+            if (!get_direction(caster_ptr, &dir, false, false))
                 return NULL;
             if (dir == 5)
                 return NULL;
@@ -706,7 +706,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
         if (cast) {
             int i;
 
-            if (!get_direction(caster_ptr, &dir, FALSE, FALSE))
+            if (!get_direction(caster_ptr, &dir, false, false))
                 return NULL;
             if (dir == 5)
                 return NULL;
@@ -755,7 +755,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
                 m_ptr->fy = ny;
                 m_ptr->fx = nx;
 
-                update_monster(caster_ptr, m_idx, TRUE);
+                update_monster(caster_ptr, m_idx, true);
 
                 /* Redraw the old spot */
                 lite_spot(caster_ptr, y, x);
@@ -788,7 +788,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(caster_ptr, &dir, FALSE, FALSE))
+            if (!get_direction(caster_ptr, &dir, false, false))
                 return NULL;
             if (dir == 5)
                 return NULL;
@@ -826,7 +826,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
 
         if (cast) {
             const int mana_cost_per_monster = 8;
-            bool is_new = TRUE;
+            bool is_new = true;
             bool mdeath;
 
             do {
@@ -835,7 +835,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
                 if (is_new) {
                     /* Reserve needed mana point */
                     caster_ptr->csp -= technic_info[REALM_HISSATSU - MIN_TECHNIC][26].smana;
-                    is_new = FALSE;
+                    is_new = false;
                 } else
                     caster_ptr->csp -= mana_cost_per_monster;
 
@@ -891,7 +891,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
         if (cast) {
             POSITION x, y;
 
-            if (!get_rep_dir(caster_ptr, &dir, FALSE))
+            if (!get_rep_dir(caster_ptr, &dir, false))
                 return NULL;
 
             y = caster_ptr->y + ddy[dir];
@@ -922,7 +922,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
             BIT_FLAGS flgs[TR_FLAG_SIZE];
             object_type *o_ptr;
 
-            if (!get_direction(caster_ptr, &dir, FALSE, FALSE))
+            if (!get_direction(caster_ptr, &dir, false, false))
                 return NULL;
             if (dir == 5)
                 return NULL;
@@ -972,7 +972,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
         if (cast) {
             POSITION y, x;
 
-            if (!get_direction(caster_ptr, &dir, FALSE, FALSE))
+            if (!get_direction(caster_ptr, &dir, false, false))
                 return NULL;
             if (dir == 5)
                 return NULL;
@@ -1010,7 +1010,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
                 return NULL;
             if (current_world_ptr->total_winner) {
                 take_hit(caster_ptr, DAMAGE_FORCE, 9999, "Seppuku");
-                current_world_ptr->total_winner = TRUE;
+                current_world_ptr->total_winner = true;
             } else {
                 msg_print(_("武士道とは、死ぬことと見つけたり。", "The meaning of bushido is found in death."));
                 take_hit(caster_ptr, DAMAGE_FORCE, 9999, "Seppuku");

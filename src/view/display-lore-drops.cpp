@@ -10,7 +10,7 @@ void display_monster_drop_quantity(lore_type *lore_ptr)
         hooked_roff(_("一つの", " a"));
 #ifdef JP
 #else
-        lore_ptr->sin = TRUE;
+        lore_ptr->sin = true;
 #endif
     } else if (lore_ptr->drop_quantity == 2) {
         hooked_roff(_("一つか二つの", " one or two"));
@@ -27,7 +27,7 @@ void display_monster_drop_quality(lore_type* lore_ptr)
         lore_ptr->drop_quality = _("上質な", " good");
 #ifdef JP
 #else
-        lore_ptr->sin = FALSE;
+        lore_ptr->sin = false;
 #endif
     } else {
         lore_ptr->drop_quality = NULL;
@@ -44,7 +44,7 @@ void display_monster_drop_items(lore_type *lore_ptr)
     if (lore_ptr->sin)
         hooked_roff("n");
 
-    lore_ptr->sin = FALSE;
+    lore_ptr->sin = false;
 #endif
 
     if (lore_ptr->drop_quality != NULL)
@@ -70,12 +70,12 @@ void display_monster_drop_golds(lore_type *lore_ptr)
 #ifdef JP
 #else
     if (lore_ptr->drop_quality == NULL)
-        lore_ptr->sin = FALSE;
+        lore_ptr->sin = false;
 
     if (lore_ptr->sin)
         hooked_roff("n");
 
-    lore_ptr->sin = FALSE;
+    lore_ptr->sin = false;
 #endif
 
     if (lore_ptr->drop_quality != NULL)
@@ -97,7 +97,7 @@ void display_monster_drops(lore_type *lore_ptr)
     hooked_roff(format(_("%^sは", "%^s may carry"), Who::who(lore_ptr->msex)));
 #ifdef JP
 #else
-    lore_ptr->sin = FALSE;
+    lore_ptr->sin = false;
 #endif
 
     display_monster_drop_quantity(lore_ptr);

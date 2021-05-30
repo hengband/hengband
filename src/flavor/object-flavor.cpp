@@ -72,25 +72,25 @@ static bool object_easy_know(int i)
     case TV_MUSIC_BOOK:
     case TV_HISSATSU_BOOK:
     case TV_HEX_BOOK:
-        return TRUE;
+        return true;
     case TV_FLASK:
     case TV_JUNK:
     case TV_BOTTLE:
     case TV_SKELETON:
     case TV_SPIKE:
     case TV_WHISTLE:
-        return TRUE;
+        return true;
     case TV_FOOD:
     case TV_POTION:
     case TV_SCROLL:
     case TV_ROD:
-        return TRUE;
+        return true;
 
     default:
         break;
     }
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -253,7 +253,7 @@ void flavor_init(void)
             continue;
 
         if (!k_ptr->flavor)
-            k_ptr->aware = TRUE;
+            k_ptr->aware = true;
 
         k_ptr->easy_know = object_easy_know(i);
     }

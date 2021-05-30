@@ -96,7 +96,7 @@
 
 static void restore_windows(player_type *player_ptr)
 {
-    player_ptr->hack_mutation = FALSE;
+    player_ptr->hack_mutation = false;
     current_world_ptr->character_icky_depth = 1;
     term_activate(angband_term[0]);
     angband_term[0]->resize_hook = resize_map;
@@ -118,7 +118,7 @@ static void send_waiting_record(player_type *player_ptr)
 
     player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
     update_creature(player_ptr);
-    player_ptr->is_dead = TRUE;
+    player_ptr->is_dead = true;
     current_world_ptr->start_time = (u32b)time(NULL);
     signals_ignore_tstp();
     current_world_ptr->character_icky_depth = 1;
@@ -127,12 +127,12 @@ static void send_waiting_record(player_type *player_ptr)
 
     /* 町名消失バグ対策(#38205)のためここで世界マップ情報を読み出す */
     parse_fixed_map(player_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
-    bool success = send_world_score(player_ptr, TRUE, display_player);
+    bool success = send_world_score(player_ptr, true, display_player);
     if (!success && !get_check_strict(player_ptr, _("スコア登録を諦めますか？", "Do you give up score registration? "), CHECK_NO_HISTORY)) {
         prt(_("引き続き待機します。", "standing by for future registration..."), 0, 0);
         (void)inkey();
     } else {
-        player_ptr->wait_report_score = FALSE;
+        player_ptr->wait_report_score = false;
         top_twenty(player_ptr);
         if (!save_player(player_ptr, SAVE_TYPE_CLOSE_GAME))
             msg_print(_("セーブ失敗！", "death save failed!"));
@@ -146,14 +146,14 @@ static void send_waiting_record(player_type *player_ptr)
 
 static void init_random_seed(player_type *player_ptr, bool new_game)
 {
-    bool init_random_seed = FALSE;
+    bool init_random_seed = false;
     if (!current_world_ptr->character_loaded) {
-        new_game = TRUE;
-        current_world_ptr->character_dungeon = FALSE;
-        init_random_seed = TRUE;
-        init_saved_floors(player_ptr, FALSE);
+        new_game = true;
+        current_world_ptr->character_dungeon = false;
+        init_random_seed = true;
+        init_saved_floors(player_ptr, false);
     } else if (new_game)
-        init_saved_floors(player_ptr, TRUE);
+        init_saved_floors(player_ptr, true);
 
     if (!new_game)
         process_player_name(player_ptr);
@@ -164,21 +164,21 @@ static void init_random_seed(player_type *player_ptr, bool new_game)
 
 static void init_world_floor_info(player_type *player_ptr)
 {
-    current_world_ptr->character_dungeon = FALSE;
+    current_world_ptr->character_dungeon = false;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->dun_level = 0;
     floor_ptr->inside_quest = 0;
-    floor_ptr->inside_arena = FALSE;
-    player_ptr->phase_out = FALSE;
-    write_level = TRUE;
+    floor_ptr->inside_arena = false;
+    player_ptr->phase_out = false;
+    write_level = true;
     current_world_ptr->seed_flavor = randint0(0x10000000);
     current_world_ptr->seed_town = randint0(0x10000000);
     player_birth(player_ptr);
     counts_write(player_ptr, 2, 0);
     player_ptr->count = 0;
-    load = FALSE;
+    load = false;
     determine_bounty_uniques(player_ptr);
-    determine_daily_bounty(player_ptr, FALSE);
+    determine_daily_bounty(player_ptr, false);
     wipe_o_list(floor_ptr);
 }
 
@@ -190,7 +190,7 @@ static void init_world_floor_info(player_type *player_ptr)
  */
 static void restore_world_floor_info(player_type *player_ptr)
 {
-    write_level = FALSE;
+    write_level = false;
     exe_write_diary(player_ptr, DIARY_GAMESTART, 1, _("                            ----ゲーム再開----", "                            --- Restarted Game ---"));
 
     if (player_ptr->riding == -1) {
@@ -207,11 +207,11 @@ static void restore_world_floor_info(player_type *player_ptr)
 
 static void reset_world_info(player_type *player_ptr)
 {
-    current_world_ptr->creating_savefile = FALSE;
-    player_ptr->teleport_town = FALSE;
-    player_ptr->sutemi = FALSE;
+    current_world_ptr->creating_savefile = false;
+    player_ptr->teleport_town = false;
+    player_ptr->sutemi = false;
     current_world_ptr->timewalk_m_idx = 0;
-    player_ptr->now_damaged = FALSE;
+    player_ptr->now_damaged = false;
     now_message = 0;
     current_world_ptr->start_time = time(NULL) - 1;
     record_o_name[0] = '\0';
@@ -223,9 +223,9 @@ static void set_wizard_mode_by_argument(player_type *player_ptr)
         return;
 
     if (enter_wizard_mode(player_ptr)) {
-        current_world_ptr->wizard = TRUE;
+        current_world_ptr->wizard = true;
         if (player_ptr->is_dead || !player_ptr->y || !player_ptr->x) {
-            init_saved_floors(player_ptr, TRUE);
+            init_saved_floors(player_ptr, true);
             player_ptr->current_floor_ptr->inside_quest = 0;
             player_ptr->y = player_ptr->x = 10;
         }
@@ -293,7 +293,7 @@ static void generate_world(player_type *player_ptr, bool new_game)
     set_wizard_mode_by_argument(player_ptr);
     generate_wilderness(player_ptr);
     change_floor_if_error(player_ptr);
-    current_world_ptr->character_generated = TRUE;
+    current_world_ptr->character_generated = true;
     current_world_ptr->character_icky_depth = 0;
     if (!new_game)
         return;
@@ -309,10 +309,10 @@ static void init_io(player_type *player_ptr)
     player_ptr->window_flags = PW_ALL;
     handle_stuff(player_ptr);
     if (arg_force_original)
-        rogue_like_commands = FALSE;
+        rogue_like_commands = false;
 
     if (arg_force_roguelike)
-        rogue_like_commands = TRUE;
+        rogue_like_commands = true;
 }
 
 static void init_riding_pet(player_type *player_ptr, bool new_game)
@@ -345,16 +345,16 @@ static void decide_arena_death(player_type *player_ptr)
         return;
     }
 
-    floor_ptr->inside_arena = FALSE;
+    floor_ptr->inside_arena = false;
     if (player_ptr->arena_number > MAX_ARENA_MONS)
         player_ptr->arena_number++;
     else
         player_ptr->arena_number = -1 - player_ptr->arena_number;
 
-    player_ptr->is_dead = FALSE;
+    player_ptr->is_dead = false;
     player_ptr->chp = 0;
     player_ptr->chp_frac = 0;
-    player_ptr->exit_bldg = TRUE;
+    player_ptr->exit_bldg = true;
     reset_tim_flags(player_ptr);
     prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_RAND_CONNECT);
     leave_floor(player_ptr);
@@ -362,13 +362,13 @@ static void decide_arena_death(player_type *player_ptr)
 
 static void process_game_turn(player_type *player_ptr)
 {
-    bool load_game = TRUE;
+    bool load_game = true;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    while (TRUE) {
+    while (true) {
         process_dungeon(player_ptr, load_game);
-        current_world_ptr->character_xtra = TRUE;
+        current_world_ptr->character_xtra = true;
         handle_stuff(player_ptr);
-        current_world_ptr->character_xtra = FALSE;
+        current_world_ptr->character_xtra = false;
         target_who = 0;
         health_track(player_ptr, 0);
         forget_lite(floor_ptr);
@@ -382,7 +382,7 @@ static void process_game_turn(player_type *player_ptr)
             wipe_monsters_list(player_ptr);
 
         msg_print(NULL);
-        load_game = FALSE;
+        load_game = false;
         decide_arena_death(player_ptr);
         if (player_ptr->is_dead)
             break;
@@ -423,7 +423,7 @@ void play_game(player_type *player_ptr, bool new_game, bool browsing_movie)
         restore_world_floor_info(player_ptr);
 
     generate_world(player_ptr, new_game);
-    player_ptr->playing = TRUE;
+    player_ptr->playing = true;
     reset_visuals(player_ptr);
     load_all_pref_files(player_ptr);
     if (new_game)
@@ -431,7 +431,7 @@ void play_game(player_type *player_ptr, bool new_game, bool browsing_movie)
 
     init_io(player_ptr);
     if (player_ptr->chp < 0 && !cheat_immortal)
-        player_ptr->is_dead = TRUE;
+        player_ptr->is_dead = true;
 
     if (player_ptr->prace == RACE_ANDROID)
         calc_android_exp(player_ptr);

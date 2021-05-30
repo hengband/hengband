@@ -190,39 +190,39 @@ bool has_extreme_damage_rate(player_type *player_ptr, object_type *o_ptr)
     object_flags(player_ptr, o_ptr, flgs);
     if (has_flag(flgs, TR_VAMPIRIC)) {
         if (has_flag(flgs, TR_BLOWS) && (o_ptr->pval == 1) && (calc_arm_avgdamage(player_ptr, o_ptr) > 52)) {
-            return TRUE;
+            return true;
         }
 
         if (has_flag(flgs, TR_BLOWS) && (o_ptr->pval == 2) && (calc_arm_avgdamage(player_ptr, o_ptr) > 43)) {
-            return TRUE;
+            return true;
         }
 
         if (has_flag(flgs, TR_BLOWS) && (o_ptr->pval == 3) && (calc_arm_avgdamage(player_ptr, o_ptr) > 33)) {
-            return TRUE;
+            return true;
         }
 
         if (calc_arm_avgdamage(player_ptr, o_ptr) > 63) {
-            return TRUE;
+            return true;
         }
 
-        return FALSE;
+        return false;
     }
 
     if (has_flag(flgs, TR_BLOWS) && (o_ptr->pval == 1) && (calc_arm_avgdamage(player_ptr, o_ptr) > 65)) {
-        return TRUE;
+        return true;
     }
 
     if (has_flag(flgs, TR_BLOWS) && (o_ptr->pval == 2) && (calc_arm_avgdamage(player_ptr, o_ptr) > 52)) {
-        return TRUE;
+        return true;
     }
 
     if (has_flag(flgs, TR_BLOWS) && (o_ptr->pval == 3) && (calc_arm_avgdamage(player_ptr, o_ptr) > 40)) {
-        return TRUE;
+        return true;
     }
 
     if (calc_arm_avgdamage(player_ptr, o_ptr) > 75) {
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }

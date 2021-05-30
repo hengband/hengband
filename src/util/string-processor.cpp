@@ -62,7 +62,7 @@ static char force_upper(char a)
 
 static int angband_stricmp(concptr a, concptr b)
 {
-    for (concptr s1 = a, s2 = b; TRUE; s1++, s2++) {
+    for (concptr s1 = a, s2 = b; true; s1++, s2++) {
         char z1 = force_upper(*s1);
         char z2 = force_upper(*s2);
         if (z1 < z2)
@@ -104,11 +104,11 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
         return;
 
     for (i = 0; macro_modifier_chr[i]; i++)
-        mod_status[i] = FALSE;
+        mod_status[i] = false;
     str++;
 
     /* Examine modifier keys */
-    while (TRUE) {
+    while (true) {
         for (i = 0; macro_modifier_chr[i]; i++) {
             len = strlen(macro_modifier_name[i]);
 
@@ -119,7 +119,7 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
         if (!macro_modifier_chr[i])
             break;
         str += len;
-        mod_status[i] = TRUE;
+        mod_status[i] = true;
         if ('S' == macro_modifier_chr[i])
             shiftstatus = 1;
     }
@@ -246,7 +246,7 @@ static bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
     char key_code[100];
     int i;
     if (macro_template == NULL)
-        return FALSE;
+        return false;
 
     *s++ = '\\';
     *s++ = '[';
@@ -275,13 +275,13 @@ static bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
         }
         default:
             if (ch != *str)
-                return FALSE;
+                return false;
             str++;
         }
     }
 
     if (*str++ != '\r')
-        return FALSE;
+        return false;
 
     for (i = 0; i < max_macrotrigger; i++) {
         if (!angband_stricmp(key_code, macro_trigger_keycode[0][i]) || !angband_stricmp(key_code, macro_trigger_keycode[1][i]))
@@ -289,7 +289,7 @@ static bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
     }
 
     if (i == max_macrotrigger)
-        return FALSE;
+        return false;
 
     tmp = macro_trigger_name[i];
     while (*tmp)
@@ -299,7 +299,7 @@ static bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
 
     *bufptr = s;
     *strptr = str;
-    return TRUE;
+    return true;
 }
 
 /*

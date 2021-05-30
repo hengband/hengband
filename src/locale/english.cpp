@@ -141,8 +141,8 @@ bool is_a_vowel(int ch)
     case 'I':
     case 'O':
     case 'U':
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }

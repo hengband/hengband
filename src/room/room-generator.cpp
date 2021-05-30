@@ -65,7 +65,7 @@ static bool room_build(player_type *player_ptr, dun_data_type *dd_ptr, EFFECT_ID
     case ROOM_T_FIXED:
         return build_type17(player_ptr, dd_ptr);
     default:
-        return FALSE;
+        return false;
     }
 }
 
@@ -181,8 +181,8 @@ bool generate_rooms(player_type *player_ptr, dun_data_type *dd_ptr)
     }
 
     bool remain;
-    while (TRUE) {
-        remain = FALSE;
+    while (true) {
+        remain = false;
         for (int i = 0; i < ROOM_T_MAX; i++) {
             int room_type = room_build_order[i];
             if (!room_num[room_type])
@@ -193,7 +193,7 @@ bool generate_rooms(player_type *player_ptr, dun_data_type *dd_ptr)
                 continue;
 
             rooms_built++;
-            remain = TRUE;
+            remain = true;
             switch (room_type) {
             case ROOM_T_PIT:
             case ROOM_T_NEST:
@@ -218,9 +218,9 @@ bool generate_rooms(player_type *player_ptr, dun_data_type *dd_ptr)
     /*! @details 部屋生成数が2未満の場合生成失敗を返す */
     if (rooms_built < 2) {
         msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("部屋数が2未満でした。生成を再試行します。", "Number of rooms was under 2. Retry."), rooms_built);
-        return FALSE;
+        return false;
     }
 
     msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("このダンジョンの部屋数は %d です。", "Number of Rooms: %d"), rooms_built);
-    return TRUE;
+    return true;
 }

@@ -76,8 +76,8 @@ MonsterSpellResult spell_RF6_WORLD(player_type *target_ptr, MONSTER_IDX m_idx)
     monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
     GAME_TEXT m_name[MAX_NLEN];
     monster_name(target_ptr, m_idx, m_name);
-    disturb(target_ptr, TRUE, TRUE);
-    (void)set_monster_timewalk(target_ptr, randint1(2) + 2, m_ptr->r_idx, TRUE);
+    disturb(target_ptr, true, true);
+    (void)set_monster_timewalk(target_ptr, randint1(2) + 2, m_ptr->r_idx, true);
 
     return MonsterSpellResult::make_valid();
 }
@@ -99,7 +99,7 @@ MonsterSpellResult spell_RF6_BLINK(player_type *target_ptr, MONSTER_IDX m_idx, i
     monster_name(target_ptr, m_idx, m_name);
 
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
-        disturb(target_ptr, TRUE, TRUE);
+        disturb(target_ptr, true, true);
 
     if (!is_quantum_effect && teleport_barrier(target_ptr, m_idx)) {
         if (see_monster(target_ptr, m_idx))
@@ -134,7 +134,7 @@ MonsterSpellResult spell_RF6_TPORT(player_type *target_ptr, MONSTER_IDX m_idx, i
     monster_name(target_ptr, m_idx, m_name);
 
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
-        disturb(target_ptr, TRUE, TRUE);
+        disturb(target_ptr, true, true);
     if (teleport_barrier(target_ptr, m_idx)) {
         if (see_monster(target_ptr, m_idx))
             msg_format(_("魔法のバリアが%^sのテレポートを邪魔した。", "Magic barrier obstructs teleporting of %^s."), m_name);
@@ -179,7 +179,7 @@ MonsterSpellResult spell_RF6_TELE_TO(player_type *target_ptr, MONSTER_IDX m_idx,
     if (TARGET_TYPE != MONSTER_TO_MONSTER)
         return res;
 
-    bool resists_tele = FALSE;
+    bool resists_tele = false;
     GAME_TEXT t_name[MAX_NLEN];
     monster_name(target_ptr, t_idx, t_name);
 
@@ -190,14 +190,14 @@ MonsterSpellResult spell_RF6_TELE_TO(player_type *target_ptr, MONSTER_IDX m_idx,
             if (see_monster(target_ptr, t_idx)) {
                 msg_format(_("%^sには効果がなかった。", "%^s is unaffected!"), t_name);
             }
-            resists_tele = TRUE;
+            resists_tele = true;
         } else if (tr_ptr->level > randint1(100)) {
             if (is_original_ap_and_seen(target_ptr, t_ptr))
                 tr_ptr->r_flagsr |= RFR_RES_TELE;
             if (see_monster(target_ptr, t_idx)) {
                 msg_format(_("%^sは耐性を持っている！", "%^s resists!"), t_name);
             }
-            resists_tele = TRUE;
+            resists_tele = true;
         }
     }
 
@@ -246,14 +246,14 @@ MonsterSpellResult spell_RF6_TELE_AWAY(player_type *target_ptr, MONSTER_IDX m_id
                 msg_print(_("弱い者いじめは止めるんだ！", ""));
         }
 
-        teleport_player_away(m_idx, target_ptr, 100, FALSE);
+        teleport_player_away(m_idx, target_ptr, 100, false);
         return res;
     }
 
     if (TARGET_TYPE != MONSTER_TO_MONSTER)
         return res;
 
-    bool resists_tele = FALSE;
+    bool resists_tele = false;
     GAME_TEXT t_name[MAX_NLEN];
     monster_name(target_ptr, t_idx, t_name);
 
@@ -264,14 +264,14 @@ MonsterSpellResult spell_RF6_TELE_AWAY(player_type *target_ptr, MONSTER_IDX m_id
             if (see_monster(target_ptr, t_idx)) {
                 msg_format(_("%^sには効果がなかった。", "%^s is unaffected!"), t_name);
             }
-            resists_tele = TRUE;
+            resists_tele = true;
         } else if (tr_ptr->level > randint1(100)) {
             if (is_original_ap_and_seen(target_ptr, t_ptr))
                 tr_ptr->r_flagsr |= RFR_RES_TELE;
             if (see_monster(target_ptr, t_idx)) {
                 msg_format(_("%^sは耐性を持っている！", "%^s resists!"), t_name);
             }
-            resists_tele = TRUE;
+            resists_tele = true;
         }
     }
 
@@ -281,7 +281,7 @@ MonsterSpellResult spell_RF6_TELE_AWAY(player_type *target_ptr, MONSTER_IDX m_id
     }
 
     if (t_idx == target_ptr->riding)
-        teleport_player_away(m_idx, target_ptr, MAX_SIGHT * 2 + 5, FALSE);
+        teleport_player_away(m_idx, target_ptr, MAX_SIGHT * 2 + 5, false);
     else
         teleport_away(target_ptr, t_idx, MAX_SIGHT * 2 + 5, TELEPORT_PASSIVE);
     set_monster_csleep(target_ptr, t_idx, 0);
@@ -356,17 +356,17 @@ MonsterSpellResult spell_RF6_DARKNESS(player_type *target_ptr, POSITION y, POSIT
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     monster_type *t_ptr = &floor_ptr->m_list[t_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    bool can_use_lite_area = FALSE;
+    bool can_use_lite_area = false;
     bool monster_to_monster = TARGET_TYPE == MONSTER_TO_MONSTER;
     bool monster_to_player = TARGET_TYPE == MONSTER_TO_PLAYER;
     GAME_TEXT t_name[MAX_NLEN];
     monster_name(target_ptr, t_idx, t_name);
 
     if ((target_ptr->pclass == CLASS_NINJA) && !(r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) && !(r_ptr->flags7 & RF7_DARK_MASK))
-        can_use_lite_area = TRUE;
+        can_use_lite_area = true;
 
     if (monster_to_monster && !is_hostile(t_ptr))
-        can_use_lite_area = FALSE;
+        can_use_lite_area = false;
 
     auto res = MonsterSpellResult::make_valid();
     res.learnable = monster_to_player && !can_use_lite_area;
@@ -419,7 +419,7 @@ MonsterSpellResult spell_RF6_TRAPS(player_type *target_ptr, POSITION y, POSITION
 {
     GAME_TEXT m_name[MAX_NLEN];
     monster_name(target_ptr, m_idx, m_name);
-    disturb(target_ptr, TRUE, TRUE);
+    disturb(target_ptr, true, true);
 
     if (target_ptr->blind)
         msg_format(_("%^sが何かをつぶやいて邪悪に微笑んだ。", "%^s mumbles, and then cackles evilly."), m_name);

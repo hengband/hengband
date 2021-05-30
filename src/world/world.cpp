@@ -15,9 +15,9 @@ bool is_daytime(void)
 {
 	s32b len = TURNS_PER_TICK * TOWN_DAWN;
 	if ((current_world_ptr->game_turn % len) < (len / 2))
-		return TRUE;
+		return true;
 	else
-		return FALSE;
+		return false;
 }
 
 /*!

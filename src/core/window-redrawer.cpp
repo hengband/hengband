@@ -160,12 +160,12 @@ void redraw_stuff(player_type *creature_ptr)
 
     if (creature_ptr->redraw & (PR_HEALTH)) {
         creature_ptr->redraw &= ~(PR_HEALTH);
-        health_redraw(creature_ptr, FALSE);
+        health_redraw(creature_ptr, false);
     }
 
     if (creature_ptr->redraw & (PR_UHEALTH)) {
         creature_ptr->redraw &= ~(PR_UHEALTH);
-        health_redraw(creature_ptr, TRUE);
+        health_redraw(creature_ptr, true);
     }
 
     if (creature_ptr->redraw & (PR_EXTRA)) {

@@ -98,16 +98,16 @@ static bool is_revealed_wall(floor_type *floor_ptr, feature_type *f_ptr, POSITIO
 {
     if (view_hidden_walls) {
         if (view_unsafe_walls)
-            return TRUE;
+            return true;
         if (none_bits(floor_ptr->grid_array[y][x].info, CAVE_UNSAFE))
-            return TRUE;
+            return true;
     }
 
     if (!has_flag(f_ptr->flags, FF_WALL) || has_flag(f_ptr->flags, FF_HAS_GOLD))
-        return TRUE;
+        return true;
 
     if (in_bounds(floor_ptr, y, x) && has_flag(f_ptr->flags, FF_PERMANENT))
-        return TRUE;
+        return true;
 
     int n = 0;
     for (int i = 0; i < 8; i++) {

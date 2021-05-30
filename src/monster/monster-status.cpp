@@ -68,7 +68,7 @@ bool monster_is_powerful(floor_type *floor_ptr, MONSTER_IDX m_idx)
 {
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    bool powerful = r_ptr->flags2 & RF2_POWERFUL ? TRUE : FALSE;
+    bool powerful = r_ptr->flags2 & RF2_POWERFUL ? true : false;
     return powerful;
 }
 
@@ -282,20 +282,20 @@ static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_i
         monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
         /* Assume does not wake up */
-        bool test = FALSE;
+        bool test = false;
 
         /* Hack -- Require proximity */
         if (m_ptr->cdis < AAF_LIMIT) {
             /* Handle "sensing radius" */
             if (m_ptr->cdis <= (is_pet(m_ptr) ? ((r_ptr->aaf > MAX_SIGHT) ? MAX_SIGHT : r_ptr->aaf) : r_ptr->aaf)) {
                 /* We may wake up */
-                test = TRUE;
+                test = true;
             }
 
             /* Handle "sight" and "aggravation" */
             else if ((m_ptr->cdis <= MAX_SIGHT) && (player_has_los_bold(target_ptr, m_ptr->fy, m_ptr->fx))) {
                 /* We may wake up */
-                test = TRUE;
+                test = true;
             }
         }
 
@@ -433,7 +433,7 @@ static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_i
 
     case MTIMED_INVULNER: {
         /* Reduce by one, note if expires */
-        if (!set_monster_invulner(target_ptr, m_idx, monster_invulner_remaining(m_ptr) - 1, TRUE))
+        if (!set_monster_invulner(target_ptr, m_idx, monster_invulner_remaining(m_ptr) - 1, true))
             break;
 
         if (is_seen(target_ptr, m_ptr)) {
@@ -481,7 +481,7 @@ void dispel_monster_status(player_type *target_ptr, MONSTER_IDX m_idx)
     GAME_TEXT m_name[MAX_NLEN];
 
     monster_desc(target_ptr, m_name, m_ptr, 0);
-    if (set_monster_invulner(target_ptr, m_idx, 0, TRUE)) {
+    if (set_monster_invulner(target_ptr, m_idx, 0, true)) {
         if (m_ptr->ml)
             msg_format(_("%sはもう無敵ではない。", "%^s is no longer invulnerable."), m_name);
     }
@@ -612,7 +612,7 @@ void monster_gain_exp(player_type *target_ptr, MONSTER_IDX m_idx, MONRACE_IDX s_
         m_ptr->parent_m_idx = 0;
     }
 
-    update_monster(target_ptr, m_idx, FALSE);
+    update_monster(target_ptr, m_idx, false);
     lite_spot(target_ptr, m_ptr->fy, m_ptr->fx);
 
     if (m_idx == target_ptr->riding)
@@ -654,7 +654,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
     monster_type exp_mon;
 
     /* Innocent until proven otherwise */
-    bool innocent = TRUE, thief = FALSE;
+    bool innocent = true, thief = false;
     int i;
     HIT_POINT expdam;
 
@@ -678,12 +678,12 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 
     /* Hack - Cancel any special player stealth magics. -LM- */
     if (target_ptr->special_defense & NINJA_S_STEALTH) {
-        set_superstealth(target_ptr, FALSE);
+        set_superstealth(target_ptr, false);
     }
 
     /* Genocided by chaos patron */
     if (!m_idx)
-        return TRUE;
+        return true;
 
     m_ptr->hp -= dam;
     m_ptr->dealt_damage += dam;
@@ -772,7 +772,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
         /* Don't kill Amberites */
         if ((r_ptr->flags3 & RF3_AMBERITE) && one_in_(2)) {
             int curses = 1 + randint1(3);
-            bool stop_ty = FALSE;
+            bool stop_ty = false;
             int count = 0;
 
             msg_format(_("%^sは恐ろしい血の呪いをあなたにかけた！", "%^s puts a terrible blood curse on you!"), m_name);
@@ -862,16 +862,16 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 
         for (i = 0; i < 4; i++) {
             if (r_ptr->blow[i].d_dice != 0)
-                innocent = FALSE; /* Murderer! */
+                innocent = false; /* Murderer! */
 
             if ((r_ptr->blow[i].effect == RBE_EAT_ITEM) || (r_ptr->blow[i].effect == RBE_EAT_GOLD))
 
-                thief = TRUE; /* Thief! */
+                thief = true; /* Thief! */
         }
 
         /* The new law says it is illegal to live in the dungeon */
         if (r_ptr->level != 0)
-            innocent = FALSE;
+            innocent = false;
 
         if (thief) {
             if (r_ptr->flags1 & RF1_UNIQUE)
@@ -918,11 +918,11 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 
         /* Death by Physical attack -- non-living monster */
         else if (!monster_living(m_ptr->r_idx)) {
-            bool explode = FALSE;
+            bool explode = false;
 
             for (i = 0; i < 4; i++) {
                 if (r_ptr->blow[i].method == RBM_EXPLODE)
-                    explode = TRUE;
+                    explode = true;
             }
 
             /* Special note at death */
@@ -961,7 +961,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
         }
 
         /* Generate treasure */
-        monster_death(target_ptr, m_idx, TRUE);
+        monster_death(target_ptr, m_idx, true);
 
         // @todo デッドアタック扱いにしてここから削除したい.
         bool is_special_summon = m_ptr->r_idx == MON_IKETA;
@@ -1001,10 +1001,10 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
         get_exp_from_mon(target_ptr, (long)exp_mon.max_maxhp * 2, &exp_mon);
 
         /* Not afraid */
-        (*fear) = FALSE;
+        (*fear) = false;
 
         /* Monster is dead */
-        return TRUE;
+        return true;
     }
 
     /* Mega-Hack -- Pain cancels fear */
@@ -1012,7 +1012,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
         /* Cure fear */
         if (set_monster_monfear(target_ptr, m_idx, monster_fear_remaining(m_ptr) - randint1(dam))) {
             /* No more fear */
-            (*fear) = FALSE;
+            (*fear) = false;
         }
     }
 
@@ -1027,7 +1027,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
          */
         if ((randint1(10) >= percentage) || ((dam >= m_ptr->hp) && (randint0(100) < 80))) {
             /* Hack -- note fear */
-            (*fear) = TRUE;
+            (*fear) = true;
 
             /* Hack -- Add some timed fear */
             (void)set_monster_monfear(target_ptr, m_idx, (randint1(10) + (((dam >= m_ptr->hp) && (percentage > 7)) ? 20 : ((11 - percentage) * 5))));
@@ -1035,7 +1035,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
     }
 
     /* Not dead yet */
-    return FALSE;
+    return false;
 }
 
 bool monster_is_valid(monster_type *m_ptr) { return (m_ptr->r_idx != 0); }

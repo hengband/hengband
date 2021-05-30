@@ -55,13 +55,13 @@ static void macro_dump(FILE **fpp, concptr fname)
 static void do_cmd_macro_aux(char *buf)
 {
     flush();
-    inkey_base = TRUE;
+    inkey_base = true;
     char i = inkey();
     int n = 0;
     while (i) {
         buf[n++] = i;
-        inkey_base = TRUE;
-        inkey_scan = TRUE;
+        inkey_base = true;
+        inkey_scan = true;
         i = inkey();
     }
 

@@ -146,23 +146,23 @@ static bool string_is_repeat(char *str, int len)
     int i;
 
     if (len < 2)
-        return FALSE;
+        return false;
 #ifdef JP
     if (iskanji(c))
-        return FALSE;
+        return false;
 #endif
 
     for (i = 1; i < len; i++) {
 #ifdef JP
         if (c != str[i] || iskanji(str[i]))
-            return FALSE;
+            return false;
 #else
         if (c != str[i])
-            return FALSE;
+            return false;
 #endif
     }
 
-    return TRUE;
+    return true;
 }
 
 static errr send_text_to_chuukei_server(TERM_LEN x, TERM_LEN y, int len, TERM_COLOR col, concptr str)
@@ -322,7 +322,7 @@ void prepare_movie_hooks(player_type *player_ptr)
 
 static int handle_movie_timestamp_data(int timestamp)
 {
-    static int initialized = FALSE;
+    static int initialized = false;
 
     /* 描画キューは空かどうか？ */
     if (!initialized) {
@@ -331,7 +331,7 @@ static int handle_movie_timestamp_data(int timestamp)
         epoch_time += browse_delay;
         epoch_time -= timestamp;
         // time_diff = current_time - timestamp;
-        initialized = TRUE;
+        initialized = true;
     }
 
     /* 描画キューに保存し、保存位置を進める */
@@ -413,7 +413,7 @@ static bool get_nextbuf(char *buf)
 {
     char *ptr = buf;
 
-    while (TRUE) {
+    while (true) {
         *ptr = ring.buf[ring.rptr++];
         ring.inlen--;
         if (ring.rptr == RINGBUF_SIZE)
@@ -423,9 +423,9 @@ static bool get_nextbuf(char *buf)
     }
 
     if (buf[0] == 'd')
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /* プレイホストのマップが大きいときクライアントのマップもリサイズする */
@@ -454,11 +454,11 @@ static bool flush_ringbuf_client(void)
 
     /* 書くデータなし */
     if (fresh_queue.next == fresh_queue.tail)
-        return FALSE;
+        return false;
 
     /* まだ書くべき時でない */
     if (fresh_queue.time[fresh_queue.next] > get_current_time() - epoch_time)
-        return FALSE;
+        return false;
 
     /* 時間情報(区切り)が得られるまで書く */
     while (get_nextbuf(buf)) {
@@ -541,7 +541,7 @@ static bool flush_ringbuf_client(void)
     fresh_queue.next++;
     if (fresh_queue.next == FRESH_QUEUE_SIZE)
         fresh_queue.next = 0;
-    return TRUE;
+    return true;
 }
 
 void prepare_browse_movie_without_path_build(concptr filename)

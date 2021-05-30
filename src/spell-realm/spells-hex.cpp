@@ -43,7 +43,7 @@ bool stop_hex_spell_all(player_type *caster_ptr)
     caster_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
     caster_ptr->redraw |= (PR_EXTRA | PR_HP | PR_MANA);
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -54,14 +54,14 @@ bool stop_hex_spell(player_type *caster_ptr)
     int spell;
     char choice = 0;
     char out_val[160];
-    bool flag = FALSE;
+    bool flag = false;
     TERM_LEN y = 1;
     TERM_LEN x = 20;
     int sp[MAX_KEEP];
 
     if (!hex_spelling_any(caster_ptr)) {
         msg_print(_("呪文を詠唱していません。", "You are not casting a spell."));
-        return FALSE;
+        return false;
     }
 
     /* Stop all spells */
@@ -85,7 +85,7 @@ bool stop_hex_spell(player_type *caster_ptr)
                 }
             }
 
-            if (!get_com(out_val, &choice, TRUE))
+            if (!get_com(out_val, &choice, true))
                 break;
             if (isupper(choice))
                 choice = (char)tolower(choice);
@@ -97,7 +97,7 @@ bool stop_hex_spell(player_type *caster_ptr)
             }
             if ((choice < I2A(0)) || (choice > I2A(casting_hex_num(caster_ptr) - 1)))
                 continue;
-            flag = TRUE;
+            flag = true;
         }
     }
 
@@ -126,7 +126,7 @@ void check_hex(player_type *caster_ptr)
     int spell;
     MANA_POINT need_mana;
     u32b need_mana_frac;
-    bool res = FALSE;
+    bool res = false;
 
     /* Spells spelled by player */
     if (caster_ptr->realm1 != REALM_HEX)
@@ -137,7 +137,7 @@ void check_hex(player_type *caster_ptr)
     if (caster_ptr->magic_num1[1]) {
         caster_ptr->magic_num1[0] = caster_ptr->magic_num1[1];
         caster_ptr->magic_num1[1] = 0;
-        res = TRUE;
+        res = true;
     }
 
     /* Stop all spells when anti-magic ability is given */
@@ -225,8 +225,8 @@ bool hex_spell_fully(player_type *caster_ptr)
     k_max = (caster_ptr->lev / 15) + 1;
     k_max = MIN(k_max, MAX_KEEP);
     if (casting_hex_num(caster_ptr) < k_max)
-        return FALSE;
-    return TRUE;
+        return false;
+    return true;
 }
 
 /*!
@@ -274,11 +274,11 @@ bool teleport_barrier(player_type *caster_ptr, MONSTER_IDX m_idx)
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
     if (!hex_spelling(caster_ptr, HEX_ANTI_TELE))
-        return FALSE;
+        return false;
     if ((caster_ptr->lev * 3 / 2) < randint1(r_ptr->level))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -292,11 +292,11 @@ bool magic_barrier(player_type *target_ptr, MONSTER_IDX m_idx)
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
     if (!hex_spelling(target_ptr, HEX_ANTI_MAGIC))
-        return FALSE;
+        return false;
     if ((target_ptr->lev * 3 / 2) < randint1(r_ptr->level))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -310,11 +310,11 @@ bool multiply_barrier(player_type *caster_ptr, MONSTER_IDX m_idx)
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
     if (!hex_spelling(caster_ptr, HEX_ANTI_MULTI))
-        return FALSE;
+        return false;
     if ((caster_ptr->lev * 3 / 2) < randint1(r_ptr->level))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 bool hex_spelling(player_type *caster_ptr, int hex) { return (caster_ptr->realm1 == REALM_HEX) && (caster_ptr->magic_num1[0] & (1UL << (hex))); }

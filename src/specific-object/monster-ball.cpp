@@ -64,22 +64,22 @@ static void inscribe_nickname(ae_type *ae_ptr)
 static bool set_activation_target(player_type *user_ptr, ae_type *ae_ptr)
 {
     bool old_target_pet = target_pet;
-    target_pet = TRUE;
+    target_pet = true;
     if (!get_aim_dir(user_ptr, &ae_ptr->dir)) {
         target_pet = old_target_pet;
-        return FALSE;
+        return false;
     }
 
     target_pet = old_target_pet;
     if (!fire_ball(user_ptr, GF_CAPTURE, ae_ptr->dir, 0, 0))
-        return TRUE;
+        return true;
 
     ae_ptr->o_ptr->pval = (PARAMETER_VALUE)cap_mon;
     ae_ptr->o_ptr->xtra3 = (XTRA8)cap_mspeed;
     ae_ptr->o_ptr->xtra4 = (XTRA16)cap_hp;
     ae_ptr->o_ptr->xtra5 = (XTRA16)cap_maxhp;
     inscribe_nickname(ae_ptr);
-    return TRUE;
+    return true;
 }
 
 static void add_quark_to_inscription(player_type *user_ptr, ae_type *ae_ptr, concptr t, char *buf)
@@ -91,10 +91,10 @@ static void add_quark_to_inscription(player_type *user_ptr, ae_type *ae_ptr, con
     t++;
 #ifdef JP
 #else
-    bool quote = FALSE;
+    bool quote = false;
     if (*t == '\'') {
         t++;
-        quote = TRUE;
+        quote = true;
     }
 #endif
 
@@ -165,25 +165,25 @@ static void check_monster_ball_use(player_type *user_ptr, ae_type *ae_ptr)
     ae_ptr->o_ptr->xtra3 = 0;
     ae_ptr->o_ptr->xtra4 = 0;
     ae_ptr->o_ptr->xtra5 = 0;
-    ae_ptr->success = TRUE;
+    ae_ptr->success = true;
 }
 
 bool exe_monster_capture(player_type *user_ptr, ae_type *ae_ptr)
 {
     if (ae_ptr->o_ptr->tval != TV_CAPTURE)
-        return FALSE;
+        return false;
 
     if (ae_ptr->o_ptr->pval == 0) {
         if (!set_activation_target(user_ptr, ae_ptr))
-            return TRUE;
+            return true;
 
         calc_android_exp(user_ptr);
-        return TRUE;
+        return true;
     }
 
-    ae_ptr->success = FALSE;
-    if (!get_direction(user_ptr, &ae_ptr->dir, FALSE, FALSE))
-        return TRUE;
+    ae_ptr->success = false;
+    if (!get_direction(user_ptr, &ae_ptr->dir, false, false))
+        return true;
 
     check_monster_ball_use(user_ptr, ae_ptr);
     if (!ae_ptr->success)
@@ -191,5 +191,5 @@ bool exe_monster_capture(player_type *user_ptr, ae_type *ae_ptr)
 
     calculate_upkeep(user_ptr);
     calc_android_exp(user_ptr);
-    return TRUE;
+    return true;
 }

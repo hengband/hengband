@@ -26,29 +26,29 @@ birther previous_char;
 bool ask_quick_start(player_type *creature_ptr)
 {
     if (!previous_char.quick_ok)
-        return FALSE;
+        return false;
 
     term_clear();
     put_str(_("クイック・スタートを使うと以前と全く同じキャラクターで始められます。",
                 "Do you want to use the quick start function (same character as your last one)."),
         11, 2);
-    while (TRUE) {
+    while (true) {
         char c;
         put_str(_("クイック・スタートを使いますか？[y/N]", "Use quick start? [y/N]"), 14, 10);
         c = inkey();
         if (c == 'Q')
             quit(NULL);
         else if (c == 'S')
-            return FALSE;
+            return false;
         else if (c == '?')
             show_help(creature_ptr, _("jbirth.txt#QuickStart", "birth.txt#QuickStart"));
         else if ((c == 'y') || (c == 'Y'))
             break;
         else
-            return FALSE;
+            return false;
     }
 
-    load_prev_data(creature_ptr, FALSE);
+    load_prev_data(creature_ptr, false);
     init_turn(creature_ptr);
     init_dungeon_quests(creature_ptr);
 
@@ -58,13 +58,13 @@ bool ask_quick_start(player_type *creature_ptr)
     mp_ptr = &m_info[creature_ptr->pclass];
     ap_ptr = &personality_info[creature_ptr->pseikaku];
 
-    get_extra(creature_ptr, FALSE);
+    get_extra(creature_ptr, false);
     creature_ptr->update |= (PU_BONUS | PU_HP);
     update_creature(creature_ptr);
     creature_ptr->chp = creature_ptr->mhp;
     creature_ptr->csp = creature_ptr->msp;
     process_player_name(creature_ptr);
-    return TRUE;
+    return true;
 }
 /*!
  * @brief プレイヤーのクイックスタート情報をプレイヤー構造体から保存する / Save the current data for later

@@ -34,10 +34,10 @@
  */
 concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 {
-    bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
-    bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
-    bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
-    bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
+    bool name = (mode == SPELL_NAME) ? true : false;
+    bool desc = (mode == SPELL_DESC) ? true : false;
+    bool info = (mode == SPELL_INFO) ? true : false;
+    bool cast = (mode == SPELL_CAST) ? true : false;
 
     DIRECTION dir;
     PLAYER_LEVEL plev = caster_ptr->lev;
@@ -355,7 +355,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
             DICE_SID sides = 4;
 
             if (cast) {
-                destroy_area(caster_ptr, caster_ptr->y, caster_ptr->x, base + randint1(sides), FALSE);
+                destroy_area(caster_ptr, caster_ptr->y, caster_ptr->x, base + randint1(sides), false);
             }
         }
         break;

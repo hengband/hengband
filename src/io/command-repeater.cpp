@@ -25,10 +25,10 @@ void repeat_push(COMMAND_CODE what)
 bool repeat_pull(COMMAND_CODE *what)
 {
     if (repeat__idx == repeat__cnt)
-        return FALSE;
+        return false;
 
     *what = repeat__key[repeat__idx++];
-    return TRUE;
+    return true;
 }
 
 void repeat_check(void)

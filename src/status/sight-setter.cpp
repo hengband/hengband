@@ -18,24 +18,24 @@
  */
 bool set_tim_esp(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
-    bool notice = FALSE;
+    bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
     if (creature_ptr->is_dead)
-        return FALSE;
+        return false;
 
     if (v) {
         if (creature_ptr->tim_esp && !do_dec) {
             if (creature_ptr->tim_esp > v)
-                return FALSE;
+                return false;
         } else if (!is_time_limit_esp(creature_ptr)) {
             msg_print(_("意識が広がった気がする！", "You feel your consciousness expand!"));
-            notice = TRUE;
+            notice = true;
         }
     } else {
         if (creature_ptr->tim_esp && !music_singing(creature_ptr, MUSIC_MIND)) {
             msg_print(_("意識は元に戻った。", "Your consciousness contracts again."));
-            notice = TRUE;
+            notice = true;
         }
     }
 
@@ -43,14 +43,14 @@ bool set_tim_esp(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
     creature_ptr->redraw |= (PR_STATUS);
 
     if (!notice)
-        return FALSE;
+        return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, false, false);
     creature_ptr->update |= (PU_BONUS);
     creature_ptr->update |= (PU_MONSTERS);
     handle_stuff(creature_ptr);
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -61,24 +61,24 @@ bool set_tim_esp(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  */
 bool set_tim_invis(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
-    bool notice = FALSE;
+    bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
     if (creature_ptr->is_dead)
-        return FALSE;
+        return false;
 
     if (v) {
         if (creature_ptr->tim_invis && !do_dec) {
             if (creature_ptr->tim_invis > v)
-                return FALSE;
+                return false;
         } else if (!creature_ptr->tim_invis) {
             msg_print(_("目が非常に敏感になった気がする！", "Your eyes feel very sensitive!"));
-            notice = TRUE;
+            notice = true;
         }
     } else {
         if (creature_ptr->tim_invis) {
             msg_print(_("目の敏感さがなくなったようだ。", "Your eyes feel less sensitive."));
-            notice = TRUE;
+            notice = true;
         }
     }
 
@@ -86,14 +86,14 @@ bool set_tim_invis(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
     creature_ptr->redraw |= (PR_STATUS);
 
     if (!notice)
-        return FALSE;
+        return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, false, false);
     creature_ptr->update |= (PU_BONUS);
     creature_ptr->update |= (PU_MONSTERS);
     handle_stuff(creature_ptr);
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -104,24 +104,24 @@ bool set_tim_invis(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  */
 bool set_tim_infra(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
-    bool notice = FALSE;
+    bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
     if (creature_ptr->is_dead)
-        return FALSE;
+        return false;
 
     if (v) {
         if (creature_ptr->tim_infra && !do_dec) {
             if (creature_ptr->tim_infra > v)
-                return FALSE;
+                return false;
         } else if (!creature_ptr->tim_infra) {
             msg_print(_("目がランランと輝き始めた！", "Your eyes begin to tingle!"));
-            notice = TRUE;
+            notice = true;
         }
     } else {
         if (creature_ptr->tim_infra) {
             msg_print(_("目の輝きがなくなった。", "Your eyes stop tingling."));
-            notice = TRUE;
+            notice = true;
         }
     }
 
@@ -129,12 +129,12 @@ bool set_tim_infra(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
     creature_ptr->redraw |= (PR_STATUS);
 
     if (!notice)
-        return FALSE;
+        return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, false, false);
     creature_ptr->update |= (PU_BONUS);
     creature_ptr->update |= (PU_MONSTERS);
     handle_stuff(creature_ptr);
-    return TRUE;
+    return true;
 }

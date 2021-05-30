@@ -45,7 +45,7 @@
 static bool check_floor_item_tag_aux(player_type *owner_ptr, fis_type *fis_ptr, char *prev_tag)
 {
     if (!fis_ptr->floor || (*fis_ptr->cp >= 0))
-        return FALSE;
+        return false;
 
     if (*prev_tag && command_cmd) {
         fis_ptr->floor_num
@@ -55,20 +55,20 @@ static bool check_floor_item_tag_aux(player_type *owner_ptr, fis_type *fis_ptr, 
             fis_ptr->tval = TV_NONE;
             item_tester_hook = NULL;
             command_cmd = 0;
-            return TRUE;
+            return true;
         }
 
         *prev_tag = '\0';
-        return FALSE;
+        return false;
     }
 
     if (!item_tester_okay(owner_ptr, &owner_ptr->current_floor_ptr->o_list[0 - (*fis_ptr->cp)], fis_ptr->tval) && ((fis_ptr->mode & USE_FULL) == 0))
-        return FALSE;
+        return false;
 
     fis_ptr->tval = TV_NONE;
     item_tester_hook = NULL;
     command_cmd = 0;
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -80,7 +80,7 @@ static bool check_floor_item_tag_aux(player_type *owner_ptr, fis_type *fis_ptr, 
  */
 static bool get_floor_item_tag_inventory(player_type *owner_ptr, fis_type *fis_ptr, char *prev_tag)
 {
-    bool flag = FALSE;
+    bool flag = false;
     item_use_flag use_flag = (*fis_ptr->cp >= INVEN_MAIN_HAND) ? USE_EQUIP : USE_INVEN;
 
     flag |= !get_tag(owner_ptr, &fis_ptr->k, *prev_tag, use_flag, fis_ptr->tval);
@@ -93,14 +93,14 @@ static bool get_floor_item_tag_inventory(player_type *owner_ptr, fis_type *fis_p
 
     if (flag) {
         *prev_tag = '\0';
-        return FALSE;
+        return false;
     }
 
     *fis_ptr->cp = fis_ptr->k;
     fis_ptr->tval = TV_NONE;
     item_tester_hook = NULL;
     command_cmd = 0;
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -114,7 +114,7 @@ static bool check_floor_item_tag_inventory(player_type *owner_ptr, fis_type *fis
 {
     if ((!fis_ptr->inven || (*fis_ptr->cp < 0) || (*fis_ptr->cp >= INVEN_PACK))
         && (!fis_ptr->equip || (*fis_ptr->cp < INVEN_MAIN_HAND) || (*fis_ptr->cp >= INVEN_TOTAL)))
-        return FALSE;
+        return false;
 
     if ((*prev_tag != '\0') && command_cmd)
         return get_floor_item_tag_inventory(owner_ptr, fis_ptr, prev_tag);
@@ -123,10 +123,10 @@ static bool check_floor_item_tag_inventory(player_type *owner_ptr, fis_type *fis
         fis_ptr->tval = TV_NONE;
         item_tester_hook = NULL;
         command_cmd = 0;
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -139,17 +139,17 @@ static bool check_floor_item_tag_inventory(player_type *owner_ptr, fis_type *fis
 static bool check_floor_item_tag(player_type *owner_ptr, fis_type *fis_ptr, char *prev_tag)
 {
     if (!repeat_pull(fis_ptr->cp))
-        return FALSE;
+        return false;
 
     if (fis_ptr->force && (*fis_ptr->cp == INVEN_FORCE)) {
         fis_ptr->tval = TV_NONE;
         item_tester_hook = NULL;
         command_cmd = 0;
-        return TRUE;
+        return true;
     }
 
     if (check_floor_item_tag_aux(owner_ptr, fis_ptr, prev_tag))
-        return TRUE;
+        return true;
 
     return check_floor_item_tag_inventory(owner_ptr, fis_ptr, prev_tag);
 }
@@ -210,13 +210,13 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
     fis_type *fis_ptr = initialize_fis_type(&tmp_fis, cp, mode, tval);
     static char prev_tag = '\0';
     if (check_floor_item_tag(owner_ptr, fis_ptr, &prev_tag))
-        return TRUE;
+        return true;
 
     msg_print(NULL);
     handle_stuff(owner_ptr);
     test_inventory_floor(owner_ptr, fis_ptr);
-    fis_ptr->done = FALSE;
-    fis_ptr->item = FALSE;
+    fis_ptr->done = false;
+    fis_ptr->item = false;
     fis_ptr->i1 = 0;
     fis_ptr->i2 = INVEN_PACK - 1;
     while ((fis_ptr->i1 <= fis_ptr->i2) && (!get_item_okay(owner_ptr, fis_ptr->i1, fis_ptr->tval)))
@@ -251,22 +251,22 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
             = scan_floor_items(owner_ptr, fis_ptr->floor_list, owner_ptr->y, owner_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, fis_ptr->tval);
 
     if ((mode & USE_INVEN) && (fis_ptr->i1 <= fis_ptr->i2))
-        fis_ptr->allow_inven = TRUE;
+        fis_ptr->allow_inven = true;
 
     if ((mode & USE_EQUIP) && (fis_ptr->e1 <= fis_ptr->e2))
-        fis_ptr->allow_equip = TRUE;
+        fis_ptr->allow_equip = true;
 
     if ((mode & USE_FLOOR) && (fis_ptr->floor_num))
-        fis_ptr->allow_floor = TRUE;
+        fis_ptr->allow_floor = true;
 
     if (!fis_ptr->allow_inven && !fis_ptr->allow_equip && !fis_ptr->allow_floor) {
-        command_see = FALSE;
-        fis_ptr->oops = TRUE;
-        fis_ptr->done = TRUE;
+        command_see = false;
+        fis_ptr->oops = true;
+        fis_ptr->done = true;
 
         if (fis_ptr->force) {
             *cp = INVEN_FORCE;
-            fis_ptr->item = TRUE;
+            fis_ptr->item = true;
         }
     } else {
         if (command_see && (command_wrk == USE_EQUIP) && fis_ptr->allow_equip)
@@ -280,8 +280,8 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
     }
 
     /* 追加オプション(always_show_list)が設定されている場合は常に一覧を表示する */
-    if ((always_show_list == TRUE) || use_menu)
-        command_see = TRUE;
+    if (always_show_list || use_menu)
+        command_see = true;
 
     if (command_see)
         screen_save();
@@ -433,7 +433,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
             case 'z':
             case 'Z':
             case '0': {
-                fis_ptr->done = TRUE;
+                fis_ptr->done = true;
                 break;
             }
             case '8':
@@ -565,22 +565,22 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
                     }
 
                     if (!get_item_allow(owner_ptr, get_item_label)) {
-                        fis_ptr->done = TRUE;
+                        fis_ptr->done = true;
                         break;
                     }
 
                     *cp = get_item_label;
                 }
 
-                fis_ptr->item = TRUE;
-                fis_ptr->done = TRUE;
+                fis_ptr->item = true;
+                fis_ptr->done = true;
                 break;
             }
             case 'w': {
                 if (fis_ptr->force) {
                     *cp = INVEN_FORCE;
-                    fis_ptr->item = TRUE;
-                    fis_ptr->done = TRUE;
+                    fis_ptr->item = true;
+                    fis_ptr->done = true;
                     break;
                 }
             }
@@ -594,18 +594,18 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 
         switch (fis_ptr->which) {
         case ESCAPE: {
-            fis_ptr->done = TRUE;
+            fis_ptr->done = true;
             break;
         }
         case '*':
         case '?':
         case ' ': {
             if (command_see) {
-                command_see = FALSE;
+                command_see = false;
                 screen_load();
             } else {
                 screen_save();
-                command_see = TRUE;
+                command_see = true;
             }
 
             break;
@@ -677,13 +677,13 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 if ((command_wrk == (USE_FLOOR)) || (!carry_query_flag)) {
                     fis_ptr->k = 0 - fis_ptr->floor_list[0];
                     if (!get_item_allow(owner_ptr, fis_ptr->k)) {
-                        fis_ptr->done = TRUE;
+                        fis_ptr->done = true;
                         break;
                     }
 
                     *cp = fis_ptr->k;
-                    fis_ptr->item = TRUE;
-                    fis_ptr->done = TRUE;
+                    fis_ptr->item = true;
+                    fis_ptr->done = true;
                     break;
                 }
             }
@@ -731,33 +731,33 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
             }
 
             if (!get_item_allow(owner_ptr, fis_ptr->k)) {
-                fis_ptr->done = TRUE;
+                fis_ptr->done = true;
                 break;
             }
 
             *cp = fis_ptr->k;
-            fis_ptr->item = TRUE;
-            fis_ptr->done = TRUE;
+            fis_ptr->item = true;
+            fis_ptr->done = true;
             fis_ptr->cur_tag = fis_ptr->which;
             break;
         }
         case 'w': {
             if (fis_ptr->force) {
                 *cp = INVEN_FORCE;
-                fis_ptr->item = TRUE;
-                fis_ptr->done = TRUE;
+                fis_ptr->item = true;
+                fis_ptr->done = true;
                 break;
             }
         }
             /* Fall through */
         default: {
-            bool tag_not_found = FALSE;
+            bool tag_not_found = false;
 
             if (command_wrk != USE_FLOOR) {
                 if (!get_tag(owner_ptr, &fis_ptr->k, fis_ptr->which, command_wrk, fis_ptr->tval))
-                    tag_not_found = TRUE;
+                    tag_not_found = true;
                 else if ((fis_ptr->k < INVEN_MAIN_HAND) ? !fis_ptr->inven : !fis_ptr->equip)
-                    tag_not_found = TRUE;
+                    tag_not_found = true;
 
                 if (!tag_not_found)
                     fis_ptr->cur_tag = fis_ptr->which;
@@ -766,7 +766,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
                     fis_ptr->k = 0 - fis_ptr->floor_list[fis_ptr->k];
                     fis_ptr->cur_tag = fis_ptr->which;
                 } else
-                    tag_not_found = TRUE;
+                    tag_not_found = true;
             }
 
             if (tag_not_found) {
@@ -809,18 +809,18 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 
             auto ver = tag_not_found && isupper(fis_ptr->which);
             if (ver && !verify(owner_ptr, _("本当に", "Try"), fis_ptr->k)) {
-                fis_ptr->done = TRUE;
+                fis_ptr->done = true;
                 break;
             }
 
             if (!get_item_allow(owner_ptr, fis_ptr->k)) {
-                fis_ptr->done = TRUE;
+                fis_ptr->done = true;
                 break;
             }
 
             *cp = fis_ptr->k;
-            fis_ptr->item = TRUE;
-            fis_ptr->done = TRUE;
+            fis_ptr->item = true;
+            fis_ptr->done = true;
             break;
         }
         }
@@ -828,7 +828,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 
     if (command_see) {
         screen_load();
-        command_see = FALSE;
+        command_see = false;
     }
 
     fis_ptr->tval = TV_NONE;

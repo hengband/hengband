@@ -64,7 +64,7 @@ static char inkey_from_menu(player_type *player_ptr)
     screen_save();
 
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    while (TRUE) {
+    while (true) {
         int i;
         char sub_cmd;
         concptr menu_name;
@@ -116,7 +116,7 @@ static char inkey_from_menu(player_type *player_ptr)
         if ((sub_cmd == ' ') || (sub_cmd == 'x') || (sub_cmd == 'X') || (sub_cmd == '\r') || (sub_cmd == '\n')) {
             if (menu_info[menu][num].fin) {
                 cmd = menu_info[menu][num].cmd;
-                use_menu = TRUE;
+                use_menu = true;
                 break;
             } else {
                 menu = menu_info[menu][num].cmd;
@@ -206,9 +206,9 @@ void request_command(player_type *player_ptr, int shopping)
     command_cmd = 0;
     command_arg = 0;
     command_dir = 0;
-    use_menu = FALSE;
+    use_menu = false;
 
-    while (TRUE) {
+    while (true) {
         if (!macro_running() && !command_new && auto_debug_save && (!inkey_next || *inkey_next == '\0')) {
             save_player(player_ptr, SAVE_TYPE_DEBUG);
         }
@@ -221,9 +221,9 @@ void request_command(player_type *player_ptr, int shopping)
             cmd = command_new;
             command_new = 0;
         } else {
-            msg_flag = FALSE;
+            msg_flag = false;
             num_more = 0;
-            inkey_flag = TRUE;
+            inkey_flag = true;
             term_fresh();
             cmd = inkey(true);
             if (!shopping && command_menu && ((cmd == '\r') || (cmd == '\n') || (cmd == 'x') || (cmd == 'X')) && !keymap_act[mode][(byte)(cmd)])
@@ -235,7 +235,7 @@ void request_command(player_type *player_ptr, int shopping)
             COMMAND_ARG old_arg = command_arg;
             command_arg = 0;
             prt(_("回数: ", "Count: "), 0, 0);
-            while (TRUE) {
+            while (true) {
                 cmd = inkey();
                 if ((cmd == 0x7F) || (cmd == KTRL('H'))) {
                     command_arg = command_arg / 10;
@@ -265,7 +265,7 @@ void request_command(player_type *player_ptr, int shopping)
             }
 
             if ((cmd == ' ') || (cmd == '\n') || (cmd == '\r')) {
-                if (!get_com(_("コマンド: ", "Command: "), (char *)&cmd, FALSE)) {
+                if (!get_com(_("コマンド: ", "Command: "), (char *)&cmd, false)) {
                     command_arg = 0;
                     continue;
                 }
@@ -273,13 +273,13 @@ void request_command(player_type *player_ptr, int shopping)
         }
 
         if (cmd == '\\') {
-            (void)get_com(_("コマンド: ", "Command: "), (char *)&cmd, FALSE);
+            (void)get_com(_("コマンド: ", "Command: "), (char *)&cmd, false);
             if (!inkey_next)
                 inkey_next = "";
         }
 
         if (cmd == '^') {
-            if (get_com(_("CTRL: ", "Control: "), (char *)&cmd, FALSE))
+            if (get_com(_("CTRL: ", "Control: "), (char *)&cmd, false))
                 cmd = KTRL(cmd);
         }
 

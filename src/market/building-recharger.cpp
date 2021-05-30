@@ -33,7 +33,7 @@
  */
 void building_recharge(player_type *player_ptr)
 {
-    msg_flag = FALSE;
+    msg_flag = false;
     clear_bldg(4, 18);
     prt(_("  再充填の費用はアイテムの種類によります。", "  The prices of recharge depend on the type."), 6, 0);
     item_tester_hook = item_tester_hook_recharge;
@@ -68,7 +68,7 @@ void building_recharge(player_type *player_ptr)
             describe_flavor(player_ptr, tmp_str, o_ptr, 0);
             msg_format(_("%s です。", "You have: %s."), tmp_str);
 
-            autopick_alter_item(player_ptr, item, FALSE);
+            autopick_alter_item(player_ptr, item, false);
             building_prt_gold(player_ptr);
         }
 
@@ -176,7 +176,7 @@ void building_recharge(player_type *player_ptr)
  */
 void building_recharge_all(player_type *player_ptr)
 {
-    msg_flag = FALSE;
+    msg_flag = false;
     clear_bldg(4, 18);
     prt(_("  再充填の費用はアイテムの種類によります。", "  The prices of recharge depend on the type."), 6, 0);
 
@@ -246,7 +246,7 @@ void building_recharge_all(player_type *player_ptr)
 
         if (!object_is_known(o_ptr)) {
             identify_item(player_ptr, o_ptr);
-            autopick_alter_item(player_ptr, i, FALSE);
+            autopick_alter_item(player_ptr, i, false);
         }
 
         switch (o_ptr->tval) {

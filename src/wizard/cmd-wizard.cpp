@@ -123,7 +123,7 @@ bool exe_cmd_debug(player_type *creature_ptr, char cmd)
     case '<':
     case '>':
     case KTRL('a'):
-        return FALSE;
+        return false;
     case ESCAPE:
     case '\n':
     case '\r':
@@ -155,7 +155,7 @@ bool exe_cmd_debug(player_type *creature_ptr, char cmd)
 
         break;
     case 'f':
-        identify_fully(creature_ptr, FALSE, TV_NONE);
+        identify_fully(creature_ptr, false, TV_NONE);
         break;
     case 'F':
         wiz_create_feature(creature_ptr);
@@ -167,7 +167,7 @@ bool exe_cmd_debug(player_type *creature_ptr, char cmd)
         wiz_summon_horde(creature_ptr);
         break;
     case 'i':
-        (void)ident_spell(creature_ptr, FALSE, TV_NONE);
+        (void)ident_spell(creature_ptr, false, TV_NONE);
         break;
     case 'I':
         wizard_item_modifier(creature_ptr);
@@ -216,7 +216,7 @@ bool exe_cmd_debug(player_type *creature_ptr, char cmd)
             for (int x = 0; x < creature_ptr->current_floor_ptr->width; x++)
                 creature_ptr->current_floor_ptr->grid_array[y][x].info |= CAVE_GLOW | CAVE_MARK;
 
-        wiz_lite(creature_ptr, FALSE);
+        wiz_lite(creature_ptr, false);
         break;
     case 'w':
         wiz_lite(creature_ptr, (bool)(creature_ptr->pclass == CLASS_NINJA));
@@ -260,7 +260,7 @@ bool exe_cmd_debug(player_type *creature_ptr, char cmd)
         break;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -282,10 +282,10 @@ void do_cmd_debug(player_type *creature_ptr)
     int page = 0;
     char cmd;
 
-    while (TRUE) {
+    while (true) {
         screen_save();
         display_debug_menu(page, max_page, page_size, max_line);
-        get_com("Debug Command: ", &cmd, FALSE);
+        get_com("Debug Command: ", &cmd, false);
         screen_load();
 
         if (exe_cmd_debug(creature_ptr, cmd))

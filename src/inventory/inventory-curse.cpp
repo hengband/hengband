@@ -191,11 +191,11 @@ static void curse_teleport(player_type *creature_ptr)
     describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     msg_format(_("%sがテレポートの能力を発動させようとしている。", "Your %s tries to teleport you."), o_name);
     if (get_check_strict(creature_ptr, _("テレポートしますか？", "Teleport? "), CHECK_OKAY_CANCEL)) {
-        disturb(creature_ptr, FALSE, TRUE);
+        disturb(creature_ptr, false, true);
         teleport_player(creature_ptr, 50, TELEPORT_SPONTANEOUS);
     } else {
         msg_format(_("%sに{.}(ピリオド)と銘を刻むと発動を抑制できます。", "You can inscribe {.} on your %s to disable random teleportation. "), o_name);
-        disturb(creature_ptr, TRUE, TRUE);
+        disturb(creature_ptr, true, true);
     }
 }
 
@@ -210,7 +210,7 @@ static void occur_chainsword_effect(player_type *creature_ptr)
     char noise[1024];
     if (!get_rnd_line(_("chainswd_j.txt", "chainswd.txt"), 0, noise))
         msg_print(noise);
-    disturb(creature_ptr, FALSE, FALSE);
+    disturb(creature_ptr, false, false);
 }
 
 static void curse_drain_exp(player_type *creature_ptr)
@@ -277,7 +277,7 @@ static void curse_call_monster(player_type *creature_ptr)
             GAME_TEXT o_name[MAX_NLEN];
             describe_flavor(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC::CALL_ANIMAL), obj_desc_type);
             msg_format(_("%sが動物を引き寄せた！", "Your %s has attracted an animal!"), o_name);
-            disturb(creature_ptr, FALSE, TRUE);
+            disturb(creature_ptr, false, true);
         }
     }
 
@@ -286,7 +286,7 @@ static void curse_call_monster(player_type *creature_ptr)
             GAME_TEXT o_name[MAX_NLEN];
             describe_flavor(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC::CALL_DEMON), obj_desc_type);
             msg_format(_("%sが悪魔を引き寄せた！", "Your %s has attracted a demon!"), o_name);
-            disturb(creature_ptr, FALSE, TRUE);
+            disturb(creature_ptr, false, true);
         }
     }
 
@@ -295,7 +295,7 @@ static void curse_call_monster(player_type *creature_ptr)
             GAME_TEXT o_name[MAX_NLEN];
             describe_flavor(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC::CALL_DRAGON), obj_desc_type);
             msg_format(_("%sがドラゴンを引き寄せた！", "Your %s has attracted a dragon!"), o_name);
-            disturb(creature_ptr, FALSE, TRUE);
+            disturb(creature_ptr, false, true);
         }
     }
 
@@ -304,7 +304,7 @@ static void curse_call_monster(player_type *creature_ptr)
             GAME_TEXT o_name[MAX_NLEN];
             describe_flavor(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC::CALL_UNDEAD), obj_desc_type);
             msg_format(_("%sが死霊を引き寄せた！", "Your %s has attracted an undead!"), o_name);
-            disturb(creature_ptr, FALSE, TRUE);
+            disturb(creature_ptr, false, true);
         }
     }
 }
@@ -317,7 +317,7 @@ static void curse_cowardice(player_type *creature_ptr)
     if (has_resist_fear(creature_ptr))
         return;
 
-    disturb(creature_ptr, FALSE, TRUE);
+    disturb(creature_ptr, false, true);
     msg_print(_("とても暗い... とても恐い！", "It's so dark... so scary!"));
     set_afraid(creature_ptr, creature_ptr->afraid + 13 + randint1(26));
 }
@@ -331,10 +331,10 @@ static void curse_berserk_rage(player_type *creature_ptr)
     if ((creature_ptr->cursed.has_not(TRC::BERS_RAGE)) || !one_in_(1500))
         return;
 
-    disturb(creature_ptr, FALSE, TRUE);
+    disturb(creature_ptr, false, true);
     msg_print(_("ウガァァア！", "RAAAAGHH!"));
     msg_print(_("激怒の発作に襲われた！", "You feel a fit of rage coming over you!"));
-    (void)set_shero(creature_ptr, 10 + randint1(creature_ptr->lev), FALSE);
+    (void)set_shero(creature_ptr, 10 + randint1(creature_ptr->lev), false);
     (void)set_afraid(creature_ptr, 0);
 }
 
@@ -375,7 +375,7 @@ static void occur_curse_effects(player_type *creature_ptr)
     occur_chainsword_effect(creature_ptr);
     if (creature_ptr->cursed.has(TRC::TY_CURSE) && one_in_(TY_CURSE_CHANCE)) {
         int count = 0;
-        (void)activate_ty_curse(creature_ptr, FALSE, &count);
+        (void)activate_ty_curse(creature_ptr, false, &count);
     }
 
     curse_drain_exp(creature_ptr);
@@ -385,7 +385,7 @@ static void occur_curse_effects(player_type *creature_ptr)
     curse_cowardice(creature_ptr);
     curse_berserk_rage(creature_ptr);
     if (creature_ptr->cursed.has(TRC::TELEPORT) && one_in_(200) && !creature_ptr->anti_tele) {
-        disturb(creature_ptr, FALSE, TRUE);
+        disturb(creature_ptr, false, true);
         teleport_player(creature_ptr, 40, TELEPORT_PASSIVE);
     }
 

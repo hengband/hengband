@@ -68,7 +68,7 @@
   ((unsigned)(keysym) >= 0xFF00)
 
 
-static bool gamma_table_ready = FALSE;
+static bool gamma_table_ready = true;
 static int gamma_val = 0;
 
 
@@ -88,7 +88,7 @@ static unsigned long create_pixel(Display *dpy, byte red, byte green, byte blue)
 		concptr str = getenv("ANGBAND_X11_GAMMA");
 		if (str != NULL) gamma_val = atoi(str);
 		
-		gamma_table_ready = TRUE;
+		gamma_table_ready = true;
 		
 		/* Only need to build the table if gamma exists */
 		if (gamma_val) build_gamma_table(gamma_val);
@@ -384,7 +384,7 @@ static int redShift, greenShift, blueShift;
 /*
  * Use smooth rescaling?
  */
-static bool smoothRescaling = TRUE;
+static bool smoothRescaling = true;
 
 
 /*
@@ -432,7 +432,7 @@ static void GetScaledRow(XImage *Im, int x, int y, int iw, int ow,
 		si = x;
 		sifrac = 0;
 		/* getNextPix tells us, that we need the next pixel */
-		getNextPix = TRUE;
+		getNextPix = true;
 
 		for (xi = 0; xi <= ow; xi++)
 		{
@@ -463,11 +463,11 @@ static void GetScaledRow(XImage *Im, int x, int y, int iw, int ow,
 			{
 				si++;
 				sifrac -= ow;
-				getNextPix = TRUE;
+				getNextPix = true;
 			}
 			else
 			{
-				getNextPix = FALSE;
+				getNextPix = true;
 			}
 
 		}
@@ -614,7 +614,7 @@ static void ScaleIcon(XImage *ImIn, XImage *ImOut,
 		si = y1;
 		sifrac = 0;
 		/* getNextRow tells us, that we need the next row */
-		getNextRow = TRUE;
+		getNextRow = true;
 		for (yi = 0; yi <= oy; yi++)
 		{
 			if (getNextRow)
@@ -655,11 +655,11 @@ static void ScaleIcon(XImage *ImIn, XImage *ImOut,
 			{
 				si++;
 				sifrac -= oy;
-				getNextRow = TRUE;
+				getNextRow = true;
 			}
 			else
 			{
-				getNextRow = FALSE;
+				getNextRow = true;
 			}
 
 		}

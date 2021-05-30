@@ -52,7 +52,7 @@ bool build_type1(player_type *player_ptr, dun_data_type *dd_ptr)
 
         /* Find and reserve some space in the dungeon.  Get center of room. */
         if (!find_space(player_ptr, dd_ptr, &yval, &xval, ysize + 2, xsize + 2))
-            return FALSE;
+            return false;
     }
 
     /* Choose lite or dark */
@@ -179,12 +179,12 @@ bool build_type1(player_type *player_ptr, dun_data_type *dd_ptr)
             place_bold(player_ptr, y2 + 1, xval, GB_SOLID);
         }
 
-        place_random_door(player_ptr, yval, xval, TRUE);
+        place_random_door(player_ptr, yval, xval, true);
         if (curtain2)
             floor_ptr->grid_array[yval][xval].feat = feat_door[DOOR_CURTAIN].closed;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -202,7 +202,7 @@ bool build_type2(player_type *player_ptr, dun_data_type *dd_ptr)
     /* Find and reserve some space in the dungeon.  Get center of room. */
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!find_space(player_ptr, dd_ptr, &yval, &xval, 11, 25))
-        return FALSE;
+        return false;
 
     /* Choose lite or dark */
     light = ((floor_ptr->dun_level <= randint1(25)) && d_info[floor_ptr->dungeon_idx].flags.has_not(DF::DARKNESS));
@@ -285,7 +285,7 @@ bool build_type2(player_type *player_ptr, dun_data_type *dd_ptr)
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -313,7 +313,7 @@ bool build_type3(player_type *player_ptr, dun_data_type *dd_ptr)
     /* Find and reserve some space in the dungeon.  Get center of room. */
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!find_space(player_ptr, dd_ptr, &yval, &xval, 11, 25))
-        return FALSE;
+        return false;
 
     /* Choose lite or dark */
     light = ((floor_ptr->dun_level <= randint1(25)) && d_info[floor_ptr->dungeon_idx].flags.has_not(DF::DARKNESS));
@@ -524,7 +524,7 @@ bool build_type3(player_type *player_ptr, dun_data_type *dd_ptr)
     }
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -548,7 +548,7 @@ bool build_type4(player_type *player_ptr, dun_data_type *dd_ptr)
     /* Find and reserve some space in the dungeon.  Get center of room. */
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!find_space(player_ptr, dd_ptr, &yval, &xval, 11, 25))
-        return FALSE;
+        return false;
 
     /* Choose lite or dark */
     light = ((floor_ptr->dun_level <= randint1(25)) && d_info[floor_ptr->dungeon_idx].flags.has_not(DF::DARKNESS));
@@ -858,7 +858,7 @@ bool build_type4(player_type *player_ptr, dun_data_type *dd_ptr)
     }
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -873,18 +873,18 @@ bool build_type4(player_type *player_ptr, dun_data_type *dd_ptr)
 bool build_type11(player_type *player_ptr, dun_data_type *dd_ptr)
 {
     POSITION rad, x, y, x0, y0;
-    int light = FALSE;
+    int light = false;
 
     /* Occasional light */
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if ((randint1(floor_ptr->dun_level) <= 15) && d_info[floor_ptr->dungeon_idx].flags.has_not(DF::DARKNESS))
-        light = TRUE;
+        light = true;
 
     rad = randint0(9);
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
     if (!find_space(player_ptr, dd_ptr, &y0, &x0, rad * 2 + 1, rad * 2 + 1))
-        return FALSE;
+        return false;
 
     /* Make circular floor */
     for (x = x0 - rad; x <= x0 + rad; x++) {
@@ -902,7 +902,7 @@ bool build_type11(player_type *player_ptr, dun_data_type *dd_ptr)
     /* Find visible outer walls and set to be FEAT_OUTER */
     add_outer_wall(player_ptr, x0, y0, light, x0 - rad, y0 - rad, x0 + rad, y0 + rad);
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -917,8 +917,8 @@ bool build_type11(player_type *player_ptr, dun_data_type *dd_ptr)
 bool build_type12(player_type *player_ptr, dun_data_type *dd_ptr)
 {
     POSITION rad, x, y, x0, y0;
-    int light = FALSE;
-    bool emptyflag = TRUE;
+    int light = false;
+    bool emptyflag = true;
 
     /* Make a random metric */
     POSITION h1, h2, h3, h4;
@@ -930,13 +930,13 @@ bool build_type12(player_type *player_ptr, dun_data_type *dd_ptr)
     /* Occasional light */
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if ((randint1(floor_ptr->dun_level) <= 5) && d_info[floor_ptr->dungeon_idx].flags.has_not(DF::DARKNESS))
-        light = TRUE;
+        light = true;
 
     rad = randint1(9);
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
     if (!find_space(player_ptr, dd_ptr, &y0, &x0, rad * 2 + 3, rad * 2 + 3))
-        return FALSE;
+        return false;
 
     /* Make floor */
     for (x = x0 - rad; x <= x0 + rad; x++) {
@@ -969,7 +969,7 @@ bool build_type12(player_type *player_ptr, dun_data_type *dd_ptr)
         for (y = y0 - 2; y <= y0 + 2; y++) {
             if (!is_floor_bold(floor_ptr, y, x)) {
                 /* Wall in the way */
-                emptyflag = FALSE;
+                emptyflag = false;
             }
         }
     }
@@ -988,5 +988,5 @@ bool build_type12(player_type *player_ptr, dun_data_type *dd_ptr)
         vault_traps(player_ptr, y0, x0, 4, 4, randint0(3) + 2);
     }
 
-    return TRUE;
+    return true;
 }

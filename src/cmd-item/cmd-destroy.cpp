@@ -47,7 +47,7 @@ typedef struct destroy_type {
 static destroy_type *initialize_destroy_type(destroy_type *destroy_ptr, object_type *o_ptr)
 {
     destroy_ptr->amt = 1;
-    destroy_ptr->force = FALSE;
+    destroy_ptr->force = false;
     destroy_ptr->q_ptr = o_ptr;
     return destroy_ptr;
 }
@@ -55,7 +55,7 @@ static destroy_type *initialize_destroy_type(destroy_type *destroy_ptr, object_t
 static bool check_destory_item(player_type *creature_ptr, destroy_type *destroy_ptr)
 {
     if (destroy_ptr->force || (!confirm_destroy && (object_value(creature_ptr, destroy_ptr->o_ptr) <= 0)))
-        return TRUE;
+        return true;
 
     describe_flavor(creature_ptr, destroy_ptr->o_name, destroy_ptr->o_ptr, OD_OMIT_PREFIX);
     sprintf(destroy_ptr->out_val, _("本当に%sを壊しますか? [y/n/Auto]", "Really destroy %s? [y/n/Auto]"), destroy_ptr->o_name);
@@ -63,23 +63,23 @@ static bool check_destory_item(player_type *creature_ptr, destroy_type *destroy_
     message_add(destroy_ptr->out_val);
     creature_ptr->window_flags |= PW_MESSAGE;
     handle_stuff(creature_ptr);
-    while (TRUE) {
+    while (true) {
         prt(destroy_ptr->out_val, 0, 0);
         char i = inkey();
         prt("", 0, 0);
         if (i == 'y' || i == 'Y')
-            return TRUE;
+            return true;
 
         if (i == ESCAPE || i == 'n' || i == 'N')
-            return FALSE;
+            return false;
 
         if (i != 'A')
             continue;
 
         if (autopick_autoregister(creature_ptr, destroy_ptr->o_ptr))
-            autopick_alter_item(creature_ptr, destroy_ptr->item, TRUE);
+            autopick_alter_item(creature_ptr, destroy_ptr->item, true);
 
-        return FALSE;
+        return false;
     }
 }
 
@@ -89,13 +89,13 @@ static bool select_destroying_item(player_type *creature_ptr, destroy_type *dest
     concptr s = _("壊せるアイテムを持っていない。", "You have nothing to destroy.");
     destroy_ptr->o_ptr = choose_object(creature_ptr, &destroy_ptr->item, q, s, USE_INVEN | USE_FLOOR, TV_NONE);
     if (destroy_ptr->o_ptr == NULL)
-        return FALSE;
+        return false;
 
     if (!check_destory_item(creature_ptr, destroy_ptr))
-        return FALSE;
+        return false;
 
     if (destroy_ptr->o_ptr->number <= 1)
-        return TRUE;
+        return true;
 
     destroy_ptr->amt = get_quantity(NULL, destroy_ptr->o_ptr->number);
     return destroy_ptr->amt > 0;
@@ -110,21 +110,21 @@ static bool select_destroying_item(player_type *creature_ptr, destroy_type *dest
 static bool decide_magic_book_exp(player_type *creature_ptr, destroy_type *destroy_ptr)
 {
     if (creature_ptr->prace == RACE_ANDROID)
-        return FALSE;
+        return false;
 
     if ((creature_ptr->pclass == CLASS_WARRIOR) || (creature_ptr->pclass == CLASS_BERSERKER))
-        return TRUE;
+        return true;
 
     if (creature_ptr->pclass != CLASS_PALADIN)
-        return FALSE;
+        return false;
 
-    bool gain_expr = FALSE;
+    bool gain_expr = false;
     if (is_good_realm(creature_ptr->realm1)) {
         if (!is_good_realm(tval2realm(destroy_ptr->q_ptr->tval)))
-            gain_expr = TRUE;
+            gain_expr = true;
     } else {
         if (is_good_realm(tval2realm(destroy_ptr->q_ptr->tval)))
-            gain_expr = TRUE;
+            gain_expr = true;
     }
 
     return gain_expr;
@@ -201,7 +201,7 @@ void do_cmd_destroy(player_type *creature_ptr)
     destroy_type tmp_destroy;
     destroy_type *destroy_ptr = initialize_destroy_type(&tmp_destroy, &forge);
     if (command_arg > 0)
-        destroy_ptr->force = TRUE;
+        destroy_ptr->force = true;
 
     if (!select_destroying_item(creature_ptr, destroy_ptr))
         return;

@@ -58,9 +58,9 @@ static bool alloc_stairs_aux(player_type *player_ptr, POSITION y, POSITION x, in
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
     if (!is_floor_grid(g_ptr) || pattern_tile(floor_ptr, y, x) || !g_ptr->o_idx_list.empty() || (g_ptr->m_idx != 0) || next_to_walls(floor_ptr, y, x) < walls)
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -78,7 +78,7 @@ bool alloc_stairs(player_type *owner_ptr, FEAT_IDX feat, int num, int walls)
     floor_type *floor_ptr = owner_ptr->current_floor_ptr;
     if (has_flag(f_ptr->flags, FF_LESS)) {
         if (ironman_downward || !floor_ptr->dun_level)
-            return TRUE;
+            return true;
 
         if (floor_ptr->dun_level > d_info[floor_ptr->dungeon_idx].mindepth)
             shaft_num = (randint1(num + 1)) / 2;
@@ -87,19 +87,19 @@ bool alloc_stairs(player_type *owner_ptr, FEAT_IDX feat, int num, int walls)
         if (floor_ptr->dun_level > 1 && q_idx) {
             monster_race *r_ptr = &r_info[quest[q_idx].r_idx];
             if (!(r_ptr->flags1 & RF1_UNIQUE) || 0 < r_ptr->max_num)
-                return TRUE;
+                return true;
         }
 
         if (floor_ptr->dun_level >= d_info[floor_ptr->dungeon_idx].maxdepth)
-            return TRUE;
+            return true;
 
         if ((floor_ptr->dun_level < d_info[floor_ptr->dungeon_idx].maxdepth - 1) && !quest_number(owner_ptr, floor_ptr->dun_level + 1))
             shaft_num = (randint1(num) + 1) / 2;
     } else
-        return FALSE;
+        return false;
 
     for (int i = 0; i < num; i++) {
-        while (TRUE) {
+        while (true) {
             grid_type *g_ptr;
             int candidates = 0;
             const POSITION max_x = floor_ptr->width - 1;
@@ -110,7 +110,7 @@ bool alloc_stairs(player_type *owner_ptr, FEAT_IDX feat, int num, int walls)
 
             if (!candidates) {
                 if (walls <= 0)
-                    return FALSE;
+                    return false;
 
                 walls--;
                 continue;
@@ -140,7 +140,7 @@ bool alloc_stairs(player_type *owner_ptr, FEAT_IDX feat, int num, int walls)
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -170,7 +170,7 @@ void alloc_object(player_type *owner_ptr, dap_type set, EFFECT_ID typ, int num)
             if (player_bold(owner_ptr, y, x))
                 continue;
 
-            bool room = (floor_ptr->grid_array[y][x].info & CAVE_ROOM) ? TRUE : FALSE;
+            bool room = (floor_ptr->grid_array[y][x].info & CAVE_ROOM) ? true : false;
             if (((set == ALLOC_SET_CORR) && room) || ((set == ALLOC_SET_ROOM) && !room))
                 continue;
 

@@ -115,7 +115,7 @@ static bool select_class(player_type *creature_ptr, char *cur, char *sym, int *k
 {
     int cs = creature_ptr->pclass;
     int os = MAX_CLASS;
-    while (TRUE) {
+    while (true) {
         display_class_stat(cs, &os, cur, sym);
         if (*k >= 0)
             break;
@@ -129,7 +129,7 @@ static bool select_class(player_type *creature_ptr, char *cur, char *sym, int *k
             birth_quit();
 
         if (c == 'S')
-            return FALSE;
+            return false;
 
         if (c == ' ' || c == '\r' || c == '\n') {
             if (cs == MAX_CLASS) {
@@ -165,7 +165,7 @@ static bool select_class(player_type *creature_ptr, char *cur, char *sym, int *k
         birth_help_option(creature_ptr, c, BK_CLASS);
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -187,11 +187,11 @@ bool get_player_class(player_type *creature_ptr)
     sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
     int k = -1;
     if (!select_class(creature_ptr, cur, sym, &k))
-        return FALSE;
+        return false;
 
     creature_ptr->pclass = static_cast<player_class_type>(k);
     cp_ptr = &class_info[creature_ptr->pclass];
     mp_ptr = &m_info[creature_ptr->pclass];
     c_put_str(TERM_L_BLUE, cp_ptr->title, 5, 15);
-    return TRUE;
+    return true;
 }

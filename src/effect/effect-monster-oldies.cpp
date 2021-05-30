@@ -22,14 +22,14 @@
 process_result effect_monster_old_poly(effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
-        em_ptr->obvious = TRUE;
-    em_ptr->do_polymorph = TRUE;
+        em_ptr->obvious = true;
+    em_ptr->do_polymorph = true;
 
     if ((em_ptr->r_ptr->flags1 & RF1_UNIQUE) || (em_ptr->r_ptr->flags1 & RF1_QUESTOR)
         || (em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10)) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
-        em_ptr->do_polymorph = FALSE;
-        em_ptr->obvious = FALSE;
+        em_ptr->do_polymorph = false;
+        em_ptr->obvious = false;
     }
 
     em_ptr->dam = 0;
@@ -39,7 +39,7 @@ process_result effect_monster_old_poly(effect_monster_type *em_ptr)
 process_result effect_monster_old_clone(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
-        em_ptr->obvious = TRUE;
+        em_ptr->obvious = true;
 
     if ((caster_ptr->current_floor_ptr->inside_arena) || is_pet(em_ptr->m_ptr) || (em_ptr->r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR))
         || (em_ptr->r_ptr->flags7 & (RF7_NAZGUL | RF7_UNIQUE2))) {
@@ -49,7 +49,7 @@ process_result effect_monster_old_clone(player_type *caster_ptr, effect_monster_
     }
 
     em_ptr->m_ptr->hp = em_ptr->m_ptr->maxhp;
-    if (multiply_monster(caster_ptr, em_ptr->g_ptr->m_idx, TRUE, 0L))
+    if (multiply_monster(caster_ptr, em_ptr->g_ptr->m_idx, true, 0L))
         em_ptr->note = _("が分裂した！", " spawns!");
 
     em_ptr->dam = 0;
@@ -59,7 +59,7 @@ process_result effect_monster_old_clone(player_type *caster_ptr, effect_monster_
 process_result effect_monster_star_heal(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
-        em_ptr->obvious = TRUE;
+        em_ptr->obvious = true;
 
     (void)set_monster_csleep(caster_ptr, em_ptr->g_ptr->m_idx, 0);
 
@@ -135,7 +135,7 @@ static void effect_monster_old_heal_recovery(player_type *caster_ptr, effect_mon
 process_result effect_monster_old_heal(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
-        em_ptr->obvious = TRUE;
+        em_ptr->obvious = true;
 
     /* Wake up */
     (void)set_monster_csleep(caster_ptr, em_ptr->g_ptr->m_idx, 0);
@@ -147,7 +147,7 @@ process_result effect_monster_old_heal(player_type *caster_ptr, effect_monster_t
 
     effect_monster_old_heal_check_player(caster_ptr, em_ptr);
     if (em_ptr->m_ptr->r_idx == MON_LEPER) {
-        em_ptr->heal_leper = TRUE;
+        em_ptr->heal_leper = true;
         if (!em_ptr->who)
             chg_virtue(caster_ptr, V_COMPASSION, 5);
     }
@@ -165,7 +165,7 @@ process_result effect_monster_old_heal(player_type *caster_ptr, effect_monster_t
 process_result effect_monster_old_speed(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
-        em_ptr->obvious = TRUE;
+        em_ptr->obvious = true;
 
     if (set_monster_fast(caster_ptr, em_ptr->g_ptr->m_idx, monster_fast_remaining(em_ptr->m_ptr) + 100)) {
         em_ptr->note = _("の動きが速くなった。", " starts moving faster.");
@@ -185,12 +185,12 @@ process_result effect_monster_old_speed(player_type *caster_ptr, effect_monster_
 process_result effect_monster_old_slow(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
-        em_ptr->obvious = TRUE;
+        em_ptr->obvious = true;
 
     /* Powerful monsters can resist */
     if ((em_ptr->r_ptr->flags1 & RF1_UNIQUE) || (em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10)) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
-        em_ptr->obvious = FALSE;
+        em_ptr->obvious = false;
         em_ptr->dam = 0;
         return PROCESS_CONTINUE;
     }
@@ -209,7 +209,7 @@ process_result effect_monster_old_slow(player_type *caster_ptr, effect_monster_t
 process_result effect_monster_old_sleep(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
-        em_ptr->obvious = TRUE;
+        em_ptr->obvious = true;
 
     if ((em_ptr->r_ptr->flags1 & RF1_UNIQUE) || (em_ptr->r_ptr->flags3 & RF3_NO_SLEEP)
         || (em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10)) {
@@ -219,7 +219,7 @@ process_result effect_monster_old_sleep(player_type *caster_ptr, effect_monster_
         }
 
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
-        em_ptr->obvious = FALSE;
+        em_ptr->obvious = false;
     } else {
         em_ptr->note = _("は眠り込んでしまった！", " falls asleep!");
         em_ptr->do_sleep = 500;
@@ -236,7 +236,7 @@ process_result effect_monster_old_sleep(player_type *caster_ptr, effect_monster_
 process_result effect_monster_old_conf(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
-        em_ptr->obvious = TRUE;
+        em_ptr->obvious = true;
 
     em_ptr->do_conf = damroll(3, (em_ptr->dam / 2)) + 1;
     if ((em_ptr->r_ptr->flags1 & (RF1_UNIQUE)) || (em_ptr->r_ptr->flags3 & (RF3_NO_CONF))
@@ -248,7 +248,7 @@ process_result effect_monster_old_conf(player_type *caster_ptr, effect_monster_t
 
         em_ptr->do_conf = 0;
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
-        em_ptr->obvious = FALSE;
+        em_ptr->obvious = false;
     }
 
     em_ptr->dam = 0;
@@ -258,7 +258,7 @@ process_result effect_monster_old_conf(player_type *caster_ptr, effect_monster_t
 process_result effect_monster_stasis(effect_monster_type *em_ptr, bool to_evil)
 {
     if (em_ptr->seen)
-        em_ptr->obvious = TRUE;
+        em_ptr->obvious = true;
 
     int stasis_damage = (em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10);
     bool has_resistance = (em_ptr->r_ptr->flags1 & RF1_UNIQUE) != 0;
@@ -268,7 +268,7 @@ process_result effect_monster_stasis(effect_monster_type *em_ptr, bool to_evil)
 
     if (has_resistance) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
-        em_ptr->obvious = FALSE;
+        em_ptr->obvious = false;
     } else {
         em_ptr->note = _("は動けなくなった！", " is suspended!");
         em_ptr->do_sleep = 500;
@@ -281,13 +281,13 @@ process_result effect_monster_stasis(effect_monster_type *em_ptr, bool to_evil)
 process_result effect_monster_stun(effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
-        em_ptr->obvious = TRUE;
+        em_ptr->obvious = true;
 
     em_ptr->do_stun = damroll((em_ptr->caster_lev / 20) + 3, (em_ptr->dam)) + 1;
     if ((em_ptr->r_ptr->flags1 & (RF1_UNIQUE)) || (em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10)) {
         em_ptr->do_stun = 0;
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
-        em_ptr->obvious = FALSE;
+        em_ptr->obvious = false;
     }
 
     em_ptr->dam = 0;

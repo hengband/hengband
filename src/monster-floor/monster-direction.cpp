@@ -33,18 +33,18 @@
 static bool decide_pet_approch_direction(player_type *target_ptr, monster_type *m_ptr, monster_type *t_ptr)
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-	if (!is_pet(m_ptr)) return FALSE;
+	if (!is_pet(m_ptr)) return false;
 
 	if (target_ptr->pet_follow_distance < 0)
 	{
 		if (t_ptr->cdis <= (0 - target_ptr->pet_follow_distance))
 		{
-			return TRUE;
+			return true;
 		}
 	}
 	else if ((m_ptr->cdis < t_ptr->cdis) && (t_ptr->cdis > target_ptr->pet_follow_distance))
 	{
-		return TRUE;
+		return true;
 	}
 
 	return (r_ptr->aaf < t_ptr->cdis);
@@ -135,14 +135,14 @@ bool get_enemy_dir(player_type *target_ptr, MONSTER_IDX m_idx, int *mm)
 
 		decide_enemy_approch_direction(target_ptr, m_idx, start, plus, &y, &x);
 
-		if ((x == 0) && (y == 0)) return FALSE;
+		if ((x == 0) && (y == 0)) return false;
 	}
 
 	x -= m_ptr->fx;
 	y -= m_ptr->fy;
 
 	store_enemy_approch_direction(mm, y, x);
-	return TRUE;
+	return true;
 }
 
 
@@ -162,7 +162,7 @@ static bool random_walk(player_type *target_ptr, DIRECTION *mm, monster_type *m_
 		if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= (RF1_RAND_50 | RF1_RAND_25);
 
 		mm[0] = mm[1] = mm[2] = mm[3] = 5;
-		return TRUE;
+		return true;
 	}
 
 	if ((r_ptr->flags1 & RF1_RAND_50) && (randint0(100) < 50))
@@ -170,7 +170,7 @@ static bool random_walk(player_type *target_ptr, DIRECTION *mm, monster_type *m_
 		if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= RF1_RAND_50;
 
 		mm[0] = mm[1] = mm[2] = mm[3] = 5;
-		return TRUE;
+		return true;
 	}
 
 	if ((r_ptr->flags1 & RF1_RAND_25) && (randint0(100) < 25))
@@ -178,10 +178,10 @@ static bool random_walk(player_type *target_ptr, DIRECTION *mm, monster_type *m_
 		if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= RF1_RAND_25;
 
 		mm[0] = mm[1] = mm[2] = mm[3] = 5;
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 
@@ -195,14 +195,14 @@ static bool random_walk(player_type *target_ptr, DIRECTION *mm, monster_type *m_
 static bool decide_pet_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx)
 {
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-	if (!is_pet(m_ptr)) return FALSE;
+	if (!is_pet(m_ptr)) return false;
 
 	bool avoid = ((target_ptr->pet_follow_distance < 0) && (m_ptr->cdis <= (0 - target_ptr->pet_follow_distance)));
 	bool lonely = (!avoid && (m_ptr->cdis > target_ptr->pet_follow_distance));
 	bool distant = (m_ptr->cdis > PET_SEEK_DIST);
 	mm[0] = mm[1] = mm[2] = mm[3] = 5;
-	if (get_enemy_dir(target_ptr, m_idx, mm)) return TRUE;
-	if (!avoid && !lonely && !distant) return TRUE;
+	if (get_enemy_dir(target_ptr, m_idx, mm)) return true;
+	if (!avoid && !lonely && !distant) return true;
 
 	POSITION dis = target_ptr->pet_follow_distance;
 	if (target_ptr->pet_follow_distance > PET_SEEK_DIST)
@@ -212,7 +212,7 @@ static bool decide_pet_movement_direction(player_type *target_ptr, DIRECTION *mm
 
 	(void)get_movable_grid(target_ptr, m_idx, mm);
 	target_ptr->pet_follow_distance = (s16b)dis;
-	return TRUE;
+	return true;
 }
 
 
@@ -232,27 +232,27 @@ bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, M
 	if (monster_confused_remaining(m_ptr) || !aware)
 	{
 		mm[0] = mm[1] = mm[2] = mm[3] = 5;
-		return TRUE;
+		return true;
 	}
 
-	if (random_walk(target_ptr, mm, m_ptr)) return TRUE;
+	if (random_walk(target_ptr, mm, m_ptr)) return true;
 
 	if ((r_ptr->flags1 & RF1_NEVER_MOVE) && (m_ptr->cdis > 1))
 	{
 		mm[0] = mm[1] = mm[2] = mm[3] = 5;
-		return TRUE;
+		return true;
 	}
 
-	if (decide_pet_movement_direction(target_ptr, mm, m_idx)) return TRUE;
+	if (decide_pet_movement_direction(target_ptr, mm, m_idx)) return true;
 
 	if (!is_hostile(m_ptr))
 	{
 		mm[0] = mm[1] = mm[2] = mm[3] = 5;
 		get_enemy_dir(target_ptr, m_idx, mm);
-		return TRUE;
+		return true;
 	}
 
-	if (!get_movable_grid(target_ptr, m_idx, mm)) return FALSE;
+	if (!get_movable_grid(target_ptr, m_idx, mm)) return false;
 
-	return TRUE;
+	return true;
 }
