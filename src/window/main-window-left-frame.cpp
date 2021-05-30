@@ -265,8 +265,8 @@ void print_frame_basic(player_type *creature_ptr)
     print_sp(creature_ptr);
     print_gold(creature_ptr);
     print_depth(creature_ptr);
-    health_redraw(creature_ptr, FALSE);
-    health_redraw(creature_ptr, TRUE);
+    health_redraw(creature_ptr, false);
+    health_redraw(creature_ptr, true);
 }
 
 /*!

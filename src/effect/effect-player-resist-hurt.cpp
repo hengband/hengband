@@ -40,7 +40,7 @@ void effect_player_elements(
     if (target_ptr->blind)
         msg_print(attack_message);
 
-    ep_ptr->get_damage = (*damage_func)(target_ptr, ep_ptr->dam, ep_ptr->killer, FALSE);
+    ep_ptr->get_damage = (*damage_func)(target_ptr, ep_ptr->dam, ep_ptr->killer, false);
 }
 
 void effect_player_poison(player_type *target_ptr, effect_player_type *ep_ptr)
@@ -365,7 +365,7 @@ void effect_player_inertial(player_type *target_ptr, effect_player_type *ep_ptr)
     if (target_ptr->blind)
         msg_print(_("何か遅いもので攻撃された！", "You are hit by something slow!"));
     if (!check_multishadow(target_ptr))
-        (void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, FALSE);
+        (void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, false);
 
     ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
 }
@@ -522,7 +522,7 @@ void effect_player_gravity(player_type *target_ptr, effect_player_type *ep_ptr)
     if (!check_multishadow(target_ptr)) {
         teleport_player(target_ptr, 5, TELEPORT_PASSIVE);
         if (!target_ptr->levitation)
-            (void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, FALSE);
+            (void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, false);
         if (!(has_resist_sound(target_ptr) || target_ptr->levitation)) {
             int plus_stun = (randint1((ep_ptr->dam > 90) ? 35 : (ep_ptr->dam / 3 + 5)));
             (void)set_stun(target_ptr, target_ptr->stun + plus_stun);
@@ -589,7 +589,7 @@ void effect_player_icee(player_type *target_ptr, effect_player_type *ep_ptr)
     if (target_ptr->blind)
         msg_print(_("何か鋭く冷たいもので攻撃された！", "You are hit by something sharp and cold!"));
 
-    ep_ptr->get_damage = cold_dam(target_ptr, ep_ptr->dam, ep_ptr->killer, FALSE);
+    ep_ptr->get_damage = cold_dam(target_ptr, ep_ptr->dam, ep_ptr->killer, false);
     if (check_multishadow(target_ptr))
         return;
 
@@ -633,7 +633,7 @@ void effect_player_void(player_type *target_ptr, effect_player_type *ep_ptr)
 
     if (!check_multishadow(target_ptr)) {
         if (!target_ptr->levitation && !target_ptr->anti_tele)
-            (void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, FALSE);
+            (void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, false);
     }
 
     ep_ptr->dam = ep_ptr->dam * calc_void_damage_rate(target_ptr, CALC_RAND) / 100;
@@ -654,7 +654,7 @@ void effect_player_abyss(player_type *target_ptr, effect_player_type *ep_ptr)
 
     if (!check_multishadow(target_ptr)) {
         if (!target_ptr->levitation)
-            (void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, FALSE);
+            (void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, false);
 
         if (!target_ptr->blind) {
             msg_print(_("深淵から何かがあなたを覗き込んでいる！", "Something gazes you from abyss!"));

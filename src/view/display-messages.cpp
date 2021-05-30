@@ -187,7 +187,7 @@ bool is_msg_window_flowed(void)
     }
     if (i < 8) {
         if (num_more < angband_term[i]->hgt)
-            return FALSE;
+            return false;
 
         return (num_more >= 0);
     }
@@ -206,12 +206,12 @@ static void msg_flush(player_type *player_ptr, int x)
         show_more = is_msg_window_flowed();
 
     if (skip_more)
-        show_more = FALSE;
+        show_more = false;
 
-    player_ptr->now_damaged = FALSE;
+    player_ptr->now_damaged = false;
     if (!player_ptr->playing || show_more) {
         term_putstr(x, 0, -1, a, _("-続く-", "-more-"));
-        while (TRUE) {
+        while (true) {
             int cmd = inkey();
             if (cmd == ESCAPE) {
                 /* auto_moreのとき、全て流す */
@@ -284,7 +284,7 @@ void msg_print(concptr msg)
     int n = (msg ? strlen(msg) : 0);
     if (p && (!msg || ((p + n) > 72))) {
         msg_flush(p_ptr, p);
-        msg_flag = FALSE;
+        msg_flag = false;
         p = 0;
     }
 
@@ -307,16 +307,16 @@ void msg_print(concptr msg)
     while (n > 72) {
         int check, split = 72;
 #ifdef JP
-        bool k_flag = FALSE;
+        bool k_flag = false;
         int wordlen = 0;
         for (check = 0; check < 72; check++) {
             if (k_flag) {
-                k_flag = FALSE;
+                k_flag = false;
                 continue;
             }
 
             if (iskanji(t[check])) {
-                k_flag = TRUE;
+                k_flag = true;
                 split = check;
             } else if (t[check] == ' ') {
                 split = check;
@@ -349,7 +349,7 @@ void msg_print(concptr msg)
     p_ptr->window_flags |= (PW_MESSAGE);
     window_stuff(p_ptr);
 
-    msg_flag = TRUE;
+    msg_flag = true;
 #ifdef JP
     p += n;
 #else

@@ -24,7 +24,7 @@ void do_cmd_reload_autopick(player_type *creature_ptr)
     if (!get_check(_("自動拾い設定ファイルをロードしますか? ", "Reload auto-pick preference file? ")))
         return;
 
-    autopick_load_pref(creature_ptr, TRUE);
+    autopick_load_pref(creature_ptr, true);
 }
 
 /*
@@ -69,6 +69,6 @@ void do_cmd_knowledge_autopick(player_type *creature_ptr)
 
     angband_fclose(fff);
 
-    (void)show_file(creature_ptr, TRUE, file_name, _("自動拾い/破壊 設定リスト", "Auto-picker/Destroyer"), 0, 0);
+    (void)show_file(creature_ptr, true, file_name, _("自動拾い/破壊 設定リスト", "Auto-picker/Destroyer"), 0, 0);
     fd_kill(file_name);
 }

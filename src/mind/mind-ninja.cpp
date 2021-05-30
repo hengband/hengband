@@ -69,17 +69,17 @@ bool kawarimi(player_type *caster_ptr, bool success)
     object_type *q_ptr = &forge;
 
     if (caster_ptr->is_dead)
-        return FALSE;
+        return false;
     if (caster_ptr->confused || caster_ptr->blind || caster_ptr->paralyzed || caster_ptr->image)
-        return FALSE;
+        return false;
     if (randint0(200) < caster_ptr->stun)
-        return FALSE;
+        return false;
 
     if (!success && one_in_(3)) {
         msg_print(_("変わり身失敗！逃げられなかった。", "Kawarimi failed! You couldn't run away."));
         caster_ptr->special_defense &= ~(NINJA_KAWARIMI);
         caster_ptr->redraw |= (PR_STATUS);
-        return FALSE;
+        return false;
     }
 
     POSITION y = caster_ptr->y;
@@ -100,7 +100,7 @@ bool kawarimi(player_type *caster_ptr, bool success)
 
     caster_ptr->special_defense &= ~(NINJA_KAWARIMI);
     caster_ptr->redraw |= (PR_STATUS);
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -112,12 +112,12 @@ bool kawarimi(player_type *caster_ptr, bool success)
 bool rush_attack(player_type *attacker_ptr, bool *mdeath)
 {
     if (mdeath)
-        *mdeath = FALSE;
+        *mdeath = false;
 
     project_length = 5;
     DIRECTION dir;
     if (!get_aim_dir(attacker_ptr, &dir))
-        return FALSE;
+        return false;
 
     int tx = attacker_ptr->x + project_length * ddx[dir];
     int ty = attacker_ptr->y + project_length * ddy[dir];
@@ -136,12 +136,12 @@ bool rush_attack(player_type *attacker_ptr, bool *mdeath)
     int path_n = projection_path(attacker_ptr, path_g, project_length, attacker_ptr->y, attacker_ptr->x, ty, tx, PROJECT_STOP | PROJECT_KILL);
     project_length = 0;
     if (!path_n)
-        return TRUE;
+        return true;
 
     ty = attacker_ptr->y;
     tx = attacker_ptr->x;
-    bool tmp_mdeath = FALSE;
-    bool moved = FALSE;
+    bool tmp_mdeath = false;
+    bool moved = false;
     for (int i = 0; i < path_n; i++) {
         monster_type *m_ptr;
 
@@ -166,7 +166,7 @@ bool rush_attack(player_type *attacker_ptr, bool *mdeath)
 
         if (!player_bold(attacker_ptr, ty, tx))
             teleport_player_to(attacker_ptr, ty, tx, TELEPORT_NONMAGICAL);
-        update_monster(attacker_ptr, floor_ptr->grid_array[ny][nx].m_idx, TRUE);
+        update_monster(attacker_ptr, floor_ptr->grid_array[ny][nx].m_idx, true);
 
         m_ptr = &floor_ptr->m_list[floor_ptr->grid_array[ny][nx].m_idx];
         if (tm_idx != floor_ptr->grid_array[ny][nx].m_idx) {
@@ -183,7 +183,7 @@ bool rush_attack(player_type *attacker_ptr, bool *mdeath)
 
         if (!player_bold(attacker_ptr, ty, tx))
             teleport_player_to(attacker_ptr, ty, tx, TELEPORT_NONMAGICAL);
-        moved = TRUE;
+        moved = true;
         tmp_mdeath = do_cmd_attack(attacker_ptr, ny, nx, HISSATSU_NYUSIN);
 
         break;
@@ -194,7 +194,7 @@ bool rush_attack(player_type *attacker_ptr, bool *mdeath)
 
     if (mdeath)
         *mdeath = tmp_mdeath;
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -217,12 +217,12 @@ void process_surprise_attack(player_type *attacker_ptr, player_attack_type *pa_p
         tmp /= 3;
     if (monster_csleep_remaining(pa_ptr->m_ptr) && pa_ptr->m_ptr->ml) {
         /* Can't backstab creatures that we can't see, right? */
-        pa_ptr->backstab = TRUE;
+        pa_ptr->backstab = true;
     } else if ((attacker_ptr->special_defense & NINJA_S_STEALTH) && (randint0(tmp) > (r_ptr->level + 20)) && pa_ptr->m_ptr->ml
         && !(r_ptr->flagsr & RFR_RES_ALL)) {
-        pa_ptr->surprise_attack = TRUE;
+        pa_ptr->surprise_attack = true;
     } else if (monster_fear_remaining(pa_ptr->m_ptr) && pa_ptr->m_ptr->ml) {
-        pa_ptr->stab_fleeing = TRUE;
+        pa_ptr->stab_fleeing = true;
     }
 }
 
@@ -270,7 +270,7 @@ bool hayagake(player_type *creature_ptr)
     if (creature_ptr->action == ACTION_HAYAGAKE) {
         set_action(creature_ptr, ACTION_NONE);
         energy.reset_player_turn();
-        return TRUE;
+        return true;
     }
 
     grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
@@ -283,7 +283,7 @@ bool hayagake(player_type *creature_ptr)
     }
 
     energy.reset_player_turn();
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -293,39 +293,39 @@ bool hayagake(player_type *creature_ptr)
  */
 bool set_superstealth(player_type *creature_ptr, bool set)
 {
-    bool notice = FALSE;
+    bool notice = false;
 
     if (creature_ptr->is_dead)
-        return FALSE;
+        return false;
 
     if (set) {
         if (!(creature_ptr->special_defense & NINJA_S_STEALTH)) {
             if (creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & CAVE_MNLT) {
                 msg_print(_("敵の目から薄い影の中に覆い隠された。", "You are mantled in weak shadow from ordinary eyes."));
-                creature_ptr->monlite = creature_ptr->old_monlite = TRUE;
+                creature_ptr->monlite = creature_ptr->old_monlite = true;
             } else {
                 msg_print(_("敵の目から影の中に覆い隠された！", "You are mantled in shadow from ordinary eyes!"));
-                creature_ptr->monlite = creature_ptr->old_monlite = FALSE;
+                creature_ptr->monlite = creature_ptr->old_monlite = false;
             }
 
-            notice = TRUE;
+            notice = true;
             creature_ptr->special_defense |= NINJA_S_STEALTH;
         }
     } else {
         if (creature_ptr->special_defense & NINJA_S_STEALTH) {
             msg_print(_("再び敵の目にさらされるようになった。", "You are exposed to common sight once more."));
-            notice = TRUE;
+            notice = true;
             creature_ptr->special_defense &= ~(NINJA_S_STEALTH);
         }
     }
 
     if (!notice)
-        return FALSE;
+        return false;
     creature_ptr->redraw |= (PR_STATUS);
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
-    return TRUE;
+        disturb(creature_ptr, false, false);
+    return true;
 }
 
 /*!
@@ -346,11 +346,11 @@ bool cast_ninja_spell(player_type *caster_ptr, mind_ninja_type spell)
         break;
     case DETECT_NEAR:
         if (plev > 44)
-            wiz_lite(caster_ptr, TRUE);
+            wiz_lite(caster_ptr, true);
 
         detect_monsters_normal(caster_ptr, DETECT_RAD_DEFAULT);
         if (plev > 4) {
-            detect_traps(caster_ptr, DETECT_RAD_DEFAULT, TRUE);
+            detect_traps(caster_ptr, DETECT_RAD_DEFAULT, true);
             detect_doors(caster_ptr, DETECT_RAD_DEFAULT);
             detect_stairs(caster_ptr, DETECT_RAD_DEFAULT);
         }
@@ -375,24 +375,24 @@ bool cast_ninja_spell(player_type *caster_ptr, mind_ninja_type spell)
         break;
     case HIT_AND_AWAY:
         if (!hit_and_away(caster_ptr))
-            return FALSE;
+            return false;
 
         break;
     case BIND_MONSTER:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
 
         (void)stasis_monster(caster_ptr, dir);
         break;
     case ANCIENT_KNOWLEDGE:
-        return ident_spell(caster_ptr, FALSE, TV_NONE);
+        return ident_spell(caster_ptr, false, TV_NONE);
     case FLOATING:
-        set_tim_levitation(caster_ptr, randint1(20) + 20, FALSE);
+        set_tim_levitation(caster_ptr, randint1(20) + 20, false);
         break;
     case HIDE_FLAMES:
         fire_ball(caster_ptr, GF_FIRE, 0, 50 + plev, plev / 10 + 2);
         teleport_player(caster_ptr, 30, TELEPORT_SPONTANEOUS);
-        set_oppose_fire(caster_ptr, (TIME_EFFECT)plev, FALSE);
+        set_oppose_fire(caster_ptr, (TIME_EFFECT)plev, false);
         break;
     case NYUSIN:
         return rush_attack(caster_ptr, NULL);
@@ -411,10 +411,10 @@ bool cast_ninja_spell(player_type *caster_ptr, mind_ninja_type spell)
                 else
                     msg_print(_("くさびがなくなった。", "You have no more Iron Spikes."));
 
-                return FALSE;
+                return false;
             }
 
-            do_cmd_throw(caster_ptr, 1, FALSE, slot);
+            do_cmd_throw(caster_ptr, 1, false, slot);
             PlayerEnergy(caster_ptr).set_player_turn_energy(100);
         }
 
@@ -425,7 +425,7 @@ bool cast_ninja_spell(player_type *caster_ptr, mind_ninja_type spell)
         break;
     case SMOKE_BALL:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
 
         fire_ball(caster_ptr, GF_OLD_CONF, dir, plev * 3, 3);
         break;
@@ -433,7 +433,7 @@ bool cast_ninja_spell(player_type *caster_ptr, mind_ninja_type spell)
         project_length = -1;
         if (!get_aim_dir(caster_ptr, &dir)) {
             project_length = 0;
-            return FALSE;
+            return false;
         }
 
         project_length = 0;
@@ -443,8 +443,8 @@ bool cast_ninja_spell(player_type *caster_ptr, mind_ninja_type spell)
         create_rune_explosion(caster_ptr, caster_ptr->y, caster_ptr->x);
         break;
     case HIDE_MUD:
-        (void)set_pass_wall(caster_ptr, randint1(plev / 2) + plev / 2, FALSE);
-        set_oppose_acid(caster_ptr, (TIME_EFFECT)plev, FALSE);
+        (void)set_pass_wall(caster_ptr, randint1(plev / 2) + plev / 2, false);
+        set_oppose_acid(caster_ptr, (TIME_EFFECT)plev, false);
         break;
     case HIDE_MIST:
         fire_ball(caster_ptr, GF_POIS, 0, 75 + plev * 2 / 3, plev / 5 + 2);
@@ -469,11 +469,11 @@ bool cast_ninja_spell(player_type *caster_ptr, mind_ninja_type spell)
         break;
     }
     case ALTER_EGO:
-        set_multishadow(caster_ptr, 6 + randint1(6), FALSE);
+        set_multishadow(caster_ptr, 6 + randint1(6), false);
         break;
     default:
         msg_print(_("なに？", "Zap?"));
         break;
     }
-    return TRUE;
+    return true;
 }

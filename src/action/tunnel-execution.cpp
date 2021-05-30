@@ -30,15 +30,15 @@ static bool do_cmd_tunnel_test(floor_type *floor_ptr, POSITION y, POSITION x)
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
     if (!(g_ptr->info & CAVE_MARK)) {
         msg_print(_("そこには何も見当たらない。", "You see nothing there."));
-        return FALSE;
+        return false;
     }
 
     if (!cave_has_flag_grid(g_ptr, FF_TUNNEL)) {
         msg_print(_("そこには掘るものが見当たらない。", "You see nothing there to tunnel."));
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -58,9 +58,9 @@ bool exe_tunnel(player_type *creature_ptr, POSITION y, POSITION x)
     feature_type *f_ptr, *mimic_f_ptr;
     int power;
     concptr name;
-    bool more = FALSE;
+    bool more = false;
     if (!do_cmd_tunnel_test(creature_ptr->current_floor_ptr, y, x))
-        return FALSE;
+        return false;
 
     PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
@@ -81,7 +81,7 @@ bool exe_tunnel(player_type *creature_ptr, POSITION y, POSITION x)
             creature_ptr->update |= PU_FLOW;
         } else {
             msg_format(_("%sをくずしている。", "You dig into the %s."), name);
-            more = TRUE;
+            more = true;
         }
     } else {
         bool tree = has_flag(mimic_f_ptr->flags, FF_TREE);
@@ -108,7 +108,7 @@ bool exe_tunnel(player_type *creature_ptr, POSITION y, POSITION x)
                 msg_format(_("%sに穴を掘っている。", "You tunnel into the %s."), name);
             }
 
-            more = TRUE;
+            more = true;
         }
     }
 

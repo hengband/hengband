@@ -128,7 +128,7 @@ void effect_player_brain_smash(player_type *target_ptr, effect_player_type *ep_p
         (void)set_paralyzed(target_ptr, target_ptr->paralyzed + randint0(4) + 4);
     }
 
-    (void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, FALSE);
+    (void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, false);
 
     while (randint0(100 + ep_ptr->rlev / 2) > (MAX(5, target_ptr->skill_sav)))
         (void)do_dec_stat(target_ptr, A_INT);

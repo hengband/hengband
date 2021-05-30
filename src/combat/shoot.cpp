@@ -393,7 +393,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
     object_type *o_ptr;
 
-    bool hit_body = FALSE;
+    bool hit_body = false;
 
     GAME_TEXT o_name[MAX_NLEN];
 
@@ -402,7 +402,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
     int msec = delay_factor * delay_factor * delay_factor;
 
     /* STICK TO */
-    bool stick_to = FALSE;
+    bool stick_to = false;
 
     /* Access the item (if in the pack) */
     if (item >= 0) {
@@ -498,7 +498,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
     /* Take a (partial) turn */
     PlayerEnergy(shooter_ptr).div_player_turn_energy((ENERGY)thits);
-    shooter_ptr->is_fired = TRUE;
+    shooter_ptr->is_fired = true;
 
     /* Sniper - Difficult to shot twice at 1 turn */
     if (snipe_type == SP_DOUBLE)
@@ -524,7 +524,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
         prev_x = x;
 
         /* The shot does not hit yet */
-        hit_body = FALSE;
+        hit_body = false;
 
         /* Travel until stopped */
         for (cur_dis = 0; cur_dis <= tdis;) {
@@ -553,7 +553,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
                     /* Destroy the wall */
                     cave_alter_feat(shooter_ptr, ny, nx, FF_HURT_ROCK);
 
-                    hit_body = TRUE;
+                    hit_body = true;
                     break;
                 }
             }
@@ -627,7 +627,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
                 visible = m_ptr->ml;
 
                 /* Note the collision */
-                hit_body = TRUE;
+                hit_body = true;
 
                 if (monster_csleep_remaining(m_ptr)) {
                     if (none_bits(r_ptr->flags3, RF3_EVIL) || one_in_(5))
@@ -665,7 +665,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
                 /* Did we hit it (penalize range) */
                 if (test_hit_fire(shooter_ptr, chance - cur_dis, m_ptr, m_ptr->ml, o_name)) {
-                    bool fear = FALSE;
+                    bool fear = false;
                     auto tdam = tdam_base; //!< @note 実際に与えるダメージ
                     auto base_dam = tdam; //!< @note 補正前の与えるダメージ(無傷、全ての耐性など)
 
@@ -721,7 +721,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
                         /* Modify the damage */
                         base_dam = tdam;
-                        tdam = mon_damage_mod(shooter_ptr, m_ptr, tdam, FALSE);
+                        tdam = mon_damage_mod(shooter_ptr, m_ptr, tdam, false);
                     }
 
                     msg_format_wizard(shooter_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), tdam,
@@ -756,7 +756,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
                             monster_desc(shooter_ptr, m_name, m_ptr, 0);
 
-                            stick_to = TRUE;
+                            stick_to = true;
                             msg_format(_("%sは%sに突き刺さった！", "%^s is stuck in %s!"), o_name, m_name);
                         }
 
@@ -808,7 +808,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
                                 m_ptr->fx = nx;
                                 m_ptr->fy = ny;
 
-                                update_monster(shooter_ptr, m_idx, TRUE);
+                                update_monster(shooter_ptr, m_idx, true);
 
                                 if (msec > 0) {
                                     lite_spot(shooter_ptr, ny, nx);
@@ -882,7 +882,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
     /* Sniper - Loose his/her concentration after any shot */
     if (shooter_ptr->concent)
-        reset_concentration(shooter_ptr, FALSE);
+        reset_concentration(shooter_ptr, false);
 }
 
 /*!
@@ -909,17 +909,17 @@ bool test_hit_fire(player_type *shooter_ptr, int chance, monster_type *m_ptr, in
 
     /* Hack -- Instant miss or hit */
     if (k <= 5)
-        return FALSE;
+        return false;
     if (k > 95)
-        return TRUE;
+        return true;
 
     if (shooter_ptr->pseikaku == PERSONALITY_LAZY)
         if (one_in_(20))
-            return FALSE;
+            return false;
 
     /* Never hit */
     if (chance <= 0)
-        return FALSE;
+        return false;
 
     ac = r_ptr->ac;
     if (shooter_ptr->concent) {
@@ -941,11 +941,11 @@ bool test_hit_fire(player_type *shooter_ptr, int chance, monster_type *m_ptr, in
             monster_desc(shooter_ptr, m_name, m_ptr, 0);
             msg_format(_("%sは%sを斬り捨てた！", "%s cuts down %s!"), m_name, o_name);
         }
-        return FALSE;
+        return false;
     }
 
     /* Assume hit */
-    return TRUE;
+    return true;
 }
 
 /*!

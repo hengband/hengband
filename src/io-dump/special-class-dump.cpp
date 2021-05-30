@@ -170,7 +170,7 @@ static void dump_blue_mage(player_type *creature_ptr, FILE *fff)
         EnumClassFlagGroup<RF_ABILITY>::get_flags(learnt_magic.ability_flags, std::back_inserter(learnt_spells));
 
         col++;
-        bool pcol = FALSE;
+        bool pcol = false;
         strcat(p[col], "       ");
 
         for (auto spell : learnt_spells) {
@@ -178,7 +178,7 @@ static void dump_blue_mage(player_type *creature_ptr, FILE *fff)
             if (creature_ptr->magic_num2[spellnum] == 0)
                 continue;
 
-            pcol = TRUE;
+            pcol = true;
             int l1 = strlen(p[col]);
             int l2 = strlen(monster_powers_short[spellnum]);
             if ((l1 + l2) >= 75) {

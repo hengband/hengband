@@ -39,33 +39,33 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
 	{
 	case ESCAPE:
 	{
-		if (!*visual_list_ptr) return FALSE;
+		if (!*visual_list_ptr) return false;
 
 		*cur_attr_ptr = attr_old;
 		*cur_char_ptr = char_old;
-		*visual_list_ptr = FALSE;
-		return TRUE;
+		*visual_list_ptr = false;
+		return true;
 	}
 	case '\n':
 	case '\r':
 	{
-		if (!*visual_list_ptr) return FALSE;
+		if (!*visual_list_ptr) return false;
 
-		*visual_list_ptr = FALSE;
-		*need_redraw = TRUE;
-		return TRUE;
+		*visual_list_ptr = false;
+		*need_redraw = true;
+		return true;
 	}
 	case 'V':
 	case 'v':
 	{
-		if (*visual_list_ptr) return FALSE;
+		if (*visual_list_ptr) return false;
 
-		*visual_list_ptr = TRUE;
+		*visual_list_ptr = true;
 		*attr_top_ptr = MAX(0, (*cur_attr_ptr & 0x7f) - 5);
 		*char_left_ptr = MAX(0, *cur_char_ptr - 10);
 		attr_old = *cur_attr_ptr;
 		char_old = *cur_char_ptr;
-		return TRUE;
+		return true;
 	}
 	case 'C':
 	case 'c':
@@ -78,7 +78,7 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
 			char_idx_feat[i] = 0;
 		}
 
-		return TRUE;
+		return true;
 	}
 	case 'P':
 	case 'p':
@@ -87,7 +87,7 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
 		{
 			*cur_attr_ptr = attr_idx;
 			*attr_top_ptr = MAX(0, (*cur_attr_ptr & 0x7f) - 5);
-			if (!*visual_list_ptr) *need_redraw = TRUE;
+			if (!*visual_list_ptr) *need_redraw = true;
 		}
 
 		if (char_idx)
@@ -95,14 +95,14 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
 			/* Set the char */
 			*cur_char_ptr = char_idx;
 			*char_left_ptr = MAX(0, *cur_char_ptr - 10);
-			if (!*visual_list_ptr) *need_redraw = TRUE;
+			if (!*visual_list_ptr) *need_redraw = true;
 		}
 
-		return TRUE;
+		return true;
 	}
 	default:
 	{
-		if (!*visual_list_ptr) return FALSE;
+		if (!*visual_list_ptr) return false;
 
 		int eff_width;
 		int d = get_keymap_dir(ch);
@@ -128,7 +128,7 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
 		if ((ddy[d] < 0) && *attr_top_ptr > MAX(0, (int)(a & 0x7f) - 4)) (*attr_top_ptr)--;
 		if ((ddy[d] > 0) && *attr_top_ptr + height < MIN(0x7f, (a & 0x7f) + 4)) (*attr_top_ptr)++;
 
-		return TRUE;
+		return true;
 	}
 	}
 }
@@ -144,11 +144,11 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
 bool open_temporary_file(FILE **fff, char *file_name)
 {
 	*fff = angband_fopen_temp(file_name, FILE_NAME_SIZE);
-	if (*fff != NULL) return TRUE;
+	if (*fff != NULL) return true;
 
 	msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
 	msg_print(NULL);
-	return FALSE;
+	return false;
 }
 
 

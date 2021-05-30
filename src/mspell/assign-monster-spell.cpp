@@ -103,7 +103,7 @@ static MonsterSpellResult monspell_to_player_impl(player_type *target_ptr, RF_AB
     case RF_ABILITY::HAND_DOOM: return spell_RF6_HAND_DOOM(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF6_HAND_DOOM */
     case RF_ABILITY::HEAL: return spell_RF6_HEAL(target_ptr, m_idx, 0, MONSTER_TO_PLAYER); /* RF6_HEAL */
     case RF_ABILITY::INVULNER: return spell_RF6_INVULNER(target_ptr, m_idx, 0, MONSTER_TO_PLAYER); /* RF6_INVULNER */
-    case RF_ABILITY::BLINK: return spell_RF6_BLINK(target_ptr, m_idx, MONSTER_TO_PLAYER, FALSE); /* RF6_BLINK */
+    case RF_ABILITY::BLINK: return spell_RF6_BLINK(target_ptr, m_idx, MONSTER_TO_PLAYER, false); /* RF6_BLINK */
     case RF_ABILITY::TPORT: return spell_RF6_TPORT(target_ptr, m_idx, MONSTER_TO_PLAYER); /* RF6_TPORT */
     case RF_ABILITY::WORLD: return spell_RF6_WORLD(target_ptr, m_idx); /* RF6_WORLD */
     case RF_ABILITY::SPECIAL: return spell_RF6_SPECIAL(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF6_SPECIAL */

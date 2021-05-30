@@ -56,12 +56,12 @@ bool mirror_concentration(player_type *creature_ptr)
 {
     if (total_friends) {
         msg_print(_("今はペットを操ることに集中していないと。", "Your pets demand all of your attention."));
-        return FALSE;
+        return false;
     }
 
     if (!is_mirror_grid(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])) {
         msg_print(_("鏡の上でないと集中できない！", "There's no mirror here!"));
-        return TRUE;
+        return true;
     }
 
     msg_print(_("少し頭がハッキリした。", "You feel your head clear a little."));
@@ -73,7 +73,7 @@ bool mirror_concentration(player_type *creature_ptr)
     }
 
     creature_ptr->redraw |= PR_MANA;
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -130,7 +130,7 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
     }
 
     if (mirror_num < 2)
-        return FALSE;
+        return false;
 
     point_x[0] = randint0(mirror_num);
     do {
@@ -149,7 +149,7 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 
     POSITION centersign = (point_x[0] * 3 - x) * (point_y[1] * 3 - y) - (point_y[0] * 3 - y) * (point_x[1] * 3 - x);
     if (centersign == 0)
-        return FALSE;
+        return false;
 
     POSITION x1 = point_x[0] < point_x[1] ? point_x[0] : point_x[1];
     x1 = x1 < point_x[2] ? x1 : point_x[2];
@@ -209,7 +209,7 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
                 && centersign * ((point_x[1] - x) * (point_y[2] - y) - (point_y[1] - y) * (point_x[2] - x)) >= 0
                 && centersign * ((point_x[2] - x) * (point_y[0] - y) - (point_y[2] - y) * (point_x[0] - x)) >= 0) {
                 if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y, x)) {
-                    (void)affect_monster(caster_ptr, 0, 0, y, x, dam, GF_MANA, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), TRUE);
+                    (void)affect_monster(caster_ptr, 0, 0, y, x, dam, GF_MANA, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), true);
                 }
             }
         }
@@ -220,7 +220,7 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
         remove_mirror(caster_ptr, point_y[0], point_x[0]);
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -235,7 +235,7 @@ void seal_of_mirror(player_type *caster_ptr, HIT_POINT dam)
             if (!is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]))
                 continue;
 
-            if (!affect_monster(caster_ptr, 0, 0, y, x, dam, GF_GENOCIDE, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), TRUE))
+            if (!affect_monster(caster_ptr, 0, 0, y, x, dam, GF_GENOCIDE, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), true))
                 continue;
 
             if (!caster_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
@@ -258,7 +258,7 @@ bool confusing_light(player_type *creature_ptr)
     confuse_monsters(creature_ptr, creature_ptr->lev * 4);
     turn_monsters(creature_ptr, creature_ptr->lev * 4);
     stasis_monsters(creature_ptr, creature_ptr->lev * 4);
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -269,7 +269,7 @@ bool place_mirror(player_type *caster_ptr)
 {
     if (!cave_clean_bold(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x)) {
         msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
-        return FALSE;
+        return false;
     }
 
     /* Create a mirror */
@@ -283,7 +283,7 @@ bool place_mirror(player_type *caster_ptr)
     lite_spot(caster_ptr, caster_ptr->y, caster_ptr->x);
     update_local_illumination(caster_ptr, caster_ptr->y, caster_ptr->x);
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -296,12 +296,12 @@ bool mirror_tunnel(player_type *caster_ptr)
 {
     POSITION x = 0, y = 0;
     if (!tgt_pt(caster_ptr, &x, &y))
-        return FALSE;
+        return false;
     if (exe_dimension_door(caster_ptr, x, y))
-        return TRUE;
+        return true;
 
     msg_print(_("鏡の世界をうまく通れなかった！", "You could not enter the mirror!"));
-    return TRUE;
+    return true;
 }
 
 /*
@@ -309,24 +309,24 @@ bool mirror_tunnel(player_type *caster_ptr)
  */
 bool set_multishadow(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
-    bool notice = FALSE;
+    bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
     if (creature_ptr->is_dead)
-        return FALSE;
+        return false;
 
     if (v) {
         if (creature_ptr->multishadow && !do_dec) {
             if (creature_ptr->multishadow > v)
-                return FALSE;
+                return false;
         } else if (!creature_ptr->multishadow) {
             msg_print(_("あなたの周りに幻影が生まれた。", "Your Shadow enveloped you."));
-            notice = TRUE;
+            notice = true;
         }
     } else {
         if (creature_ptr->multishadow) {
             msg_print(_("幻影が消えた。", "Your Shadow disappears."));
-            notice = TRUE;
+            notice = true;
         }
     }
 
@@ -334,13 +334,13 @@ bool set_multishadow(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
     creature_ptr->redraw |= (PR_STATUS);
 
     if (!notice)
-        return FALSE;
+        return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, false, false);
     creature_ptr->update |= (PU_BONUS);
     handle_stuff(creature_ptr);
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -351,24 +351,24 @@ bool set_multishadow(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  */
 bool set_dustrobe(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
-    bool notice = FALSE;
+    bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
     if (creature_ptr->is_dead)
-        return FALSE;
+        return false;
 
     if (v) {
         if (creature_ptr->dustrobe && !do_dec) {
             if (creature_ptr->dustrobe > v)
-                return FALSE;
+                return false;
         } else if (!creature_ptr->dustrobe) {
             msg_print(_("体が鏡のオーラで覆われた。", "You are enveloped by mirror shards."));
-            notice = TRUE;
+            notice = true;
         }
     } else {
         if (creature_ptr->dustrobe) {
             msg_print(_("鏡のオーラが消えた。", "The mirror shards disappear."));
-            notice = TRUE;
+            notice = true;
         }
     }
 
@@ -376,13 +376,13 @@ bool set_dustrobe(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
     creature_ptr->redraw |= (PR_STATUS);
 
     if (!notice)
-        return FALSE;
+        return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, false, false);
     creature_ptr->update |= (PU_BONUS);
     handle_stuff(creature_ptr);
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -423,7 +423,7 @@ bool cast_mirror_spell(player_type *caster_ptr, mind_mirror_master_type spell)
         if (plev + tmp > 18)
             detect_monsters_invis(caster_ptr, DETECT_RAD_DEFAULT);
         if (plev + tmp > 28)
-            set_tim_esp(caster_ptr, (TIME_EFFECT)plev, FALSE);
+            set_tim_esp(caster_ptr, (TIME_EFFECT)plev, false);
         if (plev + tmp > 38)
             map_area(caster_ptr, DETECT_RAD_MAP);
         if (tmp == 0 && plev < 5) {
@@ -439,7 +439,7 @@ bool cast_mirror_spell(player_type *caster_ptr, mind_mirror_master_type spell)
         break;
     case DRIP_LIGHT:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
 
         if (plev > 9 && is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x]))
             fire_beam(caster_ptr, GF_LITE, dir, damroll(3 + ((plev - 1) / 5), 4));
@@ -457,17 +457,17 @@ bool cast_mirror_spell(player_type *caster_ptr, mind_mirror_master_type spell)
         teleport_player(caster_ptr, plev * 5, TELEPORT_SPONTANEOUS);
         break;
     case ROBE_DUST:
-        set_dustrobe(caster_ptr, 20 + randint1(20), FALSE);
+        set_dustrobe(caster_ptr, 20 + randint1(20), false);
         break;
     case BANISHING_MIRROR:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
 
         (void)fire_beam(caster_ptr, GF_AWAY_ALL, dir, plev);
         break;
     case MIRROR_CRASHING:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
 
         fire_ball(caster_ptr, GF_SHARDS, dir, damroll(8 + ((plev - 5) / 4), 8), (plev > 20 ? (plev - 20) / 8 + 1 : 0));
         break;
@@ -481,7 +481,7 @@ bool cast_mirror_spell(player_type *caster_ptr, mind_mirror_master_type spell)
         break;
     case SEEKER_RAY:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
 
         fire_beam(caster_ptr, GF_SEEKER, dir, damroll(11 + (plev - 5) / 4, 8));
         break;
@@ -490,17 +490,17 @@ bool cast_mirror_spell(player_type *caster_ptr, mind_mirror_master_type spell)
         break;
     case WATER_SHIELD:
         t = 20 + randint1(20);
-        set_shield(caster_ptr, t, FALSE);
+        set_shield(caster_ptr, t, false);
         if (plev > 31)
-            set_tim_reflect(caster_ptr, t, FALSE);
+            set_tim_reflect(caster_ptr, t, false);
 
         if (plev > 39)
-            set_resist_magic(caster_ptr, t, FALSE);
+            set_resist_magic(caster_ptr, t, false);
 
         break;
     case SUPER_RAY:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
 
         fire_beam(caster_ptr, GF_SUPER_RAY, dir, 150 + randint1(2 * plev));
         break;
@@ -526,7 +526,7 @@ bool cast_mirror_spell(player_type *caster_ptr, mind_mirror_master_type spell)
     case RECALL_MIRROR:
         return recall_player(caster_ptr, randint0(21) + 15);
     case MULTI_SHADOW:
-        set_multishadow(caster_ptr, 6 + randint1(6), FALSE);
+        set_multishadow(caster_ptr, 6 + randint1(6), false);
         break;
     case BINDING_FIELD:
         if (!binding_field(caster_ptr, plev * 11 + 5))
@@ -534,7 +534,7 @@ bool cast_mirror_spell(player_type *caster_ptr, mind_mirror_master_type spell)
 
         break;
     case RUFFNOR_MIRROR:
-        (void)set_invuln(caster_ptr, randint1(4) + 4, FALSE);
+        (void)set_invuln(caster_ptr, randint1(4) + 4, false);
         break;
     default:
         msg_print(_("なに？", "Zap?"));
@@ -542,5 +542,5 @@ bool cast_mirror_spell(player_type *caster_ptr, mind_mirror_master_type spell)
     }
 
     caster_ptr->magic_num1[0] = 0;
-    return TRUE;
+    return true;
 }

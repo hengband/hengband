@@ -25,12 +25,12 @@ static bool buy_food(player_type *customer_ptr)
 	if (customer_ptr->food >= PY_FOOD_FULL)
 	{
 		msg_print(_("今は満腹だ。", "You are full now."));
-		return FALSE;
+		return false;
 	}
 
 	msg_print(_("バーテンはいくらかの食べ物とビールをくれた。", "The barkeep gives you some gruel and a beer."));
 	(void)set_food(customer_ptr, PY_FOOD_MAX - 1);
-	return TRUE;
+	return true;
 }
 
 
@@ -41,12 +41,12 @@ static bool buy_food(player_type *customer_ptr)
  */
 static bool is_healthy_stay(player_type *customer_ptr)
 {
-	if (!customer_ptr->poisoned && !customer_ptr->cut) return TRUE;
+	if (!customer_ptr->poisoned && !customer_ptr->cut) return true;
 
 	msg_print(_("あなたに必要なのは部屋ではなく、治療者です。", "You need a healer, not a room."));
 	msg_print(NULL);
 	msg_print(_("すみません、でもうちで誰かに死なれちゃ困りますんで。", "Sorry, but I don't want anyone dying in here."));
-	return FALSE;
+	return false;
 }
 
 
@@ -103,19 +103,19 @@ static void pass_game_turn_by_stay(void)
  */
 static bool has_a_nightmare(player_type *customer_ptr)
 {
-	if (!ironman_nightmare) return FALSE;
+	if (!ironman_nightmare) return false;
 
 	msg_print(_("眠りに就くと恐ろしい光景が心をよぎった。", "Horrible visions flit through your mind as you sleep."));
 
-	while (TRUE)
+	while (true)
 	{
-		sanity_blast(customer_ptr, NULL, FALSE);
+		sanity_blast(customer_ptr, NULL, false);
 		if (!one_in_(3)) break;
 	}
 
 	msg_print(_("あなたは絶叫して目を覚ました。", "You awake screaming."));
 	exe_write_diary(customer_ptr, DIARY_DESCRIPTION, 0, _("悪夢にうなされてよく眠れなかった。", "had a nightmare."));
-	return TRUE;
+	return true;
 }
 
 
@@ -189,7 +189,7 @@ static void display_stay_result(player_type *customer_ptr, int prev_hour)
  */
 static bool stay_inn(player_type *customer_ptr)
 {
-	if (!is_healthy_stay(customer_ptr)) return FALSE;
+	if (!is_healthy_stay(customer_ptr)) return false;
 
 	int prev_day, prev_hour, prev_min;
 	extract_day_hour_min(customer_ptr, &prev_day, &prev_hour, &prev_min);
@@ -199,18 +199,18 @@ static bool stay_inn(player_type *customer_ptr)
 	prevent_turn_overflow(customer_ptr);
 
 	if ((prev_hour >= 18) && (prev_hour <= 23)) {
-		determine_daily_bounty(customer_ptr, FALSE); /* Update daily bounty */
+		determine_daily_bounty(customer_ptr, false); /* Update daily bounty */
 		exe_write_diary(customer_ptr, DIARY_DIALY, 0, NULL);
 	}
 
 	customer_ptr->chp = customer_ptr->mhp;
-	if (has_a_nightmare(customer_ptr)) return TRUE;
+	if (has_a_nightmare(customer_ptr)) return true;
 
 	back_to_health(customer_ptr);
 	charge_magic_eating_energy(customer_ptr);
 
 	display_stay_result(customer_ptr, prev_hour);
-	return TRUE;
+	return true;
 }
 
 
@@ -237,10 +237,10 @@ bool inn_comm(player_type *customer_ptr, int cmd)
 	case BACT_REST:
 		return stay_inn(customer_ptr);
 	case BACT_RUMORS:
-		display_rumor(customer_ptr, TRUE);
-		return TRUE;
+		display_rumor(customer_ptr, true);
+		return true;
 	default:
 		//!< @todo リファクタリング前のコードもTRUEだった、FALSEにすべきでは.
-		return TRUE;
+		return true;
 	}
 }

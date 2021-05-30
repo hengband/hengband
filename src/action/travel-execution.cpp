@@ -38,7 +38,7 @@ static DIRECTION travel_test(player_type *creature_ptr, DIRECTION prev_dir)
 
     floor_type *floor_ptr = creature_ptr->current_floor_ptr;
     if ((disturb_trap_detect || alert_trap_detect) && creature_ptr->dtrap && !(floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & CAVE_IN_DETECT)) {
-        creature_ptr->dtrap = FALSE;
+        creature_ptr->dtrap = false;
         if (!(floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & CAVE_UNSAFE)) {
             if (alert_trap_detect)
                 msg_print(_("* 注意:この先はトラップの感知範囲外です！ *", "*Leaving trap detect region!*"));
@@ -99,12 +99,12 @@ void travel_step(player_type *creature_ptr)
             travel.y = travel.x = 0;
         }
 
-        disturb(creature_ptr, FALSE, TRUE);
+        disturb(creature_ptr, false, true);
         return;
     }
 
     PlayerEnergy(creature_ptr).set_player_turn_energy(100);
-    exe_movement(creature_ptr, travel.dir, always_pickup, FALSE);
+    exe_movement(creature_ptr, travel.dir, always_pickup, false);
     if ((creature_ptr->y == travel.y) && (creature_ptr->x == travel.x)) {
         travel.run = 0;
         travel.y = travel.x = 0;

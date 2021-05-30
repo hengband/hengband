@@ -187,7 +187,7 @@ static bool do_cmd_knowledge_quests_aux(player_type *player_ptr, FILE *fff, IDX 
         parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
         floor_ptr->inside_quest = old_quest;
         if (q_ptr->flags & QUEST_FLAG_SILENT)
-            return FALSE;
+            return false;
     }
 
     strnfmt(playtime_str, sizeof(playtime_str), "%02d:%02d:%02d", q_ptr->comptime / (60 * 60), (q_ptr->comptime / 60) % 60, q_ptr->comptime % 60);
@@ -196,20 +196,20 @@ static bool do_cmd_knowledge_quests_aux(player_type *player_ptr, FILE *fff, IDX 
         sprintf(tmp_str, _("  %-35s (危険度:%3d階相当) - レベル%2d - %s\n", "  %-35s (Danger  level: %3d) - level %2d - %s\n"), q_ptr->name, (int)q_ptr->level,
             q_ptr->complev, playtime_str);
         fputs(tmp_str, fff);
-        return TRUE;
+        return true;
     }
 
     if (q_ptr->complev == 0) {
         sprintf(tmp_str, _("  %-35s (%3d階)            -   不戦勝 - %s\n", "  %-35s (Dungeon level: %3d) - Unearned - %s\n"),
             r_info[q_ptr->r_idx].name.c_str(), (int)q_ptr->level, playtime_str);
         fputs(tmp_str, fff);
-        return TRUE;
+        return true;
     }
 
     sprintf(tmp_str, _("  %-35s (%3d階)            - レベル%2d - %s\n", "  %-35s (Dungeon level: %3d) - level %2d - %s\n"), r_info[q_ptr->r_idx].name.c_str(),
         (int)q_ptr->level, q_ptr->complev, playtime_str);
     fputs(tmp_str, fff);
-    return TRUE;
+    return true;
 }
 
 /*
@@ -312,7 +312,7 @@ void do_cmd_knowledge_quests(player_type *creature_ptr)
     }
 
     angband_fclose(fff);
-    (void)show_file(creature_ptr, TRUE, file_name, _("クエスト達成状況", "Quest status"), 0, 0);
+    (void)show_file(creature_ptr, true, file_name, _("クエスト達成状況", "Quest status"), 0, 0);
     fd_kill(file_name);
     C_KILL(quest_num, max_q_idx, QUEST_IDX);
 }

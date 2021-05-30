@@ -86,24 +86,24 @@ void check_music(player_type *caster_ptr)
  */
 bool set_tim_stealth(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
-    bool notice = FALSE;
+    bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
     if (creature_ptr->is_dead)
-        return FALSE;
+        return false;
 
     if (v) {
         if (creature_ptr->tim_stealth && !do_dec) {
             if (creature_ptr->tim_stealth > v)
-                return FALSE;
+                return false;
         } else if (!is_time_limit_stealth(creature_ptr)) {
             msg_print(_("足音が小さくなった！", "You begin to walk silently!"));
-            notice = TRUE;
+            notice = true;
         }
     } else {
         if (creature_ptr->tim_stealth && !music_singing(creature_ptr, MUSIC_STEALTH)) {
             msg_print(_("足音が大きくなった。", "You no longer walk silently."));
-            notice = TRUE;
+            notice = true;
         }
     }
 
@@ -111,13 +111,13 @@ bool set_tim_stealth(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
     creature_ptr->redraw |= (PR_STATUS);
 
     if (!notice)
-        return FALSE;
+        return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, false, false);
     creature_ptr->update |= (PU_BONUS);
     handle_stuff(creature_ptr);
-    return TRUE;
+    return true;
 }
 
 /*!

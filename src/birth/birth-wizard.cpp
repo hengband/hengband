@@ -92,7 +92,7 @@ static bool get_player_sex(player_type *creature_ptr, char *buf)
     int k = -1;
     int cs = 0;
     int os = MAX_SEXES;
-    while (TRUE) {
+    while (true) {
         if (cs != os) {
             put_str(cur, 12 + (os / 5), 2 + 15 * (os % 5));
             if (cs == MAX_SEXES)
@@ -117,7 +117,7 @@ static bool get_player_sex(player_type *creature_ptr, char *buf)
             birth_quit();
 
         if (c == 'S')
-            return FALSE;
+            return false;
 
         if (c == ' ' || c == '\r' || c == '\n') {
             k = cs == MAX_SEXES ? randint0(MAX_SEXES) : cs;
@@ -152,17 +152,17 @@ static bool get_player_sex(player_type *creature_ptr, char *buf)
     creature_ptr->psex = (byte)k;
     sp_ptr = &sex_info[creature_ptr->psex];
     c_put_str(TERM_L_BLUE, sp_ptr->title, 3, 15);
-    return TRUE;
+    return true;
 }
 
 static bool let_player_select_race(player_type *creature_ptr)
 {
     clear_from(10);
     creature_ptr->prace = RACE_HUMAN;
-    while (TRUE) {
+    while (true) {
         char temp[80 * 10];
         if (!get_player_race(creature_ptr))
-            return FALSE;
+            return false;
 
         clear_from(10);
         shape_buffer(race_explanations[creature_ptr->prace], 74, temp, sizeof(temp));
@@ -182,17 +182,17 @@ static bool let_player_select_race(player_type *creature_ptr)
         c_put_str(TERM_WHITE, "              ", 4, 15);
     }
 
-    return TRUE;
+    return true;
 }
 
 static bool let_player_select_class(player_type *creature_ptr)
 {
     clear_from(10);
     creature_ptr->pclass = CLASS_WARRIOR;
-    while (TRUE) {
+    while (true) {
         char temp[80 * 9];
         if (!get_player_class(creature_ptr))
-            return FALSE;
+            return false;
 
         clear_from(10);
         shape_buffer(class_explanations[creature_ptr->pclass], 74, temp, sizeof(temp));
@@ -212,16 +212,16 @@ static bool let_player_select_class(player_type *creature_ptr)
         c_put_str(TERM_WHITE, "              ", 5, 15);
     }
 
-    return TRUE;
+    return true;
 }
 
 static bool let_player_select_personality(player_type *creature_ptr)
 {
     creature_ptr->pseikaku = PERSONALITY_ORDINARY;
-    while (TRUE) {
+    while (true) {
         char temp[80 * 8];
         if (!get_player_personality(creature_ptr))
-            return FALSE;
+            return false;
 
         clear_from(10);
         shape_buffer(personality_explanations[creature_ptr->pseikaku], 74, temp, sizeof(temp));
@@ -242,28 +242,28 @@ static bool let_player_select_personality(player_type *creature_ptr)
         prt("", 1, 34 + strlen(creature_ptr->name));
     }
 
-    return TRUE;
+    return true;
 }
 
 static bool let_player_build_character(player_type *creature_ptr)
 {
     char buf[80];
     if (!get_player_sex(creature_ptr, buf))
-        return FALSE;
+        return false;
 
     if (!let_player_select_race(creature_ptr))
-        return FALSE;
+        return false;
 
     if (!let_player_select_class(creature_ptr))
-        return FALSE;
+        return false;
 
     if (!get_player_realms(creature_ptr))
-        return FALSE;
+        return false;
 
     if (!let_player_select_personality(creature_ptr))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 static void display_initial_options(player_type *creature_ptr)
@@ -349,12 +349,12 @@ static void auto_roller_count(void)
 static bool decide_initial_stat(player_type *creature_ptr)
 {
     if (!autoroller)
-        return TRUE;
+        return true;
 
-    bool accept = TRUE;
+    bool accept = true;
     for (int i = 0; i < A_MAX; i++) {
         if (creature_ptr->stat_max[i] < stat_limit[i]) {
-            accept = FALSE;
+            accept = false;
             break;
         }
     }
@@ -365,20 +365,20 @@ static bool decide_initial_stat(player_type *creature_ptr)
 static bool decide_body_spec(player_type *creature_ptr, chara_limit_type chara_limit, bool *accept)
 {
     if (!*accept)
-        return FALSE;
+        return false;
 
     get_ahw(creature_ptr);
     get_history(creature_ptr);
 
     if (autochara) {
         if ((creature_ptr->age < chara_limit.agemin) || (creature_ptr->age > chara_limit.agemax))
-            *accept = FALSE;
+            *accept = false;
         if ((creature_ptr->ht < chara_limit.htmin) || (creature_ptr->ht > chara_limit.htmax))
-            *accept = FALSE;
+            *accept = false;
         if ((creature_ptr->wt < chara_limit.wtmin) || (creature_ptr->wt > chara_limit.wtmax))
-            *accept = FALSE;
+            *accept = false;
         if ((creature_ptr->sc < chara_limit.scmin) || (creature_ptr->sc > chara_limit.scmax))
-            *accept = FALSE;
+            *accept = false;
     }
 
     return *accept;
@@ -387,7 +387,7 @@ static bool decide_body_spec(player_type *creature_ptr, chara_limit_type chara_l
 static bool display_auto_roller_count(player_type *creature_ptr, const int col)
 {
     if ((auto_round % AUTOROLLER_STEP) != 0)
-        return FALSE;
+        return false;
 
     birth_put_stats(creature_ptr);
     if (auto_upper_round)
@@ -395,14 +395,14 @@ static bool display_auto_roller_count(player_type *creature_ptr, const int col)
     else
         put_str(format("%10ld", auto_round), 10, col + 20);
     term_fresh();
-    inkey_scan = TRUE;
+    inkey_scan = true;
     if (inkey()) {
         get_ahw(creature_ptr);
         get_history(creature_ptr);
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 static void exe_auto_roller(player_type *creature_ptr, chara_limit_type chara_limit, const int col)
@@ -423,7 +423,7 @@ static void exe_auto_roller(player_type *creature_ptr, chara_limit_type chara_li
 static bool display_auto_roller_result(player_type *creature_ptr, bool prev, char *c)
 {
     BIT_FLAGS mode = 0;
-    while (TRUE) {
+    while (true) {
         creature_ptr->update |= (PU_BONUS | PU_HP);
         update_creature(creature_ptr);
         creature_ptr->chp = creature_ptr->mhp;
@@ -449,7 +449,7 @@ static bool display_auto_roller_result(player_type *creature_ptr, bool prev, cha
             birth_quit();
 
         if (*c == 'S')
-            return FALSE;
+            return false;
 
         if (*c == '\r' || *c == '\n' || *c == ESCAPE)
             break;
@@ -458,7 +458,7 @@ static bool display_auto_roller_result(player_type *creature_ptr, bool prev, cha
             break;
 
         if (prev && (*c == 'p')) {
-            load_prev_data(creature_ptr, TRUE);
+            load_prev_data(creature_ptr, true);
             continue;
         }
 
@@ -471,7 +471,7 @@ static bool display_auto_roller_result(player_type *creature_ptr, bool prev, cha
         bell();
     }
 
-    return TRUE;
+    return true;
 }
 
 /*
@@ -482,9 +482,9 @@ static bool display_auto_roller_result(player_type *creature_ptr, bool prev, cha
  */
 static bool display_auto_roller(player_type *creature_ptr, chara_limit_type chara_limit)
 {
-    bool prev = FALSE;
+    bool prev = false;
 
-    while (TRUE) {
+    while (true) {
         int col = 22;
         if (autoroller || autochara) {
             term_clear();
@@ -503,23 +503,23 @@ static bool display_auto_roller(player_type *creature_ptr, chara_limit_type char
 
         flush();
 
-        get_extra(creature_ptr, TRUE);
+        get_extra(creature_ptr, true);
         get_money(creature_ptr);
         creature_ptr->chaos_patron = (s16b)randint0(MAX_PATRON);
 
         char c;
         if (!display_auto_roller_result(creature_ptr, prev, &c))
-            return FALSE;
+            return false;
 
         if (c == '\r' || c == '\n' || c == ESCAPE)
             break;
 
         save_prev_data(creature_ptr, &previous_char);
-        previous_char.quick_ok = FALSE;
-        prev = TRUE;
+        previous_char.quick_ok = false;
+        prev = true;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -557,7 +557,7 @@ bool player_birth_wizard(player_type *creature_ptr)
     }
 
     if (!let_player_build_character(creature_ptr))
-        return FALSE;
+        return false;
 
     display_initial_options(creature_ptr);
     if (autoroller || autochara) {
@@ -568,18 +568,18 @@ bool player_birth_wizard(player_type *creature_ptr)
 
     if (autoroller)
         if (!get_stat_limits(creature_ptr))
-            return FALSE;
+            return false;
 
     chara_limit_type chara_limit;
     initialize_chara_limit(&chara_limit);
     if (autochara)
         if (!get_chara_limits(creature_ptr, &chara_limit))
-            return FALSE;
+            return false;
 
     clear_from(10);
     init_turn(creature_ptr);
     if (!display_auto_roller(creature_ptr, chara_limit))
-        return FALSE;
+        return false;
 
     set_name_history(creature_ptr);
     char c = inkey();
@@ -587,10 +587,10 @@ bool player_birth_wizard(player_type *creature_ptr)
         birth_quit();
 
     if (c == 'S')
-        return FALSE;
+        return false;
 
     init_dungeon_quests(creature_ptr);
     save_prev_data(creature_ptr, &previous_char);
-    previous_char.quick_ok = TRUE;
-    return TRUE;
+    previous_char.quick_ok = true;
+    return true;
 }

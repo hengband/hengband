@@ -37,10 +37,10 @@
  */
 concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 {
-    bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
-    bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
-    bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
-    bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
+    bool name = (mode == SPELL_NAME) ? true : false;
+    bool desc = (mode == SPELL_DESC) ? true : false;
+    bool info = (mode == SPELL_INFO) ? true : false;
+    bool cast = (mode == SPELL_CAST) ? true : false;
 
     DIRECTION dir;
     PLAYER_LEVEL plev = caster_ptr->lev;
@@ -185,7 +185,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_duration(base, base);
 
             if (cast) {
-                set_oppose_pois(caster_ptr, randint1(base) + base, FALSE);
+                set_oppose_pois(caster_ptr, randint1(base) + base, false);
             }
         }
         break;
@@ -412,7 +412,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_power(power);
 
             if (cast) {
-                symbol_genocide(caster_ptr, power, TRUE);
+                symbol_genocide(caster_ptr, power, true);
             }
         }
         break;
@@ -492,7 +492,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 (void)berserk(caster_ptr, b_base + randint1(b_base));
-                set_fast(caster_ptr, randint1(sp_sides) + sp_base, FALSE);
+                set_fast(caster_ptr, randint1(sp_sides) + sp_base, false);
             }
         }
         break;
@@ -613,10 +613,10 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
         {
             if (cast) {
                 if (randint1(50) > plev) {
-                    if (!ident_spell(caster_ptr, FALSE, TV_NONE))
+                    if (!ident_spell(caster_ptr, false, TV_NONE))
                         return NULL;
                 } else {
-                    if (!identify_fully(caster_ptr, FALSE, TV_NONE))
+                    if (!identify_fully(caster_ptr, false, TV_NONE))
                         return NULL;
                 }
             }
@@ -637,7 +637,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_duration(base, base);
 
             if (cast) {
-                set_mimic(caster_ptr, base + randint1(base), MIMIC_VAMPIRE, FALSE);
+                set_mimic(caster_ptr, base + randint1(base), MIMIC_VAMPIRE, false);
             }
         }
         break;
@@ -669,7 +669,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_power(power);
 
             if (cast) {
-                mass_genocide(caster_ptr, power, TRUE);
+                mass_genocide(caster_ptr, power, true);
             }
         }
         break;
@@ -712,7 +712,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_duration(base, base);
 
             if (cast) {
-                set_wraith_form(caster_ptr, randint1(base) + base, FALSE);
+                set_wraith_form(caster_ptr, randint1(base) + base, false);
             }
         }
         break;

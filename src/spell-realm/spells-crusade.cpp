@@ -38,7 +38,7 @@ bool cast_wrath_of_the_god(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 {
     DIRECTION dir;
     if (!get_aim_dir(caster_ptr, &dir))
-        return FALSE;
+        return false;
 
     POSITION tx = caster_ptr->x + 99 * ddx[dir];
     POSITION ty = caster_ptr->y + 99 * ddy[dir];
@@ -50,7 +50,7 @@ bool cast_wrath_of_the_god(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
     POSITION x = caster_ptr->x;
     POSITION y = caster_ptr->y;
     POSITION nx, ny;
-    while (TRUE) {
+    while (true) {
         if ((y == ty) && (x == tx))
             break;
 
@@ -99,7 +99,7 @@ bool cast_wrath_of_the_god(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
         project(caster_ptr, 0, rad, y, x, dam, GF_DISINTEGRATE, PROJECT_JUMP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -110,24 +110,24 @@ bool cast_wrath_of_the_god(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
  */
 bool set_tim_sh_holy(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
-    bool notice = FALSE;
+    bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
     if (creature_ptr->is_dead)
-        return FALSE;
+        return false;
 
     if (v) {
         if (creature_ptr->tim_sh_holy && !do_dec) {
             if (creature_ptr->tim_sh_holy > v)
-                return FALSE;
+                return false;
         } else if (!creature_ptr->tim_sh_holy) {
             msg_print(_("体が聖なるオーラで覆われた。", "You are enveloped by a holy aura!"));
-            notice = TRUE;
+            notice = true;
         }
     } else {
         if (creature_ptr->tim_sh_holy) {
             msg_print(_("聖なるオーラが消えた。", "The holy aura disappeared."));
-            notice = TRUE;
+            notice = true;
         }
     }
 
@@ -135,13 +135,13 @@ bool set_tim_sh_holy(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
     creature_ptr->redraw |= (PR_STATUS);
 
     if (!notice)
-        return FALSE;
+        return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, false, false);
     creature_ptr->update |= (PU_BONUS);
     handle_stuff(creature_ptr);
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -153,24 +153,24 @@ bool set_tim_sh_holy(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  */
 bool set_tim_eyeeye(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
-    bool notice = FALSE;
+    bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
     if (creature_ptr->is_dead)
-        return FALSE;
+        return false;
 
     if (v) {
         if (creature_ptr->tim_eyeeye && !do_dec) {
             if (creature_ptr->tim_eyeeye > v)
-                return FALSE;
+                return false;
         } else if (!creature_ptr->tim_eyeeye) {
             msg_print(_("法の守り手になった気がした！", "You feel like a keeper of commandments!"));
-            notice = TRUE;
+            notice = true;
         }
     } else {
         if (creature_ptr->tim_eyeeye) {
             msg_print(_("懲罰を執行することができなくなった。", "You lost your aura of retribution."));
-            notice = TRUE;
+            notice = true;
         }
     }
 
@@ -178,11 +178,11 @@ bool set_tim_eyeeye(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
     creature_ptr->redraw |= (PR_STATUS);
 
     if (!notice)
-        return FALSE;
+        return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, false, false);
     creature_ptr->update |= (PU_BONUS);
     handle_stuff(creature_ptr);
-    return TRUE;
+    return true;
 }

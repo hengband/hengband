@@ -38,12 +38,12 @@
  */
 static bool exe_open_chest(player_type *creature_ptr, POSITION y, POSITION x, OBJECT_IDX o_idx)
 {
-    bool flag = TRUE;
-    bool more = FALSE;
+    bool flag = true;
+    bool more = false;
     object_type *o_ptr = &creature_ptr->current_floor_ptr->o_list[o_idx];
     PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     if (o_ptr->pval > 0) {
-        flag = FALSE;
+        flag = false;
         int i = creature_ptr->skill_dis;
         if (creature_ptr->blind || no_lite(creature_ptr))
             i = i / 10;
@@ -58,9 +58,9 @@ static bool exe_open_chest(player_type *creature_ptr, POSITION y, POSITION x, OB
         if (randint0(100) < j) {
             msg_print(_("鍵をはずした。", "You have picked the lock."));
             gain_exp(creature_ptr, 1);
-            flag = TRUE;
+            flag = true;
         } else {
-            more = TRUE;
+            more = true;
             if (flush_failure)
                 flush();
 
@@ -70,7 +70,7 @@ static bool exe_open_chest(player_type *creature_ptr, POSITION y, POSITION x, OB
 
     if (flag) {
         chest_trap(creature_ptr, y, x, o_idx);
-        chest_death(creature_ptr, FALSE, y, x, o_idx);
+        chest_death(creature_ptr, false, y, x, o_idx);
     }
 
     return more;
@@ -87,7 +87,7 @@ void do_cmd_open(player_type *creature_ptr)
     POSITION y, x;
     DIRECTION dir;
     OBJECT_IDX o_idx;
-    bool more = FALSE;
+    bool more = false;
     if (creature_ptr->wild_mode)
         return;
 
@@ -95,8 +95,8 @@ void do_cmd_open(player_type *creature_ptr)
         set_action(creature_ptr, ACTION_NONE);
 
     if (easy_open) {
-        int num_doors = count_dt(creature_ptr, &y, &x, is_closed_door, FALSE);
-        int num_chests = count_chests(creature_ptr, &y, &x, FALSE);
+        int num_doors = count_dt(creature_ptr, &y, &x, is_closed_door, false);
+        int num_chests = count_chests(creature_ptr, &y, &x, false);
         if (num_doors || num_chests) {
             bool too_many = (num_doors && num_chests) || (num_doors > 1) || (num_chests > 1);
             if (!too_many)
@@ -110,14 +110,14 @@ void do_cmd_open(player_type *creature_ptr)
         command_arg = 0;
     }
 
-    if (get_rep_dir(creature_ptr, &dir, TRUE)) {
+    if (get_rep_dir(creature_ptr, &dir, true)) {
         FEAT_IDX feat;
         grid_type *g_ptr;
         y = creature_ptr->y + ddy[dir];
         x = creature_ptr->x + ddx[dir];
         g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
         feat = get_feat_mimic(g_ptr);
-        o_idx = chest_check(creature_ptr->current_floor_ptr, y, x, FALSE);
+        o_idx = chest_check(creature_ptr->current_floor_ptr, y, x, false);
         if (!has_flag(f_info[feat].flags, FF_OPEN) && !o_idx) {
             msg_print(_("そこには開けるものが見当たらない。", "You see nothing there to open."));
         } else if (g_ptr->m_idx && creature_ptr->riding != g_ptr->m_idx) {
@@ -132,7 +132,7 @@ void do_cmd_open(player_type *creature_ptr)
     }
 
     if (!more)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, false, false);
 }
 
 /*!
@@ -145,14 +145,14 @@ void do_cmd_close(player_type *creature_ptr)
 {
     POSITION y, x;
     DIRECTION dir;
-    bool more = FALSE;
+    bool more = false;
     if (creature_ptr->wild_mode)
         return;
 
     if (creature_ptr->special_defense & KATA_MUSOU)
         set_action(creature_ptr, ACTION_NONE);
 
-    if (easy_open && (count_dt(creature_ptr, &y, &x, is_open, FALSE) == 1))
+    if (easy_open && (count_dt(creature_ptr, &y, &x, is_open, false) == 1))
         command_dir = coords_to_dir(creature_ptr, y, x);
 
     if (command_arg) {
@@ -161,7 +161,7 @@ void do_cmd_close(player_type *creature_ptr)
         command_arg = 0;
     }
 
-    if (get_rep_dir(creature_ptr, &dir, FALSE)) {
+    if (get_rep_dir(creature_ptr, &dir, false)) {
         grid_type *g_ptr;
         FEAT_IDX feat;
         y = creature_ptr->y + ddy[dir];
@@ -180,7 +180,7 @@ void do_cmd_close(player_type *creature_ptr)
     }
 
     if (!more)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, false, false);
 }
 
 /*!
@@ -192,7 +192,7 @@ void do_cmd_disarm(player_type *creature_ptr)
     POSITION y, x;
     DIRECTION dir;
     OBJECT_IDX o_idx;
-    bool more = FALSE;
+    bool more = false;
     if (creature_ptr->wild_mode)
         return;
 
@@ -200,8 +200,8 @@ void do_cmd_disarm(player_type *creature_ptr)
         set_action(creature_ptr, ACTION_NONE);
 
     if (easy_disarm) {
-        int num_traps = count_dt(creature_ptr, &y, &x, is_trap, TRUE);
-        int num_chests = count_chests(creature_ptr, &y, &x, TRUE);
+        int num_traps = count_dt(creature_ptr, &y, &x, is_trap, true);
+        int num_chests = count_chests(creature_ptr, &y, &x, true);
         if (num_traps || num_chests) {
             bool too_many = (num_traps && num_chests) || (num_traps > 1) || (num_chests > 1);
             if (!too_many)
@@ -215,14 +215,14 @@ void do_cmd_disarm(player_type *creature_ptr)
         command_arg = 0;
     }
 
-    if (get_rep_dir(creature_ptr, &dir, TRUE)) {
+    if (get_rep_dir(creature_ptr, &dir, true)) {
         grid_type *g_ptr;
         FEAT_IDX feat;
         y = creature_ptr->y + ddy[dir];
         x = creature_ptr->x + ddx[dir];
         g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
         feat = get_feat_mimic(g_ptr);
-        o_idx = chest_check(creature_ptr->current_floor_ptr, y, x, TRUE);
+        o_idx = chest_check(creature_ptr->current_floor_ptr, y, x, true);
         if (!is_trap(creature_ptr, feat) && !o_idx) {
             msg_print(_("そこには解除するものが見当たらない。", "You see nothing there to disarm."));
         } else if (g_ptr->m_idx && creature_ptr->riding != g_ptr->m_idx) {
@@ -236,7 +236,7 @@ void do_cmd_disarm(player_type *creature_ptr)
     }
 
     if (!more)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, false, false);
 }
 
 /*!
@@ -261,7 +261,7 @@ void do_cmd_bash(player_type *creature_ptr)
     POSITION y, x;
     DIRECTION dir;
     grid_type *g_ptr;
-    bool more = FALSE;
+    bool more = false;
     if (creature_ptr->wild_mode)
         return;
 
@@ -274,7 +274,7 @@ void do_cmd_bash(player_type *creature_ptr)
         command_arg = 0;
     }
 
-    if (get_rep_dir(creature_ptr, &dir, FALSE)) {
+    if (get_rep_dir(creature_ptr, &dir, false)) {
         FEAT_IDX feat;
         y = creature_ptr->y + ddy[dir];
         x = creature_ptr->x + ddx[dir];
@@ -292,7 +292,7 @@ void do_cmd_bash(player_type *creature_ptr)
     }
 
     if (!more)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, false, false);
 }
 
 
@@ -315,11 +315,11 @@ static bool get_spike(player_type *creature_ptr, INVENTORY_IDX *ip)
 
         if (o_ptr->tval == TV_SPIKE) {
             *ip = i;
-            return TRUE;
+            return true;
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -340,7 +340,7 @@ void do_cmd_spike(player_type *creature_ptr)
     if (creature_ptr->special_defense & KATA_MUSOU)
         set_action(creature_ptr, ACTION_NONE);
 
-    if (!get_rep_dir(creature_ptr, &dir, FALSE))
+    if (!get_rep_dir(creature_ptr, &dir, false))
         return;
 
     POSITION y = creature_ptr->y + ddy[dir];

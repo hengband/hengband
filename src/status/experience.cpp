@@ -51,10 +51,10 @@ bool restore_level(player_type *creature_ptr)
         msg_print(_("経験値が戻ってきた気がする。", "You feel your experience returning."));
         creature_ptr->exp = creature_ptr->max_exp;
         check_experience(creature_ptr);
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 /*
@@ -64,11 +64,11 @@ bool restore_level(player_type *creature_ptr)
 bool drain_exp(player_type *creature_ptr, s32b drain, s32b slip, int hold_exp_prob)
 {
     if (creature_ptr->prace == RACE_ANDROID)
-        return FALSE;
+        return false;
 
     if (creature_ptr->hold_exp && (randint0(100) < hold_exp_prob)) {
         msg_print(_("しかし自己の経験値を守りきった！", "You keep hold of your experience!"));
-        return FALSE;
+        return false;
     }
 
     if (creature_ptr->hold_exp) {
@@ -79,5 +79,5 @@ bool drain_exp(player_type *creature_ptr, s32b drain, s32b slip, int hold_exp_pr
         lose_exp(creature_ptr, drain);
     }
 
-    return TRUE;
+    return true;
 }

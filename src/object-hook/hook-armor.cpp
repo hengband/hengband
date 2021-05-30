@@ -16,13 +16,13 @@ bool item_tester_hook_wear(player_type *player_ptr, object_type *o_ptr)
 {
     if ((o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI))
         if (player_ptr->psex == SEX_MALE)
-            return FALSE;
+            return false;
 
     /* Check for a usable slot */
     if (wield_slot(player_ptr, o_ptr) >= INVEN_MAIN_HAND)
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -49,7 +49,7 @@ bool object_is_armour(player_type *player_ptr, object_type *o_ptr)
     (void)player_ptr;
 
     if (TV_ARMOR_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_ARMOR_END)
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }

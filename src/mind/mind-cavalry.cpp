@@ -35,11 +35,11 @@ bool rodeo(player_type *creature_ptr)
 
     if (creature_ptr->riding) {
         msg_print(_("今は乗馬中だ。", "You ARE riding."));
-        return FALSE;
+        return false;
     }
 
-    if (!do_cmd_riding(creature_ptr, TRUE))
-        return TRUE;
+    if (!do_cmd_riding(creature_ptr, true))
+        return true;
 
     m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
     r_ptr = &r_info[m_ptr->r_idx];
@@ -47,7 +47,7 @@ bool rodeo(player_type *creature_ptr)
     msg_format(_("%sに乗った。", "You ride on %s."), m_name);
 
     if (is_pet(m_ptr))
-        return TRUE;
+        return true;
 
     rlev = r_ptr->level;
 
@@ -62,11 +62,11 @@ bool rodeo(player_type *creature_ptr)
         set_pet(creature_ptr, m_ptr);
     } else {
         msg_format(_("%sに振り落とされた！", "You have been thrown off by %s."), m_name);
-        process_fall_off_horse(creature_ptr, 1, TRUE);
+        process_fall_off_horse(creature_ptr, 1, true);
 
         /* 落馬処理に失敗してもとにかく乗馬解除 */
         creature_ptr->riding = 0;
     }
 
-    return TRUE;
+    return true;
 }

@@ -77,7 +77,7 @@ static cm_type *initialize_cm_type(player_type *caster_ptr, cm_type *cm_ptr)
     cm_ptr->minfail = 0;
     cm_ptr->plev = caster_ptr->lev;
     cm_ptr->old_csp = caster_ptr->csp;
-    cm_ptr->on_mirror = FALSE;
+    cm_ptr->on_mirror = false;
     return cm_ptr;
 }
 
@@ -142,18 +142,18 @@ static bool check_mind_hp_mp_sufficiency(player_type *caster_ptr, cm_type *cm_pt
     if ((cm_ptr->use_mind == MIND_BERSERKER) || (cm_ptr->use_mind == MIND_NINJUTSU)) {
         if (cm_ptr->mana_cost > caster_ptr->chp) {
             msg_print(_("ＨＰが足りません。", "You do not have enough hp to use this power."));
-            return FALSE;
+            return false;
         }
 
-        return TRUE;
+        return true;
     }
 
     if (cm_ptr->mana_cost <= caster_ptr->csp)
-        return TRUE;
+        return true;
 
     msg_print(_("ＭＰが足りません。", "You do not have enough mana to use this power."));
     if (!over_exert)
-        return FALSE;
+        return false;
 
     return get_check(_("それでも挑戦しますか? ", "Attempt it anyway? "));
 }
@@ -258,7 +258,7 @@ static void check_mind_class(player_type *caster_ptr, cm_type *cm_ptr)
 
     if ((cm_ptr->use_mind == MIND_KI) && (cm_ptr->n != 5) && get_current_ki(caster_ptr)) {
         msg_print(_("気が散ってしまった．．．", "Your improved Force has gone away..."));
-        set_current_ki(caster_ptr, TRUE, 0);
+        set_current_ki(caster_ptr, true, 0);
     }
 
     if (randint1(100) >= (cm_ptr->chance / 2))
@@ -274,25 +274,25 @@ static bool switch_mind_class(player_type *caster_ptr, cm_type *cm_ptr)
     switch (cm_ptr->use_mind) {
     case MIND_MINDCRAFTER:
         cm_ptr->cast = cast_mindcrafter_spell(caster_ptr, static_cast<mind_mindcrafter_type>(cm_ptr->n));
-        return TRUE;
+        return true;
     case MIND_KI:
         cm_ptr->cast = cast_force_spell(caster_ptr, static_cast<mind_force_trainer_type>(cm_ptr->n));
-        return TRUE;
+        return true;
     case MIND_BERSERKER:
         cm_ptr->cast = cast_berserk_spell(caster_ptr, static_cast<mind_berserker_type>(cm_ptr->n));
-        return TRUE;
+        return true;
     case MIND_MIRROR_MASTER:
         if (is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x]))
-            cm_ptr->on_mirror = TRUE;
+            cm_ptr->on_mirror = true;
 
         cm_ptr->cast = cast_mirror_spell(caster_ptr, static_cast<mind_mirror_master_type>(cm_ptr->n));
-        return TRUE;
+        return true;
     case MIND_NINJUTSU:
         cm_ptr->cast = cast_ninja_spell(caster_ptr, static_cast<mind_ninja_type>(cm_ptr->n));
-        return TRUE;
+        return true;
     default:
         msg_format(_("謎の能力:%d, %d", "Mystery power:%d, %d"), cm_ptr->use_mind, cm_ptr->n);
-        return FALSE;
+        return false;
     }
 }
 
@@ -322,7 +322,7 @@ static bool judge_mind_chance(player_type *caster_ptr, cm_type *cm_ptr)
     msg_format(_("%sの集中に失敗した！", "You failed to concentrate hard enough for %s!"), cm_ptr->mind_explanation);
     sound(SOUND_FAIL);
     check_mind_class(caster_ptr, cm_ptr);
-    return TRUE;
+    return true;
 }
 
 static void mind_reflection(player_type *caster_ptr, cm_type *cm_ptr)
@@ -372,7 +372,7 @@ void do_cmd_mind(player_type *caster_ptr)
 {
     cm_type tmp_cm;
     cm_type *cm_ptr = initialize_cm_type(caster_ptr, &tmp_cm);
-    if (cmd_limit_confused(caster_ptr) || !MindPowerGetter(caster_ptr).get_mind_power(&cm_ptr->n, FALSE))
+    if (cmd_limit_confused(caster_ptr) || !MindPowerGetter(caster_ptr).get_mind_power(&cm_ptr->n, false))
         return;
 
     switch_mind_kind(caster_ptr, cm_ptr);
@@ -424,8 +424,8 @@ void do_cmd_mind_browse(player_type *caster_ptr)
     char temp[62 * 5];
     mind_kind_type use_mind = decide_use_mind_browse(caster_ptr);
     screen_save();
-    while (TRUE) {
-        if (!MindPowerGetter(caster_ptr).get_mind_power(&n, TRUE)) {
+    while (true) {
+        if (!MindPowerGetter(caster_ptr).get_mind_power(&n, true)) {
             screen_load();
             return;
         }

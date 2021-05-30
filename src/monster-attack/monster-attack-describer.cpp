@@ -87,33 +87,33 @@ void describe_monster_attack_method(monap_type *monap_ptr)
     case RBM_HIT: {
         monap_ptr->act = _("殴られた。", "hits you.");
         monap_ptr->do_cut = monap_ptr->do_stun = 1;
-        monap_ptr->touched = TRUE;
+        monap_ptr->touched = true;
         sound(SOUND_HIT);
         break;
     }
     case RBM_TOUCH: {
         monap_ptr->act = _("触られた。", "touches you.");
-        monap_ptr->touched = TRUE;
+        monap_ptr->touched = true;
         sound(SOUND_TOUCH);
         break;
     }
     case RBM_PUNCH: {
         monap_ptr->act = _("パンチされた。", "punches you.");
-        monap_ptr->touched = TRUE;
+        monap_ptr->touched = true;
         monap_ptr->do_stun = 1;
         sound(SOUND_HIT);
         break;
     }
     case RBM_KICK: {
         monap_ptr->act = _("蹴られた。", "kicks you.");
-        monap_ptr->touched = TRUE;
+        monap_ptr->touched = true;
         monap_ptr->do_stun = 1;
         sound(SOUND_HIT);
         break;
     }
     case RBM_CLAW: {
         monap_ptr->act = _("ひっかかれた。", "claws you.");
-        monap_ptr->touched = TRUE;
+        monap_ptr->touched = true;
         monap_ptr->do_cut = 1;
         sound(SOUND_CLAW);
         break;
@@ -121,19 +121,19 @@ void describe_monster_attack_method(monap_type *monap_ptr)
     case RBM_BITE: {
         monap_ptr->act = _("噛まれた。", "bites you.");
         monap_ptr->do_cut = 1;
-        monap_ptr->touched = TRUE;
+        monap_ptr->touched = true;
         sound(SOUND_BITE);
         break;
     }
     case RBM_STING: {
         monap_ptr->act = _("刺された。", "stings you.");
-        monap_ptr->touched = TRUE;
+        monap_ptr->touched = true;
         sound(SOUND_STING);
         break;
     }
     case RBM_SLASH: {
         monap_ptr->act = _("斬られた。", "slashes you.");
-        monap_ptr->touched = TRUE;
+        monap_ptr->touched = true;
         monap_ptr->do_cut = 1;
         sound(SOUND_CLAW);
         break;
@@ -141,20 +141,20 @@ void describe_monster_attack_method(monap_type *monap_ptr)
     case RBM_BUTT: {
         monap_ptr->act = _("角で突かれた。", "butts you.");
         monap_ptr->do_stun = 1;
-        monap_ptr->touched = TRUE;
+        monap_ptr->touched = true;
         sound(SOUND_HIT);
         break;
     }
     case RBM_CRUSH: {
         monap_ptr->act = _("体当たりされた。", "crushes you.");
         monap_ptr->do_stun = 1;
-        monap_ptr->touched = TRUE;
+        monap_ptr->touched = true;
         sound(SOUND_CRUSH);
         break;
     }
     case RBM_ENGULF: {
         monap_ptr->act = _("飲み込まれた。", "engulfs you.");
-        monap_ptr->touched = TRUE;
+        monap_ptr->touched = true;
         sound(SOUND_CRUSH);
         break;
     }
@@ -163,7 +163,7 @@ void describe_monster_attack_method(monap_type *monap_ptr)
         monap_ptr->abbreviate = -1;
 #endif
         monap_ptr->act = _("は請求書をよこした。", "charges you.");
-        monap_ptr->touched = TRUE;
+        monap_ptr->touched = true;
 
         /* このコメントはジョークが効いているので残しておく / Note! This is "charges", not "charges at". */
         sound(SOUND_BUY);
@@ -174,7 +174,7 @@ void describe_monster_attack_method(monap_type *monap_ptr)
         monap_ptr->abbreviate = -1;
 #endif
         monap_ptr->act = _("が体の上を這い回った。", "crawls on you.");
-        monap_ptr->touched = TRUE;
+        monap_ptr->touched = true;
         sound(SOUND_SLIME);
         break;
     }
@@ -193,7 +193,7 @@ void describe_monster_attack_method(monap_type *monap_ptr)
         monap_ptr->abbreviate = -1;
 #endif
         monap_ptr->act = _("は爆発した。", "explodes.");
-        monap_ptr->explode = TRUE;
+        monap_ptr->explode = true;
         break;
     }
     case RBM_GAZE: {

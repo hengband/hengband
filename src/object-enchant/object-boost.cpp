@@ -127,7 +127,7 @@ void one_sustain(object_type *o_ptr)
  */
 bool add_esp_strong(object_type *o_ptr)
 {
-    bool nonliv = FALSE;
+    bool nonliv = false;
 
     switch (randint1(3)) {
     case 1:
@@ -138,7 +138,7 @@ bool add_esp_strong(object_type *o_ptr)
         break;
     case 3:
         add_flag(o_ptr->art_flags, TR_ESP_NONLIVING);
-        nonliv = TRUE;
+        nonliv = true;
         break;
     }
 
@@ -188,9 +188,9 @@ void add_esp_weak(object_type *o_ptr, bool extra)
 void add_high_telepathy(object_type* o_ptr)
 {
     if (add_esp_strong(o_ptr))
-        add_esp_weak(o_ptr, TRUE);
+        add_esp_weak(o_ptr, true);
     else
-        add_esp_weak(o_ptr, FALSE);
+        add_esp_weak(o_ptr, false);
 }
 
 /*!
@@ -205,7 +205,7 @@ void add_low_telepathy(object_type *o_ptr)
     if (one_in_(2))
         add_esp_strong(o_ptr);
     else
-        add_esp_weak(o_ptr, FALSE);
+        add_esp_weak(o_ptr, false);
 }
 
 /*!

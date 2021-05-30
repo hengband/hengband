@@ -33,13 +33,13 @@
 void call_the_void(player_type *caster_ptr)
 {
     grid_type *g_ptr;
-    bool do_call = TRUE;
+    bool do_call = true;
     for (int i = 0; i < 9; i++) {
         g_ptr = &caster_ptr->current_floor_ptr->grid_array[caster_ptr->y + ddy_ddd[i]][caster_ptr->x + ddx_ddd[i]];
 
         if (!cave_has_flag_grid(g_ptr, FF_PROJECT)) {
             if (!g_ptr->mimic || !has_flag(f_info[g_ptr->mimic].flags, FF_PROJECT) || !permanent_wall(&f_info[g_ptr->feat])) {
-                do_call = FALSE;
+                do_call = false;
                 break;
             }
         }
@@ -86,7 +86,7 @@ void call_the_void(player_type *caster_ptr)
         return;
     }
 
-    if (destroy_area(caster_ptr, caster_ptr->y, caster_ptr->x, 15 + caster_ptr->lev + randint0(11), FALSE))
+    if (destroy_area(caster_ptr, caster_ptr->y, caster_ptr->x, 15 + caster_ptr->lev + randint0(11), false))
         msg_print(_("ダンジョンが崩壊した...", "The dungeon collapses..."));
     else
         msg_print(_("ダンジョンは大きく揺れた。", "The dungeon trembles."));
@@ -105,7 +105,7 @@ bool vanish_dungeon(player_type *caster_ptr)
     bool is_special_floor = caster_ptr->current_floor_ptr->inside_quest && is_fixed_quest_idx(caster_ptr->current_floor_ptr->inside_quest);
     is_special_floor |= !caster_ptr->current_floor_ptr->dun_level;
     if (is_special_floor)
-        return FALSE;
+        return false;
 
     grid_type *g_ptr;
     feature_type *f_ptr;
@@ -179,7 +179,7 @@ bool vanish_dungeon(player_type *caster_ptr)
     caster_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
     caster_ptr->redraw |= (PR_MAP);
     caster_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
-    return TRUE;
+    return true;
 }
 
 /*!

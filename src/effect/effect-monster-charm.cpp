@@ -33,7 +33,7 @@ static void effect_monster_charm_resist(player_type *caster_ptr, effect_monster_
 {
     if (common_saving_throw_charm(caster_ptr, em_ptr->dam, em_ptr->m_ptr)) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
-        em_ptr->obvious = FALSE;
+        em_ptr->obvious = false;
 
         if (one_in_(4))
             em_ptr->m_ptr->mflag2.set(MFLAG2::NOPET);
@@ -64,7 +64,7 @@ process_result effect_monster_charm(player_type *caster_ptr, effect_monster_type
     }
 
     if (em_ptr->seen)
-        em_ptr->obvious = TRUE;
+        em_ptr->obvious = true;
 
     effect_monster_charm_resist(caster_ptr, em_ptr);
     em_ptr->dam = 0;
@@ -74,7 +74,7 @@ process_result effect_monster_charm(player_type *caster_ptr, effect_monster_type
 process_result effect_monster_control_undead(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
-        em_ptr->obvious = TRUE;
+        em_ptr->obvious = true;
 
     int vir = virtue_number(caster_ptr, V_UNLIFE);
     if (vir) {
@@ -88,7 +88,7 @@ process_result effect_monster_control_undead(player_type *caster_ptr, effect_mon
 
     if (common_saving_throw_control(caster_ptr, em_ptr->dam, em_ptr->m_ptr) || !(em_ptr->r_ptr->flags3 & RF3_UNDEAD)) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
-        em_ptr->obvious = FALSE;
+        em_ptr->obvious = false;
         if (one_in_(4))
             em_ptr->m_ptr->mflag2.set(MFLAG2::NOPET);
     } else if (has_aggravate(caster_ptr)) {
@@ -107,7 +107,7 @@ process_result effect_monster_control_undead(player_type *caster_ptr, effect_mon
 process_result effect_monster_control_demon(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
-        em_ptr->obvious = TRUE;
+        em_ptr->obvious = true;
 
     int vir = virtue_number(caster_ptr, V_UNLIFE);
     if (vir) {
@@ -121,7 +121,7 @@ process_result effect_monster_control_demon(player_type *caster_ptr, effect_mons
 
     if (common_saving_throw_control(caster_ptr, em_ptr->dam, em_ptr->m_ptr) || !(em_ptr->r_ptr->flags3 & RF3_DEMON)) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
-        em_ptr->obvious = FALSE;
+        em_ptr->obvious = false;
         if (one_in_(4))
             em_ptr->m_ptr->mflag2.set(MFLAG2::NOPET);
     } else if (has_aggravate(caster_ptr)) {
@@ -140,7 +140,7 @@ process_result effect_monster_control_demon(player_type *caster_ptr, effect_mons
 process_result effect_monster_control_animal(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
-        em_ptr->obvious = TRUE;
+        em_ptr->obvious = true;
 
     int vir = virtue_number(caster_ptr, V_NATURE);
     if (vir) {
@@ -154,7 +154,7 @@ process_result effect_monster_control_animal(player_type *caster_ptr, effect_mon
 
     if (common_saving_throw_control(caster_ptr, em_ptr->dam, em_ptr->m_ptr) || !(em_ptr->r_ptr->flags3 & RF3_ANIMAL)) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
-        em_ptr->obvious = FALSE;
+        em_ptr->obvious = false;
         if (one_in_(4))
             em_ptr->m_ptr->mflag2.set(MFLAG2::NOPET);
     } else if (has_aggravate(caster_ptr)) {
@@ -176,7 +176,7 @@ process_result effect_monster_charm_living(player_type *caster_ptr, effect_monst
 {
     int vir = virtue_number(caster_ptr, V_UNLIFE);
     if (em_ptr->seen)
-        em_ptr->obvious = TRUE;
+        em_ptr->obvious = true;
 
     vir = virtue_number(caster_ptr, V_UNLIFE);
     if (vir) {
@@ -192,7 +192,7 @@ process_result effect_monster_charm_living(player_type *caster_ptr, effect_monst
 
     if (common_saving_throw_charm(caster_ptr, em_ptr->dam, em_ptr->m_ptr) || !monster_living(em_ptr->m_ptr->r_idx)) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
-        em_ptr->obvious = FALSE;
+        em_ptr->obvious = false;
         if (one_in_(4))
             em_ptr->m_ptr->mflag2.set(MFLAG2::NOPET);
     } else if (has_aggravate(caster_ptr)) {
@@ -234,7 +234,7 @@ static void effect_monster_domination_corrupted(player_type *caster_ptr, effect_
     bool is_corrupted = ((em_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_DEMON)) != 0) && (em_ptr->r_ptr->level > caster_ptr->lev / 2) && (one_in_(2));
     if (!is_corrupted) {
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
-        em_ptr->obvious = FALSE;
+        em_ptr->obvious = false;
         return;
     }
 
@@ -270,7 +270,7 @@ process_result effect_monster_domination(player_type *caster_ptr, effect_monster
         return PROCESS_CONTINUE;
 
     if (em_ptr->seen)
-        em_ptr->obvious = TRUE;
+        em_ptr->obvious = true;
 
     if ((em_ptr->r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (em_ptr->r_ptr->flags3 & RF3_NO_CONF)
         || (em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10)) {
@@ -298,7 +298,7 @@ process_result effect_monster_domination(player_type *caster_ptr, effect_monster
 static bool effect_monster_crusade_domination(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (((em_ptr->r_ptr->flags3 & RF3_GOOD) == 0) || caster_ptr->current_floor_ptr->inside_arena)
-        return FALSE;
+        return false;
 
     if (em_ptr->r_ptr->flags3 & RF3_NO_CONF)
         em_ptr->dam -= 50;
@@ -308,7 +308,7 @@ static bool effect_monster_crusade_domination(player_type *caster_ptr, effect_mo
     if (is_pet(em_ptr->m_ptr)) {
         em_ptr->note = _("の動きが速くなった。", " starts moving faster.");
         (void)set_monster_fast(caster_ptr, em_ptr->g_ptr->m_idx, monster_fast_remaining(em_ptr->m_ptr) + 100);
-        return TRUE;
+        return true;
     }
 
     if ((em_ptr->r_ptr->flags1 & RF1_QUESTOR) || (em_ptr->r_ptr->flags1 & RF1_UNIQUE) || em_ptr->m_ptr->mflag2.has(MFLAG2::NOPET) || has_aggravate(caster_ptr)
@@ -316,7 +316,7 @@ static bool effect_monster_crusade_domination(player_type *caster_ptr, effect_mo
         if (one_in_(4))
             em_ptr->m_ptr->mflag2.set(MFLAG2::NOPET);
 
-        return FALSE;
+        return false;
     }
 
     em_ptr->note = _("を支配した。", " is tamed!");
@@ -325,13 +325,13 @@ static bool effect_monster_crusade_domination(player_type *caster_ptr, effect_mo
     if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
         em_ptr->r_ptr->r_flags3 |= RF3_GOOD;
 
-    return TRUE;
+    return true;
 }
 
 process_result effect_monster_crusade(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
-        em_ptr->obvious = TRUE;
+        em_ptr->obvious = true;
     bool success = effect_monster_crusade_domination(caster_ptr, em_ptr);
     if (success) {
         em_ptr->dam = 0;
@@ -373,7 +373,7 @@ static HIT_POINT calcutate_capturable_hp(player_type *caster_ptr, monster_type *
 static void effect_monster_captured(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->m_ptr->mflag2.has(MFLAG2::CHAMELEON))
-        choose_new_monster(caster_ptr, em_ptr->g_ptr->m_idx, FALSE, MON_CHAMELEON);
+        choose_new_monster(caster_ptr, em_ptr->g_ptr->m_idx, false, MON_CHAMELEON);
 
     msg_format(_("%sを捕えた！", "You capture %^s!"), em_ptr->m_name);
     cap_mon = em_ptr->m_ptr->r_idx;
@@ -381,7 +381,7 @@ static void effect_monster_captured(player_type *caster_ptr, effect_monster_type
     cap_hp = em_ptr->m_ptr->hp;
     cap_maxhp = em_ptr->m_ptr->max_maxhp;
     cap_nickname = em_ptr->m_ptr->nickname;
-    if ((em_ptr->g_ptr->m_idx == caster_ptr->riding) && process_fall_off_horse(caster_ptr, -1, FALSE))
+    if ((em_ptr->g_ptr->m_idx == caster_ptr->riding) && process_fall_off_horse(caster_ptr, -1, false))
         msg_format(_("地面に落とされた。", "You have fallen from %s."), em_ptr->m_name);
 
     delete_monster_idx(caster_ptr, em_ptr->g_ptr->m_idx);
@@ -401,7 +401,7 @@ process_result effect_monster_capture(player_type *caster_ptr, effect_monster_ty
         || any_bits(em_ptr->r_ptr->flags1, RF1_UNIQUE | RF1_QUESTOR) || any_bits(em_ptr->r_ptr->flags7, RF7_NAZGUL | RF7_UNIQUE2)
         || em_ptr->m_ptr->parent_m_idx) {
         msg_format(_("%sには効果がなかった。", "%s is unaffected."), em_ptr->m_name);
-        em_ptr->skipped = TRUE;
+        em_ptr->skipped = true;
         return PROCESS_CONTINUE;
     }
 
@@ -411,7 +411,7 @@ process_result effect_monster_capture(player_type *caster_ptr, effect_monster_ty
 
     if (threshold_hp < 2 || em_ptr->m_ptr->hp >= capturable_hp) {
         msg_format(_("もっと弱らせないと。", "You need to weaken %s more."), em_ptr->m_name);
-        em_ptr->skipped = TRUE;
+        em_ptr->skipped = true;
         return PROCESS_CONTINUE;
     }
 
@@ -421,6 +421,6 @@ process_result effect_monster_capture(player_type *caster_ptr, effect_monster_ty
     }
 
     msg_format(_("うまく捕まえられなかった。", "You failed to capture %s."), em_ptr->m_name);
-    em_ptr->skipped = TRUE;
+    em_ptr->skipped = true;
     return PROCESS_CONTINUE;
 }

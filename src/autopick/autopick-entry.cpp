@@ -44,7 +44,7 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
         case 'A':
         case 'P':
         case 'C':
-            return FALSE;
+            return false;
         }
 
     entry->flag[0] = entry->flag[1] = 0L;
@@ -52,7 +52,7 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
     entry->bonus = 0;
 
     byte act = DO_AUTOPICK | DO_DISPLAY;
-    while (TRUE) {
+    while (true) {
         if ((act & DO_AUTOPICK) && *str == '!') {
             act &= ~DO_AUTOPICK;
             act |= DO_AUTODESTROY;
@@ -109,9 +109,9 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
 
     buf[i] = '\0';
     if (!allow_default && *buf == 0)
-        return FALSE;
+        return false;
     if (*buf == 0 && insc)
-        return FALSE;
+        return false;
 
     concptr prev_ptr, ptr;
     ptr = prev_ptr = buf;
@@ -281,7 +281,7 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
     entry->action = act;
     entry->insc = string_make(insc);
 
-    return TRUE;
+    return true;
 }
 
 /*
@@ -290,7 +290,7 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
 void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, object_type *o_ptr)
 {
     /* Assume that object name is to be added */
-    bool name = TRUE;
+    bool name = true;
     GAME_TEXT name_str[MAX_NLEN + 32];
     name_str[0] = '\0';
     entry->insc = string_make(quark_str(o_ptr->inscription));
@@ -300,27 +300,27 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
 
     // エゴ銘が邪魔かもしれないので、デフォルトで「^」は付けない.
     // We can always use the ^ mark in English.
-    bool is_hat_added = _(FALSE, TRUE);
+    bool is_hat_added = _(false, true);
     if (!object_is_aware(o_ptr)) {
         ADD_FLG(FLG_UNAWARE);
-        is_hat_added = TRUE;
+        is_hat_added = true;
     } else if (!object_is_known(o_ptr)) {
         if (!(o_ptr->ident & IDENT_SENSE)) {
             ADD_FLG(FLG_UNIDENTIFIED);
-            is_hat_added = TRUE;
+            is_hat_added = true;
         } else {
             switch (o_ptr->feeling) {
             case FEEL_AVERAGE:
             case FEEL_GOOD:
                 ADD_FLG(FLG_NAMELESS);
-                is_hat_added = TRUE;
+                is_hat_added = true;
                 break;
 
             case FEEL_BROKEN:
             case FEEL_CURSED:
                 ADD_FLG(FLG_NAMELESS);
                 ADD_FLG(FLG_WORTHLESS);
-                is_hat_added = TRUE;
+                is_hat_added = true;
                 break;
 
             case FEEL_TERRIBLE:
@@ -355,7 +355,7 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
                 /* We ommit the basename and cannot use the ^ mark */
                 strcpy(name_str, e_ptr->name.c_str());
 #endif
-                name = FALSE;
+                name = false;
                 if (!object_is_rare(o_ptr))
                     ADD_FLG(FLG_COMMON);
             }
@@ -367,7 +367,7 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
             if (object_is_equipment(o_ptr))
                 ADD_FLG(FLG_NAMELESS);
 
-            is_hat_added = TRUE;
+            is_hat_added = true;
         }
     }
 
@@ -394,19 +394,19 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
     if (o_ptr->tval >= TV_LIFE_BOOK && !check_book_realm(player_ptr, o_ptr->tval, o_ptr->sval)) {
         ADD_FLG(FLG_UNREADABLE);
         if (o_ptr->tval != TV_ARCANE_BOOK)
-            name = FALSE;
+            name = false;
     }
 
     bool realm_except_class = player_ptr->pclass == CLASS_SORCERER || player_ptr->pclass == CLASS_RED_MAGE;
 
     if (get_realm1_book(player_ptr) == o_ptr->tval && !realm_except_class) {
         ADD_FLG(FLG_REALM1);
-        name = FALSE;
+        name = false;
     }
 
     if (get_realm2_book(player_ptr) == o_ptr->tval && !realm_except_class) {
         ADD_FLG(FLG_REALM2);
-        name = FALSE;
+        name = false;
     }
 
     if (o_ptr->tval >= TV_LIFE_BOOK && 0 == o_ptr->sval)
@@ -552,7 +552,7 @@ concptr autopick_line_from_entry(autopick_type *entry)
     if (IS_FLG(FLG_ARTIFACT))
         ADD_KEY(KEY_ARTIFACT);
 
-    bool sepa_flag = TRUE;
+    bool sepa_flag = true;
     if (IS_FLG(FLG_ITEMS))
         ADD_KEY2(KEY_ITEMS);
     else if (IS_FLG(FLG_WEAPONS))
@@ -594,7 +594,7 @@ concptr autopick_line_from_entry(autopick_type *entry)
     else if (IS_FLG(FLG_BOOTS))
         ADD_KEY2(KEY_BOOTS);
     else if (!IS_FLG(FLG_ARTIFACT))
-        sepa_flag = FALSE;
+        sepa_flag = false;
 
     if (entry->name && entry->name[0]) {
         if (sepa_flag)
@@ -651,8 +651,8 @@ bool entry_from_choosed_object(player_type *player_ptr, autopick_type *entry)
     object_type *o_ptr;
     o_ptr = choose_object(player_ptr, NULL, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP, TV_NONE);
     if (!o_ptr)
-        return FALSE;
+        return false;
 
     autopick_entry_from_object(player_ptr, entry, o_ptr);
-    return TRUE;
+    return true;
 }

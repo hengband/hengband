@@ -36,7 +36,7 @@ void process_eat_gold(player_type *target_ptr, monap_type *monap_ptr)
     if (!target_ptr->paralyzed && (randint0(100) < (adj_dex_safe[target_ptr->stat_index[A_DEX]] + target_ptr->lev))) {
         msg_print(_("しかし素早く財布を守った！", "You quickly protect your money pouch!"));
         if (randint0(3))
-            monap_ptr->blinked = TRUE;
+            monap_ptr->blinked = true;
 
         return;
     }
@@ -66,7 +66,7 @@ void process_eat_gold(player_type *target_ptr, monap_type *monap_ptr)
 
     target_ptr->redraw |= (PR_GOLD);
     target_ptr->window_flags |= (PW_PLAYER);
-    monap_ptr->blinked = TRUE;
+    monap_ptr->blinked = true;
 }
 
 /*!
@@ -78,19 +78,19 @@ void process_eat_gold(player_type *target_ptr, monap_type *monap_ptr)
 bool check_eat_item(player_type *target_ptr, monap_type *monap_ptr)
 {
     if (monster_confused_remaining(monap_ptr->m_ptr))
-        return FALSE;
+        return false;
 
     if (target_ptr->is_dead || check_multishadow(target_ptr))
-        return FALSE;
+        return false;
 
     if (!target_ptr->paralyzed && (randint0(100) < (adj_dex_safe[target_ptr->stat_index[A_DEX]] + target_ptr->lev))) {
         msg_print(_("しかしあわててザックを取り返した！", "You grab hold of your backpack!"));
-        monap_ptr->blinked = TRUE;
-        monap_ptr->obvious = TRUE;
-        return FALSE;
+        monap_ptr->blinked = true;
+        monap_ptr->obvious = true;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -146,8 +146,8 @@ void process_eat_item(player_type *target_ptr, monap_type *monap_ptr)
         move_item_to_monster(target_ptr, monap_ptr, o_idx);
         inven_item_increase(target_ptr, i_idx, -1);
         inven_item_optimize(target_ptr, i_idx);
-        monap_ptr->obvious = TRUE;
-        monap_ptr->blinked = TRUE;
+        monap_ptr->obvious = true;
+        monap_ptr->blinked = true;
         break;
     }
 }
@@ -171,7 +171,7 @@ void process_eat_food(player_type *target_ptr, monap_type *monap_ptr)
 #endif
         inven_item_increase(target_ptr, i_idx, -1);
         inven_item_optimize(target_ptr, i_idx);
-        monap_ptr->obvious = TRUE;
+        monap_ptr->obvious = true;
         break;
     }
 }
@@ -187,7 +187,7 @@ void process_eat_lite(player_type *target_ptr, monap_type *monap_ptr)
 
     if (!target_ptr->blind) {
         msg_print(_("明かりが暗くなってしまった。", "Your light dims."));
-        monap_ptr->obvious = TRUE;
+        monap_ptr->obvious = true;
     }
 
     target_ptr->window_flags |= (PW_EQUIP);
@@ -204,7 +204,7 @@ void process_eat_lite(player_type *target_ptr, monap_type *monap_ptr)
 bool process_un_power(player_type *target_ptr, monap_type *monap_ptr)
 {
     if (((monap_ptr->o_ptr->tval != TV_STAFF) && (monap_ptr->o_ptr->tval != TV_WAND)) || (monap_ptr->o_ptr->pval == 0))
-        return FALSE;
+        return false;
 
     bool is_magic_mastery = has_magic_mastery(target_ptr) != 0;
     object_kind *kind_ptr = &k_info[monap_ptr->o_ptr->k_idx];
@@ -212,13 +212,13 @@ bool process_un_power(player_type *target_ptr, monap_type *monap_ptr)
     DEPTH level = monap_ptr->rlev;
     HIT_POINT drain = is_magic_mastery ? MIN(pval, pval * level / 400 + pval * randint1(level) / 400) : pval;
     if (drain <= 0)
-        return FALSE;
+        return false;
 
     msg_print(_("ザックからエネルギーが吸い取られた！", "Energy was drained from your pack!"));
     if (is_magic_mastery)
         msg_print(_("しかし、あなたの魔法を操る力がその一部を取り返した！", "However, your skill of magic mastery got back the part of energy!"));
 
-    monap_ptr->obvious = TRUE;
+    monap_ptr->obvious = true;
     HIT_POINT recovery = drain * kind_ptr->level;
 
     if (monap_ptr->o_ptr->tval == TV_STAFF)
@@ -236,14 +236,14 @@ bool process_un_power(player_type *target_ptr, monap_type *monap_ptr)
     monap_ptr->o_ptr->pval = !is_magic_mastery || (monap_ptr->o_ptr->pval == 1) ? 0 : monap_ptr->o_ptr->pval - drain;
     target_ptr->update |= PU_COMBINE | PU_REORDER;
     target_ptr->window_flags |= PW_INVEN;
-    return TRUE;
+    return true;
 }
 
 bool check_drain_hp(player_type *target_ptr, const s32b d)
 {
     bool resist_drain = !drain_exp(target_ptr, d, d / 10, 50);
     if (target_ptr->mimic_form)
-        return (mimic_info[target_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING) != 0 ? TRUE : resist_drain;
+        return (mimic_info[target_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING) != 0 ? true : resist_drain;
 
     switch (target_ptr->prace) {
     case RACE_ZOMBIE:
@@ -253,7 +253,7 @@ bool check_drain_hp(player_type *target_ptr, const s32b d)
     case RACE_BALROG:
     case RACE_GOLEM:
     case RACE_ANDROID:
-        return TRUE;
+        return true;
     default:
         return resist_drain;
     }

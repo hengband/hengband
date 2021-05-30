@@ -135,7 +135,7 @@ static process_result exe_affect_monster_by_effect(player_type *caster_ptr, effe
         em_ptr->r_ptr->r_flagsr |= (RFR_RES_ALL);
 
     if (em_ptr->effect_type == GF_LITE_WEAK || em_ptr->effect_type == GF_KILL_WALL)
-        em_ptr->skipped = TRUE;
+        em_ptr->skipped = true;
 
     return PROCESS_CONTINUE;
 }
@@ -153,13 +153,13 @@ static void effect_damage_killed_pet(player_type *caster_ptr, effect_monster_typ
         if (em_ptr->see_s_msg)
             msg_format("%^s%s", em_ptr->m_name, em_ptr->note);
         else
-            caster_ptr->current_floor_ptr->monster_noise = TRUE;
+            caster_ptr->current_floor_ptr->monster_noise = true;
     }
 
     if (em_ptr->who > 0)
         monster_gain_exp(caster_ptr, em_ptr->who, em_ptr->m_ptr->r_idx);
 
-    monster_death(caster_ptr, em_ptr->g_ptr->m_idx, FALSE);
+    monster_death(caster_ptr, em_ptr->g_ptr->m_idx, false);
     delete_monster_idx(caster_ptr, em_ptr->g_ptr->m_idx);
     if (sad)
         msg_print(_("少し悲しい気分がした。", "You feel sad for a moment."));
@@ -177,7 +177,7 @@ static void effect_damage_makes_sleep(player_type *caster_ptr, effect_monster_ty
     else if (em_ptr->see_s_msg)
         message_pain(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam);
     else
-        caster_ptr->current_floor_ptr->monster_noise = TRUE;
+        caster_ptr->current_floor_ptr->monster_noise = true;
 
     if (em_ptr->do_sleep)
         (void)set_monster_csleep(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->do_sleep);
@@ -194,7 +194,7 @@ static void effect_damage_makes_sleep(player_type *caster_ptr, effect_monster_ty
 static bool deal_effect_damage_from_monster(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->who <= 0)
-        return FALSE;
+        return false;
 
     if (caster_ptr->health_who == em_ptr->g_ptr->m_idx)
         caster_ptr->redraw |= (PR_HEALTH);
@@ -208,7 +208,7 @@ static bool deal_effect_damage_from_monster(player_type *caster_ptr, effect_mons
     else
         effect_damage_makes_sleep(caster_ptr, em_ptr);
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -220,7 +220,7 @@ static bool deal_effect_damage_from_monster(player_type *caster_ptr, effect_mons
 static bool heal_leaper(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if (!em_ptr->heal_leper)
-        return FALSE;
+        return false;
 
     if (em_ptr->seen_msg)
         msg_print(_("不潔な病人は病気が治った！", "The Mangy looking leper is healed!"));
@@ -232,7 +232,7 @@ static bool heal_leaper(player_type *caster_ptr, effect_monster_type *em_ptr)
     }
 
     delete_monster_idx(caster_ptr, em_ptr->g_ptr->m_idx);
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -245,9 +245,9 @@ static bool heal_leaper(player_type *caster_ptr, effect_monster_type *em_ptr)
  */
 static bool deal_effect_damage_from_player(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
-    bool fear = FALSE;
+    bool fear = false;
     if (mon_take_hit(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, &fear, em_ptr->note_dies))
-        return TRUE;
+        return true;
 
     if (em_ptr->do_sleep)
         anger_monster(caster_ptr, em_ptr->m_ptr);
@@ -265,7 +265,7 @@ static bool deal_effect_damage_from_player(player_type *caster_ptr, effect_monst
         msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), em_ptr->m_name);
     }
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -322,7 +322,7 @@ static void effect_makes_change_virtues(player_type *caster_ptr, effect_monster_
 static void affected_monster_prevents_bad_status(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     if ((em_ptr->r_ptr->flags1 & RF1_UNIQUE) || (em_ptr->r_ptr->flags1 & RF1_QUESTOR) || (caster_ptr->riding && (em_ptr->g_ptr->m_idx == caster_ptr->riding)))
-        em_ptr->do_polymorph = FALSE;
+        em_ptr->do_polymorph = false;
 
     if (((em_ptr->r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (em_ptr->r_ptr->flags7 & RF7_NAZGUL)) && !caster_ptr->phase_out && (em_ptr->who > 0)
         && (em_ptr->dam > em_ptr->m_ptr->hp))
@@ -341,7 +341,7 @@ static void effect_damage_piles_stun(player_type *caster_ptr, effect_monster_typ
         return;
 
     if (em_ptr->seen)
-        em_ptr->obvious = TRUE;
+        em_ptr->obvious = true;
 
     int turns = 0;
     if (monster_stunned_remaining(em_ptr->m_ptr)) {
@@ -353,7 +353,7 @@ static void effect_damage_piles_stun(player_type *caster_ptr, effect_monster_typ
     }
 
     (void)set_monster_stunned(caster_ptr, em_ptr->g_ptr->m_idx, turns);
-    em_ptr->get_angry = TRUE;
+    em_ptr->get_angry = true;
 }
 
 /*!
@@ -368,7 +368,7 @@ static void effect_damage_piles_confusion(player_type *caster_ptr, effect_monste
         return;
 
     if (em_ptr->seen)
-        em_ptr->obvious = TRUE;
+        em_ptr->obvious = true;
 
     int turns = 0;
     if (monster_confused_remaining(em_ptr->m_ptr)) {
@@ -380,7 +380,7 @@ static void effect_damage_piles_confusion(player_type *caster_ptr, effect_monste
     }
 
     (void)set_monster_confused(caster_ptr, em_ptr->g_ptr->m_idx, turns);
-    em_ptr->get_angry = TRUE;
+    em_ptr->get_angry = true;
 }
 
 /*!
@@ -397,7 +397,7 @@ static void effect_damage_piles_fear(player_type *caster_ptr, effect_monster_typ
         return;
 
     (void)set_monster_monfear(caster_ptr, em_ptr->g_ptr->m_idx, monster_fear_remaining(em_ptr->m_ptr) + em_ptr->do_fear);
-    em_ptr->get_angry = TRUE;
+    em_ptr->get_angry = true;
 }
 
 /*!
@@ -410,7 +410,7 @@ static void effect_damage_makes_weak(effect_monster_type *em_ptr)
         return;
 
     if (em_ptr->seen)
-        em_ptr->obvious = TRUE;
+        em_ptr->obvious = true;
 
     if (em_ptr->do_time >= em_ptr->m_ptr->maxhp)
         em_ptr->do_time = em_ptr->m_ptr->maxhp - 1;
@@ -422,7 +422,7 @@ static void effect_damage_makes_weak(effect_monster_type *em_ptr)
             em_ptr->dam = em_ptr->m_ptr->hp - em_ptr->m_ptr->maxhp;
     }
 
-    em_ptr->get_angry = TRUE;
+    em_ptr->get_angry = true;
 }
 
 /*!
@@ -437,7 +437,7 @@ static void effect_damage_makes_polymorph(player_type *caster_ptr, effect_monste
 
     if (polymorph_monster(caster_ptr, em_ptr->y, em_ptr->x)) {
         if (em_ptr->seen)
-            em_ptr->obvious = TRUE;
+            em_ptr->obvious = true;
 
         em_ptr->note = _("が変身した！", " changes!");
         em_ptr->dam = 0;
@@ -458,7 +458,7 @@ static void effect_damage_makes_teleport(player_type *caster_ptr, effect_monster
         return;
 
     if (em_ptr->seen)
-        em_ptr->obvious = TRUE;
+        em_ptr->obvious = true;
 
     em_ptr->note = _("が消え去った！", " disappears!");
 
@@ -638,20 +638,20 @@ bool affect_monster(
     make_description_of_affecred_monster(caster_ptr, em_ptr);
 
     if (caster_ptr->riding && (em_ptr->g_ptr->m_idx == caster_ptr->riding))
-        disturb(caster_ptr, TRUE, TRUE);
+        disturb(caster_ptr, true, true);
 
     process_result result = exe_affect_monster_by_effect(caster_ptr, em_ptr);
     if (result != PROCESS_CONTINUE)
         return (bool)result;
 
     if (em_ptr->skipped)
-        return FALSE;
+        return false;
 
     exe_affect_monster_by_damage(caster_ptr, em_ptr);
 
     update_phase_out_stat(caster_ptr, em_ptr);
     if (em_ptr->m_ptr->r_idx)
-        update_monster(caster_ptr, em_ptr->g_ptr->m_idx, FALSE);
+        update_monster(caster_ptr, em_ptr->g_ptr->m_idx, false);
 
     lite_spot(caster_ptr, em_ptr->y, em_ptr->x);
     if ((caster_ptr->monster_race_idx == em_ptr->m_ptr->r_idx) && (em_ptr->seen || !em_ptr->m_ptr->r_idx))

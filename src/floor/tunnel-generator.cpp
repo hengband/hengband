@@ -55,7 +55,7 @@ bool build_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, dt_type *dt_pt
     POSITION row_dir, col_dir;
     POSITION start_row, start_col;
     int main_loop_count = 0;
-    bool door_flag = FALSE;
+    bool door_flag = false;
     grid_type *g_ptr;
     start_row = row1;
     start_col = col1;
@@ -63,7 +63,7 @@ bool build_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, dt_type *dt_pt
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     while ((row1 != row2) || (col1 != col2)) {
         if (main_loop_count++ > 2000)
-            return FALSE;
+            return false;
 
         if (randint0(100) < dt_ptr->dun_tun_chg) {
             correct_dir(&row_dir, &col_dir, row1, col1, row2, col2);
@@ -95,7 +95,7 @@ bool build_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, dt_type *dt_pt
             row1 = tmp_row;
             col1 = tmp_col;
             if (dd_ptr->wall_n >= WALL_MAX)
-                return FALSE;
+                return false;
 
             dd_ptr->wall[dd_ptr->wall_n].y = row1;
             dd_ptr->wall[dd_ptr->wall_n].x = col1;
@@ -112,23 +112,23 @@ bool build_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, dt_type *dt_pt
             row1 = tmp_row;
             col1 = tmp_col;
             if (dd_ptr->tunn_n >= TUNN_MAX)
-                return FALSE;
+                return false;
 
             dd_ptr->tunn[dd_ptr->tunn_n].y = row1;
             dd_ptr->tunn[dd_ptr->tunn_n].x = col1;
             dd_ptr->tunn_n++;
-            door_flag = FALSE;
+            door_flag = false;
         } else {
             row1 = tmp_row;
             col1 = tmp_col;
             if (!door_flag) {
                 if (dd_ptr->door_n >= DOOR_MAX)
-                    return FALSE;
+                    return false;
 
                 dd_ptr->door[dd_ptr->door_n].y = row1;
                 dd_ptr->door[dd_ptr->door_n].x = col1;
                 dd_ptr->door_n++;
-                door_flag = TRUE;
+                door_flag = true;
             }
 
             if (randint0(100) >= dt_ptr->dun_tun_con) {
@@ -146,7 +146,7 @@ bool build_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, dt_type *dt_pt
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -162,24 +162,24 @@ static bool set_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, POSITION 
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[*y][*x];
     if (!in_bounds(floor_ptr, *y, *x) || is_inner_grid(g_ptr))
-        return TRUE;
+        return true;
 
     if (is_extra_bold(floor_ptr, *y, *x)) {
         if (dd_ptr->tunn_n >= TUNN_MAX)
-            return FALSE;
+            return false;
 
         dd_ptr->tunn[dd_ptr->tunn_n].y = *y;
         dd_ptr->tunn[dd_ptr->tunn_n].x = *x;
         dd_ptr->tunn_n++;
-        return TRUE;
+        return true;
     }
 
     if (is_floor_bold(floor_ptr, *y, *x))
-        return TRUE;
+        return true;
 
     if (is_outer_grid(g_ptr) && affectwall) {
         if (dd_ptr->wall_n >= WALL_MAX)
-            return FALSE;
+            return false;
 
         dd_ptr->wall[dd_ptr->wall_n].y = *y;
         dd_ptr->wall[dd_ptr->wall_n].x = *x;
@@ -191,7 +191,7 @@ static bool set_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, POSITION 
 
         floor_ptr->grid_array[*y][*x].mimic = 0;
         place_bold(player_ptr, *y, *x, GB_FLOOR);
-        return TRUE;
+        return true;
     }
 
     if (is_solid_grid(g_ptr) && affectwall) {
@@ -217,10 +217,10 @@ static bool set_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, POSITION 
 
         *x = *x + dx;
         *y = *y + dy;
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -233,19 +233,19 @@ static void create_cata_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, P
 {
     POSITION x1 = x - 1;
     POSITION y1 = y;
-    set_tunnel(player_ptr, dd_ptr, &x1, &y1, FALSE);
+    set_tunnel(player_ptr, dd_ptr, &x1, &y1, false);
 
     x1 = x + 1;
     y1 = y;
-    set_tunnel(player_ptr, dd_ptr, &x1, &y1, FALSE);
+    set_tunnel(player_ptr, dd_ptr, &x1, &y1, false);
 
     x1 = x;
     y1 = y - 1;
-    set_tunnel(player_ptr, dd_ptr, &x1, &y1, FALSE);
+    set_tunnel(player_ptr, dd_ptr, &x1, &y1, false);
 
     x1 = x;
     y1 = y + 1;
-    set_tunnel(player_ptr, dd_ptr, &x1, &y1, FALSE);
+    set_tunnel(player_ptr, dd_ptr, &x1, &y1, false);
 }
 
 /*!
@@ -266,9 +266,9 @@ static void short_seg_hack(
         for (int i = 0; i <= length; i++) {
             x = x1 + i * (x2 - x1) / length;
             y = y1 + i * (y2 - y1) / length;
-            if (!set_tunnel(player_ptr, dd_ptr, &x, &y, TRUE)) {
+            if (!set_tunnel(player_ptr, dd_ptr, &x, &y, true)) {
                 if (count > 50) {
-                    *fail = FALSE;
+                    *fail = false;
                     return;
                 }
 
@@ -287,7 +287,7 @@ static void short_seg_hack(
         for (int i = x1; i <= x2; i++) {
             x = i;
             y = y1;
-            if (!set_tunnel(player_ptr, dd_ptr, &x, &y, TRUE)) {
+            if (!set_tunnel(player_ptr, dd_ptr, &x, &y, true)) {
                 short_seg_hack(player_ptr, dd_ptr, x, y, i - 1, y1, 1, count, fail);
                 short_seg_hack(player_ptr, dd_ptr, x, y, i + 1, y1, 1, count, fail);
             }
@@ -299,7 +299,7 @@ static void short_seg_hack(
         for (int i = x2; i <= x1; i++) {
             x = i;
             y = y1;
-            if (!set_tunnel(player_ptr, dd_ptr, &x, &y, TRUE)) {
+            if (!set_tunnel(player_ptr, dd_ptr, &x, &y, true)) {
                 short_seg_hack(player_ptr, dd_ptr, x, y, i - 1, y1, 1, count, fail);
                 short_seg_hack(player_ptr, dd_ptr, x, y, i + 1, y1, 1, count, fail);
             }
@@ -313,7 +313,7 @@ static void short_seg_hack(
         for (int i = y1; i <= y2; i++) {
             x = x2;
             y = i;
-            if (!set_tunnel(player_ptr, dd_ptr, &x, &y, TRUE)) {
+            if (!set_tunnel(player_ptr, dd_ptr, &x, &y, true)) {
                 short_seg_hack(player_ptr, dd_ptr, x, y, x2, i - 1, 1, count, fail);
                 short_seg_hack(player_ptr, dd_ptr, x, y, x2, i + 1, 1, count, fail);
             }
@@ -325,7 +325,7 @@ static void short_seg_hack(
         for (int i = y2; i <= y1; i++) {
             x = x2;
             y = i;
-            if (!set_tunnel(player_ptr, dd_ptr, &x, &y, TRUE)) {
+            if (!set_tunnel(player_ptr, dd_ptr, &x, &y, true)) {
                 short_seg_hack(player_ptr, dd_ptr, x, y, x2, i - 1, 1, count, fail);
                 short_seg_hack(player_ptr, dd_ptr, x, y, x2, i + 1, 1, count, fail);
             }
@@ -350,9 +350,9 @@ bool build_tunnel2(player_type *player_ptr, dun_data_type *dd_ptr, POSITION x1, 
     int length = distance(x1, y1, x2, y2);
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (length <= cutoff) {
-        retval = TRUE;
+        retval = true;
         short_seg_hack(player_ptr, dd_ptr, x1, y1, x2, y2, type, 0, &retval);
-        return TRUE;
+        return true;
     }
 
     dx = (x2 - x1) / 2;
@@ -397,32 +397,32 @@ bool build_tunnel2(player_type *player_ptr, dun_data_type *dd_ptr, POSITION x1, 
             if ((floor_ptr->grid_array[y3][x3].info & CAVE_ROOM) || (randint1(100) > 95)) {
                 retval = build_tunnel2(player_ptr, dd_ptr, x3, y3, x2, y2, type, cutoff);
             } else {
-                retval = FALSE;
+                retval = false;
                 if (dd_ptr->door_n >= DOOR_MAX)
-                    return FALSE;
+                    return false;
 
                 dd_ptr->door[dd_ptr->door_n].y = y3;
                 dd_ptr->door[dd_ptr->door_n].x = x3;
                 dd_ptr->door_n++;
             }
 
-            firstsuccede = TRUE;
+            firstsuccede = true;
         } else {
-            retval = FALSE;
-            firstsuccede = FALSE;
+            retval = false;
+            firstsuccede = false;
         }
     } else {
         if (build_tunnel2(player_ptr, dd_ptr, x1, y1, x3, y3, type, cutoff)) {
             retval = build_tunnel2(player_ptr, dd_ptr, x3, y3, x2, y2, type, cutoff);
-            firstsuccede = TRUE;
+            firstsuccede = true;
         } else {
-            retval = FALSE;
-            firstsuccede = FALSE;
+            retval = false;
+            firstsuccede = false;
         }
     }
 
     if (firstsuccede)
-        set_tunnel(player_ptr, dd_ptr, &x3, &y3, TRUE);
+        set_tunnel(player_ptr, dd_ptr, &x3, &y3, true);
 
     return retval;
 }

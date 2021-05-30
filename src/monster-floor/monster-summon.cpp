@@ -32,7 +32,7 @@ int summon_specific_who = -1;
  * @brief 召喚対象にユニークを含めるかを示すグローバル変数 / summoning unique enable
  * @todo summon_unique_okay グローバル変数の除去と関数引数への代替を行う
  */
-bool summon_unique_okay = FALSE;
+bool summon_unique_okay = false;
 
 /*!
  * @brief モンスターが召喚の基本条件に合っているかをチェックする / Hack -- help decide if a monster race is "okay" to summon
@@ -43,29 +43,29 @@ static bool summon_specific_okay(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
     if (!mon_hook_dungeon(player_ptr, r_idx))
-        return FALSE;
+        return false;
 
     if (summon_specific_who > 0) {
         monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[summon_specific_who];
         if (monster_has_hostile_align(player_ptr, m_ptr, 0, 0, r_ptr))
-            return FALSE;
+            return false;
     } else if (summon_specific_who < 0) {
         if (monster_has_hostile_align(player_ptr, NULL, 10, -10, r_ptr) && !one_in_(ABS(player_ptr->alignment) / 2 + 1))
-            return FALSE;
+            return false;
     }
 
     if (!summon_unique_okay && ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)))
-        return FALSE;
+        return false;
 
     if (!summon_specific_type)
-        return TRUE;
+        return true;
 
     if ((summon_specific_who < 0) && ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))
         && monster_has_hostile_align(player_ptr, NULL, 10, -10, r_ptr))
-        return FALSE;
+        return false;
 
     if ((r_ptr->flags7 & RF7_CHAMELEON) && d_info[player_ptr->dungeon_idx].flags.has(DF::CHAMELEON))
-        return TRUE;
+        return true;
 
     if (summon_specific_who > 0) {
         monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[summon_specific_who];
@@ -120,11 +120,11 @@ bool summon_specific(player_type *player_ptr, MONSTER_IDX who, POSITION y1, POSI
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (floor_ptr->inside_arena)
-        return FALSE;
+        return false;
 
     POSITION x, y;
     if (!mon_scatter(player_ptr, 0, &y, &x, y1, x1, 2))
-        return FALSE;
+        return false;
 
     summon_specific_who = who;
     summon_specific_type = type;
@@ -135,7 +135,7 @@ bool summon_specific(player_type *player_ptr, MONSTER_IDX who, POSITION y1, POSI
     MONRACE_IDX r_idx = get_mon_num(player_ptr, 0, (dlev + lev) / 2 + 5, 0);
     if (!r_idx) {
         summon_specific_type = SUMMON_NONE;
-        return FALSE;
+        return false;
     }
 
     if (is_dead_summoning(type))
@@ -143,12 +143,12 @@ bool summon_specific(player_type *player_ptr, MONSTER_IDX who, POSITION y1, POSI
 
     if (!place_monster_aux(player_ptr, who, y, x, r_idx, mode)) {
         summon_specific_type = SUMMON_NONE;
-        return FALSE;
+        return false;
     }
 
     summon_specific_type = SUMMON_NONE;
     sound(SOUND_SUMMON);
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -164,11 +164,11 @@ bool summon_specific(player_type *player_ptr, MONSTER_IDX who, POSITION y1, POSI
 bool summon_named_creature(player_type *player_ptr, MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
     if (r_idx >= max_r_idx)
-        return FALSE;
+        return false;
 
     POSITION x, y;
     if (player_ptr->current_floor_ptr->inside_arena || !mon_scatter(player_ptr, r_idx, &y, &x, oy, ox, 2))
-        return FALSE;
+        return false;
 
     return place_monster_aux(player_ptr, who, y, x, r_idx, (mode | PM_NO_KAGE));
 }

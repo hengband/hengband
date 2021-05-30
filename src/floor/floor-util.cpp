@@ -155,7 +155,7 @@ void scatter(player_type *player_ptr, POSITION *yp, POSITION *xp, POSITION y, PO
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     POSITION nx, ny;
-    while (TRUE) {
+    while (true) {
         ny = rand_spread(y, d);
         nx = rand_spread(x, d);
 

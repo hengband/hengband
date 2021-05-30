@@ -71,7 +71,7 @@ static bool deal_damege_by_feat(player_type *creature_ptr, grid_type *g_ptr, con
     damage = damage / 100 + (randint0(100) < (damage % 100));
 
     if (damage == 0)
-        return FALSE;
+        return false;
 
     if (creature_ptr->levitation) {
         msg_print(msg_levitation);
@@ -89,7 +89,7 @@ static bool deal_damege_by_feat(player_type *creature_ptr, grid_type *g_ptr, con
             additional_effect(creature_ptr, damage);
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -100,7 +100,7 @@ void process_player_hp_mp(player_type *creature_ptr)
 {
     grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
-    bool cave_no_regen = FALSE;
+    bool cave_no_regen = false;
     int upkeep_factor = 0;
     int regen_amount = PY_REGEN_NORMAL;
     if (creature_ptr->poisoned && !is_invuln(creature_ptr)) {
@@ -133,7 +133,7 @@ void process_player_hp_mp(player_type *creature_ptr)
             if ((creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) {
                 msg_print(_("日光があなたのアンデッドの肉体を焼き焦がした！", "The sun's rays scorch your undead flesh!"));
                 take_hit(creature_ptr, DAMAGE_NOESCAPE, 1, _("日光", "sunlight"));
-                cave_no_regen = TRUE;
+                cave_no_regen = true;
             }
         }
 
@@ -148,7 +148,7 @@ void process_player_hp_mp(player_type *creature_ptr)
             describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
             msg_format(_("%sがあなたのアンデッドの肉体を焼き焦がした！", "The %s scorches your undead flesh!"), o_name);
 
-            cave_no_regen = TRUE;
+            cave_no_regen = true;
             describe_flavor(creature_ptr, o_name, o_ptr, OD_NAME_ONLY);
             sprintf(ouch, _("%sを装備したダメージ", "wielding %s"), o_name);
 
@@ -190,7 +190,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         if (calc_inventory_weight(creature_ptr) > calc_weight_limit(creature_ptr)) {
             msg_print(_("溺れている！", "You are drowning!"));
             take_hit(creature_ptr, DAMAGE_NOESCAPE, randint1(creature_ptr->lev), _("溺れ", "drowning"));
-            cave_no_regen = TRUE;
+            cave_no_regen = true;
         }
     }
 
@@ -242,7 +242,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         if (!is_invuln(creature_ptr) && !creature_ptr->wraith_form && !creature_ptr->tim_pass_wall
             && ((creature_ptr->chp > (creature_ptr->lev / 5)) || !has_pass_wall(creature_ptr))) {
             concptr dam_desc;
-            cave_no_regen = TRUE;
+            cave_no_regen = true;
 
             if (has_pass_wall(creature_ptr)) {
                 msg_print(_("体の分子が分解した気がする！", "Your molecules feel disrupted!"));
@@ -267,7 +267,7 @@ void process_player_hp_mp(player_type *creature_ptr)
     }
 
     if (pattern_effect(creature_ptr)) {
-        cave_no_regen = TRUE;
+        cave_no_regen = true;
     } else {
         if (creature_ptr->regenerate) {
             regen_amount = regen_amount * 2;
@@ -329,7 +329,7 @@ bool hp_player(player_type *creature_ptr, int num)
     vir = virtue_number(creature_ptr, V_VITALITY);
 
     if (num <= 0)
-        return FALSE;
+        return false;
 
     if (vir) {
         num = num * (creature_ptr->virtues[vir - 1] + 1250) / 1250;
@@ -357,8 +357,8 @@ bool hp_player(player_type *creature_ptr, int num)
             msg_print(_("ひじょうに気分が良くなった。", "You feel very good."));
         }
 
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }

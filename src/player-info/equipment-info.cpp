@@ -52,7 +52,7 @@ bool can_two_hands_wielding(player_type *creature_ptr)
 bool heavy_armor(player_type *creature_ptr)
 {
     if ((creature_ptr->pclass != CLASS_MONK) && (creature_ptr->pclass != CLASS_FORCETRAINER) && (creature_ptr->pclass != CLASS_NINJA))
-        return FALSE;
+        return false;
 
     WEIGHT monk_arm_wgt = 0;
     if (creature_ptr->inventory_list[INVEN_MAIN_HAND].tval > TV_SWORD)

@@ -13,7 +13,7 @@
 static bool random_art_slay_bow(object_type *o_ptr)
 {
     if (o_ptr->tval != TV_BOW)
-        return FALSE;
+        return false;
 
     switch (randint1(6)) {
     case 1:
@@ -26,7 +26,7 @@ static bool random_art_slay_bow(object_type *o_ptr)
         if ((o_ptr->artifact_bias == BIAS_NONE) && one_in_(9))
             o_ptr->artifact_bias = BIAS_RANGER;
 
-        return TRUE;
+        return true;
     default:
         add_flag(o_ptr->art_flags, TR_XTRA_SHOTS);
         if (!one_in_(7))
@@ -35,14 +35,14 @@ static bool random_art_slay_bow(object_type *o_ptr)
         if ((o_ptr->artifact_bias == BIAS_NONE) && one_in_(9))
             o_ptr->artifact_bias = BIAS_RANGER;
 
-        return TRUE;
+        return true;
     }
 }
 
 static bool random_art_slay_chaos(object_type *o_ptr)
 {
     if (has_flag(o_ptr->art_flags, TR_CHAOTIC))
-        return FALSE;
+        return false;
 
     add_flag(o_ptr->art_flags, TR_CHAOTIC);
     return one_in_(2);
@@ -51,7 +51,7 @@ static bool random_art_slay_chaos(object_type *o_ptr)
 static bool random_art_brand_magical(object_type *o_ptr)
 {
     if (has_flag(o_ptr->art_flags, TR_BRAND_MAGIC))
-        return FALSE;
+        return false;
 
     add_flag(o_ptr->art_flags, TR_BRAND_MAGIC);
     return one_in_(3);
@@ -60,7 +60,7 @@ static bool random_art_brand_magical(object_type *o_ptr)
 static bool random_art_slay_vampiric(object_type *o_ptr)
 {
     if (has_flag(o_ptr->art_flags, TR_VAMPIRIC))
-        return FALSE;
+        return false;
 
     add_flag(o_ptr->art_flags, TR_VAMPIRIC);
     return one_in_(2);
@@ -69,7 +69,7 @@ static bool random_art_slay_vampiric(object_type *o_ptr)
 static bool random_art_slay_brand_acid(object_type *o_ptr)
 {
     if (has_flag(o_ptr->art_flags, TR_BRAND_ACID))
-        return FALSE;
+        return false;
 
     add_flag(o_ptr->art_flags, TR_BRAND_ACID);
     return one_in_(2);
@@ -78,7 +78,7 @@ static bool random_art_slay_brand_acid(object_type *o_ptr)
 static bool random_art_slay_brand_elec(object_type *o_ptr)
 {
     if (has_flag(o_ptr->art_flags, TR_BRAND_ELEC))
-        return FALSE;
+        return false;
 
     add_flag(o_ptr->art_flags, TR_BRAND_ELEC);
     return one_in_(2);
@@ -87,7 +87,7 @@ static bool random_art_slay_brand_elec(object_type *o_ptr)
 static bool random_art_slay_brand_fire(object_type *o_ptr)
 {
     if (has_flag(o_ptr->art_flags, TR_BRAND_FIRE))
-        return FALSE;
+        return false;
 
     add_flag(o_ptr->art_flags, TR_BRAND_FIRE);
     return one_in_(2);
@@ -96,7 +96,7 @@ static bool random_art_slay_brand_fire(object_type *o_ptr)
 static bool random_art_slay_brand_cold(object_type *o_ptr)
 {
     if (has_flag(o_ptr->art_flags, TR_BRAND_COLD))
-        return FALSE;
+        return false;
 
     add_flag(o_ptr->art_flags, TR_BRAND_COLD);
     return one_in_(2);
@@ -105,7 +105,7 @@ static bool random_art_slay_brand_cold(object_type *o_ptr)
 static bool random_art_slay_brand_pois(object_type *o_ptr)
 {
     if (has_flag(o_ptr->art_flags, TR_BRAND_POIS) || one_in_(2))
-        return FALSE;
+        return false;
 
     add_flag(o_ptr->art_flags, TR_BRAND_POIS);
     return one_in_(2);
@@ -114,7 +114,7 @@ static bool random_art_slay_brand_pois(object_type *o_ptr)
 static bool random_art_slay_animal(object_type *o_ptr)
 {
     if (has_flag(o_ptr->art_flags, TR_SLAY_ANIMAL))
-        return FALSE;
+        return false;
 
     add_flag(o_ptr->art_flags, TR_SLAY_ANIMAL);
     return one_in_(2);
@@ -123,7 +123,7 @@ static bool random_art_slay_animal(object_type *o_ptr)
 static bool random_art_slay_evil(object_type *o_ptr)
 {
     if (has_flag(o_ptr->art_flags, TR_SLAY_EVIL))
-        return FALSE;
+        return false;
     
     add_flag(o_ptr->art_flags, TR_SLAY_EVIL);
     return one_in_(2);
@@ -132,7 +132,7 @@ static bool random_art_slay_evil(object_type *o_ptr)
 static bool random_art_slay_undead(object_type *o_ptr)
 {
     if (has_flag(o_ptr->art_flags, TR_SLAY_UNDEAD))
-        return FALSE;
+        return false;
 
     add_flag(o_ptr->art_flags, TR_SLAY_UNDEAD);
     return one_in_(2);
@@ -141,7 +141,7 @@ static bool random_art_slay_undead(object_type *o_ptr)
 static bool random_art_slay_demon(object_type *o_ptr)
 {
     if (has_flag(o_ptr->art_flags, TR_SLAY_DEMON))
-        return FALSE;
+        return false;
 
     add_flag(o_ptr->art_flags, TR_SLAY_DEMON);
     return one_in_(2);
@@ -159,7 +159,7 @@ static bool switch_random_art_slay(object_type *o_ptr)
         if (((o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM)) && !has_flag(o_ptr->art_flags, TR_BLESSED))
             add_flag(o_ptr->art_flags, TR_BLESSED);
 
-        return FALSE;
+        return false;
     case BIAS_NECROMANTIC:
         return random_art_slay_vampiric(o_ptr) || random_art_slay_brand_pois(o_ptr);
     case BIAS_RANGER:
@@ -184,7 +184,7 @@ static bool switch_random_art_slay(object_type *o_ptr)
     case BIAS_LAW:
         return random_art_slay_evil(o_ptr) || random_art_slay_undead(o_ptr) || random_art_slay_demon(o_ptr);
     default:
-        return FALSE;
+        return false;
     }
 }
 

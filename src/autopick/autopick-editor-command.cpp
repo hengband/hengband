@@ -56,11 +56,11 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
         tb->dirty_flags |= DIRTY_ALL | DIRTY_MODE | DIRTY_EXPRESSION;
         tb->cx = tb->cy = 0;
         tb->mark = 0;
-        tb->changed = FALSE;
+        tb->changed = false;
         break;
     }
     case EC_HELP: {
-        (void)show_file(player_ptr, TRUE, _("jeditor.txt", "editor.txt"), NULL, 0, 0);
+        (void)show_file(player_ptr, true, _("jeditor.txt", "editor.txt"), NULL, 0, 0);
         tb->dirty_flags |= DIRTY_SCREEN;
         break;
     }
@@ -168,7 +168,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
         tb->cy = 0;
         break;
     case EC_BOTTOM:
-        while (TRUE) {
+        while (true) {
             if (!tb->lines_list[tb->cy + 1]) {
                 if (!add_empty_line(tb))
                     break;
@@ -188,7 +188,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
             if (bx2 > len)
                 bx2 = len;
 
-            kill_line_segment(tb, tb->cy, bx1, bx2, TRUE);
+            kill_line_segment(tb, tb->cy, bx1, bx2, true);
             tb->cx = bx1;
         } else {
             int by1 = MIN(tb->my, tb->cy);
@@ -197,7 +197,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
             for (int y = by2; y >= by1; y--) {
                 int len = strlen(tb->lines_list[y]);
 
-                kill_line_segment(tb, y, 0, len, TRUE);
+                kill_line_segment(tb, y, 0, len, true);
             }
 
             tb->cy = by1;
@@ -206,7 +206,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
 
         tb->mark = 0;
         tb->dirty_flags |= DIRTY_ALL;
-        tb->changed = TRUE;
+        tb->changed = true;
         break;
     }
     case EC_COPY: {
@@ -293,7 +293,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
 
         tb->dirty_flags |= DIRTY_ALL;
         tb->dirty_flags |= DIRTY_EXPRESSION;
-        tb->changed = TRUE;
+        tb->changed = true;
         break;
     }
     case EC_BLOCK: {
@@ -340,7 +340,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
 
         if (tb->cx < len) {
             add_str_to_yank(tb, &(tb->lines_list[tb->cy][tb->cx]));
-            kill_line_segment(tb, tb->cy, tb->cx, len, FALSE);
+            kill_line_segment(tb, tb->cy, tb->cx, len, false);
             tb->dirty_line = tb->cy;
             break;
         }
@@ -348,7 +348,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
         if (tb->yank_eol)
             add_str_to_yank(tb, "");
 
-        tb->yank_eol = TRUE;
+        tb->yank_eol = true;
         do_editor_command(player_ptr, tb, EC_DELETE_CHAR);
         break;
     }
@@ -409,7 +409,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
             tb->cy--;
             tb->dirty_flags |= DIRTY_ALL;
             tb->dirty_flags |= DIRTY_EXPRESSION;
-            tb->changed = TRUE;
+            tb->changed = true;
             break;
         }
 
@@ -436,7 +436,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
         tb->lines_list[tb->cy] = string_make(buf);
         tb->dirty_line = tb->cy;
         check_expression_line(tb, tb->cy);
-        tb->changed = TRUE;
+        tb->changed = true;
         break;
     }
     case EC_SEARCH_STR: {
@@ -456,12 +456,12 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
     }
     case EC_SEARCH_FORW:
         if (tb->search_o_ptr) {
-            search_for_object(player_ptr, tb, tb->search_o_ptr, TRUE);
+            search_for_object(player_ptr, tb, tb->search_o_ptr, true);
             break;
         }
 
         if (tb->search_str && tb->search_str[0]) {
-            search_for_string(tb, tb->search_str, TRUE);
+            search_for_string(tb, tb->search_str, true);
             break;
         }
 
@@ -470,12 +470,12 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
 
     case EC_SEARCH_BACK: {
         if (tb->search_o_ptr) {
-            search_for_object(player_ptr, tb, tb->search_o_ptr, FALSE);
+            search_for_object(player_ptr, tb, tb->search_o_ptr, false);
             break;
         }
 
         if (tb->search_str && tb->search_str[0]) {
-            search_for_string(tb, tb->search_str, FALSE);
+            search_for_string(tb, tb->search_str, false);
             break;
         }
 
@@ -525,7 +525,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
         string_free(tb->lines_list[tb->cy]);
         tb->lines_list[tb->cy] = string_make(tb->last_destroyed);
         tb->dirty_flags |= DIRTY_ALL;
-        tb->changed = TRUE;
+        tb->changed = true;
         break;
     }
     case EC_INSERT_BLOCK: {
@@ -548,7 +548,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
         string_free(tb->lines_list[tb->cy]);
         tb->lines_list[tb->cy] = string_make("?:1");
         tb->dirty_flags |= DIRTY_ALL;
-        tb->changed = TRUE;
+        tb->changed = true;
         break;
     }
     case EC_INSERT_MACRO: {
@@ -560,7 +560,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
 
         tb->cx = 2;
         tb->dirty_flags |= DIRTY_ALL;
-        tb->changed = TRUE;
+        tb->changed = true;
         break;
     }
     case EC_INSERT_KEYMAP: {
@@ -574,7 +574,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
 
         tb->cx = 2;
         tb->dirty_flags |= DIRTY_ALL;
-        tb->changed = TRUE;
+        tb->changed = true;
         break;
     }
     case EC_CL_AUTOPICK:

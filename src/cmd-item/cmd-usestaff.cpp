@@ -66,7 +66,7 @@
 int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use_charge, bool powerful, bool magic, bool known)
 {
     int k;
-    bool ident = FALSE;
+    bool ident = false;
     PLAYER_LEVEL lev = powerful ? creature_ptr->lev * 2 : creature_ptr->lev;
     POSITION detect_rad = powerful ? DETECT_RAD_DEFAULT * 3 / 2 : DETECT_RAD_DEFAULT;
 
@@ -75,22 +75,22 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
     case SV_STAFF_DARKNESS: {
         if (!has_resist_blind(creature_ptr) && !has_resist_dark(creature_ptr)) {
             if (set_blind(creature_ptr, creature_ptr->blind + 3 + randint1(5)))
-                ident = TRUE;
+                ident = true;
         }
         if (unlite_area(creature_ptr, 10, (powerful ? 6 : 3)))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_STAFF_SLOWNESS: {
-        if (set_slow(creature_ptr, creature_ptr->slow + randint1(30) + 15, FALSE))
-            ident = TRUE;
+        if (set_slow(creature_ptr, creature_ptr->slow + randint1(30) + 15, false))
+            ident = true;
         break;
     }
 
     case SV_STAFF_HASTE_MONSTERS: {
         if (speed_monsters(creature_ptr))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
@@ -99,7 +99,7 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
         for (k = 0; k < times; k++) {
             if (summon_specific(creature_ptr, 0, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_NONE,
                     (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET))) {
-                ident = TRUE;
+                ident = true;
             }
         }
         break;
@@ -107,26 +107,26 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
 
     case SV_STAFF_TELEPORTATION: {
         teleport_player(creature_ptr, (powerful ? 150 : 100), 0L);
-        ident = TRUE;
+        ident = true;
         break;
     }
 
     case SV_STAFF_IDENTIFY: {
         if (powerful) {
-            if (!identify_fully(creature_ptr, FALSE, TV_NONE))
-                *use_charge = FALSE;
+            if (!identify_fully(creature_ptr, false, TV_NONE))
+                *use_charge = false;
         } else {
-            if (!ident_spell(creature_ptr, FALSE, TV_NONE))
-                *use_charge = FALSE;
+            if (!ident_spell(creature_ptr, false, TV_NONE))
+                *use_charge = false;
         }
-        ident = TRUE;
+        ident = true;
         break;
     }
 
     case SV_STAFF_REMOVE_CURSE: {
         bool result = (powerful ? remove_all_curse(creature_ptr) : remove_curse(creature_ptr)) != 0;
         if (result) {
-            ident = TRUE;
+            ident = true;
         }
         break;
     }
@@ -137,53 +137,53 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
 
     case SV_STAFF_LITE: {
         if (lite_area(creature_ptr, damroll(2, 8), (powerful ? 4 : 2)))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_STAFF_MAPPING: {
         map_area(creature_ptr, powerful ? DETECT_RAD_MAP * 3 / 2 : DETECT_RAD_MAP);
-        ident = TRUE;
+        ident = true;
         break;
     }
 
     case SV_STAFF_DETECT_GOLD: {
         if (detect_treasure(creature_ptr, detect_rad))
-            ident = TRUE;
+            ident = true;
         if (detect_objects_gold(creature_ptr, detect_rad))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_STAFF_DETECT_ITEM: {
         if (detect_objects_normal(creature_ptr, detect_rad))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_STAFF_DETECT_TRAP: {
         if (detect_traps(creature_ptr, detect_rad, known))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_STAFF_DETECT_DOOR: {
         if (detect_doors(creature_ptr, detect_rad))
-            ident = TRUE;
+            ident = true;
         if (detect_stairs(creature_ptr, detect_rad))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_STAFF_DETECT_INVIS: {
         if (set_tim_invis(creature_ptr, creature_ptr->tim_invis + 12 + randint1(12), false))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_STAFF_DETECT_EVIL: {
         if (detect_monsters_evil(creature_ptr, detect_rad))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
@@ -194,41 +194,41 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
 
     case SV_STAFF_CURING: {
         ident = true_healing(creature_ptr, 0);
-        if (set_shero(creature_ptr, 0, TRUE))
-            ident = TRUE;
+        if (set_shero(creature_ptr, 0, true))
+            ident = true;
         break;
     }
 
     case SV_STAFF_HEALING: {
         if (cure_critical_wounds(creature_ptr, powerful ? 500 : 300))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_STAFF_THE_MAGI: {
         if (do_res_stat(creature_ptr, A_INT))
-            ident = TRUE;
-        ident |= restore_mana(creature_ptr, FALSE);
-        if (set_shero(creature_ptr, 0, TRUE))
-            ident = TRUE;
+            ident = true;
+        ident |= restore_mana(creature_ptr, false);
+        if (set_shero(creature_ptr, 0, true))
+            ident = true;
         break;
     }
 
     case SV_STAFF_SLEEP_MONSTERS: {
         if (sleep_monsters(creature_ptr, lev))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_STAFF_SLOW_MONSTERS: {
         if (slow_monsters(creature_ptr, lev))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_STAFF_SPEED: {
-        if (set_fast(creature_ptr, randint1(30) + (powerful ? 30 : 15), FALSE))
-            ident = TRUE;
+        if (set_fast(creature_ptr, randint1(30) + (powerful ? 30 : 15), false))
+            ident = true;
         break;
     }
 
@@ -253,13 +253,13 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
     }
 
     case SV_STAFF_GENOCIDE: {
-        ident = symbol_genocide(creature_ptr, (magic ? lev + 50 : 200), TRUE);
+        ident = symbol_genocide(creature_ptr, (magic ? lev + 50 : 200), true);
         break;
     }
 
     case SV_STAFF_EARTHQUAKES: {
         if (earthquake(creature_ptr, creature_ptr->y, creature_ptr->x, (powerful ? 15 : 10), 0))
-            ident = TRUE;
+            ident = true;
         else
             msg_print(_("ダンジョンが揺れた。", "The dungeon trembles."));
 
@@ -267,7 +267,7 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
     }
 
     case SV_STAFF_DESTRUCTION: {
-        ident = destroy_area(creature_ptr, creature_ptr->y, creature_ptr->x, (powerful ? 18 : 13) + randint0(5), FALSE);
+        ident = destroy_area(creature_ptr, creature_ptr->y, creature_ptr->x, (powerful ? 18 : 13) + randint0(5), false);
         break;
     }
 
@@ -305,7 +305,7 @@ void exe_use_staff(player_type *creature_ptr, INVENTORY_IDX item)
     object_type *o_ptr;
 
     /* Hack -- let staffs of identify get aborted */
-    bool use_charge = TRUE;
+    bool use_charge = true;
 
     o_ptr = ref_item(creature_ptr, item);
 
@@ -362,7 +362,7 @@ void exe_use_staff(player_type *creature_ptr, INVENTORY_IDX item)
 
     sound(SOUND_ZAP);
 
-    ident = staff_effect(creature_ptr, o_ptr->sval, &use_charge, FALSE, FALSE, object_is_aware(o_ptr));
+    ident = staff_effect(creature_ptr, o_ptr->sval, &use_charge, false, false, object_is_aware(o_ptr));
 
     if (!(object_is_aware(o_ptr))) {
         chg_virtue(creature_ptr, V_PATIENCE, -1);

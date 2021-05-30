@@ -25,50 +25,50 @@ bool cmd_limit_cast(player_type *creature_ptr)
     if (is_in_dungeon(creature_ptr) && (d_info[creature_ptr->dungeon_idx].flags.has(DF::NO_MAGIC))) {
         msg_print(_("ダンジョンが魔法を吸収した！", "The dungeon absorbs all attempted magic!"));
         msg_print(NULL);
-        return TRUE;
+        return true;
     }
 
     if (creature_ptr->anti_magic) {
         msg_print(_("反魔法バリアが魔法を邪魔した！", "An anti-magic shell disrupts your magic!"));
-        return TRUE;
+        return true;
     }
 
     if (is_shero(creature_ptr) && (creature_ptr->pclass != CLASS_BERSERKER)) {
         msg_format(_("狂戦士化していて頭が回らない！", "You cannot think directly!"));
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 bool cmd_limit_confused(player_type *creature_ptr)
 {
     if (creature_ptr->confused) {
         msg_print(_("混乱していてできない！", "You are too confused!"));
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 bool cmd_limit_image(player_type *creature_ptr)
 {
     if (creature_ptr->image) {
         msg_print(_("幻覚が見えて集中できない！", "Your hallucinations prevent you from concentrating!"));
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 bool cmd_limit_stun(player_type *creature_ptr)
 {
     if (creature_ptr->stun) {
         msg_print(_("頭が朦朧としていて集中できない！", "You are too stunned!"));
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 bool cmd_limit_arena(player_type *creature_ptr)
@@ -76,25 +76,25 @@ bool cmd_limit_arena(player_type *creature_ptr)
     if (creature_ptr->current_floor_ptr->inside_arena) {
         msg_print(_("アリーナが魔法を吸収した！", "The arena absorbs all attempted magic!"));
         msg_print(NULL);
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 bool cmd_limit_blind(player_type *creature_ptr)
 {
     if (creature_ptr->blind) {
         msg_print(_("目が見えない。", "You can't see anything."));
-        return TRUE;
+        return true;
     }
 
     if (no_lite(creature_ptr)) {
         msg_print(_("明かりがないので見えない。", "You have no light."));
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 bool cmd_limit_time_walk(player_type *creature_ptr)
@@ -105,8 +105,8 @@ bool cmd_limit_time_walk(player_type *creature_ptr)
 
         msg_print(_("止まった時の中ではうまく働かないようだ。", "It shows no reaction."));
         sound(SOUND_FAIL);
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }

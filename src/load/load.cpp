@@ -113,7 +113,7 @@ static void load_player_world(player_type *creature_ptr)
     rd_extra(creature_ptr);
 
     if (creature_ptr->energy_need < -999)
-        creature_ptr->timewalk = TRUE;
+        creature_ptr->timewalk = true;
 
     if (arg_fiddle)
         load_note(_("特別情報をロードしました", "Loaded extra information"));
@@ -296,16 +296,16 @@ bool load_savedata(player_type *player_ptr, bool *new_game)
 {
     concptr what = "generic";
     current_world_ptr->game_turn = 0;
-    player_ptr->is_dead = FALSE;
+    player_ptr->is_dead = false;
     if (!savefile[0])
-        return TRUE;
+        return true;
 
 #ifndef WINDOWS
     if (access(savefile, 0) < 0) {
         msg_print(_("セーブファイルがありません。", "Savefile does not exist."));
         msg_print(NULL);
-        *new_game = TRUE;
-        return TRUE;
+        *new_game = true;
+        return true;
     }
 #endif
 
@@ -341,7 +341,7 @@ bool load_savedata(player_type *player_ptr, bool *new_game)
     if (err) {
         msg_format("%s: %s", what, savefile);
         msg_print(NULL);
-        return FALSE;
+        return false;
     }
 
     current_world_ptr->sf_extra = fake_ver[3];
@@ -367,22 +367,22 @@ bool load_savedata(player_type *player_ptr, bool *new_game)
             current_world_ptr->h_ver_major, current_world_ptr->h_ver_minor, current_world_ptr->h_ver_patch, current_world_ptr->h_ver_extra);
 
         msg_print(NULL);
-        return FALSE;
+        return false;
     }
 
     if (player_ptr->is_dead) {
-        *new_game = TRUE;
+        *new_game = true;
         if (arg_wizard) {
-            current_world_ptr->character_loaded = TRUE;
-            return TRUE;
+            current_world_ptr->character_loaded = true;
+            return true;
         }
 
-        player_ptr->is_dead = FALSE;
+        player_ptr->is_dead = false;
         current_world_ptr->sf_lives++;
-        return TRUE;
+        return true;
     }
 
-    current_world_ptr->character_loaded = TRUE;
+    current_world_ptr->character_loaded = true;
     u32b tmp = counts_read(player_ptr, 2);
     if (tmp > player_ptr->count)
         player_ptr->count = tmp;
@@ -391,5 +391,5 @@ bool load_savedata(player_type *player_ptr, bool *new_game)
         counts_write(player_ptr, 2, ++player_ptr->count);
 
     counts_write(player_ptr, 1, current_world_ptr->play_time);
-    return TRUE;
+    return true;
 }

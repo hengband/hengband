@@ -71,7 +71,7 @@
 void do_cmd_inven(player_type *creature_ptr)
 {
     char out_val[160];
-    command_wrk = FALSE;
+    command_wrk = false;
     if (easy_floor)
         command_wrk = USE_INVEN;
 
@@ -91,7 +91,7 @@ void do_cmd_inven(player_type *creature_ptr)
     command_new = inkey();
     screen_load();
     if (command_new != ESCAPE) {
-        command_see = TRUE;
+        command_see = true;
         return;
     }
 
@@ -267,7 +267,7 @@ void do_cmd_use(player_type *creature_ptr)
         if (cmd_limit_blind(creature_ptr) || cmd_limit_confused(creature_ptr))
             return;
 
-        exe_read(creature_ptr, item, TRUE);
+        exe_read(creature_ptr, item, true);
         break;
     case TV_SHOT:
     case TV_ARROW:

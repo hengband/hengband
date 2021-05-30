@@ -327,9 +327,9 @@ bool iskanji2(concptr s, int x)
             i++;
     }
     if ((x == i) && iskanji(s[x]))
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -342,9 +342,9 @@ static bool is_ascii_str(concptr str)
     for (; *str; str++) {
         int ch = *str;
         if (!(0x00 < ch && ch <= 0x7f))
-            return FALSE;
+            return false;
     }
-    return TRUE;
+    return true;
 }
 
 #if defined(EUC)
@@ -489,17 +489,17 @@ static bool utf8_to_sys(char *utf8_str, char *sys_str_buffer, size_t sys_str_buf
     /* UTF-8 -> UTF-16 */
     if (MultiByteToWideChar(CP_UTF8, 0, utf8_str, input_len, utf16buf, input_len) == 0) {
         C_KILL(utf16buf, input_len, WCHAR);
-        return FALSE;
+        return false;
     }
 
     /* UTF-8 -> SJIS(CP932) */
     if (WideCharToMultiByte(932, 0, utf16buf, -1, sys_str_buffer, sys_str_buflen, NULL, NULL) == 0) {
         C_KILL(utf16buf, input_len, WCHAR);
-        return FALSE;
+        return false;
     }
 
     C_KILL(utf16buf, input_len, WCHAR);
-    return TRUE;
+    return true;
 
 #endif
 }

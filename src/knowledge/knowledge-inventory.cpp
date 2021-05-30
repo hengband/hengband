@@ -80,15 +80,15 @@ static bool determine_spcial_item_type(object_type *o_ptr, tval_type tval)
 static bool check_item_knowledge(object_type *o_ptr, tval_type tval)
 {
     if (o_ptr->k_idx == 0)
-        return FALSE;
+        return false;
     if (o_ptr->tval != tval)
-        return FALSE;
+        return false;
     if (!object_is_known(o_ptr))
-        return FALSE;
+        return false;
     if (!determine_spcial_item_type(o_ptr, tval))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -289,6 +289,6 @@ void do_cmd_knowledge_inventory(player_type *creature_ptr)
     }
 
     angband_fclose(fff);
-    (void)show_file(creature_ptr, TRUE, file_name, _("*鑑定*済み武器/防具の耐性リスト", "Resistances of *identified* equipment"), 0, 0);
+    (void)show_file(creature_ptr, true, file_name, _("*鑑定*済み武器/防具の耐性リスト", "Resistances of *identified* equipment"), 0, 0);
     fd_kill(file_name);
 }

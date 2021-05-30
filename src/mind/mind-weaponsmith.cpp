@@ -20,18 +20,18 @@ bool item_tester_hook_melee_ammo(player_type *player_ptr, object_type *o_ptr)
     case TV_BOLT:
     case TV_ARROW:
     case TV_SHOT: {
-        return TRUE;
+        return true;
     }
     case TV_SWORD: {
         if (o_ptr->sval != SV_POISON_NEEDLE)
-            return TRUE;
+            return true;
     }
 
     default:
         break;
     }
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -46,7 +46,7 @@ bool object_is_smith(player_type *player_ptr, object_type *o_ptr)
     (void)player_ptr;
 
     if (object_is_weapon_armour_ammo(player_ptr, o_ptr) && o_ptr->xtra3)
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }

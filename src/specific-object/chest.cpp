@@ -71,7 +71,7 @@ void chest_death(player_type *owner_ptr, bool scatter, POSITION y, POSITION x, O
 	if (o_ptr->sval == SV_CHEST_KANDUME)
 	{
 		number = 5;
-		small = FALSE;
+		small = false;
 		mode |= AM_GREAT;
 		floor_ptr->object_level = o_ptr->xtra3;
 	}
@@ -211,7 +211,7 @@ void chest_trap(player_type *target_ptr, POSITION y, POSITION x, OBJECT_IDX o_id
 		for (i = 0; i < num; i++)
 		{
 			if (randint1(100)<target_ptr->current_floor_ptr->dun_level)
-				activate_hi_summon(target_ptr, target_ptr->y, target_ptr->x, FALSE);
+				activate_hi_summon(target_ptr, target_ptr->y, target_ptr->x, false);
 			else
 				(void)summon_specific(target_ptr, 0, y, x, mon_level, SUMMON_NONE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 		}
@@ -345,7 +345,7 @@ void chest_trap(player_type *target_ptr, POSITION y, POSITION x, OBJECT_IDX o_id
 	if ((trap & (CHEST_SCATTER)) && o_ptr->k_idx)
 	{
 		msg_print(_("宝箱の中身はダンジョンじゅうに散乱した！", "The contents of the chest scatter all over the dungeon!"));
-		chest_death(target_ptr, TRUE, y, x, o_idx);
+		chest_death(target_ptr, true, y, x, o_idx);
 		o_ptr->pval = 0;
 	}
 }

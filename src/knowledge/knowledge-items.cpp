@@ -52,13 +52,13 @@ void do_cmd_knowledge_artifacts(player_type *player_ptr)
 
     for (ARTIFACT_IDX k = 0; k < max_a_idx; k++) {
         artifact_type *a_ptr = &a_info[k];
-        okay[k] = FALSE;
+        okay[k] = false;
         if (a_ptr->name.empty())
             continue;
         if (!a_ptr->cur_num)
             continue;
 
-        okay[k] = TRUE;
+        okay[k] = true;
     }
 
     for (POSITION y = 0; y < player_ptr->current_floor_ptr->height; y++) {
@@ -72,7 +72,7 @@ void do_cmd_knowledge_artifacts(player_type *player_ptr)
                 if (object_is_known(o_ptr))
                     continue;
 
-                okay[o_ptr->name1] = FALSE;
+                okay[o_ptr->name1] = false;
             }
         }
     }
@@ -86,7 +86,7 @@ void do_cmd_knowledge_artifacts(player_type *player_ptr)
         if (object_is_known(o_ptr))
             continue;
 
-        okay[o_ptr->name1] = FALSE;
+        okay[o_ptr->name1] = false;
     }
 
     int n = 0;
@@ -118,7 +118,7 @@ void do_cmd_knowledge_artifacts(player_type *player_ptr)
     C_KILL(who, max_a_idx, ARTIFACT_IDX);
     C_KILL(okay, max_a_idx, bool);
     angband_fclose(fff);
-    (void)show_file(player_ptr, TRUE, file_name, _("既知の伝説のアイテム", "Artifacts Seen"), 0, 0);
+    (void)show_file(player_ptr, true, file_name, _("既知の伝説のアイテム", "Artifacts Seen"), 0, 0);
     fd_kill(file_name);
 }
 
@@ -250,7 +250,7 @@ void do_cmd_knowledge_objects(player_type *creature_ptr, bool *need_redraw, bool
     int object_cnt;
     OBJECT_IDX *object_idx;
 
-    bool visual_list = FALSE;
+    bool visual_list = false;
     TERM_COLOR attr_top = 0;
     byte char_left = 0;
     byte mode;
@@ -302,8 +302,8 @@ void do_cmd_knowledge_objects(player_type *creature_ptr, bool *need_redraw, bool
     IDX grp_cur = 0;
     IDX grp_top = 0;
     IDX object_cur = object_top = 0;
-    bool flag = FALSE;
-    bool redraw = TRUE;
+    bool flag = false;
+    bool redraw = true;
     int column = 0;
     while (!flag) {
         object_kind *k_ptr, *flavor_k_ptr;
@@ -339,7 +339,7 @@ void do_cmd_knowledge_objects(player_type *creature_ptr, bool *need_redraw, bool
                 }
             }
 
-            redraw = FALSE;
+            redraw = false;
         }
 
         if (direct_k_idx < 0) {
@@ -412,7 +412,7 @@ void do_cmd_knowledge_objects(player_type *creature_ptr, bool *need_redraw, bool
                 case '\n':
                 case '\r':
                 case ESCAPE:
-                    flag = TRUE;
+                    flag = true;
                     break;
                 }
             }
@@ -421,7 +421,7 @@ void do_cmd_knowledge_objects(player_type *creature_ptr, bool *need_redraw, bool
 
         switch (ch) {
         case ESCAPE: {
-            flag = TRUE;
+            flag = true;
             break;
         }
 
@@ -429,7 +429,7 @@ void do_cmd_knowledge_objects(player_type *creature_ptr, bool *need_redraw, bool
         case 'r': {
             if (!visual_list && !visual_only && (grp_cnt > 0)) {
                 desc_obj_fake(creature_ptr, object_idx[object_cur]);
-                redraw = TRUE;
+                redraw = true;
             }
 
             break;

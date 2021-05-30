@@ -9,4 +9,4 @@ s16b autosave_freq; /* Autosave frequency */
 bool use_sound; /* The "sound" mode is enabled */
 bool use_music; /* The "music" mode is enabled */
 bool use_graphics; /* The "graphics" mode is enabled */
-bool use_bigtile = FALSE;
+bool use_bigtile = false;

@@ -56,7 +56,7 @@ bool update_player(player_type *caster_ptr)
 {
     caster_ptr->update |= PU_COMBINE | PU_REORDER;
     caster_ptr->window_flags |= PW_INVEN;
-    return TRUE;
+    return true;
 }
 
 bool redraw_player(player_type *caster_ptr)
@@ -68,5 +68,5 @@ bool redraw_player(player_type *caster_ptr)
     caster_ptr->redraw |= PR_MANA;
     caster_ptr->update |= PU_COMBINE | PU_REORDER;
     caster_ptr->window_flags |= PW_INVEN;
-    return TRUE;
+    return true;
 }

@@ -90,7 +90,7 @@ static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, b
     }
 
     if (disturb_minor)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, false, false);
 
     describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     if (slot >= INVEN_MAIN_HAND) {
@@ -132,7 +132,7 @@ static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, b
 void sense_inventory1(player_type *creature_ptr)
 {
     PLAYER_LEVEL plev = creature_ptr->lev;
-    bool heavy = FALSE;
+    bool heavy = false;
     object_type *o_ptr;
     if (creature_ptr->confused)
         return;
@@ -145,14 +145,14 @@ void sense_inventory1(player_type *creature_ptr)
         if (0 != randint0(9000L / (plev * plev + 40)))
             return;
 
-        heavy = TRUE;
+        heavy = true;
         break;
     }
     case CLASS_SMITH: {
         if (0 != randint0(6000L / (plev * plev + 50)))
             return;
 
-        heavy = TRUE;
+        heavy = true;
         break;
     }
     case CLASS_MAGE:
@@ -177,14 +177,14 @@ void sense_inventory1(player_type *creature_ptr)
         if (0 != randint0(20000L / (plev * plev + 40)))
             return;
 
-        heavy = TRUE;
+        heavy = true;
         break;
     }
     case CLASS_RANGER: {
         if (0 != randint0(95000L / (plev * plev + 40)))
             return;
 
-        heavy = TRUE;
+        heavy = true;
         break;
     }
     case CLASS_PALADIN:
@@ -192,7 +192,7 @@ void sense_inventory1(player_type *creature_ptr)
         if (0 != randint0(77777L / (plev * plev + 40)))
             return;
 
-        heavy = TRUE;
+        heavy = true;
         break;
     }
     case CLASS_WARRIOR_MAGE:
@@ -215,7 +215,7 @@ void sense_inventory1(player_type *creature_ptr)
         if (0 != randint0(80000L / (plev * plev + 40)))
             return;
 
-        heavy = TRUE;
+        heavy = true;
         break;
     }
     case CLASS_MONK:
@@ -229,7 +229,7 @@ void sense_inventory1(player_type *creature_ptr)
         if (0 != randint0(20000L / ((plev + 50) * (plev + 50))))
             return;
 
-        heavy = TRUE;
+        heavy = true;
         break;
     }
     case CLASS_BEASTMASTER: {
@@ -239,7 +239,7 @@ void sense_inventory1(player_type *creature_ptr)
         break;
     }
     case CLASS_BERSERKER: {
-        heavy = TRUE;
+        heavy = true;
         break;
     }
 
@@ -248,10 +248,10 @@ void sense_inventory1(player_type *creature_ptr)
     }
 
     if (compare_virtue(creature_ptr, V_KNOWLEDGE, 100, VIRTUE_LARGE))
-        heavy = TRUE;
+        heavy = true;
 
     for (INVENTORY_IDX i = 0; i < INVEN_TOTAL; i++) {
-        bool okay = FALSE;
+        bool okay = false;
 
         o_ptr = &creature_ptr->inventory_list[i];
 
@@ -277,7 +277,7 @@ void sense_inventory1(player_type *creature_ptr)
         case TV_HARD_ARMOR:
         case TV_DRAG_ARMOR:
         case TV_CARD: {
-            okay = TRUE;
+            okay = true;
             break;
         }
 
@@ -291,7 +291,7 @@ void sense_inventory1(player_type *creature_ptr)
             continue;
 
         if (has_good_luck(creature_ptr) && !randint0(13)) {
-            heavy = TRUE;
+            heavy = true;
         }
 
         sense_inventory_aux(creature_ptr, i, heavy);
@@ -372,7 +372,7 @@ void sense_inventory2(player_type *creature_ptr)
     }
 
     for (INVENTORY_IDX i = 0; i < INVEN_TOTAL; i++) {
-        bool okay = FALSE;
+        bool okay = false;
         o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
@@ -382,7 +382,7 @@ void sense_inventory2(player_type *creature_ptr)
         case TV_AMULET:
         case TV_LITE:
         case TV_FIGURINE: {
-            okay = TRUE;
+            okay = true;
             break;
         }
 
@@ -395,7 +395,7 @@ void sense_inventory2(player_type *creature_ptr)
         if ((i < INVEN_MAIN_HAND) && (0 != randint0(5)))
             continue;
 
-        sense_inventory_aux(creature_ptr, i, TRUE);
+        sense_inventory_aux(creature_ptr, i, true);
     }
 }
 

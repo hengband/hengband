@@ -207,8 +207,8 @@ void display_map(player_type *player_ptr, int *cy, int *cx)
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     yrat = (floor_ptr->height + hgt - 1) / hgt;
     xrat = (floor_ptr->width + wid - 1) / wid;
-    view_special_lite = FALSE;
-    view_granite_lite = FALSE;
+    view_special_lite = false;
+    view_granite_lite = false;
 
     using std::vector;
     vector<vector<TERM_COLOR>> ma(hgt + 2, vector<TERM_COLOR>(wid + 2, TERM_WHITE));

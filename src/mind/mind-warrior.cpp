@@ -16,8 +16,8 @@
 bool hit_and_away(player_type *caster_ptr)
 {
     DIRECTION dir;
-    if (!get_direction(caster_ptr, &dir, FALSE, FALSE))
-        return FALSE;
+    if (!get_direction(caster_ptr, &dir, false, false))
+        return false;
     POSITION y = caster_ptr->y + ddy[dir];
     POSITION x = caster_ptr->x + ddx[dir];
     if (caster_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
@@ -26,12 +26,12 @@ bool hit_and_away(player_type *caster_ptr)
             msg_print(_("うまく逃げられなかった。", "You failed to run away."));
         else
             teleport_player(caster_ptr, 30, TELEPORT_SPONTANEOUS);
-        return TRUE;
+        return true;
     }
 
     msg_print(_("その方向にはモンスターはいません。", "You don't see any monster in this direction"));
     msg_print(NULL);
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -58,5 +58,5 @@ bool sword_dancing(player_type *creature_ptr)
         }
     }
 
-    return TRUE;
+    return true;
 }

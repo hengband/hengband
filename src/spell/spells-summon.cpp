@@ -77,10 +77,10 @@ bool trump_summoning(player_type *caster_ptr, int num, bool pet, POSITION y, POS
         who = 0;
     }
 
-    bool success = FALSE;
+    bool success = false;
     for (int i = 0; i < num; i++) {
         if (summon_specific(caster_ptr, who, y, x, lev, type, mode))
-            success = TRUE;
+            success = true;
     }
 
     if (!success) {
@@ -102,7 +102,7 @@ bool cast_summon_demon(player_type *caster_ptr, int power)
         flg |= PM_ALLOW_GROUP;
 
     if (!summon_specific(caster_ptr, (pet ? -1 : 0), caster_ptr->y, caster_ptr->x, power, SUMMON_DEMON, flg))
-        return TRUE;
+        return true;
 
     msg_print(_("硫黄の悪臭が充満した。", "The area fills with a stench of sulphur and brimstone."));
     if (pet) {
@@ -111,7 +111,7 @@ bool cast_summon_demon(player_type *caster_ptr, int power)
         msg_print(_("「卑しき者よ、我は汝の下僕にあらず！ お前の魂を頂くぞ！」", "'NON SERVIAM! Wretch! I shall feast on thy mortal soul!'"));
     }
 
-    return TRUE;
+    return true;
 }
 
 bool cast_summon_undead(player_type *creature_ptr, int power)
@@ -135,7 +135,7 @@ bool cast_summon_undead(player_type *creature_ptr, int power)
         else
             msg_print(_("死者が甦った。眠りを妨げるあなたを罰するために！", "'The dead arise... to punish you for disturbing them!'"));
     }
-    return TRUE;
+    return true;
 }
 
 bool cast_summon_hound(player_type *creature_ptr, int power)
@@ -154,7 +154,7 @@ bool cast_summon_hound(player_type *creature_ptr, int power)
             msg_print(_("ハウンドはあなたに牙を向けている！", "A group of hounds appear as your enemies!"));
     }
 
-    return TRUE;
+    return true;
 }
 
 bool cast_summon_elemental(player_type *creature_ptr, int power)
@@ -176,7 +176,7 @@ bool cast_summon_elemental(player_type *creature_ptr, int power)
             msg_print(_("それをコントロールできなかった！", "You fail to control it!"));
     }
 
-    return TRUE;
+    return true;
 }
 
 bool cast_summon_octopus(player_type *creature_ptr)
@@ -192,7 +192,7 @@ bool cast_summon_octopus(player_type *creature_ptr)
             msg_print(_("蛸はあなたを睨んでいる！", "A group of octopuses appear as your enemies!"));
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -206,12 +206,12 @@ bool item_tester_offer(player_type *creature_ptr, object_type *o_ptr)
     (void)creature_ptr;
 
     if (o_ptr->tval != TV_CORPSE)
-        return FALSE;
+        return false;
     if (o_ptr->sval != SV_CORPSE)
-        return FALSE;
+        return false;
     if (angband_strchr("pht", r_info[o_ptr->pval].d_char))
-        return TRUE;
-    return FALSE;
+        return true;
+    return false;
 }
 
 /*!
@@ -227,7 +227,7 @@ bool cast_summon_greater_demon(player_type *caster_ptr)
     object_type *o_ptr;
     o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_NONE);
     if (!o_ptr)
-        return FALSE;
+        return false;
 
     PLAYER_LEVEL plev = caster_ptr->lev;
     int summon_lev = plev * 2 / 3 + r_info[o_ptr->pval].level;
@@ -240,7 +240,7 @@ bool cast_summon_greater_demon(player_type *caster_ptr)
         msg_print(_("悪魔は現れなかった。", "No Greater Demon arrives."));
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -332,12 +332,12 @@ void mitokohmon(player_type *kohmon_ptr)
     msg_format(
         _("「者ども、ひかえおろう！！！このお方をどなたとこころえる。」", "%^s says 'WHO do you think this person is! Bow your head, down to your knees!'"),
         sukekakusan);
-    sukekaku = TRUE;
+    sukekaku = true;
     stun_monsters(kohmon_ptr, 120);
     confuse_monsters(kohmon_ptr, 120);
     turn_monsters(kohmon_ptr, 120);
     stasis_monsters(kohmon_ptr, 120);
-    sukekaku = FALSE;
+    sukekaku = false;
 }
 
 /*!
@@ -352,13 +352,13 @@ void mitokohmon(player_type *kohmon_ptr)
 int activate_hi_summon(player_type *caster_ptr, POSITION y, POSITION x, bool can_pet)
 {
     BIT_FLAGS mode = PM_ALLOW_GROUP;
-    bool pet = FALSE;
+    bool pet = false;
     if (can_pet) {
         if (one_in_(4)) {
             mode |= PM_FORCE_FRIENDLY;
         } else {
             mode |= PM_FORCE_PET;
-            pet = TRUE;
+            pet = true;
         }
     }
 
@@ -514,9 +514,9 @@ void cast_invoke_spirits(player_type *caster_ptr, DIRECTION dir)
     } else if (die < 104) {
         earthquake(caster_ptr, caster_ptr->y, caster_ptr->x, 12, 0);
     } else if (die < 106) {
-        (void)destroy_area(caster_ptr, caster_ptr->y, caster_ptr->x, 13 + randint0(5), FALSE);
+        (void)destroy_area(caster_ptr, caster_ptr->y, caster_ptr->x, 13 + randint0(5), false);
     } else if (die < 108) {
-        symbol_genocide(caster_ptr, plev + 50, TRUE);
+        symbol_genocide(caster_ptr, plev + 50, true);
     } else if (die < 110) {
         dispel_monsters(caster_ptr, 120);
     } else {

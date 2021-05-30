@@ -26,7 +26,7 @@ bool rustproof(player_type *caster_ptr)
     OBJECT_IDX item;
     object_type *o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, TV_NONE);
     if (o_ptr == NULL)
-        return FALSE;
+        return false;
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(caster_ptr, o_name, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
@@ -46,5 +46,5 @@ bool rustproof(player_type *caster_ptr)
     msg_format("%s %s %s now protected against corrosion.", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "are" : "is"));
 #endif
     calc_android_exp(caster_ptr);
-    return TRUE;
+    return true;
 }

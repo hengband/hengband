@@ -64,7 +64,7 @@ void verify_equip_slot(player_type *owner_ptr, INVENTORY_IDX item)
         return;
     }
 
-    if ((empty_hands(owner_ptr, FALSE) & EMPTY_HAND_MAIN) || object_is_cursed(o_ptr))
+    if ((empty_hands(owner_ptr, false) & EMPTY_HAND_MAIN) || object_is_cursed(o_ptr))
         return;
 
     new_o_ptr = &owner_ptr->inventory_list[INVEN_SUB_HAND];

@@ -102,7 +102,7 @@ static bool detonation(player_type *creature_ptr)
     take_hit(creature_ptr, DAMAGE_NOESCAPE, damroll(50, 20), _("爆発の薬", "a potion of Detonation"));
     (void)set_stun(creature_ptr, creature_ptr->stun + 75);
     (void)set_cut(creature_ptr, creature_ptr->cut + 5000);
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -238,12 +238,12 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
             msg_print(_("身も心も弱ってきて、精気が抜けていくようだ。", "Your nerves and muscles feel weak and lifeless!"));
             take_hit(creature_ptr, DAMAGE_LOSELIFE, damroll(10, 10), _("破滅の薬", "a potion of Ruination"));
 
-            (void)dec_stat(creature_ptr, A_DEX, 25, TRUE);
-            (void)dec_stat(creature_ptr, A_WIS, 25, TRUE);
-            (void)dec_stat(creature_ptr, A_CON, 25, TRUE);
-            (void)dec_stat(creature_ptr, A_STR, 25, TRUE);
-            (void)dec_stat(creature_ptr, A_CHR, 25, TRUE);
-            (void)dec_stat(creature_ptr, A_INT, 25, TRUE);
+            (void)dec_stat(creature_ptr, A_DEX, 25, true);
+            (void)dec_stat(creature_ptr, A_WIS, 25, true);
+            (void)dec_stat(creature_ptr, A_CON, 25, true);
+            (void)dec_stat(creature_ptr, A_STR, 25, true);
+            (void)dec_stat(creature_ptr, A_CHR, 25, true);
+            (void)dec_stat(creature_ptr, A_INT, 25, true);
             ident = true;
             break;
 
@@ -366,11 +366,11 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
             break;
 
         case SV_POTION_LIFE:
-            ident = life_stream(creature_ptr, TRUE, TRUE);
+            ident = life_stream(creature_ptr, true, true);
             break;
 
         case SV_POTION_RESTORE_MANA:
-            ident = restore_mana(creature_ptr, TRUE);
+            ident = restore_mana(creature_ptr, true);
             break;
 
         case SV_POTION_RESTORE_EXP:
@@ -474,7 +474,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
             wiz_lite(creature_ptr, false);
             (void)do_inc_stat(creature_ptr, A_INT);
             (void)do_inc_stat(creature_ptr, A_WIS);
-            (void)detect_traps(creature_ptr, DETECT_RAD_DEFAULT, TRUE);
+            (void)detect_traps(creature_ptr, DETECT_RAD_DEFAULT, true);
             (void)detect_doors(creature_ptr, DETECT_RAD_DEFAULT);
             (void)detect_stairs(creature_ptr, DETECT_RAD_DEFAULT);
             (void)detect_treasure(creature_ptr, DETECT_RAD_DEFAULT);
@@ -543,7 +543,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
             msg_print(_("「オクレ兄さん！」", "Brother OKURE!"));
             msg_print(NULL);
             creature_ptr->tsuyoshi = 1;
-            (void)set_tsuyoshi(creature_ptr, 0, TRUE);
+            (void)set_tsuyoshi(creature_ptr, 0, true);
             if (!has_resist_chaos(creature_ptr)) {
                 (void)set_image(creature_ptr, 50 + randint1(50));
             }

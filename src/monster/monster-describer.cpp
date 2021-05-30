@@ -29,11 +29,11 @@ void monster_desc(player_type *player_ptr, char *desc, monster_type *m_ptr, BIT_
     r_ptr = &r_info[m_ptr->ap_r_idx];
     concptr name = (mode & MD_TRUE_NAME) ? real_r_ptr(m_ptr)->name.c_str() : r_ptr->name.c_str();
     GAME_TEXT silly_name[1024];
-    bool named = FALSE;
+    bool named = false;
     if (player_ptr->image && !(mode & MD_IGNORE_HALLU)) {
         if (one_in_(2)) {
             if (!get_rnd_line(_("silly_j.txt", "silly.txt"), m_ptr->r_idx, silly_name))
-                named = TRUE;
+                named = true;
         }
 
         if (!named) {

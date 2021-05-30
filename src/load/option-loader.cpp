@@ -43,19 +43,19 @@ void rd_options(void)
     rd_u16b(&c);
 
     if (c & 0x0002)
-        current_world_ptr->wizard = TRUE;
+        current_world_ptr->wizard = true;
 
-    cheat_peek = (c & 0x0100) ? TRUE : FALSE;
-    cheat_hear = (c & 0x0200) ? TRUE : FALSE;
-    cheat_room = (c & 0x0400) ? TRUE : FALSE;
-    cheat_xtra = (c & 0x0800) ? TRUE : FALSE;
-    cheat_know = (c & 0x1000) ? TRUE : FALSE;
-    cheat_live = (c & 0x2000) ? TRUE : FALSE;
-    cheat_save = (c & 0x4000) ? TRUE : FALSE;
-    cheat_diary_output = (c & 0x8000) ? TRUE : FALSE;
-    cheat_turn = (c & 0x0080) ? TRUE : FALSE;
-    cheat_sight = (c & 0x0040) ? TRUE : FALSE;
-    cheat_immortal = (c & 0x0020) ? TRUE : FALSE;
+    cheat_peek = (c & 0x0100) ? true : false;
+    cheat_hear = (c & 0x0200) ? true : false;
+    cheat_room = (c & 0x0400) ? true : false;
+    cheat_xtra = (c & 0x0800) ? true : false;
+    cheat_know = (c & 0x1000) ? true : false;
+    cheat_live = (c & 0x2000) ? true : false;
+    cheat_save = (c & 0x4000) ? true : false;
+    cheat_diary_output = (c & 0x8000) ? true : false;
+    cheat_turn = (c & 0x0080) ? true : false;
+    cheat_sight = (c & 0x0040) ? true : false;
+    cheat_immortal = (c & 0x0020) ? true : false;
 
     rd_byte((byte *)&autosave_l);
     rd_byte((byte *)&autosave_t);

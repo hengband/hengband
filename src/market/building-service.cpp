@@ -17,20 +17,20 @@
 bool is_owner(player_type *player_ptr, building_type *bldg)
 {
     if (bldg->member_class[player_ptr->pclass] == BUILDING_OWNER) {
-        return TRUE;
+        return true;
     }
 
     if (bldg->member_race[player_ptr->prace] == BUILDING_OWNER) {
-        return TRUE;
+        return true;
     }
 
     REALM_IDX realm1 = player_ptr->realm1;
     REALM_IDX realm2 = player_ptr->realm2;
     if ((is_magic(realm1) && (bldg->member_realm[realm1] == BUILDING_OWNER)) || (is_magic(realm2) && (bldg->member_realm[realm2] == BUILDING_OWNER))) {
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -46,28 +46,28 @@ bool is_owner(player_type *player_ptr, building_type *bldg)
 bool is_member(player_type *player_ptr, building_type *bldg)
 {
     if (bldg->member_class[player_ptr->pclass]) {
-        return TRUE;
+        return true;
     }
 
     if (bldg->member_race[player_ptr->prace]) {
-        return TRUE;
+        return true;
     }
 
     REALM_IDX realm1 = player_ptr->realm1;
     REALM_IDX realm2 = player_ptr->realm2;
     if ((is_magic(realm1) && bldg->member_realm[realm1]) || (is_magic(realm2) && bldg->member_realm[realm2])) {
-        return TRUE;
+        return true;
     }
 
     if (player_ptr->pclass != CLASS_SORCERER)
-        return FALSE;
+        return false;
 
     for (int i = 0; i < MAX_MAGIC; i++) {
         if (bldg->member_realm[i + 1])
-            return TRUE;
+            return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 /*!

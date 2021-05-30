@@ -84,13 +84,13 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     int rlev = r_ptr->level;
-    bool ignore_wraith_form = FALSE;
+    bool ignore_wraith_form = false;
 
     /* Vulnerability, resistance and immunity */
     switch (typ) {
     case GF_ELEC:
         if (has_immune_elec(target_ptr)) {
-            ignore_wraith_form = TRUE;
+            ignore_wraith_form = true;
         }
         dam = dam * calc_elec_damage_rate(target_ptr) / 100;
         break;
@@ -101,7 +101,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
 
     case GF_ACID:
         if (has_immune_acid(target_ptr)) {
-            ignore_wraith_form = TRUE;
+            ignore_wraith_form = true;
         }
         dam = dam * calc_acid_damage_rate(target_ptr) / 100;
         break;
@@ -109,26 +109,26 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
     case GF_COLD:
     case GF_ICE:
         if (has_immune_cold(target_ptr)) {
-            ignore_wraith_form = TRUE;
+            ignore_wraith_form = true;
         }
         dam = dam * calc_cold_damage_rate(target_ptr) / 100;
         break;
 
     case GF_FIRE:
         if (has_immune_fire(target_ptr)) {
-            ignore_wraith_form = TRUE;
+            ignore_wraith_form = true;
         }
         dam = dam * calc_fire_damage_rate(target_ptr) / 100;
         break;
 
     case GF_PSY_SPEAR:
-        ignore_wraith_form = TRUE;
+        ignore_wraith_form = true;
         break;
 
     case GF_ARROW:
         if (!target_ptr->blind && (has_invuln_arrow(target_ptr))) {
             dam = 0;
-            ignore_wraith_form = TRUE;
+            ignore_wraith_form = true;
         }
         break;
 
@@ -139,7 +139,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
     case GF_DARK:
         dam = dam * calc_dark_damage_rate(target_ptr, CALC_MAX) / 100;
         if (has_immune_dark(target_ptr) || target_ptr->wraith_form)
-            ignore_wraith_form = TRUE;
+            ignore_wraith_form = true;
         break;
 
     case GF_SHARDS:
@@ -161,7 +161,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
     case GF_NETHER:
         dam = dam * calc_nether_damage_rate(target_ptr, CALC_MAX) / 100;
         if (is_specific_player_race(target_ptr, RACE_SPECTRE)) {
-            ignore_wraith_form = TRUE;
+            ignore_wraith_form = true;
             dam = 0;
         }
         break;
@@ -193,7 +193,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
     case GF_DEATH_RAY:
         dam = dam * calc_deathray_damage_rate(target_ptr, CALC_MAX) / 100;
         if (dam == 0)
-            ignore_wraith_form = TRUE;
+            ignore_wraith_form = true;
         break;
 
     case GF_HOLY_FIRE:
@@ -208,7 +208,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
     case GF_BRAIN_SMASH:
         if (100 + rlev / 2 <= MAX(5, target_ptr->skill_sav)) {
             dam = 0;
-            ignore_wraith_form = TRUE;
+            ignore_wraith_form = true;
         }
 
         break;
@@ -219,7 +219,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
     case GF_HAND_DOOM:
         if (100 + rlev / 2 <= target_ptr->skill_sav) {
             dam = 0;
-            ignore_wraith_form = TRUE;
+            ignore_wraith_form = true;
         }
 
         break;
@@ -227,7 +227,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
     case GF_CAUSE_4:
         if ((100 + rlev / 2 <= target_ptr->skill_sav) && (m_ptr->r_idx != MON_KENSHIROU)) {
             dam = 0;
-            ignore_wraith_form = TRUE;
+            ignore_wraith_form = true;
         }
 
         break;
@@ -278,7 +278,7 @@ static int blow_damcalc(monster_type *m_ptr, player_type *target_ptr, monster_bl
     }
 
     ARMOUR_CLASS ac = target_ptr->ac + target_ptr->to_a;
-    bool check_wraith_form = TRUE;
+    bool check_wraith_form = true;
     switch (blow_ptr->effect) {
     case RBE_SUPERHURT: {
         int tmp_dam = dam - (dam * ((ac < 150) ? ac : 150) / 250);
@@ -294,30 +294,30 @@ static int blow_damcalc(monster_type *m_ptr, player_type *target_ptr, monster_bl
     case RBE_ACID:
         spell_damcalc(target_ptr, m_ptr, GF_ACID, dam, &dummy_max);
         dam = dummy_max;
-        check_wraith_form = FALSE;
+        check_wraith_form = false;
         break;
 
     case RBE_ELEC:
         spell_damcalc(target_ptr, m_ptr, GF_ELEC, dam, &dummy_max);
         dam = dummy_max;
-        check_wraith_form = FALSE;
+        check_wraith_form = false;
         break;
 
     case RBE_FIRE:
         spell_damcalc(target_ptr, m_ptr, GF_FIRE, dam, &dummy_max);
         dam = dummy_max;
-        check_wraith_form = FALSE;
+        check_wraith_form = false;
         break;
 
     case RBE_COLD:
         spell_damcalc(target_ptr, m_ptr, GF_COLD, dam, &dummy_max);
         dam = dummy_max;
-        check_wraith_form = FALSE;
+        check_wraith_form = false;
         break;
 
     case RBE_DR_MANA:
         dam = 0;
-        check_wraith_form = FALSE;
+        check_wraith_form = false;
         break;
 
     default:
@@ -482,7 +482,7 @@ bool process_warning(player_type *creature_ptr, POSITION xx, POSITION yy)
                 strcpy(o_name, _("体", "body")); /* Warning ability without item */
             msg_format(_("%sが鋭く震えた！", "Your %s pulsates sharply!"), o_name);
 
-            disturb(creature_ptr, FALSE, TRUE);
+            disturb(creature_ptr, false, true);
             return get_check(_("本当にこのまま進むか？", "Really want to go ahead? "));
         }
     } else
@@ -492,7 +492,7 @@ bool process_warning(player_type *creature_ptr, POSITION xx, POSITION yy)
     bool is_warning = (!easy_disarm && is_trap(creature_ptr, g_ptr->feat)) || (g_ptr->mimic && is_trap(creature_ptr, g_ptr->feat));
     is_warning &= !one_in_(13);
     if (!is_warning)
-        return TRUE;
+        return true;
 
     object_type *o_ptr = choose_warning_item(creature_ptr);
     if (o_ptr != NULL)
@@ -500,6 +500,6 @@ bool process_warning(player_type *creature_ptr, POSITION xx, POSITION yy)
     else
         strcpy(o_name, _("体", "body")); /* Warning ability without item */
     msg_format(_("%sが鋭く震えた！", "Your %s pulsates sharply!"), o_name);
-    disturb(creature_ptr, FALSE, TRUE);
+    disturb(creature_ptr, false, true);
     return get_check(_("本当にこのまま進むか？", "Really want to go ahead? "));
 }

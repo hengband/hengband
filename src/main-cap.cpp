@@ -467,7 +467,7 @@ static int            game_local_chars;
 /*
  * Are we active?  Not really needed.
  */
-static int active = FALSE;
+static int active = false;
 
 
 /*
@@ -714,7 +714,7 @@ static errr Term_xtra_cap_alive(int v)
 		keymap_norm();
 
 		/* No longer active */
-		active = FALSE;
+		active = false;
 	}
 
 	/* Resume */
@@ -732,7 +732,7 @@ static errr Term_xtra_cap_alive(int v)
 		keymap_game();
 
 		/* Now we are active */
-		active = TRUE;
+		active = true;
 	}
 
 	/* Success */
@@ -907,7 +907,7 @@ static errr Term_xtra_cap(int n, int v)
 
 		/* Flush events */
 		case TERM_XTRA_FLUSH:
-		while (!Term_xtra_cap_event(FALSE));
+		while (!Term_xtra_cap_event(false));
 		return (0);
 
 		/* Delay */
@@ -944,7 +944,7 @@ static void Term_init_cap(term *t)
 	curs_set(1);
 
 	/* Assume active */
-	active = TRUE;
+	active = true;
 }
 
 
@@ -965,7 +965,7 @@ static void Term_nuke_cap(term *t)
 	keymap_norm();
 
 	/* No longer active */
-	active = FALSE;
+	active = false;
 }
 
 
@@ -1015,7 +1015,7 @@ errr init_cap(void)
 	term_init(t, 80, 24, 256);
 
 	/* Avoid the bottom right corner */
-	t->icky_corner = TRUE;
+	t->icky_corner = true;
 
 	/* Erase with "white space" */
 	t->attr_blank = TERM_WHITE;

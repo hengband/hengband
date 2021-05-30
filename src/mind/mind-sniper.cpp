@@ -134,11 +134,11 @@ static bool snipe_concentrate(player_type *creature_ptr)
         creature_ptr->concent++;
 
     msg_format(_("集中した。(集中度 %d)", "You concentrate deeply. (lvl %d)"), creature_ptr->concent);
-    creature_ptr->reset_concent = FALSE;
+    creature_ptr->reset_concent = false;
 
     creature_ptr->update |= (PU_BONUS | PU_MONSTERS);
     creature_ptr->redraw |= (PR_STATUS);
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -152,7 +152,7 @@ void reset_concentration(player_type *creature_ptr, bool msg)
     }
 
     creature_ptr->concent = 0;
-    creature_ptr->reset_concent = FALSE;
+    creature_ptr->reset_concent = false;
 
     creature_ptr->update |= (PU_BONUS | PU_MONSTERS);
     creature_ptr->redraw |= (PR_STATUS);
@@ -247,12 +247,12 @@ static int get_snipe_power(player_type *sniper_ptr, COMMAND_CODE *sn, bool only_
         /* Verify the spell */
         if ((snipe_powers[*sn].min_lev <= plev) && (snipe_powers[*sn].mana_cost <= (int)sniper_ptr->concent)) {
             /* Success */
-            return TRUE;
+            return true;
         }
     }
 
-    flag = FALSE;
-    redraw = FALSE;
+    flag = false;
+    redraw = false;
 
     for (i = 0; i < MAX_SNIPE_POWERS; i++) {
         if ((snipe_powers[i].min_lev <= plev) && ((only_browse) || (snipe_powers[i].mana_cost <= (int)sniper_ptr->concent))) {
@@ -273,7 +273,7 @@ static int get_snipe_power(player_type *sniper_ptr, COMMAND_CODE *sn, bool only_
     while (!flag) {
         if (choice == ESCAPE)
             choice = ' ';
-        else if (!get_com(out_val, &choice, FALSE))
+        else if (!get_com(out_val, &choice, false))
             break;
 
         /* Request redraw */
@@ -282,7 +282,7 @@ static int get_snipe_power(player_type *sniper_ptr, COMMAND_CODE *sn, bool only_
             if (!redraw) {
                 char psi_index[6];
                 char psi_desc[75];
-                redraw = TRUE;
+                redraw = true;
                 if (!only_browse)
                     screen_save();
 
@@ -323,7 +323,7 @@ static int get_snipe_power(player_type *sniper_ptr, COMMAND_CODE *sn, bool only_
             /* Hide the list */
             else {
                 /* Hide list */
-                redraw = FALSE;
+                redraw = false;
                 if (!only_browse)
                     screen_load();
             }
@@ -364,7 +364,7 @@ static int get_snipe_power(player_type *sniper_ptr, COMMAND_CODE *sn, bool only_
         }
 
         /* Stop the loop */
-        flag = TRUE;
+        flag = true;
     }
     if (redraw && !only_browse)
         screen_load();
@@ -374,7 +374,7 @@ static int get_snipe_power(player_type *sniper_ptr, COMMAND_CODE *sn, bool only_
 
     /* Abort if needed */
     if (!flag)
-        return FALSE;
+        return false;
 
     /* Save the choice */
     (*sn) = i;
@@ -382,7 +382,7 @@ static int get_snipe_power(player_type *sniper_ptr, COMMAND_CODE *sn, bool only_
     repeat_push(*sn);
 
     /* Success */
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -497,7 +497,7 @@ static bool cast_sniper_spell(player_type *sniper_ptr, int spell)
 
     if (o_ptr->tval != TV_BOW) {
         msg_print(_("弓を装備していない！", "You wield no bow!"));
-        return FALSE;
+        return false;
     }
 
     /* spell code */
@@ -505,9 +505,9 @@ static bool cast_sniper_spell(player_type *sniper_ptr, int spell)
     case 0: /* Concentration */
         sound(SOUND_ZAP);
         if (!snipe_concentrate(sniper_ptr))
-            return FALSE;
+            return false;
         PlayerEnergy(sniper_ptr).set_player_turn_energy(100);
-        return TRUE;
+        return true;
     case 1:
         snipe_type = SP_LITE;
         break;
@@ -578,7 +578,7 @@ void do_cmd_snipe(player_type *sniper_ptr)
     if (cmd_limit_stun(sniper_ptr))
         return;
 
-    if (!get_snipe_power(sniper_ptr, &n, FALSE))
+    if (!get_snipe_power(sniper_ptr, &n, false))
         return;
 
     cast = cast_sniper_spell(sniper_ptr, n);
@@ -601,8 +601,8 @@ void do_cmd_snipe_browse(player_type *sniper_ptr)
 
     screen_save();
 
-    while (TRUE) {
-        if (!get_snipe_power(sniper_ptr, &n, TRUE)) {
+    while (true) {
+        if (!get_snipe_power(sniper_ptr, &n, true)) {
             screen_load();
             return;
         }

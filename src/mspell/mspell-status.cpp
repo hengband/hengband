@@ -62,7 +62,7 @@ void spell_badstatus_message(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER
     monster_name(target_ptr, t_idx, t_name);
 
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
-        disturb(target_ptr, TRUE, TRUE);
+        disturb(target_ptr, true, true);
         if (target_ptr->blind)
             msg_format(msg1, m_name);
         else
@@ -84,7 +84,7 @@ void spell_badstatus_message(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER
         if (see_either) {
             msg_format(msg1, m_name, t_name);
         } else {
-            floor_ptr->monster_noise = TRUE;
+            floor_ptr->monster_noise = true;
         }
     }
 
@@ -120,14 +120,14 @@ MonsterSpellResult spell_RF5_DRAIN_MANA(player_type *target_ptr, POSITION y, POS
     monster_name(target_ptr, t_idx, t_name);
 
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
-        disturb(target_ptr, TRUE, TRUE);
+        disturb(target_ptr, true, true);
     } else if (TARGET_TYPE == MONSTER_TO_MONSTER && see_monster(target_ptr, m_idx)) {
         /* Basic message */
         msg_format(_("%^sは精神エネルギーを%sから吸いとった。", "%^s draws psychic energy from %s."), m_name, t_name);
     }
 
     const auto dam = monspell_damage(target_ptr, RF_ABILITY::DRAIN_MANA, m_idx, DAM_ROLL);
-    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_DRAIN_MANA, dam, 0, FALSE, TARGET_TYPE);
+    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_DRAIN_MANA, dam, 0, false, TARGET_TYPE);
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         update_smart_learn(target_ptr, m_idx, DRS_MANA);
 
@@ -157,7 +157,7 @@ MonsterSpellResult spell_RF5_MIND_BLAST(player_type *target_ptr, POSITION y, POS
     monster_name(target_ptr, t_idx, t_name);
 
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
-        disturb(target_ptr, TRUE, TRUE);
+        disturb(target_ptr, true, true);
         if (!seen)
             msg_print(_("何かがあなたの精神に念を放っているようだ。", "You feel something focusing on your mind."));
         else
@@ -167,7 +167,7 @@ MonsterSpellResult spell_RF5_MIND_BLAST(player_type *target_ptr, POSITION y, POS
     }
 
     const auto dam = monspell_damage(target_ptr, RF_ABILITY::MIND_BLAST, m_idx, DAM_ROLL);
-    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_MIND_BLAST, dam, 0, FALSE, TARGET_TYPE);
+    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_MIND_BLAST, dam, 0, false, TARGET_TYPE);
 
     auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
@@ -195,7 +195,7 @@ MonsterSpellResult spell_RF5_BRAIN_SMASH(player_type *target_ptr, POSITION y, PO
     monster_name(target_ptr, t_idx, t_name);
 
     if (TARGET_TYPE == MONSTER_TO_PLAYER) {
-        disturb(target_ptr, TRUE, TRUE);
+        disturb(target_ptr, true, true);
         if (!seen)
             msg_print(_("何かがあなたの精神に念を放っているようだ。", "You feel something focusing on your mind."));
         else
@@ -205,7 +205,7 @@ MonsterSpellResult spell_RF5_BRAIN_SMASH(player_type *target_ptr, POSITION y, PO
     }
 
     const auto dam = monspell_damage(target_ptr, RF_ABILITY::BRAIN_SMASH, m_idx, DAM_ROLL);
-    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_BRAIN_SMASH, dam, 0, FALSE, TARGET_TYPE);
+    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_BRAIN_SMASH, dam, 0, false, TARGET_TYPE);
 
     auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;
@@ -485,7 +485,7 @@ MonsterSpellResult spell_RF5_SLOW(MONSTER_IDX m_idx, player_type *target_ptr, MO
             _("しかし効力を跳ね返した！", "You resist the effects!"), resist, saving_throw, TARGET_TYPE);
 
         if (!resist && !saving_throw) {
-            (void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, FALSE);
+            (void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, false);
         }
 
         update_smart_learn(target_ptr, m_idx, DRS_FREE);
@@ -540,7 +540,7 @@ MonsterSpellResult spell_RF6_HEAL(player_type *target_ptr, MONSTER_IDX m_idx, MO
     char m_poss[10];
     monster_desc(target_ptr, m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 
-    disturb(target_ptr, TRUE, TRUE);
+    disturb(target_ptr, true, true);
 
     monspell_message_base(target_ptr, m_idx, t_idx, _("%^sが何かをつぶやいた。", "%^s mumbles."),
         _("%^sは自分の傷に念を集中した。", format("%%^s concentrates on %s wounds.", m_poss)),
@@ -614,7 +614,7 @@ MonsterSpellResult spell_RF6_INVULNER(player_type *target_ptr, MONSTER_IDX m_idx
     }
 
     if (!monster_invulner_remaining(m_ptr))
-        (void)set_monster_invulner(target_ptr, m_idx, randint1(4) + 4, FALSE);
+        (void)set_monster_invulner(target_ptr, m_idx, randint1(4) + 4, false);
 
     return MonsterSpellResult::make_valid();
 }
@@ -632,7 +632,7 @@ MonsterSpellResult spell_RF6_FORGET(player_type *target_ptr, MONSTER_IDX m_idx)
     GAME_TEXT m_name[MAX_NLEN];
     monster_name(target_ptr, m_idx, m_name);
 
-    disturb(target_ptr, TRUE, TRUE);
+    disturb(target_ptr, true, true);
 
     msg_format(_("%^sがあなたの記憶を消去しようとしている。", "%^s tries to blank your mind."), m_name);
 

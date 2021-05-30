@@ -242,14 +242,14 @@ void process_monk_attack(player_type *attacker_ptr, player_attack_type *pa_ptr)
 bool double_attack(player_type *creature_ptr)
 {
     DIRECTION dir;
-    if (!get_rep_dir(creature_ptr, &dir, FALSE))
-        return FALSE;
+    if (!get_rep_dir(creature_ptr, &dir, false))
+        return false;
     POSITION y = creature_ptr->y + ddy[dir];
     POSITION x = creature_ptr->x + ddx[dir];
     if (!creature_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
         msg_print(_("その方向にはモンスターはいません。", "You don't see any monster in this direction"));
         msg_print(NULL);
-        return TRUE;
+        return true;
     }
 
     if (one_in_(3))
@@ -266,5 +266,5 @@ bool double_attack(player_type *creature_ptr)
     }
 
     creature_ptr->energy_need += ENERGY_NEED();
-    return TRUE;
+    return true;
 }

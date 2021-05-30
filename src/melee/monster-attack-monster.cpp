@@ -144,16 +144,16 @@ static void aura_elec_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
 static bool check_same_monster(player_type *subject_ptr, mam_type *mam_ptr)
 {
     if (mam_ptr->m_idx == mam_ptr->t_idx)
-        return FALSE;
+        return false;
 
     monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
     if (r_ptr->flags1 & RF1_NEVER_BLOW)
-        return FALSE;
+        return false;
 
     if (d_info[subject_ptr->dungeon_idx].flags.has(DF::NO_MELEE))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 static void redraw_health_bar(player_type *subject_ptr, mam_type *mam_ptr)
@@ -220,7 +220,7 @@ static void process_melee(player_type *subject_ptr, mam_type *mam_ptr)
     redraw_health_bar(subject_ptr, mam_ptr);
     describe_melee_method(subject_ptr, mam_ptr);
     describe_silly_melee(mam_ptr);
-    mam_ptr->obvious = TRUE;
+    mam_ptr->obvious = true;
     mam_ptr->damage = damroll(mam_ptr->d_dice, mam_ptr->d_side);
     mam_ptr->effect_type = BLOW_EFFECT_TYPE_NONE;
     mam_ptr->pt = GF_MISSILE;
@@ -234,13 +234,13 @@ static void thief_runaway_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
         if (mam_ptr->see_m) {
             msg_print(_("泥棒は笑って逃げ...ようとしたがバリアに防がれた。", "The thief flees laughing...? But a magic barrier obstructs it."));
         } else if (mam_ptr->known) {
-            subject_ptr->current_floor_ptr->monster_noise = TRUE;
+            subject_ptr->current_floor_ptr->monster_noise = true;
         }
     } else {
         if (mam_ptr->see_m) {
             msg_print(_("泥棒は笑って逃げた！", "The thief flees laughing!"));
         } else if (mam_ptr->known) {
-            subject_ptr->current_floor_ptr->monster_noise = TRUE;
+            subject_ptr->current_floor_ptr->monster_noise = true;
         }
 
         teleport_away(subject_ptr, mam_ptr->m_idx, MAX_SIGHT * 2 + 5, TELEPORT_SPONTANEOUS);
@@ -253,10 +253,10 @@ static void explode_monster_by_melee(player_type *subject_ptr, mam_type *mam_ptr
         return;
 
     sound(SOUND_EXPLODE);
-    (void)set_monster_invulner(subject_ptr, mam_ptr->m_idx, 0, FALSE);
+    (void)set_monster_invulner(subject_ptr, mam_ptr->m_idx, 0, false);
     mon_take_hit_mon(subject_ptr, mam_ptr->m_idx, mam_ptr->m_ptr->hp + 1, &mam_ptr->dead, &mam_ptr->fear,
         _("は爆発して粉々になった。", " explodes into tiny shreds."), mam_ptr->m_idx);
-    mam_ptr->blinked = FALSE;
+    mam_ptr->blinked = false;
 }
 
 /*!
@@ -304,21 +304,21 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
     mam_type *mam_ptr = initialize_mam_type(subject_ptr, &tmp_mam, m_idx, t_idx);
 
     if (!check_same_monster(subject_ptr, mam_ptr))
-        return FALSE;
+        return false;
 
     monster_desc(subject_ptr, mam_ptr->m_name, mam_ptr->m_ptr, 0);
     monster_desc(subject_ptr, mam_ptr->t_name, mam_ptr->t_ptr, 0);
     if (!mam_ptr->see_either && mam_ptr->known)
-        subject_ptr->current_floor_ptr->monster_noise = TRUE;
+        subject_ptr->current_floor_ptr->monster_noise = true;
 
     if (subject_ptr->riding && (m_idx == subject_ptr->riding))
-        disturb(subject_ptr, TRUE, TRUE);
+        disturb(subject_ptr, true, true);
 
     repeat_melee(subject_ptr, mam_ptr);
     explode_monster_by_melee(subject_ptr, mam_ptr);
     if (!mam_ptr->blinked || mam_ptr->m_ptr->r_idx == 0)
-        return TRUE;
+        return true;
 
     thief_runaway_by_melee(subject_ptr, mam_ptr);
-    return TRUE;
+    return true;
 }

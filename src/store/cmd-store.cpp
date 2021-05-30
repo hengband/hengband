@@ -104,7 +104,7 @@ void do_cmd_store(player_type *player_ptr)
     command_arg = 0;
     command_rep = 0;
     command_new = 0;
-    get_com_no_macros = TRUE;
+    get_com_no_macros = true;
     cur_store_num = which;
     cur_store_feat = g_ptr->feat;
     st_ptr = &town_info[player_ptr->town_num].store[cur_store_num];
@@ -112,7 +112,7 @@ void do_cmd_store(player_type *player_ptr)
     store_top = 0;
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BUILD);
     display_store(player_ptr);
-    leave_store = FALSE;
+    leave_store = false;
 
     while (!leave_store) {
         prt("", 1, 0);
@@ -144,10 +144,10 @@ void do_cmd_store(player_type *player_ptr)
             prt(_("w/t) 装備する/はずす", "w/t) Wear/Take off equipment"), 22 + xtra_stock, 56);
 
         prt(_("コマンド:", "You may: "), 20 + xtra_stock, 0);
-        request_command(player_ptr, TRUE);
+        request_command(player_ptr, true);
         store_process_command(player_ptr);
 
-        bool need_redraw_store_inv = (player_ptr->update & PU_BONUS) ? TRUE : FALSE;
+        bool need_redraw_store_inv = (player_ptr->update & PU_BONUS) ? true : false;
         current_world_ptr->character_icky_depth = 1;
         handle_stuff(player_ptr);
         if (player_ptr->inventory_list[INVEN_PACK].k_idx) {
@@ -159,10 +159,10 @@ void do_cmd_store(player_type *player_ptr)
                 else
                     msg_print(_("ザックからアイテムがあふれそうなので、あわてて店から出た...", "Your pack is so full that you flee the store..."));
 
-                leave_store = TRUE;
+                leave_store = true;
             } else if (!store_check_num(o_ptr)) {
                 msg_print(_("ザックからアイテムがあふれそうなので、あわてて家から出た...", "Your pack is so full that you flee your home..."));
-                leave_store = TRUE;
+                leave_store = true;
             } else {
                 int item_pos;
                 object_type forge;
@@ -188,7 +188,7 @@ void do_cmd_store(player_type *player_ptr)
             display_store_inventory(player_ptr);
 
         if (st_ptr->store_open >= current_world_ptr->game_turn)
-            leave_store = TRUE;
+            leave_store = true;
     }
 
     // 現在地の偽装を解除。
@@ -198,8 +198,8 @@ void do_cmd_store(player_type *player_ptr)
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     current_world_ptr->character_icky_depth = 0;
     command_new = 0;
-    command_see = FALSE;
-    get_com_no_macros = FALSE;
+    command_see = false;
+    get_com_no_macros = false;
 
     msg_erase();
     term_clear();

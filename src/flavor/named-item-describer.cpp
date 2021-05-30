@@ -27,24 +27,24 @@ static void check_object_known_aware(player_type *player_ptr, flavor_type *flavo
 {
     object_flags(player_ptr, flavor_ptr->o_ptr, flavor_ptr->tr_flags);
     if (object_is_aware(flavor_ptr->o_ptr))
-        flavor_ptr->aware = TRUE;
+        flavor_ptr->aware = true;
 
     if (object_is_known(flavor_ptr->o_ptr))
-        flavor_ptr->known = TRUE;
+        flavor_ptr->known = true;
 
     if (flavor_ptr->aware && ((flavor_ptr->mode & OD_NO_FLAVOR) || plain_descriptions))
-        flavor_ptr->flavor = FALSE;
+        flavor_ptr->flavor = false;
 
     if ((flavor_ptr->mode & OD_STORE) || (flavor_ptr->o_ptr->ident & IDENT_STORE)) {
-        flavor_ptr->flavor = FALSE;
-        flavor_ptr->aware = TRUE;
-        flavor_ptr->known = TRUE;
+        flavor_ptr->flavor = false;
+        flavor_ptr->aware = true;
+        flavor_ptr->known = true;
     }
 
     if (flavor_ptr->mode & OD_FORCE_FLAVOR) {
-        flavor_ptr->aware = FALSE;
-        flavor_ptr->flavor = TRUE;
-        flavor_ptr->known = FALSE;
+        flavor_ptr->aware = false;
+        flavor_ptr->flavor = true;
+        flavor_ptr->known = false;
         flavor_ptr->flavor_k_ptr = flavor_ptr->k_ptr;
     }
 }
@@ -134,25 +134,25 @@ static void describe_artifact_ja(flavor_type *flavor_ptr)
 static bool describe_random_artifact_body_ja(flavor_type *flavor_ptr)
 {
     if (flavor_ptr->o_ptr->art_name == 0)
-        return FALSE;
+        return false;
 
     char temp[256];
     int itemp;
     strcpy(temp, quark_str(flavor_ptr->o_ptr->art_name));
     if (strncmp(temp, "『", 2) == 0 || strncmp(temp, "《", 2) == 0) {
         flavor_ptr->t = object_desc_str(flavor_ptr->t, temp);
-        return TRUE;
+        return true;
     }
 
     if (temp[0] != '\'')
-        return TRUE;
+        return true;
 
     itemp = strlen(temp);
     temp[itemp - 1] = 0;
     flavor_ptr->t = object_desc_str(flavor_ptr->t, "『");
     flavor_ptr->t = object_desc_str(flavor_ptr->t, &temp[1]);
     flavor_ptr->t = object_desc_str(flavor_ptr->t, "』");
-    return TRUE;
+    return true;
 }
 
 static void describe_ego_body_ja(flavor_type *flavor_ptr)
@@ -238,15 +238,15 @@ static bool describe_prefix_en(flavor_type *flavor_ptr)
 {
     if (flavor_ptr->o_ptr->number <= 0) {
         flavor_ptr->t = object_desc_str(flavor_ptr->t, "no more ");
-        return TRUE;
+        return true;
     }
 
     if (flavor_ptr->o_ptr->number == 1)
-        return FALSE;
+        return false;
 
     flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->number);
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
-    return TRUE;
+    return true;
 }
 
 static void describe_artifact_prefix_en(flavor_type *flavor_ptr)

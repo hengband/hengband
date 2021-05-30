@@ -41,7 +41,7 @@ void learn_spell(player_type *learner_ptr, int monspell)
         msg_format(_("%sを学習した！", "You have learned %s!"), monster_powers[monspell].name);
         gain_exp(learner_ptr, monster_powers[monspell].level * monster_powers[monspell].smana);
         sound(SOUND_STUDY);
-        learner_ptr->new_mane = TRUE;
+        learner_ptr->new_mane = true;
         learner_ptr->redraw |= PR_STATE;
     }
 }

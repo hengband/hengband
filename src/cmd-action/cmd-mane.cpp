@@ -152,8 +152,8 @@ static int get_mane_power(player_type *caster_ptr, int *sn, bool baigaesi)
     /* Assume cancelled */
     *sn = (-1);
 
-    flag = FALSE;
-    redraw = FALSE;
+    flag = false;
+    redraw = false;
 
     num = caster_ptr->mane_num;
 
@@ -164,7 +164,7 @@ static int get_mane_power(player_type *caster_ptr, int *sn, bool baigaesi)
     while (!flag) {
         if (choice == ESCAPE)
             choice = ' ';
-        else if (!get_com(out_val, &choice, TRUE))
+        else if (!get_com(out_val, &choice, true))
             break;
 
         /* Request redraw */
@@ -172,7 +172,7 @@ static int get_mane_power(player_type *caster_ptr, int *sn, bool baigaesi)
             /* Show the list */
             if (!redraw) {
                 char psi_desc[160];
-                redraw = TRUE;
+                redraw = true;
                 screen_save();
 
                 /* Display a list of spells */
@@ -235,7 +235,7 @@ static int get_mane_power(player_type *caster_ptr, int *sn, bool baigaesi)
             /* Hide the list */
             else {
                 /* Hide list */
-                redraw = FALSE;
+                redraw = false;
                 screen_load();
             }
 
@@ -275,7 +275,7 @@ static int get_mane_power(player_type *caster_ptr, int *sn, bool baigaesi)
         }
 
         /* Stop the loop */
-        flag = TRUE;
+        flag = true;
     }
     if (redraw)
         screen_load();
@@ -285,7 +285,7 @@ static int get_mane_power(player_type *caster_ptr, int *sn, bool baigaesi)
 
     /* Abort if needed */
     if (!flag)
-        return FALSE;
+        return false;
 
     /* Save the choice */
     (*sn) = i;
@@ -293,7 +293,7 @@ static int get_mane_power(player_type *caster_ptr, int *sn, bool baigaesi)
     damage = (baigaesi ? caster_ptr->mane_dam[i] * 2 : caster_ptr->mane_dam[i]);
 
     /* Success */
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -327,7 +327,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         MONSTER_IDX m_idx;
 
         if (!target_set(caster_ptr, TARGET_KILL))
-            return FALSE;
+            return false;
         m_idx = caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
         if (!m_idx)
             break;
@@ -341,7 +341,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
 
     case RF_ABILITY::ROCKET:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("ロケットを発射した。", "You fire a rocket."));
         fire_rocket(caster_ptr, GF_ROCKET, dir, damage, 2);
@@ -349,7 +349,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
 
     case RF_ABILITY::SHOOT:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("矢を放った。", "You fire an arrow."));
         fire_bolt(caster_ptr, GF_ARROW, dir, damage);
@@ -366,7 +366,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
 
     case RF_ABILITY::BR_ACID:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("酸のブレスを吐いた。", "You breathe acid."));
         fire_breath(caster_ptr, GF_ACID, dir, damage, (plev > 35 ? 3 : 2));
@@ -374,7 +374,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
 
     case RF_ABILITY::BR_ELEC:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("稲妻のブレスを吐いた。", "You breathe lightning."));
         fire_breath(caster_ptr, GF_ELEC, dir, damage, (plev > 35 ? 3 : 2));
@@ -382,7 +382,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
 
     case RF_ABILITY::BR_FIRE:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("火炎のブレスを吐いた。", "You breathe fire."));
         fire_breath(caster_ptr, GF_FIRE, dir, damage, (plev > 35 ? 3 : 2));
@@ -390,7 +390,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
 
     case RF_ABILITY::BR_COLD:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("冷気のブレスを吐いた。", "You breathe frost."));
         fire_breath(caster_ptr, GF_COLD, dir, damage, (plev > 35 ? 3 : 2));
@@ -398,7 +398,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
 
     case RF_ABILITY::BR_POIS:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("ガスのブレスを吐いた。", "You breathe gas."));
         fire_breath(caster_ptr, GF_POIS, dir, damage, (plev > 35 ? 3 : 2));
@@ -406,7 +406,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
 
     case RF_ABILITY::BR_NETH:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("地獄のブレスを吐いた。", "You breathe nether."));
         fire_breath(caster_ptr, GF_NETHER, dir, damage, (plev > 35 ? 3 : 2));
@@ -414,7 +414,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
 
     case RF_ABILITY::BR_LITE:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("閃光のブレスを吐いた。", "You breathe light."));
         fire_breath(caster_ptr, GF_LITE, dir, damage, (plev > 35 ? 3 : 2));
@@ -422,7 +422,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
 
     case RF_ABILITY::BR_DARK:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("暗黒のブレスを吐いた。", "You breathe darkness."));
         fire_breath(caster_ptr, GF_DARK, dir, damage, (plev > 35 ? 3 : 2));
@@ -430,7 +430,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
 
     case RF_ABILITY::BR_CONF:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("混乱のブレスを吐いた。", "You breathe confusion."));
         fire_breath(caster_ptr, GF_CONFUSION, dir, damage, (plev > 35 ? 3 : 2));
@@ -438,7 +438,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
 
     case RF_ABILITY::BR_SOUN:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("轟音のブレスを吐いた。", "You breathe sound."));
         fire_breath(caster_ptr, GF_SOUND, dir, damage, (plev > 35 ? 3 : 2));
@@ -446,7 +446,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
 
     case RF_ABILITY::BR_CHAO:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("カオスのブレスを吐いた。", "You breathe chaos."));
         fire_breath(caster_ptr, GF_CHAOS, dir, damage, (plev > 35 ? 3 : 2));
@@ -454,7 +454,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
 
     case RF_ABILITY::BR_DISE:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("劣化のブレスを吐いた。", "You breathe disenchantment."));
         fire_breath(caster_ptr, GF_DISENCHANT, dir, damage, (plev > 35 ? 3 : 2));
@@ -462,7 +462,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
 
     case RF_ABILITY::BR_NEXU:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("因果混乱のブレスを吐いた。", "You breathe nexus."));
         fire_breath(caster_ptr, GF_NEXUS, dir, damage, (plev > 35 ? 3 : 2));
@@ -470,7 +470,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
 
     case RF_ABILITY::BR_TIME:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("時間逆転のブレスを吐いた。", "You breathe time."));
         fire_breath(caster_ptr, GF_TIME, dir, damage, (plev > 35 ? 3 : 2));
@@ -478,7 +478,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
 
     case RF_ABILITY::BR_INER:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("遅鈍のブレスを吐いた。", "You breathe inertia."));
         fire_breath(caster_ptr, GF_INERTIAL, dir, damage, (plev > 35 ? 3 : 2));
@@ -486,7 +486,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
 
     case RF_ABILITY::BR_GRAV:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("重力のブレスを吐いた。", "You breathe gravity."));
         fire_breath(caster_ptr, GF_GRAVITY, dir, damage, (plev > 35 ? 3 : 2));
@@ -494,7 +494,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
 
     case RF_ABILITY::BR_SHAR:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("破片のブレスを吐いた。", "You breathe shards."));
         fire_breath(caster_ptr, GF_SHARDS, dir, damage, (plev > 35 ? 3 : 2));
@@ -502,7 +502,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
 
     case RF_ABILITY::BR_PLAS:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("プラズマのブレスを吐いた。", "You breathe plasma."));
 
@@ -511,7 +511,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
 
     case RF_ABILITY::BR_FORC:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("フォースのブレスを吐いた。", "You breathe force."));
 
@@ -520,7 +520,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
 
     case RF_ABILITY::BR_MANA:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("魔力のブレスを吐いた。", "You breathe mana."));
 
@@ -529,7 +529,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
 
     case RF_ABILITY::BA_NUKE:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("放射能球を放った。", "You cast a ball of radiation."));
 
@@ -538,7 +538,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
 
     case RF_ABILITY::BR_NUKE:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("放射性廃棄物のブレスを吐いた。", "You breathe toxic waste."));
 
@@ -547,7 +547,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
 
     case RF_ABILITY::BA_CHAO:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("純ログルスを放った。", "You invoke a raw Logrus."));
 
@@ -555,7 +555,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         break;
     case RF_ABILITY::BR_DISI:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("分解のブレスを吐いた。", "You breathe disintegration."));
 
@@ -563,7 +563,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         break;
     case RF_ABILITY::BA_ACID:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("アシッド・ボールの呪文を唱えた。", "You cast an acid ball."));
 
@@ -571,7 +571,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         break;
     case RF_ABILITY::BA_ELEC:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("サンダー・ボールの呪文を唱えた。", "You cast a lightning ball."));
 
@@ -579,7 +579,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         break;
     case RF_ABILITY::BA_FIRE:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("ファイア・ボールの呪文を唱えた。", "You cast a fire ball."));
 
@@ -587,7 +587,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         break;
     case RF_ABILITY::BA_COLD:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("アイス・ボールの呪文を唱えた。", "You cast a frost ball."));
 
@@ -595,7 +595,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         break;
     case RF_ABILITY::BA_POIS:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("悪臭雲の呪文を唱えた。", "You cast a stinking cloud."));
 
@@ -603,7 +603,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         break;
     case RF_ABILITY::BA_NETH:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("地獄球の呪文を唱えた。", "You cast a nether ball."));
 
@@ -611,7 +611,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         break;
     case RF_ABILITY::BA_WATE:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("流れるような身振りをした。", "You gesture fluidly."));
 
@@ -619,7 +619,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         break;
     case RF_ABILITY::BA_MANA:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("魔力の嵐の呪文を念じた。", "You invoke a mana storm."));
 
@@ -627,7 +627,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         break;
     case RF_ABILITY::BA_DARK:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("暗黒の嵐の呪文を念じた。", "You invoke a darkness storm."));
 
@@ -635,42 +635,42 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         break;
     case RF_ABILITY::DRAIN_MANA:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         fire_ball_hide(caster_ptr, GF_DRAIN_MANA, dir, randint1(plev * 3) + plev, 0);
         break;
     case RF_ABILITY::MIND_BLAST:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         fire_ball_hide(caster_ptr, GF_MIND_BLAST, dir, damage, 0);
         break;
     case RF_ABILITY::BRAIN_SMASH:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         fire_ball_hide(caster_ptr, GF_BRAIN_SMASH, dir, damage, 0);
         break;
     case RF_ABILITY::CAUSE_1:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         fire_ball_hide(caster_ptr, GF_CAUSE_1, dir, damage, 0);
         break;
     case RF_ABILITY::CAUSE_2:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         fire_ball_hide(caster_ptr, GF_CAUSE_2, dir, damage, 0);
         break;
     case RF_ABILITY::CAUSE_3:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         fire_ball_hide(caster_ptr, GF_CAUSE_3, dir, damage, 0);
         break;
     case RF_ABILITY::CAUSE_4:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         fire_ball_hide(caster_ptr, GF_CAUSE_4, dir, damage, 0);
         break;
     case RF_ABILITY::BO_ACID:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("アシッド・ボルトの呪文を唱えた。", "You cast an acid bolt."));
 
@@ -678,7 +678,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         break;
     case RF_ABILITY::BO_ELEC:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("サンダー・ボルトの呪文を唱えた。", "You cast a lightning bolt."));
 
@@ -686,7 +686,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         break;
     case RF_ABILITY::BO_FIRE:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("ファイア・ボルトの呪文を唱えた。", "You cast a fire bolt."));
 
@@ -694,7 +694,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         break;
     case RF_ABILITY::BO_COLD:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("アイス・ボルトの呪文を唱えた。", "You cast a frost bolt."));
 
@@ -702,7 +702,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         break;
     case RF_ABILITY::BA_LITE:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("スターバーストの呪文を念じた。", "You invoke a starburst."));
 
@@ -710,7 +710,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         break;
     case RF_ABILITY::BO_NETH:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("地獄の矢の呪文を唱えた。", "You cast a nether bolt."));
 
@@ -718,7 +718,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         break;
     case RF_ABILITY::BO_WATE:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("ウォーター・ボルトの呪文を唱えた。", "You cast a water bolt."));
 
@@ -726,7 +726,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         break;
     case RF_ABILITY::BO_MANA:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("魔力の矢の呪文を唱えた。", "You cast a mana bolt."));
 
@@ -734,7 +734,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         break;
     case RF_ABILITY::BO_PLAS:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("プラズマ・ボルトの呪文を唱えた。", "You cast a plasma bolt."));
 
@@ -742,7 +742,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         break;
     case RF_ABILITY::BO_ICEE:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("極寒の矢の呪文を唱えた。", "You cast a ice bolt."));
 
@@ -750,7 +750,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         break;
     case RF_ABILITY::MISSILE:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("マジック・ミサイルの呪文を唱えた。", "You cast a magic missile."));
 
@@ -758,7 +758,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         break;
     case RF_ABILITY::SCARE:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("恐ろしげな幻覚を作り出した。", "You cast a fearful illusion."));
 
@@ -766,12 +766,12 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         break;
     case RF_ABILITY::BLIND:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         confuse_monster(caster_ptr, dir, plev * 2);
         break;
     case RF_ABILITY::CONF:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("誘惑的な幻覚をつくり出した。", "You cast a mesmerizing illusion."));
 
@@ -779,20 +779,20 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         break;
     case RF_ABILITY::SLOW:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         slow_monster(caster_ptr, dir, plev);
         break;
     case RF_ABILITY::HOLD:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         sleep_monster(caster_ptr, dir, plev);
         break;
     case RF_ABILITY::HASTE:
-        (void)set_fast(caster_ptr, randint1(20 + plev) + plev, FALSE);
+        (void)set_fast(caster_ptr, randint1(20 + plev) + plev, false);
         break;
     case RF_ABILITY::HAND_DOOM: {
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("<破滅の手>を放った！", "You invoke the Hand of Doom!"));
 
@@ -807,7 +807,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         break;
     case RF_ABILITY::INVULNER:
         msg_print(_("無傷の球の呪文を唱えた。", "You cast a Globe of Invulnerability."));
-        (void)set_invuln(caster_ptr, randint1(7) + 7, FALSE);
+        (void)set_invuln(caster_ptr, randint1(7) + 7, false);
         break;
     case RF_ABILITY::BLINK:
         teleport_player(caster_ptr, 10, TELEPORT_SPONTANEOUS);
@@ -826,7 +826,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         GAME_TEXT m_name[MAX_NLEN];
 
         if (!target_set(caster_ptr, TARGET_KILL))
-            return FALSE;
+            return false;
         if (!caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx)
             break;
         if (!player_has_los_bold(caster_ptr, target_row, target_col))
@@ -859,7 +859,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
     }
     case RF_ABILITY::TELE_AWAY:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
 
         (void)fire_beam(caster_ptr, GF_AWAY_ALL, dir, plev);
         break;
@@ -870,7 +870,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
 
     case RF_ABILITY::PSY_SPEAR:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
         else
             msg_print(_("光の剣を放った。", "You throw a psycho-spear."));
         (void)fire_beam(caster_ptr, GF_PSY_SPEAR, dir, damage);
@@ -883,7 +883,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
 
     case RF_ABILITY::TRAPS:
         if (!target_set(caster_ptr, TARGET_KILL))
-            return FALSE;
+            return false;
         msg_print(_("呪文を唱えて邪悪に微笑んだ。", "You cast a spell and cackle evilly."));
         trap_creation(caster_ptr, target_row, target_col);
         break;
@@ -897,7 +897,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
     case RF_ABILITY::S_KIN: {
         int k;
         if (!target_set(caster_ptr, TARGET_KILL))
-            return FALSE;
+            return false;
 
         msg_print(_("援軍を召喚した。", "You summon minions."));
         for (k = 0; k < 4; k++) {
@@ -909,7 +909,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         int k;
         int max_cyber = (caster_ptr->current_floor_ptr->dun_level / 50) + randint1(3);
         if (!target_set(caster_ptr, TARGET_KILL))
-            return FALSE;
+            return false;
         msg_print(_("サイバーデーモンを召喚した！", "You summon Cyberdemons!"));
         if (max_cyber > 4)
             max_cyber = 4;
@@ -920,7 +920,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
     case RF_ABILITY::S_MONSTER: {
         int k;
         if (!target_set(caster_ptr, TARGET_KILL))
-            return FALSE;
+            return false;
         msg_print(_("仲間を召喚した。", "You summon help."));
         for (k = 0; k < 1; k++)
             summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_NONE, (mode | u_mode));
@@ -929,7 +929,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
     case RF_ABILITY::S_MONSTERS: {
         int k;
         if (!target_set(caster_ptr, TARGET_KILL))
-            return FALSE;
+            return false;
         msg_print(_("モンスターを召喚した！", "You summon monsters!"));
         for (k = 0; k < 6; k++)
             summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_NONE, (mode | u_mode));
@@ -938,7 +938,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
     case RF_ABILITY::S_ANT: {
         int k;
         if (!target_set(caster_ptr, TARGET_KILL))
-            return FALSE;
+            return false;
         msg_print(_("アリを召喚した。", "You summon ants."));
         for (k = 0; k < 6; k++)
             summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_ANT, mode);
@@ -947,7 +947,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
     case RF_ABILITY::S_SPIDER: {
         int k;
         if (!target_set(caster_ptr, TARGET_KILL))
-            return FALSE;
+            return false;
         msg_print(_("蜘蛛を召喚した。", "You summon spiders."));
         for (k = 0; k < 6; k++)
             summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_SPIDER, mode);
@@ -956,7 +956,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
     case RF_ABILITY::S_HOUND: {
         int k;
         if (!target_set(caster_ptr, TARGET_KILL))
-            return FALSE;
+            return false;
         msg_print(_("ハウンドを召喚した。", "You summon hounds."));
         for (k = 0; k < 4; k++)
             summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_HOUND, mode);
@@ -965,7 +965,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
     case RF_ABILITY::S_HYDRA: {
         int k;
         if (!target_set(caster_ptr, TARGET_KILL))
-            return FALSE;
+            return false;
         msg_print(_("ヒドラを召喚した。", "You summon hydras."));
         for (k = 0; k < 4; k++)
             summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_HYDRA, mode);
@@ -974,7 +974,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
     case RF_ABILITY::S_ANGEL: {
         int k;
         if (!target_set(caster_ptr, TARGET_KILL))
-            return FALSE;
+            return false;
         msg_print(_("天使を召喚した！", "You summon an angel!"));
         for (k = 0; k < 1; k++)
             summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_ANGEL, mode);
@@ -983,7 +983,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
     case RF_ABILITY::S_DEMON: {
         int k;
         if (!target_set(caster_ptr, TARGET_KILL))
-            return FALSE;
+            return false;
         msg_print(_("混沌の宮廷から悪魔を召喚した！", "You summon a demon from the Courts of Chaos!"));
         for (k = 0; k < 1; k++)
             summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_DEMON, (mode | u_mode));
@@ -992,7 +992,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
     case RF_ABILITY::S_UNDEAD: {
         int k;
         if (!target_set(caster_ptr, TARGET_KILL))
-            return FALSE;
+            return false;
         msg_print(_("アンデッドの強敵を召喚した！", "You summon an undead adversary!"));
         for (k = 0; k < 1; k++)
             summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_UNDEAD, (mode | u_mode));
@@ -1001,7 +1001,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
     case RF_ABILITY::S_DRAGON: {
         int k;
         if (!target_set(caster_ptr, TARGET_KILL))
-            return FALSE;
+            return false;
         msg_print(_("ドラゴンを召喚した！", "You summon a dragon!"));
         for (k = 0; k < 1; k++)
             summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_DRAGON, (mode | u_mode));
@@ -1010,7 +1010,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
     case RF_ABILITY::S_HI_UNDEAD: {
         int k;
         if (!target_set(caster_ptr, TARGET_KILL))
-            return FALSE;
+            return false;
         msg_print(_("強力なアンデッドを召喚した！", "You summon greater undead!"));
         for (k = 0; k < 6; k++)
             summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_HI_UNDEAD, (mode | u_mode));
@@ -1019,7 +1019,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
     case RF_ABILITY::S_HI_DRAGON: {
         int k;
         if (!target_set(caster_ptr, TARGET_KILL))
-            return FALSE;
+            return false;
         msg_print(_("古代ドラゴンを召喚した！", "You summon ancient dragons!"));
         for (k = 0; k < 4; k++)
             summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_HI_DRAGON, (mode | u_mode));
@@ -1028,7 +1028,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
     case RF_ABILITY::S_AMBERITES: {
         int k;
         if (!target_set(caster_ptr, TARGET_KILL))
-            return FALSE;
+            return false;
         msg_print(_("アンバーの王族を召喚した！", "You summon Lords of Amber!"));
         for (k = 0; k < 4; k++)
             summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_AMBERITES, (mode | PM_ALLOW_UNIQUE));
@@ -1037,7 +1037,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
     case RF_ABILITY::S_UNIQUE: {
         int k, count = 0;
         if (!target_set(caster_ptr, TARGET_KILL))
-            return FALSE;
+            return false;
         msg_print(_("特別な強敵を召喚した！", "You summon special opponents!"));
         for (k = 0; k < 4; k++)
             if (summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_UNIQUE, (mode | PM_ALLOW_UNIQUE)))
@@ -1050,7 +1050,7 @@ static bool use_mane(player_type *caster_ptr, RF_ABILITY spell)
         msg_print("hoge?");
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -1080,15 +1080,15 @@ bool do_cmd_mane(player_type *creature_ptr, bool baigaesi)
     bool cast;
 
     if (cmd_limit_confused(creature_ptr))
-        return FALSE;
+        return false;
 
     if (!creature_ptr->mane_num) {
         msg_print(_("まねられるものが何もない！", "You don't remember any action!"));
-        return FALSE;
+        return false;
     }
 
     if (!get_mane_power(creature_ptr, &n, baigaesi))
-        return FALSE;
+        return false;
 
     spell = monster_powers[static_cast<int>(creature_ptr->mane_spell[n])];
 
@@ -1134,7 +1134,7 @@ bool do_cmd_mane(player_type *creature_ptr, bool baigaesi)
         sound(SOUND_ZAP);
         cast = use_mane(creature_ptr, creature_ptr->mane_spell[n]);
         if (!cast)
-            return FALSE;
+            return false;
     }
 
     creature_ptr->mane_num--;
@@ -1149,5 +1149,5 @@ bool do_cmd_mane(player_type *creature_ptr, bool baigaesi)
     creature_ptr->window_flags |= (PW_PLAYER);
     creature_ptr->window_flags |= (PW_SPELL);
 
-    return TRUE;
+    return true;
 }

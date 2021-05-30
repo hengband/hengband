@@ -220,11 +220,11 @@ bool object_similar(object_type *o_ptr, object_type *j_ptr)
     int total = o_ptr->number + j_ptr->number;
     int max_num = object_similar_part(o_ptr, j_ptr);
     if (!max_num)
-        return FALSE;
+        return false;
     if (total > max_num)
         return 0;
 
-    return TRUE;
+    return true;
 }
 
 /*!

@@ -47,7 +47,7 @@ s16b inner_town_num = 0;
 int cur_store_feat;
 
 /* Enable "increments" */
-bool allow_inc = FALSE;
+bool allow_inc = false;
 
 /*!
  * @brief 店舗の最大スロット数を返す
@@ -108,8 +108,8 @@ int store_check_num(object_type *o_ptr)
         bool old_stack_force_notes = stack_force_notes;
         bool old_stack_force_costs = stack_force_costs;
         if (cur_store_num != STORE_HOME) {
-            stack_force_notes = FALSE;
-            stack_force_costs = FALSE;
+            stack_force_notes = false;
+            stack_force_costs = false;
         }
 
         for (int i = 0; i < st_ptr->stock_num; i++) {
@@ -152,7 +152,7 @@ int store_check_num(object_type *o_ptr)
 int get_stock(COMMAND_CODE *com_val, concptr pmt, int i, int j)
 {
     if (repeat_pull(com_val) && (*com_val >= i) && (*com_val <= j))
-        return TRUE;
+        return true;
 
     msg_print(NULL);
     *com_val = (-1);
@@ -166,8 +166,8 @@ int get_stock(COMMAND_CODE *com_val, concptr pmt, int i, int j)
 #endif
 
     char command;
-    while (TRUE) {
-        if (!get_com(out_val, &command, FALSE))
+    while (true) {
+        if (!get_com(out_val, &command, false))
             break;
 
         COMMAND_CODE k;
@@ -188,10 +188,10 @@ int get_stock(COMMAND_CODE *com_val, concptr pmt, int i, int j)
 
     prt("", 0, 0);
     if (command == ESCAPE)
-        return FALSE;
+        return false;
 
     repeat_push(*com_val);
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -248,7 +248,7 @@ void store_shuffle(player_type *player_ptr, int which)
     cur_store_num = which;
     st_ptr = &town_info[player_ptr->town_num].store[cur_store_num];
     int j = st_ptr->owner;
-    while (TRUE) {
+    while (true) {
         st_ptr->owner = (byte)randint0(MAX_OWNERS);
         if (j == st_ptr->owner)
             continue;
@@ -364,7 +364,7 @@ void store_init(int town_num, int store_num)
 {
     cur_store_num = store_num;
     st_ptr = &town_info[town_num].store[store_num];
-    while (TRUE) {
+    while (true) {
         st_ptr->owner = (byte)randint0(MAX_OWNERS);
         int i;
         for (i = 1; i < max_towns; i++) {

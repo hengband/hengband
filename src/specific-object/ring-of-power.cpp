@@ -23,12 +23,12 @@ static void exe_ring_of_power(player_type *caster_ptr, DIRECTION dir)
     case 2:
         msg_print(_("あなたは悪性のオーラに包み込まれた。", "You are surrounded by a malignant aura."));
         sound(SOUND_EVIL);
-        (void)dec_stat(caster_ptr, A_STR, 50, TRUE);
-        (void)dec_stat(caster_ptr, A_INT, 50, TRUE);
-        (void)dec_stat(caster_ptr, A_WIS, 50, TRUE);
-        (void)dec_stat(caster_ptr, A_DEX, 50, TRUE);
-        (void)dec_stat(caster_ptr, A_CON, 50, TRUE);
-        (void)dec_stat(caster_ptr, A_CHR, 50, TRUE);
+        (void)dec_stat(caster_ptr, A_STR, 50, true);
+        (void)dec_stat(caster_ptr, A_INT, 50, true);
+        (void)dec_stat(caster_ptr, A_WIS, 50, true);
+        (void)dec_stat(caster_ptr, A_DEX, 50, true);
+        (void)dec_stat(caster_ptr, A_CON, 50, true);
+        (void)dec_stat(caster_ptr, A_CHR, 50, true);
         caster_ptr->exp -= (caster_ptr->exp / 4);
         caster_ptr->max_exp -= (caster_ptr->exp / 4);
         check_experience(caster_ptr);
@@ -58,8 +58,8 @@ bool activate_ring_of_power(player_type *user_ptr, concptr name)
     DIRECTION dir;
     msg_format(_("%sは漆黒に輝いた...", "The %s glows intensely black..."), name);
     if (!get_aim_dir(user_ptr, &dir))
-        return FALSE;
+        return false;
 
     exe_ring_of_power(user_ptr, dir);
-    return TRUE;
+    return true;
 }

@@ -66,7 +66,7 @@
 static bool check_throw_boomerang(player_type *creature_ptr, it_type *it_ptr, concptr *q, concptr *s)
 {
     if (!it_ptr->boomerang)
-        return TRUE;
+        return true;
 
     if (has_melee_weapon(creature_ptr, INVEN_MAIN_HAND) && has_melee_weapon(creature_ptr, INVEN_SUB_HAND)) {
         item_tester_hook = item_tester_hook_boomerang;
@@ -75,21 +75,21 @@ static bool check_throw_boomerang(player_type *creature_ptr, it_type *it_ptr, co
         it_ptr->o_ptr = choose_object(creature_ptr, &it_ptr->item, *q, *s, USE_EQUIP, TV_NONE);
         if (!it_ptr->o_ptr) {
             flush();
-            return FALSE;
+            return false;
         }
 
-        return TRUE;
+        return true;
     }
 
     if (has_melee_weapon(creature_ptr, INVEN_SUB_HAND)) {
         it_ptr->item = INVEN_SUB_HAND;
         it_ptr->o_ptr = &creature_ptr->inventory_list[it_ptr->item];
-        return TRUE;
+        return true;
     }
 
     it_ptr->item = INVEN_MAIN_HAND;
     it_ptr->o_ptr = &creature_ptr->inventory_list[it_ptr->item];
-    return TRUE;
+    return true;
 }
 
 static bool check_what_throw(player_type *creature_ptr, it_type *it_ptr)
@@ -97,41 +97,41 @@ static bool check_what_throw(player_type *creature_ptr, it_type *it_ptr)
     if (it_ptr->shuriken >= 0) {
         it_ptr->item = it_ptr->shuriken;
         it_ptr->o_ptr = &creature_ptr->inventory_list[it_ptr->item];
-        return TRUE;
+        return true;
     }
 
     concptr q, s;
     if (!check_throw_boomerang(creature_ptr, it_ptr, &q, &s))
-        return FALSE;
+        return false;
 
     q = _("どのアイテムを投げますか? ", "Throw which item? ");
     s = _("投げるアイテムがない。", "You have nothing to throw.");
     it_ptr->o_ptr = choose_object(creature_ptr, &it_ptr->item, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP, TV_NONE);
     if (!it_ptr->o_ptr) {
         flush();
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 static bool check_can_throw(player_type *creature_ptr, it_type *it_ptr)
 {
     if (!check_what_throw(creature_ptr, it_ptr))
-        return FALSE;
+        return false;
 
     if (object_is_cursed(it_ptr->o_ptr) && (it_ptr->item >= INVEN_MAIN_HAND)) {
         msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
-        return FALSE;
+        return false;
     }
 
     if (creature_ptr->current_floor_ptr->inside_arena && !it_ptr->boomerang && (it_ptr->o_ptr->tval != TV_SPIKE)) {
         msg_print(_("アリーナではアイテムを使えない！", "You're in the arena now. This is hand-to-hand!"));
         msg_print(NULL);
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 static void calc_throw_range(player_type *creature_ptr, it_type *it_ptr)
@@ -160,13 +160,13 @@ static bool calc_throw_grid(player_type *creature_ptr, it_type *it_ptr)
     if (it_ptr->shuriken >= 0) {
         it_ptr->ty = randint0(101) - 50 + creature_ptr->y;
         it_ptr->tx = randint0(101) - 50 + creature_ptr->x;
-        return TRUE;
+        return true;
     }
 
     project_length = it_ptr->tdis + 1;
     DIRECTION dir;
     if (!get_aim_dir(creature_ptr, &dir))
-        return FALSE;
+        return false;
 
     it_ptr->tx = creature_ptr->x + 99 * ddx[dir];
     it_ptr->ty = creature_ptr->y + 99 * ddy[dir];
@@ -176,13 +176,13 @@ static bool calc_throw_grid(player_type *creature_ptr, it_type *it_ptr)
     }
 
     project_length = 0;
-    return TRUE;
+    return true;
 }
 
 static void reflect_inventory_by_throw(player_type *creature_ptr, it_type *it_ptr)
 {
     if ((it_ptr->q_ptr->name1 == ART_MJOLLNIR) || (it_ptr->q_ptr->name1 == ART_AEGISFANG) || it_ptr->boomerang)
-        it_ptr->return_when_thrown = TRUE;
+        it_ptr->return_when_thrown = true;
 
     if (it_ptr->item < 0) {
         floor_item_increase(creature_ptr, 0 - it_ptr->item, -1);
@@ -229,9 +229,9 @@ static bool check_racial_target_bold(player_type *creature_ptr, it_type *it_ptr)
     it_ptr->nx[it_ptr->cur_dis] = it_ptr->x;
     mmove2(&it_ptr->ny[it_ptr->cur_dis], &it_ptr->nx[it_ptr->cur_dis], creature_ptr->y, creature_ptr->x, it_ptr->ty, it_ptr->tx);
     if (cave_has_flag_bold(creature_ptr->current_floor_ptr, it_ptr->ny[it_ptr->cur_dis], it_ptr->nx[it_ptr->cur_dis], FF_PROJECT))
-        return FALSE;
+        return false;
 
-    it_ptr->hit_wall = TRUE;
+    it_ptr->hit_wall = true;
     return (it_ptr->q_ptr->tval == TV_FIGURINE) || object_is_potion(it_ptr->q_ptr)
         || (creature_ptr->current_floor_ptr->grid_array[it_ptr->ny[it_ptr->cur_dis]][it_ptr->nx[it_ptr->cur_dis]].m_idx == 0);
 }
@@ -289,7 +289,7 @@ static void calc_racial_power_damage(player_type *creature_ptr, it_type *it_ptr)
     int ds = it_ptr->q_ptr->ds;
     torch_dice(it_ptr->q_ptr, &dd, &ds);
     it_ptr->tdam = damroll(dd, ds);
-    it_ptr->tdam = calc_attack_damage_with_slay(creature_ptr, it_ptr->q_ptr, it_ptr->tdam, it_ptr->m_ptr, HISSATSU_NONE, TRUE);
+    it_ptr->tdam = calc_attack_damage_with_slay(creature_ptr, it_ptr->q_ptr, it_ptr->tdam, it_ptr->m_ptr, HISSATSU_NONE, true);
     it_ptr->tdam = critical_shot(creature_ptr, it_ptr->q_ptr->weight, it_ptr->q_ptr->to_h, 0, it_ptr->tdam);
     if (it_ptr->q_ptr->to_d > 0)
         it_ptr->tdam += it_ptr->q_ptr->to_d;
@@ -312,7 +312,7 @@ static void calc_racial_power_damage(player_type *creature_ptr, it_type *it_ptr)
     if (it_ptr->tdam < 0)
         it_ptr->tdam = 0;
 
-    it_ptr->tdam = mon_damage_mod(creature_ptr, it_ptr->m_ptr, it_ptr->tdam, FALSE);
+    it_ptr->tdam = mon_damage_mod(creature_ptr, it_ptr->m_ptr, it_ptr->tdam, false);
 }
 
 static void attack_racial_power(player_type *creature_ptr, it_type *it_ptr)
@@ -325,7 +325,7 @@ static void attack_racial_power(player_type *creature_ptr, it_type *it_ptr)
     msg_format_wizard(creature_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), it_ptr->tdam,
         it_ptr->m_ptr->hp - it_ptr->tdam, it_ptr->m_ptr->maxhp, it_ptr->m_ptr->max_maxhp);
 
-    bool fear = FALSE;
+    bool fear = false;
     if (mon_take_hit(creature_ptr, it_ptr->g_ptr->m_idx, it_ptr->tdam, &fear, extract_note_dies(real_r_idx(it_ptr->m_ptr))))
         return;
 
@@ -357,7 +357,7 @@ static void exe_throw(player_type *creature_ptr, it_type *it_ptr)
         it_ptr->m_ptr = &creature_ptr->current_floor_ptr->m_list[it_ptr->g_ptr->m_idx];
         monster_name(creature_ptr, it_ptr->g_ptr->m_idx, it_ptr->m_name);
         it_ptr->visible = it_ptr->m_ptr->ml;
-        it_ptr->hit_body = TRUE;
+        it_ptr->hit_body = true;
         attack_racial_power(creature_ptr, it_ptr);
         break;
     }
@@ -390,13 +390,13 @@ void display_potion_throw(player_type *creature_ptr, it_type *it_ptr)
 
     msg_format(_("%sは砕け散った！", "The %s shatters!"), it_ptr->o_name);
     if (!potion_smash_effect(creature_ptr, 0, it_ptr->y, it_ptr->x, it_ptr->q_ptr->k_idx)) {
-        it_ptr->do_drop = FALSE;
+        it_ptr->do_drop = false;
         return;
     }
 
     monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[it_ptr->y][it_ptr->x].m_idx];
     if ((creature_ptr->current_floor_ptr->grid_array[it_ptr->y][it_ptr->x].m_idx == 0) || !is_friendly(m_ptr) || monster_invulner_remaining(m_ptr)) {
-        it_ptr->do_drop = FALSE;
+        it_ptr->do_drop = false;
         return;
     }
 
@@ -404,14 +404,14 @@ void display_potion_throw(player_type *creature_ptr, it_type *it_ptr)
     monster_desc(creature_ptr, m_name, m_ptr, 0);
     msg_format(_("%sは怒った！", "%^s gets angry!"), m_name);
     set_hostile(creature_ptr, &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[it_ptr->y][it_ptr->x].m_idx]);
-    it_ptr->do_drop = FALSE;
+    it_ptr->do_drop = false;
 }
 
 static void display_boomerang_throw(player_type *creature_ptr, it_type *it_ptr)
 {
     if ((it_ptr->back_chance > 37) && !creature_ptr->blind && (it_ptr->item >= 0)) {
         msg_format(_("%sが手元に返ってきた。", "%s comes back to you."), it_ptr->o2_name);
-        it_ptr->come_back = TRUE;
+        it_ptr->come_back = true;
         return;
     }
 
@@ -476,7 +476,7 @@ static void process_boomerang_back(player_type *creature_ptr, it_type *it_ptr)
     if (it_ptr->come_back) {
         if ((it_ptr->item != INVEN_MAIN_HAND) && (it_ptr->item != INVEN_SUB_HAND)) {
             store_item_to_inventory(creature_ptr, it_ptr->q_ptr);
-            it_ptr->do_drop = FALSE;
+            it_ptr->do_drop = false;
             return;
         }
 
@@ -485,7 +485,7 @@ static void process_boomerang_back(player_type *creature_ptr, it_type *it_ptr)
         creature_ptr->equip_cnt++;
         creature_ptr->update |= PU_BONUS | PU_TORCH | PU_MANA;
         creature_ptr->window_flags |= PW_EQUIP;
-        it_ptr->do_drop = FALSE;
+        it_ptr->do_drop = false;
         return;
     }
 
@@ -526,7 +526,7 @@ static void drop_thrown_item(player_type *creature_ptr, it_type *it_ptr)
 bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_IDX shuriken)
 {
     if (creature_ptr->wild_mode)
-        return FALSE;
+        return false;
 
     if (creature_ptr->special_defense & KATA_MUSOU)
         set_action(creature_ptr, ACTION_NONE);
@@ -535,15 +535,15 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
     object_type tmp_object;
     it_type *it_ptr = initialize_it_type(&tmp_it, &tmp_object, delay_factor, mult, boomerang, shuriken);
     if (!check_can_throw(creature_ptr, it_ptr))
-        return FALSE;
+        return false;
 
     calc_throw_range(creature_ptr, it_ptr);
     if (!calc_throw_grid(creature_ptr, it_ptr))
-        return FALSE;
+        return false;
 
     reflect_inventory_by_throw(creature_ptr, it_ptr);
     if (it_ptr->item >= INVEN_MAIN_HAND) {
-        it_ptr->equiped_item = TRUE;
+        it_ptr->equiped_item = true;
         creature_ptr->redraw |= PR_EQUIPPY;
     }
 
@@ -561,5 +561,5 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
     check_boomerang_throw(creature_ptr, it_ptr);
     process_boomerang_back(creature_ptr, it_ptr);
     drop_thrown_item(creature_ptr, it_ptr);
-    return TRUE;
+    return true;
 }

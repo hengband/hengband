@@ -15,24 +15,24 @@
  */
 bool set_leveling(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
-    bool notice = FALSE;
+    bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
     if (creature_ptr->is_dead)
-        return FALSE;
+        return false;
 
     if (v) {
         if (creature_ptr->tsubureru && !do_dec) {
             if (creature_ptr->tsubureru > v)
-                return FALSE;
+                return false;
         } else if (!creature_ptr->tsubureru) {
             msg_print(_("横に伸びた。", "Your body expands horizontally."));
-            notice = TRUE;
+            notice = true;
         }
     } else {
         if (creature_ptr->tsubureru) {
             msg_print(_("もう横に伸びていない。", "Your body returns to normal."));
-            notice = TRUE;
+            notice = true;
         }
     }
 
@@ -40,11 +40,11 @@ bool set_leveling(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
     creature_ptr->redraw |= (PR_STATUS);
 
     if (!notice)
-        return FALSE;
+        return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, false, false);
     creature_ptr->update |= (PU_BONUS);
     handle_stuff(creature_ptr);
-    return TRUE;
+    return true;
 }

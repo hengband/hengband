@@ -15,10 +15,10 @@ bool item_tester_hook_convertible(player_type *player_ptr, object_type *o_ptr)
     (void)player_ptr;
 
     if ((o_ptr->tval == TV_JUNK) || (o_ptr->tval == TV_SKELETON))
-        return TRUE;
+        return true;
     if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_SKELETON))
-        return TRUE;
-    return FALSE;
+        return true;
+    return false;
 }
 
 /*!
@@ -35,14 +35,14 @@ bool item_tester_hook_ammo(player_type *player_ptr, object_type *o_ptr)
     case TV_SHOT:
     case TV_ARROW:
     case TV_BOLT: {
-        return TRUE;
+        return true;
     }
 
     default:
         break;
     }
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -53,7 +53,7 @@ bool item_tester_hook_ammo(player_type *player_ptr, object_type *o_ptr)
 bool object_is_ammo(object_type *o_ptr)
 {
     if (TV_MISSILE_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_MISSILE_END)
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }

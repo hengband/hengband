@@ -228,7 +228,7 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
     if (!has_flag(f_ptr->flags, FF_REMEMBER))
         g_ptr->info &= ~(CAVE_MARK);
     if (g_ptr->m_idx)
-        update_monster(player_ptr, g_ptr->m_idx, FALSE);
+        update_monster(player_ptr, g_ptr->m_idx, false);
 
     note_spot(player_ptr, y, x);
     lite_spot(player_ptr, y, x);
@@ -250,7 +250,7 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
 
         if (player_has_los_grid(cc_ptr)) {
             if (cc_ptr->m_idx)
-                update_monster(player_ptr, cc_ptr->m_idx, FALSE);
+                update_monster(player_ptr, cc_ptr->m_idx, false);
             note_spot(player_ptr, yy, xx);
             lite_spot(player_ptr, yy, xx);
         }
@@ -260,7 +260,7 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
 
     if (player_ptr->special_defense & NINJA_S_STEALTH) {
         if (floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW)
-            set_superstealth(player_ptr, FALSE);
+            set_superstealth(player_ptr, false);
     }
 }
 

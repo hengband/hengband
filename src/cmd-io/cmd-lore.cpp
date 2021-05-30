@@ -42,20 +42,20 @@ void do_cmd_query_symbol(player_type *creature_ptr)
     char sym, query;
     char buf[256];
 
-    bool all = FALSE;
-    bool uniq = FALSE;
-    bool norm = FALSE;
-    bool ride = FALSE;
+    bool all = false;
+    bool uniq = false;
+    bool norm = false;
+    bool ride = false;
     char temp[MAX_MONSTER_NAME] = "";
 
-    bool recall = FALSE;
+    bool recall = false;
 
     u16b why = 0;
     MONRACE_IDX *who;
 
     if (!get_com(_("知りたい文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^R乗馬,^M名前): ",
                      "Enter character to be identified(^A:All,^U:Uniqs,^N:Non uniqs,^M:Name): "),
-            &sym, FALSE))
+            &sym, false))
         return;
 
     for (i = 0; ident_info[i]; ++i) {
@@ -64,19 +64,19 @@ void do_cmd_query_symbol(player_type *creature_ptr)
     }
 
     if (sym == KTRL('A')) {
-        all = TRUE;
+        all = true;
         strcpy(buf, _("全モンスターのリスト", "Full monster list."));
     } else if (sym == KTRL('U')) {
-        all = uniq = TRUE;
+        all = uniq = true;
         strcpy(buf, _("ユニーク・モンスターのリスト", "Unique monster list."));
     } else if (sym == KTRL('N')) {
-        all = norm = TRUE;
+        all = norm = true;
         strcpy(buf, _("ユニーク外モンスターのリスト", "Non-unique monster list."));
     } else if (sym == KTRL('R')) {
-        all = ride = TRUE;
+        all = ride = true;
         strcpy(buf, _("乗馬可能モンスターのリスト", "Ridable monster list."));
     } else if (sym == KTRL('M')) {
-        all = TRUE;
+        all = true;
         if (!get_string(_("名前(英語の場合小文字で可)", "Enter name:"), temp, 70)) {
             temp[0] = 0;
             return;
@@ -165,11 +165,11 @@ void do_cmd_query_symbol(player_type *creature_ptr)
     }
 
     i = n - 1;
-    while (TRUE) {
+    while (true) {
         r_idx = who[i];
         monster_race_track(creature_ptr, r_idx);
         handle_stuff(creature_ptr);
-        while (TRUE) {
+        while (true) {
             if (recall) {
                 screen_save();
                 screen_roff(creature_ptr, who[i], MONSTER_LORE_NORMAL);

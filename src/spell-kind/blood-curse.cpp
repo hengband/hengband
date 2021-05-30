@@ -23,9 +23,9 @@ void blood_curse_to_enemy(player_type *caster_ptr, MONSTER_IDX m_idx)
     grid_type *g_ptr = &caster_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx];
     BIT_FLAGS curse_flg = (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP);
     int count = 0;
-    bool is_first_loop = TRUE;
+    bool is_first_loop = true;
     while (is_first_loop || one_in_(5)) {
-        is_first_loop = FALSE;
+        is_first_loop = false;
         switch (randint1(28)) {
         case 1:
         case 2:
@@ -55,7 +55,7 @@ void blood_curse_to_enemy(player_type *caster_ptr, MONSTER_IDX m_idx)
                 if (m_ptr->r_idx)
                     teleport_away(caster_ptr, g_ptr->m_idx, damroll(10, 10), TELEPORT_PASSIVE);
                 if (one_in_(13))
-                    count += activate_hi_summon(caster_ptr, m_ptr->fy, m_ptr->fx, TRUE);
+                    count += activate_hi_summon(caster_ptr, m_ptr->fy, m_ptr->fx, true);
                 if (!one_in_(6))
                     break;
             }
@@ -79,7 +79,7 @@ void blood_curse_to_enemy(player_type *caster_ptr, MONSTER_IDX m_idx)
             /* Fall through */
         case 17:
         case 18:
-            count += activate_hi_summon(caster_ptr, m_ptr->fy, m_ptr->fx, TRUE);
+            count += activate_hi_summon(caster_ptr, m_ptr->fy, m_ptr->fx, true);
             if (!one_in_(6))
                 break;
             /* Fall through */
@@ -120,7 +120,7 @@ void blood_curse_to_enemy(player_type *caster_ptr, MONSTER_IDX m_idx)
         case 28: {
             if (one_in_(13)) {
                 for (int i = 0; i < A_MAX; i++) {
-                    bool is_first_dec_stat = TRUE;
+                    bool is_first_dec_stat = true;
                     while (is_first_dec_stat || one_in_(2)) {
                         (void)do_dec_stat(caster_ptr, i);
                     }

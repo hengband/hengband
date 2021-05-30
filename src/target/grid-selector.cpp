@@ -33,27 +33,27 @@ static bool tgt_pt_accept(player_type *creature_ptr, POSITION y, POSITION x)
 {
     floor_type *floor_ptr = creature_ptr->current_floor_ptr;
     if (!(in_bounds(floor_ptr, y, x)))
-        return FALSE;
+        return false;
 
     if ((y == creature_ptr->y) && (x == creature_ptr->x))
-        return TRUE;
+        return true;
 
     if (creature_ptr->image)
-        return FALSE;
+        return false;
 
     grid_type *g_ptr;
     g_ptr = &floor_ptr->grid_array[y][x];
     if (!(g_ptr->info & (CAVE_MARK)))
-        return FALSE;
+        return false;
 
     if (cave_has_flag_grid(g_ptr, FF_LESS) || cave_has_flag_grid(g_ptr, FF_MORE) || cave_has_flag_grid(g_ptr, FF_QUEST_ENTER)
         || cave_has_flag_grid(g_ptr, FF_QUEST_EXIT))
-        return TRUE;
+        return true;
 
     if (cave_has_flag_grid(g_ptr, FF_STORE) || cave_has_flag_grid(g_ptr, FF_BLDG))
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 /*
@@ -187,13 +187,13 @@ bool tgt_pt(player_type *creature_ptr, POSITION *x_ptr, POSITION *y_ptr)
         tgt_pt_prepare(creature_ptr, info.ys, info.xs);
 
     msg_print(_("場所を選んでスペースキーを押して下さい。", "Select a point and press space."));
-    msg_flag = FALSE;
+    msg_flag = false;
 
     info.ch = 0;
     info.n = 0;
-    bool success = FALSE;
+    bool success = false;
     while ((info.ch != ESCAPE) && !success) {
-        bool move_fast = FALSE;
+        bool move_fast = false;
         move_cursor_relative(info.y, info.x);
         info.ch = inkey();
         switch (info.ch) {
@@ -205,7 +205,7 @@ bool tgt_pt(player_type *creature_ptr, POSITION *x_ptr, POSITION *y_ptr)
             if (player_bold(creature_ptr, info.y, info.x))
                 info.ch = 0;
             else
-                success = TRUE;
+                success = true;
             break;
         case '>':
         case '<':
@@ -237,14 +237,14 @@ bool tgt_pt(player_type *creature_ptr, POSITION *x_ptr, POSITION *y_ptr)
                     if (player_bold(creature_ptr, info.y, info.x))
                         info.ch = 0;
                     else
-                        success = TRUE;
+                        success = true;
                     break;
                 }
             }
 
             int d = get_keymap_dir(info.ch);
             if (isupper(info.ch))
-                move_fast = TRUE;
+                move_fast = true;
 
             if (d == 0)
                 break;

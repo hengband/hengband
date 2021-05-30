@@ -18,8 +18,8 @@
  */
 void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x)
 {
-    bool up_stairs = TRUE;
-    bool down_stairs = TRUE;
+    bool up_stairs = true;
+    bool down_stairs = true;
     grid_type *g_ptr;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     g_ptr = &floor_ptr->grid_array[y][x];
@@ -27,22 +27,22 @@ void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x)
         return;
 
     if (!floor_ptr->dun_level)
-        up_stairs = FALSE;
+        up_stairs = false;
 
     if (ironman_downward)
-        up_stairs = FALSE;
+        up_stairs = false;
 
     if (floor_ptr->dun_level >= d_info[player_ptr->dungeon_idx].maxdepth)
-        down_stairs = FALSE;
+        down_stairs = false;
 
     if (quest_number(player_ptr, floor_ptr->dun_level) && (floor_ptr->dun_level > 1))
-        down_stairs = FALSE;
+        down_stairs = false;
 
     if (down_stairs && up_stairs) {
         if (randint0(100) < 50)
-            up_stairs = FALSE;
+            up_stairs = false;
         else
-            down_stairs = FALSE;
+            down_stairs = false;
     }
 
     if (up_stairs)
@@ -64,14 +64,14 @@ bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
     if (cave_has_flag_grid(g_ptr, FF_PERMANENT))
-        return FALSE;
+        return false;
 
     for (const auto this_o_idx : g_ptr->o_idx_list) {
         object_type *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
         if (object_is_artifact(o_ptr))
-            return FALSE;
+            return false;
     }
 
-    return TRUE;
+    return true;
 }

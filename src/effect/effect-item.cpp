@@ -44,7 +44,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
 {
     grid_type *g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
 
-    bool is_item_affected = FALSE;
+    bool is_item_affected = false;
     bool known = player_has_los_bold(caster_ptr, y, x);
     who = who ? who : 0;
     dam = (dam + r) / (r + 1);
@@ -58,8 +58,8 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
         processed_list.insert(this_o_idx);
 
         object_type *o_ptr = &caster_ptr->current_floor_ptr->o_list[this_o_idx];
-        bool ignore = FALSE;
-        bool do_kill = FALSE;
+        bool ignore = false;
+        bool do_kill = false;
         concptr note_kill = NULL;
 
 #ifdef JP
@@ -72,30 +72,30 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
         switch (typ) {
         case GF_ACID: {
             if (hates_acid(o_ptr)) {
-                do_kill = TRUE;
+                do_kill = true;
                 note_kill = _("融けてしまった！", (plural ? " melt!" : " melts!"));
                 if (has_flag(flags, TR_IGNORE_ACID))
-                    ignore = TRUE;
+                    ignore = true;
             }
 
             break;
         }
         case GF_ELEC: {
             if (hates_elec(o_ptr)) {
-                do_kill = TRUE;
+                do_kill = true;
                 note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
                 if (has_flag(flags, TR_IGNORE_ELEC))
-                    ignore = TRUE;
+                    ignore = true;
             }
 
             break;
         }
         case GF_FIRE: {
             if (hates_fire(o_ptr)) {
-                do_kill = TRUE;
+                do_kill = true;
                 note_kill = _("燃えてしまった！", (plural ? " burn up!" : " burns up!"));
                 if (has_flag(flags, TR_IGNORE_FIRE))
-                    ignore = TRUE;
+                    ignore = true;
             }
 
             break;
@@ -103,45 +103,45 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
         case GF_COLD: {
             if (hates_cold(o_ptr)) {
                 note_kill = _("砕け散ってしまった！", (plural ? " shatter!" : " shatters!"));
-                do_kill = TRUE;
+                do_kill = true;
                 if (has_flag(flags, TR_IGNORE_COLD))
-                    ignore = TRUE;
+                    ignore = true;
             }
 
             break;
         }
         case GF_PLASMA: {
             if (hates_fire(o_ptr)) {
-                do_kill = TRUE;
+                do_kill = true;
                 note_kill = _("燃えてしまった！", (plural ? " burn up!" : " burns up!"));
                 if (has_flag(flags, TR_IGNORE_FIRE))
-                    ignore = TRUE;
+                    ignore = true;
             }
 
             if (hates_elec(o_ptr)) {
-                ignore = FALSE;
-                do_kill = TRUE;
+                ignore = false;
+                do_kill = true;
                 note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
                 if (has_flag(flags, TR_IGNORE_ELEC))
-                    ignore = TRUE;
+                    ignore = true;
             }
 
             break;
         }
         case GF_METEOR: {
             if (hates_fire(o_ptr)) {
-                do_kill = TRUE;
+                do_kill = true;
                 note_kill = _("燃えてしまった！", (plural ? " burn up!" : " burns up!"));
                 if (has_flag(flags, TR_IGNORE_FIRE))
-                    ignore = TRUE;
+                    ignore = true;
             }
 
             if (hates_cold(o_ptr)) {
-                ignore = FALSE;
-                do_kill = TRUE;
+                ignore = false;
+                do_kill = true;
                 note_kill = _("砕け散ってしまった！", (plural ? " shatter!" : " shatters!"));
                 if (has_flag(flags, TR_IGNORE_COLD))
-                    ignore = TRUE;
+                    ignore = true;
             }
 
             break;
@@ -152,7 +152,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
         case GF_SOUND: {
             if (hates_cold(o_ptr)) {
                 note_kill = _("砕け散ってしまった！", (plural ? " shatter!" : " shatters!"));
-                do_kill = TRUE;
+                do_kill = true;
             }
 
             break;
@@ -160,41 +160,41 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
         case GF_MANA:
         case GF_SEEKER:
         case GF_SUPER_RAY: {
-            do_kill = TRUE;
+            do_kill = true;
             note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
             break;
         }
         case GF_DISINTEGRATE: {
-            do_kill = TRUE;
+            do_kill = true;
             note_kill = _("蒸発してしまった！", (plural ? " evaporate!" : " evaporates!"));
             break;
         }
         case GF_CHAOS: {
-            do_kill = TRUE;
+            do_kill = true;
             note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
             if (has_flag(flags, TR_RES_CHAOS))
-                ignore = TRUE;
+                ignore = true;
             else if ((o_ptr->tval == TV_SCROLL) && (o_ptr->sval == SV_SCROLL_CHAOS))
-                ignore = TRUE;
+                ignore = true;
             break;
         }
         case GF_HOLY_FIRE:
         case GF_HELL_FIRE: {
             if (object_is_cursed(o_ptr)) {
-                do_kill = TRUE;
+                do_kill = true;
                 note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
             }
 
             break;
         }
         case GF_VOID: {
-            do_kill = TRUE;
+            do_kill = true;
             note_kill = _("消滅してしまった！", (plural ? " vanish!" : " vanishes!"));
             break;
         }
         case GF_IDENTIFY: {
             identify_item(caster_ptr, o_ptr);
-            autopick_alter_item(caster_ptr, (-this_o_idx), FALSE);
+            autopick_alter_item(caster_ptr, (-this_o_idx), false);
             break;
         }
         case GF_KILL_TRAP:
@@ -208,7 +208,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
             object_known(o_ptr);
             if (known && (o_ptr->marked & OM_FOUND)) {
                 msg_print(_("カチッと音がした！", "Click!"));
-                is_item_affected = TRUE;
+                is_item_affected = true;
             }
 
             break;
@@ -235,8 +235,8 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
                 }
             }
 
-            do_kill = TRUE;
-            is_item_affected = TRUE;
+            do_kill = true;
+            is_item_affected = true;
             break;
         }
         }
@@ -246,7 +246,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
 
         GAME_TEXT o_name[MAX_NLEN];
         if (known && (o_ptr->marked & OM_FOUND)) {
-            is_item_affected = TRUE;
+            is_item_affected = true;
             describe_flavor(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         }
 

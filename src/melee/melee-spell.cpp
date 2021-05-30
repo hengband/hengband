@@ -30,24 +30,24 @@
 static bool try_melee_spell(player_type *target_ptr, melee_spell_type *ms_ptr)
 {
     if (spell_is_inate(ms_ptr->thrown_spell) || (!ms_ptr->in_no_magic_dungeon && (!monster_stunned_remaining(ms_ptr->m_ptr) || one_in_(2))))
-        return FALSE;
+        return false;
 
-    disturb(target_ptr, TRUE, TRUE);
+    disturb(target_ptr, true, true);
     if (ms_ptr->see_m)
         msg_format(_("%^sは呪文を唱えようとしたが失敗した。", "%^s tries to cast a spell, but fails."), ms_ptr->m_name);
 
-    return TRUE;
+    return true;
 }
 
 static bool disturb_melee_spell(player_type *target_ptr, melee_spell_type *ms_ptr)
 {
     if (spell_is_inate(ms_ptr->thrown_spell) || !magic_barrier(target_ptr, ms_ptr->m_idx))
-        return FALSE;
+        return false;
 
     if (ms_ptr->see_m)
         msg_format(_("反魔法バリアが%^sの呪文をかき消した。", "Anti magic barrier cancels the spell which %^s casts."), ms_ptr->m_name);
 
-    return TRUE;
+    return true;
 }
 
 static void process_special_melee_spell(player_type *target_ptr, melee_spell_type *ms_ptr)
@@ -72,7 +72,7 @@ static void process_special_melee_spell(player_type *target_ptr, melee_spell_typ
     target_ptr->mane_spell[target_ptr->mane_num] = ms_ptr->thrown_spell;
     target_ptr->mane_dam[target_ptr->mane_num] = ms_ptr->dam;
     target_ptr->mane_num++;
-    target_ptr->new_mane = TRUE;
+    target_ptr->new_mane = true;
 
     target_ptr->redraw |= PR_IMITATION;
 }
@@ -117,20 +117,20 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
     melee_spell_type tmp_ms;
     melee_spell_type *ms_ptr = initialize_melee_spell_type(target_ptr, &tmp_ms, m_idx);
     if (!check_melee_spell_set(target_ptr, ms_ptr))
-        return FALSE;
+        return false;
 
     describe_melee_spell(target_ptr, ms_ptr);
     ms_ptr->thrown_spell = ms_ptr->spells[randint0(ms_ptr->spells.size())];
     if (target_ptr->riding && (m_idx == target_ptr->riding))
-        disturb(target_ptr, TRUE, TRUE);
+        disturb(target_ptr, true, true);
 
     if (try_melee_spell(target_ptr, ms_ptr) || disturb_melee_spell(target_ptr, ms_ptr))
-        return TRUE;
+        return true;
 
     ms_ptr->can_remember = is_original_ap_and_seen(target_ptr, ms_ptr->m_ptr);
-    const auto res = monspell_to_monster(target_ptr, ms_ptr->thrown_spell, ms_ptr->y, ms_ptr->x, m_idx, ms_ptr->target_idx, FALSE);
+    const auto res = monspell_to_monster(target_ptr, ms_ptr->thrown_spell, ms_ptr->y, ms_ptr->x, m_idx, ms_ptr->target_idx, false);
     if (!res.valid)
-        return FALSE;
+        return false;
 
     ms_ptr->dam = res.dam;
     process_special_melee_spell(target_ptr, ms_ptr);
@@ -138,5 +138,5 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
     if (target_ptr->is_dead && (ms_ptr->r_ptr->r_deaths < MAX_SHORT) && !target_ptr->current_floor_ptr->inside_arena)
         ms_ptr->r_ptr->r_deaths++;
 
-    return TRUE;
+    return true;
 }

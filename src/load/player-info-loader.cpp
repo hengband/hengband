@@ -242,7 +242,7 @@ static void rd_phase_out(player_type *creature_ptr)
     creature_ptr->current_floor_ptr->inside_arena = (bool)tmp16s;
     rd_s16b(&creature_ptr->current_floor_ptr->inside_quest);
     if (h_older_than(0, 3, 5))
-        creature_ptr->phase_out = FALSE;
+        creature_ptr->phase_out = false;
     else {
         rd_s16b(&tmp16s);
         creature_ptr->phase_out = (bool)tmp16s;

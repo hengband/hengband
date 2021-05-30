@@ -183,7 +183,7 @@ bool wr_dungeon(player_type *player_ptr)
         /* No array elements */
         wr_byte(0);
         wr_saved_floor(player_ptr, NULL);
-        return TRUE;
+        return true;
     }
 
     /*** In the dungeon ***/
@@ -202,7 +202,7 @@ bool wr_dungeon(player_type *player_ptr)
     saved_floor_type *cur_sf_ptr;
     cur_sf_ptr = get_sf_ptr(player_ptr->floor_id);
     if (!save_floor(player_ptr, cur_sf_ptr, SLF_SECOND))
-        return FALSE;
+        return false;
 
     for (int i = 0; i < MAX_SAVED_FLOORS; i++) {
         saved_floor_type *sf_ptr = &saved_floors[i];
@@ -274,7 +274,7 @@ bool save_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
 
     int fd = fd_make(floor_savefile, 0644);
     safe_setuid_drop();
-    bool is_save_successful = FALSE;
+    bool is_save_successful = false;
     if (fd >= 0) {
         (void)fd_close(fd);
         safe_setuid_grab(player_ptr);
@@ -282,10 +282,10 @@ bool save_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
         safe_setuid_drop();
         if (saving_savefile) {
             if (save_floor_aux(player_ptr, sf_ptr))
-                is_save_successful = TRUE;
+                is_save_successful = true;
 
             if (angband_fclose(saving_savefile))
-                is_save_successful = FALSE;
+                is_save_successful = false;
         }
 
         if (!is_save_successful) {

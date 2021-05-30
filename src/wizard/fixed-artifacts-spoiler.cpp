@@ -31,7 +31,7 @@ void spoiler_outlist(concptr header, concptr *list, char separator)
 
     int buf_len;
     int line_len = strlen(line);
-    while (TRUE) {
+    while (true) {
         strcpy(buf, *list);
         buf_len = strlen(buf);
         if (list[1]) {
@@ -86,11 +86,11 @@ static bool make_fake_artifact(player_type *player_ptr, object_type *o_ptr, ARTI
 {
     artifact_type *a_ptr = &a_info[name1];
     if (a_ptr->name.empty())
-        return FALSE;
+        return false;
 
     OBJECT_IDX i = lookup_kind(a_ptr->tval, a_ptr->sval);
     if (!i)
-        return FALSE;
+        return false;
 
     o_ptr->prep(player_ptr, i);
     o_ptr->name1 = name1;
@@ -102,7 +102,7 @@ static bool make_fake_artifact(player_type *player_ptr, object_type *o_ptr, ARTI
     o_ptr->to_h = a_ptr->to_h;
     o_ptr->to_d = a_ptr->to_d;
     o_ptr->weight = a_ptr->weight;
-    return TRUE;
+    return true;
 }
 
 /*!

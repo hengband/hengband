@@ -70,9 +70,9 @@ static bool has_joker(void)
 {
 	for (int i = 0; i < 5; i++)
 	{
-		if (IS_JOKER(cards[i])) return TRUE;
+		if (IS_JOKER(cards[i])) return true;
 	}
-	return FALSE;
+	return false;
 }
 
 
@@ -85,10 +85,10 @@ static bool find_card_num(int num)
 {
 	for (int i = 0; i < 5; i++)
 	{
-		if (NUM_OF(cards[i]) == num && !IS_JOKER(cards[i])) return TRUE;
+		if (NUM_OF(cards[i]) == num && !IS_JOKER(cards[i])) return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 
@@ -99,19 +99,19 @@ static bool find_card_num(int num)
  */
 static bool poker_hand_check_flush(void)
 {
-	bool joker_is_used = FALSE;
+	bool joker_is_used = false;
 
 	int suit = IS_JOKER(cards[0]) ? SUIT_OF(cards[1]) : SUIT_OF(cards[0]);
 	for (int i = 0; i < 5; i++) {
 		if (SUIT_OF(cards[i]) == suit) continue;
 
 		if (has_joker() && !joker_is_used)
-			joker_is_used = TRUE;
+			joker_is_used = true;
 		else
-			return FALSE;
+			return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 
@@ -123,8 +123,8 @@ static bool poker_hand_check_flush(void)
 static int poker_hand_check_straight(void)
 {
 	int lowest = 99;
-	bool joker_is_used = FALSE;
-	bool straight = FALSE;
+	bool joker_is_used = false;
+	bool straight = false;
 
 	for (int i = 0; i < 5; i++)
 	{
@@ -141,7 +141,7 @@ static int poker_hand_check_straight(void)
 			{
 				if (!find_card_num(9 + i)) {
 					if (has_joker() && !joker_is_used)
-						joker_is_used = TRUE;
+						joker_is_used = true;
 					else
 						break;
 				}
@@ -162,7 +162,7 @@ static int poker_hand_check_straight(void)
 		}
 	}
 
-	joker_is_used = FALSE;
+	joker_is_used = false;
 
 	if (lowest == 0)
 	{
@@ -171,16 +171,16 @@ static int poker_hand_check_straight(void)
 		{
 			if (!find_card_num(9 + i)) {
 				if (has_joker() && !joker_is_used)
-					joker_is_used = TRUE;
+					joker_is_used = true;
 				else
 					break;
 			}
 		}
 
-		if (i == 4) straight = TRUE;
+		if (i == 4) straight = true;
 	}
 
-	joker_is_used = FALSE;
+	joker_is_used = false;
 
 	int i;
 	for (i = 0; i < 5; i++)
@@ -188,13 +188,13 @@ static int poker_hand_check_straight(void)
 		if (!find_card_num(lowest + i))
 		{
 			if (has_joker() && !joker_is_used)
-				joker_is_used = TRUE;
+				joker_is_used = true;
 			else
 				break; /* None */
 		}
 	}
 
-	if (i == 5) straight = TRUE;
+	if (i == 5) straight = true;
 
 	if (straight && poker_hand_check_flush()) return 2; /* Straight Flush */
 	else if (straight) return 1; /* Only Straight */
@@ -588,9 +588,9 @@ int do_poker(void)
 {
 	int is_put[5];
 
-	bool done = FALSE;
-	bool decision = TRUE;
-	bool draw = TRUE;
+	bool done = false;
+	bool decision = true;
+	bool draw = true;
 
 	int deck[53];
 	reset_deck(deck);
@@ -616,7 +616,7 @@ int do_poker(void)
 			display_kaeruka(k + decision * 5, is_put);
 		}
 
-		draw = FALSE;
+		draw = false;
 		cmd = inkey();
 		switch (cmd)
 		{
@@ -628,10 +628,10 @@ int do_poker(void)
 			else
 			{
 				k = 0;
-				decision = FALSE;
+				decision = false;
 			}
 
-			draw = TRUE;
+			draw = true;
 			break;
 		case '4': case 'h': case 'H': case KTRL('B'):
 			if (!decision)
@@ -641,33 +641,33 @@ int do_poker(void)
 			else
 			{
 				k = 4;
-				decision = FALSE;
+				decision = false;
 			}
 
-			draw = TRUE;
+			draw = true;
 			break;
 		case '2': case 'j': case 'J': case KTRL('N'):
 			if (!decision)
 			{
-				decision = TRUE; draw = TRUE;
+				decision = true; draw = true;
 			}
 
 			break;
 		case '8': case 'k': case 'K': case KTRL('P'):
 			if (decision)
 			{
-				decision = FALSE; draw = TRUE;
+				decision = false; draw = true;
 			}
 
 			break;
 		case ' ': case '\r':
 			if (decision)
 			{
-				done = TRUE;
+				done = true;
 			}
 			else
 			{
-				is_put[k] = !is_put[k]; draw = TRUE;
+				is_put[k] = !is_put[k]; draw = true;
 			}
 
 			break;

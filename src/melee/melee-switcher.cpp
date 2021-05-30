@@ -19,37 +19,37 @@ void describe_melee_method(player_type *subject_ptr, mam_type *mam_ptr)
     switch (mam_ptr->method) {
     case RBM_HIT: {
         mam_ptr->act = _("%sを殴った。", "hits %s.");
-        mam_ptr->touched = TRUE;
+        mam_ptr->touched = true;
         break;
     }
     case RBM_TOUCH: {
         mam_ptr->act = _("%sを触った。", "touches %s.");
-        mam_ptr->touched = TRUE;
+        mam_ptr->touched = true;
         break;
     }
     case RBM_PUNCH: {
         mam_ptr->act = _("%sをパンチした。", "punches %s.");
-        mam_ptr->touched = TRUE;
+        mam_ptr->touched = true;
         break;
     }
     case RBM_KICK: {
         mam_ptr->act = _("%sを蹴った。", "kicks %s.");
-        mam_ptr->touched = TRUE;
+        mam_ptr->touched = true;
         break;
     }
     case RBM_CLAW: {
         mam_ptr->act = _("%sをひっかいた。", "claws %s.");
-        mam_ptr->touched = TRUE;
+        mam_ptr->touched = true;
         break;
     }
     case RBM_BITE: {
         mam_ptr->act = _("%sを噛んだ。", "bites %s.");
-        mam_ptr->touched = TRUE;
+        mam_ptr->touched = true;
         break;
     }
     case RBM_STING: {
         mam_ptr->act = _("%sを刺した。", "stings %s.");
-        mam_ptr->touched = TRUE;
+        mam_ptr->touched = true;
         break;
     }
     case RBM_SLASH: {
@@ -58,86 +58,86 @@ void describe_melee_method(player_type *subject_ptr, mam_type *mam_ptr)
     }
     case RBM_BUTT: {
         mam_ptr->act = _("%sを角で突いた。", "butts %s.");
-        mam_ptr->touched = TRUE;
+        mam_ptr->touched = true;
         break;
     }
     case RBM_CRUSH: {
         mam_ptr->act = _("%sに体当りした。", "crushes %s.");
-        mam_ptr->touched = TRUE;
+        mam_ptr->touched = true;
         break;
     }
     case RBM_ENGULF: {
         mam_ptr->act = _("%sを飲み込んだ。", "engulfs %s.");
-        mam_ptr->touched = TRUE;
+        mam_ptr->touched = true;
         break;
     }
     case RBM_CHARGE: {
         mam_ptr->act = _("%sに請求書をよこした。", "charges %s.");
-        mam_ptr->touched = TRUE;
+        mam_ptr->touched = true;
         break;
     }
     case RBM_CRAWL: {
         mam_ptr->act = _("%sの体の上を這い回った。", "crawls on %s.");
-        mam_ptr->touched = TRUE;
+        mam_ptr->touched = true;
         break;
     }
     case RBM_DROOL: {
         mam_ptr->act = _("%sによだれをたらした。", "drools on %s.");
-        mam_ptr->touched = FALSE;
+        mam_ptr->touched = false;
         break;
     }
     case RBM_SPIT: {
         mam_ptr->act = _("%sに唾を吐いた。", "spits on %s.");
-        mam_ptr->touched = FALSE;
+        mam_ptr->touched = false;
         break;
     }
     case RBM_EXPLODE: {
         if (mam_ptr->see_either)
-            disturb(subject_ptr, TRUE, TRUE);
+            disturb(subject_ptr, true, true);
 
         mam_ptr->act = _("爆発した。", "explodes.");
-        mam_ptr->explode = TRUE;
-        mam_ptr->touched = FALSE;
+        mam_ptr->explode = true;
+        mam_ptr->touched = false;
         break;
     }
     case RBM_GAZE: {
         mam_ptr->act = _("%sをにらんだ。", "gazes at %s.");
-        mam_ptr->touched = FALSE;
+        mam_ptr->touched = false;
         break;
     }
     case RBM_WAIL: {
         mam_ptr->act = _("%sに泣きついた。", "wails at %s.");
-        mam_ptr->touched = FALSE;
+        mam_ptr->touched = false;
         break;
     }
     case RBM_SPORE: {
         mam_ptr->act = _("%sに胞子を飛ばした。", "releases spores at %s.");
-        mam_ptr->touched = FALSE;
+        mam_ptr->touched = false;
         break;
     }
     case RBM_XXX4: {
         mam_ptr->act = _("%sにXXX4を飛ばした。", "projects XXX4's at %s.");
-        mam_ptr->touched = FALSE;
+        mam_ptr->touched = false;
         break;
     }
     case RBM_BEG: {
         mam_ptr->act = _("%sに金をせがんだ。", "begs %s for money.");
-        mam_ptr->touched = FALSE;
+        mam_ptr->touched = false;
         break;
     }
     case RBM_INSULT: {
         mam_ptr->act = _("%sを侮辱した。", "insults %s.");
-        mam_ptr->touched = FALSE;
+        mam_ptr->touched = false;
         break;
     }
     case RBM_MOAN: {
         mam_ptr->act = _("%sにむかってうめいた。", "moans at %s.");
-        mam_ptr->touched = FALSE;
+        mam_ptr->touched = false;
         break;
     }
     case RBM_SHOW: {
         mam_ptr->act = _("%sにむかって歌った。", "sings to %s.");
-        mam_ptr->touched = FALSE;
+        mam_ptr->touched = false;
         break;
     }
 
@@ -178,7 +178,7 @@ void decide_monster_attack_effect(player_type *subject_ptr, mam_type *mam_ptr)
     case RBE_EAT_ITEM:
     case RBE_EAT_GOLD:
         if ((subject_ptr->riding != mam_ptr->m_idx) && one_in_(2))
-            mam_ptr->blinked = TRUE;
+            mam_ptr->blinked = true;
 
         break;
     case RBE_EAT_FOOD:

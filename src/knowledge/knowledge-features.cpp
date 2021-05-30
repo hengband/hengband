@@ -113,7 +113,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
     int feat_cnt;
     FEAT_IDX grp_idx[100];
     TERM_COLOR attr_top = 0;
-    bool visual_list = FALSE;
+    bool visual_list = false;
     byte char_left = 0;
     TERM_LEN browser_rows = hgt - 8;
     if (direct_f_idx < 0) {
@@ -152,8 +152,8 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
     FEAT_IDX feat_cur = 0;
     FEAT_IDX feat_top = 0;
     TERM_LEN column = 0;
-    bool flag = FALSE;
-    bool redraw = TRUE;
+    bool flag = false;
+    bool redraw = true;
     TERM_COLOR *cur_attr_ptr;
     SYMBOL_CODE *cur_char_ptr;
     while (!flag) {
@@ -187,7 +187,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
                 }
             }
 
-            redraw = FALSE;
+            redraw = false;
         }
 
         if (direct_f_idx < 0) {
@@ -270,7 +270,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
                 if (prev_x_char != f_ptr->x_char[*lighting_level])
                     char_left = MAX(0, f_ptr->x_char[*lighting_level] - 10);
             } else
-                *need_redraw = TRUE;
+                *need_redraw = true;
 
             continue;
         } else if (visual_mode_command(ch, &visual_list, browser_rows - 1, wid - (max + 3), &attr_top, &char_left, cur_attr_ptr, cur_char_ptr, need_redraw)) {
@@ -285,7 +285,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
             case '\n':
             case '\r':
                 if (direct_f_idx >= 0)
-                    flag = TRUE;
+                    flag = true;
                 else
                     *lighting_level = F_LIT_STANDARD;
                 break;
@@ -325,7 +325,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
 
         switch (ch) {
         case ESCAPE: {
-            flag = TRUE;
+            flag = true;
             break;
         }
 
@@ -350,7 +350,7 @@ void do_cmd_knowledge_dungeon(player_type *creature_ptr)
         return;
 
     for (int i = 1; i < current_world_ptr->max_d_idx; i++) {
-        bool seiha = FALSE;
+        bool seiha = false;
 
         if (!d_info[i].maxdepth)
             continue;
@@ -358,14 +358,14 @@ void do_cmd_knowledge_dungeon(player_type *creature_ptr)
             continue;
         if (d_info[i].final_guardian) {
             if (!r_info[d_info[i].final_guardian].max_num)
-                seiha = TRUE;
+                seiha = true;
         } else if (max_dlv[i] == d_info[i].maxdepth)
-            seiha = TRUE;
+            seiha = true;
 
         fprintf(fff, _("%c%-12s :  %3d 階\n", "%c%-16s :  level %3d\n"), seiha ? '!' : ' ', d_info[i].name.c_str(), (int)max_dlv[i]);
     }
 
     angband_fclose(fff);
-    (void)show_file(creature_ptr, TRUE, file_name, _("今までに入ったダンジョン", "Dungeon"), 0, 0);
+    (void)show_file(creature_ptr, true, file_name, _("今までに入ったダンジョン", "Dungeon"), 0, 0);
     fd_kill(file_name);
 }

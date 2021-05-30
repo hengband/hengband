@@ -43,10 +43,10 @@ bool build_type9(player_type *player_ptr, dun_data_type *dd_ptr)
 		}
 	}
 
-	light = done = FALSE;
-	room = TRUE;
+	light = done = false;
+	room = true;
 
-	if ((floor_ptr->dun_level <= randint1(25)) && d_info[floor_ptr->dungeon_idx].flags.has_not(DF::DARKNESS)) light = TRUE;
+	if ((floor_ptr->dun_level <= randint1(25)) && d_info[floor_ptr->dungeon_idx].flags.has_not(DF::DARKNESS)) light = true;
 
 	while (!done)
 	{
@@ -70,5 +70,5 @@ bool build_type9(player_type *player_ptr, dun_data_type *dd_ptr)
 		done = generate_fracave(player_ptr, y0, x0, xsize, ysize, cutoff, light, room);
 	}
 
-	return TRUE;
+	return true;
 }

@@ -186,7 +186,7 @@ static bool process_bolt_reflection(player_type *target_ptr, effect_player_type 
     can_bolt_hit &= (ep_ptr->flag & PROJECT_REFLECTABLE) != 0;
     can_bolt_hit &= !one_in_(10);
     if (!can_bolt_hit)
-        return FALSE;
+        return false;
 
     POSITION t_y, t_x;
     int max_attempts = 10;
@@ -218,8 +218,8 @@ static bool process_bolt_reflection(player_type *target_ptr, effect_player_type 
     }
 
     (*project)(target_ptr, 0, 0, t_y, t_x, ep_ptr->dam, ep_ptr->effect_type, (PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE));
-    disturb(target_ptr, TRUE, TRUE);
-    return TRUE;
+    disturb(target_ptr, true, true);
+    return true;
 }
 
 /*!
@@ -236,7 +236,7 @@ static ep_check_result check_continue_player_effect(player_type *target_ptr, eff
         return EP_CHECK_FALSE;
 
     if (((target_ptr->special_defense & NINJA_KAWARIMI) != 0) && (ep_ptr->dam > 0) && (randint0(55) < (target_ptr->lev * 3 / 5 + 20)) && (ep_ptr->who > 0)
-        && (ep_ptr->who != target_ptr->riding) && kawarimi(target_ptr, TRUE))
+        && (ep_ptr->who != target_ptr->riding) && kawarimi(target_ptr, true))
         return EP_CHECK_FALSE;
 
     if ((ep_ptr->who == 0) || (ep_ptr->who == target_ptr->riding))
@@ -315,17 +315,17 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
         msg_format(_("攻撃が%s自身を傷つけた！", "The attack of %s has wounded %s!"), ep_ptr->m_name, m_name_self);
         (*project)(target_ptr, 0, 0, ep_ptr->m_ptr->fy, ep_ptr->m_ptr->fx, ep_ptr->get_damage, GF_MISSILE, PROJECT_KILL);
         if (target_ptr->tim_eyeeye)
-            set_tim_eyeeye(target_ptr, target_ptr->tim_eyeeye - 5, TRUE);
+            set_tim_eyeeye(target_ptr, target_ptr->tim_eyeeye - 5, true);
     }
 
     if (target_ptr->riding && ep_ptr->dam > 0) {
         rakubadam_p = (ep_ptr->dam > 200) ? 200 : ep_ptr->dam;
     }
 
-    disturb(target_ptr, TRUE, TRUE);
+    disturb(target_ptr, true, true);
     if ((target_ptr->special_defense & NINJA_KAWARIMI) && ep_ptr->dam && ep_ptr->who && (ep_ptr->who != target_ptr->riding)) {
-        (void)kawarimi(target_ptr, FALSE);
+        (void)kawarimi(target_ptr, false);
     }
 
-    return TRUE;
+    return true;
 }
