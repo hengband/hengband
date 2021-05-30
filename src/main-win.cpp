@@ -306,7 +306,7 @@ static void term_getsize(term_data *td)
         rc.right = wid;
         rc.top = 0;
         rc.bottom = hgt;
-        AdjustWindowRectEx(&rc, td->dwStyle, true, td->dwExStyle);
+        AdjustWindowRectEx(&rc, td->dwStyle, TRUE, td->dwExStyle);
         td->size_wid = rc.right - rc.left;
         td->size_hgt = rc.bottom - rc.top;
     }
@@ -2085,7 +2085,7 @@ static bool handle_window_resize(term_data *td, UINT uMsg, WPARAM wParam, LPARAM
         const LONG w = min_cols * td->tile_wid + td->size_ow1 + td->size_ow2;
         const LONG h = min_rows * td->tile_hgt + td->size_oh1 + td->size_oh2 + 1;
         RECT rc{ 0, 0, w, h };
-        AdjustWindowRectEx(&rc, td->dwStyle, true, td->dwExStyle);
+        AdjustWindowRectEx(&rc, td->dwStyle, TRUE, td->dwExStyle);
 
         MINMAXINFO *lpmmi = (MINMAXINFO *)lParam;
         lpmmi->ptMinTrackSize.x = rc.right - rc.left;
