@@ -2648,7 +2648,7 @@ int WINAPI WinMain(
     if (is_already_running()) {
         MessageBoxW(
             NULL, _(L"変愚蛮怒はすでに起動しています。", L"Hengband is already running."), _(L"エラー！", L"Error"), MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
-        return false;
+        return 0;
     }
 
     command_line.handle();
