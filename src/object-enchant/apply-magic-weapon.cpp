@@ -69,7 +69,7 @@ void apply_magic_weapon(player_type *owner_ptr, object_type *o_ptr, DEPTH level,
         if (power > 1) {
             /* power > 2 is debug only */
             if (one_in_(30) || (power > 2))
-                become_random_artifact(owner_ptr, o_ptr, FALSE);
+                become_random_artifact(owner_ptr, o_ptr, false);
             else
                 o_ptr->name2 = EGO_DIGGING;
         } else if (power < -1) {
@@ -86,11 +86,11 @@ void apply_magic_weapon(player_type *owner_ptr, object_type *o_ptr, DEPTH level,
         if (power > 1) {
             /* power > 2 is debug only */
             if (one_in_(40) || (power > 2)) {
-                become_random_artifact(owner_ptr, o_ptr, FALSE);
+                become_random_artifact(owner_ptr, o_ptr, false);
                 break;
             }
-            while (TRUE) {
-                o_ptr->name2 = get_random_ego(INVEN_MAIN_HAND, TRUE);
+            while (true) {
+                o_ptr->name2 = get_random_ego(INVEN_MAIN_HAND, true);
                 if (o_ptr->name2 == EGO_SHARPNESS && o_ptr->tval != TV_SWORD)
                     continue;
                 if (o_ptr->name2 == EGO_EARTHQUAKES && o_ptr->tval != TV_HAFTED)
@@ -122,8 +122,8 @@ void apply_magic_weapon(player_type *owner_ptr, object_type *o_ptr, DEPTH level,
         } else if (power < -1) {
             if (randint0(MAX_DEPTH) < level) {
                 int n = 0;
-                while (TRUE) {
-                    o_ptr->name2 = get_random_ego(INVEN_MAIN_HAND, FALSE);
+                while (true) {
+                    o_ptr->name2 = get_random_ego(INVEN_MAIN_HAND, false);
                     if (o_ptr->name2 == EGO_WEIRD && o_ptr->tval != TV_SWORD) {
                         continue;
                     }
@@ -147,11 +147,11 @@ void apply_magic_weapon(player_type *owner_ptr, object_type *o_ptr, DEPTH level,
         if (power > 1) {
             /* power > 2 is debug only */
             if (one_in_(20) || (power > 2)) {
-                become_random_artifact(owner_ptr, o_ptr, FALSE);
+                become_random_artifact(owner_ptr, o_ptr, false);
                 break;
             }
 
-            o_ptr->name2 = get_random_ego(INVEN_BOW, TRUE);
+            o_ptr->name2 = get_random_ego(INVEN_BOW, true);
         }
 
         break;
@@ -162,11 +162,11 @@ void apply_magic_weapon(player_type *owner_ptr, object_type *o_ptr, DEPTH level,
         if (power > 1) {
             /* power > 2 is debug only */
             if (power > 2) {
-                become_random_artifact(owner_ptr, o_ptr, FALSE);
+                become_random_artifact(owner_ptr, o_ptr, false);
                 break;
             }
 
-            o_ptr->name2 = get_random_ego(INVEN_AMMO, TRUE);
+            o_ptr->name2 = get_random_ego(INVEN_AMMO, true);
 
             while (one_in_(10L * o_ptr->dd * o_ptr->ds))
                 o_ptr->dd++;
@@ -175,7 +175,7 @@ void apply_magic_weapon(player_type *owner_ptr, object_type *o_ptr, DEPTH level,
                 o_ptr->dd = 9;
         } else if (power < -1) {
             if (randint0(MAX_DEPTH) < level) {
-                o_ptr->name2 = get_random_ego(INVEN_AMMO, FALSE);
+                o_ptr->name2 = get_random_ego(INVEN_AMMO, false);
             }
         }
 

@@ -33,14 +33,14 @@ void execute_recall(player_type *creature_ptr)
         return;
 
     if (autosave_l && (creature_ptr->word_recall == 1) && !creature_ptr->phase_out)
-        do_cmd_save_game(creature_ptr, TRUE);
+        do_cmd_save_game(creature_ptr, true);
 
     creature_ptr->word_recall--;
     creature_ptr->redraw |= (PR_STATUS);
     if (creature_ptr->word_recall != 0)
         return;
 
-    disturb(creature_ptr, FALSE, TRUE);
+    disturb(creature_ptr, false, true);
     floor_type *floor_ptr = creature_ptr->current_floor_ptr;
     if (floor_ptr->dun_level || creature_ptr->current_floor_ptr->inside_quest || creature_ptr->enter_dungeon) {
         msg_print(_("上に引っ張りあげられる感じがする！", "You feel yourself yanked upwards!"));
@@ -54,7 +54,7 @@ void execute_recall(player_type *creature_ptr)
         leave_quest_check(creature_ptr);
         leave_tower_check(creature_ptr);
         creature_ptr->current_floor_ptr->inside_quest = 0;
-        creature_ptr->leaving = TRUE;
+        creature_ptr->leaving = true;
         sound(SOUND_TPLEVEL);
         return;
     }
@@ -85,14 +85,14 @@ void execute_recall(player_type *creature_ptr)
         creature_ptr->oldpy = creature_ptr->y;
     }
 
-    creature_ptr->wild_mode = FALSE;
+    creature_ptr->wild_mode = false;
 
     /*
      * Clear all saved floors
      * and create a first saved floor
      */
     prepare_change_floor_mode(creature_ptr, CFM_FIRST_FLOOR);
-    creature_ptr->leaving = TRUE;
+    creature_ptr->leaving = true;
 
     if (creature_ptr->dungeon_idx != DUNGEON_ANGBAND) {
         sound(SOUND_TPLEVEL);
@@ -125,14 +125,14 @@ void execute_floor_reset(player_type *creature_ptr)
         return;
 
     if (autosave_l && (creature_ptr->alter_reality == 1) && !creature_ptr->phase_out)
-        do_cmd_save_game(creature_ptr, TRUE);
+        do_cmd_save_game(creature_ptr, true);
 
     creature_ptr->alter_reality--;
     creature_ptr->redraw |= (PR_STATUS);
     if (creature_ptr->alter_reality != 0)
         return;
 
-    disturb(creature_ptr, FALSE, TRUE);
+    disturb(creature_ptr, false, true);
     if (!quest_number(creature_ptr, floor_ptr->dun_level) && floor_ptr->dun_level) {
         msg_print(_("世界が変わった！", "The world changes!"));
 
@@ -141,7 +141,7 @@ void execute_floor_reset(player_type *creature_ptr)
          * and create a first saved floor
          */
         prepare_change_floor_mode(creature_ptr, CFM_FIRST_FLOOR);
-        creature_ptr->leaving = TRUE;
+        creature_ptr->leaving = true;
     } else {
         msg_print(_("世界が少しの間変化したようだ。", "The world seems to change for a moment!"));
     }

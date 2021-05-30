@@ -53,7 +53,7 @@ bool get_tag_floor(floor_type *floor_ptr, COMMAND_CODE *cp, char tag, FLOOR_IDX 
         while (s) {
             if ((s[1] == command_cmd) && (s[2] == tag)) {
                 *cp = i;
-                return TRUE;
+                return true;
             }
 
             s = angband_strchr(s + 1, '@');
@@ -61,7 +61,7 @@ bool get_tag_floor(floor_type *floor_ptr, COMMAND_CODE *cp, char tag, FLOOR_IDX 
     }
 
     if (tag < '0' || '9' < tag) {
-        return FALSE;
+        return false;
     }
 
     for (COMMAND_CODE i = 0; i < floor_num && i < 23; i++) {
@@ -73,14 +73,14 @@ bool get_tag_floor(floor_type *floor_ptr, COMMAND_CODE *cp, char tag, FLOOR_IDX 
         while (s) {
             if (s[1] == tag) {
                 *cp = i;
-                return TRUE;
+                return true;
             }
 
             s = angband_strchr(s + 1, '@');
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -114,7 +114,7 @@ bool get_tag(player_type *owner_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode,
         break;
 
     default:
-        return FALSE;
+        return false;
     }
 
     for (COMMAND_CODE i = start; i <= end; i++) {
@@ -129,7 +129,7 @@ bool get_tag(player_type *owner_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode,
         while (s) {
             if ((s[1] == command_cmd) && (s[2] == tag)) {
                 *cp = i;
-                return TRUE;
+                return true;
             }
 
             s = angband_strchr(s + 1, '@');
@@ -137,7 +137,7 @@ bool get_tag(player_type *owner_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode,
     }
 
     if (tag < '0' || '9' < tag)
-        return FALSE;
+        return false;
 
     for (COMMAND_CODE i = start; i <= end; i++) {
         object_type *o_ptr = &owner_ptr->inventory_list[i];
@@ -151,14 +151,14 @@ bool get_tag(player_type *owner_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode,
         while (s) {
             if (s[1] == tag) {
                 *cp = i;
-                return TRUE;
+                return true;
             }
 
             s = angband_strchr(s + 1, '@');
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -170,7 +170,7 @@ bool get_tag(player_type *owner_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode,
 bool get_item_okay(player_type *owner_ptr, OBJECT_IDX i, tval_type item_tester_tval)
 {
     if ((i < 0) || (i >= INVEN_TOTAL))
-        return FALSE;
+        return false;
 
     if (owner_ptr->select_ring_slot)
         return is_ring_slot(i);
@@ -189,7 +189,7 @@ bool get_item_okay(player_type *owner_ptr, OBJECT_IDX i, tval_type item_tester_t
 bool get_item_allow(player_type *owner_ptr, INVENTORY_IDX item)
 {
     if (!command_cmd)
-        return TRUE;
+        return true;
 
     object_type *o_ptr;
     if (item >= 0)
@@ -198,18 +198,18 @@ bool get_item_allow(player_type *owner_ptr, INVENTORY_IDX item)
         o_ptr = &owner_ptr->current_floor_ptr->o_list[0 - item];
 
     if (!o_ptr->inscription)
-        return TRUE;
+        return true;
 
     concptr s = angband_strchr(quark_str(o_ptr->inscription), '!');
     while (s) {
         if ((s[1] == command_cmd) || (s[1] == '*'))
             if (!verify(owner_ptr, _("本当に", "Really try"), item))
-                return FALSE;
+                return false;
 
         s = angband_strchr(s + 1, '!');
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!

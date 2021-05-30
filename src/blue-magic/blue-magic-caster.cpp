@@ -47,47 +47,47 @@
 static bool cast_blue_dispel(player_type *caster_ptr)
 {
     if (!target_set(caster_ptr, TARGET_KILL))
-        return FALSE;
+        return false;
 
     MONSTER_IDX m_idx = caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
     if ((m_idx == 0) || !player_has_los_bold(caster_ptr, target_row, target_col)
         || !projectable(caster_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col))
-        return TRUE;
+        return true;
 
     dispel_monster_status(caster_ptr, m_idx);
-    return TRUE;
+    return true;
 }
 
 static bool cast_blue_rocket(player_type *caster_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
-        return FALSE;
+        return false;
 
     msg_print(_("ロケットを発射した。", "You fire a rocket."));
     bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, RF_ABILITY::ROCKET, bmc_ptr->plev, DAM_ROLL);
     fire_rocket(caster_ptr, GF_ROCKET, bmc_ptr->dir, bmc_ptr->damage, 2);
-    return TRUE;
+    return true;
 }
 
 static bool cast_blue_shoot(player_type *caster_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
-        return FALSE;
+        return false;
 
     msg_print(_("矢を放った。", "You fire an arrow."));
     bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, RF_ABILITY::SHOOT, bmc_ptr->plev, DAM_ROLL);
     fire_bolt(caster_ptr, GF_ARROW, bmc_ptr->dir, bmc_ptr->damage);
-    return TRUE;
+    return true;
 }
 
 static bool cast_blue_hand_doom(player_type *caster_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
-        return FALSE;
+        return false;
 
     msg_print(_("<破滅の手>を放った！", "You invoke the Hand of Doom!"));
     fire_ball_hide(caster_ptr, GF_HAND_DOOM, bmc_ptr->dir, bmc_ptr->plev * 3, 0);
-    return TRUE;
+    return true;
 }
 
 static bool exe_blue_teleport_back(player_type *caster_ptr, GAME_TEXT *m_name)
@@ -97,75 +97,75 @@ static bool exe_blue_teleport_back(player_type *caster_ptr, GAME_TEXT *m_name)
     floor_type *floor_ptr = caster_ptr->current_floor_ptr;
     if ((floor_ptr->grid_array[target_row][target_col].m_idx == 0) || !player_has_los_bold(caster_ptr, target_row, target_col)
         || !projectable(caster_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col))
-        return TRUE;
+        return true;
 
     m_ptr = &floor_ptr->m_list[floor_ptr->grid_array[target_row][target_col].m_idx];
     r_ptr = &r_info[m_ptr->r_idx];
     monster_desc(caster_ptr, m_name, m_ptr, 0);
     if ((r_ptr->flagsr & RFR_RES_TELE) == 0)
-        return FALSE;
+        return false;
 
     if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flagsr & RFR_RES_ALL)) {
         if (is_original_ap_and_seen(caster_ptr, m_ptr))
             r_ptr->r_flagsr |= RFR_RES_TELE;
 
         msg_format(_("%sには効果がなかった！", "%s is unaffected!"), m_name);
-        return TRUE;
+        return true;
     }
 
     if (r_ptr->level <= randint1(100))
-        return FALSE;
+        return false;
 
     if (is_original_ap_and_seen(caster_ptr, m_ptr))
         r_ptr->r_flagsr |= RFR_RES_TELE;
 
     msg_format(_("%sには耐性がある！", "%s resists!"), m_name);
-    return TRUE;
+    return true;
 }
 
 static bool cast_blue_teleport_back(player_type *caster_ptr)
 {
     if (!target_set(caster_ptr, TARGET_KILL))
-        return FALSE;
+        return false;
 
     GAME_TEXT m_name[MAX_NLEN];
     if (exe_blue_teleport_back(caster_ptr, m_name))
-        return TRUE;
+        return true;
 
     msg_format(_("%sを引き戻した。", "You command %s to return."), m_name);
     teleport_monster_to(
         caster_ptr, caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx, caster_ptr->y, caster_ptr->x, 100, TELEPORT_PASSIVE);
-    return TRUE;
+    return true;
 }
 
 static bool cast_blue_teleport_away(player_type *caster_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
-        return FALSE;
+        return false;
 
     (void)fire_beam(caster_ptr, GF_AWAY_ALL, bmc_ptr->dir, 100);
-    return TRUE;
+    return true;
 }
 
 static bool cast_blue_psy_spear(player_type *caster_ptr, bmc_type *bmc_ptr)
 {
     if (!get_aim_dir(caster_ptr, &bmc_ptr->dir))
-        return FALSE;
+        return false;
 
     msg_print(_("光の剣を放った。", "You throw a psycho-spear."));
     bmc_ptr->damage = monspell_bluemage_damage(caster_ptr, RF_ABILITY::PSY_SPEAR, bmc_ptr->plev, DAM_ROLL);
     (void)fire_beam(caster_ptr, GF_PSY_SPEAR, bmc_ptr->dir, bmc_ptr->damage);
-    return TRUE;
+    return true;
 }
 
 static bool cast_blue_make_trap(player_type *caster_ptr)
 {
     if (!target_set(caster_ptr, TARGET_KILL))
-        return FALSE;
+        return false;
 
     msg_print(_("呪文を唱えて邪悪に微笑んだ。", "You cast a spell and cackle evilly."));
     trap_creation(caster_ptr, target_row, target_col);
-    return TRUE;
+    return true;
 }
 
 static bool switch_cast_blue_magic(player_type *caster_ptr, bmc_type *bmc_ptr, RF_ABILITY spell)
@@ -174,12 +174,12 @@ static bool switch_cast_blue_magic(player_type *caster_ptr, bmc_type *bmc_ptr, R
     case RF_ABILITY::SHRIEK:
         msg_print(_("かん高い金切り声をあげた。", "You make a high pitched shriek."));
         aggravate_monsters(caster_ptr, 0);
-        return TRUE;
+        return true;
     case RF_ABILITY::XXX1:
     case RF_ABILITY::XXX2:
     case RF_ABILITY::XXX3:
     case RF_ABILITY::XXX4:
-        return TRUE;
+        return true;
     case RF_ABILITY::DISPEL:
         return cast_blue_dispel(caster_ptr);
     case RF_ABILITY::ROCKET:
@@ -299,8 +299,8 @@ static bool switch_cast_blue_magic(player_type *caster_ptr, bmc_type *bmc_ptr, R
     case RF_ABILITY::HOLD:
         return cast_blue_sleep(caster_ptr, bmc_ptr);
     case RF_ABILITY::HASTE:
-        (void)set_fast(caster_ptr, randint1(20 + bmc_ptr->plev) + bmc_ptr->plev, FALSE);
-        return TRUE;
+        (void)set_fast(caster_ptr, randint1(20 + bmc_ptr->plev) + bmc_ptr->plev, false);
+        return true;
     case RF_ABILITY::HAND_DOOM:
         return cast_blue_hand_doom(caster_ptr, bmc_ptr);
     case RF_ABILITY::HEAL:
@@ -308,22 +308,22 @@ static bool switch_cast_blue_magic(player_type *caster_ptr, bmc_type *bmc_ptr, R
         (void)hp_player(caster_ptr, bmc_ptr->plev * 4);
         (void)set_stun(caster_ptr, 0);
         (void)set_cut(caster_ptr, 0);
-        return TRUE;
+        return true;
     case RF_ABILITY::INVULNER:
         msg_print(_("無傷の球の呪文を唱えた。", "You cast a Globe of Invulnerability."));
-        (void)set_invuln(caster_ptr, randint1(4) + 4, FALSE);
-        return TRUE;
+        (void)set_invuln(caster_ptr, randint1(4) + 4, false);
+        return true;
     case RF_ABILITY::BLINK:
         teleport_player(caster_ptr, 10, TELEPORT_SPONTANEOUS);
-        return TRUE;
+        return true;
     case RF_ABILITY::TPORT:
         teleport_player(caster_ptr, bmc_ptr->plev * 5, TELEPORT_SPONTANEOUS);
-        return TRUE;
+        return true;
     case RF_ABILITY::WORLD:
         (void)time_walk(caster_ptr);
-        return TRUE;
+        return true;
     case RF_ABILITY::SPECIAL:
-        return TRUE;
+        return true;
     case RF_ABILITY::TELE_TO:
         return cast_blue_teleport_back(caster_ptr);
     case RF_ABILITY::TELE_AWAY:
@@ -335,16 +335,16 @@ static bool switch_cast_blue_magic(player_type *caster_ptr, bmc_type *bmc_ptr, R
     case RF_ABILITY::DARKNESS:
         msg_print(_("暗闇の中で手を振った。", "You gesture in shadow."));
         (void)unlite_area(caster_ptr, 10, 3);
-        return TRUE;
+        return true;
     case RF_ABILITY::TRAPS:
         return cast_blue_make_trap(caster_ptr);
     case RF_ABILITY::FORGET:
         msg_print(_("しかし何も起きなかった。", "Nothing happens."));
-        return TRUE;
+        return true;
     case RF_ABILITY::RAISE_DEAD:
         msg_print(_("死者復活の呪文を唱えた。", "You animate the dead."));
         (void)animate_dead(caster_ptr, 0, caster_ptr->y, caster_ptr->x);
-        return TRUE;
+        return true;
     case RF_ABILITY::S_KIN:
         return cast_blue_summon_kin(caster_ptr, bmc_ptr);
     case RF_ABILITY::S_CYBER:
@@ -379,7 +379,7 @@ static bool switch_cast_blue_magic(player_type *caster_ptr, bmc_type *bmc_ptr, R
         return cast_blue_summon_unique(caster_ptr, bmc_ptr);
     default:
         msg_print("hoge?");
-        return TRUE;
+        return true;
     }
 }
 
@@ -395,10 +395,10 @@ bool cast_learned_spell(player_type *caster_ptr, RF_ABILITY spell, const bool su
     bmc_type tmp_bm;
     bmc_type *bmc_ptr = initialize_blue_magic_type(caster_ptr, &tmp_bm, success, get_pseudo_monstetr_level);
     if (!switch_cast_blue_magic(caster_ptr, bmc_ptr, spell))
-        return FALSE;
+        return false;
 
     if (bmc_ptr->no_trump)
         msg_print(_("何も現れなかった。", "No one appeared."));
 
-    return TRUE;
+    return true;
 }

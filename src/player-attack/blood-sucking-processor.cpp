@@ -44,7 +44,7 @@ void decide_blood_sucking(player_type *attacker_ptr, player_attack_type *pa_ptr)
 void calc_drain(player_attack_type *pa_ptr)
 {
     if (pa_ptr->attack_damage <= 0)
-        pa_ptr->can_drain = FALSE;
+        pa_ptr->can_drain = false;
 
     if (pa_ptr->drain_result > pa_ptr->m_ptr->hp)
         pa_ptr->drain_result = pa_ptr->m_ptr->hp;
@@ -64,18 +64,18 @@ static void drain_muramasa(player_type *attacker_ptr, player_attack_type *pa_ptr
     object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
     HIT_PROB to_h = o_ptr->to_h;
     HIT_POINT to_d = o_ptr->to_d;
-    bool flag = TRUE;
+    bool flag = true;
     for (int i = 0; i < to_h + 3; i++)
         if (one_in_(4))
-            flag = FALSE;
+            flag = false;
 
     if (flag)
         to_h++;
 
-    flag = TRUE;
+    flag = true;
     for (int i = 0; i < to_d + 3; i++)
         if (one_in_(4))
-            flag = FALSE;
+            flag = false;
 
     if (flag)
         to_d++;
@@ -122,7 +122,7 @@ static void drain_result(player_type *attacker_ptr, player_attack_type *pa_ptr, 
 
     if (*drain_msg) {
         msg_format(_("刃が%sから生命力を吸い取った！", "Your weapon drains life from %s!"), pa_ptr->m_name);
-        *drain_msg = FALSE;
+        *drain_msg = false;
     }
 
     drain_heal = (drain_heal * attacker_ptr->mutant_regenerate_mod) / 100;
@@ -155,5 +155,5 @@ void process_drain(player_type *attacker_ptr, player_attack_type *pa_ptr, const 
     if (pa_ptr->m_ptr->maxhp < 1)
         pa_ptr->m_ptr->maxhp = 1;
 
-    pa_ptr->weak = TRUE;
+    pa_ptr->weak = true;
 }

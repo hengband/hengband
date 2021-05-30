@@ -67,7 +67,7 @@ bool clear_mind(player_type *creature_ptr)
 {
     if (total_friends) {
         msg_print(_("今はペットを操ることに集中していないと。", "Your pets demand all of your attention."));
-        return FALSE;
+        return false;
     }
 
     msg_print(_("少し頭がハッキリした。", "You feel your head clear a little."));
@@ -79,7 +79,7 @@ bool clear_mind(player_type *creature_ptr)
     }
 
     creature_ptr->redraw |= (PR_MANA);
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -89,7 +89,7 @@ bool clear_mind(player_type *creature_ptr)
  */
 void set_lightspeed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
-    bool notice = FALSE;
+    bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
     if (creature_ptr->is_dead)
@@ -104,14 +104,14 @@ void set_lightspeed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
                 return;
         } else if (!creature_ptr->lightspeed) {
             msg_print(_("非常に素早く動けるようになった！", "You feel yourself moving extremely fast!"));
-            notice = TRUE;
+            notice = true;
             chg_virtue(creature_ptr, V_PATIENCE, -1);
             chg_virtue(creature_ptr, V_DILIGENCE, 1);
         }
     } else {
         if (creature_ptr->lightspeed) {
             msg_print(_("動きの素早さがなくなったようだ。", "You feel yourself slow down."));
-            notice = TRUE;
+            notice = true;
         }
     }
 
@@ -121,7 +121,7 @@ void set_lightspeed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
         return;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, false, false);
     creature_ptr->update |= (PU_BONUS);
     handle_stuff(creature_ptr);
 }
@@ -134,24 +134,24 @@ void set_lightspeed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  */
 bool set_tim_sh_force(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
-    bool notice = FALSE;
+    bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
     if (creature_ptr->is_dead)
-        return FALSE;
+        return false;
 
     if (v) {
         if (creature_ptr->tim_sh_touki && !do_dec) {
             if (creature_ptr->tim_sh_touki > v)
-                return FALSE;
+                return false;
         } else if (!creature_ptr->tim_sh_touki) {
             msg_print(_("体が闘気のオーラで覆われた。", "You are enveloped by an aura of the Force!"));
-            notice = TRUE;
+            notice = true;
         }
     } else {
         if (creature_ptr->tim_sh_touki) {
             msg_print(_("闘気が消えた。", "The aura of the Force disappeared."));
-            notice = TRUE;
+            notice = true;
         }
     }
 
@@ -159,12 +159,12 @@ bool set_tim_sh_force(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
     creature_ptr->redraw |= (PR_STATUS);
 
     if (!notice)
-        return FALSE;
+        return false;
 
     if (disturb_state)
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, false, false);
     handle_stuff(creature_ptr);
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -181,7 +181,7 @@ bool shock_power(player_type *caster_ptr)
     project_length = 1;
     DIRECTION dir;
     if (!get_aim_dir(caster_ptr, &dir))
-        return FALSE;
+        return false;
 
     POSITION y = caster_ptr->y + ddy[dir];
     POSITION x = caster_ptr->x + ddx[dir];
@@ -189,7 +189,7 @@ bool shock_power(player_type *caster_ptr)
     HIT_POINT dam = damroll(8 + ((plev - 5) / 4) + boost / 12, 8);
     fire_beam(caster_ptr, GF_MISSILE, dir, dam);
     if (!caster_ptr->current_floor_ptr->grid_array[y][x].m_idx)
-        return TRUE;
+        return true;
 
     POSITION ty = y, tx = x;
     POSITION oy = y, ox = x;
@@ -201,7 +201,7 @@ bool shock_power(player_type *caster_ptr)
 
     if (randint1(r_ptr->level * 3 / 2) > randint0(dam / 2) + dam / 2) {
         msg_format(_("%sは飛ばされなかった。", "%^s was not blown away."), m_name);
-        return TRUE;
+        return true;
     }
 
     for (int i = 0; i < 5; i++) {
@@ -218,7 +218,7 @@ bool shock_power(player_type *caster_ptr)
     bool is_shock_successful = ty != oy;
     is_shock_successful |= tx != ox;
     if (is_shock_successful)
-        return TRUE;
+        return true;
 
     msg_format(_("%sを吹き飛ばした！", "You blow %s away!"), m_name);
     caster_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = 0;
@@ -226,14 +226,14 @@ bool shock_power(player_type *caster_ptr)
     m_ptr->fy = ty;
     m_ptr->fx = tx;
 
-    update_monster(caster_ptr, m_idx, TRUE);
+    update_monster(caster_ptr, m_idx, true);
     lite_spot(caster_ptr, oy, ox);
     lite_spot(caster_ptr, ty, tx);
 
     if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
         caster_ptr->update |= (PU_MON_LITE);
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -253,7 +253,7 @@ bool cast_force_spell(player_type *caster_ptr, mind_force_trainer_type spell)
     switch (spell) {
     case SMALL_FORCE_BALL:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
 
         fire_ball(caster_ptr, GF_MISSILE, dir, damroll(3 + ((plev - 1) / 5) + boost / 12, 4), 0);
         break;
@@ -261,45 +261,45 @@ bool cast_force_spell(player_type *caster_ptr, mind_force_trainer_type spell)
         (void)lite_area(caster_ptr, damroll(2, (plev / 2)), (plev / 10) + 1);
         break;
     case FLYING_TECHNIQUE:
-        set_tim_levitation(caster_ptr, randint1(30) + 30 + boost / 5, FALSE);
+        set_tim_levitation(caster_ptr, randint1(30) + 30 + boost / 5, false);
         break;
     case KAMEHAMEHA:
         project_length = plev / 8 + 3;
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
 
         fire_beam(caster_ptr, GF_MISSILE, dir, damroll(5 + ((plev - 1) / 5) + boost / 10, 5));
         break;
     case MAGIC_RESISTANCE:
-        set_resist_magic(caster_ptr, randint1(20) + 20 + boost / 5, FALSE);
+        set_resist_magic(caster_ptr, randint1(20) + 20 + boost / 5, false);
         break;
     case IMPROVE_FORCE:
         msg_print(_("気を練った。", "You improved the Force."));
-        set_current_ki(caster_ptr, FALSE, 70 + plev);
+        set_current_ki(caster_ptr, false, 70 + plev);
         caster_ptr->update |= (PU_BONUS);
         if (randint1(get_current_ki(caster_ptr)) > (plev * 4 + 120)) {
             msg_print(_("気が暴走した！", "The Force exploded!"));
             fire_ball(caster_ptr, GF_MANA, 0, get_current_ki(caster_ptr) / 2, 10);
             take_hit(caster_ptr, DAMAGE_LOSELIFE, caster_ptr->magic_num1[0] / 2, _("気の暴走", "Explosion of the Force"));
         } else
-            return TRUE;
+            return true;
 
         break;
     case AURA_OF_FORCE:
-        set_tim_sh_force(caster_ptr, randint1(plev / 2) + 15 + boost / 7, FALSE);
+        set_tim_sh_force(caster_ptr, randint1(plev / 2) + 15 + boost / 7, false);
         break;
     case SHOCK_POWER:
         return shock_power(caster_ptr);
         break;
     case LARGE_FORCE_BALL:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
 
         fire_ball(caster_ptr, GF_MISSILE, dir, damroll(10, 6) + plev * 3 / 2 + boost * 3 / 5, (plev < 30) ? 2 : 3);
         break;
     case DISPEL_MAGIC: {
         if (!target_set(caster_ptr, TARGET_KILL))
-            return FALSE;
+            return false;
 
         MONSTER_IDX m_idx = caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
         if ((m_idx == 0) || !player_has_los_bold(caster_ptr, target_row, target_col)
@@ -310,10 +310,10 @@ bool cast_force_spell(player_type *caster_ptr, mind_force_trainer_type spell)
         break;
     }
     case SUMMON_GHOST: {
-        bool success = FALSE;
+        bool success = false;
         for (int i = 0; i < 1 + boost / 100; i++)
             if (summon_specific(caster_ptr, -1, caster_ptr->y, caster_ptr->x, plev, SUMMON_PHANTOM, PM_FORCE_PET))
-                success = TRUE;
+                success = true;
 
         if (success)
             msg_print(_("御用でございますが、御主人様？", "'Your wish, master?'"));
@@ -327,18 +327,18 @@ bool cast_force_spell(player_type *caster_ptr, mind_force_trainer_type spell)
         break;
     case SUPER_KAMEHAMEHA:
         if (!get_aim_dir(caster_ptr, &dir))
-            return FALSE;
+            return false;
 
         fire_beam(caster_ptr, GF_MANA, dir, damroll(10 + (plev / 2) + boost * 3 / 10, 15));
         break;
     case LIGHT_SPEED:
-        set_lightspeed(caster_ptr, randint1(16) + 16 + boost / 20, FALSE);
+        set_lightspeed(caster_ptr, randint1(16) + 16 + boost / 20, false);
         break;
     default:
         msg_print(_("なに？", "Zap?"));
     }
 
-    set_current_ki(caster_ptr, TRUE, 0);
+    set_current_ki(caster_ptr, true, 0);
     caster_ptr->update |= PU_BONUS;
-    return TRUE;
+    return true;
 }

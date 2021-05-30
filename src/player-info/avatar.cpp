@@ -59,16 +59,16 @@ bool compare_virtue(player_type *creature_ptr, int type, int num, int tekitou)
     switch (tekitou) {
     case VIRTUE_LARGE:
         if (vir > num)
-            return TRUE;
+            return true;
         else
-            return FALSE;
+            return false;
     case VIRTUE_SMALL:
         if (vir < num)
-            return TRUE;
+            return true;
         else
-            return FALSE;
+            return false;
     default:
-        return FALSE;
+        return false;
     }
 }
 

@@ -26,7 +26,7 @@ void pack_overflow(player_type *owner_ptr)
         return;
 
     o_ptr = &owner_ptr->inventory_list[INVEN_PACK];
-    disturb(owner_ptr, FALSE, TRUE);
+    disturb(owner_ptr, false, true);
     msg_print(_("ザックからアイテムがあふれた！", "Your pack overflows!"));
 
     describe_flavor(owner_ptr, o_name, o_ptr, 0);

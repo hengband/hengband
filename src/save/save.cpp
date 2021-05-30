@@ -211,7 +211,7 @@ static bool wr_savefile_new(player_type *player_ptr, save_type type)
 
     if (!player_ptr->is_dead) {
         if (!wr_dungeon(player_ptr))
-            return FALSE;
+            return false;
 
         wr_ghost();
         wr_s32b(0);
@@ -237,7 +237,7 @@ static bool save_player_aux(player_type *player_ptr, char *name, save_type type)
     int fd = fd_make(name, file_permission);
     safe_setuid_drop();
 
-    bool is_save_successful = FALSE;
+    bool is_save_successful = false;
     saving_savefile = NULL;
     if (fd >= 0) {
         (void)fd_close(fd);
@@ -246,10 +246,10 @@ static bool save_player_aux(player_type *player_ptr, char *name, save_type type)
         safe_setuid_drop();
         if (saving_savefile) {
             if (wr_savefile_new(player_ptr, type))
-                is_save_successful = TRUE;
+                is_save_successful = true;
 
             if (angband_fclose(saving_savefile))
-                is_save_successful = FALSE;
+                is_save_successful = false;
         }
 
         safe_setuid_grab(player_ptr);
@@ -260,11 +260,11 @@ static bool save_player_aux(player_type *player_ptr, char *name, save_type type)
     }
 
     if (!is_save_successful)
-        return FALSE;
+        return false;
 
     counts_write(player_ptr, 0, current_world_ptr->play_time);
-    current_world_ptr->character_saved = TRUE;
-    return TRUE;
+    current_world_ptr->character_saved = true;
+    return true;
 }
 
 /*!
@@ -282,7 +282,7 @@ bool save_player(player_type *player_ptr, save_type type)
     fd_kill(safe);
     safe_setuid_drop();
     update_playtime();
-    bool result = FALSE;
+    bool result = false;
     if (save_player_aux(player_ptr, safe, type)) {
         char temp[1024];
         char filename[1024];
@@ -300,15 +300,15 @@ bool save_player(player_type *player_ptr, save_type type)
         fd_move(safe, filename);
         fd_kill(temp);
         safe_setuid_drop();
-        current_world_ptr->character_loaded = TRUE;
-        result = TRUE;
+        current_world_ptr->character_loaded = true;
+        result = true;
     }
 
     if (type != SAVE_TYPE_CLOSE_GAME) {
-        current_world_ptr->is_loading_now = FALSE;
+        current_world_ptr->is_loading_now = false;
         update_creature(player_ptr);
         mproc_init(player_ptr->current_floor_ptr);
-        current_world_ptr->is_loading_now = TRUE;
+        current_world_ptr->is_loading_now = true;
     }
 
     return result;

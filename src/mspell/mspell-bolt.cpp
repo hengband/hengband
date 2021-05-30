@@ -31,7 +31,8 @@ MonsterSpellResult spell_RF4_SHOOT(player_type *target_ptr, POSITION y, POSITION
 
     const auto dam = monspell_damage(target_ptr, RF_ABILITY::SHOOT, m_idx, DAM_ROLL);
     const auto proj_res = bolt(target_ptr, m_idx, y, x, GF_ARROW, dam, TARGET_TYPE);
-    sound(SOUND_SHOOT);
+    // FIXME: モンスター射撃は必中のため、命中音のSOUND_SHOOT_HIT再生を優先する
+    //sound(SOUND_SHOOT);
 
     auto res = MonsterSpellResult::make_valid(dam);
     res.learnable = proj_res.affected_player;

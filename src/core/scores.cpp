@@ -106,14 +106,14 @@ static int highscore_add(high_score *score)
     high_score the_score = (*score);
 
     /* Slide all the scores down one */
-    bool done = FALSE;
+    bool done = false;
     high_score tmpscore;
     for (int i = slot; !done && (i < MAX_HISCORES); i++) {
         /* Read the old guy, note errors */
         if (highscore_seek(i))
             return -1;
         if (highscore_read(&tmpscore))
-            done = TRUE;
+            done = true;
 
         /* Back up and dump the score we were holding */
         if (highscore_seek(i))
@@ -519,35 +519,35 @@ bool check_score(player_type *current_player_ptr)
     if (highscore_fd < 0) {
         msg_print(_("スコア・ファイルが使用できません。", "Score file unavailable."));
         msg_print(NULL);
-        return FALSE;
+        return false;
     }
 
     /* Wizard-mode pre-empts scoring */
     if (current_world_ptr->noscore & 0x000F) {
         msg_print(_("ウィザード・モードではスコアが記録されません。", "Score not registered for wizards."));
         msg_print(NULL);
-        return FALSE;
+        return false;
     }
 
     /* Cheaters are not scored */
     if (current_world_ptr->noscore & 0xFF00) {
         msg_print(_("詐欺をやった人はスコアが記録されません。", "Score not registered for cheaters."));
         msg_print(NULL);
-        return FALSE;
+        return false;
     }
 
     /* Interupted */
     if (!current_world_ptr->total_winner && streq(current_player_ptr->died_from, _("強制終了", "Interrupting"))) {
         msg_print(_("強制終了のためスコアが記録されません。", "Score not registered due to interruption."));
         msg_print(NULL);
-        return FALSE;
+        return false;
     }
 
     /* Quitter */
     if (!current_world_ptr->total_winner && streq(current_player_ptr->died_from, _("途中終了", "Quitting"))) {
         msg_print(_("途中終了のためスコアが記録されません。", "Score not registered due to quitting."));
         msg_print(NULL);
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }

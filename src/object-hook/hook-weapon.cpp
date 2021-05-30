@@ -22,18 +22,18 @@ bool item_tester_hook_orthodox_melee_weapons(player_type *player_ptr, object_typ
     case TV_HAFTED:
     case TV_POLEARM:
     case TV_DIGGING: {
-        return TRUE;
+        return true;
     }
     case TV_SWORD: {
         if (o_ptr->sval != SV_POISON_NEEDLE)
-            return TRUE;
+            return true;
     }
 
     default:
         break;
     }
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -48,9 +48,9 @@ bool item_tester_hook_melee_weapon(player_type *player_ptr, object_type *o_ptr)
 
     /* Check for a usable slot */
     if ((o_ptr->tval >= TV_DIGGING) && (o_ptr->tval <= TV_SWORD))
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -64,15 +64,15 @@ bool item_tester_hook_broken_weapon(player_type *player_ptr, object_type *o_ptr)
     (void)player_ptr;
 
     if (o_ptr->tval != TV_SWORD)
-        return FALSE;
+        return false;
 
     switch (o_ptr->sval) {
     case SV_BROKEN_DAGGER:
     case SV_BROKEN_SWORD:
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -86,9 +86,9 @@ bool item_tester_hook_boomerang(player_type *player_ptr, object_type *o_ptr)
     (void)player_ptr;
 
     if ((o_ptr->tval == TV_DIGGING) || (o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM) || (o_ptr->tval == TV_HAFTED))
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -103,9 +103,9 @@ bool item_tester_hook_mochikae(player_type *player_ptr, object_type *o_ptr)
 
     /* Check for a usable slot */
     if (((o_ptr->tval >= TV_DIGGING) && (o_ptr->tval <= TV_SWORD)) || (o_ptr->tval == TV_SHIELD) || (o_ptr->tval == TV_CAPTURE) || (o_ptr->tval == TV_CARD))
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -117,7 +117,7 @@ bool object_is_favorite(player_type *player_ptr, object_type *o_ptr)
 {
     /* Only melee weapons match */
     if (!(o_ptr->tval == TV_POLEARM || o_ptr->tval == TV_SWORD || o_ptr->tval == TV_DIGGING || o_ptr->tval == TV_HAFTED)) {
-        return FALSE;
+        return false;
     }
 
     /* Favorite weapons are varied depend on the class */
@@ -127,7 +127,7 @@ bool object_is_favorite(player_type *player_ptr, object_type *o_ptr)
         object_flags_known(player_ptr, o_ptr, flgs);
 
         if (!has_flag(flgs, TR_BLESSED) && !(o_ptr->tval == TV_HAFTED))
-            return FALSE;
+            return false;
         break;
     }
 
@@ -135,7 +135,7 @@ bool object_is_favorite(player_type *player_ptr, object_type *o_ptr)
     case CLASS_FORCETRAINER:
         /* Icky to wield? */
         if (!(s_info[player_ptr->pclass].w_max[o_ptr->tval - TV_WEAPON_BEGIN][o_ptr->sval]))
-            return FALSE;
+            return false;
         break;
 
     case CLASS_BEASTMASTER:
@@ -145,28 +145,28 @@ bool object_is_favorite(player_type *player_ptr, object_type *o_ptr)
 
         /* Is it known to be suitable to using while riding? */
         if (!(has_flag(flgs, TR_RIDING)))
-            return FALSE;
+            return false;
 
         break;
     }
 
     case CLASS_SORCERER:
         if (s_info[player_ptr->pclass].w_max[o_ptr->tval - TV_WEAPON_BEGIN][o_ptr->sval] < WEAPON_EXP_MASTER)
-            return FALSE;
+            return false;
         break;
 
     case CLASS_NINJA:
         /* Icky to wield? */
         if (s_info[player_ptr->pclass].w_max[o_ptr->tval - TV_WEAPON_BEGIN][o_ptr->sval] <= WEAPON_EXP_BEGINNER)
-            return FALSE;
+            return false;
         break;
 
     default:
         /* All weapons are okay for non-special classes */
-        return TRUE;
+        return true;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -180,9 +180,9 @@ bool object_is_weapon(player_type *player_ptr, object_type *o_ptr)
     (void)player_ptr;
 
     if (TV_WEAPON_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_WEAPON_END)
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -194,9 +194,9 @@ bool object_is_weapon(player_type *player_ptr, object_type *o_ptr)
 bool object_is_weapon_ammo(object_type *o_ptr)
 {
     if (TV_MISSILE_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_WEAPON_END)
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -210,9 +210,9 @@ bool object_is_weapon_armour_ammo(player_type *player_ptr, object_type *o_ptr)
     (void)player_ptr;
 
     if (object_is_weapon_ammo(o_ptr) || object_is_armour(player_ptr, o_ptr))
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -223,9 +223,9 @@ bool object_is_weapon_armour_ammo(player_type *player_ptr, object_type *o_ptr)
 bool object_is_melee_weapon(object_type *o_ptr)
 {
     if (TV_DIGGING <= o_ptr->tval && o_ptr->tval <= TV_SWORD)
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -236,9 +236,9 @@ bool object_is_melee_weapon(object_type *o_ptr)
 bool object_is_wearable(object_type *o_ptr)
 {
     if (TV_WEARABLE_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_WEARABLE_END)
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -249,9 +249,9 @@ bool object_is_wearable(object_type *o_ptr)
 bool object_is_equipment(object_type *o_ptr)
 {
     if (TV_EQUIP_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_EQUIP_END)
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -262,9 +262,9 @@ bool object_is_equipment(object_type *o_ptr)
 bool object_refuse_enchant_weapon(object_type *o_ptr)
 {
     if (o_ptr->tval == TV_SWORD && o_ptr->sval == SV_POISON_NEEDLE)
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -279,9 +279,9 @@ bool object_allow_enchant_weapon(player_type *player_ptr, object_type *o_ptr)
     (void)player_ptr;
 
     if (object_is_weapon_ammo(o_ptr) && !object_refuse_enchant_weapon(o_ptr))
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -296,9 +296,9 @@ bool object_allow_enchant_melee_weapon(player_type *player_ptr, object_type *o_p
     (void)player_ptr;
 
     if (object_is_melee_weapon(o_ptr) && !object_refuse_enchant_weapon(o_ptr))
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -310,7 +310,7 @@ bool object_allow_enchant_melee_weapon(player_type *player_ptr, object_type *o_p
 bool object_allow_two_hands_wielding(object_type *o_ptr)
 {
     if (object_is_melee_weapon(o_ptr) && ((o_ptr->weight > 99) || (o_ptr->tval == TV_POLEARM)))
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }

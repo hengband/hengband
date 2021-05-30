@@ -42,13 +42,13 @@ bool exe_open(player_type *creature_ptr, POSITION y, POSITION x)
     PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     if (!has_flag(f_ptr->flags, FF_OPEN)) {
         msg_format(_("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck."), f_info[get_feat_mimic(g_ptr)].name.c_str());
-        return FALSE;
+        return false;
     }
 
     if (!f_ptr->power) {
         cave_alter_feat(creature_ptr, y, x, FF_OPEN);
         sound(SOUND_OPENDOOR);
-        return FALSE;
+        return false;
     }
 
     int i = creature_ptr->skill_dis;
@@ -68,14 +68,14 @@ bool exe_open(player_type *creature_ptr, POSITION y, POSITION x)
             flush();
 
         msg_print(_("鍵をはずせなかった。", "You failed to pick the lock."));
-        return TRUE;
+        return true;
     }
 
     msg_print(_("鍵をはずした。", "You have picked the lock."));
     cave_alter_feat(creature_ptr, y, x, FF_OPEN);
     sound(SOUND_OPENDOOR);
     gain_exp(creature_ptr, 1);
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -94,7 +94,7 @@ bool exe_close(player_type *creature_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
     FEAT_IDX old_feat = g_ptr->feat;
-    bool more = FALSE;
+    bool more = false;
     PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     if (!has_flag(f_info[old_feat].flags, FF_CLOSE))
         return more;
@@ -134,7 +134,7 @@ bool easy_open_door(player_type *creature_ptr, POSITION y, POSITION x)
     grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
     if (!is_closed_door(creature_ptr, g_ptr->feat))
-        return FALSE;
+        return false;
 
     if (!has_flag(f_ptr->flags, FF_OPEN)) {
         msg_format(_("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck."), f_info[get_feat_mimic(g_ptr)].name.c_str());
@@ -167,7 +167,7 @@ bool easy_open_door(player_type *creature_ptr, POSITION y, POSITION x)
         sound(SOUND_OPENDOOR);
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -186,7 +186,7 @@ bool easy_open_door(player_type *creature_ptr, POSITION y, POSITION x)
  */
 bool exe_disarm_chest(player_type *creature_ptr, POSITION y, POSITION x, OBJECT_IDX o_idx)
 {
-    bool more = FALSE;
+    bool more = false;
     object_type *o_ptr = &creature_ptr->current_floor_ptr->o_list[o_idx];
     PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     int i = creature_ptr->skill_dis;
@@ -211,7 +211,7 @@ bool exe_disarm_chest(player_type *creature_ptr, POSITION y, POSITION x, OBJECT_
         gain_exp(creature_ptr, o_ptr->pval);
         o_ptr->pval = (0 - o_ptr->pval);
     } else if ((i > 5) && (randint1(i) > 5)) {
-        more = TRUE;
+        more = true;
         if (flush_failure)
             flush();
 
@@ -246,7 +246,7 @@ bool exe_disarm(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir
     feature_type *f_ptr = &f_info[g_ptr->feat];
     concptr name = f_ptr->name.c_str();
     int power = f_ptr->power;
-    bool more = FALSE;
+    bool more = false;
     int i = creature_ptr->skill_dis;
     PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     if (creature_ptr->blind || no_lite(creature_ptr))
@@ -263,16 +263,16 @@ bool exe_disarm(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir
         msg_format(_("%sを解除した。", "You have disarmed the %s."), name);
         gain_exp(creature_ptr, power);
         cave_alter_feat(creature_ptr, y, x, FF_DISARM);
-        exe_movement(creature_ptr, dir, easy_disarm, FALSE);
+        exe_movement(creature_ptr, dir, easy_disarm, false);
     } else if ((i > 5) && (randint1(i) > 5)) {
         if (flush_failure)
             flush();
 
         msg_format(_("%sの解除に失敗した。", "You failed to disarm the %s."), name);
-        more = TRUE;
+        more = true;
     } else {
         msg_format(_("%sを作動させてしまった！", "You set off the %s!"), name);
-        exe_movement(creature_ptr, dir, easy_disarm, FALSE);
+        exe_movement(creature_ptr, dir, easy_disarm, false);
     }
 
     return more;
@@ -298,7 +298,7 @@ bool exe_bash(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir)
     feature_type *f_ptr = &f_info[g_ptr->feat];
     int bash = adj_str_blow[creature_ptr->stat_index[A_STR]];
     int temp = f_ptr->power;
-    bool more = FALSE;
+    bool more = false;
     concptr name = f_info[get_feat_mimic(g_ptr)].name.c_str();
     PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     msg_format(_("%sに体当たりをした！", "You smash into the %s!"), name);
@@ -318,10 +318,10 @@ bool exe_bash(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir)
             cave_alter_feat(creature_ptr, y, x, FF_OPEN);
         }
 
-        exe_movement(creature_ptr, dir, FALSE, FALSE);
+        exe_movement(creature_ptr, dir, false, false);
     } else if (randint0(100) < adj_dex_safe[creature_ptr->stat_index[A_DEX]] + creature_ptr->lev) {
         msg_format(_("この%sは頑丈だ。", "The %s holds firm."), name);
-        more = TRUE;
+        more = true;
     } else {
         msg_print(_("体のバランスをくずしてしまった。", "You are off-balance."));
         (void)set_paralyzed(creature_ptr, creature_ptr->paralyzed + 2 + randint0(2));

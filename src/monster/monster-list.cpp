@@ -202,29 +202,29 @@ static bool monster_hook_chameleon_lord(player_type *player_ptr, MONRACE_IDX r_i
     monster_race *old_r_ptr = &r_info[m_ptr->r_idx];
 
     if (!(r_ptr->flags1 & (RF1_UNIQUE)))
-        return FALSE;
+        return false;
     if (r_ptr->flags7 & (RF7_FRIENDLY | RF7_CHAMELEON))
-        return FALSE;
+        return false;
 
     if (ABS(r_ptr->level - r_info[MON_CHAMELEON_K].level) > 5)
-        return FALSE;
+        return false;
 
     if ((r_ptr->blow[0].method == RBM_EXPLODE) || (r_ptr->blow[1].method == RBM_EXPLODE) || (r_ptr->blow[2].method == RBM_EXPLODE)
         || (r_ptr->blow[3].method == RBM_EXPLODE))
-        return FALSE;
+        return false;
 
     if (!monster_can_cross_terrain(player_ptr, floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0))
-        return FALSE;
+        return false;
 
     if (!(old_r_ptr->flags7 & RF7_CHAMELEON)) {
         if (monster_has_hostile_align(player_ptr, m_ptr, 0, 0, r_ptr))
-            return FALSE;
+            return false;
     } else if (summon_specific_who > 0) {
         if (monster_has_hostile_align(player_ptr, &floor_ptr->m_list[summon_specific_who], 0, 0, r_ptr))
-            return FALSE;
+            return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -241,29 +241,29 @@ static bool monster_hook_chameleon(player_type *player_ptr, MONRACE_IDX r_idx)
     monster_race *old_r_ptr = &r_info[m_ptr->r_idx];
 
     if (r_ptr->flags1 & (RF1_UNIQUE))
-        return FALSE;
+        return false;
     if (r_ptr->flags2 & RF2_MULTIPLY)
-        return FALSE;
+        return false;
     if (r_ptr->flags7 & (RF7_FRIENDLY | RF7_CHAMELEON))
-        return FALSE;
+        return false;
 
     if ((r_ptr->blow[0].method == RBM_EXPLODE) || (r_ptr->blow[1].method == RBM_EXPLODE) || (r_ptr->blow[2].method == RBM_EXPLODE)
         || (r_ptr->blow[3].method == RBM_EXPLODE))
-        return FALSE;
+        return false;
 
     if (!monster_can_cross_terrain(player_ptr, floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0))
-        return FALSE;
+        return false;
 
     if (!(old_r_ptr->flags7 & RF7_CHAMELEON)) {
         if ((old_r_ptr->flags3 & RF3_GOOD) && !(r_ptr->flags3 & RF3_GOOD))
-            return FALSE;
+            return false;
         if ((old_r_ptr->flags3 & RF3_EVIL) && !(r_ptr->flags3 & RF3_EVIL))
-            return FALSE;
+            return false;
         if (!(old_r_ptr->flags3 & (RF3_GOOD | RF3_EVIL)) && (r_ptr->flags3 & (RF3_GOOD | RF3_EVIL)))
-            return FALSE;
+            return false;
     } else if (summon_specific_who > 0) {
         if (monster_has_hostile_align(player_ptr, &floor_ptr->m_list[summon_specific_who], 0, 0, r_ptr))
-            return FALSE;
+            return false;
     }
 
     return (*(get_monster_hook(player_ptr)))(player_ptr, r_idx);
@@ -282,9 +282,9 @@ void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, M
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     monster_race *r_ptr;
 
-    bool old_unique = FALSE;
+    bool old_unique = false;
     if (r_info[m_ptr->r_idx].flags1 & RF1_UNIQUE)
-        old_unique = TRUE;
+        old_unique = true;
     if (old_unique && (r_idx == MON_CHAMELEON))
         r_idx = MON_CHAMELEON_K;
     r_ptr = &r_info[r_idx];
@@ -321,7 +321,7 @@ void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, M
 
     m_ptr->r_idx = r_idx;
     m_ptr->ap_r_idx = r_idx;
-    update_monster(player_ptr, m_idx, FALSE);
+    update_monster(player_ptr, m_idx, false);
     lite_spot(player_ptr, m_ptr->fy, m_ptr->fx);
 
     int old_r_idx = m_ptr->r_idx;
@@ -345,7 +345,7 @@ void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, M
         monster_desc(player_ptr, m_name, m_ptr, 0);
         msg_format(_("突然%sが変身した。", "Suddenly, %s transforms!"), old_m_name);
         if (!(r_ptr->flags7 & RF7_RIDING))
-            if (process_fall_off_horse(player_ptr, 0, TRUE))
+            if (process_fall_off_horse(player_ptr, 0, true))
                 msg_format(_("地面に落とされた。", "You have fallen from %s."), m_name);
     }
 

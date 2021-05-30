@@ -70,18 +70,18 @@ bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x)
     monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
     MONRACE_IDX new_r_idx;
     MONRACE_IDX old_r_idx = m_ptr->r_idx;
-    bool targeted = (target_who == g_ptr->m_idx) ? TRUE : FALSE;
-    bool health_tracked = (caster_ptr->health_who == g_ptr->m_idx) ? TRUE : FALSE;
+    bool targeted = (target_who == g_ptr->m_idx) ? true : false;
+    bool health_tracked = (caster_ptr->health_who == g_ptr->m_idx) ? true : false;
 
     if (floor_ptr->inside_arena || caster_ptr->phase_out)
-        return FALSE;
+        return false;
     if ((caster_ptr->riding == g_ptr->m_idx) || m_ptr->mflag2.has(MFLAG2::KAGE))
-        return FALSE;
+        return false;
 
     monster_type back_m = *m_ptr;
     new_r_idx = poly_r_idx(caster_ptr, old_r_idx);
     if (new_r_idx == old_r_idx)
-        return FALSE;
+        return false;
 
     bool preserve_hold_objects = !back_m.hold_o_idx_list.empty();
 
@@ -95,18 +95,18 @@ bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x)
 
     m_ptr->hold_o_idx_list.clear();
     delete_monster_idx(caster_ptr, g_ptr->m_idx);
-    bool polymorphed = FALSE;
+    bool polymorphed = false;
     if (place_monster_aux(caster_ptr, 0, y, x, new_r_idx, mode)) {
         floor_ptr->m_list[hack_m_idx_ii].nickname = back_m.nickname;
         floor_ptr->m_list[hack_m_idx_ii].parent_m_idx = back_m.parent_m_idx;
         floor_ptr->m_list[hack_m_idx_ii].hold_o_idx_list = back_m.hold_o_idx_list;
-        polymorphed = TRUE;
+        polymorphed = true;
     } else {
         if (place_monster_aux(caster_ptr, 0, y, x, old_r_idx, (mode | PM_NO_KAGE | PM_IGNORE_TERRAIN))) {
             floor_ptr->m_list[hack_m_idx_ii] = back_m;
             mproc_init(floor_ptr);
         } else
-            preserve_hold_objects = FALSE;
+            preserve_hold_objects = false;
     }
 
     if (preserve_hold_objects) {

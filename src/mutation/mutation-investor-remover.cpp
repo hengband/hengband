@@ -20,7 +20,7 @@ static void sweep_gain_mutation(player_type *creature_ptr, glm_type *gm_ptr)
     while (attempts_left--) {
         switch_gain_mutation(creature_ptr, gm_ptr);
         if (gm_ptr->muta_which != MUTA::MAX && creature_ptr->muta.has_not(gm_ptr->muta_which))
-            gm_ptr->muta_chosen = TRUE;
+            gm_ptr->muta_chosen = true;
 
         if (gm_ptr->muta_chosen)
             break;
@@ -209,7 +209,7 @@ bool gain_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
     sweep_gain_mutation(creature_ptr, gm_ptr);
     if (!gm_ptr->muta_chosen) {
         msg_print(_("普通になった気がする。", "You feel normal."));
-        return FALSE;
+        return false;
     }
 
     chg_virtue(creature_ptr, V_CHANCE, 1);
@@ -225,7 +225,7 @@ bool gain_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
     creature_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(creature_ptr);
     set_bits(creature_ptr->update, PU_BONUS);
     handle_stuff(creature_ptr);
-    return TRUE;
+    return true;
 }
 
 static void sweep_lose_mutation(player_type *creature_ptr, glm_type *glm_ptr)
@@ -238,7 +238,7 @@ static void sweep_lose_mutation(player_type *creature_ptr, glm_type *glm_ptr)
         switch_lose_mutation(creature_ptr, glm_ptr);
         if (glm_ptr->muta_which != MUTA::MAX) {
             if (creature_ptr->muta.has(glm_ptr->muta_which)) {
-                glm_ptr->muta_chosen = TRUE;
+                glm_ptr->muta_chosen = true;
             }
         }
 
@@ -257,7 +257,7 @@ bool lose_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
     glm_type *glm_ptr = initialize_glm_type(&tmp_glm, choose_mut);
     sweep_lose_mutation(creature_ptr, glm_ptr);
     if (!glm_ptr->muta_chosen)
-        return FALSE;
+        return false;
 
     msg_print(glm_ptr->muta_desc);
     if (glm_ptr->muta_which != MUTA::MAX)
@@ -266,7 +266,7 @@ bool lose_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
     set_bits(creature_ptr->update, PU_BONUS);
     handle_stuff(creature_ptr);
     creature_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(creature_ptr);
-    return TRUE;
+    return true;
 }
 
 void lose_all_mutations(player_type *creature_ptr)

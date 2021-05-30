@@ -13,26 +13,26 @@
 bool h_older_than(byte major, byte minor, byte patch, byte extra)
 {
     if (current_world_ptr->h_ver_major < major)
-        return TRUE;
+        return true;
     if (current_world_ptr->h_ver_major > major)
-        return FALSE;
+        return false;
 
     if (current_world_ptr->h_ver_minor < minor)
-        return TRUE;
+        return true;
     if (current_world_ptr->h_ver_minor > minor)
-        return FALSE;
+        return false;
 
     if (current_world_ptr->h_ver_patch < patch)
-        return TRUE;
+        return true;
     if (current_world_ptr->h_ver_patch > patch)
-        return FALSE;
+        return false;
 
     if (current_world_ptr->h_ver_extra < extra)
-        return TRUE;
+        return true;
     if (current_world_ptr->h_ver_extra > extra)
-        return FALSE;
+        return false;
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -47,19 +47,19 @@ bool h_older_than(byte major, byte minor, byte patch, byte extra)
 bool h_older_than(byte major, byte minor, byte patch)
 {
     if (current_world_ptr->h_ver_major < major)
-        return TRUE;
+        return true;
     if (current_world_ptr->h_ver_major > major)
-        return FALSE;
+        return false;
 
     if (current_world_ptr->h_ver_minor < minor)
-        return TRUE;
+        return true;
     if (current_world_ptr->h_ver_minor > minor)
-        return FALSE;
+        return false;
 
     if (current_world_ptr->h_ver_patch < patch)
-        return TRUE;
+        return true;
     if (current_world_ptr->h_ver_patch > patch)
-        return FALSE;
+        return false;
 
-    return FALSE;
+    return false;
 }

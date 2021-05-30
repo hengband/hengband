@@ -271,7 +271,7 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
     s = fmt;
 
     /* Scan the format string */
-    while (TRUE) {
+    while (true) {
         /* All done */
         if (!*s)
             break;
@@ -336,16 +336,16 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
         aux[q++] = '%';
 
         /* Assume no "long" argument */
-        do_long = FALSE;
+        do_long = false;
 
         /* Assume no "long long" argument */
-        do_long_long = FALSE;
+        do_long_long = false;
 
         /* Assume no "xtra" processing */
-        do_xtra = FALSE;
+        do_xtra = false;
 
         /* Build the "aux" string */
-        while (TRUE) {
+        while (true) {
             /* Error -- format sequence is not terminated */
             if (!*s) {
                 /* Terminate the buffer */
@@ -372,7 +372,7 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
                     aux[q++] = *s++;
 
                     /* Note the "long" flag */
-                    do_long = TRUE;
+                    do_long = true;
                 }
 
                 /* Mega-Hack -- handle "extra-long" request */
@@ -383,7 +383,7 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
                     s++;
 
                     /* Note the "long long" flag */
-                    do_long_long = TRUE;
+                    do_long_long = true;
                 }
 
                 /* Handle normal end of format sequence */
@@ -419,7 +419,7 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
                 /* Mega-Hack -- Handle 'caret' (for "uppercase" request) */
                 else if (*s == '^') {
                     /* Note the "xtra" flag */
-                    do_xtra = TRUE;
+                    do_xtra = true;
 
                     /* Skip the "^" */
                     s++;
@@ -594,7 +594,7 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
 #ifdef JP
         for (q = 0; tmp[q]; q++)
             if (iskanji(tmp[q])) {
-                do_xtra = FALSE;
+                do_xtra = false;
                 break;
             }
 #endif
@@ -662,7 +662,7 @@ char *vformat(concptr fmt, va_list vp)
         return (format_buf);
 
     /* Keep going until successful */
-    while (TRUE) {
+    while (true) {
         uint len;
 
         /* Build the string */

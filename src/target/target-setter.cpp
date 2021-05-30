@@ -57,8 +57,8 @@ static ts_type *initialize_target_set_type(player_type *creature_ptr, ts_type *t
     ts_ptr->mode = mode;
     ts_ptr->y = creature_ptr->y;
     ts_ptr->x = creature_ptr->x;
-    ts_ptr->done = FALSE;
-    ts_ptr->flag = TRUE;
+    ts_ptr->done = false;
+    ts_ptr->flag = true;
     get_screen_size(&ts_ptr->wid, &ts_ptr->hgt);
     ts_ptr->m = 0;
     return ts_ptr;
@@ -93,7 +93,7 @@ static bool change_panel_xy(player_type *creature_ptr, POSITION y, POSITION x)
         dx = 1;
 
     if (!dy && !dx)
-        return FALSE;
+        return false;
 
     return change_panel(creature_ptr, dy, dx);
 }
@@ -193,7 +193,7 @@ static void switch_target_input(player_type *creature_ptr, ts_type *ts_ptr)
     switch (ts_ptr->query) {
     case ESCAPE:
     case 'q':
-        ts_ptr->done = TRUE;
+        ts_ptr->done = true;
         return;
     case 't':
     case '.':
@@ -208,7 +208,7 @@ static void switch_target_input(player_type *creature_ptr, ts_type *ts_ptr)
         target_who = ts_ptr->g_ptr->m_idx;
         target_row = ts_ptr->y;
         target_col = ts_ptr->x;
-        ts_ptr->done = TRUE;
+        ts_ptr->done = true;
         return;
     case ' ':
     case '*':
@@ -218,7 +218,7 @@ static void switch_target_input(player_type *creature_ptr, ts_type *ts_ptr)
 
         ts_ptr->m = 0;
         if (!expand_list)
-            ts_ptr->done = TRUE;
+            ts_ptr->done = true;
 
         return;
     case '-':
@@ -227,7 +227,7 @@ static void switch_target_input(player_type *creature_ptr, ts_type *ts_ptr)
 
         ts_ptr->m = (int)size(ys_interest) - 1;
         if (!expand_list)
-            ts_ptr->done = TRUE;
+            ts_ptr->done = true;
 
         return;
     case 'p': {
@@ -242,7 +242,7 @@ static void switch_target_input(player_type *creature_ptr, ts_type *ts_ptr)
     }
         /* Fall through */
     case 'o':
-        ts_ptr->flag = FALSE;
+        ts_ptr->flag = false;
         return;
     case 'm':
         return;
@@ -261,7 +261,7 @@ static void switch_target_input(player_type *creature_ptr, ts_type *ts_ptr)
 
         ts_ptr->m = 0;
         if (!expand_list)
-            ts_ptr->done = TRUE;
+            ts_ptr->done = true;
 
         return;
     }
@@ -276,7 +276,7 @@ static bool check_panel_changed(player_type *creature_ptr, ts_type *ts_ptr)
 {
     // カーソル移動によって描画範囲が変化しないなら何もせずその旨を返す。
     if (!change_panel(creature_ptr, ddy[ts_ptr->distance], ddx[ts_ptr->distance]))
-        return FALSE;
+        return false;
 
     // 描画範囲が変化した場合、"interesting" 座標リストおよび現在のターゲットを更新する必要がある。
 
@@ -296,12 +296,12 @@ static bool check_panel_changed(player_type *creature_ptr, ts_type *ts_ptr)
     target_set_prepare(creature_ptr, ys_interest, xs_interest, ts_ptr->mode);
 
     // 新たな "interesting" 座標リストからターゲットを探す。
-    ts_ptr->flag = TRUE;
+    ts_ptr->flag = true;
     ts_ptr->target_num = target_pick(v, u, ddy[ts_ptr->distance], ddx[ts_ptr->distance]);
     if (ts_ptr->target_num >= 0)
         ts_ptr->m = ts_ptr->target_num;
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -328,7 +328,7 @@ static void sweep_targets(player_type *creature_ptr, ts_type *ts_ptr)
         creature_ptr->window_flags |= PW_OVERHEAD;
         handle_stuff(creature_ptr);
         target_set_prepare(creature_ptr, ys_interest, xs_interest, ts_ptr->mode);
-        ts_ptr->flag = FALSE;
+        ts_ptr->flag = false;
         ts_ptr->x += dx;
         ts_ptr->y += dy;
         if (((ts_ptr->x < panel_col_min + ts_ptr->wid / 2) && (dx > 0)) || ((ts_ptr->x > panel_col_min + ts_ptr->wid / 2) && (dx < 0)))
@@ -358,12 +358,12 @@ static void sweep_targets(player_type *creature_ptr, ts_type *ts_ptr)
 static bool set_target_grid(player_type *creature_ptr, ts_type *ts_ptr)
 {
     if (!ts_ptr->flag || ys_interest.empty())
-        return FALSE;
+        return false;
 
     describe_projectablity(creature_ptr, ts_ptr);
     fix_floor_item_list(creature_ptr, ts_ptr->y, ts_ptr->x);
 
-    while (TRUE) {
+    while (true) {
         ts_ptr->query = examine_grid(creature_ptr, ts_ptr->y, ts_ptr->x, ts_ptr->mode, ts_ptr->info);
         if (ts_ptr->query)
             break;
@@ -372,7 +372,7 @@ static bool set_target_grid(player_type *creature_ptr, ts_type *ts_ptr)
     menu_target(ts_ptr);
     switch_target_input(creature_ptr, ts_ptr);
     if (ts_ptr->distance == 0)
-        return TRUE;
+        return true;
 
     ts_ptr->y2 = panel_row_min;
     ts_ptr->x2 = panel_col_min;
@@ -383,7 +383,7 @@ static bool set_target_grid(player_type *creature_ptr, ts_type *ts_ptr)
     }
     sweep_targets(creature_ptr, ts_ptr);
     ts_ptr->m = ts_ptr->target_num;
-    return TRUE;
+    return true;
 }
 
 static void describe_grid_wizard(player_type *creature_ptr, ts_type *ts_ptr)
@@ -402,7 +402,7 @@ static void switch_next_grid_command(player_type *creature_ptr, ts_type *ts_ptr)
     switch (ts_ptr->query) {
     case ESCAPE:
     case 'q':
-        ts_ptr->done = TRUE;
+        ts_ptr->done = true;
         break;
     case 't':
     case '.':
@@ -411,7 +411,7 @@ static void switch_next_grid_command(player_type *creature_ptr, ts_type *ts_ptr)
         target_who = -1;
         target_row = ts_ptr->y;
         target_col = ts_ptr->x;
-        ts_ptr->done = TRUE;
+        ts_ptr->done = true;
         break;
     case 'p':
         verify_panel(creature_ptr);
@@ -430,7 +430,7 @@ static void switch_next_grid_command(player_type *creature_ptr, ts_type *ts_ptr)
     case '+':
     case '-':
     case 'm': {
-        ts_ptr->flag = TRUE;
+        ts_ptr->flag = true;
         ts_ptr->m = 0;
         int bd = 999;
         for (size_t i = 0; i < size(ys_interest); i++) {
@@ -444,14 +444,14 @@ static void switch_next_grid_command(player_type *creature_ptr, ts_type *ts_ptr)
         }
 
         if (bd == 999)
-            ts_ptr->flag = FALSE;
+            ts_ptr->flag = false;
 
         break;
     }
     default:
         ts_ptr->distance = get_keymap_dir(ts_ptr->query);
         if (isupper(ts_ptr->query))
-            ts_ptr->move_fast = TRUE;
+            ts_ptr->move_fast = true;
 
         if (!ts_ptr->distance)
             bell();
@@ -506,7 +506,7 @@ static void sweep_target_grids(player_type *creature_ptr, ts_type *ts_ptr)
         if (set_target_grid(creature_ptr, ts_ptr))
             continue;
 
-        ts_ptr->move_fast = FALSE;
+        ts_ptr->move_fast = false;
         if ((ts_ptr->mode & TARGET_LOOK) == 0)
             print_path(creature_ptr, ts_ptr->y, ts_ptr->x);
 

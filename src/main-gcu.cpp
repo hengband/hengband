@@ -277,7 +277,7 @@ static concptr ANGBAND_DIR_XTRA_SOUND;
  * todo 有効活用されていない疑惑
  * Flag set once "sound" has been initialized
  */
-static bool can_use_sound = FALSE;
+static bool can_use_sound = false;
 
 /*
  * An array of sound file names
@@ -333,12 +333,12 @@ static int active = 0;
 /*
  * Software flag -- we are allowed to use color
  */
-static int can_use_color = FALSE;
+static int can_use_color = false;
 
 /*
  * Software flag -- we are allowed to change the colors
  */
-static int can_fix_color = FALSE;
+static int can_fix_color = false;
 
 /*
  * Simple Angband to Curses color conversion table
@@ -549,10 +549,10 @@ static bool check_file(concptr s)
     FILE *fff;
     fff = fopen(s, "r");
     if (!fff)
-        return (FALSE);
+        return false;
 
     fclose(fff);
-    return (TRUE);
+    return true;
 }
 
 /*
@@ -582,7 +582,7 @@ static bool init_sound(void)
     }
 
     /* Sound available */
-    can_use_sound = TRUE;
+    can_use_sound = true;
     return (can_use_sound);
 }
 
@@ -673,7 +673,7 @@ static errr Term_xtra_gcu_event(int v)
         char *bp = buf;
 
         /* Paranoia -- Wait for it */
-        nodelay(stdscr, FALSE);
+        nodelay(stdscr, false);
 
         /* Get a keypress */
         i = getch();
@@ -687,7 +687,7 @@ static errr Term_xtra_gcu_event(int v)
         *bp++ = (char)i;
 
         /* Do not wait for it */
-        nodelay(stdscr, TRUE);
+        nodelay(stdscr, true);
 
         while ((i = getch()) != EOF) {
             if (i == ERR)
@@ -698,7 +698,7 @@ static errr Term_xtra_gcu_event(int v)
         }
 
         /* Wait for it next time */
-        nodelay(stdscr, FALSE);
+        nodelay(stdscr, false);
 
         *bp = '\0';
 #ifdef JP
@@ -714,13 +714,13 @@ static errr Term_xtra_gcu_event(int v)
     /* Do not wait */
     else {
         /* Do not wait for it */
-        nodelay(stdscr, TRUE);
+        nodelay(stdscr, true);
 
         /* Check for keypresses */
         i = getch();
 
         /* Wait for it next time */
-        nodelay(stdscr, FALSE);
+        nodelay(stdscr, false);
 
         /* None ready */
         if (i == ERR)
@@ -920,7 +920,7 @@ static errr Term_xtra_gcu(int n, int v)
 
     /* Flush events */
     case TERM_XTRA_FLUSH:
-        while (!Term_xtra_gcu_event(FALSE))
+        while (!Term_xtra_gcu_event(false))
             ;
         return (0);
 
@@ -1069,7 +1069,7 @@ static errr term_data_init(term_data *td, int rows, int cols, int y, int x)
     term_init(t, cols, rows, 256);
 
     /* Avoid the bottom right corner */
-    t->icky_corner = TRUE;
+    t->icky_corner = true;
 
     /* Erase with "white space" */
     t->attr_blank = TERM_WHITE;
@@ -1214,7 +1214,7 @@ errr init_gcu(int argc, char *argv[])
             plog("Cannot initialize sound!");
 
             /* Cannot enable */
-            arg_sound = FALSE;
+            arg_sound = false;
         }
 
         /* Change setting */
@@ -1225,7 +1225,7 @@ errr init_gcu(int argc, char *argv[])
     if (arg_graphics) {
         /* if USE_NCURSES_ACS is defined, we can do something with graphics in curses! */
 #ifdef USE_NCURSES_ACS
-        use_graphics = TRUE;
+        use_graphics = true;
 #endif
     }
 
@@ -1234,7 +1234,7 @@ errr init_gcu(int argc, char *argv[])
 #ifdef USE_GETCH
 
     /* Paranoia -- Assume no waiting */
-    nodelay(stdscr, FALSE);
+    nodelay(stdscr, false);
 
 #endif
 

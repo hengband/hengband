@@ -64,7 +64,7 @@ static void cave_temp_room_lite(player_type *caster_ptr, const std::vector<Pos2D
             PERCENTAGE chance = 25;
             monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
             monster_race *r_ptr = &r_info[m_ptr->r_idx];
-            update_monster(caster_ptr, g_ptr->m_idx, FALSE);
+            update_monster(caster_ptr, g_ptr->m_idx, false);
             if (r_ptr->flags2 & (RF2_STUPID))
                 chance = 10;
             if (r_ptr->flags2 & (RF2_SMART))
@@ -121,7 +121,7 @@ static void cave_temp_room_unlite(player_type *caster_ptr, const std::vector<Pos
                     grid_type *cc_ptr = &caster_ptr->current_floor_ptr->grid_array[by][bx];
 
                     if (has_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW)) {
-                        do_dark = FALSE;
+                        do_dark = false;
                         break;
                     }
                 }
@@ -139,7 +139,7 @@ static void cave_temp_room_unlite(player_type *caster_ptr, const std::vector<Pos
         }
 
         if (g_ptr->m_idx) {
-            update_monster(caster_ptr, g_ptr->m_idx, FALSE);
+            update_monster(caster_ptr, g_ptr->m_idx, false);
         }
 
         lite_spot(caster_ptr, y, x);
@@ -254,7 +254,7 @@ static void cave_temp_room_aux(
  */
 static void cave_temp_lite_room_aux(player_type *caster_ptr, std::vector<Pos2D> &points, const POSITION y, const POSITION x)
 {
-    cave_temp_room_aux(caster_ptr, points, y, x, FALSE, cave_los_bold);
+    cave_temp_room_aux(caster_ptr, points, y, x, false, cave_los_bold);
 }
 
 /*!
@@ -274,7 +274,7 @@ static bool cave_pass_dark_bold(floor_type *floor_ptr, POSITION y, POSITION x) {
  */
 static void cave_temp_unlite_room_aux(player_type *caster_ptr, std::vector<Pos2D> &points, const POSITION y, const POSITION x)
 {
-    cave_temp_room_aux(caster_ptr, points, y, x, TRUE, cave_pass_dark_bold);
+    cave_temp_room_aux(caster_ptr, points, y, x, true, cave_pass_dark_bold);
 }
 
 /*!
@@ -320,7 +320,7 @@ void lite_room(player_type *caster_ptr, const POSITION y1, const POSITION x1)
     // 超隠密状態の更新。
     if (caster_ptr->special_defense & NINJA_S_STEALTH) {
         if (floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info & CAVE_GLOW)
-            set_superstealth(caster_ptr, FALSE);
+            set_superstealth(caster_ptr, false);
     }
 }
 
@@ -393,7 +393,7 @@ bool starlight(player_type *caster_ptr, bool magic)
             (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL | PROJECT_LOS));
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -407,7 +407,7 @@ bool lite_area(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 {
     if (d_info[caster_ptr->dungeon_idx].flags.has(DF::DARKNESS)) {
         msg_print(_("ダンジョンが光を吸収した。", "The darkness of this dungeon absorbs your light."));
-        return FALSE;
+        return false;
     }
 
     if (!caster_ptr->blind) {
@@ -419,7 +419,7 @@ bool lite_area(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 
     lite_room(caster_ptr, caster_ptr->y, caster_ptr->x);
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -440,7 +440,7 @@ bool unlite_area(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 
     unlite_room(caster_ptr, caster_ptr->y, caster_ptr->x);
 
-    return TRUE;
+    return true;
 }
 
 /*!

@@ -102,7 +102,7 @@ static void describe_ring(flavor_type *flavor_ptr)
         flavor_ptr->basenm = _("#指輪", "& # Ring~");
 
     if (!flavor_ptr->k_ptr->to_h && !flavor_ptr->k_ptr->to_d && (flavor_ptr->o_ptr->to_h || flavor_ptr->o_ptr->to_d))
-        flavor_ptr->show_weapon = TRUE;
+        flavor_ptr->show_weapon = true;
 }
 
 static void describe_staff(flavor_type *flavor_ptr)
@@ -338,7 +338,7 @@ void switch_tval_description(flavor_type *flavor_ptr)
     case TV_POLEARM:
     case TV_SWORD:
     case TV_DIGGING:
-        flavor_ptr->show_weapon = TRUE;
+        flavor_ptr->show_weapon = true;
         break;
     case TV_BOOTS:
     case TV_GLOVES:
@@ -349,7 +349,7 @@ void switch_tval_description(flavor_type *flavor_ptr)
     case TV_SOFT_ARMOR:
     case TV_HARD_ARMOR:
     case TV_DRAG_ARMOR:
-        flavor_ptr->show_armour = TRUE;
+        flavor_ptr->show_armour = true;
         break;
     case TV_LITE:
         break;

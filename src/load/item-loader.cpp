@@ -307,8 +307,8 @@ errr load_item(void)
             k_ptr = &dummy;
 
         rd_byte(&tmp8u);
-        k_ptr->aware = (tmp8u & 0x01) ? TRUE : FALSE;
-        k_ptr->tried = (tmp8u & 0x02) ? TRUE : FALSE;
+        k_ptr->aware = (tmp8u & 0x01) ? true : false;
+        k_ptr->tried = (tmp8u & 0x02) ? true : false;
     }
 
     if (arg_fiddle)

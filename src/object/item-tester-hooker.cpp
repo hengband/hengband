@@ -24,22 +24,22 @@ bool (*item_tester_hook)(player_type *, object_type *);
 bool item_tester_okay(player_type *player_ptr, object_type *o_ptr, tval_type tval)
 {
     if (!o_ptr->k_idx)
-        return FALSE;
+        return false;
 
     if (o_ptr->tval == TV_GOLD) {
         if (!show_gold_on_floor)
-            return FALSE;
+            return false;
     }
 
     if (tval) {
         if ((tval <= TV_DEATH_BOOK) && (tval >= TV_LIFE_BOOK))
             return check_book_realm(player_ptr, o_ptr->tval, o_ptr->sval);
         else if (tval != o_ptr->tval)
-            return FALSE;
+            return false;
     }
 
     if (item_tester_hook == NULL)
-        return TRUE;
+        return true;
 
     return (*item_tester_hook)(player_ptr, o_ptr);
 }

@@ -66,7 +66,7 @@ static void display_sub_hand(player_type *creature_ptr)
         return;
     }
 
-    if ((creature_ptr->pclass != CLASS_MONK) || ((empty_hands(creature_ptr, TRUE) & EMPTY_HAND_MAIN) == 0))
+    if ((creature_ptr->pclass != CLASS_MONK) || ((empty_hands(creature_ptr, true) & EMPTY_HAND_MAIN) == 0))
         return;
 
     if ((creature_ptr->special_defense & KAMAE_MASK) == 0) {

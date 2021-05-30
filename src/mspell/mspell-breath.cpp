@@ -28,20 +28,20 @@ static bool spell_RF4_BREATH_special_message(MONSTER_IDX r_idx, int GF_TYPE, con
 {
     if (r_idx == MON_JAIAN && GF_TYPE == GF_SOUND) {
         msg_format(_("%^s「ボォエ～～～～～～」", "%^s sings, 'Booooeeeeee'"), m_name);
-        return TRUE;
+        return true;
     }
     if (r_idx == MON_BOTEI && GF_TYPE == GF_SHARDS) {
         msg_format(_("%^s「ボ帝ビルカッター！！！」", "%^s shouts, 'Boty-Build cutter!!!'"), m_name);
-        return TRUE;
+        return true;
     }
     if (r_idx == MON_RAOU &&GF_TYPE == GF_FORCE) {
         if (one_in_(2))
             msg_format(_("%^s「北斗剛掌波！！」", "%^s says, 'Hokuto Goh-Sho-Ha!!'"), m_name);
         else
             msg_format(_("%^s「受けてみい！！天将奔烈！！！」", "%^s says, 'Tensho-Honretsu!!'"), m_name);
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -60,7 +60,7 @@ MonsterSpellResult spell_RF4_BREATH(player_type *target_ptr, int GF_TYPE, POSITI
 {
     HIT_POINT dam, drs_type = 0;
     concptr type_s;
-    bool smart_learn_aux = TRUE;
+    bool smart_learn_aux = true;
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
@@ -140,17 +140,17 @@ MonsterSpellResult spell_RF4_BREATH(player_type *target_ptr, int GF_TYPE, POSITI
     case GF_TIME:
         dam = monspell_damage(target_ptr, RF_ABILITY::BR_TIME, m_idx, DAM_ROLL);
         type_s = _("時間逆転", "time");
-        smart_learn_aux = FALSE;
+        smart_learn_aux = false;
         break;
     case GF_INERTIAL:
         dam = monspell_damage(target_ptr, RF_ABILITY::BR_INER, m_idx, DAM_ROLL);
         type_s = _("遅鈍", "inertia");
-        smart_learn_aux = FALSE;
+        smart_learn_aux = false;
         break;
     case GF_GRAVITY:
         dam = monspell_damage(target_ptr, RF_ABILITY::BR_GRAV, m_idx, DAM_ROLL);
         type_s = _("重力", "gravity");
-        smart_learn_aux = FALSE;
+        smart_learn_aux = false;
         break;
     case GF_SHARDS:
         dam = monspell_damage(target_ptr, RF_ABILITY::BR_SHAR, m_idx, DAM_ROLL);
@@ -160,17 +160,17 @@ MonsterSpellResult spell_RF4_BREATH(player_type *target_ptr, int GF_TYPE, POSITI
     case GF_PLASMA:
         dam = monspell_damage(target_ptr, RF_ABILITY::BR_PLAS, m_idx, DAM_ROLL);
         type_s = _("プラズマ", "plasma");
-        smart_learn_aux = FALSE;
+        smart_learn_aux = false;
         break;
     case GF_FORCE:
         dam = monspell_damage(target_ptr, RF_ABILITY::BR_FORC, m_idx, DAM_ROLL);
         type_s = _("フォース", "force");
-        smart_learn_aux = FALSE;
+        smart_learn_aux = false;
         break;
     case GF_MANA:
         dam = monspell_damage(target_ptr, RF_ABILITY::BR_MANA, m_idx, DAM_ROLL);
         type_s = _("魔力", "mana");
-        smart_learn_aux = FALSE;
+        smart_learn_aux = false;
         break;
     case GF_NUKE:
         dam = monspell_damage(target_ptr, RF_ABILITY::BR_NUKE, m_idx, DAM_ROLL);
@@ -180,18 +180,18 @@ MonsterSpellResult spell_RF4_BREATH(player_type *target_ptr, int GF_TYPE, POSITI
     case GF_DISINTEGRATE:
         dam = monspell_damage(target_ptr, RF_ABILITY::BR_DISI, m_idx, DAM_ROLL);
         type_s = _("分解", "disintegration");
-        smart_learn_aux = FALSE;
+        smart_learn_aux = false;
         break;
     default:
         /* Do not reach here */
         dam = 0;
         type_s = _("不明", "Unknown");
-        smart_learn_aux = FALSE;
+        smart_learn_aux = false;
         break;
     }
 
     if (mon_to_player || (mon_to_mon && known && see_either))
-        disturb(target_ptr, TRUE, TRUE);
+        disturb(target_ptr, true, true);
 
     if (!spell_RF4_BREATH_special_message(m_ptr->r_idx, GF_TYPE, m_name)) {
         if (target_ptr->blind) {
@@ -207,10 +207,10 @@ MonsterSpellResult spell_RF4_BREATH(player_type *target_ptr, int GF_TYPE, POSITI
     }
 
     if (mon_to_mon && known && !see_either)
-        floor_ptr->monster_noise = TRUE;
+        floor_ptr->monster_noise = true;
 
     sound(SOUND_BREATH);
-    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_TYPE, dam, 0, TRUE, TARGET_TYPE);
+    const auto proj_res = breath(target_ptr, y, x, m_idx, GF_TYPE, dam, 0, true, TARGET_TYPE);
     if (smart_learn_aux && mon_to_player)
         update_smart_learn(target_ptr, m_idx, drs_type);
 

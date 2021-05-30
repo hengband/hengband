@@ -110,7 +110,7 @@ errr get_rnd_line(concptr file_name, int entry, char *output)
 
     int test;
     int line_num = 0;
-    while (TRUE) {
+    while (true) {
         if (angband_fgets(fp, buf, sizeof(buf)) != 0) {
             angband_fclose(fp);
             return -1;
@@ -140,7 +140,7 @@ errr get_rnd_line(concptr file_name, int entry, char *output)
 
     int counter;
     for (counter = 0;; counter++) {
-        while (TRUE) {
+        while (true) {
             test = angband_fgets(fp, buf, sizeof(buf));
             if (!test) {
                 /* Ignore lines starting with 'N:' */
@@ -181,7 +181,7 @@ errr get_rnd_line_jonly(concptr file_name, int entry, char *output, int count)
         result = get_rnd_line(file_name, entry, output);
         if (result)
             break;
-        bool kanji = FALSE;
+        bool kanji = false;
         for (int j = 0; output[j]; j++)
             kanji |= iskanji(output[j]);
         if (kanji)
@@ -214,7 +214,7 @@ static errr counts_seek(player_type *creature_ptr, int fd, u32b where, bool flag
 
     int seekpoint = 0;
     u32b zero_header[3] = { 0L, 0L, 0L };
-    while (TRUE) {
+    while (true) {
         if (fd_seek(fd, seekpoint + 3 * sizeof(u32b)))
             return 1;
         if (fd_read(fd, (char *)(temp2), sizeof(temp2))) {
@@ -250,7 +250,7 @@ u32b counts_read(player_type *creature_ptr, int where)
     int fd = fd_open(buf, O_RDONLY);
 
     u32b count = 0;
-    if (counts_seek(creature_ptr, fd, where, FALSE) || fd_read(fd, (char *)(&count), sizeof(u32b)))
+    if (counts_seek(creature_ptr, fd, where, false) || fd_read(fd, (char *)(&count), sizeof(u32b)))
         count = 0;
 
     (void)fd_close(fd);
@@ -286,7 +286,7 @@ errr counts_write(player_type *creature_ptr, int where, u32b count)
     if (err)
         return 1;
 
-    counts_seek(creature_ptr, fd, where, TRUE);
+    counts_seek(creature_ptr, fd, where, true);
     fd_write(fd, (char *)(&count), sizeof(u32b));
     safe_setuid_grab(creature_ptr);
     err = fd_lock(fd, F_UNLCK);

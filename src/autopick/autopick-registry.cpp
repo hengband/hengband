@@ -40,7 +40,7 @@ static bool clear_auto_register(player_type *player_ptr)
     }
 
     if (!pref_fff) {
-        return TRUE;
+        return true;
     }
 
     char tmp_file[1024];
@@ -50,13 +50,13 @@ static bool clear_auto_register(player_type *player_ptr)
         fclose(pref_fff);
         msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), tmp_file);
         msg_print(NULL);
-        return FALSE;
+        return false;
     }
 
-    bool autoregister = FALSE;
+    bool autoregister = false;
     int num = 0;
     char buf[1024];
-    while (TRUE) {
+    while (true) {
         if (angband_fgets(pref_fff, buf, sizeof(buf)))
             break;
 
@@ -67,7 +67,7 @@ static bool clear_auto_register(player_type *player_ptr)
         }
 
         if (streq(buf, autoregister_header)) {
-            autoregister = TRUE;
+            autoregister = true;
         } else {
             fprintf(tmp_fff, "%s\n", buf);
         }
@@ -76,14 +76,14 @@ static bool clear_auto_register(player_type *player_ptr)
     angband_fclose(pref_fff);
     angband_fclose(tmp_fff);
 
-    bool okay = TRUE;
+    bool okay = true;
     if (num) {
         msg_format(_("以前のキャラクター用の自動設定(%d行)が残っています。", "Auto registered lines (%d lines) for previous character are remaining."), num);
         strcpy(buf, _("古い設定行は削除します。よろしいですか？", "These lines will be deleted.  Are you sure? "));
 
         if (!get_check(buf)) {
-            okay = FALSE;
-            autoregister = FALSE;
+            okay = false;
+            autoregister = false;
 
             msg_print(_("エディタのカット&ペースト等を使って必要な行を避難してください。", "Use cut & paste of auto picker editor (_) to keep old prefs."));
         }
@@ -124,7 +124,7 @@ bool autopick_autoregister(player_type *player_ptr, object_type *o_ptr)
             what = _("確認して拾う", "query auto-pickup");
 
         msg_format(_("そのアイテムは既に%sように設定されています。", "The object is already registered to %s."), what);
-        return FALSE;
+        return false;
     }
 
     if ((object_is_known(o_ptr) && object_is_artifact(o_ptr))
@@ -132,12 +132,12 @@ bool autopick_autoregister(player_type *player_ptr, object_type *o_ptr)
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(player_ptr, o_name, o_ptr, 0);
         msg_format(_("%sは破壊不能だ。", "You cannot auto-destroy %s."), o_name);
-        return FALSE;
+        return false;
     }
 
     if (!player_ptr->autopick_autoregister) {
         if (!clear_auto_register(player_ptr))
-            return FALSE;
+            return false;
     }
 
     char buf[1024];
@@ -152,14 +152,14 @@ bool autopick_autoregister(player_type *player_ptr, object_type *o_ptr)
     }
 
     if (pref_fff) {
-        while (TRUE) {
+        while (true) {
             if (angband_fgets(pref_fff, buf, sizeof(buf))) {
-                player_ptr->autopick_autoregister = FALSE;
+                player_ptr->autopick_autoregister = false;
                 break;
             }
 
             if (streq(buf, autoregister_header)) {
-                player_ptr->autopick_autoregister = TRUE;
+                player_ptr->autopick_autoregister = true;
                 break;
             }
         }
@@ -170,14 +170,14 @@ bool autopick_autoregister(player_type *player_ptr, object_type *o_ptr)
          * File could not be opened for reading.  Assume header not
          * present.
          */
-        player_ptr->autopick_autoregister = FALSE;
+        player_ptr->autopick_autoregister = false;
     }
 
     pref_fff = angband_fopen(pref_file, "a");
     if (!pref_fff) {
         msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), pref_file);
         msg_print(NULL);
-        return FALSE;
+        return false;
     }
 
     if (!player_ptr->autopick_autoregister) {
@@ -187,7 +187,7 @@ bool autopick_autoregister(player_type *player_ptr, object_type *o_ptr)
         fprintf(pref_fff, "%s\n",
             _("# 後で自動的に削除されますので、必要な行は上の方へ移動しておいてください。",
                 "# Keep it by cut & paste if you need these lines for future characters."));
-        player_ptr->autopick_autoregister = TRUE;
+        player_ptr->autopick_autoregister = true;
     }
 
     autopick_entry_from_object(player_ptr, entry, o_ptr);
@@ -198,5 +198,5 @@ bool autopick_autoregister(player_type *player_ptr, object_type *o_ptr)
     fprintf(pref_fff, "%s\n", tmp);
     string_free(tmp);
     fclose(pref_fff);
-    return TRUE;
+    return true;
 }

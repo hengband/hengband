@@ -59,11 +59,11 @@ bool is_utf8_str(concptr str)
         const int byte_length = utf8_next_char_byte_length(str);
 
         if (byte_length == 0) {
-            return FALSE;
+            return false;
         }
 
         str += byte_length;
     }
 
-    return TRUE;
+    return true;
 }

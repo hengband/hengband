@@ -5,11 +5,14 @@
 
 #include "action/racial-execution.h"
 #include "action/action-limited.h"
+#include "artifact/fixed-art-types.h"
 #include "core/asking-player.h"
 #include "game-option/disturbance-options.h"
+#include "inventory/inventory-slot-types.h"
 #include "player-status/player-energy.h"
 #include "racial/racial-switcher.h"
 #include "racial/racial-util.h"
+#include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
@@ -53,6 +56,13 @@ PERCENTAGE racial_chance(player_type *creature_ptr, rpi_type *rpi_ptr)
             lev_adj = 10;
 
         difficulty -= lev_adj;
+    }
+
+    auto special_easy = creature_ptr->pclass == CLASS_IMITATOR;
+    special_easy &= creature_ptr->inventory_list[INVEN_NECK].name1 == ART_GOGO_PENDANT;
+    special_easy &= rpi_ptr->racial_name.compare("倍返し") == 0;
+    if (special_easy) {
+        difficulty -= 12;
     }
 
     if (difficulty < 5)
@@ -106,7 +116,7 @@ racial_level_check_result check_racial_level(player_type *creature_ptr, rpi_type
     if (creature_ptr->csp < rpi_ptr->racial_cost) {
         use_hp = rpi_ptr->racial_cost - creature_ptr->csp;
     }
-    
+
     PlayerEnergy energy(creature_ptr);
     if (creature_ptr->lev < min_level) {
         msg_format(_("この能力を使用するにはレベル %d に達していなければなりません。", "You need to attain level %d to use this power."), min_level);

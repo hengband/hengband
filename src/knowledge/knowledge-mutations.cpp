@@ -23,6 +23,6 @@ void do_cmd_knowledge_mutations(player_type *creature_ptr)
     dump_mutations(creature_ptr, fff);
     angband_fclose(fff);
 
-    show_file(creature_ptr, TRUE, file_name, _("突然変異", "Mutations"), 0, 0);
+    show_file(creature_ptr, true, file_name, _("突然変異", "Mutations"), 0, 0);
     fd_kill(file_name);
 }

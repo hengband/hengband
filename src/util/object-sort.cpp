@@ -26,37 +26,37 @@ bool object_sort_comp(player_type *player_ptr, object_type *o_ptr, s32b o_value,
 {
     int o_type, j_type;
     if (!j_ptr->k_idx)
-        return TRUE;
+        return true;
 
     if ((o_ptr->tval == get_realm1_book(player_ptr)) && (j_ptr->tval != get_realm1_book(player_ptr)))
-        return TRUE;
+        return true;
     if ((j_ptr->tval == get_realm1_book(player_ptr)) && (o_ptr->tval != get_realm1_book(player_ptr)))
-        return FALSE;
+        return false;
 
     if ((o_ptr->tval == get_realm2_book(player_ptr)) && (j_ptr->tval != get_realm2_book(player_ptr)))
-        return TRUE;
+        return true;
     if ((j_ptr->tval == get_realm2_book(player_ptr)) && (o_ptr->tval != get_realm2_book(player_ptr)))
-        return FALSE;
+        return false;
 
     if (o_ptr->tval > j_ptr->tval)
-        return TRUE;
+        return true;
     if (o_ptr->tval < j_ptr->tval)
-        return FALSE;
+        return false;
 
     if (!object_is_aware(o_ptr))
-        return FALSE;
+        return false;
     if (!object_is_aware(j_ptr))
-        return TRUE;
+        return true;
 
     if (o_ptr->sval < j_ptr->sval)
-        return TRUE;
+        return true;
     if (o_ptr->sval > j_ptr->sval)
-        return FALSE;
+        return false;
 
     if (!object_is_known(o_ptr))
-        return FALSE;
+        return false;
     if (!object_is_known(j_ptr))
-        return TRUE;
+        return true;
 
     if (object_is_fixed_artifact(o_ptr))
         o_type = 3;
@@ -77,9 +77,9 @@ bool object_sort_comp(player_type *player_ptr, object_type *o_ptr, s32b o_value,
         j_type = 0;
 
     if (o_type < j_type)
-        return TRUE;
+        return true;
     if (o_type > j_type)
-        return FALSE;
+        return false;
 
     switch (o_ptr->tval) {
     case TV_FIGURINE:
@@ -87,25 +87,25 @@ bool object_sort_comp(player_type *player_ptr, object_type *o_ptr, s32b o_value,
     case TV_CORPSE:
     case TV_CAPTURE:
         if (r_info[o_ptr->pval].level < r_info[j_ptr->pval].level)
-            return TRUE;
+            return true;
         if ((r_info[o_ptr->pval].level == r_info[j_ptr->pval].level) && (o_ptr->pval < j_ptr->pval))
-            return TRUE;
-        return FALSE;
+            return true;
+        return false;
 
     case TV_SHOT:
     case TV_ARROW:
     case TV_BOLT:
         if (o_ptr->to_h + o_ptr->to_d < j_ptr->to_h + j_ptr->to_d)
-            return TRUE;
+            return true;
         if (o_ptr->to_h + o_ptr->to_d > j_ptr->to_h + j_ptr->to_d)
-            return FALSE;
+            return false;
         break;
 
     case TV_ROD:
         if (o_ptr->pval < j_ptr->pval)
-            return TRUE;
+            return true;
         if (o_ptr->pval > j_ptr->pval)
-            return FALSE;
+            return false;
         break;
 
     default:

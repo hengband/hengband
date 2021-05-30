@@ -38,7 +38,7 @@ bool build_type14(player_type *player_ptr, dun_data_type *dd_ptr)
 
     /* Find and reserve some space in the dungeon.  Get center of room. */
     if (!find_space(player_ptr, dd_ptr, &yval, &xval, ysize + 2, xsize + 2))
-        return FALSE;
+        return false;
 
     /* Choose lite or dark */
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -86,5 +86,5 @@ bool build_type14(player_type *player_ptr, dun_data_type *dd_ptr)
     g_ptr->feat = trap;
 
     msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("%sの部屋が生成されました。", "Room of %s was generated."), f_info[trap].name.c_str());
-    return TRUE;
+    return true;
 }

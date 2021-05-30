@@ -228,7 +228,7 @@ static void drain_essence(player_type *creature_ptr)
     size_t i;
     OBJECT_IDX item;
     int dec = 4;
-    bool observe = FALSE;
+    bool observe = false;
     int old_ds, old_dd, old_to_h, old_to_d, old_ac, old_to_a, old_pval, old_name2;
     TIME_EFFECT old_timeout;
     BIT_FLAGS old_flgs[TR_FLAG_SIZE], new_flgs[TR_FLAG_SIZE];
@@ -421,7 +421,7 @@ static void drain_essence(player_type *creature_ptr)
         if ((o_ptr->tval >= TV_SHOT) && (o_ptr->tval <= TV_BOLT))
             drain_value[i] /= 10;
         if (drain_value[i]) {
-            observe = TRUE;
+            observe = true;
         }
     }
     if (!observe) {
@@ -443,7 +443,7 @@ static void drain_essence(player_type *creature_ptr)
     }
 
     /* Apply autodestroy/inscription to the drained item */
-    autopick_alter_item(creature_ptr, item, TRUE);
+    autopick_alter_item(creature_ptr, item, true);
     creature_ptr->update |= (PU_COMBINE | PU_REORDER);
     creature_ptr->window_flags |= (PW_INVEN);
 }
@@ -518,7 +518,7 @@ static COMMAND_CODE choose_essence(void)
             for (i = 0; i < mode_max; i++)
                 prt(format("  %c) %s", 'a' + i, menu_name[i]), 2 + i, 14);
 
-            if (!get_com(_("何を付加しますか:", "Command :"), &choice, TRUE)) {
+            if (!get_com(_("何を付加しますか:", "Command :"), &choice, true)) {
                 screen_load();
                 return 0;
             }
@@ -549,7 +549,7 @@ static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
     char choice;
     concptr q, s;
     object_type *o_ptr;
-    int ask = TRUE;
+    int ask = true;
     char out_val[160];
     int num[22];
     GAME_TEXT o_name[MAX_NLEN];
@@ -568,8 +568,8 @@ static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
     }
 
     if (!repeat_pull(&i) || i < 0 || i >= max_num) {
-        flag = FALSE;
-        redraw = FALSE;
+        flag = false;
+        redraw = false;
 
         (void)strnfmt(out_val, 78, _("('*'で一覧, ESCで中断) どの能力を付加しますか？", "(*=List, ESC=exit) Add which ability? "));
         if (use_menu)
@@ -579,7 +579,7 @@ static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
         while (!flag) {
             if (choice == ESCAPE)
                 choice = ' ';
-            else if (!get_com(out_val, &choice, FALSE))
+            else if (!get_com(out_val, &choice, false))
                 break;
 
             if (use_menu && choice != ' ') {
@@ -621,7 +621,7 @@ static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
                 case '\r':
                 case '\n': {
                     i = menu_line - 1;
-                    ask = FALSE;
+                    ask = false;
                     break;
                 }
                 }
@@ -638,7 +638,7 @@ static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
                     byte col;
 
                     strcpy(dummy, "");
-                    redraw = TRUE;
+                    redraw = true;
                     if (!use_menu)
                         screen_save();
 
@@ -671,56 +671,56 @@ static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
                         strcat(dummy, es_ptr->add_name);
 
                         col = TERM_WHITE;
-                        able[ctr] = TRUE;
+                        able[ctr] = true;
 
                         if (es_ptr->essence != -1) {
                             strcat(dummy, format("(%s)", essence_name[es_ptr->essence]));
                             if (creature_ptr->magic_num1[es_ptr->essence] < es_ptr->value)
-                                able[ctr] = FALSE;
+                                able[ctr] = false;
                         } else {
                             switch (es_ptr->add) {
                             case ESSENCE_SH_FIRE:
                                 strcat(dummy, _("(焼棄+耐火炎)", "(brand fire + res.fire)"));
                                 if (creature_ptr->magic_num1[TR_BRAND_FIRE] < es_ptr->value)
-                                    able[ctr] = FALSE;
+                                    able[ctr] = false;
                                 if (creature_ptr->magic_num1[TR_RES_FIRE] < es_ptr->value)
-                                    able[ctr] = FALSE;
+                                    able[ctr] = false;
                                 break;
                             case ESSENCE_SH_ELEC:
                                 strcat(dummy, _("(電撃+耐電撃)", "(brand elec. + res. elec.)"));
                                 if (creature_ptr->magic_num1[TR_BRAND_ELEC] < es_ptr->value)
-                                    able[ctr] = FALSE;
+                                    able[ctr] = false;
                                 if (creature_ptr->magic_num1[TR_RES_ELEC] < es_ptr->value)
-                                    able[ctr] = FALSE;
+                                    able[ctr] = false;
                                 break;
                             case ESSENCE_SH_COLD:
                                 strcat(dummy, _("(凍結+耐冷気)", "(brand cold + res. cold)"));
                                 if (creature_ptr->magic_num1[TR_BRAND_COLD] < es_ptr->value)
-                                    able[ctr] = FALSE;
+                                    able[ctr] = false;
                                 if (creature_ptr->magic_num1[TR_RES_COLD] < es_ptr->value)
-                                    able[ctr] = FALSE;
+                                    able[ctr] = false;
                                 break;
                             case ESSENCE_RESISTANCE:
                                 strcat(dummy, _("(耐火炎+耐冷気+耐電撃+耐酸)", "(r.fire+r.cold+r.elec+r.acid)"));
                                 if (creature_ptr->magic_num1[TR_RES_FIRE] < es_ptr->value)
-                                    able[ctr] = FALSE;
+                                    able[ctr] = false;
                                 if (creature_ptr->magic_num1[TR_RES_COLD] < es_ptr->value)
-                                    able[ctr] = FALSE;
+                                    able[ctr] = false;
                                 if (creature_ptr->magic_num1[TR_RES_ELEC] < es_ptr->value)
-                                    able[ctr] = FALSE;
+                                    able[ctr] = false;
                                 if (creature_ptr->magic_num1[TR_RES_ACID] < es_ptr->value)
-                                    able[ctr] = FALSE;
+                                    able[ctr] = false;
                                 break;
                             case ESSENCE_SUSTAIN:
                                 strcat(dummy, _("(耐火炎+耐冷気+耐電撃+耐酸)", "(r.fire+r.cold+r.elec+r.acid)"));
                                 if (creature_ptr->magic_num1[TR_RES_FIRE] < es_ptr->value)
-                                    able[ctr] = FALSE;
+                                    able[ctr] = false;
                                 if (creature_ptr->magic_num1[TR_RES_COLD] < es_ptr->value)
-                                    able[ctr] = FALSE;
+                                    able[ctr] = false;
                                 if (creature_ptr->magic_num1[TR_RES_ELEC] < es_ptr->value)
-                                    able[ctr] = FALSE;
+                                    able[ctr] = false;
                                 if (creature_ptr->magic_num1[TR_RES_ACID] < es_ptr->value)
-                                    able[ctr] = FALSE;
+                                    able[ctr] = false;
                                 break;
                             }
                         }
@@ -741,7 +741,7 @@ static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
                 /* Hide the list */
                 else {
                     /* Hide list */
-                    redraw = FALSE;
+                    redraw = false;
                     screen_load();
                 }
 
@@ -780,7 +780,7 @@ static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
             }
 
             /* Stop the loop */
-            flag = TRUE;
+            flag = true;
         }
         if (redraw)
             screen_load();
@@ -922,12 +922,12 @@ static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
             o_ptr->xtra3 = es_ptr->add + 1;
         }
     } else {
-        bool success = TRUE;
+        bool success = true;
 
         switch (es_ptr->add) {
         case ESSENCE_SH_FIRE:
             if ((creature_ptr->magic_num1[TR_BRAND_FIRE] < use_essence) || (creature_ptr->magic_num1[TR_RES_FIRE] < use_essence)) {
-                success = FALSE;
+                success = false;
                 break;
             }
             creature_ptr->magic_num1[TR_BRAND_FIRE] -= use_essence;
@@ -935,7 +935,7 @@ static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
             break;
         case ESSENCE_SH_ELEC:
             if ((creature_ptr->magic_num1[TR_BRAND_ELEC] < use_essence) || (creature_ptr->magic_num1[TR_RES_ELEC] < use_essence)) {
-                success = FALSE;
+                success = false;
                 break;
             }
             creature_ptr->magic_num1[TR_BRAND_ELEC] -= use_essence;
@@ -943,7 +943,7 @@ static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
             break;
         case ESSENCE_SH_COLD:
             if ((creature_ptr->magic_num1[TR_BRAND_COLD] < use_essence) || (creature_ptr->magic_num1[TR_RES_COLD] < use_essence)) {
-                success = FALSE;
+                success = false;
                 break;
             }
             creature_ptr->magic_num1[TR_BRAND_COLD] -= use_essence;
@@ -953,7 +953,7 @@ static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
         case ESSENCE_SUSTAIN:
             if ((creature_ptr->magic_num1[TR_RES_ACID] < use_essence) || (creature_ptr->magic_num1[TR_RES_ELEC] < use_essence)
                 || (creature_ptr->magic_num1[TR_RES_FIRE] < use_essence) || (creature_ptr->magic_num1[TR_RES_COLD] < use_essence)) {
-                success = FALSE;
+                success = false;
                 break;
             }
             creature_ptr->magic_num1[TR_RES_ACID] -= use_essence;
@@ -1106,9 +1106,9 @@ void do_cmd_kaji(player_type *creature_ptr, bool only_browse)
                     prt(_("  d) エッセンス付加", "  d) Add essence"), 5, 14);
                     prt(_("  e) 武器/防具強化", "  e) Enchant weapon/armor"), 6, 14);
 #ifdef JP
-                    if (!get_com(format("どの能力を%sますか:", only_browse ? "調べ" : "使い"), &choice, TRUE))
+                    if (!get_com(format("どの能力を%sますか:", only_browse ? "調べ" : "使い"), &choice, true))
 #else
-                    if (!get_com("Command :", &choice, TRUE))
+                    if (!get_com("Command :", &choice, true))
 #endif
                     {
                         screen_load();

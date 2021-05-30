@@ -36,7 +36,7 @@ bool inc_stat(player_type *creature_ptr, int stat)
     BASE_STATUS gain;
     BASE_STATUS value = creature_ptr->stat_cur[stat];
     if (value >= creature_ptr->stat_max_max[stat])
-        return FALSE;
+        return false;
 
     if (value < 18) {
         gain = ((randint0(100) < 75) ? 1 : 2);
@@ -59,7 +59,7 @@ bool inc_stat(player_type *creature_ptr, int stat)
     }
 
     creature_ptr->update |= PU_BONUS;
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -81,7 +81,7 @@ bool inc_stat(player_type *creature_ptr, int stat)
  */
 bool dec_stat(player_type *creature_ptr, int stat, int amount, int permanent)
 {
-    bool res = FALSE;
+    bool res = false;
     BASE_STATUS cur = creature_ptr->stat_cur[stat];
     BASE_STATUS max = creature_ptr->stat_max[stat];
     int same = (cur == max);
@@ -112,7 +112,7 @@ bool dec_stat(player_type *creature_ptr, int stat, int amount, int permanent)
             cur = 3;
 
         if (cur != creature_ptr->stat_cur[stat])
-            res = TRUE;
+            res = true;
     }
 
     if (permanent && (max > 3)) {
@@ -143,7 +143,7 @@ bool dec_stat(player_type *creature_ptr, int stat, int amount, int permanent)
             max = cur;
 
         if (max != creature_ptr->stat_max[stat])
-            res = TRUE;
+            res = true;
     }
 
     if (res) {
@@ -167,10 +167,10 @@ bool res_stat(player_type *creature_ptr, int stat)
         creature_ptr->stat_cur[stat] = creature_ptr->stat_max[stat];
         creature_ptr->update |= (PU_BONUS);
         creature_ptr->redraw |= (PR_STATS);
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 /*
@@ -178,45 +178,45 @@ bool res_stat(player_type *creature_ptr, int stat)
  */
 bool do_dec_stat(player_type *creature_ptr, int stat)
 {
-    bool sust = FALSE;
+    bool sust = false;
     switch (stat) {
     case A_STR:
         if (has_sustain_str(creature_ptr))
-            sust = TRUE;
+            sust = true;
         break;
     case A_INT:
         if (has_sustain_int(creature_ptr))
-            sust = TRUE;
+            sust = true;
         break;
     case A_WIS:
         if (has_sustain_wis(creature_ptr))
-            sust = TRUE;
+            sust = true;
         break;
     case A_DEX:
         if (has_sustain_dex(creature_ptr))
-            sust = TRUE;
+            sust = true;
         break;
     case A_CON:
         if (has_sustain_con(creature_ptr))
-            sust = TRUE;
+            sust = true;
         break;
     case A_CHR:
         if (has_sustain_chr(creature_ptr))
-            sust = TRUE;
+            sust = true;
         break;
     }
 
     if (sust && (!ironman_nightmare || randint0(13))) {
         msg_format(_("%sなった気がしたが、すぐに元に戻った。", "You feel %s for a moment, but the feeling passes."), desc_stat_neg[stat]);
-        return TRUE;
+        return true;
     }
 
     if (dec_stat(creature_ptr, stat, 10, (ironman_nightmare && !randint0(13)))) {
         msg_format(_("ひどく%sなった気がする。", "You feel %s."), desc_stat_neg[stat]);
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 /*
@@ -226,10 +226,10 @@ bool do_res_stat(player_type *creature_ptr, int stat)
 {
     if (res_stat(creature_ptr, stat)) {
         msg_format(_("元通りに%sなった気がする。", "You feel %s."), desc_stat_pos[stat]);
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 /*
@@ -249,15 +249,15 @@ bool do_inc_stat(player_type *creature_ptr, int stat)
             chg_virtue(creature_ptr, V_VITALITY, 1);
 
         msg_format(_("ワーオ！とても%sなった！", "Wow! You feel %s!"), desc_stat_pos[stat]);
-        return TRUE;
+        return true;
     }
 
     if (res) {
         msg_format(_("元通りに%sなった気がする。", "You feel %s."), desc_stat_pos[stat]);
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 /*
@@ -281,5 +281,5 @@ bool lose_all_info(player_type *creature_ptr)
     set_bits(creature_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
     set_bits(creature_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST);
     wiz_dark(creature_ptr);
-    return TRUE;
+    return true;
 }

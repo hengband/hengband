@@ -38,6 +38,7 @@ enum fixed_artifact_type {
     ART_BLOOD = 199,
     ART_AEGISFANG = 208,
     ART_NIGHT = 215,
+    ART_GOGO_PENDANT = 220,
     ART_HEAVENLY_MAIDEN = 233,
     ART_MILIM = 246,
     ART_ROBINTON = 251,

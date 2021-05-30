@@ -36,7 +36,7 @@
 static bool process_ostensible_arena_victory(player_type *player_ptr)
 {
     if (player_ptr->arena_number != MAX_ARENA_MONS)
-        return FALSE;
+        return false;
 
     clear_bldg(5, 19);
     prt(_("アリーナの優勝者！", "               Arena Victor!"), 5, 0);
@@ -49,7 +49,7 @@ static bool process_ostensible_arena_victory(player_type *player_ptr)
     msg_print(_("スペースキーで続行", "Press the space bar to continue"));
     msg_print(NULL);
     player_ptr->arena_number++;
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -60,34 +60,34 @@ static bool process_ostensible_arena_victory(player_type *player_ptr)
 static bool battle_metal_babble(player_type *player_ptr)
 {
     if (player_ptr->arena_number <= MAX_ARENA_MONS)
-        return FALSE;
+        return false;
 
     if (player_ptr->arena_number >= MAX_ARENA_MONS + 2) {
         msg_print(_("あなたはアリーナに入り、しばらくの間栄光にひたった。", "You enter the arena briefly and bask in your glory."));
         msg_print(NULL);
-        return TRUE;
+        return true;
     }
 
     msg_print(_("君のために最強の挑戦者を用意しておいた。", "The strongest challenger is waiting for you."));
     msg_print(NULL);
     if (!get_check(_("挑戦するかね？", "Do you fight? "))) {
         msg_print(_("残念だ。", "We are disappointed."));
-        return TRUE;
+        return true;
     }
 
     msg_print(_("死ぬがよい。", "Die, maggots."));
     msg_print(NULL);
 
-    player_ptr->exit_bldg = FALSE;
+    player_ptr->exit_bldg = false;
     reset_tim_flags(player_ptr);
 
     /* Save the surface floor as saved floor */
     prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS);
 
-    player_ptr->current_floor_ptr->inside_arena = TRUE;
-    player_ptr->leaving = TRUE;
-    player_ptr->leave_bldg = TRUE;
-    return TRUE;
+    player_ptr->current_floor_ptr->inside_arena = true;
+    player_ptr->leaving = true;
+    player_ptr->leave_bldg = true;
+    return true;
 }
 
 static void go_to_arena(player_type *player_ptr)
@@ -104,13 +104,13 @@ static void go_to_arena(player_type *player_ptr)
         return;
     }
 
-    player_ptr->exit_bldg = FALSE;
+    player_ptr->exit_bldg = false;
     reset_tim_flags(player_ptr);
     prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS);
 
-    player_ptr->current_floor_ptr->inside_arena = TRUE;
-    player_ptr->leaving = TRUE;
-    player_ptr->leave_bldg = TRUE;
+    player_ptr->current_floor_ptr->inside_arena = true;
+    player_ptr->leaving = true;
+    player_ptr->leave_bldg = true;
 }
 
 static void see_arena_poster(player_type *player_ptr)
@@ -153,7 +153,7 @@ void arena_comm(player_type *player_ptr, int cmd)
         screen_save();
 
         /* Peruse the on_defeat_arena_monster help file */
-        (void)show_file(player_ptr, TRUE, _("arena_j.txt", "arena.txt"), NULL, 0, 0);
+        (void)show_file(player_ptr, true, _("arena_j.txt", "arena.txt"), NULL, 0, 0);
         screen_load();
         break;
     }
@@ -187,13 +187,13 @@ void update_gambling_monsters(player_type *player_ptr)
         mon_level = MAX(i, mon_level);
     }
 
-    while (TRUE) {
+    while (true) {
         total = 0;
-        tekitou = FALSE;
+        tekitou = false;
         for (i = 0; i < 4; i++) {
             MONRACE_IDX r_idx;
             int j;
-            while (TRUE) {
+            while (true) {
                 get_mon_num_prep(player_ptr, monster_can_entry_arena, NULL);
                 r_idx = get_mon_num(player_ptr, 0, mon_level, GMN_ARENA);
                 if (!r_idx)
@@ -214,7 +214,7 @@ void update_gambling_monsters(player_type *player_ptr)
             }
             battle_mon[i] = r_idx;
             if (r_info[r_idx].level < 45)
-                tekitou = TRUE;
+                tekitou = true;
         }
 
         for (i = 0; i < 4; i++) {
@@ -291,7 +291,7 @@ bool monster_arena_comm(player_type *player_ptr)
         msg_print(_("おい！おまえ一文なしじゃないか！こっから出ていけ！", "Hey! You don't have gold - get out of here!"));
         msg_print(NULL);
         screen_load();
-        return FALSE;
+        return false;
     }
 
     clear_bldg(4, 10);
@@ -309,12 +309,12 @@ bool monster_arena_comm(player_type *player_ptr)
     }
 
     prt(_("どれに賭けますか:", "Which monster: "), 0, 0);
-    while (TRUE) {
+    while (true) {
         int i = inkey();
 
         if (i == ESCAPE) {
             screen_load();
-            return FALSE;
+            return false;
         }
 
         if (i >= '1' && i <= '4') {
@@ -347,7 +347,7 @@ bool monster_arena_comm(player_type *player_ptr)
      */
     if (!get_string(tmp_str, out_val, 32)) {
         screen_load();
-        return FALSE;
+        return false;
     }
 
     for (p = out_val; *p == ' '; p++)
@@ -359,7 +359,7 @@ bool monster_arena_comm(player_type *player_ptr)
 
         msg_print(NULL);
         screen_load();
-        return FALSE;
+        return false;
     } else if (wager > maxbet) {
         msg_format(_("%ldゴールドだけ受けよう。残りは取っときな。", "I'll take %ld gold of that. Keep the rest."), (long int)maxbet);
 
@@ -377,10 +377,10 @@ bool monster_arena_comm(player_type *player_ptr)
 
     prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS);
 
-    player_ptr->phase_out = TRUE;
-    player_ptr->leaving = TRUE;
-    player_ptr->leave_bldg = TRUE;
+    player_ptr->phase_out = true;
+    player_ptr->leaving = true;
+    player_ptr->leave_bldg = true;
 
     screen_load();
-    return TRUE;
+    return true;
 }

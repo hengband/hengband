@@ -53,8 +53,8 @@
  */
 static void dump_aux_pet(player_type *master_ptr, FILE *fff)
 {
-    bool pet = FALSE;
-    bool pet_settings = FALSE;
+    bool pet = false;
+    bool pet_settings = false;
     for (int i = master_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
         monster_type *m_ptr = &master_ptr->current_floor_ptr->m_list[i];
 
@@ -62,12 +62,12 @@ static void dump_aux_pet(player_type *master_ptr, FILE *fff)
             continue;
         if (!is_pet(m_ptr))
             continue;
-        pet_settings = TRUE;
+        pet_settings = true;
         if (!m_ptr->nickname && (master_ptr->riding != i))
             continue;
         if (!pet) {
             fprintf(fff, _("\n\n  [主なペット]\n\n", "\n\n  [Leading Pets]\n\n"));
-            pet = TRUE;
+            pet = true;
         }
 
         GAME_TEXT pet_name[MAX_NLEN];
@@ -161,7 +161,7 @@ static void dump_aux_recall(FILE *fff)
 {
     fprintf(fff, _("\n  [帰還場所]\n\n", "\n  [Recall Depth]\n\n"));
     for (int y = 1; y < current_world_ptr->max_d_idx; y++) {
-        bool seiha = FALSE;
+        bool seiha = false;
 
         if (!d_info[y].maxdepth)
             continue;
@@ -169,9 +169,9 @@ static void dump_aux_recall(FILE *fff)
             continue;
         if (d_info[y].final_guardian) {
             if (!r_info[d_info[y].final_guardian].max_num)
-                seiha = TRUE;
+                seiha = true;
         } else if (max_dlv[y] == d_info[y].maxdepth)
-            seiha = TRUE;
+            seiha = true;
 
         fprintf(fff, _("   %c%-12s: %3d 階\n", "   %c%-16s: level %3d\n"), seiha ? '!' : ' ', d_info[y].name.c_str(), (int)max_dlv[y]);
     }

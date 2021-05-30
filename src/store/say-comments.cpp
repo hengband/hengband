@@ -25,7 +25,7 @@ void store_owner_says_comment(player_type *player_ptr)
 	if (one_in_(RUMOR_CHANCE))
 	{
 		msg_print(_("店主は耳うちした:", "The shopkeeper whispers something into your ear:"));
-		display_rumor(player_ptr, TRUE);
+		display_rumor(player_ptr, true);
 	}
 }
 

@@ -46,26 +46,26 @@ static bool spell_attack(RF_ABILITY spell)
 {
     /* All RF4 spells hurt (except for shriek and dispel) */
     if (spell_in_between(spell, RF_ABILITY::ROCKET, RF_ABILITY::BR_DISI))
-        return TRUE;
+        return true;
 
     /* Various "ball" spells */
     if (spell_in_between(spell, RF_ABILITY::BA_ACID, RF_ABILITY::BA_DARK))
-        return TRUE;
+        return true;
 
     /* "Cause wounds" and "bolt" spells */
     if (spell_in_between(spell, RF_ABILITY::CAUSE_1, RF_ABILITY::MISSILE))
-        return TRUE;
+        return true;
 
     /* Hand of Doom */
     if (spell == RF_ABILITY::HAND_DOOM)
-        return TRUE;
+        return true;
 
     /* Psycho-Spear */
     if (spell == RF_ABILITY::PSY_SPEAR)
-        return TRUE;
+        return true;
 
     /* Doesn't hurt */
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -78,14 +78,14 @@ static bool spell_escape(RF_ABILITY spell)
 {
     /* Blink or Teleport */
     if (spell == RF_ABILITY::BLINK || spell == RF_ABILITY::TPORT)
-        return TRUE;
+        return true;
 
     /* Teleport the player away */
     if (spell == RF_ABILITY::TELE_AWAY || spell == RF_ABILITY::TELE_LEVEL)
-        return TRUE;
+        return true;
 
     /* Isn't good for escaping */
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -98,30 +98,30 @@ static bool spell_annoy(RF_ABILITY spell)
 {
     /* Shriek */
     if (spell == RF_ABILITY::SHRIEK)
-        return TRUE;
+        return true;
 
     /* Brain smash, et al (added curses) */
     if (spell_in_between(spell, RF_ABILITY::DRAIN_MANA, RF_ABILITY::CAUSE_4))
-        return TRUE;
+        return true;
 
     /* Scare, confuse, blind, slow, paralyze */
     if (spell_in_between(spell, RF_ABILITY::SCARE, RF_ABILITY::HOLD))
-        return TRUE;
+        return true;
 
     /* Teleport to */
     if (spell == RF_ABILITY::TELE_TO)
-        return TRUE;
+        return true;
 
     /* Teleport level */
     if (spell == RF_ABILITY::TELE_LEVEL)
-        return TRUE;
+        return true;
 
     /* Darkness, make traps, cause amnesia */
     if (spell_in_between(spell, RF_ABILITY::TRAPS, RF_ABILITY::RAISE_DEAD))
-        return TRUE;
+        return true;
 
     /* Doesn't annoy */
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -200,7 +200,7 @@ static bool spell_world(RF_ABILITY spell)
 static bool spell_special(player_type *target_ptr, RF_ABILITY spell)
 {
     if (target_ptr->phase_out)
-        return FALSE;
+        return false;
 
     return spell == RF_ABILITY::SPECIAL;
 }
@@ -325,12 +325,12 @@ RF_ABILITY choose_attack_spell(player_type *target_ptr, msa_type *msa_ptr)
         return (world[randint0(world.size())]);
 
     if (!special.empty()) {
-        bool success = FALSE;
+        bool success = false;
         switch (m_ptr->r_idx) {
         case MON_BANOR:
         case MON_LUPART:
             if ((m_ptr->hp < m_ptr->maxhp / 2) && r_info[MON_BANOR].max_num && r_info[MON_LUPART].max_num)
-                success = TRUE;
+                success = true;
             break;
         default:
             break;
@@ -351,7 +351,7 @@ RF_ABILITY choose_attack_spell(player_type *target_ptr, msa_type *msa_ptr)
     }
 
     if (!special.empty()) {
-        bool success = FALSE;
+        bool success = false;
         switch (m_ptr->r_idx) {
         case MON_OHMU:
         case MON_BANOR:
@@ -359,15 +359,15 @@ RF_ABILITY choose_attack_spell(player_type *target_ptr, msa_type *msa_ptr)
             break;
         case MON_BANORLUPART:
             if (randint0(100) < 70)
-                success = TRUE;
+                success = true;
             break;
         case MON_ROLENTO:
             if (randint0(100) < 40)
-                success = TRUE;
+                success = true;
             break;
         default:
             if (randint0(100) < 50)
-                success = TRUE;
+                success = true;
             break;
         }
         if (success)

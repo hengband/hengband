@@ -198,7 +198,7 @@ static void interpret_realm_select_key(birth_realm_type *birth_realm_ptr, char c
 static bool get_a_realm(player_type *creature_ptr, birth_realm_type *birth_realm_ptr)
 {
     birth_realm_ptr->os = birth_realm_ptr->n;
-    while (TRUE) {
+    while (true) {
         move_birth_realm_cursor(birth_realm_ptr);
         if (birth_realm_ptr->k >= 0)
             break;
@@ -210,7 +210,7 @@ static bool get_a_realm(player_type *creature_ptr, birth_realm_type *birth_realm
         char c = inkey();
         interpret_realm_select_key(birth_realm_ptr, c);
         if (c == 'S')
-            return TRUE;
+            return true;
 
         if (c == ' ' || c == '\r' || c == '\n') {
             if (birth_realm_ptr->cs == birth_realm_ptr->n) {
@@ -243,7 +243,7 @@ static bool get_a_realm(player_type *creature_ptr, birth_realm_type *birth_realm
         birth_help_option(creature_ptr, c, BK_REALM);
     }
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -294,11 +294,11 @@ static bool check_realm_selection(player_type *creature_ptr, int count)
         prt(_("何かキーを押してください", "Hit any key."), 0, 0);
         (void)inkey();
         prt("", 0, 0);
-        return TRUE;
+        return true;
     } else if (get_check_strict(creature_ptr, _("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -320,20 +320,20 @@ bool get_player_realms(player_type *creature_ptr)
     if (creature_ptr->pclass == CLASS_ELEMENTALIST) {
         creature_ptr->element = select_element_realm(creature_ptr);
         if (creature_ptr->element == REALM_SELECT_CANCEL)
-            return FALSE;
+            return false;
 
         put_str(_("魔法        :", "Magic       :"), 6, 1);
         c_put_str(TERM_L_BLUE, get_element_title(creature_ptr->element), 6, 15);
         creature_ptr->realm2 = REALM_NONE;
-        return TRUE;
+        return true;
     }
 
-    while (TRUE) {
+    while (true) {
         char temp[80 * 10];
         int count = 0;
         creature_ptr->realm1 = select_realm(creature_ptr, realm_choices1[creature_ptr->pclass], &count);
         if (creature_ptr->realm1 == REALM_SELECT_CANCEL)
-            return FALSE;
+            return false;
         if (!creature_ptr->realm1)
             break;
 
@@ -356,20 +356,20 @@ bool get_player_realms(player_type *creature_ptr)
     /* Select the second realm */
     creature_ptr->realm2 = REALM_NONE;
     if (creature_ptr->realm1 == REALM_NONE)
-        return TRUE;
+        return true;
 
     /* Print the realm */
     put_str(_("魔法        :", "Magic       :"), 6, 1);
     c_put_str(TERM_L_BLUE, realm_names[creature_ptr->realm1], 6, 15);
 
     /* Select the second realm */
-    while (TRUE) {
+    while (true) {
         char temp[80 * 8];
         int count = 0;
         creature_ptr->realm2 = select_realm(creature_ptr, realm_choices2[creature_ptr->pclass], &count);
 
         if (creature_ptr->realm2 == REALM_SELECT_CANCEL)
-            return FALSE;
+            return false;
         if (!creature_ptr->realm2)
             break;
 
@@ -394,5 +394,5 @@ bool get_player_realms(player_type *creature_ptr)
         c_put_str(TERM_L_BLUE, format("%s, %s", realm_names[creature_ptr->realm1], realm_names[creature_ptr->realm2]), 6, 15);
     }
 
-    return TRUE;
+    return true;
 }

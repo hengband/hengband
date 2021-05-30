@@ -33,9 +33,9 @@ bool gamble_comm(player_type *player_ptr, int cmd)
 
 	if (cmd == BACT_GAMBLE_RULES)
 	{
-		(void)show_file(player_ptr, TRUE, _("jgambling.txt", "gambling.txt"), NULL, 0, 0);
+		(void)show_file(player_ptr, true, _("jgambling.txt", "gambling.txt"), NULL, 0, 0);
 		screen_load();
-		return TRUE;
+		return true;
 	}
 
 	if (player_ptr->au < 1)
@@ -44,7 +44,7 @@ bool gamble_comm(player_type *player_ptr, int cmd)
 			"Hey! You don't have gold - get out of here!"));
 		msg_print(NULL);
 		screen_load();
-		return FALSE;
+		return false;
 	}
 
 	clear_bldg(5, 23);
@@ -63,7 +63,7 @@ bool gamble_comm(player_type *player_ptr, int cmd)
 	{
 		msg_print(NULL);
 		screen_load();
-		return TRUE;
+		return true;
 	}
 
 	for (p = out_val; *p == ' '; p++);
@@ -74,7 +74,7 @@ bool gamble_comm(player_type *player_ptr, int cmd)
 		msg_print(_("おい！金が足りないじゃないか！出ていけ！", "Hey! You don't have the gold - get out of here!"));
 		msg_print(NULL);
 		screen_load();
-		return FALSE;
+		return false;
 	}
 	else if (wager > maxbet)
 	{
@@ -88,7 +88,7 @@ bool gamble_comm(player_type *player_ptr, int cmd)
 		wager = 1;
 	}
 	msg_print(NULL);
-	win = FALSE;
+	win = 0;
 	odds = 0;
 	oldgold = player_ptr->au;
 
@@ -106,7 +106,7 @@ bool gamble_comm(player_type *player_ptr, int cmd)
 			c_put_str(TERM_GREEN, _("イン・ビトイーン", "In Between"), 5, 2);
 
 			odds = 4;
-			win = FALSE;
+			win = 0;
 			roll1 = randint1(10);
 			roll2 = randint1(10);
 			choice = randint1(10);
@@ -118,7 +118,7 @@ bool gamble_comm(player_type *player_ptr, int cmd)
 			prt(tmp_str, 11, 14);
 			if (((choice > roll1) && (choice < roll2)) ||
 				((choice < roll1) && (choice > roll2)))
-				win = TRUE;
+				win = 1;
 			break;
 		case BACT_CRAPS:  /* Game of Craps */
 			c_put_str(TERM_GREEN, _("クラップス", "Craps"), 5, 2);
@@ -133,9 +133,9 @@ bool gamble_comm(player_type *player_ptr, int cmd)
 				"First roll: %d %d    Total: %d"), roll1, roll2, roll3);
 			prt(tmp_str, 7, 5);
 			if ((roll3 == 7) || (roll3 == 11))
-				win = TRUE;
+				win = 1;
 			else if ((roll3 == 2) || (roll3 == 3) || (roll3 == 12))
-				win = FALSE;
+				win = 0;
 			else
 			{
 				do
@@ -150,16 +150,16 @@ bool gamble_comm(player_type *player_ptr, int cmd)
 						"Roll result: %d %d   Total:     %d"), roll1, roll2, roll3);
 					prt(tmp_str, 8, 5);
 					if (roll3 == choice)
-						win = TRUE;
+						win = 1;
 					else if (roll3 == 7)
-						win = FALSE;
-				} while ((win != TRUE) && (win != FALSE));
+						win = 0;
+				} while ((win != 1) && (win != 0));
 			}
 			
 			break;
 
 		case BACT_SPIN_WHEEL:  /* Spin the Wheel Game */
-			win = FALSE;
+			win = 0;
 			odds = 9;
 			c_put_str(TERM_GREEN, _("ルーレット", "Wheel"), 5, 2);
 
@@ -188,7 +188,7 @@ bool gamble_comm(player_type *player_ptr, int cmd)
 			prt("", 9, 0);
 			prt("*", 9, (3 * roll1 + 5));
 			if (roll1 == choice)
-				win = TRUE;
+				win = 1;
 			break;
 
 		case BACT_DICE_SLOTS: /* The Dice Slots */
@@ -201,7 +201,7 @@ bool gamble_comm(player_type *player_ptr, int cmd)
 			c_put_str(TERM_VIOLET, _("プラム   プラム   プラム   200", "Plum     Plum     Plum     200"), 11, 37);
 			c_put_str(TERM_RED, _("チェリー チェリー チェリー 1000", "Cherry   Cherry   Cherry   1000"), 12, 37);
 
-			win = FALSE;
+			win = 0;
 			roll1 = randint1(21);
 			for (i = 6; i > 0; i--)
 			{
@@ -239,7 +239,7 @@ bool gamble_comm(player_type *player_ptr, int cmd)
 			display_fruit(8, 21, choice - 1);
 			if ((roll1 == roll2) && (roll2 == choice))
 			{
-				win = TRUE;
+				win = 1;
 				switch (roll1)
 				{
 				case 1:
@@ -258,14 +258,14 @@ bool gamble_comm(player_type *player_ptr, int cmd)
 			}
 			else if ((roll1 == 1) && (roll2 == 1))
 			{
-				win = TRUE;
+				win = 1;
 				odds = 2;
 			}
 			break;
 		case BACT_POKER:
-			win = FALSE;
+			win = 0;
 			odds = do_poker();
-			if (odds) win = TRUE;
+			if (odds) win = 1;
 			break;
 		}
 
@@ -320,5 +320,5 @@ bool gamble_comm(player_type *player_ptr, int cmd)
 
 	msg_print(NULL);
 	screen_load();
-	return TRUE;
+	return true;
 }

@@ -36,7 +36,7 @@
 #include "window/display-sub-windows.h"
 
 /* Set this to leave the store */
-bool leave_store = FALSE;
+bool leave_store = false;
 
 /*!
  * @brief 店舗処理コマンド選択のメインルーチン /
@@ -58,7 +58,7 @@ void store_process_command(player_type *client_ptr)
 
     switch (command_cmd) {
     case ESCAPE: {
-        leave_store = TRUE;
+        leave_store = true;
         break;
     }
     case '-': {
@@ -71,7 +71,7 @@ void store_process_command(player_type *client_ptr)
             if (store_top < 0)
                 store_top = ((st_ptr->stock_num - 1) / store_bottom) * store_bottom;
 
-            if ((cur_store_num == STORE_HOME) && (powerup_home == FALSE))
+            if ((cur_store_num == STORE_HOME) && !powerup_home)
                 if (store_top >= store_bottom)
                     store_top = store_bottom;
 
@@ -154,9 +154,9 @@ void store_process_command(player_type *client_ptr)
         else if (client_ptr->pclass == CLASS_ELEMENTALIST)
             do_cmd_element_browse(client_ptr);
         else if (client_ptr->pclass == CLASS_SMITH)
-            do_cmd_kaji(client_ptr, TRUE);
+            do_cmd_kaji(client_ptr, true);
         else if (client_ptr->pclass == CLASS_MAGIC_EATER)
-            do_cmd_magic_eater(client_ptr, TRUE, FALSE);
+            do_cmd_magic_eater(client_ptr, true, false);
         else if (client_ptr->pclass == CLASS_SNIPER)
             do_cmd_snipe_browse(client_ptr);
         else

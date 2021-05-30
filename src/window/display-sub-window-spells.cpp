@@ -54,7 +54,7 @@ static void display_spell_list(player_type *caster_ptr)
         char comment[80];
         char psi_desc[160];
         int use_mind;
-        bool use_hp = FALSE;
+        bool use_hp = false;
 
         y = 1;
         x = 1;
@@ -72,14 +72,14 @@ static void display_spell_list(player_type *caster_ptr)
             break;
         case CLASS_BERSERKER:
             use_mind = MIND_BERSERKER;
-            use_hp = TRUE;
+            use_hp = true;
             break;
         case CLASS_MIRROR_MASTER:
             use_mind = MIND_MIRROR_MASTER;
             break;
         case CLASS_NINJA:
             use_mind = MIND_NINJUTSU;
-            use_hp = TRUE;
+            use_hp = true;
             break;
         case CLASS_ELEMENTALIST:
             use_mind = MIND_ELEMENTAL;

@@ -55,7 +55,7 @@
  */
 int rod_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool *use_charge, bool powerful, bool magic)
 {
-    int ident = FALSE;
+    int ident = false;
     PLAYER_LEVEL lev = powerful ? creature_ptr->lev * 2 : creature_ptr->lev;
     POSITION detect_rad = powerful ? DETECT_RAD_DEFAULT * 3 / 2 : DETECT_RAD_DEFAULT;
     POSITION rad = powerful ? 3 : 2;
@@ -66,108 +66,108 @@ int rod_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION d
     /* Analyze the rod */
     switch (sval) {
     case SV_ROD_DETECT_TRAP: {
-        if (detect_traps(creature_ptr, detect_rad, (bool)(dir ? FALSE : TRUE)))
-            ident = TRUE;
+        if (detect_traps(creature_ptr, detect_rad, dir == 0))
+            ident = true;
         break;
     }
 
     case SV_ROD_DETECT_DOOR: {
         if (detect_doors(creature_ptr, detect_rad))
-            ident = TRUE;
+            ident = true;
         if (detect_stairs(creature_ptr, detect_rad))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_ROD_IDENTIFY: {
         if (powerful) {
-            if (!identify_fully(creature_ptr, FALSE, TV_NONE))
-                *use_charge = FALSE;
+            if (!identify_fully(creature_ptr, false, TV_NONE))
+                *use_charge = false;
         } else {
-            if (!ident_spell(creature_ptr, FALSE, TV_NONE))
-                *use_charge = FALSE;
+            if (!ident_spell(creature_ptr, false, TV_NONE))
+                *use_charge = false;
         }
-        ident = TRUE;
+        ident = true;
         break;
     }
 
     case SV_ROD_RECALL: {
         if (!recall_player(creature_ptr, randint0(21) + 15))
-            *use_charge = FALSE;
-        ident = TRUE;
+            *use_charge = false;
+        ident = true;
         break;
     }
 
     case SV_ROD_ILLUMINATION: {
         if (lite_area(creature_ptr, damroll(2, 8), (powerful ? 4 : 2)))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_ROD_MAPPING: {
         map_area(creature_ptr, powerful ? DETECT_RAD_MAP * 3 / 2 : DETECT_RAD_MAP);
-        ident = TRUE;
+        ident = true;
         break;
     }
 
     case SV_ROD_DETECTION: {
         detect_all(creature_ptr, detect_rad);
-        ident = TRUE;
+        ident = true;
         break;
     }
 
     case SV_ROD_PROBING: {
         probing(creature_ptr);
-        ident = TRUE;
+        ident = true;
         break;
     }
 
     case SV_ROD_CURING: {
         if (true_healing(creature_ptr, 0))
-            ident = TRUE;
-        if (set_shero(creature_ptr, 0, TRUE))
-            ident = TRUE;
+            ident = true;
+        if (set_shero(creature_ptr, 0, true))
+            ident = true;
         break;
     }
 
     case SV_ROD_HEALING: {
         if (cure_critical_wounds(creature_ptr, powerful ? 750 : 500))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_ROD_RESTORATION: {
         if (restore_level(creature_ptr))
-            ident = TRUE;
+            ident = true;
         if (restore_all_status(creature_ptr))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_ROD_SPEED: {
-        if (set_fast(creature_ptr, randint1(30) + (powerful ? 30 : 15), FALSE))
-            ident = TRUE;
+        if (set_fast(creature_ptr, randint1(30) + (powerful ? 30 : 15), false))
+            ident = true;
         break;
     }
 
     case SV_ROD_PESTICIDE: {
         if (dispel_monsters(creature_ptr, powerful ? 8 : 4))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_ROD_TELEPORT_AWAY: {
         int distance = MAX_SIGHT * (powerful ? 8 : 5);
         if (teleport_monster(creature_ptr, dir, distance))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_ROD_DISARMING: {
         if (disarm_trap(creature_ptr, dir))
-            ident = TRUE;
+            ident = true;
         if (powerful && disarm_traps_touch(creature_ptr))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
@@ -175,98 +175,98 @@ int rod_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION d
         HIT_POINT dam = damroll((powerful ? 12 : 6), 8);
         msg_print(_("青く輝く光線が放たれた。", "A line of blue shimmering light appears."));
         (void)lite_line(creature_ptr, dir, dam);
-        ident = TRUE;
+        ident = true;
         break;
     }
 
     case SV_ROD_SLEEP_MONSTER: {
         if (sleep_monster(creature_ptr, dir, lev))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_ROD_SLOW_MONSTER: {
         if (slow_monster(creature_ptr, dir, lev))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_ROD_HYPODYNAMIA: {
         if (hypodynamic_bolt(creature_ptr, dir, 70 + 3 * lev / 2))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_ROD_POLYMORPH: {
         if (poly_monster(creature_ptr, dir, lev))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_ROD_ACID_BOLT: {
         fire_bolt_or_beam(creature_ptr, 10, GF_ACID, dir, damroll(6 + lev / 7, 8));
-        ident = TRUE;
+        ident = true;
         break;
     }
 
     case SV_ROD_ELEC_BOLT: {
         fire_bolt_or_beam(creature_ptr, 10, GF_ELEC, dir, damroll(4 + lev / 9, 8));
-        ident = TRUE;
+        ident = true;
         break;
     }
 
     case SV_ROD_FIRE_BOLT: {
         fire_bolt_or_beam(creature_ptr, 10, GF_FIRE, dir, damroll(7 + lev / 6, 8));
-        ident = TRUE;
+        ident = true;
         break;
     }
 
     case SV_ROD_COLD_BOLT: {
         fire_bolt_or_beam(creature_ptr, 10, GF_COLD, dir, damroll(5 + lev / 8, 8));
-        ident = TRUE;
+        ident = true;
         break;
     }
 
     case SV_ROD_ACID_BALL: {
         fire_ball(creature_ptr, GF_ACID, dir, 60 + lev, rad);
-        ident = TRUE;
+        ident = true;
         break;
     }
 
     case SV_ROD_ELEC_BALL: {
         fire_ball(creature_ptr, GF_ELEC, dir, 40 + lev, rad);
-        ident = TRUE;
+        ident = true;
         break;
     }
 
     case SV_ROD_FIRE_BALL: {
         fire_ball(creature_ptr, GF_FIRE, dir, 70 + lev, rad);
-        ident = TRUE;
+        ident = true;
         break;
     }
 
     case SV_ROD_COLD_BALL: {
         fire_ball(creature_ptr, GF_COLD, dir, 50 + lev, rad);
-        ident = TRUE;
+        ident = true;
         break;
     }
 
     case SV_ROD_HAVOC: {
         call_chaos(creature_ptr);
-        ident = TRUE;
+        ident = true;
         break;
     }
 
     case SV_ROD_STONE_TO_MUD: {
         HIT_POINT dam = powerful ? 40 + randint1(60) : 20 + randint1(30);
         if (wall_to_mud(creature_ptr, dir, dam))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_ROD_AGGRAVATE: {
         aggravate_monsters(creature_ptr, 0);
-        ident = TRUE;
+        ident = true;
         break;
     }
     }
@@ -294,7 +294,7 @@ void exe_zap_rod(player_type *creature_ptr, INVENTORY_IDX item)
     bool success;
 
     /* Hack -- let perception get aborted */
-    bool use_charge = TRUE;
+    bool use_charge = true;
 
     object_kind *k_ptr;
 
@@ -339,17 +339,17 @@ void exe_zap_rod(player_type *creature_ptr, INVENTORY_IDX item)
         return;
 
     if (creature_ptr->pclass == CLASS_BERSERKER)
-        success = FALSE;
+        success = false;
     else if (chance > fail) {
         if (randint0(chance * 2) < fail)
-            success = FALSE;
+            success = false;
         else
-            success = TRUE;
+            success = true;
     } else {
         if (randint0(fail * 2) < chance)
-            success = TRUE;
+            success = true;
         else
-            success = FALSE;
+            success = false;
     }
 
     /* Roll for usage */
@@ -380,7 +380,7 @@ void exe_zap_rod(player_type *creature_ptr, INVENTORY_IDX item)
 
     sound(SOUND_ZAP);
 
-    ident = rod_effect(creature_ptr, o_ptr->sval, dir, &use_charge, FALSE, FALSE);
+    ident = rod_effect(creature_ptr, o_ptr->sval, dir, &use_charge, false, false);
 
     /* Increase the timeout by the rod kind's pval. -LM- */
     if (use_charge)

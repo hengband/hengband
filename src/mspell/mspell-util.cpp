@@ -58,7 +58,7 @@ void monspell_message_base(player_type* target_ptr, MONSTER_IDX m_idx, MONSTER_I
     monster_name(target_ptr, t_idx, t_name);
 
     if (mon_to_player || (mon_to_mon && known && see_either))
-        disturb(target_ptr, TRUE, TRUE);
+        disturb(target_ptr, true, true);
 
     if (msg_flag_aux) {
         if (mon_to_player)
@@ -74,7 +74,7 @@ void monspell_message_base(player_type* target_ptr, MONSTER_IDX m_idx, MONSTER_I
     }
 
     if (mon_to_mon && known && !see_either)
-        floor_ptr->monster_noise = TRUE;
+        floor_ptr->monster_noise = true;
 }
 
 /*!

@@ -93,7 +93,7 @@ void change_race(player_type *creature_ptr, player_race_type new_race, concptr e
     handle_stuff(creature_ptr);
 
     if (old_race != creature_ptr->prace)
-        autopick_load_pref(creature_ptr, FALSE);
+        autopick_load_pref(creature_ptr, false);
 
     lite_spot(creature_ptr, creature_ptr->y, creature_ptr->x);
 }
@@ -135,7 +135,7 @@ void do_poly_self(player_type *creature_ptr)
                 tmp++;
             }
 
-            (void)dec_stat(creature_ptr, A_CHR, randint1(6), TRUE);
+            (void)dec_stat(creature_ptr, A_CHR, randint1(6), true);
 
             if (sex_msg[0]) {
                 sprintf(effect_msg, _("奇形の%s", "deformed %s "), sex_msg);

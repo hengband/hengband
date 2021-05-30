@@ -786,9 +786,9 @@ errr rd_dungeon_old(player_type *player_ptr)
     }
 
     if (h_older_than(0, 3, 13) && !floor_ptr->dun_level && !floor_ptr->inside_arena)
-        current_world_ptr->character_dungeon = FALSE;
+        current_world_ptr->character_dungeon = false;
     else
-        current_world_ptr->character_dungeon = TRUE;
+        current_world_ptr->character_dungeon = true;
 
     return 0;
 }

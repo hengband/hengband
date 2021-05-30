@@ -22,7 +22,7 @@ void process_autopick_file_command(char *buf)
     }
 
     buf[i] = 0;
-    if (!autopick_new_entry(entry, buf, FALSE))
+    if (!autopick_new_entry(entry, buf, false))
         return;
 
     for (i = 0; i < max_autopick; i++) {

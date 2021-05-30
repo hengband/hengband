@@ -49,7 +49,7 @@ void notice_lite_change(player_type* creature_ptr, object_type* o_ptr)
         if (o_ptr->xtra4 == 0)
             o_ptr->xtra4++;
     } else if (o_ptr->xtra4 == 0) {
-        disturb(creature_ptr, FALSE, TRUE);
+        disturb(creature_ptr, false, true);
         msg_print(_("明かりが消えてしまった！", "Your light has gone out!"));
         creature_ptr->update |= (PU_TORCH);
         creature_ptr->update |= (PU_BONUS);
@@ -57,12 +57,12 @@ void notice_lite_change(player_type* creature_ptr, object_type* o_ptr)
         if ((o_ptr->xtra4 < 50) && (!(o_ptr->xtra4 % 5))
             && (current_world_ptr->game_turn % (TURNS_PER_TICK * 2))) {
             if (disturb_minor)
-                disturb(creature_ptr, FALSE, TRUE);
+                disturb(creature_ptr, false, true);
             msg_print(_("明かりが微かになってきている。", "Your light is growing faint."));
         }
     } else if ((o_ptr->xtra4 < 100) && (!(o_ptr->xtra4 % 10))) {
         if (disturb_minor)
-            disturb(creature_ptr, FALSE, TRUE);
+            disturb(creature_ptr, false, true);
         msg_print(_("明かりが微かになってきている。", "Your light is growing faint."));
     }
 }

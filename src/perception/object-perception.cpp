@@ -46,7 +46,7 @@ void object_aware(player_type *owner_ptr, object_type *o_ptr)
 {
     const bool is_already_awared = object_is_aware(o_ptr);
 
-    k_info[o_ptr->k_idx].aware = TRUE;
+    k_info[o_ptr->k_idx].aware = true;
 
     // 以下、playrecordに記録しない場合はreturnする
     if (!record_ident)
@@ -82,7 +82,7 @@ void object_aware(player_type *owner_ptr, object_type *o_ptr)
  * Something has been "sampled"
  * @param o_ptr 試行済にするオブジェクトの構造体参照ポインタ
  */
-void object_tried(object_type *o_ptr) { k_info[o_ptr->k_idx].tried = TRUE; }
+void object_tried(object_type *o_ptr) { k_info[o_ptr->k_idx].tried = true; }
 
 /*
  * @brief 与えられたオブジェクトのベースアイテムが鑑定済かを返す / Determine if a given inventory item is "aware"

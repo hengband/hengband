@@ -73,8 +73,8 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
         quest_num = i;
     }
 
-    bool create_stairs = FALSE;
-    bool reward = FALSE;
+    bool create_stairs = false;
+    bool reward = false;
     if (quest_num && (quest[quest_num].status == QUEST_STATUS_TAKEN)) {
         quest_type *const q_ptr = &quest[quest_num];
         switch (q_ptr->type) {
@@ -110,7 +110,7 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
 
             complete_quest(player_ptr, quest_num);
             if (!(q_ptr->flags & QUEST_FLAG_PRESET)) {
-                create_stairs = TRUE;
+                create_stairs = true;
                 floor_ptr->inside_quest = 0;
             }
 
@@ -118,7 +118,7 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
                 q_ptr->status = QUEST_STATUS_FINISHED;
 
             if (q_ptr->type == QUEST_TYPE_RANDOM) {
-                reward = TRUE;
+                reward = true;
                 q_ptr->status = QUEST_STATUS_FINISHED;
             }
 

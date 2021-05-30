@@ -474,7 +474,7 @@ HIT_POINT monspell_race_damage(player_type *target_ptr, RF_ABILITY ms_type, MONR
 {
     monster_race *r_ptr = &r_info[r_idx];
     DEPTH rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
-    bool powerful = r_ptr->flags2 & RF2_POWERFUL ? TRUE : FALSE;
+    bool powerful = r_ptr->flags2 & RF2_POWERFUL ? true : false;
     HIT_POINT hp = r_ptr->hdice * (ironman_nightmare ? 2 : 1) * r_ptr->hside;
     int shoot_dd, shoot_ds;
 
@@ -507,5 +507,5 @@ HIT_POINT monspell_bluemage_damage(player_type *target_ptr, RF_ABILITY ms_type, 
         shoot_base = o_ptr->to_d;
     }
 
-    return monspell_damage_base(target_ptr, ms_type, hp, plev * 2, FALSE, shoot_dd, shoot_ds, shoot_base, TYPE);
+    return monspell_damage_base(target_ptr, ms_type, hp, plev * 2, false, shoot_dd, shoot_ds, shoot_base, TYPE);
 }

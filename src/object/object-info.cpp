@@ -278,7 +278,7 @@ s16b wield_slot(player_type *owner_ptr, object_type *o_ptr)
 bool check_book_realm(player_type *owner_ptr, const tval_type book_tval, const OBJECT_SUBTYPE_VALUE book_sval)
 {
     if (book_tval < TV_LIFE_BOOK)
-        return FALSE;
+        return false;
     if (owner_ptr->pclass == CLASS_SORCERER) {
         return is_magic(tval2realm(book_tval));
     } else if (owner_ptr->pclass == CLASS_RED_MAGE) {

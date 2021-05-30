@@ -23,14 +23,14 @@ bool create_rune_protection_one(player_type *caster_ptr)
 {
     if (!cave_clean_bold(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x)) {
         msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
-        return FALSE;
+        return false;
     }
 
     caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info |= CAVE_OBJECT;
     caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].mimic = feat_rune_protection;
     note_spot(caster_ptr, caster_ptr->y, caster_ptr->x);
     lite_spot(caster_ptr, caster_ptr->y, caster_ptr->x);
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -46,14 +46,14 @@ bool create_rune_explosion(player_type *caster_ptr, POSITION y, POSITION x)
     floor_type *floor_ptr = caster_ptr->current_floor_ptr;
     if (!cave_clean_bold(floor_ptr, y, x)) {
         msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
-        return FALSE;
+        return false;
     }
 
     floor_ptr->grid_array[y][x].info |= CAVE_OBJECT;
     floor_ptr->grid_array[y][x].mimic = feat_rune_explosion;
     note_spot(caster_ptr, y, x);
     lite_spot(caster_ptr, y, x);
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -62,14 +62,14 @@ bool create_rune_explosion(player_type *caster_ptr, POSITION y, POSITION x)
  */
 void stair_creation(player_type *caster_ptr)
 {
-    bool up = TRUE;
+    bool up = true;
     if (ironman_downward)
-        up = FALSE;
+        up = false;
 
-    bool down = TRUE;
+    bool down = true;
     floor_type *floor_ptr = caster_ptr->current_floor_ptr;
     if (quest_number(caster_ptr, floor_ptr->dun_level) || (floor_ptr->dun_level >= d_info[caster_ptr->dungeon_idx].maxdepth))
-        down = FALSE;
+        down = false;
 
     if (!floor_ptr->dun_level || (!up && !down) || (floor_ptr->inside_quest && is_fixed_quest_idx(floor_ptr->inside_quest)) || floor_ptr->inside_arena
         || caster_ptr->phase_out) {
@@ -92,9 +92,9 @@ void stair_creation(player_type *caster_ptr)
 
     if (up && down) {
         if (randint0(100) < 50)
-            up = FALSE;
+            up = false;
         else
-            down = FALSE;
+            down = false;
     }
 
     FLOOR_IDX dest_floor_id = 0;

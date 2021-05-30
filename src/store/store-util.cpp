@@ -204,61 +204,61 @@ void store_create(
 bool store_object_similar(object_type *o_ptr, object_type *j_ptr)
 {
     if (o_ptr == j_ptr)
-        return FALSE;
+        return false;
 
     if (o_ptr->k_idx != j_ptr->k_idx)
-        return FALSE;
+        return false;
 
     if ((o_ptr->pval != j_ptr->pval) && (o_ptr->tval != TV_WAND) && (o_ptr->tval != TV_ROD))
-        return FALSE;
+        return false;
 
     if (o_ptr->to_h != j_ptr->to_h)
-        return FALSE;
+        return false;
 
     if (o_ptr->to_d != j_ptr->to_d)
-        return FALSE;
+        return false;
 
     if (o_ptr->to_a != j_ptr->to_a)
-        return FALSE;
+        return false;
 
     if (o_ptr->name2 != j_ptr->name2)
-        return FALSE;
+        return false;
 
     if (object_is_artifact(o_ptr) || object_is_artifact(j_ptr))
-        return FALSE;
+        return false;
 
     for (int i = 0; i < TR_FLAG_SIZE; i++)
         if (o_ptr->art_flags[i] != j_ptr->art_flags[i])
-            return FALSE;
+            return false;
 
     if (o_ptr->xtra1 || j_ptr->xtra1)
-        return FALSE;
+        return false;
 
     if (o_ptr->timeout || j_ptr->timeout)
-        return FALSE;
+        return false;
 
     if (o_ptr->ac != j_ptr->ac)
-        return FALSE;
+        return false;
 
     if (o_ptr->dd != j_ptr->dd)
-        return FALSE;
+        return false;
 
     if (o_ptr->ds != j_ptr->ds)
-        return FALSE;
+        return false;
 
     if (o_ptr->tval == TV_CHEST)
-        return FALSE;
+        return false;
 
     if (o_ptr->tval == TV_STATUE)
-        return FALSE;
+        return false;
 
     if (o_ptr->tval == TV_CAPTURE)
-        return FALSE;
+        return false;
 
     if (o_ptr->discount != j_ptr->discount)
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*!

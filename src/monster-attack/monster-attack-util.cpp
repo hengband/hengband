@@ -18,12 +18,12 @@ monap_type *initialize_monap_type(player_type *target_ptr, monap_type *monap_ptr
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     monap_ptr->m_ptr = &floor_ptr->m_list[m_idx];
     monap_ptr->act = NULL;
-    monap_ptr->touched = FALSE;
-    monap_ptr->explode = FALSE;
+    monap_ptr->touched = false;
+    monap_ptr->explode = false;
     monap_ptr->do_silly_attack = one_in_(2) && target_ptr->image;
-    monap_ptr->obvious = FALSE;
+    monap_ptr->obvious = false;
     monap_ptr->get_damage = 0;
-    monap_ptr->alive = TRUE;
-    monap_ptr->fear = FALSE;
+    monap_ptr->alive = true;
+    monap_ptr->fear = false;
     return monap_ptr;
 }

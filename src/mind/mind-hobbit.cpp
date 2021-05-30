@@ -13,5 +13,5 @@ bool create_ration(player_type *creature_ptr)
     q_ptr->prep(creature_ptr, lookup_kind(TV_FOOD, SV_FOOD_RATION));
     (void)drop_near(creature_ptr, q_ptr, -1, creature_ptr->y, creature_ptr->x);
     msg_print(_("食事を料理して作った。", "You cook some food."));
-    return TRUE;
+    return true;
 }

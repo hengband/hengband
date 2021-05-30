@@ -49,17 +49,17 @@ static bool weakening_artifact(player_type *player_ptr, object_type *o_ptr)
     if (has_flag(flgs, TR_KILL_EVIL)) {
         remove_flag(o_ptr->art_flags, TR_KILL_EVIL);
         add_flag(o_ptr->art_flags, TR_SLAY_EVIL);
-        return TRUE;
+        return true;
     }
 
     if (k_ptr->dd < o_ptr->dd) {
         o_ptr->dd--;
-        return TRUE;
+        return true;
     }
 
     if (k_ptr->ds < o_ptr->ds) {
         o_ptr->ds--;
-        return TRUE;
+        return true;
     }
 
     if (o_ptr->to_d > 10) {
@@ -68,10 +68,10 @@ static bool weakening_artifact(player_type *player_ptr, object_type *o_ptr)
             o_ptr->to_d = 10;
         }
 
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 static void set_artifact_bias(player_type *player_ptr, object_type *o_ptr, int *warrior_artifact_bias)
@@ -167,12 +167,12 @@ static void decide_warrior_bias(player_type *player_ptr, object_type *o_ptr, con
 static bool decide_random_art_cursed(const bool a_scroll, object_type *o_ptr)
 {
     if (!a_scroll && one_in_(A_CURSED))
-        return TRUE;
+        return true;
 
     if (((o_ptr->tval == TV_AMULET) || (o_ptr->tval == TV_RING)) && object_is_cursed(o_ptr))
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 static int decide_random_art_power(const bool a_cursed)
@@ -198,7 +198,7 @@ static void invest_powers(player_type *player_ptr, object_type *o_ptr, int *powe
         case 1:
         case 2:
             random_plus(o_ptr);
-            *has_pval = TRUE;
+            *has_pval = true;
             break;
         case 3:
         case 4:
@@ -440,5 +440,5 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
         weakening_artifact(player_ptr, o_ptr);
 
     generate_unnatural_random_artifact(player_ptr, o_ptr, a_scroll, power_level, max_powers, total_flags);
-    return TRUE;
+    return true;
 }

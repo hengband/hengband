@@ -26,13 +26,13 @@ bool research_mon(player_type *player_ptr)
 {
     char buf[256];
     bool notpicked;
-    bool recall = FALSE;
+    bool recall = false;
     u16b why = 0;
     MONSTER_IDX *who;
 
-    bool all = FALSE;
-    bool uniq = FALSE;
-    bool norm = FALSE;
+    bool all = false;
+    bool uniq = false;
+    bool norm = false;
     char temp[MAX_MONSTER_NAME] = "";
 
     static int old_sym = '\0';
@@ -42,11 +42,11 @@ bool research_mon(player_type *player_ptr)
     char sym;
     if (!get_com(
             _("モンスターの文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^M名前):", "Enter character to be identified(^A:All,^U:Uniqs,^N:Non uniqs,^M:Name): "),
-            &sym, FALSE))
+            &sym, false))
 
     {
         screen_load();
-        return FALSE;
+        return false;
     }
 
     IDX i;
@@ -57,21 +57,21 @@ bool research_mon(player_type *player_ptr)
 
     /* XTRA HACK WHATSEARCH */
     if (sym == KTRL('A')) {
-        all = TRUE;
+        all = true;
         strcpy(buf, _("全モンスターのリスト", "Full monster list."));
     } else if (sym == KTRL('U')) {
-        all = uniq = TRUE;
+        all = uniq = true;
         strcpy(buf, _("ユニーク・モンスターのリスト", "Unique monster list."));
     } else if (sym == KTRL('N')) {
-        all = norm = TRUE;
+        all = norm = true;
         strcpy(buf, _("ユニーク外モンスターのリスト", "Non-unique monster list."));
     } else if (sym == KTRL('M')) {
-        all = TRUE;
+        all = true;
         if (!get_string(_("名前(英語の場合小文字で可)", "Enter name:"), temp, 70)) {
             temp[0] = 0;
             screen_load();
 
-            return FALSE;
+            return false;
         }
 
         sprintf(buf, _("名前:%sにマッチ", "Monsters' names with \"%s\""), temp);
@@ -144,7 +144,7 @@ bool research_mon(player_type *player_ptr)
         C_KILL(who, max_r_idx, MONRACE_IDX);
         screen_load();
 
-        return FALSE;
+        return false;
     }
 
     why = 2;
@@ -159,19 +159,19 @@ bool research_mon(player_type *player_ptr)
     else
         i = n - 1;
 
-    notpicked = TRUE;
+    notpicked = true;
     MONRACE_IDX r_idx;
     while (notpicked) {
         r_idx = who[i];
         roff_top(r_idx);
         term_addstr(-1, TERM_WHITE, _(" ['r'思い出, ' 'で続行, ESC]", " [(r)ecall, ESC, space to continue]"));
-        while (TRUE) {
+        while (true) {
             if (recall) {
                 lore_do_probe(player_ptr, r_idx);
                 monster_race_track(player_ptr, r_idx);
                 handle_stuff(player_ptr);
                 screen_roff(player_ptr, r_idx, MONSTER_LORE_RESEARCH);
-                notpicked = FALSE;
+                notpicked = false;
                 old_sym = sym;
                 old_i = i;
             }

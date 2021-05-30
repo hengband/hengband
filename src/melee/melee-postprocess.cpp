@@ -92,12 +92,12 @@ static void prepare_redraw(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
 static bool process_invulnerability(mam_pp_type *mam_pp_ptr)
 {
     if (monster_invulner_remaining(mam_pp_ptr->m_ptr) && randint0(PENETRATE_INVULNERABILITY))
-        return FALSE;
+        return false;
 
     if (mam_pp_ptr->seen)
         msg_format(_("%^sはダメージを受けない。", "%^s is unharmed."), mam_pp_ptr->m_name);
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -109,7 +109,7 @@ static bool process_all_resistances(mam_pp_type *mam_pp_ptr)
 {
     monster_race *r_ptr = &r_info[mam_pp_ptr->m_ptr->r_idx];
     if ((r_ptr->flagsr & RFR_RES_ALL) == 0)
-        return FALSE;
+        return false;
 
     if (mam_pp_ptr->dam > 0) {
         mam_pp_ptr->dam /= 100;
@@ -118,12 +118,12 @@ static bool process_all_resistances(mam_pp_type *mam_pp_ptr)
     }
 
     if (mam_pp_ptr->dam != 0)
-        return FALSE;
+        return false;
 
     if (mam_pp_ptr->seen)
         msg_format(_("%^sはダメージを受けない。", "%^s is unharmed."), mam_pp_ptr->m_name);
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -141,7 +141,7 @@ static void print_monster_dead_by_monster(player_type *player_ptr, mam_pp_type *
 
     monster_desc(player_ptr, mam_pp_ptr->m_name, mam_pp_ptr->m_ptr, MD_TRUE_NAME);
     if (!mam_pp_ptr->seen) {
-        player_ptr->current_floor_ptr->monster_noise = TRUE;
+        player_ptr->current_floor_ptr->monster_noise = true;
         return;
     }
 
@@ -168,22 +168,22 @@ static bool check_monster_hp(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
 {
     monster_race *r_ptr = &r_info[mam_pp_ptr->m_ptr->r_idx];
     if (mam_pp_ptr->m_ptr->hp < 0)
-        return FALSE;
+        return false;
 
     if (((r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (r_ptr->flags7 & RF7_NAZGUL)) && !player_ptr->phase_out) {
         mam_pp_ptr->m_ptr->hp = 1;
-        return FALSE;
+        return false;
     }
 
     sound_type kill_sound = monster_living(mam_pp_ptr->m_ptr->r_idx) ? SOUND_KILL : SOUND_N_KILL;
     sound(kill_sound);
-    *(mam_pp_ptr->dead) = TRUE;
+    *(mam_pp_ptr->dead) = true;
     print_monster_dead_by_monster(player_ptr, mam_pp_ptr);
     monster_gain_exp(player_ptr, mam_pp_ptr->who, mam_pp_ptr->m_ptr->r_idx);
-    monster_death(player_ptr, mam_pp_ptr->m_idx, FALSE);
+    monster_death(player_ptr, mam_pp_ptr->m_idx, false);
     delete_monster_idx(player_ptr, mam_pp_ptr->m_idx);
-    *(mam_pp_ptr->fear) = FALSE;
-    return TRUE;
+    *(mam_pp_ptr->fear) = false;
+    return true;
 }
 
 /*!
@@ -197,7 +197,7 @@ static void cancel_fear_by_pain(player_type *player_ptr, mam_pp_type *mam_pp_ptr
         || !set_monster_monfear(player_ptr, mam_pp_ptr->m_idx, monster_fear_remaining(mam_pp_ptr->m_ptr) - randint1(mam_pp_ptr->dam / 4)))
         return;
 
-    *(mam_pp_ptr->fear) = FALSE;
+    *(mam_pp_ptr->fear) = false;
 }
 
 /*!
@@ -216,7 +216,7 @@ static void make_monster_fear(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
     if (!can_make_fear)
         return;
 
-    *(mam_pp_ptr->fear) = TRUE;
+    *(mam_pp_ptr->fear) = true;
     (void)set_monster_monfear(
         player_ptr, mam_pp_ptr->m_idx, (randint1(10) + (((mam_pp_ptr->dam >= mam_pp_ptr->m_ptr->hp) && (percentage > 7)) ? 20 : ((11 - percentage) * 5))));
 }
@@ -235,7 +235,7 @@ static void fall_off_horse_by_melee(player_type *player_ptr, mam_pp_type *mam_pp
     if (mam_pp_ptr->m_ptr->hp > mam_pp_ptr->m_ptr->maxhp / 3)
         mam_pp_ptr->dam = (mam_pp_ptr->dam + 1) / 2;
 
-    if (process_fall_off_horse(player_ptr, (mam_pp_ptr->dam > 200) ? 200 : mam_pp_ptr->dam, FALSE))
+    if (process_fall_off_horse(player_ptr, (mam_pp_ptr->dam > 200) ? 200 : mam_pp_ptr->dam, false))
         msg_format(_("%^sに振り落とされた！", "You have been thrown off from %s!"), mam_pp_ptr->m_name);
 }
 
@@ -261,7 +261,7 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
     (void)set_monster_csleep(player_ptr, m_idx, 0);
 
     if (player_ptr->riding && (m_idx == player_ptr->riding))
-        disturb(player_ptr, TRUE, TRUE);
+        disturb(player_ptr, true, true);
 
     if (process_invulnerability(mam_pp_ptr) || process_all_resistances(mam_pp_ptr))
         return;
@@ -270,7 +270,7 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
     if (check_monster_hp(player_ptr, mam_pp_ptr))
         return;
 
-    *dead = FALSE;
+    *dead = false;
     cancel_fear_by_pain(player_ptr, mam_pp_ptr);
     make_monster_fear(player_ptr, mam_pp_ptr);
     if ((dam > 0) && !is_pet(m_ptr) && !is_friendly(m_ptr) && (mam_pp_ptr->who != m_idx)) {

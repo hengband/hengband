@@ -66,7 +66,7 @@ static int get_hissatsu_power(player_type *creature_ptr, SPELL_IDX *sn)
     POSITION y = 1;
     POSITION x = 15;
     PLAYER_LEVEL plev = creature_ptr->lev;
-    int ask = TRUE;
+    int ask = true;
     char choice;
     char out_val[160];
     SPELL_IDX sentaku[32];
@@ -85,12 +85,12 @@ static int get_hissatsu_power(player_type *creature_ptr, SPELL_IDX *sn)
         /* Verify the spell */
         if (technic_info[TECHNIC_HISSATSU][*sn].slevel <= plev) {
             /* Success */
-            return TRUE;
+            return true;
         }
     }
 
-    flag = FALSE;
-    redraw = FALSE;
+    flag = false;
+    redraw = false;
 
     for (i = 0; i < 32; i++) {
         if (technic_info[TECHNIC_HISSATSU][i].slevel <= PY_MAX_LEVEL) {
@@ -110,14 +110,14 @@ static int get_hissatsu_power(player_type *creature_ptr, SPELL_IDX *sn)
     while (!flag) {
         if (choice == ESCAPE)
             choice = ' ';
-        else if (!get_com(out_val, &choice, FALSE))
+        else if (!get_com(out_val, &choice, false))
             break;
 
         if (use_menu && choice != ' ') {
             switch (choice) {
             case '0': {
                 screen_load();
-                return FALSE;
+                return false;
             }
 
             case '8':
@@ -148,23 +148,23 @@ static int get_hissatsu_power(player_type *creature_ptr, SPELL_IDX *sn)
             case '6':
             case 'l':
             case 'L': {
-                bool reverse = FALSE;
+                bool reverse = false;
                 if ((choice == '4') || (choice == 'h') || (choice == 'H'))
-                    reverse = TRUE;
+                    reverse = true;
                 if (menu_line > 16) {
                     menu_line -= 16;
-                    reverse = TRUE;
+                    reverse = true;
                 } else
                     menu_line += 16;
                 while (!(creature_ptr->spell_learned1 & (1UL << (menu_line - 1)))) {
                     if (reverse) {
                         menu_line--;
                         if (menu_line < 2)
-                            reverse = FALSE;
+                            reverse = false;
                     } else {
                         menu_line++;
                         if (menu_line > 31)
-                            reverse = TRUE;
+                            reverse = true;
                     }
                 }
                 break;
@@ -175,7 +175,7 @@ static int get_hissatsu_power(player_type *creature_ptr, SPELL_IDX *sn)
             case '\r':
             case '\n': {
                 i = menu_line - 1;
-                ask = FALSE;
+                ask = false;
                 break;
             }
             }
@@ -186,7 +186,7 @@ static int get_hissatsu_power(player_type *creature_ptr, SPELL_IDX *sn)
             if (!redraw || use_menu) {
                 char psi_desc[80];
                 int line;
-                redraw = TRUE;
+                redraw = true;
                 if (!use_menu)
                     screen_save();
 
@@ -234,7 +234,7 @@ static int get_hissatsu_power(player_type *creature_ptr, SPELL_IDX *sn)
             /* Hide the list */
             else {
                 /* Hide list */
-                redraw = FALSE;
+                redraw = false;
                 screen_load();
             }
 
@@ -254,7 +254,7 @@ static int get_hissatsu_power(player_type *creature_ptr, SPELL_IDX *sn)
                 /* Extract request */
                 i = (islower(choice) ? A2I(choice) : -1);
             } else {
-                ask = FALSE; /* Can't uppercase digits */
+                ask = false; /* Can't uppercase digits */
 
                 i = choice - '0' + 26;
             }
@@ -281,7 +281,7 @@ static int get_hissatsu_power(player_type *creature_ptr, SPELL_IDX *sn)
         }
 
         /* Stop the loop */
-        flag = TRUE;
+        flag = true;
     }
     if (redraw)
         screen_load();
@@ -291,7 +291,7 @@ static int get_hissatsu_power(player_type *creature_ptr, SPELL_IDX *sn)
 
     /* Abort if needed */
     if (!flag)
-        return FALSE;
+        return false;
 
     /* Save the choice */
     (*sn) = j;
@@ -299,7 +299,7 @@ static int get_hissatsu_power(player_type *creature_ptr, SPELL_IDX *sn)
     repeat_push((COMMAND_CODE)j);
 
     /* Success */
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -370,7 +370,7 @@ void do_cmd_gain_hissatsu(player_type *creature_ptr)
     object_type *o_ptr;
     concptr q, s;
 
-    bool gain = FALSE;
+    bool gain = false;
 
     if (creature_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN)) {
         set_action(creature_ptr, ACTION_NONE);
@@ -414,7 +414,7 @@ void do_cmd_gain_hissatsu(player_type *creature_ptr)
                 break;
         }
         creature_ptr->spell_order[j] = i;
-        gain = TRUE;
+        gain = true;
     }
 
     if (!gain) {

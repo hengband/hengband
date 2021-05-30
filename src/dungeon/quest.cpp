@@ -62,7 +62,7 @@ void determine_random_questor(player_type *player_ptr, quest_type *q_ptr)
     get_mon_num_prep(player_ptr, mon_hook_quest, NULL);
 
     MONRACE_IDX r_idx;
-    while (TRUE) {
+    while (true) {
         /*
          * Random monster 5 - 10 levels out of depth
          * (depending on level)
@@ -341,5 +341,5 @@ void do_cmd_quest(player_type *player_ptr)
         player_ptr->current_floor_ptr->dun_level = 1;
     player_ptr->current_floor_ptr->inside_quest = player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].special;
 
-    player_ptr->leaving = TRUE;
+    player_ptr->leaving = true;
 }

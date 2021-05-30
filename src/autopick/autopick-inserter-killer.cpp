@@ -68,8 +68,8 @@ bool insert_return_code(text_body_type *tb)
     string_free(tb->lines_list[tb->cy]);
     tb->lines_list[tb->cy] = string_make(buf);
     tb->dirty_flags |= DIRTY_EXPRESSION;
-    tb->changed = TRUE;
-    return TRUE;
+    tb->changed = true;
+    return true;
 }
 
 /*
@@ -81,13 +81,13 @@ bool insert_macro_line(text_body_type *tb)
         return false;
     int i, n = 0;
     flush();
-    inkey_base = TRUE;
+    inkey_base = true;
     i = inkey();
     char buf[1024];
     while (i) {
         buf[n++] = (char)i;
-        inkey_base = TRUE;
-        inkey_scan = TRUE;
+        inkey_base = true;
+        inkey_scan = true;
         i = inkey();
     }
 
@@ -97,7 +97,7 @@ bool insert_macro_line(text_body_type *tb)
     char tmp[1024];
     ascii_to_text(tmp, buf);
     if (!tmp[0])
-        return FALSE;
+        return false;
 
     tb->cx = 0;
     insert_return_code(tb);
@@ -115,7 +115,7 @@ bool insert_macro_line(text_body_type *tb)
     string_free(tb->lines_list[tb->cy]);
     tb->lines_list[tb->cy] = string_make(format("A:%s", tmp));
 
-    return TRUE;
+    return true;
 }
 
 /*
@@ -141,7 +141,7 @@ bool insert_keymap_line(text_body_type *tb)
     char tmp[1024];
     ascii_to_text(tmp, buf);
     if (!tmp[0])
-        return FALSE;
+        return false;
 
     tb->cx = 0;
     insert_return_code(tb);
@@ -157,7 +157,7 @@ bool insert_keymap_line(text_body_type *tb)
     string_free(tb->lines_list[tb->cy]);
     tb->lines_list[tb->cy] = string_make(format("A:%s", tmp));
 
-    return TRUE;
+    return true;
 }
 
 /*
@@ -176,7 +176,7 @@ void insert_single_letter(text_body_type *tb, int key)
     if (iskanji(key)) {
         int next;
 
-        inkey_base = TRUE;
+        inkey_base = true;
         next = inkey();
         if (j + 2 < MAX_LINELEN) {
             buf[j++] = (char)key;
@@ -204,7 +204,7 @@ void insert_single_letter(text_body_type *tb, int key)
 
     tb->dirty_line = tb->cy;
     check_expression_line(tb, tb->cy);
-    tb->changed = TRUE;
+    tb->changed = true;
 }
 
 /*
@@ -241,5 +241,5 @@ void kill_line_segment(text_body_type *tb, int y, int x0, int x1, bool whole)
     string_free(tb->lines_list[y]);
     tb->lines_list[y] = string_make(buf);
     check_expression_line(tb, y);
-    tb->changed = TRUE;
+    tb->changed = true;
 }

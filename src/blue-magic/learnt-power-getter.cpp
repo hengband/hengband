@@ -58,13 +58,13 @@ static learnt_magic_type *initialize_lenat_magic_type(player_type *caster_ptr, l
     lm_ptr->x = 18;
     lm_ptr->plev = caster_ptr->lev;
     lm_ptr->chance = 0;
-    lm_ptr->ask = TRUE;
+    lm_ptr->ask = true;
     lm_ptr->mode = 0;
     lm_ptr->blue_magics.clear();
     lm_ptr->ability_flags.clear();
     lm_ptr->menu_line = use_menu ? 1 : 0;
-    lm_ptr->flag = FALSE;
-    lm_ptr->redraw = FALSE;
+    lm_ptr->flag = false;
+    lm_ptr->redraw = false;
     return lm_ptr;
 }
 
@@ -78,10 +78,10 @@ static bool check_blue_magic_cancel(SPELL_IDX *sn)
     *sn = -1;
     COMMAND_CODE code;
     if (!repeat_pull(&code))
-        return FALSE;
+        return false;
 
     *sn = (SPELL_IDX)code;
-    return TRUE;
+    return true;
 }
 
 static bool select_blue_magic_kind_menu(learnt_magic_type *lm_ptr)
@@ -100,7 +100,7 @@ static bool select_blue_magic_kind_menu(learnt_magic_type *lm_ptr)
         case 'z':
         case 'Z':
             screen_load();
-            return FALSE;
+            return false;
         case '2':
         case 'j':
         case 'J':
@@ -122,16 +122,16 @@ static bool select_blue_magic_kind_menu(learnt_magic_type *lm_ptr)
             lm_ptr->menu_line -= 5;
     }
 
-    return TRUE;
+    return true;
 }
 
 static bool select_blue_magic_kind_command(learnt_magic_type *lm_ptr)
 {
     sprintf(lm_ptr->comment, _("[A]ボルト, [B]ボール, [C]ブレス, [D]召喚, [E]その他:", "[A] bolt, [B] ball, [C] breath, [D] summoning, [E] others:"));
-    while (TRUE) {
+    while (true) {
         char ch;
-        if (!get_com(lm_ptr->comment, &ch, TRUE))
-            return FALSE;
+        if (!get_com(lm_ptr->comment, &ch, true))
+            return false;
 
         if (ch == 'A' || ch == 'a') {
             lm_ptr->mode = 1;
@@ -159,7 +159,7 @@ static bool select_blue_magic_kind_command(learnt_magic_type *lm_ptr)
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 static bool check_blue_magic_kind(learnt_magic_type *lm_ptr)
@@ -169,10 +169,10 @@ static bool check_blue_magic_kind(learnt_magic_type *lm_ptr)
 
     screen_save();
     if (!select_blue_magic_kind_menu(lm_ptr))
-        return FALSE;
+        return false;
 
     screen_load();
-    return TRUE;
+    return true;
 }
 
 static bool sweep_learnt_spells(player_type *caster_ptr, learnt_magic_type *lm_ptr)
@@ -196,12 +196,12 @@ static bool sweep_learnt_spells(player_type *caster_ptr, learnt_magic_type *lm_p
 
     if (lm_ptr->blue_magic_num == lm_ptr->count) {
         msg_print(_("その種類の魔法は覚えていない！", "You don't know any spell of this type."));
-        return FALSE;
+        return false;
     }
 
     (void)strnfmt(lm_ptr->out_val, 78, _("(%c-%c, '*'で一覧, ESC) どの%sを唱えますか？", "(%c-%c, *=List, ESC=exit) Use which %s? "), I2A(0),
         I2A(lm_ptr->count - 1), _("魔法", "magic"));
-    return TRUE;
+    return true;
 }
 
 static bool switch_blue_magic_choice(player_type *caster_ptr, learnt_magic_type *lm_ptr)
@@ -209,7 +209,7 @@ static bool switch_blue_magic_choice(player_type *caster_ptr, learnt_magic_type 
     switch (lm_ptr->choice) {
     case '0':
         screen_load();
-        return FALSE;
+        return false;
     case '8':
     case 'k':
     case 'K':
@@ -218,7 +218,7 @@ static bool switch_blue_magic_choice(player_type *caster_ptr, learnt_magic_type 
             if (lm_ptr->menu_line > lm_ptr->count)
                 lm_ptr->menu_line -= lm_ptr->count;
         } while (!caster_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->menu_line - 1]]);
-        return TRUE;
+        return true;
     case '2':
     case 'j':
     case 'J':
@@ -227,7 +227,7 @@ static bool switch_blue_magic_choice(player_type *caster_ptr, learnt_magic_type 
             if (lm_ptr->menu_line > lm_ptr->count)
                 lm_ptr->menu_line -= lm_ptr->count;
         } while (!caster_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->menu_line - 1]]);
-        return TRUE;
+        return true;
     case '6':
     case 'l':
     case 'L':
@@ -235,7 +235,7 @@ static bool switch_blue_magic_choice(player_type *caster_ptr, learnt_magic_type 
         while (!caster_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->menu_line - 1]])
             lm_ptr->menu_line--;
 
-        return TRUE;
+        return true;
     case '4':
     case 'h':
     case 'H':
@@ -243,15 +243,15 @@ static bool switch_blue_magic_choice(player_type *caster_ptr, learnt_magic_type 
         while (!caster_ptr->magic_num2[lm_ptr->blue_magics[lm_ptr->menu_line - 1]])
             lm_ptr->menu_line++;
 
-        return TRUE;
+        return true;
     case 'x':
     case 'X':
     case '\r':
         lm_ptr->blue_magic_num = lm_ptr->menu_line - 1;
-        lm_ptr->ask = FALSE;
-        return TRUE;
+        lm_ptr->ask = false;
+        return true;
     default:
-        return TRUE;
+        return true;
     }
 }
 
@@ -319,15 +319,15 @@ static void describe_blue_magic_name(player_type *caster_ptr, learnt_magic_type 
 static bool blue_magic_key_input(player_type *caster_ptr, learnt_magic_type *lm_ptr)
 {
     if ((lm_ptr->choice != ' ') && (lm_ptr->choice != '*') && (lm_ptr->choice != '?') && (!use_menu || (lm_ptr->ask == 0)))
-        return FALSE;
+        return false;
 
     if (lm_ptr->redraw && !use_menu) {
-        lm_ptr->redraw = FALSE;
+        lm_ptr->redraw = false;
         screen_load();
-        return TRUE;
+        return true;
     }
 
-    lm_ptr->redraw = TRUE;
+    lm_ptr->redraw = true;
     if (!use_menu)
         screen_save();
 
@@ -335,7 +335,7 @@ static bool blue_magic_key_input(player_type *caster_ptr, learnt_magic_type *lm_
     if (lm_ptr->y < 22)
         prt("", lm_ptr->y + lm_ptr->blue_magic_num + 1, lm_ptr->x);
 
-    return TRUE;
+    return true;
 }
 
 static void convert_lower_blue_magic_selection(learnt_magic_type *lm_ptr)
@@ -353,7 +353,7 @@ static void convert_lower_blue_magic_selection(learnt_magic_type *lm_ptr)
 static bool ask_cast_blue_magic(learnt_magic_type *lm_ptr)
 {
     if (lm_ptr->ask == 0)
-        return TRUE;
+        return true;
 
     char tmp_val[160];
     (void)strnfmt(tmp_val, 78, _("%sの魔法を唱えますか？", "Use %s? "), monster_powers[static_cast<int>(lm_ptr->blue_magics[lm_ptr->blue_magic_num])].name);
@@ -365,11 +365,11 @@ static bool select_learnt_spells(player_type *caster_ptr, learnt_magic_type *lm_
     while (!lm_ptr->flag) {
         if (lm_ptr->choice == ESCAPE)
             lm_ptr->choice = ' ';
-        else if (!get_com(lm_ptr->out_val, &lm_ptr->choice, TRUE))
+        else if (!get_com(lm_ptr->out_val, &lm_ptr->choice, true))
             break;
 
         if (use_menu && (lm_ptr->choice != ' ') && !switch_blue_magic_choice(caster_ptr, lm_ptr))
-            return FALSE;
+            return false;
 
         if (blue_magic_key_input(caster_ptr, lm_ptr))
             continue;
@@ -384,10 +384,10 @@ static bool select_learnt_spells(player_type *caster_ptr, learnt_magic_type *lm_
         if (!ask_cast_blue_magic(lm_ptr))
             continue;
 
-        lm_ptr->flag = TRUE;
+        lm_ptr->flag = true;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -413,17 +413,17 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
     learnt_magic_type tmp_magic;
     learnt_magic_type *lm_ptr = initialize_lenat_magic_type(caster_ptr, &tmp_magic);
     if (check_blue_magic_cancel(sn))
-        return TRUE;
+        return true;
 
     if (!check_blue_magic_kind(lm_ptr) || !sweep_learnt_spells(caster_ptr, lm_ptr))
-        return FALSE;
+        return false;
 
     if (use_menu)
         screen_save();
 
     lm_ptr->choice = (always_show_list || use_menu) ? ESCAPE : 1;
     if (!select_learnt_spells(caster_ptr, lm_ptr))
-        return FALSE;
+        return false;
 
     if (lm_ptr->redraw)
         screen_load();
@@ -432,9 +432,9 @@ bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
     handle_stuff(caster_ptr);
 
     if (!lm_ptr->flag)
-        return FALSE;
+        return false;
 
     *sn = lm_ptr->blue_magics[lm_ptr->blue_magic_num];
     repeat_push((COMMAND_CODE)lm_ptr->blue_magics[lm_ptr->blue_magic_num]);
-    return TRUE;
+    return true;
 }

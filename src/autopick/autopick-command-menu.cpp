@@ -58,7 +58,7 @@ static void redraw_edit_command_menu(bool *redraw, int level, int start, char *l
     }
 
     term_putstr(col0, row1, -1, TERM_WHITE, linestr);
-    *redraw = FALSE;
+    *redraw = false;
 }
 
 /*
@@ -97,8 +97,8 @@ int do_command_menu(int level, int start)
     }
 
     strcat(linestr, "+");
-    bool redraw = TRUE;
-    while (TRUE) {
+    bool redraw = true;
+    while (true) {
         redraw_edit_command_menu(&redraw, level, start, linestr, &menu_key, max_len);
         prt(format(_("(a-%c) コマンド:", "(a-%c) Command:"), menu_key + 'a' - 1), 0, 0);
         char key = inkey();
@@ -126,7 +126,7 @@ int do_command_menu(int level, int start)
             if (com_id)
                 return com_id;
             else
-                redraw = TRUE;
+                redraw = true;
         } else if (com_id) {
             return com_id;
         }

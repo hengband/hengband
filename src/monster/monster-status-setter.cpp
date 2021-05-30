@@ -98,23 +98,23 @@ bool set_monster_csleep(player_type *target_ptr, MONSTER_IDX m_idx, int v)
 {
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
-    bool notice = FALSE;
+    bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
     if (v) {
         if (!monster_csleep_remaining(m_ptr)) {
             mproc_add(floor_ptr, m_idx, MTIMED_CSLEEP);
-            notice = TRUE;
+            notice = true;
         }
     } else {
         if (monster_csleep_remaining(m_ptr)) {
             mproc_remove(floor_ptr, m_idx, MTIMED_CSLEEP);
-            notice = TRUE;
+            notice = true;
         }
     }
 
     m_ptr->mtimed[MTIMED_CSLEEP] = (s16b)v;
     if (!notice)
-        return FALSE;
+        return false;
 
     if (m_ptr->ml) {
         if (target_ptr->health_who == m_idx)
@@ -127,7 +127,7 @@ bool set_monster_csleep(player_type *target_ptr, MONSTER_IDX m_idx, int v)
     if (r_info[m_ptr->r_idx].flags7 & RF7_HAS_LD_MASK)
         target_ptr->update |= PU_MON_LITE;
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -142,28 +142,28 @@ bool set_monster_fast(player_type *target_ptr, MONSTER_IDX m_idx, int v)
 {
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
-    bool notice = FALSE;
+    bool notice = false;
     v = (v > 200) ? 200 : (v < 0) ? 0 : v;
     if (v) {
         if (!monster_fast_remaining(m_ptr)) {
             mproc_add(floor_ptr, m_idx, MTIMED_FAST);
-            notice = TRUE;
+            notice = true;
         }
     } else {
         if (monster_fast_remaining(m_ptr)) {
             mproc_remove(floor_ptr, m_idx, MTIMED_FAST);
-            notice = TRUE;
+            notice = true;
         }
     }
 
     m_ptr->mtimed[MTIMED_FAST] = (s16b)v;
     if (!notice)
-        return FALSE;
+        return false;
 
     if ((target_ptr->riding == m_idx) && !target_ptr->leaving)
         target_ptr->update |= PU_BONUS;
 
-    return TRUE;
+    return true;
 }
 
 /*
@@ -173,28 +173,28 @@ bool set_monster_slow(player_type *target_ptr, MONSTER_IDX m_idx, int v)
 {
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
-    bool notice = FALSE;
+    bool notice = false;
     v = (v > 200) ? 200 : (v < 0) ? 0 : v;
     if (v) {
         if (!monster_slow_remaining(m_ptr)) {
             mproc_add(floor_ptr, m_idx, MTIMED_SLOW);
-            notice = TRUE;
+            notice = true;
         }
     } else {
         if (monster_slow_remaining(m_ptr)) {
             mproc_remove(floor_ptr, m_idx, MTIMED_SLOW);
-            notice = TRUE;
+            notice = true;
         }
     }
 
     m_ptr->mtimed[MTIMED_SLOW] = (s16b)v;
     if (!notice)
-        return FALSE;
+        return false;
 
     if ((target_ptr->riding == m_idx) && !target_ptr->leaving)
         target_ptr->update |= PU_BONUS;
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -209,17 +209,17 @@ bool set_monster_stunned(player_type *target_ptr, MONSTER_IDX m_idx, int v)
 {
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
-    bool notice = FALSE;
+    bool notice = false;
     v = (v > 200) ? 200 : (v < 0) ? 0 : v;
     if (v) {
         if (!monster_stunned_remaining(m_ptr)) {
             mproc_add(floor_ptr, m_idx, MTIMED_STUNNED);
-            notice = TRUE;
+            notice = true;
         }
     } else {
         if (monster_stunned_remaining(m_ptr)) {
             mproc_remove(floor_ptr, m_idx, MTIMED_STUNNED);
-            notice = TRUE;
+            notice = true;
         }
     }
 
@@ -239,17 +239,17 @@ bool set_monster_confused(player_type *target_ptr, MONSTER_IDX m_idx, int v)
 {
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
-    bool notice = FALSE;
+    bool notice = false;
     v = (v > 200) ? 200 : (v < 0) ? 0 : v;
     if (v) {
         if (!monster_confused_remaining(m_ptr)) {
             mproc_add(floor_ptr, m_idx, MTIMED_CONFUSED);
-            notice = TRUE;
+            notice = true;
         }
     } else {
         if (monster_confused_remaining(m_ptr)) {
             mproc_remove(floor_ptr, m_idx, MTIMED_CONFUSED);
-            notice = TRUE;
+            notice = true;
         }
     }
 
@@ -269,24 +269,24 @@ bool set_monster_monfear(player_type *target_ptr, MONSTER_IDX m_idx, int v)
 {
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
-    bool notice = FALSE;
+    bool notice = false;
     v = (v > 200) ? 200 : (v < 0) ? 0 : v;
     if (v) {
         if (!monster_fear_remaining(m_ptr)) {
             mproc_add(floor_ptr, m_idx, MTIMED_MONFEAR);
-            notice = TRUE;
+            notice = true;
         }
     } else {
         if (monster_fear_remaining(m_ptr)) {
             mproc_remove(floor_ptr, m_idx, MTIMED_MONFEAR);
-            notice = TRUE;
+            notice = true;
         }
     }
 
     m_ptr->mtimed[MTIMED_MONFEAR] = (s16b)v;
 
     if (!notice)
-        return FALSE;
+        return false;
 
     if (m_ptr->ml) {
         if (target_ptr->health_who == m_idx)
@@ -296,7 +296,7 @@ bool set_monster_monfear(player_type *target_ptr, MONSTER_IDX m_idx, int v)
             target_ptr->redraw |= PR_UHEALTH;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -312,25 +312,25 @@ bool set_monster_invulner(player_type *target_ptr, MONSTER_IDX m_idx, int v, boo
 {
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
-    bool notice = FALSE;
+    bool notice = false;
     v = (v > 200) ? 200 : (v < 0) ? 0 : v;
     if (v) {
         if (!monster_invulner_remaining(m_ptr)) {
             mproc_add(floor_ptr, m_idx, MTIMED_INVULNER);
-            notice = TRUE;
+            notice = true;
         }
     } else {
         if (monster_invulner_remaining(m_ptr)) {
             mproc_remove(floor_ptr, m_idx, MTIMED_INVULNER);
             if (energy_need && !target_ptr->wild_mode)
                 m_ptr->energy_need += ENERGY_NEED();
-            notice = TRUE;
+            notice = true;
         }
     }
 
     m_ptr->mtimed[MTIMED_INVULNER] = (s16b)v;
     if (!notice)
-        return FALSE;
+        return false;
 
     if (m_ptr->ml) {
         if (target_ptr->health_who == m_idx)
@@ -340,7 +340,7 @@ bool set_monster_invulner(player_type *target_ptr, MONSTER_IDX m_idx, int v, boo
             target_ptr->redraw |= PR_UHEALTH;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -355,7 +355,7 @@ bool set_monster_timewalk(player_type *target_ptr, int num, MONRACE_IDX who, boo
 {
     monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[hack_m_idx];
     if (current_world_ptr->timewalk_m_idx)
-        return FALSE;
+        return false;
 
     if (vs_player) {
         GAME_TEXT m_name[MAX_NLEN];
@@ -417,5 +417,5 @@ bool set_monster_timewalk(player_type *target_ptr, int num, MONRACE_IDX who, boo
     }
 
     handle_stuff(target_ptr);
-    return TRUE;
+    return true;
 }

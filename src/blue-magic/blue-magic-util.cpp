@@ -14,7 +14,7 @@ bmc_type *initialize_blue_magic_type(
     bmc_ptr->summon_lev = caster_ptr->lev * 2 / 3 + randint1(caster_ptr->lev / 2);
     bmc_ptr->damage = 0;
     bmc_ptr->pet = success; // read-only.
-    bmc_ptr->no_trump = FALSE;
+    bmc_ptr->no_trump = false;
     bmc_ptr->p_mode = bmc_ptr->pet ? PM_FORCE_PET : PM_NO_PET;
     bmc_ptr->u_mode = 0L;
     bmc_ptr->g_mode = bmc_ptr->pet ? 0 : PM_ALLOW_GROUP;

@@ -66,7 +66,7 @@ void do_cmd_colors(player_type *creature_ptr)
     char buf[1024];
     FILE *auto_dump_stream;
     screen_save();
-    while (TRUE) {
+    while (true) {
         term_clear();
         prt(_("[ カラーの設定 ]", "Interact with Colors"), 2, 0);
         prt(_("(1) ユーザー設定ファイルのロード", "(1) Load a user pref file"), 4, 5);
@@ -122,7 +122,7 @@ void do_cmd_colors(player_type *creature_ptr)
         } else if (i == '3') {
             static byte a = 0;
             prt(_("コマンド: カラーの設定を変更します", "Command: Modify colors"), 8, 0);
-            while (TRUE) {
+            while (true) {
                 concptr name;
                 clear_from(10);
                 for (byte j = 0; j < 16; j++) {

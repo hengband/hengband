@@ -74,7 +74,7 @@ POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
     if (!dy || !dx)
         return d;
 
-    while (TRUE) {
+    while (true) {
         /* Approximate error */
         err = (target - d * d) / (2 * d);
 
@@ -150,30 +150,30 @@ bool player_can_see_bold(player_type *creature_ptr, POSITION y, POSITION x)
 
     /* Blind players see nothing */
     if (creature_ptr->blind)
-        return FALSE;
+        return false;
 
     g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
 
     /* Note that "torch-lite" yields "illumination" */
     if (g_ptr->info & (CAVE_LITE | CAVE_MNLT))
-        return TRUE;
+        return true;
 
     /* Require line of sight to the grid */
     if (!player_has_los_bold(creature_ptr, y, x))
-        return FALSE;
+        return false;
 
     /* Noctovision of Ninja */
     if (creature_ptr->see_nocto)
-        return TRUE;
+        return true;
 
     /* Require "perma-lite" of the grid */
     if ((g_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW)
-        return FALSE;
+        return false;
 
     /* Feature code (applying "mimic" field) */
     /* Floors are simple */
     if (feat_supports_los(get_feat_mimic(g_ptr)))
-        return TRUE;
+        return true;
 
     /* Check for "local" illumination */
     return check_local_illumination(creature_ptr, y, x);

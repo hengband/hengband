@@ -60,8 +60,8 @@ void process_dungeon(player_type *player_ptr, bool load_game)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->base_level = floor_ptr->dun_level;
-    current_world_ptr->is_loading_now = FALSE;
-    player_ptr->leaving = FALSE;
+    current_world_ptr->is_loading_now = false;
+    player_ptr->leaving = false;
 
     command_cmd = 0;
     command_rep = 0;
@@ -71,10 +71,10 @@ void process_dungeon(player_type *player_ptr, bool load_game)
     target_who = 0;
     player_ptr->pet_t_m_idx = 0;
     player_ptr->riding_t_m_idx = 0;
-    player_ptr->ambush_flag = FALSE;
+    player_ptr->ambush_flag = false;
     health_track(player_ptr, 0);
 
-    disturb(player_ptr, TRUE, TRUE);
+    disturb(player_ptr, true, true);
     int quest_num = quest_number(player_ptr, floor_ptr->dun_level);
     if (quest_num) {
         r_info[quest[quest_num].r_idx].flags1 |= RF1_QUESTOR;
@@ -95,13 +95,13 @@ void process_dungeon(player_type *player_ptr, bool load_game)
     verify_panel(player_ptr);
     msg_erase();
 
-    current_world_ptr->character_xtra = TRUE;
+    current_world_ptr->character_xtra = true;
     player_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER | PW_MONSTER | PW_OVERHEAD | PW_DUNGEON);
     player_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_EQUIPPY | PR_MAP);
     player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS | PU_VIEW | PU_LITE | PU_MON_LITE | PU_TORCH | PU_MONSTERS | PU_DISTANCE | PU_FLOW);
     handle_stuff(player_ptr);
 
-    current_world_ptr->character_xtra = FALSE;
+    current_world_ptr->character_xtra = false;
     player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
     player_ptr->update |= (PU_COMBINE | PU_REORDER);
     handle_stuff(player_ptr);
@@ -143,18 +143,18 @@ void process_dungeon(player_type *player_ptr, bool load_game)
     }
 
     if (!load_game && (player_ptr->special_defense & NINJA_S_STEALTH))
-        set_superstealth(player_ptr, FALSE);
+        set_superstealth(player_ptr, false);
 
     floor_ptr->monster_level = floor_ptr->base_level;
     floor_ptr->object_level = floor_ptr->base_level;
-    current_world_ptr->is_loading_now = TRUE;
+    current_world_ptr->is_loading_now = true;
     if (player_ptr->energy_need > 0 && !player_ptr->phase_out && (floor_ptr->dun_level || player_ptr->leaving_dungeon || floor_ptr->inside_arena))
         player_ptr->energy_need = 0;
 
-    player_ptr->leaving_dungeon = FALSE;
+    player_ptr->leaving_dungeon = false;
     mproc_init(floor_ptr);
 
-    while (TRUE) {
+    while (true) {
         if ((floor_ptr->m_cnt + 32 > current_world_ptr->max_m_idx) && !player_ptr->phase_out)
             compact_monsters(player_ptr, 64);
 
@@ -188,7 +188,7 @@ void process_dungeon(player_type *player_ptr, bool load_game)
         if (!player_ptr->playing || player_ptr->is_dead)
             break;
 
-        process_world(player_ptr);
+        WorldTurnProcessor(player_ptr).process_world();
         handle_stuff(player_ptr);
 
         move_cursor_relative(player_ptr->y, player_ptr->x);
@@ -226,8 +226,8 @@ void process_dungeon(player_type *player_ptr, bool load_game)
          * floor, then prepare next floor
          */
         leave_floor(player_ptr);
-        reinit_wilderness = FALSE;
+        reinit_wilderness = false;
     }
 
-    write_level = TRUE;
+    write_level = true;
 }

@@ -30,7 +30,7 @@ void calc_blow_disease(player_type *target_ptr, monap_type *monap_ptr)
         return;
 
     if (!(has_resist_pois(target_ptr) || is_oppose_pois(target_ptr)) && set_poisoned(target_ptr, target_ptr->poisoned + randint1(monap_ptr->rlev) + 5))
-        monap_ptr->obvious = TRUE;
+        monap_ptr->obvious = true;
 
     bool disease_possibility = randint1(100) > calc_nuke_damage_rate(target_ptr);
     if (disease_possibility || (randint1(100) > 10) || (target_ptr->prace == RACE_ANDROID))
@@ -39,7 +39,7 @@ void calc_blow_disease(player_type *target_ptr, monap_type *monap_ptr)
     bool perm = one_in_(10);
     if (dec_stat(target_ptr, A_CON, randint1(10), perm)) {
         msg_print(_("病があなたを蝕んでいる気がする。", "You feel sickly."));
-        monap_ptr->obvious = TRUE;
+        monap_ptr->obvious = true;
     }
 }
 
@@ -58,7 +58,7 @@ void calc_blow_lose_strength(player_type *target_ptr, monap_type *monap_ptr)
         return;
 
     if (do_dec_stat(target_ptr, A_STR))
-        monap_ptr->obvious = TRUE;
+        monap_ptr->obvious = true;
 }
 
 /*!
@@ -76,7 +76,7 @@ void calc_blow_lose_intelligence(player_type *target_ptr, monap_type *monap_ptr)
         return;
 
     if (do_dec_stat(target_ptr, A_INT))
-        monap_ptr->obvious = TRUE;
+        monap_ptr->obvious = true;
 }
 
 /*!
@@ -94,7 +94,7 @@ void calc_blow_lose_wisdom(player_type *target_ptr, monap_type *monap_ptr)
         return;
 
     if (do_dec_stat(target_ptr, A_WIS))
-        monap_ptr->obvious = TRUE;
+        monap_ptr->obvious = true;
 }
 
 /*!
@@ -112,7 +112,7 @@ void calc_blow_lose_dexterity(player_type *target_ptr, monap_type *monap_ptr)
         return;
 
     if (do_dec_stat(target_ptr, A_DEX))
-        monap_ptr->obvious = TRUE;
+        monap_ptr->obvious = true;
 }
 
 /*!
@@ -130,7 +130,7 @@ void calc_blow_lose_constitution(player_type *target_ptr, monap_type *monap_ptr)
         return;
 
     if (do_dec_stat(target_ptr, A_CON))
-        monap_ptr->obvious = TRUE;
+        monap_ptr->obvious = true;
 }
 
 /*!
@@ -148,7 +148,7 @@ void calc_blow_lose_charisma(player_type *target_ptr, monap_type *monap_ptr)
         return;
 
     if (do_dec_stat(target_ptr, A_CHR))
-        monap_ptr->obvious = TRUE;
+        monap_ptr->obvious = true;
 }
 
 /*!

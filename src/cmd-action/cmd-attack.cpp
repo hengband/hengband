@@ -127,7 +127,7 @@ static void natural_attack(player_type *attacker_ptr, MONSTER_IDX m_idx, MUTA at
     if (k < 0)
         k = 0;
 
-    k = mon_damage_mod(attacker_ptr, m_ptr, k, FALSE);
+    k = mon_damage_mod(attacker_ptr, m_ptr, k, false);
     msg_format_wizard(attacker_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), k, m_ptr->hp - k,
         m_ptr->maxhp, m_ptr->max_maxhp);
     if (k > 0)
@@ -175,13 +175,13 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
 
     const std::initializer_list<MUTA> mutation_attack_methods = { MUTA::HORNS, MUTA::BEAK, MUTA::SCOR_TAIL, MUTA::TRUNK, MUTA::TENTACLES };
 
-    disturb(attacker_ptr, FALSE, TRUE);
+    disturb(attacker_ptr, false, true);
 
     PlayerEnergy(attacker_ptr).set_player_turn_energy(100);
 
     if (!can_attack_with_main_hand(attacker_ptr) && !can_attack_with_sub_hand(attacker_ptr) && attacker_ptr->muta.has_none_of(mutation_attack_methods)) {
-        msg_format(_("%s攻撃できない。", "You cannot attack."), (empty_hands(attacker_ptr, FALSE) == EMPTY_HAND_NONE) ? _("両手がふさがって", "") : "");
-        return FALSE;
+        msg_format(_("%s攻撃できない。", "You cannot attack."), (empty_hands(attacker_ptr, false) == EMPTY_HAND_NONE) ? _("両手がふさがって", "") : "");
+        return false;
     }
 
     monster_desc(attacker_ptr, m_name, m_ptr, 0);
@@ -196,21 +196,21 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
     if ((r_ptr->flags1 & RF1_FEMALE) && !(attacker_ptr->stun || attacker_ptr->confused || attacker_ptr->image || !m_ptr->ml)) {
         if ((attacker_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_ZANTETSU) || (attacker_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_ZANTETSU)) {
             msg_print(_("拙者、おなごは斬れぬ！", "I can not attack women!"));
-            return FALSE;
+            return false;
         }
     }
 
     if (d_info[attacker_ptr->dungeon_idx].flags.has(DF::NO_MELEE)) {
         msg_print(_("なぜか攻撃することができない。", "Something prevents you from attacking."));
-        return FALSE;
+        return false;
     }
 
-    bool stormbringer = FALSE;
+    bool stormbringer = false;
     if (!is_hostile(m_ptr) && !(attacker_ptr->stun || attacker_ptr->confused || attacker_ptr->image || is_shero(attacker_ptr) || !m_ptr->ml)) {
         if (attacker_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_STORMBRINGER)
-            stormbringer = TRUE;
+            stormbringer = true;
         if (attacker_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_STORMBRINGER)
-            stormbringer = TRUE;
+            stormbringer = true;
         if (stormbringer) {
             msg_format(_("黒い刃は強欲に%sを攻撃した！", "Your black blade greedily attacks %s!"), m_name);
             chg_virtue(attacker_ptr, V_INDIVIDUALISM, 1);
@@ -225,7 +225,7 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
                 chg_virtue(attacker_ptr, V_COMPASSION, -1);
             } else {
                 msg_format(_("%sを攻撃するのを止めた。", "You stop to avoid hitting %s."), m_name);
-                return FALSE;
+                return false;
             }
         }
     }
@@ -237,7 +237,7 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
             msg_format(_("そっちには何か恐いものがいる！", "There is something scary in your way!"));
 
         (void)set_monster_csleep(attacker_ptr, g_ptr->m_idx, 0);
-        return FALSE;
+        return false;
     }
 
     if (monster_csleep_remaining(m_ptr)) {
@@ -288,8 +288,8 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
     }
 
     attacker_ptr->riding_t_m_idx = g_ptr->m_idx;
-    bool fear = FALSE;
-    bool mdeath = FALSE;
+    bool fear = false;
+    bool mdeath = false;
     if (can_attack_with_main_hand(attacker_ptr))
         exe_player_attack_to_monster(attacker_ptr, y, x, &fear, &mdeath, 0, mode);
     if (can_attack_with_sub_hand(attacker_ptr) && !mdeath)

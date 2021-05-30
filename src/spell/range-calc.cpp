@@ -46,7 +46,7 @@ bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, PO
 	POSITION delta_x = x2 - x1;
 	POSITION absolute_y = ABS(delta_y);
 	POSITION absolute_x = ABS(delta_x);
-	if ((absolute_x < 2) && (absolute_y < 2)) return TRUE;
+	if ((absolute_x < 2) && (absolute_y < 2)) return true;
 
 	POSITION scanner_y;
 	if (!delta_x)
@@ -56,7 +56,7 @@ bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, PO
 		{
 			for (scanner_y = y1 + 1; scanner_y < y2; scanner_y++)
 			{
-				if (cave_stop_disintegration(floor_ptr, scanner_y, x1)) return FALSE;
+				if (cave_stop_disintegration(floor_ptr, scanner_y, x1)) return false;
 			}
 		}
 
@@ -65,11 +65,11 @@ bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, PO
 		{
 			for (scanner_y = y1 - 1; scanner_y > y2; scanner_y--)
 			{
-				if (cave_stop_disintegration(floor_ptr, scanner_y, x1)) return FALSE;
+				if (cave_stop_disintegration(floor_ptr, scanner_y, x1)) return false;
 			}
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	/* Directly East/West */
@@ -81,7 +81,7 @@ bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, PO
 		{
 			for (scanner_x = x1 + 1; scanner_x < x2; scanner_x++)
 			{
-				if (cave_stop_disintegration(floor_ptr, y1, scanner_x)) return FALSE;
+				if (cave_stop_disintegration(floor_ptr, y1, scanner_x)) return false;
 			}
 		}
 
@@ -90,11 +90,11 @@ bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, PO
 		{
 			for (scanner_x = x1 - 1; scanner_x > x2; scanner_x--)
 			{
-				if (cave_stop_disintegration(floor_ptr, y1, scanner_x)) return FALSE;
+				if (cave_stop_disintegration(floor_ptr, y1, scanner_x)) return false;
 			}
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	POSITION sign_x = (delta_x < 0) ? -1 : 1;
@@ -103,14 +103,14 @@ bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, PO
 	{
 		if (absolute_y == 2)
 		{
-			if (!cave_stop_disintegration(floor_ptr, y1 + sign_y, x1)) return TRUE;
+			if (!cave_stop_disintegration(floor_ptr, y1 + sign_y, x1)) return true;
 		}
 	}
 	else if (absolute_y == 1)
 	{
 		if (absolute_x == 2)
 		{
-			if (!cave_stop_disintegration(floor_ptr, y1, x1 + sign_x)) return TRUE;
+			if (!cave_stop_disintegration(floor_ptr, y1, x1 + sign_x)) return true;
 		}
 	}
 
@@ -137,7 +137,7 @@ bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, PO
 		/* the LOS exactly meets the corner of a tile. */
 		while (x2 - scanner_x)
 		{
-			if (cave_stop_disintegration(floor_ptr, scanner_y, scanner_x)) return FALSE;
+			if (cave_stop_disintegration(floor_ptr, scanner_y, scanner_x)) return false;
 
 			fraction_y += m;
 
@@ -148,7 +148,7 @@ bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, PO
 			else if (fraction_y > scale_factor_2)
 			{
 				scanner_y += sign_y;
-				if (cave_stop_disintegration(floor_ptr, scanner_y, scanner_x)) return FALSE;
+				if (cave_stop_disintegration(floor_ptr, scanner_y, scanner_x)) return false;
 				fraction_y -= scale_factor_1;
 				scanner_x += sign_x;
 			}
@@ -160,7 +160,7 @@ bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, PO
 			}
 		}
 
-		return TRUE;
+		return true;
 	}
 
 	POSITION fraction_x = absolute_x * absolute_x;
@@ -180,7 +180,7 @@ bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, PO
 	/* the LOS exactly meets the corner of a tile. */
 	while (y2 - scanner_y)
 	{
-		if (cave_stop_disintegration(floor_ptr, scanner_y, scanner_x)) return FALSE;
+		if (cave_stop_disintegration(floor_ptr, scanner_y, scanner_x)) return false;
 
 		fraction_x += m;
 
@@ -191,7 +191,7 @@ bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, PO
 		else if (fraction_x > scale_factor_2)
 		{
 			scanner_x += sign_x;
-			if (cave_stop_disintegration(floor_ptr, scanner_y, scanner_x)) return FALSE;
+			if (cave_stop_disintegration(floor_ptr, scanner_y, scanner_x)) return false;
 			fraction_x -= scale_factor_1;
 			scanner_y += sign_y;
 		}
@@ -203,7 +203,7 @@ bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, PO
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 

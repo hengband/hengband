@@ -216,7 +216,7 @@ bool get_stat_limits(player_type *creature_ptr)
 
     int cs = 0;
     int os = A_MAX;
-    while (TRUE) {
+    while (true) {
         if (cs != os) {
             if (os == 7)
                 display_autoroller_chance(cval);
@@ -241,7 +241,7 @@ bool get_stat_limits(player_type *creature_ptr)
             birth_quit();
             break;
         case 'S':
-            return FALSE;
+            return false;
         case ESCAPE:
             break;
         case ' ':
@@ -272,7 +272,7 @@ bool get_stat_limits(player_type *creature_ptr)
                     cval[cs]--;
                     os = 7;
                 } else
-                    return FALSE;
+                    return false;
             }
 
             break;
@@ -286,7 +286,7 @@ bool get_stat_limits(player_type *creature_ptr)
                     cval[cs]++;
                     os = 7;
                 } else
-                    return FALSE;
+                    return false;
             }
 
             break;
@@ -325,7 +325,7 @@ bool get_stat_limits(player_type *creature_ptr)
     for (int i = 0; i < A_MAX; i++)
         stat_limit[i] = (s16b)cval[i];
 
-    return TRUE;
+    return true;
 }
 
 void initialize_chara_limit(chara_limit_type *chara_limit_ptr)
@@ -428,7 +428,7 @@ bool get_chara_limits(player_type *creature_ptr, chara_limit_type *chara_limit_p
 
     int cs = 0;
     int os = MAXITEMS;
-    while (TRUE) {
+    while (true) {
         if (cs != os) {
             const char accept[] = _("決定する", "Accept");
             if (os == MAXITEMS)
@@ -452,7 +452,7 @@ bool get_chara_limits(player_type *creature_ptr, chara_limit_type *chara_limit_p
             birth_quit();
             break;
         case 'S':
-            return FALSE;
+            return false;
         case ESCAPE:
             break; /*後でもう一回breakせんと*/
         case ' ':
@@ -580,5 +580,5 @@ bool get_chara_limits(player_type *creature_ptr, chara_limit_type *chara_limit_p
     chara_limit_ptr->wtmax = (s16b)cval[5];
     chara_limit_ptr->scmin = (s16b)cval[6];
     chara_limit_ptr->scmax = (s16b)cval[7];
-    return TRUE;
+    return true;
 }

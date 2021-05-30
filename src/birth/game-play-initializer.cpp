@@ -30,8 +30,8 @@ static void k_info_reset(void)
 {
     for (int i = 0; i < max_k_idx; i++) {
         object_kind *k_ptr = &k_info[i];
-        k_ptr->tried = FALSE;
-        k_ptr->aware = FALSE;
+        k_ptr->tried = false;
+        k_ptr->aware = false;
     }
 }
 
@@ -116,24 +116,24 @@ void player_wipe_without_name(player_type *creature_ptr)
     creature_ptr->knowledge = 0;
     creature_ptr->mutant_regenerate_mod = 100;
 
-    cheat_peek = FALSE;
-    cheat_hear = FALSE;
-    cheat_room = FALSE;
-    cheat_xtra = FALSE;
-    cheat_know = FALSE;
-    cheat_live = FALSE;
-    cheat_save = FALSE;
-    cheat_diary_output = FALSE;
-    cheat_turn = FALSE;
-    cheat_immortal = FALSE;
+    cheat_peek = false;
+    cheat_hear = false;
+    cheat_room = false;
+    cheat_xtra = false;
+    cheat_know = false;
+    cheat_live = false;
+    cheat_save = false;
+    cheat_diary_output = false;
+    cheat_turn = false;
+    cheat_immortal = false;
 
-    current_world_ptr->total_winner = FALSE;
-    creature_ptr->timewalk = FALSE;
+    current_world_ptr->total_winner = false;
+    creature_ptr->timewalk = false;
     creature_ptr->panic_save = 0;
 
     current_world_ptr->noscore = 0;
-    current_world_ptr->wizard = FALSE;
-    creature_ptr->wait_report_score = FALSE;
+    current_world_ptr->wizard = false;
+    creature_ptr->wait_report_score = false;
     creature_ptr->pet_follow_distance = PET_FOLLOW_DIST;
     creature_ptr->pet_extra_flags = (PF_TELEPORT | PF_ATTACK_SPELL | PF_SUMMON_SPELL);
 
@@ -141,7 +141,7 @@ void player_wipe_without_name(player_type *creature_ptr)
         max_dlv[i] = 0;
 
     creature_ptr->visit = 1;
-    creature_ptr->wild_mode = FALSE;
+    creature_ptr->wild_mode = false;
 
     for (int i = 0; i < MAX_SPELLS; i++) {
         creature_ptr->magic_num1[i] = 0;
@@ -150,7 +150,7 @@ void player_wipe_without_name(player_type *creature_ptr)
 
     creature_ptr->max_plv = creature_ptr->lev = 1;
     creature_ptr->arena_number = 0;
-    creature_ptr->current_floor_ptr->inside_arena = FALSE;
+    creature_ptr->current_floor_ptr->inside_arena = false;
     creature_ptr->current_floor_ptr->inside_quest = 0;
     for (int i = 0; i < MAX_MANE; i++) {
         creature_ptr->mane_spell[i] = RF_ABILITY::MAX;
@@ -158,7 +158,7 @@ void player_wipe_without_name(player_type *creature_ptr)
     }
 
     creature_ptr->mane_num = 0;
-    creature_ptr->exit_bldg = TRUE;
+    creature_ptr->exit_bldg = true;
     creature_ptr->today_mon = 0;
     update_gambling_monsters(creature_ptr);
     creature_ptr->muta.clear();

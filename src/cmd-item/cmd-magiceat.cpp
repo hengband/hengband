@@ -92,7 +92,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
     char choice;
     bool flag, request_list;
     tval_type tval = TV_NONE;
-    int ask = TRUE;
+    int ask = true;
     OBJECT_SUBTYPE_VALUE i = 0;
     char out_val[160];
 
@@ -171,8 +171,8 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
         }
         screen_load();
     } else {
-        while (TRUE) {
-            if (!get_com(_("[A] 杖, [B] 魔法棒, [C] ロッド:", "[A] staff, [B] wand, [C] rod:"), &choice, TRUE)) {
+        while (true) {
+            if (!get_com(_("[A] 杖, [B] 魔法棒, [C] ロッド:", "[A] staff, [B] wand, [C] rod:"), &choice, true)) {
                 return -1;
             }
             if (choice == 'A' || choice == 'a') {
@@ -205,7 +205,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
     }
 
     /* Nothing chosen yet */
-    flag = FALSE;
+    flag = false;
 
     if (only_browse)
         strnfmt(out_val, 78, _("('*'で一覧, ESCで中断) どの魔力を見ますか？", "(*=List, ESC=exit) Browse which power? "));
@@ -313,7 +313,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
             }
         }
 
-        if (!get_com(out_val, &choice, FALSE))
+        if (!get_com(out_val, &choice, false))
             break;
 
         if (use_menu && choice != ' ') {
@@ -351,23 +351,23 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
             case '6':
             case 'l':
             case 'L': {
-                bool reverse = FALSE;
+                bool reverse = false;
                 if ((choice == '4') || (choice == 'h') || (choice == 'H'))
-                    reverse = TRUE;
+                    reverse = true;
                 if (menu_line > EATER_EXT / 2) {
                     menu_line -= EATER_EXT / 2;
-                    reverse = TRUE;
+                    reverse = true;
                 } else
                     menu_line += EATER_EXT / 2;
                 while (!creature_ptr->magic_num2[menu_line + ext - 1]) {
                     if (reverse) {
                         menu_line--;
                         if (menu_line < 2)
-                            reverse = FALSE;
+                            reverse = false;
                     } else {
                         menu_line++;
                         if (menu_line > EATER_EXT - 1)
-                            reverse = TRUE;
+                            reverse = true;
                     }
                 }
                 break;
@@ -377,7 +377,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
             case 'X':
             case '\r': {
                 i = menu_line - 1;
-                ask = FALSE;
+                ask = false;
                 break;
             }
             }
@@ -392,11 +392,11 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
             /* Hide the list */
             if (request_list) {
                 /* Hide list */
-                request_list = FALSE;
+                request_list = false;
                 screen_load();
                 screen_save();
             } else
-                request_list = TRUE;
+                request_list = true;
 
             /* Redo asking */
             continue;
@@ -414,7 +414,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
                 /* Extract request */
                 i = (islower(choice) ? A2I(choice) : -1);
             } else {
-                ask = FALSE; /* Can't uppercase digits */
+                ask = false; /* Can't uppercase digits */
 
                 i = choice - '0' + 26;
             }
@@ -443,7 +443,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
                     msg_print(_("その魔法はまだ充填している最中だ。", "The magic is still charging."));
                     msg_print(NULL);
                     if (use_menu)
-                        ask = TRUE;
+                        ask = true;
                     continue;
                 }
             } else {
@@ -451,7 +451,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
                     msg_print(_("その魔法は使用回数が切れている。", "The magic has no charges left."));
                     msg_print(NULL);
                     if (use_menu)
-                        ask = TRUE;
+                        ask = true;
                     continue;
                 }
             }
@@ -478,7 +478,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
         }
 
         /* Stop the loop */
-        flag = TRUE;
+        flag = true;
     }
     screen_load();
 
@@ -500,16 +500,16 @@ bool do_cmd_magic_eater(player_type *creature_ptr, bool only_browse, bool powerf
 {
     tval_type tval;
     OBJECT_SUBTYPE_VALUE sval;
-    bool use_charge = TRUE;
+    bool use_charge = true;
 
     if (cmd_limit_confused(creature_ptr))
-        return FALSE;
+        return false;
 
     auto item = select_magic_eater(creature_ptr, only_browse);
     PlayerEnergy energy(creature_ptr);
     if (item == -1) {
         energy.reset_player_turn();
-        return FALSE;
+        return false;
     }
     if (item >= EATER_EXT * 2) {
         tval = TV_ROD;
@@ -553,25 +553,25 @@ bool do_cmd_magic_eater(player_type *creature_ptr, bool only_browse, bool powerf
             chg_virtue(creature_ptr, V_CHANCE, -1);
         energy.set_player_turn_energy(100);
 
-        return TRUE;
+        return true;
     } else {
         DIRECTION dir = 0;
 
         if (tval == TV_ROD) {
             if ((sval >= SV_ROD_MIN_DIRECTION) && (sval != SV_ROD_HAVOC) && (sval != SV_ROD_AGGRAVATE) && (sval != SV_ROD_PESTICIDE))
                 if (!get_aim_dir(creature_ptr, &dir))
-                    return FALSE;
-            rod_effect(creature_ptr, sval, dir, &use_charge, powerful, TRUE);
+                    return false;
+            rod_effect(creature_ptr, sval, dir, &use_charge, powerful, true);
             if (!use_charge)
-                return FALSE;
+                return false;
         } else if (tval == TV_WAND) {
             if (!get_aim_dir(creature_ptr, &dir))
-                return FALSE;
-            wand_effect(creature_ptr, sval, dir, powerful, TRUE);
+                return false;
+            wand_effect(creature_ptr, sval, dir, powerful, true);
         } else {
-            staff_effect(creature_ptr, sval, &use_charge, powerful, TRUE, TRUE);
+            staff_effect(creature_ptr, sval, &use_charge, powerful, true, true);
             if (!use_charge)
-                return FALSE;
+                return false;
         }
         if (randint1(100) < chance)
             chg_virtue(creature_ptr, V_CHANCE, 1);
@@ -583,5 +583,5 @@ bool do_cmd_magic_eater(player_type *creature_ptr, bool only_browse, bool powerf
     else
         creature_ptr->magic_num1[item] -= EATER_CHARGE;
 
-    return TRUE;
+    return true;
 }

@@ -65,11 +65,11 @@ static void home_carry_load(player_type *player_ptr, store_type *store_ptr, obje
 static errr rd_store(player_type *player_ptr, int town_number, int store_number)
 {
     store_type *store_ptr;
-    bool sort = FALSE;
+    bool sort = false;
     if (h_older_than(0, 3, 3) && (store_number == STORE_HOME)) {
         store_ptr = &town_info[1].store[store_number];
         if (store_ptr->stock_num)
-            sort = TRUE;
+            sort = true;
     } else {
         store_ptr = &town_info[town_number].store[store_number];
     }

@@ -61,7 +61,7 @@ int adjust_stat(int value, int amount)
  */
 void get_stats(player_type* creature_ptr)
 {
-    while (TRUE) {
+    while (true) {
         int sum = 0;
         for (int i = 0; i < 2; i++) {
             s32b tmp = randint0(60 * 60 * 60);
@@ -153,7 +153,7 @@ void get_extra(player_type* creature_ptr, bool roll_hitdie)
 void get_max_stats(player_type* creature_ptr)
 {
     int dice[6];
-    while (TRUE) {
+    while (true) {
         int j = 0;
         for (int i = 0; i < A_MAX; i++) {
             dice[i] = randint1(7);

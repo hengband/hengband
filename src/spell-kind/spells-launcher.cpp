@@ -169,9 +169,9 @@ bool fire_blast(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, DICE_NUMB
 
     int ld = distance(caster_ptr->y, caster_ptr->x, ly, lx);
     BIT_FLAGS flg = PROJECT_FAST | PROJECT_THRU | PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE | PROJECT_GRID;
-    bool result = TRUE;
+    bool result = true;
     for (int i = 0; i < num; i++) {
-        while (TRUE) {
+        while (true) {
             /* Get targets for some bolts */
             y = rand_spread(ly, ld * dev / 20);
             x = rand_spread(lx, ld * dev / 20);
@@ -183,7 +183,7 @@ bool fire_blast(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, DICE_NUMB
         /* Analyze the "dir" and the "target". */
         const auto proj_res = project(caster_ptr, 0, 0, y, x, damroll(dd, ds), typ, flg);
         if (!proj_res.notice)
-            result = FALSE;
+            result = false;
     }
 
     return result;

@@ -117,7 +117,7 @@ static void rd_world_info(player_type *creature_ptr)
         rd_s32b(&current_world_ptr->arena_start_turn);
 
     if (h_older_than(0, 0, 3))
-        determine_daily_bounty(creature_ptr, TRUE);
+        determine_daily_bounty(creature_ptr, true);
     else {
         rd_s16b(&current_world_ptr->today_mon);
         rd_s16b(&creature_ptr->today_mon);
@@ -168,12 +168,12 @@ void load_wilderness_info(player_type *creature_ptr)
     }
 
     if (h_older_than(0, 3, 7))
-        creature_ptr->wild_mode = FALSE;
+        creature_ptr->wild_mode = false;
     else
         rd_byte((byte *)&creature_ptr->wild_mode);
 
     if (h_older_than(0, 3, 7))
-        creature_ptr->ambush_flag = FALSE;
+        creature_ptr->ambush_flag = false;
     else
         rd_byte((byte *)&creature_ptr->ambush_flag);
 }

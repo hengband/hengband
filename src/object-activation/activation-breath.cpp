@@ -25,7 +25,7 @@ bool activate_dragon_breath(player_type *user_ptr, object_type *o_ptr)
 {
     DIRECTION dir;
     if (!get_aim_dir(user_ptr, &dir))
-        return FALSE;
+        return false;
 
     BIT_FLAGS resistance_flags[TR_FLAG_SIZE];
     object_flags(user_ptr, o_ptr, resistance_flags);
@@ -42,7 +42,7 @@ bool activate_dragon_breath(player_type *user_ptr, object_type *o_ptr)
     }
 
     if (n == 0)
-        return FALSE;
+        return false;
 
     if (music_singing_any(user_ptr))
         stop_singing(user_ptr);
@@ -53,31 +53,31 @@ bool activate_dragon_breath(player_type *user_ptr, object_type *o_ptr)
     int t = randint0(n);
     msg_format(_("あなたは%sのブレスを吐いた。", "You breathe %s."), name[t]);
     fire_breath(user_ptr, type[t], dir, 250, 4);
-    return TRUE;
+    return true;
 }
 
 bool activate_breath_fire(player_type *user_ptr, object_type *o_ptr)
 {
     DIRECTION dir;
     if (!get_aim_dir(user_ptr, &dir))
-        return FALSE;
+        return false;
 
     fire_breath(user_ptr, GF_FIRE, dir, 200, 2);
     if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES))
-        (void)set_oppose_fire(user_ptr, randint1(20) + 20, FALSE);
+        (void)set_oppose_fire(user_ptr, randint1(20) + 20, false);
 
-    return TRUE;
+    return true;
 }
 
 bool activate_breath_cold(player_type *user_ptr, object_type *o_ptr)
 {
     DIRECTION dir;
     if (!get_aim_dir(user_ptr, &dir))
-        return FALSE;
+        return false;
 
     fire_breath(user_ptr, GF_COLD, dir, 200, 2);
     if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_ICE))
-        (void)set_oppose_cold(user_ptr, randint1(20) + 20, FALSE);
+        (void)set_oppose_cold(user_ptr, randint1(20) + 20, false);
 
-    return TRUE;
+    return true;
 }

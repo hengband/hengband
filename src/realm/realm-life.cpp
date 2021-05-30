@@ -32,10 +32,10 @@
  */
 concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 {
-    bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
-    bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;
-    bool info = (mode == SPELL_INFO) ? TRUE : FALSE;
-    bool cast = (mode == SPELL_CAST) ? TRUE : FALSE;
+    bool name = mode == SPELL_NAME;
+    bool desc = mode == SPELL_DESC;
+    bool info = mode == SPELL_INFO;
+    bool cast = mode == SPELL_CAST;
 
     DIRECTION dir;
     PLAYER_LEVEL plev = caster_ptr->lev;
@@ -68,7 +68,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 return info_duration(base, base);
 
             if (cast) {
-                set_blessed(caster_ptr, randint1(base) + base, FALSE);
+                set_blessed(caster_ptr, randint1(base) + base, false);
             }
         }
         break;
@@ -124,7 +124,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 return info_radius(rad);
 
             if (cast) {
-                detect_traps(caster_ptr, rad, TRUE);
+                detect_traps(caster_ptr, rad, true);
                 detect_doors(caster_ptr, rad);
                 detect_stairs(caster_ptr, rad);
             }
@@ -232,8 +232,8 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 return info_duration(base, base);
 
             if (cast) {
-                set_oppose_cold(caster_ptr, randint1(base) + base, FALSE);
-                set_oppose_fire(caster_ptr, randint1(base) + base, FALSE);
+                set_oppose_cold(caster_ptr, randint1(base) + base, false);
+                set_oppose_fire(caster_ptr, randint1(base) + base, false);
             }
         }
         break;
@@ -317,7 +317,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 
         {
             if (cast) {
-                if (!ident_spell(caster_ptr, FALSE, TV_NONE))
+                if (!ident_spell(caster_ptr, false, TV_NONE))
                     return NULL;
             }
         }
@@ -487,7 +487,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 return info_power(power);
 
             if (cast) {
-                mass_genocide_undead(caster_ptr, power, TRUE);
+                mass_genocide_undead(caster_ptr, power, true);
             }
         }
         break;
@@ -501,7 +501,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 
         {
             if (cast) {
-                wiz_lite(caster_ptr, FALSE);
+                wiz_lite(caster_ptr, false);
             }
         }
         break;
@@ -543,7 +543,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 
         {
             if (cast) {
-                if (!identify_fully(caster_ptr, FALSE, TV_NONE))
+                if (!identify_fully(caster_ptr, false, TV_NONE))
                     return NULL;
             }
         }
@@ -563,13 +563,13 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 
             if (cast) {
                 TIME_EFFECT v = randint1(base) + base;
-                set_fast(caster_ptr, v, FALSE);
-                set_oppose_acid(caster_ptr, v, FALSE);
-                set_oppose_elec(caster_ptr, v, FALSE);
-                set_oppose_fire(caster_ptr, v, FALSE);
-                set_oppose_cold(caster_ptr, v, FALSE);
-                set_oppose_pois(caster_ptr, v, FALSE);
-                set_ultimate_res(caster_ptr, v, FALSE);
+                set_fast(caster_ptr, v, false);
+                set_oppose_acid(caster_ptr, v, false);
+                set_oppose_elec(caster_ptr, v, false);
+                set_oppose_fire(caster_ptr, v, false);
+                set_oppose_cold(caster_ptr, v, false);
+                set_oppose_pois(caster_ptr, v, false);
+                set_ultimate_res(caster_ptr, v, false);
             }
         }
         break;

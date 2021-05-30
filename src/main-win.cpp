@@ -90,6 +90,7 @@
 #include "core/special-internal-keys.h"
 #include "core/stuff-handler.h"
 #include "core/visuals-reseter.h"
+#include "core/window-redrawer.h"
 #include "floor/floor-events.h"
 #include "game-option/runtime-arguments.h"
 #include "game-option/special-options.h"
@@ -106,6 +107,7 @@
 #include "main-win/main-win-menuitem.h"
 #include "main-win/main-win-music.h"
 #include "main-win/main-win-sound.h"
+#include "main-win/main-win-term.h"
 #include "main-win/main-win-utils.h"
 #include "main/angband-initializer.h"
 #include "main/sound-of-music.h"
@@ -138,66 +140,20 @@
  */
 LPCWSTR win_term_name[] = { L"Hengband", L"Term-1", L"Term-2", L"Term-3", L"Term-4", L"Term-5", L"Term-6", L"Term-7" };
 
-/*!
- * @struct term_data
- * @brief ターム情報構造体 / Extra "term" data
- * @details
- * <p>
- * pos_x / pos_y は各タームの左上点座標を指す。
- * </p>
- * <p>
- * tile_wid / tile_hgt は[ウィンドウ]メニューのタイルの幅/高さを～を
- * 1ドットずつ調整するステータスを指す。
- * また、フォントを変更すると都度自動調整される。
- * </p>
- * <p>
- * Note the use of "font_want" for the names of the font file requested by
- * the user.
- * </p>
- */
-typedef struct {
-    term_type t;
-    LPCWSTR name;
-    HWND w;
-    DWORD dwStyle;
-    DWORD dwExStyle;
-
-    TERM_LEN rows; /* int -> uint */
-    TERM_LEN cols;
-
-    uint pos_x; //!< タームの左上X座標
-    uint pos_y; //!< タームの左上Y座標
-    uint size_wid;
-    uint size_hgt;
-    uint size_ow1;
-    uint size_oh1;
-    uint size_ow2;
-    uint size_oh2;
-
-    bool size_hack;
-    bool visible;
-    concptr font_want;
-    HFONT font_id;
-    int font_wid; //!< フォント横幅
-    int font_hgt; //!< フォント縦幅
-    int tile_wid; //!< タイル横幅
-    int tile_hgt; //!< タイル縦幅
-
-    LOGFONTW lf;
-
-    bool posfix;
-} term_data;
-
 #define MAX_TERM_DATA 8 //!< Maximum number of windows
 
 static term_data data[MAX_TERM_DATA]; //!< An array of term_data's
+static bool is_main_term(term_data *td)
+{
+    return (td == &data[0]);
+}
 static term_data *my_td; //!< Hack -- global "window creation" pointer
 POINT normsize; //!< Remember normal size of main window when maxmized
 
 /*
  * was main window maximized on previous playing
  */
-bool win_maximized = FALSE;
+bool win_maximized = false;
 
 /*
  * game in progress
@@ -212,7 +168,7 @@ bool movie_in_progress = false;
 /*
  * note when "open"/"new" become valid
  */
-bool initialized = FALSE;
+bool initialized = false;
 
 /*
  * Saved instance handle
@@ -237,7 +193,7 @@ char wallpaper_file[MAIN_WIN_MAX_PATH] = ""; //!< 壁紙ファイル名。
 /*
  * Show sub-windows even when Hengband is not in focus
  */
-static bool keep_subwindows = TRUE;
+static bool keep_subwindows = true;
 
 /*
  * Full path to ANGBAND.INI
@@ -262,13 +218,13 @@ static COLORREF win_clr[256];
 /*
  * Flag for macro trigger with dump ASCII
  */
-static bool term_no_press = FALSE;
+static bool term_no_press = false;
 
 /*
  * Copy and paste
  */
-static bool mouse_down = FALSE;
-static bool paint_rect = FALSE;
+static bool mouse_down = false;
+static bool paint_rect = false;
 static TERM_LEN mousex = 0, mousey = 0;
 static TERM_LEN oldx, oldy;
 
@@ -479,7 +435,7 @@ BOOL CALLBACK monitorenumproc([[maybe_unused]] HMONITOR hMon, [[maybe_unused]] H
 {
     bool *result = (bool *)dwDate;
     *result = true;
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -540,7 +496,7 @@ static void load_prefs_aux(int i)
 static void load_prefs(void)
 {
     arg_graphics = (byte)GetPrivateProfileIntA("Angband", "Graphics", static_cast<byte>(graphics_mode::GRAPHICS_NONE), ini_file);
-    arg_bigtile = (GetPrivateProfileIntA("Angband", "Bigtile", FALSE, ini_file) != 0);
+    arg_bigtile = (GetPrivateProfileIntA("Angband", "Bigtile", false, ini_file) != 0);
     use_bigtile = arg_bigtile;
     arg_sound = (GetPrivateProfileIntA("Angband", "Sound", 0, ini_file) != 0);
     arg_music = (GetPrivateProfileIntA("Angband", "Music", 0, ini_file) != 0);
@@ -570,11 +526,11 @@ static void load_prefs(void)
 static void init_music(void)
 {
     // Flag set once "music" has been initialized
-    static bool can_use_music = FALSE;
+    static bool can_use_music = false;
 
     if (!can_use_music) {
         main_win_music::load_music_prefs();
-        can_use_music = TRUE;
+        can_use_music = true;
     }
 }
 
@@ -584,11 +540,11 @@ static void init_music(void)
 static void init_sound(void)
 {
     // Flag set once "sound" has been initialized
-    static bool can_use_sound = FALSE;
+    static bool can_use_sound = false;
 
     if (!can_use_sound) {
         load_sound_prefs();
-        can_use_sound = TRUE;
+        can_use_sound = true;
     }
 }
 
@@ -610,11 +566,11 @@ static void change_sound_mode(bool new_mode)
 static void init_background(void)
 {
     // Flag set once "background" has been initialized
-    static bool can_use_background = FALSE;
+    static bool can_use_background = false;
 
     if (!can_use_background) {
         load_bg_prefs();
-        can_use_background = TRUE;
+        can_use_background = true;
     }
 }
 
@@ -644,11 +600,15 @@ static bool change_bg_mode(bg_mode new_mode, bool show_error = false, bool force
     const bool mode_changed = (current_bg_mode != old_bg_mode);
     if (mode_changed || force_redraw) {
         // 全ウインドウ再描画
+        term_type *old = Term;
         for (int i = 0; i < MAX_TERM_DATA; i++) {
             term_data *td = &data[i];
-            if (td->visible)
-                InvalidateRect(td->w, NULL, FALSE);
+            if (td->visible) {
+                term_activate(&td->t);
+                term_redraw();
+            }
         }
+        term_activate(old);
     }
 
     return (current_bg_mode == new_mode);
@@ -663,7 +623,11 @@ static void term_window_resize(term_data *td)
         return;
 
     SetWindowPos(td->w, 0, 0, 0, td->size_wid, td->size_hgt, SWP_NOMOVE | SWP_NOZORDER);
-    InvalidateRect(td->w, NULL, TRUE);
+    if (!td->size_hack) {
+        td->dispose_offscreen();
+        term_activate(&td->t);
+        term_redraw();
+    }
 }
 
 /*!
@@ -754,7 +718,7 @@ void term_inversed_area(HWND hWnd, int x, int y, int w, int h)
     int tw = w * td->tile_wid - 1;
     int th = h * td->tile_hgt - 1;
 
-    HDC hdc = GetDC(hWnd);
+    HDC hdc = td->get_hdc();
     HBRUSH myBrush = CreateSolidBrush(RGB(255, 255, 255));
     HBRUSH oldBrush = static_cast<HBRUSH>(SelectObject(hdc, myBrush));
     HPEN oldPen = static_cast<HPEN>(SelectObject(hdc, GetStockObject(NULL_PEN)));
@@ -763,6 +727,9 @@ void term_inversed_area(HWND hWnd, int x, int y, int w, int h)
 
     SelectObject(hdc, oldBrush);
     SelectObject(hdc, oldPen);
+
+    RECT rect{ tx, ty, tx + tw, ty + th };
+    td->refresh(&rect);
 }
 
 /*!
@@ -801,6 +768,27 @@ static void change_graphics_mode(graphics_mode mode)
 }
 
 /*!
+ * @brief ターミナルのサイズ更新
+ * @details 行数、列数の変更に対応する。
+ * @param td term_dataのポインタ
+ * @param resize_window trueの場合に再計算されたウインドウサイズにリサイズする
+ */
+static void rebuild_term(term_data *td, bool resize_window = true)
+{
+    term_type *old = Term;
+    td->size_hack = true;
+    term_activate(&td->t);
+    term_getsize(td);
+    if (resize_window) {
+        term_window_resize(td);
+    }
+    td->dispose_offscreen();
+    term_resize(td->cols, td->rows);
+    td->size_hack = false;
+    term_activate(old);
+}
+
+/*!
  * @brief React to global changes
  */
 static errr term_xtra_win_react(player_type *player_ptr)
@@ -817,10 +805,7 @@ static errr term_xtra_win_react(player_type *player_ptr)
         term_type *old = Term;
         term_data *td = &data[i];
         if ((td->cols != td->t.wid) || (td->rows != td->t.hgt)) {
-            term_activate(&td->t);
-            term_resize(td->cols, td->rows);
-            term_redraw();
-            term_activate(old);
+            rebuild_term(td);
         }
     }
 
@@ -874,7 +859,7 @@ static errr term_xtra_win_clear(void)
     RECT rc;
     GetClientRect(td->w, &rc);
 
-    HDC hdc = GetDC(td->w);
+    HDC hdc = td->get_hdc();
     SetBkColor(hdc, RGB(0, 0, 0));
     SelectObject(hdc, td->font_id);
     ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rc, NULL, 0, NULL);
@@ -885,7 +870,7 @@ static errr term_xtra_win_clear(void)
         draw_bg(hdc, &rc);
     }
 
-    ReleaseDC(td->w, hdc);
+    td->refresh();
     return 0;
 }
 
@@ -952,6 +937,12 @@ static errr term_xtra_win(int n, int v)
     case TERM_XTRA_NOISE: {
         return (term_xtra_win_noise());
     }
+    case TERM_XTRA_FRESH: {
+        term_data *td = (term_data *)(Term->data);
+        if (td->w)
+            UpdateWindow(td->w);
+        return 0;
+    }
     case TERM_XTRA_MUSIC_BASIC:
     case TERM_XTRA_MUSIC_DUNGEON:
     case TERM_XTRA_MUSIC_QUEST:
@@ -1009,9 +1000,9 @@ static errr term_curs_win(int x, int y)
     rc.top = y * tile_hgt + td->size_oh1;
     rc.bottom = rc.top + tile_hgt;
 
-    HDC hdc = GetDC(td->w);
+    HDC hdc = td->get_hdc();
     FrameRect(hdc, &rc, hbrYellow);
-    ReleaseDC(td->w, hdc);
+    td->refresh(&rc);
     return 0;
 }
 
@@ -1033,9 +1024,9 @@ static errr term_bigcurs_win(int x, int y)
     rc.top = y * tile_hgt + td->size_oh1;
     rc.bottom = rc.top + tile_hgt;
 
-    HDC hdc = GetDC(td->w);
+    HDC hdc = td->get_hdc();
     FrameRect(hdc, &rc, hbrYellow);
-    ReleaseDC(td->w, hdc);
+    td->refresh(&rc);
     return 0;
 }
 
@@ -1053,7 +1044,7 @@ static errr term_wipe_win(int x, int y, int n)
     rc.top = y * td->tile_hgt + td->size_oh1;
     rc.bottom = rc.top + td->tile_hgt;
 
-    HDC hdc = GetDC(td->w);
+    HDC hdc = td->get_hdc();
     SetBkColor(hdc, RGB(0, 0, 0));
     SelectObject(hdc, td->font_id);
     if (current_bg_mode != bg_mode::BG_NONE)
@@ -1061,7 +1052,7 @@ static errr term_wipe_win(int x, int y, int n)
     else
         ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rc, NULL, 0, NULL);
 
-    ReleaseDC(td->w, hdc);
+    td->refresh(&rc);
     return 0;
 }
 
@@ -1082,18 +1073,19 @@ static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
     static HBITMAP WALL;
     static HBRUSH myBrush, oldBrush;
     static HPEN oldPen;
-    static bool init_done = FALSE;
+    static bool init_done = false;
 
     if (!init_done) {
         WALL = LoadBitmapW(hInstance, AppName);
         myBrush = CreatePatternBrush(WALL);
-        init_done = TRUE;
+        init_done = true;
     }
 
     RECT rc{ static_cast<LONG>(x * td->tile_wid + td->size_ow1), static_cast<LONG>(y * td->tile_hgt + td->size_oh1),
         static_cast<LONG>(rc.left + n * td->tile_wid), static_cast<LONG>(rc.top + td->tile_hgt) };
+    RECT rc_start = rc;
 
-    HDC hdc = GetDC(td->w);
+    HDC hdc = td->get_hdc();
     SetBkColor(hdc, RGB(0, 0, 0));
     SetTextColor(hdc, win_clr[a]);
 
@@ -1125,7 +1117,9 @@ static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
             rc.right += 2 * td->tile_wid;
         } else if (iskanji(*(s + i))) /* 2バイト文字 */
         {
-            const auto *buf = to_wchar(s + i).wc_str();
+            char tmp[] = { *(s + i), *(s + i + 1), '\0' };
+            to_wchar wc(tmp);
+            const auto *buf = wc.wc_str();
             rc.right += td->font_wid;
             if (buf == NULL)
                 ExtTextOutA(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s + i, 2, NULL);
@@ -1165,7 +1159,9 @@ static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
 #endif
     }
 
-    ReleaseDC(td->w, hdc);
+    rc.left = rc_start.left;
+    rc.top = rc_start.top;
+    td->refresh(&rc);
     return 0;
 }
 
@@ -1206,7 +1202,7 @@ static errr term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
 
     TERM_LEN x2 = x * w2 + td->size_ow1 + infGraph.OffsetX;
     TERM_LEN y2 = y * h2 + td->size_oh1 + infGraph.OffsetY;
-    HDC hdc = GetDC(td->w);
+    HDC hdc = td->get_hdc();
     HDC hdcSrc = CreateCompatibleDC(hdc);
     HBITMAP hbmSrcOld = static_cast<HBITMAP>(SelectObject(hdcSrc, infGraph.hBitmap));
 
@@ -1262,7 +1258,7 @@ static errr term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
         DeleteDC(hdcMask);
     }
 
-    ReleaseDC(td->w, hdc);
+    td->refresh();
     return 0;
 }
 
@@ -1273,8 +1269,8 @@ static void term_data_link(term_data *td)
 {
     term_type *t = &td->t;
     term_init(t, td->cols, td->rows, FILE_READ_BUFF_SIZE);
-    t->soft_cursor = TRUE;
-    t->higher_pict = TRUE;
+    t->soft_cursor = true;
+    t->higher_pict = true;
     t->attr_blank = TERM_WHITE;
     t->char_blank = ' ';
     t->user_hook = term_user_win;
@@ -1305,14 +1301,14 @@ static void init_windows(void)
 
     td->rows = 24;
     td->cols = 80;
-    td->visible = TRUE;
+    td->visible = true;
     td->size_ow1 = 2;
     td->size_ow2 = 2;
     td->size_oh1 = 2;
     td->size_oh2 = 2;
     td->pos_x = 7 * 30;
     td->pos_y = 7 * 20;
-    td->posfix = FALSE;
+    td->posfix = false;
 
     for (int i = 1; i < MAX_TERM_DATA; i++) {
         td = &data[i];
@@ -1320,14 +1316,14 @@ static void init_windows(void)
         td->name = win_term_name[i];
         td->rows = 24;
         td->cols = 80;
-        td->visible = FALSE;
+        td->visible = false;
         td->size_ow1 = 1;
         td->size_ow2 = 1;
         td->size_oh1 = 1;
         td->size_oh2 = 1;
         td->pos_x = (7 - i) * 30;
         td->pos_y = (7 - i) * 20;
-        td->posfix = FALSE;
+        td->posfix = false;
     }
 
     load_prefs();
@@ -1336,7 +1332,7 @@ static void init_windows(void)
     td = &data[0];
     td->dwStyle = (WS_OVERLAPPED | WS_THICKFRAME | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_CAPTION | WS_VISIBLE);
     td->dwExStyle = 0;
-    td->visible = TRUE;
+    td->visible = true;
 
     /* Attributes of sub windows */
     for (int i = 1; i < MAX_TERM_DATA; i++) {
@@ -1372,14 +1368,14 @@ static void init_windows(void)
         if (!td->w)
             quit(_("サブウィンドウに作成に失敗しました", "Failed to create sub-window"));
 
-        td->size_hack = TRUE;
+        td->size_hack = true;
         term_getsize(td);
         term_window_resize(td);
 
         if (td->visible) {
             ShowWindow(td->w, SW_SHOW);
         }
-        td->size_hack = FALSE;
+        td->size_hack = false;
 
         term_data_link(td);
         angband_term[i] = &td->t;
@@ -1407,10 +1403,10 @@ static void init_windows(void)
         quit(_("メインウィンドウの作成に失敗しました", "Failed to create Angband window"));
 
     /* Resize */
-    td->size_hack = TRUE;
+    td->size_hack = true;
     term_getsize(td);
     term_window_resize(td);
-    td->size_hack = FALSE;
+    td->size_hack = false;
 
     term_data_link(td);
     angband_term[0] = &td->t;
@@ -1578,8 +1574,8 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
                 break;
             }
 
-            msg_flag = FALSE;
-            do_cmd_save_game(player_ptr, FALSE);
+            msg_flag = false;
+            do_cmd_save_game(player_ptr, false);
         } else {
             plog(_("今、セーブすることは出来ません。", "You may not do that right now."));
         }
@@ -1593,7 +1589,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
                 break;
             }
 
-            msg_flag = FALSE;
+            msg_flag = false;
             forget_lite(player_ptr->current_floor_ptr);
             forget_view(player_ptr->current_floor_ptr);
             clear_mon_lite(player_ptr->current_floor_ptr);
@@ -1659,12 +1655,12 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 
         td = &data[i];
         if (!td->visible) {
-            td->visible = TRUE;
+            td->visible = true;
             ShowWindow(td->w, SW_SHOW);
             term_data_redraw(td);
         } else {
-            td->visible = FALSE;
-            td->posfix = FALSE;
+            td->visible = false;
+            td->posfix = false;
             ShowWindow(td->w, SW_HIDE);
         }
 
@@ -1699,10 +1695,10 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 
         td = &data[i];
         if (!td->posfix && td->visible) {
-            td->posfix = TRUE;
+            td->posfix = true;
             term_window_pos(td, HWND_TOPMOST);
         } else {
-            td->posfix = FALSE;
+            td->posfix = false;
             term_window_pos(td, data[0].w);
         }
 
@@ -1822,9 +1818,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
     case IDM_OPTIONS_BIGTILE: {
         td = &data[0];
         arg_bigtile = !arg_bigtile;
-        term_activate(&td->t);
-        term_resize(td->cols, td->rows);
-        InvalidateRect(td->w, NULL, TRUE);
+        rebuild_term(td);
         break;
     }
     case IDM_OPTIONS_MUSIC: {
@@ -1938,21 +1932,21 @@ static void term_keypress(char *str)
  */
 static bool process_keydown(WPARAM wParam, LPARAM lParam)
 {
-    bool mc = FALSE;
-    bool ms = FALSE;
-    bool ma = FALSE;
+    bool mc = false;
+    bool ms = false;
+    bool ma = false;
 
     if (GetKeyState(VK_CONTROL) & 0x8000)
-        mc = TRUE;
+        mc = true;
     if (GetKeyState(VK_SHIFT) & 0x8000)
-        ms = TRUE;
+        ms = true;
     if (GetKeyState(VK_MENU) & 0x8000)
-        ma = TRUE;
+        ma = true;
 
-    term_no_press = (ma) ? TRUE : FALSE;
+    term_no_press = (ma) ? true : false;
     if (special_key[(byte)(wParam)] || (ma && !ignore_key[(byte)(wParam)])) {
-        bool ext_key = (lParam & 0x1000000L) ? TRUE : FALSE;
-        bool numpad = FALSE;
+        bool ext_key = (lParam & 0x1000000L) ? true : false;
+        bool numpad = false;
 
         term_keypress(31);
         if (mc)
@@ -1966,7 +1960,7 @@ static bool process_keydown(WPARAM wParam, LPARAM lParam)
         term_keypress('x');
         switch (wParam) {
         case VK_DIVIDE:
-            term_no_press = TRUE;
+            term_no_press = true;
             [[fallthrough]]; /* Fall through */
         case VK_RETURN:
             numpad = ext_key;
@@ -1986,7 +1980,7 @@ static bool process_keydown(WPARAM wParam, LPARAM lParam)
         case VK_SUBTRACT:
         case VK_SEPARATOR:
         case VK_DECIMAL:
-            term_no_press = TRUE;
+            term_no_press = true;
             [[fallthrough]]; /* Fall through */
         case VK_CLEAR:
         case VK_HOME:
@@ -2041,15 +2035,125 @@ static void handle_app_active(HWND hWnd, UINT uMsg, WPARAM wParam, [[maybe_unuse
 }
 
 /*!
+ * @brief ターミナルのサイズをウインドウのサイズに合わせる
+ * @param td term_dataのポインタ
+ * @param recalc_window_size trueの場合に行列数からウインドウサイズを再計算し設定する
+ */
+static void fit_term_size_to_window(term_data *td, bool recalc_window_size = false)
+{
+    RECT rc;
+    ::GetClientRect(td->w, &rc);
+    int width = rc.right - rc.left;
+    int height = rc.bottom - rc.top;
+
+    TERM_LEN cols = (width - td->size_ow1 - td->size_ow2) / td->tile_wid;
+    TERM_LEN rows = (height - td->size_oh1 - td->size_oh2) / td->tile_hgt;
+    if ((td->cols != cols) || (td->rows != rows)) {
+        td->cols = cols;
+        td->rows = rows;
+        if (is_main_term(td) && !IsZoomed(td->w) && !IsIconic(td->w)) {
+            normsize.x = td->cols;
+            normsize.y = td->rows;
+        }
+
+        rebuild_term(td, recalc_window_size);
+
+        if (!is_main_term(td)) {
+            p_ptr->window_flags = PW_ALL;
+            handle_stuff(p_ptr);
+        }
+    }
+} 
+
+/*!
+ * @brief Windowのリサイズをハンドリング
+ * @retval true ウインドウメッセージを処理した
+ * @retval false ウインドウメッセージを処理していない
+ */
+static bool handle_window_resize(term_data *td, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    if (!td)
+        return false;
+    if (!td->w)
+        return false;
+
+    switch (uMsg) {
+    case WM_GETMINMAXINFO: {
+        const bool is_main = is_main_term(td);
+        const int min_cols = (is_main) ? 80 : 20;
+        const int min_rows = (is_main) ? 24 : 3;
+        const LONG w = min_cols * td->tile_wid + td->size_ow1 + td->size_ow2;
+        const LONG h = min_rows * td->tile_hgt + td->size_oh1 + td->size_oh2 + 1;
+        RECT rc{ 0, 0, w, h };
+        AdjustWindowRectEx(&rc, td->dwStyle, TRUE, td->dwExStyle);
+
+        MINMAXINFO *lpmmi = (MINMAXINFO *)lParam;
+        lpmmi->ptMinTrackSize.x = rc.right - rc.left;
+        lpmmi->ptMinTrackSize.y = rc.bottom - rc.top;
+
+        return true;
+    }
+    case WM_EXITSIZEMOVE: {
+        fit_term_size_to_window(td, true);
+        return true;
+    }
+    case WM_WINDOWPOSCHANGED: {
+        if (!td->size_hack) {
+            WINDOWPOS *pos = (WINDOWPOS *)lParam;
+            if ((pos->flags & (SWP_NOCOPYBITS | SWP_NOSIZE)) == 0) {
+                fit_term_size_to_window(td);
+                return true;
+            }
+        }
+        break;
+    }
+    case WM_SIZE: {
+        if (td->size_hack)
+            break;
+
+        //!< @todo 二重のswitch文。後で分割する.
+        switch (wParam) {
+        case SIZE_MINIMIZED: {
+            for (int i = 1; i < MAX_TERM_DATA; i++) {
+                if (data[i].visible)
+                    ShowWindow(data[i].w, SW_HIDE);
+            }
+
+            return true;
+        }
+        case SIZE_MAXIMIZED:
+        case SIZE_RESTORED: {
+            fit_term_size_to_window(td);
+
+            td->size_hack = true;
+            for (int i = 1; i < MAX_TERM_DATA; i++) {
+                if (data[i].visible)
+                    ShowWindow(data[i].w, SW_SHOWNA);
+            }
+
+            td->size_hack = false;
+
+            return true;
+        }
+        }
+
+        break;
+    }
+    }
+
+    return false;
+}
+
+/*!
  * @brief メインウインドウ用ウインドウプロシージャ
  */
 LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    PAINTSTRUCT ps;
-    term_data *td;
-    td = (term_data *)GetWindowLong(hWnd, 0);
+    term_data *td = (term_data *)GetWindowLong(hWnd, 0);
 
     handle_app_active(hWnd, uMsg, wParam, lParam);
+    if (handle_window_resize(td, uMsg, wParam, lParam))
+        return 0;
 
     switch (uMsg) {
     case WM_NCCREATE: {
@@ -2060,32 +2164,17 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         setup_mci(hWnd);
         return 0;
     }
-    case WM_GETMINMAXINFO: {
-        MINMAXINFO *lpmmi;
-        RECT rc;
-
-        lpmmi = (MINMAXINFO *)lParam;
-        if (!td)
-            return 1;
-
-        rc.left = rc.top = 0;
-        rc.right = rc.left + 80 * td->tile_wid + td->size_ow1 + td->size_ow2;
-        rc.bottom = rc.top + 24 * td->tile_hgt + td->size_oh1 + td->size_oh2 + 1;
-
-        AdjustWindowRectEx(&rc, td->dwStyle, TRUE, td->dwExStyle);
-
-        lpmmi->ptMinTrackSize.x = rc.right - rc.left;
-        lpmmi->ptMinTrackSize.y = rc.bottom - rc.top;
-
-        return 0;
-    }
     case WM_ERASEBKGND: {
         return 1;
     }
     case WM_PAINT: {
-        BeginPaint(hWnd, &ps);
+        PAINTSTRUCT ps;
+        HDC hdc = BeginPaint(hWnd, &ps);
         if (td)
-            term_data_redraw(td);
+            if (!td->render(ps.rcPaint)) {
+                SetBkColor(hdc, RGB(0, 0, 0));
+                ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &ps.rcPaint, NULL, 0, NULL);
+            }
         EndPaint(hWnd, &ps);
         ValidateRect(hWnd, NULL);
         return 0;
@@ -2104,7 +2193,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
     case WM_CHAR: {
         // wParam is WCHAR because using RegisterClassW
         if (term_no_press)
-            term_no_press = FALSE;
+            term_no_press = false;
         else {
             WCHAR wc[2] = { (WCHAR)wParam, '\0' };
             term_keypress(to_multibyte(wc).c_str());
@@ -2116,7 +2205,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
             return 0;
         mousex = MIN(LOWORD(lParam) / td->tile_wid, td->cols - 1);
         mousey = MIN(HIWORD(lParam) / td->tile_hgt, td->rows - 1);
-        mouse_down = TRUE;
+        mouse_down = true;
         oldx = mousex;
         oldy = mousey;
         return 0;
@@ -2131,8 +2220,8 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         TERM_LEN ox = (oldx > mousex) ? mousex : oldx;
         TERM_LEN oy = (oldy > mousey) ? mousey : oldy;
 
-        mouse_down = FALSE;
-        paint_rect = FALSE;
+        mouse_down = false;
+        paint_rect = false;
 
 #ifdef JP
         int sz = (dx + 3) * dy;
@@ -2206,7 +2295,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
             oy = (oldy > mousey) ? mousey : oldy;
             term_inversed_area(hWnd, ox, oy, dx, dy);
         } else {
-            paint_rect = TRUE;
+            paint_rect = true;
         }
 
         dx = abs(cx - mousex) + 1;
@@ -2234,7 +2323,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
             return 0;
         }
 
-        msg_flag = FALSE;
+        msg_flag = false;
         forget_lite(p_ptr->current_floor_ptr);
         forget_view(p_ptr->current_floor_ptr);
         clear_mon_lite(p_ptr->current_floor_ptr);
@@ -2247,9 +2336,9 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
             return 0;
         }
 
-        msg_flag = FALSE;
+        msg_flag = false;
         if (p_ptr->chp < 0)
-            p_ptr->is_dead = FALSE;
+            p_ptr->is_dead = false;
         exe_write_diary(p_ptr, DIARY_GAMESTART, 0, _("----ゲーム中断----", "---- Save and Exit Game ----"));
 
         p_ptr->panic_save = 1;
@@ -2266,55 +2355,6 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
     case WM_COMMAND: {
         process_menus(p_ptr, LOWORD(wParam));
         return 0;
-    }
-    case WM_SIZE: {
-        if (!td)
-            return 1;
-        if (!td->w)
-            return 1;
-        if (td->size_hack)
-            return 1;
-
-        //!< @todo 二重のswitch文。後で分割する.
-        switch (wParam) {
-        case SIZE_MINIMIZED: {
-            for (int i = 1; i < MAX_TERM_DATA; i++) {
-                if (data[i].visible)
-                    ShowWindow(data[i].w, SW_HIDE);
-            }
-
-            return 0;
-        }
-        case SIZE_MAXIMIZED:
-        case SIZE_RESTORED: {
-            TERM_LEN cols = (LOWORD(lParam) - td->size_ow1 - td->size_ow2) / td->tile_wid;
-            TERM_LEN rows = (HIWORD(lParam) - td->size_oh1 - td->size_oh2) / td->tile_hgt;
-            if ((td->cols != cols) || (td->rows != rows)) {
-                td->cols = cols;
-                td->rows = rows;
-                if (!IsZoomed(td->w) && !IsIconic(td->w)) {
-                    normsize.x = td->cols;
-                    normsize.y = td->rows;
-                }
-
-                term_activate(&td->t);
-                term_resize(td->cols, td->rows);
-                InvalidateRect(td->w, NULL, TRUE);
-            }
-
-            td->size_hack = TRUE;
-            for (int i = 1; i < MAX_TERM_DATA; i++) {
-                if (data[i].visible)
-                    ShowWindow(data[i].w, SW_SHOWNA);
-            }
-
-            td->size_hack = FALSE;
-
-            return 0;
-        }
-        }
-
-        break;
     }
     case WM_ACTIVATE: {
         if (!wParam || HIWORD(lParam))
@@ -2334,7 +2374,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 
         for (int i = 1; i < MAX_TERM_DATA; i++) {
             if (data[i].visible) {
-                if (wParam == TRUE) {
+                if (wParam == 1) {
                     ShowWindow(data[i].w, SW_SHOWNA);
                 } else {
                     ShowWindow(data[i].w, SW_HIDE);
@@ -2362,9 +2402,9 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
  */
 LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    term_data *td;
-    PAINTSTRUCT ps;
-    td = (term_data *)GetWindowLong(hWnd, 0);
+    term_data *td = (term_data *)GetWindowLong(hWnd, 0);
+    if (handle_window_resize(td, uMsg, wParam, lParam))
+        return 0;
 
     switch (uMsg) {
     case WM_NCCREATE: {
@@ -2374,57 +2414,17 @@ LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
     case WM_CREATE: {
         return 0;
     }
-    case WM_GETMINMAXINFO: {
-        MINMAXINFO *lpmmi;
-        RECT rc;
-
-        lpmmi = (MINMAXINFO *)lParam;
-        if (!td)
-            return 1;
-
-        rc.left = rc.top = 0;
-        rc.right = rc.left + 20 * td->tile_wid + td->size_ow1 + td->size_ow2;
-        rc.bottom = rc.top + 3 * td->tile_hgt + td->size_oh1 + td->size_oh2 + 1;
-
-        AdjustWindowRectEx(&rc, td->dwStyle, TRUE, td->dwExStyle);
-        lpmmi->ptMinTrackSize.x = rc.right - rc.left;
-        lpmmi->ptMinTrackSize.y = rc.bottom - rc.top;
-        return 0;
-    }
-    case WM_SIZE: {
-        if (!td)
-            return 1;
-        if (!td->w)
-            return 1;
-        if (td->size_hack)
-            return 1;
-
-        td->size_hack = TRUE;
-
-        TERM_LEN cols = (LOWORD(lParam) - td->size_ow1 - td->size_ow2) / td->tile_wid;
-        TERM_LEN rows = (HIWORD(lParam) - td->size_oh1 - td->size_oh2) / td->tile_hgt;
-        if ((td->cols != cols) || (td->rows != rows)) {
-            term_type *old_term = Term;
-            td->cols = cols;
-            td->rows = rows;
-            term_activate(&td->t);
-            term_resize(td->cols, td->rows);
-            term_activate(old_term);
-            InvalidateRect(td->w, NULL, TRUE);
-            p_ptr->window_flags = 0xFFFFFFFF;
-            handle_stuff(p_ptr);
-        }
-
-        td->size_hack = FALSE;
-        return 0;
-    }
     case WM_ERASEBKGND: {
         return 1;
     }
     case WM_PAINT: {
-        BeginPaint(hWnd, &ps);
+        PAINTSTRUCT ps;
+        HDC hdc = BeginPaint(hWnd, &ps);
         if (td)
-            term_data_redraw(td);
+            if (!td->render(ps.rcPaint)) {
+                SetBkColor(hdc, RGB(0, 0, 0));
+                ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &ps.rcPaint, NULL, 0, NULL);
+            }
         EndPaint(hWnd, &ps);
         return 0;
     }
@@ -2438,7 +2438,7 @@ LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
     case WM_CHAR: {
         // wParam is WCHAR because using RegisterClassW
         if (term_no_press)
-            term_no_press = FALSE;
+            term_no_press = false;
         else {
             WCHAR wc[2] = { (WCHAR)wParam, '\0' };
             term_keypress(to_multibyte(wc).c_str());
@@ -2451,7 +2451,7 @@ LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 
         if (wParam == HTSYSMENU) {
             if (td->visible) {
-                td->visible = FALSE;
+                td->visible = false;
                 ShowWindow(td->w, SW_HIDE);
             }
 
@@ -2523,45 +2523,45 @@ static void init_stuff(void)
     }
 
     strcpy(path + i + 1, "lib\\");
-    validate_dir(path, TRUE);
+    validate_dir(path, true);
     init_file_paths(path, path);
-    validate_dir(ANGBAND_DIR_APEX, FALSE);
-    validate_dir(ANGBAND_DIR_BONE, FALSE);
+    validate_dir(ANGBAND_DIR_APEX, false);
+    validate_dir(ANGBAND_DIR_BONE, false);
     if (!check_dir(ANGBAND_DIR_EDIT)) {
-        validate_dir(ANGBAND_DIR_DATA, TRUE);
+        validate_dir(ANGBAND_DIR_DATA, true);
     } else {
-        validate_dir(ANGBAND_DIR_DATA, FALSE);
+        validate_dir(ANGBAND_DIR_DATA, false);
     }
 
-    validate_dir(ANGBAND_DIR_FILE, TRUE);
-    validate_dir(ANGBAND_DIR_HELP, FALSE);
-    validate_dir(ANGBAND_DIR_INFO, FALSE);
-    validate_dir(ANGBAND_DIR_PREF, TRUE);
-    validate_dir(ANGBAND_DIR_SAVE, FALSE);
-    validate_dir(ANGBAND_DIR_DEBUG_SAVE, FALSE);
-    validate_dir(ANGBAND_DIR_USER, TRUE);
-    validate_dir(ANGBAND_DIR_XTRA, TRUE);
+    validate_dir(ANGBAND_DIR_FILE, true);
+    validate_dir(ANGBAND_DIR_HELP, false);
+    validate_dir(ANGBAND_DIR_INFO, false);
+    validate_dir(ANGBAND_DIR_PREF, true);
+    validate_dir(ANGBAND_DIR_SAVE, false);
+    validate_dir(ANGBAND_DIR_DEBUG_SAVE, false);
+    validate_dir(ANGBAND_DIR_USER, true);
+    validate_dir(ANGBAND_DIR_XTRA, true);
     path_build(path, sizeof(path), ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
 
     validate_file(path);
     path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "graf");
     ANGBAND_DIR_XTRA_GRAF = string_make(path);
-    validate_dir(ANGBAND_DIR_XTRA_GRAF, TRUE);
+    validate_dir(ANGBAND_DIR_XTRA_GRAF, true);
 
     path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "sound");
     ANGBAND_DIR_XTRA_SOUND = string_make(path);
-    validate_dir(ANGBAND_DIR_XTRA_SOUND, FALSE);
+    validate_dir(ANGBAND_DIR_XTRA_SOUND, false);
 
     path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "music");
     ANGBAND_DIR_XTRA_MUSIC = string_make(path);
-    validate_dir(ANGBAND_DIR_XTRA_MUSIC, FALSE);
+    validate_dir(ANGBAND_DIR_XTRA_MUSIC, false);
 
     for (i = 0; special_key_list[i]; ++i) {
-        special_key[special_key_list[i]] = TRUE;
+        special_key[special_key_list[i]] = true;
     }
 
     for (i = 0; ignore_key_list[i]; ++i) {
-        ignore_key[ignore_key_list[i]] = TRUE;
+        ignore_key[ignore_key_list[i]] = true;
     }
 
     ANGBAND_SYS = "win";
@@ -2593,7 +2593,7 @@ static void init_stuff(void)
 void create_debug_spoiler(void)
 {
     init_stuff();
-    init_angband(p_ptr, TRUE);
+    init_angband(p_ptr, true);
 
     switch (output_all_spoilers()) {
     case spoiler_output_status::SPOILER_OUTPUT_SUCCESS:
@@ -2648,7 +2648,7 @@ int WINAPI WinMain(
     if (is_already_running()) {
         MessageBoxW(
             NULL, _(L"変愚蛮怒はすでに起動しています。", L"Hengband is already running."), _(L"エラー！", L"Error"), MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
-        return FALSE;
+        return 0;
     }
 
     command_line.handle();
@@ -2692,8 +2692,8 @@ int WINAPI WinMain(
 
     signals_init();
     term_activate(term_screen);
-    init_angband(p_ptr, FALSE);
-    initialized = TRUE;
+    init_angband(p_ptr, false);
+    initialized = true;
 
     check_for_save_file(command_line.get_savefile_option());
     prt(_("[ファイル] メニューの [新規] または [開く] を選択してください。", "[Choose 'New' or 'Open' from the 'File' menu]"), 23, _(8, 17));
@@ -2717,14 +2717,13 @@ int WINAPI WinMain(
     term_flush();
     if (movie_in_progress) {
         // selected movie
-        play_game(p_ptr, FALSE, TRUE);
+        play_game(p_ptr, false, true);
     } else if (savefile[0] == '\0') {
         // new game
-        play_game(p_ptr, TRUE, FALSE);
-    }
-    else {
+        play_game(p_ptr, true, false);
+    } else {
         // selected savefile
-        play_game(p_ptr, FALSE, FALSE);
+        play_game(p_ptr, false, false);
     }
 
     quit(NULL);

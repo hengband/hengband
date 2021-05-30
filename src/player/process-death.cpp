@@ -293,7 +293,7 @@ static bool show_dead_player_items(player_type *creature_ptr)
         (void)show_equipment(creature_ptr, 0, USE_FULL, TV_NONE);
         prt(_("装備していたアイテム: -続く-", "You are using: -more-"), 0, 0);
         if (inkey() == ESCAPE)
-            return TRUE;
+            return true;
     }
 
     if (creature_ptr->inven_cnt) {
@@ -302,10 +302,10 @@ static bool show_dead_player_items(player_type *creature_ptr)
         prt(_("持っていたアイテム: -続く-", "You are carrying: -more-"), 0, 0);
 
         if (inkey() == ESCAPE)
-            return TRUE;
+            return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -349,7 +349,7 @@ static void export_player_info(player_type *creature_ptr, display_player_pf disp
 {
     prt(_("キャラクターの記録をファイルに書き出すことができます。", "You may now dump a character record to one or more files."), 21, 0);
     prt(_("リターンキーでキャラクターを見ます。ESCで中断します。", "Then, hit RETURN to see the character, or ESC to abort."), 22, 0);
-    while (TRUE) {
+    while (true) {
         char out_val[160];
         put_str(_("ファイルネーム: ", "Filename: "), 23, 0);
         strcpy(out_val, "");

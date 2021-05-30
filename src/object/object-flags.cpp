@@ -99,7 +99,7 @@ void object_flags(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS flgs[TR
  */
 void object_flags_known(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
 {
-    bool spoil = FALSE;
+    bool spoil = false;
     object_kind *k_ptr = &k_info[o_ptr->k_idx];
     for (int i = 0; i < TR_FLAG_SIZE; i++) {
         flgs[i] = 0;

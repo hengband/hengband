@@ -95,10 +95,10 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type *m_ptr, int 
     if (!r_ptr)
         return;
     if (r_ptr->flags1 & RF1_UNIQUE) {
-        bool is_bounty = FALSE;
+        bool is_bounty = false;
         for (int i = 0; i < MAX_BOUNTY; i++) {
             if (current_world_ptr->bounty_r_idx[i] == r_idx) {
-                is_bounty = TRUE;
+                is_bounty = true;
                 break;
             }
         }
@@ -548,7 +548,7 @@ static void display_floor_item_list(player_type *player_ptr, const int y, const 
         if (player_ptr->image) {
             sprintf(line, _("(X:%03d Y:%03d) 何か奇妙な物の足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under something strange"), x, y);
         } else {
-            const monster_race *const r_ptr = &r_info[m_ptr->r_idx];
+            const monster_race *const r_ptr = &r_info[m_ptr->ap_r_idx];
             sprintf(line, _("(X:%03d Y:%03d) %sの足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under %s"), x, y, r_ptr->name.c_str());
         }
     } else {

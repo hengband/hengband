@@ -206,7 +206,7 @@ static void describe_autpick_jp(char *buff, autopick_type *entry, autopick_descr
     if (*describer->str) {
         if (*describer->str == '^') {
             describer->str++;
-            describer->top = TRUE;
+            describer->top = true;
         }
 
         strcat(buff, "で、名前が「");
@@ -439,7 +439,7 @@ void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *
     if (*describer->str) {
         if (*describer->str == '^') {
             describer->str++;
-            describer->top = TRUE;
+            describer->top = true;
             whose_str[whose_n] = "names begin with \"";
             whose_arg_str[whose_n] = "";
             ++whose_n;
@@ -536,7 +536,7 @@ void describe_autopick(char *buff, autopick_type *entry)
     describer.str = entry->name;
     describer.act = entry->action;
     describer.insc = entry->insc;
-    describer.top = FALSE;
+    describer.top = false;
     describer.before_n = 0;
     describer.body_str = _("アイテム", "items");
 #ifdef JP

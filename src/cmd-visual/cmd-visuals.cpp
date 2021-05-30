@@ -38,7 +38,7 @@ static bool cmd_visuals_aux(int i, IDX *num, IDX max)
         char str[10] = "";
         sprintf(str, "%d", *num);
         if (!get_string(format("Input new number(0-%d): ", max - 1), str, 4))
-            return FALSE;
+            return false;
 
         IDX tmp = (IDX)strtol(str, NULL, 0);
         if (tmp >= 0 && tmp < max)
@@ -48,7 +48,7 @@ static bool cmd_visuals_aux(int i, IDX *num, IDX max)
     else
         *num = (*num + 1) % max;
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -80,13 +80,13 @@ void do_cmd_visuals(player_type *creature_ptr)
     FILE *auto_dump_stream;
     char tmp[160];
     char buf[1024];
-    bool need_redraw = FALSE;
+    bool need_redraw = false;
     concptr empty_symbol = "<< ? >>";
     if (use_bigtile)
         empty_symbol = "<< ?? >>";
 
     screen_save();
-    while (TRUE) {
+    while (true) {
         term_clear();
         print_visuals_menu(NULL);
         int i = inkey();
@@ -102,7 +102,7 @@ void do_cmd_visuals(player_type *creature_ptr)
                 continue;
 
             (void)process_pref_file(creature_ptr, tmp, true);
-            need_redraw = TRUE;
+            need_redraw = true;
             break;
         }
         case '1': {
@@ -200,7 +200,7 @@ void do_cmd_visuals(player_type *creature_ptr)
             static concptr choice_msg = _("モンスターの[色/文字]を変更します", "Change monster attr/chars");
             static MONRACE_IDX r = 0;
             prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
-            while (TRUE) {
+            while (true) {
                 monster_race *r_ptr = &r_info[r];
                 int c;
                 IDX t;
@@ -245,16 +245,16 @@ void do_cmd_visuals(player_type *creature_ptr)
                     t = (int)r_ptr->x_attr;
                     (void)cmd_visuals_aux(i, &t, 256);
                     r_ptr->x_attr = (byte)t;
-                    need_redraw = TRUE;
+                    need_redraw = true;
                     break;
                 case 'c':
                     t = (int)r_ptr->x_char;
                     (void)cmd_visuals_aux(i, &t, 256);
                     r_ptr->x_char = (byte)t;
-                    need_redraw = TRUE;
+                    need_redraw = true;
                     break;
                 case 'v':
-                    do_cmd_knowledge_monsters(creature_ptr, &need_redraw, TRUE, r);
+                    do_cmd_knowledge_monsters(creature_ptr, &need_redraw, true, r);
                     term_clear();
                     print_visuals_menu(choice_msg);
                     break;
@@ -267,7 +267,7 @@ void do_cmd_visuals(player_type *creature_ptr)
             static concptr choice_msg = _("アイテムの[色/文字]を変更します", "Change object attr/chars");
             static IDX k = 0;
             prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
-            while (TRUE) {
+            while (true) {
                 object_kind *k_ptr = &k_info[k];
                 int c;
                 IDX t;
@@ -315,16 +315,16 @@ void do_cmd_visuals(player_type *creature_ptr)
                     t = (int)k_ptr->x_attr;
                     (void)cmd_visuals_aux(i, &t, 256);
                     k_ptr->x_attr = (byte)t;
-                    need_redraw = TRUE;
+                    need_redraw = true;
                     break;
                 case 'c':
                     t = (int)k_ptr->x_char;
                     (void)cmd_visuals_aux(i, &t, 256);
                     k_ptr->x_char = (byte)t;
-                    need_redraw = TRUE;
+                    need_redraw = true;
                     break;
                 case 'v':
-                    do_cmd_knowledge_objects(creature_ptr, &need_redraw, TRUE, k);
+                    do_cmd_knowledge_objects(creature_ptr, &need_redraw, true, k);
                     term_clear();
                     print_visuals_menu(choice_msg);
                     break;
@@ -338,7 +338,7 @@ void do_cmd_visuals(player_type *creature_ptr)
             static IDX f = 0;
             static IDX lighting_level = F_LIT_STANDARD;
             prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
-            while (TRUE) {
+            while (true) {
                 feature_type *f_ptr = &f_info[f];
                 int c;
                 IDX t;
@@ -388,23 +388,23 @@ void do_cmd_visuals(player_type *creature_ptr)
                     t = (int)f_ptr->x_attr[lighting_level];
                     (void)cmd_visuals_aux(i, &t, 256);
                     f_ptr->x_attr[lighting_level] = (byte)t;
-                    need_redraw = TRUE;
+                    need_redraw = true;
                     break;
                 case 'c':
                     t = (int)f_ptr->x_char[lighting_level];
                     (void)cmd_visuals_aux(i, &t, 256);
                     f_ptr->x_char[lighting_level] = (byte)t;
-                    need_redraw = TRUE;
+                    need_redraw = true;
                     break;
                 case 'l':
                     (void)cmd_visuals_aux(i, &lighting_level, F_LIT_MAX);
                     break;
                 case 'd':
                     apply_default_feat_lighting(f_ptr->x_attr, f_ptr->x_char);
-                    need_redraw = TRUE;
+                    need_redraw = true;
                     break;
                 case 'v':
-                    do_cmd_knowledge_features(&need_redraw, TRUE, f, &lighting_level);
+                    do_cmd_knowledge_features(&need_redraw, true, f, &lighting_level);
                     term_clear();
                     print_visuals_menu(choice_msg);
                     break;
@@ -414,21 +414,21 @@ void do_cmd_visuals(player_type *creature_ptr)
             break;
         }
         case '7':
-            do_cmd_knowledge_monsters(creature_ptr, &need_redraw, TRUE, -1);
+            do_cmd_knowledge_monsters(creature_ptr, &need_redraw, true, -1);
             break;
         case '8':
-            do_cmd_knowledge_objects(creature_ptr, &need_redraw, TRUE, -1);
+            do_cmd_knowledge_objects(creature_ptr, &need_redraw, true, -1);
             break;
         case '9': {
             IDX lighting_level = F_LIT_STANDARD;
-            do_cmd_knowledge_features(&need_redraw, TRUE, -1, &lighting_level);
+            do_cmd_knowledge_features(&need_redraw, true, -1, &lighting_level);
             break;
         }
         case 'R':
         case 'r':
             reset_visuals(creature_ptr);
             msg_print(_("画面上の[色/文字]を初期値にリセットしました。", "Visual attr/char tables reset."));
-            need_redraw = TRUE;
+            need_redraw = true;
             break;
         default:
             bell();

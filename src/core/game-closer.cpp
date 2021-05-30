@@ -49,8 +49,8 @@ static void send_world_score_on_closing(player_type *player_ptr, bool do_send)
             player_ptr, _("後でスコアを登録するために待機しますか？", "Stand by for later score registration? "), (CHECK_NO_ESCAPE | CHECK_NO_HISTORY)))
         return;
 
-    player_ptr->wait_report_score = TRUE;
-    player_ptr->is_dead = FALSE;
+    player_ptr->wait_report_score = true;
+    player_ptr->is_dead = false;
     if (!save_player(player_ptr, SAVE_TYPE_CLOSE_GAME))
         msg_print(_("セーブ失敗！", "death save failed!"));
 }
@@ -63,16 +63,16 @@ static void send_world_score_on_closing(player_type *player_ptr, bool do_send)
 static bool check_death(player_type *player_ptr)
 {
     if (player_ptr->is_dead)
-        return TRUE;
+        return true;
 
-    do_cmd_save_game(player_ptr, FALSE);
+    do_cmd_save_game(player_ptr, false);
     prt(_("リターンキーか ESC キーを押して下さい。", "Press Return (or Escape)."), 0, 40);
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_EXIT);
     if (inkey() != ESCAPE)
         predict_score(player_ptr);
 
     clear_floor(player_ptr);
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -141,7 +141,7 @@ static void kingly(player_type *winner_ptr)
  */
 void close_game(player_type *player_ptr)
 {
-    bool do_send = TRUE;
+    bool do_send = true;
     handle_stuff(player_ptr);
     msg_print(NULL);
     flush();
@@ -167,7 +167,7 @@ void close_game(player_type *player_ptr)
         if (!save_player(player_ptr, SAVE_TYPE_CLOSE_GAME))
             msg_print(_("セーブ失敗！", "death save failed!"));
     } else
-        do_send = FALSE;
+        do_send = false;
 
     print_tomb(player_ptr);
     flush();

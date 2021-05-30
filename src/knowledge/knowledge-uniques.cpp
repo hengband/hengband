@@ -52,28 +52,28 @@ unique_list_type *initialize_unique_lsit_type(unique_list_type *unique_list_ptr,
 static bool sweep_uniques(monster_race *r_ptr, bool is_alive)
 {
     if (r_ptr->name.empty())
-        return FALSE;
+        return false;
 
     if (!(r_ptr->flags1 & RF1_UNIQUE))
 
-        return FALSE;
+        return false;
 
     if (!cheat_know && !r_ptr->r_sights)
-        return FALSE;
+        return false;
 
-    bool is_except_arena = is_alive ? (r_ptr->rarity > 100) && ((r_ptr->flags1 & RF1_QUESTOR) == 0) : FALSE;
+    bool is_except_arena = is_alive ? (r_ptr->rarity > 100) && ((r_ptr->flags1 & RF1_QUESTOR) == 0) : false;
     if (!r_ptr->rarity || is_except_arena)
-        return FALSE;
+        return false;
 
     if (is_alive) {
         if (r_ptr->max_num == 0)
-            return FALSE;
+            return false;
     } else {
         if (r_ptr->max_num > 0)
-            return FALSE;
+            return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 static void display_uniques(unique_list_type *unique_list_ptr, FILE *fff)
@@ -164,6 +164,6 @@ void do_cmd_knowledge_uniques(player_type *creature_ptr, bool is_alive)
     angband_fclose(fff);
     concptr title_desc
         = unique_list_ptr->is_alive ? _("まだ生きているユニーク・モンスター", "Alive Uniques") : _("もう撃破したユニーク・モンスター", "Dead Uniques");
-    (void)show_file(creature_ptr, TRUE, file_name, title_desc, 0, 0);
+    (void)show_file(creature_ptr, true, file_name, title_desc, 0, 0);
     fd_kill(file_name);
 }

@@ -125,12 +125,12 @@ bool draconian_breath(player_type *creature_ptr)
     concptr breath_type_description = ((breath_type == GF_COLD) ? _("冷気", "cold") : _("炎", "fire"));
     DIRECTION dir;
     if (!get_aim_dir(creature_ptr, &dir))
-        return FALSE;
+        return false;
 
     decide_breath_kind(creature_ptr, &breath_type, &breath_type_description);
     stop_mouth(creature_ptr);
     msg_format(_("あなたは%sのブレスを吐いた。", "You breathe %s."), breath_type_description);
 
     fire_breath(creature_ptr, breath_type, dir, creature_ptr->lev * 2, (creature_ptr->lev / 15) + 1);
-    return TRUE;
+    return true;
 }

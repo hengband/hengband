@@ -16,12 +16,12 @@ bool vampirism(player_type *caster_ptr)
 {
     if (d_info[caster_ptr->dungeon_idx].flags.has(DF::NO_MELEE)) {
         msg_print(_("なぜか攻撃することができない。", "Something prevents you from attacking."));
-        return FALSE;
+        return false;
     }
 
     DIRECTION dir;
-    if (!get_direction(caster_ptr, &dir, FALSE, FALSE))
-        return FALSE;
+    if (!get_direction(caster_ptr, &dir, false, false))
+        return false;
 
     POSITION y = caster_ptr->y + ddy[dir];
     POSITION x = caster_ptr->x + ddx[dir];
@@ -30,7 +30,7 @@ bool vampirism(player_type *caster_ptr)
     stop_mouth(caster_ptr);
     if (!(g_ptr->m_idx)) {
         msg_print(_("何もない場所に噛みついた！", "You bite into thin air!"));
-        return FALSE;
+        return false;
     }
 
     msg_print(_("あなたはニヤリとして牙をむいた...", "You grin and bare your fangs..."));
@@ -38,7 +38,7 @@ bool vampirism(player_type *caster_ptr)
     int dummy = caster_ptr->lev * 2;
     if (!hypodynamic_bolt(caster_ptr, dir, dummy)) {
         msg_print(_("げぇ！ひどい味だ。", "Yechh. That tastes foul."));
-        return TRUE;
+        return true;
     }
 
     if (caster_ptr->food < PY_FOOD_FULL)
@@ -54,5 +54,5 @@ bool vampirism(player_type *caster_ptr)
     if (caster_ptr->food < PY_FOOD_MAX) /* Not gorged already */
         (void)set_food(caster_ptr, dummy >= PY_FOOD_MAX ? PY_FOOD_MAX - 1 : dummy);
 
-    return TRUE;
+    return true;
 }

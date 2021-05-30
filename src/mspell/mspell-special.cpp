@@ -149,7 +149,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(player_type *target_ptr, POSITION 
     GAME_TEXT m_name[MAX_NLEN];
     monster_name(target_ptr, m_idx, m_name);
 
-    disturb(target_ptr, TRUE, TRUE);
+    disturb(target_ptr, true, true);
     if (one_in_(3) || !direct) {
         simple_monspell_message(target_ptr, m_idx, t_idx, _("%^sは突然視界から消えた!", "You lose sight of %s!"),
             _("%^sは突然急上昇して視界から消えた!", "You lose sight of %s!"), TARGET_TYPE);
@@ -188,7 +188,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(player_type *target_ptr, POSITION 
             monster_desc(target_ptr, m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
             msg_format(_("攻撃が%s自身を傷つけた！", "The attack of %s has wounded %s!"), m_name, m_name_self);
             project(target_ptr, 0, 0, m_ptr->fy, m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL);
-            set_tim_eyeeye(target_ptr, target_ptr->tim_eyeeye - 5, TRUE);
+            set_tim_eyeeye(target_ptr, target_ptr->tim_eyeeye - 5, true);
         }
     }
 
@@ -218,7 +218,7 @@ MonsterSpellResult spell_RF6_SPECIAL(player_type *target_ptr, POSITION y, POSITI
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-    disturb(target_ptr, TRUE, TRUE);
+    disturb(target_ptr, true, true);
     switch (m_ptr->r_idx) {
     case MON_OHMU:
         return MonsterSpellResult::make_invalid();

@@ -19,7 +19,7 @@
  * @brief クエスト情報を処理しつつ取得する。/ Process and get quest information
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param questnum クエストのID
- * @param do_init クエストの開始処理か(TRUE)、結果処理か(FALSE)
+ * @param do_init クエストの開始処理か(true)、結果処理か(FALSE)
  */
 static void get_questinfo(player_type *player_ptr, IDX questnum, bool do_init)
 {
@@ -45,7 +45,7 @@ static void get_questinfo(player_type *player_ptr, IDX questnum, bool do_init)
  * @brief クエスト情報を処理しつつ表示する。/ Process and display quest information
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param questnum クエストのID
- * @param do_init クエストの開始処理か(TRUE)、結果処理か(FALSE)
+ * @param do_init クエストの開始処理か(true)、結果処理か(FALSE)
  */
 void print_questinfo(player_type *player_ptr, IDX questnum, bool do_init)
 {
@@ -79,8 +79,8 @@ void castle_quest(player_type *player_ptr)
     q_ptr = &quest[q_index];
     if (q_ptr->status == QUEST_STATUS_COMPLETED) {
         q_ptr->status = QUEST_STATUS_REWARDED;
-        print_questinfo(player_ptr, q_index, FALSE);
-        reinit_wilderness = TRUE;
+        print_questinfo(player_ptr, q_index, false);
+        reinit_wilderness = true;
         return;
     }
 
@@ -108,9 +108,9 @@ void castle_quest(player_type *player_ptr)
     }
 
     if (q_ptr->status == QUEST_STATUS_FAILED) {
-        print_questinfo(player_ptr, q_index, FALSE);
+        print_questinfo(player_ptr, q_index, false);
         q_ptr->status = QUEST_STATUS_FAILED_DONE;
-        reinit_wilderness = TRUE;
+        reinit_wilderness = true;
         return;
     }
 
@@ -118,9 +118,9 @@ void castle_quest(player_type *player_ptr)
         return;
 
     q_ptr->status = QUEST_STATUS_TAKEN;
-    reinit_wilderness = TRUE;
+    reinit_wilderness = true;
     if (q_ptr->type != QUEST_TYPE_KILL_ANY_LEVEL) {
-        print_questinfo(player_ptr, q_index, TRUE);
+        print_questinfo(player_ptr, q_index, true);
         return;
     }
 
@@ -149,5 +149,5 @@ void castle_quest(player_type *player_ptr)
 #else
     msg_format("Your quest: kill %d %s", q_ptr->max_num, name);
 #endif
-    print_questinfo(player_ptr, q_index, TRUE);
+    print_questinfo(player_ptr, q_index, true);
 }

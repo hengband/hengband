@@ -38,14 +38,14 @@ static concptr html_foot[3] = { "</pre>\n", "</body>\n</html>\n", 0, };
  */
 static void read_temporary_file(FILE *fff, FILE *tmpfff, char buf[], size_t buf_size, int num_tag)
 {
-	bool is_first_line = TRUE;
+	bool is_first_line = true;
 	int next_tag = num_tag + 1;
 	while (!angband_fgets(tmpfff, buf, buf_size))
 	{
 		if (is_first_line)
 		{
 			if (strncmp(buf, tags[num_tag], strlen(tags[num_tag])) == 0)
-				is_first_line = FALSE;
+				is_first_line = false;
 
 			continue;
 		}
@@ -128,12 +128,12 @@ static void screen_dump_lines(int wid, int hgt, FILE *fff)
  */
 static bool check_screen_html_can_open(FILE *fff, char *filename, int message)
 {
-	if (fff) return TRUE;
-	if (message == 0) return FALSE;
+	if (fff) return true;
+	if (message == 0) return false;
 
 	msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), filename);
 	msg_print(NULL);
-	return FALSE;
+	return false;
 }
 
 
@@ -237,27 +237,27 @@ static void do_cmd_save_screen_html(void)
  */
 static bool ask_html_dump(bool *html_dump)
 {
-	while (TRUE)
+	while (true)
 	{
 		char c = inkey();
 		if (c == 'Y' || c == 'y')
 		{
-			*html_dump = FALSE;
-			return TRUE;
+			*html_dump = false;
+			return true;
 		}
 		
 		if (c == 'H' || c == 'h')
 		{
-			*html_dump = TRUE;
-			return TRUE;
+			*html_dump = true;
+			return true;
 		}
 
 		prt("", 0, 0);
-		return FALSE;
+		return false;
 	}
 
 	// コンパイル警告対応.
-	return FALSE;
+	return false;
 }
 
 
@@ -269,11 +269,11 @@ static bool ask_html_dump(bool *html_dump)
  */
 static bool check_screen_text_can_open(FILE *fff, char buf[])
 {
-	if (fff) return TRUE;
+	if (fff) return true;
 
 	msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), buf);
 	msg_print(NULL);
-	return FALSE;
+	return false;
 }
 
 
@@ -292,7 +292,7 @@ static bool do_cmd_save_screen_text(int wid, int hgt)
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "dump.txt");
 	fff = angband_fopen(buf, "w");
-	if (!check_screen_text_can_open(fff, buf)) return FALSE;
+	if (!check_screen_text_can_open(fff, buf)) return false;
 
 	screen_save();
 	for (TERM_LEN y = 0; y < hgt; y++)
@@ -327,7 +327,7 @@ static bool do_cmd_save_screen_text(int wid, int hgt)
 	msg_print(_("画面(記念撮影)をファイルに書き出しました。", "Screen dump saved."));
 	msg_print(NULL);
 	screen_load();
-	return TRUE;
+	return true;
 }
 
 
@@ -338,13 +338,13 @@ static bool do_cmd_save_screen_text(int wid, int hgt)
  */
 static bool update_use_graphics(player_type *creature_ptr)
 {
-	if (!use_graphics) return TRUE;
+	if (!use_graphics) return true;
 
-	use_graphics = FALSE;
+	use_graphics = false;
 	reset_visuals(creature_ptr);
 	creature_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
 	handle_stuff(creature_ptr);
-	return FALSE;
+	return false;
 }
 
 
@@ -375,7 +375,7 @@ void do_cmd_save_screen(player_type *creature_ptr)
 
 	if (old_use_graphics) return;
 
-	use_graphics = TRUE;
+	use_graphics = true;
 	reset_visuals(creature_ptr);
 	creature_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
 	handle_stuff(creature_ptr);
@@ -393,10 +393,10 @@ void do_cmd_save_screen(player_type *creature_ptr)
  */
 static bool draw_white_characters(char buf[], FILE *fff, int wid, int hgt)
 {
-	bool okay = TRUE;
+	bool okay = true;
 	for (TERM_LEN y = 0; okay; y++)
 	{
-		if (!fgets(buf, 1024, fff)) okay = FALSE;
+		if (!fgets(buf, 1024, fff)) okay = false;
 
 		if (buf[0] == '\n' || buf[0] == '\0') break;
 		if (y >= hgt) continue;
@@ -428,7 +428,7 @@ static void draw_colored_characters(char buf[], FILE *fff, int wid, int hgt, boo
 	SYMBOL_CODE c = ' ';
 	for (TERM_LEN y = 0; okay; y++)
 	{
-		if (!fgets(buf, 1024, fff)) okay = FALSE;
+		if (!fgets(buf, 1024, fff)) okay = false;
 
 		if (buf[0] == '\n' || buf[0] == '\0') break;
 		if (y >= hgt) continue;

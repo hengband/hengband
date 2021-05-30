@@ -72,11 +72,11 @@ static IDX collect_monsters(player_type *creature_ptr, IDX grp_cur, IDX mon_idx[
             if (none_bits(r_ptr->flags7, RF7_RIDING))
                 continue;
         } else if (grp_wanted) {
-            bool wanted = FALSE;
+            bool wanted = false;
             for (int j = 0; j < MAX_BOUNTY; j++) {
                 if (current_world_ptr->bounty_r_idx[j] == i || current_world_ptr->bounty_r_idx[j] - 10000 == i
                     || (creature_ptr->today_mon && creature_ptr->today_mon == i)) {
-                    wanted = TRUE;
+                    wanted = true;
                     break;
                 }
             }
@@ -140,7 +140,7 @@ void do_cmd_knowledge_pets(player_type *creature_ptr)
     fprintf(fff, _(" 維持コスト: %d%% MP\n", "   Upkeep: %d%% mana.\n"), show_upkeep);
 
     angband_fclose(fff);
-    (void)show_file(creature_ptr, TRUE, file_name, _("現在のペット", "Current Pets"), 0, 0);
+    (void)show_file(creature_ptr, true, file_name, _("現在のペット", "Current Pets"), 0, 0);
     fd_kill(file_name);
 }
 
@@ -249,7 +249,7 @@ void do_cmd_knowledge_kill_count(player_type *creature_ptr)
 
     C_KILL(who, max_r_idx, s16b);
     angband_fclose(fff);
-    (void)show_file(creature_ptr, TRUE, file_name, _("倒した敵の数", "Kill Count"), 0, 0);
+    (void)show_file(creature_ptr, true, file_name, _("倒した敵の数", "Kill Count"), 0, 0);
     fd_kill(file_name);
 }
 
@@ -305,7 +305,7 @@ void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, boo
     IDX grp_cnt = 0;
     IDX grp_idx[100];
     IDX mon_cnt;
-    bool visual_list = FALSE;
+    bool visual_list = false;
     TERM_COLOR attr_top = 0;
     byte char_left = 0;
     monster_lore_mode mode;
@@ -341,8 +341,8 @@ void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, boo
     IDX mon_cur = 0;
     IDX mon_top = 0;
     int column = 0;
-    bool flag = FALSE;
-    bool redraw = TRUE;
+    bool flag = false;
+    bool redraw = true;
     while (!flag) {
         if (redraw) {
             clear_from(0);
@@ -366,7 +366,7 @@ void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, boo
                 }
             }
 
-            redraw = FALSE;
+            redraw = false;
         }
 
         if (direct_r_idx < 0) {
@@ -431,7 +431,7 @@ void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, boo
                 case '\n':
                 case '\r':
                 case ESCAPE:
-                    flag = TRUE;
+                    flag = true;
                     break;
                 }
             }
@@ -441,7 +441,7 @@ void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, boo
 
         switch (ch) {
         case ESCAPE: {
-            flag = TRUE;
+            flag = true;
             break;
         }
 
@@ -452,7 +452,7 @@ void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, boo
 
                 (void)inkey();
 
-                redraw = TRUE;
+                redraw = true;
             }
 
             break;
@@ -486,11 +486,11 @@ void do_cmd_knowledge_bounty(player_type *creature_ptr)
     fprintf(fff, _("賞金首リスト\n", "List of wanted monsters\n"));
     fprintf(fff, "----------------------------------------------\n");
 
-    bool listed = FALSE;
+    bool listed = false;
     for (int i = 0; i < MAX_BOUNTY; i++) {
         if (current_world_ptr->bounty_r_idx[i] <= 10000) {
             fprintf(fff, "%s\n", r_info[current_world_ptr->bounty_r_idx[i]].name.c_str());
-            listed = TRUE;
+            listed = true;
         }
     }
 
@@ -498,6 +498,6 @@ void do_cmd_knowledge_bounty(player_type *creature_ptr)
         fprintf(fff, "\n%s\n", _("賞金首はもう残っていません。", "There are no more wanted monster."));
 
     angband_fclose(fff);
-    (void)show_file(creature_ptr, TRUE, file_name, _("賞金首の一覧", "Wanted monsters"), 0, 0);
+    (void)show_file(creature_ptr, true, file_name, _("賞金首の一覧", "Wanted monsters"), 0, 0);
     fd_kill(file_name);
 }

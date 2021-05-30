@@ -171,12 +171,12 @@ bool write_text_lines(concptr filename, concptr *lines_list)
     FILE *fff;
     fff = angband_fopen(buf, "w");
     if (!fff)
-        return FALSE;
+        return false;
 
     for (int lines = 0; lines_list[lines]; lines++) {
         angband_fputs(fff, lines_list[lines], 1024);
     }
 
     angband_fclose(fff);
-    return TRUE;
+    return true;
 }

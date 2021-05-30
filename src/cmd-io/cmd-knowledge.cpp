@@ -25,9 +25,9 @@
 void do_cmd_knowledge(player_type *creature_ptr)
 {
     int i, p = 0;
-    bool need_redraw = FALSE;
+    bool need_redraw = false;
     screen_save();
-    while (TRUE) {
+    while (true) {
         term_clear();
         prt(format(_("%d/2 ページ", "page %d/2"), (p + 1)), 2, 65);
         prt(_("現在の知識を確認する", "Display current knowledge"), 3, 0);
@@ -73,16 +73,16 @@ void do_cmd_knowledge(player_type *creature_ptr)
             do_cmd_knowledge_artifacts(creature_ptr);
             break;
         case '2': /* Objects */
-            do_cmd_knowledge_objects(creature_ptr, &need_redraw, FALSE, -1);
+            do_cmd_knowledge_objects(creature_ptr, &need_redraw, false, -1);
             break;
         case '3': /* Uniques */
-            do_cmd_knowledge_uniques(creature_ptr, TRUE);
+            do_cmd_knowledge_uniques(creature_ptr, true);
             break;
         case '4': /* Uniques */
-            do_cmd_knowledge_uniques(creature_ptr, FALSE);
+            do_cmd_knowledge_uniques(creature_ptr, false);
             break;
         case '5': /* Monsters */
-            do_cmd_knowledge_monsters(creature_ptr, &need_redraw, FALSE, -1);
+            do_cmd_knowledge_monsters(creature_ptr, &need_redraw, false, -1);
             break;
         case '6': /* Kill count  */
             do_cmd_knowledge_kill_count(creature_ptr);
@@ -104,7 +104,7 @@ void do_cmd_knowledge(player_type *creature_ptr)
         case 'a': /* Feature list */
         {
             IDX lighting_level = F_LIT_STANDARD;
-            do_cmd_knowledge_features(&need_redraw, FALSE, -1, &lighting_level);
+            do_cmd_knowledge_features(&need_redraw, false, -1, &lighting_level);
             break;
         }
         case 'b': /* Max stat */

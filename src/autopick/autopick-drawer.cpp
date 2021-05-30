@@ -245,7 +245,7 @@ void draw_text_editor(player_type *player_ptr, text_body_type *tb)
             }
             break;
         }
-    } else if (autopick_new_entry(entry, tb->lines_list[tb->cy], FALSE)) {
+    } else if (autopick_new_entry(entry, tb->lines_list[tb->cy], false)) {
         char buf[MAX_LINELEN];
         char temp[MAX_LINELEN];
         concptr t;

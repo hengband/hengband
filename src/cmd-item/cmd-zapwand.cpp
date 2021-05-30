@@ -49,7 +49,7 @@
  */
 bool wand_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION dir, bool powerful, bool magic)
 {
-    bool ident = FALSE;
+    bool ident = false;
     PLAYER_LEVEL lev = powerful ? creature_ptr->lev * 2 : creature_ptr->lev;
     POSITION rad = powerful ? 3 : 2;
 
@@ -80,49 +80,49 @@ bool wand_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION
     case SV_WAND_HEAL_MONSTER: {
         HIT_POINT dam = damroll((powerful ? 20 : 10), 10);
         if (heal_monster(creature_ptr, dir, dam))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_WAND_HASTE_MONSTER: {
         if (speed_monster(creature_ptr, dir, lev))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_WAND_CLONE_MONSTER: {
         if (clone_monster(creature_ptr, dir))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_WAND_TELEPORT_AWAY: {
         int distance = MAX_SIGHT * (powerful ? 8 : 5);
         if (teleport_monster(creature_ptr, dir, distance))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_WAND_DISARMING: {
         if (disarm_trap(creature_ptr, dir))
-            ident = TRUE;
+            ident = true;
         if (powerful && disarm_traps_touch(creature_ptr))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_WAND_TRAP_DOOR_DEST: {
         if (destroy_door(creature_ptr, dir))
-            ident = TRUE;
+            ident = true;
         if (powerful && destroy_doors_touch(creature_ptr))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_WAND_STONE_TO_MUD: {
         HIT_POINT dam = powerful ? 40 + randint1(60) : 20 + randint1(30);
         if (wall_to_mud(creature_ptr, dir, dam))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
@@ -130,103 +130,103 @@ bool wand_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION
         HIT_POINT dam = damroll((powerful ? 12 : 6), 8);
         msg_print(_("青く輝く光線が放たれた。", "A line of blue shimmering light appears."));
         (void)lite_line(creature_ptr, dir, dam);
-        ident = TRUE;
+        ident = true;
         break;
     }
 
     case SV_WAND_SLEEP_MONSTER: {
         if (sleep_monster(creature_ptr, dir, lev))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_WAND_SLOW_MONSTER: {
         if (slow_monster(creature_ptr, dir, lev))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_WAND_CONFUSE_MONSTER: {
         if (confuse_monster(creature_ptr, dir, lev))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_WAND_FEAR_MONSTER: {
         if (fear_monster(creature_ptr, dir, lev))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_WAND_HYPODYNAMIA: {
         if (hypodynamic_bolt(creature_ptr, dir, 80 + lev))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_WAND_POLYMORPH: {
         if (poly_monster(creature_ptr, dir, lev))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_WAND_STINKING_CLOUD: {
         fire_ball(creature_ptr, GF_POIS, dir, 12 + lev / 4, rad);
-        ident = TRUE;
+        ident = true;
         break;
     }
 
     case SV_WAND_MAGIC_MISSILE: {
         fire_bolt_or_beam(creature_ptr, 20, GF_MISSILE, dir, damroll(2 + lev / 10, 6));
-        ident = TRUE;
+        ident = true;
         break;
     }
 
     case SV_WAND_ACID_BOLT: {
         fire_bolt_or_beam(creature_ptr, 20, GF_ACID, dir, damroll(6 + lev / 7, 8));
-        ident = TRUE;
+        ident = true;
         break;
     }
 
     case SV_WAND_CHARM_MONSTER: {
         if (charm_monster(creature_ptr, dir, MAX(20, lev)))
-            ident = TRUE;
+            ident = true;
         break;
     }
 
     case SV_WAND_FIRE_BOLT: {
         fire_bolt_or_beam(creature_ptr, 20, GF_FIRE, dir, damroll(7 + lev / 6, 8));
-        ident = TRUE;
+        ident = true;
         break;
     }
 
     case SV_WAND_COLD_BOLT: {
         fire_bolt_or_beam(creature_ptr, 20, GF_COLD, dir, damroll(5 + lev / 8, 8));
-        ident = TRUE;
+        ident = true;
         break;
     }
 
     case SV_WAND_ACID_BALL: {
         fire_ball(creature_ptr, GF_ACID, dir, 60 + 3 * lev / 4, rad);
-        ident = TRUE;
+        ident = true;
         break;
     }
 
     case SV_WAND_ELEC_BALL: {
         fire_ball(creature_ptr, GF_ELEC, dir, 40 + 3 * lev / 4, rad);
-        ident = TRUE;
+        ident = true;
         break;
     }
 
     case SV_WAND_FIRE_BALL: {
         fire_ball(creature_ptr, GF_FIRE, dir, 70 + 3 * lev / 4, rad);
-        ident = TRUE;
+        ident = true;
         break;
     }
 
     case SV_WAND_COLD_BALL: {
         fire_ball(creature_ptr, GF_COLD, dir, 50 + 3 * lev / 4, rad);
-        ident = TRUE;
+        ident = true;
         break;
     }
 
@@ -237,13 +237,13 @@ bool wand_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION
 
     case SV_WAND_DRAGON_FIRE: {
         fire_breath(creature_ptr, GF_FIRE, dir, (powerful ? 300 : 200), 3);
-        ident = TRUE;
+        ident = true;
         break;
     }
 
     case SV_WAND_DRAGON_COLD: {
         fire_breath(creature_ptr, GF_COLD, dir, (powerful ? 270 : 180), 3);
-        ident = TRUE;
+        ident = true;
         break;
     }
 
@@ -279,32 +279,32 @@ bool wand_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION
 
         fire_breath(creature_ptr, typ, dir, dam, 3);
 
-        ident = TRUE;
+        ident = true;
         break;
     }
 
     case SV_WAND_DISINTEGRATE: {
         fire_ball(creature_ptr, GF_DISINTEGRATE, dir, 200 + randint1(lev * 2), rad);
-        ident = TRUE;
+        ident = true;
         break;
     }
 
     case SV_WAND_ROCKETS: {
         msg_print(_("ロケットを発射した！", "You launch a rocket!"));
         fire_rocket(creature_ptr, GF_ROCKET, dir, 250 + lev * 3, rad);
-        ident = TRUE;
+        ident = true;
         break;
     }
 
     case SV_WAND_STRIKING: {
         fire_bolt(creature_ptr, GF_METEOR, dir, damroll(15 + lev / 3, 13));
-        ident = TRUE;
+        ident = true;
         break;
     }
 
     case SV_WAND_GENOCIDE: {
         fire_ball_hide(creature_ptr, GF_GENOCIDE, dir, magic ? lev + 50 : 250, 0);
-        ident = TRUE;
+        ident = true;
         break;
     }
     }
@@ -349,7 +349,7 @@ void exe_aim_wand(player_type *creature_ptr, INVENTORY_IDX item)
 
     /* Allow direction to be cancelled for free */
     if (object_is_aware(o_ptr) && (o_ptr->sval == SV_WAND_HEAL_MONSTER || o_ptr->sval == SV_WAND_HASTE_MONSTER))
-        target_pet = TRUE;
+        target_pet = true;
     if (!get_aim_dir(creature_ptr, &dir)) {
         target_pet = old_target_pet;
         return;
@@ -404,7 +404,7 @@ void exe_aim_wand(player_type *creature_ptr, INVENTORY_IDX item)
 
     sound(SOUND_ZAP);
 
-    ident = wand_effect(creature_ptr, o_ptr->sval, dir, FALSE, FALSE);
+    ident = wand_effect(creature_ptr, o_ptr->sval, dir, false, false);
 
     /*
      * Temporarily remove the flags for updating the inventory so

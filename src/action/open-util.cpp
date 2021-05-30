@@ -50,7 +50,7 @@ int count_chests(player_type *creature_ptr, POSITION *y, POSITION *x, bool trapp
     for (DIRECTION d = 0; d < 9; d++) {
         POSITION yy = creature_ptr->y + ddy_ddd[d];
         POSITION xx = creature_ptr->x + ddx_ddd[d];
-        OBJECT_IDX o_idx = chest_check(creature_ptr->current_floor_ptr, yy, xx, FALSE);
+        OBJECT_IDX o_idx = chest_check(creature_ptr->current_floor_ptr, yy, xx, false);
         if (!o_idx)
             continue;
 

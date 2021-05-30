@@ -4455,10 +4455,20 @@ D:賢者マーリンの魔法の鏡だ。鏡を通じて賢者の助けを得る
 N:266:『ドラゴンころし』
 E:'Dragon slayer'
 I:23:25:0
-W:30:100:500:100000
+W:30:140:700:100000
 F:IMPACT
-P:0:8d8:0:15:10
+P:0:8d8:10:10:10
 D:それは剣というにはあまりにも大きすぎた。
 D:大きく、分厚く、重く、そして大雑把すぎた。
 D:それはまさに鉄塊だった
 
+N:267:『アラララング』
+E:'Alalarang'
+I:23:20:-2
+W:30:1:50:3500
+P:0:8d4:-10:-10:-15
+F:DEX | HIDE_TYPE | BLOWS | HEAVY_SPELL | AGGRAVATE | IM_COLD
+F:SHOW_MODS | SPEED | CURSED | HEAVY_CURSE | TY_CURSE
+F:RANDOM_CURSE0 | RANDOM_CURSE2 | WARNING
+D:$Ala, ala, ala.
+D:あら～あらあら。

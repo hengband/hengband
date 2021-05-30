@@ -60,7 +60,7 @@ bool project_all_los(player_type *caster_ptr, EFFECT_ID typ, HIT_POINT dam)
     }
 
     BIT_FLAGS flg = PROJECT_JUMP | PROJECT_KILL | PROJECT_HIDE;
-    bool obvious = FALSE;
+    bool obvious = false;
     for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++) {
         monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
         if (m_ptr->mflag.has_not(MFLAG::LOS))
@@ -71,7 +71,7 @@ bool project_all_los(player_type *caster_ptr, EFFECT_ID typ, HIT_POINT dam)
         POSITION x = m_ptr->fx;
 
         if (project(caster_ptr, 0, 0, y, x, dam, typ, flg).notice)
-            obvious = TRUE;
+            obvious = true;
     }
 
     return obvious;
@@ -179,8 +179,8 @@ bool crusade(player_type *caster_ptr) { return (project_all_los(caster_ptr, GF_C
  */
 void aggravate_monsters(player_type *caster_ptr, MONSTER_IDX who)
 {
-    bool sleep = FALSE;
-    bool speed = FALSE;
+    bool sleep = false;
+    bool speed = false;
     for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++) {
         monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr))
@@ -191,7 +191,7 @@ void aggravate_monsters(player_type *caster_ptr, MONSTER_IDX who)
         if (m_ptr->cdis < MAX_SIGHT * 2) {
             if (monster_csleep_remaining(m_ptr)) {
                 (void)set_monster_csleep(caster_ptr, i, 0);
-                sleep = TRUE;
+                sleep = true;
             }
 
             if (!is_pet(m_ptr))
@@ -201,7 +201,7 @@ void aggravate_monsters(player_type *caster_ptr, MONSTER_IDX who)
         if (player_has_los_bold(caster_ptr, m_ptr->fy, m_ptr->fx)) {
             if (!is_pet(m_ptr)) {
                 (void)set_monster_fast(caster_ptr, i, monster_fast_remaining(m_ptr) + 100);
-                speed = TRUE;
+                speed = true;
             }
         }
     }
@@ -369,7 +369,7 @@ bool probing(player_type *caster_ptr)
     Term->scr->cu = 0;
     Term->scr->cv = 1;
 
-    bool probe = FALSE;
+    bool probe = false;
     char buf[256];
     for (int i = 1; i < caster_ptr->current_floor_ptr->m_max; i++) {
         monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
@@ -405,7 +405,7 @@ bool probing(player_type *caster_ptr)
             msg_print(NULL);
         }
 
-        probe = TRUE;
+        probe = true;
     }
 
     Term->scr->cu = cu;

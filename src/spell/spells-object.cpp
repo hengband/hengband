@@ -221,7 +221,7 @@ bool curse_armor(player_type *owner_ptr)
     o_ptr = &owner_ptr->inventory_list[INVEN_BODY];
 
     if (!o_ptr->k_idx)
-        return FALSE;
+        return false;
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(owner_ptr, o_name, o_ptr, OD_OMIT_PREFIX);
@@ -234,7 +234,7 @@ bool curse_armor(player_type *owner_ptr)
 #else
         msg_format("A %s tries to %s, but your %s resists the effects!", "terrible black aura", "surround your armor", o_name);
 #endif
-        return TRUE;
+        return true;
     }
 
     /* not artifact or failed save... */
@@ -261,7 +261,7 @@ bool curse_armor(player_type *owner_ptr)
     o_ptr->ident |= (IDENT_BROKEN);
     owner_ptr->update |= (PU_BONUS | PU_MANA);
     owner_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -276,7 +276,7 @@ bool curse_armor(player_type *owner_ptr)
 bool curse_weapon_object(player_type *owner_ptr, bool force, object_type *o_ptr)
 {
     if (!o_ptr->k_idx)
-        return FALSE;
+        return false;
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(owner_ptr, o_name, o_ptr, OD_OMIT_PREFIX);
@@ -288,7 +288,7 @@ bool curse_weapon_object(player_type *owner_ptr, bool force, object_type *o_ptr)
 #else
         msg_format("A %s tries to %s, but your %s resists the effects!", "terrible black aura", "surround your weapon", o_name);
 #endif
-        return TRUE;
+        return true;
     }
 
     /* not artifact or failed save... */
@@ -316,7 +316,7 @@ bool curse_weapon_object(player_type *owner_ptr, bool force, object_type *o_ptr)
     o_ptr->ident |= (IDENT_BROKEN);
     owner_ptr->update |= (PU_BONUS | PU_MANA);
     owner_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -369,8 +369,8 @@ void brand_bolts(player_type *caster_ptr)
  */
 bool perilous_secrets(player_type *user_ptr)
 {
-    if (!ident_spell(user_ptr, FALSE, TV_NONE))
-        return FALSE;
+    if (!ident_spell(user_ptr, false, TV_NONE))
+        return false;
 
     if (user_ptr->msp > 0) {
         if (20 <= user_ptr->csp)
@@ -398,7 +398,7 @@ bool perilous_secrets(player_type *user_ptr)
     if (one_in_(20))
         take_hit(user_ptr, DAMAGE_LOSELIFE, damroll(4, 10), _("危険な秘密", "perilous secrets"));
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -456,7 +456,7 @@ bool enchant_equipment(player_type *caster_ptr, object_type *o_ptr, int n, int e
 
     /* Try "n" times */
     int chance;
-    bool res = FALSE;
+    bool res = false;
     bool a = object_is_artifact(o_ptr);
     bool force = (eflag & ENCH_FORCE);
     for (int i = 0; i < n; i++) {
@@ -475,7 +475,7 @@ bool enchant_equipment(player_type *caster_ptr, object_type *o_ptr, int n, int e
 
             if (force || ((randint1(1000) > chance) && (!a || (randint0(100) < 50)))) {
                 o_ptr->to_h++;
-                res = TRUE;
+                res = true;
 
                 /* only when you get it above -1 -CFT */
                 if (o_ptr->to_h >= 0)
@@ -494,7 +494,7 @@ bool enchant_equipment(player_type *caster_ptr, object_type *o_ptr, int n, int e
 
             if (force || ((randint1(1000) > chance) && (!a || (randint0(100) < 50)))) {
                 o_ptr->to_d++;
-                res = TRUE;
+                res = true;
 
                 /* only when you get it above -1 -CFT */
                 if (o_ptr->to_d >= 0)
@@ -516,7 +516,7 @@ bool enchant_equipment(player_type *caster_ptr, object_type *o_ptr, int n, int e
 
         if (force || ((randint1(1000) > chance) && (!a || (randint0(100) < 50)))) {
             o_ptr->to_a++;
-            res = TRUE;
+            res = true;
 
             /* only when you get it above -1 -CFT */
             if (o_ptr->to_a >= 0)
@@ -526,14 +526,14 @@ bool enchant_equipment(player_type *caster_ptr, object_type *o_ptr, int n, int e
 
     /* Failure */
     if (!res)
-        return FALSE;
+        return false;
     set_bits(caster_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
     set_bits(caster_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST);
 
     calc_android_exp(caster_ptr);
 
     /* Success */
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -564,7 +564,7 @@ bool enchant_spell(player_type *caster_ptr, HIT_PROB num_hit, HIT_POINT num_dam,
     object_type *o_ptr;
     o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), TV_NONE);
     if (!o_ptr)
-        return FALSE;
+        return false;
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -575,13 +575,13 @@ bool enchant_spell(player_type *caster_ptr, HIT_PROB num_hit, HIT_POINT num_dam,
 #endif
 
     /* Enchant */
-    bool is_enchant_successful = FALSE;
+    bool is_enchant_successful = false;
     if (enchant_equipment(caster_ptr, o_ptr, num_hit, ENCH_TOHIT))
-        is_enchant_successful = TRUE;
+        is_enchant_successful = true;
     if (enchant_equipment(caster_ptr, o_ptr, num_dam, ENCH_TODAM))
-        is_enchant_successful = TRUE;
+        is_enchant_successful = true;
     if (enchant_equipment(caster_ptr, o_ptr, num_ac, ENCH_TOAC))
-        is_enchant_successful = TRUE;
+        is_enchant_successful = true;
 
     if (!is_enchant_successful) {
         if (flush_failure)
@@ -595,7 +595,7 @@ bool enchant_spell(player_type *caster_ptr, HIT_PROB num_hit, HIT_POINT num_dam,
     calc_android_exp(caster_ptr);
 
     /* Something happened */
-    return TRUE;
+    return true;
 }
 
 /*!

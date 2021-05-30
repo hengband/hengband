@@ -97,7 +97,7 @@ static bool select_race(player_type *creature_ptr, char *sym, int *k)
     sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
     int cs = creature_ptr->prace;
     int os = MAX_RACES;
-    while (TRUE) {
+    while (true) {
         display_race_stat(cs, &os, cur, sym);
         if (*k >= 0)
             break;
@@ -110,7 +110,7 @@ static bool select_race(player_type *creature_ptr, char *sym, int *k)
             birth_quit();
 
         if (c == 'S')
-            return FALSE;
+            return false;
 
         if (c == ' ' || c == '\r' || c == '\n') {
             if (cs == MAX_RACES) {
@@ -146,7 +146,7 @@ static bool select_race(player_type *creature_ptr, char *sym, int *k)
         birth_help_option(creature_ptr, c, BK_RACE);
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -163,10 +163,10 @@ bool get_player_race(player_type *creature_ptr)
     enumerate_race_list(sym);
     int k = -1;
     if (!select_race(creature_ptr, sym, &k))
-        return FALSE;
+        return false;
 
     creature_ptr->prace = static_cast<player_race_type>(k);
     rp_ptr = &race_info[creature_ptr->prace];
     c_put_str(TERM_L_BLUE, rp_ptr->title, 4, 15);
-    return TRUE;
+    return true;
 }

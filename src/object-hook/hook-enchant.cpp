@@ -17,58 +17,58 @@ bool object_is_rare(object_type *o_ptr)
     switch (o_ptr->tval) {
     case TV_HAFTED:
         if (o_ptr->sval == SV_MACE_OF_DISRUPTION || o_ptr->sval == SV_WIZSTAFF)
-            return TRUE;
+            return true;
         break;
 
     case TV_POLEARM:
         if (o_ptr->sval == SV_SCYTHE_OF_SLICING || o_ptr->sval == SV_DEATH_SCYTHE)
-            return TRUE;
+            return true;
         break;
 
     case TV_SWORD:
         if (o_ptr->sval == SV_BLADE_OF_CHAOS || o_ptr->sval == SV_DIAMOND_EDGE || o_ptr->sval == SV_POISON_NEEDLE || o_ptr->sval == SV_HAYABUSA)
-            return TRUE;
+            return true;
         break;
 
     case TV_SHIELD:
         if (o_ptr->sval == SV_DRAGON_SHIELD || o_ptr->sval == SV_MIRROR_SHIELD)
-            return TRUE;
+            return true;
         break;
 
     case TV_HELM:
         if (o_ptr->sval == SV_DRAGON_HELM)
-            return TRUE;
+            return true;
         break;
 
     case TV_BOOTS:
         if (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE)
-            return TRUE;
+            return true;
         break;
 
     case TV_CLOAK:
         if (o_ptr->sval == SV_ELVEN_CLOAK || o_ptr->sval == SV_ETHEREAL_CLOAK || o_ptr->sval == SV_SHADOW_CLOAK)
-            return TRUE;
+            return true;
         break;
 
     case TV_GLOVES:
         if (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES)
-            return TRUE;
+            return true;
         break;
 
     case TV_SOFT_ARMOR:
         if (o_ptr->sval == SV_KUROSHOUZOKU || o_ptr->sval == SV_ABUNAI_MIZUGI)
-            return TRUE;
+            return true;
         break;
 
     case TV_DRAG_ARMOR:
-        return TRUE;
+        return true;
 
     default:
         break;
     }
 
     /* Any others are not "rare" objects. */
-    return FALSE;
+    return false;
 }
 
 /*!

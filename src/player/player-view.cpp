@@ -37,12 +37,12 @@ static bool update_view_aux(player_type *subject_ptr, POSITION y, POSITION x, PO
     bool f1 = (cave_los_grid(g1_c_ptr));
     bool f2 = (cave_los_grid(g2_c_ptr));
     if (!f1 && !f2)
-        return TRUE;
+        return true;
 
     bool v1 = (f1 && (g1_c_ptr->info & CAVE_VIEW));
     bool v2 = (f2 && (g2_c_ptr->info & CAVE_VIEW));
     if (!v1 && !v2)
-        return TRUE;
+        return true;
 
     grid_type *g_ptr;
     g_ptr = &floor_ptr->grid_array[y][x];
@@ -75,7 +75,7 @@ static bool update_view_aux(player_type *subject_ptr, POSITION y, POSITION x, PO
         return wall;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*

@@ -70,7 +70,7 @@ bool mon_scatter(player_type *player_ptr, MONRACE_IDX r_idx, POSITION *yp, POSIT
     int num[MON_SCAT_MAXD];
 
     if (max_dist >= MON_SCAT_MAXD)
-        return FALSE;
+        return false;
 
     int i;
     for (i = 0; i < MON_SCAT_MAXD; i++)
@@ -110,12 +110,12 @@ bool mon_scatter(player_type *player_ptr, MONRACE_IDX r_idx, POSITION *yp, POSIT
     while (i < MON_SCAT_MAXD && 0 == num[i])
         i++;
     if (i >= MON_SCAT_MAXD)
-        return FALSE;
+        return false;
 
     *xp = place_x[i];
     *yp = place_y[i];
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -134,19 +134,19 @@ bool multiply_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool clone, BI
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     POSITION y, x;
     if (!mon_scatter(player_ptr, m_ptr->r_idx, &y, &x, m_ptr->fy, m_ptr->fx, 1))
-        return FALSE;
+        return false;
 
     if (m_ptr->mflag2.has(MFLAG2::NOPET))
         mode |= PM_NO_PET;
 
     if (!place_monster_aux(player_ptr, m_idx, y, x, m_ptr->r_idx, (mode | PM_NO_KAGE | PM_MULTIPLY)))
-        return FALSE;
+        return false;
 
     if (clone || m_ptr->mflag2.has(MFLAG2::CLONED)) {
         floor_ptr->m_list[hack_m_idx_ii].mflag2.set({MFLAG2::CLONED, MFLAG2::NOPET});
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -206,7 +206,7 @@ static bool place_monster_group(player_type *player_ptr, MONSTER_IDX who, POSITI
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -221,32 +221,32 @@ static bool place_monster_can_escort(player_type *player_ptr, MONRACE_IDX r_idx)
     monster_race *z_ptr = &r_info[r_idx];
 
     if (mon_hook_dungeon(player_ptr, place_monster_idx) != mon_hook_dungeon(player_ptr, r_idx))
-        return FALSE;
+        return false;
 
     if (z_ptr->d_char != r_ptr->d_char)
-        return FALSE;
+        return false;
 
     if (z_ptr->level > r_ptr->level)
-        return FALSE;
+        return false;
 
     if (z_ptr->flags1 & RF1_UNIQUE)
-        return FALSE;
+        return false;
 
     if (place_monster_idx == r_idx)
-        return FALSE;
+        return false;
 
     if (monster_has_hostile_align(player_ptr, m_ptr, 0, 0, z_ptr))
-        return FALSE;
+        return false;
 
     if (r_ptr->flags7 & RF7_FRIENDLY) {
         if (monster_has_hostile_align(player_ptr, NULL, 1, -1, z_ptr))
-            return FALSE;
+            return false;
     }
 
     if ((r_ptr->flags7 & RF7_CHAMELEON) && !(z_ptr->flags7 & RF7_CHAMELEON))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -267,9 +267,9 @@ bool place_monster_aux(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
         mode |= PM_KAGE;
 
     if (!place_monster_one(player_ptr, who, y, x, r_idx, mode))
-        return FALSE;
+        return false;
     if (!(mode & PM_ALLOW_GROUP))
-        return TRUE;
+        return true;
 
     place_monster_m_idx = hack_m_idx_ii;
 
@@ -290,7 +290,7 @@ bool place_monster_aux(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
     }
 
     if (!(r_ptr->flags1 & (RF1_ESCORT)))
-        return TRUE;
+        return true;
 
     place_monster_idx = r_idx;
     for (int i = 0; i < 32; i++) {
@@ -311,7 +311,7 @@ bool place_monster_aux(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -327,7 +327,7 @@ bool place_monster(player_type *player_ptr, POSITION y, POSITION x, BIT_FLAGS mo
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), get_monster_hook2(player_ptr, y, x));
     MONRACE_IDX r_idx = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->monster_level, 0);
     if (r_idx == 0)
-        return FALSE;
+        return false;
 
     if ((one_in_(5) || (player_ptr->current_floor_ptr->dun_level == 0)) && !(r_info[r_idx].flags1 & RF1_UNIQUE)
         && angband_strchr("hkoptuyAHLOPTUVY", r_info[r_idx].d_char)) {
@@ -355,7 +355,7 @@ bool alloc_horde(player_type *player_ptr, POSITION y, POSITION x, summon_specifi
     while (--attempts) {
         r_idx = get_mon_num(player_ptr, 0, floor_ptr->monster_level, 0);
         if (!r_idx)
-            return FALSE;
+            return false;
 
         r_ptr = &r_info[r_idx];
         if (r_ptr->flags1 & RF1_UNIQUE)
@@ -367,7 +367,7 @@ bool alloc_horde(player_type *player_ptr, POSITION y, POSITION x, summon_specifi
     }
 
     if (attempts < 1)
-        return FALSE;
+        return false;
 
     attempts = 1000;
 
@@ -377,7 +377,7 @@ bool alloc_horde(player_type *player_ptr, POSITION y, POSITION x, summon_specifi
     }
 
     if (attempts < 1)
-        return FALSE;
+        return false;
 
     MONSTER_IDX m_idx = floor_ptr->grid_array[y][x].m_idx;
     if (floor_ptr->m_list[m_idx].mflag2.has(MFLAG2::CHAMELEON))
@@ -394,7 +394,7 @@ bool alloc_horde(player_type *player_ptr, POSITION y, POSITION x, summon_specifi
 
     if (cheat_hear)
         msg_format(_("モンスターの大群(%c)", "Monster horde (%c)."), r_ptr->d_char);
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -428,12 +428,12 @@ bool alloc_guardian(player_type *player_ptr, bool def_val)
         }
 
         if (place_monster_aux(player_ptr, 0, oy, ox, guardian, (PM_ALLOW_GROUP | PM_NO_KAGE | PM_NO_PET)))
-            return TRUE;
+            return true;
 
         try_count--;
     }
 
-    return FALSE;
+    return false;
 }
 
 /*!
@@ -448,8 +448,8 @@ bool alloc_guardian(player_type *player_ptr, bool def_val)
  */
 bool alloc_monster(player_type *player_ptr, POSITION dis, BIT_FLAGS mode, summon_specific_pf summon_specific)
 {
-    if (alloc_guardian(player_ptr, FALSE))
-        return TRUE;
+    if (alloc_guardian(player_ptr, false))
+        return true;
 
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     POSITION y = 0, x = 0;
@@ -475,17 +475,17 @@ bool alloc_monster(player_type *player_ptr, POSITION dis, BIT_FLAGS mode, summon
             msg_print(_("警告！新たなモンスターを配置できません。小さい階ですか？", "Warning! Could not allocate a new monster. Small level?"));
         }
 
-        return FALSE;
+        return false;
     }
 
     if (randint1(5000) <= floor_ptr->dun_level) {
         if (alloc_horde(player_ptr, y, x, summon_specific)) {
-            return TRUE;
+            return true;
         }
     } else {
         if (place_monster(player_ptr, y, x, (mode | PM_ALLOW_GROUP)))
-            return TRUE;
+            return true;
     }
 
-    return FALSE;
+    return false;
 }

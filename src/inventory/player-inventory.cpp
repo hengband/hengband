@@ -48,7 +48,7 @@ bool can_get_item(player_type *owner_ptr, tval_type tval)
 {
     for (int j = 0; j < INVEN_TOTAL; j++)
         if (item_tester_okay(owner_ptr, &owner_ptr->inventory_list[j], tval))
-            return TRUE;
+            return true;
 
     OBJECT_IDX floor_list[23];
     ITEM_NUMBER floor_num = scan_floor_items(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, tval);
@@ -69,10 +69,10 @@ static bool py_pickup_floor_aux(player_type *owner_ptr)
     if (choose_object(owner_ptr, &item, q, s, (USE_FLOOR), TV_NONE))
         this_o_idx = 0 - item;
     else
-        return FALSE;
+        return false;
 
     describe_pickup_item(owner_ptr, this_o_idx);
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -93,7 +93,7 @@ void py_pickup_floor(player_type *owner_ptr, bool pickup)
         const OBJECT_IDX this_o_idx = *it++;
         o_ptr = &owner_ptr->current_floor_ptr->o_list[this_o_idx];
         describe_flavor(owner_ptr, o_name, o_ptr, 0);
-        disturb(owner_ptr, FALSE, FALSE);
+        disturb(owner_ptr, false, false);
         if (o_ptr->tval == TV_GOLD) {
             msg_format(_(" $%ld の価値がある%sを見つけた。", "You have found %ld gold pieces worth of %s."), (long)o_ptr->pval, o_name);
             sound(SOUND_SELL);
@@ -256,7 +256,7 @@ void carry(player_type *creature_ptr, bool pickup)
         o_ptr = &creature_ptr->current_floor_ptr->o_list[this_o_idx];
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(creature_ptr, o_name, o_ptr, 0);
-        disturb(creature_ptr, FALSE, FALSE);
+        disturb(creature_ptr, false, false);
         if (o_ptr->tval == TV_GOLD) {
             int value = (long)o_ptr->pval;
             delete_object_idx(creature_ptr, this_o_idx);
@@ -283,7 +283,7 @@ void carry(player_type *creature_ptr, bool pickup)
             continue;
         }
 
-        int is_pickup_successful = TRUE;
+        int is_pickup_successful = true;
         if (carry_query_flag) {
             char out_val[MAX_NLEN + 20];
             sprintf(out_val, _("%sを拾いますか? ", "Pick up %s? "), o_name);

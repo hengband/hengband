@@ -105,14 +105,14 @@ bool enter_wizard_mode(player_type *player_ptr)
     if (!current_world_ptr->noscore) {
         if (!allow_debug_opts || arg_wizard) {
             msg_print(_("ウィザードモードは許可されていません。 ", "Wizard mode is not permitted."));
-            return FALSE;
+            return false;
         }
 
         msg_print(_("ウィザードモードはデバッグと実験のためのモードです。 ", "Wizard mode is for debugging and experimenting."));
         msg_print(_("一度ウィザードモードに入るとスコアは記録されません。", "The game will not be scored if you enter wizard mode."));
         msg_print(NULL);
         if (!get_check(_("本当にウィザードモードに入りたいのですか? ", "Are you sure you want to enter wizard mode? "))) {
-            return FALSE;
+            return false;
         }
 
         exe_write_diary(
@@ -120,7 +120,7 @@ bool enter_wizard_mode(player_type *player_ptr)
         current_world_ptr->noscore |= 0x0002;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -134,14 +134,14 @@ static bool enter_debug_mode(player_type *player_ptr)
     if (!current_world_ptr->noscore) {
         if (!allow_debug_opts) {
             msg_print(_("デバッグコマンドは許可されていません。 ", "Use of debug command is not permitted."));
-            return FALSE;
+            return false;
         }
 
         msg_print(_("デバッグ・コマンドはデバッグと実験のためのコマンドです。 ", "The debug commands are for debugging and experimenting."));
         msg_print(_("デバッグ・コマンドを使うとスコアは記録されません。", "The game will not be scored if you use debug commands."));
         msg_print(NULL);
         if (!get_check(_("本当にデバッグ・コマンドを使いますか? ", "Are you sure you want to use debug commands? "))) {
-            return FALSE;
+            return false;
         }
 
         exe_write_diary(
@@ -149,7 +149,7 @@ static bool enter_debug_mode(player_type *player_ptr)
         current_world_ptr->noscore |= 0x0008;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*!
@@ -163,7 +163,7 @@ void process_command(player_type *creature_ptr)
     repeat_check();
     now_message = 0;
     if ((creature_ptr->pclass == CLASS_SNIPER) && (creature_ptr->concent))
-        creature_ptr->reset_concent = TRUE;
+        creature_ptr->reset_concent = true;
 
     floor_type *floor_ptr = creature_ptr->current_floor_ptr;
     switch (command_cmd) {
@@ -176,10 +176,10 @@ void process_command(player_type *creature_ptr)
     }
     case KTRL('W'): {
         if (current_world_ptr->wizard) {
-            current_world_ptr->wizard = FALSE;
+            current_world_ptr->wizard = false;
             msg_print(_("ウィザードモード解除。", "Wizard mode off."));
         } else if (enter_wizard_mode(creature_ptr)) {
-            current_world_ptr->wizard = TRUE;
+            current_world_ptr->wizard = true;
             msg_print(_("ウィザードモード突入。", "Wizard mode on."));
         }
 
@@ -246,11 +246,11 @@ void process_command(player_type *creature_ptr)
         break;
     }
     case ';': {
-        do_cmd_walk(creature_ptr, FALSE);
+        do_cmd_walk(creature_ptr, false);
         break;
     }
     case '-': {
-        do_cmd_walk(creature_ptr, TRUE);
+        do_cmd_walk(creature_ptr, true);
         break;
     }
     case '.': {
@@ -310,7 +310,7 @@ void process_command(player_type *creature_ptr)
                 break;
             }
 
-            change_wild_mode(creature_ptr, FALSE);
+            change_wild_mode(creature_ptr, false);
         } else
             do_cmd_go_up(creature_ptr);
 
@@ -318,7 +318,7 @@ void process_command(player_type *creature_ptr)
     }
     case '>': {
         if (creature_ptr->wild_mode)
-            change_wild_mode(creature_ptr, FALSE);
+            change_wild_mode(creature_ptr, false);
         else
             do_cmd_go_down(creature_ptr);
 
@@ -363,9 +363,9 @@ void process_command(player_type *creature_ptr)
         else if (creature_ptr->pclass == CLASS_ELEMENTALIST)
             do_cmd_element_browse(creature_ptr);
         else if (creature_ptr->pclass == CLASS_SMITH)
-            do_cmd_kaji(creature_ptr, TRUE);
+            do_cmd_kaji(creature_ptr, true);
         else if (creature_ptr->pclass == CLASS_MAGIC_EATER)
-            do_cmd_magic_eater(creature_ptr, TRUE, FALSE);
+            do_cmd_magic_eater(creature_ptr, true, false);
         else if (creature_ptr->pclass == CLASS_SNIPER)
             do_cmd_snipe_browse(creature_ptr);
         else
@@ -434,15 +434,15 @@ void process_command(player_type *creature_ptr)
         else if (creature_ptr->pclass == CLASS_ELEMENTALIST)
             do_cmd_element(creature_ptr);
         else if (creature_ptr->pclass == CLASS_IMITATOR)
-            do_cmd_mane(creature_ptr, FALSE);
+            do_cmd_mane(creature_ptr, false);
         else if (creature_ptr->pclass == CLASS_MAGIC_EATER)
-            do_cmd_magic_eater(creature_ptr, FALSE, FALSE);
+            do_cmd_magic_eater(creature_ptr, false, false);
         else if (creature_ptr->pclass == CLASS_SAMURAI)
             do_cmd_hissatsu(creature_ptr);
         else if (creature_ptr->pclass == CLASS_BLUE_MAGE)
             do_cmd_cast_learned(creature_ptr);
         else if (creature_ptr->pclass == CLASS_SMITH)
-            do_cmd_kaji(creature_ptr, FALSE);
+            do_cmd_kaji(creature_ptr, false);
         else if (creature_ptr->pclass == CLASS_SNIPER)
             do_cmd_snipe(creature_ptr);
         else
@@ -479,7 +479,7 @@ void process_command(player_type *creature_ptr)
         break;
     }
     case 'v': {
-        do_cmd_throw(creature_ptr, 1, FALSE, -1);
+        do_cmd_throw(creature_ptr, 1, false, -1);
         break;
     }
     case 'a': {
@@ -609,7 +609,7 @@ void process_command(player_type *creature_ptr)
         break;
     }
     case KTRL('S'): {
-        do_cmd_save_game(creature_ptr, FALSE);
+        do_cmd_save_game(creature_ptr, false);
         break;
     }
     case KTRL('T'): {

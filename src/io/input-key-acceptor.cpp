@@ -33,14 +33,14 @@ static char inkey_macro_trigger_string[1024];
  *
  * Do not match any macros until "ascii 30" is found.
  */
-static bool parse_macro = FALSE;
+static bool parse_macro = false;
 
 /*
  * Local variable -- we are inside a "macro trigger"
  *
  * Strip all keypresses until a low ascii value is found.
  */
-static bool parse_under = FALSE;
+static bool parse_under = false;
 
 /*!
  * @brief 全てのウィンドウの再描画を行う
@@ -65,9 +65,9 @@ static void forget_macro_action(void)
     if (!parse_macro)
         return;
 
-    while (TRUE) {
+    while (true) {
         char ch;
-        if (term_inkey(&ch, FALSE, TRUE))
+        if (term_inkey(&ch, false, true))
             break;
         if (ch == 0)
             break;
@@ -75,7 +75,7 @@ static void forget_macro_action(void)
             break;
     }
 
-    parse_macro = FALSE;
+    parse_macro = false;
 }
 
 /*
@@ -104,15 +104,15 @@ static char inkey_aux(void)
     num_more = 0;
 
     if (parse_macro) {
-        if (term_inkey(&ch, FALSE, TRUE)) {
-            parse_macro = FALSE;
+        if (term_inkey(&ch, false, true)) {
+            parse_macro = false;
         }
     } else {
-        (void)(term_inkey(&ch, TRUE, TRUE));
+        (void)(term_inkey(&ch, true, true));
     }
 
     if (ch == 30)
-        parse_macro = FALSE;
+        parse_macro = false;
 
     if (ch == 30)
         return (ch);
@@ -127,13 +127,13 @@ static char inkey_aux(void)
     if (k < 0)
         return (ch);
 
-    while (TRUE) {
+    while (true) {
         k = macro_find_maybe(buf);
 
         if (k < 0)
             break;
 
-        if (0 == term_inkey(&ch, FALSE, TRUE)) {
+        if (0 == term_inkey(&ch, false, true)) {
             buf[p++] = ch;
             buf[p] = '\0';
             w = 0;
@@ -153,7 +153,7 @@ static char inkey_aux(void)
                 return 0;
         }
 
-        (void)term_inkey(&ch, TRUE, TRUE);
+        (void)term_inkey(&ch, true, true);
         return (ch);
     }
 
@@ -164,7 +164,7 @@ static char inkey_aux(void)
             return 0;
     }
 
-    parse_macro = TRUE;
+    parse_macro = true;
     if (term_key_push(30))
         return 0;
 
@@ -187,19 +187,19 @@ static char inkey_aux(void)
 char inkey(bool do_all_term_refresh)
 {
     char ch = 0;
-    bool done = FALSE;
+    bool done = false;
     term_type *old = Term;
 
     if (inkey_next && *inkey_next && !inkey_xtra) {
         ch = *inkey_next++;
-        inkey_base = inkey_xtra = inkey_flag = inkey_scan = FALSE;
+        inkey_base = inkey_xtra = inkey_flag = inkey_scan = false;
         return (ch);
     }
 
     inkey_next = NULL;
     if (inkey_xtra) {
-        parse_macro = FALSE;
-        parse_under = FALSE;
+        parse_macro = false;
+        parse_under = false;
         term_flush();
     }
 
@@ -216,34 +216,34 @@ char inkey(bool do_all_term_refresh)
     auto x = angband_term[0]->scr->cx;
     char kk;
     while (!ch) {
-        if (!inkey_base && inkey_scan && (0 != term_inkey(&kk, FALSE, FALSE))) {
+        if (!inkey_base && inkey_scan && (0 != term_inkey(&kk, false, false))) {
             break;
         }
 
-        if (!done && (0 != term_inkey(&kk, FALSE, FALSE))) {
+        if (!done && (0 != term_inkey(&kk, false, false))) {
             start_term_fresh();
             if (do_all_term_refresh)
                 all_term_fresh(x, y);
             else
                 term_fresh();
-            current_world_ptr->character_saved = FALSE;
+            current_world_ptr->character_saved = false;
 
             signal_count = 0;
-            done = TRUE;
+            done = true;
         }
 
         if (inkey_base) {
             int w = 0;
             if (!inkey_scan) {
-                if (0 == term_inkey(&ch, TRUE, TRUE)) {
+                if (0 == term_inkey(&ch, true, true)) {
                     break;
                 }
 
                 break;
             }
 
-            while (TRUE) {
-                if (0 == term_inkey(&ch, FALSE, TRUE)) {
+            while (true) {
+                if (0 == term_inkey(&ch, false, true)) {
                     break;
                 } else {
                     w += 10;
@@ -265,14 +265,14 @@ char inkey(bool do_all_term_refresh)
 
         if (parse_under && (ch <= 32)) {
             ch = 0;
-            parse_under = FALSE;
+            parse_under = false;
         }
 
         if (ch == 30) {
             ch = 0;
         } else if (ch == 31) {
             ch = 0;
-            parse_under = TRUE;
+            parse_under = true;
         } else if (parse_under) {
             ch = 0;
         }
@@ -280,7 +280,7 @@ char inkey(bool do_all_term_refresh)
 
     term_activate(old);
     term_set_cursor(v);
-    inkey_base = inkey_xtra = inkey_flag = inkey_scan = FALSE;
+    inkey_base = inkey_xtra = inkey_flag = inkey_scan = false;
     return (ch);
 }
 
@@ -307,31 +307,31 @@ int inkey_special(bool numpad_cursor)
         concptr keyname;
         int keycode;
     } special_key_list[] = {
-        { FALSE, "Down]", SKEY_DOWN },
-        { FALSE, "Left]", SKEY_LEFT },
-        { FALSE, "Right]", SKEY_RIGHT },
-        { FALSE, "Up]", SKEY_UP },
-        { FALSE, "Page_Up]", SKEY_PGUP },
-        { FALSE, "Page_Down]", SKEY_PGDOWN },
-        { FALSE, "Home]", SKEY_TOP },
-        { FALSE, "End]", SKEY_BOTTOM },
-        { TRUE, "KP_Down]", SKEY_DOWN },
-        { TRUE, "KP_Left]", SKEY_LEFT },
-        { TRUE, "KP_Right]", SKEY_RIGHT },
-        { TRUE, "KP_Up]", SKEY_UP },
-        { TRUE, "KP_Page_Up]", SKEY_PGUP },
-        { TRUE, "KP_Page_Down]", SKEY_PGDOWN },
-        { TRUE, "KP_Home]", SKEY_TOP },
-        { TRUE, "KP_End]", SKEY_BOTTOM },
-        { TRUE, "KP_2]", SKEY_DOWN },
-        { TRUE, "KP_4]", SKEY_LEFT },
-        { TRUE, "KP_6]", SKEY_RIGHT },
-        { TRUE, "KP_8]", SKEY_UP },
-        { TRUE, "KP_9]", SKEY_PGUP },
-        { TRUE, "KP_3]", SKEY_PGDOWN },
-        { TRUE, "KP_7]", SKEY_TOP },
-        { TRUE, "KP_1]", SKEY_BOTTOM },
-        { FALSE, NULL, 0 },
+        { false, "Down]", SKEY_DOWN },
+        { false, "Left]", SKEY_LEFT },
+        { false, "Right]", SKEY_RIGHT },
+        { false, "Up]", SKEY_UP },
+        { false, "Page_Up]", SKEY_PGUP },
+        { false, "Page_Down]", SKEY_PGDOWN },
+        { false, "Home]", SKEY_TOP },
+        { false, "End]", SKEY_BOTTOM },
+        { true, "KP_Down]", SKEY_DOWN },
+        { true, "KP_Left]", SKEY_LEFT },
+        { true, "KP_Right]", SKEY_RIGHT },
+        { true, "KP_Up]", SKEY_UP },
+        { true, "KP_Page_Up]", SKEY_PGUP },
+        { true, "KP_Page_Down]", SKEY_PGDOWN },
+        { true, "KP_Home]", SKEY_TOP },
+        { true, "KP_End]", SKEY_BOTTOM },
+        { true, "KP_2]", SKEY_DOWN },
+        { true, "KP_4]", SKEY_LEFT },
+        { true, "KP_6]", SKEY_RIGHT },
+        { true, "KP_8]", SKEY_UP },
+        { true, "KP_9]", SKEY_PGUP },
+        { true, "KP_3]", SKEY_PGDOWN },
+        { true, "KP_7]", SKEY_TOP },
+        { true, "KP_1]", SKEY_BOTTOM },
+        { false, NULL, 0 },
     };
 
     static const struct {
@@ -376,7 +376,7 @@ int inkey_special(bool numpad_cursor)
     ascii_to_text(buf, inkey_macro_trigger_string);
     if (prefix(str, "\\[")) {
         str += 2;
-        while (TRUE) {
+        while (true) {
             for (i = 0; modifier_key_list[i].keyname; i++) {
                 if (prefix(str, modifier_key_list[i].keyname)) {
                     str += strlen(modifier_key_list[i].keyname);
@@ -389,7 +389,7 @@ int inkey_special(bool numpad_cursor)
         }
 
         if (!numpad_as_cursorkey)
-            numpad_cursor = FALSE;
+            numpad_cursor = false;
 
         for (i = 0; special_key_list[i].keyname; i++) {
             if ((!special_key_list[i].numpad || numpad_cursor) && streq(str, special_key_list[i].keyname)) {
@@ -425,7 +425,7 @@ void stop_term_fresh(void)
 {
     for (int j = 0; j < 8; j++) {
         if (angband_term[j])
-            angband_term[j]->never_fresh = TRUE;
+            angband_term[j]->never_fresh = true;
     }
 }
 
@@ -436,7 +436,7 @@ void start_term_fresh(void)
 {
     for (int j = 0; j < 8; j++) {
         if (angband_term[j])
-            angband_term[j]->never_fresh = FALSE;
+            angband_term[j]->never_fresh = false;
     }
 }
 
