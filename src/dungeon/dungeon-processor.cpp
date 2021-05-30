@@ -188,7 +188,7 @@ void process_dungeon(player_type *player_ptr, bool load_game)
         if (!player_ptr->playing || player_ptr->is_dead)
             break;
 
-        process_world(player_ptr);
+        WorldTurnProcessor(player_ptr).process_world();
         handle_stuff(player_ptr);
 
         move_cursor_relative(player_ptr->y, player_ptr->x);
