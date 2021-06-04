@@ -371,9 +371,7 @@ static void update_bonuses(player_type *creature_ptr)
     o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
     if (o_ptr->k_idx) {
         creature_ptr->tval_ammo = (byte)bow_tval_ammo(o_ptr);
-        if (o_ptr->k_idx && !is_heavy_shoot(creature_ptr, &creature_ptr->inventory_list[INVEN_BOW])) {
-            creature_ptr->num_fire = calc_num_fire(creature_ptr, o_ptr);
-        }
+        creature_ptr->num_fire = calc_num_fire(creature_ptr, o_ptr);
     }
 
     for (int i = 0; i < 2; i++) {
@@ -1010,11 +1008,14 @@ s16b calc_num_fire(player_type *creature_ptr, object_type *o_ptr)
         extra_shots++;
 
     int num = 0;
-    if (o_ptr->k_idx == 0 || is_heavy_shoot(creature_ptr, o_ptr))
+    if (o_ptr->k_idx == 0)
         return (s16b)num;
 
     num = 100;
     num += (extra_shots * 100);
+
+    if (is_heavy_shoot(creature_ptr, o_ptr))
+        return (s16b)num;
 
     tval_type tval_ammo = static_cast<tval_type>(bow_tval_ammo(o_ptr));
     if ((creature_ptr->pclass == CLASS_RANGER) && (tval_ammo == TV_ARROW)) {
