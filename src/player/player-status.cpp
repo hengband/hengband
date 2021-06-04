@@ -1459,7 +1459,7 @@ static s16b calc_num_blow(player_type *creature_ptr, int i)
             str_index = (adj_str_blow[creature_ptr->stat_index[A_STR]] * mul / div);
 
             if (has_two_handed_weapons(creature_ptr) && !has_disable_two_handed_bonus(creature_ptr, 0))
-                str_index++;
+                str_index += (creature_ptr->pclass == CLASS_WARRIOR || creature_ptr->pclass == CLASS_BERSERKER) ? (creature_ptr->lev / 23 + 1) : 1;
             if (creature_ptr->pclass == CLASS_NINJA)
                 str_index = MAX(0, str_index - 1);
             if (str_index > 11)
