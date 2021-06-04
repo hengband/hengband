@@ -2015,7 +2015,7 @@ bool has_disable_two_handed_bonus(player_type *creature_ptr, int i)
 {
     if (has_melee_weapon(creature_ptr, INVEN_MAIN_HAND + i) && has_two_handed_weapons(creature_ptr)) {
         object_type *o_ptr = &creature_ptr->inventory_list[INVEN_MAIN_HAND + i];
-        int limit = calc_weapon_weight_limit(creature_ptr) * 2;
+        int limit = calc_weapon_weight_limit(creature_ptr);
 
         /* Enable when two hand wields an enough light weapon */
         if (limit >= o_ptr->weight / 5)
