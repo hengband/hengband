@@ -237,8 +237,7 @@ static void delayed_visual_update(player_type *player_ptr)
  */
 static bool is_heavy_shoot(player_type *creature_ptr, object_type *o_ptr)
 {
-    int hold = adj_str_hold[creature_ptr->stat_index[A_STR]];
-    return (hold < o_ptr->weight / 10);
+    return (calc_bow_weight_limit(creature_ptr) < o_ptr->weight / 10);
 }
 
 /*!
@@ -372,9 +371,7 @@ static void update_bonuses(player_type *creature_ptr)
     o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
     if (o_ptr->k_idx) {
         creature_ptr->tval_ammo = (byte)bow_tval_ammo(o_ptr);
-        if (o_ptr->k_idx && !is_heavy_shoot(creature_ptr, &creature_ptr->inventory_list[INVEN_BOW])) {
-            creature_ptr->num_fire = calc_num_fire(creature_ptr, o_ptr);
-        }
+        creature_ptr->num_fire = calc_num_fire(creature_ptr, o_ptr);
     }
 
     for (int i = 0; i < 2; i++) {
@@ -1011,11 +1008,14 @@ s16b calc_num_fire(player_type *creature_ptr, object_type *o_ptr)
         extra_shots++;
 
     int num = 0;
-    if (o_ptr->k_idx == 0 || is_heavy_shoot(creature_ptr, o_ptr))
+    if (o_ptr->k_idx == 0)
         return (s16b)num;
 
     num = 100;
     num += (extra_shots * 100);
+
+    if (is_heavy_shoot(creature_ptr, o_ptr))
+        return (s16b)num;
 
     tval_type tval_ammo = static_cast<tval_type>(bow_tval_ammo(o_ptr));
     if ((creature_ptr->pclass == CLASS_RANGER) && (tval_ammo == TV_ARROW)) {
@@ -1459,7 +1459,7 @@ static s16b calc_num_blow(player_type *creature_ptr, int i)
             str_index = (adj_str_blow[creature_ptr->stat_index[A_STR]] * mul / div);
 
             if (has_two_handed_weapons(creature_ptr) && !has_disable_two_handed_bonus(creature_ptr, 0))
-                str_index++;
+                str_index += (creature_ptr->pclass == CLASS_WARRIOR || creature_ptr->pclass == CLASS_BERSERKER) ? (creature_ptr->lev / 23 + 1) : 1;
             if (creature_ptr->pclass == CLASS_NINJA)
                 str_index = MAX(0, str_index - 1);
             if (str_index > 11)
@@ -2378,7 +2378,7 @@ static s16b calc_to_hit_bow(player_type *creature_ptr, bool is_real_value)
     object_type *o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
 
     if (is_heavy_shoot(creature_ptr, o_ptr)) {
-        pow += 2 * (calc_weapon_weight_limit(creature_ptr) - o_ptr->weight / 10);
+        pow += 2 * (calc_bow_weight_limit(creature_ptr) - o_ptr->weight / 10);
     }
 
     if (o_ptr->k_idx) {
@@ -3026,12 +3026,19 @@ bool is_echizen(player_type *creature_ptr)
     return (creature_ptr->pseikaku == PERSONALITY_COMBAT) || (creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON);
 }
 
-int calc_weapon_weight_limit(player_type *creature_ptr)
+WEIGHT calc_weapon_weight_limit(player_type *creature_ptr)
 {
-    int weight = adj_str_hold[creature_ptr->stat_index[A_STR]];
+    WEIGHT weight = adj_str_hold[creature_ptr->stat_index[A_STR]];
 
     if (has_two_handed_weapons(creature_ptr))
         weight *= 2;
+
+    return weight;
+}
+
+WEIGHT calc_bow_weight_limit(player_type *creature_ptr)
+{
+    WEIGHT weight = adj_str_hold[creature_ptr->stat_index[A_STR]];
 
     return weight;
 }
