@@ -99,11 +99,11 @@
 #include "io/record-play-movie.h"
 #include "io/signal-handlers.h"
 #include "io/write-diary.h"
+#include "main-win/audio-win.h"
 #include "main-win/commandline-win.h"
 #include "main-win/graphics-win.h"
 #include "main-win/main-win-bg.h"
 #include "main-win/main-win-file-utils.h"
-#include "main-win/main-win-mci.h"
 #include "main-win/main-win-menuitem.h"
 #include "main-win/main-win-music.h"
 #include "main-win/main-win-sound.h"
@@ -529,6 +529,7 @@ static void init_music(void)
     static bool can_use_music = false;
 
     if (!can_use_music) {
+        init_audio();
         main_win_music::load_music_prefs();
         can_use_music = true;
     }
@@ -543,6 +544,7 @@ static void init_sound(void)
     static bool can_use_sound = false;
 
     if (!can_use_sound) {
+        init_audio();
         load_sound_prefs();
         can_use_sound = true;
     }
@@ -2161,7 +2163,11 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         break;
     }
     case WM_CREATE: {
-        setup_mci(hWnd);
+        setup_audio(hWnd);
+        return 0;
+    }
+    case WM_REPEAT_MUSIC: {
+        repeat_music();
         return 0;
     }
     case WM_ERASEBKGND: {
@@ -2177,11 +2183,6 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
             }
         EndPaint(hWnd, &ps);
         ValidateRect(hWnd, NULL);
-        return 0;
-    }
-    case MM_MCINOTIFY: {
-        main_win_music::on_mci_notify(wParam, lParam);
-
         return 0;
     }
     case WM_SYSKEYDOWN:
@@ -2497,11 +2498,13 @@ static void hook_quit(concptr str)
     DeleteObject(hbrYellow);
     finalize_bg();
     graphic.finalize();
+    finalize_audio();
 
     UnregisterClassW(AppName, hInstance);
     if (hIcon)
         DestroyIcon(hIcon);
 
+    ::CoUninitialize();
     exit(0);
 }
 
@@ -2643,6 +2646,7 @@ static void register_wndclass(void)
 int WINAPI WinMain(
     _In_ HINSTANCE hInst, [[maybe_unused]] _In_opt_ HINSTANCE hPrevInst, [[maybe_unused]] _In_ LPSTR lpCmdLine, [[maybe_unused]] _In_ int nCmdShow)
 {
+    ::CoInitializeEx(nullptr, COINIT_MULTITHREADED);
     setlocale(LC_ALL, "ja_JP");
     hInstance = hInst;
     if (is_already_running()) {

@@ -3,12 +3,13 @@
  * @brief Windows版固有実装(効果音)
  */
 
+#include "main-win/audio-win.h"
 #include "main-win/main-win-sound.h"
 #include "main-win/main-win-cfg-reader.h"
 #include "main-win/main-win-define.h"
 #include "main-win/main-win-file-utils.h"
-#include "main-win/main-win-mmsystem.h"
 #include "main-win/main-win-utils.h"
+#include "main-win/wav-reader.h"
 #include "util/angband-files.h"
 
 #include "main/sound-definitions-table.h"
@@ -22,6 +23,23 @@ concptr ANGBAND_DIR_XTRA_SOUND;
  * "sound.cfg" data
  */
 CfgData *sound_cfg_data;
+
+static bool play_sound_impl(char *filename)
+{
+    if (!can_audio())
+        return false;
+
+    wav_reader reader;
+    if (!reader.open(filename))
+        return false;
+    auto wf = reader.get_waveformat();
+
+    auto data_buffer = reader.read_data();
+    if (data_buffer == nullptr)
+        return false;
+
+    return add_sound_queue(wf, data_buffer, reader.get_data_chunk()->cksize);
+}
 
 /*!
  * @brief action-valに対応する[Sound]セクションのキー名を取得する
@@ -68,8 +86,9 @@ errr play_sound(int val)
     char buf[MAIN_WIN_MAX_PATH];
     path_build(buf, MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_SOUND, filename);
 
-    if (::PlaySoundW(to_wchar(buf).wc_str(), 0, SND_FILENAME | SND_ASYNC)) {
+    if (play_sound_impl(buf)) {
         return 0;
     }
+
     return -1;
 }

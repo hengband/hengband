@@ -18,5 +18,4 @@ errr play_music(int type, int val);
 errr play_music_scene(int val);
 void pause_music(void);
 void resume_music(void);
-void on_mci_notify(WPARAM wFlags, LONG lDevID);
 }

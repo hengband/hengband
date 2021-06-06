@@ -2207,9 +2207,6 @@
     <ClCompile Include="..\..\src\main-win\main-win-sound.cpp">
       <Filter>main-win</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\main-win\main-win-mci.cpp">
-      <Filter>main-win</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\main-win\main-win-tokenizer.cpp">
       <Filter>main-win</Filter>
     </ClCompile>
@@ -2290,6 +2287,12 @@
       <Filter>object</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\main-win\main-win-term.cpp">
+      <Filter>main-win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\main-win\wav-reader.cpp">
+      <Filter>main-win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\main-win\audio-win.cpp">
       <Filter>main-win</Filter>
     </ClCompile>
   </ItemGroup>
@@ -4823,13 +4826,7 @@
     <ClInclude Include="..\..\src\main-win\main-win-sound.h">
       <Filter>main-win</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\main-win\main-win-mmsystem.h">
-      <Filter>main-win</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\main-win\main-win-define.h">
-      <Filter>main-win</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\main-win\main-win-mci.h">
       <Filter>main-win</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\main-win\main-win-tokenizer.h">
@@ -4927,6 +4924,12 @@
       <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\main-win\main-win-term.h">
+      <Filter>main-win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main-win\wav-reader.h">
+      <Filter>main-win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main-win\audio-win.h">
       <Filter>main-win</Filter>
     </ClInclude>
   </ItemGroup>
