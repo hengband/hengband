@@ -146,8 +146,8 @@ errr parse_d_info(std::string_view buf, angband_header *head)
         info_set_value(d_ptr->max_m_alloc_chance, tokens[6]);
         info_set_value(d_ptr->obj_good, tokens[7]);
         info_set_value(d_ptr->obj_great, tokens[8]);
-        info_set_value(d_ptr->pit, tokens[9]);
-        info_set_value(d_ptr->nest, tokens[10]);
+        info_set_value(d_ptr->pit, tokens[9], 16);
+        info_set_value(d_ptr->nest, tokens[10], 16);
     } else if (tokens[0] == "P") {
         // P:wild_y:wild_x
         if (tokens.size() < 3)
