@@ -7,11 +7,15 @@
 #include "main-win/main-win-cfg-reader.h"
 #include "main-win/main-win-define.h"
 #include "main-win/main-win-file-utils.h"
-#include "main-win/main-win-mmsystem.h"
 #include "main-win/main-win-utils.h"
+#include "main-win/wav-reader.h"
 #include "util/angband-files.h"
 
 #include "main/sound-definitions-table.h"
+
+#include <memory>
+
+#include <mmsystem.h>
 
 /*
  * Directory name
@@ -22,6 +26,103 @@ concptr ANGBAND_DIR_XTRA_SOUND;
  * "sound.cfg" data
  */
 CfgData *sound_cfg_data;
+
+/*!
+ * 効果音データ
+ */
+struct sound_res {
+    sound_res(BYTE* _buf)
+    {
+        buf.reset(_buf);
+    }
+    ~sound_res()
+    {
+        dispose();
+    }
+
+    HWAVEOUT hwo = NULL;
+    /*!
+     * PCMデータバッファ
+     */
+    std::unique_ptr<BYTE[]> buf;
+    WAVEHDR wh = { 0 };
+
+    void dispose()
+    {
+        if (hwo != NULL) {
+            ::waveOutReset(hwo);
+            ::waveOutUnprepareHeader(hwo, &wh, sizeof(WAVEHDR));
+            ::waveOutClose(hwo);
+            hwo = NULL;
+            wh.lpData = nullptr;
+        }
+    }
+};
+/*!
+ * 効果音リソースの管理キュー
+ */
+std::queue<sound_res *> sound_queue;
+
+/*!
+ * 効果音の再生と管理キューへの追加.
+ * 
+ * @param wf WAVEFORMATEXへのポインタ
+ * @param buf PCMデータバッファ
+ * @param bufsize バッファサイズ
+ * @retval true 正常に処理された
+ * @retval false 処理エラー
+ */
+static bool add_sound_queue(const WAVEFORMATEX *wf, BYTE *buf, DWORD bufsize)
+{
+    while (!sound_queue.empty()) {
+        auto res = sound_queue.front();
+        if (res->hwo == NULL || (res->wh.dwFlags & WHDR_DONE)) {
+            delete res;
+            sound_queue.pop();
+            continue;
+        }
+        break;
+    }
+
+    auto res = new sound_res(buf);
+    sound_queue.push(res);
+
+    MMRESULT mr = ::waveOutOpen(&res->hwo, WAVE_MAPPER, wf, NULL, NULL, CALLBACK_NULL);
+    if (mr != MMSYSERR_NOERROR) {
+        return false;
+    }
+
+    WAVEHDR *wh = &res->wh;
+    wh->lpData = (LPSTR)buf;
+    wh->dwBufferLength = bufsize;
+    wh->dwFlags = 0;
+
+    ::waveOutPrepareHeader(res->hwo, wh, sizeof(WAVEHDR));
+    ::waveOutWrite(res->hwo, wh, sizeof(WAVEHDR));
+
+    return true;
+}
+
+/*!
+ * 指定ファイルを再生する
+ * 
+ * @param buf ファイル名
+ * @retval true 正常に処理された
+ * @retval false 処理エラー
+ */
+static bool play_sound_impl(char *filename)
+{
+    wav_reader reader;
+    if (!reader.open(filename))
+        return false;
+    auto wf = reader.get_waveformat();
+
+    auto data_buffer = reader.read_data();
+    if (data_buffer == nullptr)
+        return false;
+
+    return add_sound_queue(wf, data_buffer, reader.get_data_chunk()->cksize);
+}
 
 /*!
  * @brief action-valに対応する[Sound]セクションのキー名を取得する
@@ -52,6 +153,18 @@ void load_sound_prefs(void)
 }
 
 /*!
+ * @brief 効果音の終了処理
+ */
+void finalize_sound(void)
+{
+    while (!sound_queue.empty()) {
+        auto res = sound_queue.front();
+        delete res;
+        sound_queue.pop();
+    }
+}
+
+/*!
  * @brief 指定の効果音を鳴らす。
  * @param val see sound_type
  * @retval 0 正常終了
@@ -68,8 +181,9 @@ errr play_sound(int val)
     char buf[MAIN_WIN_MAX_PATH];
     path_build(buf, MAIN_WIN_MAX_PATH, ANGBAND_DIR_XTRA_SOUND, filename);
 
-    if (::PlaySoundW(to_wchar(buf).wc_str(), 0, SND_FILENAME | SND_ASYNC)) {
+    if (play_sound_impl(buf)) {
         return 0;
     }
+
     return -1;
 }
