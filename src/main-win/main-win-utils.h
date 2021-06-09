@@ -50,7 +50,7 @@ protected:
 
     void kill()
     {
-        if (!buf) {
+        if (buf) {
             C_KILL(buf, buf_size, WCHAR);
             buf = NULL;
         }
@@ -100,7 +100,7 @@ protected:
 
     void kill()
     {
-        if (!buf) {
+        if (buf) {
             C_KILL(buf, buf_size, char);
             buf = NULL;
         }
