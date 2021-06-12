@@ -2497,6 +2497,7 @@ static void hook_quit(concptr str)
     DeleteObject(hbrYellow);
     finalize_bg();
     graphic.finalize();
+    finalize_sound();
 
     UnregisterClassW(AppName, hInstance);
     if (hIcon)
