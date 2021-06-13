@@ -316,7 +316,8 @@ const std::unordered_map<std::string_view, race_flags7> r_info_flags7 = {
 const std::unordered_map<std::string_view, race_flags8> r_info_flags8 = {
 	{ "WILD_ONLY", RF8_WILD_ONLY },
 	{ "WILD_TOWN", RF8_WILD_TOWN },
-	{ "WILD_SHORE", RF8_WILD_SHORE },
+    { "NO_QUEST", RF8_NO_QUEST },
+    { "WILD_SHORE", RF8_WILD_SHORE },
 	{ "WILD_OCEAN", RF8_WILD_OCEAN },
 	{ "WILD_WASTE", RF8_WILD_WASTE },
 	{ "WILD_WOOD", RF8_WILD_WOOD },
