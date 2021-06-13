@@ -2292,6 +2292,9 @@
     <ClCompile Include="..\..\src\main-win\main-win-term.cpp">
       <Filter>main-win</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\main-win\wav-reader.cpp">
+      <Filter>main-win</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4927,6 +4930,9 @@
       <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\main-win\main-win-term.h">
+      <Filter>main-win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main-win\wav-reader.h">
       <Filter>main-win</Filter>
     </ClInclude>
   </ItemGroup>
