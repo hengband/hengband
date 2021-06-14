@@ -397,7 +397,7 @@ static void dump_aux_race_history(player_type *creature_ptr, FILE *fff)
  */
 static void dump_aux_realm_history(player_type *creature_ptr, FILE *fff)
 {
-    if (creature_ptr->old_realm)
+    if (creature_ptr->old_realm == 0)
         return;
 
     fputc('\n', fff);
