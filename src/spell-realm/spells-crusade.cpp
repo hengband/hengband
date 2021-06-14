@@ -105,7 +105,7 @@ bool cast_wrath_of_the_god(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 /*!
  * @brief 一時的聖なるのオーラの継続時間をセットする / Set "tim_sh_holy", notice observable changes
  * @param v 継続時間
- * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 魔力消去や時間経過による残り時間の減少処理ならばtrue
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_tim_sh_holy(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
@@ -147,7 +147,7 @@ bool set_tim_sh_holy(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 /*!
  * @brief 目には目をの残り時間をセットする / Set "tim_eyeeye", notice observable changes
  * @param v 継続時間
- * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 魔力消去や時間経過による残り時間の減少処理ならばtrue
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す
  * @details 呪術領域でも使えるが、汎用性と行数の兼ね合いを考えて破邪側に入れた
  */

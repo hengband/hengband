@@ -103,7 +103,7 @@ void reset_tim_flags(player_type *creature_ptr)
 /*!
  * @brief 加速の継続時間をセットする / Set "fast", notice observable changes
  * @param v 継続時間
- * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 魔力消去や時間経過による残り時間の減少処理ならばtrue
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_fast(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
@@ -145,7 +145,7 @@ bool set_fast(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 /*!
  * @brief 肌石化の継続時間をセットする / Set "shield", notice observable changes
  * @param v 継続時間
- * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 魔力消去や時間経過による残り時間の減少処理ならばtrue
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_shield(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
@@ -187,7 +187,7 @@ bool set_shield(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 /*!
  * @brief 魔法の鎧の継続時間をセットする / Set "magicdef", notice observable changes
  * @param v 継続時間
- * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 魔力消去や時間経過による残り時間の減少処理ならばtrue
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_magicdef(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
@@ -229,7 +229,7 @@ bool set_magicdef(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 /*!
  * @brief 祝福の継続時間をセットする / Set "blessed", notice observable changes
  * @param v 継続時間
- * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 魔力消去や時間経過による残り時間の減少処理ならばtrue
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_blessed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
@@ -271,7 +271,7 @@ bool set_blessed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 /*!
  * @brief 士気高揚の継続時間をセットする / Set "hero", notice observable changes
  * @param v 継続時間
- * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 魔力消去や時間経過による残り時間の減少処理ならばtrue
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_hero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
@@ -315,7 +315,7 @@ bool set_hero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  * @brief 変身効果の継続時間と変身先をセットする / Set "tim_mimic", and "mimic_form", notice observable changes
  * @param v 継続時間
  * @param p 変身内容
- * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 魔力消去や時間経過による残り時間の減少処理ならばtrue
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_mimic(player_type *creature_ptr, TIME_EFFECT v, MIMIC_RACE_IDX p, bool do_dec)
@@ -413,7 +413,7 @@ bool set_shero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 /*!
  * @brief 幽体化の継続時間をセットする / Set "wraith_form", notice observable changes
  * @param v 継続時間
- * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 魔力消去や時間経過による残り時間の減少処理ならばtrue
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_wraith_form(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
@@ -469,7 +469,7 @@ bool set_wraith_form(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 /*!
  * @brief オクレ兄さんの継続時間をセットする / Set "tsuyoshi", notice observable changes
  * @param v 継続時間
- * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 魔力消去や時間経過による残り時間の減少処理ならばtrue
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_tsuyoshi(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)

@@ -13,7 +13,7 @@
 /*!
  * @brief 一時的酸耐性の継続時間をセットする / Set "oppose_acid", notice observable changes
  * @param v 継続時間
- * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 魔力消去や時間経過による残り時間の減少処理ならばtrue
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_oppose_acid(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
@@ -53,7 +53,7 @@ bool set_oppose_acid(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 /*!
  * @brief 一時的電撃耐性の継続時間をセットする / Set "oppose_elec", notice observable changes
  * @param v 継続時間
- * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 魔力消去や時間経過による残り時間の減少処理ならばtrue
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_oppose_elec(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
@@ -94,7 +94,7 @@ bool set_oppose_elec(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 /*!
  * @brief 一時的火炎耐性の継続時間をセットする / Set "oppose_fire", notice observable changes
  * @param v 継続時間
- * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 魔力消去や時間経過による残り時間の減少処理ならばtrue
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_oppose_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
@@ -136,7 +136,7 @@ bool set_oppose_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 /*!
  * @brief 一時的冷気耐性の継続時間をセットする / Set "oppose_cold", notice observable changes
  * @param v 継続時間
- * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 魔力消去や時間経過による残り時間の減少処理ならばtrue
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_oppose_cold(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
@@ -176,7 +176,7 @@ bool set_oppose_cold(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 /*!
  * @brief 一時的毒耐性の継続時間をセットする / Set "oppose_pois", notice observable changes
  * @param v 継続時間
- * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 魔力消去や時間経過による残り時間の減少処理ならばtrue
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_oppose_pois(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)

@@ -86,7 +86,7 @@ bool clear_mind(player_type *creature_ptr)
 /*!
  * @brief 光速移動の継続時間をセットする / Set "lightspeed", notice observable changes
  * @param v 継続時間
- * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 魔力消去や時間経過による残り時間の減少処理ならばtrue
  */
 void set_lightspeed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
@@ -130,7 +130,7 @@ void set_lightspeed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 /*!
  * @brief 一時的闘気のオーラの継続時間をセットする / Set "tim_sh_touki", notice observable changes
  * @param v 継続時間
- * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 魔力消去や時間経過による残り時間の減少処理ならばtrue
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_tim_sh_force(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)

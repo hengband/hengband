@@ -347,7 +347,7 @@ bool set_multishadow(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 /*!
  * @brief 一時的破片のオーラの継続時間をセットする / Set "dustrobe", notice observable changes
  * @param v 継続時間
- * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @param do_dec 魔力消去や時間経過による残り時間の減少処理ならばtrue
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
 bool set_dustrobe(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
