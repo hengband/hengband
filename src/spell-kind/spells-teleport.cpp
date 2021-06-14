@@ -408,6 +408,9 @@ void teleport_player(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode)
  */
 void teleport_player_away(MONSTER_IDX m_idx, player_type *target_ptr, POSITION dis, bool is_quantum_effect)
 {
+    if (target_ptr->phase_out)
+        return;
+
     const POSITION oy = target_ptr->y;
     const POSITION ox = target_ptr->x;
 
