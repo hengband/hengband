@@ -654,7 +654,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それは恐怖感を引き起こす。", "It makes you subject to cowardice.");
     }
 
-    if (has_flag(flgs, TR_BERS_RAGE))
+    if (has_flag(flgs, TR_BERS_RAGE) || o_ptr->curse_flags.has(TRC::BERS_RAGE))
         info[i++] = _("それは狂戦士化の発作を引き起こす。", "It makes you subject to berserker fits.");
 
     if ((has_flag(flgs, TR_TELEPORT)) || o_ptr->curse_flags.has(TRC::TELEPORT)) {
