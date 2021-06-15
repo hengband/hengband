@@ -301,7 +301,7 @@ bool heroism(player_type *creature_ptr, int base)
     bool ident = false;
     if (set_afraid(creature_ptr, 0))
         ident = true;
-    if (set_hero(creature_ptr, creature_ptr->hero + randint1(base) + base, false))
+    if (set_hero(creature_ptr, randint1(base) + base, false))
         ident = true;
     if (hp_player(creature_ptr, 10))
         ident = true;
@@ -313,7 +313,7 @@ bool berserk(player_type *creature_ptr, int base)
     bool ident = false;
     if (set_afraid(creature_ptr, 0))
         ident = true;
-    if (set_shero(creature_ptr, creature_ptr->shero + randint1(base) + base, false))
+    if (set_shero(creature_ptr, randint1(base) + base, false))
         ident = true;
     if (hp_player(creature_ptr, 30))
         ident = true;
@@ -507,14 +507,14 @@ bool cosmic_cast_off(player_type *creature_ptr, object_type **o_ptr_ptr)
     /* Get effects */
     msg_print(_("「燃え上がれ俺の小宇宙！」", "You say, 'Burn up my cosmo!"));
     int t = 20 + randint1(20);
-    (void)set_blind(creature_ptr, creature_ptr->blind + t);
+    (void)set_blind(creature_ptr, t);
     (void)set_afraid(creature_ptr, 0);
-    (void)set_tim_esp(creature_ptr, creature_ptr->tim_esp + t, false);
-    (void)set_tim_regen(creature_ptr, creature_ptr->tim_regen + t, false);
-    (void)set_hero(creature_ptr, creature_ptr->hero + t, false);
-    (void)set_blessed(creature_ptr, creature_ptr->blessed + t, false);
-    (void)set_fast(creature_ptr, creature_ptr->fast + t, false);
-    (void)set_shero(creature_ptr, creature_ptr->shero + t, false);
+    (void)set_tim_esp(creature_ptr, t, false);
+    (void)set_tim_regen(creature_ptr, t, false);
+    (void)set_hero(creature_ptr, t, false);
+    (void)set_blessed(creature_ptr, t, false);
+    (void)set_fast(creature_ptr, t, false);
+    (void)set_shero(creature_ptr, t, false);
     if (creature_ptr->pclass == CLASS_FORCETRAINER) {
         set_current_ki(creature_ptr, true, creature_ptr->lev * 5 + 190);
         msg_print(_("気が爆発寸前になった。", "Your force absorbs the explosion."));

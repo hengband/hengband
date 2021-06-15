@@ -535,7 +535,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 
         case SV_POTION_NEO_TSUYOSHI:
             (void)set_image(creature_ptr, 0);
-            (void)set_tsuyoshi(creature_ptr, creature_ptr->tsuyoshi + randint1(100) + 100, false);
+            (void)set_tsuyoshi(creature_ptr, randint1(100) + 100, false);
             ident = true;
             break;
 

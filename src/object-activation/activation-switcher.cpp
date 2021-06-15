@@ -356,7 +356,7 @@ bool switch_activation(player_type *user_ptr, object_type **o_ptr_ptr, const act
     case ACT_STRAIN_HASTE:
         msg_format(_("%sはあなたの体力を奪った...", "The %s drains your vitality..."), name);
         take_hit(user_ptr, DAMAGE_LOSELIFE, damroll(3, 8), _("加速した疲労", "the strain of haste"));
-        (void)set_fast(user_ptr, user_ptr->fast + 25 + randint1(25), false);
+        (void)set_fast(user_ptr, 25 + randint1(25), false);
         return true;
     case ACT_FISHING:
         return fishing(user_ptr);
