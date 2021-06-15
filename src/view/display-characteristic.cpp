@@ -503,7 +503,7 @@ static void display_tval_misc_info(
     process_one_characteristic(creature_ptr, row++, col, _("祝福        :", "Blessed     :"), TR_BLESSED, f, 0);
     process_one_characteristic(creature_ptr, row++, col, _("永遠光源    :", "Perm Lite   :"), TR_LITE_1, f, DP_LITE);
     process_one_characteristic(creature_ptr, row++, col, _("消費魔力減少:", "Econom. Mana:"), TR_DEC_MANA, f, 0);
-    process_one_characteristic(creature_ptr, row++, col, _("呪文難度減少:", "Easy Spell  :"), TR_EASY_SPELL, f, 0);
+    process_one_characteristic(creature_ptr, row++, col, _("魔法難度減少:", "Easy Spell  :"), TR_EASY_SPELL, f, 0);
     process_one_characteristic(creature_ptr, row++, col, _("発動        :", "Activate    :"), TR_ACTIVATE, f, 0);
     process_one_characteristic(creature_ptr, row++, col, _("反魔法      :", "Anti Magic  :"), TR_NO_MAGIC, f, 0);
 }
