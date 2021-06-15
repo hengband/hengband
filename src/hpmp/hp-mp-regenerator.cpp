@@ -227,8 +227,9 @@ void regenerate_captured_monsters(player_type *creature_ptr)
 
     if (heal) {
         creature_ptr->update |= (PU_COMBINE);
-        creature_ptr->window_flags |= (PW_INVEN);
-        creature_ptr->window_flags |= (PW_EQUIP);
+        // FIXME 広域マップ移動で1歩毎に何度も再描画されて重くなる。現在はボール中モンスターのHP回復でボールの表示は変わらないためコメントアウトする。
+        //creature_ptr->window_flags |= (PW_INVEN);
+        //creature_ptr->window_flags |= (PW_EQUIP);
         wild_regen = 20;
     }
 }
