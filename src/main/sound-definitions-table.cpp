@@ -88,4 +88,6 @@ const concptr angband_sound_name[SOUND_MAX] = {
     "smite_hit",
     "eviscerate_hit",
     "shred_hit",
+    "wield",
+    "take_off",
 };
