@@ -89,6 +89,8 @@ enum sound_type {
     SOUND_SMITE_HIT, /*!< vorpal hit - smite */
     SOUND_EVISCERATE_HIT, /*!< vorpal hit - eviscerate */
     SOUND_SHRED_HIT, /*!< vorpal hit - shred */
+    SOUND_WIELD,
+    SOUND_TAKE_OFF,
     SOUND_MAX, /*!< 効果音定義の最大数 / Maximum numbers of sound effect */
 };
 

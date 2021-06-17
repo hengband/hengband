@@ -22,6 +22,8 @@
 #include "hpmp/hp-mp-processor.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
+#include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "mind/mind-force-trainer.h"
 #include "monster/monster-describer.h"
 #include "object/object-kind-hook.h"
@@ -499,6 +501,7 @@ bool cosmic_cast_off(player_type *creature_ptr, object_type **o_ptr_ptr)
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(creature_ptr, o_name, &forge, OD_NAME_ONLY);
     msg_format(_("%sを脱ぎ捨てた。", "You cast off %s."), o_name);
+    sound(SOUND_TAKE_OFF);
 
     /* Get effects */
     msg_print(_("「燃え上がれ俺の小宇宙！」", "You say, 'Burn up my cosmo!"));

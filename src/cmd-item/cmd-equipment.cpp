@@ -17,6 +17,8 @@
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
+#include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/trc-types.h"
@@ -206,6 +208,7 @@ void do_cmd_wield(player_type *creature_ptr)
             return;
     }
 
+    sound(SOUND_WIELD);
     if (need_switch_wielding && !object_is_cursed(&creature_ptr->inventory_list[need_switch_wielding])) {
         object_type *slot_o_ptr = &creature_ptr->inventory_list[slot];
         object_type *switch_o_ptr = &creature_ptr->inventory_list[need_switch_wielding];
@@ -333,6 +336,7 @@ void do_cmd_takeoff(player_type *creature_ptr)
         }
     }
 
+    sound(SOUND_TAKE_OFF);
     energy.set_player_turn_energy(50);
     (void)inven_takeoff(creature_ptr, item, 255);
     verify_equip_slot(creature_ptr, item);
