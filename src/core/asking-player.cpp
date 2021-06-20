@@ -14,6 +14,9 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 
+#include <climits>
+#include <algorithm>
+
 /*
  * Get some string input at the cursor location.
  * Assume the buffer is initialized to a default string.
@@ -340,6 +343,9 @@ bool get_com(concptr prompt, char *command, bool z_escape)
  */
 QUANTITY get_quantity(concptr prompt, QUANTITY max)
 {
+    // FIXME : QUANTITY、COMMAND_CODE、その他の型サイズがまちまちな変数とのやり取りが多数ある。この処理での数の入力を0からSHRT_MAXに制限することで不整合の発生を回避する。
+    max = std::clamp<QUANTITY>(max, 0, SHRT_MAX);
+
     bool res;
     char tmp[80];
     char buf[80];
@@ -386,14 +392,12 @@ QUANTITY get_quantity(concptr prompt, QUANTITY max)
     if (!res)
         return 0;
 
-    amt = (COMMAND_CODE)atoi(buf);
-    if (isalpha(buf[0]))
+   if (isalpha(buf[0]))
         amt = max;
-    if (amt > max)
-        amt = max;
-    if (amt < 0)
-        amt = 0;
-    if (amt)
+    else
+        amt = std::clamp<int>(atoi(buf), 0, max);
+
+   if (amt)
         repeat_push((COMMAND_CODE)amt);
 
     return (amt);
