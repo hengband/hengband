@@ -18,7 +18,7 @@ void dump_mutations(player_type *creature_ptr, FILE *out_file)
     if (!out_file)
         return;
 
-    if (creature_ptr->muta.any()) {
+    if (creature_ptr->muta.any() || has_good_luck(creature_ptr)) {
         if (creature_ptr->muta.has(MUTA::SPIT_ACID))
             fprintf(out_file, _(" あなたは酸を吹きかけることができる。(ダメージ レベルX1)\n", " You can spit acid (dam lvl).\n"));
 
