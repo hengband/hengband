@@ -25,6 +25,7 @@
 #include "player/player-sex.h"
 #include "player/player-status-table.h"
 #include "player/player-status.h"
+#include "player/player-status-flags.h"
 #include "realm/realm-names-table.h"
 #include "status-first-page.h"
 #include "system/floor-type-definition.h"
@@ -299,7 +300,7 @@ static void display_current_floor(char *statmsg)
  */
 void display_player(player_type *creature_ptr, int mode)
 {
-    if (creature_ptr->muta.any() && display_mutations)
+    if ((creature_ptr->muta.any() || has_good_luck(creature_ptr)) && display_mutations)
         mode = (mode % 6);
     else
         mode = (mode % 5);

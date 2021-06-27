@@ -19,6 +19,7 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags7.h"
+#include "monster-race/race-flags8.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
@@ -34,6 +35,8 @@
 #include "target/projection-path-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include "wizard/wizard-messages.h"
+#include "game-option/cheat-types.h"
 
 #define MON_SCAT_MAXD 10 /*!< mon_scatter()関数によるモンスター配置で許される中心からの最大距離 */
 
@@ -279,9 +282,18 @@ bool place_monster_aux(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
             break;
         int n = damroll(r_ptr->reinforce_dd[i], r_ptr->reinforce_ds[i]);
         for (int j = 0; j < n; j++) {
-            POSITION nx, ny, d = 7;
-            scatter(player_ptr, &ny, &nx, y, x, d, PROJECT_NONE);
-            (void)place_monster_one(player_ptr, place_monster_m_idx, ny, nx, r_ptr->reinforce_id[i], mode);
+            POSITION nx, ny, d;
+            const POSITION scatter_min = 7;
+            const POSITION scatter_max = 40;
+            for (d = scatter_min; d <= scatter_max; d++) {
+                scatter(player_ptr, &ny, &nx, y, x, d, PROJECT_NONE);
+                if (place_monster_one(player_ptr, place_monster_m_idx, ny, nx, r_ptr->reinforce_id[i], mode)) {
+                    break;
+                }
+            }
+            if (d > scatter_max) {
+                msg_format_wizard(player_ptr, CHEAT_MONSTER, _("護衛の指定生成に失敗しました。", "Failed fixed escorts."));
+            }
         }
     }
 
@@ -325,7 +337,11 @@ bool place_monster_aux(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
 bool place_monster(player_type *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode)
 {
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), get_monster_hook2(player_ptr, y, x));
-    MONRACE_IDX r_idx = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->monster_level, 0);
+    MONRACE_IDX r_idx;
+    do {
+        r_idx = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->monster_level, 0);
+    } while ((mode & PM_NO_QUEST) && (r_info[r_idx].flags8 & RF8_NO_QUEST));
+
     if (r_idx == 0)
         return false;
 

@@ -110,7 +110,7 @@ static void parse_qtw_D(player_type *player_ptr, qtwg_type *qtwg_ptr, char *s)
         if (random & RANDOM_MONSTER) {
             floor_ptr->monster_level = floor_ptr->base_level + monster_index;
 
-            place_monster(player_ptr, *qtwg_ptr->y, *qtwg_ptr->x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
+            place_monster(player_ptr, *qtwg_ptr->y, *qtwg_ptr->x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP | PM_NO_QUEST));
 
             floor_ptr->monster_level = floor_ptr->base_level;
         } else if (monster_index) {
