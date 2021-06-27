@@ -322,19 +322,19 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
             break;
         }
         case SV_SCROLL_BLESSING: {
-            if (set_blessed(creature_ptr, creature_ptr->blessed + randint1(12) + 6, false))
+            if (set_blessed(creature_ptr, randint1(12) + 6, false))
                 ident = true;
 
             break;
         }
         case SV_SCROLL_HOLY_CHANT: {
-            if (set_blessed(creature_ptr, creature_ptr->blessed + randint1(24) + 12, false))
+            if (set_blessed(creature_ptr, randint1(24) + 12, false))
                 ident = true;
             break;
         }
 
         case SV_SCROLL_HOLY_PRAYER: {
-            if (set_blessed(creature_ptr, creature_ptr->blessed + randint1(48) + 24, false))
+            if (set_blessed(creature_ptr, randint1(48) + 24, false))
                 ident = true;
 
             break;
