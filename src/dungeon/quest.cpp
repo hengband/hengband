@@ -330,7 +330,7 @@ void do_cmd_quest(player_type *player_ptr)
         return;
     if (is_echizen(player_ptr))
         msg_print(_("『とにかく入ってみようぜぇ。』", "\"Let's go in anyway.\""));
-    else if (player_ptr->pseikaku == PERSONALITY_CHARGEMAN)
+    else if (is_chargeman(player_ptr))
         msg_print(_("『全滅してやるぞ！』", "\"I'll annihilate THEM!\""));
 
     /* Player enters a new quest */
