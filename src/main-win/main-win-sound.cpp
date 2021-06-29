@@ -47,6 +47,16 @@ struct sound_res {
     std::unique_ptr<BYTE[]> buf;
     WAVEHDR wh = { 0 };
 
+    /*!
+     * 再生完了判定
+     * @retval true 完了
+     * @retval false 再生中
+     */
+    bool isDone()
+    {
+        return (this->hwo == NULL || (this->wh.dwFlags & WHDR_DONE));
+    }
+
     void dispose()
     {
         if (hwo != NULL) {
@@ -67,16 +77,17 @@ std::queue<sound_res *> sound_queue;
  * 効果音の再生と管理キューへの追加.
  * 
  * @param wf WAVEFORMATEXへのポインタ
- * @param buf PCMデータバッファ
+ * @param buf PCMデータバッファ。使用後にdelete[]すること。
  * @param bufsize バッファサイズ
  * @retval true 正常に処理された
  * @retval false 処理エラー
  */
 static bool add_sound_queue(const WAVEFORMATEX *wf, BYTE *buf, DWORD bufsize)
 {
+    // 再生完了データをキューから削除する
     while (!sound_queue.empty()) {
         auto res = sound_queue.front();
-        if (res->hwo == NULL || (res->wh.dwFlags & WHDR_DONE)) {
+        if (res->isDone()) {
             delete res;
             sound_queue.pop();
             continue;
@@ -97,8 +108,23 @@ static bool add_sound_queue(const WAVEFORMATEX *wf, BYTE *buf, DWORD bufsize)
     wh->dwBufferLength = bufsize;
     wh->dwFlags = 0;
 
-    ::waveOutPrepareHeader(res->hwo, wh, sizeof(WAVEHDR));
-    ::waveOutWrite(res->hwo, wh, sizeof(WAVEHDR));
+    mr = ::waveOutPrepareHeader(res->hwo, wh, sizeof(WAVEHDR));
+    if (mr != MMSYSERR_NOERROR) {
+        res->dispose();
+        return false;
+    }
+
+    mr = ::waveOutWrite(res->hwo, wh, sizeof(WAVEHDR));
+    if (mr != MMSYSERR_NOERROR) {
+        res->dispose();
+        return false;
+    }
+
+    while (sound_queue.size() >= 16) {
+        auto res = sound_queue.front();
+        delete res;
+        sound_queue.pop();
+    }
 
     return true;
 }
