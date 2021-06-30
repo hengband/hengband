@@ -461,11 +461,11 @@ void wiz_jump_to_dungeon(player_type *creature_ptr)
         return;
     }
 
-    if (command_arg < d_info[creature_ptr->dungeon_idx].mindepth)
+    if (command_arg < d_info[dungeon_type].mindepth)
         command_arg = 0;
 
-    if (command_arg > d_info[creature_ptr->dungeon_idx].maxdepth)
-        command_arg = (COMMAND_ARG)d_info[creature_ptr->dungeon_idx].maxdepth;
+    if (command_arg > d_info[dungeon_type].maxdepth)
+        command_arg = (COMMAND_ARG)d_info[dungeon_type].maxdepth;
 
     msg_format("You jump to dungeon level %d.", command_arg);
     if (autosave_l)
