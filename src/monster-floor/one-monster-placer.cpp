@@ -34,6 +34,7 @@
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
+#include "player/player-status.h"
 #include "object/warning.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
@@ -77,7 +78,7 @@ static bool monster_hook_tanuki(player_type *player_ptr, MONRACE_IDX r_idx)
 static MONRACE_IDX initial_r_appearance(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS generate_mode)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (player_ptr->pseikaku == PERSONALITY_CHARGEMAN && (generate_mode & PM_JURAL) && !(generate_mode & (PM_MULTIPLY | PM_KAGE)))
+    if (is_chargeman(player_ptr) && (generate_mode & PM_JURAL) && !(generate_mode & (PM_MULTIPLY | PM_KAGE)))
         return MON_ALIEN_JURAL;
 
     if (!(r_info[r_idx].flags7 & RF7_TANUKI))

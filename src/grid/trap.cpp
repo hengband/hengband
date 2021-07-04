@@ -420,7 +420,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
             msg_print(_("落とし戸に落ちた！", "You have fallen through a trap door!"));
             if (is_echizen(trapped_ptr))
                 msg_print(_("くっそ～！", ""));
-            else if (trapped_ptr->pseikaku == PERSONALITY_CHARGEMAN)
+            else if (is_chargeman(trapped_ptr))
                 msg_print(_("ジュラル星人の仕業に違いない！", ""));
 
             sound(SOUND_FALL);

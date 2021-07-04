@@ -3026,6 +3026,11 @@ bool is_echizen(player_type *creature_ptr)
     return (creature_ptr->pseikaku == PERSONALITY_COMBAT) || (creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON);
 }
 
+bool is_chargeman(player_type *creature_ptr)
+{
+    return creature_ptr->pseikaku == PERSONALITY_CHARGEMAN;
+}
+
 WEIGHT calc_weapon_weight_limit(player_type *creature_ptr)
 {
     WEIGHT weight = adj_str_hold[creature_ptr->stat_index[A_STR]];
