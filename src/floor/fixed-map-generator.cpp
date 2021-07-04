@@ -404,6 +404,7 @@ static bool parse_qtw_M(qtwg_type *qtwg_ptr, char **zz)
  * @param y 詳細不明
  * @param x 詳細不明
  * @return エラーコード
+ * @todo クエスト情報のみを読み込む手段と実際にフロアデータまで読み込む処理は分離したい
  */
 parse_error_type generate_fixed_map_floor(player_type *player_ptr, qtwg_type *qtwg_ptr, process_dungeon_file_pf parse_fixed_map)
 {

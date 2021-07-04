@@ -95,4 +95,5 @@ QUEST_IDX quest_number(player_type *player_ptr, DEPTH level);
 QUEST_IDX random_quest_number(player_type *player_ptr, DEPTH level);
 void leave_quest_check(player_type *player_ptr);
 void leave_tower_check(player_type *player_ptr);
+void exe_enter_quest(player_type *player_ptr, QUEST_IDX quest_idx);
 void do_cmd_quest(player_type *player_ptr);
