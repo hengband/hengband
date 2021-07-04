@@ -9,6 +9,7 @@
 #include "player/attack-defense-types.h"
 #include "player-info/avatar.h"
 #include "player/player-race.h"
+#include "player/player-status.h"
 #include "player/player-status-flags.h"
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"
@@ -289,7 +290,7 @@ bool set_image(player_type *creature_ptr, TIME_EFFECT v)
 
     if (creature_ptr->is_dead)
         return false;
-    if (creature_ptr->pseikaku == PERSONALITY_CHARGEMAN)
+    if (is_chargeman(creature_ptr))
         v = 0;
 
     if (v) {

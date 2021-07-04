@@ -38,5 +38,6 @@ bool is_invuln(player_type *creature_ptr);
 bool is_hero(player_type *creature_ptr);
 bool is_shero(player_type *creature_ptr);
 bool is_echizen(player_type *creature_ptr);
+bool is_chargeman(player_type *creature_ptr);
 
 void stop_mouth(player_type *caster_ptr);
