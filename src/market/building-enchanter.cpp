@@ -39,7 +39,8 @@ bool enchant_item(player_type *player_ptr, PRICE cost, HIT_PROB to_hit, HIT_POIN
         return false;
 
     char tmp_str[MAX_NLEN];
-    if (player_ptr->au < (cost * o_ptr->number)) {
+    const PRICE total_cost = cost * o_ptr->number;
+    if (player_ptr->au < total_cost) {
         describe_flavor(player_ptr, tmp_str, o_ptr, OD_NAME_ONLY);
         msg_format(_("%sを改良するだけのゴールドがありません！", "You do not have the gold to improve %s!"), tmp_str);
         return false;
@@ -76,12 +77,12 @@ bool enchant_item(player_type *player_ptr, PRICE cost, HIT_PROB to_hit, HIT_POIN
 
     describe_flavor(player_ptr, tmp_str, o_ptr, OD_NAME_AND_ENCHANT);
 #ifdef JP
-    msg_format("＄%dで%sに改良しました。", cost * o_ptr->number, tmp_str);
+    msg_format("＄%dで%sに改良しました。", total_cost, tmp_str);
 #else
-    msg_format("Improved into %s for %d gold.", tmp_str, cost * o_ptr->number);
+    msg_format("Improved into %s for %d gold.", tmp_str, total_cost);
 #endif
 
-    player_ptr->au -= (cost * o_ptr->number);
+    player_ptr->au -= total_cost;
     if (item >= INVEN_MAIN_HAND)
         calc_android_exp(player_ptr);
     return true;

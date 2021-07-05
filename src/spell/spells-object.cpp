@@ -530,8 +530,6 @@ bool enchant_equipment(player_type *caster_ptr, object_type *o_ptr, int n, int e
     set_bits(caster_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
     set_bits(caster_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST);
 
-    calc_android_exp(caster_ptr);
-
     /* Success */
     return true;
 }
