@@ -92,9 +92,11 @@ errr parse_r_info(std::string_view buf, angband_header *head)
         return PARSE_ERROR_MISSING_RECORD_HEADER;
     else if (tokens[0] == "E") {
         // E:name_en
-#ifndef JP
         if (tokens.size() < 2 || tokens[1].size() == 0)
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+#ifdef JP
+        r_ptr->E_name = tokens[1];
+#else
         r_ptr->name = tokens[1];
 #endif
     } else if (tokens[0] == "D") {
