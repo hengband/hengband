@@ -146,14 +146,19 @@ void do_cmd_go_up(player_type *creature_ptr)
     if (record_stair)
         exe_write_diary(creature_ptr, DIARY_STAIR, 0 - up_num, _("階段を上った", "climbed up the stairs to"));
 
-    if (is_echizen(creature_ptr))
-        msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
-    else if (up_num == creature_ptr->current_floor_ptr->dun_level) {
-        msg_print(_("地上に戻った。", "You go back to the surface."));
+    if (up_num == creature_ptr->current_floor_ptr->dun_level) {
+        if (is_echizen(creature_ptr))
+            msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
+        else
+            msg_print(_("地上に戻った。", "You go back to the surface."));
         creature_ptr->word_recall = 0;
     }
-    else
-        msg_print(_("階段を上って新たなる迷宮へと足を踏み入れた。", "You enter a maze of up staircases."));
+    else {
+        if (is_echizen(creature_ptr))
+            msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
+        else
+            msg_print(_("階段を上って新たなる迷宮へと足を踏み入れた。", "You enter a maze of up staircases."));
+    }
 
     creature_ptr->leaving = true;
 }
