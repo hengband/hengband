@@ -133,7 +133,7 @@ static void check_melee_spell_distance(player_type *target_ptr, melee_spell_type
 {
     auto ball_mask_except_rocket = RF_ABILITY_BALL_MASK;
     ball_mask_except_rocket.reset(RF_ABILITY::ROCKET);
-    if (ms_ptr->ability_flags.has_any_of(ball_mask_except_rocket))
+    if (ms_ptr->ability_flags.has_none_of(ball_mask_except_rocket))
         return;
 
     POSITION real_y = ms_ptr->y;
