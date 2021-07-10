@@ -48,10 +48,6 @@
 static std::optional<PRICE> prompt_to_buy(player_type *player_ptr, object_type *o_ptr)
 {
     auto price_ask = price_item(player_ptr, o_ptr, ot_ptr->inflate, false);
-    auto is_low_price = price_ask < LOW_PRICE_THRESHOLD;
-
-    if (!is_low_price)
-        price_ask += price_ask / 10;
 
     price_ask *= o_ptr->number;
     concptr s = format(_("買値 $%ld で買いますか？", "Do you buy for $%ld? "), static_cast<long>(price_ask));

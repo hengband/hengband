@@ -105,8 +105,6 @@ void display_entry(player_type *player_ptr, int pos)
     }
 
     x = price_item(player_ptr, o_ptr, ot_ptr->inflate, false);
-    if (x >= LOW_PRICE_THRESHOLD)
-        x += x / 10;
 
     (void)sprintf(out_val, "%9ld  ", (long)x);
     put_str(out_val, i + 6, 68);
