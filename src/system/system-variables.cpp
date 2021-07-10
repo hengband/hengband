@@ -24,7 +24,7 @@ const concptr copyright[5] =
 concptr ANGBAND_SYS = "xxx";
 concptr ANGBAND_KEYBOARD = _("JAPAN", "0");
 concptr ANGBAND_GRAF = "ascii";
-init_flags_type init_flags;
+init_flags_type init_flags; //!< @todo このグローバル変数何とかしたい
 
 /*!
  * Function hook to restrict "get_obj_num_prep()" function

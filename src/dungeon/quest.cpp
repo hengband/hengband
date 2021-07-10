@@ -309,6 +309,18 @@ void leave_tower_check(player_type *player_ptr)
     quest[QUEST_TOWER1].comptime = current_world_ptr->play_time;
 }
 
+/*! 
+ * @brief Player enters a new quest
+ */
+void exe_enter_quest(player_type *player_ptr, QUEST_IDX quest_idx)
+{
+    if (quest[quest_idx].type != QUEST_TYPE_RANDOM)
+        player_ptr->current_floor_ptr->dun_level = 1;
+    player_ptr->current_floor_ptr->inside_quest = quest_idx;
+
+    player_ptr->leaving = true;
+}
+
 /*!
  * @brief クエスト入り口にプレイヤーが乗った際の処理 / Do building commands
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -333,15 +345,9 @@ void do_cmd_quest(player_type *player_ptr)
     else if (is_chargeman(player_ptr))
         msg_print(_("『全滅してやるぞ！』", "\"I'll annihilate THEM!\""));
 
-    /* Player enters a new quest */
     player_ptr->oldpy = 0;
     player_ptr->oldpx = 0;
-
     leave_quest_check(player_ptr);
 
-    if (quest[player_ptr->current_floor_ptr->inside_quest].type != QUEST_TYPE_RANDOM)
-        player_ptr->current_floor_ptr->dun_level = 1;
-    player_ptr->current_floor_ptr->inside_quest = player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].special;
-
-    player_ptr->leaving = true;
+    exe_enter_quest(player_ptr, player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].special);
 }

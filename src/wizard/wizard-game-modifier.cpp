@@ -115,10 +115,12 @@ void wiz_enter_quest(player_type* creature_ptr)
     if ((tmp_int < 0) || (tmp_int >= max_q_idx))
         return;
 
+    init_flags = static_cast<init_flags_type>(INIT_SHOW_TEXT | INIT_ASSIGN);
     creature_ptr->current_floor_ptr->inside_quest = (QUEST_IDX)tmp_int;
     parse_fixed_map(creature_ptr, "q_info.txt", 0, 0, 0, 0);
     quest[tmp_int].status = QUEST_STATUS_TAKEN;
-    creature_ptr->current_floor_ptr->inside_quest = 0;
+    if (quest[tmp_int].dungeon == 0)
+        exe_enter_quest(creature_ptr, (QUEST_IDX)tmp_int);
 }
 
 /*!
