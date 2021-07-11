@@ -50,6 +50,9 @@ N:1004:Pip, the Braver from Another World
 N:1018:Raou
 は自分の胸の秘孔を突いた！「我が生涯に一片の悔いなし！」
 
+N:1021:航海士『ナミ』
+「ああ、またクリ〇ゾン逝きなのね。ハア……」
+
 N:1063:lousy, the King of louses
 「ああん，やっぱり変愚って難しいよ！」
 
