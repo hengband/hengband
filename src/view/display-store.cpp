@@ -96,19 +96,9 @@ void display_entry(player_type *player_ptr, int pos)
         put_str(out_val, i + 6, _(60, 61));
     }
 
-    s32b x;
-    if (o_ptr->ident & IDENT_FIXED) {
-        x = price_item(player_ptr, o_ptr, ot_ptr->inflate, false);
-        (void)sprintf(out_val, _("%9ld固", "%9ld F"), (long)x);
-        put_str(out_val, i + 6, 68);
-        return;
-    }
+    const auto price = price_item(player_ptr, o_ptr, ot_ptr->inflate, false);
 
-    x = price_item(player_ptr, o_ptr, ot_ptr->inflate, false);
-    if (x >= LOW_PRICE_THRESHOLD)
-        x += x / 10;
-
-    (void)sprintf(out_val, "%9ld  ", (long)x);
+    (void)sprintf(out_val, "%9ld  ", (long)price);
     put_str(out_val, i + 6, 68);
 }
 

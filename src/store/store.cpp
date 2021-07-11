@@ -278,7 +278,6 @@ void store_shuffle(player_type *player_ptr, int which)
             continue;
 
         o_ptr->discount = 50;
-        o_ptr->ident &= ~(IDENT_FIXED);
         o_ptr->inscription = quark_add(_("売出中", "on sale"));
     }
 }

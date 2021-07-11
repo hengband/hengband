@@ -48,10 +48,6 @@
 static std::optional<PRICE> prompt_to_buy(player_type *player_ptr, object_type *o_ptr)
 {
     auto price_ask = price_item(player_ptr, o_ptr, ot_ptr->inflate, false);
-    auto is_low_price = price_ask < LOW_PRICE_THRESHOLD;
-
-    if (!is_low_price)
-        price_ask += price_ask / 10;
 
     price_ask *= o_ptr->number;
     concptr s = format(_("買値 $%ld で買いますか？", "Do you buy for $%ld? "), static_cast<long>(price_ask));
@@ -253,25 +249,18 @@ void store_purchase(player_type *player_ptr)
 
     COMMAND_CODE item_new;
     PRICE price;
-    if (o_ptr->ident & (IDENT_FIXED)) {
-        price = (best * j_ptr->number);
-    } else {
-        GAME_TEXT o_name[MAX_NLEN];
-        describe_flavor(player_ptr, o_name, j_ptr, 0);
-        msg_format(_("%s(%c)を購入する。", "Buying %s (%c)."), o_name, I2A(item));
-        msg_print(NULL);
+    GAME_TEXT o_name[MAX_NLEN];
+    describe_flavor(player_ptr, o_name, j_ptr, 0);
+    msg_format(_("%s(%c)を購入する。", "Buying %s (%c)."), o_name, I2A(item));
+    msg_print(NULL);
 
-        auto res = prompt_to_buy(player_ptr, j_ptr);
-        if (st_ptr->store_open >= current_world_ptr->game_turn)
-            return;
-        if (!res)
-            return;
+    auto res = prompt_to_buy(player_ptr, j_ptr);
+    if (st_ptr->store_open >= current_world_ptr->game_turn)
+        return;
+    if (!res)
+        return;
 
-        price = res.value();
-    }
-
-    if (price == (best * j_ptr->number))
-        o_ptr->ident |= (IDENT_FIXED);
+    price = res.value();
 
     if (player_ptr->au < price) {
         msg_print(_("お金が足りません。", "You do not have enough gold."));
@@ -288,9 +277,7 @@ void store_purchase(player_type *player_ptr)
     player_ptr->au -= price;
     store_prt_gold(player_ptr);
     object_aware(player_ptr, j_ptr);
-    j_ptr->ident &= ~(IDENT_FIXED);
 
-    GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, j_ptr, 0);
     msg_format(_("%sを $%ldで購入しました。", "You bought %s for %ld gold."), o_name, (long)price);
 
