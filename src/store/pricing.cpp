@@ -62,5 +62,8 @@ PRICE price_item(player_type *player_ptr, object_type *o_ptr, int greed, bool fl
     if (price <= 0L)
         return 1L;
 
+    if (price >= LOW_PRICE_THRESHOLD)
+        price += (flip ? -1 : 1) * price / 10;
+
     return price;
 }
