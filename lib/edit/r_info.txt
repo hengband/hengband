@@ -25906,8 +25906,8 @@ I:110:3d6:20:10:20
 W:3:2:0:12:0:0
 B:CRUSH:HURT:3d6
 F:WILD_ONLY | FRIENDS | ANIMAL | EVIL | WILD_ALL
-D:$It is an annoying runaway tribe that interferes with traffic
-D:$ on a stolen motorcycle under the autumn full moon.
+D:$It is one of an annoying runaway tribe that interferes with traffic
+D:$ on stolen motorcycles under the autumn full moon.
 D:十五夜になると盗難バイクで往来の邪魔をする迷惑系暴走族だ。
 
 N:1308:気狂いピエロ『ドネルド・マクドネルド』
