@@ -18770,7 +18770,7 @@ F:DROP_CORPSE | ONLY_GOLD | DROP_2D2 | IM_ELEC | ANIMAL | AURA_ELEC
 F:SELF_LITE_1 | RAND_25 | RAND_50
 S:1_IN_6 | BR_ELEC | BO_ELEC
 D:$It's a cute mouse.
-D:$ However, static electricity is accumulated.
+D:$  However, it has accumulated some static electricity.
 D:可愛いネズミだ。しかし静電気が溜まっている。
 
 N:923:雪女
