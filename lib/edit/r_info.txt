@@ -25684,11 +25684,10 @@ W:17:3:0:50:0:0
 B:BITE:HURT:3d4
 B:BITE:HURT:3d4
 F:BASH_DOOR | WILD_GRASS | ANIMAL | PASS_WALL
-D:$This terrifying tiger escapes from the folding screen
-D:$ in the mansion of a certain lord every night and eats people.
-D:$  So the lord asked the child priest to get rid of this tiger
-D:$ and kicked out the tiger from the folding screen,
-D:$ but the priest failed to catch it and ran away as it was.
+D:$This terrifying tiger used to escape nightly from the folding screen
+D:$ in a lord's mansion and eat people.  So the lord asked a child priest
+D:$ to get rid of the tiger.  The priest exorcised the tiger from the
+D:$ screen but did not catch it afterwards.  Now it roams as it wills.
 D:この恐るべき虎は、さる殿様の屋敷に飾ってある屏風から毎晩抜け出しては
 D:人を食い殺している。
 D:そこで殿様は坊主に退治を依頼して屏風からこの虎を出したが、
