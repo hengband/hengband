@@ -4464,6 +4464,8 @@ I:23:25:0
 W:30:100:500:100000
 F:IMPACT
 P:0:8d8:0:15:10
+D:$It's too big to be a sword:  too thick, heavy, and rough.  It's just
+D:$ an iron ingot.
 D:それは剣というにはあまりにも大きすぎた。
 D:大きく、分厚く、重く、そして大雑把すぎた。
 D:それはまさに鉄塊だった
