@@ -26343,11 +26343,11 @@ F:IM_ELEC | IM_FIRE | RES_PLAS
 F:WEIRD_MIND | BASH_DOOR | MOVE_BODY | HUMAN | NONLIVING | HAS_LITE_2
 F:NO_STUN | NO_SLEEP | NO_CONF | DROP_GOOD | DROP_4D2
 S:1_IN_4 | BR_PLAS | BO_PLAS | S_KIN
-D:$A professor who boasted that plasma can explain
+D:$He is a professor who boasted that plasma can explain
 D:$ all the paranormal phenomena in the world.
-D:$  The whole body has been remodeled with plasma,
+D:$  His whole body has been remodeled with plasma,
 D:$ making it hard to say that it is a human being.
-D:$  The Serpent of Chaos are also a type of plasma for him.
+D:$  The Serpent of Chaos is also a type of plasma for him.
 D:この世すべての超常現象はプラズマで説明できると豪語する教授だ。
 D:全身にプラズマ改造を施し、もはや人間とは言い難いものになっている。
 D:混沌のサーペントも彼にとってはプラズマの一種である。
