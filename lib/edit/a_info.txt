@@ -4400,7 +4400,7 @@ P:0:2d4:4:6:0
 F:STR | HIDE_TYPE
 F:BRAND_ACID | RES_ACID | ACTIVATE | SHOW_MODS | LITE | THROW | XTRA_H_RES
 U:ACID_BALL_AND_RESISTANCE
-D:$A acidic dagger finely balanced for deadly throws.
+D:$An acidic dagger finely balanced for deadly throws.
 D:「黒の牙」を意味する名を持つこの暗澹とした短剣は、
 D:その刃から酸の球を迸らせる力をもつ。
 
