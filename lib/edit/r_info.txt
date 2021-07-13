@@ -25573,6 +25573,11 @@ F:UNIQUE | MALE | PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | SMART | CAN_SPEAK
 F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | DROP_GREAT
 F:OPEN_DOOR | BASH_DOOR | KILL_BODY | EVIL | NO_CONF | REFLECTING
 S:1_IN_3 | INVULNER | WORLD | TELE_TO
+D:$He leads the gang organization, "Passione", which is mainly active in
+D:$ Italy.  He doesn't allow anyone, including the top executives in his
+D:$ gang, to explore his past or seek out information about himself.  With
+D:$ that obsession for secrecy, he gives all orders remotely or via multiple
+D:$ proxies so his true identity will not be revealed.
 D:イタリアを中心に活動するギャング組織「パッショーネ」のボス。
 D:何人たりとも自分の過去や情報を探ることを許さず、
 D:組織にも一切顔を出さないという臆病ともとれてしまうほどの用心深さから、
