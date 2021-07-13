@@ -25819,12 +25819,10 @@ B:CRUSH:HURT:4d8
 F:INVISIBLE | BASH_DOOR | DROP_90 | EVIL | DEMON | ELDRITCH_HORROR | CAN_SPEAK
 R:318:1d1
 R:1008:1d1
-D:$It is raised while being hidden from human society by mortal
-D:$ and near-mortal relatives.
-D:$  It is usually invisible, but it looks like a twisted rope,
-D:$ full of tentacles and eyeballs, resembling an octopus, a centipede,
-D:$ or a spider, and also has appearance of a mortal pedigree.
-D:$  It is raised hidden from human society by mortal and near-mortal relatives.
+D:$A mixed-race child of Yog-Sothoth and a mortal, it is usually invisible,
+D:$ but it looks like a twisted rope, full of tentacles and eyeballs,
+D:$ resembling an octopus, a centipede, or a spider.  It is raised, hidden
+D:$ from human society, by mortal and near-mortal relatives.
 D:ヨグ=ソトートと定命のものの混血児だ。
 D:それは通常は目に見えないが、綱をよじり合わせたような、触手と目玉だらけの姿で、
 D:タコかムカデかクモに似ており、そこに定命のほうの血統が現れた外見をしている。
