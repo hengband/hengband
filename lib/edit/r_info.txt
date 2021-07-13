@@ -26057,7 +26057,7 @@ F:SELF_LITE_1 | RAND_25
 S:1_IN_5 | BR_ELEC | BO_ELEC
 D:$It is a character of a "Famous Key Monster" (Fakemon for short),
 D:$ a game that is very popular all over the world.
-D:$  It drinks secretly not only at home but also at work.
+D:$  It drinks secretly, not only at home but also at work.
 D:世界中で大人気のゲーム、パチパチモンスター略してパチモンのキャラだ。
 D:それは家だけでなく職場でもこっそり酒を飲んでいる。
 
