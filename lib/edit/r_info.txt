@@ -25762,8 +25762,8 @@ F:EVIL | GIANT | HUMAN | RES_DARK
 R:238:3d5
 S:1_IN_8 | TRAPS
 D:$A short and thin ogre.
-D:$  It has intelligence to execute trap learnt from ogre mage,
-D:$ and directs soldiers
+D:$  It is intelligent enough, directing soldiers and having learned the
+D:$ ogre mage's trick of placing traps.
 D:背が低く痩せたオーガだ。
 D:オーガメイジの罠を実行するだけの知能があり、雑兵に指図する。
 
