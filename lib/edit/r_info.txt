@@ -25707,9 +25707,9 @@ B:BITE:HURT:1d3
 B:CLAW:HURT:1d3
 F:RAND_25 | CAN_FLY | ANIMAL | PASS_WALL | WILD_GRASS | FRIENDS
 D:$A famous painter who stayed at a certain post station drew a sparrow
-D:$ on a folding screen due to lack of accommodation charges.
-D:$  It's frustrating because it doesn't enter a cage
-D:$ so it can't have a good rest.
+D:$ on a folding screen to help pay the bill for the room.  That incredibly
+D:$ lifelike bird is now frustrated that it doesn't have a cage where it
+D:$ can settle for a good rest.
 D:とある宿場に泊まった高名な絵師が宿代が足りなくて屏風へ描いた雀だ。
 D:駕籠がないのでゆっくり休めずイライラしている。
 
