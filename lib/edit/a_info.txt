@@ -4412,7 +4412,7 @@ P:0:0d0:0:0:10
 F:FULL_NAME | SPEED | STEALTH | FREE_ACT | LEVITATION
 F:ACTIVATE
 U:PHASE_DOOR
-D:$Can fly if wearing these winged sandals of Hermes.
+D:$You can fly if wearing these winged sandals of Hermes.
 D:伝令神ヘルメスの有翼のサンダルだ。
 D:身につけると空を飛ぶことができる。
 
