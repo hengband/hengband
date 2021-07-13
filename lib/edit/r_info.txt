@@ -26223,9 +26223,9 @@ B:BITE:HURT:1d12
 B:BITE:HURT:1d5
 F:UNIQUE | FORCE_MAXHP | ESCORT | BASH_DOOR
 F:ANIMAL | NO_FEAR | NO_SLEEP | WILD_WOOD | WILD_WASTE | DROP_CORPSE
-D:$It is the boss of the pack of man-eating wolves 
-D:$that plunged the city of Paris into the depths of fear.
-D:$It has reddish hair, a large body, and a short tail like a stump.
+D:$It is the boss of the pack of man-eating wolves
+D:$ that plunged the city of Paris into the depths of fear.
+D:$  It has reddish hair, a large body, and a short tail like a stump.
 D:パリの街を恐怖のどん底に陥れた、人喰い狼の群れのボスだ。
 D:赤みがかった体毛、大きな体、切り株のような短い尻尾を持つ。
 
@@ -26373,6 +26373,6 @@ B:CRUSH:HURT:3d6
 F:BASH_DOOR | KILL_BODY | NONLIVING | COLD_BLOOD | CAN_FLY | IM_FIRE | IM_POIS
 F:NO_CONF | NO_SLEEP | NO_STUN | EMPTY_MIND | RES_TELE
 D:$You got yourself a rogue Bludger.
-D:$That has been tampered with.
+D:$  That has been tampered with.
 D:なんてこった、チンピラブラッジャーのお出ましだ。
 D:誰かが細工してこちらに差し向けたのだろう。
