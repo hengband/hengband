@@ -25390,7 +25390,7 @@ S:1_IN_2 | INVULNER
 S:BO_MANA | BO_PLAS | ROCKET | PSY_SPEAR
 S:BA_FIRE | BA_LITE | BR_FIRE | BR_LITE | BR_SHAR | BR_PLAS
 D:$It is a flying object in the shape of a bee in flames.
-D:$  A great person sent you to kill you.
+D:$  A great person sent it to kill you.
 D:$  YOU SHALL DIE.
 D:炎に包まれた蜂の姿をした飛行物体だ。
 D:ある偉大な人物があなたを抹殺するために遣わした。
