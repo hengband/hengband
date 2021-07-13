@@ -4400,7 +4400,7 @@ P:0:2d4:4:6:0
 F:STR | HIDE_TYPE
 F:BRAND_ACID | RES_ACID | ACTIVATE | SHOW_MODS | LITE | THROW | XTRA_H_RES
 U:ACID_BALL_AND_RESISTANCE
-D:$A acidic dagger finely balanced for deadly throws.
+D:$An acidic dagger finely balanced for deadly throws.
 D:「黒の牙」を意味する名を持つこの暗澹とした短剣は、
 D:その刃から酸の球を迸らせる力をもつ。
 
@@ -4412,7 +4412,7 @@ P:0:0d0:0:0:10
 F:FULL_NAME | SPEED | STEALTH | FREE_ACT | LEVITATION
 F:ACTIVATE
 U:PHASE_DOOR
-D:$Can fly if wearing these winged sandals of Hermes.
+D:$You can fly if wearing these winged sandals of Hermes.
 D:伝令神ヘルメスの有翼のサンダルだ。
 D:身につけると空を飛ぶことができる。
 
@@ -4426,6 +4426,10 @@ F:SLAY_EVIL | KILL_DEMON | BRAND_FIRE | BRAND_ELEC
 F:IM_FIRE | RES_ELEC | SEE_INVIS | LITE | LITE_3
 F:BLESSED | RIDING | ACTIVATE
 U:BA_FIRE_2
+D:$It is the trident Shiva used to burn down, with one blow, the iron fort,
+D:$ silver fort, and gold fort created by the three asura brothers known as
+D:$ "Tripurasura".  Each of the spear's three tips represents one of Shiva's
+D:$ powers:  will, action, and wisdom.
 D:破壊神シヴァが持つ三又槍だ。3つの穂先はそれぞれシヴァの力である、意志(欲望)、行動、知恵をあらわす。
 D:シヴァはこの槍を用いて、アシュラ族の3人の魔神『トリプラースラ』がつくった「鉄でできた町」「銀でできた町」
 D:「金でできた町」を一晩で焼き払った。
@@ -4439,17 +4443,19 @@ F:INT | WIS | HIDE_TYPE | SHOW_MODS
 F:BRAND_MAGIC | RES_CURSE | REFLECT
 F:SEE_INVIS | EASY_SPELL | BLESSED | ACTIVATE
 U:ELBERETH
-D:$This athame has magical blade which provides some nasty effect to your enemies.
+D:$This athame has a magical blade which provides some nasty effect to your enemies.
 D:魔力を帯びた刃を持つアサメだ。斬りつけた敵に様々な効果をもたらすだろう。
 
 N:265:賢者マーリンの魔法の
-E:of Wizard Marlin
+E:of the Wizard, Merlin
 I:34:50:3
 W:65:90:50:50000
 P:0:1d1:0:0:15
 F:INT | WIS | HIDE_TYPE | INSTA_ART
 F:RES_CURSE | RES_BLIND
 F:TELEPATHY | DEC_MANA | REFLECT | BLESSED
+D:$It is the magic mirror of the sage, Merlin.  You will be able to get the
+D:$ help of the wise man through the mirror.
 D:賢者マーリンの魔法の鏡だ。鏡を通じて賢者の助けを得ることができるだろう。
 
 N:266:『ドラゴンころし』
@@ -4458,6 +4464,8 @@ I:23:25:0
 W:30:100:500:100000
 F:IMPACT
 P:0:8d8:0:15:10
+D:$It's too big to be a sword:  too thick, heavy, and rough.  It's just
+D:$ an iron ingot.
 D:それは剣というにはあまりにも大きすぎた。
 D:大きく、分厚く、重く、そして大雑把すぎた。
 D:それはまさに鉄塊だった
