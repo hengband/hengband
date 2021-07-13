@@ -4447,13 +4447,15 @@ D:$This athame has a magical blade which provides some nasty effect to your enem
 D:魔力を帯びた刃を持つアサメだ。斬りつけた敵に様々な効果をもたらすだろう。
 
 N:265:賢者マーリンの魔法の
-E:of Wizard Marlin
+E:of the Wizard, Merlin
 I:34:50:3
 W:65:90:50:50000
 P:0:1d1:0:0:15
 F:INT | WIS | HIDE_TYPE | INSTA_ART
 F:RES_CURSE | RES_BLIND
 F:TELEPATHY | DEC_MANA | REFLECT | BLESSED
+D:$It is the magic mirror of the sage, Merlin.  You will be able to get the
+D:$ help of the wise man through the mirror.
 D:賢者マーリンの魔法の鏡だ。鏡を通じて賢者の助けを得ることができるだろう。
 
 N:266:『ドラゴンころし』
