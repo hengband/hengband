@@ -26234,6 +26234,10 @@ B:BITE:SUPERHURT:5d4
 F:DROP_CORPSE | ANIMAL | HURT_FIRE | NEVER_MOVE
 F:| DROP_90 | IM_POIS | RES_WATE | CAN_SWIM | CAN_FLY
 S:1_IN_4 | SHOOT | BO_FIRE | BA_POIS
+D:$This ferocious carnivorous plant has a flower, lined with sharp fangs,
+D:$ more than capable of dispatching a person.  It is often found in clay
+D:$ pipes:  occasionally preying on humans who stupidly step too close.
+D:$  Some individuals spit out flames or poisonous gas.
 D:食虫植物が意思を持った凶暴な人喰い花で、鋭い牙を生やしている。
 D:おもに土管の中に潜んでおり、時々顔を出して愚かにも自分を踏もうとした人間を捕食する。
 D:口から炎や毒ガスやシューリンガンなどを吐き出して攻撃してくる個体もいる。
