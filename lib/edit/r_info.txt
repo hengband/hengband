@@ -26148,8 +26148,8 @@ F:IM_FIRE | IM_COLD | IM_ELEC | RES_LITE
 S:1_IN_7 | DISPEL
 R:293:4d2
 R:449:1d3
-D:$Bastral is the strongest berserker. He has never lost a single combat　 
-D:$since he got Windberg the legendary battle ax.
+D:$Bastral is the strongest berserker. He has never lost a single combat
+D:$ since he got Windberg, the legendary battle ax.
 D:最強の狂戦士バストラルは、伝説のバトル・アックス、
 D:ウィンドバーグを手にして以来、一度も一騎討ちに敗れたことはない。
 
