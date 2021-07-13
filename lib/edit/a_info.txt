@@ -4426,6 +4426,10 @@ F:SLAY_EVIL | KILL_DEMON | BRAND_FIRE | BRAND_ELEC
 F:IM_FIRE | RES_ELEC | SEE_INVIS | LITE | LITE_3
 F:BLESSED | RIDING | ACTIVATE
 U:BA_FIRE_2
+D:$It is the trident Shiva used to burn down, with one blow, the iron fort,
+D:$ silver fort, and gold fort created by the three asura brothers known as
+D:$ "Tripurasura".  Each of the spear's three tips represents one of Shiva's
+D:$ powers:  will, action, and wisdom.
 D:破壊神シヴァが持つ三又槍だ。3つの穂先はそれぞれシヴァの力である、意志(欲望)、行動、知恵をあらわす。
 D:シヴァはこの槍を用いて、アシュラ族の3人の魔神『トリプラースラ』がつくった「鉄でできた町」「銀でできた町」
 D:「金でできた町」を一晩で焼き払った。
