@@ -25779,9 +25779,10 @@ B:HIT:HURT:3d8
 F:DROP_1D2
 F:OPEN_DOOR | BASH_DOOR | DROP_CORPSE | DROP_SKELETON
 F:EVIL | GIANT | HUMAN | RES_SHAR | KILL_WALL |
-D:$This majestic humanoid is hybrid of human and giant.
-D:$  Wall of dungeon pays respect to blood of one parent,
-D:$ incarnation of nature, and pave the way.
+D:$This majestic humanoid is a hybrid of human and giant.
+D:$  Paying homage to the blood of one parent, an
+D:$ incarnation of nature, the walls of the dungeon open up
+D:$ to grant it passage.
 D:この堂々たる体躯の人型生物は、人間と巨人の混血だ。
 D:自然の顕現である片親の血に敬意を払い、ダンジョンの壁が道を開ける。
 
