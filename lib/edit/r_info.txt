@@ -25597,6 +25597,9 @@ F:UNIQUE | MALE
 F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | SMART | CAN_SPEAK | ESCORTS | HUMAN
 F:OPEN_DOOR | BASH_DOOR | MOVE_BODY | EVIL | IM_POIS | NO_CONF | NO_SLEEP
 S:1_IN_2 | S_KIN
+D:$He leads the special forces of the Italian gang organization, "Passione",
+D:$ and is often used as a trump card by his boss.  He slaughtered Roman
+D:$ citizens with his stand, "Green Day", that sprays a flesh-eating mold.
 D:イタリアのギャング組織「パッショーネ」の特殊部隊
 D:「ボス親衛隊」の一人にして、ボスの切り札。
 D:食人カビを散布するスタンド「グリーン・ディ」によってローマ市民を虐殺した。
