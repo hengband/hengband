@@ -26027,7 +26027,7 @@ W:23:2:0:160:0:0
 B:CLAW:HURT:2d9
 B:BITE:HURT:2d9
 F:WILD_GRASS | WILD_WASTE | FRIENDS | ANIMAL | DROP_CORPSE | DROP_SKELETON
-D:$It is called as the king of beasts.
+D:$It is often called the king of beasts.
 D:百獣の王だ。
 
 N:1317:ピカチャウ
