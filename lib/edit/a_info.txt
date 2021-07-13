@@ -4443,7 +4443,7 @@ F:INT | WIS | HIDE_TYPE | SHOW_MODS
 F:BRAND_MAGIC | RES_CURSE | REFLECT
 F:SEE_INVIS | EASY_SPELL | BLESSED | ACTIVATE
 U:ELBERETH
-D:$This athame has magical blade which provides some nasty effect to your enemies.
+D:$This athame has a magical blade which provides some nasty effect to your enemies.
 D:魔力を帯びた刃を持つアサメだ。斬りつけた敵に様々な効果をもたらすだろう。
 
 N:265:賢者マーリンの魔法の
