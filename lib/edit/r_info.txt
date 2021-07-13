@@ -25974,7 +25974,7 @@ B:BUTT:HURT:8d4
 F:BASH_DOOR | RAND_25 | CAN_SWIM | NO_FEAR | FRIENDS | WILD_SWAMP
 F:ANIMAL | DROP_SKELETON | DROP_CORPSE | RIDING
 D:$Big water buffalo!
-D:$  This big horn may penetrate you.
+D:$  Its big horn may penetrate you.
 D:巨大な水牛だ。その角はあなたの肉体を貫くかもしれない。
 
 N:1312:イヌワシ
