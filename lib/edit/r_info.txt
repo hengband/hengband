@@ -25511,7 +25511,7 @@ B:CRAWL:POISON:4d4
 F:FRIENDS | ANIMAL | CAN_SWIM | WEIRD_MIND | ELDRITCH_HORROR |
 F:IM_POIS | RES_DARK | NO_FEAR | RES_WATE
 S:1_IN_10 | BR_CHAO
-D:$It's a *illegally* dangerous creature.
+D:$It's an *illegally* dangerous creature.
 D:$  It grows octopus-like legs from a mice-like head.
 D:ネズミのような頭部から蛸のような足が生えている危険な生物だ。
 
