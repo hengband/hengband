@@ -192,7 +192,11 @@ static void display_player_speed(player_type *creature_ptr, TERM_COLOR attr, int
     char buf[160];
     if (tmp_speed) {
         if (!creature_ptr->riding)
-            sprintf(buf, "(%+d%+d)", base_speed - tmp_speed, tmp_speed);
+            if (creature_ptr->lightspeed) {
+                sprintf(buf, _("光速化 (+99)", "Lightspeed (+99)"));
+            } else {
+                sprintf(buf, "(%+d%+d)", base_speed - tmp_speed, tmp_speed);
+            }
         else
             sprintf(buf, _("乗馬中 (%+d%+d)", "Riding (%+d%+d)"), base_speed - tmp_speed, tmp_speed);
 
