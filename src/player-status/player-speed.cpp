@@ -27,7 +27,7 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
-/*
+/*!
  * @brief 速度 - 初期値、下限、上限
  * @details
  * * 初期値110 - 加速+0に相当
@@ -43,7 +43,7 @@ void PlayerSpeed::set_locals()
     this->tr_bad_flag = TR_SPEED;
 }
 
-/*
+/*!
  * @brief 速度計算 - 種族
  * @return 速度値の増減分
  * @details
@@ -86,7 +86,7 @@ s16b PlayerSpeed::race_value()
     return result;
 }
 
-/*
+/*!
  * @brief 速度計算 - 職業
  * @return 速度値の増減分
  * @details
@@ -131,7 +131,7 @@ s16b PlayerSpeed::class_value()
     return result;
 }
 
-/*
+/*!
  * @brief 速度計算 - 性格
  * @return 速度値の増減分
  * @details
@@ -146,7 +146,7 @@ s16b PlayerSpeed::personality_value()
     return result;
 }
 
-/*
+/*!
  * @brief 速度計算 - 装備品特殊セット
  * @return 速度値の増減分
  * @details
@@ -170,7 +170,7 @@ s16b PlayerSpeed::special_weapon_set_value()
     return result;
 }
 
-/*
+/*!
  * @brief 速度計算 - 装備品
  * @return 速度値の増減分
  * @details
@@ -185,7 +185,7 @@ s16b PlayerSpeed::equipments_value()
     return result;
 }
 
-/*
+/*!
  * @brief 速度計算 - 一時的効果
  * @return 速度値の増減分
  * @details
@@ -223,7 +223,7 @@ s16b PlayerSpeed::time_effect_value()
     return result;
 }
 
-/*
+/*!
  * @brief 速度計算 - 型
  * @return 速度値の増減分
  * @details
@@ -237,7 +237,7 @@ s16b PlayerSpeed::battleform_value()
     return result;
 }
 
-/*
+/*!
  * @brief 速度計算 - 変異
  * @return 速度値の増減分
  * @details
@@ -265,7 +265,7 @@ s16b PlayerSpeed::mutation_value()
     return result;
 }
 
-/*
+/*!
  * @brief 速度計算 - 乗馬
  * @return 速度値の増減分
  * @details
@@ -299,7 +299,7 @@ s16b PlayerSpeed::riding_value()
     return result;
 }
 
-/*
+/*!
  * @brief 速度計算 - 重量
  * @return 速度値の増減分
  * @details
@@ -333,7 +333,7 @@ s16b PlayerSpeed::inventory_weight_value()
     return result;
 }
 
-/*
+/*!
  * @brief 速度計算 - ACTION
  * @return 速度値の増減分
  * @details
@@ -347,7 +347,7 @@ s16b PlayerSpeed::action_value()
     return result;
 }
 
-/*
+/*!
  * @brief 速度フラグ - 装備
  * @return 加速修正が0でない装備に対応したBIT_FLAG
  * @details
@@ -363,7 +363,7 @@ BIT_FLAGS PlayerSpeed::equipments_flags(tr_type check_flag)
     return result;
 }
 
-/*
+/*!
  * @brief 速度計算 - 乗馬時の例外処理
  * @return 計算済の速度値
  * @details
