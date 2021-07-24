@@ -471,7 +471,7 @@ void wiz_jump_to_dungeon(player_type *creature_ptr)
     if (autosave_l)
         do_cmd_save_game(creature_ptr, true);
 
-    floor_warp(creature_ptr, dungeon_type, command_arg);
+    jump_floor(creature_ptr, dungeon_type, command_arg);
 }
 
 /*!

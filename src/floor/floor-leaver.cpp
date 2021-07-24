@@ -424,7 +424,7 @@ void leave_floor(player_type *creature_ptr)
  * @brief 任意のダンジョン及び階層に飛ぶ
  * Go to any level
  */
-void floor_warp(player_type *creature_ptr, DUNGEON_IDX dun_idx, DEPTH depth)
+void jump_floor(player_type *creature_ptr, DUNGEON_IDX dun_idx, DEPTH depth)
 {
     creature_ptr->dungeon_idx = dun_idx;
     creature_ptr->current_floor_ptr->dun_level = depth;
