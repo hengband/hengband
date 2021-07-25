@@ -44,6 +44,7 @@ enum sv_cloak_type {
     SV_CLOAK = 1,
     SV_ELVEN_CLOAK = 2,
     SV_FUR_CLOAK = 3,
+    SV_MAGIC_RESISTANCE_CLOAK = 4,
     SV_ETHEREAL_CLOAK = 5,
     SV_SHADOW_CLOAK = 6,
 };

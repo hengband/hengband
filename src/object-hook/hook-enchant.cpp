@@ -46,7 +46,7 @@ bool object_is_rare(object_type *o_ptr)
         break;
 
     case TV_CLOAK:
-        if (o_ptr->sval == SV_ELVEN_CLOAK || o_ptr->sval == SV_ETHEREAL_CLOAK || o_ptr->sval == SV_SHADOW_CLOAK)
+        if (o_ptr->sval == SV_ELVEN_CLOAK || o_ptr->sval == SV_ETHEREAL_CLOAK || o_ptr->sval == SV_SHADOW_CLOAK || o_ptr->sval == SV_MAGIC_RESISTANCE_CLOAK)
             return true;
         break;
 
@@ -57,6 +57,11 @@ bool object_is_rare(object_type *o_ptr)
 
     case TV_SOFT_ARMOR:
         if (o_ptr->sval == SV_KUROSHOUZOKU || o_ptr->sval == SV_ABUNAI_MIZUGI)
+            return true;
+        break;
+
+    case TV_HARD_ARMOR:
+        if (o_ptr->sval == SV_MITHRIL_CHAIN_MAIL || o_ptr->sval == SV_MITHRIL_PLATE_MAIL || o_ptr->sval == SV_ADAMANTITE_PLATE_MAIL)
             return true;
         break;
 

@@ -413,7 +413,6 @@ static bool select_debugging_floor(player_type *creature_ptr, int dungeon_type)
         continue;
     }
 
-    creature_ptr->dungeon_idx = (DUNGEON_IDX)dungeon_type;
     return true;
 }
 
@@ -422,7 +421,7 @@ static bool select_debugging_floor(player_type *creature_ptr, int dungeon_type)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @details 範囲外の値が選択されたら再入力を促す
  */
-static bool select_debugging_dungeon(player_type *creature_ptr, int *dungeon_type)
+static bool select_debugging_dungeon(player_type *creature_ptr, DUNGEON_IDX *dungeon_type)
 {
     if (command_arg > 0) {
         return true;    
@@ -437,7 +436,7 @@ static bool select_debugging_dungeon(player_type *creature_ptr, int *dungeon_typ
             return false;
         }
 
-        *dungeon_type = atoi(tmp_val);
+        *dungeon_type = (DUNGEON_IDX)atoi(tmp_val);
         if ((*dungeon_type < DUNGEON_ANGBAND) || (*dungeon_type > DUNGEON_MAX)) {
             msg_print("Invalid dungeon. Please re-input.");
             continue;
@@ -448,12 +447,12 @@ static bool select_debugging_dungeon(player_type *creature_ptr, int *dungeon_typ
 }
 
 /*!
- * @brief 任意のダンジョン及び階層に飛ぶ /
+ * @brief 任意のダンジョン及び階層に飛ぶtための選択処理
  * Go to any level
  */
 void wiz_jump_to_dungeon(player_type *creature_ptr)
 {
-    int dungeon_type;
+    DUNGEON_IDX dungeon_type = 1;
     if (!select_debugging_dungeon(creature_ptr, &dungeon_type)) {
         return;
     }
@@ -462,32 +461,17 @@ void wiz_jump_to_dungeon(player_type *creature_ptr)
         return;
     }
 
-    if (command_arg < d_info[creature_ptr->dungeon_idx].mindepth)
+    if (command_arg < d_info[dungeon_type].mindepth)
         command_arg = 0;
 
-    if (command_arg > d_info[creature_ptr->dungeon_idx].maxdepth)
-        command_arg = (COMMAND_ARG)d_info[creature_ptr->dungeon_idx].maxdepth;
+    if (command_arg > d_info[dungeon_type].maxdepth)
+        command_arg = (COMMAND_ARG)d_info[dungeon_type].maxdepth;
 
     msg_format("You jump to dungeon level %d.", command_arg);
     if (autosave_l)
         do_cmd_save_game(creature_ptr, true);
 
-    creature_ptr->current_floor_ptr->dun_level = command_arg;
-    prepare_change_floor_mode(creature_ptr, CFM_RAND_PLACE);
-    if (!is_in_dungeon(creature_ptr))
-        creature_ptr->dungeon_idx = 0;
-
-    creature_ptr->current_floor_ptr->inside_arena = false;
-    creature_ptr->wild_mode = false;
-    leave_quest_check(creature_ptr);
-    if (record_stair)
-        exe_write_diary(creature_ptr, DIARY_WIZ_TELE, 0, NULL);
-
-    creature_ptr->current_floor_ptr->inside_quest = 0;
-    PlayerEnergy(creature_ptr).reset_player_turn();
-    creature_ptr->energy_need = 0;
-    prepare_change_floor_mode(creature_ptr, CFM_FIRST_FLOOR);
-    creature_ptr->leaving = true;
+    jump_floor(creature_ptr, dungeon_type, command_arg);
 }
 
 /*!
