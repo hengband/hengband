@@ -558,7 +558,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
     }
 
     if (has_flag(flgs, TR_RES_CURSE)) {
-        info[i++] = _("それは呪いへの抵抗力を高める。", "It produces your high resisrance to curse.");
+        info[i++] = _("それは呪いへの抵抗力を高める。", "It increases your resistance to curses.");
     }
 
     if (has_flag(flgs, TR_SH_FIRE))
