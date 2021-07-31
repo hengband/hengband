@@ -318,7 +318,7 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
     m_ptr->ml = false;
     if (mode & PM_FORCE_PET) {
         set_pet(player_ptr, m_ptr);
-    } else if ((r_ptr->flags7 & RF7_FRIENDLY) || (mode & PM_FORCE_FRIENDLY) || is_friendly_idx(player_ptr, who)) {
+    } else if ((!who && (r_ptr->flags7 & RF7_FRIENDLY)) || is_friendly_idx(player_ptr, who) || (mode & PM_FORCE_FRIENDLY)) {
         if (!monster_has_hostile_align(player_ptr, NULL, 0, -1, r_ptr) && !player_ptr->current_floor_ptr->inside_arena)
             set_friendly(m_ptr);
     }
