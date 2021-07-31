@@ -7417,7 +7417,7 @@ F:INVISIBLE | OPEN_DOOR | BASH_DOOR |
 F:EVIL | NO_CONF | NO_SLEEP
 D:$A creature who lives underground and eats surface 
 D:$dwellers whom it catches 
-D:$with its poisonous tentacle, which is the only part of the creature tha 
+D:$with its poisonous tentacle, which is the only part of the creature that 
 D:$is ever seen. Perhaps it is better not to see the part which remains 
 D:$underground...
 D:地中に棲み、その毒のある触手で地上の生物を捕らえて食べている。
