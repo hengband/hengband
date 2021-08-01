@@ -12,6 +12,7 @@
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/apply-magic-amulet.h"
 #include "object-enchant/apply-magic-armor.h"
+#include "object-enchant/apply-magic-cloak.h"
 #include "object-enchant/apply-magic-others.h"
 #include "object-enchant/apply-magic-ring.h"
 #include "object-enchant/apply-magic-shield.h"
@@ -145,15 +146,24 @@ void apply_magic_to_object(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
         }
 
         break;
+    case TV_CLOAK:
+        if (o_ptr->sval == SV_ELVEN_CLOAK) {
+            o_ptr->pval = randint1(4);
+        }
+
+        if (power != 0) {
+            CloakEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
+        }
+
+        break;
     case TV_DRAG_ARMOR:
     case TV_HARD_ARMOR:
     case TV_SOFT_ARMOR:
     case TV_HELM:
     case TV_CROWN:
-    case TV_CLOAK:
     case TV_GLOVES:
     case TV_BOOTS: {
-        if (((o_ptr->tval == TV_CLOAK) && (o_ptr->sval == SV_ELVEN_CLOAK)) || ((o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_KUROSHOUZOKU))) {
+        if ((o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_KUROSHOUZOKU)) {
             o_ptr->pval = randint1(4);
         }
         
