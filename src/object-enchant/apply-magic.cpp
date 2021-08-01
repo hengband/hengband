@@ -149,9 +149,10 @@ void apply_magic_to_object(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
 
         if (power || ((o_ptr->tval == TV_HELM) && (o_ptr->sval == SV_DRAGON_HELM)) || ((o_ptr->tval == TV_SHIELD) && (o_ptr->sval == SV_DRAGON_SHIELD))
             || ((o_ptr->tval == TV_GLOVES) && (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES))
-            || ((o_ptr->tval == TV_BOOTS) && (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE)))
-            apply_magic_armor(owner_ptr, o_ptr, lev, power);
-
+            || ((o_ptr->tval == TV_BOOTS) && (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE))) {
+            ArmorEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
+        }
+        
         break;
     }
     case TV_RING:

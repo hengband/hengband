@@ -1,7 +1,26 @@
 ﻿#pragma once
 
+#include "object-enchant/enchanter-base.h"
 #include "system/angband.h"
 
-typedef struct object_type object_type;
-typedef struct player_type player_type;
-void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, int power);
+struct object_type;
+struct player_type;
+class ArmorEnchanter : EnchanterBase {
+public:
+    ArmorEnchanter(player_type *owner_ptr, object_type *o_ptr, DEPTH level, int power);
+    ArmorEnchanter() = delete;
+    virtual ~ArmorEnchanter() = default;
+    void apply_magic() override;
+
+protected:
+    void enchant() override;
+    void give_ego_index() override;
+    void give_high_ego_index() override;
+    void give_cursed() override;
+
+private:
+    player_type *owner_ptr;
+    object_type *o_ptr;
+    DEPTH level;
+    int power;
+};
