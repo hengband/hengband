@@ -19,6 +19,7 @@ protected:
     void give_cursed() override;
 
 private:
+    void set_ac_bonus();
     player_type *owner_ptr;
     object_type *o_ptr;
     DEPTH level;

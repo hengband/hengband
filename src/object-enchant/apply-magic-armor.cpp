@@ -41,23 +41,7 @@ ArmorEnchanter::ArmorEnchanter(player_type *owner_ptr, object_type *o_ptr, DEPTH
  */
 void ArmorEnchanter::apply_magic()
 {
-    ARMOUR_CLASS toac1 = (ARMOUR_CLASS)randint1(5) + m_bonus(5, this->level);
-    ARMOUR_CLASS toac2 = (ARMOUR_CLASS)m_bonus(10, this->level);
-    if (this->power > 0) {
-        this->o_ptr->to_a += toac1;
-        if (this->power > 1) {
-            this->o_ptr->to_a += toac2;
-        }
-    } else if (this->power < 0) {
-        this->o_ptr->to_a -= toac1;
-        if (this->power < -1) {
-            this->o_ptr->to_a -= toac2;
-        }
-
-        if (this->o_ptr->to_a < 0)
-            this->o_ptr->curse_flags.set(TRC::CURSED);
-    }
-
+    this->set_ac_bonus();
     switch (this->o_ptr->tval) {
     case TV_DRAG_ARMOR: {
         /* this->power > 2 is debug only */
@@ -360,4 +344,32 @@ void ArmorEnchanter::give_high_ego_index()
 void ArmorEnchanter::give_cursed()
 {
 
+}
+
+/*
+ * @details パワー0の時は何もしない
+ */
+void ArmorEnchanter::set_ac_bonus()
+{
+    auto toac1 = (ARMOUR_CLASS)randint1(5) + m_bonus(5, this->level);
+    auto toac2 = (ARMOUR_CLASS)m_bonus(10, this->level);
+    if (this->power > 0) {
+        this->o_ptr->to_a += toac1;
+        if (this->power > 1) {
+            this->o_ptr->to_a += toac2;
+        }
+
+        return;
+    }
+    
+    if (this->power < 0) {
+        this->o_ptr->to_a -= toac1;
+        if (this->power < -1) {
+            this->o_ptr->to_a -= toac2;
+        }
+
+        if (this->o_ptr->to_a < 0) {
+            this->o_ptr->curse_flags.set(TRC::CURSED);
+        }
+    }
 }
