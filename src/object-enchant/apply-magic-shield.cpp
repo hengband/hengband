@@ -27,13 +27,15 @@ ShieldEnchanter::ShieldEnchanter(player_type *owner_ptr, object_type *o_ptr, DEP
 }
 
 /*
- * @details 金属製の盾は魔法を受け付けない. power > 2はデバッグ専用.
+ * @details power > 2はデバッグ専用.
  */
 void ShieldEnchanter::apply_magic()
 {
-    this->enchant();
-    if (this->stop_continuous_application) {
-        return;
+    if (this->o_ptr->sval == SV_DRAGON_SHIELD) {
+        dragon_resist(this->o_ptr);
+        if (!one_in_(3)) {
+            return;
+        }
     }
 
     if (this->power <= 1) {
@@ -48,22 +50,8 @@ void ShieldEnchanter::apply_magic()
     this->give_ego_index();
 }
 
-void ShieldEnchanter::enchant()
-{
-    switch (this->o_ptr->sval) {
-    case SV_DRAGON_SHIELD:
-        dragon_resist(this->o_ptr);
-        if (!one_in_(3)) {
-            this->stop_continuous_application = true;
-        }
-
-        return;
-    default:
-        return;
-    }
-}
-
 /*
+ * @details 金属製の盾は魔法を受け付けない.
  * @todo ミラー・シールドはエゴの付与確率が低い. この仕様で良いか要確認.
  */
 void ShieldEnchanter::give_ego_index()

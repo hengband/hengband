@@ -133,93 +133,49 @@ void apply_magic_to_object(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
 
         break;
     case TV_POLEARM:
-        if ((power != 0) && !(o_ptr->sval == SV_DEATH_SCYTHE)) {
+        if ((power != 0) && (o_ptr->sval != SV_DEATH_SCYTHE)) {
             apply_magic_weapon(owner_ptr, o_ptr, lev, power);
         }
 
         break;
     case TV_SWORD:
-        if ((power != 0) && !(o_ptr->sval == SV_POISON_NEEDLE)) {
+        if ((power != 0) && (o_ptr->sval != SV_POISON_NEEDLE)) {
             apply_magic_weapon(owner_ptr, o_ptr, lev, power);
         }
 
         break;
     case TV_SHIELD:
-        if ((power != 0) || (o_ptr->sval == SV_DRAGON_SHIELD)) {
-            ShieldEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
-        }
-
+        ShieldEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
         break;
     case TV_CLOAK:
-        if (o_ptr->sval == SV_ELVEN_CLOAK) {
-            o_ptr->pval = randint1(4);
-        }
-
-        if (power != 0) {
-            CloakEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
-        }
-
+        CloakEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
         break;
     case TV_HELM:
-        if ((power != 0) || (o_ptr->sval == SV_DRAGON_HELM)) {
-            HelmEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
-        }
-
+        HelmEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
         break;
     case TV_CROWN:
-        if (power != 0) {
-            CrownEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
-        }
-
+        CrownEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
         break;
     case TV_BOOTS:
-        if ((power != 0) || (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE)) {
-            BootsEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
-        }
-
+        BootsEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
         break;
     case TV_DRAG_ARMOR:
     case TV_HARD_ARMOR:
-        if (power != 0) {
-            ArmorEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
-        }
-
-        break;
     case TV_SOFT_ARMOR:
-        if (o_ptr->sval == SV_KUROSHOUZOKU) {
-            o_ptr->pval = randint1(4);
-        }
-
-        if (power != 0) {
-            ArmorEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
-        }
-
+        ArmorEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
         break;
     case TV_GLOVES:
-        if ((power != 0) || (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES)) {
-            GlovesEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
-        }
-
+        GlovesEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
         break;
     case TV_RING:
-        if (!power && (randint0(100) < 50)) {
-            power = -1;
-        }
-
         RingEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
         break;
-    case TV_AMULET: {
-        if (!power && (randint0(100) < 50)) {
-            power = -1;
-        }
-
+    case TV_AMULET:
         AmuletEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
         break;
-    }
-    default: {
+    default:
         apply_magic_others(owner_ptr, o_ptr, power);
         break;
-    }
     }
 
     if ((o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI) && (owner_ptr->pseikaku == PERSONALITY_SEXY)) {

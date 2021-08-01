@@ -8,6 +8,7 @@
 #include "artifact/random-art-generator.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/object-ego.h"
+#include "sv-definition/sv-protector-types.h"
 #include "system/object-type-definition.h"
 
 /*
@@ -28,6 +29,10 @@ CloakEnchanter::CloakEnchanter(player_type *owner_ptr, object_type *o_ptr, DEPTH
  */
 void CloakEnchanter::apply_magic()
 {
+    if (this->o_ptr->sval == SV_ELVEN_CLOAK) {
+        this->o_ptr->pval = randint1(4);
+    }
+
     if (this->power > 1) {
         if (one_in_(20) || (this->power > 2)) {
             become_random_artifact(this->owner_ptr, this->o_ptr, false);

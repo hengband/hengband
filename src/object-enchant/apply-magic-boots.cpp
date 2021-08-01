@@ -10,8 +10,8 @@
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-ego.h"
-#include "system/object-type-definition.h"
 #include "sv-definition/sv-protector-types.h"
+#include "system/object-type-definition.h"
 
 /*
  * @brief コンストラクタ
@@ -45,7 +45,10 @@ void BootsEnchanter::apply_magic()
         }
 
         this->o_ptr->name2 = get_random_ego(INVEN_FEET, true);
-    } else if (this->power < -1) {
+        return;
+    }
+
+    if (this->power < -1) {
         this->o_ptr->name2 = get_random_ego(INVEN_FEET, false);
     }
 }

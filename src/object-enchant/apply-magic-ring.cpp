@@ -44,7 +44,11 @@ RingEnchanter::RingEnchanter(player_type *owner_ptr, object_type *o_ptr, DEPTH l
  */
 void RingEnchanter::apply_magic()
 {
-    enchant();
+    if ((this->power == 0) && (randint0(100) < 50)) {
+        this->power = -1;
+    }
+
+    this->enchant();
     if ((one_in_(400) && (this->power > 0) && !object_is_cursed(this->o_ptr) && (this->level > 79)) || (this->power > 2)) {
         this->o_ptr->pval = MIN(this->o_ptr->pval, 4);
         become_random_artifact(this->owner_ptr, this->o_ptr, false);

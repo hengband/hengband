@@ -31,6 +31,10 @@ ArmorEnchanter::ArmorEnchanter(player_type *owner_ptr, object_type *o_ptr, DEPTH
  */
 void ArmorEnchanter::apply_magic()
 {
+    if (this->power == 0) {
+        return;
+    }
+
     switch (this->o_ptr->tval) {
     case TV_DRAG_ARMOR:
         if (one_in_(50) || (this->power > 2)) {
@@ -45,6 +49,10 @@ void ArmorEnchanter::apply_magic()
 
         break;
     case TV_SOFT_ARMOR: {
+        if (this->o_ptr->sval == SV_KUROSHOUZOKU) {
+            this->o_ptr->pval = randint1(4);
+        }
+
         if (this->power > 1) {
             this->try_generate_twilight_robe();
             break;
