@@ -180,8 +180,13 @@ void apply_magic_to_object(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
         break;
     case TV_DRAG_ARMOR:
     case TV_HARD_ARMOR:
+        if (power != 0) {
+            ArmorEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
+        }
+
+        break;
     case TV_SOFT_ARMOR:
-        if ((o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_KUROSHOUZOKU)) {
+        if (o_ptr->sval == SV_KUROSHOUZOKU) {
             o_ptr->pval = randint1(4);
         }
 

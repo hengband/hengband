@@ -1,23 +1,16 @@
-﻿/*!
- * @brief 防具系のアイテムを強化して(恐らく床に)生成する処理
- * @date 2020/06/02
+﻿/*
+ * @brief 鎧類に耐性等の追加効果を付与する処理
+ * @date 2021/08/01
  * @author Hourier
- * @todo ちょっと長い。要分割
  */
 
 #include "object-enchant/apply-magic-armor.h"
 #include "artifact/random-art-generator.h"
 #include "inventory/inventory-slot-types.h"
-#include "object-enchant/object-boost.h"
 #include "object-enchant/object-ego.h"
-#include "object-enchant/tr-types.h"
-#include "object-enchant/trc-types.h"
 #include "object/object-kind-hook.h"
-#include "object/object-kind.h"
 #include "sv-definition/sv-armor-types.h"
-#include "sv-definition/sv-protector-types.h"
 #include "system/object-type-definition.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /*
@@ -34,37 +27,26 @@ ArmorEnchanter::ArmorEnchanter(player_type *owner_ptr, object_type *o_ptr, DEPTH
 }
 
 /*!
- * @brief 防具系オブジェクトに生成ランクごとの強化を与えるサブルーチン
- * Apply magic to an item known to be "armor"
+ * @brief power > 2 はデバッグ専用.
  */
 void ArmorEnchanter::apply_magic()
 {
     switch (this->o_ptr->tval) {
-    case TV_DRAG_ARMOR: {
-        /* power > 2 is debug only */
+    case TV_DRAG_ARMOR:
         if (one_in_(50) || (this->power > 2)) {
             become_random_artifact(this->owner_ptr, this->o_ptr, false);
         }
 
         break;
-    }
     case TV_HARD_ARMOR:
+        if (this->power < -1) {
+            this->give_cursed();
+        }
+
+        break;
     case TV_SOFT_ARMOR: {
         if (this->power > 1) {
-            if ((this->o_ptr->tval == TV_SOFT_ARMOR) && (this->o_ptr->sval == SV_ROBE) && (randint0(100) < 15)) {
-                if (one_in_(5)) {
-                    this->o_ptr->name2 = EGO_YOIYAMI;
-                    this->o_ptr->k_idx = lookup_kind(TV_SOFT_ARMOR, SV_YOIYAMI_ROBE);
-                    this->o_ptr->sval = SV_YOIYAMI_ROBE;
-                    this->o_ptr->ac = 0;
-                    this->o_ptr->to_a = 0;
-                } else {
-                    this->o_ptr->name2 = EGO_PERMANENCE;
-                }
-
-                break;
-            }
-
+            this->try_generate_twilight_robe();
             break;
         }
         
@@ -127,4 +109,25 @@ void ArmorEnchanter::give_cursed()
             return;
         }
     }
+}
+
+/*
+ * @brief ベースアイテムがローブの時、15%の確率で宵闇のローブを生成する.
+ */
+void ArmorEnchanter::try_generate_twilight_robe()
+{
+    if ((this->o_ptr->sval != SV_ROBE) || (randint0(100) >= 15)) {
+        return;
+    }
+
+    if (!one_in_(5)) {
+        this->o_ptr->name2 = EGO_PERMANENCE;
+        return;
+    }
+
+    this->o_ptr->name2 = EGO_TWILIGHT;
+    this->o_ptr->k_idx = lookup_kind(TV_SOFT_ARMOR, SV_TWILIGHT_ROBE);
+    this->o_ptr->sval = SV_TWILIGHT_ROBE;
+    this->o_ptr->ac = 0;
+    this->o_ptr->to_a = 0;
 }

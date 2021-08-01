@@ -314,8 +314,8 @@ void rd_item_old(player_type *player_ptr, object_type *o_ptr)
     if ((o_ptr->k_idx >= 445) && (o_ptr->k_idx <= 479))
         return;
 
-    if (h_older_than(0, 4, 10) && (o_ptr->name2 == EGO_YOIYAMI))
-        o_ptr->k_idx = lookup_kind(TV_SOFT_ARMOR, SV_YOIYAMI_ROBE);
+    if (h_older_than(0, 4, 10) && (o_ptr->name2 == EGO_TWILIGHT))
+        o_ptr->k_idx = lookup_kind(TV_SOFT_ARMOR, SV_TWILIGHT_ROBE);
 
     if (h_older_than(0, 4, 9)) {
         if (has_flag(o_ptr->art_flags, TR_MAGIC_MASTERY)) {

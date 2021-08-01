@@ -21,4 +21,5 @@ protected:
 
 private:
     player_type *owner_ptr;
+    void try_generate_twilight_robe();
 };
