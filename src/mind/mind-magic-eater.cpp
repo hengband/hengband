@@ -50,7 +50,7 @@ bool import_magic_device(player_type *user_ptr)
         ext = 36;
 
     if (o_ptr->tval == TV_ROD) {
-        user_ptr->magic_num2[o_ptr->sval + ext] += (MAGIC_NUM2)o_ptr->number;
+        user_ptr->magic_num2[o_ptr->sval + ext] += (byte)o_ptr->number;
         if (user_ptr->magic_num2[o_ptr->sval + ext] > 99)
             user_ptr->magic_num2[o_ptr->sval + ext] = 99;
     } else {
@@ -65,7 +65,7 @@ bool import_magic_device(player_type *user_ptr)
                 if (gain_num < 1)
                     gain_num = 1;
             }
-            user_ptr->magic_num2[o_ptr->sval + ext] += (MAGIC_NUM2)gain_num;
+            user_ptr->magic_num2[o_ptr->sval + ext] += (byte)gain_num;
             if (user_ptr->magic_num2[o_ptr->sval + ext] > 99)
                 user_ptr->magic_num2[o_ptr->sval + ext] = 99;
             user_ptr->magic_num1[o_ptr->sval + ext] += pval * 0x10000;

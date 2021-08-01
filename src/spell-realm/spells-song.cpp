@@ -156,42 +156,42 @@ bool music_singing_any(player_type *creature_ptr)
     return (creature_ptr->pclass == CLASS_BARD) && (creature_ptr->magic_num1[0] != 0);
 }
 
-MAGIC_NUM1 get_singing_song_effect(const player_type *creature_ptr)
+s32b get_singing_song_effect(const player_type *creature_ptr)
 {
     return creature_ptr->magic_num1[0];
 }
 
-void set_singing_song_effect(player_type *creature_ptr, const MAGIC_NUM1 magic_num)
+void set_singing_song_effect(player_type *creature_ptr, const s32b magic_num)
 {
     creature_ptr->magic_num1[0] = magic_num;
 }
 
-MAGIC_NUM1 get_interrupting_song_effect(const player_type *creature_ptr)
+s32b get_interrupting_song_effect(const player_type *creature_ptr)
 {
     return creature_ptr->magic_num1[1];
 }
 
-void set_interrupting_song_effect(player_type *creature_ptr, const MAGIC_NUM1 magic_num)
+void set_interrupting_song_effect(player_type *creature_ptr, const s32b magic_num)
 {
     creature_ptr->magic_num1[1] = magic_num;
 }
 
-MAGIC_NUM1 get_singing_count(const player_type *creature_ptr)
+s32b get_singing_count(const player_type *creature_ptr)
 {
     return creature_ptr->magic_num1[2];
 }
 
-void set_singing_count(player_type *creature_ptr, const MAGIC_NUM1 magic_num)
+void set_singing_count(player_type *creature_ptr, const s32b magic_num)
 {
     creature_ptr->magic_num1[2] = magic_num;
 }
 
-MAGIC_NUM2 get_singing_song_id(const player_type *creature_ptr)
+byte get_singing_song_id(const player_type *creature_ptr)
 {
     return creature_ptr->magic_num2[0];
 }
 
-void set_singing_song_id(player_type *creature_ptr, const MAGIC_NUM2 magic_num)
+void set_singing_song_id(player_type *creature_ptr, const byte magic_num)
 {
     creature_ptr->magic_num2[0] = magic_num;
 }
