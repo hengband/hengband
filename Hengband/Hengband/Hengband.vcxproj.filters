@@ -4700,7 +4700,7 @@
     <ClInclude Include="..\..\src\player-info\avatar.h">
       <Filter>player-info</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player-info\base-status-types.h">
+    <ClInclude Include="..\..\src\player-info\base-status-info.h">
       <Filter>player-info</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player-info\race-ability-info.h">

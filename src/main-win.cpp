@@ -802,7 +802,6 @@ static errr term_xtra_win_react(player_type *player_ptr)
     }
 
     for (int i = 0; i < MAX_TERM_DATA; i++) {
-        term_type *old = Term;
         term_data *td = &data[i];
         if ((td->cols != td->t.wid) || (td->rows != td->t.hgt)) {
             rebuild_term(td);

@@ -1120,7 +1120,7 @@
     <ClInclude Include="..\..\src\object-activation\activation-teleport.h" />
     <ClInclude Include="..\..\src\object-activation\activation-util.h" />
     <ClInclude Include="..\..\src\player-ability\player-ability-types.h" />
-    <ClInclude Include="..\..\src\player-info\base-status-types.h" />
+    <ClInclude Include="..\..\src\player-info\base-status-info.h" />
     <ClInclude Include="..\..\src\player-info\body-improvement-info.h" />
     <ClInclude Include="..\..\src\player-info\class-ability-info.h" />
     <ClInclude Include="..\..\src\player-info\mutation-info.h" />
