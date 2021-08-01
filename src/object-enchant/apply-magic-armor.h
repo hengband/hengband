@@ -16,10 +16,10 @@ public:
 protected:
     void enchant() override{};
     void give_ego_index() override;
-    void give_high_ego_index() override{};
+    void give_high_ego_index() override;
     void give_cursed() override;
 
 private:
     player_type *owner_ptr;
-    void try_generate_twilight_robe();
+    bool is_high_ego_generated = false;
 };

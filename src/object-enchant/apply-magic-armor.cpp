@@ -43,29 +43,39 @@ void ArmorEnchanter::apply_magic()
 
         break;
     case TV_HARD_ARMOR:
+        if (this->power > 1) {
+            this->give_ego_index();
+            return;
+        }
+
         if (this->power < -1) {
             this->give_cursed();
         }
 
-        break;
+        return;
     case TV_SOFT_ARMOR: {
         if (this->o_ptr->sval == SV_KUROSHOUZOKU) {
             this->o_ptr->pval = randint1(4);
         }
 
         if (this->power > 1) {
-            this->try_generate_twilight_robe();
-            break;
+            this->give_high_ego_index();
+            if (this->is_high_ego_generated) {
+                return;
+            }
+
+            this->give_ego_index();
+            return;
         }
         
         if (this->power < -1) {
             this->give_cursed();
         }
 
-        break;
+        return;
     }
     default:
-        break;
+        return;
     }
 }
 
@@ -99,43 +109,46 @@ void ArmorEnchanter::give_ego_index()
             break;
         }
 
-        if (valid)
+        if (valid) {
             break;
-    }
-}
-
-void ArmorEnchanter::give_cursed()
-{
-    while (true) {
-        this->o_ptr->name2 = get_random_ego(INVEN_BODY, false);
-        switch (this->o_ptr->name2) {
-        case EGO_A_DEMON:
-        case EGO_A_MORGUL:
-            return;
-        default:
-            msg_print(_("エラー：適した呪い鎧エゴがみつかりませんでした.", "Error:Suitable cursed armor ego not found."));
-            return;
         }
     }
 }
 
 /*
- * @brief ベースアイテムがローブの時、15%の確率で宵闇のローブを生成する.
+ * @brief ベースアイテムがローブの時、確率で永続か宵闇のローブを生成する.
+ * @return 生成条件を満たしたらtrue、満たさなかったらfalse
+ * @details 永続：12%、宵闇：3%
  */
-void ArmorEnchanter::try_generate_twilight_robe()
+void ArmorEnchanter::give_high_ego_index()
 {
     if ((this->o_ptr->sval != SV_ROBE) || (randint0(100) >= 15)) {
         return;
     }
 
-    if (!one_in_(5)) {
-        this->o_ptr->name2 = EGO_PERMANENCE;
+    this->is_high_ego_generated = true;
+    auto ego_robe = one_in_(5);
+    this->o_ptr->name2 = ego_robe ? EGO_TWILIGHT : EGO_PERMANENCE;
+    if (!ego_robe) {
         return;
     }
 
-    this->o_ptr->name2 = EGO_TWILIGHT;
     this->o_ptr->k_idx = lookup_kind(TV_SOFT_ARMOR, SV_TWILIGHT_ROBE);
     this->o_ptr->sval = SV_TWILIGHT_ROBE;
     this->o_ptr->ac = 0;
     this->o_ptr->to_a = 0;
+    return;
+}
+
+void ArmorEnchanter::give_cursed()
+{
+    this->o_ptr->name2 = get_random_ego(INVEN_BODY, false);
+    switch (this->o_ptr->name2) {
+    case EGO_A_DEMON:
+    case EGO_A_MORGUL:
+        return;
+    default:
+        msg_print(_("エラー：適した呪い鎧エゴがみつかりませんでした.", "Error:Suitable cursed armor ego not found."));
+        return;
+    }
 }
