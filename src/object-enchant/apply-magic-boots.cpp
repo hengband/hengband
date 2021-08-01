@@ -27,7 +27,7 @@ BootsEnchanter::BootsEnchanter(player_type *owner_ptr, object_type *o_ptr, DEPTH
 }
 
 /*
- * power > 2 is debug only
+ * power > 2はデバッグ専用.
  */
 void BootsEnchanter::apply_magic()
 {

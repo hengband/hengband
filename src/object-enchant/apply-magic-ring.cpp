@@ -40,7 +40,7 @@ RingEnchanter::RingEnchanter(player_type *owner_ptr, object_type *o_ptr, DEPTH l
  * @param level 生成基準階
  * @param power 生成ランク
  * @return なし
- * @details power > 2 is debug only
+ * @details power > 2はデバッグ専用.
  */
 void RingEnchanter::apply_magic()
 {

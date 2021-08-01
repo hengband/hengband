@@ -67,7 +67,7 @@ void apply_magic_weapon(player_type *owner_ptr, object_type *o_ptr, DEPTH level,
     switch (o_ptr->tval) {
     case TV_DIGGING: {
         if (power > 1) {
-            /* power > 2 is debug only */
+            /* power > 2はデバッグ専用. */
             if (one_in_(30) || (power > 2))
                 become_random_artifact(owner_ptr, o_ptr, false);
             else
@@ -84,7 +84,7 @@ void apply_magic_weapon(player_type *owner_ptr, object_type *o_ptr, DEPTH level,
     case TV_POLEARM:
     case TV_SWORD: {
         if (power > 1) {
-            /* power > 2 is debug only */
+            /* power > 2はデバッグ専用. */
             if (one_in_(40) || (power > 2)) {
                 become_random_artifact(owner_ptr, o_ptr, false);
                 break;
@@ -145,7 +145,7 @@ void apply_magic_weapon(player_type *owner_ptr, object_type *o_ptr, DEPTH level,
     }
     case TV_BOW: {
         if (power > 1) {
-            /* power > 2 is debug only */
+            /* power > 2はデバッグ専用. */
             if (one_in_(20) || (power > 2)) {
                 become_random_artifact(owner_ptr, o_ptr, false);
                 break;
@@ -160,7 +160,7 @@ void apply_magic_weapon(player_type *owner_ptr, object_type *o_ptr, DEPTH level,
     case TV_ARROW:
     case TV_SHOT: {
         if (power > 1) {
-            /* power > 2 is debug only */
+            /* power > 2はデバッグ専用. */
             if (power > 2) {
                 become_random_artifact(owner_ptr, o_ptr, false);
                 break;

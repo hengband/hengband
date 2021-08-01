@@ -21,5 +21,4 @@ protected:
 
 private:
     player_type *owner_ptr;
-    bool stop_continuous_application = false;
 };
