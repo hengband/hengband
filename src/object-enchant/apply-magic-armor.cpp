@@ -42,8 +42,10 @@ void ArmorEnchanter::apply_magic()
     switch (this->o_ptr->tval) {
     case TV_DRAG_ARMOR: {
         /* power > 2 is debug only */
-        if (one_in_(50) || (this->power > 2))
+        if (one_in_(50) || (this->power > 2)) {
             become_random_artifact(this->owner_ptr, this->o_ptr, false);
+        }
+
         break;
     }
     case TV_HARD_ARMOR:
@@ -63,53 +65,11 @@ void ArmorEnchanter::apply_magic()
                 break;
             }
 
-            /* power > 2 is debug only */
-            if (one_in_(20) || (this->power > 2)) {
-                become_random_artifact(this->owner_ptr, this->o_ptr, false);
-                break;
-            }
-
-            while (true) {
-                bool okay_flag = true;
-                this->o_ptr->name2 = get_random_ego(INVEN_BODY, true);
-                switch (this->o_ptr->name2) {
-                case EGO_DWARVEN:
-                    if (this->o_ptr->tval != TV_HARD_ARMOR) {
-                        okay_flag = false;
-                    }
-
-                    break;
-                case EGO_DRUID:
-                    if (this->o_ptr->tval != TV_SOFT_ARMOR) {
-                        okay_flag = false;
-                    }
-
-                    break;
-                default:
-                    break;
-                }
-
-                if (okay_flag)
-                    break;
-            }
-        } else if (this->power < -1) {
-            while (true) {
-                bool okay_flag = true;
-                this->o_ptr->name2 = get_random_ego(INVEN_BODY, false);
-
-                switch (this->o_ptr->name2) {
-                case EGO_A_DEMON:
-                case EGO_A_MORGUL:
-                    break;
-                default:
-                    msg_print(_("エラー：適した呪い鎧エゴがみつかりませんでした.", "Error:Suitable cursed armor ego not found."));
-                    okay_flag = true;
-                    break;
-                }
-
-                if (okay_flag)
-                    break;
-            }
+            break;
+        }
+        
+        if (this->power < -1) {
+            this->give_cursed();
         }
 
         break;
@@ -119,10 +79,52 @@ void ArmorEnchanter::apply_magic()
     }
 }
 
-void ArmorEnchanter::enchant() {}
+/*
+ * @details power > 2はデバッグ専用.
+ */
+void ArmorEnchanter::give_ego_index()
+{
+    if (one_in_(20) || (this->power > 2)) {
+        become_random_artifact(this->owner_ptr, this->o_ptr, false);
+        return;
+    }
 
-void ArmorEnchanter::give_ego_index() {}
+    while (true) {
+        auto valid = true;
+        this->o_ptr->name2 = get_random_ego(INVEN_BODY, true);
+        switch (this->o_ptr->name2) {
+        case EGO_DWARVEN:
+            if (this->o_ptr->tval != TV_HARD_ARMOR) {
+                valid = false;
+            }
 
-void ArmorEnchanter::give_high_ego_index() {}
+            break;
+        case EGO_DRUID:
+            if (this->o_ptr->tval != TV_SOFT_ARMOR) {
+                valid = false;
+            }
 
-void ArmorEnchanter::give_cursed() {}
+            break;
+        default:
+            break;
+        }
+
+        if (valid)
+            break;
+    }
+}
+
+void ArmorEnchanter::give_cursed()
+{
+    while (true) {
+        this->o_ptr->name2 = get_random_ego(INVEN_BODY, false);
+        switch (this->o_ptr->name2) {
+        case EGO_A_DEMON:
+        case EGO_A_MORGUL:
+            return;
+        default:
+            msg_print(_("エラー：適した呪い鎧エゴがみつかりませんでした.", "Error:Suitable cursed armor ego not found."));
+            return;
+        }
+    }
+}

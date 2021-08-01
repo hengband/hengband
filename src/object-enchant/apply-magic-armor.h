@@ -14,9 +14,9 @@ public:
     void apply_magic() override;
 
 protected:
-    void enchant() override;
+    void enchant(){};
     void give_ego_index() override;
-    void give_high_ego_index() override;
+    void give_high_ego_index(){};
     void give_cursed() override;
 
 private:
