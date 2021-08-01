@@ -210,64 +210,6 @@ void ArmorEnchanter::apply_magic()
 
         break;
     }
-    case TV_HELM: {
-        if (this->o_ptr->sval == SV_DRAGON_HELM) {
-            dragon_resist(this->o_ptr);
-            if (!one_in_(3))
-                break;
-        }
-
-        if (this->power > 1) {
-            /* power > 2 is debug only */
-            if (one_in_(20) || (this->power > 2)) {
-                become_random_artifact(this->owner_ptr, this->o_ptr, false);
-                break;
-            }
-
-            while (true) {
-                bool ok_flag = true;
-                this->o_ptr->name2 = get_random_ego(INVEN_HEAD, true);
-                switch (this->o_ptr->name2) {
-                case EGO_BRILLIANCE:
-                case EGO_DARK:
-                case EGO_INFRAVISION:
-                case EGO_H_PROTECTION:
-                case EGO_LITE:
-                    break;
-                case EGO_SEEING:
-                    if (one_in_(7))
-                        add_low_telepathy(this->o_ptr);
-                    break;
-                default:
-                    /* not existing helm (Magi, Might, etc...)*/
-                    ok_flag = false;
-                }
-
-                if (ok_flag)
-                    break;
-            }
-
-            break;
-        } else if (this->power < -1) {
-            while (true) {
-                bool ok_flag = true;
-                this->o_ptr->name2 = get_random_ego(INVEN_HEAD, false);
-
-                switch (this->o_ptr->name2) {
-                case EGO_ANCIENT_CURSE:
-                    ok_flag = false;
-                    break;
-                default:
-                    break;
-                }
-
-                if (ok_flag)
-                    break;
-            }
-        }
-
-        break;
-    }
     default:
         break;
     }
