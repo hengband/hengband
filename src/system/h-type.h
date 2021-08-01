@@ -232,23 +232,6 @@ typedef byte FF_FLAGS_IDX; /*!< 地形特性ID */
 
 typedef s16b FEAT_PRIORITY; /*!< 地形の縮小表示優先順位 */
 
-/*** Pointers to all the basic types defined above ***/
-typedef char *char_ptr;
-typedef byte *byte_ptr;
-
-/*** Pointers to Functions of special types (for various purposes) ***/
-/* A generic function takes a user data and a special data */
-typedef errr (*func_gen)(vptr, vptr);
-
-/* An equality testing function takes two things to compare (bool) */
-typedef bool (*func_eql)(vptr, vptr);
-
-/* A hasher takes a thing (and a max hash size) to hash (0 to siz - 1) */
-typedef uint (*func_hsh)(vptr, uint);
-
-/* A key extractor takes a thing and returns (a pointer to) some key */
-typedef vptr (*func_key)(vptr);
-
 enum process_result {
     PROCESS_FALSE = 0,
     PROCESS_TRUE = 1,
