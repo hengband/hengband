@@ -17,60 +17,59 @@ CrownEnchanter::CrownEnchanter(player_type *owner_ptr, object_type *o_ptr, DEPTH
 {
 }
 
-/*
- * @details power > 2はデバッグ専用.
- */
 void CrownEnchanter::apply_magic()
 {
     if (this->power > 1) {
-        if (one_in_(20) || (this->power > 2)) {
-            become_random_artifact(this->owner_ptr, this->o_ptr, false);
-            return;
-        }
-
-        while (true) {
-            bool ok_flag = true;
-            this->o_ptr->name2 = get_random_ego(INVEN_HEAD, true);
-
-            switch (this->o_ptr->name2) {
-            case EGO_TELEPATHY:
-            case EGO_MAGI:
-            case EGO_MIGHT:
-            case EGO_REGENERATION:
-            case EGO_LORDLINESS:
-            case EGO_BASILISK:
-                break;
-            case EGO_SEEING:
-                if (one_in_(3))
-                    add_low_telepathy(this->o_ptr);
-                break;
-            default:
-                /* not existing crown (wisdom,lite, etc...) */
-                ok_flag = false;
-            }
-
-            if (ok_flag)
-                break;
-        }
-
+        this->give_ego_index();
         return;
     }
 
     if (this->power < -1) {
-        while (true) {
-            bool ok_flag = true;
-            this->o_ptr->name2 = get_random_ego(INVEN_HEAD, false);
+        this->give_cursed();
+    }
+}
 
-            switch (this->o_ptr->name2) {
-            case EGO_H_DEMON:
-                ok_flag = false;
-                break;
-            default:
-                break;
+/*
+ * @details power > 2はデバッグ専用.
+ */
+void CrownEnchanter::give_ego_index()
+{
+    if (one_in_(20) || (this->power > 2)) {
+        become_random_artifact(this->owner_ptr, this->o_ptr, false);
+        return;
+    }
+
+    while (true) {
+        this->o_ptr->name2 = get_random_ego(INVEN_HEAD, true);
+        switch (this->o_ptr->name2) {
+        case EGO_TELEPATHY:
+        case EGO_MAGI:
+        case EGO_MIGHT:
+        case EGO_REGENERATION:
+        case EGO_LORDLINESS:
+        case EGO_BASILISK:
+            return;
+        case EGO_SEEING:
+            if (one_in_(3)) {
+                add_low_telepathy(this->o_ptr);
             }
 
-            if (ok_flag)
-                break;
+            return;
+        default:
+            continue;
+        }
+    }
+}
+
+void CrownEnchanter::give_cursed()
+{
+    while (true) {
+        this->o_ptr->name2 = get_random_ego(INVEN_HEAD, false);
+        switch (this->o_ptr->name2) {
+        case EGO_H_DEMON:
+            return;
+        default:
+            continue;
         }
     }
 }
