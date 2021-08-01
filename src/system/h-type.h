@@ -119,7 +119,6 @@ typedef int MUTATION_IDX; /*!< 突然変異のID型を定義 */
 typedef s32b POSITION; /*!< ゲーム中の座標型を定義 */
 typedef s16b POSITION_IDX; /*!< ゲーム中の座標リストID型 */
 
-typedef s32b ALIGNMENT; /*!< 善悪属性の型定義 */
 typedef byte FEAT_SUBTYPE; /*!< 地形情報の副値 (トラップ種別/パターン種別/店舗種別)*/
 
 typedef char GAME_TEXT; /*!< ゲーム中のテキスト型定義 */
@@ -139,8 +138,6 @@ typedef s32b HIT_POINT;
  * MANA_POINTはプレイヤーのMPの各地とその増減量の型である。
  */
 typedef s32b MANA_POINT; /*!< ゲーム中のMP型を定義 */
-
-typedef int ARTIFACT_BIAS_IDX; /*!< ランダムアーティファクトのバイアス型 */
 
 typedef s16b HIT_PROB; /*!< ゲーム中の装備命中修正値を定義 */
 typedef int HIT_RELIABILITY; /*!< 最終算出命中力を定義 */
