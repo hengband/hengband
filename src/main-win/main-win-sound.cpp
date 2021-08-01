@@ -35,6 +35,9 @@ struct sound_res {
     {
         buf.reset(_buf);
     }
+    sound_res(const sound_res &) = delete;
+    sound_res &operator=(const sound_res &) = delete;
+
     ~sound_res()
     {
         dispose();
@@ -121,8 +124,8 @@ static bool add_sound_queue(const WAVEFORMATEX *wf, BYTE *buf, DWORD bufsize)
     }
 
     while (sound_queue.size() >= 16) {
-        auto res = sound_queue.front();
-        delete res;
+        auto over = sound_queue.front();
+        delete over;
         sound_queue.pop();
     }
 
