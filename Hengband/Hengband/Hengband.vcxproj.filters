@@ -2313,6 +2313,9 @@
     <ClCompile Include="..\..\src\object-enchant\apply-magic-boots.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\apply-magic-gloves.cpp">
+      <Filter>object-enchant</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4969,6 +4972,9 @@
       <Filter>object-enchant</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object-enchant\apply-magic-boots.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\apply-magic-gloves.h">
       <Filter>object-enchant</Filter>
     </ClInclude>
   </ItemGroup>

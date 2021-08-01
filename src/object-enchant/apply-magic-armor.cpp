@@ -114,26 +114,6 @@ void ArmorEnchanter::apply_magic()
 
         break;
     }
-    case TV_GLOVES: {
-        if (this->o_ptr->sval == SV_SET_OF_DRAGON_GLOVES) {
-            dragon_resist(this->o_ptr);
-            if (!one_in_(3))
-                break;
-        }
-
-        if (this->power > 1) {
-            /* power > 2 is debug only */
-            if (one_in_(20) || (this->power > 2)) {
-                become_random_artifact(this->owner_ptr, this->o_ptr, false);
-                break;
-            }
-            this->o_ptr->name2 = get_random_ego(INVEN_ARMS, true);
-        } else if (this->power < -1) {
-            this->o_ptr->name2 = get_random_ego(INVEN_ARMS, false);
-        }
-
-        break;
-    }
     default:
         break;
     }
