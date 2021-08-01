@@ -2295,7 +2295,7 @@
     <ClCompile Include="..\..\src\main-win\wav-reader.cpp">
       <Filter>main-win</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-enchant\apply-magic-armors-base.cpp">
+    <ClCompile Include="..\..\src\object-enchant\abstract-protector-enchanter.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\object-enchant\apply-magic-shield.cpp">
@@ -4956,7 +4956,7 @@
     <ClInclude Include="..\..\src\main-win\wav-reader.h">
       <Filter>main-win</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object-enchant\apply-magic-armors-base.h">
+    <ClInclude Include="..\..\src\object-enchant\abstract-protector-enchanter.h">
       <Filter>object-enchant</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object-enchant\apply-magic-shield.h">

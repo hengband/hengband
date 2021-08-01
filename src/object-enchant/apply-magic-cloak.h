@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "object-enchant/apply-magic-armors-base.h"
+#include "object-enchant/abstract-protector-enchanter.h"
 #include "object-enchant/enchanter-base.h"
 #include "system/angband.h"
 
