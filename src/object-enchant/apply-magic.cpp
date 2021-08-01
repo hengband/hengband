@@ -121,37 +121,42 @@ void apply_magic_to_object(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
     case TV_BOW:
     case TV_SHOT:
     case TV_ARROW:
-    case TV_BOLT: {
-        if (power)
+    case TV_BOLT:
+        if (power != 0) {
             apply_magic_weapon(owner_ptr, o_ptr, lev, power);
+        }
+
         break;
-    }
-    case TV_POLEARM: {
-        if (power && !(o_ptr->sval == SV_DEATH_SCYTHE))
+    case TV_POLEARM:
+        if ((power != 0) && !(o_ptr->sval == SV_DEATH_SCYTHE)) {
             apply_magic_weapon(owner_ptr, o_ptr, lev, power);
+        }
+
         break;
-    }
-    case TV_SWORD: {
-        if (power && !(o_ptr->sval == SV_POISON_NEEDLE))
+    case TV_SWORD:
+        if ((power != 0) && !(o_ptr->sval == SV_POISON_NEEDLE)) {
             apply_magic_weapon(owner_ptr, o_ptr, lev, power);
+        }
+
         break;
-    }
+    case TV_SHIELD:
+        if ((power != 0) || (o_ptr->sval == SV_DRAGON_SHIELD)) {
+            ShieldEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
+        }
+
+        break;
     case TV_DRAG_ARMOR:
     case TV_HARD_ARMOR:
     case TV_SOFT_ARMOR:
-    case TV_SHIELD:
     case TV_HELM:
     case TV_CROWN:
     case TV_CLOAK:
     case TV_GLOVES:
     case TV_BOOTS: {
-        if (((o_ptr->tval == TV_CLOAK) && (o_ptr->sval == SV_ELVEN_CLOAK)) || ((o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_KUROSHOUZOKU)))
+        if (((o_ptr->tval == TV_CLOAK) && (o_ptr->sval == SV_ELVEN_CLOAK)) || ((o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_KUROSHOUZOKU))) {
             o_ptr->pval = randint1(4);
-
-        if ((power > 0) || ((o_ptr->tval == TV_SHIELD) && (o_ptr->sval == SV_DRAGON_SHIELD))) {
-            ShieldEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
         }
-
+        
         if (power || ((o_ptr->tval == TV_HELM) && (o_ptr->sval == SV_DRAGON_HELM))
             || ((o_ptr->tval == TV_GLOVES) && (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES))
             || ((o_ptr->tval == TV_BOOTS) && (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE))) {

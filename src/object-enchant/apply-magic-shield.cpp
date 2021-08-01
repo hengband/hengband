@@ -1,4 +1,11 @@
-﻿#include "object-enchant/apply-magic-shield.h"
+﻿/*
+ * @brief 盾に耐性等の追加効果を付与する処理
+ * @date 2021/08/01
+ * @author Hourier
+ * @details ドラゴンシールドは必ず付与する. それ以外は確率的に付与する.
+ */
+
+#include "object-enchant/apply-magic-shield.h"
 #include "artifact/random-art-generator.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/object-boost.h"
@@ -49,13 +56,16 @@ void ShieldEnchanter::enchant()
     }
 }
 
+/*
+ * @todo ミラー・シールドはエゴの付与確率が低い. この仕様で良いか要確認.
+ */
 void ShieldEnchanter::give_ego_index()
 {
     while (true) {
         this->o_ptr->name2 = get_random_ego(INVEN_SUB_HAND, true);
         auto is_metal = this->o_ptr->sval == SV_SMALL_METAL_SHIELD;
         is_metal |= this->o_ptr->sval == SV_LARGE_METAL_SHIELD;
-        if (!is_metal && this->o_ptr->name2 == EGO_S_DWARVEN) {
+        if (!is_metal && (this->o_ptr->name2 == EGO_S_DWARVEN)) {
             continue;
         }
 
