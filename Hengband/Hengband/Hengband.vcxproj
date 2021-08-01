@@ -273,6 +273,7 @@
     <ClCompile Include="..\..\src\main-win\main-win-term.cpp" />
     <ClCompile Include="..\..\src\main-win\wav-reader.cpp" />
     <ClCompile Include="..\..\src\object-enchant\apply-magic-amulet.cpp" />
+    <ClCompile Include="..\..\src\object-enchant\apply-magic-armors-base.cpp" />
     <ClCompile Include="..\..\src\object-enchant\apply-magic-ring.cpp" />
     <ClCompile Include="..\..\src\object\object-index-list.cpp" />
     <ClCompile Include="..\..\src\player-info\alignment.cpp" />
@@ -952,6 +953,7 @@
     <ClInclude Include="..\..\src\main-win\main-win-term.h" />
     <ClInclude Include="..\..\src\main-win\wav-reader.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic-amulet.h" />
+    <ClInclude Include="..\..\src\object-enchant\apply-magic-armors-base.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic-ring.h" />
     <ClInclude Include="..\..\src\object\object-index-list.h" />
     <ClInclude Include="..\..\src\player-info\alignment.h" />

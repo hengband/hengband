@@ -570,6 +570,7 @@ hengband_SOURCES = \
 	object-enchant/apply-magic.cpp object-enchant/apply-magic.h \
 	object-enchant/apply-magic-amulet.cpp object-enchant/apply-magic-amulet.h \
 	object-enchant/apply-magic-armor.cpp object-enchant/apply-magic-armor.h \
+	object-enchant/apply-magic-armors-base.cpp object-enchant/apply-magic-armors-base.h \
 	object-enchant/apply-magic-others.cpp object-enchant/apply-magic-others.h \
 	object-enchant/apply-magic-ring.cpp object-enchant/apply-magic-ring.h \
 	object-enchant/apply-magic-weapon.cpp object-enchant/apply-magic-weapon.h \

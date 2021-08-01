@@ -10,10 +10,10 @@
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-ego.h"
-#include "object/object-kind-hook.h"
-#include "object/object-kind.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
+#include "object/object-kind-hook.h"
+#include "object/object-kind.h"
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "system/object-type-definition.h"
@@ -28,10 +28,8 @@
  * @param power 生成ランク
  */
 ArmorEnchanter::ArmorEnchanter(player_type *owner_ptr, object_type *o_ptr, DEPTH level, int power)
-    : owner_ptr(owner_ptr)
-    , o_ptr(o_ptr)
-    , level(level)
-    , power(power)
+    : ArmorEnchanterBase{ o_ptr, level, power }
+    , owner_ptr(owner_ptr)
 {
 }
 
@@ -41,10 +39,9 @@ ArmorEnchanter::ArmorEnchanter(player_type *owner_ptr, object_type *o_ptr, DEPTH
  */
 void ArmorEnchanter::apply_magic()
 {
-    this->set_ac_bonus();
     switch (this->o_ptr->tval) {
     case TV_DRAG_ARMOR: {
-        /* this->power > 2 is debug only */
+        /* power > 2 is debug only */
         if (one_in_(50) || (this->power > 2))
             become_random_artifact(this->owner_ptr, this->o_ptr, false);
         break;
@@ -66,7 +63,7 @@ void ArmorEnchanter::apply_magic()
                 break;
             }
 
-            /* this->power > 2 is debug only */
+            /* power > 2 is debug only */
             if (one_in_(20) || (this->power > 2)) {
                 become_random_artifact(this->owner_ptr, this->o_ptr, false);
                 break;
@@ -125,7 +122,7 @@ void ArmorEnchanter::apply_magic()
         }
 
         if (this->power > 1) {
-            /* this->power > 2 is debug only */
+            /* power > 2 is debug only */
             if (one_in_(20) || (this->power > 2)) {
                 become_random_artifact(this->owner_ptr, this->o_ptr, false);
                 break;
@@ -160,7 +157,7 @@ void ArmorEnchanter::apply_magic()
         }
 
         if (this->power > 1) {
-            /* this->power > 2 is debug only */
+            /* power > 2 is debug only */
             if (one_in_(20) || (this->power > 2)) {
                 become_random_artifact(this->owner_ptr, this->o_ptr, false);
                 break;
@@ -181,7 +178,7 @@ void ArmorEnchanter::apply_magic()
         }
 
         if (this->power > 1) {
-            /* this->power > 2 is debug only */
+            /* power > 2 is debug only */
             if (one_in_(20) || (this->power > 2)) {
                 become_random_artifact(this->owner_ptr, this->o_ptr, false);
                 break;
@@ -196,7 +193,7 @@ void ArmorEnchanter::apply_magic()
     }
     case TV_CROWN: {
         if (this->power > 1) {
-            /* this->power > 2 is debug only */
+            /* power > 2 is debug only */
             if (one_in_(20) || (this->power > 2)) {
                 become_random_artifact(this->owner_ptr, this->o_ptr, false);
                 break;
@@ -256,7 +253,7 @@ void ArmorEnchanter::apply_magic()
         }
 
         if (this->power > 1) {
-            /* this->power > 2 is debug only */
+            /* power > 2 is debug only */
             if (one_in_(20) || (this->power > 2)) {
                 become_random_artifact(this->owner_ptr, this->o_ptr, false);
                 break;
@@ -267,7 +264,7 @@ void ArmorEnchanter::apply_magic()
                 this->o_ptr->name2 = get_random_ego(INVEN_HEAD, true);
                 switch (this->o_ptr->name2) {
                 case EGO_BRILLIANCE:
-                case EGO_DARK:  
+                case EGO_DARK:
                 case EGO_INFRAVISION:
                 case EGO_H_PROTECTION:
                 case EGO_LITE:
@@ -308,7 +305,7 @@ void ArmorEnchanter::apply_magic()
     }
     case TV_CLOAK: {
         if (this->power > 1) {
-            /* this->power > 2 is debug only */
+            /* power > 2 is debug only */
             if (one_in_(20) || (this->power > 2)) {
                 become_random_artifact(this->owner_ptr, this->o_ptr, false);
                 break;
@@ -326,50 +323,10 @@ void ArmorEnchanter::apply_magic()
     }
 }
 
-void ArmorEnchanter::enchant()
-{
+void ArmorEnchanter::enchant() {}
 
-}
+void ArmorEnchanter::give_ego_index() {}
 
-void ArmorEnchanter::give_ego_index()
-{
+void ArmorEnchanter::give_high_ego_index() {}
 
-}
-
-void ArmorEnchanter::give_high_ego_index()
-{
-
-}
-
-void ArmorEnchanter::give_cursed()
-{
-
-}
-
-/*
- * @details パワー0の時は何もしない
- */
-void ArmorEnchanter::set_ac_bonus()
-{
-    auto toac1 = (ARMOUR_CLASS)randint1(5) + m_bonus(5, this->level);
-    auto toac2 = (ARMOUR_CLASS)m_bonus(10, this->level);
-    if (this->power > 0) {
-        this->o_ptr->to_a += toac1;
-        if (this->power > 1) {
-            this->o_ptr->to_a += toac2;
-        }
-
-        return;
-    }
-    
-    if (this->power < 0) {
-        this->o_ptr->to_a -= toac1;
-        if (this->power < -1) {
-            this->o_ptr->to_a -= toac2;
-        }
-
-        if (this->o_ptr->to_a < 0) {
-            this->o_ptr->curse_flags.set(TRC::CURSED);
-        }
-    }
-}
+void ArmorEnchanter::give_cursed() {}
