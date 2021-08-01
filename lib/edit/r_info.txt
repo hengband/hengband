@@ -25367,7 +25367,6 @@ F:DROP_GREAT | DROP_1D2 | WILD_TOWN
 F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | EVIL | DROP_SKELETON | DROP_CORPSE
 F:EAT_GIVE_DEX | EAT_LOSE_WIS
 S:1_IN_5 | TRAPS
-A:221:1:5
 V:75
 D:$This legendary thief steals from the rich (you qualify).
 D:この伝説の盗賊は金持ち（あなたは合格）から金を盗む
