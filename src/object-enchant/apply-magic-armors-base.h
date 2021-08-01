@@ -4,11 +4,11 @@
 #include "system/angband.h"
 
 struct object_type;
-class ArmorEnchanterBase : EnchanterBase {
+class AbstractProtectorEnchanter : EnchanterBase {
 protected:
-    ArmorEnchanterBase(object_type *o_ptr, DEPTH level, int power);
-    ArmorEnchanterBase() = delete;
-    virtual ~ArmorEnchanterBase() = default;
+    AbstractProtectorEnchanter(object_type *o_ptr, DEPTH level, int power);
+    AbstractProtectorEnchanter() = delete;
+    virtual ~AbstractProtectorEnchanter() = default;
     object_type *o_ptr;
     int power;
 };

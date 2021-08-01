@@ -21,7 +21,7 @@
  * @param power 生成ランク
  */
 ArmorEnchanter::ArmorEnchanter(player_type *owner_ptr, object_type *o_ptr, DEPTH level, int power)
-    : ArmorEnchanterBase{ o_ptr, level, power }
+    : AbstractProtectorEnchanter{ o_ptr, level, power }
     , owner_ptr(owner_ptr)
 {
 }

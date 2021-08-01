@@ -17,6 +17,13 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
+/*
+ * @brief コンストラクタ
+ * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
+ * @param level 生成基準階
+ * @param power 生成ランク
+ */
 AmuletEnchanter::AmuletEnchanter(player_type *owner_ptr, object_type *o_ptr, DEPTH level, int power)
     : owner_ptr(owner_ptr)
     , o_ptr(o_ptr)

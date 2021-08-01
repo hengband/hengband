@@ -1,11 +1,21 @@
-﻿#include "object-enchant/apply-magic-armors-base.h"
+﻿/*
+ * @brief 防具類に耐性等を付与する処理の共通部分
+ * @date 2021/08/01
+ * @author Hourier
+ */
+
+#include "object-enchant/apply-magic-armors-base.h"
 #include "object-enchant/object-boost.h"
 #include "system/object-type-definition.h"
 
 /*
+ * @brief コンストラクタ
+ * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
+ * @param level 生成基準階
+ * @param power 生成ランク
  * @details パワー0の時は何もしない
  */
-ArmorEnchanterBase::ArmorEnchanterBase(object_type *o_ptr, DEPTH level, int power)
+AbstractProtectorEnchanter::AbstractProtectorEnchanter(object_type *o_ptr, DEPTH level, int power)
     : o_ptr(o_ptr)
     , power(power)
 {

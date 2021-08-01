@@ -13,8 +13,15 @@
 #include "system/object-type-definition.h"
 #include "sv-definition/sv-protector-types.h"
 
+/*
+ * @brief コンストラクタ
+ * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
+ * @param level 生成基準階
+ * @param power 生成ランク
+ */
 BootsEnchanter::BootsEnchanter(player_type *owner_ptr, object_type *o_ptr, DEPTH level, int power)
-    : ArmorEnchanterBase{ o_ptr, level, power }
+    : AbstractProtectorEnchanter{ o_ptr, level, power }
     , owner_ptr(owner_ptr)
 {
 }

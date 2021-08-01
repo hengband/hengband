@@ -6,7 +6,7 @@
 
 struct object_type;
 struct player_type;
-class BootsEnchanter : ArmorEnchanterBase {
+class BootsEnchanter : AbstractProtectorEnchanter {
 public:
     BootsEnchanter(player_type *owner_ptr, object_type *o_ptr, DEPTH level, int power);
     BootsEnchanter() = delete;
