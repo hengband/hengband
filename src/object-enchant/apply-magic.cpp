@@ -14,6 +14,7 @@
 #include "object-enchant/apply-magic-armor.h"
 #include "object-enchant/apply-magic-others.h"
 #include "object-enchant/apply-magic-ring.h"
+#include "object-enchant/apply-magic-shield.h"
 #include "object-enchant/apply-magic-weapon.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/object-curse.h"
@@ -147,7 +148,11 @@ void apply_magic_to_object(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
         if (((o_ptr->tval == TV_CLOAK) && (o_ptr->sval == SV_ELVEN_CLOAK)) || ((o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_KUROSHOUZOKU)))
             o_ptr->pval = randint1(4);
 
-        if (power || ((o_ptr->tval == TV_HELM) && (o_ptr->sval == SV_DRAGON_HELM)) || ((o_ptr->tval == TV_SHIELD) && (o_ptr->sval == SV_DRAGON_SHIELD))
+        if ((power > 0) || ((o_ptr->tval == TV_SHIELD) && (o_ptr->sval == SV_DRAGON_SHIELD))) {
+            ShieldEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();
+        }
+
+        if (power || ((o_ptr->tval == TV_HELM) && (o_ptr->sval == SV_DRAGON_HELM))
             || ((o_ptr->tval == TV_GLOVES) && (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES))
             || ((o_ptr->tval == TV_BOOTS) && (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE))) {
             ArmorEnchanter(owner_ptr, o_ptr, lev, power).apply_magic();

@@ -114,41 +114,6 @@ void ArmorEnchanter::apply_magic()
 
         break;
     }
-    case TV_SHIELD: {
-        if (this->o_ptr->sval == SV_DRAGON_SHIELD) {
-            dragon_resist(this->o_ptr);
-            if (!one_in_(3))
-                break;
-        }
-
-        if (this->power > 1) {
-            /* power > 2 is debug only */
-            if (one_in_(20) || (this->power > 2)) {
-                become_random_artifact(this->owner_ptr, this->o_ptr, false);
-                break;
-            }
-
-            while (true) {
-                this->o_ptr->name2 = get_random_ego(INVEN_SUB_HAND, true);
-                if (this->o_ptr->sval != SV_SMALL_METAL_SHIELD && this->o_ptr->sval != SV_LARGE_METAL_SHIELD && this->o_ptr->name2 == EGO_S_DWARVEN) {
-                    continue;
-                }
-
-                break;
-            }
-
-            switch (this->o_ptr->name2) {
-            case EGO_REFLECTION:
-                if (this->o_ptr->sval == SV_MIRROR_SHIELD)
-                    this->o_ptr->name2 = 0;
-                break;
-            default:
-                break;
-            }
-        }
-
-        break;
-    }
     case TV_GLOVES: {
         if (this->o_ptr->sval == SV_SET_OF_DRAGON_GLOVES) {
             dragon_resist(this->o_ptr);
