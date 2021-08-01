@@ -134,28 +134,6 @@ void ArmorEnchanter::apply_magic()
 
         break;
     }
-
-    case TV_BOOTS: {
-        if (this->o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE) {
-            dragon_resist(this->o_ptr);
-            if (!one_in_(3))
-                break;
-        }
-
-        if (this->power > 1) {
-            /* power > 2 is debug only */
-            if (one_in_(20) || (this->power > 2)) {
-                become_random_artifact(this->owner_ptr, this->o_ptr, false);
-                break;
-            }
-
-            this->o_ptr->name2 = get_random_ego(INVEN_FEET, true);
-        } else if (this->power < -1) {
-            this->o_ptr->name2 = get_random_ego(INVEN_FEET, false);
-        }
-
-        break;
-    }
     default:
         break;
     }

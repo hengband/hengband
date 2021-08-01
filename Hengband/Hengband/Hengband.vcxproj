@@ -274,6 +274,7 @@
     <ClCompile Include="..\..\src\main-win\wav-reader.cpp" />
     <ClCompile Include="..\..\src\object-enchant\apply-magic-amulet.cpp" />
     <ClCompile Include="..\..\src\object-enchant\apply-magic-armors-base.cpp" />
+    <ClCompile Include="..\..\src\object-enchant\apply-magic-boots.cpp" />
     <ClCompile Include="..\..\src\object-enchant\apply-magic-cloak.cpp" />
     <ClCompile Include="..\..\src\object-enchant\apply-magic-crown.cpp" />
     <ClCompile Include="..\..\src\object-enchant\apply-magic-helm.cpp" />
@@ -958,6 +959,7 @@
     <ClInclude Include="..\..\src\main-win\wav-reader.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic-amulet.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic-armors-base.h" />
+    <ClInclude Include="..\..\src\object-enchant\apply-magic-boots.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic-cloak.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic-crown.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic-helm.h" />
