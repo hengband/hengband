@@ -18,11 +18,11 @@
 #include "util/bit-flags-calculator.h"
 
 RingEnchanter::RingEnchanter(player_type *owner_ptr, object_type *o_ptr, DEPTH level, int power)
+    : owner_ptr(owner_ptr)
+    , o_ptr(o_ptr)
+    , level(level)
+    , power(power)
 {
-    this->owner_ptr = owner_ptr;
-    this->o_ptr = o_ptr;
-    this->level = level;
-    this->power = power;
 }
 
 /*!
