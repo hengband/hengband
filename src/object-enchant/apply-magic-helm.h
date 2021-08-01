@@ -15,9 +15,9 @@ public:
 
 protected:
     void enchant(){};
-    void give_ego_index(){};
+    void give_ego_index();
     void give_high_ego_index(){};
-    void give_cursed(){};
+    void give_cursed();
 
 private:
     player_type *owner_ptr;

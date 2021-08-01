@@ -1,7 +1,8 @@
 ﻿/*
- * @brief クロークに耐性等の追加効果を付与する処理
+ * @brief 兜に耐性等の追加効果を付与する処理
  * @date 2021/08/01
  * @author Hourier
+ * @details ドラゴンヘルムは必ず付与する. それ以外は確率的に付与する.
  */
 
 #include "object-enchant/apply-magic-helm.h"
@@ -22,56 +23,61 @@ void HelmEnchanter::apply_magic()
 {
     if (this->o_ptr->sval == SV_DRAGON_HELM) {
         dragon_resist(this->o_ptr);
-        if (!one_in_(3))
+        if (!one_in_(3)) {
             return;
+        }
     }
 
     if (this->power > 1) {
-        /* power > 2 is debug only */
-        if (one_in_(20) || (this->power > 2)) {
-            become_random_artifact(this->owner_ptr, this->o_ptr, false);
-            return;
-        }
-
-        while (true) {
-            bool ok_flag = true;
-            this->o_ptr->name2 = get_random_ego(INVEN_HEAD, true);
-            switch (this->o_ptr->name2) {
-            case EGO_BRILLIANCE:
-            case EGO_DARK:
-            case EGO_INFRAVISION:
-            case EGO_H_PROTECTION:
-            case EGO_LITE:
-                break;
-            case EGO_SEEING:
-                if (one_in_(7))
-                    add_low_telepathy(this->o_ptr);
-                break;
-            default:
-                /* not existing helm (Magi, Might, etc...)*/
-                ok_flag = false;
-            }
-
-            if (ok_flag)
-                break;
-        }
-
+        this->give_ego_index();
         return;
-    } else if (this->power < -1) {
-        while (true) {
-            bool ok_flag = true;
-            this->o_ptr->name2 = get_random_ego(INVEN_HEAD, false);
+    }
 
-            switch (this->o_ptr->name2) {
-            case EGO_ANCIENT_CURSE:
-                ok_flag = false;
-                break;
-            default:
-                break;
+    if (this->power < -1) {
+        this->give_cursed();
+    }
+}
+
+/*
+ * @details power > 2はデバッグ専用.
+ */
+void HelmEnchanter::give_ego_index()
+{
+    if (one_in_(20) || (this->power > 2)) {
+        become_random_artifact(this->owner_ptr, this->o_ptr, false);
+        return;
+    }
+
+    while (true) {
+        this->o_ptr->name2 = get_random_ego(INVEN_HEAD, true);
+        switch (this->o_ptr->name2) {
+        case EGO_BRILLIANCE:
+        case EGO_DARK:
+        case EGO_INFRAVISION:
+        case EGO_H_PROTECTION:
+        case EGO_LITE:
+            return;
+        case EGO_SEEING:
+            if (one_in_(7)) {
+                add_low_telepathy(this->o_ptr);
             }
 
-            if (ok_flag)
-                break;
+            return;
+        default:
+            continue;
+        }
+    }
+}
+
+void HelmEnchanter::give_cursed()
+{
+    while (true) {
+        this->o_ptr->name2 = get_random_ego(INVEN_HEAD, false);
+        switch (this->o_ptr->name2) {
+        case EGO_ANCIENT_CURSE:
+            return;
+        default:
+            continue;
         }
     }
 }
