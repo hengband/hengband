@@ -159,7 +159,7 @@ void MonsterSweepGrid::check_hiding_grid(POSITION *y, POSITION *x, POSITION *y2,
     }
 
     if ((!los(this->target_ptr, m_ptr->fy, m_ptr->fx, this->target_ptr->y, this->target_ptr->x)
-             || !projectable(this->target_ptr, m_ptr->fy, m_ptr->fx, this->target_ptr->y, this->target_ptr->x))) {
+            || !projectable(this->target_ptr, m_ptr->fy, m_ptr->fx, this->target_ptr->y, this->target_ptr->x))) {
         if (grid_dist(&floor_ptr->grid_array[m_ptr->fy][m_ptr->fx], r_ptr) >= MAX_SIGHT / 2) {
             return;
         }
@@ -195,27 +195,29 @@ void MonsterSweepGrid::check_hiding_grid(POSITION *y, POSITION *x, POSITION *y2,
         }
     }
 
-    if (!this->done && grid_dist(&floor_ptr->grid_array[m_ptr->fy][m_ptr->fx], r_ptr) < 3) {
-        for (auto i = 0; i < 8; i++) {
-            *y2 = this->target_ptr->y + ddy_ddd[(this->m_idx + i) & 7];
-            *x2 = this->target_ptr->x + ddx_ddd[(this->m_idx + i) & 7];
-            if ((m_ptr->fy == *y2) && (m_ptr->fx == *x2)) {
-                *y2 = this->target_ptr->y;
-                *x2 = this->target_ptr->x;
-                break;
-            }
+    if (this->done || (grid_dist(&floor_ptr->grid_array[m_ptr->fy][m_ptr->fx], r_ptr) >= 3)) {
+        return;
+    }
 
-            if (!in_bounds2(floor_ptr, *y2, *x2) || !monster_can_enter(this->target_ptr, *y2, *x2, r_ptr, 0)) {
-                continue;
-            }
-
+    for (auto i = 0; i < 8; i++) {
+        *y2 = this->target_ptr->y + ddy_ddd[(this->m_idx + i) & 7];
+        *x2 = this->target_ptr->x + ddx_ddd[(this->m_idx + i) & 7];
+        if ((m_ptr->fy == *y2) && (m_ptr->fx == *x2)) {
+            *y2 = this->target_ptr->y;
+            *x2 = this->target_ptr->x;
             break;
         }
 
-        *y = m_ptr->fy - *y2;
-        *x = m_ptr->fx - *x2;
-        this->done = true;
+        if (!in_bounds2(floor_ptr, *y2, *x2) || !monster_can_enter(this->target_ptr, *y2, *x2, r_ptr, 0)) {
+            continue;
+        }
+
+        break;
     }
+
+    *y = m_ptr->fy - *y2;
+    *x = m_ptr->fx - *x2;
+    this->done = true;
 }
 
 /*!
