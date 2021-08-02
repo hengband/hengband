@@ -165,36 +165,7 @@ void MonsterSweepGrid::check_hiding_grid(POSITION *y, POSITION *x, POSITION *y2,
         }
     }
 
-    if (any_bits(r_ptr->flags3, RF3_ANIMAL) && !this->can_pass_wall && !any_bits(r_ptr->flags2, RF2_KILL_WALL)) {
-        auto room = 0;
-        for (auto i = 0; i < 8; i++) {
-            auto xx = this->target_ptr->x + ddx_ddd[i];
-            auto yy = this->target_ptr->y + ddy_ddd[i];
-            if (!in_bounds2(floor_ptr, yy, xx)) {
-                continue;
-            }
-
-            auto *g_ptr = &floor_ptr->grid_array[yy][xx];
-            if (monster_can_cross_terrain(this->target_ptr, g_ptr->feat, r_ptr, 0)) {
-                room++;
-            }
-        }
-
-        if (any_bits(floor_ptr->grid_array[this->target_ptr->y][this->target_ptr->x].info, CAVE_ROOM)) {
-            room -= 2;
-        }
-
-        if (r_ptr->ability_flags.none()) {
-            room -= 2;
-        }
-
-        if (room < (8 * (this->target_ptr->chp + this->target_ptr->csp)) / (this->target_ptr->mhp + this->target_ptr->msp)) {
-            if (find_hiding(this->target_ptr, this->m_idx, y, x)) {
-                this->done = true;
-            }
-        }
-    }
-
+    this->search_room_to_run(y, x);
     if (this->done || (grid_dist(&floor_ptr->grid_array[m_ptr->fy][m_ptr->fx], r_ptr) >= 3)) {
         return;
     }
@@ -218,6 +189,45 @@ void MonsterSweepGrid::check_hiding_grid(POSITION *y, POSITION *x, POSITION *y2,
     *y = m_ptr->fy - *y2;
     *x = m_ptr->fx - *x2;
     this->done = true;
+}
+
+void MonsterSweepGrid::search_room_to_run(POSITION *y, POSITION *x)
+{
+    auto *floor_ptr = this->target_ptr->current_floor_ptr;
+    auto *r_ptr = &r_info[floor_ptr->m_list[this->m_idx].r_idx];
+    if (none_bits(r_ptr->flags3, RF3_ANIMAL) || this->can_pass_wall || any_bits(r_ptr->flags2, RF2_KILL_WALL)) {
+        return;
+    }
+
+    auto room = 0;
+    for (auto i = 0; i < 8; i++) {
+        auto xx = this->target_ptr->x + ddx_ddd[i];
+        auto yy = this->target_ptr->y + ddy_ddd[i];
+        if (!in_bounds2(floor_ptr, yy, xx)) {
+            continue;
+        }
+
+        auto *g_ptr = &floor_ptr->grid_array[yy][xx];
+        if (monster_can_cross_terrain(this->target_ptr, g_ptr->feat, r_ptr, 0)) {
+            room++;
+        }
+    }
+
+    if (any_bits(floor_ptr->grid_array[this->target_ptr->y][this->target_ptr->x].info, CAVE_ROOM)) {
+        room -= 2;
+    }
+
+    if (r_ptr->ability_flags.none()) {
+        room -= 2;
+    }
+
+    if (room >= (8 * (this->target_ptr->chp + this->target_ptr->csp)) / (this->target_ptr->mhp + this->target_ptr->msp)) {
+        return;
+    }
+
+    if (find_hiding(this->target_ptr, this->m_idx, y, x)) {
+        this->done = true;
+    }
 }
 
 /*!
