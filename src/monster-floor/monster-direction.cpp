@@ -182,28 +182,32 @@ static bool random_walk(player_type *target_ptr, DIRECTION *mm, monster_type *m_
  * @param m_idx モンスターID
  * @return モンスターがペットであればTRUE
  */
-static bool decide_pet_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx)
+static bool decide_pet_movement_direction(MonsterSweepGrid *msd)
 {
-    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-    if (!is_pet(m_ptr))
+    monster_type *m_ptr = &msd->target_ptr->current_floor_ptr->m_list[msd->m_idx];
+    if (!is_pet(m_ptr)) {
         return false;
-
-    bool avoid = ((target_ptr->pet_follow_distance < 0) && (m_ptr->cdis <= (0 - target_ptr->pet_follow_distance)));
-    bool lonely = (!avoid && (m_ptr->cdis > target_ptr->pet_follow_distance));
+    }
+    
+    bool avoid = ((msd->target_ptr->pet_follow_distance < 0) && (m_ptr->cdis <= (0 - msd->target_ptr->pet_follow_distance)));
+    bool lonely = (!avoid && (m_ptr->cdis > msd->target_ptr->pet_follow_distance));
     bool distant = (m_ptr->cdis > PET_SEEK_DIST);
-    mm[0] = mm[1] = mm[2] = mm[3] = 5;
-    if (get_enemy_dir(target_ptr, m_idx, mm))
+    msd->mm[0] = msd->mm[1] = msd->mm[2] = msd->mm[3] = 5;
+    if (get_enemy_dir(msd->target_ptr, msd->m_idx, msd->mm)) {
         return true;
-    if (!avoid && !lonely && !distant)
-        return true;
-
-    POSITION dis = target_ptr->pet_follow_distance;
-    if (target_ptr->pet_follow_distance > PET_SEEK_DIST) {
-        target_ptr->pet_follow_distance = PET_SEEK_DIST;
     }
 
-    (void)get_movable_grid(target_ptr, m_idx, mm);
-    target_ptr->pet_follow_distance = (s16b)dis;
+    if (!avoid && !lonely && !distant) {
+        return true;
+    }
+    
+    POSITION dis = msd->target_ptr->pet_follow_distance;
+    if (msd->target_ptr->pet_follow_distance > PET_SEEK_DIST) {
+        msd->target_ptr->pet_follow_distance = PET_SEEK_DIST;
+    }
+
+    (void)msd->get_movable_grid();
+    msd->target_ptr->pet_follow_distance = (s16b)dis;
     return true;
 }
 
@@ -225,25 +229,25 @@ bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, M
         return true;
     }
 
-    if (random_walk(target_ptr, mm, m_ptr))
+    if (random_walk(target_ptr, mm, m_ptr)) {
         return true;
-
+    }
+    
     if ((r_ptr->flags1 & RF1_NEVER_MOVE) && (m_ptr->cdis > 1)) {
         mm[0] = mm[1] = mm[2] = mm[3] = 5;
         return true;
     }
 
-    if (decide_pet_movement_direction(target_ptr, mm, m_idx))
+    MonsterSweepGrid msd(target_ptr, m_idx, mm);
+    if (decide_pet_movement_direction(&msd)) {
         return true;
-
+    }
+    
     if (!is_hostile(m_ptr)) {
         mm[0] = mm[1] = mm[2] = mm[3] = 5;
         get_enemy_dir(target_ptr, m_idx, mm);
         return true;
     }
 
-    if (!get_movable_grid(target_ptr, m_idx, mm))
-        return false;
-
-    return true;
+    return msd.get_movable_grid();
 }

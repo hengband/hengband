@@ -27,6 +27,13 @@
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 
+MonsterSweepGrid::MonsterSweepGrid(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
+    : target_ptr(target_ptr)
+    , m_idx(m_idx)
+    , mm(mm)
+{
+}
+
 /*!
  * @brief モンスターがプレイヤーから逃走するかどうかを返す /
  * Returns whether a given monster will try to run from the player.
@@ -43,7 +50,7 @@
  * Note that this function is responsible for about one to five percent\n
  * of the processor use in normal conditions...\n
  */
-static bool mon_will_run(player_type *target_ptr, MONSTER_IDX m_idx)
+bool MonsterSweepGrid::mon_will_run()
 {
     monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -87,7 +94,7 @@ static bool mon_will_run(player_type *target_ptr, MONSTER_IDX m_idx)
  * @param xp 適したマスのX座標を返す参照ポインタ
  * @return 有効なマスがあった場合TRUEを返す
  */
-static bool sweep_ranged_attack_grid(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
+bool MonsterSweepGrid::sweep_ranged_attack_grid(POSITION *yp, POSITION *xp)
 {
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
@@ -176,7 +183,7 @@ static bool sweep_ranged_attack_grid(player_type *target_ptr, MONSTER_IDX m_idx,
  * being close enough to chase directly.  I have no idea what will\n
  * happen if you combine "smell" with low "aaf" values.\n
  */
-static void sweep_movable_grid(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp, bool no_flow)
+void MonsterSweepGrid::sweep_movable_grid(POSITION *yp, POSITION *xp, bool no_flow)
 {
     grid_type *g_ptr;
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
@@ -184,7 +191,7 @@ static void sweep_movable_grid(player_type *target_ptr, MONSTER_IDX m_idx, POSIT
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
     if (r_ptr->ability_flags.has_any_of(RF_ABILITY_ATTACK_MASK)) {
-        if (sweep_ranged_attack_grid(target_ptr, m_idx, yp, xp))
+        if (sweep_ranged_attack_grid(yp, xp))
             return;
     }
 
@@ -266,10 +273,11 @@ static void sweep_movable_grid(player_type *target_ptr, MONSTER_IDX m_idx, POSIT
  * but instead of heading directly for it, the monster should "swerve"\n
  * around the player so that he has a smaller chance of getting hit.\n
  */
-static bool sweep_runnable_away_grid(floor_type *floor_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
+bool MonsterSweepGrid::sweep_runnable_away_grid(POSITION *yp, POSITION *xp)
 {
     POSITION gy = 0, gx = 0;
 
+    auto *floor_ptr = this->target_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     POSITION fy = m_ptr->fy;
@@ -316,7 +324,7 @@ static bool sweep_runnable_away_grid(floor_type *floor_ptr, MONSTER_IDX m_idx, P
  * @return 有効方向があった場合TRUEを返す
  * @todo 分割したいが条件が多すぎて適切な関数名と詳細処理を追いきれない……
  */
-bool get_movable_grid(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
+bool MonsterSweepGrid::get_movable_grid()
 {
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
@@ -325,7 +333,7 @@ bool get_movable_grid(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
     POSITION y2 = target_ptr->y;
     POSITION x2 = target_ptr->x;
     bool done = false;
-    bool will_run = mon_will_run(target_ptr, m_idx);
+    bool will_run = mon_will_run();
     grid_type *g_ptr;
     bool no_flow = m_ptr->mflag2.has(MFLAG2::NOFLOW) && grid_cost(&floor_ptr->grid_array[m_ptr->fy][m_ptr->fx], r_ptr) > 2;
     bool can_pass_wall = ((r_ptr->flags2 & RF2_PASS_WALL) != 0) && ((m_idx != target_ptr->riding) || has_pass_wall(target_ptr));
@@ -395,7 +403,7 @@ bool get_movable_grid(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
     }
 
     if (!done) {
-        sweep_movable_grid(target_ptr, m_idx, &y2, &x2, no_flow);
+        sweep_movable_grid(&y2, &x2, no_flow);
         y = m_ptr->fy - y2;
         x = m_ptr->fx - x2;
     }
@@ -407,7 +415,7 @@ bool get_movable_grid(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
             int tmp_x = (-x);
             int tmp_y = (-y);
             if (find_safety(target_ptr, m_idx, &y, &x) && !no_flow) {
-                if (sweep_runnable_away_grid(target_ptr->current_floor_ptr, m_idx, &y, &x))
+                if (sweep_runnable_away_grid(&y, &x))
                     done = true;
             }
 
