@@ -360,8 +360,9 @@ bool MonsterSweepGrid::calc_run_cost(const POSITION y, const POSITION x, const i
 {
     auto *floor_ptr = this->target_ptr->current_floor_ptr;
     auto *r_ptr = &r_info[floor_ptr->m_list[this->m_idx].r_idx];
-    if (!((any_bits(r_ptr->flags2, RF2_PASS_WALL) && ((this->m_idx != this->target_ptr->riding) || has_pass_wall(this->target_ptr)))
-            || (any_bits(r_ptr->flags2, RF2_KILL_WALL) && (this->m_idx != this->target_ptr->riding)))) {
+    auto is_riding = this->m_idx == this->target_ptr->riding;
+    if ((none_bits(r_ptr->flags2, RF2_PASS_WALL) || (is_riding && !has_pass_wall(this->target_ptr)))
+            && (none_bits(r_ptr->flags2, RF2_KILL_WALL) || is_riding)) {
         if (this->cost == 0) {
             return false;
         }
