@@ -18,6 +18,9 @@ public:
         : hmmio(NULL)
     {
     }
+    wav_reader(const wav_reader &) = delete;
+    wav_reader& operator=(const wav_reader &) = delete;
+
     ~wav_reader()
     {
         close();

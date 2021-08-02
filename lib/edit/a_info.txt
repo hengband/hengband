@@ -4293,8 +4293,9 @@ P:0:3d9:5:10:0
 F:STR | CON | SPEED | HIDE_TYPE | ACTIVATE
 F:SLAY_EVIL | SLAY_DEMON | SLAY_UNDEAD
 U:TREE_CREATION
-D:$The staff of Kuafu the sun chased giant.
-D:$This wood staff still alive will someday became peach forest.
+D:$This is the staff of Kuafu, the sun-chasing giant.
+D:$  Still alive, the wood of this staff will someday grow into a forest of
+D:$ peach trees.
 D:太陽を追った巨人、夸父の杖だ。まだ生きているこの木の杖はいずれ桃林になるだろう。
 
 # Eat steel, hungry wolves!

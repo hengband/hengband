@@ -2232,9 +2232,9 @@ F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | DROP_CORPSE | RES_TELE
 S:1_IN_5 | 
 S:HEAL | SLOW | TRAPS | BO_COLD | BA_POIS
 D:$He's been spying for Saruman.  He is a snivelling wretch with no morals.
-D:$"At [Theoden's] feet upon the steps sat a wizened figure of a man, with a 
-D:$pale wise face and heavy-lidded eyes...he laughed grimly, as he lifted his 
-D:$heavy lids for a moment and gazed on the strangers with dark eyes." 
+D:$  "At [Theoden's] feet upon the steps sat a wizened figure of a man, with a
+D:$ pale wise face and heavy-lidded eyes...he laughed grimly, as he lifted his
+D:$ heavy lids for a moment and gazed on the strangers with dark eyes."
 D:彼はサルマンのためにスパイをしている。彼はこの世の全てに不満を抱いている
 D:不運な奴で、何のモラルもない歪んだ性質をしている。
 D:「また足許には賢人めいた青白い顔に瞼の重たくかぶさる目をした、
@@ -2297,10 +2297,10 @@ B:HIT:HURT:1d9
 F:UNIQUE | MALE | FORCE_MAXHP | ESCORT | DROP_1D2 | DROP_GOOD
 F:OPEN_DOOR | BASH_DOOR | CAN_SPEAK | DROP_SKELETON | DROP_CORPSE
 F:EVIL | ORC | RES_DARK
-D:$A captain of a regiment of weaker orcs, Lagduf keeps his troop in order 
-D:$with displays of excessive violence.
-D:$"I've told you twice that Gorbag's swine got to the gate first, and none 
-D:$of ours got out.  Lagduf and Muzgash ran through, but they were shot." 
+D:$A captain of a regiment of weaker orcs, Lagduf keeps his troop in order
+D:$ with displays of excessive violence.
+D:$  "I've told you twice that Gorbag's swine got to the gate first, and none
+D:$ of ours got out.  Lagduf and Muzgash ran through, but they were shot."
 D:ラグドゥフは弱いオークの部隊を指揮する隊長で、過剰な暴力を示すことで
 D:部隊の統制を保っている。
 D:「お前さんには二度も話してるぜ、ゴルバグの豚どものほうが先に門を出たとね、
@@ -2562,9 +2562,9 @@ B:HIT:HURT:1d5
 B:HIT:HURT:1d5
 F:EVIL | FRIENDS | DROP_60 | DROP_90 | DROP_SKELETON | DROP_CORPSE
 F:OPEN_DOOR | MALE | WILD_WASTE | WILD_SWAMP
-D:$A mutated rat-creature from the great waste, it is vaguely 
-D:$humanoid in appearance and walks on its hind legs. This race
-D:$serves chaos fervently and is greatly feared by others.
+D:$A mutated rat-creature from the great waste, it is vaguely
+D:$ humanoid in appearance and walks on its hind legs. This race
+D:$ serves chaos fervently and is greatly feared by others.
 D:大荒野から来たネズミ型生物の突然変異体で、概ね
 D:人間型の姿をしていて後足で立って歩く。この種族は
 D:混沌に熱狂的に仕え、他の種族から恐れられている。
@@ -2749,10 +2749,10 @@ F:UNIQUE | MALE | EVIL | HAS_LITE_2 | HUMAN |
 F:FORCE_MAXHP | CAN_SPEAK | WILD_ALL | DROP_SKELETON | DROP_CORPSE
 F:DROP_1D2 | DROP_GOOD | EAT_POISONOUS | OPEN_DOOR | BASH_DOOR
 D:$A nasty piece of work, Brodda picks on defenseless women and children.
-D:$"And Morwen was gone.  Empty stood her house, broken and cold.  It was 
-D:$more than a year since she departed to Doriath.  Brodda the Easterling 
-D:$(who had wedded Morwen's kinswoman Airin) had plundered her house, and 
-D:$taken all that was left of her goods." 
+D:$  "And Morwen was gone.  Empty stood her house, broken and cold.  It was
+D:$ more than a year since she departed to Doriath.  Brodda the Easterling
+D:$ (who had wedded Morwen's kinswoman Airin) had plundered her house, and
+D:$ taken all that was left of her goods."
 D:残忍な性質を持っているブロッダは、特に弱い子供や女性をつけ狙う。
 D:「……そしてモルウェンもいなくなっていた。モルウェンの住まっていた家は、
 D:彼女がドリアスに去った年以来、冷え冷えとして住む人もいない廃虚となって
@@ -2872,14 +2872,14 @@ F:UNIQUE | DROP_CORPSE |
 F:BASH_DOOR | FORCE_MAXHP | NO_CONF | NO_SLEEP |
 F:IM_POIS | IM_COLD | NO_FEAR
 D:$Pallid and twisted, this creature hates the very sight of you.
-D:$"It looked like something that had started out to be a man but had never 
-D:$quite made it. It had been stepped on, twisted, had holes poked into the 
-D:$sickly dough of its head-bulge. Bones showed through the transparent flesh 
-D:$of its torso and its short legs were as thick as trees, terminating in 
-D:$disk-shaped pads from which dozens of long toes hung like roots or worms. 
-D:$its arms were longer than its entire body. it was a crushed slug, a thing 
-D:$that had been frozen and thawed before it was fully baked. It was - 
-D:$'It is the Borshin', said the Lord of Bats."
+D:$  "It looked like something that had started out to be a man but had never
+D:$ quite made it.  It had been stepped on, twisted, had holes poked into the
+D:$ sickly dough of its head-bulge.  Bones showed through the transparent flesh
+D:$ of its torso and its short legs were as thick as trees, terminating in
+D:$ disk-shaped pads from which dozens of long toes hung like roots or worms.
+D:$  Its arms were longer than its entire body.  It was a crushed slug, a thing
+D:$ that had been frozen and thawed before it was fully baked.  It was -
+D:$  'It is the Borshin', said the Lord of Bats."
 D:青白く捻じ曲がったこの生物は、あなたの姿そのものを憎んでいる。
 D:「それはまるで、人間の顔になることをめざして作りはじめながらついに目標
 D:にとどかなかったかのような貌だった。踏みしだかれ、捻じ曲げられ、
@@ -4331,7 +4331,7 @@ F:IM_POIS | IM_COLD |IM_FIRE | NO_FEAR | NO_CONF | NO_SLEEP
 S:1_IN_6
 S:BO_ACID | S_MONSTER | SCARE | DRAIN_MANA
 D:$A creature like a giant purple Buddha with lots of teeth.
-D:$It cleans them with the bones of sorcerers.
+D:$  It cleans them with the bones of sorcerers.
 D:魔法使いを好んで食べるゴリラ形の謎の守護者だ。
 D:「大きくて丸々と太った姿が僕の道を塞いでいた。コウモリの耳を
 D:した紫色のブッダのようだった。近づくにつれその詳細がはっきり
@@ -7417,7 +7417,7 @@ F:INVISIBLE | OPEN_DOOR | BASH_DOOR |
 F:EVIL | NO_CONF | NO_SLEEP
 D:$A creature who lives underground and eats surface 
 D:$dwellers whom it catches 
-D:$with its poisonous tentacle, which is the only part of the creature tha 
+D:$with its poisonous tentacle, which is the only part of the creature that 
 D:$is ever seen. Perhaps it is better not to see the part which remains 
 D:$underground...
 D:地中に棲み、その毒のある触手で地上の生物を捕らえて食べている。
@@ -9369,11 +9369,11 @@ F:EVIL | ELDRITCH_HORROR | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS |
 F:NONLIVING | CAN_FLY |
 F:NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN
 D:$"It was red and dripping; an immensity of pulsing, moving jelly;
-D:$a scarlet blob with myriad tentacular trunks that waved and waved. 
-D:$There were suckers on the tips of the appendages, and these were 
-D:$opening and closing with ghoulish lust... the thing was bloated and 
-D:$obscene; a headless, faceless, eyeless bulk, with the ravenous maw and 
-D:$titanic talons of a star-born monster."
+D:$ a scarlet blob with myriad tentacular trunks that waved and waved.
+D:$  There were suckers on the tips of the appendages, and these were
+D:$ opening and closing with ghoulish lust...  The thing was bloated and
+D:$ obscene; a headless, faceless, eyeless bulk, with the ravenous maw and
+D:$ titanic talons of a star-born monster."
 D:通常目に見ることができない、宇宙から来た吸血怪物。
 D:時々、びっくりするようなゲタゲタ笑いや、グロテスクなクスクス笑いの声を立
 D:てる。
@@ -13978,8 +13978,8 @@ S:1_IN_5 |
 S:BLINK | TELE_TO | BR_NETH | BR_TIME
 V:150
 D:$"They are lean and athirst!... All the evil in the universe
-D:$was concentrated in their lean, hungry bodies. Or had they 
-D:$bodies? I saw them only for a moment, I cannot be certain."
+D:$ was concentrated in their lean, hungry bodies. Or had they
+D:$ bodies? I saw them only for a moment, I cannot be certain."
 D:恐ろしい姿をした四つ足の不死の動物。
 D:曲がりくねった舌を持ち、青い膿のような臭い嫌らしい粘液をダラダラと垂らし
 D:ている。
@@ -15403,7 +15403,7 @@ F:EVIL | DRAGON | NO_CONF | NO_SLEEP | RIDING | SELF_LITE_2
 S:1_IN_5 | CONF | SCARE | BLIND
 S:BR_POIS | BR_ELEC | BR_ACID | BR_FIRE | BR_COLD |
 D:$It is a dragon whose scales change color.
-D:$This giant dragon can control all the elements in this world.
+D:$  This giant dragon can control all the elements in this world.
 D:めぐるましく鱗の色が変わるドラゴンだ。
 D:この巨大な竜はこの世界に存在する元素の全てを操ることができる。
 
@@ -15457,9 +15457,9 @@ S:BLIND | HOLD | CONF |
 S:BA_DARK | BA_NETH | 
 S:S_AMBERITES | S_HI_UNDEAD | S_KIN
 D:$This huge affront to existence twists and tears at the fabric of space.
-D:$Darkness itself recoils from the touch of Tselakus as he leaves a trail
-D:$of death and destruction. Mighty claws rend reality as he
-D:$annihilates all in his path to your soul!
+D:$  Darkness itself recoils from the touch of Tselakus as he leaves a trail
+D:$ of death and destruction. Mighty claws rend reality as he
+D:$ annihilates all in his path to your soul!
 D:この存在自体が侮辱的な人間は、辺りの空間の構造を歪めて引き裂いている。
 D:強力な魔法の熟練者であるツエラクスは、冒険者の柔らかい肉に飢えている。
 D:ツエラクスの持つ暗闇を発する松明が通った後には、死と破壊の痕跡しか
@@ -17447,8 +17447,8 @@ S:HAND_DOOM | ANIM_DEAD | DISPEL | PSY_SPEAR
 A:13:10:10
 A:14:1:100
 D:$Mighty in spells and enchantments,
-D:$he created the One Ring.  His eyes glow with power and his gaze seeks to 
-D:$destroy your soul.  He has many servants, and rarely fights without them.
+D:$ he created the One Ring.  His eyes glow with power and his gaze seeks to
+D:$ destroy your soul.  He has many servants, and rarely fights without them.
 D:彼はモルゴスの最も強力な召使で、恐るべき呪文を使いこなす上に高い防御力も持っ
 D:ている。
 D:一つの指輪を創造したのは彼である。その瞳は力に輝き、冒険者の魂を破壊しようと
@@ -18247,7 +18247,7 @@ F:IM_ACID | IM_COLD | IM_ELEC | IM_POIS | NO_CONF | NO_SLEEP |
 S:1_IN_2 | 
 S:CAUSE_3 | BO_WATE | BO_MANA
 D:$This body of a once-mighty warrior was so dominated by Sauron's power that
-D:$  he became little more than a mindless undead of evil.
+D:$ he became little more than a mindless undead of evil.
 D:かつて屈強さを誇ったこの戦士の肉体はサウロンの力に完全に支配され、
 D:今ではほとんど意思を持たない邪悪なアンデッドに成り下がってしまった。
 
@@ -18297,7 +18297,7 @@ F:EVIL | TROLL | IM_POIS | NO_CONF | NO_SLEEP | NO_FEAR | REGENERATE
 S:1_IN_8 |
 S:BLINK
 D:$This troll is a king, which means it's still stupid, but has even more power.
-D:$It never comes alone and can call out to other trolls.
+D:$  It never comes alone and can call out to other trolls.
 D:このトロルはトロルの中の王だ。彼は依然としてトロルであり、頭は良くないが、
 D:その力はさらに強力だ。彼は一人でいる事はなく常に手下を連れている。
 
@@ -18315,7 +18315,7 @@ F:IM_COLD | NO_CONF | NO_SLEEP | NO_FEAR | NONLIVING | FORCE_MAXHP
 S:1_IN_5
 S:BR_LITE | BA_COLD | BR_COLD | BO_ICEE | BO_COLD | BR_TIME | SHOOT
 D:$Obsidian eyes stare at you as you bend before the shower of heavenly
-D:$powers and spells...
+D:$ powers and spells...
 D:この世のものとは思えない程のパワーと呪文の嵐であなたを叩きつけている間、
 D:このゴーレムの黒曜石の目はじっとあなたを凝視している。
 
@@ -18380,8 +18380,8 @@ F:MALE | FRIENDS | DROP_60 | DROP_SKELETON | DROP_CORPSE | SELF_LITE_1 |
 F:OPEN_DOOR | BASH_DOOR | EVIL | TROLL | HURT_LITE | REGENERATE |
 F:HURT_COLD | IM_FIRE | WILD_VOLCANO
 D:$Fire trolls are believed to have been created by an
-D:$evil wizard trying to make forest trolls immune to
-D:$fire.
+D:$ evil wizard trying to make forest trolls immune to
+D:$ fire.
 D:ファイア・トロルは邪悪な魔道師によって炎の力と耐性を与えられた森トロル
 D:だと信じられている。
 
@@ -18411,7 +18411,7 @@ B:SLASH:HURT:4d6
 F:MALE | ONLY_ITEM | DROP_90 | DROP_CORPSE | DROP_SKELETON | GOOD | HUMAN |
 F:OPEN_DOOR | BASH_DOOR | NO_FEAR | HAS_LITE_1 |
 D:$A warrior clad in ornate but effective armour, holding katana so sharp it
-D:$can cut your throat and you won't notice till you nod.
+D:$ can cut your throat and you won't notice till you nod.
 D:相手の心臓を射るような鋭い眼つき。剣をピクリとも動かさずに構え、
 D:鋭いかけ声とともに相手に飛びかかる。その剣が静かにサヤに収められるときに、
 D:相手はすでに息絶えている。
@@ -18457,8 +18457,8 @@ F:NO_CONF | NO_SLEEP | NO_FEAR
 S:1_IN_11 |
 S:BR_NUKE | BR_POIS
 D:$It is a massive mushroom that seems to have a huge mouth. The air is thick
-D:$with miasma, and you notice to your horror that the fungus is sprouting
-D:$everywhere!
+D:$ with miasma, and you notice to your horror that the fungus is sprouting
+D:$ everywhere!
 D:巨大な口を持っているように見えるどっしりとしたキノコだ。
 D:このキノコはどこにでも生えて周りの空気を濃い瘴気で汚染する。
 
@@ -18473,7 +18473,7 @@ F:EMPTY_MIND | BASH_DOOR |
 F:IM_ELEC | IM_COLD | CAN_FLY |
 F:NO_CONF | NO_SLEEP | NO_FEAR | NONLIVING
 D:$Lightning crackes around this huge animated cloud entity, sending shivers
-D:$down your spine.
+D:$ down your spine.
 D:魔法で操られた雲でできた体を持つ巨大なゴーレムだ。
 D:バリバリと雷光が閃き、あなたを震え上らせる。
 
@@ -18489,7 +18489,7 @@ F:EMPTY_MIND | BASH_DOOR
 F:IM_FIRE | NO_CONF | NO_SLEEP | NO_FEAR | NONLIVING | KILL_BODY
 F:KILL_ITEM
 D:$It burns everything in its path with the heat its magma-like body
-D:$produces.
+D:$ produces.
 D:それはマグマのような体から発する熱によって、周りに近づくあらゆるもの
 D:を焼きつくしながら動いている。
 
@@ -18552,7 +18552,7 @@ F:COLD_BLOOD | EMPTY_MIND | AQUATIC | NONLIVING
 F:IM_FIRE | IM_COLD | IM_POIS | RES_WATE |
 F:NO_CONF | NO_SLEEP | NO_FEAR
 D:$An ingenious gnomish invention -- a golem designed for underwater
-D:$usage.
+D:$ usage.
 D:ノームの天才が作った発明品だ。深い水中で働くように設計されたゴーレムである。
 
 N:911:石英の鉱脈
@@ -18579,7 +18579,7 @@ F:IM_COLD | IM_FIRE | IM_POIS | IM_ACID | ONLY_ITEM | DROP_60 | NONLIVING
 S:1_IN_1
 S:MISSILE
 D:$A metallic ball floating in the air, that turns to track you with evil
-D:$intent.
+D:$ intent.
 D:空中に浮かぶ金属製の宝珠だ。邪悪な意思を持ち、常にあなたに攻撃の狙いを付けている。
 
 N:913:アンデッド・チョウチンアンコウ
@@ -18693,7 +18693,7 @@ F:RES_WATE | RES_CHAO | RES_DARK | RES_LITE | RES_SOUN | RES_TIME
 S:1_IN_9 |
 S:BR_CHAO | BR_DARK | BR_LITE | BR_SOUN | BR_DISE | BR_TIME
 D:$A disgusting fish, it has a large gaping mouth and a small lantern dangling
-D:$from an outgrowth on its head.
+D:$ from an outgrowth on its head.
 D:大きく開かれた口と頭部から生えた小さな提灯を持っているいまいましい魚。
 
 N:919:水棲ナーガ
@@ -18711,7 +18711,7 @@ F:EVIL | NO_CONF | NO_SLEEP | SMART
 S:1_IN_7 |
 S:DARKNESS | CAUSE_4 | BO_ICEE
 D:$A naga adapted to underwater life. She has a fish-like tail and a pair
-D:$of gills.
+D:$ of gills.
 D:水中での生活に適応したナーガだ。魚のような尾ヒレとエラを持っている。
 
 N:920:『デモゴルゴン』
@@ -19388,8 +19388,8 @@ F:ORC | HURT_LITE | EVIL | RES_DARK
 S:1_IN_2 |
 S:SHOOT
 D:$In a rare display of ingenuity, the Orcs invented an incredibly
-D:$destructive weapon. Most Orcish artillerists are those who dared
-D:$criticize its effectiveness.
+D:$ destructive weapon. Most Orcish artillerists are those who dared
+D:$ criticize its effectiveness.
 D:めったに見せない発明の才によって、オークは信じられないほど破壊的な
 D:兵器を発明した。このオーク弩弓隊の兵士の大半は、その有効性に疑問を
 D:投げかけた者たちが務めている。
@@ -19500,7 +19500,7 @@ F:RES_TELE | CAN_SWIM | WILD_SWAMP
 S:1_IN_10 |
 S:SHRIEK | MIND_BLAST
 D:$It`s a slime colony.
-D:$If you so much as DARE to touch it.
+D:$  If you so much as DARE to touch it.
 D:可愛らしい純心無垢なスライムモルドだ。
 D:触れて死ね！
 
@@ -19766,7 +19766,7 @@ F:EVIL | IM_ACID | IM_FIRE | IM_POIS | IM_COLD | RES_DARK
 S:1_IN_3 |
 S:HOLD | SCARE | DARKNESS | BLIND
 D:$A grim-faced dark elf, garbed in layer upon layer of gleaming black
-D:$armour.  As strong as he is magical, Eol is a worthy opponent.
+D:$ armour.  As strong as he is magical, Eol is a worthy opponent.
 D:険しい顔つきのダークエルフで、黒玉のように輝く薄い金属の鎧を常に身につけている。
 D:彼自身の手による強力な魔法の武具で身を固めており、強敵と呼ぶに相応しい相手だ。
 
@@ -19788,7 +19788,7 @@ S:1_IN_4 |
 S:BA_ACID | BA_ELEC | HASTE | HEAL |
 S:S_MONSTER | TPORT | TELE_TO
 D:$A dark elf, mighty in Gondolin, and betrayer of that hidden city to
-D:$Morgoth's wrath.
+D:$ Morgoth's wrath.
 D:鍛冶師エオルの息子であり、ゴンドリンの地に行って後は高い地位についたが、
 D:ゴンドリン王女イドリルへの欲望と、彼女を娶ったトゥオルへの憎しみから、
 D:モルゴスの拷問に屈して隠れ王国ゴンドリンの位置を告げてしまった。
@@ -19809,8 +19809,8 @@ F:SMART | TAKE_ITEM | OPEN_DOOR | BASH_DOOR | MOVE_BODY
 S:1_IN_10 |
 S:HEAL | HASTE | TELE_AWAY | S_MONSTERS
 D:$Last and proudest king of ancient Numenor.  Corrupted by power and
-D:$avarice, he fell victim to Sauron's wiles, tried to fight the immortals
-D:$themselves, and condemned Numenor to oblivion.
+D:$ avarice, he fell victim to Sauron's wiles, tried to fight the immortals
+D:$ themselves, and condemned Numenor to oblivion.
 D:ヌメノール国第25代にして最後の王だ。彼はサウロンを捕えるも、
 D:逆にその甘言に誑かされ、至福の地アマンへ兵を向け、
 D:それが結局はヌメノールを滅亡に導くことになる。
@@ -21562,7 +21562,7 @@ F:ONLY_ITEM | DROP_1D2 | DROP_GOOD | OPEN_DOOR | BASH_DOOR
 S:1_IN_5 |
 S:SHOOT
 D:$He is one of the captains of Nanman.
-D:$He comes to help his sister and her husband Meng Huo.
+D:$  He comes to help his sister and her husband Meng Huo.
 D:南蛮王孟獲の援軍として現れた南蛮の将だ。孟獲の義理の弟にあたる。
 
 N:1076:禿竜洞主『朶思大王』
@@ -21837,7 +21837,7 @@ F:RES_PLAS | RES_SHAR | RES_SOUN | RES_WALL | RES_DISE | RES_GRAV |
 S:1_IN_4
 S:SHRIEK | S_KIN
 D:$Huge centipede living in Mt. Mikamisan.
-D:$Its long body can wrap round Mt. Mikamisan seven and a half times.
+D:$  Its long body can wrap round Mt. Mikamisan seven and a half times.
 D:近江国三上山に棲み、琵琶湖の魚を喰らい竜神一族を苦しめた
 D:巨大なムカデだ。その大きさは三上山を七巻半もする。
 D:俵藤太秀郷の矢を跳ね返し、彼を慌てさせた。
@@ -21976,10 +21976,10 @@ F:OPEN_DOOR | BASH_DOOR | CAN_SPEAK | DROP_SKELETON | DROP_CORPSE
 F:EVIL | ORC | RES_DARK
 S:1_IN_3 |
 S:SHOOT
-D:$A captain of a regiment of weaker orcs, 
-D:$Muzgash schemes promotion by flattering his superiors.
-D:$"I've told you twice that Gorbag's swine got to the gate first, and none 
-D:$of ours got out.  Lagduf and Muzgash ran through, but they were shot." 
+D:$A captain of a regiment of weaker orcs,
+D:$ Muzgash schemes promotion by flattering his superiors.
+D:$  "I've told you twice that Gorbag's swine got to the gate first, and none
+D:$ of ours got out.  Lagduf and Muzgash ran through, but they were shot."
 D:ムズガッシュは弱いオークの部隊を指揮する隊長で、上役にへつらい出世を企んでいる。
 D:「お前さんには二度も話してるぜ、ゴルバグの豚どものほうが先に門を出たとね、
 D:そしておれたちのほうはだれも出ちゃおらんとね。ラグドゥフとムズガッシュの野郎が
@@ -22018,7 +22018,7 @@ F:OPEN_DOOR | BASH_DOOR | WILD_MOUNTAIN |
 F:DRAGON
 S:1_IN_8 | BLIND 
 D:$It has a form that legends are made of.
-D:$Its glossy body wriggles and goes into a liquid state.
+D:$  Its glossy body wriggles and goes into a liquid state.
 D:それはまさにこれから伝説を作らんとするかのような活力に満ちた姿をしている。
 D:その光沢のある肉体は液状にうごめいていて、変幻自在に形を変えている。
 
@@ -22167,7 +22167,7 @@ S:BLIND | SCARE |
 S:BO_MANA | HOLD |
 S:PSY_SPEAR | BA_LITE | BR_LITE
 D:$He is a light-manipulating psychics with a neutral appearance.
-D:$His back has shining light feathers.
+D:$  His back has shining light feathers.
 D:光を操るサイキッカーで、中性的な容姿と背中に輝く光の羽根を背負っている。
 
 N:1107:さまようもの
@@ -22195,7 +22195,7 @@ F:OPEN_DOOR | BASH_DOOR | MOVE_BODY |
 F:IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | 
 F:NO_SLEEP | SELF_LITE_1 | ANGEL
 D:$Born with wings of light and a sword of faith,
-D:$this heavenly incarnation embodies both fury and purity.
+D:$ this heavenly incarnation embodies both fury and purity.
 D:光の翼と信仰の剣と共に生まれたこの天使は、怒りと純粋さを体現する。
 D:（Magic: the Gathering リミテッド～第４版）
 
@@ -22235,7 +22235,7 @@ S:1_IN_3 |
 S:TPORT | BO_FIRE | BO_ELEC |
 S:S_DEMON
 D:$The half-devil Planeswalker, Tibalt always has a preference
-D:$for spread of pain and disorder to everyone including himself. 
+D:$ for spread of pain and disorder to everyone including himself.
 D:半人半魔のプレインズウォーカー、ティボルトは苦痛と騒乱が、
 D:自分を含めた全ての人々に及ぶことを常に望んでいる。
 
@@ -23301,7 +23301,7 @@ F:OPEN_DOOR | BASH_DOOR | RES_WALL
 S:1_IN_8 |
 S:TELE_TO | BO_MANA | BR_MANA | BR_FORC | BR_PLAS | BR_DISI | HEAL | HASTE
 D:$It is the fusion of twin sisters born at the end of the vaunted study of Vajura energy.
-D:$Its outrageous power will destroy a star and eventually become a new myth.
+D:$  Its outrageous power will destroy a star and eventually become a new myth.
 D:ヴァジュラエネルギーのおぞましい研究の果てに産みだされた双子の姉妹の融合体だ。
 D:その無法なる力は一個の星を滅ぼし、やがて新たな神話の存在となるに足るものだろう。
 
@@ -23443,7 +23443,7 @@ F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | ONLY_ITEM | DROP_1D2
 F:SMART | OPEN_DOOR | BASH_DOOR
 S:1_IN_2 | TPORT | HOLD | S_DEMON
 D:$This man will soon be absorbed in the devil's world.
-D:$To that extent he continues to devote his strong prayers to the devil.
+D:$  To that extent he continues to devote his strong prayers to the devil.
 D:この男は間もなく悪魔に取り込まれるだろう。
 D:それほどまでに彼は強い祈りを悪魔に捧げ続けている。
 
@@ -24979,8 +24979,8 @@ F:REGENERATE | OPEN_DOOR | MOVE_BODY | TAKE_ITEM | DROP_CORPSE
 F:IM_ACID | IM_ELEC | IM_COLD | IM_FIRE | IM_POIS
 S:1_IN_4 | HASTE | HEAL | CAUSE_2
 D:$A fairy cat that walks on two legs and understands human language.
-D:$This Cait Sith is like a swordfighter who serves the cat kingdom
-D:$It sees you as prey to give to the king.
+D:$  This Cait Sith is like a swordfighter who serves the cat kingdom.
+D:$  It sees you as prey to give to the king.
 D:二足で歩き、人語を解す妖精猫。
 D:このケット・シーは猫の王国に仕える剣士のようだ。
 D:あなたを王に献上する獲物と見なしている。
@@ -25532,7 +25532,7 @@ F:EVIL | DEMON | UNDEAD | IM_FIRE | IM_COLD | IM_POIS |
 F:ESCORT | ESCORTS
 S:1_IN_2 | BR_FIRE | BA_FIRE | BR_COLD | BA_COLD | HOLD | HASTE
 D:$"Hee hee hee. I love burning villagees!
-D:$Wanna try it?" -Servant
+D:$  Wanna try it?" -Servant
 D:大魔王に仕える高位のアンデッド。4つの腕でそれぞれ異なる武器を振るう。
 
 N:1289:『ラムフォリンクス』
@@ -25624,7 +25624,7 @@ S:BRAIN_SMASH | MIND_BLAST | BA_CHAO | BR_NEXU |DISPEL | CONF | HOLD
 D:$A hallucinatory machine sent by Giygas to invade the Earth.
 D:$  It is a golden statue that looks like a human being,
 D:$ and emits a strange aura and light.
-D:$(EarthBound by Nintendo)
+D:$  (EarthBound by Nintendo)
 D:ギーグが地球侵略のために送り込んだ幻影マシーンだ。
 D:人間のような姿をした黄金の像で、異様なオーラと光を放っている。
 D:（任天堂『マザー２』）
@@ -26116,7 +26116,7 @@ F:IM_ACID | IM_ELEC | IM_FIRE | IM_COLD | IM_POIS |
 F:RES_SHAR | RES_SOUN | RES_DISE | RES_PLAS | RES_WATE | RES_GRAV |
 F:REFLECTING | RES_TELE | NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP |
 D:$Sun Empire commanders are well versed in advanced martial strategy.
-D:$Still, the correct maneuver is usually to deploy the giant, implacable death lizard.(M:tG)
+D:$  Still, the correct maneuver is usually to deploy the giant, implacable death lizard.(M:tG)
 D:太陽帝国の指揮官たちは高度な軍事戦略に精通している。
 D:とは言え普通は、巨大でしつこい死を呼ぶトカゲを投入することが適切な戦術になる。(M:tG)
 

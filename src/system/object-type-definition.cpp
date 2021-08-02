@@ -41,7 +41,9 @@ void object_type::copy_from(object_type *j_ptr)
 void object_type::prep(player_type *player_ptr, KIND_OBJECT_IDX ko_idx)
 {
     object_kind *k_ptr = &k_info[ko_idx];
+    auto old_stack_idx = this->stack_idx;
     wipe();
+    this->stack_idx = old_stack_idx;
     this->k_idx = ko_idx;
     this->tval = k_ptr->tval;
     this->sval = k_ptr->sval;
