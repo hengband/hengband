@@ -18,6 +18,9 @@ private:
     bool done = false;
     bool will_run = false;
     bool can_pass_wall = false;
+    bool can_open_door = false;
+    int cost = 0;
+    int best = 999;
     bool mon_will_run();
     void sweep_movable_grid(POSITION *yp, POSITION *xp, bool no_flow);
     bool check_movable_grid(POSITION *yp, POSITION *xp, const bool no_flow);
@@ -27,4 +30,5 @@ private:
     void search_room_to_run(POSITION *y, POSITION *x);
     void search_pet_runnable_grid(POSITION *y, POSITION *x, bool no_flow);
     void determine_when_cost(POSITION *yp, POSITION *xp, POSITION y1, POSITION x1, const bool use_scent, int *best);
+    bool calc_run_cost(const POSITION y, const POSITION x, const int now_cost);
 };

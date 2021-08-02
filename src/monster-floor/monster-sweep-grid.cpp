@@ -93,9 +93,8 @@ bool MonsterSweepGrid::get_movable_grid()
  */
 bool MonsterSweepGrid::mon_will_run()
 {
-    monster_type *m_ptr = &this->target_ptr->current_floor_ptr->m_list[this->m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
+    auto *m_ptr = &this->target_ptr->current_floor_ptr->m_list[this->m_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     if (is_pet(m_ptr)) {
         return ((this->target_ptr->pet_follow_distance < 0) && (m_ptr->cdis <= (0 - this->target_ptr->pet_follow_distance)));
     }
@@ -328,12 +327,10 @@ bool MonsterSweepGrid::sweep_ranged_attack_grid(POSITION *yp, POSITION *xp)
         now_cost = 999;
     }
 
-    auto can_open_door = false;
     if (r_ptr->flags2 & (RF2_BASH_DOOR | RF2_OPEN_DOOR)) {
-        can_open_door = true;
+        this->can_open_door = true;
     }
 
-    auto best = 999;
     for (auto i = 7; i >= 0; i--) {
         auto y = y1 + ddy_ddd[i];
         auto x = x1 + ddx_ddd[i];
@@ -346,39 +343,52 @@ bool MonsterSweepGrid::sweep_ranged_attack_grid(POSITION *yp, POSITION *xp)
         }
 
         auto *g_ptr = &floor_ptr->grid_array[y][x];
-        auto cost = (int)grid_cost(g_ptr, r_ptr);
-        if (!((any_bits(r_ptr->flags2, RF2_PASS_WALL) && ((this->m_idx != this->target_ptr->riding) || has_pass_wall(this->target_ptr)))
-                || (any_bits(r_ptr->flags2, RF2_KILL_WALL) && (this->m_idx != this->target_ptr->riding)))) {
-            if (cost == 0) {
-                continue;
-            }
-
-            if (!can_open_door && is_closed_door(this->target_ptr, g_ptr->feat))
-                continue;
-        }
-
-        if (cost == 0) {
-            cost = 998;
-        }
-
-        if (now_cost < cost) {
+        this->cost = (int)grid_cost(g_ptr, r_ptr);
+        if (this->calc_run_cost(y, x, now_cost)) {
             continue;
         }
 
-        if (!projectable(this->target_ptr, y, x, this->target_ptr->y, this->target_ptr->x)) {
-            continue;
-        }
-
-        if (best < cost) {
-            continue;
-        }
-
-        best = cost;
+        this->best = this->cost;
         *yp = y1 + ddy_ddd[i];
         *xp = x1 + ddx_ddd[i];
     }
 
-    return best != 999;
+    return this->best != 999;
+}
+
+bool MonsterSweepGrid::calc_run_cost(const POSITION y, const POSITION x, const int now_cost)
+{
+    auto *floor_ptr = this->target_ptr->current_floor_ptr;
+    auto *r_ptr = &r_info[floor_ptr->m_list[this->m_idx].r_idx];
+    if (!((any_bits(r_ptr->flags2, RF2_PASS_WALL) && ((this->m_idx != this->target_ptr->riding) || has_pass_wall(this->target_ptr)))
+            || (any_bits(r_ptr->flags2, RF2_KILL_WALL) && (this->m_idx != this->target_ptr->riding)))) {
+        if (this->cost == 0) {
+            return false;
+        }
+
+        auto *g_ptr = &floor_ptr->grid_array[y][x];
+        if (!this->can_open_door && is_closed_door(this->target_ptr, g_ptr->feat)) {
+            return false;
+        }
+    }
+
+    if (this->cost == 0) {
+        this->cost = 998;
+    }
+
+    if (now_cost < this->cost) {
+        return false;
+    }
+
+    if (!projectable(this->target_ptr, y, x, this->target_ptr->y, this->target_ptr->x)) {
+        return false;
+    }
+
+    if (this->best < this->cost) {
+        return false;
+    }
+
+    return true;
 }
 
 /*!
