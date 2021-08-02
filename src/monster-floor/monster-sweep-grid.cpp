@@ -35,7 +35,7 @@
  * @param mm 移動方向を返す方向IDの参照ポインタ
  */
 MonsterSweepGrid::MonsterSweepGrid(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
-    : target_ptr(this->target_ptr)
+    : target_ptr(target_ptr)
     , m_idx(m_idx)
     , mm(mm)
 {
@@ -58,7 +58,7 @@ bool MonsterSweepGrid::get_movable_grid()
     auto x2 = this->target_ptr->x;
     this->will_run = this->mon_will_run();
     auto no_flow = m_ptr->mflag2.has(MFLAG2::NOFLOW) && grid_cost(&floor_ptr->grid_array[m_ptr->fy][m_ptr->fx], r_ptr) > 2;
-    auto can_pass_wall = any_bits(r_ptr->flags2, RF2_PASS_WALL) && ((this->m_idx != this->target_ptr->riding) || has_pass_wall(this->target_ptr));
+    this->can_pass_wall = any_bits(r_ptr->flags2, RF2_PASS_WALL) && ((this->m_idx != this->target_ptr->riding) || has_pass_wall(this->target_ptr));
     if (!this->will_run && m_ptr->target_y) {
         int t_m_idx = floor_ptr->grid_array[m_ptr->target_y][m_ptr->target_x].m_idx;
         if ((t_m_idx > 0) && are_enemies(this->target_ptr, m_ptr, &floor_ptr->m_list[t_m_idx])
@@ -280,33 +280,7 @@ void MonsterSweepGrid::sweep_movable_grid(POSITION *yp, POSITION *xp, bool no_fl
         return;
     }
 
-    for (auto i = 7; i >= 0; i--) {
-        auto y = y1 + ddy_ddd[i];
-        auto x = x1 + ddx_ddd[i];
-        if (!in_bounds2(floor_ptr, y, x)) {
-            continue;
-        }
-
-        g_ptr = &floor_ptr->grid_array[y][x];
-        if (use_scent) {
-            int when = g_ptr->when;
-            if (best > when) {
-                continue;
-            }
-
-            best = when;
-        } else {
-            auto cost = any_bits(r_ptr->flags2, RF2_BASH_DOOR | RF2_OPEN_DOOR) ? grid_dist(g_ptr, r_ptr) : grid_cost(g_ptr, r_ptr);
-            if ((cost == 0) || (best < cost)) {
-                continue;
-            }
-
-            best = cost;
-        }
-
-        *yp = this->target_ptr->y + 16 * ddy_ddd[i];
-        *xp = this->target_ptr->x + 16 * ddx_ddd[i];
-    }
+    this->determine_when_cost(yp, xp, y1, x1, use_scent, &best);
 }
 
 bool MonsterSweepGrid::check_movable_grid(POSITION *yp, POSITION *xp, const bool no_flow)
@@ -455,4 +429,37 @@ bool MonsterSweepGrid::sweep_runnable_away_grid(POSITION *yp, POSITION *xp)
     *yp = fy - gy;
     *xp = fx - gx;
     return true;
+}
+
+void MonsterSweepGrid::determine_when_cost(POSITION *yp, POSITION *xp, POSITION y1, POSITION x1, const bool use_scent, int *best)
+{
+    auto *floor_ptr = this->target_ptr->current_floor_ptr;
+    for (auto i = 7; i >= 0; i--) {
+        auto y = y1 + ddy_ddd[i];
+        auto x = x1 + ddx_ddd[i];
+        if (!in_bounds2(floor_ptr, y, x)) {
+            continue;
+        }
+
+        auto *g_ptr = &floor_ptr->grid_array[y][x];
+        if (use_scent) {
+            int when = g_ptr->when;
+            if (*best > when) {
+                continue;
+            }
+
+            *best = when;
+        } else {
+            auto *r_ptr = &r_info[floor_ptr->m_list[this->m_idx].r_idx];
+            auto cost = any_bits(r_ptr->flags2, RF2_BASH_DOOR | RF2_OPEN_DOOR) ? grid_dist(g_ptr, r_ptr) : grid_cost(g_ptr, r_ptr);
+            if ((cost == 0) || (*best < cost)) {
+                continue;
+            }
+
+            *best = cost;
+        }
+
+        *yp = this->target_ptr->y + 16 * ddy_ddd[i];
+        *xp = this->target_ptr->x + 16 * ddx_ddd[i];
+    }
 }

@@ -26,4 +26,5 @@ private:
     void check_hiding_grid(POSITION *y, POSITION *x, POSITION *y2, POSITION *x2);
     void search_room_to_run(POSITION *y, POSITION *x);
     void search_pet_runnable_grid(POSITION *y, POSITION *x, bool no_flow);
+    void determine_when_cost(POSITION *yp, POSITION *xp, POSITION y1, POSITION x1, const bool use_scent, int *best);
 };
