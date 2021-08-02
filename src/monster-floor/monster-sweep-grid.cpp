@@ -252,19 +252,7 @@ void MonsterSweepGrid::sweep_movable_grid(POSITION *yp, POSITION *xp, bool no_fl
     auto *floor_ptr = this->target_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ptr->m_list[this->m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
-    if ((r_ptr->ability_flags.has_any_of(RF_ABILITY_ATTACK_MASK)) && (sweep_ranged_attack_grid(yp, xp))) {
-        return;
-    }
-
-    if (no_flow) {
-        return;
-    }
-
-    if (any_bits(r_ptr->flags2, RF2_PASS_WALL) && ((this->m_idx != this->target_ptr->riding) || has_pass_wall(this->target_ptr))) {
-        return;
-    }
-
-    if (any_bits(r_ptr->flags2, RF2_KILL_WALL) && (this->m_idx != this->target_ptr->riding)) {
+    if (!this->check_movable_grid(yp, xp, no_flow)) {
         return;
     }
 
@@ -319,6 +307,28 @@ void MonsterSweepGrid::sweep_movable_grid(POSITION *yp, POSITION *xp, bool no_fl
         *yp = this->target_ptr->y + 16 * ddy_ddd[i];
         *xp = this->target_ptr->x + 16 * ddx_ddd[i];
     }
+}
+
+bool MonsterSweepGrid::check_movable_grid(POSITION *yp, POSITION *xp, const bool no_flow)
+{
+    auto *r_ptr = &r_info[this->target_ptr->current_floor_ptr->m_list[this->m_idx].r_idx];
+    if ((r_ptr->ability_flags.has_any_of(RF_ABILITY_ATTACK_MASK)) && (sweep_ranged_attack_grid(yp, xp))) {
+        return false;
+    }
+
+    if (no_flow) {
+        return false;
+    }
+
+    if (any_bits(r_ptr->flags2, RF2_PASS_WALL) && ((this->m_idx != this->target_ptr->riding) || has_pass_wall(this->target_ptr))) {
+        return false;
+    }
+
+    if (any_bits(r_ptr->flags2, RF2_KILL_WALL) && (this->m_idx != this->target_ptr->riding)) {
+        return false;
+    }
+
+    return true;
 }
 
 /*!

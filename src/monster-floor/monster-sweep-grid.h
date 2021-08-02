@@ -20,6 +20,7 @@ private:
     bool can_pass_wall = false;
     bool mon_will_run();
     void sweep_movable_grid(POSITION *yp, POSITION *xp, bool no_flow);
+    bool check_movable_grid(POSITION *yp, POSITION *xp, const bool no_flow);
     bool sweep_ranged_attack_grid(POSITION *yp, POSITION *xp);
     bool sweep_runnable_away_grid(POSITION *yp, POSITION *xp);
     void check_hiding_grid(POSITION *y, POSITION *x, POSITION *y2, POSITION *x2);
