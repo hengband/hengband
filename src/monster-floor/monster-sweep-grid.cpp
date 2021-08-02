@@ -264,22 +264,21 @@ void MonsterSweepGrid::sweep_movable_grid(POSITION *yp, POSITION *xp, bool no_fl
         }
     }
 
-    int best;
     auto use_scent = false;
     if (grid_cost(g_ptr, r_ptr)) {
-        best = 999;
+        this->best = 999;
     } else if (g_ptr->when) {
         if (floor_ptr->grid_array[this->target_ptr->y][this->target_ptr->x].when - g_ptr->when > 127) {
             return;
         }
 
         use_scent = true;
-        best = 0;
+        this->best = 0;
     } else {
         return;
     }
 
-    this->determine_when_cost(yp, xp, y1, x1, use_scent, &best);
+    this->determine_when_cost(yp, xp, y1, x1, use_scent);
 }
 
 bool MonsterSweepGrid::check_movable_grid(POSITION *yp, POSITION *xp, const bool no_flow)
@@ -442,7 +441,7 @@ bool MonsterSweepGrid::sweep_runnable_away_grid(POSITION *yp, POSITION *xp)
     return true;
 }
 
-void MonsterSweepGrid::determine_when_cost(POSITION *yp, POSITION *xp, POSITION y1, POSITION x1, const bool use_scent, int *best)
+void MonsterSweepGrid::determine_when_cost(POSITION *yp, POSITION *xp, POSITION y1, POSITION x1, const bool use_scent)
 {
     auto *floor_ptr = this->target_ptr->current_floor_ptr;
     for (auto i = 7; i >= 0; i--) {
@@ -455,19 +454,19 @@ void MonsterSweepGrid::determine_when_cost(POSITION *yp, POSITION *xp, POSITION 
         auto *g_ptr = &floor_ptr->grid_array[y][x];
         if (use_scent) {
             int when = g_ptr->when;
-            if (*best > when) {
+            if (this->best > when) {
                 continue;
             }
 
-            *best = when;
+            this->best = when;
         } else {
             auto *r_ptr = &r_info[floor_ptr->m_list[this->m_idx].r_idx];
-            auto cost = any_bits(r_ptr->flags2, RF2_BASH_DOOR | RF2_OPEN_DOOR) ? grid_dist(g_ptr, r_ptr) : grid_cost(g_ptr, r_ptr);
-            if ((cost == 0) || (*best < cost)) {
+            this->cost = any_bits(r_ptr->flags2, RF2_BASH_DOOR | RF2_OPEN_DOOR) ? grid_dist(g_ptr, r_ptr) : grid_cost(g_ptr, r_ptr);
+            if ((this->cost == 0) || (this->best < this->cost)) {
                 continue;
             }
 
-            *best = cost;
+            this->best = this->cost;
         }
 
         *yp = this->target_ptr->y + 16 * ddy_ddd[i];
