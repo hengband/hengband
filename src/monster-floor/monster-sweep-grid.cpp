@@ -26,11 +26,12 @@
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
+#include "util/bit-flags-calculator.h"
 
 /*
  * @brief コンストラクタ
  * @param target_ptr プレーヤーへの参照ポインタ
- * @param m_idx モンスターの参照ID
+ * @param m_idx 逃走するモンスターの参照ID
  * @param mm 移動方向を返す方向IDの参照ポインタ
  */
 MonsterSweepGrid::MonsterSweepGrid(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
@@ -48,18 +49,17 @@ MonsterSweepGrid::MonsterSweepGrid(player_type *target_ptr, MONSTER_IDX m_idx, D
  */
 bool MonsterSweepGrid::get_movable_grid()
 {
-    floor_type *floor_ptr = this->target_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[this->m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    POSITION y = 0, x = 0;
-    POSITION y2 = this->target_ptr->y;
-    POSITION x2 = this->target_ptr->x;
-    bool done = false;
-    bool will_run = mon_will_run();
-    grid_type *g_ptr;
-    bool no_flow = m_ptr->mflag2.has(MFLAG2::NOFLOW) && grid_cost(&floor_ptr->grid_array[m_ptr->fy][m_ptr->fx], r_ptr) > 2;
-    bool can_pass_wall = ((r_ptr->flags2 & RF2_PASS_WALL) != 0) && ((this->m_idx != this->target_ptr->riding) || has_pass_wall(this->target_ptr));
-
+    auto *floor_ptr = this->target_ptr->current_floor_ptr;
+    auto *m_ptr = &floor_ptr->m_list[this->m_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
+    POSITION y = 0;
+    POSITION x = 0;
+    auto y2 = this->target_ptr->y;
+    auto x2 = this->target_ptr->x;
+    auto done = false;
+    auto will_run = mon_will_run();
+    auto no_flow = m_ptr->mflag2.has(MFLAG2::NOFLOW) && grid_cost(&floor_ptr->grid_array[m_ptr->fy][m_ptr->fx], r_ptr) > 2;
+    auto can_pass_wall = any_bits(r_ptr->flags2, RF2_PASS_WALL) && ((this->m_idx != this->target_ptr->riding) || has_pass_wall(this->target_ptr));
     if (!will_run && m_ptr->target_y) {
         int t_m_idx = floor_ptr->grid_array[m_ptr->target_y][m_ptr->target_x].m_idx;
         if ((t_m_idx > 0) && are_enemies(this->target_ptr, m_ptr, &floor_ptr->m_list[t_m_idx])
@@ -71,10 +71,10 @@ bool MonsterSweepGrid::get_movable_grid()
         }
     }
 
-    if (!done && !will_run && is_hostile(m_ptr) && (r_ptr->flags1 & RF1_FRIENDS)
+    if (!done && !will_run && is_hostile(m_ptr) && any_bits(r_ptr->flags1, RF1_FRIENDS)
         && ((los(this->target_ptr, m_ptr->fy, m_ptr->fx, this->target_ptr->y, this->target_ptr->x) && projectable(this->target_ptr, m_ptr->fy, m_ptr->fx, this->target_ptr->y, this->target_ptr->x))
             || (grid_dist(&floor_ptr->grid_array[m_ptr->fy][m_ptr->fx], r_ptr) < MAX_SIGHT / 2))) {
-        if ((r_ptr->flags3 & RF3_ANIMAL) && !can_pass_wall && !(r_ptr->flags2 & RF2_KILL_WALL)) {
+        if (any_bits(r_ptr->flags3, RF3_ANIMAL) && !can_pass_wall && !any_bits(r_ptr->flags2, RF2_KILL_WALL)) {
             int room = 0;
             for (int i = 0; i < 8; i++) {
                 int xx = this->target_ptr->x + ddx_ddd[i];
@@ -83,17 +83,20 @@ bool MonsterSweepGrid::get_movable_grid()
                 if (!in_bounds2(floor_ptr, yy, xx))
                     continue;
 
-                g_ptr = &floor_ptr->grid_array[yy][xx];
+                auto *g_ptr = &floor_ptr->grid_array[yy][xx];
                 if (monster_can_cross_terrain(this->target_ptr, g_ptr->feat, r_ptr, 0)) {
                     room++;
                 }
             }
 
-            if (floor_ptr->grid_array[this->target_ptr->y][this->target_ptr->x].info & CAVE_ROOM)
+            if (any_bits(floor_ptr->grid_array[this->target_ptr->y][this->target_ptr->x].info, CAVE_ROOM)) {
                 room -= 2;
-            if (r_ptr->ability_flags.none())
-                room -= 2;
+            }
 
+            if (r_ptr->ability_flags.none()) {
+                room -= 2;
+            }
+            
             if (room < (8 * (this->target_ptr->chp + this->target_ptr->csp)) / (this->target_ptr->mhp + this->target_ptr->msp)) {
                 if (find_hiding(this->target_ptr, this->m_idx, &y, &x))
                     done = true;
@@ -110,10 +113,9 @@ bool MonsterSweepGrid::get_movable_grid()
                     break;
                 }
 
-                if (!in_bounds2(floor_ptr, y2, x2))
+                if (!in_bounds2(floor_ptr, y2, x2) || !monster_can_enter(this->target_ptr, y2, x2, r_ptr, 0)) {
                     continue;
-                if (!monster_can_enter(this->target_ptr, y2, x2, r_ptr, 0))
-                    continue;
+                }
 
                 break;
             }
@@ -148,9 +150,10 @@ bool MonsterSweepGrid::get_movable_grid()
         }
     }
 
-    if (!x && !y)
+    if (!x && !y) {
         return false;
-
+    }
+    
     store_moves_val(this->mm, y, x);
     return true;
 }
@@ -169,30 +172,35 @@ bool MonsterSweepGrid::mon_will_run()
         return ((this->target_ptr->pet_follow_distance < 0) && (m_ptr->cdis <= (0 - this->target_ptr->pet_follow_distance)));
     }
 
-    if (m_ptr->cdis > MAX_SIGHT + 5)
+    if (m_ptr->cdis > MAX_SIGHT + 5) {
         return false;
-    if (monster_fear_remaining(m_ptr))
-        return true;
-    if (m_ptr->cdis <= 5)
-        return false;
+    }
 
-    PLAYER_LEVEL p_lev = this->target_ptr->lev;
-    DEPTH m_lev = r_ptr->level + (this->m_idx & 0x08) + 25;
-    if (m_lev > p_lev + 4)
-        return false;
-    if (m_lev + 4 <= p_lev)
+    if (monster_fear_remaining(m_ptr)) {
         return true;
+    }
 
-    HIT_POINT p_chp = this->target_ptr->chp;
-    HIT_POINT p_mhp = this->target_ptr->mhp;
-    HIT_POINT m_chp = m_ptr->hp;
-    HIT_POINT m_mhp = m_ptr->maxhp;
+    if (m_ptr->cdis <= 5) {
+        return false;
+    }
+
+    auto p_lev = this->target_ptr->lev;
+    auto m_lev = r_ptr->level + (this->m_idx & 0x08) + 25;
+    if (m_lev > p_lev + 4) {
+        return false;
+    }
+
+    if (m_lev + 4 <= p_lev) {
+        return true;
+    }
+
+    auto p_chp = this->target_ptr->chp;
+    auto p_mhp = this->target_ptr->mhp;
+    auto m_chp = m_ptr->hp;
+    auto m_mhp = m_ptr->maxhp;
     u32b p_val = (p_lev * p_mhp) + (p_chp << 2);
     u32b m_val = (m_lev * m_mhp) + (m_chp << 2);
-    if (p_val * m_mhp > m_val * p_mhp)
-        return true;
-
-    return false;
+    return p_val * m_mhp > m_val * p_mhp;
 }
 
 /*!
@@ -204,42 +212,42 @@ bool MonsterSweepGrid::mon_will_run()
  */
 void MonsterSweepGrid::sweep_movable_grid(POSITION *yp, POSITION *xp, bool no_flow)
 {
-    grid_type *g_ptr;
-    floor_type *floor_ptr = this->target_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[this->m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-    if (r_ptr->ability_flags.has_any_of(RF_ABILITY_ATTACK_MASK)) {
-        if (sweep_ranged_attack_grid(yp, xp))
-            return;
+    auto *floor_ptr = this->target_ptr->current_floor_ptr;
+    auto *m_ptr = &floor_ptr->m_list[this->m_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
+    if ((r_ptr->ability_flags.has_any_of(RF_ABILITY_ATTACK_MASK)) && (sweep_ranged_attack_grid(yp, xp))) {
+        return;
     }
 
-    if (no_flow)
+    if (no_flow) {
         return;
-    if ((r_ptr->flags2 & RF2_PASS_WALL) && ((this->m_idx != this->target_ptr->riding) || has_pass_wall(this->target_ptr)))
-        return;
-    if ((r_ptr->flags2 & RF2_KILL_WALL) && (this->m_idx != this->target_ptr->riding))
-        return;
+    }
 
-    POSITION y1 = m_ptr->fy;
-    POSITION x1 = m_ptr->fx;
-    g_ptr = &floor_ptr->grid_array[y1][x1];
+    if (any_bits(r_ptr->flags2, RF2_PASS_WALL) && ((this->m_idx != this->target_ptr->riding) || has_pass_wall(this->target_ptr))) {
+        return;
+    }
+
+    if (any_bits(r_ptr->flags2, RF2_KILL_WALL) && (this->m_idx != this->target_ptr->riding)) {
+        return;
+    }
+    
+    auto y1 = m_ptr->fy;
+    auto x1 = m_ptr->fx;
+    auto *g_ptr = &floor_ptr->grid_array[y1][x1];
     if (player_has_los_bold(this->target_ptr, y1, x1) && projectable(this->target_ptr, this->target_ptr->y, this->target_ptr->x, y1, x1)) {
-        if (distance(y1, x1, this->target_ptr->y, this->target_ptr->x) == 1)
+        if ((distance(y1, x1, this->target_ptr->y, this->target_ptr->x) == 1) || (r_ptr->freq_spell > 0) || (grid_cost(g_ptr, r_ptr) > 5)) {
             return;
-        if (r_ptr->freq_spell > 0)
-            return;
-        if (grid_cost(g_ptr, r_ptr) > 5)
-            return;
+        }
     }
 
     int best;
-    bool use_scent = false;
+    auto use_scent = false;
     if (grid_cost(g_ptr, r_ptr)) {
         best = 999;
     } else if (g_ptr->when) {
-        if (floor_ptr->grid_array[this->target_ptr->y][this->target_ptr->x].when - g_ptr->when > 127)
+        if (floor_ptr->grid_array[this->target_ptr->y][this->target_ptr->x].when - g_ptr->when > 127) {
             return;
+        }
 
         use_scent = true;
         best = 0;
@@ -247,30 +255,26 @@ void MonsterSweepGrid::sweep_movable_grid(POSITION *yp, POSITION *xp, bool no_fl
         return;
     }
 
-    for (int i = 7; i >= 0; i--) {
-        POSITION y = y1 + ddy_ddd[i];
-        POSITION x = x1 + ddx_ddd[i];
-
-        if (!in_bounds2(floor_ptr, y, x))
+    for (auto i = 7; i >= 0; i--) {
+        auto y = y1 + ddy_ddd[i];
+        auto x = x1 + ddx_ddd[i];
+        if (!in_bounds2(floor_ptr, y, x)) {
             continue;
-
+        }
+        
         g_ptr = &floor_ptr->grid_array[y][x];
         if (use_scent) {
             int when = g_ptr->when;
-            if (best > when)
+            if (best > when) {
                 continue;
+            }
 
             best = when;
         } else {
-            int cost;
-            if (r_ptr->flags2 & (RF2_BASH_DOOR | RF2_OPEN_DOOR)) {
-                cost = grid_dist(g_ptr, r_ptr);
-            } else {
-                cost = grid_cost(g_ptr, r_ptr);
-            }
-
-            if ((cost == 0) || (best < cost))
+            auto cost = any_bits(r_ptr->flags2, RF2_BASH_DOOR | RF2_OPEN_DOOR) ? grid_dist(g_ptr, r_ptr) : grid_cost(g_ptr, r_ptr);
+            if ((cost == 0) || (best < cost)) {
                 continue;
+            }
 
             best = cost;
         }
@@ -289,64 +293,71 @@ void MonsterSweepGrid::sweep_movable_grid(POSITION *yp, POSITION *xp, bool no_fl
  */
 bool MonsterSweepGrid::sweep_ranged_attack_grid(POSITION *yp, POSITION *xp)
 {
-    floor_type *floor_ptr = this->target_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[this->m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-    POSITION y1 = m_ptr->fy;
-    POSITION x1 = m_ptr->fx;
-
-    if (projectable(this->target_ptr, y1, x1, this->target_ptr->y, this->target_ptr->x))
+    auto *floor_ptr = this->target_ptr->current_floor_ptr;
+    auto *m_ptr = &floor_ptr->m_list[this->m_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto y1 = m_ptr->fy;
+    auto x1 = m_ptr->fx;
+    if (projectable(this->target_ptr, y1, x1, this->target_ptr->y, this->target_ptr->x)) {
         return false;
-
-    int now_cost = grid_cost(&floor_ptr->grid_array[y1][x1], r_ptr);
-    if (now_cost == 0)
+    }
+    
+    auto now_cost = (int)grid_cost(&floor_ptr->grid_array[y1][x1], r_ptr);
+    if (now_cost == 0) {
         now_cost = 999;
-
-    bool can_open_door = false;
+    }
+    
+    auto can_open_door = false;
     if (r_ptr->flags2 & (RF2_BASH_DOOR | RF2_OPEN_DOOR)) {
         can_open_door = true;
     }
 
-    int best = 999;
-    for (int i = 7; i >= 0; i--) {
-        POSITION y = y1 + ddy_ddd[i];
-        POSITION x = x1 + ddx_ddd[i];
-        if (!in_bounds2(floor_ptr, y, x))
+    auto best = 999;
+    for (auto i = 7; i >= 0; i--) {
+        auto y = y1 + ddy_ddd[i];
+        auto x = x1 + ddx_ddd[i];
+        if (!in_bounds2(floor_ptr, y, x)) {
             continue;
-        if (player_bold(this->target_ptr, y, x))
-            return false;
+        }
 
-        grid_type *g_ptr;
-        g_ptr = &floor_ptr->grid_array[y][x];
-        int cost = grid_cost(g_ptr, r_ptr);
-        if (!(((r_ptr->flags2 & RF2_PASS_WALL) && ((this->m_idx != this->target_ptr->riding) || has_pass_wall(this->target_ptr)))
-                || ((r_ptr->flags2 & RF2_KILL_WALL) && (this->m_idx != this->target_ptr->riding)))) {
-            if (cost == 0)
+        if (player_bold(this->target_ptr, y, x)) {
+            return false;
+        }
+        
+        auto *g_ptr = &floor_ptr->grid_array[y][x];
+        auto cost = (int)grid_cost(g_ptr, r_ptr);
+        if (!((any_bits(r_ptr->flags2, RF2_PASS_WALL) && ((this->m_idx != this->target_ptr->riding) || has_pass_wall(this->target_ptr)))
+                || (any_bits(r_ptr->flags2, RF2_KILL_WALL) && (this->m_idx != this->target_ptr->riding)))) {
+            if (cost == 0) {
                 continue;
+            }
+
             if (!can_open_door && is_closed_door(this->target_ptr, g_ptr->feat))
                 continue;
         }
 
-        if (cost == 0)
+        if (cost == 0) {
             cost = 998;
+        }
+        
+        if (now_cost < cost) {
+            continue;
+        }
 
-        if (now_cost < cost)
+        if (!projectable(this->target_ptr, y, x, this->target_ptr->y, this->target_ptr->x)) {
             continue;
-        if (!projectable(this->target_ptr, y, x, this->target_ptr->y, this->target_ptr->x))
-            continue;
-        if (best < cost)
-            continue;
+        }
 
+        if (best < cost) {
+            continue;
+        }
+        
         best = cost;
         *yp = y1 + ddy_ddd[i];
         *xp = x1 + ddx_ddd[i];
     }
 
-    if (best == 999)
-        return false;
-
-    return true;
+    return best != 999;
 }
 
 /*!
@@ -358,42 +369,43 @@ bool MonsterSweepGrid::sweep_ranged_attack_grid(POSITION *yp, POSITION *xp)
  */
 bool MonsterSweepGrid::sweep_runnable_away_grid(POSITION *yp, POSITION *xp)
 {
-    POSITION gy = 0, gx = 0;
-
+    auto gy = 0;
+    auto gx = 0;
     auto *floor_ptr = this->target_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[this->m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    POSITION fy = m_ptr->fy;
-    POSITION fx = m_ptr->fx;
-
-    POSITION y1 = fy - (*yp);
-    POSITION x1 = fx - (*xp);
-
-    int score = -1;
-    for (int i = 7; i >= 0; i--) {
-        POSITION y = fy + ddy_ddd[i];
-        POSITION x = fx + ddx_ddd[i];
-        if (!in_bounds2(floor_ptr, y, x))
+    auto *m_ptr = &floor_ptr->m_list[this->m_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto fy = m_ptr->fy;
+    auto fx = m_ptr->fx;
+    auto y1 = fy - *yp;
+    auto x1 = fx - *xp;
+    auto score = -1;
+    for (auto i = 7; i >= 0; i--) {
+        auto y = fy + ddy_ddd[i];
+        auto x = fx + ddx_ddd[i];
+        if (!in_bounds2(floor_ptr, y, x)) {
             continue;
-
-        POSITION dis = distance(y, x, y1, x1);
-        POSITION s = 5000 / (dis + 3) - 500 / (grid_dist(&floor_ptr->grid_array[y][x], r_ptr) + 1);
-        if (s < 0)
+        }
+        
+        auto dis = distance(y, x, y1, x1);
+        auto s = 5000 / (dis + 3) - 500 / (grid_dist(&floor_ptr->grid_array[y][x], r_ptr) + 1);
+        if (s < 0) {
             s = 0;
+        }
 
-        if (s < score)
+        if (s < score) {
             continue;
+        }
 
         score = s;
         gy = y;
         gx = x;
     }
 
-    if (score == -1)
+    if (score == -1) {
         return false;
-
-    (*yp) = fy - gy;
-    (*xp) = fx - gx;
-
+    }
+    
+    *yp = fy - gy;
+    *xp = fx - gx;
     return true;
 }
