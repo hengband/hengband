@@ -35,287 +35,6 @@ MonsterSweepGrid::MonsterSweepGrid(player_type *target_ptr, MONSTER_IDX m_idx, D
 }
 
 /*!
- * @brief モンスターがプレイヤーから逃走するかどうかを返す /
- * Returns whether a given monster will try to run from the player.
- * @param m_idx 逃走するモンスターの参照ID
- * @return モンスターがプレイヤーから逃走するならばTRUEを返す。
- * @details
- * Monsters will attempt to avoid very powerful players.  See below.\n
- *\n
- * Because this function is called so often, little details are important\n
- * for efficiency.  Like not using "mod" or "div" when possible.  And\n
- * attempting to check the conditions in an optimal order.  Note that\n
- * "(x << 2) == (x * 4)" if "x" has enough bits to hold the result.\n
- *\n
- * Note that this function is responsible for about one to five percent\n
- * of the processor use in normal conditions...\n
- */
-bool MonsterSweepGrid::mon_will_run()
-{
-    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-    if (is_pet(m_ptr)) {
-        return ((target_ptr->pet_follow_distance < 0) && (m_ptr->cdis <= (0 - target_ptr->pet_follow_distance)));
-    }
-
-    if (m_ptr->cdis > MAX_SIGHT + 5)
-        return false;
-    if (monster_fear_remaining(m_ptr))
-        return true;
-    if (m_ptr->cdis <= 5)
-        return false;
-
-    PLAYER_LEVEL p_lev = target_ptr->lev;
-    DEPTH m_lev = r_ptr->level + (m_idx & 0x08) + 25;
-    if (m_lev > p_lev + 4)
-        return false;
-    if (m_lev + 4 <= p_lev)
-        return true;
-
-    HIT_POINT p_chp = target_ptr->chp;
-    HIT_POINT p_mhp = target_ptr->mhp;
-    HIT_POINT m_chp = m_ptr->hp;
-    HIT_POINT m_mhp = m_ptr->maxhp;
-    u32b p_val = (p_lev * p_mhp) + (p_chp << 2);
-    u32b m_val = (m_lev * m_mhp) + (m_chp << 2);
-    if (p_val * m_mhp > m_val * p_mhp)
-        return true;
-
-    return false;
-}
-
-/*!
- * @brief モンスターがプレイヤーに向けて遠距離攻撃を行うことが可能なマスを走査する /
- * Search spell castable grid
- * @param target_ptr プレーヤーへの参照ポインタ
- * @param m_idx モンスターの参照ID
- * @param yp 適したマスのY座標を返す参照ポインタ
- * @param xp 適したマスのX座標を返す参照ポインタ
- * @return 有効なマスがあった場合TRUEを返す
- */
-bool MonsterSweepGrid::sweep_ranged_attack_grid(POSITION *yp, POSITION *xp)
-{
-    floor_type *floor_ptr = target_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-    POSITION y1 = m_ptr->fy;
-    POSITION x1 = m_ptr->fx;
-
-    if (projectable(target_ptr, y1, x1, target_ptr->y, target_ptr->x))
-        return false;
-
-    int now_cost = grid_cost(&floor_ptr->grid_array[y1][x1], r_ptr);
-    if (now_cost == 0)
-        now_cost = 999;
-
-    bool can_open_door = false;
-    if (r_ptr->flags2 & (RF2_BASH_DOOR | RF2_OPEN_DOOR)) {
-        can_open_door = true;
-    }
-
-    int best = 999;
-    for (int i = 7; i >= 0; i--) {
-        POSITION y = y1 + ddy_ddd[i];
-        POSITION x = x1 + ddx_ddd[i];
-        if (!in_bounds2(floor_ptr, y, x))
-            continue;
-        if (player_bold(target_ptr, y, x))
-            return false;
-
-        grid_type *g_ptr;
-        g_ptr = &floor_ptr->grid_array[y][x];
-        int cost = grid_cost(g_ptr, r_ptr);
-        if (!(((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != target_ptr->riding) || has_pass_wall(target_ptr)))
-                || ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != target_ptr->riding)))) {
-            if (cost == 0)
-                continue;
-            if (!can_open_door && is_closed_door(target_ptr, g_ptr->feat))
-                continue;
-        }
-
-        if (cost == 0)
-            cost = 998;
-
-        if (now_cost < cost)
-            continue;
-        if (!projectable(target_ptr, y, x, target_ptr->y, target_ptr->x))
-            continue;
-        if (best < cost)
-            continue;
-
-        best = cost;
-        *yp = y1 + ddy_ddd[i];
-        *xp = x1 + ddx_ddd[i];
-    }
-
-    if (best == 999)
-        return false;
-
-    return true;
-}
-
-/*!
- * @brief モンスターがプレイヤーに向けて接近することが可能なマスを走査する /
- * Choose the "best" direction for "flowing"
- * @param m_idx モンスターの参照ID
- * @param yp 移動先のマスのY座標を返す参照ポインタ
- * @param xp 移動先のマスのX座標を返す参照ポインタ
- * @param no_flow モンスターにFLOWフラグが経っていない状態でTRUE
- * @details
- * Note that ghosts and rock-eaters are never allowed to "flow",\n
- * since they should move directly towards the player.\n
- *\n
- * Prefer "non-diagonal" directions, but twiddle them a little\n
- * to angle slightly towards the player's actual location.\n
- *\n
- * Allow very perceptive monsters to track old "spoor" left by\n
- * previous locations occupied by the player.  This will tend\n
- * to have monsters end up either near the player or on a grid\n
- * recently occupied by the player (and left via "teleport").\n
- *\n
- * Note that if "smell" is turned on, all monsters get vicious.\n
- *\n
- * Also note that teleporting away from a location will cause\n
- * the monsters who were chasing you to converge on that location\n
- * as long as you are still near enough to "annoy" them without\n
- * being close enough to chase directly.  I have no idea what will\n
- * happen if you combine "smell" with low "aaf" values.\n
- */
-void MonsterSweepGrid::sweep_movable_grid(POSITION *yp, POSITION *xp, bool no_flow)
-{
-    grid_type *g_ptr;
-    floor_type *floor_ptr = target_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-    if (r_ptr->ability_flags.has_any_of(RF_ABILITY_ATTACK_MASK)) {
-        if (sweep_ranged_attack_grid(yp, xp))
-            return;
-    }
-
-    if (no_flow)
-        return;
-    if ((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != target_ptr->riding) || has_pass_wall(target_ptr)))
-        return;
-    if ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != target_ptr->riding))
-        return;
-
-    POSITION y1 = m_ptr->fy;
-    POSITION x1 = m_ptr->fx;
-    g_ptr = &floor_ptr->grid_array[y1][x1];
-    if (player_has_los_bold(target_ptr, y1, x1) && projectable(target_ptr, target_ptr->y, target_ptr->x, y1, x1)) {
-        if (distance(y1, x1, target_ptr->y, target_ptr->x) == 1)
-            return;
-        if (r_ptr->freq_spell > 0)
-            return;
-        if (grid_cost(g_ptr, r_ptr) > 5)
-            return;
-    }
-
-    int best;
-    bool use_scent = false;
-    if (grid_cost(g_ptr, r_ptr)) {
-        best = 999;
-    } else if (g_ptr->when) {
-        if (floor_ptr->grid_array[target_ptr->y][target_ptr->x].when - g_ptr->when > 127)
-            return;
-
-        use_scent = true;
-        best = 0;
-    } else {
-        return;
-    }
-
-    for (int i = 7; i >= 0; i--) {
-        POSITION y = y1 + ddy_ddd[i];
-        POSITION x = x1 + ddx_ddd[i];
-
-        if (!in_bounds2(floor_ptr, y, x))
-            continue;
-
-        g_ptr = &floor_ptr->grid_array[y][x];
-        if (use_scent) {
-            int when = g_ptr->when;
-            if (best > when)
-                continue;
-
-            best = when;
-        } else {
-            int cost;
-            if (r_ptr->flags2 & (RF2_BASH_DOOR | RF2_OPEN_DOOR)) {
-                cost = grid_dist(g_ptr, r_ptr);
-            } else {
-                cost = grid_cost(g_ptr, r_ptr);
-            }
-
-            if ((cost == 0) || (best < cost))
-                continue;
-
-            best = cost;
-        }
-
-        *yp = target_ptr->y + 16 * ddy_ddd[i];
-        *xp = target_ptr->x + 16 * ddx_ddd[i];
-    }
-}
-
-/*!
- * @brief モンスターがプレイヤーから逃走することが可能なマスを走査する /
- * Provide a location to flee to, but give the player a wide berth.
- * @param m_idx モンスターの参照ID
- * @param yp 移動先のマスのY座標を返す参照ポインタ
- * @param xp 移動先のマスのX座標を返す参照ポインタ
- * @return 有効なマスがあった場合TRUEを返す
- * @details
- * A monster may wish to flee to a location that is behind the player,\n
- * but instead of heading directly for it, the monster should "swerve"\n
- * around the player so that he has a smaller chance of getting hit.\n
- */
-bool MonsterSweepGrid::sweep_runnable_away_grid(POSITION *yp, POSITION *xp)
-{
-    POSITION gy = 0, gx = 0;
-
-    auto *floor_ptr = this->target_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    POSITION fy = m_ptr->fy;
-    POSITION fx = m_ptr->fx;
-
-    POSITION y1 = fy - (*yp);
-    POSITION x1 = fx - (*xp);
-
-    int score = -1;
-    for (int i = 7; i >= 0; i--) {
-        POSITION y = fy + ddy_ddd[i];
-        POSITION x = fx + ddx_ddd[i];
-        if (!in_bounds2(floor_ptr, y, x))
-            continue;
-
-        POSITION dis = distance(y, x, y1, x1);
-        POSITION s = 5000 / (dis + 3) - 500 / (grid_dist(&floor_ptr->grid_array[y][x], r_ptr) + 1);
-        if (s < 0)
-            s = 0;
-
-        if (s < score)
-            continue;
-
-        score = s;
-        gy = y;
-        gx = x;
-    }
-
-    if (score == -1)
-        return false;
-
-    (*yp) = fy - gy;
-    (*xp) = fx - gx;
-
-    return true;
-}
-
-/*!
  * @brief モンスターの移動方向を返す /
  * Choose "logical" directions for monster movement
  * @param target_ptr プレーヤーへの参照ポインタ
@@ -430,5 +149,253 @@ bool MonsterSweepGrid::get_movable_grid()
         return false;
 
     store_moves_val(mm, y, x);
+    return true;
+}
+
+/*!
+ * @brief モンスターがプレイヤーから逃走するかどうかを返す /
+ * Returns whether a given monster will try to run from the player.
+ * @param m_idx 逃走するモンスターの参照ID
+ * @return モンスターがプレイヤーから逃走するならばTRUEを返す。
+ */
+bool MonsterSweepGrid::mon_will_run()
+{
+    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+
+    if (is_pet(m_ptr)) {
+        return ((target_ptr->pet_follow_distance < 0) && (m_ptr->cdis <= (0 - target_ptr->pet_follow_distance)));
+    }
+
+    if (m_ptr->cdis > MAX_SIGHT + 5)
+        return false;
+    if (monster_fear_remaining(m_ptr))
+        return true;
+    if (m_ptr->cdis <= 5)
+        return false;
+
+    PLAYER_LEVEL p_lev = target_ptr->lev;
+    DEPTH m_lev = r_ptr->level + (m_idx & 0x08) + 25;
+    if (m_lev > p_lev + 4)
+        return false;
+    if (m_lev + 4 <= p_lev)
+        return true;
+
+    HIT_POINT p_chp = target_ptr->chp;
+    HIT_POINT p_mhp = target_ptr->mhp;
+    HIT_POINT m_chp = m_ptr->hp;
+    HIT_POINT m_mhp = m_ptr->maxhp;
+    u32b p_val = (p_lev * p_mhp) + (p_chp << 2);
+    u32b m_val = (m_lev * m_mhp) + (m_chp << 2);
+    if (p_val * m_mhp > m_val * p_mhp)
+        return true;
+
+    return false;
+}
+
+/*!
+ * @brief モンスターがプレイヤーに向けて接近することが可能なマスを走査する /
+ * Choose the "best" direction for "flowing"
+ * @param m_idx モンスターの参照ID
+ * @param yp 移動先のマスのY座標を返す参照ポインタ
+ * @param xp 移動先のマスのX座標を返す参照ポインタ
+ * @param no_flow モンスターにFLOWフラグが経っていない状態でTRUE
+ */
+void MonsterSweepGrid::sweep_movable_grid(POSITION *yp, POSITION *xp, bool no_flow)
+{
+    grid_type *g_ptr;
+    floor_type *floor_ptr = target_ptr->current_floor_ptr;
+    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+
+    if (r_ptr->ability_flags.has_any_of(RF_ABILITY_ATTACK_MASK)) {
+        if (sweep_ranged_attack_grid(yp, xp))
+            return;
+    }
+
+    if (no_flow)
+        return;
+    if ((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != target_ptr->riding) || has_pass_wall(target_ptr)))
+        return;
+    if ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != target_ptr->riding))
+        return;
+
+    POSITION y1 = m_ptr->fy;
+    POSITION x1 = m_ptr->fx;
+    g_ptr = &floor_ptr->grid_array[y1][x1];
+    if (player_has_los_bold(target_ptr, y1, x1) && projectable(target_ptr, target_ptr->y, target_ptr->x, y1, x1)) {
+        if (distance(y1, x1, target_ptr->y, target_ptr->x) == 1)
+            return;
+        if (r_ptr->freq_spell > 0)
+            return;
+        if (grid_cost(g_ptr, r_ptr) > 5)
+            return;
+    }
+
+    int best;
+    bool use_scent = false;
+    if (grid_cost(g_ptr, r_ptr)) {
+        best = 999;
+    } else if (g_ptr->when) {
+        if (floor_ptr->grid_array[target_ptr->y][target_ptr->x].when - g_ptr->when > 127)
+            return;
+
+        use_scent = true;
+        best = 0;
+    } else {
+        return;
+    }
+
+    for (int i = 7; i >= 0; i--) {
+        POSITION y = y1 + ddy_ddd[i];
+        POSITION x = x1 + ddx_ddd[i];
+
+        if (!in_bounds2(floor_ptr, y, x))
+            continue;
+
+        g_ptr = &floor_ptr->grid_array[y][x];
+        if (use_scent) {
+            int when = g_ptr->when;
+            if (best > when)
+                continue;
+
+            best = when;
+        } else {
+            int cost;
+            if (r_ptr->flags2 & (RF2_BASH_DOOR | RF2_OPEN_DOOR)) {
+                cost = grid_dist(g_ptr, r_ptr);
+            } else {
+                cost = grid_cost(g_ptr, r_ptr);
+            }
+
+            if ((cost == 0) || (best < cost))
+                continue;
+
+            best = cost;
+        }
+
+        *yp = target_ptr->y + 16 * ddy_ddd[i];
+        *xp = target_ptr->x + 16 * ddx_ddd[i];
+    }
+}
+
+/*!
+ * @brief モンスターがプレイヤーに向けて遠距離攻撃を行うことが可能なマスを走査する /
+ * Search spell castable grid
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param m_idx モンスターの参照ID
+ * @param yp 適したマスのY座標を返す参照ポインタ
+ * @param xp 適したマスのX座標を返す参照ポインタ
+ * @return 有効なマスがあった場合TRUEを返す
+ */
+bool MonsterSweepGrid::sweep_ranged_attack_grid(POSITION *yp, POSITION *xp)
+{
+    floor_type *floor_ptr = target_ptr->current_floor_ptr;
+    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+
+    POSITION y1 = m_ptr->fy;
+    POSITION x1 = m_ptr->fx;
+
+    if (projectable(target_ptr, y1, x1, target_ptr->y, target_ptr->x))
+        return false;
+
+    int now_cost = grid_cost(&floor_ptr->grid_array[y1][x1], r_ptr);
+    if (now_cost == 0)
+        now_cost = 999;
+
+    bool can_open_door = false;
+    if (r_ptr->flags2 & (RF2_BASH_DOOR | RF2_OPEN_DOOR)) {
+        can_open_door = true;
+    }
+
+    int best = 999;
+    for (int i = 7; i >= 0; i--) {
+        POSITION y = y1 + ddy_ddd[i];
+        POSITION x = x1 + ddx_ddd[i];
+        if (!in_bounds2(floor_ptr, y, x))
+            continue;
+        if (player_bold(target_ptr, y, x))
+            return false;
+
+        grid_type *g_ptr;
+        g_ptr = &floor_ptr->grid_array[y][x];
+        int cost = grid_cost(g_ptr, r_ptr);
+        if (!(((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != target_ptr->riding) || has_pass_wall(target_ptr)))
+                || ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != target_ptr->riding)))) {
+            if (cost == 0)
+                continue;
+            if (!can_open_door && is_closed_door(target_ptr, g_ptr->feat))
+                continue;
+        }
+
+        if (cost == 0)
+            cost = 998;
+
+        if (now_cost < cost)
+            continue;
+        if (!projectable(target_ptr, y, x, target_ptr->y, target_ptr->x))
+            continue;
+        if (best < cost)
+            continue;
+
+        best = cost;
+        *yp = y1 + ddy_ddd[i];
+        *xp = x1 + ddx_ddd[i];
+    }
+
+    if (best == 999)
+        return false;
+
+    return true;
+}
+
+/*!
+ * @brief モンスターがプレイヤーから逃走することが可能なマスを走査する /
+ * Provide a location to flee to, but give the player a wide berth.
+ * @param m_idx モンスターの参照ID
+ * @param yp 移動先のマスのY座標を返す参照ポインタ
+ * @param xp 移動先のマスのX座標を返す参照ポインタ
+ * @return 有効なマスがあった場合TRUEを返す
+ */
+bool MonsterSweepGrid::sweep_runnable_away_grid(POSITION *yp, POSITION *xp)
+{
+    POSITION gy = 0, gx = 0;
+
+    auto *floor_ptr = this->target_ptr->current_floor_ptr;
+    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    POSITION fy = m_ptr->fy;
+    POSITION fx = m_ptr->fx;
+
+    POSITION y1 = fy - (*yp);
+    POSITION x1 = fx - (*xp);
+
+    int score = -1;
+    for (int i = 7; i >= 0; i--) {
+        POSITION y = fy + ddy_ddd[i];
+        POSITION x = fx + ddx_ddd[i];
+        if (!in_bounds2(floor_ptr, y, x))
+            continue;
+
+        POSITION dis = distance(y, x, y1, x1);
+        POSITION s = 5000 / (dis + 3) - 500 / (grid_dist(&floor_ptr->grid_array[y][x], r_ptr) + 1);
+        if (s < 0)
+            s = 0;
+
+        if (s < score)
+            continue;
+
+        score = s;
+        gy = y;
+        gx = x;
+    }
+
+    if (score == -1)
+        return false;
+
+    (*yp) = fy - gy;
+    (*xp) = fx - gx;
+
     return true;
 }

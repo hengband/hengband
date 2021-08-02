@@ -15,8 +15,8 @@ public:
     bool get_movable_grid();
 
 private:
-    bool sweep_runnable_away_grid(POSITION *yp, POSITION *xp);
+    bool mon_will_run();
     void sweep_movable_grid(POSITION *yp, POSITION *xp, bool no_flow);
     bool sweep_ranged_attack_grid(POSITION *yp, POSITION *xp);
-    bool mon_will_run();
+    bool sweep_runnable_away_grid(POSITION *yp, POSITION *xp);
 };
