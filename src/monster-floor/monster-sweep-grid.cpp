@@ -77,25 +77,7 @@ bool MonsterSweepGrid::get_movable_grid()
         x = m_ptr->fx - x2;
     }
 
-    if (is_pet(m_ptr) && this->will_run) {
-        y = (-y), x = (-x);
-    } else {
-        if (!this->done && this->will_run) {
-            int tmp_x = (-x);
-            int tmp_y = (-y);
-            if (find_safety(this->target_ptr, this->m_idx, &y, &x) && !no_flow) {
-                if (this->sweep_runnable_away_grid(&y, &x)) {
-                    this->done = true;
-                }
-            }
-
-            if (!this->done) {
-                y = tmp_y;
-                x = tmp_x;
-            }
-        }
-    }
-
+    this->search_pet_runnable_grid(&y, &x, no_flow);
     if (!x && !y) {
         return false;
     }
@@ -228,6 +210,34 @@ void MonsterSweepGrid::search_room_to_run(POSITION *y, POSITION *x)
     if (find_hiding(this->target_ptr, this->m_idx, y, x)) {
         this->done = true;
     }
+}
+
+void MonsterSweepGrid::search_pet_runnable_grid(POSITION *y, POSITION *x, bool no_flow)
+{
+    auto *floor_ptr = this->target_ptr->current_floor_ptr;
+    auto *m_ptr = &floor_ptr->m_list[this->m_idx];
+    if (is_pet(m_ptr) && this->will_run) {
+        *y = -(*y);
+        *x = -(*x);
+        return;
+    }
+
+    if (this->done || !this->will_run) {
+        return;
+    }
+
+    auto tmp_x = -(*x);
+    auto tmp_y = -(*y);
+    if (find_safety(this->target_ptr, this->m_idx, y, x) && !no_flow && this->sweep_runnable_away_grid(y, x)) {
+        this->done = true;
+    }
+
+    if (this->done) {
+        return;
+    }
+
+    *y = tmp_y;
+    *x = tmp_x;
 }
 
 /*!

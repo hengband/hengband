@@ -24,4 +24,5 @@ private:
     bool sweep_runnable_away_grid(POSITION *yp, POSITION *xp);
     void check_hiding_grid(POSITION *y, POSITION *x, POSITION *y2, POSITION *x2);
     void search_room_to_run(POSITION *y, POSITION *x);
+    void search_pet_runnable_grid(POSITION *y, POSITION *x, bool no_flow);
 };
