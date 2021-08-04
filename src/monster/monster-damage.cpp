@@ -105,21 +105,7 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
         this->increase_kill_numbers(m_ptr);
         GAME_TEXT m_name[MAX_NLEN];
         monster_desc(this->target_ptr, m_name, m_ptr, MD_TRUE_NAME);
-
-        /* Don't kill Amberites */
-        if ((r_ptr->flags3 & RF3_AMBERITE) && one_in_(2)) {
-            int curses = 1 + randint1(3);
-            bool stop_ty = false;
-            int count = 0;
-
-            msg_format(_("%^sは恐ろしい血の呪いをあなたにかけた！", "%^s puts a terrible blood curse on you!"), m_name);
-            curse_equipment(this->target_ptr, 100, 50);
-
-            do {
-                stop_ty = activate_ty_curse(this->target_ptr, stop_ty, &count);
-            } while (--curses);
-        }
-
+        this->death_amberites(r_ptr, m_name);
         if (r_ptr->flags2 & RF2_CAN_SPEAK) {
             char line_got[1024];
             if (!get_rnd_line(_("mondeath_j.txt", "mondeath.txt"), m_ptr->r_idx, line_got)) {
@@ -485,6 +471,22 @@ void MonsterDamageProcessor::increase_kill_numbers(monster_type *m_ptr)
     }
 
     monster_race_track(this->target_ptr, m_ptr->ap_r_idx);
+}
+
+void MonsterDamageProcessor::death_amberites(monster_race *r_ptr, GAME_TEXT *m_name)
+{
+    if (none_bits(r_ptr->flags3, RF3_AMBERITE) || one_in_(2)) {
+        return;
+    }
+
+    auto curses = 1 + randint1(3);
+    auto stop_ty = false;
+    auto count = 0;
+    msg_format(_("%^sは恐ろしい血の呪いをあなたにかけた！", "%^s puts a terrible blood curse on you!"), m_name);
+    curse_equipment(this->target_ptr, 100, 50);
+    do {
+        stop_ty = activate_ty_curse(this->target_ptr, stop_ty, &count);
+    } while (--curses);
 }
 
 /*!
