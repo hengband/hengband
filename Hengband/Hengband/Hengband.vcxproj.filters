@@ -2316,6 +2316,9 @@
     <ClCompile Include="..\..\src\object-enchant\apply-magic-gloves.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster\monster-damage.cpp">
+      <Filter>monster</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\system\grid-type-definition.cpp">
       <Filter>system</Filter>
     </ClCompile>
@@ -4985,6 +4988,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\grid\feature-action-flags.h">
       <Filter>grid</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster\monster-damage.h">
+      <Filter>monster</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

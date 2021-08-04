@@ -274,6 +274,7 @@
     <ClCompile Include="..\..\src\main-win\graphics-win.cpp" />
     <ClCompile Include="..\..\src\main-win\main-win-term.cpp" />
     <ClCompile Include="..\..\src\main-win\wav-reader.cpp" />
+    <ClCompile Include="..\..\src\monster\monster-damage.cpp" />
     <ClCompile Include="..\..\src\object-enchant\apply-magic-amulet.cpp" />
     <ClCompile Include="..\..\src\object-enchant\abstract-protector-enchanter.cpp" />
     <ClCompile Include="..\..\src\object-enchant\apply-magic-boots.cpp" />
@@ -961,6 +962,7 @@
     <ClInclude Include="..\..\src\main-win\graphics-win.h" />
     <ClInclude Include="..\..\src\main-win\main-win-term.h" />
     <ClInclude Include="..\..\src\main-win\wav-reader.h" />
+    <ClInclude Include="..\..\src\monster\monster-damage.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic-amulet.h" />
     <ClInclude Include="..\..\src\object-enchant\abstract-protector-enchanter.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic-boots.h" />

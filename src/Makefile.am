@@ -447,6 +447,7 @@ hengband_SOURCES = \
 	\
 	monster/horror-descriptions.cpp monster/horror-descriptions.h \
 	monster/monster-compaction.cpp monster/monster-compaction.h \
+	monster/monster-damage.cpp monster/monster-damage.h \
 	monster/monster-describer.cpp monster/monster-describer.h \
 	monster/monster-description-types.h \
 	monster/monster-flag-types.h \
