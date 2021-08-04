@@ -144,12 +144,8 @@ void MonsterDamageProcessor::get_exp_from_mon(monster_type *m_ptr, HIT_POINT exp
 bool MonsterDamageProcessor::mon_take_hit(concptr note)
 {
     auto *m_ptr = &this->target_ptr->current_floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
-
-    /* Innocent until proven otherwise */
     auto innocent = true;
     auto thief = false;
-    int i;
 
     monster_type exp_mon;
     (void)COPY(&exp_mon, m_ptr, monster_type);
@@ -195,7 +191,7 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
         msg_format(_("合計%d/%dのダメージを与えた。", "You do %d (out of %d) damage."), m_ptr->dealt_damage, m_ptr->maxhp);
     }
 
-    /* It is dead now */
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     if (m_ptr->hp < 0) {
         GAME_TEXT m_name[MAX_NLEN];
 
@@ -360,7 +356,7 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
             chg_virtue(this->target_ptr, V_VALOUR, -1);
         }
 
-        for (i = 0; i < 4; i++) {
+        for (auto i = 0; i < 4; i++) {
             if (r_ptr->blow[i].d_dice != 0)
                 innocent = false; /* Murderer! */
 
@@ -420,7 +416,7 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
         else if (!monster_living(m_ptr->r_idx)) {
             bool explode = false;
 
-            for (i = 0; i < 4; i++) {
+            for (auto i = 0; i < 4; i++) {
                 if (r_ptr->blow[i].method == RBM_EXPLODE)
                     explode = true;
             }
@@ -452,7 +448,7 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
 #endif
         }
         if ((r_ptr->flags1 & RF1_UNIQUE) && m_ptr->mflag2.has_not(MFLAG2::CLONED) && !vanilla_town) {
-            for (i = 0; i < MAX_BOUNTY; i++) {
+            for (auto i = 0; i < MAX_BOUNTY; i++) {
                 if ((current_world_ptr->bounty_r_idx[i] == m_ptr->r_idx) && m_ptr->mflag2.has_not(MFLAG2::CHAMELEON)) {
                     msg_format(_("%sの首には賞金がかかっている。", "There is a price on %s's head."), m_name);
                     break;
@@ -460,7 +456,6 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
             }
         }
 
-        /* Generate treasure */
         monster_death(this->target_ptr, this->m_idx, true);
 
         // @todo デッドアタック扱いにしてここから削除したい.
@@ -499,40 +494,25 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
         }
 
         this->get_exp_from_mon(&exp_mon, exp_mon.max_maxhp * 2);
-
-        /* Not afraid */
         *this->fear = false;
-
-        /* Monster is dead */
         return true;
     }
-    /* Mega-Hack -- Pain cancels fear */
+
     if (monster_fear_remaining(m_ptr) && (this->dam > 0)) {
-        /* Cure fear */
-        if (set_monster_monfear(this->target_ptr, this->m_idx, monster_fear_remaining(m_ptr) - randint1(this->dam))) {
-            /* No more fear */
+        auto fear_remining = monster_fear_remaining(m_ptr) - randint1(this->dam);
+        if (set_monster_monfear(this->target_ptr, this->m_idx, fear_remining)) {
             *this->fear = false;
         }
     }
 
-    /* Sometimes a monster gets scared by damage */
+    // 恐怖の更なる加算.
     if (!monster_fear_remaining(m_ptr) && none_bits(r_ptr->flags3, RF3_NO_FEAR)) {
-        /* Percentage of fully healthy */
         int percentage = (100L * m_ptr->hp) / m_ptr->maxhp;
-
-        /*
-         * Run (sometimes) if at 10% or less of max hit points,
-         * or (usually) when hit for half its current hit points
-         */
         if ((randint1(10) >= percentage) || ((this->dam >= m_ptr->hp) && (randint0(100) < 80))) {
-            /* Hack -- note fear */
             *this->fear = true;
-
-            /* Hack -- Add some timed fear */
             (void)set_monster_monfear(this->target_ptr, this->m_idx, (randint1(10) + (((this->dam >= m_ptr->hp) && (percentage > 7)) ? 20 : ((11 - percentage) * 5))));
         }
     }
 
-    /* Not dead yet */
     return false;
 }
