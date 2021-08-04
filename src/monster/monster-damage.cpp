@@ -49,10 +49,25 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
+/*
+ * @brief コンストラクタ
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param m_idx ダメージを与えたモンスターのID
+ * @param dam 与えたダメージ量
+ * @param fear ダメージによってモンスターが恐慌状態に陥ったならばtrue
+ * @param note モンスターが倒された際の特別なメッセージ述語
+ */
+MonsterDamageProcessor::MonsterDamageProcessor(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *fear)
+    : target_ptr(target_ptr)
+    , m_idx(m_idx)
+    , dam(dam)
+    , fear(fear)
+{
+}
+
 /*!
  * @brief モンスターに与えたダメージを元に経験値を加算する /
  * Calculate experience point to be get
- * @param dam 与えたダメージ量
  * @param m_ptr ダメージを与えたモンスターの構造体参照ポインタ
  * @details
  * <pre>
@@ -62,10 +77,10 @@
  * experience point of a monster later.
  * </pre>
  */
-static void get_exp_from_mon(player_type *target_ptr, HIT_POINT dam, monster_type *m_ptr)
+void MonsterDamageProcessor::get_exp_from_mon(monster_type *m_ptr, HIT_POINT exp_dam)
 {
     auto *r_ptr = &r_info[m_ptr->r_idx];
-    if (!monster_is_valid(m_ptr) || is_pet(m_ptr) || target_ptr->phase_out) {
+    if (!monster_is_valid(m_ptr) || is_pet(m_ptr) || this->target_ptr->phase_out) {
         return;
     }
 
@@ -74,17 +89,17 @@ static void get_exp_from_mon(player_type *target_ptr, HIT_POINT dam, monster_typ
      * - Varying speed effects
      * - Get a fraction in proportion of damage point
      */
-    auto new_exp = r_ptr->level * SPEED_TO_ENERGY(m_ptr->mspeed) * dam;
+    auto new_exp = r_ptr->level * SPEED_TO_ENERGY(m_ptr->mspeed) * exp_dam;
     auto new_exp_frac = 0U;
     auto div_h = 0;
-    auto div_l = (uint)((target_ptr->max_plv + 2) * SPEED_TO_ENERGY(r_ptr->speed));
+    auto div_l = (uint)((this->target_ptr->max_plv + 2) * SPEED_TO_ENERGY(r_ptr->speed));
 
     /* Use (average maxhp * 2) as a denominator */
     auto compensation = any_bits(r_ptr->flags1, RF1_FORCE_MAXHP) ? r_ptr->hside * 2 : r_ptr->hside + 1;
     s64b_mul(&div_h, &div_l, 0, r_ptr->hdice * (ironman_nightmare ? 2 : 1) * compensation);
 
     /* Special penalty in the wilderness */
-    if (!target_ptr->current_floor_ptr->dun_level && (none_bits(r_ptr->flags8, RF8_WILD_ONLY) || none_bits(r_ptr->flags1, RF1_UNIQUE))) {
+    if (!this->target_ptr->current_floor_ptr->dun_level && (none_bits(r_ptr->flags8, RF8_WILD_ONLY) || none_bits(r_ptr->flags1, RF1_UNIQUE))) {
         s64b_mul(&div_h, &div_l, 0, 5);
     }
 
@@ -119,64 +134,58 @@ static void get_exp_from_mon(player_type *target_ptr, HIT_POINT dam, monster_typ
     }
 
     s64b_mul(&new_exp, &new_exp_frac, 0, r_ptr->mexp);
-    gain_exp_64(target_ptr, new_exp, new_exp_frac);
+    gain_exp_64(this->target_ptr, new_exp, new_exp_frac);
 }
 
 /*!
  * @brief モンスターのHPをダメージに応じて減算する /
- * Decreases monsters hit points, handling monster death.
- * @param dam 与えたダメージ量
- * @param m_idx ダメージを与えたモンスターのID
- * @param fear ダメージによってモンスターが恐慌状態に陥ったならばTRUEを返す
- * @param note モンスターが倒された際の特別なメッセージ述語
  * @return モンスターが生きていればfalse、死んだらtrue
  */
-bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
+bool MonsterDamageProcessor::mon_take_hit(concptr note)
 {
-    auto *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+    auto *m_ptr = &this->target_ptr->current_floor_ptr->m_list[this->m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
 
     /* Innocent until proven otherwise */
     auto innocent = true;
     auto thief = false;
     int i;
-    HIT_POINT expdam;
 
     monster_type exp_mon;
     (void)COPY(&exp_mon, m_ptr, monster_type);
 
-    expdam = (m_ptr->hp > dam) ? dam : m_ptr->hp;
+    auto exp_dam = (m_ptr->hp > this->dam) ? this->dam : m_ptr->hp;
 
-    get_exp_from_mon(target_ptr, expdam, &exp_mon);
+    this->get_exp_from_mon(&exp_mon, exp_dam);
 
     /* Genocided by chaos patron */
     if (!monster_is_valid(m_ptr)) {
-        m_idx = 0;
+        this->m_idx = 0;
     }
 
     /* Redraw (later) if needed */
-    if (target_ptr->health_who == m_idx) {
-        target_ptr->redraw |= PR_HEALTH;
+    if (this->target_ptr->health_who == this->m_idx) {
+        this->target_ptr->redraw |= PR_HEALTH;
     }
 
-    if (target_ptr->riding == m_idx) {
-        target_ptr->redraw |= PR_UHEALTH;
+    if (this->target_ptr->riding == this->m_idx) {
+        this->target_ptr->redraw |= PR_UHEALTH;
     }
 
-    (void)set_monster_csleep(target_ptr, m_idx, 0);
+    (void)set_monster_csleep(this->target_ptr, this->m_idx, 0);
 
     /* Hack - Cancel any special player stealth magics. -LM- */
-    if (target_ptr->special_defense & NINJA_S_STEALTH) {
-        set_superstealth(target_ptr, false);
+    if (this->target_ptr->special_defense & NINJA_S_STEALTH) {
+        set_superstealth(this->target_ptr, false);
     }
 
     /* Genocided by chaos patron */
-    if (m_idx == 0) {
+    if (this->m_idx == 0) {
         return true;
     }
 
-    m_ptr->hp -= dam;
-    m_ptr->dealt_damage += dam;
+    m_ptr->hp -= this->dam;
+    m_ptr->dealt_damage += this->dam;
 
     if (m_ptr->dealt_damage > m_ptr->max_maxhp * 100) {
         m_ptr->dealt_damage = m_ptr->max_maxhp * 100;
@@ -241,7 +250,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
             r_ptr->r_akills++;
 
         /* Recall even invisible uniques or winners */
-        if ((m_ptr->ml && !target_ptr->image) || (r_ptr->flags1 & RF1_UNIQUE)) {
+        if ((m_ptr->ml && !this->target_ptr->image) || (r_ptr->flags1 & RF1_UNIQUE)) {
             /* Count kills this life */
             if (m_ptr->mflag2.has(MFLAG2::KAGE) && (r_info[MON_KAGE].r_pkills < MAX_SHORT))
                 r_info[MON_KAGE].r_pkills++;
@@ -255,10 +264,10 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
                 r_ptr->r_tkills++;
 
             /* Hack -- Auto-recall */
-            monster_race_track(target_ptr, m_ptr->ap_r_idx);
+            monster_race_track(this->target_ptr, m_ptr->ap_r_idx);
         }
 
-        monster_desc(target_ptr, m_name, m_ptr, MD_TRUE_NAME);
+        monster_desc(this->target_ptr, m_name, m_ptr, MD_TRUE_NAME);
 
         /* Don't kill Amberites */
         if ((r_ptr->flags3 & RF3_AMBERITE) && one_in_(2)) {
@@ -267,10 +276,10 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
             int count = 0;
 
             msg_format(_("%^sは恐ろしい血の呪いをあなたにかけた！", "%^s puts a terrible blood curse on you!"), m_name);
-            curse_equipment(target_ptr, 100, 50);
+            curse_equipment(this->target_ptr, 100, 50);
 
             do {
-                stop_ty = activate_ty_curse(target_ptr, stop_ty, &count);
+                stop_ty = activate_ty_curse(this->target_ptr, stop_ty, &count);
             } while (--curses);
         }
 
@@ -282,73 +291,73 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 
 #ifdef WORLD_SCORE
             if (m_ptr->r_idx == MON_SERPENT) {
-                screen_dump = make_screen_dump(target_ptr);
+                screen_dump = make_screen_dump(this->target_ptr);
             }
 #endif
         }
 
-        if (d_info[target_ptr->dungeon_idx].flags.has_not(DF::BEGINNER)) {
-            if (!target_ptr->current_floor_ptr->dun_level && !target_ptr->ambush_flag && !target_ptr->current_floor_ptr->inside_arena) {
-                chg_virtue(target_ptr, V_VALOUR, -1);
-            } else if (r_ptr->level > target_ptr->current_floor_ptr->dun_level) {
-                if (randint1(10) <= (r_ptr->level - target_ptr->current_floor_ptr->dun_level))
-                    chg_virtue(target_ptr, V_VALOUR, 1);
+        if (d_info[this->target_ptr->dungeon_idx].flags.has_not(DF::BEGINNER)) {
+            if (!this->target_ptr->current_floor_ptr->dun_level && !this->target_ptr->ambush_flag && !this->target_ptr->current_floor_ptr->inside_arena) {
+                chg_virtue(this->target_ptr, V_VALOUR, -1);
+            } else if (r_ptr->level > this->target_ptr->current_floor_ptr->dun_level) {
+                if (randint1(10) <= (r_ptr->level - this->target_ptr->current_floor_ptr->dun_level))
+                    chg_virtue(this->target_ptr, V_VALOUR, 1);
             }
             if (r_ptr->level > 60) {
-                chg_virtue(target_ptr, V_VALOUR, 1);
+                chg_virtue(this->target_ptr, V_VALOUR, 1);
             }
-            if (r_ptr->level >= 2 * (target_ptr->lev + 1))
-                chg_virtue(target_ptr, V_VALOUR, 2);
+            if (r_ptr->level >= 2 * (this->target_ptr->lev + 1))
+                chg_virtue(this->target_ptr, V_VALOUR, 2);
         }
 
         if (r_ptr->flags1 & RF1_UNIQUE) {
             if (r_ptr->flags3 & (RF3_EVIL | RF3_GOOD))
-                chg_virtue(target_ptr, V_HARMONY, 2);
+                chg_virtue(this->target_ptr, V_HARMONY, 2);
 
             if (r_ptr->flags3 & RF3_GOOD) {
-                chg_virtue(target_ptr, V_UNLIFE, 2);
-                chg_virtue(target_ptr, V_VITALITY, -2);
+                chg_virtue(this->target_ptr, V_UNLIFE, 2);
+                chg_virtue(this->target_ptr, V_VITALITY, -2);
             }
 
             if (one_in_(3))
-                chg_virtue(target_ptr, V_INDIVIDUALISM, -1);
+                chg_virtue(this->target_ptr, V_INDIVIDUALISM, -1);
         }
 
         if (m_ptr->r_idx == MON_BEGGAR || m_ptr->r_idx == MON_LEPER) {
-            chg_virtue(target_ptr, V_COMPASSION, -1);
+            chg_virtue(this->target_ptr, V_COMPASSION, -1);
         }
 
-        if ((r_ptr->flags3 & RF3_GOOD) && ((r_ptr->level) / 10 + (3 * target_ptr->current_floor_ptr->dun_level) >= randint1(100)))
-            chg_virtue(target_ptr, V_UNLIFE, 1);
+        if ((r_ptr->flags3 & RF3_GOOD) && ((r_ptr->level) / 10 + (3 * this->target_ptr->current_floor_ptr->dun_level) >= randint1(100)))
+            chg_virtue(this->target_ptr, V_UNLIFE, 1);
 
         if (r_ptr->d_char == 'A') {
             if (r_ptr->flags1 & RF1_UNIQUE)
-                chg_virtue(target_ptr, V_FAITH, -2);
-            else if ((r_ptr->level) / 10 + (3 * target_ptr->current_floor_ptr->dun_level) >= randint1(100)) {
+                chg_virtue(this->target_ptr, V_FAITH, -2);
+            else if ((r_ptr->level) / 10 + (3 * this->target_ptr->current_floor_ptr->dun_level) >= randint1(100)) {
                 if (r_ptr->flags3 & RF3_GOOD)
-                    chg_virtue(target_ptr, V_FAITH, -1);
+                    chg_virtue(this->target_ptr, V_FAITH, -1);
                 else
-                    chg_virtue(target_ptr, V_FAITH, 1);
+                    chg_virtue(this->target_ptr, V_FAITH, 1);
             }
         } else if (r_ptr->flags3 & RF3_DEMON) {
             if (r_ptr->flags1 & RF1_UNIQUE)
-                chg_virtue(target_ptr, V_FAITH, 2);
-            else if ((r_ptr->level) / 10 + (3 * target_ptr->current_floor_ptr->dun_level) >= randint1(100))
-                chg_virtue(target_ptr, V_FAITH, 1);
+                chg_virtue(this->target_ptr, V_FAITH, 2);
+            else if ((r_ptr->level) / 10 + (3 * this->target_ptr->current_floor_ptr->dun_level) >= randint1(100))
+                chg_virtue(this->target_ptr, V_FAITH, 1);
         }
 
         if ((r_ptr->flags3 & RF3_UNDEAD) && (r_ptr->flags1 & RF1_UNIQUE))
-            chg_virtue(target_ptr, V_VITALITY, 2);
+            chg_virtue(this->target_ptr, V_VITALITY, 2);
 
         if (r_ptr->r_deaths) {
             if (r_ptr->flags1 & RF1_UNIQUE) {
-                chg_virtue(target_ptr, V_HONOUR, 10);
-            } else if ((r_ptr->level) / 10 + (2 * target_ptr->current_floor_ptr->dun_level) >= randint1(100)) {
-                chg_virtue(target_ptr, V_HONOUR, 1);
+                chg_virtue(this->target_ptr, V_HONOUR, 10);
+            } else if ((r_ptr->level) / 10 + (2 * this->target_ptr->current_floor_ptr->dun_level) >= randint1(100)) {
+                chg_virtue(this->target_ptr, V_HONOUR, 1);
             }
         }
         if ((r_ptr->flags2 & RF2_MULTIPLY) && (r_ptr->r_akills > 1000) && one_in_(10)) {
-            chg_virtue(target_ptr, V_VALOUR, -1);
+            chg_virtue(this->target_ptr, V_VALOUR, -1);
         }
 
         for (i = 0; i < 4; i++) {
@@ -366,24 +375,24 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 
         if (thief) {
             if (r_ptr->flags1 & RF1_UNIQUE)
-                chg_virtue(target_ptr, V_JUSTICE, 3);
-            else if (1 + ((r_ptr->level) / 10 + (2 * target_ptr->current_floor_ptr->dun_level)) >= randint1(100))
-                chg_virtue(target_ptr, V_JUSTICE, 1);
+                chg_virtue(this->target_ptr, V_JUSTICE, 3);
+            else if (1 + ((r_ptr->level) / 10 + (2 * this->target_ptr->current_floor_ptr->dun_level)) >= randint1(100))
+                chg_virtue(this->target_ptr, V_JUSTICE, 1);
         } else if (innocent) {
-            chg_virtue(target_ptr, V_JUSTICE, -1);
+            chg_virtue(this->target_ptr, V_JUSTICE, -1);
         }
 
         auto magic_ability_flags = r_ptr->ability_flags;
         magic_ability_flags.reset(RF_ABILITY_NOMAGIC_MASK);
         if ((r_ptr->flags3 & RF3_ANIMAL) && !(r_ptr->flags3 & RF3_EVIL) && magic_ability_flags.none()) {
             if (one_in_(4))
-                chg_virtue(target_ptr, V_NATURE, -1);
+                chg_virtue(this->target_ptr, V_NATURE, -1);
         }
 
         if ((r_ptr->flags1 & RF1_UNIQUE) && record_destroy_uniq) {
             char note_buf[160];
             sprintf(note_buf, "%s%s", r_ptr->name.c_str(), m_ptr->mflag2.has(MFLAG2::CLONED) ? _("(クローン)", "(Clone)") : "");
-            exe_write_diary(target_ptr, DIARY_UNIQUE, 0, note_buf);
+            exe_write_diary(this->target_ptr, DIARY_UNIQUE, 0, note_buf);
         }
 
         /* Make a sound */
@@ -397,7 +406,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
         /* Death by physical attack -- invisible monster */
         else if (!m_ptr->ml) {
 #ifdef JP
-            if (is_echizen(target_ptr))
+            if (is_echizen(this->target_ptr))
                 msg_format("せっかくだから%sを殺した。", m_name);
             else
                 msg_format("%sを殺した。", m_name);
@@ -421,7 +430,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
                 msg_format(_("%sは爆発して粉々になった。", "%^s explodes into tiny shreds."), m_name);
             else {
 #ifdef JP
-                if (is_echizen(target_ptr))
+                if (is_echizen(this->target_ptr))
                     msg_format("せっかくだから%sを倒した。", m_name);
                 else
                     msg_format("%sを倒した。", m_name);
@@ -434,7 +443,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
         /* Death by Physical attack -- living monster */
         else {
 #ifdef JP
-            if (is_echizen(target_ptr))
+            if (is_echizen(this->target_ptr))
                 msg_format("せっかくだから%sを葬り去った。", m_name);
             else
                 msg_format("%sを葬り去った。", m_name);
@@ -452,12 +461,12 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
         }
 
         /* Generate treasure */
-        monster_death(target_ptr, m_idx, true);
+        monster_death(this->target_ptr, this->m_idx, true);
 
         // @todo デッドアタック扱いにしてここから削除したい.
         bool is_special_summon = m_ptr->r_idx == MON_IKETA;
         is_special_summon |= m_ptr->r_idx == MON_DOPPIO;
-        if (is_special_summon && !(target_ptr->current_floor_ptr->inside_arena || target_ptr->phase_out)) {
+        if (is_special_summon && !(this->target_ptr->current_floor_ptr->inside_arena || this->target_ptr->phase_out)) {
             POSITION dummy_y = m_ptr->fy;
             POSITION dummy_x = m_ptr->fx;
             BIT_FLAGS mode = 0L;
@@ -482,27 +491,27 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
                 break;
             }
 
-            delete_monster_idx(target_ptr, m_idx);
-            if (summon_named_creature(target_ptr, 0, dummy_y, dummy_x, new_unique_idx, mode))
+            delete_monster_idx(this->target_ptr, this->m_idx);
+            if (summon_named_creature(this->target_ptr, 0, dummy_y, dummy_x, new_unique_idx, mode))
                 msg_print(mes);
         } else {
-            delete_monster_idx(target_ptr, m_idx);
+            delete_monster_idx(this->target_ptr, this->m_idx);
         }
 
-        get_exp_from_mon(target_ptr, (long)exp_mon.max_maxhp * 2, &exp_mon);
+        this->get_exp_from_mon(&exp_mon, exp_mon.max_maxhp * 2);
 
         /* Not afraid */
-        (*fear) = false;
+        *this->fear = false;
 
         /* Monster is dead */
         return true;
     }
     /* Mega-Hack -- Pain cancels fear */
-    if (monster_fear_remaining(m_ptr) && (dam > 0)) {
+    if (monster_fear_remaining(m_ptr) && (this->dam > 0)) {
         /* Cure fear */
-        if (set_monster_monfear(target_ptr, m_idx, monster_fear_remaining(m_ptr) - randint1(dam))) {
+        if (set_monster_monfear(this->target_ptr, this->m_idx, monster_fear_remaining(m_ptr) - randint1(this->dam))) {
             /* No more fear */
-            *fear = false;
+            *this->fear = false;
         }
     }
 
@@ -515,12 +524,12 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
          * Run (sometimes) if at 10% or less of max hit points,
          * or (usually) when hit for half its current hit points
          */
-        if ((randint1(10) >= percentage) || ((dam >= m_ptr->hp) && (randint0(100) < 80))) {
+        if ((randint1(10) >= percentage) || ((this->dam >= m_ptr->hp) && (randint0(100) < 80))) {
             /* Hack -- note fear */
-            *fear = true;
+            *this->fear = true;
 
             /* Hack -- Add some timed fear */
-            (void)set_monster_monfear(target_ptr, m_idx, (randint1(10) + (((dam >= m_ptr->hp) && (percentage > 7)) ? 20 : ((11 - percentage) * 5))));
+            (void)set_monster_monfear(this->target_ptr, this->m_idx, (randint1(10) + (((this->dam >= m_ptr->hp) && (percentage > 7)) ? 20 : ((11 - percentage) * 5))));
         }
     }
 

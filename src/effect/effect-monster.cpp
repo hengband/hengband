@@ -248,7 +248,8 @@ static bool heal_leaper(player_type *caster_ptr, effect_monster_type *em_ptr)
 static bool deal_effect_damage_from_player(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     bool fear = false;
-    if (mon_take_hit(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, &fear, em_ptr->note_dies))
+    MonsterDamageProcessor mdp(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, &fear);
+    if (mdp.mon_take_hit(em_ptr->note_dies))
         return true;
 
     if (em_ptr->do_sleep)

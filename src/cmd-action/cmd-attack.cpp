@@ -140,19 +140,14 @@ static void natural_attack(player_type *attacker_ptr, MONSTER_IDX m_idx, MUTA at
         *mdeath = (m_ptr->r_idx == 0);
         break;
     case MUTA::HORNS:
-        *mdeath = mon_take_hit(attacker_ptr, m_idx, k, fear, NULL);
-        break;
     case MUTA::BEAK:
-        *mdeath = mon_take_hit(attacker_ptr, m_idx, k, fear, NULL);
-        break;
     case MUTA::TRUNK:
-        *mdeath = mon_take_hit(attacker_ptr, m_idx, k, fear, NULL);
-        break;
     case MUTA::TENTACLES:
-        *mdeath = mon_take_hit(attacker_ptr, m_idx, k, fear, NULL);
+    default: {
+        MonsterDamageProcessor mdp(attacker_ptr, m_idx, k, fear);
+        *mdeath = mdp.mon_take_hit(NULL);
         break;
-    default:
-        *mdeath = mon_take_hit(attacker_ptr, m_idx, k, fear, NULL);
+    }
     }
 
     touch_zap_player(m_ptr, attacker_ptr);
