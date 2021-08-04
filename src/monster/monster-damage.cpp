@@ -81,7 +81,7 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
     auto exp_dam = (m_ptr->hp > this->dam) ? this->dam : m_ptr->hp;
 
     this->get_exp_from_mon(&exp_mon, exp_dam);
-    if (this->genocide_chaos_patron(m_ptr)) {
+    if (this->genocide_chaos_patron()) {
         return true;
     }
 
@@ -97,15 +97,15 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
 
     auto *r_ptr = &r_info[m_ptr->r_idx];
     if (m_ptr->hp < 0) {
-        this->death_special_flag_monster(m_ptr);
+        this->death_special_flag_monster();
         if (r_ptr->r_akills < MAX_SHORT) {
             r_ptr->r_akills++;
         }
 
-        this->increase_kill_numbers(m_ptr);
+        this->increase_kill_numbers();
         GAME_TEXT m_name[MAX_NLEN];
         monster_desc(this->target_ptr, m_name, m_ptr, MD_TRUE_NAME);
-        this->death_amberites(r_ptr, m_name);
+        this->death_amberites(m_name);
         if (r_ptr->flags2 & RF2_CAN_SPEAK) {
             char line_got[1024];
             if (!get_rnd_line(_("mondeath_j.txt", "mondeath.txt"), m_ptr->r_idx, line_got)) {
@@ -284,7 +284,7 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
         }
 
         monster_death(this->target_ptr, this->m_idx, true);
-        this->summon_special_unique(m_ptr);
+        this->summon_special_unique();
         this->get_exp_from_mon(&exp_mon, exp_mon.max_maxhp * 2);
         *this->fear = false;
         return true;
@@ -310,8 +310,9 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
     return false;
 }
 
-bool MonsterDamageProcessor::genocide_chaos_patron(monster_type *m_ptr)
+bool MonsterDamageProcessor::genocide_chaos_patron()
 {
+    auto *m_ptr = &this->target_ptr->current_floor_ptr->m_list[this->m_idx];
     if (!monster_is_valid(m_ptr)) {
         this->m_idx = 0;
     }
@@ -329,8 +330,9 @@ bool MonsterDamageProcessor::genocide_chaos_patron(monster_type *m_ptr)
  * @brief たぬき、カメレオン、ナズグル、ユニークの死亡時処理
  * @param m_ptr ダメージを与えたモンスターの構造体参照ポインタ
  */
-void MonsterDamageProcessor::death_special_flag_monster(monster_type *m_ptr)
+void MonsterDamageProcessor::death_special_flag_monster()
 {
+    auto *m_ptr = &this->target_ptr->current_floor_ptr->m_list[this->m_idx];
     auto r_idx = m_ptr->r_idx;
     auto *r_ptr = &r_info[r_idx];
     if (any_bits(r_info[r_idx].flags7, RF7_TANUKI)) {
@@ -451,8 +453,9 @@ void MonsterDamageProcessor::death_combined_uniques(
     }
 }
 
-void MonsterDamageProcessor::increase_kill_numbers(monster_type *m_ptr)
+void MonsterDamageProcessor::increase_kill_numbers()
 {
+    auto *m_ptr = &this->target_ptr->current_floor_ptr->m_list[this->m_idx];
     auto *r_ptr = &r_info[m_ptr->r_idx];
     if (((m_ptr->ml == 0) || this->target_ptr->image) && none_bits(r_ptr->flags1, RF1_UNIQUE)) {
         return;
@@ -473,8 +476,10 @@ void MonsterDamageProcessor::increase_kill_numbers(monster_type *m_ptr)
     monster_race_track(this->target_ptr, m_ptr->ap_r_idx);
 }
 
-void MonsterDamageProcessor::death_amberites(monster_race *r_ptr, GAME_TEXT *m_name)
+void MonsterDamageProcessor::death_amberites(GAME_TEXT *m_name)
 {
+    auto *m_ptr = &this->target_ptr->current_floor_ptr->m_list[this->m_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     if (none_bits(r_ptr->flags3, RF3_AMBERITE) || one_in_(2)) {
         return;
     }
@@ -576,8 +581,10 @@ void MonsterDamageProcessor::set_redraw()
  * @brief 特定ユニークを倒した時に更にユニークを特殊召喚する処理
  * @param m_ptr ダメージを与えた特定ユニークの構造体参照ポインタ
  */
-void MonsterDamageProcessor::summon_special_unique(monster_type *m_ptr)
+void MonsterDamageProcessor::summon_special_unique()
 {
+    auto *m_ptr = &this->target_ptr->current_floor_ptr->m_list[this->m_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     bool is_special_summon = m_ptr->r_idx == MON_IKETA;
     is_special_summon |= m_ptr->r_idx == MON_DOPPIO;
     if (!is_special_summon || this->target_ptr->current_floor_ptr->inside_arena || this->target_ptr->phase_out) {
