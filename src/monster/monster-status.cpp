@@ -1038,18 +1038,42 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
     return false;
 }
 
-bool monster_is_valid(monster_type *m_ptr) { return (m_ptr->r_idx != 0); }
+bool monster_is_valid(monster_type *m_ptr)
+{
+    return (m_ptr->r_idx != 0);
+}
 
-TIME_EFFECT monster_csleep_remaining(monster_type *m_ptr) { return m_ptr->mtimed[MTIMED_CSLEEP]; }
+TIME_EFFECT monster_csleep_remaining(monster_type *m_ptr)
+{
+    return m_ptr->mtimed[MTIMED_CSLEEP];
+}
 
-TIME_EFFECT monster_fast_remaining(monster_type *m_ptr) { return m_ptr->mtimed[MTIMED_FAST]; }
+TIME_EFFECT monster_fast_remaining(monster_type *m_ptr)
+{
+    return m_ptr->mtimed[MTIMED_FAST];
+}
 
-TIME_EFFECT monster_slow_remaining(monster_type *m_ptr) { return m_ptr->mtimed[MTIMED_SLOW]; }
+TIME_EFFECT monster_slow_remaining(monster_type *m_ptr)
+{
+    return m_ptr->mtimed[MTIMED_SLOW];
+}
 
-TIME_EFFECT monster_stunned_remaining(monster_type *m_ptr) { return m_ptr->mtimed[MTIMED_STUNNED]; }
+TIME_EFFECT monster_stunned_remaining(monster_type *m_ptr)
+{
+    return m_ptr->mtimed[MTIMED_STUNNED];
+}
 
-TIME_EFFECT monster_confused_remaining(monster_type *m_ptr) { return m_ptr->mtimed[MTIMED_CONFUSED]; }
+TIME_EFFECT monster_confused_remaining(monster_type *m_ptr)
+{
+    return m_ptr->mtimed[MTIMED_CONFUSED];
+}
 
-TIME_EFFECT monster_fear_remaining(monster_type *m_ptr) { return m_ptr->mtimed[MTIMED_MONFEAR]; }
+TIME_EFFECT monster_fear_remaining(monster_type *m_ptr)
+{
+    return m_ptr->mtimed[MTIMED_MONFEAR];
+}
 
-TIME_EFFECT monster_invulner_remaining(monster_type *m_ptr) { return m_ptr->mtimed[MTIMED_INVULNER]; }
+TIME_EFFECT monster_invulner_remaining(monster_type *m_ptr)
+{
+    return m_ptr->mtimed[MTIMED_INVULNER];
+}
