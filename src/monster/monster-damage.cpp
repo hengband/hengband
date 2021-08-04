@@ -98,30 +98,11 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
     auto *r_ptr = &r_info[m_ptr->r_idx];
     if (m_ptr->hp < 0) {
         this->death_special_flag_monster(m_ptr);
-
-        /* Count all monsters killed */
         if (r_ptr->r_akills < MAX_SHORT) {
             r_ptr->r_akills++;
         }
 
-        /* Recall even invisible uniques or winners */
-        if ((m_ptr->ml && !this->target_ptr->image) || (r_ptr->flags1 & RF1_UNIQUE)) {
-            /* Count kills this life */
-            if (m_ptr->mflag2.has(MFLAG2::KAGE) && (r_info[MON_KAGE].r_pkills < MAX_SHORT))
-                r_info[MON_KAGE].r_pkills++;
-            else if (r_ptr->r_pkills < MAX_SHORT)
-                r_ptr->r_pkills++;
-
-            /* Count kills in all lives */
-            if (m_ptr->mflag2.has(MFLAG2::KAGE) && (r_info[MON_KAGE].r_tkills < MAX_SHORT))
-                r_info[MON_KAGE].r_tkills++;
-            else if (r_ptr->r_tkills < MAX_SHORT)
-                r_ptr->r_tkills++;
-
-            /* Hack -- Auto-recall */
-            monster_race_track(this->target_ptr, m_ptr->ap_r_idx);
-        }
-
+        this->increase_kill_numbers(m_ptr);
         GAME_TEXT m_name[MAX_NLEN];
         monster_desc(this->target_ptr, m_name, m_ptr, MD_TRUE_NAME);
 
@@ -482,6 +463,28 @@ void MonsterDamageProcessor::death_combined_uniques(
             r_info[split2].r_tkills++;
         }
     }
+}
+
+void MonsterDamageProcessor::increase_kill_numbers(monster_type *m_ptr)
+{
+    auto *r_ptr = &r_info[m_ptr->r_idx];
+    if (((m_ptr->ml == 0) || this->target_ptr->image) && none_bits(r_ptr->flags1, RF1_UNIQUE)) {
+        return;
+    }
+
+    if (m_ptr->mflag2.has(MFLAG2::KAGE) && (r_info[MON_KAGE].r_pkills < MAX_SHORT)) {
+        r_info[MON_KAGE].r_pkills++;
+    } else if (r_ptr->r_pkills < MAX_SHORT) {
+        r_ptr->r_pkills++;
+    }
+
+    if (m_ptr->mflag2.has(MFLAG2::KAGE) && (r_info[MON_KAGE].r_tkills < MAX_SHORT)) {
+        r_info[MON_KAGE].r_tkills++;
+    } else if (r_ptr->r_tkills < MAX_SHORT) {
+        r_ptr->r_tkills++;
+    }
+
+    monster_race_track(this->target_ptr, m_ptr->ap_r_idx);
 }
 
 /*!
