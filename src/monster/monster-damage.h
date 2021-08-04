@@ -22,6 +22,7 @@ private:
     void get_exp_from_mon(monster_type *m_ptr, HIT_POINT exp_dam);
     bool genocide_chaos_patron(monster_type *m_ptr);
     void death_special_flag_monster(monster_type *m_ptr);
+    void death_unique_monster(monster_race_type r_idx);
     bool check_combined_unique(const monster_race_type r_idx, std::vector<monster_race_type> *combined_uniques);
     void death_combined_uniques(const monster_race_type r_idx, std::vector<std::tuple<monster_race_type, monster_race_type, monster_race_type>> *combined_uniques);
     void set_redraw();

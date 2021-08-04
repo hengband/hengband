@@ -394,9 +394,18 @@ void MonsterDamageProcessor::death_special_flag_monster(monster_type *m_ptr)
         return;
     }
 
-    r_ptr->max_num = 0;
+    this->death_unique_monster((monster_race_type)r_idx);
+}
+
+/*
+ * @brief ユニークの死亡処理
+ * @param r_idx 死亡したユニークの種族番号
+ */
+void MonsterDamageProcessor::death_unique_monster(monster_race_type r_idx)
+{
+    r_info[r_idx].max_num = 0;
     std::vector<monster_race_type> combined_uniques;
-    if (!check_combined_unique((monster_race_type)r_idx, &combined_uniques)) {
+    if (!check_combined_unique(r_idx, &combined_uniques)) {
         return;
     }
 
@@ -407,7 +416,7 @@ void MonsterDamageProcessor::death_special_flag_monster(monster_type *m_ptr)
         uniques.push_back(unique);
     }
 
-    this->death_combined_uniques((monster_race_type)r_idx, &uniques);
+    this->death_combined_uniques(r_idx, &uniques);
 }
 
 /*
