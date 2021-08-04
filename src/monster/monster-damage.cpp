@@ -202,14 +202,9 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
         if (note != nullptr) {
             msg_format("%^s%s", m_name, note);
         } else if (!m_ptr->ml) {
-#ifdef JP
-            if (is_echizen(this->target_ptr))
-                msg_format("せっかくだから%sを殺した。", m_name);
-            else
-                msg_format("%sを殺した。", m_name);
-#else
-            msg_format("You have killed %s.", m_name);
-#endif
+            auto mes = is_echizen(this->target_ptr) ? _("せっかくだから%sを殺した。", "Because it's time, you have killed %s.")
+                                                    : _("%sを殺した。", "You have killed %s.");
+            msg_format(mes, m_name);
         } else if (!monster_living(m_ptr->r_idx)) {
             bool explode = false;
             for (auto i = 0; i < 4; i++) {
@@ -221,24 +216,14 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
             if (explode) {
                 msg_format(_("%sは爆発して粉々になった。", "%^s explodes into tiny shreds."), m_name);
             } else {
-#ifdef JP
-                if (is_echizen(this->target_ptr))
-                    msg_format("せっかくだから%sを倒した。", m_name);
-                else
-                    msg_format("%sを倒した。", m_name);
-#else
-                msg_format("You have destroyed %s.", m_name);
-#endif
+                auto mes = is_echizen(this->target_ptr) ? _("せっかくだから%sを殺した。", "Because it's time, you have destroyed %s.")
+                                                        : _("%sを殺した。", "You have destoryed %s.");
+                msg_format(mes, m_name);
             }
         } else {
-#ifdef JP
-            if (is_echizen(this->target_ptr))
-                msg_format("せっかくだから%sを葬り去った。", m_name);
-            else
-                msg_format("%sを葬り去った。", m_name);
-#else
-            msg_format("You have slain %s.", m_name);
-#endif
+            auto mes = is_echizen(this->target_ptr) ? _("せっかくだから%sを殺した。", "Because it's time, you have slained %s.")
+                                                    : _("%sを殺した。", "You have slained %s.");
+            msg_format(mes, m_name);
         }
 
         if (any_bits(r_ptr->flags1, RF1_UNIQUE) && m_ptr->mflag2.has_not(MFLAG2::CLONED) && !vanilla_town) {
