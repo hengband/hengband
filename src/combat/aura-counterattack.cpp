@@ -13,6 +13,7 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-flags3.h"
+#include "monster/monster-damage.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "object-hook/hook-armor.h"

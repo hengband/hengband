@@ -3,5 +3,4 @@
 #include "system/angband.h"
 
 struct player_type;
-struct monster_type;
-void get_exp_from_mon(player_type *target_ptr, HIT_POINT dam, monster_type *m_ptr);
+bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note);
