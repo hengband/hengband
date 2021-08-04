@@ -144,23 +144,23 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
             }
         }
 
-        if ((r_ptr->flags3 & RF3_UNDEAD) && (r_ptr->flags1 & RF1_UNIQUE)) {
+        if (any_bits(r_ptr->flags3, RF3_UNDEAD) && any_bits(r_ptr->flags1, RF1_UNIQUE)) {
             chg_virtue(this->target_ptr, V_VITALITY, 2);
         }
 
-        if (r_ptr->r_deaths) {
-            if (r_ptr->flags1 & RF1_UNIQUE) {
+        if (r_ptr->r_deaths > 0) {
+            if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
                 chg_virtue(this->target_ptr, V_HONOUR, 10);
             } else if ((r_ptr->level) / 10 + (2 * this->target_ptr->current_floor_ptr->dun_level) >= randint1(100)) {
                 chg_virtue(this->target_ptr, V_HONOUR, 1);
             }
         }
 
-        if ((r_ptr->flags2 & RF2_MULTIPLY) && (r_ptr->r_akills > 1000) && one_in_(10)) {
+        if (any_bits(r_ptr->flags2, RF2_MULTIPLY) && (r_ptr->r_akills > 1000) && one_in_(10)) {
             chg_virtue(this->target_ptr, V_VALOUR, -1);
         }
 
-        for (auto i = 0; i < 4; i++) {
+        for (auto i = 0; i < MAX_NUM_BLOWS; i++) {
             if (r_ptr->blow[i].d_dice != 0) {
                 innocent = false;
             }
@@ -175,7 +175,7 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
         }
 
         if (thief) {
-            if (r_ptr->flags1 & RF1_UNIQUE) {
+            if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
                 chg_virtue(this->target_ptr, V_JUSTICE, 3);
             } else if (1 + ((r_ptr->level) / 10 + (2 * this->target_ptr->current_floor_ptr->dun_level)) >= randint1(100)) {
                 chg_virtue(this->target_ptr, V_JUSTICE, 1);
