@@ -106,19 +106,7 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
         GAME_TEXT m_name[MAX_NLEN];
         monster_desc(this->target_ptr, m_name, m_ptr, MD_TRUE_NAME);
         this->death_amberites(m_name);
-        if (r_ptr->flags2 & RF2_CAN_SPEAK) {
-            char line_got[1024];
-            if (!get_rnd_line(_("mondeath_j.txt", "mondeath.txt"), m_ptr->r_idx, line_got)) {
-                msg_format("%^s %s", m_name, line_got);
-            }
-
-#ifdef WORLD_SCORE
-            if (m_ptr->r_idx == MON_SERPENT) {
-                screen_dump = make_screen_dump(this->target_ptr);
-            }
-#endif
-        }
-
+        this->dying_scream(m_name);
         if (d_info[this->target_ptr->dungeon_idx].flags.has_not(DF::BEGINNER)) {
             if (!this->target_ptr->current_floor_ptr->dun_level && !this->target_ptr->ambush_flag && !this->target_ptr->current_floor_ptr->inside_arena) {
                 chg_virtue(this->target_ptr, V_VALOUR, -1);
@@ -492,6 +480,26 @@ void MonsterDamageProcessor::death_amberites(GAME_TEXT *m_name)
     do {
         stop_ty = activate_ty_curse(this->target_ptr, stop_ty, &count);
     } while (--curses);
+}
+
+void MonsterDamageProcessor::dying_scream(GAME_TEXT *m_name)
+{
+    auto *m_ptr = &this->target_ptr->current_floor_ptr->m_list[this->m_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
+    if (none_bits(r_ptr->flags2, RF2_CAN_SPEAK)) {
+        return;
+    }
+
+    char line_got[1024];
+    if (!get_rnd_line(_("mondeath_j.txt", "mondeath.txt"), m_ptr->r_idx, line_got)) {
+        msg_format("%^s %s", m_name, line_got);
+    }
+
+#ifdef WORLD_SCORE
+    if (m_ptr->r_idx == MON_SERPENT) {
+        screen_dump = make_screen_dump(this->target_ptr);
+    }
+#endif
 }
 
 /*!

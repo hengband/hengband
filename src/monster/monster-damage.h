@@ -28,6 +28,7 @@ private:
     void death_combined_uniques(const monster_race_type r_idx, std::vector<std::tuple<monster_race_type, monster_race_type, monster_race_type>> *combined_uniques);
     void increase_kill_numbers();
     void death_amberites(GAME_TEXT *m_name);
+    void dying_scream(GAME_TEXT *m_name);
     void set_redraw();
     void summon_special_unique();
 };
