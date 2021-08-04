@@ -81,36 +81,12 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
     auto exp_dam = (m_ptr->hp > this->dam) ? this->dam : m_ptr->hp;
 
     this->get_exp_from_mon(&exp_mon, exp_dam);
-
-    /* Genocided by chaos patron */
-    if (!monster_is_valid(m_ptr)) {
-        this->m_idx = 0;
-    }
-
-    /* Redraw (later) if needed */
-    if (this->target_ptr->health_who == this->m_idx) {
-        this->target_ptr->redraw |= PR_HEALTH;
-    }
-
-    if (this->target_ptr->riding == this->m_idx) {
-        this->target_ptr->redraw |= PR_UHEALTH;
-    }
-
-    (void)set_monster_csleep(this->target_ptr, this->m_idx, 0);
-
-    /* Hack - Cancel any special player stealth magics. -LM- */
-    if (this->target_ptr->special_defense & NINJA_S_STEALTH) {
-        set_superstealth(this->target_ptr, false);
-    }
-
-    /* Genocided by chaos patron */
-    if (this->m_idx == 0) {
+    if (this->genocide_chaos_patron(m_ptr)) {
         return true;
     }
 
     m_ptr->hp -= this->dam;
     m_ptr->dealt_damage += this->dam;
-
     if (m_ptr->dealt_damage > m_ptr->max_maxhp * 100) {
         m_ptr->dealt_damage = m_ptr->max_maxhp * 100;
     }
@@ -411,6 +387,21 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
     return false;
 }
 
+bool MonsterDamageProcessor::genocide_chaos_patron(monster_type *m_ptr)
+{
+    if (!monster_is_valid(m_ptr)) {
+        this->m_idx = 0;
+    }
+
+    this->set_redraw();
+    (void)set_monster_csleep(this->target_ptr, this->m_idx, 0);
+    if (this->target_ptr->special_defense & NINJA_S_STEALTH) {
+        set_superstealth(this->target_ptr, false);
+    }
+
+    return this->m_idx == 0;
+}
+
 /*!
  * @brief モンスターに与えたダメージを元に経験値を加算する /
  * Calculate experience point to be get
@@ -481,6 +472,17 @@ void MonsterDamageProcessor::get_exp_from_mon(monster_type *m_ptr, HIT_POINT exp
 
     s64b_mul(&new_exp, &new_exp_frac, 0, r_ptr->mexp);
     gain_exp_64(this->target_ptr, new_exp, new_exp_frac);
+}
+
+void MonsterDamageProcessor::set_redraw()
+{
+    if (this->target_ptr->health_who == this->m_idx) {
+        this->target_ptr->redraw |= PR_HEALTH;
+    }
+
+    if (this->target_ptr->riding == this->m_idx) {
+        this->target_ptr->redraw |= PR_UHEALTH;
+    }
 }
 
 /*
