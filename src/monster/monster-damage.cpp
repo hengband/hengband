@@ -29,7 +29,6 @@
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-flags8.h"
-#include "monster-race/race-indice-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
@@ -48,6 +47,7 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <algorithm>
 
 /*
  * @brief コンストラクタ
@@ -103,7 +103,7 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
         if (r_ptr->r_akills < MAX_SHORT) {
             r_ptr->r_akills++;
         }
-        
+
         /* Recall even invisible uniques or winners */
         if ((m_ptr->ml && !this->target_ptr->image) || (r_ptr->flags1 & RF1_UNIQUE)) {
             /* Count kills this life */
@@ -393,33 +393,52 @@ void MonsterDamageProcessor::death_special_flag_monster(monster_type *m_ptr)
     }
 
     r_ptr->max_num = 0;
-    if ((m_ptr->r_idx == MON_BANOR) || (m_ptr->r_idx == MON_LUPART)) {
-        r_info[MON_BANORLUPART].max_num = 0;
-        r_info[MON_BANORLUPART].r_pkills++;
-        r_info[MON_BANORLUPART].r_akills++;
-        if (r_info[MON_BANORLUPART].r_tkills < MAX_SHORT) {
-            r_info[MON_BANORLUPART].r_tkills++;
+    std::vector<std::tuple<monster_race_type, monster_race_type, monster_race_type>> uniques;
+    uniques.push_back(std::make_tuple<monster_race_type, monster_race_type, monster_race_type>(MON_BANORLUPART, MON_BANOR, MON_LUPART));
+    this->split_unite_uniques(m_ptr, uniques);
+}
+
+/*
+ * @brief 分裂/合体を行う特殊ユニークの分裂/合体処理
+ * @param m_ptr ダメージを与えたモンスターの構造体参照ポインタ
+ * @uniques 分裂/合体を行う特殊ユニークのリスト
+ */
+void MonsterDamageProcessor::split_unite_uniques(
+    monster_type *m_ptr, std::vector<std::tuple<monster_race_type, monster_race_type, monster_race_type>> uniques)
+{
+    for(const auto &unique : uniques) {
+        auto united = (monster_race_type)0;
+        auto split1 = (monster_race_type)0;
+        auto split2 = (monster_race_type)0;
+        std::tie(united, split1, split2) = unique;
+        if ((m_ptr->r_idx == split1) || (m_ptr->r_idx == split2)) {
+            r_info[united].max_num = 0;
+            r_info[united].r_pkills++;
+            r_info[united].r_akills++;
+            if (r_info[united].r_tkills < MAX_SHORT) {
+                r_info[united].r_tkills++;
+            }
+
+            continue;
         }
 
-        return;
-    }
-    
-    if (m_ptr->r_idx != MON_BANORLUPART) {
-        return;
-    }
+        if (m_ptr->r_idx != united) {
+            continue;
+        }
 
-    r_info[MON_BANOR].max_num = 0;
-    r_info[MON_BANOR].r_pkills++;
-    r_info[MON_BANOR].r_akills++;
-    if (r_info[MON_BANOR].r_tkills < MAX_SHORT) {
-        r_info[MON_BANOR].r_tkills++;
-    }
+        r_info[split1].max_num = 0;
+        r_info[split1].r_pkills++;
+        r_info[split1].r_akills++;
+        if (r_info[split1].r_tkills < MAX_SHORT) {
+            r_info[split1].r_tkills++;
+        }
 
-    r_info[MON_LUPART].max_num = 0;
-    r_info[MON_LUPART].r_pkills++;
-    r_info[MON_LUPART].r_akills++;
-    if (r_info[MON_LUPART].r_tkills < MAX_SHORT) {
-        r_info[MON_LUPART].r_tkills++;
+        r_info[split2].max_num = 0;
+        r_info[split2].r_pkills++;
+        r_info[split2].r_akills++;
+        if (r_info[split2].r_tkills < MAX_SHORT) {
+            r_info[split2].r_tkills++;
+        }
     }
 }
 
@@ -525,7 +544,7 @@ void MonsterDamageProcessor::summon_special_unique(monster_type *m_ptr)
     if (is_pet(m_ptr)) {
         mode |= PM_FORCE_PET;
     }
-    
+
     MONRACE_IDX new_unique_idx;
     concptr mes;
     switch (m_ptr->r_idx) {
