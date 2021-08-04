@@ -125,27 +125,28 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
             chg_virtue(this->target_ptr, V_COMPASSION, -1);
         }
 
-        if ((r_ptr->flags3 & RF3_GOOD) && ((r_ptr->level) / 10 + (3 * this->target_ptr->current_floor_ptr->dun_level) >= randint1(100)))
+        auto *floor_ptr = this->target_ptr->current_floor_ptr;
+        if ((r_ptr->flags3 & RF3_GOOD) && ((r_ptr->level) / 10 + (3 * floor_ptr->dun_level) >= randint1(100)))
             chg_virtue(this->target_ptr, V_UNLIFE, 1);
 
         if (r_ptr->d_char == 'A') {
-            if (r_ptr->flags1 & RF1_UNIQUE)
+            if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
                 chg_virtue(this->target_ptr, V_FAITH, -2);
-            else if ((r_ptr->level) / 10 + (3 * this->target_ptr->current_floor_ptr->dun_level) >= randint1(100)) {
-                if (r_ptr->flags3 & RF3_GOOD)
-                    chg_virtue(this->target_ptr, V_FAITH, -1);
-                else
-                    chg_virtue(this->target_ptr, V_FAITH, 1);
+            } else if ((r_ptr->level) / 10 + (3 * floor_ptr->dun_level) >= randint1(100)) {
+                auto change_value = any_bits(r_ptr->flags3, RF3_GOOD) ? -1 : 1;
+                chg_virtue(this->target_ptr, V_FAITH, change_value);
             }
-        } else if (r_ptr->flags3 & RF3_DEMON) {
-            if (r_ptr->flags1 & RF1_UNIQUE)
+        } else if (any_bits(r_ptr->flags3, RF3_DEMON)) {
+            if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
                 chg_virtue(this->target_ptr, V_FAITH, 2);
-            else if ((r_ptr->level) / 10 + (3 * this->target_ptr->current_floor_ptr->dun_level) >= randint1(100))
+            } else if ((r_ptr->level) / 10 + (3 * floor_ptr->dun_level) >= randint1(100)) {
                 chg_virtue(this->target_ptr, V_FAITH, 1);
+            }
         }
 
-        if ((r_ptr->flags3 & RF3_UNDEAD) && (r_ptr->flags1 & RF1_UNIQUE))
+        if ((r_ptr->flags3 & RF3_UNDEAD) && (r_ptr->flags1 & RF1_UNIQUE)) {
             chg_virtue(this->target_ptr, V_VITALITY, 2);
+        }
 
         if (r_ptr->r_deaths) {
             if (r_ptr->flags1 & RF1_UNIQUE) {
@@ -154,55 +155,53 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
                 chg_virtue(this->target_ptr, V_HONOUR, 1);
             }
         }
+
         if ((r_ptr->flags2 & RF2_MULTIPLY) && (r_ptr->r_akills > 1000) && one_in_(10)) {
             chg_virtue(this->target_ptr, V_VALOUR, -1);
         }
 
         for (auto i = 0; i < 4; i++) {
-            if (r_ptr->blow[i].d_dice != 0)
-                innocent = false; /* Murderer! */
-
-            if ((r_ptr->blow[i].effect == RBE_EAT_ITEM) || (r_ptr->blow[i].effect == RBE_EAT_GOLD))
-
-                thief = true; /* Thief! */
+            if (r_ptr->blow[i].d_dice != 0) {
+                innocent = false;
+            }
+            
+            if ((r_ptr->blow[i].effect == RBE_EAT_ITEM) || (r_ptr->blow[i].effect == RBE_EAT_GOLD)) {
+                thief = true;
+            }
         }
 
-        /* The new law says it is illegal to live in the dungeon */
-        if (r_ptr->level != 0)
+        if (r_ptr->level > 0) {
             innocent = false;
+        }
 
         if (thief) {
-            if (r_ptr->flags1 & RF1_UNIQUE)
+            if (r_ptr->flags1 & RF1_UNIQUE) {
                 chg_virtue(this->target_ptr, V_JUSTICE, 3);
-            else if (1 + ((r_ptr->level) / 10 + (2 * this->target_ptr->current_floor_ptr->dun_level)) >= randint1(100))
+            } else if (1 + ((r_ptr->level) / 10 + (2 * this->target_ptr->current_floor_ptr->dun_level)) >= randint1(100)) {
                 chg_virtue(this->target_ptr, V_JUSTICE, 1);
+            }
         } else if (innocent) {
             chg_virtue(this->target_ptr, V_JUSTICE, -1);
         }
 
         auto magic_ability_flags = r_ptr->ability_flags;
         magic_ability_flags.reset(RF_ABILITY_NOMAGIC_MASK);
-        if ((r_ptr->flags3 & RF3_ANIMAL) && !(r_ptr->flags3 & RF3_EVIL) && magic_ability_flags.none()) {
-            if (one_in_(4))
+        if (any_bits(r_ptr->flags3, RF3_ANIMAL) && none_bits(r_ptr->flags3, RF3_EVIL) && magic_ability_flags.none()) {
+            if (one_in_(4)) {
                 chg_virtue(this->target_ptr, V_NATURE, -1);
+            }
         }
 
-        if ((r_ptr->flags1 & RF1_UNIQUE) && record_destroy_uniq) {
+        if (any_bits(r_ptr->flags1, RF1_UNIQUE) && record_destroy_uniq) {
             char note_buf[160];
             sprintf(note_buf, "%s%s", r_ptr->name.c_str(), m_ptr->mflag2.has(MFLAG2::CLONED) ? _("(クローン)", "(Clone)") : "");
             exe_write_diary(this->target_ptr, DIARY_UNIQUE, 0, note_buf);
         }
 
-        /* Make a sound */
         sound(SOUND_KILL);
-
-        /* Death by Missile/Spell attack */
-        if (note) {
+        if (note != nullptr) {
             msg_format("%^s%s", m_name, note);
-        }
-
-        /* Death by physical attack -- invisible monster */
-        else if (!m_ptr->ml) {
+        } else if (!m_ptr->ml) {
 #ifdef JP
             if (is_echizen(this->target_ptr))
                 msg_format("せっかくだから%sを殺した。", m_name);
@@ -211,22 +210,17 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
 #else
             msg_format("You have killed %s.", m_name);
 #endif
-
-        }
-
-        /* Death by Physical attack -- non-living monster */
-        else if (!monster_living(m_ptr->r_idx)) {
+        } else if (!monster_living(m_ptr->r_idx)) {
             bool explode = false;
-
             for (auto i = 0; i < 4; i++) {
-                if (r_ptr->blow[i].method == RBM_EXPLODE)
+                if (r_ptr->blow[i].method == RBM_EXPLODE) {
                     explode = true;
+                }
             }
 
-            /* Special note at death */
-            if (explode)
+            if (explode) {
                 msg_format(_("%sは爆発して粉々になった。", "%^s explodes into tiny shreds."), m_name);
-            else {
+            } else {
 #ifdef JP
                 if (is_echizen(this->target_ptr))
                     msg_format("せっかくだから%sを倒した。", m_name);
@@ -236,10 +230,7 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
                 msg_format("You have destroyed %s.", m_name);
 #endif
             }
-        }
-
-        /* Death by Physical attack -- living monster */
-        else {
+        } else {
 #ifdef JP
             if (is_echizen(this->target_ptr))
                 msg_format("せっかくだから%sを葬り去った。", m_name);
@@ -249,7 +240,8 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
             msg_format("You have slain %s.", m_name);
 #endif
         }
-        if ((r_ptr->flags1 & RF1_UNIQUE) && m_ptr->mflag2.has_not(MFLAG2::CLONED) && !vanilla_town) {
+
+        if (any_bits(r_ptr->flags1, RF1_UNIQUE) && m_ptr->mflag2.has_not(MFLAG2::CLONED) && !vanilla_town) {
             for (auto i = 0; i < MAX_BOUNTY; i++) {
                 if ((current_world_ptr->bounty_r_idx[i] == m_ptr->r_idx) && m_ptr->mflag2.has_not(MFLAG2::CHAMELEON)) {
                     msg_format(_("%sの首には賞金がかかっている。", "There is a price on %s's head."), m_name);
