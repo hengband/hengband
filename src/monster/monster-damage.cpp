@@ -129,7 +129,7 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
         if ((r_ptr->flags3 & RF3_GOOD) && ((r_ptr->level) / 10 + (3 * floor_ptr->dun_level) >= randint1(100)))
             chg_virtue(this->target_ptr, V_UNLIFE, 1);
 
-        if (r_ptr->d_char == 'A') {
+        if (any_bits(r_ptr->flags3, RF3_ANGEL)) {
             if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
                 chg_virtue(this->target_ptr, V_FAITH, -2);
             } else if ((r_ptr->level) / 10 + (3 * floor_ptr->dun_level) >= randint1(100)) {
