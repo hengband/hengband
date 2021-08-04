@@ -97,58 +97,13 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
 
     auto *r_ptr = &r_info[m_ptr->r_idx];
     if (m_ptr->hp < 0) {
-        GAME_TEXT m_name[MAX_NLEN];
-
-        if (r_info[m_ptr->r_idx].flags7 & RF7_TANUKI) {
-            /* You might have unmasked Tanuki first time */
-            r_ptr = &r_info[m_ptr->r_idx];
-            m_ptr->ap_r_idx = m_ptr->r_idx;
-            if (r_ptr->r_sights < MAX_SHORT)
-                r_ptr->r_sights++;
-        }
-
-        if (m_ptr->mflag2.has(MFLAG2::CHAMELEON)) {
-            /* You might have unmasked Chameleon first time */
-            r_ptr = real_r_ptr(m_ptr);
-            if (r_ptr->r_sights < MAX_SHORT)
-                r_ptr->r_sights++;
-        }
-
-        if (m_ptr->mflag2.has_not(MFLAG2::CLONED)) {
-            /* When the player kills a Unique, it stays dead */
-            if (r_ptr->flags1 & RF1_UNIQUE) {
-                r_ptr->max_num = 0;
-
-                /* Mega-Hack -- Banor & Lupart */
-                if ((m_ptr->r_idx == MON_BANOR) || (m_ptr->r_idx == MON_LUPART)) {
-                    r_info[MON_BANORLUPART].max_num = 0;
-                    r_info[MON_BANORLUPART].r_pkills++;
-                    r_info[MON_BANORLUPART].r_akills++;
-                    if (r_info[MON_BANORLUPART].r_tkills < MAX_SHORT)
-                        r_info[MON_BANORLUPART].r_tkills++;
-                } else if (m_ptr->r_idx == MON_BANORLUPART) {
-                    r_info[MON_BANOR].max_num = 0;
-                    r_info[MON_BANOR].r_pkills++;
-                    r_info[MON_BANOR].r_akills++;
-                    if (r_info[MON_BANOR].r_tkills < MAX_SHORT)
-                        r_info[MON_BANOR].r_tkills++;
-                    r_info[MON_LUPART].max_num = 0;
-                    r_info[MON_LUPART].r_pkills++;
-                    r_info[MON_LUPART].r_akills++;
-                    if (r_info[MON_LUPART].r_tkills < MAX_SHORT)
-                        r_info[MON_LUPART].r_tkills++;
-                }
-            }
-
-            /* When the player kills a Nazgul, it stays dead */
-            else if (r_ptr->flags7 & RF7_NAZGUL)
-                r_ptr->max_num--;
-        }
+        this->death_special_flag_monster(m_ptr);
 
         /* Count all monsters killed */
-        if (r_ptr->r_akills < MAX_SHORT)
+        if (r_ptr->r_akills < MAX_SHORT) {
             r_ptr->r_akills++;
-
+        }
+        
         /* Recall even invisible uniques or winners */
         if ((m_ptr->ml && !this->target_ptr->image) || (r_ptr->flags1 & RF1_UNIQUE)) {
             /* Count kills this life */
@@ -167,6 +122,7 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
             monster_race_track(this->target_ptr, m_ptr->ap_r_idx);
         }
 
+        GAME_TEXT m_name[MAX_NLEN];
         monster_desc(this->target_ptr, m_name, m_ptr, MD_TRUE_NAME);
 
         /* Don't kill Amberites */
@@ -402,6 +358,71 @@ bool MonsterDamageProcessor::genocide_chaos_patron(monster_type *m_ptr)
     return this->m_idx == 0;
 }
 
+/*
+ * @brief たぬき、カメレオン、ナズグル、ユニークの死亡時処理
+ * @param m_ptr ダメージを与えたモンスターの構造体参照ポインタ
+ */
+void MonsterDamageProcessor::death_special_flag_monster(monster_type *m_ptr)
+{
+    auto *r_ptr = &r_info[m_ptr->r_idx];
+    if (r_info[m_ptr->r_idx].flags7 & RF7_TANUKI) {
+        r_ptr = &r_info[m_ptr->r_idx];
+        m_ptr->ap_r_idx = m_ptr->r_idx;
+        if (r_ptr->r_sights < MAX_SHORT) {
+            r_ptr->r_sights++;
+        }
+    }
+
+    if (m_ptr->mflag2.has(MFLAG2::CHAMELEON)) {
+        r_ptr = real_r_ptr(m_ptr);
+        if (r_ptr->r_sights < MAX_SHORT)
+            r_ptr->r_sights++;
+    }
+
+    if (m_ptr->mflag2.has(MFLAG2::CLONED)) {
+        return;
+    }
+
+    if (any_bits(r_ptr->flags7, RF7_NAZGUL)) {
+        r_ptr->max_num--;
+        return;
+    }
+
+    if (none_bits(r_ptr->flags1, RF1_UNIQUE)) {
+        return;
+    }
+
+    r_ptr->max_num = 0;
+    if ((m_ptr->r_idx == MON_BANOR) || (m_ptr->r_idx == MON_LUPART)) {
+        r_info[MON_BANORLUPART].max_num = 0;
+        r_info[MON_BANORLUPART].r_pkills++;
+        r_info[MON_BANORLUPART].r_akills++;
+        if (r_info[MON_BANORLUPART].r_tkills < MAX_SHORT) {
+            r_info[MON_BANORLUPART].r_tkills++;
+        }
+
+        return;
+    }
+    
+    if (m_ptr->r_idx != MON_BANORLUPART) {
+        return;
+    }
+
+    r_info[MON_BANOR].max_num = 0;
+    r_info[MON_BANOR].r_pkills++;
+    r_info[MON_BANOR].r_akills++;
+    if (r_info[MON_BANOR].r_tkills < MAX_SHORT) {
+        r_info[MON_BANOR].r_tkills++;
+    }
+
+    r_info[MON_LUPART].max_num = 0;
+    r_info[MON_LUPART].r_pkills++;
+    r_info[MON_LUPART].r_akills++;
+    if (r_info[MON_LUPART].r_tkills < MAX_SHORT) {
+        r_info[MON_LUPART].r_tkills++;
+    }
+}
+
 /*!
  * @brief モンスターに与えたダメージを元に経験値を加算する /
  * Calculate experience point to be get
@@ -487,7 +508,7 @@ void MonsterDamageProcessor::set_redraw()
 
 /*
  * @brief 特定ユニークを倒した時に更にユニークを特殊召喚する処理
- * @param m_ptr 特定ユニークへのモンスター実体ポインタ
+ * @param m_ptr ダメージを与えた特定ユニークの構造体参照ポインタ
  */
 void MonsterDamageProcessor::summon_special_unique(monster_type *m_ptr)
 {
