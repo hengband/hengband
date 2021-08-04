@@ -29,6 +29,7 @@ private:
     void increase_kill_numbers();
     void death_amberites(GAME_TEXT *m_name);
     void dying_scream(GAME_TEXT *m_name);
+    void change_virtue_non_beginner();
     void set_redraw();
     void summon_special_unique();
 };

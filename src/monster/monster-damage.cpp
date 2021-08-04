@@ -107,20 +107,7 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
         monster_desc(this->target_ptr, m_name, m_ptr, MD_TRUE_NAME);
         this->death_amberites(m_name);
         this->dying_scream(m_name);
-        if (d_info[this->target_ptr->dungeon_idx].flags.has_not(DF::BEGINNER)) {
-            if (!this->target_ptr->current_floor_ptr->dun_level && !this->target_ptr->ambush_flag && !this->target_ptr->current_floor_ptr->inside_arena) {
-                chg_virtue(this->target_ptr, V_VALOUR, -1);
-            } else if (r_ptr->level > this->target_ptr->current_floor_ptr->dun_level) {
-                if (randint1(10) <= (r_ptr->level - this->target_ptr->current_floor_ptr->dun_level))
-                    chg_virtue(this->target_ptr, V_VALOUR, 1);
-            }
-            if (r_ptr->level > 60) {
-                chg_virtue(this->target_ptr, V_VALOUR, 1);
-            }
-            if (r_ptr->level >= 2 * (this->target_ptr->lev + 1))
-                chg_virtue(this->target_ptr, V_VALOUR, 2);
-        }
-
+        this->change_virtue_non_beginner();
         if (r_ptr->flags1 & RF1_UNIQUE) {
             if (r_ptr->flags3 & (RF3_EVIL | RF3_GOOD))
                 chg_virtue(this->target_ptr, V_HARMONY, 2);
@@ -500,6 +487,32 @@ void MonsterDamageProcessor::dying_scream(GAME_TEXT *m_name)
         screen_dump = make_screen_dump(this->target_ptr);
     }
 #endif
+}
+
+void MonsterDamageProcessor::change_virtue_non_beginner()
+{
+    auto *floor_ptr = this->target_ptr->current_floor_ptr;
+    auto *m_ptr = &floor_ptr->m_list[this->m_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
+    if (d_info[this->target_ptr->dungeon_idx].flags.has(DF::BEGINNER)) {
+        return;
+    }
+
+    if ((floor_ptr->dun_level == 0) && !this->target_ptr->ambush_flag && !floor_ptr->inside_arena) {
+        chg_virtue(this->target_ptr, V_VALOUR, -1);
+    } else if (r_ptr->level > floor_ptr->dun_level) {
+        if (randint1(10) <= (r_ptr->level - floor_ptr->dun_level)) {
+            chg_virtue(this->target_ptr, V_VALOUR, 1);
+        }
+    }
+
+    if (r_ptr->level > 60) {
+        chg_virtue(this->target_ptr, V_VALOUR, 1);
+    }
+
+    if (r_ptr->level >= 2 * (this->target_ptr->lev + 1)) {
+        chg_virtue(this->target_ptr, V_VALOUR, 2);
+    }
 }
 
 /*!
