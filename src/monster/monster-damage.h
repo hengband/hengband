@@ -17,4 +17,5 @@ private:
     HIT_POINT dam;
     bool *fear;
     void get_exp_from_mon(monster_type *m_ptr, HIT_POINT exp_dam);
+    void summon_special_unique(monster_type *m_ptr);
 };

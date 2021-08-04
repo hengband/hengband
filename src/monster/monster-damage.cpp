@@ -457,42 +457,7 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
         }
 
         monster_death(this->target_ptr, this->m_idx, true);
-
-        // @todo デッドアタック扱いにしてここから削除したい.
-        bool is_special_summon = m_ptr->r_idx == MON_IKETA;
-        is_special_summon |= m_ptr->r_idx == MON_DOPPIO;
-        if (is_special_summon && !(this->target_ptr->current_floor_ptr->inside_arena || this->target_ptr->phase_out)) {
-            POSITION dummy_y = m_ptr->fy;
-            POSITION dummy_x = m_ptr->fx;
-            BIT_FLAGS mode = 0L;
-            if (is_pet(m_ptr))
-                mode |= PM_FORCE_PET;
-
-            MONRACE_IDX new_unique_idx;
-            concptr mes;
-            switch (m_ptr->r_idx) {
-            case MON_IKETA:
-                new_unique_idx = MON_BIKETAL;
-                mes = _("「ハァッハッハッハ！！私がバイケタルだ！！」", "Uwa-hahaha!  *I* am Biketal!");
-                break;
-            case MON_DOPPIO:
-                new_unique_idx = MON_DIAVOLO;
-                mes = _("「これは『試練』だ　過去に打ち勝てという『試練』とオレは受けとった」",
-                    "This is a 'trial'. I took it as a 'trial' to overcome in the past.");
-                break;
-            default: // バグでなければ入らない.
-                new_unique_idx = 0;
-                mes = "";
-                break;
-            }
-
-            delete_monster_idx(this->target_ptr, this->m_idx);
-            if (summon_named_creature(this->target_ptr, 0, dummy_y, dummy_x, new_unique_idx, mode))
-                msg_print(mes);
-        } else {
-            delete_monster_idx(this->target_ptr, this->m_idx);
-        }
-
+        this->summon_special_unique(m_ptr);
         this->get_exp_from_mon(&exp_mon, exp_mon.max_maxhp * 2);
         *this->fear = false;
         return true;
@@ -510,9 +475,53 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
         int percentage = (100L * m_ptr->hp) / m_ptr->maxhp;
         if ((randint1(10) >= percentage) || ((this->dam >= m_ptr->hp) && (randint0(100) < 80))) {
             *this->fear = true;
-            (void)set_monster_monfear(this->target_ptr, this->m_idx, (randint1(10) + (((this->dam >= m_ptr->hp) && (percentage > 7)) ? 20 : ((11 - percentage) * 5))));
+            (void)set_monster_monfear(
+                this->target_ptr, this->m_idx, (randint1(10) + (((this->dam >= m_ptr->hp) && (percentage > 7)) ? 20 : ((11 - percentage) * 5))));
         }
     }
 
     return false;
+}
+
+/*
+ * @brief 特定ユニークを倒した時に更にユニークを特殊召喚する処理
+ * @param m_ptr 特定ユニークへのモンスター実体ポインタ
+ */
+void MonsterDamageProcessor::summon_special_unique(monster_type *m_ptr)
+{
+    bool is_special_summon = m_ptr->r_idx == MON_IKETA;
+    is_special_summon |= m_ptr->r_idx == MON_DOPPIO;
+    if (!is_special_summon || this->target_ptr->current_floor_ptr->inside_arena || this->target_ptr->phase_out) {
+        delete_monster_idx(this->target_ptr, this->m_idx);
+        return;
+    }
+
+    auto dummy_y = m_ptr->fy;
+    auto dummy_x = m_ptr->fx;
+    auto mode = (BIT_FLAGS)0;
+    if (is_pet(m_ptr)) {
+        mode |= PM_FORCE_PET;
+    }
+    
+    MONRACE_IDX new_unique_idx;
+    concptr mes;
+    switch (m_ptr->r_idx) {
+    case MON_IKETA:
+        new_unique_idx = MON_BIKETAL;
+        mes = _("「ハァッハッハッハ！！私がバイケタルだ！！」", "Uwa-hahaha!  *I* am Biketal!");
+        break;
+    case MON_DOPPIO:
+        new_unique_idx = MON_DIAVOLO;
+        mes = _("「これは『試練』だ　過去に打ち勝てという『試練』とオレは受けとった」", "This is a 'trial'. I took it as a 'trial' to overcome in the past.");
+        break;
+    default: // バグでなければ入らない.
+        new_unique_idx = 0;
+        mes = "";
+        break;
+    }
+
+    delete_monster_idx(this->target_ptr, this->m_idx);
+    if (summon_named_creature(this->target_ptr, 0, dummy_y, dummy_x, new_unique_idx, mode)) {
+        msg_print(mes);
+    }
 }
