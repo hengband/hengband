@@ -92,32 +92,7 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
         msg_format(_("合計%d/%dのダメージを与えた。", "You do %d (out of %d) damage."), m_ptr->dealt_damage, m_ptr->maxhp);
     }
 
-    auto *r_ptr = &r_info[m_ptr->r_idx];
-    if (m_ptr->hp < 0) {
-        this->death_special_flag_monster();
-        if (r_ptr->r_akills < MAX_SHORT) {
-            r_ptr->r_akills++;
-        }
-
-        this->increase_kill_numbers();
-        GAME_TEXT m_name[MAX_NLEN];
-        monster_desc(this->target_ptr, m_name, m_ptr, MD_TRUE_NAME);
-        this->death_amberites(m_name);
-        this->dying_scream(m_name);
-        this->change_virtue();
-        if (any_bits(r_ptr->flags1, RF1_UNIQUE) && record_destroy_uniq) {
-            char note_buf[160];
-            sprintf(note_buf, "%s%s", r_ptr->name.c_str(), m_ptr->mflag2.has(MFLAG2::CLONED) ? _("(クローン)", "(Clone)") : "");
-            exe_write_diary(this->target_ptr, DIARY_UNIQUE, 0, note_buf);
-        }
-
-        sound(SOUND_KILL);
-        this->show_kill_message(note, m_name);
-        this->show_bounty_message(m_name);
-        monster_death(this->target_ptr, this->m_idx, true);
-        this->summon_special_unique();
-        this->get_exp_from_mon(&exp_mon, exp_mon.max_maxhp * 2);
-        *this->fear = false;
+    if (this->process_dead_exp_virtue(note, &exp_mon)) {
         return true;
     }
 
@@ -129,6 +104,7 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
     }
 
     // 恐怖の更なる加算.
+    auto *r_ptr = &r_info[m_ptr->r_idx];
     if (!monster_fear_remaining(m_ptr) && none_bits(r_ptr->flags3, RF3_NO_FEAR)) {
         int percentage = (100L * m_ptr->hp) / m_ptr->maxhp;
         if ((randint1(10) >= percentage) || ((this->dam >= m_ptr->hp) && (randint0(100) < 80))) {
@@ -155,6 +131,41 @@ bool MonsterDamageProcessor::genocide_chaos_patron()
     }
 
     return this->m_idx == 0;
+}
+
+bool MonsterDamageProcessor::process_dead_exp_virtue(concptr note, monster_type *exp_mon)
+{
+    auto *m_ptr = &this->target_ptr->current_floor_ptr->m_list[this->m_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
+    if (m_ptr->hp >= 0) {
+        return false;
+    }
+
+    this->death_special_flag_monster();
+    if (r_ptr->r_akills < MAX_SHORT) {
+        r_ptr->r_akills++;
+    }
+
+    this->increase_kill_numbers();
+    GAME_TEXT m_name[MAX_NLEN];
+    monster_desc(this->target_ptr, m_name, m_ptr, MD_TRUE_NAME);
+    this->death_amberites(m_name);
+    this->dying_scream(m_name);
+    this->change_virtue();
+    if (any_bits(r_ptr->flags1, RF1_UNIQUE) && record_destroy_uniq) {
+        char note_buf[160];
+        sprintf(note_buf, "%s%s", r_ptr->name.c_str(), m_ptr->mflag2.has(MFLAG2::CLONED) ? _("(クローン)", "(Clone)") : "");
+        exe_write_diary(this->target_ptr, DIARY_UNIQUE, 0, note_buf);
+    }
+
+    sound(SOUND_KILL);
+    this->show_kill_message(note, m_name);
+    this->show_bounty_message(m_name);
+    monster_death(this->target_ptr, this->m_idx, true);
+    this->summon_special_unique();
+    this->get_exp_from_mon(exp_mon, exp_mon->max_maxhp * 2);
+    *this->fear = false;
+    return true;
 }
 
 /*

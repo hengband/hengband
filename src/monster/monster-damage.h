@@ -22,6 +22,7 @@ private:
     bool *fear;
     void get_exp_from_mon(monster_type *m_ptr, HIT_POINT exp_dam);
     bool genocide_chaos_patron();
+    bool process_dead_exp_virtue(concptr note, monster_type *exp_mon);
     void death_special_flag_monster();
     void death_unique_monster(monster_race_type r_idx);
     bool check_combined_unique(const monster_race_type r_idx, std::vector<monster_race_type> *combined_uniques);
