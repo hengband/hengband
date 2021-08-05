@@ -534,7 +534,7 @@ static void set_name_history(player_type *creature_ptr)
     process_player_name(creature_ptr, current_world_ptr->creating_savefile);
     edit_history(creature_ptr);
     get_max_stats(creature_ptr);
-    get_virtues(creature_ptr);
+    initialize_virtues(creature_ptr);
     prt(_("[ 'Q' 中断, 'S' 初めから, Enter ゲーム開始 ]", "['Q'uit, 'S'tart over, or Enter to continue]"), 23, _(14, 10));
 }
 

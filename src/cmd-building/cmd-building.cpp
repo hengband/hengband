@@ -274,7 +274,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
         set_virtue(player_ptr, V_DILIGENCE, 0);
         set_virtue(player_ptr, V_VALOUR, 0);
         set_virtue(player_ptr, V_INDIVIDUALISM, 0);
-        get_virtues(player_ptr);
+        initialize_virtues(player_ptr);
         paid = true;
         break;
 

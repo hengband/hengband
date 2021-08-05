@@ -1,4 +1,10 @@
-﻿#include "avatar/avatar-changer.h"
+﻿/*
+ * @brief 敵への攻撃によって徳を変化させる処理
+ * @date 2021/08/05
+ * @author Hourier
+ */
+
+#include "avatar/avatar-changer.h"
 #include "dungeon/dungeon.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-ability-mask.h"
