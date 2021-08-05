@@ -72,9 +72,6 @@ MonsterDamageProcessor::MonsterDamageProcessor(player_type *target_ptr, MONSTER_
 bool MonsterDamageProcessor::mon_take_hit(concptr note)
 {
     auto *m_ptr = &this->target_ptr->current_floor_ptr->m_list[this->m_idx];
-    auto innocent = true;
-    auto thief = false;
-
     monster_type exp_mon;
     (void)COPY(&exp_mon, m_ptr, monster_type);
 
@@ -123,30 +120,7 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
             chg_virtue(this->target_ptr, V_VALOUR, -1);
         }
 
-        for (auto i = 0; i < MAX_NUM_BLOWS; i++) {
-            if (r_ptr->blow[i].d_dice != 0) {
-                innocent = false;
-            }
-
-            if ((r_ptr->blow[i].effect == RBE_EAT_ITEM) || (r_ptr->blow[i].effect == RBE_EAT_GOLD)) {
-                thief = true;
-            }
-        }
-
-        if (r_ptr->level > 0) {
-            innocent = false;
-        }
-
-        if (thief) {
-            if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
-                chg_virtue(this->target_ptr, V_JUSTICE, 3);
-            } else if (1 + ((r_ptr->level) / 10 + (2 * this->target_ptr->current_floor_ptr->dun_level)) >= randint1(100)) {
-                chg_virtue(this->target_ptr, V_JUSTICE, 1);
-            }
-        } else if (innocent) {
-            chg_virtue(this->target_ptr, V_JUSTICE, -1);
-        }
-
+        this->change_virtue_wild_thief();
         auto magic_ability_flags = r_ptr->ability_flags;
         magic_ability_flags.reset(RF_ABILITY_NOMAGIC_MASK);
         if (any_bits(r_ptr->flags3, RF3_ANIMAL) && none_bits(r_ptr->flags3, RF3_EVIL) && magic_ability_flags.none()) {
@@ -530,6 +504,48 @@ void MonsterDamageProcessor::change_virtue_revenge()
 
     if ((r_ptr->level) / 10 + (2 * floor_ptr->dun_level) >= randint1(100)) {
         chg_virtue(this->target_ptr, V_HONOUR, 1);
+    }
+}
+
+/*
+ * @brief 盗み逃げをするモンスター及び地上のモンスターを攻撃した際に徳を変化させる
+ */
+void MonsterDamageProcessor::change_virtue_wild_thief()
+{
+    auto *floor_ptr = this->target_ptr->current_floor_ptr;
+    auto *m_ptr = &floor_ptr->m_list[this->m_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto innocent = true;
+    auto thief = false;
+    for (auto i = 0; i < MAX_NUM_BLOWS; i++) {
+        if (r_ptr->blow[i].d_dice != 0) {
+            innocent = false;
+        }
+
+        if ((r_ptr->blow[i].effect == RBE_EAT_ITEM) || (r_ptr->blow[i].effect == RBE_EAT_GOLD)) {
+            thief = true;
+        }
+    }
+
+    if (r_ptr->level > 0) {
+        innocent = false;
+    }
+
+    if (thief) {
+        if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
+            chg_virtue(this->target_ptr, V_JUSTICE, 3);
+            return;
+        }
+        
+        if (1 + ((r_ptr->level) / 10 + (2 * floor_ptr->dun_level)) >= randint1(100)) {
+            chg_virtue(this->target_ptr, V_JUSTICE, 1);
+        }
+
+        return;
+    }
+    
+    if (innocent) {
+        chg_virtue(this->target_ptr, V_JUSTICE, -1);
     }
 }
 
