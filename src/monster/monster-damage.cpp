@@ -4,6 +4,8 @@
  * @author Hourier
  */
 
+#include <algorithm>
+
 #include "monster/monster-damage.h"
 #include "avatar/avatar-changer.h"
 #include "core/player-redraw-types.h"
@@ -44,7 +46,11 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-#include <algorithm>
+
+#if JP
+#else
+#include "io/files-util.h"
+#endif
 
 /*
  * @brief コンストラクタ

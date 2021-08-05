@@ -25,6 +25,11 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
+#if JP
+#else
+#include "monster/monster-description-types.h"
+#endif
+
 static u32b csleep_noise;
 
 /*!
