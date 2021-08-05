@@ -53,6 +53,8 @@ hengband_SOURCES = \
 	autopick/autopick-editor-util.cpp autopick/autopick-editor-util.h \
 	autopick/autopick-editor-command.cpp autopick/autopick-editor-command.h \
 	\
+	avatar/avatar-changer.cpp avatar/avatar-changer.h \
+	\
 	birth/birth-explanations-table.cpp birth/birth-explanations-table.h \
 	birth/character-builder.cpp birth/character-builder.h \
 	birth/history.cpp birth/history.h \

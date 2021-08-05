@@ -5,6 +5,7 @@
  */
 
 #include "monster/monster-damage.h"
+#include "avatar/avatar-changer.h"
 #include "core/player-redraw-types.h"
 #include "core/speed-table.h"
 #include "core/stuff-handler.h"
@@ -134,7 +135,8 @@ bool MonsterDamageProcessor::process_dead_exp_virtue(concptr note, monster_type 
     monster_desc(this->target_ptr, m_name, m_ptr, MD_TRUE_NAME);
     this->death_amberites(m_name);
     this->dying_scream(m_name);
-    this->change_virtue();
+    AvatarChanger ac(target_ptr, m_ptr);
+    ac.change_virtue();
     if (any_bits(r_ptr->flags1, RF1_UNIQUE) && record_destroy_uniq) {
         char note_buf[160];
         sprintf(note_buf, "%s%s", r_ptr->name.c_str(), m_ptr->mflag2.has(MFLAG2::CLONED) ? _("(クローン)", "(Clone)") : "");
@@ -198,15 +200,15 @@ void MonsterDamageProcessor::death_special_flag_monster()
 void MonsterDamageProcessor::death_unique_monster(monster_race_type r_idx)
 {
     r_info[r_idx].max_num = 0;
-    std::vector<monster_race_type> combined_uniques;
-    if (!check_combined_unique(r_idx, &combined_uniques)) {
+    std::vector<monster_race_type> combined_unique_vec;
+    if (!check_combined_unique(r_idx, &combined_unique_vec)) {
         return;
     }
 
-    std::vector<std::tuple<monster_race_type, monster_race_type, monster_race_type>> uniques;
+    combined_uniques uniques;
     const int one_unit = 3;
-    for (auto i = 0U; i < combined_uniques.size(); i += one_unit) {
-        auto unique = std::make_tuple(combined_uniques[i], combined_uniques[i + 1], combined_uniques[i + 2]);
+    for (auto i = 0U; i < combined_unique_vec.size(); i += one_unit) {
+        auto unique = std::make_tuple(combined_unique_vec[i], combined_unique_vec[i + 1], combined_unique_vec[i + 2]);
         uniques.push_back(unique);
     }
 
@@ -219,13 +221,13 @@ void MonsterDamageProcessor::death_unique_monster(monster_race_type r_idx)
  * @param united_uniques 分裂/合体を行う特殊ユニーク
  * @details 合体後、合体前1、合体前2 の順にpush_backすること
  */
-bool MonsterDamageProcessor::check_combined_unique(const monster_race_type r_idx, std::vector<monster_race_type> *combined_uniques)
+bool MonsterDamageProcessor::check_combined_unique(const monster_race_type r_idx, std::vector<monster_race_type> *combined_unique_vec)
 {
-    combined_uniques->push_back(MON_BANORLUPART);
-    combined_uniques->push_back(MON_BANOR);
-    combined_uniques->push_back(MON_LUPART);
+    combined_unique_vec->push_back(MON_BANORLUPART);
+    combined_unique_vec->push_back(MON_BANOR);
+    combined_unique_vec->push_back(MON_LUPART);
 
-    for (const auto &unique : *combined_uniques) {
+    for (const auto &unique : *combined_unique_vec) {
         if (r_idx == unique) {
             return true;
         }
@@ -239,8 +241,7 @@ bool MonsterDamageProcessor::check_combined_unique(const monster_race_type r_idx
  * @param m_ptr ダメージを与えたモンスターの構造体参照ポインタ
  * @uniques 分裂/合体を行う特殊ユニークのリスト
  */
-void MonsterDamageProcessor::death_combined_uniques(
-    const monster_race_type r_idx, std::vector<std::tuple<monster_race_type, monster_race_type, monster_race_type>> *combined_uniques)
+void MonsterDamageProcessor::death_combined_uniques(const monster_race_type r_idx, combined_uniques *combined_uniques)
 {
     for (const auto &unique : *combined_uniques) {
         auto united = (monster_race_type)0;
@@ -337,195 +338,6 @@ void MonsterDamageProcessor::dying_scream(GAME_TEXT *m_name)
         screen_dump = make_screen_dump(this->target_ptr);
     }
 #endif
-}
-
-void MonsterDamageProcessor::change_virtue()
-{
-    this->change_virtue_non_beginner();
-    this->change_virtue_unique();
-    auto *m_ptr = &this->target_ptr->current_floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
-    if (m_ptr->r_idx == MON_BEGGAR || m_ptr->r_idx == MON_LEPER) {
-        chg_virtue(this->target_ptr, V_COMPASSION, -1);
-    }
-
-    this->change_virtue_good_evil();
-    if (any_bits(r_ptr->flags3, RF3_UNDEAD) && any_bits(r_ptr->flags1, RF1_UNIQUE)) {
-        chg_virtue(this->target_ptr, V_VITALITY, 2);
-    }
-
-    this->change_virtue_revenge();
-    if (any_bits(r_ptr->flags2, RF2_MULTIPLY) && (r_ptr->r_akills > 1000) && one_in_(10)) {
-        chg_virtue(this->target_ptr, V_VALOUR, -1);
-    }
-
-    this->change_virtue_wild_thief();
-    this->change_virtue_good_animal();
-}
-
-void MonsterDamageProcessor::change_virtue_non_beginner()
-{
-    auto *floor_ptr = this->target_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
-    if (d_info[this->target_ptr->dungeon_idx].flags.has(DF::BEGINNER)) {
-        return;
-    }
-
-    if ((floor_ptr->dun_level == 0) && !this->target_ptr->ambush_flag && !floor_ptr->inside_arena) {
-        chg_virtue(this->target_ptr, V_VALOUR, -1);
-    } else if (r_ptr->level > floor_ptr->dun_level) {
-        if (randint1(10) <= (r_ptr->level - floor_ptr->dun_level)) {
-            chg_virtue(this->target_ptr, V_VALOUR, 1);
-        }
-    }
-
-    if (r_ptr->level > 60) {
-        chg_virtue(this->target_ptr, V_VALOUR, 1);
-    }
-
-    if (r_ptr->level >= 2 * (this->target_ptr->lev + 1)) {
-        chg_virtue(this->target_ptr, V_VALOUR, 2);
-    }
-}
-
-void MonsterDamageProcessor::change_virtue_unique()
-{
-    auto *floor_ptr = this->target_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
-    if (none_bits(r_ptr->flags1, RF1_UNIQUE)) {
-        return;
-    }
-
-    if (any_bits(r_ptr->flags3, RF3_EVIL | RF3_GOOD)) {
-        chg_virtue(this->target_ptr, V_HARMONY, 2);
-    }
-
-    if (any_bits(r_ptr->flags3, RF3_GOOD)) {
-        chg_virtue(this->target_ptr, V_UNLIFE, 2);
-        chg_virtue(this->target_ptr, V_VITALITY, -2);
-    }
-
-    if (one_in_(3)) {
-        chg_virtue(this->target_ptr, V_INDIVIDUALISM, -1);
-    }
-}
-
-/*
- * @brief 攻撃を与えたモンスターが天使か悪魔だった場合、徳を変化させる
- * @details 天使かつ悪魔だった場合、天使であることが優先される
- */
-void MonsterDamageProcessor::change_virtue_good_evil()
-{
-    auto *floor_ptr = this->target_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
-    if (any_bits(r_ptr->flags3, RF3_GOOD) && ((r_ptr->level) / 10 + (3 * floor_ptr->dun_level) >= randint1(100))) {
-        chg_virtue(this->target_ptr, V_UNLIFE, 1);
-    }
-
-    if (any_bits(r_ptr->flags3, RF3_ANGEL)) {
-        if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
-            chg_virtue(this->target_ptr, V_FAITH, -2);
-        } else if ((r_ptr->level) / 10 + (3 * floor_ptr->dun_level) >= randint1(100)) {
-            auto change_value = any_bits(r_ptr->flags3, RF3_GOOD) ? -1 : 1;
-            chg_virtue(this->target_ptr, V_FAITH, change_value);
-        }
-
-        return;
-    }
-
-    if (any_bits(r_ptr->flags3, RF3_DEMON)) {
-        if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
-            chg_virtue(this->target_ptr, V_FAITH, 2);
-        } else if ((r_ptr->level) / 10 + (3 * floor_ptr->dun_level) >= randint1(100)) {
-            chg_virtue(this->target_ptr, V_FAITH, 1);
-        }
-    }
-}
-
-/*
- * @brief 過去に＠を殺したことがあるユニークにリゾンべを果たせたら徳を上げる
- */
-void MonsterDamageProcessor::change_virtue_revenge()
-{
-    auto *floor_ptr = this->target_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
-    if (r_ptr->r_deaths == 0) {
-        return;
-    }
-
-    if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
-        chg_virtue(this->target_ptr, V_HONOUR, 10);
-        return;
-    }
-
-    if ((r_ptr->level) / 10 + (2 * floor_ptr->dun_level) >= randint1(100)) {
-        chg_virtue(this->target_ptr, V_HONOUR, 1);
-    }
-}
-
-/*
- * @brief 盗み逃げをするモンスター及び地上のモンスターを攻撃した際に徳を変化させる
- */
-void MonsterDamageProcessor::change_virtue_wild_thief()
-{
-    auto *floor_ptr = this->target_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
-    auto innocent = true;
-    auto thief = false;
-    for (auto i = 0; i < MAX_NUM_BLOWS; i++) {
-        if (r_ptr->blow[i].d_dice != 0) {
-            innocent = false;
-        }
-
-        if ((r_ptr->blow[i].effect == RBE_EAT_ITEM) || (r_ptr->blow[i].effect == RBE_EAT_GOLD)) {
-            thief = true;
-        }
-    }
-
-    if (r_ptr->level > 0) {
-        innocent = false;
-    }
-
-    if (thief) {
-        if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
-            chg_virtue(this->target_ptr, V_JUSTICE, 3);
-            return;
-        }
-
-        if (1 + ((r_ptr->level) / 10 + (2 * floor_ptr->dun_level)) >= randint1(100)) {
-            chg_virtue(this->target_ptr, V_JUSTICE, 1);
-        }
-
-        return;
-    }
-
-    if (innocent) {
-        chg_virtue(this->target_ptr, V_JUSTICE, -1);
-    }
-}
-
-/*
- * @brief 邪悪でなく、魔法も持たない動物を攻撃した時に徳を下げる
- */
-void MonsterDamageProcessor::change_virtue_good_animal()
-{
-    auto *floor_ptr = this->target_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
-    auto magic_ability_flags = r_ptr->ability_flags;
-    magic_ability_flags.reset(RF_ABILITY_NOMAGIC_MASK);
-    if (none_bits(r_ptr->flags3, RF3_ANIMAL) || any_bits(r_ptr->flags3, RF3_EVIL) || magic_ability_flags.any()) {
-        return;
-    }
-
-    if (one_in_(4)) {
-        chg_virtue(this->target_ptr, V_NATURE, -1);
-    }
 }
 
 void MonsterDamageProcessor::show_kill_message(concptr note, GAME_TEXT *m_name)
@@ -676,7 +488,6 @@ void MonsterDamageProcessor::set_redraw()
 void MonsterDamageProcessor::summon_special_unique()
 {
     auto *m_ptr = &this->target_ptr->current_floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = &r_info[m_ptr->r_idx];
     bool is_special_summon = m_ptr->r_idx == MON_IKETA;
     is_special_summon |= m_ptr->r_idx == MON_DOPPIO;
     if (!is_special_summon || this->target_ptr->current_floor_ptr->inside_arena || this->target_ptr->phase_out) {

@@ -2325,6 +2325,9 @@
     <ClCompile Include="..\..\src\grid\feature-action-flags.cpp">
       <Filter>grid</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\avatar\avatar-changer.cpp">
+      <Filter>avatar</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4992,6 +4995,9 @@
     <ClInclude Include="..\..\src\monster\monster-damage.h">
       <Filter>monster</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\avatar\avatar-changer.h">
+      <Filter>avatar</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -5204,6 +5210,9 @@
     </Filter>
     <Filter Include="player-ability">
       <UniqueIdentifier>{d6c9dc68-d79b-4509-bf9c-34ff9620bbf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="avatar">
+      <UniqueIdentifier>{953acb44-db6d-4bd8-bb0b-5692524bad93}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

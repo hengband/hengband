@@ -235,6 +235,7 @@
     <ClCompile Include="..\..\src\artifact\random-art-misc.cpp" />
     <ClCompile Include="..\..\src\artifact\random-art-resistance.cpp" />
     <ClCompile Include="..\..\src\artifact\random-art-slay.cpp" />
+    <ClCompile Include="..\..\src\avatar\avatar-changer.cpp" />
     <ClCompile Include="..\..\src\birth\auto-roller.cpp" />
     <ClCompile Include="..\..\src\birth\birth-body-spec.cpp" />
     <ClCompile Include="..\..\src\birth\birth-select-class.cpp" />
@@ -923,6 +924,7 @@
     <ClInclude Include="..\..\src\artifact\random-art-resistance.h" />
     <ClInclude Include="..\..\src\artifact\random-art-slay.h" />
     <ClInclude Include="..\..\src\artifact\random-art-characteristics.h" />
+    <ClInclude Include="..\..\src\avatar\avatar-changer.h" />
     <ClInclude Include="..\..\src\birth\auto-roller.h" />
     <ClInclude Include="..\..\src\birth\birth-body-spec.h" />
     <ClInclude Include="..\..\src\birth\birth-select-class.h" />
