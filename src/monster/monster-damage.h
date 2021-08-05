@@ -41,4 +41,5 @@ private:
     void show_bounty_message(GAME_TEXT *m_name);
     void set_redraw();
     void summon_special_unique();
+    void add_monster_fear();
 };

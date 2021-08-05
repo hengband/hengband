@@ -96,24 +96,7 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
         return true;
     }
 
-    if (monster_fear_remaining(m_ptr) && (this->dam > 0)) {
-        auto fear_remining = monster_fear_remaining(m_ptr) - randint1(this->dam);
-        if (set_monster_monfear(this->target_ptr, this->m_idx, fear_remining)) {
-            *this->fear = false;
-        }
-    }
-
-    // 恐怖の更なる加算.
-    auto *r_ptr = &r_info[m_ptr->r_idx];
-    if (!monster_fear_remaining(m_ptr) && none_bits(r_ptr->flags3, RF3_NO_FEAR)) {
-        int percentage = (100L * m_ptr->hp) / m_ptr->maxhp;
-        if ((randint1(10) >= percentage) || ((this->dam >= m_ptr->hp) && (randint0(100) < 80))) {
-            *this->fear = true;
-            (void)set_monster_monfear(
-                this->target_ptr, this->m_idx, (randint1(10) + (((this->dam >= m_ptr->hp) && (percentage > 7)) ? 20 : ((11 - percentage) * 5))));
-        }
-    }
-
+    this->add_monster_fear();
     return false;
 }
 
@@ -729,4 +712,30 @@ void MonsterDamageProcessor::summon_special_unique()
     if (summon_named_creature(this->target_ptr, 0, dummy_y, dummy_x, new_unique_idx, mode)) {
         msg_print(mes);
     }
+}
+
+void MonsterDamageProcessor::add_monster_fear()
+{
+    auto *m_ptr = &this->target_ptr->current_floor_ptr->m_list[this->m_idx];
+    if (monster_fear_remaining(m_ptr) && (this->dam > 0)) {
+        auto fear_remining = monster_fear_remaining(m_ptr) - randint1(this->dam);
+        if (set_monster_monfear(this->target_ptr, this->m_idx, fear_remining)) {
+            *this->fear = false;
+        }
+    }
+
+    auto *r_ptr = &r_info[m_ptr->r_idx];
+    if (monster_fear_remaining(m_ptr) || any_bits(r_ptr->flags3, RF3_NO_FEAR)) {
+        return;
+    }
+
+    int percentage = (100L * m_ptr->hp) / m_ptr->maxhp;
+    if ((randint1(10) < percentage) && ((this->dam < m_ptr->hp) || (randint0(100) >= 80))) {
+        return;
+    }
+
+    *this->fear = true;
+    auto fear_condition = (this->dam >= m_ptr->hp) && (percentage > 7);
+    auto fear_value = randint1(10) + (fear_condition ? 20 : (11 - percentage) * 5);
+    (void)set_monster_monfear(this->target_ptr, this->m_idx, fear_value);
 }
