@@ -118,14 +118,7 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
             chg_virtue(this->target_ptr, V_VITALITY, 2);
         }
 
-        if (r_ptr->r_deaths > 0) {
-            if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
-                chg_virtue(this->target_ptr, V_HONOUR, 10);
-            } else if ((r_ptr->level) / 10 + (2 * this->target_ptr->current_floor_ptr->dun_level) >= randint1(100)) {
-                chg_virtue(this->target_ptr, V_HONOUR, 1);
-            }
-        }
-
+        this->change_virtue_revenge();
         if (any_bits(r_ptr->flags2, RF2_MULTIPLY) && (r_ptr->r_akills > 1000) && one_in_(10)) {
             chg_virtue(this->target_ptr, V_VALOUR, -1);
         }
@@ -134,7 +127,7 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
             if (r_ptr->blow[i].d_dice != 0) {
                 innocent = false;
             }
-            
+
             if ((r_ptr->blow[i].effect == RBE_EAT_ITEM) || (r_ptr->blow[i].effect == RBE_EAT_GOLD)) {
                 thief = true;
             }
@@ -508,13 +501,35 @@ void MonsterDamageProcessor::change_virtue_good_evil()
 
         return;
     }
-    
+
     if (any_bits(r_ptr->flags3, RF3_DEMON)) {
         if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
             chg_virtue(this->target_ptr, V_FAITH, 2);
         } else if ((r_ptr->level) / 10 + (3 * floor_ptr->dun_level) >= randint1(100)) {
             chg_virtue(this->target_ptr, V_FAITH, 1);
         }
+    }
+}
+
+/*
+ * @brief 過去に＠を殺したことがあるユニークにリゾンべを果たせたら徳を上げる
+ */
+void MonsterDamageProcessor::change_virtue_revenge()
+{
+    auto *floor_ptr = this->target_ptr->current_floor_ptr;
+    auto *m_ptr = &floor_ptr->m_list[this->m_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
+    if (r_ptr->r_deaths == 0) {
+        return;
+    }
+
+    if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
+        chg_virtue(this->target_ptr, V_HONOUR, 10);
+        return;
+    }
+
+    if ((r_ptr->level) / 10 + (2 * floor_ptr->dun_level) >= randint1(100)) {
+        chg_virtue(this->target_ptr, V_HONOUR, 1);
     }
 }
 
