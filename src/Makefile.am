@@ -53,6 +53,7 @@ hengband_SOURCES = \
 	autopick/autopick-editor-util.cpp autopick/autopick-editor-util.h \
 	autopick/autopick-editor-command.cpp autopick/autopick-editor-command.h \
 	\
+	avatar/avatar.h avatar/avatar.cpp \
 	avatar/avatar-changer.cpp avatar/avatar-changer.h \
 	\
 	birth/birth-explanations-table.cpp birth/birth-explanations-table.h \
@@ -657,7 +658,6 @@ hengband_SOURCES = \
 	player-attack/blood-sucking-processor.cpp player-attack/blood-sucking-processor.h \
 	player-attack/player-attack.cpp player-attack/player-attack.h \
 	\
-	player-info/avatar.h player-info/avatar.cpp \
 	player-info/base-status-info.cpp player-info/base-status-info.h \
 	player-info/body-improvement-info.cpp player-info/body-improvement-info.h \
 	player-info/class-ability-info.cpp player-info/class-ability-info.h \

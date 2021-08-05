@@ -6,6 +6,7 @@
 
 #include "cmd-action/cmd-attack.h"
 #include "artifact/fixed-art-types.h"
+#include "avatar/avatar.h"
 #include "combat/attack-accuracy.h"
 #include "combat/attack-criticality.h"
 #include "core/asking-player.h"
@@ -32,7 +33,6 @@
 #include "mutation/mutation-flag-types.h"
 #include "object/item-use-flags.h"
 #include "player-attack/player-attack.h"
-#include "player-info/avatar.h"
 #include "player-info/equipment-info.h"
 #include "player-status/player-energy.h"
 #include "player-status/player-hand-types.h"

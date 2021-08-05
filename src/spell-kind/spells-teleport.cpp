@@ -5,6 +5,7 @@
  */
 
 #include "spell-kind/spells-teleport.h"
+#include "avatar/avatar.h"
 #include "core/asking-player.h"
 #include "core/player-update-types.h"
 #include "core/speed-table.h"
@@ -28,7 +29,6 @@
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-checker.h"
 #include "object/object-flags.h"
-#include "player-info/avatar.h"
 #include "player/player-move.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"

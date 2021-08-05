@@ -1,7 +1,8 @@
 ﻿#include "monster/monster-status-setter.h"
+#include "avatar/avatar.h"
 #include "cmd-visual/cmd-draw.h"
-#include "core/player-update-types.h"
 #include "core/player-redraw-types.h"
+#include "core/player-update-types.h"
 #include "core/speed-table.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
@@ -18,7 +19,6 @@
 #include "monster/monster-status.h" //!< @todo 相互依存. 後で何とかする.
 #include "monster/monster-util.h"
 #include "monster/smart-learn-types.h"
-#include "player-info/avatar.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
@@ -50,7 +50,7 @@ void set_hostile(player_type *player_ptr, monster_type *m_ptr)
     if (player_ptr->phase_out)
         return;
 
-    m_ptr->mflag2.reset({MFLAG2::PET, MFLAG2::FRIENDLY});
+    m_ptr->mflag2.reset({ MFLAG2::PET, MFLAG2::FRIENDLY });
 }
 
 /*!

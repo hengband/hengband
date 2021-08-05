@@ -1,5 +1,6 @@
 ﻿#include "market/bounty.h"
 #include "autopick/autopick.h"
+#include "avatar/avatar.h"
 #include "cmd-building/cmd-building.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
@@ -26,7 +27,6 @@
 #include "object/object-info.h"
 #include "object/object-kind-hook.h"
 #include "perception/object-perception.h"
-#include "player-info/avatar.h"
 #include "sv-definition/sv-other-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -107,7 +107,8 @@ bool exchange_cash(player_type *player_ptr)
             describe_flavor(player_ptr, o_name, o_ptr, 0);
             sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
             if (get_check(buf)) {
-                msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)((r_info[current_world_ptr->today_mon].level * 50 + 100) * o_ptr->number));
+                msg_format(
+                    _("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)((r_info[current_world_ptr->today_mon].level * 50 + 100) * o_ptr->number));
                 player_ptr->au += (r_info[current_world_ptr->today_mon].level * 50 + 100) * o_ptr->number;
                 player_ptr->redraw |= (PR_GOLD);
                 vary_item(player_ptr, i, -o_ptr->number);

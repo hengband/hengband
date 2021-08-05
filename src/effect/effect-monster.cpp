@@ -5,13 +5,14 @@
  */
 
 #include "effect/effect-monster.h"
+#include "avatar/avatar.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "effect/effect-characteristics.h"
-#include "effect/effect-monster-util.h"
 #include "effect/effect-monster-switcher.h"
+#include "effect/effect-monster-util.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "game-option/play-record-options.h"
@@ -37,8 +38,6 @@
 #include "monster/monster-update.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/object-kind-hook.h"
-#include "player-info/avatar.h"
-#include "util/bit-flags-calculator.h"
 #include "spell-kind/blood-curse.h"
 #include "spell-kind/spells-polymorph.h"
 #include "spell-kind/spells-teleport.h"
@@ -47,10 +46,11 @@
 #include "sv-definition/sv-other-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-type-definition.h"
 #include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /*!

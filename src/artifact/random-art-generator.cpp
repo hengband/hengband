@@ -13,6 +13,7 @@
 #include "artifact/random-art-pval-investor.h"
 #include "artifact/random-art-resistance.h"
 #include "artifact/random-art-slay.h"
+#include "avatar/avatar.h"
 #include "core/asking-player.h"
 #include "core/window-redrawer.h"
 #include "flavor/object-flavor.h"
@@ -28,7 +29,6 @@
 #include "object/object-value-calc.h"
 #include "perception/identification.h"
 #include "perception/object-perception.h"
-#include "player-info/avatar.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
@@ -259,7 +259,7 @@ static void invest_positive_modified_value(player_type *player_ptr, object_type 
         o_ptr->to_a += randint1(o_ptr->to_a > 19 ? 1 : 20 - o_ptr->to_a);
         return;
     }
-    
+
     if (!object_is_weapon_ammo(o_ptr))
         return;
 
@@ -377,7 +377,8 @@ static void name_unnatural_random_artifact(player_type *player_ptr, object_type 
     chg_virtue(player_ptr, V_ENCHANT, 5);
 }
 
-static void generate_unnatural_random_artifact(player_type *player_ptr, object_type *o_ptr, const bool a_scroll, const int power_level, const int max_powers, const int total_flags)
+static void generate_unnatural_random_artifact(
+    player_type *player_ptr, object_type *o_ptr, const bool a_scroll, const int power_level, const int max_powers, const int total_flags)
 {
     GAME_TEXT new_name[1024];
     strcpy(new_name, "");

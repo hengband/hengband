@@ -6,6 +6,7 @@
 
 #include "player-attack/player-attack.h"
 #include "artifact/fixed-art-types.h"
+#include "avatar/avatar.h"
 #include "cmd-action/cmd-attack.h"
 #include "combat/attack-accuracy.h"
 #include "combat/attack-criticality.h"
@@ -37,7 +38,6 @@
 #include "player-attack/attack-chaos-effect.h"
 #include "player-attack/blood-sucking-processor.h"
 #include "player-attack/player-attack-util.h"
-#include "player-info/avatar.h"
 #include "player-info/equipment-info.h"
 #include "player-status/player-energy.h"
 #include "player-status/player-hand-types.h"

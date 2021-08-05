@@ -5,6 +5,7 @@
  */
 
 #include "spell/spells-status.h"
+#include "avatar/avatar.h"
 #include "cmd-action/cmd-spell.h"
 #include "cmd-item/cmd-magiceat.h"
 #include "core/player-redraw-types.h"
@@ -27,7 +28,6 @@
 #include "monster/monster-describer.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
-#include "player-info/avatar.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/player-class.h"

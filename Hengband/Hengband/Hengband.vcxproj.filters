@@ -2084,9 +2084,6 @@
     <ClCompile Include="..\..\src\player-info\self-info.cpp">
       <Filter>player-info</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player-info\avatar.cpp">
-      <Filter>player-info</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\player-info\race-ability-info.cpp">
       <Filter>player-info</Filter>
     </ClCompile>
@@ -2326,6 +2323,9 @@
       <Filter>grid</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\avatar\avatar-changer.cpp">
+      <Filter>avatar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\avatar\avatar.cpp">
       <Filter>avatar</Filter>
     </ClCompile>
   </ItemGroup>
@@ -4727,9 +4727,6 @@
     <ClInclude Include="..\..\src\player-info\self-info.h">
       <Filter>player-info</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player-info\avatar.h">
-      <Filter>player-info</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\player-info\base-status-info.h">
       <Filter>player-info</Filter>
     </ClInclude>
@@ -4996,6 +4993,9 @@
       <Filter>monster</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\avatar\avatar-changer.h">
+      <Filter>avatar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\avatar\avatar.h">
       <Filter>avatar</Filter>
     </ClInclude>
   </ItemGroup>

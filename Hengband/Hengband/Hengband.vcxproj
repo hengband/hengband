@@ -684,7 +684,7 @@
     <ClCompile Include="..\..\src\specific-object\death-scythe.cpp" />
     <ClCompile Include="..\..\src\specific-object\torch.cpp" />
     <ClCompile Include="..\..\src\pet\pet-util.cpp" />
-    <ClCompile Include="..\..\src\player-info\avatar.cpp" />
+    <ClCompile Include="..\..\src\avatar\avatar.cpp" />
     <ClCompile Include="..\..\src\birth\character-builder.cpp" />
     <ClCompile Include="..\..\src\birth\birth-explanations-table.cpp" />
     <ClCompile Include="..\..\src\cmd-io\cmd-autopick.cpp" />
@@ -1475,7 +1475,7 @@
     <ClInclude Include="..\..\src\object-enchant\tr-types.h" />
     <ClInclude Include="..\..\src\object-enchant\trc-types.h" />
     <ClInclude Include="..\..\src\object\tval-types.h" />
-    <ClInclude Include="..\..\src\player-info\avatar.h" />
+    <ClInclude Include="..\..\src\avatar\avatar.h" />
     <ClInclude Include="..\..\src\birth\character-builder.h" />
     <ClInclude Include="..\..\src\birth\birth-explanations-table.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-autopick.h" />

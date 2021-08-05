@@ -2,6 +2,7 @@
 #include "autopick/autopick-finder.h"
 #include "autopick/autopick-util.h"
 #include "autopick/autopick.h"
+#include "avatar/avatar.h"
 #include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "flavor/flavor-describer.h"
@@ -19,7 +20,6 @@
 #include "object/object-stack.h"
 #include "object/object-value.h"
 #include "perception/object-perception.h"
-#include "player-info/avatar.h"
 #include "player/race-info-table.h"
 #include "store/home.h"
 #include "store/pricing.h"
@@ -58,7 +58,7 @@ static std::optional<PRICE> prompt_to_buy(player_type *player_ptr, object_type *
     return std::nullopt;
 }
 
-    /*!
+/*!
  * @brief 店舗から購入する際のアイテム選択プロンプト
  * @param item 店舗インベントリ番号(アドレス渡し)
  * @param i 店舗インベントリストック数

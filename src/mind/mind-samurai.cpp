@@ -6,6 +6,7 @@
 
 #include "mind/mind-samurai.h"
 #include "action/action-limited.h"
+#include "avatar/avatar.h"
 #include "cmd-action/cmd-attack.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
@@ -24,7 +25,6 @@
 #include "object-enchant/tr-types.h"
 #include "pet/pet-util.h"
 #include "player-attack/player-attack-util.h"
-#include "player-info/avatar.h"
 #include "player/attack-defense-types.h"
 #include "status/action-setter.h"
 #include "system/grid-type-definition.h"

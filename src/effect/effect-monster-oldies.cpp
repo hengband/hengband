@@ -1,4 +1,5 @@
 ﻿#include "effect/effect-monster-oldies.h"
+#include "avatar/avatar.h"
 #include "core/player-redraw-types.h"
 #include "effect/effect-monster-util.h"
 #include "monster-floor/monster-generator.h"
@@ -10,7 +11,6 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
-#include "player-info/avatar.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"

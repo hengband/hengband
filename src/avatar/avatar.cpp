@@ -12,13 +12,13 @@
  * included in all such copies.
  */
 
-#include "player-info/avatar.h"
+#include "avatar/avatar.h"
 #include "core/player-update-types.h"
 #include "game-option/text-display-options.h"
 #include "player/player-class.h"
 #include "player/player-race-types.h"
-#include "system/player-type-definition.h"
 #include "realm/realm-names-table.h"
+#include "system/player-type-definition.h"
 
 /*!
  * 徳の名称 / The names of the virtues

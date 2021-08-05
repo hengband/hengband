@@ -5,6 +5,7 @@
  */
 
 #include "spell/spells-object.h"
+#include "avatar/avatar.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
@@ -32,7 +33,6 @@
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
-#include "player-info/avatar.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
 #include "racial/racial-android.h"

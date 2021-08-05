@@ -1,4 +1,5 @@
 ﻿#include "player/digestion-processor.h"
+#include "avatar/avatar.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
@@ -9,7 +10,6 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "object-enchant/trc-types.h"
-#include "player-info/avatar.h"
 #include "player/player-damage.h"
 #include "player/player-status.h"
 #include "player/special-defense-types.h"
