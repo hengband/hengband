@@ -61,7 +61,7 @@ static bool monster_hook_tanuki(player_type *player_ptr, MONRACE_IDX r_idx)
     monster_race *r_ptr = &r_info[r_idx];
     bool unselectable = any_bits(r_ptr->flags1, RF1_UNIQUE);
     unselectable |= any_bits(r_ptr->flags2, RF2_MULTIPLY);
-    unselectable |= any_bits(r_ptr->flags7, (RF7_FRIENDLY | RF7_CHAMELEON));
+    unselectable |= any_bits(r_ptr->flags7, RF7_FRIENDLY | RF7_CHAMELEON);
     unselectable |= any_bits(r_ptr->flags7, RF7_AQUATIC);
     if (unselectable)
         return false;
@@ -82,7 +82,7 @@ static bool monster_hook_tanuki(player_type *player_ptr, MONRACE_IDX r_idx)
 static MONRACE_IDX initial_r_appearance(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS generate_mode)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (is_chargeman(player_ptr) && any_bits(generate_mode, PM_JURAL) && none_bits(generate_mode, (PM_MULTIPLY | PM_KAGE)))
+    if (is_chargeman(player_ptr) && any_bits(generate_mode, PM_JURAL) && none_bits(generate_mode, PM_MULTIPLY | PM_KAGE))
         return MON_ALIEN_JURAL;
 
     if (none_bits(r_info[r_idx].flags7, RF7_TANUKI))
@@ -276,7 +276,7 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
             m_ptr->mflag2.set(MFLAG2::KAGE);
     }
 
-    if ((who > 0) && none_bits(r_ptr->flags3, (RF3_EVIL | RF3_GOOD)))
+    if ((who > 0) && none_bits(r_ptr->flags3, RF3_EVIL | RF3_GOOD))
         m_ptr->sub_align = floor_ptr->m_list[who].sub_align;
     else {
         m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
