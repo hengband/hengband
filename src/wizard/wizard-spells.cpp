@@ -149,7 +149,6 @@ void wiz_summon_random_enemy(player_type *caster_ptr, int num)
 }
 
 /*!
- * @brief モンスターを種族IDを指定して敵対的に召喚する /
  * @brief モンスターを種族IDを指定して自然生成と同じように召喚する /
  * Summon a creature of the specified type
  * @param r_idx モンスター種族ID（回数指定コマンド'0'で指定した回数がIDになる）
