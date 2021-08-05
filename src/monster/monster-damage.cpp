@@ -112,33 +112,7 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
         }
 
         sound(SOUND_KILL);
-        if (note != nullptr) {
-            msg_format("%^s%s", m_name, note);
-        } else if (!m_ptr->ml) {
-            auto mes = is_echizen(this->target_ptr) ? _("せっかくだから%sを殺した。", "Because it's time, you have killed %s.")
-                                                    : _("%sを殺した。", "You have killed %s.");
-            msg_format(mes, m_name);
-        } else if (!monster_living(m_ptr->r_idx)) {
-            bool explode = false;
-            for (auto i = 0; i < 4; i++) {
-                if (r_ptr->blow[i].method == RBM_EXPLODE) {
-                    explode = true;
-                }
-            }
-
-            if (explode) {
-                msg_format(_("%sは爆発して粉々になった。", "%^s explodes into tiny shreds."), m_name);
-            } else {
-                auto mes = is_echizen(this->target_ptr) ? _("せっかくだから%sを殺した。", "Because it's time, you have destroyed %s.")
-                                                        : _("%sを殺した。", "You have destoryed %s.");
-                msg_format(mes, m_name);
-            }
-        } else {
-            auto mes = is_echizen(this->target_ptr) ? _("せっかくだから%sを殺した。", "Because it's time, you have slained %s.")
-                                                    : _("%sを殺した。", "You have slained %s.");
-            msg_format(mes, m_name);
-        }
-
+        this->show_kill_message(note, m_name);
         if (any_bits(r_ptr->flags1, RF1_UNIQUE) && m_ptr->mflag2.has_not(MFLAG2::CLONED) && !vanilla_town) {
             for (auto i = 0; i < MAX_BOUNTY; i++) {
                 if ((current_world_ptr->bounty_r_idx[i] == m_ptr->r_idx) && m_ptr->mflag2.has_not(MFLAG2::CHAMELEON)) {
@@ -566,6 +540,47 @@ void MonsterDamageProcessor::change_virtue_good_animal()
     if (one_in_(4)) {
         chg_virtue(this->target_ptr, V_NATURE, -1);
     }
+}
+
+void MonsterDamageProcessor::show_kill_message(concptr note, GAME_TEXT *m_name)
+{
+    auto *floor_ptr = this->target_ptr->current_floor_ptr;
+    auto *m_ptr = &floor_ptr->m_list[this->m_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
+    if (note != nullptr) {
+        msg_format("%^s%s", m_name, note);
+        return;
+    }
+
+    if (!m_ptr->ml) {
+        auto mes = is_echizen(this->target_ptr) ? _("せっかくだから%sを殺した。", "Because it's time, you have killed %s.")
+                                                : _("%sを殺した。", "You have killed %s.");
+        msg_format(mes, m_name);
+        return;
+    }
+
+    if (monster_living(m_ptr->r_idx)) {
+        auto mes = is_echizen(this->target_ptr) ? _("せっかくだから%sを殺した。", "Because it's time, you have slained %s.")
+                                                : _("%sを殺した。", "You have slained %s.");
+        msg_format(mes, m_name);
+        return;
+    }
+
+    auto explode = false;
+    for (auto i = 0; i < 4; i++) {
+        if (r_ptr->blow[i].method == RBM_EXPLODE) {
+            explode = true;
+        }
+    }
+
+    if (explode) {
+        msg_format(_("%sは爆発して粉々になった。", "%^s explodes into tiny shreds."), m_name);
+        return;
+    }
+
+    auto mes = is_echizen(this->target_ptr) ? _("せっかくだから%sを殺した。", "Because it's time, you have destroyed %s.")
+                                            : _("%sを殺した。", "You have destoryed %s.");
+    msg_format(mes, m_name);
 }
 
 /*!
