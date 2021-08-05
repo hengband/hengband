@@ -37,6 +37,7 @@ private:
     void change_virtue_good_animal();
     void change_virtue_wild_thief();
     void show_kill_message(concptr note, GAME_TEXT *m_name);
+    void show_bounty_message(GAME_TEXT *m_name);
     void set_redraw();
     void summon_special_unique();
 };

@@ -113,15 +113,7 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
 
         sound(SOUND_KILL);
         this->show_kill_message(note, m_name);
-        if (any_bits(r_ptr->flags1, RF1_UNIQUE) && m_ptr->mflag2.has_not(MFLAG2::CLONED) && !vanilla_town) {
-            for (auto i = 0; i < MAX_BOUNTY; i++) {
-                if ((current_world_ptr->bounty_r_idx[i] == m_ptr->r_idx) && m_ptr->mflag2.has_not(MFLAG2::CHAMELEON)) {
-                    msg_format(_("%sの首には賞金がかかっている。", "There is a price on %s's head."), m_name);
-                    break;
-                }
-            }
-        }
-
+        this->show_bounty_message(m_name);
         monster_death(this->target_ptr, this->m_idx, true);
         this->summon_special_unique();
         this->get_exp_from_mon(&exp_mon, exp_mon.max_maxhp * 2);
@@ -581,6 +573,23 @@ void MonsterDamageProcessor::show_kill_message(concptr note, GAME_TEXT *m_name)
     auto mes = is_echizen(this->target_ptr) ? _("せっかくだから%sを殺した。", "Because it's time, you have destroyed %s.")
                                             : _("%sを殺した。", "You have destoryed %s.");
     msg_format(mes, m_name);
+}
+
+void MonsterDamageProcessor::show_bounty_message(GAME_TEXT *m_name)
+{
+    auto *floor_ptr = this->target_ptr->current_floor_ptr;
+    auto *m_ptr = &floor_ptr->m_list[this->m_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
+    if (none_bits(r_ptr->flags1, RF1_UNIQUE) || m_ptr->mflag2.has(MFLAG2::CLONED) || vanilla_town) {
+        return;
+    }
+
+    for (auto i = 0; i < MAX_BOUNTY; i++) {
+        if ((current_world_ptr->bounty_r_idx[i] == m_ptr->r_idx) && m_ptr->mflag2.has_not(MFLAG2::CHAMELEON)) {
+            msg_format(_("%sの首には賞金がかかっている。", "There is a price on %s's head."), m_name);
+            break;
+        }
+    }
 }
 
 /*!
