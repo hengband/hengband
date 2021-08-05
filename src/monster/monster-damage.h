@@ -31,6 +31,7 @@ private:
     void dying_scream(GAME_TEXT *m_name);
     void change_virtue_non_beginner();
     void change_virtue_unique();
+    void change_virtue_good_evil();
     void set_redraw();
     void summon_special_unique();
 };

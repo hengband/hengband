@@ -113,25 +113,7 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
             chg_virtue(this->target_ptr, V_COMPASSION, -1);
         }
 
-        auto *floor_ptr = this->target_ptr->current_floor_ptr;
-        if ((r_ptr->flags3 & RF3_GOOD) && ((r_ptr->level) / 10 + (3 * floor_ptr->dun_level) >= randint1(100)))
-            chg_virtue(this->target_ptr, V_UNLIFE, 1);
-
-        if (any_bits(r_ptr->flags3, RF3_ANGEL)) {
-            if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
-                chg_virtue(this->target_ptr, V_FAITH, -2);
-            } else if ((r_ptr->level) / 10 + (3 * floor_ptr->dun_level) >= randint1(100)) {
-                auto change_value = any_bits(r_ptr->flags3, RF3_GOOD) ? -1 : 1;
-                chg_virtue(this->target_ptr, V_FAITH, change_value);
-            }
-        } else if (any_bits(r_ptr->flags3, RF3_DEMON)) {
-            if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
-                chg_virtue(this->target_ptr, V_FAITH, 2);
-            } else if ((r_ptr->level) / 10 + (3 * floor_ptr->dun_level) >= randint1(100)) {
-                chg_virtue(this->target_ptr, V_FAITH, 1);
-            }
-        }
-
+        this->change_virtue_good_evil();
         if (any_bits(r_ptr->flags3, RF3_UNDEAD) && any_bits(r_ptr->flags1, RF1_UNIQUE)) {
             chg_virtue(this->target_ptr, V_VITALITY, 2);
         }
@@ -500,6 +482,39 @@ void MonsterDamageProcessor::change_virtue_unique()
 
     if (one_in_(3)) {
         chg_virtue(this->target_ptr, V_INDIVIDUALISM, -1);
+    }
+}
+
+/*
+ * @brief 攻撃を与えたモンスターが天使か悪魔だった場合、徳を変化させる
+ * @details 天使かつ悪魔だった場合、天使であることが優先される
+ */
+void MonsterDamageProcessor::change_virtue_good_evil()
+{
+    auto *floor_ptr = this->target_ptr->current_floor_ptr;
+    auto *m_ptr = &floor_ptr->m_list[this->m_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
+    if (any_bits(r_ptr->flags3, RF3_GOOD) && ((r_ptr->level) / 10 + (3 * floor_ptr->dun_level) >= randint1(100))) {
+        chg_virtue(this->target_ptr, V_UNLIFE, 1);
+    }
+
+    if (any_bits(r_ptr->flags3, RF3_ANGEL)) {
+        if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
+            chg_virtue(this->target_ptr, V_FAITH, -2);
+        } else if ((r_ptr->level) / 10 + (3 * floor_ptr->dun_level) >= randint1(100)) {
+            auto change_value = any_bits(r_ptr->flags3, RF3_GOOD) ? -1 : 1;
+            chg_virtue(this->target_ptr, V_FAITH, change_value);
+        }
+
+        return;
+    }
+    
+    if (any_bits(r_ptr->flags3, RF3_DEMON)) {
+        if (any_bits(r_ptr->flags1, RF1_UNIQUE)) {
+            chg_virtue(this->target_ptr, V_FAITH, 2);
+        } else if ((r_ptr->level) / 10 + (3 * floor_ptr->dun_level) >= randint1(100)) {
+            chg_virtue(this->target_ptr, V_FAITH, 1);
+        }
     }
 }
 
