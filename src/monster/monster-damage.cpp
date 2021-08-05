@@ -121,14 +121,7 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
         }
 
         this->change_virtue_wild_thief();
-        auto magic_ability_flags = r_ptr->ability_flags;
-        magic_ability_flags.reset(RF_ABILITY_NOMAGIC_MASK);
-        if (any_bits(r_ptr->flags3, RF3_ANIMAL) && none_bits(r_ptr->flags3, RF3_EVIL) && magic_ability_flags.none()) {
-            if (one_in_(4)) {
-                chg_virtue(this->target_ptr, V_NATURE, -1);
-            }
-        }
-
+        this->change_virtue_good_animal();
         if (any_bits(r_ptr->flags1, RF1_UNIQUE) && record_destroy_uniq) {
             char note_buf[160];
             sprintf(note_buf, "%s%s", r_ptr->name.c_str(), m_ptr->mflag2.has(MFLAG2::CLONED) ? _("(クローン)", "(Clone)") : "");
@@ -536,16 +529,35 @@ void MonsterDamageProcessor::change_virtue_wild_thief()
             chg_virtue(this->target_ptr, V_JUSTICE, 3);
             return;
         }
-        
+
         if (1 + ((r_ptr->level) / 10 + (2 * floor_ptr->dun_level)) >= randint1(100)) {
             chg_virtue(this->target_ptr, V_JUSTICE, 1);
         }
 
         return;
     }
-    
+
     if (innocent) {
         chg_virtue(this->target_ptr, V_JUSTICE, -1);
+    }
+}
+
+/*
+ * @brief 邪悪でなく、魔法も持たない動物を攻撃した時に徳を下げる
+ */
+void MonsterDamageProcessor::change_virtue_good_animal()
+{
+    auto *floor_ptr = this->target_ptr->current_floor_ptr;
+    auto *m_ptr = &floor_ptr->m_list[this->m_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
+    auto magic_ability_flags = r_ptr->ability_flags;
+    magic_ability_flags.reset(RF_ABILITY_NOMAGIC_MASK);
+    if (none_bits(r_ptr->flags3, RF3_ANIMAL) || any_bits(r_ptr->flags3, RF3_EVIL) || magic_ability_flags.any()) {
+        return;
+    }
+
+    if (one_in_(4)) {
+        chg_virtue(this->target_ptr, V_NATURE, -1);
     }
 }
 

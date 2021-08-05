@@ -33,6 +33,7 @@ private:
     void change_virtue_unique();
     void change_virtue_good_evil();
     void change_virtue_revenge();
+    void change_virtue_good_animal();
     void change_virtue_wild_thief();
     void set_redraw();
     void summon_special_unique();
