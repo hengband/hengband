@@ -30,6 +30,7 @@ private:
     void death_amberites(GAME_TEXT *m_name);
     void dying_scream(GAME_TEXT *m_name);
     void change_virtue_non_beginner();
+    void change_virtue_unique();
     void set_redraw();
     void summon_special_unique();
 };

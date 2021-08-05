@@ -108,19 +108,7 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
         this->death_amberites(m_name);
         this->dying_scream(m_name);
         this->change_virtue_non_beginner();
-        if (r_ptr->flags1 & RF1_UNIQUE) {
-            if (r_ptr->flags3 & (RF3_EVIL | RF3_GOOD))
-                chg_virtue(this->target_ptr, V_HARMONY, 2);
-
-            if (r_ptr->flags3 & RF3_GOOD) {
-                chg_virtue(this->target_ptr, V_UNLIFE, 2);
-                chg_virtue(this->target_ptr, V_VITALITY, -2);
-            }
-
-            if (one_in_(3))
-                chg_virtue(this->target_ptr, V_INDIVIDUALISM, -1);
-        }
-
+        this->change_virtue_unique();
         if (m_ptr->r_idx == MON_BEGGAR || m_ptr->r_idx == MON_LEPER) {
             chg_virtue(this->target_ptr, V_COMPASSION, -1);
         }
@@ -489,6 +477,29 @@ void MonsterDamageProcessor::change_virtue_non_beginner()
 
     if (r_ptr->level >= 2 * (this->target_ptr->lev + 1)) {
         chg_virtue(this->target_ptr, V_VALOUR, 2);
+    }
+}
+
+void MonsterDamageProcessor::change_virtue_unique()
+{
+    auto *floor_ptr = this->target_ptr->current_floor_ptr;
+    auto *m_ptr = &floor_ptr->m_list[this->m_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
+    if (none_bits(r_ptr->flags1, RF1_UNIQUE)) {
+        return;
+    }
+
+    if (any_bits(r_ptr->flags3, RF3_EVIL | RF3_GOOD)) {
+        chg_virtue(this->target_ptr, V_HARMONY, 2);
+    }
+
+    if (any_bits(r_ptr->flags3, RF3_GOOD)) {
+        chg_virtue(this->target_ptr, V_UNLIFE, 2);
+        chg_virtue(this->target_ptr, V_VITALITY, -2);
+    }
+
+    if (one_in_(3)) {
+        chg_virtue(this->target_ptr, V_INDIVIDUALISM, -1);
     }
 }
 
