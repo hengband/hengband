@@ -104,24 +104,7 @@ bool MonsterDamageProcessor::mon_take_hit(concptr note)
         monster_desc(this->target_ptr, m_name, m_ptr, MD_TRUE_NAME);
         this->death_amberites(m_name);
         this->dying_scream(m_name);
-        this->change_virtue_non_beginner();
-        this->change_virtue_unique();
-        if (m_ptr->r_idx == MON_BEGGAR || m_ptr->r_idx == MON_LEPER) {
-            chg_virtue(this->target_ptr, V_COMPASSION, -1);
-        }
-
-        this->change_virtue_good_evil();
-        if (any_bits(r_ptr->flags3, RF3_UNDEAD) && any_bits(r_ptr->flags1, RF1_UNIQUE)) {
-            chg_virtue(this->target_ptr, V_VITALITY, 2);
-        }
-
-        this->change_virtue_revenge();
-        if (any_bits(r_ptr->flags2, RF2_MULTIPLY) && (r_ptr->r_akills > 1000) && one_in_(10)) {
-            chg_virtue(this->target_ptr, V_VALOUR, -1);
-        }
-
-        this->change_virtue_wild_thief();
-        this->change_virtue_good_animal();
+        this->change_virtue();
         if (any_bits(r_ptr->flags1, RF1_UNIQUE) && record_destroy_uniq) {
             char note_buf[160];
             sprintf(note_buf, "%s%s", r_ptr->name.c_str(), m_ptr->mflag2.has(MFLAG2::CLONED) ? _("(クローン)", "(Clone)") : "");
@@ -394,6 +377,30 @@ void MonsterDamageProcessor::dying_scream(GAME_TEXT *m_name)
         screen_dump = make_screen_dump(this->target_ptr);
     }
 #endif
+}
+
+void MonsterDamageProcessor::change_virtue()
+{
+    this->change_virtue_non_beginner();
+    this->change_virtue_unique();
+    auto *m_ptr = &this->target_ptr->current_floor_ptr->m_list[this->m_idx];
+    auto *r_ptr = &r_info[m_ptr->r_idx];
+    if (m_ptr->r_idx == MON_BEGGAR || m_ptr->r_idx == MON_LEPER) {
+        chg_virtue(this->target_ptr, V_COMPASSION, -1);
+    }
+
+    this->change_virtue_good_evil();
+    if (any_bits(r_ptr->flags3, RF3_UNDEAD) && any_bits(r_ptr->flags1, RF1_UNIQUE)) {
+        chg_virtue(this->target_ptr, V_VITALITY, 2);
+    }
+
+    this->change_virtue_revenge();
+    if (any_bits(r_ptr->flags2, RF2_MULTIPLY) && (r_ptr->r_akills > 1000) && one_in_(10)) {
+        chg_virtue(this->target_ptr, V_VALOUR, -1);
+    }
+
+    this->change_virtue_wild_thief();
+    this->change_virtue_good_animal();
 }
 
 void MonsterDamageProcessor::change_virtue_non_beginner()

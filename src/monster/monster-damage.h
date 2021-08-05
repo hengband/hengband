@@ -29,6 +29,7 @@ private:
     void increase_kill_numbers();
     void death_amberites(GAME_TEXT *m_name);
     void dying_scream(GAME_TEXT *m_name);
+    void change_virtue();
     void change_virtue_non_beginner();
     void change_virtue_unique();
     void change_virtue_good_evil();
