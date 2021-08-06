@@ -34,8 +34,8 @@
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
-#include "player/player-status.h"
 #include "object/warning.h"
+#include "player/player-status.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -45,7 +45,10 @@
 #include "wizard/wizard-messages.h"
 #include "world/world.h"
 
-static bool is_friendly_idx(player_type *player_ptr, MONSTER_IDX m_idx) { return m_idx > 0 && is_friendly(&player_ptr->current_floor_ptr->m_list[(m_idx)]); }
+static bool is_friendly_idx(player_type *player_ptr, MONSTER_IDX m_idx)
+{
+    return m_idx > 0 && is_friendly(&player_ptr->current_floor_ptr->m_list[(m_idx)]);
+}
 
 /*!
  * @brief たぬきの変身対象となるモンスターかどうか判定する / Hook for Tanuki
@@ -56,10 +59,10 @@ static bool is_friendly_idx(player_type *player_ptr, MONSTER_IDX m_idx) { return
 static bool monster_hook_tanuki(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
-    bool unselectable = (r_ptr->flags1 & RF1_UNIQUE) != 0;
-    unselectable |= (r_ptr->flags2 & RF2_MULTIPLY) != 0;
-    unselectable |= (r_ptr->flags7 & (RF7_FRIENDLY | RF7_CHAMELEON)) != 0;
-    unselectable |= (r_ptr->flags7 & RF7_AQUATIC) != 0;
+    bool unselectable = any_bits(r_ptr->flags1, RF1_UNIQUE);
+    unselectable |= any_bits(r_ptr->flags2, RF2_MULTIPLY);
+    unselectable |= any_bits(r_ptr->flags7, RF7_FRIENDLY | RF7_CHAMELEON);
+    unselectable |= any_bits(r_ptr->flags7, RF7_AQUATIC);
     if (unselectable)
         return false;
 
@@ -79,10 +82,10 @@ static bool monster_hook_tanuki(player_type *player_ptr, MONRACE_IDX r_idx)
 static MONRACE_IDX initial_r_appearance(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS generate_mode)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (is_chargeman(player_ptr) && (generate_mode & PM_JURAL) && !(generate_mode & (PM_MULTIPLY | PM_KAGE)))
+    if (is_chargeman(player_ptr) && any_bits(generate_mode, PM_JURAL) && none_bits(generate_mode, PM_MULTIPLY | PM_KAGE))
         return MON_ALIEN_JURAL;
 
-    if (!(r_info[r_idx].flags7 & RF7_TANUKI))
+    if (none_bits(r_info[r_idx].flags7, RF7_TANUKI))
         return r_idx;
 
     get_mon_num_prep(player_ptr, monster_hook_tanuki, NULL);
@@ -109,11 +112,11 @@ static bool check_unique_placeable(player_type *player_ptr, MONRACE_IDX r_idx)
         return true;
 
     monster_race *r_ptr = &r_info[r_idx];
-    if (((r_ptr->flags1 & (RF1_UNIQUE)) || (r_ptr->flags7 & (RF7_NAZGUL))) && (r_ptr->cur_num >= r_ptr->max_num)) {
+    if ((any_bits(r_ptr->flags1, RF1_UNIQUE) || any_bits(r_ptr->flags7, RF7_NAZGUL)) && (r_ptr->cur_num >= r_ptr->max_num)) {
         return false;
     }
 
-    if ((r_ptr->flags7 & (RF7_UNIQUE2)) && (r_ptr->cur_num >= 1)) {
+    if (any_bits(r_ptr->flags7, RF7_UNIQUE2) && (r_ptr->cur_num >= 1)) {
         return false;
     }
 
@@ -124,8 +127,8 @@ static bool check_unique_placeable(player_type *player_ptr, MONRACE_IDX r_idx)
             return false;
     }
 
-    if ((r_ptr->flags1 & (RF1_FORCE_DEPTH)) && (player_ptr->current_floor_ptr->dun_level < r_ptr->level)
-        && (!ironman_nightmare || (r_ptr->flags1 & (RF1_QUESTOR)))) {
+    if (any_bits(r_ptr->flags1, RF1_FORCE_DEPTH) && (player_ptr->current_floor_ptr->dun_level < r_ptr->level)
+        && (!ironman_nightmare || any_bits(r_ptr->flags1, RF1_QUESTOR))) {
         return false;
     }
 
@@ -181,11 +184,11 @@ static bool check_procection_rune(player_type *player_ptr, MONRACE_IDX r_idx, PO
     if (randint1(BREAK_RUNE_PROTECTION) >= (r_ptr->level + 20))
         return false;
 
-    if (g_ptr->info & CAVE_MARK)
+    if (any_bits(g_ptr->info, CAVE_MARK))
         msg_print(_("守りのルーンが壊れた！", "The rune of protection is broken!"));
 
-    g_ptr->info &= ~(CAVE_MARK);
-    g_ptr->info &= ~(CAVE_OBJECT);
+    reset_bits(g_ptr->info, CAVE_MARK);
+    reset_bits(g_ptr->info, CAVE_OBJECT);
     g_ptr->mimic = 0;
     note_spot(player_ptr, y, x);
     return true;
@@ -197,7 +200,7 @@ static void warn_unique_generation(player_type *player_ptr, MONRACE_IDX r_idx)
         return;
 
     monster_race *r_ptr = &r_info[r_idx];
-    if ((r_ptr->flags1 & RF1_UNIQUE) == 0)
+    if (none_bits(r_ptr->flags1, RF1_UNIQUE))
         return;
 
     concptr color;
@@ -245,15 +248,15 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
     if (player_ptr->wild_mode || !in_bounds(floor_ptr, y, x) || (r_idx == 0) || r_ptr->name.empty())
         return false;
 
-    if (((mode & PM_IGNORE_TERRAIN) == 0) && (pattern_tile(floor_ptr, y, x) || !monster_can_enter(player_ptr, y, x, r_ptr, 0)))
+    if (none_bits(mode, PM_IGNORE_TERRAIN) && (pattern_tile(floor_ptr, y, x) || !monster_can_enter(player_ptr, y, x, r_ptr, 0)))
         return false;
 
     if (!check_unique_placeable(player_ptr, r_idx) || !check_quest_placeable(player_ptr, r_idx) || !check_procection_rune(player_ptr, r_idx, y, x))
         return false;
 
     msg_format_wizard(player_ptr, CHEAT_MONSTER, _("%s(Lv%d)を生成しました。", "%s(Lv%d) was generated."), name, r_ptr->level);
-    if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL) || (r_ptr->level < 10))
-        mode &= ~PM_KAGE;
+    if (any_bits(r_ptr->flags1, RF1_UNIQUE) || any_bits(r_ptr->flags7, RF7_NAZGUL) || (r_ptr->level < 10))
+        reset_bits(mode, PM_KAGE);
 
     g_ptr->m_idx = m_pop(floor_ptr);
     hack_m_idx_ii = g_ptr->m_idx;
@@ -267,20 +270,20 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
 
     m_ptr->mflag.clear();
     m_ptr->mflag2.clear();
-    if ((mode & PM_MULTIPLY) && (who > 0) && !is_original_ap(&floor_ptr->m_list[who])) {
+    if (any_bits(mode, PM_MULTIPLY) && (who > 0) && !is_original_ap(&floor_ptr->m_list[who])) {
         m_ptr->ap_r_idx = floor_ptr->m_list[who].ap_r_idx;
         if (floor_ptr->m_list[who].mflag2.has(MFLAG2::KAGE))
             m_ptr->mflag2.set(MFLAG2::KAGE);
     }
 
-    if ((who > 0) && !(r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)))
+    if ((who > 0) && none_bits(r_ptr->flags3, RF3_EVIL | RF3_GOOD))
         m_ptr->sub_align = floor_ptr->m_list[who].sub_align;
     else {
         m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
-        if (r_ptr->flags3 & RF3_EVIL)
-            m_ptr->sub_align |= SUB_ALIGN_EVIL;
-        if (r_ptr->flags3 & RF3_GOOD)
-            m_ptr->sub_align |= SUB_ALIGN_GOOD;
+        if (any_bits(r_ptr->flags3, RF3_EVIL))
+            set_bits(m_ptr->sub_align, SUB_ALIGN_EVIL);
+        if (any_bits(r_ptr->flags3, RF3_GOOD))
+            set_bits(m_ptr->sub_align, SUB_ALIGN_GOOD);
     }
 
     m_ptr->fy = y;
@@ -296,28 +299,28 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
     m_ptr->exp = 0;
 
     if (who > 0 && is_pet(&floor_ptr->m_list[who])) {
-        mode |= PM_FORCE_PET;
+        set_bits(mode, PM_FORCE_PET);
         m_ptr->parent_m_idx = who;
     } else {
         m_ptr->parent_m_idx = 0;
     }
 
-    if (r_ptr->flags7 & RF7_CHAMELEON) {
+    if (any_bits(r_ptr->flags7, RF7_CHAMELEON)) {
         choose_new_monster(player_ptr, g_ptr->m_idx, true, 0);
         r_ptr = &r_info[m_ptr->r_idx];
         m_ptr->mflag2.set(MFLAG2::CHAMELEON);
-        if ((r_ptr->flags1 & RF1_UNIQUE) && (who <= 0))
+        if (any_bits(r_ptr->flags1, RF1_UNIQUE) && (who <= 0))
             m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
-    } else if ((mode & PM_KAGE) && !(mode & PM_FORCE_PET)) {
+    } else if (any_bits(mode, PM_KAGE) && none_bits(mode, PM_FORCE_PET)) {
         m_ptr->ap_r_idx = MON_KAGE;
         m_ptr->mflag2.set(MFLAG2::KAGE);
     }
 
-    if (mode & PM_NO_PET)
+    if (any_bits(mode, PM_NO_PET))
         m_ptr->mflag2.set(MFLAG2::NOPET);
 
     m_ptr->ml = false;
-    if (mode & PM_FORCE_PET) {
+    if (any_bits(mode, PM_FORCE_PET)) {
         set_pet(player_ptr, m_ptr);
     } else if (((who == 0) && any_bits(r_ptr->flags7, RF7_FRIENDLY)) || is_friendly_idx(player_ptr, who) || any_bits(mode, PM_FORCE_FRIENDLY)) {
         if (!monster_has_hostile_align(player_ptr, NULL, 0, -1, r_ptr) && !player_ptr->current_floor_ptr->inside_arena)
@@ -325,12 +328,12 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
     }
 
     m_ptr->mtimed[MTIMED_CSLEEP] = 0;
-    if ((mode & PM_ALLOW_SLEEP) && r_ptr->sleep && !ironman_nightmare) {
+    if (any_bits(mode, PM_ALLOW_SLEEP) && r_ptr->sleep && !ironman_nightmare) {
         int val = r_ptr->sleep;
         (void)set_monster_csleep(player_ptr, g_ptr->m_idx, (val * 2) + randint1(val * 10));
     }
 
-    if (r_ptr->flags1 & RF1_FORCE_MAXHP) {
+    if (any_bits(r_ptr->flags1, RF1_FORCE_MAXHP)) {
         m_ptr->max_maxhp = maxroll(r_ptr->hdice, r_ptr->hside);
     } else {
         m_ptr->max_maxhp = damroll(r_ptr->hdice, r_ptr->hside);
@@ -352,7 +355,7 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
 
     m_ptr->mspeed = get_mspeed(floor_ptr, r_ptr);
 
-    if (mode & PM_HASTE)
+    if (any_bits(mode, PM_HASTE))
         (void)set_monster_fast(player_ptr, g_ptr->m_idx, 100);
 
     if (!ironman_nightmare) {
@@ -361,7 +364,7 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
         m_ptr->energy_need = ENERGY_NEED() - (s16b)randint0(100) * 2;
     }
 
-    if ((r_ptr->flags1 & RF1_PREVENT_SUDDEN_MAGIC) && !ironman_nightmare) {
+    if (any_bits(r_ptr->flags1, RF1_PREVENT_SUDDEN_MAGIC) && !ironman_nightmare) {
         m_ptr->mflag.set(MFLAG::PREVENT_MAGIC);
     }
 
@@ -369,10 +372,10 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
         m_ptr->mflag.set(MFLAG::BORN);
     }
 
-    if (r_ptr->flags7 & RF7_SELF_LD_MASK)
-        player_ptr->update |= (PU_MON_LITE);
-    else if ((r_ptr->flags7 & RF7_HAS_LD_MASK) && !monster_csleep_remaining(m_ptr))
-        player_ptr->update |= (PU_MON_LITE);
+    if (any_bits(r_ptr->flags7, RF7_SELF_LD_MASK))
+        set_bits(player_ptr->update, PU_MON_LITE);
+    else if (any_bits(r_ptr->flags7, RF7_HAS_LD_MASK) && !monster_csleep_remaining(m_ptr))
+        set_bits(player_ptr->update, PU_MON_LITE);
     update_monster(player_ptr, g_ptr->m_idx, true);
 
     real_r_ptr(m_ptr)->cur_num++;
@@ -381,10 +384,10 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
      * Memorize location of the unique monster in saved floors.
      * A unique monster move from old saved floor.
      */
-    if (current_world_ptr->character_dungeon && ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)))
+    if (current_world_ptr->character_dungeon && (any_bits(r_ptr->flags1, RF1_UNIQUE) || any_bits(r_ptr->flags7, RF7_NAZGUL)))
         real_r_ptr(m_ptr)->floor_id = player_ptr->floor_id;
 
-    if (r_ptr->flags2 & RF2_MULTIPLY)
+    if (any_bits(r_ptr->flags2, RF2_MULTIPLY))
         floor_ptr->num_repro++;
 
     warn_unique_generation(player_ptr, r_idx);
@@ -392,7 +395,7 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
         return true;
 
     if (randint1(BREAK_RUNE_EXPLOSION) > r_ptr->level) {
-        if (g_ptr->info & CAVE_MARK) {
+        if (any_bits(g_ptr->info, CAVE_MARK)) {
             msg_print(_("ルーンが爆発した！", "The rune explodes!"));
             project(player_ptr, 0, 2, y, x, 2 * (player_ptr->lev + damroll(7, 7)), GF_MANA,
                 (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
@@ -401,8 +404,8 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
         msg_print(_("爆発のルーンは解除された。", "An explosive rune was disarmed."));
     }
 
-    g_ptr->info &= ~(CAVE_MARK);
-    g_ptr->info &= ~(CAVE_OBJECT);
+    reset_bits(g_ptr->info, CAVE_MARK);
+    reset_bits(g_ptr->info, CAVE_OBJECT);
     g_ptr->mimic = 0;
 
     note_spot(player_ptr, y, x);
