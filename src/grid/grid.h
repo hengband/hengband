@@ -40,15 +40,7 @@ enum grid_bold_type {
     GB_SOLID_NOPERM
 };
 
-/*!
- * @brief 指定座標がFLOOR属性を持ったマスかどうかを返す
- * @param Y 指定Y座標
- * @param X 指定X座標
- * @return FLOOR属性を持っているならばTRUE
- */
-#define is_floor_bold(F, Y, X) (F->grid_array[Y][X].info & CAVE_FLOOR)
 #define is_extra_bold(F, Y, X) (F->grid_array[Y][X].info & CAVE_EXTRA)
-
 #define is_inner_bold(F, Y, X) (F->grid_array[Y][X].info & CAVE_INNER)
 #define is_outer_bold(F, Y, X) (F->grid_array[Y][X].info & CAVE_OUTER)
 #define is_solid_bold(F, Y, X) (F->grid_array[Y][X].info & CAVE_SOLID)

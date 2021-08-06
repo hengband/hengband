@@ -175,7 +175,7 @@ static bool set_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, POSITION 
         return true;
     }
 
-    if (is_floor_bold(floor_ptr, *y, *x))
+    if (g_ptr->is_floor())
         return true;
 
     if (g_ptr->is_outer() && affectwall) {

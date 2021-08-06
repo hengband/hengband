@@ -362,7 +362,7 @@ void add_outer_wall(player_type *player_ptr, POSITION x, POSITION y, int light, 
     g_ptr->info |= CAVE_ROOM;
     feature_type *f_ptr;
     f_ptr = &f_info[g_ptr->feat];
-    if (is_floor_bold(floor_ptr, y, x)) {
+    if (g_ptr->is_floor()) {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 if ((x + i >= x1) && (x + i <= x2) && (y + j >= y1) && (y + j <= y2)) {

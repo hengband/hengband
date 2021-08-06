@@ -31,8 +31,8 @@ void add_door(player_type *player_ptr, POSITION x, POSITION y)
      *  .=floor, #=wall
      */
 
-    if (is_floor_bold(floor_ptr, y - 1, x) && is_floor_bold(floor_ptr, y + 1, x)
-        && (is_outer_bold(floor_ptr, y, x - 1) && is_outer_bold(floor_ptr, y, x + 1))) {
+    if (floor_ptr->grid_array[y - 1][x].is_floor() && floor_ptr->grid_array[y + 1][x].is_floor() && floor_ptr->grid_array[y][x - 1].is_outer()
+        && floor_ptr->grid_array[y][x + 1].is_outer()) {
         place_secret_door(player_ptr, y, x, DOOR_DEFAULT);
         place_bold(player_ptr, y, x - 1, GB_SOLID);
         place_bold(player_ptr, y, x + 1, GB_SOLID);
@@ -46,7 +46,8 @@ void add_door(player_type *player_ptr, POSITION x, POSITION y)
      *  where x = don't care
      *  .=floor, #=wall
      */
-    if (is_outer_bold(floor_ptr, y - 1, x) && is_outer_bold(floor_ptr, y + 1, x) && is_floor_bold(floor_ptr, y, x - 1) && is_floor_bold(floor_ptr, y, x + 1)) {
+    if (floor_ptr->grid_array[y - 1][x].is_outer() && floor_ptr->grid_array[y + 1][x].is_outer() && floor_ptr->grid_array[y][x - 1].is_floor()
+        && floor_ptr->grid_array[y][x + 1].is_floor()) {
         place_secret_door(player_ptr, y, x, DOOR_DEFAULT);
         place_bold(player_ptr, y - 1, x, GB_SOLID);
         place_bold(player_ptr, y + 1, x, GB_SOLID);

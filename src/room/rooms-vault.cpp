@@ -1016,7 +1016,7 @@ static void build_mini_c_vault(player_type *player_ptr, POSITION x0, POSITION y0
         for (y = y1; y <= y2; y++) {
             total = x - x1 + y - y1;
             /* If total is odd- and is a floor then make a wall */
-            if ((total % 2 == 1) && is_floor_bold(floor_ptr, y, x)) {
+            if ((total % 2 == 1) && floor_ptr->grid_array[y][x].is_floor()) {
                 place_bold(player_ptr, y, x, GB_INNER);
             }
         }

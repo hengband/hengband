@@ -20,7 +20,7 @@ static bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y)
         return false;
     }
 
-    if (is_floor_bold(floor_ptr, y, x))
+    if (floor_ptr->grid_array[y][x].is_floor())
         return true;
 
     return false;

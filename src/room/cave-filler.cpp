@@ -347,7 +347,7 @@ bool generate_fracave(player_type *player_ptr, POSITION y0, POSITION x0, POSITIO
 
     for (POSITION x = 1; x < xsize; ++x) {
         for (POSITION y = 1; y < ysize; ++y) {
-            if (is_floor_bold(floor_ptr, y0 + y - yhsize, x0 + x - xhsize) && floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].is_icky()) {
+            if (floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].is_floor() && floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].is_icky()) {
                 floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~CAVE_ICKY;
                 if (light)
                     floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info |= (CAVE_GLOW);

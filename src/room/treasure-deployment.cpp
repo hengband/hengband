@@ -8,7 +8,6 @@
 #include "floor/cave.h"
 #include "floor/geometry.h"
 #include "grid/feature-flag-types.h"
-#include "grid/grid.h"
 #include "grid/object-placer.h"
 #include "grid/trap.h"
 #include "monster-floor/monster-generator.h"
@@ -33,7 +32,7 @@ void fill_treasure(player_type *player_ptr, POSITION x1, POSITION x2, POSITION y
             if ((randint1(100) - difficulty * 3) > 50)
                 value = 20;
 
-            if (!is_floor_bold(floor_ptr, y, x) && (!cave_has_flag_bold(floor_ptr, y, x, FF_PLACE) || !cave_has_flag_bold(floor_ptr, y, x, FF_DROP)))
+            if (!floor_ptr->grid_array[y][x].is_floor() && (!cave_has_flag_bold(floor_ptr, y, x, FF_PLACE) || !cave_has_flag_bold(floor_ptr, y, x, FF_DROP)))
                 continue;
 
             if (value < 0) {
