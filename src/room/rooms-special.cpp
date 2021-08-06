@@ -17,6 +17,7 @@
 #include "object/object-kind-hook.h"
 #include "room/space-finder.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
 #include "wizard/wizard-messages.h"

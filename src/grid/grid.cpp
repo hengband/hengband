@@ -16,6 +16,7 @@
 
 #include <queue>
 
+#include "grid/grid.h"
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
@@ -29,7 +30,6 @@
 #include "game-option/map-screen-options.h"
 #include "game-option/special-options.h"
 #include "grid/feature.h"
-#include "grid/grid.h"
 #include "grid/object-placer.h"
 #include "grid/trap.h"
 #include "io/screen-util.h"
@@ -48,6 +48,7 @@
 #include "room/rooms-builder.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
@@ -406,7 +407,10 @@ void update_local_illumination(player_type *creature_ptr, POSITION y, POSITION x
  * @return 視覚に収められていないならTRUEを返す
  * @details player_can_see_bold()関数の返り値の否定を返している。
  */
-bool no_lite(player_type *creature_ptr) { return (!player_can_see_bold(creature_ptr, creature_ptr->y, creature_ptr->x)); }
+bool no_lite(player_type *creature_ptr)
+{
+    return (!player_can_see_bold(creature_ptr, creature_ptr->y, creature_ptr->x));
+}
 
 /*
  * Place an attr/char pair at the given map coordinate, if legal.
@@ -893,7 +897,8 @@ void update_flow(player_type *subject_ptr)
     }
 }
 
-static flow_type get_grid_flow_type(monster_race *r_ptr) {
+static flow_type get_grid_flow_type(monster_race *r_ptr)
+{
     if (any_bits(r_ptr->flags7, RF7_CAN_FLY))
         return FLOW_CAN_FLY;
     return FLOW_NORMAL;
@@ -1272,19 +1277,28 @@ void place_bold(player_type *player_ptr, POSITION y, POSITION x, grid_bold_type 
     place_grid(player_ptr, g_ptr, gb_type);
 }
 
-void set_cave_feat(floor_type *floor_ptr, POSITION y, POSITION x, FEAT_IDX feature_idx) { floor_ptr->grid_array[y][x].feat = feature_idx; }
+void set_cave_feat(floor_type *floor_ptr, POSITION y, POSITION x, FEAT_IDX feature_idx)
+{
+    floor_ptr->grid_array[y][x].feat = feature_idx;
+}
 
 /*!
  * @todo intをenumに変更する
  */
-void add_cave_info(floor_type *floor_ptr, POSITION y, POSITION x, int cave_mask) { floor_ptr->grid_array[y][x].info |= cave_mask; }
+void add_cave_info(floor_type *floor_ptr, POSITION y, POSITION x, int cave_mask)
+{
+    floor_ptr->grid_array[y][x].info |= cave_mask;
+}
 
 /*
  * @brief Get feature mimic from f_info[] (applying "mimic" field)
  * @param g_ptr グリッドへの参照ポインタ
  * @return 地形情報
  */
-FEAT_IDX get_feat_mimic(grid_type *g_ptr) { return (f_info[g_ptr->mimic ? g_ptr->mimic : g_ptr->feat].mimic); }
+FEAT_IDX get_feat_mimic(grid_type *g_ptr)
+{
+    return (f_info[g_ptr->mimic ? g_ptr->mimic : g_ptr->feat].mimic);
+}
 
 /*!
  * @brief プレイヤーの周辺9マスに該当する地形がいくつあるかを返す /
@@ -1324,4 +1338,7 @@ int count_dt(player_type *creature_ptr, POSITION *y, POSITION *x, bool (*test)(p
     return count;
 }
 
-bool feat_uses_special(FEAT_IDX f_idx) { return has_flag(f_info[(f_idx)].flags, FF_SPECIAL); }
+bool feat_uses_special(FEAT_IDX f_idx)
+{
+    return has_flag(f_info[(f_idx)].flags, FF_SPECIAL);
+}

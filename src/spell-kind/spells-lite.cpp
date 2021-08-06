@@ -1,6 +1,4 @@
-﻿#include <vector>
-
-#include "dungeon/dungeon-flag-types.h"
+﻿#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
@@ -22,6 +20,7 @@
 #include "spell-kind/spells-lite.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
@@ -30,6 +29,7 @@
 #include "util/point-2d.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <vector>
 
 using PassBoldFunc = bool (*)(floor_type *, POSITION, POSITION);
 

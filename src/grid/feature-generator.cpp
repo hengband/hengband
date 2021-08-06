@@ -15,6 +15,7 @@
 #include "room/rooms-builder.h"
 #include "system/dungeon-data-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "wizard/wizard-messages.h"
 

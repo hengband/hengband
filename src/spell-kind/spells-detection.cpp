@@ -24,6 +24,7 @@
 #include "realm/realm-song.h"
 #include "spell-realm/spells-song.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"

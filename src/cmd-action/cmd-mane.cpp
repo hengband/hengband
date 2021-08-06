@@ -9,6 +9,7 @@
  * 2014 Deskull rearranged comment for Doxygen.\n
  */
 
+#include "cmd-action/cmd-mane.h"
 #include "action/action-limited.h"
 #include "artifact/fixed-art-types.h"
 #include "cmd-action/cmd-spell.h"
@@ -20,7 +21,6 @@
 #include "floor/floor-object.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/text-display-options.h"
-#include "grid/grid.h"
 #include "hpmp/hp-mp-processor.h"
 #include "inventory/inventory-slot-types.h"
 #include "main/sound-definitions-table.h"
@@ -53,6 +53,7 @@
 #include "status/body-improvement.h"
 #include "status/buff-setter.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"

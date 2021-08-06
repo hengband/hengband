@@ -45,6 +45,7 @@
 #include "room/cave-filler.h"
 #include "room/lake-types.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 

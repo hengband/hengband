@@ -12,6 +12,7 @@
 #include "player/special-defense-types.h"
 #include "room/door-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "world/world.h"

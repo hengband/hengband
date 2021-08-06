@@ -1,7 +1,4 @@
-﻿#include <algorithm>
-#include <utility>
-#include <vector>
-
+﻿#include "target/target-preparation.h"
 #include "floor/cave.h"
 #include "game-option/input-options.h"
 #include "grid/feature.h"
@@ -13,16 +10,19 @@
 #include "monster/monster-status.h"
 #include "object/object-mark-types.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
+#include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
-#include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
-#include "target/target-preparation.h"
 #include "target/target-types.h"
 #include "util/bit-flags-calculator.h"
 #include "util/sort.h"
 #include "window/main-window-util.h"
+#include <algorithm>
+#include <utility>
+#include <vector>
 
 /*
  * Determine is a monster makes a reasonable target

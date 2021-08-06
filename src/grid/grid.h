@@ -45,33 +45,6 @@
  * Note the special fields for the "MONSTER_FLOW" code.
  */
 
-enum flow_type {
-    FLOW_NORMAL = 0,
-    FLOW_CAN_FLY = 1,
-    FLOW_MAX = 2,
-};
-
-struct grid_type {
-    BIT_FLAGS info{}; /* Hack -- grid flags */
-
-    FEAT_IDX feat{}; /* Hack -- feature type */
-    ObjectIndexList o_idx_list; /* Object list in this grid */
-    MONSTER_IDX m_idx{}; /* Monster in this grid */
-
-    /*! 地形の特別な情報を保存する / Special grid info
-     * 具体的な使用一覧はクエスト行き階段の移行先クエストID、
-     * 各ダンジョン入口の移行先ダンジョンID、
-     *
-     */
-    s16b special{};
-
-    FEAT_IDX mimic{}; /* Feature to mimic */
-
-    byte costs[FLOW_MAX]{}; /* Hack -- cost of flowing */
-    byte dists[FLOW_MAX]{}; /* Hack -- distance from player */
-    byte when{}; /* Hack -- when cost was computed */
-};
-
 /*  A structure type for terrain template of saving dungeon floor */
 typedef struct grid_template_type {
     BIT_FLAGS info;
@@ -156,9 +129,10 @@ typedef struct grid_template_type {
 #define DOOR_CURTAIN     2
 
 // clang-format on
-typedef struct floor_type floor_type;
-typedef struct player_type player_type;
-typedef struct monster_race monster_race;
+struct floor_type;
+struct grid_type;
+struct player_type;
+struct monster_race;
 extern bool new_player_spot(player_type *creature_ptr);
 
 extern void place_bound_perm_wall(player_type *player_ptr, grid_type *g_ptr);

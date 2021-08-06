@@ -15,6 +15,7 @@
 #include "monster-floor/place-monster-types.h"
 #include "object-enchant/item-apply-magic.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 
 /*

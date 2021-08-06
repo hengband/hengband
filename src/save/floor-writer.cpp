@@ -14,6 +14,7 @@
 #include "save/monster-writer.h"
 #include "save/save-util.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/object-type-definition.h"
 #include "util/angband-files.h"
 #include "util/sort.h"

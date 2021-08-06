@@ -1268,6 +1268,7 @@
     <ClInclude Include="..\..\src\system\alloc-entries.h" />
     <ClInclude Include="..\..\src\system\dungeon-data-definition.h" />
     <ClInclude Include="..\..\src\system\floor-type-definition.h" />
+    <ClInclude Include="..\..\src\system\grid-type-definition.h" />
     <ClInclude Include="..\..\src\system\player-type-definition.h" />
     <ClInclude Include="..\..\src\target\grid-selector.h" />
     <ClInclude Include="..\..\src\target\projection-path-calculator.h" />
@@ -1492,7 +1493,6 @@
     <ClInclude Include="..\..\src\mspell\mspell-damage-calculator.h" />
     <ClInclude Include="..\..\src\mspell\mspell-learn-checker.h" />
     <ClInclude Include="..\..\src\mspell\mspell-summon.h" />
-    <ClInclude Include="..\..\src\mspell\mspell-type.h" />
     <ClInclude Include="..\..\src\mspell\mspell-util.h" />
     <ClInclude Include="..\..\src\mspell\mspell-ball.h" />
     <ClInclude Include="..\..\src\player\player-personality-types.h" />

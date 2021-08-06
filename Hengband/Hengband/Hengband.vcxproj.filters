@@ -2876,9 +2876,6 @@
     <ClInclude Include="..\..\src\mspell\mspell-summon.h">
       <Filter>mspell</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\mspell\mspell-type.h">
-      <Filter>mspell</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\mspell\mspell-util.h">
       <Filter>mspell</Filter>
     </ClInclude>
@@ -4976,6 +4973,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object-enchant\apply-magic-gloves.h">
       <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\grid-type-definition.h">
+      <Filter>system</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

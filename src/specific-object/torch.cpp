@@ -1,5 +1,4 @@
-﻿#include <vector>
-
+﻿#include "specific-object/torch.h"
 #include "core/player-update-types.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
@@ -11,13 +10,14 @@
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "player/special-defense-types.h"
-#include "specific-object/torch.h"
 #include "sv-definition/sv-lite-types.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/point-2d.h"
+#include <vector>
 
 /*!
  * @brief 投擲時たいまつに投げやすい/焼棄/アンデッドスレイの特別効果を返す。
