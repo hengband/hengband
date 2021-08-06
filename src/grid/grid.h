@@ -82,15 +82,6 @@ typedef struct grid_template_type {
 
 // clang-format off
 
-/* Types of conversions */
-#define CONVERT_TYPE_FLOOR   0
-#define CONVERT_TYPE_WALL    1
-#define CONVERT_TYPE_INNER   2
-#define CONVERT_TYPE_OUTER   3
-#define CONVERT_TYPE_SOLID   4
-#define CONVERT_TYPE_STREAM1 5
-#define CONVERT_TYPE_STREAM2 6
-
 /* Types of doors */
 #define DOOR_DEFAULT    -1
 #define DOOR_DOOR        0

@@ -17,6 +17,16 @@
 #include "util/bit-flags-calculator.h"
 #include "world/world.h"
 
+enum conversion_type {
+    CONVERT_TYPE_FLOOR = 0,
+    CONVERT_TYPE_WALL = 1,
+    CONVERT_TYPE_INNER = 2,
+    CONVERT_TYPE_OUTER = 3,
+    CONVERT_TYPE_SOLID = 4,
+    CONVERT_TYPE_STREAM1 = 5,
+    CONVERT_TYPE_STREAM2 = 6,
+};
+
 /*** Terrain feature variables ***/
 
 /* The terrain feature arrays */
