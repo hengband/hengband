@@ -79,18 +79,4 @@ int count_dt(player_type *creature_ptr, POSITION *y, POSITION *x, bool (*test)(p
 void cave_lite_hack(floor_type *floor_ptr, POSITION y, POSITION x);
 void cave_redraw_later(floor_type *floor_ptr, POSITION y, POSITION x);
 void cave_note_and_redraw_later(floor_type *floor_ptr, POSITION y, POSITION x);
-
-/*
- * This macro allows us to efficiently add a grid to the "view" array,
- * note that we are never called for illegal grids, or for grids which
- * have already been placed into the "view" array, and we are never
- * called when the "view" array is full.
- */
-#define cave_view_hack(F,C,Y,X) \
-{\
-    if (!((C)->info & (CAVE_VIEW))){\
-    (C)->info |= (CAVE_VIEW); \
-    (F)->view_y[(F)->view_n] = (Y); \
-    (F)->view_x[(F)->view_n] = (X); \
-    (F)->view_n++;}\
-}
+void cave_view_hack(floor_type *floor_ptr, POSITION y, POSITION x);

@@ -51,27 +51,27 @@ static bool update_view_aux(player_type *subject_ptr, POSITION y, POSITION x, PO
     bool z2 = (v2 && (g2_c_ptr->info & CAVE_XTRA));
     if (z1 && z2) {
         g_ptr->info |= CAVE_XTRA;
-        cave_view_hack(floor_ptr, g_ptr, y, x);
+        cave_view_hack(floor_ptr, y, x);
         return wall;
     }
 
     if (z1) {
-        cave_view_hack(floor_ptr, g_ptr, y, x);
+        cave_view_hack(floor_ptr, y, x);
         return wall;
     }
 
     if (v1 && v2) {
-        cave_view_hack(floor_ptr, g_ptr, y, x);
+        cave_view_hack(floor_ptr, y, x);
         return wall;
     }
 
     if (wall) {
-        cave_view_hack(floor_ptr, g_ptr, y, x);
+        cave_view_hack(floor_ptr, y, x);
         return wall;
     }
 
     if (los(subject_ptr, subject_ptr->y, subject_ptr->x, y, x)) {
-        cave_view_hack(floor_ptr, g_ptr, y, x);
+        cave_view_hack(floor_ptr, y, x);
         return wall;
     }
 
@@ -136,13 +136,13 @@ void update_view(player_type *subject_ptr)
     x = subject_ptr->x;
     g_ptr = &floor_ptr->grid_array[y][x];
     g_ptr->info |= CAVE_XTRA;
-    cave_view_hack(floor_ptr, g_ptr, y, x);
+    cave_view_hack(floor_ptr, y, x);
 
     z = full * 2 / 3;
     for (d = 1; d <= z; d++) {
         g_ptr = &floor_ptr->grid_array[y + d][x + d];
         g_ptr->info |= CAVE_XTRA;
-        cave_view_hack(floor_ptr, g_ptr, y + d, x + d);
+        cave_view_hack(floor_ptr, y + d, x + d);
         if (!cave_los_grid(g_ptr))
             break;
     }
@@ -150,7 +150,7 @@ void update_view(player_type *subject_ptr)
     for (d = 1; d <= z; d++) {
         g_ptr = &floor_ptr->grid_array[y + d][x - d];
         g_ptr->info |= CAVE_XTRA;
-        cave_view_hack(floor_ptr, g_ptr, y + d, x - d);
+        cave_view_hack(floor_ptr, y + d, x - d);
         if (!cave_los_grid(g_ptr))
             break;
     }
@@ -158,7 +158,7 @@ void update_view(player_type *subject_ptr)
     for (d = 1; d <= z; d++) {
         g_ptr = &floor_ptr->grid_array[y - d][x + d];
         g_ptr->info |= CAVE_XTRA;
-        cave_view_hack(floor_ptr, g_ptr, y - d, x + d);
+        cave_view_hack(floor_ptr, y - d, x + d);
         if (!cave_los_grid(g_ptr))
             break;
     }
@@ -166,7 +166,7 @@ void update_view(player_type *subject_ptr)
     for (d = 1; d <= z; d++) {
         g_ptr = &floor_ptr->grid_array[y - d][x - d];
         g_ptr->info |= CAVE_XTRA;
-        cave_view_hack(floor_ptr, g_ptr, y - d, x - d);
+        cave_view_hack(floor_ptr, y - d, x - d);
         if (!cave_los_grid(g_ptr))
             break;
     }
@@ -174,7 +174,7 @@ void update_view(player_type *subject_ptr)
     for (d = 1; d <= full; d++) {
         g_ptr = &floor_ptr->grid_array[y + d][x];
         g_ptr->info |= CAVE_XTRA;
-        cave_view_hack(floor_ptr, g_ptr, y + d, x);
+        cave_view_hack(floor_ptr, y + d, x);
         if (!cave_los_grid(g_ptr))
             break;
     }
@@ -183,7 +183,7 @@ void update_view(player_type *subject_ptr)
     for (d = 1; d <= full; d++) {
         g_ptr = &floor_ptr->grid_array[y - d][x];
         g_ptr->info |= CAVE_XTRA;
-        cave_view_hack(floor_ptr, g_ptr, y - d, x);
+        cave_view_hack(floor_ptr, y - d, x);
         if (!cave_los_grid(g_ptr))
             break;
     }
@@ -192,7 +192,7 @@ void update_view(player_type *subject_ptr)
     for (d = 1; d <= full; d++) {
         g_ptr = &floor_ptr->grid_array[y][x + d];
         g_ptr->info |= CAVE_XTRA;
-        cave_view_hack(floor_ptr, g_ptr, y, x + d);
+        cave_view_hack(floor_ptr, y, x + d);
         if (!cave_los_grid(g_ptr))
             break;
     }
@@ -201,7 +201,7 @@ void update_view(player_type *subject_ptr)
     for (d = 1; d <= full; d++) {
         g_ptr = &floor_ptr->grid_array[y][x - d];
         g_ptr->info |= CAVE_XTRA;
-        cave_view_hack(floor_ptr, g_ptr, y, x - d);
+        cave_view_hack(floor_ptr, y, x - d);
         if (!cave_los_grid(g_ptr))
             break;
     }
@@ -337,7 +337,7 @@ void update_view(player_type *subject_ptr)
         if (g_ptr->info & CAVE_TEMP)
             continue;
 
-        cave_note_and_redraw_later(floor_ptr, g_ptr, y, x);
+        cave_note_and_redraw_later(floor_ptr, y, x);
     }
 
     for (const auto &[py, px] : points) {

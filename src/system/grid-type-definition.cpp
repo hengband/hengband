@@ -51,3 +51,8 @@ bool grid_type::is_redraw()
 {
     return any_bits(this->info, CAVE_REDRAW);
 }
+
+bool grid_type::is_view()
+{
+    return any_bits(this->info, CAVE_VIEW);
+}

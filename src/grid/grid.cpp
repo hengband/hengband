@@ -1387,3 +1387,16 @@ void cave_note_and_redraw_later(floor_type *floor_ptr, POSITION y, POSITION x)
     floor_ptr->grid_array[y][x].info |= CAVE_NOTE;
     cave_redraw_later(floor_ptr, y, x);
 }
+
+void cave_view_hack(floor_type* floor_ptr, POSITION y, POSITION x)
+{
+    auto *g_ptr = &floor_ptr->grid_array[y][x];
+    if (g_ptr->is_view()) {
+        return;
+    }
+
+    g_ptr->info |= CAVE_VIEW;
+    floor_ptr->view_y[floor_ptr->view_n] = y;
+    floor_ptr->view_x[floor_ptr->view_n] = x;
+    floor_ptr->view_n++;
+}

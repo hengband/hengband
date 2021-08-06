@@ -73,4 +73,5 @@ struct grid_type {
     bool is_icky();
     bool is_lite();
     bool is_redraw();
+    bool is_view();
 };
