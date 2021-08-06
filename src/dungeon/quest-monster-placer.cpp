@@ -3,7 +3,6 @@
 #include "floor/floor-generator-util.h"
 #include "floor/geometry.h"
 #include "grid/feature.h"
-#include "grid/grid.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-race.h"

@@ -10,7 +10,6 @@
 #include "game-option/keymap-directory-getter.h"
 #include "grid/feature-flag-types.h"
 #include "grid/feature.h"
-#include "grid/grid.h"
 #include "io/cursor.h"
 #include "io/input-key-acceptor.h"
 #include "io/screen-util.h"

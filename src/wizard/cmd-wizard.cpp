@@ -9,7 +9,6 @@
 #include "birth/inventory-initializer.h"
 #include "cmd-io/cmd-help.h"
 #include "core/asking-player.h"
-#include "grid/grid.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-requester.h"

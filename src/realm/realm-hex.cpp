@@ -27,7 +27,6 @@
 #include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "floor/geometry.h"
-#include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-requester.h"
 #include "monster-race/monster-race.h"

@@ -1,5 +1,4 @@
-﻿#include <vector>
-
+﻿#include "monster-floor/monster-lite.h"
 #include "core/player-update-types.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
@@ -7,7 +6,6 @@
 #include "grid/feature-flag-types.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-lite-util.h"
-#include "monster-floor/monster-lite.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags7.h"
 #include "monster/monster-status.h"
@@ -20,6 +18,7 @@
 #include "util/point-2d.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <vector>
 
 /*!
  * @brief モンスターによる光量状態更新 / Add a square to the changes array
@@ -191,7 +190,7 @@ void update_mon_lite(player_type *subject_ptr)
             }
 
             monster_lite_type tmp_ml;
-            monster_lite_type *ml_ptr = initialize_monster_lite_type(floor_ptr, &tmp_ml, m_ptr);
+            monster_lite_type *ml_ptr = initialize_monster_lite_type(floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].info, &tmp_ml, m_ptr);
             add_mon_lite(subject_ptr, points, ml_ptr->mon_fy, ml_ptr->mon_fx, ml_ptr);
             add_mon_lite(subject_ptr, points, ml_ptr->mon_fy + 1, ml_ptr->mon_fx, ml_ptr);
             add_mon_lite(subject_ptr, points, ml_ptr->mon_fy - 1, ml_ptr->mon_fx, ml_ptr);

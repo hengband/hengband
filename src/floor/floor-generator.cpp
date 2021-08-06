@@ -9,10 +9,6 @@
  * 2014 Deskull rearranged comment for Doxygen. \n
  */
 
-#include <algorithm>
-#include <array>
-#include <stack>
-
 #include "floor/floor-generator.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
@@ -55,6 +51,9 @@
 #include "window/main-window-util.h"
 #include "wizard/wizard-messages.h"
 #include "world/world.h"
+#include <algorithm>
+#include <array>
+#include <stack>
 
 /*!
  * @brief 闘技場用のアリーナ地形を作成する / Builds the on_defeat_arena_monster after it is entered -KMW-
