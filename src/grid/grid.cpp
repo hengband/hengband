@@ -16,7 +16,6 @@
 
 #include <queue>
 
-#include "grid/grid.h"
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
@@ -30,6 +29,7 @@
 #include "game-option/map-screen-options.h"
 #include "game-option/special-options.h"
 #include "grid/feature.h"
+#include "grid/grid.h"
 #include "grid/object-placer.h"
 #include "grid/trap.h"
 #include "io/screen-util.h"
@@ -1344,4 +1344,22 @@ int count_dt(player_type *creature_ptr, POSITION *y, POSITION *x, bool (*test)(p
 bool feat_uses_special(FEAT_IDX f_idx)
 {
     return has_flag(f_info[(f_idx)].flags, FF_SPECIAL);
+}
+
+/*
+ * This function allows us to efficiently add a grid to the "lite" array,
+ * note that we are never called for illegal grids, or for grids which
+ * have already been placed into the "lite" array, and we are never
+ * called when the "lite" array is full.
+ */
+void cave_lite_hack(floor_type *floor_ptr, POSITION y, POSITION x)
+{
+    auto *g_ptr = &floor_ptr->grid_array[y][x];
+    if (g_ptr->is_lite()) {
+        return;
+    }
+
+    g_ptr->info |= CAVE_LITE;
+    floor_ptr->lite_y[floor_ptr->lite_n] = y;
+    floor_ptr->lite_x[floor_ptr->lite_n++] = x;
 }

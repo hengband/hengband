@@ -41,3 +41,8 @@ bool grid_type::is_icky()
 {
     return any_bits(this->info, CAVE_ICKY);
 }
+
+bool grid_type::is_lite()
+{
+    return any_bits(this->info, CAVE_LITE);
+}

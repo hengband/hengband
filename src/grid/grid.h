@@ -76,24 +76,7 @@ void set_cave_feat(floor_type *floor_ptr, POSITION y, POSITION x, FEAT_IDX featu
 void add_cave_info(floor_type *floor_ptr, POSITION y, POSITION x, int cave_mask);
 FEAT_IDX get_feat_mimic(grid_type *g_ptr);
 int count_dt(player_type *creature_ptr, POSITION *y, POSITION *x, bool (*test)(player_type *, FEAT_IDX), bool under);
-
-// clang-format off
-
-/*
- * This macro allows us to efficiently add a grid to the "lite" array,
- * note that we are never called for illegal grids, or for grids which
- * have already been placed into the "lite" array, and we are never
- * called when the "lite" array is full.
- */
-#define cave_lite_hack(F,Y,X) \
-{\
-    if (!((F)->grid_array[Y][X].info & (CAVE_LITE))) \
-    { \
-        (F)->grid_array[Y][X].info |= (CAVE_LITE); \
-        (F)->lite_y[(F)->lite_n] = (Y); \
-        (F)->lite_x[(F)->lite_n++] = (X); \
-    } \
-}
+void cave_lite_hack(floor_type *floor_ptr, POSITION y, POSITION x);
 
 /*
  * For delayed visual update
@@ -131,5 +114,3 @@ int count_dt(player_type *creature_ptr, POSITION *y, POSITION *x, bool (*test)(p
     (F)->view_x[(F)->view_n] = (X); \
     (F)->view_n++;}\
 }
-
-// clang-format on

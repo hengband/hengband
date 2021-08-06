@@ -71,4 +71,5 @@ struct grid_type {
     bool is_outer();
     bool is_solid();
     bool is_icky();
+    bool is_lite();
 };
