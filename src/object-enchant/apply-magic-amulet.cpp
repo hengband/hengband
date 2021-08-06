@@ -17,12 +17,19 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
+/*
+ * @brief コンストラクタ
+ * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
+ * @param level 生成基準階
+ * @param power 生成ランク
+ */
 AmuletEnchanter::AmuletEnchanter(player_type *owner_ptr, object_type *o_ptr, DEPTH level, int power)
+    : owner_ptr(owner_ptr)
+    , o_ptr(o_ptr)
+    , level(level)
+    , power(power)
 {
-    this->owner_ptr = owner_ptr;
-    this->o_ptr = o_ptr;
-    this->level = level;
-    this->power = power;
 }
 
 /*!
@@ -33,11 +40,15 @@ AmuletEnchanter::AmuletEnchanter(player_type *owner_ptr, object_type *o_ptr, DEP
  * @param level 生成基準階
  * @param power 生成ランク
  * @return なし
- * @details power > 2 is debug only
+ * @details power > 2はデバッグ専用.
  */
 void AmuletEnchanter::apply_magic()
 {
-    enchant();
+    if ((this->power == 0) && (randint0(100) < 50)) {
+        this->power = -1;
+    }
+
+    this->enchant();
     if ((one_in_(150) && (this->power > 0) && !object_is_cursed(this->o_ptr) && (this->level > 79)) || (this->power > 2)) {
         this->o_ptr->pval = MIN(this->o_ptr->pval, 4);
         become_random_artifact(owner_ptr, this->o_ptr, false);

@@ -1,0 +1,80 @@
+﻿/*
+ * @brief 盾に耐性等の追加効果を付与する処理
+ * @date 2021/08/01
+ * @author Hourier
+ * @details ドラゴンシールドは必ず付与する. それ以外は確率的に付与する.
+ */
+
+#include "object-enchant/apply-magic-shield.h"
+#include "artifact/random-art-generator.h"
+#include "inventory/inventory-slot-types.h"
+#include "object-enchant/object-boost.h"
+#include "object-enchant/object-ego.h"
+#include "sv-definition/sv-protector-types.h"
+#include "system/object-type-definition.h"
+
+/*
+ * @brief コンストラクタ
+ * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
+ * @param level 生成基準階
+ * @param power 生成ランク
+ */
+ShieldEnchanter::ShieldEnchanter(player_type *owner_ptr, object_type *o_ptr, DEPTH level, int power)
+    : AbstractProtectorEnchanter{ o_ptr, level, power }
+    , owner_ptr(owner_ptr)
+{
+}
+
+/*
+ * @details power > 2はデバッグ専用.
+ */
+void ShieldEnchanter::apply_magic()
+{
+    if (this->o_ptr->sval == SV_DRAGON_SHIELD) {
+        dragon_resist(this->o_ptr);
+        if (!one_in_(3)) {
+            return;
+        }
+    }
+
+    if (this->power <= 1) {
+        return;
+    }
+
+    if (one_in_(20) || (this->power > 2)) {
+        become_random_artifact(this->owner_ptr, this->o_ptr, false);
+        return;
+    }
+
+    this->give_ego_index();
+}
+
+/*
+ * @details 金属製の盾は魔法を受け付けない.
+ * @todo ミラー・シールドはエゴの付与確率が低い. この仕様で良いか要確認.
+ */
+void ShieldEnchanter::give_ego_index()
+{
+    while (true) {
+        this->o_ptr->name2 = get_random_ego(INVEN_SUB_HAND, true);
+        auto is_metal = this->o_ptr->sval == SV_SMALL_METAL_SHIELD;
+        is_metal |= this->o_ptr->sval == SV_LARGE_METAL_SHIELD;
+        if (!is_metal && (this->o_ptr->name2 == EGO_S_DWARVEN)) {
+            continue;
+        }
+
+        break;
+    }
+
+    switch (this->o_ptr->name2) {
+    case EGO_REFLECTION:
+        if (this->o_ptr->sval == SV_MIRROR_SHIELD) {
+            this->o_ptr->name2 = 0;
+        }
+
+        return;
+    default:
+        return;
+    }
+}

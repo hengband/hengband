@@ -566,12 +566,19 @@ hengband_SOURCES = \
 	object-activation/activation-teleport.cpp object-activation/activation-teleport.h \
 	object-activation/activation-util.cpp object-activation/activation-util.h \
 	\
+	object-enchant/abstract-protector-enchanter.cpp object-enchant/abstract-protector-enchanter.h \
 	object-enchant/activation-info-table.cpp object-enchant/activation-info-table.h \
 	object-enchant/apply-magic.cpp object-enchant/apply-magic.h \
 	object-enchant/apply-magic-amulet.cpp object-enchant/apply-magic-amulet.h \
 	object-enchant/apply-magic-armor.cpp object-enchant/apply-magic-armor.h \
+	object-enchant/apply-magic-boots.cpp object-enchant/apply-magic-boots.h \
+	object-enchant/apply-magic-cloak.cpp object-enchant/apply-magic-cloak.h \
+	object-enchant/apply-magic-crown.cpp object-enchant/apply-magic-crown.h \
+	object-enchant/apply-magic-gloves.cpp object-enchant/apply-magic-gloves.h \
+	object-enchant/apply-magic-helm.cpp object-enchant/apply-magic-helm.h \
 	object-enchant/apply-magic-others.cpp object-enchant/apply-magic-others.h \
 	object-enchant/apply-magic-ring.cpp object-enchant/apply-magic-ring.h \
+	object-enchant/apply-magic-shield.cpp object-enchant/apply-magic-shield.h \
 	object-enchant/apply-magic-weapon.cpp object-enchant/apply-magic-weapon.h \
 	object-enchant/dragon-breaths-table.cpp object-enchant/dragon-breaths-table.h \
 	object-enchant/enchanter-base.h \
