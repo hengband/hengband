@@ -66,4 +66,8 @@ struct grid_type {
 
     bool is_floor();
     bool is_room();
+    bool is_extra();
+    bool is_inner();
+    bool is_outer();
+    bool is_solid();
 };

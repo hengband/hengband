@@ -53,11 +53,6 @@ enum grid_bold_type {
 #define is_outer_bold(F, Y, X) (F->grid_array[Y][X].info & CAVE_OUTER)
 #define is_solid_bold(F, Y, X) (F->grid_array[Y][X].info & CAVE_SOLID)
 
-#define is_extra_grid(C) ((C)->info & CAVE_EXTRA)
-#define is_inner_grid(C) ((C)->info & CAVE_INNER)
-#define is_outer_grid(C) ((C)->info & CAVE_OUTER)
-#define is_solid_grid(C) ((C)->info & CAVE_SOLID)
-
 struct floor_type;
 struct grid_type;
 struct player_type;

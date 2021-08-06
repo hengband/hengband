@@ -324,7 +324,7 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
 
             /* Only convert "granite" walls */
             if (streamer_is_wall) {
-                if (!is_extra_grid(g_ptr) && !is_inner_grid(g_ptr) && !is_outer_grid(g_ptr) && !is_solid_grid(g_ptr))
+                if (!g_ptr->is_extra() && !g_ptr->is_inner() && !g_ptr->is_outer() && !g_ptr->is_solid())
                     continue;
                 if (is_closed_door(player_ptr, g_ptr->feat))
                     continue;

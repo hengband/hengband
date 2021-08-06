@@ -84,10 +84,10 @@ bool build_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, dt_type *dt_pt
         }
 
         g_ptr = &floor_ptr->grid_array[tmp_row][tmp_col];
-        if (is_solid_grid(g_ptr))
+        if (g_ptr->is_solid())
             continue;
 
-        if (is_outer_grid(g_ptr)) {
+        if (g_ptr->is_outer()) {
             POSITION y = tmp_row + row_dir;
             POSITION x = tmp_col + col_dir;
             if (is_outer_bold(floor_ptr, y, x) || is_solid_bold(floor_ptr, y, x))
@@ -109,7 +109,7 @@ bool build_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, dt_type *dt_pt
         } else if (g_ptr->info & (CAVE_ROOM)) {
             row1 = tmp_row;
             col1 = tmp_col;
-        } else if (is_extra_grid(g_ptr) || is_inner_grid(g_ptr) || is_solid_grid(g_ptr)) {
+        } else if (g_ptr->is_extra() || g_ptr->is_inner() || g_ptr->is_solid()) {
             row1 = tmp_row;
             col1 = tmp_col;
             if (dd_ptr->tunn_n >= TUNN_MAX)
@@ -162,7 +162,7 @@ static bool set_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, POSITION 
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[*y][*x];
-    if (!in_bounds(floor_ptr, *y, *x) || is_inner_grid(g_ptr))
+    if (!in_bounds(floor_ptr, *y, *x) || g_ptr->is_inner())
         return true;
 
     if (is_extra_bold(floor_ptr, *y, *x)) {
@@ -178,7 +178,7 @@ static bool set_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, POSITION 
     if (is_floor_bold(floor_ptr, *y, *x))
         return true;
 
-    if (is_outer_grid(g_ptr) && affectwall) {
+    if (g_ptr->is_outer() && affectwall) {
         if (dd_ptr->wall_n >= WALL_MAX)
             return false;
 
@@ -195,7 +195,7 @@ static bool set_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, POSITION 
         return true;
     }
 
-    if (is_solid_grid(g_ptr) && affectwall) {
+    if (g_ptr->is_solid() && affectwall) {
         int i = 50;
         int dy = 0;
         int dx = 0;
@@ -368,7 +368,7 @@ bool build_tunnel2(player_type *player_ptr, dun_data_type *dd_ptr, POSITION x1, 
     }
 
     g_ptr = &floor_ptr->grid_array[y3][x3];
-    if (is_solid_grid(g_ptr)) {
+    if (g_ptr->is_solid()) {
         int i = 50;
         dy = 0;
         dx = 0;
