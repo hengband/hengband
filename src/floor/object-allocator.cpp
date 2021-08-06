@@ -31,16 +31,16 @@
 static int next_to_walls(floor_type *floor_ptr, POSITION y, POSITION x)
 {
     int k = 0;
-    if (in_bounds(floor_ptr, y + 1, x) && is_extra_bold(floor_ptr, y + 1, x))
+    if (in_bounds(floor_ptr, y + 1, x) && floor_ptr->grid_array[y + 1][x].is_extra())
         k++;
 
-    if (in_bounds(floor_ptr, y - 1, x) && is_extra_bold(floor_ptr, y - 1, x))
+    if (in_bounds(floor_ptr, y - 1, x) && floor_ptr->grid_array[y - 1][x].is_extra())
         k++;
 
-    if (in_bounds(floor_ptr, y, x + 1) && is_extra_bold(floor_ptr, y, x + 1))
+    if (in_bounds(floor_ptr, y, x + 1) && floor_ptr->grid_array[y][x + 1].is_extra())
         k++;
 
-    if (in_bounds(floor_ptr, y, x - 1) && is_extra_bold(floor_ptr, y, x - 1))
+    if (in_bounds(floor_ptr, y, x - 1) && floor_ptr->grid_array[y][x - 1].is_extra())
         k++;
 
     return k;

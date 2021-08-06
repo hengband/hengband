@@ -165,7 +165,7 @@ static bool set_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, POSITION 
     if (!in_bounds(floor_ptr, *y, *x) || g_ptr->is_inner())
         return true;
 
-    if (is_extra_bold(floor_ptr, *y, *x)) {
+    if (g_ptr->is_extra()) {
         if (dd_ptr->tunn_n >= TUNN_MAX)
             return false;
 

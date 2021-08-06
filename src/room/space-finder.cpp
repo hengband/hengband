@@ -38,10 +38,11 @@ static void set_floor(player_type *player_ptr, POSITION x, POSITION y)
     if (!in_bounds(floor_ptr, y, x))
         return;
 
-    if (floor_ptr->grid_array[y][x].is_room())
+    auto *g_ptr = &floor_ptr->grid_array[y][x];
+    if (g_ptr->is_room())
         return;
 
-    if (is_extra_bold(floor_ptr, y, x))
+    if (g_ptr->is_extra())
         place_bold(player_ptr, y, x, GB_FLOOR);
 }
 

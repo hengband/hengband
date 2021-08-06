@@ -192,11 +192,12 @@ void build_room(player_type *player_ptr, POSITION x1, POSITION x2, POSITION y1, 
 
     for (POSITION x = 1; x < xsize; x++) {
         for (POSITION y = 1; y < ysize; y++) {
-            if (is_extra_bold(floor_ptr, y1 + y, x1 + x)) {
+            auto *g_ptr = &floor_ptr->grid_array[y1 + y][x1 + x];
+            if (g_ptr->is_extra()) {
                 place_bold(player_ptr, y1 + y, x1 + x, GB_FLOOR);
-                floor_ptr->grid_array[y1 + y][x1 + x].info |= (CAVE_ROOM | CAVE_ICKY);
+                g_ptr->info |= (CAVE_ROOM | CAVE_ICKY);
             } else {
-                floor_ptr->grid_array[y1 + y][x1 + x].info |= (CAVE_ROOM | CAVE_ICKY);
+                g_ptr->info |= (CAVE_ROOM | CAVE_ICKY);
             }
         }
     }
@@ -356,7 +357,7 @@ void add_outer_wall(player_type *player_ptr, POSITION x, POSITION y, int light, 
 
     grid_type *g_ptr;
     g_ptr = &floor_ptr->grid_array[y][x];
-    if (g_ptr->info & CAVE_ROOM)
+    if (g_ptr->is_room())
         return;
 
     g_ptr->info |= CAVE_ROOM;
@@ -376,7 +377,7 @@ void add_outer_wall(player_type *player_ptr, POSITION x, POSITION y, int light, 
         return;
     }
 
-    if (is_extra_bold(floor_ptr, y, x)) {
+    if (g_ptr->is_extra()) {
         place_bold(player_ptr, y, x, GB_OUTER);
         if (light)
             g_ptr->info |= CAVE_GLOW;
