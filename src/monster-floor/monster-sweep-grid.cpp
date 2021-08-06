@@ -360,7 +360,7 @@ bool get_movable_grid(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
                 }
             }
 
-            if (floor_ptr->grid_array[target_ptr->y][target_ptr->x].info & CAVE_ROOM)
+            if (floor_ptr->grid_array[target_ptr->y][target_ptr->x].is_room())
                 room -= 2;
             if (r_ptr->ability_flags.none())
                 room -= 2;

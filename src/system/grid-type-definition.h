@@ -65,4 +65,5 @@ struct grid_type {
     byte when{}; /* Hack -- when cost was computed */
 
     bool is_floor();
+    bool is_room();
 };
