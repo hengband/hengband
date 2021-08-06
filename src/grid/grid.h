@@ -40,8 +40,6 @@ enum grid_bold_type {
     GB_SOLID_NOPERM
 };
 
-#define is_solid_bold(F, Y, X) (F->grid_array[Y][X].info & CAVE_SOLID)
-
 struct floor_type;
 struct grid_type;
 struct player_type;

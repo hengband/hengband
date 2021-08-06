@@ -199,7 +199,7 @@ static bool set_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, POSITION 
         int i = 50;
         int dy = 0;
         int dx = 0;
-        while ((i > 0) && is_solid_bold(floor_ptr, *y + dy, *x + dx)) {
+        while ((i > 0) && floor_ptr->grid_array[*y + dy][*x + dx].is_solid()) {
             dy = randint0(3) - 1;
             dx = randint0(3) - 1;
             if (!in_bounds(floor_ptr, *y + dy, *x + dx)) {
@@ -372,7 +372,7 @@ bool build_tunnel2(player_type *player_ptr, dun_data_type *dd_ptr, POSITION x1, 
         int i = 50;
         dy = 0;
         dx = 0;
-        while ((i > 0) && is_solid_bold(floor_ptr, y3 + dy, x3 + dx)) {
+        while ((i > 0) && floor_ptr->grid_array[y3 + dy][x3 + dx].is_solid()) {
             dy = randint0(3) - 1;
             dx = randint0(3) - 1;
             if (!in_bounds(floor_ptr, y3 + dy, x3 + dx)) {
