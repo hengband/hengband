@@ -393,7 +393,7 @@ bool build_tunnel2(player_type *player_ptr, dun_data_type *dd_ptr, POSITION x1, 
         g_ptr = &floor_ptr->grid_array[y3][x3];
     }
 
-    if (is_floor_grid(g_ptr)) {
+    if (g_ptr->is_floor()) {
         if (build_tunnel2(player_ptr, dd_ptr, x1, y1, x3, y3, type, cutoff)) {
             if ((floor_ptr->grid_array[y3][x3].info & CAVE_ROOM) || (randint1(100) > 95)) {
                 retval = build_tunnel2(player_ptr, dd_ptr, x3, y3, x2, y2, type, cutoff);

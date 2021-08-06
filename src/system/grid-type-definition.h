@@ -63,4 +63,6 @@ struct grid_type {
     byte costs[FLOW_MAX]{}; /* Hack -- cost of flowing */
     byte dists[FLOW_MAX]{}; /* Hack -- distance from player */
     byte when{}; /* Hack -- when cost was computed */
+
+    bool is_floor();
 };

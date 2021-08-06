@@ -24,7 +24,7 @@ void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x)
     grid_type *g_ptr;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     g_ptr = &floor_ptr->grid_array[y][x];
-    if (!is_floor_grid(g_ptr) || !g_ptr->o_idx_list.empty())
+    if (!g_ptr->is_floor() || !g_ptr->o_idx_list.empty())
         return;
 
     if (!floor_ptr->dun_level)

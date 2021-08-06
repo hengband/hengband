@@ -2316,6 +2316,9 @@
     <ClCompile Include="..\..\src\object-enchant\apply-magic-gloves.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\system\grid-type-definition.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
