@@ -57,7 +57,6 @@ bool build_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, dt_type *dt_pt
     POSITION start_row, start_col;
     int main_loop_count = 0;
     bool door_flag = false;
-    grid_type *g_ptr;
     start_row = row1;
     start_col = col1;
     correct_dir(&row_dir, &col_dir, row1, col1, row2, col2);
@@ -83,14 +82,15 @@ bool build_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, dt_type *dt_pt
             tmp_col = col1 + col_dir;
         }
 
-        g_ptr = &floor_ptr->grid_array[tmp_row][tmp_col];
-        if (g_ptr->is_solid())
+        auto *tmp_g_ptr = &floor_ptr->grid_array[tmp_row][tmp_col];
+        if (tmp_g_ptr->is_solid())
             continue;
 
-        if (g_ptr->is_outer()) {
+        if (tmp_g_ptr->is_outer()) {
             POSITION y = tmp_row + row_dir;
             POSITION x = tmp_col + col_dir;
-            if (is_outer_bold(floor_ptr, y, x) || is_solid_bold(floor_ptr, y, x))
+            auto *g_ptr = &floor_ptr->grid_array[y][x];
+            if (g_ptr->is_outer() || g_ptr->is_solid())
                 continue;
 
             row1 = tmp_row;
@@ -103,13 +103,13 @@ bool build_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, dt_type *dt_pt
             dd_ptr->wall_n++;
             for (y = row1 - 1; y <= row1 + 1; y++)
                 for (x = col1 - 1; x <= col1 + 1; x++)
-                    if (is_outer_bold(floor_ptr, y, x))
+                    if (floor_ptr->grid_array[y][x].is_outer())
                         place_bold(player_ptr, y, x, GB_SOLID_NOPERM);
 
-        } else if (g_ptr->info & (CAVE_ROOM)) {
+        } else if (tmp_g_ptr->info & (CAVE_ROOM)) {
             row1 = tmp_row;
             col1 = tmp_col;
-        } else if (g_ptr->is_extra() || g_ptr->is_inner() || g_ptr->is_solid()) {
+        } else if (tmp_g_ptr->is_extra() || tmp_g_ptr->is_inner() || tmp_g_ptr->is_solid()) {
             row1 = tmp_row;
             col1 = tmp_col;
             if (dd_ptr->tunn_n >= TUNN_MAX)
@@ -187,7 +187,7 @@ static bool set_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, POSITION 
         dd_ptr->wall_n++;
         for (int j = *y - 1; j <= *y + 1; j++)
             for (int i = *x - 1; i <= *x + 1; i++)
-                if (is_outer_bold(floor_ptr, j, i))
+                if (floor_ptr->grid_array[j][i].is_outer())
                     place_bold(player_ptr, j, i, GB_SOLID_NOPERM);
 
         floor_ptr->grid_array[*y][*x].mimic = 0;

@@ -40,8 +40,6 @@ enum grid_bold_type {
     GB_SOLID_NOPERM
 };
 
-#define is_inner_bold(F, Y, X) (F->grid_array[Y][X].info & CAVE_INNER)
-#define is_outer_bold(F, Y, X) (F->grid_array[Y][X].info & CAVE_OUTER)
 #define is_solid_bold(F, Y, X) (F->grid_array[Y][X].info & CAVE_SOLID)
 
 struct floor_type;

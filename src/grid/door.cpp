@@ -19,7 +19,7 @@
 void add_door(player_type *player_ptr, POSITION x, POSITION y)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (!is_outer_bold(floor_ptr, y, x))
+    if (!floor_ptr->grid_array[y][x].is_outer())
         return;
 
     /* look at:
