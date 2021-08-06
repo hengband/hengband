@@ -15,6 +15,7 @@
 #include "monster/monster-util.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object/object-kind-hook.h"
+#include "room/door-definition.h"
 #include "room/space-finder.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"

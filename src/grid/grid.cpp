@@ -1338,6 +1338,9 @@ int count_dt(player_type *creature_ptr, POSITION *y, POSITION *x, bool (*test)(p
     return count;
 }
 
+/*!
+ * @brief マス構造体のspecial要素を利用する地形かどうかを判定する.
+ */
 bool feat_uses_special(FEAT_IDX f_idx)
 {
     return has_flag(f_info[(f_idx)].flags, FF_SPECIAL);

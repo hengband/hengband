@@ -43,6 +43,7 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "room/cave-filler.h"
+#include "room/door-definition.h"
 #include "room/lake-types.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"

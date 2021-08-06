@@ -18,6 +18,7 @@
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
+#include "room/door-definition.h"
 #include "room/space-finder.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
