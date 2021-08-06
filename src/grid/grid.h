@@ -77,28 +77,8 @@ void add_cave_info(floor_type *floor_ptr, POSITION y, POSITION x, int cave_mask)
 FEAT_IDX get_feat_mimic(grid_type *g_ptr);
 int count_dt(player_type *creature_ptr, POSITION *y, POSITION *x, bool (*test)(player_type *, FEAT_IDX), bool under);
 void cave_lite_hack(floor_type *floor_ptr, POSITION y, POSITION x);
-
-/*
- * For delayed visual update
- */
-#define cave_note_and_redraw_later(F,C,Y,X) \
-{\
-    (C)->info |= CAVE_NOTE; \
-    cave_redraw_later((F), (C), (Y), (X)); \
-}
-
-/*
-* For delayed visual update
-*/
-#define cave_redraw_later(F,G,Y,X) \
-{\
-    if (!((G)->info & CAVE_REDRAW)) \
-    { \
-        (G)->info |= CAVE_REDRAW; \
-        (F)->redraw_y[(F)->redraw_n] = (Y); \
-        (F)->redraw_x[(F)->redraw_n++] = (X); \
-    } \
-}
+void cave_redraw_later(floor_type *floor_ptr, POSITION y, POSITION x);
+void cave_note_and_redraw_later(floor_type *floor_ptr, POSITION y, POSITION x);
 
 /*
  * This macro allows us to efficiently add a grid to the "view" array,

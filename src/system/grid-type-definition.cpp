@@ -46,3 +46,8 @@ bool grid_type::is_lite()
 {
     return any_bits(this->info, CAVE_LITE);
 }
+
+bool grid_type::is_redraw()
+{
+    return any_bits(this->info, CAVE_REDRAW);
+}

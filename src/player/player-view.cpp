@@ -346,7 +346,7 @@ void update_view(player_type *subject_ptr)
         if (g_ptr->info & CAVE_VIEW)
             continue;
 
-        cave_redraw_later(floor_ptr, g_ptr, py, px);
+        cave_redraw_later(floor_ptr, py, px);
     }
 
     subject_ptr->update |= PU_DELAY_VIS;

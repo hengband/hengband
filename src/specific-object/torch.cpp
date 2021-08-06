@@ -279,7 +279,7 @@ void update_lite(player_type *subject_ptr)
         if (g_ptr->info & CAVE_TEMP)
             continue;
 
-        cave_note_and_redraw_later(floor_ptr, g_ptr, y, x);
+        cave_note_and_redraw_later(floor_ptr, y, x);
     }
 
     // 前回照らされていた座標たちのうち、状態が変わったものについて再描画フラグを立てる。
@@ -289,7 +289,7 @@ void update_lite(player_type *subject_ptr)
         if (g_ptr->info & CAVE_LITE)
             continue;
 
-        cave_redraw_later(floor_ptr, g_ptr, y, x);
+        cave_redraw_later(floor_ptr, y, x);
     }
 
     subject_ptr->update |= PU_DELAY_VIS;

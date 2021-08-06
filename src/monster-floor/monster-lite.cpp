@@ -277,9 +277,9 @@ void update_mon_lite(player_type *subject_ptr)
         g_ptr = &floor_ptr->grid_array[fy][fx];
         if (g_ptr->info & CAVE_TEMP) {
             if ((g_ptr->info & (CAVE_VIEW | CAVE_MNLT)) == CAVE_VIEW)
-                cave_note_and_redraw_later(floor_ptr, g_ptr, fy, fx);
+                cave_note_and_redraw_later(floor_ptr, fy, fx);
         } else if ((g_ptr->info & (CAVE_VIEW | CAVE_MNDK)) == CAVE_VIEW)
-            cave_note_and_redraw_later(floor_ptr, g_ptr, fy, fx);
+            cave_note_and_redraw_later(floor_ptr, fy, fx);
 
         points.emplace_back(fy, fx);
     }
@@ -291,9 +291,9 @@ void update_mon_lite(player_type *subject_ptr)
         grid_type *const g_ptr = &floor_ptr->grid_array[fy][fx];
         if (g_ptr->info & CAVE_MNLT) {
             if ((g_ptr->info & (CAVE_VIEW | CAVE_TEMP)) == CAVE_VIEW)
-                cave_note_and_redraw_later(floor_ptr, g_ptr, fy, fx);
+                cave_note_and_redraw_later(floor_ptr, fy, fx);
         } else if ((g_ptr->info & (CAVE_VIEW | CAVE_XTRA)) == CAVE_VIEW)
-            cave_note_and_redraw_later(floor_ptr, g_ptr, fy, fx);
+            cave_note_and_redraw_later(floor_ptr, fy, fx);
 
         floor_ptr->mon_lite_x[floor_ptr->mon_lite_n] = fx;
         floor_ptr->mon_lite_y[floor_ptr->mon_lite_n] = fy;

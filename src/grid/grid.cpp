@@ -1363,3 +1363,27 @@ void cave_lite_hack(floor_type *floor_ptr, POSITION y, POSITION x)
     floor_ptr->lite_y[floor_ptr->lite_n] = y;
     floor_ptr->lite_x[floor_ptr->lite_n++] = x;
 }
+
+/*
+ * For delayed visual update
+ */
+void cave_redraw_later(floor_type *floor_ptr, POSITION y, POSITION x)
+{
+    auto *g_ptr = &floor_ptr->grid_array[y][x];
+    if (g_ptr->is_redraw()) {
+        return;
+    }
+
+    g_ptr->info |= CAVE_REDRAW;
+    floor_ptr->redraw_y[floor_ptr->redraw_n] = y;
+    floor_ptr->redraw_x[floor_ptr->redraw_n++] = x;
+}
+
+/*
+ * For delayed visual update
+ */
+void cave_note_and_redraw_later(floor_type *floor_ptr, POSITION y, POSITION x)
+{
+    floor_ptr->grid_array[y][x].info |= CAVE_NOTE;
+    cave_redraw_later(floor_ptr, y, x);
+}
