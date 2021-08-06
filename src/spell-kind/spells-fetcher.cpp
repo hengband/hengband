@@ -61,7 +61,7 @@ void fetch_item(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require
             return;
         }
 
-        if (g_ptr->info & CAVE_ICKY) {
+        if (g_ptr->is_icky()) {
             msg_print(_("アイテムがコントロールを外れて落ちた。", "The item slips from your control."));
             return;
         }

@@ -60,7 +60,7 @@ bool place_quest_monsters(player_type *creature_ptr)
                     if (distance(y, x, creature_ptr->y, creature_ptr->x) < 10)
                         continue;
 
-                    if (g_ptr->info & CAVE_ICKY)
+                    if (g_ptr->is_icky())
                         continue;
                     else
                         break;

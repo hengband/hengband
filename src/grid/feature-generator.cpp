@@ -10,7 +10,6 @@
 #include "game-option/game-play-options.h"
 #include "grid/door.h"
 #include "grid/feature-flag-types.h"
-#include "grid/grid.h"
 #include "room/lake-types.h"
 #include "room/rooms-builder.h"
 #include "system/dungeon-data-definition.h"

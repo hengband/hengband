@@ -1,6 +1,12 @@
 ﻿#include "system/grid-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
+/*!
+ * @brief 指定座標がFLOOR属性を持ったマスかどうかを返す
+ * @param Y 指定Y座標
+ * @param X 指定X座標
+ * @return FLOOR属性を持っているならばTRUE
+ */
 bool grid_type::is_floor()
 {
     return any_bits(this->info, CAVE_FLOOR);
@@ -29,4 +35,9 @@ bool grid_type::is_outer()
 bool grid_type::is_solid()
 {
     return any_bits(this->info, CAVE_SOLID);
+}
+
+bool grid_type::is_icky()
+{
+    return any_bits(this->info, CAVE_ICKY);
 }

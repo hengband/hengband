@@ -799,7 +799,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                         flag = true;
                 }
 
-                if (!is_cave_empty_bold(caster_ptr, y, x) || (caster_ptr->current_floor_ptr->grid_array[y][x].info & CAVE_ICKY)
+                if (!is_cave_empty_bold(caster_ptr, y, x) || caster_ptr->current_floor_ptr->grid_array[y][x].is_icky()
                     || (distance(y, x, caster_ptr->y, caster_ptr->x) > plev + 2)) {
                     msg_print(_("そこには移動できない。", "Can not teleport to there."));
                     continue;

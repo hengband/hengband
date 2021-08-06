@@ -242,7 +242,7 @@ bool new_player_spot(player_type *creature_ptr)
             continue;
 
         /* Refuse to start on anti-teleport grids */
-        if (g_ptr->info & (CAVE_ICKY))
+        if (g_ptr->is_icky())
             continue;
 
         break;
@@ -1102,7 +1102,7 @@ bool cave_player_teleportable_bold(player_type *player_ptr, POSITION y, POSITION
         return false;
 
     /* No magical teleporting into vaults and such */
-    if (!(mode & TELEPORT_NONMAGICAL) && (g_ptr->info & CAVE_ICKY))
+    if (!(mode & TELEPORT_NONMAGICAL) && g_ptr->is_icky())
         return false;
 
     if (g_ptr->m_idx && (g_ptr->m_idx != player_ptr->riding))
