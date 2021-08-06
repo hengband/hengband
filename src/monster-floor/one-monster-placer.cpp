@@ -373,9 +373,9 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
     }
 
     if (any_bits(r_ptr->flags7, RF7_SELF_LD_MASK))
-        set_bits(player_ptr->update, (PU_MON_LITE));
+        set_bits(player_ptr->update, PU_MON_LITE);
     else if (any_bits(r_ptr->flags7, RF7_HAS_LD_MASK) && !monster_csleep_remaining(m_ptr))
-        set_bits(player_ptr->update, (PU_MON_LITE));
+        set_bits(player_ptr->update, PU_MON_LITE);
     update_monster(player_ptr, g_ptr->m_idx, true);
 
     real_r_ptr(m_ptr)->cur_num++;
