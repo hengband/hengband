@@ -41,13 +41,6 @@ enum grid_bold_type {
 };
 
 /*!
- * @brief 指定座標に瓦礫を配置する
- * @param Y 指定Y座標
- * @param X 指定X座標
- */
-#define place_rubble(F, Y, X) set_cave_feat(F, Y, X, feat_rubble)
-
-/*!
  * @brief 指定座標がFLOOR属性を持ったマスかどうかを返す
  * @param Y 指定Y座標
  * @param X 指定X座標

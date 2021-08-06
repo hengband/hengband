@@ -2,9 +2,9 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
+#include "floor/dungeon-tunnel-util.h"
 #include "floor/floor-allocation-types.h"
 #include "floor/floor-generator-util.h"
-#include "floor/dungeon-tunnel-util.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-types.h"
 #include "grid/feature.h"
@@ -142,6 +142,16 @@ bool alloc_stairs(player_type *owner_ptr, FEAT_IDX feat, int num, int walls)
     }
 
     return true;
+}
+
+/*!
+ * @brief 指定座標に瓦礫を配置する
+ * @param Y 指定Y座標
+ * @param X 指定X座標
+ */
+static void place_rubble(floor_type *floor_ptr, POSITION y, POSITION x)
+{
+    set_cave_feat(floor_ptr, y, x, feat_rubble);
 }
 
 /*!
