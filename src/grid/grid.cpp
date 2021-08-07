@@ -259,30 +259,6 @@ bool new_player_spot(player_type *creature_ptr)
 }
 
 /*!
- * @brief マスにフロア端用の永久壁を配置する / Set boundary mimic and add "solid" perma-wall
- * @param g_ptr 永久壁を配置したいマス構造体の参照ポインタ
- */
-void place_bound_perm_wall(player_type *player_ptr, grid_type *g_ptr)
-{
-    if (bound_walls_perm) {
-        /* Clear boundary mimic */
-        g_ptr->mimic = 0;
-    } else {
-        feature_type *f_ptr = &f_info[g_ptr->feat];
-
-        /* Hack -- Decline boundary walls with known treasure  */
-        if ((has_flag(f_ptr->flags, FF_HAS_GOLD) || has_flag(f_ptr->flags, FF_HAS_ITEM)) && !has_flag(f_ptr->flags, FF_SECRET))
-            g_ptr->feat = feat_state(player_ptr->current_floor_ptr, g_ptr->feat, FF_ENSECRET);
-
-        /* Set boundary mimic */
-        g_ptr->mimic = g_ptr->feat;
-    }
-
-    /* Add "solid" perma-wall */
-    place_grid(player_ptr, g_ptr, GB_SOLID_PERM);
-}
-
-/*!
  * @brief マスに看破済みの罠があるかの判定を行う。 / Return TRUE if the given grid is a known trap
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param g_ptr マス構造体の参照ポインタ
