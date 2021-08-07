@@ -1195,14 +1195,6 @@ void set_cave_feat(floor_type *floor_ptr, POSITION y, POSITION x, FEAT_IDX featu
 }
 
 /*!
- * @todo intをenumに変更する
- */
-void add_cave_info(floor_type *floor_ptr, POSITION y, POSITION x, int cave_mask)
-{
-    floor_ptr->grid_array[y][x].info |= cave_mask;
-}
-
-/*!
  * @brief プレイヤーの周辺9マスに該当する地形がいくつあるかを返す /
  * Attempt to open the given chest at the given location
  * @param y 該当する地形の中から1つのY座標を返す参照ポインタ
