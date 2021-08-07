@@ -392,7 +392,7 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
         floor_ptr->num_repro++;
 
     warn_unique_generation(player_ptr, r_idx);
-    if (!is_rune_explosion_grid(g_ptr))
+    if (!g_ptr->is_rune_explosion())
         return true;
 
     if (randint1(BREAK_RUNE_EXPLOSION) > r_ptr->level) {

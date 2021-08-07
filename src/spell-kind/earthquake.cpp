@@ -215,7 +215,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
                     if (g_ptr->is_rune_protection())
                         continue;
 
-                    if (is_rune_explosion_grid(g_ptr))
+                    if (g_ptr->is_rune_explosion())
                         continue;
 
                     if (pattern_tile(floor_ptr, y, x))

@@ -80,3 +80,11 @@ bool grid_type::is_rune_protection()
 {
     return this->is_object() && has_flag(f_info[this->mimic].flags, FF_RUNE_PROTECTION);
 }
+
+/*
+ *  @brief 爆発のルーンが仕掛けられているかを返す
+ */
+bool grid_type::is_rune_explosion()
+{
+    return this->is_object() && has_flag(f_info[this->mimic].flags, FF_RUNE_EXPLOSION);
+}

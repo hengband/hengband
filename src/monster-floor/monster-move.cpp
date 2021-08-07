@@ -253,7 +253,7 @@ static bool process_explosive_rune(player_type *target_ptr, turn_flags *turn_fla
     grid_type *g_ptr;
     g_ptr = &target_ptr->current_floor_ptr->grid_array[ny][nx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    if (!turn_flags_ptr->do_move || !is_rune_explosion_grid(g_ptr) || (((r_ptr->flags1 & RF1_NEVER_BLOW) != 0) && player_bold(target_ptr, ny, nx)))
+    if (!turn_flags_ptr->do_move || !g_ptr->is_rune_explosion() || (((r_ptr->flags1 & RF1_NEVER_BLOW) != 0) && player_bold(target_ptr, ny, nx)))
         return true;
 
     turn_flags_ptr->do_move = false;

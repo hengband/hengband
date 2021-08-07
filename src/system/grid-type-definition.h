@@ -78,4 +78,5 @@ struct grid_type {
     bool is_mark();
     bool is_mirror();
     bool is_rune_protection();
+    bool is_rune_explosion();
 };

@@ -428,7 +428,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
         break;
     }
     case GF_DISINTEGRATE: {
-        if (g_ptr->is_mirror() || g_ptr->is_rune_protection() || is_rune_explosion_grid(g_ptr))
+        if (g_ptr->is_mirror() || g_ptr->is_rune_protection() || g_ptr->is_rune_explosion())
             remove_mirror(caster_ptr, y, x);
 
         if (!has_flag(f_ptr->flags, FF_HURT_DISI) || has_flag(f_ptr->flags, FF_PERMANENT))

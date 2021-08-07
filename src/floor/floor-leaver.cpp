@@ -231,7 +231,7 @@ static void get_out_monster(player_type *protected_ptr)
             dis++;
 
         if (!in_bounds(floor_ptr, ny, nx) || !is_cave_empty_bold(protected_ptr, ny, nx) || floor_ptr->grid_array[ny][nx].is_rune_protection()
-            || is_rune_explosion_grid(&floor_ptr->grid_array[ny][nx]) || pattern_tile(floor_ptr, ny, nx))
+            || floor_ptr->grid_array[ny][nx].is_rune_explosion() || pattern_tile(floor_ptr, ny, nx))
             continue;
 
         m_ptr = &floor_ptr->m_list[m_idx];
