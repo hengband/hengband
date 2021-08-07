@@ -14,8 +14,7 @@
  * 2013 Deskull Doxygen向けのコメント整理\n
  */
 
-#include <queue>
-
+#include "grid/grid.h"
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
@@ -29,7 +28,6 @@
 #include "game-option/map-screen-options.h"
 #include "game-option/special-options.h"
 #include "grid/feature.h"
-#include "grid/grid.h"
 #include "grid/object-placer.h"
 #include "grid/trap.h"
 #include "io/screen-util.h"
@@ -60,6 +58,7 @@
 #include "view/display-messages.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
+#include <queue>
 
 #define MONSTER_FLOW_DEPTH                                                                                                                                     \
     32 /*!< 敵のプレイヤーに対する移動道のりの最大値(この値以上は処理を打ち切る) / OPTION: Maximum flow depth when using "MONSTER_FLOW" */
@@ -256,20 +255,6 @@ bool new_player_spot(player_type *creature_ptr)
     creature_ptr->x = x;
 
     return true;
-}
-
-/*!
- * @brief マスに看破済みの罠があるかの判定を行う。 / Return TRUE if the given grid is a known trap
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param g_ptr マス構造体の参照ポインタ
- * @return 看破済みの罠があるならTRUEを返す。
- */
-bool is_known_trap(player_type *player_ptr, grid_type *g_ptr)
-{
-    if (!g_ptr->mimic && !cave_has_flag_grid(g_ptr, FF_SECRET) && is_trap(player_ptr, g_ptr->feat))
-        return true;
-    else
-        return false;
 }
 
 /*!
@@ -1364,7 +1349,7 @@ void cave_note_and_redraw_later(floor_type *floor_ptr, POSITION y, POSITION x)
     cave_redraw_later(floor_ptr, y, x);
 }
 
-void cave_view_hack(floor_type* floor_ptr, POSITION y, POSITION x)
+void cave_view_hack(floor_type *floor_ptr, POSITION y, POSITION x)
 {
     auto *g_ptr = &floor_ptr->grid_array[y][x];
     if (g_ptr->is_view()) {

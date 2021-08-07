@@ -45,7 +45,6 @@ struct grid_type;
 struct player_type;
 struct monster_race;
 bool new_player_spot(player_type *creature_ptr);
-bool is_known_trap(player_type *player_ptr, grid_type *g_ptr);
 bool is_hidden_door(player_type *player_ptr, grid_type *g_ptr);
 bool is_mirror_grid(grid_type *g_ptr);
 bool is_rune_protection_grid(grid_type *g_ptr);
