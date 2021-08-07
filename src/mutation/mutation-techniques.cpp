@@ -38,7 +38,7 @@ bool eat_rock(player_type *caster_ptr)
     g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
     feature_type *f_ptr, *mimic_f_ptr;
     f_ptr = &f_info[g_ptr->feat];
-    mimic_f_ptr = &f_info[get_feat_mimic(g_ptr)];
+    mimic_f_ptr = &f_info[g_ptr->get_feat_mimic()];
 
     stop_mouth(caster_ptr);
     if (!has_flag(mimic_f_ptr->flags, FF_HURT_ROCK)) {

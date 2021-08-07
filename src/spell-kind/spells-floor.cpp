@@ -83,7 +83,7 @@ void wiz_lite(player_type *caster_ptr, bool ninja)
             g_ptr->info |= (CAVE_KNOWN);
 
             /* Feature code (applying "mimic" field) */
-            FEAT_IDX feat = get_feat_mimic(g_ptr);
+            FEAT_IDX feat = g_ptr->get_feat_mimic();
             feature_type *f_ptr;
             f_ptr = &f_info[feat];
 
@@ -94,7 +94,7 @@ void wiz_lite(player_type *caster_ptr, bool ninja)
                 g_ptr = &caster_ptr->current_floor_ptr->grid_array[yy][xx];
 
                 /* Feature code (applying "mimic" field) */
-                f_ptr = &f_info[get_feat_mimic(g_ptr)];
+                f_ptr = &f_info[g_ptr->get_feat_mimic()];
 
                 /* Perma-lite the grid */
                 if (d_info[caster_ptr->dungeon_idx].flags.has_not(DF::DARKNESS) && !ninja) {
@@ -201,7 +201,7 @@ void map_area(player_type *caster_ptr, POSITION range)
             g_ptr->info |= (CAVE_KNOWN);
 
             /* Feature code (applying "mimic" field) */
-            FEAT_IDX feat = get_feat_mimic(g_ptr);
+            FEAT_IDX feat = g_ptr->get_feat_mimic();
             feature_type *f_ptr;
             f_ptr = &f_info[feat];
 
@@ -216,7 +216,7 @@ void map_area(player_type *caster_ptr, POSITION range)
                 g_ptr = &caster_ptr->current_floor_ptr->grid_array[y + ddy_ddd[i]][x + ddx_ddd[i]];
 
                 /* Feature code (applying "mimic" field) */
-                feat = get_feat_mimic(g_ptr);
+                feat = g_ptr->get_feat_mimic();
                 f_ptr = &f_info[feat];
 
                 /* Memorize walls (etc) */
@@ -435,7 +435,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
                 if (!in_bounds2(floor_ptr, yy, xx))
                     continue;
                 cc_ptr = &floor_ptr->grid_array[yy][xx];
-                if (has_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW)) {
+                if (has_flag(f_info[cc_ptr->get_feat_mimic()].flags, FF_GLOW)) {
                     g_ptr->info |= CAVE_GLOW;
                     break;
                 }

@@ -67,7 +67,6 @@ void delete_monster(player_type *player_ptr, POSITION y, POSITION x);
 void place_bold(player_type *player_ptr, POSITION y, POSITION x, grid_bold_type gh_type);
 void set_cave_feat(floor_type *floor_ptr, POSITION y, POSITION x, FEAT_IDX feature_idx);
 void add_cave_info(floor_type *floor_ptr, POSITION y, POSITION x, int cave_mask);
-FEAT_IDX get_feat_mimic(grid_type *g_ptr);
 int count_dt(player_type *creature_ptr, POSITION *y, POSITION *x, bool (*test)(player_type *, FEAT_IDX), bool under);
 void cave_lite_hack(floor_type *floor_ptr, POSITION y, POSITION x);
 void cave_redraw_later(floor_type *floor_ptr, POSITION y, POSITION x);

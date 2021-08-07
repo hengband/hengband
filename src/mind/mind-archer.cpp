@@ -109,7 +109,7 @@ bool create_ammo(player_type *creature_ptr)
         POSITION y = creature_ptr->y + ddy[dir];
         POSITION x = creature_ptr->x + ddx[dir];
         grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
-        if (!has_flag(f_info[get_feat_mimic(g_ptr)].flags, FF_CAN_DIG)) {
+        if (!has_flag(f_info[g_ptr->get_feat_mimic()].flags, FF_CAN_DIG)) {
             msg_print(_("そこには岩石がない。", "You need a pile of rubble."));
             return false;
         }

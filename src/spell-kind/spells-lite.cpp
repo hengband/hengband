@@ -120,7 +120,7 @@ static void cave_temp_room_unlite(player_type *caster_ptr, const std::vector<Pos
                 if (in_bounds2(caster_ptr->current_floor_ptr, by, bx)) {
                     grid_type *cc_ptr = &caster_ptr->current_floor_ptr->grid_array[by][bx];
 
-                    if (has_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW)) {
+                    if (has_flag(f_info[cc_ptr->get_feat_mimic()].flags, FF_GLOW)) {
                         do_dark = false;
                         break;
                     }
@@ -132,7 +132,7 @@ static void cave_temp_room_unlite(player_type *caster_ptr, const std::vector<Pos
         }
 
         g_ptr->info &= ~(CAVE_GLOW);
-        if (!has_flag(f_info[get_feat_mimic(g_ptr)].flags, FF_REMEMBER)) {
+        if (!has_flag(f_info[g_ptr->get_feat_mimic()].flags, FF_REMEMBER)) {
             if (!view_torch_grids)
                 g_ptr->info &= ~(CAVE_MARK);
             note_spot(caster_ptr, y, x);

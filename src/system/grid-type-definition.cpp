@@ -105,3 +105,13 @@ flow_type grid_type::get_grid_flow_type(monster_race *r_ptr)
 {
     return any_bits(r_ptr->flags7, RF7_CAN_FLY) ? FLOW_CAN_FLY : FLOW_NORMAL;
 }
+
+/*
+ * @brief Get feature mimic from f_info[] (applying "mimic" field)
+ * @param g_ptr グリッドへの参照ポインタ
+ * @return 地形情報
+ */
+FEAT_IDX grid_type::get_feat_mimic()
+{
+    return f_info[this->mimic ? this->mimic : this->feat].mimic;
+}

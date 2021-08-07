@@ -67,7 +67,7 @@ static bool exe_alter(player_type *creature_ptr)
     POSITION x = creature_ptr->x + ddx[dir];
     grid_type *g_ptr;
     g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
-    FEAT_IDX feat = get_feat_mimic(g_ptr);
+    FEAT_IDX feat = g_ptr->get_feat_mimic();
     feature_type *f_ptr;
     f_ptr = &f_info[feat];
     PlayerEnergy(creature_ptr).set_player_turn_energy(100);

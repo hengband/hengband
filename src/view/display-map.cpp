@@ -142,7 +142,7 @@ void map_info(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, S
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-    FEAT_IDX feat = get_feat_mimic(g_ptr);
+    FEAT_IDX feat = g_ptr->get_feat_mimic();
     feature_type *f_ptr = &f_info[feat];
     TERM_COLOR a;
     SYMBOL_CODE c;

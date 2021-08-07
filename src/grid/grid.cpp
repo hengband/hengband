@@ -286,12 +286,13 @@ bool check_local_illumination(player_type *creature_ptr, POSITION y, POSITION x)
     /* Check for "local" illumination */
 
     /* Check for "complex" illumination */
-    if ((feat_supports_los(get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[yy][xx]))
-            && (creature_ptr->current_floor_ptr->grid_array[yy][xx].info & CAVE_GLOW))
-        || (feat_supports_los(get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[y][xx]))
-            && (creature_ptr->current_floor_ptr->grid_array[y][xx].info & CAVE_GLOW))
-        || (feat_supports_los(get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[yy][x]))
-            && (creature_ptr->current_floor_ptr->grid_array[yy][x].info & CAVE_GLOW))) {
+    auto *floor_ptr = creature_ptr->current_floor_ptr;
+    if ((feat_supports_los(floor_ptr->grid_array[yy][xx].get_feat_mimic())
+            && (floor_ptr->grid_array[yy][xx].info & CAVE_GLOW))
+        || (feat_supports_los(floor_ptr->grid_array[y][xx].get_feat_mimic())
+            && (floor_ptr->grid_array[y][xx].info & CAVE_GLOW))
+        || (feat_supports_los(floor_ptr->grid_array[yy][x].get_feat_mimic())
+            && (floor_ptr->grid_array[yy][x].info & CAVE_GLOW))) {
         return true;
     } else
         return false;
@@ -468,7 +469,7 @@ void note_spot(player_type *player_ptr, POSITION y, POSITION x)
     /* Hack -- memorize grids */
     if (!g_ptr->is_mark()) {
         /* Feature code (applying "mimic" field) */
-        feature_type *f_ptr = &f_info[get_feat_mimic(g_ptr)];
+        feature_type *f_ptr = &f_info[g_ptr->get_feat_mimic()];
 
         /* Memorize some "boring" grids */
         if (!has_flag(f_ptr->flags, FF_REMEMBER)) {
@@ -1201,16 +1202,6 @@ void add_cave_info(floor_type *floor_ptr, POSITION y, POSITION x, int cave_mask)
     floor_ptr->grid_array[y][x].info |= cave_mask;
 }
 
-/*
- * @brief Get feature mimic from f_info[] (applying "mimic" field)
- * @param g_ptr グリッドへの参照ポインタ
- * @return 地形情報
- */
-FEAT_IDX get_feat_mimic(grid_type *g_ptr)
-{
-    return (f_info[g_ptr->mimic ? g_ptr->mimic : g_ptr->feat].mimic);
-}
-
 /*!
  * @brief プレイヤーの周辺9マスに該当する地形がいくつあるかを返す /
  * Attempt to open the given chest at the given location
@@ -1237,7 +1228,7 @@ int count_dt(player_type *creature_ptr, POSITION *y, POSITION *x, bool (*test)(p
         if (!g_ptr->is_mark())
             continue;
 
-        feat = get_feat_mimic(g_ptr);
+        feat = g_ptr->get_feat_mimic();
         if (!((*test)(creature_ptr, feat)))
             continue;
 

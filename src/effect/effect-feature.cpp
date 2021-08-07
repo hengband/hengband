@@ -221,7 +221,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
             break;
 
         s16b old_mimic = g_ptr->mimic;
-        feature_type *mimic_f_ptr = &f_info[get_feat_mimic(g_ptr)];
+        feature_type *mimic_f_ptr = &f_info[g_ptr->get_feat_mimic()];
 
         cave_alter_feat(caster_ptr, y, x, FF_SPIKE);
         g_ptr->mimic = old_mimic;
@@ -241,7 +241,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
             break;
 
         if (known && g_ptr->is_mark()) {
-            msg_format(_("%sが溶けて泥になった！", "The %s turns into mud!"), f_info[get_feat_mimic(g_ptr)].name.c_str());
+            msg_format(_("%sが溶けて泥になった！", "The %s turns into mud!"), f_info[g_ptr->get_feat_mimic()].name.c_str());
             obvious = true;
         }
 
@@ -354,7 +354,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
                     continue;
 
                 grid_type *cc_ptr = &floor_ptr->grid_array[by][bx];
-                if (has_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW)) {
+                if (has_flag(f_info[cc_ptr->get_feat_mimic()].flags, FF_GLOW)) {
                     do_dark = false;
                     break;
                 }
@@ -398,7 +398,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
             break;
 
         if (known && (g_ptr->is_mark())) {
-            msg_format(_("%sが割れた！", "The %s crumbled!"), f_info[get_feat_mimic(g_ptr)].name.c_str());
+            msg_format(_("%sが割れた！", "The %s crumbled!"), f_info[g_ptr->get_feat_mimic()].name.c_str());
             sound(SOUND_GLASS);
         }
 
@@ -419,7 +419,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
             break;
 
         if (known && (g_ptr->is_mark())) {
-            msg_format(_("%sが割れた！", "The %s crumbled!"), f_info[get_feat_mimic(g_ptr)].name.c_str());
+            msg_format(_("%sが割れた！", "The %s crumbled!"), f_info[g_ptr->get_feat_mimic()].name.c_str());
             sound(SOUND_GLASS);
         }
 

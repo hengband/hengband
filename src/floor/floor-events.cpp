@@ -77,7 +77,7 @@ void night_falls(player_type *subject_ptr)
         for (POSITION y = 0; y < floor_ptr->height; y++) {
             for (POSITION x = 0; x < floor_ptr->width; x++) {
                 grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-                feature_type *f_ptr = &f_info[get_feat_mimic(g_ptr)];
+                feature_type *f_ptr = &f_info[g_ptr->get_feat_mimic()];
                 if (g_ptr->is_mirror() || has_flag(f_ptr->flags, FF_QUEST_ENTER) || has_flag(f_ptr->flags, FF_ENTRANCE))
                     continue;
 
@@ -274,7 +274,7 @@ void glow_deep_lava_and_bldg(player_type *subject_ptr)
         for (POSITION x = 0; x < floor_ptr->width; x++) {
             grid_type *g_ptr;
             g_ptr = &floor_ptr->grid_array[y][x];
-            if (!has_flag(f_info[get_feat_mimic(g_ptr)].flags, FF_GLOW))
+            if (!has_flag(f_info[g_ptr->get_feat_mimic()].flags, FF_GLOW))
                 continue;
 
             for (DIRECTION i = 0; i < 9; i++) {

@@ -68,7 +68,7 @@ static bool see_wall(player_type *creature_ptr, DIRECTION dir, POSITION y, POSIT
     if (!g_ptr->is_mark())
         return false;
 
-    s16b feat = get_feat_mimic(g_ptr);
+    s16b feat = g_ptr->get_feat_mimic();
     feature_type *f_ptr = &f_info[feat];
     if (!player_can_enter(creature_ptr, feat, 0))
         return !has_flag(f_ptr->flags, FF_DOOR);
@@ -217,7 +217,7 @@ static bool run_test(player_type *creature_ptr)
         int col = creature_ptr->x + ddx[new_dir];
         grid_type *g_ptr;
         g_ptr = &floor_ptr->grid_array[row][col];
-        FEAT_IDX feat = get_feat_mimic(g_ptr);
+        FEAT_IDX feat = g_ptr->get_feat_mimic();
         feature_type *f_ptr;
         f_ptr = &f_info[feat];
         if (g_ptr->m_idx) {

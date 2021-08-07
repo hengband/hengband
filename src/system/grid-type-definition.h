@@ -83,6 +83,7 @@ public:
     bool is_rune_explosion();
     byte get_cost(monster_race *r_ptr);
     byte get_distance(monster_race *r_ptr);
+    FEAT_IDX get_feat_mimic();
 
 private:
     flow_type get_grid_flow_type(monster_race *r_ptr);

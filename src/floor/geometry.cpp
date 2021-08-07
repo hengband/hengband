@@ -173,7 +173,7 @@ bool player_can_see_bold(player_type *creature_ptr, POSITION y, POSITION x)
 
     /* Feature code (applying "mimic" field) */
     /* Floors are simple */
-    if (feat_supports_los(get_feat_mimic(g_ptr)))
+    if (feat_supports_los(g_ptr->get_feat_mimic()))
         return true;
 
     /* Check for "local" illumination */

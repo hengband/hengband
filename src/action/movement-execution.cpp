@@ -213,17 +213,17 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
             /* Allow moving */
         } else if (has_flag(f_ptr->flags, FF_WATER) && !(riding_r_ptr->flags7 & RF7_AQUATIC)
             && (has_flag(f_ptr->flags, FF_DEEP) || (riding_r_ptr->flags2 & RF2_AURA_FIRE))) {
-            msg_format(_("%sの上に行けない。", "Can't swim."), f_info[get_feat_mimic(g_ptr)].name.c_str());
+            msg_format(_("%sの上に行けない。", "Can't swim."), f_info[g_ptr->get_feat_mimic()].name.c_str());
             energy.reset_player_turn();
             can_move = false;
             disturb(creature_ptr, false, true);
         } else if (!has_flag(f_ptr->flags, FF_WATER) && (riding_r_ptr->flags7 & RF7_AQUATIC)) {
-            msg_format(_("%sから上がれない。", "Can't land."), f_info[get_feat_mimic(&floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name.c_str());
+            msg_format(_("%sから上がれない。", "Can't land."), f_info[floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].get_feat_mimic()].name.c_str());
             energy.reset_player_turn();
             can_move = false;
             disturb(creature_ptr, false, true);
         } else if (has_flag(f_ptr->flags, FF_LAVA) && !(riding_r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK)) {
-            msg_format(_("%sの上に行けない。", "Too hot to go through."), f_info[get_feat_mimic(g_ptr)].name.c_str());
+            msg_format(_("%sの上に行けない。", "Too hot to go through."), f_info[g_ptr->get_feat_mimic()].name.c_str());
             energy.reset_player_turn();
             can_move = false;
             disturb(creature_ptr, false, true);
@@ -240,7 +240,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
 
     if (!can_move) {
     } else if (!has_flag(f_ptr->flags, FF_MOVE) && has_flag(f_ptr->flags, FF_CAN_FLY) && !creature_ptr->levitation) {
-        msg_format(_("空を飛ばないと%sの上には行けない。", "You need to fly to go through the %s."), f_info[get_feat_mimic(g_ptr)].name.c_str());
+        msg_format(_("空を飛ばないと%sの上には行けない。", "You need to fly to go through the %s."), f_info[g_ptr->get_feat_mimic()].name.c_str());
         energy.reset_player_turn();
         creature_ptr->running = 0;
         can_move = false;
@@ -254,7 +254,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
             return;
         }
     } else if (!p_can_enter && !p_can_kill_walls) {
-        FEAT_IDX feat = get_feat_mimic(g_ptr);
+        FEAT_IDX feat = g_ptr->get_feat_mimic();
         feature_type *mimic_f_ptr = &f_info[feat];
         concptr name = mimic_f_ptr->name.c_str();
         can_move = false;
