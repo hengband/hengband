@@ -44,7 +44,9 @@ enum flow_type {
     FLOW_MAX = 2,
 };
 
+struct monster_race;
 struct grid_type {
+public:
     BIT_FLAGS info{}; /* Hack -- grid flags */
 
     FEAT_IDX feat{}; /* Hack -- feature type */
@@ -79,4 +81,9 @@ struct grid_type {
     bool is_mirror();
     bool is_rune_protection();
     bool is_rune_explosion();
+    byte get_cost(monster_race *r_ptr);
+    byte get_distance(monster_race *r_ptr);
+
+private:
+    flow_type get_grid_flow_type(monster_race *r_ptr);
 };

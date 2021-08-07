@@ -54,8 +54,6 @@ void print_rel(player_type *subject_ptr, SYMBOL_CODE c, TERM_COLOR a, POSITION y
 void note_spot(player_type *player_ptr, POSITION y, POSITION x);
 void lite_spot(player_type *player_ptr, POSITION y, POSITION x);
 void update_flow(player_type *subject_ptr);
-byte grid_cost(grid_type *g_ptr, monster_race *r_ptr);
-byte grid_dist(grid_type *g_ptr, monster_race *r_ptr);
 FEAT_IDX feat_state(floor_type *floor_ptr, FEAT_IDX feat, int action);
 void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, int action);
 void remove_mirror(player_type *caster_ptr, POSITION y, POSITION x);

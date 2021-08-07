@@ -1,5 +1,7 @@
 ﻿#include "system/grid-type-definition.h"
 #include "grid/feature.h" // @todo 相互依存している. 後で何とかする.
+#include "monster-race/race-flags7.h"
+#include "system/monster-race-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*!
@@ -87,4 +89,19 @@ bool grid_type::is_rune_protection()
 bool grid_type::is_rune_explosion()
 {
     return this->is_object() && has_flag(f_info[this->mimic].flags, FF_RUNE_EXPLOSION);
+}
+
+byte grid_type::get_cost(monster_race *r_ptr)
+{
+    return this->costs[get_grid_flow_type(r_ptr)];
+}
+
+byte grid_type::get_distance(monster_race *r_ptr)
+{
+    return this->dists[get_grid_flow_type(r_ptr)];
+}
+
+flow_type grid_type::get_grid_flow_type(monster_race *r_ptr)
+{
+    return any_bits(r_ptr->flags7, RF7_CAN_FLY) ? FLOW_CAN_FLY : FLOW_NORMAL;
 }

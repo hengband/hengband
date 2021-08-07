@@ -858,23 +858,6 @@ void update_flow(player_type *subject_ptr)
     }
 }
 
-static flow_type get_grid_flow_type(monster_race *r_ptr)
-{
-    if (any_bits(r_ptr->flags7, RF7_CAN_FLY))
-        return FLOW_CAN_FLY;
-    return FLOW_NORMAL;
-}
-
-byte grid_cost(grid_type *g_ptr, monster_race *r_ptr)
-{
-    return g_ptr->costs[get_grid_flow_type(r_ptr)];
-}
-
-byte grid_dist(grid_type *g_ptr, monster_race *r_ptr)
-{
-    return g_ptr->dists[get_grid_flow_type(r_ptr)];
-}
-
 /*
  * Take a feature, determine what that feature becomes
  * through applying the given action.
