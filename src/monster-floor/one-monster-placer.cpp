@@ -178,7 +178,7 @@ static bool check_quest_placeable(player_type *player_ptr, MONRACE_IDX r_idx)
 static bool check_procection_rune(player_type *player_ptr, MONRACE_IDX r_idx, POSITION y, POSITION x)
 {
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    if (!is_rune_protection_grid(g_ptr))
+    if (!g_ptr->is_rune_protection())
         return true;
 
     monster_race *r_ptr = &r_info[r_idx];

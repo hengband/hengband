@@ -72,3 +72,11 @@ bool grid_type::is_mirror()
 {
     return this->is_object() && has_flag(f_info[this->mimic].flags, FF_MIRROR);
 }
+
+/*
+ *  @brief 守りのルーンで守られているかを返す
+ */
+bool grid_type::is_rune_protection()
+{
+    return this->is_object() && has_flag(f_info[this->mimic].flags, FF_RUNE_PROTECTION);
+}

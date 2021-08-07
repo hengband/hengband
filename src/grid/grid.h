@@ -46,7 +46,6 @@ struct player_type;
 struct monster_race;
 bool new_player_spot(player_type *creature_ptr);
 bool is_hidden_door(player_type *player_ptr, grid_type *g_ptr);
-bool is_rune_protection_grid(grid_type *g_ptr);
 bool is_rune_explosion_grid(grid_type *g_ptr);
 bool player_can_enter(player_type *creature_ptr, FEAT_IDX feature, BIT_FLAGS16 mode);
 bool feat_uses_special(FEAT_IDX f_idx);

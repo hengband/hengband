@@ -975,17 +975,6 @@ void remove_mirror(player_type *caster_ptr, POSITION y, POSITION x)
 }
 
 /*
- *  Return TRUE if there is a rune of protection on the grid.
- */
-bool is_rune_protection_grid(grid_type *g_ptr)
-{
-    if (g_ptr->is_object() && has_flag(f_info[g_ptr->mimic].flags, FF_RUNE_PROTECTION))
-        return true;
-    else
-        return false;
-}
-
-/*
  *  Return TRUE if there is a rune of explosion on the grid.
  */
 bool is_rune_explosion_grid(grid_type *g_ptr)
@@ -1021,7 +1010,7 @@ bool cave_monster_teleportable_bold(player_type *player_ptr, MONSTER_IDX m_idx, 
         return false;
 
     /* Hack -- no teleport onto rune of protection */
-    if (is_rune_protection_grid(g_ptr))
+    if (g_ptr->is_rune_protection())
         return false;
     if (is_rune_explosion_grid(g_ptr))
         return false;
