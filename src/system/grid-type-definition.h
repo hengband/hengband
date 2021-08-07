@@ -75,4 +75,5 @@ struct grid_type {
     bool is_redraw();
     bool is_view();
     bool is_object();
+    bool is_mark();
 };

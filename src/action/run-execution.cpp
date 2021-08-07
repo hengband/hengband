@@ -65,7 +65,7 @@ static bool see_wall(player_type *creature_ptr, DIRECTION dir, POSITION y, POSIT
 
     grid_type *g_ptr;
     g_ptr = &floor_ptr->grid_array[y][x];
-    if (!(g_ptr->info & CAVE_MARK))
+    if (!g_ptr->is_mark())
         return false;
 
     s16b feat = get_feat_mimic(g_ptr);
@@ -173,7 +173,7 @@ static bool see_nothing(player_type *creature_ptr, DIRECTION dir, POSITION y, PO
     if (!in_bounds2(floor_ptr, y, x))
         return true;
 
-    if (floor_ptr->grid_array[y][x].info & (CAVE_MARK))
+    if (floor_ptr->grid_array[y][x].is_mark())
         return false;
 
     if (player_can_see_bold(creature_ptr, y, x))
@@ -234,7 +234,7 @@ static bool run_test(player_type *creature_ptr)
         }
 
         bool inv = true;
-        if (g_ptr->info & (CAVE_MARK)) {
+        if (g_ptr->is_mark()) {
             bool notice = has_flag(f_ptr->flags, FF_NOTICE);
             if (notice && has_flag(f_ptr->flags, FF_MOVE)) {
                 if (find_ignore_doors && has_flag(f_ptr->flags, FF_DOOR) && has_flag(f_ptr->flags, FF_CLOSE)) {

@@ -149,7 +149,7 @@ void map_info(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, S
     if (!has_flag(f_ptr->flags, FF_REMEMBER)) {
         if (!player_ptr->blind
             && ((g_ptr->info & (CAVE_MARK | CAVE_LITE | CAVE_MNLT))
-                || ((g_ptr->info & CAVE_VIEW) && (((g_ptr->info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) || player_ptr->see_nocto)))) {
+                || (g_ptr->is_view() && (((g_ptr->info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) || player_ptr->see_nocto)))) {
             a = f_ptr->x_attr[F_LIT_STANDARD];
             c = f_ptr->x_char[F_LIT_STANDARD];
             if (player_ptr->wild_mode) {
@@ -185,7 +185,7 @@ void map_info(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, S
             c = f_ptr->x_char[F_LIT_STANDARD];
         }
     } else {
-        if (g_ptr->info & CAVE_MARK && is_revealed_wall(floor_ptr, f_ptr, y, x)) {
+        if (g_ptr->is_mark() && is_revealed_wall(floor_ptr, f_ptr, y, x)) {
             a = f_ptr->x_attr[F_LIT_STANDARD];
             c = f_ptr->x_char[F_LIT_STANDARD];
             if (player_ptr->wild_mode) {

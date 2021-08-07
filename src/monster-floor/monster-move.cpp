@@ -227,7 +227,7 @@ static bool process_protection_rune(player_type *target_ptr, turn_flags *turn_fl
     if (is_pet(m_ptr) || (randint1(BREAK_RUNE_PROTECTION) >= r_ptr->level))
         return true;
 
-    if (g_ptr->info & CAVE_MARK) {
+    if (g_ptr->is_mark()) {
         msg_print(_("守りのルーンが壊れた！", "The rune of protection is broken!"));
     }
 

@@ -258,7 +258,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
         feature_type *mimic_f_ptr = &f_info[feat];
         concptr name = mimic_f_ptr->name.c_str();
         can_move = false;
-        if (!(g_ptr->info & CAVE_MARK) && !player_can_see_bold(creature_ptr, y, x)) {
+        if (!g_ptr->is_mark() && !player_can_see_bold(creature_ptr, y, x)) {
             if (boundary_floor(g_ptr, f_ptr, mimic_f_ptr))
                 msg_print(_("それ以上先には進めないようだ。", "You feel you cannot go any more."));
             else {

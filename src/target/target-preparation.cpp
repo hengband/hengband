@@ -90,7 +90,7 @@ static bool target_set_accept(player_type *creature_ptr, POSITION y, POSITION x)
             return true;
     }
 
-    if (g_ptr->info & (CAVE_MARK)) {
+    if (g_ptr->is_mark()) {
         if (g_ptr->is_object())
             return true;
 

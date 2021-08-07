@@ -530,7 +530,7 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
         return (char)footing_items_description;
 
     eg_ptr->feat = get_feat_mimic(eg_ptr->g_ptr);
-    if (!(eg_ptr->g_ptr->info & CAVE_MARK) && !player_can_see_bold(subject_ptr, y, x))
+    if (!eg_ptr->g_ptr->is_mark() && !player_can_see_bold(subject_ptr, y, x))
         eg_ptr->feat = feat_none;
 
     eg_ptr->f_ptr = &f_info[eg_ptr->feat];

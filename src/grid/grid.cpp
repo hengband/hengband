@@ -466,7 +466,7 @@ void note_spot(player_type *player_ptr, POSITION y, POSITION x)
     }
 
     /* Hack -- memorize grids */
-    if (!(g_ptr->info & (CAVE_MARK))) {
+    if (!g_ptr->is_mark()) {
         /* Feature code (applying "mimic" field) */
         feature_type *f_ptr = &f_info[get_feat_mimic(g_ptr)];
 
@@ -1284,7 +1284,7 @@ int count_dt(player_type *creature_ptr, POSITION *y, POSITION *x, bool (*test)(p
         POSITION yy = creature_ptr->y + ddy_ddd[d];
         POSITION xx = creature_ptr->x + ddx_ddd[d];
         g_ptr = &creature_ptr->current_floor_ptr->grid_array[yy][xx];
-        if (!(g_ptr->info & (CAVE_MARK)))
+        if (!g_ptr->is_mark())
             continue;
 
         feat = get_feat_mimic(g_ptr);

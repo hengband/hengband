@@ -124,7 +124,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
             cave_set_feat(caster_ptr, y, x, one_in_(3) ? feat_brake : feat_grass);
 
             /* Observe */
-            if (g_ptr->info & (CAVE_MARK))
+            if (g_ptr->is_mark())
                 obvious = true;
         }
     }
@@ -240,7 +240,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
         if (!has_flag(f_ptr->flags, FF_HURT_ROCK))
             break;
 
-        if (known && (g_ptr->info & (CAVE_MARK))) {
+        if (known && g_ptr->is_mark()) {
             msg_format(_("%sが溶けて泥になった！", "The %s turns into mud!"), f_info[get_feat_mimic(g_ptr)].name.c_str());
             obvious = true;
         }
@@ -255,7 +255,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
         if (player_bold(caster_ptr, y, x))
             break;
         cave_set_feat(caster_ptr, y, x, feat_door[DOOR_DOOR].closed);
-        if (g_ptr->info & (CAVE_MARK))
+        if (g_ptr->is_mark())
             obvious = true;
         break;
     }
@@ -269,7 +269,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
         if (player_bold(caster_ptr, y, x))
             break;
         cave_set_feat(caster_ptr, y, x, feat_tree);
-        if (g_ptr->info & (CAVE_MARK))
+        if (g_ptr->is_mark())
             obvious = true;
         break;
     }
@@ -397,7 +397,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
         if (!has_flag(f_ptr->flags, FF_GLASS) || has_flag(f_ptr->flags, FF_PERMANENT) || (dam < 50))
             break;
 
-        if (known && (g_ptr->info & CAVE_MARK)) {
+        if (known && (g_ptr->is_mark())) {
             msg_format(_("%sが割れた！", "The %s crumbled!"), f_info[get_feat_mimic(g_ptr)].name.c_str());
             sound(SOUND_GLASS);
         }
@@ -418,7 +418,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
         if (!has_flag(f_ptr->flags, FF_GLASS) || has_flag(f_ptr->flags, FF_PERMANENT) || (dam < 200))
             break;
 
-        if (known && (g_ptr->info & CAVE_MARK)) {
+        if (known && (g_ptr->is_mark())) {
             msg_format(_("%sが割れた！", "The %s crumbled!"), f_info[get_feat_mimic(g_ptr)].name.c_str());
             sound(SOUND_GLASS);
         }

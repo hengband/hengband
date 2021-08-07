@@ -61,3 +61,8 @@ bool grid_type::is_object()
 {
     return any_bits(this->info, CAVE_OBJECT);
 }
+
+bool grid_type::is_mark()
+{
+    return any_bits(this->info, CAVE_MARK);
+}

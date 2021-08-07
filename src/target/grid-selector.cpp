@@ -42,7 +42,7 @@ static bool tgt_pt_accept(player_type *creature_ptr, POSITION y, POSITION x)
 
     grid_type *g_ptr;
     g_ptr = &floor_ptr->grid_array[y][x];
-    if (!(g_ptr->info & (CAVE_MARK)))
+    if (!g_ptr->is_mark())
         return false;
 
     if (cave_has_flag_grid(g_ptr, FF_LESS) || cave_has_flag_grid(g_ptr, FF_MORE) || cave_has_flag_grid(g_ptr, FF_QUEST_ENTER)
