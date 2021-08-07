@@ -147,9 +147,10 @@ void map_info(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, S
     TERM_COLOR a;
     SYMBOL_CODE c;
     if (!has_flag(f_ptr->flags, FF_REMEMBER)) {
-        if (!player_ptr->blind
-            && ((g_ptr->info & (CAVE_MARK | CAVE_LITE | CAVE_MNLT))
-                || (g_ptr->is_view() && (((g_ptr->info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) || player_ptr->see_nocto)))) {
+        auto is_visible = any_bits(g_ptr->info, (CAVE_MARK | CAVE_LITE | CAVE_MNLT));
+        auto is_glowing = match_bits(g_ptr->info, CAVE_GLOW | CAVE_MNDK, CAVE_GLOW);
+        auto can_view = g_ptr->is_view() && (is_glowing || player_ptr->see_nocto);
+        if ((player_ptr->blind == 0) && (is_visible || can_view)) {
             a = f_ptr->x_attr[F_LIT_STANDARD];
             c = f_ptr->x_char[F_LIT_STANDARD];
             if (player_ptr->wild_mode) {
