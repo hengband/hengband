@@ -76,4 +76,5 @@ struct grid_type {
     bool is_view();
     bool is_object();
     bool is_mark();
+    bool is_mirror();
 };

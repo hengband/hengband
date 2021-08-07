@@ -1,4 +1,5 @@
 ﻿#include "system/grid-type-definition.h"
+#include "grid/feature.h" // @todo 相互依存している. 後で何とかする.
 #include "util/bit-flags-calculator.h"
 
 /*!
@@ -65,4 +66,9 @@ bool grid_type::is_object()
 bool grid_type::is_mark()
 {
     return any_bits(this->info, CAVE_MARK);
+}
+
+bool grid_type::is_mirror()
+{
+    return this->is_object() && has_flag(f_info[this->mimic].flags, FF_MIRROR);
 }

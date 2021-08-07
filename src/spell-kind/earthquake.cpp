@@ -319,9 +319,8 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
             if (distance(cy, cx, yy, xx) > r)
                 continue;
 
-            grid_type *g_ptr;
-            g_ptr = &floor_ptr->grid_array[yy][xx];
-            if (is_mirror_grid(g_ptr)) {
+            auto *g_ptr = &floor_ptr->grid_array[yy][xx];
+            if (g_ptr->is_mirror()) {
                 g_ptr->info |= CAVE_GLOW;
                 continue;
             }

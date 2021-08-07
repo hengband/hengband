@@ -341,7 +341,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
     case GF_DARK_WEAK:
     case GF_DARK:
     case GF_ABYSS: {
-        bool do_dark = !caster_ptr->phase_out && !is_mirror_grid(g_ptr);
+        bool do_dark = !caster_ptr->phase_out && !g_ptr->is_mirror();
         if (!do_dark)
             break;
 
@@ -386,7 +386,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
     }
     case GF_SHARDS:
     case GF_ROCKET: {
-        if (is_mirror_grid(g_ptr)) {
+        if (g_ptr->is_mirror()) {
             msg_print(_("鏡が割れた！", "The mirror was shattered!"));
             sound(SOUND_GLASS);
             remove_mirror(caster_ptr, y, x);
@@ -407,7 +407,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
         break;
     }
     case GF_SOUND: {
-        if (is_mirror_grid(g_ptr) && caster_ptr->lev < 40) {
+        if (g_ptr->is_mirror() && caster_ptr->lev < 40) {
             msg_print(_("鏡が割れた！", "The mirror was shattered!"));
             sound(SOUND_GLASS);
             remove_mirror(caster_ptr, y, x);
@@ -428,7 +428,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
         break;
     }
     case GF_DISINTEGRATE: {
-        if (is_mirror_grid(g_ptr) || is_rune_protection_grid(g_ptr) || is_rune_explosion_grid(g_ptr))
+        if (g_ptr->is_mirror() || is_rune_protection_grid(g_ptr) || is_rune_explosion_grid(g_ptr))
             remove_mirror(caster_ptr, y, x);
 
         if (!has_flag(f_ptr->flags, FF_HURT_DISI) || has_flag(f_ptr->flags, FF_PERMANENT))

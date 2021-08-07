@@ -975,17 +975,6 @@ void remove_mirror(player_type *caster_ptr, POSITION y, POSITION x)
 }
 
 /*
- *  Return TRUE if there is a mirror on the grid.
- */
-bool is_mirror_grid(grid_type *g_ptr)
-{
-    if (g_ptr->is_object() && has_flag(f_info[g_ptr->mimic].flags, FF_MIRROR))
-        return true;
-    else
-        return false;
-}
-
-/*
  *  Return TRUE if there is a rune of protection on the grid.
  */
 bool is_rune_protection_grid(grid_type *g_ptr)

@@ -468,7 +468,7 @@ void wilderness_gen(player_type *creature_ptr)
 
             feature_type *f_ptr;
             f_ptr = &f_info[get_feat_mimic(g_ptr)];
-            if (!is_mirror_grid(g_ptr) && !has_flag(f_ptr->flags, FF_QUEST_ENTER) && !has_flag(f_ptr->flags, FF_ENTRANCE)) {
+            if (!g_ptr->is_mirror() && !has_flag(f_ptr->flags, FF_QUEST_ENTER) && !has_flag(f_ptr->flags, FF_ENTRANCE)) {
                 g_ptr->info &= ~(CAVE_GLOW);
                 if (!has_flag(f_ptr->flags, FF_REMEMBER))
                     g_ptr->info &= ~(CAVE_MARK);

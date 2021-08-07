@@ -417,7 +417,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
             grid_type *g_ptr;
             g_ptr = &floor_ptr->grid_array[y][x];
 
-            if (is_mirror_grid(g_ptr)) {
+            if (g_ptr->is_mirror()) {
                 g_ptr->info |= CAVE_GLOW;
                 continue;
             }

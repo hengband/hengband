@@ -12,7 +12,7 @@
 #include "player/special-defense-types.h"
 #include "room/door-definition.h"
 #include "system/floor-type-definition.h"
-#include "system/grid-type-definition.h"
+#include "system/grid-type-definition.h" // @todo 相互依存している. 後で何とかする.
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "world/world.h"
@@ -223,7 +223,7 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
     }
 
     bool old_los = cave_has_flag_bold(floor_ptr, y, x, FF_LOS);
-    bool old_mirror = is_mirror_grid(g_ptr);
+    bool old_mirror = g_ptr->is_mirror();
 
     g_ptr->mimic = 0;
     g_ptr->feat = feat;

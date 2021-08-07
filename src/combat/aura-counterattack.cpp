@@ -115,7 +115,7 @@ static void aura_shards_by_monster_attack(player_type *target_ptr, monap_type *m
         }
     }
 
-    if (is_mirror_grid(&target_ptr->current_floor_ptr->grid_array[target_ptr->y][target_ptr->x]))
+    if (target_ptr->current_floor_ptr->grid_array[target_ptr->y][target_ptr->x].is_mirror())
         teleport_player(target_ptr, 10, TELEPORT_SPONTANEOUS);
 }
 

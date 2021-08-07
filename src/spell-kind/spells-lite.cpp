@@ -107,7 +107,7 @@ static void cave_temp_room_unlite(player_type *caster_ptr, const std::vector<Pos
         const POSITION x = point.x;
 
         grid_type *g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
-        bool do_dark = !is_mirror_grid(g_ptr);
+        bool do_dark = !g_ptr->is_mirror();
         g_ptr->info &= ~(CAVE_TEMP);
         if (!do_dark)
             continue;
