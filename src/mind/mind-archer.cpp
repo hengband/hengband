@@ -114,7 +114,7 @@ bool create_ammo(player_type *creature_ptr)
             return false;
         }
 
-        if (!cave_has_flag_grid(g_ptr, FF_CAN_DIG) || !cave_has_flag_grid(g_ptr, FF_HURT_ROCK)) {
+        if (!g_ptr->cave_has_flag(FF_CAN_DIG) || !g_ptr->cave_has_flag(FF_HURT_ROCK)) {
             msg_print(_("硬すぎて崩せなかった。", "You failed to make ammo."));
             return true;
         }

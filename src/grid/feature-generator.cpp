@@ -121,7 +121,7 @@ static int next_to_corr(floor_type *floor_ptr, POSITION y1, POSITION x1)
         POSITION x = x1 + ddx_ddd[i];
         grid_type *g_ptr;
         g_ptr = &floor_ptr->grid_array[y][x];
-        if (cave_has_flag_grid(g_ptr, FF_WALL) || !g_ptr->is_floor() || g_ptr->is_room())
+        if (g_ptr->cave_has_flag(FF_WALL) || !g_ptr->is_floor() || g_ptr->is_room())
             continue;
 
         k++;

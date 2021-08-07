@@ -512,7 +512,7 @@ void wilderness_gen(player_type *creature_ptr)
             for (x = 0; x < floor_ptr->width; x++) {
                 grid_type *g_ptr;
                 g_ptr = &floor_ptr->grid_array[y][x];
-                if (!cave_has_flag_grid(g_ptr, FF_ENTRANCE))
+                if (!g_ptr->cave_has_flag(FF_ENTRANCE))
                     continue;
 
                 if (g_ptr->m_idx != 0)

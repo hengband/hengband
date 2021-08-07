@@ -38,7 +38,7 @@ void call_the_void(player_type *caster_ptr)
     for (int i = 0; i < 9; i++) {
         g_ptr = &caster_ptr->current_floor_ptr->grid_array[caster_ptr->y + ddy_ddd[i]][caster_ptr->x + ddx_ddd[i]];
 
-        if (!cave_has_flag_grid(g_ptr, FF_PROJECT)) {
+        if (!g_ptr->cave_has_flag(FF_PROJECT)) {
             if (!g_ptr->mimic || !has_flag(f_info[g_ptr->mimic].flags, FF_PROJECT) || !permanent_wall(&f_info[g_ptr->feat])) {
                 do_call = false;
                 break;

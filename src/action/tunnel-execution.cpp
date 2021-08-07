@@ -34,7 +34,7 @@ static bool do_cmd_tunnel_test(floor_type *floor_ptr, POSITION y, POSITION x)
         return false;
     }
 
-    if (!cave_has_flag_grid(g_ptr, FF_TUNNEL)) {
+    if (!g_ptr->cave_has_flag(FF_TUNNEL)) {
         msg_print(_("そこには掘るものが見当たらない。", "You see nothing there to tunnel."));
         return false;
     }

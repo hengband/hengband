@@ -265,7 +265,7 @@ bool new_player_spot(player_type *creature_ptr)
  */
 bool is_hidden_door(player_type *player_ptr, grid_type *g_ptr)
 {
-    if ((g_ptr->mimic || cave_has_flag_grid(g_ptr, FF_SECRET)) && is_closed_door(player_ptr, g_ptr->feat))
+    if ((g_ptr->mimic || g_ptr->cave_has_flag(FF_SECRET)) && is_closed_door(player_ptr, g_ptr->feat))
         return true;
     else
         return false;
@@ -832,10 +832,10 @@ void update_flow(player_type *subject_ptr)
                 bool can_move = false;
                 switch (i) {
                 case FLOW_CAN_FLY:
-                    can_move = cave_has_flag_grid(g_ptr, FF_MOVE) || cave_has_flag_grid(g_ptr, FF_CAN_FLY);
+                    can_move = g_ptr->cave_has_flag(FF_MOVE) || g_ptr->cave_has_flag(FF_CAN_FLY);
                     break;
                 default:
-                    can_move = cave_has_flag_grid(g_ptr, FF_MOVE);
+                    can_move = g_ptr->cave_has_flag(FF_MOVE);
                     break;
                 }
 

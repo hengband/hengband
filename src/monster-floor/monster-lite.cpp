@@ -37,7 +37,7 @@ static void update_monster_lite(
     if ((g_ptr->info & (CAVE_MNLT | CAVE_VIEW)) != CAVE_VIEW)
         return;
 
-    if (!cave_los_grid(g_ptr)) {
+    if (!feat_supports_los(g_ptr->feat)) {
         if (((y < subject_ptr->y) && (y > ml_ptr->mon_fy)) || ((y > subject_ptr->y) && (y < ml_ptr->mon_fy))) {
             dpf = subject_ptr->y - ml_ptr->mon_fy;
             d = y - ml_ptr->mon_fy;
@@ -88,7 +88,7 @@ static void update_monster_dark(
     if ((g_ptr->info & (CAVE_LITE | CAVE_MNLT | CAVE_MNDK | CAVE_VIEW)) != CAVE_VIEW)
         return;
 
-    if (!cave_los_grid(g_ptr) && !cave_has_flag_grid(g_ptr, FF_PROJECT)) {
+    if (!feat_supports_los(g_ptr->feat) && !g_ptr->cave_has_flag(FF_PROJECT)) {
         if (((y < subject_ptr->y) && (y > ml_ptr->mon_fy)) || ((y > subject_ptr->y) && (y < ml_ptr->mon_fy))) {
             dpf = subject_ptr->y - ml_ptr->mon_fy;
             d = y - ml_ptr->mon_fy;
@@ -209,7 +209,7 @@ void update_mon_lite(player_type *subject_ptr)
                 add_mon_lite(subject_ptr, points, ml_ptr->mon_fy + 2, ml_ptr->mon_fx, ml_ptr);
                 add_mon_lite(subject_ptr, points, ml_ptr->mon_fy + 2, ml_ptr->mon_fx - 1, ml_ptr);
                 g_ptr = &floor_ptr->grid_array[ml_ptr->mon_fy + 2][ml_ptr->mon_fx];
-                if ((rad == 3) && cave_has_flag_grid(g_ptr, f_flag)) {
+                if ((rad == 3) && g_ptr->cave_has_flag(f_flag)) {
                     add_mon_lite(subject_ptr, points, ml_ptr->mon_fy + 3, ml_ptr->mon_fx + 1, ml_ptr);
                     add_mon_lite(subject_ptr, points, ml_ptr->mon_fy + 3, ml_ptr->mon_fx, ml_ptr);
                     add_mon_lite(subject_ptr, points, ml_ptr->mon_fy + 3, ml_ptr->mon_fx - 1, ml_ptr);
@@ -221,7 +221,7 @@ void update_mon_lite(player_type *subject_ptr)
                 add_mon_lite(subject_ptr, points, ml_ptr->mon_fy - 2, ml_ptr->mon_fx, ml_ptr);
                 add_mon_lite(subject_ptr, points, ml_ptr->mon_fy - 2, ml_ptr->mon_fx - 1, ml_ptr);
                 g_ptr = &floor_ptr->grid_array[ml_ptr->mon_fy - 2][ml_ptr->mon_fx];
-                if ((rad == 3) && cave_has_flag_grid(g_ptr, f_flag)) {
+                if ((rad == 3) && g_ptr->cave_has_flag(f_flag)) {
                     add_mon_lite(subject_ptr, points, ml_ptr->mon_fy - 3, ml_ptr->mon_fx + 1, ml_ptr);
                     add_mon_lite(subject_ptr, points, ml_ptr->mon_fy - 3, ml_ptr->mon_fx, ml_ptr);
                     add_mon_lite(subject_ptr, points, ml_ptr->mon_fy - 3, ml_ptr->mon_fx - 1, ml_ptr);
@@ -233,7 +233,7 @@ void update_mon_lite(player_type *subject_ptr)
                 add_mon_lite(subject_ptr, points, ml_ptr->mon_fy, ml_ptr->mon_fx + 2, ml_ptr);
                 add_mon_lite(subject_ptr, points, ml_ptr->mon_fy - 1, ml_ptr->mon_fx + 2, ml_ptr);
                 g_ptr = &floor_ptr->grid_array[ml_ptr->mon_fy][ml_ptr->mon_fx + 2];
-                if ((rad == 3) && cave_has_flag_grid(g_ptr, f_flag)) {
+                if ((rad == 3) && g_ptr->cave_has_flag(f_flag)) {
                     add_mon_lite(subject_ptr, points, ml_ptr->mon_fy + 1, ml_ptr->mon_fx + 3, ml_ptr);
                     add_mon_lite(subject_ptr, points, ml_ptr->mon_fy, ml_ptr->mon_fx + 3, ml_ptr);
                     add_mon_lite(subject_ptr, points, ml_ptr->mon_fy - 1, ml_ptr->mon_fx + 3, ml_ptr);
@@ -245,7 +245,7 @@ void update_mon_lite(player_type *subject_ptr)
                 add_mon_lite(subject_ptr, points, ml_ptr->mon_fy, ml_ptr->mon_fx - 2, ml_ptr);
                 add_mon_lite(subject_ptr, points, ml_ptr->mon_fy - 1, ml_ptr->mon_fx - 2, ml_ptr);
                 g_ptr = &floor_ptr->grid_array[ml_ptr->mon_fy][ml_ptr->mon_fx - 2];
-                if ((rad == 3) && cave_has_flag_grid(g_ptr, f_flag)) {
+                if ((rad == 3) && g_ptr->cave_has_flag(f_flag)) {
                     add_mon_lite(subject_ptr, points, ml_ptr->mon_fy + 1, ml_ptr->mon_fx - 3, ml_ptr);
                     add_mon_lite(subject_ptr, points, ml_ptr->mon_fy, ml_ptr->mon_fx - 3, ml_ptr);
                     add_mon_lite(subject_ptr, points, ml_ptr->mon_fy - 1, ml_ptr->mon_fx - 3, ml_ptr);

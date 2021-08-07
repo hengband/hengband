@@ -115,3 +115,8 @@ FEAT_IDX grid_type::get_feat_mimic()
 {
     return f_info[this->mimic ? this->mimic : this->feat].mimic;
 }
+
+bool grid_type::cave_has_flag(int feature_flags)
+{
+    return has_flag(f_info[this->feat].flags, feature_flags);
+}
