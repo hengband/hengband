@@ -74,4 +74,5 @@ struct grid_type {
     bool is_lite();
     bool is_redraw();
     bool is_view();
+    bool is_object();
 };

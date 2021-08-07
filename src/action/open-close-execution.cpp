@@ -1,5 +1,5 @@
 ﻿/*!
- * @file open-close-execution.cpp 
+ * @file open-close-execution.cpp
  * @brief 扉や箱を開ける処理
  * @date 2020/07/11
  * @author Hourier
@@ -101,15 +101,16 @@ bool exe_close(player_type *creature_ptr, POSITION y, POSITION x)
         return more;
 
     s16b closed_feat = feat_state(creature_ptr->current_floor_ptr, old_feat, FF_CLOSE);
-    if ((!g_ptr->o_idx_list.empty() || (g_ptr->info & CAVE_OBJECT)) && (closed_feat != old_feat) && !has_flag(f_info[closed_feat].flags, FF_DROP)) {
+    if ((!g_ptr->o_idx_list.empty() || g_ptr->is_object()) && (closed_feat != old_feat) && !has_flag(f_info[closed_feat].flags, FF_DROP)) {
         msg_print(_("何かがつっかえて閉まらない。", "Something prevents it from closing."));
+        return more;
+    }
+
+    cave_alter_feat(creature_ptr, y, x, FF_CLOSE);
+    if (old_feat == g_ptr->feat) {
+        msg_print(_("ドアは壊れてしまっている。", "The door appears to be broken."));
     } else {
-        cave_alter_feat(creature_ptr, y, x, FF_CLOSE);
-        if (old_feat == g_ptr->feat) {
-            msg_print(_("ドアは壊れてしまっている。", "The door appears to be broken."));
-        } else {
-            sound(SOUND_SHUTDOOR);
-        }
+        sound(SOUND_SHUTDOOR);
     }
 
     return more;

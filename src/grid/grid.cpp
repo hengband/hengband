@@ -979,7 +979,7 @@ void remove_mirror(player_type *caster_ptr, POSITION y, POSITION x)
  */
 bool is_mirror_grid(grid_type *g_ptr)
 {
-    if ((g_ptr->info & CAVE_OBJECT) && has_flag(f_info[g_ptr->mimic].flags, FF_MIRROR))
+    if (g_ptr->is_object() && has_flag(f_info[g_ptr->mimic].flags, FF_MIRROR))
         return true;
     else
         return false;
@@ -990,7 +990,7 @@ bool is_mirror_grid(grid_type *g_ptr)
  */
 bool is_rune_protection_grid(grid_type *g_ptr)
 {
-    if ((g_ptr->info & CAVE_OBJECT) && has_flag(f_info[g_ptr->mimic].flags, FF_RUNE_PROTECTION))
+    if (g_ptr->is_object() && has_flag(f_info[g_ptr->mimic].flags, FF_RUNE_PROTECTION))
         return true;
     else
         return false;
@@ -1001,7 +1001,7 @@ bool is_rune_protection_grid(grid_type *g_ptr)
  */
 bool is_rune_explosion_grid(grid_type *g_ptr)
 {
-    if ((g_ptr->info & CAVE_OBJECT) && has_flag(f_info[g_ptr->mimic].flags, FF_RUNE_EXPLOSION))
+    if (g_ptr->is_object() && has_flag(f_info[g_ptr->mimic].flags, FF_RUNE_EXPLOSION))
         return true;
     else
         return false;

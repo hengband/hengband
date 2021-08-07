@@ -56,3 +56,8 @@ bool grid_type::is_view()
 {
     return any_bits(this->info, CAVE_VIEW);
 }
+
+bool grid_type::is_object()
+{
+    return any_bits(this->info, CAVE_OBJECT);
+}
