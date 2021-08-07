@@ -247,6 +247,7 @@ hengband_SOURCES = \
 	game-option/text-display-options.cpp game-option/text-display-options.h \
 	\
 	grid/door.cpp grid/door.h \
+	grid/feature-action-flags.cpp grid/feature-action-flags.h \
 	grid/feature-flag-types.h \
 	grid/feature-generator.cpp grid/feature-generator.h \
 	grid/feature.cpp grid/feature.h \

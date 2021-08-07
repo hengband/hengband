@@ -2319,6 +2319,9 @@
     <ClCompile Include="..\..\src\system\grid-type-definition.cpp">
       <Filter>system</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\grid\feature-action-flags.cpp">
+      <Filter>grid</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4979,6 +4982,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\system\grid-type-definition.h">
       <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\grid\feature-action-flags.h">
+      <Filter>grid</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
