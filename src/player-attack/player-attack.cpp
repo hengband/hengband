@@ -6,6 +6,7 @@
 
 #include "player-attack/player-attack.h"
 #include "artifact/fixed-art-types.h"
+#include "avatar/avatar.h"
 #include "cmd-action/cmd-attack.h"
 #include "combat/attack-accuracy.h"
 #include "combat/attack-criticality.h"
@@ -16,7 +17,6 @@
 #include "floor/geometry.h"
 #include "game-option/cheat-types.h"
 #include "grid/feature-flag-types.h"
-#include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
@@ -26,6 +26,7 @@
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags3.h"
+#include "monster/monster-damage.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
@@ -37,7 +38,6 @@
 #include "player-attack/attack-chaos-effect.h"
 #include "player-attack/blood-sucking-processor.h"
 #include "player-attack/player-attack-util.h"
-#include "player-info/avatar.h"
 #include "player-info/equipment-info.h"
 #include "player-status/player-energy.h"
 #include "player-status/player-hand-types.h"
@@ -49,6 +49,7 @@
 #include "spell-realm/spells-hex.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
@@ -435,7 +436,8 @@ static void apply_damage_negative_effect(player_attack_type *pa_ptr, bool is_zan
  */
 static bool check_fear_death(player_type *attacker_ptr, player_attack_type *pa_ptr, const int num, const bool is_lowlevel)
 {
-    if (!mon_take_hit(attacker_ptr, pa_ptr->m_idx, pa_ptr->attack_damage, pa_ptr->fear, NULL))
+    MonsterDamageProcessor mdp(attacker_ptr, pa_ptr->m_idx, pa_ptr->attack_damage, pa_ptr->fear);
+    if (!mdp.mon_take_hit(NULL))
         return false;
 
     *(pa_ptr->mdeath) = true;

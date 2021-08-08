@@ -5,6 +5,7 @@
  */
 
 #include "spell-kind/spells-teleport.h"
+#include "avatar/avatar.h"
 #include "core/asking-player.h"
 #include "core/player-update-types.h"
 #include "core/speed-table.h"
@@ -28,12 +29,12 @@
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-checker.h"
 #include "object/object-flags.h"
-#include "player-info/avatar.h"
 #include "player/player-move.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
@@ -73,7 +74,7 @@ bool teleport_swap(player_type *caster_ptr, DIRECTION dir)
         return false;
     }
 
-    if ((g_ptr->info & CAVE_ICKY) || (distance(ty, tx, caster_ptr->y, caster_ptr->x) > caster_ptr->lev * 3 / 2 + 10)) {
+    if ((g_ptr->is_icky()) || (distance(ty, tx, caster_ptr->y, caster_ptr->x) > caster_ptr->lev * 3 / 2 + 10)) {
         msg_print(_("失敗した。", "Failed to swap."));
         return false;
     }
@@ -157,7 +158,7 @@ bool teleport_away(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION dis, tel
             if (!cave_monster_teleportable_bold(caster_ptr, m_idx, ny, nx, mode))
                 continue;
             if (!(caster_ptr->current_floor_ptr->inside_quest || caster_ptr->current_floor_ptr->inside_arena))
-                if (caster_ptr->current_floor_ptr->grid_array[ny][nx].info & CAVE_ICKY)
+                if (caster_ptr->current_floor_ptr->grid_array[ny][nx].is_icky())
                     continue;
 
             look = false;

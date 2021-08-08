@@ -2,11 +2,11 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor-generator.h"
-#include "grid/grid.h"
 #include "room/cave-filler.h"
 #include "room/rooms-normal.h"
 #include "room/space-finder.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 
 /*!

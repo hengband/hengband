@@ -1,7 +1,7 @@
 ﻿#include "view/display-self-info.h"
+#include "avatar/avatar.h"
 #include "io/input-key-acceptor.h"
 #include "player-info/alignment.h"
-#include "player-info/avatar.h"
 #include "player-info/self-info-util.h"
 #include "player/player-race.h"
 #include "player/player-status-table.h"

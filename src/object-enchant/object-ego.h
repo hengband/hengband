@@ -18,7 +18,7 @@
 #define EGO_ELVENKIND           9
 #define EGO_DWARVEN             10
 #define EGO_PERMANENCE          11
-#define EGO_YOIYAMI             12
+#define EGO_TWILIGHT             12
 #define EGO_URUKISH             13
 
 /* Shields */

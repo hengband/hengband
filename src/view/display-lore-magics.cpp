@@ -78,7 +78,7 @@ void display_monster_magic_types(lore_type *lore_ptr)
 
 void display_mosnter_magic_possibility(lore_type *lore_ptr)
 {
-    if (!lore_ptr->breath && !lore_ptr->magic)
+    if (!lore_ptr->breath && !lore_ptr->magic && !lore_ptr->shoot && !lore_ptr->rocket)
         return;
 
     int m = lore_ptr->r_ptr->r_cast_spell;

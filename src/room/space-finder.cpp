@@ -5,6 +5,7 @@
 #include "grid/grid.h"
 #include "system/dungeon-data-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 
 /*!
@@ -19,7 +20,7 @@ static bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y)
         return false;
     }
 
-    if (is_floor_bold(floor_ptr, y, x))
+    if (floor_ptr->grid_array[y][x].is_floor())
         return true;
 
     return false;
@@ -37,10 +38,11 @@ static void set_floor(player_type *player_ptr, POSITION x, POSITION y)
     if (!in_bounds(floor_ptr, y, x))
         return;
 
-    if (floor_ptr->grid_array[y][x].info & CAVE_ROOM)
+    auto *g_ptr = &floor_ptr->grid_array[y][x];
+    if (g_ptr->is_room())
         return;
 
-    if (is_extra_bold(floor_ptr, y, x))
+    if (g_ptr->is_extra())
         place_bold(player_ptr, y, x, GB_FLOOR);
 }
 

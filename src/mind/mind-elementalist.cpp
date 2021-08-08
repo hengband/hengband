@@ -4,6 +4,7 @@
 
 #include "mind-elementalist.h"
 #include "action/action-limited.h"
+#include "avatar/avatar.h"
 #include "cmd-action/cmd-mind.h"
 #include "cmd-action/cmd-spell.h"
 #include "cmd-io/cmd-gameoption.h"
@@ -36,7 +37,6 @@
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
 #include "monster/monster-describer.h"
-#include "player-info/avatar.h"
 #include "player-info/equipment-info.h"
 #include "player-status/player-energy.h"
 #include "player-status/player-status-base.h"
@@ -57,6 +57,7 @@
 #include "status/base-status.h"
 #include "system/floor-type-definition.h"
 #include "system/game-option-types.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
@@ -1440,7 +1441,7 @@ static bool door_to_darkness(player_type *caster_ptr, POSITION dist)
             continue;
         }
 
-        if (!is_cave_empty_bold(caster_ptr, y, x) || f_ptr->grid_array[y][x].info & CAVE_ICKY) {
+        if (!is_cave_empty_bold(caster_ptr, y, x) || f_ptr->grid_array[y][x].is_icky()) {
             msg_print(_("そこには移動できない。", "Can not teleport to there."));
             continue;
         }

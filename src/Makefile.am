@@ -53,6 +53,9 @@ hengband_SOURCES = \
 	autopick/autopick-editor-util.cpp autopick/autopick-editor-util.h \
 	autopick/autopick-editor-command.cpp autopick/autopick-editor-command.h \
 	\
+	avatar/avatar.h avatar/avatar.cpp \
+	avatar/avatar-changer.cpp avatar/avatar-changer.h \
+	\
 	birth/birth-explanations-table.cpp birth/birth-explanations-table.h \
 	birth/character-builder.cpp birth/character-builder.h \
 	birth/history.cpp birth/history.h \
@@ -247,6 +250,7 @@ hengband_SOURCES = \
 	game-option/text-display-options.cpp game-option/text-display-options.h \
 	\
 	grid/door.cpp grid/door.h \
+	grid/feature-action-flags.cpp grid/feature-action-flags.h \
 	grid/feature-flag-types.h \
 	grid/feature-generator.cpp grid/feature-generator.h \
 	grid/feature.cpp grid/feature.h \
@@ -446,6 +450,7 @@ hengband_SOURCES = \
 	\
 	monster/horror-descriptions.cpp monster/horror-descriptions.h \
 	monster/monster-compaction.cpp monster/monster-compaction.h \
+	monster/monster-damage.cpp monster/monster-damage.h \
 	monster/monster-describer.cpp monster/monster-describer.h \
 	monster/monster-description-types.h \
 	monster/monster-flag-types.h \
@@ -566,12 +571,19 @@ hengband_SOURCES = \
 	object-activation/activation-teleport.cpp object-activation/activation-teleport.h \
 	object-activation/activation-util.cpp object-activation/activation-util.h \
 	\
+	object-enchant/abstract-protector-enchanter.cpp object-enchant/abstract-protector-enchanter.h \
 	object-enchant/activation-info-table.cpp object-enchant/activation-info-table.h \
 	object-enchant/apply-magic.cpp object-enchant/apply-magic.h \
 	object-enchant/apply-magic-amulet.cpp object-enchant/apply-magic-amulet.h \
 	object-enchant/apply-magic-armor.cpp object-enchant/apply-magic-armor.h \
+	object-enchant/apply-magic-boots.cpp object-enchant/apply-magic-boots.h \
+	object-enchant/apply-magic-cloak.cpp object-enchant/apply-magic-cloak.h \
+	object-enchant/apply-magic-crown.cpp object-enchant/apply-magic-crown.h \
+	object-enchant/apply-magic-gloves.cpp object-enchant/apply-magic-gloves.h \
+	object-enchant/apply-magic-helm.cpp object-enchant/apply-magic-helm.h \
 	object-enchant/apply-magic-others.cpp object-enchant/apply-magic-others.h \
 	object-enchant/apply-magic-ring.cpp object-enchant/apply-magic-ring.h \
+	object-enchant/apply-magic-shield.cpp object-enchant/apply-magic-shield.h \
 	object-enchant/apply-magic-weapon.cpp object-enchant/apply-magic-weapon.h \
 	object-enchant/dragon-breaths-table.cpp object-enchant/dragon-breaths-table.h \
 	object-enchant/enchanter-base.h \
@@ -646,7 +658,6 @@ hengband_SOURCES = \
 	player-attack/blood-sucking-processor.cpp player-attack/blood-sucking-processor.h \
 	player-attack/player-attack.cpp player-attack/player-attack.h \
 	\
-	player-info/avatar.h player-info/avatar.cpp \
 	player-info/base-status-info.cpp player-info/base-status-info.h \
 	player-info/body-improvement-info.cpp player-info/body-improvement-info.h \
 	player-info/class-ability-info.cpp player-info/class-ability-info.h \
@@ -829,6 +840,7 @@ hengband_SOURCES = \
 	system/building-type-definition.cpp system/building-type-definition.h \
 	system/dungeon-data-definition.h \
 	system/floor-type-definition.h \
+	system/grid-type-definition.cpp system/grid-type-definition.h \
 	system/game-option-types.h \
 	system/h-basic.h system/h-config.h \
 	system/h-define.h system/h-system.h system/h-type.h \

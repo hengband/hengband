@@ -28,6 +28,7 @@
 #include "monster-floor/monster-death.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
+#include "monster/monster-damage.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"
@@ -52,6 +53,7 @@
 #include "specific-object/torch.h"
 #include "status/action-setter.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
@@ -326,7 +328,8 @@ static void attack_racial_power(player_type *creature_ptr, it_type *it_ptr)
         it_ptr->m_ptr->hp - it_ptr->tdam, it_ptr->m_ptr->maxhp, it_ptr->m_ptr->max_maxhp);
 
     bool fear = false;
-    if (mon_take_hit(creature_ptr, it_ptr->g_ptr->m_idx, it_ptr->tdam, &fear, extract_note_dies(real_r_idx(it_ptr->m_ptr))))
+    MonsterDamageProcessor mdp(creature_ptr, it_ptr->g_ptr->m_idx, it_ptr->tdam, &fear);
+    if (mdp.mon_take_hit(extract_note_dies(real_r_idx(it_ptr->m_ptr))))
         return;
 
     message_pain(creature_ptr, it_ptr->g_ptr->m_idx, it_ptr->tdam);

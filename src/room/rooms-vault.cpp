@@ -22,6 +22,7 @@
 #include "monster-floor/place-monster-types.h"
 #include "object-enchant/item-apply-magic.h"
 #include "room/cave-filler.h"
+#include "room/door-definition.h"
 #include "room/lake-types.h"
 #include "room/rooms-builder.h"
 #include "room/rooms-maze-vault.h"
@@ -31,6 +32,7 @@
 #include "store/store.h"
 #include "system/dungeon-data-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "wizard/wizard-messages.h"
 
@@ -1014,7 +1016,7 @@ static void build_mini_c_vault(player_type *player_ptr, POSITION x0, POSITION y0
         for (y = y1; y <= y2; y++) {
             total = x - x1 + y - y1;
             /* If total is odd- and is a floor then make a wall */
-            if ((total % 2 == 1) && is_floor_bold(floor_ptr, y, x)) {
+            if ((total % 2 == 1) && floor_ptr->grid_array[y][x].is_floor()) {
                 place_bold(player_ptr, y, x, GB_INNER);
             }
         }

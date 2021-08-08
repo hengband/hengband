@@ -185,8 +185,8 @@ typedef struct player_type {
     SUB_EXP weapon_exp[5][64]{}; /* Proficiency of weapons */
     SUB_EXP skill_exp[MAX_SKILLS]{}; /* Proficiency of misc. skill */
 
-    MAGIC_NUM1 magic_num1[MAX_SPELLS]{}; /*!< Array for non-spellbook type magic */
-    MAGIC_NUM2 magic_num2[MAX_SPELLS]{}; /*!< 魔道具術師の取り込み済魔道具使用回数 / Flags for non-spellbook type magics */
+    s32b magic_num1[MAX_SPELLS]{}; /*!< Array for non-spellbook type magic */
+    byte magic_num2[MAX_SPELLS]{}; /*!< 魔道具術師の取り込み済魔道具使用回数 / Flags for non-spellbook type magics */
 
     RF_ABILITY mane_spell[MAX_MANE]{};
     HIT_POINT mane_dam[MAX_MANE]{};
@@ -302,7 +302,7 @@ typedef struct player_type {
     bool sutemi{};
     bool counter{};
 
-    ALIGNMENT alignment{}; /* Good/evil/neutral */
+    int alignment{}; /* Good/evil/neutral */
     POSITION run_py{};
     POSITION run_px{};
     DIRECTION fishing_dir{};

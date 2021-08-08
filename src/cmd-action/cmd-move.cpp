@@ -2,6 +2,7 @@
 #include "action/action-limited.h"
 #include "action/movement-execution.h"
 #include "action/run-execution.h"
+#include "avatar/avatar.h"
 #include "cmd-io/cmd-save.h"
 #include "core/asking-player.h"
 #include "core/disturbance.h"
@@ -15,16 +16,14 @@
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/input-options.h"
+#include "game-option/map-screen-options.h"
 #include "game-option/play-record-options.h"
 #include "game-option/special-options.h"
-#include "game-option/map-screen-options.h"
 #include "grid/feature.h"
-#include "grid/grid.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io/input-key-requester.h"
 #include "io/write-diary.h"
 #include "mind/mind-ninja.h"
-#include "player-info/avatar.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/player-move.h"
@@ -34,6 +33,7 @@
 #include "spell-realm/spells-song.h"
 #include "status/action-setter.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "util/bit-flags-calculator.h"
@@ -152,8 +152,7 @@ void do_cmd_go_up(player_type *creature_ptr)
         else
             msg_print(_("地上に戻った。", "You go back to the surface."));
         creature_ptr->word_recall = 0;
-    }
-    else {
+    } else {
         if (is_echizen(creature_ptr))
             msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
         else
@@ -394,7 +393,7 @@ void do_cmd_stay(player_type *creature_ptr, bool pickup)
 void do_cmd_rest(player_type *creature_ptr)
 {
     set_action(creature_ptr, ACTION_NONE);
-    if ((creature_ptr->pclass == CLASS_BARD) && ((get_singing_song_effect(creature_ptr) != 0)|| (get_interrupting_song_effect(creature_ptr) != 0)))
+    if ((creature_ptr->pclass == CLASS_BARD) && ((get_singing_song_effect(creature_ptr) != 0) || (get_interrupting_song_effect(creature_ptr) != 0)))
         stop_singing(creature_ptr);
 
     if (hex_spelling_any(creature_ptr))

@@ -25,7 +25,7 @@
  * @return 命中と判定された場合TRUEを返す
  * @note Always miss 5%, always hit 5%, otherwise random.
  */
-bool test_hit_norm(player_type *attacker_ptr, HIT_RELIABILITY chance, ARMOUR_CLASS ac, bool visible)
+bool test_hit_norm(player_type *attacker_ptr, int chance, ARMOUR_CLASS ac, bool visible)
 {
     if (!visible)
         chance = (chance + 1) / 2;
@@ -39,7 +39,7 @@ bool test_hit_norm(player_type *attacker_ptr, HIT_RELIABILITY chance, ARMOUR_CLA
  * @param ac 敵AC
  * @return 命中確率
  */
-PERCENTAGE hit_chance(player_type *attacker_ptr, HIT_RELIABILITY reli, ARMOUR_CLASS ac)
+PERCENTAGE hit_chance(player_type *attacker_ptr, int reli, ARMOUR_CLASS ac)
 {
     PERCENTAGE chance = 5, chance_left = 90;
     if (reli <= 0)

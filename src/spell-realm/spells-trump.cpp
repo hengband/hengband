@@ -1,8 +1,8 @@
 ﻿#include "spell-realm/spells-trump.h"
+#include "avatar/avatar.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "mutation/mutation-investor-remover.h"
-#include "player-info/avatar.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-charm.h"
 #include "spell-kind/spells-floor.h"
@@ -94,8 +94,8 @@ void cast_shuffle(player_type *caster_ptr)
 
     if (die < 30) {
         msg_print(_("奇妙なモンスターの絵だ。", "It's the picture of a strange monster."));
-        trump_summoning(
-            caster_ptr, 1, false, caster_ptr->y, caster_ptr->x, (floor_ptr->dun_level * 3 / 2), static_cast<summon_type>(SUMMON_UNIQUE + randint1(6)), PM_ALLOW_GROUP | PM_ALLOW_UNIQUE);
+        trump_summoning(caster_ptr, 1, false, caster_ptr->y, caster_ptr->x, (floor_ptr->dun_level * 3 / 2),
+            static_cast<summon_type>(SUMMON_UNIQUE + randint1(6)), PM_ALLOW_GROUP | PM_ALLOW_UNIQUE);
         return;
     }
 

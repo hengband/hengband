@@ -4,15 +4,15 @@
  * @author Hourier
  */
 
+#include "knowledge-self.h"
+#include "avatar/avatar.h"
 #include "birth/birth-explanations-table.h"
 #include "core/show-file.h"
 #include "flavor/flavor-describer.h"
 #include "floor/floor-town.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io-dump/dump-util.h"
-#include "knowledge-self.h"
 #include "player-info/alignment.h"
-#include "player-info/avatar.h"
 #include "player/player-class.h"
 #include "player/player-status-table.h"
 #include "player/race-info-table.h"

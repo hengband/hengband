@@ -39,6 +39,7 @@
 #include "spell-realm/spells-hex.h"
 #include "status/action-setter.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
@@ -466,8 +467,8 @@ void wilderness_gen(player_type *creature_ptr)
             }
 
             feature_type *f_ptr;
-            f_ptr = &f_info[get_feat_mimic(g_ptr)];
-            if (!is_mirror_grid(g_ptr) && !has_flag(f_ptr->flags, FF_QUEST_ENTER) && !has_flag(f_ptr->flags, FF_ENTRANCE)) {
+            f_ptr = &f_info[g_ptr->get_feat_mimic()];
+            if (!g_ptr->is_mirror() && !has_flag(f_ptr->flags, FF_QUEST_ENTER) && !has_flag(f_ptr->flags, FF_ENTRANCE)) {
                 g_ptr->info &= ~(CAVE_GLOW);
                 if (!has_flag(f_ptr->flags, FF_REMEMBER))
                     g_ptr->info &= ~(CAVE_MARK);
@@ -511,7 +512,7 @@ void wilderness_gen(player_type *creature_ptr)
             for (x = 0; x < floor_ptr->width; x++) {
                 grid_type *g_ptr;
                 g_ptr = &floor_ptr->grid_array[y][x];
-                if (!cave_has_flag_grid(g_ptr, FF_ENTRANCE))
+                if (!g_ptr->cave_has_flag(FF_ENTRANCE))
                     continue;
 
                 if (g_ptr->m_idx != 0)

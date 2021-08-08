@@ -15,6 +15,7 @@
 #include "monster/monster-processor-util.h"
 #include "mspell/mspell-checker.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
@@ -49,10 +50,10 @@ static coordinate_candidate sweep_safe_coordinate(player_type *target_ptr, MONST
             continue;
 
         if (m_ptr->mflag2.has_not(MFLAG2::NOFLOW)) {
-            byte dist = grid_dist(g_ptr, r_ptr);
+            byte dist = g_ptr->get_distance(r_ptr);
             if (dist == 0)
                 continue;
-            if (dist > grid_dist(&floor_ptr->grid_array[m_ptr->fy][m_ptr->fx], r_ptr) + 2 * d)
+            if (dist > floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].get_distance(r_ptr) + 2 * d)
                 continue;
         }
 

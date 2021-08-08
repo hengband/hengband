@@ -1,4 +1,5 @@
 ﻿#include "spell-kind/spells-equipment.h"
+#include "avatar/avatar.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
@@ -7,7 +8,6 @@
 #include "object-hook/hook-enchant.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-info.h"
-#include "player-info/avatar.h"
 #include "racial/racial-android.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"

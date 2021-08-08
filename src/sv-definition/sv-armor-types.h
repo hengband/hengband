@@ -18,7 +18,7 @@ enum sv_soft_armor_type {
     SV_KUROSHOUZOKU = 13,
     SV_STONE_AND_HIDE_ARMOR = 15, /* 15 */
     SV_ABUNAI_MIZUGI = 50,
-    SV_YOIYAMI_ROBE = 60,
+    SV_TWILIGHT_ROBE = 60,
     SV_NAMAKE_ARMOR = 63,
 };
 

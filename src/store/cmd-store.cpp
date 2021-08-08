@@ -12,7 +12,6 @@
 #include "game-option/birth-options.h"
 #include "game-option/input-options.h"
 #include "grid/feature.h"
-#include "grid/grid.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-requester.h"
@@ -27,6 +26,7 @@
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
@@ -63,7 +63,7 @@ void do_cmd_store(player_type *player_ptr)
     grid_type *g_ptr;
     g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
 
-    if (!cave_has_flag_grid(g_ptr, FF_STORE)) {
+    if (!g_ptr->cave_has_flag(FF_STORE)) {
         msg_print(_("ここには店がありません。", "You see no store here."));
         return;
     }

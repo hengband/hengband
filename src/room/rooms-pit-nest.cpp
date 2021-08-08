@@ -18,8 +18,10 @@
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
+#include "room/door-definition.h"
 #include "room/space-finder.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
@@ -187,6 +189,14 @@ std::vector<nest_pit_type> nest_types = {
 };
 
 /*!
+ * @todo intをenumに変更する
+ */
+static void add_cave_info(grid_type *g_ptr, int cave_mask)
+{
+    g_ptr->info |= cave_mask;
+}
+
+/*!
  * @brief タイプ5の部屋…nestを生成する / Type 5 -- Monster nests
  * @param player_ptr プレーヤーへの参照ポインタ
  * @details
@@ -321,7 +331,7 @@ bool build_type5(player_type *player_ptr, dun_data_type *dd_ptr)
     }
     for (y = y1; y <= y2; y++) {
         for (x = x1; x <= x2; x++) {
-            add_cave_info(floor_ptr, y, x, CAVE_ICKY);
+            add_cave_info(&floor_ptr->grid_array[y][x], CAVE_ICKY);
         }
     }
 
@@ -546,7 +556,7 @@ bool build_type6(player_type *player_ptr, dun_data_type *dd_ptr)
     }
     for (y = y1; y <= y2; y++) {
         for (x = x1; x <= x2; x++) {
-            add_cave_info(floor_ptr, y, x, CAVE_ICKY);
+            add_cave_info(&floor_ptr->grid_array[y][x], CAVE_ICKY);
         }
     }
 
@@ -820,22 +830,22 @@ bool build_type13(player_type *player_ptr, dun_data_type *dd_ptr)
     for (x = x1 + 3; x <= x2 - 3; x++) {
         g_ptr = &floor_ptr->grid_array[yval - 2][x];
         place_grid(player_ptr, g_ptr, GB_FLOOR);
-        add_cave_info(floor_ptr, yval - 2, x, CAVE_ICKY);
+        add_cave_info(&floor_ptr->grid_array[yval - 2][x], CAVE_ICKY);
 
         g_ptr = &floor_ptr->grid_array[yval + 2][x];
         place_grid(player_ptr, g_ptr, GB_FLOOR);
-        add_cave_info(floor_ptr, yval + 2, x, CAVE_ICKY);
+        add_cave_info(&floor_ptr->grid_array[yval + 2][x], CAVE_ICKY);
     }
 
     /* Place the floor area 2 */
     for (x = x1 + 5; x <= x2 - 5; x++) {
         g_ptr = &floor_ptr->grid_array[yval - 3][x];
         place_grid(player_ptr, g_ptr, GB_FLOOR);
-        add_cave_info(floor_ptr, yval - 3, x, CAVE_ICKY);
+        add_cave_info(&floor_ptr->grid_array[yval - 3][x], CAVE_ICKY);
 
         g_ptr = &floor_ptr->grid_array[yval + 3][x];
         place_grid(player_ptr, g_ptr, GB_FLOOR);
-        add_cave_info(floor_ptr, yval + 3, x, CAVE_ICKY);
+        add_cave_info(&floor_ptr->grid_array[yval + 3][x], CAVE_ICKY);
     }
 
     /* Corridor */

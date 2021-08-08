@@ -12,6 +12,7 @@
  */
 
 #include "cmd-building/cmd-building.h"
+#include "avatar/avatar.h"
 #include "cmd-action/cmd-spell.h"
 #include "cmd-building/cmd-inn.h"
 #include "cmd-io/cmd-dump.h"
@@ -28,7 +29,6 @@
 #include "floor/floor-mode-changer.h"
 #include "floor/wild.h"
 #include "grid/feature.h"
-#include "grid/grid.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
 #include "main/music-definitions-table.h"
@@ -54,7 +54,6 @@
 #include "object-hook/hook-bow.h"
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"
-#include "player-info/avatar.h"
 #include "player-status/player-energy.h"
 #include "player/player-personality-types.h"
 #include "spell-kind/spells-perception.h"
@@ -62,6 +61,7 @@
 #include "spell/spells-status.h"
 #include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
@@ -274,7 +274,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
         set_virtue(player_ptr, V_DILIGENCE, 0);
         set_virtue(player_ptr, V_VALOUR, 0);
         set_virtue(player_ptr, V_INDIVIDUALISM, 0);
-        get_virtues(player_ptr);
+        initialize_virtues(player_ptr);
         paid = true;
         break;
 

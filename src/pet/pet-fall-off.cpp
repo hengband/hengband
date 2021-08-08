@@ -21,6 +21,7 @@
 #include "player/player-move.h"
 #include "player/player-skill.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
@@ -120,12 +121,12 @@ bool process_fall_off_horse(player_type *creature_ptr, HIT_POINT dam, bool force
                 continue;
 
             /* Skip non-empty grids */
-            if (!cave_has_flag_grid(g_ptr, FF_MOVE) && !cave_has_flag_grid(g_ptr, FF_CAN_FLY)) {
+            if (!g_ptr->cave_has_flag(FF_MOVE) && !g_ptr->cave_has_flag(FF_CAN_FLY)) {
                 if (!can_player_ride_pet(creature_ptr, g_ptr, false))
                     continue;
             }
 
-            if (cave_has_flag_grid(g_ptr, FF_PATTERN))
+            if (g_ptr->cave_has_flag(FF_PATTERN))
                 continue;
 
             /* Count "safe" grids */

@@ -14,6 +14,7 @@
 #include "monster/monster-status-setter.h"
 #include "monster/monster-update.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
@@ -60,7 +61,7 @@ void fetch_item(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require
             return;
         }
 
-        if (g_ptr->info & CAVE_ICKY) {
+        if (g_ptr->is_icky()) {
             msg_print(_("アイテムがコントロールを外れて落ちた。", "The item slips from your control."));
             return;
         }
@@ -144,7 +145,7 @@ bool fetch_monster(player_type *caster_ptr)
         POSITION nx = get_grid_x(path_g[i]);
         grid_type *g_ptr = &caster_ptr->current_floor_ptr->grid_array[ny][nx];
 
-        if (in_bounds(caster_ptr->current_floor_ptr, ny, nx) && is_cave_empty_bold(caster_ptr, ny, nx) && !(g_ptr->info & CAVE_OBJECT)
+        if (in_bounds(caster_ptr->current_floor_ptr, ny, nx) && is_cave_empty_bold(caster_ptr, ny, nx) && !g_ptr->is_object()
             && !pattern_tile(caster_ptr->current_floor_ptr, ny, nx)) {
             ty = ny;
             tx = nx;

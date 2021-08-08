@@ -12,6 +12,7 @@
 #include "room/space-finder.h"
 #include "room/vault-builder.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 
 /*!
@@ -967,7 +968,7 @@ bool build_type12(player_type *player_ptr, dun_data_type *dd_ptr)
     /* Check to see if there is room for an inner vault */
     for (x = x0 - 2; x <= x0 + 2; x++) {
         for (y = y0 - 2; y <= y0 + 2; y++) {
-            if (!is_floor_bold(floor_ptr, y, x)) {
+            if (!floor_ptr->grid_array[y][x].is_floor()) {
                 /* Wall in the way */
                 emptyflag = false;
             }

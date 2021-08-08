@@ -53,6 +53,8 @@ typedef struct lore_type {
     byte qc;
     rbm_type method;
     int count;
+    bool shoot = false;
+    bool rocket = false;
 } lore_type;
 
 enum monster_lore_mode {

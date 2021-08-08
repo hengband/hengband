@@ -10,6 +10,7 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "world/world.h"
@@ -102,10 +103,6 @@ bool cave_los_bold(floor_type *floor_ptr, POSITION y, POSITION x) { return feat_
  */
 bool feat_supports_los(FEAT_IDX f_idx) { return has_flag(f_info[f_idx].flags, FF_LOS); }
 
-bool cave_los_grid(grid_type *grid_ptr) { return feat_supports_los(grid_ptr->feat); }
-
-bool cave_has_flag_grid(grid_type *grid_ptr, int feature_flags) { return has_flag(f_info[grid_ptr->feat].flags, feature_flags); }
-
 /*
  * Determine if a "legal" grid is a "clean" floor grid
  * Determine if terrain-change spells are allowed in a grid.
@@ -116,7 +113,7 @@ bool cave_has_flag_grid(grid_type *grid_ptr, int feature_flags) { return has_fla
  */
 bool cave_clean_bold(floor_type *floor_ptr, POSITION y, POSITION x)
 {
-    return cave_has_flag_bold(floor_ptr, y, x, FF_FLOOR) && ((floor_ptr->grid_array[y][x].info & CAVE_OBJECT) == 0)
+    return cave_has_flag_bold(floor_ptr, y, x, FF_FLOOR) && ((floor_ptr->grid_array[y][x].is_object()) == 0)
         && floor_ptr->grid_array[y][x].o_idx_list.empty();
 }
 
@@ -128,7 +125,7 @@ bool cave_clean_bold(floor_type *floor_ptr, POSITION y, POSITION x)
  */
 bool cave_drop_bold(floor_type *floor_ptr, POSITION y, POSITION x)
 {
-    return cave_has_flag_bold(floor_ptr, y, x, FF_DROP) && ((floor_ptr->grid_array[y][x].info & CAVE_OBJECT) == 0);
+    return cave_has_flag_bold(floor_ptr, y, x, FF_DROP) && ((floor_ptr->grid_array[y][x].is_object()) == 0);
 }
 
 bool pattern_tile(floor_type *floor_ptr, POSITION y, POSITION x) { return cave_has_flag_bold(floor_ptr, y, x, FF_PATTERN); }

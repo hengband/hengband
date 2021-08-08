@@ -52,7 +52,7 @@ typedef struct object_type {
     BIT_FLAGS art_flags[TR_FLAG_SIZE]{}; /*!< Extra Flags for ego and artifacts */
     EnumClassFlagGroup<TRC> curse_flags{}; /*!< Flags for curse */
     MONSTER_IDX held_m_idx{}; /*!< アイテムを所持しているモンスターID (いないなら 0) / Monster holding us (if any) */
-    ARTIFACT_BIAS_IDX artifact_bias{}; /*!< ランダムアーティファクト生成時のバイアスID */
+    int artifact_bias{}; /*!< ランダムアーティファクト生成時のバイアスID */
 
     void wipe();
     void copy_from(object_type *j_ptr);

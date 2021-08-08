@@ -63,13 +63,6 @@ typedef int errr;
 /* A signed byte of memory */
 /* typedef signed char syte; */
 typedef unsigned char byte; /*!< byte型をunsighned charとして定義 / Note that unsigned values can cause math problems / An unsigned byte of memory */
-#ifndef __cplusplus
-#if __STDC_VERSION__ >= 199901L
-#include <stdbool.h>
-#else
-typedef char bool; /*!< bool型をcharとして定義 / Note that a bool is smaller than a full "int" / Simple True/False type */
-#endif
-#endif
 typedef unsigned int uint; /* uint型をintとして定義 /  An unsigned, "standard" integer (often pre-defined) */
 
 /* The largest possible unsigned integer */
@@ -126,7 +119,6 @@ typedef int MUTATION_IDX; /*!< 突然変異のID型を定義 */
 typedef s32b POSITION; /*!< ゲーム中の座標型を定義 */
 typedef s16b POSITION_IDX; /*!< ゲーム中の座標リストID型 */
 
-typedef s32b ALIGNMENT; /*!< 善悪属性の型定義 */
 typedef byte FEAT_SUBTYPE; /*!< 地形情報の副値 (トラップ種別/パターン種別/店舗種別)*/
 
 typedef char GAME_TEXT; /*!< ゲーム中のテキスト型定義 */
@@ -147,10 +139,7 @@ typedef s32b HIT_POINT;
  */
 typedef s32b MANA_POINT; /*!< ゲーム中のMP型を定義 */
 
-typedef int ARTIFACT_BIAS_IDX; /*!< ランダムアーティファクトのバイアス型 */
-
 typedef s16b HIT_PROB; /*!< ゲーム中の装備命中修正値を定義 */
-typedef int HIT_RELIABILITY; /*!< 最終算出命中力を定義 */
 typedef s16b BASE_STATUS; /*!< ゲーム中の基礎能力値型を定義 */
 
 typedef s32b MONSTER_NUMBER; /*!< ゲーム中のモンスター数型を定義 */
@@ -214,9 +203,6 @@ typedef int TERM_LEN; /*!< コンソール表示座標の型定義 */
 typedef byte TERM_COLOR; /*!< テキスト表示色の型定義 */
 typedef char SYMBOL_CODE; /*!< キャラの文字の型定義 */
 
-typedef s32b MAGIC_NUM1; /*!< プレイヤーの汎用魔法情報配列1の型定義*/
-typedef byte MAGIC_NUM2; /*!< プレイヤーの汎用魔法情報配列2の型定義*/
-
 typedef s32b SPELL_IDX; /*!< 各魔法領域/職業能力ごとの呪文ID型定義 */
 typedef s16b PROB; /*!< 確率の重みの型定義 */
 typedef byte FEAT_POWER; /*!< 地形強度の型定義 */
@@ -234,23 +220,6 @@ typedef int PET_COMMAND_IDX; /*!< ペットへの指示ID */
 typedef byte FF_FLAGS_IDX; /*!< 地形特性ID */
 
 typedef s16b FEAT_PRIORITY; /*!< 地形の縮小表示優先順位 */
-
-/*** Pointers to all the basic types defined above ***/
-typedef char *char_ptr;
-typedef byte *byte_ptr;
-
-/*** Pointers to Functions of special types (for various purposes) ***/
-/* A generic function takes a user data and a special data */
-typedef errr (*func_gen)(vptr, vptr);
-
-/* An equality testing function takes two things to compare (bool) */
-typedef bool (*func_eql)(vptr, vptr);
-
-/* A hasher takes a thing (and a max hash size) to hash (0 to siz - 1) */
-typedef uint (*func_hsh)(vptr, uint);
-
-/* A key extractor takes a thing and returns (a pointer to) some key */
-typedef vptr (*func_key)(vptr);
 
 enum process_result {
     PROCESS_FALSE = 0,

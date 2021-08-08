@@ -5,13 +5,14 @@
  */
 
 #include "effect/effect-monster.h"
+#include "avatar/avatar.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "effect/effect-characteristics.h"
-#include "effect/effect-monster-util.h"
 #include "effect/effect-monster-switcher.h"
+#include "effect/effect-monster-util.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "game-option/play-record-options.h"
@@ -28,6 +29,7 @@
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
+#include "monster/monster-damage.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
@@ -36,8 +38,6 @@
 #include "monster/monster-update.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/object-kind-hook.h"
-#include "player-info/avatar.h"
-#include "util/bit-flags-calculator.h"
 #include "spell-kind/blood-curse.h"
 #include "spell-kind/spells-polymorph.h"
 #include "spell-kind/spells-teleport.h"
@@ -45,10 +45,12 @@
 #include "spells-effect-util.h"
 #include "sv-definition/sv-other-types.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
+#include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /*!
@@ -246,7 +248,8 @@ static bool heal_leaper(player_type *caster_ptr, effect_monster_type *em_ptr)
 static bool deal_effect_damage_from_player(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
     bool fear = false;
-    if (mon_take_hit(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, &fear, em_ptr->note_dies))
+    MonsterDamageProcessor mdp(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, &fear);
+    if (mdp.mon_take_hit(em_ptr->note_dies))
         return true;
 
     if (em_ptr->do_sleep)

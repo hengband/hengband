@@ -5,6 +5,7 @@
  */
 
 #include "monster-attack/monster-eating.h"
+#include "avatar/avatar.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
@@ -19,7 +20,6 @@
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"
-#include "player-info/avatar.h"
 #include "player/mimic-info-table.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-table.h"

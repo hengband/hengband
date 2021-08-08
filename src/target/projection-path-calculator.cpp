@@ -3,8 +3,8 @@
 #include "effect/spells-effect-util.h"
 #include "floor/cave.h"
 #include "grid/feature-flag-types.h"
-#include "grid/grid.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 
 typedef struct projection_path_type {

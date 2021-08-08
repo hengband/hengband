@@ -6,6 +6,7 @@
  */
 
 #include "object-use/quaff-execution.h"
+#include "avatar/avatar.h"
 #include "birth/birth-stat.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
@@ -19,7 +20,6 @@
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
-#include "player-info/avatar.h"
 #include "player-info/self-info.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
