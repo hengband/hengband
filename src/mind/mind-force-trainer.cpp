@@ -42,7 +42,7 @@
  * @param caster_ptr プレーヤーの参照ポインタ
  * @return 現在溜まっている気の量
  */
-MAGIC_NUM1 get_current_ki(player_type *caster_ptr)
+s32b get_current_ki(player_type *caster_ptr)
 {
     return caster_ptr->magic_num1[0];
 }
@@ -53,7 +53,7 @@ MAGIC_NUM1 get_current_ki(player_type *caster_ptr)
  * @param is_reset TRUEなら気の量をkiにセットし、FALSEなら加減算を行う
  * @param ki 気の量
  */
-void set_current_ki(player_type *caster_ptr, bool is_reset, MAGIC_NUM1 ki)
+void set_current_ki(player_type *caster_ptr, bool is_reset, s32b ki)
 {
     if (is_reset) {
         caster_ptr->magic_num1[0] = ki;

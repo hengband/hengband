@@ -284,7 +284,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             return info_damage(0, 0, power);
         if (cast) {
             int a = 3 - (caster_ptr->pspeed - 100) / 10;
-            MAGIC_NUM2 r = 3 + randint1(3) + MAX(0, MIN(3, a));
+            byte r = 3 + randint1(3) + MAX(0, MIN(3, a));
 
             if (hex_revenge_turn(caster_ptr) > 0) {
                 msg_print(_("すでに我慢をしている。", "You are already biding your time for vengeance."));
@@ -841,7 +841,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
         if (info)
             return info_damage(0, 0, power);
         if (cast) {
-            MAGIC_NUM2 r;
+            byte r;
             int a = 3 - (caster_ptr->pspeed - 100) / 10;
             r = 1 + randint1(2) + MAX(0, MIN(3, a));
 

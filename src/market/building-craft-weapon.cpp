@@ -314,7 +314,7 @@ static void list_weapon(player_type *player_ptr, object_type *o_ptr, TERM_LEN ro
 
     DICE_NUMBER eff_dd = o_ptr->dd + player_ptr->to_dd[0];
     DICE_SID eff_ds = o_ptr->ds + player_ptr->to_ds[0];
-    HIT_RELIABILITY reli = player_ptr->skill_thn + (player_ptr->to_h[0] + o_ptr->to_h) * BTH_PLUS_ADJ;
+    auto hit_reliability = player_ptr->skill_thn + (player_ptr->to_h[0] + o_ptr->to_h) * BTH_PLUS_ADJ;
 
     describe_flavor(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
     c_put_str(TERM_YELLOW, o_name, row, col);
@@ -323,8 +323,8 @@ static void list_weapon(player_type *player_ptr, object_type *o_ptr, TERM_LEN ro
 
     sprintf(tmp_str, _("命中率:  0  50 100 150 200 (敵のAC)", "To Hit:  0  50 100 150 200 (AC)"));
     put_str(tmp_str, row + 2, col);
-    sprintf(tmp_str, "        %2d  %2d  %2d  %2d  %2d (%%)", (int)hit_chance(player_ptr, reli, 0), (int)hit_chance(player_ptr, reli, 50),
-        (int)hit_chance(player_ptr, reli, 100), (int)hit_chance(player_ptr, reli, 150), (int)hit_chance(player_ptr, reli, 200));
+    sprintf(tmp_str, "        %2d  %2d  %2d  %2d  %2d (%%)", (int)hit_chance(player_ptr, hit_reliability, 0), (int)hit_chance(player_ptr, hit_reliability, 50),
+        (int)hit_chance(player_ptr, hit_reliability, 100), (int)hit_chance(player_ptr, hit_reliability, 150), (int)hit_chance(player_ptr, hit_reliability, 200));
     put_str(tmp_str, row + 3, col);
     c_put_str(TERM_YELLOW, _("可能なダメージ:", "Possible Damage:"), row + 5, col);
 
