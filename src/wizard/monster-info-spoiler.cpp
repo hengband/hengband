@@ -218,11 +218,6 @@ spoiler_output_status spoil_mon_info(concptr fname)
             spoil_out("[U] ");
         } else if (any_bits(r_ptr->flags7, RF7_NAZGUL)) {
             spoil_out("[N] ");
-        } else {
-#ifdef JP
-#else
-            spoil_out("The ");
-#endif
         }
 
         sprintf(buf, _("%s/%s  (", "%s%s ("), r_ptr->name.c_str(), _(r_ptr->E_name.c_str(), "")); /* ---)--- */

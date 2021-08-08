@@ -6,6 +6,7 @@
 
 #include "cmd-action/cmd-attack.h"
 #include "artifact/fixed-art-types.h"
+#include "avatar/avatar.h"
 #include "combat/attack-accuracy.h"
 #include "combat/attack-criticality.h"
 #include "core/asking-player.h"
@@ -17,7 +18,6 @@
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "game-option/cheat-types.h"
-#include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
@@ -25,6 +25,7 @@
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
+#include "monster/monster-damage.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"
@@ -32,7 +33,6 @@
 #include "mutation/mutation-flag-types.h"
 #include "object/item-use-flags.h"
 #include "player-attack/player-attack.h"
-#include "player-info/avatar.h"
 #include "player-info/equipment-info.h"
 #include "player-status/player-energy.h"
 #include "player-status/player-hand-types.h"
@@ -45,6 +45,7 @@
 #include "spell/spell-types.h"
 #include "status/action-setter.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
@@ -139,19 +140,14 @@ static void natural_attack(player_type *attacker_ptr, MONSTER_IDX m_idx, MUTA at
         *mdeath = (m_ptr->r_idx == 0);
         break;
     case MUTA::HORNS:
-        *mdeath = mon_take_hit(attacker_ptr, m_idx, k, fear, NULL);
-        break;
     case MUTA::BEAK:
-        *mdeath = mon_take_hit(attacker_ptr, m_idx, k, fear, NULL);
-        break;
     case MUTA::TRUNK:
-        *mdeath = mon_take_hit(attacker_ptr, m_idx, k, fear, NULL);
-        break;
     case MUTA::TENTACLES:
-        *mdeath = mon_take_hit(attacker_ptr, m_idx, k, fear, NULL);
+    default: {
+        MonsterDamageProcessor mdp(attacker_ptr, m_idx, k, fear);
+        *mdeath = mdp.mon_take_hit(NULL);
         break;
-    default:
-        *mdeath = mon_take_hit(attacker_ptr, m_idx, k, fear, NULL);
+    }
     }
 
     touch_zap_player(m_ptr, attacker_ptr);

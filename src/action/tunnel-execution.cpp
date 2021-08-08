@@ -4,16 +4,17 @@
  */
 
 #include "action/tunnel-execution.h"
+#include "avatar/avatar.h"
 #include "core/player-update-types.h"
 #include "floor/cave.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
-#include "player-info/avatar.h"
 #include "player-status/player-energy.h"
 #include "player/player-move.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -28,12 +29,12 @@
 static bool do_cmd_tunnel_test(floor_type *floor_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-    if (!(g_ptr->info & CAVE_MARK)) {
+    if (!g_ptr->is_mark()) {
         msg_print(_("そこには何も見当たらない。", "You see nothing there."));
         return false;
     }
 
-    if (!cave_has_flag_grid(g_ptr, FF_TUNNEL)) {
+    if (!g_ptr->cave_has_flag(FF_TUNNEL)) {
         msg_print(_("そこには掘るものが見当たらない。", "You see nothing there to tunnel."));
         return false;
     }
@@ -66,7 +67,7 @@ bool exe_tunnel(player_type *creature_ptr, POSITION y, POSITION x)
     g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
     f_ptr = &f_info[g_ptr->feat];
     power = f_ptr->power;
-    mimic_f_ptr = &f_info[get_feat_mimic(g_ptr)];
+    mimic_f_ptr = &f_info[g_ptr->get_feat_mimic()];
     name = mimic_f_ptr->name.c_str();
     sound(SOUND_DIG);
     if (has_flag(f_ptr->flags, FF_PERMANENT)) {

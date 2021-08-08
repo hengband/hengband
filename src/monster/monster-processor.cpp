@@ -13,6 +13,7 @@
  */
 
 #include "monster/monster-processor.h"
+#include "avatar/avatar.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/player-update-types.h"
 #include "core/speed-table.h"
@@ -20,7 +21,6 @@
 #include "floor/geometry.h"
 #include "game-option/play-record-options.h"
 #include "grid/feature.h"
-#include "grid/grid.h"
 #include "io/write-diary.h"
 #include "melee/melee-postprocess.h"
 #include "melee/melee-spell.h"
@@ -52,7 +52,6 @@
 #include "mspell/mspell-judgement.h"
 #include "object-enchant/trc-types.h"
 #include "pet/pet-fall-off.h"
-#include "player-info/avatar.h"
 #include "player/player-move.h"
 #include "player/player-skill.h"
 #include "player/player-status-flags.h"
@@ -60,6 +59,7 @@
 #include "spell-realm/spells-hex.h"
 #include "spell/summon-types.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"

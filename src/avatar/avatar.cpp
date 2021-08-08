@@ -12,13 +12,13 @@
  * included in all such copies.
  */
 
-#include "player-info/avatar.h"
+#include "avatar/avatar.h"
 #include "core/player-update-types.h"
 #include "game-option/text-display-options.h"
 #include "player/player-class.h"
 #include "player/player-race-types.h"
-#include "system/player-type-definition.h"
 #include "realm/realm-names-table.h"
+#include "system/player-type-definition.h"
 
 /*!
  * 徳の名称 / The names of the virtues
@@ -211,7 +211,7 @@ static enum virtue_idx get_realm_virtues(player_type *creature_ptr, REALM_IDX re
  * @brief 作成中のプレイヤーキャラクターに徳8種類を与える。 / Select virtues & reset values for a new character
  * @details 職業に応じて1～4種が固定、種族に応じて1種類が与えられ、後は重複なくランダムに選択される。
  */
-void get_virtues(player_type *creature_ptr)
+void initialize_virtues(player_type *creature_ptr)
 {
     int i = 0, j = 0;
     s16b tmp_vir;

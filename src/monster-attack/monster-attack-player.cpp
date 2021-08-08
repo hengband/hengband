@@ -31,6 +31,7 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags1.h"
 #include "monster-race/race-flags3.h"
+#include "monster/monster-damage.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
@@ -251,7 +252,8 @@ static void monster_explode(player_type *target_ptr, monap_type *monap_ptr)
         return;
 
     sound(SOUND_EXPLODE);
-    if (mon_take_hit(target_ptr, monap_ptr->m_idx, monap_ptr->m_ptr->hp + 1, &monap_ptr->fear, NULL)) {
+    MonsterDamageProcessor mdp(target_ptr, monap_ptr->m_idx, monap_ptr->m_ptr->hp + 1, &monap_ptr->fear);
+    if (mdp.mon_take_hit(NULL)) {
         monap_ptr->blinked = false;
         monap_ptr->alive = false;
     }

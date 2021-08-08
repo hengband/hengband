@@ -1,4 +1,5 @@
 ﻿#include "spell/spells-summon.h"
+#include "avatar/avatar.h"
 #include "effect/spells-effect-util.h"
 #include "floor/floor-object.h"
 #include "floor/line-of-sight.h"
@@ -14,7 +15,6 @@
 #include "monster/smart-learn-types.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "player-info/avatar.h"
 #include "spell-kind/earthquake.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-genocide.h"

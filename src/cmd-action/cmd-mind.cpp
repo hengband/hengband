@@ -44,6 +44,7 @@
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/buffer-shaper.h"
@@ -282,7 +283,7 @@ static bool switch_mind_class(player_type *caster_ptr, cm_type *cm_ptr)
         cm_ptr->cast = cast_berserk_spell(caster_ptr, static_cast<mind_berserker_type>(cm_ptr->n));
         return true;
     case MIND_MIRROR_MASTER:
-        if (is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x]))
+        if (caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].is_mirror())
             cm_ptr->on_mirror = true;
 
         cm_ptr->cast = cast_mirror_spell(caster_ptr, static_cast<mind_mirror_master_type>(cm_ptr->n));

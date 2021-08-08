@@ -8,6 +8,7 @@
 #include "cmd-action/cmd-spell.h"
 #include "action/action-limited.h"
 #include "autopick/autopick-reader-writer.h"
+#include "avatar/avatar.h"
 #include "cmd-action/cmd-mind.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/asking-player.h"
@@ -30,7 +31,6 @@
 #include "object-hook/hook-magic.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "player-info/avatar.h"
 #include "player-info/self-info.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
@@ -116,7 +116,10 @@ concptr info_string_dice(concptr str, DICE_NUMBER dice, DICE_SID sides, int base
  * @param base 固定値
  * @return フォーマットに従い整形された文字列
  */
-concptr info_damage(DICE_NUMBER dice, DICE_SID sides, int base) { return info_string_dice(_("損傷:", "dam "), dice, sides, base); }
+concptr info_damage(DICE_NUMBER dice, DICE_SID sides, int base)
+{
+    return info_string_dice(_("損傷:", "dam "), dice, sides, base);
+}
 
 /*!
  * @brief 魔法の効果時間を出力する / Generate duration info string such as "dur 20+1d20"
@@ -124,14 +127,20 @@ concptr info_damage(DICE_NUMBER dice, DICE_SID sides, int base) { return info_st
  * @param sides ダイス目
  * @return フォーマットに従い整形された文字列
  */
-concptr info_duration(int base, DICE_SID sides) { return format(_("期間:%d+1d%d", "dur %d+1d%d"), base, sides); }
+concptr info_duration(int base, DICE_SID sides)
+{
+    return format(_("期間:%d+1d%d", "dur %d+1d%d"), base, sides);
+}
 
 /*!
  * @brief 魔法の効果範囲を出力する / Generate range info string such as "range 5"
  * @param range 効果範囲
  * @return フォーマットに従い整形された文字列
  */
-concptr info_range(POSITION range) { return format(_("範囲:%d", "range %d"), range); }
+concptr info_range(POSITION range)
+{
+    return format(_("範囲:%d", "range %d"), range);
+}
 
 /*!
  * @brief 魔法による回復量を出力する / Generate heal info string such as "heal 2d8"
@@ -140,7 +149,10 @@ concptr info_range(POSITION range) { return format(_("範囲:%d", "range %d"), r
  * @param base 固定値
  * @return フォーマットに従い整形された文字列
  */
-concptr info_heal(DICE_NUMBER dice, DICE_SID sides, int base) { return info_string_dice(_("回復:", "heal "), dice, sides, base); }
+concptr info_heal(DICE_NUMBER dice, DICE_SID sides, int base)
+{
+    return info_string_dice(_("回復:", "heal "), dice, sides, base);
+}
 
 /*!
  * @brief 魔法効果発動までの遅延ターンを出力する / Generate delay info string such as "delay 15+1d15"
@@ -148,14 +160,20 @@ concptr info_heal(DICE_NUMBER dice, DICE_SID sides, int base) { return info_stri
  * @param sides ダイス目
  * @return フォーマットに従い整形された文字列
  */
-concptr info_delay(int base, DICE_SID sides) { return format(_("遅延:%d+1d%d", "delay %d+1d%d"), base, sides); }
+concptr info_delay(int base, DICE_SID sides)
+{
+    return format(_("遅延:%d+1d%d", "delay %d+1d%d"), base, sides);
+}
 
 /*!
  * @brief 魔法によるダメージを出力する(固定値＆複数回処理) / Generate multiple-damage info string such as "dam 25 each"
  * @param dam 固定値
  * @return フォーマットに従い整形された文字列
  */
-concptr info_multi_damage(HIT_POINT dam) { return format(_("損傷:各%d", "dam %d each"), dam); }
+concptr info_multi_damage(HIT_POINT dam)
+{
+    return format(_("損傷:各%d", "dam %d each"), dam);
+}
 
 /*!
  * @brief 魔法によるダメージを出力する(ダイスのみ＆複数回処理) / Generate multiple-damage-dice info string such as "dam 5d2 each"
@@ -163,14 +181,20 @@ concptr info_multi_damage(HIT_POINT dam) { return format(_("損傷:各%d", "dam 
  * @param sides ダイス目
  * @return フォーマットに従い整形された文字列
  */
-concptr info_multi_damage_dice(DICE_NUMBER dice, DICE_SID sides) { return format(_("損傷:各%dd%d", "dam %dd%d each"), dice, sides); }
+concptr info_multi_damage_dice(DICE_NUMBER dice, DICE_SID sides)
+{
+    return format(_("損傷:各%dd%d", "dam %dd%d each"), dice, sides);
+}
 
 /*!
  * @brief 魔法による一般的な効力値を出力する（固定値） / Generate power info string such as "power 100"
  * @param power 固定値
  * @return フォーマットに従い整形された文字列
  */
-concptr info_power(int power) { return format(_("効力:%d", "power %d"), power); }
+concptr info_power(int power)
+{
+    return format(_("効力:%d", "power %d"), power);
+}
 
 /*!
  * @brief 魔法による一般的な効力値を出力する（ダイス値） / Generate power info string such as "power 100"
@@ -181,14 +205,20 @@ concptr info_power(int power) { return format(_("効力:%d", "power %d"), power)
 /*
  * Generate power info string such as "power 1d100"
  */
-concptr info_power_dice(DICE_NUMBER dice, DICE_SID sides) { return format(_("効力:%dd%d", "power %dd%d"), dice, sides); }
+concptr info_power_dice(DICE_NUMBER dice, DICE_SID sides)
+{
+    return format(_("効力:%dd%d", "power %dd%d"), dice, sides);
+}
 
 /*!
  * @brief 魔法の効果半径を出力する / Generate radius info string such as "rad 100"
  * @param rad 効果半径
  * @return フォーマットに従い整形された文字列
  */
-concptr info_radius(POSITION rad) { return format(_("半径:%d", "rad %d"), rad); }
+concptr info_radius(POSITION rad)
+{
+    return format(_("半径:%d", "rad %d"), rad);
+}
 
 /*!
  * @brief 魔法効果の限界重量を出力する / Generate weight info string such as "max wgt 15"
@@ -1031,8 +1061,11 @@ bool do_cmd_cast(player_type *caster_ptr)
 
         /* Ask for a spell */
 #ifdef JP
-    if (!get_spell(caster_ptr, &spell, ((mp_ptr->spell_book == TV_LIFE_BOOK) ? "詠唱する" : (mp_ptr->spell_book == TV_MUSIC_BOOK) ? "歌う" : "唱える"), sval,
-            true, realm)) {
+    if (!get_spell(caster_ptr, &spell,
+            ((mp_ptr->spell_book == TV_LIFE_BOOK)           ? "詠唱する"
+                    : (mp_ptr->spell_book == TV_MUSIC_BOOK) ? "歌う"
+                                                            : "唱える"),
+            sval, true, realm)) {
         if (spell == -2)
             msg_format("その本には知っている%sがない。", prayer);
         return false;
@@ -1070,7 +1103,9 @@ bool do_cmd_cast(player_type *caster_ptr)
             /* Warning */
 #ifdef JP
         msg_format("その%sを%sのに十分なマジックポイントがない。", prayer,
-            ((mp_ptr->spell_book == TV_LIFE_BOOK) ? "詠唱する" : (mp_ptr->spell_book == TV_LIFE_BOOK) ? "歌う" : "唱える"));
+            ((mp_ptr->spell_book == TV_LIFE_BOOK)          ? "詠唱する"
+                    : (mp_ptr->spell_book == TV_LIFE_BOOK) ? "歌う"
+                                                           : "唱える"));
 #else
         msg_format("You do not have enough mana to %s this %s.", ((mp_ptr->spell_book == TV_LIFE_BOOK) ? "recite" : "cast"), prayer);
 #endif

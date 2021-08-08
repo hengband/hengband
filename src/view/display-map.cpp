@@ -15,6 +15,7 @@
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
@@ -141,14 +142,15 @@ void map_info(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, S
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-    FEAT_IDX feat = get_feat_mimic(g_ptr);
+    FEAT_IDX feat = g_ptr->get_feat_mimic();
     feature_type *f_ptr = &f_info[feat];
     TERM_COLOR a;
     SYMBOL_CODE c;
     if (!has_flag(f_ptr->flags, FF_REMEMBER)) {
-        if (!player_ptr->blind
-            && ((g_ptr->info & (CAVE_MARK | CAVE_LITE | CAVE_MNLT))
-                || ((g_ptr->info & CAVE_VIEW) && (((g_ptr->info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) || player_ptr->see_nocto)))) {
+        auto is_visible = any_bits(g_ptr->info, (CAVE_MARK | CAVE_LITE | CAVE_MNLT));
+        auto is_glowing = match_bits(g_ptr->info, CAVE_GLOW | CAVE_MNDK, CAVE_GLOW);
+        auto can_view = g_ptr->is_view() && (is_glowing || player_ptr->see_nocto);
+        if ((player_ptr->blind == 0) && (is_visible || can_view)) {
             a = f_ptr->x_attr[F_LIT_STANDARD];
             c = f_ptr->x_char[F_LIT_STANDARD];
             if (player_ptr->wild_mode) {
@@ -184,7 +186,7 @@ void map_info(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, S
             c = f_ptr->x_char[F_LIT_STANDARD];
         }
     } else {
-        if (g_ptr->info & CAVE_MARK && is_revealed_wall(floor_ptr, f_ptr, y, x)) {
+        if (g_ptr->is_mark() && is_revealed_wall(floor_ptr, f_ptr, y, x)) {
             a = f_ptr->x_attr[F_LIT_STANDARD];
             c = f_ptr->x_char[F_LIT_STANDARD];
             if (player_ptr->wild_mode) {

@@ -1,6 +1,4 @@
-﻿#include <vector>
-#include <unordered_map>
-
+﻿#include "target/grid-selector.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
@@ -10,20 +8,21 @@
 #include "game-option/game-play-options.h"
 #include "game-option/input-options.h"
 #include "game-option/keymap-directory-getter.h"
-#include "grid/feature.h"
 #include "grid/feature-flag-types.h"
-#include "grid/grid.h"
+#include "grid/feature.h"
 #include "io/cursor.h"
 #include "io/input-key-acceptor.h"
 #include "io/screen-util.h"
 #include "system/floor-type-definition.h"
-#include "target/grid-selector.h"
+#include "system/grid-type-definition.h"
 #include "target/target-checker.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "util/sort.h"
 #include "view/display-messages.h"
 #include "window/main-window-util.h"
+#include <unordered_map>
+#include <vector>
 
 /*
  * XAngband: determine if a given location is "interesting"
@@ -43,14 +42,14 @@ static bool tgt_pt_accept(player_type *creature_ptr, POSITION y, POSITION x)
 
     grid_type *g_ptr;
     g_ptr = &floor_ptr->grid_array[y][x];
-    if (!(g_ptr->info & (CAVE_MARK)))
+    if (!g_ptr->is_mark())
         return false;
 
-    if (cave_has_flag_grid(g_ptr, FF_LESS) || cave_has_flag_grid(g_ptr, FF_MORE) || cave_has_flag_grid(g_ptr, FF_QUEST_ENTER)
-        || cave_has_flag_grid(g_ptr, FF_QUEST_EXIT))
+    if (g_ptr->cave_has_flag(FF_LESS) || g_ptr->cave_has_flag(FF_MORE) || g_ptr->cave_has_flag(FF_QUEST_ENTER)
+        || g_ptr->cave_has_flag(FF_QUEST_EXIT))
         return true;
 
-    if (cave_has_flag_grid(g_ptr, FF_STORE) || cave_has_flag_grid(g_ptr, FF_BLDG))
+    if (g_ptr->cave_has_flag(FF_STORE) || g_ptr->cave_has_flag(FF_BLDG))
         return true;
 
     return false;
@@ -85,25 +84,28 @@ static void tgt_pt_prepare(player_type *creature_ptr, std::vector<POSITION> &ys,
  * @param ch 指定するシンボル文字
  * @return シンボルが指定した記号ならTRUE、そうでなければFALSE
  */
-static bool cave_is_symbol_grid(grid_type* g_ptr, char ch) { return f_info[g_ptr->feat].x_char[0] == ch; }
+static bool cave_is_symbol_grid(grid_type *g_ptr, char ch)
+{
+    return f_info[g_ptr->feat].x_char[0] == ch;
+}
 
 /*!
  * @brief 指定したシンボルのマスかどうかを判定するための条件式コールバック
  */
-std::unordered_map<int, std::function<bool(grid_type*)>> tgt_pt_symbol_call_back = {
-    { '<', [](grid_type *g_ptr) { return cave_has_flag_grid(g_ptr, FF_STAIRS) && cave_has_flag_grid(g_ptr, FF_LESS); } },
-    { '>', [](grid_type *g_ptr) { return cave_has_flag_grid(g_ptr, FF_STAIRS) && cave_has_flag_grid(g_ptr, FF_MORE); } },
-    { '+', [](grid_type *g_ptr) { return cave_has_flag_grid(g_ptr, FF_BLDG); } },
-    { '0', [](grid_type *g_ptr) { return cave_has_flag_grid(g_ptr, FF_STORE) && cave_is_symbol_grid(g_ptr, '0'); } },
-    { '!', [](grid_type *g_ptr) { return cave_has_flag_grid(g_ptr, FF_STORE) && cave_is_symbol_grid(g_ptr, '1'); } },
-    { '"', [](grid_type *g_ptr) { return cave_has_flag_grid(g_ptr, FF_STORE) && cave_is_symbol_grid(g_ptr, '2'); } },
-    { '#', [](grid_type *g_ptr) { return cave_has_flag_grid(g_ptr, FF_STORE) && cave_is_symbol_grid(g_ptr, '3'); } },
-    { '$', [](grid_type *g_ptr) { return cave_has_flag_grid(g_ptr, FF_STORE) && cave_is_symbol_grid(g_ptr, '4'); } },
-    { '%', [](grid_type *g_ptr) { return cave_has_flag_grid(g_ptr, FF_STORE) && cave_is_symbol_grid(g_ptr, '5'); } },
-    { '&', [](grid_type *g_ptr) { return cave_has_flag_grid(g_ptr, FF_STORE) && cave_is_symbol_grid(g_ptr, '6'); } },
-    { '\'', [](grid_type *g_ptr) { return cave_has_flag_grid(g_ptr, FF_STORE) && cave_is_symbol_grid(g_ptr, '7'); } },
-    { '(', [](grid_type *g_ptr) { return cave_has_flag_grid(g_ptr, FF_STORE) && cave_is_symbol_grid(g_ptr, '8'); } },
-    { ')', [](grid_type *g_ptr) { return cave_has_flag_grid(g_ptr, FF_STORE) && cave_is_symbol_grid(g_ptr, '9'); } },
+std::unordered_map<int, std::function<bool(grid_type *)>> tgt_pt_symbol_call_back = {
+    { '<', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF_STAIRS) && g_ptr->cave_has_flag(FF_LESS); } },
+    { '>', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF_STAIRS) && g_ptr->cave_has_flag(FF_MORE); } },
+    { '+', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF_BLDG); } },
+    { '0', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF_STORE) && cave_is_symbol_grid(g_ptr, '0'); } },
+    { '!', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF_STORE) && cave_is_symbol_grid(g_ptr, '1'); } },
+    { '"', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF_STORE) && cave_is_symbol_grid(g_ptr, '2'); } },
+    { '#', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF_STORE) && cave_is_symbol_grid(g_ptr, '3'); } },
+    { '$', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF_STORE) && cave_is_symbol_grid(g_ptr, '4'); } },
+    { '%', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF_STORE) && cave_is_symbol_grid(g_ptr, '5'); } },
+    { '&', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF_STORE) && cave_is_symbol_grid(g_ptr, '6'); } },
+    { '\'', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF_STORE) && cave_is_symbol_grid(g_ptr, '7'); } },
+    { '(', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF_STORE) && cave_is_symbol_grid(g_ptr, '8'); } },
+    { ')', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF_STORE) && cave_is_symbol_grid(g_ptr, '9'); } },
 };
 
 /*!
@@ -129,7 +131,7 @@ struct tgt_pt_info {
  * @param creature_ptr プレイヤー情報への参照ポインタ
  * @param info 位置ターゲット指定情報構造体(参照渡し)
  */
-void tgt_pt_move_to_symbol(player_type *creature_ptr, tgt_pt_info& info)
+void tgt_pt_move_to_symbol(player_type *creature_ptr, tgt_pt_info &info)
 {
     if (!expand_list || info.ys.empty())
         return;

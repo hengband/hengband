@@ -2084,9 +2084,6 @@
     <ClCompile Include="..\..\src\player-info\self-info.cpp">
       <Filter>player-info</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player-info\avatar.cpp">
-      <Filter>player-info</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\player-info\race-ability-info.cpp">
       <Filter>player-info</Filter>
     </ClCompile>
@@ -2315,6 +2312,21 @@
     </ClCompile>
     <ClCompile Include="..\..\src\object-enchant\apply-magic-gloves.cpp">
       <Filter>object-enchant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster\monster-damage.cpp">
+      <Filter>monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\grid-type-definition.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\grid\feature-action-flags.cpp">
+      <Filter>grid</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\avatar\avatar-changer.cpp">
+      <Filter>avatar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\avatar\avatar.cpp">
+      <Filter>avatar</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2874,9 +2886,6 @@
       <Filter>mspell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mspell\mspell-summon.h">
-      <Filter>mspell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\mspell\mspell-type.h">
       <Filter>mspell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mspell\mspell-util.h">
@@ -4718,9 +4727,6 @@
     <ClInclude Include="..\..\src\player-info\self-info.h">
       <Filter>player-info</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player-info\avatar.h">
-      <Filter>player-info</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\player-info\base-status-info.h">
       <Filter>player-info</Filter>
     </ClInclude>
@@ -4977,6 +4983,21 @@
     <ClInclude Include="..\..\src\object-enchant\apply-magic-gloves.h">
       <Filter>object-enchant</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\system\grid-type-definition.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\grid\feature-action-flags.h">
+      <Filter>grid</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster\monster-damage.h">
+      <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\avatar\avatar-changer.h">
+      <Filter>avatar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\avatar\avatar.h">
+      <Filter>avatar</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -5189,6 +5210,9 @@
     </Filter>
     <Filter Include="player-ability">
       <UniqueIdentifier>{d6c9dc68-d79b-4509-bf9c-34ff9620bbf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="avatar">
+      <UniqueIdentifier>{953acb44-db6d-4bd8-bb0b-5692524bad93}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

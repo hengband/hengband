@@ -1,5 +1,6 @@
 ﻿#include "player/player-damage.h"
 #include "autopick/autopick-pref-processor.h"
+#include "avatar/avatar.h"
 #include "blue-magic/blue-magic-checker.h"
 #include "cmd-io/cmd-process-screen.h"
 #include "core/asking-player.h"
@@ -42,7 +43,6 @@
 #include "object/item-tester-hooker.h"
 #include "object/object-broken.h"
 #include "object/object-flags.h"
-#include "player-info/avatar.h"
 #include "player/player-class.h"
 #include "player/player-personality-types.h"
 #include "player/player-race-types.h"
@@ -357,7 +357,8 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
         chg_virtue(creature_ptr, V_SACRIFICE, 10);
         handle_stuff(creature_ptr);
         creature_ptr->leaving = true;
-        if(!cheat_immortal) creature_ptr->is_dead = true;
+        if (!cheat_immortal)
+            creature_ptr->is_dead = true;
         if (creature_ptr->current_floor_ptr->inside_arena) {
             concptr m_name = r_info[arena_info[creature_ptr->arena_number].r_idx].name.c_str();
             msg_format(_("あなたは%sの前に敗れ去った。", "You are beaten by %s."), m_name);
@@ -383,7 +384,10 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
             } else {
                 char dummy[1024];
 #ifdef JP
-                sprintf(dummy, "%s%s%s", !creature_ptr->paralyzed ? "" : creature_ptr->free_act ? "彫像状態で" : "麻痺状態で",
+                sprintf(dummy, "%s%s%s",
+                    !creature_ptr->paralyzed     ? ""
+                        : creature_ptr->free_act ? "彫像状態で"
+                                                 : "麻痺状態で",
                     creature_ptr->image ? "幻覚に歪んだ" : "", hit_from);
 #else
                 sprintf(dummy, "%s%s", hit_from, !creature_ptr->paralyzed ? "" : " while helpless");

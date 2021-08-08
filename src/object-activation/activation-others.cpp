@@ -6,6 +6,7 @@
 
 #include "object-activation/activation-others.h"
 #include "artifact/fixed-art-types.h"
+#include "avatar/avatar.h"
 #include "cmd-io/cmd-save.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
@@ -18,7 +19,6 @@
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-status.h"
 #include "player-attack/player-attack.h"
-#include "player-info/avatar.h"
 #include "player/player-damage.h"
 #include "player/player-status.h"
 #include "spell-kind/earthquake.h"
@@ -388,4 +388,10 @@ bool activate_animate_dead(player_type *user_ptr, object_type *o_ptr)
         msg_print(_("ぴぴるぴるぴるぴぴるぴ～♪", "Pipiru piru piru pipiru pii"));
 
     return animate_dead(user_ptr, 0, user_ptr->y, user_ptr->x);
+}
+
+bool activate_detect_treasure(player_type *user_ptr)
+{
+    msg_print(_("金と銀に彩られている...", "It shines with gold and silver..."));
+    return detect_treasure(user_ptr, DETECT_RAD_DEFAULT);
 }

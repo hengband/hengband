@@ -48,6 +48,7 @@
 #include "player/special-defense-types.h"
 #include "status/action-setter.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
@@ -257,7 +258,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
 
         if (!can_player_ride_pet(creature_ptr, g_ptr, true)) {
             /* Feature code (applying "mimic" field) */
-            feature_type *f_ptr = &f_info[get_feat_mimic(g_ptr)];
+            feature_type *f_ptr = &f_info[g_ptr->get_feat_mimic()];
 #ifdef JP
             msg_format("そのモンスターは%sの%sにいる。", f_ptr->name.c_str(),
                 ((!has_flag(f_ptr->flags, FF_MOVE) && !has_flag(f_ptr->flags, FF_CAN_FLY))

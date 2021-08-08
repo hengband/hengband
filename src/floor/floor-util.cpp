@@ -14,12 +14,12 @@
 #include "floor/line-of-sight.h"
 #include "game-option/birth-options.h"
 #include "grid/feature.h"
-#include "grid/grid.h"
 #include "object-hook/hook-checker.h"
 #include "object-hook/hook-enchant.h"
 #include "perception/object-perception.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
@@ -81,7 +81,7 @@ void update_smell(floor_type *floor_ptr, player_type *subject_ptr)
                 continue;
 
             g_ptr = &floor_ptr->grid_array[y][x];
-            if (!cave_has_flag_grid(g_ptr, FF_MOVE) && !is_closed_door(subject_ptr, g_ptr->feat))
+            if (!g_ptr->cave_has_flag(FF_MOVE) && !is_closed_door(subject_ptr, g_ptr->feat))
                 continue;
             if (!player_has_los_bold(subject_ptr, y, x))
                 continue;

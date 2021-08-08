@@ -35,6 +35,7 @@
 #include "save/floor-writer.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
@@ -229,8 +230,8 @@ static void get_out_monster(player_type *protected_ptr)
         if (tries > 20 * dis * dis)
             dis++;
 
-        if (!in_bounds(floor_ptr, ny, nx) || !is_cave_empty_bold(protected_ptr, ny, nx) || is_rune_protection_grid(&floor_ptr->grid_array[ny][nx])
-            || is_rune_explosion_grid(&floor_ptr->grid_array[ny][nx]) || pattern_tile(floor_ptr, ny, nx))
+        if (!in_bounds(floor_ptr, ny, nx) || !is_cave_empty_bold(protected_ptr, ny, nx) || floor_ptr->grid_array[ny][nx].is_rune_protection()
+            || floor_ptr->grid_array[ny][nx].is_rune_explosion() || pattern_tile(floor_ptr, ny, nx))
             continue;
 
         m_ptr = &floor_ptr->m_list[m_idx];

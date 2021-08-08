@@ -1,6 +1,4 @@
-﻿#include <vector>
-
-#include "target/target-setter.h"
+﻿#include "target/target-setter.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
 #include "core/stuff-handler.h"
@@ -10,12 +8,12 @@
 #include "game-option/cheat-options.h"
 #include "game-option/game-play-options.h"
 #include "game-option/input-options.h"
-#include "grid/grid.h"
 #include "io/cursor.h"
 #include "io/input-key-requester.h"
 #include "io/screen-util.h"
 #include "main/sound-of-music.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
@@ -27,6 +25,7 @@
 #include "util/int-char-converter.h"
 #include "window/display-sub-windows.h"
 #include "window/main-window-util.h"
+#include <vector>
 
 // "interesting" な座標たちを記録する配列。
 // ang_sort() を利用する関係上、y/x座標それぞれについて配列を作る。

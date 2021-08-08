@@ -18,6 +18,7 @@
 #include "room/door-definition.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -123,7 +124,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
             cave_set_feat(caster_ptr, y, x, one_in_(3) ? feat_brake : feat_grass);
 
             /* Observe */
-            if (g_ptr->info & (CAVE_MARK))
+            if (g_ptr->is_mark())
                 obvious = true;
         }
     }
@@ -220,7 +221,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
             break;
 
         s16b old_mimic = g_ptr->mimic;
-        feature_type *mimic_f_ptr = &f_info[get_feat_mimic(g_ptr)];
+        feature_type *mimic_f_ptr = &f_info[g_ptr->get_feat_mimic()];
 
         cave_alter_feat(caster_ptr, y, x, FF_SPIKE);
         g_ptr->mimic = old_mimic;
@@ -239,8 +240,8 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
         if (!has_flag(f_ptr->flags, FF_HURT_ROCK))
             break;
 
-        if (known && (g_ptr->info & (CAVE_MARK))) {
-            msg_format(_("%sが溶けて泥になった！", "The %s turns into mud!"), f_info[get_feat_mimic(g_ptr)].name.c_str());
+        if (known && g_ptr->is_mark()) {
+            msg_format(_("%sが溶けて泥になった！", "The %s turns into mud!"), f_info[g_ptr->get_feat_mimic()].name.c_str());
             obvious = true;
         }
 
@@ -254,7 +255,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
         if (player_bold(caster_ptr, y, x))
             break;
         cave_set_feat(caster_ptr, y, x, feat_door[DOOR_DOOR].closed);
-        if (g_ptr->info & (CAVE_MARK))
+        if (g_ptr->is_mark())
             obvious = true;
         break;
     }
@@ -268,7 +269,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
         if (player_bold(caster_ptr, y, x))
             break;
         cave_set_feat(caster_ptr, y, x, feat_tree);
-        if (g_ptr->info & (CAVE_MARK))
+        if (g_ptr->is_mark())
             obvious = true;
         break;
     }
@@ -340,7 +341,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
     case GF_DARK_WEAK:
     case GF_DARK:
     case GF_ABYSS: {
-        bool do_dark = !caster_ptr->phase_out && !is_mirror_grid(g_ptr);
+        bool do_dark = !caster_ptr->phase_out && !g_ptr->is_mirror();
         if (!do_dark)
             break;
 
@@ -353,7 +354,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
                     continue;
 
                 grid_type *cc_ptr = &floor_ptr->grid_array[by][bx];
-                if (has_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW)) {
+                if (has_flag(f_info[cc_ptr->get_feat_mimic()].flags, FF_GLOW)) {
                     do_dark = false;
                     break;
                 }
@@ -385,7 +386,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
     }
     case GF_SHARDS:
     case GF_ROCKET: {
-        if (is_mirror_grid(g_ptr)) {
+        if (g_ptr->is_mirror()) {
             msg_print(_("鏡が割れた！", "The mirror was shattered!"));
             sound(SOUND_GLASS);
             remove_mirror(caster_ptr, y, x);
@@ -396,8 +397,8 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
         if (!has_flag(f_ptr->flags, FF_GLASS) || has_flag(f_ptr->flags, FF_PERMANENT) || (dam < 50))
             break;
 
-        if (known && (g_ptr->info & CAVE_MARK)) {
-            msg_format(_("%sが割れた！", "The %s crumbled!"), f_info[get_feat_mimic(g_ptr)].name.c_str());
+        if (known && (g_ptr->is_mark())) {
+            msg_format(_("%sが割れた！", "The %s crumbled!"), f_info[g_ptr->get_feat_mimic()].name.c_str());
             sound(SOUND_GLASS);
         }
 
@@ -406,7 +407,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
         break;
     }
     case GF_SOUND: {
-        if (is_mirror_grid(g_ptr) && caster_ptr->lev < 40) {
+        if (g_ptr->is_mirror() && caster_ptr->lev < 40) {
             msg_print(_("鏡が割れた！", "The mirror was shattered!"));
             sound(SOUND_GLASS);
             remove_mirror(caster_ptr, y, x);
@@ -417,8 +418,8 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
         if (!has_flag(f_ptr->flags, FF_GLASS) || has_flag(f_ptr->flags, FF_PERMANENT) || (dam < 200))
             break;
 
-        if (known && (g_ptr->info & CAVE_MARK)) {
-            msg_format(_("%sが割れた！", "The %s crumbled!"), f_info[get_feat_mimic(g_ptr)].name.c_str());
+        if (known && (g_ptr->is_mark())) {
+            msg_format(_("%sが割れた！", "The %s crumbled!"), f_info[g_ptr->get_feat_mimic()].name.c_str());
             sound(SOUND_GLASS);
         }
 
@@ -427,7 +428,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
         break;
     }
     case GF_DISINTEGRATE: {
-        if (is_mirror_grid(g_ptr) || is_rune_protection_grid(g_ptr) || is_rune_explosion_grid(g_ptr))
+        if (g_ptr->is_mirror() || g_ptr->is_rune_protection() || g_ptr->is_rune_explosion())
             remove_mirror(caster_ptr, y, x);
 
         if (!has_flag(f_ptr->flags, FF_HURT_DISI) || has_flag(f_ptr->flags, FF_PERMANENT))

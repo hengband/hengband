@@ -15741,14 +15741,15 @@ B:TOUCH:LOSE_ALL:6d16
 B:TOUCH:EXP_VAMP:6d16
 B:TOUCH:UN_POWER:6d16
 B:TOUCH:DR_MANA:6d16
-F:PASS_WALL | NO_CONF | NO_SLEEP | NONLIVING | IM_ACID | CAN_FLY |
-F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | SMART | EVIL |
-F:ELDRITCH_HORROR | IM_COLD | RES_NETH | RES_DARK | NO_STUN | UNIQUE |
-F:REGENERATE | FORCE_MAXHP | SELF_DARK_1 | SELF_DARK_2
-S:1_IN_5
-S:BR_NETH | BRAIN_SMASH | SCARE | S_UNDEAD | S_HI_UNDEAD |
+F:UNIQUE | FORCE_MAXHP | PASS_WALL | NONLIVING | IM_ACID | CAN_FLY
+F:ONLY_ITEM | DROP_2D2 | DROP_4D2 | DROP_GOOD | SMART | EVIL
+F:ELDRITCH_HORROR | IM_COLD | RES_NETH | RES_DARK
+F:NO_CONF | NO_SLEEP | NO_STUN | QUANTUM | RAND_25
+F:REGENERATE | SELF_DARK_1 | SELF_DARK_2
+S:1_IN_5 | BR_NETH | BRAIN_SMASH | SCARE | S_UNDEAD | S_HI_UNDEAD
 S:DRAIN_MANA | HEAL | ANIM_DEAD
-D:$A black hole in the fabric of reality. It simply is not there.
+D:$A black hole in the fabric of reality.
+D:$  It simply is not there.
 D:現実という生地に空いた黒い穴。これは「無」だ。
 
 #J0#
@@ -19546,13 +19547,9 @@ B:GAZE:CONFUSE:2d3
 B:CLAW:POISON:3d4
 B:CLAW:POISON:3d4
 B:SPIT:BLIND:2d3
-F:CHAR_MULTI | 
-F:PREVENT_SUDDEN_MAGIC | NEVER_MOVE | 
-F:EMPTY_MIND | COLD_BLOOD |
+F:CHAR_MULTI | PREVENT_SUDDEN_MAGIC | NEVER_MOVE | EMPTY_MIND | COLD_BLOOD
 F:NO_CONF | NO_SLEEP | NO_FEAR
-S:1_IN_5 | 
-S:BLIND | CONF | SCARE | CAUSE_2 | BA_POIS |
-S:S_MONSTER
+S:1_IN_5 | BLIND | CONF | SCARE | CAUSE_2 | BA_POIS | S_MONSTER
 D:$This strange creature, transformed into an image of a strange creature
 D:$ that is transformed into an abandoned box, waits for a stupid adventurer
 D:$ to get close to its poisonous claws.
@@ -25367,7 +25364,7 @@ F:DROP_GREAT | DROP_1D2 | WILD_TOWN
 F:TAKE_ITEM | OPEN_DOOR | BASH_DOOR | EVIL | DROP_SKELETON | DROP_CORPSE
 F:EAT_GIVE_DEX | EAT_LOSE_WIS
 S:1_IN_5 | TRAPS
-A:221:1:5
+A:268:1:20
 V:75
 D:$This legendary thief steals from the rich (you qualify).
 D:この伝説の盗賊は金持ち（あなたは合格）から金を盗む
@@ -25375,19 +25372,18 @@ D:この伝説の盗賊は金持ち（あなたは合格）から金を盗む
 N:1283:『火蜂』
 E:Hibachi
 G:I:r
-I:135:8d1111:1200:150:0
+I:134:8d1111:88:88:0
 W:88:8:0:42541:0:0
 B:CRUSH:FIRE:15d15
 B:CRUSH:FIRE:15d15
 B:CRUSH:SUPERHURT:13d13
-F:UNIQUE | ONLY_ITEM | RES_TELE | HAS_LITE_2 | 
-F:BASH_DOOR | KILL_BODY | KILL_WALL | CAN_FLY | RAND_25 |
-F:FORCE_MAXHP | NO_CONF | NO_SLEEP | NO_STUN | NO_FEAR |
-F:STUPID | EMPTY_MIND | POWERFUL | NONLIVING | PREVENT_SUDDEN_MAGIC
-F:EVIL | DROP_4D2 | DROP_3D2 | DROP_GOOD | DROP_GREAT |
-F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_PLAS | 
-S:1_IN_2 | INVULNER
-S:BO_MANA | BO_PLAS | ROCKET | PSY_SPEAR
+F:UNIQUE | FORCE_MAXHP | BASH_DOOR | KILL_BODY | KILL_WALL | CAN_FLY | RAND_25
+F:NO_CONF | NO_SLEEP | NO_STUN | NO_FEAR | HAS_LITE_2
+F:STUPID | POWERFUL | NONLIVING | PREVENT_SUDDEN_MAGIC
+F:EVIL | DROP_4D2 | DROP_3D2 | DROP_GREAT
+F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | RES_PLAS
+S:1_IN_2 | BR_ELEC | BO_FIRE | BO_ELEC | BO_WATE | BA_ELEC | BA_WATE
+S:BO_MANA | BO_PLAS | ROCKET | PSY_SPEAR | INVULNER
 S:BA_FIRE | BA_LITE | BR_FIRE | BR_LITE | BR_SHAR | BR_PLAS
 D:$It is a flying object in the shape of a bee in flames.
 D:$  A great person sent it to kill you.
@@ -25493,17 +25489,19 @@ D:$  So old that even he cannot remember his own name,
 D:$ his power and evil are undeniable.
 D:$  He believes unshakeably that he is unbeatable
 D:$ and laughs as he weaves his awesome spells.
+D:$  Hmm, wait a minute...?
 D:サウロンのロは強力な魔法使いだ。
 D:あまりにも長い年月を生きているので自分の名前すらも忘れてしまっているが、
 D:己の力と邪悪な使命だけは覚えている。
 D:彼はこの世界で自分が最強だという揺るぎがたい信念を持ち、
 D:恐ろしげな呪文を唱えながらも余裕で笑っている。
+D:おや、ちょっと待てよ……？
 
 N:1287:たこぶえ
 E:Takobue
 G:H:d
 I:110:10d20:10:30:20
-W:30:100:0:30:0:0
+W:30:10:0:300:0:0
 B:SPIT:BLIND
 B:TOUCH:CONFUSE
 B:CRUSH:HURT:6d6
@@ -25889,7 +25887,7 @@ B:INSULT:SUPERHURT:10d10
 F:UNIQUE | FORCE_MAXHP | HUMAN | MALE | EVIL | GOOD
 F:CAN_SPEAK | DROP_CORPSE | ONLY_ITEM | DROP_4D2 | DROP_3D2 | DROP_2D2
 F:IM_FIRE | IM_POIS | RES_SOUN | RES_DISE
-S:1_IN_8 | SHRIEK | DISPEL | FORGET | TELE_AWAY
+S:1_IN_3 | SHRIEK | DISPEL | FORGET | TELE_AWAY
 S:MIND_BLAST | BRAIN_SMASH | S_KIN
 D:$No one in the world deserves to be called a naked king like this man.
 D:$  He could only speak dirty words and believed that it was justice.
@@ -26025,9 +26023,10 @@ F:CAN_FLY | WILD_GRASS | ANIMAL | DROP_SKELETON
 D:$It emits strange microwaves.
 D:それは奇妙な電波を飛ばしている。
 
+# It's OK that lion is white.
 N:1316:ライオン
 E:Lion
-G:f:U
+G:f:w
 I:120:16d15:20:55:5
 W:23:2:0:160:0:0
 B:CLAW:HURT:2d9
@@ -26376,3 +26375,185 @@ D:$You got yourself a rogue Bludger.
 D:$  That has been tampered with.
 D:なんてこった、チンピラブラッジャーのお出ましだ。
 D:誰かが細工してこちらに差し向けたのだろう。
+
+N:1335:メメクラゲ
+E:Jellyfish
+G:l:B
+I:110:12d12:10:40:20
+W:20:4:0:100:0:0
+B:STING:HURT:7d5
+B:SLASH:HURT:7d5
+B:SLASH:HURT:7d5
+F:ATTR_MULTI | CAN_SWIM | RES_WATE | EMPTY_MIND
+F:AQUATIC | WILD_SHORE | WILD_OCEAN
+D:$It can cut human veins.
+D:$  There are only eye doctors in the habitat of this jellyfish.
+D:$  Be careful!
+D:それは人間の静脈を切断できる。
+D:このクラゲの生息範囲は目医者ばかりだ、気をつけろ！
+
+N:1336:『死神ももえ』 
+E:Momoe Shinigami
+G:p:W
+I:190:35d100:100:50:0
+W:78:3:0:558:0:0
+B:SHOOT:HURT:13d13
+B:SLASH:HURT:13d13
+B:SLASH:UN_POWER:13d13
+B:ENGULF:CONFUSE:13d13
+F:UNIQUE | FEMALE | DROP_1D2 | DROP_2D2 | DROP_3D2 | DROP_GREAT
+F:OPEN_DOOR | BASH_DOOR | DROP_CORPSE | DROP_SKELETON | FORCE_MAXHP
+F:EVIL | GOOD | GIANT | HUMAN | ANGEL | NONLIVING | ANIMAL | SMART
+F:REGENERATE | REFLECTING
+F:IM_COLD | IM_FIRE | IM_ELEC | RES_NEXU | RES_CHAO | NO_CONF | NO_STUN
+F:NO_SLEEP | RES_TELE | RES_NETH | RES_TIME | POWERFUL | CAN_FLY
+R:904:3d5
+S:1_IN_5 | SHOOT | BR_NEXU | BR_CHAO | TPORT | BLIND | TELE_TO
+S:HOLD | BLINK | HEAL | HASTE | CONF | BRAIN_SMASH | BO_MANA | PSY_SPEAR
+D:$Whatever she slays will be hers. Flee while you can!
+D:彼女が斬ったものはすべて彼女に肩代わりされる。今のうちに逃げろ！
+
+# シンボルはgと迷ったが、フロアの近いUncovered coreと似てるのでカエルとする
+N:1337:『パクマン』
+E:Pakuman
+G:R:g
+I:115:10d8:15:15:20
+W:6:2:0:40:0:0
+F:UNIQUE | MALE | FORCE_MAXHP | NONLIVING | OPEN_DOOR | RES_CHAO | COLD_BLOOD
+B:PUNCH:ELEC:3d7
+D:$It has the personality that puts all dried vegetable
+D:$ and soup powder packages the cup noodles first.
+D:それはカップ麺のかやくを最初に全部入れるタイプだ。
+
+N:1338:ミミック(ミミック(ミミック(箱)の像)の像)
+E:Statue of Chest mimic mimic mimic
+G:`:W
+I:110:20d14:30:40:0
+W:26:6:0:280:0:0
+B:GAZE:CONFUSE:3d4
+B:CLAW:POISON:4d5
+B:CLAW:POISON:4d5
+B:SPIT:BLIND:3d4
+F:CHAR_MULTI | PREVENT_SUDDEN_MAGIC | NEVER_MOVE | EMPTY_MIND | COLD_BLOOD
+F:NO_CONF | NO_SLEEP | NO_FEAR | DROP_1D2 | ONLY_ITEM
+S:1_IN_5 | BLIND | CONF | SCARE | CAUSE_2 | BA_POIS | S_MONSTER
+D:$This strange creature, transformed into an image of a strange creature
+D:$ that is transformed into an abandoned box, waits for a stupid adventurer
+D:$ to get close to its poisonous claws.
+D:放置された箱に化けている奇妙な生物の像に化けている
+D:奇妙な生物に化けている奇妙な生物で、
+D:愚かな冒険者がその毒のある爪の射程に入るのを待ち構えている。
+
+N:1339:ミミック(ミミック(ミミック(ミミック(箱)の像)の像)の像)
+E:Statue of Chest mimic mimic mimic mimic mimic
+G:`:W
+I:110:30d14:30:40:0
+W:31:6:0:560:0:0
+B:GAZE:CONFUSE:4d5
+B:CLAW:POISON:5d6
+B:CLAW:POISON:5d6
+B:SPIT:BLIND:4d5
+F:CHAR_MULTI | PREVENT_SUDDEN_MAGIC | NEVER_MOVE | EMPTY_MIND | COLD_BLOOD
+F:NO_CONF | NO_SLEEP | NO_FEAR | DROP_2D2 | ONLY_ITEM
+S:1_IN_4 | BLIND | CONF | SCARE | CAUSE_2 | BA_POIS | S_MONSTER
+D:$This strange creature, transformed into an image of a strange creature
+D:$ that is transformed into an abandoned box, waits for a stupid adventurer
+D:$ to get close to its poisonous claws.
+D:放置された箱に化けている奇妙な生物の像に化けている
+D:奇妙な生物に化けている奇妙な生物に化けている奇妙な生物で、
+D:愚かな冒険者がその毒のある爪の射程に入るのを待ち構えている。
+
+N:1340:ミミック(ミミック(ミミック(ミミック(ミミック(ミミック(ミミック(ミミック(ミミック(ミミック(ミミック(箱)の像)の像)の像)の像)の像)の像)の像)の像)の像)の像)の像)
+E:Statue of Chest mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic mimic
+G:`:W
+I:110:60d14:30:40:0
+W:41:6:0:1750:0:0
+B:GAZE:CONFUSE:5d6
+B:CLAW:POISON:6d7
+B:CLAW:POISON:6d7
+B:SPIT:BLIND:5d6
+F:CHAR_MULTI | PREVENT_SUDDEN_MAGIC | NEVER_MOVE | EMPTY_MIND | COLD_BLOOD
+F:NO_CONF | NO_SLEEP | NO_FEAR | DROP_3D2 | ONLY_ITEM
+S:1_IN_3 | BLIND | CONF | SCARE | CAUSE_2 | BA_POIS | S_MONSTER
+D:$This strange creature, transformed into an image of a strange creature
+D:$ that is transformed into an abandoned box, waits for a stupid adventurer
+D:$ to get close to its poisonous claws.
+D:放置された箱に化けている奇妙な生物の像に化けている
+D:奇妙な生物に化けている奇妙な生物に化けている奇妙な生物に
+D:化けている奇妙な生物に化けている奇妙な生物に化けている奇妙な生物に
+D:化けている奇妙な生物に化けている奇妙な生物に化けている奇妙な生物に
+D:化けている奇妙な生物で、
+D:愚かな冒険者がその毒のある爪の射程に入るのを待ち構えている。
+
+N:1341:第一の乗り手『ペスティレンス』
+E:Pestilence, the first rider
+G:U:W
+I:130:100d80:60:75:10
+W:80:16:0:30000:0:0
+B:GAZE:PARALYZE
+B:GAZE:CONFUSE
+B:HIT:STUN:8d8
+B:HIT:DISEASE:8d8
+F:UNIQUE | MALE | DROP_CORPSE
+F:ONLY_ITEM | DROP_4D2 | DROP_GREAT
+F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | SMART
+F:OPEN_DOOR | BASH_DOOR
+F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | REGENERATE | CAN_FLY | RES_DARK | RES_NETH
+F:NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN | POWERFUL | MOVE_BODY | INVISIBLE
+S:1_IN_2 | BR_NUKE | TPORT
+D:$And I saw when the Lamb opened one of the seals,
+D:$and I heard, as it were the noise of thunder, one of the four
+D:$beasts saying, Come and see. And I saw, and behold a white
+D:$horse: and he that sat on him had a bow; and a crown was given
+D:$unto him: and he went forth conquering, and to conquer.
+D:白い馬に乗った「災厄」そのものだ。あなたを病に苦しめるだろう。
+
+# 第二の乗り手は欠番
+# It's OK that the second rider is missing.
+N:1342:第三の乗り手『フェミン』
+E:Famine, the third rider
+G:U:D
+I:130:100d80:60:75:10
+W:80:16:0:30000:0:0
+B:GAZE:PARALYZE
+B:GAZE:CONFUSE
+B:HIT:EAT_FOOD:8d8
+B:HIT:STUN:8d8
+F:UNIQUE | MALE | DROP_CORPSE
+F:ONLY_ITEM | DROP_4D2 | DROP_GREAT
+F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | SMART
+F:OPEN_DOOR | BASH_DOOR
+F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | REGENERATE | CAN_FLY | RES_DARK | RES_NETH
+F:NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN | POWERFUL | MOVE_BODY | INVISIBLE
+S:1_IN_2 | TPORT | BR_INER
+D:$And when he had opened the third seal, I heard the
+D:$third beast say, Come and see. And I beheld, and lo a black
+D:$horse; and he that sat on him had a pair of balances in his
+D:$hand. And I heard a voice in the midst of the four beasts say,
+D:$A measure of wheat for a penny, and three measures of barley
+D:$for a penny; and see thou hurt not the oil and the wine.
+D:黒い馬に乗り秤を持った「飢餓」そのものだ。あなたを飢えに苦しめるだろう。
+
+N:1343:第四の乗り手『デス』
+E:Death, the fourth rider
+G:U:b
+I:130:100d80:60:75:10
+W:80:16:0:30000:0:0
+B:GAZE:PARALYZE
+B:GAZE:CONFUSE
+B:HIT:LOSE_ALL:8d8
+B:HIT:EXP_80:8d8
+F:UNIQUE | MALE | DROP_CORPSE | NONLIVING
+F:ONLY_ITEM | DROP_4D2 | DROP_GREAT
+F:PREVENT_SUDDEN_MAGIC | FORCE_MAXHP | SMART
+F:OPEN_DOOR | BASH_DOOR
+F:IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | REGENERATE | CAN_FLY | RES_DARK | RES_NETH
+F:NO_CONF | NO_SLEEP | NO_FEAR | NO_STUN | POWERFUL | MOVE_BODY | INVISIBLE
+S:1_IN_2 | HAND_DOOM | TPORT | BR_NETH
+D:$And when he had opened the fourth seal, I heard the
+D:$voice of the fourth beast say, Come and see. And I looked, and
+D:$behold a pale horse: and his name that sat on him was Death,
+D:$and Hell followed with him. And power was given unto them over
+D:$the fourth part of the earth, to kill with sword, and with
+D:$hunger, and with death, and with the beasts of the earth.
+D:蒼ざめた馬に乗った「死」そのものだ。あなたを死に至らしめるだろう。

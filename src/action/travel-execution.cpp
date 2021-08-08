@@ -16,6 +16,7 @@
 #include "player-status/player-energy.h"
 #include "player/player-move.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"

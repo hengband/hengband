@@ -2,6 +2,7 @@
 #include "action/weapon-shield.h"
 #include "artifact/fixed-art-types.h"
 #include "autopick/autopick.h"
+#include "avatar/avatar.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
@@ -30,7 +31,6 @@
 #include "object/object-info.h"
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
-#include "player-info/avatar.h"
 #include "player-info/equipment-info.h"
 #include "player-status/player-energy.h"
 #include "player-status/player-hand-types.h"
@@ -314,8 +314,7 @@ void do_cmd_takeoff(player_type *creature_ptr)
         return;
 
     PlayerEnergy energy(creature_ptr);
-    if (object_is_cursed(o_ptr))
-    {
+    if (object_is_cursed(o_ptr)) {
         if (o_ptr->curse_flags.has(TRC::PERMA_CURSE) || (creature_ptr->pclass != CLASS_BERSERKER)) {
             msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
             return;

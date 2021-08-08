@@ -11,7 +11,6 @@
 #include "floor/geometry.h"
 #include "floor/line-of-sight.h"
 #include "grid/feature.h"
-#include "grid/grid.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-ability-mask.h"
 #include "monster-race/race-flags2.h"
@@ -21,6 +20,7 @@
 #include "mspell/mspell-judgement.h"
 #include "spell/range-calc.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
@@ -57,7 +57,7 @@ bool adjacent_grid_check(player_type *target_ptr, monster_type *m_ptr, POSITION 
         int next_y = *yp + tonari_y[next][i];
         grid_type *g_ptr;
         g_ptr = &target_ptr->current_floor_ptr->grid_array[next_y][next_x];
-        if (!cave_has_flag_grid(g_ptr, f_flag))
+        if (!g_ptr->cave_has_flag(f_flag))
             continue;
 
         if (path_check(target_ptr, m_ptr->fy, m_ptr->fx, next_y, next_x)) {

@@ -35,6 +35,7 @@
 #include "player/player-status-flags.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
@@ -219,14 +220,14 @@ static bool process_protection_rune(player_type *target_ptr, turn_flags *turn_fl
     grid_type *g_ptr;
     g_ptr = &target_ptr->current_floor_ptr->grid_array[ny][nx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    if (!turn_flags_ptr->do_move || !is_rune_protection_grid(g_ptr) || (((r_ptr->flags1 & RF1_NEVER_BLOW) != 0) && player_bold(target_ptr, ny, nx)))
+    if (!turn_flags_ptr->do_move || !g_ptr->is_rune_protection() || (((r_ptr->flags1 & RF1_NEVER_BLOW) != 0) && player_bold(target_ptr, ny, nx)))
         return false;
 
     turn_flags_ptr->do_move = false;
     if (is_pet(m_ptr) || (randint1(BREAK_RUNE_PROTECTION) >= r_ptr->level))
         return true;
 
-    if (g_ptr->info & CAVE_MARK) {
+    if (g_ptr->is_mark()) {
         msg_print(_("守りのルーンが壊れた！", "The rune of protection is broken!"));
     }
 
@@ -252,7 +253,7 @@ static bool process_explosive_rune(player_type *target_ptr, turn_flags *turn_fla
     grid_type *g_ptr;
     g_ptr = &target_ptr->current_floor_ptr->grid_array[ny][nx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    if (!turn_flags_ptr->do_move || !is_rune_explosion_grid(g_ptr) || (((r_ptr->flags1 & RF1_NEVER_BLOW) != 0) && player_bold(target_ptr, ny, nx)))
+    if (!turn_flags_ptr->do_move || !g_ptr->is_rune_explosion() || (((r_ptr->flags1 & RF1_NEVER_BLOW) != 0) && player_bold(target_ptr, ny, nx)))
         return true;
 
     turn_flags_ptr->do_move = false;

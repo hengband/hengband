@@ -5,6 +5,7 @@
 #include "grid/grid.h"
 #include "system/dungeon-data-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 
 /*!
@@ -56,7 +57,6 @@ bool build_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, dt_type *dt_pt
     POSITION start_row, start_col;
     int main_loop_count = 0;
     bool door_flag = false;
-    grid_type *g_ptr;
     start_row = row1;
     start_col = col1;
     correct_dir(&row_dir, &col_dir, row1, col1, row2, col2);
@@ -82,14 +82,15 @@ bool build_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, dt_type *dt_pt
             tmp_col = col1 + col_dir;
         }
 
-        g_ptr = &floor_ptr->grid_array[tmp_row][tmp_col];
-        if (is_solid_grid(g_ptr))
+        auto *tmp_g_ptr = &floor_ptr->grid_array[tmp_row][tmp_col];
+        if (tmp_g_ptr->is_solid())
             continue;
 
-        if (is_outer_grid(g_ptr)) {
+        if (tmp_g_ptr->is_outer()) {
             POSITION y = tmp_row + row_dir;
             POSITION x = tmp_col + col_dir;
-            if (is_outer_bold(floor_ptr, y, x) || is_solid_bold(floor_ptr, y, x))
+            auto *g_ptr = &floor_ptr->grid_array[y][x];
+            if (g_ptr->is_outer() || g_ptr->is_solid())
                 continue;
 
             row1 = tmp_row;
@@ -102,13 +103,13 @@ bool build_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, dt_type *dt_pt
             dd_ptr->wall_n++;
             for (y = row1 - 1; y <= row1 + 1; y++)
                 for (x = col1 - 1; x <= col1 + 1; x++)
-                    if (is_outer_bold(floor_ptr, y, x))
+                    if (floor_ptr->grid_array[y][x].is_outer())
                         place_bold(player_ptr, y, x, GB_SOLID_NOPERM);
 
-        } else if (g_ptr->info & (CAVE_ROOM)) {
+        } else if (tmp_g_ptr->info & (CAVE_ROOM)) {
             row1 = tmp_row;
             col1 = tmp_col;
-        } else if (is_extra_grid(g_ptr) || is_inner_grid(g_ptr) || is_solid_grid(g_ptr)) {
+        } else if (tmp_g_ptr->is_extra() || tmp_g_ptr->is_inner() || tmp_g_ptr->is_solid()) {
             row1 = tmp_row;
             col1 = tmp_col;
             if (dd_ptr->tunn_n >= TUNN_MAX)
@@ -161,10 +162,10 @@ static bool set_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, POSITION 
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[*y][*x];
-    if (!in_bounds(floor_ptr, *y, *x) || is_inner_grid(g_ptr))
+    if (!in_bounds(floor_ptr, *y, *x) || g_ptr->is_inner())
         return true;
 
-    if (is_extra_bold(floor_ptr, *y, *x)) {
+    if (g_ptr->is_extra()) {
         if (dd_ptr->tunn_n >= TUNN_MAX)
             return false;
 
@@ -174,10 +175,10 @@ static bool set_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, POSITION 
         return true;
     }
 
-    if (is_floor_bold(floor_ptr, *y, *x))
+    if (g_ptr->is_floor())
         return true;
 
-    if (is_outer_grid(g_ptr) && affectwall) {
+    if (g_ptr->is_outer() && affectwall) {
         if (dd_ptr->wall_n >= WALL_MAX)
             return false;
 
@@ -186,7 +187,7 @@ static bool set_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, POSITION 
         dd_ptr->wall_n++;
         for (int j = *y - 1; j <= *y + 1; j++)
             for (int i = *x - 1; i <= *x + 1; i++)
-                if (is_outer_bold(floor_ptr, j, i))
+                if (floor_ptr->grid_array[j][i].is_outer())
                     place_bold(player_ptr, j, i, GB_SOLID_NOPERM);
 
         floor_ptr->grid_array[*y][*x].mimic = 0;
@@ -194,11 +195,11 @@ static bool set_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, POSITION 
         return true;
     }
 
-    if (is_solid_grid(g_ptr) && affectwall) {
+    if (g_ptr->is_solid() && affectwall) {
         int i = 50;
         int dy = 0;
         int dx = 0;
-        while ((i > 0) && is_solid_bold(floor_ptr, *y + dy, *x + dx)) {
+        while ((i > 0) && floor_ptr->grid_array[*y + dy][*x + dx].is_solid()) {
             dy = randint0(3) - 1;
             dx = randint0(3) - 1;
             if (!in_bounds(floor_ptr, *y + dy, *x + dx)) {
@@ -367,11 +368,11 @@ bool build_tunnel2(player_type *player_ptr, dun_data_type *dd_ptr, POSITION x1, 
     }
 
     g_ptr = &floor_ptr->grid_array[y3][x3];
-    if (is_solid_grid(g_ptr)) {
+    if (g_ptr->is_solid()) {
         int i = 50;
         dy = 0;
         dx = 0;
-        while ((i > 0) && is_solid_bold(floor_ptr, y3 + dy, x3 + dx)) {
+        while ((i > 0) && floor_ptr->grid_array[y3 + dy][x3 + dx].is_solid()) {
             dy = randint0(3) - 1;
             dx = randint0(3) - 1;
             if (!in_bounds(floor_ptr, y3 + dy, x3 + dx)) {
@@ -392,9 +393,9 @@ bool build_tunnel2(player_type *player_ptr, dun_data_type *dd_ptr, POSITION x1, 
         g_ptr = &floor_ptr->grid_array[y3][x3];
     }
 
-    if (is_floor_grid(g_ptr)) {
+    if (g_ptr->is_floor()) {
         if (build_tunnel2(player_ptr, dd_ptr, x1, y1, x3, y3, type, cutoff)) {
-            if ((floor_ptr->grid_array[y3][x3].info & CAVE_ROOM) || (randint1(100) > 95)) {
+            if (floor_ptr->grid_array[y3][x3].is_room() || (randint1(100) > 95)) {
                 retval = build_tunnel2(player_ptr, dd_ptr, x3, y3, x2, y2, type, cutoff);
             } else {
                 retval = false;

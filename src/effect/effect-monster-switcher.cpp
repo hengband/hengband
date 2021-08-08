@@ -7,6 +7,7 @@
  */
 
 #include "effect/effect-monster-switcher.h"
+#include "avatar/avatar.h"
 #include "cmd-action/cmd-attack.h"
 #include "effect/effect-monster-charm.h"
 #include "effect/effect-monster-curse.h"
@@ -17,7 +18,6 @@
 #include "effect/effect-monster-resist-hurt.h"
 #include "effect/effect-monster-spirit.h"
 #include "effect/effect-monster-util.h"
-#include "grid/grid.h"
 #include "mind/mind-elementalist.h"
 #include "monster-floor/monster-death.h"
 #include "monster-race/monster-race-hook.h"
@@ -28,10 +28,10 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
-#include "player-info/avatar.h"
 #include "player/player-damage.h"
 #include "spell-kind/spells-genocide.h"
 #include "spell/spell-types.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"

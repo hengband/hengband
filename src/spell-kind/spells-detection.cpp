@@ -24,6 +24,7 @@
 #include "realm/realm-song.h"
 #include "spell-realm/spells-song.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
@@ -63,7 +64,7 @@ static bool detect_feat_flag(player_type *caster_ptr, POSITION range, int flag, 
                 }
             }
 
-            if (cave_has_flag_grid(g_ptr, flag)) {
+            if (g_ptr->cave_has_flag(flag)) {
                 disclose_grid(caster_ptr, y, x);
                 g_ptr->info |= (CAVE_MARK);
                 lite_spot(caster_ptr, y, x);

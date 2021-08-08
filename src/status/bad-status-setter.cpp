@@ -1,4 +1,5 @@
 ﻿#include "status/bad-status-setter.h"
+#include "avatar/avatar.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
@@ -7,10 +8,9 @@
 #include "game-option/disturbance-options.h"
 #include "mind/mind-sniper.h"
 #include "player/attack-defense-types.h"
-#include "player-info/avatar.h"
 #include "player/player-race.h"
-#include "player/player-status.h"
 #include "player/player-status-flags.h"
+#include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "spell-realm/spells-hex.h"
 #include "status/base-status.h"
@@ -564,7 +564,8 @@ bool set_cut(player_type *creature_ptr, TIME_EFFECT v)
         }
     } else if (new_aux < old_aux) {
         if (new_aux == 0) {
-            msg_format(_("やっと%s。", "You are no longer %s."), creature_ptr->prace == RACE_ANDROID ? _("怪我が直った", "leaking fluid") : _("出血が止まった", "bleeding"));
+            msg_format(_("やっと%s。", "You are no longer %s."),
+                creature_ptr->prace == RACE_ANDROID ? _("怪我が直った", "leaking fluid") : _("出血が止まった", "bleeding"));
             if (disturb_state)
                 disturb(creature_ptr, false, false);
         }

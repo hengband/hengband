@@ -38,6 +38,7 @@
 #include "player/player-status.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
@@ -177,7 +178,7 @@ static bool check_quest_placeable(player_type *player_ptr, MONRACE_IDX r_idx)
 static bool check_procection_rune(player_type *player_ptr, MONRACE_IDX r_idx, POSITION y, POSITION x)
 {
     grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    if (!is_rune_protection_grid(g_ptr))
+    if (!g_ptr->is_rune_protection())
         return true;
 
     monster_race *r_ptr = &r_info[r_idx];
@@ -391,7 +392,7 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
         floor_ptr->num_repro++;
 
     warn_unique_generation(player_ptr, r_idx);
-    if (!is_rune_explosion_grid(g_ptr))
+    if (!g_ptr->is_rune_explosion())
         return true;
 
     if (randint1(BREAK_RUNE_EXPLOSION) > r_ptr->level) {
