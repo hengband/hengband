@@ -120,6 +120,7 @@ enum monster_race_type {
     MON_HORSE = 956,
     MON_BOTEI = 963,
     MON_KAGE = 964,
+    MON_CHEST_MIMIC_02 = 965,
     MON_LUIGI = 966,
     MON_JAIAN = 967,
     MON_FENGHUANG = 988,
@@ -195,4 +196,7 @@ enum monster_race_type {
     MON_HAWK = 1315,
     MON_LION = 1316,
     MON_OOTSUKI = 1333,
+    MON_CHEST_MIMIC_03 = 1338,
+    MON_CHEST_MIMIC_04 = 1339,
+    MON_CHEST_MIMIC_11 = 1340,
 };

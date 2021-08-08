@@ -134,7 +134,8 @@ enum random_art_activation_type {
     ACT_DETECT_ALL_MONS = 137,
     ACT_ULTIMATE_RESIST = 138,
     ACT_ELBERETH = 139,
-    /* 140 - 245 unused */
+    ACT_DETECT_TREASURE = 140,
+    /* 141 - 245 unused */
     ACT_FALLING_STAR = 246,
     ACT_STRAIN_HASTE = 247,
     ACT_TELEPORT_LEVEL = 248,

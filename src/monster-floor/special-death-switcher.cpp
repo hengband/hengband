@@ -91,8 +91,10 @@ static void on_dead_pink_horror(player_type *player_ptr, monster_death_type *md_
             notice = true;
     }
 
-    if (notice)
+    if (notice) {
+        sound(SOUND_SUMMON);
         msg_print(_("ピンク・ホラーは分裂した！", "The Pink horror divides!"));
+    }
 }
 
 static void on_dead_bloodletter(player_type *player_ptr, monster_death_type *md_ptr)
@@ -439,6 +441,51 @@ static void drop_specific_item_on_dead(player_type *player_ptr, monster_death_ty
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
 
+static void on_dead_chest_mimic(player_type *player_ptr, monster_death_type *md_ptr)
+{
+    if (player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out)
+        return;
+
+    bool notice = false;
+    monster_race_type mimic_inside;
+    int num_summons;
+    auto r_idx = md_ptr->m_ptr->r_idx;
+    switch (r_idx) {
+    case MON_CHEST_MIMIC_03:
+        mimic_inside = MON_CHEST_MIMIC_02;
+        num_summons = 1;
+        break;
+    case MON_CHEST_MIMIC_04:
+        mimic_inside = MON_CHEST_MIMIC_03;
+        num_summons = 1;
+        break;
+    case MON_CHEST_MIMIC_11:
+        mimic_inside = MON_CHEST_MIMIC_04;
+        num_summons = next_bool() ? 3 : 2;
+        break;
+    default:
+        mimic_inside = (monster_race_type)-1;
+        num_summons = 0;
+        return;
+    }
+
+    for (auto i = 0; i < num_summons; i++) {
+        auto wy = md_ptr->md_y;
+        auto wx = md_ptr->md_x;
+        auto pet = is_pet(md_ptr->m_ptr);
+        auto mode = pet ? PM_FORCE_PET : PM_NONE;
+        if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, (MONSTER_IDX)mimic_inside, (BIT_FLAGS)mode)
+            && player_can_see_bold(player_ptr, wy, wx)) {
+            notice = true;
+        }
+    }
+
+    if (notice) {
+        msg_print(_("箱の中から新たなミミックが現れた！", "A new mimic appears in the dead mimic!"));
+        sound(SOUND_SUMMON);
+    }
+}
+
 static void on_dead_mimics(player_type *player_ptr, monster_death_type *md_ptr)
 {
     if (!md_ptr->drop_chosen_item)
@@ -561,6 +608,11 @@ void switch_special_death(player_type *player_ptr, monster_death_type *md_ptr)
     case MON_LOSTRINGIL:
         on_dead_random_artifact(player_ptr, md_ptr, kind_is_sword);
         return;
+    case MON_CHEST_MIMIC_03:
+    case MON_CHEST_MIMIC_04:
+    case MON_CHEST_MIMIC_11:
+        on_dead_chest_mimic(player_ptr, md_ptr);
+        break;
     default:
         on_dead_mimics(player_ptr, md_ptr);
         return;

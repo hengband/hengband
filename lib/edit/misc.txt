@@ -13,7 +13,7 @@ M:WX:99
 M:WY:66
 
 # Maximum number of monsters in r_info.txt
-M:R:1335
+M:R:1344
 
 # Maximum number of items in k_info.txt
 M:K:674
@@ -25,7 +25,7 @@ M:V:173
 M:F:255
 
 # Maximum number of artifacts in a_info.txt
-M:A:268
+M:A:269
 
 # Maximum number of ego-items in e_info.txt
 M:E:255
