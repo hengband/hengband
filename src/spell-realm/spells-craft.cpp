@@ -1,4 +1,5 @@
 ﻿#include "spell-realm/spells-craft.h"
+#include "avatar/avatar.h"
 #include "core/disturbance.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
@@ -14,7 +15,6 @@
 #include "object-hook/hook-enchant.h"
 #include "object/item-use-flags.h"
 #include "object/object-flags.h"
-#include "player-info/avatar.h"
 #include "player-info/equipment-info.h"
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"

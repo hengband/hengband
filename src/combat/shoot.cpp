@@ -1,5 +1,6 @@
 ﻿#include "combat/shoot.h"
 #include "artifact/fixed-art-types.h"
+#include "avatar/avatar.h"
 #include "combat/attack-criticality.h"
 #include "core/player-redraw-types.h"
 #include "core/player-update-types.h"
@@ -34,6 +35,7 @@
 #include "monster-race/race-flags3.h"
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-indice-types.h"
+#include "monster/monster-damage.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"
@@ -46,7 +48,6 @@
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"
-#include "player-info/avatar.h"
 #include "player-status/player-energy.h"
 #include "player/player-class.h"
 #include "player/player-personality-types.h"
@@ -77,7 +78,8 @@
  * @param monster_ptr 目標モンスターの構造体参照ポインタ
  * @return スレイ倍率をかけたダメージ量
  */
-static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type *bow_ptr, object_type *arrow_ptr, HIT_POINT tdam, monster_type *monster_ptr, SPELL_IDX snipe_type)
+static MULTIPLY calc_shot_damage_with_slay(
+    player_type *sniper_ptr, object_type *bow_ptr, object_type *arrow_ptr, HIT_POINT tdam, monster_type *monster_ptr, SPELL_IDX snipe_type)
 {
     MULTIPLY mult = 10;
 
@@ -745,7 +747,8 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
                     }
 
                     /* Hit the monster, check for death */
-                    if (mon_take_hit(shooter_ptr, c_mon_ptr->m_idx, tdam, &fear, extract_note_dies(real_r_idx(m_ptr)))) {
+                    MonsterDamageProcessor mdp(shooter_ptr, c_mon_ptr->m_idx, tdam, &fear);
+                    if (mdp.mon_take_hit(extract_note_dies(real_r_idx(m_ptr)))) {
                         /* Dead monster */
                     }
 

@@ -1,4 +1,5 @@
 ﻿#include "realm/realm-nature.h"
+#include "avatar/avatar.h"
 #include "cmd-action/cmd-spell.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
@@ -9,7 +10,6 @@
 #include "monster-floor/place-monster-types.h"
 #include "object/object-kind-hook.h"
 #include "player-attack/player-attack.h"
-#include "player-info/avatar.h"
 #include "player/player-damage.h"
 #include "player/player-race-types.h"
 #include "player/player-race.h"

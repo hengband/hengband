@@ -11,9 +11,9 @@
  */
 
 #include "player-info/self-info.h"
+#include "avatar/avatar.h"
 #include "io/input-key-acceptor.h"
 #include "object-enchant/trc-types.h"
-#include "player-info/avatar.h"
 #include "player-info/base-status-info.h"
 #include "player-info/body-improvement-info.h"
 #include "player-info/class-ability-info.h"

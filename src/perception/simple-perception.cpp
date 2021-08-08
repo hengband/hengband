@@ -6,6 +6,7 @@
 
 #include "perception/simple-perception.h"
 #include "autopick/autopick.h"
+#include "avatar/avatar.h"
 #include "core/disturbance.h"
 #include "core/player-update-types.h"
 #include "core/window-redrawer.h"
@@ -22,11 +23,10 @@
 #include "object-hook/hook-enchant.h"
 #include "object/object-info.h"
 #include "perception/object-perception.h"
-#include "player-info/avatar.h"
+#include "player/player-status-flags.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
-#include "player/player-status-flags.h"
 
 /*!
  * @brief 擬似鑑定を実際に行い判定を反映する

@@ -1,6 +1,7 @@
 ﻿#include <string>
 
 #include "artifact/fixed-art-types.h"
+#include "avatar/avatar.h"
 #include "cmd-building/cmd-building.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
@@ -27,7 +28,6 @@
 #include "object/object-info.h"
 #include "pet/pet-util.h"
 #include "player-info/alignment.h"
-#include "player-info/avatar.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-table.h"
 #include "player/race-info-table.h"

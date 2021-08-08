@@ -6,6 +6,7 @@
 
 #include "player-attack/player-attack.h"
 #include "artifact/fixed-art-types.h"
+#include "avatar/avatar.h"
 #include "cmd-action/cmd-attack.h"
 #include "combat/attack-accuracy.h"
 #include "combat/attack-criticality.h"
@@ -25,6 +26,7 @@
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags3.h"
+#include "monster/monster-damage.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
@@ -36,7 +38,6 @@
 #include "player-attack/attack-chaos-effect.h"
 #include "player-attack/blood-sucking-processor.h"
 #include "player-attack/player-attack-util.h"
-#include "player-info/avatar.h"
 #include "player-info/equipment-info.h"
 #include "player-status/player-energy.h"
 #include "player-status/player-hand-types.h"
@@ -435,7 +436,8 @@ static void apply_damage_negative_effect(player_attack_type *pa_ptr, bool is_zan
  */
 static bool check_fear_death(player_type *attacker_ptr, player_attack_type *pa_ptr, const int num, const bool is_lowlevel)
 {
-    if (!mon_take_hit(attacker_ptr, pa_ptr->m_idx, pa_ptr->attack_damage, pa_ptr->fear, NULL))
+    MonsterDamageProcessor mdp(attacker_ptr, pa_ptr->m_idx, pa_ptr->attack_damage, pa_ptr->fear);
+    if (!mdp.mon_take_hit(NULL))
         return false;
 
     *(pa_ptr->mdeath) = true;

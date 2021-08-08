@@ -4,13 +4,13 @@
  */
 
 #include "action/tunnel-execution.h"
+#include "avatar/avatar.h"
 #include "core/player-update-types.h"
 #include "floor/cave.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
-#include "player-info/avatar.h"
 #include "player-status/player-energy.h"
 #include "player/player-move.h"
 #include "system/floor-type-definition.h"

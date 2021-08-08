@@ -13,6 +13,7 @@
  */
 
 #include "monster/monster-processor.h"
+#include "avatar/avatar.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/player-update-types.h"
 #include "core/speed-table.h"
@@ -51,7 +52,6 @@
 #include "mspell/mspell-judgement.h"
 #include "object-enchant/trc-types.h"
 #include "pet/pet-fall-off.h"
-#include "player-info/avatar.h"
 #include "player/player-move.h"
 #include "player/player-skill.h"
 #include "player/player-status-flags.h"

@@ -235,6 +235,7 @@
     <ClCompile Include="..\..\src\artifact\random-art-misc.cpp" />
     <ClCompile Include="..\..\src\artifact\random-art-resistance.cpp" />
     <ClCompile Include="..\..\src\artifact\random-art-slay.cpp" />
+    <ClCompile Include="..\..\src\avatar\avatar-changer.cpp" />
     <ClCompile Include="..\..\src\birth\auto-roller.cpp" />
     <ClCompile Include="..\..\src\birth\birth-body-spec.cpp" />
     <ClCompile Include="..\..\src\birth\birth-select-class.cpp" />
@@ -274,6 +275,7 @@
     <ClCompile Include="..\..\src\main-win\graphics-win.cpp" />
     <ClCompile Include="..\..\src\main-win\main-win-term.cpp" />
     <ClCompile Include="..\..\src\main-win\wav-reader.cpp" />
+    <ClCompile Include="..\..\src\monster\monster-damage.cpp" />
     <ClCompile Include="..\..\src\object-enchant\apply-magic-amulet.cpp" />
     <ClCompile Include="..\..\src\object-enchant\abstract-protector-enchanter.cpp" />
     <ClCompile Include="..\..\src\object-enchant\apply-magic-boots.cpp" />
@@ -682,7 +684,7 @@
     <ClCompile Include="..\..\src\specific-object\death-scythe.cpp" />
     <ClCompile Include="..\..\src\specific-object\torch.cpp" />
     <ClCompile Include="..\..\src\pet\pet-util.cpp" />
-    <ClCompile Include="..\..\src\player-info\avatar.cpp" />
+    <ClCompile Include="..\..\src\avatar\avatar.cpp" />
     <ClCompile Include="..\..\src\birth\character-builder.cpp" />
     <ClCompile Include="..\..\src\birth\birth-explanations-table.cpp" />
     <ClCompile Include="..\..\src\cmd-io\cmd-autopick.cpp" />
@@ -922,6 +924,7 @@
     <ClInclude Include="..\..\src\artifact\random-art-resistance.h" />
     <ClInclude Include="..\..\src\artifact\random-art-slay.h" />
     <ClInclude Include="..\..\src\artifact\random-art-characteristics.h" />
+    <ClInclude Include="..\..\src\avatar\avatar-changer.h" />
     <ClInclude Include="..\..\src\birth\auto-roller.h" />
     <ClInclude Include="..\..\src\birth\birth-body-spec.h" />
     <ClInclude Include="..\..\src\birth\birth-select-class.h" />
@@ -961,6 +964,7 @@
     <ClInclude Include="..\..\src\main-win\graphics-win.h" />
     <ClInclude Include="..\..\src\main-win\main-win-term.h" />
     <ClInclude Include="..\..\src\main-win\wav-reader.h" />
+    <ClInclude Include="..\..\src\monster\monster-damage.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic-amulet.h" />
     <ClInclude Include="..\..\src\object-enchant\abstract-protector-enchanter.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic-boots.h" />
@@ -1471,7 +1475,7 @@
     <ClInclude Include="..\..\src\object-enchant\tr-types.h" />
     <ClInclude Include="..\..\src\object-enchant\trc-types.h" />
     <ClInclude Include="..\..\src\object\tval-types.h" />
-    <ClInclude Include="..\..\src\player-info\avatar.h" />
+    <ClInclude Include="..\..\src\avatar\avatar.h" />
     <ClInclude Include="..\..\src\birth\character-builder.h" />
     <ClInclude Include="..\..\src\birth\birth-explanations-table.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-autopick.h" />

@@ -1,4 +1,5 @@
 ﻿#include "birth/birth-wizard.h"
+#include "avatar/avatar.h"
 #include "birth/auto-roller.h"
 #include "birth/birth-body-spec.h"
 #include "birth/birth-explanations-table.h"
@@ -20,14 +21,13 @@
 #include "io/input-key-acceptor.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
-#include "player-info/avatar.h"
 #include "player/patron.h"
 #include "player/player-class.h"
 #include "player/player-race.h"
 #include "player/player-sex.h"
-#include "player/process-name.h"
 #include "player/player-status-table.h"
 #include "player/player-status.h"
+#include "player/process-name.h"
 #include "system/game-option-types.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
@@ -320,10 +320,7 @@ static void display_auto_roller_success_rate(const int col)
         sprintf(buf, _("確率 :     1/10000以上", "Prob :     >1/10000"));
     put_str(buf, 11, col + 10);
 
-    put_str(_(
-        "注意 : 体格等のオートローラを併用時は、上記確率より困難です。",
-        "Note : Prob may be lower when you use the 'autochara' option."
-        ), 22, 5);
+    put_str(_("注意 : 体格等のオートローラを併用時は、上記確率より困難です。", "Note : Prob may be lower when you use the 'autochara' option."), 22, 5);
 
     for (int i = 0; i < A_MAX; i++) {
         put_str(stat_names[i], 3 + i, col + 8);
@@ -534,7 +531,7 @@ static void set_name_history(player_type *creature_ptr)
     process_player_name(creature_ptr, current_world_ptr->creating_savefile);
     edit_history(creature_ptr);
     get_max_stats(creature_ptr);
-    get_virtues(creature_ptr);
+    initialize_virtues(creature_ptr);
     prt(_("[ 'Q' 中断, 'S' 初めから, Enter ゲーム開始 ]", "['Q'uit, 'S'tart over, or Enter to continue]"), 23, _(14, 10));
 }
 

@@ -9,7 +9,6 @@ bool monster_is_powerful(floor_type *floor_ptr, MONSTER_IDX m_idx);
 DEPTH monster_level_idx(floor_type *floor_ptr, MONSTER_IDX m_idx);
 
 HIT_POINT mon_damage_mod(player_type *target_ptr, monster_type *m_ptr, HIT_POINT dam, bool is_psy_spear);
-bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note);
 bool monster_is_valid(monster_type *m_ptr);
 
 void dispel_monster_status(player_type *target_ptr, MONSTER_IDX m_idx);

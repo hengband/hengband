@@ -1,4 +1,5 @@
 ﻿#include "spell-kind/spells-genocide.h"
+#include "avatar/avatar.h"
 #include "core/asking-player.h"
 #include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
@@ -22,7 +23,6 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
-#include "player-info/avatar.h"
 #include "player/player-damage.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
