@@ -5,9 +5,9 @@
 #include "dungeon/quest.h"
 #include "flavor/flavor-describer.h"
 #include "floor/cave.h"
-#include "floor/geometry.h"
 #include "floor/floor-object.h"
 #include "floor/floor-town.h"
+#include "floor/geometry.h"
 #include "floor/object-scanner.h"
 #include "game-option/input-options.h"
 #include "grid/feature.h"
@@ -25,6 +25,7 @@
 #include "player/player-status-table.h"
 #include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
@@ -263,7 +264,10 @@ static u16b describe_monster_item(player_type *subject_ptr, eg_type *eg_ptr)
     return CONTINUOUS_DESCRIPTION;
 }
 
-static bool within_char_util(s16b input) { return (input > -127) && (input < 128); }
+static bool within_char_util(s16b input)
+{
+    return (input > -127) && (input < 128);
+}
 
 static s16b describe_grid(player_type *subject_ptr, eg_type *eg_ptr)
 {
@@ -525,8 +529,8 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
     if (within_char_util(footing_items_description))
         return (char)footing_items_description;
 
-    eg_ptr->feat = get_feat_mimic(eg_ptr->g_ptr);
-    if (!(eg_ptr->g_ptr->info & CAVE_MARK) && !player_can_see_bold(subject_ptr, y, x))
+    eg_ptr->feat = eg_ptr->g_ptr->get_feat_mimic();
+    if (!eg_ptr->g_ptr->is_mark() && !player_can_see_bold(subject_ptr, y, x))
         eg_ptr->feat = feat_none;
 
     eg_ptr->f_ptr = &f_info[eg_ptr->feat];

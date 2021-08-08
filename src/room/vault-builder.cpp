@@ -4,12 +4,12 @@
 #include "floor/floor-util.h"
 #include "game-option/cheat-options.h"
 #include "grid/feature-flag-types.h"
-#include "grid/grid.h"
 #include "grid/object-placer.h"
 #include "grid/trap.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/place-monster-types.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
@@ -23,7 +23,7 @@ static bool player_grid(player_type *player_ptr, grid_type *g_ptr) { return g_pt
  */
 static bool is_cave_empty_grid(player_type *player_ptr, grid_type *g_ptr)
 {
-    bool is_empty_grid = cave_has_flag_grid(g_ptr, FF_PLACE);
+    bool is_empty_grid = g_ptr->cave_has_flag(FF_PLACE);
     is_empty_grid &= g_ptr->m_idx == 0;
     is_empty_grid &= !player_grid(player_ptr, g_ptr);
     return is_empty_grid;
@@ -89,7 +89,7 @@ void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int num)
 
             grid_type *g_ptr;
             g_ptr = &floor_ptr->grid_array[j][k];
-            if (!is_floor_grid(g_ptr) || !g_ptr->o_idx_list.empty())
+            if (!g_ptr->is_floor() || !g_ptr->o_idx_list.empty())
                 continue;
 
             if (randint0(100) < 75) {
@@ -133,7 +133,7 @@ static void vault_trap_aux(player_type *player_ptr, POSITION y, POSITION x, POSI
         }
 
         g_ptr = &floor_ptr->grid_array[y1][x1];
-        if (!is_floor_grid(g_ptr) || !g_ptr->o_idx_list.empty() || g_ptr->m_idx)
+        if (!g_ptr->is_floor() || !g_ptr->o_idx_list.empty() || g_ptr->m_idx)
             continue;
 
         place_trap(player_ptr, y1, x1);

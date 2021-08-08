@@ -7,6 +7,7 @@
 #include "grid/grid.h"
 #include "object-hook/hook-enchant.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 
@@ -23,7 +24,7 @@ void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x)
     grid_type *g_ptr;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     g_ptr = &floor_ptr->grid_array[y][x];
-    if (!is_floor_grid(g_ptr) || !g_ptr->o_idx_list.empty())
+    if (!g_ptr->is_floor() || !g_ptr->o_idx_list.empty())
         return;
 
     if (!floor_ptr->dun_level)
@@ -63,7 +64,7 @@ void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x)
 bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-    if (cave_has_flag_grid(g_ptr, FF_PERMANENT))
+    if (g_ptr->cave_has_flag(FF_PERMANENT))
         return false;
 
     for (const auto this_o_idx : g_ptr->o_idx_list) {

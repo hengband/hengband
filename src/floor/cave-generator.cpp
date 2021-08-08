@@ -25,6 +25,7 @@
 #include "room/rooms-maze-vault.h"
 #include "system/dungeon-data-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "wizard/wizard-messages.h"
@@ -255,6 +256,27 @@ static void make_aqua_streams(player_type *player_ptr, dun_data_type *dd_ptr, du
     if (d_ptr->stream1)
         for (int i = 0; i < DUN_STR_MAG; i++)
             build_streamer(player_ptr, d_ptr->stream1, DUN_STR_MC);
+}
+
+/*!
+ * @brief マスにフロア端用の永久壁を配置する / Set boundary mimic and add "solid" perma-wall
+ * @param g_ptr 永久壁を配置したいマス構造体の参照ポインタ
+ */
+static void place_bound_perm_wall(player_type *player_ptr, grid_type *g_ptr)
+{
+    if (bound_walls_perm) {
+        g_ptr->mimic = 0;
+        place_grid(player_ptr, g_ptr, GB_SOLID_PERM);
+        return;
+    }
+
+    auto *f_ptr = &f_info[g_ptr->feat];
+    if ((has_flag(f_ptr->flags, FF_HAS_GOLD) || has_flag(f_ptr->flags, FF_HAS_ITEM)) && !has_flag(f_ptr->flags, FF_SECRET)) {
+        g_ptr->feat = feat_state(player_ptr->current_floor_ptr, g_ptr->feat, FF_ENSECRET);
+    }
+
+    g_ptr->mimic = g_ptr->feat;
+    place_grid(player_ptr, g_ptr, GB_SOLID_PERM);
 }
 
 static void make_perm_walls(player_type *player_ptr)

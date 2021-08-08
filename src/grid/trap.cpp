@@ -37,6 +37,7 @@
 #include "status/base-status.h"
 #include "status/element-resistance.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
@@ -200,7 +201,7 @@ void disclose_grid(player_type *trapped_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr = &trapped_ptr->current_floor_ptr->grid_array[y][x];
 
-    if (cave_has_flag_grid(g_ptr, FF_SECRET)) {
+    if (g_ptr->cave_has_flag(FF_SECRET)) {
         /* No longer hidden */
         cave_alter_feat(trapped_ptr, y, x, FF_SECRET);
     } else if (g_ptr->mimic) {

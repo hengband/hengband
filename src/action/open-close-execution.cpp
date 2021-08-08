@@ -1,5 +1,5 @@
 ﻿/*!
- * @file open-close-execution.cpp 
+ * @file open-close-execution.cpp
  * @brief 扉や箱を開ける処理
  * @date 2020/07/11
  * @author Hourier
@@ -22,6 +22,7 @@
 #include "status/bad-status-setter.h"
 #include "status/experience.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
@@ -41,7 +42,7 @@ bool exe_open(player_type *creature_ptr, POSITION y, POSITION x)
     feature_type *f_ptr = &f_info[g_ptr->feat];
     PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     if (!has_flag(f_ptr->flags, FF_OPEN)) {
-        msg_format(_("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck."), f_info[get_feat_mimic(g_ptr)].name.c_str());
+        msg_format(_("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck."), f_info[g_ptr->get_feat_mimic()].name.c_str());
         return false;
     }
 
@@ -100,15 +101,16 @@ bool exe_close(player_type *creature_ptr, POSITION y, POSITION x)
         return more;
 
     s16b closed_feat = feat_state(creature_ptr->current_floor_ptr, old_feat, FF_CLOSE);
-    if ((!g_ptr->o_idx_list.empty() || (g_ptr->info & CAVE_OBJECT)) && (closed_feat != old_feat) && !has_flag(f_info[closed_feat].flags, FF_DROP)) {
+    if ((!g_ptr->o_idx_list.empty() || g_ptr->is_object()) && (closed_feat != old_feat) && !has_flag(f_info[closed_feat].flags, FF_DROP)) {
         msg_print(_("何かがつっかえて閉まらない。", "Something prevents it from closing."));
+        return more;
+    }
+
+    cave_alter_feat(creature_ptr, y, x, FF_CLOSE);
+    if (old_feat == g_ptr->feat) {
+        msg_print(_("ドアは壊れてしまっている。", "The door appears to be broken."));
     } else {
-        cave_alter_feat(creature_ptr, y, x, FF_CLOSE);
-        if (old_feat == g_ptr->feat) {
-            msg_print(_("ドアは壊れてしまっている。", "The door appears to be broken."));
-        } else {
-            sound(SOUND_SHUTDOOR);
-        }
+        sound(SOUND_SHUTDOOR);
     }
 
     return more;
@@ -137,7 +139,7 @@ bool easy_open_door(player_type *creature_ptr, POSITION y, POSITION x)
         return false;
 
     if (!has_flag(f_ptr->flags, FF_OPEN)) {
-        msg_format(_("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck."), f_info[get_feat_mimic(g_ptr)].name.c_str());
+        msg_format(_("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck."), f_info[g_ptr->get_feat_mimic()].name.c_str());
     } else if (f_ptr->power) {
         i = creature_ptr->skill_dis;
         if (creature_ptr->blind || no_lite(creature_ptr))
@@ -299,7 +301,7 @@ bool exe_bash(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir)
     int bash = adj_str_blow[creature_ptr->stat_index[A_STR]];
     int temp = f_ptr->power;
     bool more = false;
-    concptr name = f_info[get_feat_mimic(g_ptr)].name.c_str();
+    concptr name = f_info[g_ptr->get_feat_mimic()].name.c_str();
     PlayerEnergy(creature_ptr).set_player_turn_energy(100);
     msg_format(_("%sに体当たりをした！", "You smash into the %s!"), name);
     temp = (bash - (temp * 10));

@@ -8,6 +8,7 @@
 #include "player/player-move.h"
 #include "player/player-status-flags.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/grid-selector.h"
 #include "util/bit-flags-calculator.h"
@@ -25,7 +26,8 @@
 static int travel_flow_cost(player_type *creature_ptr, POSITION y, POSITION x)
 {
     int cost = 1;
-    feature_type *f_ptr = &f_info[creature_ptr->current_floor_ptr->grid_array[y][x].feat];
+    auto *g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
+    feature_type *f_ptr = &f_info[g_ptr->feat];
     if (has_flag(f_ptr->flags, FF_AVOID_RUN))
         cost += 1;
 
@@ -46,7 +48,7 @@ static int travel_flow_cost(player_type *creature_ptr, POSITION y, POSITION x)
         cost += lava;
     }
 
-    if (creature_ptr->current_floor_ptr->grid_array[y][x].info & (CAVE_MARK)) {
+    if (g_ptr->is_mark()) {
         if (has_flag(f_ptr->flags, FF_DOOR))
             cost += 1;
 

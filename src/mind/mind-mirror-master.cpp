@@ -33,6 +33,7 @@
 #include "status/buff-setter.h"
 #include "status/sight-setter.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/grid-selector.h"
 #include "target/projection-path-calculator.h"
@@ -59,7 +60,7 @@ bool mirror_concentration(player_type *creature_ptr)
         return false;
     }
 
-    if (!is_mirror_grid(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])) {
+    if (!creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].is_mirror()) {
         msg_print(_("鏡の上でないと集中できない！", "There's no mirror here!"));
         return true;
     }
@@ -85,7 +86,7 @@ void remove_all_mirrors(player_type *caster_ptr, bool explode)
 {
     for (POSITION x = 0; x < caster_ptr->current_floor_ptr->width; x++) {
         for (POSITION y = 0; y < caster_ptr->current_floor_ptr->height; y++) {
-            if (!is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]))
+            if (!caster_ptr->current_floor_ptr->grid_array[y][x].is_mirror())
                 continue;
 
             remove_mirror(caster_ptr, y, x);
@@ -119,7 +120,7 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 
     for (POSITION x = 0; x < caster_ptr->current_floor_ptr->width; x++) {
         for (POSITION y = 0; y < caster_ptr->current_floor_ptr->height; y++) {
-            if (is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]) && distance(caster_ptr->y, caster_ptr->x, y, x) <= get_max_range(caster_ptr)
+            if (caster_ptr->current_floor_ptr->grid_array[y][x].is_mirror() && distance(caster_ptr->y, caster_ptr->x, y, x) <= get_max_range(caster_ptr)
                 && distance(caster_ptr->y, caster_ptr->x, y, x) != 0 && player_has_los_bold(caster_ptr, y, x)
                 && projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y, x)) {
                 mirror_y[mirror_num] = y;
@@ -232,7 +233,7 @@ void seal_of_mirror(player_type *caster_ptr, HIT_POINT dam)
 {
     for (POSITION x = 0; x < caster_ptr->current_floor_ptr->width; x++) {
         for (POSITION y = 0; y < caster_ptr->current_floor_ptr->height; y++) {
-            if (!is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]))
+            if (!caster_ptr->current_floor_ptr->grid_array[y][x].is_mirror())
                 continue;
 
             if (!affect_monster(caster_ptr, 0, 0, y, x, dam, GF_GENOCIDE, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), true))
@@ -394,7 +395,7 @@ static int number_of_mirrors(floor_type *floor_ptr)
     int val = 0;
     for (POSITION x = 0; x < floor_ptr->width; x++) {
         for (POSITION y = 0; y < floor_ptr->height; y++) {
-            if (is_mirror_grid(&floor_ptr->grid_array[y][x]))
+            if (floor_ptr->grid_array[y][x].is_mirror())
                 val++;
         }
     }
@@ -415,9 +416,10 @@ bool cast_mirror_spell(player_type *caster_ptr, mind_mirror_master_type spell)
     int tmp;
     TIME_EFFECT t;
     POSITION x, y;
+    auto *g_ptr = &caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x];
     switch (spell) {
     case MIRROR_SEEING:
-        tmp = is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x]) ? 4 : 0;
+        tmp = g_ptr->is_mirror() ? 4 : 0;
         if (plev + tmp > 4)
             detect_monsters_normal(caster_ptr, DETECT_RAD_DEFAULT);
         if (plev + tmp > 18)
@@ -441,7 +443,7 @@ bool cast_mirror_spell(player_type *caster_ptr, mind_mirror_master_type spell)
         if (!get_aim_dir(caster_ptr, &dir))
             return false;
 
-        if (plev > 9 && is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x]))
+        if (plev > 9 && g_ptr->is_mirror())
             fire_beam(caster_ptr, GF_LITE, dir, damroll(3 + ((plev - 1) / 5), 4));
         else
             fire_bolt(caster_ptr, GF_LITE, dir, damroll(3 + ((plev - 1) / 5), 4));
@@ -474,7 +476,7 @@ bool cast_mirror_spell(player_type *caster_ptr, mind_mirror_master_type spell)
     case SLEEPING_MIRROR:
         for (x = 0; x < caster_ptr->current_floor_ptr->width; x++)
             for (y = 0; y < caster_ptr->current_floor_ptr->height; y++)
-                if (is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]))
+                if (caster_ptr->current_floor_ptr->grid_array[y][x].is_mirror())
                     project(caster_ptr, 0, 2, y, x, (HIT_POINT)plev, GF_OLD_SLEEP,
                         (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
 
@@ -505,7 +507,7 @@ bool cast_mirror_spell(player_type *caster_ptr, mind_mirror_master_type spell)
         fire_beam(caster_ptr, GF_SUPER_RAY, dir, 150 + randint1(2 * plev));
         break;
     case ILLUSION_LIGHT:
-        tmp = is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x]) ? 4 : 3;
+        tmp = g_ptr->is_mirror() ? 4 : 3;
         slow_monsters(caster_ptr, plev);
         stun_monsters(caster_ptr, plev * tmp * 2);
         confuse_monsters(caster_ptr, plev * tmp);
@@ -513,7 +515,7 @@ bool cast_mirror_spell(player_type *caster_ptr, mind_mirror_master_type spell)
         stasis_monsters(caster_ptr, plev * tmp);
         break;
     case MIRROR_SHIFT:
-        if (!is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x])) {
+        if (!g_ptr->is_mirror()) {
             msg_print(_("鏡の国の場所がわからない！", "You cannot find out where the mirror is!"));
             break;
         }

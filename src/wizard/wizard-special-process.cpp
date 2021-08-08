@@ -76,6 +76,7 @@
 #include "system/angband-version.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/grid-selector.h"
@@ -356,7 +357,7 @@ void wiz_create_feature(player_type *creature_ptr)
     cave_set_feat(creature_ptr, y, x, tmp_feat);
     g_ptr->mimic = (s16b)tmp_mimic;
     feature_type *f_ptr;
-    f_ptr = &f_info[get_feat_mimic(g_ptr)];
+    f_ptr = &f_info[g_ptr->get_feat_mimic()];
 
     if (has_flag(f_ptr->flags, FF_RUNE_PROTECTION) || has_flag(f_ptr->flags, FF_RUNE_EXPLOSION))
         g_ptr->info |= CAVE_OBJECT;

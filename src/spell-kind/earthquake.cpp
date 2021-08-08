@@ -32,6 +32,7 @@
 #include "player/special-defense-types.h"
 #include "status/bad-status-setter.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
@@ -183,15 +184,15 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
             if (!map[16 + yy - cy][16 + xx - cx])
                 continue;
 
-            grid_type *g_ptr;
-            g_ptr = &floor_ptr->grid_array[yy][xx];
-            if (g_ptr->m_idx == caster_ptr->riding)
+            grid_type *gg_ptr;
+            gg_ptr = &floor_ptr->grid_array[yy][xx];
+            if (gg_ptr->m_idx == caster_ptr->riding)
                 continue;
 
-            if (!g_ptr->m_idx)
+            if (!gg_ptr->m_idx)
                 continue;
 
-            monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
+            monster_type *m_ptr = &floor_ptr->m_list[gg_ptr->m_idx];
             monster_race *r_ptr = &r_info[m_ptr->r_idx];
             if (r_ptr->flags1 & RF1_QUESTOR) {
                 map[16 + yy - cy][16 + xx - cx] = false;
@@ -203,17 +204,18 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 
             GAME_TEXT m_name[MAX_NLEN];
             sn = 0;
-            if (!(r_ptr->flags1 & RF1_NEVER_MOVE)) {
+            if (none_bits(r_ptr->flags1, RF1_NEVER_MOVE)) {
                 for (DIRECTION i = 0; i < 8; i++) {
                     POSITION y = yy + ddy_ddd[i];
                     POSITION x = xx + ddx_ddd[i];
                     if (!is_cave_empty_bold(caster_ptr, y, x))
                         continue;
 
-                    if (is_rune_protection_grid(&floor_ptr->grid_array[y][x]))
+                    auto *g_ptr = &floor_ptr->grid_array[y][x];
+                    if (g_ptr->is_rune_protection())
                         continue;
 
-                    if (is_rune_explosion_grid(&floor_ptr->grid_array[y][x]))
+                    if (g_ptr->is_rune_explosion())
                         continue;
 
                     if (pattern_tile(floor_ptr, y, x))
@@ -243,14 +245,14 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
                 msg_format(_("%^sは苦痛で泣きわめいた！", "%^s wails out in pain!"), m_name);
 
             damage = (sn ? damroll(4, 8) : (m_ptr->hp + 1));
-            (void)set_monster_csleep(caster_ptr, g_ptr->m_idx, 0);
+            (void)set_monster_csleep(caster_ptr, gg_ptr->m_idx, 0);
             m_ptr->hp -= damage;
             if (m_ptr->hp < 0) {
                 if (!ignore_unview || is_seen(caster_ptr, m_ptr))
                     msg_format(_("%^sは岩石に埋もれてしまった！", "%^s is embedded in the rock!"), m_name);
 
-                if (g_ptr->m_idx) {
-                    if (record_named_pet && is_pet(&floor_ptr->m_list[g_ptr->m_idx]) && floor_ptr->m_list[g_ptr->m_idx].nickname) {
+                if (gg_ptr->m_idx) {
+                    if (record_named_pet && is_pet(&floor_ptr->m_list[gg_ptr->m_idx]) && floor_ptr->m_list[gg_ptr->m_idx].nickname) {
                         char m2_name[MAX_NLEN];
 
                         monster_desc(caster_ptr, m2_name, m_ptr, MD_INDEF_VISIBLE);
@@ -318,9 +320,8 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
             if (distance(cy, cx, yy, xx) > r)
                 continue;
 
-            grid_type *g_ptr;
-            g_ptr = &floor_ptr->grid_array[yy][xx];
-            if (is_mirror_grid(g_ptr)) {
+            auto *g_ptr = &floor_ptr->grid_array[yy][xx];
+            if (g_ptr->is_mirror()) {
                 g_ptr->info |= CAVE_GLOW;
                 continue;
             }
@@ -335,7 +336,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
                 if (!in_bounds2(floor_ptr, yyy, xxx))
                     continue;
                 cc_ptr = &floor_ptr->grid_array[yyy][xxx];
-                if (has_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW)) {
+                if (has_flag(f_info[cc_ptr->get_feat_mimic()].flags, FF_GLOW)) {
                     g_ptr->info |= CAVE_GLOW;
                     break;
                 }

@@ -35,6 +35,7 @@
 #include "system/artifact-type-definition.h"
 #include "system/dungeon-data-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
@@ -123,7 +124,7 @@ static void recursive_river(floor_type *floor_ptr, POSITION x1, POSITION y1, POS
                             continue;
 
                         /* Do not convert permanent features */
-                        if (cave_has_flag_grid(g_ptr, FF_PERMANENT))
+                        if (g_ptr->cave_has_flag(FF_PERMANENT))
                             continue;
 
                         /*
@@ -210,8 +211,8 @@ void add_river(floor_type *floor_ptr, dun_data_type *dd_ptr)
         feature_type *f_ptr = &f_info[feat1];
 
         /* Only add river if matches lake type or if have no lake at all */
-        if (!(((dd_ptr->laketype == LAKE_T_LAVA) && has_flag(f_ptr->flags, FF_LAVA))
-                || ((dd_ptr->laketype == LAKE_T_WATER) && has_flag(f_ptr->flags, FF_WATER)) || !dd_ptr->laketype)) {
+        if (!(((dd_ptr->laketype == LAKE_T_LAVA) && has_flag(f_ptr->flags, FF_LAVA)) || ((dd_ptr->laketype == LAKE_T_WATER) && has_flag(f_ptr->flags, FF_WATER))
+                || !dd_ptr->laketype)) {
             return;
         }
     }
@@ -323,7 +324,7 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
 
             /* Only convert "granite" walls */
             if (streamer_is_wall) {
-                if (!is_extra_grid(g_ptr) && !is_inner_grid(g_ptr) && !is_outer_grid(g_ptr) && !is_solid_grid(g_ptr))
+                if (!g_ptr->is_extra() && !g_ptr->is_inner() && !g_ptr->is_outer() && !g_ptr->is_solid())
                     continue;
                 if (is_closed_door(player_ptr, g_ptr->feat))
                     continue;
@@ -432,7 +433,7 @@ void place_trees(player_type *player_ptr, POSITION x, POSITION y)
                 continue;
 
             /* Want square to be in the circle and accessable. */
-            if ((distance(j, i, y, x) < 4) && !cave_has_flag_grid(g_ptr, FF_PERMANENT)) {
+            if ((distance(j, i, y, x) < 4) && !g_ptr->cave_has_flag(FF_PERMANENT)) {
                 /*
                  * Clear previous contents, add feature
                  * The border mainly gets trees, while the center gets rubble

@@ -28,6 +28,7 @@
 #include "spell/range-calc.h"
 #include "spell/spell-types.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
@@ -50,7 +51,7 @@ static void next_mirror(player_type *creature_ptr, POSITION *next_y, POSITION *n
     int mirror_num = 0; /* 鏡の数 */
     for (POSITION x = 0; x < creature_ptr->current_floor_ptr->width; x++) {
         for (POSITION y = 0; y < creature_ptr->current_floor_ptr->height; y++) {
-            if (is_mirror_grid(&creature_ptr->current_floor_ptr->grid_array[y][x])) {
+            if (creature_ptr->current_floor_ptr->grid_array[y][x].is_mirror()) {
                 mirror_y[mirror_num] = y;
                 mirror_x[mirror_num] = x;
                 mirror_num++;
@@ -230,7 +231,7 @@ ProjectResult project(player_type *caster_ptr, const MONSTER_IDX who, POSITION r
 
             if (affect_item(caster_ptr, 0, 0, y, x, dam, GF_SEEKER))
                 res.notice = true;
-            if (!is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]))
+            if (!caster_ptr->current_floor_ptr->grid_array[y][x].is_mirror())
                 continue;
 
             monster_target_y = y;
@@ -333,7 +334,7 @@ ProjectResult project(player_type *caster_ptr, const MONSTER_IDX who, POSITION r
                 break;
             }
 
-            if (is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]) && !second_step) {
+            if (caster_ptr->current_floor_ptr->grid_array[y][x].is_mirror() && !second_step) {
                 monster_target_y = y;
                 monster_target_x = x;
                 remove_mirror(caster_ptr, y, x);

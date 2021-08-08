@@ -56,6 +56,7 @@
 #include "sv-definition/sv-bow-types.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
@@ -543,7 +544,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
             if (snipe_type == SP_KILL_WALL) {
                 g_ptr = &shooter_ptr->current_floor_ptr->grid_array[ny][nx];
 
-                if (cave_has_flag_grid(g_ptr, FF_HURT_ROCK) && !g_ptr->m_idx) {
+                if (g_ptr->cave_has_flag(FF_HURT_ROCK) && !g_ptr->m_idx) {
                     if (any_bits(g_ptr->info, (CAVE_MARK)))
                         msg_print(_("岩が砕け散った。", "Wall rocks were shattered."));
                     /* Forget the wall */

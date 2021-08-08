@@ -31,6 +31,7 @@
 #include "status/bad-status-setter.h"
 #include "status/element-resistance.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
@@ -76,12 +77,12 @@ static bool deal_damege_by_feat(player_type *creature_ptr, grid_type *g_ptr, con
     if (creature_ptr->levitation) {
         msg_print(msg_levitation);
 
-        take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"), f_info[get_feat_mimic(g_ptr)].name.c_str()));
+        take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"), f_info[g_ptr->get_feat_mimic()].name.c_str()));
 
         if (additional_effect != NULL)
             additional_effect(creature_ptr, damage);
     } else {
-        concptr name = f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name.c_str();
+        concptr name = f_info[creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].get_feat_mimic()].name.c_str();
         msg_format(_("%s%s！", "The %s %s!"), name, msg_normal);
         take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name);
 

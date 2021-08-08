@@ -9,8 +9,15 @@
 
 #define MAX_DOOR_TYPES 3
 
+enum door_kind_type {
+    DOOR_DEFAULT = -1,
+    DOOR_DOOR = 0,
+    DOOR_GLASS_DOOR = 1,
+    DOOR_CURTAIN = 2,
+};
+
 /* A structure type for doors */
-typedef struct door_type {
+struct door_type {
     FEAT_IDX open;
     FEAT_IDX broken;
     FEAT_IDX closed;
@@ -18,6 +25,6 @@ typedef struct door_type {
     FEAT_IDX num_locked;
     FEAT_IDX jammed[MAX_LJ_DOORS];
     FEAT_IDX num_jammed;
-} door_type;
+};
 
 extern door_type feat_door[MAX_DOOR_TYPES];
