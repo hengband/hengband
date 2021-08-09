@@ -120,10 +120,9 @@ void blood_curse_to_enemy(player_type *caster_ptr, MONSTER_IDX m_idx)
         case 28: {
             if (one_in_(13)) {
                 for (int i = 0; i < A_MAX; i++) {
-                    bool is_first_dec_stat = true;
-                    while (is_first_dec_stat || one_in_(2)) {
-                        (void)do_dec_stat(caster_ptr, i);
-                    }
+                    do {
+                        (void)do_dec_stat(caster_ptr, i); //FIXED
+                    } while(one_in_(2));
                 }
             } else {
                 (void)do_dec_stat(caster_ptr, randint0(6));
