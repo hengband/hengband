@@ -344,7 +344,7 @@ bool MonsterSweepGrid::sweep_ranged_attack_grid(POSITION *yp, POSITION *xp)
 
         auto *g_ptr = &floor_ptr->grid_array[y][x];
         this->cost = (int)g_ptr->get_cost(r_ptr);
-        if (this->calc_run_cost(y, x, now_cost)) {
+        if (!this->is_best_cost(y, x, now_cost)) {
             continue;
         }
 
@@ -356,7 +356,7 @@ bool MonsterSweepGrid::sweep_ranged_attack_grid(POSITION *yp, POSITION *xp)
     return this->best != 999;
 }
 
-bool MonsterSweepGrid::calc_run_cost(const POSITION y, const POSITION x, const int now_cost)
+bool MonsterSweepGrid::is_best_cost(const POSITION y, const POSITION x, const int now_cost)
 {
     auto *floor_ptr = this->target_ptr->current_floor_ptr;
     auto *r_ptr = &r_info[floor_ptr->m_list[this->m_idx].r_idx];
