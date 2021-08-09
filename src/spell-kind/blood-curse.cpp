@@ -117,11 +117,12 @@ void blood_curse_to_enemy(player_type *caster_ptr, MONSTER_IDX m_idx)
             /* Fall through */
         case 26:
         case 27:
-        case 28: {
+        case 28:
+        default: {
             if (one_in_(13)) {
                 for (int i = 0; i < A_MAX; i++) {
                     do {
-                        (void)do_dec_stat(caster_ptr, i); //FIXED
+                        (void)do_dec_stat(caster_ptr, i);
                     } while(one_in_(2));
                 }
             } else {

@@ -220,7 +220,7 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
         default:
             for (int i = 0; i < A_MAX; i++) {
                 do {
-                    (void)do_dec_stat(target_ptr, i); //FIXED
+                    (void)do_dec_stat(target_ptr, i);
                 } while(one_in_(2));
             }
         }
