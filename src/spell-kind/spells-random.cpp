@@ -219,11 +219,9 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
             /* Fall through */
         default:
             for (int i = 0; i < A_MAX; i++) {
-                bool is_first_dec_stat = true;
-                while (is_first_dec_stat || one_in_(2)) {
-                    is_first_dec_stat = false;
+                do {
                     (void)do_dec_stat(target_ptr, i);
-                }
+                } while(one_in_(2));
             }
         }
     }

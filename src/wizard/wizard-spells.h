@@ -3,7 +3,7 @@
 #include "system/angband.h"
 #include "spell/spell-types.h"
 
-#define SPELL_MAX 3
+#define SPELL_MAX 4
 
 typedef struct floor_type floor_type;
 typedef struct player_type player_type;
@@ -19,6 +19,10 @@ typedef union spell_functions {
     struct debug_spell_type3 {
         bool (*spell_function)(player_type *, HIT_POINT);
     } spell3;
+
+    struct debug_spell_type4 { // 実質 ty curse
+        bool (*spell_function)(player_type *, bool, int*);
+    } spell4;
 
 } spell_functions;
 
