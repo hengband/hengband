@@ -4484,7 +4484,7 @@ D:あら～あらあら。
 
 N:268:鼠小僧の
 E:of Nezumi-Kozou
-I:36:13:1
+I:36:13:7
 W:15:30:80:12500
 P:4:1d1:0:0:12
 F:RES_DARK | FREE_ACT | STEALTH | ACTIVATE
