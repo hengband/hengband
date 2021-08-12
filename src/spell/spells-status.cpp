@@ -244,6 +244,8 @@ void roll_hitdice(player_type *creature_ptr, spell_operation options)
             break;
     }
 
+    creature_ptr->knowledge &= ~(KNOW_HPRATE);
+
     PERCENTAGE percent
         = (int)(((long)creature_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) / (2 * creature_ptr->hitdie + ((PY_MAX_LEVEL - 1 + 3) * (creature_ptr->hitdie + 1))));
 
@@ -265,7 +267,6 @@ void roll_hitdice(player_type *creature_ptr, spell_operation options)
     }
 
     msg_print(_("体力ランクが変わった。", "Life rate has changed."));
-    creature_ptr->knowledge &= ~(KNOW_HPRATE);
 }
 
 bool life_stream(player_type *creature_ptr, bool message, bool virtue_change)
