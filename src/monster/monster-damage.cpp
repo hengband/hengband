@@ -13,6 +13,7 @@
 #include "core/stuff-handler.h"
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
+#include "io/files-util.h"
 #include "io/report.h"
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
@@ -46,11 +47,6 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-
-#if JP
-#else
-#include "io/files-util.h"
-#endif
 
 /*
  * @brief コンストラクタ
