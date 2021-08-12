@@ -146,15 +146,19 @@ static void print_monster_dead_by_monster(player_type *player_ptr, mam_pp_type *
     }
 
     if (mam_pp_ptr->note) {
+        sound_type kill_sound = monster_living(mam_pp_ptr->m_ptr->r_idx) ? SOUND_KILL : SOUND_N_KILL;
+        sound(kill_sound);
         msg_format(_("%^s%s", "%^s%s"), mam_pp_ptr->m_name, mam_pp_ptr->note);
         return;
     }
 
     if (!monster_living(mam_pp_ptr->m_ptr->r_idx)) {
+        sound(SOUND_N_KILL);
         msg_format(_("%^sは破壊された。", "%^s is destroyed."), mam_pp_ptr->m_name);
         return;
     }
 
+        sound(SOUND_KILL);
     msg_format(_("%^sは殺された。", "%^s is killed."), mam_pp_ptr->m_name);
 }
 
@@ -175,8 +179,6 @@ static bool check_monster_hp(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
         return false;
     }
 
-    sound_type kill_sound = monster_living(mam_pp_ptr->m_ptr->r_idx) ? SOUND_KILL : SOUND_N_KILL;
-    sound(kill_sound);
     *(mam_pp_ptr->dead) = true;
     print_monster_dead_by_monster(player_ptr, mam_pp_ptr);
     monster_gain_exp(player_ptr, mam_pp_ptr->who, mam_pp_ptr->m_ptr->r_idx);

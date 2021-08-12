@@ -208,7 +208,8 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
     }
 
     delete_monster_idx(creature_ptr, m_idx);
-    sound(SOUND_TPLEVEL);
+    if (see_m)
+        sound(SOUND_TPLEVEL);
 }
 
 bool teleport_level_other(player_type *caster_ptr)
