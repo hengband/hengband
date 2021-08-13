@@ -24,8 +24,11 @@
  * @brief プレイヤーの現在ダンジョンIDと階層に応じて、ダンジョン内ランクエの自動放棄を行う
  * @param creature_ptr プレーヤーへの参照ポインタ
  */
-void check_random_quest_auto_failure(player_type *creature_ptr) {
-    if (creature_ptr->dungeon_idx != DUNGEON_ANGBAND) return;
+void check_random_quest_auto_failure(player_type *creature_ptr)
+{
+    if (creature_ptr->dungeon_idx != DUNGEON_ANGBAND) {
+        return;
+    }
     for (auto i = MIN_RANDOM_QUEST; i < MAX_RANDOM_QUEST + 1; i++) {
         auto q_ptr = &quest[i];
         if ((q_ptr->type == QUEST_TYPE_RANDOM) && (q_ptr->status == QUEST_STATUS_TAKEN) && (q_ptr->level < creature_ptr->current_floor_ptr->dun_level)) {
