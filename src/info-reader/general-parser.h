@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include <functional>
 #include <string_view>
 
 enum parse_error_type : int;

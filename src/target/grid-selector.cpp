@@ -21,6 +21,7 @@
 #include "util/sort.h"
 #include "view/display-messages.h"
 #include "window/main-window-util.h"
+#include <functional>
 #include <unordered_map>
 #include <vector>
 

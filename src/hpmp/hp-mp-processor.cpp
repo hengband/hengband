@@ -39,6 +39,7 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <functional>
 
 /*!
  * @brief 地形によるダメージを与える / Deal damage from feature.
