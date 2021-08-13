@@ -13,6 +13,7 @@
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
 #include "floor/floor-util.h"
+#include "floor/pattern-walk.h"
 #include "mind/mind-blue-mage.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-summon.h"
@@ -38,6 +39,7 @@ debug_spell_command debug_spell_commands_list[SPELL_MAX] = {
     { 3, "true healing", { .spell3 = { true_healing } } },
     { 2, "drop weapons", { .spell2 = { drop_weapons } } },
     { 4, "ty curse", { .spell4 = { activate_ty_curse } } },
+    { 5, "pattern teleport", { .spell5 = { pattern_teleport } } },
 };
 
 /*!
@@ -71,6 +73,10 @@ bool wiz_debug_spell(player_type *creature_ptr)
             break;
         case 4:
             (*(debug_spell_commands_list[i].command_function.spell4.spell_function))(creature_ptr, true, &tmp_int);
+            return true;
+            break;
+        case 5:
+            (*(debug_spell_commands_list[i].command_function.spell5.spell_function))(creature_ptr);
             return true;
             break;
         default:

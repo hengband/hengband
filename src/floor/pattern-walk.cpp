@@ -27,12 +27,13 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include "world/world-movement-processor.h"
 
 /*!
  * @brief パターン終点到達時のテレポート処理を行う
  * @param creature_ptr プレーヤーへの参照ポインタ
  */
-static void pattern_teleport(player_type *creature_ptr)
+void pattern_teleport(player_type *creature_ptr)
 {
     DEPTH min_level = 0;
     DEPTH max_level = 99;
@@ -89,6 +90,9 @@ static void pattern_teleport(player_type *creature_ptr)
      * and create a first saved floor
      */
     prepare_change_floor_mode(creature_ptr, CFM_FIRST_FLOOR);
+
+    check_random_quest_auto_failure(creature_ptr);
+
     creature_ptr->leaving = true;
 }
 
