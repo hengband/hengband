@@ -94,19 +94,16 @@ void execute_recall(player_type *creature_ptr)
     prepare_change_floor_mode(creature_ptr, CFM_FIRST_FLOOR);
     creature_ptr->leaving = true;
 
-    if (creature_ptr->dungeon_idx != DUNGEON_ANGBAND) {
-        sound(SOUND_TPLEVEL);
-        return;
-    }
-
-    for (int i = MIN_RANDOM_QUEST; i < MAX_RANDOM_QUEST + 1; i++) {
-        quest_type *const q_ptr = &quest[i];
-        if ((q_ptr->type == QUEST_TYPE_RANDOM) && (q_ptr->status == QUEST_STATUS_TAKEN) && (q_ptr->level < floor_ptr->dun_level)) {
-            q_ptr->status = QUEST_STATUS_FAILED;
-            q_ptr->complev = (byte)creature_ptr->lev;
-            update_playtime();
-            q_ptr->comptime = current_world_ptr->play_time;
-            r_info[q_ptr->r_idx].flags1 &= ~(RF1_QUESTOR);
+    if (creature_ptr->dungeon_idx == DUNGEON_ANGBAND) {
+        for (int i = MIN_RANDOM_QUEST; i < MAX_RANDOM_QUEST + 1; i++) {
+            quest_type *const q_ptr = &quest[i];
+            if ((q_ptr->type == QUEST_TYPE_RANDOM) && (q_ptr->status == QUEST_STATUS_TAKEN) && (q_ptr->level < floor_ptr->dun_level)) {
+                q_ptr->status = QUEST_STATUS_FAILED;
+                q_ptr->complev = (byte)creature_ptr->lev;
+                update_playtime();
+                q_ptr->comptime = current_world_ptr->play_time;
+                r_info[q_ptr->r_idx].flags1 &= ~(RF1_QUESTOR);
+            }
         }
     }
 
