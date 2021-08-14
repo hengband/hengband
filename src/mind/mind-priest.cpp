@@ -61,7 +61,7 @@ bool bless_weapon(player_type *caster_ptr)
 #endif
         o_ptr->curse_flags.clear();
         set_bits(o_ptr->ident, IDENT_SENSE);
-        set_bits(o_ptr->feeling, FEEL_NONE);
+        o_ptr->feeling = FEEL_NONE;
         set_bits(caster_ptr->update, PU_BONUS);
         set_bits(caster_ptr->window_flags, PW_EQUIP | PW_FLOOR_ITEM_LIST);
     }
