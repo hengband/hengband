@@ -311,8 +311,8 @@ void process_monster_attack_hungry(player_type *target_ptr, monap_type *monap_pt
     msg_format("You feel hungry!");
 #endif
     FEED subtracted_food = target_ptr->food - monap_ptr->damage;
-    if (target_ptr->food > PY_FOOD_ALERT && PY_FOOD_ALERT >= subtracted_food)
-        set_food(target_ptr, PY_FOOD_ALERT);
+    if (target_ptr->food >= PY_FOOD_ALERT && PY_FOOD_ALERT > subtracted_food)
+        set_food(target_ptr, PY_FOOD_ALERT - 1);
     else if (target_ptr->food > PY_FOOD_FAINT && PY_FOOD_FAINT >= subtracted_food)
         set_food(target_ptr, PY_FOOD_FAINT);
     else
