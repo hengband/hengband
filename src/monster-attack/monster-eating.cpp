@@ -246,13 +246,13 @@ bool check_drain_hp(player_type *target_ptr, const s32b d)
         return (mimic_info[target_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING) != 0 ? true : resist_drain;
 
     switch (target_ptr->prace) {
-    case RACE_ZOMBIE:
-    case RACE_VAMPIRE:
-    case RACE_SPECTRE:
-    case RACE_SKELETON:
-    case RACE_BALROG:
-    case RACE_GOLEM:
-    case RACE_ANDROID:
+    case player_race_type::RACE_ZOMBIE:
+    case player_race_type::RACE_VAMPIRE:
+    case player_race_type::RACE_SPECTRE:
+    case player_race_type::RACE_SKELETON:
+    case player_race_type::RACE_BALROG:
+    case player_race_type::RACE_GOLEM:
+    case player_race_type::RACE_ANDROID:
         return true;
     default:
         return resist_drain;

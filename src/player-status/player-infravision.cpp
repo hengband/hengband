@@ -29,7 +29,7 @@ s16b PlayerInfravision::race_value()
     if (this->owner_ptr->mimic_form)
         tmp_rp_ptr = &mimic_info[this->owner_ptr->mimic_form];
     else
-        tmp_rp_ptr = &race_info[this->owner_ptr->prace];
+        tmp_rp_ptr = &race_info[static_cast<int>(this->owner_ptr->prace)];
 
     return tmp_rp_ptr->infra;
 }

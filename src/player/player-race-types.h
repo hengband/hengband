@@ -3,7 +3,7 @@
 /*!
  * @details 既にplayer_raceが存在するので_typeと付けた
  */
-enum player_race_type {
+enum class player_race_type {
     RACE_HUMAN = 0,
     RACE_HALF_ELF = 1,
     RACE_ELF = 2,
@@ -42,5 +42,7 @@ enum player_race_type {
     RACE_KUTAR = 35,
     RACE_ANDROID = 36,
     RACE_MERFOLK = 37,
-    MAX_RACES = 38,
+    MAX,
 };
+
+constexpr int MAX_RACES = static_cast<int>(player_race_type::MAX);

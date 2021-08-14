@@ -216,7 +216,7 @@ static errr exe_reading_savefile(player_type *creature_ptr)
         return load_hp_result;
 
     sp_ptr = &sex_info[creature_ptr->psex];
-    rp_ptr = &race_info[creature_ptr->prace];
+    rp_ptr = &race_info[static_cast<int>(creature_ptr->prace)];
     cp_ptr = &class_info[creature_ptr->pclass];
     ap_ptr = &personality_info[creature_ptr->pseikaku];
 

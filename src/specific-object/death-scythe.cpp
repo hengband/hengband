@@ -32,27 +32,27 @@
 static int calc_death_scythe_reflection_magnification_mimic_none(player_type *attacker_ptr)
 {
     switch (attacker_ptr->prace) {
-    case RACE_YEEK:
-    case RACE_KLACKON:
-    case RACE_HUMAN:
-    case RACE_AMBERITE:
-    case RACE_DUNADAN:
-    case RACE_BARBARIAN:
-    case RACE_BEASTMAN:
+    case player_race_type::RACE_YEEK:
+    case player_race_type::RACE_KLACKON:
+    case player_race_type::RACE_HUMAN:
+    case player_race_type::RACE_AMBERITE:
+    case player_race_type::RACE_DUNADAN:
+    case player_race_type::RACE_BARBARIAN:
+    case player_race_type::RACE_BEASTMAN:
         return 25;
-    case RACE_HALF_ORC:
-    case RACE_HALF_TROLL:
-    case RACE_HALF_OGRE:
-    case RACE_HALF_GIANT:
-    case RACE_HALF_TITAN:
-    case RACE_CYCLOPS:
-    case RACE_IMP:
-    case RACE_SKELETON:
-    case RACE_ZOMBIE:
-    case RACE_VAMPIRE:
-    case RACE_SPECTRE:
-    case RACE_BALROG:
-    case RACE_DRACONIAN:
+    case player_race_type::RACE_HALF_ORC:
+    case player_race_type::RACE_HALF_TROLL:
+    case player_race_type::RACE_HALF_OGRE:
+    case player_race_type::RACE_HALF_GIANT:
+    case player_race_type::RACE_HALF_TITAN:
+    case player_race_type::RACE_CYCLOPS:
+    case player_race_type::RACE_IMP:
+    case player_race_type::RACE_SKELETON:
+    case player_race_type::RACE_ZOMBIE:
+    case player_race_type::RACE_VAMPIRE:
+    case player_race_type::RACE_SPECTRE:
+    case player_race_type::RACE_BALROG:
+    case player_race_type::RACE_DRACONIAN:
         return 30;
     default:
         return 10;

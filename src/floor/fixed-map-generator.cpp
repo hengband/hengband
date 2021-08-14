@@ -365,7 +365,7 @@ static bool parse_qtw_M(qtwg_type *qtwg_ptr, char **zz)
     } else if (zz[0][0] == 'Q') {
         max_q_idx = (QUEST_IDX)atoi(zz[1]);
     } else if (zz[0][0] == 'R') {
-        max_r_idx = (player_race_type)atoi(zz[1]);
+        max_r_idx = (MONRACE_IDX)atoi(zz[1]);
     } else if (zz[0][0] == 'K') {
         max_k_idx = (KIND_OBJECT_IDX)atoi(zz[1]);
     } else if (zz[0][0] == 'V') {
