@@ -105,7 +105,7 @@ void player_birth(player_type *creature_ptr)
     }
 
     seed_wilderness();
-    if (creature_ptr->prace == player_race_type::RACE_BEASTMAN)
+    if (creature_ptr->prace == player_race_type::BEASTMAN)
         creature_ptr->hack_mutation = true;
     else
         creature_ptr->hack_mutation = false;

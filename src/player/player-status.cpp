@@ -1376,7 +1376,7 @@ static ACTION_SKILL_POWER calc_skill_dig(player_type *creature_ptr)
 
     pow = 0;
 
-    if (!creature_ptr->mimic_form && creature_ptr->prace == player_race_type::RACE_ENT && !creature_ptr->inventory_list[INVEN_MAIN_HAND].k_idx) {
+    if (!creature_ptr->mimic_form && creature_ptr->prace == player_race_type::ENT && !creature_ptr->inventory_list[INVEN_MAIN_HAND].k_idx) {
         pow += creature_ptr->lev * 10;
     }
 
@@ -1668,7 +1668,7 @@ static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_real_value)
         }
     }
 
-    if (is_specific_player_race(creature_ptr, player_race_type::RACE_GOLEM) || is_specific_player_race(creature_ptr, player_race_type::RACE_ANDROID)) {
+    if (is_specific_player_race(creature_ptr, player_race_type::GOLEM) || is_specific_player_race(creature_ptr, player_race_type::ANDROID)) {
         ac += 10 + (creature_ptr->lev * 2 / 5);
     }
 
@@ -2722,7 +2722,7 @@ void check_experience(player_type *creature_ptr)
     set_bits(creature_ptr->redraw, PR_EXP);
     handle_stuff(creature_ptr);
 
-    bool android = (creature_ptr->prace == player_race_type::RACE_ANDROID ? true : false);
+    bool android = (creature_ptr->prace == player_race_type::ANDROID ? true : false);
     PLAYER_LEVEL old_lev = creature_ptr->lev;
     while ((creature_ptr->lev > 1) && (creature_ptr->exp < ((android ? player_exp_a : player_exp)[creature_ptr->lev - 2] * creature_ptr->expfact / 100L))) {
         creature_ptr->lev--;
@@ -2744,7 +2744,7 @@ void check_experience(player_type *creature_ptr)
             if ((creature_ptr->pclass == CLASS_CHAOS_WARRIOR) || creature_ptr->muta.has(MUTA::CHAOS_GIFT)) {
                 level_reward = true;
             }
-            if (creature_ptr->prace == player_race_type::RACE_BEASTMAN) {
+            if (creature_ptr->prace == player_race_type::BEASTMAN) {
                 if (one_in_(5))
                     level_mutation = true;
             }
@@ -2945,7 +2945,7 @@ long calc_score(player_type *creature_ptr)
     if (ironman_downward)
         point *= 2;
     if (creature_ptr->pclass == CLASS_BERSERKER) {
-        if (creature_ptr->prace == player_race_type::RACE_SPECTRE)
+        if (creature_ptr->prace == player_race_type::SPECTRE)
             point = point / 5;
     }
 

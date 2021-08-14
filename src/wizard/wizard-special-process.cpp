@@ -307,7 +307,7 @@ void wiz_change_status(player_type *creature_ptr)
     if (tmp_long < 0)
         tmp_long = 0L;
 
-    if (creature_ptr->prace == player_race_type::RACE_ANDROID)
+    if (creature_ptr->prace == player_race_type::ANDROID)
         return;
 
     creature_ptr->max_exp = tmp_long;

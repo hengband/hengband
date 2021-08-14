@@ -334,76 +334,76 @@ void initialize_virtues(player_type *creature_ptr)
 
     /* Get one virtue based on race */
     switch (creature_ptr->prace) {
-    case player_race_type::RACE_HUMAN:
-    case player_race_type::RACE_HALF_ELF:
-    case player_race_type::RACE_DUNADAN:
+    case player_race_type::HUMAN:
+    case player_race_type::HALF_ELF:
+    case player_race_type::DUNADAN:
         creature_ptr->vir_types[i++] = V_INDIVIDUALISM;
         break;
-    case player_race_type::RACE_ELF:
-    case player_race_type::RACE_SPRITE:
-    case player_race_type::RACE_ENT:
-    case player_race_type::RACE_MERFOLK:
+    case player_race_type::ELF:
+    case player_race_type::SPRITE:
+    case player_race_type::ENT:
+    case player_race_type::MERFOLK:
         creature_ptr->vir_types[i++] = V_NATURE;
         break;
-    case player_race_type::RACE_HOBBIT:
-    case player_race_type::RACE_HALF_OGRE:
+    case player_race_type::HOBBIT:
+    case player_race_type::HALF_OGRE:
         creature_ptr->vir_types[i++] = V_TEMPERANCE;
         break;
-    case player_race_type::RACE_DWARF:
-    case player_race_type::RACE_KLACKON:
-    case player_race_type::RACE_ANDROID:
+    case player_race_type::DWARF:
+    case player_race_type::KLACKON:
+    case player_race_type::ANDROID:
         creature_ptr->vir_types[i++] = V_DILIGENCE;
         break;
-    case player_race_type::RACE_GNOME:
-    case player_race_type::RACE_CYCLOPS:
+    case player_race_type::GNOME:
+    case player_race_type::CYCLOPS:
         creature_ptr->vir_types[i++] = V_KNOWLEDGE;
         break;
-    case player_race_type::RACE_HALF_ORC:
-    case player_race_type::RACE_AMBERITE:
-    case player_race_type::RACE_KOBOLD:
+    case player_race_type::HALF_ORC:
+    case player_race_type::AMBERITE:
+    case player_race_type::KOBOLD:
         creature_ptr->vir_types[i++] = V_HONOUR;
         break;
-    case player_race_type::RACE_HALF_TROLL:
-    case player_race_type::RACE_BARBARIAN:
+    case player_race_type::HALF_TROLL:
+    case player_race_type::BARBARIAN:
         creature_ptr->vir_types[i++] = V_VALOUR;
         break;
-    case player_race_type::RACE_HIGH_ELF:
-    case player_race_type::RACE_KUTAR:
+    case player_race_type::HIGH_ELF:
+    case player_race_type::KUTAR:
         creature_ptr->vir_types[i++] = V_VITALITY;
         break;
-    case player_race_type::RACE_HALF_GIANT:
-    case player_race_type::RACE_GOLEM:
-    case player_race_type::RACE_ARCHON:
-    case player_race_type::RACE_BALROG:
+    case player_race_type::HALF_GIANT:
+    case player_race_type::GOLEM:
+    case player_race_type::ARCHON:
+    case player_race_type::BALROG:
         creature_ptr->vir_types[i++] = V_JUSTICE;
         break;
-    case player_race_type::RACE_HALF_TITAN:
+    case player_race_type::HALF_TITAN:
         creature_ptr->vir_types[i++] = V_HARMONY;
         break;
-    case player_race_type::RACE_YEEK:
+    case player_race_type::YEEK:
         creature_ptr->vir_types[i++] = V_SACRIFICE;
         break;
-    case player_race_type::RACE_MIND_FLAYER:
+    case player_race_type::MIND_FLAYER:
         creature_ptr->vir_types[i++] = V_ENLIGHTEN;
         break;
-    case player_race_type::RACE_DARK_ELF:
-    case player_race_type::RACE_DRACONIAN:
-    case player_race_type::RACE_S_FAIRY:
+    case player_race_type::DARK_ELF:
+    case player_race_type::DRACONIAN:
+    case player_race_type::S_FAIRY:
         creature_ptr->vir_types[i++] = V_ENCHANT;
         break;
-    case player_race_type::RACE_NIBELUNG:
+    case player_race_type::NIBELUNG:
         creature_ptr->vir_types[i++] = V_PATIENCE;
         break;
-    case player_race_type::RACE_IMP:
+    case player_race_type::IMP:
         creature_ptr->vir_types[i++] = V_FAITH;
         break;
-    case player_race_type::RACE_ZOMBIE:
-    case player_race_type::RACE_SKELETON:
-    case player_race_type::RACE_VAMPIRE:
-    case player_race_type::RACE_SPECTRE:
+    case player_race_type::ZOMBIE:
+    case player_race_type::SKELETON:
+    case player_race_type::VAMPIRE:
+    case player_race_type::SPECTRE:
         creature_ptr->vir_types[i++] = V_UNLIFE;
         break;
-    case player_race_type::RACE_BEASTMAN:
+    case player_race_type::BEASTMAN:
         creature_ptr->vir_types[i++] = V_CHANCE;
         break;
     case player_race_type::MAX:
