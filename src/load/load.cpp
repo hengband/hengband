@@ -239,7 +239,7 @@ static errr exe_reading_savefile(player_type *creature_ptr)
     if (h_older_than(0, 4, 10))
         set_zangband_pet(creature_ptr);
     else
-        rd_s16b(&creature_ptr->pet_extra_flags);
+        rd_u16b(&creature_ptr->pet_extra_flags);
 
     if (!h_older_than(1, 0, 9)) {
         char *buf;
