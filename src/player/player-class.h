@@ -22,7 +22,7 @@
 
 typedef struct player_magic {
     tval_type spell_book{}; /* Tval of spell books (if any) */
-    int spell_xtra{}; /* Something for later */
+    BIT_FLAGS8 spell_xtra{}; /* Something for later */
 
     int spell_stat{}; /* Stat for spells (if any)  */
     int spell_type{}; /* Spell type (mage/priest) */

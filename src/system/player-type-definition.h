@@ -225,7 +225,7 @@ typedef struct player_type {
     s16b old_realm{}; /* Record of realm changes */
 
     s16b pet_follow_distance{}; /* Length of the imaginary "leash" for pets */
-    s16b pet_extra_flags{}; /* Various flags for controling pets */
+    BIT_FLAGS16 pet_extra_flags{}; /* Various flags for controling pets */
 
     MONSTER_IDX today_mon{}; //!< 日替わり賞金首を知っていればそのモンスターID、知らなければ 0
 

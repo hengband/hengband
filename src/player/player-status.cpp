@@ -285,7 +285,7 @@ WEIGHT calc_inventory_weight(player_type *creature_ptr)
  */
 static void update_bonuses(player_type *creature_ptr)
 {
-    int empty_hands_status = empty_hands(creature_ptr, true);
+    auto empty_hands_status = empty_hands(creature_ptr, true);
     object_type *o_ptr;
 
     /* Save the old vision stuff */
