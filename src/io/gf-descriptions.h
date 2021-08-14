@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-#define MAX_NAMED_NUM 102
+#define MAX_NAMED_NUM 103
 
 typedef struct named_num
 {

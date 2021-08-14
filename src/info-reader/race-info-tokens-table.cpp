@@ -74,8 +74,9 @@ const std::unordered_map<std::string_view, rbe_type> r_info_blow_effect = {
 	{ "DR_MANA", RBE_DR_MANA },
 	{ "SUPERHURT", RBE_SUPERHURT },
 	{ "INERTIA", RBE_INERTIA },
-	{ "STUN", RBE_STUN },
-	{ "FLAVOR", RBE_FLAVOR },
+    { "STUN", RBE_STUN },
+    { "HUNGRY", RBE_HUNGRY },
+    { "FLAVOR", RBE_FLAVOR },
 };
 
 /*!

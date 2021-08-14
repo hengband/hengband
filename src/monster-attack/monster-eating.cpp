@@ -30,6 +30,7 @@
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world-object.h"
+#include "player/digestion-processor.h"
 
 void process_eat_gold(player_type *target_ptr, monap_type *monap_ptr)
 {
@@ -294,4 +295,20 @@ void process_drain_mana(player_type *target_ptr, monap_type *monap_ptr)
     }
 
     target_ptr->redraw |= (PR_MANA);
+}
+
+/*!
+ * @brief モンスターからの空腹進行処理
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
+ */
+void process_monster_attack_hungry(player_type *target_ptr, monap_type *monap_ptr)
+{
+    /*hungry*/
+    set_food(target_ptr, target_ptr->food - monap_ptr->damage);
+#ifdef JP
+    msg_format("あなたは腹が減った！");
+#else
+    msg_format("You feel hungry!");
+#endif
 }
