@@ -301,14 +301,19 @@ void process_drain_mana(player_type *target_ptr, monap_type *monap_ptr)
  * @brief モンスターからの空腹進行処理
  * @param target_ptr プレーヤーへの参照ポインタ
  * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
+ * @details 空腹、衰弱の一歩手前で止める優しさは残す。
  */
 void process_monster_attack_hungry(player_type *target_ptr, monap_type *monap_ptr)
 {
-    /*hungry*/
-    set_food(target_ptr, target_ptr->food - monap_ptr->damage);
 #ifdef JP
     msg_format("あなたは腹が減った！");
 #else
     msg_format("You feel hungry!");
 #endif
+    if (target_ptr->food > PY_FOOD_ALERT && PY_FOOD_ALERT >= target_ptr->food - monap_ptr->damage)
+        set_food(target_ptr, PY_FOOD_ALERT);
+    else if (target_ptr->food > PY_FOOD_FAINT && PY_FOOD_FAINT >= target_ptr->food - monap_ptr->damage)
+        set_food(target_ptr, PY_FOOD_FAINT);
+    else
+        set_food(target_ptr, target_ptr->food - monap_ptr->damage);
 }
