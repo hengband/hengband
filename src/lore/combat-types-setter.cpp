@@ -253,6 +253,10 @@ void set_monster_blow_effect(lore_type *lore_ptr, int m)
         lore_ptr->q = _("朦朧とさせる", "stun");
         lore_ptr->qc = TERM_ORANGE;
         break;
+    case RBE_HUNGRY:
+        lore_ptr->q = _("空腹を進行させる", "be hangry");
+        lore_ptr->qc = TERM_L_BLUE;
+        break;
     case RBE_FLAVOR:
         // フレーバー打撃には何の効果もないので付加説明もない。
         break;

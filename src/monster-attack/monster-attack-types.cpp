@@ -186,6 +186,10 @@ const mbe_info_type mbe_info[NB_RBE_TYPE] = {
         GF_MISSILE,
     }, /* STUN */
     {
+        5,
+        GF_MISSILE,
+    }, /* HUNGRY */
+    {
         0,
         GF_NONE,
     }, /* FLAVOR */
