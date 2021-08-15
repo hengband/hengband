@@ -4489,7 +4489,8 @@ W:15:30:80:12500
 P:4:1d1:0:0:12
 F:RES_DARK | FREE_ACT | STEALTH | ACTIVATE
 U:DETECT_TREASURE
-D:$It is the jet-black wear worn by a thief in far east. It makes you
-D:$blended into the darkness and never prevent your any action.
+D:$It is the jet-black wear worn by a thief in the far east.  The wearer
+D:$ blends easily into any shadows and never finds his or her movements
+D:$ hindered.
 D:遥か東の国の盗賊が身につける仕事着だ。
 D:その漆黒の装いは闇に溶け込み、いかなる体の動きをも邪魔しない。
