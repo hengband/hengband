@@ -148,7 +148,7 @@ void ArmorEnchanter::give_cursed()
     case EGO_A_MORGUL:
         return;
     default:
-        msg_print(_("エラー：適した呪い鎧エゴがみつかりませんでした.", "Error:Suitable cursed armor ego not found."));
+        msg_print(_("エラー：適した呪い鎧エゴがみつかりませんでした.", "Error:  suitable cursed armor ego not found."));
         return;
     }
 }
