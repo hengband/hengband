@@ -54,8 +54,8 @@ static void process_dirty_expression(player_type *player_ptr, text_body_type *tb
     tb->dirty_flags |= DIRTY_ALL;
 }
 
-/*
- * Draw text
+/*!
+ * @brief Draw text
  */
 void draw_text_editor(player_type *player_ptr, text_body_type *tb)
 {

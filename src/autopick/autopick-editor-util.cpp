@@ -8,8 +8,8 @@
 #include "autopick/autopick-methods-table.h"
 #include "autopick/autopick-util.h"
 
-/*
- * Delete or insert string
+/*!
+ * @brief Delete or insert string
  */
 void toggle_keyword(text_body_type *tb, BIT_FLAGS flg)
 {
@@ -68,8 +68,8 @@ void toggle_keyword(text_body_type *tb, BIT_FLAGS flg)
     }
 }
 
-/*
- * Change command letter
+/*!
+ * @brief Change command letter
  */
 void toggle_command_letter(text_body_type *tb, byte flg)
 {
@@ -146,8 +146,8 @@ void toggle_command_letter(text_body_type *tb, byte flg)
     }
 }
 
-/*
- * Delete or insert string
+/*!
+ * @brief Delete or insert string
  */
 void add_keyword(text_body_type *tb, BIT_FLAGS flg)
 {
@@ -183,8 +183,8 @@ void add_keyword(text_body_type *tb, BIT_FLAGS flg)
     }
 }
 
-/*
- * Add an empty line at the last of the file
+/*!
+ * @brief Add an empty line at the last of the file
  */
 bool add_empty_line(text_body_type *tb)
 {
@@ -245,8 +245,8 @@ void add_str_to_yank(text_body_type *tb, concptr str)
     }
 }
 
-/*
- * Do work for the copy editor-command
+/*!
+ * @brief Do work for the copy editor-command
  */
 void copy_text_to_yank(text_body_type *tb)
 {

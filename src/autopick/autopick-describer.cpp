@@ -527,8 +527,8 @@ void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *
 }
 #endif
 
-/*
- * Describe which kind of object is Auto-picked/destroyed
+/*!
+ * @brief Describe which kind of object is Auto-picked/destroyed
  */
 void describe_autopick(char *buff, autopick_type *entry)
 {

@@ -26,7 +26,7 @@
 #include "system/player-type-definition.h"
 #include "term/term-color-types.h"
 
-/*
+/*!
  * @brief
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param tb 自動拾いの構文
