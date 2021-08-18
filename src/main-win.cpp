@@ -86,11 +86,7 @@
 #include "core/game-play.h"
 #include "core/player-processor.h"
 #include "core/score-util.h"
-#include "core/scores.h"
 #include "core/special-internal-keys.h"
-#include "core/stuff-handler.h"
-#include "core/visuals-reseter.h"
-#include "core/window-redrawer.h"
 #include "floor/floor-events.h"
 #include "game-option/runtime-arguments.h"
 #include "game-option/special-options.h"
@@ -100,8 +96,6 @@
 #include "io/signal-handlers.h"
 #include "io/write-diary.h"
 #include "main-win/commandline-win.h"
-#include "main-win/graphics-win.h"
-#include "main-win/main-win-bg.h"
 #include "main-win/main-win-file-utils.h"
 #include "main-win/main-win-mci.h"
 #include "main-win/main-win-menuitem.h"
@@ -113,27 +107,21 @@
 #include "main/sound-of-music.h"
 #include "monster-floor/monster-lite.h"
 #include "save/save.h"
-#include "system/angband.h"
 #include "system/player-type-definition.h"
-#include "system/system-variables.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
-#include "util/int-char-converter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "view/display-scores.h"
-#include "wizard/spoiler-util.h"
 #include "wizard/wizard-spoiler.h"
 #include "world/world.h"
-
+#include <commdlg.h>
 #include <cstdlib>
+#include <direct.h>
 #include <locale>
 #include <string>
-
-#include <commdlg.h>
-#include <direct.h>
 
 /*
  * Window names
