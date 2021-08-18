@@ -28,7 +28,7 @@
  * #ACTION_NONE / #ACTION_SEARCH / #ACTION_REST / #ACTION_LEARN / #ACTION_FISH / #ACTION_KAMAE / #ACTION_KATA / #ACTION_SING / #ACTION_HAYAGAKE / #ACTION_SPELL
  * から選択。
  */
-void set_action(player_type *creature_ptr, ACTION_IDX typ)
+void set_action(player_type *creature_ptr, uint8_t typ)
 {
     int prev_typ = creature_ptr->action;
     if (typ == prev_typ) {
