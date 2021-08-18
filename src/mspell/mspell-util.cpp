@@ -45,9 +45,11 @@ bool monster_near_player(floor_type* floor_ptr, MONSTER_IDX m_idx, MONSTER_IDX t
  * @param msg4 msg_flagがFALSEで、モンスターを対象とする場合のメッセージ
  * @param msg_flag_aux メッセージを分岐するためのフラグ
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
+ * @return メッセージを表示した場合trueを返す。
  */
-void monspell_message_base(player_type* target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr msg1, concptr msg2, concptr msg3, concptr msg4, bool msg_flag_aux, int TARGET_TYPE)
+bool monspell_message_base(player_type* target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr msg1, concptr msg2, concptr msg3, concptr msg4, bool msg_flag_aux, int TARGET_TYPE)
 {
+    bool notice = false;
     floor_type* floor_ptr = target_ptr->current_floor_ptr;
     bool known = monster_near_player(floor_ptr, m_idx, t_idx);
     bool see_either = see_monster(target_ptr, m_idx) || see_monster(target_ptr, t_idx);
@@ -61,20 +63,27 @@ void monspell_message_base(player_type* target_ptr, MONSTER_IDX m_idx, MONSTER_I
         disturb(target_ptr, true, true);
 
     if (msg_flag_aux) {
-        if (mon_to_player)
+        if (mon_to_player) {
             msg_format(msg1, m_name);
-        else if (mon_to_mon && known && see_either)
+            notice = true;
+        } else if (mon_to_mon && known && see_either) {
             msg_format(msg2, m_name);
+            notice = true;
+        }
     } else {
         if (mon_to_player) {
             msg_format(msg3, m_name);
+            notice = true;
         } else if (mon_to_mon && known && see_either) {
             msg_format(msg4, m_name, t_name);
+            notice = true;
         }
     }
 
     if (mon_to_mon && known && !see_either)
         floor_ptr->monster_noise = true;
+
+    return notice;
 }
 
 /*!
@@ -86,10 +95,11 @@ void monspell_message_base(player_type* target_ptr, MONSTER_IDX m_idx, MONSTER_I
 * @param msg2 プレイヤーが盲目でなく、プレイヤーを対象とする場合のメッセージ
 * @param msg3 プレイヤーが盲目でなく、モンスター対象とする場合のメッセージ
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
-*/
-void monspell_message(player_type* target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr msg1, concptr msg2, concptr msg3, int TARGET_TYPE)
+ * @return メッセージを表示した場合trueを返す。
+ */
+bool monspell_message(player_type* target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr msg1, concptr msg2, concptr msg3, int TARGET_TYPE)
 {
-    monspell_message_base(target_ptr, m_idx, t_idx, msg1, msg1, msg2, msg3, target_ptr->blind > 0, TARGET_TYPE);
+    return monspell_message_base(target_ptr, m_idx, t_idx, msg1, msg1, msg2, msg3, target_ptr->blind > 0, TARGET_TYPE);
 }
 
 /*!
