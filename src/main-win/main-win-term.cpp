@@ -4,6 +4,7 @@
  */
 
 #include "main-win/main-win-term.h"
+#include "term/gameterm.h"
 
 term_data data[MAX_TERM_DATA];
 
@@ -221,4 +222,14 @@ void term_data::change_font()
 void term_data::set_window_position(HWND hWnd)
 {
     SetWindowPos(this->w, hWnd, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+}
+
+/*!
+ * @brief Hack -- redraw a term_data
+ */
+void term_data::redraw_data()
+{
+    term_activate(&this->t);
+    term_redraw();
+    term_activate(term_screen);
 }
