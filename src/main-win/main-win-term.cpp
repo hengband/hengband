@@ -103,6 +103,25 @@ bool term_data::is_main_term()
 }
 
 /*!
+ * @brief Resize a window
+ */
+void term_data::resize_window()
+{
+    if (!this->w) {
+        return;
+    }
+
+    SetWindowPos(this->w, 0, 0, 0, this->size_wid, this->size_hgt, SWP_NOMOVE | SWP_NOZORDER);
+    if (this->size_hack) {
+        return;
+    }
+
+    this->dispose_offscreen();
+    term_activate(&this->t);
+    term_redraw();
+}
+
+/*!
  * @brief (Windows版固有実装) / Adjust the "size" for a window
  */
 void term_data::adjust_size()
