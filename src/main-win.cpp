@@ -573,27 +573,6 @@ static bool change_bg_mode(bg_mode new_mode, bool show_error = false, bool force
 }
 
 /*!
- * @brief Allow the user to change the font for this window.
- */
-static void term_change_font(term_data *td)
-{
-    CHOOSEFONTW cf;
-    memset(&cf, 0, sizeof(cf));
-    cf.lStructSize = sizeof(cf);
-    cf.Flags = CF_SCREENFONTS | CF_FIXEDPITCHONLY | CF_NOVERTFONTS | CF_INITTOLOGFONTSTRUCT;
-    cf.lpLogFont = &(td->lf);
-
-    if (!ChooseFontW(&cf))
-        return;
-
-    td->force_font();
-    td->tile_wid = td->font_wid;
-    td->tile_hgt = td->font_hgt;
-    td->adjust_size();
-    td->resize_window();
-}
-
-/*!
  * @brief Allow the user to lock this window.
  */
 static void term_window_pos(term_data *td, HWND hWnd)
@@ -1582,7 +1561,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
             break;
 
         td = &data[i];
-        term_change_font(td);
+        td->change_font();
         break;
     }
     case IDM_WINDOW_POS_1:

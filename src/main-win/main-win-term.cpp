@@ -193,3 +193,24 @@ void term_data::force_font()
     this->font_hgt = hgt;
     return;
 }
+
+/*!
+ * @brief Allow the user to change the font for this window.
+ */
+void term_data::change_font()
+{
+    CHOOSEFONTW cf;
+    memset(&cf, 0, sizeof(cf));
+    cf.lStructSize = sizeof(cf);
+    cf.Flags = CF_SCREENFONTS | CF_FIXEDPITCHONLY | CF_NOVERTFONTS | CF_INITTOLOGFONTSTRUCT;
+    cf.lpLogFont = &(this->lf);
+
+    if (!ChooseFontW(&cf))
+        return;
+
+    this->force_font();
+    this->tile_wid = this->font_wid;
+    this->tile_hgt = this->font_hgt;
+    this->adjust_size();
+    this->resize_window();
+}

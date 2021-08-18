@@ -94,6 +94,7 @@ struct term_data {
     void resize_window();
     void adjust_size();
     void force_font();
+    void change_font();
 };
 
 constexpr int MAX_TERM_DATA = 8; //!< Maximum number of windows
