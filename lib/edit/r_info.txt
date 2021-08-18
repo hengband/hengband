@@ -26421,8 +26421,8 @@ I:115:10d8:15:15:20
 W:6:2:0:40:0:0
 F:UNIQUE | MALE | FORCE_MAXHP | NONLIVING | OPEN_DOOR | RES_CHAO | COLD_BLOOD
 B:PUNCH:ELEC:3d7
-D:$It has the personality that puts all dried vegetable
-D:$ and soup powder packages the cup noodles first.
+D:$It has the personality that adds all the dried vegetable
+D:$ and soup powder packages to instant noodles before adding the hot water.
 D:それはカップ麺のかやくを最初に全部入れるタイプだ。
 
 N:1338:ミミック(ミミック(ミミック(箱)の像)の像)
