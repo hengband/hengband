@@ -604,7 +604,7 @@ void wilderness_gen_small(player_type *creature_ptr)
 
 typedef struct wilderness_grid {
     wt_type terrain; /* Terrain type */
-    TOWN_IDX town; /* Town number */
+    int16_t town; /* Town number */
     DEPTH level; /* Level of the wilderness */
     byte road; /* Road */
     char name[32]; /* Name of the town/wilderness */
@@ -658,7 +658,7 @@ parse_error_type parse_line_wilderness(player_type *creature_ptr, char *buf, int
                 w_letter[index].level = 0;
 
             if (num > 3)
-                w_letter[index].town = (TOWN_IDX)atoi(zz[3]);
+                w_letter[index].town = static_cast<int16_t>(atoi(zz[3]));
             else
                 w_letter[index].town = 0;
 

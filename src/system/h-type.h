@@ -70,7 +70,6 @@ static_assert(sizeof(int) == 4);
 
 typedef int16_t IDX; /*!< ゲーム中のID型を定義 */
 
-typedef int16_t TOWN_IDX; /*!< ゲーム中の町ID型を定義 */
 typedef int16_t FEAT_IDX; /*!< ゲーム中の地形ID型を定義 */
 typedef int16_t FLOOR_IDX; /*!< ゲーム中のフロアID型を定義 */
 

@@ -15,5 +15,5 @@ typedef struct town_type {
 	byte numstores;
 } town_type;
 
-extern TOWN_IDX max_towns;
+extern int16_t max_towns;
 extern town_type *town_info;
