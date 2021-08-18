@@ -16,6 +16,7 @@
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
+#include "util/bit-flags-calculator.h"
 
 LPCWSTR AppName = L"ANGBAND";
 HINSTANCE hInstance;
@@ -827,8 +828,9 @@ errr term_data::extra_win_event(int v)
  */
 bool term_data::handle_window_resize(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    if (!this->w)
+    if (!this->w) {
         return false;
+    }
 
     switch (uMsg) {
     case WM_GETMINMAXINFO: {
@@ -840,59 +842,64 @@ bool term_data::handle_window_resize(UINT uMsg, WPARAM wParam, LPARAM lParam)
         RECT rc{ 0, 0, tmp_width, tmp_height };
         AdjustWindowRectEx(&rc, this->dwStyle, TRUE, this->dwExStyle);
 
-        MINMAXINFO *lpmmi = (MINMAXINFO *)lParam;
+        auto *lpmmi = (MINMAXINFO *)lParam;
         lpmmi->ptMinTrackSize.x = rc.right - rc.left;
         lpmmi->ptMinTrackSize.y = rc.bottom - rc.top;
 
         return true;
     }
-    case WM_EXITSIZEMOVE: {
+    case WM_EXITSIZEMOVE:
         this->fit_size_to_window(true);
         return true;
-    }
     case WM_WINDOWPOSCHANGED: {
-        if (!this->size_hack) {
-            WINDOWPOS *pos = (WINDOWPOS *)lParam;
-            if ((pos->flags & (SWP_NOCOPYBITS | SWP_NOSIZE)) == 0) {
-                this->fit_size_to_window();
-                return true;
-            }
+        if (this->size_hack) {
+            return false;
         }
-        break;
-    }
-    case WM_SIZE: {
-        if (this->size_hack)
-            break;
 
-        //!< @todo 二重のswitch文。後で分割する.
-        switch (wParam) {
-        case SIZE_MINIMIZED: {
-            for (int i = 1; i < MAX_TERM_DATA; i++) {
-                if (data[i].visible)
-                    ShowWindow(data[i].w, SW_HIDE);
-            }
-
-            return true;
-        }
-        case SIZE_MAXIMIZED:
-        case SIZE_RESTORED: {
+        auto *pos = (WINDOWPOS *)lParam;
+        if (none_bits(pos->flags, SWP_NOCOPYBITS | SWP_NOSIZE)) {
             this->fit_size_to_window();
-
-            this->size_hack = true;
-            for (int i = 1; i < MAX_TERM_DATA; i++) {
-                if (data[i].visible)
-                    ShowWindow(data[i].w, SW_SHOWNA);
-            }
-
-            this->size_hack = false;
-
             return true;
         }
+
+        return false;
+    }
+    case WM_SIZE:
+        return handle_window_max_min(wParam);
+    default:
+        return false;
+    }
+}
+
+bool term_data::handle_window_max_min(const WPARAM wParam)
+{
+    if (this->size_hack) {
+        return false;
+    }
+
+    switch (wParam) {
+    case SIZE_MINIMIZED: {
+        for (auto i = 1; i < MAX_TERM_DATA; i++) {
+            if (data[i].visible) {
+                ShowWindow(data[i].w, SW_HIDE);
+            }
         }
 
-        break;
+        return true;
     }
-    }
+    case SIZE_MAXIMIZED:
+    case SIZE_RESTORED:
+        this->fit_size_to_window();
+        this->size_hack = true;
+        for (auto i = 1; i < MAX_TERM_DATA; i++) {
+            if (data[i].visible) {
+                ShowWindow(data[i].w, SW_SHOWNA);
+            }
+        }
 
-    return false;
+        this->size_hack = false;
+        return true;
+    default:
+        return false;
+    }
 }
