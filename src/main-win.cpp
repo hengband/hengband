@@ -573,14 +573,6 @@ static bool change_bg_mode(bg_mode new_mode, bool show_error = false, bool force
 }
 
 /*!
- * @brief Allow the user to lock this window.
- */
-static void term_window_pos(term_data *td, HWND hWnd)
-{
-    SetWindowPos(td->w, hWnd, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
-}
-
-/*!
  * @brief Hack -- redraw a term_data
  */
 static void term_data_redraw(term_data *td)
@@ -1268,9 +1260,9 @@ static void init_windows(void)
         }
 
         if (td->posfix) {
-            term_window_pos(td, HWND_TOPMOST);
+            td->set_window_position(HWND_TOPMOST);
         } else {
-            term_window_pos(td, td->w);
+            td->set_window_position(td->w);
         }
     }
 
@@ -1578,10 +1570,10 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         td = &data[i];
         if (!td->posfix && td->visible) {
             td->posfix = true;
-            term_window_pos(td, HWND_TOPMOST);
+            td->set_window_position(HWND_TOPMOST);
         } else {
             td->posfix = false;
-            term_window_pos(td, data[0].w);
+            td->set_window_position(data[0].w);
         }
 
         break;
@@ -2244,7 +2236,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 
         for (int i = 1; i < MAX_TERM_DATA; i++) {
             if (!data[i].posfix)
-                term_window_pos(&data[i], hWnd);
+                (&data[i])->set_window_position(hWnd);
         }
 
         SetFocus(hWnd);
