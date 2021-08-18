@@ -66,6 +66,12 @@ typedef unsigned char byte; /*!< byte型をunsighned charとして定義 / Note 
 typedef unsigned int uint; /* uint型をintとして定義 /  An unsigned, "standard" integer (often pre-defined) */
 typedef unsigned long ulong; /* The largest possible unsigned integer */
 
+// 整数型のバイト数が2021年現在の通常環境と異なるならばコンパイルを通さない.
+static_assert(sizeof(char) == 1);
+static_assert(sizeof(short) == 2);
+static_assert(sizeof(int) == 4);
+// static_assert(sizeof(long) == 8); // 将来のための予約.
+
 /* Signed/Unsigned 16 bit value */
 #ifdef HAVE_STDINT_H
 typedef int16_t s16b;
