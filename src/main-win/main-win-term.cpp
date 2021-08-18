@@ -48,9 +48,49 @@ bool double_buffering::render(const RECT &rect)
 void double_buffering::dispose_offscreen()
 {
     ::DeleteDC(this->offscreen);
-     this->offscreen = NULL;
+    this->offscreen = NULL;
     ::DeleteObject(this->bitmap);
-     this->bitmap = NULL;
+    this->bitmap = NULL;
     ::DeleteDC(this->display);
-     this->display = NULL;
+    this->display = NULL;
 }
+
+/*!
+ * @brief オフスクリーンHDC取得
+ * @return HDC
+ */
+HDC term_data::get_hdc()
+{
+    return graphics.get_hdc(this->w);
+}
+
+/*!
+ * @brief WM_PAINTでの描画が必要になる領域を設定する.
+ * @param lpRect 更新領域。NULLの場合はクライアント領域全体の描画が必要。
+ */
+void term_data::refresh(const RECT *lpRect)
+{
+    InvalidateRect(this->w, lpRect, FALSE);
+}
+
+/*!
+ * @brief オフスクリーン内容を表示画面に描画する
+ * @param rect 描画領域
+ * @retval true 描画した
+ * @retval false 描画なし（オフスクリーンが存在しない等）
+ */
+bool term_data::render(const RECT &rect)
+{
+    return graphics.render(rect);
+}
+
+/*!
+ * @brief オフスクリーンを破棄する
+ * @details
+ * リサイズ時にはオフスクリーンを破棄して
+ * 呼び出し元で画面の再描画を行う必要がある。
+ */
+void term_data::dispose_offscreen()
+{
+    graphics.dispose_offscreen();
+};
