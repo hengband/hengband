@@ -78,7 +78,6 @@ typedef int16_t IDX; /*!< ゲーム中のID型を定義 */
 typedef int16_t FEAT_IDX; /*!< ゲーム中の地形ID型を定義 */
 typedef int16_t FLOOR_IDX; /*!< ゲーム中のフロアID型を定義 */
 
-typedef int16_t PATRON_IDX; /*!< ゲーム中のプレイヤーパトロンID型を定義 */
 typedef int32_t ACTION_IDX; /*!< プレイヤーが現在取っている常時行動のID定義 */
 typedef int16_t BACT_IDX; /*!< 町の施設処理のID定義 */
 typedef int16_t BACT_RESTRICT_IDX; /*!< 町の施設処理の規制処理ID定義 */

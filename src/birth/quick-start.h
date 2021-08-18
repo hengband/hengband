@@ -29,7 +29,7 @@ struct birther {
     BASE_STATUS stat_max_max[6]{}; /* Maximal "maximal" stat values */
     HIT_POINT player_hp[PY_MAX_LEVEL]{};
 
-    PATRON_IDX chaos_patron{};
+    int16_t chaos_patron{}; /*! カオスパトロンのID */
 
     int16_t vir_types[8]{};
 

@@ -20,6 +20,7 @@
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"
+#include "player/digestion-processor.h"
 #include "player/mimic-info-table.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-table.h"
@@ -28,9 +29,9 @@
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world-object.h"
-#include "player/digestion-processor.h"
 
 void process_eat_gold(player_type *target_ptr, monap_type *monap_ptr)
 {
@@ -243,8 +244,9 @@ bool process_un_power(player_type *target_ptr, monap_type *monap_ptr)
 bool check_drain_hp(player_type *target_ptr, const int32_t d)
 {
     bool resist_drain = !drain_exp(target_ptr, d, d / 10, 50);
-    if (target_ptr->mimic_form)
-        return (mimic_info[target_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING) != 0 ? true : resist_drain;
+    if (target_ptr->mimic_form) {
+        return any_bits(mimic_info[target_ptr->mimic_form].choice, MIMIC_IS_NONLIVING) ? true : resist_drain;
+    }
 
     switch (target_ptr->prace) {
     case player_race_type::ZOMBIE:
