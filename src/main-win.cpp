@@ -134,6 +134,7 @@
 
 #include <commdlg.h>
 #include <direct.h>
+#include <cassert>
 
 /*
  * Window names
@@ -2645,6 +2646,12 @@ int WINAPI WinMain(
 {
     setlocale(LC_ALL, "ja_JP");
     hInstance = hInst;
+
+    // リテラルしか第2引数に入らない上に_()も使えないので仕方なく英文のみコピペ.
+    static_assert(sizeof(char) == 1, L"This OS environment can't run Hengband.");
+    static_assert(sizeof(short) == 2, L"This OS environment can't run Hengband.");
+    static_assert(sizeof(int) == 4, L"This OS environment can't run Hengband.");
+    // static_assert(sizeof(long) == 8); // 将来のための予約.
     if (is_already_running()) {
         MessageBoxW(
             NULL, _(L"変愚蛮怒はすでに起動しています。", L"Hengband is already running."), _(L"エラー！", L"Error"), MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);

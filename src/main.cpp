@@ -27,6 +27,7 @@
 #include "util/string-processor.h"
 #include "view/display-scores.h"
 #include "wizard/wizard-spoiler.h"
+#include <cassert>
 
 /*
  * Available graphic modes
@@ -323,6 +324,12 @@ static bool parse_long_opt(const char *opt)
  */
 int main(int argc, char *argv[])
 {
+    // リテラルしか第2引数に入らない上に_()も使えないので仕方なく英文のみコピペ.
+    static_assert(sizeof(char) == 1, L"This OS environment can't run Hengband.");
+    static_assert(sizeof(short) == 2, L"This OS environment can't run Hengband.");
+    static_assert(sizeof(int) == 4, L"This OS environment can't run Hengband.");
+    // static_assert(sizeof(long) == 8); // 将来のための予約.
+
     int i;
 
     bool done = false;
