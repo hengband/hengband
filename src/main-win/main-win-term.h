@@ -86,41 +86,8 @@ struct term_data {
     term_data &operator=(term_data &&) = default; //!< move代入
 
     double_buffering graphics{};
-    /*!
-     * @brief オフスクリーンHDC取得
-     * @return HDC
-     */
-    HDC get_hdc()
-    {
-        return graphics.get_hdc(this->w);
-    };
-    /*!
-     * @brief WM_PAINTでの描画が必要になる領域を設定する.
-     * @param lpRect 更新領域。NULLの場合はクライアント領域全体の描画が必要。
-     */
-    void refresh(const RECT *lpRect = NULL)
-    {
-        InvalidateRect(this->w, lpRect, FALSE);
-    };
-    /*!
-     * @brief オフスクリーン内容を表示画面に描画する
-     * @param rect 描画領域
-     * @retval true 描画した
-     * @retval false 描画なし（オフスクリーンが存在しない等）
-     */
-    bool render(const RECT &rect)
-    {
-        return graphics.render(rect);
-    };
-    /*!
-     * @brief オフスクリーンを破棄する
-     * @details
-     * リサイズ時にはオフスクリーンを破棄して
-     * 呼び出し元で画面の再描画を行う必要がある。
-     */
-    void dispose_offscreen()
-    {
-        graphics.dispose_offscreen();
-    };
+    HDC get_hdc();
+    void refresh(const RECT *lpRect = NULL);
+    bool render(const RECT &rect);
+    void dispose_offscreen();
 };
-
