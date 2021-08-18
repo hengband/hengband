@@ -649,7 +649,7 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
 char *vformat(concptr fmt, va_list vp)
 {
     static char *format_buf = NULL;
-    static huge format_len = 0;
+    static ulong format_len = 0;
 
     /* Initial allocation */
     if (!format_buf) {

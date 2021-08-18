@@ -64,9 +64,7 @@ typedef int errr;
 /* typedef signed char syte; */
 typedef unsigned char byte; /*!< byte型をunsighned charとして定義 / Note that unsigned values can cause math problems / An unsigned byte of memory */
 typedef unsigned int uint; /* uint型をintとして定義 /  An unsigned, "standard" integer (often pre-defined) */
-
-/* The largest possible unsigned integer */
-typedef unsigned long huge;
+typedef unsigned long ulong; /* The largest possible unsigned integer */
 
 /* Signed/Unsigned 16 bit value */
 #ifdef HAVE_STDINT_H
