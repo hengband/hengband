@@ -828,24 +828,13 @@ errr term_data::extra_win_event(int v)
  */
 bool term_data::handle_window_resize(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    if (!this->w) {
+    if (this->w == NULL) {
         return false;
     }
 
     switch (uMsg) {
-    case WM_GETMINMAXINFO: {
-        const bool is_main = this->is_main_term();
-        const int min_cols = (is_main) ? 80 : 20;
-        const int min_rows = (is_main) ? 24 : 3;
-        const LONG tmp_width = min_cols * this->tile_wid + this->size_ow1 + this->size_ow2;
-        const LONG tmp_height = min_rows * this->tile_hgt + this->size_oh1 + this->size_oh2 + 1;
-        RECT rc{ 0, 0, tmp_width, tmp_height };
-        AdjustWindowRectEx(&rc, this->dwStyle, TRUE, this->dwExStyle);
-        auto *lpmmi = (MINMAXINFO *)lParam;
-        lpmmi->ptMinTrackSize.x = rc.right - rc.left;
-        lpmmi->ptMinTrackSize.y = rc.bottom - rc.top;
-        return true;
-    }
+    case WM_GETMINMAXINFO:
+        return handle_window_get_info(lParam);
     case WM_EXITSIZEMOVE:
         this->fit_size_to_window(true);
         return true;
@@ -856,6 +845,21 @@ bool term_data::handle_window_resize(UINT uMsg, WPARAM wParam, LPARAM lParam)
     default:
         return false;
     }
+}
+
+bool term_data::handle_window_get_info(const LPARAM lParam)
+{
+    const bool is_main = this->is_main_term();
+    const int min_cols = (is_main) ? 80 : 20;
+    const int min_rows = (is_main) ? 24 : 3;
+    const LONG tmp_width = min_cols * this->tile_wid + this->size_ow1 + this->size_ow2;
+    const LONG tmp_height = min_rows * this->tile_hgt + this->size_oh1 + this->size_oh2 + 1;
+    RECT rc{ 0, 0, tmp_width, tmp_height };
+    AdjustWindowRectEx(&rc, this->dwStyle, TRUE, this->dwExStyle);
+    auto *lpmmi = (MINMAXINFO *)lParam;
+    lpmmi->ptMinTrackSize.x = rc.right - rc.left;
+    lpmmi->ptMinTrackSize.y = rc.bottom - rc.top;
+    return true;
 }
 
 bool term_data::handle_window_position_change(const LPARAM lParam)
