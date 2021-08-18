@@ -141,7 +141,6 @@
 LPCWSTR win_term_name[] = { L"Hengband", L"Term-1", L"Term-2", L"Term-3", L"Term-4", L"Term-5", L"Term-6", L"Term-7" };
 
 static term_data *my_td; //!< Hack -- global "window creation" pointer
-POINT normsize; //!< Remember normal size of main window when maxmized
 
 /*
  * was main window maximized on previous playing
@@ -1878,37 +1877,6 @@ static void handle_app_active(HWND hWnd, UINT uMsg, WPARAM wParam, [[maybe_unuse
 }
 
 /*!
- * @brief ターミナルのサイズをウインドウのサイズに合わせる
- * @param td term_dataのポインタ
- * @param recalc_window_size trueの場合に行列数からウインドウサイズを再計算し設定する
- */
-static void fit_term_size_to_window(term_data *td, bool recalc_window_size = false)
-{
-    RECT rc;
-    ::GetClientRect(td->w, &rc);
-    int width = rc.right - rc.left;
-    int height = rc.bottom - rc.top;
-
-    TERM_LEN cols = (width - td->size_ow1 - td->size_ow2) / td->tile_wid;
-    TERM_LEN rows = (height - td->size_oh1 - td->size_oh2) / td->tile_hgt;
-    if ((td->cols != cols) || (td->rows != rows)) {
-        td->cols = cols;
-        td->rows = rows;
-        if (td->is_main_term() && !IsZoomed(td->w) && !IsIconic(td->w)) {
-            normsize.x = td->cols;
-            normsize.y = td->rows;
-        }
-
-        td->rebuild(recalc_window_size);
-
-        if (!td->is_main_term()) {
-            p_ptr->window_flags = PW_ALL;
-            handle_stuff(p_ptr);
-        }
-    }
-} 
-
-/*!
  * @brief Windowのリサイズをハンドリング
  * @retval true ウインドウメッセージを処理した
  * @retval false ウインドウメッセージを処理していない
@@ -1937,14 +1905,14 @@ static bool handle_window_resize(term_data *td, UINT uMsg, WPARAM wParam, LPARAM
         return true;
     }
     case WM_EXITSIZEMOVE: {
-        fit_term_size_to_window(td, true);
+        td->fit_size_to_window(true);
         return true;
     }
     case WM_WINDOWPOSCHANGED: {
         if (!td->size_hack) {
             WINDOWPOS *pos = (WINDOWPOS *)lParam;
             if ((pos->flags & (SWP_NOCOPYBITS | SWP_NOSIZE)) == 0) {
-                fit_term_size_to_window(td);
+                td->fit_size_to_window();
                 return true;
             }
         }
@@ -1966,7 +1934,7 @@ static bool handle_window_resize(term_data *td, UINT uMsg, WPARAM wParam, LPARAM
         }
         case SIZE_MAXIMIZED:
         case SIZE_RESTORED: {
-            fit_term_size_to_window(td);
+            td->fit_size_to_window();
 
             td->size_hack = true;
             for (int i = 1; i < MAX_TERM_DATA; i++) {

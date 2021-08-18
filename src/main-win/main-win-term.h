@@ -6,7 +6,6 @@
 
 #include "term/z-term.h"
 #include "system/h-type.h"
-
 #include <windows.h>
 
 /*!
@@ -30,6 +29,8 @@ protected:
     HBITMAP bitmap;
     HDC offscreen;
 };
+
+extern POINT normsize;
 
 /*!
  * @struct term_data
@@ -98,6 +99,7 @@ struct term_data {
     void set_window_position(HWND hWnd);
     void redraw_data();
     void rebuild(bool resize_window = true);
+    void fit_size_to_window(bool recalc_window_size = false);
 };
 
 constexpr int MAX_TERM_DATA = 8; //!< Maximum number of windows

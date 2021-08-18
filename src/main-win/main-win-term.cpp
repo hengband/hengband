@@ -4,8 +4,12 @@
  */
 
 #include "main-win/main-win-term.h"
+#include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
+#include "system/player-type-definition.h"
 #include "term/gameterm.h"
 
+POINT normsize; //!< Remember normal size of main window when maxmized
 term_data data[MAX_TERM_DATA];
 
 /*!
@@ -253,4 +257,34 @@ void term_data::rebuild(bool resize_window)
     term_resize(this->cols, this->rows);
     this->size_hack = false;
     term_activate(old);
+}
+
+void term_data::fit_size_to_window(bool recalc_window_size)
+{
+    RECT rc;
+    ::GetClientRect(this->w, &rc);
+    int width = rc.right - rc.left;
+    int height = rc.bottom - rc.top;
+
+    TERM_LEN tmp_cols = (width - this->size_ow1 - this->size_ow2) / this->tile_wid;
+    TERM_LEN tmp_rows = (height - this->size_oh1 - this->size_oh2) / this->tile_hgt;
+    if ((this->cols == tmp_cols) && (this->rows == tmp_rows)) {
+        return;
+    }
+
+    this->cols = tmp_cols;
+    this->rows = tmp_rows;
+    if (this->is_main_term() && !IsZoomed(this->w) && !IsIconic(this->w)) {
+        normsize.x = this->cols;
+        normsize.y = this->rows;
+    }
+
+    this->rebuild(recalc_window_size);
+
+    if (this->is_main_term()) {
+        return;
+    }
+
+    p_ptr->window_flags = PW_ALL;
+    handle_stuff(p_ptr);
 }
