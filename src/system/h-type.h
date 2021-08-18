@@ -74,7 +74,6 @@ typedef int16_t TOWN_IDX; /*!< ゲーム中の町ID型を定義 */
 typedef int16_t FEAT_IDX; /*!< ゲーム中の地形ID型を定義 */
 typedef int16_t FLOOR_IDX; /*!< ゲーム中のフロアID型を定義 */
 
-typedef byte SEX_IDX; /*!< ゲーム中のプレイヤー性別ID型を定義 */
 typedef int16_t MIMIC_RACE_IDX; /*!< ゲーム中のプレイヤー変身種族ID型を定義 */
 typedef int16_t PATRON_IDX; /*!< ゲーム中のプレイヤーパトロンID型を定義 */
 typedef int32_t ACTION_IDX; /*!< プレイヤーが現在取っている常時行動のID定義 */

@@ -3,9 +3,10 @@
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/trc-types.h"
 #include "player-ability/player-ability-types.h"
-#include "player/player-race-types.h"
 #include "player/player-class-types.h"
 #include "player/player-personality-types.h"
+#include "player/player-race-types.h"
+#include "player/player-sex.h"
 #include "system/angband.h"
 #include "system/system-variables.h"
 #include "util/flag-group.h"
@@ -26,7 +27,7 @@ typedef struct player_type {
     POSITION oldpy{}; /* Previous player location -KMW- */
     POSITION oldpx{}; /* Previous player location -KMW- */
 
-    SEX_IDX psex{}; /* Sex index */
+    player_sex psex{}; /* Sex index */
     player_race_type prace{}; /* Race index */
     player_class_type pclass{}; /* Class index */
     player_personality_type pseikaku{}; /* Seikaku index */
