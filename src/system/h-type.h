@@ -184,9 +184,6 @@ typedef int QUANTITY; /*!< インターフェース上の指定個数 */
 
 typedef int EFFECT_ID; /*!< 効果属性ID */
 
-typedef short QUEST_TYPE; /*!< クエストの種別ID */
-typedef short QUEST_STATUS; /*!< クエストの状態ID */
-
 typedef short ACTION_SKILL_POWER; /*!< 行動技能値 */
 
 typedef int PET_COMMAND_IDX; /*!< ペットへの指示ID */

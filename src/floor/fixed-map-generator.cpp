@@ -205,7 +205,7 @@ static bool parse_qtw_QQ(quest_type *q_ptr, char **zz, int num)
     if (num < 9)
         return true;
 
-    q_ptr->type = (QUEST_TYPE)atoi(zz[2]);
+    q_ptr->type = static_cast<short>(atoi(zz[2]));
     q_ptr->num_mon = (MONSTER_NUMBER)atoi(zz[3]);
     q_ptr->cur_num = (MONSTER_NUMBER)atoi(zz[4]);
     q_ptr->max_num = (MONSTER_NUMBER)atoi(zz[5]);
