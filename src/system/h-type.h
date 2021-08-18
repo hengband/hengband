@@ -48,59 +48,57 @@ typedef const char *concptr; /*!< 文字列定数用ポインタ定義 / A simpl
 typedef int errr;
 
 #define MAX_UCHAR 255 /*!< Maximum value storable in a "byte" (hard-coded) */
-#define MAX_SHORT 32767 /*!< Maximum value storable in a "s16b" (hard-coded) */
+#define MAX_SHORT 32767 /*!< Maximum value storable in a "short" (hard-coded) */
 
 #define MAX_NLEN 160 /*!< Maximum length of object's name */
 #define MAX_MONSTER_NAME 160 /*!< モンスター名称の最大バイト数 / Max characters of monster's name */
 
 /* Note that "signed char" is not always "defined" */
-/* So always use "s16b" to hold small signed values */
+/* So always use "short" to hold small signed values */
 /* A signed byte of memory */
 /* typedef signed char syte; */
 typedef unsigned char byte; /*!< byte型をunsighned charとして定義 / Note that unsigned values can cause math problems / An unsigned byte of memory */
 typedef unsigned int uint; /* uint型をintとして定義 /  An unsigned, "standard" integer (often pre-defined) */
 typedef unsigned long ulong; /* The largest possible unsigned integer */
 
-/* Signed/Unsigned 16 bit value */
-typedef int16_t s16b;
 typedef uint16_t u16b;
 
 /* Signed/Unsigned 32 bit value */
 typedef int32_t s32b;
 typedef uint32_t u32b;
 
-typedef s16b IDX; /*!< ゲーム中のID型を定義 */
+typedef short IDX; /*!< ゲーム中のID型を定義 */
 
-typedef s16b TOWN_IDX; /*!< ゲーム中の町ID型を定義 */
-typedef s16b FEAT_IDX; /*!< ゲーム中の地形ID型を定義 */
-typedef s16b FLOOR_IDX; /*!< ゲーム中のフロアID型を定義 */
+typedef short TOWN_IDX; /*!< ゲーム中の町ID型を定義 */
+typedef short FEAT_IDX; /*!< ゲーム中の地形ID型を定義 */
+typedef short FLOOR_IDX; /*!< ゲーム中のフロアID型を定義 */
 
 typedef byte SEX_IDX; /*!< ゲーム中のプレイヤー性別ID型を定義 */
-typedef s16b MIMIC_RACE_IDX; /*!< ゲーム中のプレイヤー変身種族ID型を定義 */
-typedef s16b PATRON_IDX; /*!< ゲーム中のプレイヤーパトロンID型を定義 */
+typedef short MIMIC_RACE_IDX; /*!< ゲーム中のプレイヤー変身種族ID型を定義 */
+typedef short PATRON_IDX; /*!< ゲーム中のプレイヤーパトロンID型を定義 */
 typedef s32b ACTION_IDX; /*!< プレイヤーが現在取っている常時行動のID定義 */
-typedef s16b BACT_IDX; /*!< 町の施設処理のID定義 */
-typedef s16b BACT_RESTRICT_IDX; /*!< 町の施設処理の規制処理ID定義 */
+typedef short BACT_IDX; /*!< 町の施設処理のID定義 */
+typedef short BACT_RESTRICT_IDX; /*!< 町の施設処理の規制処理ID定義 */
 
-typedef s16b MONRACE_IDX; /*!< @todo monster_race_typeに差し替えて消滅させる ゲーム中のモンスター種族ID型を定義 */
-typedef s16b MONSTER_IDX; /*!< @todo monster_race_typeに差し替えて消滅させる ゲーム中のモンスター個体ID型を定義 */
-typedef s16b DUNGEON_IDX; /*!< ゲーム中のダンジョンID型を定義 */
-typedef s16b REALM_IDX; /*!< ゲーム中の魔法領域ID型を定義 */
-typedef s16b ARTIFACT_IDX; /*!< ゲーム中のアーティファクトID型を定義 */
-typedef s16b EGO_IDX; /*!< アイテムエゴのID型を定義 */
-typedef s16b ACTIVATION_IDX; /*!< アイテムの発動効果ID型を定義 */
-typedef s16b QUEST_IDX; /*!< ゲーム中のクエストID型を定義 */
+typedef short MONRACE_IDX; /*!< @todo monster_race_typeに差し替えて消滅させる ゲーム中のモンスター種族ID型を定義 */
+typedef short MONSTER_IDX; /*!< @todo monster_race_typeに差し替えて消滅させる ゲーム中のモンスター個体ID型を定義 */
+typedef short DUNGEON_IDX; /*!< ゲーム中のダンジョンID型を定義 */
+typedef short REALM_IDX; /*!< ゲーム中の魔法領域ID型を定義 */
+typedef short ARTIFACT_IDX; /*!< ゲーム中のアーティファクトID型を定義 */
+typedef short EGO_IDX; /*!< アイテムエゴのID型を定義 */
+typedef short ACTIVATION_IDX; /*!< アイテムの発動効果ID型を定義 */
+typedef short QUEST_IDX; /*!< ゲーム中のクエストID型を定義 */
 typedef byte ROOM_IDX; /*!< 部屋のID型を定義 */
 
-typedef s16b INVENTORY_IDX; /*!< ゲーム中の所持品ID型を定義 */
-typedef s16b OBJECT_IDX; /*!< ゲーム中のアイテムID型を定義 */
+typedef short INVENTORY_IDX; /*!< ゲーム中の所持品ID型を定義 */
+typedef short OBJECT_IDX; /*!< ゲーム中のアイテムID型を定義 */
 typedef s32b ESSENCE_IDX; /*!< 鍛冶エッセンスのID型 */
-typedef s16b KIND_OBJECT_IDX; /*!< ゲーム中のベースアイテムID型を定義 */
-typedef s16b VAULT_IDX; /*!< 固定部屋のID型を定義 */
+typedef short KIND_OBJECT_IDX; /*!< ゲーム中のベースアイテムID型を定義 */
+typedef short VAULT_IDX; /*!< 固定部屋のID型を定義 */
 typedef int MUTATION_IDX; /*!< 突然変異のID型を定義 */
 
 typedef s32b POSITION; /*!< ゲーム中の座標型を定義 */
-typedef s16b POSITION_IDX; /*!< ゲーム中の座標リストID型 */
+typedef short POSITION_IDX; /*!< ゲーム中の座標リストID型 */
 
 typedef byte FEAT_SUBTYPE; /*!< 地形情報の副値 (トラップ種別/パターン種別/店舗種別)*/
 
@@ -122,41 +120,41 @@ typedef s32b HIT_POINT;
  */
 typedef s32b MANA_POINT; /*!< ゲーム中のMP型を定義 */
 
-typedef s16b HIT_PROB; /*!< ゲーム中の装備命中修正値を定義 */
-typedef s16b BASE_STATUS; /*!< ゲーム中の基礎能力値型を定義 */
+typedef short HIT_PROB; /*!< ゲーム中の装備命中修正値を定義 */
+typedef short BASE_STATUS; /*!< ゲーム中の基礎能力値型を定義 */
 
 typedef s32b MONSTER_NUMBER; /*!< ゲーム中のモンスター数型を定義 */
 typedef s32b ITEM_NUMBER; /*!< ゲーム中のアイテム数型を定義 */
 
-typedef s16b ACTION_ENERGY; /*!< ゲーム中の行動エネルギー型を定義 */
-typedef s16b ARMOUR_CLASS; /*!< ゲーム中の行動アーマークラス型を定義 */
-typedef s16b TIME_EFFECT; /*!< ゲーム中の時限期間の型を定義 */
+typedef short ACTION_ENERGY; /*!< ゲーム中の行動エネルギー型を定義 */
+typedef short ARMOUR_CLASS; /*!< ゲーム中の行動アーマークラス型を定義 */
+typedef short TIME_EFFECT; /*!< ゲーム中の時限期間の型を定義 */
 typedef byte DISCOUNT_RATE; /*!< ゲーム中の値引き率の型を定義 */
-typedef s16b SPEED; /*!< ゲーム中の加速値の型定義 */
+typedef short SPEED; /*!< ゲーム中の加速値の型定義 */
 
 /*!
- * @var typedef s16b ENEGRY
+ * @var typedef short ENEGRY
  * @brief 行動エネルギーの型定義
  * @details
  * ENERGYはプレイヤーとモンスターの行動順を定める行動エネルギーを示す型定義である。
  */
-typedef s16b ENERGY; /*!< ゲーム中の行動エネルギーの型定義 */
+typedef short ENERGY; /*!< ゲーム中の行動エネルギーの型定義 */
 
-typedef s16b SLEEP_DEGREE; /*!< モンスターの睡眠度の型定義 */
+typedef short SLEEP_DEGREE; /*!< モンスターの睡眠度の型定義 */
 
-typedef s16b PLAYER_LEVEL; /*!< ゲーム中のプレイヤーレベルの型を定義 */
+typedef short PLAYER_LEVEL; /*!< ゲーム中のプレイヤーレベルの型を定義 */
 typedef int DIRECTION; /*!< ゲーム中の方角の型定義 */
 typedef s32b EXP; /*!< ゲーム中の主経験値の型定義 */
-typedef s16b SUB_EXP; /*!< ゲーム中の副経験値の型定義 */
+typedef short SUB_EXP; /*!< ゲーム中の副経験値の型定義 */
 
 typedef s32b OBJECT_SUBTYPE_VALUE; /*!< ゲーム中のアイテム副分類の型定義 */
-typedef s16b PARAMETER_VALUE; /*!< ゲーム中のアイテム能力値の型定義 */
+typedef short PARAMETER_VALUE; /*!< ゲーム中のアイテム能力値の型定義 */
 typedef s32b WEIGHT; /*!< ゲーム中の重量の型定義(ポンド) */
 
 typedef int DICE_NUMBER; /*!< ゲーム中のダイス数の型定義 */
 typedef int DICE_SID; /*!< ゲーム中のダイス面の型定義 */
 typedef s32b PRICE; /*!< ゲーム中の金額価値の型定義 */
-typedef s16b FEED; /*!< ゲーム中の滋養度の型定義 */
+typedef short FEED; /*!< ゲーム中の滋養度の型定義 */
 
 typedef u32b STR_OFFSET; /*!< テキストオフセットの型定義 */
 
@@ -169,40 +167,40 @@ typedef s32b GAME_TURN; /*!< ゲーム中のターンの型定義 */
 typedef u32b REAL_TIME; /*!< 実時刻の型定義 */
 
 typedef s32b PERCENTAGE; /*!< ゲーム中のパーセント表記の型定義(/100倍) */
-typedef s16b MULTIPLY; /*!< ゲーム中の倍率の型定義(/10倍) */
+typedef short MULTIPLY; /*!< ゲーム中の倍率の型定義(/10倍) */
 
 typedef u32b BIT_FLAGS; /*!< 32ビットのフラグ配列の型定義 */
 typedef u16b BIT_FLAGS16; /*!< 16ビットのフラグ配列の型定義 */
 typedef byte BIT_FLAGS8; /*!< 8ビットのフラグ配列の型定義 */
 
-typedef s16b XTRA16; /*!< 汎用変数16ビットの型定義 */
+typedef short XTRA16; /*!< 汎用変数16ビットの型定義 */
 typedef byte XTRA8; /*!< 汎用変数8ビットの型定義 */
 
-typedef s16b COMMAND_CODE; /*!< コマンド内容の型定義 */
-typedef s16b COMMAND_ARG; /*!< コマンド引数の型定義 */
-typedef s16b COMMAND_NUM; /*!< コマンド数の型定義 */
+typedef short COMMAND_CODE; /*!< コマンド内容の型定義 */
+typedef short COMMAND_ARG; /*!< コマンド引数の型定義 */
+typedef short COMMAND_NUM; /*!< コマンド数の型定義 */
 
 typedef int TERM_LEN; /*!< コンソール表示座標の型定義 */
 typedef byte TERM_COLOR; /*!< テキスト表示色の型定義 */
 typedef char SYMBOL_CODE; /*!< キャラの文字の型定義 */
 
 typedef s32b SPELL_IDX; /*!< 各魔法領域/職業能力ごとの呪文ID型定義 */
-typedef s16b PROB; /*!< 確率の重みの型定義 */
+typedef short PROB; /*!< 確率の重みの型定義 */
 typedef byte FEAT_POWER; /*!< 地形強度の型定義 */
 
 typedef int QUANTITY; /*!< インターフェース上の指定個数 */
 
 typedef int EFFECT_ID; /*!< 効果属性ID */
 
-typedef s16b QUEST_TYPE; /*!< クエストの種別ID */
-typedef s16b QUEST_STATUS; /*!< クエストの状態ID */
+typedef short QUEST_TYPE; /*!< クエストの種別ID */
+typedef short QUEST_STATUS; /*!< クエストの状態ID */
 
-typedef s16b ACTION_SKILL_POWER; /*!< 行動技能値 */
+typedef short ACTION_SKILL_POWER; /*!< 行動技能値 */
 
 typedef int PET_COMMAND_IDX; /*!< ペットへの指示ID */
 typedef byte FF_FLAGS_IDX; /*!< 地形特性ID */
 
-typedef s16b FEAT_PRIORITY; /*!< 地形の縮小表示優先順位 */
+typedef short FEAT_PRIORITY; /*!< 地形の縮小表示優先順位 */
 
 enum process_result {
     PROCESS_FALSE = 0,

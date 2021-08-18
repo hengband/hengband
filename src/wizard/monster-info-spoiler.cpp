@@ -108,7 +108,7 @@ spoiler_output_status spoil_mon_desc(concptr fname, std::function<bool(const mon
     for (auto i = 1; i < max_r_idx; i++) {
         monster_race *r_ptr = &r_info[i];
         if (!r_ptr->name.empty())
-            who[n++] = (s16b)i;
+            who[n++] = (short)i;
     }
 
     ang_sort(&dummy, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
@@ -162,7 +162,7 @@ spoiler_output_status spoil_mon_desc(concptr fname, std::function<bool(const mon
     }
 
     fprintf(spoiler_file, "\n");
-    C_KILL(who, max_r_idx, s16b);
+    C_KILL(who, max_r_idx, short);
     return ferror(spoiler_file) || angband_fclose(spoiler_file) ? spoiler_output_status::SPOILER_OUTPUT_FAIL_FCLOSE
                                                                 : spoiler_output_status::SPOILER_OUTPUT_SUCCESS;
 }
@@ -206,7 +206,7 @@ spoiler_output_status spoil_mon_info(concptr fname)
     for (int i = 1; i < max_r_idx; i++) {
         monster_race *r_ptr = &r_info[i];
         if (!r_ptr->name.empty())
-            who[n++] = (s16b)i;
+            who[n++] = (short)i;
     }
 
     u16b why = 2;
@@ -255,7 +255,7 @@ spoiler_output_status spoil_mon_info(concptr fname)
         spoil_out(NULL);
     }
 
-    C_KILL(who, max_r_idx, s16b);
+    C_KILL(who, max_r_idx, short);
     return ferror(spoiler_file) || angband_fclose(spoiler_file) ? spoiler_output_status::SPOILER_OUTPUT_FAIL_FCLOSE
                                                                 : spoiler_output_status::SPOILER_OUTPUT_SUCCESS;
 }

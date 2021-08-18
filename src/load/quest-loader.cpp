@@ -71,7 +71,7 @@ static bool check_quest_index(int loading_quest_index)
 static void load_quest_completion(quest_type *q_ptr)
 {
     rd_s16b(&q_ptr->status);
-    s16b tmp16s;
+    short tmp16s;
     rd_s16b(&tmp16s);
     q_ptr->level = tmp16s;
 
@@ -91,7 +91,7 @@ static void load_quest_completion(quest_type *q_ptr)
 
 static void load_quest_details(player_type *creature_ptr, quest_type *q_ptr, int loading_quest_index)
 {
-    s16b tmp16s;
+    short tmp16s;
     rd_s16b(&tmp16s);
     q_ptr->cur_num = (MONSTER_NUMBER)tmp16s;
     rd_s16b(&tmp16s);

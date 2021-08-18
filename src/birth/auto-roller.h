@@ -4,13 +4,13 @@
 
 /*! オートローラの年齢、身長、体重、社会的地位の要求水準 */
 typedef struct {
-    s16b agemin, agemax;
-    s16b htmin, htmax;
-    s16b wtmin, wtmax;
-    s16b scmin, scmax;
+    short agemin, agemax;
+    short htmin, htmax;
+    short wtmin, wtmax;
+    short scmin, scmax;
 } chara_limit_type;
 
-extern s16b stat_limit[6];
+extern short stat_limit[6];
 extern s32b auto_round;
 extern s32b auto_upper_round;
 extern s32b autoroll_chance;

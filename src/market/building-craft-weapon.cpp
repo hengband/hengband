@@ -70,7 +70,7 @@ static HIT_POINT calc_slaydam(HIT_POINT dam, int mult, int div, bool force)
  * @return ダメージ期待値
  */
 static u32b calc_expect_dice(
-    player_type *owner_ptr, u32b dam, int mult, int div, bool force, WEIGHT weight, int plus, s16b meichuu, bool dokubari, bool impact, int vorpal_mult, int vorpal_div)
+    player_type *owner_ptr, u32b dam, int mult, int div, bool force, WEIGHT weight, int plus, short meichuu, bool dokubari, bool impact, int vorpal_mult, int vorpal_div)
 {
     dam = calc_slaydam(dam, mult, div, force);
     dam = calc_expect_crit(owner_ptr, weight, plus, dam, meichuu, dokubari, impact);

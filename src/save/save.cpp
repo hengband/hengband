@@ -125,7 +125,7 @@ static bool wr_savefile_new(player_type *player_ptr, save_type type)
     for (int i = 0; i < max_q_idx; i++) {
         quest_type *const q_ptr = &quest[i];
         wr_s16b(q_ptr->status);
-        wr_s16b((s16b)q_ptr->level);
+        wr_s16b((short)q_ptr->level);
         wr_byte((byte)q_ptr->complev);
         wr_u32b(q_ptr->comptime);
 
@@ -135,8 +135,8 @@ static bool wr_savefile_new(player_type *player_ptr, save_type type)
         if (!is_quest_running)
             continue;
 
-        wr_s16b((s16b)q_ptr->cur_num);
-        wr_s16b((s16b)q_ptr->max_num);
+        wr_s16b((short)q_ptr->cur_num);
+        wr_s16b((short)q_ptr->max_num);
         wr_s16b(q_ptr->type);
         wr_s16b(q_ptr->r_idx);
         wr_s16b(q_ptr->k_idx);
@@ -170,7 +170,7 @@ static bool wr_savefile_new(player_type *player_ptr, save_type type)
     tmp16u = PY_MAX_LEVEL;
     wr_u16b(tmp16u);
     for (int i = 0; i < tmp16u; i++)
-        wr_s16b((s16b)player_ptr->player_hp[i]);
+        wr_s16b((short)player_ptr->player_hp[i]);
 
     wr_u32b(player_ptr->spell_learned1);
     wr_u32b(player_ptr->spell_learned2);

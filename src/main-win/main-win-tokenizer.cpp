@@ -22,9 +22,9 @@
  *
  * We save pointers to the tokens in "tokens", and return the number found.
  */
-s16b tokenize_whitespace(char *buf, s16b num, char **tokens)
+short tokenize_whitespace(char *buf, short num, char **tokens)
 {
-    s16b k = 0;
+    short k = 0;
     char *s = buf;
 
     while (k < num) {

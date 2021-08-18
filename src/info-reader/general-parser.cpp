@@ -92,7 +92,7 @@ parse_error_type parse_line_feature(floor_type *floor_ptr, char *buf)
 
     switch (num) {
     case 9:
-        letter[index].special = (s16b)atoi(zz[8]);
+        letter[index].special = (short)atoi(zz[8]);
         /* Fall through */
     case 8:
         if ((zz[7][0] == '*') && !zz[7][1]) {

@@ -58,7 +58,7 @@ void rd_item(player_type *player_ptr, object_type *o_ptr)
     } else
         o_ptr->number = 1;
 
-    s16b tmp16s;
+    short tmp16s;
     rd_s16b(&tmp16s);
     o_ptr->weight = tmp16s;
 

@@ -11,8 +11,8 @@ public:
 
 protected:
     void set_locals() override;
-    s16b battleform_value() override;
-    s16b mutation_value() override;
-    s16b set_exception_value(s16b value) override;
-    s16b set_exception_use_status(s16b value) override;
+    short battleform_value() override;
+    short mutation_value() override;
+    short set_exception_value(short value) override;
+    short set_exception_use_status(short value) override;
 };

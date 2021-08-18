@@ -273,10 +273,10 @@ struct infowin {
 
     long mask;
 
-    s16b ox, oy;
+    short ox, oy;
 
-    s16b x, y;
-    s16b w, h;
+    short x, y;
+    short w, h;
     u16b b;
 
     byte byte1;
@@ -342,10 +342,10 @@ struct infofnt {
 #endif
     concptr name;
 
-    s16b wid;
-    s16b twid;
-    s16b hgt;
-    s16b asc;
+    short wid;
+    short twid;
+    short hgt;
+    short asc;
 
     byte off;
 

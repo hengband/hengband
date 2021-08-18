@@ -15,7 +15,7 @@ static void rd_hengband_dungeons(void)
 {
     byte max = (byte)current_world_ptr->max_d_idx;
     rd_byte(&max);
-    s16b tmp16s;
+    short tmp16s;
     for (int i = 0; i < max; i++) {
         rd_s16b(&tmp16s);
         max_dlv[i] = tmp16s;
@@ -41,7 +41,7 @@ void rd_dungeons(player_type *creature_ptr)
  */
 void rd_alter_reality(player_type *creature_ptr)
 {
-    s16b tmp16s;
+    short tmp16s;
     if (h_older_than(0, 3, 8))
         creature_ptr->recall_dungeon = DUNGEON_ANGBAND;
     else {

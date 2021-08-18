@@ -28,7 +28,7 @@ void rd_monster(player_type *player_ptr, monster_type *m_ptr)
     rd_byte(&tmp8u);
     m_ptr->fx = (POSITION)tmp8u;
 
-    s16b tmp16s;
+    short tmp16s;
     rd_s16b(&tmp16s);
     m_ptr->hp = (HIT_POINT)tmp16s;
     rd_s16b(&tmp16s);
@@ -64,31 +64,31 @@ void rd_monster(player_type *player_ptr, monster_type *m_ptr)
 
     if (flags & SAVE_MON_FAST) {
         rd_byte(&tmp8u);
-        m_ptr->mtimed[MTIMED_FAST] = (s16b)tmp8u;
+        m_ptr->mtimed[MTIMED_FAST] = (short)tmp8u;
     } else
         m_ptr->mtimed[MTIMED_FAST] = 0;
 
     if (flags & SAVE_MON_SLOW) {
         rd_byte(&tmp8u);
-        m_ptr->mtimed[MTIMED_SLOW] = (s16b)tmp8u;
+        m_ptr->mtimed[MTIMED_SLOW] = (short)tmp8u;
     } else
         m_ptr->mtimed[MTIMED_SLOW] = 0;
 
     if (flags & SAVE_MON_STUNNED) {
         rd_byte(&tmp8u);
-        m_ptr->mtimed[MTIMED_STUNNED] = (s16b)tmp8u;
+        m_ptr->mtimed[MTIMED_STUNNED] = (short)tmp8u;
     } else
         m_ptr->mtimed[MTIMED_STUNNED] = 0;
 
     if (flags & SAVE_MON_CONFUSED) {
         rd_byte(&tmp8u);
-        m_ptr->mtimed[MTIMED_CONFUSED] = (s16b)tmp8u;
+        m_ptr->mtimed[MTIMED_CONFUSED] = (short)tmp8u;
     } else
         m_ptr->mtimed[MTIMED_CONFUSED] = 0;
 
     if (flags & SAVE_MON_MONFEAR) {
         rd_byte(&tmp8u);
-        m_ptr->mtimed[MTIMED_MONFEAR] = (s16b)tmp8u;
+        m_ptr->mtimed[MTIMED_MONFEAR] = (short)tmp8u;
     } else
         m_ptr->mtimed[MTIMED_MONFEAR] = 0;
 
@@ -106,7 +106,7 @@ void rd_monster(player_type *player_ptr, monster_type *m_ptr)
 
     if (flags & SAVE_MON_INVULNER) {
         rd_byte(&tmp8u);
-        m_ptr->mtimed[MTIMED_INVULNER] = (s16b)tmp8u;
+        m_ptr->mtimed[MTIMED_INVULNER] = (short)tmp8u;
     } else
         m_ptr->mtimed[MTIMED_INVULNER] = 0;
 

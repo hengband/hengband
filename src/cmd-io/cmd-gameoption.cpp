@@ -58,7 +58,7 @@ static opts option_fields[OPT_NUM] = {
  * @param current 現在のセーブ頻度ターン値
  * @return 次のセーブ頻度ターン値
  */
-static s16b toggle_frequency(s16b current)
+static short toggle_frequency(short current)
 {
     switch (current) {
     case 0:

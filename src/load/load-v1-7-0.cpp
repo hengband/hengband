@@ -8,7 +8,7 @@
 
 void set_hp_old(player_type *creature_ptr)
 {
-    s16b tmp16s;
+    short tmp16s;
     rd_s16b(&tmp16s);
     creature_ptr->mhp = tmp16s;
 
@@ -22,7 +22,7 @@ void set_hp_old(player_type *creature_ptr)
 
 void set_mana_old(player_type *creature_ptr)
 {
-    s16b tmp16s;
+    short tmp16s;
     rd_s16b(&tmp16s);
     creature_ptr->msp = tmp16s;
 

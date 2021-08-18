@@ -360,9 +360,9 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
         (void)set_monster_fast(player_ptr, g_ptr->m_idx, 100);
 
     if (!ironman_nightmare) {
-        m_ptr->energy_need = ENERGY_NEED() - (s16b)randint0(100);
+        m_ptr->energy_need = ENERGY_NEED() - (short)randint0(100);
     } else {
-        m_ptr->energy_need = ENERGY_NEED() - (s16b)randint0(100) * 2;
+        m_ptr->energy_need = ENERGY_NEED() - (short)randint0(100) * 2;
     }
 
     if (any_bits(r_ptr->flags1, RF1_PREVENT_SUDDEN_MAGIC) && !ironman_nightmare) {

@@ -18,7 +18,7 @@
 #include "term/term-color-types.h"
 #include "world/world.h"
 
-s16b signal_count; /* Hack -- Count interupts */
+short signal_count; /* Hack -- Count interupts */
 
 #include <signal.h>
 

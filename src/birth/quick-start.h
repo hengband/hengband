@@ -17,10 +17,10 @@ struct birther {
     REALM_IDX realm1{}; /* First magic realm */
     REALM_IDX realm2{}; /* Second magic realm */
 
-    s16b age{};
-    s16b ht{};
-    s16b wt{};
-    s16b sc{};
+    short age{};
+    short ht{};
+    short wt{};
+    short sc{};
 
     PRICE au{}; /*!< 初期の所持金 */
 
@@ -30,7 +30,7 @@ struct birther {
 
     PATRON_IDX chaos_patron{};
 
-    s16b vir_types[8]{};
+    short vir_types[8]{};
 
     char history[4][60]{};
 

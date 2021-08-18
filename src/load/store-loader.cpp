@@ -76,7 +76,7 @@ static errr rd_store(player_type *player_ptr, int town_number, int store_number)
 
     byte owner_idx;
     byte tmp8u;
-    s16b inven_num;
+    short inven_num;
     rd_s32b(&store_ptr->store_open);
     rd_s16b(&store_ptr->insult_cur);
     rd_byte(&owner_idx);

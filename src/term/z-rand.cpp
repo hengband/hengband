@@ -208,7 +208,7 @@ s32b Rand_div(s32b m) { return Rand_div_impl(m, Rand_state); }
 /*
  * The normal distribution table for the "randnor()" function (below)
  */
-static s16b randnor_table[RANDNOR_NUM] =
+static short randnor_table[RANDNOR_NUM] =
 {
 	206,     613,    1022,    1430,		1838,	 2245,	  2652,	   3058,
 	3463,    3867,    4271,    4673,	5075,	 5475,	  5874,	   6271,
@@ -266,18 +266,18 @@ static s16b randnor_table[RANDNOR_NUM] =
  *
  * Note that the binary search takes up to 16 quick iterations.
  */
-s16b randnor(int mean, int stand)
+short randnor(int mean, int stand)
 {
-    s16b tmp;
-    s16b offset;
+    short tmp;
+    short offset;
 
-    s16b low = 0;
-    s16b high = RANDNOR_NUM;
+    short low = 0;
+    short high = RANDNOR_NUM;
     if (stand < 1)
-        return (s16b)(mean);
+        return (short)(mean);
 
     /* Roll for probability */
-    tmp = (s16b)randint0(32768);
+    tmp = (short)randint0(32768);
 
     /* Binary Search */
     while (low < high) {
@@ -290,7 +290,7 @@ s16b randnor(int mean, int stand)
 
         /* Move left otherwise */
         else {
-            high = (s16b)mid;
+            high = (short)mid;
         }
     }
 
@@ -308,18 +308,18 @@ s16b randnor(int mean, int stand)
 /*
  * Generates damage for "2d6" style dice rolls
  */
-s16b damroll(DICE_NUMBER num, DICE_SID sides)
+short damroll(DICE_NUMBER num, DICE_SID sides)
 {
     int i, sum = 0;
     for (i = 0; i < num; i++)
         sum += randint1(sides);
-    return (s16b)(sum);
+    return (short)(sum);
 }
 
 /*
  * Same as above, but always maximal
  */
-s16b maxroll(DICE_NUMBER num, DICE_SID sides) { return (num * sides); }
+short maxroll(DICE_NUMBER num, DICE_SID sides) { return (num * sides); }
 
 /*
  * Given a numerator and a denominator, supply a properly rounded result,

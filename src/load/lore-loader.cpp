@@ -13,7 +13,7 @@
  */
 void rd_lore(monster_race *r_ptr, MONRACE_IDX r_idx)
 {
-    s16b tmp16s;
+    short tmp16s;
     rd_s16b(&tmp16s);
     r_ptr->r_sights = (MONSTER_NUMBER)tmp16s;
 

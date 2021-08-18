@@ -586,28 +586,28 @@ static void wiz_tweak_item(player_type *player_ptr, object_type *o_ptr)
     if (!get_string(p, tmp_val, 5))
         return;
 
-    o_ptr->pval = clamp_cast<s16b>(atoi(tmp_val));
+    o_ptr->pval = clamp_cast<short>(atoi(tmp_val));
     wiz_display_item(player_ptr, o_ptr);
     p = "Enter new 'to_a' setting: ";
     sprintf(tmp_val, "%d", o_ptr->to_a);
     if (!get_string(p, tmp_val, 5))
         return;
 
-    o_ptr->to_a = clamp_cast<s16b>(atoi(tmp_val));
+    o_ptr->to_a = clamp_cast<short>(atoi(tmp_val));
     wiz_display_item(player_ptr, o_ptr);
     p = "Enter new 'to_h' setting: ";
     sprintf(tmp_val, "%d", o_ptr->to_h);
     if (!get_string(p, tmp_val, 5))
         return;
 
-    o_ptr->to_h = clamp_cast<s16b>(atoi(tmp_val));
+    o_ptr->to_h = clamp_cast<short>(atoi(tmp_val));
     wiz_display_item(player_ptr, o_ptr);
     p = "Enter new 'to_d' setting: ";
     sprintf(tmp_val, "%d", (int)o_ptr->to_d);
     if (!get_string(p, tmp_val, 5))
         return;
 
-    o_ptr->to_d = clamp_cast<s16b>(atoi(tmp_val));
+    o_ptr->to_d = clamp_cast<short>(atoi(tmp_val));
     wiz_display_item(player_ptr, o_ptr);
 }
 

@@ -160,7 +160,7 @@ void save_quick_start(void)
         wr_s16b(previous_char.stat_max_max[i]);
 
     for (int i = 0; i < PY_MAX_LEVEL; i++)
-        wr_s16b((s16b)previous_char.player_hp[i]);
+        wr_s16b((short)previous_char.player_hp[i]);
 
     wr_s16b(previous_char.chaos_patron);
     for (int i = 0; i < 8; i++)

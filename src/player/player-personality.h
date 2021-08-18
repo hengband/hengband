@@ -10,18 +10,18 @@ typedef struct player_personality {
 	concptr E_title;		/* 英語性格 */
 #endif
 
-	s16b a_adj[6];		/* ersonality stat bonuses */
+	short a_adj[6];		/* ersonality stat bonuses */
 
-	s16b a_dis;			/* personality disarming */
-	s16b a_dev;			/* personality magic devices */
-	s16b a_sav;			/* personality saving throw */
-	s16b a_stl;			/* personality stealth */
-	s16b a_srh;			/* personality search ability */
-	s16b a_fos;			/* personality search frequency */
-	s16b a_thn;			/* personality combat (normal) */
-	s16b a_thb;			/* personality combat (shooting) */
+	short a_dis;			/* personality disarming */
+	short a_dev;			/* personality magic devices */
+	short a_sav;			/* personality saving throw */
+	short a_stl;			/* personality stealth */
+	short a_srh;			/* personality search ability */
+	short a_fos;			/* personality search frequency */
+	short a_thn;			/* personality combat (normal) */
+	short a_thb;			/* personality combat (shooting) */
 
-	s16b a_mhp;			/* Race hit-dice modifier */
+	short a_mhp;			/* Race hit-dice modifier */
 
 	byte no;			/* の */
 	byte sex;			/* seibetu seigen */

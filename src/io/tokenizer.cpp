@@ -18,9 +18,9 @@
  * Hack -- We will always extract at least one token
  * </pre>
  */
-s16b tokenize(char *buf, s16b num, char **tokens, BIT_FLAGS mode)
+short tokenize(char *buf, short num, char **tokens, BIT_FLAGS mode)
 {
-	s16b i = 0;
+	short i = 0;
 	char *s = buf;
 	while (i < num - 1)
 	{

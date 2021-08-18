@@ -73,7 +73,7 @@ void rd_u16b(u16b *ip)
  * @brief ロードファイルポインタから符号つき16bit値を読み込んでポインタに渡す
  * @param ip 読み込みポインタ
  */
-void rd_s16b(s16b *ip) { rd_u16b((u16b *)ip); }
+void rd_s16b(short *ip) { rd_u16b((u16b *)ip); }
 
 /*!
  * @brief ロードファイルポインタから符号なし32bit値を読み込んでポインタに渡す

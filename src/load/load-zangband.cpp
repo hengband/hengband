@@ -145,7 +145,7 @@ void set_zangband_reflection(player_type *creature_ptr)
 
 void rd_zangband_dungeon()
 {
-    s16b tmp16s;
+    short tmp16s;
     rd_s16b(&tmp16s);
     max_dlv[DUNGEON_ANGBAND] = tmp16s;
 }
@@ -160,7 +160,7 @@ void set_zangband_game_turns(player_type *creature_ptr)
 
 void set_zangband_gambling_monsters(int i)
 {
-    s16b tmp16s;
+    short tmp16s;
     rd_s16b(&tmp16s);
     mon_odds[i] = tmp16s;
 }

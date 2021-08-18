@@ -16,7 +16,7 @@
 #include "util/int-char-converter.h"
 
 /*! オートローラの能力値的要求水準 / Autoroll limit */
-s16b stat_limit[6];
+short stat_limit[6];
 
 /*! オートローラの試行回数 / Autoroll round */
 s32b auto_round;
@@ -323,7 +323,7 @@ bool get_stat_limits(player_type *creature_ptr)
     }
 
     for (int i = 0; i < A_MAX; i++)
-        stat_limit[i] = (s16b)cval[i];
+        stat_limit[i] = (short)cval[i];
 
     return true;
 }
@@ -572,13 +572,13 @@ bool get_chara_limits(player_type *creature_ptr, chara_limit_type *chara_limit_p
             break;
     }
 
-    chara_limit_ptr->agemin = (s16b)cval[0];
-    chara_limit_ptr->agemax = (s16b)cval[1];
-    chara_limit_ptr->htmin = (s16b)cval[2];
-    chara_limit_ptr->htmax = (s16b)cval[3];
-    chara_limit_ptr->wtmin = (s16b)cval[4];
-    chara_limit_ptr->wtmax = (s16b)cval[5];
-    chara_limit_ptr->scmin = (s16b)cval[6];
-    chara_limit_ptr->scmax = (s16b)cval[7];
+    chara_limit_ptr->agemin = (short)cval[0];
+    chara_limit_ptr->agemax = (short)cval[1];
+    chara_limit_ptr->htmin = (short)cval[2];
+    chara_limit_ptr->htmax = (short)cval[3];
+    chara_limit_ptr->wtmin = (short)cval[4];
+    chara_limit_ptr->wtmax = (short)cval[5];
+    chara_limit_ptr->scmin = (short)cval[6];
+    chara_limit_ptr->scmax = (short)cval[7];
     return true;
 }

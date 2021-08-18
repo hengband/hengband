@@ -29,9 +29,9 @@ void PlayerIntelligence::set_locals()
  * * 玄武の構えで減算(-1)
  * * 朱雀の構えで加算(+1)
  */
-s16b PlayerIntelligence::battleform_value()
+short PlayerIntelligence::battleform_value()
 {
-    s16b result = 0;
+    short result = 0;
 
     if (any_bits(this->owner_ptr->special_defense, KATA_KOUKIJIN)) {
         result += 5;
@@ -54,9 +54,9 @@ s16b PlayerIntelligence::battleform_value()
  * * 変異MUT3_HYPER_INTで加算(+4)
  * * 変異MUT3_MORONICで減算(-4)
  */
-s16b PlayerIntelligence::mutation_value()
+short PlayerIntelligence::mutation_value()
 {
-    s16b result = 0;
+    short result = 0;
     if (this->owner_ptr->muta.any()) {
         if (this->owner_ptr->muta.has(MUTA::HYPER_INT)) {
             result += 4;

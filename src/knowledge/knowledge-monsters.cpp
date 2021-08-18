@@ -247,7 +247,7 @@ void do_cmd_knowledge_kill_count(player_type *creature_ptr)
     fprintf(fff, "   Total: %lu creature%s killed.\n", (unsigned long int)total, (total == 1 ? "" : "s"));
 #endif
 
-    C_KILL(who, max_r_idx, s16b);
+    C_KILL(who, max_r_idx, short);
     angband_fclose(fff);
     (void)show_file(creature_ptr, true, file_name, _("倒した敵の数", "Kill Count"), 0, 0);
     fd_kill(file_name);
@@ -256,7 +256,7 @@ void do_cmd_knowledge_kill_count(player_type *creature_ptr)
 /*
  * Display the monsters in a group.
  */
-static void display_monster_list(int col, int row, int per_page, s16b mon_idx[], int mon_cur, int mon_top, bool visual_only)
+static void display_monster_list(int col, int row, int per_page, short mon_idx[], int mon_cur, int mon_top, bool visual_only)
 {
     int i;
     for (i = 0; i < per_page && (mon_idx[mon_top + i] >= 0); i++) {

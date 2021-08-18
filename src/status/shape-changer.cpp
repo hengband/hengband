@@ -29,9 +29,9 @@
 
 void do_poly_wounds(player_type *creature_ptr)
 {
-    s16b wounds = creature_ptr->cut;
-    s16b hit_p = (creature_ptr->mhp - creature_ptr->chp);
-    s16b change = damroll(creature_ptr->lev, 5);
+    short wounds = creature_ptr->cut;
+    short hit_p = (creature_ptr->mhp - creature_ptr->chp);
+    short change = damroll(creature_ptr->lev, 5);
     bool Nasty_effect = one_in_(5);
     if (!(wounds || hit_p || Nasty_effect))
         return;

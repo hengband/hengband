@@ -8,17 +8,17 @@ public:
 
 protected:
     void set_locals() override;
-    s16b race_value() override;
-    s16b class_value() override;
-    s16b personality_value() override;
-    s16b equipments_value() override;
-    s16b time_effect_value() override;
-    s16b battleform_value() override;
-    s16b mutation_value() override;
-    s16b riding_value() override;
-    s16b inventory_weight_value() override;
-    s16b action_value() override;
+    short race_value() override;
+    short class_value() override;
+    short personality_value() override;
+    short equipments_value() override;
+    short time_effect_value() override;
+    short battleform_value() override;
+    short mutation_value() override;
+    short riding_value() override;
+    short inventory_weight_value() override;
+    short action_value() override;
     BIT_FLAGS equipments_flags(tr_type check_flag) override;
-    s16b special_weapon_set_value();
-    s16b set_exception_value(s16b value) override;
+    short special_weapon_set_value();
+    short set_exception_value(short value) override;
 };
