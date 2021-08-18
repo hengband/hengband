@@ -160,7 +160,7 @@ typedef struct player_type {
     ENERGY energy_need{}; /* Energy needed for next move */
     ENERGY enchant_energy_need{}; /* Energy needed for next upkeep effect	 */
 
-    FEED food{}; /* Current nutrition */
+    short food{}; /*!< ゲーム中の滋養度の型定義 / Current nutrition */
 
     /*
      * p_ptr->special_attackによるプレイヤーの攻撃状態の定義 / Bit flags for the "p_ptr->special_attack" variable. -LM-

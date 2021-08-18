@@ -147,7 +147,6 @@ typedef int WEIGHT; /*!< ゲーム中の重量の型定義(ポンド) */
 typedef int DICE_NUMBER; /*!< ゲーム中のダイス数の型定義 */
 typedef int DICE_SID; /*!< ゲーム中のダイス面の型定義 */
 typedef int PRICE; /*!< ゲーム中の金額価値の型定義 */
-typedef short FEED; /*!< ゲーム中の滋養度の型定義 */
 
 typedef uint STR_OFFSET; /*!< テキストオフセットの型定義 */
 
