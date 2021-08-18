@@ -573,44 +573,6 @@ static bool change_bg_mode(bg_mode new_mode, bool show_error = false, bool force
 }
 
 /*!
- * @brief Force the use of a new font for a term_data.
- * This function may be called before the "window" is ready.
- * This function returns zero only if everything succeeds.
- * @note that the "font name" must be capitalized!!!
- */
-static errr term_force_font(term_data *td)
-{
-    if (td->font_id)
-        DeleteObject(td->font_id);
-
-    td->font_id = CreateFontIndirectW(&(td->lf));
-    int wid = td->lf.lfWidth;
-    int hgt = td->lf.lfHeight;
-    if (!td->font_id)
-        return 1;
-
-    if (!wid || !hgt) {
-        HDC hdcDesktop;
-        HFONT hfOld;
-        TEXTMETRIC tm;
-
-        hdcDesktop = GetDC(HWND_DESKTOP);
-        hfOld = static_cast<HFONT>(SelectObject(hdcDesktop, td->font_id));
-        GetTextMetrics(hdcDesktop, &tm);
-        SelectObject(hdcDesktop, hfOld);
-        ReleaseDC(HWND_DESKTOP, hdcDesktop);
-
-        wid = tm.tmAveCharWidth;
-        hgt = tm.tmHeight;
-    }
-
-    td->font_wid = wid;
-    td->font_hgt = hgt;
-
-    return 0;
-}
-
-/*!
  * @brief Allow the user to change the font for this window.
  */
 static void term_change_font(term_data *td)
@@ -624,7 +586,7 @@ static void term_change_font(term_data *td)
     if (!ChooseFontW(&cf))
         return;
 
-    term_force_font(td);
+    td->force_font();
     td->tile_wid = td->font_wid;
     td->tile_hgt = td->font_hgt;
     td->adjust_size();
@@ -1288,7 +1250,7 @@ static void init_windows(void)
         wcsncpy(td->lf.lfFaceName, to_wchar(td->font_want).wc_str(), LF_FACESIZE);
         td->lf.lfCharSet = _(SHIFTJIS_CHARSET, DEFAULT_CHARSET);
         td->lf.lfPitchAndFamily = FIXED_PITCH | FF_DONTCARE;
-        term_force_font(td);
+        td->force_font();
         if (!td->tile_wid)
             td->tile_wid = td->font_wid;
         if (!td->tile_hgt)
@@ -2427,7 +2389,7 @@ static void hook_quit(concptr str)
 
     save_prefs();
     for (int i = MAX_TERM_DATA - 1; i >= 0; --i) {
-        term_force_font(&data[i]);
+        (&data[i])->force_font();
         if (data[i].font_want)
             string_free(data[i].font_want);
         if (data[i].w)
