@@ -96,7 +96,7 @@ struct term_data {
 
     double_buffering graphics{};
 
-    static errr term_xtra_win_flush();
+    static errr extra_win_flush();
     static void refresh_color_table();
     static void change_graphics_mode(graphics_mode mode);
 
@@ -117,21 +117,21 @@ struct term_data {
     bool handle_window_resize(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 private:
-    static errr term_user_win(int n);
-    static errr term_xtra_win(int n, int v);
-    static errr term_curs_win(int x, int y);
-    static errr term_bigcurs_win(int x, int y);
-    static errr term_wipe_win(int x, int y, int n);
-    static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s);
-    static errr term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, concptr cp, const TERM_COLOR *tap, concptr tcp);
-    static errr term_xtra_win_react(player_type *player_ptr);
-    static errr term_xtra_win_event(int v);
-    static errr term_xtra_win_clear(void);
-    static errr term_xtra_win_noise(void);
-    static errr term_xtra_win_sound(int v);
-    static errr term_xtra_win_music(int n, int v);
-    static errr term_xtra_win_scene(int v);
-    static int term_xtra_win_delay(int v);
+    static errr user_win(int n);
+    static errr extra_win(int n, int v);
+    static errr curs_win(int x, int y);
+    static errr bigcurs_win(int x, int y);
+    static errr wipe_win(int x, int y, int n);
+    static errr text_win(int x, int y, int n, TERM_COLOR a, concptr s);
+    static errr pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, concptr cp, const TERM_COLOR *tap, concptr tcp);
+    static errr extra_win_react(player_type *player_ptr);
+    static errr extra_win_event(int v);
+    static errr extra_win_clear(void);
+    static errr extra_win_noise(void);
+    static errr extra_win_sound(int v);
+    static errr extra_win_music(int n, int v);
+    static errr extra_win_scene(int v);
+    static int extra_win_delay(int v);
 };
 
 constexpr int MAX_TERM_DATA = 8; //!< Maximum number of windows

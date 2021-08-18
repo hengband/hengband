@@ -711,7 +711,7 @@ static void init_windows(void)
 
     SetWindowPos(td->w, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
     hbrYellow = CreateSolidBrush(win_clr[TERM_YELLOW]);
-    (void)term_data::term_xtra_win_flush();
+    (void)term_data::extra_win_flush();
 }
 
 /*!

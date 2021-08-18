@@ -313,20 +313,20 @@ void term_data::link_data()
     link->higher_pict = true;
     link->attr_blank = TERM_WHITE;
     link->char_blank = ' ';
-    link->user_hook = this->term_user_win;
-    link->xtra_hook = this->term_xtra_win;
-    link->curs_hook = this->term_curs_win;
-    link->bigcurs_hook = this->term_bigcurs_win;
-    link->wipe_hook = this->term_wipe_win;
-    link->text_hook = this->term_text_win;
-    link->pict_hook = this->term_pict_win;
+    link->user_hook = this->user_win;
+    link->xtra_hook = this->extra_win;
+    link->curs_hook = this->curs_win;
+    link->bigcurs_hook = this->bigcurs_win;
+    link->wipe_hook = this->wipe_win;
+    link->text_hook = this->text_win;
+    link->pict_hook = this->pict_win;
     link->data = (vptr)(this);
 }
 
 /*!
  * @brief Windows版ユーザ設定項目実装部(実装必須) /Interact with the User
  */
-errr term_data::term_user_win(int n)
+errr term_data::user_win(int n)
 {
     (void)n;
     return 0;
@@ -337,7 +337,7 @@ errr term_data::term_user_win(int n)
  * @details
  * Draw a "big cursor" at (x,y), using a "yellow box".
  */
-errr term_data::term_bigcurs_win(int x, int y)
+errr term_data::bigcurs_win(int x, int y)
 {
     term_data *td = (term_data *)(Term->data);
     int tile_wid, tile_hgt;
@@ -361,7 +361,7 @@ errr term_data::term_bigcurs_win(int x, int y)
  * @details
  * Erase a "block" of "n" characters starting at (x,y).
  */
-errr term_data::term_wipe_win(int x, int y, int n)
+errr term_data::wipe_win(int x, int y, int n)
 {
     term_data *td = (term_data *)(Term->data);
     RECT rc;
@@ -393,7 +393,7 @@ errr term_data::term_wipe_win(int x, int y, int n)
  * what color it should be using to draw with, but perhaps simply changing
  * it every time is not too inefficient.
  */
-errr term_data::term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
+errr term_data::text_win(int x, int y, int n, TERM_COLOR a, concptr s)
 {
     term_data *td = (term_data *)(Term->data);
     static HBITMAP WALL;
@@ -504,13 +504,13 @@ errr term_data::term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
  *
  * If "graphics" is not available, we simply "wipe" the given grids.
  */
-errr term_data::term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, concptr cp, const TERM_COLOR *tap, concptr tcp)
+errr term_data::pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, concptr cp, const TERM_COLOR *tap, concptr tcp)
 {
     term_data *td = (term_data *)(Term->data);
     int i;
     HDC hdcMask = NULL;
     if (!use_graphics) {
-        return (term_wipe_win(x, y, n));
+        return (wipe_win(x, y, n));
     }
 
     const tile_info &infGraph = graphic.get_tile_info();
@@ -617,7 +617,7 @@ void term_data::change_graphics_mode(graphics_mode mode)
 /*!
  * @brief Process all pending events
  */
-errr term_data::term_xtra_win_flush()
+errr term_data::extra_win_flush()
 {
     MSG msg;
     while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
@@ -633,7 +633,7 @@ errr term_data::term_xtra_win_flush()
  * @details
  * Make this more efficient
  */
-errr term_data::term_xtra_win_clear(void)
+errr term_data::extra_win_clear(void)
 {
     term_data *td = (term_data *)(Term->data);
 
@@ -658,7 +658,7 @@ errr term_data::term_xtra_win_clear(void)
 /*!
  * @brief Hack -- make a noise
  */
-errr term_data::term_xtra_win_noise(void)
+errr term_data::extra_win_noise(void)
 {
     MessageBeep(MB_ICONASTERISK);
     return 0;
@@ -667,7 +667,7 @@ errr term_data::term_xtra_win_noise(void)
 /*!
  * @brief Hack -- make a sound
  */
-errr term_data::term_xtra_win_sound(int v)
+errr term_data::extra_win_sound(int v)
 {
     if (!use_sound)
         return 1;
@@ -677,7 +677,7 @@ errr term_data::term_xtra_win_sound(int v)
 /*!
  * @brief Hack -- play a music
  */
-errr term_data::term_xtra_win_music(int n, int v)
+errr term_data::extra_win_music(int n, int v)
 {
     if (!use_music) {
         return 1;
@@ -689,7 +689,7 @@ errr term_data::term_xtra_win_music(int n, int v)
 /*!
  * @brief Hack -- play a music matches a situation
  */
-errr term_data::term_xtra_win_scene(int v)
+errr term_data::extra_win_scene(int v)
 {
     // TODO 場面に合った壁紙変更対応
     if (!use_music) {
@@ -702,7 +702,7 @@ errr term_data::term_xtra_win_scene(int v)
 /*!
  * @brief Delay for "x" milliseconds
  */
-int term_data::term_xtra_win_delay(int v)
+int term_data::extra_win_delay(int v)
 {
     Sleep(v);
     return 0;
@@ -712,12 +712,11 @@ int term_data::term_xtra_win_delay(int v)
  * @brief Do a "special thing"
  * @todo z-termに影響があるのでplayer_typeの追加は保留
  */
-errr term_data::term_xtra_win(int n, int v)
+errr term_data::extra_win(int n, int v)
 {
     switch (n) {
-    case TERM_XTRA_NOISE: {
-        return (term_xtra_win_noise());
-    }
+    case TERM_XTRA_NOISE:
+        return (extra_win_noise());
     case TERM_XTRA_FRESH: {
         term_data *td = (term_data *)(Term->data);
         if (td->w)
@@ -728,39 +727,29 @@ errr term_data::term_xtra_win(int n, int v)
     case TERM_XTRA_MUSIC_DUNGEON:
     case TERM_XTRA_MUSIC_QUEST:
     case TERM_XTRA_MUSIC_TOWN:
-    case TERM_XTRA_MUSIC_MONSTER: {
-        return term_xtra_win_music(n, v);
-    }
-    case TERM_XTRA_MUSIC_MUTE: {
+    case TERM_XTRA_MUSIC_MONSTER:
+        return extra_win_music(n, v);
+    case TERM_XTRA_MUSIC_MUTE:
         return main_win_music::stop_music();
+    case TERM_XTRA_SCENE:
+        return extra_win_scene(v);
+    case TERM_XTRA_SOUND:
+        return (extra_win_sound(v));
+    case TERM_XTRA_BORED:
+        return (extra_win_event(0));
+    case TERM_XTRA_EVENT:
+        return (extra_win_event(v));
+    case TERM_XTRA_FLUSH:
+        return (extra_win_flush());
+    case TERM_XTRA_CLEAR:
+        return (extra_win_clear());
+    case TERM_XTRA_REACT:
+        return (extra_win_react(p_ptr));
+    case TERM_XTRA_DELAY:
+        return (extra_win_delay(v));
+    default:
+        return 1;
     }
-    case TERM_XTRA_SCENE: {
-        return term_xtra_win_scene(v);
-    }
-    case TERM_XTRA_SOUND: {
-        return (term_xtra_win_sound(v));
-    }
-    case TERM_XTRA_BORED: {
-        return (term_xtra_win_event(0));
-    }
-    case TERM_XTRA_EVENT: {
-        return (term_xtra_win_event(v));
-    }
-    case TERM_XTRA_FLUSH: {
-        return (term_xtra_win_flush());
-    }
-    case TERM_XTRA_CLEAR: {
-        return (term_xtra_win_clear());
-    }
-    case TERM_XTRA_REACT: {
-        return (term_xtra_win_react(p_ptr));
-    }
-    case TERM_XTRA_DELAY: {
-        return (term_xtra_win_delay(v));
-    }
-    }
-
-    return 1;
 }
 
 /*!
@@ -768,7 +757,7 @@ errr term_data::term_xtra_win(int n, int v)
  * @details
  * Draw a "cursor" at (x,y), using a "yellow box".
  */
-errr term_data::term_curs_win(int x, int y)
+errr term_data::curs_win(int x, int y)
 {
     term_data *td = (term_data *)(Term->data);
     int tile_wid, tile_hgt;
@@ -790,7 +779,7 @@ errr term_data::term_curs_win(int x, int y)
 /*!
  * @brief React to global changes
  */
-errr term_data::term_xtra_win_react(player_type *player_ptr)
+errr term_data::extra_win_react(player_type *player_ptr)
 {
     refresh_color_table();
 
@@ -813,7 +802,7 @@ errr term_data::term_xtra_win_react(player_type *player_ptr)
 /*!
  * @brief Process at least one event
  */
-errr term_data::term_xtra_win_event(int v)
+errr term_data::extra_win_event(int v)
 {
     MSG msg;
     if (v) {
