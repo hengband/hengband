@@ -9,7 +9,8 @@
 #define MAX_RANDOM_QUEST 49 /*<! ランダムクエストを割り当てるクエストIDの終了値 */
 
 /*
- * Quest status
+ * @brief Quest status
+ * @todo 後でenumにする.
  */
 #define QUEST_STATUS_UNTAKEN              0 /*!< クエストステータス状態：未発生*/
 #define QUEST_STATUS_TAKEN                1 /*!< クエストステータス状態：発生中*/
@@ -58,8 +59,8 @@
  * @brief クエスト情報の構造体 / Structure for the "quests".
  */
 typedef struct quest_type {
-	QUEST_STATUS status;          /*!< クエストの進行ステータス / Is the quest taken, completed, finished? */
-	QUEST_TYPE type;              /*!< クエストの種別 / The quest type */
+	int16_t status;          /*!< クエストの進行ステータス / Is the quest taken, completed, finished? */
+	int16_t type;              /*!< クエストの種別 / The quest type */
 
 	GAME_TEXT name[60];          /*!< クエスト名 / Quest name */
 	DEPTH level;            /*!< 処理階層 / Dungeon level */
@@ -87,7 +88,7 @@ extern int leaving_quest;
 typedef struct object_type object_type;
 typedef struct player_type player_type;
 void determine_random_questor(player_type *player_ptr, quest_type *q_ptr);
-void record_quest_final_status(quest_type *q_ptr, PLAYER_LEVEL lev, QUEST_STATUS stat);
+void record_quest_final_status(quest_type *q_ptr, PLAYER_LEVEL lev, int16_t stat);
 void complete_quest(player_type *player_ptr, QUEST_IDX quest_num);
 void check_find_art_quest_completion(player_type *player_ptr, object_type *o_ptr);
 void quest_discovery(QUEST_IDX q_idx);
