@@ -23,9 +23,9 @@ void quark_init(void)
 /*
  * Add a new "quark" to the set of quarks.
  */
-u16b quark_add(concptr str)
+ushort quark_add(concptr str)
 {
-    u16b i;
+    ushort i;
     for (i = 1; i < quark__num; i++) {
         if (streq(quark__str[i], str))
             return (i);

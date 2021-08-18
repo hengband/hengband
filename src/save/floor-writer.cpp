@@ -38,12 +38,12 @@ void wr_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
         wr_s16b(sf_ptr->lower_floor_id);
     }
 
-    wr_u16b((u16b)floor_ptr->base_level);
+    wr_u16b((ushort)floor_ptr->base_level);
     wr_u16b((short)player_ptr->current_floor_ptr->num_repro);
-    wr_u16b((u16b)player_ptr->y);
-    wr_u16b((u16b)player_ptr->x);
-    wr_u16b((u16b)floor_ptr->height);
-    wr_u16b((u16b)floor_ptr->width);
+    wr_u16b((ushort)player_ptr->y);
+    wr_u16b((ushort)player_ptr->x);
+    wr_u16b((ushort)floor_ptr->height);
+    wr_u16b((ushort)floor_ptr->width);
     wr_byte(player_ptr->feeling);
 
     /*
@@ -58,11 +58,11 @@ void wr_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
      */
 
     /* Fake max number */
-    u16b max_num_temp = 255;
+    ushort max_num_temp = 255;
 
     grid_template_type *templates;
     C_MAKE(templates, max_num_temp, grid_template_type);
-    u16b num_temp = 0;
+    ushort num_temp = 0;
     for (int y = 0; y < floor_ptr->height; y++) {
         for (int x = 0; x < floor_ptr->width; x++) {
             grid_type *g_ptr = &floor_ptr->grid_array[y][x];
@@ -102,14 +102,14 @@ void wr_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
     wr_u16b(num_temp);
     for (int i = 0; i < num_temp; i++) {
         grid_template_type *ct_ptr = &templates[i];
-        wr_u16b((u16b)ct_ptr->info);
+        wr_u16b((ushort)ct_ptr->info);
         wr_s16b(ct_ptr->feat);
         wr_s16b(ct_ptr->mimic);
         wr_s16b(ct_ptr->special);
     }
 
     byte count = 0;
-    u16b prev_u16b = 0;
+    ushort prev_u16b = 0;
     for (int y = 0; y < floor_ptr->height; y++) {
         for (int x = 0; x < floor_ptr->width; x++) {
             grid_type *g_ptr = &floor_ptr->grid_array[y][x];
@@ -120,7 +120,7 @@ void wr_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
                     break;
             }
 
-            u16b tmp16u = (u16b)i;
+            ushort tmp16u = (ushort)i;
             if ((tmp16u == prev_u16b) && (count != MAX_UCHAR)) {
                 count++;
                 continue;

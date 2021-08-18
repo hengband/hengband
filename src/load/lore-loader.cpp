@@ -101,7 +101,7 @@ void rd_lore(monster_race *r_ptr, MONRACE_IDX r_idx)
 
 errr load_lore(void)
 {
-    u16b loading_max_r_idx;
+    ushort loading_max_r_idx;
     rd_u16b(&loading_max_r_idx);
 
     monster_race *r_ptr;

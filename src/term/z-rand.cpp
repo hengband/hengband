@@ -51,7 +51,7 @@
 /*
  * Currently unused
  */
-u16b Rand_place;
+ushort Rand_place;
 
 /*
  * Current "state" table for the RNG

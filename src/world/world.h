@@ -19,8 +19,8 @@ struct world_type {
     GAME_TURN dungeon_turn_limit{}; /*!< dungeon_turnの最大値 / Limit of game_turn in dungeon */
     GAME_TURN arena_start_turn{}; /*!< 闘技場賭博の開始ターン値 */
     u32b start_time{};
-    u16b noscore{}; /* Cheating flags */
-    u16b total_winner{}; /* Total winner */
+    ushort noscore{}; /* Cheating flags */
+    ushort total_winner{}; /* Total winner */
 
     MONSTER_IDX timewalk_m_idx{}; /*!< 現在時間停止を行っているモンスターのID */
 
@@ -43,8 +43,8 @@ struct world_type {
 
     u32b sf_system{}; //!< OS情報 / OS information
     u32b sf_when{}; //!< 作成日時 / Created Date
-    u16b sf_lives{}; //!< このセーブファイルで何人プレイしたか / Number of past "lives" with this file
-    u16b sf_saves{}; //!< 現在のプレイで何回セーブしたか / Number of "saves" during this life
+    ushort sf_lives{}; //!< このセーブファイルで何人プレイしたか / Number of past "lives" with this file
+    ushort sf_saves{}; //!< 現在のプレイで何回セーブしたか / Number of "saves" during this life
     u32b sf_play_time{}; //!< このセーブファイルで遊んだ合計のプレイ時間
     FlagGroup<player_class_type, MAX_CLASS> sf_winner{}; //!< このセーブファイルで*勝利*した職業
     FlagGroup<player_class_type, MAX_CLASS> sf_retired{}; //!< このセーブファイルで引退した職業

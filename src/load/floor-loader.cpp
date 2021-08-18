@@ -96,7 +96,7 @@ errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
     rd_s16b(&tmp16s);
     floor_ptr->num_repro = (MONSTER_NUMBER)tmp16s;
 
-    u16b tmp16u;
+    ushort tmp16u;
     rd_u16b(&tmp16u);
     player_ptr->y = (POSITION)tmp16u;
 
@@ -110,7 +110,7 @@ errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 
     rd_byte(&player_ptr->feeling);
 
-    u16b limit;
+    ushort limit;
     rd_u16b(&limit);
     C_MAKE(templates, limit, grid_template_type);
 
@@ -138,7 +138,7 @@ errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
         byte count;
         rd_byte(&count);
 
-        u16b id = 0;
+        ushort id = 0;
         byte tmp8u;
         do {
             rd_byte(&tmp8u);

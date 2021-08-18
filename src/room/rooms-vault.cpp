@@ -66,7 +66,7 @@ static void build_bubble_vault(player_type *player_ptr, POSITION x0, POSITION y0
 
     int i, j;
     POSITION x = 0, y = 0;
-    u16b min1, min2, temp;
+    ushort min1, min2, temp;
     bool done;
 
     /* Offset from center to top left hand corner */
@@ -126,8 +126,8 @@ static void build_bubble_vault(player_type *player_ptr, POSITION x0, POSITION y0
         for (y = 1; y < ysize - 1; y++) {
             /* Get distances to two closest centers */
 
-            min1 = (u16b)distance(x, y, center[0].x, center[0].y);
-            min2 = (u16b)distance(x, y, center[1].x, center[1].y);
+            min1 = (ushort)distance(x, y, center[0].x, center[0].y);
+            min2 = (ushort)distance(x, y, center[1].x, center[1].y);
 
             if (min1 > min2) {
                 /* swap if in wrong order */
@@ -138,7 +138,7 @@ static void build_bubble_vault(player_type *player_ptr, POSITION x0, POSITION y0
 
             /* Scan the rest */
             for (i = 2; i < BUBBLENUM; i++) {
-                temp = (u16b)distance(x, y, center[i].x, center[i].y);
+                temp = (ushort)distance(x, y, center[i].x, center[i].y);
 
                 if (temp < min1) {
                     /* smallest */

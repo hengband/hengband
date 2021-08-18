@@ -53,15 +53,13 @@ typedef int errr;
 #define MAX_NLEN 160 /*!< Maximum length of object's name */
 #define MAX_MONSTER_NAME 160 /*!< モンスター名称の最大バイト数 / Max characters of monster's name */
 
-/* Note that "signed char" is not always "defined" */
-/* So always use "short" to hold small signed values */
-/* A signed byte of memory */
-/* typedef signed char syte; */
-typedef unsigned char byte; /*!< byte型をunsighned charとして定義 / Note that unsigned values can cause math problems / An unsigned byte of memory */
-typedef unsigned int uint; /* uint型をintとして定義 /  An unsigned, "standard" integer (often pre-defined) */
-typedef unsigned long ulong; /* The largest possible unsigned integer */
-
-typedef uint16_t u16b;
+/*!
+ * @brief 符号なし整数の簡潔な定義
+ */
+typedef unsigned char byte;
+typedef unsigned short ushort;
+typedef unsigned int uint;
+typedef unsigned long ulong;
 
 /* Signed/Unsigned 32 bit value */
 typedef int32_t s32b;
@@ -170,7 +168,7 @@ typedef s32b PERCENTAGE; /*!< ゲーム中のパーセント表記の型定義(/
 typedef short MULTIPLY; /*!< ゲーム中の倍率の型定義(/10倍) */
 
 typedef u32b BIT_FLAGS; /*!< 32ビットのフラグ配列の型定義 */
-typedef u16b BIT_FLAGS16; /*!< 16ビットのフラグ配列の型定義 */
+typedef ushort BIT_FLAGS16; /*!< 16ビットのフラグ配列の型定義 */
 typedef byte BIT_FLAGS8; /*!< 8ビットのフラグ配列の型定義 */
 
 typedef short XTRA16; /*!< 汎用変数16ビットの型定義 */

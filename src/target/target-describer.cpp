@@ -237,7 +237,7 @@ static void describe_monster_person(eg_type *eg_ptr)
 #endif
 }
 
-static u16b describe_monster_item(player_type *subject_ptr, eg_type *eg_ptr)
+static ushort describe_monster_item(player_type *subject_ptr, eg_type *eg_ptr)
 {
     for (const auto this_o_idx : eg_ptr->m_ptr->hold_o_idx_list) {
         GAME_TEXT o_name[MAX_NLEN];
@@ -286,7 +286,7 @@ static short describe_grid(player_type *subject_ptr, eg_type *eg_ptr)
         return eg_ptr->query;
 
     describe_monster_person(eg_ptr);
-    u16b monster_item_description = describe_monster_item(subject_ptr, eg_ptr);
+    ushort monster_item_description = describe_monster_item(subject_ptr, eg_ptr);
     if (within_char_util(monster_item_description))
         return (char)monster_item_description;
 

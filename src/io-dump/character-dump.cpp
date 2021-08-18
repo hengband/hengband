@@ -288,7 +288,7 @@ static void dump_aux_monsters(player_type *creature_ptr, FILE *fff)
 
     /* Allocate the "who" array */
     MONRACE_IDX *who;
-    u16b why = 2;
+    ushort why = 2;
     C_MAKE(who, max_r_idx, MONRACE_IDX);
 
     /* Count monster kills */

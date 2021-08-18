@@ -59,7 +59,7 @@ static errr load_town_quest(player_type *creature_ptr)
     if (load_town_result != 0)
         return load_town_result;
 
-    u16b max_quests_load;
+    ushort max_quests_load;
     byte max_rquests_load;
     errr load_quest_result = load_quest_info(&max_quests_load, &max_rquests_load);
     if (load_quest_result != 0)
@@ -121,7 +121,7 @@ static void load_player_world(player_type *creature_ptr)
 
 static errr load_hp(player_type *creature_ptr)
 {
-    u16b tmp16u;
+    ushort tmp16u;
     rd_u16b(&tmp16u);
     if (tmp16u > PY_MAX_LEVEL) {
         load_note(format(_("ヒットポイント配列が大きすぎる(%u)！", "Too many (%u) hitpoint entries!"), tmp16u));

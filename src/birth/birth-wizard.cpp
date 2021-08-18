@@ -268,7 +268,7 @@ static bool let_player_build_character(player_type *creature_ptr)
 
 static void display_initial_options(player_type *creature_ptr)
 {
-    u16b expfact = get_expfact(creature_ptr) - 100;
+    ushort expfact = get_expfact(creature_ptr) - 100;
     short adj[A_MAX];
     for (int i = 0; i < A_MAX; i++) {
         adj[i] = rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i];

@@ -54,7 +54,7 @@ void wr_options(save_type type)
     wr_byte(mana_warn);
 
     /*** Cheating options ***/
-    u16b c = 0;
+    ushort c = 0;
     if (current_world_ptr->wizard)
         c |= 0x0002;
 

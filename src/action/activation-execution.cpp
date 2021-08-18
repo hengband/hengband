@@ -196,7 +196,7 @@ static bool activate_whistle(player_type *user_ptr, ae_type *ae_ptr)
         if (is_pet(&user_ptr->current_floor_ptr->m_list[pet_ctr]) && (user_ptr->riding != pet_ctr))
             who[max_pet++] = pet_ctr;
 
-    u16b dummy_why;
+    ushort dummy_why;
     ang_sort(user_ptr, who, &dummy_why, max_pet, ang_sort_comp_pet, ang_sort_swap_hook);
     for (MONSTER_IDX i = 0; i < max_pet; i++) {
         pet_ctr = who[i];

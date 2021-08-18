@@ -125,7 +125,7 @@ errr load_store(player_type *creature_ptr)
 {
     (void)creature_ptr;
 
-    u16b tmp16u;
+    ushort tmp16u;
     rd_u16b(&tmp16u);
     auto town_count = (int)tmp16u;
 

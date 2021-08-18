@@ -277,7 +277,7 @@ struct infowin {
 
     short x, y;
     short w, h;
-    u16b b;
+    ushort b;
 
     byte byte1;
 

@@ -62,7 +62,7 @@
  */
 #define saving_throw(S) (randint0(100) < (S))
 
-extern u16b Rand_place;
+extern ushort Rand_place;
 extern u32b Rand_state[RAND_DEG];
 
 void Rand_state_init(void);

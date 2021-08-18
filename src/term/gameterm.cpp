@@ -7,7 +7,7 @@
  /*
  * Convert an "attr"/"char" pair into a "pict" (P)
  */
-#define PICT(A, C) ((((u16b)(A)) << 8) | ((byte)(C)))
+#define PICT(A, C) ((((ushort)(A)) << 8) | ((byte)(C)))
 
 /*
  * Standard window names
@@ -525,7 +525,7 @@ static TERM_COLOR spell_color(EFFECT_ID type)
  * If the distance is not "one", we (may) return "*".
  * </pre>
  */
-u16b bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, EFFECT_ID typ)
+ushort bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, EFFECT_ID typ)
 {
 	int base;
 

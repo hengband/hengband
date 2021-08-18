@@ -233,8 +233,8 @@ bool ang_sort_art_comp(player_type *player_ptr, vptr u, vptr v, int a, int b)
     /* Unused */
     (void)player_ptr;
 
-    u16b *who = (u16b *)(u);
-    u16b *why = (u16b *)(v);
+    ushort *who = (ushort *)(u);
+    ushort *why = (ushort *)(v);
 
     int w1 = who[a];
     int w2 = who[b];
@@ -299,8 +299,8 @@ void ang_sort_art_swap(player_type *player_ptr, vptr u, vptr v, int a, int b)
     (void)player_ptr;
     (void)v;
 
-    u16b *who = (u16b *)(u);
-    u16b holder = who[a];
+    ushort *who = (ushort *)(u);
+    ushort holder = who[a];
     who[a] = who[b];
     who[b] = holder;
 }
@@ -342,7 +342,7 @@ bool ang_sort_comp_pet(player_type *player_ptr, vptr u, vptr v, int a, int b)
     /* Unused */
     (void)v;
 
-    u16b *who = (u16b *)(u);
+    ushort *who = (ushort *)(u);
 
     int w1 = who[a];
     int w2 = who[b];
@@ -395,8 +395,8 @@ bool ang_sort_comp_hook(player_type *player_ptr, vptr u, vptr v, int a, int b)
     /* Unused */
     (void)player_ptr;
 
-    u16b *who = (u16b *)(u);
-    u16b *why = (u16b *)(v);
+    ushort *who = (ushort *)(u);
+    ushort *why = (ushort *)(v);
 
     int w1 = who[a];
     int w2 = who[b];
@@ -476,8 +476,8 @@ void ang_sort_swap_hook(player_type *player_ptr, vptr u, vptr v, int a, int b)
     (void)player_ptr;
     (void)v;
 
-    u16b *who = (u16b *)(u);
-    u16b holder;
+    ushort *who = (ushort *)(u);
+    ushort holder;
 
     holder = who[a];
     who[a] = who[b];
@@ -493,7 +493,7 @@ bool ang_sort_comp_monster_level(player_type *player_ptr, vptr u, vptr v, int a,
     (void)player_ptr;
     (void)v;
 
-    u16b *who = (u16b *)(u);
+    ushort *who = (ushort *)(u);
 
     int w1 = who[a];
     int w2 = who[b];
@@ -529,7 +529,7 @@ bool ang_sort_comp_pet_dismiss(player_type *player_ptr, vptr u, vptr v, int a, i
     /* Unused */
     (void)v;
 
-    u16b *who = (u16b *)(u);
+    ushort *who = (ushort *)(u);
 
     int w1 = who[a];
     int w2 = who[b];
@@ -594,8 +594,8 @@ bool ang_sort_comp_cave_temp(player_type *player_ptr, vptr u, vptr v, int a, int
 
     grid_template_type *who = (grid_template_type *)(u);
 
-    u16b o1 = who[a].occurrence;
-    u16b o2 = who[b].occurrence;
+    ushort o1 = who[a].occurrence;
+    ushort o2 = who[b].occurrence;
 
     return o2 <= o1;
 }

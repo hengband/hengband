@@ -75,7 +75,7 @@ static concptr attr_to_text(monster_race *r_ptr)
 spoiler_output_status spoil_mon_desc(concptr fname, std::function<bool(const monster_race *)> filter_monster)
 {
     player_type dummy;
-    u16b why = 2;
+    ushort why = 2;
     MONRACE_IDX *who;
     char buf[1024];
     char nam[MAX_MONSTER_NAME + 10]; // ユニークには[U] が付くので少し伸ばす
@@ -209,7 +209,7 @@ spoiler_output_status spoil_mon_info(concptr fname)
             who[n++] = (short)i;
     }
 
-    u16b why = 2;
+    ushort why = 2;
     ang_sort(&dummy, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
     for (int i = 0; i < n; i++) {
         monster_race *r_ptr = &r_info[who[i]];

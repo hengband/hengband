@@ -36,7 +36,7 @@ typedef struct player_type {
     player_personality_type oops{}; /* Unused */
 
     DICE_SID hitdie{}; /* Hit dice (sides) */
-    u16b expfact{}; /* Experience factor
+    ushort expfact{}; /* Experience factor
                      * Note: was byte, causing overflow for Amberite
                      * characters (such as Amberite Paladins)
                      */
@@ -202,7 +202,7 @@ typedef struct player_type {
     concptr last_message{}; /* Last message on death or retirement */
     char history[4][60]{}; /* Textual "history" for the Player */
 
-    u16b panic_save{}; /* Panic save */
+    ushort panic_save{}; /* Panic save */
 
     bool wait_report_score{}; /* Waiting to report score */
     bool is_dead{}; /* Player is dead */

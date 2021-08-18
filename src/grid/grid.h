@@ -24,7 +24,7 @@ struct grid_template_type {
     FEAT_IDX feat;
     FEAT_IDX mimic;
     short special;
-    u16b occurrence;
+    ushort occurrence;
 };
 
 enum grid_bold_type {
