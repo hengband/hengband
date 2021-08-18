@@ -233,3 +233,24 @@ void term_data::redraw_data()
     term_redraw();
     term_activate(term_screen);
 }
+
+/*!
+ * @brief ターミナルのサイズ更新
+ * @details 行数、列数の変更に対応する。
+ * @param td term_dataのポインタ
+ * @param resize_window trueの場合に再計算されたウインドウサイズにリサイズする
+ */
+void term_data::rebuild(bool resize_window)
+{
+    term_type *old = Term;
+    this->size_hack = true;
+    term_activate(&this->t);
+    this->adjust_size();
+    if (resize_window) {
+        this->resize_window();
+    }
+    this->dispose_offscreen();
+    term_resize(this->cols, this->rows);
+    this->size_hack = false;
+    term_activate(old);
+}
