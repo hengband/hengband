@@ -63,12 +63,12 @@
 #define saving_throw(S) (randint0(100) < (S))
 
 extern ushort Rand_place;
-extern u32b Rand_state[RAND_DEG];
+extern uint Rand_state[RAND_DEG];
 
 void Rand_state_init(void);
-void Rand_state_set(u32b seed);
-void Rand_state_backup(u32b *backup_state);
-void Rand_state_restore(u32b *backup_state);
+void Rand_state_set(uint seed);
+void Rand_state_backup(uint *backup_state);
+void Rand_state_restore(uint *backup_state);
 int Rand_div(int m);
 short randnor(int mean, int stand);
 short damroll(DICE_NUMBER num, DICE_SID sides);

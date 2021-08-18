@@ -11,15 +11,15 @@ typedef struct saved_floor_type {
     short savefile_id; /* ID for savefile (from 0 to MAX_SAVED_FLOOR) */
     DEPTH dun_level;
     int last_visit; /* Time count of last visit. 0 for new floor. */
-    u32b visit_mark; /* Older has always smaller mark. */
+    uint visit_mark; /* Older has always smaller mark. */
     FLOOR_IDX upper_floor_id; /* a floor connected with level teleportation */
     FLOOR_IDX lower_floor_id; /* a floor connected with level tel. and trap door */
 } saved_floor_type;
 
-extern u32b saved_floor_file_sign;
+extern uint saved_floor_file_sign;
 extern saved_floor_type saved_floors[MAX_SAVED_FLOORS];
 extern FLOOR_IDX max_floor_id;
 
 extern FLOOR_IDX new_floor_id;
-extern u32b latest_visit_mark;
+extern uint latest_visit_mark;
 extern monster_type party_mon[MAX_PARTY_MON];

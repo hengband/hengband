@@ -142,24 +142,24 @@ void core(concptr str)
 
 /*** 64-bit integer operations ***/
 
-void s64b_lshift(int* hi, u32b* lo, const int n)
+void s64b_lshift(int* hi, uint* lo, const int n)
 {
 	if (n == 0) return;
 
-	*hi = (int)((u32b)(*hi << n) | (*lo >> (32 - n)));
+	*hi = (int)((uint)(*hi << n) | (*lo >> (32 - n)));
 	*lo <<= n;
 }
 
-void s64b_rshift(int* hi, u32b* lo, const int n)
+void s64b_rshift(int* hi, uint* lo, const int n)
 {
 	if (n == 0) return;
 
-	*lo = ((u32b)*hi << (32 - n)) | (*lo >> n);
+	*lo = ((uint)*hi << (32 - n)) | (*lo >> n);
 	*hi >>= n;
 }
 
 /* Add B to A */
-void s64b_add(int *A1, u32b *A2, int B1, u32b B2)
+void s64b_add(int *A1, uint *A2, int B1, uint B2)
 {
 	(*A2) += B2;
 
@@ -172,7 +172,7 @@ void s64b_add(int *A1, u32b *A2, int B1, u32b B2)
 
 
 /* Subtract B from A */
-void s64b_sub(int *A1, u32b *A2, int B1, u32b B2)
+void s64b_sub(int *A1, uint *A2, int B1, uint B2)
 {
 	/* Underflaw? */
 	if ((*A2) < B2)
@@ -195,13 +195,13 @@ void s64b_sub(int *A1, u32b *A2, int B1, u32b B2)
  *   +(A2l*B2h & 0xffff0000)*2^16
  *   +(A2*B2 & 0xffffffff)
  */
-void s64b_mul(int *A1, u32b *A2, int B1, u32b B2)
+void s64b_mul(int *A1, uint *A2, int B1, uint B2)
 {
 	int tmp1;
-	u32b A2val = (*A2);
+	uint A2val = (*A2);
 
-	u32b B2high = (B2 >> 16);
-	u32b A2high = (A2val >> 16);
+	uint B2high = (B2 >> 16);
+	uint A2high = (A2val >> 16);
 
 	(*A2) *= B2;
 	tmp1 = (*A1) * B2;
@@ -215,7 +215,7 @@ void s64b_mul(int *A1, u32b *A2, int B1, u32b B2)
 
 
 /* Compare A to B */
-int s64b_cmp(int A1, u32b A2, int B1, u32b B2)
+int s64b_cmp(int A1, uint A2, int B1, uint B2)
 {
 	if (A1 > B1) return 1;
 	if (A1 < B1) return -1;
@@ -229,12 +229,12 @@ int s64b_cmp(int A1, u32b A2, int B1, u32b B2)
  *
  * Assumes that both A and B are positive
  */
-void s64b_div(int *A1, u32b *A2, int B1, u32b B2)
+void s64b_div(int *A1, uint *A2, int B1, uint B2)
 {
 	int result1 = 0;
-	u32b result2 = 0;
+	uint result2 = 0;
 	int A1val = (*A1);
-	u32b A2val = (*A2);
+	uint A2val = (*A2);
 	int bit = 0;
 
 	/* No result for B==0 */
@@ -272,10 +272,10 @@ void s64b_div(int *A1, u32b *A2, int B1, u32b B2)
 
 
 /* Reminder of ENERGY_DIVISION (A % B) */
-void s64b_mod(int *A1, u32b *A2, int B1, u32b B2)
+void s64b_mod(int *A1, uint *A2, int B1, uint B2)
 {
 	int tmp1 = (*A1);
-	u32b tmp2 = (*A2);
+	uint tmp2 = (*A2);
 
 	s64b_div(&tmp1, &tmp2, B1, B2);
 	s64b_mul(&tmp1, &tmp2, B1, B2);

@@ -5,10 +5,10 @@
 #endif
 
 FILE *loading_savefile;
-u32b loading_savefile_version;
+uint loading_savefile_version;
 byte load_xor_byte; // Old "encryption" byte.
-u32b v_check = 0L; // Simple "checksum" on the actual values.
-u32b x_check = 0L; // Simple "checksum" on the encoded bytes.
+uint v_check = 0L; // Simple "checksum" on the actual values.
+uint x_check = 0L; // Simple "checksum" on the encoded bytes.
 
 /*
  * Japanese Kanji code
@@ -79,19 +79,19 @@ void rd_s16b(short *ip) { rd_u16b((ushort *)ip); }
  * @brief ロードファイルポインタから符号なし32bit値を読み込んでポインタに渡す
  * @param ip 読み込みポインタ
  */
-void rd_u32b(u32b *ip)
+void rd_u32b(uint *ip)
 {
     (*ip) = sf_get();
-    (*ip) |= ((u32b)(sf_get()) << 8);
-    (*ip) |= ((u32b)(sf_get()) << 16);
-    (*ip) |= ((u32b)(sf_get()) << 24);
+    (*ip) |= ((uint)(sf_get()) << 8);
+    (*ip) |= ((uint)(sf_get()) << 16);
+    (*ip) |= ((uint)(sf_get()) << 24);
 }
 
 /*!
  * @brief ロードファイルポインタから符号つき32bit値を読み込んでポインタに渡す
  * @param ip 読み込みポインタ
  */
-void rd_s32b(int *ip) { rd_u32b((u32b *)ip); }
+void rd_s32b(int *ip) { rd_u32b((uint *)ip); }
 
 /*!
  * @brief ロードファイルポインタから文字列を読み込んでポインタに渡す / Hack -- read a string
@@ -158,7 +158,7 @@ void strip_bytes(int n)
  * @return bool ロード中のセーブファイルのバージョンが version より古いなら true
  *              version と等しいかより新しいなら false
  */
-bool loading_savefile_version_is_older_than(u32b version)
+bool loading_savefile_version_is_older_than(uint version)
 {
     return loading_savefile_version < version;
 }

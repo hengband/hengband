@@ -52,7 +52,7 @@ static bool wr_savefile_new(player_type *player_ptr, save_type type)
     compact_objects(player_ptr, 0);
     compact_monsters(player_ptr, 0);
 
-    u32b now = (u32b)time((time_t *)0);
+    uint now = (uint)time((time_t *)0);
     current_world_ptr->sf_system = 0L;
     current_world_ptr->sf_when = now;
     current_world_ptr->sf_saves++;
@@ -95,7 +95,7 @@ static bool wr_savefile_new(player_type *player_ptr, save_type type)
 
     wr_randomizer();
     wr_options(type);
-    u32b tmp32u = message_num();
+    uint tmp32u = message_num();
     if ((compress_savefile || (type == SAVE_TYPE_DEBUG)) && (tmp32u > 40))
         tmp32u = 40;
 

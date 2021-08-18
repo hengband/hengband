@@ -56,7 +56,7 @@ void rd_lore(monster_race *r_ptr, MONRACE_IDX r_idx)
     rd_u32b(&r_ptr->r_flags2);
     rd_u32b(&r_ptr->r_flags3);
     if (loading_savefile_version_is_older_than(3)) {
-        u32b f4, f5, f6;
+        uint f4, f5, f6;
         rd_u32b(&f4);
         rd_u32b(&f5);
         rd_u32b(&f6);
@@ -65,7 +65,7 @@ void rd_lore(monster_race *r_ptr, MONRACE_IDX r_idx)
         else
             rd_u32b(&r_ptr->r_flagsr);
 
-        auto migrate = [r_ptr](u32b f, int start_idx) {
+        auto migrate = [r_ptr](uint f, int start_idx) {
             std::bitset<32> flag_bits(f);
             for (size_t i = 0; i < flag_bits.size(); i++) {
                 auto ability = static_cast<RF_ABILITY>(start_idx + i);

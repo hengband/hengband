@@ -219,7 +219,7 @@ static short terrain_table[MAX_WILDERNESS][MAX_FEAT_IN_TERRAIN];
  * @param border 未使用
  * @param corner 広域マップの角部分としての生成ならばTRUE
  */
-static void generate_wilderness_area(floor_type *floor_ptr, int terrain, u32b seed, bool corner)
+static void generate_wilderness_area(floor_type *floor_ptr, int terrain, uint seed, bool corner)
 {
     if (terrain == TERRAIN_EDGE) {
         for (POSITION y1 = 0; y1 < MAX_HGT; y1++)
@@ -229,7 +229,7 @@ static void generate_wilderness_area(floor_type *floor_ptr, int terrain, u32b se
         return;
     }
 
-    u32b state_backup[4];
+    uint state_backup[4];
     Rand_state_backup(state_backup);
     Rand_state_set(seed);
     int table_size = sizeof(terrain_table[0]) / sizeof(short);
@@ -306,7 +306,7 @@ static void generate_area(player_type *player_ptr, POSITION y, POSITION x, bool 
             player_ptr->visit |= (1UL << (player_ptr->town_num - 1));
     } else {
         int terrain = wilderness[y][x].terrain;
-        u32b seed = wilderness[y][x].seed;
+        uint seed = wilderness[y][x].seed;
         generate_wilderness_area(floor_ptr, terrain, seed, corner);
     }
 
@@ -356,7 +356,7 @@ static void generate_area(player_type *player_ptr, POSITION y, POSITION x, bool 
     if (!is_winner)
         return;
 
-    u32b state_backup[4];
+    uint state_backup[4];
     Rand_state_backup(state_backup);
     Rand_state_set(wilderness[y][x].seed);
     int dy = rand_range(6, floor_ptr->height - 6);

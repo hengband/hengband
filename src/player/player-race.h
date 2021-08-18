@@ -103,7 +103,7 @@ struct player_race {
 
     byte infra{}; //!< 赤外線視力 / Infra-vision range
 
-    u32b choice{}; //!< 似つかわしい職業(ミミック時はミミック種族属性) / Legal class choices
+    uint choice{}; //!< 似つかわしい職業(ミミック時はミミック種族属性) / Legal class choices
     PlayerRaceLife life{}; //!< 生命の形態
     PlayerRaceFood food{}; //!< 食料の形態
 

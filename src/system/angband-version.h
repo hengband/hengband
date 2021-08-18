@@ -1,7 +1,5 @@
 ﻿#pragma once
 
-#include "system/h-type.h"
-
 #define VERSION_NAME "Hengband" /*!< バリアント名称 / Name of the version/variant */
 
 /*!
@@ -22,7 +20,7 @@
 /*!
  * @brief セーブファイルのバージョン(3.0.0から導入)
  */
-constexpr u32b SAVEFILE_VERSION = 5;
+constexpr uint32_t SAVEFILE_VERSION = 5;
 
 /*!
  * @brief バージョンが開発版が安定版かを返す(廃止予定)

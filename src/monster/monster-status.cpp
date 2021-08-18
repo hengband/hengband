@@ -30,7 +30,7 @@
 #include "monster/monster-description-types.h"
 #endif
 
-static u32b csleep_noise;
+static uint csleep_noise;
 
 /*!
  * @brief モンスターIDからPOWERFULフラグの有無を取得する /
@@ -181,7 +181,7 @@ static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_i
             break;
         }
 
-        auto notice = (u32b)randint0(1024);
+        auto notice = (uint)randint0(1024);
 
         /* Nightmare monsters are more alert */
         if (ironman_nightmare) {

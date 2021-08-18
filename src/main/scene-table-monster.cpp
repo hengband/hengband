@@ -19,7 +19,7 @@ struct scene_monster_info {
     MONSTER_IDX m_idx;
     monster_race *ap_r_ptr;
     GAME_TURN last_seen; //!< 最後に対象モンスター見たゲームターン
-    u32b mute_until; //!< この時間に到達するまでモンスターBGMは設定しない
+    uint mute_until; //!< この時間に到達するまでモンスターBGMは設定しない
 };
 
 scene_monster_info scene_target_monster;
@@ -60,7 +60,7 @@ static GAME_TURN get_game_turn()
  */
 void set_temp_mute_scene_monster(int sec)
 {
-    scene_target_monster.mute_until = (u32b)time(NULL) + sec;
+    scene_target_monster.mute_until = (uint)time(NULL) + sec;
 }
 
 /*!

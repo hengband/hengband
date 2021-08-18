@@ -255,8 +255,8 @@ bool save_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
 {
     FILE *old_fff = NULL;
     byte old_xor_byte = 0;
-    u32b old_v_stamp = 0;
-    u32b old_x_stamp = 0;
+    uint old_v_stamp = 0;
+    uint old_x_stamp = 0;
 
     char floor_savefile[sizeof(savefile) + 32];
     if ((mode & SLF_SECOND) != 0) {

@@ -207,7 +207,7 @@ void do_cmd_edit_autopick(player_type *player_ptr)
 	kill_yank_chain(tb);
 
 	process_autopick_file(player_ptr, buf);
-	current_world_ptr->start_time = (u32b)time(NULL);
+	current_world_ptr->start_time = (uint)time(NULL);
 	cx_save = tb->cx;
 	cy_save = tb->cy;
 }

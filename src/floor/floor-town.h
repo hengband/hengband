@@ -10,7 +10,7 @@ typedef struct store_type store_type;
  */
 typedef struct town_type {
 	GAME_TEXT name[32];
-	u32b seed;      /* Seed for RNG */
+	uint seed;      /* Seed for RNG */
 	store_type *store;    /* The stores [MAX_STORES] */
 	byte numstores;
 } town_type;

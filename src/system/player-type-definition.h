@@ -51,7 +51,7 @@ typedef struct player_type {
     EXP max_max_exp{}; /* Max max experience (only to calculate score) */
     EXP max_exp{}; /* Max experience */
     EXP exp{}; /* Cur experience */
-    u32b exp_frac{}; /* Cur exp frac (times 2^16) */
+    uint exp_frac{}; /* Cur exp frac (times 2^16) */
 
     PLAYER_LEVEL lev{}; /* Level */
 
@@ -66,12 +66,12 @@ typedef struct player_type {
 
     HIT_POINT mhp{}; /* Max hit pts */
     HIT_POINT chp{}; /* Cur hit pts */
-    u32b chp_frac{}; /* Cur hit frac (times 2^16) */
+    uint chp_frac{}; /* Cur hit frac (times 2^16) */
     PERCENTAGE mutant_regenerate_mod{};
 
     MANA_POINT msp{}; /* Max mana pts */
     MANA_POINT csp{}; /* Cur mana pts */
-    u32b csp_frac{}; /* Cur mana frac (times 2^16) */
+    uint csp_frac{}; /* Cur mana frac (times 2^16) */
 
     short max_plv{}; /* Max Player Level */
 
@@ -82,7 +82,7 @@ typedef struct player_type {
     short learned_spells{};
     short add_spells{};
 
-    u32b count{};
+    uint count{};
 
     TIME_EFFECT fast{}; /* Timed -- Fast */
     TIME_EFFECT slow{}; /* Timed -- Slow */

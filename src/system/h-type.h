@@ -61,8 +61,6 @@ typedef unsigned short ushort;
 typedef unsigned int uint;
 typedef unsigned long ulong;
 
-typedef uint32_t u32b;
-
 typedef short IDX; /*!< ゲーム中のID型を定義 */
 
 typedef short TOWN_IDX; /*!< ゲーム中の町ID型を定義 */
@@ -152,7 +150,7 @@ typedef int DICE_SID; /*!< ゲーム中のダイス面の型定義 */
 typedef int PRICE; /*!< ゲーム中の金額価値の型定義 */
 typedef short FEED; /*!< ゲーム中の滋養度の型定義 */
 
-typedef u32b STR_OFFSET; /*!< テキストオフセットの型定義 */
+typedef uint STR_OFFSET; /*!< テキストオフセットの型定義 */
 
 typedef int POWER; /*!< 魔法の効力定義*/
 
@@ -160,12 +158,12 @@ typedef int DEPTH; /*!< ゲーム中の階層レベルの型定義 */
 typedef byte RARITY; /*!< ゲーム中の希少度の型定義 */
 
 typedef int GAME_TURN; /*!< ゲーム中のターンの型定義 */
-typedef u32b REAL_TIME; /*!< 実時刻の型定義 */
+typedef uint REAL_TIME; /*!< 実時刻の型定義 */
 
 typedef int PERCENTAGE; /*!< ゲーム中のパーセント表記の型定義(/100倍) */
 typedef short MULTIPLY; /*!< ゲーム中の倍率の型定義(/10倍) */
 
-typedef u32b BIT_FLAGS; /*!< 32ビットのフラグ配列の型定義 */
+typedef uint BIT_FLAGS; /*!< 32ビットのフラグ配列の型定義 */
 typedef ushort BIT_FLAGS16; /*!< 16ビットのフラグ配列の型定義 */
 typedef byte BIT_FLAGS8; /*!< 8ビットのフラグ配列の型定義 */
 

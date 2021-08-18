@@ -155,7 +155,7 @@ void rd_item(player_type *player_ptr, object_type *o_ptr)
 
     if (flags & SAVE_ITEM_CURSE_FLAGS) {
         if (loading_savefile_version_is_older_than(5)) {
-            u32b tmp32u;
+            uint tmp32u;
             rd_u32b(&tmp32u);
             std::bitset<32> rd_bits_cursed_flags(tmp32u);
             for (size_t i = 0; i < std::min(o_ptr->curse_flags.size(), rd_bits_cursed_flags.size()); i++) {

@@ -341,7 +341,7 @@ bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
     }
 
     if (ironman_nightmare) {
-        u32b hp = m_ptr->max_maxhp * 2L;
+        uint hp = m_ptr->max_maxhp * 2L;
 
         m_ptr->max_maxhp = (HIT_POINT)MIN(30000, hp);
     }

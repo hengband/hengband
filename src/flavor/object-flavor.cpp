@@ -227,7 +227,7 @@ static void shuffle_flavors(tval_type tval)
  */
 void flavor_init(void)
 {
-    u32b state_backup[4];
+    uint state_backup[4];
     Rand_state_backup(state_backup);
     Rand_state_set(current_world_ptr->seed_flavor);
     for (KIND_OBJECT_IDX i = 0; i < max_k_idx; i++) {

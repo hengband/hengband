@@ -90,7 +90,7 @@ void known_obj_immunity(player_type *creature_ptr, BIT_FLAGS *flags)
 
 	for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++)
 	{
-		u32b o_flags[TR_FLAG_SIZE];
+		uint o_flags[TR_FLAG_SIZE];
 		object_type *o_ptr;
 		o_ptr = &creature_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;

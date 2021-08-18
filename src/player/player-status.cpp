@@ -2926,8 +2926,8 @@ long calc_score(player_type *creature_ptr)
         if (max_dlv[i] > max_dl)
             max_dl = max_dlv[i];
 
-    u32b point_l = (creature_ptr->max_max_exp + (100 * max_dl));
-    u32b point_h = point_l / 0x10000L;
+    uint point_l = (creature_ptr->max_max_exp + (100 * max_dl));
+    uint point_h = point_l / 0x10000L;
     point_l = point_l % 0x10000L;
     point_h *= mult;
     point_l *= mult;
@@ -2938,7 +2938,7 @@ long calc_score(player_type *creature_ptr)
     point_h /= 100;
     point_l /= 100;
 
-    u32b point = (point_h << 16) + (point_l);
+    uint point = (point_h << 16) + (point_l);
     if (creature_ptr->arena_number >= 0)
         point += (arena_win * arena_win * (arena_win > 29 ? 1000 : 100));
 

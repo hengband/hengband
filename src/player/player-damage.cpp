@@ -556,7 +556,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
  * @param dam_func ダメージ処理を行う関数の参照ポインタ
  * @param message オーラダメージを受けた際のメッセージ
  */
-static void process_aura_damage(monster_type *m_ptr, player_type *touched_ptr, bool immune, int flags_offset, int r_flags_offset, u32b aura_flag,
+static void process_aura_damage(monster_type *m_ptr, player_type *touched_ptr, bool immune, int flags_offset, int r_flags_offset, uint aura_flag,
     HIT_POINT (*dam_func)(player_type *creature_type, HIT_POINT dam, concptr kb_str, bool aura), concptr message)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];

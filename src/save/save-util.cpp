@@ -2,8 +2,8 @@
 
 FILE *saving_savefile; /* Current save "file" */
 byte save_xor_byte; /* Simple encryption */
-u32b v_stamp = 0L; /* A simple "checksum" on the actual values */
-u32b x_stamp = 0L; /* A simple "checksum" on the encoded bytes */
+uint v_stamp = 0L; /* A simple "checksum" on the actual values */
+uint x_stamp = 0L; /* A simple "checksum" on the encoded bytes */
 
 /*!
  * @brief 1バイトをファイルに書き込む / These functions place information into a savefile a byte at a time
@@ -46,7 +46,7 @@ void wr_s16b(short v) { wr_u16b((ushort)v); }
  * @brief 符号なし32ビットをファイルに書き込む
  * @param v 書き込む符号なし32bit値
  */
-void wr_u32b(u32b v)
+void wr_u32b(uint v)
 {
     wr_byte((byte)(v & 0xFF));
     wr_byte((byte)((v >> 8) & 0xFF));
@@ -58,7 +58,7 @@ void wr_u32b(u32b v)
  * @brief 符号あり32ビットをファイルに書き込む
  * @param v 書き込む符号あり32bit値
  */
-void wr_s32b(int v) { wr_u32b((u32b)v); }
+void wr_s32b(int v) { wr_u32b((uint)v); }
 
 /*!
  * @brief 文字列をファイルに書き込む

@@ -31,7 +31,7 @@ typedef struct wilderness_type {
 	wt_type terrain;
 	TOWN_IDX town;
 	int road;
-	u32b seed;
+	uint seed;
 	DEPTH level;
 	byte entrance;
 } wilderness_type;

@@ -258,10 +258,10 @@ void wiz_identify_full_inventory(player_type *caster_ptr)
  */
 static void prt_alloc(tval_type tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row, TERM_LEN col)
 {
-    u32b rarity[K_MAX_DEPTH];
-    (void)C_WIPE(rarity, K_MAX_DEPTH, u32b);
-    u32b total[K_MAX_DEPTH];
-    (void)C_WIPE(total, K_MAX_DEPTH, u32b);
+    uint rarity[K_MAX_DEPTH];
+    (void)C_WIPE(rarity, K_MAX_DEPTH, uint);
+    uint total[K_MAX_DEPTH];
+    (void)C_WIPE(total, K_MAX_DEPTH, uint);
     int display[22];
     (void)C_WIPE(display, 22, int);
 
@@ -319,7 +319,7 @@ static void prt_alloc(tval_type tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row, T
  */
 static void prt_binary(BIT_FLAGS flags, const int row, int col)
 {
-    u32b bitmask;
+    uint bitmask;
     for (int i = bitmask = 1; i <= 32; i++, bitmask *= 2)
         if (flags & bitmask)
             term_putch(col++, row, TERM_BLUE, '*');
@@ -405,8 +405,8 @@ static void wiz_statistics(player_type *caster_ptr, object_type *o_ptr)
     if (object_is_fixed_artifact(o_ptr))
         a_info[o_ptr->name1].cur_num = 0;
 
-    u32b i, matches, better, worse, other, correct;
-    u32b test_roll = 1000000;
+    uint i, matches, better, worse, other, correct;
+    uint test_roll = 1000000;
     char ch;
     concptr quality;
     BIT_FLAGS mode;

@@ -143,11 +143,11 @@ static unsigned long create_pixel(Display *dpy, byte red, byte green, byte blue)
  */
 typedef struct BITMAPFILEHEADER
 {
-	u16b bfType;
-	u32b bfSize;
-	u16b bfReserved1;
-	u16b bfReserved2;
-	u32b bfOffBits;
+	ushort bfType;
+	uint bfSize;
+	ushort bfReserved1;
+	ushort bfReserved2;
+	uint bfOffBits;
 } BITMAPFILEHEADER;
 
 /*
@@ -155,17 +155,17 @@ typedef struct BITMAPFILEHEADER
  */
 typedef struct BITMAPINFOHEADER
 {
-	u32b biSize;
-	u32b biWidth;
-	u32b biHeight;
-	u16b biPlanes;
-	u16b biBitCount;
-	u32b biCompresion;
-	u32b biSizeImage;
-	u32b biXPelsPerMeter;
-	u32b biYPelsPerMeter;
-	u32b biClrUsed;
-	u32b biClrImportand;
+	uint biSize;
+	uint biWidth;
+	uint biHeight;
+	ushort biPlanes;
+	ushort biBitCount;
+	uint biCompresion;
+	uint biSizeImage;
+	uint biXPelsPerMeter;
+	uint biYPelsPerMeter;
+	uint biClrUsed;
+	uint biClrImportand;
 } BITMAPINFOHEADER;
 
 /*
@@ -191,18 +191,18 @@ static void rd_byte(FILE *fff, byte *ip)
 	*ip = get_byte(fff);
 }
 
-static void rd_u16b(FILE *fff, u16b *ip)
+static void rd_u16b(FILE *fff, ushort *ip)
 {
 	(*ip) = get_byte(fff);
-	(*ip) |= ((u16b)(get_byte(fff)) << 8);
+	(*ip) |= ((ushort)(get_byte(fff)) << 8);
 }
 
-static void rd_u32b(FILE *fff, u32b *ip)
+static void rd_u32b(FILE *fff, uint *ip)
 {
 	(*ip) = get_byte(fff);
-	(*ip) |= ((u32b)(get_byte(fff)) << 8);
-	(*ip) |= ((u32b)(get_byte(fff)) << 16);
-	(*ip) |= ((u32b)(get_byte(fff)) << 24);
+	(*ip) |= ((uint)(get_byte(fff)) << 8);
+	(*ip) |= ((uint)(get_byte(fff)) << 16);
+	(*ip) |= ((uint)(get_byte(fff)) << 24);
 }
 
 

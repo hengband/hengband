@@ -57,19 +57,19 @@ ushort Rand_place;
  * Current "state" table for the RNG
  * Only index 0 to 3 are used
  */
-u32b Rand_state[RAND_DEG] = {
+uint Rand_state[RAND_DEG] = {
     123456789,
     362436069,
     521288629,
     88675123,
 };
 
-static u32b u32b_rotl(const u32b x, int k) { return (x << k) | (x >> (32 - k)); }
+static uint u32b_rotl(const uint x, int k) { return (x << k) | (x >> (32 - k)); }
 
 /*
  * Initialize RNG state
  */
-static void Rand_seed(u32b seed, u32b *state)
+static void Rand_seed(uint seed, uint *state)
 {
     int i;
 
@@ -82,11 +82,11 @@ static void Rand_seed(u32b seed, u32b *state)
 /*
  * Xoshiro128** Algorithm
  */
-static u32b Rand_Xoshiro128starstar(u32b *state)
+static uint Rand_Xoshiro128starstar(uint *state)
 {
-    const u32b result = u32b_rotl(state[1] * 5, 7) * 9;
+    const uint result = u32b_rotl(state[1] * 5, 7) * 9;
 
-    const u32b t = state[1] << 9;
+    const uint t = state[1] << 9;
 
     state[2] ^= state[0];
     state[3] ^= state[1];
@@ -100,12 +100,12 @@ static u32b Rand_Xoshiro128starstar(u32b *state)
     return result;
 }
 
-static const u32b Rand_Xorshift_max = 0xFFFFFFFF;
+static const uint Rand_Xorshift_max = 0xFFFFFFFF;
 
 /*
  * Initialize the RNG using a new seed
  */
-void Rand_state_set(u32b seed) { Rand_seed(seed, Rand_state); }
+void Rand_state_set(uint seed) { Rand_seed(seed, Rand_state); }
 
 void Rand_state_init(void)
 {
@@ -135,7 +135,7 @@ void Rand_state_init(void)
 #else
 
     /* Basic seed */
-    u32b seed = (time(NULL));
+    uint seed = (time(NULL));
 #ifdef SET_UID
     /* Mutate the seed on Unix machines */
     seed = ((seed >> 3) * (getpid() << 1));
@@ -149,7 +149,7 @@ void Rand_state_init(void)
 /*
  * Backup the RNG state
  */
-void Rand_state_backup(u32b *backup_state)
+void Rand_state_backup(uint *backup_state)
 {
     int i;
 
@@ -161,7 +161,7 @@ void Rand_state_backup(u32b *backup_state)
 /*
  * Restore the RNG state
  */
-void Rand_state_restore(u32b *backup_state)
+void Rand_state_restore(uint *backup_state)
 {
     int i;
 
@@ -173,11 +173,11 @@ void Rand_state_restore(u32b *backup_state)
 /*
  * Extract a "random" number from 0 to m-1, via "ENERGY_DIVISION"
  */
-static int Rand_div_impl(int m, u32b *state)
+static int Rand_div_impl(int m, uint *state)
 {
-    u32b scaling;
-    u32b past;
-    u32b ret;
+    uint scaling;
+    uint past;
+    uint ret;
 
     /* Hack -- simple case */
     if (m <= 1)
@@ -361,11 +361,11 @@ int div_round(int n, int d)
 int Rand_external(int m)
 {
     static bool initialized = false;
-    static u32b Rand_state_external[4];
+    static uint Rand_state_external[4];
 
     if (!initialized) {
         /* Initialize with new seed */
-        u32b seed = (u32b)time(NULL);
+        uint seed = (uint)time(NULL);
         Rand_seed(seed, Rand_state_external);
         initialized = true;
     }
