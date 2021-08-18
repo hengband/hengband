@@ -314,11 +314,11 @@ bool set_hero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 /*!
  * @brief 変身効果の継続時間と変身先をセットする / Set "tim_mimic", and "mimic_form", notice observable changes
  * @param v 継続時間
- * @param p 変身内容
+ * @param mimic_race_idx 変身内容
  * @param do_dec 現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_mimic(player_type *creature_ptr, TIME_EFFECT v, MIMIC_RACE_IDX p, bool do_dec)
+bool set_mimic(player_type *creature_ptr, TIME_EFFECT v, int16_t mimic_race_idx, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
@@ -327,12 +327,12 @@ bool set_mimic(player_type *creature_ptr, TIME_EFFECT v, MIMIC_RACE_IDX p, bool 
         return false;
 
     if (v) {
-        if (creature_ptr->tim_mimic && (creature_ptr->mimic_form == p) && !do_dec) {
+        if (creature_ptr->tim_mimic && (creature_ptr->mimic_form == mimic_race_idx) && !do_dec) {
             if (creature_ptr->tim_mimic > v)
                 return false;
-        } else if ((!creature_ptr->tim_mimic) || (creature_ptr->mimic_form != p)) {
+        } else if ((!creature_ptr->tim_mimic) || (creature_ptr->mimic_form != mimic_race_idx)) {
             msg_print(_("自分の体が変わってゆくのを感じた。", "You feel that your body changes."));
-            creature_ptr->mimic_form = p;
+            creature_ptr->mimic_form = mimic_race_idx;
             notice = true;
         }
     }
@@ -344,7 +344,7 @@ bool set_mimic(player_type *creature_ptr, TIME_EFFECT v, MIMIC_RACE_IDX p, bool 
                 set_oppose_fire(creature_ptr, 0, true);
             creature_ptr->mimic_form = 0;
             notice = true;
-            p = 0;
+            mimic_race_idx = 0;
         }
     }
 
