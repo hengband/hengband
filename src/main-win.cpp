@@ -573,22 +573,6 @@ static bool change_bg_mode(bg_mode new_mode, bool show_error = false, bool force
 }
 
 /*!
- * @brief Resize a window
- */
-static void term_window_resize(term_data *td)
-{
-    if (!td->w)
-        return;
-
-    SetWindowPos(td->w, 0, 0, 0, td->size_wid, td->size_hgt, SWP_NOMOVE | SWP_NOZORDER);
-    if (!td->size_hack) {
-        td->dispose_offscreen();
-        term_activate(&td->t);
-        term_redraw();
-    }
-}
-
-/*!
  * @brief Force the use of a new font for a term_data.
  * This function may be called before the "window" is ready.
  * This function returns zero only if everything succeeds.
@@ -644,7 +628,7 @@ static void term_change_font(term_data *td)
     td->tile_wid = td->font_wid;
     td->tile_hgt = td->font_hgt;
     td->adjust_size();
-    term_window_resize(td);
+    td->resize_window();
 }
 
 /*!
@@ -738,7 +722,7 @@ static void rebuild_term(term_data *td, bool resize_window = true)
     term_activate(&td->t);
     td->adjust_size();
     if (resize_window) {
-        term_window_resize(td);
+        td->resize_window();
     }
     td->dispose_offscreen();
     term_resize(td->cols, td->rows);
@@ -1310,7 +1294,7 @@ static void init_windows(void)
         if (!td->tile_hgt)
             td->tile_hgt = td->font_hgt;
         td->adjust_size();
-        term_window_resize(td);
+        td->resize_window();
     }
 
     /* Create sub windows */
@@ -1327,7 +1311,7 @@ static void init_windows(void)
 
         td->size_hack = true;
         td->adjust_size();
-        term_window_resize(td);
+        td->resize_window();
 
         if (td->visible) {
             ShowWindow(td->w, SW_SHOW);
@@ -1362,7 +1346,7 @@ static void init_windows(void)
     /* Resize */
     td->size_hack = true;
     td->adjust_size();
-    term_window_resize(td);
+    td->resize_window();
     td->size_hack = false;
 
     term_data_link(td);
@@ -1676,7 +1660,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         td = &data[i];
         td->tile_wid += 1;
         td->adjust_size();
-        term_window_resize(td);
+        td->resize_window();
         break;
     }
     case IDM_WINDOW_D_WID_0:
@@ -1694,7 +1678,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         td = &data[i];
         td->tile_wid -= 1;
         td->adjust_size();
-        term_window_resize(td);
+        td->resize_window();
         break;
     }
     case IDM_WINDOW_I_HGT_0:
@@ -1712,7 +1696,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         td = &data[i];
         td->tile_hgt += 1;
         td->adjust_size();
-        term_window_resize(td);
+        td->resize_window();
         break;
     }
     case IDM_WINDOW_D_HGT_0:
@@ -1730,7 +1714,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         td = &data[i];
         td->tile_hgt -= 1;
         td->adjust_size();
-        term_window_resize(td);
+        td->resize_window();
         break;
     }
     case IDM_WINDOW_KEEP_SUBWINDOWS: {

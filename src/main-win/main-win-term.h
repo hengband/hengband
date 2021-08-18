@@ -91,6 +91,7 @@ struct term_data {
     bool render(const RECT &rect);
     void dispose_offscreen();
     bool is_main_term();
+    void resize_window();
     void adjust_size();
 };
 
