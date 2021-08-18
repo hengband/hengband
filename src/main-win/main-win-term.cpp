@@ -841,34 +841,36 @@ bool term_data::handle_window_resize(UINT uMsg, WPARAM wParam, LPARAM lParam)
         const LONG tmp_height = min_rows * this->tile_hgt + this->size_oh1 + this->size_oh2 + 1;
         RECT rc{ 0, 0, tmp_width, tmp_height };
         AdjustWindowRectEx(&rc, this->dwStyle, TRUE, this->dwExStyle);
-
         auto *lpmmi = (MINMAXINFO *)lParam;
         lpmmi->ptMinTrackSize.x = rc.right - rc.left;
         lpmmi->ptMinTrackSize.y = rc.bottom - rc.top;
-
         return true;
     }
     case WM_EXITSIZEMOVE:
         this->fit_size_to_window(true);
         return true;
-    case WM_WINDOWPOSCHANGED: {
-        if (this->size_hack) {
-            return false;
-        }
-
-        auto *pos = (WINDOWPOS *)lParam;
-        if (none_bits(pos->flags, SWP_NOCOPYBITS | SWP_NOSIZE)) {
-            this->fit_size_to_window();
-            return true;
-        }
-
-        return false;
-    }
+    case WM_WINDOWPOSCHANGED:
+        return handle_window_position_change(lParam);
     case WM_SIZE:
         return handle_window_max_min(wParam);
     default:
         return false;
     }
+}
+
+bool term_data::handle_window_position_change(const LPARAM lParam)
+{
+    if (this->size_hack) {
+        return false;
+    }
+
+    auto *pos = (WINDOWPOS *)lParam;
+    if (none_bits(pos->flags, SWP_NOCOPYBITS | SWP_NOSIZE)) {
+        this->fit_size_to_window();
+        return true;
+    }
+
+    return false;
 }
 
 bool term_data::handle_window_max_min(const WPARAM wParam)
