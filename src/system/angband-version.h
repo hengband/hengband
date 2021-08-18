@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include <stdint.h>
+
 #define VERSION_NAME "Hengband" /*!< バリアント名称 / Name of the version/variant */
 
 /*!
