@@ -132,6 +132,7 @@ private:
     static errr extra_win_music(int n, int v);
     static errr extra_win_scene(int v);
     static int extra_win_delay(int v);
+    bool handle_window_max_min(const WPARAM wParam);
 };
 
 constexpr int MAX_TERM_DATA = 8; //!< Maximum number of windows
