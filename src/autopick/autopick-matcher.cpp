@@ -32,9 +32,8 @@
 #include "system/player-type-definition.h"
 #include "util/string-processor.h"
 
-/*
- * A function for Auto-picker/destroyer
- * Examine whether the object matches to the entry
+/*!
+ * @brief A function for Auto-picker/destroyer Examine whether the object matches to the entry
  */
 bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_type *entry, concptr o_name)
 {

@@ -3,8 +3,8 @@
 #include "autopick/autopick-util.h"
 #include "system/angband.h"
 
-/*
- * Initialize the autopick
+/*!
+ * @brief Initialize the autopick
  */
 void init_autopick(void)
 {

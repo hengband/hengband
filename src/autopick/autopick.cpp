@@ -34,8 +34,8 @@
 #include "view/display-messages.h"
 #include "window/display-sub-windows.h"
 
-/*
- *  Auto-destroy marked item
+/*!
+ * @brief Auto-destroy marked item
  */
 static void autopick_delayed_alter_aux(player_type *player_ptr, INVENTORY_IDX item)
 {
@@ -57,15 +57,14 @@ static void autopick_delayed_alter_aux(player_type *player_ptr, INVENTORY_IDX it
     msg_format(_("%sを自動破壊します。", "Auto-destroying %s."), o_name);
 }
 
-/*
- *  Auto-destroy marked items in inventry and on floor
+/*!
+ * @brief Auto-destroy marked items in inventry and on floor
+ * @details  
+ * Scan inventry in reverse order to prevent
+ * skipping after inven_item_optimize()
  */
 void autopick_delayed_alter(player_type *owner_ptr)
 {
-    /*
-     * Scan inventry in reverse order to prevent
-     * skipping after inven_item_optimize()
-     */
     for (INVENTORY_IDX item = INVEN_TOTAL - 1; item >= 0; item--)
         autopick_delayed_alter_aux(owner_ptr, item);
 
@@ -79,9 +78,9 @@ void autopick_delayed_alter(player_type *owner_ptr)
     fix_floor_item_list(owner_ptr, owner_ptr->y, owner_ptr->x);
 }
 
-/*
- * Auto-inscription and/or destroy
- *
+/*!
+ * @brief Auto-inscription and/or destroy
+ * @details
  * Auto-destroyer works only on inventory or on floor stack only when
  * requested.
  */
@@ -95,8 +94,8 @@ void autopick_alter_item(player_type *player_ptr, INVENTORY_IDX item, bool destr
         auto_destroy_item(player_ptr, o_ptr, idx);
 }
 
-/*
- * Automatically pickup/destroy items in this grid.
+/*!
+ * @brief Automatically pickup/destroy items in this grid.
  */
 void autopick_pickup_items(player_type *player_ptr, grid_type *g_ptr)
 {

@@ -9,8 +9,8 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 
-/*
- * Load an autopick preference file
+/*!
+ * @brief Load an autopick preference file
  */
 void autopick_load_pref(player_type *player_ptr, bool disp_mes)
 {
@@ -35,8 +35,8 @@ void autopick_load_pref(player_type *player_ptr, bool disp_mes)
     }
 }
 
-/*
- *  Get file name for autopick preference
+/*!
+ * @brief Get file name for autopick preference
  */
 concptr pickpref_filename(player_type *player_ptr, int filename_mode)
 {
@@ -54,8 +54,8 @@ concptr pickpref_filename(player_type *player_ptr, int filename_mode)
     }
 }
 
-/*
- * Read whole lines of a file to memory
+/*!
+ * @brief Read whole lines of a file to memory
  */
 static concptr *read_text_lines(concptr filename)
 {
@@ -84,8 +84,8 @@ static concptr *read_text_lines(concptr filename)
     return lines_list;
 }
 
-/*
- * Copy the default autopick file to the user directory
+/*!
+ * @brief Copy the default autopick file to the user directory
  */
 static void prepare_default_pickpref(player_type *player_ptr)
 {
@@ -129,8 +129,8 @@ static void prepare_default_pickpref(player_type *player_ptr)
     angband_fclose(pref_fp);
 }
 
-/*
- * Read an autopick prefence file to memory
+/*!
+ * @brief Read an autopick prefence file to memory
  * Prepare default if no user file is found
  */
 concptr *read_pickpref_text_lines(player_type *player_ptr, int *filename_mode_p)
@@ -161,8 +161,8 @@ concptr *read_pickpref_text_lines(player_type *player_ptr, int *filename_mode_p)
     return lines_list;
 }
 
-/*
- * Write whole lines of memory to a file.
+/*!
+ * @brief Write whole lines of memory to a file.
  */
 bool write_text_lines(concptr filename, concptr *lines_list)
 {

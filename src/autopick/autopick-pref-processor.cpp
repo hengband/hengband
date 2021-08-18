@@ -3,8 +3,8 @@
 #include "autopick/autopick-util.h"
 #include "system/angband.h"
 
-/*
- *  Process line for auto picker/destroyer.
+/*!
+ * @brief Process line for auto picker/destroyer.
  */
 void process_autopick_file_command(char *buf)
 {

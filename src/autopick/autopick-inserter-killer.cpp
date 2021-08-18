@@ -10,9 +10,8 @@
 #include "term/screen-processor.h"
 #include "util/string-processor.h"
 
-/*
- * Check if this line is expression or not.
- * And update it if it is.
+/*!
+ * @brief Check if this line is expression or not. And update it if it is.
  */
 void check_expression_line(text_body_type *tb, int y)
 {
@@ -36,8 +35,8 @@ bool can_insert_line(text_body_type *tb, int add_num)
     return !is_greater_autopick_max_line(count + add_num);
 }
 
-/*
- * Insert return code and split the line
+/*!
+ * @brief Insert return code and split the line
  */
 bool insert_return_code(text_body_type *tb)
 {
@@ -72,8 +71,8 @@ bool insert_return_code(text_body_type *tb)
     return true;
 }
 
-/*
- * Get a trigger key and insert ASCII string for the trigger
+/*!
+ * @brief Get a trigger key and insert ASCII string for the trigger
  */
 bool insert_macro_line(text_body_type *tb)
 {
@@ -118,8 +117,8 @@ bool insert_macro_line(text_body_type *tb)
     return true;
 }
 
-/*
- * Get a command key and insert ASCII string for the key
+/*!
+ * @brief Get a command key and insert ASCII string for the key
  */
 bool insert_keymap_line(text_body_type *tb)
 {
@@ -160,8 +159,8 @@ bool insert_keymap_line(text_body_type *tb)
     return true;
 }
 
-/*
- * Insert single letter at cursor position.
+/*!
+ * @brief Insert single letter at cursor position.
  */
 void insert_single_letter(text_body_type *tb, int key)
 {
@@ -207,8 +206,8 @@ void insert_single_letter(text_body_type *tb, int key)
     tb->changed = true;
 }
 
-/*
- * Kill segment of a line
+/*!
+ * @brief Kill segment of a line
  */
 void kill_line_segment(text_body_type *tb, int y, int x0, int x1, bool whole)
 {

@@ -58,8 +58,8 @@ static bool is_leave_special_item(player_type *player_ptr, object_type *o_ptr)
     return true;
 }
 
-/*
- * Automatically destroy items in this grid.
+/*!
+ * @brief Automatically destroy items in this grid.
  */
 static bool is_opt_confirm_destroy(player_type *player_ptr, object_type *o_ptr)
 {
