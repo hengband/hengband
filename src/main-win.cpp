@@ -633,27 +633,6 @@ static void change_graphics_mode(graphics_mode mode)
 }
 
 /*!
- * @brief ターミナルのサイズ更新
- * @details 行数、列数の変更に対応する。
- * @param td term_dataのポインタ
- * @param resize_window trueの場合に再計算されたウインドウサイズにリサイズする
- */
-static void rebuild_term(term_data *td, bool resize_window = true)
-{
-    term_type *old = Term;
-    td->size_hack = true;
-    term_activate(&td->t);
-    td->adjust_size();
-    if (resize_window) {
-        td->resize_window();
-    }
-    td->dispose_offscreen();
-    term_resize(td->cols, td->rows);
-    td->size_hack = false;
-    term_activate(old);
-}
-
-/*!
  * @brief React to global changes
  */
 static errr term_xtra_win_react(player_type *player_ptr)
@@ -669,7 +648,7 @@ static errr term_xtra_win_react(player_type *player_ptr)
     for (int i = 0; i < MAX_TERM_DATA; i++) {
         term_data *td = &data[i];
         if ((td->cols != td->t.wid) || (td->rows != td->t.hgt)) {
-            rebuild_term(td);
+            td->rebuild();
         }
     }
 
@@ -1682,7 +1661,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
     case IDM_OPTIONS_BIGTILE: {
         td = &data[0];
         arg_bigtile = !arg_bigtile;
-        rebuild_term(td);
+        td->rebuild();
         break;
     }
     case IDM_OPTIONS_MUSIC: {
@@ -1920,7 +1899,7 @@ static void fit_term_size_to_window(term_data *td, bool recalc_window_size = fal
             normsize.y = td->rows;
         }
 
-        rebuild_term(td, recalc_window_size);
+        td->rebuild(recalc_window_size);
 
         if (!td->is_main_term()) {
             p_ptr->window_flags = PW_ALL;

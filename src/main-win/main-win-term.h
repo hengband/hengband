@@ -97,6 +97,7 @@ struct term_data {
     void change_font();
     void set_window_position(HWND hWnd);
     void redraw_data();
+    void rebuild(bool resize_window = true);
 };
 
 constexpr int MAX_TERM_DATA = 8; //!< Maximum number of windows
