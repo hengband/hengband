@@ -38,7 +38,12 @@
 
 /*** Special 4 letter names for some standard types ***/
 typedef void *vptr; /*!< void型ポインタ定義 / A standard pointer (to "void" because ANSI C says so) */
-typedef const char *concptr; /*!< 文字列定数用ポインタ定義 / A simple pointer (to unmodifiable strings) */
+
+/*!
+ * @brief 文字列定数用ポインタ定義 / Unmodifiable strings
+ * @todo std::stringに置換したい.
+ */
+typedef const char *concptr;
 
 /*!
  * @brief エラーコードの定義 / Error codes for function return values
