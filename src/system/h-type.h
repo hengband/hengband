@@ -186,7 +186,6 @@ typedef int EFFECT_ID; /*!< 効果属性ID */
 
 typedef short ACTION_SKILL_POWER; /*!< 行動技能値 */
 
-typedef int PET_COMMAND_IDX; /*!< ペットへの指示ID */
 typedef byte FF_FLAGS_IDX; /*!< 地形特性ID */
 
 typedef short FEAT_PRIORITY; /*!< 地形の縮小表示優先順位 */
