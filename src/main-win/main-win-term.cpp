@@ -101,3 +101,41 @@ bool term_data::is_main_term()
 {
     return (this == &data[0]);
 }
+
+/*!
+ * @brief (Windows版固有実装) / Adjust the "size" for a window
+ */
+void term_data::adjust_size()
+{
+    if (this->cols < 1) {
+        this->cols = 1;
+    }
+
+    if (this->rows < 1) {
+        this->rows = 1;
+    }
+
+    TERM_LEN wid = this->cols * this->tile_wid + this->size_ow1 + this->size_ow2;
+    TERM_LEN hgt = this->rows * this->tile_hgt + this->size_oh1 + this->size_oh2;
+
+    RECT rw, rc;
+    if (this->w) {
+        GetWindowRect(this->w, &rw);
+        GetClientRect(this->w, &rc);
+
+        this->size_wid = (rw.right - rw.left) - (rc.right - rc.left) + wid;
+        this->size_hgt = (rw.bottom - rw.top) - (rc.bottom - rc.top) + hgt;
+
+        this->pos_x = rw.left;
+        this->pos_y = rw.top;
+    } else {
+        /* Tempolary calculation */
+        rc.left = 0;
+        rc.right = wid;
+        rc.top = 0;
+        rc.bottom = hgt;
+        AdjustWindowRectEx(&rc, this->dwStyle, TRUE, this->dwExStyle);
+        this->size_wid = rc.right - rc.left;
+        this->size_hgt = rc.bottom - rc.top;
+    }
+}

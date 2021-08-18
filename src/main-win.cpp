@@ -271,41 +271,6 @@ static void validate_dir(concptr s, bool vital)
 }
 
 /*!
- * @brief (Windows版固有実装)Get the "size" for a window
- */
-static void term_getsize(term_data *td)
-{
-    if (td->cols < 1)
-        td->cols = 1;
-    if (td->rows < 1)
-        td->rows = 1;
-
-    TERM_LEN wid = td->cols * td->tile_wid + td->size_ow1 + td->size_ow2;
-    TERM_LEN hgt = td->rows * td->tile_hgt + td->size_oh1 + td->size_oh2;
-
-    RECT rw, rc;
-    if (td->w) {
-        GetWindowRect(td->w, &rw);
-        GetClientRect(td->w, &rc);
-
-        td->size_wid = (rw.right - rw.left) - (rc.right - rc.left) + wid;
-        td->size_hgt = (rw.bottom - rw.top) - (rc.bottom - rc.top) + hgt;
-
-        td->pos_x = rw.left;
-        td->pos_y = rw.top;
-    } else {
-        /* Tempolary calculation */
-        rc.left = 0;
-        rc.right = wid;
-        rc.top = 0;
-        rc.bottom = hgt;
-        AdjustWindowRectEx(&rc, td->dwStyle, TRUE, td->dwExStyle);
-        td->size_wid = rc.right - rc.left;
-        td->size_hgt = rc.bottom - rc.top;
-    }
-}
-
-/*!
  * @brief Write the "prefs" for a single term
  */
 static void save_prefs_aux(int i)
@@ -678,7 +643,7 @@ static void term_change_font(term_data *td)
     term_force_font(td);
     td->tile_wid = td->font_wid;
     td->tile_hgt = td->font_hgt;
-    term_getsize(td);
+    td->adjust_size();
     term_window_resize(td);
 }
 
@@ -771,7 +736,7 @@ static void rebuild_term(term_data *td, bool resize_window = true)
     term_type *old = Term;
     td->size_hack = true;
     term_activate(&td->t);
-    term_getsize(td);
+    td->adjust_size();
     if (resize_window) {
         term_window_resize(td);
     }
@@ -1344,7 +1309,7 @@ static void init_windows(void)
             td->tile_wid = td->font_wid;
         if (!td->tile_hgt)
             td->tile_hgt = td->font_hgt;
-        term_getsize(td);
+        td->adjust_size();
         term_window_resize(td);
     }
 
@@ -1361,7 +1326,7 @@ static void init_windows(void)
             quit(_("サブウィンドウに作成に失敗しました", "Failed to create sub-window"));
 
         td->size_hack = true;
-        term_getsize(td);
+        td->adjust_size();
         term_window_resize(td);
 
         if (td->visible) {
@@ -1396,7 +1361,7 @@ static void init_windows(void)
 
     /* Resize */
     td->size_hack = true;
-    term_getsize(td);
+    td->adjust_size();
     term_window_resize(td);
     td->size_hack = false;
 
@@ -1710,7 +1675,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 
         td = &data[i];
         td->tile_wid += 1;
-        term_getsize(td);
+        td->adjust_size();
         term_window_resize(td);
         break;
     }
@@ -1728,7 +1693,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 
         td = &data[i];
         td->tile_wid -= 1;
-        term_getsize(td);
+        td->adjust_size();
         term_window_resize(td);
         break;
     }
@@ -1746,7 +1711,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 
         td = &data[i];
         td->tile_hgt += 1;
-        term_getsize(td);
+        td->adjust_size();
         term_window_resize(td);
         break;
     }
@@ -1764,7 +1729,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 
         td = &data[i];
         td->tile_hgt -= 1;
-        term_getsize(td);
+        td->adjust_size();
         term_window_resize(td);
         break;
     }
