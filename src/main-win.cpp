@@ -1326,85 +1326,6 @@ static void handle_app_active(HWND hWnd, UINT uMsg, WPARAM wParam, [[maybe_unuse
 }
 
 /*!
- * @brief Windowのリサイズをハンドリング
- * @retval true ウインドウメッセージを処理した
- * @retval false ウインドウメッセージを処理していない
- */
-static bool handle_window_resize(term_data *td, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-    if (!td)
-        return false;
-    if (!td->w)
-        return false;
-
-    switch (uMsg) {
-    case WM_GETMINMAXINFO: {
-        const bool is_main = td->is_main_term();
-        const int min_cols = (is_main) ? 80 : 20;
-        const int min_rows = (is_main) ? 24 : 3;
-        const LONG w = min_cols * td->tile_wid + td->size_ow1 + td->size_ow2;
-        const LONG h = min_rows * td->tile_hgt + td->size_oh1 + td->size_oh2 + 1;
-        RECT rc{ 0, 0, w, h };
-        AdjustWindowRectEx(&rc, td->dwStyle, TRUE, td->dwExStyle);
-
-        MINMAXINFO *lpmmi = (MINMAXINFO *)lParam;
-        lpmmi->ptMinTrackSize.x = rc.right - rc.left;
-        lpmmi->ptMinTrackSize.y = rc.bottom - rc.top;
-
-        return true;
-    }
-    case WM_EXITSIZEMOVE: {
-        td->fit_size_to_window(true);
-        return true;
-    }
-    case WM_WINDOWPOSCHANGED: {
-        if (!td->size_hack) {
-            WINDOWPOS *pos = (WINDOWPOS *)lParam;
-            if ((pos->flags & (SWP_NOCOPYBITS | SWP_NOSIZE)) == 0) {
-                td->fit_size_to_window();
-                return true;
-            }
-        }
-        break;
-    }
-    case WM_SIZE: {
-        if (td->size_hack)
-            break;
-
-        //!< @todo 二重のswitch文。後で分割する.
-        switch (wParam) {
-        case SIZE_MINIMIZED: {
-            for (int i = 1; i < MAX_TERM_DATA; i++) {
-                if (data[i].visible)
-                    ShowWindow(data[i].w, SW_HIDE);
-            }
-
-            return true;
-        }
-        case SIZE_MAXIMIZED:
-        case SIZE_RESTORED: {
-            td->fit_size_to_window();
-
-            td->size_hack = true;
-            for (int i = 1; i < MAX_TERM_DATA; i++) {
-                if (data[i].visible)
-                    ShowWindow(data[i].w, SW_SHOWNA);
-            }
-
-            td->size_hack = false;
-
-            return true;
-        }
-        }
-
-        break;
-    }
-    }
-
-    return false;
-}
-
-/*!
  * @brief メインウインドウ用ウインドウプロシージャ
  */
 LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -1412,7 +1333,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
     term_data *td = (term_data *)GetWindowLong(hWnd, 0);
 
     handle_app_active(hWnd, uMsg, wParam, lParam);
-    if (handle_window_resize(td, uMsg, wParam, lParam))
+    if ((td != NULL) && td->handle_window_resize(uMsg, wParam, lParam))
         return 0;
 
     switch (uMsg) {
@@ -1663,7 +1584,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     term_data *td = (term_data *)GetWindowLong(hWnd, 0);
-    if (handle_window_resize(td, uMsg, wParam, lParam))
+    if ((td != NULL) && td->handle_window_resize(uMsg, wParam, lParam))
         return 0;
 
     switch (uMsg) {

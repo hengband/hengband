@@ -830,3 +830,80 @@ errr term_data::term_xtra_win_event(int v)
 
     return 0;
 }
+
+/*!
+ * @brief Windowのリサイズをハンドリング
+ * @retval true ウインドウメッセージを処理した
+ * @retval false ウインドウメッセージを処理していない
+ */
+bool term_data::handle_window_resize(UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    if (!this->w)
+        return false;
+
+    switch (uMsg) {
+    case WM_GETMINMAXINFO: {
+        const bool is_main = this->is_main_term();
+        const int min_cols = (is_main) ? 80 : 20;
+        const int min_rows = (is_main) ? 24 : 3;
+        const LONG tmp_width = min_cols * this->tile_wid + this->size_ow1 + this->size_ow2;
+        const LONG tmp_height = min_rows * this->tile_hgt + this->size_oh1 + this->size_oh2 + 1;
+        RECT rc{ 0, 0, tmp_width, tmp_height };
+        AdjustWindowRectEx(&rc, this->dwStyle, TRUE, this->dwExStyle);
+
+        MINMAXINFO *lpmmi = (MINMAXINFO *)lParam;
+        lpmmi->ptMinTrackSize.x = rc.right - rc.left;
+        lpmmi->ptMinTrackSize.y = rc.bottom - rc.top;
+
+        return true;
+    }
+    case WM_EXITSIZEMOVE: {
+        this->fit_size_to_window(true);
+        return true;
+    }
+    case WM_WINDOWPOSCHANGED: {
+        if (!this->size_hack) {
+            WINDOWPOS *pos = (WINDOWPOS *)lParam;
+            if ((pos->flags & (SWP_NOCOPYBITS | SWP_NOSIZE)) == 0) {
+                this->fit_size_to_window();
+                return true;
+            }
+        }
+        break;
+    }
+    case WM_SIZE: {
+        if (this->size_hack)
+            break;
+
+        //!< @todo 二重のswitch文。後で分割する.
+        switch (wParam) {
+        case SIZE_MINIMIZED: {
+            for (int i = 1; i < MAX_TERM_DATA; i++) {
+                if (data[i].visible)
+                    ShowWindow(data[i].w, SW_HIDE);
+            }
+
+            return true;
+        }
+        case SIZE_MAXIMIZED:
+        case SIZE_RESTORED: {
+            this->fit_size_to_window();
+
+            this->size_hack = true;
+            for (int i = 1; i < MAX_TERM_DATA; i++) {
+                if (data[i].visible)
+                    ShowWindow(data[i].w, SW_SHOWNA);
+            }
+
+            this->size_hack = false;
+
+            return true;
+        }
+        }
+
+        break;
+    }
+    }
+
+    return false;
+}
