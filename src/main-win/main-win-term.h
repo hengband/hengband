@@ -91,6 +91,7 @@ struct term_data {
     bool render(const RECT &rect);
     void dispose_offscreen();
     bool is_main_term();
+    void adjust_size();
 };
 
 constexpr int MAX_TERM_DATA = 8; //!< Maximum number of windows
