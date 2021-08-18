@@ -8,8 +8,8 @@
 enum cfm_type {
 	CFM_UP = 0x0001, /*!< 上の階層に上る / Move up */
 	CFM_DOWN = 0x0002, /*!< 下の階層に下る /  Move down */
-	CFM_LONG_STAIRS = 0x0004, /*!< 階段から坑道かランダム…らしいが現在未実装 / Randomly occurred long stairs/shaft */
-	CFM_XXX = 0x0008, /*!< 未実装 / XXX */
+	CFM_XXX1 = 0x0004, /*!< 未実装 / unused */
+	CFM_XXX2 = 0x0008, /*!< 未実装 / unused */
 	CFM_SHAFT = 0x0010, /*!< 坑道である(2階層分移動する) / Shaft */
 	CFM_RAND_PLACE = 0x0020, /*!< 移動先フロアにランダム配置される / Arrive at random grid */
 	CFM_RAND_CONNECT = 0x0040, /*!< 移動先フロアの階段にランダムに接続する / Connect with random stairs */
