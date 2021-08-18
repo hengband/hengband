@@ -158,3 +158,38 @@ void term_data::adjust_size()
         this->size_hgt = rc.bottom - rc.top;
     }
 }
+
+/*!
+ * @brief Force the use of a new font for a term_data.
+ * This function may be called before the "window" is ready.
+ * This function returns zero only if everything succeeds.
+ * @note that the "font name" must be capitalized!!!
+ */
+void term_data::force_font()
+{
+    if (this->font_id) {
+        DeleteObject(this->font_id);
+    }
+
+    this->font_id = CreateFontIndirectW(&(this->lf));
+    int wid = this->lf.lfWidth;
+    int hgt = this->lf.lfHeight;
+    if (!this->font_id) {
+        return;
+    }
+
+    if ((wid == 0) || (hgt == 0)) {
+        auto hdcDesktop = GetDC(HWND_DESKTOP);
+        auto hfOld = static_cast<HFONT>(SelectObject(hdcDesktop, this->font_id));
+        TEXTMETRIC tm;
+        GetTextMetrics(hdcDesktop, &tm);
+        SelectObject(hdcDesktop, hfOld);
+        ReleaseDC(HWND_DESKTOP, hdcDesktop);
+        wid = tm.tmAveCharWidth;
+        hgt = tm.tmHeight;
+    }
+
+    this->font_wid = wid;
+    this->font_hgt = hgt;
+    return;
+}
