@@ -307,16 +307,13 @@ void process_drain_mana(player_type *target_ptr, monap_type *monap_ptr)
  */
 void process_monster_attack_hungry(player_type *target_ptr, monap_type *monap_ptr)
 {
-#ifdef JP
-    msg_format("あなたは腹が減った！");
-#else
-    msg_format("You feel hungry!");
-#endif
-    auto subtracted_food = target_ptr->food - monap_ptr->damage;
-    if (target_ptr->food >= PY_FOOD_ALERT && PY_FOOD_ALERT > subtracted_food)
+    msg_format(_("あなたは腹が減った！", "You feel hungry!"));
+    auto subtracted_food = static_cast<int16_t>(target_ptr->food - monap_ptr->damage);
+    if ((target_ptr->food >= PY_FOOD_ALERT) && (PY_FOOD_ALERT > subtracted_food)) {
         set_food(target_ptr, PY_FOOD_ALERT - 1);
-    else if (target_ptr->food > PY_FOOD_FAINT && PY_FOOD_FAINT >= subtracted_food)
+    } else if ((target_ptr->food > PY_FOOD_FAINT) && (PY_FOOD_FAINT >= subtracted_food)) {
         set_food(target_ptr, PY_FOOD_FAINT);
-    else
+    } else {
         set_food(target_ptr, subtracted_food);
+    }
 }
