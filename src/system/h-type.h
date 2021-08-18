@@ -63,7 +63,6 @@ typedef unsigned long ulong;
 
 typedef short IDX; /*!< ゲーム中のID型を定義 */
 
-typedef short TOWN_IDX; /*!< ゲーム中の町ID型を定義 */
 typedef short FEAT_IDX; /*!< ゲーム中の地形ID型を定義 */
 typedef short FLOOR_IDX; /*!< ゲーム中のフロアID型を定義 */
 

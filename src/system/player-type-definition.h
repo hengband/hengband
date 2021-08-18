@@ -56,7 +56,7 @@ typedef struct player_type {
 
     PLAYER_LEVEL lev{}; /* Level */
 
-    TOWN_IDX town_num{}; /* Current town number */
+    short town_num{}; /* Current town number */
     short arena_number{}; /* monster number in on_defeat_arena_monster -KMW- */
     bool phase_out{}; /*!< フェイズアウト状態(闘技場観戦状態などに利用、NPCの処理の対象にならず自身もほとんどの行動ができない) */
 

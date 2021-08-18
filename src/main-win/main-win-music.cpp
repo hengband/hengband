@@ -93,7 +93,7 @@ static concptr quest_key_at(int index, char *buf)
     return buf;
 }
 
-static inline TOWN_IDX get_town_count()
+static inline short get_town_count()
 {
     return max_towns;
 }
