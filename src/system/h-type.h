@@ -87,7 +87,6 @@ typedef int16_t DUNGEON_IDX; /*!< ゲーム中のダンジョンID型を定義 *
 typedef int16_t REALM_IDX; /*!< ゲーム中の魔法領域ID型を定義 */
 typedef int16_t ARTIFACT_IDX; /*!< ゲーム中のアーティファクトID型を定義 */
 typedef int16_t EGO_IDX; /*!< アイテムエゴのID型を定義 */
-typedef int16_t ACTIVATION_IDX; /*!< アイテムの発動効果ID型を定義 */
 typedef int16_t QUEST_IDX; /*!< ゲーム中のクエストID型を定義 */
 typedef byte ROOM_IDX; /*!< 部屋のID型を定義 */
 
