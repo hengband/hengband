@@ -80,7 +80,6 @@ typedef short DUNGEON_IDX; /*!< ゲーム中のダンジョンID型を定義 */
 typedef short REALM_IDX; /*!< ゲーム中の魔法領域ID型を定義 */
 typedef short ARTIFACT_IDX; /*!< ゲーム中のアーティファクトID型を定義 */
 typedef short EGO_IDX; /*!< アイテムエゴのID型を定義 */
-typedef short ACTIVATION_IDX; /*!< アイテムの発動効果ID型を定義 */
 typedef short QUEST_IDX; /*!< ゲーム中のクエストID型を定義 */
 typedef byte ROOM_IDX; /*!< 部屋のID型を定義 */
 

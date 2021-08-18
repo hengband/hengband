@@ -54,7 +54,7 @@ typedef struct object_kind {
     bool aware{}; /*!< ベースアイテムが鑑定済かどうか /  The player is "aware" of the item's effects */
     bool tried{}; /*!< ベースアイテムを未鑑定のまま試したことがあるか /  The player has "tried" one of the items */
 
-    ACTIVATION_IDX act_idx{}; /*!< 発動能力のID /  Activative ability index */
+    short act_idx{}; /*!< 発動能力のID /  Activative ability index */
 } object_kind;
 
 extern std::vector<object_kind> k_info;
