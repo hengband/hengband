@@ -240,7 +240,7 @@ bool process_un_power(player_type *target_ptr, monap_type *monap_ptr)
     return true;
 }
 
-bool check_drain_hp(player_type *target_ptr, const s32b d)
+bool check_drain_hp(player_type *target_ptr, const int d)
 {
     bool resist_drain = !drain_exp(target_ptr, d, d / 10, 50);
     if (target_ptr->mimic_form)

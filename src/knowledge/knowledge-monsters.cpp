@@ -159,7 +159,7 @@ void do_cmd_knowledge_kill_count(player_type *creature_ptr)
 
     MONRACE_IDX *who;
     C_MAKE(who, max_r_idx, MONRACE_IDX);
-    s32b total = 0;
+    int total = 0;
     for (int kk = 1; kk < max_r_idx; kk++) {
         monster_race *r_ptr = &r_info[kk];
 

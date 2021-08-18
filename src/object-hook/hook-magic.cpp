@@ -97,7 +97,7 @@ bool item_tester_hook_recharge(player_type *player_ptr, object_type *o_ptr)
  */
 bool item_tester_learn_spell(player_type *player_ptr, object_type *o_ptr)
 {
-    s32b choices = realm_choices2[player_ptr->pclass];
+    int choices = realm_choices2[player_ptr->pclass];
     if (player_ptr->pclass == CLASS_PRIEST) {
         if (is_good_realm(player_ptr->realm1)) {
             choices &= ~(CH_DEATH | CH_DAEMON);

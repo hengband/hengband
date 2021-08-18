@@ -32,8 +32,8 @@ struct store_type {
     short insult_cur{};     //!< Insult counter
     short good_buy{};       //!< Number of "good" buys (3.0.0で廃止)
     short bad_buy{};        //!< Number of "bad" buys (3.0.0で廃止)
-    s32b store_open{};     //!< Closed until this turn
-    s32b last_visit{};     //!< Last visited on this turn
+    int store_open{};     //!< Closed until this turn
+    int last_visit{};     //!< Last visited on this turn
     store_k_idx regular{}; //!< Table -- Legal regular item kinds
     store_k_idx table{};   //!< Table -- Legal item kinds
     short stock_num{};      //!< Stock -- Number of entries

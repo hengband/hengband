@@ -15,7 +15,7 @@ void rd_byte(byte *ip);
 void rd_u16b(ushort *ip);
 void rd_s16b(short *ip);
 void rd_u32b(u32b *ip);
-void rd_s32b(s32b *ip);
+void rd_s32b(int *ip);
 void rd_string(char *str, int max);
 void strip_bytes(int n);
 bool loading_savefile_version_is_older_than(u32b version);

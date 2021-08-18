@@ -185,7 +185,7 @@ typedef struct player_type {
     SUB_EXP weapon_exp[5][64]{}; /* Proficiency of weapons */
     SUB_EXP skill_exp[MAX_SKILLS]{}; /* Proficiency of misc. skill */
 
-    s32b magic_num1[MAX_SPELLS]{}; /*!< Array for non-spellbook type magic */
+    int magic_num1[MAX_SPELLS]{}; /*!< Array for non-spellbook type magic */
     byte magic_num2[MAX_SPELLS]{}; /*!< 魔道具術師の取り込み済魔道具使用回数 / Flags for non-spellbook type magics */
 
     RF_ABILITY mane_spell[MAX_MANE]{};
@@ -235,7 +235,7 @@ typedef struct player_type {
     bool autopick_autoregister{}; /* auto register is in-use or not */
 
     byte feeling{}; /* Most recent dungeon feeling */
-    s32b feeling_turn{}; /* The turn of the last dungeon feeling */
+    int feeling_turn{}; /* The turn of the last dungeon feeling */
 
     object_type *inventory_list{}; /* The player's inventory */
     short inven_cnt{}; /* Number of items in inventory */

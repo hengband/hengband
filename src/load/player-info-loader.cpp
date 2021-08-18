@@ -149,7 +149,7 @@ static void set_race(player_type *creature_ptr)
     byte tmp8u;
     rd_byte(&tmp8u);
     creature_ptr->start_race = (player_race_type)tmp8u;
-    s32b tmp32s;
+    int tmp32s;
     rd_s32b(&tmp32s);
     creature_ptr->old_race1 = (BIT_FLAGS)tmp32s;
     rd_s32b(&tmp32s);

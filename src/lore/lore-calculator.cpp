@@ -87,11 +87,11 @@ bool know_damage(MONRACE_IDX r_idx, int i)
 {
     monster_race *r_ptr = &r_info[r_idx];
     DEPTH level = r_ptr->level;
-    s32b a = r_ptr->r_blows[i];
+    int a = r_ptr->r_blows[i];
 
-    s32b d1 = r_ptr->blow[i].d_dice;
-    s32b d2 = r_ptr->blow[i].d_side;
-    s32b d = d1 * d2;
+    int d1 = r_ptr->blow[i].d_dice;
+    int d2 = r_ptr->blow[i].d_side;
+    int d = d1 * d2;
 
     if (d >= ((4 + level) * MAX_UCHAR) / 80)
         d = ((4 + level) * MAX_UCHAR - 1) / 80;

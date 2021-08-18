@@ -64,7 +64,7 @@ void get_stats(player_type* creature_ptr)
     while (true) {
         int sum = 0;
         for (int i = 0; i < 2; i++) {
-            s32b tmp = randint0(60 * 60 * 60);
+            int tmp = randint0(60 * 60 * 60);
             BASE_STATUS val;
 
             for (int j = 0; j < 3; j++) {

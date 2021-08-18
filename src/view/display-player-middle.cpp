@@ -235,9 +235,9 @@ static void display_player_exp(player_type *creature_ptr)
     if (creature_ptr->lev >= PY_MAX_LEVEL)
         display_player_one_line(e, "*****", TERM_L_GREEN);
     else if (creature_ptr->prace == player_race_type::ANDROID)
-        display_player_one_line(e, format("%ld", (s32b)(player_exp_a[creature_ptr->lev - 1] * creature_ptr->expfact / 100L)), TERM_L_GREEN);
+        display_player_one_line(e, format("%ld", (int)(player_exp_a[creature_ptr->lev - 1] * creature_ptr->expfact / 100L)), TERM_L_GREEN);
     else
-        display_player_one_line(e, format("%ld", (s32b)(player_exp[creature_ptr->lev - 1] * creature_ptr->expfact / 100L)), TERM_L_GREEN);
+        display_player_one_line(e, format("%ld", (int)(player_exp[creature_ptr->lev - 1] * creature_ptr->expfact / 100L)), TERM_L_GREEN);
 }
 
 /*!

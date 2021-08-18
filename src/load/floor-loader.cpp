@@ -71,7 +71,7 @@ errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
             return 171;
         floor_ptr->dun_level = sf_ptr->dun_level;
 
-        s32b tmp32s;
+        int tmp32s;
         rd_s32b(&tmp32s);
         if (tmp32s != sf_ptr->last_visit)
             return 171;

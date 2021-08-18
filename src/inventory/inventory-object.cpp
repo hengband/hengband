@@ -224,7 +224,7 @@ void combine_pack(player_type *owner_ptr)
 void reorder_pack(player_type *owner_ptr)
 {
     int i, j, k;
-    s32b o_value;
+    int o_value;
     object_type forge;
     object_type *q_ptr;
     object_type *o_ptr;
@@ -314,7 +314,7 @@ short store_item_to_inventory(player_type *owner_ptr, object_type *o_ptr)
 
     i = j;
     if (i < INVEN_PACK) {
-        s32b o_value = object_value(owner_ptr, o_ptr);
+        int o_value = object_value(owner_ptr, o_ptr);
         for (j = 0; j < INVEN_PACK; j++) {
             if (object_sort_comp(owner_ptr, o_ptr, o_value, &owner_ptr->inventory_list[j]))
                 break;

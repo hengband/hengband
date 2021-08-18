@@ -10,7 +10,7 @@ typedef struct saved_floor_type {
     FLOOR_IDX floor_id; /* No recycle until 65536 IDs are all used */
     short savefile_id; /* ID for savefile (from 0 to MAX_SAVED_FLOOR) */
     DEPTH dun_level;
-    s32b last_visit; /* Time count of last visit. 0 for new floor. */
+    int last_visit; /* Time count of last visit. 0 for new floor. */
     u32b visit_mark; /* Older has always smaller mark. */
     FLOOR_IDX upper_floor_id; /* a floor connected with level teleportation */
     FLOOR_IDX lower_floor_id; /* a floor connected with level tel. and trap door */

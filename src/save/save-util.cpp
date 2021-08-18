@@ -58,7 +58,7 @@ void wr_u32b(u32b v)
  * @brief 符号あり32ビットをファイルに書き込む
  * @param v 書き込む符号あり32bit値
  */
-void wr_s32b(s32b v) { wr_u32b((u32b)v); }
+void wr_s32b(int v) { wr_u32b((u32b)v); }
 
 /*!
  * @brief 文字列をファイルに書き込む

@@ -422,7 +422,7 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
     add_flag(o_ptr->art_flags, TR_IGNORE_FIRE);
     add_flag(o_ptr->art_flags, TR_IGNORE_COLD);
 
-    s32b total_flags = flag_cost(player_ptr, o_ptr, o_ptr->pval);
+    int total_flags = flag_cost(player_ptr, o_ptr, o_ptr->pval);
     if (a_cursed)
         curse_artifact(player_ptr, o_ptr);
 

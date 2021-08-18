@@ -262,8 +262,8 @@ static void prt_alloc(tval_type tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row, T
     (void)C_WIPE(rarity, K_MAX_DEPTH, u32b);
     u32b total[K_MAX_DEPTH];
     (void)C_WIPE(total, K_MAX_DEPTH, u32b);
-    s32b display[22];
-    (void)C_WIPE(display, 22, s32b);
+    int display[22];
+    (void)C_WIPE(display, 22, int);
 
     int home = 0;
     for (int i = 0; i < K_MAX_DEPTH; i++) {

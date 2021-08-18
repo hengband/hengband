@@ -146,7 +146,7 @@ errr restore_dungeon(player_type *creature_ptr)
     }
 
     rd_ghost();
-    s32b tmp32s;
+    int tmp32s;
     rd_s32b(&tmp32s);
     strip_bytes(tmp32s);
     return 0;

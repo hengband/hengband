@@ -306,7 +306,7 @@ void rd_item_old(player_type *player_ptr, object_type *o_ptr)
     if (buf[0])
         o_ptr->art_name = quark_add(buf);
     {
-        s32b tmp32s;
+        int tmp32s;
 
         rd_s32b(&tmp32s);
         strip_bytes(tmp32s);

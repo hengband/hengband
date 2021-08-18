@@ -91,7 +91,7 @@ void rd_u32b(u32b *ip)
  * @brief ロードファイルポインタから符号つき32bit値を読み込んでポインタに渡す
  * @param ip 読み込みポインタ
  */
-void rd_s32b(s32b *ip) { rd_u32b((u32b *)ip); }
+void rd_s32b(int *ip) { rd_u32b((u32b *)ip); }
 
 /*!
  * @brief ロードファイルポインタから文字列を読み込んでポインタに渡す / Hack -- read a string

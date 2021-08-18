@@ -223,7 +223,7 @@ void process_player(player_type *creature_ptr)
     }
 
     if (creature_ptr->action == ACTION_LEARN) {
-        s32b cost = 0L;
+        int cost = 0L;
         u32b cost_frac = (creature_ptr->msp + 30L) * 256L;
         s64b_lshift(&cost, &cost_frac, 16);
         if (s64b_cmp(creature_ptr->csp, creature_ptr->csp_frac, cost, cost_frac) < 0) {
@@ -312,7 +312,7 @@ void process_player(player_type *creature_ptr)
             if (creature_ptr->timewalk || creature_ptr->energy_use > 400) {
                 creature_ptr->energy_need += creature_ptr->energy_use * TURNS_PER_TICK / 10;
             } else {
-                creature_ptr->energy_need += (short)((s32b)creature_ptr->energy_use * ENERGY_NEED() / 100L);
+                creature_ptr->energy_need += (short)((int)creature_ptr->energy_use * ENERGY_NEED() / 100L);
             }
 
             if (creature_ptr->image)
