@@ -114,6 +114,7 @@ struct term_data {
     void rebuild(bool resize_window = true);
     void fit_size_to_window(bool recalc_window_size = false);
     void link_data();
+    bool handle_window_resize(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 private:
     static errr term_user_win(int n);
