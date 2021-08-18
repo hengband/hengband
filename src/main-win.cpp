@@ -140,13 +140,6 @@
  */
 LPCWSTR win_term_name[] = { L"Hengband", L"Term-1", L"Term-2", L"Term-3", L"Term-4", L"Term-5", L"Term-6", L"Term-7" };
 
-#define MAX_TERM_DATA 8 //!< Maximum number of windows
-
-static term_data data[MAX_TERM_DATA]; //!< An array of term_data's
-static bool is_main_term(term_data *td)
-{
-    return (td == &data[0]);
-}
 static term_data *my_td; //!< Hack -- global "window creation" pointer
 POINT normsize; //!< Remember normal size of main window when maxmized
 
@@ -2050,14 +2043,14 @@ static void fit_term_size_to_window(term_data *td, bool recalc_window_size = fal
     if ((td->cols != cols) || (td->rows != rows)) {
         td->cols = cols;
         td->rows = rows;
-        if (is_main_term(td) && !IsZoomed(td->w) && !IsIconic(td->w)) {
+        if (td->is_main_term() && !IsZoomed(td->w) && !IsIconic(td->w)) {
             normsize.x = td->cols;
             normsize.y = td->rows;
         }
 
         rebuild_term(td, recalc_window_size);
 
-        if (!is_main_term(td)) {
+        if (!td->is_main_term()) {
             p_ptr->window_flags = PW_ALL;
             handle_stuff(p_ptr);
         }
@@ -2078,7 +2071,7 @@ static bool handle_window_resize(term_data *td, UINT uMsg, WPARAM wParam, LPARAM
 
     switch (uMsg) {
     case WM_GETMINMAXINFO: {
-        const bool is_main = is_main_term(td);
+        const bool is_main = td->is_main_term();
         const int min_cols = (is_main) ? 80 : 20;
         const int min_rows = (is_main) ? 24 : 3;
         const LONG w = min_cols * td->tile_wid + td->size_ow1 + td->size_ow2;

@@ -5,6 +5,8 @@
 
 #include "main-win/main-win-term.h"
 
+term_data data[MAX_TERM_DATA];
+
 /*!
  * @brief オフスクリーンのデバイスコンテキストを取得する
  * @param hWnd ウインドウハンドル
@@ -94,3 +96,8 @@ void term_data::dispose_offscreen()
 {
     graphics.dispose_offscreen();
 };
+
+bool term_data::is_main_term()
+{
+    return (this == &data[0]);
+}

@@ -90,4 +90,8 @@ struct term_data {
     void refresh(const RECT *lpRect = NULL);
     bool render(const RECT &rect);
     void dispose_offscreen();
+    bool is_main_term();
 };
+
+constexpr int MAX_TERM_DATA = 8; //!< Maximum number of windows
+extern term_data data[MAX_TERM_DATA]; //!< An array of term_data's
