@@ -70,7 +70,8 @@ void rd_base_info(player_type *creature_ptr)
     rd_byte(&tmp8u);
     creature_ptr->pseikaku = (player_personality_type)tmp8u;
 
-    rd_byte(&creature_ptr->psex);
+    rd_byte(&tmp8u);
+    creature_ptr->psex = static_cast<player_sex>(tmp8u);
 
     rd_realms(creature_ptr);
 

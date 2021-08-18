@@ -16,8 +16,9 @@ void load_quick_start(void)
         return;
     }
 
-    rd_byte(&previous_char.psex);
     byte tmp8u;
+    rd_byte(&tmp8u);
+    previous_char.psex = static_cast<player_sex>(tmp8u);
     rd_byte(&tmp8u);
     previous_char.prace = (player_race_type)tmp8u;
     rd_byte(&tmp8u);

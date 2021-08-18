@@ -149,7 +149,7 @@ static bool get_player_sex(player_type *creature_ptr, char *buf)
         display_help_on_sex_select(creature_ptr, c);
     }
 
-    creature_ptr->psex = (byte)k;
+    creature_ptr->psex = static_cast<player_sex>(k);
     sp_ptr = &sex_info[creature_ptr->psex];
     c_put_str(TERM_L_BLUE, sp_ptr->title, 3, 15);
     return true;

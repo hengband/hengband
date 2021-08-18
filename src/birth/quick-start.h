@@ -3,6 +3,7 @@
 #include "player/player-class-types.h"
 #include "player/player-personality-types.h"
 #include "player/player-race-types.h"
+#include "player/player-sex.h"
 #include "system/angband.h"
 #include "system/system-variables.h"
 
@@ -10,7 +11,7 @@
  * A structure to hold "rolled" information
  */
 struct birther {
-    SEX_IDX psex{}; /* Sex index */
+    player_sex psex{}; /* Sex index */
     player_race_type prace{}; /* Race index */
     player_class_type pclass{}; /* Class index */
     player_personality_type pseikaku{}; /* Seikaku index */
@@ -39,7 +40,7 @@ struct birther {
 
 extern birther previous_char;
 
-typedef struct player_type player_type;
+struct player_type;
 bool ask_quick_start(player_type *creature_ptr);
 void save_prev_data(player_type *creature_ptr, birther *birther_ptr);
 void load_prev_data(player_type *creature_ptr, bool swap);

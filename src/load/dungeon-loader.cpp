@@ -40,7 +40,7 @@ static errr rd_dungeon(player_type *player_ptr)
     rd_s16b(&max_floor_id);
     byte tmp8u;
     rd_byte(&tmp8u);
-    player_ptr->dungeon_idx = (DUNGEON_IDX)tmp8u;
+    player_ptr->dungeon_idx = (DUNGEON_IDX)tmp8u; // @todo セーブデータの方を16ビットにするかdungeon_idxの定義を8ビットにした方が良い.
     byte num;
     rd_byte(&num);
     if (num == 0) {
