@@ -146,7 +146,7 @@ typedef struct player_type {
 #define COMMAND_ARG_REST_FULL_HEALING -1 /*!<休憩コマンド引数 … HPとMPが全回復するまで */
     GAME_TURN resting{}; /* Current counter for resting, if any */
 
-    PATRON_IDX chaos_patron{};
+    short chaos_patron{};
 
     EnumClassFlagGroup<MUTA> muta{}; /*!< 突然変異 / mutations */
 
