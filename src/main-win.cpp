@@ -573,16 +573,6 @@ static bool change_bg_mode(bg_mode new_mode, bool show_error = false, bool force
 }
 
 /*!
- * @brief Hack -- redraw a term_data
- */
-static void term_data_redraw(term_data *td)
-{
-    term_activate(&td->t);
-    term_redraw();
-    term_activate(term_screen);
-}
-
-/*!
  * @brief termの反転色表示
  */
 void term_inversed_area(HWND hWnd, int x, int y, int w, int h)
@@ -1531,7 +1521,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         if (!td->visible) {
             td->visible = true;
             ShowWindow(td->w, SW_SHOW);
-            term_data_redraw(td);
+            td->redraw_data();
         } else {
             td->visible = false;
             td->posfix = false;
