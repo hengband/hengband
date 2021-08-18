@@ -4,8 +4,10 @@
  * @brief Windows版固有実装(ターミナル)ヘッダ
  */
 
-#include "term/z-term.h"
+#include "main-win/graphics-win.h"
+#include "main-win/main-win-bg.h"
 #include "system/h-type.h"
+#include "term/z-term.h"
 #include <windows.h>
 
 /*!
@@ -30,7 +32,12 @@ protected:
     HDC offscreen;
 };
 
-extern POINT normsize;
+extern LPCWSTR AppName; // Name of application.
+extern HINSTANCE hInstance; // Saved instance handle.
+extern bg_mode current_bg_mode;
+extern COLORREF win_clr[256]; // The "complex" color values.
+extern POINT normsize; //!< Remember normal size of main window when maxmized.
+extern HBRUSH hbrYellow; // Yellow brush for the cursor.
 
 /*!
  * @struct term_data
@@ -49,6 +56,7 @@ extern POINT normsize;
  * the user.
  * </p>
  */
+struct player_type;
 struct term_data {
     term_type t{};
     LPCWSTR name{};
@@ -87,6 +95,11 @@ struct term_data {
     term_data &operator=(term_data &&) = default; //!< move代入
 
     double_buffering graphics{};
+
+    static errr term_xtra_win_flush();
+    static void refresh_color_table();
+    static void change_graphics_mode(graphics_mode mode);
+
     HDC get_hdc();
     void refresh(const RECT *lpRect = NULL);
     bool render(const RECT &rect);
@@ -100,6 +113,24 @@ struct term_data {
     void redraw_data();
     void rebuild(bool resize_window = true);
     void fit_size_to_window(bool recalc_window_size = false);
+    void link_data();
+
+private:
+    static errr term_user_win(int n);
+    static errr term_xtra_win(int n, int v);
+    static errr term_curs_win(int x, int y);
+    static errr term_bigcurs_win(int x, int y);
+    static errr term_wipe_win(int x, int y, int n);
+    static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s);
+    static errr term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, concptr cp, const TERM_COLOR *tap, concptr tcp);
+    static errr term_xtra_win_react(player_type *player_ptr);
+    static errr term_xtra_win_event(int v);
+    static errr term_xtra_win_clear(void);
+    static errr term_xtra_win_noise(void);
+    static errr term_xtra_win_sound(int v);
+    static errr term_xtra_win_music(int n, int v);
+    static errr term_xtra_win_scene(int v);
+    static int term_xtra_win_delay(int v);
 };
 
 constexpr int MAX_TERM_DATA = 8; //!< Maximum number of windows
