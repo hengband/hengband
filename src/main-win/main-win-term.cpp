@@ -214,3 +214,11 @@ void term_data::change_font()
     this->adjust_size();
     this->resize_window();
 }
+
+/*!
+ * @brief Allow the user to lock this window.
+ */
+void term_data::set_window_position(HWND hWnd)
+{
+    SetWindowPos(this->w, hWnd, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+}
