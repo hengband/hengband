@@ -160,7 +160,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
 
     case GF_NETHER:
         dam = dam * calc_nether_damage_rate(target_ptr, CALC_MAX) / 100;
-        if (is_specific_player_race(target_ptr, RACE_SPECTRE)) {
+        if (is_specific_player_race(target_ptr, player_race_type::SPECTRE)) {
             ignore_wraith_form = true;
             dam = 0;
         }

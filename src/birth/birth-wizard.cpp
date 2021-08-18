@@ -158,14 +158,14 @@ static bool get_player_sex(player_type *creature_ptr, char *buf)
 static bool let_player_select_race(player_type *creature_ptr)
 {
     clear_from(10);
-    creature_ptr->prace = RACE_HUMAN;
+    creature_ptr->prace = player_race_type::HUMAN;
     while (true) {
         char temp[80 * 10];
         if (!get_player_race(creature_ptr))
             return false;
 
         clear_from(10);
-        shape_buffer(race_explanations[creature_ptr->prace], 74, temp, sizeof(temp));
+        shape_buffer(race_explanations[static_cast<int>(creature_ptr->prace)], 74, temp, sizeof(temp));
         concptr t = temp;
         for (int i = 0; i < 10; i++) {
             if (t[0] == 0)

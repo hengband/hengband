@@ -20,7 +20,7 @@ bool is_owner(player_type *player_ptr, building_type *bldg)
         return true;
     }
 
-    if (bldg->member_race[player_ptr->prace] == BUILDING_OWNER) {
+    if (static_cast<int>(bldg->member_race[static_cast<int>(player_ptr->prace)]) == BUILDING_OWNER) {
         return true;
     }
 
@@ -49,7 +49,7 @@ bool is_member(player_type *player_ptr, building_type *bldg)
         return true;
     }
 
-    if (bldg->member_race[player_ptr->prace]) {
+    if (static_cast<bool>(bldg->member_race[static_cast<int>(player_ptr->prace)])) {
         return true;
     }
 

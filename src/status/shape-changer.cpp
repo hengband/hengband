@@ -52,8 +52,8 @@ void do_poly_wounds(player_type *creature_ptr)
  */
 void change_race(player_type *creature_ptr, player_race_type new_race, concptr effect_msg)
 {
-    concptr title = race_info[new_race].title;
-    int old_race = creature_ptr->prace;
+    concptr title = race_info[static_cast<int>(new_race)].title;
+    player_race_type old_race = creature_ptr->prace;
 #ifdef JP
     msg_format("あなたは%s%sに変化した！", effect_msg, title);
 #else
@@ -61,21 +61,21 @@ void change_race(player_type *creature_ptr, player_race_type new_race, concptr e
 #endif
 
     chg_virtue(creature_ptr, V_CHANCE, 2);
-    if (creature_ptr->prace < 32) {
-        creature_ptr->old_race1 |= 1UL << creature_ptr->prace;
+    if (static_cast<int>(creature_ptr->prace) < 32) {
+        creature_ptr->old_race1 |= 1UL << static_cast<int>(creature_ptr->prace);
     } else {
-        creature_ptr->old_race2 |= 1UL << (creature_ptr->prace - 32);
+        creature_ptr->old_race2 |= 1UL << (static_cast<int>(creature_ptr->prace) - 32);
     }
 
     creature_ptr->prace = new_race;
-    rp_ptr = &race_info[creature_ptr->prace];
+    rp_ptr = &race_info[static_cast<int>(creature_ptr->prace)];
     creature_ptr->expfact = rp_ptr->r_exp + cp_ptr->c_exp;
 
     bool is_special_class = creature_ptr->pclass == CLASS_MONK;
     is_special_class |= creature_ptr->pclass == CLASS_FORCETRAINER;
     is_special_class |= creature_ptr->pclass == CLASS_NINJA;
-    bool is_special_race = creature_ptr->prace == RACE_KLACKON;
-    is_special_race |= creature_ptr->prace == RACE_SPRITE;
+    bool is_special_race = creature_ptr->prace == player_race_type::KLACKON;
+    is_special_race |= creature_ptr->prace == player_race_type::SPRITE;
     if (is_special_class && is_special_race)
         creature_ptr->expfact -= 15;
 
@@ -105,7 +105,7 @@ void do_poly_self(player_type *creature_ptr)
     msg_print(_("あなたは変化の訪れを感じた...", "You feel a change coming over you..."));
     chg_virtue(creature_ptr, V_CHANCE, 1);
 
-    if ((power > randint0(20)) && one_in_(3) && (creature_ptr->prace != RACE_ANDROID)) {
+    if ((power > randint0(20)) && one_in_(3) && (creature_ptr->prace != player_race_type::ANDROID)) {
         char effect_msg[80] = "";
         char sex_msg[32] = "";
         player_race_type new_race;
@@ -153,7 +153,7 @@ void do_poly_self(player_type *creature_ptr)
 
         do {
             new_race = (player_race_type)randint0(MAX_RACES);
-        } while ((new_race == creature_ptr->prace) || (new_race == RACE_ANDROID));
+        } while ((new_race == creature_ptr->prace) || (new_race == player_race_type::ANDROID));
 
         change_race(creature_ptr, new_race, effect_msg);
     }
@@ -161,7 +161,7 @@ void do_poly_self(player_type *creature_ptr)
     if ((power > randint0(30)) && one_in_(6)) {
         int tmp = 0;
         power -= 20;
-        msg_format(_("%sの構成が変化した！", "Your internal organs are rearranged!"), creature_ptr->prace == RACE_ANDROID ? "機械" : "内臓");
+        msg_format(_("%sの構成が変化した！", "Your internal organs are rearranged!"), creature_ptr->prace == player_race_type::ANDROID ? "機械" : "内臓");
 
         while (tmp < A_MAX) {
             (void)dec_stat(creature_ptr, tmp, randint1(6) + 6, one_in_(3));

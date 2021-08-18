@@ -35,10 +35,10 @@ void extract_day_hour_min(player_type *player_ptr, int *day, int *hour, int *min
 
 	switch (player_ptr->start_race)
 	{
-	case RACE_VAMPIRE:
-	case RACE_SKELETON:
-	case RACE_ZOMBIE:
-	case RACE_SPECTRE:
+	case player_race_type::VAMPIRE:
+	case player_race_type::SKELETON:
+	case player_race_type::ZOMBIE:
+	case player_race_type::SPECTRE:
 		*day = (current_world_ptr->game_turn - A_DAY * 3 / 4) / A_DAY + 1;
 		break;
 	default:

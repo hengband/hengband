@@ -183,7 +183,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
             set_action(creature_ptr, ACTION_NONE);
         }
 
-        if (creature_ptr->prace == RACE_MERFOLK) {
+        if (creature_ptr->prace == player_race_type::MERFOLK) {
             if (has_flag(f_ptr->flags, FF_WATER) ^ has_flag(of_ptr->flags, FF_WATER)) {
                 creature_ptr->update |= PU_BONUS;
                 update_creature(creature_ptr);

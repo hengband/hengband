@@ -372,9 +372,9 @@ static void dump_aux_race_history(player_type *creature_ptr, FILE *fff)
     if (!creature_ptr->old_race1 && !creature_ptr->old_race2)
         return;
 
-    fprintf(fff, _("\n\n あなたは%sとして生まれた。", "\n\n You were born as %s."), race_info[creature_ptr->start_race].title);
+    fprintf(fff, _("\n\n あなたは%sとして生まれた。", "\n\n You were born as %s."), race_info[static_cast<int>(creature_ptr->start_race)].title);
     for (int i = 0; i < MAX_RACES; i++) {
-        if (creature_ptr->start_race == i)
+        if (static_cast<int>(creature_ptr->start_race) == i)
             continue;
         if (i < 32) {
             if (!(creature_ptr->old_race1 & 1UL << i))

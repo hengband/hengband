@@ -212,12 +212,12 @@ PERCENTAGE calc_deathray_damage_rate(player_type *creature_ptr, rate_calc_type_m
     }
 
     switch (creature_ptr->prace) {
-    case RACE_GOLEM:
-    case RACE_SKELETON:
-    case RACE_ZOMBIE:
-    case RACE_VAMPIRE:
-    case RACE_BALROG:
-    case RACE_SPECTRE:
+    case player_race_type::GOLEM:
+    case player_race_type::SKELETON:
+    case player_race_type::ZOMBIE:
+    case player_race_type::VAMPIRE:
+    case player_race_type::BALROG:
+    case player_race_type::SPECTRE:
         return 0;
         break;
 
@@ -388,7 +388,7 @@ PERCENTAGE calc_nether_damage_rate(player_type *creature_ptr, rate_calc_type_mod
     PERCENTAGE per = 100;
 
     if (has_resist_neth(creature_ptr)) {
-        if (!is_specific_player_race(creature_ptr, RACE_SPECTRE))
+        if (!is_specific_player_race(creature_ptr, player_race_type::SPECTRE))
             per *= 6;
         per *= 100;
         per /= randrate(4, 7, mode);

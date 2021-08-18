@@ -53,7 +53,7 @@ void do_cmd_redraw(player_type *creature_ptr)
 
 	update_playtime();
 	handle_stuff(creature_ptr);
-	if (creature_ptr->prace == RACE_ANDROID) calc_android_exp(creature_ptr);
+	if (creature_ptr->prace == player_race_type::ANDROID) calc_android_exp(creature_ptr);
 
 	term_type *old = Term;
 	for (int j = 0; j < 8; j++)

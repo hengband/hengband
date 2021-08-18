@@ -10,7 +10,7 @@ void gain_exp_64(player_type *creature_ptr, s32b amount, u32b amount_frac)
 {
     if (creature_ptr->is_dead)
         return;
-    if (creature_ptr->prace == RACE_ANDROID)
+    if (creature_ptr->prace == player_race_type::ANDROID)
         return;
 
     s64b_add(&(creature_ptr->exp), &(creature_ptr->exp_frac), amount, amount_frac);
@@ -32,7 +32,7 @@ void gain_exp(player_type *creature_ptr, s32b amount) { gain_exp_64(creature_ptr
  */
 void lose_exp(player_type *creature_ptr, s32b amount)
 {
-    if (creature_ptr->prace == RACE_ANDROID)
+    if (creature_ptr->prace == player_race_type::ANDROID)
         return;
     if (amount > creature_ptr->exp)
         amount = creature_ptr->exp;
@@ -63,7 +63,7 @@ bool restore_level(player_type *creature_ptr)
  */
 bool drain_exp(player_type *creature_ptr, s32b drain, s32b slip, int hold_exp_prob)
 {
-    if (creature_ptr->prace == RACE_ANDROID)
+    if (creature_ptr->prace == player_race_type::ANDROID)
         return false;
 
     if (creature_ptr->hold_exp && (randint0(100) < hold_exp_prob)) {

@@ -12,8 +12,9 @@ const player_race *rp_ptr;
 
 const player_race *get_player_race_info(player_type* creature_ptr, bool base_race = false)
 {
-    if (base_race)
-        return &race_info[creature_ptr->prace];
+    if (base_race) {
+        return &race_info[static_cast<int>(creature_ptr->prace)];
+    }
 
     switch (creature_ptr->mimic_form) {
     case MIMIC_DEMON:
@@ -21,7 +22,7 @@ const player_race *get_player_race_info(player_type* creature_ptr, bool base_rac
     case MIMIC_VAMPIRE:
         return &mimic_info[creature_ptr->mimic_form];
     default: // MIMIC_NONE or undefined
-        return &race_info[creature_ptr->prace];
+        return &race_info[static_cast<int>(creature_ptr->prace)];
     }
 }
 

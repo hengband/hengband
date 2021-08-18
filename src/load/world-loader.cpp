@@ -80,10 +80,10 @@ void rd_autopick(player_type *creature_ptr)
 static void set_undead_turn_limit(player_type *creature_ptr)
 {
     switch (creature_ptr->start_race) {
-    case RACE_VAMPIRE:
-    case RACE_SKELETON:
-    case RACE_ZOMBIE:
-    case RACE_SPECTRE:
+    case player_race_type::VAMPIRE:
+    case player_race_type::SKELETON:
+    case player_race_type::ZOMBIE:
+    case player_race_type::SPECTRE:
         current_world_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * MAX_DAYS + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
         break;
     default:

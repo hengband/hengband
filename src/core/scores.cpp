@@ -214,7 +214,7 @@ errr top_twenty(player_type *current_player_ptr)
     /* Save the player info */
     sprintf(the_score.uid, "%7u", current_player_ptr->player_uid);
     sprintf(the_score.sex, "%c", (current_player_ptr->psex ? 'm' : 'f'));
-    snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->prace, MAX_RACES));
+    snprintf(buf, sizeof(buf), "%2d", MIN(static_cast<int>(current_player_ptr->prace), MAX_RACES));
     memcpy(the_score.p_r, buf, 3);
     snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->pclass, MAX_CLASS));
     memcpy(the_score.p_c, buf, 3);
@@ -317,7 +317,7 @@ errr predict_score(player_type *current_player_ptr)
     /* Save the player info */
     sprintf(the_score.uid, "%7u", current_player_ptr->player_uid);
     sprintf(the_score.sex, "%c", (current_player_ptr->psex ? 'm' : 'f'));
-    snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->prace, MAX_RACES));
+    snprintf(buf, sizeof(buf), "%2d", MIN(static_cast<int>(current_player_ptr->prace), MAX_RACES));
     memcpy(the_score.p_r, buf, 3);
     snprintf(buf, sizeof(buf), "%2d", MIN(current_player_ptr->pclass, MAX_CLASS));
     memcpy(the_score.p_c, buf, 3);
@@ -398,9 +398,9 @@ void show_highclass(player_type *current_player_ptr)
     }
 
 #ifdef JP
-    sprintf(out_val, "あなた) %sの%s (レベル %2d)", race_info[current_player_ptr->prace].title, current_player_ptr->name, current_player_ptr->lev);
+    sprintf(out_val, "あなた) %sの%s (レベル %2d)", race_info[static_cast<int>(current_player_ptr->prace)].title, current_player_ptr->name, current_player_ptr->lev);
 #else
-    sprintf(out_val, "You) %s the %s (Level %2d)", current_player_ptr->name, race_info[current_player_ptr->prace].title, current_player_ptr->lev);
+    sprintf(out_val, "You) %s the %s (Level %2d)", current_player_ptr->name, race_info[static_cast<int>(current_player_ptr->prace)].title, current_player_ptr->lev);
 #endif
 
     prt(out_val, (m + 8), 0);
@@ -478,11 +478,11 @@ void race_score(player_type *current_player_ptr, int race_num)
     }
 
     /* add player if qualified */
-    if ((current_player_ptr->prace == race_num) && (current_player_ptr->lev >= lastlev)) {
+    if ((static_cast<int>(current_player_ptr->prace) == race_num) && (current_player_ptr->lev >= lastlev)) {
 #ifdef JP
-        sprintf(out_val, "あなた) %sの%s (レベル %2d)", race_info[current_player_ptr->prace].title, current_player_ptr->name, current_player_ptr->lev);
+        sprintf(out_val, "あなた) %sの%s (レベル %2d)", race_info[static_cast<int>(current_player_ptr->prace)].title, current_player_ptr->name, current_player_ptr->lev);
 #else
-        sprintf(out_val, "You) %s the %s (Level %3d)", current_player_ptr->name, race_info[current_player_ptr->prace].title, current_player_ptr->lev);
+        sprintf(out_val, "You) %s the %s (Level %3d)", current_player_ptr->name, race_info[static_cast<int>(current_player_ptr->prace)].title, current_player_ptr->lev);
 #endif
 
         prt(out_val, (m + 8), 0);

@@ -307,7 +307,7 @@ void wiz_change_status(player_type *creature_ptr)
     if (tmp_long < 0)
         tmp_long = 0L;
 
-    if (creature_ptr->prace == RACE_ANDROID)
+    if (creature_ptr->prace == player_race_type::ANDROID)
         return;
 
     creature_ptr->max_exp = tmp_long;
@@ -503,7 +503,7 @@ void wiz_reset_race(player_type *creature_ptr)
     sprintf(ppp, "Race (0-%d): ", MAX_RACES - 1);
 
     char tmp_val[160];
-    sprintf(tmp_val, "%d", creature_ptr->prace);
+    sprintf(tmp_val, "%d", static_cast<int>(creature_ptr->prace));
 
     if (!get_string(ppp, tmp_val, 2))
         return;
@@ -513,7 +513,7 @@ void wiz_reset_race(player_type *creature_ptr)
         return;
 
     creature_ptr->prace = static_cast<player_race_type>(tmp_int);
-    rp_ptr = &race_info[creature_ptr->prace];
+    rp_ptr = &race_info[static_cast<int>(creature_ptr->prace)];
 
     creature_ptr->window_flags |= PW_PLAYER;
     creature_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;

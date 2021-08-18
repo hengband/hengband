@@ -31,7 +31,7 @@ s16b PlayerConstitution::race_value()
 {
     s16b result = PlayerBasicStatistics::race_value();
 
-    if (is_specific_player_race(this->owner_ptr, RACE_ENT)) {
+    if (is_specific_player_race(this->owner_ptr, player_race_type::ENT)) {
         if (this->owner_ptr->lev > 25)
             result++;
         if (this->owner_ptr->lev > 40)

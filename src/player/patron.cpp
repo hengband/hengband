@@ -210,7 +210,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
             msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[creature_ptr->chaos_patron]);
             msg_print(_("「汝は良く行いたり！続けよ！」", "'Well done, mortal! Lead on!'"));
 
-            if (creature_ptr->prace == RACE_ANDROID) {
+            if (creature_ptr->prace == player_race_type::ANDROID) {
                 msg_print(_("しかし何も起こらなかった。", "But, nothing happens."));
             } else if (creature_ptr->exp < PY_MAX_EXP) {
                 s32b ee = (creature_ptr->exp / 2) + 10;
@@ -228,7 +228,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
             msg_format(_("%sの声が響き渡った:", "The voice of %s booms out:"), chaos_patrons[creature_ptr->chaos_patron]);
             msg_print(_("「下僕よ、汝それに値せず。」", "'Thou didst not deserve that, slave.'"));
 
-            if (creature_ptr->prace == RACE_ANDROID) {
+            if (creature_ptr->prace == player_race_type::ANDROID) {
                 msg_print(_("しかし何も起こらなかった。", "But, nothing happens."));
             } else {
                 lose_exp(creature_ptr, creature_ptr->exp / 6);

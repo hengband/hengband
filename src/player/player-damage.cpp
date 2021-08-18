@@ -347,7 +347,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
     }
 
     if (creature_ptr->chp < 0 && !cheat_immortal) {
-        bool android = (creature_ptr->prace == RACE_ANDROID ? true : false);
+        bool android = (creature_ptr->prace == player_race_type::ANDROID ? true : false);
 
         /* 死んだ時に強制終了して死を回避できなくしてみた by Habu */
         if (!cheat_save && !save_player(creature_ptr, SAVE_TYPE_CLOSE_GAME))

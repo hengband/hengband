@@ -106,7 +106,7 @@ bool pattern_effect(player_type *creature_ptr)
     if (!pattern_tile(floor_ptr, creature_ptr->y, creature_ptr->x))
         return false;
 
-    if ((is_specific_player_race(creature_ptr, RACE_AMBERITE)) && (creature_ptr->cut > 0) && one_in_(10)) {
+    if ((is_specific_player_race(creature_ptr, player_race_type::AMBERITE)) && (creature_ptr->cut > 0) && one_in_(10)) {
         wreck_the_pattern(creature_ptr);
     }
 
@@ -143,7 +143,7 @@ bool pattern_effect(player_type *creature_ptr)
         break;
 
     default:
-        if (is_specific_player_race(creature_ptr, RACE_AMBERITE) && !one_in_(2))
+        if (is_specific_player_race(creature_ptr, player_race_type::AMBERITE) && !one_in_(2))
             return true;
         else if (!is_invuln(creature_ptr))
             take_hit(creature_ptr, DAMAGE_NOESCAPE, damroll(1, 3), _("「パターン」を歩いたダメージ", "walking the Pattern"));

@@ -33,7 +33,7 @@ void player_immunity(player_type *creature_ptr, BIT_FLAGS *flags)
     if (player_race_has_flag(creature_ptr, TR_IM_FIRE))
         add_flag(flags, TR_RES_FIRE);
 
-    if (is_specific_player_race(creature_ptr, RACE_SPECTRE))
+    if (is_specific_player_race(creature_ptr, player_race_type::SPECTRE))
         add_flag(flags, TR_RES_NETHER);
     if (player_race_has_flag(creature_ptr, TR_IM_DARK))
         add_flag(flags, TR_RES_DARK);

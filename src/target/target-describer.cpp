@@ -99,7 +99,7 @@ static eg_type *initialize_eg_type(player_type *subject_ptr, eg_type *eg_ptr, PO
 static void evaluate_monster_exp(player_type *creature_ptr, char *buf, monster_type *m_ptr)
 {
     monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
-    if ((creature_ptr->lev >= PY_MAX_LEVEL) || (creature_ptr->prace == RACE_ANDROID)) {
+    if ((creature_ptr->lev >= PY_MAX_LEVEL) || (creature_ptr->prace == player_race_type::ANDROID)) {
         sprintf(buf, "**");
         return;
     }

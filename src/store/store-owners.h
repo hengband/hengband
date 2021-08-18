@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "player/player-race-types.h"
 #include <array>
 
 #define MAX_STORES      10 /*!< 店舗の種類最大数 / Total number of stores (see "store.c", etc) */
@@ -13,7 +14,7 @@ struct owner_type {
 	concptr owner_name;	//!< 名前 / Name
 	PRICE max_cost; //!< 買取上限 / Purse limit
 	byte inflate; //!< 価格上乗せ率 / Inflation
-	byte owner_race; //!< 店主種族 / Owner race
+	player_race_type owner_race; //!< 店主種族 / Owner race
 };
 
 extern const owner_type owners[MAX_STORES][MAX_OWNERS];

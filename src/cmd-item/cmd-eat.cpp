@@ -322,7 +322,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
         return;
     }
 
-    if (is_specific_player_race(creature_ptr, RACE_SKELETON)) {
+    if (is_specific_player_race(creature_ptr, player_race_type::SKELETON)) {
         if (!((o_ptr->sval == SV_FOOD_WAYBREAD) || (o_ptr->sval < SV_FOOD_BISCUIT))) {
             object_type forge;
             object_type *q_ptr = &forge;

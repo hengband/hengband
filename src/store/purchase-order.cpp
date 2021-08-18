@@ -141,7 +141,7 @@ static void shuffle_store(player_type *player_ptr)
     msg_print(_("店主は引退した。", "The shopkeeper retires."));
     store_shuffle(player_ptr, cur_store_num);
     prt("", 3, 0);
-    sprintf(buf, "%s (%s)", ot_ptr->owner_name, race_info[ot_ptr->owner_race].title);
+    sprintf(buf, "%s (%s)", ot_ptr->owner_name, race_info[static_cast<int>(ot_ptr->owner_race)].title);
     put_str(buf, 3, 10);
     sprintf(buf, "%s (%ld)", f_info[cur_store_feat].name.c_str(), (long)(ot_ptr->max_cost));
     prt(buf, 3, 50);

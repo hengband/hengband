@@ -7,78 +7,78 @@
 static int get_history_chart(player_type *creature_ptr)
 {
     switch (creature_ptr->prace) {
-    case RACE_AMBERITE:
+    case player_race_type::AMBERITE:
         return 67;
-    case RACE_HUMAN:
-    case RACE_BARBARIAN:
-    case RACE_DUNADAN:
+    case player_race_type::HUMAN:
+    case player_race_type::BARBARIAN:
+    case player_race_type::DUNADAN:
         return 1;
-    case RACE_HALF_ELF:
+    case player_race_type::HALF_ELF:
         return 4;
-    case RACE_ELF:
-    case RACE_HIGH_ELF:
+    case player_race_type::ELF:
+    case player_race_type::HIGH_ELF:
         return 7;
-    case RACE_HOBBIT:
+    case player_race_type::HOBBIT:
         return 10;
-    case RACE_GNOME:
+    case player_race_type::GNOME:
         return 13;
-    case RACE_DWARF:
+    case player_race_type::DWARF:
         return 16;
-    case RACE_HALF_ORC:
+    case player_race_type::HALF_ORC:
         return 19;
-    case RACE_HALF_TROLL:
+    case player_race_type::HALF_TROLL:
         return 22;
-    case RACE_DARK_ELF:
+    case player_race_type::DARK_ELF:
         return 69;
-    case RACE_HALF_OGRE:
+    case player_race_type::HALF_OGRE:
         return 74;
-    case RACE_HALF_GIANT:
+    case player_race_type::HALF_GIANT:
         return 75;
-    case RACE_HALF_TITAN:
+    case player_race_type::HALF_TITAN:
         return 76;
-    case RACE_CYCLOPS:
+    case player_race_type::CYCLOPS:
         return 77;
-    case RACE_YEEK:
+    case player_race_type::YEEK:
         return 78;
-    case RACE_KOBOLD:
+    case player_race_type::KOBOLD:
         return 82;
-    case RACE_KLACKON:
+    case player_race_type::KLACKON:
         return 84;
-    case RACE_NIBELUNG:
+    case player_race_type::NIBELUNG:
         return 87;
-    case RACE_DRACONIAN:
+    case player_race_type::DRACONIAN:
         return 89;
-    case RACE_MIND_FLAYER:
+    case player_race_type::MIND_FLAYER:
         return 92;
-    case RACE_IMP:
+    case player_race_type::IMP:
         return 94;
-    case RACE_GOLEM:
+    case player_race_type::GOLEM:
         return 98;
-    case RACE_SKELETON:
+    case player_race_type::SKELETON:
         return 102;
-    case RACE_ZOMBIE:
+    case player_race_type::ZOMBIE:
         return 107;
-    case RACE_VAMPIRE:
+    case player_race_type::VAMPIRE:
         return 113;
-    case RACE_SPECTRE:
+    case player_race_type::SPECTRE:
         return 118;
-    case RACE_SPRITE:
+    case player_race_type::SPRITE:
         return 124;
-    case RACE_BEASTMAN:
+    case player_race_type::BEASTMAN:
         return 129;
-    case RACE_ENT:
+    case player_race_type::ENT:
         return 137;
-    case RACE_ARCHON:
+    case player_race_type::ARCHON:
         return 142;
-    case RACE_BALROG:
+    case player_race_type::BALROG:
         return 145;
-    case RACE_S_FAIRY:
+    case player_race_type::S_FAIRY:
         return 148;
-    case RACE_KUTAR:
+    case player_race_type::KUTAR:
         return 154;
-    case RACE_ANDROID:
+    case player_race_type::ANDROID:
         return 155;
-    case RACE_MERFOLK:
+    case player_race_type::MERFOLK:
         return 170;
     default:
         return 0;

@@ -17,10 +17,10 @@
 s32b turn_real(player_type *player_ptr, s32b hoge)
 {
     switch (player_ptr->start_race) {
-    case RACE_VAMPIRE:
-    case RACE_SKELETON:
-    case RACE_ZOMBIE:
-    case RACE_SPECTRE:
+    case player_race_type::VAMPIRE:
+    case player_race_type::SKELETON:
+    case player_race_type::ZOMBIE:
+    case player_race_type::SPECTRE:
         return hoge - (TURNS_PER_TICK * TOWN_DAWN * 3 / 4);
     default:
         return hoge;

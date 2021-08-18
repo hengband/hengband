@@ -65,7 +65,7 @@ void get_money(player_type *creature_ptr)
         gold /= 2;
     else if (creature_ptr->pseikaku == PERSONALITY_MUNCHKIN)
         gold = 10000000;
-    if (creature_ptr->prace == RACE_ANDROID)
+    if (creature_ptr->prace == player_race_type::ANDROID)
         gold /= 5;
 
     creature_ptr->au = gold;

@@ -58,7 +58,7 @@ bool android_inside_weapon(player_type *creature_ptr)
 void calc_android_exp(player_type *creature_ptr)
 {
     u32b total_exp = 0;
-    if (creature_ptr->is_dead || (creature_ptr->prace != RACE_ANDROID))
+    if (creature_ptr->is_dead || (creature_ptr->prace != player_race_type::ANDROID))
         return;
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {

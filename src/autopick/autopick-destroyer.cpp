@@ -41,7 +41,7 @@ static bool is_leave_special_item(player_type *player_ptr, object_type *o_ptr)
     if (!leave_special)
         return true;
 
-    if (player_ptr->prace == RACE_BALROG) {
+    if (player_ptr->prace == player_race_type::BALROG) {
         if (o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_CORPSE && angband_strchr("pht", r_info[o_ptr->pval].d_char))
             return false;
     } else if (player_ptr->pclass == CLASS_ARCHER) {

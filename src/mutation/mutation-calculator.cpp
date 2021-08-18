@@ -40,7 +40,7 @@ int calc_mutant_regenerate_mod(player_type *creature_ptr)
     if (creature_ptr->pseikaku == PERSONALITY_LUCKY)
         count--;
 
-    if (creature_ptr->prace == RACE_BEASTMAN) {
+    if (creature_ptr->prace == player_race_type::BEASTMAN) {
         count -= 10;
         mod = 5;
     }
