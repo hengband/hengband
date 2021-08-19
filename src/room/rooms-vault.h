@@ -8,7 +8,7 @@ typedef struct vault_type {
     std::string name; /* Name (offset) */
     std::string text; /* Text (offset) */
 
-    ROOM_IDX typ{}; /* Vault type */
+    byte typ{}; /* Vault type */
     PROB rat{}; /* Vault rating (unused) */
     POSITION hgt{}; /* Vault height */
     POSITION wid{}; /* Vault width */
