@@ -2045,7 +2045,7 @@ errr term_init(term_type *t, TERM_LEN w, TERM_LEN h, int k)
     t->key_head = t->key_tail = 0;
 
     /* Determine the input queue size */
-    t->key_size = (u16b)k;
+    t->key_size = (uint16_t)k;
 
     /* Allocate the input queue */
     t->key_queue.resize(t->key_size);

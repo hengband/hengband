@@ -276,7 +276,7 @@ struct infowin {
     int16_t ox, oy;
     int16_t x, y;
     int16_t w, h;
-    u16b b;
+    uint16_t b;
 
     byte byte1;
 

@@ -88,9 +88,9 @@ void get_stats(player_type* creature_ptr)
 /*!
  * @brief 経験値修正の合計値を計算
  */
-u16b get_expfact(player_type *creature_ptr)
+uint16_t get_expfact(player_type *creature_ptr)
 {
-    u16b expfact = rp_ptr->r_exp;
+    uint16_t expfact = rp_ptr->r_exp;
 
     if (creature_ptr->prace != player_race_type::ANDROID)
         expfact += cp_ptr->c_exp;

@@ -15,4 +15,4 @@ extern concptr *quark__str;
 
 concptr quark_str(STR_OFFSET num);
 void quark_init(void);
-u16b quark_add(concptr str);
+uint16_t quark_add(concptr str);

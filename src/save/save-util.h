@@ -8,7 +8,7 @@ extern u32b v_stamp;
 extern u32b x_stamp;
 
 void wr_byte(byte v);
-void wr_u16b(u16b v);
+void wr_u16b(uint16_t v);
 void wr_s16b(int16_t v);
 void wr_u32b(u32b v);
 void wr_s32b(s32b v);

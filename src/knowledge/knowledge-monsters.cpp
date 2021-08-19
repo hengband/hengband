@@ -195,7 +195,7 @@ void do_cmd_knowledge_kill_count(player_type *creature_ptr)
             who[n++] = i;
     }
 
-    u16b why = 2;
+    uint16_t why = 2;
     char buf[80];
     ang_sort(creature_ptr, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
     for (int k = 0; k < n; k++) {

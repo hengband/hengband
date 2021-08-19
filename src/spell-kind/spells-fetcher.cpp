@@ -119,7 +119,7 @@ bool fetch_monster(player_type *caster_ptr)
     GAME_TEXT m_name[MAX_NLEN];
     int i;
     int path_n;
-    u16b path_g[512];
+    uint16_t path_g[512];
     POSITION ty, tx;
 
     if (!target_set(caster_ptr, TARGET_KILL))

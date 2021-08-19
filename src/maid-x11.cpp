@@ -143,10 +143,10 @@ static unsigned long create_pixel(Display *dpy, byte red, byte green, byte blue)
  */
 typedef struct BITMAPFILEHEADER
 {
-	u16b bfType;
+	uint16_t bfType;
 	u32b bfSize;
-	u16b bfReserved1;
-	u16b bfReserved2;
+	uint16_t bfReserved1;
+	uint16_t bfReserved2;
 	u32b bfOffBits;
 } BITMAPFILEHEADER;
 
@@ -158,8 +158,8 @@ typedef struct BITMAPINFOHEADER
 	u32b biSize;
 	u32b biWidth;
 	u32b biHeight;
-	u16b biPlanes;
-	u16b biBitCount;
+	uint16_t biPlanes;
+	uint16_t biBitCount;
 	u32b biCompresion;
 	u32b biSizeImage;
 	u32b biXPelsPerMeter;
@@ -191,10 +191,10 @@ static void rd_byte(FILE *fff, byte *ip)
 	*ip = get_byte(fff);
 }
 
-static void rd_u16b(FILE *fff, u16b *ip)
+static void rd_u16b(FILE *fff, uint16_t *ip)
 {
 	(*ip) = get_byte(fff);
-	(*ip) |= ((u16b)(get_byte(fff)) << 8);
+	(*ip) |= ((uint16_t)(get_byte(fff)) << 8);
 }
 
 static void rd_u32b(FILE *fff, u32b *ip)

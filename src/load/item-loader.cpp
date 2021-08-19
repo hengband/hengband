@@ -294,7 +294,7 @@ void rd_item(player_type *player_ptr, object_type *o_ptr)
  */
 errr load_item(void)
 {
-    u16b loading_max_k_idx;
+    uint16_t loading_max_k_idx;
     rd_u16b(&loading_max_k_idx);
 
     object_kind *k_ptr;
@@ -323,7 +323,7 @@ errr load_item(void)
  */
 errr load_artifact(void)
 {
-    u16b loading_max_a_idx;
+    uint16_t loading_max_a_idx;
     rd_u16b(&loading_max_a_idx);
 
     artifact_type *a_ptr;

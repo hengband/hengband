@@ -77,7 +77,7 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
     int Dismissed = 0;
 
     MONSTER_IDX *who;
-    u16b dummy_why;
+    uint16_t dummy_why;
     int max_pet = 0;
     bool cu, cv;
 

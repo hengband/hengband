@@ -67,8 +67,6 @@ static_assert(sizeof(short) == 2);
 static_assert(sizeof(int) == 4);
 // static_assert(sizeof(long) == 8); // 将来のための予約.
 
-typedef uint16_t u16b;
-
 typedef int32_t s32b;
 typedef uint32_t u32b;
 
@@ -175,7 +173,7 @@ typedef s32b PERCENTAGE; /*!< ゲーム中のパーセント表記の型定義(/
 typedef int16_t MULTIPLY; /*!< ゲーム中の倍率の型定義(/10倍) */
 
 typedef u32b BIT_FLAGS; /*!< 32ビットのフラグ配列の型定義 */
-typedef u16b BIT_FLAGS16; /*!< 16ビットのフラグ配列の型定義 */
+typedef uint16_t BIT_FLAGS16; /*!< 16ビットのフラグ配列の型定義 */
 typedef byte BIT_FLAGS8; /*!< 8ビットのフラグ配列の型定義 */
 
 typedef int16_t XTRA16; /*!< 汎用変数16ビットの型定義 */

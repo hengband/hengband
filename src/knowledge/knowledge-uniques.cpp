@@ -17,7 +17,7 @@
 
 typedef struct unique_list_type {
     bool is_alive;
-    u16b why;
+    uint16_t why;
     IDX *who;
     int num_uniques[10];
     int num_uniques_surface;

@@ -63,17 +63,17 @@ void rd_byte(byte *ip) { *ip = sf_get(); }
  * @brief ロードファイルポインタから符号なし16bit値を読み込んでポインタに渡す
  * @param ip 読み込みポインタ
  */
-void rd_u16b(u16b *ip)
+void rd_u16b(uint16_t *ip)
 {
     (*ip) = sf_get();
-    (*ip) |= ((u16b)(sf_get()) << 8);
+    (*ip) |= ((uint16_t)(sf_get()) << 8);
 }
 
 /*!
  * @brief ロードファイルポインタから符号つき16bit値を読み込んでポインタに渡す
  * @param ip 読み込みポインタ
  */
-void rd_s16b(int16_t *ip) { rd_u16b((u16b *)ip); }
+void rd_s16b(int16_t *ip) { rd_u16b((uint16_t *)ip); }
 
 /*!
  * @brief ロードファイルポインタから符号なし32bit値を読み込んでポインタに渡す

@@ -11,7 +11,7 @@
  */
 struct angband_header {
     byte checksum; //!< Checksum of "info" records
-    u16b info_num; //!< このinfoのデータ数
+    uint16_t info_num; //!< このinfoのデータ数
 };
 
 extern angband_header f_head;

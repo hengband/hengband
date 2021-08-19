@@ -103,7 +103,7 @@ static bool wr_savefile_new(player_type *player_ptr, save_type type)
     for (int i = tmp32u - 1; i >= 0; i--)
         wr_string(message_str(i));
 
-    u16b tmp16u = max_r_idx;
+    uint16_t tmp16u = max_r_idx;
     wr_u16b(tmp16u);
     for (MONRACE_IDX r_idx = 0; r_idx < tmp16u; r_idx++)
         wr_lore(r_idx);
@@ -188,7 +188,7 @@ static bool wr_savefile_new(player_type *player_ptr, save_type type)
         if (!o_ptr->k_idx)
             continue;
 
-        wr_u16b((u16b)i);
+        wr_u16b((uint16_t)i);
         wr_item(o_ptr);
     }
 

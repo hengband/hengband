@@ -102,7 +102,7 @@ static std::array<tr_type, 6> lite_flags = {
  * @param char_stat その行の特性の状況(参照渡し)
  * その行の表示色用の判定も行う
  */
-static void process_cursed_equipment_characteristics(player_type *creature_ptr, u16b mode, char_stat &char_stat)
+static void process_cursed_equipment_characteristics(player_type *creature_ptr, uint16_t mode, char_stat &char_stat)
 {
     int max_i = (mode & DP_WP) ? INVEN_BOW + 1 : INVEN_TOTAL;
     for (int i = INVEN_MAIN_HAND; i < max_i; i++) {
@@ -152,7 +152,7 @@ static void process_cursed_equipment_characteristics(player_type *creature_ptr, 
  * @details
  * その行の表示色用の判定も行う
  */
-static void process_light_equipment_characteristics(player_type *creature_ptr, all_player_flags *f, u16b mode, char_stat &char_stat)
+static void process_light_equipment_characteristics(player_type *creature_ptr, all_player_flags *f, uint16_t mode, char_stat &char_stat)
 {
     int max_i = (mode & DP_WP) ? INVEN_BOW + 1 : INVEN_TOTAL;
     for (int i = INVEN_MAIN_HAND; i < max_i; i++) {
@@ -202,7 +202,7 @@ static void process_light_equipment_characteristics(player_type *creature_ptr, a
  * @details
  * その行の表示色用の判定も行う
  */
-static void process_inventory_characteristic(player_type *creature_ptr, tr_type flag, all_player_flags *f, u16b mode, char_stat &char_stat)
+static void process_inventory_characteristic(player_type *creature_ptr, tr_type flag, all_player_flags *f, uint16_t mode, char_stat &char_stat)
 {
     int max_i = (mode & DP_WP) ? INVEN_BOW + 1 : INVEN_TOTAL;
     for (int i = INVEN_MAIN_HAND; i < max_i; i++) {
@@ -266,7 +266,7 @@ static void process_inventory_characteristic(player_type *creature_ptr, tr_type 
  * @param f プレイヤーの特性情報構造体
  * @param mode 表示オプション
  */
-static void process_one_characteristic(player_type *creature_ptr, TERM_LEN row, TERM_LEN col, std::string_view header, tr_type flag, all_player_flags *f, u16b mode)
+static void process_one_characteristic(player_type *creature_ptr, TERM_LEN row, TERM_LEN col, std::string_view header, tr_type flag, all_player_flags *f, uint16_t mode)
 {
     char_stat char_stat;
 

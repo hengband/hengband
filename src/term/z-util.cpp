@@ -207,8 +207,8 @@ void s64b_mul(s32b *A1, u32b *A2, s32b B1, u32b B2)
 	tmp1 = (*A1) * B2;
 	tmp1 += A2val * B1;
 	tmp1 += A2high * B2high;
-	tmp1 += (A2high * (u16b)B2) >> 16;
-	tmp1 += ((u16b)A2val * B2high) >> 16;
+	tmp1 += (A2high * (uint16_t)B2) >> 16;
+	tmp1 += ((uint16_t)A2val * B2high) >> 16;
 
 	(*A1) = tmp1;
 }

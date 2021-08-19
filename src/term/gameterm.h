@@ -31,4 +31,4 @@ extern byte angband_color_table[256][4];
 extern TERM_COLOR gf_color[MAX_GF];
 extern TERM_COLOR color_char_to_attr(SYMBOL_CODE c);
 
-u16b bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, EFFECT_ID typ);
+uint16_t bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, EFFECT_ID typ);

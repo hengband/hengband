@@ -27,7 +27,7 @@ bool research_mon(player_type *player_ptr)
     char buf[256];
     bool notpicked;
     bool recall = false;
-    u16b why = 0;
+    uint16_t why = 0;
     MONSTER_IDX *who;
 
     bool all = false;

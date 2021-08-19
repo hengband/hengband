@@ -591,13 +591,13 @@ errr rd_dungeon_old(player_type *player_ptr)
     int xmax = floor_ptr->width;
 
     for (int x = 0, y = 0; y < ymax;) {
-        u16b info;
+        uint16_t info;
         byte count;
         rd_byte(&count);
         if (h_older_than(0, 3, 6)) {
             byte tmp8u;
             rd_byte(&tmp8u);
-            info = (u16b)tmp8u;
+            info = (uint16_t)tmp8u;
         } else {
             rd_u16b(&info);
             info &= ~(CAVE_LITE | CAVE_VIEW | CAVE_MNLT | CAVE_MNDK);
@@ -741,7 +741,7 @@ errr rd_dungeon_old(player_type *player_ptr)
         }
     }
 
-    u16b limit;
+    uint16_t limit;
     rd_u16b(&limit);
     if (limit > current_world_ptr->max_o_idx) {
         load_note(format(_("アイテムの配列が大きすぎる(%d)！", "Too many (%d) object entries!"), limit));

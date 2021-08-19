@@ -45,8 +45,8 @@ typedef struct object_type {
     TIME_EFFECT timeout{}; /*!< Timeout Counter */
     byte ident{}; /*!< Special flags  */
     byte marked{}; /*!< Object is marked */
-    u16b inscription{}; /*!< Inscription index */
-    u16b art_name{}; /*!< Artifact name (random artifacts) */
+    uint16_t inscription{}; /*!< Inscription index */
+    uint16_t art_name{}; /*!< Artifact name (random artifacts) */
     byte feeling{}; /*!< Game generated inscription number (eg, pseudo-id) */
 
     BIT_FLAGS art_flags[TR_FLAG_SIZE]{}; /*!< Extra Flags for ego and artifacts */

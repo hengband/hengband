@@ -30,7 +30,7 @@ void wr_byte(byte v) { sf_put(v); }
  * @brief 符号なし16ビットをファイルに書き込む
  * @param v 書き込む符号なし16bit値
  */
-void wr_u16b(u16b v)
+void wr_u16b(uint16_t v)
 {
     wr_byte((byte)(v & 0xFF));
     wr_byte((byte)((v >> 8) & 0xFF));
@@ -40,7 +40,7 @@ void wr_u16b(u16b v)
  * @brief 符号あり16ビットをファイルに書き込む
  * @param v 書き込む符号あり16bit値
  */
-void wr_s16b(int16_t v) { wr_u16b((u16b)v); }
+void wr_s16b(int16_t v) { wr_u16b((uint16_t)v); }
 
 /*!
  * @brief 符号なし32ビットをファイルに書き込む
