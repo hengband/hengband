@@ -143,6 +143,17 @@ void it_type::set_class_specific_throw_params()
         && ((this->q_ptr->tval == TV_SPIKE) || ((has_flag(this->obj_flags, TR_THROW)) && (this->q_ptr->tval == TV_SWORD)));
 }
 
+void it_type::set_racial_chance()
+{
+    if (has_flag(this->obj_flags, TR_THROW))
+        this->chance = ((this->creature_ptr->skill_tht) + ((this->creature_ptr->to_h_b + this->q_ptr->to_h) * BTH_PLUS_ADJ));
+    else
+        this->chance = (this->creature_ptr->skill_tht + (this->creature_ptr->to_h_b * BTH_PLUS_ADJ));
+
+    if (this->shuriken != 0)
+        this->chance *= 2;
+}
+
 bool it_type::check_what_throw()
 {
     if (this->shuriken >= 0) {

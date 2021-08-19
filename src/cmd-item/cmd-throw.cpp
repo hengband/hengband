@@ -70,17 +70,6 @@ ThrowCommand::ThrowCommand(player_type* creature_ptr)
 {
 }
 
-static void set_racial_chance(player_type *creature_ptr, it_type *it_ptr)
-{
-    if (has_flag(it_ptr->obj_flags, TR_THROW))
-        it_ptr->chance = ((creature_ptr->skill_tht) + ((creature_ptr->to_h_b + it_ptr->q_ptr->to_h) * BTH_PLUS_ADJ));
-    else
-        it_ptr->chance = (creature_ptr->skill_tht + (creature_ptr->to_h_b * BTH_PLUS_ADJ));
-
-    if (it_ptr->shuriken != 0)
-        it_ptr->chance *= 2;
-}
-
 static bool check_racial_target_bold(player_type *creature_ptr, it_type *it_ptr)
 {
     it_ptr->ny[it_ptr->cur_dis] = it_ptr->y;
@@ -407,7 +396,7 @@ bool ThrowCommand::do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
     }
 
     it_ptr->set_class_specific_throw_params();
-    set_racial_chance(this->creature_ptr, it_ptr);
+    it_ptr->set_racial_chance();
     it_ptr->prev_y = it_ptr->y;
     it_ptr->prev_x = it_ptr->x;
     exe_throw(this->creature_ptr, it_ptr);
