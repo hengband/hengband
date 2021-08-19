@@ -27,8 +27,8 @@ typedef struct building_type {
     PRICE member_costs[8]; /* Costs for class members of building */
     PRICE other_costs[8]; /* Costs for nonguild members */
     char letters[8]; /* action letters */
-    BACT_IDX actions[8]; /* action codes */
-    BACT_RESTRICT_IDX action_restr[8]; /* action restrictions */
+    int16_t actions[8]; /*!< 町の施設処理における行動ID */
+    int16_t action_restr[8]; /*!< 町の施設処理の規制処理ID */
 
     player_class_type member_class[MAX_CLASS]; /* which classes are part of guild */
     player_race_type member_race[MAX_RACES]; /* which classes are part of guild */

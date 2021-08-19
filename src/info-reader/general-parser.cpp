@@ -222,8 +222,8 @@ parse_error_type parse_line_building(char *buf)
             building[index].member_costs[action_index] = (PRICE)atoi(zz[2]);
             building[index].other_costs[action_index] = (PRICE)atoi(zz[3]);
             building[index].letters[action_index] = zz[4][0];
-            building[index].actions[action_index] = (BACT_IDX)atoi(zz[5]);
-            building[index].action_restr[action_index] = (BACT_RESTRICT_IDX)atoi(zz[6]);
+            building[index].actions[action_index] = static_cast<int16_t>(atoi(zz[5]));
+            building[index].action_restr[action_index] = static_cast<int16_t>(atoi(zz[6]));
             break;
         }
 
