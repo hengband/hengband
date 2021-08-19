@@ -33,12 +33,7 @@
  * </pre>
  */
 
-#ifndef INCLUDED_H_TYPE_H
-#define INCLUDED_H_TYPE_H
-
-#ifdef HAVE_STDINT_H
 #include <stdint.h>
-#endif
 
 /*** Special 4 letter names for some standard types ***/
 typedef void *vptr; /*!< void型ポインタ定義 / A standard pointer (to "void" because ANSI C says so) */
@@ -72,23 +67,11 @@ static_assert(sizeof(short) == 2);
 static_assert(sizeof(int) == 4);
 // static_assert(sizeof(long) == 8); // 将来のための予約.
 
-/* Signed/Unsigned 16 bit value */
-#ifdef HAVE_STDINT_H
 typedef int16_t s16b;
 typedef uint16_t u16b;
-#else
-typedef signed short s16b;
-typedef unsigned short u16b;
-#endif
 
-/* Signed/Unsigned 32 bit value */
-#ifdef HAVE_STDINT_H
 typedef int32_t s32b;
 typedef uint32_t u32b;
-#else
-typedef signed long s32b;
-typedef unsigned long u32b;
-#endif
 
 typedef s16b IDX; /*!< ゲーム中のID型を定義 */
 
@@ -230,5 +213,3 @@ enum process_result {
     PROCESS_TRUE = 1,
     PROCESS_CONTINUE = 2,
 };
-
-#endif
