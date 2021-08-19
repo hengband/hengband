@@ -70,77 +70,6 @@ ThrowCommand::ThrowCommand(player_type* creature_ptr)
 {
 }
 
-static bool check_throw_boomerang(player_type *creature_ptr, it_type *it_ptr, concptr *q, concptr *s)
-{
-    if (!it_ptr->boomerang)
-        return true;
-
-    if (has_melee_weapon(creature_ptr, INVEN_MAIN_HAND) && has_melee_weapon(creature_ptr, INVEN_SUB_HAND)) {
-        item_tester_hook = item_tester_hook_boomerang;
-        *q = _("どの武器を投げますか? ", "Throw which item? ");
-        *s = _("投げる武器がない。", "You have nothing to throw.");
-        it_ptr->o_ptr = choose_object(creature_ptr, &it_ptr->item, *q, *s, USE_EQUIP, TV_NONE);
-        if (!it_ptr->o_ptr) {
-            flush();
-            return false;
-        }
-
-        return true;
-    }
-
-    if (has_melee_weapon(creature_ptr, INVEN_SUB_HAND)) {
-        it_ptr->item = INVEN_SUB_HAND;
-        it_ptr->o_ptr = &creature_ptr->inventory_list[it_ptr->item];
-        return true;
-    }
-
-    it_ptr->item = INVEN_MAIN_HAND;
-    it_ptr->o_ptr = &creature_ptr->inventory_list[it_ptr->item];
-    return true;
-}
-
-static bool check_what_throw(player_type *creature_ptr, it_type *it_ptr)
-{
-    if (it_ptr->shuriken >= 0) {
-        it_ptr->item = it_ptr->shuriken;
-        it_ptr->o_ptr = &creature_ptr->inventory_list[it_ptr->item];
-        return true;
-    }
-
-    concptr q, s;
-    if (!check_throw_boomerang(creature_ptr, it_ptr, &q, &s))
-        return false;
-
-    q = _("どのアイテムを投げますか? ", "Throw which item? ");
-    s = _("投げるアイテムがない。", "You have nothing to throw.");
-    it_ptr->o_ptr = choose_object(creature_ptr, &it_ptr->item, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP, TV_NONE);
-    if (!it_ptr->o_ptr) {
-        flush();
-        return false;
-    }
-
-    return true;
-}
-
-static bool check_can_throw(player_type *creature_ptr, it_type *it_ptr)
-{
-    if (!check_what_throw(creature_ptr, it_ptr))
-        return false;
-
-    if (object_is_cursed(it_ptr->o_ptr) && (it_ptr->item >= INVEN_MAIN_HAND)) {
-        msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
-        return false;
-    }
-
-    if (creature_ptr->current_floor_ptr->inside_arena && !it_ptr->boomerang && (it_ptr->o_ptr->tval != TV_SPIKE)) {
-        msg_print(_("アリーナではアイテムを使えない！", "You're in the arena now. This is hand-to-hand!"));
-        msg_print(NULL);
-        return false;
-    }
-
-    return true;
-}
-
 static void calc_throw_range(player_type *creature_ptr, it_type *it_ptr)
 {
     it_ptr->q_ptr->copy_from(it_ptr->o_ptr);
@@ -542,7 +471,7 @@ bool ThrowCommand::do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
     object_type tmp_object;
     it_type tmp_it(this->creature_ptr, &tmp_object, delay_factor, mult, boomerang, shuriken);
     it_type *it_ptr = &tmp_it;
-    if (!check_can_throw(this->creature_ptr, it_ptr))
+    if (!it_ptr->check_can_throw())
         return false;
 
     calc_throw_range(this->creature_ptr, it_ptr);

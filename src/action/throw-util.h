@@ -53,6 +53,11 @@ public:
     char o2_name[MAX_NLEN]{};
     bool super_boomerang{};
 
+    bool check_can_throw();
+
 private:
     player_type *creature_ptr;
+
+    bool check_what_throw();
+    bool check_throw_boomerang(concptr *q, concptr *s);
 };
