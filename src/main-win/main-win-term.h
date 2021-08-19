@@ -33,11 +33,15 @@ protected:
 };
 
 constexpr LPCWSTR application_name = L"ANGBAND";
+constexpr int MAX_TERM_DATA = 8; //!< Maximum number of windows
 extern HINSTANCE hInstance; // Saved instance handle.
 extern bg_mode current_bg_mode;
 extern COLORREF win_clr[256]; // The "complex" color values.
 extern POINT normsize; //!< Remember normal size of main window when maxmized.
 extern HBRUSH hbrYellow; // Yellow brush for the cursor.
+
+struct term_data;
+extern term_data data[MAX_TERM_DATA]; //!< An array of term_data's
 
 /*!
  * @struct term_data
@@ -58,6 +62,11 @@ extern HBRUSH hbrYellow; // Yellow brush for the cursor.
  */
 struct player_type;
 struct term_data {
+    term_data() = default; //!< デフォルトコンストラクタ
+    term_data(const term_data &) = delete; //!< コピー禁止
+    term_data &operator=(term_data &) = delete; //!< 代入演算子禁止
+    term_data &operator=(term_data &&) = default; //!< move代入
+
     term_type t{};
     LPCWSTR name{};
     HWND w{};
@@ -86,14 +95,7 @@ struct term_data {
     int tile_hgt{}; //!< タイル縦幅
 
     LOGFONTW lf{};
-
     bool posfix{};
-
-    term_data() = default; //!< デフォルトコンストラクタ
-    term_data(const term_data &) = delete; //!< コピー禁止
-    term_data &operator=(term_data &) = delete; //!< 代入演算子禁止
-    term_data &operator=(term_data &&) = default; //!< move代入
-
     double_buffering graphics{};
 
     static errr extra_win_flush();
@@ -103,8 +105,6 @@ struct term_data {
     HDC get_hdc();
     void refresh(const RECT *lpRect = NULL);
     bool render(const RECT &rect);
-    void dispose_offscreen();
-    bool is_main_term();
     void resize_window();
     void adjust_size();
     void force_font();
@@ -133,10 +133,9 @@ private:
     static errr extra_win_scene(int v);
     static int extra_win_delay(int v);
 
+    void dispose_offscreen();
+    bool is_main_term();
     bool handle_window_get_info(const LPARAM lParam);
     bool handle_window_position_change(const LPARAM lParam);
     bool handle_window_max_min(const WPARAM wParam);
 };
-
-constexpr int MAX_TERM_DATA = 8; //!< Maximum number of windows
-extern term_data data[MAX_TERM_DATA]; //!< An array of term_data's
