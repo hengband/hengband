@@ -27,6 +27,8 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "monster-floor/monster-death.h"
+#include "monster-floor/monster-summon.h"
+#include "monster-floor/place-monster-types.h"
 #include "monster/monster-damage.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
@@ -198,6 +200,21 @@ void it_type::exe_throw()
         this->attack_racial_power();
         break;
     }
+}
+
+void it_type::display_figurine_throw()
+{
+    if ((this->q_ptr->tval != TV_FIGURINE) || this->creature_ptr->current_floor_ptr->inside_arena)
+        return;
+
+    this->corruption_possibility = 100;
+    if (!(summon_named_creature(this->creature_ptr, 0, this->y, this->x, this->q_ptr->pval, !(object_is_cursed(this->q_ptr)) ? PM_FORCE_PET : PM_NONE))) {
+        msg_print(_("人形は捻じ曲がり砕け散ってしまった！", "The Figurine writhes and then shatters."));
+        return;
+    }
+
+    if (object_is_cursed(this->q_ptr))
+        msg_print(_("これはあまり良くない気がする。", "You have a bad feeling about this."));
 }
 
 bool it_type::check_what_throw()

@@ -60,6 +60,7 @@ public:
     void set_class_specific_throw_params();
     void set_racial_chance();
     void exe_throw();
+    void display_figurine_throw();
 
 private:
     player_type *creature_ptr;
