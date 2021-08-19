@@ -59,10 +59,17 @@ public:
     void reflect_inventory_by_throw();
     void set_class_specific_throw_params();
     void set_racial_chance();
+    void exe_throw();
 
 private:
     player_type *creature_ptr;
 
     bool check_what_throw();
     bool check_throw_boomerang(concptr *q, concptr *s);
+    bool check_racial_target_bold();
+    void check_racial_target_seen();
+    bool check_racial_target_monster();
+    void attack_racial_power();
+    void display_attack_racial_power();
+    void calc_racial_power_damage();
 };

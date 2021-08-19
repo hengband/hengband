@@ -8,25 +8,46 @@
 #include "action/throw-util.h"
 #include "artifact/fixed-art-types.h"
 #include "combat/attack-power-table.h"
+#include "combat/shoot.h"
+#include "combat/slaying.h"
 #include "core/stuff-handler.h"
 #include "effect/spells-effect-util.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
+#include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "floor/geometry.h"
+#include "game-option/cheat-types.h"
+#include "grid/feature-flag-types.h"
+#include "grid/grid.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
+#include "io/cursor.h"
+#include "io/screen-util.h"
+#include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
+#include "monster-floor/monster-death.h"
+#include "monster/monster-damage.h"
+#include "monster/monster-describer.h"
+#include "monster/monster-info.h"
+#include "monster/monster-status-setter.h"
+#include "monster/monster-status.h"
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-checker.h"
+#include "object-hook/hook-expendable.h"
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "object/object-flags.h"
+#include "object/object-info.h"
+#include "object/object-kind.h"
 #include "object/object-stack.h"
 #include "player-info/equipment-info.h"
 #include "player-status/player-energy.h"
 #include "specific-object/torch.h"
 #include "system/floor-type-definition.h"
+#include "system/grid-type-definition.h"
+#include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/target-checker.h"
@@ -35,6 +56,7 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "view/object-describer.h"
+#include "wizard/wizard-messages.h"
 
 it_type::it_type(player_type *creature_ptr, object_type *q_ptr, const int delay_factor_val, const int mult, const bool boomerang, const OBJECT_IDX shuriken)
     : q_ptr(q_ptr)
@@ -154,6 +176,30 @@ void it_type::set_racial_chance()
         this->chance *= 2;
 }
 
+void it_type::exe_throw()
+{
+    this->cur_dis = 0;
+    while (this->cur_dis <= this->tdis) {
+        if ((this->y == this->ty) && (this->x == this->tx))
+            break;
+
+        if (this->check_racial_target_bold())
+            break;
+
+        this->check_racial_target_seen();
+        if (this->check_racial_target_monster())
+            continue;
+
+        this->g_ptr = &this->creature_ptr->current_floor_ptr->grid_array[this->y][this->x];
+        this->m_ptr = &this->creature_ptr->current_floor_ptr->m_list[this->g_ptr->m_idx];
+        monster_name(this->creature_ptr, this->g_ptr->m_idx, this->m_name);
+        this->visible = this->m_ptr->ml;
+        this->hit_body = true;
+        this->attack_racial_power();
+        break;
+    }
+}
+
 bool it_type::check_what_throw()
 {
     if (this->shuriken >= 0) {
@@ -163,7 +209,7 @@ bool it_type::check_what_throw()
     }
 
     concptr q, s;
-    if (!check_throw_boomerang(&q, &s))
+    if (!this->check_throw_boomerang(&q, &s))
         return false;
 
     q = _("どのアイテムを投げますか? ", "Throw which item? ");
@@ -204,4 +250,121 @@ bool it_type::check_throw_boomerang(concptr *q, concptr *s)
     this->item = INVEN_MAIN_HAND;
     this->o_ptr = &this->creature_ptr->inventory_list[this->item];
     return true;
+}
+
+bool it_type::check_racial_target_bold()
+{
+    this->ny[this->cur_dis] = this->y;
+    this->nx[this->cur_dis] = this->x;
+    mmove2(&this->ny[this->cur_dis], &this->nx[this->cur_dis], this->creature_ptr->y, this->creature_ptr->x, this->ty, this->tx);
+    if (cave_has_flag_bold(this->creature_ptr->current_floor_ptr, this->ny[this->cur_dis], this->nx[this->cur_dis], FF_PROJECT))
+        return false;
+
+    this->hit_wall = true;
+    return (this->q_ptr->tval == TV_FIGURINE) || object_is_potion(this->q_ptr)
+        || (this->creature_ptr->current_floor_ptr->grid_array[this->ny[this->cur_dis]][this->nx[this->cur_dis]].m_idx == 0);
+}
+
+void it_type::check_racial_target_seen()
+{
+    if (!panel_contains(this->ny[this->cur_dis], this->nx[this->cur_dis])
+        || !player_can_see_bold(this->creature_ptr, this->ny[this->cur_dis], this->nx[this->cur_dis])) {
+        term_xtra(TERM_XTRA_DELAY, this->msec);
+        return;
+    }
+
+    if (this->msec > 0) {
+        SYMBOL_CODE c = object_char(this->q_ptr);
+        TERM_COLOR a = object_attr(this->q_ptr);
+        print_rel(this->creature_ptr, c, a, this->ny[this->cur_dis], this->nx[this->cur_dis]);
+        move_cursor_relative(this->ny[this->cur_dis], this->nx[this->cur_dis]);
+        term_fresh();
+        term_xtra(TERM_XTRA_DELAY, this->msec);
+        lite_spot(this->creature_ptr, this->ny[this->cur_dis], this->nx[this->cur_dis]);
+        term_fresh();
+    }
+}
+
+bool it_type::check_racial_target_monster()
+{
+    this->prev_y = this->y;
+    this->prev_x = this->x;
+    this->x = this->nx[this->cur_dis];
+    this->y = this->ny[this->cur_dis];
+    this->cur_dis++;
+    return this->creature_ptr->current_floor_ptr->grid_array[this->y][this->x].m_idx == 0;
+}
+
+void it_type::attack_racial_power()
+{
+    if (!test_hit_fire(this->creature_ptr, this->chance - this->cur_dis, this->m_ptr, this->m_ptr->ml, this->o_name))
+        return;
+
+    this->display_attack_racial_power();
+    this->calc_racial_power_damage();
+    msg_format_wizard(this->creature_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), this->tdam,
+        this->m_ptr->hp - this->tdam, this->m_ptr->maxhp, this->m_ptr->max_maxhp);
+
+    bool fear = false;
+    MonsterDamageProcessor mdp(this->creature_ptr, this->g_ptr->m_idx, this->tdam, &fear);
+    if (mdp.mon_take_hit(extract_note_dies(real_r_idx(this->m_ptr))))
+        return;
+
+    message_pain(this->creature_ptr, this->g_ptr->m_idx, this->tdam);
+    if ((this->tdam > 0) && !object_is_potion(this->q_ptr))
+        anger_monster(this->creature_ptr, this->m_ptr);
+
+    if (fear && this->m_ptr->ml) {
+        sound(SOUND_FLEE);
+        msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), this->m_name);
+    }
+}
+
+void it_type::display_attack_racial_power()
+{
+    if (!this->visible) {
+        msg_format(_("%sが敵を捕捉した。", "The %s finds a mark."), this->o_name);
+        return;
+    }
+
+    msg_format(_("%sが%sに命中した。", "The %s hits %s."), this->o_name, this->m_name);
+    if (!this->m_ptr->ml)
+        return;
+
+    if (!this->creature_ptr->image)
+        monster_race_track(this->creature_ptr, this->m_ptr->ap_r_idx);
+
+    health_track(this->creature_ptr, this->g_ptr->m_idx);
+}
+
+void it_type::calc_racial_power_damage()
+{
+    int dd = this->q_ptr->dd;
+    int ds = this->q_ptr->ds;
+    torch_dice(this->q_ptr, &dd, &ds);
+    this->tdam = damroll(dd, ds);
+    this->tdam = calc_attack_damage_with_slay(this->creature_ptr, this->q_ptr, this->tdam, this->m_ptr, HISSATSU_NONE, true);
+    this->tdam = critical_shot(this->creature_ptr, this->q_ptr->weight, this->q_ptr->to_h, 0, this->tdam);
+    if (this->q_ptr->to_d > 0)
+        this->tdam += this->q_ptr->to_d;
+    else
+        this->tdam += -this->q_ptr->to_d;
+
+    if (this->boomerang) {
+        this->tdam *= (this->mult + this->creature_ptr->num_blow[this->item - INVEN_MAIN_HAND]);
+        this->tdam += this->creature_ptr->to_d_m;
+    } else if (has_flag(this->obj_flags, TR_THROW)) {
+        this->tdam *= (3 + this->mult);
+        this->tdam += this->creature_ptr->to_d_m;
+    } else {
+        this->tdam *= this->mult;
+    }
+
+    if (this->shuriken != 0)
+        this->tdam += ((this->creature_ptr->lev + 30) * (this->creature_ptr->lev + 30) - 900) / 55;
+
+    if (this->tdam < 0)
+        this->tdam = 0;
+
+    this->tdam = mon_damage_mod(this->creature_ptr, this->m_ptr, this->tdam, false);
 }
