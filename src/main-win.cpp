@@ -675,7 +675,7 @@ static void init_windows(void)
     td = &data[0];
     my_td = td;
     td->w = CreateWindowExW(
-        td->dwExStyle, AppName, _(L"変愚蛮怒", td->name), td->dwStyle, td->pos_x, td->pos_y, td->size_wid, td->size_hgt, HWND_DESKTOP, NULL, hInstance, NULL);
+        td->dwExStyle, application_name, _(L"変愚蛮怒", td->name), td->dwStyle, td->pos_x, td->pos_y, td->size_wid, td->size_hgt, HWND_DESKTOP, NULL, hInstance, NULL);
     my_td = NULL;
 
     if (!td->w)
@@ -1668,7 +1668,7 @@ static void hook_quit(concptr str)
     graphic.finalize();
     finalize_sound();
 
-    UnregisterClassW(AppName, hInstance);
+    UnregisterClassW(application_name, hInstance);
     if (hIcon)
         DestroyIcon(hIcon);
 
@@ -1790,11 +1790,11 @@ static void register_wndclass(void)
     wc.cbClsExtra = 0;
     wc.cbWndExtra = 4;
     wc.hInstance = hInstance;
-    wc.hIcon = hIcon = LoadIconW(hInstance, AppName);
+    wc.hIcon = hIcon = LoadIconW(hInstance, application_name);
     wc.hCursor = LoadCursor(NULL, IDC_ARROW);
     wc.hbrBackground = NULL;
-    wc.lpszMenuName = AppName;
-    wc.lpszClassName = AppName;
+    wc.lpszMenuName = application_name;
+    wc.lpszClassName = application_name;
 
     if (!RegisterClassW(&wc))
         exit(1);
@@ -1834,7 +1834,7 @@ int WINAPI WinMain(
             MessageBoxW(NULL, to_wchar(str).wc_str(), _(L"エラー！", L"Error"), MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
         }
 
-        UnregisterClassW(AppName, hInstance);
+        UnregisterClassW(application_name, hInstance);
         if (hIcon)
             DestroyIcon(hIcon);
 
