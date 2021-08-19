@@ -6,12 +6,14 @@
  */
 
 #include "action/throw-util.h"
+#include "artifact/fixed-art-types.h"
 #include "combat/attack-power-table.h"
 #include "effect/spells-effect-util.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "floor/geometry.h"
+#include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-checker.h"
@@ -30,6 +32,7 @@
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include "view/object-describer.h"
 
 it_type::it_type(player_type *creature_ptr, object_type *q_ptr, const int delay_factor_val, const int mult, const bool boomerang, const OBJECT_IDX shuriken)
     : q_ptr(q_ptr)
@@ -103,6 +106,24 @@ bool it_type::calc_throw_grid()
 
     project_length = 0;
     return true;
+}
+
+void it_type::reflect_inventory_by_throw()
+{
+    if ((this->q_ptr->name1 == ART_MJOLLNIR) || (this->q_ptr->name1 == ART_AEGISFANG) || this->boomerang)
+        this->return_when_thrown = true;
+
+    if (this->item < 0) {
+        floor_item_increase(this->creature_ptr, 0 - this->item, -1);
+        floor_item_optimize(this->creature_ptr, 0 - this->item);
+        return;
+    }
+
+    inven_item_increase(this->creature_ptr, this->item, -1);
+    if (!this->return_when_thrown)
+        inven_item_describe(this->creature_ptr, this->item);
+
+    inven_item_optimize(this->creature_ptr, this->item);
 }
 
 bool it_type::check_what_throw()

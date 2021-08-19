@@ -70,24 +70,6 @@ ThrowCommand::ThrowCommand(player_type* creature_ptr)
 {
 }
 
-static void reflect_inventory_by_throw(player_type *creature_ptr, it_type *it_ptr)
-{
-    if ((it_ptr->q_ptr->name1 == ART_MJOLLNIR) || (it_ptr->q_ptr->name1 == ART_AEGISFANG) || it_ptr->boomerang)
-        it_ptr->return_when_thrown = true;
-
-    if (it_ptr->item < 0) {
-        floor_item_increase(creature_ptr, 0 - it_ptr->item, -1);
-        floor_item_optimize(creature_ptr, 0 - it_ptr->item);
-        return;
-    }
-
-    inven_item_increase(creature_ptr, it_ptr->item, -1);
-    if (!it_ptr->return_when_thrown)
-        inven_item_describe(creature_ptr, it_ptr->item);
-
-    inven_item_optimize(creature_ptr, it_ptr->item);
-}
-
 static void set_class_specific_throw_params(player_type *creature_ptr, it_type *it_ptr)
 {
     PlayerEnergy energy(creature_ptr);
@@ -433,7 +415,7 @@ bool ThrowCommand::do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
     if (!it_ptr->calc_throw_grid())
         return false;
 
-    reflect_inventory_by_throw(this->creature_ptr, it_ptr);
+    it_ptr->reflect_inventory_by_throw();
     if (it_ptr->item >= INVEN_MAIN_HAND) {
         it_ptr->equiped_item = true;
         this->creature_ptr->redraw |= PR_EQUIPPY;
