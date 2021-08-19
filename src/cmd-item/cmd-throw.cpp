@@ -70,30 +70,6 @@ ThrowCommand::ThrowCommand(player_type* creature_ptr)
 {
 }
 
-static bool calc_throw_grid(player_type *creature_ptr, it_type *it_ptr)
-{
-    if (it_ptr->shuriken >= 0) {
-        it_ptr->ty = randint0(101) - 50 + creature_ptr->y;
-        it_ptr->tx = randint0(101) - 50 + creature_ptr->x;
-        return true;
-    }
-
-    project_length = it_ptr->tdis + 1;
-    DIRECTION dir;
-    if (!get_aim_dir(creature_ptr, &dir))
-        return false;
-
-    it_ptr->tx = creature_ptr->x + 99 * ddx[dir];
-    it_ptr->ty = creature_ptr->y + 99 * ddy[dir];
-    if ((dir == 5) && target_okay(creature_ptr)) {
-        it_ptr->tx = target_col;
-        it_ptr->ty = target_row;
-    }
-
-    project_length = 0;
-    return true;
-}
-
 static void reflect_inventory_by_throw(player_type *creature_ptr, it_type *it_ptr)
 {
     if ((it_ptr->q_ptr->name1 == ART_MJOLLNIR) || (it_ptr->q_ptr->name1 == ART_AEGISFANG) || it_ptr->boomerang)
@@ -454,7 +430,7 @@ bool ThrowCommand::do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
         return false;
 
     it_ptr->calc_throw_range();
-    if (!calc_throw_grid(this->creature_ptr, it_ptr))
+    if (!it_ptr->calc_throw_grid())
         return false;
 
     reflect_inventory_by_throw(this->creature_ptr, it_ptr);

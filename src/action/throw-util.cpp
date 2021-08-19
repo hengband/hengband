@@ -7,9 +7,11 @@
 
 #include "action/throw-util.h"
 #include "combat/attack-power-table.h"
+#include "effect/spells-effect-util.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
+#include "floor/geometry.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-checker.h"
@@ -23,6 +25,8 @@
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "target/target-checker.h"
+#include "target/target-getter.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -75,6 +79,30 @@ void it_type::calc_throw_range()
     this->tdis = (adj_str_blow[this->creature_ptr->stat_index[A_STR]] + 20) * mul / div;
     if (this->tdis > mul)
         this->tdis = mul;
+}
+
+bool it_type::calc_throw_grid()
+{
+    if (this->shuriken >= 0) {
+        this->ty = randint0(101) - 50 + this->creature_ptr->y;
+        this->tx = randint0(101) - 50 + this->creature_ptr->x;
+        return true;
+    }
+
+    project_length = this->tdis + 1;
+    DIRECTION dir;
+    if (!get_aim_dir(this->creature_ptr, &dir))
+        return false;
+
+    this->tx = this->creature_ptr->x + 99 * ddx[dir];
+    this->ty = this->creature_ptr->y + 99 * ddy[dir];
+    if ((dir == 5) && target_okay(this->creature_ptr)) {
+        this->tx = target_col;
+        this->ty = target_row;
+    }
+
+    project_length = 0;
+    return true;
 }
 
 bool it_type::check_what_throw()

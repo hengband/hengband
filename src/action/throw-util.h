@@ -55,6 +55,7 @@ public:
 
     bool check_can_throw();
     void calc_throw_range();
+    bool calc_throw_grid();
 
 private:
     player_type *creature_ptr;
