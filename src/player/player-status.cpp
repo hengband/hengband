@@ -595,7 +595,7 @@ static void update_num_of_spells(player_type *creature_ptr)
         if (!is_spell_learned)
             continue;
 
-        REALM_IDX which;
+        int16_t which;
         if (j < 32) {
             set_bits(creature_ptr->spell_forgotten1, (1UL << j));
             which = creature_ptr->realm1;
@@ -635,7 +635,7 @@ static void update_num_of_spells(player_type *creature_ptr)
         if (!is_spell_learned)
             continue;
 
-        REALM_IDX which;
+        int16_t which;
         if (j < 32) {
             set_bits(creature_ptr->spell_forgotten1, (1UL << j));
             which = creature_ptr->realm1;
@@ -688,7 +688,7 @@ static void update_num_of_spells(player_type *creature_ptr)
         if (!is_spell_learned)
             continue;
 
-        REALM_IDX which;
+        int16_t which;
         if (j < 32) {
             reset_bits(creature_ptr->spell_forgotten1, (1UL << j));
             which = creature_ptr->realm1;

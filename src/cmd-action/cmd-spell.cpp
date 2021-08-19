@@ -298,7 +298,7 @@ static bool spell_okay(player_type *caster_ptr, int spell, bool learned, bool st
  * The "known" should be TRUE for cast/pray, FALSE for study
  * </pre>
  */
-static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool learned, REALM_IDX use_realm)
+static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJECT_SUBTYPE_VALUE sval, bool learned, int16_t use_realm)
 {
     int i;
     SPELL_IDX spell = -1;
@@ -591,7 +591,7 @@ void do_cmd_browse(player_type *caster_ptr)
 {
     OBJECT_IDX item;
     OBJECT_SUBTYPE_VALUE sval;
-    REALM_IDX use_realm = 0;
+    int16_t use_realm = 0;
     int j, line;
     SPELL_IDX spell = -1;
     int num = 0;
@@ -707,7 +707,7 @@ void do_cmd_browse(player_type *caster_ptr)
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param next_realm 変更先の魔法領域ID
  */
-static void change_realm2(player_type *caster_ptr, REALM_IDX next_realm)
+static void change_realm2(player_type *caster_ptr, int16_t next_realm)
 {
     int i, j = 0;
     char tmp[80];
@@ -976,10 +976,10 @@ bool do_cmd_cast(player_type *caster_ptr)
     OBJECT_IDX item;
     OBJECT_SUBTYPE_VALUE sval;
     SPELL_IDX spell;
-    REALM_IDX realm;
+    int16_t realm;
     int chance;
     int increment = 0;
-    REALM_IDX use_realm;
+    int16_t use_realm;
     MANA_POINT need_mana;
 
     concptr prayer;

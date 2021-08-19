@@ -32,7 +32,7 @@ typedef struct building_type {
 
     player_class_type member_class[MAX_CLASS]; /* which classes are part of guild */
     player_race_type member_race[MAX_RACES]; /* which classes are part of guild */
-    REALM_IDX member_realm[MAX_MAGIC + 1]; /* which realms are part of guild */
+    int16_t member_realm[MAX_MAGIC + 1]; /* ギルド (店主？)ごとの魔法領域ID / which realms are part of guild */
 } building_type;
 
 extern building_type building[MAX_BLDG];

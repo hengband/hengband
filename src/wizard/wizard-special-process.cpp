@@ -563,14 +563,14 @@ void wiz_reset_realms(player_type *creature_ptr)
     if (!get_string(ppp, tmp_val, 2))
         return;
 
-    creature_ptr->realm1 = static_cast<REALM_IDX>(atoi(tmp_val));
+    creature_ptr->realm1 = static_cast<int16_t>(atoi(tmp_val));
 
     sprintf(ppp, "2st Realm (None=0, 1-%d): ", MAX_REALM - 1);
     sprintf(tmp_val, "%d", creature_ptr->realm2);
     if (!get_string(ppp, tmp_val, 2))
         return;
 
-    creature_ptr->realm2 = static_cast<REALM_IDX>(atoi(tmp_val));
+    creature_ptr->realm2 = static_cast<int16_t>(atoi(tmp_val));
     creature_ptr->window_flags |= PW_PLAYER;
     creature_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
     creature_ptr->redraw |= PR_BASIC;

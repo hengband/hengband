@@ -31,9 +31,9 @@ typedef struct player_type {
     player_race_type prace{}; /* Race index */
     player_class_type pclass{}; /* Class index */
     player_personality_type pseikaku{}; /* Seikaku index */
-    REALM_IDX realm1{}; /* First magic realm */
-    REALM_IDX realm2{}; /* Second magic realm */
-    REALM_IDX element{}; //!< 元素使い領域番号 / Elementalist system index
+    int16_t realm1{}; /* First magic realm */
+    int16_t realm2{}; /* Second magic realm */
+    int16_t element{}; //!< 元素使い領域番号 / Elementalist system index
     player_personality_type oops{}; /* Unused */
 
     DICE_SID hitdie{}; /* Hit dice (sides) */

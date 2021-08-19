@@ -15,8 +15,8 @@ struct birther {
     player_race_type prace{}; /* Race index */
     player_class_type pclass{}; /* Class index */
     player_personality_type pseikaku{}; /* Seikaku index */
-    REALM_IDX realm1{}; /* First magic realm */
-    REALM_IDX realm2{}; /* Second magic realm */
+    int16_t realm1{}; /* First magic realm */
+    int16_t realm2{}; /* Second magic realm */
 
     int16_t age{};
     int16_t ht{};

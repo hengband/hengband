@@ -30,12 +30,12 @@ static void rd_realms(player_type *creature_ptr)
 
     rd_byte(&tmp8u);
     if (creature_ptr->pclass == CLASS_ELEMENTALIST)
-        creature_ptr->element = (REALM_IDX)tmp8u;
+        creature_ptr->element = (int16_t)tmp8u;
     else
-        creature_ptr->realm1 = (REALM_IDX)tmp8u;
+        creature_ptr->realm1 = (int16_t)tmp8u;
 
     rd_byte(&tmp8u);
-    creature_ptr->realm2 = (REALM_IDX)tmp8u;
+    creature_ptr->realm2 = (int16_t)tmp8u;
     if (creature_ptr->realm2 == 255)
         creature_ptr->realm2 = 0;
 }

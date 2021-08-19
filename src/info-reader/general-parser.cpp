@@ -251,7 +251,7 @@ parse_error_type parse_line_building(char *buf)
         int n;
         n = tokenize(s + 2, MAX_MAGIC, zz, 0);
         for (int i = 0; i < MAX_MAGIC; i++) {
-            building[index].member_realm[i + 1] = ((i < n) ? (REALM_IDX)atoi(zz[i]) : 1);
+            building[index].member_realm[i + 1] = ((i < n) ? static_cast<int16_t>(atoi(zz[i])) : 1);
         }
 
         break;

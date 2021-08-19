@@ -26,9 +26,9 @@ void load_quick_start(void)
     rd_byte(&tmp8u);
     previous_char.pseikaku = (player_personality_type)tmp8u;
     rd_byte(&tmp8u);
-    previous_char.realm1 = (REALM_IDX)tmp8u;
+    previous_char.realm1 = (int16_t)tmp8u;
     rd_byte(&tmp8u);
-    previous_char.realm2 = (REALM_IDX)tmp8u;
+    previous_char.realm2 = (int16_t)tmp8u;
 
     rd_s16b(&previous_char.age);
     rd_s16b(&previous_char.ht);
