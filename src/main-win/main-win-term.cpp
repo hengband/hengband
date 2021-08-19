@@ -18,7 +18,6 @@
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
 
-LPCWSTR AppName = L"ANGBAND";
 HINSTANCE hInstance;
 bg_mode current_bg_mode = bg_mode::BG_NONE;
 COLORREF win_clr[256];
@@ -403,7 +402,7 @@ errr term_data::text_win(int x, int y, int n, TERM_COLOR a, concptr s)
     static bool init_done = false;
 
     if (!init_done) {
-        WALL = LoadBitmapW(hInstance, AppName);
+        WALL = LoadBitmapW(hInstance, application_name);
         myBrush = CreatePatternBrush(WALL);
         init_done = true;
     }

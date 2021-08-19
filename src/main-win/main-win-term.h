@@ -32,7 +32,7 @@ protected:
     HDC offscreen;
 };
 
-extern LPCWSTR AppName; // Name of application.
+constexpr LPCWSTR application_name = L"ANGBAND";
 extern HINSTANCE hInstance; // Saved instance handle.
 extern bg_mode current_bg_mode;
 extern COLORREF win_clr[256]; // The "complex" color values.
