@@ -8,6 +8,7 @@
 #include "action/throw-util.h"
 #include "artifact/fixed-art-types.h"
 #include "combat/attack-power-table.h"
+#include "core/stuff-handler.h"
 #include "effect/spells-effect-util.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
@@ -23,6 +24,7 @@
 #include "object/object-flags.h"
 #include "object/object-stack.h"
 #include "player-info/equipment-info.h"
+#include "player-status/player-energy.h"
 #include "specific-object/torch.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
@@ -124,6 +126,21 @@ void it_type::reflect_inventory_by_throw()
         inven_item_describe(this->creature_ptr, this->item);
 
     inven_item_optimize(this->creature_ptr, this->item);
+}
+
+void it_type::set_class_specific_throw_params()
+{
+    PlayerEnergy energy(this->creature_ptr);
+    energy.set_player_turn_energy(100);
+    if ((this->creature_ptr->pclass == CLASS_ROGUE) || (this->creature_ptr->pclass == CLASS_NINJA)) {
+        energy.sub_player_turn_energy(this->creature_ptr->lev);
+    }
+
+    this->y = this->creature_ptr->y;
+    this->x = this->creature_ptr->x;
+    handle_stuff(this->creature_ptr);
+    this->shuriken = (this->creature_ptr->pclass == CLASS_NINJA)
+        && ((this->q_ptr->tval == TV_SPIKE) || ((has_flag(this->obj_flags, TR_THROW)) && (this->q_ptr->tval == TV_SWORD)));
 }
 
 bool it_type::check_what_throw()

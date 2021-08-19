@@ -57,6 +57,7 @@ public:
     void calc_throw_range();
     bool calc_throw_grid();
     void reflect_inventory_by_throw();
+    void set_class_specific_throw_params();
 
 private:
     player_type *creature_ptr;

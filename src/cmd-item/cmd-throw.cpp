@@ -70,21 +70,6 @@ ThrowCommand::ThrowCommand(player_type* creature_ptr)
 {
 }
 
-static void set_class_specific_throw_params(player_type *creature_ptr, it_type *it_ptr)
-{
-    PlayerEnergy energy(creature_ptr);
-    energy.set_player_turn_energy(100);
-    if ((creature_ptr->pclass == CLASS_ROGUE) || (creature_ptr->pclass == CLASS_NINJA)) {
-        energy.sub_player_turn_energy(creature_ptr->lev);
-    }
-
-    it_ptr->y = creature_ptr->y;
-    it_ptr->x = creature_ptr->x;
-    handle_stuff(creature_ptr);
-    it_ptr->shuriken = (creature_ptr->pclass == CLASS_NINJA)
-        && ((it_ptr->q_ptr->tval == TV_SPIKE) || ((has_flag(it_ptr->obj_flags, TR_THROW)) && (it_ptr->q_ptr->tval == TV_SWORD)));
-}
-
 static void set_racial_chance(player_type *creature_ptr, it_type *it_ptr)
 {
     if (has_flag(it_ptr->obj_flags, TR_THROW))
@@ -421,7 +406,7 @@ bool ThrowCommand::do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
         this->creature_ptr->redraw |= PR_EQUIPPY;
     }
 
-    set_class_specific_throw_params(this->creature_ptr, it_ptr);
+    it_ptr->set_class_specific_throw_params();
     set_racial_chance(this->creature_ptr, it_ptr);
     it_ptr->prev_y = it_ptr->y;
     it_ptr->prev_x = it_ptr->x;
