@@ -19,27 +19,27 @@
 int16_t stat_limit[6];
 
 /*! オートローラの試行回数 / Autoroll round */
-s32b auto_round;
-s32b auto_upper_round;
+int32_t auto_round;
+int32_t auto_upper_round;
 
 /*! オートローラの要求値実現確率 */
-s32b autoroll_chance;
+int32_t autoroll_chance;
 
 /*!
  * @breif オートローラーで指定した能力値以上が出る確率を計算する。
  * @return 確率 / 100
  */
-static s32b get_autoroller_prob(int *minval)
+static int32_t get_autoroller_prob(int *minval)
 {
     /* 1 percent of the valid random space (60^6 && 72<sum<87) */
-    s32b tot_rand_1p = 320669745;
+    int32_t tot_rand_1p = 320669745;
     int i, j, tmp;
     int ii[6];
     int tval[6];
     int tot = 0;
 
     /* success count */
-    s32b succ = 0;
+    int32_t succ = 0;
 
     /* random combinations out of 60 (1d3+1d4+1d5) patterns */
     int pp[18] = {

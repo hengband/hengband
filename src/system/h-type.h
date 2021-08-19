@@ -67,7 +67,6 @@ static_assert(sizeof(short) == 2);
 static_assert(sizeof(int) == 4);
 // static_assert(sizeof(long) == 8); // 将来のための予約.
 
-typedef int32_t s32b;
 typedef uint32_t u32b;
 
 typedef int16_t IDX; /*!< ゲーム中のID型を定義 */
@@ -79,7 +78,7 @@ typedef int16_t FLOOR_IDX; /*!< ゲーム中のフロアID型を定義 */
 typedef byte SEX_IDX; /*!< ゲーム中のプレイヤー性別ID型を定義 */
 typedef int16_t MIMIC_RACE_IDX; /*!< ゲーム中のプレイヤー変身種族ID型を定義 */
 typedef int16_t PATRON_IDX; /*!< ゲーム中のプレイヤーパトロンID型を定義 */
-typedef s32b ACTION_IDX; /*!< プレイヤーが現在取っている常時行動のID定義 */
+typedef int32_t ACTION_IDX; /*!< プレイヤーが現在取っている常時行動のID定義 */
 typedef int16_t BACT_IDX; /*!< 町の施設処理のID定義 */
 typedef int16_t BACT_RESTRICT_IDX; /*!< 町の施設処理の規制処理ID定義 */
 
@@ -95,12 +94,12 @@ typedef byte ROOM_IDX; /*!< 部屋のID型を定義 */
 
 typedef int16_t INVENTORY_IDX; /*!< ゲーム中の所持品ID型を定義 */
 typedef int16_t OBJECT_IDX; /*!< ゲーム中のアイテムID型を定義 */
-typedef s32b ESSENCE_IDX; /*!< 鍛冶エッセンスのID型 */
+typedef int32_t ESSENCE_IDX; /*!< 鍛冶エッセンスのID型 */
 typedef int16_t KIND_OBJECT_IDX; /*!< ゲーム中のベースアイテムID型を定義 */
 typedef int16_t VAULT_IDX; /*!< 固定部屋のID型を定義 */
 typedef int MUTATION_IDX; /*!< 突然変異のID型を定義 */
 
-typedef s32b POSITION; /*!< ゲーム中の座標型を定義 */
+typedef int32_t POSITION; /*!< ゲーム中の座標型を定義 */
 typedef int16_t POSITION_IDX; /*!< ゲーム中の座標リストID型 */
 
 typedef byte FEAT_SUBTYPE; /*!< 地形情報の副値 (トラップ種別/パターン種別/店舗種別)*/
@@ -108,26 +107,26 @@ typedef byte FEAT_SUBTYPE; /*!< 地形情報の副値 (トラップ種別/パタ
 typedef char GAME_TEXT; /*!< ゲーム中のテキスト型定義 */
 
 /*!
- * @var typedef s32b HIT_POINT
+ * @var typedef int32_t HIT_POINT
  * @brief HPとその増減量の型定義
  * @details
  * HIT_POINTはプレイヤー及びモンスターのHPの各値とその増減量の型である。
  */
-typedef s32b HIT_POINT;
+typedef int32_t HIT_POINT;
 
 /*!
- * @var typedef s32b MANA_POINT
+ * @var typedef int32_t MANA_POINT
  * @brief MPとその増減量の型定義
  * @details
  * MANA_POINTはプレイヤーのMPの各地とその増減量の型である。
  */
-typedef s32b MANA_POINT; /*!< ゲーム中のMP型を定義 */
+typedef int32_t MANA_POINT; /*!< ゲーム中のMP型を定義 */
 
 typedef int16_t HIT_PROB; /*!< ゲーム中の装備命中修正値を定義 */
 typedef int16_t BASE_STATUS; /*!< ゲーム中の基礎能力値型を定義 */
 
-typedef s32b MONSTER_NUMBER; /*!< ゲーム中のモンスター数型を定義 */
-typedef s32b ITEM_NUMBER; /*!< ゲーム中のアイテム数型を定義 */
+typedef int32_t MONSTER_NUMBER; /*!< ゲーム中のモンスター数型を定義 */
+typedef int32_t ITEM_NUMBER; /*!< ゲーム中のアイテム数型を定義 */
 
 typedef int16_t ACTION_ENERGY; /*!< ゲーム中の行動エネルギー型を定義 */
 typedef int16_t ARMOUR_CLASS; /*!< ゲーム中の行動アーマークラス型を定義 */
@@ -147,29 +146,29 @@ typedef int16_t SLEEP_DEGREE; /*!< モンスターの睡眠度の型定義 */
 
 typedef int16_t PLAYER_LEVEL; /*!< ゲーム中のプレイヤーレベルの型を定義 */
 typedef int DIRECTION; /*!< ゲーム中の方角の型定義 */
-typedef s32b EXP; /*!< ゲーム中の主経験値の型定義 */
+typedef int32_t EXP; /*!< ゲーム中の主経験値の型定義 */
 typedef int16_t SUB_EXP; /*!< ゲーム中の副経験値の型定義 */
 
-typedef s32b OBJECT_SUBTYPE_VALUE; /*!< ゲーム中のアイテム副分類の型定義 */
+typedef int32_t OBJECT_SUBTYPE_VALUE; /*!< ゲーム中のアイテム副分類の型定義 */
 typedef int16_t PARAMETER_VALUE; /*!< ゲーム中のアイテム能力値の型定義 */
-typedef s32b WEIGHT; /*!< ゲーム中の重量の型定義(ポンド) */
+typedef int32_t WEIGHT; /*!< ゲーム中の重量の型定義(ポンド) */
 
 typedef int DICE_NUMBER; /*!< ゲーム中のダイス数の型定義 */
 typedef int DICE_SID; /*!< ゲーム中のダイス面の型定義 */
-typedef s32b PRICE; /*!< ゲーム中の金額価値の型定義 */
+typedef int32_t PRICE; /*!< ゲーム中の金額価値の型定義 */
 typedef int16_t FEED; /*!< ゲーム中の滋養度の型定義 */
 
 typedef u32b STR_OFFSET; /*!< テキストオフセットの型定義 */
 
 typedef int POWER; /*!< 魔法の効力定義*/
 
-typedef s32b DEPTH; /*!< ゲーム中の階層レベルの型定義 */
+typedef int32_t DEPTH; /*!< ゲーム中の階層レベルの型定義 */
 typedef byte RARITY; /*!< ゲーム中の希少度の型定義 */
 
-typedef s32b GAME_TURN; /*!< ゲーム中のターンの型定義 */
+typedef int32_t GAME_TURN; /*!< ゲーム中のターンの型定義 */
 typedef u32b REAL_TIME; /*!< 実時刻の型定義 */
 
-typedef s32b PERCENTAGE; /*!< ゲーム中のパーセント表記の型定義(/100倍) */
+typedef int32_t PERCENTAGE; /*!< ゲーム中のパーセント表記の型定義(/100倍) */
 typedef int16_t MULTIPLY; /*!< ゲーム中の倍率の型定義(/10倍) */
 
 typedef u32b BIT_FLAGS; /*!< 32ビットのフラグ配列の型定義 */
@@ -187,7 +186,7 @@ typedef int TERM_LEN; /*!< コンソール表示座標の型定義 */
 typedef byte TERM_COLOR; /*!< テキスト表示色の型定義 */
 typedef char SYMBOL_CODE; /*!< キャラの文字の型定義 */
 
-typedef s32b SPELL_IDX; /*!< 各魔法領域/職業能力ごとの呪文ID型定義 */
+typedef int32_t SPELL_IDX; /*!< 各魔法領域/職業能力ごとの呪文ID型定義 */
 typedef int16_t PROB; /*!< 確率の重みの型定義 */
 typedef byte FEAT_POWER; /*!< 地形強度の型定義 */
 

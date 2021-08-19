@@ -61,14 +61,14 @@ void regenhp(player_type *creature_ptr, int percent)
 void regenmana(player_type *creature_ptr, MANA_POINT upkeep_factor, MANA_POINT regen_amount)
 {
     MANA_POINT old_csp = creature_ptr->csp;
-    s32b regen_rate = regen_amount * 100 - upkeep_factor * PY_REGEN_NORMAL;
+    int32_t regen_rate = regen_amount * 100 - upkeep_factor * PY_REGEN_NORMAL;
 
     /*
      * Excess mana will decay 32 times faster than normal
      * regeneration rate.
      */
     if (creature_ptr->csp > creature_ptr->msp) {
-        s32b decay = 0;
+        int32_t decay = 0;
         u32b decay_frac = (creature_ptr->msp * 32 * PY_REGEN_NORMAL + PY_REGEN_MNBASE);
         s64b_lshift(&decay, &decay_frac, 16);
         s64b_sub(&(creature_ptr->csp), &(creature_ptr->csp_frac), decay, decay_frac);
@@ -92,7 +92,7 @@ void regenmana(player_type *creature_ptr, MANA_POINT upkeep_factor, MANA_POINT r
 
     /* Reduce mana (even when the player has excess mana) */
     if (regen_rate < 0) {
-        s32b reduce_mana = 0;
+        int32_t reduce_mana = 0;
         u32b reduce_mana_frac = (creature_ptr->msp * (-1) * regen_rate / 100 + PY_REGEN_MNBASE);
         s64b_lshift(&reduce_mana, &reduce_mana_frac, 16);
         s64b_sub(&(creature_ptr->csp), &(creature_ptr->csp_frac), reduce_mana, reduce_mana_frac);

@@ -136,7 +136,7 @@ void rd_visited_towns(player_type *creature_ptr)
         return;
     }
 
-    s32b tmp32s;
+    int32_t tmp32s;
     rd_s32b(&tmp32s);
     creature_ptr->visit = (BIT_FLAGS)tmp32s;
 }
@@ -180,8 +180,8 @@ void load_wilderness_info(player_type *creature_ptr)
 
 errr analyze_wilderness(void)
 {
-    s32b wild_x_size;
-    s32b wild_y_size;
+    int32_t wild_x_size;
+    int32_t wild_y_size;
     rd_s32b(&wild_x_size);
     rd_s32b(&wild_y_size);
 

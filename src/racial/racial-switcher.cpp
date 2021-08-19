@@ -84,7 +84,7 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
-bool switch_class_racial_execution(player_type *creature_ptr, const s32b command)
+bool switch_class_racial_execution(player_type *creature_ptr, const int32_t command)
 {
     DIRECTION dir = 0;
     switch (creature_ptr->pclass) {
@@ -286,7 +286,7 @@ bool switch_mimic_racial_execution(player_type *creature_ptr)
     }
 }
 
-bool switch_race_racial_execution(player_type *creature_ptr, const s32b command)
+bool switch_race_racial_execution(player_type *creature_ptr, const int32_t command)
 {
     DIRECTION dir = 0;
     switch (creature_ptr->prace) {

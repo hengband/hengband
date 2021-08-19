@@ -224,7 +224,7 @@ static void display_essence(player_type *creature_ptr)
  */
 static void drain_essence(player_type *creature_ptr)
 {
-    int drain_value[sizeof(creature_ptr->magic_num1) / sizeof(s32b)];
+    int drain_value[sizeof(creature_ptr->magic_num1) / sizeof(int32_t)];
     size_t i;
     OBJECT_IDX item;
     int dec = 4;

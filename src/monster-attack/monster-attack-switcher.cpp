@@ -192,7 +192,7 @@ static void calc_blow_paralysis(player_type *target_ptr, monap_type *monap_ptr)
  */
 static void calc_blow_drain_exp(player_type *target_ptr, monap_type *monap_ptr, const int drain_value, const int hold_exp_prob)
 {
-    s32b d = damroll(drain_value, 6) + (target_ptr->exp / 100) * MON_DRAIN_LIFE;
+    int32_t d = damroll(drain_value, 6) + (target_ptr->exp / 100) * MON_DRAIN_LIFE;
     monap_ptr->obvious = true;
     int damage_ratio = 1000;
     if (has_hold_exp(target_ptr))
@@ -233,7 +233,7 @@ static void calc_blow_time(player_type *target_ptr, monap_type *monap_ptr)
  */
 static void calc_blow_drain_life(player_type *target_ptr, monap_type *monap_ptr)
 {
-    s32b d = damroll(60, 6) + (target_ptr->exp / 100) * MON_DRAIN_LIFE;
+    int32_t d = damroll(60, 6) + (target_ptr->exp / 100) * MON_DRAIN_LIFE;
     monap_ptr->obvious = true;
     if (target_ptr->hold_exp)
         monap_ptr->damage = monap_ptr->damage * 9 / 10;

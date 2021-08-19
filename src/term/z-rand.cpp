@@ -173,7 +173,7 @@ void Rand_state_restore(u32b *backup_state)
 /*
  * Extract a "random" number from 0 to m-1, via "ENERGY_DIVISION"
  */
-static s32b Rand_div_impl(s32b m, u32b *state)
+static int32_t Rand_div_impl(int32_t m, u32b *state)
 {
     u32b scaling;
     u32b past;
@@ -193,7 +193,7 @@ static s32b Rand_div_impl(s32b m, u32b *state)
     return ret / scaling;
 }
 
-s32b Rand_div(s32b m) { return Rand_div_impl(m, Rand_state); }
+int32_t Rand_div(int32_t m) { return Rand_div_impl(m, Rand_state); }
 
 /*
  * The number of entries in the "randnor_table"
@@ -325,9 +325,9 @@ int16_t maxroll(DICE_NUMBER num, DICE_SID sides) { return (num * sides); }
  * Given a numerator and a denominator, supply a properly rounded result,
  * using the RNG to smooth out remainders.  -LM-
  */
-s32b div_round(s32b n, s32b d)
+int32_t div_round(int32_t n, int32_t d)
 {
-    s32b tmp;
+    int32_t tmp;
 
     /* Refuse to divide by zero */
     if (!d)
@@ -358,7 +358,7 @@ s32b div_round(s32b n, s32b d)
  *
  * Could also use rand() from <stdlib.h> directly.
  */
-s32b Rand_external(s32b m)
+int32_t Rand_external(int32_t m)
 {
     static bool initialized = false;
     static u32b Rand_state_external[4];

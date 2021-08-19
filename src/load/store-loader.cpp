@@ -39,7 +39,7 @@ static void home_carry_load(player_type *player_ptr, store_type *store_ptr, obje
     if (store_ptr->stock_num >= store_get_stock_max(STORE_HOME))
         return;
 
-    s32b value = object_value(player_ptr, o_ptr);
+    int32_t value = object_value(player_ptr, o_ptr);
     int slot;
     for (slot = 0; slot < store_ptr->stock_num; slot++) {
         if (object_sort_comp(player_ptr, o_ptr, value, &store_ptr->stock[slot]))

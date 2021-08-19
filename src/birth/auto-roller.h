@@ -11,9 +11,9 @@ typedef struct {
 } chara_limit_type;
 
 extern int16_t stat_limit[6];
-extern s32b auto_round;
-extern s32b auto_upper_round;
-extern s32b autoroll_chance;
+extern int32_t auto_round;
+extern int32_t auto_upper_round;
+extern int32_t autoroll_chance;
 
 typedef struct player_type player_type;
 bool get_stat_limits(player_type *creature_ptr);

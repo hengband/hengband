@@ -84,7 +84,7 @@ void calc_android_exp(player_type *creature_ptr)
         } else if (object_is_ego(o_ptr)) {
             level += MAX(3, (e_info[o_ptr->name2].rating - 5) / 2);
         } else if (o_ptr->art_name) {
-            s32b total_flags = flag_cost(creature_ptr, o_ptr, o_ptr->pval);
+            int32_t total_flags = flag_cost(creature_ptr, o_ptr, o_ptr->pval);
             int fake_level;
 
             if (!object_is_weapon_ammo(o_ptr)) {

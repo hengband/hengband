@@ -66,7 +66,7 @@ msg_sp make_message(T &&str)
  * @brief 保存中の過去ゲームメッセージの数を返す。 / How many messages are "available"?
  * @return 残っているメッセージの数
  */
-s32b message_num(void)
+int32_t message_num(void)
 {
     return message_history.size();
 }
