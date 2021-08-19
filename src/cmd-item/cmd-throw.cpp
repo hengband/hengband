@@ -70,27 +70,6 @@ ThrowCommand::ThrowCommand(player_type* creature_ptr)
 {
 }
 
-static void calc_throw_range(player_type *creature_ptr, it_type *it_ptr)
-{
-    it_ptr->q_ptr->copy_from(it_ptr->o_ptr);
-    object_flags(creature_ptr, it_ptr->q_ptr, it_ptr->obj_flags);
-    torch_flags(it_ptr->q_ptr, it_ptr->obj_flags);
-    distribute_charges(it_ptr->o_ptr, it_ptr->q_ptr, 1);
-    it_ptr->q_ptr->number = 1;
-    describe_flavor(creature_ptr, it_ptr->o_name, it_ptr->q_ptr, OD_OMIT_PREFIX);
-    if (creature_ptr->mighty_throw)
-        it_ptr->mult += 3;
-
-    int mul = 10 + 2 * (it_ptr->mult - 1);
-    int div = ((it_ptr->q_ptr->weight > 10) ? it_ptr->q_ptr->weight : 10);
-    if ((has_flag(it_ptr->obj_flags, TR_THROW)) || it_ptr->boomerang)
-        div /= 2;
-
-    it_ptr->tdis = (adj_str_blow[creature_ptr->stat_index[A_STR]] + 20) * mul / div;
-    if (it_ptr->tdis > mul)
-        it_ptr->tdis = mul;
-}
-
 static bool calc_throw_grid(player_type *creature_ptr, it_type *it_ptr)
 {
     if (it_ptr->shuriken >= 0) {
@@ -474,7 +453,7 @@ bool ThrowCommand::do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
     if (!it_ptr->check_can_throw())
         return false;
 
-    calc_throw_range(this->creature_ptr, it_ptr);
+    it_ptr->calc_throw_range();
     if (!calc_throw_grid(this->creature_ptr, it_ptr))
         return false;
 

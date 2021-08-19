@@ -54,6 +54,7 @@ public:
     bool super_boomerang{};
 
     bool check_can_throw();
+    void calc_throw_range();
 
 private:
     player_type *creature_ptr;
