@@ -65,6 +65,11 @@
 #include "view/object-describer.h"
 #include "wizard/wizard-messages.h"
 
+ThrowCommand::ThrowCommand(player_type* creature_ptr)
+    : creature_ptr(creature_ptr)
+{
+}
+
 static bool check_throw_boomerang(player_type *creature_ptr, it_type *it_ptr, concptr *q, concptr *s)
 {
     if (!it_ptr->boomerang)
@@ -526,43 +531,43 @@ static void drop_thrown_item(player_type *creature_ptr, it_type *it_ptr)
  * the item to be destroyed?  Should it do any damage at all?
  * </pre>
  */
-bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_IDX shuriken)
+bool ThrowCommand::do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 {
-    if (creature_ptr->wild_mode)
+    if (this->creature_ptr->wild_mode)
         return false;
 
-    if (creature_ptr->special_defense & KATA_MUSOU)
-        set_action(creature_ptr, ACTION_NONE);
+    if (this->creature_ptr->special_defense & KATA_MUSOU)
+        set_action(this->creature_ptr, ACTION_NONE);
 
     it_type tmp_it;
     object_type tmp_object;
     it_type *it_ptr = initialize_it_type(&tmp_it, &tmp_object, delay_factor, mult, boomerang, shuriken);
-    if (!check_can_throw(creature_ptr, it_ptr))
+    if (!check_can_throw(this->creature_ptr, it_ptr))
         return false;
 
-    calc_throw_range(creature_ptr, it_ptr);
-    if (!calc_throw_grid(creature_ptr, it_ptr))
+    calc_throw_range(this->creature_ptr, it_ptr);
+    if (!calc_throw_grid(this->creature_ptr, it_ptr))
         return false;
 
-    reflect_inventory_by_throw(creature_ptr, it_ptr);
+    reflect_inventory_by_throw(this->creature_ptr, it_ptr);
     if (it_ptr->item >= INVEN_MAIN_HAND) {
         it_ptr->equiped_item = true;
-        creature_ptr->redraw |= PR_EQUIPPY;
+        this->creature_ptr->redraw |= PR_EQUIPPY;
     }
 
-    set_class_specific_throw_params(creature_ptr, it_ptr);
-    set_racial_chance(creature_ptr, it_ptr);
+    set_class_specific_throw_params(this->creature_ptr, it_ptr);
+    set_racial_chance(this->creature_ptr, it_ptr);
     it_ptr->prev_y = it_ptr->y;
     it_ptr->prev_x = it_ptr->x;
-    exe_throw(creature_ptr, it_ptr);
+    exe_throw(this->creature_ptr, it_ptr);
     if (it_ptr->hit_body)
         torch_lost_fuel(it_ptr->q_ptr);
 
-    it_ptr->corruption_possibility = (it_ptr->hit_body ? breakage_chance(creature_ptr, it_ptr->q_ptr, creature_ptr->pclass == CLASS_ARCHER, 0) : 0);
-    display_figurine_throw(creature_ptr, it_ptr);
-    display_potion_throw(creature_ptr, it_ptr);
-    check_boomerang_throw(creature_ptr, it_ptr);
-    process_boomerang_back(creature_ptr, it_ptr);
-    drop_thrown_item(creature_ptr, it_ptr);
+    it_ptr->corruption_possibility = (it_ptr->hit_body ? breakage_chance(this->creature_ptr, it_ptr->q_ptr, this->creature_ptr->pclass == CLASS_ARCHER, 0) : 0);
+    display_figurine_throw(this->creature_ptr, it_ptr);
+    display_potion_throw(this->creature_ptr, it_ptr);
+    check_boomerang_throw(this->creature_ptr, it_ptr);
+    process_boomerang_back(this->creature_ptr, it_ptr);
+    drop_thrown_item(this->creature_ptr, it_ptr);
     return true;
 }

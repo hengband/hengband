@@ -142,7 +142,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
                 "武器を手元に戻ってくるように投げる。戻ってこないこともある。", "Throws current weapon. It'll return to your hand unless the action failed.");
 
         if (cast) {
-            if (!do_cmd_throw(caster_ptr, 1, true, -1))
+            if (!ThrowCommand(caster_ptr).do_cmd_throw(1, true, -1))
                 return NULL;
         }
         break;

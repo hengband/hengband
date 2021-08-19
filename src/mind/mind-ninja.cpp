@@ -415,7 +415,7 @@ bool cast_ninja_spell(player_type *caster_ptr, mind_ninja_type spell)
                 return false;
             }
 
-            do_cmd_throw(caster_ptr, 1, false, slot);
+            (void)ThrowCommand(caster_ptr).do_cmd_throw(1, false, slot);
             PlayerEnergy(caster_ptr).set_player_turn_energy(100);
         }
 
