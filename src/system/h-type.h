@@ -33,6 +33,7 @@
  * </pre>
  */
 
+#include <cassert>
 #include <stdint.h>
 
 /*** Special 4 letter names for some standard types ***/
@@ -53,13 +54,13 @@ typedef int errr;
 #define MAX_NLEN 160 /*!< Maximum length of object's name */
 #define MAX_MONSTER_NAME 160 /*!< モンスター名称の最大バイト数 / Max characters of monster's name */
 
-/* Note that "signed char" is not always "defined" */
-/* So always use "int16_t" to hold small signed values */
-/* A signed byte of memory */
-/* typedef signed char syte; */
-typedef unsigned char byte; /*!< byte型をunsighned charとして定義 / Note that unsigned values can cause math problems / An unsigned byte of memory */
-typedef unsigned int uint; /* uint型をintとして定義 /  An unsigned, "standard" integer (often pre-defined) */
-typedef unsigned long ulong; /* The largest possible unsigned integer */
+/*!
+ * @brief 符号なし整数の簡潔な定義
+ */
+typedef unsigned char byte;
+typedef unsigned short ushort;
+typedef unsigned int uint;
+typedef unsigned long ulong;
 
 // 整数型のバイト数が2021年現在の通常環境と異なるならばコンパイルを通さない.
 static_assert(sizeof(char) == 1);

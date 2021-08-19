@@ -242,9 +242,9 @@ void do_cmd_knowledge_kill_count(player_type *creature_ptr)
 
     fprintf(fff, "----------------------------------------------\n");
 #ifdef JP
-    fprintf(fff, "    合計: %lu 体を倒した。\n", (unsigned long int)total);
+    fprintf(fff, "    合計: %lu 体を倒した。\n", (ulong)total);
 #else
-    fprintf(fff, "   Total: %lu creature%s killed.\n", (unsigned long int)total, (total == 1 ? "" : "s"));
+    fprintf(fff, "   Total: %lu creature%s killed.\n", (ulong)total, (total == 1 ? "" : "s"));
 #endif
 
     C_KILL(who, max_r_idx, int16_t);
