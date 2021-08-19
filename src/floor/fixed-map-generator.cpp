@@ -369,7 +369,7 @@ static bool parse_qtw_M(qtwg_type *qtwg_ptr, char **zz)
     } else if (zz[0][0] == 'K') {
         max_k_idx = (KIND_OBJECT_IDX)atoi(zz[1]);
     } else if (zz[0][0] == 'V') {
-        max_v_idx = (VAULT_IDX)atoi(zz[1]);
+        max_v_idx = static_cast<int16_t>(atoi(zz[1]));
     } else if (zz[0][0] == 'F') {
         max_f_idx = (FEAT_IDX)atoi(zz[1]);
     } else if (zz[0][0] == 'A') {

@@ -15,7 +15,7 @@ typedef struct vault_type {
 } vault_type;
 
 extern std::vector<vault_type> v_info;
-extern VAULT_IDX max_v_idx;
+extern int16_t max_v_idx;
 
 typedef struct dun_data_type dun_data_type;
 typedef struct player_type player_type;

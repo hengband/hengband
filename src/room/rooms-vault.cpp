@@ -44,7 +44,7 @@ std::vector<vault_type> v_info;
 /*
  * Maximum number of vaults in v_info.txt
  */
-VAULT_IDX max_v_idx;
+int16_t max_v_idx;
 
 /*
  * This function creates a random vault that looks like a collection of bubbles.
