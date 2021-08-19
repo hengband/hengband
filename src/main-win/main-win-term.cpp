@@ -81,7 +81,7 @@ void double_buffering::dispose_offscreen()
  */
 HDC term_data::get_hdc()
 {
-    return graphics.get_hdc(this->w);
+    return this->graphics.get_hdc(this->w);
 }
 
 /*!
@@ -101,7 +101,7 @@ void term_data::refresh(const RECT *lpRect)
  */
 bool term_data::render(const RECT &rect)
 {
-    return graphics.render(rect);
+    return this->graphics.render(rect);
 }
 
 /*!
@@ -112,7 +112,7 @@ bool term_data::render(const RECT &rect)
  */
 void term_data::dispose_offscreen()
 {
-    graphics.dispose_offscreen();
+    this->graphics.dispose_offscreen();
 };
 
 bool term_data::is_main_term()
@@ -734,19 +734,19 @@ errr term_data::extra_win(int n, int v)
     case TERM_XTRA_SCENE:
         return extra_win_scene(v);
     case TERM_XTRA_SOUND:
-        return (extra_win_sound(v));
+        return extra_win_sound(v);
     case TERM_XTRA_BORED:
-        return (extra_win_event(0));
+        return extra_win_event(0);
     case TERM_XTRA_EVENT:
-        return (extra_win_event(v));
+        return extra_win_event(v);
     case TERM_XTRA_FLUSH:
-        return (extra_win_flush());
+        return extra_win_flush();
     case TERM_XTRA_CLEAR:
-        return (extra_win_clear());
+        return extra_win_clear();
     case TERM_XTRA_REACT:
-        return (extra_win_react(p_ptr));
+        return extra_win_react(p_ptr);
     case TERM_XTRA_DELAY:
-        return (extra_win_delay(v));
+        return extra_win_delay(v);
     default:
         return 1;
     }
