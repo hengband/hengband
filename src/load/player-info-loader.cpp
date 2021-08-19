@@ -207,7 +207,7 @@ static void set_imitation(player_type *creature_ptr)
     }
 
     if (h_older_than(0, 2, 3)) {
-        s16b tmp16s;
+        int16_t tmp16s;
         const int OLD_MAX_MANE = 22;
         for (int i = 0; i < OLD_MAX_MANE; i++) {
             rd_s16b(&tmp16s);
@@ -225,7 +225,7 @@ static void set_imitation(player_type *creature_ptr)
     }
 
     for (int i = 0; i < MAX_MANE; i++) {
-        s16b tmp16s;
+        int16_t tmp16s;
         rd_s16b(&tmp16s);
         creature_ptr->mane_spell[i] = static_cast<RF_ABILITY>(tmp16s);
         rd_s16b(&tmp16s);
@@ -237,7 +237,7 @@ static void set_imitation(player_type *creature_ptr)
 
 static void rd_phase_out(player_type *creature_ptr)
 {
-    s16b tmp16s;
+    int16_t tmp16s;
     rd_s16b(&tmp16s);
     creature_ptr->current_floor_ptr->inside_arena = (bool)tmp16s;
     rd_s16b(&creature_ptr->current_floor_ptr->inside_quest);
@@ -267,7 +267,7 @@ static void rd_arena(player_type *creature_ptr)
     rd_byte(&creature_ptr->exit_bldg);
     rd_byte(&tmp8u);
 
-    s16b tmp16s;
+    int16_t tmp16s;
     rd_s16b(&tmp16s);
     creature_ptr->oldpx = (POSITION)tmp16s;
     rd_s16b(&tmp16s);

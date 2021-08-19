@@ -90,7 +90,7 @@ void rd_item_old(player_type *player_ptr, object_type *o_ptr)
     rd_byte(&tmp8u);
     o_ptr->number = (ITEM_NUMBER)tmp8u;
 
-    s16b tmp16s;
+    int16_t tmp16s;
     rd_s16b(&tmp16s);
     o_ptr->weight = tmp16s;
 
@@ -272,7 +272,7 @@ void rd_item_old(player_type *player_ptr, object_type *o_ptr)
             else
                 o_ptr->xtra5 = damroll(r_info[o_ptr->pval].hdice, r_info[o_ptr->pval].hside);
             if (ironman_nightmare) {
-                o_ptr->xtra5 = (s16b)MIN(30000, o_ptr->xtra5 * 2L);
+                o_ptr->xtra5 = (int16_t)MIN(30000, o_ptr->xtra5 * 2L);
             }
             o_ptr->xtra4 = o_ptr->xtra5;
         }
@@ -372,7 +372,7 @@ void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
     m_ptr->fx = (POSITION)tmp8u;
     m_ptr->current_floor_ptr = player_ptr->current_floor_ptr;
 
-    s16b tmp16s;
+    int16_t tmp16s;
     rd_s16b(&tmp16s);
     m_ptr->hp = tmp16s;
     rd_s16b(&tmp16s);
@@ -396,7 +396,7 @@ void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
 
     if (h_older_than(0, 4, 2)) {
         rd_byte(&tmp8u);
-        m_ptr->energy_need = (s16b)tmp8u;
+        m_ptr->energy_need = (int16_t)tmp8u;
     } else
         rd_s16b(&m_ptr->energy_need);
 
@@ -408,17 +408,17 @@ void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
         m_ptr->mtimed[MTIMED_SLOW] = 0;
     } else {
         rd_byte(&tmp8u);
-        m_ptr->mtimed[MTIMED_FAST] = (s16b)tmp8u;
+        m_ptr->mtimed[MTIMED_FAST] = (int16_t)tmp8u;
         rd_byte(&tmp8u);
-        m_ptr->mtimed[MTIMED_SLOW] = (s16b)tmp8u;
+        m_ptr->mtimed[MTIMED_SLOW] = (int16_t)tmp8u;
     }
 
     rd_byte(&tmp8u);
-    m_ptr->mtimed[MTIMED_STUNNED] = (s16b)tmp8u;
+    m_ptr->mtimed[MTIMED_STUNNED] = (int16_t)tmp8u;
     rd_byte(&tmp8u);
-    m_ptr->mtimed[MTIMED_CONFUSED] = (s16b)tmp8u;
+    m_ptr->mtimed[MTIMED_CONFUSED] = (int16_t)tmp8u;
     rd_byte(&tmp8u);
-    m_ptr->mtimed[MTIMED_MONFEAR] = (s16b)tmp8u;
+    m_ptr->mtimed[MTIMED_MONFEAR] = (int16_t)tmp8u;
 
     if (h_older_than(0, 0, 10)) {
         reset_target(m_ptr);
@@ -433,7 +433,7 @@ void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
     }
 
     rd_byte(&tmp8u);
-    m_ptr->mtimed[MTIMED_INVULNER] = (s16b)tmp8u;
+    m_ptr->mtimed[MTIMED_INVULNER] = (int16_t)tmp8u;
 
     u32b tmp32u;
     rd_u32b(&tmp32u);
@@ -554,7 +554,7 @@ void set_old_lore(monster_race *r_ptr, BIT_FLAGS f4, const MONRACE_IDX r_idx)
  */
 errr rd_dungeon_old(player_type *player_ptr)
 {
-    s16b tmp16s;
+    int16_t tmp16s;
     rd_s16b(&tmp16s);
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->dun_level = (DEPTH)tmp16s;
@@ -623,7 +623,7 @@ errr rd_dungeon_old(player_type *player_ptr)
         for (int i = count; i > 0; i--) {
             grid_type *g_ptr;
             g_ptr = &floor_ptr->grid_array[y][x];
-            g_ptr->feat = (s16b)tmp8u;
+            g_ptr->feat = (int16_t)tmp8u;
             if (++x >= xmax) {
                 x = 0;
                 if (++y >= ymax)
@@ -640,7 +640,7 @@ errr rd_dungeon_old(player_type *player_ptr)
         for (int i = count; i > 0; i--) {
             grid_type *g_ptr;
             g_ptr = &floor_ptr->grid_array[y][x];
-            g_ptr->mimic = (s16b)tmp8u;
+            g_ptr->mimic = (int16_t)tmp8u;
             if (++x >= xmax) {
                 x = 0;
                 if (++y >= ymax)

@@ -13,7 +13,7 @@ concptr *macro__pat;
 concptr *macro__act;
 
 /* Number of active macros */
-s16b macro__num;
+int16_t macro__num;
 
 /* Expand macros in "get_com" or not */
 bool get_com_no_macros = false;

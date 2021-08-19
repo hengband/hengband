@@ -23,7 +23,7 @@ struct grid_template_type {
     BIT_FLAGS info;
     FEAT_IDX feat;
     FEAT_IDX mimic;
-    s16b special;
+    int16_t special;
     u16b occurrence;
 };
 

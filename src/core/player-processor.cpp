@@ -312,7 +312,7 @@ void process_player(player_type *creature_ptr)
             if (creature_ptr->timewalk || creature_ptr->energy_use > 400) {
                 creature_ptr->energy_need += creature_ptr->energy_use * TURNS_PER_TICK / 10;
             } else {
-                creature_ptr->energy_need += (s16b)((s32b)creature_ptr->energy_use * ENERGY_NEED() / 100L);
+                creature_ptr->energy_need += (int16_t)((s32b)creature_ptr->energy_use * ENERGY_NEED() / 100L);
             }
 
             if (creature_ptr->image)

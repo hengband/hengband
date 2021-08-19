@@ -262,7 +262,7 @@ void wiz_change_status(player_type *creature_ptr)
     if (!get_string(_("熟練度: ", "Proficiency: "), tmp_val, 4))
         return;
 
-    s16b tmp_s16b = (s16b)atoi(tmp_val);
+    int16_t tmp_s16b = (int16_t)atoi(tmp_val);
     if (tmp_s16b < WEAPON_EXP_UNSKILLED)
         tmp_s16b = WEAPON_EXP_UNSKILLED;
 
@@ -355,7 +355,7 @@ void wiz_create_feature(player_type *creature_ptr)
         tmp_mimic = max_f_idx - 1;
 
     cave_set_feat(creature_ptr, y, x, tmp_feat);
-    g_ptr->mimic = (s16b)tmp_mimic;
+    g_ptr->mimic = (int16_t)tmp_mimic;
     feature_type *f_ptr;
     f_ptr = &f_info[g_ptr->get_feat_mimic()];
 

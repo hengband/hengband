@@ -41,10 +41,10 @@ typedef struct player_type {
                      * characters (such as Amberite Paladins)
                      */
 
-    s16b age{}; /* Characters age */
-    s16b ht{}; /* Height */
-    s16b wt{}; /* Weight */
-    s16b sc{}; /* Social Class */
+    int16_t age{}; /* Characters age */
+    int16_t ht{}; /* Height */
+    int16_t wt{}; /* Weight */
+    int16_t sc{}; /* Social Class */
 
     PRICE au{}; /* Current Gold */
 
@@ -56,7 +56,7 @@ typedef struct player_type {
     PLAYER_LEVEL lev{}; /* Level */
 
     TOWN_IDX town_num{}; /* Current town number */
-    s16b arena_number{}; /* monster number in on_defeat_arena_monster -KMW- */
+    int16_t arena_number{}; /* monster number in on_defeat_arena_monster -KMW- */
     bool phase_out{}; /*!< フェイズアウト状態(闘技場観戦状態などに利用、NPCの処理の対象にならず自身もほとんどの行動ができない) */
 
     DUNGEON_IDX dungeon_idx{}; /* current dungeon index */
@@ -73,14 +73,14 @@ typedef struct player_type {
     MANA_POINT csp{}; /* Cur mana pts */
     u32b csp_frac{}; /* Cur mana frac (times 2^16) */
 
-    s16b max_plv{}; /* Max Player Level */
+    int16_t max_plv{}; /* Max Player Level */
 
     BASE_STATUS stat_max[A_MAX]{}; /* Current "maximal" stat values */
     BASE_STATUS stat_max_max[A_MAX]{}; /* Maximal "maximal" stat values */
     BASE_STATUS stat_cur[A_MAX]{}; /* Current "natural" stat values */
 
-    s16b learned_spells{};
-    s16b add_spells{};
+    int16_t learned_spells{};
+    int16_t add_spells{};
 
     u32b count{};
 
@@ -149,8 +149,8 @@ typedef struct player_type {
 
     EnumClassFlagGroup<MUTA> muta{}; /*!< 突然変異 / mutations */
 
-    s16b virtues[8]{};
-    s16b vir_types[8]{};
+    int16_t virtues[8]{};
+    int16_t vir_types[8]{};
 
     TIME_EFFECT word_recall{}; /* Word of recall counter */
     TIME_EFFECT alter_reality{}; /* Alter reality counter */
@@ -190,12 +190,12 @@ typedef struct player_type {
 
     RF_ABILITY mane_spell[MAX_MANE]{};
     HIT_POINT mane_dam[MAX_MANE]{};
-    s16b mane_num{};
+    int16_t mane_num{};
     bool new_mane{};
 
 #define CONCENT_RADAR_THRESHOLD 2
 #define CONCENT_TELE_THRESHOLD 5
-    s16b concent{}; /* Sniper's concentration level */
+    int16_t concent{}; /* Sniper's concentration level */
 
     HIT_POINT player_hp[PY_MAX_LEVEL]{};
     char died_from[MAX_MONSTER_NAME]{}; /* What killed the player */
@@ -222,9 +222,9 @@ typedef struct player_type {
     player_race_type start_race{}; /* Race at birth */
     BIT_FLAGS old_race1{}; /* Record of race changes */
     BIT_FLAGS old_race2{}; /* Record of race changes */
-    s16b old_realm{}; /* Record of realm changes */
+    int16_t old_realm{}; /* Record of realm changes */
 
-    s16b pet_follow_distance{}; /* Length of the imaginary "leash" for pets */
+    int16_t pet_follow_distance{}; /* Length of the imaginary "leash" for pets */
     BIT_FLAGS16 pet_extra_flags{}; /* Various flags for controling pets */
 
     MONSTER_IDX today_mon{}; //!< 日替わり賞金首を知っていればそのモンスターID、知らなければ 0
@@ -238,8 +238,8 @@ typedef struct player_type {
     s32b feeling_turn{}; /* The turn of the last dungeon feeling */
 
     object_type *inventory_list{}; /* The player's inventory */
-    s16b inven_cnt{}; /* Number of items in inventory */
-    s16b equip_cnt{}; /* Number of items in equipment */
+    int16_t inven_cnt{}; /* Number of items in inventory */
+    int16_t equip_cnt{}; /* Number of items in equipment */
 
     /*** Temporary fields ***/
 
@@ -263,10 +263,10 @@ typedef struct player_type {
 
     KIND_OBJECT_IDX object_kind_idx{}; /* Object kind trackee */
 
-    s16b new_spells{}; /* Number of spells available */
-    s16b old_spells{};
+    int16_t new_spells{}; /* Number of spells available */
+    int16_t old_spells{};
 
-    s16b old_food_aux{}; /* Old value of food */
+    int16_t old_food_aux{}; /* Old value of food */
 
     bool old_cumber_armor{};
     bool old_cumber_glove{};
@@ -296,8 +296,8 @@ typedef struct player_type {
     BIT_FLAGS update{}; /* Pending Updates */
     BIT_FLAGS redraw{}; /* Normal Redraws */
     BIT_FLAGS window_flags{}; /* Window Redraws */
-    s16b stat_use[A_MAX]{}; /* Current modified stats */
-    s16b stat_top[A_MAX]{}; /* Maximal modified stats */
+    int16_t stat_use[A_MAX]{}; /* Current modified stats */
+    int16_t stat_top[A_MAX]{}; /* Maximal modified stats */
 
     bool sutemi{};
     bool counter{};
@@ -312,11 +312,11 @@ typedef struct player_type {
 
     /*** Extracted fields ***/
 
-    s16b running{}; /* Current counter for running, if any */
+    int16_t running{}; /* Current counter for running, if any */
     bool suppress_multi_reward{}; /*!< 複数レベルアップ時のパトロンからの報酬多重受け取りを防止 */
 
-    s16b stat_add[A_MAX]{}; /* Modifiers to stat values */
-    s16b stat_index[A_MAX]{}; /* Indexes into stat tables */
+    int16_t stat_add[A_MAX]{}; /* Modifiers to stat values */
+    int16_t stat_index[A_MAX]{}; /* Indexes into stat tables */
 
     bool hack_mutation{};
     bool is_fired{};
@@ -372,14 +372,14 @@ typedef struct player_type {
     ARMOUR_CLASS dis_to_a{}; /*!< 判明している現在の表記上の装備AC修正値 / Known bonus to ac */
     ARMOUR_CLASS dis_ac{}; /*!< 判明している現在の表記上の装備AC基礎値 / Known base ac */
 
-    s16b to_h[2]{}; /* Bonus to hit (wield) */
-    s16b to_h_b{}; /* Bonus to hit (bow) */
-    s16b to_h_m{}; /* Bonus to hit (misc) */
-    s16b to_d[2]{}; /* Bonus to dam (wield) */
-    s16b to_d_m{}; /* Bonus to dam (misc) */
+    int16_t to_h[2]{}; /* Bonus to hit (wield) */
+    int16_t to_h_b{}; /* Bonus to hit (bow) */
+    int16_t to_h_m{}; /* Bonus to hit (misc) */
+    int16_t to_d[2]{}; /* Bonus to dam (wield) */
+    int16_t to_d_m{}; /* Bonus to dam (misc) */
     ARMOUR_CLASS to_a{}; /* Bonus to ac */
 
-    s16b to_m_chance{}; /* Minusses to cast chance */
+    int16_t to_m_chance{}; /* Minusses to cast chance */
 
     bool no_flowed{};
 
@@ -405,13 +405,13 @@ typedef struct player_type {
     ACTION_SKILL_POWER skill_tht{}; /*!< 行動技能値:投射命中能力 / Skill: To hit (throwing) */
     ACTION_SKILL_POWER skill_dig{}; /*!< 行動技能値:掘削 / Skill: Digging */
 
-    s16b num_blow[2]{}; /* Number of blows */
-    s16b num_fire{}; /* Number of shots */
+    int16_t num_blow[2]{}; /* Number of blows */
+    int16_t num_fire{}; /* Number of shots */
 
     byte tval_xtra{}; /* (Unused)Correct xtra tval */
     byte tval_ammo{}; /* Correct ammo tval */
 
-    s16b pspeed{}; /*!< 現在の速度 / Current speed */
+    int16_t pspeed{}; /*!< 現在の速度 / Current speed */
 
     ENERGY energy_use{}; /*!< 直近のターンに消費したエネルギー / Energy use this turn */
 

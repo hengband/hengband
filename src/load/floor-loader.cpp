@@ -51,12 +51,12 @@ errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
     player_ptr->x = player_ptr->y = 0;
 
     if (!sf_ptr) {
-        s16b tmp16s;
+        int16_t tmp16s;
         rd_s16b(&tmp16s);
         floor_ptr->dun_level = (DEPTH)tmp16s;
         floor_ptr->base_level = floor_ptr->dun_level;
     } else {
-        s16b tmp16s;
+        int16_t tmp16s;
         rd_s16b(&tmp16s);
         if (tmp16s != sf_ptr->floor_id)
             return 171;
@@ -90,7 +90,7 @@ errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
             return 171;
     }
 
-    s16b tmp16s;
+    int16_t tmp16s;
     rd_s16b(&tmp16s);
     floor_ptr->base_level = (DEPTH)tmp16s;
     rd_s16b(&tmp16s);
@@ -121,9 +121,9 @@ errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
         if (h_older_than(1, 7, 0, 2)) {
             byte tmp8u;
             rd_byte(&tmp8u);
-            ct_ptr->feat = (s16b)tmp8u;
+            ct_ptr->feat = (int16_t)tmp8u;
             rd_byte(&tmp8u);
-            ct_ptr->mimic = (s16b)tmp8u;
+            ct_ptr->mimic = (int16_t)tmp8u;
         } else {
             rd_s16b(&ct_ptr->feat);
             rd_s16b(&ct_ptr->mimic);

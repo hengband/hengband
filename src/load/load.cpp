@@ -129,7 +129,7 @@ static errr load_hp(player_type *creature_ptr)
     }
 
     for (int i = 0; i < tmp16u; i++) {
-        s16b tmp16s;
+        int16_t tmp16s;
         rd_s16b(&tmp16s);
         creature_ptr->player_hp[i] = (HIT_POINT)tmp16s;
     }

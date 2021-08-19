@@ -41,7 +41,7 @@ void load_quick_start(void)
         rd_s16b(&previous_char.stat_max_max[i]);
 
     for (int i = 0; i < PY_MAX_LEVEL; i++) {
-        s16b tmp16s;
+        int16_t tmp16s;
         rd_s16b(&tmp16s);
         previous_char.player_hp[i] = (HIT_POINT)tmp16s;
     }

@@ -152,7 +152,7 @@ static bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
         return false;
 
     if (act_ptr->timeout.constant >= 0) {
-        o_ptr->timeout = (s16b)act_ptr->timeout.constant;
+        o_ptr->timeout = (int16_t)act_ptr->timeout.constant;
         if (act_ptr->timeout.dice > 0)
             o_ptr->timeout += randint1(act_ptr->timeout.dice);
 

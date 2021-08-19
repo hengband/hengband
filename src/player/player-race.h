@@ -74,16 +74,16 @@ struct player_race {
     concptr E_title{}; //!< 英語種族名
 #endif
     concptr symbol{}; //!< 種族シンボル(救援召喚) / Race symbols
-    s16b r_adj[A_MAX]{}; //!< 能力値ボーナス / Racial stat bonuses
+    int16_t r_adj[A_MAX]{}; //!< 能力値ボーナス / Racial stat bonuses
 
-    s16b r_dis{}; //!< 解除 / disarming
-    s16b r_dev{}; //!< 魔道具使用 /magic devices
-    s16b r_sav{}; //!< 魔法防御 / saving throw
-    s16b r_stl{}; //!< 隠密 / stealth
-    s16b r_srh{}; //!< 探索 / search ability
-    s16b r_fos{}; //!< 知覚 / search frequency
-    s16b r_thn{}; //!< 打撃修正(命中) / combat (normal)
-    s16b r_thb{}; //!< 射撃修正(命中) / combat (shooting)
+    int16_t r_dis{}; //!< 解除 / disarming
+    int16_t r_dev{}; //!< 魔道具使用 /magic devices
+    int16_t r_sav{}; //!< 魔法防御 / saving throw
+    int16_t r_stl{}; //!< 隠密 / stealth
+    int16_t r_srh{}; //!< 探索 / search ability
+    int16_t r_fos{}; //!< 知覚 / search frequency
+    int16_t r_thn{}; //!< 打撃修正(命中) / combat (normal)
+    int16_t r_thb{}; //!< 射撃修正(命中) / combat (shooting)
 
     byte r_mhp{}; //!< ヒットダイス /  Race hit-dice modifier
     byte r_exp{}; //!< 経験値修正 /Race experience factor

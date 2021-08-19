@@ -40,7 +40,7 @@ void wr_u16b(u16b v)
  * @brief 符号あり16ビットをファイルに書き込む
  * @param v 書き込む符号あり16bit値
  */
-void wr_s16b(s16b v) { wr_u16b((u16b)v); }
+void wr_s16b(int16_t v) { wr_u16b((u16b)v); }
 
 /*!
  * @brief 符号なし32ビットをファイルに書き込む

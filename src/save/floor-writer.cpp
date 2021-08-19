@@ -27,11 +27,11 @@ void wr_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (!sf_ptr) {
-        wr_s16b((s16b)floor_ptr->dun_level);
+        wr_s16b((int16_t)floor_ptr->dun_level);
     } else {
         wr_s16b(sf_ptr->floor_id);
         wr_byte((byte)sf_ptr->savefile_id);
-        wr_s16b((s16b)sf_ptr->dun_level);
+        wr_s16b((int16_t)sf_ptr->dun_level);
         wr_s32b(sf_ptr->last_visit);
         wr_u32b(sf_ptr->visit_mark);
         wr_s16b(sf_ptr->upper_floor_id);
@@ -39,7 +39,7 @@ void wr_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
     }
 
     wr_u16b((u16b)floor_ptr->base_level);
-    wr_u16b((s16b)player_ptr->current_floor_ptr->num_repro);
+    wr_u16b((int16_t)player_ptr->current_floor_ptr->num_repro);
     wr_u16b((u16b)player_ptr->y);
     wr_u16b((u16b)player_ptr->x);
     wr_u16b((u16b)floor_ptr->height);
@@ -193,7 +193,7 @@ bool wr_dungeon(player_type *player_ptr)
         saved_floor_type *sf_ptr = &saved_floors[i];
         wr_s16b(sf_ptr->floor_id);
         wr_byte((byte)sf_ptr->savefile_id);
-        wr_s16b((s16b)sf_ptr->dun_level);
+        wr_s16b((int16_t)sf_ptr->dun_level);
         wr_s32b(sf_ptr->last_visit);
         wr_u32b(sf_ptr->visit_mark);
         wr_s16b(sf_ptr->upper_floor_id);

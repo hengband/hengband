@@ -349,7 +349,7 @@ void fix_message(void)
         TERM_LEN w, h;
         term_get_size(&w, &h);
         for (int i = 0; i < h; i++) {
-            term_putstr(0, (h - 1) - i, -1, (byte)((i < now_message) ? TERM_WHITE : TERM_SLATE), message_str((s16b)i));
+            term_putstr(0, (h - 1) - i, -1, (byte)((i < now_message) ? TERM_WHITE : TERM_SLATE), message_str((int16_t)i));
             TERM_LEN x, y;
             term_locate(&x, &y);
             term_erase(x, y, 255);

@@ -272,7 +272,7 @@ bool build_type5(player_type *player_ptr, dun_data_type *dd_ptr)
         if (r_ptr->flags3 & RF3_GOOD)
             align.sub_align |= SUB_ALIGN_GOOD;
 
-        nest_mon_info[i].r_idx = (s16b)r_idx;
+        nest_mon_info[i].r_idx = (int16_t)r_idx;
         nest_mon_info[i].used = false;
     }
 

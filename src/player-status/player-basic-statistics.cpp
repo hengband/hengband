@@ -21,7 +21,7 @@
  * @details
  * * 各要素によるステータス修正値の合計
  */
-s16b PlayerBasicStatistics::modification_value()
+int16_t PlayerBasicStatistics::modification_value()
 {
     return PlayerStatusBase::get_value();
 }
@@ -30,7 +30,7 @@ s16b PlayerBasicStatistics::modification_value()
  * @brief 基礎ステータスの実値
  * @return status_typeに対応するステータスの実値を返す
  */
-s16b PlayerBasicStatistics::get_value()
+int16_t PlayerBasicStatistics::get_value()
 {
     this->set_locals();
     return this->owner_ptr->stat_index[(int)this->ability_type];
@@ -43,7 +43,7 @@ s16b PlayerBasicStatistics::get_value()
  * @details
  * * 種族によるステータス修正値。
  */
-s16b PlayerBasicStatistics::race_value()
+int16_t PlayerBasicStatistics::race_value()
 {
     const player_race *tmp_rp_ptr;
     if (this->owner_ptr->mimic_form)
@@ -61,7 +61,7 @@ s16b PlayerBasicStatistics::race_value()
  * @details
  * * 職業によるステータス修正値
  */
-s16b PlayerBasicStatistics::class_value()
+int16_t PlayerBasicStatistics::class_value()
 {
     const player_class *c_ptr = &class_info[this->owner_ptr->pclass];
     return c_ptr->c_adj[this->ability_type];
@@ -74,7 +74,7 @@ s16b PlayerBasicStatistics::class_value()
  * @details
  * * 性格によるステータス修正値
  */
-s16b PlayerBasicStatistics::personality_value()
+int16_t PlayerBasicStatistics::personality_value()
 {
     const player_personality *a_ptr = &personality_info[this->owner_ptr->pseikaku];
     return a_ptr->a_adj[this->ability_type];
@@ -105,7 +105,7 @@ void PlayerBasicStatistics::update_top_status()
     int top = modify_stat_value(this->owner_ptr->stat_max[status], this->owner_ptr->stat_add[status]);
 
     if (this->owner_ptr->stat_top[status] != top) {
-        this->owner_ptr->stat_top[status] = (s16b)top;
+        this->owner_ptr->stat_top[status] = (int16_t)top;
         set_bits(this->owner_ptr->redraw, PR_STATS);
         set_bits(this->owner_ptr->window_flags, PW_PLAYER);
     }
@@ -119,7 +119,7 @@ void PlayerBasicStatistics::update_top_status()
  * * owner_ptrのステータス現在値を更新する際の例外処理
  * * 派生クラスでoverrideして使用する。
  */
-s16b PlayerBasicStatistics::set_exception_use_status(s16b value)
+int16_t PlayerBasicStatistics::set_exception_use_status(int16_t value)
 {
     return value;
 }
@@ -133,12 +133,12 @@ s16b PlayerBasicStatistics::set_exception_use_status(s16b value)
 void PlayerBasicStatistics::update_use_status()
 {
     int status = (int)this->ability_type;
-    s16b use = modify_stat_value(this->owner_ptr->stat_cur[status], this->owner_ptr->stat_add[status]);
+    int16_t use = modify_stat_value(this->owner_ptr->stat_cur[status], this->owner_ptr->stat_add[status]);
 
     use = this->set_exception_use_status(use);
 
     if (this->owner_ptr->stat_use[status] != use) {
-        this->owner_ptr->stat_use[status] = (s16b)use;
+        this->owner_ptr->stat_use[status] = (int16_t)use;
         set_bits(this->owner_ptr->redraw, PR_STATS);
         set_bits(this->owner_ptr->window_flags, PW_PLAYER);
     }
@@ -165,7 +165,7 @@ void PlayerBasicStatistics::update_index_status()
     if (this->owner_ptr->stat_index[status] == index)
         return;
 
-    this->owner_ptr->stat_index[status] = (s16b)index;
+    this->owner_ptr->stat_index[status] = (int16_t)index;
     if (status == A_CON) {
         set_bits(this->owner_ptr->update, PU_HP);
     } else if (status == A_INT) {

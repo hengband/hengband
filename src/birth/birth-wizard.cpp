@@ -269,7 +269,7 @@ static bool let_player_build_character(player_type *creature_ptr)
 static void display_initial_options(player_type *creature_ptr)
 {
     u16b expfact = get_expfact(creature_ptr) - 100;
-    s16b adj[A_MAX];
+    int16_t adj[A_MAX];
     for (int i = 0; i < A_MAX; i++) {
         adj[i] = rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i];
     }
@@ -502,7 +502,7 @@ static bool display_auto_roller(player_type *creature_ptr, chara_limit_type char
 
         get_extra(creature_ptr, true);
         get_money(creature_ptr);
-        creature_ptr->chaos_patron = (s16b)randint0(MAX_PATRON);
+        creature_ptr->chaos_patron = (int16_t)randint0(MAX_PATRON);
 
         char c;
         if (!display_auto_roller_result(creature_ptr, prev, &c))

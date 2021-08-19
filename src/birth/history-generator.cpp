@@ -112,7 +112,7 @@ static void decide_social_class(player_type *creature_ptr, char *buf)
     else if (social_class < 1)
         social_class = 1;
 
-    creature_ptr->sc = (s16b)social_class;
+    creature_ptr->sc = (int16_t)social_class;
 }
 
 /*!

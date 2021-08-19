@@ -51,9 +51,9 @@ static errr rd_dungeon(player_type *player_ptr)
 
             rd_s16b(&sf_ptr->floor_id);
             rd_byte(&tmp8u);
-            sf_ptr->savefile_id = (s16b)tmp8u;
+            sf_ptr->savefile_id = (int16_t)tmp8u;
 
-            s16b tmp16s;
+            int16_t tmp16s;
             rd_s16b(&tmp16s);
             sf_ptr->dun_level = (DEPTH)tmp16s;
 

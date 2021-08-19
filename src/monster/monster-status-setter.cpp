@@ -112,7 +112,7 @@ bool set_monster_csleep(player_type *target_ptr, MONSTER_IDX m_idx, int v)
         }
     }
 
-    m_ptr->mtimed[MTIMED_CSLEEP] = (s16b)v;
+    m_ptr->mtimed[MTIMED_CSLEEP] = (int16_t)v;
     if (!notice)
         return false;
 
@@ -156,7 +156,7 @@ bool set_monster_fast(player_type *target_ptr, MONSTER_IDX m_idx, int v)
         }
     }
 
-    m_ptr->mtimed[MTIMED_FAST] = (s16b)v;
+    m_ptr->mtimed[MTIMED_FAST] = (int16_t)v;
     if (!notice)
         return false;
 
@@ -187,7 +187,7 @@ bool set_monster_slow(player_type *target_ptr, MONSTER_IDX m_idx, int v)
         }
     }
 
-    m_ptr->mtimed[MTIMED_SLOW] = (s16b)v;
+    m_ptr->mtimed[MTIMED_SLOW] = (int16_t)v;
     if (!notice)
         return false;
 
@@ -223,7 +223,7 @@ bool set_monster_stunned(player_type *target_ptr, MONSTER_IDX m_idx, int v)
         }
     }
 
-    m_ptr->mtimed[MTIMED_STUNNED] = (s16b)v;
+    m_ptr->mtimed[MTIMED_STUNNED] = (int16_t)v;
     return notice;
 }
 
@@ -253,7 +253,7 @@ bool set_monster_confused(player_type *target_ptr, MONSTER_IDX m_idx, int v)
         }
     }
 
-    m_ptr->mtimed[MTIMED_CONFUSED] = (s16b)v;
+    m_ptr->mtimed[MTIMED_CONFUSED] = (int16_t)v;
     return notice;
 }
 
@@ -283,7 +283,7 @@ bool set_monster_monfear(player_type *target_ptr, MONSTER_IDX m_idx, int v)
         }
     }
 
-    m_ptr->mtimed[MTIMED_MONFEAR] = (s16b)v;
+    m_ptr->mtimed[MTIMED_MONFEAR] = (int16_t)v;
 
     if (!notice)
         return false;
@@ -328,7 +328,7 @@ bool set_monster_invulner(player_type *target_ptr, MONSTER_IDX m_idx, int v, boo
         }
     }
 
-    m_ptr->mtimed[MTIMED_INVULNER] = (s16b)v;
+    m_ptr->mtimed[MTIMED_INVULNER] = (int16_t)v;
     if (!notice)
         return false;
 

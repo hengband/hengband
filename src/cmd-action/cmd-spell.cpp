@@ -1315,8 +1315,8 @@ bool do_cmd_cast(player_type *caster_ptr)
             break;
         }
         if (any_bits(mp_ptr->spell_xtra, extra_magic_gain_exp)) {
-            s16b cur_exp = caster_ptr->spell_exp[(increment ? 32 : 0) + spell];
-            s16b exp_gain = 0;
+            int16_t cur_exp = caster_ptr->spell_exp[(increment ? 32 : 0) + spell];
+            int16_t exp_gain = 0;
 
             if (cur_exp < SPELL_EXP_BEGINNER)
                 exp_gain += 60;

@@ -101,7 +101,7 @@ HIT_POINT mon_damage_mod(player_type *target_ptr, monster_type *m_ptr, HIT_POINT
  */
 int get_mproc_idx(floor_type *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
 {
-    s16b *cur_mproc_list = floor_ptr->mproc_list[mproc_type];
+    int16_t *cur_mproc_list = floor_ptr->mproc_list[mproc_type];
     for (int i = floor_ptr->mproc_max[mproc_type] - 1; i >= 0; i--) {
         if (cur_mproc_list[i] == m_idx) {
             return i;
@@ -120,7 +120,7 @@ int get_mproc_idx(floor_type *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
 void mproc_add(floor_type *floor_ptr, MONSTER_IDX m_idx, int mproc_type)
 {
     if (floor_ptr->mproc_max[mproc_type] < current_world_ptr->max_m_idx) {
-        floor_ptr->mproc_list[mproc_type][floor_ptr->mproc_max[mproc_type]++] = (s16b)m_idx;
+        floor_ptr->mproc_list[mproc_type][floor_ptr->mproc_max[mproc_type]++] = (int16_t)m_idx;
     }
 }
 

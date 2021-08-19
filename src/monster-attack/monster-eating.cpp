@@ -182,7 +182,7 @@ void process_eat_lite(player_type *target_ptr, monap_type *monap_ptr)
     if ((monap_ptr->o_ptr->xtra4 <= 0) || object_is_fixed_artifact(monap_ptr->o_ptr))
         return;
 
-    monap_ptr->o_ptr->xtra4 -= (s16b)(250 + randint1(250));
+    monap_ptr->o_ptr->xtra4 -= (int16_t)(250 + randint1(250));
     if (monap_ptr->o_ptr->xtra4 < 1)
         monap_ptr->o_ptr->xtra4 = 1;
 

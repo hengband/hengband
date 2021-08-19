@@ -45,7 +45,7 @@
 #include "locale/english.h"
 #endif
 
-static const s16b CONTINUOUS_DESCRIPTION = 256;
+static const int16_t CONTINUOUS_DESCRIPTION = 256;
 
 bool show_gold_on_floor = false;
 
@@ -264,12 +264,12 @@ static u16b describe_monster_item(player_type *subject_ptr, eg_type *eg_ptr)
     return CONTINUOUS_DESCRIPTION;
 }
 
-static bool within_char_util(s16b input)
+static bool within_char_util(int16_t input)
 {
     return (input > -127) && (input < 128);
 }
 
-static s16b describe_grid(player_type *subject_ptr, eg_type *eg_ptr)
+static int16_t describe_grid(player_type *subject_ptr, eg_type *eg_ptr)
 {
     if ((eg_ptr->g_ptr->m_idx == 0) || !subject_ptr->current_floor_ptr->m_list[eg_ptr->g_ptr->m_idx].ml)
         return CONTINUOUS_DESCRIPTION;
@@ -299,7 +299,7 @@ static s16b describe_grid(player_type *subject_ptr, eg_type *eg_ptr)
     return CONTINUOUS_DESCRIPTION;
 }
 
-static s16b describe_footing(player_type *subject_ptr, eg_type *eg_ptr)
+static int16_t describe_footing(player_type *subject_ptr, eg_type *eg_ptr)
 {
     if (eg_ptr->floor_num != 1)
         return CONTINUOUS_DESCRIPTION;
@@ -319,7 +319,7 @@ static s16b describe_footing(player_type *subject_ptr, eg_type *eg_ptr)
     return eg_ptr->query;
 }
 
-static s16b describe_footing_items(eg_type *eg_ptr)
+static int16_t describe_footing_items(eg_type *eg_ptr)
 {
     if (!eg_ptr->boring)
         return CONTINUOUS_DESCRIPTION;
@@ -366,18 +366,18 @@ static char describe_footing_many_items(player_type *subject_ptr, eg_type *eg_pt
     }
 }
 
-static s16b loop_describing_grid(player_type *subject_ptr, eg_type *eg_ptr)
+static int16_t loop_describing_grid(player_type *subject_ptr, eg_type *eg_ptr)
 {
     if (eg_ptr->floor_num == 0)
         return CONTINUOUS_DESCRIPTION;
 
     int min_width = 0;
     while (true) {
-        s16b footing_description = describe_footing(subject_ptr, eg_ptr);
+        int16_t footing_description = describe_footing(subject_ptr, eg_ptr);
         if (within_char_util(footing_description))
             return (char)footing_description;
 
-        s16b footing_descriptions = describe_footing_items(eg_ptr);
+        int16_t footing_descriptions = describe_footing_items(eg_ptr);
         if (within_char_util(footing_descriptions))
             return (char)footing_descriptions;
 
@@ -385,7 +385,7 @@ static s16b loop_describing_grid(player_type *subject_ptr, eg_type *eg_ptr)
     }
 }
 
-static s16b describe_footing_sight(player_type *subject_ptr, eg_type *eg_ptr, object_type *o_ptr)
+static int16_t describe_footing_sight(player_type *subject_ptr, eg_type *eg_ptr, object_type *o_ptr)
 {
     if ((o_ptr->marked & OM_FOUND) == 0)
         return CONTINUOUS_DESCRIPTION;
@@ -420,12 +420,12 @@ static s16b describe_footing_sight(player_type *subject_ptr, eg_type *eg_ptr, ob
     return CONTINUOUS_DESCRIPTION;
 }
 
-static s16b sweep_footing_items(player_type *subject_ptr, eg_type *eg_ptr)
+static int16_t sweep_footing_items(player_type *subject_ptr, eg_type *eg_ptr)
 {
     for (const auto this_o_idx : eg_ptr->g_ptr->o_idx_list) {
         object_type *o_ptr;
         o_ptr = &subject_ptr->current_floor_ptr->o_list[this_o_idx];
-        s16b ret = describe_footing_sight(subject_ptr, eg_ptr, o_ptr);
+        int16_t ret = describe_footing_sight(subject_ptr, eg_ptr, o_ptr);
         if (within_char_util(ret))
             return (char)ret;
     }
@@ -517,15 +517,15 @@ char examine_grid(player_type *subject_ptr, const POSITION y, const POSITION x, 
         break;
     }
 
-    s16b description_grid = describe_grid(subject_ptr, eg_ptr);
+    int16_t description_grid = describe_grid(subject_ptr, eg_ptr);
     if (within_char_util(description_grid))
         return (char)description_grid;
 
-    s16b loop_description = loop_describing_grid(subject_ptr, eg_ptr);
+    int16_t loop_description = loop_describing_grid(subject_ptr, eg_ptr);
     if (within_char_util(loop_description))
         return (char)loop_description;
 
-    s16b footing_items_description = sweep_footing_items(subject_ptr, eg_ptr);
+    int16_t footing_items_description = sweep_footing_items(subject_ptr, eg_ptr);
     if (within_char_util(footing_items_description))
         return (char)footing_items_description;
 
