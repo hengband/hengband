@@ -539,9 +539,9 @@ bool ThrowCommand::do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
     if (this->creature_ptr->special_defense & KATA_MUSOU)
         set_action(this->creature_ptr, ACTION_NONE);
 
-    it_type tmp_it;
     object_type tmp_object;
-    it_type *it_ptr = initialize_it_type(&tmp_it, &tmp_object, delay_factor, mult, boomerang, shuriken);
+    it_type tmp_it(this->creature_ptr, &tmp_object, delay_factor, mult, boomerang, shuriken);
+    it_type *it_ptr = &tmp_it;
     if (!check_can_throw(this->creature_ptr, it_ptr))
         return false;
 
