@@ -61,6 +61,7 @@ public:
     void set_racial_chance();
     void exe_throw();
     void display_figurine_throw();
+    void display_potion_throw();
 
 private:
     player_type *creature_ptr;

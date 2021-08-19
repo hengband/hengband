@@ -70,35 +70,6 @@ ThrowCommand::ThrowCommand(player_type* creature_ptr)
 {
 }
 
-void display_potion_throw(player_type *creature_ptr, it_type *it_ptr)
-{
-    if (!object_is_potion(it_ptr->q_ptr))
-        return;
-
-    if (!it_ptr->hit_body && !it_ptr->hit_wall && (randint1(100) >= it_ptr->corruption_possibility)) {
-        it_ptr->corruption_possibility = 0;
-        return;
-    }
-
-    msg_format(_("%sは砕け散った！", "The %s shatters!"), it_ptr->o_name);
-    if (!potion_smash_effect(creature_ptr, 0, it_ptr->y, it_ptr->x, it_ptr->q_ptr->k_idx)) {
-        it_ptr->do_drop = false;
-        return;
-    }
-
-    monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[it_ptr->y][it_ptr->x].m_idx];
-    if ((creature_ptr->current_floor_ptr->grid_array[it_ptr->y][it_ptr->x].m_idx == 0) || !is_friendly(m_ptr) || monster_invulner_remaining(m_ptr)) {
-        it_ptr->do_drop = false;
-        return;
-    }
-
-    GAME_TEXT m_name[MAX_NLEN];
-    monster_desc(creature_ptr, m_name, m_ptr, 0);
-    msg_format(_("%sは怒った！", "%^s gets angry!"), m_name);
-    set_hostile(creature_ptr, &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[it_ptr->y][it_ptr->x].m_idx]);
-    it_ptr->do_drop = false;
-}
-
 static void display_boomerang_throw(player_type *creature_ptr, it_type *it_ptr)
 {
     if ((it_ptr->back_chance > 37) && !creature_ptr->blind && (it_ptr->item >= 0)) {
@@ -249,7 +220,7 @@ bool ThrowCommand::do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 
     it_ptr->corruption_possibility = (it_ptr->hit_body ? breakage_chance(this->creature_ptr, it_ptr->q_ptr, this->creature_ptr->pclass == CLASS_ARCHER, 0) : 0);
     it_ptr->display_figurine_throw();
-    display_potion_throw(this->creature_ptr, it_ptr);
+    it_ptr->display_potion_throw();
     check_boomerang_throw(this->creature_ptr, it_ptr);
     process_boomerang_back(this->creature_ptr, it_ptr);
     drop_thrown_item(this->creature_ptr, it_ptr);

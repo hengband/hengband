@@ -40,6 +40,7 @@
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
+#include "object/object-broken.h"
 #include "object/object-flags.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
@@ -215,6 +216,35 @@ void it_type::display_figurine_throw()
 
     if (object_is_cursed(this->q_ptr))
         msg_print(_("これはあまり良くない気がする。", "You have a bad feeling about this."));
+}
+
+void it_type::display_potion_throw()
+{
+    if (!object_is_potion(this->q_ptr))
+        return;
+
+    if (!this->hit_body && !this->hit_wall && (randint1(100) >= this->corruption_possibility)) {
+        this->corruption_possibility = 0;
+        return;
+    }
+
+    msg_format(_("%sは砕け散った！", "The %s shatters!"), this->o_name);
+    if (!potion_smash_effect(this->creature_ptr, 0, this->y, this->x, this->q_ptr->k_idx)) {
+        this->do_drop = false;
+        return;
+    }
+
+    monster_type *angry_m_ptr = &this->creature_ptr->current_floor_ptr->m_list[this->creature_ptr->current_floor_ptr->grid_array[this->y][this->x].m_idx];
+    if ((this->creature_ptr->current_floor_ptr->grid_array[this->y][this->x].m_idx == 0) || !is_friendly(angry_m_ptr) || monster_invulner_remaining(angry_m_ptr)) {
+        this->do_drop = false;
+        return;
+    }
+
+    GAME_TEXT angry_m_name[MAX_NLEN];
+    monster_desc(this->creature_ptr, angry_m_name, angry_m_ptr, 0);
+    msg_format(_("%sは怒った！", "%^s gets angry!"), angry_m_name);
+    set_hostile(this->creature_ptr, &this->creature_ptr->current_floor_ptr->m_list[this->creature_ptr->current_floor_ptr->grid_array[this->y][this->x].m_idx]);
+    this->do_drop = false;
 }
 
 bool it_type::check_what_throw()
