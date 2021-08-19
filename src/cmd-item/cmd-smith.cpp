@@ -46,7 +46,7 @@
 typedef struct {
     int add; /* TR flag number or special essence id */
     concptr add_name; /* Name of this ability */
-    ESSENCE_IDX type; /* Menu number */
+    int32_t type; /* Menu number */
     int essence; /* Index for carrying essences */
     int value; /* Needed value to add this ability */
 } essence_type;
@@ -540,7 +540,7 @@ static COMMAND_CODE choose_essence(void)
  * @brief エッセンスを実際に付加する
  * @param mode エッセンスの大別ID
  */
-static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
+static void add_essence(player_type *creature_ptr, int32_t mode)
 {
     OBJECT_IDX item;
     int max_num = 0;
