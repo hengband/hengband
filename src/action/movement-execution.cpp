@@ -338,7 +338,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
         creature_ptr->update |= PU_FLOW;
     }
 
-    u32b mpe_mode = MPE_ENERGY_USE;
+    uint32_t mpe_mode = MPE_ENERGY_USE;
     if (do_pickup != always_pickup)
         mpe_mode |= MPE_DO_PICKUP;
 

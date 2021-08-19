@@ -6,7 +6,7 @@
 /*
  * Gain experience
  */
-void gain_exp_64(player_type *creature_ptr, int32_t amount, u32b amount_frac)
+void gain_exp_64(player_type *creature_ptr, int32_t amount, uint32_t amount_frac)
 {
     if (creature_ptr->is_dead)
         return;

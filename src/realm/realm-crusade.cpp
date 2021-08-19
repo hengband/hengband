@@ -467,7 +467,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
         {
             if (cast) {
                 bool pet = !one_in_(3);
-                u32b flg = 0L;
+                uint32_t flg = 0L;
 
                 if (pet)
                     flg |= PM_FORCE_PET;

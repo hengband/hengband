@@ -159,8 +159,8 @@ static void load_spells(player_type *creature_ptr)
 
 static errr verify_checksum()
 {
-    u32b n_v_check = v_check;
-    u32b o_v_check;
+    uint32_t n_v_check = v_check;
+    uint32_t o_v_check;
     rd_u32b(&o_v_check);
     if (o_v_check == n_v_check)
         return 0;
@@ -171,8 +171,8 @@ static errr verify_checksum()
 
 static errr verify_encoded_checksum()
 {
-    u32b n_x_check = x_check;
-    u32b o_x_check;
+    uint32_t n_x_check = x_check;
+    uint32_t o_x_check;
     rd_u32b(&o_x_check);
     if (o_x_check == n_x_check)
         return 0;
@@ -383,7 +383,7 @@ bool load_savedata(player_type *player_ptr, bool *new_game)
     }
 
     current_world_ptr->character_loaded = true;
-    u32b tmp = counts_read(player_ptr, 2);
+    uint32_t tmp = counts_read(player_ptr, 2);
     if (tmp > player_ptr->count)
         player_ptr->count = tmp;
 

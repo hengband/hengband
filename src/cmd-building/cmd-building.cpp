@@ -69,7 +69,7 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-u32b mon_odds[4];
+uint32_t mon_odds[4];
 int battle_odds;
 PRICE kakekin;
 int sel_monster;

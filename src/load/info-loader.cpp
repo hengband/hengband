@@ -76,7 +76,7 @@ void rd_messages(void)
         }
     }
 
-    u32b num;
+    uint32_t num;
     rd_u32b(&num);
     int message_max = (int)num;
     for (int i = 0; i < message_max; i++) {

@@ -219,7 +219,7 @@ static void do_cmd_options_win(player_type *player_ptr)
     TERM_LEN x = 0;
     char ch;
     bool go = true;
-    u32b old_flag[8];
+    uint32_t old_flag[8];
 
     for (j = 0; j < 8; j++) {
         old_flag[j] = window_flag[j];

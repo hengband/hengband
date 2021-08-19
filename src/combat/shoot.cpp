@@ -1148,7 +1148,7 @@ HIT_POINT calc_crit_ratio_shot(player_type *shooter_ptr, HIT_POINT plus_ammo, HI
  */
 HIT_POINT calc_expect_crit_shot(player_type *shooter_ptr, WEIGHT weight, int plus_ammo, int plus_bow, HIT_POINT dam)
 {
-    u32b num;
+    uint32_t num;
     int i, k, crit;
     i = calc_crit_ratio_shot(shooter_ptr, plus_ammo, plus_bow);
 
@@ -1208,7 +1208,7 @@ HIT_POINT calc_expect_crit(player_type *shooter_ptr, WEIGHT weight, int plus, HI
         return sum / 650;
     };
 
-    u32b num = 0;
+    uint32_t num = 0;
 
     if (impact) {
         for (int d = 1; d <= 650; ++d) {

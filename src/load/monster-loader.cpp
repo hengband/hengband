@@ -115,7 +115,7 @@ void rd_monster(player_type *player_ptr, monster_type *m_ptr)
 
     if (flags & SAVE_MON_SMART) {
         if (loading_savefile_version_is_older_than(2)) {
-            u32b tmp32u;
+            uint32_t tmp32u;
             rd_u32b(&tmp32u);
             std::bitset<32> rd_bits(tmp32u);
             for (size_t i = 0; i < std::min(m_ptr->smart.size(), rd_bits.size()); i++) {
@@ -137,7 +137,7 @@ void rd_monster(player_type *player_ptr, monster_type *m_ptr)
     }
 
     if (flags & SAVE_MON_EXP) {
-        u32b tmp32u;
+        uint32_t tmp32u;
         rd_u32b(&tmp32u);
         m_ptr->exp = (EXP)tmp32u;
     } else

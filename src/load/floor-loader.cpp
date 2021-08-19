@@ -76,7 +76,7 @@ errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
         if (tmp32s != sf_ptr->last_visit)
             return 171;
 
-        u32b tmp32u;
+        uint32_t tmp32u;
         rd_u32b(&tmp32u);
         if (tmp32u != sf_ptr->visit_mark)
             return 171;
@@ -229,8 +229,8 @@ errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
  */
 static bool load_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
 {
-    u32b n_x_check, n_v_check;
-    u32b o_x_check, o_v_check;
+    uint32_t n_x_check, n_v_check;
+    uint32_t o_x_check, o_v_check;
 
     load_xor_byte = 0;
     byte tmp8u;
@@ -245,7 +245,7 @@ static bool load_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
     current_world_ptr->h_ver_major = H_VER_MAJOR;
     loading_savefile_version = SAVEFILE_VERSION;
 
-    u32b tmp32u;
+    uint32_t tmp32u;
     rd_u32b(&tmp32u);
     if (saved_floor_file_sign != tmp32u)
         return false;
@@ -293,13 +293,13 @@ bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
 
     FILE *old_fff = NULL;
     byte old_xor_byte = 0;
-    u32b old_v_check = 0;
-    u32b old_x_check = 0;
+    uint32_t old_v_check = 0;
+    uint32_t old_x_check = 0;
     byte old_h_ver_major = 0;
     byte old_h_ver_minor = 0;
     byte old_h_ver_patch = 0;
     byte old_h_ver_extra = 0;
-    u32b old_loading_savefile_version = 0;
+    uint32_t old_loading_savefile_version = 0;
     if (mode & SLF_SECOND) {
         old_fff = loading_savefile;
         old_xor_byte = load_xor_byte;

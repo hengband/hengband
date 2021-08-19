@@ -67,8 +67,6 @@ static_assert(sizeof(short) == 2);
 static_assert(sizeof(int) == 4);
 // static_assert(sizeof(long) == 8); // 将来のための予約.
 
-typedef uint32_t u32b;
-
 typedef int16_t IDX; /*!< ゲーム中のID型を定義 */
 
 typedef int16_t TOWN_IDX; /*!< ゲーム中の町ID型を定義 */
@@ -158,7 +156,7 @@ typedef int DICE_SID; /*!< ゲーム中のダイス面の型定義 */
 typedef int32_t PRICE; /*!< ゲーム中の金額価値の型定義 */
 typedef int16_t FEED; /*!< ゲーム中の滋養度の型定義 */
 
-typedef u32b STR_OFFSET; /*!< テキストオフセットの型定義 */
+typedef uint32_t STR_OFFSET; /*!< テキストオフセットの型定義 */
 
 typedef int POWER; /*!< 魔法の効力定義*/
 
@@ -166,12 +164,12 @@ typedef int32_t DEPTH; /*!< ゲーム中の階層レベルの型定義 */
 typedef byte RARITY; /*!< ゲーム中の希少度の型定義 */
 
 typedef int32_t GAME_TURN; /*!< ゲーム中のターンの型定義 */
-typedef u32b REAL_TIME; /*!< 実時刻の型定義 */
+typedef uint32_t REAL_TIME; /*!< 実時刻の型定義 */
 
 typedef int32_t PERCENTAGE; /*!< ゲーム中のパーセント表記の型定義(/100倍) */
 typedef int16_t MULTIPLY; /*!< ゲーム中の倍率の型定義(/10倍) */
 
-typedef u32b BIT_FLAGS; /*!< 32ビットのフラグ配列の型定義 */
+typedef uint32_t BIT_FLAGS; /*!< 32ビットのフラグ配列の型定義 */
 typedef uint16_t BIT_FLAGS16; /*!< 16ビットのフラグ配列の型定義 */
 typedef byte BIT_FLAGS8; /*!< 8ビットのフラグ配列の型定義 */
 

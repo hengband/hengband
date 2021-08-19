@@ -152,7 +152,7 @@ void rd_item_old(player_type *player_ptr, object_type *o_ptr)
         }
         o_ptr->art_flags[2] &= (0x1FFFFFFFL);
     } else {
-        u32b tmp32u;
+        uint32_t tmp32u;
         rd_u32b(&tmp32u);
         std::bitset<32> rd_bits_cursed_flags(tmp32u);
         for (size_t i = 0; i < std::min(o_ptr->curse_flags.size(), rd_bits_cursed_flags.size()); i++) {
@@ -435,7 +435,7 @@ void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
     rd_byte(&tmp8u);
     m_ptr->mtimed[MTIMED_INVULNER] = (int16_t)tmp8u;
 
-    u32b tmp32u;
+    uint32_t tmp32u;
     rd_u32b(&tmp32u);
     std::bitset<32> rd_bits_smart(tmp32u);
     for (size_t i = 0; i < std::min(m_ptr->smart.size(), rd_bits_smart.size()); i++) {

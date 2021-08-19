@@ -371,7 +371,7 @@ void do_cmd_run(player_type *creature_ptr)
  */
 void do_cmd_stay(player_type *creature_ptr, bool pickup)
 {
-    u32b mpe_mode = MPE_STAYING | MPE_ENERGY_USE;
+    uint32_t mpe_mode = MPE_STAYING | MPE_ENERGY_USE;
     if (command_arg) {
         command_rep = command_arg - 1;
         creature_ptr->redraw |= (PR_STATE);

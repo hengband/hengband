@@ -55,7 +55,7 @@ void extract_day_hour_min(player_type *player_ptr, int *day, int *hour, int *min
 void update_playtime(void)
 {
     if (current_world_ptr->start_time != 0) {
-        u32b tmp = (u32b)time(NULL);
+        uint32_t tmp = (uint32_t)time(NULL);
         current_world_ptr->play_time += (tmp - current_world_ptr->start_time);
         current_world_ptr->start_time = tmp;
     }

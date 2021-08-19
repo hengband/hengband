@@ -112,11 +112,11 @@ static void evaluate_monster_exp(player_type *creature_ptr, char *buf, monster_t
     }
 
     int32_t exp_mon = ap_r_ptr->mexp * ap_r_ptr->level;
-    u32b exp_mon_frac = 0;
+    uint32_t exp_mon_frac = 0;
     s64b_div(&exp_mon, &exp_mon_frac, 0, (creature_ptr->max_plv + 2));
 
     int32_t exp_adv = player_exp[creature_ptr->lev - 1] * creature_ptr->expfact;
-    u32b exp_adv_frac = 0;
+    uint32_t exp_adv_frac = 0;
     s64b_div(&exp_adv, &exp_adv_frac, 0, 100);
 
     s64b_sub(&exp_adv, &exp_adv_frac, creature_ptr->exp, creature_ptr->exp_frac);
@@ -126,7 +126,7 @@ static void evaluate_monster_exp(player_type *creature_ptr, char *buf, monster_t
 
     s64b_div(&exp_adv, &exp_adv_frac, exp_mon, exp_mon_frac);
 
-    u32b num = MIN(999, exp_adv_frac);
+    uint32_t num = MIN(999, exp_adv_frac);
     sprintf(buf, "%03ld", (long int)num);
 }
 

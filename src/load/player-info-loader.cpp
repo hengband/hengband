@@ -416,7 +416,7 @@ static void set_mutations(player_type *creature_ptr)
 {
     if (loading_savefile_version_is_older_than(2)) {
         for (int i = 0; i < 3; i++) {
-            u32b tmp32u;
+            uint32_t tmp32u;
             rd_u32b(&tmp32u);
             std::bitset<32> rd_bits(tmp32u);
             for (size_t j = 0; j < rd_bits.size(); j++) {

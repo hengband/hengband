@@ -5,7 +5,7 @@
 /*!
  * 職業毎に選択可能な第一領域魔法テーブル
  */
-const u32b realm_choices1[MAX_CLASS] = {
+const uint32_t realm_choices1[MAX_CLASS] = {
     (CH_NONE), /* Warrior */
     (CH_LIFE | CH_SORCERY | CH_NATURE | CH_CHAOS | CH_DEATH | CH_TRUMP | CH_ARCANE | CH_ENCHANT | CH_DAEMON | CH_CRUSADE), /* Mage */
     (CH_LIFE | CH_DEATH | CH_DAEMON | CH_CRUSADE), /* Priest */
@@ -40,7 +40,7 @@ const u32b realm_choices1[MAX_CLASS] = {
 /*!
  * 職業毎に選択可能な第二領域魔法テーブル
  */
-const u32b realm_choices2[MAX_CLASS] = {
+const uint32_t realm_choices2[MAX_CLASS] = {
     (CH_NONE), /* Warrior */
     (CH_LIFE | CH_SORCERY | CH_NATURE | CH_CHAOS | CH_DEATH | CH_TRUMP | CH_ARCANE | CH_ENCHANT | CH_DAEMON | CH_CRUSADE), /* Mage */
     (CH_LIFE | CH_SORCERY | CH_NATURE | CH_CHAOS | CH_DEATH | CH_TRUMP | CH_ARCANE | CH_ENCHANT | CH_DAEMON | CH_CRUSADE), /* Priest */

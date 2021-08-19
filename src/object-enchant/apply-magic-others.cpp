@@ -155,7 +155,7 @@ void apply_magic_others(player_type *owner_ptr, object_type *o_ptr, int power)
     case TV_CORPSE: {
         PARAMETER_VALUE i = 1;
         int check;
-        u32b match = 0;
+        uint32_t match = 0;
         monster_race *r_ptr;
         if (o_ptr->sval == SV_SKELETON) {
             match = RF9_DROP_SKELETON;

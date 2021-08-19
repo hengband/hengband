@@ -21,8 +21,8 @@ enum choosable_realm {
     CH_HEX = 0x20000,
 };
 
-extern const u32b realm_choices1[];
-extern const u32b realm_choices2[];
+extern const uint32_t realm_choices1[];
+extern const uint32_t realm_choices2[];
 
 typedef struct player_type player_type;
 REALM_IDX get_realm1_book(player_type *player_ptr);

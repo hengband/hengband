@@ -90,7 +90,7 @@ static errr rd_dungeon(player_type *player_ptr)
         // latest_visit_mark の復元。
         // 全ての保存フロアについての visit_mark の最大値 + 1 とする。
         for (int i = 0; i < num; ++i) {
-            const u32b next_visit_mark = saved_floors[i].visit_mark + 1;
+            const uint32_t next_visit_mark = saved_floors[i].visit_mark + 1;
             if (next_visit_mark > latest_visit_mark)
                 latest_visit_mark = next_visit_mark;
         }
