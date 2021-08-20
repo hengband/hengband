@@ -6,11 +6,14 @@
  */
 
 #include "action/throw-util.h"
+#include "action/weapon-shield.h"
 #include "artifact/fixed-art-types.h"
 #include "combat/attack-power-table.h"
 #include "combat/shoot.h"
 #include "combat/slaying.h"
+#include "core/player-update-types.h"
 #include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
 #include "effect/spells-effect-util.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
@@ -30,7 +33,6 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster/monster-damage.h"
-#include "player/player-status-table.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"
@@ -48,6 +50,8 @@
 #include "object/object-stack.h"
 #include "player-info/equipment-info.h"
 #include "player-status/player-energy.h"
+#include "player/player-status-table.h"
+#include "racial/racial-android.h"
 #include "specific-object/torch.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -236,7 +240,8 @@ void it_type::display_potion_throw()
     }
 
     monster_type *angry_m_ptr = &this->creature_ptr->current_floor_ptr->m_list[this->creature_ptr->current_floor_ptr->grid_array[this->y][this->x].m_idx];
-    if ((this->creature_ptr->current_floor_ptr->grid_array[this->y][this->x].m_idx == 0) || !is_friendly(angry_m_ptr) || monster_invulner_remaining(angry_m_ptr)) {
+    if ((this->creature_ptr->current_floor_ptr->grid_array[this->y][this->x].m_idx == 0) || !is_friendly(angry_m_ptr)
+        || monster_invulner_remaining(angry_m_ptr)) {
         this->do_drop = false;
         return;
     }
@@ -264,6 +269,30 @@ void it_type::check_boomerang_throw()
 
     describe_flavor(this->creature_ptr, this->o2_name, this->q_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
     this->process_boomerang_throw();
+}
+
+void it_type::process_boomerang_back()
+{
+    if (this->come_back) {
+        if ((this->item != INVEN_MAIN_HAND) && (this->item != INVEN_SUB_HAND)) {
+            store_item_to_inventory(creature_ptr, this->q_ptr);
+            this->do_drop = false;
+            return;
+        }
+
+        this->o_ptr = &creature_ptr->inventory_list[this->item];
+        this->o_ptr->copy_from(this->q_ptr);
+        creature_ptr->equip_cnt++;
+        creature_ptr->update |= PU_BONUS | PU_TORCH | PU_MANA;
+        creature_ptr->window_flags |= PW_EQUIP;
+        this->do_drop = false;
+        return;
+    }
+
+    if (this->equiped_item) {
+        verify_equip_slot(creature_ptr, this->item);
+        calc_android_exp(creature_ptr);
+    }
 }
 
 bool it_type::check_what_throw()

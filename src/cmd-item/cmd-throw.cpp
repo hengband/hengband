@@ -70,30 +70,6 @@ ThrowCommand::ThrowCommand(player_type* creature_ptr)
 {
 }
 
-void process_boomerang_back(player_type *creature_ptr, it_type *it_ptr)
-{
-    if (it_ptr->come_back) {
-        if ((it_ptr->item != INVEN_MAIN_HAND) && (it_ptr->item != INVEN_SUB_HAND)) {
-            store_item_to_inventory(creature_ptr, it_ptr->q_ptr);
-            it_ptr->do_drop = false;
-            return;
-        }
-
-        it_ptr->o_ptr = &creature_ptr->inventory_list[it_ptr->item];
-        it_ptr->o_ptr->copy_from(it_ptr->q_ptr);
-        creature_ptr->equip_cnt++;
-        creature_ptr->update |= PU_BONUS | PU_TORCH | PU_MANA;
-        creature_ptr->window_flags |= PW_EQUIP;
-        it_ptr->do_drop = false;
-        return;
-    }
-
-    if (it_ptr->equiped_item) {
-        verify_equip_slot(creature_ptr, it_ptr->item);
-        calc_android_exp(creature_ptr);
-    }
-}
-
 static void drop_thrown_item(player_type *creature_ptr, it_type *it_ptr)
 {
     if (!it_ptr->do_drop)
@@ -158,7 +134,7 @@ bool ThrowCommand::do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
     it_ptr->display_figurine_throw();
     it_ptr->display_potion_throw();
     it_ptr->check_boomerang_throw();
-    process_boomerang_back(this->creature_ptr, it_ptr);
+    it_ptr->process_boomerang_back();
     drop_thrown_item(this->creature_ptr, it_ptr);
     return true;
 }
