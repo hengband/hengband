@@ -127,7 +127,7 @@ bool create_ammo(player_type *creature_ptr)
         object_known(q_ptr);
         apply_magic_to_object(creature_ptr, q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
         q_ptr->discount = 99;
-        s16b slot = store_item_to_inventory(creature_ptr, q_ptr);
+        int16_t slot = store_item_to_inventory(creature_ptr, q_ptr);
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(creature_ptr, o_name, q_ptr, 0);
         msg_format(_("%sを作った。", "You make some ammo."), o_name);
@@ -159,7 +159,7 @@ bool create_ammo(player_type *creature_ptr)
         describe_flavor(creature_ptr, o_name, q_ptr, 0);
         msg_format(_("%sを作った。", "You make some ammo."), o_name);
         vary_item(creature_ptr, item, -1);
-        s16b slot = store_item_to_inventory(creature_ptr, q_ptr);
+        int16_t slot = store_item_to_inventory(creature_ptr, q_ptr);
         if (slot >= 0)
             autopick_alter_item(creature_ptr, slot, false);
 
@@ -186,7 +186,7 @@ bool create_ammo(player_type *creature_ptr)
         describe_flavor(creature_ptr, o_name, q_ptr, 0);
         msg_format(_("%sを作った。", "You make some ammo."), o_name);
         vary_item(creature_ptr, item, -1);
-        s16b slot = store_item_to_inventory(creature_ptr, q_ptr);
+        int16_t slot = store_item_to_inventory(creature_ptr, q_ptr);
         if (slot >= 0)
             autopick_alter_item(creature_ptr, slot, false);
 

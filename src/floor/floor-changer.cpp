@@ -163,7 +163,7 @@ static void place_pet(player_type *master_ptr)
  * while new floor creation since dungeons may be re-created by\n
  * auto-scum option.\n
  */
-static void update_unique_artifact(floor_type *floor_ptr, s16b cur_floor_id)
+static void update_unique_artifact(floor_type *floor_ptr, int16_t cur_floor_id)
 {
     for (int i = 1; i < floor_ptr->m_max; i++) {
         monster_race *r_ptr;

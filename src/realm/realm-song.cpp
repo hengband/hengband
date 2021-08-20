@@ -33,7 +33,7 @@
  * @param spell 領域魔法としてのID
  * @param song 魔法効果のID
  */
-static void start_singing(player_type *caster_ptr, SPELL_IDX spell, s32b song)
+static void start_singing(player_type *caster_ptr, SPELL_IDX spell, int32_t song)
 {
     /* Remember the song index */
     set_singing_song_effect(caster_ptr, song);

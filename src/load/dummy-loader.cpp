@@ -13,10 +13,10 @@
  */
 void rd_dummy1(void)
 {
-    s16b tmp16s;
+    int16_t tmp16s;
     rd_s16b(&tmp16s);
     for (int i = 0; i < tmp16s; i++) {
-        s16b tmp16s2;
+        int16_t tmp16s2;
         rd_s16b(&tmp16s2);
     }
 }
@@ -45,7 +45,7 @@ void rd_dummy_monsters(player_type *creature_ptr)
     if (h_older_than(1, 5, 0, 2))
         return;
 
-    s16b tmp16s;
+    int16_t tmp16s;
     rd_s16b(&tmp16s);
     for (int i = 0; i < tmp16s; i++) {
         monster_type dummy_mon;
@@ -67,7 +67,7 @@ void rd_ghost(void)
 
 void rd_dummy3(void)
 {
-    u16b tmp16u;
+    uint16_t tmp16u;
     rd_u16b(&tmp16u);
 
     byte tmp8u;

@@ -6,7 +6,7 @@ typedef struct activation_type {
     concptr flag;
     byte index;
     byte level;
-    s32b value;
+    int32_t value;
     struct {
         int constant;
         DICE_NUMBER dice;

@@ -152,7 +152,7 @@ static bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
         return false;
 
     if (act_ptr->timeout.constant >= 0) {
-        o_ptr->timeout = (s16b)act_ptr->timeout.constant;
+        o_ptr->timeout = (int16_t)act_ptr->timeout.constant;
         if (act_ptr->timeout.dice > 0)
             o_ptr->timeout += randint1(act_ptr->timeout.dice);
 
@@ -196,7 +196,7 @@ static bool activate_whistle(player_type *user_ptr, ae_type *ae_ptr)
         if (is_pet(&user_ptr->current_floor_ptr->m_list[pet_ctr]) && (user_ptr->riding != pet_ctr))
             who[max_pet++] = pet_ctr;
 
-    u16b dummy_why;
+    uint16_t dummy_why;
     ang_sort(user_ptr, who, &dummy_why, max_pet, ang_sort_comp_pet, ang_sort_swap_hook);
     for (MONSTER_IDX i = 0; i < max_pet; i++) {
         pet_ctr = who[i];

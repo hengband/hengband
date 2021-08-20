@@ -213,7 +213,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
             if (creature_ptr->prace == player_race_type::ANDROID) {
                 msg_print(_("しかし何も起こらなかった。", "But, nothing happens."));
             } else if (creature_ptr->exp < PY_MAX_EXP) {
-                s32b ee = (creature_ptr->exp / 2) + 10;
+                int32_t ee = (creature_ptr->exp / 2) + 10;
                 if (ee > 100000L)
                     ee = 100000L;
                 msg_print(_("更に経験を積んだような気がする。", "You feel more experienced."));

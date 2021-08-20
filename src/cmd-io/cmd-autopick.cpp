@@ -88,7 +88,7 @@ void do_cmd_edit_autopick(player_type *player_ptr)
 	char buf[MAX_LINELEN];
 	int i;
 	int key = -1;
-	static s32b old_autosave_turn = 0L;
+	static int32_t old_autosave_turn = 0L;
 	ape_quittance quit = APE_QUIT;
 
 	text_body_type text_body;
@@ -207,7 +207,7 @@ void do_cmd_edit_autopick(player_type *player_ptr)
 	kill_yank_chain(tb);
 
 	process_autopick_file(player_ptr, buf);
-	current_world_ptr->start_time = (u32b)time(NULL);
+	current_world_ptr->start_time = (uint32_t)time(NULL);
 	cx_save = tb->cx;
 	cy_save = tb->cy;
 }

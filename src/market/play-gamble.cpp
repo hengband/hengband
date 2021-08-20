@@ -22,9 +22,9 @@ bool gamble_comm(player_type *player_ptr, int cmd)
 {
     int i;
     int roll1, roll2, roll3, choice, odds, win;
-    s32b wager;
-    s32b maxbet;
-    s32b oldgold;
+    int32_t wager;
+    int32_t maxbet;
+    int32_t oldgold;
 
     char out_val[160], tmp_str[80], again;
     concptr p;
@@ -53,7 +53,7 @@ bool gamble_comm(player_type *player_ptr, int cmd)
 
     /*
      * Use get_string() because we may need more than
-     * the s16b value returned by get_quantity().
+     * the int16_t value returned by get_quantity().
      */
     if (!get_string(tmp_str, out_val, 32)) {
         msg_print(NULL);

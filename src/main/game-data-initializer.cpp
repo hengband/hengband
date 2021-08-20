@@ -58,7 +58,7 @@ errr init_other(player_type *player_ptr)
     C_MAKE(floor_ptr->o_list, current_world_ptr->max_o_idx, object_type);
     C_MAKE(floor_ptr->m_list, current_world_ptr->max_m_idx, monster_type);
     for (int i = 0; i < MAX_MTIMED; i++)
-        C_MAKE(floor_ptr->mproc_list[i], current_world_ptr->max_m_idx, s16b);
+        C_MAKE(floor_ptr->mproc_list[i], current_world_ptr->max_m_idx, int16_t);
 
     C_MAKE(max_dlv, current_world_ptr->max_d_idx, DEPTH);
     for (int i = 0; i < MAX_HGT; i++)
@@ -106,11 +106,11 @@ errr init_other(player_type *player_ptr)
  */
 errr init_object_alloc(void)
 {
-    s16b aux[MAX_DEPTH];
-    (void)C_WIPE(aux, MAX_DEPTH, s16b);
+    int16_t aux[MAX_DEPTH];
+    (void)C_WIPE(aux, MAX_DEPTH, int16_t);
 
-    s16b num[MAX_DEPTH];
-    (void)C_WIPE(num, MAX_DEPTH, s16b);
+    int16_t num[MAX_DEPTH];
+    (void)C_WIPE(num, MAX_DEPTH, int16_t);
 
     if (alloc_kind_table)
         C_KILL(alloc_kind_table, alloc_kind_size, alloc_entry);

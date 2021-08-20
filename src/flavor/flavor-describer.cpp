@@ -286,7 +286,7 @@ static void describe_bow_power(player_type *player_ptr, flavor_type *flavor_ptr)
 static void describe_spike_power(player_type *player_ptr, flavor_type *flavor_ptr)
 {
     int avgdam = player_ptr->mighty_throw ? (1 + 3) : 1;
-    s16b energy_fire = 100 - player_ptr->lev;
+    int16_t energy_fire = 100 - player_ptr->lev;
     avgdam += ((player_ptr->lev + 30) * (player_ptr->lev + 30) - 900) / 55;
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);

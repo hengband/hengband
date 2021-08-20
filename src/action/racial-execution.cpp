@@ -23,7 +23,7 @@
  * @param command 発動するレイシャルのID
  * @return 処理を実際に実行した場合はTRUE、キャンセルした場合FALSEを返す。
  */
-bool exe_racial_power(player_type *creature_ptr, const s32b command)
+bool exe_racial_power(player_type *creature_ptr, const int32_t command)
 {
     if (command <= -3)
         return switch_class_racial_execution(creature_ptr, command);

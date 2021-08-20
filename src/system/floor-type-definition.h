@@ -29,8 +29,8 @@ typedef struct floor_type {
     MONSTER_IDX m_max; /* Number of allocated monsters */
     MONSTER_IDX m_cnt; /* Number of live monsters */
 
-    s16b *mproc_list[MAX_MTIMED]; /*!< The array to process dungeon monsters[max_m_idx] */
-    s16b mproc_max[MAX_MTIMED]; /*!< Number of monsters to be processed */
+    int16_t *mproc_list[MAX_MTIMED]; /*!< The array to process dungeon monsters[max_m_idx] */
+    int16_t mproc_max[MAX_MTIMED]; /*!< Number of monsters to be processed */
 
     POSITION_IDX lite_n; //!< Array of grids lit by player lite
     POSITION lite_y[LITE_MAX];

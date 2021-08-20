@@ -17,7 +17,7 @@
 
 typedef struct unique_list_type {
     bool is_alive;
-    u16b why;
+    uint16_t why;
     IDX *who;
     int num_uniques[10];
     int num_uniques_surface;
@@ -160,7 +160,7 @@ void do_cmd_knowledge_uniques(player_type *creature_ptr, bool is_alive)
 
     ang_sort(creature_ptr, unique_list_ptr->who, &unique_list_ptr->why, unique_list_ptr->n, ang_sort_comp_hook, ang_sort_swap_hook);
     display_uniques(unique_list_ptr, fff);
-    C_KILL(unique_list_ptr->who, max_r_idx, s16b);
+    C_KILL(unique_list_ptr->who, max_r_idx, int16_t);
     angband_fclose(fff);
     concptr title_desc
         = unique_list_ptr->is_alive ? _("まだ生きているユニーク・モンスター", "Alive Uniques") : _("もう撃破したユニーク・モンスター", "Dead Uniques");

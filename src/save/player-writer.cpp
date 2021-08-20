@@ -90,8 +90,8 @@ void wr_player(player_type *creature_ptr)
     wr_s32b(creature_ptr->old_race2);
     wr_s16b(creature_ptr->old_realm);
     for (int i = 0; i < MAX_MANE; i++) {
-        wr_s16b((s16b)creature_ptr->mane_spell[i]);
-        wr_s16b((s16b)creature_ptr->mane_dam[i]);
+        wr_s16b((int16_t)creature_ptr->mane_spell[i]);
+        wr_s16b((int16_t)creature_ptr->mane_dam[i]);
     }
 
     wr_s16b(creature_ptr->mane_num);
@@ -112,8 +112,8 @@ void wr_player(player_type *creature_ptr)
     wr_byte(creature_ptr->exit_bldg);
     wr_byte(0); /* Unused */
 
-    wr_s16b((s16b)creature_ptr->oldpx);
-    wr_s16b((s16b)creature_ptr->oldpy);
+    wr_s16b((int16_t)creature_ptr->oldpx);
+    wr_s16b((int16_t)creature_ptr->oldpy);
 
     wr_s16b(0);
     wr_s32b(creature_ptr->mhp);
@@ -127,7 +127,7 @@ void wr_player(player_type *creature_ptr)
     byte tmp8u = (byte)current_world_ptr->max_d_idx;
     wr_byte(tmp8u);
     for (int i = 0; i < tmp8u; i++)
-        wr_s16b((s16b)max_dlv[i]);
+        wr_s16b((int16_t)max_dlv[i]);
 
     wr_s16b(0);
     wr_s16b(0);

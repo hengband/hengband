@@ -18,19 +18,19 @@ struct world_type {
     GAME_TURN dungeon_turn{}; /*!< NASTY生成の計算に関わる内部ターン値 / Game turn in dungeon */
     GAME_TURN dungeon_turn_limit{}; /*!< dungeon_turnの最大値 / Limit of game_turn in dungeon */
     GAME_TURN arena_start_turn{}; /*!< 闘技場賭博の開始ターン値 */
-    u32b start_time{};
-    u16b noscore{}; /* Cheating flags */
-    u16b total_winner{}; /* Total winner */
+    uint32_t start_time{};
+    uint16_t noscore{}; /* Cheating flags */
+    uint16_t total_winner{}; /* Total winner */
 
     MONSTER_IDX timewalk_m_idx{}; /*!< 現在時間停止を行っているモンスターのID */
 
     MONRACE_IDX bounty_r_idx[MAX_BOUNTY]{};
     MONSTER_IDX today_mon{}; //!< 実際の日替わり賞金首
 
-    u32b play_time{}; /*!< 実プレイ時間 */
+    uint32_t play_time{}; /*!< 実プレイ時間 */
 
-    u32b seed_flavor{}; /* Hack -- consistent object colors */
-    u32b seed_town{}; /* Hack -- consistent town layout */
+    uint32_t seed_flavor{}; /* Hack -- consistent object colors */
+    uint32_t seed_town{}; /* Hack -- consistent town layout */
 
     bool is_loading_now{}; /*!< ロード処理中フラグ...ロード直後にcalc_bonus()時の徳変化、及びsanity_blast()による異常を抑止する */
 
@@ -41,11 +41,11 @@ struct world_type {
 
     byte sf_extra{}; //!< セーブファイルエンコードキー(XOR)
 
-    u32b sf_system{}; //!< OS情報 / OS information
-    u32b sf_when{}; //!< 作成日時 / Created Date
-    u16b sf_lives{}; //!< このセーブファイルで何人プレイしたか / Number of past "lives" with this file
-    u16b sf_saves{}; //!< 現在のプレイで何回セーブしたか / Number of "saves" during this life
-    u32b sf_play_time{}; //!< このセーブファイルで遊んだ合計のプレイ時間
+    uint32_t sf_system{}; //!< OS情報 / OS information
+    uint32_t sf_when{}; //!< 作成日時 / Created Date
+    uint16_t sf_lives{}; //!< このセーブファイルで何人プレイしたか / Number of past "lives" with this file
+    uint16_t sf_saves{}; //!< 現在のプレイで何回セーブしたか / Number of "saves" during this life
+    uint32_t sf_play_time{}; //!< このセーブファイルで遊んだ合計のプレイ時間
     FlagGroup<player_class_type, MAX_CLASS> sf_winner{}; //!< このセーブファイルで*勝利*した職業
     FlagGroup<player_class_type, MAX_CLASS> sf_retired{}; //!< このセーブファイルで引退した職業
 

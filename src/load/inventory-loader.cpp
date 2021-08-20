@@ -29,7 +29,7 @@ static errr rd_inventory(player_type *player_ptr)
 
     int slot = 0;
     while (true) {
-        u16b n;
+        uint16_t n;
         rd_u16b(&n);
 
         if (n == 0xFFFF)

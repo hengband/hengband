@@ -274,7 +274,7 @@ static spoiler_output_status spoil_player_spell(concptr fname)
             continue;
         }
 
-        for (REALM_IDX r = 1; r < MAX_MAGIC; r++) {
+        for (int16_t r = 1; r < MAX_MAGIC; r++) {
             sprintf(buf, "[Realm: %s]\n", realm_names[r]);
             spoil_out(buf);
             spoil_out("Name                     Lv Cst Dif Exp\n");

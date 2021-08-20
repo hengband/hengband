@@ -100,7 +100,7 @@ bool exe_close(player_type *creature_ptr, POSITION y, POSITION x)
     if (!has_flag(f_info[old_feat].flags, FF_CLOSE))
         return more;
 
-    s16b closed_feat = feat_state(creature_ptr->current_floor_ptr, old_feat, FF_CLOSE);
+    int16_t closed_feat = feat_state(creature_ptr->current_floor_ptr, old_feat, FF_CLOSE);
     if ((!g_ptr->o_idx_list.empty() || g_ptr->is_object()) && (closed_feat != old_feat) && !has_flag(f_info[closed_feat].flags, FF_DROP)) {
         msg_print(_("何かがつっかえて閉まらない。", "Something prevents it from closing."));
         return more;

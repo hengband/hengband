@@ -8,7 +8,7 @@ public:
 
 protected:
     void set_locals() override;
-    s16b race_value() override;
-    s16b time_effect_value() override;
-    s16b mutation_value() override;
+    int16_t race_value() override;
+    int16_t time_effect_value() override;
+    int16_t mutation_value() override;
 };

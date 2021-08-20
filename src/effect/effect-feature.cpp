@@ -220,7 +220,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
         if (!has_flag(f_ptr->flags, FF_SPIKE))
             break;
 
-        s16b old_mimic = g_ptr->mimic;
+        int16_t old_mimic = g_ptr->mimic;
         feature_type *mimic_f_ptr = &f_info[g_ptr->get_feat_mimic()];
 
         cave_alter_feat(caster_ptr, y, x, FF_SPIKE);

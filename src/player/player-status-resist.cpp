@@ -206,7 +206,7 @@ PERCENTAGE calc_deathray_damage_rate(player_type *creature_ptr, rate_calc_type_m
 {
     (void)mode; // unused
     if (creature_ptr->mimic_form) {
-        if (mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING) {
+        if (any_bits(mimic_info[creature_ptr->mimic_form].choice, MIMIC_IS_NONLIVING)) {
             return 0;
         }
     }

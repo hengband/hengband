@@ -51,7 +51,7 @@
 bool direct_beam(player_type *target_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, monster_type *m_ptr)
 {
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
-    u16b grid_g[512];
+    uint16_t grid_g[512];
     int grid_n = projection_path(target_ptr, grid_g, get_max_range(target_ptr), y1, x1, y2, x2, PROJECT_THRU);
     if (!grid_n)
         return false;
@@ -106,7 +106,7 @@ bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POSITION y
         break;
     }
 
-    u16b grid_g[512];
+    uint16_t grid_g[512];
     int grid_n = projection_path(master_ptr, grid_g, get_max_range(master_ptr), y1, x1, y2, x2, flg);
     int i;
     POSITION y = y1;
@@ -187,7 +187,7 @@ bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POSITION y
  */
 void get_project_point(player_type *target_ptr, POSITION sy, POSITION sx, POSITION *ty, POSITION *tx, BIT_FLAGS flg)
 {
-    u16b path_g[128];
+    uint16_t path_g[128];
     int path_n = projection_path(target_ptr, path_g, get_max_range(target_ptr), sy, sx, *ty, *tx, flg);
     *ty = sy;
     *tx = sx;

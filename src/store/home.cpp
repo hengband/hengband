@@ -137,7 +137,7 @@ static void exe_reorder_store_item(player_type *player_ptr, bool *flag)
         if (!o_ptr->k_idx)
             continue;
 
-        s32b o_value = object_value(player_ptr, o_ptr);
+        int32_t o_value = object_value(player_ptr, o_ptr);
         int j;
         for (j = 0; j < st_ptr->stock_num; j++)
             if (object_sort_comp(player_ptr, o_ptr, o_value, &st_ptr->stock[j]))

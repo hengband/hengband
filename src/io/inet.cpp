@@ -234,9 +234,9 @@ int connect_server(int timeout, concptr host, int port)
     to.sin_family = AF_INET;
 
     if (proxy && proxy[0] && proxy_port)
-        to.sin_port = htons((unsigned short int)proxy_port);
+        to.sin_port = htons(static_cast<ushort>(proxy_port));
     else
-        to.sin_port = htons((unsigned short int)port);
+        to.sin_port = htons(static_cast<ushort>(port));
 
 #ifndef WINDOWS
     if ((sd = socket(PF_INET, SOCK_STREAM, 0)) < 0)

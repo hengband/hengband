@@ -29,9 +29,9 @@ enum wt_type {
  */
 typedef struct wilderness_type {
 	wt_type terrain;
-	TOWN_IDX town;
+	int16_t town;
 	int road;
-	u32b seed;
+	uint32_t seed;
 	DEPTH level;
 	byte entrance;
 } wilderness_type;

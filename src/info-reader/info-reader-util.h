@@ -24,7 +24,7 @@ using sview = std::string_view;
  * @return 見つけたらtrue
  */
 template <typename T>
-bool info_grab_one_flag(u32b &flags, const std::unordered_map<sview, T> &names, sview what)
+bool info_grab_one_flag(uint32_t &flags, const std::unordered_map<sview, T> &names, sview what)
 {
     if (auto it = names.find(what); it != names.end()) {
         set_bits(flags, it->second);
@@ -41,7 +41,7 @@ bool info_grab_one_flag(u32b &flags, const std::unordered_map<sview, T> &names, 
  * @return 見つけたらtrue
  */
 template <typename T>
-bool info_grab_one_flag(u32b *flags, const std::unordered_map<sview, T> &names, sview what)
+bool info_grab_one_flag(uint32_t *flags, const std::unordered_map<sview, T> &names, sview what)
 {
     if (auto it = names.find(what); it != names.end()) {
         add_flag(flags, it->second);

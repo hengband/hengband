@@ -1003,7 +1003,7 @@ void place_grid(player_type *player_ptr, grid_type *g_ptr, grid_bold_type gb_typ
     case GB_OUTER_NOPERM: {
         feature_type *f_ptr = &f_info[feat_wall_outer];
         if (permanent_wall(f_ptr)) {
-            g_ptr->feat = (s16b)feat_state(player_ptr->current_floor_ptr, feat_wall_outer, FF_UNPERM);
+            g_ptr->feat = (int16_t)feat_state(player_ptr->current_floor_ptr, feat_wall_outer, FF_UNPERM);
         } else {
             g_ptr->feat = feat_wall_outer;
         }
@@ -1027,7 +1027,7 @@ void place_grid(player_type *player_ptr, grid_type *g_ptr, grid_bold_type gb_typ
     case GB_SOLID_NOPERM: {
         feature_type *f_ptr = &f_info[feat_wall_solid];
         if ((g_ptr->info & CAVE_VAULT) && permanent_wall(f_ptr))
-            g_ptr->feat = (s16b)feat_state(player_ptr->current_floor_ptr, feat_wall_solid, FF_UNPERM);
+            g_ptr->feat = (int16_t)feat_state(player_ptr->current_floor_ptr, feat_wall_solid, FF_UNPERM);
         else
             g_ptr->feat = feat_wall_solid;
         g_ptr->info &= ~(CAVE_MASK);

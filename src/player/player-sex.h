@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-enum player_sex {
+enum player_sex : byte {
     SEX_FEMALE = 0,
     SEX_MALE = 1,
     MAX_SEXES = 2, /*!< 性別の定義最大数 / Maximum number of player "sex" types (see "table.c", etc) */

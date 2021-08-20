@@ -13,7 +13,7 @@
  */
 void rd_lore(monster_race *r_ptr, MONRACE_IDX r_idx)
 {
-    s16b tmp16s;
+    int16_t tmp16s;
     rd_s16b(&tmp16s);
     r_ptr->r_sights = (MONSTER_NUMBER)tmp16s;
 
@@ -56,7 +56,7 @@ void rd_lore(monster_race *r_ptr, MONRACE_IDX r_idx)
     rd_u32b(&r_ptr->r_flags2);
     rd_u32b(&r_ptr->r_flags3);
     if (loading_savefile_version_is_older_than(3)) {
-        u32b f4, f5, f6;
+        uint32_t f4, f5, f6;
         rd_u32b(&f4);
         rd_u32b(&f5);
         rd_u32b(&f6);
@@ -65,7 +65,7 @@ void rd_lore(monster_race *r_ptr, MONRACE_IDX r_idx)
         else
             rd_u32b(&r_ptr->r_flagsr);
 
-        auto migrate = [r_ptr](u32b f, int start_idx) {
+        auto migrate = [r_ptr](uint32_t f, int start_idx) {
             std::bitset<32> flag_bits(f);
             for (size_t i = 0; i < flag_bits.size(); i++) {
                 auto ability = static_cast<RF_ABILITY>(start_idx + i);
@@ -101,7 +101,7 @@ void rd_lore(monster_race *r_ptr, MONRACE_IDX r_idx)
 
 errr load_lore(void)
 {
-    u16b loading_max_r_idx;
+    uint16_t loading_max_r_idx;
     rd_u16b(&loading_max_r_idx);
 
     monster_race *r_ptr;

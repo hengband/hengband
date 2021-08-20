@@ -93,10 +93,10 @@ void generate_hmap(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsi
         }
     }
 
-    floor_ptr->grid_array[fill_data.ymin][fill_data.xmin].feat = (s16b)maxsize;
-    floor_ptr->grid_array[fill_data.ymax][fill_data.xmin].feat = (s16b)maxsize;
-    floor_ptr->grid_array[fill_data.ymin][fill_data.xmax].feat = (s16b)maxsize;
-    floor_ptr->grid_array[fill_data.ymax][fill_data.xmax].feat = (s16b)maxsize;
+    floor_ptr->grid_array[fill_data.ymin][fill_data.xmin].feat = (int16_t)maxsize;
+    floor_ptr->grid_array[fill_data.ymax][fill_data.xmin].feat = (int16_t)maxsize;
+    floor_ptr->grid_array[fill_data.ymin][fill_data.xmax].feat = (int16_t)maxsize;
+    floor_ptr->grid_array[fill_data.ymax][fill_data.xmax].feat = (int16_t)maxsize;
     floor_ptr->grid_array[y0][x0].feat = 0;
     POSITION xstep = xsize * 256;
     POSITION xhstep = xsize * 256;

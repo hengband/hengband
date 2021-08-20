@@ -51,25 +51,25 @@
 /*
  * Currently unused
  */
-u16b Rand_place;
+uint16_t Rand_place;
 
 /*
  * Current "state" table for the RNG
  * Only index 0 to 3 are used
  */
-u32b Rand_state[RAND_DEG] = {
+uint32_t Rand_state[RAND_DEG] = {
     123456789,
     362436069,
     521288629,
     88675123,
 };
 
-static u32b u32b_rotl(const u32b x, int k) { return (x << k) | (x >> (32 - k)); }
+static uint32_t u32b_rotl(const uint32_t x, int k) { return (x << k) | (x >> (32 - k)); }
 
 /*
  * Initialize RNG state
  */
-static void Rand_seed(u32b seed, u32b *state)
+static void Rand_seed(uint32_t seed, uint32_t *state)
 {
     int i;
 
@@ -82,11 +82,11 @@ static void Rand_seed(u32b seed, u32b *state)
 /*
  * Xoshiro128** Algorithm
  */
-static u32b Rand_Xoshiro128starstar(u32b *state)
+static uint32_t Rand_Xoshiro128starstar(uint32_t *state)
 {
-    const u32b result = u32b_rotl(state[1] * 5, 7) * 9;
+    const uint32_t result = u32b_rotl(state[1] * 5, 7) * 9;
 
-    const u32b t = state[1] << 9;
+    const uint32_t t = state[1] << 9;
 
     state[2] ^= state[0];
     state[3] ^= state[1];
@@ -100,12 +100,12 @@ static u32b Rand_Xoshiro128starstar(u32b *state)
     return result;
 }
 
-static const u32b Rand_Xorshift_max = 0xFFFFFFFF;
+static const uint32_t Rand_Xorshift_max = 0xFFFFFFFF;
 
 /*
  * Initialize the RNG using a new seed
  */
-void Rand_state_set(u32b seed) { Rand_seed(seed, Rand_state); }
+void Rand_state_set(uint32_t seed) { Rand_seed(seed, Rand_state); }
 
 void Rand_state_init(void)
 {
@@ -135,7 +135,7 @@ void Rand_state_init(void)
 #else
 
     /* Basic seed */
-    u32b seed = (time(NULL));
+    uint32_t seed = (time(NULL));
 #ifdef SET_UID
     /* Mutate the seed on Unix machines */
     seed = ((seed >> 3) * (getpid() << 1));
@@ -149,7 +149,7 @@ void Rand_state_init(void)
 /*
  * Backup the RNG state
  */
-void Rand_state_backup(u32b *backup_state)
+void Rand_state_backup(uint32_t *backup_state)
 {
     int i;
 
@@ -161,7 +161,7 @@ void Rand_state_backup(u32b *backup_state)
 /*
  * Restore the RNG state
  */
-void Rand_state_restore(u32b *backup_state)
+void Rand_state_restore(uint32_t *backup_state)
 {
     int i;
 
@@ -173,11 +173,11 @@ void Rand_state_restore(u32b *backup_state)
 /*
  * Extract a "random" number from 0 to m-1, via "ENERGY_DIVISION"
  */
-static s32b Rand_div_impl(s32b m, u32b *state)
+static int32_t Rand_div_impl(int32_t m, uint32_t *state)
 {
-    u32b scaling;
-    u32b past;
-    u32b ret;
+    uint32_t scaling;
+    uint32_t past;
+    uint32_t ret;
 
     /* Hack -- simple case */
     if (m <= 1)
@@ -193,7 +193,7 @@ static s32b Rand_div_impl(s32b m, u32b *state)
     return ret / scaling;
 }
 
-s32b Rand_div(s32b m) { return Rand_div_impl(m, Rand_state); }
+int32_t Rand_div(int32_t m) { return Rand_div_impl(m, Rand_state); }
 
 /*
  * The number of entries in the "randnor_table"
@@ -208,7 +208,7 @@ s32b Rand_div(s32b m) { return Rand_div_impl(m, Rand_state); }
 /*
  * The normal distribution table for the "randnor()" function (below)
  */
-static s16b randnor_table[RANDNOR_NUM] =
+static int16_t randnor_table[RANDNOR_NUM] =
 {
 	206,     613,    1022,    1430,		1838,	 2245,	  2652,	   3058,
 	3463,    3867,    4271,    4673,	5075,	 5475,	  5874,	   6271,
@@ -266,18 +266,18 @@ static s16b randnor_table[RANDNOR_NUM] =
  *
  * Note that the binary search takes up to 16 quick iterations.
  */
-s16b randnor(int mean, int stand)
+int16_t randnor(int mean, int stand)
 {
-    s16b tmp;
-    s16b offset;
+    int16_t tmp;
+    int16_t offset;
 
-    s16b low = 0;
-    s16b high = RANDNOR_NUM;
+    int16_t low = 0;
+    int16_t high = RANDNOR_NUM;
     if (stand < 1)
-        return (s16b)(mean);
+        return (int16_t)(mean);
 
     /* Roll for probability */
-    tmp = (s16b)randint0(32768);
+    tmp = (int16_t)randint0(32768);
 
     /* Binary Search */
     while (low < high) {
@@ -290,7 +290,7 @@ s16b randnor(int mean, int stand)
 
         /* Move left otherwise */
         else {
-            high = (s16b)mid;
+            high = (int16_t)mid;
         }
     }
 
@@ -308,26 +308,26 @@ s16b randnor(int mean, int stand)
 /*
  * Generates damage for "2d6" style dice rolls
  */
-s16b damroll(DICE_NUMBER num, DICE_SID sides)
+int16_t damroll(DICE_NUMBER num, DICE_SID sides)
 {
     int i, sum = 0;
     for (i = 0; i < num; i++)
         sum += randint1(sides);
-    return (s16b)(sum);
+    return (int16_t)(sum);
 }
 
 /*
  * Same as above, but always maximal
  */
-s16b maxroll(DICE_NUMBER num, DICE_SID sides) { return (num * sides); }
+int16_t maxroll(DICE_NUMBER num, DICE_SID sides) { return (num * sides); }
 
 /*
  * Given a numerator and a denominator, supply a properly rounded result,
  * using the RNG to smooth out remainders.  -LM-
  */
-s32b div_round(s32b n, s32b d)
+int32_t div_round(int32_t n, int32_t d)
 {
-    s32b tmp;
+    int32_t tmp;
 
     /* Refuse to divide by zero */
     if (!d)
@@ -358,14 +358,14 @@ s32b div_round(s32b n, s32b d)
  *
  * Could also use rand() from <stdlib.h> directly.
  */
-s32b Rand_external(s32b m)
+int32_t Rand_external(int32_t m)
 {
     static bool initialized = false;
-    static u32b Rand_state_external[4];
+    static uint32_t Rand_state_external[4];
 
     if (!initialized) {
         /* Initialize with new seed */
-        u32b seed = (u32b)time(NULL);
+        uint32_t seed = (uint32_t)time(NULL);
         Rand_seed(seed, Rand_state_external);
         initialized = true;
     }

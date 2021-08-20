@@ -104,7 +104,7 @@ ProjectResult project(player_type *caster_ptr, const MONSTER_IDX who, POSITION r
     bool blind = caster_ptr->blind != 0;
     bool old_hide = false;
     int path_n = 0;
-    u16b path_g[512];
+    uint16_t path_g[512];
     int grids = 0;
     POSITION gx[1024];
     POSITION gy[1024];
@@ -206,7 +206,7 @@ ProjectResult project(player_type *caster_ptr, const MONSTER_IDX who, POSITION r
             if (msec > 0) {
                 if (!blind && !(flag & (PROJECT_HIDE))) {
                     if (panel_contains(y, x) && player_has_los_bold(caster_ptr, y, x)) {
-                        u16b p = bolt_pict(oy, ox, y, x, typ);
+                        uint16_t p = bolt_pict(oy, ox, y, x, typ);
                         TERM_COLOR a = PICT_A(p);
                         SYMBOL_CODE c = PICT_C(p);
                         print_rel(caster_ptr, c, a, y, x);
@@ -300,7 +300,7 @@ ProjectResult project(player_type *caster_ptr, const MONSTER_IDX who, POSITION r
             {
                 if (msec > 0) {
                     if (panel_contains(y, x) && player_has_los_bold(caster_ptr, y, x)) {
-                        u16b p;
+                        uint16_t p;
                         TERM_COLOR a;
                         SYMBOL_CODE c;
                         p = bolt_pict(oy, ox, y, x, typ);
@@ -415,7 +415,7 @@ ProjectResult project(player_type *caster_ptr, const MONSTER_IDX who, POSITION r
         if (msec > 0) {
             if (!blind && !(flag & (PROJECT_HIDE | PROJECT_FAST))) {
                 if (panel_contains(y, x) && player_has_los_bold(caster_ptr, y, x)) {
-                    u16b p;
+                    uint16_t p;
                     TERM_COLOR a;
                     SYMBOL_CODE c;
                     p = bolt_pict(oy, ox, y, x, typ);
@@ -521,7 +521,7 @@ ProjectResult project(player_type *caster_ptr, const MONSTER_IDX who, POSITION r
                 y = gy[i];
                 x = gx[i];
                 if (panel_contains(y, x) && player_has_los_bold(caster_ptr, y, x)) {
-                    u16b p;
+                    uint16_t p;
                     TERM_COLOR a;
                     SYMBOL_CODE c;
                     drawn = true;

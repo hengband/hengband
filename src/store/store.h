@@ -16,14 +16,14 @@ extern int store_top;
 extern int store_bottom;
 extern int xtra_stock;
 extern const owner_type *ot_ptr;
-extern s16b old_town_num;
-extern s16b inner_town_num;
+extern int16_t old_town_num;
+extern int16_t inner_town_num;
 
 extern int cur_store_feat;
 extern bool allow_inc;
 
 typedef struct player_type player_type;
-s16b store_get_stock_max(STORE_TYPE_IDX store_idx, bool powerup = true);
+int16_t store_get_stock_max(STORE_TYPE_IDX store_idx, bool powerup = true);
 void store_shuffle(player_type *player_ptr, int which);
 void store_maintenance(player_type *player_ptr, int town_num, int store_num, int chance);
 void store_init(int town_num, int store_num);

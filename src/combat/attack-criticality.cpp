@@ -48,7 +48,7 @@ std::tuple<HIT_POINT, concptr, sound_type> apply_critical_norm_damage(int k, HIT
  * @param mode オプションフラグ
  * @return クリティカル修正が入ったダメージ値
  */
-HIT_POINT critical_norm(player_type *attacker_ptr, WEIGHT weight, int plus, HIT_POINT dam, s16b meichuu, combat_options mode, bool impact)
+HIT_POINT critical_norm(player_type *attacker_ptr, WEIGHT weight, int plus, HIT_POINT dam, int16_t meichuu, combat_options mode, bool impact)
 {
     /* Extract "blow" power */
     int i = (weight + (meichuu * 3 + plus * 5) + attacker_ptr->skill_thn);

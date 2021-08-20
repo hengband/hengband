@@ -70,7 +70,7 @@ void init_saved_floors(player_type *creature_ptr, bool force)
 
     max_floor_id = 1;
     latest_visit_mark = 1;
-    saved_floor_file_sign = (u32b)time(NULL);
+    saved_floor_file_sign = (uint32_t)time(NULL);
     new_floor_id = 0;
     creature_ptr->change_floor_mode = 0;
 }
@@ -141,7 +141,7 @@ void kill_saved_floor(player_type *creature_ptr, saved_floor_type *sf_ptr)
 static FLOOR_IDX find_oldest_floor_idx(player_type *creature_ptr)
 {
     FLOOR_IDX oldest_floor_idx = 0;
-    u32b oldest_visit = 0xffffffffL;
+    uint32_t oldest_visit = 0xffffffffL;
 
     for (FLOOR_IDX fl_idx = 0; fl_idx < MAX_SAVED_FLOORS; fl_idx++) {
         const saved_floor_type* sf_ptr = &saved_floors[fl_idx];

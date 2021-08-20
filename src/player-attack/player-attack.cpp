@@ -63,7 +63,7 @@
  * @brief プレイヤーの攻撃情報を初期化する(コンストラクタ以外の分)
  */
 static player_attack_type *initialize_player_attack_type(
-    player_attack_type *pa_ptr, player_type *attacker_ptr, POSITION y, POSITION x, s16b hand, combat_options mode, bool *fear, bool *mdeath)
+    player_attack_type *pa_ptr, player_type *attacker_ptr, POSITION y, POSITION x, int16_t hand, combat_options mode, bool *fear, bool *mdeath)
 {
     auto floor_ptr = attacker_ptr->current_floor_ptr;
     auto g_ptr = &floor_ptr->grid_array[y][x];
@@ -533,7 +533,7 @@ static void cause_earthquake(player_type *attacker_ptr, player_attack_type *pa_p
  * @details
  * If no "weapon" is available, then "punch" the monster one time.
  */
-void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITION x, bool *fear, bool *mdeath, s16b hand, combat_options mode)
+void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITION x, bool *fear, bool *mdeath, int16_t hand, combat_options mode)
 {
     bool do_quake = false;
     bool drain_msg = true;

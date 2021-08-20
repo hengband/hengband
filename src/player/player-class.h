@@ -49,28 +49,28 @@ struct player_class
 #ifdef JP
 	concptr E_title;		/* 英語職業 */
 #endif
-	s16b c_adj[6];		/* Class stat modifier */
+	int16_t c_adj[6];		/* Class stat modifier */
 
-	s16b c_dis;			/* class disarming */
-	s16b c_dev;			/* class magic devices */
-	s16b c_sav;			/* class saving throws */
-	s16b c_stl;			/* class stealth */
-	s16b c_srh;			/* class searching ability */
-	s16b c_fos;			/* class searching frequency */
-	s16b c_thn;			/* class to hit (normal) */
-	s16b c_thb;			/* class to hit (bows) */
+	int16_t c_dis;			/* class disarming */
+	int16_t c_dev;			/* class magic devices */
+	int16_t c_sav;			/* class saving throws */
+	int16_t c_stl;			/* class stealth */
+	int16_t c_srh;			/* class searching ability */
+	int16_t c_fos;			/* class searching frequency */
+	int16_t c_thn;			/* class to hit (normal) */
+	int16_t c_thb;			/* class to hit (bows) */
 
-	s16b x_dis;			/* extra disarming */
-	s16b x_dev;			/* extra magic devices */
-	s16b x_sav;			/* extra saving throws */
-	s16b x_stl;			/* extra stealth */
-	s16b x_srh;			/* extra searching ability */
-	s16b x_fos;			/* extra searching frequency */
-	s16b x_thn;			/* extra to hit (normal) */
-	s16b x_thb;			/* extra to hit (bows) */
+	int16_t x_dis;			/* extra disarming */
+	int16_t x_dev;			/* extra magic devices */
+	int16_t x_sav;			/* extra saving throws */
+	int16_t x_stl;			/* extra stealth */
+	int16_t x_srh;			/* extra searching ability */
+	int16_t x_fos;			/* extra searching frequency */
+	int16_t x_thn;			/* extra to hit (normal) */
+	int16_t x_thb;			/* extra to hit (bows) */
 
-	s16b c_mhp;			/* Class hit-dice adjustment */
-	s16b c_exp;			/* Class experience factor */
+	int16_t c_mhp;			/* Class hit-dice adjustment */
+	int16_t c_exp;			/* Class experience factor */
 
 	byte pet_upkeep_div; /* Pet upkeep divider */
 

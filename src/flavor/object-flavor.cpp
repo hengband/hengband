@@ -213,12 +213,12 @@ static void shuffle_flavors(tval_type tval)
     for (KIND_OBJECT_IDX i = 0; i < k_idx_list_num; i++) {
         object_kind *k1_ptr = &k_info[k_idx_list[i]];
         object_kind *k2_ptr = &k_info[k_idx_list[randint0(k_idx_list_num)]];
-        s16b tmp = k1_ptr->flavor;
+        int16_t tmp = k1_ptr->flavor;
         k1_ptr->flavor = k2_ptr->flavor;
         k2_ptr->flavor = tmp;
     }
 
-    C_KILL(k_idx_list, max_k_idx, s16b);
+    C_KILL(k_idx_list, max_k_idx, int16_t);
 }
 
 /*!
@@ -227,7 +227,7 @@ static void shuffle_flavors(tval_type tval)
  */
 void flavor_init(void)
 {
-    u32b state_backup[4];
+    uint32_t state_backup[4];
     Rand_state_backup(state_backup);
     Rand_state_set(current_world_ptr->seed_flavor);
     for (KIND_OBJECT_IDX i = 0; i < max_k_idx; i++) {
