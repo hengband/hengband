@@ -13,7 +13,6 @@ hengband_SOURCES = \
 	action/open-close-execution.cpp action/open-close-execution.h \
 	action/racial-execution.cpp action/racial-execution.h \
 	action/run-execution.cpp action/run-execution.h \
-	action/throw-util.cpp action/throw-util.h \
 	action/travel-execution.cpp action/travel-execution.h \
 	action/tunnel-execution.cpp action/tunnel-execution.h \
 	action/weapon-shield.cpp action/weapon-shield.h \
@@ -608,6 +607,7 @@ hengband_SOURCES = \
 	\
 	object-use/quaff-execution.cpp object-use/quaff-execution.h \
 	object-use/read-execution.cpp object-use/read-execution.h \
+	object-use/throw-execution.cpp object-use/throw-execution.h \
 	\
 	perception/identification.cpp perception/identification.h \
 	perception/object-perception.cpp perception/object-perception.h \

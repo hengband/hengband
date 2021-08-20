@@ -5,7 +5,7 @@
  * @author Hourier
  */
 
-#include "action/throw-util.h"
+#include "object-use/throw-execution.h"
 #include "action/weapon-shield.h"
 #include "artifact/fixed-art-types.h"
 #include "combat/attack-power-table.h"
