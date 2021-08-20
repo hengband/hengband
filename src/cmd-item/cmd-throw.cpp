@@ -16,7 +16,7 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 
-ThrowCommand::ThrowCommand(player_type* creature_ptr)
+ThrowCommand::ThrowCommand(player_type *creature_ptr)
     : creature_ptr(creature_ptr)
 {
 }
@@ -40,20 +40,24 @@ ThrowCommand::ThrowCommand(player_type* creature_ptr)
  */
 bool ThrowCommand::do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
 {
-    if (this->creature_ptr->wild_mode)
+    if (this->creature_ptr->wild_mode) {
         return false;
+    }
 
-    if (this->creature_ptr->special_defense & KATA_MUSOU)
+    if (this->creature_ptr->special_defense & KATA_MUSOU) {
         set_action(this->creature_ptr, ACTION_NONE);
+    }
 
     object_type tmp_object;
     ObjectThrowEntity ote(this->creature_ptr, &tmp_object, delay_factor, mult, boomerang, shuriken);
-    if (!ote.check_can_throw())
+    if (!ote.check_can_throw()) {
         return false;
+    }
 
     ote.calc_throw_range();
-    if (!ote.calc_throw_grid())
+    if (!ote.calc_throw_grid()) {
         return false;
+    }
 
     ote.reflect_inventory_by_throw();
     if (ote.item >= INVEN_MAIN_HAND) {
@@ -66,10 +70,11 @@ bool ThrowCommand::do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
     ote.prev_y = ote.y;
     ote.prev_x = ote.x;
     ote.exe_throw();
-    if (ote.hit_body)
+    if (ote.hit_body) {
         torch_lost_fuel(ote.q_ptr);
+    }
 
-    ote.corruption_possibility = (ote.hit_body ? breakage_chance(this->creature_ptr, ote.q_ptr, this->creature_ptr->pclass == CLASS_ARCHER, 0) : 0);
+    ote.corruption_possibility = ote.hit_body ? breakage_chance(this->creature_ptr, ote.q_ptr, this->creature_ptr->pclass == CLASS_ARCHER, 0) : 0;
     ote.display_figurine_throw();
     ote.display_potion_throw();
     ote.check_boomerang_throw();
