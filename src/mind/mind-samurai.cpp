@@ -39,17 +39,17 @@
 
 typedef struct samurai_slaying_type {
     MULTIPLY mult;
-    BIT_FLAGS *flags;
+    TrFlags flags;
     monster_type *m_ptr;
     combat_options mode;
     monster_race *r_ptr;
 } samurai_slaying_type;
 
 static samurai_slaying_type *initialize_samurai_slaying_type(
-    samurai_slaying_type *samurai_slaying_ptr, MULTIPLY mult, BIT_FLAGS *flags, monster_type *m_ptr, combat_options mode, monster_race *r_ptr)
+    samurai_slaying_type *samurai_slaying_ptr, MULTIPLY mult, const TrFlags &flags, monster_type *m_ptr, combat_options mode, monster_race *r_ptr)
 {
     samurai_slaying_ptr->mult = mult;
-    samurai_slaying_ptr->flags = flags;
+    std::copy_n(flags, TR_FLAG_SIZE, samurai_slaying_ptr->flags);
     samurai_slaying_ptr->m_ptr = m_ptr;
     samurai_slaying_ptr->mode = mode;
     samurai_slaying_ptr->r_ptr = r_ptr;
@@ -280,7 +280,7 @@ static void hissatsu_keiun_kininken(player_type *attacker_ptr, samurai_slaying_t
  * @param mode 剣術のスレイ型ID
  * @return スレイの倍率(/10倍)
  */
-MULTIPLY mult_hissatsu(player_type *attacker_ptr, MULTIPLY mult, BIT_FLAGS *flags, monster_type *m_ptr, combat_options mode)
+MULTIPLY mult_hissatsu(player_type *attacker_ptr, MULTIPLY mult, const TrFlags &flags, monster_type *m_ptr, combat_options mode)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     samurai_slaying_type tmp_slaying;

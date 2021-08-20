@@ -38,8 +38,8 @@
  */
 static void give_one_ability_of_object(player_type *player_ptr, object_type *to_ptr, object_type *from_ptr)
 {
-    BIT_FLAGS to_flgs[TR_FLAG_SIZE];
-    BIT_FLAGS from_flgs[TR_FLAG_SIZE];
+    TrFlags to_flgs;
+    TrFlags from_flgs;
     object_flags(player_ptr, to_ptr, to_flgs);
     object_flags(player_ptr, from_ptr, from_flgs);
 

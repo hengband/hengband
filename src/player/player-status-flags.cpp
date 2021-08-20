@@ -86,7 +86,7 @@ BIT_FLAGS convert_inventory_slot_type_to_flag_cause(inventory_slot_type inventor
 BIT_FLAGS check_equipment_flags(player_type *creature_ptr, tr_type tr_flag)
 {
     object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     BIT_FLAGS result = 0L;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &creature_ptr->inventory_list[i];
@@ -762,7 +762,7 @@ BIT_FLAGS has_warning(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
     object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &creature_ptr->inventory_list[i];
@@ -1185,7 +1185,7 @@ BIT_FLAGS has_regenerate(player_type *creature_ptr)
 void update_curses(player_type *creature_ptr)
 {
     object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     creature_ptr->cursed.clear();
     creature_ptr->cursed_special.clear();
 
@@ -1272,7 +1272,7 @@ BIT_FLAGS has_earthquake(player_type *creature_ptr)
 void update_extra_blows(player_type *creature_ptr)
 {
     object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     creature_ptr->extra_blows[0] = creature_ptr->extra_blows[1] = 0;
 
     const melee_type melee_type = player_melee_type(creature_ptr);
@@ -2032,7 +2032,7 @@ bool has_disable_two_handed_bonus(player_type *creature_ptr, int i)
  */
 bool has_icky_wield_weapon(player_type *creature_ptr, int i)
 {
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     object_type *o_ptr = &creature_ptr->inventory_list[INVEN_MAIN_HAND + i];
     object_flags(creature_ptr, o_ptr, flgs);
 
@@ -2058,7 +2058,7 @@ bool has_icky_wield_weapon(player_type *creature_ptr, int i)
 bool has_riding_wield_weapon(player_type *creature_ptr, int i)
 {
     object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     o_ptr = &creature_ptr->inventory_list[INVEN_MAIN_HAND + i];
     object_flags(creature_ptr, o_ptr, flgs);
     if (creature_ptr->riding != 0 && !(o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE))

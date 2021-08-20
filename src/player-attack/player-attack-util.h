@@ -44,7 +44,7 @@ typedef struct player_attack_type {
     const martial_arts *ma_ptr{}; //!< マーシャルアーツ種別
     HIT_POINT attack_damage{}; //!< 累積ダメージ
     int num_blow{}; //!< 打撃回数
-    BIT_FLAGS flags[TR_FLAG_SIZE]{}; //!< 武器フラグ
+    TrFlags flags{}; //!< 武器フラグ
     chaotic_effect chaos_effect{}; //!< カオス効果
     MagicalBrandEffect magical_effect{}; //!< 魔術効果
     bool *fear{}; //!< 恐怖したかどうか

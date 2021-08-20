@@ -19,7 +19,7 @@
  * @param flags 耐性フラグの配列
  * @todo 最終的にplayer-status系列と統合する
  */
-static void add_class_flags(player_type *creature_ptr, BIT_FLAGS *flags)
+static void add_class_flags(player_type *creature_ptr, TrFlags &flags)
 {
     switch (creature_ptr->pclass) {
     case CLASS_WARRIOR: {
@@ -152,7 +152,7 @@ static void add_class_flags(player_type *creature_ptr, BIT_FLAGS *flags)
  * @param flags 耐性フラグの配列
  * @todo 最終的にplayer-status系列と統合する
  */
-static void add_mutation_flags(player_type *creature_ptr, BIT_FLAGS *flags)
+static void add_mutation_flags(player_type *creature_ptr, TrFlags &flags)
 {
     if (creature_ptr->muta.none())
         return;
@@ -186,7 +186,7 @@ static void add_mutation_flags(player_type *creature_ptr, BIT_FLAGS *flags)
  * @param flags 耐性フラグの配列
  * @todo 最終的にplayer-status系列と統合する
  */
-static void add_personality_flags(player_type *creature_ptr, BIT_FLAGS *flags)
+static void add_personality_flags(player_type *creature_ptr, TrFlags &flags)
 {
     if (creature_ptr->pseikaku == PERSONALITY_SEXY)
         add_flag(flags, TR_AGGRAVATE);
@@ -211,7 +211,7 @@ static void add_personality_flags(player_type *creature_ptr, BIT_FLAGS *flags)
  * @param flags 耐性フラグの配列
  * @todo 最終的にplayer-status系列と統合する
  */
-static void add_kata_flags(player_type *creature_ptr, BIT_FLAGS *flags)
+static void add_kata_flags(player_type *creature_ptr, TrFlags &flags)
 {
     if (creature_ptr->special_defense & KATA_FUUJIN)
         add_flag(flags, TR_REFLECT);
@@ -274,7 +274,7 @@ static void add_kata_flags(player_type *creature_ptr, BIT_FLAGS *flags)
  * Obtain the "flags" for the player as if he was an item
  * @todo 最終的にplayer-status系列と統合する
  */
-void player_flags(player_type *creature_ptr, BIT_FLAGS *flags)
+void player_flags(player_type *creature_ptr, TrFlags &flags)
 {
     for (int i = 0; i < TR_FLAG_SIZE; i++)
         flags[i] = 0L;
@@ -287,7 +287,7 @@ void player_flags(player_type *creature_ptr, BIT_FLAGS *flags)
     add_kata_flags(creature_ptr, flags);
 }
 
-void riding_flags(player_type *creature_ptr, BIT_FLAGS *flags, BIT_FLAGS *negative_flags)
+void riding_flags(player_type *creature_ptr, TrFlags &flags, TrFlags &negative_flags)
 {
     for (int i = 0; i < TR_FLAG_SIZE; i++) {
         flags[i] = 0L;

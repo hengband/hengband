@@ -31,7 +31,7 @@
  * The possibly updated description pointer is returned.
  * </pre>
  */
-static concptr *spoiler_flag_aux(const BIT_FLAGS art_flags[TR_FLAG_SIZE], const flag_desc *flag_ptr, concptr *desc_ptr, const int n_elmnts)
+static concptr *spoiler_flag_aux(const TrFlags &art_flags, const flag_desc *flag_ptr, concptr *desc_ptr, const int n_elmnts)
 {
     for (int i = 0; i < n_elmnts; ++i)
         if (has_flag(art_flags, flag_ptr[i].flag))
@@ -60,7 +60,7 @@ static void analyze_general(player_type *player_ptr, object_type *o_ptr, char *d
  */
 static void analyze_pval(player_type *player_ptr, object_type *o_ptr, pval_info_type *pi_ptr)
 {
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     concptr *affects_list;
     if (!o_ptr->pval) {
         pi_ptr->pval_desc[0] = '\0';
@@ -90,7 +90,7 @@ static void analyze_pval(player_type *player_ptr, object_type *o_ptr, pval_info_
  */
 static void analyze_slay(player_type *player_ptr, object_type *o_ptr, concptr *slay_list)
 {
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     object_flags(player_ptr, o_ptr, flgs);
     slay_list = spoiler_flag_aux(flgs, slay_flags_desc, slay_list, N_ELEMENTS(slay_flags_desc));
     *slay_list = NULL;
@@ -104,7 +104,7 @@ static void analyze_slay(player_type *player_ptr, object_type *o_ptr, concptr *s
  */
 static void analyze_brand(player_type *player_ptr, object_type *o_ptr, concptr *brand_list)
 {
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     object_flags(player_ptr, o_ptr, flgs);
     brand_list = spoiler_flag_aux(flgs, brand_flags_desc, brand_list, N_ELEMENTS(brand_flags_desc));
     *brand_list = NULL;
@@ -118,7 +118,7 @@ static void analyze_brand(player_type *player_ptr, object_type *o_ptr, concptr *
  */
 static void analyze_resist(player_type *player_ptr, object_type *o_ptr, concptr *resist_list)
 {
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     object_flags(player_ptr, o_ptr, flgs);
     resist_list = spoiler_flag_aux(flgs, resist_flags_desc, resist_list, N_ELEMENTS(resist_flags_desc));
     *resist_list = NULL;
@@ -132,7 +132,7 @@ static void analyze_resist(player_type *player_ptr, object_type *o_ptr, concptr 
  */
 static void analyze_immune(player_type *player_ptr, object_type *o_ptr, concptr *immune_list)
 {
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     object_flags(player_ptr, o_ptr, flgs);
     immune_list = spoiler_flag_aux(flgs, immune_flags_desc, immune_list, N_ELEMENTS(immune_flags_desc));
     *immune_list = NULL;
@@ -146,7 +146,7 @@ static void analyze_immune(player_type *player_ptr, object_type *o_ptr, concptr 
  */
 static void analyze_sustains(player_type *player_ptr, object_type *o_ptr, concptr *sustain_list)
 {
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     object_flags(player_ptr, o_ptr, flgs);
     if (has_flag(flgs, TR_SUST_STR) && has_flag(flgs, TR_SUST_INT) && has_flag(flgs, TR_SUST_WIS) && has_flag(flgs, TR_SUST_DEX)
         && has_flag(flgs, TR_SUST_CON) && has_flag(flgs, TR_SUST_CHR)) {
@@ -168,7 +168,7 @@ static void analyze_sustains(player_type *player_ptr, object_type *o_ptr, concpt
  */
 static void analyze_misc_magic(player_type *player_ptr, object_type *o_ptr, concptr *misc_list)
 {
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     char desc[256];
 
     object_flags(player_ptr, o_ptr, flgs);

@@ -83,7 +83,7 @@ bool player_race_has_flag(player_type *creature_ptr, tr_type flag, bool base_rac
  * @param flags フラグ配列へのポインタ
  * @param base_race ベース種族の情報を返すならtrue、ミミック擬態中の種族を返すならfalse
  */
-void add_player_race_flags(player_type *creature_ptr, BIT_FLAGS *flags, bool base_race)
+void add_player_race_flags(player_type *creature_ptr, TrFlags &flags, bool base_race)
 {
     auto race_ptr = get_player_race_info(creature_ptr, base_race);
     if (race_ptr->infra > 0)

@@ -84,7 +84,7 @@ static int calc_death_scythe_reflection_magnification(player_type *attacker_ptr)
  * @param magnification ダメージ倍率
  * @param death_scythe_flags 死の大鎌に関するオブジェクトフラグ配列
  */
-static void compensate_death_scythe_reflection_magnification(player_type *attacker_ptr, int *magnification, BIT_FLAGS *death_scythe_flags)
+static void compensate_death_scythe_reflection_magnification(player_type *attacker_ptr, int *magnification, const TrFlags &death_scythe_flags)
 {
     if ((attacker_ptr->alignment < 0) && (*magnification < 20))
         *magnification = 20;
@@ -135,7 +135,7 @@ static void death_scythe_reflection_critial_hit(player_attack_type *pa_ptr)
  */
 void process_death_scythe_reflection(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {
-    BIT_FLAGS death_scythe_flags[TR_FLAG_SIZE];
+    TrFlags death_scythe_flags;
     sound(SOUND_HIT);
     msg_format(_("ミス！ %sにかわされた。", "You miss %s."), pa_ptr->m_name);
     msg_print(_("振り回した大鎌が自分自身に返ってきた！", "Your scythe returns to you!"));

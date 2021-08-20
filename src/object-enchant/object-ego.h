@@ -253,7 +253,7 @@ struct ego_item_type {
 
     PRICE cost{}; //!< コスト
 
-    BIT_FLAGS flags[TR_FLAG_SIZE]{}; //!< 能力/耐性フラグ
+    TrFlags flags{}; //!< 能力/耐性フラグ
     EnumClassFlagGroup<TRG> gen_flags; //!< 生成時適用フラグ
     std::vector<ego_generate_type> xtra_flags{}; //!< 追加能力/耐性フラグ
 

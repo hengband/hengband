@@ -186,7 +186,7 @@ void PlayerStatusBase::set_locals()
 BIT_FLAGS PlayerStatusBase::equipments_flags(tr_type check_flag)
 {
     object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     BIT_FLAGS result = 0L;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &owner_ptr->inventory_list[i];
@@ -209,7 +209,7 @@ BIT_FLAGS PlayerStatusBase::equipments_flags(tr_type check_flag)
 BIT_FLAGS PlayerStatusBase::equipments_bad_flags(tr_type check_flag)
 {
     object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     BIT_FLAGS result = 0L;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &owner_ptr->inventory_list[i];
@@ -237,7 +237,7 @@ int16_t PlayerStatusBase::equipments_value()
     int16_t result = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         object_type *o_ptr = &owner_ptr->inventory_list[i];
-        BIT_FLAGS flgs[TR_FLAG_SIZE];
+        TrFlags flgs;
         object_flags(owner_ptr, o_ptr, flgs);
 
         if (!o_ptr->k_idx)

@@ -70,7 +70,7 @@ static void choise_cursed_item(player_type *creature_ptr, TRC flag, object_type 
         return;
 
     tr_type cf = TR_STR;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     object_flags(creature_ptr, o_ptr, flgs);
     switch (flag) {
     case TRC::ADD_L_CURSE:
@@ -169,7 +169,7 @@ static void curse_teleport(player_type *creature_ptr)
     object_type *o_ptr;
     int i_keep = 0, count = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        BIT_FLAGS flgs[TR_FLAG_SIZE];
+        TrFlags flgs;
         o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;

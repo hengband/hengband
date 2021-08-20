@@ -273,7 +273,7 @@ bool pulish_shield(player_type *caster_ptr)
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(caster_ptr, o_name, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     object_flags(caster_ptr, o_ptr, flgs);
 
     bool is_pulish_successful = o_ptr->k_idx && !object_is_artifact(o_ptr) && !object_is_ego(o_ptr);

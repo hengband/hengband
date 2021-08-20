@@ -34,7 +34,7 @@
 /*!
  * @brief オブジェクトのフラグを更新する
  */
-static void update_object_flags(BIT_FLAGS *flgs, BIT_FLAGS *flg2, BIT_FLAGS *flg3, BIT_FLAGS *flgr)
+static void update_object_flags(const TrFlags &flgs, BIT_FLAGS *flg2, BIT_FLAGS *flg3, BIT_FLAGS *flgr)
 {
     if (has_flag(flgs, TR_SLAY_DRAGON))
         *flg3 |= (RF3_DRAGON);
@@ -159,7 +159,8 @@ void update_object_by_monster_movement(player_type *target_ptr, turn_flags *turn
 
     turn_flags_ptr->do_take = (r_ptr->flags2 & RF2_TAKE_ITEM) != 0;
     for (auto it = g_ptr->o_idx_list.begin(); it != g_ptr->o_idx_list.end();) {
-        BIT_FLAGS flgs[TR_FLAG_SIZE], flg2 = 0L, flg3 = 0L, flgr = 0L;
+        TrFlags flgs;
+        BIT_FLAGS flg2 = 0L, flg3 = 0L, flgr = 0L;
         GAME_TEXT m_name[MAX_NLEN], o_name[MAX_NLEN];
         OBJECT_IDX this_o_idx = *it++;
         object_type *o_ptr = &target_ptr->current_floor_ptr->o_list[this_o_idx];

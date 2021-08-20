@@ -43,7 +43,7 @@ static bool weakening_artifact(player_type *player_ptr, object_type *o_ptr)
 {
     KIND_OBJECT_IDX k_idx = lookup_kind(o_ptr->tval, o_ptr->sval);
     object_kind *k_ptr = &k_info[k_idx];
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     object_flags(player_ptr, o_ptr, flgs);
 
     if (has_flag(flgs, TR_KILL_EVIL)) {

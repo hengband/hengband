@@ -21,7 +21,7 @@ bool item_tester_hook_activate(player_type *player_ptr, object_type *o_ptr)
     /* Unused */
     (void)player_ptr;
 
-    BIT_FLAGS flags[TR_FLAG_SIZE];
+    TrFlags flags;
     if (!object_is_known(o_ptr))
         return false;
 
@@ -43,7 +43,7 @@ bool item_tester_hook_use(player_type *player_ptr, object_type *o_ptr)
     /* Unused */
     (void)player_ptr;
 
-    BIT_FLAGS flags[TR_FLAG_SIZE];
+    TrFlags flags;
     if (o_ptr->tval == player_ptr->tval_ammo)
         return true;
 
