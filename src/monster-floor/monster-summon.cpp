@@ -158,7 +158,7 @@ bool summon_specific(player_type *player_ptr, MONSTER_IDX who, POSITION y1, POSI
             notice = true;
         } else if (is_seen(player_ptr, m_ptr)) {
             notice = true;
-        } else if (player_can_see_bold(player_ptr, x, y)) {
+        } else if (player_can_see_bold(player_ptr, y, x)) {
             notice = true;
         }
     }
