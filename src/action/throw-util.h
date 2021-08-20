@@ -14,43 +14,19 @@ struct player_type;
 class ObjectThrowEntity {
 public:
     ObjectThrowEntity() = default;
-    ObjectThrowEntity(player_type *creature_ptr, object_type *q_ptr, const int delay_factor_val, const int mult, const bool boomerang, const OBJECT_IDX shuriken);
+    ObjectThrowEntity(
+        player_type *creature_ptr, object_type *q_ptr, const int delay_factor_val, const int mult, const bool boomerang, const OBJECT_IDX shuriken);
     virtual ~ObjectThrowEntity() = default;
+
     object_type *q_ptr;
-    int mult;
-    int msec;
-    bool boomerang;
-    OBJECT_IDX shuriken;
     OBJECT_IDX item{};
     POSITION y{};
     POSITION x{};
-    POSITION ty{};
-    POSITION tx{};
     POSITION prev_y{};
     POSITION prev_x{};
-    POSITION ny[19]{};
-    POSITION nx[19]{};
-    int chance{};
-    int tdam{};
-    int tdis{};
-    int cur_dis{};
-    int visible{};
-    PERCENTAGE corruption_possibility{};
-    object_type *o_ptr{};
-    bool hit_body = false;
-    bool hit_wall = false;
     bool equiped_item = false;
-    bool return_when_thrown = false;
-    GAME_TEXT o_name[MAX_NLEN]{};
-    BIT_FLAGS obj_flags[TR_FLAG_SIZE]{};
-    bool come_back = false;
-    bool do_drop = true;
-    grid_type *g_ptr{};
-    monster_type *m_ptr{};
-    GAME_TEXT m_name[MAX_NLEN]{};
-    int back_chance{};
-    char o2_name[MAX_NLEN]{};
-    bool super_boomerang{};
+    bool hit_body = false;
+    PERCENTAGE corruption_possibility{};
 
     bool check_can_throw();
     void calc_throw_range();
@@ -67,6 +43,32 @@ public:
 
 private:
     player_type *creature_ptr;
+    OBJECT_IDX shuriken;
+    int mult;
+    int msec;
+    bool boomerang;
+    POSITION ty{};
+    POSITION tx{};
+    POSITION ny[19]{};
+    POSITION nx[19]{};
+    int chance{};
+    int tdam{};
+    int tdis{};
+    int cur_dis{};
+    int visible{};
+    object_type *o_ptr{};
+    bool hit_wall = false;
+    bool return_when_thrown = false;
+    GAME_TEXT o_name[MAX_NLEN]{};
+    BIT_FLAGS obj_flags[TR_FLAG_SIZE]{};
+    bool come_back = false;
+    bool do_drop = true;
+    grid_type *g_ptr{};
+    monster_type *m_ptr{};
+    GAME_TEXT m_name[MAX_NLEN]{};
+    int back_chance{};
+    char o2_name[MAX_NLEN]{};
+    bool super_boomerang{};
 
     bool check_what_throw();
     bool check_throw_boomerang(concptr *q, concptr *s);
