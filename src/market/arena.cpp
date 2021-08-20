@@ -343,7 +343,7 @@ bool monster_arena_comm(player_type *player_ptr)
 
     /*
      * Use get_string() because we may need more than
-     * the s16b value returned by get_quantity().
+     * the int16_t value returned by get_quantity().
      */
     if (!get_string(tmp_str, out_val, 32)) {
         screen_load();

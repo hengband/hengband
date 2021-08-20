@@ -119,7 +119,7 @@ static void send_waiting_record(player_type *player_ptr)
     player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
     update_creature(player_ptr);
     player_ptr->is_dead = true;
-    current_world_ptr->start_time = (u32b)time(NULL);
+    current_world_ptr->start_time = (uint32_t)time(NULL);
     signals_ignore_tstp();
     current_world_ptr->character_icky_depth = 1;
     path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");

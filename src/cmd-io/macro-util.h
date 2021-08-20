@@ -9,7 +9,7 @@ extern bool get_com_no_macros;
 
 extern concptr *macro__pat;
 extern concptr *macro__act;
-extern s16b macro__num;
+extern int16_t macro__num;
 
 int macro_find_exact(concptr pat);
 int macro_find_check(concptr pat);

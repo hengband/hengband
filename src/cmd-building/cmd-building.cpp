@@ -69,7 +69,7 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-u32b mon_odds[4];
+uint32_t mon_odds[4];
 int battle_odds;
 PRICE kakekin;
 int sel_monster;
@@ -110,7 +110,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
         return;
     }
 
-    BACT_IDX bact = bldg->actions[i];
+    auto bact = bldg->actions[i];
     if ((bact != BACT_RECHARGE)
         && (((bldg->member_costs[i] > player_ptr->au) && is_owner(player_ptr, bldg))
             || ((bldg->other_costs[i] > player_ptr->au) && !is_owner(player_ptr, bldg)))) {

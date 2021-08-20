@@ -201,7 +201,7 @@ errr get_rnd_line_jonly(concptr file_name, int entry, char *output, int count)
  * @return エラーコード
  * @details
  */
-static errr counts_seek(player_type *creature_ptr, int fd, u32b where, bool flag)
+static errr counts_seek(player_type *creature_ptr, int fd, uint32_t where, bool flag)
 {
     char temp1[128], temp2[128];
 #ifdef SAVEFILE_USE_UID
@@ -213,16 +213,16 @@ static errr counts_seek(player_type *creature_ptr, int fd, u32b where, bool flag
         temp1[i] ^= (i + 1) * 63;
 
     int seekpoint = 0;
-    u32b zero_header[3] = { 0L, 0L, 0L };
+    uint32_t zero_header[3] = { 0L, 0L, 0L };
     while (true) {
-        if (fd_seek(fd, seekpoint + 3 * sizeof(u32b)))
+        if (fd_seek(fd, seekpoint + 3 * sizeof(uint32_t)))
             return 1;
         if (fd_read(fd, (char *)(temp2), sizeof(temp2))) {
             if (!flag)
                 return 1;
             /* add new name */
             fd_seek(fd, seekpoint);
-            fd_write(fd, (char *)zero_header, 3 * sizeof(u32b));
+            fd_write(fd, (char *)zero_header, 3 * sizeof(uint32_t));
             fd_write(fd, (char *)(temp1), sizeof(temp1));
             break;
         }
@@ -230,10 +230,10 @@ static errr counts_seek(player_type *creature_ptr, int fd, u32b where, bool flag
         if (strcmp(temp1, temp2) == 0)
             break;
 
-        seekpoint += 128 + 3 * sizeof(u32b);
+        seekpoint += 128 + 3 * sizeof(uint32_t);
     }
 
-    return fd_seek(fd, seekpoint + where * sizeof(u32b));
+    return fd_seek(fd, seekpoint + where * sizeof(uint32_t));
 }
 
 /*!
@@ -243,14 +243,14 @@ static errr counts_seek(player_type *creature_ptr, int fd, u32b where, bool flag
  * @return エラーコード
  * @details
  */
-u32b counts_read(player_type *creature_ptr, int where)
+uint32_t counts_read(player_type *creature_ptr, int where)
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, _("z_info_j.raw", "z_info.raw"));
     int fd = fd_open(buf, O_RDONLY);
 
-    u32b count = 0;
-    if (counts_seek(creature_ptr, fd, where, false) || fd_read(fd, (char *)(&count), sizeof(u32b)))
+    uint32_t count = 0;
+    if (counts_seek(creature_ptr, fd, where, false) || fd_read(fd, (char *)(&count), sizeof(uint32_t)))
         count = 0;
 
     (void)fd_close(fd);
@@ -266,7 +266,7 @@ u32b counts_read(player_type *creature_ptr, int where)
  * @return エラーコード
  * @details
  */
-errr counts_write(player_type *creature_ptr, int where, u32b count)
+errr counts_write(player_type *creature_ptr, int where, uint32_t count)
 {
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, _("z_info_j.raw", "z_info.raw"));
@@ -287,7 +287,7 @@ errr counts_write(player_type *creature_ptr, int where, u32b count)
         return 1;
 
     counts_seek(creature_ptr, fd, where, true);
-    fd_write(fd, (char *)(&count), sizeof(u32b));
+    fd_write(fd, (char *)(&count), sizeof(uint32_t));
     safe_setuid_grab(creature_ptr);
     err = fd_lock(fd, F_UNLCK);
     safe_setuid_drop();

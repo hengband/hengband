@@ -186,7 +186,7 @@ bool hates_cold(object_type *o_ptr)
  */
 int set_acid_destroy(player_type *owner_ptr, object_type *o_ptr)
 {
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     if (!hates_acid(o_ptr))
         return false;
     object_flags(owner_ptr, o_ptr, flgs);
@@ -204,7 +204,7 @@ int set_acid_destroy(player_type *owner_ptr, object_type *o_ptr)
  */
 int set_elec_destroy(player_type *owner_ptr, object_type *o_ptr)
 {
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     if (!hates_elec(o_ptr))
         return false;
     object_flags(owner_ptr, o_ptr, flgs);
@@ -222,7 +222,7 @@ int set_elec_destroy(player_type *owner_ptr, object_type *o_ptr)
  */
 int set_fire_destroy(player_type *owner_ptr, object_type *o_ptr)
 {
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     if (!hates_fire(o_ptr))
         return false;
     object_flags(owner_ptr, o_ptr, flgs);
@@ -240,7 +240,7 @@ int set_fire_destroy(player_type *owner_ptr, object_type *o_ptr)
  */
 int set_cold_destroy(player_type *owner_ptr, object_type *o_ptr)
 {
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     if (!hates_cold(o_ptr))
         return false;
     object_flags(owner_ptr, o_ptr, flgs);

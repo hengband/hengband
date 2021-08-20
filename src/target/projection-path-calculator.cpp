@@ -8,7 +8,7 @@
 #include "system/player-type-definition.h"
 
 typedef struct projection_path_type {
-    u16b *gp;
+    uint16_t *gp;
     POSITION range;
     BIT_FLAGS flag;
     POSITION y1;
@@ -35,10 +35,10 @@ typedef struct projection_path_type {
  * @param x X座標
  * return 経路座標
  */
-static u16b location_to_grid(POSITION y, POSITION x) { return 256 * y + x; }
+static uint16_t location_to_grid(POSITION y, POSITION x) { return 256 * y + x; }
 
 static projection_path_type *initialize_projection_path_type(
-    projection_path_type *pp_ptr, u16b *gp, POSITION range, BIT_FLAGS flag, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
+    projection_path_type *pp_ptr, uint16_t *gp, POSITION range, BIT_FLAGS flag, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
     pp_ptr->gp = gp;
     pp_ptr->range = range;
@@ -212,7 +212,7 @@ static void calc_projection_others(player_type *player_ptr, projection_path_type
  * @param flag フラグID
  * @return リストの長さ
  */
-int projection_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flag)
+int projection_path(player_type *player_ptr, uint16_t *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flag)
 {
     if ((x1 == x2) && (y1 == y2))
         return 0;
@@ -245,7 +245,7 @@ int projection_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION 
  */
 bool projectable(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
-    u16b grid_g[512];
+    uint16_t grid_g[512];
     int grid_n = projection_path(player_ptr, grid_g, (project_length ? project_length : get_max_range(player_ptr)), y1, x1, y2, x2, 0);
     if (!grid_n)
         return true;
@@ -268,9 +268,9 @@ int get_max_range(player_type *creature_ptr) { return creature_ptr->phase_out ? 
 /*
  * Convert a "grid" (G) into a "location" (Y)
  */
-POSITION get_grid_y(u16b grid) { return (int)(grid / 256U); }
+POSITION get_grid_y(uint16_t grid) { return (int)(grid / 256U); }
 
 /*
  * Convert a "grid" (G) into a "location" (X)
  */
-POSITION get_grid_x(u16b grid) { return (int)(grid % 256U); }
+POSITION get_grid_x(uint16_t grid) { return (int)(grid % 256U); }

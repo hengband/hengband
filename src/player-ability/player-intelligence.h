@@ -8,6 +8,6 @@ public:
 
 protected:
     void set_locals() override;
-    s16b battleform_value() override;
-    s16b mutation_value() override;
+    int16_t battleform_value() override;
+    int16_t mutation_value() override;
 };

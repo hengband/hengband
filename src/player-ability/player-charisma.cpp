@@ -27,9 +27,9 @@ void PlayerCharisma::set_locals()
  * * 型による魅力修正値
  * * 降鬼陣で加算(+5)
  */
-s16b PlayerCharisma::battleform_value()
+int16_t PlayerCharisma::battleform_value()
 {
-    s16b result = 0;
+    int16_t result = 0;
 
     if (any_bits(this->owner_ptr->special_defense, KATA_KOUKIJIN)) {
         result += 5;
@@ -49,9 +49,9 @@ s16b PlayerCharisma::battleform_value()
  * * 変異MUT3_WART_SKINで減算(-2)
  * * 変異MUT3_SCALESで減算(-1)
  */
-s16b PlayerCharisma::mutation_value()
+int16_t PlayerCharisma::mutation_value()
 {
-    s16b result = 0;
+    int16_t result = 0;
 
     if (this->owner_ptr->muta.any()) {
         if (this->owner_ptr->muta.has(MUTA::FLESH_ROT)) {
@@ -74,9 +74,9 @@ s16b PlayerCharisma::mutation_value()
     return result;
 }
 
-s16b PlayerCharisma::set_exception_value(s16b value)
+int16_t PlayerCharisma::set_exception_value(int16_t value)
 {
-    s16b result = value;
+    int16_t result = value;
 
     if (this->owner_ptr->muta.has(MUTA::ILL_NORM)) {
         result = 0;
@@ -115,7 +115,7 @@ BIT_FLAGS PlayerCharisma::get_bad_flags()
  * * MUT3_ILL_NORMを保持しているときの例外処理。
  * * 魅力現在値をレベル依存の値に修正する。
  */
-s16b PlayerCharisma::set_exception_use_status(s16b value)
+int16_t PlayerCharisma::set_exception_use_status(int16_t value)
 {
     if (this->owner_ptr->muta.has(MUTA::ILL_NORM)) {
         /* 10 to 18/90 charisma, guaranteed, based on level */

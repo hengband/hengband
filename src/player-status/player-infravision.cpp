@@ -22,7 +22,7 @@ void PlayerInfravision::set_locals()
  * @details
  * * 種族による加算
  */
-s16b PlayerInfravision::race_value()
+int16_t PlayerInfravision::race_value()
 {
     const player_race *tmp_rp_ptr;
 
@@ -40,9 +40,9 @@ s16b PlayerInfravision::race_value()
  * @details
  * * 変異MUT3_INFRAVISによる加算(+3)
  */
-s16b PlayerInfravision::mutation_value()
+int16_t PlayerInfravision::mutation_value()
 {
-    s16b result = 0;
+    int16_t result = 0;
     if (this->owner_ptr->muta.has(MUTA::INFRAVIS)) {
         result += 3;
     }
@@ -56,9 +56,9 @@ s16b PlayerInfravision::mutation_value()
  * @details
  * * 魔法効果tim_infraによる加算(+3)
  */
-s16b PlayerInfravision::time_effect_value()
+int16_t PlayerInfravision::time_effect_value()
 {
-    s16b result = 0;
+    int16_t result = 0;
     if (this->owner_ptr->tim_infra) {
         result += 3;
     }

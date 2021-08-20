@@ -77,7 +77,7 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
     int Dismissed = 0;
 
     MONSTER_IDX *who;
-    u16b dummy_why;
+    uint16_t dummy_why;
     int max_pet = 0;
     bool cu, cv;
 
@@ -393,7 +393,7 @@ void do_cmd_pet(player_type *creature_ptr)
     int pet_ctr;
     monster_type *m_ptr;
 
-    PET_COMMAND_IDX mode = 0;
+    auto command_idx = 0;
 
     char buf[160];
     char target_buf[160];
@@ -424,27 +424,27 @@ void do_cmd_pet(player_type *creature_ptr)
     power_desc[num] = _("近くにいろ", "stay close");
 
     if (creature_ptr->pet_follow_distance == PET_CLOSE_DIST)
-        mode = num;
+        command_idx = num;
     powers[num++] = PET_STAY_CLOSE;
     power_desc[num] = _("ついて来い", "follow me");
 
     if (creature_ptr->pet_follow_distance == PET_FOLLOW_DIST)
-        mode = num;
+        command_idx = num;
     powers[num++] = PET_FOLLOW_ME;
     power_desc[num] = _("敵を見つけて倒せ", "seek and destroy");
 
     if (creature_ptr->pet_follow_distance == PET_DESTROY_DIST)
-        mode = num;
+        command_idx = num;
     powers[num++] = PET_SEEK_AND_DESTROY;
     power_desc[num] = _("少し離れていろ", "give me space");
 
     if (creature_ptr->pet_follow_distance == PET_SPACE_DIST)
-        mode = num;
+        command_idx = num;
     powers[num++] = PET_ALLOW_SPACE;
     power_desc[num] = _("離れていろ", "stay away");
 
     if (creature_ptr->pet_follow_distance == PET_AWAY_DIST)
-        mode = num;
+        command_idx = num;
     powers[num++] = PET_STAY_AWAY;
 
     if (creature_ptr->pet_extra_flags & PF_OPEN_DOORS) {
@@ -611,7 +611,6 @@ void do_cmd_pet(player_type *creature_ptr)
                 /* Show the list */
                 if (!redraw || use_menu) {
                     byte y = 1, x = 0;
-                    PET_COMMAND_IDX ctr = 0;
                     redraw = true;
                     if (!use_menu)
                         screen_save();
@@ -619,19 +618,20 @@ void do_cmd_pet(player_type *creature_ptr)
                     prt("", y++, x);
 
                     /* Print list */
-                    for (ctr = 0; ctr < num; ctr++) {
+                    int control;
+                    for (control = 0; control < num; control++) {
                         /* Letter/number for power selection */
                         if (use_menu)
-                            sprintf(buf, "%c%s ", (ctr == mode) ? '*' : ' ', (ctr == (menu_line - 1)) ? _("》", "> ") : "  ");
+                            sprintf(buf, "%c%s ", (control == command_idx) ? '*' : ' ', (control == (menu_line - 1)) ? _("》", "> ") : "  ");
                         else
-                            sprintf(buf, "%c%c) ", (ctr == mode) ? '*' : ' ', I2A(ctr));
+                            sprintf(buf, "%c%c) ", (control == command_idx) ? '*' : ' ', I2A(control));
 
-                        strcat(buf, power_desc[ctr]);
+                        strcat(buf, power_desc[control]);
 
-                        prt(buf, y + ctr, x);
+                        prt(buf, y + control, x);
                     }
 
-                    prt("", y + MIN(ctr, 17), x);
+                    prt("", y + MIN(control, 17), x);
                 }
 
                 /* Hide the list */

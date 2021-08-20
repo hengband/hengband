@@ -145,7 +145,7 @@ static void get_random_virtue(player_type *creature_ptr, int which)
         }
     }
 
-    creature_ptr->vir_types[which] = (s16b)type;
+    creature_ptr->vir_types[which] = (int16_t)type;
 }
 
 /*!
@@ -153,7 +153,7 @@ static void get_random_virtue(player_type *creature_ptr, int which)
  * @param realm 魔法領域のID
  * @return 対応する徳のID
  */
-static enum virtue_idx get_realm_virtues(player_type *creature_ptr, REALM_IDX realm)
+static enum virtue_idx get_realm_virtues(player_type *creature_ptr, int16_t realm)
 {
     switch (realm) {
     case REALM_LIFE:
@@ -214,7 +214,7 @@ static enum virtue_idx get_realm_virtues(player_type *creature_ptr, REALM_IDX re
 void initialize_virtues(player_type *creature_ptr)
 {
     int i = 0, j = 0;
-    s16b tmp_vir;
+    int16_t tmp_vir;
 
     /* Reset */
     for (i = 0; i < 8; i++) {
@@ -503,7 +503,7 @@ void set_virtue(player_type *creature_ptr, int virtue_id, int amount)
 {
     for (int i = 0; i < 8; i++)
         if (creature_ptr->vir_types[i] == virtue_id) {
-            creature_ptr->virtues[i] = (s16b)amount;
+            creature_ptr->virtues[i] = (int16_t)amount;
             return;
         }
 }

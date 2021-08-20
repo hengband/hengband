@@ -83,7 +83,7 @@ static void write_diary_stay_inn(player_type *customer_ptr, int prev_hour)
  */
 static void pass_game_turn_by_stay(void)
 {
-	s32b oldturn = current_world_ptr->game_turn;
+	int32_t oldturn = current_world_ptr->game_turn;
 	current_world_ptr->game_turn =
 		(current_world_ptr->game_turn / (TURNS_PER_TICK * TOWN_DAWN / 2) + 1) *
 		(TURNS_PER_TICK * TOWN_DAWN / 2);

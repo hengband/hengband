@@ -53,9 +53,9 @@ void PlayerSpeed::set_locals()
  * ** マーフォークがFF_WATER地形にいれば加算(+2+レベル/10)
  * ** そうでなく浮遊を持っていないなら減算(-2)
  */
-s16b PlayerSpeed::race_value()
+int16_t PlayerSpeed::race_value()
 {
-    s16b result = 0;
+    int16_t result = 0;
 
     if (is_specific_player_race(this->owner_ptr, player_race_type::KLACKON) || is_specific_player_race(this->owner_ptr, player_race_type::SPRITE))
         result += (this->owner_ptr->lev) / 10;
@@ -95,7 +95,7 @@ s16b PlayerSpeed::race_value()
  * ** 錬気術師で装備が重くなくクラッコン、妖精、いかさま以外なら加算(+レベル/10)
  * ** 狂戦士なら加算(+3),レベル20/30/40/50ごとに+1
  */
-s16b PlayerSpeed::class_value()
+int16_t PlayerSpeed::class_value()
 {
     SPEED result = 0;
 
@@ -137,9 +137,9 @@ s16b PlayerSpeed::class_value()
  * @details
  * ** いかさまでクラッコン/妖精以外なら加算(+5+レベル/10)
  */
-s16b PlayerSpeed::personality_value()
+int16_t PlayerSpeed::personality_value()
 {
-    s16b result = 0;
+    int16_t result = 0;
     if (this->owner_ptr->pseikaku == PERSONALITY_MUNCHKIN && this->owner_ptr->prace != player_race_type::KLACKON && this->owner_ptr->prace != player_race_type::SPRITE) {
         result += (this->owner_ptr->lev) / 10 + 5;
     }
@@ -153,9 +153,9 @@ s16b PlayerSpeed::personality_value()
  * ** 棘セット装備中ならば加算(+7)
  * ** アイシングデス-トゥインクル装備中ならば加算(+7)
  */
-s16b PlayerSpeed::special_weapon_set_value()
+int16_t PlayerSpeed::special_weapon_set_value()
 {
-    s16b result = 0;
+    int16_t result = 0;
     if (has_melee_weapon(this->owner_ptr, INVEN_MAIN_HAND) && has_melee_weapon(this->owner_ptr, INVEN_SUB_HAND)) {
         if ((this->owner_ptr->inventory_list[INVEN_MAIN_HAND].name1 == ART_QUICKTHORN)
             && (this->owner_ptr->inventory_list[INVEN_SUB_HAND].name1 == ART_TINYTHORN)) {
@@ -177,9 +177,9 @@ s16b PlayerSpeed::special_weapon_set_value()
  * ** 装備品にTR_SPEEDがあれば加算(+pval+1
  * ** セットで加速増減があるものを計算
  */
-s16b PlayerSpeed::equipments_value()
+int16_t PlayerSpeed::equipments_value()
 {
-    s16b result = PlayerStatusBase::equipments_value();
+    int16_t result = PlayerStatusBase::equipments_value();
     result += this->special_weapon_set_value();
 
     return result;
@@ -195,9 +195,9 @@ s16b PlayerSpeed::equipments_value()
  * ** 食い過ぎなら減算(-10)
  * ** 光速移動中は+999(最終的に+99になる)
  */
-s16b PlayerSpeed::time_effect_value()
+int16_t PlayerSpeed::time_effect_value()
 {
-    s16b result = 0;
+    int16_t result = 0;
 
     if (is_fast(this->owner_ptr)) {
         result += 10;
@@ -229,9 +229,9 @@ s16b PlayerSpeed::time_effect_value()
  * @details
  * ** 朱雀の構えなら加算(+10)
  */
-s16b PlayerSpeed::battleform_value()
+int16_t PlayerSpeed::battleform_value()
 {
-    s16b result = 0;
+    int16_t result = 0;
     if (any_bits(this->owner_ptr->special_defense, KAMAE_SUZAKU))
         result += 10;
     return result;
@@ -245,7 +245,7 @@ s16b PlayerSpeed::battleform_value()
  * ** 変異MUT3_XTRA_LEGなら加算(+3)
  * ** 変異MUT3_SHORT_LEGなら減算(-3)
  */
-s16b PlayerSpeed::mutation_value()
+int16_t PlayerSpeed::mutation_value()
 {
     SPEED result = 0;
 
@@ -271,7 +271,7 @@ s16b PlayerSpeed::mutation_value()
  * @details
  * * 騎乗中ならばモンスターの加速に準拠、ただし騎乗技能値とモンスターレベルによるキャップ処理あり
  */
-s16b PlayerSpeed::riding_value()
+int16_t PlayerSpeed::riding_value()
 {
     monster_type *riding_m_ptr = &(this->owner_ptr)->current_floor_ptr->m_list[this->owner_ptr->riding];
     SPEED speed = riding_m_ptr->mspeed;
@@ -282,7 +282,7 @@ s16b PlayerSpeed::riding_value()
     }
 
     if (riding_m_ptr->mspeed > 110) {
-        result = (s16b)((speed - 110) * (this->owner_ptr->skill_exp[SKILL_RIDING] * 3 + this->owner_ptr->lev * 160L - 10000L) / (22000L));
+        result = (int16_t)((speed - 110) * (this->owner_ptr->skill_exp[SKILL_RIDING] * 3 + this->owner_ptr->lev * 160L - 10000L) / (22000L));
         if (result < 0)
             result = 0;
     } else {
@@ -305,7 +305,7 @@ s16b PlayerSpeed::riding_value()
  * @details
  * * 所持品の重量による減速処理。乗馬時は別計算。
  */
-s16b PlayerSpeed::inventory_weight_value()
+int16_t PlayerSpeed::inventory_weight_value()
 {
     SPEED result = 0;
 
@@ -339,7 +339,7 @@ s16b PlayerSpeed::inventory_weight_value()
  * @details
  * * 探索中なら減算(-10)
  */
-s16b PlayerSpeed::action_value()
+int16_t PlayerSpeed::action_value()
 {
     SPEED result = 0;
     if (this->owner_ptr->action == ACTION_SEARCH)
@@ -370,7 +370,7 @@ BIT_FLAGS PlayerSpeed::equipments_flags(tr_type check_flag)
  * * 非乗馬時 - ここまでの修正値合算をそのまま使用
  * * 乗馬時 - 乗馬の速度と重量減衰のみを計算
  */
-s16b PlayerSpeed::set_exception_value(s16b value)
+int16_t PlayerSpeed::set_exception_value(int16_t value)
 {
     if (this->owner_ptr->riding) {
         value = this->default_value;

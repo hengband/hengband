@@ -651,7 +651,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
 
         if (cast) {
             int total_damage = 0, basedam, i;
-            BIT_FLAGS flgs[TR_FLAG_SIZE];
+            TrFlags flgs;
             object_type *o_ptr;
             if (!get_aim_dir(caster_ptr, &dir))
                 return NULL;
@@ -920,7 +920,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
         if (cast) {
             int total_damage = 0, basedam, i;
             POSITION y, x;
-            BIT_FLAGS flgs[TR_FLAG_SIZE];
+            TrFlags flgs;
             object_type *o_ptr;
 
             if (!get_direction(caster_ptr, &dir, false, false))

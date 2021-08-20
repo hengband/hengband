@@ -290,7 +290,7 @@ void print_frame_basic(player_type *creature_ptr)
  */
 void health_redraw(player_type *creature_ptr, bool riding)
 {
-    s16b health_who;
+    int16_t health_who;
     int row, col;
 
     if (riding) {

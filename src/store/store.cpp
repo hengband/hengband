@@ -40,8 +40,8 @@ int store_top = 0;
 int store_bottom = 0;
 int xtra_stock = 0;
 const owner_type *ot_ptr = NULL;
-s16b old_town_num = 0;
-s16b inner_town_num = 0;
+int16_t old_town_num = 0;
+int16_t inner_town_num = 0;
 
 /* We store the current "store feat" here so everyone can access it */
 int cur_store_feat;
@@ -54,7 +54,7 @@ bool allow_inc = false;
  * @param store_idx 店舗ID
  * @return 店舗の最大スロット数
  */
-s16b store_get_stock_max(STORE_TYPE_IDX store_idx, bool powerup)
+int16_t store_get_stock_max(STORE_TYPE_IDX store_idx, bool powerup)
 {
     switch (store_idx) {
     case STORE_HOME:

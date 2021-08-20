@@ -18,7 +18,6 @@
 #define MIMIC_DEMON_LORD 2
 #define MIMIC_VAMPIRE 3
 
-#define MIMIC_FLAGS choice
 #define MIMIC_IS_NONLIVING 0x00000001
 #define MIMIC_IS_DEMON 0x00000002
 #define MIMIC_IS_UNDEAD 0x00000004
@@ -74,16 +73,16 @@ struct player_race {
     concptr E_title{}; //!< 英語種族名
 #endif
     concptr symbol{}; //!< 種族シンボル(救援召喚) / Race symbols
-    s16b r_adj[A_MAX]{}; //!< 能力値ボーナス / Racial stat bonuses
+    int16_t r_adj[A_MAX]{}; //!< 能力値ボーナス / Racial stat bonuses
 
-    s16b r_dis{}; //!< 解除 / disarming
-    s16b r_dev{}; //!< 魔道具使用 /magic devices
-    s16b r_sav{}; //!< 魔法防御 / saving throw
-    s16b r_stl{}; //!< 隠密 / stealth
-    s16b r_srh{}; //!< 探索 / search ability
-    s16b r_fos{}; //!< 知覚 / search frequency
-    s16b r_thn{}; //!< 打撃修正(命中) / combat (normal)
-    s16b r_thb{}; //!< 射撃修正(命中) / combat (shooting)
+    int16_t r_dis{}; //!< 解除 / disarming
+    int16_t r_dev{}; //!< 魔道具使用 /magic devices
+    int16_t r_sav{}; //!< 魔法防御 / saving throw
+    int16_t r_stl{}; //!< 隠密 / stealth
+    int16_t r_srh{}; //!< 探索 / search ability
+    int16_t r_fos{}; //!< 知覚 / search frequency
+    int16_t r_thn{}; //!< 打撃修正(命中) / combat (normal)
+    int16_t r_thb{}; //!< 射撃修正(命中) / combat (shooting)
 
     byte r_mhp{}; //!< ヒットダイス /  Race hit-dice modifier
     byte r_exp{}; //!< 経験値修正 /Race experience factor
@@ -103,7 +102,7 @@ struct player_race {
 
     byte infra{}; //!< 赤外線視力 / Infra-vision range
 
-    u32b choice{}; //!< 似つかわしい職業(ミミック時はミミック種族属性) / Legal class choices
+    uint32_t choice{}; //!< 似つかわしい職業(ミミック時はミミック種族属性) / Legal class choices
     PlayerRaceLife life{}; //!< 生命の形態
     PlayerRaceFood food{}; //!< 食料の形態
 
@@ -116,6 +115,6 @@ typedef struct player_type player_type;
 SYMBOL_CODE get_summon_symbol_from_player(player_type *creature_ptr);
 bool is_specific_player_race(player_type *creature_ptr, player_race_type prace);
 bool player_race_has_flag(player_type *creature_ptr, tr_type flag, bool base_race = false);
-void add_player_race_flags(player_type *creature_ptr, BIT_FLAGS *flags, bool base_race = false);
+void add_player_race_flags(player_type *creature_ptr, TrFlags &flags, bool base_race = false);
 PlayerRaceLife player_race_life(player_type *creature_ptr, bool base_race = false);
 PlayerRaceFood player_race_food(player_type *creature_ptr, bool base_race = false);

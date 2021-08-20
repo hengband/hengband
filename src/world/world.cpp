@@ -13,7 +13,7 @@ world_type *current_world_ptr = &world;
  */
 bool is_daytime(void)
 {
-	s32b len = TURNS_PER_TICK * TOWN_DAWN;
+	int32_t len = TURNS_PER_TICK * TOWN_DAWN;
 	if ((current_world_ptr->game_turn % len) < (len / 2))
 		return true;
 	else
@@ -30,8 +30,8 @@ bool is_daytime(void)
  */
 void extract_day_hour_min(player_type *player_ptr, int *day, int *hour, int *min)
 {
-	const s32b A_DAY = TURNS_PER_TICK * TOWN_DAWN;
-	s32b turn_in_today = (current_world_ptr->game_turn + A_DAY / 4) % A_DAY;
+	const int32_t A_DAY = TURNS_PER_TICK * TOWN_DAWN;
+	int32_t turn_in_today = (current_world_ptr->game_turn + A_DAY / 4) % A_DAY;
 
 	switch (player_ptr->start_race)
 	{
@@ -55,7 +55,7 @@ void extract_day_hour_min(player_type *player_ptr, int *day, int *hour, int *min
 void update_playtime(void)
 {
     if (current_world_ptr->start_time != 0) {
-        u32b tmp = (u32b)time(NULL);
+        uint32_t tmp = (uint32_t)time(NULL);
         current_world_ptr->play_time += (tmp - current_world_ptr->start_time);
         current_world_ptr->start_time = tmp;
     }

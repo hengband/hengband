@@ -58,7 +58,7 @@ public:
      * 具体的な使用一覧はクエスト行き階段の移行先クエストID、
      * 各ダンジョン入口の移行先ダンジョンID、
      */
-    s16b special{};
+    int16_t special{};
 
     FEAT_IDX mimic{}; /* Feature to mimic */
 

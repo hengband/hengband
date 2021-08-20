@@ -61,7 +61,7 @@ extern void core(concptr str);
  *
  * hi や n に範囲外の値を渡したり、オーバーフローした場合の動作は未定義。
  */
-void s64b_lshift(s32b* hi, u32b* lo, int n);
+void s64b_lshift(int32_t* hi, uint32_t* lo, int n);
 
 /*!
  * @brief 64bit非負整数を n 回右シフトする。
@@ -71,14 +71,14 @@ void s64b_lshift(s32b* hi, u32b* lo, int n);
  *
  * hi や n に範囲外の値を渡した場合の動作は未定義。
  */
-void s64b_rshift(s32b* hi, u32b* lo, int n);
+void s64b_rshift(int32_t* hi, uint32_t* lo, int n);
 
-extern void s64b_add(s32b *A1, u32b *A2, s32b B1, u32b B2);
-extern void s64b_sub(s32b *A1, u32b *A2, s32b B1, u32b B2);
-extern int s64b_cmp(s32b A1, u32b A2, s32b B1, u32b B2);
-extern void s64b_mul(s32b *A1, u32b *A2, s32b B1, u32b B2);
-extern void s64b_div(s32b *A1, u32b *A2, s32b B1, u32b B2);
-extern void s64b_mod(s32b *A1, u32b *A2, s32b B1, u32b B2);
+extern void s64b_add(int32_t *A1, uint32_t *A2, int32_t B1, uint32_t B2);
+extern void s64b_sub(int32_t *A1, uint32_t *A2, int32_t B1, uint32_t B2);
+extern int s64b_cmp(int32_t A1, uint32_t A2, int32_t B1, uint32_t B2);
+extern void s64b_mul(int32_t *A1, uint32_t *A2, int32_t B1, uint32_t B2);
+extern void s64b_div(int32_t *A1, uint32_t *A2, int32_t B1, uint32_t B2);
+extern void s64b_mod(int32_t *A1, uint32_t *A2, int32_t B1, uint32_t B2);
 
 
 #endif

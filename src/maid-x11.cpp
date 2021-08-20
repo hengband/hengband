@@ -143,11 +143,11 @@ static unsigned long create_pixel(Display *dpy, byte red, byte green, byte blue)
  */
 typedef struct BITMAPFILEHEADER
 {
-	u16b bfType;
-	u32b bfSize;
-	u16b bfReserved1;
-	u16b bfReserved2;
-	u32b bfOffBits;
+	uint16_t bfType;
+	uint32_t bfSize;
+	uint16_t bfReserved1;
+	uint16_t bfReserved2;
+	uint32_t bfOffBits;
 } BITMAPFILEHEADER;
 
 /*
@@ -155,17 +155,17 @@ typedef struct BITMAPFILEHEADER
  */
 typedef struct BITMAPINFOHEADER
 {
-	u32b biSize;
-	u32b biWidth;
-	u32b biHeight;
-	u16b biPlanes;
-	u16b biBitCount;
-	u32b biCompresion;
-	u32b biSizeImage;
-	u32b biXPelsPerMeter;
-	u32b biYPelsPerMeter;
-	u32b biClrUsed;
-	u32b biClrImportand;
+	uint32_t biSize;
+	uint32_t biWidth;
+	uint32_t biHeight;
+	uint16_t biPlanes;
+	uint16_t biBitCount;
+	uint32_t biCompresion;
+	uint32_t biSizeImage;
+	uint32_t biXPelsPerMeter;
+	uint32_t biYPelsPerMeter;
+	uint32_t biClrUsed;
+	uint32_t biClrImportand;
 } BITMAPINFOHEADER;
 
 /*
@@ -191,18 +191,18 @@ static void rd_byte(FILE *fff, byte *ip)
 	*ip = get_byte(fff);
 }
 
-static void rd_u16b(FILE *fff, u16b *ip)
+static void rd_u16b(FILE *fff, uint16_t *ip)
 {
 	(*ip) = get_byte(fff);
-	(*ip) |= ((u16b)(get_byte(fff)) << 8);
+	(*ip) |= ((uint16_t)(get_byte(fff)) << 8);
 }
 
-static void rd_u32b(FILE *fff, u32b *ip)
+static void rd_u32b(FILE *fff, uint32_t *ip)
 {
 	(*ip) = get_byte(fff);
-	(*ip) |= ((u32b)(get_byte(fff)) << 8);
-	(*ip) |= ((u32b)(get_byte(fff)) << 16);
-	(*ip) |= ((u32b)(get_byte(fff)) << 24);
+	(*ip) |= ((uint32_t)(get_byte(fff)) << 8);
+	(*ip) |= ((uint32_t)(get_byte(fff)) << 16);
+	(*ip) |= ((uint32_t)(get_byte(fff)) << 24);
 }
 
 

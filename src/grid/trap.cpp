@@ -45,7 +45,7 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-static s16b normal_traps[MAX_NORMAL_TRAPS];
+static int16_t normal_traps[MAX_NORMAL_TRAPS];
 
 /*!
  * @brief 箱のトラップテーブル

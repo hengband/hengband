@@ -2,4 +2,4 @@
 
 #include "system/h-type.h"
 
-s16b tokenize_whitespace(char *buf, s16b num, char **tokens);
+int16_t tokenize_whitespace(char *buf, int16_t num, char **tokens);

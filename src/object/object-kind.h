@@ -33,7 +33,7 @@ typedef struct object_kind {
 
     PRICE cost{}; /*!< ベースアイテムの基本価値 / Object "base cost" */
 
-    BIT_FLAGS flags[TR_FLAG_SIZE]{}; /*!< ベースアイテムの基本特性ビット配列 / Flags */
+    TrFlags flags{}; /*!< ベースアイテムの基本特性ビット配列 / Flags */
 
     EnumClassFlagGroup<TRG> gen_flags; /*!< ベースアイテムの生成特性ビット配列 / flags for generate */
 
@@ -54,7 +54,7 @@ typedef struct object_kind {
     bool aware{}; /*!< ベースアイテムが鑑定済かどうか /  The player is "aware" of the item's effects */
     bool tried{}; /*!< ベースアイテムを未鑑定のまま試したことがあるか /  The player has "tried" one of the items */
 
-    ACTIVATION_IDX act_idx{}; /*!< 発動能力のID /  Activative ability index */
+    int16_t act_idx{}; /*!< 発動能力のID /  Activative ability index */
 } object_kind;
 
 extern std::vector<object_kind> k_info;

@@ -90,10 +90,10 @@ static void write_monster_info(monster_type *m_ptr, const BIT_FLAGS flags)
     }
 
     if (flags & SAVE_MON_TARGET_Y)
-        wr_s16b((s16b)m_ptr->target_y);
+        wr_s16b((int16_t)m_ptr->target_y);
 
     if (flags & SAVE_MON_TARGET_X)
-        wr_s16b((s16b)m_ptr->target_x);
+        wr_s16b((int16_t)m_ptr->target_x);
 
     if (flags & SAVE_MON_INVULNER) {
         tmp8u = (byte)m_ptr->mtimed[MTIMED_INVULNER];
@@ -128,9 +128,9 @@ void wr_monster(monster_type *m_ptr)
     wr_s16b(m_ptr->r_idx);
     wr_byte((byte)m_ptr->fy);
     wr_byte((byte)m_ptr->fx);
-    wr_s16b((s16b)m_ptr->hp);
-    wr_s16b((s16b)m_ptr->maxhp);
-    wr_s16b((s16b)m_ptr->max_maxhp);
+    wr_s16b((int16_t)m_ptr->hp);
+    wr_s16b((int16_t)m_ptr->maxhp);
+    wr_s16b((int16_t)m_ptr->max_maxhp);
     wr_u32b(m_ptr->dealt_damage);
 
     if (flags & SAVE_MON_AP_R_IDX)
@@ -154,11 +154,11 @@ void wr_monster(monster_type *m_ptr)
 void wr_lore(MONRACE_IDX r_idx)
 {
     monster_race *r_ptr = &r_info[r_idx];
-    wr_s16b((s16b)r_ptr->r_sights);
-    wr_s16b((s16b)r_ptr->r_deaths);
-    wr_s16b((s16b)r_ptr->r_pkills);
-    wr_s16b((s16b)r_ptr->r_akills);
-    wr_s16b((s16b)r_ptr->r_tkills);
+    wr_s16b((int16_t)r_ptr->r_sights);
+    wr_s16b((int16_t)r_ptr->r_deaths);
+    wr_s16b((int16_t)r_ptr->r_pkills);
+    wr_s16b((int16_t)r_ptr->r_akills);
+    wr_s16b((int16_t)r_ptr->r_tkills);
 
     wr_byte(r_ptr->r_wake);
     wr_byte(r_ptr->r_ignore);

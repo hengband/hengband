@@ -92,7 +92,7 @@ parse_error_type parse_line_feature(floor_type *floor_ptr, char *buf)
 
     switch (num) {
     case 9:
-        letter[index].special = (s16b)atoi(zz[8]);
+        letter[index].special = (int16_t)atoi(zz[8]);
         /* Fall through */
     case 8:
         if ((zz[7][0] == '*') && !zz[7][1]) {
@@ -222,8 +222,8 @@ parse_error_type parse_line_building(char *buf)
             building[index].member_costs[action_index] = (PRICE)atoi(zz[2]);
             building[index].other_costs[action_index] = (PRICE)atoi(zz[3]);
             building[index].letters[action_index] = zz[4][0];
-            building[index].actions[action_index] = (BACT_IDX)atoi(zz[5]);
-            building[index].action_restr[action_index] = (BACT_RESTRICT_IDX)atoi(zz[6]);
+            building[index].actions[action_index] = static_cast<int16_t>(atoi(zz[5]));
+            building[index].action_restr[action_index] = static_cast<int16_t>(atoi(zz[6]));
             break;
         }
 
@@ -251,7 +251,7 @@ parse_error_type parse_line_building(char *buf)
         int n;
         n = tokenize(s + 2, MAX_MAGIC, zz, 0);
         for (int i = 0; i < MAX_MAGIC; i++) {
-            building[index].member_realm[i + 1] = ((i < n) ? (REALM_IDX)atoi(zz[i]) : 1);
+            building[index].member_realm[i + 1] = ((i < n) ? static_cast<int16_t>(atoi(zz[i])) : 1);
         }
 
         break;

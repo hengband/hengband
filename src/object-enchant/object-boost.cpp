@@ -153,7 +153,7 @@ bool add_esp_strong(object_type *o_ptr)
 void add_esp_weak(object_type *o_ptr, bool extra)
 {
     int i;
-    u32b weak_esp_list[] = {
+    uint32_t weak_esp_list[] = {
         TR_ESP_ANIMAL,
         TR_ESP_UNDEAD,
         TR_ESP_DEMON,

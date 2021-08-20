@@ -16,30 +16,30 @@
 #include "util/int-char-converter.h"
 
 /*! オートローラの能力値的要求水準 / Autoroll limit */
-s16b stat_limit[6];
+int16_t stat_limit[6];
 
 /*! オートローラの試行回数 / Autoroll round */
-s32b auto_round;
-s32b auto_upper_round;
+int32_t auto_round;
+int32_t auto_upper_round;
 
 /*! オートローラの要求値実現確率 */
-s32b autoroll_chance;
+int32_t autoroll_chance;
 
 /*!
  * @breif オートローラーで指定した能力値以上が出る確率を計算する。
  * @return 確率 / 100
  */
-static s32b get_autoroller_prob(int *minval)
+static int32_t get_autoroller_prob(int *minval)
 {
     /* 1 percent of the valid random space (60^6 && 72<sum<87) */
-    s32b tot_rand_1p = 320669745;
+    int32_t tot_rand_1p = 320669745;
     int i, j, tmp;
     int ii[6];
     int tval[6];
     int tot = 0;
 
     /* success count */
-    s32b succ = 0;
+    int32_t succ = 0;
 
     /* random combinations out of 60 (1d3+1d4+1d5) patterns */
     int pp[18] = {
@@ -323,7 +323,7 @@ bool get_stat_limits(player_type *creature_ptr)
     }
 
     for (int i = 0; i < A_MAX; i++)
-        stat_limit[i] = (s16b)cval[i];
+        stat_limit[i] = (int16_t)cval[i];
 
     return true;
 }
@@ -572,13 +572,13 @@ bool get_chara_limits(player_type *creature_ptr, chara_limit_type *chara_limit_p
             break;
     }
 
-    chara_limit_ptr->agemin = (s16b)cval[0];
-    chara_limit_ptr->agemax = (s16b)cval[1];
-    chara_limit_ptr->htmin = (s16b)cval[2];
-    chara_limit_ptr->htmax = (s16b)cval[3];
-    chara_limit_ptr->wtmin = (s16b)cval[4];
-    chara_limit_ptr->wtmax = (s16b)cval[5];
-    chara_limit_ptr->scmin = (s16b)cval[6];
-    chara_limit_ptr->scmax = (s16b)cval[7];
+    chara_limit_ptr->agemin = (int16_t)cval[0];
+    chara_limit_ptr->agemax = (int16_t)cval[1];
+    chara_limit_ptr->htmin = (int16_t)cval[2];
+    chara_limit_ptr->htmax = (int16_t)cval[3];
+    chara_limit_ptr->wtmin = (int16_t)cval[4];
+    chara_limit_ptr->wtmax = (int16_t)cval[5];
+    chara_limit_ptr->scmin = (int16_t)cval[6];
+    chara_limit_ptr->scmax = (int16_t)cval[7];
     return true;
 }

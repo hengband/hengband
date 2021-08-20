@@ -85,7 +85,7 @@ static MULTIPLY calc_shot_damage_with_slay(
 
     monster_race *race_ptr = &r_info[monster_ptr->r_idx];
 
-    BIT_FLAGS flags[TR_FLAG_SIZE], bow_flags[TR_FLAG_SIZE], arrow_flags[TR_FLAG_SIZE];
+    TrFlags flags, bow_flags, arrow_flags;
     object_flags(sniper_ptr, arrow_ptr, arrow_flags);
     object_flags(sniper_ptr, bow_ptr, bow_flags);
 
@@ -400,7 +400,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
     GAME_TEXT o_name[MAX_NLEN];
 
-    u16b path_g[512]; /* For calcuration of path length */
+    uint16_t path_g[512]; /* For calcuration of path length */
 
     int msec = delay_factor * delay_factor * delay_factor;
 
@@ -732,7 +732,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
                     /* Sniper */
                     if (snipe_type == SP_EXPLODE) {
-                        u16b flg = (PROJECT_STOP | PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID);
+                        uint16_t flg = (PROJECT_STOP | PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID);
 
                         sound(SOUND_EXPLODE); /* No explode sound - use breath fire instead */
                         project(shooter_ptr, 0, ((shooter_ptr->concent + 1) / 2 + 1), ny, nx, base_dam, GF_MISSILE, flg);
@@ -1148,7 +1148,7 @@ HIT_POINT calc_crit_ratio_shot(player_type *shooter_ptr, HIT_POINT plus_ammo, HI
  */
 HIT_POINT calc_expect_crit_shot(player_type *shooter_ptr, WEIGHT weight, int plus_ammo, int plus_bow, HIT_POINT dam)
 {
-    u32b num;
+    uint32_t num;
     int i, k, crit;
     i = calc_crit_ratio_shot(shooter_ptr, plus_ammo, plus_bow);
 
@@ -1189,7 +1189,7 @@ HIT_POINT calc_expect_crit_shot(player_type *shooter_ptr, WEIGHT weight, int plu
  * @param impact 強撃かどうか
  * @return ダメージ期待値
  */
-HIT_POINT calc_expect_crit(player_type *shooter_ptr, WEIGHT weight, int plus, HIT_POINT dam, s16b meichuu, bool dokubari, bool impact)
+HIT_POINT calc_expect_crit(player_type *shooter_ptr, WEIGHT weight, int plus, HIT_POINT dam, int16_t meichuu, bool dokubari, bool impact)
 {
     if (dokubari)
         return dam;
@@ -1208,7 +1208,7 @@ HIT_POINT calc_expect_crit(player_type *shooter_ptr, WEIGHT weight, int plus, HI
         return sum / 650;
     };
 
-    u32b num = 0;
+    uint32_t num = 0;
 
     if (impact) {
         for (int d = 1; d <= 650; ++d) {

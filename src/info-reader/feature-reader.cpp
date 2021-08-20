@@ -237,7 +237,7 @@ errr init_feat_variables(void)
     /* Locked doors */
     FEAT_IDX i;
     for (i = 1; i < MAX_LJ_DOORS; i++) {
-        s16b door = f_tag_to_index(format("LOCKED_DOOR_%d", i));
+        int16_t door = f_tag_to_index(format("LOCKED_DOOR_%d", i));
         if (door < 0)
             break;
         feat_door[DOOR_DOOR].locked[i - 1] = door;
@@ -249,7 +249,7 @@ errr init_feat_variables(void)
 
     /* Jammed doors */
     for (i = 0; i < MAX_LJ_DOORS; i++) {
-        s16b door = f_tag_to_index(format("JAMMED_DOOR_%d", i));
+        int16_t door = f_tag_to_index(format("JAMMED_DOOR_%d", i));
         if (door < 0)
             break;
         feat_door[DOOR_DOOR].jammed[i] = door;
@@ -266,7 +266,7 @@ errr init_feat_variables(void)
 
     /* Locked glass doors */
     for (i = 1; i < MAX_LJ_DOORS; i++) {
-        s16b door = f_tag_to_index(format("LOCKED_GLASS_DOOR_%d", i));
+        int16_t door = f_tag_to_index(format("LOCKED_GLASS_DOOR_%d", i));
         if (door < 0)
             break;
         feat_door[DOOR_GLASS_DOOR].locked[i - 1] = door;
@@ -278,7 +278,7 @@ errr init_feat_variables(void)
 
     /* Jammed glass doors */
     for (i = 0; i < MAX_LJ_DOORS; i++) {
-        s16b door = f_tag_to_index(format("JAMMED_GLASS_DOOR_%d", i));
+        int16_t door = f_tag_to_index(format("JAMMED_GLASS_DOOR_%d", i));
         if (door < 0)
             break;
         feat_door[DOOR_GLASS_DOOR].jammed[i] = door;
@@ -391,7 +391,7 @@ FEAT_IDX f_tag_to_index(std::string_view str)
  * Initialize quest array
  * @return 地形ID
  */
-s16b f_tag_to_index_in_init(concptr str)
+int16_t f_tag_to_index_in_init(concptr str)
 {
     FEAT_IDX feat = f_tag_to_index(str);
 

@@ -136,7 +136,7 @@ static void gain_exp_by_destroying_magic_book(player_type *creature_ptr, destroy
     if (!gain_expr || (creature_ptr->exp >= PY_MAX_EXP))
         return;
 
-    s32b tester_exp = creature_ptr->max_exp / 20;
+    int32_t tester_exp = creature_ptr->max_exp / 20;
     if (tester_exp > 10000)
         tester_exp = 10000;
 

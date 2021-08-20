@@ -21,7 +21,7 @@
  * @details
  * * 種族による加算
  */
-s16b PlayerStealth::race_value()
+int16_t PlayerStealth::race_value()
 {
     const player_race *tmp_rp_ptr;
 
@@ -39,7 +39,7 @@ s16b PlayerStealth::race_value()
  * @details
  * * 性格による加算
  */
-s16b PlayerStealth::personality_value()
+int16_t PlayerStealth::personality_value()
 {
     const player_personality *a_ptr = &personality_info[this->owner_ptr->pseikaku];
     return a_ptr->a_stl;
@@ -51,7 +51,7 @@ s16b PlayerStealth::personality_value()
  * @details
  * * 職業による加算
  */
-s16b PlayerStealth::class_base_value()
+int16_t PlayerStealth::class_base_value()
 {
     const player_class *c_ptr = &class_info[this->owner_ptr->pclass];
     return c_ptr->c_stl + (c_ptr->x_stl * this->owner_ptr->lev / 10);
@@ -64,7 +64,7 @@ s16b PlayerStealth::class_base_value()
  * * 忍者がheavy_armorならば減算(-レベル/10)
  * * 忍者がheavy_armorでなく適正な武器を持っていれば加算(+レベル/10)
  */
-s16b PlayerStealth::class_value()
+int16_t PlayerStealth::class_value()
 {
     ACTION_SKILL_POWER result = 0;
 
@@ -87,9 +87,9 @@ s16b PlayerStealth::class_value()
  * * 変異MUT3_XTRA_NOISで減算(-3)
  * * 変異MUT3_MOTIONで加算(+1)
  */
-s16b PlayerStealth::mutation_value()
+int16_t PlayerStealth::mutation_value()
 {
-    s16b result = 0;
+    int16_t result = 0;
     const auto &muta = this->owner_ptr->muta;
     if (muta.has(MUTA::XTRA_NOIS)) {
         result -= 3;
@@ -108,9 +108,9 @@ s16b PlayerStealth::mutation_value()
  * * 狂戦士化で減算(-7)
  * * 隠密の歌で加算(+999)
  */
-s16b PlayerStealth::time_effect_value()
+int16_t PlayerStealth::time_effect_value()
 {
-    s16b result = 0;
+    int16_t result = 0;
     if (this->owner_ptr->realm1 == REALM_HEX) {
         if (hex_spelling_any(this->owner_ptr))
             result -= (1 + casting_hex_num(this->owner_ptr));
@@ -135,7 +135,7 @@ bool PlayerStealth::is_aggravated_s_fairy()
  * @details
  * * セクシーギャルでない影フェアリーがTRC_AGGRAVATE持ちの時、別処理でTRC_AGGRAVATEを無効にする代わりに減算(-3か3未満なら(現在値+2)/2)
  */
-s16b PlayerStealth::set_exception_value(s16b value)
+int16_t PlayerStealth::set_exception_value(int16_t value)
 {
     if (this->is_aggravated_s_fairy()) {
         value = MIN(value - 3, (value + 2) / 2);

@@ -60,7 +60,7 @@ private:
     bool hit_wall = false;
     bool return_when_thrown = false;
     GAME_TEXT o_name[MAX_NLEN]{};
-    BIT_FLAGS obj_flags[TR_FLAG_SIZE]{};
+    TrFlags obj_flags{};
     bool come_back = false;
     bool do_drop = true;
     grid_type *g_ptr{};

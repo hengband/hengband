@@ -258,12 +258,12 @@ void wiz_identify_full_inventory(player_type *caster_ptr)
  */
 static void prt_alloc(tval_type tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row, TERM_LEN col)
 {
-    u32b rarity[K_MAX_DEPTH];
-    (void)C_WIPE(rarity, K_MAX_DEPTH, u32b);
-    u32b total[K_MAX_DEPTH];
-    (void)C_WIPE(total, K_MAX_DEPTH, u32b);
-    s32b display[22];
-    (void)C_WIPE(display, 22, s32b);
+    uint32_t rarity[K_MAX_DEPTH];
+    (void)C_WIPE(rarity, K_MAX_DEPTH, uint32_t);
+    uint32_t total[K_MAX_DEPTH];
+    (void)C_WIPE(total, K_MAX_DEPTH, uint32_t);
+    int32_t display[22];
+    (void)C_WIPE(display, 22, int32_t);
 
     int home = 0;
     for (int i = 0; i < K_MAX_DEPTH; i++) {
@@ -319,7 +319,7 @@ static void prt_alloc(tval_type tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row, T
  */
 static void prt_binary(BIT_FLAGS flags, const int row, int col)
 {
-    u32b bitmask;
+    uint32_t bitmask;
     for (int i = bitmask = 1; i <= 32; i++, bitmask *= 2)
         if (flags & bitmask)
             term_putch(col++, row, TERM_BLUE, '*');
@@ -335,7 +335,7 @@ static void prt_binary(BIT_FLAGS flags, const int row, int col)
  */
 static void wiz_display_item(player_type *player_ptr, object_type *o_ptr)
 {
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     object_flags(player_ptr, o_ptr, flgs);
     int j = 13;
     for (int i = 1; i <= 23; i++)
@@ -405,8 +405,8 @@ static void wiz_statistics(player_type *caster_ptr, object_type *o_ptr)
     if (object_is_fixed_artifact(o_ptr))
         a_info[o_ptr->name1].cur_num = 0;
 
-    u32b i, matches, better, worse, other, correct;
-    u32b test_roll = 1000000;
+    uint32_t i, matches, better, worse, other, correct;
+    uint32_t test_roll = 1000000;
     char ch;
     concptr quality;
     BIT_FLAGS mode;
@@ -586,28 +586,28 @@ static void wiz_tweak_item(player_type *player_ptr, object_type *o_ptr)
     if (!get_string(p, tmp_val, 5))
         return;
 
-    o_ptr->pval = clamp_cast<s16b>(atoi(tmp_val));
+    o_ptr->pval = clamp_cast<int16_t>(atoi(tmp_val));
     wiz_display_item(player_ptr, o_ptr);
     p = "Enter new 'to_a' setting: ";
     sprintf(tmp_val, "%d", o_ptr->to_a);
     if (!get_string(p, tmp_val, 5))
         return;
 
-    o_ptr->to_a = clamp_cast<s16b>(atoi(tmp_val));
+    o_ptr->to_a = clamp_cast<int16_t>(atoi(tmp_val));
     wiz_display_item(player_ptr, o_ptr);
     p = "Enter new 'to_h' setting: ";
     sprintf(tmp_val, "%d", o_ptr->to_h);
     if (!get_string(p, tmp_val, 5))
         return;
 
-    o_ptr->to_h = clamp_cast<s16b>(atoi(tmp_val));
+    o_ptr->to_h = clamp_cast<int16_t>(atoi(tmp_val));
     wiz_display_item(player_ptr, o_ptr);
     p = "Enter new 'to_d' setting: ";
     sprintf(tmp_val, "%d", (int)o_ptr->to_d);
     if (!get_string(p, tmp_val, 5))
         return;
 
-    o_ptr->to_d = clamp_cast<s16b>(atoi(tmp_val));
+    o_ptr->to_d = clamp_cast<int16_t>(atoi(tmp_val));
     wiz_display_item(player_ptr, o_ptr);
 }
 

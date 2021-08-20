@@ -159,7 +159,7 @@ void do_cmd_knowledge_kill_count(player_type *creature_ptr)
 
     MONRACE_IDX *who;
     C_MAKE(who, max_r_idx, MONRACE_IDX);
-    s32b total = 0;
+    int32_t total = 0;
     for (int kk = 1; kk < max_r_idx; kk++) {
         monster_race *r_ptr = &r_info[kk];
 
@@ -195,7 +195,7 @@ void do_cmd_knowledge_kill_count(player_type *creature_ptr)
             who[n++] = i;
     }
 
-    u16b why = 2;
+    uint16_t why = 2;
     char buf[80];
     ang_sort(creature_ptr, who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
     for (int k = 0; k < n; k++) {
@@ -242,12 +242,12 @@ void do_cmd_knowledge_kill_count(player_type *creature_ptr)
 
     fprintf(fff, "----------------------------------------------\n");
 #ifdef JP
-    fprintf(fff, "    合計: %lu 体を倒した。\n", (unsigned long int)total);
+    fprintf(fff, "    合計: %lu 体を倒した。\n", (ulong)total);
 #else
-    fprintf(fff, "   Total: %lu creature%s killed.\n", (unsigned long int)total, (total == 1 ? "" : "s"));
+    fprintf(fff, "   Total: %lu creature%s killed.\n", (ulong)total, (total == 1 ? "" : "s"));
 #endif
 
-    C_KILL(who, max_r_idx, s16b);
+    C_KILL(who, max_r_idx, int16_t);
     angband_fclose(fff);
     (void)show_file(creature_ptr, true, file_name, _("倒した敵の数", "Kill Count"), 0, 0);
     fd_kill(file_name);
@@ -256,7 +256,7 @@ void do_cmd_knowledge_kill_count(player_type *creature_ptr)
 /*
  * Display the monsters in a group.
  */
-static void display_monster_list(int col, int row, int per_page, s16b mon_idx[], int mon_cur, int mon_top, bool visual_only)
+static void display_monster_list(int col, int row, int per_page, int16_t mon_idx[], int mon_cur, int mon_top, bool visual_only)
 {
     int i;
     for (i = 0; i < per_page && (mon_idx[mon_top + i] >= 0); i++) {

@@ -140,10 +140,10 @@ inline T *free_impl(T *p)
 /**** Available macros ****/
 
 /* Size of 'N' things of type 'T' */
-#define C_SIZE(N, T) ((huge)((N) * (sizeof(T))))
+#define C_SIZE(N, T) ((ulong)((N) * (sizeof(T))))
 
 /* Size of one thing of type 'T' */
-#define SIZE(T) ((huge)(sizeof(T)))
+#define SIZE(T) ((ulong)(sizeof(T)))
 
 #if 0
 /* Compare two arrays of type T[N], at locations P1 and P2 */

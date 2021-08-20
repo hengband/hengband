@@ -57,7 +57,7 @@ bool android_inside_weapon(player_type *creature_ptr)
 
 void calc_android_exp(player_type *creature_ptr)
 {
-    u32b total_exp = 0;
+    uint32_t total_exp = 0;
     if (creature_ptr->is_dead || (creature_ptr->prace != player_race_type::ANDROID))
         return;
 
@@ -65,7 +65,7 @@ void calc_android_exp(player_type *creature_ptr)
         object_type *o_ptr = &creature_ptr->inventory_list[i];
         object_type forge;
         object_type *q_ptr = &forge;
-        u32b value, exp;
+        uint32_t value, exp;
         DEPTH level = MAX(k_info[o_ptr->k_idx].level - 8, 1);
 
         if ((i == INVEN_MAIN_RING) || (i == INVEN_SUB_RING) || (i == INVEN_NECK) || (i == INVEN_LITE))
@@ -84,7 +84,7 @@ void calc_android_exp(player_type *creature_ptr)
         } else if (object_is_ego(o_ptr)) {
             level += MAX(3, (e_info[o_ptr->name2].rating - 5) / 2);
         } else if (o_ptr->art_name) {
-            s32b total_flags = flag_cost(creature_ptr, o_ptr, o_ptr->pval);
+            int32_t total_flags = flag_cost(creature_ptr, o_ptr, o_ptr->pval);
             int fake_level;
 
             if (!object_is_weapon_ammo(o_ptr)) {

@@ -29,15 +29,15 @@ struct store_type {
     byte type{};           //!< Store type
     byte owner{};          //!< Owner index
     byte extra{};          //!< Unused for now
-    s16b insult_cur{};     //!< Insult counter
-    s16b good_buy{};       //!< Number of "good" buys (3.0.0で廃止)
-    s16b bad_buy{};        //!< Number of "bad" buys (3.0.0で廃止)
-    s32b store_open{};     //!< Closed until this turn
-    s32b last_visit{};     //!< Last visited on this turn
+    int16_t insult_cur{};     //!< Insult counter
+    int16_t good_buy{};       //!< Number of "good" buys (3.0.0で廃止)
+    int16_t bad_buy{};        //!< Number of "bad" buys (3.0.0で廃止)
+    int32_t store_open{};     //!< Closed until this turn
+    int32_t last_visit{};     //!< Last visited on this turn
     store_k_idx regular{}; //!< Table -- Legal regular item kinds
     store_k_idx table{};   //!< Table -- Legal item kinds
-    s16b stock_num{};      //!< Stock -- Number of entries
-    s16b stock_size{};     //!< Stock -- Total Size of Array
+    int16_t stock_num{};      //!< Stock -- Number of entries
+    int16_t stock_size{};     //!< Stock -- Total Size of Array
     object_type *stock{};  //!< Stock -- Actual stock items
 };
 

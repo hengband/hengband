@@ -7,7 +7,7 @@ typedef struct monap_type monap_type;
 typedef struct monster_type monster_type;
 typedef struct player_attack_type player_attack_type;
 typedef struct player_type player_type;
-MULTIPLY mult_hissatsu(player_type *attacker_ptr, MULTIPLY mult, BIT_FLAGS *flgs, monster_type *m_ptr, combat_options mode);
+MULTIPLY mult_hissatsu(player_type *attacker_ptr, MULTIPLY mult, const TrFlags &flgs, monster_type *m_ptr, combat_options mode);
 void concentration(player_type *creature_ptr);
 bool choose_kata(player_type* creature_ptr);
 int calc_attack_quality(player_type *attacker_ptr, player_attack_type *pa_ptr);

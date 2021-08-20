@@ -110,7 +110,7 @@ static bool acid_minus_ac(player_type *creature_ptr)
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(creature_ptr, o_name, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     object_flags(creature_ptr, o_ptr, flgs);
     if (o_ptr->ac + o_ptr->to_a <= 0) {
         msg_format(_("%sは既にボロボロだ！", "Your %s is already fully corroded!"), o_name);
@@ -556,7 +556,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
  * @param dam_func ダメージ処理を行う関数の参照ポインタ
  * @param message オーラダメージを受けた際のメッセージ
  */
-static void process_aura_damage(monster_type *m_ptr, player_type *touched_ptr, bool immune, int flags_offset, int r_flags_offset, u32b aura_flag,
+static void process_aura_damage(monster_type *m_ptr, player_type *touched_ptr, bool immune, int flags_offset, int r_flags_offset, uint32_t aura_flag,
     HIT_POINT (*dam_func)(player_type *creature_type, HIT_POINT dam, concptr kb_str, bool aura), concptr message)
 {
     monster_race *r_ptr = &r_info[m_ptr->r_idx];

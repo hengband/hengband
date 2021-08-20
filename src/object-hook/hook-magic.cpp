@@ -21,7 +21,7 @@ bool item_tester_hook_activate(player_type *player_ptr, object_type *o_ptr)
     /* Unused */
     (void)player_ptr;
 
-    BIT_FLAGS flags[TR_FLAG_SIZE];
+    TrFlags flags;
     if (!object_is_known(o_ptr))
         return false;
 
@@ -43,7 +43,7 @@ bool item_tester_hook_use(player_type *player_ptr, object_type *o_ptr)
     /* Unused */
     (void)player_ptr;
 
-    BIT_FLAGS flags[TR_FLAG_SIZE];
+    TrFlags flags;
     if (o_ptr->tval == player_ptr->tval_ammo)
         return true;
 
@@ -97,7 +97,7 @@ bool item_tester_hook_recharge(player_type *player_ptr, object_type *o_ptr)
  */
 bool item_tester_learn_spell(player_type *player_ptr, object_type *o_ptr)
 {
-    s32b choices = realm_choices2[player_ptr->pclass];
+    int32_t choices = realm_choices2[player_ptr->pclass];
     if (player_ptr->pclass == CLASS_PRIEST) {
         if (is_good_realm(player_ptr->realm1)) {
             choices &= ~(CH_DEATH | CH_DAEMON);

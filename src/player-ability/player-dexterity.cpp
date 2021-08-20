@@ -27,9 +27,9 @@ void PlayerDexterity::set_locals()
  * * 種族による器用さ修正値。
  * * エントは別途レベル26,41,46到達ごとに減算(-1)
  */
-s16b PlayerDexterity::race_value()
+int16_t PlayerDexterity::race_value()
 {
-    s16b result = PlayerBasicStatistics::race_value();
+    int16_t result = PlayerBasicStatistics::race_value();
 
     if (is_specific_player_race(this->owner_ptr, player_race_type::ENT)) {
         if (this->owner_ptr->lev > 25)
@@ -50,9 +50,9 @@ s16b PlayerDexterity::race_value()
  * * 一時効果による器用さ修正値
  * * 呪術の肉体強化で加算(+4)
  */
-s16b PlayerDexterity::time_effect_value()
+int16_t PlayerDexterity::time_effect_value()
 {
-    s16b result = 0;
+    int16_t result = 0;
 
     if (this->owner_ptr->realm1 == REALM_HEX) {
         if (hex_spelling(this->owner_ptr, HEX_BUILDING)) {
@@ -73,9 +73,9 @@ s16b PlayerDexterity::time_effect_value()
  * * 玄武の構えで減算(-2)
  * * 朱雀の構えで加算(+2)
  */
-s16b PlayerDexterity::battleform_value()
+int16_t PlayerDexterity::battleform_value()
 {
-    s16b result = 0;
+    int16_t result = 0;
 
     if (any_bits(this->owner_ptr->special_defense, KATA_KOUKIJIN)) {
         result += 5;
@@ -101,9 +101,9 @@ s16b PlayerDexterity::battleform_value()
  * * 変異MUT3_LIMBERで加算(+3)
  * * 変異MUT3_ARTHRITISで減算(-3)
  */
-s16b PlayerDexterity::mutation_value()
+int16_t PlayerDexterity::mutation_value()
 {
-    s16b result = 0;
+    int16_t result = 0;
 
     if (this->owner_ptr->muta.has(MUTA::IRON_SKIN)) {
         result -= 1;

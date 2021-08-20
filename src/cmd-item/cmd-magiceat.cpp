@@ -302,7 +302,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
                             col = TERM_RED;
                     } else {
                         strcat(dummy,
-                            format(" %-22.22s    %2d/%2d %3d%%", k_info[k_idx].name.c_str(), (s16b)(creature_ptr->magic_num1[ctr + ext] / EATER_CHARGE),
+                            format(" %-22.22s    %2d/%2d %3d%%", k_info[k_idx].name.c_str(), (int16_t)(creature_ptr->magic_num1[ctr + ext] / EATER_CHARGE),
                                 creature_ptr->magic_num2[ctr + ext], chance));
                         if (creature_ptr->magic_num1[ctr + ext] < EATER_CHARGE)
                             col = TERM_RED;

@@ -32,14 +32,14 @@ concptr keymap_act[KEYMAP_MODES][256];
 
 bool use_menu;
 
-s16b command_cmd; /* Current "Angband Command" */
+int16_t command_cmd; /* Current "Angband Command" */
 COMMAND_ARG command_arg; /*!< 各種コマンドの汎用的な引数として扱う / Gives argument of current command */
 COMMAND_NUM command_rep; /*!< 各種コマンドの汎用的なリピート数として扱う / Gives repetition of current command */
 DIRECTION command_dir; /*!< 各種コマンドの汎用的な方向値処理として扱う/ Gives direction of current command */
-s16b command_see; /* アイテム使用時等にリストを表示させるかどうか (ゲームオプションの他、様々なタイミングでONになったりOFFになったりする模様……) */
-s16b command_wrk; /* アイテムの使用許可状況 (ex. 装備品のみ、床上もOK等) */
+int16_t command_see; /* アイテム使用時等にリストを表示させるかどうか (ゲームオプションの他、様々なタイミングでONになったりOFFになったりする模様……) */
+int16_t command_wrk; /* アイテムの使用許可状況 (ex. 装備品のみ、床上もOK等) */
 TERM_LEN command_gap = 999; /* アイテムの表示に使う (詳細未調査) */
-s16b command_new; /* Command chaining from inven/equip view */
+int16_t command_new; /* Command chaining from inven/equip view */
 
 /*
  * Hack -- special buffer to hold the action of the current keymap
@@ -189,7 +189,7 @@ static char inkey_from_menu(player_type *player_ptr)
  */
 void request_command(player_type *player_ptr, int shopping)
 {
-    s16b cmd;
+    int16_t cmd;
     int mode;
 
     concptr act;

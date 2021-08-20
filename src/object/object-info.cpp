@@ -41,7 +41,7 @@
 static concptr item_activation_dragon_breath(player_type *owner_ptr, object_type *o_ptr)
 {
     static char desc[256];
-    BIT_FLAGS flgs[TR_FLAG_SIZE]; /* for resistance flags */
+    TrFlags flgs; /* for resistance flags */
     int n = 0;
 
     object_flags(owner_ptr, o_ptr, flgs);
@@ -169,7 +169,7 @@ static concptr item_activation_aux(player_type *owner_ptr, object_type *o_ptr)
  */
 concptr activation_explanation(player_type *owner_ptr, object_type *o_ptr)
 {
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     object_flags(owner_ptr, o_ptr, flgs);
     if (!(has_flag(flgs, TR_ACTIVATE)))
         return (_("なし", "nothing"));
@@ -204,7 +204,7 @@ char index_to_label(int i) { return (i < INVEN_MAIN_HAND) ? (I2A(i)) : (I2A(i - 
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return 対応する装備部位ID
  */
-s16b wield_slot(player_type *owner_ptr, object_type *o_ptr)
+int16_t wield_slot(player_type *owner_ptr, object_type *o_ptr)
 {
     switch (o_ptr->tval) {
     case TV_DIGGING:

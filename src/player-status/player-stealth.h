@@ -10,12 +10,12 @@ public:
 
 protected:
     void set_locals() override;
-    s16b race_value() override;
-    s16b class_value() override;
-    s16b class_base_value() override;
-    s16b personality_value() override;
-    s16b time_effect_value() override;
-    s16b mutation_value() override;
-    s16b set_exception_value(s16b value) override;
+    int16_t race_value() override;
+    int16_t class_value() override;
+    int16_t class_base_value() override;
+    int16_t personality_value() override;
+    int16_t time_effect_value() override;
+    int16_t mutation_value() override;
+    int16_t set_exception_value(int16_t value) override;
     bool is_aggravated_s_fairy();
 };

@@ -34,7 +34,7 @@ void rd_unique_info(void)
 
 errr load_town(void)
 {
-    u16b max_towns_load;
+    uint16_t max_towns_load;
     rd_u16b(&max_towns_load);
     if (max_towns_load <= max_towns)
         return 0;
@@ -43,7 +43,7 @@ errr load_town(void)
     return 23;
 }
 
-errr load_quest_info(u16b *max_quests_load, byte *max_rquests_load)
+errr load_quest_info(uint16_t *max_quests_load, byte *max_rquests_load)
 {
     rd_u16b(max_quests_load);
     if (h_older_than(1, 0, 7))
@@ -71,7 +71,7 @@ static bool check_quest_index(int loading_quest_index)
 static void load_quest_completion(quest_type *q_ptr)
 {
     rd_s16b(&q_ptr->status);
-    s16b tmp16s;
+    int16_t tmp16s;
     rd_s16b(&tmp16s);
     q_ptr->level = tmp16s;
 
@@ -91,7 +91,7 @@ static void load_quest_completion(quest_type *q_ptr)
 
 static void load_quest_details(player_type *creature_ptr, quest_type *q_ptr, int loading_quest_index)
 {
-    s16b tmp16s;
+    int16_t tmp16s;
     rd_s16b(&tmp16s);
     q_ptr->cur_num = (MONSTER_NUMBER)tmp16s;
     rd_s16b(&tmp16s);
@@ -111,7 +111,7 @@ static void load_quest_details(player_type *creature_ptr, quest_type *q_ptr, int
     q_ptr->flags = tmp8u;
 }
 
-void analyze_quests(player_type *creature_ptr, const u16b max_quests_load, const byte max_rquests_load)
+void analyze_quests(player_type *creature_ptr, const uint16_t max_quests_load, const byte max_rquests_load)
 {
     QUEST_IDX old_inside_quest = creature_ptr->current_floor_ptr->inside_quest;
     for (int i = 0; i < max_quests_load; i++) {

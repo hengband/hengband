@@ -224,7 +224,7 @@ void combine_pack(player_type *owner_ptr)
 void reorder_pack(player_type *owner_ptr)
 {
     int i, j, k;
-    s32b o_value;
+    int32_t o_value;
     object_type forge;
     object_type *q_ptr;
     object_type *o_ptr;
@@ -282,7 +282,7 @@ void reorder_pack(player_type *owner_ptr)
  * Note that this code must remove any location/stack information\n
  * from the object once it is placed into the inventory.\n
  */
-s16b store_item_to_inventory(player_type *owner_ptr, object_type *o_ptr)
+int16_t store_item_to_inventory(player_type *owner_ptr, object_type *o_ptr)
 {
     INVENTORY_IDX i, j, k;
     INVENTORY_IDX n = -1;
@@ -314,7 +314,7 @@ s16b store_item_to_inventory(player_type *owner_ptr, object_type *o_ptr)
 
     i = j;
     if (i < INVEN_PACK) {
-        s32b o_value = object_value(owner_ptr, o_ptr);
+        int32_t o_value = object_value(owner_ptr, o_ptr);
         for (j = 0; j < INVEN_PACK; j++) {
             if (object_sort_comp(owner_ptr, o_ptr, o_value, &owner_ptr->inventory_list[j]))
                 break;

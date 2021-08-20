@@ -5,7 +5,7 @@
 
 /* Room type information */
 typedef struct room_info_type {
-    s16b prob[ROOM_T_MAX]; /* Allocation information. */
+    int16_t prob[ROOM_T_MAX]; /* Allocation information. */
     byte min_level; /* Minimum level on which room can appear. */
 } room_info_type;
 

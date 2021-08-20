@@ -56,7 +56,7 @@ PRICE price_item(player_type *player_ptr, object_type *o_ptr, int greed, bool fl
         if (cur_store_num == STORE_BLACK)
             price = price * 2;
 
-        price = (s32b)(((u32b)price * (u32b)adjust + 50UL) / 100UL);
+        price = (int32_t)(((uint32_t)price * (uint32_t)adjust + 50UL) / 100UL);
     }
 
     if (price <= 0L)

@@ -37,7 +37,7 @@ void move_cursor_relative(int row, int col)
  */
 void print_path(player_type *player_ptr, POSITION y, POSITION x)
 {
-    u16b path_g[512];
+    uint16_t path_g[512];
     byte default_color = TERM_SLATE;
 
     if (!display_path || (project_length == -1))

@@ -64,7 +64,7 @@ void get_stats(player_type* creature_ptr)
     while (true) {
         int sum = 0;
         for (int i = 0; i < 2; i++) {
-            s32b tmp = randint0(60 * 60 * 60);
+            int32_t tmp = randint0(60 * 60 * 60);
             BASE_STATUS val;
 
             for (int j = 0; j < 3; j++) {
@@ -88,9 +88,9 @@ void get_stats(player_type* creature_ptr)
 /*!
  * @brief 経験値修正の合計値を計算
  */
-u16b get_expfact(player_type *creature_ptr)
+uint16_t get_expfact(player_type *creature_ptr)
 {
-    u16b expfact = rp_ptr->r_exp;
+    uint16_t expfact = rp_ptr->r_exp;
 
     if (creature_ptr->prace != player_race_type::ANDROID)
         expfact += cp_ptr->c_exp;

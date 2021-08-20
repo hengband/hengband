@@ -23,8 +23,8 @@ struct grid_template_type {
     BIT_FLAGS info;
     FEAT_IDX feat;
     FEAT_IDX mimic;
-    s16b special;
-    u16b occurrence;
+    int16_t special;
+    uint16_t occurrence;
 };
 
 enum grid_bold_type {

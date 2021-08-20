@@ -8,37 +8,37 @@
 
 void set_hp_old(player_type *creature_ptr)
 {
-    s16b tmp16s;
+    int16_t tmp16s;
     rd_s16b(&tmp16s);
     creature_ptr->mhp = tmp16s;
 
     rd_s16b(&tmp16s);
     creature_ptr->chp = tmp16s;
 
-    u16b tmp16u;
+    uint16_t tmp16u;
     rd_u16b(&tmp16u);
-    creature_ptr->chp_frac = (u32b)tmp16u;
+    creature_ptr->chp_frac = (uint32_t)tmp16u;
 }
 
 void set_mana_old(player_type *creature_ptr)
 {
-    s16b tmp16s;
+    int16_t tmp16s;
     rd_s16b(&tmp16s);
     creature_ptr->msp = tmp16s;
 
     rd_s16b(&tmp16s);
     creature_ptr->csp = tmp16s;
 
-    u16b tmp16u;
+    uint16_t tmp16u;
     rd_u16b(&tmp16u);
-    creature_ptr->csp_frac = (u32b)tmp16u;
+    creature_ptr->csp_frac = (uint32_t)tmp16u;
 }
 
 void set_exp_frac_old(player_type *creature_ptr)
 {
-    u16b tmp16u;
+    uint16_t tmp16u;
     rd_u16b(&tmp16u);
-    creature_ptr->exp_frac = (u32b)tmp16u;
+    creature_ptr->exp_frac = (uint32_t)tmp16u;
 }
 
 void remove_water_cave(player_type* creature_ptr)

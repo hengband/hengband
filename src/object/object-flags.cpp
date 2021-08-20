@@ -18,7 +18,7 @@
  * @param o_ptr フラグ取得元のオブジェクト構造体ポインタ
  * @param flgs フラグ情報を受け取る配列
  */
-void object_flags(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
+void object_flags(player_type *player_ptr, object_type *o_ptr, TrFlags &flgs)
 {
     object_kind *k_ptr = &k_info[o_ptr->k_idx];
 
@@ -97,7 +97,7 @@ void object_flags(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS flgs[TR
  * @param o_ptr フラグ取得元のオブジェクト構造体ポインタ
  * @param flgs フラグ情報を受け取る配列
  */
-void object_flags_known(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
+void object_flags_known(player_type *player_ptr, object_type *o_ptr, TrFlags &flgs)
 {
     bool spoil = false;
     object_kind *k_ptr = &k_info[o_ptr->k_idx];

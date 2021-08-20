@@ -515,7 +515,7 @@ void teleport_away_followable(player_type *tracer_ptr, MONSTER_IDX m_idx)
     if (tracer_ptr->muta.has(MUTA::VTELEPORT) || (tracer_ptr->pclass == CLASS_IMITATOR))
         follow = true;
     else {
-        BIT_FLAGS flgs[TR_FLAG_SIZE];
+        TrFlags flgs;
         object_type *o_ptr;
         INVENTORY_IDX i;
 
@@ -558,11 +558,11 @@ bool exe_dimension_door(player_type *caster_ptr, POSITION x, POSITION y)
 {
     PLAYER_LEVEL plev = caster_ptr->lev;
 
-    caster_ptr->energy_need += (s16b)((s32b)(60 - plev) * ENERGY_NEED() / 100L);
+    caster_ptr->energy_need += (int16_t)((int32_t)(60 - plev) * ENERGY_NEED() / 100L);
 
     if (!cave_player_teleportable_bold(caster_ptr, y, x, TELEPORT_SPONTANEOUS) || (distance(y, x, caster_ptr->y, caster_ptr->x) > plev / 2 + 10)
         || (!randint0(plev / 10 + 10))) {
-        caster_ptr->energy_need += (s16b)((s32b)(60 - plev) * ENERGY_NEED() / 100L);
+        caster_ptr->energy_need += (int16_t)((int32_t)(60 - plev) * ENERGY_NEED() / 100L);
         teleport_player(caster_ptr, (plev + 2) * 2, TELEPORT_PASSIVE);
         return false;
     }

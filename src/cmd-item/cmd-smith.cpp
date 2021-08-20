@@ -46,7 +46,7 @@
 typedef struct {
     int add; /* TR flag number or special essence id */
     concptr add_name; /* Name of this ability */
-    ESSENCE_IDX type; /* Menu number */
+    int32_t type; /* Menu number */
     int essence; /* Index for carrying essences */
     int value; /* Needed value to add this ability */
 } essence_type;
@@ -224,14 +224,14 @@ static void display_essence(player_type *creature_ptr)
  */
 static void drain_essence(player_type *creature_ptr)
 {
-    int drain_value[sizeof(creature_ptr->magic_num1) / sizeof(s32b)];
+    int drain_value[sizeof(creature_ptr->magic_num1) / sizeof(int32_t)];
     size_t i;
     OBJECT_IDX item;
     int dec = 4;
     bool observe = false;
     int old_ds, old_dd, old_to_h, old_to_d, old_ac, old_to_a, old_pval, old_name2;
     TIME_EFFECT old_timeout;
-    BIT_FLAGS old_flgs[TR_FLAG_SIZE], new_flgs[TR_FLAG_SIZE];
+    TrFlags old_flgs, new_flgs;
     object_type *o_ptr;
     concptr q, s;
     POSITION iy, ix;
@@ -540,7 +540,7 @@ static COMMAND_CODE choose_essence(void)
  * @brief エッセンスを実際に付加する
  * @param mode エッセンスの大別ID
  */
-static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
+static void add_essence(player_type *creature_ptr, int32_t mode)
 {
     OBJECT_IDX item;
     int max_num = 0;
@@ -991,7 +991,7 @@ static void erase_essence(player_type *creature_ptr)
     concptr q, s;
     object_type *o_ptr;
     GAME_TEXT o_name[MAX_NLEN];
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
 
     item_tester_hook = object_is_smith;
 

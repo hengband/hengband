@@ -28,7 +28,7 @@
  * The integer X falls along a uniform distribution.
  * For example, if M is 100, you get "percentile dice"
  */
-#define randint0(M) ((s32b)Rand_div(M))
+#define randint0(M) ((int32_t)Rand_div(M))
 
 /*
  * Generates a random long integer X where A<=X<=B
@@ -62,19 +62,19 @@
  */
 #define saving_throw(S) (randint0(100) < (S))
 
-extern u16b Rand_place;
-extern u32b Rand_state[RAND_DEG];
+extern uint16_t Rand_place;
+extern uint32_t Rand_state[RAND_DEG];
 
 void Rand_state_init(void);
-void Rand_state_set(u32b seed);
-void Rand_state_backup(u32b *backup_state);
-void Rand_state_restore(u32b *backup_state);
-s32b Rand_div(s32b m);
-s16b randnor(int mean, int stand);
-s16b damroll(DICE_NUMBER num, DICE_SID sides);
-s16b maxroll(DICE_NUMBER num, DICE_SID sides);
-s32b div_round(s32b n, s32b d);
-s32b Rand_external(s32b m);
+void Rand_state_set(uint32_t seed);
+void Rand_state_backup(uint32_t *backup_state);
+void Rand_state_restore(uint32_t *backup_state);
+int32_t Rand_div(int32_t m);
+int16_t randnor(int mean, int stand);
+int16_t damroll(DICE_NUMBER num, DICE_SID sides);
+int16_t maxroll(DICE_NUMBER num, DICE_SID sides);
+int32_t div_round(int32_t n, int32_t d);
+int32_t Rand_external(int32_t m);
 bool next_bool();
 
 #endif

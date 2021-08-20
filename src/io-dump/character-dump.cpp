@@ -139,7 +139,7 @@ static void dump_aux_last_message(player_type *creature_ptr, FILE *fff)
     if (!current_world_ptr->total_winner) {
         fprintf(fff, _("\n  [死ぬ直前のメッセージ]\n\n", "\n  [Last Messages]\n\n"));
         for (int i = MIN(message_num(), 30); i >= 0; i--) {
-            fprintf(fff, "> %s\n", message_str((s16b)i));
+            fprintf(fff, "> %s\n", message_str((int16_t)i));
         }
 
         fputc('\n', fff);
@@ -288,7 +288,7 @@ static void dump_aux_monsters(player_type *creature_ptr, FILE *fff)
 
     /* Allocate the "who" array */
     MONRACE_IDX *who;
-    u16b why = 2;
+    uint16_t why = 2;
     C_MAKE(who, max_r_idx, MONRACE_IDX);
 
     /* Count monster kills */
@@ -320,7 +320,7 @@ static void dump_aux_monsters(player_type *creature_ptr, FILE *fff)
     /* No monsters is defeated */
     if (norm_total < 1) {
         fprintf(fff, _("まだ敵を倒していません。\n", "You have defeated no enemies yet.\n"));
-        C_KILL(who, max_r_idx, s16b);
+        C_KILL(who, max_r_idx, int16_t);
         return;
     }
 
@@ -331,7 +331,7 @@ static void dump_aux_monsters(player_type *creature_ptr, FILE *fff)
 #else
         fprintf(fff, "You have defeated %ld %s.\n", norm_total, norm_total == 1 ? "enemy" : "enemies");
 #endif
-        C_KILL(who, max_r_idx, s16b);
+        C_KILL(who, max_r_idx, int16_t);
         return;
     }
 
@@ -359,7 +359,7 @@ static void dump_aux_monsters(player_type *creature_ptr, FILE *fff)
         fprintf(fff, _("  %-40s (レベル%3d)%s\n", "  %-40s (level %3d)%s\n"), r_ptr->name.c_str(), (int)r_ptr->level, buf);
     }
 
-    C_KILL(who, max_r_idx, s16b);
+    C_KILL(who, max_r_idx, int16_t);
 }
 
 /*!

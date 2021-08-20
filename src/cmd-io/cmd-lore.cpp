@@ -50,7 +50,7 @@ void do_cmd_query_symbol(player_type *creature_ptr)
 
     bool recall = false;
 
-    u16b why = 0;
+    uint16_t why = 0;
     MONRACE_IDX *who;
 
     if (!get_com(_("知りたい文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^R乗馬,^M名前): ",

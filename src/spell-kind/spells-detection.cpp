@@ -571,7 +571,7 @@ bool detect_monsters_string(player_type *caster_ptr, POSITION range, concptr Mat
  * @param match_flag 感知フラグ
  * @return 効力があった場合TRUEを返す
  */
-bool detect_monsters_xxx(player_type *caster_ptr, POSITION range, u32b match_flag)
+bool detect_monsters_xxx(player_type *caster_ptr, POSITION range, uint32_t match_flag)
 {
     if (d_info[caster_ptr->dungeon_idx].flags.has(DF::DARKNESS))
         range /= 3;
