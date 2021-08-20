@@ -62,6 +62,7 @@ public:
     void exe_throw();
     void display_figurine_throw();
     void display_potion_throw();
+    void check_boomerang_throw();
 
 private:
     player_type *creature_ptr;
@@ -74,4 +75,6 @@ private:
     void attack_racial_power();
     void display_attack_racial_power();
     void calc_racial_power_damage();
+    void process_boomerang_throw();
+    void display_boomerang_throw();
 };

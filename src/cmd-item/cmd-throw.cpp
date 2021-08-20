@@ -70,71 +70,7 @@ ThrowCommand::ThrowCommand(player_type* creature_ptr)
 {
 }
 
-static void display_boomerang_throw(player_type *creature_ptr, it_type *it_ptr)
-{
-    if ((it_ptr->back_chance > 37) && !creature_ptr->blind && (it_ptr->item >= 0)) {
-        msg_format(_("%sが手元に返ってきた。", "%s comes back to you."), it_ptr->o2_name);
-        it_ptr->come_back = true;
-        return;
-    }
-
-    if (it_ptr->item >= 0)
-        msg_format(_("%sを受け損ねた！", "%s comes back, but you can't catch!"), it_ptr->o2_name);
-    else
-        msg_format(_("%sが返ってきた。", "%s comes back."), it_ptr->o2_name);
-
-    it_ptr->y = creature_ptr->y;
-    it_ptr->x = creature_ptr->x;
-}
-
-static void process_boomerang_throw(player_type *creature_ptr, it_type *it_ptr)
-{
-    if ((it_ptr->back_chance <= 30) || (one_in_(100) && !it_ptr->super_boomerang)) {
-        msg_format(_("%sが返ってこなかった！", "%s doesn't come back!"), it_ptr->o2_name);
-        return;
-    }
-
-    for (int i = it_ptr->cur_dis - 1; i > 0; i--) {
-        if (!panel_contains(it_ptr->ny[i], it_ptr->nx[i]) || !player_can_see_bold(creature_ptr, it_ptr->ny[i], it_ptr->nx[i])) {
-            term_xtra(TERM_XTRA_DELAY, it_ptr->msec);
-            continue;
-        }
-
-        SYMBOL_CODE c = object_char(it_ptr->q_ptr);
-        byte a = object_attr(it_ptr->q_ptr);
-
-        if (it_ptr->msec > 0) {
-            print_rel(creature_ptr, c, a, it_ptr->ny[i], it_ptr->nx[i]);
-            move_cursor_relative(it_ptr->ny[i], it_ptr->nx[i]);
-            term_fresh();
-            term_xtra(TERM_XTRA_DELAY, it_ptr->msec);
-            lite_spot(creature_ptr, it_ptr->ny[i], it_ptr->nx[i]);
-            term_fresh();
-        }
-    }
-
-    display_boomerang_throw(creature_ptr, it_ptr);
-}
-
-static void check_boomerang_throw(player_type *creature_ptr, it_type *it_ptr)
-{
-    if (!it_ptr->return_when_thrown)
-        return;
-
-    it_ptr->back_chance = randint1(30) + 20 + ((int)(adj_dex_th[creature_ptr->stat_index[A_DEX]]) - 128);
-    it_ptr->super_boomerang = (((it_ptr->q_ptr->name1 == ART_MJOLLNIR) || (it_ptr->q_ptr->name1 == ART_AEGISFANG)) && it_ptr->boomerang);
-    it_ptr->corruption_possibility = -1;
-    if (it_ptr->boomerang)
-        it_ptr->back_chance += 4 + randint1(5);
-
-    if (it_ptr->super_boomerang)
-        it_ptr->back_chance += 100;
-
-    describe_flavor(creature_ptr, it_ptr->o2_name, it_ptr->q_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
-    process_boomerang_throw(creature_ptr, it_ptr);
-}
-
-static void process_boomerang_back(player_type *creature_ptr, it_type *it_ptr)
+void process_boomerang_back(player_type *creature_ptr, it_type *it_ptr)
 {
     if (it_ptr->come_back) {
         if ((it_ptr->item != INVEN_MAIN_HAND) && (it_ptr->item != INVEN_SUB_HAND)) {
@@ -221,7 +157,7 @@ bool ThrowCommand::do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
     it_ptr->corruption_possibility = (it_ptr->hit_body ? breakage_chance(this->creature_ptr, it_ptr->q_ptr, this->creature_ptr->pclass == CLASS_ARCHER, 0) : 0);
     it_ptr->display_figurine_throw();
     it_ptr->display_potion_throw();
-    check_boomerang_throw(this->creature_ptr, it_ptr);
+    it_ptr->check_boomerang_throw();
     process_boomerang_back(this->creature_ptr, it_ptr);
     drop_thrown_item(this->creature_ptr, it_ptr);
     return true;

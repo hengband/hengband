@@ -30,6 +30,7 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster/monster-damage.h"
+#include "player/player-status-table.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"
@@ -247,6 +248,24 @@ void it_type::display_potion_throw()
     this->do_drop = false;
 }
 
+void it_type::check_boomerang_throw()
+{
+    if (!this->return_when_thrown)
+        return;
+
+    this->back_chance = randint1(30) + 20 + ((int)(adj_dex_th[this->creature_ptr->stat_index[A_DEX]]) - 128);
+    this->super_boomerang = (((this->q_ptr->name1 == ART_MJOLLNIR) || (this->q_ptr->name1 == ART_AEGISFANG)) && this->boomerang);
+    this->corruption_possibility = -1;
+    if (this->boomerang)
+        this->back_chance += 4 + randint1(5);
+
+    if (this->super_boomerang)
+        this->back_chance += 100;
+
+    describe_flavor(this->creature_ptr, this->o2_name, this->q_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
+    this->process_boomerang_throw();
+}
+
 bool it_type::check_what_throw()
 {
     if (this->shuriken >= 0) {
@@ -414,4 +433,50 @@ void it_type::calc_racial_power_damage()
         this->tdam = 0;
 
     this->tdam = mon_damage_mod(this->creature_ptr, this->m_ptr, this->tdam, false);
+}
+
+void it_type::process_boomerang_throw()
+{
+    if ((this->back_chance <= 30) || (one_in_(100) && !this->super_boomerang)) {
+        msg_format(_("%sが返ってこなかった！", "%s doesn't come back!"), this->o2_name);
+        return;
+    }
+
+    for (int i = this->cur_dis - 1; i > 0; i--) {
+        if (!panel_contains(this->ny[i], this->nx[i]) || !player_can_see_bold(this->creature_ptr, this->ny[i], this->nx[i])) {
+            term_xtra(TERM_XTRA_DELAY, this->msec);
+            continue;
+        }
+
+        SYMBOL_CODE c = object_char(this->q_ptr);
+        byte a = object_attr(this->q_ptr);
+
+        if (this->msec > 0) {
+            print_rel(this->creature_ptr, c, a, this->ny[i], this->nx[i]);
+            move_cursor_relative(this->ny[i], this->nx[i]);
+            term_fresh();
+            term_xtra(TERM_XTRA_DELAY, this->msec);
+            lite_spot(this->creature_ptr, this->ny[i], this->nx[i]);
+            term_fresh();
+        }
+    }
+
+    this->display_boomerang_throw();
+}
+
+void it_type::display_boomerang_throw()
+{
+    if ((this->back_chance > 37) && !this->creature_ptr->blind && (this->item >= 0)) {
+        msg_format(_("%sが手元に返ってきた。", "%s comes back to you."), this->o2_name);
+        this->come_back = true;
+        return;
+    }
+
+    if (this->item >= 0)
+        msg_format(_("%sを受け損ねた！", "%s comes back, but you can't catch!"), this->o2_name);
+    else
+        msg_format(_("%sが返ってきた。", "%s comes back."), this->o2_name);
+
+    this->y = this->creature_ptr->y;
+    this->x = this->creature_ptr->x;
 }
