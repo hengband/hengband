@@ -7,16 +7,15 @@
 #include "system/angband.h"
 #include "system/system-variables.h"
 
-// Item Throw.
 struct grid_type;
 struct monster_type;
 struct object_type;
 struct player_type;
-struct it_type {
+class ObjectThrowEntity {
 public:
-    it_type() = default;
-    it_type(player_type *creature_ptr, object_type *q_ptr, const int delay_factor_val, const int mult, const bool boomerang, const OBJECT_IDX shuriken);
-    virtual ~it_type() = default;
+    ObjectThrowEntity() = default;
+    ObjectThrowEntity(player_type *creature_ptr, object_type *q_ptr, const int delay_factor_val, const int mult, const bool boomerang, const OBJECT_IDX shuriken);
+    virtual ~ObjectThrowEntity() = default;
     object_type *q_ptr;
     int mult;
     int msec;

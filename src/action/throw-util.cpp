@@ -66,7 +66,7 @@
 #include "view/object-describer.h"
 #include "wizard/wizard-messages.h"
 
-it_type::it_type(player_type *creature_ptr, object_type *q_ptr, const int delay_factor_val, const int mult, const bool boomerang, const OBJECT_IDX shuriken)
+ObjectThrowEntity::ObjectThrowEntity(player_type *creature_ptr, object_type *q_ptr, const int delay_factor_val, const int mult, const bool boomerang, const OBJECT_IDX shuriken)
     : q_ptr(q_ptr)
     , mult(mult)
     , msec(delay_factor_val * delay_factor_val * delay_factor_val)
@@ -76,7 +76,7 @@ it_type::it_type(player_type *creature_ptr, object_type *q_ptr, const int delay_
 {
 }
 
-bool it_type::check_can_throw()
+bool ObjectThrowEntity::check_can_throw()
 {
     if (!this->check_what_throw())
         return false;
@@ -95,7 +95,7 @@ bool it_type::check_can_throw()
     return true;
 }
 
-void it_type::calc_throw_range()
+void ObjectThrowEntity::calc_throw_range()
 {
     this->q_ptr->copy_from(this->o_ptr);
     object_flags(this->creature_ptr, this->q_ptr, this->obj_flags);
@@ -116,7 +116,7 @@ void it_type::calc_throw_range()
         this->tdis = mul;
 }
 
-bool it_type::calc_throw_grid()
+bool ObjectThrowEntity::calc_throw_grid()
 {
     if (this->shuriken >= 0) {
         this->ty = randint0(101) - 50 + this->creature_ptr->y;
@@ -140,7 +140,7 @@ bool it_type::calc_throw_grid()
     return true;
 }
 
-void it_type::reflect_inventory_by_throw()
+void ObjectThrowEntity::reflect_inventory_by_throw()
 {
     if ((this->q_ptr->name1 == ART_MJOLLNIR) || (this->q_ptr->name1 == ART_AEGISFANG) || this->boomerang)
         this->return_when_thrown = true;
@@ -158,7 +158,7 @@ void it_type::reflect_inventory_by_throw()
     inven_item_optimize(this->creature_ptr, this->item);
 }
 
-void it_type::set_class_specific_throw_params()
+void ObjectThrowEntity::set_class_specific_throw_params()
 {
     PlayerEnergy energy(this->creature_ptr);
     energy.set_player_turn_energy(100);
@@ -173,7 +173,7 @@ void it_type::set_class_specific_throw_params()
         && ((this->q_ptr->tval == TV_SPIKE) || ((has_flag(this->obj_flags, TR_THROW)) && (this->q_ptr->tval == TV_SWORD)));
 }
 
-void it_type::set_racial_chance()
+void ObjectThrowEntity::set_racial_chance()
 {
     if (has_flag(this->obj_flags, TR_THROW))
         this->chance = ((this->creature_ptr->skill_tht) + ((this->creature_ptr->to_h_b + this->q_ptr->to_h) * BTH_PLUS_ADJ));
@@ -184,7 +184,7 @@ void it_type::set_racial_chance()
         this->chance *= 2;
 }
 
-void it_type::exe_throw()
+void ObjectThrowEntity::exe_throw()
 {
     this->cur_dis = 0;
     while (this->cur_dis <= this->tdis) {
@@ -208,7 +208,7 @@ void it_type::exe_throw()
     }
 }
 
-void it_type::display_figurine_throw()
+void ObjectThrowEntity::display_figurine_throw()
 {
     if ((this->q_ptr->tval != TV_FIGURINE) || this->creature_ptr->current_floor_ptr->inside_arena)
         return;
@@ -223,7 +223,7 @@ void it_type::display_figurine_throw()
         msg_print(_("これはあまり良くない気がする。", "You have a bad feeling about this."));
 }
 
-void it_type::display_potion_throw()
+void ObjectThrowEntity::display_potion_throw()
 {
     if (!object_is_potion(this->q_ptr))
         return;
@@ -253,7 +253,7 @@ void it_type::display_potion_throw()
     this->do_drop = false;
 }
 
-void it_type::check_boomerang_throw()
+void ObjectThrowEntity::check_boomerang_throw()
 {
     if (!this->return_when_thrown)
         return;
@@ -271,7 +271,7 @@ void it_type::check_boomerang_throw()
     this->process_boomerang_throw();
 }
 
-void it_type::process_boomerang_back()
+void ObjectThrowEntity::process_boomerang_back()
 {
     if (this->come_back) {
         if ((this->item != INVEN_MAIN_HAND) && (this->item != INVEN_SUB_HAND)) {
@@ -295,7 +295,7 @@ void it_type::process_boomerang_back()
     }
 }
 
-void it_type::drop_thrown_item()
+void ObjectThrowEntity::drop_thrown_item()
 {
     if (!this->do_drop)
         return;
@@ -306,7 +306,7 @@ void it_type::drop_thrown_item()
         (void)drop_near(this->creature_ptr, this->q_ptr, this->corruption_possibility, this->prev_y, this->prev_x);
 }
 
-bool it_type::check_what_throw()
+bool ObjectThrowEntity::check_what_throw()
 {
     if (this->shuriken >= 0) {
         this->item = this->shuriken;
@@ -329,7 +329,7 @@ bool it_type::check_what_throw()
     return true;
 }
 
-bool it_type::check_throw_boomerang(concptr *q, concptr *s)
+bool ObjectThrowEntity::check_throw_boomerang(concptr *q, concptr *s)
 {
     if (!this->boomerang)
         return true;
@@ -358,7 +358,7 @@ bool it_type::check_throw_boomerang(concptr *q, concptr *s)
     return true;
 }
 
-bool it_type::check_racial_target_bold()
+bool ObjectThrowEntity::check_racial_target_bold()
 {
     this->ny[this->cur_dis] = this->y;
     this->nx[this->cur_dis] = this->x;
@@ -371,7 +371,7 @@ bool it_type::check_racial_target_bold()
         || (this->creature_ptr->current_floor_ptr->grid_array[this->ny[this->cur_dis]][this->nx[this->cur_dis]].m_idx == 0);
 }
 
-void it_type::check_racial_target_seen()
+void ObjectThrowEntity::check_racial_target_seen()
 {
     if (!panel_contains(this->ny[this->cur_dis], this->nx[this->cur_dis])
         || !player_can_see_bold(this->creature_ptr, this->ny[this->cur_dis], this->nx[this->cur_dis])) {
@@ -391,7 +391,7 @@ void it_type::check_racial_target_seen()
     }
 }
 
-bool it_type::check_racial_target_monster()
+bool ObjectThrowEntity::check_racial_target_monster()
 {
     this->prev_y = this->y;
     this->prev_x = this->x;
@@ -401,7 +401,7 @@ bool it_type::check_racial_target_monster()
     return this->creature_ptr->current_floor_ptr->grid_array[this->y][this->x].m_idx == 0;
 }
 
-void it_type::attack_racial_power()
+void ObjectThrowEntity::attack_racial_power()
 {
     if (!test_hit_fire(this->creature_ptr, this->chance - this->cur_dis, this->m_ptr, this->m_ptr->ml, this->o_name))
         return;
@@ -426,7 +426,7 @@ void it_type::attack_racial_power()
     }
 }
 
-void it_type::display_attack_racial_power()
+void ObjectThrowEntity::display_attack_racial_power()
 {
     if (!this->visible) {
         msg_format(_("%sが敵を捕捉した。", "The %s finds a mark."), this->o_name);
@@ -443,7 +443,7 @@ void it_type::display_attack_racial_power()
     health_track(this->creature_ptr, this->g_ptr->m_idx);
 }
 
-void it_type::calc_racial_power_damage()
+void ObjectThrowEntity::calc_racial_power_damage()
 {
     int dd = this->q_ptr->dd;
     int ds = this->q_ptr->ds;
@@ -475,7 +475,7 @@ void it_type::calc_racial_power_damage()
     this->tdam = mon_damage_mod(this->creature_ptr, this->m_ptr, this->tdam, false);
 }
 
-void it_type::process_boomerang_throw()
+void ObjectThrowEntity::process_boomerang_throw()
 {
     if ((this->back_chance <= 30) || (one_in_(100) && !this->super_boomerang)) {
         msg_format(_("%sが返ってこなかった！", "%s doesn't come back!"), this->o2_name);
@@ -504,7 +504,7 @@ void it_type::process_boomerang_throw()
     this->display_boomerang_throw();
 }
 
-void it_type::display_boomerang_throw()
+void ObjectThrowEntity::display_boomerang_throw()
 {
     if ((this->back_chance > 37) && !this->creature_ptr->blind && (this->item >= 0)) {
         msg_format(_("%sが手元に返ってきた。", "%s comes back to you."), this->o2_name);

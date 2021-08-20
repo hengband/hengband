@@ -96,34 +96,33 @@ bool ThrowCommand::do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
         set_action(this->creature_ptr, ACTION_NONE);
 
     object_type tmp_object;
-    it_type tmp_it(this->creature_ptr, &tmp_object, delay_factor, mult, boomerang, shuriken);
-    it_type *it_ptr = &tmp_it;
-    if (!it_ptr->check_can_throw())
+    ObjectThrowEntity ote(this->creature_ptr, &tmp_object, delay_factor, mult, boomerang, shuriken);
+    if (!ote.check_can_throw())
         return false;
 
-    it_ptr->calc_throw_range();
-    if (!it_ptr->calc_throw_grid())
+    ote.calc_throw_range();
+    if (!ote.calc_throw_grid())
         return false;
 
-    it_ptr->reflect_inventory_by_throw();
-    if (it_ptr->item >= INVEN_MAIN_HAND) {
-        it_ptr->equiped_item = true;
+    ote.reflect_inventory_by_throw();
+    if (ote.item >= INVEN_MAIN_HAND) {
+        ote.equiped_item = true;
         this->creature_ptr->redraw |= PR_EQUIPPY;
     }
 
-    it_ptr->set_class_specific_throw_params();
-    it_ptr->set_racial_chance();
-    it_ptr->prev_y = it_ptr->y;
-    it_ptr->prev_x = it_ptr->x;
-    it_ptr->exe_throw();
-    if (it_ptr->hit_body)
-        torch_lost_fuel(it_ptr->q_ptr);
+    ote.set_class_specific_throw_params();
+    ote.set_racial_chance();
+    ote.prev_y = ote.y;
+    ote.prev_x = ote.x;
+    ote.exe_throw();
+    if (ote.hit_body)
+        torch_lost_fuel(ote.q_ptr);
 
-    it_ptr->corruption_possibility = (it_ptr->hit_body ? breakage_chance(this->creature_ptr, it_ptr->q_ptr, this->creature_ptr->pclass == CLASS_ARCHER, 0) : 0);
-    it_ptr->display_figurine_throw();
-    it_ptr->display_potion_throw();
-    it_ptr->check_boomerang_throw();
-    it_ptr->process_boomerang_back();
-    it_ptr->drop_thrown_item();
+    ote.corruption_possibility = (ote.hit_body ? breakage_chance(this->creature_ptr, ote.q_ptr, this->creature_ptr->pclass == CLASS_ARCHER, 0) : 0);
+    ote.display_figurine_throw();
+    ote.display_potion_throw();
+    ote.check_boomerang_throw();
+    ote.process_boomerang_back();
+    ote.drop_thrown_item();
     return true;
 }
