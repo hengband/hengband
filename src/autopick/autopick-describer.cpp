@@ -322,7 +322,7 @@ void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *
     if (IS_FLG(FLG_MORE_DICE)) {
         describer->body_str = "weapons";
         whose_str[whose_n] = "maximum damage from dice is bigger than ";
-        if (arg_n < (int)(sizeof(arg_str) / sizeof(arg_str[0]))) {
+        if (arg_n < static_cast<int>(sizeof(arg_str) / sizeof(arg_str[0]))) {
             snprintf(arg_str[arg_n], sizeof(arg_str[arg_n]), "%d", entry->dice);
             whose_arg_str[whose_n] = arg_str[arg_n];
             ++arg_n;
@@ -334,7 +334,7 @@ void describe_autopick_en(char *buff, autopick_type *entry, autopick_describer *
 
     if (IS_FLG(FLG_MORE_BONUS)) {
         whose_str[whose_n] = "magical bonuses are bigger than (+";
-        if (arg_n < (int)(sizeof(arg_str) / sizeof(arg_str[0]))) {
+        if (arg_n < static_cast<int>(sizeof(arg_str) / sizeof(arg_str[0]))) {
             snprintf(arg_str[arg_n], sizeof(arg_str[arg_n]), "%d)", entry->bonus);
             whose_arg_str[whose_n] = arg_str[arg_n];
             ++arg_n;

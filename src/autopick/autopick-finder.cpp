@@ -366,13 +366,13 @@ void search_for_string(text_body_type *tb, concptr search_str, bool forward)
         if ((tb->states[i] & LSTAT_BYPASS) && !(tb->states[i] & LSTAT_EXPRESSION)) {
             if (bypassed_cy == -1) {
                 bypassed_cy = i;
-                bypassed_cx = (int)(pos - tb->lines_list[i]);
+                bypassed_cx = static_cast<int>(pos - tb->lines_list[i]);
             }
 
             continue;
         }
 
-        tb->cx = (int)(pos - tb->lines_list[i]);
+        tb->cx = static_cast<int>(pos - tb->lines_list[i]);
         tb->cy = i;
 
         if (bypassed_cy != -1) {

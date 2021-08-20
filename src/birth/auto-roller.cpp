@@ -357,11 +357,11 @@ bool get_chara_limits(player_type *creature_ptr, chara_limit_type *chara_limit_p
 
     int max_percent, min_percent;
     if (creature_ptr->psex == SEX_MALE) {
-        max_percent = (int)(rp_ptr->m_b_ht + rp_ptr->m_m_ht * 4 - 1) * 100 / (int)(rp_ptr->m_b_ht);
-        min_percent = (int)(rp_ptr->m_b_ht - rp_ptr->m_m_ht * 4 + 1) * 100 / (int)(rp_ptr->m_b_ht);
+        max_percent = static_cast<int>(rp_ptr->m_b_ht + rp_ptr->m_m_ht * 4 - 1) * 100 / static_cast<int>(rp_ptr->m_b_ht);
+        min_percent = static_cast<int>(rp_ptr->m_b_ht - rp_ptr->m_m_ht * 4 + 1) * 100 / static_cast<int>(rp_ptr->m_b_ht);
     } else {
-        max_percent = (int)(rp_ptr->f_b_ht + rp_ptr->f_m_ht * 4 - 1) * 100 / (int)(rp_ptr->f_b_ht);
-        min_percent = (int)(rp_ptr->f_b_ht - rp_ptr->f_m_ht * 4 + 1) * 100 / (int)(rp_ptr->f_b_ht);
+        max_percent = static_cast<int>(rp_ptr->f_b_ht + rp_ptr->f_m_ht * 4 - 1) * 100 / static_cast<int>(rp_ptr->f_b_ht);
+        min_percent = static_cast<int>(rp_ptr->f_b_ht - rp_ptr->f_m_ht * 4 + 1) * 100 / static_cast<int>(rp_ptr->f_b_ht);
     }
 
     put_str(_("体格/地位の最小値/最大値を設定して下さい。", "Set minimum/maximum attribute."), 10, 10);
