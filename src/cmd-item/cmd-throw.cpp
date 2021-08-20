@@ -70,17 +70,6 @@ ThrowCommand::ThrowCommand(player_type* creature_ptr)
 {
 }
 
-static void drop_thrown_item(player_type *creature_ptr, it_type *it_ptr)
-{
-    if (!it_ptr->do_drop)
-        return;
-
-    if (cave_has_flag_bold(creature_ptr->current_floor_ptr, it_ptr->y, it_ptr->x, FF_PROJECT))
-        (void)drop_near(creature_ptr, it_ptr->q_ptr, it_ptr->corruption_possibility, it_ptr->y, it_ptr->x);
-    else
-        (void)drop_near(creature_ptr, it_ptr->q_ptr, it_ptr->corruption_possibility, it_ptr->prev_y, it_ptr->prev_x);
-}
-
 /*!
  * @brief 投射処理メインルーチン /
  * Throw an object from the pack or floor.
@@ -135,6 +124,6 @@ bool ThrowCommand::do_cmd_throw(int mult, bool boomerang, OBJECT_IDX shuriken)
     it_ptr->display_potion_throw();
     it_ptr->check_boomerang_throw();
     it_ptr->process_boomerang_back();
-    drop_thrown_item(this->creature_ptr, it_ptr);
+    it_ptr->drop_thrown_item();
     return true;
 }

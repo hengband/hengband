@@ -295,6 +295,17 @@ void it_type::process_boomerang_back()
     }
 }
 
+void it_type::drop_thrown_item()
+{
+    if (!this->do_drop)
+        return;
+
+    if (cave_has_flag_bold(this->creature_ptr->current_floor_ptr, this->y, this->x, FF_PROJECT))
+        (void)drop_near(this->creature_ptr, this->q_ptr, this->corruption_possibility, this->y, this->x);
+    else
+        (void)drop_near(this->creature_ptr, this->q_ptr, this->corruption_possibility, this->prev_y, this->prev_x);
+}
+
 bool it_type::check_what_throw()
 {
     if (this->shuriken >= 0) {

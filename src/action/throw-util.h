@@ -64,6 +64,7 @@ public:
     void display_potion_throw();
     void check_boomerang_throw();
     void process_boomerang_back();
+    void drop_thrown_item();
 
 private:
     player_type *creature_ptr;
