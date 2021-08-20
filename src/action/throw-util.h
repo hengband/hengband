@@ -38,7 +38,7 @@ typedef struct it_type {
     bool return_when_thrown;
     GAME_TEXT o_name[MAX_NLEN];
     int msec;
-    BIT_FLAGS obj_flags[TR_FLAG_SIZE];
+    TrFlags obj_flags;
     bool come_back;
     bool do_drop;
     grid_type *g_ptr;

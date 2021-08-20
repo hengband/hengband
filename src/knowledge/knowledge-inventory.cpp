@@ -42,7 +42,7 @@ static concptr inven_res_label = _(
  * @param flags 耐性配列へのポインタ
  * @param fff 一時ファイルへのポインタ
  */
-static void print_im_or_res_flag(int immunity, int resistance, BIT_FLAGS *flags, FILE *fff)
+static void print_im_or_res_flag(int immunity, int resistance, const TrFlags &flags, FILE *fff)
 {
     fputs(has_flag(flags, immunity) ? IM_FLAG_STR : (has_flag(flags, resistance) ? HAS_FLAG_STR : NO_FLAG_STR), fff);
 }
@@ -53,7 +53,10 @@ static void print_im_or_res_flag(int immunity, int resistance, BIT_FLAGS *flags,
  * @param flags 耐性配列へのポインタ
  * @param fff 一時ファイルへのポインタ
  */
-static void print_flag(int tr, BIT_FLAGS *flags, FILE *fff) { fputs(has_flag(flags, tr) ? HAS_FLAG_STR : NO_FLAG_STR, fff); }
+static void print_flag(int tr, const TrFlags &flags, FILE *fff)
+{
+    fputs(has_flag(flags, tr) ? HAS_FLAG_STR : NO_FLAG_STR, fff);
+}
 
 /*!
  * @brief 特殊なアイテムかどうかを調べる
@@ -99,7 +102,7 @@ static bool check_item_knowledge(object_type *o_ptr, tval_type tval)
  */
 static void display_identified_resistances_flag(player_type *creature_ptr, object_type *o_ptr, FILE *fff)
 {
-    BIT_FLAGS flags[TR_FLAG_SIZE];
+    TrFlags flags;
     object_flags_known(creature_ptr, o_ptr, flags);
 
     print_im_or_res_flag(TR_IM_ACID, TR_RES_ACID, flags, fff);

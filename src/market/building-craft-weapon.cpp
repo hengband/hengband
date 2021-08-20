@@ -118,7 +118,7 @@ static void show_weapon_dmg(int r, int c, int mindice, int maxdice, int blows, i
  */
 static void compare_weapon_aux(player_type *owner_ptr, object_type *o_ptr, int col, int r)
 {
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     int blow = owner_ptr->num_blow[0];
     bool force = false;
     bool dokubari = false;

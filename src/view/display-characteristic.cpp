@@ -27,14 +27,14 @@
 #include <unordered_map>
 
 struct all_player_flags {
-    BIT_FLAGS player_flags[TR_FLAG_SIZE]{};
-    BIT_FLAGS tim_player_flags[TR_FLAG_SIZE]{};
-    BIT_FLAGS player_imm[TR_FLAG_SIZE]{};
-    BIT_FLAGS tim_player_imm[TR_FLAG_SIZE]{};
-    BIT_FLAGS player_vuln[TR_FLAG_SIZE]{};
-    BIT_FLAGS known_obj_imm[TR_FLAG_SIZE]{};
-    BIT_FLAGS riding_flags[TR_FLAG_SIZE]{};
-    BIT_FLAGS riding_negative_flags[TR_FLAG_SIZE]{};
+    TrFlags player_flags{};
+    TrFlags tim_player_flags{};
+    TrFlags player_imm{};
+    TrFlags tim_player_imm{};
+    TrFlags player_vuln{};
+    TrFlags known_obj_imm{};
+    TrFlags riding_flags{};
+    TrFlags riding_negative_flags{};
 };
 
 /*!
@@ -106,7 +106,7 @@ static void process_cursed_equipment_characteristics(player_type *creature_ptr, 
 {
     int max_i = (mode & DP_WP) ? INVEN_BOW + 1 : INVEN_TOTAL;
     for (int i = INVEN_MAIN_HAND; i < max_i; i++) {
-        BIT_FLAGS flags[TR_FLAG_SIZE];
+        TrFlags flags;
         auto *o_ptr = &creature_ptr->inventory_list[i];
         auto is_known = object_is_known(o_ptr);
         auto is_sensed = is_known || o_ptr->ident & IDENT_SENSE;
@@ -156,7 +156,7 @@ static void process_light_equipment_characteristics(player_type *creature_ptr, a
 {
     int max_i = (mode & DP_WP) ? INVEN_BOW + 1 : INVEN_TOTAL;
     for (int i = INVEN_MAIN_HAND; i < max_i; i++) {
-        BIT_FLAGS flags[TR_FLAG_SIZE];
+        TrFlags flags;
         auto *o_ptr = &creature_ptr->inventory_list[i];
         object_flags_known(creature_ptr, o_ptr, flags);
 
@@ -206,7 +206,7 @@ static void process_inventory_characteristic(player_type *creature_ptr, tr_type 
 {
     int max_i = (mode & DP_WP) ? INVEN_BOW + 1 : INVEN_TOTAL;
     for (int i = INVEN_MAIN_HAND; i < max_i; i++) {
-        BIT_FLAGS flags[TR_FLAG_SIZE];
+        TrFlags flags;
         auto *o_ptr = &creature_ptr->inventory_list[i];
         object_flags_known(creature_ptr, o_ptr, flags);
 

@@ -33,7 +33,7 @@ typedef struct object_kind {
 
     PRICE cost{}; /*!< ベースアイテムの基本価値 / Object "base cost" */
 
-    BIT_FLAGS flags[TR_FLAG_SIZE]{}; /*!< ベースアイテムの基本特性ビット配列 / Flags */
+    TrFlags flags{}; /*!< ベースアイテムの基本特性ビット配列 / Flags */
 
     EnumClassFlagGroup<TRG> gen_flags; /*!< ベースアイテムの生成特性ビット配列 / flags for generate */
 

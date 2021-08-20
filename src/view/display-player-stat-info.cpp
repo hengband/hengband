@@ -168,7 +168,7 @@ static void process_stats(player_type *creature_ptr, int row, int stat_col)
  * @param stat 能力値番号
  * @param flags 装備品に立っているフラグ
  */
-static void compensate_stat_by_weapon(char *c, TERM_COLOR *a, object_type *o_ptr, int stat, BIT_FLAGS *flags)
+static void compensate_stat_by_weapon(char *c, TERM_COLOR *a, object_type *o_ptr, int stat, const TrFlags &flags)
 {
     *c = '*';
 
@@ -196,7 +196,7 @@ static void compensate_stat_by_weapon(char *c, TERM_COLOR *a, object_type *o_ptr
  * @param row 行数
  * @param col 列数
  */
-static void display_equipments_compensation(player_type *creature_ptr, BIT_FLAGS *flags, int row, int *col)
+static void display_equipments_compensation(player_type *creature_ptr, TrFlags &flags, int row, int *col)
 {
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         object_type *o_ptr;
@@ -322,7 +322,7 @@ static void change_display_by_mutation(player_type *creature_ptr, int stat, char
  * @param col 列数
  * @param row 行数
  */
-static void display_mutation_compensation(player_type *creature_ptr, BIT_FLAGS *flags, int row, int col)
+static void display_mutation_compensation(player_type *creature_ptr, const TrFlags &flags, int row, int col)
 {
     for (int stat = 0; stat < A_MAX; stat++) {
         byte a = TERM_SLATE;
@@ -368,7 +368,7 @@ void display_player_stat_info(player_type *creature_ptr)
     c_put_str(TERM_WHITE, "abcdefghijkl@", row, col);
     c_put_str(TERM_L_GREEN, _("能力修正", "Modification"), row - 1, col);
 
-    BIT_FLAGS flags[TR_FLAG_SIZE];
+    TrFlags flags;
     display_equipments_compensation(creature_ptr, flags, row, &col);
     player_flags(creature_ptr, flags);
     display_mutation_compensation(creature_ptr, flags, row, col);

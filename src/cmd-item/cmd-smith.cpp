@@ -231,7 +231,7 @@ static void drain_essence(player_type *creature_ptr)
     bool observe = false;
     int old_ds, old_dd, old_to_h, old_to_d, old_ac, old_to_a, old_pval, old_name2;
     TIME_EFFECT old_timeout;
-    BIT_FLAGS old_flgs[TR_FLAG_SIZE], new_flgs[TR_FLAG_SIZE];
+    TrFlags old_flgs, new_flgs;
     object_type *o_ptr;
     concptr q, s;
     POSITION iy, ix;
@@ -991,7 +991,7 @@ static void erase_essence(player_type *creature_ptr)
     concptr q, s;
     object_type *o_ptr;
     GAME_TEXT o_name[MAX_NLEN];
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
 
     item_tester_hook = object_is_smith;
 

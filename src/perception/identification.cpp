@@ -35,7 +35,7 @@
  */
 bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 {
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     char temp[70 * 20];
     concptr info[128];
     GAME_TEXT o_name[MAX_NLEN];

@@ -23,7 +23,7 @@
  */
 static bool is_blessed_item(player_type *player_ptr, object_type *o_ptr)
 {
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     object_flags(player_ptr, o_ptr, flgs);
     return has_flag(flgs, TR_BLESSED);
 }

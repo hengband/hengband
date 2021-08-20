@@ -128,7 +128,7 @@ static bool calc_weapon_one_hand(object_type *o_ptr, int hand, int *damage, int 
  * @param flgs オブジェクトフラグ群
  * @return 強化後の素手ダメージ
  */
-static int strengthen_basedam(player_type *creature_ptr, object_type *o_ptr, int basedam, BIT_FLAGS *flgs)
+static int strengthen_basedam(player_type *creature_ptr, object_type *o_ptr, int basedam, const TrFlags &flgs)
 {
     if (object_is_fully_known(o_ptr) && ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD))) {
         /* vorpal blade */
@@ -245,7 +245,7 @@ static void calc_two_hands(player_type *creature_ptr, int *damage, int *to_h)
 {
     object_type *o_ptr;
     o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     for (int i = 0; i < 2; i++) {
         int basedam;
         damage[i] = creature_ptr->dis_to_d[i] * 100;

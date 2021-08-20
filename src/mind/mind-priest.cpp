@@ -39,7 +39,7 @@ bool bless_weapon(player_type *caster_ptr)
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(caster_ptr, o_name, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     object_flags(caster_ptr, o_ptr, flgs);
 
     if (object_is_cursed(o_ptr)) {
