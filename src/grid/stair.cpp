@@ -64,7 +64,7 @@ void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x)
 bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-    if (g_ptr->cave_has_flag(FF_PERMANENT))
+    if (g_ptr->cave_has_flag(FF::PERMANENT))
         return false;
 
     for (const auto this_o_idx : g_ptr->o_idx_list) {

@@ -178,13 +178,13 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
         }
 
         if ((creature_ptr->action == ACTION_HAYAGAKE)
-            && (!has_flag(f_ptr->flags, FF_PROJECT) || (!creature_ptr->levitation && has_flag(f_ptr->flags, FF_DEEP)))) {
+            && (f_ptr->flags.has_not(FF::PROJECT) || (!creature_ptr->levitation && f_ptr->flags.has(FF::DEEP)))) {
             msg_print(_("ここでは素早く動けない。", "You cannot run in here."));
             set_action(creature_ptr, ACTION_NONE);
         }
 
         if (creature_ptr->prace == player_race_type::MERFOLK) {
-            if (has_flag(f_ptr->flags, FF_WATER) ^ has_flag(of_ptr->flags, FF_WATER)) {
+            if (f_ptr->flags.has(FF::WATER) ^ of_ptr->flags.has(FF::WATER)) {
                 creature_ptr->update |= PU_BONUS;
                 update_creature(creature_ptr);
             }
@@ -215,19 +215,19 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
     }
 
     PlayerEnergy energy(creature_ptr);
-    if (has_flag(f_ptr->flags, FF_STORE)) {
+    if (f_ptr->flags.has(FF::STORE)) {
         disturb(creature_ptr, false, true);
         energy.reset_player_turn();
         command_new = SPECIAL_KEY_STORE;
-    } else if (has_flag(f_ptr->flags, FF_BLDG)) {
+    } else if (f_ptr->flags.has(FF::BLDG)) {
         disturb(creature_ptr, false, true);
         energy.reset_player_turn();
         command_new = SPECIAL_KEY_BUILDING;
-    } else if (has_flag(f_ptr->flags, FF_QUEST_ENTER)) {
+    } else if (f_ptr->flags.has(FF::QUEST_ENTER)) {
         disturb(creature_ptr, false, true);
         energy.reset_player_turn();
         command_new = SPECIAL_KEY_QUEST;
-    } else if (has_flag(f_ptr->flags, FF_QUEST_EXIT)) {
+    } else if (f_ptr->flags.has(FF::QUEST_EXIT)) {
         if (quest[floor_ptr->inside_quest].type == QUEST_TYPE_FIND_EXIT)
             complete_quest(creature_ptr, floor_ptr->inside_quest);
 
@@ -239,9 +239,9 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
         creature_ptr->oldpx = 0;
         creature_ptr->oldpy = 0;
         creature_ptr->leaving = true;
-    } else if (has_flag(f_ptr->flags, FF_HIT_TRAP) && !(mpe_mode & MPE_STAYING)) {
+    } else if (f_ptr->flags.has(FF::HIT_TRAP) && !(mpe_mode & MPE_STAYING)) {
         disturb(creature_ptr, false, true);
-        if (g_ptr->mimic || has_flag(f_ptr->flags, FF_SECRET)) {
+        if (g_ptr->mimic || f_ptr->flags.has(FF::SECRET)) {
             msg_print(_("トラップだ！", "You found a trap!"));
             disclose_grid(creature_ptr, creature_ptr->y, creature_ptr->x);
         }
@@ -274,7 +274,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 bool trap_can_be_ignored(player_type *creature_ptr, FEAT_IDX feat)
 {
     feature_type *f_ptr = &f_info[feat];
-    if (!has_flag(f_ptr->flags, FF_TRAP))
+    if (f_ptr->flags.has_not(FF::TRAP))
         return true;
 
     switch (f_ptr->subtype) {

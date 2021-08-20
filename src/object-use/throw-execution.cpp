@@ -317,7 +317,7 @@ void ObjectThrowEntity::drop_thrown_item()
         return;
     }
 
-    auto is_bold = cave_has_flag_bold(this->creature_ptr->current_floor_ptr, this->y, this->x, FF_PROJECT);
+    auto is_bold = cave_has_flag_bold(this->creature_ptr->current_floor_ptr, this->y, this->x, FF::PROJECT);
     auto drop_y = is_bold ? this->y : this->prev_y;
     auto drop_x = is_bold ? this->x : this->prev_x;
     (void)drop_near(this->creature_ptr, this->q_ptr, this->corruption_possibility, drop_y, drop_x);
@@ -383,7 +383,7 @@ bool ObjectThrowEntity::check_racial_target_bold()
     this->nx[this->cur_dis] = this->x;
     mmove2(&this->ny[this->cur_dis], &this->nx[this->cur_dis], this->creature_ptr->y, this->creature_ptr->x, this->ty, this->tx);
     auto *floor_ptr = this->creature_ptr->current_floor_ptr;
-    if (cave_has_flag_bold(floor_ptr, this->ny[this->cur_dis], this->nx[this->cur_dis], FF_PROJECT)) {
+    if (cave_has_flag_bold(floor_ptr, this->ny[this->cur_dis], this->nx[this->cur_dis], FF::PROJECT)) {
         return false;
     }
 

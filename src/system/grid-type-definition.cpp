@@ -72,7 +72,7 @@ bool grid_type::is_mark()
 
 bool grid_type::is_mirror()
 {
-    return this->is_object() && has_flag(f_info[this->mimic].flags, FF_MIRROR);
+    return this->is_object() && f_info[this->mimic].flags.has(FF::MIRROR);
 }
 
 /*
@@ -80,7 +80,7 @@ bool grid_type::is_mirror()
  */
 bool grid_type::is_rune_protection()
 {
-    return this->is_object() && has_flag(f_info[this->mimic].flags, FF_RUNE_PROTECTION);
+    return this->is_object() && f_info[this->mimic].flags.has(FF::RUNE_PROTECTION);
 }
 
 /*
@@ -88,7 +88,7 @@ bool grid_type::is_rune_protection()
  */
 bool grid_type::is_rune_explosion()
 {
-    return this->is_object() && has_flag(f_info[this->mimic].flags, FF_RUNE_EXPLOSION);
+    return this->is_object() && f_info[this->mimic].flags.has(FF::RUNE_EXPLOSION);
 }
 
 byte grid_type::get_cost(monster_race *r_ptr)
@@ -116,7 +116,7 @@ FEAT_IDX grid_type::get_feat_mimic()
     return f_info[this->mimic ? this->mimic : this->feat].mimic;
 }
 
-bool grid_type::cave_has_flag(int feature_flags)
+bool grid_type::cave_has_flag(FF feature_flags)
 {
-    return has_flag(f_info[this->feat].flags, feature_flags);
+    return f_info[this->feat].flags.has(feature_flags);
 }

@@ -44,6 +44,7 @@ struct floor_type;
 struct grid_type;
 struct player_type;
 struct monster_race;
+enum class FF;
 bool new_player_spot(player_type *creature_ptr);
 bool is_hidden_door(player_type *player_ptr, grid_type *g_ptr);
 bool player_can_enter(player_type *creature_ptr, FEAT_IDX feature, BIT_FLAGS16 mode);
@@ -54,8 +55,8 @@ void print_rel(player_type *subject_ptr, SYMBOL_CODE c, TERM_COLOR a, POSITION y
 void note_spot(player_type *player_ptr, POSITION y, POSITION x);
 void lite_spot(player_type *player_ptr, POSITION y, POSITION x);
 void update_flow(player_type *subject_ptr);
-FEAT_IDX feat_state(floor_type *floor_ptr, FEAT_IDX feat, int action);
-void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, int action);
+FEAT_IDX feat_state(floor_type *floor_ptr, FEAT_IDX feat, FF action);
+void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, FF action);
 void remove_mirror(player_type *caster_ptr, POSITION y, POSITION x);
 bool is_open(player_type *player_ptr, FEAT_IDX feat);
 bool check_local_illumination(player_type *creature_ptr, POSITION y, POSITION x);

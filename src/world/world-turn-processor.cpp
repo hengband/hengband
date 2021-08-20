@@ -282,7 +282,7 @@ void WorldTurnProcessor::shuffle_shopkeeper()
 
     for (auto i = 1; i < max_f_idx; i++) {
         auto *f_ptr = &f_info[i];
-        if (f_ptr->name.empty() || !has_flag(f_ptr->flags, FF_STORE))
+        if (f_ptr->name.empty() || f_ptr->flags.has_not(FF::STORE))
             continue;
 
         if (f_ptr->subtype != n) {

@@ -59,9 +59,9 @@ static bool boundary_floor(grid_type *g_ptr, feature_type *f_ptr, feature_type *
 {
     bool is_boundary_floor = g_ptr->mimic > 0;
     is_boundary_floor &= permanent_wall(f_ptr);
-    is_boundary_floor &= has_flag((mimic_f_ptr)->flags, FF_MOVE) || has_flag((mimic_f_ptr)->flags, FF_CAN_FLY);
-    is_boundary_floor &= has_flag((mimic_f_ptr)->flags, FF_PROJECT);
-    is_boundary_floor &= !has_flag((mimic_f_ptr)->flags, FF_OPEN);
+    is_boundary_floor &= mimic_f_ptr->flags.has_any_of({ FF::MOVE, FF::CAN_FLY });
+    is_boundary_floor &= mimic_f_ptr->flags.has(FF::PROJECT);
+    is_boundary_floor &= mimic_f_ptr->flags.has_not(FF::OPEN);
     return is_boundary_floor;
 }
 
@@ -153,8 +153,8 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
         stormbringer = true;
 
     feature_type *f_ptr = &f_info[g_ptr->feat];
-    bool p_can_kill_walls = has_kill_wall(creature_ptr) && has_flag(f_ptr->flags, FF_HURT_DISI) && (!p_can_enter || !has_flag(f_ptr->flags, FF_LOS))
-        && !has_flag(f_ptr->flags, FF_PERMANENT);
+    bool p_can_kill_walls = has_kill_wall(creature_ptr) && f_ptr->flags.has(FF::HURT_DISI) && (!p_can_enter || f_ptr->flags.has_not(FF::LOS))
+        && f_ptr->flags.has_not(FF::PERMANENT);
     GAME_TEXT m_name[MAX_NLEN];
     bool can_move = true;
     bool do_past = false;
@@ -207,22 +207,22 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
         } else if (creature_ptr->riding_ryoute) {
             can_move = false;
             disturb(creature_ptr, false, true);
-        } else if (has_flag(f_ptr->flags, FF_CAN_FLY) && (riding_r_ptr->flags7 & RF7_CAN_FLY)) {
+        } else if (f_ptr->flags.has(FF::CAN_FLY) && (riding_r_ptr->flags7 & RF7_CAN_FLY)) {
             /* Allow moving */
-        } else if (has_flag(f_ptr->flags, FF_CAN_SWIM) && (riding_r_ptr->flags7 & RF7_CAN_SWIM)) {
+        } else if (f_ptr->flags.has(FF::CAN_SWIM) && (riding_r_ptr->flags7 & RF7_CAN_SWIM)) {
             /* Allow moving */
-        } else if (has_flag(f_ptr->flags, FF_WATER) && !(riding_r_ptr->flags7 & RF7_AQUATIC)
-            && (has_flag(f_ptr->flags, FF_DEEP) || (riding_r_ptr->flags2 & RF2_AURA_FIRE))) {
+        } else if (f_ptr->flags.has(FF::WATER) && !(riding_r_ptr->flags7 & RF7_AQUATIC)
+            && (f_ptr->flags.has(FF::DEEP) || (riding_r_ptr->flags2 & RF2_AURA_FIRE))) {
             msg_format(_("%sの上に行けない。", "Can't swim."), f_info[g_ptr->get_feat_mimic()].name.c_str());
             energy.reset_player_turn();
             can_move = false;
             disturb(creature_ptr, false, true);
-        } else if (!has_flag(f_ptr->flags, FF_WATER) && (riding_r_ptr->flags7 & RF7_AQUATIC)) {
+        } else if (f_ptr->flags.has_not(FF::WATER) && (riding_r_ptr->flags7 & RF7_AQUATIC)) {
             msg_format(_("%sから上がれない。", "Can't land."), f_info[floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].get_feat_mimic()].name.c_str());
             energy.reset_player_turn();
             can_move = false;
             disturb(creature_ptr, false, true);
-        } else if (has_flag(f_ptr->flags, FF_LAVA) && !(riding_r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK)) {
+        } else if (f_ptr->flags.has(FF::LAVA) && !(riding_r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK)) {
             msg_format(_("%sの上に行けない。", "Too hot to go through."), f_info[g_ptr->get_feat_mimic()].name.c_str());
             energy.reset_player_turn();
             can_move = false;
@@ -239,16 +239,16 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
     }
 
     if (!can_move) {
-    } else if (!has_flag(f_ptr->flags, FF_MOVE) && has_flag(f_ptr->flags, FF_CAN_FLY) && !creature_ptr->levitation) {
+    } else if (f_ptr->flags.has_not(FF::MOVE) && f_ptr->flags.has(FF::CAN_FLY) && !creature_ptr->levitation) {
         msg_format(_("空を飛ばないと%sの上には行けない。", "You need to fly to go through the %s."), f_info[g_ptr->get_feat_mimic()].name.c_str());
         energy.reset_player_turn();
         creature_ptr->running = 0;
         can_move = false;
-    } else if (has_flag(f_ptr->flags, FF_TREE) && !p_can_kill_walls) {
+    } else if (f_ptr->flags.has(FF::TREE) && !p_can_kill_walls) {
         if ((creature_ptr->pclass != CLASS_RANGER) && !creature_ptr->levitation && (!creature_ptr->riding || !(riding_r_ptr->flags8 & RF8_WILD_WOOD))) {
             energy.mul_player_turn_energy(2);
         }
-    } else if ((do_pickup != easy_disarm) && has_flag(f_ptr->flags, FF_DISARM) && !g_ptr->mimic) {
+    } else if ((do_pickup != easy_disarm) && f_ptr->flags.has(FF::DISARM) && !g_ptr->mimic) {
         if (!trap_can_be_ignored(creature_ptr, g_ptr->feat)) {
             (void)exe_disarm(creature_ptr, y, x, dir);
             return;
@@ -334,7 +334,7 @@ void exe_movement(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool
     }
 
     if (p_can_kill_walls) {
-        cave_alter_feat(creature_ptr, y, x, FF_HURT_DISI);
+        cave_alter_feat(creature_ptr, y, x, FF::HURT_DISI);
         creature_ptr->update |= PU_FLOW;
     }
 

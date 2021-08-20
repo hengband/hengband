@@ -315,9 +315,9 @@ static void update_new_floor_feature(player_type *creature_ptr, saved_floor_type
 
     grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
     if ((creature_ptr->change_floor_mode & CFM_UP) && !quest_number(creature_ptr, creature_ptr->current_floor_ptr->dun_level))
-        g_ptr->feat = (creature_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(creature_ptr->current_floor_ptr, feat_down_stair, FF_SHAFT) : feat_down_stair;
+        g_ptr->feat = (creature_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(creature_ptr->current_floor_ptr, feat_down_stair, FF::SHAFT) : feat_down_stair;
     else if ((creature_ptr->change_floor_mode & CFM_DOWN) && !ironman_downward)
-        g_ptr->feat = (creature_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(creature_ptr->current_floor_ptr, feat_up_stair, FF_SHAFT) : feat_up_stair;
+        g_ptr->feat = (creature_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(creature_ptr->current_floor_ptr, feat_up_stair, FF::SHAFT) : feat_up_stair;
 
     g_ptr->mimic = 0;
     g_ptr->special = creature_ptr->floor_id;

@@ -166,8 +166,8 @@ bool pattern_seq(player_type *creature_ptr, POSITION c_y, POSITION c_x, POSITION
 {
     feature_type *cur_f_ptr = &f_info[creature_ptr->current_floor_ptr->grid_array[c_y][c_x].feat];
     feature_type *new_f_ptr = &f_info[creature_ptr->current_floor_ptr->grid_array[n_y][n_x].feat];
-    bool is_pattern_tile_cur = has_flag(cur_f_ptr->flags, FF_PATTERN);
-    bool is_pattern_tile_new = has_flag(new_f_ptr->flags, FF_PATTERN);
+    bool is_pattern_tile_cur = cur_f_ptr->flags.has(FF::PATTERN);
+    bool is_pattern_tile_new = new_f_ptr->flags.has(FF::PATTERN);
     if (!is_pattern_tile_cur && !is_pattern_tile_new)
         return true;
 

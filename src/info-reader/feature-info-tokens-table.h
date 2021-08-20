@@ -5,4 +5,4 @@
 #include <string_view>
 #include <unordered_map>
 
-extern const std::unordered_map<std::string_view, feature_flag_type> f_info_flags;
+extern const std::unordered_map<std::string_view, FF> f_info_flags;

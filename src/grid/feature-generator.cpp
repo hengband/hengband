@@ -121,7 +121,7 @@ static int next_to_corr(floor_type *floor_ptr, POSITION y1, POSITION x1)
         POSITION x = x1 + ddx_ddd[i];
         grid_type *g_ptr;
         g_ptr = &floor_ptr->grid_array[y][x];
-        if (g_ptr->cave_has_flag(FF_WALL) || !g_ptr->is_floor() || g_ptr->is_room())
+        if (g_ptr->cave_has_flag(FF::WALL) || !g_ptr->is_floor() || g_ptr->is_room())
             continue;
 
         k++;
@@ -142,10 +142,10 @@ static bool possible_doorway(floor_type *floor_ptr, POSITION y, POSITION x)
     if (next_to_corr(floor_ptr, y, x) < 2)
         return false;
 
-    if (cave_has_flag_bold(floor_ptr, y - 1, x, FF_WALL) && cave_has_flag_bold(floor_ptr, y + 1, x, FF_WALL))
+    if (cave_has_flag_bold(floor_ptr, y - 1, x, FF::WALL) && cave_has_flag_bold(floor_ptr, y + 1, x, FF::WALL))
         return true;
 
-    if (cave_has_flag_bold(floor_ptr, y, x - 1, FF_WALL) && cave_has_flag_bold(floor_ptr, y, x + 1, FF_WALL))
+    if (cave_has_flag_bold(floor_ptr, y, x - 1, FF::WALL) && cave_has_flag_bold(floor_ptr, y, x + 1, FF::WALL))
         return true;
 
     return false;
@@ -160,7 +160,7 @@ static bool possible_doorway(floor_type *floor_ptr, POSITION y, POSITION x)
 void try_door(player_type *player_ptr, dt_type *dt_ptr, POSITION y, POSITION x)
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if (!in_bounds(floor_ptr, y, x) || cave_has_flag_bold(floor_ptr, y, x, FF_WALL) || floor_ptr->grid_array[y][x].is_room())
+    if (!in_bounds(floor_ptr, y, x) || cave_has_flag_bold(floor_ptr, y, x, FF::WALL) || floor_ptr->grid_array[y][x].is_room())
         return;
 
     bool can_place_door = randint0(100) < dt_ptr->dun_tun_jct;

@@ -188,8 +188,6 @@ typedef int EFFECT_ID; /*!< 効果属性ID */
 
 typedef int16_t ACTION_SKILL_POWER; /*!< 行動技能値 */
 
-typedef byte FF_FLAGS_IDX; /*!< 地形特性ID */
-
 typedef int16_t FEAT_PRIORITY; /*!< 地形の縮小表示優先順位 */
 
 using TrFlags = BIT_FLAGS[TR_FLAG_SIZE];

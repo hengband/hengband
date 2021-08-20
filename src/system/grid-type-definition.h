@@ -45,6 +45,7 @@ enum flow_type {
 };
 
 struct monster_race;
+enum class FF;
 struct grid_type {
 public:
     BIT_FLAGS info{}; /* Hack -- grid flags */
@@ -84,7 +85,7 @@ public:
     byte get_cost(monster_race *r_ptr);
     byte get_distance(monster_race *r_ptr);
     FEAT_IDX get_feat_mimic();
-    bool cave_has_flag(int feature_flags);
+    bool cave_has_flag(FF feature_flags);
 
 private:
     flow_type get_grid_flow_type(monster_race *r_ptr);

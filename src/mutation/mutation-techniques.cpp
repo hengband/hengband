@@ -41,9 +41,9 @@ bool eat_rock(player_type *caster_ptr)
     mimic_f_ptr = &f_info[g_ptr->get_feat_mimic()];
 
     stop_mouth(caster_ptr);
-    if (!has_flag(mimic_f_ptr->flags, FF_HURT_ROCK)) {
+    if (mimic_f_ptr->flags.has_not(FF::HURT_ROCK)) {
         msg_print(_("この地形は食べられない。", "You cannot eat this feature."));
-    } else if (has_flag(f_ptr->flags, FF_PERMANENT)) {
+    } else if (f_ptr->flags.has(FF::PERMANENT)) {
         msg_format(_("いてっ！この%sはあなたの歯より硬い！", "Ouch!  This %s is harder than your teeth!"), mimic_f_ptr->name.c_str());
     } else if (g_ptr->m_idx) {
         monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
@@ -51,20 +51,20 @@ bool eat_rock(player_type *caster_ptr)
 
         if (!m_ptr->ml || !is_pet(m_ptr))
             do_cmd_attack(caster_ptr, y, x, HISSATSU_NONE);
-    } else if (has_flag(f_ptr->flags, FF_TREE)) {
+    } else if (f_ptr->flags.has(FF::TREE)) {
         msg_print(_("木の味は好きじゃない！", "You don't like the woody taste!"));
-    } else if (has_flag(f_ptr->flags, FF_GLASS)) {
+    } else if (f_ptr->flags.has(FF::GLASS)) {
         msg_print(_("ガラスの味は好きじゃない！", "You don't like the glassy taste!"));
-    } else if (has_flag(f_ptr->flags, FF_DOOR) || has_flag(f_ptr->flags, FF_CAN_DIG)) {
+    } else if (f_ptr->flags.has(FF::DOOR) || f_ptr->flags.has(FF::CAN_DIG)) {
         (void)set_food(caster_ptr, caster_ptr->food + 3000);
-    } else if (has_flag(f_ptr->flags, FF_MAY_HAVE_GOLD) || has_flag(f_ptr->flags, FF_HAS_GOLD)) {
+    } else if (f_ptr->flags.has(FF::MAY_HAVE_GOLD) || f_ptr->flags.has(FF::HAS_GOLD)) {
         (void)set_food(caster_ptr, caster_ptr->food + 5000);
     } else {
         msg_format(_("この%sはとてもおいしい！", "This %s is very filling!"), mimic_f_ptr->name.c_str());
         (void)set_food(caster_ptr, caster_ptr->food + 10000);
     }
 
-    cave_alter_feat(caster_ptr, y, x, FF_HURT_ROCK);
+    cave_alter_feat(caster_ptr, y, x, FF::HURT_ROCK);
     (void)move_player_effect(caster_ptr, y, x, MPE_DONT_PICKUP);
     return true;
 }

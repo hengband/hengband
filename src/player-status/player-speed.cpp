@@ -63,7 +63,7 @@ int16_t PlayerSpeed::race_value()
     if (is_specific_player_race(this->owner_ptr, player_race_type::MERFOLK)) {
         floor_type *floor_ptr = this->owner_ptr->current_floor_ptr;
         feature_type *f_ptr = &f_info[floor_ptr->grid_array[this->owner_ptr->y][this->owner_ptr->x].feat];
-        if (has_flag(f_ptr->flags, FF_WATER)) {
+        if (f_ptr->flags.has(FF::WATER)) {
             result += (2 + this->owner_ptr->lev / 10);
         } else if (!this->owner_ptr->levitation) {
             result -= 2;

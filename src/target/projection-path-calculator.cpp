@@ -107,7 +107,7 @@ static void calc_projection_to_target(player_type *player_ptr, projection_path_t
             if ((pp_ptr->n > 0) && !cave_los_bold(floor_ptr, pp_ptr->y, pp_ptr->x))
                 break;
         } else if (!(pp_ptr->flag & PROJECT_PATH)) {
-            if ((pp_ptr->n > 0) && !cave_has_flag_bold(floor_ptr, pp_ptr->y, pp_ptr->x, FF_PROJECT))
+            if ((pp_ptr->n > 0) && !cave_has_flag_bold(floor_ptr, pp_ptr->y, pp_ptr->x, FF::PROJECT))
                 break;
         }
 
@@ -183,7 +183,7 @@ static void calc_projection_others(player_type *player_ptr, projection_path_type
             if ((pp_ptr->n > 0) && !cave_los_bold(floor_ptr, pp_ptr->y, pp_ptr->x))
                 break;
         } else if (!(pp_ptr->flag & PROJECT_PATH)) {
-            if ((pp_ptr->n > 0) && !cave_has_flag_bold(floor_ptr, pp_ptr->y, pp_ptr->x, FF_PROJECT))
+            if ((pp_ptr->n > 0) && !cave_has_flag_bold(floor_ptr, pp_ptr->y, pp_ptr->x, FF::PROJECT))
                 break;
         }
 

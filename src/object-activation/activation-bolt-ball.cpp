@@ -311,7 +311,7 @@ bool activate_ball_lite(player_type *user_ptr, concptr name)
         int attempts = 1000;
         while (attempts--) {
             scatter(user_ptr, &y, &x, user_ptr->y, user_ptr->x, 4, PROJECT_NONE);
-            if (!cave_has_flag_bold(user_ptr->current_floor_ptr, y, x, FF_PROJECT))
+            if (!cave_has_flag_bold(user_ptr->current_floor_ptr, y, x, FF::PROJECT))
                 continue;
 
             if (!player_bold(user_ptr, y, x))

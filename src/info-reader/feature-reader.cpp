@@ -25,7 +25,7 @@ static bool feat_tag_is_not_found = false;
  */
 static bool grab_one_feat_flag(feature_type *f_ptr, std::string_view what)
 {
-    if (info_grab_one_flag(f_ptr->flags, f_info_flags, what))
+    if (EnumClassFlagGroup<FF>::grab_one_flag(f_ptr->flags, f_info_flags, what))
         return true;
 
     msg_format(_("未知の地形フラグ '%s'。", "Unknown feature flag '%s'."), what.data());
@@ -43,7 +43,7 @@ static bool grab_one_feat_flag(feature_type *f_ptr, std::string_view what)
 static bool grab_one_feat_action(feature_type *f_ptr, std::string_view what, int count)
 {
     if (auto it = f_info_flags.find(what); it != f_info_flags.end()) {
-        f_ptr->state[count].action = static_cast<FF_FLAGS_IDX>(it->second);
+        f_ptr->state[count].action = it->second;
         return true;
     }
 
@@ -84,7 +84,7 @@ errr parse_f_info(std::string_view buf, angband_header *head)
         f_ptr->mimic = (FEAT_IDX)i;
         f_ptr->destroyed = (FEAT_IDX)i;
         for (i = 0; i < MAX_FEAT_STATES; i++)
-            f_ptr->state[i].action = FF_FLAG_MAX;
+            f_ptr->state[i].action = FF::MAX;
 
     } else if (!f_ptr)
         return PARSE_ERROR_MISSING_RECORD_HEADER;
@@ -194,7 +194,7 @@ errr parse_f_info(std::string_view buf, angband_header *head)
 
         int i = 0;
         for (; i < MAX_FEAT_STATES; i++) {
-            if (f_ptr->state[i].action == FF_FLAG_MAX)
+            if (f_ptr->state[i].action == FF::MAX)
                 break;
         }
 
@@ -204,7 +204,6 @@ errr parse_f_info(std::string_view buf, angband_header *head)
         if (tokens[1] == "DESTROYED")
             f_ptr->destroyed_tag = tokens[2];
         else {
-            f_ptr->state[i].action = 0;
             if (!grab_one_feat_action(f_ptr, tokens[1], i))
                 return PARSE_ERROR_INVALID_FLAG;
 

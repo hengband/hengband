@@ -124,7 +124,7 @@ static void recursive_river(floor_type *floor_ptr, POSITION x1, POSITION y1, POS
                             continue;
 
                         /* Do not convert permanent features */
-                        if (g_ptr->cave_has_flag(FF_PERMANENT))
+                        if (g_ptr->cave_has_flag(FF::PERMANENT))
                             continue;
 
                         /*
@@ -140,7 +140,7 @@ static void recursive_river(floor_type *floor_ptr, POSITION x1, POSITION y1, POS
                         g_ptr->mimic = 0;
 
                         /* Lava terrain glows */
-                        if (has_flag(f_info[feat1].flags, FF_LAVA)) {
+                        if (f_info[feat1].flags.has(FF::LAVA)) {
                             if (d_info[floor_ptr->dungeon_idx].flags.has_not(DF::DARKNESS))
                                 g_ptr->info |= CAVE_GLOW;
                         }
@@ -211,7 +211,7 @@ void add_river(floor_type *floor_ptr, dun_data_type *dd_ptr)
         feature_type *f_ptr = &f_info[feat1];
 
         /* Only add river if matches lake type or if have no lake at all */
-        if (!(((dd_ptr->laketype == LAKE_T_LAVA) && has_flag(f_ptr->flags, FF_LAVA)) || ((dd_ptr->laketype == LAKE_T_WATER) && has_flag(f_ptr->flags, FF_WATER))
+        if (!(((dd_ptr->laketype == LAKE_T_LAVA) && f_ptr->flags.has(FF::LAVA)) || ((dd_ptr->laketype == LAKE_T_WATER) && f_ptr->flags.has(FF::WATER))
                 || !dd_ptr->laketype)) {
             return;
         }
@@ -285,8 +285,8 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
     feature_type *f_ptr;
 
     feature_type *streamer_ptr = &f_info[feat];
-    bool streamer_is_wall = has_flag(streamer_ptr->flags, FF_WALL) && !has_flag(streamer_ptr->flags, FF_PERMANENT);
-    bool streamer_may_have_gold = has_flag(streamer_ptr->flags, FF_MAY_HAVE_GOLD);
+    bool streamer_is_wall = streamer_ptr->flags.has(FF::WALL) && streamer_ptr->flags.has_not(FF::PERMANENT);
+    bool streamer_may_have_gold = streamer_ptr->flags.has(FF::MAY_HAVE_GOLD);
 
     /* Hack -- Choose starting point */
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -315,11 +315,11 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
             g_ptr = &floor_ptr->grid_array[ty][tx];
             f_ptr = &f_info[g_ptr->feat];
 
-            if (has_flag(f_ptr->flags, FF_MOVE) && (has_flag(f_ptr->flags, FF_WATER) || has_flag(f_ptr->flags, FF_LAVA)))
+            if (f_ptr->flags.has(FF::MOVE) && f_ptr->flags.has_any_of({FF::WATER, FF::LAVA}))
                 continue;
 
             /* Do not convert permanent features */
-            if (has_flag(f_ptr->flags, FF_PERMANENT))
+            if (f_ptr->flags.has(FF::PERMANENT))
                 continue;
 
             /* Only convert "granite" walls */
@@ -331,13 +331,13 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
             }
 
             if (g_ptr->m_idx
-                && !(has_flag(streamer_ptr->flags, FF_PLACE)
+                && !(streamer_ptr->flags.has(FF::PLACE)
                     && monster_can_cross_terrain(player_ptr, feat, &r_info[floor_ptr->m_list[g_ptr->m_idx].r_idx], 0))) {
                 /* Delete the monster (if any) */
                 delete_monster(player_ptr, ty, tx);
             }
 
-            if (!g_ptr->o_idx_list.empty() && !has_flag(streamer_ptr->flags, FF_DROP)) {
+            if (!g_ptr->o_idx_list.empty() && streamer_ptr->flags.has_not(FF::DROP)) {
 
                 /* Scan all objects in the grid */
                 for (const auto this_o_idx : g_ptr->o_idx_list) {
@@ -370,13 +370,13 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
             if (streamer_may_have_gold) {
                 /* Hack -- Add some known treasure */
                 if (one_in_(chance)) {
-                    cave_alter_feat(player_ptr, ty, tx, FF_MAY_HAVE_GOLD);
+                    cave_alter_feat(player_ptr, ty, tx, FF::MAY_HAVE_GOLD);
                 }
 
                 /* Hack -- Add some hidden treasure */
                 else if (one_in_(chance / 4)) {
-                    cave_alter_feat(player_ptr, ty, tx, FF_MAY_HAVE_GOLD);
-                    cave_alter_feat(player_ptr, ty, tx, FF_ENSECRET);
+                    cave_alter_feat(player_ptr, ty, tx, FF::MAY_HAVE_GOLD);
+                    cave_alter_feat(player_ptr, ty, tx, FF::ENSECRET);
                 }
             }
         }
@@ -433,7 +433,7 @@ void place_trees(player_type *player_ptr, POSITION x, POSITION y)
                 continue;
 
             /* Want square to be in the circle and accessable. */
-            if ((distance(j, i, y, x) < 4) && !g_ptr->cave_has_flag(FF_PERMANENT)) {
+            if ((distance(j, i, y, x) < 4) && !g_ptr->cave_has_flag(FF::PERMANENT)) {
                 /*
                  * Clear previous contents, add feature
                  * The border mainly gets trees, while the center gets rubble

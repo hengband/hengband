@@ -546,7 +546,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
             if (snipe_type == SP_KILL_WALL) {
                 g_ptr = &shooter_ptr->current_floor_ptr->grid_array[ny][nx];
 
-                if (g_ptr->cave_has_flag(FF_HURT_ROCK) && !g_ptr->m_idx) {
+                if (g_ptr->cave_has_flag(FF::HURT_ROCK) && !g_ptr->m_idx) {
                     if (any_bits(g_ptr->info, (CAVE_MARK)))
                         msg_print(_("岩が砕け散った。", "Wall rocks were shattered."));
                     /* Forget the wall */
@@ -554,7 +554,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
                     set_bits(shooter_ptr->update, PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
 
                     /* Destroy the wall */
-                    cave_alter_feat(shooter_ptr, ny, nx, FF_HURT_ROCK);
+                    cave_alter_feat(shooter_ptr, ny, nx, FF::HURT_ROCK);
 
                     hit_body = true;
                     break;
@@ -562,7 +562,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
             }
 
             /* Stopped by walls/doors */
-            if (!cave_has_flag_bold(shooter_ptr->current_floor_ptr, ny, nx, FF_PROJECT) && !shooter_ptr->current_floor_ptr->grid_array[ny][nx].m_idx)
+            if (!cave_has_flag_bold(shooter_ptr->current_floor_ptr, ny, nx, FF::PROJECT) && !shooter_ptr->current_floor_ptr->grid_array[ny][nx].m_idx)
                 break;
 
             /* Advance the distance */
@@ -873,7 +873,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
             /* Carry object */
             m_ptr->hold_o_idx_list.add(shooter_ptr->current_floor_ptr, o_idx);
-        } else if (cave_has_flag_bold(shooter_ptr->current_floor_ptr, y, x, FF_PROJECT)) {
+        } else if (cave_has_flag_bold(shooter_ptr->current_floor_ptr, y, x, FF::PROJECT)) {
             /* Drop (or break) near that location */
             (void)drop_near(shooter_ptr, q_ptr, j, y, x);
         } else {

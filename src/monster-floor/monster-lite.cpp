@@ -88,16 +88,16 @@ static void update_monster_dark(
     if ((g_ptr->info & (CAVE_LITE | CAVE_MNLT | CAVE_MNDK | CAVE_VIEW)) != CAVE_VIEW)
         return;
 
-    if (!feat_supports_los(g_ptr->feat) && !g_ptr->cave_has_flag(FF_PROJECT)) {
+    if (!feat_supports_los(g_ptr->feat) && !g_ptr->cave_has_flag(FF::PROJECT)) {
         if (((y < subject_ptr->y) && (y > ml_ptr->mon_fy)) || ((y > subject_ptr->y) && (y < ml_ptr->mon_fy))) {
             dpf = subject_ptr->y - ml_ptr->mon_fy;
             d = y - ml_ptr->mon_fy;
             midpoint = ml_ptr->mon_fx + ((subject_ptr->x - ml_ptr->mon_fx) * ABS(d)) / ABS(dpf);
             if (x < midpoint) {
-                if (!cave_los_bold(subject_ptr->current_floor_ptr, y, x + 1) && !cave_has_flag_bold(subject_ptr->current_floor_ptr, y, x + 1, FF_PROJECT))
+                if (!cave_los_bold(subject_ptr->current_floor_ptr, y, x + 1) && !cave_has_flag_bold(subject_ptr->current_floor_ptr, y, x + 1, FF::PROJECT))
                     return;
             } else if (x > midpoint) {
-                if (!cave_los_bold(subject_ptr->current_floor_ptr, y, x - 1) && !cave_has_flag_bold(subject_ptr->current_floor_ptr, y, x - 1, FF_PROJECT))
+                if (!cave_los_bold(subject_ptr->current_floor_ptr, y, x - 1) && !cave_has_flag_bold(subject_ptr->current_floor_ptr, y, x - 1, FF::PROJECT))
                     return;
             } else if (ml_ptr->mon_invis)
                 return;
@@ -108,10 +108,10 @@ static void update_monster_dark(
             d = x - ml_ptr->mon_fx;
             midpoint = ml_ptr->mon_fy + ((subject_ptr->y - ml_ptr->mon_fy) * ABS(d)) / ABS(dpf);
             if (y < midpoint) {
-                if (!cave_los_bold(subject_ptr->current_floor_ptr, y + 1, x) && !cave_has_flag_bold(subject_ptr->current_floor_ptr, y + 1, x, FF_PROJECT))
+                if (!cave_los_bold(subject_ptr->current_floor_ptr, y + 1, x) && !cave_has_flag_bold(subject_ptr->current_floor_ptr, y + 1, x, FF::PROJECT))
                     return;
             } else if (y > midpoint) {
-                if (!cave_los_bold(subject_ptr->current_floor_ptr, y - 1, x) && !cave_has_flag_bold(subject_ptr->current_floor_ptr, y - 1, x, FF_PROJECT))
+                if (!cave_los_bold(subject_ptr->current_floor_ptr, y - 1, x) && !cave_has_flag_bold(subject_ptr->current_floor_ptr, y - 1, x, FF::PROJECT))
                     return;
             } else if (ml_ptr->mon_invis)
                 return;
@@ -169,7 +169,7 @@ void update_mon_lite(player_type *subject_ptr)
             if (!rad)
                 continue;
 
-            feature_flag_type f_flag;
+            FF f_flag;
             if (rad > 0) {
                 if (!(r_ptr->flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2))
                     && (monster_csleep_remaining(m_ptr) || (!floor_ptr->dun_level && is_daytime()) || subject_ptr->phase_out))
@@ -179,13 +179,13 @@ void update_mon_lite(player_type *subject_ptr)
                     rad = 1;
 
                 add_mon_lite = update_monster_lite;
-                f_flag = FF_LOS;
+                f_flag = FF::LOS;
             } else {
                 if (!(r_ptr->flags7 & (RF7_SELF_DARK_1 | RF7_SELF_DARK_2)) && (monster_csleep_remaining(m_ptr) || (!floor_ptr->dun_level && !is_daytime())))
                     continue;
 
                 add_mon_lite = update_monster_dark;
-                f_flag = FF_PROJECT;
+                f_flag = FF::PROJECT;
                 rad = -rad;
             }
 
