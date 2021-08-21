@@ -165,7 +165,7 @@ void try_door(player_type *player_ptr, dt_type *dt_ptr, POSITION y, POSITION x)
 
     bool can_place_door = randint0(100) < dt_ptr->dun_tun_jct;
     can_place_door &= possible_doorway(floor_ptr, y, x);
-    can_place_door &= d_info[player_ptr->dungeon_idx].flags.has_not(DF::NO_DOORS);
+    can_place_door &= d_info[static_cast<int>(player_ptr->dungeon_idx)].flags.has_not(DF::NO_DOORS);
     if (can_place_door)
         place_random_door(player_ptr, y, x, false);
 }

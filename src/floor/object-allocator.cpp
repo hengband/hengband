@@ -81,7 +81,7 @@ bool alloc_stairs(player_type *owner_ptr, FEAT_IDX feat, int num, int walls)
         if (ironman_downward || !floor_ptr->dun_level)
             return true;
 
-        if (floor_ptr->dun_level > d_info[floor_ptr->dungeon_idx].mindepth)
+        if (floor_ptr->dun_level > d_info[static_cast<int>(floor_ptr->dungeon_idx)].mindepth)
             shaft_num = (randint1(num + 1)) / 2;
     } else if (f_ptr->flags.has(FF::MORE)) {
         QUEST_IDX q_idx = quest_number(owner_ptr, floor_ptr->dun_level);
@@ -91,10 +91,10 @@ bool alloc_stairs(player_type *owner_ptr, FEAT_IDX feat, int num, int walls)
                 return true;
         }
 
-        if (floor_ptr->dun_level >= d_info[floor_ptr->dungeon_idx].maxdepth)
+        if (floor_ptr->dun_level >= d_info[static_cast<int>(floor_ptr->dungeon_idx)].maxdepth)
             return true;
 
-        if ((floor_ptr->dun_level < d_info[floor_ptr->dungeon_idx].maxdepth - 1) && !quest_number(owner_ptr, floor_ptr->dun_level + 1))
+        if ((floor_ptr->dun_level < d_info[static_cast<int>(floor_ptr->dungeon_idx)].maxdepth - 1) && !quest_number(owner_ptr, floor_ptr->dun_level + 1))
             shaft_num = (randint1(num) + 1) / 2;
     } else
         return false;

@@ -421,10 +421,10 @@ bool alloc_horde(player_type *player_ptr, POSITION y, POSITION x, summon_specifi
  */
 bool alloc_guardian(player_type *player_ptr, bool def_val)
 {
-    MONRACE_IDX guardian = d_info[player_ptr->dungeon_idx].final_guardian;
+    MONRACE_IDX guardian = d_info[static_cast<int>(player_ptr->dungeon_idx)].final_guardian;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     bool is_guardian_applicable = guardian > 0;
-    is_guardian_applicable &= d_info[player_ptr->dungeon_idx].maxdepth == floor_ptr->dun_level;
+    is_guardian_applicable &= d_info[static_cast<int>(player_ptr->dungeon_idx)].maxdepth == floor_ptr->dun_level;
     is_guardian_applicable &= r_info[guardian].cur_num < r_info[guardian].max_num;
     if (!is_guardian_applicable)
         return def_val;

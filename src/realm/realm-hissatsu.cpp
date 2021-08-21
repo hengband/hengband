@@ -348,7 +348,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
                 msg_print(_("その方向にはモンスターはいません。", "There is no monster."));
                 return NULL;
             }
-            if (d_info[caster_ptr->dungeon_idx].flags.has(DF::NO_MELEE)) {
+            if (d_info[static_cast<int>(caster_ptr->dungeon_idx)].flags.has(DF::NO_MELEE)) {
                 return "";
             }
             if (caster_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
@@ -730,7 +730,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
                     return NULL;
                 }
 
-                if (d_info[caster_ptr->dungeon_idx].flags.has(DF::NO_MELEE)) {
+                if (d_info[static_cast<int>(caster_ptr->dungeon_idx)].flags.has(DF::NO_MELEE)) {
                     return "";
                 }
 
@@ -931,7 +931,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
             y = caster_ptr->y + ddy[dir];
             x = caster_ptr->x + ddx[dir];
 
-            if (d_info[caster_ptr->dungeon_idx].flags.has(DF::NO_MELEE)) {
+            if (d_info[static_cast<int>(caster_ptr->dungeon_idx)].flags.has(DF::NO_MELEE)) {
                 msg_print(_("なぜか攻撃することができない。", "Something prevents you from attacking."));
                 return "";
             }

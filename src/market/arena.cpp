@@ -171,9 +171,9 @@ void update_gambling_monsters(player_type *player_ptr)
     int power[4];
     bool tekitou;
 
-    for (i = 0; i < current_world_ptr->max_d_idx; i++) {
-        if (max_dl < max_dlv[i])
-            max_dl = max_dlv[i];
+    for (i = 0; i < static_cast<int>(current_world_ptr->max_d_idx); i++) {
+        if (max_dl < max_dlv[static_cast<int>(i)])
+            max_dl = max_dlv[static_cast<int>(i)];
     }
 
     mon_level = randint1(MIN(max_dl, 122)) + 5;

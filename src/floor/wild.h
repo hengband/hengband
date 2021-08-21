@@ -6,6 +6,7 @@
 #define SECRET_TOWN 5
 
 enum parse_error_type : int;
+enum class DUNGEON_IDX : int;
 
 /* Wilderness Terrains */
 enum wt_type {

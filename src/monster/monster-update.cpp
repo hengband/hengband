@@ -169,7 +169,7 @@ static um_type *initialize_um_type(player_type *subject_ptr, um_type *um_ptr, MO
     um_ptr->fx = um_ptr->m_ptr->fx;
     um_ptr->flag = false;
     um_ptr->easy = false;
-    um_ptr->in_darkness = d_info[subject_ptr->dungeon_idx].flags.has(DF::DARKNESS) && !subject_ptr->see_nocto;
+    um_ptr->in_darkness = d_info[static_cast<int>(subject_ptr->dungeon_idx)].flags.has(DF::DARKNESS) && !subject_ptr->see_nocto;
     um_ptr->full = full;
     return um_ptr;
 }

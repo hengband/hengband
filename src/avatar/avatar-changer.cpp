@@ -52,7 +52,7 @@ void AvatarChanger::change_virtue_non_beginner()
 {
     auto *floor_ptr = this->target_ptr->current_floor_ptr;
     auto *r_ptr = &r_info[m_ptr->r_idx];
-    if (d_info[this->target_ptr->dungeon_idx].flags.has(DF::BEGINNER)) {
+    if (d_info[static_cast<int>(this->target_ptr->dungeon_idx)].flags.has(DF::BEGINNER)) {
         return;
     }
 

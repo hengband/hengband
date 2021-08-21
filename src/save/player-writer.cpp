@@ -127,7 +127,7 @@ void wr_player(player_type *creature_ptr)
     byte tmp8u = (byte)current_world_ptr->max_d_idx;
     wr_byte(tmp8u);
     for (int i = 0; i < tmp8u; i++)
-        wr_s16b((int16_t)max_dlv[i]);
+        wr_s16b((int16_t)max_dlv[static_cast<int>(i)]);
 
     wr_s16b(0);
     wr_s16b(0);
@@ -161,7 +161,7 @@ void wr_player(player_type *creature_ptr)
     wr_s16b(creature_ptr->blessed);
     wr_s16b(creature_ptr->tim_invis);
     wr_s16b(creature_ptr->word_recall);
-    wr_s16b(creature_ptr->recall_dungeon);
+    wr_s16b(static_cast<int16_t>(creature_ptr->recall_dungeon));
     wr_s16b(creature_ptr->alter_reality);
     wr_s16b(creature_ptr->see_infra);
     wr_s16b(creature_ptr->tim_infra);

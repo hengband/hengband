@@ -53,7 +53,7 @@ static void build_dead_end(player_type *creature_ptr)
 {
     clear_cave(creature_ptr);
     creature_ptr->x = creature_ptr->y = 0;
-    set_floor_and_wall(0);
+    set_floor_and_wall(DUNGEON_IDX::NONE);
     creature_ptr->current_floor_ptr->height = SCREEN_HGT;
     creature_ptr->current_floor_ptr->width = SCREEN_WID;
     for (POSITION y = 0; y < MAX_HGT; y++)
@@ -259,7 +259,7 @@ static void reset_unique_by_floor_change(player_type *creature_ptr)
 static void new_floor_allocation(player_type *creature_ptr, saved_floor_type *sf_ptr)
 {
     GAME_TURN tmp_last_visit = sf_ptr->last_visit;
-    int alloc_chance = d_info[creature_ptr->dungeon_idx].max_m_alloc_chance;
+    int alloc_chance = d_info[static_cast<int>(creature_ptr->dungeon_idx)].max_m_alloc_chance;
     while (tmp_last_visit > current_world_ptr->game_turn)
         tmp_last_visit -= TURNS_PER_TICK * TOWN_DAWN;
 

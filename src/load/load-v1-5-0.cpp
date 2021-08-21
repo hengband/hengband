@@ -559,11 +559,11 @@ errr rd_dungeon_old(player_type *player_ptr)
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->dun_level = (DEPTH)tmp16s;
     if (h_older_than(0, 3, 8))
-        player_ptr->dungeon_idx = DUNGEON_ANGBAND;
+        player_ptr->dungeon_idx = DUNGEON_IDX::ANGBAND;
     else {
         byte tmp8u;
         rd_byte(&tmp8u);
-        player_ptr->dungeon_idx = (IDX)tmp8u;
+        player_ptr->dungeon_idx = static_cast<DUNGEON_IDX>(tmp8u);
     }
 
     floor_ptr->base_level = floor_ptr->dun_level;

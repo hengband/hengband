@@ -349,20 +349,20 @@ void do_cmd_knowledge_dungeon(player_type *creature_ptr)
     if (!open_temporary_file(&fff, file_name))
         return;
 
-    for (int i = 1; i < current_world_ptr->max_d_idx; i++) {
+    for (int i = 1; i < static_cast<int>(current_world_ptr->max_d_idx); i++) {
         bool seiha = false;
 
-        if (!d_info[i].maxdepth)
+        if (!d_info[static_cast<int>(i)].maxdepth)
             continue;
-        if (!max_dlv[i])
+        if (!max_dlv[static_cast<int>(i)])
             continue;
-        if (d_info[i].final_guardian) {
-            if (!r_info[d_info[i].final_guardian].max_num)
+        if (d_info[static_cast<int>(i)].final_guardian) {
+            if (!r_info[d_info[static_cast<int>(i)].final_guardian].max_num)
                 seiha = true;
-        } else if (max_dlv[i] == d_info[i].maxdepth)
+        } else if (max_dlv[static_cast<int>(i)] == d_info[static_cast<int>(i)].maxdepth)
             seiha = true;
 
-        fprintf(fff, _("%c%-12s :  %3d 階\n", "%c%-16s :  level %3d\n"), seiha ? '!' : ' ', d_info[i].name.c_str(), (int)max_dlv[i]);
+        fprintf(fff, _("%c%-12s :  %3d 階\n", "%c%-16s :  level %3d\n"), seiha ? '!' : ' ', d_info[static_cast<int>(i)].name.c_str(), (int)max_dlv[static_cast<int>(i)]);
     }
 
     angband_fclose(fff);

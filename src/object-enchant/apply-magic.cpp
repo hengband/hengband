@@ -58,12 +58,12 @@ void apply_magic_to_object(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
         lev = MAX_DEPTH - 1;
 
     int f1 = lev + 10;
-    if (f1 > d_info[owner_ptr->dungeon_idx].obj_good)
-        f1 = d_info[owner_ptr->dungeon_idx].obj_good;
+    if (f1 > d_info[static_cast<int>(owner_ptr->dungeon_idx)].obj_good)
+        f1 = d_info[static_cast<int>(owner_ptr->dungeon_idx)].obj_good;
 
     int f2 = f1 * 2 / 3;
-    if ((owner_ptr->pseikaku != PERSONALITY_MUNCHKIN) && (f2 > d_info[owner_ptr->dungeon_idx].obj_great))
-        f2 = d_info[owner_ptr->dungeon_idx].obj_great;
+    if ((owner_ptr->pseikaku != PERSONALITY_MUNCHKIN) && (f2 > d_info[static_cast<int>(owner_ptr->dungeon_idx)].obj_great))
+        f2 = d_info[static_cast<int>(owner_ptr->dungeon_idx)].obj_great;
 
     if (has_good_luck(owner_ptr)) {
         f1 += 5;

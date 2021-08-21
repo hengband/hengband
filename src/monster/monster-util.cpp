@@ -54,7 +54,7 @@ summon_type summon_specific_type = SUMMON_NONE;
 static bool restrict_monster_to_dungeon(player_type *player_ptr, MONRACE_IDX r_idx)
 {
     DUNGEON_IDX d_idx = player_ptr->dungeon_idx;
-    dungeon_type *d_ptr = &d_info[d_idx];
+    dungeon_type *d_ptr = &d_info[static_cast<int>(d_idx)];
     monster_race *r_ptr = &r_info[r_idx];
 
     if (d_ptr->flags.has(DF::CHAMELEON)) {
@@ -358,7 +358,7 @@ static errr do_get_mon_num_prep(player_type *player_ptr, const monsterrace_hook_
             if (cond && !restrict_monster_to_dungeon(player_ptr, entry->index)) {
                 // ダンジョンによる制約に掛かった場合、重みを special_div/64 倍する。
                 // 丸めは確率的に行う。
-                const int numer = entry->prob2 * d_info[player_ptr->dungeon_idx].special_div;
+                const int numer = entry->prob2 * d_info[static_cast<int>(player_ptr->dungeon_idx)].special_div;
                 const int q = numer / 64;
                 const int r = numer % 64;
                 entry->prob2 = (PROB)(randint0(64) < r ? q + 1 : q);

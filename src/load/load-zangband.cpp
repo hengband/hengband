@@ -147,7 +147,7 @@ void rd_zangband_dungeon()
 {
     int16_t tmp16s;
     rd_s16b(&tmp16s);
-    max_dlv[DUNGEON_ANGBAND] = tmp16s;
+    max_dlv[static_cast<int>(DUNGEON_IDX::ANGBAND)] = tmp16s;
 }
 
 void set_zangband_game_turns(player_type *creature_ptr)
@@ -199,7 +199,7 @@ void set_zangband_visited_towns(player_type *creature_ptr)
 void set_zangband_quest(player_type *creature_ptr, quest_type *const q_ptr, int loading_quest_index, const QUEST_IDX old_inside_quest)
 {
     if (q_ptr->flags & QUEST_FLAG_PRESET) {
-        q_ptr->dungeon = 0;
+        q_ptr->dungeon = DUNGEON_IDX::NONE;
         return;
     }
 

@@ -29,7 +29,7 @@ bool build_type1(player_type *player_ptr, dun_data_type *dd_ptr)
     grid_type *g_ptr;
 
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    bool curtain = (d_info[floor_ptr->dungeon_idx].flags.has(DF::CURTAIN)) && one_in_(d_info[floor_ptr->dungeon_idx].flags.has(DF::NO_CAVE) ? 48 : 512);
+    bool curtain = (d_info[static_cast<int>(floor_ptr->dungeon_idx)].flags.has(DF::CURTAIN)) && one_in_(d_info[static_cast<int>(floor_ptr->dungeon_idx)].flags.has(DF::NO_CAVE) ? 48 : 512);
 
     /* Pick a room size */
     y1 = randint1(4);
@@ -57,7 +57,7 @@ bool build_type1(player_type *player_ptr, dun_data_type *dd_ptr)
     }
 
     /* Choose lite or dark */
-    light = ((floor_ptr->dun_level <= randint1(25)) && d_info[floor_ptr->dungeon_idx].flags.has_not(DF::DARKNESS));
+    light = ((floor_ptr->dun_level <= randint1(25)) && d_info[static_cast<int>(floor_ptr->dungeon_idx)].flags.has_not(DF::DARKNESS));
 
     /* Get corner values */
     y1 = yval - ysize / 2;
@@ -154,7 +154,7 @@ bool build_type1(player_type *player_ptr, dun_data_type *dd_ptr)
     }
     /* Hack -- Occasional divided room */
     else if (one_in_(50)) {
-        bool curtain2 = (d_info[floor_ptr->dungeon_idx].flags.has(DF::CURTAIN)) && one_in_(d_info[floor_ptr->dungeon_idx].flags.has(DF::NO_CAVE) ? 2 : 128);
+        bool curtain2 = (d_info[static_cast<int>(floor_ptr->dungeon_idx)].flags.has(DF::CURTAIN)) && one_in_(d_info[static_cast<int>(floor_ptr->dungeon_idx)].flags.has(DF::NO_CAVE) ? 2 : 128);
 
         if (randint1(100) < 50) {
             /* Horizontal wall */
@@ -206,7 +206,7 @@ bool build_type2(player_type *player_ptr, dun_data_type *dd_ptr)
         return false;
 
     /* Choose lite or dark */
-    light = ((floor_ptr->dun_level <= randint1(25)) && d_info[floor_ptr->dungeon_idx].flags.has_not(DF::DARKNESS));
+    light = ((floor_ptr->dun_level <= randint1(25)) && d_info[static_cast<int>(floor_ptr->dungeon_idx)].flags.has_not(DF::DARKNESS));
 
     /* Determine extents of the first room */
     y1a = yval - randint1(4);
@@ -317,7 +317,7 @@ bool build_type3(player_type *player_ptr, dun_data_type *dd_ptr)
         return false;
 
     /* Choose lite or dark */
-    light = ((floor_ptr->dun_level <= randint1(25)) && d_info[floor_ptr->dungeon_idx].flags.has_not(DF::DARKNESS));
+    light = ((floor_ptr->dun_level <= randint1(25)) && d_info[static_cast<int>(floor_ptr->dungeon_idx)].flags.has_not(DF::DARKNESS));
 
     /* For now, always 3x3 */
     wx = wy = 1;
@@ -490,9 +490,9 @@ bool build_type3(player_type *player_ptr, dun_data_type *dd_ptr)
             /* Sometimes shut using secret doors */
             if (one_in_(3)) {
                 int door_type
-                    = (d_info[floor_ptr->dungeon_idx].flags.has(DF::CURTAIN) && one_in_(d_info[floor_ptr->dungeon_idx].flags.has(DF::NO_CAVE) ? 16 : 256))
+                    = (d_info[static_cast<int>(floor_ptr->dungeon_idx)].flags.has(DF::CURTAIN) && one_in_(d_info[static_cast<int>(floor_ptr->dungeon_idx)].flags.has(DF::NO_CAVE) ? 16 : 256))
                     ? DOOR_CURTAIN
-                    : (d_info[floor_ptr->dungeon_idx].flags.has(DF::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
+                    : (d_info[static_cast<int>(floor_ptr->dungeon_idx)].flags.has(DF::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
 
                 place_secret_door(player_ptr, yval, x1a - 1, door_type);
                 place_secret_door(player_ptr, yval, x2a + 1, door_type);
@@ -552,7 +552,7 @@ bool build_type4(player_type *player_ptr, dun_data_type *dd_ptr)
         return false;
 
     /* Choose lite or dark */
-    light = ((floor_ptr->dun_level <= randint1(25)) && d_info[floor_ptr->dungeon_idx].flags.has_not(DF::DARKNESS));
+    light = ((floor_ptr->dun_level <= randint1(25)) && d_info[static_cast<int>(floor_ptr->dungeon_idx)].flags.has_not(DF::DARKNESS));
 
     /* Large room */
     y1 = yval - 4;
@@ -737,9 +737,9 @@ bool build_type4(player_type *player_ptr, dun_data_type *dd_ptr)
 
         /* Occasionally, some Inner rooms */
         if (one_in_(3)) {
-            int door_type = (d_info[floor_ptr->dungeon_idx].flags.has(DF::CURTAIN) && one_in_(d_info[floor_ptr->dungeon_idx].flags.has(DF::NO_CAVE) ? 16 : 256))
+            int door_type = (d_info[static_cast<int>(floor_ptr->dungeon_idx)].flags.has(DF::CURTAIN) && one_in_(d_info[static_cast<int>(floor_ptr->dungeon_idx)].flags.has(DF::NO_CAVE) ? 16 : 256))
                 ? DOOR_CURTAIN
-                : (d_info[floor_ptr->dungeon_idx].flags.has(DF::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
+                : (d_info[static_cast<int>(floor_ptr->dungeon_idx)].flags.has(DF::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
 
             /* Long horizontal walls */
             for (x = xval - 5; x <= xval + 5; x++) {
@@ -817,9 +817,9 @@ bool build_type4(player_type *player_ptr, dun_data_type *dd_ptr)
 
     /* Four small rooms. */
     case 5: {
-        int door_type = (d_info[floor_ptr->dungeon_idx].flags.has(DF::CURTAIN) && one_in_(d_info[floor_ptr->dungeon_idx].flags.has(DF::NO_CAVE) ? 16 : 256))
+        int door_type = (d_info[static_cast<int>(floor_ptr->dungeon_idx)].flags.has(DF::CURTAIN) && one_in_(d_info[static_cast<int>(floor_ptr->dungeon_idx)].flags.has(DF::NO_CAVE) ? 16 : 256))
             ? DOOR_CURTAIN
-            : (d_info[floor_ptr->dungeon_idx].flags.has(DF::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
+            : (d_info[static_cast<int>(floor_ptr->dungeon_idx)].flags.has(DF::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
 
         /* Inner "cross" */
         for (y = y1; y <= y2; y++) {
@@ -878,7 +878,7 @@ bool build_type11(player_type *player_ptr, dun_data_type *dd_ptr)
 
     /* Occasional light */
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if ((randint1(floor_ptr->dun_level) <= 15) && d_info[floor_ptr->dungeon_idx].flags.has_not(DF::DARKNESS))
+    if ((randint1(floor_ptr->dun_level) <= 15) && d_info[static_cast<int>(floor_ptr->dungeon_idx)].flags.has_not(DF::DARKNESS))
         light = true;
 
     rad = randint0(9);
@@ -930,7 +930,7 @@ bool build_type12(player_type *player_ptr, dun_data_type *dd_ptr)
 
     /* Occasional light */
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    if ((randint1(floor_ptr->dun_level) <= 5) && d_info[floor_ptr->dungeon_idx].flags.has_not(DF::DARKNESS))
+    if ((randint1(floor_ptr->dun_level) <= 5) && d_info[static_cast<int>(floor_ptr->dungeon_idx)].flags.has_not(DF::DARKNESS))
         light = true;
 
     rad = randint1(9);

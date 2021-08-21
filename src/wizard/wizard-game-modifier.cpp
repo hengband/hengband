@@ -5,6 +5,7 @@
 
 #include "wizard/wizard-game-modifier.h"
 #include "core/asking-player.h"
+#include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io/input-key-requester.h"
@@ -119,7 +120,7 @@ void wiz_enter_quest(player_type* creature_ptr)
     creature_ptr->current_floor_ptr->inside_quest = (QUEST_IDX)tmp_int;
     parse_fixed_map(creature_ptr, "q_info.txt", 0, 0, 0, 0);
     quest[tmp_int].status = QUEST_STATUS_TAKEN;
-    if (quest[tmp_int].dungeon == 0)
+    if (quest[tmp_int].dungeon == DUNGEON_IDX::NONE)
         exe_enter_quest(creature_ptr, (QUEST_IDX)tmp_int);
 }
 

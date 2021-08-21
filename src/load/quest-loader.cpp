@@ -132,7 +132,7 @@ void analyze_quests(player_type *creature_ptr, const uint16_t max_quests_load, c
         else {
             byte tmp8u;
             rd_byte(&tmp8u);
-            q_ptr->dungeon = tmp8u;
+            q_ptr->dungeon = static_cast<DUNGEON_IDX>(tmp8u);
         }
 
         if (q_ptr->status == QUEST_STATUS_TAKEN || q_ptr->status == QUEST_STATUS_UNTAKEN)

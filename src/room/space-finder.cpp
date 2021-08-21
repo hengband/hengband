@@ -196,7 +196,7 @@ bool find_space(player_type *player_ptr, dun_data_type *dd_ptr, POSITION *y, POS
     if (!candidates)
         return false;
 
-    if (d_info[player_ptr->current_floor_ptr->dungeon_idx].flags.has_not(DF::NO_CAVE))
+    if (d_info[static_cast<int>(player_ptr->current_floor_ptr->dungeon_idx)].flags.has_not(DF::NO_CAVE))
         pick = randint1(candidates);
     else
         pick = candidates / 2 + 1;

@@ -18,9 +18,9 @@ static void rd_hengband_dungeons(void)
     int16_t tmp16s;
     for (int i = 0; i < max; i++) {
         rd_s16b(&tmp16s);
-        max_dlv[i] = tmp16s;
-        if (max_dlv[i] > d_info[i].maxdepth)
-            max_dlv[i] = d_info[i].maxdepth;
+        max_dlv[static_cast<int>(i)] = tmp16s;
+        if (max_dlv[static_cast<int>(i)] > d_info[static_cast<int>(i)].maxdepth)
+            max_dlv[static_cast<int>(i)] = d_info[static_cast<int>(i)].maxdepth;
     }
 }
 
@@ -43,10 +43,10 @@ void rd_alter_reality(player_type *creature_ptr)
 {
     int16_t tmp16s;
     if (h_older_than(0, 3, 8))
-        creature_ptr->recall_dungeon = DUNGEON_ANGBAND;
+        creature_ptr->recall_dungeon = DUNGEON_IDX::ANGBAND;
     else {
         rd_s16b(&tmp16s);
-        creature_ptr->recall_dungeon = (byte)tmp16s;
+        creature_ptr->recall_dungeon = static_cast<DUNGEON_IDX>(tmp16s);
     }
 
     if (h_older_than(1, 5, 0, 0))

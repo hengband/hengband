@@ -54,6 +54,8 @@
 #define QUEST_OBERON 8 /*<! オベロン打倒クエストに割り振るクエストID */
 #define QUEST_SERPENT 9 /*<! サーペント打倒クエストに割り振るクエストID */
 
+enum class DUNGEON_IDX : int;
+
 /*!
  * @struct quest_type
  * @brief クエスト情報の構造体 / Structure for the "quests".

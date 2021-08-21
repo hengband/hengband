@@ -95,12 +95,12 @@ static void set_floor_and_wall_aux(int16_t feat_type[100], feat_prob prob[DUNGEO
  */
 void set_floor_and_wall(DUNGEON_IDX type)
 {
-    DUNGEON_IDX cur_type = 255;
+    DUNGEON_IDX cur_type = DUNGEON_IDX::UNKNOWN;
     if (cur_type == type)
         return;
 
     cur_type = type;
-    dungeon_type *d_ptr = &d_info[type];
+    dungeon_type *d_ptr = &d_info[static_cast<int>(type)];
 
     set_floor_and_wall_aux(feat_ground_type, d_ptr->floor);
     set_floor_and_wall_aux(feat_wall_type, d_ptr->fill);
@@ -351,7 +351,7 @@ static void generate_area(player_type *player_ptr, POSITION y, POSITION x, bool 
 
     bool is_winner = wilderness[y][x].entrance > 0;
     is_winner &= (wilderness[y][x].town == 0);
-    bool is_wild_winner = d_info[wilderness[y][x].entrance].flags.has_not(DF::WINNER);
+    bool is_wild_winner = d_info[static_cast<int>(wilderness[y][x].entrance)].flags.has_not(DF::WINNER);
     is_winner &= ((current_world_ptr->total_winner != 0) || is_wild_winner);
     if (!is_winner)
         return;
@@ -540,7 +540,7 @@ void wilderness_gen(player_type *creature_ptr)
         creature_ptr->ambush_flag = true;
 
     generate_encounter = false;
-    set_floor_and_wall(0);
+    set_floor_and_wall(DUNGEON_IDX::NONE);
     for (int i = 0; i < max_q_idx; i++)
         if (quest[i].status == QUEST_STATUS_REWARDED)
             quest[i].status = QUEST_STATUS_FINISHED;
@@ -575,7 +575,7 @@ void wilderness_gen_small(player_type *creature_ptr)
                 continue;
             }
 
-            if (wilderness[j][i].entrance && (current_world_ptr->total_winner || d_info[wilderness[j][i].entrance].flags.has_not(DF::WINNER))) {
+            if (wilderness[j][i].entrance && (current_world_ptr->total_winner || d_info[static_cast<int>(wilderness[j][i].entrance)].flags.has_not(DF::WINNER))) {
                 floor_ptr->grid_array[j][i].feat = feat_entrance;
                 floor_ptr->grid_array[j][i].special = (byte)wilderness[j][i].entrance;
                 floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_MARK);
@@ -724,12 +724,12 @@ parse_error_type parse_line_wilderness(player_type *creature_ptr, char *buf, int
         return PARSE_ERROR_UNDEFINED_DIRECTIVE;
     }
 
-    for (int i = 1; i < current_world_ptr->max_d_idx; i++) {
-        if (!d_info[i].maxdepth)
+    for (int i = 1; i < static_cast<int>(current_world_ptr->max_d_idx); i++) {
+        if (!d_info[static_cast<int>(i)].maxdepth)
             continue;
-        wilderness[d_info[i].dy][d_info[i].dx].entrance = (byte)i;
-        if (!wilderness[d_info[i].dy][d_info[i].dx].town) {
-            wilderness[d_info[i].dy][d_info[i].dx].level = d_info[i].mindepth;
+        wilderness[d_info[static_cast<int>(i)].dy][d_info[static_cast<int>(i)].dx].entrance = (byte)i;
+        if (!wilderness[d_info[static_cast<int>(i)].dy][d_info[static_cast<int>(i)].dx].town) {
+            wilderness[d_info[static_cast<int>(i)].dy][d_info[static_cast<int>(i)].dx].level = d_info[static_cast<int>(i)].mindepth;
         }
     }
 

@@ -84,8 +84,8 @@ void process_dungeon(player_type *player_ptr, bool load_game)
         player_ptr->max_plv = player_ptr->lev;
     }
 
-    if ((max_dlv[player_ptr->dungeon_idx] < floor_ptr->dun_level) && !floor_ptr->inside_quest) {
-        max_dlv[player_ptr->dungeon_idx] = floor_ptr->dun_level;
+    if ((max_dlv[static_cast<int>(player_ptr->dungeon_idx)] < floor_ptr->dun_level) && !floor_ptr->inside_quest) {
+        max_dlv[static_cast<int>(player_ptr->dungeon_idx)] = floor_ptr->dun_level;
         if (record_maxdepth)
             exe_write_diary(player_ptr, DIARY_MAXDEAPTH, floor_ptr->dun_level, NULL);
     }
@@ -127,18 +127,18 @@ void process_dungeon(player_type *player_ptr, bool load_game)
     if (!player_ptr->playing || player_ptr->is_dead)
         return;
 
-    if (!floor_ptr->inside_quest && (player_ptr->dungeon_idx == DUNGEON_ANGBAND)) {
+    if (!floor_ptr->inside_quest && (player_ptr->dungeon_idx == DUNGEON_IDX::ANGBAND)) {
         quest_discovery(random_quest_number(player_ptr, floor_ptr->dun_level));
         floor_ptr->inside_quest = random_quest_number(player_ptr, floor_ptr->dun_level);
     }
-    if ((floor_ptr->dun_level == d_info[player_ptr->dungeon_idx].maxdepth) && d_info[player_ptr->dungeon_idx].final_guardian) {
-        if (r_info[d_info[player_ptr->dungeon_idx].final_guardian].max_num)
+    if ((floor_ptr->dun_level == d_info[static_cast<int>(player_ptr->dungeon_idx)].maxdepth) && d_info[static_cast<int>(player_ptr->dungeon_idx)].final_guardian) {
+        if (r_info[d_info[static_cast<int>(player_ptr->dungeon_idx)].final_guardian].max_num)
 #ifdef JP
-            msg_format("この階には%sの主である%sが棲んでいる。", d_info[player_ptr->dungeon_idx].name.c_str(),
-                r_info[d_info[player_ptr->dungeon_idx].final_guardian].name.c_str());
+            msg_format("この階には%sの主である%sが棲んでいる。", d_info[static_cast<int>(player_ptr->dungeon_idx)].name.c_str(),
+                r_info[d_info[static_cast<int>(player_ptr->dungeon_idx)].final_guardian].name.c_str());
 #else
-            msg_format("%^s lives in this level as the keeper of %s.", r_info[d_info[player_ptr->dungeon_idx].final_guardian].name.c_str(),
-                d_info[player_ptr->dungeon_idx].name.c_str());
+            msg_format("%^s lives in this level as the keeper of %s.", r_info[d_info[static_cast<int>(player_ptr->dungeon_idx)].final_guardian].name.c_str(),
+                d_info[static_cast<int>(player_ptr->dungeon_idx)].name.c_str());
 #endif
     }
 

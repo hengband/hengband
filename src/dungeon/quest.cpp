@@ -231,12 +231,12 @@ QUEST_IDX quest_number(player_type *player_ptr, DEPTH level)
  */
 QUEST_IDX random_quest_number(player_type *player_ptr, DEPTH level)
 {
-    if (player_ptr->dungeon_idx != DUNGEON_ANGBAND)
+    if (player_ptr->dungeon_idx != DUNGEON_IDX::ANGBAND)
         return 0;
 
     for (QUEST_IDX i = MIN_RANDOM_QUEST; i < MAX_RANDOM_QUEST + 1; i++) {
         if ((quest[i].type == QUEST_TYPE_RANDOM) && (quest[i].status == QUEST_STATUS_TAKEN) && (quest[i].level == level)
-            && (quest[i].dungeon == DUNGEON_ANGBAND)) {
+            && (quest[i].dungeon == DUNGEON_IDX::ANGBAND)) {
             return i;
         }
     }

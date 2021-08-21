@@ -326,7 +326,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
                 continue;
             }
 
-            if (d_info[caster_ptr->dungeon_idx].flags.has(DF::DARKNESS))
+            if (d_info[static_cast<int>(caster_ptr->dungeon_idx)].flags.has(DF::DARKNESS))
                 continue;
 
             grid_type *cc_ptr;

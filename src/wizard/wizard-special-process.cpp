@@ -379,14 +379,14 @@ void wiz_create_feature(player_type *creature_ptr)
  * @details 0を指定すると地上に飛ぶが、元いた場所にしか飛ばない
  * @todo 可能ならダンジョンの入口 (例：ルルイエなら大洋の真ん中)へ飛べるようにしたい
  */
-static bool select_debugging_floor(player_type *creature_ptr, int dungeon_type)
+static bool select_debugging_floor(player_type *creature_ptr, DUNGEON_IDX dungeon_type)
 {
-    auto max_depth = d_info[dungeon_type].maxdepth;
+    auto max_depth = d_info[static_cast<int>(dungeon_type)].maxdepth;
     if ((max_depth == 0) || (dungeon_type > current_world_ptr->max_d_idx)) {
-        dungeon_type = DUNGEON_ANGBAND;
+        dungeon_type = DUNGEON_IDX::ANGBAND;
     }
 
-    auto min_depth = (int)d_info[dungeon_type].mindepth;
+    auto min_depth = (int)d_info[static_cast<int>(dungeon_type)].mindepth;
     while (true) {
         char ppp[80];
         char tmp_val[160];
@@ -438,7 +438,7 @@ static bool select_debugging_dungeon(player_type *creature_ptr, DUNGEON_IDX *dun
         }
 
         *dungeon_type = (DUNGEON_IDX)atoi(tmp_val);
-        if ((*dungeon_type < DUNGEON_ANGBAND) || (*dungeon_type > DUNGEON_MAX)) {
+        if ((*dungeon_type < DUNGEON_IDX::ANGBAND) || (*dungeon_type > DUNGEON_IDX::DUNGEON_MAX)) {
             msg_print("Invalid dungeon. Please re-input.");
             continue;
         }
@@ -448,12 +448,12 @@ static bool select_debugging_dungeon(player_type *creature_ptr, DUNGEON_IDX *dun
 }
 
 /*!
- * @brief 任意のダンジョン及び階層に飛ぶtための選択処理
+ * @brief 任意のダンジョン及び階層に飛ぶための選択処理
  * Go to any level
  */
 void wiz_jump_to_dungeon(player_type *creature_ptr)
 {
-    DUNGEON_IDX dungeon_type = 1;
+    DUNGEON_IDX dungeon_type = DUNGEON_IDX::ANGBAND;
     if (!select_debugging_dungeon(creature_ptr, &dungeon_type)) {
         return;
     }
@@ -462,11 +462,11 @@ void wiz_jump_to_dungeon(player_type *creature_ptr)
         return;
     }
 
-    if (command_arg < d_info[dungeon_type].mindepth)
+    if (command_arg < d_info[static_cast<int>(dungeon_type)].mindepth)
         command_arg = 0;
 
-    if (command_arg > d_info[dungeon_type].maxdepth)
-        command_arg = (COMMAND_ARG)d_info[dungeon_type].maxdepth;
+    if (command_arg > d_info[static_cast<int>(dungeon_type)].maxdepth)
+        command_arg = (COMMAND_ARG)d_info[static_cast<int>(dungeon_type)].maxdepth;
 
     msg_format("You jump to dungeon level %d.", command_arg);
     if (autosave_l)
@@ -719,9 +719,9 @@ void cheat_death(player_type *creature_ptr)
     creature_ptr->phase_out = false;
     leaving_quest = 0;
     floor_ptr->inside_quest = 0;
-    if (creature_ptr->dungeon_idx)
+    if (creature_ptr->dungeon_idx != DUNGEON_IDX::NONE)
         creature_ptr->recall_dungeon = creature_ptr->dungeon_idx;
-    creature_ptr->dungeon_idx = 0;
+    creature_ptr->dungeon_idx = DUNGEON_IDX::NONE;
     if (lite_town || vanilla_town) {
         creature_ptr->wilderness_y = 1;
         creature_ptr->wilderness_x = 1;

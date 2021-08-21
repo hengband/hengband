@@ -430,7 +430,7 @@ errr report_score(player_type *creature_ptr, display_player_pf display_player)
     buf_sprintf(score, "level: %d\n", creature_ptr->lev);
     buf_sprintf(score, "depth: %d\n", creature_ptr->current_floor_ptr->dun_level);
     buf_sprintf(score, "maxlv: %d\n", creature_ptr->max_plv);
-    buf_sprintf(score, "maxdp: %d\n", max_dlv[DUNGEON_ANGBAND]);
+    buf_sprintf(score, "maxdp: %d\n", max_dlv[static_cast<int>(DUNGEON_IDX::ANGBAND)]);
     buf_sprintf(score, "au: %d\n", creature_ptr->au);
     buf_sprintf(score, "turns: %d\n", turn_real(creature_ptr, current_world_ptr->game_turn));
     buf_sprintf(score, "sex: %d\n", creature_ptr->psex);

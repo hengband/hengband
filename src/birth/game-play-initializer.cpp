@@ -137,8 +137,8 @@ void player_wipe_without_name(player_type *creature_ptr)
     creature_ptr->pet_follow_distance = PET_FOLLOW_DIST;
     creature_ptr->pet_extra_flags = (PF_TELEPORT | PF_ATTACK_SPELL | PF_SUMMON_SPELL);
 
-    for (int i = 0; i < current_world_ptr->max_d_idx; i++)
-        max_dlv[i] = 0;
+    for (int i = 0; i < static_cast<int>(current_world_ptr->max_d_idx); i++)
+        max_dlv[static_cast<int>(i)] = 0;
 
     creature_ptr->visit = 1;
     creature_ptr->wild_mode = false;
@@ -166,11 +166,11 @@ void player_wipe_without_name(player_type *creature_ptr)
     for (int i = 0; i < 8; i++)
         creature_ptr->virtues[i] = 0;
 
-    creature_ptr->dungeon_idx = 0;
+    creature_ptr->dungeon_idx = DUNGEON_IDX::NONE;
     if (vanilla_town || ironman_downward) {
-        creature_ptr->recall_dungeon = DUNGEON_ANGBAND;
+        creature_ptr->recall_dungeon = DUNGEON_IDX::ANGBAND;
     } else {
-        creature_ptr->recall_dungeon = DUNGEON_GALGALS;
+        creature_ptr->recall_dungeon = DUNGEON_IDX::GALGALS;
     }
 
     memcpy(creature_ptr->name, tmp.name, sizeof(tmp.name));

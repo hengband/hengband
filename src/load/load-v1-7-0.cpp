@@ -46,7 +46,7 @@ void remove_water_cave(player_type* creature_ptr)
     if (creature_ptr->current_floor_ptr->inside_quest != OLD_QUEST_WATER_CAVE)
         return;
 
-    creature_ptr->dungeon_idx = lite_town ? DUNGEON_ANGBAND : DUNGEON_GALGALS;
+    creature_ptr->dungeon_idx = lite_town ? DUNGEON_IDX::ANGBAND : DUNGEON_IDX::GALGALS;
     creature_ptr->current_floor_ptr->dun_level = 1;
     creature_ptr->current_floor_ptr->inside_quest = 0;
 }

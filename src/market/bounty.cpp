@@ -272,14 +272,14 @@ void determine_daily_bounty(player_type *player_ptr, bool conv_old)
 {
     int max_dl = 3, i;
     if (!conv_old) {
-        for (i = 0; i < current_world_ptr->max_d_idx; i++) {
-            if (max_dlv[i] < d_info[i].mindepth)
+        for (i = 0; i < static_cast<int>(current_world_ptr->max_d_idx); i++) {
+            if (max_dlv[static_cast<int>(i)] < d_info[static_cast<int>(i)].mindepth)
                 continue;
-            if (max_dl < max_dlv[i])
-                max_dl = max_dlv[i];
+            if (max_dl < max_dlv[static_cast<int>(i)])
+                max_dl = max_dlv[static_cast<int>(i)];
         }
     } else {
-        max_dl = MAX(max_dlv[DUNGEON_ANGBAND], 3);
+        max_dl = MAX(max_dlv[static_cast<int>(DUNGEON_IDX::ANGBAND)], 3);
     }
 
     get_mon_num_prep_bounty(player_ptr);

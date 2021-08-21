@@ -453,7 +453,7 @@ static concptr decide_target_floor(player_type *subject_ptr, eg_type *eg_ptr)
         return building[eg_ptr->f_ptr->subtype].name;
 
     if (eg_ptr->f_ptr->flags.has(FF::ENTRANCE))
-        return format(_("%s(%d階相当)", "%s(level %d)"), d_info[eg_ptr->g_ptr->special].text.c_str(), d_info[eg_ptr->g_ptr->special].mindepth);
+        return format(_("%s(%d階相当)", "%s(level %d)"), d_info[static_cast<int>(eg_ptr->g_ptr->special)].text.c_str(), d_info[static_cast<int>(eg_ptr->g_ptr->special)].mindepth);
 
     if (eg_ptr->f_ptr->flags.has(FF::TOWN))
         return town_info[eg_ptr->g_ptr->special].name;

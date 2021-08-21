@@ -60,7 +60,7 @@ errr init_other(player_type *player_ptr)
     for (int i = 0; i < MAX_MTIMED; i++)
         C_MAKE(floor_ptr->mproc_list[i], current_world_ptr->max_m_idx, int16_t);
 
-    C_MAKE(max_dlv, current_world_ptr->max_d_idx, DEPTH);
+    C_MAKE(max_dlv, static_cast<int>(current_world_ptr->max_d_idx), DEPTH);
     for (int i = 0; i < MAX_HGT; i++)
         C_MAKE(floor_ptr->grid_array[i], MAX_WID, grid_type);
 

@@ -52,7 +52,7 @@ bool is_teleport_level_ineffective(player_type *caster_ptr, MONSTER_IDX idx)
     bool is_special_floor
         = floor_ptr->inside_arena || caster_ptr->phase_out || (floor_ptr->inside_quest && !random_quest_number(caster_ptr, floor_ptr->dun_level));
     bool is_invalid_floor = idx <= 0;
-    is_invalid_floor &= quest_number(caster_ptr, floor_ptr->dun_level) || (floor_ptr->dun_level >= d_info[caster_ptr->dungeon_idx].maxdepth);
+    is_invalid_floor &= quest_number(caster_ptr, floor_ptr->dun_level) || (floor_ptr->dun_level >= d_info[static_cast<int>(caster_ptr->dungeon_idx)].maxdepth);
     is_invalid_floor &= caster_ptr->current_floor_ptr->dun_level >= 1;
     is_invalid_floor &= ironman_downward;
     return is_special_floor || is_invalid_floor;
@@ -101,7 +101,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
             go_up = false;
     }
 
-    if ((ironman_downward && (m_idx <= 0)) || (creature_ptr->current_floor_ptr->dun_level <= d_info[creature_ptr->dungeon_idx].mindepth)) {
+    if ((ironman_downward && (m_idx <= 0)) || (creature_ptr->current_floor_ptr->dun_level <= d_info[static_cast<int>(creature_ptr->dungeon_idx)].mindepth)) {
 #ifdef JP
         if (see_m)
             msg_format("%^sは床を突き破って沈んでいく。", m_name);
@@ -111,7 +111,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 #endif
         if (m_idx <= 0) {
             if (!is_in_dungeon(creature_ptr)) {
-                creature_ptr->dungeon_idx = ironman_downward ? DUNGEON_ANGBAND : creature_ptr->recall_dungeon;
+                creature_ptr->dungeon_idx = ironman_downward ? DUNGEON_IDX::ANGBAND : creature_ptr->recall_dungeon;
                 creature_ptr->oldpy = creature_ptr->y;
                 creature_ptr->oldpx = creature_ptr->x;
             }
@@ -123,7 +123,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
                 do_cmd_save_game(creature_ptr, true);
 
             if (!is_in_dungeon(creature_ptr)) {
-                creature_ptr->current_floor_ptr->dun_level = d_info[creature_ptr->dungeon_idx].mindepth;
+                creature_ptr->current_floor_ptr->dun_level = d_info[static_cast<int>(creature_ptr->dungeon_idx)].mindepth;
                 prepare_change_floor_mode(creature_ptr, CFM_RAND_PLACE);
             } else {
                 prepare_change_floor_mode(creature_ptr, CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
@@ -132,7 +132,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
             creature_ptr->leaving = true;
         }
     } else if (quest_number(creature_ptr, creature_ptr->current_floor_ptr->dun_level)
-        || (creature_ptr->current_floor_ptr->dun_level >= d_info[creature_ptr->dungeon_idx].maxdepth)) {
+        || (creature_ptr->current_floor_ptr->dun_level >= d_info[static_cast<int>(creature_ptr->dungeon_idx)].maxdepth)) {
 #ifdef JP
         if (see_m)
             msg_format("%^sは天井を突き破って宙へ浮いていく。", m_name);
@@ -357,14 +357,14 @@ bool recall_player(player_type *creature_ptr, TIME_EFFECT turns)
     }
 
     bool is_special_floor = is_in_dungeon(creature_ptr);
-    is_special_floor &= max_dlv[creature_ptr->dungeon_idx] > creature_ptr->current_floor_ptr->dun_level;
+    is_special_floor &= max_dlv[static_cast<int>(creature_ptr->dungeon_idx)] > creature_ptr->current_floor_ptr->dun_level;
     is_special_floor &= !creature_ptr->current_floor_ptr->inside_quest;
     is_special_floor &= !creature_ptr->word_recall;
     if (is_special_floor) {
         if (get_check(_("ここは最深到達階より浅い階です。この階に戻って来ますか？ ", "Reset recall depth? "))) {
-            max_dlv[creature_ptr->dungeon_idx] = creature_ptr->current_floor_ptr->dun_level;
+            max_dlv[static_cast<int>(creature_ptr->dungeon_idx)] = creature_ptr->current_floor_ptr->dun_level;
             if (record_maxdepth)
-                exe_write_diary(creature_ptr, DIARY_TRUMP, creature_ptr->dungeon_idx, _("帰還のときに", "when recalled from dungeon"));
+                exe_write_diary(creature_ptr, DIARY_TRUMP, static_cast<int>(creature_ptr->dungeon_idx), _("帰還のときに", "when recalled from dungeon"));
         }
     }
 
@@ -378,7 +378,7 @@ bool recall_player(player_type *creature_ptr, TIME_EFFECT turns)
     if (!is_in_dungeon(creature_ptr)) {
         DUNGEON_IDX select_dungeon;
         select_dungeon = choose_dungeon(_("に帰還", "recall"), 2, 14);
-        if (!select_dungeon)
+        if (select_dungeon == DUNGEON_IDX::NONE)
             return false;
         creature_ptr->recall_dungeon = select_dungeon;
     }
@@ -392,11 +392,11 @@ bool recall_player(player_type *creature_ptr, TIME_EFFECT turns)
 bool free_level_recall(player_type *creature_ptr)
 {
     DUNGEON_IDX select_dungeon = choose_dungeon(_("にテレポート", "teleport"), 4, 0);
-    if (!select_dungeon)
+    if (select_dungeon == DUNGEON_IDX::NONE)
         return false;
 
-    DEPTH max_depth = d_info[select_dungeon].maxdepth;
-    if (select_dungeon == DUNGEON_ANGBAND) {
+    DEPTH max_depth = d_info[static_cast<int>(select_dungeon)].maxdepth;
+    if (select_dungeon == DUNGEON_IDX::ANGBAND) {
         if (quest[QUEST_OBERON].status != QUEST_STATUS_FINISHED)
             max_depth = 98;
         else if (quest[QUEST_SERPENT].status != QUEST_STATUS_FINISHED)
@@ -404,18 +404,18 @@ bool free_level_recall(player_type *creature_ptr)
     }
 
     QUANTITY amt = get_quantity(
-        format(_("%sの何階にテレポートしますか？", "Teleport to which level of %s? "), d_info[select_dungeon].name.c_str()), (QUANTITY)max_depth);
+        format(_("%sの何階にテレポートしますか？", "Teleport to which level of %s? "), d_info[static_cast<int>(select_dungeon)].name.c_str()), (QUANTITY)max_depth);
     if (amt <= 0) {
         return false;
     }
 
     creature_ptr->word_recall = 1;
     creature_ptr->recall_dungeon = select_dungeon;
-    max_dlv[creature_ptr->recall_dungeon]
-        = ((amt > d_info[select_dungeon].maxdepth) ? d_info[select_dungeon].maxdepth
-                                                   : ((amt < d_info[select_dungeon].mindepth) ? d_info[select_dungeon].mindepth : amt));
+    max_dlv[static_cast<int>(creature_ptr->recall_dungeon)]
+        = ((amt > d_info[static_cast<int>(select_dungeon)].maxdepth) ? d_info[static_cast<int>(select_dungeon)].maxdepth
+                                                   : ((amt < d_info[static_cast<int>(select_dungeon)].mindepth) ? d_info[static_cast<int>(select_dungeon)].mindepth : amt));
     if (record_maxdepth)
-        exe_write_diary(creature_ptr, DIARY_TRUMP, select_dungeon, _("トランプタワーで", "at Trump Tower"));
+        exe_write_diary(creature_ptr, DIARY_TRUMP, static_cast<int>(select_dungeon), _("トランプタワーで", "at Trump Tower"));
 
     msg_print(_("回りの大気が張りつめてきた...", "The air about you becomes charged..."));
 
@@ -430,7 +430,8 @@ bool free_level_recall(player_type *creature_ptr)
  */
 bool reset_recall(player_type *caster_ptr)
 {
-    int select_dungeon, dummy = 0;
+    DUNGEON_IDX select_dungeon;
+    int dummy = 0;
     char ppp[80];
     char tmp_val[160];
 
@@ -440,9 +441,9 @@ bool reset_recall(player_type *caster_ptr)
         return true;
     }
 
-    if (!select_dungeon)
+    if (select_dungeon == DUNGEON_IDX::NONE)
         return false;
-    sprintf(ppp, _("何階にセットしますか (%d-%d):", "Reset to which level (%d-%d): "), (int)d_info[select_dungeon].mindepth, (int)max_dlv[select_dungeon]);
+    sprintf(ppp, _("何階にセットしますか (%d-%d):", "Reset to which level (%d-%d): "), (int)d_info[static_cast<int>(select_dungeon)].mindepth, (int)max_dlv[static_cast<int>(select_dungeon)]);
     sprintf(tmp_val, "%d", (int)MAX(caster_ptr->current_floor_ptr->dun_level, 1));
 
     if (!get_string(ppp, tmp_val, 10)) {
@@ -452,17 +453,17 @@ bool reset_recall(player_type *caster_ptr)
     dummy = atoi(tmp_val);
     if (dummy < 1)
         dummy = 1;
-    if (dummy > max_dlv[select_dungeon])
-        dummy = max_dlv[select_dungeon];
-    if (dummy < d_info[select_dungeon].mindepth)
-        dummy = d_info[select_dungeon].mindepth;
+    if (dummy > max_dlv[static_cast<int>(select_dungeon)])
+        dummy = max_dlv[static_cast<int>(select_dungeon)];
+    if (dummy < d_info[static_cast<int>(select_dungeon)].mindepth)
+        dummy = d_info[static_cast<int>(select_dungeon)].mindepth;
 
-    max_dlv[select_dungeon] = dummy;
+    max_dlv[static_cast<int>(select_dungeon)] = dummy;
 
     if (record_maxdepth)
-        exe_write_diary(caster_ptr, DIARY_TRUMP, select_dungeon, _("フロア・リセットで", "using a scroll of reset recall"));
+        exe_write_diary(caster_ptr, DIARY_TRUMP, static_cast<int>(select_dungeon), _("フロア・リセットで", "using a scroll of reset recall"));
 #ifdef JP
-    msg_format("%sの帰還レベルを %d 階にセット。", d_info[select_dungeon].name.c_str(), dummy, dummy * 50);
+    msg_format("%sの帰還レベルを %d 階にセット。", d_info[static_cast<int>(select_dungeon)].name.c_str(), dummy, dummy * 50);
 #else
     msg_format("Recall depth set to level %d (%d').", dummy, dummy * 50);
 #endif

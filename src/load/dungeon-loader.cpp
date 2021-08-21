@@ -1,4 +1,5 @@
 ﻿#include "load/dungeon-loader.h"
+#include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor-save-util.h"
 #include "floor/floor-save.h"
@@ -29,7 +30,7 @@ static errr rd_dungeon(player_type *player_ptr)
     errr err = 0;
     if (h_older_than(1, 5, 0, 0)) {
         err = rd_dungeon_old(player_ptr);
-        if (player_ptr->dungeon_idx) {
+        if (player_ptr->dungeon_idx != DUNGEON_IDX::NONE) {
             player_ptr->floor_id = get_new_floor_id(player_ptr);
             get_sf_ptr(player_ptr->floor_id)->dun_level = player_ptr->current_floor_ptr->dun_level;
         }

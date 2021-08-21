@@ -250,7 +250,7 @@ static void get_out_monster(player_type *protected_ptr)
 static void preserve_info(player_type *creature_ptr)
 {
     MONRACE_IDX quest_r_idx = 0;
-    for (DUNGEON_IDX i = 0; i < max_q_idx; i++) {
+    for (int i = 0; i < max_q_idx; i++) {
         if ((quest[i].status == QUEST_STATUS_TAKEN) && ((quest[i].type == QUEST_TYPE_KILL_LEVEL) || (quest[i].type == QUEST_TYPE_RANDOM))
             && (quest[i].level == creature_ptr->current_floor_ptr->dun_level) && (creature_ptr->dungeon_idx == quest[i].dungeon)
             && !(quest[i].flags & QUEST_FLAG_PRESET)) {
@@ -258,7 +258,7 @@ static void preserve_info(player_type *creature_ptr)
         }
     }
 
-    for (DUNGEON_IDX i = 1; i < creature_ptr->current_floor_ptr->m_max; i++) {
+    for (int i = 1; i < creature_ptr->current_floor_ptr->m_max; i++) {
         monster_race *r_ptr;
         monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[i];
         if (!monster_is_valid(m_ptr) || (quest_r_idx != m_ptr->r_idx))
@@ -271,7 +271,7 @@ static void preserve_info(player_type *creature_ptr)
         delete_monster_idx(creature_ptr, i);
     }
 
-    for (DUNGEON_IDX i = 0; i < INVEN_PACK; i++) {
+    for (int i = 0; i < INVEN_PACK; i++) {
         object_type *o_ptr = &creature_ptr->inventory_list[i];
         if (!object_is_valid(o_ptr))
             continue;
@@ -311,9 +311,9 @@ static void jump_floors(player_type *creature_ptr)
 
     if (creature_ptr->change_floor_mode & CFM_DOWN) {
         if (!is_in_dungeon(creature_ptr))
-            move_num = d_info[creature_ptr->dungeon_idx].mindepth;
+            move_num = d_info[static_cast<int>(creature_ptr->dungeon_idx)].mindepth;
     } else if (creature_ptr->change_floor_mode & CFM_UP) {
-        if (creature_ptr->current_floor_ptr->dun_level + move_num < d_info[creature_ptr->dungeon_idx].mindepth)
+        if (creature_ptr->current_floor_ptr->dun_level + move_num < d_info[static_cast<int>(creature_ptr->dungeon_idx)].mindepth)
             move_num = -creature_ptr->current_floor_ptr->dun_level;
     }
 
@@ -322,25 +322,25 @@ static void jump_floors(player_type *creature_ptr)
 
 static void exit_to_wilderness(player_type *creature_ptr)
 {
-    if (is_in_dungeon(creature_ptr) || (creature_ptr->dungeon_idx == 0))
+    if (is_in_dungeon(creature_ptr) || (creature_ptr->dungeon_idx == DUNGEON_IDX::NONE))
         return;
 
     creature_ptr->leaving_dungeon = true;
     if (!vanilla_town && !lite_town) {
-        creature_ptr->wilderness_y = d_info[creature_ptr->dungeon_idx].dy;
-        creature_ptr->wilderness_x = d_info[creature_ptr->dungeon_idx].dx;
+        creature_ptr->wilderness_y = d_info[static_cast<int>(creature_ptr->dungeon_idx)].dy;
+        creature_ptr->wilderness_x = d_info[static_cast<int>(creature_ptr->dungeon_idx)].dx;
     }
 
     creature_ptr->recall_dungeon = creature_ptr->dungeon_idx;
     creature_ptr->word_recall = 0;
-    creature_ptr->dungeon_idx = 0;
+    creature_ptr->dungeon_idx = DUNGEON_IDX::NONE;
     creature_ptr->change_floor_mode &= ~CFM_SAVE_FLOORS; // TODO
 }
 
 static void kill_saved_floors(player_type *creature_ptr, saved_floor_type *sf_ptr)
 {
     if (!(creature_ptr->change_floor_mode & CFM_SAVE_FLOORS)) {
-        for (DUNGEON_IDX i = 0; i < MAX_SAVED_FLOORS; i++)
+        for (int i = 0; i < MAX_SAVED_FLOORS; i++)
             kill_saved_floor(creature_ptr, &saved_floors[i]);
 
         latest_visit_mark = 1;
@@ -431,7 +431,7 @@ void jump_floor(player_type *creature_ptr, DUNGEON_IDX dun_idx, DEPTH depth)
     creature_ptr->current_floor_ptr->dun_level = depth;
     prepare_change_floor_mode(creature_ptr, CFM_RAND_PLACE);
     if (!is_in_dungeon(creature_ptr))
-        creature_ptr->dungeon_idx = 0;
+        creature_ptr->dungeon_idx = DUNGEON_IDX::NONE;
 
     creature_ptr->current_floor_ptr->inside_arena = false;
     creature_ptr->wild_mode = false;

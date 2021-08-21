@@ -145,7 +145,7 @@ static void do_cmd_knowledge_quests_current(player_type *creature_ptr, FILE *fff
             continue;
 
         rand_level = quest[i].level;
-        if (max_dlv[DUNGEON_ANGBAND] < rand_level)
+        if (max_dlv[static_cast<int>(DUNGEON_IDX::ANGBAND)] < rand_level)
             continue;
 
         r_ptr = &r_info[quest[i].r_idx];

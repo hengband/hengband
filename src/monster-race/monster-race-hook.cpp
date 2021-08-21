@@ -129,7 +129,7 @@ bool mon_hook_dungeon(player_type *player_ptr, MONRACE_IDX r_idx)
         return true;
 
     monster_race *r_ptr = &r_info[r_idx];
-    dungeon_type *d_ptr = &d_info[player_ptr->dungeon_idx];
+    dungeon_type *d_ptr = &d_info[static_cast<int>(player_ptr->dungeon_idx)];
 
     if (any_bits(r_ptr->flags8, RF8_WILD_ONLY))
         return (any_bits(d_ptr->mflags8, RF8_WILD_MOUNTAIN) && any_bits(r_ptr->flags8, RF8_WILD_MOUNTAIN));

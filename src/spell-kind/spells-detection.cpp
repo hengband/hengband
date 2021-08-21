@@ -41,7 +41,7 @@
  */
 static bool detect_feat_flag(player_type *caster_ptr, POSITION range, FF flag, bool known)
 {
-    if (d_info[caster_ptr->dungeon_idx].flags.has(DF::DARKNESS))
+    if (d_info[static_cast<int>(caster_ptr->dungeon_idx)].flags.has(DF::DARKNESS))
         range /= 3;
 
     grid_type *g_ptr;
@@ -168,7 +168,7 @@ bool detect_treasure(player_type *caster_ptr, POSITION range)
 bool detect_objects_gold(player_type *caster_ptr, POSITION range)
 {
     POSITION range2 = range;
-    if (d_info[caster_ptr->dungeon_idx].flags.has(DF::DARKNESS))
+    if (d_info[static_cast<int>(caster_ptr->dungeon_idx)].flags.has(DF::DARKNESS))
         range2 /= 3;
 
     /* Scan objects */
@@ -216,7 +216,7 @@ bool detect_objects_gold(player_type *caster_ptr, POSITION range)
 bool detect_objects_normal(player_type *caster_ptr, POSITION range)
 {
     POSITION range2 = range;
-    if (d_info[caster_ptr->dungeon_idx].flags.has(DF::DARKNESS))
+    if (d_info[static_cast<int>(caster_ptr->dungeon_idx)].flags.has(DF::DARKNESS))
         range2 /= 3;
 
     bool detect = false;
@@ -270,7 +270,7 @@ bool detect_objects_normal(player_type *caster_ptr, POSITION range)
  */
 bool detect_objects_magic(player_type *caster_ptr, POSITION range)
 {
-    if (d_info[caster_ptr->dungeon_idx].flags.has(DF::DARKNESS))
+    if (d_info[static_cast<int>(caster_ptr->dungeon_idx)].flags.has(DF::DARKNESS))
         range /= 3;
 
     tval_type tv;
@@ -316,7 +316,7 @@ bool detect_objects_magic(player_type *caster_ptr, POSITION range)
  */
 bool detect_monsters_normal(player_type *caster_ptr, POSITION range)
 {
-    if (d_info[caster_ptr->dungeon_idx].flags.has(DF::DARKNESS))
+    if (d_info[static_cast<int>(caster_ptr->dungeon_idx)].flags.has(DF::DARKNESS))
         range /= 3;
 
     bool flag = false;
@@ -355,7 +355,7 @@ bool detect_monsters_normal(player_type *caster_ptr, POSITION range)
  */
 bool detect_monsters_invis(player_type *caster_ptr, POSITION range)
 {
-    if (d_info[caster_ptr->dungeon_idx].flags.has(DF::DARKNESS))
+    if (d_info[static_cast<int>(caster_ptr->dungeon_idx)].flags.has(DF::DARKNESS))
         range /= 3;
 
     bool flag = false;
@@ -400,7 +400,7 @@ bool detect_monsters_invis(player_type *caster_ptr, POSITION range)
  */
 bool detect_monsters_evil(player_type *caster_ptr, POSITION range)
 {
-    if (d_info[caster_ptr->dungeon_idx].flags.has(DF::DARKNESS))
+    if (d_info[static_cast<int>(caster_ptr->dungeon_idx)].flags.has(DF::DARKNESS))
         range /= 3;
 
     bool flag = false;
@@ -445,7 +445,7 @@ bool detect_monsters_evil(player_type *caster_ptr, POSITION range)
  */
 bool detect_monsters_nonliving(player_type *caster_ptr, POSITION range)
 {
-    if (d_info[caster_ptr->dungeon_idx].flags.has(DF::DARKNESS))
+    if (d_info[static_cast<int>(caster_ptr->dungeon_idx)].flags.has(DF::DARKNESS))
         range /= 3;
 
     bool flag = false;
@@ -485,7 +485,7 @@ bool detect_monsters_nonliving(player_type *caster_ptr, POSITION range)
  */
 bool detect_monsters_mind(player_type *caster_ptr, POSITION range)
 {
-    if (d_info[caster_ptr->dungeon_idx].flags.has(DF::DARKNESS))
+    if (d_info[static_cast<int>(caster_ptr->dungeon_idx)].flags.has(DF::DARKNESS))
         range /= 3;
 
     bool flag = false;
@@ -528,7 +528,7 @@ bool detect_monsters_mind(player_type *caster_ptr, POSITION range)
  */
 bool detect_monsters_string(player_type *caster_ptr, POSITION range, concptr Match)
 {
-    if (d_info[caster_ptr->dungeon_idx].flags.has(DF::DARKNESS))
+    if (d_info[static_cast<int>(caster_ptr->dungeon_idx)].flags.has(DF::DARKNESS))
         range /= 3;
 
     bool flag = false;
@@ -573,7 +573,7 @@ bool detect_monsters_string(player_type *caster_ptr, POSITION range, concptr Mat
  */
 bool detect_monsters_xxx(player_type *caster_ptr, POSITION range, uint32_t match_flag)
 {
-    if (d_info[caster_ptr->dungeon_idx].flags.has(DF::DARKNESS))
+    if (d_info[static_cast<int>(caster_ptr->dungeon_idx)].flags.has(DF::DARKNESS))
         range /= 3;
 
     bool flag = false;

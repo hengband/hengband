@@ -26,7 +26,7 @@
  */
 void check_random_quest_auto_failure(player_type *creature_ptr)
 {
-    if (creature_ptr->dungeon_idx != DUNGEON_ANGBAND) {
+    if (creature_ptr->dungeon_idx != DUNGEON_IDX::ANGBAND) {
         return;
     }
     for (auto i = MIN_RANDOM_QUEST; i < MAX_RANDOM_QUEST + 1; i++) {
@@ -66,13 +66,13 @@ void execute_recall(player_type *creature_ptr)
     floor_type *floor_ptr = creature_ptr->current_floor_ptr;
     if (floor_ptr->dun_level || creature_ptr->current_floor_ptr->inside_quest || creature_ptr->enter_dungeon) {
         msg_print(_("上に引っ張りあげられる感じがする！", "You feel yourself yanked upwards!"));
-        if (creature_ptr->dungeon_idx)
+        if (creature_ptr->dungeon_idx != DUNGEON_IDX::NONE)
             creature_ptr->recall_dungeon = creature_ptr->dungeon_idx;
         if (record_stair)
             exe_write_diary(creature_ptr, DIARY_RECALL, floor_ptr->dun_level, NULL);
 
         floor_ptr->dun_level = 0;
-        creature_ptr->dungeon_idx = 0;
+        creature_ptr->dungeon_idx = DUNGEON_IDX::NONE;
         leave_quest_check(creature_ptr);
         leave_tower_check(creature_ptr);
         creature_ptr->current_floor_ptr->inside_quest = 0;
@@ -86,16 +86,16 @@ void execute_recall(player_type *creature_ptr)
     if (record_stair)
         exe_write_diary(creature_ptr, DIARY_RECALL, floor_ptr->dun_level, NULL);
 
-    floor_ptr->dun_level = max_dlv[creature_ptr->dungeon_idx];
+    floor_ptr->dun_level = max_dlv[static_cast<int>(creature_ptr->dungeon_idx)];
     if (floor_ptr->dun_level < 1)
         floor_ptr->dun_level = 1;
-    if (ironman_nightmare && !randint0(666) && (creature_ptr->dungeon_idx == DUNGEON_ANGBAND)) {
+    if (ironman_nightmare && !randint0(666) && (creature_ptr->dungeon_idx == DUNGEON_IDX::ANGBAND)) {
         if (floor_ptr->dun_level < 50) {
             floor_ptr->dun_level *= 2;
         } else if (floor_ptr->dun_level < 99) {
             floor_ptr->dun_level = (floor_ptr->dun_level + 99) / 2;
         } else if (floor_ptr->dun_level > 100) {
-            floor_ptr->dun_level = d_info[creature_ptr->dungeon_idx].maxdepth - 1;
+            floor_ptr->dun_level = d_info[static_cast<int>(creature_ptr->dungeon_idx)].maxdepth - 1;
         }
     }
 

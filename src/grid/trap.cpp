@@ -181,7 +181,7 @@ FEAT_IDX choose_random_trap(player_type *trapped_ptr)
             continue;
 
         /* Hack -- no trap doors on the deepest level */
-        if (floor_ptr->dun_level >= d_info[floor_ptr->dungeon_idx].maxdepth)
+        if (floor_ptr->dun_level >= d_info[static_cast<int>(floor_ptr->dungeon_idx)].maxdepth)
             continue;
 
         break;

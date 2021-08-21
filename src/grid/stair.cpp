@@ -33,7 +33,7 @@ void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x)
     if (ironman_downward)
         up_stairs = false;
 
-    if (floor_ptr->dun_level >= d_info[player_ptr->dungeon_idx].maxdepth)
+    if (floor_ptr->dun_level >= d_info[static_cast<int>(player_ptr->dungeon_idx)].maxdepth)
         down_stairs = false;
 
     if (quest_number(player_ptr, floor_ptr->dun_level) && (floor_ptr->dun_level > 1))

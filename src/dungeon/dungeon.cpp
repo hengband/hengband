@@ -33,43 +33,43 @@ DEPTH *max_dlv;
 DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
 {
 	DUNGEON_IDX select_dungeon;
-	DUNGEON_IDX i;
+	int i;
 	int num = 0;
 	DUNGEON_IDX *dun;
 
 	/* Hack -- No need to choose dungeon in some case */
 	if (lite_town || vanilla_town || ironman_downward)
 	{
-		if (max_dlv[DUNGEON_ANGBAND]) return DUNGEON_ANGBAND;
+		if (max_dlv[static_cast<int>(DUNGEON_IDX::ANGBAND)]) return DUNGEON_IDX::ANGBAND;
 		else
 		{
-                    msg_format(_("まだ%sに入ったことはない。", "You haven't entered %s yet."), d_info[DUNGEON_ANGBAND].name.c_str());
+            msg_format(_("まだ%sに入ったことはない。", "You haven't entered %s yet."), d_info[static_cast<int>(DUNGEON_IDX::ANGBAND)].name.c_str());
 			msg_print(NULL);
-			return 0;
+			return DUNGEON_IDX::NONE;
 		}
 	}
 
 	/* Allocate the "dun" array */
-	C_MAKE(dun, current_world_ptr->max_d_idx, DUNGEON_IDX);
+    C_MAKE(dun, static_cast<int>(current_world_ptr->max_d_idx), DUNGEON_IDX);
 
 	screen_save();
-	for (i = 1; i < current_world_ptr->max_d_idx; i++)
+	for (i = 1; i < static_cast<int>(current_world_ptr->max_d_idx); i++)
 	{
 		char buf[80];
 		bool seiha = false;
 
-		if (!d_info[i].maxdepth) continue;
-		if (!max_dlv[i]) continue;
-		if (d_info[i].final_guardian)
+		if (!d_info[static_cast<int>(i)].maxdepth) continue;
+		if (!max_dlv[static_cast<int>(i)]) continue;
+		if (d_info[static_cast<int>(i)].final_guardian)
 		{
-			if (!r_info[d_info[i].final_guardian].max_num) seiha = true;
+			if (!r_info[d_info[static_cast<int>(i)].final_guardian].max_num) seiha = true;
 		}
-		else if (max_dlv[i] == d_info[i].maxdepth) seiha = true;
+		else if (max_dlv[static_cast<int>(i)] == d_info[static_cast<int>(i)].maxdepth) seiha = true;
 
 		sprintf(buf, _("      %c) %c%-12s : 最大 %d 階", "      %c) %c%-16s : Max level %d"),
-			'a' + num, seiha ? '!' : ' ', d_info[i].name.c_str(), (int)max_dlv[i]);
+			'a' + num, seiha ? '!' : ' ', d_info[static_cast<int>(i)].name.c_str(), (int)max_dlv[static_cast<int>(i)]);
 		prt(buf, y + num, x);
-		dun[num++] = i;
+		dun[num++] = static_cast<DUNGEON_IDX>(i);
 	}
 
 	if (!num)
@@ -84,14 +84,14 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
 		if ((i == ESCAPE) || !num)
 		{
 			/* Free the "dun" array */
-			C_KILL(dun, current_world_ptr->max_d_idx, DUNGEON_IDX);
+			C_KILL(dun, static_cast<int>(current_world_ptr->max_d_idx), DUNGEON_IDX);
 
 			screen_load();
-			return 0;
+			return DUNGEON_IDX::NONE;
 		}
 		if (i >= 'a' && i < ('a' + num))
 		{
-			select_dungeon = dun[i - 'a'];
+			select_dungeon = static_cast<DUNGEON_IDX>(dun[i - 'a']);
 			break;
 		}
 		else bell();
@@ -99,7 +99,7 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
 	screen_load();
 
 	/* Free the "dun" array */
-	C_KILL(dun, current_world_ptr->max_d_idx, DUNGEON_IDX);
+	C_KILL(dun, static_cast<int>(current_world_ptr->max_d_idx), DUNGEON_IDX);
 
 	return select_dungeon;
 }

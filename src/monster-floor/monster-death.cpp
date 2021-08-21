@@ -183,11 +183,11 @@ static ARTIFACT_IDX drop_artifact_index(player_type *player_ptr, monster_death_t
 static KIND_OBJECT_IDX drop_dungeon_final_artifact(player_type *player_ptr, monster_death_type *md_ptr, ARTIFACT_IDX a_idx)
 {
     KIND_OBJECT_IDX k_idx
-        = d_info[player_ptr->dungeon_idx].final_object != 0 ? d_info[player_ptr->dungeon_idx].final_object : lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT);
-    if (d_info[player_ptr->dungeon_idx].final_artifact == 0)
+        = d_info[static_cast<int>(player_ptr->dungeon_idx)].final_object != 0 ? d_info[static_cast<int>(player_ptr->dungeon_idx)].final_object : lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT);
+    if (d_info[static_cast<int>(player_ptr->dungeon_idx)].final_artifact == 0)
         return k_idx;
 
-    a_idx = d_info[player_ptr->dungeon_idx].final_artifact;
+    a_idx = d_info[static_cast<int>(player_ptr->dungeon_idx)].final_artifact;
     artifact_type *a_ptr = &a_info[a_idx];
     if (a_ptr->cur_num == 1)
         return k_idx;
@@ -199,7 +199,7 @@ static KIND_OBJECT_IDX drop_dungeon_final_artifact(player_type *player_ptr, mons
         a_ptr->cur_num = 1;
     }
 
-    return d_info[player_ptr->dungeon_idx].final_object ? k_idx : 0;
+    return d_info[static_cast<int>(player_ptr->dungeon_idx)].final_object ? k_idx : 0;
 }
 
 static void drop_artifact(player_type *player_ptr, monster_death_type *md_ptr)
@@ -208,7 +208,7 @@ static void drop_artifact(player_type *player_ptr, monster_death_type *md_ptr)
         return;
 
     ARTIFACT_IDX a_idx = drop_artifact_index(player_ptr, md_ptr);
-    if (((md_ptr->r_ptr->flags7 & RF7_GUARDIAN) == 0) || (d_info[player_ptr->dungeon_idx].final_guardian != md_ptr->m_ptr->r_idx))
+    if (((md_ptr->r_ptr->flags7 & RF7_GUARDIAN) == 0) || (d_info[static_cast<int>(player_ptr->dungeon_idx)].final_guardian != md_ptr->m_ptr->r_idx))
         return;
 
     KIND_OBJECT_IDX k_idx = drop_dungeon_final_artifact(player_ptr, md_ptr, a_idx);
@@ -220,7 +220,7 @@ static void drop_artifact(player_type *player_ptr, monster_death_type *md_ptr)
         (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
     }
 
-    msg_format(_("あなたは%sを制覇した！", "You have conquered %s!"), d_info[player_ptr->dungeon_idx].name.c_str());
+    msg_format(_("あなたは%sを制覇した！", "You have conquered %s!"), d_info[static_cast<int>(player_ptr->dungeon_idx)].name.c_str());
 }
 
 static void decide_drop_quality(monster_death_type *md_ptr)

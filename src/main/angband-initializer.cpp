@@ -297,9 +297,9 @@ void init_angband(player_type *player_ptr, bool no_term)
     if (init_d_info())
         quit(_("ダンジョン初期化不能", "Cannot initialize dungeon"));
 
-    for (int i = 1; i < current_world_ptr->max_d_idx; i++)
-        if (d_info[i].final_guardian)
-            r_info[d_info[i].final_guardian].flags7 |= RF7_GUARDIAN;
+    for (int i = 1; i < static_cast<int>(current_world_ptr->max_d_idx); i++)
+        if (d_info[static_cast<int>(i)].final_guardian)
+            r_info[d_info[static_cast<int>(i)].final_guardian].flags7 |= RF7_GUARDIAN;
 
     init_note(_("[データの初期化中... (魔法)]", "[Initializing arrays... (magic)]"));
     if (init_m_info())

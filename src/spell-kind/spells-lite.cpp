@@ -405,7 +405,7 @@ bool starlight(player_type *caster_ptr, bool magic)
  */
 bool lite_area(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 {
-    if (d_info[caster_ptr->dungeon_idx].flags.has(DF::DARKNESS)) {
+    if (d_info[static_cast<int>(caster_ptr->dungeon_idx)].flags.has(DF::DARKNESS)) {
         msg_print(_("ダンジョンが光を吸収した。", "The darkness of this dungeon absorbs your light."));
         return false;
     }

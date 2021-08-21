@@ -208,7 +208,7 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
     if (!current_world_ptr->character_dungeon) {
         g_ptr->mimic = 0;
         g_ptr->feat = feat;
-        if (f_ptr->flags.has(FF::GLOW) && d_info[floor_ptr->dungeon_idx].flags.has_not(DF::DARKNESS)) {
+        if (f_ptr->flags.has(FF::GLOW) && d_info[static_cast<int>(floor_ptr->dungeon_idx)].flags.has_not(DF::DARKNESS)) {
             for (DIRECTION i = 0; i < 9; i++) {
                 POSITION yy = y + ddy_ddd[i];
                 POSITION xx = x + ddx_ddd[i];
@@ -228,7 +228,7 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
     g_ptr->mimic = 0;
     g_ptr->feat = feat;
     g_ptr->info &= ~(CAVE_OBJECT);
-    if (old_mirror && d_info[floor_ptr->dungeon_idx].flags.has(DF::DARKNESS)) {
+    if (old_mirror && d_info[static_cast<int>(floor_ptr->dungeon_idx)].flags.has(DF::DARKNESS)) {
         g_ptr->info &= ~(CAVE_GLOW);
         if (!view_torch_grids)
             g_ptr->info &= ~(CAVE_MARK);
@@ -246,7 +246,7 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
     if (old_los ^ f_ptr->flags.has(FF::LOS))
         player_ptr->update |= PU_VIEW | PU_LITE | PU_MON_LITE | PU_MONSTERS;
 
-    if (f_ptr->flags.has_not(FF::GLOW) || d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS))
+    if (f_ptr->flags.has_not(FF::GLOW) || d_info[static_cast<int>(player_ptr->dungeon_idx)].flags.has(DF::DARKNESS))
         return;
 
     for (DIRECTION i = 0; i < 9; i++) {
@@ -293,9 +293,9 @@ FEAT_IDX conv_dungeon_feat(floor_type *floor_ptr, FEAT_IDX newfeat)
     case CONVERT_TYPE_SOLID:
         return feat_wall_solid;
     case CONVERT_TYPE_STREAM1:
-        return d_info[floor_ptr->dungeon_idx].stream1;
+        return d_info[static_cast<int>(floor_ptr->dungeon_idx)].stream1;
     case CONVERT_TYPE_STREAM2:
-        return d_info[floor_ptr->dungeon_idx].stream2;
+        return d_info[static_cast<int>(floor_ptr->dungeon_idx)].stream2;
     default:
         return newfeat;
     }

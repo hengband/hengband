@@ -117,10 +117,10 @@ static bool scene_dungeon_feeling(player_type *player_ptr, scene_type *value)
 
 static bool scene_dungeon(player_type *player_ptr, scene_type *value)
 {
-    const bool enable = (player_ptr->dungeon_idx > 0);
+    const bool enable = (static_cast<int>(player_ptr->dungeon_idx) > 0);
     if (enable) {
         value->type = TERM_XTRA_MUSIC_DUNGEON;
-        value->val = player_ptr->dungeon_idx;
+        value->val = static_cast<int>(player_ptr->dungeon_idx);
     }
     return enable;
 }

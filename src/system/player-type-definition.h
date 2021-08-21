@@ -15,6 +15,7 @@
 #define MAX_MANE 16
 
 enum class RF_ABILITY;
+enum class DUNGEON_IDX : int;
 
 typedef struct floor_type floor_type;
 typedef struct object_type object_type;

@@ -8,6 +8,8 @@
 typedef struct grid_type grid_type;
 typedef struct object_type object_type;
 typedef struct monster_type monster_type;
+enum class DUNGEON_IDX : int;
+
 typedef struct floor_type {
     DUNGEON_IDX dungeon_idx;
     grid_type *grid_array[MAX_HGT];

@@ -6,6 +6,8 @@
 
 #define MAX_BOUNTY 20
 
+enum class DUNGEON_IDX : int;
+
 /*!
  * @brief 世界情報構造体
  */

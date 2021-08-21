@@ -1,4 +1,5 @@
-﻿#include "window/main-window-left-frame.h"
+﻿#include "dungeon/dungeon.h"
+#include "window/main-window-left-frame.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
 #include "market/arena-info-table.h"
@@ -190,7 +191,7 @@ void print_depth(player_type *creature_ptr)
         return;
     }
 
-    if (floor_ptr->inside_quest && !creature_ptr->dungeon_idx) {
+    if (floor_ptr->inside_quest && (creature_ptr->dungeon_idx == DUNGEON_IDX::NONE)) {
         strcpy(depths, _("地上", "Quest"));
         c_prt(attr, format("%7s", depths), row_depth, col_depth);
         return;

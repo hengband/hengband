@@ -98,16 +98,16 @@ void display_rumor(player_type *player_ptr, bool ex)
         DUNGEON_IDX d_idx;
         dungeon_type *d_ptr;
         while (true) {
-            d_idx = rumor_num(zz[1], current_world_ptr->max_d_idx);
-            d_ptr = &d_info[d_idx];
+            d_idx = static_cast<DUNGEON_IDX>(rumor_num(zz[1], static_cast<IDX>(current_world_ptr->max_d_idx)));
+            d_ptr = &d_info[static_cast<int>(d_idx)];
             if (!d_ptr->name.empty())
                 break;
         }
 
         strcpy(fullname, d_ptr->name.c_str());
 
-        if (!max_dlv[d_idx]) {
-            max_dlv[d_idx] = d_ptr->mindepth;
+        if (!max_dlv[static_cast<int>(d_idx)]) {
+            max_dlv[static_cast<int>(d_idx)] = d_ptr->mindepth;
             rumor_eff_format = _("%sに帰還できるようになった。", "You can recall to %s.");
         }
     } else if (strcmp(zz[0], "TOWN") == 0) {

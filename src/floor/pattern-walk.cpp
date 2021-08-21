@@ -45,14 +45,14 @@ void pattern_teleport(player_type *creature_ptr)
         if (ironman_downward)
             min_level = creature_ptr->current_floor_ptr->dun_level;
 
-        if (creature_ptr->dungeon_idx == DUNGEON_ANGBAND) {
+        if (creature_ptr->dungeon_idx == DUNGEON_IDX::ANGBAND) {
             if (creature_ptr->current_floor_ptr->dun_level > 100)
                 max_level = MAX_DEPTH - 1;
             else if (creature_ptr->current_floor_ptr->dun_level == 100)
                 max_level = 100;
         } else {
-            max_level = d_info[creature_ptr->dungeon_idx].maxdepth;
-            min_level = d_info[creature_ptr->dungeon_idx].mindepth;
+            max_level = d_info[static_cast<int>(creature_ptr->dungeon_idx)].maxdepth;
+            min_level = d_info[static_cast<int>(creature_ptr->dungeon_idx)].mindepth;
         }
 
         sprintf(ppp, _("テレポート先:(%d-%d)", "Teleport to level (%d-%d): "), (int)min_level, (int)max_level);

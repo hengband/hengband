@@ -1,6 +1,7 @@
 ﻿#include "market/building-quest.h"
 #include "cmd-building/cmd-building.h"
 #include "core/asking-player.h"
+#include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "info-reader/fixed-map-parser.h"
 #include "market/building-util.h"
@@ -91,7 +92,7 @@ void castle_quest(player_type *player_ptr)
         get_questinfo(player_ptr, q_index, false);
         put_str(format(_("現在のクエスト「%s」", "Current quest is '%s'."), q_ptr->name), 11, 0);
 
-        if (q_ptr->type != QUEST_TYPE_KILL_LEVEL || q_ptr->dungeon == 0) {
+        if (q_ptr->type != QUEST_TYPE_KILL_LEVEL || q_ptr->dungeon == DUNGEON_IDX::NONE) {
             put_str(_("クエストを終わらせたら戻って来て下さい。", "Return when you have completed your quest."), 12, 0);
             return;
         }

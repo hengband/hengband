@@ -22,7 +22,7 @@
  */
 bool cmd_limit_cast(player_type *creature_ptr)
 {
-    if (is_in_dungeon(creature_ptr) && (d_info[creature_ptr->dungeon_idx].flags.has(DF::NO_MAGIC))) {
+    if (is_in_dungeon(creature_ptr) && (d_info[static_cast<int>(creature_ptr->dungeon_idx)].flags.has(DF::NO_MAGIC))) {
         msg_print(_("ダンジョンが魔法を吸収した！", "The dungeon absorbs all attempted magic!"));
         msg_print(NULL);
         return true;

@@ -53,9 +53,9 @@ static concptr basic_key_at(int index, char *buf)
     return angband_music_basic_name[index];
 }
 
-static inline DUNGEON_IDX get_dungeon_count()
+static inline int get_dungeon_count()
 {
-    return current_world_ptr->max_d_idx;
+    return static_cast<int>(current_world_ptr->max_d_idx);
 }
 
 /*!

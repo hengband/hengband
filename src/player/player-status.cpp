@@ -2922,9 +2922,9 @@ long calc_score(player_type *creature_ptr)
         mult = 5;
 
     DEPTH max_dl = 0;
-    for (int i = 0; i < current_world_ptr->max_d_idx; i++)
-        if (max_dlv[i] > max_dl)
-            max_dl = max_dlv[i];
+    for (int i = 0; i < static_cast<int>(current_world_ptr->max_d_idx); i++)
+        if (max_dlv[static_cast<int>(i)] > max_dl)
+            max_dl = max_dlv[static_cast<int>(i)];
 
     uint32_t point_l = (creature_ptr->max_max_exp + (100 * max_dl));
     uint32_t point_h = point_l / 0x10000L;

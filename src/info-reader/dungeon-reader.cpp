@@ -101,7 +101,7 @@ errr parse_d_info(std::string_view buf, angband_header *head)
             return PARSE_ERROR_OUT_OF_BOUNDS;
 
         error_idx = i;
-        d_ptr = &d_info[i];
+        d_ptr = &d_info[static_cast<int>(i)];
 #ifdef JP
         d_ptr->name = tokens[2];
 #endif
