@@ -603,7 +603,7 @@ void massacre(player_type *caster_ptr)
         POSITION x = caster_ptr->x + ddx_ddd[dir];
         g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
         m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-        if (g_ptr->m_idx && (m_ptr->ml || cave_has_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT)))
+        if (g_ptr->m_idx && (m_ptr->ml || cave_has_flag_bold(caster_ptr->current_floor_ptr, y, x, FF::PROJECT)))
             do_cmd_attack(caster_ptr, y, x, HISSATSU_NONE);
     }
 }

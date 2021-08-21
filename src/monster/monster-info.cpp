@@ -53,7 +53,7 @@ bool monster_can_cross_terrain(player_type *player_ptr, FEAT_IDX feat, monster_r
 {
     feature_type *f_ptr = &f_info[feat];
 
-    if (has_flag(f_ptr->flags, FF_PATTERN)) {
+    if (f_ptr->flags.has(FF::PATTERN)) {
         if (!(mode & CEM_RIDING)) {
             if (!(r_ptr->flags7 & RF7_CAN_FLY))
                 return false;
@@ -63,24 +63,24 @@ bool monster_can_cross_terrain(player_type *player_ptr, FEAT_IDX feat, monster_r
         }
     }
 
-    if (has_flag(f_ptr->flags, FF_CAN_FLY) && (r_ptr->flags7 & RF7_CAN_FLY))
+    if (f_ptr->flags.has(FF::CAN_FLY) && (r_ptr->flags7 & RF7_CAN_FLY))
         return true;
-    if (has_flag(f_ptr->flags, FF_CAN_SWIM) && (r_ptr->flags7 & RF7_CAN_SWIM))
+    if (f_ptr->flags.has(FF::CAN_SWIM) && (r_ptr->flags7 & RF7_CAN_SWIM))
         return true;
-    if (has_flag(f_ptr->flags, FF_CAN_PASS)) {
+    if (f_ptr->flags.has(FF::CAN_PASS)) {
         if ((r_ptr->flags2 & RF2_PASS_WALL) && (!(mode & CEM_RIDING) || has_pass_wall(player_ptr)))
             return true;
     }
 
-    if (!has_flag(f_ptr->flags, FF_MOVE))
+    if (f_ptr->flags.has_not(FF::MOVE))
         return false;
 
-    if (has_flag(f_ptr->flags, FF_MOUNTAIN) && (r_ptr->flags8 & RF8_WILD_MOUNTAIN))
+    if (f_ptr->flags.has(FF::MOUNTAIN) && (r_ptr->flags8 & RF8_WILD_MOUNTAIN))
         return true;
 
-    if (has_flag(f_ptr->flags, FF_WATER)) {
+    if (f_ptr->flags.has(FF::WATER)) {
         if (!(r_ptr->flags7 & RF7_AQUATIC)) {
-            if (has_flag(f_ptr->flags, FF_DEEP))
+            if (f_ptr->flags.has(FF::DEEP))
                 return false;
             else if (r_ptr->flags2 & RF2_AURA_FIRE)
                 return false;
@@ -88,27 +88,27 @@ bool monster_can_cross_terrain(player_type *player_ptr, FEAT_IDX feat, monster_r
     } else if (r_ptr->flags7 & RF7_AQUATIC)
         return false;
 
-    if (has_flag(f_ptr->flags, FF_LAVA)) {
+    if (f_ptr->flags.has(FF::LAVA)) {
         if (!(r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK))
             return false;
     }
 
-    if (has_flag(f_ptr->flags, FF_COLD_PUDDLE)) {
+    if (f_ptr->flags.has(FF::COLD_PUDDLE)) {
         if (!(r_ptr->flagsr & RFR_EFF_IM_COLD_MASK))
             return false;
     }
 
-    if (has_flag(f_ptr->flags, FF_ELEC_PUDDLE)) {
+    if (f_ptr->flags.has(FF::ELEC_PUDDLE)) {
         if (!(r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK))
             return false;
     }
 
-    if (has_flag(f_ptr->flags, FF_ACID_PUDDLE)) {
+    if (f_ptr->flags.has(FF::ACID_PUDDLE)) {
         if (!(r_ptr->flagsr & RFR_EFF_IM_ACID_MASK))
             return false;
     }
 
-    if (has_flag(f_ptr->flags, FF_POISON_PUDDLE)) {
+    if (f_ptr->flags.has(FF::POISON_PUDDLE)) {
         if (!(r_ptr->flagsr & RFR_EFF_IM_POIS_MASK))
             return false;
     }

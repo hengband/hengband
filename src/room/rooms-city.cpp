@@ -148,7 +148,7 @@ static void build_stores(player_type *player_ptr, POSITION ltcy, POSITION ltcx, 
         }
 
         for (j = 0; j < max_f_idx; j++) {
-            if (has_flag(f_info[j].flags, FF_STORE)) {
+            if (f_info[j].flags.has(FF::STORE)) {
                 if (f_info[j].subtype == stores[i])
                     break;
             }
@@ -194,7 +194,7 @@ bool build_type16(player_type *player_ptr, dun_data_type *dd_ptr)
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     for (y = 0; (y < floor_ptr->height) && !prevent_bm; y++) {
         for (x = 0; x < floor_ptr->width; x++) {
-            if (floor_ptr->grid_array[y][x].feat == FF_STORE) {
+            if (floor_ptr->grid_array[y][x].feat == static_cast<FEAT_IDX>(FF::STORE)) {
                 prevent_bm = (f_info[floor_ptr->grid_array[y][x].feat].subtype == STORE_BLACK);
                 break;
             }

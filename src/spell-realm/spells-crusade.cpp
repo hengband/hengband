@@ -59,7 +59,7 @@ bool cast_wrath_of_the_god(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
         mmove2(&ny, &nx, caster_ptr->y, caster_ptr->x, ty, tx);
         if (get_max_range(caster_ptr) <= distance(caster_ptr->y, caster_ptr->x, ny, nx))
             break;
-        if (!cave_has_flag_bold(caster_ptr->current_floor_ptr, ny, nx, FF_PROJECT))
+        if (!cave_has_flag_bold(caster_ptr->current_floor_ptr, ny, nx, FF::PROJECT))
             break;
         if ((dir != 5) && caster_ptr->current_floor_ptr->grid_array[ny][nx].m_idx != 0)
             break;

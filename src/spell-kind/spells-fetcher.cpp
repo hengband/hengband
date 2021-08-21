@@ -87,7 +87,7 @@ void fetch_item(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require
             g_ptr = &caster_ptr->current_floor_ptr->grid_array[ty][tx];
 
             if ((distance(caster_ptr->y, caster_ptr->x, ty, tx) > get_max_range(caster_ptr))
-                || !cave_has_flag_bold(caster_ptr->current_floor_ptr, ty, tx, FF_PROJECT))
+                || !cave_has_flag_bold(caster_ptr->current_floor_ptr, ty, tx, FF::PROJECT))
                 return;
         }
     }

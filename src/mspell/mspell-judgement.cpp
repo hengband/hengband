@@ -122,7 +122,7 @@ bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POSITION y
             if (!cave_los_bold(master_ptr->current_floor_ptr, ny, nx))
                 break;
         } else {
-            if (!cave_has_flag_bold(master_ptr->current_floor_ptr, ny, nx, FF_PROJECT))
+            if (!cave_has_flag_bold(master_ptr->current_floor_ptr, ny, nx, FF::PROJECT))
                 break;
         }
 
@@ -194,7 +194,7 @@ void get_project_point(player_type *target_ptr, POSITION sy, POSITION sx, POSITI
     for (int i = 0; i < path_n; i++) {
         sy = get_grid_y(path_g[i]);
         sx = get_grid_x(path_g[i]);
-        if (!cave_has_flag_bold(target_ptr->current_floor_ptr, sy, sx, FF_PROJECT))
+        if (!cave_has_flag_bold(target_ptr->current_floor_ptr, sy, sx, FF::PROJECT))
             break;
 
         *ty = sy;

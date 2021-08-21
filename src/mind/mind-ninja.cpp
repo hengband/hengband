@@ -277,7 +277,7 @@ bool hayagake(player_type *creature_ptr)
     grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
 
-    if (!has_flag(f_ptr->flags, FF_PROJECT) || (!creature_ptr->levitation && has_flag(f_ptr->flags, FF_DEEP))) {
+    if (f_ptr->flags.has_not(FF::PROJECT) || (!creature_ptr->levitation && f_ptr->flags.has(FF::DEEP))) {
         msg_print(_("ここでは素早く動けない。", "You cannot run in here."));
     } else {
         set_action(creature_ptr, ACTION_HAYAGAKE);

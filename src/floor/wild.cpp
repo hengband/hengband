@@ -468,15 +468,15 @@ void wilderness_gen(player_type *creature_ptr)
 
             feature_type *f_ptr;
             f_ptr = &f_info[g_ptr->get_feat_mimic()];
-            if (!g_ptr->is_mirror() && !has_flag(f_ptr->flags, FF_QUEST_ENTER) && !has_flag(f_ptr->flags, FF_ENTRANCE)) {
+            if (!g_ptr->is_mirror() && f_ptr->flags.has_none_of({FF::QUEST_ENTER, FF::ENTRANCE})) {
                 g_ptr->info &= ~(CAVE_GLOW);
-                if (!has_flag(f_ptr->flags, FF_REMEMBER))
+                if (f_ptr->flags.has_not(FF::REMEMBER))
                     g_ptr->info &= ~(CAVE_MARK);
 
                 continue;
             }
 
-            if (!has_flag(f_ptr->flags, FF_ENTRANCE))
+            if (f_ptr->flags.has_not(FF::ENTRANCE))
                 continue;
 
             g_ptr->info |= CAVE_GLOW;
@@ -492,7 +492,7 @@ void wilderness_gen(player_type *creature_ptr)
                 g_ptr = &floor_ptr->grid_array[y][x];
                 feature_type *f_ptr;
                 f_ptr = &f_info[g_ptr->feat];
-                if (!has_flag(f_ptr->flags, FF_BLDG))
+                if (f_ptr->flags.has_not(FF::BLDG))
                     continue;
 
                 if ((f_ptr->subtype != 4) && !((creature_ptr->town_num == 1) && (f_ptr->subtype == 0)))
@@ -512,7 +512,7 @@ void wilderness_gen(player_type *creature_ptr)
             for (x = 0; x < floor_ptr->width; x++) {
                 grid_type *g_ptr;
                 g_ptr = &floor_ptr->grid_array[y][x];
-                if (!g_ptr->cave_has_flag(FF_ENTRANCE))
+                if (!g_ptr->cave_has_flag(FF::ENTRANCE))
                     continue;
 
                 if (g_ptr->m_idx != 0)

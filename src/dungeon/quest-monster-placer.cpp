@@ -51,7 +51,7 @@ bool place_quest_monsters(player_type *creature_ptr)
                     x = randint0(floor_ptr->width);
                     g_ptr = &floor_ptr->grid_array[y][x];
                     f_ptr = &f_info[g_ptr->feat];
-                    if (!has_flag(f_ptr->flags, FF_MOVE) && !has_flag(f_ptr->flags, FF_CAN_FLY))
+                    if (f_ptr->flags.has_none_of({FF::MOVE, FF::CAN_FLY}))
                         continue;
 
                     if (!monster_can_enter(creature_ptr, y, x, r_ptr, 0))

@@ -359,9 +359,9 @@ void wiz_create_feature(player_type *creature_ptr)
     feature_type *f_ptr;
     f_ptr = &f_info[g_ptr->get_feat_mimic()];
 
-    if (has_flag(f_ptr->flags, FF_RUNE_PROTECTION) || has_flag(f_ptr->flags, FF_RUNE_EXPLOSION))
+    if (f_ptr->flags.has(FF::RUNE_PROTECTION) || f_ptr->flags.has(FF::RUNE_EXPLOSION))
         g_ptr->info |= CAVE_OBJECT;
-    else if (has_flag(f_ptr->flags, FF_MIRROR))
+    else if (f_ptr->flags.has(FF::MIRROR))
         g_ptr->info |= CAVE_GLOW | CAVE_OBJECT;
 
     note_spot(creature_ptr, y, x);

@@ -41,13 +41,13 @@ bool exe_open(player_type *creature_ptr, POSITION y, POSITION x)
     grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
     PlayerEnergy(creature_ptr).set_player_turn_energy(100);
-    if (!has_flag(f_ptr->flags, FF_OPEN)) {
+    if (f_ptr->flags.has_not(FF::OPEN)) {
         msg_format(_("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck."), f_info[g_ptr->get_feat_mimic()].name.c_str());
         return false;
     }
 
     if (!f_ptr->power) {
-        cave_alter_feat(creature_ptr, y, x, FF_OPEN);
+        cave_alter_feat(creature_ptr, y, x, FF::OPEN);
         sound(SOUND_OPENDOOR);
         return false;
     }
@@ -73,7 +73,7 @@ bool exe_open(player_type *creature_ptr, POSITION y, POSITION x)
     }
 
     msg_print(_("鍵をはずした。", "You have picked the lock."));
-    cave_alter_feat(creature_ptr, y, x, FF_OPEN);
+    cave_alter_feat(creature_ptr, y, x, FF::OPEN);
     sound(SOUND_OPENDOOR);
     gain_exp(creature_ptr, 1);
     return false;
@@ -97,16 +97,16 @@ bool exe_close(player_type *creature_ptr, POSITION y, POSITION x)
     FEAT_IDX old_feat = g_ptr->feat;
     bool more = false;
     PlayerEnergy(creature_ptr).set_player_turn_energy(100);
-    if (!has_flag(f_info[old_feat].flags, FF_CLOSE))
+    if (f_info[old_feat].flags.has_not(FF::CLOSE))
         return more;
 
-    int16_t closed_feat = feat_state(creature_ptr->current_floor_ptr, old_feat, FF_CLOSE);
-    if ((!g_ptr->o_idx_list.empty() || g_ptr->is_object()) && (closed_feat != old_feat) && !has_flag(f_info[closed_feat].flags, FF_DROP)) {
+    int16_t closed_feat = feat_state(creature_ptr->current_floor_ptr, old_feat, FF::CLOSE);
+    if ((!g_ptr->o_idx_list.empty() || g_ptr->is_object()) && (closed_feat != old_feat) && f_info[closed_feat].flags.has_not(FF::DROP)) {
         msg_print(_("何かがつっかえて閉まらない。", "Something prevents it from closing."));
         return more;
     }
 
-    cave_alter_feat(creature_ptr, y, x, FF_CLOSE);
+    cave_alter_feat(creature_ptr, y, x, FF::CLOSE);
     if (old_feat == g_ptr->feat) {
         msg_print(_("ドアは壊れてしまっている。", "The door appears to be broken."));
     } else {
@@ -138,7 +138,7 @@ bool easy_open_door(player_type *creature_ptr, POSITION y, POSITION x)
     if (!is_closed_door(creature_ptr, g_ptr->feat))
         return false;
 
-    if (!has_flag(f_ptr->flags, FF_OPEN)) {
+    if (f_ptr->flags.has_not(FF::OPEN)) {
         msg_format(_("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck."), f_info[g_ptr->get_feat_mimic()].name.c_str());
     } else if (f_ptr->power) {
         i = creature_ptr->skill_dis;
@@ -155,7 +155,7 @@ bool easy_open_door(player_type *creature_ptr, POSITION y, POSITION x)
 
         if (randint0(100) < j) {
             msg_print(_("鍵をはずした。", "You have picked the lock."));
-            cave_alter_feat(creature_ptr, y, x, FF_OPEN);
+            cave_alter_feat(creature_ptr, y, x, FF::OPEN);
             sound(SOUND_OPENDOOR);
             gain_exp(creature_ptr, 1);
         } else {
@@ -165,7 +165,7 @@ bool easy_open_door(player_type *creature_ptr, POSITION y, POSITION x)
             msg_print(_("鍵をはずせなかった。", "You failed to pick the lock."));
         }
     } else {
-        cave_alter_feat(creature_ptr, y, x, FF_OPEN);
+        cave_alter_feat(creature_ptr, y, x, FF::OPEN);
         sound(SOUND_OPENDOOR);
     }
 
@@ -264,7 +264,7 @@ bool exe_disarm(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir
     if (randint0(100) < j) {
         msg_format(_("%sを解除した。", "You have disarmed the %s."), name);
         gain_exp(creature_ptr, power);
-        cave_alter_feat(creature_ptr, y, x, FF_DISARM);
+        cave_alter_feat(creature_ptr, y, x, FF::DISARM);
         exe_movement(creature_ptr, dir, easy_disarm, false);
     } else if ((i > 5) && (randint1(i) > 5)) {
         if (flush_failure)
@@ -313,11 +313,11 @@ bool exe_bash(player_type *creature_ptr, POSITION y, POSITION x, DIRECTION dir)
 
     if (randint0(100) < temp) {
         msg_format(_("%sを壊した！", "The %s crashes open!"), name);
-        sound(has_flag(f_ptr->flags, FF_GLASS) ? SOUND_GLASS : SOUND_OPENDOOR);
-        if ((randint0(100) < 50) || (feat_state(creature_ptr->current_floor_ptr, g_ptr->feat, FF_OPEN) == g_ptr->feat) || has_flag(f_ptr->flags, FF_GLASS)) {
-            cave_alter_feat(creature_ptr, y, x, FF_BASH);
+        sound(f_ptr->flags.has(FF::GLASS) ? SOUND_GLASS : SOUND_OPENDOOR);
+        if ((randint0(100) < 50) || (feat_state(creature_ptr->current_floor_ptr, g_ptr->feat, FF::OPEN) == g_ptr->feat) || f_ptr->flags.has(FF::GLASS)) {
+            cave_alter_feat(creature_ptr, y, x, FF::BASH);
         } else {
-            cave_alter_feat(creature_ptr, y, x, FF_OPEN);
+            cave_alter_feat(creature_ptr, y, x, FF::OPEN);
         }
 
         exe_movement(creature_ptr, dir, false, false);
