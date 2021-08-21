@@ -1,7 +1,7 @@
 ﻿#include "mind/mind-explanations-table.h"
 
 /*! 特殊技能の一覧テーブル */
-mind_power const mind_powers[MAX_MIND_KINDS] = {
+mind_power const mind_powers[MAX_MINDKINDS] = {
     { {
         /* Level gained,  cost,  %fail,  name */
         { 1, 1, 15, _("霊視", "Precognition") },
@@ -140,7 +140,7 @@ mind_power const mind_powers[MAX_MIND_KINDS] = {
 };
 
 /*! 特殊能力の解説文字列 */
-concptr const mind_tips[MAX_MIND_KINDS][MAX_MIND_POWERS] = {
+concptr const mind_tips[MAX_MINDKINDS][MAX_MIND_POWERS] = {
     {
         _("近くの全ての見えるモンスターを感知する。レベル5で罠/"
           "扉、15で透明なモンスター、30で財宝とアイテムを感知できるようになる。レベル20で周辺の地形を感知し、45でその階全体を永久に照らし、"
