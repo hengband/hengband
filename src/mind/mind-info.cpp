@@ -236,5 +236,7 @@ void mindcraft_info(player_type *caster_ptr, char *p, mind_kind_type use_mind, i
     case mind_kind_type::NINJUTSU:
         switch_mind_ninja(plev, power, p);
         break;
+    default:
+        break;
     }
 }
