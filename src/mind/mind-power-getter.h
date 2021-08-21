@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "mind/mind-types.h"
 
 struct mind_power;
 struct mind_type;
@@ -23,7 +24,7 @@ private:
     const mind_type *spell = nullptr;
     bool flag = false;
     bool redraw = false;
-    int use_mind = 0;
+    mind_kind_type use_mind;
     int menu_line;
     const mind_power *mind_ptr = nullptr;
     PERCENTAGE chance = 0;
