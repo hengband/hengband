@@ -412,7 +412,14 @@ MULTIPLY calc_snipe_damage_with_slay(player_type *sniper_ptr, MULTIPLY mult, mon
             if (seen)
                 r_ptr->r_flagsr |= RFR_IM_FIRE;
         } else {
-            MULTIPLY n = 15 + (sniper_ptr->concent * 3);
+            MULTIPLY n;
+            if (r_ptr->flags3 & RF3_HURT_FIRE) {
+                n = 22 + (sniper_ptr->concent * 4);
+                r_ptr->r_flags3 |= RF3_HURT_FIRE;
+            }
+            else
+                n = 15 + (sniper_ptr->concent * 3);
+
             if (mult < n)
                 mult = n;
         }
@@ -422,7 +429,14 @@ MULTIPLY calc_snipe_damage_with_slay(player_type *sniper_ptr, MULTIPLY mult, mon
             if (seen)
                 r_ptr->r_flagsr |= RFR_IM_COLD;
         } else {
-            MULTIPLY n = 15 + (sniper_ptr->concent * 3);
+            MULTIPLY n;
+            if (r_ptr->flags3 & RF3_HURT_COLD) {
+                n = 22 + (sniper_ptr->concent * 4);
+                r_ptr->r_flags3 |= RF3_HURT_COLD;
+            }
+            else
+                n = 15 + (sniper_ptr->concent * 3);
+
             if (mult < n)
                 mult = n;
         }
