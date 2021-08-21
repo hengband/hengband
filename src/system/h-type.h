@@ -59,7 +59,7 @@ typedef int errr;
 #define MAX_NLEN 160 /*!< Maximum length of object's name */
 #define MAX_MONSTER_NAME 160 /*!< モンスター名称の最大バイト数 / Max characters of monster's name */
 
-constexpr ssize_t TR_FLAG_SIZE = 5;
+constexpr int TR_FLAG_SIZE = 5;
 
 /*!
  * @brief 符号なし整数の簡潔な定義

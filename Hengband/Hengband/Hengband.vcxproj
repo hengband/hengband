@@ -903,14 +903,14 @@
     <ClCompile Include="..\..\src\wizard\tval-descriptions-table.cpp" />
     <ClCompile Include="..\..\src\load\quest-loader.cpp" />
     <ClCompile Include="..\..\src\view\display-store.cpp" />
-    <ClCompile Include="..\..\src\action\throw-util.cpp" />
+    <ClCompile Include="..\..\src\object-use\throw-execution.cpp" />
     <ClInclude Include="..\..\src\action\action-limited.h" />
     <ClInclude Include="..\..\src\action\activation-execution.h" />
     <ClInclude Include="..\..\src\action\mutation-execution.h" />
     <ClInclude Include="..\..\src\action\open-close-execution.h" />
     <ClInclude Include="..\..\src\action\open-util.h" />
     <ClInclude Include="..\..\src\action\run-execution.h" />
-    <ClInclude Include="..\..\src\action\throw-util.h" />
+    <ClInclude Include="..\..\src\object-use\throw-execution.h" />
     <ClInclude Include="..\..\src\action\travel-execution.h" />
     <ClInclude Include="..\..\src\action\tunnel-execution.h" />
     <ClInclude Include="..\..\src\action\weapon-shield.h" />
