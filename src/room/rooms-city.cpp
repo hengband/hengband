@@ -192,10 +192,13 @@ bool build_type16(player_type *player_ptr, dun_data_type *dd_ptr)
     int town_wid = rand_range(MIN_TOWN_WID, MAX_TOWN_WID);
     bool prevent_bm = false;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
+
+    // If already exist black market, prevent building
     for (y = 0; (y < floor_ptr->height) && !prevent_bm; y++) {
         for (x = 0; x < floor_ptr->width; x++) {
-            if (floor_ptr->grid_array[y][x].feat == static_cast<FEAT_IDX>(FF::STORE)) {
-                prevent_bm = (f_info[floor_ptr->grid_array[y][x].feat].subtype == STORE_BLACK);
+            const auto f_ptr = &f_info[floor_ptr->grid_array[y][x].feat];
+            if (f_ptr->flags.has(FF::STORE) && f_ptr->subtype == STORE_BLACK) {
+                prevent_bm = true;
                 break;
             }
         }
