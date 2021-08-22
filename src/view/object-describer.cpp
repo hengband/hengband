@@ -77,7 +77,7 @@ void display_koff(player_type *owner_ptr, KIND_OBJECT_IDX k_idx)
     object_type forge;
     object_type *q_ptr;
     int sval;
-    REALM_IDX use_realm;
+    int16_t use_realm;
     GAME_TEXT o_name[MAX_NLEN];
     for (int y = 0; y < Term->hgt; y++) {
         term_erase(0, y, 255);

@@ -148,7 +148,7 @@ static void build_stores(player_type *player_ptr, POSITION ltcy, POSITION ltcx, 
         }
 
         for (j = 0; j < max_f_idx; j++) {
-            if (has_flag(f_info[j].flags, FF_STORE)) {
+            if (f_info[j].flags.has(FF::STORE)) {
                 if (f_info[j].subtype == stores[i])
                     break;
             }
@@ -187,23 +187,9 @@ bool build_type16(player_type *player_ptr, dun_data_type *dd_ptr)
         STORE_BOOK,
     };
     int n = sizeof stores / sizeof(int);
-    POSITION i, y, x, y1, x1, yval, xval;
+    POSITION y1, x1, yval, xval;
     int town_hgt = rand_range(MIN_TOWN_HGT, MAX_TOWN_HGT);
     int town_wid = rand_range(MIN_TOWN_WID, MAX_TOWN_WID);
-    bool prevent_bm = false;
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    for (y = 0; (y < floor_ptr->height) && !prevent_bm; y++) {
-        for (x = 0; x < floor_ptr->width; x++) {
-            if (floor_ptr->grid_array[y][x].feat == FF_STORE) {
-                prevent_bm = (f_info[floor_ptr->grid_array[y][x].feat].subtype == STORE_BLACK);
-                break;
-            }
-        }
-    }
-
-    for (i = 0; i < n; i++)
-        if ((stores[i] == STORE_BLACK) && prevent_bm)
-            stores[i] = stores[--n];
 
     if (!n)
         return false;

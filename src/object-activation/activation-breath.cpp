@@ -27,7 +27,7 @@ bool activate_dragon_breath(player_type *user_ptr, object_type *o_ptr)
     if (!get_aim_dir(user_ptr, &dir))
         return false;
 
-    BIT_FLAGS resistance_flags[TR_FLAG_SIZE];
+    TrFlags resistance_flags;
     object_flags(user_ptr, o_ptr, resistance_flags);
 
     int type[20];

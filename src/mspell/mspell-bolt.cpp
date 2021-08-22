@@ -11,6 +11,7 @@
 #include "mspell/mspell-util.h"
 #include "mspell/mspell.h"
 #include "spell/spell-types.h"
+#include "system/floor-type-definition.h"
 #include "system/player-type-definition.h"
 
 /*!
@@ -26,10 +27,14 @@
  */
 MonsterSpellResult spell_RF4_SHOOT(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-    monspell_message(target_ptr, m_idx, t_idx, _("%^sが奇妙な音を発した。", "%^s makes a strange noise."), _("%^sが矢を放った。", "%^s fires an arrow."),
+    bool notice = monspell_message(target_ptr, m_idx, t_idx, _("%^sが奇妙な音を発した。", "%^s makes a strange noise."),
+        _("%^sが矢を放った。", "%^s fires an arrow."),
         _("%^sが%sに矢を放った。", "%^s fires an arrow at %s."), TARGET_TYPE);
 
-    sound(SOUND_SHOOT);
+    if (notice) {
+        sound(SOUND_SHOOT);
+    }
+
     const auto dam = monspell_damage(target_ptr, RF_ABILITY::SHOOT, m_idx, DAM_ROLL);
     const auto proj_res = bolt(target_ptr, m_idx, y, x, GF_ARROW, dam, TARGET_TYPE);
 

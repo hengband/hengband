@@ -192,7 +192,7 @@ static void calc_blow_paralysis(player_type *target_ptr, monap_type *monap_ptr)
  */
 static void calc_blow_drain_exp(player_type *target_ptr, monap_type *monap_ptr, const int drain_value, const int hold_exp_prob)
 {
-    s32b d = damroll(drain_value, 6) + (target_ptr->exp / 100) * MON_DRAIN_LIFE;
+    int32_t d = damroll(drain_value, 6) + (target_ptr->exp / 100) * MON_DRAIN_LIFE;
     monap_ptr->obvious = true;
     int damage_ratio = 1000;
     if (has_hold_exp(target_ptr))
@@ -233,7 +233,7 @@ static void calc_blow_time(player_type *target_ptr, monap_type *monap_ptr)
  */
 static void calc_blow_drain_life(player_type *target_ptr, monap_type *monap_ptr)
 {
-    s32b d = damroll(60, 6) + (target_ptr->exp / 100) * MON_DRAIN_LIFE;
+    int32_t d = damroll(60, 6) + (target_ptr->exp / 100) * MON_DRAIN_LIFE;
     monap_ptr->obvious = true;
     if (target_ptr->hold_exp)
         monap_ptr->damage = monap_ptr->damage * 9 / 10;
@@ -280,6 +280,19 @@ static void calc_blow_inertia(player_type *target_ptr, monap_type *monap_ptr)
 
     if (set_slow(target_ptr, (target_ptr->slow + 4 + randint0(monap_ptr->rlev / 10)), false))
         monap_ptr->obvious = true;
+}
+
+/*!
+* @brief 空腹進行度を計算する (急速回復があれば+100%、遅消化があれば-50%)
+*/
+static void calc_blow_hungry(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (target_ptr->regenerate)
+        monap_ptr->damage = monap_ptr->damage * 2;
+    if (target_ptr->slow_digest)
+        monap_ptr->damage = monap_ptr->damage / 2;
+
+    process_monster_attack_hungry(target_ptr, monap_ptr);
 }
 
 void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_ptr)
@@ -463,13 +476,15 @@ void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_pt
         monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
         if (target_ptr->is_dead)
             break;
-
         process_stun_attack(target_ptr, monap_ptr);
         break;
     case RBE_FLAVOR:
         // フレーバー打撃は自明かつダメージ 0。
         monap_ptr->obvious = true;
         monap_ptr->damage = 0;
+        break;
+    case RBE_HUNGRY:
+        calc_blow_hungry(target_ptr, monap_ptr);
         break;
 
     case NB_RBE_TYPE:

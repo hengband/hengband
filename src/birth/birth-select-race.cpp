@@ -95,7 +95,7 @@ static bool select_race(player_type *creature_ptr, char *sym, int *k)
 {
     char cur[80];
     sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
-    int cs = creature_ptr->prace;
+    int cs = static_cast<int>(creature_ptr->prace);
     int os = MAX_RACES;
     while (true) {
         display_race_stat(cs, &os, cur, sym);
@@ -166,7 +166,7 @@ bool get_player_race(player_type *creature_ptr)
         return false;
 
     creature_ptr->prace = static_cast<player_race_type>(k);
-    rp_ptr = &race_info[creature_ptr->prace];
+    rp_ptr = &race_info[k];
     c_put_str(TERM_L_BLUE, rp_ptr->title, 4, 15);
     return true;
 }

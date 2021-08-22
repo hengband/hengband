@@ -25,7 +25,7 @@
  * @param o_ptr 投擲するオブジェクトの構造体参照ポインタ
  * @param flgs 特別に追加するフラグを返す参照ポインタ
  */
-void torch_flags(object_type *o_ptr, BIT_FLAGS *flgs)
+void torch_flags(object_type *o_ptr, TrFlags &flgs)
 {
     if ((o_ptr->tval != TV_LITE) || (o_ptr->sval != SV_LITE_TORCH) || (o_ptr->xtra4 <= 0))
         return;
@@ -77,7 +77,7 @@ void update_lite_radius(player_type *creature_ptr)
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         object_type *o_ptr;
         o_ptr = &creature_ptr->inventory_list[i];
-        BIT_FLAGS flgs[TR_FLAG_SIZE];
+        TrFlags flgs;
         object_flags(creature_ptr, o_ptr, flgs);
 
         if (!o_ptr->k_idx)

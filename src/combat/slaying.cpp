@@ -28,7 +28,7 @@
  * @param m_ptr 目標モンスターの構造体参照ポインタ
  * @return スレイング加味後の倍率(/10倍)
  */
-MULTIPLY mult_slaying(player_type *player_ptr, MULTIPLY mult, const BIT_FLAGS *flgs, monster_type *m_ptr)
+MULTIPLY mult_slaying(player_type *player_ptr, MULTIPLY mult, const TrFlags &flgs, monster_type *m_ptr)
 {
     static const struct slay_table_t {
         int slay_flag;
@@ -86,7 +86,7 @@ MULTIPLY mult_slaying(player_type *player_ptr, MULTIPLY mult, const BIT_FLAGS *f
  * @param m_ptr 目標モンスターの構造体参照ポインタ
  * @return スレイング加味後の倍率(/10倍)
  */
-MULTIPLY mult_brand(player_type *player_ptr, MULTIPLY mult, const BIT_FLAGS *flgs, monster_type *m_ptr)
+MULTIPLY mult_brand(player_type *player_ptr, MULTIPLY mult, const TrFlags &flgs, monster_type *m_ptr)
 {
     static const struct brand_table_t {
         int brand_flag;
@@ -150,7 +150,7 @@ MULTIPLY mult_brand(player_type *player_ptr, MULTIPLY mult, const BIT_FLAGS *flg
  */
 HIT_POINT calc_attack_damage_with_slay(player_type *attacker_ptr, object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, combat_options mode, bool thrown)
 {
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     object_flags(attacker_ptr, o_ptr, flgs);
     torch_flags(o_ptr, flgs); /* torches has secret flags */
 

@@ -105,7 +105,7 @@ void determine_random_questor(player_type *player_ptr, quest_type *q_ptr)
  * @param q_ptr クエスト情報への参照ポインタ
  * @param stat ステータス(成功or失敗)
  */
-void record_quest_final_status(quest_type *q_ptr, PLAYER_LEVEL lev, QUEST_STATUS stat)
+void record_quest_final_status(quest_type *q_ptr, PLAYER_LEVEL lev, int16_t stat)
 {
     q_ptr->status = stat;
     q_ptr->complev = lev;
@@ -332,7 +332,7 @@ void do_cmd_quest(player_type *player_ptr)
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
 
-    if (!cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, FF_QUEST_ENTER)) {
+    if (!cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, FF::QUEST_ENTER)) {
         msg_print(_("ここにはクエストの入口はない。", "You see no quest level here."));
         return;
     }

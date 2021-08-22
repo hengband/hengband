@@ -219,22 +219,24 @@ static void switch_mind_ninja(const PLAYER_LEVEL plev, const int power, char *p)
  * @param use_mind 職業毎の特殊技能ID
  * @param power モンスター魔法のID
  */
-void mindcraft_info(player_type *caster_ptr, char *p, int use_mind, int power)
+void mindcraft_info(player_type *caster_ptr, char *p, mind_kind_type use_mind, int power)
 {
     const PLAYER_LEVEL plev = caster_ptr->lev;
     strcpy(p, "");
     switch (use_mind) {
-    case MIND_MINDCRAFTER:
+    case mind_kind_type::MINDCRAFTER:
         switch_mind_mindcrafter(caster_ptr, plev, power, p);
         break;
-    case MIND_KI:
+    case mind_kind_type::KI:
         switch_mind_ki(caster_ptr, plev, power, p);
         break;
-    case MIND_MIRROR_MASTER:
+    case mind_kind_type::MIRROR_MASTER:
         switch_mind_mirror_master(plev, power, p);
         break;
-    case MIND_NINJUTSU:
+    case mind_kind_type::NINJUTSU:
         switch_mind_ninja(plev, power, p);
+        break;
+    default:
         break;
     }
 }

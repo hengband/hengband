@@ -104,7 +104,7 @@ bool set_oppose_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
     if (creature_ptr->is_dead)
         return false;
 
-    if ((is_specific_player_race(creature_ptr, RACE_BALROG) && (creature_ptr->lev > 44)) || (creature_ptr->mimic_form == MIMIC_DEMON))
+    if ((is_specific_player_race(creature_ptr, player_race_type::BALROG) && (creature_ptr->lev > 44)) || (creature_ptr->mimic_form == MIMIC_DEMON))
         v = 1;
     if (v) {
         if (creature_ptr->oppose_fire && !do_dec) {
@@ -228,7 +228,7 @@ bool is_oppose_fire(player_type *creature_ptr)
 {
     return creature_ptr->oppose_fire || music_singing(creature_ptr, MUSIC_RESIST)
         || (creature_ptr->special_defense & KATA_MUSOU || (creature_ptr->mimic_form == MIMIC_DEMON)
-            || (is_specific_player_race(creature_ptr, RACE_BALROG) && creature_ptr->lev > 44));
+            || (is_specific_player_race(creature_ptr, player_race_type::BALROG) && creature_ptr->lev > 44));
 }
 
 bool is_oppose_cold(player_type *creature_ptr)

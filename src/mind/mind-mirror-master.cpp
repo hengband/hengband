@@ -169,7 +169,7 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
                 && centersign * ((point_x[2] - x) * (point_y[0] - y) - (point_y[2] - y) * (point_x[0] - x)) >= 0) {
                 if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y, x)) {
                     if (!(caster_ptr->blind) && panel_contains(y, x)) {
-                        u16b p = bolt_pict(y, x, y, x, GF_MANA);
+                        uint16_t p = bolt_pict(y, x, y, x, GF_MANA);
                         print_rel(caster_ptr, PICT_C(p), PICT_A(p), y, x);
                         move_cursor_relative(y, x);
                         term_fresh();

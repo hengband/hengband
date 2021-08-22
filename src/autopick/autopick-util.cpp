@@ -10,23 +10,23 @@
 #include "system/player-type-definition.h"
 #include "util/quarks.h"
 
-/*
- * 自動拾い/破壊設定のリストに関する変数 / List for auto-picker/destroyer entries
+/*!
+ * @brief 自動拾い/破壊設定のリストに関する変数 / List for auto-picker/destroyer entries
  */
 int max_autopick = 0; /*!< 現在登録している自動拾い/破壊設定の数 */
 int max_max_autopick = 0; /*!< 自動拾い/破壊設定の限界数 */
 autopick_type *autopick_list = NULL; /*!< 自動拾い/破壊設定構造体のポインタ配列 */
 
-/*
- * Automatically destroy an item if it is to be destroyed
- *
+/*!
+ * @brief Automatically destroy an item if it is to be destroyed
+ * @details
  * When always_pickup is 'yes', we disable auto-destroyer function of
  * auto-picker/destroyer, and do only easy-auto-destroyer.
  */
 object_type autopick_last_destroyed_object;
 
-/*
- * A function to delete entry
+/*!
+ * @brief A function to delete entry
  */
 void autopick_free_entry(autopick_type *entry)
 {
@@ -36,8 +36,8 @@ void autopick_free_entry(autopick_type *entry)
     entry->insc = NULL;
 }
 
-/*
- * Free memory of lines_list.
+/*!
+ * @brief Free memory of lines_list.
  */
 void free_text_lines(concptr *lines_list)
 {
@@ -49,8 +49,8 @@ void free_text_lines(concptr *lines_list)
     C_FREE(lines_list, MAX_LINES, concptr);
 }
 
-/*
- * Find a command by 'key'.
+/*!
+ * @brief Find a command by 'key'.
  */
 int get_com_id(char key)
 {
@@ -63,8 +63,8 @@ int get_com_id(char key)
     return 0;
 }
 
-/*
- * Auto inscription
+/*!
+ * @brief Auto inscription
  */
 void auto_inscribe_item(player_type *player_ptr, object_type *o_ptr, int idx)
 {
@@ -79,8 +79,8 @@ void auto_inscribe_item(player_type *player_ptr, object_type *o_ptr, int idx)
     player_ptr->update |= (PU_COMBINE);
 }
 
-/*
- * Add one line to autopick_list[]
+/*!
+ * @brief Add one line to autopick_list[]
  */
 void add_autopick_list(autopick_type *entry)
 {

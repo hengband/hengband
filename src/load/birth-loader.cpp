@@ -16,8 +16,9 @@ void load_quick_start(void)
         return;
     }
 
-    rd_byte(&previous_char.psex);
     byte tmp8u;
+    rd_byte(&tmp8u);
+    previous_char.psex = static_cast<player_sex>(tmp8u);
     rd_byte(&tmp8u);
     previous_char.prace = (player_race_type)tmp8u;
     rd_byte(&tmp8u);
@@ -25,9 +26,9 @@ void load_quick_start(void)
     rd_byte(&tmp8u);
     previous_char.pseikaku = (player_personality_type)tmp8u;
     rd_byte(&tmp8u);
-    previous_char.realm1 = (REALM_IDX)tmp8u;
+    previous_char.realm1 = (int16_t)tmp8u;
     rd_byte(&tmp8u);
-    previous_char.realm2 = (REALM_IDX)tmp8u;
+    previous_char.realm2 = (int16_t)tmp8u;
 
     rd_s16b(&previous_char.age);
     rd_s16b(&previous_char.ht);
@@ -41,7 +42,7 @@ void load_quick_start(void)
         rd_s16b(&previous_char.stat_max_max[i]);
 
     for (int i = 0; i < PY_MAX_LEVEL; i++) {
-        s16b tmp16s;
+        int16_t tmp16s;
         rd_s16b(&tmp16s);
         previous_char.player_hp[i] = (HIT_POINT)tmp16s;
     }

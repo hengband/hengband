@@ -109,7 +109,7 @@ static bool select_destroying_item(player_type *creature_ptr, destroy_type *dest
  */
 static bool decide_magic_book_exp(player_type *creature_ptr, destroy_type *destroy_ptr)
 {
-    if (creature_ptr->prace == RACE_ANDROID)
+    if (creature_ptr->prace == player_race_type::ANDROID)
         return false;
 
     if ((creature_ptr->pclass == CLASS_WARRIOR) || (creature_ptr->pclass == CLASS_BERSERKER))
@@ -136,7 +136,7 @@ static void gain_exp_by_destroying_magic_book(player_type *creature_ptr, destroy
     if (!gain_expr || (creature_ptr->exp >= PY_MAX_EXP))
         return;
 
-    s32b tester_exp = creature_ptr->max_exp / 20;
+    int32_t tester_exp = creature_ptr->max_exp / 20;
     if (tester_exp > 10000)
         tester_exp = 10000;
 

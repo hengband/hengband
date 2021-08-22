@@ -244,6 +244,8 @@ void roll_hitdice(player_type *creature_ptr, spell_operation options)
             break;
     }
 
+    creature_ptr->knowledge &= ~(KNOW_HPRATE);
+
     PERCENTAGE percent
         = (int)(((long)creature_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) / (2 * creature_ptr->hitdie + ((PY_MAX_LEVEL - 1 + 3) * (creature_ptr->hitdie + 1))));
 
@@ -265,7 +267,6 @@ void roll_hitdice(player_type *creature_ptr, spell_operation options)
     }
 
     msg_print(_("体力ランクが変わった。", "Life rate has changed."));
-    creature_ptr->knowledge &= ~(KNOW_HPRATE);
 }
 
 bool life_stream(player_type *creature_ptr, bool message, bool virtue_change)
@@ -450,7 +451,7 @@ bool fishing(player_type *creature_ptr)
     POSITION y = creature_ptr->y + ddy[dir];
     POSITION x = creature_ptr->x + ddx[dir];
     creature_ptr->fishing_dir = dir;
-    if (!cave_has_flag_bold(creature_ptr->current_floor_ptr, y, x, FF_WATER)) {
+    if (!cave_has_flag_bold(creature_ptr->current_floor_ptr, y, x, FF::WATER)) {
         msg_print(_("そこは水辺ではない。", "You can't fish here."));
         return false;
     }

@@ -61,8 +61,8 @@ static void redraw_edit_command_menu(bool *redraw, int level, int start, char *l
     *redraw = false;
 }
 
-/*
- * Display the menu, and get a command
+/*!
+ * @brief Display the menu, and get a command
  */
 int do_command_menu(int level, int start)
 {

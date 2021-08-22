@@ -40,7 +40,7 @@ static errr rd_dungeon(player_type *player_ptr)
     rd_s16b(&max_floor_id);
     byte tmp8u;
     rd_byte(&tmp8u);
-    player_ptr->dungeon_idx = (DUNGEON_IDX)tmp8u;
+    player_ptr->dungeon_idx = (DUNGEON_IDX)tmp8u; // @todo セーブデータの方を16ビットにするかdungeon_idxの定義を8ビットにした方が良い.
     byte num;
     rd_byte(&num);
     if (num == 0) {
@@ -51,9 +51,9 @@ static errr rd_dungeon(player_type *player_ptr)
 
             rd_s16b(&sf_ptr->floor_id);
             rd_byte(&tmp8u);
-            sf_ptr->savefile_id = (s16b)tmp8u;
+            sf_ptr->savefile_id = (int16_t)tmp8u;
 
-            s16b tmp16s;
+            int16_t tmp16s;
             rd_s16b(&tmp16s);
             sf_ptr->dun_level = (DEPTH)tmp16s;
 
@@ -90,7 +90,7 @@ static errr rd_dungeon(player_type *player_ptr)
         // latest_visit_mark の復元。
         // 全ての保存フロアについての visit_mark の最大値 + 1 とする。
         for (int i = 0; i < num; ++i) {
-            const u32b next_visit_mark = saved_floors[i].visit_mark + 1;
+            const uint32_t next_visit_mark = saved_floors[i].visit_mark + 1;
             if (next_visit_mark > latest_visit_mark)
                 latest_visit_mark = next_visit_mark;
         }
@@ -146,7 +146,7 @@ errr restore_dungeon(player_type *creature_ptr)
     }
 
     rd_ghost();
-    s32b tmp32s;
+    int32_t tmp32s;
     rd_s32b(&tmp32s);
     strip_bytes(tmp32s);
     return 0;

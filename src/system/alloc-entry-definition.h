@@ -25,5 +25,5 @@ typedef struct alloc_entry {
     PROB prob1; /* Probability, pass 1 */
     PROB prob2; /* Probability, pass 2 */
 
-    u16b total; /* Unused for now */
+    uint16_t total; /* Unused for now */
 } alloc_entry;

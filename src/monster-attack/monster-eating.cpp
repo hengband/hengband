@@ -20,6 +20,7 @@
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"
+#include "player/digestion-processor.h"
 #include "player/mimic-info-table.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-table.h"
@@ -28,6 +29,7 @@
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world-object.h"
 
@@ -181,7 +183,7 @@ void process_eat_lite(player_type *target_ptr, monap_type *monap_ptr)
     if ((monap_ptr->o_ptr->xtra4 <= 0) || object_is_fixed_artifact(monap_ptr->o_ptr))
         return;
 
-    monap_ptr->o_ptr->xtra4 -= (s16b)(250 + randint1(250));
+    monap_ptr->o_ptr->xtra4 -= (int16_t)(250 + randint1(250));
     if (monap_ptr->o_ptr->xtra4 < 1)
         monap_ptr->o_ptr->xtra4 = 1;
 
@@ -239,20 +241,21 @@ bool process_un_power(player_type *target_ptr, monap_type *monap_ptr)
     return true;
 }
 
-bool check_drain_hp(player_type *target_ptr, const s32b d)
+bool check_drain_hp(player_type *target_ptr, const int32_t d)
 {
     bool resist_drain = !drain_exp(target_ptr, d, d / 10, 50);
-    if (target_ptr->mimic_form)
-        return (mimic_info[target_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING) != 0 ? true : resist_drain;
+    if (target_ptr->mimic_form) {
+        return any_bits(mimic_info[target_ptr->mimic_form].choice, MIMIC_IS_NONLIVING) ? true : resist_drain;
+    }
 
     switch (target_ptr->prace) {
-    case RACE_ZOMBIE:
-    case RACE_VAMPIRE:
-    case RACE_SPECTRE:
-    case RACE_SKELETON:
-    case RACE_BALROG:
-    case RACE_GOLEM:
-    case RACE_ANDROID:
+    case player_race_type::ZOMBIE:
+    case player_race_type::VAMPIRE:
+    case player_race_type::SPECTRE:
+    case player_race_type::SKELETON:
+    case player_race_type::BALROG:
+    case player_race_type::GOLEM:
+    case player_race_type::ANDROID:
         return true;
     default:
         return resist_drain;
@@ -294,4 +297,23 @@ void process_drain_mana(player_type *target_ptr, monap_type *monap_ptr)
     }
 
     target_ptr->redraw |= (PR_MANA);
+}
+
+/*!
+ * @brief モンスターからの空腹進行処理
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
+ * @details 空腹、衰弱の一歩手前で止める優しさは残す。
+ */
+void process_monster_attack_hungry(player_type *target_ptr, monap_type *monap_ptr)
+{
+    msg_format(_("あなたは腹が減った！", "You feel hungry!"));
+    auto subtracted_food = static_cast<int16_t>(target_ptr->food - monap_ptr->damage);
+    if ((target_ptr->food >= PY_FOOD_ALERT) && (PY_FOOD_ALERT > subtracted_food)) {
+        set_food(target_ptr, PY_FOOD_ALERT - 1);
+    } else if ((target_ptr->food > PY_FOOD_FAINT) && (PY_FOOD_FAINT >= subtracted_food)) {
+        set_food(target_ptr, PY_FOOD_FAINT);
+    } else {
+        set_food(target_ptr, subtracted_food);
+    }
 }

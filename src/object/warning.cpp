@@ -58,7 +58,7 @@ object_type *choose_warning_item(player_type *creature_ptr)
     /* Search Inventory */
     int number = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        BIT_FLAGS flgs[TR_FLAG_SIZE];
+        TrFlags flgs;
         object_type *o_ptr = &creature_ptr->inventory_list[i];
 
         object_flags(creature_ptr, o_ptr, flgs);
@@ -160,7 +160,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
 
     case GF_NETHER:
         dam = dam * calc_nether_damage_rate(target_ptr, CALC_MAX) / 100;
-        if (is_specific_player_race(target_ptr, RACE_SPECTRE)) {
+        if (is_specific_player_race(target_ptr, player_race_type::SPECTRE)) {
             ignore_wraith_form = true;
             dam = 0;
         }

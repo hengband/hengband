@@ -92,7 +92,7 @@ bool trump_summoning(player_type *caster_ptr, int num, bool pet, POSITION y, POS
 
 bool cast_summon_demon(player_type *caster_ptr, int power)
 {
-    u32b flg = 0L;
+    uint32_t flg = 0L;
     bool pet = !one_in_(3);
     if (pet)
         flg |= PM_FORCE_PET;

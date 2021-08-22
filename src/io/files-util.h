@@ -32,5 +32,5 @@ void read_dead_file(char* buf, size_t buf_size);
 #ifdef JP
 extern errr get_rnd_line_jonly(concptr file_name, int entry, char *output, int count);
 #endif
-extern errr counts_write(player_type *creature_ptr, int where, u32b count);
-extern u32b counts_read(player_type *creature_ptr, int where);
+extern errr counts_write(player_type *creature_ptr, int where, uint32_t count);
+extern uint32_t counts_read(player_type *creature_ptr, int where);

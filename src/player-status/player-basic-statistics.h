@@ -9,18 +9,18 @@ public:
     PlayerBasicStatistics() = delete;
 
     void update_value();
-    s16b modification_value();
-    s16b get_value() override;
+    int16_t modification_value();
+    int16_t get_value() override;
 
 protected:
     player_ability_type ability_type;
-    s16b race_value() override;
-    s16b class_value() override;
-    s16b personality_value() override;
+    int16_t race_value() override;
+    int16_t class_value() override;
+    int16_t personality_value() override;
     void update_top_status();
     void update_use_status();
     void update_index_status();
-    virtual s16b set_exception_use_status(s16b value);
+    virtual int16_t set_exception_use_status(int16_t value);
 };
 
 #include "player-ability/player-charisma.h"

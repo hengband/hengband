@@ -20,12 +20,12 @@ bool is_owner(player_type *player_ptr, building_type *bldg)
         return true;
     }
 
-    if (bldg->member_race[player_ptr->prace] == BUILDING_OWNER) {
+    if (static_cast<int>(bldg->member_race[static_cast<int>(player_ptr->prace)]) == BUILDING_OWNER) {
         return true;
     }
 
-    REALM_IDX realm1 = player_ptr->realm1;
-    REALM_IDX realm2 = player_ptr->realm2;
+    int16_t realm1 = player_ptr->realm1;
+    int16_t realm2 = player_ptr->realm2;
     if ((is_magic(realm1) && (bldg->member_realm[realm1] == BUILDING_OWNER)) || (is_magic(realm2) && (bldg->member_realm[realm2] == BUILDING_OWNER))) {
         return true;
     }
@@ -49,12 +49,12 @@ bool is_member(player_type *player_ptr, building_type *bldg)
         return true;
     }
 
-    if (bldg->member_race[player_ptr->prace]) {
+    if (static_cast<bool>(bldg->member_race[static_cast<int>(player_ptr->prace)])) {
         return true;
     }
 
-    REALM_IDX realm1 = player_ptr->realm1;
-    REALM_IDX realm2 = player_ptr->realm2;
+    int16_t realm1 = player_ptr->realm1;
+    int16_t realm2 = player_ptr->realm2;
     if ((is_magic(realm1) && bldg->member_realm[realm1]) || (is_magic(realm2) && bldg->member_realm[realm2])) {
         return true;
     }

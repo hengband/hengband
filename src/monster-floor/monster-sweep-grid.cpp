@@ -126,8 +126,8 @@ bool MonsterSweepGrid::mon_will_run()
     auto p_mhp = this->target_ptr->mhp;
     auto m_chp = m_ptr->hp;
     auto m_mhp = m_ptr->maxhp;
-    u32b p_val = (p_lev * p_mhp) + (p_chp << 2);
-    u32b m_val = (m_lev * m_mhp) + (m_chp << 2);
+    uint32_t p_val = (p_lev * p_mhp) + (p_chp << 2);
+    uint32_t m_val = (m_lev * m_mhp) + (m_chp << 2);
     return p_val * m_mhp > m_val * p_mhp;
 }
 

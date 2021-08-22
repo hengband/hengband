@@ -24,10 +24,10 @@ PlayerStatusBase::PlayerStatusBase(player_type *owner_ptr)
  * * 派生クラスからset_locals()をコールして初期値、上限、下限をセット。
  * * 各要素毎に計算した値を初期値に単純に加算し、上限と下限で丸める。
  */
-s16b PlayerStatusBase::get_value()
+int16_t PlayerStatusBase::get_value()
 {
     this->set_locals(); /* 計算前に値のセット。派生クラスの値がセットされる。*/
-    s16b pow = this->default_value;
+    int16_t pow = this->default_value;
 
     pow += this->action_value();
     pow += this->battleform_value();
@@ -186,7 +186,7 @@ void PlayerStatusBase::set_locals()
 BIT_FLAGS PlayerStatusBase::equipments_flags(tr_type check_flag)
 {
     object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     BIT_FLAGS result = 0L;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &owner_ptr->inventory_list[i];
@@ -209,7 +209,7 @@ BIT_FLAGS PlayerStatusBase::equipments_flags(tr_type check_flag)
 BIT_FLAGS PlayerStatusBase::equipments_bad_flags(tr_type check_flag)
 {
     object_type *o_ptr;
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     BIT_FLAGS result = 0L;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &owner_ptr->inventory_list[i];
@@ -231,13 +231,13 @@ BIT_FLAGS PlayerStatusBase::equipments_bad_flags(tr_type check_flag)
  * @brief this->tr_flagを持つ装備品のpval合計値を返す
  * @return 該当するfalgを持つ全装備のpvalの合計値
  */
-s16b PlayerStatusBase::equipments_value()
+int16_t PlayerStatusBase::equipments_value()
 {
     this->set_locals(); /* 計算前に値のセット。派生クラスの値がセットされる。*/
-    s16b result = 0;
+    int16_t result = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         object_type *o_ptr = &owner_ptr->inventory_list[i];
-        BIT_FLAGS flgs[TR_FLAG_SIZE];
+        TrFlags flgs;
         object_flags(owner_ptr, o_ptr, flgs);
 
         if (!o_ptr->k_idx)
@@ -248,43 +248,43 @@ s16b PlayerStatusBase::equipments_value()
     return result;
 }
 
-s16b PlayerStatusBase::race_value()
+int16_t PlayerStatusBase::race_value()
 {
     return 0;
 }
-s16b PlayerStatusBase::class_value()
+int16_t PlayerStatusBase::class_value()
 {
     return 0;
 }
-s16b PlayerStatusBase::class_base_value()
+int16_t PlayerStatusBase::class_base_value()
 {
     return 0;
 }
-s16b PlayerStatusBase::personality_value()
+int16_t PlayerStatusBase::personality_value()
 {
     return 0;
 }
-s16b PlayerStatusBase::time_effect_value()
+int16_t PlayerStatusBase::time_effect_value()
 {
     return 0;
 }
-s16b PlayerStatusBase::battleform_value()
+int16_t PlayerStatusBase::battleform_value()
 {
     return 0;
 }
-s16b PlayerStatusBase::mutation_value()
+int16_t PlayerStatusBase::mutation_value()
 {
     return 0;
 }
-s16b PlayerStatusBase::riding_value()
+int16_t PlayerStatusBase::riding_value()
 {
     return 0;
 }
-s16b PlayerStatusBase::inventory_weight_value()
+int16_t PlayerStatusBase::inventory_weight_value()
 {
     return 0;
 }
-s16b PlayerStatusBase::action_value()
+int16_t PlayerStatusBase::action_value()
 {
     return 0;
 }
@@ -296,7 +296,7 @@ s16b PlayerStatusBase::action_value()
  * * 派生クラスで必要とされる例外処理でoverrideされる
  * @return 直接変更された値。このままmin-max処理され最終的なvalueになる。
  */
-s16b PlayerStatusBase::set_exception_value(s16b value)
+int16_t PlayerStatusBase::set_exception_value(int16_t value)
 {
     return value;
 }

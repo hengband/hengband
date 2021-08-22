@@ -32,27 +32,27 @@
 static int calc_death_scythe_reflection_magnification_mimic_none(player_type *attacker_ptr)
 {
     switch (attacker_ptr->prace) {
-    case RACE_YEEK:
-    case RACE_KLACKON:
-    case RACE_HUMAN:
-    case RACE_AMBERITE:
-    case RACE_DUNADAN:
-    case RACE_BARBARIAN:
-    case RACE_BEASTMAN:
+    case player_race_type::YEEK:
+    case player_race_type::KLACKON:
+    case player_race_type::HUMAN:
+    case player_race_type::AMBERITE:
+    case player_race_type::DUNADAN:
+    case player_race_type::BARBARIAN:
+    case player_race_type::BEASTMAN:
         return 25;
-    case RACE_HALF_ORC:
-    case RACE_HALF_TROLL:
-    case RACE_HALF_OGRE:
-    case RACE_HALF_GIANT:
-    case RACE_HALF_TITAN:
-    case RACE_CYCLOPS:
-    case RACE_IMP:
-    case RACE_SKELETON:
-    case RACE_ZOMBIE:
-    case RACE_VAMPIRE:
-    case RACE_SPECTRE:
-    case RACE_BALROG:
-    case RACE_DRACONIAN:
+    case player_race_type::HALF_ORC:
+    case player_race_type::HALF_TROLL:
+    case player_race_type::HALF_OGRE:
+    case player_race_type::HALF_GIANT:
+    case player_race_type::HALF_TITAN:
+    case player_race_type::CYCLOPS:
+    case player_race_type::IMP:
+    case player_race_type::SKELETON:
+    case player_race_type::ZOMBIE:
+    case player_race_type::VAMPIRE:
+    case player_race_type::SPECTRE:
+    case player_race_type::BALROG:
+    case player_race_type::DRACONIAN:
         return 30;
     default:
         return 10;
@@ -84,7 +84,7 @@ static int calc_death_scythe_reflection_magnification(player_type *attacker_ptr)
  * @param magnification ダメージ倍率
  * @param death_scythe_flags 死の大鎌に関するオブジェクトフラグ配列
  */
-static void compensate_death_scythe_reflection_magnification(player_type *attacker_ptr, int *magnification, BIT_FLAGS *death_scythe_flags)
+static void compensate_death_scythe_reflection_magnification(player_type *attacker_ptr, int *magnification, const TrFlags &death_scythe_flags)
 {
     if ((attacker_ptr->alignment < 0) && (*magnification < 20))
         *magnification = 20;
@@ -135,7 +135,7 @@ static void death_scythe_reflection_critial_hit(player_attack_type *pa_ptr)
  */
 void process_death_scythe_reflection(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {
-    BIT_FLAGS death_scythe_flags[TR_FLAG_SIZE];
+    TrFlags death_scythe_flags;
     sound(SOUND_HIT);
     msg_format(_("ミス！ %sにかわされた。", "You miss %s."), pa_ptr->m_name);
     msg_print(_("振り回した大鎌が自分自身に返ってきた！", "Your scythe returns to you!"));

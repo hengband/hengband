@@ -120,7 +120,7 @@ void display_rumor(player_type *player_ptr, bool ex)
 
         strcpy(fullname, town_info[t_idx].name);
 
-        s32b visit = (1UL << (t_idx - 1));
+        int32_t visit = (1UL << (t_idx - 1));
         if ((t_idx != SECRET_TOWN) && !(player_ptr->visit & visit)) {
             player_ptr->visit |= visit;
             rumor_eff_format = _("%sに行ったことがある気がする。", "You feel you have been to %s.");

@@ -165,7 +165,7 @@ bool make_gold(player_type *player_ptr, object_type *j_ptr)
         i = MAX_GOLD - 1;
     j_ptr->prep(player_ptr, OBJ_GOLD_LIST + i);
 
-    s32b base = k_info[OBJ_GOLD_LIST + i].cost;
+    int32_t base = k_info[OBJ_GOLD_LIST + i].cost;
     j_ptr->pval = (base + (8L * randint1(base)) + randint1(8));
 
     return true;

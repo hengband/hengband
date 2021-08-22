@@ -68,10 +68,10 @@ struct term_type {
     char char_blank{}; //!< Value "char_blank" Use this "char" value for "blank" grids
 
     std::vector<char> key_queue; //!< Keypress Queue -- various data / Keypress Queue -- pending keys
-    u16b key_head{};
-    u16b key_tail{};
-    u16b key_xtra{};
-    u16b key_size{};
+    uint16_t key_head{};
+    uint16_t key_tail{};
+    uint16_t key_xtra{};
+    uint16_t key_size{};
 
     TERM_LEN wid{}; //!< Window Width(max 255)
     TERM_LEN hgt{}; //!< Window Height(max 255)

@@ -125,7 +125,7 @@ void check_hex(player_type *caster_ptr)
 {
     int spell;
     MANA_POINT need_mana;
-    u32b need_mana_frac;
+    uint32_t need_mana_frac;
     bool res = false;
 
     /* Spells spelled by player */

@@ -18,13 +18,13 @@
  * @todo
  * xtra1.c周りと多重実装になっているのを何とかする
  */
-void player_immunity(player_type *creature_ptr, BIT_FLAGS *flags)
+void player_immunity(player_type *creature_ptr, TrFlags &flags)
 {
     for (int i = 0; i < TR_FLAG_SIZE; i++) {
         flags[i] = 0L;
     }
 
-	if (player_race_has_flag(creature_ptr, TR_IM_ACID))
+    if (player_race_has_flag(creature_ptr, TR_IM_ACID))
         add_flag(flags, TR_RES_ACID);
     if (player_race_has_flag(creature_ptr, TR_IM_COLD))
         add_flag(flags, TR_RES_COLD);
@@ -33,7 +33,7 @@ void player_immunity(player_type *creature_ptr, BIT_FLAGS *flags)
     if (player_race_has_flag(creature_ptr, TR_IM_FIRE))
         add_flag(flags, TR_RES_FIRE);
 
-    if (is_specific_player_race(creature_ptr, RACE_SPECTRE))
+    if (is_specific_player_race(creature_ptr, player_race_type::SPECTRE))
         add_flag(flags, TR_RES_NETHER);
     if (player_race_has_flag(creature_ptr, TR_IM_DARK))
         add_flag(flags, TR_RES_DARK);
@@ -50,7 +50,6 @@ void player_immunity(player_type *creature_ptr, BIT_FLAGS *flags)
     }
 }
 
-
 /*!
  * @brief プレイヤーの一時的魔法効果による免疫フラグを返す
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -58,7 +57,7 @@ void player_immunity(player_type *creature_ptr, BIT_FLAGS *flags)
  * @todo
  * xtra1.c周りと多重実装になっているのを何とかする
  */
-void tim_player_immunity(player_type *creature_ptr, BIT_FLAGS *flags)
+void tim_player_immunity(player_type *creature_ptr, TrFlags &flags)
 {
 	for (int i = 0; i < TR_FLAG_SIZE; i++)
 		flags[i] = 0L;
@@ -83,14 +82,14 @@ void tim_player_immunity(player_type *creature_ptr, BIT_FLAGS *flags)
  * @todo
  * xtra1.c周りと多重実装になっているのを何とかする
  */
-void known_obj_immunity(player_type *creature_ptr, BIT_FLAGS *flags)
+void known_obj_immunity(player_type *creature_ptr, TrFlags &flags)
 {
 	for (int i = 0; i < TR_FLAG_SIZE; i++)
 		flags[i] = 0L;
 
 	for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++)
 	{
-		u32b o_flags[TR_FLAG_SIZE];
+		TrFlags o_flags;
 		object_type *o_ptr;
 		o_ptr = &creature_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
@@ -111,7 +110,7 @@ void known_obj_immunity(player_type *creature_ptr, BIT_FLAGS *flags)
  * @todo
  * xtra1.c周りと多重実装になっているのを何とかする
  */
-void player_vulnerability_flags(player_type *creature_ptr, BIT_FLAGS *flags)
+void player_vulnerability_flags(player_type *creature_ptr, TrFlags &flags)
 {
 	for (int i = 0; i < TR_FLAG_SIZE; i++)
 		flags[i] = 0L;

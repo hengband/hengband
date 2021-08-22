@@ -14,13 +14,13 @@
  * @details アンデッド種族は18:00からゲームを開始するので、この修正を予め行う。
  * @return 修正をかけた後のゲームターン
  */
-s32b turn_real(player_type *player_ptr, s32b hoge)
+int32_t turn_real(player_type *player_ptr, int32_t hoge)
 {
     switch (player_ptr->start_race) {
-    case RACE_VAMPIRE:
-    case RACE_SKELETON:
-    case RACE_ZOMBIE:
-    case RACE_SPECTRE:
+    case player_race_type::VAMPIRE:
+    case player_race_type::SKELETON:
+    case player_race_type::ZOMBIE:
+    case player_race_type::SPECTRE:
         return hoge - (TURNS_PER_TICK * TOWN_DAWN * 3 / 4);
     default:
         return hoge;
@@ -39,7 +39,7 @@ void prevent_turn_overflow(player_type *player_ptr)
         return;
 
     int rollback_days = 1 + (current_world_ptr->game_turn - current_world_ptr->game_turn_limit) / (TURNS_PER_TICK * TOWN_DAWN);
-    s32b rollback_turns = TURNS_PER_TICK * TOWN_DAWN * rollback_days;
+    int32_t rollback_turns = TURNS_PER_TICK * TOWN_DAWN * rollback_days;
 
     if (current_world_ptr->game_turn > rollback_turns)
         current_world_ptr->game_turn -= rollback_turns;

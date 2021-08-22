@@ -95,17 +95,16 @@ struct monster_race {
     MONSTER_NUMBER r_tkills{}; //!< 全ゲームで倒した数 / Count monsters killed in all lives
     byte r_wake{}; //!< @に気づいて起きた数 / Number of times woken up (?)
     byte r_ignore{}; //!< @に気づいていない数 / Number of times ignored (?)
-#define MR1_EVOLUTION 0x01
-    byte r_xtra1{}; //!< 特殊な思い出フラグ(進化) / Something
+    bool r_can_evolve{}; //!< 進化するか否か / Flag being able to evolve
     byte r_xtra2{}; //!< 未使用 / Something (unused)
     ITEM_NUMBER r_drop_gold{}; //!< これまでに撃破時に落とした財宝の数 / Max number of gold dropped at once
     ITEM_NUMBER r_drop_item{}; //!< これまでに撃破時に落としたアイテムの数 / Max number of item dropped at once
     byte r_cast_spell{}; //!< 使った魔法/ブレスの種類数 /  Max unique number of spells seen
     byte r_blows[MAX_NUM_BLOWS]{}; //!< 受けた打撃 /  Number of times each blow type was seen
-    u32b r_flags1{}; //!< Observed racial flags
-    u32b r_flags2{}; //!< Observed racial flags
-    u32b r_flags3{}; //!< Observed racial flags
-    u32b r_flagsr{}; //!< 見た耐性フラグ / Observed racial resistance flags
+    uint32_t r_flags1{}; //!< Observed racial flags
+    uint32_t r_flags2{}; //!< Observed racial flags
+    uint32_t r_flags3{}; //!< Observed racial flags
+    uint32_t r_flagsr{}; //!< 見た耐性フラグ / Observed racial resistance flags
     EnumClassFlagGroup<RF_ABILITY> r_ability_flags; //!< 見た能力フラグ(魔法/ブレス) / Observed racial ability flags
     PLAYER_LEVEL defeat_level{}; //!< 倒したレベル(ユニーク用) / player level at which defeated this race
     REAL_TIME defeat_time{}; //!< 倒した時間(ユニーク用) / time at which defeated this race

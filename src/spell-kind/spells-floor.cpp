@@ -102,7 +102,7 @@ void wiz_lite(player_type *caster_ptr, bool ninja)
                 }
 
                 /* Memorize normal features */
-                if (has_flag(f_ptr->flags, FF_REMEMBER)) {
+                if (f_ptr->flags.has(FF::REMEMBER)) {
                     /* Memorize the grid */
                     g_ptr->info |= (CAVE_MARK);
                 }
@@ -206,7 +206,7 @@ void map_area(player_type *caster_ptr, POSITION range)
             f_ptr = &f_info[feat];
 
             /* Memorize normal features */
-            if (has_flag(f_ptr->flags, FF_REMEMBER)) {
+            if (f_ptr->flags.has(FF::REMEMBER)) {
                 /* Memorize the object */
                 g_ptr->info |= (CAVE_MARK);
             }
@@ -220,7 +220,7 @@ void map_area(player_type *caster_ptr, POSITION range)
                 f_ptr = &f_info[feat];
 
                 /* Memorize walls (etc) */
-                if (has_flag(f_ptr->flags, FF_REMEMBER)) {
+                if (f_ptr->flags.has(FF::REMEMBER)) {
                     /* Memorize the walls */
                     g_ptr->info |= (CAVE_MARK);
                 }
@@ -355,7 +355,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
             delete_all_items_from_floor(caster_ptr, y, x);
 
             /* Destroy "non-permanent" grids */
-            if (g_ptr->cave_has_flag(FF_PERMANENT))
+            if (g_ptr->cave_has_flag(FF::PERMANENT))
                 continue;
 
             /* Wall (or floor) type */
@@ -435,7 +435,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
                 if (!in_bounds2(floor_ptr, yy, xx))
                     continue;
                 cc_ptr = &floor_ptr->grid_array[yy][xx];
-                if (has_flag(f_info[cc_ptr->get_feat_mimic()].flags, FF_GLOW)) {
+                if (f_info[cc_ptr->get_feat_mimic()].flags.has(FF::GLOW)) {
                     g_ptr->info |= CAVE_GLOW;
                     break;
                 }

@@ -213,7 +213,7 @@ void cast_shuffle(player_type *caster_ptr)
         return;
     }
 
-    s32b ee = (caster_ptr->exp / 25) + 1;
+    int32_t ee = (caster_ptr->exp / 25) + 1;
     if (ee > 5000)
         ee = 5000;
     msg_print(_("更に経験を積んだような気がする。", "You feel more experienced."));

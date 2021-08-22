@@ -36,7 +36,7 @@ static void do_cmd_refill_lamp(player_type *user_ptr)
     if (!o_ptr)
         return;
 
-    BIT_FLAGS flgs[TR_FLAG_SIZE], flgs2[TR_FLAG_SIZE];
+    TrFlags flgs, flgs2;
     object_flags(user_ptr, o_ptr, flgs);
 
     PlayerEnergy(user_ptr).set_player_turn_energy(50);
@@ -75,7 +75,7 @@ static void do_cmd_refill_torch(player_type *user_ptr)
     if (!o_ptr)
         return;
 
-    BIT_FLAGS flgs[TR_FLAG_SIZE], flgs2[TR_FLAG_SIZE];
+    TrFlags flgs, flgs2;
     object_flags(user_ptr, o_ptr, flgs);
 
     PlayerEnergy(user_ptr).set_player_turn_energy(50);

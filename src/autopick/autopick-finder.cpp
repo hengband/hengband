@@ -24,7 +24,7 @@
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 
-/*
+/*!
  * @brief 与えられたアイテムが自動拾いのリストに登録されているかどうかを検索する
  * @param player_ptr プレーヤーへの参照ポインタ
  * @o_ptr アイテムへの参照ポインタ
@@ -50,8 +50,8 @@ int find_autopick_list(player_type *player_ptr, object_type *o_ptr)
     return -1;
 }
 
-/*
- * Choose an item for search
+/*!
+ * @brief Choose an item for search
  */
 bool get_object_for_search(player_type *player_ptr, object_type **o_handle, concptr *search_strp)
 {
@@ -70,8 +70,8 @@ bool get_object_for_search(player_type *player_ptr, object_type **o_handle, conc
     return true;
 }
 
-/*
- * Prepare for search by destroyed object
+/*!
+ * @brief Prepare for search by destroyed object
  */
 bool get_destroyed_object_for_search(player_type *player_ptr, object_type **o_handle, concptr *search_strp)
 {
@@ -86,16 +86,15 @@ bool get_destroyed_object_for_search(player_type *player_ptr, object_type **o_ha
     return true;
 }
 
-/*
- * Choose an item or string for search
+/*!
+ * @brief Choose an item or string for search
+ * @details
+ * Text color
+ * TERM_YELLOW : Overwrite mode
+ * TERM_WHITE : Insert mode
  */
 byte get_string_for_search(player_type *player_ptr, object_type **o_handle, concptr *search_strp)
 {
-    /*
-     * Text color
-     * TERM_YELLOW : Overwrite mode
-     * TERM_WHITE : Insert mode
-     */
     byte color = TERM_YELLOW;
     char buf[MAX_NLEN + 20];
     const int len = 80;
@@ -286,8 +285,8 @@ byte get_string_for_search(player_type *player_ptr, object_type **o_handle, conc
     }
 }
 
-/*
- * Search next line matches for o_ptr
+/*!
+ * @brief Search next line matches for o_ptr
  */
 void search_for_object(player_type *player_ptr, text_body_type *tb, object_type *o_ptr, bool forward)
 {
@@ -341,8 +340,8 @@ void search_for_object(player_type *player_ptr, text_body_type *tb, object_type 
     tb->dirty_flags |= DIRTY_INACTIVE;
 }
 
-/*
- * Search next line matches to the string
+/*!
+ * @brief Search next line matches to the string
  */
 void search_for_string(text_body_type *tb, concptr search_str, bool forward)
 {

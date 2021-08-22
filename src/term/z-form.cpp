@@ -492,10 +492,10 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
         case 'x':
         case 'X': {
             if (do_long) {
-                unsigned long arg;
+                ulong arg;
 
                 /* Access next argument */
-                arg = va_arg(vp, unsigned long);
+                arg = va_arg(vp, ulong);
 
                 sprintf(tmp, aux, arg);
             } else if (do_long_long) {
@@ -506,10 +506,10 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
 
                 sprintf(tmp, aux, arg);
             } else {
-                unsigned int arg;
+                uint arg;
 
                 /* Access next argument */
-                arg = va_arg(vp, unsigned int);
+                arg = va_arg(vp, uint);
                 sprintf(tmp, aux, arg);
             }
 
@@ -649,7 +649,7 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
 char *vformat(concptr fmt, va_list vp)
 {
     static char *format_buf = NULL;
-    static huge format_len = 0;
+    static ulong format_len = 0;
 
     /* Initial allocation */
     if (!format_buf) {

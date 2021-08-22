@@ -13,7 +13,7 @@
  */
 void rd_lore(monster_race *r_ptr, MONRACE_IDX r_idx)
 {
-    s16b tmp16s;
+    int16_t tmp16s;
     rd_s16b(&tmp16s);
     r_ptr->r_sights = (MONSTER_NUMBER)tmp16s;
 
@@ -35,10 +35,15 @@ void rd_lore(monster_race *r_ptr, MONRACE_IDX r_idx)
 
     rd_byte(&r_ptr->r_wake);
     rd_byte(&r_ptr->r_ignore);
-    rd_byte(&r_ptr->r_xtra1);
-    rd_byte(&r_ptr->r_xtra2);
 
     byte tmp8u;
+    rd_byte(&tmp8u);
+    r_ptr->r_can_evolve = tmp8u > 0;
+    if (loading_savefile_version_is_older_than(6)) {
+        // かつては未使用フラグr_ptr->r_xtra2だった.
+        rd_byte(&tmp8u);
+    }
+
     rd_byte(&tmp8u);
     r_ptr->r_drop_gold = (ITEM_NUMBER)tmp8u;
     rd_byte(&tmp8u);
@@ -56,7 +61,7 @@ void rd_lore(monster_race *r_ptr, MONRACE_IDX r_idx)
     rd_u32b(&r_ptr->r_flags2);
     rd_u32b(&r_ptr->r_flags3);
     if (loading_savefile_version_is_older_than(3)) {
-        u32b f4, f5, f6;
+        uint32_t f4, f5, f6;
         rd_u32b(&f4);
         rd_u32b(&f5);
         rd_u32b(&f6);
@@ -65,7 +70,7 @@ void rd_lore(monster_race *r_ptr, MONRACE_IDX r_idx)
         else
             rd_u32b(&r_ptr->r_flagsr);
 
-        auto migrate = [r_ptr](u32b f, int start_idx) {
+        auto migrate = [r_ptr](uint32_t f, int start_idx) {
             std::bitset<32> flag_bits(f);
             for (size_t i = 0; i < flag_bits.size(); i++) {
                 auto ability = static_cast<RF_ABILITY>(start_idx + i);
@@ -101,7 +106,7 @@ void rd_lore(monster_race *r_ptr, MONRACE_IDX r_idx)
 
 errr load_lore(void)
 {
-    u16b loading_max_r_idx;
+    uint16_t loading_max_r_idx;
     rd_u16b(&loading_max_r_idx);
 
     monster_race *r_ptr;

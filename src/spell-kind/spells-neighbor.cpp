@@ -131,7 +131,7 @@ void wall_breaker(player_type *caster_ptr)
         while (attempts--) {
             scatter(caster_ptr, &y, &x, caster_ptr->y, caster_ptr->x, 4, PROJECT_NONE);
 
-            if (!cave_has_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT))
+            if (!cave_has_flag_bold(caster_ptr->current_floor_ptr, y, x, FF::PROJECT))
                 continue;
 
             if (!player_bold(caster_ptr, y, x))

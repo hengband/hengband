@@ -92,27 +92,27 @@ void MindPowerGetter::select_mind_description()
 {
     switch (this->caster_ptr->pclass)
     case CLASS_MINDCRAFTER: {
-        this->use_mind = (int)MIND_MINDCRAFTER;
+        this->use_mind = mind_kind_type::MINDCRAFTER;
         this->mind_description = _("超能力", "mindcraft");
         break;
     case CLASS_FORCETRAINER:
-        this->use_mind = (int)MIND_KI;
+        this->use_mind = mind_kind_type::KI;
         this->mind_description = _("練気術", "Force");
         break;
     case CLASS_BERSERKER:
-        this->use_mind = (int)MIND_BERSERKER;
+        this->use_mind = mind_kind_type::BERSERKER;
         this->mind_description = _("技", "brutal power");
         break;
     case CLASS_MIRROR_MASTER:
-        this->use_mind = (int)MIND_MIRROR_MASTER;
+        this->use_mind = mind_kind_type::MIRROR_MASTER;
         this->mind_description = _("鏡魔法", "magic");
         break;
     case CLASS_NINJA:
-        this->use_mind = (int)MIND_NINJUTSU;
+        this->use_mind = mind_kind_type::NINJUTSU;
         this->mind_description = _("忍術", "ninjutsu");
         break;
     default:
-        this->use_mind = 0;
+        this->use_mind = mind_kind_type::MINDCRAFTER;
         this->mind_description = _("超能力", "mindcraft");
         break;
     }
@@ -121,7 +121,7 @@ void MindPowerGetter::select_mind_description()
 bool MindPowerGetter::select_spell_index(SPELL_IDX *sn)
 {
     COMMAND_CODE code;
-    this->mind_ptr = &mind_powers[this->use_mind];
+    this->mind_ptr = &mind_powers[static_cast<int>(this->use_mind)];
     *sn = -1;
     if (!repeat_pull(&code)) {
         return false;
@@ -230,7 +230,7 @@ bool MindPowerGetter::display_minds_chance(const bool only_browse)
         prt("", y, x);
         put_str(_("名前", "Name"), y, x + 5);
         put_str(
-            format(_("Lv   %s   失率 効果", "Lv   %s   Fail Info"), ((this->use_mind == MIND_BERSERKER) || (this->use_mind == MIND_NINJUTSU)) ? "HP" : "MP"), y,
+            format(_("Lv   %s   失率 効果", "Lv   %s   Fail Info"), ((this->use_mind == mind_kind_type::BERSERKER) || (this->use_mind == mind_kind_type::NINJUTSU)) ? "HP" : "MP"), y,
             x + 35);
         display_each_mind_chance();
         prt("", y + this->index + 1, x);
@@ -273,7 +273,7 @@ void MindPowerGetter::display_each_mind_chance()
 
         strcat(psi_desc,
             format("%-30s%2d %4d%s %3d%%%s", this->spell->name, this->spell->min_lev, mana_cost,
-                (((this->use_mind == MIND_MINDCRAFTER) && (this->index == 13)) ? _("～", "~ ") : "  "), chance, comment));
+                (((this->use_mind == mind_kind_type::MINDCRAFTER) && (this->index == 13)) ? _("～", "~ ") : "  "), chance, comment));
         prt(psi_desc, y + this->index + 1, x);
     }
 }
@@ -289,7 +289,7 @@ void MindPowerGetter::calculate_mind_chance(bool *has_weapon)
     this->chance -= 3 * (this->caster_ptr->lev - this->spell->min_lev);
     this->chance -= 3 * (adj_mag_stat[this->caster_ptr->stat_index[mp_ptr->spell_stat]] - 1);
     calculate_ki_chance(has_weapon);
-    if ((this->use_mind != MIND_BERSERKER) && (this->use_mind != MIND_NINJUTSU) && (this->mana_cost > this->caster_ptr->csp)) {
+    if ((this->use_mind != mind_kind_type::BERSERKER) && (this->use_mind != mind_kind_type::NINJUTSU) && (this->mana_cost > this->caster_ptr->csp)) {
         this->chance += 5 * (this->mana_cost - this->caster_ptr->csp);
     }
 
@@ -313,7 +313,7 @@ void MindPowerGetter::calculate_mind_chance(bool *has_weapon)
 
 void MindPowerGetter::calculate_ki_chance(bool *has_weapon)
 {
-    if (this->use_mind != MIND_KI) {
+    if (this->use_mind != mind_kind_type::KI) {
         return;
     }
 
@@ -341,7 +341,7 @@ void MindPowerGetter::calculate_ki_chance(bool *has_weapon)
 
 void MindPowerGetter::add_ki_chance()
 {
-    if (this->use_mind != MIND_KI) {
+    if (this->use_mind != mind_kind_type::KI) {
         return;
     }
 

@@ -195,7 +195,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             concptr q, s;
             GAME_TEXT o_name[MAX_NLEN];
             object_type *o_ptr;
-            u32b f[TR_FLAG_SIZE];
+            TrFlags f;
 
             item_tester_hook = item_tester_hook_weapon_except_bow;
             q = _("どれを呪いますか？", "Which weapon do you curse?");
@@ -502,7 +502,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             concptr q, s;
             GAME_TEXT o_name[MAX_NLEN];
             object_type *o_ptr;
-            u32b f[TR_FLAG_SIZE];
+            TrFlags f;
 
             item_tester_hook = object_is_armour;
             q = _("どれを呪いますか？", "Which piece of armour do you curse?");
@@ -702,7 +702,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
         if (cast) {
             OBJECT_IDX item;
             concptr s, q;
-            u32b f[TR_FLAG_SIZE];
+            TrFlags f;
             object_type *o_ptr;
 
             item_tester_hook = item_tester_hook_cursed;

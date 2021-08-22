@@ -80,7 +80,7 @@ void place_secret_door(player_type *player_ptr, POSITION y, POSITION x, int type
     if (type != DOOR_CURTAIN) {
         g_ptr->mimic = feat_wall_inner;
         if (feat_supports_los(g_ptr->mimic) && !feat_supports_los(g_ptr->feat)) {
-            if (has_flag(f_info[g_ptr->mimic].flags, FF_MOVE) || has_flag(f_info[g_ptr->mimic].flags, FF_CAN_FLY)) {
+            if (f_info[g_ptr->mimic].flags.has(FF::MOVE) || f_info[g_ptr->mimic].flags.has(FF::CAN_FLY)) {
                 g_ptr->feat = one_in_(2) ? g_ptr->mimic : feat_ground_type[randint0(100)];
             }
 
@@ -145,7 +145,7 @@ void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool roo
         if (type != DOOR_CURTAIN) {
             g_ptr->mimic = room ? feat_wall_outer : feat_wall_type[randint0(100)];
             if (feat_supports_los(g_ptr->mimic) && !feat_supports_los(g_ptr->feat)) {
-                if (has_flag(f_info[g_ptr->mimic].flags, FF_MOVE) || has_flag(f_info[g_ptr->mimic].flags, FF_CAN_FLY)) {
+                if (f_info[g_ptr->mimic].flags.has(FF::MOVE) || f_info[g_ptr->mimic].flags.has(FF::CAN_FLY)) {
                     g_ptr->feat = one_in_(2) ? g_ptr->mimic : feat_ground_type[randint0(100)];
                 }
                 g_ptr->mimic = 0;

@@ -44,7 +44,8 @@ void rd_action(player_type *creature_ptr)
     byte tmp8u;
     rd_byte(&tmp8u);
     rd_byte(&tmp8u);
-    creature_ptr->action = (ACTION_IDX)tmp8u;
-    if (!h_older_than(0, 4, 3))
+    creature_ptr->action = tmp8u;
+    if (!h_older_than(0, 4, 3)) {
         set_zangband_action(creature_ptr);
+    }
 }

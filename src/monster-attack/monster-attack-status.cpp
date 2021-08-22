@@ -27,7 +27,7 @@ void process_blind_attack(player_type *target_ptr, monap_type *monap_ptr)
 
     auto is_dio = monap_ptr->m_ptr->r_idx == MON_DIO;
     auto dio_msg = _("どうだッ！この血の目潰しはッ！", "How is it! This blood-blinding!");
-    if (is_dio && target_ptr->prace == RACE_SKELETON) {
+    if (is_dio && target_ptr->prace == player_race_type::SKELETON) {
         msg_print(dio_msg);
         msg_print(_("しかし、あなたには元々目はなかった！", "However, you don't have eyes!"));
         return;
@@ -178,7 +178,7 @@ void process_monster_attack_time(player_type *target_ptr, monap_type *monap_ptr)
     case 3:
     case 4:
     case 5:
-        if (target_ptr->prace == RACE_ANDROID) {
+        if (target_ptr->prace == player_race_type::ANDROID) {
             break;
         }
 

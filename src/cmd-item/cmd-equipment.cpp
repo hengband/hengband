@@ -197,7 +197,7 @@ void do_cmd_wield(player_type *creature_ptr)
             return;
     }
 
-    if ((o_ptr->name1 == ART_STONEMASK) && object_is_known(o_ptr) && (creature_ptr->prace != RACE_VAMPIRE) && (creature_ptr->prace != RACE_ANDROID)) {
+    if ((o_ptr->name1 == ART_STONEMASK) && object_is_known(o_ptr) && (creature_ptr->prace != player_race_type::VAMPIRE) && (creature_ptr->prace != player_race_type::ANDROID)) {
         char dummy[MAX_NLEN + 100];
         describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         sprintf(dummy,
@@ -288,8 +288,8 @@ void do_cmd_wield(player_type *creature_ptr)
         o_ptr->ident |= (IDENT_SENSE);
     }
 
-    if ((o_ptr->name1 == ART_STONEMASK) && (creature_ptr->prace != RACE_VAMPIRE) && (creature_ptr->prace != RACE_ANDROID))
-        change_race(creature_ptr, RACE_VAMPIRE, "");
+    if ((o_ptr->name1 == ART_STONEMASK) && (creature_ptr->prace != player_race_type::VAMPIRE) && (creature_ptr->prace != player_race_type::ANDROID))
+        change_race(creature_ptr, player_race_type::VAMPIRE, "");
 
     calc_android_exp(creature_ptr);
     creature_ptr->update |= PU_BONUS | PU_TORCH | PU_MANA;

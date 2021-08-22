@@ -30,12 +30,12 @@ static void rd_realms(player_type *creature_ptr)
 
     rd_byte(&tmp8u);
     if (creature_ptr->pclass == CLASS_ELEMENTALIST)
-        creature_ptr->element = (REALM_IDX)tmp8u;
+        creature_ptr->element = (int16_t)tmp8u;
     else
-        creature_ptr->realm1 = (REALM_IDX)tmp8u;
+        creature_ptr->realm1 = (int16_t)tmp8u;
 
     rd_byte(&tmp8u);
-    creature_ptr->realm2 = (REALM_IDX)tmp8u;
+    creature_ptr->realm2 = (int16_t)tmp8u;
     if (creature_ptr->realm2 == 255)
         creature_ptr->realm2 = 0;
 }
@@ -70,7 +70,8 @@ void rd_base_info(player_type *creature_ptr)
     rd_byte(&tmp8u);
     creature_ptr->pseikaku = (player_personality_type)tmp8u;
 
-    rd_byte(&creature_ptr->psex);
+    rd_byte(&tmp8u);
+    creature_ptr->psex = static_cast<player_sex>(tmp8u);
 
     rd_realms(creature_ptr);
 
@@ -149,7 +150,7 @@ static void set_race(player_type *creature_ptr)
     byte tmp8u;
     rd_byte(&tmp8u);
     creature_ptr->start_race = (player_race_type)tmp8u;
-    s32b tmp32s;
+    int32_t tmp32s;
     rd_s32b(&tmp32s);
     creature_ptr->old_race1 = (BIT_FLAGS)tmp32s;
     rd_s32b(&tmp32s);
@@ -207,7 +208,7 @@ static void set_imitation(player_type *creature_ptr)
     }
 
     if (h_older_than(0, 2, 3)) {
-        s16b tmp16s;
+        int16_t tmp16s;
         const int OLD_MAX_MANE = 22;
         for (int i = 0; i < OLD_MAX_MANE; i++) {
             rd_s16b(&tmp16s);
@@ -225,7 +226,7 @@ static void set_imitation(player_type *creature_ptr)
     }
 
     for (int i = 0; i < MAX_MANE; i++) {
-        s16b tmp16s;
+        int16_t tmp16s;
         rd_s16b(&tmp16s);
         creature_ptr->mane_spell[i] = static_cast<RF_ABILITY>(tmp16s);
         rd_s16b(&tmp16s);
@@ -237,7 +238,7 @@ static void set_imitation(player_type *creature_ptr)
 
 static void rd_phase_out(player_type *creature_ptr)
 {
-    s16b tmp16s;
+    int16_t tmp16s;
     rd_s16b(&tmp16s);
     creature_ptr->current_floor_ptr->inside_arena = (bool)tmp16s;
     rd_s16b(&creature_ptr->current_floor_ptr->inside_quest);
@@ -267,7 +268,7 @@ static void rd_arena(player_type *creature_ptr)
     rd_byte(&creature_ptr->exit_bldg);
     rd_byte(&tmp8u);
 
-    s16b tmp16s;
+    int16_t tmp16s;
     rd_s16b(&tmp16s);
     creature_ptr->oldpx = (POSITION)tmp16s;
     rd_s16b(&tmp16s);
@@ -416,7 +417,7 @@ static void set_mutations(player_type *creature_ptr)
 {
     if (loading_savefile_version_is_older_than(2)) {
         for (int i = 0; i < 3; i++) {
-            u32b tmp32u;
+            uint32_t tmp32u;
             rd_u32b(&tmp32u);
             std::bitset<32> rd_bits(tmp32u);
             for (size_t j = 0; j < rd_bits.size(); j++) {

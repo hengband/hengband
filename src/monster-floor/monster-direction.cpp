@@ -207,7 +207,7 @@ static bool decide_pet_movement_direction(MonsterSweepGrid *msd)
     }
 
     (void)msd->get_movable_grid();
-    msd->target_ptr->pet_follow_distance = (s16b)dis;
+    msd->target_ptr->pet_follow_distance = (int16_t)dis;
     return true;
 }
 

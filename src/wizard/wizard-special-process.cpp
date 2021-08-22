@@ -262,7 +262,7 @@ void wiz_change_status(player_type *creature_ptr)
     if (!get_string(_("熟練度: ", "Proficiency: "), tmp_val, 4))
         return;
 
-    s16b tmp_s16b = (s16b)atoi(tmp_val);
+    int16_t tmp_s16b = (int16_t)atoi(tmp_val);
     if (tmp_s16b < WEAPON_EXP_UNSKILLED)
         tmp_s16b = WEAPON_EXP_UNSKILLED;
 
@@ -307,7 +307,7 @@ void wiz_change_status(player_type *creature_ptr)
     if (tmp_long < 0)
         tmp_long = 0L;
 
-    if (creature_ptr->prace == RACE_ANDROID)
+    if (creature_ptr->prace == player_race_type::ANDROID)
         return;
 
     creature_ptr->max_exp = tmp_long;
@@ -355,13 +355,13 @@ void wiz_create_feature(player_type *creature_ptr)
         tmp_mimic = max_f_idx - 1;
 
     cave_set_feat(creature_ptr, y, x, tmp_feat);
-    g_ptr->mimic = (s16b)tmp_mimic;
+    g_ptr->mimic = (int16_t)tmp_mimic;
     feature_type *f_ptr;
     f_ptr = &f_info[g_ptr->get_feat_mimic()];
 
-    if (has_flag(f_ptr->flags, FF_RUNE_PROTECTION) || has_flag(f_ptr->flags, FF_RUNE_EXPLOSION))
+    if (f_ptr->flags.has(FF::RUNE_PROTECTION) || f_ptr->flags.has(FF::RUNE_EXPLOSION))
         g_ptr->info |= CAVE_OBJECT;
-    else if (has_flag(f_ptr->flags, FF_MIRROR))
+    else if (f_ptr->flags.has(FF::MIRROR))
         g_ptr->info |= CAVE_GLOW | CAVE_OBJECT;
 
     note_spot(creature_ptr, y, x);
@@ -503,7 +503,7 @@ void wiz_reset_race(player_type *creature_ptr)
     sprintf(ppp, "Race (0-%d): ", MAX_RACES - 1);
 
     char tmp_val[160];
-    sprintf(tmp_val, "%d", creature_ptr->prace);
+    sprintf(tmp_val, "%d", static_cast<int>(creature_ptr->prace));
 
     if (!get_string(ppp, tmp_val, 2))
         return;
@@ -513,7 +513,7 @@ void wiz_reset_race(player_type *creature_ptr)
         return;
 
     creature_ptr->prace = static_cast<player_race_type>(tmp_int);
-    rp_ptr = &race_info[creature_ptr->prace];
+    rp_ptr = &race_info[static_cast<int>(creature_ptr->prace)];
 
     creature_ptr->window_flags |= PW_PLAYER;
     creature_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
@@ -563,14 +563,14 @@ void wiz_reset_realms(player_type *creature_ptr)
     if (!get_string(ppp, tmp_val, 2))
         return;
 
-    creature_ptr->realm1 = static_cast<REALM_IDX>(atoi(tmp_val));
+    creature_ptr->realm1 = static_cast<int16_t>(atoi(tmp_val));
 
     sprintf(ppp, "2st Realm (None=0, 1-%d): ", MAX_REALM - 1);
     sprintf(tmp_val, "%d", creature_ptr->realm2);
     if (!get_string(ppp, tmp_val, 2))
         return;
 
-    creature_ptr->realm2 = static_cast<REALM_IDX>(atoi(tmp_val));
+    creature_ptr->realm2 = static_cast<int16_t>(atoi(tmp_val));
     creature_ptr->window_flags |= PW_PLAYER;
     creature_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
     creature_ptr->redraw |= PR_BASIC;

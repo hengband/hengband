@@ -133,7 +133,7 @@ bool rush_attack(player_type *attacker_ptr, bool *mdeath)
     if (in_bounds(floor_ptr, ty, tx))
         tm_idx = floor_ptr->grid_array[ty][tx].m_idx;
 
-    u16b path_g[32];
+    uint16_t path_g[32];
     int path_n = projection_path(attacker_ptr, path_g, project_length, attacker_ptr->y, attacker_ptr->x, ty, tx, PROJECT_STOP | PROJECT_KILL);
     project_length = 0;
     if (!path_n)
@@ -277,7 +277,7 @@ bool hayagake(player_type *creature_ptr)
     grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
     feature_type *f_ptr = &f_info[g_ptr->feat];
 
-    if (!has_flag(f_ptr->flags, FF_PROJECT) || (!creature_ptr->levitation && has_flag(f_ptr->flags, FF_DEEP))) {
+    if (f_ptr->flags.has_not(FF::PROJECT) || (!creature_ptr->levitation && f_ptr->flags.has(FF::DEEP))) {
         msg_print(_("ここでは素早く動けない。", "You cannot run in here."));
     } else {
         set_action(creature_ptr, ACTION_HAYAGAKE);
@@ -415,7 +415,7 @@ bool cast_ninja_spell(player_type *caster_ptr, mind_ninja_type spell)
                 return false;
             }
 
-            do_cmd_throw(caster_ptr, 1, false, slot);
+            (void)ThrowCommand(caster_ptr).do_cmd_throw(1, false, slot);
             PlayerEnergy(caster_ptr).set_player_turn_energy(100);
         }
 

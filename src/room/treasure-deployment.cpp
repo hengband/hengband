@@ -28,11 +28,11 @@ void fill_treasure(player_type *player_ptr, POSITION x1, POSITION x2, POSITION y
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     for (POSITION x = x1; x <= x2; x++) {
         for (POSITION y = y1; y <= y2; y++) {
-            s32b value = ((((s32b)(distance(cx, cy, x, y))) * 100) / size) + randint1(10) - difficulty;
+            int32_t value = ((((int32_t)(distance(cx, cy, x, y))) * 100) / size) + randint1(10) - difficulty;
             if ((randint1(100) - difficulty * 3) > 50)
                 value = 20;
 
-            if (!floor_ptr->grid_array[y][x].is_floor() && (!cave_has_flag_bold(floor_ptr, y, x, FF_PLACE) || !cave_has_flag_bold(floor_ptr, y, x, FF_DROP)))
+            if (!floor_ptr->grid_array[y][x].is_floor() && (!cave_has_flag_bold(floor_ptr, y, x, FF::PLACE) || !cave_has_flag_bold(floor_ptr, y, x, FF::DROP)))
                 continue;
 
             if (value < 0) {

@@ -479,7 +479,7 @@ void process_command(player_type *creature_ptr)
         break;
     }
     case 'v': {
-        do_cmd_throw(creature_ptr, 1, false, -1);
+        (void)ThrowCommand(creature_ptr).do_cmd_throw(1, false, -1);
         break;
     }
     case 'a': {

@@ -94,7 +94,7 @@ static bool target_set_accept(player_type *creature_ptr, POSITION y, POSITION x)
         if (g_ptr->is_object())
             return true;
 
-        if (has_flag(f_info[g_ptr->get_feat_mimic()].flags, FF_NOTICE))
+        if (f_info[g_ptr->get_feat_mimic()].flags.has(FF::NOTICE))
             return true;
     }
 

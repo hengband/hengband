@@ -13,7 +13,7 @@ bool detect_objects_magic(player_type* caster_ptr, POSITION range);
 bool detect_monsters_normal(player_type* caster_ptr, POSITION range);
 bool detect_monsters_invis(player_type* caster_ptr, POSITION range);
 bool detect_monsters_evil(player_type* caster_ptr, POSITION range);
-bool detect_monsters_xxx(player_type* caster_ptr, POSITION range, u32b match_flag);
+bool detect_monsters_xxx(player_type* caster_ptr, POSITION range, uint32_t match_flag);
 bool detect_monsters_string(player_type* caster_ptr, POSITION range, concptr);
 bool detect_monsters_nonliving(player_type* caster_ptr, POSITION range);
 bool detect_monsters_mind(player_type* caster_ptr, POSITION range);

@@ -58,7 +58,7 @@ void rd_item(player_type *player_ptr, object_type *o_ptr)
     } else
         o_ptr->number = 1;
 
-    s16b tmp16s;
+    int16_t tmp16s;
     rd_s16b(&tmp16s);
     o_ptr->weight = tmp16s;
 
@@ -155,7 +155,7 @@ void rd_item(player_type *player_ptr, object_type *o_ptr)
 
     if (flags & SAVE_ITEM_CURSE_FLAGS) {
         if (loading_savefile_version_is_older_than(5)) {
-            u32b tmp32u;
+            uint32_t tmp32u;
             rd_u32b(&tmp32u);
             std::bitset<32> rd_bits_cursed_flags(tmp32u);
             for (size_t i = 0; i < std::min(o_ptr->curse_flags.size(), rd_bits_cursed_flags.size()); i++) {
@@ -235,7 +235,7 @@ void rd_item(player_type *player_ptr, object_type *o_ptr)
     if (!h_older_than(2, 1, 2, 4))
         return;
 
-    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    TrFlags flgs;
     object_flags(player_ptr, o_ptr, flgs);
 
     if ((o_ptr->name2 == EGO_DARK) || (o_ptr->name2 == EGO_ANCIENT_CURSE) || (o_ptr->name1 == ART_NIGHT)) {
@@ -294,7 +294,7 @@ void rd_item(player_type *player_ptr, object_type *o_ptr)
  */
 errr load_item(void)
 {
-    u16b loading_max_k_idx;
+    uint16_t loading_max_k_idx;
     rd_u16b(&loading_max_k_idx);
 
     object_kind *k_ptr;
@@ -323,7 +323,7 @@ errr load_item(void)
  */
 errr load_artifact(void)
 {
-    u16b loading_max_a_idx;
+    uint16_t loading_max_a_idx;
     rd_u16b(&loading_max_a_idx);
 
     artifact_type *a_ptr;

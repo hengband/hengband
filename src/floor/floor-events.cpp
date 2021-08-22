@@ -78,11 +78,11 @@ void night_falls(player_type *subject_ptr)
             for (POSITION x = 0; x < floor_ptr->width; x++) {
                 grid_type *g_ptr = &floor_ptr->grid_array[y][x];
                 feature_type *f_ptr = &f_info[g_ptr->get_feat_mimic()];
-                if (g_ptr->is_mirror() || has_flag(f_ptr->flags, FF_QUEST_ENTER) || has_flag(f_ptr->flags, FF_ENTRANCE))
+                if (g_ptr->is_mirror() || f_ptr->flags.has(FF::QUEST_ENTER) || f_ptr->flags.has(FF::ENTRANCE))
                     continue;
 
                 g_ptr->info &= ~(CAVE_GLOW);
-                if (!has_flag(f_ptr->flags, FF_REMEMBER)) {
+                if (f_ptr->flags.has_not(FF::REMEMBER)) {
                     g_ptr->info &= ~(CAVE_MARK);
                     note_spot(subject_ptr, y, x);
                 }
@@ -274,7 +274,7 @@ void glow_deep_lava_and_bldg(player_type *subject_ptr)
         for (POSITION x = 0; x < floor_ptr->width; x++) {
             grid_type *g_ptr;
             g_ptr = &floor_ptr->grid_array[y][x];
-            if (!has_flag(f_info[g_ptr->get_feat_mimic()].flags, FF_GLOW))
+            if (f_info[g_ptr->get_feat_mimic()].flags.has_not(FF::GLOW))
                 continue;
 
             for (DIRECTION i = 0; i < 9; i++) {

@@ -142,7 +142,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
                 "武器を手元に戻ってくるように投げる。戻ってこないこともある。", "Throws current weapon. It'll return to your hand unless the action failed.");
 
         if (cast) {
-            if (!do_cmd_throw(caster_ptr, 1, true, -1))
+            if (!ThrowCommand(caster_ptr).do_cmd_throw(1, true, -1))
                 return NULL;
         }
         break;
@@ -426,11 +426,11 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
             if (caster_ptr->current_floor_ptr->grid_array[y][x].m_idx)
                 do_cmd_attack(caster_ptr, y, x, HISSATSU_HAGAN);
 
-            if (!cave_has_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_HURT_ROCK))
+            if (!cave_has_flag_bold(caster_ptr->current_floor_ptr, y, x, FF::HURT_ROCK))
                 break;
 
             /* Destroy the feature */
-            cave_alter_feat(caster_ptr, y, x, FF_HURT_ROCK);
+            cave_alter_feat(caster_ptr, y, x, FF::HURT_ROCK);
             caster_ptr->update |= (PU_FLOW);
         }
         break;
@@ -606,7 +606,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
                 m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
                 /* Hack -- attack monsters */
-                if (g_ptr->m_idx && (m_ptr->ml || cave_has_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT))) {
+                if (g_ptr->m_idx && (m_ptr->ml || cave_has_flag_bold(caster_ptr->current_floor_ptr, y, x, FF::PROJECT))) {
                     if (!monster_living(m_ptr->r_idx)) {
                         GAME_TEXT m_name[MAX_NLEN];
 
@@ -651,7 +651,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
 
         if (cast) {
             int total_damage = 0, basedam, i;
-            BIT_FLAGS flgs[TR_FLAG_SIZE];
+            TrFlags flgs;
             object_type *o_ptr;
             if (!get_aim_dir(caster_ptr, &dir))
                 return NULL;
@@ -920,7 +920,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
         if (cast) {
             int total_damage = 0, basedam, i;
             POSITION y, x;
-            BIT_FLAGS flgs[TR_FLAG_SIZE];
+            TrFlags flgs;
             object_type *o_ptr;
 
             if (!get_direction(caster_ptr, &dir, false, false))
@@ -958,7 +958,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
                 damage *= caster_ptr->num_blow[i];
                 total_damage += (damage / 100);
             }
-            project(caster_ptr, 0, (cave_has_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT) ? 5 : 0), y, x, total_damage * 3 / 2, GF_METEOR,
+            project(caster_ptr, 0, (cave_has_flag_bold(caster_ptr->current_floor_ptr, y, x, FF::PROJECT) ? 5 : 0), y, x, total_damage * 3 / 2, GF_METEOR,
                 PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM);
         }
         break;

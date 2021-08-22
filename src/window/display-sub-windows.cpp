@@ -349,7 +349,7 @@ void fix_message(void)
         TERM_LEN w, h;
         term_get_size(&w, &h);
         for (int i = 0; i < h; i++) {
-            term_putstr(0, (h - 1) - i, -1, (byte)((i < now_message) ? TERM_WHITE : TERM_SLATE), message_str((s16b)i));
+            term_putstr(0, (h - 1) - i, -1, (byte)((i < now_message) ? TERM_WHITE : TERM_SLATE), message_str((int16_t)i));
             TERM_LEN x, y;
             term_locate(&x, &y);
             term_erase(x, y, 255);
@@ -556,9 +556,9 @@ static void display_floor_item_list(player_type *player_ptr, const int y, const 
         concptr fn = f_ptr->name.c_str();
         char buf[512];
 
-        if (has_flag(f_ptr->flags, FF_STORE) || (has_flag(f_ptr->flags, FF_BLDG) && !floor_ptr->inside_arena))
+        if (f_ptr->flags.has(FF::STORE) || (f_ptr->flags.has(FF::BLDG) && !floor_ptr->inside_arena))
             sprintf(buf, _("%sの入口", "on the entrance of %s"), fn);
-        else if (has_flag(f_ptr->flags, FF_WALL))
+        else if (f_ptr->flags.has(FF::WALL))
             sprintf(buf, _("%sの中", "in %s"), fn);
         else
             sprintf(buf, _("%s", "on %s"), fn);

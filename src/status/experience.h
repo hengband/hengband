@@ -3,8 +3,8 @@
 #include "system/angband.h"
 
 typedef struct player_type player_type;
-void gain_exp_64(player_type *creature_ptr, s32b amount, u32b amount_frac);
-void gain_exp(player_type *creature_ptr, s32b amount);
+void gain_exp_64(player_type *creature_ptr, int32_t amount, uint32_t amount_frac);
+void gain_exp(player_type *creature_ptr, int32_t amount);
 bool restore_level(player_type *creature_ptr);
-void lose_exp(player_type *creature_ptr, s32b amount);
-bool drain_exp(player_type *creature_ptr, s32b drain, s32b slip, int hold_exp_prob);
+void lose_exp(player_type *creature_ptr, int32_t amount);
+bool drain_exp(player_type *creature_ptr, int32_t drain, int32_t slip, int hold_exp_prob);

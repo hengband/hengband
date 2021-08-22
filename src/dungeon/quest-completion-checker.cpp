@@ -156,7 +156,7 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
     if (create_stairs) {
         POSITION ny, nx;
         auto *g_ptr = &floor_ptr->grid_array[y][x];
-        while (cave_has_flag_bold(floor_ptr, y, x, FF_PERMANENT) || !g_ptr->o_idx_list.empty() || g_ptr->is_object()) {
+        while (cave_has_flag_bold(floor_ptr, y, x, FF::PERMANENT) || !g_ptr->o_idx_list.empty() || g_ptr->is_object()) {
             scatter(player_ptr, &ny, &nx, y, x, 1, PROJECT_NONE);
             y = ny;
             x = nx;

@@ -85,7 +85,7 @@ static MULTIPLY calc_shot_damage_with_slay(
 
     monster_race *race_ptr = &r_info[monster_ptr->r_idx];
 
-    BIT_FLAGS flags[TR_FLAG_SIZE], bow_flags[TR_FLAG_SIZE], arrow_flags[TR_FLAG_SIZE];
+    TrFlags flags, bow_flags, arrow_flags;
     object_flags(sniper_ptr, arrow_ptr, arrow_flags);
     object_flags(sniper_ptr, bow_ptr, bow_flags);
 
@@ -400,7 +400,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
     GAME_TEXT o_name[MAX_NLEN];
 
-    u16b path_g[512]; /* For calcuration of path length */
+    uint16_t path_g[512]; /* For calcuration of path length */
 
     int msec = delay_factor * delay_factor * delay_factor;
 
@@ -546,7 +546,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
             if (snipe_type == SP_KILL_WALL) {
                 g_ptr = &shooter_ptr->current_floor_ptr->grid_array[ny][nx];
 
-                if (g_ptr->cave_has_flag(FF_HURT_ROCK) && !g_ptr->m_idx) {
+                if (g_ptr->cave_has_flag(FF::HURT_ROCK) && !g_ptr->m_idx) {
                     if (any_bits(g_ptr->info, (CAVE_MARK)))
                         msg_print(_("岩が砕け散った。", "Wall rocks were shattered."));
                     /* Forget the wall */
@@ -554,7 +554,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
                     set_bits(shooter_ptr->update, PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE);
 
                     /* Destroy the wall */
-                    cave_alter_feat(shooter_ptr, ny, nx, FF_HURT_ROCK);
+                    cave_alter_feat(shooter_ptr, ny, nx, FF::HURT_ROCK);
 
                     hit_body = true;
                     break;
@@ -562,7 +562,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
             }
 
             /* Stopped by walls/doors */
-            if (!cave_has_flag_bold(shooter_ptr->current_floor_ptr, ny, nx, FF_PROJECT) && !shooter_ptr->current_floor_ptr->grid_array[ny][nx].m_idx)
+            if (!cave_has_flag_bold(shooter_ptr->current_floor_ptr, ny, nx, FF::PROJECT) && !shooter_ptr->current_floor_ptr->grid_array[ny][nx].m_idx)
                 break;
 
             /* Advance the distance */
@@ -732,7 +732,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
                     /* Sniper */
                     if (snipe_type == SP_EXPLODE) {
-                        u16b flg = (PROJECT_STOP | PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID);
+                        uint16_t flg = (PROJECT_STOP | PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID);
 
                         sound(SOUND_EXPLODE); /* No explode sound - use breath fire instead */
                         project(shooter_ptr, 0, ((shooter_ptr->concent + 1) / 2 + 1), ny, nx, base_dam, GF_MISSILE, flg);
@@ -873,7 +873,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
             /* Carry object */
             m_ptr->hold_o_idx_list.add(shooter_ptr->current_floor_ptr, o_idx);
-        } else if (cave_has_flag_bold(shooter_ptr->current_floor_ptr, y, x, FF_PROJECT)) {
+        } else if (cave_has_flag_bold(shooter_ptr->current_floor_ptr, y, x, FF::PROJECT)) {
             /* Drop (or break) near that location */
             (void)drop_near(shooter_ptr, q_ptr, j, y, x);
         } else {
@@ -1148,7 +1148,7 @@ HIT_POINT calc_crit_ratio_shot(player_type *shooter_ptr, HIT_POINT plus_ammo, HI
  */
 HIT_POINT calc_expect_crit_shot(player_type *shooter_ptr, WEIGHT weight, int plus_ammo, int plus_bow, HIT_POINT dam)
 {
-    u32b num;
+    uint32_t num;
     int i, k, crit;
     i = calc_crit_ratio_shot(shooter_ptr, plus_ammo, plus_bow);
 
@@ -1189,7 +1189,7 @@ HIT_POINT calc_expect_crit_shot(player_type *shooter_ptr, WEIGHT weight, int plu
  * @param impact 強撃かどうか
  * @return ダメージ期待値
  */
-HIT_POINT calc_expect_crit(player_type *shooter_ptr, WEIGHT weight, int plus, HIT_POINT dam, s16b meichuu, bool dokubari, bool impact)
+HIT_POINT calc_expect_crit(player_type *shooter_ptr, WEIGHT weight, int plus, HIT_POINT dam, int16_t meichuu, bool dokubari, bool impact)
 {
     if (dokubari)
         return dam;
@@ -1208,7 +1208,7 @@ HIT_POINT calc_expect_crit(player_type *shooter_ptr, WEIGHT weight, int plus, HI
         return sum / 650;
     };
 
-    u32b num = 0;
+    uint32_t num = 0;
 
     if (impact) {
         for (int d = 1; d <= 650; ++d) {

@@ -39,7 +39,7 @@ static void home_carry_load(player_type *player_ptr, store_type *store_ptr, obje
     if (store_ptr->stock_num >= store_get_stock_max(STORE_HOME))
         return;
 
-    s32b value = object_value(player_ptr, o_ptr);
+    int32_t value = object_value(player_ptr, o_ptr);
     int slot;
     for (slot = 0; slot < store_ptr->stock_num; slot++) {
         if (object_sort_comp(player_ptr, o_ptr, value, &store_ptr->stock[slot]))
@@ -76,7 +76,7 @@ static errr rd_store(player_type *player_ptr, int town_number, int store_number)
 
     byte owner_idx;
     byte tmp8u;
-    s16b inven_num;
+    int16_t inven_num;
     rd_s32b(&store_ptr->store_open);
     rd_s16b(&store_ptr->insult_cur);
     rd_byte(&owner_idx);
@@ -125,7 +125,7 @@ errr load_store(player_type *creature_ptr)
 {
     (void)creature_ptr;
 
-    u16b tmp16u;
+    uint16_t tmp16u;
     rd_u16b(&tmp16u);
     auto town_count = (int)tmp16u;
 

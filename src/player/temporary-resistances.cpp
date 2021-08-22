@@ -21,7 +21,7 @@
  * @todo
  * xtra1.c周りと多重実装になっているのを何とかする
  */
-void tim_player_flags(player_type *creature_ptr, BIT_FLAGS *flags)
+void tim_player_flags(player_type *creature_ptr, TrFlags &flags)
 {
     BIT_FLAGS tmp_effect_flag = FLAG_CAUSE_MAGIC_TIME_EFFECT;
     set_bits(tmp_effect_flag, FLAG_CAUSE_BATTLE_FORM);

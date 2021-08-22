@@ -55,8 +55,8 @@ WorldTurnProcessor::WorldTurnProcessor(player_type *player_ptr)
  */
 void WorldTurnProcessor::process_world()
 {
-    const s32b a_day = TURNS_PER_TICK * TOWN_DAWN;
-    s32b prev_turn_in_today = ((current_world_ptr->game_turn - TURNS_PER_TICK) % a_day + a_day / 4) % a_day;
+    const int32_t a_day = TURNS_PER_TICK * TOWN_DAWN;
+    int32_t prev_turn_in_today = ((current_world_ptr->game_turn - TURNS_PER_TICK) % a_day + a_day / 4) % a_day;
     int prev_min = (1440 * prev_turn_in_today / a_day) % 60;
 
     int dummy_day;
@@ -208,7 +208,7 @@ void WorldTurnProcessor::decide_auto_save()
 
     auto should_save = autosave_t;
     should_save &= !this->player_ptr->phase_out;
-    should_save &= current_world_ptr->game_turn % ((s32b)autosave_freq * TURNS_PER_TICK) == 0;
+    should_save &= current_world_ptr->game_turn % ((int32_t)autosave_freq * TURNS_PER_TICK) == 0;
     if (should_save) {
         do_cmd_save_game(this->player_ptr, true);
     }
@@ -282,7 +282,7 @@ void WorldTurnProcessor::shuffle_shopkeeper()
 
     for (auto i = 1; i < max_f_idx; i++) {
         auto *f_ptr = &f_info[i];
-        if (f_ptr->name.empty() || !has_flag(f_ptr->flags, FF_STORE))
+        if (f_ptr->name.empty() || f_ptr->flags.has_not(FF::STORE))
             continue;
 
         if (f_ptr->subtype != n) {

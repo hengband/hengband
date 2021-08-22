@@ -209,7 +209,9 @@ MonsterSpellResult spell_RF4_BREATH(player_type *target_ptr, int GF_TYPE, POSITI
     if (mon_to_mon && known && !see_either)
         floor_ptr->monster_noise = true;
 
-    sound(SOUND_BREATH);
+    if (known || see_either)
+        sound(SOUND_BREATH);
+
     const auto proj_res = breath(target_ptr, y, x, m_idx, GF_TYPE, dam, 0, true, TARGET_TYPE);
     if (smart_learn_aux && mon_to_player)
         update_smart_learn(target_ptr, m_idx, drs_type);

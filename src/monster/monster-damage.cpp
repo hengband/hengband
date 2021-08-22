@@ -13,6 +13,7 @@
 #include "core/stuff-handler.h"
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
+#include "io/files-util.h"
 #include "io/report.h"
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
@@ -46,11 +47,6 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-
-#if JP
-#else
-#include "io/files-util.h"
-#endif
 
 /*
  * @brief コンストラクタ
@@ -360,8 +356,8 @@ void MonsterDamageProcessor::show_kill_message(concptr note, GAME_TEXT *m_name)
     }
 
     if (monster_living(m_ptr->r_idx)) {
-        auto mes = is_echizen(this->target_ptr) ? _("せっかくだから%sを殺した。", "Because it's time, you have slained %s.")
-                                                : _("%sを殺した。", "You have slained %s.");
+        auto mes = is_echizen(this->target_ptr) ? _("せっかくだから%sを殺した。", "Because it's time, you have slain %s.")
+                                                : _("%sを殺した。", "You have slain %s.");
         msg_format(mes, m_name);
         return;
     }
@@ -379,7 +375,7 @@ void MonsterDamageProcessor::show_kill_message(concptr note, GAME_TEXT *m_name)
     }
 
     auto mes = is_echizen(this->target_ptr) ? _("せっかくだから%sを殺した。", "Because it's time, you have destroyed %s.")
-                                            : _("%sを殺した。", "You have destoryed %s.");
+                                            : _("%sを殺した。", "You have destroyed %s.");
     msg_format(mes, m_name);
 }
 

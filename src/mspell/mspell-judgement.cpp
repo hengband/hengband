@@ -51,7 +51,7 @@
 bool direct_beam(player_type *target_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, monster_type *m_ptr)
 {
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
-    u16b grid_g[512];
+    uint16_t grid_g[512];
     int grid_n = projection_path(target_ptr, grid_g, get_max_range(target_ptr), y1, x1, y2, x2, PROJECT_THRU);
     if (!grid_n)
         return false;
@@ -106,7 +106,7 @@ bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POSITION y
         break;
     }
 
-    u16b grid_g[512];
+    uint16_t grid_g[512];
     int grid_n = projection_path(master_ptr, grid_g, get_max_range(master_ptr), y1, x1, y2, x2, flg);
     int i;
     POSITION y = y1;
@@ -122,7 +122,7 @@ bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POSITION y
             if (!cave_los_bold(master_ptr->current_floor_ptr, ny, nx))
                 break;
         } else {
-            if (!cave_has_flag_bold(master_ptr->current_floor_ptr, ny, nx, FF_PROJECT))
+            if (!cave_has_flag_bold(master_ptr->current_floor_ptr, ny, nx, FF::PROJECT))
                 break;
         }
 
@@ -187,14 +187,14 @@ bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POSITION y
  */
 void get_project_point(player_type *target_ptr, POSITION sy, POSITION sx, POSITION *ty, POSITION *tx, BIT_FLAGS flg)
 {
-    u16b path_g[128];
+    uint16_t path_g[128];
     int path_n = projection_path(target_ptr, path_g, get_max_range(target_ptr), sy, sx, *ty, *tx, flg);
     *ty = sy;
     *tx = sx;
     for (int i = 0; i < path_n; i++) {
         sy = get_grid_y(path_g[i]);
         sx = get_grid_x(path_g[i]);
-        if (!cave_has_flag_bold(target_ptr->current_floor_ptr, sy, sx, FF_PROJECT))
+        if (!cave_has_flag_bold(target_ptr->current_floor_ptr, sy, sx, FF::PROJECT))
             break;
 
         *ty = sy;
@@ -268,7 +268,7 @@ bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
     }
 
     if (r_ptr->ability_flags.has(RF_ABILITY::BR_FIRE)) {
-        if (!((creature_ptr->prace == RACE_BALROG) && creature_ptr->lev > 44)) {
+        if (!((creature_ptr->prace == player_race_type::BALROG) && creature_ptr->lev > 44)) {
             if (!has_immune_fire(creature_ptr) && (creature_ptr->oppose_fire || music_singing(creature_ptr, MUSIC_RESIST)))
                 return true;
 

@@ -24,8 +24,8 @@
 
 static const char autoregister_header[] = "?:$AUTOREGISTER";
 
-/*
- *  Clear auto registered lines in the picktype.prf .
+/*!
+ * @brief Clear auto registered lines in the picktype.prf .
  */
 static bool clear_auto_register(player_type *player_ptr)
 {
@@ -104,8 +104,8 @@ static bool clear_auto_register(player_type *player_ptr)
     return okay;
 }
 
-/*
- *  Automatically register an auto-destroy preference line
+/*!
+ * @brief Automatically register an auto-destroy preference line
  */
 bool autopick_autoregister(player_type *player_ptr, object_type *o_ptr)
 {

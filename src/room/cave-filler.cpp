@@ -93,10 +93,10 @@ void generate_hmap(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsi
         }
     }
 
-    floor_ptr->grid_array[fill_data.ymin][fill_data.xmin].feat = (s16b)maxsize;
-    floor_ptr->grid_array[fill_data.ymax][fill_data.xmin].feat = (s16b)maxsize;
-    floor_ptr->grid_array[fill_data.ymin][fill_data.xmax].feat = (s16b)maxsize;
-    floor_ptr->grid_array[fill_data.ymax][fill_data.xmax].feat = (s16b)maxsize;
+    floor_ptr->grid_array[fill_data.ymin][fill_data.xmin].feat = (int16_t)maxsize;
+    floor_ptr->grid_array[fill_data.ymax][fill_data.xmin].feat = (int16_t)maxsize;
+    floor_ptr->grid_array[fill_data.ymin][fill_data.xmax].feat = (int16_t)maxsize;
+    floor_ptr->grid_array[fill_data.ymax][fill_data.xmax].feat = (int16_t)maxsize;
     floor_ptr->grid_array[y0][x0].feat = 0;
     POSITION xstep = xsize * 256;
     POSITION xhstep = xsize * 256;
@@ -477,7 +477,7 @@ bool generate_lake(player_type *player_ptr, POSITION y0, POSITION x0, POSITION x
                 place_bold(player_ptr, y0 + y - yhsize, x0 + x - xhsize, GB_EXTRA);
 
             floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY | CAVE_ROOM);
-            if (cave_has_flag_bold(floor_ptr, y0 + y - yhsize, x0 + x - xhsize, FF_LAVA)) {
+            if (cave_has_flag_bold(floor_ptr, y0 + y - yhsize, x0 + x - xhsize, FF::LAVA)) {
                 if (d_info[floor_ptr->dungeon_idx].flags.has_not(DF::DARKNESS))
                     floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info |= CAVE_GLOW;
             }

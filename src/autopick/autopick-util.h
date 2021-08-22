@@ -62,7 +62,7 @@ typedef struct text_body_type {
 	concptr *lines_list;
 	byte states[MAX_LINES];
 
-	u16b dirty_flags;
+	uint16_t dirty_flags;
 	int dirty_line;
 	int filename_mode;
 	int old_com_id;

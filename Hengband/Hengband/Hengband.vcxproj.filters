@@ -1943,9 +1943,6 @@
     <ClCompile Include="..\..\src\racial\race-racial-command-setter.cpp">
       <Filter>racial</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\action\throw-util.cpp">
-      <Filter>action</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\player\player-status-table.cpp">
       <Filter>player</Filter>
     </ClCompile>
@@ -2327,6 +2324,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\avatar\avatar.cpp">
       <Filter>avatar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-use\throw-execution.cpp">
+      <Filter>object-use</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4586,9 +4586,6 @@
     <ClInclude Include="..\..\src\racial\race-racial-command-setter.h">
       <Filter>racial</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\action\throw-util.h">
-      <Filter>action</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\player\player-status-table.h">
       <Filter>player</Filter>
     </ClInclude>
@@ -4997,6 +4994,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\avatar\avatar.h">
       <Filter>avatar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-use\throw-execution.h">
+      <Filter>object-use</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

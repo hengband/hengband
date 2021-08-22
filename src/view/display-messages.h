@@ -11,7 +11,7 @@
 extern bool msg_flag;
 extern COMMAND_CODE now_message;
 
-s32b message_num(void);
+int32_t message_num(void);
 concptr message_str(int age);
 void message_add(concptr msg);
 void msg_erase(void);

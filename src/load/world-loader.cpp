@@ -15,7 +15,7 @@ static void rd_hengband_dungeons(void)
 {
     byte max = (byte)current_world_ptr->max_d_idx;
     rd_byte(&max);
-    s16b tmp16s;
+    int16_t tmp16s;
     for (int i = 0; i < max; i++) {
         rd_s16b(&tmp16s);
         max_dlv[i] = tmp16s;
@@ -41,7 +41,7 @@ void rd_dungeons(player_type *creature_ptr)
  */
 void rd_alter_reality(player_type *creature_ptr)
 {
-    s16b tmp16s;
+    int16_t tmp16s;
     if (h_older_than(0, 3, 8))
         creature_ptr->recall_dungeon = DUNGEON_ANGBAND;
     else {
@@ -80,10 +80,10 @@ void rd_autopick(player_type *creature_ptr)
 static void set_undead_turn_limit(player_type *creature_ptr)
 {
     switch (creature_ptr->start_race) {
-    case RACE_VAMPIRE:
-    case RACE_SKELETON:
-    case RACE_ZOMBIE:
-    case RACE_SPECTRE:
+    case player_race_type::VAMPIRE:
+    case player_race_type::SKELETON:
+    case player_race_type::ZOMBIE:
+    case player_race_type::SPECTRE:
         current_world_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * MAX_DAYS + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
         break;
     default:
@@ -136,7 +136,7 @@ void rd_visited_towns(player_type *creature_ptr)
         return;
     }
 
-    s32b tmp32s;
+    int32_t tmp32s;
     rd_s32b(&tmp32s);
     creature_ptr->visit = (BIT_FLAGS)tmp32s;
 }
@@ -180,8 +180,8 @@ void load_wilderness_info(player_type *creature_ptr)
 
 errr analyze_wilderness(void)
 {
-    s32b wild_x_size;
-    s32b wild_y_size;
+    int32_t wild_x_size;
+    int32_t wild_y_size;
     rd_s32b(&wild_x_size);
     rd_s32b(&wild_y_size);
 

@@ -125,7 +125,7 @@ static void make_tunnels(player_type *player_ptr, dun_data_type *dd_ptr)
         dd_ptr->tunnel_x = dd_ptr->tunn[j].x;
         g_ptr = &player_ptr->current_floor_ptr->grid_array[dd_ptr->tunnel_y][dd_ptr->tunnel_x];
         f_ptr = &f_info[g_ptr->feat];
-        if (!has_flag(f_ptr->flags, FF_MOVE) || (!has_flag(f_ptr->flags, FF_WATER) && !has_flag(f_ptr->flags, FF_LAVA))) {
+        if (f_ptr->flags.has_not(FF::MOVE) || f_ptr->flags.has_none_of({FF::WATER, FF::LAVA})) {
             g_ptr->mimic = 0;
             place_grid(player_ptr, g_ptr, GB_FLOOR);
         }
@@ -271,8 +271,8 @@ static void place_bound_perm_wall(player_type *player_ptr, grid_type *g_ptr)
     }
 
     auto *f_ptr = &f_info[g_ptr->feat];
-    if ((has_flag(f_ptr->flags, FF_HAS_GOLD) || has_flag(f_ptr->flags, FF_HAS_ITEM)) && !has_flag(f_ptr->flags, FF_SECRET)) {
-        g_ptr->feat = feat_state(player_ptr->current_floor_ptr, g_ptr->feat, FF_ENSECRET);
+    if (f_ptr->flags.has_any_of({FF::HAS_GOLD, FF::HAS_ITEM}) && f_ptr->flags.has_not(FF::SECRET)) {
+        g_ptr->feat = feat_state(player_ptr->current_floor_ptr, g_ptr->feat, FF::ENSECRET);
     }
 
     g_ptr->mimic = g_ptr->feat;
