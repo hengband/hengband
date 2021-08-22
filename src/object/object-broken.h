@@ -16,8 +16,8 @@ protected:
     virtual ~ObjectBreaker() = default;
 
 public:
-    int set_destroy(object_type *o_ptr);
-    virtual bool hates(object_type *o_ptr) = 0;
+    int can_destroy(object_type *o_ptr) const;
+    virtual bool hates(object_type *o_ptr) const = 0;
 
 private:
     tr_type ignore_flg;
@@ -27,26 +27,26 @@ class BreakerAcid : public ObjectBreaker {
 public:
     BreakerAcid();
     virtual ~BreakerAcid() = default;
-    bool hates(object_type *o_ptr);
+    bool hates(object_type *o_ptr) const;
 };
 
 class BreakerElec : public ObjectBreaker {
 public:
     BreakerElec();
     virtual ~BreakerElec() = default;
-    bool hates(object_type *o_ptr);
+    bool hates(object_type *o_ptr) const;
 };
 
 class BreakerFire : public ObjectBreaker {
 public:
     BreakerFire();
     virtual ~BreakerFire() = default;
-    bool hates(object_type *o_ptr);
+    bool hates(object_type *o_ptr) const;
 };
 
 class BreakerCold : public ObjectBreaker {
 public:
     BreakerCold();
     virtual ~BreakerCold() = default;
-    bool hates(object_type *o_ptr);
+    bool hates(object_type *o_ptr) const;
 };
