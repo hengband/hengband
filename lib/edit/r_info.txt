@@ -24444,7 +24444,7 @@ N:1233:シャウラス
 E:Chaurus
 G:c:D
 I:115:15d13:40:50:15
-W:18:1:0:100:450:1235
+W:18:2:0:100:450:1235
 B:BITE:HURT:1d13
 B:STING:HURT:1d13
 F:EVIL | ANIMAL | DROP_CORPSE | BASH_DOOR | DROP_60 | FRIENDS
@@ -24455,11 +24455,11 @@ D:それは人ほどの大きさを誇り、甲殻に覆われている。
 N:1234:シャウラス・リーパー
 E:Chaurus reaper
 G:c:s
-I:120:30d25:40:80:15
-W:33:1:0:500:0:0
+I:115:30d25:40:80:15
+W:33:2:0:500:0:0
 B:BITE:HURT:3d13
 B:STING:HURT:3d13
-F:EVIL | ANIMAL | DROP_CORPSE | BASH_DOOR | DROP_90 | FRIENDS
+F:EVIL | ANIMAL | DROP_CORPSE | BASH_DOOR | DROP_60 | FRIENDS
 F:IM_POIS | RES_DARK
 D:$It is much larger than a human
 D:$ and has an extremely hard shell made of chitin.
