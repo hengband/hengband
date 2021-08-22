@@ -4998,6 +4998,9 @@
     <ClInclude Include="..\..\src\object-use\throw-execution.h">
       <Filter>object-use</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\util\enum-converter.h">
+      <Filter>util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
