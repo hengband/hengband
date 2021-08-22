@@ -163,7 +163,8 @@ void wr_lore(MONRACE_IDX r_idx)
     wr_byte(r_ptr->r_wake);
     wr_byte(r_ptr->r_ignore);
 
-    wr_byte(r_ptr->r_xtra1);
+    byte tmp8u = r_ptr->r_can_evolve ? 1 : 0;
+    wr_byte(tmp8u);
     wr_byte(r_ptr->r_xtra2);
 
     wr_byte((byte)r_ptr->r_drop_gold);

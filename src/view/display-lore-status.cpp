@@ -334,7 +334,7 @@ void display_monster_resistances(lore_type *lore_ptr)
 
 void display_monster_evolution(lore_type* lore_ptr)
 {
-    if (((lore_ptr->r_ptr->r_xtra1 & MR1_EVOLUTION) == 0) && !lore_ptr->know_everything)
+    if (!lore_ptr->r_ptr->r_can_evolve && !lore_ptr->know_everything)
         return;
 
     if (lore_ptr->r_ptr->next_r_idx) {
