@@ -35,10 +35,15 @@ void rd_lore(monster_race *r_ptr, MONRACE_IDX r_idx)
 
     rd_byte(&r_ptr->r_wake);
     rd_byte(&r_ptr->r_ignore);
-    rd_byte(&r_ptr->r_xtra1);
-    rd_byte(&r_ptr->r_xtra2);
 
     byte tmp8u;
+    rd_byte(&tmp8u);
+    r_ptr->r_can_evolve = tmp8u > 0;
+    if (loading_savefile_version_is_older_than(6)) {
+        // かつては未使用フラグr_ptr->r_xtra2だった.
+        rd_byte(&tmp8u);
+    }
+
     rd_byte(&tmp8u);
     r_ptr->r_drop_gold = (ITEM_NUMBER)tmp8u;
     rd_byte(&tmp8u);

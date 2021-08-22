@@ -95,8 +95,7 @@ struct monster_race {
     MONSTER_NUMBER r_tkills{}; //!< 全ゲームで倒した数 / Count monsters killed in all lives
     byte r_wake{}; //!< @に気づいて起きた数 / Number of times woken up (?)
     byte r_ignore{}; //!< @に気づいていない数 / Number of times ignored (?)
-#define MR1_EVOLUTION 0x01
-    byte r_xtra1{}; //!< 特殊な思い出フラグ(進化) / Something
+    bool r_can_evolve{}; //!< 進化するか否か / Flag being able to evolve
     byte r_xtra2{}; //!< 未使用 / Something (unused)
     ITEM_NUMBER r_drop_gold{}; //!< これまでに撃破時に落とした財宝の数 / Max number of gold dropped at once
     ITEM_NUMBER r_drop_item{}; //!< これまでに撃破時に落としたアイテムの数 / Max number of item dropped at once
