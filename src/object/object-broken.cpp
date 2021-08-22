@@ -18,23 +18,28 @@
 
 ObjectBreaker::ObjectBreaker(tr_type ignore_flg)
     : ignore_flg(ignore_flg)
-{}
+{
+}
 
 BreakerAcid::BreakerAcid()
     : ObjectBreaker(TR_IGNORE_ACID)
-{}
+{
+}
 
 BreakerElec::BreakerElec()
     : ObjectBreaker(TR_IGNORE_ELEC)
-{}
+{
+}
 
 BreakerFire::BreakerFire()
     : ObjectBreaker(TR_IGNORE_FIRE)
-{}
+{
+}
 
 BreakerCold::BreakerCold()
     : ObjectBreaker(TR_IGNORE_COLD)
-{}
+{
+}
 
 /*!
  * @brief アイテムが酸で破損するかどうかを判定する
@@ -204,12 +209,12 @@ bool BreakerCold::hates(object_type *o_ptr)
  * @return 破損するならばTRUEを返す
  * @todo 統合を検討
  */
-int ObjectBreaker::set_destroy(player_type *owner_ptr, object_type *o_ptr)
+int ObjectBreaker::set_destroy(object_type *o_ptr)
 {
     TrFlags flgs;
     if (!this->hates(o_ptr))
         return false;
-    object_flags(owner_ptr, o_ptr, flgs);
+    object_flags(o_ptr, flgs);
     if (has_flag(flgs, this->ignore_flg))
         return false;
     return true;
