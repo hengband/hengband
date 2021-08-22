@@ -45,6 +45,7 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
+#include "util/enum-converter.h"
 #include "util/quarks.h"
 #include "world/world-object.h"
 #include "world/world.h"
@@ -464,7 +465,7 @@ void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
         }
     } else {
         rd_byte(&tmp8u);
-        constexpr auto base = static_cast<int>(MFLAG2::KAGE);
+        constexpr auto base = enum2i(MFLAG2::KAGE);
         std::bitset<7> rd_bits_mflag2(tmp8u);
         for (size_t i = 0; i < std::min(m_ptr->mflag2.size(), rd_bits_mflag2.size()); ++i) {
             auto f = static_cast<MFLAG2>(base + i);

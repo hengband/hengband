@@ -21,6 +21,7 @@
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
 #include "system/player-type-definition.h"
+#include "util/enum-converter.h"
 #include "view/display-messages.h"
 #ifdef JP
 #else
@@ -52,7 +53,7 @@ void do_poly_wounds(player_type *creature_ptr)
  */
 void change_race(player_type *creature_ptr, player_race_type new_race, concptr effect_msg)
 {
-    concptr title = race_info[static_cast<int>(new_race)].title;
+    concptr title = race_info[enum2i(new_race)].title;
     player_race_type old_race = creature_ptr->prace;
 #ifdef JP
     msg_format("あなたは%s%sに変化した！", effect_msg, title);
@@ -61,14 +62,14 @@ void change_race(player_type *creature_ptr, player_race_type new_race, concptr e
 #endif
 
     chg_virtue(creature_ptr, V_CHANCE, 2);
-    if (static_cast<int>(creature_ptr->prace) < 32) {
-        creature_ptr->old_race1 |= 1UL << static_cast<int>(creature_ptr->prace);
+    if (enum2i(creature_ptr->prace) < 32) {
+        creature_ptr->old_race1 |= 1UL << enum2i(creature_ptr->prace);
     } else {
-        creature_ptr->old_race2 |= 1UL << (static_cast<int>(creature_ptr->prace) - 32);
+        creature_ptr->old_race2 |= 1UL << (enum2i(creature_ptr->prace) - 32);
     }
 
     creature_ptr->prace = new_race;
-    rp_ptr = &race_info[static_cast<int>(creature_ptr->prace)];
+    rp_ptr = &race_info[enum2i(creature_ptr->prace)];
     creature_ptr->expfact = rp_ptr->r_exp + cp_ptr->c_exp;
 
     bool is_special_class = creature_ptr->pclass == CLASS_MONK;

@@ -103,6 +103,7 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
+#include "util/enum-converter.h"
 #include "util/quarks.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -1063,7 +1064,7 @@ static ACTION_SKILL_POWER calc_disarming(player_type *creature_ptr)
     if (creature_ptr->mimic_form)
         tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
     else
-        tmp_rp_ptr = &race_info[static_cast<int>(creature_ptr->prace)];
+        tmp_rp_ptr = &race_info[enum2i(creature_ptr->prace)];
     const player_class *c_ptr = &class_info[creature_ptr->pclass];
     const player_personality *a_ptr = &personality_info[creature_ptr->pseikaku];
 
@@ -1093,7 +1094,7 @@ static ACTION_SKILL_POWER calc_device_ability(player_type *creature_ptr)
     if (creature_ptr->mimic_form)
         tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
     else
-        tmp_rp_ptr = &race_info[static_cast<int>(creature_ptr->prace)];
+        tmp_rp_ptr = &race_info[enum2i(creature_ptr->prace)];
     const player_class *c_ptr = &class_info[creature_ptr->pclass];
     const player_personality *a_ptr = &personality_info[creature_ptr->pseikaku];
 
@@ -1144,7 +1145,7 @@ static ACTION_SKILL_POWER calc_saving_throw(player_type *creature_ptr)
     if (creature_ptr->mimic_form)
         tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
     else
-        tmp_rp_ptr = &race_info[static_cast<int>(creature_ptr->prace)];
+        tmp_rp_ptr = &race_info[enum2i(creature_ptr->prace)];
     const player_class *c_ptr = &class_info[creature_ptr->pclass];
     const player_personality *a_ptr = &personality_info[creature_ptr->pseikaku];
 
@@ -1199,7 +1200,7 @@ static ACTION_SKILL_POWER calc_search(player_type *creature_ptr)
     if (creature_ptr->mimic_form)
         tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
     else
-        tmp_rp_ptr = &race_info[static_cast<int>(creature_ptr->prace)];
+        tmp_rp_ptr = &race_info[enum2i(creature_ptr->prace)];
     const player_class *c_ptr = &class_info[creature_ptr->pclass];
     const player_personality *a_ptr = &personality_info[creature_ptr->pseikaku];
 
@@ -1247,7 +1248,7 @@ static ACTION_SKILL_POWER calc_search_freq(player_type *creature_ptr)
     if (creature_ptr->mimic_form)
         tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
     else
-        tmp_rp_ptr = &race_info[static_cast<int>(creature_ptr->prace)];
+        tmp_rp_ptr = &race_info[enum2i(creature_ptr->prace)];
     const player_class *c_ptr = &class_info[creature_ptr->pclass];
     const player_personality *a_ptr = &personality_info[creature_ptr->pseikaku];
 
@@ -1293,7 +1294,7 @@ static ACTION_SKILL_POWER calc_to_hit_melee(player_type *creature_ptr)
     if (creature_ptr->mimic_form)
         tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
     else
-        tmp_rp_ptr = &race_info[static_cast<int>(creature_ptr->prace)];
+        tmp_rp_ptr = &race_info[enum2i(creature_ptr->prace)];
 
     pow = tmp_rp_ptr->r_thn + c_ptr->c_thn + a_ptr->a_thn;
     pow += ((c_ptr->x_thn * creature_ptr->lev / 10) + (a_ptr->a_thn * creature_ptr->lev / 50));
@@ -1317,7 +1318,7 @@ static ACTION_SKILL_POWER calc_to_hit_shoot(player_type *creature_ptr)
     if (creature_ptr->mimic_form)
         tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
     else
-        tmp_rp_ptr = &race_info[static_cast<int>(creature_ptr->prace)];
+        tmp_rp_ptr = &race_info[enum2i(creature_ptr->prace)];
 
     pow = tmp_rp_ptr->r_thb + c_ptr->c_thb + a_ptr->a_thb;
     pow += ((c_ptr->x_thb * creature_ptr->lev / 10) + (a_ptr->a_thb * creature_ptr->lev / 50));
@@ -1342,7 +1343,7 @@ static ACTION_SKILL_POWER calc_to_hit_throw(player_type *creature_ptr)
     if (creature_ptr->mimic_form)
         tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
     else
-        tmp_rp_ptr = &race_info[static_cast<int>(creature_ptr->prace)];
+        tmp_rp_ptr = &race_info[enum2i(creature_ptr->prace)];
 
     pow = tmp_rp_ptr->r_thb + c_ptr->c_thb + a_ptr->a_thb;
     pow += ((c_ptr->x_thb * creature_ptr->lev / 10) + (a_ptr->a_thb * creature_ptr->lev / 50));

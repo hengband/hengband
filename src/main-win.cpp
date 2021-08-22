@@ -120,6 +120,7 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/angband-files.h"
+#include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -495,7 +496,7 @@ static void load_prefs_aux(int i)
  */
 static void load_prefs(void)
 {
-    arg_graphics = (byte)GetPrivateProfileIntA("Angband", "Graphics", static_cast<byte>(graphics_mode::GRAPHICS_NONE), ini_file);
+    arg_graphics = (byte)GetPrivateProfileIntA("Angband", "Graphics", enum2i(graphics_mode::GRAPHICS_NONE), ini_file);
     arg_bigtile = (GetPrivateProfileIntA("Angband", "Bigtile", false, ini_file) != 0);
     use_bigtile = arg_bigtile;
     arg_sound = (GetPrivateProfileIntA("Angband", "Sound", 0, ini_file) != 0);
@@ -1491,10 +1492,10 @@ static void setup_menus(void)
     }
     CheckMenuItem(hm, IDM_WINDOW_KEEP_SUBWINDOWS, (keep_subwindows ? MF_CHECKED : MF_UNCHECKED));
 
-    CheckMenuItem(hm, IDM_OPTIONS_NO_GRAPHICS, (arg_graphics == static_cast<byte>(graphics_mode::GRAPHICS_NONE) ? MF_CHECKED : MF_UNCHECKED));
-    CheckMenuItem(hm, IDM_OPTIONS_OLD_GRAPHICS, (arg_graphics == static_cast<byte>(graphics_mode::GRAPHICS_ORIGINAL) ? MF_CHECKED : MF_UNCHECKED));
-    CheckMenuItem(hm, IDM_OPTIONS_NEW_GRAPHICS, (arg_graphics == static_cast<byte>(graphics_mode::GRAPHICS_ADAM_BOLT) ? MF_CHECKED : MF_UNCHECKED));
-    CheckMenuItem(hm, IDM_OPTIONS_NEW2_GRAPHICS, (arg_graphics == static_cast<byte>(graphics_mode::GRAPHICS_HENGBAND) ? MF_CHECKED : MF_UNCHECKED));
+    CheckMenuItem(hm, IDM_OPTIONS_NO_GRAPHICS, (arg_graphics == enum2i(graphics_mode::GRAPHICS_NONE) ? MF_CHECKED : MF_UNCHECKED));
+    CheckMenuItem(hm, IDM_OPTIONS_OLD_GRAPHICS, (arg_graphics == enum2i(graphics_mode::GRAPHICS_ORIGINAL) ? MF_CHECKED : MF_UNCHECKED));
+    CheckMenuItem(hm, IDM_OPTIONS_NEW_GRAPHICS, (arg_graphics == enum2i(graphics_mode::GRAPHICS_ADAM_BOLT) ? MF_CHECKED : MF_UNCHECKED));
+    CheckMenuItem(hm, IDM_OPTIONS_NEW2_GRAPHICS, (arg_graphics == enum2i(graphics_mode::GRAPHICS_HENGBAND) ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_BIGTILE, (arg_bigtile ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_MUSIC, (arg_music ? MF_CHECKED : MF_UNCHECKED));
     CheckMenuItem(hm, IDM_OPTIONS_MUSIC_PAUSE_INACTIVE, (use_pause_music_inactive ? MF_CHECKED : MF_UNCHECKED));
@@ -1780,16 +1781,16 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         break;
     }
     case IDM_OPTIONS_NO_GRAPHICS: {
-        if (arg_graphics != static_cast<byte>(graphics_mode::GRAPHICS_NONE)) {
-            arg_graphics = static_cast<byte>(graphics_mode::GRAPHICS_NONE);
+        if (arg_graphics != enum2i(graphics_mode::GRAPHICS_NONE)) {
+            arg_graphics = enum2i(graphics_mode::GRAPHICS_NONE);
             if (game_in_progress)
                 do_cmd_redraw(player_ptr);
         }
         break;
     }
     case IDM_OPTIONS_OLD_GRAPHICS: {
-        if (arg_graphics != static_cast<byte>(graphics_mode::GRAPHICS_ORIGINAL)) {
-            arg_graphics = static_cast<byte>(graphics_mode::GRAPHICS_ORIGINAL);
+        if (arg_graphics != enum2i(graphics_mode::GRAPHICS_ORIGINAL)) {
+            arg_graphics = enum2i(graphics_mode::GRAPHICS_ORIGINAL);
             if (game_in_progress)
                 do_cmd_redraw(player_ptr);
         }
@@ -1797,8 +1798,8 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         break;
     }
     case IDM_OPTIONS_NEW_GRAPHICS: {
-        if (arg_graphics != static_cast<byte>(graphics_mode::GRAPHICS_ADAM_BOLT)) {
-            arg_graphics = static_cast<byte>(graphics_mode::GRAPHICS_ADAM_BOLT);
+        if (arg_graphics != enum2i(graphics_mode::GRAPHICS_ADAM_BOLT)) {
+            arg_graphics = enum2i(graphics_mode::GRAPHICS_ADAM_BOLT);
             if (game_in_progress)
                 do_cmd_redraw(player_ptr);
         }
@@ -1806,8 +1807,8 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         break;
     }
     case IDM_OPTIONS_NEW2_GRAPHICS: {
-        if (arg_graphics != static_cast<byte>(graphics_mode::GRAPHICS_HENGBAND)) {
-            arg_graphics = static_cast<byte>(graphics_mode::GRAPHICS_HENGBAND);
+        if (arg_graphics != enum2i(graphics_mode::GRAPHICS_HENGBAND)) {
+            arg_graphics = enum2i(graphics_mode::GRAPHICS_HENGBAND);
             if (game_in_progress)
                 do_cmd_redraw(player_ptr);
         }

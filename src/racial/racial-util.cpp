@@ -1,6 +1,7 @@
 ﻿#include "racial/racial-util.h"
 #include "io/input-key-requester.h"
 #include "system/player-type-definition.h"
+#include "util/enum-converter.h"
 
 rc_type::rc_type(player_type *creature_ptr)
 {
@@ -17,7 +18,7 @@ void rc_type::add_power(rpi_type& rpi, int number)
 
 void rc_type::add_power(rpi_type &rpi, MUTA flag)
 {
-    add_power(rpi, static_cast<int>(flag));
+    add_power(rpi, enum2i(flag));
 }
 
 COMMAND_CODE rc_type::power_count()

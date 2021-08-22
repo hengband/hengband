@@ -29,6 +29,7 @@
 #include "sv-definition/sv-weapon-types.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "util/enum-converter.h"
 
 /*!
  * @brief 所持状態にあるアイテムの中から一部枠の装備可能なものを装備させる。
@@ -184,8 +185,7 @@ void player_outfit(player_type *creature_ptr)
         q_ptr->pval = (PARAMETER_VALUE)rand_range(25, 30);
         add_outfit(creature_ptr, q_ptr);
     } else if (creature_ptr->pclass == CLASS_SORCERER) {
-        int book_tval;
-        for (book_tval = TV_LIFE_BOOK; book_tval <= TV_LIFE_BOOK + static_cast<int>(MAX_MAGIC) - 1; book_tval++) {
+        for (auto book_tval = enum2i(TV_LIFE_BOOK); book_tval <= enum2i(TV_LIFE_BOOK) + enum2i(MAX_MAGIC) - 1; book_tval++) {
             q_ptr->prep(creature_ptr, lookup_kind(static_cast<tval_type>(book_tval), 0));
             q_ptr->number = 1;
             add_outfit(creature_ptr, q_ptr);

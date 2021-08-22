@@ -18,6 +18,7 @@
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
+#include "util/enum-converter.h"
 #include "world/world.h"
 
 /*!
@@ -32,8 +33,8 @@
  */
 static bool spell_in_between(RF_ABILITY spell, RF_ABILITY start, RF_ABILITY end)
 {
-    auto spell_int = static_cast<int>(spell);
-    return static_cast<int>(start) <= spell_int && spell_int <= static_cast<int>(end);
+    auto spell_int = enum2i(spell);
+    return enum2i(start) <= spell_int && spell_int <= enum2i(end);
 }
 
 /*!

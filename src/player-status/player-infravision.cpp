@@ -4,6 +4,8 @@
 #include "player/player-race-types.h"
 #include "player/race-info-table.h"
 #include "system/player-type-definition.h"
+#include "util/enum-converter.h"
+
 /*
  * @brief 赤外線視力 - 初期値、下限、上限
  */
@@ -29,7 +31,7 @@ int16_t PlayerInfravision::race_value()
     if (this->owner_ptr->mimic_form)
         tmp_rp_ptr = &mimic_info[this->owner_ptr->mimic_form];
     else
-        tmp_rp_ptr = &race_info[static_cast<int>(this->owner_ptr->prace)];
+        tmp_rp_ptr = &race_info[enum2i(this->owner_ptr->prace)];
 
     return tmp_rp_ptr->infra;
 }

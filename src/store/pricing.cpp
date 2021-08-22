@@ -7,6 +7,7 @@
 #include "store/store.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "util/enum-converter.h"
 
 /*!
  * @brief 店舗価格を決定する. 無料にはならない /
@@ -36,7 +37,7 @@ PRICE price_item(player_type *player_ptr, object_type *o_ptr, int greed, bool fl
     if (price <= 0)
         return 0L;
 
-    int factor = rgold_adj[static_cast<int>(ot_ptr->owner_race)][static_cast<int>(player_ptr->prace)];
+    int factor = rgold_adj[enum2i(ot_ptr->owner_race)][enum2i(player_ptr->prace)];
     factor += adj_chr_gold[player_ptr->stat_index[A_CHR]];
     int adjust;
     if (flip) {

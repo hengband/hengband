@@ -14,6 +14,7 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
+#include "util/enum-converter.h"
 #include "view/display-messages.h"
 
 namespace {
@@ -32,7 +33,7 @@ TRC get_curse(player_type *owner_ptr, int power, object_type *o_ptr)
     TRC new_curse;
 
     while (true) {
-        new_curse = static_cast<TRC>(rand_range(static_cast<int>(TRC::TY_CURSE), static_cast<int>(TRC::MAX) - 1));
+        new_curse = static_cast<TRC>(rand_range(enum2i(TRC::TY_CURSE), enum2i(TRC::MAX) - 1));
         if (power == 2) {
             if (TRC_HEAVY_MASK.has_not(new_curse))
                 continue;

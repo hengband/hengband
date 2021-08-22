@@ -22,6 +22,7 @@
 #include "spell/spell-info.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "util/enum-converter.h"
 #include "util/flag-group.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
@@ -181,7 +182,7 @@ static bool sweep_learnt_spells(player_type *caster_ptr, learnt_magic_type *lm_p
 
     std::vector<RF_ABILITY> spells;
     EnumClassFlagGroup<RF_ABILITY>::get_flags(lm_ptr->ability_flags, std::back_inserter(spells));
-    std::transform(spells.begin(), spells.end(), std::back_inserter(lm_ptr->blue_magics), [](RF_ABILITY ability) { return static_cast<int>(ability); });
+    std::transform(spells.begin(), spells.end(), std::back_inserter(lm_ptr->blue_magics), [](RF_ABILITY ability) { return enum2i(ability); });
     lm_ptr->count = lm_ptr->ability_flags.count();
 
     for (lm_ptr->blue_magic_num = 0; lm_ptr->blue_magic_num < lm_ptr->count; lm_ptr->blue_magic_num++) {
@@ -356,7 +357,7 @@ static bool ask_cast_blue_magic(learnt_magic_type *lm_ptr)
         return true;
 
     char tmp_val[160];
-    (void)strnfmt(tmp_val, 78, _("%sの魔法を唱えますか？", "Use %s? "), monster_powers[static_cast<int>(lm_ptr->blue_magics[lm_ptr->blue_magic_num])].name);
+    (void)strnfmt(tmp_val, 78, _("%sの魔法を唱えますか？", "Use %s? "), monster_powers[lm_ptr->blue_magics[lm_ptr->blue_magic_num]].name);
     return get_check(tmp_val);
 }
 
