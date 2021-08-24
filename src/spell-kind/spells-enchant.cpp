@@ -26,7 +26,7 @@
  */
 bool artifact_scroll(player_type *caster_ptr)
 {
-    item_tester_hook = item_tester_hook_nameless_weapon_armour;
+    item_tester_hook = make_item_tester(object_is_nameless_weapon_armour);
 
     concptr q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
     concptr s = _("強化できるアイテムがない。", "You have nothing to enchant.");
@@ -139,7 +139,7 @@ bool mundane_spell(player_type *owner_ptr, bool only_equip)
     byte marked = o_ptr->marked;
     uint16_t inscription = o_ptr->inscription;
 
-    o_ptr->prep(owner_ptr, o_ptr->k_idx);
+    o_ptr->prep(o_ptr->k_idx);
 
     o_ptr->iy = iy;
     o_ptr->ix = ix;

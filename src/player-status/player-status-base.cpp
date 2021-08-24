@@ -193,7 +193,7 @@ BIT_FLAGS PlayerStatusBase::equipments_flags(tr_type check_flag)
         if (!o_ptr->k_idx)
             continue;
 
-        object_flags(owner_ptr, o_ptr, flgs);
+        object_flags(o_ptr, flgs);
 
         if (has_flag(flgs, check_flag))
             set_bits(result, convert_inventory_slot_type_to_flag_cause(static_cast<inventory_slot_type>(i)));
@@ -216,7 +216,7 @@ BIT_FLAGS PlayerStatusBase::equipments_bad_flags(tr_type check_flag)
         if (!o_ptr->k_idx)
             continue;
 
-        object_flags(owner_ptr, o_ptr, flgs);
+        object_flags(o_ptr, flgs);
 
         if (has_flag(flgs, check_flag)) {
             if (o_ptr->pval < 0) {
@@ -238,7 +238,7 @@ int16_t PlayerStatusBase::equipments_value()
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         object_type *o_ptr = &owner_ptr->inventory_list[i];
         TrFlags flgs;
-        object_flags(owner_ptr, o_ptr, flgs);
+        object_flags(o_ptr, flgs);
 
         if (!o_ptr->k_idx)
             continue;

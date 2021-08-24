@@ -110,7 +110,7 @@ static void process_cursed_equipment_characteristics(player_type *creature_ptr, 
         auto *o_ptr = &creature_ptr->inventory_list[i];
         auto is_known = object_is_known(o_ptr);
         auto is_sensed = is_known || o_ptr->ident & IDENT_SENSE;
-        object_flags_known(creature_ptr, o_ptr, flags);
+        object_flags_known(o_ptr, flags);
 
         if (has_flag(flags, TR_ADD_L_CURSE) || has_flag(flags, TR_ADD_H_CURSE)) {
             if (is_known) {
@@ -158,7 +158,7 @@ static void process_light_equipment_characteristics(player_type *creature_ptr, a
     for (int i = INVEN_MAIN_HAND; i < max_i; i++) {
         TrFlags flags;
         auto *o_ptr = &creature_ptr->inventory_list[i];
-        object_flags_known(creature_ptr, o_ptr, flags);
+        object_flags_known(o_ptr, flags);
 
         auto b = false;
         for (auto flg : lite_flags) {
@@ -208,7 +208,7 @@ static void process_inventory_characteristic(player_type *creature_ptr, tr_type 
     for (int i = INVEN_MAIN_HAND; i < max_i; i++) {
         TrFlags flags;
         auto *o_ptr = &creature_ptr->inventory_list[i];
-        object_flags_known(creature_ptr, o_ptr, flags);
+        object_flags_known(o_ptr, flags);
 
         auto f_imm = flag_to_greater_flag.find(flag);
         if (f_imm != flag_to_greater_flag.end()) {

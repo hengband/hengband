@@ -28,7 +28,7 @@ bool activate_dragon_breath(player_type *user_ptr, object_type *o_ptr)
         return false;
 
     TrFlags resistance_flags;
-    object_flags(user_ptr, o_ptr, resistance_flags);
+    object_flags(o_ptr, resistance_flags);
 
     int type[20];
     int n = 0;

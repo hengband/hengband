@@ -52,5 +52,5 @@ void store_delete(void);
 void store_create(player_type *player_ptr, KIND_OBJECT_IDX k_idx, black_market_crap_pf black_market_crap, store_will_buy_pf store_will_buy, mass_produce_pf mass_produce);
 void store_item_increase(INVENTORY_IDX item, ITEM_NUMBER num);
 void store_item_optimize(INVENTORY_IDX item);
-int store_carry(player_type *player_ptr, object_type *o_ptr);
+int store_carry(object_type *o_ptr);
 bool store_object_similar(object_type *o_ptr, object_type *j_ptr);

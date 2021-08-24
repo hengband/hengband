@@ -259,7 +259,7 @@ static void drain_essence(player_type *creature_ptr)
 
     PlayerEnergy(creature_ptr).set_player_turn_energy(100);
 
-    object_flags(creature_ptr, o_ptr, old_flgs);
+    object_flags(o_ptr, old_flgs);
     if (has_flag(old_flgs, TR_KILL_DRAGON))
         add_flag(old_flgs, TR_SLAY_DRAGON);
     if (has_flag(old_flgs, TR_KILL_ANIMAL))
@@ -332,7 +332,7 @@ static void drain_essence(player_type *creature_ptr)
     marked = o_ptr->marked;
     number = o_ptr->number;
 
-    o_ptr->prep(creature_ptr, o_ptr->k_idx);
+    o_ptr->prep(o_ptr->k_idx);
 
     o_ptr->iy = iy;
     o_ptr->ix = ix;
@@ -344,7 +344,7 @@ static void drain_essence(player_type *creature_ptr)
     object_aware(creature_ptr, o_ptr);
     object_known(o_ptr);
 
-    object_flags(creature_ptr, o_ptr, new_flgs);
+    object_flags(o_ptr, new_flgs);
 
     for (i = 0; essence_info[i].add_name; i++) {
         essence_type *es_ptr = &essence_info[i];
@@ -795,7 +795,7 @@ static void add_essence(player_type *creature_ptr, int32_t mode)
     if (es_ptr->add == ESSENCE_SLAY_GLOVE)
         tval = TV_GLOVES;
     else if (mode == 1 || mode == 5)
-        item_tester_hook = item_tester_hook_melee_ammo;
+        item_tester_hook = make_item_tester(object_is_melee_ammo);
     else if (es_ptr->add == ESSENCE_ATTACK)
         item_tester_hook = make_item_tester(object_allow_enchant_weapon);
     else if (es_ptr->add == ESSENCE_AC)
@@ -1018,7 +1018,7 @@ static void erase_essence(player_type *creature_ptr)
             o_ptr->to_d = 0;
     }
     o_ptr->xtra3 = 0;
-    object_flags(creature_ptr, o_ptr, flgs);
+    object_flags(o_ptr, flgs);
     if (!(has_pval_flags(flgs)))
         o_ptr->pval = 0;
     msg_print(_("エッセンスを取り去った。", "You removed all essence you have added."));

@@ -56,5 +56,5 @@ typedef struct object_type {
 
     void wipe();
     void copy_from(object_type *j_ptr);
-    void prep(player_type *player_ptr, KIND_OBJECT_IDX ko_idx);
+    void prep(KIND_OBJECT_IDX ko_idx);
 } object_type;

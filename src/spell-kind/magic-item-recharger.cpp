@@ -50,7 +50,7 @@
  */
 bool recharge(player_type *caster_ptr, int power)
 {
-    item_tester_hook = item_tester_hook_recharge;
+    item_tester_hook = make_item_tester(object_is_rechargeable);
     concptr q = _("どのアイテムに魔力を充填しますか? ", "Recharge which item? ");
     concptr s = _("魔力を充填すべきアイテムがない。", "You have nothing to recharge.");
 

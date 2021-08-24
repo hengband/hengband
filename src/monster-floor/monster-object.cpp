@@ -171,7 +171,7 @@ void update_object_by_monster_movement(player_type *target_ptr, turn_flags *turn
                 continue;
         }
 
-        object_flags(target_ptr, o_ptr, flgs);
+        object_flags(o_ptr, flgs);
         describe_flavor(target_ptr, o_name, o_ptr, 0);
         monster_desc(target_ptr, m_name, m_ptr, MD_INDEF_HIDDEN);
         update_object_flags(flgs, &flg2, &flg3, &flgr);

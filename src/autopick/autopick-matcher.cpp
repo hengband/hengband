@@ -81,7 +81,7 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
         }
     }
 
-    if (IS_FLG(FLG_WORTHLESS) && object_value(player_ptr, o_ptr) > 0)
+    if (IS_FLG(FLG_WORTHLESS) && object_value(o_ptr) > 0)
         return false;
 
     if (IS_FLG(FLG_ARTIFACT)) {

@@ -8,13 +8,13 @@
 #include "util/quarks.h"
 #include "util/string-processor.h"
 
-void display_short_flavors(player_type *player_ptr, flavor_type *flavor_ptr)
+void display_short_flavors(flavor_type *flavor_ptr)
 {
     flavor_ptr->tmp_val2[0] = '\0';
     if ((abbrev_extra || abbrev_all) && object_is_fully_known(flavor_ptr->o_ptr)) {
         if (!flavor_ptr->o_ptr->inscription || !angband_strchr(quark_str(flavor_ptr->o_ptr->inscription), '%')) {
             bool kanji = _(true, false);
-            get_ability_abbreviation(player_ptr, flavor_ptr->tmp_val2, flavor_ptr->o_ptr, kanji, abbrev_all);
+            get_ability_abbreviation(flavor_ptr->tmp_val2, flavor_ptr->o_ptr, kanji, abbrev_all);
         }
     }
 
@@ -25,7 +25,7 @@ void display_short_flavors(player_type *player_ptr, flavor_type *flavor_ptr)
     if (flavor_ptr->tmp_val2[0])
         strcat(flavor_ptr->tmp_val2, ", ");
 
-    get_inscription(player_ptr, buff, flavor_ptr->o_ptr);
+    get_inscription(buff, flavor_ptr->o_ptr);
     angband_strcat(flavor_ptr->tmp_val2, buff, sizeof(flavor_ptr->tmp_val2));
 }
 

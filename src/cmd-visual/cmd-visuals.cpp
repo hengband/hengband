@@ -154,7 +154,7 @@ void do_cmd_visuals(player_type *creature_ptr)
                     strip_name(o_name, k_idx);
                 } else {
                     object_type dummy;
-                    dummy.prep(creature_ptr, k_idx);
+                    dummy.prep(k_idx);
                     describe_flavor(creature_ptr, o_name, &dummy, OD_FORCE_FLAVOR);
                 }
 

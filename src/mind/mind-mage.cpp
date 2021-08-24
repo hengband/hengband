@@ -32,7 +32,7 @@ bool eat_magic(player_type *caster_ptr, int power)
     byte fail_type = 1;
     GAME_TEXT o_name[MAX_NLEN];
 
-    item_tester_hook = item_tester_hook_recharge;
+    item_tester_hook = make_item_tester(object_is_rechargeable);
 
     concptr q = _("どのアイテムから魔力を吸収しますか？", "Drain which item? ");
     concptr s = _("魔力を吸収できるアイテムがありません。", "You have nothing to drain.");

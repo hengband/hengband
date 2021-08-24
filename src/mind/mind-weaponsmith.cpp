@@ -8,11 +8,8 @@
  * @param o_ptr チェックしたいオブジェクトの構造体参照ポインタ
  * @return エッセンスの付加可能な武器か矢弾ならばTRUEを返す。
  */
-bool item_tester_hook_melee_ammo(player_type *player_ptr, const object_type *o_ptr)
+bool object_is_melee_ammo(const object_type *o_ptr)
 {
-    /* Unused */
-    (void)player_ptr;
-
     switch (o_ptr->tval) {
     case TV_HAFTED:
     case TV_POLEARM:

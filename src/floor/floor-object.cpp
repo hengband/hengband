@@ -118,7 +118,7 @@ bool make_object(player_type *owner_ptr, object_type *j_ptr, BIT_FLAGS mode)
         if (!k_idx)
             return false;
 
-        j_ptr->prep(owner_ptr, k_idx);
+        j_ptr->prep(k_idx);
     }
 
     apply_magic_to_object(owner_ptr, j_ptr, floor_ptr->object_level, mode);
@@ -163,7 +163,7 @@ bool make_gold(player_type *player_ptr, object_type *j_ptr)
         i = coin_type;
     if (i >= MAX_GOLD)
         i = MAX_GOLD - 1;
-    j_ptr->prep(player_ptr, OBJ_GOLD_LIST + i);
+    j_ptr->prep(OBJ_GOLD_LIST + i);
 
     int32_t base = k_info[OBJ_GOLD_LIST + i].cost;
     j_ptr->pval = (base + (8L * randint1(base)) + randint1(8));

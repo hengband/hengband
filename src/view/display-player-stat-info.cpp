@@ -201,7 +201,7 @@ static void display_equipments_compensation(player_type *creature_ptr, TrFlags &
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         object_type *o_ptr;
         o_ptr = &creature_ptr->inventory_list[i];
-        object_flags_known(creature_ptr, o_ptr, flags);
+        object_flags_known(o_ptr, flags);
         for (int stat = 0; stat < A_MAX; stat++) {
             TERM_COLOR a = TERM_SLATE;
             char c = '.';

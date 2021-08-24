@@ -95,7 +95,7 @@ static void decide_initial_items(player_type *creature_ptr, object_type *q_ptr)
         /* Demon can drain vitality from humanoid corpse */
         get_mon_num_prep(creature_ptr, monster_hook_human, NULL);
         for (int i = rand_range(3, 4); i > 0; i--) {
-            q_ptr->prep(creature_ptr, lookup_kind(TV_CORPSE, SV_CORPSE));
+            q_ptr->prep(lookup_kind(TV_CORPSE, SV_CORPSE));
             q_ptr->pval = get_mon_num(creature_ptr, 0, 2, 0);
             if (q_ptr->pval) {
                 q_ptr->number = 1;
@@ -109,26 +109,26 @@ static void decide_initial_items(player_type *creature_ptr, object_type *q_ptr)
     case player_race_type::ZOMBIE:
     case player_race_type::SPECTRE:
         /* Staff (of Nothing) */
-        q_ptr->prep(creature_ptr, lookup_kind(TV_STAFF, SV_STAFF_NOTHING));
+        q_ptr->prep(lookup_kind(TV_STAFF, SV_STAFF_NOTHING));
         q_ptr->number = 1;
         add_outfit(creature_ptr, q_ptr);
         break;
     case player_race_type::ENT:
         /* Potions of Water */
-        q_ptr->prep(creature_ptr, lookup_kind(TV_POTION, SV_POTION_WATER));
+        q_ptr->prep(lookup_kind(TV_POTION, SV_POTION_WATER));
         q_ptr->number = (ITEM_NUMBER)rand_range(15, 23);
         add_outfit(creature_ptr, q_ptr);
         break;
     case player_race_type::ANDROID:
         /* Flasks of oil */
-        q_ptr->prep(creature_ptr, lookup_kind(TV_FLASK, SV_ANY));
+        q_ptr->prep(lookup_kind(TV_FLASK, SV_ANY));
         apply_magic_to_object(creature_ptr, q_ptr, 1, AM_NO_FIXED_ART);
         q_ptr->number = (ITEM_NUMBER)rand_range(7, 12);
         add_outfit(creature_ptr, q_ptr);
         break;
     default:
         /* Food rations */
-        q_ptr->prep(creature_ptr, lookup_kind(TV_FOOD, SV_FOOD_RATION));
+        q_ptr->prep(lookup_kind(TV_FOOD, SV_FOOD_RATION));
         q_ptr->number = (ITEM_NUMBER)rand_range(3, 7);
         add_outfit(creature_ptr, q_ptr);
     }
@@ -148,11 +148,11 @@ void player_outfit(player_type *creature_ptr)
     q_ptr = &forge;
 
     if ((creature_ptr->prace == player_race_type::VAMPIRE) && (creature_ptr->pclass != CLASS_NINJA)) {
-        q_ptr->prep(creature_ptr, lookup_kind(TV_SCROLL, SV_SCROLL_DARKNESS));
+        q_ptr->prep(lookup_kind(TV_SCROLL, SV_SCROLL_DARKNESS));
         q_ptr->number = (ITEM_NUMBER)rand_range(2, 5);
         add_outfit(creature_ptr, q_ptr);
     } else if (creature_ptr->pclass != CLASS_NINJA) {
-        q_ptr->prep(creature_ptr, lookup_kind(TV_LITE, SV_LITE_TORCH));
+        q_ptr->prep(lookup_kind(TV_LITE, SV_LITE_TORCH));
         q_ptr->number = (ITEM_NUMBER)rand_range(3, 7);
         q_ptr->xtra4 = rand_range(3, 7) * 500;
 
@@ -161,72 +161,72 @@ void player_outfit(player_type *creature_ptr)
 
     q_ptr = &forge;
     if (creature_ptr->prace == player_race_type::MERFOLK) {
-        q_ptr->prep(creature_ptr, lookup_kind(TV_RING, SV_RING_LEVITATION_FALL));
+        q_ptr->prep(lookup_kind(TV_RING, SV_RING_LEVITATION_FALL));
         q_ptr->number = 1;
         add_outfit(creature_ptr, q_ptr);
     }
 
     if ((creature_ptr->pclass == CLASS_RANGER) || (creature_ptr->pclass == CLASS_CAVALRY)) {
-        q_ptr->prep(creature_ptr, lookup_kind(TV_ARROW, SV_AMMO_NORMAL));
+        q_ptr->prep(lookup_kind(TV_ARROW, SV_AMMO_NORMAL));
         q_ptr->number = (byte)rand_range(15, 20);
         add_outfit(creature_ptr, q_ptr);
     }
 
     if (creature_ptr->pclass == CLASS_RANGER) {
-        q_ptr->prep(creature_ptr, lookup_kind(TV_BOW, SV_SHORT_BOW));
+        q_ptr->prep(lookup_kind(TV_BOW, SV_SHORT_BOW));
         add_outfit(creature_ptr, q_ptr);
     } else if (creature_ptr->pclass == CLASS_ARCHER) {
-        q_ptr->prep(creature_ptr, lookup_kind(TV_ARROW, SV_AMMO_NORMAL));
+        q_ptr->prep(lookup_kind(TV_ARROW, SV_AMMO_NORMAL));
         q_ptr->number = (ITEM_NUMBER)rand_range(15, 20);
         add_outfit(creature_ptr, q_ptr);
     } else if (creature_ptr->pclass == CLASS_HIGH_MAGE || creature_ptr->pclass == CLASS_ELEMENTALIST) {
-        q_ptr->prep(creature_ptr, lookup_kind(TV_WAND, SV_WAND_MAGIC_MISSILE));
+        q_ptr->prep(lookup_kind(TV_WAND, SV_WAND_MAGIC_MISSILE));
         q_ptr->number = 1;
         q_ptr->pval = (PARAMETER_VALUE)rand_range(25, 30);
         add_outfit(creature_ptr, q_ptr);
     } else if (creature_ptr->pclass == CLASS_SORCERER) {
         for (auto book_tval = enum2i(TV_LIFE_BOOK); book_tval <= enum2i(TV_LIFE_BOOK) + enum2i(MAX_MAGIC) - 1; book_tval++) {
-            q_ptr->prep(creature_ptr, lookup_kind(static_cast<tval_type>(book_tval), 0));
+            q_ptr->prep(lookup_kind(static_cast<tval_type>(book_tval), 0));
             q_ptr->number = 1;
             add_outfit(creature_ptr, q_ptr);
         }
     } else if (creature_ptr->pclass == CLASS_TOURIST) {
         if (creature_ptr->pseikaku != PERSONALITY_SEXY) {
-            q_ptr->prep(creature_ptr, lookup_kind(TV_SHOT, SV_AMMO_LIGHT));
+            q_ptr->prep(lookup_kind(TV_SHOT, SV_AMMO_LIGHT));
             q_ptr->number = rand_range(15, 20);
             add_outfit(creature_ptr, q_ptr);
         }
 
-        q_ptr->prep(creature_ptr, lookup_kind(TV_FOOD, SV_FOOD_BISCUIT));
+        q_ptr->prep(lookup_kind(TV_FOOD, SV_FOOD_BISCUIT));
         q_ptr->number = rand_range(2, 4);
 
         add_outfit(creature_ptr, q_ptr);
 
-        q_ptr->prep(creature_ptr, lookup_kind(TV_FOOD, SV_FOOD_WAYBREAD));
+        q_ptr->prep(lookup_kind(TV_FOOD, SV_FOOD_WAYBREAD));
         q_ptr->number = rand_range(2, 4);
 
         add_outfit(creature_ptr, q_ptr);
 
-        q_ptr->prep(creature_ptr, lookup_kind(TV_FOOD, SV_FOOD_JERKY));
+        q_ptr->prep(lookup_kind(TV_FOOD, SV_FOOD_JERKY));
         q_ptr->number = rand_range(1, 3);
 
         add_outfit(creature_ptr, q_ptr);
 
-        q_ptr->prep(creature_ptr, lookup_kind(TV_FOOD, SV_FOOD_PINT_OF_ALE));
+        q_ptr->prep(lookup_kind(TV_FOOD, SV_FOOD_PINT_OF_ALE));
         q_ptr->number = rand_range(2, 4);
 
         add_outfit(creature_ptr, q_ptr);
 
-        q_ptr->prep(creature_ptr, lookup_kind(TV_FOOD, SV_FOOD_PINT_OF_WINE));
+        q_ptr->prep(lookup_kind(TV_FOOD, SV_FOOD_PINT_OF_WINE));
         q_ptr->number = rand_range(2, 4);
 
         add_outfit(creature_ptr, q_ptr);
     } else if (creature_ptr->pclass == CLASS_NINJA) {
-        q_ptr->prep(creature_ptr, lookup_kind(TV_SPIKE, 0));
+        q_ptr->prep(lookup_kind(TV_SPIKE, 0));
         q_ptr->number = rand_range(15, 20);
         add_outfit(creature_ptr, q_ptr);
     } else if (creature_ptr->pclass == CLASS_SNIPER) {
-        q_ptr->prep(creature_ptr, lookup_kind(TV_BOLT, SV_AMMO_NORMAL));
+        q_ptr->prep(lookup_kind(TV_BOLT, SV_AMMO_NORMAL));
         q_ptr->number = rand_range(15, 20);
         add_outfit(creature_ptr, q_ptr);
     }
@@ -259,7 +259,7 @@ void player_outfit(player_type *creature_ptr)
         }
 
         q_ptr = &forge;
-        q_ptr->prep(creature_ptr, lookup_kind(static_cast<tval_type>(tv), sv));
+        q_ptr->prep(lookup_kind(static_cast<tval_type>(tv), sv));
         if ((tv == TV_SWORD || tv == TV_HAFTED)
             && (creature_ptr->pclass == CLASS_ROGUE && creature_ptr->realm1 == REALM_DEATH)) /* Only assassins get a poisoned weapon */
             q_ptr->name2 = EGO_BRAND_POIS;

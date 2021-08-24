@@ -87,7 +87,7 @@ void display_koff(player_type *owner_ptr, KIND_OBJECT_IDX k_idx)
         return;
     q_ptr = &forge;
 
-    q_ptr->prep(owner_ptr, k_idx);
+    q_ptr->prep(k_idx);
     describe_flavor(owner_ptr, o_name, q_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
 
     term_putstr(0, 0, -1, TERM_WHITE, o_name);

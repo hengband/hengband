@@ -93,7 +93,7 @@ BIT_FLAGS check_equipment_flags(player_type *creature_ptr, tr_type tr_flag)
         if (!o_ptr->k_idx)
             continue;
 
-        object_flags(creature_ptr, o_ptr, flgs);
+        object_flags(o_ptr, flgs);
 
         if (has_flag(flgs, tr_flag))
             set_bits(result, convert_inventory_slot_type_to_flag_cause(static_cast<inventory_slot_type>(i)));
@@ -769,7 +769,7 @@ BIT_FLAGS has_warning(player_type *creature_ptr)
         if (!o_ptr->k_idx)
             continue;
 
-        object_flags(creature_ptr, o_ptr, flgs);
+        object_flags(o_ptr, flgs);
 
         if (has_flag(flgs, TR_WARNING)) {
             if (!o_ptr->inscription || !(angband_strchr(quark_str(o_ptr->inscription), '$')))
@@ -1196,7 +1196,7 @@ void update_curses(player_type *creature_ptr)
         o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
-        object_flags(creature_ptr, o_ptr, flgs);
+        object_flags(o_ptr, flgs);
         if (has_flag(flgs, TR_AGGRAVATE))
             creature_ptr->cursed.set(TRC::AGGRAVATE);
         if (has_flag(flgs, TR_DRAIN_EXP))
@@ -1283,7 +1283,7 @@ void update_extra_blows(player_type *creature_ptr)
         if (!o_ptr->k_idx)
             continue;
 
-        object_flags(creature_ptr, o_ptr, flgs);
+        object_flags(o_ptr, flgs);
         if (has_flag(flgs, TR_BLOWS)) {
             if ((i == INVEN_MAIN_HAND || i == INVEN_MAIN_RING) && !two_handed)
                 creature_ptr->extra_blows[0] += o_ptr->pval;
@@ -2034,7 +2034,7 @@ bool has_icky_wield_weapon(player_type *creature_ptr, int i)
 {
     TrFlags flgs;
     object_type *o_ptr = &creature_ptr->inventory_list[INVEN_MAIN_HAND + i];
-    object_flags(creature_ptr, o_ptr, flgs);
+    object_flags(o_ptr, flgs);
 
     bool has_no_weapon = (o_ptr->tval == TV_NONE) || (o_ptr->tval == TV_SHIELD);
     if (creature_ptr->pclass == CLASS_PRIEST) {
@@ -2060,7 +2060,7 @@ bool has_riding_wield_weapon(player_type *creature_ptr, int i)
     object_type *o_ptr;
     TrFlags flgs;
     o_ptr = &creature_ptr->inventory_list[INVEN_MAIN_HAND + i];
-    object_flags(creature_ptr, o_ptr, flgs);
+    object_flags(o_ptr, flgs);
     if (creature_ptr->riding != 0 && !(o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE))
         && !has_flag(flgs, TR_RIDING)) {
         return true;

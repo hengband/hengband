@@ -112,5 +112,5 @@ bool object_sort_comp(player_type *player_ptr, object_type *o_ptr, int32_t o_val
         break;
     }
 
-    return o_value > object_value(player_ptr, j_ptr);
+    return o_value > object_value(j_ptr);
 }

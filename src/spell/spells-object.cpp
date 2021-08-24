@@ -143,7 +143,7 @@ void amusement(player_type *creature_ptr, POSITION y1, POSITION x1, int num, boo
         }
 
         /* Make an object (if possible) */
-        i_ptr->prep(creature_ptr, k_idx);
+        i_ptr->prep(k_idx);
         if (a_idx)
             i_ptr->name1 = a_idx;
         apply_magic_to_object(creature_ptr, i_ptr, 1, AM_NO_FIXED_ART);

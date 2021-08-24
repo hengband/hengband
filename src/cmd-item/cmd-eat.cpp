@@ -328,7 +328,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
             object_type *q_ptr = &forge;
 
             msg_print(_("食べ物がアゴを素通りして落ちた！", "The food falls through your jaws!"));
-            q_ptr->prep(creature_ptr, lookup_kind(o_ptr->tval, o_ptr->sval));
+            q_ptr->prep(lookup_kind(o_ptr->tval, o_ptr->sval));
 
             /* Drop the object from heaven */
             (void)drop_near(creature_ptr, q_ptr, -1, creature_ptr->y, creature_ptr->x);

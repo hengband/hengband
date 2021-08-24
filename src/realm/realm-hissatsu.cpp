@@ -664,7 +664,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
                 o_ptr = &caster_ptr->inventory_list[INVEN_MAIN_HAND + i];
                 basedam = (o_ptr->dd * (o_ptr->ds + 1)) * 50;
                 damage = o_ptr->to_d * 100;
-                object_flags(caster_ptr, o_ptr, flgs);
+                object_flags(o_ptr, flgs);
                 if ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)) {
                     /* vorpal blade */
                     basedam *= 5;
@@ -943,7 +943,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
                 o_ptr = &caster_ptr->inventory_list[INVEN_MAIN_HAND + i];
                 basedam = (o_ptr->dd * (o_ptr->ds + 1)) * 50;
                 damage = o_ptr->to_d * 100;
-                object_flags(caster_ptr, o_ptr, flgs);
+                object_flags(o_ptr, flgs);
                 if ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)) {
                     /* vorpal blade */
                     basedam *= 5;

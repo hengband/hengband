@@ -151,7 +151,7 @@ void store_sell(player_type *owner_ptr)
 
             owner_ptr->au += price;
             store_prt_gold(owner_ptr);
-            PRICE dummy = object_value(owner_ptr, q_ptr) * q_ptr->number;
+            PRICE dummy = object_value(q_ptr) * q_ptr->number;
 
             identify_item(owner_ptr, o_ptr);
             q_ptr = &forge;
@@ -162,7 +162,7 @@ void store_sell(player_type *owner_ptr)
             if ((o_ptr->tval == TV_ROD) || (o_ptr->tval == TV_WAND))
                 q_ptr->pval = o_ptr->pval * amt / o_ptr->number;
 
-            PRICE value = object_value(owner_ptr, q_ptr) * q_ptr->number;
+            PRICE value = object_value(q_ptr) * q_ptr->number;
             describe_flavor(owner_ptr, o_name, q_ptr, 0);
             msg_format(_("%sを $%ldで売却しました。", "You sold %s for %ld gold."), o_name, static_cast<long>(price));
 
@@ -180,7 +180,7 @@ void store_sell(player_type *owner_ptr)
                 autopick_alter_item(owner_ptr, item, false);
 
             inven_item_optimize(owner_ptr, item);
-            int item_pos = store_carry(owner_ptr, q_ptr);
+            int item_pos = store_carry(q_ptr);
             if (item_pos >= 0) {
                 store_top = (item_pos / store_bottom) * store_bottom;
                 display_store_inventory(owner_ptr);

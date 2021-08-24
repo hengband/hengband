@@ -179,11 +179,11 @@ static bool has_flag_of(std::vector<flag_insc_table> &fi_vec, const TrFlags &flg
  * @param all TRUEならばベースアイテム上で明らかなフラグは省略する
  * @return ptrと同じアドレス
  */
-char *get_ability_abbreviation(player_type *player_ptr, char *short_flavor, object_type *o_ptr, bool kanji, bool all)
+char *get_ability_abbreviation(char *short_flavor, object_type *o_ptr, bool kanji, bool all)
 {
     char *prev_ptr = short_flavor;
     TrFlags flgs;
-    object_flags(player_ptr, o_ptr, flgs);
+    object_flags(o_ptr, flgs);
     if (!all) {
         object_kind *k_ptr = &k_info[o_ptr->k_idx];
         for (int j = 0; j < TR_FLAG_SIZE; j++)
@@ -316,7 +316,7 @@ char *get_ability_abbreviation(player_type *player_ptr, char *short_flavor, obje
  * @param buff 特性短縮表記を格納する文字列ポインタ
  * @param o_ptr 特性短縮表記を得たいオブジェクト構造体の参照ポインタ
  */
-void get_inscription(player_type *player_ptr, char *buff, object_type *o_ptr)
+void get_inscription(char *buff, object_type *o_ptr)
 {
     concptr insc = quark_str(o_ptr->inscription);
     char *ptr = buff;
@@ -360,7 +360,7 @@ void get_inscription(player_type *player_ptr, char *buff, object_type *o_ptr)
             } else
                 all = false;
 
-            ptr = get_ability_abbreviation(player_ptr, ptr, o_ptr, kanji, all);
+            ptr = get_ability_abbreviation(ptr, o_ptr, kanji, all);
             if (ptr == start)
                 add_inscription(&ptr, " ");
         } else

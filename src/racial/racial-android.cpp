@@ -84,7 +84,7 @@ void calc_android_exp(player_type *creature_ptr)
         } else if (object_is_ego(o_ptr)) {
             level += MAX(3, (e_info[o_ptr->name2].rating - 5) / 2);
         } else if (o_ptr->art_name) {
-            int32_t total_flags = flag_cost(creature_ptr, o_ptr, o_ptr->pval);
+            int32_t total_flags = flag_cost(o_ptr, o_ptr->pval);
             int fake_level;
 
             if (!object_is_weapon_ammo(o_ptr)) {
@@ -106,7 +106,7 @@ void calc_android_exp(player_type *creature_ptr)
             level = MAX(level, (level + MAX(fake_level - 8, 5)) / 2 + 3);
         }
 
-        value = object_value_real(creature_ptr, q_ptr);
+        value = object_value_real(q_ptr);
         if (value <= 0)
             continue;
         if ((o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI) && (creature_ptr->pseikaku != PERSONALITY_SEXY))

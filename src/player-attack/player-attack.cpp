@@ -482,7 +482,7 @@ static void apply_actual_attack(
     sound(SOUND_HIT);
     print_surprise_attack(pa_ptr);
 
-    object_flags(attacker_ptr, o_ptr, pa_ptr->flags);
+    object_flags(o_ptr, pa_ptr->flags);
     pa_ptr->chaos_effect = select_chaotic_effect(attacker_ptr, pa_ptr);
     pa_ptr->magical_effect = select_magical_brand_effect(attacker_ptr, pa_ptr);
     decide_blood_sucking(attacker_ptr, pa_ptr);
