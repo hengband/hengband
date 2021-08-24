@@ -18,9 +18,9 @@ static void rd_hengband_dungeons(void)
     int16_t tmp16s;
     for (int i = 0; i < max; i++) {
         rd_s16b(&tmp16s);
-        max_dlv[static_cast<int>(i)] = tmp16s;
-        if (max_dlv[static_cast<int>(i)] > d_info[static_cast<int>(i)].maxdepth)
-            max_dlv[static_cast<int>(i)] = d_info[static_cast<int>(i)].maxdepth;
+        max_dlv[i] = tmp16s;
+        if (max_dlv[i] > d_info[i].maxdepth)
+            max_dlv[i] = d_info[i].maxdepth;
     }
 }
 
