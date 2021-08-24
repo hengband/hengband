@@ -348,7 +348,7 @@ int16_t store_item_to_inventory(player_type *owner_ptr, object_type *o_ptr)
  * @param o_ptr 拾いたいオブジェクトの構造体参照ポインタ
  * @return 溢れずに済むならTRUEを返す
  */
-bool check_store_item_to_inventory(player_type *player_ptr, object_type *o_ptr)
+bool check_store_item_to_inventory(player_type *player_ptr, const object_type *o_ptr)
 {
     /* Unused */
     (void)player_ptr;

@@ -23,7 +23,7 @@
  * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
  * @return 食べることが可能ならばTRUEを返す
  */
-bool item_tester_hook_eatable(player_type *player_ptr, object_type *o_ptr)
+bool item_tester_hook_eatable(player_type *player_ptr, const object_type *o_ptr)
 {
     if (o_ptr->tval == TV_FOOD)
         return true;
@@ -46,7 +46,7 @@ bool item_tester_hook_eatable(player_type *player_ptr, object_type *o_ptr)
  * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
  * @return 飲むことが可能ならばTRUEを返す
  */
-bool item_tester_hook_quaff(player_type *player_ptr, object_type *o_ptr)
+bool item_tester_hook_quaff(player_type *player_ptr, const object_type *o_ptr)
 {
     if (o_ptr->tval == TV_POTION)
         return true;
@@ -63,7 +63,7 @@ bool item_tester_hook_quaff(player_type *player_ptr, object_type *o_ptr)
  * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
  * @return 読むことが可能ならばTRUEを返す
  */
-bool item_tester_hook_readable(player_type *player_ptr, object_type *o_ptr)
+bool item_tester_hook_readable(player_type *player_ptr, const object_type *o_ptr)
 {
     /* Unused */
     (void)player_ptr;
@@ -80,7 +80,7 @@ bool item_tester_hook_readable(player_type *player_ptr, object_type *o_ptr)
  * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
  * @return オブジェクトがランタンの燃料になるならばTRUEを返す
  */
-bool item_tester_refill_lantern(player_type *player_ptr, object_type *o_ptr)
+bool item_tester_refill_lantern(player_type *player_ptr, const object_type *o_ptr)
 {
     /* Unused */
     (void)player_ptr;
@@ -97,7 +97,7 @@ bool item_tester_refill_lantern(player_type *player_ptr, object_type *o_ptr)
  * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
  * @return オブジェクトが松明に束ねられるならばTRUEを返す
  */
-bool object_can_refill_torch(player_type *player_ptr, object_type *o_ptr)
+bool object_can_refill_torch(player_type *player_ptr, const object_type *o_ptr)
 {
     /* Unused */
     (void)player_ptr;
@@ -140,4 +140,7 @@ bool can_player_destroy_object(player_type *player_ptr, object_type *o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return オブジェクトが薬ならばTRUEを返す
  */
-bool object_is_potion(object_type *o_ptr) { return (k_info[o_ptr->k_idx].tval == TV_POTION); }
+bool object_is_potion(const object_type *o_ptr)
+{
+    return (k_info[o_ptr->k_idx].tval == TV_POTION);
+}

@@ -9,7 +9,7 @@
  * @param o_ptr オブジェクトの構造体の参照ポインタ。
  * @return 材料にできるならTRUEを返す
  */
-bool object_is_convertible(object_type *o_ptr)
+bool object_is_convertible(const object_type *o_ptr)
 {
     if ((o_ptr->tval == TV_JUNK) || (o_ptr->tval == TV_SKELETON))
         return true;
@@ -23,7 +23,7 @@ bool object_is_convertible(object_type *o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 矢弾として使えるならばTRUEを返す
  */
-bool object_is_ammo(object_type *o_ptr)
+bool object_is_ammo(const object_type *o_ptr)
 {
     if (TV_MISSILE_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_MISSILE_END)
         return true;

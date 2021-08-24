@@ -200,7 +200,7 @@ bool cast_summon_octopus(player_type *creature_ptr)
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @return 生贄に使用可能な死体ならばTRUEを返す。
  */
-bool item_tester_offer(player_type *creature_ptr, object_type *o_ptr)
+bool item_tester_offer(player_type *creature_ptr, const object_type *o_ptr)
 {
     /* Unused */
     (void)creature_ptr;

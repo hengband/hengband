@@ -21,14 +21,14 @@
  * @param o_ptr 判定したいオブジェクト構造体の参照ポインタ
  * @return アイテムが祝福されたアイテムならばTRUEを返す
  */
-static bool is_blessed_item(player_type *player_ptr, object_type *o_ptr)
+static bool is_blessed_item(player_type *player_ptr, const object_type *o_ptr)
 {
     TrFlags flgs;
     object_flags(player_ptr, o_ptr, flgs);
     return has_flag(flgs, TR_BLESSED);
 }
 
-static bool check_store_general(object_type *o_ptr)
+static bool check_store_general(const object_type *o_ptr)
 {
     switch (o_ptr->tval) {
     case TV_ROD:
@@ -56,7 +56,7 @@ static bool check_store_general(object_type *o_ptr)
     }
 }
 
-static bool check_store_armoury(object_type *o_ptr)
+static bool check_store_armoury(const object_type *o_ptr)
 {
     switch (o_ptr->tval) {
     case TV_BOOTS:
@@ -74,7 +74,7 @@ static bool check_store_armoury(object_type *o_ptr)
     }
 }
 
-static bool check_store_weapon(object_type *o_ptr)
+static bool check_store_weapon(const object_type *o_ptr)
 {
     switch (o_ptr->tval) {
     case TV_SHOT:
@@ -93,7 +93,7 @@ static bool check_store_weapon(object_type *o_ptr)
     }
 }
 
-static bool check_store_temple(player_type *player_ptr, object_type *o_ptr)
+static bool check_store_temple(player_type *player_ptr, const object_type *o_ptr)
 {
     switch (o_ptr->tval) {
     case TV_LIFE_BOOK:
@@ -121,7 +121,7 @@ static bool check_store_temple(player_type *player_ptr, object_type *o_ptr)
     }
 }
 
-static bool check_store_alchemist(object_type *o_ptr)
+static bool check_store_alchemist(const object_type *o_ptr)
 {
     switch (o_ptr->tval) {
     case TV_SCROLL:
@@ -132,7 +132,7 @@ static bool check_store_alchemist(object_type *o_ptr)
     }
 }
 
-static bool check_store_magic(object_type *o_ptr)
+static bool check_store_magic(const object_type *o_ptr)
 {
     switch (o_ptr->tval) {
     case TV_SORCERY_BOOK:
@@ -161,7 +161,7 @@ static bool check_store_magic(object_type *o_ptr)
     }
 }
 
-static bool check_store_book(object_type *o_ptr)
+static bool check_store_book(const object_type *o_ptr)
 {
     switch (o_ptr->tval) {
     case TV_SORCERY_BOOK:
@@ -182,7 +182,7 @@ static bool check_store_book(object_type *o_ptr)
     }
 }
 
-static bool switch_store_check(player_type *player_ptr, object_type *o_ptr)
+static bool switch_store_check(player_type *player_ptr, const object_type *o_ptr)
 {
     switch (cur_store_num) {
     case STORE_GENERAL:
@@ -212,7 +212,7 @@ static bool switch_store_check(player_type *player_ptr, object_type *o_ptr)
  * @note
  * Note that a shop-keeper must refuse to buy "worthless" items
  */
-bool store_will_buy(player_type *player_ptr, object_type *o_ptr)
+bool store_will_buy(player_type *player_ptr, const object_type *o_ptr)
 {
     if ((cur_store_num == STORE_HOME) || (cur_store_num == STORE_MUSEUM))
         return true;

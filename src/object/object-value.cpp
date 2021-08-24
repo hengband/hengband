@@ -23,7 +23,7 @@
  * @param o_ptr 未鑑定価格を確認したいオブジェクトの構造体参照ポインタ
  * @return オブジェクトの未鑑定価格
  */
-static PRICE object_value_base(object_type *o_ptr)
+static PRICE object_value_base(const object_type *o_ptr)
 {
     if (object_is_aware(o_ptr))
         return (k_info[o_ptr->k_idx].cost);
@@ -85,7 +85,7 @@ static PRICE object_value_base(object_type *o_ptr)
  * Note that discounted items stay discounted forever, even if\n
  * the discount is "forgotten" by the player via memory loss.\n
  */
-PRICE object_value(player_type *player_ptr, object_type *o_ptr)
+PRICE object_value(player_type *player_ptr, const object_type *o_ptr)
 {
     PRICE value;
 
@@ -137,7 +137,7 @@ PRICE object_value(player_type *player_ptr, object_type *o_ptr)
  *\n
  * Every wearable item with a "pval" bonus is worth extra (see below).\n
  */
-PRICE object_value_real(player_type *player_ptr, object_type *o_ptr)
+PRICE object_value_real(player_type *player_ptr, const object_type *o_ptr)
 {
     TrFlags flgs;
     object_kind *k_ptr = &k_info[o_ptr->k_idx];

@@ -204,7 +204,7 @@ char index_to_label(int i) { return (i < INVEN_MAIN_HAND) ? (I2A(i)) : (I2A(i - 
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return 対応する装備部位ID
  */
-int16_t wield_slot(player_type *owner_ptr, object_type *o_ptr)
+int16_t wield_slot(player_type *owner_ptr, const object_type *o_ptr)
 {
     switch (o_ptr->tval) {
     case TV_DIGGING:
