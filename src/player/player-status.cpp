@@ -1608,8 +1608,7 @@ static ARMOUR_CLASS calc_base_ac(player_type *creature_ptr)
         ac += o_ptr->ac;
     }
 
-    if (object_is_armour(creature_ptr, &creature_ptr->inventory_list[INVEN_MAIN_HAND])
-        || object_is_armour(creature_ptr, &creature_ptr->inventory_list[INVEN_SUB_HAND])) {
+    if (object_is_armour(&creature_ptr->inventory_list[INVEN_MAIN_HAND]) || object_is_armour(&creature_ptr->inventory_list[INVEN_SUB_HAND])) {
         ac += creature_ptr->skill_exp[SKILL_SHIELD] * (1 + creature_ptr->lev / 22) / 2000;
     }
 
@@ -1728,7 +1727,7 @@ static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_real_value)
             object_type *o_ptr = &creature_ptr->inventory_list[i];
             if (!o_ptr->k_idx)
                 continue;
-            if (!object_is_armour(creature_ptr, o_ptr))
+            if (!object_is_armour(o_ptr))
                 continue;
             if (!object_is_cursed(o_ptr))
                 continue;

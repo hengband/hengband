@@ -13,7 +13,7 @@
 /*
  * Used during calls to "get_item()" and "show_inven()" and "show_equip()", and the choice window routines.
  */
-bool (*item_tester_hook)(player_type *, object_type *);
+std::function<bool(player_type *, object_type *)> item_tester_hook;
 
 /*!
  * @brief アイテムがitem_tester_hookグローバル関数ポインタの条件を満たしているかを返す汎用関数
@@ -41,5 +41,16 @@ bool item_tester_okay(player_type *player_ptr, object_type *o_ptr, tval_type tva
     if (item_tester_hook == NULL)
         return true;
 
-    return (*item_tester_hook)(player_ptr, o_ptr);
+    return item_tester_hook(player_ptr, o_ptr);
+}
+
+/*!
+ * @brief オブジェクト判定関数を item_tester_hook に渡すためのラッパー関数を生成する
+ *
+ * @param pred オブジェクトへのポインタを受け取り、オブジェクトが条件に適合するかどうかを返す関数
+ * @return item_tester_hook に渡すラッパー関数を返す
+ */
+ItemTester make_item_tester(std::function<bool(object_type *)> pred)
+{
+    return [pred = std::move(pred)](player_type *, object_type *o_ptr) { return pred(o_ptr); };
 }

@@ -56,7 +56,7 @@ bool apply_disenchant(player_type *target_ptr, BIT_FLAGS mode)
     if (!o_ptr->k_idx)
         return false;
 
-    if (!object_is_weapon_armour_ammo(target_ptr, o_ptr))
+    if (!object_is_weapon_armour_ammo(o_ptr))
         return false;
 
     if ((o_ptr->to_h <= 0) && (o_ptr->to_d <= 0) && (o_ptr->to_a <= 0) && (o_ptr->pval <= 1)) {

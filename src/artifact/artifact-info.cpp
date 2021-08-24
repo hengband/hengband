@@ -25,7 +25,7 @@
  */
 int activation_index(player_type *player_ptr, object_type *o_ptr)
 {
-    if (object_is_smith(player_ptr, o_ptr)) {
+    if (object_is_smith(o_ptr)) {
         switch (o_ptr->xtra3 - 1) {
         case ESSENCE_TMP_RES_ACID:
             return ACT_RESIST_ACID;

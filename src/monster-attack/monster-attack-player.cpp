@@ -279,7 +279,7 @@ static void describe_attack_evasion(player_type *target_ptr, monap_type *monap_p
 
 static void gain_armor_exp(player_type *target_ptr, monap_type *monap_ptr)
 {
-    if (!object_is_armour(target_ptr, &target_ptr->inventory_list[INVEN_MAIN_HAND]) && !object_is_armour(target_ptr, &target_ptr->inventory_list[INVEN_SUB_HAND]))
+    if (!object_is_armour(&target_ptr->inventory_list[INVEN_MAIN_HAND]) && !object_is_armour(&target_ptr->inventory_list[INVEN_SUB_HAND]))
         return;
 
     int cur = target_ptr->skill_exp[SKILL_SHIELD];

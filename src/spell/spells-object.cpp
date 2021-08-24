@@ -549,11 +549,11 @@ bool enchant_equipment(player_type *caster_ptr, object_type *o_ptr, int n, int e
 bool enchant_spell(player_type *caster_ptr, HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
 {
     /* Assume enchant weapon */
-    item_tester_hook = object_allow_enchant_weapon;
+    item_tester_hook = make_item_tester(object_allow_enchant_weapon);
 
     /* Enchant armor if requested */
     if (num_ac)
-        item_tester_hook = object_is_armour;
+        item_tester_hook = make_item_tester(object_is_armour);
 
     concptr q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
     concptr s = _("強化できるアイテムがない。", "You have nothing to enchant.");
@@ -605,7 +605,7 @@ bool enchant_spell(player_type *caster_ptr, HIT_PROB num_hit, HIT_POINT num_dam,
 void brand_weapon(player_type *caster_ptr, int brand_type)
 {
     /* Assume enchant weapon */
-    item_tester_hook = object_allow_enchant_melee_weapon;
+    item_tester_hook = make_item_tester(object_allow_enchant_melee_weapon);
 
     concptr q = _("どの武器を強化しますか? ", "Enchant which weapon? ");
     concptr s = _("強化できる武器がない。", "You have nothing to enchant.");

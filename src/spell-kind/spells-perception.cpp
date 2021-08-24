@@ -110,7 +110,7 @@ bool ident_spell(player_type *caster_ptr, bool only_equip, tval_type item_tester
         q = _("どのアイテムを鑑定しますか? ", "Identify which item? ");
     } else {
         if (only_equip)
-            item_tester_hook = object_is_weapon_armour_ammo;
+            item_tester_hook = make_item_tester(object_is_weapon_armour_ammo);
         else
             item_tester_hook = NULL;
 
@@ -162,7 +162,7 @@ bool identify_fully(player_type *caster_ptr, bool only_equip, tval_type item_tes
         q = _("どのアイテムを*鑑定*しますか? ", "*Identify* which item? ");
     } else {
         if (only_equip)
-            item_tester_hook = object_is_weapon_armour_ammo;
+            item_tester_hook = make_item_tester(object_is_weapon_armour_ammo);
         else
             item_tester_hook = NULL;
 

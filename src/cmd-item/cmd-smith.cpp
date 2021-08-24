@@ -241,7 +241,7 @@ static void drain_essence(player_type *creature_ptr)
     for (i = 0; i < sizeof(drain_value) / sizeof(int); i++)
         drain_value[i] = 0;
 
-    item_tester_hook = object_is_weapon_armour_ammo;
+    item_tester_hook = make_item_tester(object_is_weapon_armour_ammo);
 
     q = _("どのアイテムから抽出しますか？", "Extract from which item? ");
     s = _("抽出できるアイテムがありません。", "You have nothing you can extract from.");
@@ -250,7 +250,7 @@ static void drain_essence(player_type *creature_ptr)
     if (!o_ptr)
         return;
 
-    if (object_is_known(o_ptr) && !object_is_nameless(creature_ptr, o_ptr)) {
+    if (object_is_known(o_ptr) && !object_is_nameless(o_ptr)) {
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         if (!get_check(format(_("本当に%sから抽出してよろしいですか？", "Really extract from %s? "), o_name)))
@@ -797,11 +797,11 @@ static void add_essence(player_type *creature_ptr, int32_t mode)
     else if (mode == 1 || mode == 5)
         item_tester_hook = item_tester_hook_melee_ammo;
     else if (es_ptr->add == ESSENCE_ATTACK)
-        item_tester_hook = object_allow_enchant_weapon;
+        item_tester_hook = make_item_tester(object_allow_enchant_weapon);
     else if (es_ptr->add == ESSENCE_AC)
-        item_tester_hook = object_is_armour;
+        item_tester_hook = make_item_tester(object_is_armour);
     else
-        item_tester_hook = object_is_weapon_armour_ammo;
+        item_tester_hook = make_item_tester(object_is_weapon_armour_ammo);
 
     q = _("どのアイテムを改良しますか？", "Improve which item? ");
     s = _("改良できるアイテムがありません。", "You have nothing to improve.");
@@ -810,7 +810,7 @@ static void add_essence(player_type *creature_ptr, int32_t mode)
     if (!o_ptr)
         return;
 
-    if ((mode != 10) && (object_is_artifact(o_ptr) || object_is_smith(creature_ptr, o_ptr))) {
+    if ((mode != 10) && (object_is_artifact(o_ptr) || object_is_smith(o_ptr))) {
         msg_print(_("そのアイテムはこれ以上改良できない。", "This item can not be improved any further."));
         return;
     }
@@ -993,7 +993,7 @@ static void erase_essence(player_type *creature_ptr)
     GAME_TEXT o_name[MAX_NLEN];
     TrFlags flgs;
 
-    item_tester_hook = object_is_smith;
+    item_tester_hook = make_item_tester(object_is_smith);
 
     q = _("どのアイテムのエッセンスを消去しますか？", "Remove from which item? ");
     s = _("エッセンスを付加したアイテムがありません。", "You have nothing with added essence to remove.");

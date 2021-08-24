@@ -98,12 +98,9 @@ bool object_is_random_artifact(object_type *o_ptr) { return object_is_artifact(o
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 通常のアイテムならばTRUEを返す
  */
-bool object_is_nameless(player_type *player_ptr, object_type *o_ptr)
+bool object_is_nameless(object_type *o_ptr)
 {
-    /* Unused */
-    (void)player_ptr;
-
-    return !object_is_artifact(o_ptr) && !object_is_ego(o_ptr) && !object_is_smith(player_ptr, o_ptr);
+    return !object_is_artifact(o_ptr) && !object_is_ego(o_ptr) && !object_is_smith(o_ptr);
 }
 
 /*

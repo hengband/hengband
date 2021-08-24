@@ -17,11 +17,11 @@ bool item_tester_hook_nameless_weapon_armour(player_type *player_ptr, object_typ
     (void)player_ptr;
 
     /* Require weapon or armour */
-    if (!object_is_weapon_armour_ammo(player_ptr, o_ptr))
+    if (!object_is_weapon_armour_ammo(o_ptr))
         return false;
 
     /* Require nameless object if the object is well known */
-    if (object_is_known(o_ptr) && !object_is_nameless(player_ptr, o_ptr))
+    if (object_is_known(o_ptr) && !object_is_nameless(o_ptr))
         return false;
 
     return true;
@@ -53,7 +53,7 @@ bool item_tester_hook_identify_weapon_armour(player_type *player_ptr, object_typ
     if (object_is_known(o_ptr))
 
         return false;
-    return object_is_weapon_armour_ammo(player_ptr, o_ptr);
+    return object_is_weapon_armour_ammo(o_ptr);
 }
 
 /*!
@@ -82,5 +82,5 @@ bool item_tester_hook_identify_fully_weapon_armour(player_type *player_ptr, obje
     if (!item_tester_hook_identify_fully(player_ptr, o_ptr))
         return false;
 
-    return object_is_weapon_armour_ammo(player_ptr, o_ptr);
+    return object_is_weapon_armour_ammo(o_ptr);
 }

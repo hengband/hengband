@@ -98,7 +98,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 
     concptr q = _("どの折れた武器を修復しますか？", "Repair which broken weapon? ");
     concptr s = _("修復できる折れた武器がありません。", "You have no broken weapon to repair.");
-    item_tester_hook = item_tester_hook_broken_weapon;
+    item_tester_hook = make_item_tester(object_is_broken_weapon);
 
     OBJECT_IDX item;
     object_type *o_ptr;
@@ -123,7 +123,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
     q = _("材料となる武器は？", "Which weapon for material? ");
     s = _("材料となる武器がありません。", "You have no material for the repair.");
 
-    item_tester_hook = item_tester_hook_orthodox_melee_weapons;
+    item_tester_hook = make_item_tester(object_is_orthodox_melee_weapons);
     OBJECT_IDX mater;
     object_type *mo_ptr;
     mo_ptr = choose_object(player_ptr, &mater, q, s, (USE_INVEN | USE_EQUIP), TV_NONE);

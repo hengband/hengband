@@ -40,12 +40,9 @@ bool item_tester_hook_melee_ammo(player_type *player_ptr, object_type *o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return エッセンス付加済みならばTRUEを返す
  */
-bool object_is_smith(player_type *player_ptr, object_type *o_ptr)
+bool object_is_smith(object_type *o_ptr)
 {
-    /* Unused */
-    (void)player_ptr;
-
-    if (object_is_weapon_armour_ammo(player_ptr, o_ptr) && o_ptr->xtra3)
+    if (object_is_weapon_armour_ammo(o_ptr) && o_ptr->xtra3)
         return true;
 
     return false;

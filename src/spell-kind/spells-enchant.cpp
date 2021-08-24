@@ -122,7 +122,7 @@ bool artifact_scroll(player_type *caster_ptr)
 bool mundane_spell(player_type *owner_ptr, bool only_equip)
 {
     if (only_equip)
-        item_tester_hook = object_is_weapon_armour_ammo;
+        item_tester_hook = make_item_tester(object_is_weapon_armour_ammo);
 
     OBJECT_IDX item;
     object_type *o_ptr;

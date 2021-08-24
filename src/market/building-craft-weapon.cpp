@@ -363,7 +363,7 @@ PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
     i_ptr = &customer_ptr->inventory_list[INVEN_MAIN_HAND];
     (&orig_weapon)->copy_from(i_ptr);
 
-    item_tester_hook = item_tester_hook_orthodox_melee_weapons;
+    item_tester_hook = make_item_tester(object_is_orthodox_melee_weapons);
     concptr q = _("第一の武器は？", "What is your first weapon? ");
     concptr s = _("比べるものがありません。", "You have nothing to compare.");
 
@@ -418,7 +418,7 @@ PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
             continue;
         }
 
-        item_tester_hook = item_tester_hook_orthodox_melee_weapons;
+        item_tester_hook = make_item_tester(object_is_orthodox_melee_weapons);
         q = _("第二の武器は？", "What is your second weapon? ");
         s = _("比べるものがありません。", "You have nothing to compare.");
         OBJECT_IDX item2;

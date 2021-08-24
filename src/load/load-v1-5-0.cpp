@@ -280,7 +280,7 @@ void rd_item_old(player_type *player_ptr, object_type *o_ptr)
     } else {
         rd_byte(&o_ptr->xtra3);
         if (h_older_than(1, 3, 0, 1)) {
-            if (object_is_smith(player_ptr, o_ptr) && o_ptr->xtra3 >= 1 + 96)
+            if (object_is_smith(o_ptr) && o_ptr->xtra3 >= 1 + 96)
                 o_ptr->xtra3 += -96 + MIN_SPECIAL_ESSENCE;
         }
 

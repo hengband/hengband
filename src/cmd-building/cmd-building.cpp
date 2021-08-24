@@ -166,11 +166,11 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
         bcost = compare_weapons(player_ptr, bcost);
         break;
     case BACT_ENCHANT_WEAPON:
-        item_tester_hook = object_allow_enchant_melee_weapon;
+        item_tester_hook = make_item_tester(object_allow_enchant_melee_weapon);
         enchant_item(player_ptr, bcost, 1, 1, 0, TV_NONE);
         break;
     case BACT_ENCHANT_ARMOR:
-        item_tester_hook = object_is_armour;
+        item_tester_hook = make_item_tester(object_is_armour);
         enchant_item(player_ptr, bcost, 0, 0, 1, TV_NONE);
         break;
     case BACT_RECHARGE:
@@ -199,7 +199,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
         paid = restore_all_status(player_ptr);
         break;
     case BACT_ENCHANT_ARROWS:
-        item_tester_hook = item_tester_hook_ammo;
+        item_tester_hook = make_item_tester(object_is_ammo);
         enchant_item(player_ptr, bcost, 1, 1, 0, TV_NONE);
         break;
     case BACT_ENCHANT_BOW:

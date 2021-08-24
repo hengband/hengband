@@ -504,7 +504,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             object_type *o_ptr;
             TrFlags f;
 
-            item_tester_hook = object_is_armour;
+            item_tester_hook = make_item_tester(object_is_armour);
             q = _("どれを呪いますか？", "Which piece of armour do you curse?");
             s = _("防具を装備していない。", "You're not wearing any armor.");
 
@@ -705,7 +705,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             TrFlags f;
             object_type *o_ptr;
 
-            item_tester_hook = item_tester_hook_cursed;
+            item_tester_hook = make_item_tester(object_is_cursed);
             q = _("どの装備品から吸収しますか？", "Which cursed equipment do you drain mana from?");
             s = _("呪われたアイテムを装備していない。", "You have no cursed equipment.");
 
