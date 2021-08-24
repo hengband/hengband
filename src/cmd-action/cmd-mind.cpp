@@ -48,6 +48,7 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/buffer-shaper.h"
+#include "util/enum-converter.h"
 #include "view/display-messages.h"
 
 /*!
@@ -377,7 +378,7 @@ void do_cmd_mind(player_type *caster_ptr)
         return;
 
     switch_mind_kind(caster_ptr, cm_ptr);
-    cm_ptr->spell = mind_powers[static_cast<int>(cm_ptr->use_mind)].info[cm_ptr->n];
+    cm_ptr->spell = mind_powers[enum2i(cm_ptr->use_mind)].info[cm_ptr->n];
     cm_ptr->chance = cm_ptr->spell.fail;
     cm_ptr->mana_cost = cm_ptr->spell.mana_cost;
     decide_mind_ki_chance(caster_ptr, cm_ptr);

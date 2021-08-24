@@ -5,6 +5,7 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/enum-converter.h"
 
 /*!
  * @brief 施設毎に設定された種族、職業、魔法領域フラグがプレイヤーと一致するかを判定する。
@@ -20,7 +21,7 @@ bool is_owner(player_type *player_ptr, building_type *bldg)
         return true;
     }
 
-    if (static_cast<int>(bldg->member_race[static_cast<int>(player_ptr->prace)]) == BUILDING_OWNER) {
+    if (enum2i(bldg->member_race[enum2i(player_ptr->prace)]) == BUILDING_OWNER) {
         return true;
     }
 
@@ -49,7 +50,7 @@ bool is_member(player_type *player_ptr, building_type *bldg)
         return true;
     }
 
-    if (static_cast<bool>(bldg->member_race[static_cast<int>(player_ptr->prace)])) {
+    if (static_cast<bool>(bldg->member_race[enum2i(player_ptr->prace)])) {
         return true;
     }
 

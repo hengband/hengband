@@ -54,6 +54,7 @@
 #include "system/player-type-definition.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
+#include "util/enum-converter.h"
 #include "util/point-2d.h"
 #include "view/display-map.h"
 #include "view/display-messages.h"
@@ -748,7 +749,7 @@ FEAT_IDX feat_state(floor_type *floor_ptr, FEAT_IDX feat, FF action)
     if (f_ptr->flags.has(FF::PERMANENT))
         return feat;
 
-    return (feature_action_flags[static_cast<int>(action)] & FAF_DESTROY) ? conv_dungeon_feat(floor_ptr, f_ptr->destroyed) : feat;
+    return (feature_action_flags[enum2i(action)] & FAF_DESTROY) ? conv_dungeon_feat(floor_ptr, f_ptr->destroyed) : feat;
 }
 
 /*
@@ -771,7 +772,7 @@ void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, FF action)
     /* Set the new feature */
     cave_set_feat(player_ptr, y, x, newfeat);
 
-    if (!(feature_action_flags[static_cast<int>(action)] & FAF_NO_DROP)) {
+    if (!(feature_action_flags[enum2i(action)] & FAF_NO_DROP)) {
         feature_type *old_f_ptr = &f_info[oldfeat];
         feature_type *f_ptr = &f_info[newfeat];
         bool found = false;
@@ -795,7 +796,7 @@ void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, FF action)
         }
     }
 
-    if (feature_action_flags[static_cast<int>(action)] & FAF_CRASH_GLASS) {
+    if (feature_action_flags[enum2i(action)] & FAF_CRASH_GLASS) {
         feature_type *old_f_ptr = &f_info[oldfeat];
 
         if (old_f_ptr->flags.has(FF::GLASS) && current_world_ptr->character_dungeon) {

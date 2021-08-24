@@ -67,6 +67,7 @@
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
 #include "util/buffer-shaper.h"
+#include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include <array>
@@ -750,7 +751,7 @@ bool get_element_power(player_type *caster_ptr, SPELL_IDX *sn, bool only_browse)
                 menu_line -= num;
         }
 
-        int spell_max = static_cast<int>(ElementSpells::MAX);
+        int spell_max = enum2i(ElementSpells::MAX);
         if ((choice == ' ') || (choice == '*') || (choice == '?') || (use_menu && ask)) {
             if (!redraw || use_menu) {
                 char desc[80];
@@ -1198,7 +1199,7 @@ byte select_element_realm(player_type *creature_ptr)
 {
     clear_from(10);
 
-    int realm_max = static_cast<int>(ElementRealm::MAX);
+    int realm_max = enum2i(ElementRealm::MAX);
     int realm_idx = 1;
     int row = 16;
     while (1) {

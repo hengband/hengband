@@ -21,6 +21,7 @@
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "util/buffer-shaper.h"
+#include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 #include "world/world.h"
@@ -55,9 +56,9 @@ static void dump_yourself(player_type *creature_ptr, FILE *fff)
         return;
 
     char temp[80 * 10];
-    shape_buffer(race_explanations[static_cast<int>(creature_ptr->prace)], 78, temp, sizeof(temp));
+    shape_buffer(race_explanations[enum2i(creature_ptr->prace)], 78, temp, sizeof(temp));
     fprintf(fff, "\n\n");
-    fprintf(fff, _("種族: %s\n", "Race: %s\n"), race_info[static_cast<int>(creature_ptr->prace)].title);
+    fprintf(fff, _("種族: %s\n", "Race: %s\n"), race_info[enum2i(creature_ptr->prace)].title);
     concptr t = temp;
 
     for (int i = 0; i < 10; i++) {

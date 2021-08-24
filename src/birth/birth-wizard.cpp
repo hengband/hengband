@@ -33,6 +33,7 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/buffer-shaper.h"
+#include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 #include "view/display-birth.h" // 暫定。後で消す予定。
 #include "view/display-player.h" // 暫定。後で消す.
@@ -165,7 +166,7 @@ static bool let_player_select_race(player_type *creature_ptr)
             return false;
 
         clear_from(10);
-        shape_buffer(race_explanations[static_cast<int>(creature_ptr->prace)], 74, temp, sizeof(temp));
+        shape_buffer(race_explanations[enum2i(creature_ptr->prace)], 74, temp, sizeof(temp));
         concptr t = temp;
         for (int i = 0; i < 10; i++) {
             if (t[0] == 0)

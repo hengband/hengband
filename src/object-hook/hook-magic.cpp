@@ -9,6 +9,7 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
+#include "util/enum-converter.h"
 
 /*!
  * @brief オブジェクトをプレイヤーが魔道具として発動できるかを判定する /
@@ -106,7 +107,7 @@ bool item_tester_learn_spell(player_type *player_ptr, object_type *o_ptr)
         }
     }
 
-    if ((o_ptr->tval < TV_LIFE_BOOK) || (o_ptr->tval > (TV_LIFE_BOOK + static_cast<int>(MAX_REALM) - 1)))
+    if ((o_ptr->tval < TV_LIFE_BOOK) || (o_ptr->tval > (TV_LIFE_BOOK + enum2i(MAX_REALM) - 1)))
         return false;
 
     if ((o_ptr->tval == TV_MUSIC_BOOK) && (player_ptr->pclass == CLASS_BARD))

@@ -16,6 +16,7 @@
 #include "player/player-status-table.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 
 MindPowerGetter::MindPowerGetter(player_type *caster_ptr)
@@ -121,7 +122,7 @@ void MindPowerGetter::select_mind_description()
 bool MindPowerGetter::select_spell_index(SPELL_IDX *sn)
 {
     COMMAND_CODE code;
-    this->mind_ptr = &mind_powers[static_cast<int>(this->use_mind)];
+    this->mind_ptr = &mind_powers[enum2i(this->use_mind)];
     *sn = -1;
     if (!repeat_pull(&code)) {
         return false;

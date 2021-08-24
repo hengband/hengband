@@ -33,6 +33,7 @@
 #include "store/store-owners.h"
 #include "store/store.h"
 #include "system/player-type-definition.h"
+#include "util/enum-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -55,7 +56,7 @@ static void write_birth_diary(player_type *creature_ptr)
     char buf[80];
     sprintf(buf, _("%s性別に%sを選択した。", "%schose %s gender."), indent, sex_info[creature_ptr->psex].title);
     exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, buf);
-    sprintf(buf, _("%s種族に%sを選択した。", "%schose %s race."), indent, race_info[static_cast<int>(creature_ptr->prace)].title);
+    sprintf(buf, _("%s種族に%sを選択した。", "%schose %s race."), indent, race_info[enum2i(creature_ptr->prace)].title);
     exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, buf);
     sprintf(buf, _("%s職業に%sを選択した。", "%schose %s class."), indent, class_info[creature_ptr->pclass].title);
     exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, buf);
