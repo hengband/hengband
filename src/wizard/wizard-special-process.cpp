@@ -432,7 +432,7 @@ static bool select_debugging_dungeon(player_type *creature_ptr, DUNGEON_IDX *dun
         char ppp[80];
         char tmp_val[160];
         sprintf(ppp, "Jump which dungeon : ");
-        sprintf(tmp_val, "%d", creature_ptr->dungeon_idx);
+        sprintf(tmp_val, "%d", static_cast<int>(creature_ptr->dungeon_idx));
         if (!get_string(ppp, tmp_val, 2)) {
             return false;
         }
