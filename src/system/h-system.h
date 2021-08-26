@@ -44,14 +44,7 @@
 #include <io.h>
 #endif
 
-#if !defined(VM)
-#if defined(__TURBOC__) || defined(__WATCOMC__)
-#include <mem.h>
-#else
 #include <memory.h>
-#endif
-#endif
-
 #include <fcntl.h>
 
 #ifdef SET_UID
