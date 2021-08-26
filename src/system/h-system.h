@@ -16,49 +16,33 @@
  * because VMS does not use the "ASCII" character set.
  */
 
-#ifndef INCLUDED_H_SYSTEM_H
-#define INCLUDED_H_SYSTEM_H
+#pragma once
 
 #include <ctype.h>
 #include <errno.h>
+#include <fcntl.h>
+#include <memory.h>
+#include <stdarg.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <time.h>
 #include <wctype.h>
 
-#ifdef SET_UID
-
-#include <sys/types.h>
-
-#if defined(Pyramid) || defined(NCR3K) || defined(ibm032) || defined(__osf__) || defined(ISC) || defined(linux)
-#include <sys/time.h>
-#endif
-
-#include <sys/timeb.h>
-
-#endif /* SET_UID */
-
-#include <time.h>
-
-#if defined(WINDOWS)
+#ifdef WINDOWS
 #include <io.h>
 #endif
 
-#include <memory.h>
-#include <fcntl.h>
-
 #ifdef SET_UID
-
 #include <pwd.h>
 #include <sys/file.h>
 #include <sys/param.h>
 #include <sys/stat.h>
+#include <sys/timeb.h>
+#include <sys/types.h>
 #include <unistd.h>
-
+#if defined(Pyramid) || defined(NCR3K) || defined(ibm032) || defined(__osf__) || defined(ISC) || defined(linux)
+#include <sys/time.h>
+#endif
 #endif /* SET_UID */
-
-#include <string.h>
-
-#include <stdarg.h>
-
-#endif /* INCLUDED_H_SYSTEM_H */
