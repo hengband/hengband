@@ -134,7 +134,7 @@ static void compare_weapon_aux(player_type *owner_ptr, object_type *o_ptr, int c
     int vorpal_div = 1;
     int dmg_bonus = o_ptr->to_d + owner_ptr->to_d[0];
 
-    object_flags(owner_ptr, o_ptr, flgs);
+    object_flags(o_ptr, flgs);
     if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
         dokubari = true;
 
@@ -363,7 +363,7 @@ PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
     i_ptr = &customer_ptr->inventory_list[INVEN_MAIN_HAND];
     (&orig_weapon)->copy_from(i_ptr);
 
-    item_tester_hook = item_tester_hook_orthodox_melee_weapons;
+    item_tester_hook = make_item_tester(object_is_orthodox_melee_weapons);
     concptr q = _("第一の武器は？", "What is your first weapon? ");
     concptr s = _("比べるものがありません。", "You have nothing to compare.");
 
@@ -418,7 +418,7 @@ PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
             continue;
         }
 
-        item_tester_hook = item_tester_hook_orthodox_melee_weapons;
+        item_tester_hook = make_item_tester(object_is_orthodox_melee_weapons);
         q = _("第二の武器は？", "What is your second weapon? ");
         s = _("比べるものがありません。", "You have nothing to compare.");
         OBJECT_IDX item2;

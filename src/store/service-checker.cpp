@@ -21,14 +21,14 @@
  * @param o_ptr 判定したいオブジェクト構造体の参照ポインタ
  * @return アイテムが祝福されたアイテムならばTRUEを返す
  */
-static bool is_blessed_item(player_type *player_ptr, object_type *o_ptr)
+static bool is_blessed_item(const object_type *o_ptr)
 {
     TrFlags flgs;
-    object_flags(player_ptr, o_ptr, flgs);
+    object_flags(o_ptr, flgs);
     return has_flag(flgs, TR_BLESSED);
 }
 
-static bool check_store_general(object_type *o_ptr)
+static bool check_store_general(const object_type *o_ptr)
 {
     switch (o_ptr->tval) {
     case TV_ROD:
@@ -56,7 +56,7 @@ static bool check_store_general(object_type *o_ptr)
     }
 }
 
-static bool check_store_armoury(object_type *o_ptr)
+static bool check_store_armoury(const object_type *o_ptr)
 {
     switch (o_ptr->tval) {
     case TV_BOOTS:
@@ -74,7 +74,7 @@ static bool check_store_armoury(object_type *o_ptr)
     }
 }
 
-static bool check_store_weapon(object_type *o_ptr)
+static bool check_store_weapon(const object_type *o_ptr)
 {
     switch (o_ptr->tval) {
     case TV_SHOT:
@@ -93,7 +93,7 @@ static bool check_store_weapon(object_type *o_ptr)
     }
 }
 
-static bool check_store_temple(player_type *player_ptr, object_type *o_ptr)
+static bool check_store_temple(const object_type *o_ptr)
 {
     switch (o_ptr->tval) {
     case TV_LIFE_BOOK:
@@ -112,7 +112,7 @@ static bool check_store_temple(player_type *player_ptr, object_type *o_ptr)
         /* Fall through */
     case TV_POLEARM:
     case TV_SWORD:
-        if (is_blessed_item(player_ptr, o_ptr))
+        if (is_blessed_item(o_ptr))
             return true;
 
         /* Fall through */
@@ -121,7 +121,7 @@ static bool check_store_temple(player_type *player_ptr, object_type *o_ptr)
     }
 }
 
-static bool check_store_alchemist(object_type *o_ptr)
+static bool check_store_alchemist(const object_type *o_ptr)
 {
     switch (o_ptr->tval) {
     case TV_SCROLL:
@@ -132,7 +132,7 @@ static bool check_store_alchemist(object_type *o_ptr)
     }
 }
 
-static bool check_store_magic(object_type *o_ptr)
+static bool check_store_magic(const object_type *o_ptr)
 {
     switch (o_ptr->tval) {
     case TV_SORCERY_BOOK:
@@ -161,7 +161,7 @@ static bool check_store_magic(object_type *o_ptr)
     }
 }
 
-static bool check_store_book(object_type *o_ptr)
+static bool check_store_book(const object_type *o_ptr)
 {
     switch (o_ptr->tval) {
     case TV_SORCERY_BOOK:
@@ -182,7 +182,7 @@ static bool check_store_book(object_type *o_ptr)
     }
 }
 
-static bool switch_store_check(player_type *player_ptr, object_type *o_ptr)
+static bool switch_store_check(const object_type *o_ptr)
 {
     switch (cur_store_num) {
     case STORE_GENERAL:
@@ -192,7 +192,7 @@ static bool switch_store_check(player_type *player_ptr, object_type *o_ptr)
     case STORE_WEAPON:
         return check_store_weapon(o_ptr);
     case STORE_TEMPLE:
-        return check_store_temple(player_ptr, o_ptr);
+        return check_store_temple(o_ptr);
     case STORE_ALCHEMIST:
         return check_store_alchemist(o_ptr);
     case STORE_MAGIC:
@@ -212,15 +212,15 @@ static bool switch_store_check(player_type *player_ptr, object_type *o_ptr)
  * @note
  * Note that a shop-keeper must refuse to buy "worthless" items
  */
-bool store_will_buy(player_type *player_ptr, object_type *o_ptr)
+bool store_will_buy(player_type *, const object_type *o_ptr)
 {
     if ((cur_store_num == STORE_HOME) || (cur_store_num == STORE_MUSEUM))
         return true;
 
-    if (!switch_store_check(player_ptr, o_ptr))
+    if (!switch_store_check(o_ptr))
         return false;
 
-    return object_value(player_ptr, o_ptr) > 0;
+    return object_value(o_ptr) > 0;
 }
 
 static int mass_lite_produce(const PRICE cost)
@@ -411,9 +411,9 @@ static DISCOUNT_RATE decide_discount_rate(const PRICE cost)
  * Some objects can be sold at a "discount" (in small piles)
  * </pre>
  */
-void mass_produce(player_type *player_ptr, object_type *o_ptr)
+void mass_produce(player_type *, object_type *o_ptr)
 {
-    const PRICE cost = object_value(player_ptr, o_ptr);
+    const PRICE cost = object_value(o_ptr);
     int size = switch_mass_production(o_ptr, cost);
     DISCOUNT_RATE discount = decide_discount_rate(cost);
     if (o_ptr->art_name)

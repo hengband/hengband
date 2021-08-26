@@ -114,7 +114,7 @@ void do_cmd_wield(player_type *creature_ptr)
     case TV_SHIELD:
     case TV_CARD:
         if (has_melee_weapon(creature_ptr, INVEN_MAIN_HAND) && has_melee_weapon(creature_ptr, INVEN_SUB_HAND)) {
-            item_tester_hook = item_tester_hook_melee_weapon;
+            item_tester_hook = make_item_tester(object_is_melee_weapon);
             q = _("どちらの武器と取り替えますか?", "Replace which weapon? ");
             s = _("おっと。", "Oops.");
             if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), TV_NONE))
@@ -126,7 +126,7 @@ void do_cmd_wield(player_type *creature_ptr)
             slot = INVEN_MAIN_HAND;
         else if (creature_ptr->inventory_list[INVEN_MAIN_HAND].k_idx && !object_is_melee_weapon(&creature_ptr->inventory_list[INVEN_MAIN_HAND])
             && creature_ptr->inventory_list[INVEN_SUB_HAND].k_idx && !object_is_melee_weapon(&creature_ptr->inventory_list[INVEN_SUB_HAND])) {
-            item_tester_hook = item_tester_hook_mochikae;
+            item_tester_hook = make_item_tester(object_is_mochikae);
             q = _("どちらの手に装備しますか?", "Equip which hand? ");
             s = _("おっと。", "Oops.");
             if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP), TV_NONE))
@@ -145,7 +145,7 @@ void do_cmd_wield(player_type *creature_ptr)
             if (!get_check(_("二刀流で戦いますか？", "Dual wielding? ")))
                 slot = INVEN_SUB_HAND;
         } else if (creature_ptr->inventory_list[INVEN_SUB_HAND].k_idx && creature_ptr->inventory_list[INVEN_MAIN_HAND].k_idx) {
-            item_tester_hook = item_tester_hook_mochikae;
+            item_tester_hook = make_item_tester(object_is_mochikae);
             q = _("どちらの手に装備しますか?", "Equip which hand? ");
             s = _("おっと。", "Oops.");
             if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP), TV_NONE))

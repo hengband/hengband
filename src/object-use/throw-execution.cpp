@@ -99,7 +99,7 @@ bool ObjectThrowEntity::check_can_throw()
 void ObjectThrowEntity::calc_throw_range()
 {
     this->q_ptr->copy_from(this->o_ptr);
-    object_flags(this->creature_ptr, this->q_ptr, this->obj_flags);
+    object_flags(this->q_ptr, this->obj_flags);
     torch_flags(this->q_ptr, this->obj_flags);
     distribute_charges(this->o_ptr, this->q_ptr, 1);
     this->q_ptr->number = 1;
@@ -354,7 +354,7 @@ bool ObjectThrowEntity::check_throw_boomerang(concptr *q, concptr *s)
     }
 
     if (has_melee_weapon(this->creature_ptr, INVEN_MAIN_HAND) && has_melee_weapon(this->creature_ptr, INVEN_SUB_HAND)) {
-        item_tester_hook = item_tester_hook_boomerang;
+        item_tester_hook = make_item_tester(object_is_boomerang);
         *q = _("どの武器を投げますか? ", "Throw which item? ");
         *s = _("投げる武器がない。", "You have nothing to throw.");
         this->o_ptr = choose_object(this->creature_ptr, &this->item, *q, *s, USE_EQUIP, TV_NONE);

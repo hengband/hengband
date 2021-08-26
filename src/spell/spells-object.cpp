@@ -143,7 +143,7 @@ void amusement(player_type *creature_ptr, POSITION y1, POSITION x1, int num, boo
         }
 
         /* Make an object (if possible) */
-        i_ptr->prep(creature_ptr, k_idx);
+        i_ptr->prep(k_idx);
         if (a_idx)
             i_ptr->name1 = a_idx;
         apply_magic_to_object(creature_ptr, i_ptr, 1, AM_NO_FIXED_ART);
@@ -549,11 +549,11 @@ bool enchant_equipment(player_type *caster_ptr, object_type *o_ptr, int n, int e
 bool enchant_spell(player_type *caster_ptr, HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
 {
     /* Assume enchant weapon */
-    item_tester_hook = object_allow_enchant_weapon;
+    item_tester_hook = make_item_tester(object_allow_enchant_weapon);
 
     /* Enchant armor if requested */
     if (num_ac)
-        item_tester_hook = object_is_armour;
+        item_tester_hook = make_item_tester(object_is_armour);
 
     concptr q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
     concptr s = _("強化できるアイテムがない。", "You have nothing to enchant.");
@@ -605,7 +605,7 @@ bool enchant_spell(player_type *caster_ptr, HIT_PROB num_hit, HIT_POINT num_dam,
 void brand_weapon(player_type *caster_ptr, int brand_type)
 {
     /* Assume enchant weapon */
-    item_tester_hook = object_allow_enchant_melee_weapon;
+    item_tester_hook = make_item_tester(object_allow_enchant_melee_weapon);
 
     concptr q = _("どの武器を強化しますか? ", "Enchant which weapon? ");
     concptr s = _("強化できる武器がない。", "You have nothing to enchant.");

@@ -38,7 +38,7 @@ extern const int QUEST_ROYAL_CRYPT;
 
 typedef struct object_type object_type;
 typedef struct player_type player_type;
-void rd_item_old(player_type *player_ptr, object_type *o_ptr);
+void rd_item_old(object_type *o_ptr);
 void rd_monster_old(player_type *player_ptr, monster_type *m_ptr);
 void set_old_lore(monster_race *r_ptr, BIT_FLAGS f4, const MONRACE_IDX r_idx);
 errr rd_dungeon_old(player_type *player_ptr);

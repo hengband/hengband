@@ -90,7 +90,7 @@ static void on_defeat_arena_monster(player_type *player_ptr, monster_death_type 
     if (arena_info[player_ptr->arena_number].tval) {
         object_type forge;
         object_type *q_ptr = &forge;
-        q_ptr->prep(player_ptr, lookup_kind(arena_info[player_ptr->arena_number].tval, arena_info[player_ptr->arena_number].sval));
+        q_ptr->prep(lookup_kind(arena_info[player_ptr->arena_number].tval, arena_info[player_ptr->arena_number].sval));
         apply_magic_to_object(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART);
         (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
     }
@@ -134,7 +134,7 @@ static void drop_corpse(player_type *player_ptr, monster_death_type *md_ptr)
 
     object_type forge;
     object_type *q_ptr = &forge;
-    q_ptr->prep(player_ptr, lookup_kind(TV_CORPSE, (corpse ? SV_CORPSE : SV_SKELETON)));
+    q_ptr->prep(lookup_kind(TV_CORPSE, (corpse ? SV_CORPSE : SV_SKELETON)));
     apply_magic_to_object(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART);
     q_ptr->pval = md_ptr->m_ptr->r_idx;
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
@@ -215,7 +215,7 @@ static void drop_artifact(player_type *player_ptr, monster_death_type *md_ptr)
     if (k_idx != 0) {
         object_type forge;
         object_type *q_ptr = &forge;
-        q_ptr->prep(player_ptr, k_idx);
+        q_ptr->prep(k_idx);
         apply_magic_to_object(player_ptr, q_ptr, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART | AM_GOOD);
         (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
     }

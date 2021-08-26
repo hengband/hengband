@@ -29,7 +29,7 @@ static void do_cmd_refill_lamp(player_type *user_ptr)
     OBJECT_IDX item;
     object_type *o_ptr;
     object_type *j_ptr;
-    item_tester_hook = item_tester_refill_lantern;
+    item_tester_hook = make_item_tester(object_is_refill_lantern);
     concptr q = _("どの油つぼから注ぎますか? ", "Refill with which flask? ");
     concptr s = _("油つぼがない。", "You have no flasks of oil.");
     o_ptr = choose_object(user_ptr, &item, q, s, USE_INVEN | USE_FLOOR, TV_NONE);
@@ -37,11 +37,11 @@ static void do_cmd_refill_lamp(player_type *user_ptr)
         return;
 
     TrFlags flgs, flgs2;
-    object_flags(user_ptr, o_ptr, flgs);
+    object_flags(o_ptr, flgs);
 
     PlayerEnergy(user_ptr).set_player_turn_energy(50);
     j_ptr = &user_ptr->inventory_list[INVEN_LITE];
-    object_flags(user_ptr, j_ptr, flgs2);
+    object_flags(j_ptr, flgs2);
     j_ptr->xtra4 += o_ptr->xtra4;
     msg_print(_("ランプに油を注いだ。", "You fuel your lamp."));
     if (has_flag(flgs, TR_DARK_SOURCE) && (j_ptr->xtra4 > 0)) {
@@ -68,7 +68,7 @@ static void do_cmd_refill_torch(player_type *user_ptr)
     OBJECT_IDX item;
     object_type *o_ptr;
     object_type *j_ptr;
-    item_tester_hook = object_can_refill_torch;
+    item_tester_hook = make_item_tester(object_can_refill_torch);
     concptr q = _("どの松明で明かりを強めますか? ", "Refuel with which torch? ");
     concptr s = _("他に松明がない。", "You have no extra torches.");
     o_ptr = choose_object(user_ptr, &item, q, s, USE_INVEN | USE_FLOOR, TV_NONE);
@@ -76,11 +76,11 @@ static void do_cmd_refill_torch(player_type *user_ptr)
         return;
 
     TrFlags flgs, flgs2;
-    object_flags(user_ptr, o_ptr, flgs);
+    object_flags(o_ptr, flgs);
 
     PlayerEnergy(user_ptr).set_player_turn_energy(50);
     j_ptr = &user_ptr->inventory_list[INVEN_LITE];
-    object_flags(user_ptr, j_ptr, flgs2);
+    object_flags(j_ptr, flgs2);
     j_ptr->xtra4 += o_ptr->xtra4 + 5;
     msg_print(_("松明を結合した。", "You combine the torches."));
     if (has_flag(flgs, TR_DARK_SOURCE) && (j_ptr->xtra4 > 0)) {

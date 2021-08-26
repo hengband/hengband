@@ -76,7 +76,7 @@ void display_rumor(player_type *player_ptr, bool ex)
         KIND_OBJECT_IDX k_idx = lookup_kind(a_ptr->tval, a_ptr->sval);
         object_type forge;
         object_type *q_ptr = &forge;
-        q_ptr->prep(player_ptr, k_idx);
+        q_ptr->prep(k_idx);
         q_ptr->name1 = a_idx;
         q_ptr->ident = IDENT_STORE;
         describe_flavor(player_ptr, fullname, q_ptr, OD_NAME_ONLY);

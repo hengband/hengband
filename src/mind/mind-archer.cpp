@@ -121,7 +121,7 @@ bool create_ammo(player_type *creature_ptr)
 
         object_type forge;
         object_type *q_ptr = &forge;
-        q_ptr->prep(creature_ptr, lookup_kind(TV_SHOT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, creature_ptr->lev) + 1));
+        q_ptr->prep(lookup_kind(TV_SHOT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, creature_ptr->lev) + 1));
         q_ptr->number = (byte)rand_range(15, 30);
         object_aware(creature_ptr, q_ptr);
         object_known(q_ptr);
@@ -139,7 +139,7 @@ bool create_ammo(player_type *creature_ptr)
         return true;
     }
     case AMMO_ARROW: {
-        item_tester_hook = item_tester_hook_convertible;
+        item_tester_hook = make_item_tester(object_is_convertible);
         concptr q = _("どのアイテムから作りますか？ ", "Convert which item? ");
         concptr s = _("材料を持っていない。", "You have no item to convert.");
         OBJECT_IDX item;
@@ -149,7 +149,7 @@ bool create_ammo(player_type *creature_ptr)
 
         object_type forge;
         q_ptr = &forge;
-        q_ptr->prep(creature_ptr, lookup_kind(TV_ARROW, (OBJECT_SUBTYPE_VALUE)m_bonus(1, creature_ptr->lev) + 1));
+        q_ptr->prep(lookup_kind(TV_ARROW, (OBJECT_SUBTYPE_VALUE)m_bonus(1, creature_ptr->lev) + 1));
         q_ptr->number = (byte)rand_range(5, 10);
         object_aware(creature_ptr, q_ptr);
         object_known(q_ptr);
@@ -166,7 +166,7 @@ bool create_ammo(player_type *creature_ptr)
         return true;
     }
     case AMMO_BOLT: {
-        item_tester_hook = item_tester_hook_convertible;
+        item_tester_hook = make_item_tester(object_is_convertible);
         concptr q = _("どのアイテムから作りますか？ ", "Convert which item? ");
         concptr s = _("材料を持っていない。", "You have no item to convert.");
         OBJECT_IDX item;
@@ -176,7 +176,7 @@ bool create_ammo(player_type *creature_ptr)
 
         object_type forge;
         q_ptr = &forge;
-        q_ptr->prep(creature_ptr, lookup_kind(TV_BOLT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, creature_ptr->lev) + 1));
+        q_ptr->prep(lookup_kind(TV_BOLT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, creature_ptr->lev) + 1));
         q_ptr->number = (byte)rand_range(4, 8);
         object_aware(creature_ptr, q_ptr);
         object_known(q_ptr);

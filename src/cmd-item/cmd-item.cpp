@@ -293,7 +293,7 @@ void do_cmd_activate(player_type *user_ptr)
     if (user_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
         set_action(user_ptr, ACTION_NONE);
 
-    item_tester_hook = item_tester_hook_activate;
+    item_tester_hook = make_item_tester(object_is_activatable);
 
     concptr q = _("どのアイテムを始動させますか? ", "Activate which item? ");
     concptr s = _("始動できるアイテムを装備していない。", "You have nothing to activate.");

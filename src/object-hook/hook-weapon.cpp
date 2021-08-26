@@ -13,11 +13,8 @@
  * @param o_ptr オブジェクトの構造体の参照ポインタ。
  * @return 対象になるならTRUEを返す。
  */
-bool item_tester_hook_orthodox_melee_weapons(player_type *player_ptr, object_type *o_ptr)
+bool object_is_orthodox_melee_weapons(const object_type *o_ptr)
 {
-    /* Unused */
-    (void)player_ptr;
-
     switch (o_ptr->tval) {
     case TV_HAFTED:
     case TV_POLEARM:
@@ -37,32 +34,12 @@ bool item_tester_hook_orthodox_melee_weapons(player_type *player_ptr, object_typ
 }
 
 /*!
- * @brief オブジェクトが右手か左手に装備できる武器かどうかの判定
- * @param o_ptr 判定するオブジェクトの構造体参照ポインタ
- * @return 右手か左手の武器として装備できるならばTRUEを返す。
- */
-bool item_tester_hook_melee_weapon(player_type *player_ptr, object_type *o_ptr)
-{
-    /* Unused */
-    (void)player_ptr;
-
-    /* Check for a usable slot */
-    if ((o_ptr->tval >= TV_DIGGING) && (o_ptr->tval <= TV_SWORD))
-        return true;
-
-    return false;
-}
-
-/*!
  * @brief 修復対象となる壊れた武器かを判定する。 / Hook to specify "broken weapon"
  * @param o_ptr オブジェクトの構造体の参照ポインタ。
  * @return 修復対象になるならTRUEを返す。
  */
-bool item_tester_hook_broken_weapon(player_type *player_ptr, object_type *o_ptr)
+bool object_is_broken_weapon(const object_type *o_ptr)
 {
-    /* Unused */
-    (void)player_ptr;
-
     if (o_ptr->tval != TV_SWORD)
         return false;
 
@@ -80,11 +57,8 @@ bool item_tester_hook_broken_weapon(player_type *player_ptr, object_type *o_ptr)
  * @param o_ptr 判定するオブジェクトの構造体参照ポインタ
  * @return 投射可能な武器ならばTRUE
  */
-bool item_tester_hook_boomerang(player_type *player_ptr, object_type *o_ptr)
+bool object_is_boomerang(const object_type *o_ptr)
 {
-    /* Unused */
-    (void)player_ptr;
-
     if ((o_ptr->tval == TV_DIGGING) || (o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM) || (o_ptr->tval == TV_HAFTED))
         return true;
 
@@ -96,11 +70,8 @@ bool item_tester_hook_boomerang(player_type *player_ptr, object_type *o_ptr)
  * @param o_ptr 判定するオブジェクトの構造体参照ポインタ
  * @return 左右両方の手で装備できるならばTRUEを返す。
  */
-bool item_tester_hook_mochikae(player_type *player_ptr, object_type *o_ptr)
+bool object_is_mochikae(const object_type *o_ptr)
 {
-    /* Unused */
-    (void)player_ptr;
-
     /* Check for a usable slot */
     if (((o_ptr->tval >= TV_DIGGING) && (o_ptr->tval <= TV_SWORD)) || (o_ptr->tval == TV_SHIELD) || (o_ptr->tval == TV_CAPTURE) || (o_ptr->tval == TV_CARD))
         return true;
@@ -113,7 +84,7 @@ bool item_tester_hook_mochikae(player_type *player_ptr, object_type *o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return オブジェクトが適正武器ならばTRUEを返す
  */
-bool object_is_favorite(player_type *player_ptr, object_type *o_ptr)
+bool object_is_favorite(player_type *player_ptr, const object_type *o_ptr)
 {
     /* Only melee weapons match */
     if (!(o_ptr->tval == TV_POLEARM || o_ptr->tval == TV_SWORD || o_ptr->tval == TV_DIGGING || o_ptr->tval == TV_HAFTED)) {
@@ -124,7 +95,7 @@ bool object_is_favorite(player_type *player_ptr, object_type *o_ptr)
     switch (player_ptr->pclass) {
     case CLASS_PRIEST: {
         TrFlags flgs;
-        object_flags_known(player_ptr, o_ptr, flgs);
+        object_flags_known(o_ptr, flgs);
 
         if (!has_flag(flgs, TR_BLESSED) && !(o_ptr->tval == TV_HAFTED))
             return false;
@@ -141,7 +112,7 @@ bool object_is_favorite(player_type *player_ptr, object_type *o_ptr)
     case CLASS_BEASTMASTER:
     case CLASS_CAVALRY: {
         TrFlags flgs;
-        object_flags_known(player_ptr, o_ptr, flgs);
+        object_flags_known(o_ptr, flgs);
 
         /* Is it known to be suitable to using while riding? */
         if (!(has_flag(flgs, TR_RIDING)))
@@ -174,11 +145,8 @@ bool object_is_favorite(player_type *player_ptr, object_type *o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 武器として使えるならばTRUEを返す
  */
-bool object_is_weapon(player_type *player_ptr, object_type *o_ptr)
+bool object_is_weapon(const object_type *o_ptr)
 {
-    /* Unused */
-    (void)player_ptr;
-
     if (TV_WEAPON_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_WEAPON_END)
         return true;
 
@@ -191,7 +159,7 @@ bool object_is_weapon(player_type *player_ptr, object_type *o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 武器や矢弾として使えるならばTRUEを返す
  */
-bool object_is_weapon_ammo(object_type *o_ptr)
+bool object_is_weapon_ammo(const object_type *o_ptr)
 {
     if (TV_MISSILE_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_WEAPON_END)
         return true;
@@ -204,12 +172,9 @@ bool object_is_weapon_ammo(object_type *o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 武器、防具、矢弾として使えるならばTRUEを返す
  */
-bool object_is_weapon_armour_ammo(player_type *player_ptr, object_type *o_ptr)
+bool object_is_weapon_armour_ammo(const object_type *o_ptr)
 {
-    /* Unused */
-    (void)player_ptr;
-
-    if (object_is_weapon_ammo(o_ptr) || object_is_armour(player_ptr, o_ptr))
+    if (object_is_weapon_ammo(o_ptr) || object_is_armour(o_ptr))
         return true;
 
     return false;
@@ -220,7 +185,7 @@ bool object_is_weapon_armour_ammo(player_type *player_ptr, object_type *o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 近接武器として使えるならばTRUEを返す
  */
-bool object_is_melee_weapon(object_type *o_ptr)
+bool object_is_melee_weapon(const object_type *o_ptr)
 {
     if (TV_DIGGING <= o_ptr->tval && o_ptr->tval <= TV_SWORD)
         return true;
@@ -233,7 +198,7 @@ bool object_is_melee_weapon(object_type *o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 装備可能ならばTRUEを返す
  */
-bool object_is_wearable(object_type *o_ptr)
+bool object_is_wearable(const object_type *o_ptr)
 {
     if (TV_WEARABLE_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_WEARABLE_END)
         return true;
@@ -246,7 +211,7 @@ bool object_is_wearable(object_type *o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 装備品ならばTRUEを返す
  */
-bool object_is_equipment(object_type *o_ptr)
+bool object_is_equipment(const object_type *o_ptr)
 {
     if (TV_EQUIP_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_EQUIP_END)
         return true;
@@ -259,7 +224,7 @@ bool object_is_equipment(object_type *o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 強化不能ならばTRUEを返す
  */
-bool object_refuse_enchant_weapon(object_type *o_ptr)
+bool object_refuse_enchant_weapon(const object_type *o_ptr)
 {
     if (o_ptr->tval == TV_SWORD && o_ptr->sval == SV_POISON_NEEDLE)
         return true;
@@ -273,11 +238,8 @@ bool object_refuse_enchant_weapon(object_type *o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 強化可能ならばTRUEを返す
  */
-bool object_allow_enchant_weapon(player_type *player_ptr, object_type *o_ptr)
+bool object_allow_enchant_weapon(const object_type *o_ptr)
 {
-    /* Unused */
-    (void)player_ptr;
-
     if (object_is_weapon_ammo(o_ptr) && !object_refuse_enchant_weapon(o_ptr))
         return true;
 
@@ -290,11 +252,8 @@ bool object_allow_enchant_weapon(player_type *player_ptr, object_type *o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 強化可能な近接武器ならばTRUEを返す
  */
-bool object_allow_enchant_melee_weapon(player_type *player_ptr, object_type *o_ptr)
+bool object_allow_enchant_melee_weapon(const object_type *o_ptr)
 {
-    /* Unused */
-    (void)player_ptr;
-
     if (object_is_melee_weapon(o_ptr) && !object_refuse_enchant_weapon(o_ptr))
         return true;
 
@@ -307,7 +266,7 @@ bool object_allow_enchant_melee_weapon(player_type *player_ptr, object_type *o_p
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 両手持ち可能ならばTRUEを返す
  */
-bool object_allow_two_hands_wielding(object_type *o_ptr)
+bool object_allow_two_hands_wielding(const object_type *o_ptr)
 {
     if (object_is_melee_weapon(o_ptr) && ((o_ptr->weight > 99) || (o_ptr->tval == TV_POLEARM)))
         return true;

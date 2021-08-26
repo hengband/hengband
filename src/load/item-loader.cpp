@@ -21,10 +21,10 @@
  * @brief アイテムオブジェクトを読み込む(現版) / Read an object (New method)
  * @param o_ptr アイテムオブジェクト保存先ポインタ
  */
-void rd_item(player_type *player_ptr, object_type *o_ptr)
+void rd_item(object_type *o_ptr)
 {
     if (h_older_than(1, 5, 0, 0)) {
-        rd_item_old(player_ptr, o_ptr);
+        rd_item_old(o_ptr);
         return;
     }
 
@@ -236,7 +236,7 @@ void rd_item(player_type *player_ptr, object_type *o_ptr)
         return;
 
     TrFlags flgs;
-    object_flags(player_ptr, o_ptr, flgs);
+    object_flags(o_ptr, flgs);
 
     if ((o_ptr->name2 == EGO_DARK) || (o_ptr->name2 == EGO_ANCIENT_CURSE) || (o_ptr->name1 == ART_NIGHT)) {
         add_flag(o_ptr->art_flags, TR_LITE_M1);

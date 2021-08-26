@@ -9,11 +9,8 @@
  * @param o_ptr オブジェクトの構造体の参照ポインタ。
  * @return 材料にできるならTRUEを返す
  */
-bool item_tester_hook_convertible(player_type *player_ptr, object_type *o_ptr)
+bool object_is_convertible(const object_type *o_ptr)
 {
-    /* Unused */
-    (void)player_ptr;
-
     if ((o_ptr->tval == TV_JUNK) || (o_ptr->tval == TV_SKELETON))
         return true;
     if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_SKELETON))
@@ -22,35 +19,11 @@ bool item_tester_hook_convertible(player_type *player_ptr, object_type *o_ptr)
 }
 
 /*!
- * @brief 武器匠の「矢弾」鑑定対象になるかを判定する。/ Hook to specify "weapon"
- * @param o_ptr オブジェクトの構造体の参照ポインタ。
- * @return 対象になるならTRUEを返す。
- */
-bool item_tester_hook_ammo(player_type *player_ptr, object_type *o_ptr)
-{
-    /* Unused */
-    (void)player_ptr;
-
-    switch (o_ptr->tval) {
-    case TV_SHOT:
-    case TV_ARROW:
-    case TV_BOLT: {
-        return true;
-    }
-
-    default:
-        break;
-    }
-
-    return false;
-}
-
-/*!
  * @brief オブジェクトが矢弾として使用できるかどうかを返す / Check if an object is ammo
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 矢弾として使えるならばTRUEを返す
  */
-bool object_is_ammo(object_type *o_ptr)
+bool object_is_ammo(const object_type *o_ptr)
 {
     if (TV_MISSILE_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_MISSILE_END)
         return true;

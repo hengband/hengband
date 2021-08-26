@@ -58,7 +58,7 @@ static void analyze_general(player_type *player_ptr, object_type *o_ptr, char *d
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param pi_ptr pval修正構造体の参照ポインタ
  */
-static void analyze_pval(player_type *player_ptr, object_type *o_ptr, pval_info_type *pi_ptr)
+static void analyze_pval(object_type *o_ptr, pval_info_type *pi_ptr)
 {
     TrFlags flgs;
     concptr *affects_list;
@@ -67,7 +67,7 @@ static void analyze_pval(player_type *player_ptr, object_type *o_ptr, pval_info_
         return;
     }
 
-    object_flags(player_ptr, o_ptr, flgs);
+    object_flags(o_ptr, flgs);
     affects_list = pi_ptr->pval_affects;
     sprintf(pi_ptr->pval_desc, "%s%d", o_ptr->pval >= 0 ? "+" : "", o_ptr->pval);
     if (has_flag(flgs, TR_STR) && has_flag(flgs, TR_INT) && has_flag(flgs, TR_WIS) && has_flag(flgs, TR_DEX) && has_flag(flgs, TR_CON)
@@ -88,10 +88,10 @@ static void analyze_pval(player_type *player_ptr, object_type *o_ptr, pval_info_
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param slay_list 種族スレイ構造体の参照ポインタ
  */
-static void analyze_slay(player_type *player_ptr, object_type *o_ptr, concptr *slay_list)
+static void analyze_slay(object_type *o_ptr, concptr *slay_list)
 {
     TrFlags flgs;
-    object_flags(player_ptr, o_ptr, flgs);
+    object_flags(o_ptr, flgs);
     slay_list = spoiler_flag_aux(flgs, slay_flags_desc, slay_list, N_ELEMENTS(slay_flags_desc));
     *slay_list = NULL;
 }
@@ -102,10 +102,10 @@ static void analyze_slay(player_type *player_ptr, object_type *o_ptr, concptr *s
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param brand_list 属性ブランド構造体の参照ポインタ
  */
-static void analyze_brand(player_type *player_ptr, object_type *o_ptr, concptr *brand_list)
+static void analyze_brand(object_type *o_ptr, concptr *brand_list)
 {
     TrFlags flgs;
-    object_flags(player_ptr, o_ptr, flgs);
+    object_flags(o_ptr, flgs);
     brand_list = spoiler_flag_aux(flgs, brand_flags_desc, brand_list, N_ELEMENTS(brand_flags_desc));
     *brand_list = NULL;
 }
@@ -116,10 +116,10 @@ static void analyze_brand(player_type *player_ptr, object_type *o_ptr, concptr *
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param resist_list 通常耐性構造体の参照ポインタ
  */
-static void analyze_resist(player_type *player_ptr, object_type *o_ptr, concptr *resist_list)
+static void analyze_resist(object_type *o_ptr, concptr *resist_list)
 {
     TrFlags flgs;
-    object_flags(player_ptr, o_ptr, flgs);
+    object_flags(o_ptr, flgs);
     resist_list = spoiler_flag_aux(flgs, resist_flags_desc, resist_list, N_ELEMENTS(resist_flags_desc));
     *resist_list = NULL;
 }
@@ -130,10 +130,10 @@ static void analyze_resist(player_type *player_ptr, object_type *o_ptr, concptr 
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param immune_list 免疫構造体の参照ポインタ
  */
-static void analyze_immune(player_type *player_ptr, object_type *o_ptr, concptr *immune_list)
+static void analyze_immune(object_type *o_ptr, concptr *immune_list)
 {
     TrFlags flgs;
-    object_flags(player_ptr, o_ptr, flgs);
+    object_flags(o_ptr, flgs);
     immune_list = spoiler_flag_aux(flgs, immune_flags_desc, immune_list, N_ELEMENTS(immune_flags_desc));
     *immune_list = NULL;
 }
@@ -144,10 +144,10 @@ static void analyze_immune(player_type *player_ptr, object_type *o_ptr, concptr 
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param sustain_list 維持特性構造体の参照ポインタ
  */
-static void analyze_sustains(player_type *player_ptr, object_type *o_ptr, concptr *sustain_list)
+static void analyze_sustains(object_type *o_ptr, concptr *sustain_list)
 {
     TrFlags flgs;
-    object_flags(player_ptr, o_ptr, flgs);
+    object_flags(o_ptr, flgs);
     if (has_flag(flgs, TR_SUST_STR) && has_flag(flgs, TR_SUST_INT) && has_flag(flgs, TR_SUST_WIS) && has_flag(flgs, TR_SUST_DEX)
         && has_flag(flgs, TR_SUST_CON) && has_flag(flgs, TR_SUST_CHR)) {
         *sustain_list++ = _("全能力", "All stats");
@@ -166,12 +166,12 @@ static void analyze_sustains(player_type *player_ptr, object_type *o_ptr, concpt
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param misc_list その他の特性構造体の参照ポインタ
  */
-static void analyze_misc_magic(player_type *player_ptr, object_type *o_ptr, concptr *misc_list)
+static void analyze_misc_magic(object_type *o_ptr, concptr *misc_list)
 {
     TrFlags flgs;
     char desc[256];
 
-    object_flags(player_ptr, o_ptr, flgs);
+    object_flags(o_ptr, flgs);
     misc_list = spoiler_flag_aux(flgs, misc_flags2_desc, misc_list, N_ELEMENTS(misc_flags2_desc));
     misc_list = spoiler_flag_aux(flgs, misc_flags3_desc, misc_list, N_ELEMENTS(misc_flags3_desc));
     POSITION rad = 0;
@@ -285,16 +285,16 @@ static void analyze_misc(object_type *o_ptr, char *misc_desc)
 void object_analyze(player_type *player_ptr, object_type *o_ptr, obj_desc_list *desc_ptr)
 {
     analyze_general(player_ptr, o_ptr, desc_ptr->description);
-    analyze_pval(player_ptr, o_ptr, &desc_ptr->pval_info);
-    analyze_brand(player_ptr, o_ptr, desc_ptr->brands);
-    analyze_slay(player_ptr, o_ptr, desc_ptr->slays);
-    analyze_immune(player_ptr, o_ptr, desc_ptr->immunities);
-    analyze_resist(player_ptr, o_ptr, desc_ptr->resistances);
-    analyze_sustains(player_ptr, o_ptr, desc_ptr->sustains);
-    analyze_misc_magic(player_ptr, o_ptr, desc_ptr->misc_magic);
+    analyze_pval(o_ptr, &desc_ptr->pval_info);
+    analyze_brand(o_ptr, desc_ptr->brands);
+    analyze_slay(o_ptr, desc_ptr->slays);
+    analyze_immune(o_ptr, desc_ptr->immunities);
+    analyze_resist(o_ptr, desc_ptr->resistances);
+    analyze_sustains(o_ptr, desc_ptr->sustains);
+    analyze_misc_magic(o_ptr, desc_ptr->misc_magic);
     analyze_addition(o_ptr, desc_ptr->addition);
     analyze_misc(o_ptr, desc_ptr->misc_desc);
-    desc_ptr->activation = activation_explanation(player_ptr, o_ptr);
+    desc_ptr->activation = activation_explanation(o_ptr);
 }
 
 /*!
@@ -307,14 +307,14 @@ void object_analyze(player_type *player_ptr, object_type *o_ptr, obj_desc_list *
 void random_artifact_analyze(player_type *player_ptr, object_type *o_ptr, obj_desc_list *desc_ptr)
 {
     analyze_general(player_ptr, o_ptr, desc_ptr->description);
-    analyze_pval(player_ptr, o_ptr, &desc_ptr->pval_info);
-    analyze_brand(player_ptr, o_ptr, desc_ptr->brands);
-    analyze_slay(player_ptr, o_ptr, desc_ptr->slays);
-    analyze_immune(player_ptr, o_ptr, desc_ptr->immunities);
-    analyze_resist(player_ptr, o_ptr, desc_ptr->resistances);
-    analyze_sustains(player_ptr, o_ptr, desc_ptr->sustains);
-    analyze_misc_magic(player_ptr, o_ptr, desc_ptr->misc_magic);
-    desc_ptr->activation = activation_explanation(player_ptr, o_ptr);
+    analyze_pval(o_ptr, &desc_ptr->pval_info);
+    analyze_brand(o_ptr, desc_ptr->brands);
+    analyze_slay(o_ptr, desc_ptr->slays);
+    analyze_immune(o_ptr, desc_ptr->immunities);
+    analyze_resist(o_ptr, desc_ptr->resistances);
+    analyze_sustains(o_ptr, desc_ptr->sustains);
+    analyze_misc_magic(o_ptr, desc_ptr->misc_magic);
+    desc_ptr->activation = activation_explanation(o_ptr);
     sprintf(desc_ptr->misc_desc, _("重さ %d.%d kg", "Weight %d.%d lbs"), _(lbtokg1(o_ptr->weight), o_ptr->weight / 10),
         _(lbtokg2(o_ptr->weight), o_ptr->weight % 10));
 }

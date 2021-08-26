@@ -20,12 +20,12 @@
  * @param plusses フラグに与える価格の基本重み
  * @return オブジェクトのフラグ価格
  */
-PRICE flag_cost(player_type *player_ptr, object_type *o_ptr, int plusses)
+PRICE flag_cost(const object_type *o_ptr, int plusses)
 {
     PRICE total = 0;
     TrFlags flgs;
     object_kind *k_ptr = &k_info[o_ptr->k_idx];
-    object_flags(player_ptr, o_ptr, flgs);
+    object_flags(o_ptr, flgs);
 
     /*
      * Exclude fixed flags of the base item.
@@ -450,7 +450,7 @@ PRICE flag_cost(player_type *player_ptr, object_type *o_ptr, int plusses)
 
     /* Also, give some extra for activatable powers... */
     if (o_ptr->art_name && (has_flag(o_ptr->art_flags, TR_ACTIVATE))) {
-        const activation_type *const act_ptr = find_activation_info(player_ptr, o_ptr);
+        const activation_type *const act_ptr = find_activation_info(o_ptr);
         if (act_ptr) {
             total += act_ptr->value;
         }

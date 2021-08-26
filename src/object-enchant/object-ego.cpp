@@ -64,7 +64,7 @@ byte get_random_ego(byte slot, bool good)
  * @param o_ptr オブジェクト情報への参照ポインタ
  * @param gen_flags 生成フラグ(参照渡し)
  */
-static void ego_invest_curse(player_type *player_ptr, object_type *o_ptr, EnumClassFlagGroup<TRG> &gen_flags)
+static void ego_invest_curse(object_type *o_ptr, EnumClassFlagGroup<TRG> &gen_flags)
 {
     if (gen_flags.has(TRG::CURSED))
         o_ptr->curse_flags.set(TRC::CURSED);
@@ -73,11 +73,11 @@ static void ego_invest_curse(player_type *player_ptr, object_type *o_ptr, EnumCl
     if (gen_flags.has(TRG::PERMA_CURSE))
         o_ptr->curse_flags.set(TRC::PERMA_CURSE);
     if (gen_flags.has(TRG::RANDOM_CURSE0))
-        o_ptr->curse_flags.set(get_curse(player_ptr, 0, o_ptr));
+        o_ptr->curse_flags.set(get_curse(0, o_ptr));
     if (gen_flags.has(TRG::RANDOM_CURSE1))
-        o_ptr->curse_flags.set(get_curse(player_ptr, 1, o_ptr));
+        o_ptr->curse_flags.set(get_curse(1, o_ptr));
     if (gen_flags.has(TRG::RANDOM_CURSE2))
-        o_ptr->curse_flags.set(get_curse(player_ptr, 2, o_ptr));
+        o_ptr->curse_flags.set(get_curse(2, o_ptr));
 }
 
 /*!
@@ -202,9 +202,9 @@ static bool ego_has_flag(object_type *o_ptr, ego_item_type *e_ptr, tr_type flag)
  * @param e_ptr エゴアイテム情報への参照ポインタ
  * @param lev 生成階
  */
-void ego_invest_extra_attack(player_type *player_ptr, object_type *o_ptr, ego_item_type *e_ptr, DEPTH lev)
+void ego_invest_extra_attack(object_type *o_ptr, ego_item_type *e_ptr, DEPTH lev)
 {
-    if (!object_is_weapon(player_ptr, o_ptr)) {
+    if (!object_is_weapon(o_ptr)) {
         o_ptr->pval = e_ptr->max_pval >= 0 ? 1 : randint1_signed(e_ptr->max_pval);
         return;
     }
@@ -239,7 +239,7 @@ void ego_invest_extra_attack(player_type *player_ptr, object_type *o_ptr, ego_it
  * @param o_ptr オブジェクト情報への参照ポインタ
  * @param lev 生成階
  */
-void apply_ego(player_type *player_ptr, object_type *o_ptr, DEPTH lev)
+void apply_ego(object_type *o_ptr, DEPTH lev)
 {
     auto e_ptr = &e_info[o_ptr->name2];
     auto gen_flags = e_ptr->gen_flags;
@@ -249,7 +249,7 @@ void apply_ego(player_type *player_ptr, object_type *o_ptr, DEPTH lev)
     if (!e_ptr->cost)
         o_ptr->ident |= (IDENT_BROKEN);
 
-    ego_invest_curse(player_ptr, o_ptr, gen_flags);
+    ego_invest_curse(o_ptr, gen_flags);
     ego_invest_extra_abilities(o_ptr, gen_flags);
 
     if (e_ptr->act_idx)
@@ -311,7 +311,7 @@ void apply_ego(player_type *player_ptr, object_type *o_ptr, DEPTH lev)
                     o_ptr->pval += randint1(2);
             } else {
                 if (ego_has_flag(o_ptr, e_ptr, TR_BLOWS))
-                    ego_invest_extra_attack(player_ptr, o_ptr, e_ptr, lev);
+                    ego_invest_extra_attack(o_ptr, e_ptr, lev);
                 else {
                     if (e_ptr->max_pval > 0)
                         o_ptr->pval += randint1(e_ptr->max_pval);

@@ -1,9 +1,8 @@
 ﻿#pragma once
 
 typedef struct object_type object_type;
-typedef struct player_type player_type;
-bool item_tester_hook_nameless_weapon_armour(player_type *player_ptr, object_type *o_ptr);
-bool item_tester_hook_identify(player_type *player_ptr, object_type *o_ptr);
-bool item_tester_hook_identify_weapon_armour(player_type *player_ptr, object_type *o_ptr);
-bool item_tester_hook_identify_fully(player_type *player_ptr, object_type *o_ptr);
-bool item_tester_hook_identify_fully_weapon_armour(player_type *player_ptr, object_type *o_ptr);
+bool object_is_nameless_weapon_armour(const object_type *o_ptr);
+bool object_is_not_identified(const object_type *o_ptr);
+bool object_is_not_identified_weapon_armor(const object_type *o_ptr);
+bool object_is_not_fully_identified(const object_type *o_ptr);
+bool object_is_not_fully_identified_weapon_armour(const object_type *o_ptr);

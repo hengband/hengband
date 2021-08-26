@@ -151,7 +151,7 @@ MULTIPLY mult_brand(player_type *player_ptr, MULTIPLY mult, const TrFlags &flgs,
 HIT_POINT calc_attack_damage_with_slay(player_type *attacker_ptr, object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, combat_options mode, bool thrown)
 {
     TrFlags flgs;
-    object_flags(attacker_ptr, o_ptr, flgs);
+    object_flags(o_ptr, flgs);
     torch_flags(o_ptr, flgs); /* torches has secret flags */
 
     if (!thrown) {

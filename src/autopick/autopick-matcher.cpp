@@ -81,7 +81,7 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
         }
     }
 
-    if (IS_FLG(FLG_WORTHLESS) && object_value(player_ptr, o_ptr) > 0)
+    if (IS_FLG(FLG_WORTHLESS) && object_value(o_ptr) > 0)
         return false;
 
     if (IS_FLG(FLG_ARTIFACT)) {
@@ -100,7 +100,7 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
         if (!object_is_equipment(o_ptr))
             return false;
         if (object_is_known(o_ptr)) {
-            if (!object_is_nameless(player_ptr, o_ptr))
+            if (!object_is_nameless(o_ptr))
                 return false;
 
             if (o_ptr->to_a <= 0 && (o_ptr->to_h + o_ptr->to_d) <= 0)
@@ -122,7 +122,7 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
         if (!object_is_equipment(o_ptr))
             return false;
         if (object_is_known(o_ptr)) {
-            if (!object_is_nameless(player_ptr, o_ptr))
+            if (!object_is_nameless(o_ptr))
                 return false;
         } else if (o_ptr->ident & IDENT_SENSE) {
             switch (o_ptr->feeling) {
@@ -144,7 +144,7 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
         if (!object_is_equipment(o_ptr))
             return false;
         if (object_is_known(o_ptr)) {
-            if (!object_is_nameless(player_ptr, o_ptr))
+            if (!object_is_nameless(o_ptr))
                 return false;
 
             if (object_is_cursed(o_ptr) || object_is_broken(o_ptr))
@@ -204,13 +204,13 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
         return false;
 
     if (IS_FLG(FLG_WEAPONS)) {
-        if (!object_is_weapon(player_ptr, o_ptr))
+        if (!object_is_weapon(o_ptr))
             return false;
     } else if (IS_FLG(FLG_FAVORITE_WEAPONS)) {
         if (!object_is_favorite(player_ptr, o_ptr))
             return false;
     } else if (IS_FLG(FLG_ARMORS)) {
-        if (!object_is_armour(player_ptr, o_ptr))
+        if (!object_is_armour(o_ptr))
             return false;
     } else if (IS_FLG(FLG_MISSILES)) {
         if (!object_is_ammo(o_ptr))

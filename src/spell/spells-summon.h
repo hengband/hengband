@@ -12,7 +12,7 @@ bool cast_summon_undead(player_type *creature_ptr, int power);
 bool cast_summon_hound(player_type *creature_ptr, int power);
 bool cast_summon_elemental(player_type *creature_ptr, int power);
 bool cast_summon_octopus(player_type *creature_ptr);
-bool item_tester_offer(player_type *creature_ptr, object_type *o_ptr);
+bool object_is_offerable(const object_type *o_ptr);
 bool cast_summon_greater_demon(player_type *caster_ptr);
 bool summon_kin_player(player_type *creature_ptr, DEPTH level, POSITION y, POSITION x, BIT_FLAGS mode);
 void mitokohmon(player_type *kohmon_ptr);

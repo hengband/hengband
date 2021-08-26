@@ -47,7 +47,7 @@ void inventory_damage(player_type *player_ptr, inven_func typ, int perc)
             continue;
 
         /* Give this item slot a shot at death */
-        if (!(*typ)(player_ptr, o_ptr))
+        if (!(*typ)(o_ptr))
             continue;
 
         /* Count the casualties */

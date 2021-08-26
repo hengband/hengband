@@ -39,12 +39,12 @@
 #include "wizard/wizard-messages.h"
 #include "world/world.h"
 
-static bool weakening_artifact(player_type *player_ptr, object_type *o_ptr)
+static bool weakening_artifact(object_type *o_ptr)
 {
     KIND_OBJECT_IDX k_idx = lookup_kind(o_ptr->tval, o_ptr->sval);
     object_kind *k_ptr = &k_info[k_idx];
     TrFlags flgs;
-    object_flags(player_ptr, o_ptr, flgs);
+    object_flags(o_ptr, flgs);
 
     if (has_flag(flgs, TR_KILL_EVIL)) {
         remove_flag(o_ptr->art_flags, TR_KILL_EVIL);
@@ -253,9 +253,9 @@ static void strengthen_pval(object_type *o_ptr)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr ランダムアーティファクトを示すアイテムへの参照ポインタ
  */
-static void invest_positive_modified_value(player_type *player_ptr, object_type *o_ptr)
+static void invest_positive_modified_value(object_type *o_ptr)
 {
-    if (object_is_armour(player_ptr, o_ptr)) {
+    if (object_is_armour(o_ptr)) {
         o_ptr->to_a += randint1(o_ptr->to_a > 19 ? 1 : 20 - o_ptr->to_a);
         return;
     }
@@ -274,9 +274,9 @@ static void invest_positive_modified_value(player_type *player_ptr, object_type 
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr ランダムアーティファクトを示すアイテムへの参照ポインタ
  */
-static void invest_negative_modified_value(player_type *player_ptr, object_type *o_ptr)
+static void invest_negative_modified_value(object_type *o_ptr)
 {
-    if (!object_is_armour(player_ptr, o_ptr))
+    if (!object_is_armour(o_ptr))
         return;
 
     while ((o_ptr->to_d + o_ptr->to_h) > 20) {
@@ -353,7 +353,7 @@ static int decide_random_art_power_level(object_type *o_ptr, const bool a_cursed
 static void name_unnatural_random_artifact(player_type *player_ptr, object_type *o_ptr, const bool a_scroll, const int power_level, GAME_TEXT *new_name)
 {
     if (!a_scroll) {
-        get_random_name(o_ptr, new_name, object_is_armour(player_ptr, o_ptr), power_level);
+        get_random_name(o_ptr, new_name, object_is_armour(o_ptr), power_level);
         return;
     }
 
@@ -416,29 +416,29 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
     if (has_pval)
         strengthen_pval(o_ptr);
 
-    invest_positive_modified_value(player_ptr, o_ptr);
+    invest_positive_modified_value(o_ptr);
     add_flag(o_ptr->art_flags, TR_IGNORE_ACID);
     add_flag(o_ptr->art_flags, TR_IGNORE_ELEC);
     add_flag(o_ptr->art_flags, TR_IGNORE_FIRE);
     add_flag(o_ptr->art_flags, TR_IGNORE_COLD);
 
-    int32_t total_flags = flag_cost(player_ptr, o_ptr, o_ptr->pval);
+    int32_t total_flags = flag_cost(o_ptr, o_ptr->pval);
     if (a_cursed)
         curse_artifact(player_ptr, o_ptr);
 
-    if (!a_cursed && one_in_(object_is_armour(player_ptr, o_ptr) ? ACTIVATION_CHANCE * 2 : ACTIVATION_CHANCE)) {
+    if (!a_cursed && one_in_(object_is_armour(o_ptr) ? ACTIVATION_CHANCE * 2 : ACTIVATION_CHANCE)) {
         o_ptr->xtra2 = 0;
         give_activation_power(o_ptr);
     }
 
-    invest_negative_modified_value(player_ptr, o_ptr);
+    invest_negative_modified_value(o_ptr);
     if (((o_ptr->artifact_bias == BIAS_MAGE) || (o_ptr->artifact_bias == BIAS_INT)) && (o_ptr->tval == TV_GLOVES))
         add_flag(o_ptr->art_flags, TR_FREE_ACT);
 
     reset_flags_poison_needle(o_ptr);
     int power_level = decide_random_art_power_level(o_ptr, a_cursed, total_flags);
     while (has_extreme_damage_rate(player_ptr, o_ptr) && !one_in_(SWORDFISH_LUCK))
-        weakening_artifact(player_ptr, o_ptr);
+        weakening_artifact(o_ptr);
 
     generate_unnatural_random_artifact(player_ptr, o_ptr, a_scroll, power_level, max_powers, total_flags);
     return true;

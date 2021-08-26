@@ -23,7 +23,7 @@
  * @param o_ptr 未鑑定価格を確認したいオブジェクトの構造体参照ポインタ
  * @return オブジェクトの未鑑定価格
  */
-static PRICE object_value_base(object_type *o_ptr)
+static PRICE object_value_base(const object_type *o_ptr)
 {
     if (object_is_aware(o_ptr))
         return (k_info[o_ptr->k_idx].cost);
@@ -85,7 +85,7 @@ static PRICE object_value_base(object_type *o_ptr)
  * Note that discounted items stay discounted forever, even if\n
  * the discount is "forgotten" by the player via memory loss.\n
  */
-PRICE object_value(player_type *player_ptr, object_type *o_ptr)
+PRICE object_value(const object_type *o_ptr)
 {
     PRICE value;
 
@@ -95,7 +95,7 @@ PRICE object_value(player_type *player_ptr, object_type *o_ptr)
         if (object_is_cursed(o_ptr))
             return (0L);
 
-        value = object_value_real(player_ptr, o_ptr);
+        value = object_value_real(o_ptr);
     } else {
         if ((o_ptr->ident & (IDENT_SENSE)) && object_is_broken(o_ptr))
             return (0L);
@@ -137,7 +137,7 @@ PRICE object_value(player_type *player_ptr, object_type *o_ptr)
  *\n
  * Every wearable item with a "pval" bonus is worth extra (see below).\n
  */
-PRICE object_value_real(player_type *player_ptr, object_type *o_ptr)
+PRICE object_value_real(const object_type *o_ptr)
 {
     TrFlags flgs;
     object_kind *k_ptr = &k_info[o_ptr->k_idx];
@@ -146,14 +146,14 @@ PRICE object_value_real(player_type *player_ptr, object_type *o_ptr)
         return (0L);
 
     PRICE value = k_info[o_ptr->k_idx].cost;
-    object_flags(player_ptr, o_ptr, flgs);
+    object_flags(o_ptr, flgs);
     if (object_is_fixed_artifact(o_ptr)) {
         artifact_type *a_ptr = &a_info[o_ptr->name1];
         if (!a_ptr->cost)
             return (0L);
 
         value = a_ptr->cost;
-        value += flag_cost(player_ptr, o_ptr, o_ptr->pval);
+        value += flag_cost(o_ptr, o_ptr->pval);
         return (value);
     } else if (object_is_ego(o_ptr)) {
         ego_item_type *e_ptr = &e_info[o_ptr->name2];
@@ -161,7 +161,7 @@ PRICE object_value_real(player_type *player_ptr, object_type *o_ptr)
             return (0L);
 
         value += e_ptr->cost;
-        value += flag_cost(player_ptr, o_ptr, o_ptr->pval);
+        value += flag_cost(o_ptr, o_ptr->pval);
     } else {
         bool flag = false;
         for (int i = 0; i < TR_FLAG_SIZE; i++)
@@ -169,7 +169,7 @@ PRICE object_value_real(player_type *player_ptr, object_type *o_ptr)
                 flag = true;
 
         if (flag)
-            value += flag_cost(player_ptr, o_ptr, o_ptr->pval);
+            value += flag_cost(o_ptr, o_ptr->pval);
     }
 
     /* Analyze pval bonus for normal object */

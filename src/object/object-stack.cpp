@@ -72,7 +72,7 @@ void reduce_charges(object_type *o_ptr, int amt)
  * @param j_ptr 検証したいオブジェクトの構造体参照ポインタ2
  * @return 重ね合わせ可能なアイテム数
  */
-int object_similar_part(object_type *o_ptr, object_type *j_ptr)
+int object_similar_part(const object_type *o_ptr, const object_type *j_ptr)
 {
     const int max_stack_size = 99;
     int max_num = max_stack_size;
@@ -215,7 +215,7 @@ int object_similar_part(object_type *o_ptr, object_type *j_ptr)
  * @param j_ptr 検証したいオブジェクトの構造体参照ポインタ2
  * @return 重ね合わせ可能ならばTRUEを返す。
  */
-bool object_similar(object_type *o_ptr, object_type *j_ptr)
+bool object_similar(const object_type *o_ptr, const object_type *j_ptr)
 {
     int total = o_ptr->number + j_ptr->number;
     int max_num = object_similar_part(o_ptr, j_ptr);

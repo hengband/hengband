@@ -61,7 +61,7 @@ const int QUEST_ROYAL_CRYPT = 28; // 王家の墓.
  * @brief アイテムオブジェクト1件を読み込む / Read an object
  * @param o_ptr アイテムオブジェクト読み取り先ポインタ
  */
-void rd_item_old(player_type *player_ptr, object_type *o_ptr)
+void rd_item_old(object_type *o_ptr)
 {
     rd_s16b(&o_ptr->k_idx);
 
@@ -280,7 +280,7 @@ void rd_item_old(player_type *player_ptr, object_type *o_ptr)
     } else {
         rd_byte(&o_ptr->xtra3);
         if (h_older_than(1, 3, 0, 1)) {
-            if (object_is_smith(player_ptr, o_ptr) && o_ptr->xtra3 >= 1 + 96)
+            if (object_is_smith(o_ptr) && o_ptr->xtra3 >= 1 + 96)
                 o_ptr->xtra3 += -96 + MIN_SPECIAL_ESSENCE;
         }
 
@@ -758,7 +758,7 @@ errr rd_dungeon_old(player_type *player_ptr)
 
         object_type *o_ptr;
         o_ptr = &floor_ptr->o_list[o_idx];
-        rd_item(player_ptr, o_ptr);
+        rd_item(o_ptr);
 
         auto &list = get_o_idx_list_contains(floor_ptr, o_idx);
         list.add(floor_ptr, o_idx);

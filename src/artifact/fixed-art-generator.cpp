@@ -54,7 +54,7 @@ static bool invest_terror_mask(player_type *player_ptr, object_type *o_ptr)
         add_flag(o_ptr->art_flags, TR_AGGRAVATE);
         add_flag(o_ptr->art_flags, TR_TY_CURSE);
         o_ptr->curse_flags.set({ TRC::CURSED, TRC::HEAVY_CURSE });
-        o_ptr->curse_flags.set(get_curse(player_ptr, 2, o_ptr));
+        o_ptr->curse_flags.set(get_curse(2, o_ptr));
         return false;
     }
 }
@@ -173,7 +173,7 @@ static void fixed_artifact_random_abilities(player_type *player_ptr, artifact_ty
  * @param a_ptr 固定アーティファクト情報への参照ポインタ
  * @param q_ptr オブジェクト情報への参照ポインタ
  */
-static void invest_curse_to_fixed_artifact(player_type *player_ptr, artifact_type *a_ptr, object_type *o_ptr)
+static void invest_curse_to_fixed_artifact(artifact_type *a_ptr, object_type *o_ptr)
 {
     if (!a_ptr->cost)
         set_bits(o_ptr->ident, IDENT_BROKEN);
@@ -188,13 +188,13 @@ static void invest_curse_to_fixed_artifact(player_type *player_ptr, artifact_typ
         o_ptr->curse_flags.set(TRC::PERMA_CURSE);
 
     if (a_ptr->gen_flags.has(TRG::RANDOM_CURSE0))
-        o_ptr->curse_flags.set(get_curse(player_ptr, 0, o_ptr));
+        o_ptr->curse_flags.set(get_curse(0, o_ptr));
 
     if (a_ptr->gen_flags.has(TRG::RANDOM_CURSE1))
-        o_ptr->curse_flags.set(get_curse(player_ptr, 1, o_ptr));
+        o_ptr->curse_flags.set(get_curse(1, o_ptr));
 
     if (a_ptr->gen_flags.has(TRG::RANDOM_CURSE2))
-        o_ptr->curse_flags.set(get_curse(player_ptr, 2, o_ptr));
+        o_ptr->curse_flags.set(get_curse(2, o_ptr));
 }
 
 /*!
@@ -216,7 +216,7 @@ artifact_type *apply_artifact(player_type *player_ptr, object_type *o_ptr)
     o_ptr->weight = a_ptr->weight;
     o_ptr->xtra2 = a_ptr->act_idx;
 
-    invest_curse_to_fixed_artifact(player_ptr, a_ptr, o_ptr);
+    invest_curse_to_fixed_artifact(a_ptr, o_ptr);
     fixed_artifact_random_abilities(player_ptr, a_ptr, o_ptr);
 
     return a_ptr;
@@ -246,7 +246,7 @@ bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, P
 
     object_type forge;
     auto q_ptr = &forge;
-    q_ptr->prep(player_ptr, i);
+    q_ptr->prep(i);
     q_ptr->name1 = a_idx;
 
     (void)apply_artifact(player_ptr, q_ptr);
@@ -377,7 +377,7 @@ bool make_artifact_special(player_type *player_ptr, object_type *o_ptr)
 
         /*! @note 前述の条件を満たしたら、後のIDのアーティファクトはチェックせずすぐ確定し生成処理に移す /
          * Assign the template. Mega-Hack -- mark the item as an artifact. Hack: Some artifacts get random extra powers. Success. */
-        o_ptr->prep(player_ptr, k_idx);
+        o_ptr->prep(k_idx);
 
         o_ptr->name1 = i;
         return true;

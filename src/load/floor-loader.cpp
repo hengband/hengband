@@ -193,7 +193,7 @@ errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
             return 152;
 
         o_ptr = &floor_ptr->o_list[o_idx];
-        rd_item(player_ptr, o_ptr);
+        rd_item(o_ptr);
 
         auto &list = get_o_idx_list_contains(floor_ptr, o_idx);
         list.add(floor_ptr, o_idx, o_ptr->stack_idx);

@@ -38,13 +38,13 @@
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return concptr 発動名称を返す文字列ポインタ
  */
-static concptr item_activation_dragon_breath(player_type *owner_ptr, object_type *o_ptr)
+static concptr item_activation_dragon_breath(object_type *o_ptr)
 {
     static char desc[256];
     TrFlags flgs; /* for resistance flags */
     int n = 0;
 
-    object_flags(owner_ptr, o_ptr, flgs);
+    object_flags(o_ptr, flgs);
     strcpy(desc, _("", "breathe "));
 
     for (int i = 0; dragonbreath_info[i].flag != 0; i++) {
@@ -66,11 +66,11 @@ static concptr item_activation_dragon_breath(player_type *owner_ptr, object_type
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return concptr 発動名称を返す文字列ポインタ
  */
-static concptr item_activation_aux(player_type *owner_ptr, object_type *o_ptr)
+static concptr item_activation_aux(object_type *o_ptr)
 {
     static char activation_detail[512];
     char timeout[64];
-    const activation_type *const act_ptr = find_activation_info(owner_ptr, o_ptr);
+    const activation_type *const act_ptr = find_activation_info(o_ptr);
 
     if (!act_ptr)
         return _("未定義", "something undefined");
@@ -86,7 +86,7 @@ static concptr item_activation_aux(player_type *owner_ptr, object_type *o_ptr)
             desc = _("冷気のブレス (200) と冷気への耐性", "breathe cold (200) and resist cold");
         break;
     case ACT_BR_DRAGON:
-        desc = item_activation_dragon_breath(owner_ptr, o_ptr);
+        desc = item_activation_dragon_breath(o_ptr);
         break;
     case ACT_AGGRAVATE:
         if (o_ptr->name1 == ART_HYOUSIGI)
@@ -167,15 +167,15 @@ static concptr item_activation_aux(player_type *owner_ptr, object_type *o_ptr)
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return concptr 発動名称を返す文字列ポインタ
  */
-concptr activation_explanation(player_type *owner_ptr, object_type *o_ptr)
+concptr activation_explanation(object_type *o_ptr)
 {
     TrFlags flgs;
-    object_flags(owner_ptr, o_ptr, flgs);
+    object_flags(o_ptr, flgs);
     if (!(has_flag(flgs, TR_ACTIVATE)))
         return (_("なし", "nothing"));
 
-    if (activation_index(owner_ptr, o_ptr)) {
-        return item_activation_aux(owner_ptr, o_ptr);
+    if (activation_index(o_ptr)) {
+        return item_activation_aux(o_ptr);
     }
 
     if (o_ptr->tval == TV_WHISTLE) {
@@ -204,7 +204,7 @@ char index_to_label(int i) { return (i < INVEN_MAIN_HAND) ? (I2A(i)) : (I2A(i - 
  * @param o_ptr 名称を取得する元のオブジェクト構造体参照ポインタ
  * @return 対応する装備部位ID
  */
-int16_t wield_slot(player_type *owner_ptr, object_type *o_ptr)
+int16_t wield_slot(player_type *owner_ptr, const object_type *o_ptr)
 {
     switch (o_ptr->tval) {
     case TV_DIGGING:

@@ -36,7 +36,7 @@ void building_recharge(player_type *player_ptr)
     msg_flag = false;
     clear_bldg(4, 18);
     prt(_("  再充填の費用はアイテムの種類によります。", "  The prices of recharge depend on the type."), 6, 0);
-    item_tester_hook = item_tester_hook_recharge;
+    item_tester_hook = make_item_tester(object_is_rechargeable);
 
     concptr q = _("どのアイテムに魔力を充填しますか? ", "Recharge which item? ");
     concptr s = _("魔力を充填すべきアイテムがない。", "You have nothing to recharge.");

@@ -102,12 +102,12 @@ static void describe_chest(flavor_type *flavor_ptr)
     describe_chest_trap(flavor_ptr);
 }
 
-static void decide_tval_show(player_type *player_ptr, flavor_type *flavor_ptr)
+static void decide_tval_show(flavor_type *flavor_ptr)
 {
     if (has_flag(flavor_ptr->tr_flags, TR_SHOW_MODS))
         flavor_ptr->show_weapon = true;
 
-    if (object_is_smith(player_ptr, flavor_ptr->o_ptr) && (flavor_ptr->o_ptr->xtra3 == 1 + ESSENCE_SLAY_GLOVE))
+    if (object_is_smith(flavor_ptr->o_ptr) && (flavor_ptr->o_ptr->xtra3 == 1 + ESSENCE_SLAY_GLOVE))
         flavor_ptr->show_weapon = true;
 
     if (flavor_ptr->o_ptr->to_h && flavor_ptr->o_ptr->to_d)
@@ -151,7 +151,7 @@ static void describe_bow(player_type *player_ptr, flavor_type *flavor_ptr)
         num_fire = calc_num_fire(player_ptr, flavor_ptr->o_ptr);
     } else {
         TrFlags flgs;
-        object_flags(player_ptr, flavor_ptr->o_ptr, flgs);
+        object_flags(flavor_ptr->o_ptr, flgs);
         if (has_flag(flgs, TR_XTRA_SHOTS))
             num_fire += 100;
     }
@@ -507,7 +507,7 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     }
 
     describe_chest(flavor_ptr);
-    decide_tval_show(player_ptr, flavor_ptr);
+    decide_tval_show(flavor_ptr);
     describe_tval(player_ptr, flavor_ptr);
     describe_named_item_tval(flavor_ptr);
     if (!(mode & OD_DEBUG)) {
@@ -530,7 +530,7 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
         return;
     }
 
-    display_short_flavors(player_ptr, flavor_ptr);
+    display_short_flavors(flavor_ptr);
     decide_item_feeling(flavor_ptr);
     display_item_discount(flavor_ptr);
     display_item_fake_inscription(flavor_ptr);

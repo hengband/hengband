@@ -133,7 +133,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 msg_print(_("食料を生成した。", "A food ration is produced."));
 
                 /* Create the food ration */
-                q_ptr->prep(caster_ptr, lookup_kind(TV_FOOD, SV_FOOD_RATION));
+                q_ptr->prep(lookup_kind(TV_FOOD, SV_FOOD_RATION));
 
                 /* Drop the object from heaven */
                 (void)drop_near(caster_ptr, q_ptr, -1, caster_ptr->y, caster_ptr->x);

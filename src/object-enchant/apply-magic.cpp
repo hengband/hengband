@@ -189,7 +189,7 @@ void apply_magic_to_object(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
     }
 
     if (object_is_ego(o_ptr)) {
-        apply_ego(owner_ptr, o_ptr, lev);
+        apply_ego(o_ptr, lev);
         return;
     }
 
@@ -205,10 +205,10 @@ void apply_magic_to_object(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
         if (k_ptr->gen_flags.has(TRG::PERMA_CURSE))
             o_ptr->curse_flags.set(TRC::PERMA_CURSE);
         if (k_ptr->gen_flags.has(TRG::RANDOM_CURSE0))
-            o_ptr->curse_flags.set(get_curse(owner_ptr, 0, o_ptr));
+            o_ptr->curse_flags.set(get_curse(0, o_ptr));
         if (k_ptr->gen_flags.has(TRG::RANDOM_CURSE1))
-            o_ptr->curse_flags.set(get_curse(owner_ptr, 1, o_ptr));
+            o_ptr->curse_flags.set(get_curse(1, o_ptr));
         if (k_ptr->gen_flags.has(TRG::RANDOM_CURSE2))
-            o_ptr->curse_flags.set(get_curse(owner_ptr, 2, o_ptr));
+            o_ptr->curse_flags.set(get_curse(2, o_ptr));
     }
 }

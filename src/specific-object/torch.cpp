@@ -78,7 +78,7 @@ void update_lite_radius(player_type *creature_ptr)
         object_type *o_ptr;
         o_ptr = &creature_ptr->inventory_list[i];
         TrFlags flgs;
-        object_flags(creature_ptr, o_ptr, flgs);
+        object_flags(o_ptr, flgs);
 
         if (!o_ptr->k_idx)
             continue;

@@ -23,9 +23,9 @@
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 発動効果のIDを返す
  */
-int activation_index(player_type *player_ptr, object_type *o_ptr)
+int activation_index(const object_type *o_ptr)
 {
-    if (object_is_smith(player_ptr, o_ptr)) {
+    if (object_is_smith(o_ptr)) {
         switch (o_ptr->xtra3 - 1) {
         case ESSENCE_TMP_RES_ACID:
             return ACT_RESIST_ACID;
@@ -58,9 +58,9 @@ int activation_index(player_type *player_ptr, object_type *o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 発動効果構造体のポインタを返す
  */
-const activation_type *find_activation_info(player_type *player_ptr, object_type *o_ptr)
+const activation_type *find_activation_info(const object_type *o_ptr)
 {
-    const int index = activation_index(player_ptr, o_ptr);
+    const int index = activation_index(o_ptr);
     const activation_type *p;
     for (p = activation_info; p->flag != NULL; ++p)
         if (p->index == index)

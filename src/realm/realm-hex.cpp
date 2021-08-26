@@ -76,7 +76,7 @@
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @return 呪縛可能な武器ならばTRUEを返す
  */
-static bool item_tester_hook_weapon_except_bow(player_type *player_ptr, object_type *o_ptr)
+static bool item_tester_hook_weapon_except_bow(player_type *player_ptr, const object_type *o_ptr)
 {
     /* Unused */
     (void)player_ptr;
@@ -206,7 +206,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 return "";
 
             describe_flavor(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
-            object_flags(caster_ptr, o_ptr, f);
+            object_flags(o_ptr, f);
 
             if (!get_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really？"), o_name)))
                 return "";
@@ -253,7 +253,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                     }
                 }
 
-                o_ptr->curse_flags.set(get_curse(caster_ptr, curse_rank, o_ptr));
+                o_ptr->curse_flags.set(get_curse(curse_rank, o_ptr));
             }
 
             caster_ptr->update |= (PU_BONUS);
@@ -504,7 +504,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             object_type *o_ptr;
             TrFlags f;
 
-            item_tester_hook = object_is_armour;
+            item_tester_hook = make_item_tester(object_is_armour);
             q = _("どれを呪いますか？", "Which piece of armour do you curse?");
             s = _("防具を装備していない。", "You're not wearing any armor.");
 
@@ -514,7 +514,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 
             o_ptr = &caster_ptr->inventory_list[item];
             describe_flavor(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
-            object_flags(caster_ptr, o_ptr, f);
+            object_flags(o_ptr, f);
 
             if (!get_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really？"), o_name)))
                 return "";
@@ -562,7 +562,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                     }
                 }
 
-                o_ptr->curse_flags.set(get_curse(caster_ptr, curse_rank, o_ptr));
+                o_ptr->curse_flags.set(get_curse(curse_rank, o_ptr));
             }
 
             caster_ptr->update |= (PU_BONUS);
@@ -705,7 +705,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             TrFlags f;
             object_type *o_ptr;
 
-            item_tester_hook = item_tester_hook_cursed;
+            item_tester_hook = make_item_tester(object_is_cursed);
             q = _("どの装備品から吸収しますか？", "Which cursed equipment do you drain mana from?");
             s = _("呪われたアイテムを装備していない。", "You have no cursed equipment.");
 
@@ -713,7 +713,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             if (!o_ptr)
                 return "";
 
-            object_flags(caster_ptr, o_ptr, f);
+            object_flags(o_ptr, f);
 
             caster_ptr->csp += (caster_ptr->lev / 5) + randint1(caster_ptr->lev / 5);
             if (has_flag(f, TR_TY_CURSE) || o_ptr->curse_flags.has(TRC::TY_CURSE))

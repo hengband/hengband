@@ -27,7 +27,7 @@
  */
 bool bless_weapon(player_type *caster_ptr)
 {
-    item_tester_hook = object_is_weapon;
+    item_tester_hook = make_item_tester(object_is_weapon);
 
     concptr q = _("どのアイテムを祝福しますか？", "Bless which weapon? ");
     concptr s = _("祝福できる武器がありません。", "You have weapon to bless.");
@@ -40,7 +40,7 @@ bool bless_weapon(player_type *caster_ptr)
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(caster_ptr, o_name, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
     TrFlags flgs;
-    object_flags(caster_ptr, o_ptr, flgs);
+    object_flags(o_ptr, flgs);
 
     if (object_is_cursed(o_ptr)) {
         if ((o_ptr->curse_flags.has(TRC::HEAVY_CURSE) && (randint1(100) < 33)) || has_flag(flgs, TR_ADD_L_CURSE) || has_flag(flgs, TR_ADD_H_CURSE)

@@ -204,7 +204,7 @@ void wiz_create_item(player_type *caster_ptr)
     object_type forge;
     object_type *q_ptr;
     q_ptr = &forge;
-    q_ptr->prep(caster_ptr, k_idx);
+    q_ptr->prep(k_idx);
     apply_magic_to_object(caster_ptr, q_ptr, caster_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
     (void)drop_near(caster_ptr, q_ptr, -1, caster_ptr->y, caster_ptr->x);
     msg_print("Allocated.");
@@ -489,7 +489,7 @@ void wiz_learn_items_all(player_type *caster_ptr)
         object_kind *k_ptr = &k_info[i];
         if (k_ptr->level <= command_arg) {
             q_ptr = &forge;
-            q_ptr->prep(caster_ptr, i);
+            q_ptr->prep(i);
             object_aware(caster_ptr, q_ptr);
         }
     }

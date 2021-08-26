@@ -15,7 +15,7 @@ void set_equipment_influence(player_type *creature_ptr, self_info_type *self_ptr
         if (o_ptr->k_idx == 0)
             continue;
 
-        object_flags(creature_ptr, o_ptr, tflgs);
+        object_flags(o_ptr, tflgs);
         for (int j = 0; j < TR_FLAG_SIZE; j++)
             self_ptr->flags[j] |= tflgs[j];
     }

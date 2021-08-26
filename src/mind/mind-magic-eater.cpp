@@ -19,7 +19,7 @@
  */
 bool import_magic_device(player_type *user_ptr)
 {
-    item_tester_hook = item_tester_hook_recharge;
+    item_tester_hook = make_item_tester(object_is_rechargeable);
     concptr q = _("どのアイテムの魔力を取り込みますか? ", "Gain power of which item? ");
     concptr s = _("魔力を取り込めるアイテムがない。", "There's nothing with power to absorb.");
     OBJECT_IDX item;

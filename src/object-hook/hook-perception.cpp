@@ -11,76 +11,61 @@
  * @param o_ptr 判定するアイテムの情報参照ポインタ
  * @return 並ならばTRUEを返す
  */
-bool item_tester_hook_nameless_weapon_armour(player_type *player_ptr, object_type *o_ptr)
+bool object_is_nameless_weapon_armour(const object_type *o_ptr)
 {
-    /* Unused */
-    (void)player_ptr;
-
     /* Require weapon or armour */
-    if (!object_is_weapon_armour_ammo(player_ptr, o_ptr))
+    if (!object_is_weapon_armour_ammo(o_ptr))
         return false;
 
     /* Require nameless object if the object is well known */
-    if (object_is_known(o_ptr) && !object_is_nameless(player_ptr, o_ptr))
+    if (object_is_known(o_ptr) && !object_is_nameless(o_ptr))
         return false;
 
     return true;
 }
 
 /*!
- * @brief アイテムが鑑定済みかを判定する /
+ * @brief アイテムが未鑑定かを判定する /
  * @param o_ptr 判定するアイテムの情報参照ポインタ
- * @return 実際に鑑定済みならばTRUEを返す
+ * @return 実際に未鑑定ならばTRUEを返す
  */
-bool item_tester_hook_identify(player_type *player_ptr, object_type *o_ptr)
+bool object_is_not_identified(const object_type *o_ptr)
 {
-    /* Unused */
-    (void)player_ptr;
-
-    return (bool)!object_is_known(o_ptr);
+    return !object_is_known(o_ptr);
 }
 
 /*!
- * @brief アイテムが鑑定済みの武器防具かを判定する /
+ * @brief アイテムが未鑑定の武器防具かを判定する /
  * @param o_ptr 判定するアイテムの情報参照ポインタ
- * @return 実際に鑑定済みならばTRUEを返す
+ * @return 実際に未鑑定の武器防具ならばTRUEを返す
  */
-bool item_tester_hook_identify_weapon_armour(player_type *player_ptr, object_type *o_ptr)
+bool object_is_not_identified_weapon_armor(const object_type *o_ptr)
 {
-    /* Unused */
-    (void)player_ptr;
-
-    if (object_is_known(o_ptr))
-
-        return false;
-    return object_is_weapon_armour_ammo(player_ptr, o_ptr);
-}
-
-/*!
- * @brief アイテムが*鑑定*済みかを判定する /
- * @param o_ptr 判定するアイテムの情報参照ポインタ
- * @return 実際に鑑定済みならばTRUEを返す
- */
-bool item_tester_hook_identify_fully(player_type *player_ptr, object_type *o_ptr)
-{
-    /* Unused */
-    (void)player_ptr;
-
-    return (bool)(!object_is_known(o_ptr) || !object_is_fully_known(o_ptr));
-}
-
-/*!
- * @brief アイテムが*鑑定*済みの武器防具かを判定する /
- * @param o_ptr 判定するアイテムの情報参照ポインタ
- * @return 実際に鑑定済みならばTRUEを返す
- */
-bool item_tester_hook_identify_fully_weapon_armour(player_type *player_ptr, object_type *o_ptr)
-{
-    /* Unused */
-    (void)player_ptr;
-
-    if (!item_tester_hook_identify_fully(player_ptr, o_ptr))
+    if (!object_is_not_identified(o_ptr))
         return false;
 
-    return object_is_weapon_armour_ammo(player_ptr, o_ptr);
+    return object_is_weapon_armour_ammo(o_ptr);
+}
+
+/*!
+ * @brief アイテムが未*鑑定*かを判定する /
+ * @param o_ptr 判定するアイテムの情報参照ポインタ
+ * @return 実際に未*鑑定*ならばTRUEを返す
+ */
+bool object_is_not_fully_identified(const object_type *o_ptr)
+{
+    return !object_is_known(o_ptr) || !object_is_fully_known(o_ptr);
+}
+
+/*!
+ * @brief アイテムが未*鑑定*の武器防具かを判定する /
+ * @param o_ptr 判定するアイテムの情報参照ポインタ
+ * @return 実際に未*鑑定*の武器防具ならばTRUEを返す
+ */
+bool object_is_not_fully_identified_weapon_armour(const object_type *o_ptr)
+{
+    if (!object_is_not_fully_identified(o_ptr))
+        return false;
+
+    return object_is_weapon_armour_ammo(o_ptr);
 }

@@ -54,7 +54,7 @@ static destroy_type *initialize_destroy_type(destroy_type *destroy_ptr, object_t
 
 static bool check_destory_item(player_type *creature_ptr, destroy_type *destroy_ptr)
 {
-    if (destroy_ptr->force || (!confirm_destroy && (object_value(creature_ptr, destroy_ptr->o_ptr) <= 0)))
+    if (destroy_ptr->force || (!confirm_destroy && (object_value(destroy_ptr->o_ptr) <= 0)))
         return true;
 
     describe_flavor(creature_ptr, destroy_ptr->o_name, destroy_ptr->o_ptr, OD_OMIT_PREFIX);
@@ -167,9 +167,9 @@ static void process_destroy_magic_book(player_type *creature_ptr, destroy_type *
     if ((destroy_ptr->q_ptr->to_a != 0) || (destroy_ptr->q_ptr->to_h != 0) || (destroy_ptr->q_ptr->to_d != 0))
         chg_virtue(creature_ptr, V_ENCHANT, -1);
 
-    if (object_value_real(creature_ptr, destroy_ptr->q_ptr) > 30000)
+    if (object_value_real(destroy_ptr->q_ptr) > 30000)
         chg_virtue(creature_ptr, V_SACRIFICE, 2);
-    else if (object_value_real(creature_ptr, destroy_ptr->q_ptr) > 10000)
+    else if (object_value_real(destroy_ptr->q_ptr) > 10000)
         chg_virtue(creature_ptr, V_SACRIFICE, 1);
 }
 

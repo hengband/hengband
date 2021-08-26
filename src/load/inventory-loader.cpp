@@ -39,7 +39,7 @@ static errr rd_inventory(player_type *player_ptr)
         q_ptr = &forge;
         q_ptr->wipe();
 
-        rd_item(player_ptr, q_ptr);
+        rd_item(q_ptr);
         if (!q_ptr->k_idx)
             return (53);
 
