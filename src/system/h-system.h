@@ -1,19 +1,10 @@
 ﻿/*!
  * @file h-system.h
  * @brief 変愚蛮怒用システムヘッダーファイル /
- * The most basic "include" file. This file simply includes other low level header files.
- * @date 2014/08/16
- * @author
- * 不明(変愚蛮怒スタッフ？)
- * @details
- * Include the basic "system" files.
- * Make sure all "system" constants/macros are defined.
- * Make sure all "system" functions have "extern" declarations.
- * This file is a big hack to make other files less of a hack.
- * This file has been rebuilt -- it may need a little more work.
- *
- * It is (very) unlikely that VMS will work without help, primarily
- * because VMS does not use the "ASCII" character set.
+ * The most basic "include" file.
+ * This file simply includes other low level header files.
+ * @date 2021/08/26
+ * @author Hourier
  */
 
 #pragma once
