@@ -19,49 +19,48 @@
 #ifndef INCLUDED_H_SYSTEM_H
 #define INCLUDED_H_SYSTEM_H
 
-#include <stdio.h>
 #include <ctype.h>
-#include <wctype.h>
 #include <errno.h>
 #include <stddef.h>
-# include <stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <wctype.h>
 
 #ifdef SET_UID
 
-# include <sys/types.h>
+#include <sys/types.h>
 
-# if defined(Pyramid) || defined(NCR3K) || defined(ibm032) || \
-     defined(__osf__) || defined(ISC) || defined(linux)
-#  include <sys/time.h>
-# endif
+#if defined(Pyramid) || defined(NCR3K) || defined(ibm032) || defined(__osf__) || defined(ISC) || defined(linux)
+#include <sys/time.h>
+#endif
 
-#  include <sys/timeb.h>
+#include <sys/timeb.h>
 
 #endif /* SET_UID */
 
 #include <time.h>
 
 #if defined(WINDOWS)
-# include <io.h>
+#include <io.h>
 #endif
 
 #if !defined(VM)
-# if defined(__TURBOC__) || defined(__WATCOMC__)
-#  include <mem.h>
-# else
-#  include <memory.h>
-# endif
+#if defined(__TURBOC__) || defined(__WATCOMC__)
+#include <mem.h>
+#else
+#include <memory.h>
+#endif
 #endif
 
 #include <fcntl.h>
 
 #ifdef SET_UID
 
-#include <sys/param.h>
-#include <sys/file.h>
 #include <pwd.h>
-#include <unistd.h>
+#include <sys/file.h>
+#include <sys/param.h>
 #include <sys/stat.h>
+#include <unistd.h>
 
 #endif /* SET_UID */
 
