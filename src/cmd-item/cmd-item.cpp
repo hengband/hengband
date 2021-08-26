@@ -76,7 +76,7 @@ void do_cmd_inven(player_type *creature_ptr)
         command_wrk = USE_INVEN;
 
     screen_save();
-    (void)show_inventory(creature_ptr, 0, USE_FULL, TV_NONE);
+    (void)show_inventory(creature_ptr, 0, USE_FULL, TV_NONE, ItemTester());
     WEIGHT weight = calc_inventory_weight(creature_ptr);
     WEIGHT weight_lim = calc_weight_limit(creature_ptr);
 #ifdef JP
@@ -237,10 +237,9 @@ void do_cmd_use(player_type *creature_ptr)
     if (creature_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
         set_action(creature_ptr, ACTION_NONE);
 
-    item_tester_hook = item_tester_hook_use;
     concptr q = _("どれを使いますか？", "Use which item? ");
     concptr s = _("使えるものがありません。", "You have nothing to use.");
-    o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_EQUIP | USE_FLOOR | IGNORE_BOTHHAND_SLOT), TV_NONE);
+    o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_EQUIP | USE_FLOOR | IGNORE_BOTHHAND_SLOT), TV_NONE, ItemTester(item_tester_hook_use));
     if (!o_ptr)
         return;
 
@@ -293,11 +292,9 @@ void do_cmd_activate(player_type *user_ptr)
     if (user_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
         set_action(user_ptr, ACTION_NONE);
 
-    item_tester_hook = make_item_tester(object_is_activatable);
-
     concptr q = _("どのアイテムを始動させますか? ", "Activate which item? ");
     concptr s = _("始動できるアイテムを装備していない。", "You have nothing to activate.");
-    if (!choose_object(user_ptr, &item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), TV_NONE))
+    if (!choose_object(user_ptr, &item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), TV_NONE, ItemTester(object_is_activatable)))
         return;
 
     exe_activate(user_ptr, item);

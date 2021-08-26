@@ -13,15 +13,35 @@
 /*
  * Used during calls to "get_item()" and "show_inven()" and "show_equip()", and the choice window routines.
  */
-ItemTester item_tester_hook;
+// ItemTester item_tester_hook;
+
+ItemTester::ItemTester(std::function<bool(const object_type *)> pred)
+{
+    set_tester(pred);
+}
+
+ItemTester::ItemTester(std::function<bool(player_type *, const object_type *)> pred)
+    : tester(std::move(pred))
+{
+}
+
+void ItemTester::set_tester(std::function<bool(const object_type *)> pred)
+{
+    tester = [pred = std::move(pred)](player_type *, const object_type *o_ptr) { return pred(o_ptr); };
+}
+
+void ItemTester::set_tester(std::function<bool(player_type *, const object_type *)> pred)
+{
+    tester = std::move(pred);
+}
 
 /*!
- * @brief アイテムがitem_tester_hookグローバル関数ポインタの条件を満たしているかを返す汎用関数
+ * @brief アイテムが条件を満たしているか調べる
  * Check an item against the item tester info
  * @param o_ptr 判定を行いたいオブジェクト構造体参照ポインタ
- * @return item_tester_hookの参照先が特にないならTRUE、その他いくつかの例外に応じてTRUE/FALSEを返す。
+ * @return アイテムが条件を満たしているならtrue、その他いくつかの例外に応じてtrue/falseを返す。
  */
-bool item_tester_okay(player_type *player_ptr, const object_type *o_ptr, tval_type tval)
+bool ItemTester::okay(player_type *player_ptr, const object_type *o_ptr, tval_type tval) const
 {
     if (!o_ptr->k_idx)
         return false;
@@ -38,19 +58,8 @@ bool item_tester_okay(player_type *player_ptr, const object_type *o_ptr, tval_ty
             return false;
     }
 
-    if (item_tester_hook == NULL)
+    if (!this->tester)
         return true;
 
-    return item_tester_hook(player_ptr, o_ptr);
-}
-
-/*!
- * @brief オブジェクト判定関数を item_tester_hook に渡すためのラッパー関数を生成する
- *
- * @param pred オブジェクトへのポインタを受け取り、オブジェクトが条件に適合するかどうかを返す関数
- * @return item_tester_hook に渡すラッパー関数を返す
- */
-ItemTester make_item_tester(std::function<bool(const object_type *)> pred)
-{
-    return [pred = std::move(pred)](player_type *, const object_type *o_ptr) { return pred(o_ptr); };
+    return this->tester(player_ptr, o_ptr);
 }

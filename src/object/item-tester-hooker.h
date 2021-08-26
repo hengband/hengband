@@ -4,12 +4,20 @@
 
 #include <functional>
 
-typedef struct object_type object_type;
-typedef struct player_type player_type;
+struct object_type;
+struct player_type;
 
-using ItemTester = std::function<bool(player_type *, const object_type *)>;
-extern ItemTester item_tester_hook;
+class ItemTester {
+public:
+    ItemTester() = default;
+    ItemTester(std::function<bool(const object_type *)> pred);
+    ItemTester(std::function<bool(player_type *, const object_type *)> pred);
 
-bool item_tester_okay(player_type *player_ptr, const object_type *o_ptr, tval_type tval);
+    bool okay(player_type *player_ptr, const object_type *o_ptr, tval_type tval) const;
 
-ItemTester make_item_tester(std::function<bool(const object_type *)> pred);
+    void set_tester(std::function<bool(const object_type *)> pred);
+    void set_tester(std::function<bool(player_type *, const object_type *)> pred);
+
+private:
+    std::function<bool(player_type *, const object_type *)> tester;
+};

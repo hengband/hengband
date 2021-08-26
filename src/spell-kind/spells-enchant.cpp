@@ -26,13 +26,11 @@
  */
 bool artifact_scroll(player_type *caster_ptr)
 {
-    item_tester_hook = make_item_tester(object_is_nameless_weapon_armour);
-
     concptr q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
     concptr s = _("強化できるアイテムがない。", "You have nothing to enchant.");
     object_type *o_ptr;
     OBJECT_IDX item;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), TV_NONE);
+    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), TV_NONE, ItemTester(object_is_nameless_weapon_armour));
     if (!o_ptr)
         return false;
 
@@ -121,15 +119,16 @@ bool artifact_scroll(player_type *caster_ptr)
  */
 bool mundane_spell(player_type *owner_ptr, bool only_equip)
 {
+    ItemTester item_tester;
     if (only_equip)
-        item_tester_hook = make_item_tester(object_is_weapon_armour_ammo);
+        item_tester.set_tester(object_is_weapon_armour_ammo);
 
     OBJECT_IDX item;
     object_type *o_ptr;
     concptr q = _("どのアイテムを凡庸化しますか？", "Mundanify which item? ");
     concptr s = _("凡庸化できるアイテムがない。", "You have nothing to mundanify.");
 
-    o_ptr = choose_object(owner_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), TV_NONE);
+    o_ptr = choose_object(owner_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), TV_NONE, item_tester);
     if (!o_ptr)
         return false;
 

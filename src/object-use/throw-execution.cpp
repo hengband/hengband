@@ -354,10 +354,9 @@ bool ObjectThrowEntity::check_throw_boomerang(concptr *q, concptr *s)
     }
 
     if (has_melee_weapon(this->creature_ptr, INVEN_MAIN_HAND) && has_melee_weapon(this->creature_ptr, INVEN_SUB_HAND)) {
-        item_tester_hook = make_item_tester(object_is_boomerang);
         *q = _("どの武器を投げますか? ", "Throw which item? ");
         *s = _("投げる武器がない。", "You have nothing to throw.");
-        this->o_ptr = choose_object(this->creature_ptr, &this->item, *q, *s, USE_EQUIP, TV_NONE);
+        this->o_ptr = choose_object(this->creature_ptr, &this->item, *q, *s, USE_EQUIP, TV_NONE, ItemTester(object_is_boomerang));
         if (!this->o_ptr) {
             flush();
             return false;

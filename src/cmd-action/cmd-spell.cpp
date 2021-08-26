@@ -622,17 +622,17 @@ void do_cmd_browse(player_type *caster_ptr)
     }
 
     /* Restrict choices to "useful" books */
+    ItemTester item_tester;
     if (caster_ptr->realm2 == REALM_NONE)
         tval = mp_ptr->spell_book;
     else
-        item_tester_hook = item_tester_learn_spell;
+        item_tester.set_tester(item_tester_learn_spell);
 
     q = _("どの本を読みますか? ", "Browse which book? ");
     s = _("読める本がない。", "You have no books that you can read.");
 
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | (caster_ptr->pclass == CLASS_FORCETRAINER ? USE_FORCE : 0)), tval);
+    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | (caster_ptr->pclass == CLASS_FORCETRAINER ? USE_FORCE : 0)), tval, item_tester);
 
-    item_tester_hook = NULL;
     if (!o_ptr) {
         if (item == INVEN_FORCE) /* the_force */
         {
@@ -791,15 +791,16 @@ void do_cmd_study(player_type *caster_ptr)
     msg_print(NULL);
 
     /* Restrict choices to "useful" books */
+    ItemTester item_tester;
     if (caster_ptr->realm2 == REALM_NONE)
         tval = mp_ptr->spell_book;
     else
-        item_tester_hook = item_tester_learn_spell;
+        item_tester.set_tester(item_tester_learn_spell);
 
     q = _("どの本から学びますか? ", "Study which book? ");
     s = _("読める本がない。", "You have no books that you can read.");
 
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), tval);
+    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), tval, item_tester);
 
     if (!o_ptr)
         return;

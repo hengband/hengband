@@ -100,27 +100,20 @@ bool identify_item(player_type *owner_ptr, object_type *o_ptr)
  */
 bool ident_spell(player_type *caster_ptr, bool only_equip, tval_type item_tester_tval)
 {
-    if (only_equip)
-        item_tester_hook = make_item_tester(object_is_not_identified_weapon_armor);
-    else
-        item_tester_hook = make_item_tester(object_is_not_identified);
+    ItemTester item_tester(only_equip ? object_is_not_identified_weapon_armor : object_is_not_identified);
 
     concptr q;
-    if (can_get_item(caster_ptr, item_tester_tval)) {
+    if (can_get_item(caster_ptr, item_tester_tval, item_tester)) {
         q = _("どのアイテムを鑑定しますか? ", "Identify which item? ");
     } else {
-        if (only_equip)
-            item_tester_hook = make_item_tester(object_is_weapon_armour_ammo);
-        else
-            item_tester_hook = NULL;
-
+        item_tester.set_tester(only_equip ? object_is_weapon_armour_ammo : nullptr);
         q = _("すべて鑑定済みです。 ", "All items are identified. ");
     }
 
     concptr s = _("鑑定するべきアイテムがない。", "You have nothing to identify.");
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), TV_NONE);
+    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), TV_NONE, item_tester);
     if (!o_ptr)
         return false;
 
@@ -152,20 +145,13 @@ bool ident_spell(player_type *caster_ptr, bool only_equip, tval_type item_tester
  */
 bool identify_fully(player_type *caster_ptr, bool only_equip, tval_type item_tester_tval)
 {
-    if (only_equip)
-        item_tester_hook = make_item_tester(object_is_not_fully_identified_weapon_armour);
-    else
-        item_tester_hook = make_item_tester(object_is_not_fully_identified);
+    ItemTester item_tester(only_equip ? object_is_not_fully_identified_weapon_armour : object_is_not_fully_identified);
 
     concptr q;
-    if (can_get_item(caster_ptr, item_tester_tval)) {
+    if (can_get_item(caster_ptr, item_tester_tval, item_tester)) {
         q = _("どのアイテムを*鑑定*しますか? ", "*Identify* which item? ");
     } else {
-        if (only_equip)
-            item_tester_hook = make_item_tester(object_is_weapon_armour_ammo);
-        else
-            item_tester_hook = NULL;
-
+        item_tester.set_tester(only_equip ? object_is_weapon_armour_ammo : nullptr);
         q = _("すべて*鑑定*済みです。 ", "All items are *identified*. ");
     }
 
@@ -173,7 +159,7 @@ bool identify_fully(player_type *caster_ptr, bool only_equip, tval_type item_tes
 
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), TV_NONE);
+    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), TV_NONE, item_tester);
     if (!o_ptr)
         return false;
 
