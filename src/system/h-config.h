@@ -1,52 +1,18 @@
 ﻿/*!
  * @file h-config.h
  * @brief OSごとの差異を吸収してコンパイルするためのプリプロ群
- * The most basic "include" file. This file simply includes other low level header files.
+ * The most basic "include" file.
+ * This file simply includes other low level header files.
  * @date 2021/08/26
- * @author
- * 不明(変愚蛮怒スタッフ？)
+ * @author Hourier
  * @details
- * <pre>
- * Choose the hardware, operating system, and compiler.
- * Also, choose various "system level" compilation options.
- * A lot of these definitions take effect in "h-system.h"
- * Note that you may find it simpler to define some of these
- * options in the "Makefile", especially any options describing
- * what "system" is being used.
- * no system definitions are needed for 4.3BSD, SUN OS, DG/UX
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- *
- * This software may be copied and distributed for educational, research,
- * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.  Other copyrights may also apply.
  */
 
-#ifndef INCLUDED_H_CONFIG_H
-#define INCLUDED_H_CONFIG_H
+#pragma once
 
-/*
- * OPTION: Compile on Windows (automatic)
- */
-#ifndef WINDOWS
-/* #define WINDOWS */
-#endif
-
-/*
- * Extract the "WINDOWS" flag from the compiler
- */
-#if defined(_Windows) || defined(__WINDOWS__) || defined(__WIN32__) || defined(WIN32) || defined(__WINNT__) || defined(__NT__)
-#ifndef WINDOWS
+#if defined(WIN32) && !defined(WINDOWS)
 #define WINDOWS
-#endif
-#endif
-
-/*
- * OPTION: Define "L64" if a "long" is 64-bits.  See "h-types.h".
- * The only such platform that angband is ported to is currently
- * DEC Alpha AXP running OSF/1 (OpenVMS uses 32-bit longs).
- */
-#if defined(__alpha) && defined(__osf__)
-#define L64
 #endif
 
 /*
@@ -60,7 +26,7 @@
  * Basically, SET_UID should *only* be set for "Unix" machines,
  * or for the "Atari" platform which is Unix-like, apparently
  */
-#if !defined(WINDOWS) && !defined(VM)
+#ifndef WINDOWS
 #define SET_UID
 #endif
 
@@ -76,68 +42,75 @@
 #undef PATH_SEP
 #define PATH_SEP "/"
 
-#if defined(WINDOWS) || defined(WINNT)
+#ifdef WINDOWS
 #undef PATH_SEP
 #define PATH_SEP "\\"
 #endif
 
-/*
- * Linux has "stricmp()" with a different name
- */
-#if defined(linux)
-#define stricmp strcasecmp
-#endif
+// clang-format off
 
 /*
  * OPTION: Define "HAVE_USLEEP" only if "usleep()" exists.
  *
  * Note that this is only relevant for "SET_UID" machines.
  */
-#if defined(SET_UID) && !defined(HAVE_CONFIG_H)
-#if !defined(ISC)
-#define HAVE_USLEEP
-#endif
+#ifdef SET_UID
+  #ifdef SET_UID
+  #define PRIVATE_USER_PATH "~/.angband"
+  #define SAVEFILE_USE_UID
+  #endif
+
+  #ifndef HAVE_CONFIG_H
+  #ifndef ISC
+  #define HAVE_USLEEP
+  #endif
+  #endif
 #endif
 
 #ifdef JP
-#if defined(EUC)
-#define iskanji(x) (((unsigned char)(x) >= 0xa1 && (unsigned char)(x) <= 0xfe) || (unsigned char)(x) == 0x8e)
-#define iskana(x) (0)
-#elif defined(SJIS)
-#define iskanji(x) ((0x81 <= (unsigned char)(x) && (unsigned char)(x) <= 0x9f) || (0xe0 <= (unsigned char)(x) && (unsigned char)(x) <= 0xfc))
-#define iskana(x) (((unsigned char)(x) >= 0xA0) && ((unsigned char)(x) <= 0xDF))
-#else
-#error Oops! Please define "EUC" or "SJIS" for kanji-code of your system.
+  #ifdef SJIS
+  #define iskanji(x) ((0x81 <= (unsigned char)(x) && (unsigned char)(x) <= 0x9f) || (0xe0 <= (unsigned char)(x) && (unsigned char)(x) <= 0xfc))
+  #define iskana(x) (((unsigned char)(x) >= 0xA0) && ((unsigned char)(x) <= 0xDF))
+  #elif defined EUC
+  #define iskanji(x) (((unsigned char)(x) >= 0xa1 && (unsigned char)(x) <= 0xfe) || (unsigned char)(x) == 0x8e)
+  #define iskana(x) (0)
+  #else
+  #error Oops! Please define "EUC" or "SJIS" for kanji-code of your system.
+  #endif
 #endif
-#endif
-
-#endif /* INCLUDED_H_CONFIG_H */
 
 #ifndef HAVE_CONFIG_H
+  #ifdef JP
+  #define USE_XIM
+  #endif
 
-#ifdef JP
-#define USE_XIM
+  #if defined(USE_XIM)
+  #define USE_LOCALE
+  #endif
 #endif
-
-#if defined(USE_XIM)
-#define USE_LOCALE
-#endif
-
-#endif /* HAVE_CONFIG_H */
 
 /*
- * Look through the following lines, and where a comment includes the
- * tag "OPTION:", examine the associated "#define" statements, and decide
- * whether you wish to keep, comment, or uncomment them.  You should not
- * have to modify any lines not indicated by "OPTION".
- *
- * Note: Also examine the "system" configuration file "h-config.h"
- * and the variable initialization file "variable.c".  If you change
- * anything in "variable.c", you only need to recompile that file.
- *
- * And finally, remember that the "Makefile" will specify some rather
- * important compile time options, like what visual module to use.
+ * OPTION: Default font (when using X11).
  */
+#ifdef USE_XFT
+  #ifdef JP
+  #define DEFAULT_X11_FONT "monospace-24:lang=ja:spacing=90"
+  #define DEFAULT_X11_FONT_SUB "sans-serif-16:lang=ja"
+  #else
+  #define DEFAULT_X11_FONT "monospace-24:lang=en:spacing=90"
+  #define DEFAULT_X11_FONT_SUB "sans-serif-16:lang=en"
+  #endif
+#else
+  #ifdef JP
+  #define DEFAULT_X11_FONT "-*-*-medium-r-normal--24-*-*-*-*-*-iso8859-1,-*-*-medium-r-normal--24-*-*-*-*-*-jisx0208.1983-0"
+  #define DEFAULT_X11_FONT_SUB "-*-*-medium-r-normal--16-*-*-*-*-*-iso8859-1,-*-*-medium-r-normal--16-*-*-*-*-*-jisx0208.1983-0"
+  #else
+  #define DEFAULT_X11_FONT "-*-*-medium-r-normal--24-*-*-*-*-*-iso8859-1"
+  #define DEFAULT_X11_FONT_SUB "-*-*-medium-r-normal--16-*-*-*-*-*-iso8859-1"
+  #endif
+#endif
+
+// clang-format on
 
 /*
  * OPTION: for multi-user machines running the game setuid to some other
@@ -189,46 +162,9 @@
 #endif
 
 /*
- * OPTION: Create and use a hidden directory in the users home directory
- * for storing pref-files and character-dumps.
- */
-#ifdef SET_UID
-#define PRIVATE_USER_PATH "~/.angband"
-#endif /* SET_UID */
-
-/*
- * On multiuser systems, add the "uid" to savefile names
- */
-#ifdef SET_UID
-#define SAVEFILE_USE_UID
-#endif
-
-/*
  * OPTION: Person to bother if something goes wrong.
  */
-/* #define MAINTAINER	"rr9@angband.org" */
 #define MAINTAINER "echizen@users.sourceforge.jp"
-
-/*
- * OPTION: Default font (when using X11).
- */
-#ifdef USE_XFT
-#ifdef JP
-#define DEFAULT_X11_FONT "monospace-24:lang=ja:spacing=90"
-#define DEFAULT_X11_FONT_SUB "sans-serif-16:lang=ja"
-#else
-#define DEFAULT_X11_FONT "monospace-24:lang=en:spacing=90"
-#define DEFAULT_X11_FONT_SUB "sans-serif-16:lang=en"
-#endif
-#else
-#ifdef JP
-#define DEFAULT_X11_FONT "-*-*-medium-r-normal--24-*-*-*-*-*-iso8859-1,-*-*-medium-r-normal--24-*-*-*-*-*-jisx0208.1983-0"
-#define DEFAULT_X11_FONT_SUB "-*-*-medium-r-normal--16-*-*-*-*-*-iso8859-1,-*-*-medium-r-normal--16-*-*-*-*-*-jisx0208.1983-0"
-#else
-#define DEFAULT_X11_FONT "-*-*-medium-r-normal--24-*-*-*-*-*-iso8859-1"
-#define DEFAULT_X11_FONT_SUB "-*-*-medium-r-normal--16-*-*-*-*-*-iso8859-1"
-#endif
-#endif
 
 /*
  * OPTION: Default fonts (when using X11)
