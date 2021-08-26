@@ -4,4 +4,4 @@
 
 typedef struct player_type player_type;
 class ItemTester;
-void display_inventory(player_type *creature_ptr, tval_type tval, const ItemTester& item_tester);
+void display_inventory(player_type *creature_ptr, const ItemTester& item_tester);

@@ -10,6 +10,7 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "object-enchant/special-object-flags.h"
+#include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
@@ -461,7 +462,7 @@ void do_cmd_aim_wand(player_type *creature_ptr)
 
     q = _("どの魔法棒で狙いますか? ", "Aim which wand? ");
     s = _("使える魔法棒がない。", "You have no wand to aim.");
-    if (!choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_WAND))
+    if (!choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TvalItemTester(TV_WAND)))
         return;
 
     exe_aim_wand(creature_ptr, item);

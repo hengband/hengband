@@ -19,6 +19,8 @@
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 
+#include <memory>
+
 /*!
  * @brief アーティファクト生成の巻物処理 /
  * @param caster_ptr プレーヤーへの参照ポインタ
@@ -30,7 +32,7 @@ bool artifact_scroll(player_type *caster_ptr)
     concptr s = _("強化できるアイテムがない。", "You have nothing to enchant.");
     object_type *o_ptr;
     OBJECT_IDX item;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), TV_NONE, ItemTester(object_is_nameless_weapon_armour));
+    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), FuncItemTester(object_is_nameless_weapon_armour));
     if (!o_ptr)
         return false;
 
@@ -119,16 +121,16 @@ bool artifact_scroll(player_type *caster_ptr)
  */
 bool mundane_spell(player_type *owner_ptr, bool only_equip)
 {
-    ItemTester item_tester;
+    std::unique_ptr<ItemTester> item_tester = std::make_unique<AllMatchItemTester>();
     if (only_equip)
-        item_tester.set_tester(object_is_weapon_armour_ammo);
+        item_tester = std::make_unique<FuncItemTester>(object_is_weapon_armour_ammo);
 
     OBJECT_IDX item;
     object_type *o_ptr;
     concptr q = _("どのアイテムを凡庸化しますか？", "Mundanify which item? ");
     concptr s = _("凡庸化できるアイテムがない。", "You have nothing to mundanify.");
 
-    o_ptr = choose_object(owner_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), TV_NONE, item_tester);
+    o_ptr = choose_object(owner_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
     if (!o_ptr)
         return false;
 

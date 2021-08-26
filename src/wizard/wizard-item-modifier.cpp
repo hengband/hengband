@@ -136,7 +136,7 @@ void wizard_item_modifier(player_type *creature_ptr)
         acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, true, false, true);
         break;
     case 'f':
-        identify_fully(creature_ptr, false, TV_NONE);
+        identify_fully(creature_ptr, false);
         break;
     case 'g':
         if (command_arg <= 0)
@@ -145,7 +145,7 @@ void wizard_item_modifier(player_type *creature_ptr)
         acquirement(creature_ptr, creature_ptr->y, creature_ptr->x, command_arg, false, false, true);
         break;
     case 'i':
-        (void)ident_spell(creature_ptr, false, TV_NONE);
+        (void)ident_spell(creature_ptr, false);
         break;
     case 'I':
         wiz_identify_full_inventory(creature_ptr);
@@ -203,7 +203,7 @@ void wiz_modify_item_activation(player_type *caster_ptr)
     concptr q = "Which object? ";
     concptr s = "Nothing to do with.";
     OBJECT_IDX item;
-    auto *o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, TV_NONE);
+    auto *o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT);
     if (!o_ptr)
         return;
 
@@ -655,7 +655,7 @@ void wiz_modify_item(player_type *creature_ptr)
     concptr s = "You have nothing to play with.";
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(creature_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, TV_NONE);
+    o_ptr = choose_object(creature_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT);
     if (!o_ptr)
         return;
 

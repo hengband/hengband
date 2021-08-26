@@ -42,7 +42,7 @@ void building_recharge(player_type *player_ptr)
 
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_NONE, ItemTester(object_is_rechargeable));
+    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(object_is_rechargeable));
     if (!o_ptr)
         return;
 

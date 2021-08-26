@@ -221,7 +221,7 @@ bool cast_summon_greater_demon(player_type *caster_ptr)
     concptr s = _("捧げられる死体を持っていない。", "You have nothing to scrifice.");
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_NONE, ItemTester(object_is_offerable));
+    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(object_is_offerable));
     if (!o_ptr)
         return false;
 

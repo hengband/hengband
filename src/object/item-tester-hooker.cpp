@@ -5,45 +5,52 @@
  */
 
 #include "object/item-tester-hooker.h"
-#include "object/object-info.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/target-describer.h"
 
-/*
- * Used during calls to "get_item()" and "show_inven()" and "show_equip()", and the choice window routines.
+/**
+ * @brief Construct a new Tval Item Tester:: Tval Item Tester object
+ *
+ * @param tval テストOKとなるtvalを指定する
  */
-// ItemTester item_tester_hook;
-
-ItemTester::ItemTester(std::function<bool(const object_type *)> pred)
-{
-    set_tester(pred);
-}
-
-ItemTester::ItemTester(std::function<bool(player_type *, const object_type *)> pred)
-    : tester(std::move(pred))
+TvalItemTester::TvalItemTester(tval_type tval)
+    : tval(tval)
 {
 }
 
-void ItemTester::set_tester(std::function<bool(const object_type *)> pred)
+/**
+ * @brief Construct a new Func Item Tester:: Func Item Tester object
+ *
+ * @param test_func 引数に object_type へのポインタを取り、そのオブジェクトが条件に合うならtrueを返す関数を指定する
+ */
+FuncItemTester::FuncItemTester(std::function<bool(const object_type *)> test_func)
+    : test_func([f = std::move(test_func)](player_type *, const object_type *o_ptr) { return f(o_ptr); })
 {
-    tester = [pred = std::move(pred)](player_type *, const object_type *o_ptr) { return pred(o_ptr); };
 }
 
-void ItemTester::set_tester(std::function<bool(player_type *, const object_type *)> pred)
+/*!
+ * @brief Construct a new Func Item Tester:: Func Item Tester object
+ *
+ * @param test_func 引数に player_type へのポインタと object_type へのポインタを取り、そのオブジェクトが条件に合うならtrueを返す関数を指定する
+ * @param player_ptr test_func の player_type へのポインタの引数に対して渡すポインタを指定する
+ */
+FuncItemTester::FuncItemTester(std::function<bool(player_type *, const object_type *)> test_func, player_type *player_ptr)
+    : test_func(std::move(test_func))
+    , player_ptr(player_ptr)
 {
-    tester = std::move(pred);
 }
 
 /*!
  * @brief アイテムが条件を満たしているか調べる
  * Check an item against the item tester info
  * @param o_ptr 判定を行いたいオブジェクト構造体参照ポインタ
- * @return アイテムが条件を満たしているならtrue、その他いくつかの例外に応じてtrue/falseを返す。
+ * @return アイテムが条件を満たしているならtrueを返す
+ * @details 最初にk_idxが無効でないか等の共通の判定を行った後に子クラスで実装される okay_impl 関数の結果を返す
  */
-bool ItemTester::okay(player_type *player_ptr, const object_type *o_ptr, tval_type tval) const
+bool ItemTester::okay(const object_type *o_ptr) const
 {
-    if (!o_ptr->k_idx)
+    if (o_ptr->k_idx == 0)
         return false;
 
     if (o_ptr->tval == TV_GOLD) {
@@ -51,15 +58,15 @@ bool ItemTester::okay(player_type *player_ptr, const object_type *o_ptr, tval_ty
             return false;
     }
 
-    if (tval) {
-        if ((tval <= TV_DEATH_BOOK) && (tval >= TV_LIFE_BOOK))
-            return check_book_realm(player_ptr, o_ptr->tval, o_ptr->sval);
-        else if (tval != o_ptr->tval)
-            return false;
-    }
+    return this->okay_impl(o_ptr);
+}
 
-    if (!this->tester)
-        return true;
+bool TvalItemTester::okay_impl(const object_type *o_ptr) const
+{
+    return this->tval == o_ptr->tval;
+}
 
-    return this->tester(player_ptr, o_ptr);
+bool FuncItemTester::okay_impl(const object_type *o_ptr) const
+{
+    return this->test_func(this->player_ptr, o_ptr);
 }

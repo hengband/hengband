@@ -378,7 +378,7 @@ void do_cmd_eat_food(player_type *creature_ptr)
     q = _("どれを食べますか? ", "Eat which item? ");
     s = _("食べ物がない。", "You have nothing to eat.");
 
-    if (!choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_NONE, ItemTester(item_tester_hook_eatable)))
+    if (!choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(item_tester_hook_eatable, creature_ptr)))
         return;
 
     exe_eat_food(creature_ptr, item);

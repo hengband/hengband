@@ -408,7 +408,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
         {
             if (cast) {
-                if (!ident_spell(caster_ptr, false, TV_NONE))
+                if (!ident_spell(caster_ptr, false))
                     return NULL;
             }
         }

@@ -386,7 +386,7 @@ bool cast_ninja_spell(player_type *caster_ptr, mind_ninja_type spell)
         (void)stasis_monster(caster_ptr, dir);
         break;
     case ANCIENT_KNOWLEDGE:
-        return ident_spell(caster_ptr, false, TV_NONE);
+        return ident_spell(caster_ptr, false);
     case FLOATING:
         set_tim_levitation(caster_ptr, randint1(20) + 20, false);
         break;

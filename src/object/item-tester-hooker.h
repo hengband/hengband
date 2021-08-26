@@ -7,17 +7,59 @@
 struct object_type;
 struct player_type;
 
+/*!
+ * @brief アイテムの絞り込み条件をテストする基底クラス
+ */
 class ItemTester {
 public:
+    virtual ~ItemTester() = default;
+    bool okay(const object_type *o_ptr) const;
+
+protected:
     ItemTester() = default;
-    ItemTester(std::function<bool(const object_type *)> pred);
-    ItemTester(std::function<bool(player_type *, const object_type *)> pred);
-
-    bool okay(player_type *player_ptr, const object_type *o_ptr, tval_type tval) const;
-
-    void set_tester(std::function<bool(const object_type *)> pred);
-    void set_tester(std::function<bool(player_type *, const object_type *)> pred);
 
 private:
-    std::function<bool(player_type *, const object_type *)> tester;
+    virtual bool okay_impl(const object_type *o_ptr) const = 0;
+};
+
+/*!
+ * @brief 全てのアイテムがOKとなるアイテムテストクラス
+ */
+class AllMatchItemTester : public ItemTester {
+public:
+    AllMatchItemTester() = default;
+
+private:
+    virtual bool okay_impl(const object_type *) const
+    {
+        return true;
+    }
+};
+
+/*!
+ * @brief 指定した tval のアイテムならばOKとなるアイテムテストクラス
+ */
+class TvalItemTester : public ItemTester {
+public:
+    explicit TvalItemTester(tval_type tval);
+
+private:
+    virtual bool okay_impl(const object_type *o_ptr) const;
+
+    tval_type tval;
+};
+
+/*!
+ * @brief 指定した関数を呼び出した結果戻り値が true であればOKとなるアイテムテストクラス
+ */
+class FuncItemTester : public ItemTester {
+public:
+    explicit FuncItemTester(std::function<bool(const object_type *)> test_func);
+    explicit FuncItemTester(std::function<bool(player_type *, const object_type *)> test_func, player_type *player_ptr);
+
+private:
+    virtual bool okay_impl(const object_type *o_ptr) const;
+
+    std::function<bool(player_type *, const object_type *)> test_func;
+    player_type *player_ptr;
 };

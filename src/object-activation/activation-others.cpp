@@ -234,14 +234,14 @@ bool activate_extra_detection(player_type *user_ptr)
     msg_print(_("明るく輝いている...", "It glows brightly..."));
     detect_all(user_ptr, DETECT_RAD_DEFAULT);
     probing(user_ptr);
-    identify_fully(user_ptr, false, TV_NONE);
+    identify_fully(user_ptr, false);
     return true;
 }
 
 bool activate_fully_identification(player_type *user_ptr)
 {
     msg_print(_("黄色く輝いている...", "It glows yellow..."));
-    identify_fully(user_ptr, false, TV_NONE);
+    identify_fully(user_ptr, false);
     return true;
 }
 
@@ -252,7 +252,7 @@ bool activate_fully_identification(player_type *user_ptr)
  */
 bool activate_identification(player_type *user_ptr)
 {
-    return ident_spell(user_ptr, false, TV_NONE);
+    return ident_spell(user_ptr, false);
 }
 
 bool activate_pesticide(player_type *user_ptr)

@@ -31,7 +31,7 @@ static void do_cmd_refill_lamp(player_type *user_ptr)
     object_type *j_ptr;
     concptr q = _("どの油つぼから注ぎますか? ", "Refill with which flask? ");
     concptr s = _("油つぼがない。", "You have no flasks of oil.");
-    o_ptr = choose_object(user_ptr, &item, q, s, USE_INVEN | USE_FLOOR, TV_NONE, ItemTester(object_is_refill_lantern));
+    o_ptr = choose_object(user_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(object_is_refill_lantern));
     if (!o_ptr)
         return;
 
@@ -69,7 +69,7 @@ static void do_cmd_refill_torch(player_type *user_ptr)
     object_type *j_ptr;
     concptr q = _("どの松明で明かりを強めますか? ", "Refuel with which torch? ");
     concptr s = _("他に松明がない。", "You have no extra torches.");
-    o_ptr = choose_object(user_ptr, &item, q, s, USE_INVEN | USE_FLOOR, TV_NONE, ItemTester(object_can_refill_torch));
+    o_ptr = choose_object(user_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(object_can_refill_torch));
     if (!o_ptr)
         return;
 

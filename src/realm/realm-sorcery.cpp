@@ -224,7 +224,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
 
         {
             if (cast) {
-                if (!ident_spell(caster_ptr, false, TV_NONE))
+                if (!ident_spell(caster_ptr, false))
                     return NULL;
             }
         }
@@ -336,7 +336,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
 
         {
             if (cast) {
-                if (!identify_fully(caster_ptr, false, TV_NONE))
+                if (!identify_fully(caster_ptr, false))
                     return NULL;
             }
         }
