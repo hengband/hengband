@@ -26,37 +26,36 @@
  * Basically, SET_UID should *only* be set for "Unix" machines,
  * or for the "Atari" platform which is Unix-like, apparently
  */
-#ifndef WINDOWS
+#undef PATH_SEP
+#ifdef WINDOWS
+#define PATH_SEP "\\"
+#else
+
+#define PATH_SEP "/"
 #define SET_UID
+#define PRIVATE_USER_PATH "~/.angband"
+#define SAVEFILE_USE_UID
+
+#if !defined(HAVE_CONFIG_H) && !defined(ISC)
+#define HAVE_USLEEP
 #endif
 
-/*
- * Every system seems to use its own symbol as a path separator.
- * Default to the standard Unix slash, but attempt to change this
- * for various other systems.  Note that any system that uses the
- * "period" as a separator will have to pretend that it uses the
- * slash, and do its own mapping of period <-> slash.
- * Note that the VM system uses a "flat" directory, and thus uses
- * the empty string for "PATH_SEP".
- */
-#undef PATH_SEP
-#define PATH_SEP "/"
+#define SAFE_SETUID
+#ifdef _POSIX_SAVED_IDS
+#define SAFE_SETUID_POSIX
+#endif
 
-#ifdef WINDOWS
-#undef PATH_SEP
-#define PATH_SEP "\\"
+#ifndef DEFAULT_LIB_PATH
+#define DEFAULT_LIB_PATH "./lib/"
+#endif
+
+#ifndef DEFAULT_VAR_PATH
+#define DEFAULT_VAR_PATH DEFAULT_LIB_PATH
+#endif
+
 #endif
 
 // clang-format off
-
-#ifdef SET_UID
-  #define PRIVATE_USER_PATH "~/.angband"
-  #define SAVEFILE_USE_UID
-
-  #if !defined(HAVE_CONFIG_H) && !defined(ISC)
-  #define HAVE_USLEEP
-  #endif
-#endif
 
 #ifdef JP
   #ifdef SJIS
@@ -102,55 +101,6 @@
 #endif
 
 // clang-format on
-
-/*
- * OPTION: for multi-user machines running the game setuid to some other
- * user (like 'games') this SAFE_SETUID option allows the program to drop
- * its privileges when saving files that allow for user specified pathnames.
- * This lets the game be installed system wide without major security
- * concerns.  There should not be any side effects on any machines.
- *
- * This will handle "gids" correctly once the permissions are set right.
- */
-#define SAFE_SETUID
-
-/*
- * This flag enables the "POSIX" methods for "SAFE_SETUID".
- */
-#ifdef _POSIX_SAVED_IDS
-#define SAFE_SETUID_POSIX
-#endif
-
-/*
- * OPTION: Set the "default" path to the angband "lib" directory.
- *
- * See "main.c" for usage, and note that this value is only used on
- * certain machines, primarily Unix machines.  If this value is used,
- * it will be over-ridden by the "ANGBAND_PATH" environment variable,
- * if that variable is defined and accessable.  The final slash is
- * optional, but it may eventually be required.
- *
- * Using the value "./lib/" below tells Angband that, by default,
- * the user will run "angband" from the same directory that contains
- * the "lib" directory.  This is a reasonable (but imperfect) default.
- *
- * If at all possible, you should change this value to refer to the
- * actual location of the "lib" folder, for example, "/tmp/angband/lib/"
- * or "/usr/games/lib/angband/", or "/pkg/angband/lib".
- */
-#ifndef DEFAULT_LIB_PATH
-#define DEFAULT_LIB_PATH "./lib/"
-#endif
-
-/*
- * OPTION: Set the "default" path to the angband "var" directory.
- *
- * This is like DEFAULT_LIB_PATH, but is for files that will be
- * modified after installation.
- */
-#ifndef DEFAULT_VAR_PATH
-#define DEFAULT_VAR_PATH DEFAULT_LIB_PATH
-#endif
 
 /*
  * OPTION: Person to bother if something goes wrong.
