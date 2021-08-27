@@ -14,7 +14,7 @@ SYMBOL_CODE char_idx = 0;
 TERM_COLOR attr_idx_feat[F_LIT_MAX];
 SYMBOL_CODE char_idx_feat[F_LIT_MAX];
 
-/*
+/*!
  * @brief シンボル変更処理 / Do visual mode command -- Change symbols
  * @param ch
  * @param visual_list_ptr
@@ -176,8 +176,8 @@ void display_group_list(int col, int row, int wid, int per_page, IDX grp_idx[], 
 }
 
 
-/*
- * Display visuals.
+/*!
+ * @brief Display visuals.
  */
 void display_visual_list(int col, int row, int height, int width, TERM_COLOR attr_top, byte char_left)
 {
@@ -212,8 +212,8 @@ void display_visual_list(int col, int row, int height, int width, TERM_COLOR att
 }
 
 
-/*
- * Place the cursor at the collect position for visual mode
+/*!
+ * @brief Place the cursor at the collect position for visual mode
  */
 void place_visual_list_cursor(TERM_LEN col, TERM_LEN row, TERM_COLOR a, byte c, TERM_COLOR attr_top, byte char_left)
 {
@@ -228,8 +228,8 @@ void place_visual_list_cursor(TERM_LEN col, TERM_LEN row, TERM_COLOR a, byte c, 
 }
 
 
-/*
- * Move the cursor in a browser window
+/*!
+ * @brief Move the cursor in a browser window
  */
 void browser_cursor(char ch, int *column, IDX *grp_cur, int grp_cnt, IDX *list_cur, int list_cnt)
 {
