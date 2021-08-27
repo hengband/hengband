@@ -16,7 +16,7 @@ protected:
     virtual ~ObjectBreaker() = default;
 
 public:
-    int can_destroy(object_type *o_ptr) const;
+    bool can_destroy(object_type *o_ptr) const;
     virtual bool hates(object_type *o_ptr) const = 0;
 
 private:
