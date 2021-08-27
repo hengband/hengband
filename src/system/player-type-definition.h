@@ -2,6 +2,7 @@
 
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/trc-types.h"
+#include "object/tval-types.h"
 #include "player-ability/player-ability-types.h"
 #include "player/player-class-types.h"
 #include "player/player-personality-types.h"
@@ -410,7 +411,7 @@ typedef struct player_type {
     int16_t num_fire{}; /* Number of shots */
 
     byte tval_xtra{}; /* (Unused)Correct xtra tval */
-    byte tval_ammo{}; /* Correct ammo tval */
+    tval_type tval_ammo{}; /* Correct ammo tval */
 
     int16_t pspeed{}; /*!< 現在の速度 / Current speed */
 

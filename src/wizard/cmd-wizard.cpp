@@ -155,7 +155,7 @@ bool exe_cmd_debug(player_type *creature_ptr, char cmd)
 
         break;
     case 'f':
-        identify_fully(creature_ptr, false, TV_NONE);
+        identify_fully(creature_ptr, false);
         break;
     case 'F':
         wiz_create_feature(creature_ptr);
@@ -167,7 +167,7 @@ bool exe_cmd_debug(player_type *creature_ptr, char cmd)
         wiz_summon_horde(creature_ptr);
         break;
     case 'i':
-        (void)ident_spell(creature_ptr, false, TV_NONE);
+        (void)ident_spell(creature_ptr, false);
         break;
     case 'I':
         wizard_item_modifier(creature_ptr);

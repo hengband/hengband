@@ -33,12 +33,11 @@ void do_cmd_read_scroll(player_type *creature_ptr)
     if (cmd_limit_blind(creature_ptr) || cmd_limit_confused(creature_ptr))
         return;
 
-    item_tester_hook = make_item_tester(object_is_readable);
     concptr q = _("どの巻物を読みますか? ", "Read which scroll? ");
     concptr s = _("読める巻物がない。", "You have no scrolls to read.");
     object_type *o_ptr;
     OBJECT_IDX item;
-    o_ptr = choose_object(creature_ptr, &item, q, s, USE_INVEN | USE_FLOOR, TV_NONE);
+    o_ptr = choose_object(creature_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(object_is_readable));
     if (!o_ptr)
         return;
 

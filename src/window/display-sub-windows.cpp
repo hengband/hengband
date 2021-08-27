@@ -63,7 +63,7 @@ void fix_inventory(player_type *player_ptr, tval_type item_tester_tval)
             continue;
 
         term_activate(angband_term[j]);
-        display_inventory(player_ptr, item_tester_tval);
+        display_inventory(player_ptr, TvalItemTester(item_tester_tval));
         term_fresh();
         term_activate(old);
     }
@@ -217,7 +217,7 @@ void fix_monster_list(player_type *player_ptr)
  * @brief 装備アイテム一覧を表示する /
  * Choice window "shadow" of the "show_equip()" function
  */
-static void display_equipment(player_type *owner_ptr, tval_type tval)
+static void display_equipment(player_type *owner_ptr, const ItemTester& item_tester)
 {
     if (!owner_ptr || !owner_ptr->inventory_list)
         return;
@@ -234,7 +234,7 @@ static void display_equipment(player_type *owner_ptr, tval_type tval)
             break;
 
         auto o_ptr = &owner_ptr->inventory_list[i];
-        auto do_disp = owner_ptr->select_ring_slot ? is_ring_slot(i) : item_tester_okay(owner_ptr, o_ptr, tval);
+        auto do_disp = owner_ptr->select_ring_slot ? is_ring_slot(i) : item_tester.okay(o_ptr);
         strcpy(tmp_val, "   ");
 
         if (do_disp) {
@@ -301,7 +301,7 @@ void fix_equip(player_type *player_ptr, tval_type item_tester_tval)
             continue;
 
         term_activate(angband_term[j]);
-        display_equipment(player_ptr, item_tester_tval);
+        display_equipment(player_ptr, TvalItemTester(item_tester_tval));
         term_fresh();
         term_activate(old);
     }

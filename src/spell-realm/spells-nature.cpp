@@ -20,11 +20,10 @@
  */
 bool rustproof(player_type *caster_ptr)
 {
-    item_tester_hook = make_item_tester(object_is_armour);
     concptr q = _("どの防具に錆止めをしますか？", "Rustproof which piece of armour? ");
     concptr s = _("錆止めできるものがありません。", "You have nothing to rustproof.");
     OBJECT_IDX item;
-    object_type *o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, TV_NONE);
+    object_type *o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, FuncItemTester(object_is_armour));
     if (o_ptr == NULL)
         return false;
 

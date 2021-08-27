@@ -40,6 +40,8 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
+#include <memory>
+
 /*!
  * エッセンス情報の構造体 / A structure for smithing
  */
@@ -241,12 +243,10 @@ static void drain_essence(player_type *creature_ptr)
     for (i = 0; i < sizeof(drain_value) / sizeof(int); i++)
         drain_value[i] = 0;
 
-    item_tester_hook = make_item_tester(object_is_weapon_armour_ammo);
-
     q = _("どのアイテムから抽出しますか？", "Extract from which item? ");
     s = _("抽出できるアイテムがありません。", "You have nothing you can extract from.");
 
-    o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), TV_NONE);
+    o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), FuncItemTester(object_is_weapon_armour_ammo));
     if (!o_ptr)
         return;
 
@@ -556,7 +556,6 @@ static void add_essence(player_type *creature_ptr, int32_t mode)
     int use_essence;
     essence_type *es_ptr;
     bool able[22] = { 0 };
-    tval_type tval = TV_NONE;
     int menu_line = (use_menu ? 1 : 0);
 
     for (i = 0; essence_info[i].add_name; i++) {
@@ -792,21 +791,25 @@ static void add_essence(player_type *creature_ptr, int32_t mode)
     }
     es_ptr = &essence_info[num[i]];
 
-    if (es_ptr->add == ESSENCE_SLAY_GLOVE)
-        tval = TV_GLOVES;
-    else if (mode == 1 || mode == 5)
-        item_tester_hook = make_item_tester(object_is_melee_ammo);
-    else if (es_ptr->add == ESSENCE_ATTACK)
-        item_tester_hook = make_item_tester(object_allow_enchant_weapon);
-    else if (es_ptr->add == ESSENCE_AC)
-        item_tester_hook = make_item_tester(object_is_armour);
-    else
-        item_tester_hook = make_item_tester(object_is_weapon_armour_ammo);
+    auto decide_item_tester = [es_ptr, mode]() -> std::unique_ptr<ItemTester> {
+        if (es_ptr->add == ESSENCE_SLAY_GLOVE)
+            return std::make_unique<TvalItemTester>(TV_GLOVES);
+        else if (mode == 1 || mode == 5)
+            return std::make_unique<FuncItemTester>(object_is_melee_ammo);
+        else if (es_ptr->add == ESSENCE_ATTACK)
+            return std::make_unique<FuncItemTester>(object_allow_enchant_weapon);
+        else if (es_ptr->add == ESSENCE_AC)
+            return std::make_unique<FuncItemTester>(object_is_armour);
+        else
+            return std::make_unique<FuncItemTester>(object_is_weapon_armour_ammo);
+    };
+
+    auto item_tester = decide_item_tester();
 
     q = _("どのアイテムを改良しますか？", "Improve which item? ");
     s = _("改良できるアイテムがありません。", "You have nothing to improve.");
 
-    o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), tval);
+    o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
     if (!o_ptr)
         return;
 
@@ -993,12 +996,10 @@ static void erase_essence(player_type *creature_ptr)
     GAME_TEXT o_name[MAX_NLEN];
     TrFlags flgs;
 
-    item_tester_hook = make_item_tester(object_is_smith);
-
     q = _("どのアイテムのエッセンスを消去しますか？", "Remove from which item? ");
     s = _("エッセンスを付加したアイテムがありません。", "You have nothing with added essence to remove.");
 
-    o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_NONE);
+    o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(object_is_smith));
     if (!o_ptr)
         return;
 

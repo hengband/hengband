@@ -44,14 +44,14 @@
  * @return アイテムを拾えるならばTRUEを返す。
  * @details assuming mode = (USE_EQUIP | USE_INVEN | USE_FLOOR).
  */
-bool can_get_item(player_type *owner_ptr, tval_type tval)
+bool can_get_item(player_type *owner_ptr, const ItemTester& item_tester)
 {
     for (int j = 0; j < INVEN_TOTAL; j++)
-        if (item_tester_okay(owner_ptr, &owner_ptr->inventory_list[j], tval))
+        if (item_tester.okay(&owner_ptr->inventory_list[j]))
             return true;
 
     OBJECT_IDX floor_list[23];
-    ITEM_NUMBER floor_num = scan_floor_items(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, tval);
+    ITEM_NUMBER floor_num = scan_floor_items(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
     return floor_num != 0;
 }
 
@@ -63,10 +63,9 @@ static bool py_pickup_floor_aux(player_type *owner_ptr)
 {
     OBJECT_IDX this_o_idx;
     OBJECT_IDX item;
-    item_tester_hook = check_store_item_to_inventory;
     concptr q = _("どれを拾いますか？", "Get which item? ");
     concptr s = _("もうザックには床にあるどのアイテムも入らない。", "You no longer have any room for the objects on the floor.");
-    if (choose_object(owner_ptr, &item, q, s, (USE_FLOOR), TV_NONE))
+    if (choose_object(owner_ptr, &item, q, s, (USE_FLOOR), FuncItemTester(check_store_item_to_inventory, owner_ptr)))
         this_o_idx = 0 - item;
     else
         return false;

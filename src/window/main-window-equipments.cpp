@@ -23,7 +23,7 @@
  * @param target_item アイテムの選択処理を行うか否か。
  * @return 選択したアイテムのタグ
  */
-COMMAND_CODE show_equipment(player_type *owner_ptr, int target_item, BIT_FLAGS mode, tval_type tval)
+COMMAND_CODE show_equipment(player_type *owner_ptr, int target_item, BIT_FLAGS mode, const ItemTester& item_tester)
 {
     COMMAND_CODE i;
     int j, k, l;
@@ -41,7 +41,7 @@ COMMAND_CODE show_equipment(player_type *owner_ptr, int target_item, BIT_FLAGS m
     int len = wid - col - 1;
     for (k = 0, i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &owner_ptr->inventory_list[i];
-        if (!(owner_ptr->select_ring_slot ? is_ring_slot(i) : item_tester_okay(owner_ptr, o_ptr, tval) || (mode & USE_FULL))
+        if (!(owner_ptr->select_ring_slot ? is_ring_slot(i) : item_tester.okay(o_ptr) || (mode & USE_FULL))
             && (!((((i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(owner_ptr)) || ((i == INVEN_SUB_HAND) && can_attack_with_main_hand(owner_ptr)))
                     && has_two_handed_weapons(owner_ptr))
                 || (mode & IGNORE_BOTHHAND_SLOT)))
@@ -78,7 +78,7 @@ COMMAND_CODE show_equipment(player_type *owner_ptr, int target_item, BIT_FLAGS m
     }
 
     col = (len > wid - _(6, 4)) ? 0 : (wid - len - 1);
-    prepare_label_string(owner_ptr, equip_label, USE_EQUIP, tval);
+    prepare_label_string(owner_ptr, equip_label, USE_EQUIP, item_tester);
     for (j = 0; j < k; j++) {
         i = out_index[j];
         o_ptr = &owner_ptr->inventory_list[i];

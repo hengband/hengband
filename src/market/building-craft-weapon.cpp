@@ -363,12 +363,11 @@ PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
     i_ptr = &customer_ptr->inventory_list[INVEN_MAIN_HAND];
     (&orig_weapon)->copy_from(i_ptr);
 
-    item_tester_hook = make_item_tester(object_is_orthodox_melee_weapons);
     concptr q = _("第一の武器は？", "What is your first weapon? ");
     concptr s = _("比べるものがありません。", "You have nothing to compare.");
 
     OBJECT_IDX item;
-    o_ptr[0] = choose_object(customer_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT), TV_NONE);
+    o_ptr[0] = choose_object(customer_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT), FuncItemTester(object_is_orthodox_melee_weapons));
     if (!o_ptr[0]) {
         screen_load();
         return 0;
@@ -418,11 +417,10 @@ PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
             continue;
         }
 
-        item_tester_hook = make_item_tester(object_is_orthodox_melee_weapons);
         q = _("第二の武器は？", "What is your second weapon? ");
         s = _("比べるものがありません。", "You have nothing to compare.");
         OBJECT_IDX item2;
-        object_type *i2_ptr = choose_object(customer_ptr, &item2, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT), TV_NONE);
+        object_type *i2_ptr = choose_object(customer_ptr, &item2, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT), FuncItemTester(object_is_orthodox_melee_weapons));
         if (!i2_ptr)
             continue;
 

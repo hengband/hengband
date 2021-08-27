@@ -31,6 +31,7 @@
 #include "object-hook/hook-magic.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
+#include "object/object-info.h"
 #include "player-info/self-info.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
@@ -576,6 +577,20 @@ static void confirm_use_force(player_type *caster_ptr, bool browse_only)
     }
 }
 
+static FuncItemTester get_castable_spellbook_tester(player_type *caster_ptr)
+{
+    return FuncItemTester([](auto p_ptr, auto o_ptr) { return check_book_realm(p_ptr, o_ptr->tval, o_ptr->sval); }, caster_ptr);
+}
+
+static FuncItemTester get_learnable_spellbook_tester(player_type *caster_ptr)
+{
+    if (caster_ptr->realm2 == REALM_NONE) {
+        return get_castable_spellbook_tester(caster_ptr);
+    } else {
+        return FuncItemTester(item_tester_learn_spell, caster_ptr);
+    }
+}
+
 /*!
  * @brief プレイヤーの魔法と技能を閲覧するコマンドのメインルーチン /
  * Peruse the spells/prayers in a book
@@ -602,7 +617,6 @@ void do_cmd_browse(player_type *caster_ptr)
     object_type *o_ptr;
 
     concptr q, s;
-    tval_type tval = TV_NONE;
 
     /* Warriors are illiterate */
     if (!(caster_ptr->realm1 || caster_ptr->realm2) && (caster_ptr->pclass != CLASS_SORCERER) && (caster_ptr->pclass != CLASS_RED_MAGE)) {
@@ -622,17 +636,13 @@ void do_cmd_browse(player_type *caster_ptr)
     }
 
     /* Restrict choices to "useful" books */
-    if (caster_ptr->realm2 == REALM_NONE)
-        tval = mp_ptr->spell_book;
-    else
-        item_tester_hook = item_tester_learn_spell;
+    auto item_tester = get_learnable_spellbook_tester(caster_ptr);
 
     q = _("どの本を読みますか? ", "Browse which book? ");
     s = _("読める本がない。", "You have no books that you can read.");
 
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | (caster_ptr->pclass == CLASS_FORCETRAINER ? USE_FORCE : 0)), tval);
+    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | (caster_ptr->pclass == CLASS_FORCETRAINER ? USE_FORCE : 0)), item_tester);
 
-    item_tester_hook = NULL;
     if (!o_ptr) {
         if (item == INVEN_FORCE) /* the_force */
         {
@@ -757,7 +767,6 @@ void do_cmd_study(player_type *caster_ptr)
     concptr p = spell_category_name(mp_ptr->spell_book);
     object_type *o_ptr;
     concptr q, s;
-    tval_type tval = TV_NONE;
 
     if (!caster_ptr->realm1) {
         msg_print(_("本を読むことができない！", "You cannot read books!"));
@@ -791,15 +800,12 @@ void do_cmd_study(player_type *caster_ptr)
     msg_print(NULL);
 
     /* Restrict choices to "useful" books */
-    if (caster_ptr->realm2 == REALM_NONE)
-        tval = mp_ptr->spell_book;
-    else
-        item_tester_hook = item_tester_learn_spell;
+    auto item_tester = get_learnable_spellbook_tester(caster_ptr);
 
     q = _("どの本から学びますか? ", "Study which book? ");
     s = _("読める本がない。", "You have no books that you can read.");
 
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), tval);
+    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), item_tester);
 
     if (!o_ptr)
         return;
@@ -1032,7 +1038,10 @@ bool do_cmd_cast(player_type *caster_ptr)
     q = _("どの呪文書を使いますか? ", "Use which book? ");
     s = _("呪文書がない！", "You have no spell books!");
 
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | (caster_ptr->pclass == CLASS_FORCETRAINER ? USE_FORCE : 0)), mp_ptr->spell_book);
+    auto item_tester = get_castable_spellbook_tester(caster_ptr);
+
+    o_ptr = choose_object(
+        caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | (caster_ptr->pclass == CLASS_FORCETRAINER ? USE_FORCE : 0)), item_tester);
     if (!o_ptr) {
         if (item == INVEN_FORCE) /* the_force */
         {

@@ -7,7 +7,6 @@
 typedef struct fis_type {
     COMMAND_CODE *cp;
     BIT_FLAGS mode;
-    tval_type tval;
     char n1;
     char n2;
     char which;
@@ -42,7 +41,6 @@ typedef struct fis_type {
 typedef struct item_selection_type {
     COMMAND_CODE *cp;
     BIT_FLAGS mode;
-    tval_type tval;
     char which;
     OBJECT_IDX k;
     OBJECT_IDX i1;
@@ -65,5 +63,5 @@ typedef struct item_selection_type {
     char cur_tag;
 } item_selection_type;
 
-fis_type *initialize_fis_type(fis_type *fis_ptr, COMMAND_CODE *cp, BIT_FLAGS mode, tval_type tval);
-item_selection_type *initialize_item_selection_type(item_selection_type *item_selection_ptr, COMMAND_CODE *cp, BIT_FLAGS mode, tval_type tval);
+fis_type *initialize_fis_type(fis_type *fis_ptr, COMMAND_CODE *cp, BIT_FLAGS mode);
+item_selection_type *initialize_item_selection_type(item_selection_type *item_selection_ptr, COMMAND_CODE *cp, BIT_FLAGS mode);

@@ -495,7 +495,7 @@ concptr do_craft_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
         {
             if (cast) {
-                if (!identify_fully(caster_ptr, false, TV_NONE))
+                if (!identify_fully(caster_ptr, false))
                     return NULL;
             }
         }

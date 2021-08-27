@@ -397,10 +397,10 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
 
         if (cast) {
             if (plev > 44) {
-                if (!identify_fully(caster_ptr, true, TV_NONE))
+                if (!identify_fully(caster_ptr, true))
                     return NULL;
             } else {
-                if (!ident_spell(caster_ptr, true, TV_NONE))
+                if (!ident_spell(caster_ptr, true))
                     return NULL;
             }
         }

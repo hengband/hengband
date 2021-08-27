@@ -58,7 +58,7 @@ bool get_object_for_search(player_type *player_ptr, object_type **o_handle, conc
     concptr q = _("どのアイテムを検索しますか? ", "Enter which item? ");
     concptr s = _("アイテムを持っていない。", "You have nothing to enter.");
     object_type *o_ptr;
-    o_ptr = choose_object(player_ptr, NULL, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP, TV_NONE);
+    o_ptr = choose_object(player_ptr, NULL, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP);
     if (!o_ptr)
         return false;
 

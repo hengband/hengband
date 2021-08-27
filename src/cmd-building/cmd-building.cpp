@@ -124,7 +124,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
         /* Do nothing */
         break;
     case BACT_RESEARCH_ITEM:
-        paid = identify_fully(player_ptr, false, TV_NONE);
+        paid = identify_fully(player_ptr, false);
         break;
     case BACT_TOWN_HISTORY:
         town_history(player_ptr);
@@ -166,12 +166,10 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
         bcost = compare_weapons(player_ptr, bcost);
         break;
     case BACT_ENCHANT_WEAPON:
-        item_tester_hook = make_item_tester(object_allow_enchant_melee_weapon);
-        enchant_item(player_ptr, bcost, 1, 1, 0, TV_NONE);
+        enchant_item(player_ptr, bcost, 1, 1, 0, FuncItemTester(object_allow_enchant_melee_weapon));
         break;
     case BACT_ENCHANT_ARMOR:
-        item_tester_hook = make_item_tester(object_is_armour);
-        enchant_item(player_ptr, bcost, 0, 0, 1, TV_NONE);
+        enchant_item(player_ptr, bcost, 0, 0, 1, FuncItemTester(object_is_armour));
         break;
     case BACT_RECHARGE:
         building_recharge(player_ptr);
@@ -187,7 +185,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
         paid = true;
         break;
     case BACT_IDENT_ONE:
-        paid = ident_spell(player_ptr, false, TV_NONE);
+        paid = ident_spell(player_ptr, false);
         break;
     case BACT_LEARN:
         do_cmd_study(player_ptr);
@@ -199,11 +197,10 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
         paid = restore_all_status(player_ptr);
         break;
     case BACT_ENCHANT_ARROWS:
-        item_tester_hook = make_item_tester(object_is_ammo);
-        enchant_item(player_ptr, bcost, 1, 1, 0, TV_NONE);
+        enchant_item(player_ptr, bcost, 1, 1, 0, FuncItemTester(object_is_ammo));
         break;
     case BACT_ENCHANT_BOW:
-        enchant_item(player_ptr, bcost, 1, 1, 0, TV_BOW);
+        enchant_item(player_ptr, bcost, 1, 1, 0, TvalItemTester(TV_BOW));
         break;
 
     case BACT_RECALL:

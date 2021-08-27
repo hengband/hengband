@@ -369,7 +369,7 @@ void brand_bolts(player_type *caster_ptr)
  */
 bool perilous_secrets(player_type *user_ptr)
 {
-    if (!ident_spell(user_ptr, false, TV_NONE))
+    if (!ident_spell(user_ptr, false))
         return false;
 
     if (user_ptr->msp > 0) {
@@ -549,18 +549,18 @@ bool enchant_equipment(player_type *caster_ptr, object_type *o_ptr, int n, int e
 bool enchant_spell(player_type *caster_ptr, HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
 {
     /* Assume enchant weapon */
-    item_tester_hook = make_item_tester(object_allow_enchant_weapon);
+    FuncItemTester item_tester(object_allow_enchant_weapon);
 
     /* Enchant armor if requested */
     if (num_ac)
-        item_tester_hook = make_item_tester(object_is_armour);
+        item_tester = FuncItemTester(object_is_armour);
 
     concptr q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
     concptr s = _("強化できるアイテムがない。", "You have nothing to enchant.");
 
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), TV_NONE);
+    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), item_tester);
     if (!o_ptr)
         return false;
 
@@ -604,15 +604,12 @@ bool enchant_spell(player_type *caster_ptr, HIT_PROB num_hit, HIT_POINT num_dam,
  */
 void brand_weapon(player_type *caster_ptr, int brand_type)
 {
-    /* Assume enchant weapon */
-    item_tester_hook = make_item_tester(object_allow_enchant_melee_weapon);
-
     concptr q = _("どの武器を強化しますか? ", "Enchant which weapon? ");
     concptr s = _("強化できる武器がない。", "You have nothing to enchant.");
 
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | IGNORE_BOTHHAND_SLOT, TV_NONE);
+    o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | IGNORE_BOTHHAND_SLOT, FuncItemTester(object_allow_enchant_melee_weapon));
     if (!o_ptr)
         return;
 

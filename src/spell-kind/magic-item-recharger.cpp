@@ -50,13 +50,12 @@
  */
 bool recharge(player_type *caster_ptr, int power)
 {
-    item_tester_hook = make_item_tester(object_is_rechargeable);
     concptr q = _("どのアイテムに魔力を充填しますか? ", "Recharge which item? ");
     concptr s = _("魔力を充填すべきアイテムがない。", "You have nothing to recharge.");
 
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_NONE);
+    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(object_is_rechargeable));
     if (!o_ptr)
         return false;
 

@@ -28,7 +28,7 @@
  *		mode & 0x02 -- Marked items only
  *		mode & 0x04 -- Stop after first
  */
-ITEM_NUMBER scan_floor_items(player_type *owner_ptr, OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode, tval_type item_tester_tval)
+ITEM_NUMBER scan_floor_items(player_type *owner_ptr, OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode, const ItemTester& item_tester)
 {
     floor_type *floor_ptr = owner_ptr->current_floor_ptr;
     if (!in_bounds(floor_ptr, y, x))
@@ -38,7 +38,7 @@ ITEM_NUMBER scan_floor_items(player_type *owner_ptr, OBJECT_IDX *items, POSITION
     for (const auto this_o_idx : floor_ptr->grid_array[y][x].o_idx_list) {
         object_type *o_ptr;
         o_ptr = &floor_ptr->o_list[this_o_idx];
-        if ((mode & SCAN_FLOOR_ITEM_TESTER) && !item_tester_okay(owner_ptr, o_ptr, item_tester_tval))
+        if ((mode & SCAN_FLOOR_ITEM_TESTER) && !item_tester.okay(o_ptr))
             continue;
 
         if ((mode & SCAN_FLOOR_ONLY_MARKED) && !(o_ptr->marked & OM_FOUND))
@@ -90,7 +90,7 @@ static void prepare_label_string_floor(floor_type *floor_ptr, char *label, FLOOR
  * @return 選択したアイテムの添え字
  * @details
  */
-COMMAND_CODE show_floor_items(player_type *owner_ptr, int target_item, POSITION y, POSITION x, TERM_LEN *min_width, tval_type item_tester_tval)
+COMMAND_CODE show_floor_items(player_type *owner_ptr, int target_item, POSITION y, POSITION x, TERM_LEN *min_width, const ItemTester& item_tester)
 {
     COMMAND_CODE i, m;
     int j, k, l;
@@ -108,7 +108,7 @@ COMMAND_CODE show_floor_items(player_type *owner_ptr, int target_item, POSITION 
     bool dont_need_to_show_weights = true;
     term_get_size(&wid, &hgt);
     int len = MAX((*min_width), 20);
-    floor_num = scan_floor_items(owner_ptr, floor_list, y, x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester_tval);
+    floor_num = scan_floor_items(owner_ptr, floor_list, y, x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
     floor_type *floor_ptr = owner_ptr->current_floor_ptr;
     for (k = 0, i = 0; i < floor_num && i < 23; i++) {
         o_ptr = &floor_ptr->o_list[floor_list[i]];

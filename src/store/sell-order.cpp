@@ -91,11 +91,9 @@ void store_sell(player_type *owner_ptr)
         break;
     }
 
-    item_tester_hook = store_will_buy;
-
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(owner_ptr, &item, q, s_none, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, TV_NONE);
+    o_ptr = choose_object(owner_ptr, &item, q, s_none, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, FuncItemTester(store_will_buy, owner_ptr));
     if (!o_ptr)
         return;
 

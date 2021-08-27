@@ -171,7 +171,7 @@ bool switch_class_racial_execution(player_type *creature_ptr, const int32_t comm
             return true;
         }
 
-        return (command != -4) || identify_fully(creature_ptr, false, TV_NONE);
+        return (command != -4) || identify_fully(creature_ptr, false);
     case CLASS_IMITATOR:
         handle_stuff(creature_ptr);
         return do_cmd_mane(creature_ptr, true);
@@ -245,9 +245,9 @@ bool switch_class_racial_execution(player_type *creature_ptr, const int32_t comm
         return recall_player(creature_ptr, randint0(21) + 15);
     case CLASS_SMITH:
         if (creature_ptr->lev <= 29)
-            return ident_spell(creature_ptr, true, TV_NONE);
+            return ident_spell(creature_ptr, true);
 
-        return identify_fully(creature_ptr, true, TV_NONE);
+        return identify_fully(creature_ptr, true);
     case CLASS_MIRROR_MASTER:
         if (command == -3) {
             remove_all_mirrors(creature_ptr, true);

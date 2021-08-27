@@ -15,6 +15,7 @@
 #include "game-option/game-play-options.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
+#include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "perception/object-perception.h"
 #include "player/player-class.h"
@@ -290,7 +291,7 @@ static bool show_dead_player_items(player_type *creature_ptr)
 {
     if (creature_ptr->equip_cnt) {
         term_clear();
-        (void)show_equipment(creature_ptr, 0, USE_FULL, TV_NONE);
+        (void)show_equipment(creature_ptr, 0, USE_FULL, AllMatchItemTester());
         prt(_("装備していたアイテム: -続く-", "You are using: -more-"), 0, 0);
         if (inkey() == ESCAPE)
             return true;
@@ -298,7 +299,7 @@ static bool show_dead_player_items(player_type *creature_ptr)
 
     if (creature_ptr->inven_cnt) {
         term_clear();
-        (void)show_inventory(creature_ptr, 0, USE_FULL, TV_NONE);
+        (void)show_inventory(creature_ptr, 0, USE_FULL, AllMatchItemTester());
         prt(_("持っていたアイテム: -続く-", "You are carrying: -more-"), 0, 0);
 
         if (inkey() == ESCAPE)

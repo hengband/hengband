@@ -29,6 +29,8 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
+#include <memory>
+
 /*!
  * @brief 全所持アイテム鑑定処理 /
  * Identify everything being carried.
@@ -98,29 +100,26 @@ bool identify_item(player_type *owner_ptr, object_type *o_ptr)
  * This routine does *not* automatically combine objects.
  * Returns TRUE if something was identified, else FALSE.
  */
-bool ident_spell(player_type *caster_ptr, bool only_equip, tval_type item_tester_tval)
+bool ident_spell(player_type *caster_ptr, bool only_equip)
 {
-    if (only_equip)
-        item_tester_hook = make_item_tester(object_is_not_identified_weapon_armor);
-    else
-        item_tester_hook = make_item_tester(object_is_not_identified);
+    std::unique_ptr<ItemTester> item_tester = std::make_unique<FuncItemTester>(only_equip ? object_is_not_identified_weapon_armor : object_is_not_identified);
 
     concptr q;
-    if (can_get_item(caster_ptr, item_tester_tval)) {
+    if (can_get_item(caster_ptr, *item_tester)) {
         q = _("どのアイテムを鑑定しますか? ", "Identify which item? ");
     } else {
-        if (only_equip)
-            item_tester_hook = make_item_tester(object_is_weapon_armour_ammo);
-        else
-            item_tester_hook = NULL;
-
+        if (only_equip) {
+            item_tester = std::make_unique<FuncItemTester>(object_is_weapon_armour_ammo);
+        } else {
+            item_tester = std::make_unique<AllMatchItemTester>();
+        }
         q = _("すべて鑑定済みです。 ", "All items are identified. ");
     }
 
     concptr s = _("鑑定するべきアイテムがない。", "You have nothing to identify.");
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), TV_NONE);
+    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
     if (!o_ptr)
         return false;
 
@@ -150,22 +149,20 @@ bool ident_spell(player_type *caster_ptr, bool only_equip, tval_type item_tester
  * Fully "identify" an object in the inventory -BEN-
  * This routine returns TRUE if an item was identified.
  */
-bool identify_fully(player_type *caster_ptr, bool only_equip, tval_type item_tester_tval)
+bool identify_fully(player_type *caster_ptr, bool only_equip)
 {
-    if (only_equip)
-        item_tester_hook = make_item_tester(object_is_not_fully_identified_weapon_armour);
-    else
-        item_tester_hook = make_item_tester(object_is_not_fully_identified);
+    std::unique_ptr<ItemTester> item_tester
+        = std::make_unique<FuncItemTester>(only_equip ? object_is_not_fully_identified_weapon_armour : object_is_not_fully_identified);
 
     concptr q;
-    if (can_get_item(caster_ptr, item_tester_tval)) {
+    if (can_get_item(caster_ptr, *item_tester)) {
         q = _("どのアイテムを*鑑定*しますか? ", "*Identify* which item? ");
     } else {
-        if (only_equip)
-            item_tester_hook = make_item_tester(object_is_weapon_armour_ammo);
-        else
-            item_tester_hook = NULL;
-
+        if (only_equip) {
+            item_tester = std::make_unique<FuncItemTester>(object_is_weapon_armour_ammo);
+        } else {
+            item_tester = std::make_unique<AllMatchItemTester>();
+        }
         q = _("すべて*鑑定*済みです。 ", "All items are *identified*. ");
     }
 
@@ -173,7 +170,7 @@ bool identify_fully(player_type *caster_ptr, bool only_equip, tval_type item_tes
 
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), TV_NONE);
+    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
     if (!o_ptr)
         return false;
 

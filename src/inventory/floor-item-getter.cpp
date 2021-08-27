@@ -42,18 +42,16 @@
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  * @todo 適切な関数名をどうしても付けられなかったので暫定でauxとした
  */
-static bool check_floor_item_tag_aux(player_type *owner_ptr, fis_type *fis_ptr, char *prev_tag)
+static bool check_floor_item_tag_aux(player_type *owner_ptr, fis_type *fis_ptr, char *prev_tag, const ItemTester& item_tester)
 {
     if (!fis_ptr->floor || (*fis_ptr->cp >= 0))
         return false;
 
     if (*prev_tag && command_cmd) {
         fis_ptr->floor_num
-            = scan_floor_items(owner_ptr, fis_ptr->floor_list, owner_ptr->y, owner_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, fis_ptr->tval);
+            = scan_floor_items(owner_ptr, fis_ptr->floor_list, owner_ptr->y, owner_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
         if (get_tag_floor(owner_ptr->current_floor_ptr, &fis_ptr->k, *prev_tag, fis_ptr->floor_list, fis_ptr->floor_num)) {
             *fis_ptr->cp = 0 - fis_ptr->floor_list[fis_ptr->k];
-            fis_ptr->tval = TV_NONE;
-            item_tester_hook = NULL;
             command_cmd = 0;
             return true;
         }
@@ -62,11 +60,9 @@ static bool check_floor_item_tag_aux(player_type *owner_ptr, fis_type *fis_ptr, 
         return false;
     }
 
-    if (!item_tester_okay(owner_ptr, &owner_ptr->current_floor_ptr->o_list[0 - (*fis_ptr->cp)], fis_ptr->tval) && ((fis_ptr->mode & USE_FULL) == 0))
+    if (!item_tester.okay(&owner_ptr->current_floor_ptr->o_list[0 - (*fis_ptr->cp)]) && ((fis_ptr->mode & USE_FULL) == 0))
         return false;
 
-    fis_ptr->tval = TV_NONE;
-    item_tester_hook = NULL;
     command_cmd = 0;
     return true;
 }
@@ -78,13 +74,13 @@ static bool check_floor_item_tag_aux(player_type *owner_ptr, fis_type *fis_ptr, 
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  */
-static bool get_floor_item_tag_inventory(player_type *owner_ptr, fis_type *fis_ptr, char *prev_tag)
+static bool get_floor_item_tag_inventory(player_type *owner_ptr, fis_type *fis_ptr, char *prev_tag, const ItemTester& item_tester)
 {
     bool flag = false;
     item_use_flag use_flag = (*fis_ptr->cp >= INVEN_MAIN_HAND) ? USE_EQUIP : USE_INVEN;
 
-    flag |= !get_tag(owner_ptr, &fis_ptr->k, *prev_tag, use_flag, fis_ptr->tval);
-    flag |= !get_item_okay(owner_ptr, fis_ptr->k, fis_ptr->tval);
+    flag |= !get_tag(owner_ptr, &fis_ptr->k, *prev_tag, use_flag, item_tester);
+    flag |= !get_item_okay(owner_ptr, fis_ptr->k, item_tester);
 
     if (fis_ptr->k < INVEN_MAIN_HAND)
         flag |= !fis_ptr->inven;
@@ -97,8 +93,6 @@ static bool get_floor_item_tag_inventory(player_type *owner_ptr, fis_type *fis_p
     }
 
     *fis_ptr->cp = fis_ptr->k;
-    fis_ptr->tval = TV_NONE;
-    item_tester_hook = NULL;
     command_cmd = 0;
     return true;
 }
@@ -110,18 +104,16 @@ static bool get_floor_item_tag_inventory(player_type *owner_ptr, fis_type *fis_p
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  */
-static bool check_floor_item_tag_inventory(player_type *owner_ptr, fis_type *fis_ptr, char *prev_tag)
+static bool check_floor_item_tag_inventory(player_type *owner_ptr, fis_type *fis_ptr, char *prev_tag, const ItemTester& item_tester)
 {
     if ((!fis_ptr->inven || (*fis_ptr->cp < 0) || (*fis_ptr->cp >= INVEN_PACK))
         && (!fis_ptr->equip || (*fis_ptr->cp < INVEN_MAIN_HAND) || (*fis_ptr->cp >= INVEN_TOTAL)))
         return false;
 
     if ((*prev_tag != '\0') && command_cmd)
-        return get_floor_item_tag_inventory(owner_ptr, fis_ptr, prev_tag);
+        return get_floor_item_tag_inventory(owner_ptr, fis_ptr, prev_tag, item_tester);
 
-    if (get_item_okay(owner_ptr, *fis_ptr->cp, fis_ptr->tval)) {
-        fis_ptr->tval = TV_NONE;
-        item_tester_hook = NULL;
+    if (get_item_okay(owner_ptr, *fis_ptr->cp, item_tester)) {
         command_cmd = 0;
         return true;
     }
@@ -136,22 +128,20 @@ static bool check_floor_item_tag_inventory(player_type *owner_ptr, fis_type *fis
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  */
-static bool check_floor_item_tag(player_type *owner_ptr, fis_type *fis_ptr, char *prev_tag)
+static bool check_floor_item_tag(player_type *owner_ptr, fis_type *fis_ptr, char *prev_tag, const ItemTester& item_tester)
 {
     if (!repeat_pull(fis_ptr->cp))
         return false;
 
     if (fis_ptr->force && (*fis_ptr->cp == INVEN_FORCE)) {
-        fis_ptr->tval = TV_NONE;
-        item_tester_hook = NULL;
         command_cmd = 0;
         return true;
     }
 
-    if (check_floor_item_tag_aux(owner_ptr, fis_ptr, prev_tag))
+    if (check_floor_item_tag_aux(owner_ptr, fis_ptr, prev_tag, item_tester))
         return true;
 
-    return check_floor_item_tag_inventory(owner_ptr, fis_ptr, prev_tag);
+    return check_floor_item_tag_inventory(owner_ptr, fis_ptr, prev_tag, item_tester);
 }
 
 /*!
@@ -159,7 +149,7 @@ static bool check_floor_item_tag(player_type *owner_ptr, fis_type *fis_ptr, char
  * @param owner_ptr プレーヤーへの参照ポインタ
  * @param fis_ptr 床上アイテムへの参照ポインタ
  */
-static void test_inventory_floor(player_type *owner_ptr, fis_type *fis_ptr)
+static void test_inventory_floor(player_type *owner_ptr, fis_type *fis_ptr, const ItemTester& item_tester)
 {
     if (!fis_ptr->inven) {
         fis_ptr->i2 = -1;
@@ -170,7 +160,7 @@ static void test_inventory_floor(player_type *owner_ptr, fis_type *fis_ptr)
         return;
 
     for (int i = 0; i < INVEN_PACK; i++)
-        if (item_tester_okay(owner_ptr, &owner_ptr->inventory_list[i], fis_ptr->tval) || (fis_ptr->mode & USE_FULL))
+        if (item_tester.okay(&owner_ptr->inventory_list[i]) || (fis_ptr->mode & USE_FULL))
             fis_ptr->max_inven++;
 }
 
@@ -179,7 +169,7 @@ static void test_inventory_floor(player_type *owner_ptr, fis_type *fis_ptr)
  * @param owner_ptr プレーヤーへの参照ポインタ
  * @param fis_ptr 床上アイテムへの参照ポインタ
  */
-static void test_equipment_floor(player_type *owner_ptr, fis_type *fis_ptr)
+static void test_equipment_floor(player_type *owner_ptr, fis_type *fis_ptr, const ItemTester& item_tester)
 {
     if (!fis_ptr->equip) {
         fis_ptr->e2 = -1;
@@ -191,7 +181,7 @@ static void test_equipment_floor(player_type *owner_ptr, fis_type *fis_ptr)
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++)
         if (owner_ptr->select_ring_slot ? is_ring_slot(i)
-                                        : item_tester_okay(owner_ptr, &owner_ptr->inventory_list[i], fis_ptr->tval) || (fis_ptr->mode & USE_FULL))
+                                        : item_tester.okay(&owner_ptr->inventory_list[i]) || (fis_ptr->mode & USE_FULL))
             fis_ptr->max_equip++;
 }
 
@@ -204,37 +194,37 @@ static void test_equipment_floor(player_type *owner_ptr, fis_type *fis_ptr)
  * @param mode オプションフラグ
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す。/
  */
-bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, tval_type tval)
+bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, const ItemTester& item_tester)
 {
     fis_type tmp_fis;
-    fis_type *fis_ptr = initialize_fis_type(&tmp_fis, cp, mode, tval);
+    fis_type *fis_ptr = initialize_fis_type(&tmp_fis, cp, mode);
     static char prev_tag = '\0';
-    if (check_floor_item_tag(owner_ptr, fis_ptr, &prev_tag))
+    if (check_floor_item_tag(owner_ptr, fis_ptr, &prev_tag, item_tester))
         return true;
 
     msg_print(NULL);
     handle_stuff(owner_ptr);
-    test_inventory_floor(owner_ptr, fis_ptr);
+    test_inventory_floor(owner_ptr, fis_ptr, item_tester);
     fis_ptr->done = false;
     fis_ptr->item = false;
     fis_ptr->i1 = 0;
     fis_ptr->i2 = INVEN_PACK - 1;
-    while ((fis_ptr->i1 <= fis_ptr->i2) && (!get_item_okay(owner_ptr, fis_ptr->i1, fis_ptr->tval)))
+    while ((fis_ptr->i1 <= fis_ptr->i2) && (!get_item_okay(owner_ptr, fis_ptr->i1, item_tester)))
         fis_ptr->i1++;
 
-    while ((fis_ptr->i1 <= fis_ptr->i2) && (!get_item_okay(owner_ptr, fis_ptr->i2, fis_ptr->tval)))
+    while ((fis_ptr->i1 <= fis_ptr->i2) && (!get_item_okay(owner_ptr, fis_ptr->i2, item_tester)))
         fis_ptr->i2--;
 
     fis_ptr->e1 = INVEN_MAIN_HAND;
     fis_ptr->e2 = INVEN_TOTAL - 1;
-    test_equipment_floor(owner_ptr, fis_ptr);
+    test_equipment_floor(owner_ptr, fis_ptr, item_tester);
     if (has_two_handed_weapons(owner_ptr) && !(fis_ptr->mode & IGNORE_BOTHHAND_SLOT))
         fis_ptr->max_equip++;
 
-    while ((fis_ptr->e1 <= fis_ptr->e2) && (!get_item_okay(owner_ptr, fis_ptr->e1, fis_ptr->tval)))
+    while ((fis_ptr->e1 <= fis_ptr->e2) && (!get_item_okay(owner_ptr, fis_ptr->e1, item_tester)))
         fis_ptr->e1++;
 
-    while ((fis_ptr->e1 <= fis_ptr->e2) && (!get_item_okay(owner_ptr, fis_ptr->e2, fis_ptr->tval)))
+    while ((fis_ptr->e1 <= fis_ptr->e2) && (!get_item_okay(owner_ptr, fis_ptr->e2, item_tester)))
         fis_ptr->e2--;
 
     if (fis_ptr->equip && has_two_handed_weapons(owner_ptr) && !(fis_ptr->mode & IGNORE_BOTHHAND_SLOT)) {
@@ -248,7 +238,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
     fis_ptr->floor_num = 0;
     if (fis_ptr->floor)
         fis_ptr->floor_num
-            = scan_floor_items(owner_ptr, fis_ptr->floor_list, owner_ptr->y, owner_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, fis_ptr->tval);
+            = scan_floor_items(owner_ptr, fis_ptr->floor_list, owner_ptr->y, owner_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
 
     if ((mode & USE_INVEN) && (fis_ptr->i1 <= fis_ptr->i2))
         fis_ptr->allow_inven = true;
@@ -312,19 +302,19 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
             fis_ptr->n1 = I2A(fis_ptr->i1);
             fis_ptr->n2 = I2A(fis_ptr->i2);
             if (command_see)
-                get_item_label = show_inventory(owner_ptr, fis_ptr->menu_line, fis_ptr->mode, fis_ptr->tval);
+                get_item_label = show_inventory(owner_ptr, fis_ptr->menu_line, fis_ptr->mode, item_tester);
         } else if (command_wrk == USE_EQUIP) {
             fis_ptr->n1 = I2A(fis_ptr->e1 - INVEN_MAIN_HAND);
             fis_ptr->n2 = I2A(fis_ptr->e2 - INVEN_MAIN_HAND);
             if (command_see)
-                get_item_label = show_equipment(owner_ptr, fis_ptr->menu_line, mode, fis_ptr->tval);
+                get_item_label = show_equipment(owner_ptr, fis_ptr->menu_line, mode, item_tester);
         } else if (command_wrk == USE_FLOOR) {
             int j = fis_ptr->floor_top;
             fis_ptr->k = MIN(fis_ptr->floor_top + 23, fis_ptr->floor_num) - 1;
             fis_ptr->n1 = I2A(j - fis_ptr->floor_top); // TODO: 常に'0'になる。どんな意図でこのようなコードになっているのか不明.
             fis_ptr->n2 = I2A(fis_ptr->k - fis_ptr->floor_top);
             if (command_see)
-                get_item_label = show_floor_items(owner_ptr, fis_ptr->menu_line, owner_ptr->y, owner_ptr->x, &fis_ptr->min_width, fis_ptr->tval);
+                get_item_label = show_floor_items(owner_ptr, fis_ptr->menu_line, owner_ptr->y, owner_ptr->x, &fis_ptr->min_width, item_tester);
         }
 
         if (command_wrk == USE_INVEN) {
@@ -559,7 +549,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 if (command_wrk == USE_FLOOR)
                     *cp = -get_item_label;
                 else {
-                    if (!get_item_okay(owner_ptr, get_item_label, fis_ptr->tval)) {
+                    if (!get_item_okay(owner_ptr, get_item_label, item_tester)) {
                         bell();
                         break;
                     }
@@ -628,7 +618,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
             window_stuff(owner_ptr);
 
             fis_ptr->floor_num
-                = scan_floor_items(owner_ptr, fis_ptr->floor_list, owner_ptr->y, owner_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, fis_ptr->tval);
+                = scan_floor_items(owner_ptr, fis_ptr->floor_list, owner_ptr->y, owner_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
             if (command_see) {
                 screen_load();
                 screen_save();
@@ -707,7 +697,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
         case '8':
         case '9': {
             if (command_wrk != USE_FLOOR) {
-                if (!get_tag(owner_ptr, &fis_ptr->k, fis_ptr->which, command_wrk, fis_ptr->tval)) {
+                if (!get_tag(owner_ptr, &fis_ptr->k, fis_ptr->which, command_wrk, item_tester)) {
                     bell();
                     break;
                 }
@@ -717,7 +707,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
                     break;
                 }
 
-                if (!get_item_okay(owner_ptr, fis_ptr->k, fis_ptr->tval)) {
+                if (!get_item_okay(owner_ptr, fis_ptr->k, item_tester)) {
                     bell();
                     break;
                 }
@@ -754,7 +744,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
             bool tag_not_found = false;
 
             if (command_wrk != USE_FLOOR) {
-                if (!get_tag(owner_ptr, &fis_ptr->k, fis_ptr->which, command_wrk, fis_ptr->tval))
+                if (!get_tag(owner_ptr, &fis_ptr->k, fis_ptr->which, command_wrk, item_tester))
                     tag_not_found = true;
                 else if ((fis_ptr->k < INVEN_MAIN_HAND) ? !fis_ptr->inven : !fis_ptr->equip)
                     tag_not_found = true;
@@ -802,7 +792,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 }
             }
 
-            if ((command_wrk != USE_FLOOR) && !get_item_okay(owner_ptr, fis_ptr->k, fis_ptr->tval)) {
+            if ((command_wrk != USE_FLOOR) && !get_item_okay(owner_ptr, fis_ptr->k, item_tester)) {
                 bell();
                 break;
             }
@@ -831,8 +821,6 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
         command_see = false;
     }
 
-    fis_ptr->tval = TV_NONE;
-    item_tester_hook = NULL;
     if (fis_ptr->toggle)
         toggle_inventory_equipment(owner_ptr);
 

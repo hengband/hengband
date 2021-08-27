@@ -613,10 +613,10 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
         {
             if (cast) {
                 if (randint1(50) > plev) {
-                    if (!ident_spell(caster_ptr, false, TV_NONE))
+                    if (!ident_spell(caster_ptr, false))
                         return NULL;
                 } else {
-                    if (!identify_fully(caster_ptr, false, TV_NONE))
+                    if (!identify_fully(caster_ptr, false))
                         return NULL;
                 }
             }

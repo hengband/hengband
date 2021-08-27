@@ -477,7 +477,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
         {
             if (cast) {
-                if (!identify_fully(caster_ptr, false, TV_NONE))
+                if (!identify_fully(caster_ptr, false))
                     return NULL;
             }
         }

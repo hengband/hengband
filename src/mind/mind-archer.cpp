@@ -139,11 +139,10 @@ bool create_ammo(player_type *creature_ptr)
         return true;
     }
     case AMMO_ARROW: {
-        item_tester_hook = make_item_tester(object_is_convertible);
         concptr q = _("どのアイテムから作りますか？ ", "Convert which item? ");
         concptr s = _("材料を持っていない。", "You have no item to convert.");
         OBJECT_IDX item;
-        object_type *q_ptr = choose_object(creature_ptr, &item, q, s, USE_INVEN | USE_FLOOR, TV_NONE);
+        object_type *q_ptr = choose_object(creature_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(object_is_convertible));
         if (!q_ptr)
             return false;
 
@@ -166,11 +165,10 @@ bool create_ammo(player_type *creature_ptr)
         return true;
     }
     case AMMO_BOLT: {
-        item_tester_hook = make_item_tester(object_is_convertible);
         concptr q = _("どのアイテムから作りますか？ ", "Convert which item? ");
         concptr s = _("材料を持っていない。", "You have no item to convert.");
         OBJECT_IDX item;
-        object_type *q_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_NONE);
+        object_type *q_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(object_is_convertible));
         if (!q_ptr)
             return false;
 
