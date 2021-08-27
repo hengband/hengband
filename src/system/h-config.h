@@ -49,21 +49,12 @@
 
 // clang-format off
 
-/*
- * OPTION: Define "HAVE_USLEEP" only if "usleep()" exists.
- *
- * Note that this is only relevant for "SET_UID" machines.
- */
 #ifdef SET_UID
-  #ifdef SET_UID
   #define PRIVATE_USER_PATH "~/.angband"
   #define SAVEFILE_USE_UID
-  #endif
 
-  #ifndef HAVE_CONFIG_H
-  #ifndef ISC
+  #if !defined(HAVE_CONFIG_H) && !defined(ISC)
   #define HAVE_USLEEP
-  #endif
   #endif
 #endif
 
