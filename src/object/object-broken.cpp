@@ -209,7 +209,7 @@ bool BreakerCold::hates(object_type *o_ptr) const
  * @return 破損するならばTRUEを返す
  * @todo 統合を検討
  */
-int ObjectBreaker::can_destroy(object_type *o_ptr) const
+bool ObjectBreaker::can_destroy(object_type *o_ptr) const
 {
     TrFlags flgs;
     if (!this->hates(o_ptr))
