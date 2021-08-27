@@ -10,10 +10,12 @@ bool potion_smash_effect(player_type *owner_ptr, MONSTER_IDX who, POSITION y, PO
 PERCENTAGE breakage_chance(player_type *owner_ptr, object_type *o_ptr, bool has_archer_bonus, SPELL_IDX snipe_type);
 
 class ObjectBreaker {
-public:
+protected:
     ObjectBreaker(tr_type ignore_flg);
     ObjectBreaker() = delete;
     virtual ~ObjectBreaker() = default;
+
+public:
     int set_destroy(object_type *o_ptr);
     virtual bool hates(object_type *o_ptr) = 0;
 
