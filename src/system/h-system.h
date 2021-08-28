@@ -21,19 +21,23 @@
 #include <time.h>
 #include <wctype.h>
 
+// clang-format off
+
 #ifdef WINDOWS
-#include <io.h>
+  #include <io.h>
+#else
+  #ifdef SET_UID
+    #include <pwd.h>
+    #include <sys/file.h>
+    #include <sys/param.h>
+    #include <sys/stat.h>
+    #include <sys/timeb.h>
+    #include <sys/types.h>
+    #include <unistd.h>
+    #ifdef linux
+      #include <sys/time.h>
+    #endif
+  #endif
 #endif
 
-#ifdef SET_UID
-#include <pwd.h>
-#include <sys/file.h>
-#include <sys/param.h>
-#include <sys/stat.h>
-#include <sys/timeb.h>
-#include <sys/types.h>
-#include <unistd.h>
-#ifdef linux
-#include <sys/time.h>
-#endif
-#endif
+// clang-format on
