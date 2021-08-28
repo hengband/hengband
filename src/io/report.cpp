@@ -401,15 +401,11 @@ concptr make_screen_dump(player_type *creature_ptr)
 /*!
  * @brief スコア転送処理のメインルーチン
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return 正常終了の時0、異常があったら1
- * @todo メッセージは言語選択の関数マクロで何とかならんか？
+ * @return 正常にスコアを送信できたらtrue、失敗時に送信を中止したらfalse
  */
-errr report_score(player_type *creature_ptr, display_player_pf display_player)
+bool report_score(player_type *creature_ptr, display_player_pf display_player)
 {
-    BUF *score;
-    score = buf_new();
-
-    concptr realm1_name;
+    auto *score = buf_new();
     char seikakutmp[128];
     char title[128];
     put_version(title);
@@ -419,11 +415,7 @@ errr report_score(player_type *creature_ptr, display_player_pf display_player)
     sprintf(seikakutmp, "%s ", ap_ptr->title);
 #endif
 
-    if (creature_ptr->pclass == CLASS_ELEMENTALIST)
-        realm1_name = get_element_title(creature_ptr->element);
-    else
-        realm1_name = realm_names[creature_ptr->realm1];
-
+    auto realm1_name = creature_ptr->pclass == CLASS_ELEMENTALIST ? get_element_title(creature_ptr->element) : realm_names[creature_ptr->realm1];
     buf_sprintf(score, "name: %s\n", creature_ptr->name);
     buf_sprintf(score, "version: %s\n", title);
     buf_sprintf(score, "score: %d\n", calc_score(creature_ptr));
@@ -443,36 +435,30 @@ errr report_score(player_type *creature_ptr, display_player_pf display_player)
     buf_sprintf(score, "-----charcter dump-----\n");
 
     make_dump(creature_ptr, score, display_player);
-
     if (screen_dump) {
         buf_sprintf(score, "-----screen shot-----\n");
         buf_append(score, screen_dump, strlen(screen_dump));
     }
 
     term_clear();
-
-    bool succeeded = false;
-    while (!succeeded) {
+    while (true) {
         term_fresh();
-
         prt(_("スコア送信中...", "Sending the score..."), 0, 0);
         term_fresh();
-
         if (http_post(SCORE_PATH, score)) {
-            succeeded = true;
-        } else {
-            prt(_("スコア・サーバへの送信に失敗しました。", "Failed to send to the score server."), 0, 0);
-            (void)inkey();
-
-            if (!get_check_strict(creature_ptr, _("もう一度接続を試みますか? ", "Try again? "), CHECK_NO_HISTORY)) {
-                break;
-            }
+            buf_delete(score);
+            return true;
         }
+
+        prt(_("スコア・サーバへの送信に失敗しました。", "Failed to send to the score server."), 0, 0);
+        (void)inkey();
+        if (get_check_strict(creature_ptr, _("もう一度接続を試みますか? ", "Try again? "), CHECK_NO_HISTORY)) {
+            continue;
+        }
+
+        buf_delete(score);
+        return false;
     }
-
-    buf_delete(score);
-
-    return succeeded ? 0 : 1;
 }
 #else
 concptr screen_dump = NULL;
