@@ -13,7 +13,7 @@
 
 // @todo このアドレスもそろそろ変えた方が良い気がする.
 // そもそもこのご時世にメールによる連絡を試みるか？
-#define MAINTAINER "echizen@users.sourceforge.jp"
+constexpr auto MAINTAINER = "echizen@users.sourceforge.jp";
 
 // clang-format off
 
