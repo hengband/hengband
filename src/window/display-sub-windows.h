@@ -1,16 +1,16 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "object/tval-types.h"
 
 #include <vector>
 
 typedef struct floor_type floor_type;
 typedef struct player_type player_type;
-void fix_inventory(player_type *player_ptr, tval_type item_tester_tval);
+class ItemTester;
+void fix_inventory(player_type *player_ptr, const ItemTester &item_tester);
 void print_monster_list(floor_type *floor_ptr, const std::vector<MONSTER_IDX> &monster_list, TERM_LEN x, TERM_LEN y, TERM_LEN max_lines);
 void fix_monster_list(player_type *player_ptr);
-void fix_equip(player_type *player_ptr, tval_type item_tester_tval);
+void fix_equip(player_type *player_ptr, const ItemTester &item_tester);
 void fix_player(player_type *player_ptr);
 void fix_message(void);
 void fix_overhead(player_type *player_ptr);

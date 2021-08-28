@@ -52,7 +52,7 @@
  * @brief サブウィンドウに所持品一覧を表示する / Hack -- display inventory in sub-windows
  * @param player_ptr プレーヤーへの参照ポインタ
  */
-void fix_inventory(player_type *player_ptr, tval_type item_tester_tval)
+void fix_inventory(player_type *player_ptr, const ItemTester &item_tester)
 {
     for (int j = 0; j < 8; j++) {
         term_type *old = Term;
@@ -63,7 +63,7 @@ void fix_inventory(player_type *player_ptr, tval_type item_tester_tval)
             continue;
 
         term_activate(angband_term[j]);
-        display_inventory(player_ptr, TvalItemTester(item_tester_tval));
+        display_inventory(player_ptr, item_tester);
         term_fresh();
         term_activate(old);
     }
@@ -291,7 +291,7 @@ static void display_equipment(player_type *owner_ptr, const ItemTester& item_tes
  * Hack -- display equipment in sub-windows
  * @param player_ptr プレーヤーへの参照ポインタ
  */
-void fix_equip(player_type *player_ptr, tval_type item_tester_tval)
+void fix_equip(player_type *player_ptr, const ItemTester &item_tester)
 {
     for (int j = 0; j < 8; j++) {
         term_type *old = Term;
@@ -301,7 +301,7 @@ void fix_equip(player_type *player_ptr, tval_type item_tester_tval)
             continue;
 
         term_activate(angband_term[j]);
-        display_equipment(player_ptr, TvalItemTester(item_tester_tval));
+        display_equipment(player_ptr, item_tester);
         term_fresh();
         term_activate(old);
     }
