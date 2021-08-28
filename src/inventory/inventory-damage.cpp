@@ -16,7 +16,7 @@
 #include "view/display-messages.h"
 
 /*!
- * @brief アイテムを指定確率で破損させる /
+ * @brief 手持ちのアイテムを指定確率で破損させる /
  * Destroys a type of item on a given percent chance
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param typ 破損判定関数ポインタ
@@ -26,7 +26,7 @@
  * Destruction taken from "melee.c" code for "stealing".
  * New-style wands and rods handled correctly. -LM-
  */
-void inventory_damage(player_type *player_ptr, inven_func typ, int perc)
+void inventory_damage(player_type *player_ptr, const ObjectBreaker& breaker, int perc)
 {
     INVENTORY_IDX i;
     int j, amt;
@@ -47,7 +47,7 @@ void inventory_damage(player_type *player_ptr, inven_func typ, int perc)
             continue;
 
         /* Give this item slot a shot at death */
-        if (!(*typ)(o_ptr))
+        if (!breaker.can_destroy(o_ptr))
             continue;
 
         /* Count the casualties */

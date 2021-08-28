@@ -159,7 +159,7 @@ HIT_POINT acid_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, boo
 
     HIT_POINT get_damage = take_hit(creature_ptr, aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str);
     if (!aura && !(double_resist && has_resist_acid(creature_ptr)))
-        inventory_damage(creature_ptr, set_acid_destroy, inv);
+        inventory_damage(creature_ptr, BreakerAcid(), inv);
 
     return get_damage;
 }
@@ -191,7 +191,7 @@ HIT_POINT elec_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, boo
 
     HIT_POINT get_damage = take_hit(creature_ptr, aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str);
     if (!aura && !(double_resist && has_resist_elec(creature_ptr)))
-        inventory_damage(creature_ptr, set_elec_destroy, inv);
+        inventory_damage(creature_ptr, BreakerElec(), inv);
 
     return get_damage;
 }
@@ -223,7 +223,7 @@ HIT_POINT fire_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, boo
 
     HIT_POINT get_damage = take_hit(creature_ptr, aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str);
     if (!aura && !(double_resist && has_resist_fire(creature_ptr)))
-        inventory_damage(creature_ptr, set_fire_destroy, inv);
+        inventory_damage(creature_ptr, BreakerFire(), inv);
 
     return get_damage;
 }
@@ -253,7 +253,7 @@ HIT_POINT cold_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, boo
 
     HIT_POINT get_damage = take_hit(creature_ptr, aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str);
     if (!aura && !(double_resist && has_resist_cold(creature_ptr)))
-        inventory_damage(creature_ptr, set_cold_destroy, inv);
+        inventory_damage(creature_ptr, BreakerCold(), inv);
 
     return get_damage;
 }
