@@ -41,6 +41,7 @@
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include "window/display-sub-windows.h"
 #include "wizard/wizard-messages.h"
 #include "world/world-object.h"
 #include "world/world.h"
@@ -590,6 +591,8 @@ object_type *choose_object(player_type *owner_ptr, OBJECT_IDX *idx, concptr q, c
 
     if (idx)
         *idx = INVEN_NONE;
+
+    FixItemTesterSetter setter(item_tester);
 
     if (!get_item(owner_ptr, &item, q, s, option, item_tester))
         return NULL;
