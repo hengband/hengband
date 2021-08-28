@@ -3,6 +3,7 @@
 #include "object/tval-types.h"
 
 #include <functional>
+#include <memory>
 
 struct object_type;
 struct player_type;
@@ -14,6 +15,7 @@ class ItemTester {
 public:
     virtual ~ItemTester() = default;
     bool okay(const object_type *o_ptr) const;
+    virtual std::unique_ptr<ItemTester> clone() const = 0;
 
 protected:
     ItemTester() = default;
@@ -29,6 +31,11 @@ class AllMatchItemTester : public ItemTester {
 public:
     AllMatchItemTester() = default;
 
+    virtual std::unique_ptr<ItemTester> clone() const
+    {
+        return std::make_unique<AllMatchItemTester>(*this);
+    }
+
 private:
     virtual bool okay_impl(const object_type *) const
     {
@@ -43,6 +50,11 @@ class TvalItemTester : public ItemTester {
 public:
     explicit TvalItemTester(tval_type tval);
 
+    virtual std::unique_ptr<ItemTester> clone() const
+    {
+        return std::make_unique<TvalItemTester>(*this);
+    }
+
 private:
     virtual bool okay_impl(const object_type *o_ptr) const;
 
@@ -56,6 +68,11 @@ class FuncItemTester : public ItemTester {
 public:
     explicit FuncItemTester(std::function<bool(const object_type *)> test_func);
     explicit FuncItemTester(std::function<bool(player_type *, const object_type *)> test_func, player_type *player_ptr);
+
+    virtual std::unique_ptr<ItemTester> clone() const
+    {
+        return std::make_unique<FuncItemTester>(*this);
+    }
 
 private:
     virtual bool okay_impl(const object_type *o_ptr) const;
