@@ -158,9 +158,9 @@ bool send_world_score(player_type *current_player_ptr, bool do_send, display_pla
     prt(_("送信中．．", "Sending..."), 0, 0);
     term_fresh();
     screen_save();
-    auto err = report_score(current_player_ptr, display_player);
+    auto successful_send = report_score(current_player_ptr, display_player);
     screen_load();
-    if (err) {
+    if (!successful_send) {
         return false;
     }
 
