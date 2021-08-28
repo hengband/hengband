@@ -33,7 +33,7 @@
 #include <sys/timeb.h>
 #include <sys/types.h>
 #include <unistd.h>
-#if defined(Pyramid) || defined(NCR3K) || defined(ibm032) || defined(__osf__) || defined(ISC) || defined(linux)
+#ifdef linux
 #include <sys/time.h>
 #endif
-#endif /* SET_UID */
+#endif
