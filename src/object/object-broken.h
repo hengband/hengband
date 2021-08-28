@@ -13,9 +13,9 @@ class ObjectBreaker {
 protected:
     ObjectBreaker(tr_type ignore_flg);
     ObjectBreaker() = delete;
-    virtual ~ObjectBreaker() = default;
 
 public:
+    virtual ~ObjectBreaker() = default;
     bool can_destroy(object_type *o_ptr) const;
     virtual bool hates(object_type *o_ptr) const = 0;
 
