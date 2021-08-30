@@ -92,7 +92,7 @@ constexpr auto MAINTAINER = "echizen@users.sourceforge.jp";
       #define iskanji(x) (((unsigned char)(x) >= 0xa1 && (unsigned char)(x) <= 0xfe) || (unsigned char)(x) == 0x8e)
       #define iskana(x) (0)
     #else
-      #error Oops! Please define "EUC" or "SJIS" for kanji-code of your system.
+      #error Oops! Please define "EUC" for kanji-code of your system.
     #endif
   #endif
   
