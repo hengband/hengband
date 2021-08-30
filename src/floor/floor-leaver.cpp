@@ -306,8 +306,16 @@ static void jump_floors(player_type *creature_ptr)
     else if (creature_ptr->change_floor_mode & CFM_UP)
         move_num = -1;
 
-    if (creature_ptr->change_floor_mode & CFM_SHAFT)
-        move_num += SGN(move_num);
+    if (creature_ptr->change_floor_mode & CFM_SHAFT) {
+        auto direction = 0;
+        if (move_num > 0) {
+            direction = 1;
+        } else if (move_num < 0) {
+            direction = -1;
+        }
+            
+        move_num += direction;
+    }
 
     if (creature_ptr->change_floor_mode & CFM_DOWN) {
         if (!is_in_dungeon(creature_ptr))
