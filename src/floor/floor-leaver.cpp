@@ -297,26 +297,26 @@ static void set_grid_by_leaving_floor(player_type *creature_ptr, grid_type **g_p
 
 static void jump_floors(player_type *creature_ptr)
 {
-    if ((creature_ptr->change_floor_mode & (CFM_DOWN | CFM_UP)) == 0) {
+    if (none_bits(creature_ptr->change_floor_mode, CFM_DOWN | CFM_UP)) {
         return;
     }
 
-    int move_num = 0;
-    if (creature_ptr->change_floor_mode & CFM_DOWN) {
+    auto move_num = 0;
+    if (any_bits(creature_ptr->change_floor_mode, CFM_DOWN)) {
         move_num = 1;
-    } else if (creature_ptr->change_floor_mode & CFM_UP) {
+    } else if (any_bits(creature_ptr->change_floor_mode, CFM_UP)) {
         move_num = -1;
     }
 
-    if (creature_ptr->change_floor_mode & CFM_SHAFT) {
+    if (any_bits(creature_ptr->change_floor_mode, CFM_SHAFT)) {
         move_num *= 2;
     }
 
-    if (creature_ptr->change_floor_mode & CFM_DOWN) {
+    if (any_bits(creature_ptr->change_floor_mode, CFM_DOWN)) {
         if (!is_in_dungeon(creature_ptr)) {
             move_num = d_info[creature_ptr->dungeon_idx].mindepth;
         }
-    } else if (creature_ptr->change_floor_mode & CFM_UP) {
+    } else if (any_bits(creature_ptr->change_floor_mode, CFM_UP)) {
         if (creature_ptr->current_floor_ptr->dun_level + move_num < d_info[creature_ptr->dungeon_idx].mindepth) {
             move_num = -creature_ptr->current_floor_ptr->dun_level;
         }
