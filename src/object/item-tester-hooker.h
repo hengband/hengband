@@ -24,17 +24,26 @@ private:
     virtual bool okay_impl(const object_type *o_ptr) const = 0;
 };
 
+/**
+ * @brief ItemTesterの派生クラスのオブジェクトを複製するメンバ関数 clone() を実装するクラス
+ *
+ * @tparam T ItemTesterの派生クラスのオブジェクトの型
+ */
+template <typename DerivedItemTester>
+class CloneableItemTester : public ItemTester {
+public:
+    virtual std::unique_ptr<ItemTester> clone() const final
+    {
+        return std::make_unique<DerivedItemTester>(static_cast<const DerivedItemTester &>(*this));
+    }
+};
+
 /*!
  * @brief 全てのアイテムがOKとなるアイテムテストクラス
  */
-class AllMatchItemTester : public ItemTester {
+class AllMatchItemTester : public CloneableItemTester<AllMatchItemTester> {
 public:
     AllMatchItemTester() = default;
-
-    virtual std::unique_ptr<ItemTester> clone() const
-    {
-        return std::make_unique<AllMatchItemTester>(*this);
-    }
 
 private:
     virtual bool okay_impl(const object_type *) const
@@ -46,14 +55,9 @@ private:
 /*!
  * @brief 指定した tval のアイテムならばOKとなるアイテムテストクラス
  */
-class TvalItemTester : public ItemTester {
+class TvalItemTester : public CloneableItemTester<TvalItemTester> {
 public:
     explicit TvalItemTester(tval_type tval);
-
-    virtual std::unique_ptr<ItemTester> clone() const
-    {
-        return std::make_unique<TvalItemTester>(*this);
-    }
 
 private:
     virtual bool okay_impl(const object_type *o_ptr) const;
@@ -64,15 +68,10 @@ private:
 /*!
  * @brief 指定した関数を呼び出した結果戻り値が true であればOKとなるアイテムテストクラス
  */
-class FuncItemTester : public ItemTester {
+class FuncItemTester : public CloneableItemTester<FuncItemTester> {
 public:
     explicit FuncItemTester(std::function<bool(const object_type *)> test_func);
     explicit FuncItemTester(std::function<bool(player_type *, const object_type *)> test_func, player_type *player_ptr);
-
-    virtual std::unique_ptr<ItemTester> clone() const
-    {
-        return std::make_unique<FuncItemTester>(*this);
-    }
 
 private:
     virtual bool okay_impl(const object_type *o_ptr) const;
