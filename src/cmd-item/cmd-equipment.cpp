@@ -108,6 +108,9 @@ void do_cmd_wield(player_type *creature_ptr)
 
     slot = wield_slot(creature_ptr, o_ptr);
 
+    const auto o_ptr_mh = &creature_ptr->inventory_list[INVEN_MAIN_HAND];
+    const auto o_ptr_sh = &creature_ptr->inventory_list[INVEN_SUB_HAND];
+
     switch (o_ptr->tval) {
     case TV_CAPTURE:
     case TV_SHIELD:
@@ -122,8 +125,7 @@ void do_cmd_wield(player_type *creature_ptr)
                 need_switch_wielding = INVEN_SUB_HAND;
         } else if (has_melee_weapon(creature_ptr, INVEN_SUB_HAND))
             slot = INVEN_MAIN_HAND;
-        else if (creature_ptr->inventory_list[INVEN_MAIN_HAND].k_idx && !object_is_melee_weapon(&creature_ptr->inventory_list[INVEN_MAIN_HAND])
-            && creature_ptr->inventory_list[INVEN_SUB_HAND].k_idx && !object_is_melee_weapon(&creature_ptr->inventory_list[INVEN_SUB_HAND])) {
+        else if (o_ptr_mh->k_idx && !object_is_melee_weapon(o_ptr_mh) && o_ptr_sh->k_idx && !object_is_melee_weapon(o_ptr_sh)) {
             q = _("どちらの手に装備しますか?", "Equip which hand? ");
             s = _("おっと。", "Oops.");
             if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP), FuncItemTester(object_is_mochikae)))
@@ -138,10 +140,10 @@ void do_cmd_wield(player_type *creature_ptr)
         if (slot == INVEN_SUB_HAND) {
             if (!get_check(_("二刀流で戦いますか？", "Dual wielding? ")))
                 slot = INVEN_MAIN_HAND;
-        } else if (!creature_ptr->inventory_list[INVEN_MAIN_HAND].k_idx && has_melee_weapon(creature_ptr, INVEN_SUB_HAND)) {
+        } else if (!o_ptr_mh->k_idx && has_melee_weapon(creature_ptr, INVEN_SUB_HAND)) {
             if (!get_check(_("二刀流で戦いますか？", "Dual wielding? ")))
                 slot = INVEN_SUB_HAND;
-        } else if (creature_ptr->inventory_list[INVEN_SUB_HAND].k_idx && creature_ptr->inventory_list[INVEN_MAIN_HAND].k_idx) {
+        } else if (o_ptr_mh->k_idx && o_ptr_sh->k_idx) {
             q = _("どちらの手に装備しますか?", "Equip which hand? ");
             s = _("おっと。", "Oops.");
             if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP), FuncItemTester(object_is_mochikae)))
