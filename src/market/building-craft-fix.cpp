@@ -101,7 +101,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_EQUIP), FuncItemTester(object_is_broken_weapon));
+    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_EQUIP), FuncItemTester(&object_type::is_broken_weapon));
     if (!o_ptr)
         return 0;
 

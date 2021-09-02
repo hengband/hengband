@@ -9,25 +9,6 @@
 #include "util/bit-flags-calculator.h"
 
 /*!
- * @brief 修復対象となる壊れた武器かを判定する。 / Hook to specify "broken weapon"
- * @param o_ptr オブジェクトの構造体の参照ポインタ。
- * @return 修復対象になるならTRUEを返す。
- */
-bool object_is_broken_weapon(const object_type *o_ptr)
-{
-    if (o_ptr->tval != TV_SWORD)
-        return false;
-
-    switch (o_ptr->sval) {
-    case SV_BROKEN_DAGGER:
-    case SV_BROKEN_SWORD:
-        return true;
-    }
-
-    return false;
-}
-
-/*!
  * @brief オブジェクトが投射可能な武器かどうかを返す。
  * @param o_ptr 判定するオブジェクトの構造体参照ポインタ
  * @return 投射可能な武器ならばTRUE

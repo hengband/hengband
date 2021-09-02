@@ -156,6 +156,24 @@ bool object_type::is_orthodox_melee_weapons() const
     return false;
 }
 
+/*!
+ * @brief 修復対象となる壊れた武器かを判定する。 / Hook to specify "broken weapon"
+ * @return 修復対象になるならTRUEを返す。
+ */
+bool object_type::is_broken_weapon() const
+{
+    if (this->tval != TV_SWORD)
+        return false;
+
+    switch (this->sval) {
+    case SV_BROKEN_DAGGER:
+    case SV_BROKEN_SWORD:
+        return true;
+    }
+
+    return false;
+}
+
 bool object_type::is_lance() const
 {
     auto is_lance = this->tval == TV_POLEARM;
