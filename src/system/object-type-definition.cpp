@@ -77,7 +77,7 @@ void object_type::prep(KIND_OBJECT_IDX ko_idx)
         this->curse_flags.set(get_curse(2, this));
 }
 
-bool object_type::is_lance()
+bool object_type::is_lance() const
 {
     auto is_lance = this->tval == TV_POLEARM;
     is_lance &= (this->sval == SV_LANCE) || (this->sval == SV_HEAVY_LANCE);
