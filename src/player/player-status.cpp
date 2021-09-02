@@ -2194,14 +2194,11 @@ static int16_t calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool i
         }
 
         /* Riding bonus and penalty */
-        if (creature_ptr->riding) {
-            if ((o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE))) {
-                hit += 15;
-            }
+        if (creature_ptr->riding && o_ptr->is_lance()) {
+            hit += 15;
         }
 
-        if (creature_ptr->riding != 0 && !(o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE))
-            && !has_flag(flgs, TR_RIDING)) {
+        if (creature_ptr->riding && !o_ptr->is_lance() && !has_flag(flgs, TR_RIDING)) {
             int penalty;
             if ((creature_ptr->pclass == CLASS_BEASTMASTER) || (creature_ptr->pclass == CLASS_CAVALRY)) {
                 penalty = 5;
@@ -2502,7 +2499,7 @@ static DICE_NUMBER calc_to_weapon_dice_num(player_type *creature_ptr, INVENTORY_
     DICE_NUMBER dn = 0;
 
     if (creature_ptr->riding) {
-        if ((o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE))) {
+        if (o_ptr->is_lance()) {
             dn += 2;
         }
     }

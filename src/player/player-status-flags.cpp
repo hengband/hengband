@@ -2061,8 +2061,7 @@ bool has_riding_wield_weapon(player_type *creature_ptr, int i)
     TrFlags flgs;
     o_ptr = &creature_ptr->inventory_list[INVEN_MAIN_HAND + i];
     object_flags(o_ptr, flgs);
-    if (creature_ptr->riding != 0 && !(o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE))
-        && !has_flag(flgs, TR_RIDING)) {
+    if (creature_ptr->riding != 0 && !o_ptr->is_lance() && !has_flag(flgs, TR_RIDING)) {
         return true;
     }
     return false;

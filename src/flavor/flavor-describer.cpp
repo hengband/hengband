@@ -124,7 +124,7 @@ static void describe_weapon_dice(player_type *player_ptr, flavor_type *flavor_pt
 
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
-    if (player_ptr->riding && (flavor_ptr->o_ptr->tval == TV_POLEARM) && ((flavor_ptr->o_ptr->sval == SV_LANCE) || (flavor_ptr->o_ptr->sval == SV_HEAVY_LANCE))) {
+    if (player_ptr->riding && flavor_ptr->o_ptr->is_lance()) {
         flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->dd + 2);
     } else {
         flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->dd);    
