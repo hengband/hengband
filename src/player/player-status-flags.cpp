@@ -2062,7 +2062,9 @@ bool has_riding_wield_weapon(player_type *creature_ptr, int i)
     auto *o_ptr = &creature_ptr->inventory_list[INVEN_MAIN_HAND + i];
     TrFlags flgs;
     object_flags(o_ptr, flgs);
-    return (creature_ptr->riding > 0) && !o_ptr->is_lance() && !has_flag(flgs, TR_RIDING);
+    auto has_no_weapon = (o_ptr->tval == TV_NONE) || (o_ptr->tval == TV_SHIELD);
+    auto is_suitable = o_ptr->is_lance() || has_flag(flgs, TR_RIDING);
+    return (creature_ptr->riding > 0) && !has_no_weapon && !is_suitable;
 }
 
 bool has_not_ninja_weapon(player_type *creature_ptr, int i)
