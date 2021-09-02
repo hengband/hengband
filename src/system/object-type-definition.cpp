@@ -342,3 +342,12 @@ bool object_type::is_rare() const
     /* Any others are not "rare" objects. */
     return false;
 }
+
+/*!
+ * @brief オブジェクトがエゴアイテムかどうかを返す
+ * @return エゴアイテムならばtrueを返す
+ */
+bool object_type::is_ego() const
+{
+    return this->name2 != 0;
+}

@@ -413,7 +413,7 @@ item_feel_type pseudo_value_check_heavy(object_type *o_ptr)
         return FEEL_SPECIAL;
     }
 
-    if (object_is_ego(o_ptr)) {
+    if (o_ptr->is_ego()) {
         if (object_is_cursed(o_ptr) || object_is_broken(o_ptr))
             return FEEL_WORTHLESS;
 
@@ -447,7 +447,7 @@ item_feel_type pseudo_value_check_light(object_type *o_ptr)
         return FEEL_BROKEN;
     if (object_is_artifact(o_ptr))
         return FEEL_UNCURSED;
-    if (object_is_ego(o_ptr))
+    if (o_ptr->is_ego())
         return FEEL_UNCURSED;
     if (o_ptr->to_a > 0)
         return FEEL_UNCURSED;

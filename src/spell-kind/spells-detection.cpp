@@ -290,7 +290,7 @@ bool detect_objects_magic(player_type *caster_ptr, POSITION range)
             continue;
 
         tv = o_ptr->tval;
-        if (object_is_artifact(o_ptr) || object_is_ego(o_ptr) || (tv == TV_WHISTLE) || (tv == TV_AMULET) || (tv == TV_RING) || (tv == TV_STAFF)
+        if (object_is_artifact(o_ptr) || o_ptr->is_ego() || (tv == TV_WHISTLE) || (tv == TV_AMULET) || (tv == TV_RING) || (tv == TV_STAFF)
             || (tv == TV_WAND) || (tv == TV_ROD) || (tv == TV_SCROLL) || (tv == TV_POTION) || (tv == TV_LIFE_BOOK) || (tv == TV_SORCERY_BOOK)
             || (tv == TV_NATURE_BOOK) || (tv == TV_CHAOS_BOOK) || (tv == TV_DEATH_BOOK) || (tv == TV_TRUMP_BOOK) || (tv == TV_ARCANE_BOOK)
             || (tv == TV_CRAFT_BOOK) || (tv == TV_DEMON_BOOK) || (tv == TV_CRUSADE_BOOK) || (tv == TV_MUSIC_BOOK) || (tv == TV_HISSATSU_BOOK)

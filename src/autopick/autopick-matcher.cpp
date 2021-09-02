@@ -90,7 +90,7 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
     }
 
     if (IS_FLG(FLG_EGO)) {
-        if (!object_is_ego(o_ptr))
+        if (!o_ptr->is_ego())
             return false;
         if (!object_is_known(o_ptr) && !((o_ptr->ident & IDENT_SENSE) && o_ptr->feeling == FEEL_EXCELLENT))
             return false;

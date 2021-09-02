@@ -76,4 +76,5 @@ typedef struct object_type {
     bool is_lance() const;
     bool is_armour() const;
     bool is_rare() const;
+    bool is_ego() const;
 } object_type;

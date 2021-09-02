@@ -81,7 +81,7 @@ void calc_android_exp(player_type *creature_ptr)
         if (object_is_fixed_artifact(o_ptr)) {
             level = (level + MAX(a_info[o_ptr->name1].level - 8, 5)) / 2;
             level += MIN(20, a_info[o_ptr->name1].rarity / (a_info[o_ptr->name1].gen_flags.has(TRG::INSTA_ART) ? 10 : 3));
-        } else if (object_is_ego(o_ptr)) {
+        } else if (o_ptr->is_ego()) {
             level += MAX(3, (e_info[o_ptr->name2].rating - 5) / 2);
         } else if (o_ptr->art_name) {
             int32_t total_flags = flag_cost(o_ptr, o_ptr->pval);
@@ -116,7 +116,7 @@ void calc_android_exp(player_type *creature_ptr)
         if ((o_ptr->tval == TV_DRAG_ARMOR) || (o_ptr->tval == TV_CARD))
             level /= 2;
 
-        if (object_is_artifact(o_ptr) || object_is_ego(o_ptr) || (o_ptr->tval == TV_DRAG_ARMOR) || ((o_ptr->tval == TV_HELM) && (o_ptr->sval == SV_DRAGON_HELM))
+        if (object_is_artifact(o_ptr) || o_ptr->is_ego() || (o_ptr->tval == TV_DRAG_ARMOR) || ((o_ptr->tval == TV_HELM) && (o_ptr->sval == SV_DRAGON_HELM))
             || ((o_ptr->tval == TV_SHIELD) && (o_ptr->sval == SV_DRAGON_SHIELD)) || ((o_ptr->tval == TV_GLOVES) && (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES))
             || ((o_ptr->tval == TV_BOOTS) && (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE)) || ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DIAMOND_EDGE))) {
             if (level > 65)

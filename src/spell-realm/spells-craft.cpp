@@ -276,7 +276,7 @@ bool pulish_shield(player_type *caster_ptr)
     TrFlags flgs;
     object_flags(o_ptr, flgs);
 
-    bool is_pulish_successful = o_ptr->k_idx && !object_is_artifact(o_ptr) && !object_is_ego(o_ptr);
+    bool is_pulish_successful = o_ptr->k_idx && !object_is_artifact(o_ptr) && !o_ptr->is_ego();
     is_pulish_successful &= !object_is_cursed(o_ptr);
     is_pulish_successful &= (o_ptr->sval != SV_MIRROR_SHIELD);
     if (is_pulish_successful) {

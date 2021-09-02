@@ -43,7 +43,7 @@ int activation_index(const object_type *o_ptr)
     if (object_is_fixed_artifact(o_ptr) && has_flag(a_info[o_ptr->name1].flags, TR_ACTIVATE))
         return a_info[o_ptr->name1].act_idx;
 
-    if (object_is_ego(o_ptr) && has_flag(e_info[o_ptr->name2].flags, TR_ACTIVATE))
+    if (o_ptr->is_ego() && has_flag(e_info[o_ptr->name2].flags, TR_ACTIVATE))
         return e_info[o_ptr->name2].act_idx;
 
     if (!object_is_random_artifact(o_ptr) && has_flag(k_info[o_ptr->k_idx].flags, TR_ACTIVATE))

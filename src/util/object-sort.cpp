@@ -62,7 +62,7 @@ bool object_sort_comp(player_type *player_ptr, object_type *o_ptr, int32_t o_val
         o_type = 3;
     else if (o_ptr->art_name)
         o_type = 2;
-    else if (object_is_ego(o_ptr))
+    else if (o_ptr->is_ego())
         o_type = 1;
     else
         o_type = 0;
@@ -71,7 +71,7 @@ bool object_sort_comp(player_type *player_ptr, object_type *o_ptr, int32_t o_val
         j_type = 3;
     else if (j_ptr->art_name)
         j_type = 2;
-    else if (object_is_ego(j_ptr))
+    else if (j_ptr->is_ego())
         j_type = 1;
     else
         j_type = 0;

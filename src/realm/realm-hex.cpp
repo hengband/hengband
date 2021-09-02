@@ -235,7 +235,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), o_name);
                 o_ptr->curse_flags.set(TRC::CURSED);
 
-                if (object_is_artifact(o_ptr) || object_is_ego(o_ptr)) {
+                if (object_is_artifact(o_ptr) || o_ptr->is_ego()) {
 
                     if (one_in_(3))
                         o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
@@ -542,7 +542,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), o_name);
                 o_ptr->curse_flags.set(TRC::CURSED);
 
-                if (object_is_artifact(o_ptr) || object_is_ego(o_ptr)) {
+                if (object_is_artifact(o_ptr) || o_ptr->is_ego()) {
 
                     if (one_in_(3))
                         o_ptr->curse_flags.set(TRC::HEAVY_CURSE);

@@ -143,7 +143,7 @@ void rd_item_old(object_type *o_ptr)
                     o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
                 if (a_ptr->gen_flags.has(TRG::PERMA_CURSE))
                     o_ptr->curse_flags.set(TRC::PERMA_CURSE);
-            } else if (object_is_ego(o_ptr)) {
+            } else if (o_ptr->is_ego()) {
                 ego_item_type *e_ptr = &e_info[o_ptr->name2];
                 if (e_ptr->gen_flags.has(TRG::HEAVY_CURSE))
                     o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
@@ -333,7 +333,7 @@ void rd_item_old(object_type *o_ptr)
             o_ptr->name1 = 0;
     }
 
-    if (object_is_ego(o_ptr)) {
+    if (o_ptr->is_ego()) {
         ego_item_type *e_ptr;
         e_ptr = &e_info[o_ptr->name2];
         if (e_ptr->name.empty())

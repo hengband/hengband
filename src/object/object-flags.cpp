@@ -34,7 +34,7 @@ void object_flags(const object_type *o_ptr, TrFlags &flgs)
         }
     }
 
-    if (object_is_ego(o_ptr)) {
+    if (o_ptr->is_ego()) {
         ego_item_type *e_ptr = &e_info[o_ptr->name2];
         for (int i = 0; i < TR_FLAG_SIZE; i++) {
             flgs[i] |= e_ptr->flags[i];
@@ -116,7 +116,7 @@ void object_flags_known(const object_type *o_ptr, TrFlags &flgs)
     if (!object_is_known(o_ptr))
         return;
 
-    if (object_is_ego(o_ptr)) {
+    if (o_ptr->is_ego()) {
         ego_item_type *e_ptr = &e_info[o_ptr->name2];
         for (int i = 0; i < TR_FLAG_SIZE; i++) {
             flgs[i] |= e_ptr->flags[i];

@@ -155,7 +155,7 @@ PRICE object_value_real(const object_type *o_ptr)
         value = a_ptr->cost;
         value += flag_cost(o_ptr, o_ptr->pval);
         return (value);
-    } else if (object_is_ego(o_ptr)) {
+    } else if (o_ptr->is_ego()) {
         ego_item_type *e_ptr = &e_info[o_ptr->name2];
         if (!e_ptr->cost)
             return (0L);

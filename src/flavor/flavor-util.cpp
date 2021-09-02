@@ -195,7 +195,7 @@ char *get_ability_abbreviation(char *short_flavor, object_type *o_ptr, bool kanj
                 flgs[j] &= ~a_ptr->flags[j];
         }
 
-        if (object_is_ego(o_ptr)) {
+        if (o_ptr->is_ego()) {
             ego_item_type *e_ptr = &e_info[o_ptr->name2];
             for (int j = 0; j < TR_FLAG_SIZE; j++)
                 flgs[j] &= ~e_ptr->flags[j];

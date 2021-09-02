@@ -39,7 +39,7 @@ PRICE flag_cost(const object_type *o_ptr, int plusses)
 
         for (int i = 0; i < TR_FLAG_SIZE; i++)
             flgs[i] &= ~(a_ptr->flags[i]);
-    } else if (object_is_ego(o_ptr)) {
+    } else if (o_ptr->is_ego()) {
         ego_item_type *e_ptr = &e_info[o_ptr->name2];
 
         for (int i = 0; i < TR_FLAG_SIZE; i++)

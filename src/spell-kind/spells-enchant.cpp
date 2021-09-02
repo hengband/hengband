@@ -52,7 +52,7 @@ bool artifact_scroll(player_type *caster_ptr)
         msg_format("The %s %s already %s!", o_name, ((o_ptr->number > 1) ? "are" : "is"), ((o_ptr->number > 1) ? "artifacts" : "an artifact"));
 #endif
         okay = false;
-    } else if (object_is_ego(o_ptr)) {
+    } else if (o_ptr->is_ego()) {
 #ifdef JP
         msg_format("%sは既に名のあるアイテムです！", o_name);
 #else

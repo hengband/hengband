@@ -340,7 +340,7 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
             }
         }
     } else {
-        if (object_is_ego(o_ptr)) {
+        if (o_ptr->is_ego()) {
             if (o_ptr->is_weapon_armour_ammo()) {
                 /*
                  * Base name of ego weapons and armors
