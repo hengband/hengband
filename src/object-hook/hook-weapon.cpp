@@ -9,19 +9,6 @@
 #include "util/bit-flags-calculator.h"
 
 /*!
- * @brief オブジェクトが投射可能な武器かどうかを返す。
- * @param o_ptr 判定するオブジェクトの構造体参照ポインタ
- * @return 投射可能な武器ならばTRUE
- */
-bool object_is_boomerang(const object_type *o_ptr)
-{
-    if ((o_ptr->tval == TV_DIGGING) || (o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM) || (o_ptr->tval == TV_HAFTED))
-        return true;
-
-    return false;
-}
-
-/*!
  * @brief オブジェクトがどちらの手にも装備できる武器かどうかの判定
  * @param o_ptr 判定するオブジェクトの構造体参照ポインタ
  * @return 左右両方の手で装備できるならばTRUEを返す。

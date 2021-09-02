@@ -174,6 +174,15 @@ bool object_type::is_broken_weapon() const
     return false;
 }
 
+/*!
+ * @brief オブジェクトが投射可能な武器かどうかを返す。
+ * @return 投射可能な武器ならばtrue
+ */
+bool object_type::is_throwable() const
+{
+    return (this->tval == TV_DIGGING) || (this->tval == TV_SWORD) || (this->tval == TV_POLEARM) || (this->tval == TV_HAFTED);
+}
+
 bool object_type::is_lance() const
 {
     auto is_lance = this->tval == TV_POLEARM;
