@@ -9,20 +9,6 @@
 #include "util/bit-flags-calculator.h"
 
 /*!
- * @brief オブジェクトがどちらの手にも装備できる武器かどうかの判定
- * @param o_ptr 判定するオブジェクトの構造体参照ポインタ
- * @return 左右両方の手で装備できるならばTRUEを返す。
- */
-bool object_is_mochikae(const object_type *o_ptr)
-{
-    /* Check for a usable slot */
-    if (((o_ptr->tval >= TV_DIGGING) && (o_ptr->tval <= TV_SWORD)) || (o_ptr->tval == TV_SHIELD) || (o_ptr->tval == TV_CAPTURE) || (o_ptr->tval == TV_CARD))
-        return true;
-
-    return false;
-}
-
-/*!
  * @brief オブジェクトがプレイヤーの職業に応じた適正武器か否かを返す / Favorite weapons
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return オブジェクトが適正武器ならばTRUEを返す

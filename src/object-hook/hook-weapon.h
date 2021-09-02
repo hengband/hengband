@@ -2,7 +2,6 @@
 
 typedef struct object_type object_type;
 typedef struct player_type player_type;
-bool object_is_mochikae(const object_type *o_ptr);
 bool object_is_favorite(player_type *player_ptr, const object_type *o_ptr);
 bool object_refuse_enchant_weapon(const object_type *o_ptr);
 bool object_allow_enchant_weapon(const object_type *o_ptr);

@@ -183,6 +183,16 @@ bool object_type::is_throwable() const
     return (this->tval == TV_DIGGING) || (this->tval == TV_SWORD) || (this->tval == TV_POLEARM) || (this->tval == TV_HAFTED);
 }
 
+/*!
+ * @brief オブジェクトがどちらの手にも装備できる武器かどうかの判定
+ * @return 左右両方の手で装備できるならばtrueを返す。
+ */
+bool object_type::is_mochikae() const
+{
+    /* Check for a usable slot */
+    return ((TV_DIGGING <= this->tval) && (this->tval <= TV_SWORD)) || (this->tval == TV_SHIELD) || (this->tval == TV_CAPTURE) || (this->tval == TV_CARD);
+}
+
 bool object_type::is_lance() const
 {
     auto is_lance = this->tval == TV_POLEARM;
