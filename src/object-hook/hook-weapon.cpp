@@ -9,31 +9,6 @@
 #include "util/bit-flags-calculator.h"
 
 /*!
- * @brief 武器匠の「武器」鑑定対象になるかを判定する。/ Hook to specify "weapon"
- * @param o_ptr オブジェクトの構造体の参照ポインタ。
- * @return 対象になるならTRUEを返す。
- */
-bool object_is_orthodox_melee_weapons(const object_type *o_ptr)
-{
-    switch (o_ptr->tval) {
-    case TV_HAFTED:
-    case TV_POLEARM:
-    case TV_DIGGING: {
-        return true;
-    }
-    case TV_SWORD: {
-        if (o_ptr->sval != SV_POISON_NEEDLE)
-            return true;
-    }
-
-    default:
-        break;
-    }
-
-    return false;
-}
-
-/*!
  * @brief 修復対象となる壊れた武器かを判定する。 / Hook to specify "broken weapon"
  * @param o_ptr オブジェクトの構造体の参照ポインタ。
  * @return 修復対象になるならTRUEを返す。

@@ -124,7 +124,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 
     OBJECT_IDX mater;
     object_type *mo_ptr;
-    mo_ptr = choose_object(player_ptr, &mater, q, s, (USE_INVEN | USE_EQUIP), FuncItemTester(object_is_orthodox_melee_weapons));
+    mo_ptr = choose_object(player_ptr, &mater, q, s, (USE_INVEN | USE_EQUIP), FuncItemTester(&object_type::is_orthodox_melee_weapons));
     if (!mo_ptr)
         return 0;
     if (mater == item) {

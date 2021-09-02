@@ -132,6 +132,30 @@ bool object_type::is_equipment() const
     return (TV_EQUIP_BEGIN <= this->tval) && (this->tval <= TV_EQUIP_END);
 }
 
+/*!
+ * @brief 武器匠の「武器」鑑定対象になるかを判定する。/ Hook to specify "weapon"
+ * @return 対象になるならtrueを返す。
+ */
+bool object_type::is_orthodox_melee_weapons() const
+{
+    switch (this->tval) {
+    case TV_HAFTED:
+    case TV_POLEARM:
+    case TV_DIGGING: {
+        return true;
+    }
+    case TV_SWORD: {
+        if (this->sval != SV_POISON_NEEDLE)
+            return true;
+    }
+
+    default:
+        break;
+    }
+
+    return false;
+}
+
 bool object_type::is_lance() const
 {
     auto is_lance = this->tval == TV_POLEARM;
