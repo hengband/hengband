@@ -11,6 +11,7 @@
 #include "object-enchant/trc-types.h"
 #include "object-enchant/trg-types.h"
 #include "object/object-kind.h"
+#include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/player-type-definition.h"
 
@@ -241,6 +242,19 @@ bool object_type::is_ammo() const
     return (TV_MISSILE_BEGIN <= this->tval) && (this->tval <= TV_MISSILE_END);
 }
 
+/*!
+ * @brief 対象のアイテムが矢やクロスボウの矢の材料になるかを返す。/
+ * Hook to determine if an object is contertible in an arrow/bolt
+ * @return 材料にできるならtrueを返す
+ */
+bool object_type::is_convertible() const
+{
+    if ((this->tval == TV_JUNK) || (this->tval == TV_SKELETON))
+        return true;
+    if ((this->tval == TV_CORPSE) && (this->sval == SV_SKELETON))
+        return true;
+    return false;
+}
 
 bool object_type::is_lance() const
 {
