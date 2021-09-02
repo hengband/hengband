@@ -391,3 +391,43 @@ bool object_type::is_smith() const
 
     return false;
 }
+
+/*!
+ * @brief オブジェクトがアーティファクトかを返す /
+ * Check if an object is artifact
+ * @return アーティファクトならばtrueを返す
+ */
+bool object_type::is_artifact() const
+{
+    return this->is_fixed_artifact() || (this->art_name != 0);
+}
+
+/*!
+ * @brief オブジェクトが固定アーティファクトかを返す /
+ * Check if an object is fixed artifact
+ * @return 固定アーティファクトならばtrueを返す
+ */
+bool object_type::is_fixed_artifact() const
+{
+    return this->name1 != 0;
+}
+
+/*!
+ * @brief オブジェクトがランダムアーティファクトかを返す /
+ * Check if an object is random artifact
+ * @return ランダムアーティファクトならばtrueを返す
+ */
+bool object_type::is_random_artifact() const
+{
+    return this->is_artifact() && !this->is_fixed_artifact();
+}
+
+/*!
+ * @brief オブジェクトが通常のアイテム(アーティファクト、エゴ、鍛冶師エッセンス付加いずれでもない)かを返す /
+ * Check if an object is neither artifact, ego, nor 'smith' object
+ * @return 通常のアイテムならばtrueを返す
+ */
+bool object_type::is_nameless() const
+{
+    return !this->is_artifact() && !this->is_ego() && !this->is_smith();
+}

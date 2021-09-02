@@ -406,7 +406,7 @@ void sense_inventory2(player_type *creature_ptr)
  */
 item_feel_type pseudo_value_check_heavy(object_type *o_ptr)
 {
-    if (object_is_artifact(o_ptr)) {
+    if (o_ptr->is_artifact()) {
         if (object_is_cursed(o_ptr) || object_is_broken(o_ptr))
             return FEEL_TERRIBLE;
 
@@ -445,7 +445,7 @@ item_feel_type pseudo_value_check_light(object_type *o_ptr)
         return FEEL_CURSED;
     if (object_is_broken(o_ptr))
         return FEEL_BROKEN;
-    if (object_is_artifact(o_ptr))
+    if (o_ptr->is_artifact())
         return FEEL_UNCURSED;
     if (o_ptr->is_ego())
         return FEEL_UNCURSED;

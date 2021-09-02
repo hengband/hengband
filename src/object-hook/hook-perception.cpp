@@ -18,7 +18,7 @@ bool object_is_nameless_weapon_armour(const object_type *o_ptr)
         return false;
 
     /* Require nameless object if the object is well known */
-    if (object_is_known(o_ptr) && !object_is_nameless(o_ptr))
+    if (object_is_known(o_ptr) && !o_ptr->is_nameless())
         return false;
 
     return true;

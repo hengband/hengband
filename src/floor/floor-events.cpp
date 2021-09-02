@@ -153,7 +153,7 @@ static byte get_dungeon_feeling(player_type *subject_ptr)
             delta += e_ptr->rating * base;
         }
 
-        if (object_is_artifact(o_ptr)) {
+        if (o_ptr->is_artifact()) {
             PRICE cost = object_value_real(o_ptr);
             delta += 10 * base;
             if (cost > 10000L)

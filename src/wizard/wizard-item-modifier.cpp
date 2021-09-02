@@ -402,7 +402,7 @@ static void wiz_statistics(player_type *caster_ptr, object_type *o_ptr)
     concptr p = "Enter number of items to roll: ";
     char tmp_val[80];
 
-    if (object_is_fixed_artifact(o_ptr))
+    if (o_ptr->is_fixed_artifact())
         a_info[o_ptr->name1].cur_num = 0;
 
     uint32_t i, matches, better, worse, other, correct;
@@ -453,7 +453,7 @@ static void wiz_statistics(player_type *caster_ptr, object_type *o_ptr)
             object_type *q_ptr = &forge;
             q_ptr->wipe();
             make_object(caster_ptr, q_ptr, mode);
-            if (object_is_fixed_artifact(q_ptr))
+            if (q_ptr->is_fixed_artifact())
                 a_info[q_ptr->name1].cur_num = 0;
 
             if ((o_ptr->tval != q_ptr->tval) || (o_ptr->sval != q_ptr->sval))
@@ -476,7 +476,7 @@ static void wiz_statistics(player_type *caster_ptr, object_type *o_ptr)
         msg_print(NULL);
     }
 
-    if (object_is_fixed_artifact(o_ptr))
+    if (o_ptr->is_fixed_artifact())
         a_info[o_ptr->name1].cur_num = 1;
 }
 
@@ -487,7 +487,7 @@ static void wiz_statistics(player_type *caster_ptr, object_type *o_ptr)
  */
 static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
 {
-    if (object_is_artifact(o_ptr))
+    if (o_ptr->is_artifact())
         return;
 
     object_type forge;
@@ -500,7 +500,7 @@ static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
     while (true) {
         wiz_display_item(owner_ptr, q_ptr);
         if (!get_com("[a]ccept, [w]orthless, [c]ursed, [n]ormal, [g]ood, [e]xcellent, [s]pecial? ", &ch, false)) {
-            if (object_is_fixed_artifact(q_ptr)) {
+            if (q_ptr->is_fixed_artifact()) {
                 a_info[q_ptr->name1].cur_num = 0;
                 q_ptr->name1 = 0;
             }
@@ -514,7 +514,7 @@ static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
             break;
         }
 
-        if (object_is_fixed_artifact(q_ptr)) {
+        if (q_ptr->is_fixed_artifact()) {
             a_info[q_ptr->name1].cur_num = 0;
             q_ptr->name1 = 0;
         }
@@ -549,7 +549,7 @@ static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
         case 's':
             q_ptr->prep(o_ptr->k_idx);
             apply_magic_to_object(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_GOOD | AM_GREAT | AM_SPECIAL);
-            if (!object_is_artifact(q_ptr))
+            if (!q_ptr->is_artifact())
                 become_random_artifact(owner_ptr, q_ptr, false);
 
             break;
@@ -577,7 +577,7 @@ static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
  */
 static void wiz_tweak_item(player_type *player_ptr, object_type *o_ptr)
 {
-    if (object_is_artifact(o_ptr))
+    if (o_ptr->is_artifact())
         return;
 
     concptr p = "Enter new 'pval' setting: ";
@@ -619,7 +619,7 @@ static void wiz_tweak_item(player_type *player_ptr, object_type *o_ptr)
  */
 static void wiz_quantity_item(object_type *o_ptr)
 {
-    if (object_is_artifact(o_ptr))
+    if (o_ptr->is_artifact())
         return;
 
     int tmp_qnt = o_ptr->number;

@@ -87,7 +87,7 @@ void curse_equipment(player_type *owner_ptr, PERCENTAGE chance, PERCENTAGE heavy
 
     bool changed = false;
     int curse_power = 0;
-    if ((randint1(100) <= heavy_chance) && (object_is_artifact(o_ptr) || o_ptr->is_ego())) {
+    if ((randint1(100) <= heavy_chance) && (o_ptr->is_artifact() || o_ptr->is_ego())) {
         if (o_ptr->curse_flags.has_not(TRC::HEAVY_CURSE))
             changed = true;
         o_ptr->curse_flags.set(TRC::HEAVY_CURSE);

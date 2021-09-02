@@ -116,7 +116,7 @@ bool recharge(player_type *caster_ptr, int power)
 
     byte fail_type = 1;
     GAME_TEXT o_name[MAX_NLEN];
-    if (object_is_fixed_artifact(o_ptr)) {
+    if (o_ptr->is_fixed_artifact()) {
         describe_flavor(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
         msg_format(_("魔力が逆流した！%sは完全に魔力を失った。", "The recharging backfires - %s is completely drained!"), o_name);
         if ((o_ptr->tval == TV_ROD) && (o_ptr->timeout < 10000))

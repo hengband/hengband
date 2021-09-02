@@ -85,7 +85,7 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
         return false;
 
     if (IS_FLG(FLG_ARTIFACT)) {
-        if (!object_is_known(o_ptr) || !object_is_artifact(o_ptr))
+        if (!object_is_known(o_ptr) || !o_ptr->is_artifact())
             return false;
     }
 
@@ -100,7 +100,7 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
         if (!o_ptr->is_equipment())
             return false;
         if (object_is_known(o_ptr)) {
-            if (!object_is_nameless(o_ptr))
+            if (!o_ptr->is_nameless())
                 return false;
 
             if (o_ptr->to_a <= 0 && (o_ptr->to_h + o_ptr->to_d) <= 0)
@@ -122,7 +122,7 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
         if (!o_ptr->is_equipment())
             return false;
         if (object_is_known(o_ptr)) {
-            if (!object_is_nameless(o_ptr))
+            if (!o_ptr->is_nameless())
                 return false;
         } else if (o_ptr->ident & IDENT_SENSE) {
             switch (o_ptr->feeling) {
@@ -144,7 +144,7 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
         if (!o_ptr->is_equipment())
             return false;
         if (object_is_known(o_ptr)) {
-            if (!object_is_nameless(o_ptr))
+            if (!o_ptr->is_nameless())
                 return false;
 
             if (object_is_cursed(o_ptr) || object_is_broken(o_ptr))

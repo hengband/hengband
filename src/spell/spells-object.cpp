@@ -227,7 +227,7 @@ bool curse_armor(player_type *owner_ptr)
     describe_flavor(owner_ptr, o_name, o_ptr, OD_OMIT_PREFIX);
 
     /* Attempt a saving throw for artifacts */
-    if (object_is_artifact(o_ptr) && (randint0(100) < 50)) {
+    if (o_ptr->is_artifact() && (randint0(100) < 50)) {
         /* Cool */
 #ifdef JP
         msg_format("%sが%sを包み込もうとしたが、%sはそれを跳ね返した！", "恐怖の暗黒オーラ", "防具", o_name);
@@ -282,7 +282,7 @@ bool curse_weapon_object(player_type *owner_ptr, bool force, object_type *o_ptr)
     describe_flavor(owner_ptr, o_name, o_ptr, OD_OMIT_PREFIX);
 
     /* Attempt a saving throw */
-    if (object_is_artifact(o_ptr) && (randint0(100) < 50) && !force) {
+    if (o_ptr->is_artifact() && (randint0(100) < 50) && !force) {
 #ifdef JP
         msg_format("%sが%sを包み込もうとしたが、%sはそれを跳ね返した！", "恐怖の暗黒オーラ", "武器", o_name);
 #else
@@ -335,7 +335,7 @@ void brand_bolts(player_type *caster_ptr)
             continue;
 
         /* Skip artifacts and ego-items */
-        if (object_is_artifact(o_ptr) || o_ptr->is_ego())
+        if (o_ptr->is_artifact() || o_ptr->is_ego())
             continue;
 
         /* Skip cursed/broken items */
@@ -457,7 +457,7 @@ bool enchant_equipment(player_type *caster_ptr, object_type *o_ptr, int n, int e
     /* Try "n" times */
     int chance;
     bool res = false;
-    bool a = object_is_artifact(o_ptr);
+    bool a = o_ptr->is_artifact();
     bool force = (eflag & ENCH_FORCE);
     for (int i = 0; i < n; i++) {
         /* Hack -- Roll for pile resistance */
@@ -613,7 +613,7 @@ void brand_weapon(player_type *caster_ptr, int brand_type)
     if (!o_ptr)
         return;
 
-    bool is_special_item = o_ptr->k_idx && !object_is_artifact(o_ptr) && !o_ptr->is_ego() && !object_is_cursed(o_ptr)
+    bool is_special_item = o_ptr->k_idx && !o_ptr->is_artifact() && !o_ptr->is_ego() && !object_is_cursed(o_ptr)
         && !((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) && !((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE))
         && !((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DIAMOND_EDGE));
     if (!is_special_item) {

@@ -137,7 +137,7 @@ void rd_item_old(object_type *o_ptr)
                 o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
             if (o_ptr->art_flags[2] & 0x80000000L)
                 o_ptr->curse_flags.set(TRC::PERMA_CURSE);
-            if (object_is_fixed_artifact(o_ptr)) {
+            if (o_ptr->is_fixed_artifact()) {
                 artifact_type *a_ptr = &a_info[o_ptr->name1];
                 if (a_ptr->gen_flags.has(TRG::HEAVY_CURSE))
                     o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
@@ -326,7 +326,7 @@ void rd_item_old(object_type *o_ptr)
         }
     }
 
-    if (object_is_fixed_artifact(o_ptr)) {
+    if (o_ptr->is_fixed_artifact()) {
         artifact_type *a_ptr;
         a_ptr = &a_info[o_ptr->name1];
         if (a_ptr->name.empty())

@@ -264,7 +264,7 @@ void rd_item(object_type *o_ptr)
     }
 
     if (o_ptr->tval == TV_LITE) {
-        if (object_is_fixed_artifact(o_ptr)) {
+        if (o_ptr->is_fixed_artifact()) {
             add_flag(o_ptr->art_flags, TR_LITE_3);
             return;
         }

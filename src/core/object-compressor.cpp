@@ -90,7 +90,7 @@ void compact_objects(player_type *player_ptr, int size)
                 continue;
 
             int chance = 90;
-            if ((object_is_fixed_artifact(o_ptr) || o_ptr->art_name) && (cnt < 1000))
+            if ((o_ptr->is_fixed_artifact() || o_ptr->art_name) && (cnt < 1000))
                 chance = 100;
 
             if (randint0(100) < chance)

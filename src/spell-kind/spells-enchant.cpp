@@ -45,7 +45,7 @@ bool artifact_scroll(player_type *caster_ptr)
 #endif
 
     bool okay = false;
-    if (object_is_artifact(o_ptr)) {
+    if (o_ptr->is_artifact()) {
 #ifdef JP
         msg_format("%sは既に伝説のアイテムです！", o_name);
 #else

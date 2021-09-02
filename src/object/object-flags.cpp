@@ -27,7 +27,7 @@ void object_flags(const object_type *o_ptr, TrFlags &flgs)
         flgs[i] = k_ptr->flags[i];
     }
 
-    if (object_is_fixed_artifact(o_ptr)) {
+    if (o_ptr->is_fixed_artifact()) {
         artifact_type *a_ptr = &a_info[o_ptr->name1];
         for (int i = 0; i < TR_FLAG_SIZE; i++) {
             flgs[i] = a_ptr->flags[i];
@@ -133,7 +133,7 @@ void object_flags_known(const object_type *o_ptr, TrFlags &flgs)
     }
 
     if (spoil || object_is_fully_known(o_ptr)) {
-        if (object_is_fixed_artifact(o_ptr)) {
+        if (o_ptr->is_fixed_artifact()) {
             artifact_type *a_ptr = &a_info[o_ptr->name1];
 
             for (int i = 0; i < TR_FLAG_SIZE; i++) {

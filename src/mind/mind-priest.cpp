@@ -81,7 +81,7 @@ bool bless_weapon(player_type *caster_ptr)
         return true;
     }
 
-    if (!(object_is_artifact(o_ptr) || o_ptr->is_ego()) || one_in_(3)) {
+    if (!(o_ptr->is_artifact() || o_ptr->is_ego()) || one_in_(3)) {
 #ifdef JP
         msg_format("%sは輝いた！", o_name);
 #else

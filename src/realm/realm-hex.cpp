@@ -210,7 +210,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             if (!get_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really？"), o_name)))
                 return "";
 
-            if (!one_in_(3) && (object_is_artifact(o_ptr) || has_flag(f, TR_BLESSED))) {
+            if (!one_in_(3) && (o_ptr->is_artifact() || has_flag(f, TR_BLESSED))) {
                 msg_format(_("%s は呪いを跳ね返した。", "%s resists the effect."), o_name);
                 if (one_in_(3)) {
                     if (o_ptr->to_d > 0) {
@@ -235,7 +235,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), o_name);
                 o_ptr->curse_flags.set(TRC::CURSED);
 
-                if (object_is_artifact(o_ptr) || o_ptr->is_ego()) {
+                if (o_ptr->is_artifact() || o_ptr->is_ego()) {
 
                     if (one_in_(3))
                         o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
@@ -517,7 +517,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             if (!get_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really？"), o_name)))
                 return "";
 
-            if (!one_in_(3) && (object_is_artifact(o_ptr) || has_flag(f, TR_BLESSED))) {
+            if (!one_in_(3) && (o_ptr->is_artifact() || has_flag(f, TR_BLESSED))) {
                 msg_format(_("%s は呪いを跳ね返した。", "%s resists the effect."), o_name);
                 if (one_in_(3)) {
                     if (o_ptr->to_d > 0) {
@@ -542,7 +542,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 msg_format(_("恐怖の暗黒オーラがあなたの%sを包み込んだ！", "A terrible black aura blasts your %s!"), o_name);
                 o_ptr->curse_flags.set(TRC::CURSED);
 
-                if (object_is_artifact(o_ptr) || o_ptr->is_ego()) {
+                if (o_ptr->is_artifact() || o_ptr->is_ego()) {
 
                     if (one_in_(3))
                         o_ptr->curse_flags.set(TRC::HEAVY_CURSE);

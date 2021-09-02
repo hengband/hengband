@@ -34,7 +34,7 @@ PRICE flag_cost(const object_type *o_ptr, int plusses)
     for (int i = 0; i < TR_FLAG_SIZE; i++)
         flgs[i] &= ~(k_ptr->flags[i]);
 
-    if (object_is_fixed_artifact(o_ptr)) {
+    if (o_ptr->is_fixed_artifact()) {
         artifact_type *a_ptr = &a_info[o_ptr->name1];
 
         for (int i = 0; i < TR_FLAG_SIZE; i++)

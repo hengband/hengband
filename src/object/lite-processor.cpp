@@ -22,7 +22,7 @@ void reduce_lite_life(player_type* creature_ptr)
     if (o_ptr->tval != TV_LITE)
         return;
 
-    if (object_is_fixed_artifact(o_ptr) || (o_ptr->sval == SV_LITE_FEANOR) || (o_ptr->xtra4 <= 0))
+    if (o_ptr->is_fixed_artifact() || (o_ptr->sval == SV_LITE_FEANOR) || (o_ptr->xtra4 <= 0))
         return;
 
     if (o_ptr->name2 == EGO_LITE_LONG) {

@@ -67,7 +67,7 @@ void do_cmd_knowledge_artifacts(player_type *player_ptr)
             for (const auto this_o_idx : g_ptr->o_idx_list) {
                 object_type *o_ptr;
                 o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
-                if (!object_is_fixed_artifact(o_ptr))
+                if (!o_ptr->is_fixed_artifact())
                     continue;
                 if (object_is_known(o_ptr))
                     continue;
@@ -81,7 +81,7 @@ void do_cmd_knowledge_artifacts(player_type *player_ptr)
         object_type *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
-        if (!object_is_fixed_artifact(o_ptr))
+        if (!o_ptr->is_fixed_artifact())
             continue;
         if (object_is_known(o_ptr))
             continue;

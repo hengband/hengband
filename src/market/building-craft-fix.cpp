@@ -105,7 +105,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
     if (!o_ptr)
         return 0;
 
-    if (!o_ptr->is_ego() && !object_is_artifact(o_ptr)) {
+    if (!o_ptr->is_ego() && !o_ptr->is_artifact()) {
         msg_format(_("それは直してもしょうがないぜ。", "It is worthless to repair."));
         return 0;
     }
@@ -236,7 +236,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
     o_ptr->to_h += MAX(0, (mo_ptr->to_h / 3));
     o_ptr->to_a += MAX(0, (mo_ptr->to_a));
 
-    if ((o_ptr->name1 == ART_NARSIL) || (object_is_random_artifact(o_ptr) && one_in_(1)) || (o_ptr->is_ego() && one_in_(7))) {
+    if ((o_ptr->name1 == ART_NARSIL) || (o_ptr->is_random_artifact() && one_in_(1)) || (o_ptr->is_ego() && one_in_(7))) {
         if (o_ptr->is_ego()) {
             add_flag(o_ptr->art_flags, TR_IGNORE_FIRE);
             add_flag(o_ptr->art_flags, TR_IGNORE_ACID);

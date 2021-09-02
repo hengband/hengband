@@ -250,7 +250,7 @@ static void drain_essence(player_type *creature_ptr)
     if (!o_ptr)
         return;
 
-    if (object_is_known(o_ptr) && !object_is_nameless(o_ptr)) {
+    if (object_is_known(o_ptr) && !o_ptr->is_nameless()) {
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         if (!get_check(format(_("本当に%sから抽出してよろしいですか？", "Really extract from %s? "), o_name)))
@@ -813,7 +813,7 @@ static void add_essence(player_type *creature_ptr, int32_t mode)
     if (!o_ptr)
         return;
 
-    if ((mode != 10) && (object_is_artifact(o_ptr) || o_ptr->is_smith())) {
+    if ((mode != 10) && (o_ptr->is_artifact() || o_ptr->is_smith())) {
         msg_print(_("そのアイテムはこれ以上改良できない。", "This item can not be improved any further."));
         return;
     }

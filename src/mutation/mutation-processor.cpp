@@ -270,7 +270,7 @@ void process_world_aux_mutation(player_type *creature_ptr)
         o_ptr = &creature_ptr->inventory_list[INVEN_LITE];
 
         if (o_ptr->tval == TV_LITE) {
-            if (!object_is_fixed_artifact(o_ptr) && (o_ptr->xtra4 > 0)) {
+            if (!o_ptr->is_fixed_artifact() && (o_ptr->xtra4 > 0)) {
                 hp_player(creature_ptr, o_ptr->xtra4 / 20);
                 o_ptr->xtra4 /= 2;
                 msg_print(_("光源からエネルギーを吸収した！", "You absorb energy from your light!"));

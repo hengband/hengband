@@ -108,7 +108,7 @@ bool object_can_refill_torch(const object_type *o_ptr)
 bool can_player_destroy_object(player_type *player_ptr, object_type *o_ptr)
 {
     /* Artifacts cannot be destroyed */
-    if (!object_is_artifact(o_ptr))
+    if (!o_ptr->is_artifact())
         return true;
 
     if (!object_is_known(o_ptr)) {

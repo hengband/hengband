@@ -76,7 +76,7 @@ static void describe_corpse(flavor_type *flavor_ptr)
 
 static void describe_amulet(flavor_type *flavor_ptr)
 {
-    if (flavor_ptr->aware && (object_is_fixed_artifact(flavor_ptr->o_ptr) || flavor_ptr->k_ptr->gen_flags.has(TRG::INSTA_ART)))
+    if (flavor_ptr->aware && (flavor_ptr->o_ptr->is_fixed_artifact() || flavor_ptr->k_ptr->gen_flags.has(TRG::INSTA_ART)))
         return;
 
     flavor_ptr->modstr = flavor_ptr->flavor_k_ptr->flavor_name.c_str();
@@ -90,7 +90,7 @@ static void describe_amulet(flavor_type *flavor_ptr)
 
 static void describe_ring(flavor_type *flavor_ptr)
 {
-    if (flavor_ptr->aware && (object_is_fixed_artifact(flavor_ptr->o_ptr) || flavor_ptr->k_ptr->gen_flags.has(TRG::INSTA_ART)))
+    if (flavor_ptr->aware && (flavor_ptr->o_ptr->is_fixed_artifact() || flavor_ptr->k_ptr->gen_flags.has(TRG::INSTA_ART)))
         return;
 
     flavor_ptr->modstr = flavor_ptr->flavor_k_ptr->flavor_name.c_str();

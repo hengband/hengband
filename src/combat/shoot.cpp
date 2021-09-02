@@ -755,7 +755,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
                     /* No death */
                     else {
                         /* STICK TO */
-                        if (object_is_fixed_artifact(q_ptr) && (shooter_ptr->pclass != CLASS_SNIPER || shooter_ptr->concent == 0)) {
+                        if (q_ptr->is_fixed_artifact() && (shooter_ptr->pclass != CLASS_SNIPER || shooter_ptr->concent == 0)) {
                             GAME_TEXT m_name[MAX_NLEN];
 
                             monster_desc(shooter_ptr, m_name, m_ptr, 0);
@@ -853,7 +853,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
             if (!o_idx) {
                 msg_format(_("%sはどこかへ行った。", "The %s went somewhere."), o_name);
-                if (object_is_fixed_artifact(q_ptr)) {
+                if (q_ptr->is_fixed_artifact()) {
                     a_info[j_ptr->name1].cur_num = 0;
                 }
                 return;

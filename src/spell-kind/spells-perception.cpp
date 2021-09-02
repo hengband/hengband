@@ -66,7 +66,7 @@ bool identify_item(player_type *owner_ptr, object_type *o_ptr)
         old_known = true;
 
     if (!object_is_fully_known(o_ptr)) {
-        if (object_is_artifact(o_ptr) || one_in_(5))
+        if (o_ptr->is_artifact() || one_in_(5))
             chg_virtue(owner_ptr, V_KNOWLEDGE, 1);
     }
 
@@ -82,7 +82,7 @@ bool identify_item(player_type *owner_ptr, object_type *o_ptr)
 
     describe_flavor(owner_ptr, o_name, o_ptr, OD_NAME_ONLY);
 
-    if (record_fix_art && !old_known && object_is_fixed_artifact(o_ptr))
+    if (record_fix_art && !old_known && o_ptr->is_fixed_artifact())
         exe_write_diary(owner_ptr, DIARY_ART, 0, o_name);
     if (record_rand_art && !old_known && o_ptr->art_name)
         exe_write_diary(owner_ptr, DIARY_ART, 0, o_name);

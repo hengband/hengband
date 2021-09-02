@@ -80,7 +80,7 @@ static void describe_artifact_prefix_ja(flavor_type *flavor_ptr)
     if (!flavor_ptr->known)
         return;
 
-    if (object_is_fixed_artifact(flavor_ptr->o_ptr))
+    if (flavor_ptr->o_ptr->is_fixed_artifact())
         flavor_ptr->t = object_desc_str(flavor_ptr->t, "★");
     else if (flavor_ptr->o_ptr->art_name)
         flavor_ptr->t = object_desc_str(flavor_ptr->t, "☆");
@@ -195,7 +195,7 @@ static void describe_artifact_body_ja(flavor_type *flavor_ptr)
     if (describe_random_artifact_body_ja(flavor_ptr))
         return;
 
-    if (object_is_fixed_artifact(flavor_ptr->o_ptr)) {
+    if (flavor_ptr->o_ptr->is_fixed_artifact()) {
         artifact_type *a_ptr = &a_info[flavor_ptr->o_ptr->name1];
         if (a_ptr->name.find("『", 0, 2) == 0)
             flavor_ptr->t = object_desc_str(flavor_ptr->t, a_ptr->name.c_str());
@@ -258,7 +258,7 @@ static void describe_artifact_prefix_en(flavor_type *flavor_ptr)
     if (describe_prefix_en(flavor_ptr))
         return;
 
-    if ((flavor_ptr->known && object_is_artifact(flavor_ptr->o_ptr))
+    if ((flavor_ptr->known && flavor_ptr->o_ptr->is_artifact())
         || ((flavor_ptr->o_ptr->tval == TV_CORPSE) && (r_info[flavor_ptr->o_ptr->pval].flags1 & RF1_UNIQUE))) {
         flavor_ptr->t = object_desc_str(flavor_ptr->t, "The ");
         return;
@@ -276,7 +276,7 @@ static void describe_basename_en(flavor_type *flavor_ptr)
     if (describe_prefix_en(flavor_ptr))
         return;
 
-    if (flavor_ptr->known && object_is_artifact(flavor_ptr->o_ptr))
+    if (flavor_ptr->known && flavor_ptr->o_ptr->is_artifact())
         flavor_ptr->t = object_desc_str(flavor_ptr->t, "The ");
 }
 
@@ -291,7 +291,7 @@ static void describe_artifact_body_en(flavor_type *flavor_ptr)
         return;
     }
 
-    if (object_is_fixed_artifact(flavor_ptr->o_ptr)) {
+    if (flavor_ptr->o_ptr->is_fixed_artifact()) {
         artifact_type *a_ptr = &a_info[flavor_ptr->o_ptr->name1];
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
         flavor_ptr->t = object_desc_str(flavor_ptr->t, a_ptr->name.c_str());

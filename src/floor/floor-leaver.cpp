@@ -276,7 +276,7 @@ static void preserve_info(player_type *creature_ptr)
         if (!object_is_valid(o_ptr))
             continue;
 
-        if (object_is_fixed_artifact(o_ptr))
+        if (o_ptr->is_fixed_artifact())
             a_info[o_ptr->name1].floor_id = 0;
     }
 }

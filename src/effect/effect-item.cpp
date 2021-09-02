@@ -69,7 +69,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
 #endif
         TrFlags flags;
         object_flags(o_ptr, flags);
-        bool is_artifact = object_is_artifact(o_ptr);
+        bool is_artifact = o_ptr->is_artifact();
         switch (typ) {
         case GF_ACID: {
             if (BreakerAcid().hates(o_ptr)) {

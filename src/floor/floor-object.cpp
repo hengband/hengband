@@ -334,7 +334,7 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
     bool plural = (j_ptr->number != 1);
 #endif
     describe_flavor(owner_ptr, o_name, j_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-    if (!object_is_artifact(j_ptr) && (randint0(100) < chance)) {
+    if (!j_ptr->is_artifact() && (randint0(100) < chance)) {
 #ifdef JP
         msg_format("%sは消えた。", o_name);
 #else
@@ -403,7 +403,7 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
         }
     }
 
-    if (!flag && !object_is_artifact(j_ptr)) {
+    if (!flag && !j_ptr->is_artifact()) {
 #ifdef JP
         msg_format("%sは消えた。", o_name);
 #else
@@ -451,7 +451,7 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
                 msg_print(_("(床スペースがない)", "(no floor space)"));
 
             if (preserve_mode) {
-                if (object_is_fixed_artifact(j_ptr) && !object_is_known(j_ptr)) {
+                if (j_ptr->is_fixed_artifact() && !object_is_known(j_ptr)) {
                     a_info[j_ptr->name1].cur_num = 0;
                 }
             }
@@ -500,7 +500,7 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
         if (current_world_ptr->wizard)
             msg_print(_("(アイテムが多過ぎる)", "(too many objects)"));
 
-        if (object_is_fixed_artifact(j_ptr)) {
+        if (j_ptr->is_fixed_artifact()) {
             a_info[j_ptr->name1].cur_num = 0;
         }
 
