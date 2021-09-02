@@ -193,6 +193,35 @@ bool object_type::is_mochikae() const
     return ((TV_DIGGING <= this->tval) && (this->tval <= TV_SWORD)) || (this->tval == TV_SHIELD) || (this->tval == TV_CAPTURE) || (this->tval == TV_CARD);
 }
 
+/*!
+ * @brief オブジェクトが強化不能武器であるかを返す / Poison needle can not be enchanted
+ * @return 強化不能ならばtrueを返す
+ */
+bool object_type::refuse_enchant_weapon() const
+{
+    return (this->tval == TV_SWORD) && (this->sval == SV_POISON_NEEDLE);
+}
+
+/*!
+ * @brief オブジェクトが強化可能武器であるかを返す /
+ * Check if an object is weapon (including bows and ammo) and allows enchantment
+ * @return 強化可能ならばtrueを返す
+ */
+bool object_type::allow_enchant_weapon() const
+{
+    return this->is_weapon_ammo() && !this->refuse_enchant_weapon();
+}
+
+/*!
+ * @brief オブジェクトが強化可能な近接武器であるかを返す /
+ * Check if an object is melee weapon and allows enchantment
+ * @return 強化可能な近接武器ならばtrueを返す
+ */
+bool object_type::allow_enchant_melee_weapon() const
+{
+    return this->is_melee_weapon() && !this->refuse_enchant_weapon();
+}
+
 bool object_type::is_lance() const
 {
     auto is_lance = this->tval == TV_POLEARM;

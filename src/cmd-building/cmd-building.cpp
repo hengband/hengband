@@ -167,7 +167,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
         bcost = compare_weapons(player_ptr, bcost);
         break;
     case BACT_ENCHANT_WEAPON:
-        enchant_item(player_ptr, bcost, 1, 1, 0, FuncItemTester(object_allow_enchant_melee_weapon));
+        enchant_item(player_ptr, bcost, 1, 1, 0, FuncItemTester(&object_type::allow_enchant_melee_weapon));
         break;
     case BACT_ENCHANT_ARMOR:
         enchant_item(player_ptr, bcost, 0, 0, 1, FuncItemTester(&object_type::is_armour));

@@ -549,7 +549,7 @@ bool enchant_equipment(player_type *caster_ptr, object_type *o_ptr, int n, int e
 bool enchant_spell(player_type *caster_ptr, HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
 {
     /* Assume enchant weapon */
-    FuncItemTester item_tester(object_allow_enchant_weapon);
+    FuncItemTester item_tester(&object_type::allow_enchant_weapon);
 
     /* Enchant armor if requested */
     if (num_ac)
@@ -609,7 +609,7 @@ void brand_weapon(player_type *caster_ptr, int brand_type)
 
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | IGNORE_BOTHHAND_SLOT, FuncItemTester(object_allow_enchant_melee_weapon));
+    o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | IGNORE_BOTHHAND_SLOT, FuncItemTester(&object_type::allow_enchant_melee_weapon));
     if (!o_ptr)
         return;
 

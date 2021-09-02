@@ -70,47 +70,6 @@ bool object_is_favorite(player_type *player_ptr, const object_type *o_ptr)
 }
 
 /*!
- * @brief オブジェクトが強化不能武器であるかを返す / Poison needle can not be enchanted
- * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return 強化不能ならばTRUEを返す
- */
-bool object_refuse_enchant_weapon(const object_type *o_ptr)
-{
-    if (o_ptr->tval == TV_SWORD && o_ptr->sval == SV_POISON_NEEDLE)
-        return true;
-
-    return false;
-}
-
-/*!
- * @brief オブジェクトが強化可能武器であるかを返す /
- * Check if an object is weapon (including bows and ammo) and allows enchantment
- * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return 強化可能ならばTRUEを返す
- */
-bool object_allow_enchant_weapon(const object_type *o_ptr)
-{
-    if (o_ptr->is_weapon_ammo() && !object_refuse_enchant_weapon(o_ptr))
-        return true;
-
-    return false;
-}
-
-/*!
- * @brief オブジェクトが強化可能な近接武器であるかを返す /
- * Check if an object is melee weapon and allows enchantment
- * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return 強化可能な近接武器ならばTRUEを返す
- */
-bool object_allow_enchant_melee_weapon(const object_type *o_ptr)
-{
-    if (o_ptr->is_melee_weapon() && !object_refuse_enchant_weapon(o_ptr))
-        return true;
-
-    return false;
-}
-
-/*!
  * @brief オブジェクトが両手持ち可能な武器かを返す /
  * Check if an object is melee weapon and allows wielding with two-hands
  * @param o_ptr 対象のオブジェクト構造体ポインタ

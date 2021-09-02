@@ -797,7 +797,7 @@ static void add_essence(player_type *creature_ptr, int32_t mode)
         else if (mode == 1 || mode == 5)
             return std::make_unique<FuncItemTester>(object_is_melee_ammo);
         else if (es_ptr->add == ESSENCE_ATTACK)
-            return std::make_unique<FuncItemTester>(object_allow_enchant_weapon);
+            return std::make_unique<FuncItemTester>(&object_type::allow_enchant_weapon);
         else if (es_ptr->add == ESSENCE_AC)
             return std::make_unique<FuncItemTester>(&object_type::is_armour);
         else
