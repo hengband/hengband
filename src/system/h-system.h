@@ -34,9 +34,6 @@
     #include <sys/timeb.h>
     #include <sys/types.h>
     #include <unistd.h>
-    #ifdef linux
-      #include <sys/time.h>
-    #endif
   #endif
 #endif
 
