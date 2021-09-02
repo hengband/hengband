@@ -2194,21 +2194,23 @@ static int16_t calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool i
         }
 
         /* Riding bonus and penalty */
-        if (creature_ptr->riding && o_ptr->is_lance()) {
-            hit += 15;
-        }
+        if (creature_ptr->riding > 0) {
+            if (o_ptr->is_lance()) {
+                hit += 15;
+            } else if (!has_flag(flgs, TR_RIDING)) {
+                short penalty;
+                if ((creature_ptr->pclass == CLASS_BEASTMASTER) || (creature_ptr->pclass == CLASS_CAVALRY)) {
+                    penalty = 5;
+                } else {
+                    penalty = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level - creature_ptr->skill_exp[SKILL_RIDING] / 80;
+                    penalty += 30;
+                    if (penalty < 30) {
+                        penalty = 30;
+                    }
+                }
 
-        if (creature_ptr->riding && !o_ptr->is_lance() && !has_flag(flgs, TR_RIDING)) {
-            int penalty;
-            if ((creature_ptr->pclass == CLASS_BEASTMASTER) || (creature_ptr->pclass == CLASS_CAVALRY)) {
-                penalty = 5;
-            } else {
-                penalty = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level - creature_ptr->skill_exp[SKILL_RIDING] / 80;
-                penalty += 30;
-                if (penalty < 30)
-                    penalty = 30;
+                hit -= penalty;
             }
-            hit -= (int16_t)penalty;
         }
 
         /* Class penalties */
@@ -2495,16 +2497,8 @@ static int16_t calc_to_hit_misc(player_type *creature_ptr)
 
 static DICE_NUMBER calc_to_weapon_dice_num(player_type *creature_ptr, INVENTORY_IDX slot)
 {
-    object_type *o_ptr = &creature_ptr->inventory_list[slot];
-    DICE_NUMBER dn = 0;
-
-    if (creature_ptr->riding) {
-        if (o_ptr->is_lance()) {
-            dn += 2;
-        }
-    }
-
-    return dn;
+    auto *o_ptr = &creature_ptr->inventory_list[slot];
+    return (creature_ptr->riding > 0) && o_ptr->is_lance() ? 2 : 0;
 }
 
 /*!

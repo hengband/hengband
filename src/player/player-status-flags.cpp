@@ -2057,14 +2057,10 @@ bool has_icky_wield_weapon(player_type *creature_ptr, int i)
 
 bool has_riding_wield_weapon(player_type *creature_ptr, int i)
 {
-    object_type *o_ptr;
+    auto *o_ptr = &creature_ptr->inventory_list[INVEN_MAIN_HAND + i];
     TrFlags flgs;
-    o_ptr = &creature_ptr->inventory_list[INVEN_MAIN_HAND + i];
     object_flags(o_ptr, flgs);
-    if (creature_ptr->riding != 0 && !o_ptr->is_lance() && !has_flag(flgs, TR_RIDING)) {
-        return true;
-    }
-    return false;
+    return (creature_ptr->riding > 0) && !o_ptr->is_lance() && !has_flag(flgs, TR_RIDING);
 }
 
 bool has_not_ninja_weapon(player_type *creature_ptr, int i)
