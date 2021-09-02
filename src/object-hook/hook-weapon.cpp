@@ -174,7 +174,7 @@ bool object_is_weapon_ammo(const object_type *o_ptr)
  */
 bool object_is_weapon_armour_ammo(const object_type *o_ptr)
 {
-    if (object_is_weapon_ammo(o_ptr) || object_is_armour(o_ptr))
+    if (object_is_weapon_ammo(o_ptr) || o_ptr->is_armour())
         return true;
 
     return false;

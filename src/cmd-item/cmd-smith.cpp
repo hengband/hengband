@@ -799,7 +799,7 @@ static void add_essence(player_type *creature_ptr, int32_t mode)
         else if (es_ptr->add == ESSENCE_ATTACK)
             return std::make_unique<FuncItemTester>(object_allow_enchant_weapon);
         else if (es_ptr->add == ESSENCE_AC)
-            return std::make_unique<FuncItemTester>(object_is_armour);
+            return std::make_unique<FuncItemTester>(&object_type::is_armour);
         else
             return std::make_unique<FuncItemTester>(object_is_weapon_armour_ammo);
     };

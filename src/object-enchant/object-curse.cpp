@@ -47,7 +47,7 @@ TRC get_curse(int power, object_type *o_ptr)
 
         if (new_curse == TRC::LOW_MELEE && !object_is_weapon(o_ptr))
             continue;
-        if (new_curse == TRC::LOW_AC && !object_is_armour(o_ptr))
+        if (new_curse == TRC::LOW_AC && !o_ptr->is_armour())
             continue;
         break;
     }

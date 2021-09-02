@@ -553,7 +553,7 @@ bool enchant_spell(player_type *caster_ptr, HIT_PROB num_hit, HIT_POINT num_dam,
 
     /* Enchant armor if requested */
     if (num_ac)
-        item_tester = FuncItemTester(object_is_armour);
+        item_tester = FuncItemTester(&object_type::is_armour);
 
     concptr q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
     concptr s = _("強化できるアイテムがない。", "You have nothing to enchant.");

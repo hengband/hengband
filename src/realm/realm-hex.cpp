@@ -506,7 +506,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             q = _("どれを呪いますか？", "Which piece of armour do you curse?");
             s = _("防具を装備していない。", "You're not wearing any armor.");
 
-            o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP), FuncItemTester(object_is_armour));
+            o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP), FuncItemTester(&object_type::is_armour));
             if (!o_ptr)
                 return "";
 

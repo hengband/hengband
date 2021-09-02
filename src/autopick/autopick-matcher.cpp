@@ -210,7 +210,7 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
         if (!object_is_favorite(player_ptr, o_ptr))
             return false;
     } else if (IS_FLG(FLG_ARMORS)) {
-        if (!object_is_armour(o_ptr))
+        if (!o_ptr->is_armour())
             return false;
     } else if (IS_FLG(FLG_MISSILES)) {
         if (!object_is_ammo(o_ptr))

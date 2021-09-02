@@ -62,6 +62,7 @@
 #include "system/building-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
+#include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
@@ -169,7 +170,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
         enchant_item(player_ptr, bcost, 1, 1, 0, FuncItemTester(object_allow_enchant_melee_weapon));
         break;
     case BACT_ENCHANT_ARMOR:
-        enchant_item(player_ptr, bcost, 0, 0, 1, FuncItemTester(object_is_armour));
+        enchant_item(player_ptr, bcost, 0, 0, 1, FuncItemTester(&object_type::is_armour));
         break;
     case BACT_RECHARGE:
         building_recharge(player_ptr);

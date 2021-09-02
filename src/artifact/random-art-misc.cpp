@@ -328,7 +328,7 @@ void random_misc(player_type *player_ptr, object_type *o_ptr)
     case 24:
     case 25:
     case 26:
-        if (object_is_armour(o_ptr))
+        if (o_ptr->is_armour())
             random_misc(player_ptr, o_ptr);
         else
             o_ptr->to_a = 4 + randint1(11);

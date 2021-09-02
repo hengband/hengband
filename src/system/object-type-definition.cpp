@@ -83,3 +83,12 @@ bool object_type::is_lance() const
     is_lance &= (this->sval == SV_LANCE) || (this->sval == SV_HEAVY_LANCE);
     return is_lance;
 }
+
+/*!
+ * @brief オブジェクトが防具として装備できるかどうかを返す / Check if an object is armour
+ * @return 防具として装備できるならばtrueを返す
+ */
+bool object_type::is_armour() const
+{
+    return (TV_ARMOR_BEGIN <= this->tval) && (this->tval <= TV_ARMOR_END);
+}

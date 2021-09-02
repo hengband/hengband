@@ -255,7 +255,7 @@ static void strengthen_pval(object_type *o_ptr)
  */
 static void invest_positive_modified_value(object_type *o_ptr)
 {
-    if (object_is_armour(o_ptr)) {
+    if (o_ptr->is_armour()) {
         o_ptr->to_a += randint1(o_ptr->to_a > 19 ? 1 : 20 - o_ptr->to_a);
         return;
     }
@@ -276,7 +276,7 @@ static void invest_positive_modified_value(object_type *o_ptr)
  */
 static void invest_negative_modified_value(object_type *o_ptr)
 {
-    if (!object_is_armour(o_ptr))
+    if (!o_ptr->is_armour())
         return;
 
     while ((o_ptr->to_d + o_ptr->to_h) > 20) {
@@ -353,7 +353,7 @@ static int decide_random_art_power_level(object_type *o_ptr, const bool a_cursed
 static void name_unnatural_random_artifact(player_type *player_ptr, object_type *o_ptr, const bool a_scroll, const int power_level, GAME_TEXT *new_name)
 {
     if (!a_scroll) {
-        get_random_name(o_ptr, new_name, object_is_armour(o_ptr), power_level);
+        get_random_name(o_ptr, new_name, o_ptr->is_armour(), power_level);
         return;
     }
 
@@ -426,7 +426,7 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
     if (a_cursed)
         curse_artifact(player_ptr, o_ptr);
 
-    if (!a_cursed && one_in_(object_is_armour(o_ptr) ? ACTIVATION_CHANCE * 2 : ACTIVATION_CHANCE)) {
+    if (!a_cursed && one_in_(o_ptr->is_armour() ? ACTIVATION_CHANCE * 2 : ACTIVATION_CHANCE)) {
         o_ptr->xtra2 = 0;
         give_activation_power(o_ptr);
     }
