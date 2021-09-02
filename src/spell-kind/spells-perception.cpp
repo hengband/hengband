@@ -109,7 +109,7 @@ bool ident_spell(player_type *caster_ptr, bool only_equip)
         q = _("どのアイテムを鑑定しますか? ", "Identify which item? ");
     } else {
         if (only_equip) {
-            item_tester = std::make_unique<FuncItemTester>(object_is_weapon_armour_ammo);
+            item_tester = std::make_unique<FuncItemTester>(&object_type::is_weapon_armour_ammo);
         } else {
             item_tester = std::make_unique<AllMatchItemTester>();
         }
@@ -159,7 +159,7 @@ bool identify_fully(player_type *caster_ptr, bool only_equip)
         q = _("どのアイテムを*鑑定*しますか? ", "*Identify* which item? ");
     } else {
         if (only_equip) {
-            item_tester = std::make_unique<FuncItemTester>(object_is_weapon_armour_ammo);
+            item_tester = std::make_unique<FuncItemTester>(&object_type::is_weapon_armour_ammo);
         } else {
             item_tester = std::make_unique<AllMatchItemTester>();
         }

@@ -59,6 +59,7 @@ typedef struct object_type {
     void prep(KIND_OBJECT_IDX ko_idx);
     bool is_weapon() const;
     bool is_weapon_ammo() const;
+    bool is_weapon_armour_ammo() const;
     bool is_lance() const;
     bool is_armour() const;
 } object_type;

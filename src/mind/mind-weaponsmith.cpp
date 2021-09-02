@@ -39,7 +39,7 @@ bool object_is_melee_ammo(const object_type *o_ptr)
  */
 bool object_is_smith(const object_type *o_ptr)
 {
-    if (object_is_weapon_armour_ammo(o_ptr) && o_ptr->xtra3)
+    if (o_ptr->is_weapon_armour_ammo() && o_ptr->xtra3)
         return true;
 
     return false;

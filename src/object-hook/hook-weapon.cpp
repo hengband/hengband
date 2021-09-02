@@ -141,19 +141,6 @@ bool object_is_favorite(player_type *player_ptr, const object_type *o_ptr)
 }
 
 /*!
- * @brief オブジェクトが武器、防具、矢弾として使用できるかを返す / Check if an object is weapon, armour or ammo
- * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return 武器、防具、矢弾として使えるならばTRUEを返す
- */
-bool object_is_weapon_armour_ammo(const object_type *o_ptr)
-{
-    if (o_ptr->is_weapon_ammo() || o_ptr->is_armour())
-        return true;
-
-    return false;
-}
-
-/*!
  * @brief オブジェクトが近接武器として装備できるかを返す / Melee weapons
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 近接武器として使えるならばTRUEを返す

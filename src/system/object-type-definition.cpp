@@ -96,6 +96,15 @@ bool object_type::is_weapon_ammo() const
     return (TV_MISSILE_BEGIN <= this->tval) && (this->tval <= TV_WEAPON_END);
 }
 
+/*!
+ * @brief オブジェクトが武器、防具、矢弾として使用できるかを返す / Check if an object is weapon, armour or ammo
+ * @return 武器、防具、矢弾として使えるならばtrueを返す
+ */
+bool object_type::is_weapon_armour_ammo() const
+{
+    return this->is_weapon_ammo() || this->is_armour();
+}
+
 bool object_type::is_lance() const
 {
     auto is_lance = this->tval == TV_POLEARM;

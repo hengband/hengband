@@ -246,7 +246,7 @@ static void drain_essence(player_type *creature_ptr)
     q = _("どのアイテムから抽出しますか？", "Extract from which item? ");
     s = _("抽出できるアイテムがありません。", "You have nothing you can extract from.");
 
-    o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), FuncItemTester(object_is_weapon_armour_ammo));
+    o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), FuncItemTester(&object_type::is_weapon_armour_ammo));
     if (!o_ptr)
         return;
 
@@ -801,7 +801,7 @@ static void add_essence(player_type *creature_ptr, int32_t mode)
         else if (es_ptr->add == ESSENCE_AC)
             return std::make_unique<FuncItemTester>(&object_type::is_armour);
         else
-            return std::make_unique<FuncItemTester>(object_is_weapon_armour_ammo);
+            return std::make_unique<FuncItemTester>(&object_type::is_weapon_armour_ammo);
     };
 
     auto item_tester = decide_item_tester();

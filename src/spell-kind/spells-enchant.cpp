@@ -123,7 +123,7 @@ bool mundane_spell(player_type *owner_ptr, bool only_equip)
 {
     std::unique_ptr<ItemTester> item_tester = std::make_unique<AllMatchItemTester>();
     if (only_equip)
-        item_tester = std::make_unique<FuncItemTester>(object_is_weapon_armour_ammo);
+        item_tester = std::make_unique<FuncItemTester>(&object_type::is_weapon_armour_ammo);
 
     OBJECT_IDX item;
     object_type *o_ptr;

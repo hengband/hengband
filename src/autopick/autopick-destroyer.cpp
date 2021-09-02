@@ -71,7 +71,7 @@ static bool is_opt_confirm_destroy(player_type *player_ptr, object_type *o_ptr)
             return false;
 
     if (leave_equip)
-        if (object_is_weapon_armour_ammo(o_ptr))
+        if (o_ptr->is_weapon_armour_ammo())
             return false;
 
     if (leave_chest)
