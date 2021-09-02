@@ -22,6 +22,16 @@ TvalItemTester::TvalItemTester(tval_type tval)
 /**
  * @brief Construct a new Func Item Tester:: Func Item Tester object
  *
+ * @param test_func そのオブジェクトが条件に合うならtrueを返すメンバ関数を指定する
+ */
+FuncItemTester::FuncItemTester(TestMemberFunctionPtr test_func)
+    : test_func([f = test_func](player_type *, const object_type *o_ptr) { return (o_ptr->*f)(); })
+{
+}
+
+/**
+ * @brief Construct a new Func Item Tester:: Func Item Tester object
+ *
  * @param test_func 引数に object_type へのポインタを取り、そのオブジェクトが条件に合うならtrueを返す関数を指定する
  */
 FuncItemTester::FuncItemTester(std::function<bool(const object_type *)> test_func)
