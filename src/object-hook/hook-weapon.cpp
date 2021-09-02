@@ -68,17 +68,3 @@ bool object_is_favorite(player_type *player_ptr, const object_type *o_ptr)
 
     return true;
 }
-
-/*!
- * @brief オブジェクトが両手持ち可能な武器かを返す /
- * Check if an object is melee weapon and allows wielding with two-hands
- * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return 両手持ち可能ならばTRUEを返す
- */
-bool object_allow_two_hands_wielding(const object_type *o_ptr)
-{
-    if (o_ptr->is_melee_weapon() && ((o_ptr->weight > 99) || (o_ptr->tval == TV_POLEARM)))
-        return true;
-
-    return false;
-}

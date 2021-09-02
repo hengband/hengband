@@ -254,14 +254,14 @@ void do_cmd_wield(player_type *creature_ptr)
 
     switch (slot) {
     case INVEN_MAIN_HAND:
-        if (object_allow_two_hands_wielding(o_ptr) && (empty_hands(creature_ptr, false) == EMPTY_HAND_SUB) && can_two_hands_wielding(creature_ptr))
+        if (o_ptr->allow_two_hands_wielding() && (empty_hands(creature_ptr, false) == EMPTY_HAND_SUB) && can_two_hands_wielding(creature_ptr))
             act = STR_WIELD_HANDS_TWO;
         else
             act = (left_hander ? STR_WIELD_HAND_LEFT : STR_WIELD_HAND_RIGHT);
 
         break;
     case INVEN_SUB_HAND:
-        if (object_allow_two_hands_wielding(o_ptr) && (empty_hands(creature_ptr, false) == EMPTY_HAND_MAIN) && can_two_hands_wielding(creature_ptr))
+        if (o_ptr->allow_two_hands_wielding() && (empty_hands(creature_ptr, false) == EMPTY_HAND_MAIN) && can_two_hands_wielding(creature_ptr))
             act = STR_WIELD_HANDS_TWO;
         else
             act = (left_hander ? STR_WIELD_HAND_RIGHT : STR_WIELD_HAND_LEFT);

@@ -222,6 +222,16 @@ bool object_type::allow_enchant_melee_weapon() const
     return this->is_melee_weapon() && !this->refuse_enchant_weapon();
 }
 
+/*!
+ * @brief オブジェクトが両手持ち可能な武器かを返す /
+ * Check if an object is melee weapon and allows wielding with two-hands
+ * @return 両手持ち可能ならばTRUEを返す
+ */
+bool object_type::allow_two_hands_wielding() const
+{
+    return this->is_melee_weapon() && ((this->weight > 99) || (this->tval == TV_POLEARM));
+}
+
 bool object_type::is_lance() const
 {
     auto is_lance = this->tval == TV_POLEARM;
