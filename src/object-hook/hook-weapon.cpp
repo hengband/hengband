@@ -141,20 +141,7 @@ bool object_is_favorite(player_type *player_ptr, const object_type *o_ptr)
 }
 
 /*!
- * @brief オブジェクトが装備可能であるかを返す / Wearable including all weapon, all armour, bow, light source, amulet, and ring
- * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return 装備可能ならばTRUEを返す
- */
-bool object_is_wearable(const object_type *o_ptr)
-{
-    if (TV_WEARABLE_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_WEARABLE_END)
-        return true;
-
-    return false;
-}
-
-/*!
- * @brief オブジェクトが装備品であるかを返す(object_is_wearableに矢弾を含む) / Equipment including all wearable objects and ammo
+ * @brief オブジェクトが装備品であるかを返す(object_type::is_wearableに矢弾を含む) / Equipment including all wearable objects and ammo
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 装備品ならばTRUEを返す
  */

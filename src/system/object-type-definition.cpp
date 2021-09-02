@@ -114,6 +114,15 @@ bool object_type::is_melee_weapon() const
     return (TV_DIGGING <= this->tval) && (this->tval <= TV_SWORD);
 }
 
+/*!
+ * @brief オブジェクトが装備可能であるかを返す / Wearable including all weapon, all armour, bow, light source, amulet, and ring
+ * @return 装備可能ならばTRUEを返す
+ */
+bool object_type::is_wearable() const
+{
+    return (TV_WEARABLE_BEGIN <= this->tval) && (this->tval <= TV_WEARABLE_END);
+}
+
 bool object_type::is_lance() const
 {
     auto is_lance = this->tval == TV_POLEARM;
