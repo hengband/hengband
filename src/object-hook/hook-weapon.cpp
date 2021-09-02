@@ -141,27 +141,13 @@ bool object_is_favorite(player_type *player_ptr, const object_type *o_ptr)
 }
 
 /*!
- * @brief オブジェクトが武器や矢弾として使用できるかを返す / Check if an object is weapon (including bows and ammo)
- * Rare weapons/aromors including Blade of Chaos, Dragon armors, etc.
- * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return 武器や矢弾として使えるならばTRUEを返す
- */
-bool object_is_weapon_ammo(const object_type *o_ptr)
-{
-    if (TV_MISSILE_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_WEAPON_END)
-        return true;
-
-    return false;
-}
-
-/*!
  * @brief オブジェクトが武器、防具、矢弾として使用できるかを返す / Check if an object is weapon, armour or ammo
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 武器、防具、矢弾として使えるならばTRUEを返す
  */
 bool object_is_weapon_armour_ammo(const object_type *o_ptr)
 {
-    if (object_is_weapon_ammo(o_ptr) || o_ptr->is_armour())
+    if (o_ptr->is_weapon_ammo() || o_ptr->is_armour())
         return true;
 
     return false;
@@ -227,7 +213,7 @@ bool object_refuse_enchant_weapon(const object_type *o_ptr)
  */
 bool object_allow_enchant_weapon(const object_type *o_ptr)
 {
-    if (object_is_weapon_ammo(o_ptr) && !object_refuse_enchant_weapon(o_ptr))
+    if (o_ptr->is_weapon_ammo() && !object_refuse_enchant_weapon(o_ptr))
         return true;
 
     return false;

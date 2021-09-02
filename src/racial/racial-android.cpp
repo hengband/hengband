@@ -87,7 +87,7 @@ void calc_android_exp(player_type *creature_ptr)
             int32_t total_flags = flag_cost(o_ptr, o_ptr->pval);
             int fake_level;
 
-            if (!object_is_weapon_ammo(o_ptr)) {
+            if (!o_ptr->is_weapon_ammo()) {
                 if (total_flags < 15000)
                     fake_level = 10;
                 else if (total_flags < 35000)

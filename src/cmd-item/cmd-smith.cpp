@@ -398,7 +398,7 @@ static void drain_essence(player_type *creature_ptr)
     if (old_name2 == EGO_2WEAPON) {
         drain_value[TR_DEX] += 20;
     }
-    if (object_is_weapon_ammo(o_ptr)) {
+    if (o_ptr->is_weapon_ammo()) {
         if (old_ds > o_ptr->ds)
             drain_value[TR_ES_ATTACK] += (old_ds - o_ptr->ds) * 10;
 

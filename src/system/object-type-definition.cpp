@@ -86,6 +86,16 @@ bool object_type::is_weapon() const
     return (TV_WEAPON_BEGIN <= this->tval) && (this->tval <= TV_WEAPON_END);
 }
 
+/*!
+ * @brief オブジェクトが武器や矢弾として使用できるかを返す / Check if an object is weapon (including bows and ammo)
+ * Rare weapons/aromors including Blade of Chaos, Dragon armors, etc.
+ * @return 武器や矢弾として使えるならばtrueを返す
+ */
+bool object_type::is_weapon_ammo() const
+{
+    return (TV_MISSILE_BEGIN <= this->tval) && (this->tval <= TV_WEAPON_END);
+}
+
 bool object_type::is_lance() const
 {
     auto is_lance = this->tval == TV_POLEARM;

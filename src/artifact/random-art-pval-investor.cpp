@@ -145,7 +145,7 @@ void random_plus(object_type *o_ptr)
     if (switch_random_art_bias(o_ptr) || random_art_bias_decrease_mana(o_ptr))
         return;
 
-    int this_type = object_is_weapon_ammo(o_ptr) ? 23 : 19;
+    int this_type = o_ptr->is_weapon_ammo() ? 23 : 19;
     switch (randint1(this_type)) {
     case 1:
     case 2:

@@ -192,7 +192,7 @@ static int decide_random_art_power(const bool a_cursed)
 
 static void invest_powers(player_type *player_ptr, object_type *o_ptr, int *powers, bool *has_pval, const bool a_cursed)
 {
-    int max_type = object_is_weapon_ammo(o_ptr) ? 7 : 5;
+    int max_type = o_ptr->is_weapon_ammo() ? 7 : 5;
     while ((*powers)--) {
         switch (randint1(max_type)) {
         case 1:
@@ -202,7 +202,7 @@ static void invest_powers(player_type *player_ptr, object_type *o_ptr, int *powe
             break;
         case 3:
         case 4:
-            if (one_in_(2) && object_is_weapon_ammo(o_ptr) && (o_ptr->tval != TV_BOW)) {
+            if (one_in_(2) && o_ptr->is_weapon_ammo() && (o_ptr->tval != TV_BOW)) {
                 if (a_cursed && !one_in_(13))
                     break;
                 if (one_in_(13)) {
@@ -260,7 +260,7 @@ static void invest_positive_modified_value(object_type *o_ptr)
         return;
     }
 
-    if (!object_is_weapon_ammo(o_ptr))
+    if (!o_ptr->is_weapon_ammo())
         return;
 
     o_ptr->to_h += randint1(o_ptr->to_h > 19 ? 1 : 20 - o_ptr->to_h);
@@ -325,7 +325,7 @@ static void reset_flags_poison_needle(object_type *o_ptr)
 
 static int decide_random_art_power_level(object_type *o_ptr, const bool a_cursed, const int total_flags)
 {
-    if (object_is_weapon_ammo(o_ptr)) {
+    if (o_ptr->is_weapon_ammo()) {
         if (a_cursed)
             return 0;
 
