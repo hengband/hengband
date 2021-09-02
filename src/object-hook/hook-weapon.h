@@ -7,7 +7,6 @@ bool object_is_broken_weapon(const object_type *o_ptr);
 bool object_is_boomerang(const object_type *o_ptr);
 bool object_is_mochikae(const object_type *o_ptr);
 bool object_is_favorite(player_type *player_ptr, const object_type *o_ptr);
-bool object_is_weapon(const object_type *o_ptr);
 bool object_is_weapon_ammo(const object_type *o_ptr);
 bool object_is_weapon_armour_ammo(const object_type *o_ptr);
 bool object_is_melee_weapon(const object_type *o_ptr);

@@ -141,19 +141,6 @@ bool object_is_favorite(player_type *player_ptr, const object_type *o_ptr)
 }
 
 /*!
- * @brief オブジェクトが武器として装備できるかどうかを返す / Check if an object is weapon (including bows and ammo)
- * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return 武器として使えるならばTRUEを返す
- */
-bool object_is_weapon(const object_type *o_ptr)
-{
-    if (TV_WEAPON_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_WEAPON_END)
-        return true;
-
-    return false;
-}
-
-/*!
  * @brief オブジェクトが武器や矢弾として使用できるかを返す / Check if an object is weapon (including bows and ammo)
  * Rare weapons/aromors including Blade of Chaos, Dragon armors, etc.
  * @param o_ptr 対象のオブジェクト構造体ポインタ

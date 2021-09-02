@@ -204,7 +204,7 @@ static bool ego_has_flag(object_type *o_ptr, ego_item_type *e_ptr, tr_type flag)
  */
 void ego_invest_extra_attack(object_type *o_ptr, ego_item_type *e_ptr, DEPTH lev)
 {
-    if (!object_is_weapon(o_ptr)) {
+    if (!o_ptr->is_weapon()) {
         o_ptr->pval = e_ptr->max_pval >= 0 ? 1 : randint1_signed(e_ptr->max_pval);
         return;
     }

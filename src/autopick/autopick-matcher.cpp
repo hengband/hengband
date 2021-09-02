@@ -204,7 +204,7 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
         return false;
 
     if (IS_FLG(FLG_WEAPONS)) {
-        if (!object_is_weapon(o_ptr))
+        if (!o_ptr->is_weapon())
             return false;
     } else if (IS_FLG(FLG_FAVORITE_WEAPONS)) {
         if (!object_is_favorite(player_ptr, o_ptr))

@@ -77,6 +77,15 @@ void object_type::prep(KIND_OBJECT_IDX ko_idx)
         this->curse_flags.set(get_curse(2, this));
 }
 
+/*!
+ * @brief オブジェクトが武器として装備できるかどうかを返す / Check if an object is weapon (including bows)
+ * @return 武器として使えるならばtrueを返す
+ */
+bool object_type::is_weapon() const
+{
+    return (TV_WEAPON_BEGIN <= this->tval) && (this->tval <= TV_WEAPON_END);
+}
+
 bool object_type::is_lance() const
 {
     auto is_lance = this->tval == TV_POLEARM;
