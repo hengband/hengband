@@ -206,7 +206,7 @@ bool rush_attack(player_type *attacker_ptr, bool *mdeath)
 void process_surprise_attack(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {
     monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
-    if (!has_melee_weapon(attacker_ptr, INVEN_MAIN_HAND + pa_ptr->hand) || attacker_ptr->icky_wield[pa_ptr->hand])
+    if (!has_melee_weapon(attacker_ptr, INVEN_MAIN_HAND + pa_ptr->hand) || attacker_ptr->is_icky_wield[pa_ptr->hand])
         return;
 
     int tmp = attacker_ptr->lev * 6 + (attacker_ptr->skill_stl + 10) * 4;

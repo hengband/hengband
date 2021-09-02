@@ -321,13 +321,13 @@ void MindPowerGetter::calculate_ki_chance(bool *has_weapon)
     if (heavy_armor(this->caster_ptr))
         this->chance += 20;
 
-    if (this->caster_ptr->icky_wield[0]) {
+    if (this->caster_ptr->is_icky_wield[0]) {
         this->chance += 20;
     } else if (has_weapon[0]) {
         this->chance += 10;
     }
 
-    if (this->caster_ptr->icky_wield[1]) {
+    if (this->caster_ptr->is_icky_wield[1]) {
         chance += 20;
     } else if (has_weapon[1]) {
         this->chance += 10;
@@ -350,11 +350,11 @@ void MindPowerGetter::add_ki_chance()
         this->chance += 5;
     }
 
-    if (this->caster_ptr->icky_wield[0]) {
+    if (this->caster_ptr->is_icky_wield[0]) {
         this->chance += 5;
     }
 
-    if (this->caster_ptr->icky_wield[1]) {
+    if (this->caster_ptr->is_icky_wield[1]) {
         this->chance += 5;
     }
 }

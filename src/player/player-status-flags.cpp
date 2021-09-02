@@ -2030,7 +2030,7 @@ bool has_disable_two_handed_bonus(player_type *creature_ptr, int i)
  * @brief ふさわしくない武器を持っているかどうかを返す。
  * @todo 相応しい時にFALSEで相応しくない時にTRUEという負論理は良くない、後で修正する
  */
-bool has_icky_wield_weapon(player_type *creature_ptr, int i)
+bool is_wielding_icky_weapon(player_type *creature_ptr, int i)
 {
     TrFlags flgs;
     auto *o_ptr = &creature_ptr->inventory_list[INVEN_MAIN_HAND + i];
@@ -2057,7 +2057,7 @@ bool has_icky_wield_weapon(player_type *creature_ptr, int i)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param i 武器を持っている手。0ならば利き手、1ならば反対の手
  */
-bool has_riding_wield_weapon(player_type *creature_ptr, int i)
+bool is_wielding_icky_riding_weapon(player_type *creature_ptr, int i)
 {
     auto *o_ptr = &creature_ptr->inventory_list[INVEN_MAIN_HAND + i];
     TrFlags flgs;

@@ -165,9 +165,9 @@ PERCENTAGE spell_chance(player_type *caster_ptr, SPELL_IDX spell, int16_t use_re
             minfail = 5;
     }
 
-    if (((caster_ptr->pclass == CLASS_PRIEST) || (caster_ptr->pclass == CLASS_SORCERER)) && caster_ptr->icky_wield[0])
+    if (((caster_ptr->pclass == CLASS_PRIEST) || (caster_ptr->pclass == CLASS_SORCERER)) && caster_ptr->is_icky_wield[0])
         chance += 25;
-    if (((caster_ptr->pclass == CLASS_PRIEST) || (caster_ptr->pclass == CLASS_SORCERER)) && caster_ptr->icky_wield[1])
+    if (((caster_ptr->pclass == CLASS_PRIEST) || (caster_ptr->pclass == CLASS_SORCERER)) && caster_ptr->is_icky_wield[1])
         chance += 25;
 
     chance = mod_spell_chance_1(caster_ptr, chance);
