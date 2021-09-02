@@ -364,7 +364,7 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
         } else if (object_is_artifact(o_ptr))
             ADD_FLG(FLG_ARTIFACT);
         else {
-            if (object_is_equipment(o_ptr))
+            if (o_ptr->is_equipment())
                 ADD_FLG(FLG_NAMELESS);
 
             is_hat_added = true;

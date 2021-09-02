@@ -97,7 +97,7 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
     }
 
     if (IS_FLG(FLG_GOOD)) {
-        if (!object_is_equipment(o_ptr))
+        if (!o_ptr->is_equipment())
             return false;
         if (object_is_known(o_ptr)) {
             if (!object_is_nameless(o_ptr))
@@ -119,7 +119,7 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
     }
 
     if (IS_FLG(FLG_NAMELESS)) {
-        if (!object_is_equipment(o_ptr))
+        if (!o_ptr->is_equipment())
             return false;
         if (object_is_known(o_ptr)) {
             if (!object_is_nameless(o_ptr))
@@ -141,7 +141,7 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
     }
 
     if (IS_FLG(FLG_AVERAGE)) {
-        if (!object_is_equipment(o_ptr))
+        if (!o_ptr->is_equipment())
             return false;
         if (object_is_known(o_ptr)) {
             if (!object_is_nameless(o_ptr))

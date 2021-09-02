@@ -123,6 +123,15 @@ bool object_type::is_wearable() const
     return (TV_WEARABLE_BEGIN <= this->tval) && (this->tval <= TV_WEARABLE_END);
 }
 
+/*!
+ * @brief オブジェクトが装備品であるかを返す(object_type::is_wearableに矢弾を含む) / Equipment including all wearable objects and ammo
+ * @return 装備品ならばtrueを返す
+ */
+bool object_type::is_equipment() const
+{
+    return (TV_EQUIP_BEGIN <= this->tval) && (this->tval <= TV_EQUIP_END);
+}
+
 bool object_type::is_lance() const
 {
     auto is_lance = this->tval == TV_POLEARM;

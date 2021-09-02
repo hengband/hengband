@@ -52,7 +52,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         i++;
     }
 
-    if (object_is_equipment(o_ptr)) {
+    if (o_ptr->is_equipment()) {
         trivial_info = i;
     }
 

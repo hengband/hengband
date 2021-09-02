@@ -141,19 +141,6 @@ bool object_is_favorite(player_type *player_ptr, const object_type *o_ptr)
 }
 
 /*!
- * @brief オブジェクトが装備品であるかを返す(object_type::is_wearableに矢弾を含む) / Equipment including all wearable objects and ammo
- * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return 装備品ならばTRUEを返す
- */
-bool object_is_equipment(const object_type *o_ptr)
-{
-    if (TV_EQUIP_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_EQUIP_END)
-        return true;
-
-    return false;
-}
-
-/*!
  * @brief オブジェクトが強化不能武器であるかを返す / Poison needle can not be enchanted
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 強化不能ならばTRUEを返す
