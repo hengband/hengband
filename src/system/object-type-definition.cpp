@@ -232,6 +232,16 @@ bool object_type::allow_two_hands_wielding() const
     return this->is_melee_weapon() && ((this->weight > 99) || (this->tval == TV_POLEARM));
 }
 
+/*!
+ * @brief オブジェクトが矢弾として使用できるかどうかを返す / Check if an object is ammo
+ * @return 矢弾として使えるならばtrueを返す
+ */
+bool object_type::is_ammo() const
+{
+    return (TV_MISSILE_BEGIN <= this->tval) && (this->tval <= TV_MISSILE_END);
+}
+
+
 bool object_type::is_lance() const
 {
     auto is_lance = this->tval == TV_POLEARM;

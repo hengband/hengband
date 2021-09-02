@@ -198,7 +198,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
         paid = restore_all_status(player_ptr);
         break;
     case BACT_ENCHANT_ARROWS:
-        enchant_item(player_ptr, bcost, 1, 1, 0, FuncItemTester(object_is_ammo));
+        enchant_item(player_ptr, bcost, 1, 1, 0, FuncItemTester(&object_type::is_ammo));
         break;
     case BACT_ENCHANT_BOW:
         enchant_item(player_ptr, bcost, 1, 1, 0, TvalItemTester(TV_BOW));

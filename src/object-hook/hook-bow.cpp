@@ -17,16 +17,3 @@ bool object_is_convertible(const object_type *o_ptr)
         return true;
     return false;
 }
-
-/*!
- * @brief オブジェクトが矢弾として使用できるかどうかを返す / Check if an object is ammo
- * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return 矢弾として使えるならばTRUEを返す
- */
-bool object_is_ammo(const object_type *o_ptr)
-{
-    if (TV_MISSILE_BEGIN <= o_ptr->tval && o_ptr->tval <= TV_MISSILE_END)
-        return true;
-
-    return false;
-}

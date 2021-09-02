@@ -418,7 +418,7 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
     if (o_ptr->tval >= TV_LIFE_BOOK && 3 == o_ptr->sval)
         ADD_FLG(FLG_FOURTH);
 
-    if (object_is_ammo(o_ptr))
+    if (o_ptr->is_ammo())
         ADD_FLG(FLG_MISSILES);
     else if (o_ptr->tval == TV_SCROLL || o_ptr->tval == TV_STAFF || o_ptr->tval == TV_WAND || o_ptr->tval == TV_ROD)
         ADD_FLG(FLG_DEVICES);
