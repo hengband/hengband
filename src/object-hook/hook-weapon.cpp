@@ -141,19 +141,6 @@ bool object_is_favorite(player_type *player_ptr, const object_type *o_ptr)
 }
 
 /*!
- * @brief オブジェクトが近接武器として装備できるかを返す / Melee weapons
- * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return 近接武器として使えるならばTRUEを返す
- */
-bool object_is_melee_weapon(const object_type *o_ptr)
-{
-    if (TV_DIGGING <= o_ptr->tval && o_ptr->tval <= TV_SWORD)
-        return true;
-
-    return false;
-}
-
-/*!
  * @brief オブジェクトが装備可能であるかを返す / Wearable including all weapon, all armour, bow, light source, amulet, and ring
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return 装備可能ならばTRUEを返す
@@ -214,7 +201,7 @@ bool object_allow_enchant_weapon(const object_type *o_ptr)
  */
 bool object_allow_enchant_melee_weapon(const object_type *o_ptr)
 {
-    if (object_is_melee_weapon(o_ptr) && !object_refuse_enchant_weapon(o_ptr))
+    if (o_ptr->is_melee_weapon() && !object_refuse_enchant_weapon(o_ptr))
         return true;
 
     return false;
@@ -228,7 +215,7 @@ bool object_allow_enchant_melee_weapon(const object_type *o_ptr)
  */
 bool object_allow_two_hands_wielding(const object_type *o_ptr)
 {
-    if (object_is_melee_weapon(o_ptr) && ((o_ptr->weight > 99) || (o_ptr->tval == TV_POLEARM)))
+    if (o_ptr->is_melee_weapon() && ((o_ptr->weight > 99) || (o_ptr->tval == TV_POLEARM)))
         return true;
 
     return false;

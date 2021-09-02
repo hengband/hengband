@@ -105,6 +105,15 @@ bool object_type::is_weapon_armour_ammo() const
     return this->is_weapon_ammo() || this->is_armour();
 }
 
+/*!
+ * @brief オブジェクトが近接武器として装備できるかを返す / Melee weapons
+ * @return 近接武器として使えるならばtrueを返す
+ */
+bool object_type::is_melee_weapon() const
+{
+    return (TV_DIGGING <= this->tval) && (this->tval <= TV_SWORD);
+}
+
 bool object_type::is_lance() const
 {
     auto is_lance = this->tval == TV_POLEARM;

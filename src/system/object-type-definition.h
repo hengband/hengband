@@ -60,6 +60,7 @@ typedef struct object_type {
     bool is_weapon() const;
     bool is_weapon_ammo() const;
     bool is_weapon_armour_ammo() const;
+    bool is_melee_weapon() const;
     bool is_lance() const;
     bool is_armour() const;
 } object_type;

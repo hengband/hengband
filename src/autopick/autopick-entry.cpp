@@ -371,7 +371,7 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
         }
     }
 
-    if (object_is_melee_weapon(o_ptr)) {
+    if (o_ptr->is_melee_weapon()) {
         object_kind *k_ptr = &k_info[o_ptr->k_idx];
 
         if ((o_ptr->dd != k_ptr->dd) || (o_ptr->ds != k_ptr->ds))

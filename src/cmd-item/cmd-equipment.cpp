@@ -118,14 +118,14 @@ void do_cmd_wield(player_type *creature_ptr)
         if (has_melee_weapon(creature_ptr, INVEN_MAIN_HAND) && has_melee_weapon(creature_ptr, INVEN_SUB_HAND)) {
             q = _("どちらの武器と取り替えますか?", "Replace which weapon? ");
             s = _("おっと。", "Oops.");
-            if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), FuncItemTester(object_is_melee_weapon)))
+            if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), FuncItemTester(&object_type::is_melee_weapon)))
                 return;
 
             if (slot == INVEN_MAIN_HAND)
                 need_switch_wielding = INVEN_SUB_HAND;
         } else if (has_melee_weapon(creature_ptr, INVEN_SUB_HAND))
             slot = INVEN_MAIN_HAND;
-        else if (o_ptr_mh->k_idx && !object_is_melee_weapon(o_ptr_mh) && o_ptr_sh->k_idx && !object_is_melee_weapon(o_ptr_sh)) {
+        else if (o_ptr_mh->k_idx && !o_ptr_mh->is_melee_weapon() && o_ptr_sh->k_idx && !o_ptr_sh->is_melee_weapon()) {
             q = _("どちらの手に装備しますか?", "Equip which hand? ");
             s = _("おっと。", "Oops.");
             if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP), FuncItemTester(object_is_mochikae)))
