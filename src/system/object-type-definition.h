@@ -57,4 +57,5 @@ typedef struct object_type {
     void wipe();
     void copy_from(object_type *j_ptr);
     void prep(KIND_OBJECT_IDX ko_idx);
+    bool is_lance() const;
 } object_type;

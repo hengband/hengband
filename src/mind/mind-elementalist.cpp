@@ -641,10 +641,10 @@ static PERCENTAGE decide_element_chance(player_type *caster_ptr, mind_type spell
     if (heavy_armor(caster_ptr))
         chance += 5;
 
-    if (caster_ptr->icky_wield[0])
+    if (caster_ptr->is_icky_wield[0])
         chance += 5;
 
-    if (caster_ptr->icky_wield[1])
+    if (caster_ptr->is_icky_wield[1])
         chance += 5;
 
     if (chance > 95)

@@ -66,7 +66,7 @@ static void add_class_flags(player_type *creature_ptr, TrFlags &flags)
             if ((!creature_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(creature_ptr))
                 && (!creature_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(creature_ptr)))
                 add_flag(flags, TR_SPEED);
-            if (creature_ptr->lev > 24 && !creature_ptr->icky_wield[0] && !creature_ptr->icky_wield[1])
+            if (creature_ptr->lev > 24 && !creature_ptr->is_icky_wield[0] && !creature_ptr->is_icky_wield[1])
                 add_flag(flags, TR_FREE_ACT);
         }
 

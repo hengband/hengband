@@ -11,6 +11,7 @@
 #include "object-enchant/trc-types.h"
 #include "object-enchant/trg-types.h"
 #include "object/object-kind.h"
+#include "sv-definition/sv-weapon-types.h"
 #include "system/player-type-definition.h"
 
 /*!
@@ -74,4 +75,11 @@ void object_type::prep(KIND_OBJECT_IDX ko_idx)
         this->curse_flags.set(get_curse(1, this));
     if (k_ptr->gen_flags.has(TRG::RANDOM_CURSE2))
         this->curse_flags.set(get_curse(2, this));
+}
+
+bool object_type::is_lance() const
+{
+    auto is_lance = this->tval == TV_POLEARM;
+    is_lance &= (this->sval == SV_LANCE) || (this->sval == SV_HEAVY_LANCE);
+    return is_lance;
 }

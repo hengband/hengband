@@ -377,8 +377,8 @@ static void update_bonuses(player_type *creature_ptr)
     }
 
     for (int i = 0; i < 2; i++) {
-        creature_ptr->icky_wield[i] = has_icky_wield_weapon(creature_ptr, i);
-        creature_ptr->riding_wield[i] = has_riding_wield_weapon(creature_ptr, i);
+        creature_ptr->is_icky_wield[i] = is_wielding_icky_weapon(creature_ptr, i);
+        creature_ptr->is_icky_riding_wield[i] = is_wielding_icky_riding_weapon(creature_ptr, i);
         creature_ptr->heavy_wield[i] = is_heavy_wield(creature_ptr, i);
         creature_ptr->num_blow[i] = calc_num_blow(creature_ptr, i);
         creature_ptr->to_dd[i] = calc_to_weapon_dice_num(creature_ptr, INVEN_MAIN_HAND + i);
@@ -1898,8 +1898,8 @@ void put_equipment_warning(player_type *creature_ptr)
             creature_ptr->old_heavy_wield[i] = creature_ptr->heavy_wield[i];
         }
 
-        if (creature_ptr->old_riding_wield[i] != creature_ptr->riding_wield[i]) {
-            if (creature_ptr->riding_wield[i]) {
+        if (creature_ptr->old_riding_wield[i] != creature_ptr->is_icky_riding_wield[i]) {
+            if (creature_ptr->is_icky_riding_wield[i]) {
                 msg_print(_("この武器は乗馬中に使うにはむかないようだ。", "This weapon is not suitable for use while riding."));
             } else if (!creature_ptr->riding) {
                 msg_print(_("この武器は徒歩で使いやすい。", "This weapon is suitable for use on foot."));
@@ -1907,13 +1907,13 @@ void put_equipment_warning(player_type *creature_ptr)
                 msg_print(_("これなら乗馬中にぴったりだ。", "This weapon is suitable for use while riding."));
             }
 
-            creature_ptr->old_riding_wield[i] = creature_ptr->riding_wield[i];
+            creature_ptr->old_riding_wield[i] = creature_ptr->is_icky_riding_wield[i];
         }
 
-        if (creature_ptr->old_icky_wield[i] == creature_ptr->icky_wield[i])
+        if (creature_ptr->old_icky_wield[i] == creature_ptr->is_icky_wield[i])
             continue;
 
-        if (creature_ptr->icky_wield[i]) {
+        if (creature_ptr->is_icky_wield[i]) {
             msg_print(_("今の装備はどうも自分にふさわしくない気がする。", "You do not feel comfortable with your weapon."));
             if (current_world_ptr->is_loading_now) {
                 chg_virtue(creature_ptr, V_FAITH, -1);
@@ -1924,7 +1924,7 @@ void put_equipment_warning(player_type *creature_ptr)
             msg_print(_("装備をはずしたら随分と気が楽になった。", "You feel more comfortable after removing your weapon."));
         }
 
-        creature_ptr->old_icky_wield[i] = creature_ptr->icky_wield[i];
+        creature_ptr->old_icky_wield[i] = creature_ptr->is_icky_wield[i];
     }
 
     if (creature_ptr->riding && (creature_ptr->old_riding_ryoute != creature_ptr->riding_ryoute)) {
@@ -2194,24 +2194,23 @@ static int16_t calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool i
         }
 
         /* Riding bonus and penalty */
-        if (creature_ptr->riding) {
-            if ((o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE))) {
+        if (creature_ptr->riding > 0) {
+            if (o_ptr->is_lance()) {
                 hit += 15;
-            }
-        }
+            } else if (!has_flag(flgs, TR_RIDING)) {
+                short penalty;
+                if ((creature_ptr->pclass == CLASS_BEASTMASTER) || (creature_ptr->pclass == CLASS_CAVALRY)) {
+                    penalty = 5;
+                } else {
+                    penalty = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level - creature_ptr->skill_exp[SKILL_RIDING] / 80;
+                    penalty += 30;
+                    if (penalty < 30) {
+                        penalty = 30;
+                    }
+                }
 
-        if (creature_ptr->riding != 0 && !(o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE))
-            && !has_flag(flgs, TR_RIDING)) {
-            int penalty;
-            if ((creature_ptr->pclass == CLASS_BEASTMASTER) || (creature_ptr->pclass == CLASS_CAVALRY)) {
-                penalty = 5;
-            } else {
-                penalty = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level - creature_ptr->skill_exp[SKILL_RIDING] / 80;
-                penalty += 30;
-                if (penalty < 30)
-                    penalty = 30;
+                hit -= penalty;
             }
-            hit -= (int16_t)penalty;
         }
 
         /* Class penalties */
@@ -2498,16 +2497,8 @@ static int16_t calc_to_hit_misc(player_type *creature_ptr)
 
 static DICE_NUMBER calc_to_weapon_dice_num(player_type *creature_ptr, INVENTORY_IDX slot)
 {
-    object_type *o_ptr = &creature_ptr->inventory_list[slot];
-    DICE_NUMBER dn = 0;
-
-    if (creature_ptr->riding) {
-        if ((o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE))) {
-            dn += 2;
-        }
-    }
-
-    return dn;
+    auto *o_ptr = &creature_ptr->inventory_list[slot];
+    return (creature_ptr->riding > 0) && o_ptr->is_lance() ? 2 : 0;
 }
 
 /*!

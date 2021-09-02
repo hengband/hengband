@@ -155,9 +155,9 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
     }
 
     if (has_flag(flgs, TR_RIDING)) {
-        if ((o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE)))
+        if (o_ptr->is_lance()) {
             info[i++] = _("それは乗馬中は非常に使いやすい。", "It is made for use while riding.");
-        else {
+        } else {
             info[i++] = _("それは乗馬中でも使いやすい。", "It is suitable for use while riding.");
             trivial_info++;
         }
