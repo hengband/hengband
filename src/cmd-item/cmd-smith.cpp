@@ -813,7 +813,7 @@ static void add_essence(player_type *creature_ptr, int32_t mode)
     if (!o_ptr)
         return;
 
-    if ((mode != 10) && (object_is_artifact(o_ptr) || object_is_smith(o_ptr))) {
+    if ((mode != 10) && (object_is_artifact(o_ptr) || o_ptr->is_smith())) {
         msg_print(_("そのアイテムはこれ以上改良できない。", "This item can not be improved any further."));
         return;
     }
@@ -999,7 +999,7 @@ static void erase_essence(player_type *creature_ptr)
     q = _("どのアイテムのエッセンスを消去しますか？", "Remove from which item? ");
     s = _("エッセンスを付加したアイテムがありません。", "You have nothing with added essence to remove.");
 
-    o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(object_is_smith));
+    o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&object_type::is_smith));
     if (!o_ptr)
         return;
 

@@ -36,7 +36,7 @@ bool object_is_random_artifact(const object_type *o_ptr)
  */
 bool object_is_nameless(const object_type *o_ptr)
 {
-    return !object_is_artifact(o_ptr) && !o_ptr->is_ego() && !object_is_smith(o_ptr);
+    return !object_is_artifact(o_ptr) && !o_ptr->is_ego() && !o_ptr->is_smith();
 }
 
 /*

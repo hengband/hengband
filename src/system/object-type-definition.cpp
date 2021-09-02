@@ -378,3 +378,16 @@ bool object_type::is_ego() const
 {
     return this->name2 != 0;
 }
+
+/*!
+ * @brief オブジェクトが鍛冶師のエッセンス付加済みかを返す /
+ * Check if an object is made by a smith's special ability
+ * @return エッセンス付加済みならばTRUEを返す
+ */
+bool object_type::is_smith() const
+{
+    if (this->is_weapon_armour_ammo() && this->xtra3)
+        return true;
+
+    return false;
+}

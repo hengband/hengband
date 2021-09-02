@@ -55,7 +55,7 @@ void object_flags(const object_type *o_ptr, TrFlags &flgs)
         flgs[i] |= o_ptr->art_flags[i];
     }
 
-    if (object_is_smith(o_ptr)) {
+    if (o_ptr->is_smith()) {
         int add = o_ptr->xtra3 - 1;
         if (add < TR_FLAG_MAX) {
             add_flag(flgs, add);
@@ -147,7 +147,7 @@ void object_flags_known(const object_type *o_ptr, TrFlags &flgs)
         }
     }
 
-    if (!object_is_smith(o_ptr))
+    if (!o_ptr->is_smith())
         return;
 
     int add = o_ptr->xtra3 - 1;

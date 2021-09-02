@@ -107,7 +107,7 @@ static void decide_tval_show(flavor_type *flavor_ptr)
     if (has_flag(flavor_ptr->tr_flags, TR_SHOW_MODS))
         flavor_ptr->show_weapon = true;
 
-    if (object_is_smith(flavor_ptr->o_ptr) && (flavor_ptr->o_ptr->xtra3 == 1 + ESSENCE_SLAY_GLOVE))
+    if (flavor_ptr->o_ptr->is_smith() && (flavor_ptr->o_ptr->xtra3 == 1 + ESSENCE_SLAY_GLOVE))
         flavor_ptr->show_weapon = true;
 
     if (flavor_ptr->o_ptr->to_h && flavor_ptr->o_ptr->to_d)
