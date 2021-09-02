@@ -795,7 +795,7 @@ static void add_essence(player_type *creature_ptr, int32_t mode)
         if (es_ptr->add == ESSENCE_SLAY_GLOVE)
             return std::make_unique<TvalItemTester>(TV_GLOVES);
         else if (mode == 1 || mode == 5)
-            return std::make_unique<FuncItemTester>(object_is_melee_ammo);
+            return std::make_unique<FuncItemTester>(&object_type::is_melee_ammo);
         else if (es_ptr->add == ESSENCE_ATTACK)
             return std::make_unique<FuncItemTester>(&object_type::allow_enchant_weapon);
         else if (es_ptr->add == ESSENCE_AC)

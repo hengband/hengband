@@ -118,6 +118,33 @@ bool object_type::is_melee_weapon() const
 }
 
 /*!
+ * @brief エッセンスの付加可能な武器や矢弾かを返す
+ * @return エッセンスの付加可能な武器か矢弾ならばtrueを返す。
+ */
+bool object_type::is_melee_ammo() const
+{
+    switch (this->tval) {
+    case TV_HAFTED:
+    case TV_POLEARM:
+    case TV_DIGGING:
+    case TV_BOLT:
+    case TV_ARROW:
+    case TV_SHOT: {
+        return true;
+    }
+    case TV_SWORD: {
+        if (this->sval != SV_POISON_NEEDLE)
+            return true;
+    }
+
+    default:
+        break;
+    }
+
+    return false;
+}
+
+/*!
  * @brief オブジェクトが装備可能であるかを返す / Wearable including all weapon, all armour, bow, light source, amulet, and ring
  * @return 装備可能ならばTRUEを返す
  */
