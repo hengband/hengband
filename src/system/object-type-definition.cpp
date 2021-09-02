@@ -11,7 +11,9 @@
 #include "object-enchant/trc-types.h"
 #include "object-enchant/trg-types.h"
 #include "object/object-kind.h"
+#include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-other-types.h"
+#include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/player-type-definition.h"
 
@@ -270,4 +272,73 @@ bool object_type::is_lance() const
 bool object_type::is_armour() const
 {
     return (TV_ARMOR_BEGIN <= this->tval) && (this->tval <= TV_ARMOR_END);
+}
+
+/*!
+ * @brief オブジェクトがレアアイテムかどうかを返す /
+ * Rare weapons/aromors including Blade of Chaos, Dragon armors, etc.
+ * @return レアアイテムならばTRUEを返す
+ */
+bool object_type::is_rare() const
+{
+    switch (this->tval) {
+    case TV_HAFTED:
+        if (this->sval == SV_MACE_OF_DISRUPTION || this->sval == SV_WIZSTAFF)
+            return true;
+        break;
+
+    case TV_POLEARM:
+        if (this->sval == SV_SCYTHE_OF_SLICING || this->sval == SV_DEATH_SCYTHE)
+            return true;
+        break;
+
+    case TV_SWORD:
+        if (this->sval == SV_BLADE_OF_CHAOS || this->sval == SV_DIAMOND_EDGE || this->sval == SV_POISON_NEEDLE || this->sval == SV_HAYABUSA)
+            return true;
+        break;
+
+    case TV_SHIELD:
+        if (this->sval == SV_DRAGON_SHIELD || this->sval == SV_MIRROR_SHIELD)
+            return true;
+        break;
+
+    case TV_HELM:
+        if (this->sval == SV_DRAGON_HELM)
+            return true;
+        break;
+
+    case TV_BOOTS:
+        if (this->sval == SV_PAIR_OF_DRAGON_GREAVE)
+            return true;
+        break;
+
+    case TV_CLOAK:
+        if (this->sval == SV_ELVEN_CLOAK || this->sval == SV_ETHEREAL_CLOAK || this->sval == SV_SHADOW_CLOAK || this->sval == SV_MAGIC_RESISTANCE_CLOAK)
+            return true;
+        break;
+
+    case TV_GLOVES:
+        if (this->sval == SV_SET_OF_DRAGON_GLOVES)
+            return true;
+        break;
+
+    case TV_SOFT_ARMOR:
+        if (this->sval == SV_KUROSHOUZOKU || this->sval == SV_ABUNAI_MIZUGI)
+            return true;
+        break;
+
+    case TV_HARD_ARMOR:
+        if (this->sval == SV_MITHRIL_CHAIN_MAIL || this->sval == SV_MITHRIL_PLATE_MAIL || this->sval == SV_ADAMANTITE_PLATE_MAIL)
+            return true;
+        break;
+
+    case TV_DRAG_ARMOR:
+        return true;
+
+    default:
+        break;
+    }
+
+    /* Any others are not "rare" objects. */
+    return false;
 }

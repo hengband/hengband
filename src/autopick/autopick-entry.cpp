@@ -356,7 +356,7 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
                 strcpy(name_str, e_ptr->name.c_str());
 #endif
                 name = false;
-                if (!object_is_rare(o_ptr))
+                if (!o_ptr->is_rare())
                     ADD_FLG(FLG_COMMON);
             }
 

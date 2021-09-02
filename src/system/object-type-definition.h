@@ -75,4 +75,5 @@ typedef struct object_type {
     bool is_convertible() const;
     bool is_lance() const;
     bool is_armour() const;
+    bool is_rare() const;
 } object_type;

@@ -165,10 +165,10 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
         }
     }
 
-    if (IS_FLG(FLG_RARE) && !object_is_rare(o_ptr))
+    if (IS_FLG(FLG_RARE) && !o_ptr->is_rare())
         return false;
 
-    if (IS_FLG(FLG_COMMON) && object_is_rare(o_ptr))
+    if (IS_FLG(FLG_COMMON) && o_ptr->is_rare())
         return false;
 
     if (IS_FLG(FLG_WANTED) && !object_is_bounty(player_ptr, o_ptr))
