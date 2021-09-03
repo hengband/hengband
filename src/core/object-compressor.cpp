@@ -73,7 +73,7 @@ void compact_objects(player_type *player_ptr, int size)
                 continue;
 
             POSITION y, x;
-            if (object_is_held_monster(o_ptr)) {
+            if (o_ptr->is_held_by_monster()) {
                 monster_type *m_ptr;
                 m_ptr = &floor_ptr->m_list[o_ptr->held_m_idx];
                 y = m_ptr->fy;

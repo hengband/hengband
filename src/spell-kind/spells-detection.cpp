@@ -179,7 +179,7 @@ bool detect_objects_gold(player_type *caster_ptr, POSITION range)
 
         if (!o_ptr->is_valid())
             continue;
-        if (object_is_held_monster(o_ptr))
+        if (o_ptr->is_held_by_monster())
             continue;
 
         y = o_ptr->iy;
@@ -225,7 +225,7 @@ bool detect_objects_normal(player_type *caster_ptr, POSITION range)
 
         if (!o_ptr->is_valid())
             continue;
-        if (object_is_held_monster(o_ptr))
+        if (o_ptr->is_held_by_monster())
             continue;
 
         POSITION y = o_ptr->iy;
@@ -280,7 +280,7 @@ bool detect_objects_magic(player_type *caster_ptr, POSITION range)
 
         if (!o_ptr->is_valid())
             continue;
-        if (object_is_held_monster(o_ptr))
+        if (o_ptr->is_held_by_monster())
             continue;
 
         POSITION y = o_ptr->iy;

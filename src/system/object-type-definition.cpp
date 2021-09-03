@@ -446,3 +446,8 @@ bool object_type::is_cursed() const
 {
     return this->curse_flags.any();
 }
+
+bool object_type::is_held_by_monster() const
+{
+    return this->held_m_idx != 0;
+}

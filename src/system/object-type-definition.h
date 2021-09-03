@@ -86,4 +86,5 @@ typedef struct object_type {
     bool is_valid() const;
     bool is_broken() const;
     bool is_cursed() const;
+    bool is_held_by_monster() const;
 } object_type;

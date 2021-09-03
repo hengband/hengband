@@ -68,7 +68,7 @@ void wiz_lite(player_type *caster_ptr, bool ninja)
         object_type *o_ptr = &caster_ptr->current_floor_ptr->o_list[i];
         if (!o_ptr->is_valid())
             continue;
-        if (object_is_held_monster(o_ptr))
+        if (o_ptr->is_held_by_monster())
             continue;
         o_ptr->marked |= OM_FOUND;
     }
@@ -163,7 +163,7 @@ void wiz_dark(player_type *caster_ptr)
 
         if (!o_ptr->is_valid())
             continue;
-        if (object_is_held_monster(o_ptr))
+        if (o_ptr->is_held_by_monster())
             continue;
 
         /* Forget the object */

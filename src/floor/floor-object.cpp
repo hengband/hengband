@@ -255,7 +255,7 @@ void delete_object_idx(player_type *player_ptr, OBJECT_IDX o_idx)
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     excise_object_idx(floor_ptr, o_idx);
     j_ptr = &floor_ptr->o_list[o_idx];
-    if (!object_is_held_monster(j_ptr)) {
+    if (!j_ptr->is_held_by_monster()) {
         POSITION y, x;
         y = j_ptr->iy;
         x = j_ptr->ix;
@@ -289,7 +289,7 @@ ObjectIndexList &get_o_idx_list_contains(floor_type *floor_ptr, OBJECT_IDX o_idx
 {
     object_type *o_ptr = &floor_ptr->o_list[o_idx];
 
-    if (object_is_held_monster(o_ptr)) {
+    if (o_ptr->is_held_by_monster()) {
         return floor_ptr->m_list[o_ptr->held_m_idx].hold_o_idx_list;
     } else {
         return floor_ptr->grid_array[o_ptr->iy][o_ptr->ix].o_idx_list;
