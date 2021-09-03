@@ -501,14 +501,14 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
     BIT_FLAGS inventory_flags = PU_COMBINE | PU_REORDER | (creature_ptr->update & PU_AUTODESTROY);
     creature_ptr->update &= ~(PU_COMBINE | PU_REORDER | PU_AUTODESTROY);
 
-    if (!(object_is_aware(o_ptr))) {
+    if (!(o_ptr->is_aware())) {
         chg_virtue(creature_ptr, V_PATIENCE, -1);
         chg_virtue(creature_ptr, V_CHANCE, 1);
         chg_virtue(creature_ptr, V_KNOWLEDGE, -1);
     }
 
     object_tried(o_ptr);
-    if (ident && !object_is_aware(o_ptr)) {
+    if (ident && !o_ptr->is_aware()) {
         object_aware(creature_ptr, o_ptr);
         gain_exp(creature_ptr, (lev + (creature_ptr->lev >> 1)) / creature_ptr->lev);
     }

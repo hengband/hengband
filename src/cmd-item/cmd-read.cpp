@@ -16,6 +16,7 @@
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
 #include "status/action-setter.h"
+#include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 
 /*!
@@ -41,5 +42,5 @@ void do_cmd_read_scroll(player_type *creature_ptr)
     if (!o_ptr)
         return;
 
-    exe_read(creature_ptr, item, object_is_aware(o_ptr));
+    exe_read(creature_ptr, item, o_ptr->is_aware());
 }

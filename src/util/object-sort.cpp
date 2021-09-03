@@ -43,9 +43,9 @@ bool object_sort_comp(player_type *player_ptr, object_type *o_ptr, int32_t o_val
     if (o_ptr->tval < j_ptr->tval)
         return false;
 
-    if (!object_is_aware(o_ptr))
+    if (!o_ptr->is_aware())
         return false;
-    if (!object_is_aware(j_ptr))
+    if (!j_ptr->is_aware())
         return true;
 
     if (o_ptr->sval < j_ptr->sval)

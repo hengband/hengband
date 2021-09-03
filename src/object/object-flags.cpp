@@ -105,7 +105,7 @@ void object_flags_known(const object_type *o_ptr, TrFlags &flgs)
         flgs[i] = 0;
     }
 
-    if (!object_is_aware(o_ptr))
+    if (!o_ptr->is_aware())
         return;
 
     /* Base object */

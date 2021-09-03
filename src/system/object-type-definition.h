@@ -89,4 +89,5 @@ typedef struct object_type {
     bool is_held_by_monster() const;
     bool is_known() const;
     bool is_fully_known() const;
+    bool is_aware() const;
 } object_type;

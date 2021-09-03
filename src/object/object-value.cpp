@@ -25,7 +25,7 @@
  */
 static PRICE object_value_base(const object_type *o_ptr)
 {
-    if (object_is_aware(o_ptr))
+    if (o_ptr->is_aware())
         return (k_info[o_ptr->k_idx].cost);
 
     switch (o_ptr->tval) {

@@ -301,7 +301,7 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
     // エゴ銘が邪魔かもしれないので、デフォルトで「^」は付けない.
     // We can always use the ^ mark in English.
     bool is_hat_added = _(false, true);
-    if (!object_is_aware(o_ptr)) {
+    if (!o_ptr->is_aware()) {
         ADD_FLG(FLG_UNAWARE);
         is_hat_added = true;
     } else if (!o_ptr->is_known()) {

@@ -466,3 +466,12 @@ bool object_type::is_fully_known() const
 {
     return (this->ident & IDENT_FULL_KNOWN) != 0;
 }
+
+/*!
+ * @brief 与えられたオブジェクトのベースアイテムが鑑定済かを返す / Determine if a given inventory item is "aware"
+ * @return 鑑定済ならtrue
+ */
+bool object_type::is_aware() const
+{
+    return k_info[this->k_idx].aware;
+}

@@ -44,7 +44,7 @@ void object_known(object_type *o_ptr)
  */
 void object_aware(player_type *owner_ptr, object_type *o_ptr)
 {
-    const bool is_already_awared = object_is_aware(o_ptr);
+    const bool is_already_awared = o_ptr->is_aware();
 
     k_info[o_ptr->k_idx].aware = true;
 
@@ -83,16 +83,6 @@ void object_aware(player_type *owner_ptr, object_type *o_ptr)
  * @param o_ptr 試行済にするオブジェクトの構造体参照ポインタ
  */
 void object_tried(object_type *o_ptr) { k_info[o_ptr->k_idx].tried = true; }
-
-/*
- * @brief 与えられたオブジェクトのベースアイテムが鑑定済かを返す / Determine if a given inventory item is "aware"
- * @param o_ptr オブジェクトへの参照ポインタ
- * @return 鑑定済ならTRUE
- */
-bool object_is_aware(const object_type *o_ptr)
-{
-    return k_info[(o_ptr)->k_idx].aware;
-}
 
 /*
  * Determine if a given inventory item is "tried"

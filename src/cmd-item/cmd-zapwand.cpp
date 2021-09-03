@@ -349,7 +349,7 @@ void exe_aim_wand(player_type *creature_ptr, INVENTORY_IDX item)
     }
 
     /* Allow direction to be cancelled for free */
-    if (object_is_aware(o_ptr) && (o_ptr->sval == SV_WAND_HEAL_MONSTER || o_ptr->sval == SV_WAND_HASTE_MONSTER))
+    if (o_ptr->is_aware() && (o_ptr->sval == SV_WAND_HEAL_MONSTER || o_ptr->sval == SV_WAND_HASTE_MONSTER))
         target_pet = true;
     if (!get_aim_dir(creature_ptr, &dir)) {
         target_pet = old_target_pet;
@@ -415,7 +415,7 @@ void exe_aim_wand(player_type *creature_ptr, INVENTORY_IDX item)
     BIT_FLAGS inventory_flags = (PU_COMBINE | PU_REORDER | (creature_ptr->update & PU_AUTODESTROY));
     reset_bits(creature_ptr->update, PU_COMBINE | PU_REORDER | PU_AUTODESTROY);
 
-    if (!(object_is_aware(o_ptr))) {
+    if (!(o_ptr->is_aware())) {
         chg_virtue(creature_ptr, V_PATIENCE, -1);
         chg_virtue(creature_ptr, V_CHANCE, 1);
         chg_virtue(creature_ptr, V_KNOWLEDGE, -1);
@@ -425,7 +425,7 @@ void exe_aim_wand(player_type *creature_ptr, INVENTORY_IDX item)
     object_tried(o_ptr);
 
     /* Apply identification */
-    if (ident && !object_is_aware(o_ptr)) {
+    if (ident && !o_ptr->is_aware()) {
         object_aware(creature_ptr, o_ptr);
         gain_exp(creature_ptr, (lev + (creature_ptr->lev >> 1)) / creature_ptr->lev);
     }
