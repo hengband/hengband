@@ -80,33 +80,22 @@ static void tgt_pt_prepare(player_type *creature_ptr, std::vector<POSITION> &ys,
 }
 
 /*!
- * @brief グリッドのシンボルが指定した記号かどうかを調べる
- * @param g_ptr グリッド情報への参照ポインタ
- * @param ch 指定するシンボル文字
- * @return シンボルが指定した記号ならTRUE、そうでなければFALSE
- */
-static bool cave_is_symbol_grid(grid_type *g_ptr, char ch)
-{
-    return f_info[g_ptr->feat].x_char[0] == ch;
-}
-
-/*!
  * @brief 指定したシンボルのマスかどうかを判定するための条件式コールバック
  */
 std::unordered_map<int, std::function<bool(grid_type *)>> tgt_pt_symbol_call_back = {
     { '<', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STAIRS) && g_ptr->cave_has_flag(FF::LESS); } },
     { '>', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STAIRS) && g_ptr->cave_has_flag(FF::MORE); } },
     { '+', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::BLDG); } },
-    { '0', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && cave_is_symbol_grid(g_ptr, '0'); } },
-    { '!', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && cave_is_symbol_grid(g_ptr, '1'); } },
-    { '"', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && cave_is_symbol_grid(g_ptr, '2'); } },
-    { '#', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && cave_is_symbol_grid(g_ptr, '3'); } },
-    { '$', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && cave_is_symbol_grid(g_ptr, '4'); } },
-    { '%', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && cave_is_symbol_grid(g_ptr, '5'); } },
-    { '&', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && cave_is_symbol_grid(g_ptr, '6'); } },
-    { '\'', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && cave_is_symbol_grid(g_ptr, '7'); } },
-    { '(', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && cave_is_symbol_grid(g_ptr, '8'); } },
-    { ')', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && cave_is_symbol_grid(g_ptr, '9'); } },
+    { '0', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && g_ptr->is_symbol('0'); } },
+    { '!', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && g_ptr->is_symbol('1'); } },
+    { '"', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && g_ptr->is_symbol('2'); } },
+    { '#', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && g_ptr->is_symbol('3'); } },
+    { '$', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && g_ptr->is_symbol('4'); } },
+    { '%', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && g_ptr->is_symbol('5'); } },
+    { '&', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && g_ptr->is_symbol('6'); } },
+    { '\'', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && g_ptr->is_symbol('7'); } },
+    { '(', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && g_ptr->is_symbol('8'); } },
+    { ')', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && g_ptr->is_symbol('9'); } },
 };
 
 /*!

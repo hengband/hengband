@@ -120,3 +120,13 @@ bool grid_type::cave_has_flag(FF feature_flags)
 {
     return f_info[this->feat].flags.has(feature_flags);
 }
+
+/*!
+ * @brief グリッドのシンボルが指定した記号かどうかを調べる
+ * @param ch 指定するシンボル文字
+ * @return シンボルが指定した記号か否か
+ */
+bool grid_type::is_symbol(const int ch)
+{
+    return f_info[this->feat].x_char[0] == ch;
+}
