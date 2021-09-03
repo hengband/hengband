@@ -336,7 +336,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
                     o_ptr = &floor_ptr->o_list[this_o_idx];
 
                     /* Hack -- Preserve unknown artifacts */
-                    if (o_ptr->is_fixed_artifact() && (!object_is_known(o_ptr) || in_generate)) {
+                    if (o_ptr->is_fixed_artifact() && (!o_ptr->is_known() || in_generate)) {
                         /* Mega-Hack -- Preserve the artifact */
                         a_info[o_ptr->name1].cur_num = 0;
 

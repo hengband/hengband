@@ -65,7 +65,7 @@ bool identify_item(player_type *owner_ptr, object_type *o_ptr)
     if (any_bits(o_ptr->ident, IDENT_KNOWN))
         old_known = true;
 
-    if (!object_is_fully_known(o_ptr)) {
+    if (!o_ptr->is_fully_known()) {
         if (o_ptr->is_artifact() || one_in_(5))
             chg_virtue(owner_ptr, V_KNOWLEDGE, 1);
     }

@@ -86,7 +86,7 @@ static bool check_item_knowledge(object_type *o_ptr, tval_type tval)
         return false;
     if (o_ptr->tval != tval)
         return false;
-    if (!object_is_known(o_ptr))
+    if (!o_ptr->is_known())
         return false;
     if (!determine_spcial_item_type(o_ptr, tval))
         return false;
@@ -166,7 +166,7 @@ static void do_cmd_knowledge_inventory_aux(player_type *creature_ptr, FILE *fff,
 
     fprintf(fff, "%s %s", where, o_name);
 
-    if (!object_is_fully_known(o_ptr)) {
+    if (!o_ptr->is_fully_known()) {
         fputs(_("-------不明--------------- -------不明---------\n", "-------unknown------------ -------unknown------\n"), fff);
         return;
     }

@@ -248,7 +248,7 @@ static void describe_bow_power(player_type *player_ptr, flavor_type *flavor_ptr)
 {
     flavor_ptr->avgdam = flavor_ptr->o_ptr->dd * (flavor_ptr->o_ptr->ds + 1) * 10 / 2;
     int tmul = bow_tmul(flavor_ptr->bow_ptr->sval);
-    if (object_is_known(flavor_ptr->bow_ptr))
+    if (flavor_ptr->bow_ptr->is_known())
         flavor_ptr->avgdam += (flavor_ptr->bow_ptr->to_d * 10);
 
     if (flavor_ptr->known)

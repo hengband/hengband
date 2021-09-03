@@ -40,7 +40,7 @@ static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, b
     GAME_TEXT o_name[MAX_NLEN];
     if (o_ptr->ident & (IDENT_SENSE))
         return;
-    if (object_is_known(o_ptr))
+    if (o_ptr->is_known())
         return;
 
     item_feel_type feel = (heavy ? pseudo_value_check_heavy(o_ptr) : pseudo_value_check_light(o_ptr));

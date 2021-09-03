@@ -89,7 +89,7 @@ PRICE object_value(const object_type *o_ptr)
 {
     PRICE value;
 
-    if (object_is_known(o_ptr)) {
+    if (o_ptr->is_known()) {
         if (o_ptr->is_broken())
             return (0L);
         if (o_ptr->is_cursed())

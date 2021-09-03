@@ -1652,15 +1652,15 @@ static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_real_value)
         object_flags(o_ptr, flags);
         if (!o_ptr->k_idx)
             continue;
-        if (is_real_value || object_is_known(o_ptr))
+        if (is_real_value || o_ptr->is_known())
             ac += o_ptr->to_a;
 
         if (o_ptr->curse_flags.has(TRC::LOW_AC)) {
             if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {
-                if (is_real_value || object_is_fully_known(o_ptr))
+                if (is_real_value || o_ptr->is_fully_known())
                     ac -= 30;
             } else {
-                if (is_real_value || object_is_fully_known(o_ptr))
+                if (is_real_value || o_ptr->is_fully_known())
                     ac -= 10;
             }
         }
@@ -2028,7 +2028,7 @@ static int16_t calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, boo
             || (i == INVEN_SUB_HAND && has_melee_weapon(creature_ptr, i)) || i == INVEN_BOW)
             continue;
 
-        if (!object_is_known(o_ptr) && !is_real_value)
+        if (!o_ptr->is_known() && !is_real_value)
             continue;
         bonus_to_d = o_ptr->to_d;
 
@@ -2187,7 +2187,7 @@ static int16_t calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool i
         }
 
         /* Low melee penalty */
-        if ((object_is_fully_known(o_ptr) || is_real_value) && o_ptr->curse_flags.has(TRC::LOW_MELEE)) {
+        if ((o_ptr->is_fully_known() || is_real_value) && o_ptr->curse_flags.has(TRC::LOW_MELEE)) {
             if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {
                 hit -= 15;
             } else {
@@ -2262,7 +2262,7 @@ static int16_t calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool i
             continue;
 
         /* Fake value does not include unknown objects' value */
-        if (!object_is_known(o_ptr) && !is_real_value)
+        if (!o_ptr->is_known() && !is_real_value)
             continue;
 
         int bonus_to_h = o_ptr->to_h;
@@ -2406,7 +2406,7 @@ static int16_t calc_to_hit_bow(player_type *creature_ptr, bool is_real_value)
                 bonus_to_h = (o_ptr->to_h + 1) / 2;
         }
 
-        if (is_real_value || object_is_known(o_ptr))
+        if (is_real_value || o_ptr->is_known())
             pow += (int16_t)bonus_to_h;
     }
 

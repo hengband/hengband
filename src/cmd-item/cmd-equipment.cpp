@@ -185,7 +185,7 @@ void do_cmd_wield(player_type *creature_ptr)
     }
 
     if (confirm_wear
-        && ((o_ptr->is_cursed() && object_is_known(o_ptr))
+        && ((o_ptr->is_cursed() && o_ptr->is_known())
             || ((o_ptr->ident & IDENT_SENSE) && (FEEL_BROKEN <= o_ptr->feeling) && (o_ptr->feeling <= FEEL_CURSED)))) {
         char dummy[MAX_NLEN + 80];
         describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -195,7 +195,8 @@ void do_cmd_wield(player_type *creature_ptr)
             return;
     }
 
-    if ((o_ptr->name1 == ART_STONEMASK) && object_is_known(o_ptr) && (creature_ptr->prace != player_race_type::VAMPIRE) && (creature_ptr->prace != player_race_type::ANDROID)) {
+    if ((o_ptr->name1 == ART_STONEMASK) && o_ptr->is_known() && (creature_ptr->prace != player_race_type::VAMPIRE)
+        && (creature_ptr->prace != player_race_type::ANDROID)) {
         char dummy[MAX_NLEN + 100];
         describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         sprintf(dummy,

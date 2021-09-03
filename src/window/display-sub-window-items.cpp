@@ -11,7 +11,7 @@
 void display_short_flavors(flavor_type *flavor_ptr)
 {
     flavor_ptr->tmp_val2[0] = '\0';
-    if ((abbrev_extra || abbrev_all) && object_is_fully_known(flavor_ptr->o_ptr)) {
+    if ((abbrev_extra || abbrev_all) && flavor_ptr->o_ptr->is_fully_known()) {
         if (!flavor_ptr->o_ptr->inscription || !angband_strchr(quark_str(flavor_ptr->o_ptr->inscription), '%')) {
             bool kanji = _(true, false);
             get_ability_abbreviation(flavor_ptr->tmp_val2, flavor_ptr->o_ptr, kanji, abbrev_all);

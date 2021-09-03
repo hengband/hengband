@@ -101,18 +101,3 @@ bool object_is_tried(const object_type *o_ptr)
 {
     return k_info[(o_ptr)->k_idx].tried;
 }
-
-/*
- * Determine if a given inventory item is "known"
- * Test One -- Check for special "known" tag
- * Test Two -- Check for "Easy Know" + "Aware"
- */
-bool object_is_known(const object_type *o_ptr)
-{
-    return ((o_ptr->ident & IDENT_KNOWN) != 0) || (k_info[(o_ptr)->k_idx].easy_know && k_info[(o_ptr)->k_idx].aware);
-}
-
-bool object_is_fully_known(const object_type *o_ptr)
-{
-    return (o_ptr->ident & IDENT_FULL_KNOWN) != 0;
-}

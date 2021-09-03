@@ -153,7 +153,7 @@ void do_cmd_observe(player_type *creature_ptr)
     if (!o_ptr)
         return;
 
-    if (!object_is_fully_known(o_ptr)) {
+    if (!o_ptr->is_fully_known()) {
         msg_print(_("このアイテムについて特に知っていることはない。", "You have no special knowledge about that item."));
         return;
     }

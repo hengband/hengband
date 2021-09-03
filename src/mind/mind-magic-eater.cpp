@@ -31,7 +31,7 @@ bool import_magic_device(player_type *user_ptr)
         return false;
     }
 
-    if (!object_is_known(o_ptr)) {
+    if (!o_ptr->is_known()) {
         msg_print(_("鑑定されていないと取り込めない。", "You need to identify before absorbing."));
         return false;
     }

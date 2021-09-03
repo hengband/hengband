@@ -202,7 +202,7 @@ bool exe_disarm_chest(player_type *creature_ptr, POSITION y, POSITION x, OBJECT_
     if (j < 2)
         j = 2;
 
-    if (!object_is_known(o_ptr)) {
+    if (!o_ptr->is_known()) {
         msg_print(_("トラップが見あたらない。", "I don't see any traps."));
     } else if (o_ptr->pval <= 0) {
         msg_print(_("箱にはトラップが仕掛けられていない。", "The chest is not trapped."));

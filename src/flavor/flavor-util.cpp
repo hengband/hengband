@@ -320,7 +320,7 @@ void get_inscription(char *buff, object_type *o_ptr)
 {
     concptr insc = quark_str(o_ptr->inscription);
     char *ptr = buff;
-    if (!object_is_fully_known(o_ptr)) {
+    if (!o_ptr->is_fully_known()) {
         while (*insc) {
             if (*insc == '#')
                 break;

@@ -29,7 +29,7 @@ static void check_object_known_aware(flavor_type *flavor_ptr)
     if (object_is_aware(flavor_ptr->o_ptr))
         flavor_ptr->aware = true;
 
-    if (object_is_known(flavor_ptr->o_ptr))
+    if (flavor_ptr->o_ptr->is_known())
         flavor_ptr->known = true;
 
     if (flavor_ptr->aware && ((flavor_ptr->mode & OD_NO_FLAVOR) || plain_descriptions))

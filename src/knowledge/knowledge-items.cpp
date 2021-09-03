@@ -69,7 +69,7 @@ void do_cmd_knowledge_artifacts(player_type *player_ptr)
                 o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
                 if (!o_ptr->is_fixed_artifact())
                     continue;
-                if (object_is_known(o_ptr))
+                if (o_ptr->is_known())
                     continue;
 
                 okay[o_ptr->name1] = false;
@@ -83,7 +83,7 @@ void do_cmd_knowledge_artifacts(player_type *player_ptr)
             continue;
         if (!o_ptr->is_fixed_artifact())
             continue;
-        if (object_is_known(o_ptr))
+        if (o_ptr->is_known())
             continue;
 
         okay[o_ptr->name1] = false;

@@ -304,7 +304,7 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
     if (!object_is_aware(o_ptr)) {
         ADD_FLG(FLG_UNAWARE);
         is_hat_added = true;
-    } else if (!object_is_known(o_ptr)) {
+    } else if (!o_ptr->is_known()) {
         if (!(o_ptr->ident & IDENT_SENSE)) {
             ADD_FLG(FLG_UNIDENTIFIED);
             is_hat_added = true;

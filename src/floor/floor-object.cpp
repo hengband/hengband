@@ -451,7 +451,7 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
                 msg_print(_("(床スペースがない)", "(no floor space)"));
 
             if (preserve_mode) {
-                if (j_ptr->is_fixed_artifact() && !object_is_known(j_ptr)) {
+                if (j_ptr->is_fixed_artifact() && !j_ptr->is_known()) {
                     a_info[j_ptr->name1].cur_num = 0;
                 }
             }
@@ -542,7 +542,7 @@ void floor_item_charges(floor_type *floor_ptr, INVENTORY_IDX item)
     object_type *o_ptr = &floor_ptr->o_list[item];
     if ((o_ptr->tval != TV_STAFF) && (o_ptr->tval != TV_WAND))
         return;
-    if (!object_is_known(o_ptr))
+    if (!o_ptr->is_known())
         return;
 
 #ifdef JP

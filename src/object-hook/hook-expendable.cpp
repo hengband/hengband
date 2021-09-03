@@ -111,7 +111,7 @@ bool can_player_destroy_object(player_type *player_ptr, object_type *o_ptr)
     if (!o_ptr->is_artifact())
         return true;
 
-    if (!object_is_known(o_ptr)) {
+    if (!o_ptr->is_known()) {
         byte feel = FEEL_SPECIAL;
         if (o_ptr->is_cursed() || o_ptr->is_broken())
             feel = FEEL_TERRIBLE;

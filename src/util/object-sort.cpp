@@ -53,9 +53,9 @@ bool object_sort_comp(player_type *player_ptr, object_type *o_ptr, int32_t o_val
     if (o_ptr->sval > j_ptr->sval)
         return false;
 
-    if (!object_is_known(o_ptr))
+    if (!o_ptr->is_known())
         return false;
-    if (!object_is_known(j_ptr))
+    if (!j_ptr->is_known())
         return true;
 
     if (o_ptr->is_fixed_artifact())

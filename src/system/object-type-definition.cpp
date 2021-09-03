@@ -451,3 +451,18 @@ bool object_type::is_held_by_monster() const
 {
     return this->held_m_idx != 0;
 }
+
+/*
+ * Determine if a given inventory item is "known"
+ * Test One -- Check for special "known" tag
+ * Test Two -- Check for "Easy Know" + "Aware"
+ */
+bool object_type::is_known() const
+{
+    return ((this->ident & IDENT_KNOWN) != 0) || (k_info[this->k_idx].easy_know && k_info[this->k_idx].aware);
+}
+
+bool object_type::is_fully_known() const
+{
+    return (this->ident & IDENT_FULL_KNOWN) != 0;
+}

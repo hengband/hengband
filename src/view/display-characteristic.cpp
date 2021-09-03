@@ -108,7 +108,7 @@ static void process_cursed_equipment_characteristics(player_type *creature_ptr, 
     for (int i = INVEN_MAIN_HAND; i < max_i; i++) {
         TrFlags flags;
         auto *o_ptr = &creature_ptr->inventory_list[i];
-        auto is_known = object_is_known(o_ptr);
+        auto is_known = o_ptr->is_known();
         auto is_sensed = is_known || o_ptr->ident & IDENT_SENSE;
         object_flags_known(o_ptr, flags);
 

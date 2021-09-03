@@ -408,7 +408,7 @@ void execute_cursed_items_effect(player_type *creature_ptr)
     if (o_ptr->name1 != ART_JUDGE)
         return;
 
-    if (object_is_known(o_ptr))
+    if (o_ptr->is_known())
         msg_print(_("『審判の宝石』はあなたの体力を吸収した！", "The Jewel of Judgement drains life from you!"));
     else
         msg_print(_("なにかがあなたの体力を吸収した！", "Something drains life from you!"));

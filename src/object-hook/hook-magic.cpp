@@ -20,7 +20,7 @@
 bool object_is_activatable(const object_type *o_ptr)
 {
     TrFlags flags;
-    if (!object_is_known(o_ptr))
+    if (!o_ptr->is_known())
         return false;
 
     object_flags(o_ptr, flags);
@@ -56,7 +56,7 @@ bool item_tester_hook_use(player_type *player_ptr, const object_type *o_ptr)
     default: {
         int i;
 
-        if (!object_is_known(o_ptr))
+        if (!o_ptr->is_known())
             return false;
         for (i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
             if (&player_ptr->inventory_list[i] == o_ptr) {

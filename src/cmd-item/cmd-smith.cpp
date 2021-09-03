@@ -250,7 +250,7 @@ static void drain_essence(player_type *creature_ptr)
     if (!o_ptr)
         return;
 
-    if (object_is_known(o_ptr) && !o_ptr->is_nameless()) {
+    if (o_ptr->is_known() && !o_ptr->is_nameless()) {
         GAME_TEXT o_name[MAX_NLEN];
         describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         if (!get_check(format(_("本当に%sから抽出してよろしいですか？", "Really extract from %s? "), o_name)))

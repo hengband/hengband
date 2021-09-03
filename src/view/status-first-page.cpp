@@ -130,7 +130,7 @@ static bool calc_weapon_one_hand(object_type *o_ptr, int hand, int *damage, int 
  */
 static int strengthen_basedam(player_type *creature_ptr, object_type *o_ptr, int basedam, const TrFlags &flgs)
 {
-    if (object_is_fully_known(o_ptr) && ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD))) {
+    if (o_ptr->is_fully_known() && ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD))) {
         /* vorpal blade */
         basedam *= 5;
         basedam /= 3;
@@ -264,7 +264,7 @@ static void calc_two_hands(player_type *creature_ptr, int *damage, int *to_h)
         bool poison_needle = false;
         if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
             poison_needle = true;
-        if (object_is_known(o_ptr)) {
+        if (o_ptr->is_known()) {
             damage[i] += o_ptr->to_d * 100;
             to_h[i] += o_ptr->to_h;
         }
