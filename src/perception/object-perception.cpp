@@ -83,11 +83,3 @@ void object_aware(player_type *owner_ptr, object_type *o_ptr)
  * @param o_ptr 試行済にするオブジェクトの構造体参照ポインタ
  */
 void object_tried(object_type *o_ptr) { k_info[o_ptr->k_idx].tried = true; }
-
-/*
- * Determine if a given inventory item is "tried"
- */
-bool object_is_tried(const object_type *o_ptr)
-{
-    return k_info[(o_ptr)->k_idx].tried;
-}

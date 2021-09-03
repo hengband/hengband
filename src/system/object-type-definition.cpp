@@ -475,3 +475,11 @@ bool object_type::is_aware() const
 {
     return k_info[this->k_idx].aware;
 }
+
+/*
+ * Determine if a given inventory item is "tried"
+ */
+bool object_type::is_tried() const
+{
+    return k_info[this->k_idx].tried;
+}

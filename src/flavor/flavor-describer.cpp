@@ -482,7 +482,7 @@ static void decide_item_feeling(flavor_type *flavor_ptr)
         return;
     }
 
-    if (!flavor_ptr->aware && object_is_tried(flavor_ptr->o_ptr))
+    if (!flavor_ptr->aware && flavor_ptr->o_ptr->is_tried())
         strcpy(flavor_ptr->fake_insc_buf, _("未判明", "tried"));
 }
 

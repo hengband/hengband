@@ -90,4 +90,5 @@ typedef struct object_type {
     bool is_known() const;
     bool is_fully_known() const;
     bool is_aware() const;
+    bool is_tried() const;
 } object_type;
