@@ -72,17 +72,6 @@ bool item_tester_hook_use(player_type *player_ptr, const object_type *o_ptr)
 }
 
 /*!
- * @brief 魔力充填が可能なアイテムかどうか判定する /
- * Hook for "get_item()".  Determine if something is rechargable.
- * @param o_ptr 判定するアイテムの情報参照ポインタ
- * @return 魔力充填が可能ならばTRUEを返す
- */
-bool object_is_rechargeable(const object_type *o_ptr)
-{
-    return (o_ptr->tval == TV_STAFF) || (o_ptr->tval == TV_WAND) || (o_ptr->tval == TV_ROD);
-}
-
-/*!
  * @brief オブジェクトがプレイヤーが使用可能な魔道書かどうかを判定する
  * @param o_ptr 判定したいオブ会ジェクトの構造体参照ポインタ
  * @return 学習できる魔道書ならばTRUEを返す

@@ -524,3 +524,13 @@ bool object_type::can_refill_torch() const
 {
     return (this->tval == TV_LITE) && (this->sval == SV_LITE_TORCH);
 }
+
+/*!
+ * @brief 魔力充填が可能なアイテムかどうか判定する /
+ * Hook for "get_item()".  Determine if something is rechargable.
+ * @return 魔力充填が可能ならばTRUEを返す
+ */
+bool object_type::is_rechargeable() const
+{
+    return (this->tval == TV_STAFF) || (this->tval == TV_WAND) || (this->tval == TV_ROD);
+}
