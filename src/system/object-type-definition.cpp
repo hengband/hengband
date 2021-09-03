@@ -431,3 +431,8 @@ bool object_type::is_nameless() const
 {
     return !this->is_artifact() && !this->is_ego() && !this->is_smith();
 }
+
+bool object_type::is_valid() const
+{
+    return this->k_idx != 0;
+}

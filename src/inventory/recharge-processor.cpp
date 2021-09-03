@@ -110,7 +110,7 @@ void recharge_magic_items(player_type *creature_ptr)
 
     for (i = 1; i < creature_ptr->current_floor_ptr->o_max; i++) {
         object_type *o_ptr = &creature_ptr->current_floor_ptr->o_list[i];
-        if (!object_is_valid(o_ptr))
+        if (!o_ptr->is_valid())
             continue;
 
         if ((o_ptr->tval == TV_ROD) && (o_ptr->timeout)) {

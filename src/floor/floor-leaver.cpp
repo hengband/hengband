@@ -273,7 +273,7 @@ static void preserve_info(player_type *creature_ptr)
 
     for (DUNGEON_IDX i = 0; i < INVEN_PACK; i++) {
         object_type *o_ptr = &creature_ptr->inventory_list[i];
-        if (!object_is_valid(o_ptr))
+        if (!o_ptr->is_valid())
             continue;
 
         if (o_ptr->is_fixed_artifact())

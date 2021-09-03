@@ -69,7 +69,7 @@ void compact_objects(player_type *player_ptr, int size)
         for (OBJECT_IDX i = 1; i < floor_ptr->o_max; i++) {
             o_ptr = &floor_ptr->o_list[i];
 
-            if (!object_is_valid(o_ptr) || (k_info[o_ptr->k_idx].level > cur_lev))
+            if (!o_ptr->is_valid() || (k_info[o_ptr->k_idx].level > cur_lev))
                 continue;
 
             POSITION y, x;

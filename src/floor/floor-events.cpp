@@ -145,7 +145,7 @@ static byte get_dungeon_feeling(player_type *subject_ptr)
         object_type *o_ptr = &floor_ptr->o_list[i];
         object_kind *k_ptr = &k_info[o_ptr->k_idx];
         int delta = 0;
-        if (!object_is_valid(o_ptr) || (object_is_known(o_ptr) && ((o_ptr->marked & OM_TOUCHED) != 0)) || ((o_ptr->ident & IDENT_SENSE) != 0))
+        if (!o_ptr->is_valid() || (object_is_known(o_ptr) && ((o_ptr->marked & OM_TOUCHED) != 0)) || ((o_ptr->ident & IDENT_SENSE) != 0))
             continue;
 
         if (o_ptr->is_ego()) {
