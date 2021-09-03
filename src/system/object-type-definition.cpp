@@ -25,6 +25,9 @@
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 
+#include <set>
+#include <unordered_map>
+
 /*!
  * @brief オブジェクトを初期化する
  * Wipe an object clean.
@@ -225,9 +228,8 @@ bool object_type::is_throwable() const
  * @brief オブジェクトがどちらの手にも装備できる武器かどうかの判定
  * @return 左右両方の手で装備できるならばtrueを返す。
  */
-bool object_type::is_mochikae() const
+bool object_type::is_wieldable_in_etheir_hand() const
 {
-    /* Check for a usable slot */
     return ((TV_DIGGING <= this->tval) && (this->tval <= TV_SWORD)) || (this->tval == TV_SHIELD) || (this->tval == TV_CAPTURE) || (this->tval == TV_CARD);
 }
 
@@ -286,11 +288,9 @@ bool object_type::is_ammo() const
  */
 bool object_type::is_convertible() const
 {
-    if ((this->tval == TV_JUNK) || (this->tval == TV_SKELETON))
-        return true;
-    if ((this->tval == TV_CORPSE) && (this->sval == SV_SKELETON))
-        return true;
-    return false;
+    auto is_convertible = ((this->tval == TV_JUNK) || (this->tval == TV_SKELETON));
+    is_convertible |= ((this->tval == TV_CORPSE) && (this->sval == SV_SKELETON));
+    return is_convertible;
 }
 
 bool object_type::is_lance() const
@@ -316,65 +316,25 @@ bool object_type::is_armour() const
  */
 bool object_type::is_rare() const
 {
-    switch (this->tval) {
-    case TV_HAFTED:
-        if (this->sval == SV_MACE_OF_DISRUPTION || this->sval == SV_WIZSTAFF)
-            return true;
-        break;
+    static const std::unordered_map<tval_type, const std::set<OBJECT_SUBTYPE_VALUE>> rare_table = {
+        { TV_HAFTED, { SV_MACE_OF_DISRUPTION, SV_WIZSTAFF } },
+        { TV_POLEARM, { SV_SCYTHE_OF_SLICING, SV_DEATH_SCYTHE } },
+        { TV_SWORD, { SV_BLADE_OF_CHAOS, SV_DIAMOND_EDGE, SV_POISON_NEEDLE, SV_HAYABUSA } },
+        { TV_SHIELD, { SV_DRAGON_SHIELD, SV_MIRROR_SHIELD } },
+        { TV_HELM, { SV_DRAGON_HELM } },
+        { TV_BOOTS, { SV_PAIR_OF_DRAGON_GREAVE } },
+        { TV_CLOAK, { SV_ELVEN_CLOAK, SV_ETHEREAL_CLOAK, SV_SHADOW_CLOAK, SV_MAGIC_RESISTANCE_CLOAK } },
+        { TV_GLOVES, { SV_SET_OF_DRAGON_GLOVES } },
+        { TV_SOFT_ARMOR, { SV_KUROSHOUZOKU, SV_ABUNAI_MIZUGI } },
+        { TV_HARD_ARMOR, { SV_MITHRIL_CHAIN_MAIL, SV_MITHRIL_PLATE_MAIL, SV_ADAMANTITE_PLATE_MAIL } },
+        { TV_DRAG_ARMOR, { /* Any */ } },
+    };
 
-    case TV_POLEARM:
-        if (this->sval == SV_SCYTHE_OF_SLICING || this->sval == SV_DEATH_SCYTHE)
-            return true;
-        break;
-
-    case TV_SWORD:
-        if (this->sval == SV_BLADE_OF_CHAOS || this->sval == SV_DIAMOND_EDGE || this->sval == SV_POISON_NEEDLE || this->sval == SV_HAYABUSA)
-            return true;
-        break;
-
-    case TV_SHIELD:
-        if (this->sval == SV_DRAGON_SHIELD || this->sval == SV_MIRROR_SHIELD)
-            return true;
-        break;
-
-    case TV_HELM:
-        if (this->sval == SV_DRAGON_HELM)
-            return true;
-        break;
-
-    case TV_BOOTS:
-        if (this->sval == SV_PAIR_OF_DRAGON_GREAVE)
-            return true;
-        break;
-
-    case TV_CLOAK:
-        if (this->sval == SV_ELVEN_CLOAK || this->sval == SV_ETHEREAL_CLOAK || this->sval == SV_SHADOW_CLOAK || this->sval == SV_MAGIC_RESISTANCE_CLOAK)
-            return true;
-        break;
-
-    case TV_GLOVES:
-        if (this->sval == SV_SET_OF_DRAGON_GLOVES)
-            return true;
-        break;
-
-    case TV_SOFT_ARMOR:
-        if (this->sval == SV_KUROSHOUZOKU || this->sval == SV_ABUNAI_MIZUGI)
-            return true;
-        break;
-
-    case TV_HARD_ARMOR:
-        if (this->sval == SV_MITHRIL_CHAIN_MAIL || this->sval == SV_MITHRIL_PLATE_MAIL || this->sval == SV_ADAMANTITE_PLATE_MAIL)
-            return true;
-        break;
-
-    case TV_DRAG_ARMOR:
-        return true;
-
-    default:
-        break;
+    if (auto it = rare_table.find(this->tval); it != rare_table.end()) {
+        const auto &svals = it->second;
+        return svals.empty() || (svals.find(this->sval) != svals.end());
     }
 
-    /* Any others are not "rare" objects. */
     return false;
 }
 
@@ -394,10 +354,7 @@ bool object_type::is_ego() const
  */
 bool object_type::is_smith() const
 {
-    if (this->is_weapon_armour_ammo() && this->xtra3)
-        return true;
-
-    return false;
+    return this->is_weapon_armour_ammo() && (this->xtra3 > 0);
 }
 
 /*!
@@ -447,7 +404,7 @@ bool object_type::is_valid() const
 
 bool object_type::is_broken() const
 {
-    return (this->ident & IDENT_BROKEN) != 0;
+    return any_bits(this->ident, IDENT_BROKEN);
 }
 
 bool object_type::is_cursed() const
@@ -467,12 +424,12 @@ bool object_type::is_held_by_monster() const
  */
 bool object_type::is_known() const
 {
-    return ((this->ident & IDENT_KNOWN) != 0) || (k_info[this->k_idx].easy_know && k_info[this->k_idx].aware);
+    return any_bits(this->ident, IDENT_KNOWN) || (k_info[this->k_idx].easy_know && k_info[this->k_idx].aware);
 }
 
 bool object_type::is_fully_known() const
 {
-    return (this->ident & IDENT_FULL_KNOWN) != 0;
+    return any_bits(this->ident, IDENT_FULL_KNOWN);
 }
 
 /*!
@@ -547,13 +504,11 @@ bool object_type::is_rechargeable() const
  */
 bool object_type::is_offerable() const
 {
-    if (this->tval != TV_CORPSE)
+    if ((this->tval != TV_CORPSE) || (this->sval != SV_CORPSE)) {
         return false;
-    if (this->sval != SV_CORPSE)
-        return false;
-    if (angband_strchr("pht", r_info[this->pval].d_char))
-        return true;
-    return false;
+    }
+
+    return angband_strchr("pht", r_info[this->pval].d_char);
 }
 
 /*!
@@ -563,13 +518,10 @@ bool object_type::is_offerable() const
  */
 bool object_type::is_activatable() const
 {
-    TrFlags flags;
     if (!this->is_known())
         return false;
 
+    TrFlags flags;
     object_flags(this, flags);
-    if (has_flag(flags, TR_ACTIVATE))
-        return true;
-
-    return false;
+    return has_flag(flags, TR_ACTIVATE);
 }
