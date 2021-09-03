@@ -10,8 +10,10 @@
 #include "monster-race/monster-race.h"
 #include "object-enchant/object-curse.h"
 #include "object-enchant/special-object-flags.h"
+#include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "object-enchant/trg-types.h"
+#include "object/object-flags.h"
 #include "object/object-kind.h"
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-lite-types.h"
@@ -20,6 +22,7 @@
 #include "sv-definition/sv-weapon-types.h"
 #include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
+#include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 
 /*!
@@ -550,5 +553,23 @@ bool object_type::is_offerable() const
         return false;
     if (angband_strchr("pht", r_info[this->pval].d_char))
         return true;
+    return false;
+}
+
+/*!
+ * @brief オブジェクトをプレイヤーが魔道具として発動できるかを判定する /
+ * Hook to determine if an object is activatable
+ * @return 魔道具として発動可能ならばTRUEを返す
+ */
+bool object_type::is_activatable() const
+{
+    TrFlags flags;
+    if (!this->is_known())
+        return false;
+
+    object_flags(this, flags);
+    if (has_flag(flags, TR_ACTIVATE))
+        return true;
+
     return false;
 }

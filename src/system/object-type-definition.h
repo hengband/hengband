@@ -97,4 +97,5 @@ typedef struct object_type {
     bool can_refill_torch() const;
     bool is_rechargeable() const;
     bool is_offerable() const;
+    bool is_activatable() const;
 } object_type;

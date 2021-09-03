@@ -12,25 +12,6 @@
 #include "util/enum-converter.h"
 
 /*!
- * @brief オブジェクトをプレイヤーが魔道具として発動できるかを判定する /
- * Hook to determine if an object is activatable
- * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
- * @return 魔道具として発動可能ならばTRUEを返す
- */
-bool object_is_activatable(const object_type *o_ptr)
-{
-    TrFlags flags;
-    if (!o_ptr->is_known())
-        return false;
-
-    object_flags(o_ptr, flags);
-    if (has_flag(flags, TR_ACTIVATE))
-        return true;
-
-    return false;
-}
-
-/*!
  * @brief オブジェクトをプレイヤーが簡易使用コマンドで利用できるかを判定する /
  * Hook to determine if an object is useable
  * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ

@@ -294,7 +294,7 @@ void do_cmd_activate(player_type *user_ptr)
 
     concptr q = _("どのアイテムを始動させますか? ", "Activate which item? ");
     concptr s = _("始動できるアイテムを装備していない。", "You have nothing to activate.");
-    if (!choose_object(user_ptr, &item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), FuncItemTester(object_is_activatable)))
+    if (!choose_object(user_ptr, &item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), FuncItemTester(&object_type::is_activatable)))
         return;
 
     exe_activate(user_ptr, item);
