@@ -7,6 +7,7 @@
 
 #include "system/object-type-definition.h"
 #include "artifact/fixed-art-types.h"
+#include "monster-race/monster-race.h"
 #include "object-enchant/object-curse.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/trc-types.h"
@@ -17,7 +18,9 @@
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/monster-race-definition.h"
 #include "system/player-type-definition.h"
+#include "util/string-processor.h"
 
 /*!
  * @brief オブジェクトを初期化する
@@ -533,4 +536,19 @@ bool object_type::can_refill_torch() const
 bool object_type::is_rechargeable() const
 {
     return (this->tval == TV_STAFF) || (this->tval == TV_WAND) || (this->tval == TV_ROD);
+}
+
+/*!
+ * @brief 悪魔領域のグレーターデーモン召喚に利用可能な死体かどうかを返す。 / An "item_tester_hook" for offer
+ * @return 生贄に使用可能な死体ならばTRUEを返す。
+ */
+bool object_type::is_offerable() const
+{
+    if (this->tval != TV_CORPSE)
+        return false;
+    if (this->sval != SV_CORPSE)
+        return false;
+    if (angband_strchr("pht", r_info[this->pval].d_char))
+        return true;
+    return false;
 }
