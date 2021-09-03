@@ -13,6 +13,7 @@
 #include "object-enchant/trg-types.h"
 #include "object/object-kind.h"
 #include "sv-definition/sv-armor-types.h"
+#include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-weapon-types.h"
@@ -502,4 +503,24 @@ bool object_type::is_potion() const
 bool object_type::is_readable() const
 {
     return (this->tval == TV_SCROLL) || (this->tval == TV_PARCHMENT) || (this->name1 == ART_GHB) || (this->name1 == ART_POWER);
+}
+
+/*!
+ * @brief オブジェクトがランタンの燃料になるかどうかを判定する
+ * An "item_tester_hook" for refilling lanterns
+ * @return オブジェクトがランタンの燃料になるならばTRUEを返す
+ */
+bool object_type::can_refill_lantern() const
+{
+    return (this->tval == TV_FLASK) || ((this->tval == TV_LITE) && (this->sval == SV_LITE_LANTERN));
+}
+
+/*!
+ * @brief オブジェクトが松明に束ねられるかどうかを判定する
+ * An "item_tester_hook" for refilling torches
+ * @return オブジェクトが松明に束ねられるならばTRUEを返す
+ */
+bool object_type::can_refill_torch() const
+{
+    return (this->tval == TV_LITE) && (this->sval == SV_LITE_TORCH);
 }

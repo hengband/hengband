@@ -58,34 +58,6 @@ bool item_tester_hook_quaff(player_type *player_ptr, const object_type *o_ptr)
 }
 
 /*!
- * @brief オブジェクトがランタンの燃料になるかどうかを判定する
- * An "item_tester_hook" for refilling lanterns
- * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
- * @return オブジェクトがランタンの燃料になるならばTRUEを返す
- */
-bool object_is_refill_lantern(const object_type *o_ptr)
-{
-    if ((o_ptr->tval == TV_FLASK) || ((o_ptr->tval == TV_LITE) && (o_ptr->sval == SV_LITE_LANTERN)))
-        return true;
-
-    return false;
-}
-
-/*!
- * @brief オブジェクトが松明に束ねられるかどうかを判定する
- * An "item_tester_hook" for refilling torches
- * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
- * @return オブジェクトが松明に束ねられるならばTRUEを返す
- */
-bool object_can_refill_torch(const object_type *o_ptr)
-{
-    if ((o_ptr->tval == TV_LITE) && (o_ptr->sval == SV_LITE_TORCH))
-        return true;
-
-    return false;
-}
-
-/*!
  * @brief 破壊可能なアイテムかを返す /
  * Determines whether an object can be destroyed, and makes fake inscription.
  * @param o_ptr 破壊可能かを確認したいオブジェクトの構造体参照ポインタ

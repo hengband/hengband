@@ -93,4 +93,6 @@ typedef struct object_type {
     bool is_tried() const;
     bool is_potion() const;
     bool is_readable() const;
+    bool can_refill_lantern() const;
+    bool can_refill_torch() const;
 } object_type;
