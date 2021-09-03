@@ -113,7 +113,7 @@ bool can_player_destroy_object(player_type *player_ptr, object_type *o_ptr)
 
     if (!object_is_known(o_ptr)) {
         byte feel = FEEL_SPECIAL;
-        if (object_is_cursed(o_ptr) || o_ptr->is_broken())
+        if (o_ptr->is_cursed() || o_ptr->is_broken())
             feel = FEEL_TERRIBLE;
 
         o_ptr->feeling = feel;

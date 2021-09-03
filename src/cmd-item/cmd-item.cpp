@@ -118,7 +118,7 @@ void do_cmd_drop(player_type *creature_ptr)
     if (!o_ptr)
         return;
 
-    if ((item >= INVEN_MAIN_HAND) && object_is_cursed(o_ptr)) {
+    if ((item >= INVEN_MAIN_HAND) && o_ptr->is_cursed()) {
         msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
         return;
     }

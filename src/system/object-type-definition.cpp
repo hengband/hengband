@@ -441,3 +441,8 @@ bool object_type::is_broken() const
 {
     return (this->ident & IDENT_BROKEN) != 0;
 }
+
+bool object_type::is_cursed() const
+{
+    return this->curse_flags.any();
+}

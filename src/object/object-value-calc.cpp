@@ -427,7 +427,7 @@ PRICE flag_cost(const object_type *o_ptr, int plusses)
     if (has_flag(flgs, TR_SLOW_REGEN))
         total -= 10000;
     if (has_flag(flgs, TR_TELEPORT)) {
-        if (object_is_cursed(o_ptr))
+        if (o_ptr->is_cursed())
             total -= 7500;
         else
             total += 250;

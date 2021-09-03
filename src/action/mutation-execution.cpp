@@ -149,7 +149,7 @@ bool exe_mutation_power(player_type *creature_ptr, MUTA power)
     case MUTA::DET_CURSE:
         for (int i = 0; i < INVEN_TOTAL; i++) {
             object_type *o_ptr = &creature_ptr->inventory_list[i];
-            if ((o_ptr->k_idx == 0) || !object_is_cursed(o_ptr))
+            if ((o_ptr->k_idx == 0) || !o_ptr->is_cursed())
                 continue;
 
             o_ptr->feeling = FEEL_CURSED;

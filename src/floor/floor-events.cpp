@@ -184,16 +184,16 @@ static byte get_dungeon_feeling(player_type *subject_ptr)
         if (o_ptr->tval == TV_HELM && o_ptr->sval == SV_DRAGON_HELM)
             delta += 5 * base;
 
-        if (o_ptr->tval == TV_RING && o_ptr->sval == SV_RING_SPEED && !object_is_cursed(o_ptr))
+        if (o_ptr->tval == TV_RING && o_ptr->sval == SV_RING_SPEED && !o_ptr->is_cursed())
             delta += 25 * base;
 
-        if (o_ptr->tval == TV_RING && o_ptr->sval == SV_RING_LORDLY && !object_is_cursed(o_ptr))
+        if (o_ptr->tval == TV_RING && o_ptr->sval == SV_RING_LORDLY && !o_ptr->is_cursed())
             delta += 15 * base;
 
-        if (o_ptr->tval == TV_AMULET && o_ptr->sval == SV_AMULET_THE_MAGI && !object_is_cursed(o_ptr))
+        if (o_ptr->tval == TV_AMULET && o_ptr->sval == SV_AMULET_THE_MAGI && !o_ptr->is_cursed())
             delta += 15 * base;
 
-        if (!object_is_cursed(o_ptr) && !o_ptr->is_broken() && k_ptr->level > floor_ptr->dun_level)
+        if (!o_ptr->is_cursed() && !o_ptr->is_broken() && k_ptr->level > floor_ptr->dun_level)
             delta += (k_ptr->level - floor_ptr->dun_level) * base;
 
         rating += rating_boost(delta);

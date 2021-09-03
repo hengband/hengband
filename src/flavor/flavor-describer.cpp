@@ -465,7 +465,7 @@ static void decide_item_feeling(flavor_type *flavor_ptr)
         return;
     }
 
-    if (object_is_cursed(flavor_ptr->o_ptr) && (flavor_ptr->known || (flavor_ptr->o_ptr->ident & IDENT_SENSE))) {
+    if (flavor_ptr->o_ptr->is_cursed() && (flavor_ptr->known || (flavor_ptr->o_ptr->ident & IDENT_SENSE))) {
         strcpy(flavor_ptr->fake_insc_buf, _("呪われている", "cursed"));
         return;
     }

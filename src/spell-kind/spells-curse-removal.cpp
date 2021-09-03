@@ -24,7 +24,7 @@ static int exe_curse_removal(player_type *creature_ptr, int all)
         object_type *o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
-        if (!object_is_cursed(o_ptr))
+        if (!o_ptr->is_cursed())
             continue;
         if (!all && o_ptr->curse_flags.has(TRC::HEAVY_CURSE))
             continue;

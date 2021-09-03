@@ -260,7 +260,7 @@ void apply_ego(object_type *o_ptr, DEPTH lev)
     o_ptr->to_a += (ARMOUR_CLASS)e_ptr->base_to_a;
 
     auto is_powerful = e_ptr->gen_flags.has(TRG::POWERFUL);
-    auto is_cursed = (object_is_cursed(o_ptr) || o_ptr->is_broken()) && !is_powerful;
+    auto is_cursed = (o_ptr->is_cursed() || o_ptr->is_broken()) && !is_powerful;
     if (is_cursed) {
         if (e_ptr->max_to_h)
             o_ptr->to_h -= randint1(e_ptr->max_to_h);

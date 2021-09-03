@@ -82,7 +82,7 @@ bool ObjectThrowEntity::check_can_throw()
         return false;
     }
 
-    if (object_is_cursed(this->o_ptr) && (this->item >= INVEN_MAIN_HAND)) {
+    if (this->o_ptr->is_cursed() && (this->item >= INVEN_MAIN_HAND)) {
         msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
         return false;
     }
@@ -224,12 +224,12 @@ void ObjectThrowEntity::display_figurine_throw()
     }
 
     this->corruption_possibility = 100;
-    if (!(summon_named_creature(this->creature_ptr, 0, this->y, this->x, this->q_ptr->pval, !(object_is_cursed(this->q_ptr)) ? PM_FORCE_PET : PM_NONE))) {
+    if (!(summon_named_creature(this->creature_ptr, 0, this->y, this->x, this->q_ptr->pval, !(this->q_ptr->is_cursed()) ? PM_FORCE_PET : PM_NONE))) {
         msg_print(_("人形は捻じ曲がり砕け散ってしまった！", "The Figurine writhes and then shatters."));
         return;
     }
 
-    if (object_is_cursed(this->q_ptr)) {
+    if (this->q_ptr->is_cursed()) {
         msg_print(_("これはあまり良くない気がする。", "You have a bad feeling about this."));
     }
 }

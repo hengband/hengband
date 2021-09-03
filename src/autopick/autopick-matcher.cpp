@@ -147,7 +147,7 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
             if (!o_ptr->is_nameless())
                 return false;
 
-            if (object_is_cursed(o_ptr) || o_ptr->is_broken())
+            if (o_ptr->is_cursed() || o_ptr->is_broken())
                 return false;
 
             if (o_ptr->to_a > 0 || (o_ptr->to_h + o_ptr->to_d) > 0)

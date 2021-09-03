@@ -97,7 +97,7 @@ void store_sell(player_type *owner_ptr)
     if (!o_ptr)
         return;
 
-    if ((item >= INVEN_MAIN_HAND) && object_is_cursed(o_ptr)) {
+    if ((item >= INVEN_MAIN_HAND) && o_ptr->is_cursed()) {
         msg_print(_("ふーむ、どうやらそれは呪われているようだね。", "Hmmm, it seems to be cursed."));
         return;
     }

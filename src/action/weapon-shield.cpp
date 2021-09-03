@@ -33,7 +33,7 @@ void verify_equip_slot(player_type *owner_ptr, INVENTORY_IDX item)
         o_ptr = &owner_ptr->inventory_list[INVEN_SUB_HAND];
         describe_flavor(owner_ptr, o_name, o_ptr, 0);
 
-        if (object_is_cursed(o_ptr)) {
+        if (o_ptr->is_cursed()) {
             if (o_ptr->allow_two_hands_wielding() && can_two_hands_wielding(owner_ptr))
                 msg_format(_("%sを両手で構えた。", "You are wielding %s with both hands."), o_name);
             return;
@@ -64,7 +64,7 @@ void verify_equip_slot(player_type *owner_ptr, INVENTORY_IDX item)
         return;
     }
 
-    if ((empty_hands(owner_ptr, false) & EMPTY_HAND_MAIN) || object_is_cursed(o_ptr))
+    if ((empty_hands(owner_ptr, false) & EMPTY_HAND_MAIN) || o_ptr->is_cursed())
         return;
 
     new_o_ptr = &owner_ptr->inventory_list[INVEN_SUB_HAND];

@@ -1731,7 +1731,7 @@ static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_real_value)
                 continue;
             if (!o_ptr->is_armour())
                 continue;
-            if (!object_is_cursed(o_ptr))
+            if (!o_ptr->is_cursed())
                 continue;
             if (o_ptr->curse_flags.has(TRC::CURSED))
                 ac += 5;
@@ -2007,7 +2007,7 @@ static int16_t calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, boo
         }
     }
 
-    if ((creature_ptr->realm1 == REALM_HEX) && object_is_cursed(o_ptr)) {
+    if ((creature_ptr->realm1 == REALM_HEX) && o_ptr->is_cursed()) {
         if (hex_spelling(creature_ptr, HEX_RUNESWORD)) {
             if (o_ptr->curse_flags.has(TRC::CURSED)) {
                 damage += 5;
@@ -2236,7 +2236,7 @@ static int16_t calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool i
         }
 
         /* Hex realm bonuses */
-        if ((creature_ptr->realm1 == REALM_HEX) && object_is_cursed(o_ptr)) {
+        if ((creature_ptr->realm1 == REALM_HEX) && o_ptr->is_cursed()) {
             if (o_ptr->curse_flags.has(TRC::CURSED)) {
                 hit += 5;
             }

@@ -92,14 +92,14 @@ PRICE object_value(const object_type *o_ptr)
     if (object_is_known(o_ptr)) {
         if (o_ptr->is_broken())
             return (0L);
-        if (object_is_cursed(o_ptr))
+        if (o_ptr->is_cursed())
             return (0L);
 
         value = object_value_real(o_ptr);
     } else {
         if ((o_ptr->ident & (IDENT_SENSE)) && o_ptr->is_broken())
             return (0L);
-        if ((o_ptr->ident & (IDENT_SENSE)) && object_is_cursed(o_ptr))
+        if ((o_ptr->ident & (IDENT_SENSE)) && o_ptr->is_cursed())
             return (0L);
 
         value = object_value_base(o_ptr);

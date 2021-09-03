@@ -407,20 +407,20 @@ void sense_inventory2(player_type *creature_ptr)
 item_feel_type pseudo_value_check_heavy(object_type *o_ptr)
 {
     if (o_ptr->is_artifact()) {
-        if (object_is_cursed(o_ptr) || o_ptr->is_broken())
+        if (o_ptr->is_cursed() || o_ptr->is_broken())
             return FEEL_TERRIBLE;
 
         return FEEL_SPECIAL;
     }
 
     if (o_ptr->is_ego()) {
-        if (object_is_cursed(o_ptr) || o_ptr->is_broken())
+        if (o_ptr->is_cursed() || o_ptr->is_broken())
             return FEEL_WORTHLESS;
 
         return FEEL_EXCELLENT;
     }
 
-    if (object_is_cursed(o_ptr))
+    if (o_ptr->is_cursed())
         return FEEL_CURSED;
     if (o_ptr->is_broken())
         return FEEL_BROKEN;
@@ -441,7 +441,7 @@ item_feel_type pseudo_value_check_heavy(object_type *o_ptr)
  */
 item_feel_type pseudo_value_check_light(object_type *o_ptr)
 {
-    if (object_is_cursed(o_ptr))
+    if (o_ptr->is_cursed())
         return FEEL_CURSED;
     if (o_ptr->is_broken())
         return FEEL_BROKEN;

@@ -1241,7 +1241,7 @@ void update_curses(player_type *creature_ptr)
             creature_ptr->cursed_special.set(TRCS::CHAINSWORD);
 
         if (has_flag(flgs, TR_TELEPORT)) {
-            if (object_is_cursed(o_ptr))
+            if (o_ptr->is_cursed())
                 creature_ptr->cursed.set(TRC::TELEPORT);
             else {
                 concptr insc = quark_str(o_ptr->inscription);

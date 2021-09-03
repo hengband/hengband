@@ -594,7 +594,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それは神に祝福されている。", "It has been blessed by the gods.");
     }
 
-    if (object_is_cursed(o_ptr)) {
+    if (o_ptr->is_cursed()) {
         if (o_ptr->curse_flags.has(TRC::PERMA_CURSE)) {
             info[i++] = _("それは永遠の呪いがかけられている。", "It is permanently cursed.");
         } else if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {

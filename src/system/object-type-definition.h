@@ -85,4 +85,5 @@ typedef struct object_type {
     bool is_nameless() const;
     bool is_valid() const;
     bool is_broken() const;
+    bool is_cursed() const;
 } object_type;

@@ -174,7 +174,7 @@ void do_cmd_wield(player_type *creature_ptr)
         break;
     }
 
-    if (object_is_cursed(&creature_ptr->inventory_list[slot])) {
+    if (creature_ptr->inventory_list[slot].is_cursed()) {
         describe_flavor(creature_ptr, o_name, &creature_ptr->inventory_list[slot], OD_OMIT_PREFIX | OD_NAME_ONLY);
 #ifdef JP
         msg_format("%s%sは呪われているようだ。", describe_use(creature_ptr, slot), o_name);
@@ -185,7 +185,7 @@ void do_cmd_wield(player_type *creature_ptr)
     }
 
     if (confirm_wear
-        && ((object_is_cursed(o_ptr) && object_is_known(o_ptr))
+        && ((o_ptr->is_cursed() && object_is_known(o_ptr))
             || ((o_ptr->ident & IDENT_SENSE) && (FEEL_BROKEN <= o_ptr->feeling) && (o_ptr->feeling <= FEEL_CURSED)))) {
         char dummy[MAX_NLEN + 80];
         describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -207,7 +207,7 @@ void do_cmd_wield(player_type *creature_ptr)
     }
 
     sound(SOUND_WIELD);
-    if (need_switch_wielding && !object_is_cursed(&creature_ptr->inventory_list[need_switch_wielding])) {
+    if (need_switch_wielding && !creature_ptr->inventory_list[need_switch_wielding].is_cursed()) {
         object_type *slot_o_ptr = &creature_ptr->inventory_list[slot];
         object_type *switch_o_ptr = &creature_ptr->inventory_list[need_switch_wielding];
         object_type object_tmp;
@@ -280,7 +280,7 @@ void do_cmd_wield(player_type *creature_ptr)
 
     describe_flavor(creature_ptr, o_name, o_ptr, 0);
     msg_format(act, o_name, index_to_label(slot));
-    if (object_is_cursed(o_ptr)) {
+    if (o_ptr->is_cursed()) {
         msg_print(_("うわ！ すさまじく冷たい！", "Oops! It feels deathly cold!"));
         chg_virtue(creature_ptr, V_HARMONY, -1);
         o_ptr->ident |= (IDENT_SENSE);
@@ -312,7 +312,7 @@ void do_cmd_takeoff(player_type *creature_ptr)
         return;
 
     PlayerEnergy energy(creature_ptr);
-    if (object_is_cursed(o_ptr)) {
+    if (o_ptr->is_cursed()) {
         if (o_ptr->curse_flags.has(TRC::PERMA_CURSE) || (creature_ptr->pclass != CLASS_BERSERKER)) {
             msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
             return;

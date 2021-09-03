@@ -94,7 +94,7 @@ void curse_equipment(player_type *owner_ptr, PERCENTAGE chance, PERCENTAGE heavy
         o_ptr->curse_flags.set(TRC::CURSED);
         curse_power++;
     } else {
-        if (!object_is_cursed(o_ptr))
+        if (!o_ptr->is_cursed())
             changed = true;
         o_ptr->curse_flags.set(TRC::CURSED);
     }

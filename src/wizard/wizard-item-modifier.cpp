@@ -1029,7 +1029,7 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
                 do {
                     o_ptr->prep(k_idx);
                     apply_magic_to_object(caster_ptr, o_ptr, k_ptr->level, (AM_SPECIAL | AM_NO_FIXED_ART));
-                } while (!o_ptr->art_name || o_ptr->name1 || o_ptr->name2 || object_is_cursed(o_ptr));
+                } while (!o_ptr->art_name || o_ptr->name1 || o_ptr->name2 || o_ptr->is_cursed());
 
                 if (o_ptr->art_name)
                     drop_near(caster_ptr, o_ptr, -1, caster_ptr->y, caster_ptr->x);
@@ -1085,7 +1085,7 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
             for (int i = 0; i < 100; i++) {
                 o_ptr->prep(k_idx);
                 apply_magic_to_object(caster_ptr, o_ptr, 0, (AM_NO_FIXED_ART));
-                if (!object_is_cursed(o_ptr))
+                if (!o_ptr->is_cursed())
                     break;
             }
             res = WishResult::NORMAL;

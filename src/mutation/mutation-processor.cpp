@@ -493,7 +493,7 @@ bool drop_weapons(player_type *creature_ptr)
         slot = INVEN_SUB_HAND;
     }
 
-    if ((slot == 0) || object_is_cursed(o_ptr))
+    if ((slot == 0) || o_ptr->is_cursed())
         return false;
 
     msg_print(_("武器を落としてしまった！", "You drop your weapon!"));

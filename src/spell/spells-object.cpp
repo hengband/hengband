@@ -339,7 +339,7 @@ void brand_bolts(player_type *caster_ptr)
             continue;
 
         /* Skip cursed/broken items */
-        if (object_is_cursed(o_ptr) || o_ptr->is_broken())
+        if (o_ptr->is_cursed() || o_ptr->is_broken())
             continue;
 
         /* Randomize */
@@ -409,7 +409,7 @@ bool perilous_secrets(player_type *user_ptr)
 static void break_curse(object_type *o_ptr)
 {
     BIT_FLAGS is_curse_broken
-        = object_is_cursed(o_ptr) && o_ptr->curse_flags.has_not(TRC::PERMA_CURSE) && o_ptr->curse_flags.has_not(TRC::HEAVY_CURSE) && (randint0(100) < 25);
+        = o_ptr->is_cursed() && o_ptr->curse_flags.has_not(TRC::PERMA_CURSE) && o_ptr->curse_flags.has_not(TRC::HEAVY_CURSE) && (randint0(100) < 25);
     if (!is_curse_broken) {
         return;
     }
@@ -613,7 +613,7 @@ void brand_weapon(player_type *caster_ptr, int brand_type)
     if (!o_ptr)
         return;
 
-    bool is_special_item = o_ptr->k_idx && !o_ptr->is_artifact() && !o_ptr->is_ego() && !object_is_cursed(o_ptr)
+    bool is_special_item = o_ptr->k_idx && !o_ptr->is_artifact() && !o_ptr->is_ego() && !o_ptr->is_cursed()
         && !((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) && !((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE))
         && !((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DIAMOND_EDGE));
     if (!is_special_item) {

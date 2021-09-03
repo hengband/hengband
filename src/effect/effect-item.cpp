@@ -181,7 +181,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
         }
         case GF_HOLY_FIRE:
         case GF_HELL_FIRE: {
-            if (object_is_cursed(o_ptr)) {
+            if (o_ptr->is_cursed()) {
                 do_kill = true;
                 note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
             }

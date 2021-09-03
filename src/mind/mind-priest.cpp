@@ -40,7 +40,7 @@ bool bless_weapon(player_type *caster_ptr)
     TrFlags flgs;
     object_flags(o_ptr, flgs);
 
-    if (object_is_cursed(o_ptr)) {
+    if (o_ptr->is_cursed()) {
         if ((o_ptr->curse_flags.has(TRC::HEAVY_CURSE) && (randint1(100) < 33)) || has_flag(flgs, TR_ADD_L_CURSE) || has_flag(flgs, TR_ADD_H_CURSE)
             || o_ptr->curse_flags.has(TRC::PERMA_CURSE)) {
 #ifdef JP

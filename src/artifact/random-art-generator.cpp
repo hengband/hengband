@@ -169,7 +169,7 @@ static bool decide_random_art_cursed(const bool a_scroll, object_type *o_ptr)
     if (!a_scroll && one_in_(A_CURSED))
         return true;
 
-    if (((o_ptr->tval == TV_AMULET) || (o_ptr->tval == TV_RING)) && object_is_cursed(o_ptr))
+    if (((o_ptr->tval == TV_AMULET) || (o_ptr->tval == TV_RING)) && o_ptr->is_cursed())
         return true;
 
     return false;
