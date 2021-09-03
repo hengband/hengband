@@ -6,6 +6,7 @@
  */
 
 #include "system/object-type-definition.h"
+#include "artifact/fixed-art-types.h"
 #include "object-enchant/object-curse.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/trc-types.h"
@@ -491,4 +492,14 @@ bool object_type::is_tried() const
 bool object_type::is_potion() const
 {
     return k_info[this->k_idx].tval == TV_POTION;
+}
+
+/*!
+ * @brief オブジェクトをプレイヤーが読むことができるかを判定する /
+ * Hook to determine if an object is readable
+ * @return 読むことが可能ならばtrueを返す
+ */
+bool object_type::is_readable() const
+{
+    return (this->tval == TV_SCROLL) || (this->tval == TV_PARCHMENT) || (this->name1 == ART_GHB) || (this->name1 == ART_POWER);
 }

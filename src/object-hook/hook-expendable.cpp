@@ -58,20 +58,6 @@ bool item_tester_hook_quaff(player_type *player_ptr, const object_type *o_ptr)
 }
 
 /*!
- * @brief オブジェクトをプレイヤーが読むことができるかを判定する /
- * Hook to determine if an object is readable
- * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
- * @return 読むことが可能ならばTRUEを返す
- */
-bool object_is_readable(const object_type *o_ptr)
-{
-    if ((o_ptr->tval == TV_SCROLL) || (o_ptr->tval == TV_PARCHMENT) || (o_ptr->name1 == ART_GHB) || (o_ptr->name1 == ART_POWER))
-        return true;
-
-    return false;
-}
-
-/*!
  * @brief オブジェクトがランタンの燃料になるかどうかを判定する
  * An "item_tester_hook" for refilling lanterns
  * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
