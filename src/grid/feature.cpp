@@ -192,12 +192,6 @@ FEAT_IDX feat_jammed_door_random(int door_type)
 }
 
 /*
- * Determine if a "legal" grid is within "los" of the player *
- * Note the use of comparison to zero to force a "boolean" result
- */
-static bool player_has_los_grid(grid_type *g_ptr) { return (g_ptr->info & CAVE_VIEW) != 0; }
-
-/*
  * Change the "feat" flag for a grid, and notice/redraw the grid
  */
 void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX feat)
@@ -259,7 +253,7 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
         cc_ptr = &floor_ptr->grid_array[yy][xx];
         cc_ptr->info |= CAVE_GLOW;
 
-        if (player_has_los_grid(cc_ptr)) {
+        if (cc_ptr->is_view()) {
             if (cc_ptr->m_idx)
                 update_monster(player_ptr, cc_ptr->m_idx, false);
             note_spot(player_ptr, yy, xx);
