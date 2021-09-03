@@ -262,7 +262,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
             msg_format(_("%sは%s", "The %s%s"), o_name, note_kill);
 
         KIND_OBJECT_IDX k_idx = o_ptr->k_idx;
-        bool is_potion = object_is_potion(o_ptr);
+        bool is_potion = o_ptr->is_potion();
         delete_object_idx(caster_ptr, this_o_idx);
         if (is_potion) {
             (void)potion_smash_effect(caster_ptr, who, y, x, k_idx);

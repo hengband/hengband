@@ -91,4 +91,5 @@ typedef struct object_type {
     bool is_fully_known() const;
     bool is_aware() const;
     bool is_tried() const;
+    bool is_potion() const;
 } object_type;

@@ -125,13 +125,3 @@ bool can_player_destroy_object(player_type *player_ptr, object_type *o_ptr)
 
     return false;
 }
-
-/*!
- * @brief オブジェクトが薬であるかを返す
- * @param o_ptr 対象のオブジェクト構造体ポインタ
- * @return オブジェクトが薬ならばTRUEを返す
- */
-bool object_is_potion(const object_type *o_ptr)
-{
-    return (k_info[o_ptr->k_idx].tval == TV_POTION);
-}

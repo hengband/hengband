@@ -82,7 +82,7 @@ void inventory_damage(player_type *player_ptr, const ObjectBreaker& breaker, int
 #endif
 
         /* Potions smash open */
-        if (object_is_potion(o_ptr)) {
+        if (o_ptr->is_potion()) {
             (void)potion_smash_effect(player_ptr, 0, player_ptr->y, player_ptr->x, o_ptr->k_idx);
         }
 

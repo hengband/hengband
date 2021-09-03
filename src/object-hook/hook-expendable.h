@@ -8,4 +8,3 @@ bool object_is_readable(const object_type *o_ptr);
 bool object_is_refill_lantern(const object_type *o_ptr);
 bool object_can_refill_torch(const object_type *o_ptr);
 bool can_player_destroy_object(player_type *player_ptr, object_type *o_ptr);
-bool object_is_potion(const object_type *o_ptr);

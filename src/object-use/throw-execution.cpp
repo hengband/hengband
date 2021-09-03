@@ -236,7 +236,7 @@ void ObjectThrowEntity::display_figurine_throw()
 
 void ObjectThrowEntity::display_potion_throw()
 {
-    if (!object_is_potion(this->q_ptr)) {
+    if (!this->q_ptr->is_potion()) {
         return;
     }
 
@@ -387,7 +387,7 @@ bool ObjectThrowEntity::check_racial_target_bold()
     }
 
     this->hit_wall = true;
-    return (this->q_ptr->tval == TV_FIGURINE) || object_is_potion(this->q_ptr)
+    return (this->q_ptr->tval == TV_FIGURINE) || this->q_ptr->is_potion()
         || (floor_ptr->grid_array[this->ny[this->cur_dis]][this->nx[this->cur_dis]].m_idx == 0);
 }
 
@@ -441,7 +441,7 @@ void ObjectThrowEntity::attack_racial_power()
     }
 
     message_pain(this->creature_ptr, this->g_ptr->m_idx, this->tdam);
-    if ((this->tdam > 0) && !object_is_potion(this->q_ptr)) {
+    if ((this->tdam > 0) && !this->q_ptr->is_potion()) {
         anger_monster(this->creature_ptr, this->m_ptr);
     }
 

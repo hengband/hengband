@@ -483,3 +483,12 @@ bool object_type::is_tried() const
 {
     return k_info[this->k_idx].tried;
 }
+
+/*!
+ * @brief オブジェクトが薬であるかを返す
+ * @return オブジェクトが薬ならばtrueを返す
+ */
+bool object_type::is_potion() const
+{
+    return k_info[this->k_idx].tval == TV_POTION;
+}
