@@ -84,4 +84,5 @@ typedef struct object_type {
     bool is_random_artifact() const;
     bool is_nameless() const;
     bool is_valid() const;
+    bool is_broken() const;
 } object_type;

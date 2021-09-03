@@ -436,3 +436,8 @@ bool object_type::is_valid() const
 {
     return this->k_idx != 0;
 }
+
+bool object_type::is_broken() const
+{
+    return (this->ident & IDENT_BROKEN) != 0;
+}

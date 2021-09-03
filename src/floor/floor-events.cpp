@@ -193,7 +193,7 @@ static byte get_dungeon_feeling(player_type *subject_ptr)
         if (o_ptr->tval == TV_AMULET && o_ptr->sval == SV_AMULET_THE_MAGI && !object_is_cursed(o_ptr))
             delta += 15 * base;
 
-        if (!object_is_cursed(o_ptr) && !object_is_broken(o_ptr) && k_ptr->level > floor_ptr->dun_level)
+        if (!object_is_cursed(o_ptr) && !o_ptr->is_broken() && k_ptr->level > floor_ptr->dun_level)
             delta += (k_ptr->level - floor_ptr->dun_level) * base;
 
         rating += rating_boost(delta);

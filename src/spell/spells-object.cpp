@@ -339,7 +339,7 @@ void brand_bolts(player_type *caster_ptr)
             continue;
 
         /* Skip cursed/broken items */
-        if (object_is_cursed(o_ptr) || object_is_broken(o_ptr))
+        if (object_is_cursed(o_ptr) || o_ptr->is_broken())
             continue;
 
         /* Randomize */
