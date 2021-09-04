@@ -4,7 +4,7 @@
 
 struct dungeon_type;
 struct dun_data_type;
-typedef struct dt_type dt_type;
+struct dt_type;
 struct player_type;
 void gen_caverns_and_lakes(player_type *owner_ptr, dungeon_type *dungeon_ptr, dun_data_type *dd_ptr);
 bool has_river_flag(dungeon_type *dungeon_ptr);
