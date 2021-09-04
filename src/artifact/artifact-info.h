@@ -4,7 +4,7 @@
  * @brief アーティファクトの発動効果取得関数ヘッダ
  */
 
-typedef struct activation_type activation_type;
+struct activation_type;
 struct object_type;;
 struct player_type;
 int activation_index(const object_type *o_ptr);
