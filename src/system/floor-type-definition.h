@@ -5,7 +5,7 @@
 #include "monster/monster-timed-effect-types.h"
 #include "system/angband.h"
 
-typedef struct grid_type grid_type;
+struct grid_type;;
 struct object_type;;
 typedef struct monster_type monster_type;
 typedef struct floor_type {

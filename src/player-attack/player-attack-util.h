@@ -25,7 +25,7 @@ enum class MagicalBrandEffect { NONE = 0, EXTRA = 1, STUN = 2, SCARE = 3, DISPEL
 /*!
  * @brief プレイヤーの打撃に関する情報
  */
-typedef struct grid_type grid_type;
+struct grid_type;;
 typedef struct monster_race monster_race;
 typedef struct monster_type monster_type;
 typedef struct player_attack_type {
