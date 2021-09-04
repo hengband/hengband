@@ -22,5 +22,5 @@
 
 extern concptr essence_name[];
 
-typedef struct player_type player_type;
+struct player_type;
 void do_cmd_kaji(player_type *creature_ptr, bool only_browse);

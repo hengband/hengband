@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef struct player_type player_type;
+struct player_type;
 bool activate_teleport_away(player_type *user_ptr);
 bool activate_escape(player_type *user_ptr);
 bool activate_teleport_level(player_type *user_ptr);

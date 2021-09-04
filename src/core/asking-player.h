@@ -10,7 +10,7 @@
 #define CHECK_NO_HISTORY 0x04
 #define CHECK_DEFAULT_Y 0x08
 
-typedef struct player_type player_type;
+struct player_type;
 bool askfor_aux(char *buf, int len, bool numpad_cursor);
 bool askfor(char *buf, int len);
 bool get_string(concptr prompt, char *buf, int len);

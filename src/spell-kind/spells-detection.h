@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct player_type player_type;
+struct player_type;
 bool detect_traps(player_type *caster_ptr, POSITION range, bool known);
 bool detect_doors(player_type* caster_ptr, POSITION range);
 bool detect_stairs(player_type* caster_ptr, POSITION range);

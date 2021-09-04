@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef struct player_type player_type;
+struct player_type;
 bool psychometry(player_type *caster_ptr);
 
 enum mind_mindcrafter_type : int;

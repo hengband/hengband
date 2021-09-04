@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct player_type player_type;
+struct player_type;
 void build_lake(player_type *player_ptr, int type);
 void build_cavern(player_type *player_ptr);
 void build_small_room(player_type *player_ptr, POSITION x0, POSITION y0);

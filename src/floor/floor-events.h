@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef struct player_type player_type;
+struct player_type;
 typedef struct floor_type floor_type;
 void day_break(player_type *subject_ptr);
 void night_falls(player_type *subject_ptr);

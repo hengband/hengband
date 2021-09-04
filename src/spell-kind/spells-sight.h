@@ -4,7 +4,7 @@
 
 typedef struct monster_race monster_race;
 typedef struct monster_type monster_type;
-typedef struct player_type player_type;
+struct player_type;
 bool project_all_los(player_type *caster_ptr, EFFECT_ID typ, HIT_POINT dam);
 bool speed_monsters(player_type *caster_ptr);
 bool slow_monsters(player_type *caster_ptr, int power);

@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct player_type player_type;
+struct player_type;
 class PlayerEnergy {
 public:
     PlayerEnergy(player_type *creature_ptr);

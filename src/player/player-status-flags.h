@@ -47,7 +47,7 @@ enum aggravate_state {
     AGGRAVATE_NORMAL = 0x00000002L,
 };
 
-typedef struct player_type player_type;
+struct player_type;
 BIT_FLAGS convert_inventory_slot_type_to_flag_cause(inventory_slot_type inventory_slot);
 BIT_FLAGS check_equipment_flags(player_type *creature_ptr, tr_type tr_flag);
 BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag);

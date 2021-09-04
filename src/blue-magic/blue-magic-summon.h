@@ -5,7 +5,7 @@
  */
 
 typedef struct bmc_type bmc_type;
-typedef struct player_type player_type;
+struct player_type;
 bool cast_blue_summon_kin(player_type *caster_ptr, bmc_type *bmc_ptr);
 bool cast_blue_summon_cyber(player_type *caster_ptr, bmc_type *bmc_ptr);
 bool cast_blue_summon_monster(player_type *caster_ptr, bmc_type *bmc_ptr);

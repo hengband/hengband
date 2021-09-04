@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct player_type player_type;
+struct player_type;
 void wiz_lite(player_type *caster_ptr, bool ninja);
 void wiz_dark(player_type *caster_ptr);
 void map_area(player_type *caster_ptr, POSITION range);

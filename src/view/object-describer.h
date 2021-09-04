@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct player_type player_type;
+struct player_type;
 void inven_item_charges(player_type *owner_ptr, INVENTORY_IDX item);
 void inven_item_describe(player_type *owner_ptr, INVENTORY_IDX item);
 void display_koff(player_type *owner_ptr, KIND_OBJECT_IDX k_idx);

@@ -13,5 +13,5 @@ extern bool ignore_avoid_run;
 extern byte cycle[MAX_RUN_CYCLES];
 extern byte chome[MAX_RUN_CHOME];
 
-typedef struct player_type player_type;
+struct player_type;
 void run_step(player_type *creature_ptr, DIRECTION dir);

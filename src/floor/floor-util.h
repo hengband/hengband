@@ -5,7 +5,7 @@
 typedef struct floor_type floor_type;
 extern floor_type floor_info;
 
-typedef struct player_type player_type;
+struct player_type;
 void update_smell(floor_type *floor_ptr, player_type *subject_ptr);
 void forget_flow(floor_type *floor_ptr);
 void wipe_o_list(floor_type *floor_ptr);

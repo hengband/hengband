@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef struct player_type player_type;
+struct player_type;
 void rd_base_info(player_type *creature_ptr);
 void rd_experience(player_type *creature_ptr);
 void rd_skills(player_type *creature_ptr);

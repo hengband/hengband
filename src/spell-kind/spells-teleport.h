@@ -3,7 +3,7 @@
 #include "system/angband.h"
 #include "spell/spells-util.h"
 
-typedef struct player_type player_type;
+struct player_type;
 bool teleport_monster(player_type *caster_ptr, DIRECTION dir, int distance);
 bool teleport_swap(player_type *caster_ptr, DIRECTION dir);
 bool teleport_away(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION dis, teleport_flags mode);

@@ -37,5 +37,5 @@ typedef struct monap_type {
     bool fear;
 } monap_type;
 
-typedef struct player_type player_type;
+struct player_type;
 monap_type *initialize_monap_type(player_type *target_ptr, monap_type *monap_ptr, MONSTER_IDX m_idx);

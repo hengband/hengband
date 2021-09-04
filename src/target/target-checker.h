@@ -6,6 +6,6 @@ extern MONSTER_IDX target_who;
 extern POSITION target_col;
 extern POSITION target_row;
 
-typedef struct player_type player_type;
+struct player_type;
 void verify_panel(player_type *creature_ptr);
 bool target_okay(player_type *creature_ptr);

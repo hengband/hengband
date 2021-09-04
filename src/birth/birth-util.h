@@ -11,7 +11,7 @@ enum birth_kind
 	BK_AUTO_ROLLER,
 };
 
-typedef struct player_type player_type;
+struct player_type;
 void birth_quit(void);
 void show_help(player_type* creature_ptr, concptr helpfile);
 void birth_help_option(player_type *creature_ptr, char c, birth_kind bk);

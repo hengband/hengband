@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct player_type player_type;
+struct player_type;
 void lite_room(player_type *caster_ptr, POSITION y1, POSITION x1);
 bool starlight(player_type *caster_ptr, bool magic);
 void unlite_room(player_type *caster_ptr, POSITION y1, POSITION x1);

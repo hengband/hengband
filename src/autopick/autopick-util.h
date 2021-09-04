@@ -78,7 +78,7 @@ extern int max_max_autopick;
 extern autopick_type *autopick_list;
 extern object_type autopick_last_destroyed_object;
 
-typedef struct player_type player_type;
+struct player_type;
 void autopick_free_entry(autopick_type *entry);
 void free_text_lines(concptr *lines_list);
 int get_com_id(char key);

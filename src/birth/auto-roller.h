@@ -15,7 +15,7 @@ extern int32_t auto_round;
 extern int32_t auto_upper_round;
 extern int32_t autoroll_chance;
 
-typedef struct player_type player_type;
+struct player_type;
 bool get_stat_limits(player_type *creature_ptr);
 void initialize_chara_limit(chara_limit_type *chara_limit_ptr);
 bool get_chara_limits(player_type *creature_ptr, chara_limit_type *chara_limit_ptr);
