@@ -2,7 +2,6 @@
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags3.h"
 #include "object-enchant/tr-types.h"
-#include "object-hook/hook-enchant.h"
 #include "object/object-flags.h"
 #include "object/object-value.h"
 #include "store/store-util.h"

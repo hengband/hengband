@@ -467,9 +467,6 @@
     <ClCompile Include="..\..\src\mspell\mspell-dispel.cpp" />
     <ClCompile Include="..\..\src\mutation\mutation-techniques.cpp" />
     <ClCompile Include="..\..\src\artifact\random-art-pval-investor.cpp" />
-    <ClCompile Include="..\..\src\object-hook\hook-bow.cpp" />
-    <ClCompile Include="..\..\src\object-hook\hook-checker.cpp" />
-    <ClCompile Include="..\..\src\object-hook\hook-enchant.cpp" />
     <ClCompile Include="..\..\src\object-hook\hook-expendable.cpp" />
     <ClCompile Include="..\..\src\object-hook\hook-magic.cpp" />
     <ClCompile Include="..\..\src\object-hook\hook-perception.cpp" />
@@ -1183,9 +1180,6 @@
     <ClInclude Include="..\..\src\mutation\mutation-techniques.h" />
     <ClInclude Include="..\..\src\artifact\random-art-pval-investor.h" />
     <ClInclude Include="..\..\src\object-hook\hook-armor.h" />
-    <ClInclude Include="..\..\src\object-hook\hook-bow.h" />
-    <ClInclude Include="..\..\src\object-hook\hook-checker.h" />
-    <ClInclude Include="..\..\src\object-hook\hook-enchant.h" />
     <ClInclude Include="..\..\src\object-hook\hook-expendable.h" />
     <ClInclude Include="..\..\src\object-hook\hook-magic.h" />
     <ClInclude Include="..\..\src\object-hook\hook-perception.h" />

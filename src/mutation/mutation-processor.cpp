@@ -16,8 +16,6 @@
 #include "monster/monster-status.h"
 #include "mutation/mutation-flag-types.h"
 #include "mutation/mutation-investor-remover.h"
-#include "object-hook/hook-checker.h"
-#include "object-hook/hook-enchant.h"
 #include "object/lite-processor.h"
 #include "player-info/equipment-info.h"
 #include "player/digestion-processor.h"

@@ -38,7 +38,6 @@
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "object-enchant/tr-types.h"
-#include "object-hook/hook-checker.h"
 #include "object-hook/hook-expendable.h"
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"

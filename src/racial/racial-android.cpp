@@ -2,7 +2,6 @@
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/trg-types.h"
-#include "object-hook/hook-enchant.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-kind.h"
 #include "object/object-value-calc.h"

@@ -26,8 +26,6 @@
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
-#include "object-hook/hook-checker.h"
-#include "object-hook/hook-enchant.h"
 #include "pet/pet-util.h"
 #include "player/player-status.h"
 #include "player/special-defense-types.h"

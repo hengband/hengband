@@ -17,7 +17,6 @@
 #include "floor/floor-object.h"
 #include "inventory/inventory-object.h"
 #include "object-enchant/special-object-flags.h"
-#include "object-hook/hook-enchant.h"
 #include "object-hook/hook-magic.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"

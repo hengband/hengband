@@ -14,7 +14,6 @@
 #include "inventory/player-inventory.h"
 #include "io/write-diary.h"
 #include "object-enchant/special-object-flags.h"
-#include "object-hook/hook-enchant.h"
 #include "object-hook/hook-perception.h"
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"

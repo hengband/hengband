@@ -4,7 +4,6 @@
 #include "floor/floor-object.h"
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-armor.h"
-#include "object-hook/hook-checker.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "racial/racial-android.h"

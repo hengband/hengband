@@ -5,7 +5,6 @@
 #include "flavor/object-flavor-types.h"
 #include "hpmp/hp-mp-regenerator.h"
 #include "inventory/inventory-slot-types.h"
-#include "object-hook/hook-checker.h"
 #include "object/object-kind.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"

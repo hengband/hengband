@@ -1337,13 +1337,7 @@
     <ClCompile Include="..\..\src\object-hook\hook-weapon.cpp">
       <Filter>object-hook</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object-hook\hook-bow.cpp">
-      <Filter>object-hook</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\object-hook\hook-armor.cpp">
-      <Filter>object-hook</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\object-hook\hook-checker.cpp">
       <Filter>object-hook</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\object-hook\hook-expendable.cpp">
@@ -1353,9 +1347,6 @@
       <Filter>object-hook</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\object-hook\hook-quest.cpp">
-      <Filter>object-hook</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\object-hook\hook-enchant.cpp">
       <Filter>object-hook</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\mind\mind-weaponsmith.cpp">
@@ -3911,13 +3902,7 @@
     <ClInclude Include="..\..\src\object-hook\hook-weapon.h">
       <Filter>object-hook</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object-hook\hook-bow.h">
-      <Filter>object-hook</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\object-hook\hook-armor.h">
-      <Filter>object-hook</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object-hook\hook-checker.h">
       <Filter>object-hook</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object-hook\hook-expendable.h">
@@ -3927,9 +3912,6 @@
       <Filter>object-hook</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object-hook\hook-quest.h">
-      <Filter>object-hook</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object-hook\hook-enchant.h">
       <Filter>object-hook</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mind\mind-weaponsmith.h">

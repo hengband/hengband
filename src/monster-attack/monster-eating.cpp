@@ -16,7 +16,6 @@
 #include "mind/mind-mirror-master.h"
 #include "monster-attack/monster-attack-util.h"
 #include "monster/monster-status.h"
-#include "object-hook/hook-enchant.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"

@@ -36,7 +36,6 @@
 #include "io/input-key-requester.h"
 #include "mind/snipe-types.h"
 #include "object-activation/activation-switcher.h"
-#include "object-hook/hook-checker.h"
 #include "object-hook/hook-magic.h"
 #include "object-use/quaff-execution.h"
 #include "object-use/read-execution.h"

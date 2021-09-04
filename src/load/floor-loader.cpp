@@ -16,7 +16,6 @@
 #include "monster-race/monster-race.h"
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
-#include "object-hook/hook-checker.h"
 #include "save/floor-writer.h"
 #include "system/angband-version.h"
 #include "system/floor-type-definition.h"

@@ -8,7 +8,6 @@
 #include "game-option/birth-options.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
-#include "object-hook/hook-checker.h"
 #include "object-hook/hook-weapon.h"
 #include "player-info/equipment-info.h"
 #include "player-status/player-hand-types.h"

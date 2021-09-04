@@ -23,7 +23,6 @@
 #include "object-activation/activation-util.h"
 #include "object-enchant/activation-info-table.h"
 #include "object-enchant/object-ego.h"
-#include "object-hook/hook-enchant.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "player-status/player-energy.h"

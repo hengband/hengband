@@ -18,7 +18,6 @@
 #include "io/command-repeater.h"
 #include "main/sound-of-music.h"
 #include "object-enchant/special-object-flags.h"
-#include "object-hook/hook-enchant.h"
 #include "object/object-stack.h"
 #include "perception/identification.h"
 #include "perception/object-perception.h"
