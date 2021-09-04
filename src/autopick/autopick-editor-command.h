@@ -8,5 +8,5 @@ enum ape_quittance {
 };
 
 struct player_type;
-typedef struct text_body_type text_body_type;
+struct text_body_type;
 ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id);

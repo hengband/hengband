@@ -4,7 +4,7 @@
 
 struct object_type;;
 struct player_type;
-typedef struct text_body_type text_body_type;
+struct text_body_type;
 int find_autopick_list(player_type *player_ptr, object_type *o_ptr);
 bool get_object_for_search(player_type *player_ptr, object_type **o_handle, concptr *search_strp);
 bool get_destroyed_object_for_search(player_type *player_ptr, object_type **o_handle, concptr *search_strp);
