@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef struct player_attack_type player_attack_type;
+struct player_attack_type;
 struct player_type;
 bool kawarimi(player_type *caster_ptr, bool success);
 bool rush_attack(player_type *attacker_ptr, bool *mdeath);
