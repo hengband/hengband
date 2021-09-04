@@ -14,7 +14,7 @@ enum monster_sex {
     MSEX_FEMALE = 2,
 };
 
-typedef struct monster_race monster_race;
+struct monster_race;
 typedef struct lore_type {
 #ifdef JP
     char jverb_buf[64];

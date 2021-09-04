@@ -4,7 +4,7 @@
 
 struct grid_type;;
 struct monster_type;
-typedef struct monster_race monster_race;
+struct monster_race;
 typedef struct effect_monster_type {
     grid_type *g_ptr;
     monster_type *m_ptr;

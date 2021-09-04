@@ -26,7 +26,7 @@ enum class MagicalBrandEffect { NONE = 0, EXTRA = 1, STUN = 2, SCARE = 3, DISPEL
  * @brief プレイヤーの打撃に関する情報
  */
 struct grid_type;;
-typedef struct monster_race monster_race;
+struct monster_race;
 struct monster_type;
 typedef struct player_attack_type {
     int16_t hand{}; //!< 武器の持ち手

@@ -7,7 +7,7 @@
  */
 #define CEM_RIDING 0x0001
 #define CEM_P_CAN_ENTER_PATTERN 0x0002
-typedef struct monster_race monster_race;
+struct monster_race;
 struct monster_type;
 struct player_type;
 bool monster_can_cross_terrain(player_type *player_ptr, FEAT_IDX feat, monster_race *r_ptr, BIT_FLAGS16 mode);

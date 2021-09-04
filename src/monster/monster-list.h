@@ -5,7 +5,7 @@
 #define GMN_ARENA 0x00000001 //!< 賭け闘技場向け生成
 
 struct floor_type;
-typedef struct monster_race monster_race;
+struct monster_race;
 struct player_type;
 MONSTER_IDX m_pop(floor_type *floor_ptr);
 

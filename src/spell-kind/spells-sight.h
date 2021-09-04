@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct monster_race monster_race;
+struct monster_race;
 struct monster_type;
 struct player_type;
 bool project_all_los(player_type *caster_ptr, EFFECT_ID typ, HIT_POINT dam);
