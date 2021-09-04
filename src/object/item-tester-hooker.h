@@ -70,6 +70,8 @@ private:
  */
 class FuncItemTester : public CloneableItemTester<FuncItemTester> {
 public:
+    using TestMemberFunctionPtr = bool (object_type::*)() const;
+    explicit FuncItemTester(TestMemberFunctionPtr test_func);
     explicit FuncItemTester(std::function<bool(const object_type *)> test_func);
     explicit FuncItemTester(std::function<bool(player_type *, const object_type *)> test_func, player_type *player_ptr);
 

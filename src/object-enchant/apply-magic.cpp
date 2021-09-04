@@ -112,7 +112,7 @@ void apply_magic_to_object(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
         }
     }
 
-    if (object_is_fixed_artifact(o_ptr)) {
+    if (o_ptr->is_fixed_artifact()) {
         artifact_type *a_ptr = apply_artifact(owner_ptr, o_ptr);
         a_ptr->cur_num = 1;
         if (current_world_ptr->character_dungeon)
@@ -188,7 +188,7 @@ void apply_magic_to_object(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
         add_flag(o_ptr->art_flags, TR_CHR);
     }
 
-    if (object_is_ego(o_ptr)) {
+    if (o_ptr->is_ego()) {
         apply_ego(o_ptr, lev);
         return;
     }

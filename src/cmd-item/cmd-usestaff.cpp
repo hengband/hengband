@@ -363,9 +363,9 @@ void exe_use_staff(player_type *creature_ptr, INVENTORY_IDX item)
 
     sound(SOUND_ZAP);
 
-    ident = staff_effect(creature_ptr, o_ptr->sval, &use_charge, false, false, object_is_aware(o_ptr));
+    ident = staff_effect(creature_ptr, o_ptr->sval, &use_charge, false, false, o_ptr->is_aware());
 
-    if (!(object_is_aware(o_ptr))) {
+    if (!(o_ptr->is_aware())) {
         chg_virtue(creature_ptr, V_PATIENCE, -1);
         chg_virtue(creature_ptr, V_CHANCE, 1);
         chg_virtue(creature_ptr, V_KNOWLEDGE, -1);
@@ -383,7 +383,7 @@ void exe_use_staff(player_type *creature_ptr, INVENTORY_IDX item)
     object_tried(o_ptr);
 
     /* An identification was made */
-    if (ident && !object_is_aware(o_ptr)) {
+    if (ident && !o_ptr->is_aware()) {
         object_aware(creature_ptr, o_ptr);
         gain_exp(creature_ptr, (lev + (creature_ptr->lev >> 1)) / creature_ptr->lev);
     }

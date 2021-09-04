@@ -48,10 +48,10 @@ static bool is_leave_special_item(player_type *player_ptr, object_type *o_ptr)
         if (o_ptr->tval == TV_SKELETON || (o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_SKELETON))
             return false;
     } else if (player_ptr->pclass == CLASS_NINJA) {
-        if (o_ptr->tval == TV_LITE && o_ptr->name2 == EGO_LITE_DARKNESS && object_is_known(o_ptr))
+        if (o_ptr->tval == TV_LITE && o_ptr->name2 == EGO_LITE_DARKNESS && o_ptr->is_known())
             return false;
     } else if (player_ptr->pclass == CLASS_BEASTMASTER || player_ptr->pclass == CLASS_CAVALRY) {
-        if (o_ptr->tval == TV_WAND && o_ptr->sval == SV_WAND_HEAL_MONSTER && object_is_aware(o_ptr))
+        if (o_ptr->tval == TV_WAND && o_ptr->sval == SV_WAND_HEAL_MONSTER && o_ptr->is_aware())
             return false;
     }
 
@@ -71,7 +71,7 @@ static bool is_opt_confirm_destroy(player_type *player_ptr, object_type *o_ptr)
             return false;
 
     if (leave_equip)
-        if (object_is_weapon_armour_ammo(o_ptr))
+        if (o_ptr->is_weapon_armour_ammo())
             return false;
 
     if (leave_chest)

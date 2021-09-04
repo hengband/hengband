@@ -396,7 +396,7 @@ INVENTORY_IDX inven_takeoff(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUM
     q_ptr->copy_from(o_ptr);
     q_ptr->number = amt;
     describe_flavor(owner_ptr, o_name, q_ptr, 0);
-    if (((item == INVEN_MAIN_HAND) || (item == INVEN_SUB_HAND)) && object_is_melee_weapon(o_ptr)) {
+    if (((item == INVEN_MAIN_HAND) || (item == INVEN_SUB_HAND)) && o_ptr->is_melee_weapon()) {
         act = _("を装備からはずした", "You were wielding");
     } else if (item == INVEN_BOW) {
         act = _("を装備からはずした", "You were holding");

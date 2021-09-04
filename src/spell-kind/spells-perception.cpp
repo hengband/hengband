@@ -65,8 +65,8 @@ bool identify_item(player_type *owner_ptr, object_type *o_ptr)
     if (any_bits(o_ptr->ident, IDENT_KNOWN))
         old_known = true;
 
-    if (!object_is_fully_known(o_ptr)) {
-        if (object_is_artifact(o_ptr) || one_in_(5))
+    if (!o_ptr->is_fully_known()) {
+        if (o_ptr->is_artifact() || one_in_(5))
             chg_virtue(owner_ptr, V_KNOWLEDGE, 1);
     }
 
@@ -82,7 +82,7 @@ bool identify_item(player_type *owner_ptr, object_type *o_ptr)
 
     describe_flavor(owner_ptr, o_name, o_ptr, OD_NAME_ONLY);
 
-    if (record_fix_art && !old_known && object_is_fixed_artifact(o_ptr))
+    if (record_fix_art && !old_known && o_ptr->is_fixed_artifact())
         exe_write_diary(owner_ptr, DIARY_ART, 0, o_name);
     if (record_rand_art && !old_known && o_ptr->art_name)
         exe_write_diary(owner_ptr, DIARY_ART, 0, o_name);
@@ -109,7 +109,7 @@ bool ident_spell(player_type *caster_ptr, bool only_equip)
         q = _("どのアイテムを鑑定しますか? ", "Identify which item? ");
     } else {
         if (only_equip) {
-            item_tester = std::make_unique<FuncItemTester>(object_is_weapon_armour_ammo);
+            item_tester = std::make_unique<FuncItemTester>(&object_type::is_weapon_armour_ammo);
         } else {
             item_tester = std::make_unique<AllMatchItemTester>();
         }
@@ -159,7 +159,7 @@ bool identify_fully(player_type *caster_ptr, bool only_equip)
         q = _("どのアイテムを*鑑定*しますか? ", "*Identify* which item? ");
     } else {
         if (only_equip) {
-            item_tester = std::make_unique<FuncItemTester>(object_is_weapon_armour_ammo);
+            item_tester = std::make_unique<FuncItemTester>(&object_type::is_weapon_armour_ammo);
         } else {
             item_tester = std::make_unique<AllMatchItemTester>();
         }

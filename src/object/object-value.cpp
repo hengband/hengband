@@ -25,7 +25,7 @@
  */
 static PRICE object_value_base(const object_type *o_ptr)
 {
-    if (object_is_aware(o_ptr))
+    if (o_ptr->is_aware())
         return (k_info[o_ptr->k_idx].cost);
 
     switch (o_ptr->tval) {
@@ -89,17 +89,17 @@ PRICE object_value(const object_type *o_ptr)
 {
     PRICE value;
 
-    if (object_is_known(o_ptr)) {
-        if (object_is_broken(o_ptr))
+    if (o_ptr->is_known()) {
+        if (o_ptr->is_broken())
             return (0L);
-        if (object_is_cursed(o_ptr))
+        if (o_ptr->is_cursed())
             return (0L);
 
         value = object_value_real(o_ptr);
     } else {
-        if ((o_ptr->ident & (IDENT_SENSE)) && object_is_broken(o_ptr))
+        if ((o_ptr->ident & (IDENT_SENSE)) && o_ptr->is_broken())
             return (0L);
-        if ((o_ptr->ident & (IDENT_SENSE)) && object_is_cursed(o_ptr))
+        if ((o_ptr->ident & (IDENT_SENSE)) && o_ptr->is_cursed())
             return (0L);
 
         value = object_value_base(o_ptr);
@@ -147,7 +147,7 @@ PRICE object_value_real(const object_type *o_ptr)
 
     PRICE value = k_info[o_ptr->k_idx].cost;
     object_flags(o_ptr, flgs);
-    if (object_is_fixed_artifact(o_ptr)) {
+    if (o_ptr->is_fixed_artifact()) {
         artifact_type *a_ptr = &a_info[o_ptr->name1];
         if (!a_ptr->cost)
             return (0L);
@@ -155,7 +155,7 @@ PRICE object_value_real(const object_type *o_ptr)
         value = a_ptr->cost;
         value += flag_cost(o_ptr, o_ptr->pval);
         return (value);
-    } else if (object_is_ego(o_ptr)) {
+    } else if (o_ptr->is_ego()) {
         ego_item_type *e_ptr = &e_info[o_ptr->name2];
         if (!e_ptr->cost)
             return (0L);

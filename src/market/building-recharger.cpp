@@ -42,7 +42,7 @@ void building_recharge(player_type *player_ptr)
 
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(object_is_rechargeable));
+    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&object_type::is_rechargeable));
     if (!o_ptr)
         return;
 
@@ -55,7 +55,7 @@ void building_recharge(player_type *player_ptr)
      */
     /* The item must be "known" */
     char tmp_str[MAX_NLEN];
-    if (!object_is_known(o_ptr)) {
+    if (!o_ptr->is_known()) {
         msg_format(_("充填する前に鑑定されている必要があります！", "The item must be identified first!"));
         msg_print(NULL);
 
@@ -187,7 +187,7 @@ void building_recharge_all(player_type *player_ptr)
 
         if (o_ptr->tval < TV_STAFF || o_ptr->tval > TV_ROD)
             continue;
-        if (!object_is_known(o_ptr))
+        if (!o_ptr->is_known())
             total_cost += 50;
 
         DEPTH lev = k_info[o_ptr->k_idx].level;
@@ -243,7 +243,7 @@ void building_recharge_all(player_type *player_ptr)
         if (o_ptr->tval < TV_STAFF || o_ptr->tval > TV_ROD)
             continue;
 
-        if (!object_is_known(o_ptr)) {
+        if (!o_ptr->is_known()) {
             identify_item(player_ptr, o_ptr);
             autopick_alter_item(player_ptr, i, false);
         }

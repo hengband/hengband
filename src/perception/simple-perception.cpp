@@ -40,7 +40,7 @@ static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, b
     GAME_TEXT o_name[MAX_NLEN];
     if (o_ptr->ident & (IDENT_SENSE))
         return;
-    if (object_is_known(o_ptr))
+    if (o_ptr->is_known())
         return;
 
     item_feel_type feel = (heavy ? pseudo_value_check_heavy(o_ptr) : pseudo_value_check_light(o_ptr));
@@ -406,23 +406,23 @@ void sense_inventory2(player_type *creature_ptr)
  */
 item_feel_type pseudo_value_check_heavy(object_type *o_ptr)
 {
-    if (object_is_artifact(o_ptr)) {
-        if (object_is_cursed(o_ptr) || object_is_broken(o_ptr))
+    if (o_ptr->is_artifact()) {
+        if (o_ptr->is_cursed() || o_ptr->is_broken())
             return FEEL_TERRIBLE;
 
         return FEEL_SPECIAL;
     }
 
-    if (object_is_ego(o_ptr)) {
-        if (object_is_cursed(o_ptr) || object_is_broken(o_ptr))
+    if (o_ptr->is_ego()) {
+        if (o_ptr->is_cursed() || o_ptr->is_broken())
             return FEEL_WORTHLESS;
 
         return FEEL_EXCELLENT;
     }
 
-    if (object_is_cursed(o_ptr))
+    if (o_ptr->is_cursed())
         return FEEL_CURSED;
-    if (object_is_broken(o_ptr))
+    if (o_ptr->is_broken())
         return FEEL_BROKEN;
     if ((o_ptr->tval == TV_RING) || (o_ptr->tval == TV_AMULET))
         return FEEL_AVERAGE;
@@ -441,13 +441,13 @@ item_feel_type pseudo_value_check_heavy(object_type *o_ptr)
  */
 item_feel_type pseudo_value_check_light(object_type *o_ptr)
 {
-    if (object_is_cursed(o_ptr))
+    if (o_ptr->is_cursed())
         return FEEL_CURSED;
-    if (object_is_broken(o_ptr))
+    if (o_ptr->is_broken())
         return FEEL_BROKEN;
-    if (object_is_artifact(o_ptr))
+    if (o_ptr->is_artifact())
         return FEEL_UNCURSED;
-    if (object_is_ego(o_ptr))
+    if (o_ptr->is_ego())
         return FEEL_UNCURSED;
     if (o_ptr->to_a > 0)
         return FEEL_UNCURSED;

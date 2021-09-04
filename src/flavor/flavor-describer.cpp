@@ -107,7 +107,7 @@ static void decide_tval_show(flavor_type *flavor_ptr)
     if (has_flag(flavor_ptr->tr_flags, TR_SHOW_MODS))
         flavor_ptr->show_weapon = true;
 
-    if (object_is_smith(flavor_ptr->o_ptr) && (flavor_ptr->o_ptr->xtra3 == 1 + ESSENCE_SLAY_GLOVE))
+    if (flavor_ptr->o_ptr->is_smith() && (flavor_ptr->o_ptr->xtra3 == 1 + ESSENCE_SLAY_GLOVE))
         flavor_ptr->show_weapon = true;
 
     if (flavor_ptr->o_ptr->to_h && flavor_ptr->o_ptr->to_d)
@@ -248,7 +248,7 @@ static void describe_bow_power(player_type *player_ptr, flavor_type *flavor_ptr)
 {
     flavor_ptr->avgdam = flavor_ptr->o_ptr->dd * (flavor_ptr->o_ptr->ds + 1) * 10 / 2;
     int tmul = bow_tmul(flavor_ptr->bow_ptr->sval);
-    if (object_is_known(flavor_ptr->bow_ptr))
+    if (flavor_ptr->bow_ptr->is_known())
         flavor_ptr->avgdam += (flavor_ptr->bow_ptr->to_d * 10);
 
     if (flavor_ptr->known)
@@ -425,7 +425,7 @@ static void describe_pval(flavor_type *flavor_ptr)
 
 static void describe_lamp_life(flavor_type *flavor_ptr)
 {
-    if ((flavor_ptr->o_ptr->tval != TV_LITE) || (object_is_fixed_artifact(flavor_ptr->o_ptr) || (flavor_ptr->o_ptr->sval == SV_LITE_FEANOR)))
+    if ((flavor_ptr->o_ptr->tval != TV_LITE) || (flavor_ptr->o_ptr->is_fixed_artifact() || (flavor_ptr->o_ptr->sval == SV_LITE_FEANOR)))
         return;
 
     flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(", " (with "));
@@ -465,7 +465,7 @@ static void decide_item_feeling(flavor_type *flavor_ptr)
         return;
     }
 
-    if (object_is_cursed(flavor_ptr->o_ptr) && (flavor_ptr->known || (flavor_ptr->o_ptr->ident & IDENT_SENSE))) {
+    if (flavor_ptr->o_ptr->is_cursed() && (flavor_ptr->known || (flavor_ptr->o_ptr->ident & IDENT_SENSE))) {
         strcpy(flavor_ptr->fake_insc_buf, _("呪われている", "cursed"));
         return;
     }
@@ -482,7 +482,7 @@ static void decide_item_feeling(flavor_type *flavor_ptr)
         return;
     }
 
-    if (!flavor_ptr->aware && object_is_tried(flavor_ptr->o_ptr))
+    if (!flavor_ptr->aware && flavor_ptr->o_ptr->is_tried())
         strcpy(flavor_ptr->fake_insc_buf, _("未判明", "tried"));
 }
 

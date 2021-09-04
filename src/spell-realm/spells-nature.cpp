@@ -23,14 +23,14 @@ bool rustproof(player_type *caster_ptr)
     concptr q = _("どの防具に錆止めをしますか？", "Rustproof which piece of armour? ");
     concptr s = _("錆止めできるものがありません。", "You have nothing to rustproof.");
     OBJECT_IDX item;
-    object_type *o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, FuncItemTester(object_is_armour));
+    object_type *o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, FuncItemTester(&object_type::is_armour));
     if (o_ptr == NULL)
         return false;
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(caster_ptr, o_name, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
     add_flag(o_ptr->art_flags, TR_IGNORE_ACID);
-    if ((o_ptr->to_a < 0) && !object_is_cursed(o_ptr)) {
+    if ((o_ptr->to_a < 0) && !o_ptr->is_cursed()) {
 #ifdef JP
         msg_format("%sは新品同様になった！", o_name);
 #else

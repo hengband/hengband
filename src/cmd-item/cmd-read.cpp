@@ -16,6 +16,7 @@
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
 #include "status/action-setter.h"
+#include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 
 /*!
@@ -37,9 +38,9 @@ void do_cmd_read_scroll(player_type *creature_ptr)
     concptr s = _("読める巻物がない。", "You have no scrolls to read.");
     object_type *o_ptr;
     OBJECT_IDX item;
-    o_ptr = choose_object(creature_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(object_is_readable));
+    o_ptr = choose_object(creature_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&object_type::is_readable));
     if (!o_ptr)
         return;
 
-    exe_read(creature_ptr, item, object_is_aware(o_ptr));
+    exe_read(creature_ptr, item, o_ptr->is_aware());
 }

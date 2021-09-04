@@ -171,7 +171,7 @@ static void get_attack_exp(player_type *attacker_ptr, player_attack_type *pa_ptr
         return;
     }
 
-    if (!object_is_melee_weapon(o_ptr) || ((r_ptr->level + 10) <= attacker_ptr->lev))
+    if (!o_ptr->is_melee_weapon() || ((r_ptr->level + 10) <= attacker_ptr->lev))
         return;
 
     get_weapon_exp(attacker_ptr, pa_ptr);

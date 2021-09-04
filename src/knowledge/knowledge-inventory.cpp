@@ -66,10 +66,10 @@ static void print_flag(int tr, const TrFlags &flags, FILE *fff)
  */
 static bool determine_spcial_item_type(object_type *o_ptr, tval_type tval)
 {
-    bool is_special_item_type = (object_is_wearable(o_ptr) && object_is_ego(o_ptr)) || ((tval == TV_AMULET) && (o_ptr->sval == SV_AMULET_RESISTANCE))
+    bool is_special_item_type = (o_ptr->is_wearable() && o_ptr->is_ego()) || ((tval == TV_AMULET) && (o_ptr->sval == SV_AMULET_RESISTANCE))
         || ((tval == TV_RING) && (o_ptr->sval == SV_RING_LORDLY)) || ((tval == TV_SHIELD) && (o_ptr->sval == SV_DRAGON_SHIELD))
         || ((tval == TV_HELM) && (o_ptr->sval == SV_DRAGON_HELM)) || ((tval == TV_GLOVES) && (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES))
-        || ((tval == TV_BOOTS) && (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE)) || object_is_artifact(o_ptr);
+        || ((tval == TV_BOOTS) && (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE)) || o_ptr->is_artifact();
 
     return is_special_item_type;
 }
@@ -86,7 +86,7 @@ static bool check_item_knowledge(object_type *o_ptr, tval_type tval)
         return false;
     if (o_ptr->tval != tval)
         return false;
-    if (!object_is_known(o_ptr))
+    if (!o_ptr->is_known())
         return false;
     if (!determine_spcial_item_type(o_ptr, tval))
         return false;
@@ -166,7 +166,7 @@ static void do_cmd_knowledge_inventory_aux(player_type *creature_ptr, FILE *fff,
 
     fprintf(fff, "%s %s", where, o_name);
 
-    if (!object_is_fully_known(o_ptr)) {
+    if (!o_ptr->is_fully_known()) {
         fputs(_("-------不明--------------- -------不明---------\n", "-------unknown------------ -------unknown------\n"), fff);
         return;
     }

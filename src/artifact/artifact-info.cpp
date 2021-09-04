@@ -25,7 +25,7 @@
  */
 int activation_index(const object_type *o_ptr)
 {
-    if (object_is_smith(o_ptr)) {
+    if (o_ptr->is_smith()) {
         switch (o_ptr->xtra3 - 1) {
         case ESSENCE_TMP_RES_ACID:
             return ACT_RESIST_ACID;
@@ -40,13 +40,13 @@ int activation_index(const object_type *o_ptr)
         }
     }
 
-    if (object_is_fixed_artifact(o_ptr) && has_flag(a_info[o_ptr->name1].flags, TR_ACTIVATE))
+    if (o_ptr->is_fixed_artifact() && has_flag(a_info[o_ptr->name1].flags, TR_ACTIVATE))
         return a_info[o_ptr->name1].act_idx;
 
-    if (object_is_ego(o_ptr) && has_flag(e_info[o_ptr->name2].flags, TR_ACTIVATE))
+    if (o_ptr->is_ego() && has_flag(e_info[o_ptr->name2].flags, TR_ACTIVATE))
         return e_info[o_ptr->name2].act_idx;
 
-    if (!object_is_random_artifact(o_ptr) && has_flag(k_info[o_ptr->k_idx].flags, TR_ACTIVATE))
+    if (!o_ptr->is_random_artifact() && has_flag(k_info[o_ptr->k_idx].flags, TR_ACTIVATE))
         return k_info[o_ptr->k_idx].act_idx;
 
     return o_ptr->xtra2;

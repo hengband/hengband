@@ -61,7 +61,7 @@ bool psychometry(player_type *caster_ptr)
     if (!o_ptr)
         return false;
 
-    if (object_is_known(o_ptr)) {
+    if (o_ptr->is_known()) {
         msg_print(_("何も新しいことは判らなかった。", "You cannot find out anything more about that."));
         return true;
     }

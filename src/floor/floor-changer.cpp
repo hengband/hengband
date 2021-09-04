@@ -178,10 +178,10 @@ static void update_unique_artifact(floor_type *floor_ptr, int16_t cur_floor_id)
 
     for (int i = 1; i < floor_ptr->o_max; i++) {
         object_type *o_ptr = &floor_ptr->o_list[i];
-        if (!object_is_valid(o_ptr))
+        if (!o_ptr->is_valid())
             continue;
 
-        if (object_is_fixed_artifact(o_ptr))
+        if (o_ptr->is_fixed_artifact())
             a_info[o_ptr->name1].floor_id = cur_floor_id;
     }
 }
@@ -267,7 +267,7 @@ static void new_floor_allocation(player_type *creature_ptr, saved_floor_type *sf
     reset_unique_by_floor_change(creature_ptr);
     for (MONSTER_IDX i = 1; i < creature_ptr->current_floor_ptr->o_max; i++) {
         object_type *o_ptr = &creature_ptr->current_floor_ptr->o_list[i];
-        if (!object_is_valid(o_ptr) || !object_is_fixed_artifact(o_ptr))
+        if (!o_ptr->is_valid() || !o_ptr->is_fixed_artifact())
             continue;
 
         if (a_info[o_ptr->name1].floor_id == new_floor_id)

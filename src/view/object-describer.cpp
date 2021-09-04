@@ -22,7 +22,7 @@ void inven_item_charges(player_type *owner_ptr, INVENTORY_IDX item)
     object_type *o_ptr = &owner_ptr->inventory_list[item];
     if ((o_ptr->tval != TV_STAFF) && (o_ptr->tval != TV_WAND))
         return;
-    if (!object_is_known(o_ptr))
+    if (!o_ptr->is_known())
         return;
 
 #ifdef JP

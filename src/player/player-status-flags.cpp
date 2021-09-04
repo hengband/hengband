@@ -1241,7 +1241,7 @@ void update_curses(player_type *creature_ptr)
             creature_ptr->cursed_special.set(TRCS::CHAINSWORD);
 
         if (has_flag(flgs, TR_TELEPORT)) {
-            if (object_is_cursed(o_ptr))
+            if (o_ptr->is_cursed())
                 creature_ptr->cursed.set(TRC::TELEPORT);
             else {
                 concptr insc = quark_str(o_ptr->inscription);
@@ -1969,10 +1969,10 @@ bool has_two_handed_weapons(player_type *creature_ptr)
 {
     if (can_two_hands_wielding(creature_ptr)) {
         if (can_attack_with_main_hand(creature_ptr) && (empty_hands(creature_ptr, false) == EMPTY_HAND_SUB)
-            && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_MAIN_HAND])) {
+            && creature_ptr->inventory_list[INVEN_MAIN_HAND].allow_two_hands_wielding()) {
             return true;
         } else if (can_attack_with_sub_hand(creature_ptr) && (empty_hands(creature_ptr, false) == EMPTY_HAND_MAIN)
-            && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_SUB_HAND])) {
+            && creature_ptr->inventory_list[INVEN_SUB_HAND].allow_two_hands_wielding()) {
             return true;
         }
     }

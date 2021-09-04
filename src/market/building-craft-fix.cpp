@@ -101,11 +101,11 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_EQUIP), FuncItemTester(object_is_broken_weapon));
+    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_EQUIP), FuncItemTester(&object_type::is_broken_weapon));
     if (!o_ptr)
         return 0;
 
-    if (!object_is_ego(o_ptr) && !object_is_artifact(o_ptr)) {
+    if (!o_ptr->is_ego() && !o_ptr->is_artifact()) {
         msg_format(_("それは直してもしょうがないぜ。", "It is worthless to repair."));
         return 0;
     }
@@ -124,7 +124,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 
     OBJECT_IDX mater;
     object_type *mo_ptr;
-    mo_ptr = choose_object(player_ptr, &mater, q, s, (USE_INVEN | USE_EQUIP), FuncItemTester(object_is_orthodox_melee_weapons));
+    mo_ptr = choose_object(player_ptr, &mater, q, s, (USE_INVEN | USE_EQUIP), FuncItemTester(&object_type::is_orthodox_melee_weapons));
     if (!mo_ptr)
         return 0;
     if (mater == item) {
@@ -236,8 +236,8 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
     o_ptr->to_h += MAX(0, (mo_ptr->to_h / 3));
     o_ptr->to_a += MAX(0, (mo_ptr->to_a));
 
-    if ((o_ptr->name1 == ART_NARSIL) || (object_is_random_artifact(o_ptr) && one_in_(1)) || (object_is_ego(o_ptr) && one_in_(7))) {
-        if (object_is_ego(o_ptr)) {
+    if ((o_ptr->name1 == ART_NARSIL) || (o_ptr->is_random_artifact() && one_in_(1)) || (o_ptr->is_ego() && one_in_(7))) {
+        if (o_ptr->is_ego()) {
             add_flag(o_ptr->art_flags, TR_IGNORE_FIRE);
             add_flag(o_ptr->art_flags, TR_IGNORE_ACID);
         }

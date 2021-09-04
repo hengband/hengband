@@ -12,25 +12,6 @@
 #include "util/enum-converter.h"
 
 /*!
- * @brief オブジェクトをプレイヤーが魔道具として発動できるかを判定する /
- * Hook to determine if an object is activatable
- * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
- * @return 魔道具として発動可能ならばTRUEを返す
- */
-bool object_is_activatable(const object_type *o_ptr)
-{
-    TrFlags flags;
-    if (!object_is_known(o_ptr))
-        return false;
-
-    object_flags(o_ptr, flags);
-    if (has_flag(flags, TR_ACTIVATE))
-        return true;
-
-    return false;
-}
-
-/*!
  * @brief オブジェクトをプレイヤーが簡易使用コマンドで利用できるかを判定する /
  * Hook to determine if an object is useable
  * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
@@ -56,7 +37,7 @@ bool item_tester_hook_use(player_type *player_ptr, const object_type *o_ptr)
     default: {
         int i;
 
-        if (!object_is_known(o_ptr))
+        if (!o_ptr->is_known())
             return false;
         for (i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
             if (&player_ptr->inventory_list[i] == o_ptr) {
@@ -69,17 +50,6 @@ bool item_tester_hook_use(player_type *player_ptr, const object_type *o_ptr)
     }
 
     return false;
-}
-
-/*!
- * @brief 魔力充填が可能なアイテムかどうか判定する /
- * Hook for "get_item()".  Determine if something is rechargable.
- * @param o_ptr 判定するアイテムの情報参照ポインタ
- * @return 魔力充填が可能ならばTRUEを返す
- */
-bool object_is_rechargeable(const object_type *o_ptr)
-{
-    return (o_ptr->tval == TV_STAFF) || (o_ptr->tval == TV_WAND) || (o_ptr->tval == TV_ROD);
 }
 
 /*!

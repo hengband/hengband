@@ -69,11 +69,11 @@ void compact_objects(player_type *player_ptr, int size)
         for (OBJECT_IDX i = 1; i < floor_ptr->o_max; i++) {
             o_ptr = &floor_ptr->o_list[i];
 
-            if (!object_is_valid(o_ptr) || (k_info[o_ptr->k_idx].level > cur_lev))
+            if (!o_ptr->is_valid() || (k_info[o_ptr->k_idx].level > cur_lev))
                 continue;
 
             POSITION y, x;
-            if (object_is_held_monster(o_ptr)) {
+            if (o_ptr->is_held_by_monster()) {
                 monster_type *m_ptr;
                 m_ptr = &floor_ptr->m_list[o_ptr->held_m_idx];
                 y = m_ptr->fy;
@@ -90,7 +90,7 @@ void compact_objects(player_type *player_ptr, int size)
                 continue;
 
             int chance = 90;
-            if ((object_is_fixed_artifact(o_ptr) || o_ptr->art_name) && (cnt < 1000))
+            if ((o_ptr->is_fixed_artifact() || o_ptr->art_name) && (cnt < 1000))
                 chance = 100;
 
             if (randint0(100) < chance)

@@ -37,7 +37,7 @@ bool eat_magic(player_type *caster_ptr, int power)
 
     object_type *o_ptr;
     OBJECT_IDX item;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(object_is_rechargeable));
+    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&object_type::is_rechargeable));
     if (!o_ptr)
         return false;
 
@@ -97,7 +97,7 @@ bool eat_magic(player_type *caster_ptr, int power)
         return redraw_player(caster_ptr);
     }
 
-    if (object_is_fixed_artifact(o_ptr)) {
+    if (o_ptr->is_fixed_artifact()) {
         describe_flavor(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
         msg_format(_("魔力が逆流した！%sは完全に魔力を失った。", "The recharging backfires - %s is completely drained!"), o_name);
         if (o_ptr->tval == TV_ROD)

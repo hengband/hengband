@@ -27,14 +27,14 @@ void object_flags(const object_type *o_ptr, TrFlags &flgs)
         flgs[i] = k_ptr->flags[i];
     }
 
-    if (object_is_fixed_artifact(o_ptr)) {
+    if (o_ptr->is_fixed_artifact()) {
         artifact_type *a_ptr = &a_info[o_ptr->name1];
         for (int i = 0; i < TR_FLAG_SIZE; i++) {
             flgs[i] = a_ptr->flags[i];
         }
     }
 
-    if (object_is_ego(o_ptr)) {
+    if (o_ptr->is_ego()) {
         ego_item_type *e_ptr = &e_info[o_ptr->name2];
         for (int i = 0; i < TR_FLAG_SIZE; i++) {
             flgs[i] |= e_ptr->flags[i];
@@ -55,7 +55,7 @@ void object_flags(const object_type *o_ptr, TrFlags &flgs)
         flgs[i] |= o_ptr->art_flags[i];
     }
 
-    if (object_is_smith(o_ptr)) {
+    if (o_ptr->is_smith()) {
         int add = o_ptr->xtra3 - 1;
         if (add < TR_FLAG_MAX) {
             add_flag(flgs, add);
@@ -105,7 +105,7 @@ void object_flags_known(const object_type *o_ptr, TrFlags &flgs)
         flgs[i] = 0;
     }
 
-    if (!object_is_aware(o_ptr))
+    if (!o_ptr->is_aware())
         return;
 
     /* Base object */
@@ -113,10 +113,10 @@ void object_flags_known(const object_type *o_ptr, TrFlags &flgs)
         flgs[i] = k_ptr->flags[i];
     }
 
-    if (!object_is_known(o_ptr))
+    if (!o_ptr->is_known())
         return;
 
-    if (object_is_ego(o_ptr)) {
+    if (o_ptr->is_ego()) {
         ego_item_type *e_ptr = &e_info[o_ptr->name2];
         for (int i = 0; i < TR_FLAG_SIZE; i++) {
             flgs[i] |= e_ptr->flags[i];
@@ -132,8 +132,8 @@ void object_flags_known(const object_type *o_ptr, TrFlags &flgs)
         }
     }
 
-    if (spoil || object_is_fully_known(o_ptr)) {
-        if (object_is_fixed_artifact(o_ptr)) {
+    if (spoil || o_ptr->is_fully_known()) {
+        if (o_ptr->is_fixed_artifact()) {
             artifact_type *a_ptr = &a_info[o_ptr->name1];
 
             for (int i = 0; i < TR_FLAG_SIZE; i++) {
@@ -147,7 +147,7 @@ void object_flags_known(const object_type *o_ptr, TrFlags &flgs)
         }
     }
 
-    if (!object_is_smith(o_ptr))
+    if (!o_ptr->is_smith())
         return;
 
     int add = o_ptr->xtra3 - 1;

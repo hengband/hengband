@@ -45,14 +45,14 @@ bool artifact_scroll(player_type *caster_ptr)
 #endif
 
     bool okay = false;
-    if (object_is_artifact(o_ptr)) {
+    if (o_ptr->is_artifact()) {
 #ifdef JP
         msg_format("%sは既に伝説のアイテムです！", o_name);
 #else
         msg_format("The %s %s already %s!", o_name, ((o_ptr->number > 1) ? "are" : "is"), ((o_ptr->number > 1) ? "artifacts" : "an artifact"));
 #endif
         okay = false;
-    } else if (object_is_ego(o_ptr)) {
+    } else if (o_ptr->is_ego()) {
 #ifdef JP
         msg_format("%sは既に名のあるアイテムです！", o_name);
 #else
@@ -123,7 +123,7 @@ bool mundane_spell(player_type *owner_ptr, bool only_equip)
 {
     std::unique_ptr<ItemTester> item_tester = std::make_unique<AllMatchItemTester>();
     if (only_equip)
-        item_tester = std::make_unique<FuncItemTester>(object_is_weapon_armour_ammo);
+        item_tester = std::make_unique<FuncItemTester>(&object_type::is_weapon_armour_ammo);
 
     OBJECT_IDX item;
     object_type *o_ptr;

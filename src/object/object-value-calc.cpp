@@ -34,12 +34,12 @@ PRICE flag_cost(const object_type *o_ptr, int plusses)
     for (int i = 0; i < TR_FLAG_SIZE; i++)
         flgs[i] &= ~(k_ptr->flags[i]);
 
-    if (object_is_fixed_artifact(o_ptr)) {
+    if (o_ptr->is_fixed_artifact()) {
         artifact_type *a_ptr = &a_info[o_ptr->name1];
 
         for (int i = 0; i < TR_FLAG_SIZE; i++)
             flgs[i] &= ~(a_ptr->flags[i]);
-    } else if (object_is_ego(o_ptr)) {
+    } else if (o_ptr->is_ego()) {
         ego_item_type *e_ptr = &e_info[o_ptr->name2];
 
         for (int i = 0; i < TR_FLAG_SIZE; i++)
@@ -427,7 +427,7 @@ PRICE flag_cost(const object_type *o_ptr, int plusses)
     if (has_flag(flgs, TR_SLOW_REGEN))
         total -= 10000;
     if (has_flag(flgs, TR_TELEPORT)) {
-        if (object_is_cursed(o_ptr))
+        if (o_ptr->is_cursed())
             total -= 7500;
         else
             total += 250;

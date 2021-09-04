@@ -271,7 +271,7 @@ static int mass_book_produce(const PRICE cost)
 static int mass_equipment_produce(object_type *o_ptr, const PRICE cost)
 {
     int size = 1;
-    if (object_is_artifact(o_ptr) || object_is_ego(o_ptr))
+    if (o_ptr->is_artifact() || o_ptr->is_ego())
         return size;
 
     if (cost <= 10L)

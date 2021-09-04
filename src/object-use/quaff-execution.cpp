@@ -572,7 +572,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
     }
     creature_ptr->update |= (PU_COMBINE | PU_REORDER);
 
-    if (!(object_is_aware(q_ptr))) {
+    if (!(q_ptr->is_aware())) {
         chg_virtue(creature_ptr, V_PATIENCE, -1);
         chg_virtue(creature_ptr, V_CHANCE, 1);
         chg_virtue(creature_ptr, V_KNOWLEDGE, -1);
@@ -582,7 +582,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
     object_tried(q_ptr);
 
     /* An identification was made */
-    if (ident && !object_is_aware(q_ptr)) {
+    if (ident && !q_ptr->is_aware()) {
         object_aware(creature_ptr, q_ptr);
         gain_exp(creature_ptr, (lev + (creature_ptr->lev >> 1)) / creature_ptr->lev);
     }

@@ -31,7 +31,7 @@ bool bless_weapon(player_type *caster_ptr)
     concptr s = _("祝福できる武器がありません。", "You have weapon to bless.");
 
     OBJECT_IDX item;
-    object_type *o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, FuncItemTester(object_is_weapon));
+    object_type *o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, FuncItemTester(&object_type::is_weapon));
     if (!o_ptr)
         return false;
 
@@ -40,7 +40,7 @@ bool bless_weapon(player_type *caster_ptr)
     TrFlags flgs;
     object_flags(o_ptr, flgs);
 
-    if (object_is_cursed(o_ptr)) {
+    if (o_ptr->is_cursed()) {
         if ((o_ptr->curse_flags.has(TRC::HEAVY_CURSE) && (randint1(100) < 33)) || has_flag(flgs, TR_ADD_L_CURSE) || has_flag(flgs, TR_ADD_H_CURSE)
             || o_ptr->curse_flags.has(TRC::PERMA_CURSE)) {
 #ifdef JP
@@ -81,7 +81,7 @@ bool bless_weapon(player_type *caster_ptr)
         return true;
     }
 
-    if (!(object_is_artifact(o_ptr) || object_is_ego(o_ptr)) || one_in_(3)) {
+    if (!(o_ptr->is_artifact() || o_ptr->is_ego()) || one_in_(3)) {
 #ifdef JP
         msg_format("%sは輝いた！", o_name);
 #else

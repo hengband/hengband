@@ -189,13 +189,13 @@ char *get_ability_abbreviation(char *short_flavor, object_type *o_ptr, bool kanj
         for (int j = 0; j < TR_FLAG_SIZE; j++)
             flgs[j] &= ~k_ptr->flags[j];
 
-        if (object_is_fixed_artifact(o_ptr)) {
+        if (o_ptr->is_fixed_artifact()) {
             artifact_type *a_ptr = &a_info[o_ptr->name1];
             for (int j = 0; j < TR_FLAG_SIZE; j++)
                 flgs[j] &= ~a_ptr->flags[j];
         }
 
-        if (object_is_ego(o_ptr)) {
+        if (o_ptr->is_ego()) {
             ego_item_type *e_ptr = &e_info[o_ptr->name2];
             for (int j = 0; j < TR_FLAG_SIZE; j++)
                 flgs[j] &= ~e_ptr->flags[j];
@@ -320,7 +320,7 @@ void get_inscription(char *buff, object_type *o_ptr)
 {
     concptr insc = quark_str(o_ptr->inscription);
     char *ptr = buff;
-    if (!object_is_fully_known(o_ptr)) {
+    if (!o_ptr->is_fully_known()) {
         while (*insc) {
             if (*insc == '#')
                 break;

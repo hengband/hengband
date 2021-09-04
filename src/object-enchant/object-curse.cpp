@@ -45,9 +45,9 @@ TRC get_curse(int power, object_type *o_ptr)
                 continue;
         }
 
-        if (new_curse == TRC::LOW_MELEE && !object_is_weapon(o_ptr))
+        if (new_curse == TRC::LOW_MELEE && !o_ptr->is_weapon())
             continue;
-        if (new_curse == TRC::LOW_AC && !object_is_armour(o_ptr))
+        if (new_curse == TRC::LOW_AC && !o_ptr->is_armour())
             continue;
         break;
     }
@@ -87,14 +87,14 @@ void curse_equipment(player_type *owner_ptr, PERCENTAGE chance, PERCENTAGE heavy
 
     bool changed = false;
     int curse_power = 0;
-    if ((randint1(100) <= heavy_chance) && (object_is_artifact(o_ptr) || object_is_ego(o_ptr))) {
+    if ((randint1(100) <= heavy_chance) && (o_ptr->is_artifact() || o_ptr->is_ego())) {
         if (o_ptr->curse_flags.has_not(TRC::HEAVY_CURSE))
             changed = true;
         o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
         o_ptr->curse_flags.set(TRC::CURSED);
         curse_power++;
     } else {
-        if (!object_is_cursed(o_ptr))
+        if (!o_ptr->is_cursed())
             changed = true;
         o_ptr->curse_flags.set(TRC::CURSED);
     }

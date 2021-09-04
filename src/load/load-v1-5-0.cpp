@@ -137,13 +137,13 @@ void rd_item_old(object_type *o_ptr)
                 o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
             if (o_ptr->art_flags[2] & 0x80000000L)
                 o_ptr->curse_flags.set(TRC::PERMA_CURSE);
-            if (object_is_fixed_artifact(o_ptr)) {
+            if (o_ptr->is_fixed_artifact()) {
                 artifact_type *a_ptr = &a_info[o_ptr->name1];
                 if (a_ptr->gen_flags.has(TRG::HEAVY_CURSE))
                     o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
                 if (a_ptr->gen_flags.has(TRG::PERMA_CURSE))
                     o_ptr->curse_flags.set(TRC::PERMA_CURSE);
-            } else if (object_is_ego(o_ptr)) {
+            } else if (o_ptr->is_ego()) {
                 ego_item_type *e_ptr = &e_info[o_ptr->name2];
                 if (e_ptr->gen_flags.has(TRG::HEAVY_CURSE))
                     o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
@@ -280,7 +280,7 @@ void rd_item_old(object_type *o_ptr)
     } else {
         rd_byte(&o_ptr->xtra3);
         if (h_older_than(1, 3, 0, 1)) {
-            if (object_is_smith(o_ptr) && o_ptr->xtra3 >= 1 + 96)
+            if (o_ptr->is_smith() && o_ptr->xtra3 >= 1 + 96)
                 o_ptr->xtra3 += -96 + MIN_SPECIAL_ESSENCE;
         }
 
@@ -326,14 +326,14 @@ void rd_item_old(object_type *o_ptr)
         }
     }
 
-    if (object_is_fixed_artifact(o_ptr)) {
+    if (o_ptr->is_fixed_artifact()) {
         artifact_type *a_ptr;
         a_ptr = &a_info[o_ptr->name1];
         if (a_ptr->name.empty())
             o_ptr->name1 = 0;
     }
 
-    if (object_is_ego(o_ptr)) {
+    if (o_ptr->is_ego()) {
         ego_item_type *e_ptr;
         e_ptr = &e_info[o_ptr->name2];
         if (e_ptr->name.empty())

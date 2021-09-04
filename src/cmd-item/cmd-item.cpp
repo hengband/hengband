@@ -118,7 +118,7 @@ void do_cmd_drop(player_type *creature_ptr)
     if (!o_ptr)
         return;
 
-    if ((item >= INVEN_MAIN_HAND) && object_is_cursed(o_ptr)) {
+    if ((item >= INVEN_MAIN_HAND) && o_ptr->is_cursed()) {
         msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
         return;
     }
@@ -153,7 +153,7 @@ void do_cmd_observe(player_type *creature_ptr)
     if (!o_ptr)
         return;
 
-    if (!object_is_fully_known(o_ptr)) {
+    if (!o_ptr->is_fully_known()) {
         msg_print(_("このアイテムについて特に知っていることはない。", "You have no special knowledge about that item."));
         return;
     }
@@ -294,7 +294,7 @@ void do_cmd_activate(player_type *user_ptr)
 
     concptr q = _("どのアイテムを始動させますか? ", "Activate which item? ");
     concptr s = _("始動できるアイテムを装備していない。", "You have nothing to activate.");
-    if (!choose_object(user_ptr, &item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), FuncItemTester(object_is_activatable)))
+    if (!choose_object(user_ptr, &item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), FuncItemTester(&object_type::is_activatable)))
         return;
 
     exe_activate(user_ptr, item);

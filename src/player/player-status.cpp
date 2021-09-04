@@ -1608,7 +1608,9 @@ static ARMOUR_CLASS calc_base_ac(player_type *creature_ptr)
         ac += o_ptr->ac;
     }
 
-    if (object_is_armour(&creature_ptr->inventory_list[INVEN_MAIN_HAND]) || object_is_armour(&creature_ptr->inventory_list[INVEN_SUB_HAND])) {
+    const auto o_ptr_mh = &creature_ptr->inventory_list[INVEN_MAIN_HAND];
+    const auto o_ptr_sh = &creature_ptr->inventory_list[INVEN_SUB_HAND];
+    if (o_ptr_mh->is_armour() || o_ptr_sh->is_armour()) {
         ac += creature_ptr->skill_exp[SKILL_SHIELD] * (1 + creature_ptr->lev / 22) / 2000;
     }
 
@@ -1650,15 +1652,15 @@ static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_real_value)
         object_flags(o_ptr, flags);
         if (!o_ptr->k_idx)
             continue;
-        if (is_real_value || object_is_known(o_ptr))
+        if (is_real_value || o_ptr->is_known())
             ac += o_ptr->to_a;
 
         if (o_ptr->curse_flags.has(TRC::LOW_AC)) {
             if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {
-                if (is_real_value || object_is_fully_known(o_ptr))
+                if (is_real_value || o_ptr->is_fully_known())
                     ac -= 30;
             } else {
-                if (is_real_value || object_is_fully_known(o_ptr))
+                if (is_real_value || o_ptr->is_fully_known())
                     ac -= 10;
             }
         }
@@ -1727,9 +1729,9 @@ static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_real_value)
             object_type *o_ptr = &creature_ptr->inventory_list[i];
             if (!o_ptr->k_idx)
                 continue;
-            if (!object_is_armour(o_ptr))
+            if (!o_ptr->is_armour())
                 continue;
-            if (!object_is_cursed(o_ptr))
+            if (!o_ptr->is_cursed())
                 continue;
             if (o_ptr->curse_flags.has(TRC::CURSED))
                 ac += 5;
@@ -2005,7 +2007,7 @@ static int16_t calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, boo
         }
     }
 
-    if ((creature_ptr->realm1 == REALM_HEX) && object_is_cursed(o_ptr)) {
+    if ((creature_ptr->realm1 == REALM_HEX) && o_ptr->is_cursed()) {
         if (hex_spelling(creature_ptr, HEX_RUNESWORD)) {
             if (o_ptr->curse_flags.has(TRC::CURSED)) {
                 damage += 5;
@@ -2026,7 +2028,7 @@ static int16_t calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, boo
             || (i == INVEN_SUB_HAND && has_melee_weapon(creature_ptr, i)) || i == INVEN_BOW)
             continue;
 
-        if (!object_is_known(o_ptr) && !is_real_value)
+        if (!o_ptr->is_known() && !is_real_value)
             continue;
         bonus_to_d = o_ptr->to_d;
 
@@ -2185,7 +2187,7 @@ static int16_t calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool i
         }
 
         /* Low melee penalty */
-        if ((object_is_fully_known(o_ptr) || is_real_value) && o_ptr->curse_flags.has(TRC::LOW_MELEE)) {
+        if ((o_ptr->is_fully_known() || is_real_value) && o_ptr->curse_flags.has(TRC::LOW_MELEE)) {
             if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {
                 hit -= 15;
             } else {
@@ -2234,7 +2236,7 @@ static int16_t calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool i
         }
 
         /* Hex realm bonuses */
-        if ((creature_ptr->realm1 == REALM_HEX) && object_is_cursed(o_ptr)) {
+        if ((creature_ptr->realm1 == REALM_HEX) && o_ptr->is_cursed()) {
             if (o_ptr->curse_flags.has(TRC::CURSED)) {
                 hit += 5;
             }
@@ -2260,7 +2262,7 @@ static int16_t calc_to_hit(player_type *creature_ptr, INVENTORY_IDX slot, bool i
             continue;
 
         /* Fake value does not include unknown objects' value */
-        if (!object_is_known(o_ptr) && !is_real_value)
+        if (!o_ptr->is_known() && !is_real_value)
             continue;
 
         int bonus_to_h = o_ptr->to_h;
@@ -2404,7 +2406,7 @@ static int16_t calc_to_hit_bow(player_type *creature_ptr, bool is_real_value)
                 bonus_to_h = (o_ptr->to_h + 1) / 2;
         }
 
-        if (is_real_value || object_is_known(o_ptr))
+        if (is_real_value || o_ptr->is_known())
             pow += (int16_t)bonus_to_h;
     }
 

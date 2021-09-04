@@ -500,9 +500,9 @@ void do_cmd_pet(player_type *creature_ptr)
 
     if (creature_ptr->riding) {
         if ((can_attack_with_main_hand(creature_ptr) && (empty_hands(creature_ptr, false) == EMPTY_HAND_SUB)
-                && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_MAIN_HAND]))
+                && creature_ptr->inventory_list[INVEN_MAIN_HAND].allow_two_hands_wielding())
             || (can_attack_with_sub_hand(creature_ptr) && (empty_hands(creature_ptr, false) == EMPTY_HAND_MAIN)
-                && object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_SUB_HAND]))) {
+                && creature_ptr->inventory_list[INVEN_SUB_HAND].allow_two_hands_wielding())) {
             if (creature_ptr->pet_extra_flags & PF_TWO_HANDS) {
                 power_desc[num] = _("武器を片手で持つ", "use one hand to control the pet you are riding");
             } else {

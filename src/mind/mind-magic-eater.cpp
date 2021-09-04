@@ -22,7 +22,7 @@ bool import_magic_device(player_type *user_ptr)
     concptr q = _("どのアイテムの魔力を取り込みますか? ", "Gain power of which item? ");
     concptr s = _("魔力を取り込めるアイテムがない。", "There's nothing with power to absorb.");
     OBJECT_IDX item;
-    object_type *o_ptr = choose_object(user_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(object_is_rechargeable));
+    object_type *o_ptr = choose_object(user_ptr, &item, q, s, USE_INVEN | USE_FLOOR, FuncItemTester(&object_type::is_rechargeable));
     if (!o_ptr)
         return false;
 
@@ -31,7 +31,7 @@ bool import_magic_device(player_type *user_ptr)
         return false;
     }
 
-    if (!object_is_known(o_ptr)) {
+    if (!o_ptr->is_known()) {
         msg_print(_("鑑定されていないと取り込めない。", "You need to identify before absorbing."));
         return false;
     }

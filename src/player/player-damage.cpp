@@ -105,7 +105,7 @@ static bool acid_minus_ac(player_type *creature_ptr)
         break;
     }
 
-    if ((o_ptr == NULL) || (o_ptr->k_idx == 0) || !object_is_armour(o_ptr))
+    if ((o_ptr == NULL) || (o_ptr->k_idx == 0) || !o_ptr->is_armour())
         return false;
 
     GAME_TEXT o_name[MAX_NLEN];

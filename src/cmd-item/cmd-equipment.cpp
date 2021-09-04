@@ -108,6 +108,9 @@ void do_cmd_wield(player_type *creature_ptr)
 
     slot = wield_slot(creature_ptr, o_ptr);
 
+    const auto o_ptr_mh = &creature_ptr->inventory_list[INVEN_MAIN_HAND];
+    const auto o_ptr_sh = &creature_ptr->inventory_list[INVEN_SUB_HAND];
+
     switch (o_ptr->tval) {
     case TV_CAPTURE:
     case TV_SHIELD:
@@ -115,18 +118,17 @@ void do_cmd_wield(player_type *creature_ptr)
         if (has_melee_weapon(creature_ptr, INVEN_MAIN_HAND) && has_melee_weapon(creature_ptr, INVEN_SUB_HAND)) {
             q = _("どちらの武器と取り替えますか?", "Replace which weapon? ");
             s = _("おっと。", "Oops.");
-            if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), FuncItemTester(object_is_melee_weapon)))
+            if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), FuncItemTester(&object_type::is_melee_weapon)))
                 return;
 
             if (slot == INVEN_MAIN_HAND)
                 need_switch_wielding = INVEN_SUB_HAND;
         } else if (has_melee_weapon(creature_ptr, INVEN_SUB_HAND))
             slot = INVEN_MAIN_HAND;
-        else if (creature_ptr->inventory_list[INVEN_MAIN_HAND].k_idx && !object_is_melee_weapon(&creature_ptr->inventory_list[INVEN_MAIN_HAND])
-            && creature_ptr->inventory_list[INVEN_SUB_HAND].k_idx && !object_is_melee_weapon(&creature_ptr->inventory_list[INVEN_SUB_HAND])) {
+        else if (o_ptr_mh->k_idx && !o_ptr_mh->is_melee_weapon() && o_ptr_sh->k_idx && !o_ptr_sh->is_melee_weapon()) {
             q = _("どちらの手に装備しますか?", "Equip which hand? ");
             s = _("おっと。", "Oops.");
-            if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP), FuncItemTester(object_is_mochikae)))
+            if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP), FuncItemTester(&object_type::is_wieldable_in_etheir_hand)))
                 return;
         }
 
@@ -138,13 +140,13 @@ void do_cmd_wield(player_type *creature_ptr)
         if (slot == INVEN_SUB_HAND) {
             if (!get_check(_("二刀流で戦いますか？", "Dual wielding? ")))
                 slot = INVEN_MAIN_HAND;
-        } else if (!creature_ptr->inventory_list[INVEN_MAIN_HAND].k_idx && has_melee_weapon(creature_ptr, INVEN_SUB_HAND)) {
+        } else if (!o_ptr_mh->k_idx && has_melee_weapon(creature_ptr, INVEN_SUB_HAND)) {
             if (!get_check(_("二刀流で戦いますか？", "Dual wielding? ")))
                 slot = INVEN_SUB_HAND;
-        } else if (creature_ptr->inventory_list[INVEN_SUB_HAND].k_idx && creature_ptr->inventory_list[INVEN_MAIN_HAND].k_idx) {
+        } else if (o_ptr_mh->k_idx && o_ptr_sh->k_idx) {
             q = _("どちらの手に装備しますか?", "Equip which hand? ");
             s = _("おっと。", "Oops.");
-            if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP), FuncItemTester(object_is_mochikae)))
+            if (!choose_object(creature_ptr, &slot, q, s, (USE_EQUIP), FuncItemTester(&object_type::is_wieldable_in_etheir_hand)))
                 return;
 
             if ((slot == INVEN_SUB_HAND) && !has_melee_weapon(creature_ptr, INVEN_MAIN_HAND))
@@ -172,7 +174,7 @@ void do_cmd_wield(player_type *creature_ptr)
         break;
     }
 
-    if (object_is_cursed(&creature_ptr->inventory_list[slot])) {
+    if (creature_ptr->inventory_list[slot].is_cursed()) {
         describe_flavor(creature_ptr, o_name, &creature_ptr->inventory_list[slot], OD_OMIT_PREFIX | OD_NAME_ONLY);
 #ifdef JP
         msg_format("%s%sは呪われているようだ。", describe_use(creature_ptr, slot), o_name);
@@ -183,7 +185,7 @@ void do_cmd_wield(player_type *creature_ptr)
     }
 
     if (confirm_wear
-        && ((object_is_cursed(o_ptr) && object_is_known(o_ptr))
+        && ((o_ptr->is_cursed() && o_ptr->is_known())
             || ((o_ptr->ident & IDENT_SENSE) && (FEEL_BROKEN <= o_ptr->feeling) && (o_ptr->feeling <= FEEL_CURSED)))) {
         char dummy[MAX_NLEN + 80];
         describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -193,7 +195,8 @@ void do_cmd_wield(player_type *creature_ptr)
             return;
     }
 
-    if ((o_ptr->name1 == ART_STONEMASK) && object_is_known(o_ptr) && (creature_ptr->prace != player_race_type::VAMPIRE) && (creature_ptr->prace != player_race_type::ANDROID)) {
+    if ((o_ptr->name1 == ART_STONEMASK) && o_ptr->is_known() && (creature_ptr->prace != player_race_type::VAMPIRE)
+        && (creature_ptr->prace != player_race_type::ANDROID)) {
         char dummy[MAX_NLEN + 100];
         describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         sprintf(dummy,
@@ -205,7 +208,7 @@ void do_cmd_wield(player_type *creature_ptr)
     }
 
     sound(SOUND_WIELD);
-    if (need_switch_wielding && !object_is_cursed(&creature_ptr->inventory_list[need_switch_wielding])) {
+    if (need_switch_wielding && !creature_ptr->inventory_list[need_switch_wielding].is_cursed()) {
         object_type *slot_o_ptr = &creature_ptr->inventory_list[slot];
         object_type *switch_o_ptr = &creature_ptr->inventory_list[need_switch_wielding];
         object_type object_tmp;
@@ -252,14 +255,14 @@ void do_cmd_wield(player_type *creature_ptr)
 
     switch (slot) {
     case INVEN_MAIN_HAND:
-        if (object_allow_two_hands_wielding(o_ptr) && (empty_hands(creature_ptr, false) == EMPTY_HAND_SUB) && can_two_hands_wielding(creature_ptr))
+        if (o_ptr->allow_two_hands_wielding() && (empty_hands(creature_ptr, false) == EMPTY_HAND_SUB) && can_two_hands_wielding(creature_ptr))
             act = STR_WIELD_HANDS_TWO;
         else
             act = (left_hander ? STR_WIELD_HAND_LEFT : STR_WIELD_HAND_RIGHT);
 
         break;
     case INVEN_SUB_HAND:
-        if (object_allow_two_hands_wielding(o_ptr) && (empty_hands(creature_ptr, false) == EMPTY_HAND_MAIN) && can_two_hands_wielding(creature_ptr))
+        if (o_ptr->allow_two_hands_wielding() && (empty_hands(creature_ptr, false) == EMPTY_HAND_MAIN) && can_two_hands_wielding(creature_ptr))
             act = STR_WIELD_HANDS_TWO;
         else
             act = (left_hander ? STR_WIELD_HAND_RIGHT : STR_WIELD_HAND_LEFT);
@@ -278,7 +281,7 @@ void do_cmd_wield(player_type *creature_ptr)
 
     describe_flavor(creature_ptr, o_name, o_ptr, 0);
     msg_format(act, o_name, index_to_label(slot));
-    if (object_is_cursed(o_ptr)) {
+    if (o_ptr->is_cursed()) {
         msg_print(_("うわ！ すさまじく冷たい！", "Oops! It feels deathly cold!"));
         chg_virtue(creature_ptr, V_HARMONY, -1);
         o_ptr->ident |= (IDENT_SENSE);
@@ -310,7 +313,7 @@ void do_cmd_takeoff(player_type *creature_ptr)
         return;
 
     PlayerEnergy energy(creature_ptr);
-    if (object_is_cursed(o_ptr)) {
+    if (o_ptr->is_cursed()) {
         if (o_ptr->curse_flags.has(TRC::PERMA_CURSE) || (creature_ptr->pclass != CLASS_BERSERKER)) {
             msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
             return;

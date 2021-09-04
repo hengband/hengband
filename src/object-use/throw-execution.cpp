@@ -82,7 +82,7 @@ bool ObjectThrowEntity::check_can_throw()
         return false;
     }
 
-    if (object_is_cursed(this->o_ptr) && (this->item >= INVEN_MAIN_HAND)) {
+    if (this->o_ptr->is_cursed() && (this->item >= INVEN_MAIN_HAND)) {
         msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
         return false;
     }
@@ -224,19 +224,19 @@ void ObjectThrowEntity::display_figurine_throw()
     }
 
     this->corruption_possibility = 100;
-    if (!(summon_named_creature(this->creature_ptr, 0, this->y, this->x, this->q_ptr->pval, !(object_is_cursed(this->q_ptr)) ? PM_FORCE_PET : PM_NONE))) {
+    if (!(summon_named_creature(this->creature_ptr, 0, this->y, this->x, this->q_ptr->pval, !(this->q_ptr->is_cursed()) ? PM_FORCE_PET : PM_NONE))) {
         msg_print(_("人形は捻じ曲がり砕け散ってしまった！", "The Figurine writhes and then shatters."));
         return;
     }
 
-    if (object_is_cursed(this->q_ptr)) {
+    if (this->q_ptr->is_cursed()) {
         msg_print(_("これはあまり良くない気がする。", "You have a bad feeling about this."));
     }
 }
 
 void ObjectThrowEntity::display_potion_throw()
 {
-    if (!object_is_potion(this->q_ptr)) {
+    if (!this->q_ptr->is_potion()) {
         return;
     }
 
@@ -356,7 +356,7 @@ bool ObjectThrowEntity::check_throw_boomerang(concptr *q, concptr *s)
     if (has_melee_weapon(this->creature_ptr, INVEN_MAIN_HAND) && has_melee_weapon(this->creature_ptr, INVEN_SUB_HAND)) {
         *q = _("どの武器を投げますか? ", "Throw which item? ");
         *s = _("投げる武器がない。", "You have nothing to throw.");
-        this->o_ptr = choose_object(this->creature_ptr, &this->item, *q, *s, USE_EQUIP, FuncItemTester(object_is_boomerang));
+        this->o_ptr = choose_object(this->creature_ptr, &this->item, *q, *s, USE_EQUIP, FuncItemTester(&object_type::is_throwable));
         if (!this->o_ptr) {
             flush();
             return false;
@@ -387,7 +387,7 @@ bool ObjectThrowEntity::check_racial_target_bold()
     }
 
     this->hit_wall = true;
-    return (this->q_ptr->tval == TV_FIGURINE) || object_is_potion(this->q_ptr)
+    return (this->q_ptr->tval == TV_FIGURINE) || this->q_ptr->is_potion()
         || (floor_ptr->grid_array[this->ny[this->cur_dis]][this->nx[this->cur_dis]].m_idx == 0);
 }
 
@@ -441,7 +441,7 @@ void ObjectThrowEntity::attack_racial_power()
     }
 
     message_pain(this->creature_ptr, this->g_ptr->m_idx, this->tdam);
-    if ((this->tdam > 0) && !object_is_potion(this->q_ptr)) {
+    if ((this->tdam > 0) && !this->q_ptr->is_potion()) {
         anger_monster(this->creature_ptr, this->m_ptr);
     }
 

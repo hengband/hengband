@@ -14,11 +14,11 @@
 bool object_is_nameless_weapon_armour(const object_type *o_ptr)
 {
     /* Require weapon or armour */
-    if (!object_is_weapon_armour_ammo(o_ptr))
+    if (!o_ptr->is_weapon_armour_ammo())
         return false;
 
     /* Require nameless object if the object is well known */
-    if (object_is_known(o_ptr) && !object_is_nameless(o_ptr))
+    if (o_ptr->is_known() && !o_ptr->is_nameless())
         return false;
 
     return true;
@@ -31,7 +31,7 @@ bool object_is_nameless_weapon_armour(const object_type *o_ptr)
  */
 bool object_is_not_identified(const object_type *o_ptr)
 {
-    return !object_is_known(o_ptr);
+    return !o_ptr->is_known();
 }
 
 /*!
@@ -44,7 +44,7 @@ bool object_is_not_identified_weapon_armor(const object_type *o_ptr)
     if (!object_is_not_identified(o_ptr))
         return false;
 
-    return object_is_weapon_armour_ammo(o_ptr);
+    return o_ptr->is_weapon_armour_ammo();
 }
 
 /*!
@@ -54,7 +54,7 @@ bool object_is_not_identified_weapon_armor(const object_type *o_ptr)
  */
 bool object_is_not_fully_identified(const object_type *o_ptr)
 {
-    return !object_is_known(o_ptr) || !object_is_fully_known(o_ptr);
+    return !o_ptr->is_known() || !o_ptr->is_fully_known();
 }
 
 /*!
@@ -67,5 +67,5 @@ bool object_is_not_fully_identified_weapon_armour(const object_type *o_ptr)
     if (!object_is_not_fully_identified(o_ptr))
         return false;
 
-    return object_is_weapon_armour_ammo(o_ptr);
+    return o_ptr->is_weapon_armour_ammo();
 }

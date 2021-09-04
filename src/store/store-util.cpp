@@ -224,7 +224,7 @@ bool store_object_similar(object_type *o_ptr, object_type *j_ptr)
     if (o_ptr->name2 != j_ptr->name2)
         return false;
 
-    if (object_is_artifact(o_ptr) || object_is_artifact(j_ptr))
+    if (o_ptr->is_artifact() || j_ptr->is_artifact())
         return false;
 
     for (int i = 0; i < TR_FLAG_SIZE; i++)
