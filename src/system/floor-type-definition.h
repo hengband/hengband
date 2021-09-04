@@ -7,7 +7,7 @@
 
 struct grid_type;;
 struct object_type;;
-typedef struct monster_type monster_type;
+struct monster_type;
 typedef struct floor_type {
     DUNGEON_IDX dungeon_idx;
     grid_type *grid_array[MAX_HGT];

@@ -3,7 +3,7 @@
 #include "system/angband.h"
 
 struct grid_type;;
-typedef struct monster_type monster_type;
+struct monster_type;
 typedef struct monster_race monster_race;
 typedef struct effect_monster_type {
     grid_type *g_ptr;

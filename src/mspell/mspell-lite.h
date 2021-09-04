@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct monster_type monster_type;
+struct monster_type;
 typedef struct msa_type msa_type;
 struct player_type;
 typedef bool (*path_check_pf)(player_type *, POSITION, POSITION, POSITION, POSITION);

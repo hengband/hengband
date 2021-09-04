@@ -3,7 +3,7 @@
 #include "system/angband.h"
 
 typedef struct monster_race monster_race;
-typedef struct monster_type monster_type;
+struct monster_type;
 typedef struct old_race_flags old_race_flags;
 struct player_type;
 typedef struct turn_flags turn_flags;

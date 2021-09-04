@@ -3,7 +3,7 @@
 #include "system/angband.h"
 
 typedef struct monster_race monster_race;
-typedef struct monster_type monster_type;
+struct monster_type;
 struct player_type;
 bool project_all_los(player_type *caster_ptr, EFFECT_ID typ, HIT_POINT dam);
 bool speed_monsters(player_type *caster_ptr);

@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct monster_type monster_type;
+struct monster_type;
 struct player_type;
 typedef struct turn_flags turn_flags;
 bool process_monster_movement(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, DIRECTION *mm, POSITION oy, POSITION ox, int *count);

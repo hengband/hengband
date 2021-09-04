@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct monster_type monster_type;
+struct monster_type;
 struct monster_race;
 typedef struct monster_death_type {
     MONSTER_IDX m_idx;

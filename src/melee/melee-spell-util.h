@@ -7,7 +7,7 @@
 #include "util/flag-group.h"
 
 typedef struct monster_race monster_race;
-typedef struct monster_type monster_type;
+struct monster_type;
 typedef struct melee_spell_type {
     MONSTER_IDX m_idx;
     POSITION y;

@@ -5,7 +5,7 @@
 
 struct object_type;;
 struct player_type;
-typedef struct monster_type monster_type;
+struct monster_type;
 bool heal_monster(player_type *caster_ptr, DIRECTION dir, HIT_POINT dam);
 bool speed_monster(player_type *caster_ptr, DIRECTION dir, int power);
 bool slow_monster(player_type *caster_ptr, DIRECTION dir, int power);

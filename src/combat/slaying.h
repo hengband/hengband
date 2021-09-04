@@ -3,7 +3,7 @@
 #include "system/angband.h"
 #include "combat/combat-options-type.h"
 
-typedef struct monster_type monster_type;
+struct monster_type;
 struct object_type;;
 struct player_type;
 MULTIPLY mult_slaying(player_type *player_ptr, MULTIPLY mult, const TrFlags &flgs, monster_type *m_ptr);

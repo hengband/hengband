@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct monster_type monster_type;
+struct monster_type;
 struct object_type;;
 struct player_type;
 bool test_hit_fire(player_type *shooter_ptr, int chance, monster_type *m_ptr, int vis, char *o_name);

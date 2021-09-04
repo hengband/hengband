@@ -4,7 +4,7 @@
 #include "combat/combat-options-type.h"
 
 typedef struct monap_type monap_type;
-typedef struct monster_type monster_type;
+struct monster_type;
 typedef struct player_attack_type player_attack_type;
 struct player_type;
 MULTIPLY mult_hissatsu(player_type *attacker_ptr, MULTIPLY mult, const TrFlags &flgs, monster_type *m_ptr, combat_options mode);

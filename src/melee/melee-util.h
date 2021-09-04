@@ -6,7 +6,7 @@
 #include "spell/spell-types.h"
 
 /* monster-attack-monster type*/
-typedef struct monster_type monster_type;
+struct monster_type;
 typedef struct mam_type {
     int effect_type;
     MONRACE_IDX m_idx;

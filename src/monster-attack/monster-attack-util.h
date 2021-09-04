@@ -5,7 +5,7 @@
 #include "system/angband.h"
 
 /* MONster-Attack-Player、地図のMAPと紛らわしいのでmonapとした */
-typedef struct monster_type monster_type;
+struct monster_type;
 struct object_type;;
 typedef struct monap_type {
 #ifdef JP

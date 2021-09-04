@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct monster_type monster_type;
+struct monster_type;
 struct player_type;
 void reset_concentration(player_type *creature_ptr, bool msg);
 void display_snipe_list(player_type *sniper_ptr);

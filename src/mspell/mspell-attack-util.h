@@ -15,7 +15,7 @@ enum mspell_lite_type {
 };
 
 // Monster Spell Attack.
-typedef struct monster_type monster_type;
+struct monster_type;
 struct monster_race;
 typedef struct msa_type {
     MONSTER_IDX m_idx;
