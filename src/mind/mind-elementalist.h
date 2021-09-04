@@ -16,7 +16,7 @@ enum class ElementRealm {
 };
 
 struct player_type;
-typedef struct effect_monster_type effect_monster_type;
+struct effect_monster_type;
 struct rc_type;
 
 concptr get_element_title(int realm_idx);
