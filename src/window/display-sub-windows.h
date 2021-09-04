@@ -4,7 +4,7 @@
 
 #include <vector>
 
-typedef struct floor_type floor_type;
+struct floor_type;
 struct player_type;
 class ItemTester;
 void fix_inventory(player_type *player_ptr);

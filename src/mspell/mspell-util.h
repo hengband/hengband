@@ -11,7 +11,7 @@
 #define RF5_SPELL_START 32 * 4
 #define RF6_SPELL_START 32 * 5
 
-typedef struct floor_type floor_type;
+struct floor_type;
 struct player_type;
 bool see_monster(player_type *player_ptr, MONSTER_IDX m_idx);
 bool monster_near_player(floor_type* floor_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx);

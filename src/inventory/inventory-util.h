@@ -3,7 +3,7 @@
 #include "object/tval-types.h"
 #include "system/angband.h"
 
-typedef struct floor_type floor_type;
+struct floor_type;
 struct player_type;
 class ItemTester;
 bool is_ring_slot(int i);

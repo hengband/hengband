@@ -5,7 +5,7 @@
 
 class ObjectIndexList;
 
-typedef struct floor_type floor_type;
+struct floor_type;
 typedef struct object_type object_type;
 struct player_type;
 class ItemTester;

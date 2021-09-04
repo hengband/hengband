@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct floor_type floor_type;
+struct floor_type;
 extern floor_type floor_info;
 
 struct player_type;
