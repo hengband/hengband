@@ -25909,7 +25909,7 @@ D:$ on stolen motorcycles under the autumn full moon.
 D:十五夜になると盗難バイクで往来の邪魔をする迷惑系暴走族だ。
 
 N:1308:気狂いピエロ『ドネルド・マクドネルド』
-E:Doneld McDoneld, the Mad Pierrot
+E:Roneld McDoneld, the Mad Pierrot
 G:h:v
 I:120:50d30:20:80:20
 W:36:3:0:3000:0:0
