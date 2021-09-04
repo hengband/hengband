@@ -23,15 +23,10 @@ void object_flags(const object_type *o_ptr, TrFlags &flgs)
     object_kind *k_ptr = &k_info[o_ptr->k_idx];
 
     /* Base object */
-    for (int i = 0; i < TR_FLAG_SIZE; i++) {
-        flgs[i] = k_ptr->flags[i];
-    }
+    flgs = k_ptr->flags;
 
     if (o_ptr->is_fixed_artifact()) {
-        artifact_type *a_ptr = &a_info[o_ptr->name1];
-        for (int i = 0; i < TR_FLAG_SIZE; i++) {
-            flgs[i] = a_ptr->flags[i];
-        }
+        flgs = a_info[o_ptr->name1].flags;
     }
 
     if (o_ptr->is_ego()) {
@@ -101,17 +96,13 @@ void object_flags_known(const object_type *o_ptr, TrFlags &flgs)
 {
     bool spoil = false;
     object_kind *k_ptr = &k_info[o_ptr->k_idx];
-    for (int i = 0; i < TR_FLAG_SIZE; i++) {
-        flgs[i] = 0;
-    }
+    flgs.fill(0U);
 
     if (!o_ptr->is_aware())
         return;
 
     /* Base object */
-    for (int i = 0; i < TR_FLAG_SIZE; i++) {
-        flgs[i] = k_ptr->flags[i];
-    }
+    flgs = k_ptr->flags;
 
     if (!o_ptr->is_known())
         return;
@@ -134,11 +125,7 @@ void object_flags_known(const object_type *o_ptr, TrFlags &flgs)
 
     if (spoil || o_ptr->is_fully_known()) {
         if (o_ptr->is_fixed_artifact()) {
-            artifact_type *a_ptr = &a_info[o_ptr->name1];
-
-            for (int i = 0; i < TR_FLAG_SIZE; i++) {
-                flgs[i] = a_ptr->flags[i];
-            }
+            flgs = a_info[o_ptr->name1].flags;
         }
 
         /* Random artifact ! */

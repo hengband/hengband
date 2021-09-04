@@ -188,9 +188,8 @@ int object_similar_part(const object_type *o_ptr, const object_type *j_ptr)
     }
     }
 
-    for (int i = 0; i < TR_FLAG_SIZE; i++)
-        if (o_ptr->art_flags[i] != j_ptr->art_flags[i])
-            return 0;
+    if (o_ptr->art_flags != j_ptr->art_flags)
+        return 0;
 
     if (o_ptr->curse_flags != j_ptr->curse_flags)
         return 0;

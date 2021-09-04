@@ -20,9 +20,7 @@
  */
 void player_immunity(player_type *creature_ptr, TrFlags &flags)
 {
-    for (int i = 0; i < TR_FLAG_SIZE; i++) {
-        flags[i] = 0L;
-    }
+    flags.fill(0U);
 
     if (player_race_has_flag(creature_ptr, TR_IM_ACID))
         add_flag(flags, TR_RES_ACID);
@@ -59,8 +57,7 @@ void player_immunity(player_type *creature_ptr, TrFlags &flags)
  */
 void tim_player_immunity(player_type *creature_ptr, TrFlags &flags)
 {
-    for (int i = 0; i < TR_FLAG_SIZE; i++)
-        flags[i] = 0L;
+    flags.fill(0U);
 
     if (creature_ptr->special_defense & DEFENSE_ACID)
         add_flag(flags, TR_RES_ACID);
@@ -83,8 +80,7 @@ void tim_player_immunity(player_type *creature_ptr, TrFlags &flags)
  */
 void known_obj_immunity(player_type *creature_ptr, TrFlags &flags)
 {
-    for (int i = 0; i < TR_FLAG_SIZE; i++)
-        flags[i] = 0L;
+    flags.fill(0U);
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         TrFlags o_flags;
@@ -114,8 +110,7 @@ void known_obj_immunity(player_type *creature_ptr, TrFlags &flags)
  */
 void player_vulnerability_flags(player_type *creature_ptr, TrFlags &flags)
 {
-    for (int i = 0; i < TR_FLAG_SIZE; i++)
-        flags[i] = 0L;
+    flags.fill(0U);
 
     if (creature_ptr->muta.has(MUTA::VULN_ELEM) || (creature_ptr->special_defense & KATA_KOUKIJIN)) {
         add_flag(flags, TR_RES_ACID);

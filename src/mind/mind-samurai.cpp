@@ -49,7 +49,7 @@ static samurai_slaying_type *initialize_samurai_slaying_type(
     samurai_slaying_type *samurai_slaying_ptr, MULTIPLY mult, const TrFlags &flags, monster_type *m_ptr, combat_options mode, monster_race *r_ptr)
 {
     samurai_slaying_ptr->mult = mult;
-    std::copy_n(flags, TR_FLAG_SIZE, samurai_slaying_ptr->flags);
+    samurai_slaying_ptr->flags = flags;
     samurai_slaying_ptr->m_ptr = m_ptr;
     samurai_slaying_ptr->mode = mode;
     samurai_slaying_ptr->r_ptr = r_ptr;

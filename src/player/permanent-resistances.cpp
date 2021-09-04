@@ -276,8 +276,7 @@ static void add_kata_flags(player_type *creature_ptr, TrFlags &flags)
  */
 void player_flags(player_type *creature_ptr, TrFlags &flags)
 {
-    for (int i = 0; i < TR_FLAG_SIZE; i++)
-        flags[i] = 0L;
+    flags.fill(0U);
 
     add_class_flags(creature_ptr, flags);
     add_player_race_flags(creature_ptr, flags);
@@ -289,10 +288,8 @@ void player_flags(player_type *creature_ptr, TrFlags &flags)
 
 void riding_flags(player_type *creature_ptr, TrFlags &flags, TrFlags &negative_flags)
 {
-    for (int i = 0; i < TR_FLAG_SIZE; i++) {
-        flags[i] = 0L;
-        negative_flags[i] = 0L;
-    }
+    flags.fill(0U);
+    negative_flags.fill(0U);
 
     if (!creature_ptr->riding)
         return;
