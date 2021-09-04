@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct effect_player_type effect_player_type;
+struct effect_player_type;
 struct player_type;
 void effect_player_elements(
     player_type *target_ptr, effect_player_type *ep_ptr, concptr attack_message, HIT_POINT (*damage_func)(player_type *, HIT_POINT, concptr, bool));
