@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef struct lore_type lore_type;
+struct lore_type;
 struct player_type;
 void set_breath_types(player_type *player_ptr, lore_type *lore_ptr);
 void set_ball_types(player_type *player_ptr, lore_type *lore_ptr);

@@ -3,7 +3,7 @@
 #include "lore/lore-util.h"
 #include "system/angband.h"
 
-typedef struct lore_type lore_type;
+struct lore_type;
 struct player_type;
 void roff_top(MONRACE_IDX r_idx);
 void screen_roff(player_type *player_ptr, MONRACE_IDX r_idx, monster_lore_mode mode);
