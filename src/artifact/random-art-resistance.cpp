@@ -204,6 +204,24 @@ static bool random_art_resistance_disenchant(object_type *o_ptr)
     return one_in_(2);
 }
 
+static bool random_art_resistance_water(object_type *o_ptr)
+{
+    if (has_flag(o_ptr->art_flags, TR_RES_WATER))
+        return false;
+
+    add_flag(o_ptr->art_flags, TR_RES_WATER);
+    return one_in_(2);
+}
+
+static bool random_art_resistance_curse(object_type *o_ptr)
+{
+    if (has_flag(o_ptr->art_flags, TR_RES_CURSE))
+        return false;
+
+    add_flag(o_ptr->art_flags, TR_RES_CURSE);
+    return one_in_(2);
+}
+
 static bool switch_random_art_resistance(object_type *o_ptr)
 {
     switch (o_ptr->artifact_bias) {
@@ -217,8 +235,12 @@ static bool switch_random_art_resistance(object_type *o_ptr)
         return random_art_resistance_cold(o_ptr) || random_art_aura_cold(o_ptr) || random_art_immunity_cold(o_ptr);
     case BIAS_POIS:
         return random_art_resistance_pois(o_ptr);
+    case BIAS_PRIESTLY:
+        return random_art_resistance_curse(o_ptr);
     case BIAS_WARRIOR:
         return random_art_resistance_fear(o_ptr) || random_art_resistance_no_magic(o_ptr);
+    case BIAS_RANGER:
+        return random_art_resistance_water(o_ptr) || random_art_resistance_pois(o_ptr);
     case BIAS_NECROMANTIC:
         return random_art_resistance_nether(o_ptr) || random_art_resistance_pois(o_ptr) || random_art_resistance_dark(o_ptr);
     case BIAS_CHAOS:
@@ -358,7 +380,7 @@ void random_resistance(object_type *o_ptr)
     if (switch_random_art_resistance(o_ptr))
         return;
 
-    switch (randint1(42)) {
+    switch (randint1(45)) {
     case 1:
         set_weird_bias_acid(o_ptr);
         break;
@@ -462,15 +484,30 @@ void random_resistance(object_type *o_ptr)
         add_flag(o_ptr->art_flags, TR_RES_DISEN);
         break;
     case 39:
-        set_weird_bias_aura_elec(o_ptr);
+        add_flag(o_ptr->art_flags, TR_RES_TIME);
         break;
     case 40:
-        set_weird_bias_aura_fire(o_ptr);
+        add_flag(o_ptr->art_flags, TR_RES_WATER);
+        if (!o_ptr->artifact_bias && one_in_(6)) {
+            o_ptr->artifact_bias = BIAS_RANGER;
+        }
         break;
     case 41:
-        set_weird_bias_reflection(o_ptr);
+        add_flag(o_ptr->art_flags, TR_RES_CURSE);
+        if (!o_ptr->artifact_bias && one_in_(3)) {
+            o_ptr->artifact_bias = BIAS_PRIESTLY;
+        }
         break;
     case 42:
+        set_weird_bias_aura_elec(o_ptr);
+        break;
+    case 43:
+        set_weird_bias_aura_fire(o_ptr);
+        break;
+    case 44:
+        set_weird_bias_reflection(o_ptr);
+        break;
+    case 45:
         set_weird_bias_aura_cold(o_ptr);
         break;
     }
