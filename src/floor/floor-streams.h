@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct dun_data_type dun_data_type;
+struct dun_data_type;
 struct floor_type;
 struct player_type;
 void add_river(floor_type *floor_ptr, dun_data_type *dd_ptr);

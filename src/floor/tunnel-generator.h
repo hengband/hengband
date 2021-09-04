@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct dun_data_type dun_data_type;
+struct dun_data_type;
 typedef struct dt_type dt_type;
 struct player_type;
 bool build_tunnel(player_type *player_ptr, dun_data_type *dd_ptr, dt_type *dt_ptr, POSITION row1, POSITION col1, POSITION row2, POSITION col2);
