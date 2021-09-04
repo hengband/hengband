@@ -247,12 +247,12 @@ void one_dragon_ele_resistance(object_type *o_ptr)
 
 /*!
  * @brief 対象のオブジェクトにランダムな上位耐性を一つ付加する。/ Choose one random high resistance
- * @details 重複の抑止はない。候補は毒、閃光、暗黒、破片、盲目、混乱、地獄、因果混乱、カオス、劣化、恐怖のいずれか。
+ * @details 重複の抑止はない。候補は毒、閃光、暗黒、破片、盲目、混乱、地獄、因果混乱、カオス、劣化、恐怖、時間逆転、水、呪力のいずれか。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  */
 void one_high_resistance(object_type *o_ptr)
 {
-    switch (randint0(12)) {
+    switch (randint0(15)) {
     case 0:
         add_flag(o_ptr->art_flags, TR_RES_POIS);
         break;
@@ -288,6 +288,15 @@ void one_high_resistance(object_type *o_ptr)
         break;
     case 11:
         add_flag(o_ptr->art_flags, TR_RES_FEAR);
+        break;
+    case 12:
+        add_flag(o_ptr->art_flags, TR_RES_TIME);
+        break;
+    case 13:
+        add_flag(o_ptr->art_flags, TR_RES_WATER);
+        break;
+    case 14:
+        add_flag(o_ptr->art_flags, TR_RES_CURSE);
         break;
     }
 }
@@ -523,14 +532,14 @@ void one_activation(object_type *o_ptr)
 
 /*!
  * @brief 対象のオブジェクトに王者の指輪向けの上位耐性を一つ付加する。/ Choose one random high resistance
- * @details 候補は閃光、暗黒、破片、盲目、混乱、地獄、因果混乱、カオス、恐怖であり
+ * @details 候補は閃光、暗黒、破片、盲目、混乱、地獄、因果混乱、カオス、恐怖、時間逆転、水、呪力であり
  * 王者の指輪にあらかじめついている耐性をone_high_resistance()から除外したものである。
  * ランダム付加そのものに重複の抑止はない。
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  */
 void one_lordly_high_resistance(object_type *o_ptr)
 {
-    switch (randint0(12)) {
+    switch (randint0(13)) {
     case 0:
         add_flag(o_ptr->art_flags, TR_RES_LITE);
         break;
@@ -566,6 +575,9 @@ void one_lordly_high_resistance(object_type *o_ptr)
         break;
     case 11:
         add_flag(o_ptr->art_flags, TR_RES_WATER);
+        break;
+    case 12:
+        add_flag(o_ptr->art_flags, TR_RES_CURSE);
         break;
     }
 }
