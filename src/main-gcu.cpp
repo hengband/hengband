@@ -205,11 +205,7 @@ static term_data data[MAX_TERM_DATA];
 #if defined(_POSIX_VERSION)
 #define USE_TPOSIX
 #else
-#if defined(linux)
-#define USE_TERMIO
-#else
 #define USE_TCHARS
-#endif
 #endif
 #endif
 
