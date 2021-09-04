@@ -14,6 +14,8 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "wizard/wizard-messages.h"
+#include <sstream>
+#include <string_view>
 
 static void pval_subtraction(object_type *o_ptr)
 {
@@ -87,42 +89,29 @@ void curse_artifact(player_type *player_ptr, object_type *o_ptr)
  * @param armour 防具かどうか
  * @param power 生成パワー
  * @return ファイル名
- * @details 二重switch文だが短いので執行猶予とする
  */
-static concptr get_random_art_filename(const bool armour, const int power)
+static std::string get_random_art_filename(const bool armour, const int power)
 {
-    concptr filename;
-    if (armour) {
-        switch (power) {
-        case 0:
-            filename = _("a_cursed_j.txt", "a_cursed.txt");
-            break;
-        case 1:
-            filename = _("a_low_j.txt", "a_low.txt");
-            break;
-        case 2:
-            filename = _("a_med_j.txt", "a_med.txt");
-            break;
-        default:
-            filename = _("a_high_j.txt", "a_high.txt");
-        }
-    } else {
-        switch (power) {
-        case 0:
-            filename = _("w_cursed_j.txt", "w_cursed.txt");
-            break;
-        case 1:
-            filename = _("w_low_j.txt", "w_low.txt");
-            break;
-        case 2:
-            filename = _("w_med_j.txt", "w_med.txt");
-            break;
-        default:
-            filename = _("w_high_j.txt", "w_high.txt");
-        }
+    const std::string_view prefix(armour ? "a_" : "w_");
+    constexpr std::string_view suffix(_("_j.txt", ".txt"));
+    std::string_view grade;
+    switch (power) {
+    case 0:
+        grade = "cursed";
+        break;
+    case 1:
+        grade = "low";
+        break;
+    case 2:
+        grade = "med";
+        break;
+    default:
+        grade = "high";
     }
 
-    return filename;
+    std::stringstream ss;
+    ss << prefix << grade << suffix;
+    return ss.str();
 }
 
 /*!
@@ -146,8 +135,8 @@ void get_random_name(object_type *o_ptr, char *return_name, bool armour, int pow
         return;
     }
 
-    concptr filename = get_random_art_filename(armour, power);
-    (void)get_rnd_line(filename, o_ptr->artifact_bias, return_name);
+    auto filename = get_random_art_filename(armour, power);
+    (void)get_rnd_line(filename.c_str(), o_ptr->artifact_bias, return_name);
 #ifdef JP
     if (return_name[0] == 0)
         get_table_name(return_name);
