@@ -7,8 +7,6 @@
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "object-hook/hook-armor.h"
-#include "object-hook/hook-checker.h"
-#include "object-hook/hook-enchant.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-flags.h"
 #include "system/object-type-definition.h"

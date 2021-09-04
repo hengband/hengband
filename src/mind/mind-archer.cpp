@@ -14,7 +14,6 @@
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/object-boost.h"
-#include "object-hook/hook-bow.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "object/object-kind-hook.h"

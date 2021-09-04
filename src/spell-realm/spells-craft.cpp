@@ -11,8 +11,6 @@
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "object-enchant/object-ego.h"
-#include "object-hook/hook-checker.h"
-#include "object-hook/hook-enchant.h"
 #include "object/item-use-flags.h"
 #include "object/object-flags.h"
 #include "player-info/equipment-info.h"

@@ -4,8 +4,6 @@
 #include "floor/floor-object.h"
 #include "floor/geometry.h"
 #include "grid/grid.h"
-#include "object-hook/hook-checker.h"
-#include "object-hook/hook-enchant.h"
 #include "object/object-kind.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-type-definition.h"

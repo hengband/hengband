@@ -8,7 +8,6 @@
 #include "game-option/play-record-options.h"
 #include "inventory/inventory-object.h"
 #include "io/write-diary.h"
-#include "object-hook/hook-enchant.h"
 #include "object-hook/hook-perception.h"
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"

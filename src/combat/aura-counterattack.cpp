@@ -17,7 +17,6 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "object-hook/hook-armor.h"
-#include "object-hook/hook-checker.h"
 #include "player/player-status-flags.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell-kind/spells-teleport.h"

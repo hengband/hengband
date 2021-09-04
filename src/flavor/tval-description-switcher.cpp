@@ -8,7 +8,6 @@
 #include "flavor/flavor-util.h"
 #include "monster-race/monster-race.h"
 #include "object-enchant/trg-types.h"
-#include "object-hook/hook-enchant.h"
 #include "object/object-kind.h"
 #include "system/monster-race-definition.h"
 #include "system/object-type-definition.h"

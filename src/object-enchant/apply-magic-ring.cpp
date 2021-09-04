@@ -10,7 +10,6 @@
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/trc-types.h"
-#include "object-hook/hook-checker.h"
 #include "object/object-kind.h"
 #include "sv-definition/sv-ring-types.h"
 #include "system/object-type-definition.h"

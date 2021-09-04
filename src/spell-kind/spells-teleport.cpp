@@ -27,7 +27,6 @@
 #include "monster/monster-update.h"
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
-#include "object-hook/hook-checker.h"
 #include "object/object-flags.h"
 #include "player/player-move.h"
 #include "player/player-status.h"

@@ -6,7 +6,6 @@
 
 #include "util/object-sort.h"
 #include "monster-race/monster-race.h"
-#include "object-hook/hook-enchant.h"
 #include "object/object-value.h"
 #include "perception/object-perception.h"
 #include "player/player-realm.h"

@@ -25,8 +25,6 @@
 #include "monster/monster-status.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"
-#include "object-hook/hook-checker.h"
-#include "object-hook/hook-enchant.h"
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"
 #include "object/object-value.h"

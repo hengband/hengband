@@ -11,7 +11,6 @@
 #include "object-enchant/object-curse.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/trc-types.h"
-#include "object-hook/hook-checker.h"
 #include "object-hook/hook-weapon.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-weapon-types.h"

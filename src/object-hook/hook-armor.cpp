@@ -1,6 +1,5 @@
 ﻿#include "object-hook/hook-armor.h"
 #include "inventory/inventory-slot-types.h"
-#include "object-hook/hook-checker.h"
 #include "object/object-info.h"
 #include "player/player-sex.h"
 #include "sv-definition/sv-armor-types.h"

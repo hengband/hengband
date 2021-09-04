@@ -16,7 +16,6 @@
 #include "io/input-key-acceptor.h"
 #include "knowledge/object-group-table.h"
 #include "object-enchant/special-object-flags.h"
-#include "object-hook/hook-enchant.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "perception/identification.h"

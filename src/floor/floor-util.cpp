@@ -14,8 +14,6 @@
 #include "floor/line-of-sight.h"
 #include "game-option/birth-options.h"
 #include "grid/feature.h"
-#include "object-hook/hook-checker.h"
-#include "object-hook/hook-enchant.h"
 #include "perception/object-perception.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"

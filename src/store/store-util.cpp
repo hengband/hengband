@@ -9,7 +9,6 @@
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"
-#include "object-hook/hook-enchant.h"
 #include "object/object-kind.h"
 #include "object/object-value.h"
 #include "perception/object-perception.h"

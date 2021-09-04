@@ -19,7 +19,6 @@
 #include "monster/monster-processor-util.h"
 #include "monster/smart-learn-types.h"
 #include "object-enchant/tr-types.h"
-#include "object-hook/hook-enchant.h"
 #include "object/object-flags.h"
 #include "object/object-mark-types.h"
 #include "system/floor-type-definition.h"
