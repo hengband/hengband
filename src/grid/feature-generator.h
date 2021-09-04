@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct dungeon_type dungeon_type;
+struct dungeon_type;
 struct dun_data_type;
 typedef struct dt_type dt_type;
 struct player_type;
