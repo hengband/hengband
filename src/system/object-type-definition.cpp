@@ -508,7 +508,7 @@ bool object_type::is_offerable() const
         return false;
     }
 
-    return angband_strchr("pht", r_info[this->pval].d_char);
+    return angband_strchr("pht", r_info[this->pval].d_char) != nullptr;
 }
 
 /*!
