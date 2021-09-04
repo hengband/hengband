@@ -235,9 +235,6 @@ void rd_item(object_type *o_ptr)
     if (!h_older_than(2, 1, 2, 4))
         return;
 
-    TrFlags flgs;
-    object_flags(o_ptr, flgs);
-
     if ((o_ptr->name2 == EGO_DARK) || (o_ptr->name2 == EGO_ANCIENT_CURSE) || (o_ptr->name1 == ART_NIGHT)) {
         add_flag(o_ptr->art_flags, TR_LITE_M1);
         remove_flag(o_ptr->art_flags, TR_LITE_1);

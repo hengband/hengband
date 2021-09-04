@@ -86,14 +86,13 @@ BIT_FLAGS convert_inventory_slot_type_to_flag_cause(inventory_slot_type inventor
 BIT_FLAGS check_equipment_flags(player_type *creature_ptr, tr_type tr_flag)
 {
     object_type *o_ptr;
-    TrFlags flgs;
     BIT_FLAGS result = 0L;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
 
-        object_flags(o_ptr, flgs);
+        auto flgs = object_flags(o_ptr);
 
         if (has_flag(flgs, tr_flag))
             set_bits(result, convert_inventory_slot_type_to_flag_cause(static_cast<inventory_slot_type>(i)));
@@ -762,14 +761,13 @@ BIT_FLAGS has_warning(player_type *creature_ptr)
 {
     BIT_FLAGS result = 0L;
     object_type *o_ptr;
-    TrFlags flgs;
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
 
-        object_flags(o_ptr, flgs);
+        auto flgs = object_flags(o_ptr);
 
         if (has_flag(flgs, TR_WARNING)) {
             if (!o_ptr->inscription || !(angband_strchr(quark_str(o_ptr->inscription), '$')))
@@ -1185,7 +1183,6 @@ BIT_FLAGS has_regenerate(player_type *creature_ptr)
 void update_curses(player_type *creature_ptr)
 {
     object_type *o_ptr;
-    TrFlags flgs;
     creature_ptr->cursed.clear();
     creature_ptr->cursed_special.clear();
 
@@ -1196,7 +1193,7 @@ void update_curses(player_type *creature_ptr)
         o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
-        object_flags(o_ptr, flgs);
+        auto flgs = object_flags(o_ptr);
         if (has_flag(flgs, TR_AGGRAVATE))
             creature_ptr->cursed.set(TRC::AGGRAVATE);
         if (has_flag(flgs, TR_DRAIN_EXP))
@@ -1272,7 +1269,6 @@ BIT_FLAGS has_earthquake(player_type *creature_ptr)
 void update_extra_blows(player_type *creature_ptr)
 {
     object_type *o_ptr;
-    TrFlags flgs;
     creature_ptr->extra_blows[0] = creature_ptr->extra_blows[1] = 0;
 
     const melee_type melee_type = player_melee_type(creature_ptr);
@@ -1283,7 +1279,7 @@ void update_extra_blows(player_type *creature_ptr)
         if (!o_ptr->k_idx)
             continue;
 
-        object_flags(o_ptr, flgs);
+        auto flgs = object_flags(o_ptr);
         if (has_flag(flgs, TR_BLOWS)) {
             if ((i == INVEN_MAIN_HAND || i == INVEN_MAIN_RING) && !two_handed)
                 creature_ptr->extra_blows[0] += o_ptr->pval;
@@ -2032,9 +2028,8 @@ bool has_disable_two_handed_bonus(player_type *creature_ptr, int i)
  */
 bool is_wielding_icky_weapon(player_type *creature_ptr, int i)
 {
-    TrFlags flgs;
     auto *o_ptr = &creature_ptr->inventory_list[INVEN_MAIN_HAND + i];
-    object_flags(o_ptr, flgs);
+    auto flgs = object_flags(o_ptr);
 
     auto has_no_weapon = (o_ptr->tval == TV_NONE) || (o_ptr->tval == TV_SHIELD);
     if (creature_ptr->pclass == CLASS_PRIEST) {
@@ -2060,8 +2055,7 @@ bool is_wielding_icky_weapon(player_type *creature_ptr, int i)
 bool is_wielding_icky_riding_weapon(player_type *creature_ptr, int i)
 {
     auto *o_ptr = &creature_ptr->inventory_list[INVEN_MAIN_HAND + i];
-    TrFlags flgs;
-    object_flags(o_ptr, flgs);
+    auto flgs = object_flags(o_ptr);
     auto has_no_weapon = (o_ptr->tval == TV_NONE) || (o_ptr->tval == TV_SHIELD);
     auto is_suitable = o_ptr->is_lance() || has_flag(flgs, TR_RIDING);
     return (creature_ptr->riding > 0) && !has_no_weapon && !is_suitable;

@@ -25,7 +25,7 @@
 
 static void check_object_known_aware(flavor_type *flavor_ptr)
 {
-    object_flags(flavor_ptr->o_ptr, flavor_ptr->tr_flags);
+    flavor_ptr->tr_flags = object_flags(flavor_ptr->o_ptr);
     if (flavor_ptr->o_ptr->is_aware())
         flavor_ptr->aware = true;
 

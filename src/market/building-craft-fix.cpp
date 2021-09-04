@@ -38,10 +38,8 @@
  */
 static void give_one_ability_of_object(object_type *to_ptr, object_type *from_ptr)
 {
-    TrFlags to_flgs;
-    TrFlags from_flgs;
-    object_flags(to_ptr, to_flgs);
-    object_flags(from_ptr, from_flgs);
+    auto to_flgs = object_flags(to_ptr);
+    auto from_flgs = object_flags(from_ptr);
 
     int n = 0;
     int cand[TR_FLAG_MAX];

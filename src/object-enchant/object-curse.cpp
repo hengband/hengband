@@ -69,8 +69,7 @@ void curse_equipment(player_type *owner_ptr, PERCENTAGE chance, PERCENTAGE heavy
     object_type *o_ptr = &owner_ptr->inventory_list[INVEN_MAIN_HAND + randint0(12)];
     if (!o_ptr->k_idx)
         return;
-    TrFlags oflgs;
-    object_flags(o_ptr, oflgs);
+    auto oflgs = object_flags(o_ptr);
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(owner_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 

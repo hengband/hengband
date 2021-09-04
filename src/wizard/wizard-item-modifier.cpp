@@ -335,8 +335,7 @@ static void prt_binary(BIT_FLAGS flags, const int row, int col)
  */
 static void wiz_display_item(player_type *player_ptr, object_type *o_ptr)
 {
-    TrFlags flgs;
-    object_flags(o_ptr, flgs);
+    auto flgs = object_flags(o_ptr);
     int j = 13;
     for (int i = 1; i <= 23; i++)
         prt("", i, j - 2);

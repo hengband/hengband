@@ -19,7 +19,6 @@
  */
 bool item_tester_hook_use(player_type *player_ptr, const object_type *o_ptr)
 {
-    TrFlags flags;
     if (o_ptr->tval == player_ptr->tval_ammo)
         return true;
 
@@ -41,7 +40,7 @@ bool item_tester_hook_use(player_type *player_ptr, const object_type *o_ptr)
             return false;
         for (i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
             if (&player_ptr->inventory_list[i] == o_ptr) {
-                object_flags(o_ptr, flags);
+                auto flags = object_flags(o_ptr);
                 if (has_flag(flags, TR_ACTIVATE))
                     return true;
             }

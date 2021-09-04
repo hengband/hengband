@@ -141,8 +141,7 @@ void process_player_hp_mp(player_type *creature_ptr)
 
         object_type *o_ptr;
         o_ptr = &creature_ptr->inventory_list[INVEN_LITE];
-        TrFlags flgs;
-        object_flags(o_ptr, flgs);
+        auto flgs = object_flags(o_ptr);
 
         if (creature_ptr->inventory_list[INVEN_LITE].tval && !has_flag(flgs, TR_DARK_SOURCE) && !has_resist_lite(creature_ptr)) {
             GAME_TEXT o_name[MAX_NLEN];

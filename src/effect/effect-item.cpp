@@ -67,8 +67,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
 #else
         bool plural = (o_ptr->number > 1);
 #endif
-        TrFlags flags;
-        object_flags(o_ptr, flags);
+        auto flags = object_flags(o_ptr);
         bool is_artifact = o_ptr->is_artifact();
         switch (typ) {
         case GF_ACID: {

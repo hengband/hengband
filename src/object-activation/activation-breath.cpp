@@ -27,8 +27,7 @@ bool activate_dragon_breath(player_type *user_ptr, object_type *o_ptr)
     if (!get_aim_dir(user_ptr, &dir))
         return false;
 
-    TrFlags resistance_flags;
-    object_flags(o_ptr, resistance_flags);
+    auto resistance_flags = object_flags(o_ptr);
 
     int type[20];
     int n = 0;

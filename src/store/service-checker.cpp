@@ -23,8 +23,7 @@
  */
 static bool is_blessed_item(const object_type *o_ptr)
 {
-    TrFlags flgs;
-    object_flags(o_ptr, flgs);
+    auto flgs = object_flags(o_ptr);
     return has_flag(flgs, TR_BLESSED);
 }
 

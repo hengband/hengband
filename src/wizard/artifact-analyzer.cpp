@@ -60,14 +60,13 @@ static void analyze_general(player_type *player_ptr, object_type *o_ptr, char *d
  */
 static void analyze_pval(object_type *o_ptr, pval_info_type *pi_ptr)
 {
-    TrFlags flgs;
     concptr *affects_list;
     if (!o_ptr->pval) {
         pi_ptr->pval_desc[0] = '\0';
         return;
     }
 
-    object_flags(o_ptr, flgs);
+    auto flgs = object_flags(o_ptr);
     affects_list = pi_ptr->pval_affects;
     sprintf(pi_ptr->pval_desc, "%s%d", o_ptr->pval >= 0 ? "+" : "", o_ptr->pval);
     if (has_flag(flgs, TR_STR) && has_flag(flgs, TR_INT) && has_flag(flgs, TR_WIS) && has_flag(flgs, TR_DEX) && has_flag(flgs, TR_CON)
@@ -90,8 +89,7 @@ static void analyze_pval(object_type *o_ptr, pval_info_type *pi_ptr)
  */
 static void analyze_slay(object_type *o_ptr, concptr *slay_list)
 {
-    TrFlags flgs;
-    object_flags(o_ptr, flgs);
+    auto flgs = object_flags(o_ptr);
     slay_list = spoiler_flag_aux(flgs, slay_flags_desc, slay_list, N_ELEMENTS(slay_flags_desc));
     *slay_list = NULL;
 }
@@ -104,8 +102,7 @@ static void analyze_slay(object_type *o_ptr, concptr *slay_list)
  */
 static void analyze_brand(object_type *o_ptr, concptr *brand_list)
 {
-    TrFlags flgs;
-    object_flags(o_ptr, flgs);
+    auto flgs = object_flags(o_ptr);
     brand_list = spoiler_flag_aux(flgs, brand_flags_desc, brand_list, N_ELEMENTS(brand_flags_desc));
     *brand_list = NULL;
 }
@@ -118,8 +115,7 @@ static void analyze_brand(object_type *o_ptr, concptr *brand_list)
  */
 static void analyze_resist(object_type *o_ptr, concptr *resist_list)
 {
-    TrFlags flgs;
-    object_flags(o_ptr, flgs);
+    auto flgs = object_flags(o_ptr);
     resist_list = spoiler_flag_aux(flgs, resist_flags_desc, resist_list, N_ELEMENTS(resist_flags_desc));
     *resist_list = NULL;
 }
@@ -132,8 +128,7 @@ static void analyze_resist(object_type *o_ptr, concptr *resist_list)
  */
 static void analyze_immune(object_type *o_ptr, concptr *immune_list)
 {
-    TrFlags flgs;
-    object_flags(o_ptr, flgs);
+    auto flgs = object_flags(o_ptr);
     immune_list = spoiler_flag_aux(flgs, immune_flags_desc, immune_list, N_ELEMENTS(immune_flags_desc));
     *immune_list = NULL;
 }
@@ -146,8 +141,7 @@ static void analyze_immune(object_type *o_ptr, concptr *immune_list)
  */
 static void analyze_sustains(object_type *o_ptr, concptr *sustain_list)
 {
-    TrFlags flgs;
-    object_flags(o_ptr, flgs);
+    auto flgs = object_flags(o_ptr);
     if (has_flag(flgs, TR_SUST_STR) && has_flag(flgs, TR_SUST_INT) && has_flag(flgs, TR_SUST_WIS) && has_flag(flgs, TR_SUST_DEX)
         && has_flag(flgs, TR_SUST_CON) && has_flag(flgs, TR_SUST_CHR)) {
         *sustain_list++ = _("全能力", "All stats");
@@ -168,10 +162,9 @@ static void analyze_sustains(object_type *o_ptr, concptr *sustain_list)
  */
 static void analyze_misc_magic(object_type *o_ptr, concptr *misc_list)
 {
-    TrFlags flgs;
     char desc[256];
 
-    object_flags(o_ptr, flgs);
+    auto flgs = object_flags(o_ptr);
     misc_list = spoiler_flag_aux(flgs, misc_flags2_desc, misc_list, N_ELEMENTS(misc_flags2_desc));
     misc_list = spoiler_flag_aux(flgs, misc_flags3_desc, misc_list, N_ELEMENTS(misc_flags3_desc));
     POSITION rad = 0;

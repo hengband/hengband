@@ -41,10 +41,9 @@
 static concptr item_activation_dragon_breath(object_type *o_ptr)
 {
     static char desc[256];
-    TrFlags flgs; /* for resistance flags */
     int n = 0;
 
-    object_flags(o_ptr, flgs);
+    auto flgs = object_flags(o_ptr);
     strcpy(desc, _("", "breathe "));
 
     for (int i = 0; dragonbreath_info[i].flag != 0; i++) {
@@ -169,8 +168,7 @@ static concptr item_activation_aux(object_type *o_ptr)
  */
 concptr activation_explanation(object_type *o_ptr)
 {
-    TrFlags flgs;
-    object_flags(o_ptr, flgs);
+    auto flgs = object_flags(o_ptr);
     if (!(has_flag(flgs, TR_ACTIVATE)))
         return (_("なし", "nothing"));
 

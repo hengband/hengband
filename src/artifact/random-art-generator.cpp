@@ -43,8 +43,7 @@ static bool weakening_artifact(object_type *o_ptr)
 {
     KIND_OBJECT_IDX k_idx = lookup_kind(o_ptr->tval, o_ptr->sval);
     object_kind *k_ptr = &k_info[k_idx];
-    TrFlags flgs;
-    object_flags(o_ptr, flgs);
+    auto flgs = object_flags(o_ptr);
 
     if (has_flag(flgs, TR_KILL_EVIL)) {
         remove_flag(o_ptr->art_flags, TR_KILL_EVIL);

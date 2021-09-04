@@ -515,14 +515,13 @@ void teleport_away_followable(player_type *tracer_ptr, MONSTER_IDX m_idx)
     if (tracer_ptr->muta.has(MUTA::VTELEPORT) || (tracer_ptr->pclass == CLASS_IMITATOR))
         follow = true;
     else {
-        TrFlags flgs;
         object_type *o_ptr;
         INVENTORY_IDX i;
 
         for (i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
             o_ptr = &tracer_ptr->inventory_list[i];
             if (o_ptr->k_idx && !o_ptr->is_cursed()) {
-                object_flags(o_ptr, flgs);
+                auto flgs = object_flags(o_ptr);
                 if (has_flag(flgs, TR_TELEPORT)) {
                     follow = true;
                     break;

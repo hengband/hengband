@@ -18,12 +18,12 @@
  * @param o_ptr フラグ取得元のオブジェクト構造体ポインタ
  * @param flgs フラグ情報を受け取る配列
  */
-void object_flags(const object_type *o_ptr, TrFlags &flgs)
+TrFlags object_flags(const object_type *o_ptr)
 {
     object_kind *k_ptr = &k_info[o_ptr->k_idx];
 
     /* Base object */
-    flgs = k_ptr->flags;
+    auto flgs = k_ptr->flags;
 
     if (o_ptr->is_fixed_artifact()) {
         flgs = a_info[o_ptr->name1].flags;
@@ -84,6 +84,8 @@ void object_flags(const object_type *o_ptr, TrFlags &flgs)
             add_flag(flgs, TR_ACTIVATE);
         }
     }
+
+    return flgs;
 }
 
 /*!
