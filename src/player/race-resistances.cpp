@@ -83,13 +83,12 @@ void known_obj_immunity(player_type *creature_ptr, TrFlags &flags)
     flags.fill(0U);
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        TrFlags o_flags;
         object_type *o_ptr;
         o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
 
-        object_flags_known(o_ptr, o_flags);
+        auto o_flags = object_flags_known(o_ptr);
         if (has_flag(o_flags, TR_IM_ACID))
             add_flag(flags, TR_RES_ACID);
         if (has_flag(o_flags, TR_IM_ELEC))

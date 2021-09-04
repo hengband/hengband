@@ -102,8 +102,7 @@ static bool check_item_knowledge(object_type *o_ptr, tval_type tval)
  */
 static void display_identified_resistances_flag(object_type *o_ptr, FILE *fff)
 {
-    TrFlags flags;
-    object_flags_known(o_ptr, flags);
+    auto flags = object_flags_known(o_ptr);
 
     print_im_or_res_flag(TR_IM_ACID, TR_RES_ACID, flags, fff);
     print_im_or_res_flag(TR_IM_ELEC, TR_RES_ELEC, flags, fff);

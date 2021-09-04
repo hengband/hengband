@@ -94,20 +94,20 @@ TrFlags object_flags(const object_type *o_ptr)
  * @param o_ptr フラグ取得元のオブジェクト構造体ポインタ
  * @param flgs フラグ情報を受け取る配列
  */
-void object_flags_known(const object_type *o_ptr, TrFlags &flgs)
+TrFlags object_flags_known(const object_type *o_ptr)
 {
     bool spoil = false;
     object_kind *k_ptr = &k_info[o_ptr->k_idx];
-    flgs.fill(0U);
+    TrFlags flgs{};
 
     if (!o_ptr->is_aware())
-        return;
+        return flgs;
 
     /* Base object */
     flgs = k_ptr->flags;
 
     if (!o_ptr->is_known())
-        return;
+        return flgs;
 
     if (o_ptr->is_ego()) {
         ego_item_type *e_ptr = &e_info[o_ptr->name2];
@@ -137,7 +137,7 @@ void object_flags_known(const object_type *o_ptr, TrFlags &flgs)
     }
 
     if (!o_ptr->is_smith())
-        return;
+        return flgs;
 
     int add = o_ptr->xtra3 - 1;
     if (add < TR_FLAG_MAX) {
@@ -165,4 +165,6 @@ void object_flags_known(const object_type *o_ptr, TrFlags &flgs)
         add_flag(flgs, TR_RES_FIRE);
         add_flag(flgs, TR_RES_COLD);
     }
+
+    return flgs;
 }

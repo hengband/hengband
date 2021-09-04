@@ -245,7 +245,7 @@ static void calc_two_hands(player_type *creature_ptr, int *damage, int *to_h)
 {
     object_type *o_ptr;
     o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
-    TrFlags flgs;
+
     for (int i = 0; i < 2; i++) {
         int basedam;
         damage[i] = creature_ptr->dis_to_d[i] * 100;
@@ -270,7 +270,7 @@ static void calc_two_hands(player_type *creature_ptr, int *damage, int *to_h)
         }
 
         basedam = ((o_ptr->dd + creature_ptr->to_dd[i]) * (o_ptr->ds + creature_ptr->to_ds[i] + 1)) * 50;
-        object_flags_known(o_ptr, flgs);
+        auto flgs = object_flags_known(o_ptr);
 
         bool impact = creature_ptr->impact != 0;
         basedam = calc_expect_crit(creature_ptr, o_ptr->weight, to_h[i], basedam, creature_ptr->dis_to_h[i], poison_needle, impact);
