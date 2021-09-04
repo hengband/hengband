@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct object_type object_type;
+struct object_type;;
 int m_bonus(int max, DEPTH level);
 void one_sustain(object_type *o_ptr);
 bool add_esp_strong(object_type *o_ptr);

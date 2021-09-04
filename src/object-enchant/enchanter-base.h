@@ -10,7 +10,7 @@
 
 #include "system/angband.h"
 
-typedef struct object_type object_type;
+struct object_type;;
 struct player_type;
 class EnchanterBase {
 public:

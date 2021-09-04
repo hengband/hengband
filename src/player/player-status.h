@@ -7,7 +7,7 @@
 
 #include "system/angband.h"
 
-typedef struct object_type object_type;
+struct object_type;;
 struct player_type;
 int weapon_exp_level(int weapon_exp);
 int riding_exp_level(int riding_exp);

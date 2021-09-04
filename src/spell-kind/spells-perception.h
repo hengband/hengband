@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct object_type object_type;
+struct object_type;;
 struct player_type;
 void identify_pack(player_type *target_ptr);
 bool identify_item(player_type *owner_ptr, object_type *o_ptr);

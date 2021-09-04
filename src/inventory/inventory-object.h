@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct object_type object_type;
+struct object_type;;
 struct player_type;
 void vary_item(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER num);
 void inven_item_increase(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER num);

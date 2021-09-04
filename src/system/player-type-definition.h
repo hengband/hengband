@@ -18,7 +18,7 @@
 enum class RF_ABILITY;
 
 struct floor_type;
-typedef struct object_type object_type;
+struct object_type;;
 typedef struct player_type {
     int player_uid{};
     int player_euid{};

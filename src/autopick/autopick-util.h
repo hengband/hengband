@@ -41,7 +41,7 @@ typedef struct chain_str {
 /*
  * Data struct for text editor
  */
-typedef struct object_type object_type;
+struct object_type;;
 typedef struct text_body_type {
 	int wid, hgt;
 	int cx, cy;

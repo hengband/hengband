@@ -85,7 +85,7 @@ extern char quest_text[10][80];
 extern int quest_text_line;
 extern int leaving_quest;
 
-typedef struct object_type object_type;
+struct object_type;;
 struct player_type;
 void determine_random_questor(player_type *player_ptr, quest_type *q_ptr);
 void record_quest_final_status(quest_type *q_ptr, PLAYER_LEVEL lev, int16_t stat);

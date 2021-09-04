@@ -3,7 +3,7 @@
 #include "system/angband.h"
 
 // Activation Execution.
-typedef struct object_type object_type;
+struct object_type;;
 typedef struct ae_type {
     DIRECTION dir;
     bool success;

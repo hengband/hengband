@@ -3,7 +3,7 @@
 #include "system/angband.h"
 #include "spell/spells-util.h"
 
-typedef struct object_type object_type;
+struct object_type;;
 struct player_type;
 typedef struct monster_type monster_type;
 bool heal_monster(player_type *caster_ptr, DIRECTION dir, HIT_POINT dam);
