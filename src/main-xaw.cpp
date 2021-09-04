@@ -162,7 +162,7 @@ typedef struct AngbandClassRec *AngbandWidgetClass;
  * New fields for the Angband widget record
  */
 
-typedef struct
+struct AngbandPart
 {
 	/* Settable resources */
 	int               start_rows;
@@ -183,15 +183,12 @@ typedef struct
 	Dimension         fontascent;
 	GC                gc[NUM_COLORS+1];  /* Includes a special 'xor' color */
 
-} AngbandPart;
+};
 
 
 /*
  * Full instance record declaration
  */
-
-typedef struct AngbandRec AngbandRec;
-
 struct AngbandRec
 {
 	CorePart          core;
@@ -203,9 +200,6 @@ struct AngbandRec
 /*
  * New fields for the Angband widget class record
  */
-
-typedef struct AngbandClassPart AngbandClassPart;
-
 struct AngbandClassPart
 {
 	int               dummy;
@@ -215,9 +209,6 @@ struct AngbandClassPart
 /*
  * Full class record declaration
  */
-
-typedef struct AngbandClassRec AngbandClassRec;
-
 struct AngbandClassRec
 {
 	CoreClassPart     core_class;
@@ -736,11 +727,6 @@ static XFontStruct *getFont(AngbandWidget widget,
  * Number of windows with special fallback resources
  */
 #define SPECIAL_FALLBACKS 3
-
-/*
- * Forward declare
- */
-typedef struct term_data term_data;
 
 /*
  * A structure for each "term"
