@@ -2,5 +2,5 @@
 
 #include "system/angband.h"
 
-typedef struct player_type player_type;
+struct player_type;
 bool process_quantum_effect(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);

@@ -14,7 +14,7 @@ typedef struct qtwg_type {
     int *x;
 } qtwg_type;
 
-typedef struct player_type player_type;
+struct player_type;
 typedef parse_error_type (*process_dungeon_file_pf)(player_type *, concptr, int, int, int, int);
 
 qtwg_type *initialize_quest_generator_type(qtwg_type *qg_ptr, char *buf, int ymin, int xmin, int ymax, int xmax, int *y, int *x);

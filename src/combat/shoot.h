@@ -2,9 +2,9 @@
 
 #include "system/angband.h"
 
-typedef struct monster_type monster_type;
-typedef struct object_type object_type;
-typedef struct player_type player_type;
+struct monster_type;
+struct object_type;;
+struct player_type;
 bool test_hit_fire(player_type *shooter_ptr, int chance, monster_type *m_ptr, int vis, char *o_name);
 HIT_POINT critical_shot(player_type *shooter_ptr, WEIGHT weight, int plus_ammo, int plus_bow, HIT_POINT dam);
 ENERGY bow_energy(OBJECT_SUBTYPE_VALUE sval);

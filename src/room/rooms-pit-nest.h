@@ -34,7 +34,7 @@ enum pit_type : int {
 };
 
 /*! pit/nest型情報の構造体定義 */
-typedef struct player_type player_type;
+struct player_type;
 struct nest_pit_type {
     concptr name; //<! 部屋名
     bool (*hook_func)(player_type *player_ptr, MONRACE_IDX r_idx); //<! モンスターフィルタ関数
@@ -49,7 +49,7 @@ struct nest_mon_info_type {
     bool used; //!< 既に選んだかどうか
 };
 
-typedef struct dun_data_type dun_data_type;
+struct dun_data_type;
 bool build_type5(player_type *player_ptr, dun_data_type *dd_ptr);
 bool build_type6(player_type *player_ptr, dun_data_type *dd_ptr);
 bool build_type13(player_type *player_ptr, dun_data_type *dd_ptr);

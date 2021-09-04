@@ -2,9 +2,9 @@
 
 #include "system/angband.h"
 
-typedef struct dun_data_type dun_data_type;
-typedef struct floor_type floor_type;
-typedef struct player_type player_type;
+struct dun_data_type;
+struct floor_type;
+struct player_type;
 void add_river(floor_type *floor_ptr, dun_data_type *dd_ptr);
 void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance);
 void place_trees(player_type *player_ptr, POSITION x, POSITION y);

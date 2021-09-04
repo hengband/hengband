@@ -3,7 +3,7 @@
 #include "system/angband.h"
 
 // Activation Execution.
-typedef struct object_type object_type;
+struct object_type;;
 typedef struct ae_type {
     DIRECTION dir;
     bool success;
@@ -13,5 +13,5 @@ typedef struct ae_type {
     int fail;
 } ae_type;
 
-typedef struct player_type player_type;
+struct player_type;
 ae_type *initialize_ae_type(player_type *user_ptr, ae_type *ae_ptr, const INVENTORY_IDX item);

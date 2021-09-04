@@ -113,8 +113,8 @@ extern FEAT_IDX feat_wall_solid;
 extern FEAT_IDX feat_ground_type[100];
 extern FEAT_IDX feat_wall_type[100];
 
-typedef struct floor_type floor_type;
-typedef struct player_type player_type;
+struct floor_type;
+struct player_type;
 bool is_closed_door(player_type *player_ptr, FEAT_IDX feat);
 bool is_trap(player_type *player_ptr, FEAT_IDX feat);
 void apply_default_feat_lighting(TERM_COLOR *f_attr, SYMBOL_CODE *f_char);

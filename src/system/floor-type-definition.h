@@ -5,9 +5,9 @@
 #include "monster/monster-timed-effect-types.h"
 #include "system/angband.h"
 
-typedef struct grid_type grid_type;
-typedef struct object_type object_type;
-typedef struct monster_type monster_type;
+struct grid_type;;
+struct object_type;;
+struct monster_type;
 typedef struct floor_type {
     DUNGEON_IDX dungeon_idx;
     grid_type *grid_array[MAX_HGT];

@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct player_type player_type;
+struct player_type;
 void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, bool visual_only, IDX direct_r_idx);
 void do_cmd_knowledge_pets(player_type *creature_ptr);
 void do_cmd_knowledge_kill_count(player_type *creature_ptr);

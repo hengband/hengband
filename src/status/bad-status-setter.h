@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct player_type player_type;
+struct player_type;
 bool set_blind(player_type *creature_ptr, TIME_EFFECT v);
 bool set_confused(player_type *creature_ptr, TIME_EFFECT v);
 bool set_poisoned(player_type *creature_ptr, TIME_EFFECT v);

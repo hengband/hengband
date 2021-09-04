@@ -2,8 +2,8 @@
 
 #include "system/angband.h"
 
-typedef struct object_type object_type;
-typedef struct player_type player_type;
+struct object_type;;
+struct player_type;
 bool activate_sunlight(player_type *user_ptr);
 bool activate_confusion(player_type *user_ptr);
 bool activate_banish_evil(player_type *user_ptr);

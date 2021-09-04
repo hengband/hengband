@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct player_type player_type;
+struct player_type;
 bool set_tim_levitation(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 bool set_ultimate_res(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 bool set_tim_res_nether(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);

@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct player_type player_type;
+struct player_type;
 bool door_creation(player_type *caster_ptr, POSITION y, POSITION x);
 bool trap_creation(player_type *caster_ptr, POSITION y, POSITION x);
 bool tree_creation(player_type *caster_ptr, POSITION y, POSITION x);

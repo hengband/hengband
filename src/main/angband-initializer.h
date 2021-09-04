@@ -11,6 +11,6 @@
  * are included in all such copies.
  */
 
-typedef struct player_type player_type;
+struct player_type;
 void init_angband(player_type *player_ptr, bool no_term);
 void init_file_paths(char *path, char *varpath);

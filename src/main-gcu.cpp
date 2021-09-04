@@ -185,8 +185,6 @@
  */
 #include <curses.h>
 
-typedef struct term_data term_data;
-
 struct term_data {
     term_type t;
 

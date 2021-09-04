@@ -6,5 +6,5 @@
 
 #include "system/angband.h"
 
-typedef struct player_type player_type;
+struct player_type;
 bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn);

@@ -51,7 +51,7 @@ const int MAX_NORMAL_TRAPS = TRAP_ALARM + 1;
 
 extern const int chest_traps[64];
 
-typedef struct player_type player_type;
+struct player_type;
 void init_normal_traps(void);
 FEAT_IDX choose_random_trap(player_type *trapped_ptr);
 void disclose_grid(player_type *trapped_ptr, POSITION y, POSITION x);

@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef struct player_type player_type;
+struct player_type;
 bool exchange_cash(player_type *player_ptr);
 void today_target(player_type *player_ptr);
 void tsuchinoko(void);

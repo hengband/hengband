@@ -2,6 +2,6 @@
 
 #include "system/angband.h"
 
-typedef struct player_type player_type;
+struct player_type;
 void place_gold(player_type *player_ptr, POSITION y, POSITION x);
 void place_object(player_type *owner_ptr, POSITION y, POSITION x, BIT_FLAGS mode);

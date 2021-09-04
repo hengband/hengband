@@ -38,7 +38,7 @@ typedef struct wilderness_type {
 
 extern wilderness_type **wilderness;
 
-typedef struct player_type player_type;
+struct player_type;
 void set_floor_and_wall(DUNGEON_IDX type);
 void wilderness_gen(player_type *creature_ptr);
 void wilderness_gen_small(player_type *creature_ptr);

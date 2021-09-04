@@ -8,5 +8,5 @@ enum blue_magic_type : int {
     MONSPELL_TYPE_OTHER = 5,
 };
 
-typedef struct player_type player_type;
+struct player_type;
 bool do_cmd_cast_learned(player_type *caster_ptr);

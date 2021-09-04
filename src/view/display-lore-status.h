@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef struct lore_type lore_type;
+struct lore_type;
 void display_monster_hp_ac(lore_type *lore_ptr);
 void display_monster_concrete_abilities(lore_type *lore_ptr);
 void display_monster_abilities(lore_type *lore_ptr);

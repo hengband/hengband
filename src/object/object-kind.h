@@ -60,5 +60,5 @@ typedef struct object_kind {
 extern std::vector<object_kind> k_info;
 extern KIND_OBJECT_IDX max_k_idx;
 
-typedef struct object_type object_type;
+struct object_type;;
 SYMBOL_CODE object_char(object_type *o_ptr);

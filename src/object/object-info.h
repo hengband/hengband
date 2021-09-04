@@ -5,8 +5,8 @@
 
 #define OBJ_GOLD_LIST 480 /* First "gold" entry */
 
-typedef struct object_type object_type;
-typedef struct player_type player_type;
+struct object_type;;
+struct player_type;
 concptr activation_explanation(object_type *o_ptr);
 char index_to_label(int i);
 int16_t wield_slot(player_type *owner_ptr, const object_type *o_ptr);

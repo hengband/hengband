@@ -13,7 +13,7 @@
  * The "hold_o_idx" field points to the first object of a stack
  * of objects (if any) being carried by the monster (see above).
  */
-typedef struct floor_type floor_type;
+struct floor_type;
 struct monster_race;
 typedef struct monster_type {
 	MONRACE_IDX r_idx{};		/*!< モンスターの実種族ID (これが0の時は死亡扱いになる) / Monster race index 0 = dead. */

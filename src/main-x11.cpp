@@ -170,14 +170,6 @@ typedef unsigned long Pixell;
 #endif
 
 /*
- * The structures defined below
- */
-typedef struct metadpy metadpy;
-typedef struct infowin infowin;
-typedef struct infoclr infoclr;
-typedef struct infofnt infofnt;
-
-/*
  * A structure summarizing a given Display.
  *
  *	- The Display itself
@@ -983,11 +975,6 @@ static infoclr *clr[256];
 static byte color_table[256][4];
 
 /*
- * Forward declare
- */
-typedef struct term_data term_data;
-
-/*
  * A structure for each "term"
  */
 struct term_data {
@@ -1015,7 +1002,6 @@ static term_data data[MAX_TERM_DATA];
 #define WIN (Infowin->win)
 
 /* Describe a set of co-ordinates. */
-typedef struct co_ord co_ord;
 struct co_ord {
     int x;
     int y;
@@ -1025,7 +1011,6 @@ struct co_ord {
  * A special structure to store information about the text currently
  * selected.
  */
-typedef struct x11_selection_type x11_selection_type;
 struct x11_selection_type {
     bool select; /* The selection is currently in use. */
     bool drawn; /* The selection is currently displayed. */

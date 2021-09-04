@@ -3,7 +3,7 @@
 #include "io/files-util.h"
 #include "system/angband.h"
 
-typedef struct player_type player_type;
+struct player_type;
 bool send_world_score(player_type *current_player_ptr, bool do_send, display_player_pf display_player);
 errr top_twenty(player_type *current_player_ptr);
 errr predict_score(player_type *current_player_ptr);

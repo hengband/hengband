@@ -18,5 +18,5 @@ enum cfm_type {
 	CFM_FIRST_FLOOR = 0x0200, /*!< ダンジョンに入った最初のフロアである / Create exit from the dungeon */
 };
 
-typedef struct player_type player_type;
+struct player_type;
 void prepare_change_floor_mode(player_type *creature_ptr, BIT_FLAGS mode);

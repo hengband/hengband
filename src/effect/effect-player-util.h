@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct monster_type monster_type;
+struct monster_type;
 typedef struct effect_player_type {
     DEPTH rlev; // モンスターのレベル (但し0のモンスターは1になる).
     monster_type *m_ptr;

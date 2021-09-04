@@ -4,8 +4,8 @@
 
 enum class RF_ABILITY;
 
-typedef struct lore_type lore_type;
-typedef struct player_type player_type;
+struct lore_type;
+struct player_type;
 void dice_to_string(int base_damage, int dice_num, int dice_side, int dice_mult, int dice_div, char *msg);
 bool know_armour(MONRACE_IDX r_idx, const bool know_everything);
 bool know_damage(MONRACE_IDX r_idx, int i);

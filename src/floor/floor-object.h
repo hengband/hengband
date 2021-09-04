@@ -5,9 +5,9 @@
 
 class ObjectIndexList;
 
-typedef struct floor_type floor_type;
-typedef struct object_type object_type;
-typedef struct player_type player_type;
+struct floor_type;
+struct object_type;;
+struct player_type;
 class ItemTester;
 bool make_object(player_type *owner_ptr, object_type *j_ptr, BIT_FLAGS mode);
 bool make_gold(player_type *player_ptr, object_type *j_ptr);

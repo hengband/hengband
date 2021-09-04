@@ -4,7 +4,7 @@
 
 struct MonsterSpellResult;
 
-typedef struct player_type player_type;
+struct player_type;
 void spell_badstatus_message(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr msg1, concptr msg2, concptr msg3, concptr msg4, bool resist,
     bool saving_throw, int TARGET_TYPE);
 MonsterSpellResult spell_RF5_DRAIN_MANA(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE);
