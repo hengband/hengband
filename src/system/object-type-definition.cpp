@@ -521,7 +521,6 @@ bool object_type::is_activatable() const
     if (!this->is_known())
         return false;
 
-    TrFlags flags;
-    object_flags(this, flags);
+    auto flags = object_flags(this);
     return has_flag(flags, TR_ACTIVATE);
 }

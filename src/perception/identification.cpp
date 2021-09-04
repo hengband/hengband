@@ -35,14 +35,13 @@
  */
 bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 {
-    TrFlags flgs;
     char temp[70 * 20];
     concptr info[128];
     GAME_TEXT o_name[MAX_NLEN];
     char desc[256];
 
     int trivial_info = 0;
-    object_flags(o_ptr, flgs);
+    auto flgs = object_flags(o_ptr);
 
     shape_buffer(o_ptr->name1 ? a_info[o_ptr->name1].text.c_str() : k_info[o_ptr->k_idx].text.c_str(), 77 - 15, temp, sizeof(temp));
 

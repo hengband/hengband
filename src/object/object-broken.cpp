@@ -211,10 +211,9 @@ bool BreakerCold::hates(object_type *o_ptr) const
  */
 bool ObjectBreaker::can_destroy(object_type *o_ptr) const
 {
-    TrFlags flgs;
     if (!this->hates(o_ptr))
         return false;
-    object_flags(o_ptr, flgs);
+    auto flgs = object_flags(o_ptr);
     if (has_flag(flgs, this->ignore_flg))
         return false;
     return true;

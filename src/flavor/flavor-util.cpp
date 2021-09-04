@@ -182,8 +182,7 @@ static bool has_flag_of(std::vector<flag_insc_table> &fi_vec, const TrFlags &flg
 char *get_ability_abbreviation(char *short_flavor, object_type *o_ptr, bool kanji, bool all)
 {
     char *prev_ptr = short_flavor;
-    TrFlags flgs;
-    object_flags(o_ptr, flgs);
+    auto flgs = object_flags(o_ptr);
     if (!all) {
         object_kind *k_ptr = &k_info[o_ptr->k_idx];
         for (int j = 0; j < TR_FLAG_SIZE; j++)

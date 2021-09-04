@@ -23,9 +23,8 @@
 PRICE flag_cost(const object_type *o_ptr, int plusses)
 {
     PRICE total = 0;
-    TrFlags flgs;
     object_kind *k_ptr = &k_info[o_ptr->k_idx];
-    object_flags(o_ptr, flgs);
+    auto flgs = object_flags(o_ptr);
 
     /*
      * Exclude fixed flags of the base item.

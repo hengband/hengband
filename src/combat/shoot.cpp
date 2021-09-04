@@ -85,9 +85,9 @@ static MULTIPLY calc_shot_damage_with_slay(
 
     monster_race *race_ptr = &r_info[monster_ptr->r_idx];
 
-    TrFlags flags, bow_flags, arrow_flags;
-    object_flags(arrow_ptr, arrow_flags);
-    object_flags(bow_ptr, bow_flags);
+    TrFlags flags{};
+    auto arrow_flags = object_flags(arrow_ptr);
+    auto bow_flags = object_flags(bow_ptr);
 
     for (int i = 0; i < TR_FLAG_SIZE; i++)
         flags[i] = bow_flags[i] | arrow_flags[i];

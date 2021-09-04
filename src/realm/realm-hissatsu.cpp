@@ -651,7 +651,6 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
 
         if (cast) {
             int total_damage = 0, basedam, i;
-            TrFlags flgs;
             object_type *o_ptr;
             if (!get_aim_dir(caster_ptr, &dir))
                 return NULL;
@@ -664,7 +663,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
                 o_ptr = &caster_ptr->inventory_list[INVEN_MAIN_HAND + i];
                 basedam = (o_ptr->dd * (o_ptr->ds + 1)) * 50;
                 damage = o_ptr->to_d * 100;
-                object_flags(o_ptr, flgs);
+                auto flgs = object_flags(o_ptr);
                 if ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)) {
                     /* vorpal blade */
                     basedam *= 5;
@@ -920,7 +919,6 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
         if (cast) {
             int total_damage = 0, basedam, i;
             POSITION y, x;
-            TrFlags flgs;
             object_type *o_ptr;
 
             if (!get_direction(caster_ptr, &dir, false, false))
@@ -943,7 +941,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
                 o_ptr = &caster_ptr->inventory_list[INVEN_MAIN_HAND + i];
                 basedam = (o_ptr->dd * (o_ptr->ds + 1)) * 50;
                 damage = o_ptr->to_d * 100;
-                object_flags(o_ptr, flgs);
+                auto flgs = object_flags(o_ptr);
                 if ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)) {
                     /* vorpal blade */
                     basedam *= 5;

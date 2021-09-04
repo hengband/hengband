@@ -159,7 +159,6 @@ void update_object_by_monster_movement(player_type *target_ptr, turn_flags *turn
 
     turn_flags_ptr->do_take = (r_ptr->flags2 & RF2_TAKE_ITEM) != 0;
     for (auto it = g_ptr->o_idx_list.begin(); it != g_ptr->o_idx_list.end();) {
-        TrFlags flgs;
         BIT_FLAGS flg2 = 0L, flg3 = 0L, flgr = 0L;
         GAME_TEXT m_name[MAX_NLEN], o_name[MAX_NLEN];
         OBJECT_IDX this_o_idx = *it++;
@@ -171,7 +170,7 @@ void update_object_by_monster_movement(player_type *target_ptr, turn_flags *turn
                 continue;
         }
 
-        object_flags(o_ptr, flgs);
+        auto flgs = object_flags(o_ptr);
         describe_flavor(target_ptr, o_name, o_ptr, 0);
         monster_desc(target_ptr, m_name, m_ptr, MD_INDEF_HIDDEN);
         update_object_flags(flgs, &flg2, &flg3, &flgr);

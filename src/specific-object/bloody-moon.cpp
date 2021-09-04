@@ -17,8 +17,7 @@
  */
 void get_bloody_moon_flags(object_type *o_ptr)
 {
-    for (int i = 0; i < TR_FLAG_SIZE; i++)
-        o_ptr->art_flags[i] = a_info[ART_BLOOD].flags[i];
+    o_ptr->art_flags = a_info[ART_BLOOD].flags;
 
     int dummy = randint1(2) + randint1(2);
     for (int i = 0; i < dummy; i++) {

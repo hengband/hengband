@@ -99,7 +99,7 @@ bool ObjectThrowEntity::check_can_throw()
 void ObjectThrowEntity::calc_throw_range()
 {
     this->q_ptr->copy_from(this->o_ptr);
-    object_flags(this->q_ptr, this->obj_flags);
+    this->obj_flags = object_flags(this->q_ptr);
     torch_flags(this->q_ptr, this->obj_flags);
     distribute_charges(this->o_ptr, this->q_ptr, 1);
     this->q_ptr->number = 1;

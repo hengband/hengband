@@ -58,10 +58,9 @@ object_type *choose_warning_item(player_type *creature_ptr)
     /* Search Inventory */
     int number = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        TrFlags flgs;
         object_type *o_ptr = &creature_ptr->inventory_list[i];
 
-        object_flags(o_ptr, flgs);
+        auto flgs = object_flags(o_ptr);
         if (has_flag(flgs, TR_WARNING)) {
             choices[number] = i;
             number++;

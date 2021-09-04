@@ -118,7 +118,6 @@ static void show_weapon_dmg(int r, int c, int mindice, int maxdice, int blows, i
  */
 static void compare_weapon_aux(player_type *owner_ptr, object_type *o_ptr, int col, int r)
 {
-    TrFlags flgs;
     int blow = owner_ptr->num_blow[0];
     bool force = false;
     bool dokubari = false;
@@ -134,7 +133,7 @@ static void compare_weapon_aux(player_type *owner_ptr, object_type *o_ptr, int c
     int vorpal_div = 1;
     int dmg_bonus = o_ptr->to_d + owner_ptr->to_d[0];
 
-    object_flags(o_ptr, flgs);
+    auto flgs = object_flags(o_ptr);
     if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
         dokubari = true;
 

@@ -195,7 +195,6 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             concptr q, s;
             GAME_TEXT o_name[MAX_NLEN];
             object_type *o_ptr;
-            TrFlags f;
 
             q = _("どれを呪いますか？", "Which weapon do you curse?");
             s = _("武器を装備していない。", "You're not wielding a weapon.");
@@ -205,7 +204,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                 return "";
 
             describe_flavor(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
-            object_flags(o_ptr, f);
+            auto f = object_flags(o_ptr);
 
             if (!get_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really？"), o_name)))
                 return "";
@@ -501,7 +500,6 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             concptr q, s;
             GAME_TEXT o_name[MAX_NLEN];
             object_type *o_ptr;
-            TrFlags f;
 
             q = _("どれを呪いますか？", "Which piece of armour do you curse?");
             s = _("防具を装備していない。", "You're not wearing any armor.");
@@ -512,7 +510,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 
             o_ptr = &caster_ptr->inventory_list[item];
             describe_flavor(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
-            object_flags(o_ptr, f);
+            auto f = object_flags(o_ptr);
 
             if (!get_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really？"), o_name)))
                 return "";
@@ -700,7 +698,6 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
         if (cast) {
             OBJECT_IDX item;
             concptr s, q;
-            TrFlags f;
             object_type *o_ptr;
 
             q = _("どの装備品から吸収しますか？", "Which cursed equipment do you drain mana from?");
@@ -710,7 +707,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             if (!o_ptr)
                 return "";
 
-            object_flags(o_ptr, f);
+            auto f = object_flags(o_ptr);
 
             caster_ptr->csp += (caster_ptr->lev / 5) + randint1(caster_ptr->lev / 5);
             if (has_flag(f, TR_TY_CURSE) || o_ptr->curse_flags.has(TRC::TY_CURSE))

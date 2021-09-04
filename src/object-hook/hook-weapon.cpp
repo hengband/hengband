@@ -23,8 +23,7 @@ bool object_is_favorite(player_type *player_ptr, const object_type *o_ptr)
     /* Favorite weapons are varied depend on the class */
     switch (player_ptr->pclass) {
     case CLASS_PRIEST: {
-        TrFlags flgs;
-        object_flags_known(o_ptr, flgs);
+        auto flgs = object_flags_known(o_ptr);
 
         if (!has_flag(flgs, TR_BLESSED) && !(o_ptr->tval == TV_HAFTED))
             return false;
@@ -40,8 +39,7 @@ bool object_is_favorite(player_type *player_ptr, const object_type *o_ptr)
 
     case CLASS_BEASTMASTER:
     case CLASS_CAVALRY: {
-        TrFlags flgs;
-        object_flags_known(o_ptr, flgs);
+        auto flgs = object_flags_known(o_ptr);
 
         /* Is it known to be suitable to using while riding? */
         if (!(has_flag(flgs, TR_RIDING)))
