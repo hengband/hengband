@@ -122,7 +122,6 @@ typedef int32_t ITEM_NUMBER; /*!< ゲーム中のアイテム数型を定義 */
 typedef int16_t ACTION_ENERGY; /*!< ゲーム中の行動エネルギー型を定義 */
 typedef int16_t ARMOUR_CLASS; /*!< ゲーム中の行動アーマークラス型を定義 */
 typedef int16_t TIME_EFFECT; /*!< ゲーム中の時限期間の型を定義 */
-typedef byte DISCOUNT_RATE; /*!< ゲーム中の値引き率の型を定義 */
 typedef int16_t SPEED; /*!< ゲーム中の加速値の型定義 */
 
 /*!
