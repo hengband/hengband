@@ -226,7 +226,7 @@ void kill_yank_chain(text_body_type *tb)
 void add_str_to_yank(text_body_type *tb, concptr str)
 {
     tb->yank_eol = false;
-    if (NULL == tb->yank) {
+    if (tb->yank == nullptr) {
         tb->yank = new_chain_str(str);
         return;
     }
