@@ -22,6 +22,11 @@
 
 #define MAX_KEEP 4 /*!<呪術の最大詠唱数 */
 
+RealmHex::RealmHex(player_type *caster_ptr)
+    : caster_ptr(caster_ptr)
+{
+}
+
 /*!
  * @brief プレイヤーが詠唱中の全呪術を停止する
  */
@@ -286,14 +291,14 @@ bool teleport_barrier(player_type *caster_ptr, MONSTER_IDX m_idx)
  * @param m_idx 判定の対象となるモンスターID
  * @return 反魔法の効果が適用されるならTRUEを返す
  */
-bool magic_barrier(player_type *target_ptr, MONSTER_IDX m_idx)
+bool magic_barrier(player_type *caster_ptr, MONSTER_IDX m_idx)
 {
-    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+    monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-    if (!hex_spelling(target_ptr, HEX_ANTI_MAGIC))
+    if (!hex_spelling(caster_ptr, HEX_ANTI_MAGIC))
         return false;
-    if ((target_ptr->lev * 3 / 2) < randint1(r_ptr->level))
+    if ((caster_ptr->lev * 3 / 2) < randint1(r_ptr->level))
         return false;
 
     return true;
