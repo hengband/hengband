@@ -214,7 +214,7 @@ bool ObjectBreaker::can_destroy(object_type *o_ptr) const
     if (!this->hates(o_ptr))
         return false;
     auto flgs = object_flags(o_ptr);
-    if (has_flag(flgs, this->ignore_flg))
+    if (flgs.has(this->ignore_flg))
         return false;
     return true;
 }

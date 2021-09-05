@@ -38,30 +38,30 @@ static void add_negative_flags(object_type *o_ptr)
         o_ptr->curse_flags.set(TRC::PERMA_CURSE);
 
     if (one_in_(3))
-        add_flag(o_ptr->art_flags, TR_TY_CURSE);
+        o_ptr->art_flags.set(TR_TY_CURSE);
 
     if (one_in_(2))
-        add_flag(o_ptr->art_flags, TR_AGGRAVATE);
+        o_ptr->art_flags.set(TR_AGGRAVATE);
 
     if (one_in_(3))
-        add_flag(o_ptr->art_flags, TR_DRAIN_EXP);
+        o_ptr->art_flags.set(TR_DRAIN_EXP);
 
     if (one_in_(6))
-        add_flag(o_ptr->art_flags, TR_ADD_L_CURSE);
+        o_ptr->art_flags.set(TR_ADD_L_CURSE);
 
     if (one_in_(9))
-        add_flag(o_ptr->art_flags, TR_ADD_H_CURSE);
+        o_ptr->art_flags.set(TR_ADD_H_CURSE);
 
     if (one_in_(9))
-        add_flag(o_ptr->art_flags, TR_DRAIN_HP);
+        o_ptr->art_flags.set(TR_DRAIN_HP);
 
     if (one_in_(9))
-        add_flag(o_ptr->art_flags, TR_DRAIN_MANA);
+        o_ptr->art_flags.set(TR_DRAIN_MANA);
 
     if (one_in_(2))
-        add_flag(o_ptr->art_flags, TR_TELEPORT);
+        o_ptr->art_flags.set(TR_TELEPORT);
     else if (one_in_(3))
-        add_flag(o_ptr->art_flags, TR_NO_TELE);
+        o_ptr->art_flags.set(TR_NO_TELE);
 }
 
 /*!
@@ -77,11 +77,11 @@ void curse_artifact(player_type *player_ptr, object_type *o_ptr)
 {
     pval_subtraction(o_ptr);
     o_ptr->curse_flags.set({ TRC::HEAVY_CURSE, TRC::CURSED });
-    remove_flag(o_ptr->art_flags, TR_BLESSED);
+    o_ptr->art_flags.reset(TR_BLESSED);
     add_negative_flags(o_ptr);
     if ((player_ptr->pclass != CLASS_WARRIOR) && (player_ptr->pclass != CLASS_ARCHER) && (player_ptr->pclass != CLASS_CAVALRY)
         && (player_ptr->pclass != CLASS_BERSERKER) && (player_ptr->pclass != CLASS_SMITH) && one_in_(3))
-        add_flag(o_ptr->art_flags, TR_NO_MAGIC);
+        o_ptr->art_flags.set(TR_NO_MAGIC);
 }
 
 /*!
@@ -150,19 +150,19 @@ static HIT_POINT calc_arm_avgdamage(player_type *player_ptr, object_type *o_ptr)
     HIT_POINT base, forced, vorpal;
     HIT_POINT s_evil = forced = vorpal = 0;
     HIT_POINT dam = base = (o_ptr->dd * o_ptr->ds + o_ptr->dd) / 2;
-    if (has_flag(flgs, TR_KILL_EVIL)) {
+    if (flgs.has(TR_KILL_EVIL)) {
         dam = s_evil = dam * 7 / 2;
-    } else if (!has_flag(flgs, TR_KILL_EVIL) && has_flag(flgs, TR_SLAY_EVIL)) {
+    } else if (flgs.has_not(TR_KILL_EVIL) && flgs.has(TR_SLAY_EVIL)) {
         dam = s_evil = dam * 2;
     } else
         s_evil = dam;
 
-    if (has_flag(flgs, TR_FORCE_WEAPON)) {
+    if (flgs.has(TR_FORCE_WEAPON)) {
         dam = forced = dam * 3 / 2 + (o_ptr->dd * o_ptr->ds + o_ptr->dd);
     } else
         forced = dam;
 
-    if (has_flag(flgs, TR_VORPAL)) {
+    if (flgs.has(TR_VORPAL)) {
         dam = vorpal = dam * 11 / 9;
     } else
         vorpal = dam;
@@ -175,16 +175,16 @@ static HIT_POINT calc_arm_avgdamage(player_type *player_ptr, object_type *o_ptr)
 bool has_extreme_damage_rate(player_type *player_ptr, object_type *o_ptr)
 {
     auto flgs = object_flags(o_ptr);
-    if (has_flag(flgs, TR_VAMPIRIC)) {
-        if (has_flag(flgs, TR_BLOWS) && (o_ptr->pval == 1) && (calc_arm_avgdamage(player_ptr, o_ptr) > 52)) {
+    if (flgs.has(TR_VAMPIRIC)) {
+        if (flgs.has(TR_BLOWS) && (o_ptr->pval == 1) && (calc_arm_avgdamage(player_ptr, o_ptr) > 52)) {
             return true;
         }
 
-        if (has_flag(flgs, TR_BLOWS) && (o_ptr->pval == 2) && (calc_arm_avgdamage(player_ptr, o_ptr) > 43)) {
+        if (flgs.has(TR_BLOWS) && (o_ptr->pval == 2) && (calc_arm_avgdamage(player_ptr, o_ptr) > 43)) {
             return true;
         }
 
-        if (has_flag(flgs, TR_BLOWS) && (o_ptr->pval == 3) && (calc_arm_avgdamage(player_ptr, o_ptr) > 33)) {
+        if (flgs.has(TR_BLOWS) && (o_ptr->pval == 3) && (calc_arm_avgdamage(player_ptr, o_ptr) > 33)) {
             return true;
         }
 
@@ -195,15 +195,15 @@ bool has_extreme_damage_rate(player_type *player_ptr, object_type *o_ptr)
         return false;
     }
 
-    if (has_flag(flgs, TR_BLOWS) && (o_ptr->pval == 1) && (calc_arm_avgdamage(player_ptr, o_ptr) > 65)) {
+    if (flgs.has(TR_BLOWS) && (o_ptr->pval == 1) && (calc_arm_avgdamage(player_ptr, o_ptr) > 65)) {
         return true;
     }
 
-    if (has_flag(flgs, TR_BLOWS) && (o_ptr->pval == 2) && (calc_arm_avgdamage(player_ptr, o_ptr) > 52)) {
+    if (flgs.has(TR_BLOWS) && (o_ptr->pval == 2) && (calc_arm_avgdamage(player_ptr, o_ptr) > 52)) {
         return true;
     }
 
-    if (has_flag(flgs, TR_BLOWS) && (o_ptr->pval == 3) && (calc_arm_avgdamage(player_ptr, o_ptr) > 40)) {
+    if (flgs.has(TR_BLOWS) && (o_ptr->pval == 3) && (calc_arm_avgdamage(player_ptr, o_ptr) > 40)) {
         return true;
     }
 

@@ -168,7 +168,7 @@ static void process_stats(player_type *creature_ptr, int row, int stat_col)
  * @param stat 能力値番号
  * @param flags 装備品に立っているフラグ
  */
-static void compensate_stat_by_weapon(char *c, TERM_COLOR *a, object_type *o_ptr, int stat, const TrFlags &flags)
+static void compensate_stat_by_weapon(char *c, TERM_COLOR *a, object_type *o_ptr, tr_type tr_flag, const TrFlags &flags)
 {
     *c = '*';
 
@@ -178,7 +178,7 @@ static void compensate_stat_by_weapon(char *c, TERM_COLOR *a, object_type *o_ptr
             *c = '0' + o_ptr->pval;
     }
 
-    if (has_flag(flags, stat + TR_SUST_STR)) {
+    if (flags.has(tr_flag)) {
         *a = TERM_GREEN;
     }
 
@@ -205,9 +205,9 @@ static void display_equipments_compensation(player_type *creature_ptr, int row, 
         for (int stat = 0; stat < A_MAX; stat++) {
             TERM_COLOR a = TERM_SLATE;
             char c = '.';
-            if (has_flag(flags, stat)) {
-                compensate_stat_by_weapon(&c, &a, o_ptr, stat, flags);
-            } else if (has_flag(flags, stat + TR_SUST_STR)) {
+            if (flags.has(TR_STATUS_LIST[stat])) {
+                compensate_stat_by_weapon(&c, &a, o_ptr, TR_STATUS_LIST[stat], flags);
+            } else if (flags.has(TR_SUST_STATUS_LIST[stat])) {
                 a = TERM_GREEN;
                 c = 's';
             }
@@ -331,7 +331,7 @@ static void display_mutation_compensation(player_type *creature_ptr, int row, in
         char c = '.';
         change_display_by_mutation(creature_ptr, stat, &c, &a);
 
-        if (has_flag(flags, stat + TR_SUST_STR)) {
+        if (flags.has(TR_SUST_STATUS_LIST[stat])) {
             a = TERM_GREEN;
             c = 's';
         }

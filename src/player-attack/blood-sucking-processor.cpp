@@ -27,7 +27,7 @@
  */
 void decide_blood_sucking(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {
-    bool is_blood_sucker = has_flag(pa_ptr->flags, TR_VAMPIRIC);
+    bool is_blood_sucker = pa_ptr->flags.has(TR_VAMPIRIC);
     is_blood_sucker |= pa_ptr->chaos_effect == CE_VAMPIRIC;
     is_blood_sucker |= pa_ptr->mode == HISSATSU_DRAIN;
     is_blood_sucker |= hex_spelling(attacker_ptr, HEX_VAMP_BLADE);

@@ -18,7 +18,7 @@
  */
 static bool grab_one_ego_item_flag(ego_item_type *e_ptr, std::string_view what)
 {
-    if (info_grab_one_flag(e_ptr->flags, k_info_flags, what))
+    if (TrFlags::grab_one_flag(e_ptr->flags, k_info_flags, what))
         return true;
 
     if (EnumClassFlagGroup<TRG>::grab_one_flag(e_ptr->gen_flags, k_info_gen_flags, what))

@@ -102,7 +102,7 @@ static void describe_chest(flavor_type *flavor_ptr)
 
 static void decide_tval_show(flavor_type *flavor_ptr)
 {
-    if (has_flag(flavor_ptr->tr_flags, TR_SHOW_MODS))
+    if (flavor_ptr->tr_flags.has(TR_SHOW_MODS))
         flavor_ptr->show_weapon = true;
 
     if (flavor_ptr->o_ptr->is_smith() && (flavor_ptr->o_ptr->xtra3 == 1 + ESSENCE_SLAY_GLOVE))
@@ -133,7 +133,7 @@ static void describe_weapon_dice(player_type *player_ptr, flavor_type *flavor_pt
 static void describe_bow(player_type *player_ptr, flavor_type *flavor_ptr)
 {
     flavor_ptr->power = bow_tmul(flavor_ptr->o_ptr->sval);
-    if (has_flag(flavor_ptr->tr_flags, TR_XTRA_MIGHT))
+    if (flavor_ptr->tr_flags.has(TR_XTRA_MIGHT))
         flavor_ptr->power++;
 
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
@@ -147,7 +147,7 @@ static void describe_bow(player_type *player_ptr, flavor_type *flavor_ptr)
         num_fire = calc_num_fire(player_ptr, flavor_ptr->o_ptr);
     } else {
         auto flgs = object_flags(flavor_ptr->o_ptr);
-        if (has_flag(flgs, TR_XTRA_SHOTS))
+        if (flgs.has(TR_XTRA_SHOTS))
             num_fire += 100;
     }
     if ((num_fire == 0) || (flavor_ptr->power <= 0) || !flavor_ptr->known)
@@ -373,12 +373,12 @@ static void describe_charges_rod(flavor_type *flavor_ptr)
 
 static void describe_specific_pval(flavor_type *flavor_ptr)
 {
-    if (has_flag(flavor_ptr->tr_flags, TR_SPEED)) {
+    if (flavor_ptr->tr_flags.has(TR_SPEED)) {
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("加速", " to speed"));
         return;
     }
 
-    if (has_flag(flavor_ptr->tr_flags, TR_BLOWS)) {
+    if (flavor_ptr->tr_flags.has(TR_BLOWS)) {
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("攻撃", " attack"));
 #ifdef JP
 #else
@@ -389,29 +389,29 @@ static void describe_specific_pval(flavor_type *flavor_ptr)
         return;
     }
 
-    if (has_flag(flavor_ptr->tr_flags, TR_STEALTH)) {
+    if (flavor_ptr->tr_flags.has(TR_STEALTH)) {
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("隠密", " to stealth"));
         return;
     }
 
-    if (has_flag(flavor_ptr->tr_flags, TR_SEARCH)) {
+    if (flavor_ptr->tr_flags.has(TR_SEARCH)) {
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("探索", " to searching"));
         return;
     }
 
-    if (has_flag(flavor_ptr->tr_flags, TR_INFRA))
+    if (flavor_ptr->tr_flags.has(TR_INFRA))
         flavor_ptr->t = object_desc_str(flavor_ptr->t, _("赤外線視力", " to infravision"));
 }
 
 static void describe_pval(flavor_type *flavor_ptr)
 {
-    if (!has_pval_flags(flavor_ptr->tr_flags))
+    if (flavor_ptr->tr_flags.has_none_of(TR_PVAL_FLAG_MASK))
         return;
 
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
     flavor_ptr->t = object_desc_int(flavor_ptr->t, flavor_ptr->o_ptr->pval);
-    if (has_flag(flavor_ptr->tr_flags, TR_HIDE_TYPE)) {
+    if (flavor_ptr->tr_flags.has(TR_HIDE_TYPE)) {
         flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
         return;
     }

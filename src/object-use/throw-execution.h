@@ -7,6 +7,9 @@
 #include "system/angband.h"
 #include "system/system-variables.h"
 
+#include "object-enchant/tr-flags.h"
+#include "util/flag-group.h"
+
 struct grid_type;
 struct monster_type;
 struct object_type;

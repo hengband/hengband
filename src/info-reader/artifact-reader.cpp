@@ -18,7 +18,7 @@
  */
 static bool grab_one_artifact_flag(artifact_type *a_ptr, std::string_view what)
 {
-    if (info_grab_one_flag(a_ptr->flags, k_info_flags, what))
+    if (TrFlags::grab_one_flag(a_ptr->flags, k_info_flags, what))
         return true;
 
     if (EnumClassFlagGroup<TRG>::grab_one_flag(a_ptr->gen_flags, k_info_gen_flags, what))
@@ -53,10 +53,10 @@ errr parse_a_info(std::string_view buf, angband_header *head)
 
         error_idx = i;
         a_ptr = &a_info[i];
-        add_flag(a_ptr->flags, TR_IGNORE_ACID);
-        add_flag(a_ptr->flags, TR_IGNORE_ELEC);
-        add_flag(a_ptr->flags, TR_IGNORE_FIRE);
-        add_flag(a_ptr->flags, TR_IGNORE_COLD);
+        a_ptr->flags.set(TR_IGNORE_ACID);
+        a_ptr->flags.set(TR_IGNORE_ELEC);
+        a_ptr->flags.set(TR_IGNORE_FIRE);
+        a_ptr->flags.set(TR_IGNORE_COLD);
 
 #ifdef JP
         a_ptr->name = tokens[2];

@@ -114,26 +114,26 @@ void rd_item_old(object_type *o_ptr)
 
     rd_byte(&o_ptr->ident);
     rd_byte(&o_ptr->marked);
-    rd_u32b(&o_ptr->art_flags[0]);
-    rd_u32b(&o_ptr->art_flags[1]);
-    rd_u32b(&o_ptr->art_flags[2]);
-    if (h_older_than(1, 3, 0, 0))
-        o_ptr->art_flags[3] = 0L;
-    else
-        rd_u32b(&o_ptr->art_flags[3]);
+
+    for (int i = 0, count = (h_older_than(1, 3, 0, 0) ? 3 : 4); i < count; i++) {
+        uint32_t tmp32u;
+        rd_u32b(&tmp32u);
+        migrate_bitflag_to_flaggroup(o_ptr->art_flags, tmp32u, i * 32);
+    }
 
     if (h_older_than(1, 3, 0, 0)) {
         if (o_ptr->name2 == EGO_TELEPATHY)
-            add_flag(o_ptr->art_flags, TR_TELEPATHY);
+            o_ptr->art_flags.set(TR_TELEPATHY);
     }
 
     if (h_older_than(1, 0, 11)) {
+        // バージョン 1.0.11 以前は tr_type の 93, 94, 95 は現在と違い呪い等の別の用途で使用されていたので番号をハードコーディングする
         o_ptr->curse_flags.clear();
         if (o_ptr->ident & 0x40) {
             o_ptr->curse_flags.set(TRC::CURSED);
-            if (o_ptr->art_flags[2] & 0x40000000L)
+            if (o_ptr->art_flags.has(static_cast<tr_type>(94)))
                 o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
-            if (o_ptr->art_flags[2] & 0x80000000L)
+            if (o_ptr->art_flags.has(static_cast<tr_type>(95)))
                 o_ptr->curse_flags.set(TRC::PERMA_CURSE);
             if (o_ptr->is_fixed_artifact()) {
                 artifact_type *a_ptr = &a_info[o_ptr->name1];
@@ -149,7 +149,7 @@ void rd_item_old(object_type *o_ptr)
                     o_ptr->curse_flags.set(TRC::PERMA_CURSE);
             }
         }
-        o_ptr->art_flags[2] &= (0x1FFFFFFFL);
+        o_ptr->art_flags.reset({ static_cast<tr_type>(93), static_cast<tr_type>(94), static_cast<tr_type>(95) });
     } else {
         uint32_t tmp32u;
         rd_u32b(&tmp32u);
@@ -169,87 +169,87 @@ void rd_item_old(object_type *o_ptr)
         if (o_ptr->xtra1 == EGO_XTRA_SUSTAIN) {
             switch (o_ptr->xtra2 % 6) {
             case 0:
-                add_flag(o_ptr->art_flags, TR_SUST_STR);
+                o_ptr->art_flags.set(TR_SUST_STR);
                 break;
             case 1:
-                add_flag(o_ptr->art_flags, TR_SUST_INT);
+                o_ptr->art_flags.set(TR_SUST_INT);
                 break;
             case 2:
-                add_flag(o_ptr->art_flags, TR_SUST_WIS);
+                o_ptr->art_flags.set(TR_SUST_WIS);
                 break;
             case 3:
-                add_flag(o_ptr->art_flags, TR_SUST_DEX);
+                o_ptr->art_flags.set(TR_SUST_DEX);
                 break;
             case 4:
-                add_flag(o_ptr->art_flags, TR_SUST_CON);
+                o_ptr->art_flags.set(TR_SUST_CON);
                 break;
             case 5:
-                add_flag(o_ptr->art_flags, TR_SUST_CHR);
+                o_ptr->art_flags.set(TR_SUST_CHR);
                 break;
             }
             o_ptr->xtra2 = 0;
         } else if (o_ptr->xtra1 == EGO_XTRA_POWER) {
             switch (o_ptr->xtra2 % 11) {
             case 0:
-                add_flag(o_ptr->art_flags, TR_RES_BLIND);
+                o_ptr->art_flags.set(TR_RES_BLIND);
                 break;
             case 1:
-                add_flag(o_ptr->art_flags, TR_RES_CONF);
+                o_ptr->art_flags.set(TR_RES_CONF);
                 break;
             case 2:
-                add_flag(o_ptr->art_flags, TR_RES_SOUND);
+                o_ptr->art_flags.set(TR_RES_SOUND);
                 break;
             case 3:
-                add_flag(o_ptr->art_flags, TR_RES_SHARDS);
+                o_ptr->art_flags.set(TR_RES_SHARDS);
                 break;
             case 4:
-                add_flag(o_ptr->art_flags, TR_RES_NETHER);
+                o_ptr->art_flags.set(TR_RES_NETHER);
                 break;
             case 5:
-                add_flag(o_ptr->art_flags, TR_RES_NEXUS);
+                o_ptr->art_flags.set(TR_RES_NEXUS);
                 break;
             case 6:
-                add_flag(o_ptr->art_flags, TR_RES_CHAOS);
+                o_ptr->art_flags.set(TR_RES_CHAOS);
                 break;
             case 7:
-                add_flag(o_ptr->art_flags, TR_RES_DISEN);
+                o_ptr->art_flags.set(TR_RES_DISEN);
                 break;
             case 8:
-                add_flag(o_ptr->art_flags, TR_RES_POIS);
+                o_ptr->art_flags.set(TR_RES_POIS);
                 break;
             case 9:
-                add_flag(o_ptr->art_flags, TR_RES_DARK);
+                o_ptr->art_flags.set(TR_RES_DARK);
                 break;
             case 10:
-                add_flag(o_ptr->art_flags, TR_RES_LITE);
+                o_ptr->art_flags.set(TR_RES_LITE);
                 break;
             }
             o_ptr->xtra2 = 0;
         } else if (o_ptr->xtra1 == EGO_XTRA_ABILITY) {
             switch (o_ptr->xtra2 % 8) {
             case 0:
-                add_flag(o_ptr->art_flags, TR_LEVITATION);
+                o_ptr->art_flags.set(TR_LEVITATION);
                 break;
             case 1:
-                add_flag(o_ptr->art_flags, TR_LITE_1);
+                o_ptr->art_flags.set(TR_LITE_1);
                 break;
             case 2:
-                add_flag(o_ptr->art_flags, TR_SEE_INVIS);
+                o_ptr->art_flags.set(TR_SEE_INVIS);
                 break;
             case 3:
-                add_flag(o_ptr->art_flags, TR_WARNING);
+                o_ptr->art_flags.set(TR_WARNING);
                 break;
             case 4:
-                add_flag(o_ptr->art_flags, TR_SLOW_DIGEST);
+                o_ptr->art_flags.set(TR_SLOW_DIGEST);
                 break;
             case 5:
-                add_flag(o_ptr->art_flags, TR_REGEN);
+                o_ptr->art_flags.set(TR_REGEN);
                 break;
             case 6:
-                add_flag(o_ptr->art_flags, TR_FREE_ACT);
+                o_ptr->art_flags.set(TR_FREE_ACT);
                 break;
             case 7:
-                add_flag(o_ptr->art_flags, TR_HOLD_EXP);
+                o_ptr->art_flags.set(TR_HOLD_EXP);
                 break;
             }
             o_ptr->xtra2 = 0;
@@ -318,9 +318,9 @@ void rd_item_old(object_type *o_ptr)
         o_ptr->k_idx = lookup_kind(TV_SOFT_ARMOR, SV_TWILIGHT_ROBE);
 
     if (h_older_than(0, 4, 9)) {
-        if (has_flag(o_ptr->art_flags, TR_MAGIC_MASTERY)) {
-            remove_flag(o_ptr->art_flags, TR_MAGIC_MASTERY);
-            add_flag(o_ptr->art_flags, TR_DEC_MANA);
+        if (o_ptr->art_flags.has(TR_MAGIC_MASTERY)) {
+            o_ptr->art_flags.reset(TR_MAGIC_MASTERY);
+            o_ptr->art_flags.set(TR_DEC_MANA);
         }
     }
 

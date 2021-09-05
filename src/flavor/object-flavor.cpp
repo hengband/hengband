@@ -201,7 +201,7 @@ static void shuffle_flavors(tval_type tval)
         if (!k_ptr->flavor)
             continue;
 
-        if (has_flag(k_ptr->flags, TR_FIXED_FLAVOR))
+        if (k_ptr->flags.has(TR_FIXED_FLAVOR))
             continue;
 
         k_idx_list[k_idx_list_num] = i;

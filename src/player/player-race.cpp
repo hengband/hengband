@@ -88,7 +88,7 @@ void add_player_race_flags(player_type *creature_ptr, TrFlags &flags, bool base_
 {
     auto race_ptr = get_player_race_info(creature_ptr, base_race);
     if (race_ptr->infra > 0)
-        add_flag(flags, TR_INFRA);
+        flags.set(TR_INFRA);
 
     for (auto &cond : race_ptr->extra_flags) {
         if (creature_ptr->lev < cond.level)
@@ -100,7 +100,7 @@ void add_player_race_flags(player_type *creature_ptr, TrFlags &flags, bool base_
                 continue;
         }
 
-        add_flag(flags, cond.type);
+        flags.set(cond.type);
     }
 }
 

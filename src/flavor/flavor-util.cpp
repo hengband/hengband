@@ -148,7 +148,7 @@ static char *inscribe_flags_aux(std::vector<flag_insc_table> &fi_vec, const TrFl
 #endif
 
     for (flag_insc_table &fi : fi_vec)
-        if (has_flag(flgs, fi.flag) && (fi.except_flag == -1 || !has_flag(flgs, fi.except_flag)))
+        if (flgs.has(fi.flag) && (fi.except_flag == -1 || flgs.has_not(static_cast<tr_type>(fi.except_flag))))
             add_inscription(&ptr, _(kanji ? fi.japanese : fi.english, fi.english));
 
     return ptr;
@@ -164,7 +164,7 @@ static char *inscribe_flags_aux(std::vector<flag_insc_table> &fi_vec, const TrFl
 static bool has_flag_of(std::vector<flag_insc_table> &fi_vec, const TrFlags &flgs)
 {
     for (flag_insc_table &fi : fi_vec)
-        if (has_flag(flgs, fi.flag) && (fi.except_flag == -1 || !has_flag(flgs, fi.except_flag)))
+        if (flgs.has(fi.flag) && (fi.except_flag == -1 || flgs.has_not(static_cast<tr_type>(fi.except_flag))))
             return true;
 
     return false;
@@ -184,38 +184,35 @@ char *get_ability_abbreviation(char *short_flavor, object_type *o_ptr, bool kanj
     auto flgs = object_flags(o_ptr);
     if (!all) {
         object_kind *k_ptr = &k_info[o_ptr->k_idx];
-        for (int j = 0; j < TR_FLAG_SIZE; j++)
-            flgs[j] &= ~k_ptr->flags[j];
+        flgs.reset(k_ptr->flags);
 
         if (o_ptr->is_fixed_artifact()) {
             artifact_type *a_ptr = &a_info[o_ptr->name1];
-            for (int j = 0; j < TR_FLAG_SIZE; j++)
-                flgs[j] &= ~a_ptr->flags[j];
+            flgs.reset(a_ptr->flags);
         }
 
         if (o_ptr->is_ego()) {
             ego_item_type *e_ptr = &e_info[o_ptr->name2];
-            for (int j = 0; j < TR_FLAG_SIZE; j++)
-                flgs[j] &= ~e_ptr->flags[j];
+            flgs.reset(e_ptr->flags);
         }
     }
 
     if (has_dark_flag(flgs)) {
-        if (has_flag(flgs, TR_LITE_1))
-            remove_flag(flgs, TR_LITE_1);
+        if (flgs.has(TR_LITE_1))
+            flgs.reset(TR_LITE_1);
 
-        if (has_flag(flgs, TR_LITE_2))
-            remove_flag(flgs, TR_LITE_2);
+        if (flgs.has(TR_LITE_2))
+            flgs.reset(TR_LITE_2);
 
-        if (has_flag(flgs, TR_LITE_3))
-            remove_flag(flgs, TR_LITE_3);
+        if (flgs.has(TR_LITE_3))
+            flgs.reset(TR_LITE_3);
     } else if (has_lite_flag(flgs)) {
-        add_flag(flgs, TR_LITE_1);
-        if (has_flag(flgs, TR_LITE_2))
-            remove_flag(flgs, TR_LITE_2);
+        flgs.set(TR_LITE_1);
+        if (flgs.has(TR_LITE_2))
+            flgs.reset(TR_LITE_2);
 
-        if (has_flag(flgs, TR_LITE_3))
-            remove_flag(flgs, TR_LITE_3);
+        if (flgs.has(TR_LITE_3))
+            flgs.reset(TR_LITE_3);
     }
 
     if (has_flag_of(flag_insc_plus, flgs) && kanji)
@@ -457,10 +454,10 @@ char *object_desc_count_japanese(char *t, object_type *o_ptr)
 
 bool has_lite_flag(const TrFlags &flags)
 {
-    return has_flag(flags, TR_LITE_1) || has_flag(flags, TR_LITE_2) || has_flag(flags, TR_LITE_3);
+    return flags.has(TR_LITE_1) || flags.has(TR_LITE_2) || flags.has(TR_LITE_3);
 }
 
 bool has_dark_flag(const TrFlags &flags)
 {
-    return has_flag(flags, TR_LITE_M1) || has_flag(flags, TR_LITE_M2) || has_flag(flags, TR_LITE_M3);
+    return flags.has(TR_LITE_M1) || flags.has(TR_LITE_M2) || flags.has(TR_LITE_M3);
 }

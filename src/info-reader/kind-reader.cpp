@@ -19,7 +19,7 @@
  */
 static bool grab_one_kind_flag(object_kind *k_ptr, std::string_view what)
 {
-    if (info_grab_one_flag(k_ptr->flags, k_info_flags, what))
+    if (TrFlags::grab_one_flag(k_ptr->flags, k_info_flags, what))
         return true;
 
     if (EnumClassFlagGroup<TRG>::grab_one_flag(k_ptr->gen_flags, k_info_gen_flags, what))

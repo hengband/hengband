@@ -41,9 +41,9 @@ static concptr inven_res_label = _(
  * @param flags 耐性配列へのポインタ
  * @param fff 一時ファイルへのポインタ
  */
-static void print_im_or_res_flag(int immunity, int resistance, const TrFlags &flags, FILE *fff)
+static void print_im_or_res_flag(tr_type immunity, tr_type resistance, const TrFlags &flags, FILE *fff)
 {
-    fputs(has_flag(flags, immunity) ? IM_FLAG_STR : (has_flag(flags, resistance) ? HAS_FLAG_STR : NO_FLAG_STR), fff);
+    fputs(flags.has(immunity) ? IM_FLAG_STR : (flags.has(resistance) ? HAS_FLAG_STR : NO_FLAG_STR), fff);
 }
 
 /*!
@@ -52,9 +52,9 @@ static void print_im_or_res_flag(int immunity, int resistance, const TrFlags &fl
  * @param flags 耐性配列へのポインタ
  * @param fff 一時ファイルへのポインタ
  */
-static void print_flag(int tr, const TrFlags &flags, FILE *fff)
+static void print_flag(tr_type tr, const TrFlags &flags, FILE *fff)
 {
-    fputs(has_flag(flags, tr) ? HAS_FLAG_STR : NO_FLAG_STR, fff);
+    fputs(flags.has(tr) ? HAS_FLAG_STR : NO_FLAG_STR, fff);
 }
 
 /*!

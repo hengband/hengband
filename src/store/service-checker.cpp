@@ -23,7 +23,7 @@
 static bool is_blessed_item(const object_type *o_ptr)
 {
     auto flgs = object_flags(o_ptr);
-    return has_flag(flgs, TR_BLESSED);
+    return flgs.has(TR_BLESSED);
 }
 
 static bool check_store_general(const object_type *o_ptr)

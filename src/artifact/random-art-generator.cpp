@@ -44,9 +44,9 @@ static bool weakening_artifact(object_type *o_ptr)
     object_kind *k_ptr = &k_info[k_idx];
     auto flgs = object_flags(o_ptr);
 
-    if (has_flag(flgs, TR_KILL_EVIL)) {
-        remove_flag(o_ptr->art_flags, TR_KILL_EVIL);
-        add_flag(o_ptr->art_flags, TR_SLAY_EVIL);
+    if (flgs.has(TR_KILL_EVIL)) {
+        o_ptr->art_flags.reset(TR_KILL_EVIL);
+        o_ptr->art_flags.set(TR_SLAY_EVIL);
         return true;
     }
 
@@ -232,7 +232,7 @@ static void invest_powers(player_type *player_ptr, object_type *o_ptr, int *powe
 
 static void strengthen_pval(object_type *o_ptr)
 {
-    if (has_flag(o_ptr->art_flags, TR_BLOWS)) {
+    if (o_ptr->art_flags.has(TR_BLOWS)) {
         o_ptr->pval = randint1(2);
         if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_HAYABUSA))
             o_ptr->pval++;
@@ -263,8 +263,8 @@ static void invest_positive_modified_value(object_type *o_ptr)
 
     o_ptr->to_h += randint1(o_ptr->to_h > 19 ? 1 : 20 - o_ptr->to_h);
     o_ptr->to_d += randint1(o_ptr->to_d > 19 ? 1 : 20 - o_ptr->to_d);
-    if ((has_flag(o_ptr->art_flags, TR_WIS)) && (o_ptr->pval > 0))
-        add_flag(o_ptr->art_flags, TR_BLESSED);
+    if ((o_ptr->art_flags.has(TR_WIS)) && (o_ptr->pval > 0))
+        o_ptr->art_flags.set(TR_BLESSED);
 }
 
 /*!
@@ -301,24 +301,24 @@ static void reset_flags_poison_needle(object_type *o_ptr)
 
     o_ptr->to_h = 0;
     o_ptr->to_d = 0;
-    remove_flag(o_ptr->art_flags, TR_BLOWS);
-    remove_flag(o_ptr->art_flags, TR_FORCE_WEAPON);
-    remove_flag(o_ptr->art_flags, TR_SLAY_ANIMAL);
-    remove_flag(o_ptr->art_flags, TR_SLAY_EVIL);
-    remove_flag(o_ptr->art_flags, TR_SLAY_UNDEAD);
-    remove_flag(o_ptr->art_flags, TR_SLAY_DEMON);
-    remove_flag(o_ptr->art_flags, TR_SLAY_ORC);
-    remove_flag(o_ptr->art_flags, TR_SLAY_TROLL);
-    remove_flag(o_ptr->art_flags, TR_SLAY_GIANT);
-    remove_flag(o_ptr->art_flags, TR_SLAY_DRAGON);
-    remove_flag(o_ptr->art_flags, TR_KILL_DRAGON);
-    remove_flag(o_ptr->art_flags, TR_SLAY_HUMAN);
-    remove_flag(o_ptr->art_flags, TR_VORPAL);
-    remove_flag(o_ptr->art_flags, TR_BRAND_POIS);
-    remove_flag(o_ptr->art_flags, TR_BRAND_ACID);
-    remove_flag(o_ptr->art_flags, TR_BRAND_ELEC);
-    remove_flag(o_ptr->art_flags, TR_BRAND_FIRE);
-    remove_flag(o_ptr->art_flags, TR_BRAND_COLD);
+    o_ptr->art_flags.reset(TR_BLOWS);
+    o_ptr->art_flags.reset(TR_FORCE_WEAPON);
+    o_ptr->art_flags.reset(TR_SLAY_ANIMAL);
+    o_ptr->art_flags.reset(TR_SLAY_EVIL);
+    o_ptr->art_flags.reset(TR_SLAY_UNDEAD);
+    o_ptr->art_flags.reset(TR_SLAY_DEMON);
+    o_ptr->art_flags.reset(TR_SLAY_ORC);
+    o_ptr->art_flags.reset(TR_SLAY_TROLL);
+    o_ptr->art_flags.reset(TR_SLAY_GIANT);
+    o_ptr->art_flags.reset(TR_SLAY_DRAGON);
+    o_ptr->art_flags.reset(TR_KILL_DRAGON);
+    o_ptr->art_flags.reset(TR_SLAY_HUMAN);
+    o_ptr->art_flags.reset(TR_VORPAL);
+    o_ptr->art_flags.reset(TR_BRAND_POIS);
+    o_ptr->art_flags.reset(TR_BRAND_ACID);
+    o_ptr->art_flags.reset(TR_BRAND_ELEC);
+    o_ptr->art_flags.reset(TR_BRAND_FIRE);
+    o_ptr->art_flags.reset(TR_BRAND_COLD);
 }
 
 static int decide_random_art_power_level(object_type *o_ptr, const bool a_cursed, const int total_flags)
@@ -401,8 +401,7 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
     o_ptr->artifact_bias = 0;
     o_ptr->name1 = 0;
     o_ptr->name2 = 0;
-    for (int i = 0; i < TR_FLAG_SIZE; i++)
-        o_ptr->art_flags[i] |= k_info[o_ptr->k_idx].flags[i];
+    o_ptr->art_flags |= k_info[o_ptr->k_idx].flags;
 
     bool has_pval = o_ptr->pval != 0;
     decide_warrior_bias(player_ptr, o_ptr, a_scroll);
@@ -415,10 +414,10 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
         strengthen_pval(o_ptr);
 
     invest_positive_modified_value(o_ptr);
-    add_flag(o_ptr->art_flags, TR_IGNORE_ACID);
-    add_flag(o_ptr->art_flags, TR_IGNORE_ELEC);
-    add_flag(o_ptr->art_flags, TR_IGNORE_FIRE);
-    add_flag(o_ptr->art_flags, TR_IGNORE_COLD);
+    o_ptr->art_flags.set(TR_IGNORE_ACID);
+    o_ptr->art_flags.set(TR_IGNORE_ELEC);
+    o_ptr->art_flags.set(TR_IGNORE_FIRE);
+    o_ptr->art_flags.set(TR_IGNORE_COLD);
 
     int32_t total_flags = flag_cost(o_ptr, o_ptr->pval);
     if (a_cursed)
@@ -431,7 +430,7 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
 
     invest_negative_modified_value(o_ptr);
     if (((o_ptr->artifact_bias == BIAS_MAGE) || (o_ptr->artifact_bias == BIAS_INT)) && (o_ptr->tval == TV_GLOVES))
-        add_flag(o_ptr->art_flags, TR_FREE_ACT);
+        o_ptr->art_flags.set(TR_FREE_ACT);
 
     reset_flags_poison_needle(o_ptr);
     int power_level = decide_random_art_power_level(o_ptr, a_cursed, total_flags);

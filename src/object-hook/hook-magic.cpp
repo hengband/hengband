@@ -41,7 +41,7 @@ bool item_tester_hook_use(player_type *player_ptr, const object_type *o_ptr)
         for (i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
             if (&player_ptr->inventory_list[i] == o_ptr) {
                 auto flags = object_flags(o_ptr);
-                if (has_flag(flags, TR_ACTIVATE))
+                if (flags.has(TR_ACTIVATE))
                     return true;
             }
         }

@@ -20,31 +20,31 @@
  */
 void player_immunity(player_type *creature_ptr, TrFlags &flags)
 {
-    flags.fill(0U);
+    flags.clear();
 
     if (player_race_has_flag(creature_ptr, TR_IM_ACID))
-        add_flag(flags, TR_RES_ACID);
+        flags.set(TR_RES_ACID);
     if (player_race_has_flag(creature_ptr, TR_IM_COLD))
-        add_flag(flags, TR_RES_COLD);
+        flags.set(TR_RES_COLD);
     if (player_race_has_flag(creature_ptr, TR_IM_ELEC))
-        add_flag(flags, TR_RES_ELEC);
+        flags.set(TR_RES_ELEC);
     if (player_race_has_flag(creature_ptr, TR_IM_FIRE))
-        add_flag(flags, TR_RES_FIRE);
+        flags.set(TR_RES_FIRE);
 
     if (is_specific_player_race(creature_ptr, player_race_type::SPECTRE))
-        add_flag(flags, TR_RES_NETHER);
+        flags.set(TR_RES_NETHER);
     if (player_race_has_flag(creature_ptr, TR_IM_DARK))
-        add_flag(flags, TR_RES_DARK);
+        flags.set(TR_RES_DARK);
 
     if (creature_ptr->pclass == CLASS_ELEMENTALIST) {
         if (has_element_resist(creature_ptr, ElementRealm::FIRE, 30))
-            add_flag(flags, TR_RES_FIRE);
+            flags.set(TR_RES_FIRE);
         if (has_element_resist(creature_ptr, ElementRealm::SKY, 30))
-            add_flag(flags, TR_RES_ELEC);
+            flags.set(TR_RES_ELEC);
         if (has_element_resist(creature_ptr, ElementRealm::SEA, 30))
-            add_flag(flags, TR_RES_ACID);
+            flags.set(TR_RES_ACID);
         if (has_element_resist(creature_ptr, ElementRealm::ICE, 30))
-            add_flag(flags, TR_RES_COLD);
+            flags.set(TR_RES_COLD);
     }
 }
 
@@ -57,18 +57,18 @@ void player_immunity(player_type *creature_ptr, TrFlags &flags)
  */
 void tim_player_immunity(player_type *creature_ptr, TrFlags &flags)
 {
-    flags.fill(0U);
+    flags.clear();
 
     if (creature_ptr->special_defense & DEFENSE_ACID)
-        add_flag(flags, TR_RES_ACID);
+        flags.set(TR_RES_ACID);
     if (creature_ptr->special_defense & DEFENSE_ELEC)
-        add_flag(flags, TR_RES_ELEC);
+        flags.set(TR_RES_ELEC);
     if (creature_ptr->special_defense & DEFENSE_FIRE)
-        add_flag(flags, TR_RES_FIRE);
+        flags.set(TR_RES_FIRE);
     if (creature_ptr->special_defense & DEFENSE_COLD)
-        add_flag(flags, TR_RES_COLD);
+        flags.set(TR_RES_COLD);
     if (creature_ptr->wraith_form)
-        add_flag(flags, TR_RES_DARK);
+        flags.set(TR_RES_DARK);
 }
 
 /*!
@@ -80,7 +80,7 @@ void tim_player_immunity(player_type *creature_ptr, TrFlags &flags)
  */
 void known_obj_immunity(player_type *creature_ptr, TrFlags &flags)
 {
-    flags.fill(0U);
+    flags.clear();
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         object_type *o_ptr;
@@ -89,14 +89,14 @@ void known_obj_immunity(player_type *creature_ptr, TrFlags &flags)
             continue;
 
         auto o_flags = object_flags_known(o_ptr);
-        if (has_flag(o_flags, TR_IM_ACID))
-            add_flag(flags, TR_RES_ACID);
-        if (has_flag(o_flags, TR_IM_ELEC))
-            add_flag(flags, TR_RES_ELEC);
-        if (has_flag(o_flags, TR_IM_FIRE))
-            add_flag(flags, TR_RES_FIRE);
-        if (has_flag(o_flags, TR_IM_COLD))
-            add_flag(flags, TR_RES_COLD);
+        if (o_flags.has(TR_IM_ACID))
+            flags.set(TR_RES_ACID);
+        if (o_flags.has(TR_IM_ELEC))
+            flags.set(TR_RES_ELEC);
+        if (o_flags.has(TR_IM_FIRE))
+            flags.set(TR_RES_FIRE);
+        if (o_flags.has(TR_IM_COLD))
+            flags.set(TR_RES_COLD);
     }
 }
 
@@ -109,23 +109,23 @@ void known_obj_immunity(player_type *creature_ptr, TrFlags &flags)
  */
 void player_vulnerability_flags(player_type *creature_ptr, TrFlags &flags)
 {
-    flags.fill(0U);
+    flags.clear();
 
     if (creature_ptr->muta.has(MUTA::VULN_ELEM) || (creature_ptr->special_defense & KATA_KOUKIJIN)) {
-        add_flag(flags, TR_RES_ACID);
-        add_flag(flags, TR_RES_ELEC);
-        add_flag(flags, TR_RES_FIRE);
-        add_flag(flags, TR_RES_COLD);
+        flags.set(TR_RES_ACID);
+        flags.set(TR_RES_ELEC);
+        flags.set(TR_RES_FIRE);
+        flags.set(TR_RES_COLD);
     }
 
     if (player_race_has_flag(creature_ptr, TR_VUL_ACID))
-        add_flag(flags, TR_RES_ACID);
+        flags.set(TR_RES_ACID);
     if (player_race_has_flag(creature_ptr, TR_VUL_COLD))
-        add_flag(flags, TR_RES_COLD);
+        flags.set(TR_RES_COLD);
     if (player_race_has_flag(creature_ptr, TR_VUL_ELEC))
-        add_flag(flags, TR_RES_ELEC);
+        flags.set(TR_RES_ELEC);
     if (player_race_has_flag(creature_ptr, TR_VUL_FIRE))
-        add_flag(flags, TR_RES_FIRE);
+        flags.set(TR_RES_FIRE);
     if (player_race_has_flag(creature_ptr, TR_VUL_LITE))
-        add_flag(flags, TR_RES_LITE);
+        flags.set(TR_RES_LITE);
 }

@@ -121,7 +121,7 @@ static void choise_cursed_item(TRC flag, object_type *o_ptr, int *choices, int *
         break;
     }
 
-    if (!has_flag(flgs, (long)cf))
+    if (flgs.has_not(cf))
         return;
 
     choices[*number] = item_num;
@@ -174,7 +174,7 @@ static void curse_teleport(player_type *creature_ptr)
 
         auto flgs = object_flags(o_ptr);
 
-        if (!has_flag(flgs, TR_TELEPORT))
+        if (flgs.has_not(TR_TELEPORT))
             continue;
 
         if (o_ptr->inscription && angband_strchr(quark_str(o_ptr->inscription), '.'))

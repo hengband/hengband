@@ -15,82 +15,82 @@
 
 static bool random_art_bias_strength(object_type *o_ptr)
 {
-    if (has_flag(o_ptr->art_flags, TR_STR))
+    if (o_ptr->art_flags.has(TR_STR))
         return false;
 
-    add_flag(o_ptr->art_flags, TR_STR);
+    o_ptr->art_flags.set(TR_STR);
     return one_in_(2);
 }
 
 static bool random_art_bias_intelligence(object_type *o_ptr)
 {
-    if (has_flag(o_ptr->art_flags, TR_INT))
+    if (o_ptr->art_flags.has(TR_INT))
         return false;
 
-    add_flag(o_ptr->art_flags, TR_INT);
+    o_ptr->art_flags.set(TR_INT);
     return one_in_(2);
 }
 
 static bool random_art_bias_wisdom(object_type *o_ptr)
 {
-    if (has_flag(o_ptr->art_flags, TR_WIS))
+    if (o_ptr->art_flags.has(TR_WIS))
         return false;
 
-    add_flag(o_ptr->art_flags, TR_WIS);
+    o_ptr->art_flags.set(TR_WIS);
     return one_in_(2);
 }
 
 static bool random_art_bias_dexterity(object_type *o_ptr)
 {
-    if (has_flag(o_ptr->art_flags, TR_DEX))
+    if (o_ptr->art_flags.has(TR_DEX))
         return false;
 
-    add_flag(o_ptr->art_flags, TR_DEX);
+    o_ptr->art_flags.set(TR_DEX);
     return one_in_(2);
 }
 
 static bool random_art_bias_constitution(object_type *o_ptr)
 {
-    if (has_flag(o_ptr->art_flags, TR_CON))
+    if (o_ptr->art_flags.has(TR_CON))
         return false;
 
-    add_flag(o_ptr->art_flags, TR_CON);
+    o_ptr->art_flags.set(TR_CON);
     return one_in_(2);
 }
 
 static bool random_art_bias_charisma(object_type *o_ptr)
 {
-    if (has_flag(o_ptr->art_flags, TR_CHR))
+    if (o_ptr->art_flags.has(TR_CHR))
         return false;
 
-    add_flag(o_ptr->art_flags, TR_CHR);
+    o_ptr->art_flags.set(TR_CHR);
     return one_in_(2);
 }
 
 static bool random_art_bias_magic_mastery(object_type *o_ptr)
 {
-    if ((o_ptr->tval != TV_GLOVES) || has_flag(o_ptr->art_flags, TR_MAGIC_MASTERY))
+    if ((o_ptr->tval != TV_GLOVES) || o_ptr->art_flags.has(TR_MAGIC_MASTERY))
         return false;
 
-    add_flag(o_ptr->art_flags, TR_MAGIC_MASTERY);
+    o_ptr->art_flags.set(TR_MAGIC_MASTERY);
     return one_in_(2);
 }
 
 static bool random_art_bias_stealth(object_type *o_ptr)
 {
-    if (has_flag(o_ptr->art_flags, TR_STEALTH))
+    if (o_ptr->art_flags.has(TR_STEALTH))
         return false;
 
-    add_flag(o_ptr->art_flags, TR_STEALTH);
+    o_ptr->art_flags.set(TR_STEALTH);
     return one_in_(2);
 }
 
 static bool random_art_bias_search(object_type *o_ptr)
 {
-    if (has_flag(o_ptr->art_flags, TR_SEARCH))
+    if (o_ptr->art_flags.has(TR_SEARCH))
         return false;
 
-    add_flag(o_ptr->art_flags, TR_SEARCH);
+    o_ptr->art_flags.set(TR_SEARCH);
     return one_in_(2);
 }
 
@@ -126,10 +126,10 @@ static bool switch_random_art_bias(object_type *o_ptr)
 static bool random_art_bias_decrease_mana(object_type *o_ptr)
 {
     if (((o_ptr->artifact_bias != BIAS_MAGE) && (o_ptr->artifact_bias != BIAS_PRIESTLY)) || (o_ptr->tval != TV_SOFT_ARMOR) || (o_ptr->sval != SV_ROBE)
-        || has_flag(o_ptr->art_flags, TR_DEC_MANA) || !one_in_(3))
+        || o_ptr->art_flags.has(TR_DEC_MANA) || !one_in_(3))
         return false;
 
-    add_flag(o_ptr->art_flags, TR_DEC_MANA);
+    o_ptr->art_flags.set(TR_DEC_MANA);
     return one_in_(2);
 }
 
@@ -149,7 +149,7 @@ void random_plus(object_type *o_ptr)
     switch (randint1(this_type)) {
     case 1:
     case 2:
-        add_flag(o_ptr->art_flags, TR_STR);
+        o_ptr->art_flags.set(TR_STR);
         if (!o_ptr->artifact_bias && !one_in_(13))
             o_ptr->artifact_bias = BIAS_STR;
         else if (!o_ptr->artifact_bias && one_in_(7))
@@ -158,7 +158,7 @@ void random_plus(object_type *o_ptr)
         break;
     case 3:
     case 4:
-        add_flag(o_ptr->art_flags, TR_INT);
+        o_ptr->art_flags.set(TR_INT);
         if (!o_ptr->artifact_bias && !one_in_(13))
             o_ptr->artifact_bias = BIAS_INT;
         else if (!o_ptr->artifact_bias && one_in_(7))
@@ -167,7 +167,7 @@ void random_plus(object_type *o_ptr)
         break;
     case 5:
     case 6:
-        add_flag(o_ptr->art_flags, TR_WIS);
+        o_ptr->art_flags.set(TR_WIS);
         if (!o_ptr->artifact_bias && !one_in_(13))
             o_ptr->artifact_bias = BIAS_WIS;
         else if (!o_ptr->artifact_bias && one_in_(7))
@@ -176,7 +176,7 @@ void random_plus(object_type *o_ptr)
         break;
     case 7:
     case 8:
-        add_flag(o_ptr->art_flags, TR_DEX);
+        o_ptr->art_flags.set(TR_DEX);
         if (!o_ptr->artifact_bias && !one_in_(13))
             o_ptr->artifact_bias = BIAS_DEX;
         else if (!o_ptr->artifact_bias && one_in_(7))
@@ -185,7 +185,7 @@ void random_plus(object_type *o_ptr)
         break;
     case 9:
     case 10:
-        add_flag(o_ptr->art_flags, TR_CON);
+        o_ptr->art_flags.set(TR_CON);
         if (!o_ptr->artifact_bias && !one_in_(13))
             o_ptr->artifact_bias = BIAS_CON;
         else if (!o_ptr->artifact_bias && one_in_(9))
@@ -194,38 +194,38 @@ void random_plus(object_type *o_ptr)
         break;
     case 11:
     case 12:
-        add_flag(o_ptr->art_flags, TR_CHR);
+        o_ptr->art_flags.set(TR_CHR);
         if (!o_ptr->artifact_bias && !one_in_(13))
             o_ptr->artifact_bias = BIAS_CHR;
 
         break;
     case 13:
     case 14:
-        add_flag(o_ptr->art_flags, TR_STEALTH);
+        o_ptr->art_flags.set(TR_STEALTH);
         if (!o_ptr->artifact_bias && one_in_(3))
             o_ptr->artifact_bias = BIAS_ROGUE;
 
         break;
     case 15:
     case 16:
-        add_flag(o_ptr->art_flags, TR_SEARCH);
+        o_ptr->art_flags.set(TR_SEARCH);
         if (!o_ptr->artifact_bias && one_in_(9))
             o_ptr->artifact_bias = BIAS_RANGER;
 
         break;
     case 17:
     case 18:
-        add_flag(o_ptr->art_flags, TR_INFRA);
+        o_ptr->art_flags.set(TR_INFRA);
         break;
     case 19:
-        add_flag(o_ptr->art_flags, TR_SPEED);
+        o_ptr->art_flags.set(TR_SPEED);
         if (!o_ptr->artifact_bias && one_in_(11))
             o_ptr->artifact_bias = BIAS_ROGUE;
 
         break;
     case 20:
     case 21:
-        add_flag(o_ptr->art_flags, TR_TUNNEL);
+        o_ptr->art_flags.set(TR_TUNNEL);
         break;
     case 22:
     case 23:
@@ -234,7 +234,7 @@ void random_plus(object_type *o_ptr)
             break;
         }
 
-        add_flag(o_ptr->art_flags, TR_BLOWS);
+        o_ptr->art_flags.set(TR_BLOWS);
         if (!o_ptr->artifact_bias && one_in_(11))
             o_ptr->artifact_bias = BIAS_WARRIOR;
 

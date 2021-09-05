@@ -28,21 +28,21 @@ void tim_player_flags(player_type *creature_ptr, TrFlags &flags)
     BIT_FLAGS race_class_flag = FLAG_CAUSE_CLASS;
     set_bits(race_class_flag, FLAG_CAUSE_RACE);
 
-    flags.fill(0U);
+    flags.clear();
 
     if (is_oppose_acid(creature_ptr) && none_bits(has_immune_acid(creature_ptr), (race_class_flag | tmp_effect_flag)))
-        add_flag(flags, TR_RES_ACID);
+        flags.set(TR_RES_ACID);
     if (is_oppose_elec(creature_ptr) && none_bits(has_immune_elec(creature_ptr), (race_class_flag | tmp_effect_flag)))
-        add_flag(flags, TR_RES_ELEC);
+        flags.set(TR_RES_ELEC);
     if (is_oppose_fire(creature_ptr) && none_bits(has_immune_fire(creature_ptr), (race_class_flag | tmp_effect_flag)))
-        add_flag(flags, TR_RES_FIRE);
+        flags.set(TR_RES_FIRE);
     if (is_oppose_cold(creature_ptr) && none_bits(has_immune_cold(creature_ptr), (race_class_flag | tmp_effect_flag)))
-        add_flag(flags, TR_RES_COLD);
+        flags.set(TR_RES_COLD);
     if (is_oppose_pois(creature_ptr))
-        add_flag(flags, TR_RES_POIS);
+        flags.set(TR_RES_POIS);
 
     for (int test_flag = 0; test_flag < TR_FLAG_MAX; test_flag++) {
         if (any_bits(get_player_flags(creature_ptr, static_cast<tr_type>(test_flag)), tmp_effect_flag))
-            add_flag(flags, test_flag);
+            flags.set(static_cast<tr_type>(test_flag));
     }
 }

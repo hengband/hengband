@@ -207,7 +207,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             if (!get_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really？"), o_name)))
                 return "";
 
-            if (!one_in_(3) && (o_ptr->is_artifact() || has_flag(f, TR_BLESSED))) {
+            if (!one_in_(3) && (o_ptr->is_artifact() || f.has(TR_BLESSED))) {
                 msg_format(_("%s は呪いを跳ね返した。", "%s resists the effect."), o_name);
                 if (one_in_(3)) {
                     if (o_ptr->to_d > 0) {
@@ -241,9 +241,9 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                         if (one_in_(666))
                             o_ptr->curse_flags.set(TRC::PERMA_CURSE);
 
-                        add_flag(o_ptr->art_flags, TR_AGGRAVATE);
-                        add_flag(o_ptr->art_flags, TR_VORPAL);
-                        add_flag(o_ptr->art_flags, TR_VAMPIRIC);
+                        o_ptr->art_flags.set(TR_AGGRAVATE);
+                        o_ptr->art_flags.set(TR_VORPAL);
+                        o_ptr->art_flags.set(TR_VAMPIRIC);
                         msg_print(_("血だ！血だ！血だ！", "Blood, Blood, Blood!"));
                         curse_rank = 2;
                     }
@@ -513,7 +513,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             if (!get_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really？"), o_name)))
                 return "";
 
-            if (!one_in_(3) && (o_ptr->is_artifact() || has_flag(f, TR_BLESSED))) {
+            if (!one_in_(3) && (o_ptr->is_artifact() || f.has(TR_BLESSED))) {
                 msg_format(_("%s は呪いを跳ね返した。", "%s resists the effect."), o_name);
                 if (one_in_(3)) {
                     if (o_ptr->to_d > 0) {
@@ -547,10 +547,10 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
                         if (one_in_(666))
                             o_ptr->curse_flags.set(TRC::PERMA_CURSE);
 
-                        add_flag(o_ptr->art_flags, TR_AGGRAVATE);
-                        add_flag(o_ptr->art_flags, TR_RES_POIS);
-                        add_flag(o_ptr->art_flags, TR_RES_DARK);
-                        add_flag(o_ptr->art_flags, TR_RES_NETHER);
+                        o_ptr->art_flags.set(TR_AGGRAVATE);
+                        o_ptr->art_flags.set(TR_RES_POIS);
+                        o_ptr->art_flags.set(TR_RES_DARK);
+                        o_ptr->art_flags.set(TR_RES_NETHER);
                         msg_print(_("血だ！血だ！血だ！", "Blood, Blood, Blood!"));
                         curse_rank = 2;
                     }
@@ -708,7 +708,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             auto f = object_flags(o_ptr);
 
             caster_ptr->csp += (caster_ptr->lev / 5) + randint1(caster_ptr->lev / 5);
-            if (has_flag(f, TR_TY_CURSE) || o_ptr->curse_flags.has(TRC::TY_CURSE))
+            if (f.has(TR_TY_CURSE) || o_ptr->curse_flags.has(TRC::TY_CURSE))
                 caster_ptr->csp += randint1(5);
             if (caster_ptr->csp > caster_ptr->msp)
                 caster_ptr->csp = caster_ptr->msp;

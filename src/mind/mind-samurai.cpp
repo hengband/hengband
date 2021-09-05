@@ -75,7 +75,7 @@ static void hissatsu_burning_strike(player_type *attacker_ptr, samurai_slaying_t
     }
 
     /* Otherwise, take the damage */
-    if (has_flag(samurai_slaying_ptr->flags, TR_BRAND_FIRE)) {
+    if (samurai_slaying_ptr->flags.has(TR_BRAND_FIRE)) {
         if (samurai_slaying_ptr->r_ptr->flags3 & RF3_HURT_FIRE) {
             if (samurai_slaying_ptr->mult < 70)
                 samurai_slaying_ptr->mult = 70;
@@ -118,7 +118,7 @@ static void hissatsu_serpent_tongue(player_type *attacker_ptr, samurai_slaying_t
     }
 
     /* Otherwise, take the damage */
-    if (has_flag(samurai_slaying_ptr->flags, TR_BRAND_POIS)) {
+    if (samurai_slaying_ptr->flags.has(TR_BRAND_POIS)) {
         if (samurai_slaying_ptr->mult < 35)
             samurai_slaying_ptr->mult = 35;
     } else if (samurai_slaying_ptr->mult < 25)
@@ -182,7 +182,7 @@ static void hissatsu_midare_setsugetsuka(player_type *attacker_ptr, samurai_slay
     }
 
     /* Otherwise, take the damage */
-    if (has_flag(samurai_slaying_ptr->flags, TR_BRAND_COLD)) {
+    if (samurai_slaying_ptr->flags.has(TR_BRAND_COLD)) {
         if (samurai_slaying_ptr->r_ptr->flags3 & RF3_HURT_COLD) {
             if (samurai_slaying_ptr->mult < 70)
                 samurai_slaying_ptr->mult = 70;
@@ -224,7 +224,7 @@ static void hissatsu_lightning_eagle(player_type *attacker_ptr, samurai_slaying_
     }
 
     /* Otherwise, take the damage */
-    if (has_flag(samurai_slaying_ptr->flags, TR_BRAND_ELEC)) {
+    if (samurai_slaying_ptr->flags.has(TR_BRAND_ELEC)) {
         if (samurai_slaying_ptr->mult < 70)
             samurai_slaying_ptr->mult = 70;
     } else if (samurai_slaying_ptr->mult < 50)

@@ -28,7 +28,7 @@ bool rustproof(player_type *caster_ptr)
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(caster_ptr, o_name, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
-    add_flag(o_ptr->art_flags, TR_IGNORE_ACID);
+    o_ptr->art_flags.set(TR_IGNORE_ACID);
     if ((o_ptr->to_a < 0) && !o_ptr->is_cursed()) {
 #ifdef JP
         msg_format("%sは新品同様になった！", o_name);
