@@ -222,7 +222,7 @@ static XImage *ReadBMP(Display *dpy, char *Name)
 
     /* No such file */
     if (f == NULL) {
-        return (NULL);
+        return nullptr;
     }
 
     /* Read the "BITMAPFILEHEADER" */
@@ -285,7 +285,7 @@ static XImage *ReadBMP(Display *dpy, char *Name)
     if (Res == NULL) {
         C_KILL(Data, total, char);
         fclose(f);
-        return (NULL);
+        return nullptr;
     }
 
     for (y = 0; y < static_cast<int>(infoheader.biHeight); y++) {

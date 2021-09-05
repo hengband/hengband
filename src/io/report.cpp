@@ -294,7 +294,7 @@ concptr make_screen_dump(player_type *creature_ptr)
     BUF *screen_buf;
     screen_buf = buf_new();
     if (screen_buf == NULL)
-        return (NULL);
+        return nullptr;
 
     bool old_use_graphics = use_graphics;
     if (old_use_graphics) {
