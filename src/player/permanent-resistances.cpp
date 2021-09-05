@@ -66,7 +66,7 @@ static void add_class_flags(player_type *creature_ptr, TrFlags &flags)
             if ((!creature_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(creature_ptr))
                 && (!creature_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(creature_ptr)))
                 add_flag(flags, TR_SPEED);
-            if (creature_ptr->lev > 24 && !creature_ptr->icky_wield[0] && !creature_ptr->icky_wield[1])
+            if (creature_ptr->lev > 24 && !creature_ptr->is_icky_wield[0] && !creature_ptr->is_icky_wield[1])
                 add_flag(flags, TR_FREE_ACT);
         }
 
@@ -276,8 +276,7 @@ static void add_kata_flags(player_type *creature_ptr, TrFlags &flags)
  */
 void player_flags(player_type *creature_ptr, TrFlags &flags)
 {
-    for (int i = 0; i < TR_FLAG_SIZE; i++)
-        flags[i] = 0L;
+    flags.fill(0U);
 
     add_class_flags(creature_ptr, flags);
     add_player_race_flags(creature_ptr, flags);
@@ -289,10 +288,8 @@ void player_flags(player_type *creature_ptr, TrFlags &flags)
 
 void riding_flags(player_type *creature_ptr, TrFlags &flags, TrFlags &negative_flags)
 {
-    for (int i = 0; i < TR_FLAG_SIZE; i++) {
-        flags[i] = 0L;
-        negative_flags[i] = 0L;
-    }
+    flags.fill(0U);
+    negative_flags.fill(0U);
 
     if (!creature_ptr->riding)
         return;

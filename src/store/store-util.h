@@ -24,7 +24,7 @@ using store_k_idx = std::vector<KIND_OBJECT_IDX>;
 /*!
  * @brief 店舗の情報構造体
  */
-typedef struct object_type object_type;
+struct object_type;;
 struct store_type {
     byte type{};           //!< Store type
     byte owner{};          //!< Owner index
@@ -44,13 +44,13 @@ struct store_type {
 extern int cur_store_num;
 extern store_type *st_ptr;
 
-typedef struct player_type player_type;
+struct player_type;
 typedef bool (*black_market_crap_pf)(player_type *, object_type *);
-typedef bool (*store_will_buy_pf)(player_type *, object_type *);
+typedef bool (*store_will_buy_pf)(player_type *, const object_type *);
 typedef void (*mass_produce_pf)(player_type *, object_type *);
 void store_delete(void);
 void store_create(player_type *player_ptr, KIND_OBJECT_IDX k_idx, black_market_crap_pf black_market_crap, store_will_buy_pf store_will_buy, mass_produce_pf mass_produce);
 void store_item_increase(INVENTORY_IDX item, ITEM_NUMBER num);
 void store_item_optimize(INVENTORY_IDX item);
-int store_carry(player_type *player_ptr, object_type *o_ptr);
+int store_carry(object_type *o_ptr);
 bool store_object_similar(object_type *o_ptr, object_type *j_ptr);

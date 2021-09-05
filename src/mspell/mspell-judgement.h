@@ -2,8 +2,8 @@
 
 #include "system/angband.h"
 
-typedef struct monster_type monster_type;
-typedef struct player_type player_type;
+struct monster_type;
+struct player_type;
 bool direct_beam(player_type *target_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, monster_type *m_ptr);
 bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, POSITION rad, EFFECT_ID typ, bool is_friend);
 void get_project_point(player_type *target_ptr, POSITION sy, POSITION sx, POSITION *ty, POSITION *tx, BIT_FLAGS flg);

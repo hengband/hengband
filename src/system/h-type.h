@@ -33,6 +33,7 @@
  * </pre>
  */
 
+#include <array>
 #include <cassert>
 #include <stdint.h>
 
@@ -190,7 +191,7 @@ typedef int16_t ACTION_SKILL_POWER; /*!< 行動技能値 */
 
 typedef int16_t FEAT_PRIORITY; /*!< 地形の縮小表示優先順位 */
 
-using TrFlags = BIT_FLAGS[TR_FLAG_SIZE];
+using TrFlags = std::array<BIT_FLAGS, TR_FLAG_SIZE>;
 
 enum process_result {
     PROCESS_FALSE = 0,

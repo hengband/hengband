@@ -99,7 +99,7 @@ bool get_tag_floor(floor_type *floor_ptr, COMMAND_CODE *cp, char tag, FLOOR_IDX 
  * Also, the tag "@xn" will work as well, where "n" is a any tag-char,\n
  * and "x" is the "current" command_cmd code.\n
  */
-bool get_tag(player_type *owner_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode, tval_type tval)
+bool get_tag(player_type *owner_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode, const ItemTester& item_tester)
 {
     COMMAND_CODE start, end;
     switch (mode) {
@@ -122,7 +122,7 @@ bool get_tag(player_type *owner_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode,
         if ((o_ptr->k_idx == 0) || (o_ptr->inscription == 0))
             continue;
 
-        if (!item_tester_okay(owner_ptr, o_ptr, tval) && !(mode & USE_FULL))
+        if (!item_tester.okay(o_ptr) && !(mode & USE_FULL))
             continue;
 
         concptr s = angband_strchr(quark_str(o_ptr->inscription), '@');
@@ -144,7 +144,7 @@ bool get_tag(player_type *owner_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode,
         if ((o_ptr->k_idx == 0) || (o_ptr->inscription == 0))
             continue;
 
-        if (!item_tester_okay(owner_ptr, o_ptr, tval) && !(mode & USE_FULL))
+        if (!item_tester.okay(o_ptr) && !(mode & USE_FULL))
             continue;
 
         concptr s = angband_strchr(quark_str(o_ptr->inscription), '@');
@@ -167,7 +167,7 @@ bool get_tag(player_type *owner_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode,
  * @param i 選択アイテムID
  * @return 正規のIDならばTRUEを返す。
  */
-bool get_item_okay(player_type *owner_ptr, OBJECT_IDX i, tval_type item_tester_tval)
+bool get_item_okay(player_type *owner_ptr, OBJECT_IDX i, const ItemTester& item_tester)
 {
     if ((i < 0) || (i >= INVEN_TOTAL))
         return false;
@@ -175,7 +175,7 @@ bool get_item_okay(player_type *owner_ptr, OBJECT_IDX i, tval_type item_tester_t
     if (owner_ptr->select_ring_slot)
         return is_ring_slot(i);
 
-    return item_tester_okay(owner_ptr, &owner_ptr->inventory_list[i], item_tester_tval);
+    return item_tester.okay(&owner_ptr->inventory_list[i]);
 }
 
 /*!
@@ -283,7 +283,7 @@ bool verify(player_type *owner_ptr, concptr prompt, INVENTORY_IDX item)
  * @param label ラベルリストを取得する文字列参照ポインタ
  * @param mode 所持品リストか装備品リストかの切り替え
  */
-void prepare_label_string(player_type *owner_ptr, char *label, BIT_FLAGS mode, tval_type tval)
+void prepare_label_string(player_type *owner_ptr, char *label, BIT_FLAGS mode, const ItemTester& item_tester)
 {
     concptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     int offset = (mode == USE_EQUIP) ? INVEN_MAIN_HAND : 0;
@@ -291,7 +291,7 @@ void prepare_label_string(player_type *owner_ptr, char *label, BIT_FLAGS mode, t
     for (int i = 0; i < 52; i++) {
         COMMAND_CODE index;
         SYMBOL_CODE c = alphabet_chars[i];
-        if (!get_tag(owner_ptr, &index, c, mode, tval))
+        if (!get_tag(owner_ptr, &index, c, mode, item_tester))
             continue;
 
         if (label[i] == c)

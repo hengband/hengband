@@ -3,6 +3,7 @@
 #include "floor/floor-object.h"
 #include "inventory/inventory-slot-types.h"
 #include "mind/snipe-types.h"
+#include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
@@ -53,7 +54,7 @@ void do_cmd_fire(player_type *creature_ptr, SPELL_IDX snipe_type)
 
     concptr q = _("どれを撃ちますか? ", "Fire which item? ");
     concptr s = _("発射されるアイテムがありません。", "You have nothing to fire.");
-    ammo_ptr = choose_object(creature_ptr, &item, q, s, USE_INVEN | USE_FLOOR, static_cast<tval_type>(creature_ptr->tval_ammo));
+    ammo_ptr = choose_object(creature_ptr, &item, q, s, USE_INVEN | USE_FLOOR, TvalItemTester(creature_ptr->tval_ammo));
     if (!ammo_ptr) {
         flush();
         return;

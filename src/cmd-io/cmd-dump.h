@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef struct player_type player_type;
+struct player_type;
 void do_cmd_pref(player_type *creature_ptr);
 void do_cmd_colors(player_type *creature_ptr);
 void do_cmd_note(void);

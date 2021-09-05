@@ -81,7 +81,7 @@ static void feel_eldritch_horror(concptr desc, monster_race *r_ptr)
 
 /*!
  * @brief ELDRITCH_HORRORによるプレイヤーの精神破壊処理
- * @param m_ptr ELDRITCH_HORRORを引き起こしたモンスターの参照ポインタ。薬・罠・魔法の影響ならNULL
+ * @param m_ptr ELDRITCH_HORRORを引き起こしたモンスターの参照ポインタ。薬・罠・魔法の影響ならnullptr
  * @param necro 暗黒領域魔法の詠唱失敗によるものならばTRUEを返す
  */
 void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
@@ -145,11 +145,11 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
         monster_race *r_ptr;
         GAME_TEXT m_name[MAX_NLEN];
         concptr desc;
-        get_mon_num_prep(creature_ptr, get_nightmare, NULL);
+        get_mon_num_prep(creature_ptr, get_nightmare, nullptr);
         r_ptr = &r_info[get_mon_num(creature_ptr, 0, MAX_DEPTH, 0)];
         power = r_ptr->level + 10;
         desc = r_ptr->name.c_str();
-        get_mon_num_prep(creature_ptr, NULL, NULL);
+        get_mon_num_prep(creature_ptr, nullptr, nullptr);
 #ifdef JP
 #else
 

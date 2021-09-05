@@ -42,7 +42,7 @@ enum pet_permission {
 
 extern int total_friends;
 
-typedef struct grid_type grid_type;
-typedef struct player_type player_type;
+struct grid_type;;
+struct player_type;
 bool can_player_ride_pet(player_type *creature_ptr, grid_type *g_ptr, bool now_riding);
 PERCENTAGE calculate_upkeep(player_type *creature_ptr);

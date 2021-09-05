@@ -20,8 +20,6 @@
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trg-types.h"
-#include "object-hook/hook-checker.h"
-#include "object-hook/hook-enchant.h"
 #include "object-hook/hook-quest.h"
 #include "object/object-flags.h"
 #include "object/object-kind.h"
@@ -102,12 +100,12 @@ static void describe_chest(flavor_type *flavor_ptr)
     describe_chest_trap(flavor_ptr);
 }
 
-static void decide_tval_show(player_type *player_ptr, flavor_type *flavor_ptr)
+static void decide_tval_show(flavor_type *flavor_ptr)
 {
     if (has_flag(flavor_ptr->tr_flags, TR_SHOW_MODS))
         flavor_ptr->show_weapon = true;
 
-    if (object_is_smith(player_ptr, flavor_ptr->o_ptr) && (flavor_ptr->o_ptr->xtra3 == 1 + ESSENCE_SLAY_GLOVE))
+    if (flavor_ptr->o_ptr->is_smith() && (flavor_ptr->o_ptr->xtra3 == 1 + ESSENCE_SLAY_GLOVE))
         flavor_ptr->show_weapon = true;
 
     if (flavor_ptr->o_ptr->to_h && flavor_ptr->o_ptr->to_d)
@@ -124,11 +122,9 @@ static void describe_weapon_dice(player_type *player_ptr, flavor_type *flavor_pt
 
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, ' ');
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p1);
-    if (player_ptr->riding && (flavor_ptr->o_ptr->tval == TV_POLEARM) && ((flavor_ptr->o_ptr->sval == SV_LANCE) || (flavor_ptr->o_ptr->sval == SV_HEAVY_LANCE))) {
-        flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->dd + 2);
-    } else {
-        flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->dd);    
-    }
+    auto is_bonus = (player_ptr->riding > 0) && flavor_ptr->o_ptr->is_lance();
+    auto bonus = is_bonus ? 2 : 0;
+    flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->dd + bonus);
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, 'd');
     flavor_ptr->t = object_desc_num(flavor_ptr->t, flavor_ptr->o_ptr->ds);
     flavor_ptr->t = object_desc_chr(flavor_ptr->t, flavor_ptr->p2);
@@ -150,8 +146,7 @@ static void describe_bow(player_type *player_ptr, flavor_type *flavor_ptr)
     if (!(flavor_ptr->mode & OD_DEBUG)) {
         num_fire = calc_num_fire(player_ptr, flavor_ptr->o_ptr);
     } else {
-        TrFlags flgs;
-        object_flags(player_ptr, flavor_ptr->o_ptr, flgs);
+        auto flgs = object_flags(flavor_ptr->o_ptr);
         if (has_flag(flgs, TR_XTRA_SHOTS))
             num_fire += 100;
     }
@@ -250,7 +245,7 @@ static void describe_bow_power(player_type *player_ptr, flavor_type *flavor_ptr)
 {
     flavor_ptr->avgdam = flavor_ptr->o_ptr->dd * (flavor_ptr->o_ptr->ds + 1) * 10 / 2;
     int tmul = bow_tmul(flavor_ptr->bow_ptr->sval);
-    if (object_is_known(flavor_ptr->bow_ptr))
+    if (flavor_ptr->bow_ptr->is_known())
         flavor_ptr->avgdam += (flavor_ptr->bow_ptr->to_d * 10);
 
     if (flavor_ptr->known)
@@ -427,7 +422,7 @@ static void describe_pval(flavor_type *flavor_ptr)
 
 static void describe_lamp_life(flavor_type *flavor_ptr)
 {
-    if ((flavor_ptr->o_ptr->tval != TV_LITE) || (object_is_fixed_artifact(flavor_ptr->o_ptr) || (flavor_ptr->o_ptr->sval == SV_LITE_FEANOR)))
+    if ((flavor_ptr->o_ptr->tval != TV_LITE) || (flavor_ptr->o_ptr->is_fixed_artifact() || (flavor_ptr->o_ptr->sval == SV_LITE_FEANOR)))
         return;
 
     flavor_ptr->t = object_desc_str(flavor_ptr->t, _("(", " (with "));
@@ -467,7 +462,7 @@ static void decide_item_feeling(flavor_type *flavor_ptr)
         return;
     }
 
-    if (object_is_cursed(flavor_ptr->o_ptr) && (flavor_ptr->known || (flavor_ptr->o_ptr->ident & IDENT_SENSE))) {
+    if (flavor_ptr->o_ptr->is_cursed() && (flavor_ptr->known || (flavor_ptr->o_ptr->ident & IDENT_SENSE))) {
         strcpy(flavor_ptr->fake_insc_buf, _("呪われている", "cursed"));
         return;
     }
@@ -484,7 +479,7 @@ static void decide_item_feeling(flavor_type *flavor_ptr)
         return;
     }
 
-    if (!flavor_ptr->aware && object_is_tried(flavor_ptr->o_ptr))
+    if (!flavor_ptr->aware && flavor_ptr->o_ptr->is_tried())
         strcpy(flavor_ptr->fake_insc_buf, _("未判明", "tried"));
 }
 
@@ -507,7 +502,7 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
     }
 
     describe_chest(flavor_ptr);
-    decide_tval_show(player_ptr, flavor_ptr);
+    decide_tval_show(flavor_ptr);
     describe_tval(player_ptr, flavor_ptr);
     describe_named_item_tval(flavor_ptr);
     if (!(mode & OD_DEBUG)) {
@@ -530,7 +525,7 @@ void describe_flavor(player_type *player_ptr, char *buf, object_type *o_ptr, BIT
         return;
     }
 
-    display_short_flavors(player_ptr, flavor_ptr);
+    display_short_flavors(flavor_ptr);
     decide_item_feeling(flavor_ptr);
     display_item_discount(flavor_ptr);
     display_item_fake_inscription(flavor_ptr);

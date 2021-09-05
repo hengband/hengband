@@ -38,7 +38,7 @@ static bool grab_one_kind_flag(object_kind *k_ptr, std::string_view what)
  */
 errr parse_k_info(std::string_view buf, angband_header *head)
 {
-    static object_kind *k_ptr = NULL;
+    static object_kind *k_ptr = nullptr;
     const auto &tokens = str_split(buf, ':', false, 10);
 
     if (tokens[0] == "N") {

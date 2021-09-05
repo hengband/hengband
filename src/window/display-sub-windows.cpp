@@ -48,11 +48,24 @@
 #include <sstream>
 #include <string>
 
+/*! サブウィンドウ表示用の ItemTester オブジェクト */
+static std::unique_ptr<ItemTester> fix_item_tester = std::make_unique<AllMatchItemTester>();
+
+FixItemTesterSetter::FixItemTesterSetter(const ItemTester& item_tester)
+{
+    fix_item_tester = item_tester.clone();
+}
+
+FixItemTesterSetter::~FixItemTesterSetter()
+{
+    fix_item_tester = std::make_unique<AllMatchItemTester>();
+}
+
 /*!
  * @brief サブウィンドウに所持品一覧を表示する / Hack -- display inventory in sub-windows
  * @param player_ptr プレーヤーへの参照ポインタ
  */
-void fix_inventory(player_type *player_ptr, tval_type item_tester_tval)
+void fix_inventory(player_type *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
         term_type *old = Term;
@@ -63,7 +76,7 @@ void fix_inventory(player_type *player_ptr, tval_type item_tester_tval)
             continue;
 
         term_activate(angband_term[j]);
-        display_inventory(player_ptr, item_tester_tval);
+        display_inventory(player_ptr, *fix_item_tester);
         term_fresh();
         term_activate(old);
     }
@@ -133,7 +146,7 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type *m_ptr, int 
 void print_monster_list(floor_type *floor_ptr, const std::vector<MONSTER_IDX> &monster_list, TERM_LEN x, TERM_LEN y, TERM_LEN max_lines)
 {
     TERM_LEN line = y;
-    monster_type *last_mons = NULL;
+    monster_type *last_mons = nullptr;
     int n_same = 0;
     size_t i;
     for (i = 0; i < monster_list.size(); i++) {
@@ -217,7 +230,7 @@ void fix_monster_list(player_type *player_ptr)
  * @brief 装備アイテム一覧を表示する /
  * Choice window "shadow" of the "show_equip()" function
  */
-static void display_equipment(player_type *owner_ptr, tval_type tval)
+static void display_equipment(player_type *owner_ptr, const ItemTester& item_tester)
 {
     if (!owner_ptr || !owner_ptr->inventory_list)
         return;
@@ -234,7 +247,7 @@ static void display_equipment(player_type *owner_ptr, tval_type tval)
             break;
 
         auto o_ptr = &owner_ptr->inventory_list[i];
-        auto do_disp = owner_ptr->select_ring_slot ? is_ring_slot(i) : item_tester_okay(owner_ptr, o_ptr, tval);
+        auto do_disp = owner_ptr->select_ring_slot ? is_ring_slot(i) : item_tester.okay(o_ptr);
         strcpy(tmp_val, "   ");
 
         if (do_disp) {
@@ -291,7 +304,7 @@ static void display_equipment(player_type *owner_ptr, tval_type tval)
  * Hack -- display equipment in sub-windows
  * @param player_ptr プレーヤーへの参照ポインタ
  */
-void fix_equip(player_type *player_ptr, tval_type item_tester_tval)
+void fix_equip(player_type *player_ptr)
 {
     for (int j = 0; j < 8; j++) {
         term_type *old = Term;
@@ -301,7 +314,7 @@ void fix_equip(player_type *player_ptr, tval_type item_tester_tval)
             continue;
 
         term_activate(angband_term[j]);
-        display_equipment(player_ptr, item_tester_tval);
+        display_equipment(player_ptr, *fix_item_tester);
         term_fresh();
         term_activate(old);
     }
@@ -501,18 +514,18 @@ void fix_object(player_type *player_ptr)
  * @brief 床上のモンスター情報を返す
  * @param floor_ptr 階の情報への参照ポインタ
  * @param grid_prt 座標グリッドの情報への参照ポインタ
- * @return モンスターが見える場合にはモンスター情報への参照ポインタ、それ以外はNULL
+ * @return モンスターが見える場合にはモンスター情報への参照ポインタ、それ以外はnullptr
  * @details
  * Lookコマンドでカーソルを合わせた場合に合わせてミミックは考慮しない。
  */
 static monster_type *monster_on_floor_items(const floor_type *floor_ptr, const grid_type *g_ptr)
 {
     if (g_ptr->m_idx == 0)
-        return NULL;
+        return nullptr;
 
     monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
     if (!monster_is_valid(m_ptr) || !m_ptr->ml)
-        return NULL;
+        return nullptr;
 
     return m_ptr;
 }
@@ -544,7 +557,7 @@ static void display_floor_item_list(player_type *player_ptr, const int y, const 
     // 先頭行を書く。
     if (player_bold(player_ptr, y, x))
         sprintf(line, _("(X:%03d Y:%03d) あなたの足元のアイテム一覧", "Items at (%03d,%03d) under you"), x, y);
-    else if (const auto *m_ptr = monster_on_floor_items(floor_ptr, g_ptr); m_ptr != NULL) {
+    else if (const auto *m_ptr = monster_on_floor_items(floor_ptr, g_ptr); m_ptr != nullptr) {
         if (player_ptr->image) {
             sprintf(line, _("(X:%03d Y:%03d) 何か奇妙な物の足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under something strange"), x, y);
         } else {

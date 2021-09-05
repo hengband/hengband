@@ -67,6 +67,7 @@
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
 #include "util/buffer-shaper.h"
+#include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include <array>
@@ -640,10 +641,10 @@ static PERCENTAGE decide_element_chance(player_type *caster_ptr, mind_type spell
     if (heavy_armor(caster_ptr))
         chance += 5;
 
-    if (caster_ptr->icky_wield[0])
+    if (caster_ptr->is_icky_wield[0])
         chance += 5;
 
-    if (caster_ptr->icky_wield[1])
+    if (caster_ptr->is_icky_wield[1])
         chance += 5;
 
     if (chance > 95)
@@ -750,7 +751,7 @@ bool get_element_power(player_type *caster_ptr, SPELL_IDX *sn, bool only_browse)
                 menu_line -= num;
         }
 
-        int spell_max = static_cast<int>(ElementSpells::MAX);
+        int spell_max = enum2i(ElementSpells::MAX);
         if ((choice == ' ') || (choice == '*') || (choice == '?') || (use_menu && ask)) {
             if (!redraw || use_menu) {
                 char desc[80];
@@ -1101,7 +1102,7 @@ static void display_realm_cursor(int i, int n, term_color_type color)
 static int interpret_realm_select_key(int cs, int n, char c)
 {
     if (c == 'Q')
-        quit(NULL);
+        quit(nullptr);
 
     if (c == '8')
         if (cs >= 5)
@@ -1198,7 +1199,7 @@ byte select_element_realm(player_type *creature_ptr)
 {
     clear_from(10);
 
-    int realm_max = static_cast<int>(ElementRealm::MAX);
+    int realm_max = enum2i(ElementRealm::MAX);
     int realm_idx = 1;
     int row = 16;
     while (1) {

@@ -165,7 +165,7 @@ enum ep_check_result {
 static effect_player_type *initialize_effect_player(effect_player_type *ep_ptr, MONSTER_IDX who, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag)
 {
     ep_ptr->rlev = 0;
-    ep_ptr->m_ptr = NULL;
+    ep_ptr->m_ptr = nullptr;
     ep_ptr->get_damage = 0;
     ep_ptr->who = who;
     ep_ptr->dam = dam;

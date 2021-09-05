@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct player_type player_type;
+struct player_type;
 typedef struct quest_type quest_type;
 void load_zangband_options(void);
 void set_zangband_realm(player_type *creature_ptr);

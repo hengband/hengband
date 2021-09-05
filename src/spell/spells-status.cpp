@@ -205,7 +205,7 @@ bool time_walk(player_type *creature_ptr)
     creature_ptr->timewalk = true;
     msg_print(_("「時よ！」", "You yell 'Time!'"));
     //	msg_print(_("「『ザ・ワールド』！時は止まった！」", "You yell 'The World! Time has stopped!'"));
-    msg_print(NULL);
+    msg_print(nullptr);
 
     creature_ptr->energy_need -= 1000 + (100 + creature_ptr->csp - 50) * TURNS_PER_TICK / 10;
     creature_ptr->redraw |= (PR_MAP);

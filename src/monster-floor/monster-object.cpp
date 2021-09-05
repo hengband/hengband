@@ -19,7 +19,6 @@
 #include "monster/monster-processor-util.h"
 #include "monster/smart-learn-types.h"
 #include "object-enchant/tr-types.h"
-#include "object-hook/hook-enchant.h"
 #include "object/object-flags.h"
 #include "object/object-mark-types.h"
 #include "system/floor-type-definition.h"
@@ -159,7 +158,6 @@ void update_object_by_monster_movement(player_type *target_ptr, turn_flags *turn
 
     turn_flags_ptr->do_take = (r_ptr->flags2 & RF2_TAKE_ITEM) != 0;
     for (auto it = g_ptr->o_idx_list.begin(); it != g_ptr->o_idx_list.end();) {
-        TrFlags flgs;
         BIT_FLAGS flg2 = 0L, flg3 = 0L, flgr = 0L;
         GAME_TEXT m_name[MAX_NLEN], o_name[MAX_NLEN];
         OBJECT_IDX this_o_idx = *it++;
@@ -171,12 +169,12 @@ void update_object_by_monster_movement(player_type *target_ptr, turn_flags *turn
                 continue;
         }
 
-        object_flags(target_ptr, o_ptr, flgs);
+        auto flgs = object_flags(o_ptr);
         describe_flavor(target_ptr, o_name, o_ptr, 0);
         monster_desc(target_ptr, m_name, m_ptr, MD_INDEF_HIDDEN);
         update_object_flags(flgs, &flg2, &flg3, &flgr);
 
-        bool is_special_object = object_is_artifact(o_ptr) || ((r_ptr->flags3 & flg3) != 0) || ((r_ptr->flags2 & flg2) != 0)
+        bool is_special_object = o_ptr->is_artifact() || ((r_ptr->flags3 & flg3) != 0) || ((r_ptr->flags2 & flg2) != 0)
             || (((~(r_ptr->flagsr) & flgr) != 0) && !(r_ptr->flagsr & RFR_RES_ALL));
         monster_pickup_object(target_ptr, turn_flags_ptr, m_idx, o_ptr, is_special_object, ny, nx, m_name, o_name, this_o_idx);
     }

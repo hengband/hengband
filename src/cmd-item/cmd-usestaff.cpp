@@ -12,6 +12,7 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "object-enchant/special-object-flags.h"
+#include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
@@ -113,10 +114,10 @@ int staff_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, bool *use
 
     case SV_STAFF_IDENTIFY: {
         if (powerful) {
-            if (!identify_fully(creature_ptr, false, TV_NONE))
+            if (!identify_fully(creature_ptr, false))
                 *use_charge = false;
         } else {
-            if (!ident_spell(creature_ptr, false, TV_NONE))
+            if (!ident_spell(creature_ptr, false))
                 *use_charge = false;
         }
         ident = true;
@@ -362,9 +363,9 @@ void exe_use_staff(player_type *creature_ptr, INVENTORY_IDX item)
 
     sound(SOUND_ZAP);
 
-    ident = staff_effect(creature_ptr, o_ptr->sval, &use_charge, false, false, object_is_aware(o_ptr));
+    ident = staff_effect(creature_ptr, o_ptr->sval, &use_charge, false, false, o_ptr->is_aware());
 
-    if (!(object_is_aware(o_ptr))) {
+    if (!(o_ptr->is_aware())) {
         chg_virtue(creature_ptr, V_PATIENCE, -1);
         chg_virtue(creature_ptr, V_CHANCE, 1);
         chg_virtue(creature_ptr, V_KNOWLEDGE, -1);
@@ -382,7 +383,7 @@ void exe_use_staff(player_type *creature_ptr, INVENTORY_IDX item)
     object_tried(o_ptr);
 
     /* An identification was made */
-    if (ident && !object_is_aware(o_ptr)) {
+    if (ident && !o_ptr->is_aware()) {
         object_aware(creature_ptr, o_ptr);
         gain_exp(creature_ptr, (lev + (creature_ptr->lev >> 1)) / creature_ptr->lev);
     }
@@ -449,7 +450,7 @@ void do_cmd_use_staff(player_type *creature_ptr)
 
     q = _("どの杖を使いますか? ", "Use which staff? ");
     s = _("使える杖がない。", "You have no staff to use.");
-    if (!choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_STAFF))
+    if (!choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TvalItemTester(TV_STAFF)))
         return;
 
     exe_use_staff(creature_ptr, item);

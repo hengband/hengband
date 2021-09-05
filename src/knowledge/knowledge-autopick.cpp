@@ -32,7 +32,7 @@ void do_cmd_reload_autopick(player_type *creature_ptr)
  */
 void do_cmd_knowledge_autopick(player_type *creature_ptr)
 {
-    FILE *fff = NULL;
+    FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
     if (!open_temporary_file(&fff, file_name))
         return;

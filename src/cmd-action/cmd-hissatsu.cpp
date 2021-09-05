@@ -25,6 +25,7 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "monster-race/monster-race-hook.h"
+#include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "player-info/equipment-info.h"
 #include "player-status/player-energy.h"
@@ -338,7 +339,7 @@ void do_cmd_hissatsu(player_type *creature_ptr)
             flush();
         /* Warning */
         msg_print(_("ＭＰが足りません。", "You do not have enough mana to use this power."));
-        msg_print(NULL);
+        msg_print(nullptr);
         return;
     }
 
@@ -395,7 +396,7 @@ void do_cmd_gain_hissatsu(player_type *creature_ptr)
     q = _("どの書から学びますか? ", "Study which book? ");
     s = _("読める書がない。", "You have no books that you can read.");
 
-    o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_HISSATSU_BOOK);
+    o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TvalItemTester(TV_HISSATSU_BOOK));
     if (!o_ptr)
         return;
 

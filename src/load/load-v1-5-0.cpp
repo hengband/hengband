@@ -33,8 +33,6 @@
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "object-enchant/trg-types.h"
-#include "object-hook/hook-checker.h"
-#include "object-hook/hook-enchant.h"
 #include "object/object-kind-hook.h"
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-lite-types.h"
@@ -45,6 +43,7 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
+#include "util/enum-converter.h"
 #include "util/quarks.h"
 #include "world/world-object.h"
 #include "world/world.h"
@@ -60,7 +59,7 @@ const int QUEST_ROYAL_CRYPT = 28; // 王家の墓.
  * @brief アイテムオブジェクト1件を読み込む / Read an object
  * @param o_ptr アイテムオブジェクト読み取り先ポインタ
  */
-void rd_item_old(player_type *player_ptr, object_type *o_ptr)
+void rd_item_old(object_type *o_ptr)
 {
     rd_s16b(&o_ptr->k_idx);
 
@@ -136,13 +135,13 @@ void rd_item_old(player_type *player_ptr, object_type *o_ptr)
                 o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
             if (o_ptr->art_flags[2] & 0x80000000L)
                 o_ptr->curse_flags.set(TRC::PERMA_CURSE);
-            if (object_is_fixed_artifact(o_ptr)) {
+            if (o_ptr->is_fixed_artifact()) {
                 artifact_type *a_ptr = &a_info[o_ptr->name1];
                 if (a_ptr->gen_flags.has(TRG::HEAVY_CURSE))
                     o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
                 if (a_ptr->gen_flags.has(TRG::PERMA_CURSE))
                     o_ptr->curse_flags.set(TRC::PERMA_CURSE);
-            } else if (object_is_ego(o_ptr)) {
+            } else if (o_ptr->is_ego()) {
                 ego_item_type *e_ptr = &e_info[o_ptr->name2];
                 if (e_ptr->gen_flags.has(TRG::HEAVY_CURSE))
                     o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
@@ -279,7 +278,7 @@ void rd_item_old(player_type *player_ptr, object_type *o_ptr)
     } else {
         rd_byte(&o_ptr->xtra3);
         if (h_older_than(1, 3, 0, 1)) {
-            if (object_is_smith(player_ptr, o_ptr) && o_ptr->xtra3 >= 1 + 96)
+            if (o_ptr->is_smith() && o_ptr->xtra3 >= 1 + 96)
                 o_ptr->xtra3 += -96 + MIN_SPECIAL_ESSENCE;
         }
 
@@ -325,14 +324,14 @@ void rd_item_old(player_type *player_ptr, object_type *o_ptr)
         }
     }
 
-    if (object_is_fixed_artifact(o_ptr)) {
+    if (o_ptr->is_fixed_artifact()) {
         artifact_type *a_ptr;
         a_ptr = &a_info[o_ptr->name1];
         if (a_ptr->name.empty())
             o_ptr->name1 = 0;
     }
 
-    if (object_is_ego(o_ptr)) {
+    if (o_ptr->is_ego()) {
         ego_item_type *e_ptr;
         e_ptr = &e_info[o_ptr->name2];
         if (e_ptr->name.empty())
@@ -464,7 +463,7 @@ void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
         }
     } else {
         rd_byte(&tmp8u);
-        constexpr auto base = static_cast<int>(MFLAG2::KAGE);
+        constexpr auto base = enum2i(MFLAG2::KAGE);
         std::bitset<7> rd_bits_mflag2(tmp8u);
         for (size_t i = 0; i < std::min(m_ptr->mflag2.size(), rd_bits_mflag2.size()); ++i) {
             auto f = static_cast<MFLAG2>(base + i);
@@ -757,7 +756,7 @@ errr rd_dungeon_old(player_type *player_ptr)
 
         object_type *o_ptr;
         o_ptr = &floor_ptr->o_list[o_idx];
-        rd_item(player_ptr, o_ptr);
+        rd_item(o_ptr);
 
         auto &list = get_o_idx_list_contains(floor_ptr, o_idx);
         list.add(floor_ptr, o_idx);

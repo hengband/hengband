@@ -50,7 +50,7 @@ concptr pickpref_filename(player_type *player_ptr, int filename_mode)
         return format("%s-%s.prf", namebase, player_ptr->base_name);
 
     default:
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -59,7 +59,7 @@ concptr pickpref_filename(player_type *player_ptr, int filename_mode)
  */
 static concptr *read_text_lines(concptr filename)
 {
-    concptr *lines_list = NULL;
+    concptr *lines_list = nullptr;
     FILE *fff;
 
     int lines = 0;
@@ -68,7 +68,7 @@ static concptr *read_text_lines(concptr filename)
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
     fff = angband_fopen(buf, "r");
     if (!fff)
-        return NULL;
+        return nullptr;
 
     C_MAKE(lines_list, MAX_LINES, concptr);
     while (angband_fgets(fff, buf, sizeof(buf)) == 0) {
@@ -91,14 +91,14 @@ static void prepare_default_pickpref(player_type *player_ptr)
 {
     const concptr messages[] = { _("あなたは「自動拾いエディタ」を初めて起動しました。", "You have activated the Auto-Picker Editor for the first time."),
         _("自動拾いのユーザー設定ファイルがまだ書かれていないので、", "Since user pref file for autopick is not yet created,"),
-        _("基本的な自動拾い設定ファイルをlib/pref/picktype.prfからコピーします。", "the default setting is loaded from lib/pref/pickpref.prf ."), NULL };
+        _("基本的な自動拾い設定ファイルをlib/pref/picktype.prfからコピーします。", "the default setting is loaded from lib/pref/pickpref.prf ."), nullptr };
 
     concptr filename = pickpref_filename(player_ptr, PT_DEFAULT);
     for (int i = 0; messages[i]; i++) {
         msg_print(messages[i]);
     }
 
-    msg_print(NULL);
+    msg_print(nullptr);
     char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
     FILE *user_fp;

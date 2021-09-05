@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef struct player_type player_type;
+struct player_type;
 void do_cmd_go_up(player_type *creature_ptr);
 void do_cmd_go_down(player_type *creature_ptr);
 void do_cmd_walk(player_type *creature_ptr, bool pickup);

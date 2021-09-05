@@ -80,7 +80,7 @@ void pattern_teleport(player_type *creature_ptr)
     creature_ptr->current_floor_ptr->dun_level = command_arg;
     leave_quest_check(creature_ptr);
     if (record_stair)
-        exe_write_diary(creature_ptr, DIARY_PAT_TELE, 0, NULL);
+        exe_write_diary(creature_ptr, DIARY_PAT_TELE, 0, nullptr);
 
     creature_ptr->current_floor_ptr->inside_quest = 0;
     PlayerEnergy(creature_ptr).reset_player_turn();

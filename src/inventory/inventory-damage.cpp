@@ -4,7 +4,6 @@
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
 #include "mind/mind-mirror-master.h"
-#include "object-hook/hook-enchant.h"
 #include "object-hook/hook-expendable.h"
 #include "object/object-broken.h"
 #include "object/object-info.h"
@@ -16,7 +15,7 @@
 #include "view/display-messages.h"
 
 /*!
- * @brief アイテムを指定確率で破損させる /
+ * @brief 手持ちのアイテムを指定確率で破損させる /
  * Destroys a type of item on a given percent chance
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param typ 破損判定関数ポインタ
@@ -26,7 +25,7 @@
  * Destruction taken from "melee.c" code for "stealing".
  * New-style wands and rods handled correctly. -LM-
  */
-void inventory_damage(player_type *player_ptr, inven_func typ, int perc)
+void inventory_damage(player_type *player_ptr, const ObjectBreaker& breaker, int perc)
 {
     INVENTORY_IDX i;
     int j, amt;
@@ -43,11 +42,11 @@ void inventory_damage(player_type *player_ptr, inven_func typ, int perc)
             continue;
 
         /* Hack -- for now, skip artifacts */
-        if (object_is_artifact(o_ptr))
+        if (o_ptr->is_artifact())
             continue;
 
         /* Give this item slot a shot at death */
-        if (!(*typ)(player_ptr, o_ptr))
+        if (!breaker.can_destroy(o_ptr))
             continue;
 
         /* Count the casualties */
@@ -82,7 +81,7 @@ void inventory_damage(player_type *player_ptr, inven_func typ, int perc)
 #endif
 
         /* Potions smash open */
-        if (object_is_potion(o_ptr)) {
+        if (o_ptr->is_potion()) {
             (void)potion_smash_effect(player_ptr, 0, player_ptr->y, player_ptr->x, o_ptr->k_idx);
         }
 

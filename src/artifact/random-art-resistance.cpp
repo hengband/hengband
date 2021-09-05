@@ -9,198 +9,59 @@
 #include "system/object-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
-static bool random_art_resistance_acid(object_type *o_ptr)
+/*!
+ * @brief オーラフラグを付与する
+ *
+ * @param o_ptr フラグを付与するオブジェクト構造体へのポインタ
+ * @param tr_sh_flag 付与するフラグ (TR_SH_*)
+ * @return 続くフラグ付与の処理を打ち切る場合 true を返す
+ */
+static bool random_art_aura(object_type *o_ptr, tr_type tr_sh_flag)
 {
-    if (has_flag(o_ptr->art_flags, TR_RES_ACID))
+    if ((o_ptr->tval < TV_CLOAK) || (o_ptr->tval > TV_HARD_ARMOR) || has_flag(o_ptr->art_flags, tr_sh_flag))
         return false;
 
-    add_flag(o_ptr->art_flags, TR_RES_ACID);
+    add_flag(o_ptr->art_flags, tr_sh_flag);
     return one_in_(2);
 }
 
-static bool random_art_immunity_acid(object_type *o_ptr)
+/*!
+ * @brief 免疫フラグを付与する
+ * @details フラグの付与には 1/BIAS_LUCK の確率を通過する必要があり、さらに 1/IM_LUCK の確率を通過しなければ他の免疫フラグは消去される。
+ * @param o_ptr フラグを付与するオブジェクト構造体へのポインタ
+ * @param tr_im_flag 付与するフラグ (TR_IM_*)
+ * @return 続くフラグ付与の処理を打ち切る場合 true を返す
+ */
+static bool random_art_immunity(object_type *o_ptr, tr_type tr_im_flag)
 {
-    if (!one_in_(BIAS_LUCK) || has_flag(o_ptr->art_flags, TR_IM_ACID))
+    if (!one_in_(BIAS_LUCK) || has_flag(o_ptr->art_flags, tr_im_flag))
         return false;
 
-    add_flag(o_ptr->art_flags, TR_IM_ACID);
-    if (one_in_(IM_LUCK))
-        return one_in_(2);
+    if (!one_in_(IM_LUCK)) {
+        remove_flag(o_ptr->art_flags, TR_IM_ACID);
+        remove_flag(o_ptr->art_flags, TR_IM_ELEC);
+        remove_flag(o_ptr->art_flags, TR_IM_FIRE);
+        remove_flag(o_ptr->art_flags, TR_IM_COLD);
+    }
 
-    remove_flag(o_ptr->art_flags, TR_IM_ELEC);
-    remove_flag(o_ptr->art_flags, TR_IM_COLD);
-    remove_flag(o_ptr->art_flags, TR_IM_FIRE);
+    add_flag(o_ptr->art_flags, tr_im_flag);
     return one_in_(2);
 }
 
-static bool random_art_resistance_elec(object_type *o_ptr)
+/*!
+ * @brief 耐性フラグを付与する
+ *
+ * @param o_ptr フラグを付与するオブジェクト構造体へのポインタ
+ * @param tr_res_flag 付与するフラグ (TR_RES_*)
+ * @param skip true の場合このフラグは付与せず処理を終了し、続くフラグ付与の処理を継続する
+ * @return 続くフラグ付与の処理を打ち切る場合 true を返す
+ */
+static bool random_art_resistance(object_type *o_ptr, tr_type tr_res_flag, bool skip = false)
 {
-    if (has_flag(o_ptr->art_flags, TR_RES_ELEC))
+    if (skip || has_flag(o_ptr->art_flags, tr_res_flag))
         return false;
 
-    add_flag(o_ptr->art_flags, TR_RES_ELEC);
-    return one_in_(2);
-}
-
-static bool random_art_aura_elec(object_type *o_ptr)
-{
-    if ((o_ptr->tval < TV_CLOAK) || (o_ptr->tval > TV_HARD_ARMOR) || has_flag(o_ptr->art_flags, TR_SH_ELEC))
-        return false;
-
-    add_flag(o_ptr->art_flags, TR_SH_ELEC);
-    return one_in_(2);
-}
-
-static bool random_art_immunity_elec(object_type *o_ptr)
-{
-    if (!one_in_(BIAS_LUCK) || has_flag(o_ptr->art_flags, TR_IM_ELEC))
-        return false;
-
-    add_flag(o_ptr->art_flags, TR_IM_ELEC);
-    if (one_in_(IM_LUCK))
-        return one_in_(2);
-
-    remove_flag(o_ptr->art_flags, TR_IM_ACID);
-    remove_flag(o_ptr->art_flags, TR_IM_COLD);
-    remove_flag(o_ptr->art_flags, TR_IM_FIRE);
-    return one_in_(2);
-}
-
-static bool random_art_resistance_fire(object_type *o_ptr)
-{
-    if (has_flag(o_ptr->art_flags, TR_RES_FIRE))
-        return false;
-
-    add_flag(o_ptr->art_flags, TR_RES_FIRE);
-    return one_in_(2);
-}
-
-static bool random_art_aura_fire(object_type *o_ptr)
-{
-    if ((o_ptr->tval < TV_CLOAK) || (o_ptr->tval > TV_HARD_ARMOR) || has_flag(o_ptr->art_flags, TR_SH_FIRE))
-        return false;
-
-    add_flag(o_ptr->art_flags, TR_SH_FIRE);
-    return one_in_(2);
-}
-
-static bool random_art_immunity_fire(object_type *o_ptr)
-{
-    if (!one_in_(BIAS_LUCK) || has_flag(o_ptr->art_flags, TR_IM_FIRE))
-        return false;
-
-    add_flag(o_ptr->art_flags, TR_IM_FIRE);
-    if (one_in_(IM_LUCK))
-        return one_in_(2);
-
-    remove_flag(o_ptr->art_flags, TR_IM_ELEC);
-    remove_flag(o_ptr->art_flags, TR_IM_COLD);
-    remove_flag(o_ptr->art_flags, TR_IM_ACID);
-    return one_in_(2);
-}
-
-static bool random_art_resistance_cold(object_type *o_ptr)
-{
-    if (has_flag(o_ptr->art_flags, TR_RES_COLD))
-        return false;
-
-    add_flag(o_ptr->art_flags, TR_RES_COLD);
-    return one_in_(2);
-}
-
-static bool random_art_aura_cold(object_type *o_ptr)
-{
-    if ((o_ptr->tval < TV_CLOAK) || (o_ptr->tval > TV_HARD_ARMOR) || has_flag(o_ptr->art_flags, TR_SH_COLD))
-        return false;
-
-    add_flag(o_ptr->art_flags, TR_SH_COLD);
-    return one_in_(2);
-}
-
-static bool random_art_immunity_cold(object_type *o_ptr)
-{
-    if (!one_in_(BIAS_LUCK) || has_flag(o_ptr->art_flags, TR_IM_COLD))
-        return false;
-
-    add_flag(o_ptr->art_flags, TR_IM_COLD);
-    if (one_in_(IM_LUCK))
-        return one_in_(2);
-
-    remove_flag(o_ptr->art_flags, TR_IM_ELEC);
-    remove_flag(o_ptr->art_flags, TR_IM_COLD);
-    remove_flag(o_ptr->art_flags, TR_IM_ACID);
-    return one_in_(2);
-}
-
-static bool random_art_resistance_pois(object_type *o_ptr)
-{
-    if (has_flag(o_ptr->art_flags, TR_RES_POIS))
-        return false;
-
-    add_flag(o_ptr->art_flags, TR_RES_POIS);
-    return one_in_(2);
-}
-
-static bool random_art_resistance_fear(object_type *o_ptr)
-{
-    if (one_in_(3) || has_flag(o_ptr->art_flags, TR_RES_FEAR))
-        return false;
-
-    add_flag(o_ptr->art_flags, TR_RES_FEAR);
-    return one_in_(2);
-}
-
-static bool random_art_resistance_no_magic(object_type *o_ptr)
-{
-    if (!one_in_(3) || has_flag(o_ptr->art_flags, TR_NO_MAGIC))
-        return false;
-
-    add_flag(o_ptr->art_flags, TR_NO_MAGIC);
-    return one_in_(2);
-}
-
-static bool random_art_resistance_nether(object_type *o_ptr)
-{
-    if (has_flag(o_ptr->art_flags, TR_RES_NETHER))
-        return false;
-
-    add_flag(o_ptr->art_flags, TR_RES_NETHER);
-    return one_in_(2);
-}
-
-static bool random_art_resistance_dark(object_type *o_ptr)
-{
-    if (has_flag(o_ptr->art_flags, TR_RES_DARK))
-        return false;
-
-    add_flag(o_ptr->art_flags, TR_RES_DARK);
-    return one_in_(2);
-}
-
-static bool random_art_resistance_chaos(object_type *o_ptr)
-{
-    if (has_flag(o_ptr->art_flags, TR_RES_CHAOS))
-        return false;
-
-    add_flag(o_ptr->art_flags, TR_RES_CHAOS);
-    return one_in_(2);
-}
-
-static bool random_art_resistance_confusion(object_type *o_ptr)
-{
-    if (has_flag(o_ptr->art_flags, TR_RES_CONF))
-        return false;
-
-    add_flag(o_ptr->art_flags, TR_RES_CONF);
-    return one_in_(2);
-}
-
-static bool random_art_resistance_disenchant(object_type *o_ptr)
-{
-    if (has_flag(o_ptr->art_flags, TR_RES_DISEN))
-        return false;
-
-    add_flag(o_ptr->art_flags, TR_RES_DISEN);
+    add_flag(o_ptr->art_flags, tr_res_flag);
     return one_in_(2);
 }
 
@@ -208,21 +69,25 @@ static bool switch_random_art_resistance(object_type *o_ptr)
 {
     switch (o_ptr->artifact_bias) {
     case BIAS_ACID:
-        return random_art_resistance_acid(o_ptr) || random_art_immunity_acid(o_ptr);
+        return random_art_resistance(o_ptr, TR_RES_ACID) || random_art_immunity(o_ptr, TR_IM_ACID);
     case BIAS_ELEC:
-        return random_art_resistance_elec(o_ptr) || random_art_aura_elec(o_ptr) || random_art_immunity_elec(o_ptr);
+        return random_art_resistance(o_ptr, TR_RES_ELEC) || random_art_aura(o_ptr, TR_SH_ELEC) || random_art_immunity(o_ptr, TR_IM_ELEC);
     case BIAS_FIRE:
-        return random_art_resistance_fire(o_ptr) || random_art_aura_fire(o_ptr) || random_art_immunity_fire(o_ptr);
+        return random_art_resistance(o_ptr, TR_RES_FIRE) || random_art_aura(o_ptr, TR_SH_FIRE) || random_art_immunity(o_ptr, TR_IM_FIRE);
     case BIAS_COLD:
-        return random_art_resistance_cold(o_ptr) || random_art_aura_cold(o_ptr) || random_art_immunity_cold(o_ptr);
+        return random_art_resistance(o_ptr, TR_RES_COLD) || random_art_aura(o_ptr, TR_SH_COLD) || random_art_immunity(o_ptr, TR_IM_COLD);
     case BIAS_POIS:
-        return random_art_resistance_pois(o_ptr);
+        return random_art_resistance(o_ptr, TR_RES_POIS);
+    case BIAS_PRIESTLY:
+        return random_art_resistance(o_ptr, TR_RES_CURSE);
     case BIAS_WARRIOR:
-        return random_art_resistance_fear(o_ptr) || random_art_resistance_no_magic(o_ptr);
+        return random_art_resistance(o_ptr, TR_RES_FEAR, one_in_(3)) || random_art_resistance(o_ptr, TR_NO_MAGIC, !one_in_(3));
+    case BIAS_RANGER:
+        return random_art_resistance(o_ptr, TR_RES_WATER) || random_art_resistance(o_ptr, TR_RES_POIS);
     case BIAS_NECROMANTIC:
-        return random_art_resistance_nether(o_ptr) || random_art_resistance_pois(o_ptr) || random_art_resistance_dark(o_ptr);
+        return random_art_resistance(o_ptr, TR_RES_NETHER) || random_art_resistance(o_ptr, TR_RES_POIS) || random_art_resistance(o_ptr, TR_RES_DARK);
     case BIAS_CHAOS:
-        return random_art_resistance_chaos(o_ptr) || random_art_resistance_confusion(o_ptr) || random_art_resistance_disenchant(o_ptr);
+        return random_art_resistance(o_ptr, TR_RES_CHAOS) || random_art_resistance(o_ptr, TR_RES_CONF) || random_art_resistance(o_ptr, TR_RES_DISEN);
     default:
         return false;
     }
@@ -358,7 +223,7 @@ void random_resistance(object_type *o_ptr)
     if (switch_random_art_resistance(o_ptr))
         return;
 
-    switch (randint1(42)) {
+    switch (randint1(45)) {
     case 1:
         set_weird_bias_acid(o_ptr);
         break;
@@ -462,15 +327,30 @@ void random_resistance(object_type *o_ptr)
         add_flag(o_ptr->art_flags, TR_RES_DISEN);
         break;
     case 39:
-        set_weird_bias_aura_elec(o_ptr);
+        add_flag(o_ptr->art_flags, TR_RES_TIME);
         break;
     case 40:
-        set_weird_bias_aura_fire(o_ptr);
+        add_flag(o_ptr->art_flags, TR_RES_WATER);
+        if (!o_ptr->artifact_bias && one_in_(6)) {
+            o_ptr->artifact_bias = BIAS_RANGER;
+        }
         break;
     case 41:
-        set_weird_bias_reflection(o_ptr);
+        add_flag(o_ptr->art_flags, TR_RES_CURSE);
+        if (!o_ptr->artifact_bias && one_in_(3)) {
+            o_ptr->artifact_bias = BIAS_PRIESTLY;
+        }
         break;
     case 42:
+        set_weird_bias_aura_elec(o_ptr);
+        break;
+    case 43:
+        set_weird_bias_aura_fire(o_ptr);
+        break;
+    case 44:
+        set_weird_bias_reflection(o_ptr);
+        break;
+    case 45:
         set_weird_bias_aura_cold(o_ptr);
         break;
     }

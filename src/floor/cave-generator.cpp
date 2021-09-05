@@ -383,7 +383,7 @@ bool cave_gen(player_type *player_ptr, concptr *why)
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     reset_lite_area(floor_ptr);
     set_floor_and_wall(floor_ptr->dungeon_idx);
-    get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), NULL);
+    get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), nullptr);
 
     dun_data_type tmp_dd;
     dun_data_type *dd_ptr = initialize_dun_data_type(&tmp_dd, why);

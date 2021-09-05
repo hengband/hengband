@@ -131,7 +131,7 @@ void wiz_complete_quest(player_type *creature_ptr)
 {
     if (!creature_ptr->current_floor_ptr->inside_quest) {
         msg_print("No current quest");
-        msg_print(NULL);
+        msg_print(nullptr);
         return;
     }
 
@@ -158,7 +158,7 @@ void wiz_restore_monster_max_num()
     monster_race *r_ptr = &r_info[r_idx];
     if (r_ptr->name.empty()) {
         msg_print("そのモンスターは存在しません。");
-        msg_print(NULL);
+        msg_print(nullptr);
         return;
     }
 
@@ -170,7 +170,7 @@ void wiz_restore_monster_max_num()
 
     if (n == 0) {
         msg_print("出現数に制限がないモンスターです。");
-        msg_print(NULL);
+        msg_print(nullptr);
         return;
     }
 
@@ -181,5 +181,5 @@ void wiz_restore_monster_max_num()
     std::stringstream ss;
     ss << r_ptr->name << _("の出現数を復元しました。", " can appear again now.");
     msg_print(ss.str().c_str());
-    msg_print(NULL);
+    msg_print(nullptr);
 }

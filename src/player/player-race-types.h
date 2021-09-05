@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "util/enum-converter.h"
+
 /*!
  * @details 既にplayer_raceが存在するので_typeと付けた
  */
@@ -45,4 +47,4 @@ enum class player_race_type {
     MAX,
 };
 
-constexpr int MAX_RACES = static_cast<int>(player_race_type::MAX);
+constexpr auto MAX_RACES = enum2i(player_race_type::MAX);

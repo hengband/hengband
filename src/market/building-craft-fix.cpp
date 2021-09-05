@@ -12,7 +12,6 @@
 #include "object-enchant/object-boost.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
-#include "object-hook/hook-enchant.h"
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
@@ -36,12 +35,10 @@
  * @param from_ptr 修復材料オブジェクトの構造体の参照ポインタ。
  * @return 修復対象になるならTRUEを返す。
  */
-static void give_one_ability_of_object(player_type *player_ptr, object_type *to_ptr, object_type *from_ptr)
+static void give_one_ability_of_object(object_type *to_ptr, object_type *from_ptr)
 {
-    TrFlags to_flgs;
-    TrFlags from_flgs;
-    object_flags(player_ptr, to_ptr, to_flgs);
-    object_flags(player_ptr, from_ptr, from_flgs);
+    auto to_flgs = object_flags(to_ptr);
+    auto from_flgs = object_flags(from_ptr);
 
     int n = 0;
     int cand[TR_FLAG_MAX];
@@ -98,15 +95,14 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 
     concptr q = _("どの折れた武器を修復しますか？", "Repair which broken weapon? ");
     concptr s = _("修復できる折れた武器がありません。", "You have no broken weapon to repair.");
-    item_tester_hook = item_tester_hook_broken_weapon;
 
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_EQUIP), TV_NONE);
+    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_EQUIP), FuncItemTester(&object_type::is_broken_weapon));
     if (!o_ptr)
         return 0;
 
-    if (!object_is_ego(o_ptr) && !object_is_artifact(o_ptr)) {
+    if (!o_ptr->is_ego() && !o_ptr->is_artifact()) {
         msg_format(_("それは直してもしょうがないぜ。", "It is worthless to repair."));
         return 0;
     }
@@ -123,10 +119,9 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
     q = _("材料となる武器は？", "Which weapon for material? ");
     s = _("材料となる武器がありません。", "You have no material for the repair.");
 
-    item_tester_hook = item_tester_hook_orthodox_melee_weapons;
     OBJECT_IDX mater;
     object_type *mo_ptr;
-    mo_ptr = choose_object(player_ptr, &mater, q, s, (USE_INVEN | USE_EQUIP), TV_NONE);
+    mo_ptr = choose_object(player_ptr, &mater, q, s, (USE_INVEN | USE_EQUIP), FuncItemTester(&object_type::is_orthodox_melee_weapons));
     if (!mo_ptr)
         return 0;
     if (mater == item) {
@@ -136,14 +131,14 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 
     describe_flavor(player_ptr, basenm, mo_ptr, OD_NAME_ONLY);
     prt(format(_("材料とする武器： %s", "Material : %s"), basenm), row + 4, 2);
-    PRICE cost = bcost + object_value_real(player_ptr, o_ptr) * 2;
+    PRICE cost = bcost + object_value_real(o_ptr) * 2;
     if (!get_check(format(_("＄%dかかりますがよろしいですか？ ", "Costs %d gold, okay? "), cost)))
         return 0;
 
     if (player_ptr->au < cost) {
         describe_flavor(player_ptr, basenm, o_ptr, OD_NAME_ONLY);
         msg_format(_("%sを修復するだけのゴールドがありません！", "You do not have the gold to repair %s!"), basenm);
-        msg_print(NULL);
+        msg_print(nullptr);
         return 0;
     }
 
@@ -233,19 +228,19 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
         o_ptr->pval = MIN(o_ptr->pval, bmax);
     }
 
-    give_one_ability_of_object(player_ptr, o_ptr, mo_ptr);
+    give_one_ability_of_object(o_ptr, mo_ptr);
     o_ptr->to_d += MAX(0, (mo_ptr->to_d / 3));
     o_ptr->to_h += MAX(0, (mo_ptr->to_h / 3));
     o_ptr->to_a += MAX(0, (mo_ptr->to_a));
 
-    if ((o_ptr->name1 == ART_NARSIL) || (object_is_random_artifact(o_ptr) && one_in_(1)) || (object_is_ego(o_ptr) && one_in_(7))) {
-        if (object_is_ego(o_ptr)) {
+    if ((o_ptr->name1 == ART_NARSIL) || (o_ptr->is_random_artifact() && one_in_(1)) || (o_ptr->is_ego() && one_in_(7))) {
+        if (o_ptr->is_ego()) {
             add_flag(o_ptr->art_flags, TR_IGNORE_FIRE);
             add_flag(o_ptr->art_flags, TR_IGNORE_ACID);
         }
 
-        give_one_ability_of_object(player_ptr, o_ptr, mo_ptr);
-        if (!activation_index(player_ptr, o_ptr))
+        give_one_ability_of_object(o_ptr, mo_ptr);
+        if (!activation_index(o_ptr))
             one_activation(o_ptr);
 
         if (o_ptr->name1 == ART_NARSIL) {
@@ -262,7 +257,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 #else
     msg_format("Repaired into %s for %d gold.", basenm, cost);
 #endif
-    msg_print(NULL);
+    msg_print(nullptr);
     o_ptr->ident &= ~(IDENT_BROKEN);
     o_ptr->discount = 99;
 

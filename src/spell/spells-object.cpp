@@ -25,8 +25,6 @@
 #include "object-enchant/trc-types.h"
 #include "object-enchant/trg-types.h"
 #include "object-hook/hook-armor.h"
-#include "object-hook/hook-checker.h"
-#include "object-hook/hook-enchant.h"
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
@@ -143,7 +141,7 @@ void amusement(player_type *creature_ptr, POSITION y1, POSITION x1, int num, boo
         }
 
         /* Make an object (if possible) */
-        i_ptr->prep(creature_ptr, k_idx);
+        i_ptr->prep(k_idx);
         if (a_idx)
             i_ptr->name1 = a_idx;
         apply_magic_to_object(creature_ptr, i_ptr, 1, AM_NO_FIXED_ART);
@@ -227,7 +225,7 @@ bool curse_armor(player_type *owner_ptr)
     describe_flavor(owner_ptr, o_name, o_ptr, OD_OMIT_PREFIX);
 
     /* Attempt a saving throw for artifacts */
-    if (object_is_artifact(o_ptr) && (randint0(100) < 50)) {
+    if (o_ptr->is_artifact() && (randint0(100) < 50)) {
         /* Cool */
 #ifdef JP
         msg_format("%sが%sを包み込もうとしたが、%sはそれを跳ね返した！", "恐怖の暗黒オーラ", "防具", o_name);
@@ -251,8 +249,7 @@ bool curse_armor(player_type *owner_ptr)
     o_ptr->dd = 0;
     o_ptr->ds = 0;
 
-    for (int i = 0; i < TR_FLAG_SIZE; i++)
-        o_ptr->art_flags[i] = 0;
+    o_ptr->art_flags.fill(0U);
 
     /* Curse it */
     o_ptr->curse_flags.set(TRC::CURSED);
@@ -282,7 +279,7 @@ bool curse_weapon_object(player_type *owner_ptr, bool force, object_type *o_ptr)
     describe_flavor(owner_ptr, o_name, o_ptr, OD_OMIT_PREFIX);
 
     /* Attempt a saving throw */
-    if (object_is_artifact(o_ptr) && (randint0(100) < 50) && !force) {
+    if (o_ptr->is_artifact() && (randint0(100) < 50) && !force) {
 #ifdef JP
         msg_format("%sが%sを包み込もうとしたが、%sはそれを跳ね返した！", "恐怖の暗黒オーラ", "武器", o_name);
 #else
@@ -335,11 +332,11 @@ void brand_bolts(player_type *caster_ptr)
             continue;
 
         /* Skip artifacts and ego-items */
-        if (object_is_artifact(o_ptr) || object_is_ego(o_ptr))
+        if (o_ptr->is_artifact() || o_ptr->is_ego())
             continue;
 
         /* Skip cursed/broken items */
-        if (object_is_cursed(o_ptr) || object_is_broken(o_ptr))
+        if (o_ptr->is_cursed() || o_ptr->is_broken())
             continue;
 
         /* Randomize */
@@ -369,7 +366,7 @@ void brand_bolts(player_type *caster_ptr)
  */
 bool perilous_secrets(player_type *user_ptr)
 {
-    if (!ident_spell(user_ptr, false, TV_NONE))
+    if (!ident_spell(user_ptr, false))
         return false;
 
     if (user_ptr->msp > 0) {
@@ -409,7 +406,7 @@ bool perilous_secrets(player_type *user_ptr)
 static void break_curse(object_type *o_ptr)
 {
     BIT_FLAGS is_curse_broken
-        = object_is_cursed(o_ptr) && o_ptr->curse_flags.has_not(TRC::PERMA_CURSE) && o_ptr->curse_flags.has_not(TRC::HEAVY_CURSE) && (randint0(100) < 25);
+        = o_ptr->is_cursed() && o_ptr->curse_flags.has_not(TRC::PERMA_CURSE) && o_ptr->curse_flags.has_not(TRC::HEAVY_CURSE) && (randint0(100) < 25);
     if (!is_curse_broken) {
         return;
     }
@@ -457,7 +454,7 @@ bool enchant_equipment(player_type *caster_ptr, object_type *o_ptr, int n, int e
     /* Try "n" times */
     int chance;
     bool res = false;
-    bool a = object_is_artifact(o_ptr);
+    bool a = o_ptr->is_artifact();
     bool force = (eflag & ENCH_FORCE);
     for (int i = 0; i < n; i++) {
         /* Hack -- Roll for pile resistance */
@@ -549,18 +546,18 @@ bool enchant_equipment(player_type *caster_ptr, object_type *o_ptr, int n, int e
 bool enchant_spell(player_type *caster_ptr, HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
 {
     /* Assume enchant weapon */
-    item_tester_hook = object_allow_enchant_weapon;
+    FuncItemTester item_tester(&object_type::allow_enchant_weapon);
 
     /* Enchant armor if requested */
     if (num_ac)
-        item_tester_hook = object_is_armour;
+        item_tester = FuncItemTester(&object_type::is_armour);
 
     concptr q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
     concptr s = _("強化できるアイテムがない。", "You have nothing to enchant.");
 
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), TV_NONE);
+    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), item_tester);
     if (!o_ptr)
         return false;
 
@@ -604,19 +601,16 @@ bool enchant_spell(player_type *caster_ptr, HIT_PROB num_hit, HIT_POINT num_dam,
  */
 void brand_weapon(player_type *caster_ptr, int brand_type)
 {
-    /* Assume enchant weapon */
-    item_tester_hook = object_allow_enchant_melee_weapon;
-
     concptr q = _("どの武器を強化しますか? ", "Enchant which weapon? ");
     concptr s = _("強化できる武器がない。", "You have nothing to enchant.");
 
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | IGNORE_BOTHHAND_SLOT, TV_NONE);
+    o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | IGNORE_BOTHHAND_SLOT, FuncItemTester(&object_type::allow_enchant_melee_weapon));
     if (!o_ptr)
         return;
 
-    bool is_special_item = o_ptr->k_idx && !object_is_artifact(o_ptr) && !object_is_ego(o_ptr) && !object_is_cursed(o_ptr)
+    bool is_special_item = o_ptr->k_idx && !o_ptr->is_artifact() && !o_ptr->is_ego() && !o_ptr->is_cursed()
         && !((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) && !((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE))
         && !((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DIAMOND_EDGE));
     if (!is_special_item) {
@@ -632,7 +626,7 @@ void brand_weapon(player_type *caster_ptr, int brand_type)
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
-    concptr act = NULL;
+    concptr act = nullptr;
     switch (brand_type) {
     case 17:
         if (o_ptr->tval == TV_SWORD) {

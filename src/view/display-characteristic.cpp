@@ -106,11 +106,10 @@ static void process_cursed_equipment_characteristics(player_type *creature_ptr, 
 {
     int max_i = (mode & DP_WP) ? INVEN_BOW + 1 : INVEN_TOTAL;
     for (int i = INVEN_MAIN_HAND; i < max_i; i++) {
-        TrFlags flags;
         auto *o_ptr = &creature_ptr->inventory_list[i];
-        auto is_known = object_is_known(o_ptr);
+        auto is_known = o_ptr->is_known();
         auto is_sensed = is_known || o_ptr->ident & IDENT_SENSE;
-        object_flags_known(creature_ptr, o_ptr, flags);
+        auto flags = object_flags_known(o_ptr);
 
         if (has_flag(flags, TR_ADD_L_CURSE) || has_flag(flags, TR_ADD_H_CURSE)) {
             if (is_known) {
@@ -156,9 +155,8 @@ static void process_light_equipment_characteristics(player_type *creature_ptr, a
 {
     int max_i = (mode & DP_WP) ? INVEN_BOW + 1 : INVEN_TOTAL;
     for (int i = INVEN_MAIN_HAND; i < max_i; i++) {
-        TrFlags flags;
         auto *o_ptr = &creature_ptr->inventory_list[i];
-        object_flags_known(creature_ptr, o_ptr, flags);
+        auto flags = object_flags_known(o_ptr);
 
         auto b = false;
         for (auto flg : lite_flags) {
@@ -206,9 +204,8 @@ static void process_inventory_characteristic(player_type *creature_ptr, tr_type 
 {
     int max_i = (mode & DP_WP) ? INVEN_BOW + 1 : INVEN_TOTAL;
     for (int i = INVEN_MAIN_HAND; i < max_i; i++) {
-        TrFlags flags;
         auto *o_ptr = &creature_ptr->inventory_list[i];
-        object_flags_known(creature_ptr, o_ptr, flags);
+        auto flags = object_flags_known(o_ptr);
 
         auto f_imm = flag_to_greater_flag.find(flag);
         if (f_imm != flag_to_greater_flag.end()) {

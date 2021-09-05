@@ -5,7 +5,6 @@
 #include "flavor/object-flavor-types.h"
 #include "hpmp/hp-mp-regenerator.h"
 #include "inventory/inventory-slot-types.h"
-#include "object-hook/hook-checker.h"
 #include "object/object-kind.h"
 #include "system/floor-type-definition.h"
 #include "system/object-type-definition.h"
@@ -110,7 +109,7 @@ void recharge_magic_items(player_type *creature_ptr)
 
     for (i = 1; i < creature_ptr->current_floor_ptr->o_max; i++) {
         object_type *o_ptr = &creature_ptr->current_floor_ptr->o_list[i];
-        if (!object_is_valid(o_ptr))
+        if (!o_ptr->is_valid())
             continue;
 
         if ((o_ptr->tval == TV_ROD) && (o_ptr->timeout)) {

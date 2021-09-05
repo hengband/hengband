@@ -2,8 +2,8 @@
 
 #include "system/angband.h"
 
-typedef struct object_type object_type;
-typedef struct player_type player_type;
+struct object_type;;
+struct player_type;
 void amusement(player_type *creature_ptr, POSITION y1, POSITION x1, int num, bool known);
 void acquirement(player_type *caster_ptr, POSITION y1, POSITION x1, int num, bool great, bool special, bool known);
 bool curse_armor(player_type *owner_ptr);

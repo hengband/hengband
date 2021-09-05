@@ -70,7 +70,7 @@ errr file_character(player_type *creature_ptr, concptr name, display_player_pf d
             fd = -1;
     }
 
-    FILE *fff = NULL;
+    FILE *fff = nullptr;
     if (fd < 0)
         fff = angband_fopen(buf, "w");
 
@@ -83,7 +83,7 @@ errr file_character(player_type *creature_ptr, concptr name, display_player_pf d
     make_character_dump(creature_ptr, fff, display_player);
     angband_fclose(fff);
     msg_print(_("キャラクタ情報のファイルへの書き出しに成功しました。", "Character dump successful."));
-    msg_print(NULL);
+    msg_print(nullptr);
     return 0;
 }
 

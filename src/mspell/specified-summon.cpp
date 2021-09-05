@@ -178,7 +178,7 @@ MONSTER_NUMBER summon_NAZGUL(player_type *target_ptr, POSITION y, POSITION x, MO
     else
         msg_format(_("%^sが魔法で幽鬼戦隊を召喚した！", "%^s magically summons rangers of Nazgul!"), m_name);
 
-    msg_print(NULL);
+    msg_print(nullptr);
 
     int count = 0;
     for (int k = 0; k < 30; k++) {
@@ -208,11 +208,11 @@ MONSTER_NUMBER summon_NAZGUL(player_type *target_ptr, POSITION y, POSITION x, MO
         else
             msg_format(_("「同じく%d号、ナズグル・ブラック！」", "Another one says 'Number %d, Nazgul-Black!'"), count);
 
-        msg_print(NULL);
+        msg_print(nullptr);
     }
 
     msg_format(_("「%d人そろって、リングレンジャー！」", "They say 'The %d meets! We are the Ring-Ranger!'."), count);
-    msg_print(NULL);
+    msg_print(nullptr);
     return count;
 }
 

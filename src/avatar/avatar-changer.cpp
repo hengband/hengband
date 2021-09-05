@@ -19,12 +19,18 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
+/*!
+ * @brief AvaterChangerコンストラクタ
+ */
 AvatarChanger::AvatarChanger(player_type *target_ptr, monster_type *m_ptr)
     : target_ptr(target_ptr)
     , m_ptr(m_ptr)
 {
 }
 
+/*!
+ * @brief 徳変化処理のメインルーチン
+ */
 void AvatarChanger::change_virtue()
 {
     this->change_virtue_non_beginner();
@@ -48,6 +54,9 @@ void AvatarChanger::change_virtue()
     this->change_virtue_good_animal();
 }
 
+/*!
+ * @brief 非BEGINNERダンジョン時に伴う徳の変化処理
+ */
 void AvatarChanger::change_virtue_non_beginner()
 {
     auto *floor_ptr = this->target_ptr->current_floor_ptr;
@@ -73,6 +82,9 @@ void AvatarChanger::change_virtue_non_beginner()
     }
 }
 
+/*!
+ * @brief ユニークを攻撃対象にした場合限定の徳変化処理
+ */
 void AvatarChanger::change_virtue_unique()
 {
     auto *r_ptr = &r_info[m_ptr->r_idx];
@@ -94,7 +106,7 @@ void AvatarChanger::change_virtue_unique()
     }
 }
 
-/*
+/*!
  * @brief 攻撃を与えたモンスターが天使か悪魔だった場合、徳を変化させる
  * @details 天使かつ悪魔だった場合、天使であることが優先される
  */
@@ -126,7 +138,7 @@ void AvatarChanger::change_virtue_good_evil()
     }
 }
 
-/*
+/*!
  * @brief 過去に＠を殺したことがあるユニークにリゾンべを果たせたら徳を上げる
  */
 void AvatarChanger::change_virtue_revenge()
@@ -147,7 +159,7 @@ void AvatarChanger::change_virtue_revenge()
     }
 }
 
-/*
+/*!
  * @brief 盗み逃げをするモンスター及び地上のモンスターを攻撃した際に徳を変化させる
  */
 void AvatarChanger::change_virtue_wild_thief()
@@ -188,7 +200,7 @@ void AvatarChanger::change_virtue_wild_thief()
     }
 }
 
-/*
+/*!
  * @brief 邪悪でなく、魔法も持たない動物を攻撃した時に徳を下げる
  */
 void AvatarChanger::change_virtue_good_animal()

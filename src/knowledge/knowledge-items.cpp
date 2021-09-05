@@ -16,7 +16,6 @@
 #include "io/input-key-acceptor.h"
 #include "knowledge/object-group-table.h"
 #include "object-enchant/special-object-flags.h"
-#include "object-hook/hook-enchant.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "perception/identification.h"
@@ -40,7 +39,7 @@
  */
 void do_cmd_knowledge_artifacts(player_type *player_ptr)
 {
-    FILE *fff = NULL;
+    FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
     if (!open_temporary_file(&fff, file_name))
         return;
@@ -67,9 +66,9 @@ void do_cmd_knowledge_artifacts(player_type *player_ptr)
             for (const auto this_o_idx : g_ptr->o_idx_list) {
                 object_type *o_ptr;
                 o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
-                if (!object_is_fixed_artifact(o_ptr))
+                if (!o_ptr->is_fixed_artifact())
                     continue;
-                if (object_is_known(o_ptr))
+                if (o_ptr->is_known())
                     continue;
 
                 okay[o_ptr->name1] = false;
@@ -81,9 +80,9 @@ void do_cmd_knowledge_artifacts(player_type *player_ptr)
         object_type *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
-        if (!object_is_fixed_artifact(o_ptr))
+        if (!o_ptr->is_fixed_artifact())
             continue;
-        if (object_is_known(o_ptr))
+        if (o_ptr->is_known())
             continue;
 
         okay[o_ptr->name1] = false;
@@ -106,7 +105,7 @@ void do_cmd_knowledge_artifacts(player_type *player_ptr)
             object_type forge;
             object_type *q_ptr;
             q_ptr = &forge;
-            q_ptr->prep(player_ptr, z);
+            q_ptr->prep(z);
             q_ptr->name1 = who[k];
             q_ptr->ident |= IDENT_STORE;
             describe_flavor(player_ptr, base_name, q_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -228,7 +227,7 @@ static void desc_obj_fake(player_type *creature_ptr, KIND_OBJECT_IDX k_idx)
     object_type object_type_body;
     o_ptr = &object_type_body;
     o_ptr->wipe();
-    o_ptr->prep(creature_ptr, k_idx);
+    o_ptr->prep(k_idx);
 
     o_ptr->ident |= IDENT_KNOWN;
     handle_stuff(creature_ptr);
@@ -237,7 +236,7 @@ static void desc_obj_fake(player_type *creature_ptr, KIND_OBJECT_IDX k_idx)
         return;
 
     msg_print(_("特に変わったところはないようだ。", "You see nothing special."));
-    msg_print(NULL);
+    msg_print(nullptr);
 }
 
 /**
@@ -266,7 +265,7 @@ void do_cmd_knowledge_objects(player_type *creature_ptr, bool *need_redraw, bool
     int grp_cnt = 0;
     if (direct_k_idx < 0) {
         mode = visual_only ? 0x03 : 0x01;
-        for (IDX i = 0; object_group_text[i] != NULL; i++) {
+        for (IDX i = 0; object_group_text[i] != nullptr; i++) {
             len = strlen(object_group_text[i]);
             if (len > max)
                 max = len;

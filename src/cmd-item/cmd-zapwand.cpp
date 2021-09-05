@@ -10,6 +10,7 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "object-enchant/special-object-flags.h"
+#include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
@@ -348,7 +349,7 @@ void exe_aim_wand(player_type *creature_ptr, INVENTORY_IDX item)
     }
 
     /* Allow direction to be cancelled for free */
-    if (object_is_aware(o_ptr) && (o_ptr->sval == SV_WAND_HEAL_MONSTER || o_ptr->sval == SV_WAND_HASTE_MONSTER))
+    if (o_ptr->is_aware() && (o_ptr->sval == SV_WAND_HEAL_MONSTER || o_ptr->sval == SV_WAND_HASTE_MONSTER))
         target_pet = true;
     if (!get_aim_dir(creature_ptr, &dir)) {
         target_pet = old_target_pet;
@@ -414,7 +415,7 @@ void exe_aim_wand(player_type *creature_ptr, INVENTORY_IDX item)
     BIT_FLAGS inventory_flags = (PU_COMBINE | PU_REORDER | (creature_ptr->update & PU_AUTODESTROY));
     reset_bits(creature_ptr->update, PU_COMBINE | PU_REORDER | PU_AUTODESTROY);
 
-    if (!(object_is_aware(o_ptr))) {
+    if (!(o_ptr->is_aware())) {
         chg_virtue(creature_ptr, V_PATIENCE, -1);
         chg_virtue(creature_ptr, V_CHANCE, 1);
         chg_virtue(creature_ptr, V_KNOWLEDGE, -1);
@@ -424,7 +425,7 @@ void exe_aim_wand(player_type *creature_ptr, INVENTORY_IDX item)
     object_tried(o_ptr);
 
     /* Apply identification */
-    if (ident && !object_is_aware(o_ptr)) {
+    if (ident && !o_ptr->is_aware()) {
         object_aware(creature_ptr, o_ptr);
         gain_exp(creature_ptr, (lev + (creature_ptr->lev >> 1)) / creature_ptr->lev);
     }
@@ -461,7 +462,7 @@ void do_cmd_aim_wand(player_type *creature_ptr)
 
     q = _("どの魔法棒で狙いますか? ", "Aim which wand? ");
     s = _("使える魔法棒がない。", "You have no wand to aim.");
-    if (!choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_WAND))
+    if (!choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TvalItemTester(TV_WAND)))
         return;
 
     exe_aim_wand(creature_ptr, item);

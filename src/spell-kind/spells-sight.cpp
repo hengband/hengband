@@ -443,7 +443,7 @@ bool probing(player_type *caster_ptr)
 
         if (!probe)
             msg_print(_("調査中...", "Probing..."));
-        msg_print(NULL);
+        msg_print(nullptr);
 
         probed_monster_info(buf, caster_ptr, m_ptr, r_ptr);
         prt(buf, 0, 0);
@@ -462,7 +462,7 @@ bool probing(player_type *caster_ptr)
             plural_aux(buf);
             msg_format("You now know more about %s.", buf);
 #endif
-            msg_print(NULL);
+            msg_print(nullptr);
         }
 
         probe = true;

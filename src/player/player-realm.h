@@ -24,7 +24,7 @@ enum choosable_realm {
 extern const uint32_t realm_choices1[];
 extern const uint32_t realm_choices2[];
 
-typedef struct player_type player_type;
+struct player_type;
 int16_t get_realm1_book(player_type *player_ptr);
 int16_t get_realm2_book(player_type *player_ptr);
 bool is_wizard_class(player_type *player_ptr);

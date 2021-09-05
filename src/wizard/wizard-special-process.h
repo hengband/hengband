@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct player_type player_type;
+struct player_type;
 void wiz_cure_all(player_type *creature_ptr);
 KIND_OBJECT_IDX wiz_create_itemtype(void);
 void wiz_create_item(player_type *caster_ptr);

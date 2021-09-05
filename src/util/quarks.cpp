@@ -46,9 +46,9 @@ concptr quark_str(STR_OFFSET i)
 {
     concptr q;
 
-    /* Return NULL for an invalid index */
+    /* Return nullptr for an invalid index */
     if ((i < 1) || (i >= quark__num))
-        return NULL;
+        return nullptr;
 
     /* Access the quark */
     q = quark__str[i];

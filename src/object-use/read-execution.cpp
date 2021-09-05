@@ -200,14 +200,14 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
             break;
         }
         case SV_SCROLL_IDENTIFY: {
-            if (!ident_spell(creature_ptr, false, TV_NONE))
+            if (!ident_spell(creature_ptr, false))
                 used_up = false;
 
             ident = true;
             break;
         }
         case SV_SCROLL_STAR_IDENTIFY: {
-            if (!identify_fully(creature_ptr, false, TV_NONE))
+            if (!identify_fully(creature_ptr, false))
                 used_up = false;
 
             ident = true;
@@ -440,9 +440,9 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
         }
         case SV_SCROLL_RUMOR: {
             msg_print(_("巻物にはメッセージが書かれている:", "There is message on the scroll. It says:"));
-            msg_print(NULL);
+            msg_print(nullptr);
             display_rumor(creature_ptr, true);
-            msg_print(NULL);
+            msg_print(nullptr);
             msg_print(_("巻物は煙を立てて消え去った！", "The scroll disappears in a puff of smoke!"));
             ident = true;
             break;
@@ -478,11 +478,11 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
         used_up = false;
     } else if (o_ptr->name1 == ART_POWER) {
         msg_print(_("「一つの指輪は全てを統べ、", "'One Ring to rule them all, "));
-        msg_print(NULL);
+        msg_print(nullptr);
         msg_print(_("一つの指輪は全てを見つけ、", "One Ring to find them, "));
-        msg_print(NULL);
+        msg_print(nullptr);
         msg_print(_("一つの指輪は全てを捕らえて", "One Ring to bring them all "));
-        msg_print(NULL);
+        msg_print(nullptr);
         msg_print(_("暗闇の中に繋ぎとめる。」", "and in the darkness bind them.'"));
         used_up = false;
     } else if (o_ptr->tval == TV_PARCHMENT) {
@@ -501,14 +501,14 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
     BIT_FLAGS inventory_flags = PU_COMBINE | PU_REORDER | (creature_ptr->update & PU_AUTODESTROY);
     creature_ptr->update &= ~(PU_COMBINE | PU_REORDER | PU_AUTODESTROY);
 
-    if (!(object_is_aware(o_ptr))) {
+    if (!(o_ptr->is_aware())) {
         chg_virtue(creature_ptr, V_PATIENCE, -1);
         chg_virtue(creature_ptr, V_CHANCE, 1);
         chg_virtue(creature_ptr, V_KNOWLEDGE, -1);
     }
 
     object_tried(o_ptr);
-    if (ident && !object_is_aware(o_ptr)) {
+    if (ident && !o_ptr->is_aware()) {
         object_aware(creature_ptr, o_ptr);
         gain_exp(creature_ptr, (lev + (creature_ptr->lev >> 1)) / creature_ptr->lev);
     }

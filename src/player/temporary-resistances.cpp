@@ -28,8 +28,7 @@ void tim_player_flags(player_type *creature_ptr, TrFlags &flags)
     BIT_FLAGS race_class_flag = FLAG_CAUSE_CLASS;
     set_bits(race_class_flag, FLAG_CAUSE_RACE);
 
-    for (int i = 0; i < TR_FLAG_SIZE; i++)
-        flags[i] = 0L;
+    flags.fill(0U);
 
     if (is_oppose_acid(creature_ptr) && none_bits(has_immune_acid(creature_ptr), (race_class_flag | tmp_effect_flag)))
         add_flag(flags, TR_RES_ACID);

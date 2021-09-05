@@ -23,7 +23,7 @@
  * @details
  * Hack -- do not display "trailing" empty slots
  */
-COMMAND_CODE show_inventory(player_type *owner_ptr, int target_item, BIT_FLAGS mode, tval_type tval)
+COMMAND_CODE show_inventory(player_type *owner_ptr, int target_item, BIT_FLAGS mode, const ItemTester& item_tester)
 {
     COMMAND_CODE i;
     int k, l, z = 0;
@@ -48,10 +48,10 @@ COMMAND_CODE show_inventory(player_type *owner_ptr, int target_item, BIT_FLAGS m
         z = i + 1;
     }
 
-    prepare_label_string(owner_ptr, inven_label, USE_INVEN, tval);
+    prepare_label_string(owner_ptr, inven_label, USE_INVEN, item_tester);
     for (k = 0, i = 0; i < z; i++) {
         o_ptr = &owner_ptr->inventory_list[i];
-        if (!item_tester_okay(owner_ptr, o_ptr, tval) && !(mode & USE_FULL))
+        if (!item_tester.okay(o_ptr) && !(mode & USE_FULL))
             continue;
 
         describe_flavor(owner_ptr, o_name, o_ptr, 0);
@@ -126,7 +126,7 @@ COMMAND_CODE show_inventory(player_type *owner_ptr, int target_item, BIT_FLAGS m
  * @brief 所持アイテム一覧を表示する /
  * Choice window "shadow" of the "show_inven()" function
  */
-void display_inventory(player_type *owner_ptr, tval_type tval)
+void display_inventory(player_type *owner_ptr, const ItemTester& item_tester)
 {
     int i, n, z = 0;
     TERM_COLOR attr = TERM_WHITE;
@@ -151,7 +151,7 @@ void display_inventory(player_type *owner_ptr, tval_type tval)
             break;
 
         auto o_ptr = &owner_ptr->inventory_list[i];
-        auto do_disp = item_tester_okay(owner_ptr, o_ptr, tval);
+        auto do_disp = item_tester.okay(o_ptr);
         strcpy(tmp_val, "   ");
         if (do_disp) {
             tmp_val[0] = index_to_label(i);

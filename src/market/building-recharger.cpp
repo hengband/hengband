@@ -36,14 +36,13 @@ void building_recharge(player_type *player_ptr)
     msg_flag = false;
     clear_bldg(4, 18);
     prt(_("  再充填の費用はアイテムの種類によります。", "  The prices of recharge depend on the type."), 6, 0);
-    item_tester_hook = item_tester_hook_recharge;
 
     concptr q = _("どのアイテムに魔力を充填しますか? ", "Recharge which item? ");
     concptr s = _("魔力を充填すべきアイテムがない。", "You have nothing to recharge.");
 
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_NONE);
+    o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&object_type::is_rechargeable));
     if (!o_ptr)
         return;
 
@@ -56,9 +55,9 @@ void building_recharge(player_type *player_ptr)
      */
     /* The item must be "known" */
     char tmp_str[MAX_NLEN];
-    if (!object_is_known(o_ptr)) {
+    if (!o_ptr->is_known()) {
         msg_format(_("充填する前に鑑定されている必要があります！", "The item must be identified first!"));
-        msg_print(NULL);
+        msg_print(nullptr);
 
         if ((player_ptr->au >= 50) && get_check(_("＄50で鑑定しますか？ ", "Identify for 50 gold? ")))
 
@@ -188,7 +187,7 @@ void building_recharge_all(player_type *player_ptr)
 
         if (o_ptr->tval < TV_STAFF || o_ptr->tval > TV_ROD)
             continue;
-        if (!object_is_known(o_ptr))
+        if (!o_ptr->is_known())
             total_cost += 50;
 
         DEPTH lev = k_info[o_ptr->k_idx].level;
@@ -222,13 +221,13 @@ void building_recharge_all(player_type *player_ptr)
 
     if (!total_cost) {
         msg_print(_("充填する必要はありません。", "No need to recharge."));
-        msg_print(NULL);
+        msg_print(nullptr);
         return;
     }
 
     if (player_ptr->au < total_cost) {
         msg_format(_("すべてのアイテムを再充填するには＄%d 必要です！", "You need %d gold to recharge all items!"), total_cost);
-        msg_print(NULL);
+        msg_print(nullptr);
         return;
     }
 
@@ -244,7 +243,7 @@ void building_recharge_all(player_type *player_ptr)
         if (o_ptr->tval < TV_STAFF || o_ptr->tval > TV_ROD)
             continue;
 
-        if (!object_is_known(o_ptr)) {
+        if (!o_ptr->is_known()) {
             identify_item(player_ptr, o_ptr);
             autopick_alter_item(player_ptr, i, false);
         }
@@ -272,7 +271,7 @@ void building_recharge_all(player_type *player_ptr)
     }
 
     msg_format(_("＄%d で再充填しました。", "You pay %d gold."), total_cost);
-    msg_print(NULL);
+    msg_print(nullptr);
     player_ptr->update |= (PU_COMBINE | PU_REORDER);
     player_ptr->window_flags |= (PW_INVEN);
     player_ptr->au -= total_cost;

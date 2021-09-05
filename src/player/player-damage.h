@@ -9,8 +9,8 @@
 #define DAMAGE_NOESCAPE 5
 #define DAMAGE_USELIFE  6
 
-typedef struct monster_type monster_type;
-typedef struct player_type player_type;
+struct monster_type;
+struct player_type;
 int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concptr kb_str);
 HIT_POINT acid_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, bool aura);
 HIT_POINT elec_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, bool aura);

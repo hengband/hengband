@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct player_type player_type;
+struct player_type;
 bool activate_missile_1(player_type *user_ptr);
 bool activate_missile_2(player_type *user_ptr);
 bool activate_missile_3(player_type *user_ptr);

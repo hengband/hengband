@@ -608,7 +608,7 @@ static void build_vault(
  */
 bool build_type7(player_type *player_ptr, dun_data_type *dd_ptr)
 {
-    vault_type *v_ptr = NULL;
+    vault_type *v_ptr = nullptr;
     int dummy;
     POSITION x, y;
     POSITION xval, yval;
@@ -1149,7 +1149,7 @@ bool build_type10(player_type *player_ptr, dun_data_type *dd_ptr)
  */
 bool build_type17(player_type *player_ptr, dun_data_type *dd_ptr)
 {
-    vault_type *v_ptr = NULL;
+    vault_type *v_ptr = nullptr;
     int dummy;
     POSITION x, y;
     POSITION xval, yval;

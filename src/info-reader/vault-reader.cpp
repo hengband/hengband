@@ -14,7 +14,7 @@
  */
 errr parse_v_info(std::string_view buf, angband_header *head)
 {
-    static vault_type *v_ptr = NULL;
+    static vault_type *v_ptr = nullptr;
     const auto &tokens = str_split(buf, ':', false, 5);
 
     if (tokens[0] == "N") {

@@ -14,8 +14,6 @@
 #include "floor/line-of-sight.h"
 #include "game-option/birth-options.h"
 #include "grid/feature.h"
-#include "object-hook/hook-checker.h"
-#include "object-hook/hook-enchant.h"
 #include "perception/object-perception.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
@@ -122,11 +120,11 @@ void wipe_o_list(floor_type *floor_ptr)
 {
     for (OBJECT_IDX i = 1; i < floor_ptr->o_max; i++) {
         object_type *o_ptr = &floor_ptr->o_list[i];
-        if (!object_is_valid(o_ptr))
+        if (!o_ptr->is_valid())
             continue;
 
         if (!current_world_ptr->character_dungeon || preserve_mode) {
-            if (object_is_fixed_artifact(o_ptr) && !object_is_known(o_ptr)) {
+            if (o_ptr->is_fixed_artifact() && !o_ptr->is_known()) {
                 a_info[o_ptr->name1].cur_num = 0;
             }
         }

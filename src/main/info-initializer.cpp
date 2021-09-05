@@ -100,7 +100,7 @@ static errr init_info(concptr filename, angband_header &head, std::vector<InfoTy
 #endif
         msg_format(_("レコード %d は '%s' エラーがあります。", "Record %d contains a '%s' error."), error_idx, oops);
         msg_format(_("構文 '%s'。", "Parsing '%s'."), buf);
-        msg_print(NULL);
+        msg_print(nullptr);
         quit(format(_("'%s.txt'ファイルにエラー", "Error in '%s.txt' file."), filename));
     }
 
@@ -129,7 +129,7 @@ errr init_f_info()
 errr init_k_info()
 {
     init_header(&k_head, max_k_idx);
-    return init_info("k_info", k_head, k_info, parse_k_info, NULL);
+    return init_info("k_info", k_head, k_info, parse_k_info, nullptr);
 }
 
 /*!
@@ -140,7 +140,7 @@ errr init_k_info()
 errr init_a_info()
 {
     init_header(&a_head, max_a_idx);
-    return init_info("a_info", a_head, a_info, parse_a_info, NULL);
+    return init_info("a_info", a_head, a_info, parse_a_info, nullptr);
 }
 
 /*!
@@ -151,7 +151,7 @@ errr init_a_info()
 errr init_e_info()
 {
     init_header(&e_head, max_e_idx);
-    return init_info("e_info", e_head, e_info, parse_e_info, NULL);
+    return init_info("e_info", e_head, e_info, parse_e_info, nullptr);
 }
 
 /*!
@@ -162,7 +162,7 @@ errr init_e_info()
 errr init_r_info()
 {
     init_header(&r_head, max_r_idx);
-    return init_info("r_info", r_head, r_info, parse_r_info, NULL);
+    return init_info("r_info", r_head, r_info, parse_r_info, nullptr);
 }
 
 /*!
@@ -173,7 +173,7 @@ errr init_r_info()
 errr init_d_info()
 {
     init_header(&d_head, current_world_ptr->max_d_idx);
-    return init_info("d_info", d_head, d_info, parse_d_info, NULL);
+    return init_info("d_info", d_head, d_info, parse_d_info, nullptr);
 }
 
 /*!
@@ -187,7 +187,7 @@ errr init_d_info()
 errr init_v_info()
 {
     init_header(&v_head, max_v_idx);
-    return init_info("v_info", v_head, v_info, parse_v_info, NULL);
+    return init_info("v_info", v_head, v_info, parse_v_info, nullptr);
 }
 
 /*!
@@ -198,7 +198,7 @@ errr init_v_info()
 errr init_s_info()
 {
     init_header(&s_head, MAX_CLASS);
-    return init_info("s_info", s_head, s_info, parse_s_info, NULL);
+    return init_info("s_info", s_head, s_info, parse_s_info, nullptr);
 }
 
 /*!
@@ -209,5 +209,5 @@ errr init_s_info()
 errr init_m_info()
 {
     init_header(&m_head, MAX_CLASS);
-    return init_info("m_info", m_head, m_info, parse_m_info, NULL);
+    return init_info("m_info", m_head, m_info, parse_m_info, nullptr);
 }

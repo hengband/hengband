@@ -42,7 +42,6 @@
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "object-enchant/tr-types.h"
-#include "object-hook/hook-enchant.h"
 #include "object/object-broken.h"
 #include "object/object-flags.h"
 #include "object/object-info.h"
@@ -85,9 +84,9 @@ static MULTIPLY calc_shot_damage_with_slay(
 
     monster_race *race_ptr = &r_info[monster_ptr->r_idx];
 
-    TrFlags flags, bow_flags, arrow_flags;
-    object_flags(sniper_ptr, arrow_ptr, arrow_flags);
-    object_flags(sniper_ptr, bow_ptr, bow_flags);
+    TrFlags flags{};
+    auto arrow_flags = object_flags(arrow_ptr);
+    auto bow_flags = object_flags(bow_ptr);
 
     for (int i = 0; i < TR_FLAG_SIZE; i++)
         flags[i] = bow_flags[i] | arrow_flags[i];
@@ -755,7 +754,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
                     /* No death */
                     else {
                         /* STICK TO */
-                        if (object_is_fixed_artifact(q_ptr) && (shooter_ptr->pclass != CLASS_SNIPER || shooter_ptr->concent == 0)) {
+                        if (q_ptr->is_fixed_artifact() && (shooter_ptr->pclass != CLASS_SNIPER || shooter_ptr->concent == 0)) {
                             GAME_TEXT m_name[MAX_NLEN];
 
                             monster_desc(shooter_ptr, m_name, m_ptr, 0);
@@ -853,7 +852,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
             if (!o_idx) {
                 msg_format(_("%sはどこかへ行った。", "The %s went somewhere."), o_name);
-                if (object_is_fixed_artifact(q_ptr)) {
+                if (q_ptr->is_fixed_artifact()) {
                     a_info[j_ptr->name1].cur_num = 0;
                 }
                 return;

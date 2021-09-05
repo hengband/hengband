@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct player_type player_type;
+struct player_type;
 int32_t get_current_ki(player_type *caster_ptr);
 void set_current_ki(player_type *caster_ptr, bool is_reset, int32_t ki);
 bool clear_mind(player_type *creature_ptr);

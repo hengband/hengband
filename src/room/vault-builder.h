@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct player_type player_type;
+struct player_type;
 void vault_monsters(player_type *player_ptr, POSITION y1, POSITION x1, int num);
 void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int num);
 void vault_traps(player_type *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd, int num);

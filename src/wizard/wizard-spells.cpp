@@ -31,6 +31,7 @@
 #include "target/grid-selector.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
+#include "util/enum-converter.h"
 #include "util/flag-group.h"
 #include "view/display-messages.h"
 
@@ -143,7 +144,7 @@ void wiz_learn_blue_magic_all(player_type *caster_ptr)
         std::vector<RF_ABILITY> spells;
         EnumClassFlagGroup<RF_ABILITY>::get_flags(ability_flags, std::back_inserter(spells));
         for (auto spell : spells) {
-            caster_ptr->magic_num2[static_cast<int>(spell)] = 1;
+            caster_ptr->magic_num2[enum2i(spell)] = 1;
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef struct player_type player_type;
+struct player_type;
 void print_title(player_type *creature_ptr);
 void print_level(player_type *creature_ptr);
 void print_exp(player_type *creature_ptr);

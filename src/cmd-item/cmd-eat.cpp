@@ -284,7 +284,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
     BIT_FLAGS inventory_flags = (PU_COMBINE | PU_REORDER | (creature_ptr->update & PU_AUTODESTROY));
     creature_ptr->update &= ~(PU_COMBINE | PU_REORDER | PU_AUTODESTROY);
 
-    if (!(object_is_aware(o_ptr))) {
+    if (!(o_ptr->is_aware())) {
         chg_virtue(creature_ptr, V_KNOWLEDGE, -1);
         chg_virtue(creature_ptr, V_PATIENCE, -1);
         chg_virtue(creature_ptr, V_CHANCE, 1);
@@ -295,7 +295,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
         object_tried(o_ptr);
 
     /* The player is now aware of the object */
-    if (ident && !object_is_aware(o_ptr)) {
+    if (ident && !o_ptr->is_aware()) {
         object_aware(creature_ptr, o_ptr);
         gain_exp(creature_ptr, (lev + (creature_ptr->lev >> 1)) / creature_ptr->lev);
     }
@@ -328,7 +328,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
             object_type *q_ptr = &forge;
 
             msg_print(_("食べ物がアゴを素通りして落ちた！", "The food falls through your jaws!"));
-            q_ptr->prep(creature_ptr, lookup_kind(o_ptr->tval, o_ptr->sval));
+            q_ptr->prep(lookup_kind(o_ptr->tval, o_ptr->sval));
 
             /* Drop the object from heaven */
             (void)drop_near(creature_ptr, q_ptr, -1, creature_ptr->y, creature_ptr->x);
@@ -375,12 +375,10 @@ void do_cmd_eat_food(player_type *creature_ptr)
         set_action(creature_ptr, ACTION_NONE);
     }
 
-    item_tester_hook = item_tester_hook_eatable;
-
     q = _("どれを食べますか? ", "Eat which item? ");
     s = _("食べ物がない。", "You have nothing to eat.");
 
-    if (!choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_NONE))
+    if (!choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(item_tester_hook_eatable, creature_ptr)))
         return;
 
     exe_eat_food(creature_ptr, item);

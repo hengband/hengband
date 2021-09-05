@@ -23,8 +23,6 @@
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/special-object-flags.h"
-#include "object-hook/hook-checker.h"
-#include "object-hook/hook-enchant.h"
 #include "object/object-info.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
@@ -41,6 +39,7 @@
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include "window/display-sub-windows.h"
 #include "wizard/wizard-messages.h"
 #include "world/world-object.h"
 #include "world/world.h"
@@ -111,14 +110,14 @@ bool make_object(player_type *owner_ptr, object_type *j_ptr, BIT_FLAGS mode)
 
         k_idx = get_obj_num(owner_ptr, base, mode);
         if (get_obj_num_hook) {
-            get_obj_num_hook = NULL;
+            get_obj_num_hook = nullptr;
             get_obj_num_prep();
         }
 
         if (!k_idx)
             return false;
 
-        j_ptr->prep(owner_ptr, k_idx);
+        j_ptr->prep(k_idx);
     }
 
     apply_magic_to_object(owner_ptr, j_ptr, floor_ptr->object_level, mode);
@@ -163,7 +162,7 @@ bool make_gold(player_type *player_ptr, object_type *j_ptr)
         i = coin_type;
     if (i >= MAX_GOLD)
         i = MAX_GOLD - 1;
-    j_ptr->prep(player_ptr, OBJ_GOLD_LIST + i);
+    j_ptr->prep(OBJ_GOLD_LIST + i);
 
     int32_t base = k_info[OBJ_GOLD_LIST + i].cost;
     j_ptr->pval = (base + (8L * randint1(base)) + randint1(8));
@@ -254,7 +253,7 @@ void delete_object_idx(player_type *player_ptr, OBJECT_IDX o_idx)
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     excise_object_idx(floor_ptr, o_idx);
     j_ptr = &floor_ptr->o_list[o_idx];
-    if (!object_is_held_monster(j_ptr)) {
+    if (!j_ptr->is_held_by_monster()) {
         POSITION y, x;
         y = j_ptr->iy;
         x = j_ptr->ix;
@@ -288,7 +287,7 @@ ObjectIndexList &get_o_idx_list_contains(floor_type *floor_ptr, OBJECT_IDX o_idx
 {
     object_type *o_ptr = &floor_ptr->o_list[o_idx];
 
-    if (object_is_held_monster(o_ptr)) {
+    if (o_ptr->is_held_by_monster()) {
         return floor_ptr->m_list[o_ptr->held_m_idx].hold_o_idx_list;
     } else {
         return floor_ptr->grid_array[o_ptr->iy][o_ptr->ix].o_idx_list;
@@ -333,7 +332,7 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
     bool plural = (j_ptr->number != 1);
 #endif
     describe_flavor(owner_ptr, o_name, j_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-    if (!object_is_artifact(j_ptr) && (randint0(100) < chance)) {
+    if (!j_ptr->is_artifact() && (randint0(100) < chance)) {
 #ifdef JP
         msg_format("%sは消えた。", o_name);
 #else
@@ -402,7 +401,7 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
         }
     }
 
-    if (!flag && !object_is_artifact(j_ptr)) {
+    if (!flag && !j_ptr->is_artifact()) {
 #ifdef JP
         msg_format("%sは消えた。", o_name);
 #else
@@ -450,7 +449,7 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
                 msg_print(_("(床スペースがない)", "(no floor space)"));
 
             if (preserve_mode) {
-                if (object_is_fixed_artifact(j_ptr) && !object_is_known(j_ptr)) {
+                if (j_ptr->is_fixed_artifact() && !j_ptr->is_known()) {
                     a_info[j_ptr->name1].cur_num = 0;
                 }
             }
@@ -499,7 +498,7 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
         if (current_world_ptr->wizard)
             msg_print(_("(アイテムが多過ぎる)", "(too many objects)"));
 
-        if (object_is_fixed_artifact(j_ptr)) {
+        if (j_ptr->is_fixed_artifact()) {
             a_info[j_ptr->name1].cur_num = 0;
         }
 
@@ -541,7 +540,7 @@ void floor_item_charges(floor_type *floor_ptr, INVENTORY_IDX item)
     object_type *o_ptr = &floor_ptr->o_list[item];
     if ((o_ptr->tval != TV_STAFF) && (o_ptr->tval != TV_WAND))
         return;
-    if (!object_is_known(o_ptr))
+    if (!o_ptr->is_known())
         return;
 
 #ifdef JP
@@ -584,21 +583,23 @@ void floor_item_describe(player_type *owner_ptr, INVENTORY_IDX item)
 /*
  * Choose an item and get auto-picker entry from it.
  */
-object_type *choose_object(player_type *owner_ptr, OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option, tval_type tval)
+object_type *choose_object(player_type *owner_ptr, OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option, const ItemTester& item_tester)
 {
     OBJECT_IDX item;
 
     if (idx)
         *idx = INVEN_NONE;
 
-    if (!get_item(owner_ptr, &item, q, s, option, tval))
-        return NULL;
+    FixItemTesterSetter setter(item_tester);
+
+    if (!get_item(owner_ptr, &item, q, s, option, item_tester))
+        return nullptr;
 
     if (idx)
         *idx = item;
 
     if (item == INVEN_FORCE)
-        return NULL;
+        return nullptr;
 
     return ref_item(owner_ptr, item);
 }

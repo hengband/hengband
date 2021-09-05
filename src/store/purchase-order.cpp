@@ -30,6 +30,7 @@
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "view/display-store.h"
@@ -141,7 +142,7 @@ static void shuffle_store(player_type *player_ptr)
     msg_print(_("店主は引退した。", "The shopkeeper retires."));
     store_shuffle(player_ptr, cur_store_num);
     prt("", 3, 0);
-    sprintf(buf, "%s (%s)", ot_ptr->owner_name, race_info[static_cast<int>(ot_ptr->owner_race)].title);
+    sprintf(buf, "%s (%s)", ot_ptr->owner_name, race_info[enum2i(ot_ptr->owner_race)].title);
     put_str(buf, 3, 10);
     sprintf(buf, "%s (%ld)", f_info[cur_store_feat].name.c_str(), (long)(ot_ptr->max_cost));
     prt(buf, 3, 50);
@@ -223,7 +224,7 @@ void store_purchase(player_type *player_ptr)
             msg_format(_("一つにつき $%ldです。", "That costs %ld gold per item."), (long)(best));
         }
 
-        amt = get_quantity(NULL, o_ptr->number);
+        amt = get_quantity(nullptr, o_ptr->number);
         if (amt <= 0)
             return;
     }
@@ -252,7 +253,7 @@ void store_purchase(player_type *player_ptr)
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, j_ptr, 0);
     msg_format(_("%s(%c)を購入する。", "Buying %s (%c)."), o_name, I2A(item));
-    msg_print(NULL);
+    msg_print(nullptr);
 
     auto res = prompt_to_buy(player_ptr, j_ptr);
     if (st_ptr->store_open >= current_world_ptr->game_turn)

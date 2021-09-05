@@ -28,7 +28,6 @@
 #include "monster/monster-info.h"
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
-#include "object-hook/hook-checker.h"
 #include "object/object-kind-hook.h"
 #include "spell/spell-types.h"
 #include "spell/summon-types.h"
@@ -104,7 +103,7 @@ static void on_dead_bloodletter(player_type *player_ptr, monster_death_type *md_
 
     object_type forge;
     object_type *q_ptr = &forge;
-    q_ptr->prep(player_ptr, lookup_kind(TV_SWORD, SV_BLADE_OF_CHAOS));
+    q_ptr->prep(lookup_kind(TV_SWORD, SV_BLADE_OF_CHAOS));
     apply_magic_to_object(player_ptr, q_ptr, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART | md_ptr->mo_mode);
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
@@ -154,7 +153,7 @@ static void on_dead_sacred_treasures(player_type *player_ptr, monster_death_type
         return;
 
     ARTIFACT_IDX a_idx = 0;
-    artifact_type *a_ptr = NULL;
+    artifact_type *a_ptr = nullptr;
     do {
         switch (randint0(3)) {
         case 0:
@@ -190,12 +189,12 @@ static void on_dead_serpent(player_type *player_ptr, monster_death_type *md_ptr)
 
     object_type forge;
     object_type *q_ptr = &forge;
-    q_ptr->prep(player_ptr, lookup_kind(TV_HAFTED, SV_GROND));
+    q_ptr->prep(lookup_kind(TV_HAFTED, SV_GROND));
     q_ptr->name1 = ART_GROND;
     apply_magic_to_object(player_ptr, q_ptr, -1, AM_GOOD | AM_GREAT);
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
     q_ptr = &forge;
-    q_ptr->prep(player_ptr, lookup_kind(TV_CROWN, SV_CHAOS));
+    q_ptr->prep(lookup_kind(TV_CROWN, SV_CHAOS));
     q_ptr->name1 = ART_CHAOS;
     apply_magic_to_object(player_ptr, q_ptr, -1, AM_GOOD | AM_GREAT);
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
@@ -208,7 +207,7 @@ static void on_dead_death_sword(player_type *player_ptr, monster_death_type *md_
 
     object_type forge;
     object_type *q_ptr = &forge;
-    q_ptr->prep(player_ptr, lookup_kind(TV_SWORD, randint1(2)));
+    q_ptr->prep(lookup_kind(TV_SWORD, randint1(2)));
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
 
@@ -223,7 +222,7 @@ static void on_dead_can_angel(player_type *player_ptr, monster_death_type *md_pt
 
     object_type forge;
     object_type *q_ptr = &forge;
-    q_ptr->prep(player_ptr, lookup_kind(TV_CHEST, SV_CHEST_KANDUME));
+    q_ptr->prep(lookup_kind(TV_CHEST, SV_CHEST_KANDUME));
     apply_magic_to_object(player_ptr, q_ptr, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART);
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }
@@ -377,7 +376,7 @@ static bool make_equipment(player_type *player_ptr, object_type *q_ptr, const BI
  * @brief 死亡時ドロップとしてランダムアーティファクトのみを生成する
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param md_ptr モンスター撃破構造体への参照ポインタ
- * @param object_hook_pf アイテム種別指定、特になければNULLで良い
+ * @param object_hook_pf アイテム種別指定、特になければnullptrで良い
  * @return なし
  * @details
  * 最初のアイテム生成でいきなり☆が生成された場合を除き、中途半端な☆ (例：呪われている)は生成しない.
@@ -387,7 +386,7 @@ static void on_dead_random_artifact(player_type *player_ptr, monster_death_type 
 {
     object_type forge;
     object_type *q_ptr = &forge;
-    auto is_object_hook_null = object_hook_pf == NULL;
+    auto is_object_hook_null = object_hook_pf == nullptr;
     auto drop_mode = md_ptr->mo_mode | AM_NO_FIXED_ART;
     while (true) {
         // make_object() の中でアイテム種別をキャンセルしている
@@ -406,7 +405,7 @@ static void on_dead_random_artifact(player_type *player_ptr, monster_death_type 
         }
 
         (void)become_random_artifact(player_ptr, q_ptr, false);
-        auto is_good_random_art = !object_is_cursed(q_ptr);
+        auto is_good_random_art = !q_ptr->is_cursed();
         is_good_random_art &= q_ptr->to_h > 0;
         is_good_random_art &= q_ptr->to_d > 0;
         is_good_random_art &= q_ptr->to_a > 0;

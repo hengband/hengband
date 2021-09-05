@@ -1,4 +1,6 @@
 ﻿#pragma once
 
-typedef struct object_type object_type;
-int bow_tval_ammo(object_type *o_ptr);
+#include "object/tval-types.h"
+
+struct object_type;;
+tval_type bow_tval_ammo(object_type *o_ptr);

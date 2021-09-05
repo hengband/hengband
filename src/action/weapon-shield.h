@@ -6,5 +6,5 @@
 
 #include "system/angband.h"
 
-typedef struct player_type player_type;
+struct player_type;
 void verify_equip_slot(player_type *owner_ptr, INVENTORY_IDX item);

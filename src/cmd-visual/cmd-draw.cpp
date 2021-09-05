@@ -162,7 +162,7 @@ void do_cmd_messages(int num_now)
 	char shower_str[81];
 	char finder_str[81];
 	char back_str[81];
-	concptr shower = NULL;
+	concptr shower = nullptr;
 	int wid, hgt;
 	term_get_size(&wid, &hgt);
 	int num_lines = hgt - 4;
@@ -183,7 +183,7 @@ void do_cmd_messages(int num_now)
 			if (!shower || !shower[0]) continue;
 
 			concptr str = msg;
-			while ((str = angband_strstr(str, shower)) != NULL)
+			while ((str = angband_strstr(str, shower)) != nullptr)
 			{
 				int len = strlen(shower);
 				term_putstr(str - msg, num_lines + 1 - j, len, TERM_YELLOW, shower);
@@ -208,7 +208,7 @@ void do_cmd_messages(int num_now)
 			prt(_("強調: ", "Show: "), hgt - 1, 0);
 			strcpy(back_str, shower_str);
 			if (askfor(shower_str, 80))
-				shower = shower_str[0] ? shower_str : NULL;
+				shower = shower_str[0] ? shower_str : nullptr;
 			else
 				strcpy(shower_str, back_str);
 
@@ -225,7 +225,7 @@ void do_cmd_messages(int num_now)
 			}
 			else if (!finder_str[0])
 			{
-				shower = NULL;
+				shower = nullptr;
 				continue;
 			}
 

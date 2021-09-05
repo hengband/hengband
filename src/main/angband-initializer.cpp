@@ -100,7 +100,7 @@ void init_file_paths(char *libpath, char *varpath)
     strcpy(libtail, "xtra");
     ANGBAND_DIR_XTRA = string_make(libpath);
 
-    time_t now = time(NULL);
+    time_t now = time(nullptr);
     struct tm *t = localtime(&now);
     char tmp[128];
     strftime(tmp, sizeof(tmp), "%Y-%m-%d-%H-%M-%S", t);

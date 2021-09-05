@@ -11,8 +11,6 @@
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "object-enchant/object-ego.h"
-#include "object-hook/hook-checker.h"
-#include "object-hook/hook-enchant.h"
 #include "object/item-use-flags.h"
 #include "object/object-flags.h"
 #include "player-info/equipment-info.h"
@@ -267,17 +265,15 @@ bool pulish_shield(player_type *caster_ptr)
     concptr s = _("磨く盾がありません。", "You have no shield to polish.");
 
     OBJECT_IDX item;
-    object_type *o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, TV_SHIELD);
-    if (o_ptr == NULL)
+    object_type *o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, TvalItemTester(TV_SHIELD));
+    if (o_ptr == nullptr)
         return false;
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(caster_ptr, o_name, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
-    TrFlags flgs;
-    object_flags(caster_ptr, o_ptr, flgs);
 
-    bool is_pulish_successful = o_ptr->k_idx && !object_is_artifact(o_ptr) && !object_is_ego(o_ptr);
-    is_pulish_successful &= !object_is_cursed(o_ptr);
+    bool is_pulish_successful = o_ptr->k_idx && !o_ptr->is_artifact() && !o_ptr->is_ego();
+    is_pulish_successful &= !o_ptr->is_cursed();
     is_pulish_successful &= (o_ptr->sval != SV_MIRROR_SHIELD);
     if (is_pulish_successful) {
 #ifdef JP

@@ -14,7 +14,8 @@
  */
 bool has_melee_weapon(player_type *creature_ptr, int slot)
 {
-    return ((creature_ptr->inventory_list[slot].k_idx) && object_is_melee_weapon(&creature_ptr->inventory_list[slot]));
+    const auto o_ptr = &creature_ptr->inventory_list[slot];
+    return o_ptr->k_idx && o_ptr->is_melee_weapon();
 }
 
 /*!

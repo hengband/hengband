@@ -153,11 +153,11 @@ static void attack_dispel(player_type *attacker_ptr, player_attack_type *pa_ptr)
 static void attack_probe(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {
     msg_print(_("刃が敵を調査した...", "The blade probed your enemy..."));
-    msg_print(NULL);
+    msg_print(nullptr);
     char buf[256];
     probed_monster_info(buf, attacker_ptr, pa_ptr->m_ptr, pa_ptr->r_ptr);
     msg_print(buf);
-    msg_print(NULL);
+    msg_print(nullptr);
     (void)lore_do_probe(attacker_ptr, pa_ptr->r_idx);
 }
 

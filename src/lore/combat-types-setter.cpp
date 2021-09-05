@@ -8,7 +8,7 @@
 void set_monster_blow_method(lore_type *lore_ptr, int m)
 {
     rbm_type method = lore_ptr->r_ptr->blow[m].method;
-    lore_ptr->p = NULL;
+    lore_ptr->p = nullptr;
     lore_ptr->pc = TERM_WHITE;
     switch (method) {
     case RBM_HIT:
@@ -111,7 +111,7 @@ void set_monster_blow_method(lore_type *lore_ptr, int m)
 void set_monster_blow_effect(lore_type *lore_ptr, int m)
 {
     rbe_type effect = lore_ptr->r_ptr->blow[m].effect;
-    lore_ptr->q = NULL;
+    lore_ptr->q = nullptr;
     lore_ptr->qc = TERM_WHITE;
     switch (effect) {
     case RBE_SUPERHURT:

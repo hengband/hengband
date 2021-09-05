@@ -171,7 +171,7 @@ static void get_attack_exp(player_type *attacker_ptr, player_attack_type *pa_ptr
         return;
     }
 
-    if (!object_is_melee_weapon(o_ptr) || ((r_ptr->level + 10) <= attacker_ptr->lev))
+    if (!o_ptr->is_melee_weapon() || ((r_ptr->level + 10) <= attacker_ptr->lev))
         return;
 
     get_weapon_exp(attacker_ptr, pa_ptr);
@@ -437,7 +437,7 @@ static void apply_damage_negative_effect(player_attack_type *pa_ptr, bool is_zan
 static bool check_fear_death(player_type *attacker_ptr, player_attack_type *pa_ptr, const int num, const bool is_lowlevel)
 {
     MonsterDamageProcessor mdp(attacker_ptr, pa_ptr->m_idx, pa_ptr->attack_damage, pa_ptr->fear);
-    if (!mdp.mon_take_hit(NULL))
+    if (!mdp.mon_take_hit(nullptr))
         return false;
 
     *(pa_ptr->mdeath) = true;
@@ -482,7 +482,7 @@ static void apply_actual_attack(
     sound(SOUND_HIT);
     print_surprise_attack(pa_ptr);
 
-    object_flags(attacker_ptr, o_ptr, pa_ptr->flags);
+    pa_ptr->flags = object_flags(o_ptr);
     pa_ptr->chaos_effect = select_chaotic_effect(attacker_ptr, pa_ptr);
     pa_ptr->magical_effect = select_magical_brand_effect(attacker_ptr, pa_ptr);
     decide_blood_sucking(attacker_ptr, pa_ptr);

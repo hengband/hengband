@@ -13,8 +13,6 @@
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"
-#include "object-hook/hook-bow.h"
-#include "object-hook/hook-enchant.h"
 #include "object-hook/hook-quest.h"
 #include "object-hook/hook-weapon.h"
 #include "object/item-use-flags.h"
@@ -83,7 +81,7 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
         break;
     }
 
-    concptr insc = NULL;
+    concptr insc = nullptr;
     char buf[MAX_LINELEN];
     int i;
     for (i = 0; *str; i++) {
@@ -115,7 +113,7 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
 
     concptr prev_ptr, ptr;
     ptr = prev_ptr = buf;
-    concptr old_ptr = NULL;
+    concptr old_ptr = nullptr;
     while (old_ptr != ptr) {
         old_ptr = ptr;
         if (MATCH_KEY(KEY_ALL))
@@ -301,10 +299,10 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
     // エゴ銘が邪魔かもしれないので、デフォルトで「^」は付けない.
     // We can always use the ^ mark in English.
     bool is_hat_added = _(false, true);
-    if (!object_is_aware(o_ptr)) {
+    if (!o_ptr->is_aware()) {
         ADD_FLG(FLG_UNAWARE);
         is_hat_added = true;
-    } else if (!object_is_known(o_ptr)) {
+    } else if (!o_ptr->is_known()) {
         if (!(o_ptr->ident & IDENT_SENSE)) {
             ADD_FLG(FLG_UNIDENTIFIED);
             is_hat_added = true;
@@ -340,8 +338,8 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
             }
         }
     } else {
-        if (object_is_ego(o_ptr)) {
-            if (object_is_weapon_armour_ammo(player_ptr, o_ptr)) {
+        if (o_ptr->is_ego()) {
+            if (o_ptr->is_weapon_armour_ammo()) {
                 /*
                  * Base name of ego weapons and armors
                  * are almost meaningless.
@@ -356,22 +354,22 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
                 strcpy(name_str, e_ptr->name.c_str());
 #endif
                 name = false;
-                if (!object_is_rare(o_ptr))
+                if (!o_ptr->is_rare())
                     ADD_FLG(FLG_COMMON);
             }
 
             ADD_FLG(FLG_EGO);
-        } else if (object_is_artifact(o_ptr))
+        } else if (o_ptr->is_artifact())
             ADD_FLG(FLG_ARTIFACT);
         else {
-            if (object_is_equipment(o_ptr))
+            if (o_ptr->is_equipment())
                 ADD_FLG(FLG_NAMELESS);
 
             is_hat_added = true;
         }
     }
 
-    if (object_is_melee_weapon(o_ptr)) {
+    if (o_ptr->is_melee_weapon()) {
         object_kind *k_ptr = &k_info[o_ptr->k_idx];
 
         if ((o_ptr->dd != k_ptr->dd) || (o_ptr->ds != k_ptr->ds))
@@ -418,7 +416,7 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
     if (o_ptr->tval >= TV_LIFE_BOOK && 3 == o_ptr->sval)
         ADD_FLG(FLG_FOURTH);
 
-    if (object_is_ammo(o_ptr))
+    if (o_ptr->is_ammo())
         ADD_FLG(FLG_MISSILES);
     else if (o_ptr->tval == TV_SCROLL || o_ptr->tval == TV_STAFF || o_ptr->tval == TV_WAND || o_ptr->tval == TV_ROD)
         ADD_FLG(FLG_DEVICES);
@@ -649,7 +647,7 @@ bool entry_from_choosed_object(player_type *player_ptr, autopick_type *entry)
     concptr q = _("どのアイテムを登録しますか? ", "Enter which item? ");
     concptr s = _("アイテムを持っていない。", "You have nothing to enter.");
     object_type *o_ptr;
-    o_ptr = choose_object(player_ptr, NULL, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP, TV_NONE);
+    o_ptr = choose_object(player_ptr, nullptr, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP);
     if (!o_ptr)
         return false;
 

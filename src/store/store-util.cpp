@@ -9,7 +9,6 @@
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"
-#include "object-hook/hook-enchant.h"
 #include "object/object-kind.h"
 #include "object/object-value.h"
 #include "perception/object-perception.h"
@@ -19,7 +18,7 @@
 #include "world/world-object.h"
 
 int cur_store_num = 0;
-store_type *st_ptr = NULL;
+store_type *st_ptr = nullptr;
 
 /*!
  * @brief 店舗のオブジェクト数を増やす /
@@ -85,7 +84,7 @@ void store_delete(void)
 
     if ((st_ptr->stock[what].tval == TV_ROD) || (st_ptr->stock[what].tval == TV_WAND))
         st_ptr->stock[what].pval -= num * st_ptr->stock[what].pval / st_ptr->stock[what].number;
-    
+
     store_item_increase(what, -num);
     store_item_optimize(what);
 }
@@ -152,7 +151,7 @@ void store_create(
         object_type forge;
         object_type *q_ptr;
         q_ptr = &forge;
-        q_ptr->prep(player_ptr, k_idx);
+        q_ptr->prep(k_idx);
         apply_magic_to_object(player_ptr, q_ptr, level, AM_NO_FIXED_ART);
         if (!(*store_will_buy)(player_ptr, q_ptr))
             continue;
@@ -177,15 +176,15 @@ void store_create(
             continue;
 
         if (cur_store_num == STORE_BLACK) {
-            if (black_market_crap(player_ptr, q_ptr) || (object_value(player_ptr, q_ptr) < 10))
+            if (black_market_crap(player_ptr, q_ptr) || (object_value(q_ptr) < 10))
                 continue;
         } else {
-            if (object_value(player_ptr, q_ptr) <= 0)
+            if (object_value(q_ptr) <= 0)
                 continue;
         }
 
         mass_produce(player_ptr, q_ptr);
-        (void)store_carry(player_ptr, q_ptr);
+        (void)store_carry(q_ptr);
         break;
     }
 }
@@ -224,12 +223,11 @@ bool store_object_similar(object_type *o_ptr, object_type *j_ptr)
     if (o_ptr->name2 != j_ptr->name2)
         return false;
 
-    if (object_is_artifact(o_ptr) || object_is_artifact(j_ptr))
+    if (o_ptr->is_artifact() || j_ptr->is_artifact())
         return false;
 
-    for (int i = 0; i < TR_FLAG_SIZE; i++)
-        if (o_ptr->art_flags[i] != j_ptr->art_flags[i])
-            return false;
+    if (o_ptr->art_flags != j_ptr->art_flags)
+        return false;
 
     if (o_ptr->xtra1 || j_ptr->xtra1)
         return false;
@@ -295,9 +293,9 @@ static void store_object_absorb(object_type *o_ptr, object_type *j_ptr)
  * known, the player may have to pick stuff up and drop it again.
  * </pre>
  */
-int store_carry(player_type *player_ptr, object_type *o_ptr)
+int store_carry(object_type *o_ptr)
 {
-    PRICE value = object_value(player_ptr, o_ptr);
+    PRICE value = object_value(o_ptr);
     if (value <= 0)
         return -1;
 
@@ -335,7 +333,7 @@ int store_carry(player_type *player_ptr, object_type *o_ptr)
                 continue;
         }
 
-        PRICE j_value = object_value(player_ptr, j_ptr);
+        PRICE j_value = object_value(j_ptr);
         if (value > j_value)
             break;
         if (value < j_value)

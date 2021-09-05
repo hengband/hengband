@@ -26,7 +26,7 @@
  */
 void do_cmd_knowledge_weapon_exp(player_type *creature_ptr)
 {
-    FILE *fff = NULL;
+    FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
     if (!open_temporary_file(&fff, file_name))
         return;
@@ -72,7 +72,7 @@ void do_cmd_knowledge_weapon_exp(player_type *creature_ptr)
  */
 void do_cmd_knowledge_spell_exp(player_type *creature_ptr)
 {
-    FILE *fff = NULL;
+    FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
     if (!open_temporary_file(&fff, file_name))
         return;
@@ -156,7 +156,7 @@ void do_cmd_knowledge_skill_exp(player_type *creature_ptr)
     char skill_name[SKILL_MAX][20] = { _("マーシャルアーツ", "Martial Arts    "), _("二刀流          ", "Dual Wielding   "),
         _("乗馬            ", "Riding          "), _("盾              ", "Shield          ") };
 
-    FILE *fff = NULL;
+    FILE *fff = nullptr;
     char file_name[FILE_NAME_SIZE];
     if (!open_temporary_file(&fff, file_name))
         return;

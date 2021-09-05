@@ -269,7 +269,7 @@ bool lose_all_info(player_type *creature_ptr)
     chg_virtue(creature_ptr, V_ENLIGHTEN, -5);
     for (int i = 0; i < INVEN_TOTAL; i++) {
         object_type *o_ptr = &creature_ptr->inventory_list[i];
-        if ((o_ptr->k_idx == 0) || object_is_fully_known(o_ptr))
+        if ((o_ptr->k_idx == 0) || o_ptr->is_fully_known())
             continue;
 
         o_ptr->feeling = FEEL_NONE;

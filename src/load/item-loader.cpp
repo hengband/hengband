@@ -7,7 +7,6 @@
 #include "load/savedata-flag-types.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
-#include "object-hook/hook-enchant.h"
 #include "object/object-flags.h"
 #include "object/object-kind.h"
 #include "sv-definition/sv-lite-types.h"
@@ -21,10 +20,10 @@
  * @brief アイテムオブジェクトを読み込む(現版) / Read an object (New method)
  * @param o_ptr アイテムオブジェクト保存先ポインタ
  */
-void rd_item(player_type *player_ptr, object_type *o_ptr)
+void rd_item(object_type *o_ptr)
 {
     if (h_older_than(1, 5, 0, 0)) {
-        rd_item_old(player_ptr, o_ptr);
+        rd_item_old(o_ptr);
         return;
     }
 
@@ -235,9 +234,6 @@ void rd_item(player_type *player_ptr, object_type *o_ptr)
     if (!h_older_than(2, 1, 2, 4))
         return;
 
-    TrFlags flgs;
-    object_flags(player_ptr, o_ptr, flgs);
-
     if ((o_ptr->name2 == EGO_DARK) || (o_ptr->name2 == EGO_ANCIENT_CURSE) || (o_ptr->name1 == ART_NIGHT)) {
         add_flag(o_ptr->art_flags, TR_LITE_M1);
         remove_flag(o_ptr->art_flags, TR_LITE_1);
@@ -264,7 +260,7 @@ void rd_item(player_type *player_ptr, object_type *o_ptr)
     }
 
     if (o_ptr->tval == TV_LITE) {
-        if (object_is_fixed_artifact(o_ptr)) {
+        if (o_ptr->is_fixed_artifact()) {
             add_flag(o_ptr->art_flags, TR_LITE_3);
             return;
         }

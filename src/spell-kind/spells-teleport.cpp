@@ -27,7 +27,6 @@
 #include "monster/monster-update.h"
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
-#include "object-hook/hook-checker.h"
 #include "object/object-flags.h"
 #include "player/player-move.h"
 #include "player/player-status.h"
@@ -515,14 +514,13 @@ void teleport_away_followable(player_type *tracer_ptr, MONSTER_IDX m_idx)
     if (tracer_ptr->muta.has(MUTA::VTELEPORT) || (tracer_ptr->pclass == CLASS_IMITATOR))
         follow = true;
     else {
-        TrFlags flgs;
         object_type *o_ptr;
         INVENTORY_IDX i;
 
         for (i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
             o_ptr = &tracer_ptr->inventory_list[i];
-            if (o_ptr->k_idx && !object_is_cursed(o_ptr)) {
-                object_flags(tracer_ptr, o_ptr, flgs);
+            if (o_ptr->k_idx && !o_ptr->is_cursed()) {
+                auto flgs = object_flags(o_ptr);
                 if (has_flag(flgs, TR_TELEPORT)) {
                     follow = true;
                     break;

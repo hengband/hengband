@@ -13,6 +13,7 @@
 #include "player/race-info-table.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "util/enum-converter.h"
 
 /*
  * The last character rolled,
@@ -37,7 +38,7 @@ bool ask_quick_start(player_type *creature_ptr)
         put_str(_("クイック・スタートを使いますか？[y/N]", "Use quick start? [y/N]"), 14, 10);
         c = inkey();
         if (c == 'Q')
-            quit(NULL);
+            quit(nullptr);
         else if (c == 'S')
             return false;
         else if (c == '?')
@@ -53,7 +54,7 @@ bool ask_quick_start(player_type *creature_ptr)
     init_dungeon_quests(creature_ptr);
 
     sp_ptr = &sex_info[creature_ptr->psex];
-    rp_ptr = &race_info[static_cast<int>(creature_ptr->prace)];
+    rp_ptr = &race_info[enum2i(creature_ptr->prace)];
     cp_ptr = &class_info[creature_ptr->pclass];
     mp_ptr = &m_info[creature_ptr->pclass];
     ap_ptr = &personality_info[creature_ptr->pseikaku];

@@ -5,7 +5,6 @@
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/trc-types.h"
-#include "object-hook/hook-checker.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
@@ -24,7 +23,7 @@ static int exe_curse_removal(player_type *creature_ptr, int all)
         object_type *o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
-        if (!object_is_cursed(o_ptr))
+        if (!o_ptr->is_cursed())
             continue;
         if (!all && o_ptr->curse_flags.has(TRC::HEAVY_CURSE))
             continue;

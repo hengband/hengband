@@ -2,5 +2,5 @@
 
 #include "system/angband.h"
 
-typedef struct player_type player_type;
+struct player_type;
 bool activate_ring_of_power(player_type *user_ptr, concptr name);

@@ -216,7 +216,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
                     msg_print(_("恐ろしい光景が頭に浮かんできた。", "A horrible vision enters your mind."));
 
                     /* Have some nightmares */
-                    sanity_blast(creature_ptr, NULL, false);
+                    sanity_blast(creature_ptr, nullptr, false);
                 }
                 if (set_paralyzed(creature_ptr, creature_ptr->paralyzed + randint0(4) + 4)) {
                     ident = true;
@@ -470,7 +470,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
             msg_print(_("更なる啓蒙を感じた...", "You begin to feel more enlightened..."));
             chg_virtue(creature_ptr, V_KNOWLEDGE, 1);
             chg_virtue(creature_ptr, V_ENLIGHTEN, 2);
-            msg_print(NULL);
+            msg_print(nullptr);
             wiz_lite(creature_ptr, false);
             (void)do_inc_stat(creature_ptr, A_INT);
             (void)do_inc_stat(creature_ptr, A_WIS);
@@ -487,7 +487,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 
         case SV_POTION_SELF_KNOWLEDGE:
             msg_print(_("自分自身のことが少しは分かった気がする...", "You begin to know yourself a little better..."));
-            msg_print(NULL);
+            msg_print(nullptr);
             self_knowledge(creature_ptr);
             ident = true;
             break;
@@ -541,7 +541,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 
         case SV_POTION_TSUYOSHI:
             msg_print(_("「オクレ兄さん！」", "Brother OKURE!"));
-            msg_print(NULL);
+            msg_print(nullptr);
             creature_ptr->tsuyoshi = 1;
             (void)set_tsuyoshi(creature_ptr, 0, true);
             if (!has_resist_chaos(creature_ptr)) {
@@ -572,7 +572,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
     }
     creature_ptr->update |= (PU_COMBINE | PU_REORDER);
 
-    if (!(object_is_aware(q_ptr))) {
+    if (!(q_ptr->is_aware())) {
         chg_virtue(creature_ptr, V_PATIENCE, -1);
         chg_virtue(creature_ptr, V_CHANCE, 1);
         chg_virtue(creature_ptr, V_KNOWLEDGE, -1);
@@ -582,7 +582,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
     object_tried(q_ptr);
 
     /* An identification was made */
-    if (ident && !object_is_aware(q_ptr)) {
+    if (ident && !q_ptr->is_aware()) {
         object_aware(creature_ptr, q_ptr);
         gain_exp(creature_ptr, (lev + (creature_ptr->lev >> 1)) / creature_ptr->lev);
     }

@@ -4,7 +4,7 @@
 #include "system/system-variables.h"
 
 typedef struct object_kind object_kind;
-typedef struct object_type object_type;
+struct object_type;;
 typedef struct flavor_type {
     char *buf;
     object_type *o_ptr;
@@ -38,14 +38,14 @@ typedef struct flavor_type {
     int avgdam;
 } flavor_type;
 
-typedef struct player_type player_type;
+struct player_type;
 flavor_type *initialize_flavor_type(flavor_type *flavor_ptr, char *buf, object_type *o_ptr, BIT_FLAGS mode);
 char *object_desc_chr(char *t, char c);
 char *object_desc_str(char *t, concptr s);
 char *object_desc_num(char *t, uint n);
 char *object_desc_int(char *t, int v);
-char *get_ability_abbreviation(player_type *player_ptr, char *ptr, object_type *o_ptr, bool kanji, bool all);
-void get_inscription(player_type *player_ptr, char *buff, object_type *o_ptr);
+char *get_ability_abbreviation(char *ptr, object_type *o_ptr, bool kanji, bool all);
+void get_inscription(char *buff, object_type *o_ptr);
 bool has_lite_flag(const TrFlags &flags);
 bool has_dark_flag(const TrFlags &flags);
 

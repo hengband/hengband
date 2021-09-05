@@ -115,7 +115,7 @@ bool affect_feature(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
             message = _("消滅した", "vanished.");
             break;
         default:
-            message = NULL;
+            message = nullptr;
             break;
         }
 

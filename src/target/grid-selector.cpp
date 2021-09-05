@@ -9,7 +9,6 @@
 #include "game-option/input-options.h"
 #include "game-option/keymap-directory-getter.h"
 #include "grid/feature-flag-types.h"
-#include "grid/feature.h"
 #include "io/cursor.h"
 #include "io/input-key-acceptor.h"
 #include "io/screen-util.h"
@@ -80,33 +79,22 @@ static void tgt_pt_prepare(player_type *creature_ptr, std::vector<POSITION> &ys,
 }
 
 /*!
- * @brief グリッドのシンボルが指定した記号かどうかを調べる
- * @param g_ptr グリッド情報への参照ポインタ
- * @param ch 指定するシンボル文字
- * @return シンボルが指定した記号ならTRUE、そうでなければFALSE
- */
-static bool cave_is_symbol_grid(grid_type *g_ptr, char ch)
-{
-    return f_info[g_ptr->feat].x_char[0] == ch;
-}
-
-/*!
  * @brief 指定したシンボルのマスかどうかを判定するための条件式コールバック
  */
 std::unordered_map<int, std::function<bool(grid_type *)>> tgt_pt_symbol_call_back = {
     { '<', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STAIRS) && g_ptr->cave_has_flag(FF::LESS); } },
     { '>', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STAIRS) && g_ptr->cave_has_flag(FF::MORE); } },
     { '+', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::BLDG); } },
-    { '0', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && cave_is_symbol_grid(g_ptr, '0'); } },
-    { '!', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && cave_is_symbol_grid(g_ptr, '1'); } },
-    { '"', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && cave_is_symbol_grid(g_ptr, '2'); } },
-    { '#', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && cave_is_symbol_grid(g_ptr, '3'); } },
-    { '$', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && cave_is_symbol_grid(g_ptr, '4'); } },
-    { '%', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && cave_is_symbol_grid(g_ptr, '5'); } },
-    { '&', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && cave_is_symbol_grid(g_ptr, '6'); } },
-    { '\'', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && cave_is_symbol_grid(g_ptr, '7'); } },
-    { '(', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && cave_is_symbol_grid(g_ptr, '8'); } },
-    { ')', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && cave_is_symbol_grid(g_ptr, '9'); } },
+    { '0', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && g_ptr->is_symbol('0'); } },
+    { '!', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && g_ptr->is_symbol('1'); } },
+    { '"', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && g_ptr->is_symbol('2'); } },
+    { '#', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && g_ptr->is_symbol('3'); } },
+    { '$', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && g_ptr->is_symbol('4'); } },
+    { '%', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && g_ptr->is_symbol('5'); } },
+    { '&', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && g_ptr->is_symbol('6'); } },
+    { '\'', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && g_ptr->is_symbol('7'); } },
+    { '(', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && g_ptr->is_symbol('8'); } },
+    { ')', [](grid_type *g_ptr) { return g_ptr->cave_has_flag(FF::STORE) && g_ptr->is_symbol('9'); } },
 };
 
 /*!
@@ -125,48 +113,51 @@ struct tgt_pt_info {
     char ch; //<! 入力キー
     char prev_ch; //<! 前回入力キー
     std::function<bool(grid_type *)> callback; //<! 条件判定コールバック
+
+    void move_to_symbol(player_type *creature_ptr);
 };
 
 /*!
  * @brief 指定した記号のシンボルのグリッドにカーソルを移動する
  * @param creature_ptr プレイヤー情報への参照ポインタ
- * @param info 位置ターゲット指定情報構造体(参照渡し)
+ * @details 自分 (＠)の位置に戻ってくるような処理に見える.
+ * コールバックにも依る？
  */
-void tgt_pt_move_to_symbol(player_type *creature_ptr, tgt_pt_info &info)
+void tgt_pt_info::move_to_symbol(player_type *creature_ptr)
 {
-    if (!expand_list || info.ys.empty())
+    if (!expand_list || this->ys.empty())
         return;
 
     int dx, dy;
     int cx = (panel_col_min + panel_col_max) / 2;
     int cy = (panel_row_min + panel_row_max) / 2;
-    if (info.ch != info.prev_ch)
-        info.n = 0;
-    info.prev_ch = info.ch;
-    info.n++;
+    if (this->ch != this->prev_ch)
+        this->n = 0;
+    this->prev_ch = this->ch;
+    this->n++;
 
-    for (; info.n < size(info.ys); ++info.n) {
-        const POSITION y_cur = info.ys[info.n];
-        const POSITION x_cur = info.xs[info.n];
+    for (; this->n < size(this->ys); ++this->n) {
+        const POSITION y_cur = this->ys[this->n];
+        const POSITION x_cur = this->xs[this->n];
         grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[y_cur][x_cur];
-        if (info.callback(g_ptr))
+        if (this->callback(g_ptr))
             break;
     }
 
-    if (info.n == size(info.ys)) {
-        info.n = 0;
-        info.y = creature_ptr->y;
-        info.x = creature_ptr->x;
+    if (this->n == size(this->ys)) {
+        this->n = 0;
+        this->y = creature_ptr->y;
+        this->x = creature_ptr->x;
         verify_panel(creature_ptr);
         creature_ptr->update |= PU_MONSTERS;
         creature_ptr->redraw |= PR_MAP;
         creature_ptr->window_flags |= PW_OVERHEAD;
         handle_stuff(creature_ptr);
     } else {
-        info.y = info.ys[info.n];
-        info.x = info.xs[info.n];
-        dy = 2 * (info.y - cy) / info.hgt;
-        dx = 2 * (info.x - cx) / info.wid;
+        this->y = this->ys[this->n];
+        this->x = this->xs[this->n];
+        dy = 2 * (this->y - cy) / this->hgt;
+        dx = 2 * (this->x - cx) / this->wid;
         if (dy || dx)
             change_panel(creature_ptr, dy, dx);
     }
@@ -223,7 +214,7 @@ bool tgt_pt(player_type *creature_ptr, POSITION *x_ptr, POSITION *y_ptr)
         case '(':
         case ')': {
             info.callback = tgt_pt_symbol_call_back[info.ch];
-            tgt_pt_move_to_symbol(creature_ptr, info);
+            info.move_to_symbol(creature_ptr);
             break;
         }
         default: {
@@ -232,7 +223,7 @@ bool tgt_pt(player_type *creature_ptr, POSITION *x_ptr, POSITION *y_ptr)
                     if (info.ch != '0')
                         info.ch -= 16;
                     info.callback = tgt_pt_symbol_call_back[info.ch];
-                    tgt_pt_move_to_symbol(creature_ptr, info);
+                    info.move_to_symbol(creature_ptr);
                     break;
                 }
             } else {

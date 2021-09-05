@@ -155,7 +155,7 @@ static void do_cmd_options_autosave(player_type *player_ptr, concptr info)
         }
 
         case '?': {
-            (void)show_file(player_ptr, true, _("joption.txt#Autosave", "option.txt#Autosave"), NULL, 0, 0);
+            (void)show_file(player_ptr, true, _("joption.txt#Autosave", "option.txt#Autosave"), nullptr, 0, 0);
             term_clear();
             break;
         }
@@ -284,7 +284,7 @@ static void do_cmd_options_win(player_type *player_ptr)
             set_window_flag(x, y);
             break;
         case '?':
-            (void)show_file(player_ptr, true, _("joption.txt#Window", "option.txt#Window"), NULL, 0, 0);
+            (void)show_file(player_ptr, true, _("joption.txt#Window", "option.txt#Window"), nullptr, 0, 0);
             term_clear();
             break;
         default:
@@ -387,7 +387,7 @@ static void do_cmd_options_cheat(player_type *player_ptr, concptr info)
         }
         case '?': {
             strnfmt(buf, sizeof(buf), _("joption.txt#%s", "option.txt#%s"), cheat_info[k].o_text);
-            (void)show_file(player_ptr, true, buf, NULL, 0, 0);
+            (void)show_file(player_ptr, true, buf, nullptr, 0, 0);
             term_clear();
             break;
         }
@@ -560,7 +560,7 @@ void do_cmd_options(player_type *player_ptr)
                 if (k == ESCAPE)
                     break;
                 else if (k == '?') {
-                    (void)show_file(player_ptr, true, _("joption.txt#BaseDelay", "option.txt#BaseDelay"), NULL, 0, 0);
+                    (void)show_file(player_ptr, true, _("joption.txt#BaseDelay", "option.txt#BaseDelay"), nullptr, 0, 0);
                     term_clear();
                 } else if (isdigit(k))
                     delay_factor = D2I(k);
@@ -581,7 +581,7 @@ void do_cmd_options(player_type *player_ptr)
                 if (k == ESCAPE)
                     break;
                 else if (k == '?') {
-                    (void)show_file(player_ptr, true, _("joption.txt#Hitpoint", "option.txt#Hitpoint"), NULL, 0, 0);
+                    (void)show_file(player_ptr, true, _("joption.txt#Hitpoint", "option.txt#Hitpoint"), nullptr, 0, 0);
                     term_clear();
                 } else if (isdigit(k))
                     hitpoint_warn = D2I(k);
@@ -602,7 +602,7 @@ void do_cmd_options(player_type *player_ptr)
                 if (k == ESCAPE)
                     break;
                 else if (k == '?') {
-                    (void)show_file(player_ptr, true, _("joption.txt#Manapoint", "option.txt#Manapoint"), NULL, 0, 0);
+                    (void)show_file(player_ptr, true, _("joption.txt#Manapoint", "option.txt#Manapoint"), nullptr, 0, 0);
                     term_clear();
                 } else if (isdigit(k))
                     mana_warn = D2I(k);
@@ -613,7 +613,7 @@ void do_cmd_options(player_type *player_ptr)
             break;
         }
         case '?':
-            (void)show_file(player_ptr, true, _("joption.txt", "option.txt"), NULL, 0, 0);
+            (void)show_file(player_ptr, true, _("joption.txt", "option.txt"), nullptr, 0, 0);
             term_clear();
             break;
         default: {
@@ -727,7 +727,7 @@ void do_cmd_options_aux(player_type *player_ptr, game_option_types page, concptr
         }
         case '?': {
             strnfmt(buf, sizeof(buf), _("joption.txt#%s", "option.txt#%s"), option_info[opt[k]].o_text);
-            (void)show_file(player_ptr, true, buf, NULL, 0, 0);
+            (void)show_file(player_ptr, true, buf, nullptr, 0, 0);
             term_clear();
             break;
         }

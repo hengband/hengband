@@ -596,9 +596,6 @@ hengband_SOURCES = \
 	object-enchant/vorpal-weapon.cpp object-enchant/vorpal-weapon.h \
 	\
 	object-hook/hook-armor.cpp object-hook/hook-armor.h \
-	object-hook/hook-bow.cpp object-hook/hook-bow.h \
-	object-hook/hook-checker.cpp object-hook/hook-checker.h \
-	object-hook/hook-enchant.cpp object-hook/hook-enchant.h \
 	object-hook/hook-expendable.cpp object-hook/hook-expendable.h \
 	object-hook/hook-magic.cpp object-hook/hook-magic.h \
 	object-hook/hook-perception.cpp object-hook/hook-perception.h \
@@ -870,6 +867,7 @@ hengband_SOURCES = \
 	util/angband-files.cpp util/angband-files.h \
 	util/buffer-shaper.cpp util/buffer-shaper.h \
 	util/bit-flags-calculator.h \
+	util/enum-converter.h \
 	util/flag-group.h \
 	util/int-char-converter.h \
 	util/object-sort.cpp util/object-sort.h \

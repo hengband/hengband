@@ -80,7 +80,7 @@
  */
 static bool acid_minus_ac(player_type *creature_ptr)
 {
-    object_type *o_ptr = NULL;
+    object_type *o_ptr = nullptr;
     switch (randint1(7)) {
     case 1:
         o_ptr = &creature_ptr->inventory_list[INVEN_MAIN_HAND];
@@ -105,13 +105,12 @@ static bool acid_minus_ac(player_type *creature_ptr)
         break;
     }
 
-    if ((o_ptr == NULL) || (o_ptr->k_idx == 0) || !object_is_armour(creature_ptr, o_ptr))
+    if ((o_ptr == nullptr) || (o_ptr->k_idx == 0) || !o_ptr->is_armour())
         return false;
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(creature_ptr, o_name, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
-    TrFlags flgs;
-    object_flags(creature_ptr, o_ptr, flgs);
+    auto flgs = object_flags(o_ptr);
     if (o_ptr->ac + o_ptr->to_a <= 0) {
         msg_format(_("%sは既にボロボロだ！", "Your %s is already fully corroded!"), o_name);
         return false;
@@ -159,7 +158,7 @@ HIT_POINT acid_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, boo
 
     HIT_POINT get_damage = take_hit(creature_ptr, aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str);
     if (!aura && !(double_resist && has_resist_acid(creature_ptr)))
-        inventory_damage(creature_ptr, set_acid_destroy, inv);
+        inventory_damage(creature_ptr, BreakerAcid(), inv);
 
     return get_damage;
 }
@@ -191,7 +190,7 @@ HIT_POINT elec_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, boo
 
     HIT_POINT get_damage = take_hit(creature_ptr, aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str);
     if (!aura && !(double_resist && has_resist_elec(creature_ptr)))
-        inventory_damage(creature_ptr, set_elec_destroy, inv);
+        inventory_damage(creature_ptr, BreakerElec(), inv);
 
     return get_damage;
 }
@@ -223,7 +222,7 @@ HIT_POINT fire_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, boo
 
     HIT_POINT get_damage = take_hit(creature_ptr, aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str);
     if (!aura && !(double_resist && has_resist_fire(creature_ptr)))
-        inventory_damage(creature_ptr, set_fire_destroy, inv);
+        inventory_damage(creature_ptr, BreakerFire(), inv);
 
     return get_damage;
 }
@@ -253,7 +252,7 @@ HIT_POINT cold_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, boo
 
     HIT_POINT get_damage = take_hit(creature_ptr, aura ? DAMAGE_NOESCAPE : DAMAGE_ATTACK, dam, kb_str);
     if (!aura && !(double_resist && has_resist_cold(creature_ptr)))
-        inventory_damage(creature_ptr, set_cold_destroy, inv);
+        inventory_damage(creature_ptr, BreakerCold(), inv);
 
     return get_damage;
 }
@@ -362,7 +361,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
         if (creature_ptr->current_floor_ptr->inside_arena) {
             concptr m_name = r_info[arena_info[creature_ptr->arena_number].r_idx].name.c_str();
             msg_format(_("あなたは%sの前に敗れ去った。", "You are beaten by %s."), m_name);
-            msg_print(NULL);
+            msg_print(nullptr);
             if (record_arena)
                 exe_write_diary(creature_ptr, DIARY_ARENA, -1 - creature_ptr->arena_number, m_name);
         } else {
@@ -425,7 +424,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
             if (creature_ptr->last_message)
                 string_free(creature_ptr->last_message);
 
-            creature_ptr->last_message = NULL;
+            creature_ptr->last_message = nullptr;
             if (!last_words) {
 #ifdef JP
                 msg_format("あなたは%sました。", android ? "壊れ" : "死に");
@@ -433,7 +432,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
                 msg_print(android ? "You are broken." : "You die.");
 #endif
 
-                msg_print(NULL);
+                msg_print(nullptr);
             } else {
                 if (winning_seppuku) {
                     get_rnd_line(_("seppuku_j.txt", "seppuku.txt"), 0, death_message);
@@ -481,20 +480,20 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
                         str += 2;
 
                     str2 = angband_strstr(str, "」");
-                    if (str2 != NULL)
+                    if (str2 != nullptr)
                         *str2 = '\0';
 
                     i = 0;
                     while (i < 9) {
                         str2 = angband_strstr(str, " ");
-                        if (str2 == NULL)
+                        if (str2 == nullptr)
                             len = strlen(str);
                         else
                             len = str2 - str;
 
                         if (len != 0) {
                             term_putstr_v(w * 3 / 4 - 2 - msg_pos_x[i] * 2, msg_pos_y[i], len, TERM_WHITE, str);
-                            if (str2 == NULL)
+                            if (str2 == nullptr)
                                 break;
                             i++;
                         }
@@ -536,7 +535,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
             creature_ptr->now_damaged = true;
 
         msg_print(_("*** 警告:低ヒット・ポイント！ ***", "*** LOW HITPOINT WARNING! ***"));
-        msg_print(NULL);
+        msg_print(nullptr);
         flush();
     }
 

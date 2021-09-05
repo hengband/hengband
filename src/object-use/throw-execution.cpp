@@ -38,7 +38,6 @@
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "object-enchant/tr-types.h"
-#include "object-hook/hook-checker.h"
 #include "object-hook/hook-expendable.h"
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"
@@ -82,14 +81,14 @@ bool ObjectThrowEntity::check_can_throw()
         return false;
     }
 
-    if (object_is_cursed(this->o_ptr) && (this->item >= INVEN_MAIN_HAND)) {
+    if (this->o_ptr->is_cursed() && (this->item >= INVEN_MAIN_HAND)) {
         msg_print(_("ふーむ、どうやら呪われているようだ。", "Hmmm, it seems to be cursed."));
         return false;
     }
 
     if (this->creature_ptr->current_floor_ptr->inside_arena && !this->boomerang && (this->o_ptr->tval != TV_SPIKE)) {
         msg_print(_("アリーナではアイテムを使えない！", "You're in the arena now. This is hand-to-hand!"));
-        msg_print(NULL);
+        msg_print(nullptr);
         return false;
     }
 
@@ -99,7 +98,7 @@ bool ObjectThrowEntity::check_can_throw()
 void ObjectThrowEntity::calc_throw_range()
 {
     this->q_ptr->copy_from(this->o_ptr);
-    object_flags(this->creature_ptr, this->q_ptr, this->obj_flags);
+    this->obj_flags = object_flags(this->q_ptr);
     torch_flags(this->q_ptr, this->obj_flags);
     distribute_charges(this->o_ptr, this->q_ptr, 1);
     this->q_ptr->number = 1;
@@ -224,19 +223,19 @@ void ObjectThrowEntity::display_figurine_throw()
     }
 
     this->corruption_possibility = 100;
-    if (!(summon_named_creature(this->creature_ptr, 0, this->y, this->x, this->q_ptr->pval, !(object_is_cursed(this->q_ptr)) ? PM_FORCE_PET : PM_NONE))) {
+    if (!(summon_named_creature(this->creature_ptr, 0, this->y, this->x, this->q_ptr->pval, !(this->q_ptr->is_cursed()) ? PM_FORCE_PET : PM_NONE))) {
         msg_print(_("人形は捻じ曲がり砕け散ってしまった！", "The Figurine writhes and then shatters."));
         return;
     }
 
-    if (object_is_cursed(this->q_ptr)) {
+    if (this->q_ptr->is_cursed()) {
         msg_print(_("これはあまり良くない気がする。", "You have a bad feeling about this."));
     }
 }
 
 void ObjectThrowEntity::display_potion_throw()
 {
-    if (!object_is_potion(this->q_ptr)) {
+    if (!this->q_ptr->is_potion()) {
         return;
     }
 
@@ -338,7 +337,7 @@ bool ObjectThrowEntity::check_what_throw()
 
     q = _("どのアイテムを投げますか? ", "Throw which item? ");
     s = _("投げるアイテムがない。", "You have nothing to throw.");
-    this->o_ptr = choose_object(this->creature_ptr, &this->item, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP, TV_NONE);
+    this->o_ptr = choose_object(this->creature_ptr, &this->item, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP);
     if (!this->o_ptr) {
         flush();
         return false;
@@ -354,10 +353,9 @@ bool ObjectThrowEntity::check_throw_boomerang(concptr *q, concptr *s)
     }
 
     if (has_melee_weapon(this->creature_ptr, INVEN_MAIN_HAND) && has_melee_weapon(this->creature_ptr, INVEN_SUB_HAND)) {
-        item_tester_hook = item_tester_hook_boomerang;
         *q = _("どの武器を投げますか? ", "Throw which item? ");
         *s = _("投げる武器がない。", "You have nothing to throw.");
-        this->o_ptr = choose_object(this->creature_ptr, &this->item, *q, *s, USE_EQUIP, TV_NONE);
+        this->o_ptr = choose_object(this->creature_ptr, &this->item, *q, *s, USE_EQUIP, FuncItemTester(&object_type::is_throwable));
         if (!this->o_ptr) {
             flush();
             return false;
@@ -388,7 +386,7 @@ bool ObjectThrowEntity::check_racial_target_bold()
     }
 
     this->hit_wall = true;
-    return (this->q_ptr->tval == TV_FIGURINE) || object_is_potion(this->q_ptr)
+    return (this->q_ptr->tval == TV_FIGURINE) || this->q_ptr->is_potion()
         || (floor_ptr->grid_array[this->ny[this->cur_dis]][this->nx[this->cur_dis]].m_idx == 0);
 }
 
@@ -442,7 +440,7 @@ void ObjectThrowEntity::attack_racial_power()
     }
 
     message_pain(this->creature_ptr, this->g_ptr->m_idx, this->tdam);
-    if ((this->tdam > 0) && !object_is_potion(this->q_ptr)) {
+    if ((this->tdam > 0) && !this->q_ptr->is_potion()) {
         anger_monster(this->creature_ptr, this->m_ptr);
     }
 

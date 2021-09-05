@@ -83,6 +83,7 @@
 #include "term/screen-processor.h"
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
+#include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "wizard/tval-descriptions-table.h"
@@ -203,7 +204,7 @@ void wiz_create_item(player_type *caster_ptr)
     object_type forge;
     object_type *q_ptr;
     q_ptr = &forge;
-    q_ptr->prep(caster_ptr, k_idx);
+    q_ptr->prep(k_idx);
     apply_magic_to_object(caster_ptr, q_ptr, caster_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
     (void)drop_near(caster_ptr, q_ptr, -1, caster_ptr->y, caster_ptr->x);
     msg_print("Allocated.");
@@ -488,7 +489,7 @@ void wiz_learn_items_all(player_type *caster_ptr)
         object_kind *k_ptr = &k_info[i];
         if (k_ptr->level <= command_arg) {
             q_ptr = &forge;
-            q_ptr->prep(caster_ptr, i);
+            q_ptr->prep(i);
             object_aware(caster_ptr, q_ptr);
         }
     }
@@ -503,7 +504,7 @@ void wiz_reset_race(player_type *creature_ptr)
     sprintf(ppp, "Race (0-%d): ", MAX_RACES - 1);
 
     char tmp_val[160];
-    sprintf(tmp_val, "%d", static_cast<int>(creature_ptr->prace));
+    sprintf(tmp_val, "%d", enum2i(creature_ptr->prace));
 
     if (!get_string(ppp, tmp_val, 2))
         return;
@@ -513,7 +514,7 @@ void wiz_reset_race(player_type *creature_ptr)
         return;
 
     creature_ptr->prace = static_cast<player_race_type>(tmp_int);
-    rp_ptr = &race_info[static_cast<int>(creature_ptr->prace)];
+    rp_ptr = &race_info[enum2i(creature_ptr->prace)];
 
     creature_ptr->window_flags |= PW_PLAYER;
     creature_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
@@ -588,9 +589,9 @@ void wiz_dump_options(void)
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "opt_info.txt");
     FILE *fff;
     fff = angband_fopen(buf, "a");
-    if (fff == NULL) {
+    if (fff == nullptr) {
         msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), buf);
-        msg_print(NULL);
+        msg_print(nullptr);
         return;
     }
 
@@ -702,7 +703,7 @@ void cheat_death(player_type *creature_ptr)
 
     current_world_ptr->noscore |= 0x0001;
     msg_print(_("ウィザードモードに念を送り、死を欺いた。", "You invoke wizard mode and cheat death."));
-    msg_print(NULL);
+    msg_print(nullptr);
 
     creature_ptr->is_dead = false;
     (void)life_stream(creature_ptr, false, false);

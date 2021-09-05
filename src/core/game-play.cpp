@@ -119,7 +119,7 @@ static void send_waiting_record(player_type *player_ptr)
     player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
     update_creature(player_ptr);
     player_ptr->is_dead = true;
-    current_world_ptr->start_time = (uint32_t)time(NULL);
+    current_world_ptr->start_time = (uint32_t)time(nullptr);
     signals_ignore_tstp();
     current_world_ptr->character_icky_depth = 1;
     path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
@@ -213,7 +213,7 @@ static void reset_world_info(player_type *player_ptr)
     current_world_ptr->timewalk_m_idx = 0;
     player_ptr->now_damaged = false;
     now_message = 0;
-    current_world_ptr->start_time = time(NULL) - 1;
+    current_world_ptr->start_time = time(nullptr) - 1;
     record_o_name[0] = '\0';
 }
 
@@ -381,7 +381,7 @@ static void process_game_turn(player_type *player_ptr)
         if (!player_ptr->is_dead)
             wipe_monsters_list(player_ptr);
 
-        msg_print(NULL);
+        msg_print(nullptr);
         load_game = false;
         decide_arena_death(player_ptr);
         if (player_ptr->is_dead)
@@ -442,5 +442,5 @@ void play_game(player_type *player_ptr, bool new_game, bool browsing_movie)
     select_floor_music(player_ptr);
     process_game_turn(player_ptr);
     close_game(player_ptr);
-    quit(NULL);
+    quit(nullptr);
 }

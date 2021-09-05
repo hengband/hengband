@@ -15,9 +15,6 @@
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-hook/hook-armor.h"
-#include "object-hook/hook-bow.h"
-#include "object-hook/hook-checker.h"
-#include "object-hook/hook-enchant.h"
 #include "object-hook/hook-quest.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-info.h"
@@ -38,27 +35,27 @@
 bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_type *entry, concptr o_name)
 {
     concptr ptr = entry->name;
-    if (IS_FLG(FLG_UNAWARE) && object_is_aware(o_ptr))
+    if (IS_FLG(FLG_UNAWARE) && o_ptr->is_aware())
         return false;
 
-    if (IS_FLG(FLG_UNIDENTIFIED) && (object_is_known(o_ptr) || (o_ptr->ident & IDENT_SENSE)))
+    if (IS_FLG(FLG_UNIDENTIFIED) && (o_ptr->is_known() || (o_ptr->ident & IDENT_SENSE)))
         return false;
 
-    if (IS_FLG(FLG_IDENTIFIED) && !object_is_known(o_ptr))
+    if (IS_FLG(FLG_IDENTIFIED) && !o_ptr->is_known())
         return false;
 
-    if (IS_FLG(FLG_STAR_IDENTIFIED) && (!object_is_known(o_ptr) || !object_is_fully_known(o_ptr)))
+    if (IS_FLG(FLG_STAR_IDENTIFIED) && (!o_ptr->is_known() || !o_ptr->is_fully_known()))
         return false;
 
     if (IS_FLG(FLG_BOOSTED)) {
         object_kind *k_ptr = &k_info[o_ptr->k_idx];
-        if (!object_is_melee_weapon(o_ptr))
+        if (!o_ptr->is_melee_weapon())
             return false;
 
         if ((o_ptr->dd == k_ptr->dd) && (o_ptr->ds == k_ptr->ds))
             return false;
 
-        if (!object_is_known(o_ptr) && object_is_quest_target(player_ptr->current_floor_ptr->inside_quest, o_ptr)) {
+        if (!o_ptr->is_known() && object_is_quest_target(player_ptr->current_floor_ptr->inside_quest, o_ptr)) {
             return false;
         }
     }
@@ -69,7 +66,7 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
     }
 
     if (IS_FLG(FLG_MORE_BONUS)) {
-        if (!object_is_known(o_ptr))
+        if (!o_ptr->is_known())
             return false;
 
         if (o_ptr->pval) {
@@ -81,26 +78,26 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
         }
     }
 
-    if (IS_FLG(FLG_WORTHLESS) && object_value(player_ptr, o_ptr) > 0)
+    if (IS_FLG(FLG_WORTHLESS) && object_value(o_ptr) > 0)
         return false;
 
     if (IS_FLG(FLG_ARTIFACT)) {
-        if (!object_is_known(o_ptr) || !object_is_artifact(o_ptr))
+        if (!o_ptr->is_known() || !o_ptr->is_artifact())
             return false;
     }
 
     if (IS_FLG(FLG_EGO)) {
-        if (!object_is_ego(o_ptr))
+        if (!o_ptr->is_ego())
             return false;
-        if (!object_is_known(o_ptr) && !((o_ptr->ident & IDENT_SENSE) && o_ptr->feeling == FEEL_EXCELLENT))
+        if (!o_ptr->is_known() && !((o_ptr->ident & IDENT_SENSE) && o_ptr->feeling == FEEL_EXCELLENT))
             return false;
     }
 
     if (IS_FLG(FLG_GOOD)) {
-        if (!object_is_equipment(o_ptr))
+        if (!o_ptr->is_equipment())
             return false;
-        if (object_is_known(o_ptr)) {
-            if (!object_is_nameless(player_ptr, o_ptr))
+        if (o_ptr->is_known()) {
+            if (!o_ptr->is_nameless())
                 return false;
 
             if (o_ptr->to_a <= 0 && (o_ptr->to_h + o_ptr->to_d) <= 0)
@@ -119,10 +116,10 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
     }
 
     if (IS_FLG(FLG_NAMELESS)) {
-        if (!object_is_equipment(o_ptr))
+        if (!o_ptr->is_equipment())
             return false;
-        if (object_is_known(o_ptr)) {
-            if (!object_is_nameless(player_ptr, o_ptr))
+        if (o_ptr->is_known()) {
+            if (!o_ptr->is_nameless())
                 return false;
         } else if (o_ptr->ident & IDENT_SENSE) {
             switch (o_ptr->feeling) {
@@ -141,13 +138,13 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
     }
 
     if (IS_FLG(FLG_AVERAGE)) {
-        if (!object_is_equipment(o_ptr))
+        if (!o_ptr->is_equipment())
             return false;
-        if (object_is_known(o_ptr)) {
-            if (!object_is_nameless(player_ptr, o_ptr))
+        if (o_ptr->is_known()) {
+            if (!o_ptr->is_nameless())
                 return false;
 
-            if (object_is_cursed(o_ptr) || object_is_broken(o_ptr))
+            if (o_ptr->is_cursed() || o_ptr->is_broken())
                 return false;
 
             if (o_ptr->to_a > 0 || (o_ptr->to_h + o_ptr->to_d) > 0)
@@ -165,10 +162,10 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
         }
     }
 
-    if (IS_FLG(FLG_RARE) && !object_is_rare(o_ptr))
+    if (IS_FLG(FLG_RARE) && !o_ptr->is_rare())
         return false;
 
-    if (IS_FLG(FLG_COMMON) && object_is_rare(o_ptr))
+    if (IS_FLG(FLG_COMMON) && o_ptr->is_rare())
         return false;
 
     if (IS_FLG(FLG_WANTED) && !object_is_bounty(player_ptr, o_ptr))
@@ -204,16 +201,16 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
         return false;
 
     if (IS_FLG(FLG_WEAPONS)) {
-        if (!object_is_weapon(player_ptr, o_ptr))
+        if (!o_ptr->is_weapon())
             return false;
     } else if (IS_FLG(FLG_FAVORITE_WEAPONS)) {
         if (!object_is_favorite(player_ptr, o_ptr))
             return false;
     } else if (IS_FLG(FLG_ARMORS)) {
-        if (!object_is_armour(player_ptr, o_ptr))
+        if (!o_ptr->is_armour())
             return false;
     } else if (IS_FLG(FLG_MISSILES)) {
-        if (!object_is_ammo(o_ptr))
+        if (!o_ptr->is_ammo())
             return false;
     } else if (IS_FLG(FLG_DEVICES)) {
         switch (o_ptr->tval) {

@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "util/enum-converter.h"
+
 /*!
  * @brief Feature flags - should be used instead of feature indexes unless generating.
  * Originally from UnAngband, and modified into TR-like style in Hengband
@@ -71,4 +73,4 @@ enum class FF {
     MAX,
 };
 
-constexpr auto FF_FLAG_MAX = static_cast<int>(FF::MAX);
+constexpr auto FF_FLAG_MAX = enum2i(FF::MAX);

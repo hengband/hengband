@@ -16,7 +16,6 @@
 #include "monster-race/monster-race.h"
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
-#include "object-hook/hook-checker.h"
 #include "save/floor-writer.h"
 #include "system/angband-version.h"
 #include "system/floor-type-definition.h"
@@ -193,7 +192,7 @@ errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
             return 152;
 
         o_ptr = &floor_ptr->o_list[o_idx];
-        rd_item(player_ptr, o_ptr);
+        rd_item(o_ptr);
 
         auto &list = get_o_idx_list_contains(floor_ptr, o_idx);
         list.add(floor_ptr, o_idx, o_ptr->stack_idx);
@@ -291,7 +290,7 @@ bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
     kanji_code = 1;
 #endif
 
-    FILE *old_fff = NULL;
+    FILE *old_fff = nullptr;
     byte old_xor_byte = 0;
     uint32_t old_v_check = 0;
     uint32_t old_x_check = 0;

@@ -3,6 +3,7 @@
 #include "mutation/mutation-flag-types.h"
 #include "racial/racial-util.h"
 #include "system/player-type-definition.h"
+#include "util/enum-converter.h"
 
 void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
 {
@@ -15,7 +16,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = 9;
         rpi.stat = A_DEX;
         rpi.fail = 15;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::SPIT_ACID));
+        rc_ptr->add_power(rpi, enum2i(MUTA::SPIT_ACID));
     }
 
     if (creature_ptr->muta.has(MUTA::BR_FIRE)) {
@@ -26,7 +27,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = rc_ptr->lvl;
         rpi.stat = A_CON;
         rpi.fail = 18;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::BR_FIRE));
+        rc_ptr->add_power(rpi, enum2i(MUTA::BR_FIRE));
     }
 
     if (creature_ptr->muta.has(MUTA::HYPN_GAZE)) {
@@ -37,7 +38,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = 12;
         rpi.stat = A_CHR;
         rpi.fail = 18;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::HYPN_GAZE));
+        rc_ptr->add_power(rpi, enum2i(MUTA::HYPN_GAZE));
     }
 
     if (creature_ptr->muta.has(MUTA::TELEKINES)) {
@@ -52,7 +53,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = 9;
         rpi.stat = A_WIS;
         rpi.fail = 14;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::TELEKINES));
+        rc_ptr->add_power(rpi, enum2i(MUTA::TELEKINES));
     }
 
     if (creature_ptr->muta.has(MUTA::VTELEPORT)) {
@@ -63,7 +64,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = 7;
         rpi.stat = A_WIS;
         rpi.fail = 15;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::VTELEPORT));
+        rc_ptr->add_power(rpi, enum2i(MUTA::VTELEPORT));
     }
 
     if (creature_ptr->muta.has(MUTA::MIND_BLST)) {
@@ -74,7 +75,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = 3;
         rpi.stat = A_WIS;
         rpi.fail = 15;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::MIND_BLST));
+        rc_ptr->add_power(rpi, enum2i(MUTA::MIND_BLST));
     }
 
     if (creature_ptr->muta.has(MUTA::RADIATION)) {
@@ -85,7 +86,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = 15;
         rpi.stat = A_CON;
         rpi.fail = 14;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::RADIATION));
+        rc_ptr->add_power(rpi, enum2i(MUTA::RADIATION));
     }
 
     if (creature_ptr->muta.has(MUTA::VAMPIRISM)) {
@@ -97,7 +98,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = 1 + (rc_ptr->lvl / 3);
         rpi.stat = A_CON;
         rpi.fail = 9;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::VAMPIRISM));
+        rc_ptr->add_power(rpi, enum2i(MUTA::VAMPIRISM));
     }
 
     if (creature_ptr->muta.has(MUTA::SMELL_MET)) {
@@ -107,7 +108,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = 2;
         rpi.stat = A_INT;
         rpi.fail = 12;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::SMELL_MET));
+        rc_ptr->add_power(rpi, enum2i(MUTA::SMELL_MET));
     }
 
     if (creature_ptr->muta.has(MUTA::SMELL_MON)) {
@@ -117,7 +118,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = 4;
         rpi.stat = A_INT;
         rpi.fail = 15;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::SMELL_MON));
+        rc_ptr->add_power(rpi, enum2i(MUTA::SMELL_MON));
     }
 
     if (creature_ptr->muta.has(MUTA::BLINK)) {
@@ -128,7 +129,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = 3;
         rpi.stat = A_WIS;
         rpi.fail = 12;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::BLINK));
+        rc_ptr->add_power(rpi, enum2i(MUTA::BLINK));
     }
 
     if (creature_ptr->muta.has(MUTA::EAT_ROCK)) {
@@ -138,7 +139,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = 12;
         rpi.stat = A_CON;
         rpi.fail = 18;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::EAT_ROCK));
+        rc_ptr->add_power(rpi, enum2i(MUTA::EAT_ROCK));
     }
 
     if (creature_ptr->muta.has(MUTA::SWAP_POS)) {
@@ -149,7 +150,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = 12;
         rpi.stat = A_DEX;
         rpi.fail = 16;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::SWAP_POS));
+        rc_ptr->add_power(rpi, enum2i(MUTA::SWAP_POS));
     }
 
     if (creature_ptr->muta.has(MUTA::SHRIEK)) {
@@ -159,7 +160,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = 14;
         rpi.stat = A_CON;
         rpi.fail = 16;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::SHRIEK));
+        rc_ptr->add_power(rpi, enum2i(MUTA::SHRIEK));
     }
 
     if (creature_ptr->muta.has(MUTA::ILLUMINE)) {
@@ -169,7 +170,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = 2;
         rpi.stat = A_INT;
         rpi.fail = 10;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::ILLUMINE));
+        rc_ptr->add_power(rpi, enum2i(MUTA::ILLUMINE));
     }
 
     if (creature_ptr->muta.has(MUTA::DET_CURSE)) {
@@ -179,7 +180,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = 14;
         rpi.stat = A_WIS;
         rpi.fail = 14;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::DET_CURSE));
+        rc_ptr->add_power(rpi, enum2i(MUTA::DET_CURSE));
     }
 
     if (creature_ptr->muta.has(MUTA::BERSERK)) {
@@ -190,7 +191,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = 8;
         rpi.stat = A_STR;
         rpi.fail = 14;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::BERSERK));
+        rc_ptr->add_power(rpi, enum2i(MUTA::BERSERK));
     }
 
     if (creature_ptr->muta.has(MUTA::POLYMORPH)) {
@@ -200,7 +201,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = 20;
         rpi.stat = A_CON;
         rpi.fail = 18;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::POLYMORPH));
+        rc_ptr->add_power(rpi, enum2i(MUTA::POLYMORPH));
     }
 
     if (creature_ptr->muta.has(MUTA::MIDAS_TCH)) {
@@ -210,7 +211,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = 5;
         rpi.stat = A_INT;
         rpi.fail = 12;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::MIDAS_TCH));
+        rc_ptr->add_power(rpi, enum2i(MUTA::MIDAS_TCH));
     }
 
     if (creature_ptr->muta.has(MUTA::GROW_MOLD)) {
@@ -220,7 +221,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = 6;
         rpi.stat = A_CON;
         rpi.fail = 14;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::GROW_MOLD));
+        rc_ptr->add_power(rpi, enum2i(MUTA::GROW_MOLD));
     }
 
     if (creature_ptr->muta.has(MUTA::RESIST)) {
@@ -231,7 +232,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = 12;
         rpi.stat = A_CON;
         rpi.fail = 12;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::RESIST));
+        rc_ptr->add_power(rpi, enum2i(MUTA::RESIST));
     }
 
     if (creature_ptr->muta.has(MUTA::EARTHQUAKE)) {
@@ -243,7 +244,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = 12;
         rpi.stat = A_STR;
         rpi.fail = 16;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::EARTHQUAKE));
+        rc_ptr->add_power(rpi, enum2i(MUTA::EARTHQUAKE));
     }
 
     if (creature_ptr->muta.has(MUTA::EAT_MAGIC)) {
@@ -254,7 +255,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = 1;
         rpi.stat = A_WIS;
         rpi.fail = 15;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::EAT_MAGIC));
+        rc_ptr->add_power(rpi, enum2i(MUTA::EAT_MAGIC));
     }
 
     if (creature_ptr->muta.has(MUTA::WEIGH_MAG)) {
@@ -264,7 +265,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = 6;
         rpi.stat = A_INT;
         rpi.fail = 10;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::WEIGH_MAG));
+        rc_ptr->add_power(rpi, enum2i(MUTA::WEIGH_MAG));
     }
 
     if (creature_ptr->muta.has(MUTA::STERILITY)) {
@@ -274,7 +275,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = 23;
         rpi.stat = A_CHR;
         rpi.fail = 15;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::STERILITY));
+        rc_ptr->add_power(rpi, enum2i(MUTA::STERILITY));
     }
 
     if (creature_ptr->muta.has(MUTA::HIT_AND_AWAY)) {
@@ -285,7 +286,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = 12;
         rpi.stat = A_DEX;
         rpi.fail = 14;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::HIT_AND_AWAY));
+        rc_ptr->add_power(rpi, enum2i(MUTA::HIT_AND_AWAY));
     }
 
     if (creature_ptr->muta.has(MUTA::DAZZLE)) {
@@ -297,7 +298,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = 15;
         rpi.stat = A_CHR;
         rpi.fail = 8;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::DAZZLE));
+        rc_ptr->add_power(rpi, enum2i(MUTA::DAZZLE));
     }
 
     if (creature_ptr->muta.has(MUTA::LASER_EYE)) {
@@ -308,7 +309,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = 10;
         rpi.stat = A_WIS;
         rpi.fail = 9;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::LASER_EYE));
+        rc_ptr->add_power(rpi, enum2i(MUTA::LASER_EYE));
     }
 
     if (creature_ptr->muta.has(MUTA::RECALL)) {
@@ -319,7 +320,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = 50;
         rpi.stat = A_INT;
         rpi.fail = 16;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::RECALL));
+        rc_ptr->add_power(rpi, enum2i(MUTA::RECALL));
     }
 
     if (creature_ptr->muta.has(MUTA::BANISH)) {
@@ -330,7 +331,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = 25;
         rpi.stat = A_WIS;
         rpi.fail = 18;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::BANISH));
+        rc_ptr->add_power(rpi, enum2i(MUTA::BANISH));
     }
 
     if (creature_ptr->muta.has(MUTA::COLD_TOUCH)) {
@@ -341,7 +342,7 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = 2;
         rpi.stat = A_CON;
         rpi.fail = 11;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::COLD_TOUCH));
+        rc_ptr->add_power(rpi, enum2i(MUTA::COLD_TOUCH));
     }
 
     if (creature_ptr->muta.has(MUTA::LAUNCHER)) {
@@ -351,6 +352,6 @@ void select_mutation_racial(player_type *creature_ptr, rc_type *rc_ptr)
         rpi.cost = rc_ptr->lvl;
         rpi.stat = A_STR;
         rpi.fail = 6;
-        rc_ptr->add_power(rpi, static_cast<int>(MUTA::LAUNCHER));
+        rc_ptr->add_power(rpi, enum2i(MUTA::LAUNCHER));
     }
 }

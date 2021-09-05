@@ -4,7 +4,6 @@
 #include "floor/floor-object.h"
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-armor.h"
-#include "object-hook/hook-checker.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "racial/racial-android.h"
@@ -20,18 +19,17 @@
  */
 bool rustproof(player_type *caster_ptr)
 {
-    item_tester_hook = object_is_armour;
     concptr q = _("どの防具に錆止めをしますか？", "Rustproof which piece of armour? ");
     concptr s = _("錆止めできるものがありません。", "You have nothing to rustproof.");
     OBJECT_IDX item;
-    object_type *o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, TV_NONE);
-    if (o_ptr == NULL)
+    object_type *o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, FuncItemTester(&object_type::is_armour));
+    if (o_ptr == nullptr)
         return false;
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(caster_ptr, o_name, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
     add_flag(o_ptr->art_flags, TR_IGNORE_ACID);
-    if ((o_ptr->to_a < 0) && !object_is_cursed(o_ptr)) {
+    if ((o_ptr->to_a < 0) && !o_ptr->is_cursed()) {
 #ifdef JP
         msg_format("%sは新品同様になった！", o_name);
 #else

@@ -41,6 +41,7 @@
 #include "system/monster-type-definition.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
+#include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 #include "util/sort.h"
 #include "view/display-messages.h"
@@ -372,9 +373,9 @@ static void dump_aux_race_history(player_type *creature_ptr, FILE *fff)
     if (!creature_ptr->old_race1 && !creature_ptr->old_race2)
         return;
 
-    fprintf(fff, _("\n\n あなたは%sとして生まれた。", "\n\n You were born as %s."), race_info[static_cast<int>(creature_ptr->start_race)].title);
+    fprintf(fff, _("\n\n あなたは%sとして生まれた。", "\n\n You were born as %s."), race_info[enum2i(creature_ptr->start_race)].title);
     for (int i = 0; i < MAX_RACES; i++) {
-        if (static_cast<int>(creature_ptr->start_race) == i)
+        if (enum2i(creature_ptr->start_race) == i)
             continue;
         if (i < 32) {
             if (!(creature_ptr->old_race1 & 1UL << i))

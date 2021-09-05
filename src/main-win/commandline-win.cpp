@@ -26,7 +26,7 @@ std::string savefile_option;
 static void create_console(void)
 {
     ::AllocConsole();
-    FILE *stream = NULL;
+    FILE *stream = nullptr;
     freopen_s(&stream, "CONOUT$", "w+", stdout);
     std::cout << "Hengband debug console" << std::endl;
 }
@@ -57,7 +57,7 @@ void CommandLine::handle(void)
         ::LocalFree(argv);
     } else {
         fprintf(stdout, "CommandLineToArgvW failed.");
-        quit(NULL);
+        quit(nullptr);
     }
 }
 

@@ -18,7 +18,6 @@
 #include "main/sound-of-music.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"
-#include "object-hook/hook-checker.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "object/object-info.h"
@@ -91,22 +90,20 @@ void store_sell(player_type *owner_ptr)
         break;
     }
 
-    item_tester_hook = store_will_buy;
-
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(owner_ptr, &item, q, s_none, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, TV_NONE);
+    o_ptr = choose_object(owner_ptr, &item, q, s_none, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, FuncItemTester(store_will_buy, owner_ptr));
     if (!o_ptr)
         return;
 
-    if ((item >= INVEN_MAIN_HAND) && object_is_cursed(o_ptr)) {
+    if ((item >= INVEN_MAIN_HAND) && o_ptr->is_cursed()) {
         msg_print(_("ふーむ、どうやらそれは呪われているようだね。", "Hmmm, it seems to be cursed."));
         return;
     }
 
     int amt = 1;
     if (o_ptr->number > 1) {
-        amt = get_quantity(NULL, o_ptr->number);
+        amt = get_quantity(nullptr, o_ptr->number);
         if (amt <= 0)
             return;
     }
@@ -134,7 +131,7 @@ void store_sell(player_type *owner_ptr)
     bool placed = false;
     if ((cur_store_num != STORE_HOME) && (cur_store_num != STORE_MUSEUM)) {
         msg_format(_("%s(%c)を売却する。", "Selling %s (%c)."), o_name, index_to_label(item));
-        msg_print(NULL);
+        msg_print(nullptr);
 
         auto res = prompt_to_sell(owner_ptr, q_ptr);
         placed = res.has_value();
@@ -151,7 +148,7 @@ void store_sell(player_type *owner_ptr)
 
             owner_ptr->au += price;
             store_prt_gold(owner_ptr);
-            PRICE dummy = object_value(owner_ptr, q_ptr) * q_ptr->number;
+            PRICE dummy = object_value(q_ptr) * q_ptr->number;
 
             identify_item(owner_ptr, o_ptr);
             q_ptr = &forge;
@@ -162,7 +159,7 @@ void store_sell(player_type *owner_ptr)
             if ((o_ptr->tval == TV_ROD) || (o_ptr->tval == TV_WAND))
                 q_ptr->pval = o_ptr->pval * amt / o_ptr->number;
 
-            PRICE value = object_value(owner_ptr, q_ptr) * q_ptr->number;
+            PRICE value = object_value(q_ptr) * q_ptr->number;
             describe_flavor(owner_ptr, o_name, q_ptr, 0);
             msg_format(_("%sを $%ldで売却しました。", "You sold %s for %ld gold."), o_name, static_cast<long>(price));
 
@@ -180,7 +177,7 @@ void store_sell(player_type *owner_ptr)
                 autopick_alter_item(owner_ptr, item, false);
 
             inven_item_optimize(owner_ptr, item);
-            int item_pos = store_carry(owner_ptr, q_ptr);
+            int item_pos = store_carry(q_ptr);
             if (item_pos >= 0) {
                 store_top = (item_pos / store_bottom) * store_bottom;
                 display_store_inventory(owner_ptr);

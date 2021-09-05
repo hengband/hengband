@@ -6,6 +6,7 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 
 static const char p2 = ')';
@@ -95,7 +96,7 @@ static bool select_race(player_type *creature_ptr, char *sym, int *k)
 {
     char cur[80];
     sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
-    int cs = static_cast<int>(creature_ptr->prace);
+    auto cs = enum2i(creature_ptr->prace);
     int os = MAX_RACES;
     while (true) {
         display_race_stat(cs, &os, cur, sym);

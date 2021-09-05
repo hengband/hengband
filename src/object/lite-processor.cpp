@@ -5,7 +5,6 @@
 #include "game-option/disturbance-options.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/object-ego.h"
-#include "object-hook/hook-enchant.h"
 #include "sv-definition/sv-lite-types.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
@@ -22,7 +21,7 @@ void reduce_lite_life(player_type* creature_ptr)
     if (o_ptr->tval != TV_LITE)
         return;
 
-    if (object_is_fixed_artifact(o_ptr) || (o_ptr->sval == SV_LITE_FEANOR) || (o_ptr->xtra4 <= 0))
+    if (o_ptr->is_fixed_artifact() || (o_ptr->sval == SV_LITE_FEANOR) || (o_ptr->xtra4 <= 0))
         return;
 
     if (o_ptr->name2 == EGO_LITE_LONG) {

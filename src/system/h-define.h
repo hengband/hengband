@@ -39,12 +39,6 @@
 #define ABS(a)		(((a) < 0)   ? (-(a)) : (a))
 
 /*
- * Non-typed sign extractor macro
- */
-#undef SGN
-#define SGN(a)		(((a) < 0)   ? (-1) : ((a) != 0))
-
-/*
  * Refer to the member at offset of structure
  */
 #define atoffset(TYPE, STRUCT_PTR, OFFSET) (*(TYPE*)(((char*)STRUCT_PTR) + (OFFSET)))

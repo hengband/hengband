@@ -196,36 +196,16 @@ bool cast_summon_octopus(player_type *creature_ptr)
 }
 
 /*!
- * @brief 悪魔領域のグレーターデーモン召喚に利用可能な死体かどうかを返す。 / An "item_tester_hook" for offer
- * @param o_ptr オブジェクト構造体の参照ポインタ
- * @return 生贄に使用可能な死体ならばTRUEを返す。
- */
-bool item_tester_offer(player_type *creature_ptr, object_type *o_ptr)
-{
-    /* Unused */
-    (void)creature_ptr;
-
-    if (o_ptr->tval != TV_CORPSE)
-        return false;
-    if (o_ptr->sval != SV_CORPSE)
-        return false;
-    if (angband_strchr("pht", r_info[o_ptr->pval].d_char))
-        return true;
-    return false;
-}
-
-/*!
  * @brief 悪魔領域のグレーターデーモン召喚を処理する / Daemon spell Summon Greater Demon
  * @return 処理を実行したならばTRUEを返す。
  */
 bool cast_summon_greater_demon(player_type *caster_ptr)
 {
-    item_tester_hook = item_tester_offer;
     concptr q = _("どの死体を捧げますか? ", "Sacrifice which corpse? ");
     concptr s = _("捧げられる死体を持っていない。", "You have nothing to scrifice.");
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_NONE);
+    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), FuncItemTester(&object_type::is_offerable));
     if (!o_ptr)
         return false;
 

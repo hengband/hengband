@@ -152,5 +152,5 @@ const activation_type activation_info[MAX_ACTIVATION_TYPE] = {
     { "ELBERETH", ACT_ELBERETH, 10, 30000, { 75, 0 }, _("エルベレスの結界", "Rune of Elbereth") },
     { "DETECT_TREASURE", ACT_DETECT_TREASURE, 10, 3000, {35, 0}, _("財宝感知", "detect treasure") },
 
-    { NULL, 0, 0, 0, { 0, 0 }, "" },
+    { nullptr, 0, 0, 0, { 0, 0 }, "" },
 };

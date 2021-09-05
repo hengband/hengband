@@ -310,7 +310,7 @@ void process_angar(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m)
         gets_angry = true;
 
     if (is_pet(m_ptr)
-        && ((((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) && monster_has_hostile_align(target_ptr, NULL, 10, -10, r_ptr))
+        && ((((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) && monster_has_hostile_align(target_ptr, nullptr, 10, -10, r_ptr))
             || (r_ptr->flagsr & RFR_RES_ALL)))
         gets_angry = true;
 

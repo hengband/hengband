@@ -10,8 +10,8 @@
 
 #include "system/angband.h"
 
-typedef struct object_type object_type;
-typedef struct player_type player_type;
+struct object_type;;
+struct player_type;
 class EnchanterBase {
 public:
     virtual void apply_magic() = 0;

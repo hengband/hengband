@@ -16,6 +16,7 @@
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "system/player-type-definition.h"
+#include "util/enum-converter.h"
 #include "util/flag-group.h"
 
 typedef struct {
@@ -174,7 +175,7 @@ static void dump_blue_mage(player_type *creature_ptr, FILE *fff)
         strcat(p[col], "       ");
 
         for (auto spell : learnt_spells) {
-            const int spellnum = static_cast<int>(spell);
+            const int spellnum = enum2i(spell);
             if (creature_ptr->magic_num2[spellnum] == 0)
                 continue;
 

@@ -2,7 +2,6 @@
 #include "flavor/flag-inscriptions-table.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
-#include "object-hook/hook-enchant.h"
 #include "object/object-flags.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
@@ -179,23 +178,22 @@ static bool has_flag_of(std::vector<flag_insc_table> &fi_vec, const TrFlags &flg
  * @param all TRUEならばベースアイテム上で明らかなフラグは省略する
  * @return ptrと同じアドレス
  */
-char *get_ability_abbreviation(player_type *player_ptr, char *short_flavor, object_type *o_ptr, bool kanji, bool all)
+char *get_ability_abbreviation(char *short_flavor, object_type *o_ptr, bool kanji, bool all)
 {
     char *prev_ptr = short_flavor;
-    TrFlags flgs;
-    object_flags(player_ptr, o_ptr, flgs);
+    auto flgs = object_flags(o_ptr);
     if (!all) {
         object_kind *k_ptr = &k_info[o_ptr->k_idx];
         for (int j = 0; j < TR_FLAG_SIZE; j++)
             flgs[j] &= ~k_ptr->flags[j];
 
-        if (object_is_fixed_artifact(o_ptr)) {
+        if (o_ptr->is_fixed_artifact()) {
             artifact_type *a_ptr = &a_info[o_ptr->name1];
             for (int j = 0; j < TR_FLAG_SIZE; j++)
                 flgs[j] &= ~a_ptr->flags[j];
         }
 
-        if (object_is_ego(o_ptr)) {
+        if (o_ptr->is_ego()) {
             ego_item_type *e_ptr = &e_info[o_ptr->name2];
             for (int j = 0; j < TR_FLAG_SIZE; j++)
                 flgs[j] &= ~e_ptr->flags[j];
@@ -316,11 +314,11 @@ char *get_ability_abbreviation(player_type *player_ptr, char *short_flavor, obje
  * @param buff 特性短縮表記を格納する文字列ポインタ
  * @param o_ptr 特性短縮表記を得たいオブジェクト構造体の参照ポインタ
  */
-void get_inscription(player_type *player_ptr, char *buff, object_type *o_ptr)
+void get_inscription(char *buff, object_type *o_ptr)
 {
     concptr insc = quark_str(o_ptr->inscription);
     char *ptr = buff;
-    if (!object_is_fully_known(o_ptr)) {
+    if (!o_ptr->is_fully_known()) {
         while (*insc) {
             if (*insc == '#')
                 break;
@@ -360,7 +358,7 @@ void get_inscription(player_type *player_ptr, char *buff, object_type *o_ptr)
             } else
                 all = false;
 
-            ptr = get_ability_abbreviation(player_ptr, ptr, o_ptr, kanji, all);
+            ptr = get_ability_abbreviation(ptr, o_ptr, kanji, all);
             if (ptr == start)
                 add_inscription(&ptr, " ");
         } else

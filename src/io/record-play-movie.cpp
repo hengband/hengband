@@ -84,7 +84,7 @@ static errr init_buffer(void)
     ring.wptr = ring.rptr = ring.inlen = 0;
     fresh_queue.time[0] = 0;
     ring.buf = static_cast<char*>(malloc(RINGBUF_SIZE));
-    if (ring.buf == NULL)
+    if (ring.buf == nullptr)
         return -1;
 
     return 0;
@@ -97,7 +97,7 @@ static long get_current_time(void)
     return timeGetTime() / 100;
 #else
     struct timeval tv;
-    gettimeofday(&tv, NULL);
+    gettimeofday(&tv, nullptr);
 
     return (tv.tv_sec * 10 + tv.tv_usec / 100000);
 #endif

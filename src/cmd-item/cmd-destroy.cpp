@@ -54,12 +54,12 @@ static destroy_type *initialize_destroy_type(destroy_type *destroy_ptr, object_t
 
 static bool check_destory_item(player_type *creature_ptr, destroy_type *destroy_ptr)
 {
-    if (destroy_ptr->force || (!confirm_destroy && (object_value(creature_ptr, destroy_ptr->o_ptr) <= 0)))
+    if (destroy_ptr->force || (!confirm_destroy && (object_value(destroy_ptr->o_ptr) <= 0)))
         return true;
 
     describe_flavor(creature_ptr, destroy_ptr->o_name, destroy_ptr->o_ptr, OD_OMIT_PREFIX);
     sprintf(destroy_ptr->out_val, _("本当に%sを壊しますか? [y/n/Auto]", "Really destroy %s? [y/n/Auto]"), destroy_ptr->o_name);
-    msg_print(NULL);
+    msg_print(nullptr);
     message_add(destroy_ptr->out_val);
     creature_ptr->window_flags |= PW_MESSAGE;
     handle_stuff(creature_ptr);
@@ -87,8 +87,8 @@ static bool select_destroying_item(player_type *creature_ptr, destroy_type *dest
 {
     concptr q = _("どのアイテムを壊しますか? ", "Destroy which item? ");
     concptr s = _("壊せるアイテムを持っていない。", "You have nothing to destroy.");
-    destroy_ptr->o_ptr = choose_object(creature_ptr, &destroy_ptr->item, q, s, USE_INVEN | USE_FLOOR, TV_NONE);
-    if (destroy_ptr->o_ptr == NULL)
+    destroy_ptr->o_ptr = choose_object(creature_ptr, &destroy_ptr->item, q, s, USE_INVEN | USE_FLOOR);
+    if (destroy_ptr->o_ptr == nullptr)
         return false;
 
     if (!check_destory_item(creature_ptr, destroy_ptr))
@@ -97,7 +97,7 @@ static bool select_destroying_item(player_type *creature_ptr, destroy_type *dest
     if (destroy_ptr->o_ptr->number <= 1)
         return true;
 
-    destroy_ptr->amt = get_quantity(NULL, destroy_ptr->o_ptr->number);
+    destroy_ptr->amt = get_quantity(nullptr, destroy_ptr->o_ptr->number);
     return destroy_ptr->amt > 0;
 }
 
@@ -167,9 +167,9 @@ static void process_destroy_magic_book(player_type *creature_ptr, destroy_type *
     if ((destroy_ptr->q_ptr->to_a != 0) || (destroy_ptr->q_ptr->to_h != 0) || (destroy_ptr->q_ptr->to_d != 0))
         chg_virtue(creature_ptr, V_ENCHANT, -1);
 
-    if (object_value_real(creature_ptr, destroy_ptr->q_ptr) > 30000)
+    if (object_value_real(destroy_ptr->q_ptr) > 30000)
         chg_virtue(creature_ptr, V_SACRIFICE, 2);
-    else if (object_value_real(creature_ptr, destroy_ptr->q_ptr) > 10000)
+    else if (object_value_real(destroy_ptr->q_ptr) > 10000)
         chg_virtue(creature_ptr, V_SACRIFICE, 1);
 }
 

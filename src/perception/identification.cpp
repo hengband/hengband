@@ -10,7 +10,6 @@
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
-#include "object-hook/hook-checker.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-flags.h"
 #include "object/object-info.h"
@@ -35,14 +34,13 @@
  */
 bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 {
-    TrFlags flgs;
     char temp[70 * 20];
     concptr info[128];
     GAME_TEXT o_name[MAX_NLEN];
     char desc[256];
 
     int trivial_info = 0;
-    object_flags(player_ptr, o_ptr, flgs);
+    auto flgs = object_flags(o_ptr);
 
     shape_buffer(o_ptr->name1 ? a_info[o_ptr->name1].text.c_str() : k_info[o_ptr->k_idx].text.c_str(), 77 - 15, temp, sizeof(temp));
 
@@ -52,13 +50,13 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         i++;
     }
 
-    if (object_is_equipment(o_ptr)) {
+    if (o_ptr->is_equipment()) {
         trivial_info = i;
     }
 
     if (has_flag(flgs, TR_ACTIVATE)) {
         info[i++] = _("始動したときの効果...", "It can be activated for...");
-        info[i++] = activation_explanation(player_ptr, o_ptr);
+        info[i++] = activation_explanation(o_ptr);
         info[i++] = _("...ただし装備していなければならない。", "...if it is being worn.");
     }
 
@@ -155,9 +153,9 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
     }
 
     if (has_flag(flgs, TR_RIDING)) {
-        if ((o_ptr->tval == TV_POLEARM) && ((o_ptr->sval == SV_LANCE) || (o_ptr->sval == SV_HEAVY_LANCE)))
+        if (o_ptr->is_lance()) {
             info[i++] = _("それは乗馬中は非常に使いやすい。", "It is made for use while riding.");
-        else {
+        } else {
             info[i++] = _("それは乗馬中でも使いやすい。", "It is suitable for use while riding.");
             trivial_info++;
         }
@@ -594,7 +592,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
         info[i++] = _("それは神に祝福されている。", "It has been blessed by the gods.");
     }
 
-    if (object_is_cursed(o_ptr)) {
+    if (o_ptr->is_cursed()) {
         if (o_ptr->curse_flags.has(TRC::PERMA_CURSE)) {
             info[i++] = _("それは永遠の呪いがかけられている。", "It is permanently cursed.");
         } else if (o_ptr->curse_flags.has(TRC::HEAVY_CURSE)) {

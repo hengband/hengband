@@ -1,6 +1,5 @@
 ﻿#include "store/black-market.h"
 #include "floor/floor-town.h"
-#include "object-hook/hook-enchant.h"
 #include "store/store-owners.h"
 #include "store/store-util.h"
 #include "system/object-type-definition.h"
@@ -20,7 +19,7 @@
  */
 bool black_market_crap(player_type *player_ptr, object_type *o_ptr)
 {
-    if (object_is_ego(o_ptr))
+    if (o_ptr->is_ego())
         return false;
 
     if (o_ptr->to_a > 0)

@@ -23,7 +23,7 @@ static errr rd_inventory(player_type *player_ptr)
     player_ptr->inven_cnt = 0;
     player_ptr->equip_cnt = 0;
 
-    if (player_ptr->inventory_list != NULL)
+    if (player_ptr->inventory_list != nullptr)
         C_KILL(player_ptr->inventory_list, INVEN_TOTAL, object_type);
     C_MAKE(player_ptr->inventory_list, INVEN_TOTAL, object_type);
 
@@ -39,7 +39,7 @@ static errr rd_inventory(player_type *player_ptr)
         q_ptr = &forge;
         q_ptr->wipe();
 
-        rd_item(player_ptr, q_ptr);
+        rd_item(q_ptr);
         if (!q_ptr->k_idx)
             return (53);
 

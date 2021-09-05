@@ -37,9 +37,9 @@ static void display_player_melee_bonus(player_type *creature_ptr, int hand, int 
     HIT_POINT show_todam = creature_ptr->dis_to_d[hand];
     object_type *o_ptr = &creature_ptr->inventory_list[INVEN_MAIN_HAND + hand];
 
-    if (object_is_known(o_ptr))
+    if (o_ptr->is_known())
         show_tohit += o_ptr->to_h;
-    if (object_is_known(o_ptr))
+    if (o_ptr->is_known())
         show_todam += o_ptr->to_d;
 
     show_tohit += creature_ptr->skill_thn / BTH_PLUS_ADJ;
@@ -94,9 +94,9 @@ static void display_hit_damage(player_type *creature_ptr)
     object_type *o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
     HIT_PROB show_tohit = creature_ptr->dis_to_h_b;
     HIT_POINT show_todam = 0;
-    if (object_is_known(o_ptr))
+    if (o_ptr->is_known())
         show_tohit += o_ptr->to_h;
-    if (object_is_known(o_ptr))
+    if (o_ptr->is_known())
         show_todam += o_ptr->to_d;
 
     if ((o_ptr->sval == SV_LIGHT_XBOW) || (o_ptr->sval == SV_HEAVY_XBOW))

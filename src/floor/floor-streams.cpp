@@ -29,7 +29,6 @@
 #include "grid/grid.h"
 #include "monster-race/monster-race.h"
 #include "monster/monster-info.h"
-#include "object-hook/hook-enchant.h"
 #include "room/lake-types.h"
 #include "spell-kind/spells-floor.h"
 #include "system/artifact-type-definition.h"
@@ -344,7 +343,7 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
                     object_type *o_ptr = &floor_ptr->o_list[this_o_idx];
 
                     /* Hack -- Preserve unknown artifacts */
-                    if (object_is_fixed_artifact(o_ptr)) {
+                    if (o_ptr->is_fixed_artifact()) {
                         /* Mega-Hack -- Preserve the artifact */
                         a_info[o_ptr->name1].cur_num = 0;
 

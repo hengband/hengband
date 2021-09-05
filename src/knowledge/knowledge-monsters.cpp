@@ -111,7 +111,7 @@ static IDX collect_monsters(player_type *creature_ptr, IDX grp_cur, IDX mon_idx[
  */
 void do_cmd_knowledge_pets(player_type *creature_ptr)
 {
-    FILE *fff = NULL;
+    FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
     if (!open_temporary_file(&fff, file_name))
         return;
@@ -152,7 +152,7 @@ void do_cmd_knowledge_pets(player_type *creature_ptr)
  */
 void do_cmd_knowledge_kill_count(player_type *creature_ptr)
 {
-    FILE *fff = NULL;
+    FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
     if (!open_temporary_file(&fff, file_name))
         return;
@@ -313,7 +313,7 @@ void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, boo
     if (direct_r_idx < 0) {
         mode = visual_only ? MONSTER_LORE_DEBUG : MONSTER_LORE_NORMAL;
         int len;
-        for (IDX i = 0; monster_group_text[i] != NULL; i++) {
+        for (IDX i = 0; monster_group_text[i] != nullptr; i++) {
             len = strlen(monster_group_text[i]);
             if (len > max)
                 max = len;
@@ -475,7 +475,7 @@ void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, boo
  */
 void do_cmd_knowledge_bounty(player_type *creature_ptr)
 {
-    FILE *fff = NULL;
+    FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
     if (!open_temporary_file(&fff, file_name))
         return;

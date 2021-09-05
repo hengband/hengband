@@ -8,6 +8,7 @@
 #include "core/stuff-handler.h"
 #include "floor/floor-util.h"
 #include "game-option/option-flags.h"
+#include "object/item-tester-hooker.h"
 #include "player/player-race.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
@@ -73,7 +74,7 @@ void redraw_stuff(player_type *creature_ptr)
 
     if (creature_ptr->redraw & (PR_WIPE)) {
         creature_ptr->redraw &= ~(PR_WIPE);
-        msg_print(NULL);
+        msg_print(nullptr);
         term_clear();
     }
 
@@ -235,12 +236,12 @@ void window_stuff(player_type *player_ptr)
 
     if (window_flags & (PW_INVEN)) {
         player_ptr->window_flags &= ~(PW_INVEN);
-        fix_inventory(player_ptr, TV_NONE); // TODO:2.2.2 まともなtval参照手段を確保
+        fix_inventory(player_ptr);
     }
 
     if (window_flags & (PW_EQUIP)) {
         player_ptr->window_flags &= ~(PW_EQUIP);
-        fix_equip(player_ptr, TV_NONE); // TODO:2.2.2 まともなtval参照手段を確保
+        fix_equip(player_ptr);
     }
 
     if (window_flags & (PW_SPELL)) {

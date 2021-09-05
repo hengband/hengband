@@ -16,7 +16,6 @@
 #include "mind/mind-mirror-master.h"
 #include "monster-attack/monster-attack-util.h"
 #include "monster/monster-status.h"
-#include "object-hook/hook-enchant.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"
@@ -134,7 +133,7 @@ void process_eat_item(player_type *target_ptr, monap_type *monap_ptr)
         if (!monap_ptr->o_ptr->k_idx)
             continue;
 
-        if (object_is_artifact(monap_ptr->o_ptr))
+        if (monap_ptr->o_ptr->is_artifact())
             continue;
 
         describe_flavor(target_ptr, monap_ptr->o_name, monap_ptr->o_ptr, OD_OMIT_PREFIX);
@@ -180,7 +179,7 @@ void process_eat_food(player_type *target_ptr, monap_type *monap_ptr)
 
 void process_eat_lite(player_type *target_ptr, monap_type *monap_ptr)
 {
-    if ((monap_ptr->o_ptr->xtra4 <= 0) || object_is_fixed_artifact(monap_ptr->o_ptr))
+    if ((monap_ptr->o_ptr->xtra4 <= 0) || monap_ptr->o_ptr->is_fixed_artifact())
         return;
 
     monap_ptr->o_ptr->xtra4 -= (int16_t)(250 + randint1(250));

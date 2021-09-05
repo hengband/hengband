@@ -64,14 +64,13 @@ static bool is_specific_curse(TRC flag)
     }
 }
 
-static void choise_cursed_item(player_type *creature_ptr, TRC flag, object_type *o_ptr, int *choices, int *number, int item_num)
+static void choise_cursed_item(TRC flag, object_type *o_ptr, int *choices, int *number, int item_num)
 {
     if (!is_specific_curse(flag))
         return;
 
     tr_type cf = TR_STR;
-    TrFlags flgs;
-    object_flags(creature_ptr, o_ptr, flgs);
+    auto flgs = object_flags(o_ptr);
     switch (flag) {
     case TRC::ADD_L_CURSE:
         cf = TR_ADD_L_CURSE;
@@ -133,14 +132,14 @@ static void choise_cursed_item(player_type *creature_ptr, TRC flag, object_type 
  * @brief 現在呪いを保持している装備品を一つランダムに探し出す / Choose one of items that have cursed flag
  * @param flag 探し出したい呪いフラグ配列
  * @return 該当の呪いが一つでもあった場合にランダムに選ばれた装備品のオブジェクト構造体参照ポインタを返す。\n
- * 呪いがない場合NULLを返す。
+ * 呪いがない場合nullptrを返す。
  */
 object_type *choose_cursed_obj_name(player_type *creature_ptr, TRC flag)
 {
     int choices[INVEN_TOTAL - INVEN_MAIN_HAND];
     int number = 0;
     if (creature_ptr->cursed.has_not(flag))
-        return NULL;
+        return nullptr;
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         object_type *o_ptr = &creature_ptr->inventory_list[i];
@@ -150,7 +149,7 @@ object_type *choose_cursed_obj_name(player_type *creature_ptr, TRC flag)
             continue;
         }
 
-        choise_cursed_item(creature_ptr, flag, o_ptr, choices, &number, i);
+        choise_cursed_item(flag, o_ptr, choices, &number, i);
     }
 
     return &creature_ptr->inventory_list[choices[randint0(number)]];
@@ -169,12 +168,11 @@ static void curse_teleport(player_type *creature_ptr)
     object_type *o_ptr;
     int i_keep = 0, count = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        TrFlags flgs;
         o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
 
-        object_flags(creature_ptr, o_ptr, flgs);
+        auto flgs = object_flags(o_ptr);
 
         if (!has_flag(flgs, TR_TELEPORT))
             continue;
@@ -236,7 +234,7 @@ static void multiply_low_curse(player_type *creature_ptr)
 
     object_type *o_ptr;
     o_ptr = choose_cursed_obj_name(creature_ptr, TRC::ADD_L_CURSE);
-    auto new_curse = get_curse(creature_ptr, 0, o_ptr);
+    auto new_curse = get_curse(0, o_ptr);
     if (o_ptr->curse_flags.has(new_curse))
         return;
 
@@ -255,7 +253,7 @@ static void multiply_high_curse(player_type *creature_ptr)
 
     object_type *o_ptr;
     o_ptr = choose_cursed_obj_name(creature_ptr, TRC::ADD_H_CURSE);
-    auto new_curse = get_curse(creature_ptr, 1, o_ptr);
+    auto new_curse = get_curse(1, o_ptr);
     if (o_ptr->curse_flags.has(new_curse))
         return;
 
@@ -408,7 +406,7 @@ void execute_cursed_items_effect(player_type *creature_ptr)
     if (o_ptr->name1 != ART_JUDGE)
         return;
 
-    if (object_is_known(o_ptr))
+    if (o_ptr->is_known())
         msg_print(_("『審判の宝石』はあなたの体力を吸収した！", "The Jewel of Judgement drains life from you!"));
     else
         msg_print(_("なにかがあなたの体力を吸収した！", "Something drains life from you!"));

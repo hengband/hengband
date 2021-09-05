@@ -44,7 +44,7 @@ static errr rd_dungeon(player_type *player_ptr)
     byte num;
     rd_byte(&num);
     if (num == 0) {
-        err = rd_saved_floor(player_ptr, NULL);
+        err = rd_saved_floor(player_ptr, nullptr);
     } else {
         for (int i = 0; i < num; i++) {
             saved_floor_type *sf_ptr = &saved_floors[i];

@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct player_type player_type;
+struct player_type;
 bool stop_hex_spell_all(player_type *caster_ptr);
 bool stop_hex_spell(player_type *caster_ptr);
 void check_hex(player_type *caster_ptr);

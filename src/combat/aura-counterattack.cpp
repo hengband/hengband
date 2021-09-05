@@ -17,7 +17,6 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "object-hook/hook-armor.h"
-#include "object-hook/hook-checker.h"
 #include "player/player-status-flags.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell-kind/spells-teleport.h"
@@ -197,7 +196,7 @@ static void aura_shadow_by_monster_attack(player_type *target_ptr, monap_type *m
     }
 
     o_armed_ptr = &target_ptr->inventory_list[INVEN_BODY];
-    if ((o_armed_ptr->k_idx) && object_is_cursed(o_armed_ptr))
+    if ((o_armed_ptr->k_idx) && o_armed_ptr->is_cursed())
         dam *= 2;
 
     dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, false);
@@ -215,7 +214,7 @@ static void aura_shadow_by_monster_attack(player_type *target_ptr, monap_type *m
     /* Some cursed armours gives an extra effect */
     for (int j = 0; j < 4; j++) {
         o_armed_ptr = &target_ptr->inventory_list[typ[j][0]];
-        if ((o_armed_ptr->k_idx) && object_is_cursed(o_armed_ptr) && object_is_armour(target_ptr, o_armed_ptr))
+        if ((o_armed_ptr->k_idx) && o_armed_ptr->is_cursed() && o_armed_ptr->is_armour())
             project(target_ptr, 0, 0, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, (target_ptr->lev * 2), typ[j][1], flg);
     }
 }

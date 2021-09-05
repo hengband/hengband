@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct player_type player_type;
+struct player_type;
 bool charm_monster(player_type *caster_ptr, DIRECTION dir, PLAYER_LEVEL plev);
 bool control_one_undead(player_type *caster_ptr, DIRECTION dir, PLAYER_LEVEL plev);
 bool control_one_demon(player_type *caster_ptr, DIRECTION dir, PLAYER_LEVEL plev);

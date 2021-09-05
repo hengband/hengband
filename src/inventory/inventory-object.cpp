@@ -238,7 +238,7 @@ void reorder_pack(player_type *owner_ptr)
         if (!o_ptr->k_idx)
             continue;
 
-        o_value = object_value(owner_ptr, o_ptr);
+        o_value = object_value(o_ptr);
         for (j = 0; j < INVEN_PACK; j++) {
             if (object_sort_comp(owner_ptr, o_ptr, o_value, &owner_ptr->inventory_list[j]))
                 break;
@@ -314,7 +314,7 @@ int16_t store_item_to_inventory(player_type *owner_ptr, object_type *o_ptr)
 
     i = j;
     if (i < INVEN_PACK) {
-        int32_t o_value = object_value(owner_ptr, o_ptr);
+        int32_t o_value = object_value(o_ptr);
         for (j = 0; j < INVEN_PACK; j++) {
             if (object_sort_comp(owner_ptr, o_ptr, o_value, &owner_ptr->inventory_list[j]))
                 break;
@@ -348,11 +348,8 @@ int16_t store_item_to_inventory(player_type *owner_ptr, object_type *o_ptr)
  * @param o_ptr 拾いたいオブジェクトの構造体参照ポインタ
  * @return 溢れずに済むならTRUEを返す
  */
-bool check_store_item_to_inventory(player_type *player_ptr, object_type *o_ptr)
+bool check_store_item_to_inventory(player_type *player_ptr, const object_type *o_ptr)
 {
-    /* Unused */
-    (void)player_ptr;
-
     if (player_ptr->inven_cnt < INVEN_PACK)
         return true;
 
@@ -399,7 +396,7 @@ INVENTORY_IDX inven_takeoff(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUM
     q_ptr->copy_from(o_ptr);
     q_ptr->number = amt;
     describe_flavor(owner_ptr, o_name, q_ptr, 0);
-    if (((item == INVEN_MAIN_HAND) || (item == INVEN_SUB_HAND)) && object_is_melee_weapon(o_ptr)) {
+    if (((item == INVEN_MAIN_HAND) || (item == INVEN_SUB_HAND)) && o_ptr->is_melee_weapon()) {
         act = _("を装備からはずした", "You were wielding");
     } else if (item == INVEN_BOW) {
         act = _("を装備からはずした", "You were holding");

@@ -16,6 +16,7 @@
 #include "player/player-status-table.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 
 MindPowerGetter::MindPowerGetter(player_type *caster_ptr)
@@ -121,7 +122,7 @@ void MindPowerGetter::select_mind_description()
 bool MindPowerGetter::select_spell_index(SPELL_IDX *sn)
 {
     COMMAND_CODE code;
-    this->mind_ptr = &mind_powers[static_cast<int>(this->use_mind)];
+    this->mind_ptr = &mind_powers[enum2i(this->use_mind)];
     *sn = -1;
     if (!repeat_pull(&code)) {
         return false;
@@ -320,13 +321,13 @@ void MindPowerGetter::calculate_ki_chance(bool *has_weapon)
     if (heavy_armor(this->caster_ptr))
         this->chance += 20;
 
-    if (this->caster_ptr->icky_wield[0]) {
+    if (this->caster_ptr->is_icky_wield[0]) {
         this->chance += 20;
     } else if (has_weapon[0]) {
         this->chance += 10;
     }
 
-    if (this->caster_ptr->icky_wield[1]) {
+    if (this->caster_ptr->is_icky_wield[1]) {
         chance += 20;
     } else if (has_weapon[1]) {
         this->chance += 10;
@@ -349,11 +350,11 @@ void MindPowerGetter::add_ki_chance()
         this->chance += 5;
     }
 
-    if (this->caster_ptr->icky_wield[0]) {
+    if (this->caster_ptr->is_icky_wield[0]) {
         this->chance += 5;
     }
 
-    if (this->caster_ptr->icky_wield[1]) {
+    if (this->caster_ptr->is_icky_wield[1]) {
         this->chance += 5;
     }
 }

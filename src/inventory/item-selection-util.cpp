@@ -2,11 +2,10 @@
 #include "io/input-key-requester.h"
 #include "object/item-use-flags.h"
 
-fis_type *initialize_fis_type(fis_type *fis_ptr, COMMAND_CODE *cp, BIT_FLAGS mode, tval_type tval)
+fis_type *initialize_fis_type(fis_type *fis_ptr, COMMAND_CODE *cp, BIT_FLAGS mode)
 {
     fis_ptr->cp = cp;
     fis_ptr->mode = mode;
-    fis_ptr->tval = tval;
     fis_ptr->n1 = ' ';
     fis_ptr->n2 = ' ';
     fis_ptr->which = ' ';
@@ -28,11 +27,10 @@ fis_type *initialize_fis_type(fis_type *fis_ptr, COMMAND_CODE *cp, BIT_FLAGS mod
     return fis_ptr;
 }
 
-item_selection_type *initialize_item_selection_type(item_selection_type *item_selection_ptr, COMMAND_CODE *cp, BIT_FLAGS mode, tval_type tval)
+item_selection_type *initialize_item_selection_type(item_selection_type *item_selection_ptr, COMMAND_CODE *cp, BIT_FLAGS mode)
 {
     item_selection_ptr->cp = cp;
     item_selection_ptr->mode = mode;
-    item_selection_ptr->tval = tval;
     item_selection_ptr->which = ' ';
     item_selection_ptr->oops = false;
     item_selection_ptr->equip = false;

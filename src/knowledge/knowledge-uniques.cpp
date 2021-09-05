@@ -133,7 +133,7 @@ void do_cmd_knowledge_uniques(player_type *creature_ptr, bool is_alive)
 {
     unique_list_type tmp_list;
     unique_list_type *unique_list_ptr = initialize_unique_lsit_type(&tmp_list, is_alive);
-    FILE *fff = NULL;
+    FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
     if (!open_temporary_file(&fff, file_name))
         return;

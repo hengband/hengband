@@ -2,6 +2,7 @@
 
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/trc-types.h"
+#include "object/tval-types.h"
 #include "player-ability/player-ability-types.h"
 #include "player/player-class-types.h"
 #include "player/player-personality-types.h"
@@ -16,8 +17,8 @@
 
 enum class RF_ABILITY;
 
-typedef struct floor_type floor_type;
-typedef struct object_type object_type;
+struct floor_type;
+struct object_type;;
 typedef struct player_type {
     int player_uid{};
     int player_euid{};
@@ -284,8 +285,8 @@ typedef struct player_type {
     bool cumber_armor{}; /* Mana draining armor */
     bool cumber_glove{}; /* Mana draining gloves */
     bool heavy_wield[2]{}; /* Heavy weapon */
-    bool icky_wield[2]{}; /* Icky weapon */
-    bool riding_wield[2]{}; /* Riding weapon */
+    bool is_icky_wield[2]{}; /* クラスにふさわしくない装備をしている / Icky weapon */
+    bool is_icky_riding_wield[2]{}; /* 乗馬中に乗馬にふさわしくない装備をしている / Riding weapon */
     bool riding_ryoute{}; /* Riding weapon */
     bool monlite{};
     BIT_FLAGS yoiyami{};
@@ -410,7 +411,7 @@ typedef struct player_type {
     int16_t num_fire{}; /* Number of shots */
 
     byte tval_xtra{}; /* (Unused)Correct xtra tval */
-    byte tval_ammo{}; /* Correct ammo tval */
+    tval_type tval_ammo{}; /* Correct ammo tval */
 
     int16_t pspeed{}; /*!< 現在の速度 / Current speed */
 

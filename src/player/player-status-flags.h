@@ -47,7 +47,7 @@ enum aggravate_state {
     AGGRAVATE_NORMAL = 0x00000002L,
 };
 
-typedef struct player_type player_type;
+struct player_type;
 BIT_FLAGS convert_inventory_slot_type_to_flag_cause(inventory_slot_type inventory_slot);
 BIT_FLAGS check_equipment_flags(player_type *creature_ptr, tr_type tr_flag);
 BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag);
@@ -139,8 +139,8 @@ BIT_FLAGS has_lite(player_type *creature_ptr);
 bool has_disable_two_handed_bonus(player_type *creature_ptr, int i);
 bool has_not_ninja_weapon(player_type *creature_ptr, int i);
 bool has_not_monk_weapon(player_type *creature_ptr, int i);
-bool has_icky_wield_weapon(player_type *creature_ptr, int i);
-bool has_riding_wield_weapon(player_type *creature_ptr, int i);
+bool is_wielding_icky_weapon(player_type *creature_ptr, int i);
+bool is_wielding_icky_riding_weapon(player_type *creature_ptr, int i);
 bool has_good_luck(player_type *creature_ptr);
 BIT_FLAGS player_aggravate_state(player_type *creature_ptr);
 melee_type player_melee_type(player_type *creature_ptr);

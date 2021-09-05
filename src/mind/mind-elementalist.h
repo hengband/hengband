@@ -15,9 +15,9 @@ enum class ElementRealm {
 	MAX
 };
 
-typedef struct player_type player_type;
-typedef struct effect_monster_type effect_monster_type;
-typedef struct rc_type rc_type;
+struct player_type;
+struct effect_monster_type;
+struct rc_type;
 
 concptr get_element_title(int realm_idx);
 spells_type get_element_type(int realm_idx, int n);

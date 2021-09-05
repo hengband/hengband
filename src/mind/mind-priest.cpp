@@ -8,8 +8,6 @@
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/trc-types.h"
 #include "object-enchant/tr-types.h"
-#include "object-hook/hook-checker.h"
-#include "object-hook/hook-enchant.h"
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
@@ -27,22 +25,19 @@
  */
 bool bless_weapon(player_type *caster_ptr)
 {
-    item_tester_hook = object_is_weapon;
-
     concptr q = _("どのアイテムを祝福しますか？", "Bless which weapon? ");
     concptr s = _("祝福できる武器がありません。", "You have weapon to bless.");
 
     OBJECT_IDX item;
-    object_type *o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, TV_NONE);
+    object_type *o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, FuncItemTester(&object_type::is_weapon));
     if (!o_ptr)
         return false;
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(caster_ptr, o_name, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
-    TrFlags flgs;
-    object_flags(caster_ptr, o_ptr, flgs);
+    auto flgs = object_flags(o_ptr);
 
-    if (object_is_cursed(o_ptr)) {
+    if (o_ptr->is_cursed()) {
         if ((o_ptr->curse_flags.has(TRC::HEAVY_CURSE) && (randint1(100) < 33)) || has_flag(flgs, TR_ADD_L_CURSE) || has_flag(flgs, TR_ADD_H_CURSE)
             || o_ptr->curse_flags.has(TRC::PERMA_CURSE)) {
 #ifdef JP
@@ -83,7 +78,7 @@ bool bless_weapon(player_type *caster_ptr)
         return true;
     }
 
-    if (!(object_is_artifact(o_ptr) || object_is_ego(o_ptr)) || one_in_(3)) {
+    if (!(o_ptr->is_artifact() || o_ptr->is_ego()) || one_in_(3)) {
 #ifdef JP
         msg_format("%sは輝いた！", o_name);
 #else

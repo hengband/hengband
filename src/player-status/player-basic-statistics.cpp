@@ -14,6 +14,7 @@
 #include "spell-realm/spells-hex.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
+#include "util/enum-converter.h"
 
 /*!
  * @brief 基礎ステータス補正値
@@ -49,7 +50,7 @@ int16_t PlayerBasicStatistics::race_value()
     if (this->owner_ptr->mimic_form)
         tmp_rp_ptr = &mimic_info[this->owner_ptr->mimic_form];
     else
-        tmp_rp_ptr = &race_info[static_cast<int>(this->owner_ptr->prace)];
+        tmp_rp_ptr = &race_info[enum2i(this->owner_ptr->prace)];
 
     return tmp_rp_ptr->r_adj[this->ability_type];
 }

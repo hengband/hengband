@@ -9,7 +9,6 @@
 #include "object-enchant/object-ego.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/trc-types.h"
-#include "object-hook/hook-enchant.h"
 #include "object/object-kind.h"
 #include "object/object-value.h"
 #include "perception/object-perception.h"
@@ -72,7 +71,7 @@ void reduce_charges(object_type *o_ptr, int amt)
  * @param j_ptr 検証したいオブジェクトの構造体参照ポインタ2
  * @return 重ね合わせ可能なアイテム数
  */
-int object_similar_part(object_type *o_ptr, object_type *j_ptr)
+int object_similar_part(const object_type *o_ptr, const object_type *j_ptr)
 {
     const int max_stack_size = 99;
     int max_num = max_stack_size;
@@ -105,7 +104,7 @@ int object_similar_part(object_type *o_ptr, object_type *j_ptr)
         break;
     }
     case TV_STAFF: {
-        if ((!(o_ptr->ident & (IDENT_EMPTY)) && !object_is_known(o_ptr)) || (!(j_ptr->ident & (IDENT_EMPTY)) && !object_is_known(j_ptr)))
+        if ((!(o_ptr->ident & (IDENT_EMPTY)) && !o_ptr->is_known()) || (!(j_ptr->ident & (IDENT_EMPTY)) && !j_ptr->is_known()))
             return 0;
 
         if (o_ptr->pval != j_ptr->pval)
@@ -114,7 +113,7 @@ int object_similar_part(object_type *o_ptr, object_type *j_ptr)
         break;
     }
     case TV_WAND: {
-        if ((!(o_ptr->ident & (IDENT_EMPTY)) && !object_is_known(o_ptr)) || (!(j_ptr->ident & (IDENT_EMPTY)) && !object_is_known(j_ptr)))
+        if ((!(o_ptr->ident & (IDENT_EMPTY)) && !o_ptr->is_known()) || (!(j_ptr->ident & (IDENT_EMPTY)) && !j_ptr->is_known()))
             return 0;
 
         break;
@@ -141,14 +140,14 @@ int object_similar_part(object_type *o_ptr, object_type *j_ptr)
     case TV_AMULET:
     case TV_LITE:
     case TV_WHISTLE: {
-        if (!object_is_known(o_ptr) || !object_is_known(j_ptr))
+        if (!o_ptr->is_known() || !j_ptr->is_known())
             return 0;
     }
         /* Fall through */
     case TV_BOLT:
     case TV_ARROW:
     case TV_SHOT: {
-        if (object_is_known(o_ptr) != object_is_known(j_ptr))
+        if (o_ptr->is_known() != j_ptr->is_known())
             return 0;
         if (o_ptr->feeling != j_ptr->feeling)
             return 0;
@@ -160,7 +159,7 @@ int object_similar_part(object_type *o_ptr, object_type *j_ptr)
             return 0;
         if (o_ptr->pval != j_ptr->pval)
             return 0;
-        if (object_is_artifact(o_ptr) || object_is_artifact(j_ptr))
+        if (o_ptr->is_artifact() || j_ptr->is_artifact())
             return 0;
         if (o_ptr->name2 != j_ptr->name2)
             return 0;
@@ -181,16 +180,15 @@ int object_similar_part(object_type *o_ptr, object_type *j_ptr)
         break;
     }
     default: {
-        if (!object_is_known(o_ptr) || !object_is_known(j_ptr))
+        if (!o_ptr->is_known() || !j_ptr->is_known())
             return 0;
 
         break;
     }
     }
 
-    for (int i = 0; i < TR_FLAG_SIZE; i++)
-        if (o_ptr->art_flags[i] != j_ptr->art_flags[i])
-            return 0;
+    if (o_ptr->art_flags != j_ptr->art_flags)
+        return 0;
 
     if (o_ptr->curse_flags != j_ptr->curse_flags)
         return 0;
@@ -215,7 +213,7 @@ int object_similar_part(object_type *o_ptr, object_type *j_ptr)
  * @param j_ptr 検証したいオブジェクトの構造体参照ポインタ2
  * @return 重ね合わせ可能ならばTRUEを返す。
  */
-bool object_similar(object_type *o_ptr, object_type *j_ptr)
+bool object_similar(const object_type *o_ptr, const object_type *j_ptr)
 {
     int total = o_ptr->number + j_ptr->number;
     int max_num = object_similar_part(o_ptr, j_ptr);
@@ -240,7 +238,7 @@ void object_absorb(object_type *o_ptr, object_type *j_ptr)
     int diff = (total > max_num) ? total - max_num : 0;
 
     o_ptr->number = (total > max_num) ? max_num : total;
-    if (object_is_known(j_ptr))
+    if (j_ptr->is_known())
         object_known(o_ptr);
 
     if (((o_ptr->ident & IDENT_STORE) || (j_ptr->ident & IDENT_STORE)) && (!((o_ptr->ident & IDENT_STORE) && (j_ptr->ident & IDENT_STORE)))) {
@@ -250,7 +248,7 @@ void object_absorb(object_type *o_ptr, object_type *j_ptr)
             o_ptr->ident &= 0xEF;
     }
 
-    if (object_is_fully_known(j_ptr))
+    if (j_ptr->is_fully_known())
         o_ptr->ident |= (IDENT_FULL_KNOWN);
     if (j_ptr->inscription)
         o_ptr->inscription = j_ptr->inscription;

@@ -59,7 +59,7 @@ static bool grab_ego_generate_flags(ego_generate_type &xtra, std::string_view wh
  */
 errr parse_e_info(std::string_view buf, angband_header *head)
 {
-    static ego_item_type *e_ptr = NULL;
+    static ego_item_type *e_ptr = nullptr;
     const auto &tokens = str_split(buf, ':', false, 10);
 
     error_idx = 0; //!< @note 順不同で登録しているため

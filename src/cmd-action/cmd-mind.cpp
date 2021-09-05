@@ -48,6 +48,7 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/buffer-shaper.h"
+#include "util/enum-converter.h"
 #include "view/display-messages.h"
 
 /*!
@@ -123,12 +124,12 @@ static void decide_mind_ki_chance(player_type *caster_ptr, cm_type *cm_ptr)
     if (heavy_armor(caster_ptr))
         cm_ptr->chance += 20;
 
-    if (caster_ptr->icky_wield[0])
+    if (caster_ptr->is_icky_wield[0])
         cm_ptr->chance += 20;
     else if (has_melee_weapon(caster_ptr, INVEN_MAIN_HAND))
         cm_ptr->chance += 10;
 
-    if (caster_ptr->icky_wield[1])
+    if (caster_ptr->is_icky_wield[1])
         cm_ptr->chance += 20;
     else if (has_melee_weapon(caster_ptr, INVEN_SUB_HAND))
         cm_ptr->chance += 10;
@@ -185,10 +186,10 @@ static void decide_mind_chance(player_type *caster_ptr, cm_type *cm_ptr)
     if (heavy_armor(caster_ptr))
         cm_ptr->chance += 5;
 
-    if (caster_ptr->icky_wield[0])
+    if (caster_ptr->is_icky_wield[0])
         cm_ptr->chance += 5;
 
-    if (caster_ptr->icky_wield[1])
+    if (caster_ptr->is_icky_wield[1])
         cm_ptr->chance += 5;
 }
 
@@ -377,7 +378,7 @@ void do_cmd_mind(player_type *caster_ptr)
         return;
 
     switch_mind_kind(caster_ptr, cm_ptr);
-    cm_ptr->spell = mind_powers[static_cast<int>(cm_ptr->use_mind)].info[cm_ptr->n];
+    cm_ptr->spell = mind_powers[enum2i(cm_ptr->use_mind)].info[cm_ptr->n];
     cm_ptr->chance = cm_ptr->spell.fail;
     cm_ptr->mana_cost = cm_ptr->spell.mana_cost;
     decide_mind_ki_chance(caster_ptr, cm_ptr);

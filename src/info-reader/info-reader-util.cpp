@@ -16,7 +16,7 @@ int error_line; /*!< データ読み込み/初期化時に汎用的にエラー�
 byte grab_one_activation_flag(concptr what)
 {
     for (int i = 0;; i++) {
-        if (activation_info[i].flag == NULL)
+        if (activation_info[i].flag == nullptr)
             break;
 
         if (streq(what, activation_info[i].flag)) {

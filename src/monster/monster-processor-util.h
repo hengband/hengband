@@ -50,7 +50,7 @@ typedef struct coordinate_candidate {
 	POSITION gdis;
 } coordinate_candidate;
 
-typedef struct monster_type monster_type;
+struct monster_type;
 turn_flags *init_turn_flags(MONSTER_IDX riding_idx, MONSTER_IDX m_idx, turn_flags *turn_flags_ptr);
 old_race_flags *init_old_race_flags(old_race_flags *old_race_flags_ptr);
 coordinate_candidate init_coordinate_candidate(void);

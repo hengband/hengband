@@ -38,8 +38,6 @@
 #include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"
 #include "object-enchant/special-object-flags.h"
-#include "object-hook/hook-checker.h"
-#include "object-hook/hook-enchant.h"
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
 #include "player/player-status-flags.h"
@@ -66,9 +64,9 @@ void wiz_lite(player_type *caster_ptr, bool ninja)
     /* Memorize objects */
     for (OBJECT_IDX i = 1; i < caster_ptr->current_floor_ptr->o_max; i++) {
         object_type *o_ptr = &caster_ptr->current_floor_ptr->o_list[i];
-        if (!object_is_valid(o_ptr))
+        if (!o_ptr->is_valid())
             continue;
-        if (object_is_held_monster(o_ptr))
+        if (o_ptr->is_held_by_monster())
             continue;
         o_ptr->marked |= OM_FOUND;
     }
@@ -161,9 +159,9 @@ void wiz_dark(player_type *caster_ptr)
     for (OBJECT_IDX i = 1; i < caster_ptr->current_floor_ptr->o_max; i++) {
         object_type *o_ptr = &caster_ptr->current_floor_ptr->o_list[i];
 
-        if (!object_is_valid(o_ptr))
+        if (!o_ptr->is_valid())
             continue;
-        if (object_is_held_monster(o_ptr))
+        if (o_ptr->is_held_by_monster())
             continue;
 
         /* Forget the object */
@@ -336,7 +334,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
                     o_ptr = &floor_ptr->o_list[this_o_idx];
 
                     /* Hack -- Preserve unknown artifacts */
-                    if (object_is_fixed_artifact(o_ptr) && (!object_is_known(o_ptr) || in_generate)) {
+                    if (o_ptr->is_fixed_artifact() && (!o_ptr->is_known() || in_generate)) {
                         /* Mega-Hack -- Preserve the artifact */
                         a_info[o_ptr->name1].cur_num = 0;
 

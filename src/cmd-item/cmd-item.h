@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef struct player_type player_type;
+struct player_type;
 void do_cmd_inven(player_type *creature_ptr);
 void do_cmd_drop(player_type *creature_ptr);
 void do_cmd_observe(player_type *creature_ptr);

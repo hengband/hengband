@@ -26,8 +26,6 @@
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
-#include "object-hook/hook-checker.h"
-#include "object-hook/hook-enchant.h"
 #include "pet/pet-util.h"
 #include "player/player-status.h"
 #include "player/special-defense-types.h"
@@ -273,10 +271,10 @@ static void preserve_info(player_type *creature_ptr)
 
     for (DUNGEON_IDX i = 0; i < INVEN_PACK; i++) {
         object_type *o_ptr = &creature_ptr->inventory_list[i];
-        if (!object_is_valid(o_ptr))
+        if (!o_ptr->is_valid())
             continue;
 
-        if (object_is_fixed_artifact(o_ptr))
+        if (o_ptr->is_fixed_artifact())
             a_info[o_ptr->name1].floor_id = 0;
     }
 }
@@ -297,24 +295,29 @@ static void set_grid_by_leaving_floor(player_type *creature_ptr, grid_type **g_p
 
 static void jump_floors(player_type *creature_ptr)
 {
-    if ((creature_ptr->change_floor_mode & (CFM_DOWN | CFM_UP)) == 0)
+    if (none_bits(creature_ptr->change_floor_mode, CFM_DOWN | CFM_UP)) {
         return;
+    }
 
-    int move_num = 0;
-    if (creature_ptr->change_floor_mode & CFM_DOWN)
+    auto move_num = 0;
+    if (any_bits(creature_ptr->change_floor_mode, CFM_DOWN)) {
         move_num = 1;
-    else if (creature_ptr->change_floor_mode & CFM_UP)
+    } else if (any_bits(creature_ptr->change_floor_mode, CFM_UP)) {
         move_num = -1;
+    }
 
-    if (creature_ptr->change_floor_mode & CFM_SHAFT)
-        move_num += SGN(move_num);
+    if (any_bits(creature_ptr->change_floor_mode, CFM_SHAFT)) {
+        move_num *= 2;
+    }
 
-    if (creature_ptr->change_floor_mode & CFM_DOWN) {
-        if (!is_in_dungeon(creature_ptr))
+    if (any_bits(creature_ptr->change_floor_mode, CFM_DOWN)) {
+        if (!is_in_dungeon(creature_ptr)) {
             move_num = d_info[creature_ptr->dungeon_idx].mindepth;
-    } else if (creature_ptr->change_floor_mode & CFM_UP) {
-        if (creature_ptr->current_floor_ptr->dun_level + move_num < d_info[creature_ptr->dungeon_idx].mindepth)
+        }
+    } else if (any_bits(creature_ptr->change_floor_mode, CFM_UP)) {
+        if (creature_ptr->current_floor_ptr->dun_level + move_num < d_info[creature_ptr->dungeon_idx].mindepth) {
             move_num = -creature_ptr->current_floor_ptr->dun_level;
+        }
     }
 
     creature_ptr->current_floor_ptr->dun_level += move_num;
@@ -357,7 +360,7 @@ static void refresh_new_floor_id(player_type *creature_ptr, grid_type *g_ptr)
         return;
 
     new_floor_id = get_new_floor_id(creature_ptr);
-    if ((g_ptr != NULL) && !feat_uses_special(g_ptr->feat))
+    if ((g_ptr != nullptr) && !feat_uses_special(g_ptr->feat))
         g_ptr->special = new_floor_id;
 }
 
@@ -374,7 +377,7 @@ static void update_upper_lower_or_floor_id(player_type *creature_ptr, saved_floo
 
 static void exe_leave_floor(player_type *creature_ptr, saved_floor_type *sf_ptr)
 {
-    grid_type *g_ptr = NULL;
+    grid_type *g_ptr = nullptr;
     set_grid_by_leaving_floor(creature_ptr, &g_ptr);
     jump_floors(creature_ptr);
     exit_to_wilderness(creature_ptr);
@@ -437,7 +440,7 @@ void jump_floor(player_type *creature_ptr, DUNGEON_IDX dun_idx, DEPTH depth)
     creature_ptr->wild_mode = false;
     leave_quest_check(creature_ptr);
     if (record_stair)
-        exe_write_diary(creature_ptr, DIARY_WIZ_TELE, 0, NULL);
+        exe_write_diary(creature_ptr, DIARY_WIZ_TELE, 0, nullptr);
 
     creature_ptr->current_floor_ptr->inside_quest = 0;
     PlayerEnergy(creature_ptr).reset_player_turn();

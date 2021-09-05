@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 
-typedef struct player_type player_type;
+struct player_type;
 MONSTER_NUMBER summon_EAGLE(player_type *target_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx);
 MONSTER_NUMBER summon_EDGE(player_type *target_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx);
 MONSTER_NUMBER summon_guardian(player_type *target_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE);

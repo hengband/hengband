@@ -150,7 +150,7 @@ static spoiler_output_status spoil_mon_evol(concptr fname)
         }
     }
 
-    ang_sort(&dummy, evol_tree, NULL, max_r_idx, ang_sort_comp_evol_tree, ang_sort_swap_evol_tree);
+    ang_sort(&dummy, evol_tree, nullptr, max_r_idx, ang_sort_comp_evol_tree, ang_sort_swap_evol_tree);
     for (i = 0; i < max_r_idx; i++) {
         r_idx = evol_tree[i][0];
         if (!r_idx)
@@ -259,7 +259,7 @@ static spoiler_output_status spoil_player_spell(concptr fname)
         if (magic_ptr->spell_book != 0) {
             object_type book;
             auto o_ptr = &book;
-            o_ptr->prep(&dummy_p, lookup_kind(magic_ptr->spell_book, 0));
+            o_ptr->prep(lookup_kind(magic_ptr->spell_book, 0));
             describe_flavor(&dummy_p, title, o_ptr, OD_NAME_ONLY);
             book_name = title;
             char *s = angband_strchr(book_name, '[');

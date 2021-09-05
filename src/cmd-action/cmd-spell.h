@@ -26,7 +26,7 @@ concptr info_power_dice(DICE_NUMBER dice, DICE_SID sides);
 concptr info_radius(POSITION rad);
 concptr info_weight(WEIGHT weight);
 
-typedef struct player_type player_type;
+struct player_type;
 void do_cmd_browse(player_type *caster_ptr);
 void do_cmd_study(player_type *caster_ptr);
 bool do_cmd_cast(player_type *caster_ptr);

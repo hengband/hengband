@@ -2,7 +2,6 @@
 #include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "grid/grid.h"
-#include "object-hook/hook-enchant.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
@@ -83,7 +82,7 @@ void place_object(player_type *owner_ptr, POSITION y, POSITION x, BIT_FLAGS mode
 
     OBJECT_IDX o_idx = o_pop(floor_ptr);
     if (o_idx == 0) {
-        if (object_is_fixed_artifact(q_ptr)) {
+        if (q_ptr->is_fixed_artifact()) {
             a_info[q_ptr->name1].cur_num = 0;
         }
 

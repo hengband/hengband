@@ -6,6 +6,6 @@
 
 extern char *histpref_buf;
 
-typedef struct player_type player_type;
+struct player_type;
 errr interpret_pref_file(player_type *creature_ptr, char *buf);
 void add_history_from_pref_line(concptr t);

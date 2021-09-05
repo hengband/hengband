@@ -5,7 +5,6 @@
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "inventory/inventory-slot-types.h"
-#include "object-hook/hook-enchant.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-info.h"
 #include "racial/racial-android.h"
@@ -56,7 +55,7 @@ bool apply_disenchant(player_type *target_ptr, BIT_FLAGS mode)
     if (!o_ptr->k_idx)
         return false;
 
-    if (!object_is_weapon_armour_ammo(target_ptr, o_ptr))
+    if (!o_ptr->is_weapon_armour_ammo())
         return false;
 
     if ((o_ptr->to_h <= 0) && (o_ptr->to_d <= 0) && (o_ptr->to_a <= 0) && (o_ptr->pval <= 1)) {
@@ -65,7 +64,7 @@ bool apply_disenchant(player_type *target_ptr, BIT_FLAGS mode)
 
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(target_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-    if (object_is_artifact(o_ptr) && (randint0(100) < 71)) {
+    if (o_ptr->is_artifact() && (randint0(100) < 71)) {
 #ifdef JP
         msg_format("%s(%c)は劣化を跳ね返した！", o_name, index_to_label(t));
 #else

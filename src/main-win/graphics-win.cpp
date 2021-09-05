@@ -79,7 +79,7 @@ graphics_mode change_graphics(graphics_mode arg)
     char buf[MAIN_WIN_MAX_PATH];
     BYTE wid, hgt, twid, thgt, ox, oy;
     concptr name;
-    concptr name_mask = NULL;
+    concptr name_mask = nullptr;
 
     infGraph.delete_bitmap();
 

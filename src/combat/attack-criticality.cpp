@@ -175,7 +175,7 @@ void critical_attack(player_type *attacker_ptr, player_attack_type *pa_ptr)
     }
 
     bool is_ninja_hit = (attacker_ptr->pclass == CLASS_NINJA) && has_melee_weapon(attacker_ptr, INVEN_MAIN_HAND + pa_ptr->hand)
-        && !attacker_ptr->icky_wield[pa_ptr->hand] && ((attacker_ptr->cur_lite <= 0) || one_in_(7));
+        && !attacker_ptr->is_icky_wield[pa_ptr->hand] && ((attacker_ptr->cur_lite <= 0) || one_in_(7));
     if (is_ninja_hit)
         ninja_critical(attacker_ptr, pa_ptr);
 }

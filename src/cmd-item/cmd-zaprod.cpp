@@ -8,6 +8,7 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "object-enchant/special-object-flags.h"
+#include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "object/object-info.h"
 #include "object/object-kind.h"
@@ -81,10 +82,10 @@ int rod_effect(player_type *creature_ptr, OBJECT_SUBTYPE_VALUE sval, DIRECTION d
 
     case SV_ROD_IDENTIFY: {
         if (powerful) {
-            if (!identify_fully(creature_ptr, false, TV_NONE))
+            if (!identify_fully(creature_ptr, false))
                 *use_charge = false;
         } else {
-            if (!ident_spell(creature_ptr, false, TV_NONE))
+            if (!ident_spell(creature_ptr, false))
                 *use_charge = false;
         }
         ident = true;
@@ -308,7 +309,7 @@ void exe_zap_rod(player_type *creature_ptr, INVENTORY_IDX item)
 
     /* Get a direction (unless KNOWN not to need it) */
     if (((o_ptr->sval >= SV_ROD_MIN_DIRECTION) && (o_ptr->sval != SV_ROD_HAVOC) && (o_ptr->sval != SV_ROD_AGGRAVATE) && (o_ptr->sval != SV_ROD_PESTICIDE))
-        || !object_is_aware(o_ptr)) {
+        || !o_ptr->is_aware()) {
         /* Get a direction, allow cancel */
         if (!get_aim_dir(creature_ptr, &dir))
             return;
@@ -387,7 +388,7 @@ void exe_zap_rod(player_type *creature_ptr, INVENTORY_IDX item)
         o_ptr->timeout += k_ptr->pval;
     creature_ptr->update |= (PU_COMBINE | PU_REORDER);
 
-    if (!(object_is_aware(o_ptr))) {
+    if (!(o_ptr->is_aware())) {
         chg_virtue(creature_ptr, V_PATIENCE, -1);
         chg_virtue(creature_ptr, V_CHANCE, 1);
         chg_virtue(creature_ptr, V_KNOWLEDGE, -1);
@@ -397,7 +398,7 @@ void exe_zap_rod(player_type *creature_ptr, INVENTORY_IDX item)
     object_tried(o_ptr);
 
     /* Successfully determined the object function */
-    if (ident && !object_is_aware(o_ptr)) {
+    if (ident && !o_ptr->is_aware()) {
         object_aware(creature_ptr, o_ptr);
         gain_exp(creature_ptr, (lev + (creature_ptr->lev >> 1)) / creature_ptr->lev);
     }
@@ -428,7 +429,7 @@ void do_cmd_zap_rod(player_type *creature_ptr)
     q = _("どのロッドを振りますか? ", "Zap which rod? ");
     s = _("使えるロッドがない。", "You have no rod to zap.");
 
-    if (!choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TV_ROD))
+    if (!choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), TvalItemTester(TV_ROD)))
         return;
 
     /* Zap the rod */

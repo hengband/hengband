@@ -65,12 +65,12 @@ static void process_fishing(player_type *creature_ptr)
     if (one_in_(1000)) {
         MONRACE_IDX r_idx;
         bool success = false;
-        get_mon_num_prep(creature_ptr, monster_is_fishing_target, NULL);
+        get_mon_num_prep(creature_ptr, monster_is_fishing_target, nullptr);
         r_idx = get_mon_num(creature_ptr, 0,
             is_in_dungeon(creature_ptr) ? creature_ptr->current_floor_ptr->dun_level
                                                        : wilderness[creature_ptr->wilderness_y][creature_ptr->wilderness_x].level,
             0);
-        msg_print(NULL);
+        msg_print(nullptr);
         if (r_idx && one_in_(2)) {
             POSITION y, x;
             y = creature_ptr->y + ddy[creature_ptr->fishing_dir];
@@ -385,7 +385,7 @@ void process_player(player_type *creature_ptr)
                 creature_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
 
                 msg_print(_("「時は動きだす…」", "You feel time flowing around you once more."));
-                msg_print(NULL);
+                msg_print(nullptr);
                 creature_ptr->timewalk = false;
                 creature_ptr->energy_need = ENERGY_NEED();
 

@@ -89,7 +89,7 @@ bool kawarimi(player_type *caster_ptr, bool success)
     teleport_player(caster_ptr, 10 + randint1(90), TELEPORT_SPONTANEOUS);
     q_ptr->wipe();
     const int SV_WOODEN_STATUE = 0;
-    q_ptr->prep(caster_ptr, lookup_kind(TV_STATUE, SV_WOODEN_STATUE));
+    q_ptr->prep(lookup_kind(TV_STATUE, SV_WOODEN_STATUE));
 
     q_ptr->pval = MON_NINJA;
     (void)drop_near(caster_ptr, q_ptr, -1, y, x);
@@ -206,7 +206,7 @@ bool rush_attack(player_type *attacker_ptr, bool *mdeath)
 void process_surprise_attack(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {
     monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
-    if (!has_melee_weapon(attacker_ptr, INVEN_MAIN_HAND + pa_ptr->hand) || attacker_ptr->icky_wield[pa_ptr->hand])
+    if (!has_melee_weapon(attacker_ptr, INVEN_MAIN_HAND + pa_ptr->hand) || attacker_ptr->is_icky_wield[pa_ptr->hand])
         return;
 
     int tmp = attacker_ptr->lev * 6 + (attacker_ptr->skill_stl + 10) * 4;
@@ -386,7 +386,7 @@ bool cast_ninja_spell(player_type *caster_ptr, mind_ninja_type spell)
         (void)stasis_monster(caster_ptr, dir);
         break;
     case ANCIENT_KNOWLEDGE:
-        return ident_spell(caster_ptr, false, TV_NONE);
+        return ident_spell(caster_ptr, false);
     case FLOATING:
         set_tim_levitation(caster_ptr, randint1(20) + 20, false);
         break;
@@ -396,7 +396,7 @@ bool cast_ninja_spell(player_type *caster_ptr, mind_ninja_type spell)
         set_oppose_fire(caster_ptr, (TIME_EFFECT)plev, false);
         break;
     case NYUSIN:
-        return rush_attack(caster_ptr, NULL);
+        return rush_attack(caster_ptr, nullptr);
     case SYURIKEN_SPREADING: {
         for (int i = 0; i < 8; i++) {
             OBJECT_IDX slot;

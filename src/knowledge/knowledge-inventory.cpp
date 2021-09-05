@@ -13,7 +13,6 @@
 #include "io-dump/dump-util.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
-#include "object-hook/hook-enchant.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-flags.h"
 #include "object/tval-types.h"
@@ -66,10 +65,10 @@ static void print_flag(int tr, const TrFlags &flags, FILE *fff)
  */
 static bool determine_spcial_item_type(object_type *o_ptr, tval_type tval)
 {
-    bool is_special_item_type = (object_is_wearable(o_ptr) && object_is_ego(o_ptr)) || ((tval == TV_AMULET) && (o_ptr->sval == SV_AMULET_RESISTANCE))
+    bool is_special_item_type = (o_ptr->is_wearable() && o_ptr->is_ego()) || ((tval == TV_AMULET) && (o_ptr->sval == SV_AMULET_RESISTANCE))
         || ((tval == TV_RING) && (o_ptr->sval == SV_RING_LORDLY)) || ((tval == TV_SHIELD) && (o_ptr->sval == SV_DRAGON_SHIELD))
         || ((tval == TV_HELM) && (o_ptr->sval == SV_DRAGON_HELM)) || ((tval == TV_GLOVES) && (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES))
-        || ((tval == TV_BOOTS) && (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE)) || object_is_artifact(o_ptr);
+        || ((tval == TV_BOOTS) && (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE)) || o_ptr->is_artifact();
 
     return is_special_item_type;
 }
@@ -86,7 +85,7 @@ static bool check_item_knowledge(object_type *o_ptr, tval_type tval)
         return false;
     if (o_ptr->tval != tval)
         return false;
-    if (!object_is_known(o_ptr))
+    if (!o_ptr->is_known())
         return false;
     if (!determine_spcial_item_type(o_ptr, tval))
         return false;
@@ -100,10 +99,9 @@ static bool check_item_knowledge(object_type *o_ptr, tval_type tval)
  * @param fff 一時ファイルへの参照ポインタ
  * @todo ここの関数から表示用の関数に移したい
  */
-static void display_identified_resistances_flag(player_type *creature_ptr, object_type *o_ptr, FILE *fff)
+static void display_identified_resistances_flag(object_type *o_ptr, FILE *fff)
 {
-    TrFlags flags;
-    object_flags_known(creature_ptr, o_ptr, flags);
+    auto flags = object_flags_known(o_ptr);
 
     print_im_or_res_flag(TR_IM_ACID, TR_RES_ACID, flags, fff);
     print_im_or_res_flag(TR_IM_ELEC, TR_RES_ELEC, flags, fff);
@@ -166,12 +164,12 @@ static void do_cmd_knowledge_inventory_aux(player_type *creature_ptr, FILE *fff,
 
     fprintf(fff, "%s %s", where, o_name);
 
-    if (!object_is_fully_known(o_ptr)) {
+    if (!o_ptr->is_fully_known()) {
         fputs(_("-------不明--------------- -------不明---------\n", "-------unknown------------ -------unknown------\n"), fff);
         return;
     }
 
-    display_identified_resistances_flag(creature_ptr, o_ptr, fff);
+    display_identified_resistances_flag(o_ptr, fff);
 }
 
 /*!
@@ -277,7 +275,7 @@ static void show_home_equipment_resistances(player_type *creature_ptr, tval_type
  */
 void do_cmd_knowledge_inventory(player_type *creature_ptr)
 {
-    FILE *fff = NULL;
+    FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
     if (!open_temporary_file(&fff, file_name))
         return;

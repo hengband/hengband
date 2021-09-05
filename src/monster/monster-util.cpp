@@ -288,8 +288,8 @@ monsterrace_hook_type get_monster_hook2(player_type *player_ptr, POSITION y, POS
 /*!
  * @brief モンスター生成テーブルの重みを指定条件に従って変更する。
  * @param player_ptr
- * @param hook1 生成制約関数1 (NULL の場合、制約なし)
- * @param hook2 生成制約関数2 (NULL の場合、制約なし)
+ * @param hook1 生成制約関数1 (nullptr の場合、制約なし)
+ * @param hook2 生成制約関数2 (nullptr の場合、制約なし)
  * @param restrict_to_dungeon 現在プレイヤーのいるダンジョンの制約を適用するか
  * @return 常に 0
  *
@@ -386,8 +386,8 @@ static errr do_get_mon_num_prep(player_type *player_ptr, const monsterrace_hook_
 /*!
  * @brief モンスター生成テーブルの重み修正
  * @param player_ptr
- * @param hook1 生成制約関数1 (NULL の場合、制約なし)
- * @param hook2 生成制約関数2 (NULL の場合、制約なし)
+ * @param hook1 生成制約関数1 (nullptr の場合、制約なし)
+ * @param hook2 生成制約関数2 (nullptr の場合、制約なし)
  * @return 常に 0
  *
  * get_mon_num() を呼ぶ前に get_mon_num_prep() 系関数のいずれかを呼ぶこと。
@@ -405,5 +405,5 @@ errr get_mon_num_prep(player_type *player_ptr, const monsterrace_hook_type hook1
  */
 errr get_mon_num_prep_bounty(player_type *player_ptr)
 {
-    return do_get_mon_num_prep(player_ptr, NULL, NULL, false);
+    return do_get_mon_num_prep(player_ptr, nullptr, nullptr, false);
 }
