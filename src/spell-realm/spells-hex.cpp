@@ -224,7 +224,6 @@ void RealmHex::gain_exp_from_hex()
             continue;
         }
 
-        const auto *s_ptr = &technic_info[REALM_HEX - MIN_TECHNIC][spell];
         if (this->caster_ptr->spell_exp[spell] < SPELL_EXP_BEGINNER) {
             this->caster_ptr->spell_exp[spell] += 5;
             continue;
@@ -234,11 +233,11 @@ void RealmHex::gain_exp_from_hex()
             continue;
         }
 
-        if (this->gain_exp_expert(spell, s_ptr)) {
+        if (this->gain_exp_expert(spell)) {
             continue;
         }
 
-        this->gain_exp_master(spell, s_ptr);
+        this->gain_exp_master(spell);
     }
 }
 
@@ -259,12 +258,13 @@ bool RealmHex::gain_exp_skilled(const int spell)
     return true;
 }
 
-bool RealmHex::gain_exp_expert(const int spell, const magic_type *s_ptr)
+bool RealmHex::gain_exp_expert(const int spell)
 {
     if (this->caster_ptr->spell_exp[spell] >= SPELL_EXP_EXPERT) {
         return false;
     }
 
+    const auto *s_ptr = &technic_info[REALM_HEX - MIN_TECHNIC][spell];
     auto *floor_ptr = this->caster_ptr->current_floor_ptr;
     auto gain_condition = one_in_(5);
     gain_condition &= (floor_ptr->dun_level + 5) > this->caster_ptr->lev;
@@ -276,12 +276,13 @@ bool RealmHex::gain_exp_expert(const int spell, const magic_type *s_ptr)
     return true;
 }
 
-void RealmHex::gain_exp_master(const int spell, const magic_type *s_ptr)
+void RealmHex::gain_exp_master(const int spell)
 {
     if (this->caster_ptr->spell_exp[spell] >= SPELL_EXP_MASTER) {
         return;
     }
 
+    const auto *s_ptr = &technic_info[REALM_HEX - MIN_TECHNIC][spell];
     auto *floor_ptr = this->caster_ptr->current_floor_ptr;
     auto gain_condition = one_in_(5);
     gain_condition &= (floor_ptr->dun_level + 5) > this->caster_ptr->lev;
