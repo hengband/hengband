@@ -134,7 +134,7 @@ bool RealmHex::select_spell_stopping(int *sp, char *out_val, char *choice)
  * @brief 一定時間毎に呪術で消費するMPを処理する /
  * Upkeeping hex spells Called from dungeon.c
  */
-void check_hex(player_type *caster_ptr)
+void RealmHex::check_hex()
 {
     int spell;
     MANA_POINT need_mana;
@@ -142,57 +142,57 @@ void check_hex(player_type *caster_ptr)
     bool res = false;
 
     /* Spells spelled by player */
-    if (caster_ptr->realm1 != REALM_HEX)
+    if (this->caster_ptr->realm1 != REALM_HEX)
         return;
-    if (!casting_hex_flags(caster_ptr) && !caster_ptr->magic_num1[1])
+    if (!casting_hex_flags(this->caster_ptr) && !this->caster_ptr->magic_num1[1])
         return;
 
-    if (caster_ptr->magic_num1[1]) {
-        caster_ptr->magic_num1[0] = caster_ptr->magic_num1[1];
-        caster_ptr->magic_num1[1] = 0;
+    if (this->caster_ptr->magic_num1[1]) {
+        this->caster_ptr->magic_num1[0] = this->caster_ptr->magic_num1[1];
+        this->caster_ptr->magic_num1[1] = 0;
         res = true;
     }
 
     /* Stop all spells when anti-magic ability is given */
-    if (caster_ptr->anti_magic) {
-        stop_hex_spell_all(caster_ptr);
+    if (this->caster_ptr->anti_magic) {
+        stop_hex_spell_all(this->caster_ptr);
         return;
     }
 
     need_mana = 0;
     for (spell = 0; spell < 32; spell++) {
-        if (hex_spelling(caster_ptr, spell)) {
+        if (hex_spelling(this->caster_ptr, spell)) {
             const magic_type *s_ptr;
             s_ptr = &technic_info[REALM_HEX - MIN_TECHNIC][spell];
-            need_mana += mod_need_mana(caster_ptr, s_ptr->smana, spell, REALM_HEX);
+            need_mana += mod_need_mana(this->caster_ptr, s_ptr->smana, spell, REALM_HEX);
         }
     }
 
     /* Culcurates final mana cost */
     need_mana_frac = 0;
     s64b_div(&need_mana, &need_mana_frac, 0, 3); /* Divide by 3 */
-    need_mana += (casting_hex_num(caster_ptr) - 1);
+    need_mana += (casting_hex_num(this->caster_ptr) - 1);
 
     /* Not enough mana */
-    if (s64b_cmp(caster_ptr->csp, caster_ptr->csp_frac, need_mana, need_mana_frac) < 0) {
-        stop_hex_spell_all(caster_ptr);
+    if (s64b_cmp(this->caster_ptr->csp, this->caster_ptr->csp_frac, need_mana, need_mana_frac) < 0) {
+        stop_hex_spell_all(this->caster_ptr);
         return;
     }
 
     /* Enough mana */
     else {
-        s64b_sub(&(caster_ptr->csp), &(caster_ptr->csp_frac), need_mana, need_mana_frac);
+        s64b_sub(&(this->caster_ptr->csp), &(this->caster_ptr->csp_frac), need_mana, need_mana_frac);
 
-        caster_ptr->redraw |= PR_MANA;
+        this->caster_ptr->redraw |= PR_MANA;
         if (res) {
             msg_print(_("詠唱を再開した。", "You restart casting."));
 
-            caster_ptr->action = ACTION_SPELL;
+            this->caster_ptr->action = ACTION_SPELL;
 
-            caster_ptr->update |= (PU_BONUS | PU_HP);
-            caster_ptr->redraw |= (PR_MAP | PR_STATUS | PR_STATE);
-            caster_ptr->update |= (PU_MONSTERS);
-            caster_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
+            this->caster_ptr->update |= (PU_BONUS | PU_HP);
+            this->caster_ptr->redraw |= (PR_MAP | PR_STATUS | PR_STATE);
+            this->caster_ptr->update |= (PU_MONSTERS);
+            this->caster_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
         }
     }
 
@@ -200,30 +200,30 @@ void check_hex(player_type *caster_ptr)
     for (spell = 0; spell < 32; spell++) {
         const magic_type *s_ptr;
 
-        if (!hex_spelling(caster_ptr, spell))
+        if (!hex_spelling(this->caster_ptr, spell))
             continue;
 
         s_ptr = &technic_info[REALM_HEX - MIN_TECHNIC][spell];
 
-        if (caster_ptr->spell_exp[spell] < SPELL_EXP_BEGINNER)
-            caster_ptr->spell_exp[spell] += 5;
-        else if (caster_ptr->spell_exp[spell] < SPELL_EXP_SKILLED) {
-            if (one_in_(2) && (caster_ptr->current_floor_ptr->dun_level > 4) && ((caster_ptr->current_floor_ptr->dun_level + 10) > caster_ptr->lev))
-                caster_ptr->spell_exp[spell] += 1;
-        } else if (caster_ptr->spell_exp[spell] < SPELL_EXP_EXPERT) {
-            if (one_in_(5) && ((caster_ptr->current_floor_ptr->dun_level + 5) > caster_ptr->lev)
-                && ((caster_ptr->current_floor_ptr->dun_level + 5) > s_ptr->slevel))
-                caster_ptr->spell_exp[spell] += 1;
-        } else if (caster_ptr->spell_exp[spell] < SPELL_EXP_MASTER) {
-            if (one_in_(5) && ((caster_ptr->current_floor_ptr->dun_level + 5) > caster_ptr->lev) && (caster_ptr->current_floor_ptr->dun_level > s_ptr->slevel))
-                caster_ptr->spell_exp[spell] += 1;
+        if (this->caster_ptr->spell_exp[spell] < SPELL_EXP_BEGINNER)
+            this->caster_ptr->spell_exp[spell] += 5;
+        else if (this->caster_ptr->spell_exp[spell] < SPELL_EXP_SKILLED) {
+            if (one_in_(2) && (this->caster_ptr->current_floor_ptr->dun_level > 4) && ((this->caster_ptr->current_floor_ptr->dun_level + 10) > this->caster_ptr->lev))
+                this->caster_ptr->spell_exp[spell] += 1;
+        } else if (this->caster_ptr->spell_exp[spell] < SPELL_EXP_EXPERT) {
+            if (one_in_(5) && ((this->caster_ptr->current_floor_ptr->dun_level + 5) > this->caster_ptr->lev)
+                && ((this->caster_ptr->current_floor_ptr->dun_level + 5) > s_ptr->slevel))
+                this->caster_ptr->spell_exp[spell] += 1;
+        } else if (this->caster_ptr->spell_exp[spell] < SPELL_EXP_MASTER) {
+            if (one_in_(5) && ((this->caster_ptr->current_floor_ptr->dun_level + 5) > this->caster_ptr->lev) && (this->caster_ptr->current_floor_ptr->dun_level > s_ptr->slevel))
+                this->caster_ptr->spell_exp[spell] += 1;
         }
     }
 
     /* Do any effects of continual spells */
     for (spell = 0; spell < 32; spell++) {
-        if (hex_spelling(caster_ptr, spell)) {
-            exe_spell(caster_ptr, REALM_HEX, spell, SPELL_CONT);
+        if (hex_spelling(this->caster_ptr, spell)) {
+            exe_spell(this->caster_ptr, REALM_HEX, spell, SPELL_CONT);
         }
     }
 }

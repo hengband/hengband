@@ -10,6 +10,7 @@ public:
     virtual ~RealmHex() = default;
 
     bool stop_hex_spell();
+    void check_hex();
 
 private:
     player_type *caster_ptr;
@@ -18,7 +19,6 @@ private:
 };
 
 bool stop_hex_spell_all(player_type *caster_ptr);
-void check_hex(player_type *caster_ptr);
 bool hex_spell_fully(player_type *caster_ptr);
 void revenge_spell(player_type *caster_ptr);
 void revenge_store(player_type *caster_ptr, HIT_POINT dam);
