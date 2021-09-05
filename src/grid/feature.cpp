@@ -192,19 +192,13 @@ FEAT_IDX feat_jammed_door_random(int door_type)
 }
 
 /*
- * Determine if a "legal" grid is within "los" of the player *
- * Note the use of comparison to zero to force a "boolean" result
- */
-static bool player_has_los_grid(grid_type *g_ptr) { return (g_ptr->info & CAVE_VIEW) != 0; }
-
-/*
  * Change the "feat" flag for a grid, and notice/redraw the grid
  */
 void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX feat)
 {
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
-    grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-    feature_type *f_ptr = &f_info[feat];
+    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto *g_ptr = &floor_ptr->grid_array[y][x];
+    auto *f_ptr = &f_info[feat];
     if (!current_world_ptr->character_dungeon) {
         g_ptr->mimic = 0;
         g_ptr->feat = feat;
@@ -212,8 +206,9 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
             for (DIRECTION i = 0; i < 9; i++) {
                 POSITION yy = y + ddy_ddd[i];
                 POSITION xx = x + ddx_ddd[i];
-                if (!in_bounds2(floor_ptr, yy, xx))
+                if (!in_bounds2(floor_ptr, yy, xx)) {
                     continue;
+                }
 
                 floor_ptr->grid_array[yy][xx].info |= CAVE_GLOW;
             }
@@ -230,38 +225,45 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
     g_ptr->info &= ~(CAVE_OBJECT);
     if (old_mirror && d_info[floor_ptr->dungeon_idx].flags.has(DF::DARKNESS)) {
         g_ptr->info &= ~(CAVE_GLOW);
-        if (!view_torch_grids)
+        if (!view_torch_grids) {
             g_ptr->info &= ~(CAVE_MARK);
+        }
 
         update_local_illumination(player_ptr, y, x);
     }
 
-    if (f_ptr->flags.has_not(FF::REMEMBER))
+    if (f_ptr->flags.has_not(FF::REMEMBER)) {
         g_ptr->info &= ~(CAVE_MARK);
-    if (g_ptr->m_idx)
+    }
+
+    if (g_ptr->m_idx) {
         update_monster(player_ptr, g_ptr->m_idx, false);
+    }
 
     note_spot(player_ptr, y, x);
     lite_spot(player_ptr, y, x);
-    if (old_los ^ f_ptr->flags.has(FF::LOS))
+    if (old_los ^ f_ptr->flags.has(FF::LOS)) {
         player_ptr->update |= PU_VIEW | PU_LITE | PU_MON_LITE | PU_MONSTERS;
+    }
 
-    if (f_ptr->flags.has_not(FF::GLOW) || d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS))
+    if (f_ptr->flags.has_not(FF::GLOW) || d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS)) {
         return;
+    }
 
-    for (DIRECTION i = 0; i < 9; i++) {
+    for (auto i = 0; i < 9; i++) {
         POSITION yy = y + ddy_ddd[i];
         POSITION xx = x + ddx_ddd[i];
-        if (!in_bounds2(floor_ptr, yy, xx))
+        if (!in_bounds2(floor_ptr, yy, xx)) {
             continue;
+        }
 
-        grid_type *cc_ptr;
-        cc_ptr = &floor_ptr->grid_array[yy][xx];
+        auto *cc_ptr = &floor_ptr->grid_array[yy][xx];
         cc_ptr->info |= CAVE_GLOW;
-
-        if (player_has_los_grid(cc_ptr)) {
-            if (cc_ptr->m_idx)
+        if (cc_ptr->is_view()) {
+            if (cc_ptr->m_idx) {
                 update_monster(player_ptr, cc_ptr->m_idx, false);
+            }
+
             note_spot(player_ptr, yy, xx);
             lite_spot(player_ptr, yy, xx);
         }
@@ -270,8 +272,9 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
     }
 
     if (player_ptr->special_defense & NINJA_S_STEALTH) {
-        if (floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW)
+        if (floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) {
             set_superstealth(player_ptr, false);
+        }
     }
 }
 

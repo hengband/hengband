@@ -67,26 +67,27 @@ public:
     byte dists[FLOW_MAX]{}; /* Hack -- distance from player */
     byte when{}; /* Hack -- when cost was computed */
 
-    bool is_floor();
-    bool is_room();
-    bool is_extra();
-    bool is_inner();
-    bool is_outer();
-    bool is_solid();
-    bool is_icky();
-    bool is_lite();
-    bool is_redraw();
-    bool is_view();
-    bool is_object();
-    bool is_mark();
-    bool is_mirror();
-    bool is_rune_protection();
-    bool is_rune_explosion();
-    byte get_cost(monster_race *r_ptr);
-    byte get_distance(monster_race *r_ptr);
-    FEAT_IDX get_feat_mimic();
-    bool cave_has_flag(FF feature_flags);
+    bool is_floor() const;
+    bool is_room() const;
+    bool is_extra() const;
+    bool is_inner() const;
+    bool is_outer() const;
+    bool is_solid() const;
+    bool is_icky() const;
+    bool is_lite() const;
+    bool is_redraw() const;
+    bool is_view() const;
+    bool is_object() const;
+    bool is_mark() const;
+    bool is_mirror() const;
+    bool is_rune_protection() const;
+    bool is_rune_explosion() const;
+    byte get_cost(monster_race *r_ptr) const;
+    byte get_distance(monster_race *r_ptr) const;
+    FEAT_IDX get_feat_mimic() const;
+    bool cave_has_flag(FF feature_flags) const;
+    bool is_symbol(const int ch) const;
 
 private:
-    flow_type get_grid_flow_type(monster_race *r_ptr);
+    flow_type get_grid_flow_type(monster_race *r_ptr) const;
 };
