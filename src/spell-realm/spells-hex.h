@@ -19,6 +19,7 @@ private:
     void process_mana_cost(const bool need_restart);
     bool check_restart();
     int calc_need_mana();
+    void gain_exp_from_hex();
 };
 
 bool stop_hex_spell_all(player_type *caster_ptr);

@@ -154,51 +154,7 @@ void RealmHex::check_hex()
     }
 
     this->process_mana_cost(need_restart);
-        
-    /* Gain experiences of spelling spells */
-    for (auto spell = 0; spell < 32; spell++) {
-        if (!hex_spelling(this->caster_ptr, spell)) {
-            continue;
-        }
-
-        const auto *s_ptr = &technic_info[REALM_HEX - MIN_TECHNIC][spell];
-        if (this->caster_ptr->spell_exp[spell] < SPELL_EXP_BEGINNER) {
-            this->caster_ptr->spell_exp[spell] += 5;
-            continue;
-        }
-
-        auto *floor_ptr = this->caster_ptr->current_floor_ptr;
-        if (this->caster_ptr->spell_exp[spell] < SPELL_EXP_SKILLED) {
-            auto condition = one_in_(2);
-            condition &= floor_ptr->dun_level > 4;
-            condition &= (floor_ptr->dun_level + 10) > this->caster_ptr->lev;
-            if (condition) {
-                this->caster_ptr->spell_exp[spell]++;
-            }
-
-            continue;
-        }
-
-        if (this->caster_ptr->spell_exp[spell] < SPELL_EXP_EXPERT) {
-            auto condition = one_in_(5);
-            condition &= (floor_ptr->dun_level + 5) > this->caster_ptr->lev;
-            condition &= (floor_ptr->dun_level + 5) > s_ptr->slevel;
-            if (condition) {
-                this->caster_ptr->spell_exp[spell]++;
-            }
-
-            continue;
-        }
-
-        if (this->caster_ptr->spell_exp[spell] < SPELL_EXP_MASTER) {
-            auto condition = one_in_(5);
-            condition &= (floor_ptr->dun_level + 5) > this->caster_ptr->lev;
-            condition &= floor_ptr->dun_level > s_ptr->slevel;
-            if (condition) {
-                this->caster_ptr->spell_exp[spell]++;
-            }
-        }
-    }
+    this->gain_exp_from_hex();        
 
     /* Do any effects of continual spells */
     for (auto spell = 0; spell < 32; spell++) {
@@ -259,6 +215,53 @@ int RealmHex::calc_need_mana()
     }
 
     return need_mana;
+}
+
+void RealmHex::gain_exp_from_hex()
+{
+    for (auto spell = 0; spell < 32; spell++) {
+        if (!hex_spelling(this->caster_ptr, spell)) {
+            continue;
+        }
+
+        const auto *s_ptr = &technic_info[REALM_HEX - MIN_TECHNIC][spell];
+        if (this->caster_ptr->spell_exp[spell] < SPELL_EXP_BEGINNER) {
+            this->caster_ptr->spell_exp[spell] += 5;
+            continue;
+        }
+
+        auto *floor_ptr = this->caster_ptr->current_floor_ptr;
+        if (this->caster_ptr->spell_exp[spell] < SPELL_EXP_SKILLED) {
+            auto gain_condition = one_in_(2);
+            gain_condition &= floor_ptr->dun_level > 4;
+            gain_condition &= (floor_ptr->dun_level + 10) > this->caster_ptr->lev;
+            if (gain_condition) {
+                this->caster_ptr->spell_exp[spell]++;
+            }
+
+            continue;
+        }
+
+        if (this->caster_ptr->spell_exp[spell] < SPELL_EXP_EXPERT) {
+            auto gain_condition = one_in_(5);
+            gain_condition &= (floor_ptr->dun_level + 5) > this->caster_ptr->lev;
+            gain_condition &= (floor_ptr->dun_level + 5) > s_ptr->slevel;
+            if (gain_condition) {
+                this->caster_ptr->spell_exp[spell]++;
+            }
+
+            continue;
+        }
+
+        if (this->caster_ptr->spell_exp[spell] < SPELL_EXP_MASTER) {
+            auto gain_condition = one_in_(5);
+            gain_condition &= (floor_ptr->dun_level + 5) > this->caster_ptr->lev;
+            gain_condition &= floor_ptr->dun_level > s_ptr->slevel;
+            if (gain_condition) {
+                this->caster_ptr->spell_exp[spell]++;
+            }
+        }
+    }
 }
 
 /*!
