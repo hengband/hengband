@@ -495,8 +495,10 @@ static errr Infowin_set_name(concptr name)
     char *bp = buf;
     strcpy(buf, name);
     st = XStringListToTextProperty(&bp, 1, &tp);
-    if (st)
+    if (st) {
         XSetWMName(Metadpy->dpy, Infowin->win, &tp);
+        XFree(tp.value);
+    }
     return (0);
 }
 
@@ -2080,6 +2082,32 @@ static char force_lower(char a)
     return ((isupper((a))) ? tolower((a)) : (a));
 }
 
+static void Term_nuke_x11(term_type *)
+{
+    for (auto i = 0; i < MAX_TERM_DATA; i++) {
+        infofnt *ifnt = data[i].fnt;
+        infowin *iwin = data[i].win;
+        if (ifnt && ifnt->info)
+#ifdef USE_XFT
+            XftFontClose(Metadpy->dpy, ifnt->info);
+#else
+            XFreeFontSet(Metadpy->dpy, ifnt->info);
+#endif
+        if (iwin && iwin->xic)
+            XDestroyIC(iwin->xic);
+#ifdef USE_XFT
+        if (iwin && iwin->draw)
+            XftDrawDestroy(iwin->draw);
+#endif
+        angband_term[i] = nullptr;
+    }
+
+    if (Metadpy->xim)
+        XCloseIM(Metadpy->xim);
+    XUnregisterIMInstantiateCallback(Metadpy->dpy, NULL, NULL, NULL, IMInstantiateCallback, NULL);
+    XCloseDisplay(Metadpy->dpy);
+}
+
 /*
  * Initialize a term_data
  */
@@ -2226,6 +2254,7 @@ static errr term_data_init(term_data *td, int i)
     ch->res_class = res_class;
 
     XSetClassHint(Metadpy->dpy, Infowin->win, ch);
+    XFree(ch);
     sh = XAllocSizeHints();
     if (sh == nullptr)
         quit("XAllocSizeHints failed");
@@ -2251,6 +2280,7 @@ static errr term_data_init(term_data *td, int i)
     sh->base_width = (ox + ox);
     sh->base_height = (oy + oy);
     XSetWMNormalHints(Metadpy->dpy, Infowin->win, sh);
+    XFree(sh);
     Infowin_map();
 
 #ifdef USE_XIM
@@ -2260,6 +2290,7 @@ static errr term_data_init(term_data *td, int i)
     wh->flags = InputHint;
     wh->input = True;
     XSetWMHints(Metadpy->dpy, Infowin->win, wh);
+    XFree(wh);
 #endif
 
     if ((x >= 0) && (y >= 0))
@@ -2274,6 +2305,7 @@ static errr term_data_init(term_data *td, int i)
     t->bigcurs_hook = Term_bigcurs_x11;
     t->wipe_hook = Term_wipe_x11;
     t->text_hook = Term_text_x11;
+    t->nuke_hook = Term_nuke_x11;
     t->data = td;
     term_activate(t);
     return (0);
