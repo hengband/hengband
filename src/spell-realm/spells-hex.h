@@ -23,6 +23,7 @@ private:
     void gain_exp_from_hex();
     bool gain_exp_skilled(const int spell);
     bool gain_exp_expert(const int spell, const magic_type *s_ptr);
+    void gain_exp_master(const int spell, const magic_type *s_ptr);
 };
 
 bool stop_hex_spell_all(player_type *caster_ptr);

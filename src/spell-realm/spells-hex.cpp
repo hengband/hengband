@@ -238,15 +238,7 @@ void RealmHex::gain_exp_from_hex()
             continue;
         }
 
-        auto *floor_ptr = this->caster_ptr->current_floor_ptr;
-        if (this->caster_ptr->spell_exp[spell] < SPELL_EXP_MASTER) {
-            auto gain_condition = one_in_(5);
-            gain_condition &= (floor_ptr->dun_level + 5) > this->caster_ptr->lev;
-            gain_condition &= floor_ptr->dun_level > s_ptr->slevel;
-            if (gain_condition) {
-                this->caster_ptr->spell_exp[spell]++;
-            }
-        }
+        this->gain_exp_master(spell, s_ptr);
     }
 }
 
@@ -282,6 +274,21 @@ bool RealmHex::gain_exp_expert(const int spell, const magic_type *s_ptr)
     }
 
     return true;
+}
+
+void RealmHex::gain_exp_master(const int spell, const magic_type *s_ptr)
+{
+    if (this->caster_ptr->spell_exp[spell] >= SPELL_EXP_MASTER) {
+        return;
+    }
+
+    auto *floor_ptr = this->caster_ptr->current_floor_ptr;
+    auto gain_condition = one_in_(5);
+    gain_condition &= (floor_ptr->dun_level + 5) > this->caster_ptr->lev;
+    gain_condition &= floor_ptr->dun_level > s_ptr->slevel;
+    if (gain_condition) {
+        this->caster_ptr->spell_exp[spell]++;
+    }
 }
 
 /*!
