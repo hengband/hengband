@@ -73,7 +73,7 @@ static unsigned long create_pixel(Display *dpy, byte red, byte green, byte blue)
     XColor xcolour;
     if (!gamma_table_ready) {
         concptr str = getenv("ANGBAND_X11_GAMMA");
-        if (str != NULL)
+        if (str != nullptr)
             gamma_val = atoi(str);
 
         gamma_table_ready = true;
@@ -203,7 +203,7 @@ static XImage *ReadBMP(Display *dpy, char *Name)
     BITMAPFILEHEADER fileheader;
     BITMAPINFOHEADER infoheader;
 
-    XImage *Res = NULL;
+    XImage *Res = nullptr;
 
     char *Data;
 
@@ -221,7 +221,7 @@ static XImage *ReadBMP(Display *dpy, char *Name)
     f = fopen(Name, "r");
 
     /* No such file */
-    if (f == NULL) {
+    if (f == nullptr) {
         return nullptr;
     }
 
@@ -282,7 +282,7 @@ static XImage *ReadBMP(Display *dpy, char *Name)
     Res = XCreateImage(dpy, visual, depth, ZPixmap, 0 /*offset*/, Data, infoheader.biWidth, infoheader.biHeight, 8 /*bitmap_pad*/, 0 /*bytes_per_line*/);
 
     /* Failure */
-    if (Res == NULL) {
+    if (Res == nullptr) {
         C_KILL(Data, total, char);
         fclose(f);
         return nullptr;

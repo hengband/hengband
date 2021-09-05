@@ -124,7 +124,7 @@ void Rand_state_init(void)
 
     HCRYPTPROV hProvider;
 
-    CryptAcquireContext(&hProvider, NULL, NULL, PROV_RSA_FULL, 0);
+    CryptAcquireContext(&hProvider, nullptr, nullptr, PROV_RSA_FULL, 0);
 
     do {
         CryptGenRandom(hProvider, sizeof(Rand_state[0]) * 4, (BYTE *)Rand_state);
@@ -135,7 +135,7 @@ void Rand_state_init(void)
 #else
 
     /* Basic seed */
-    uint32_t seed = (time(NULL));
+    uint32_t seed = (time(nullptr));
 #ifdef SET_UID
     /* Mutate the seed on Unix machines */
     seed = ((seed >> 3) * (getpid() << 1));
@@ -365,7 +365,7 @@ int32_t Rand_external(int32_t m)
 
     if (!initialized) {
         /* Initialize with new seed */
-        uint32_t seed = (uint32_t)time(NULL);
+        uint32_t seed = (uint32_t)time(nullptr);
         Rand_seed(seed, Rand_state_external);
         initialized = true;
     }

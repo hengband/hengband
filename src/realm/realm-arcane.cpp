@@ -30,7 +30,7 @@
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param spell 魔法ID
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
- * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はnullptr文字列を返す。
  */
 concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 {
@@ -58,7 +58,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr) - 10, GF_ELEC, dir, damroll(dice, sides));
             }
@@ -74,7 +74,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
         {
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 wizard_lock(caster_ptr, dir);
             }
@@ -164,7 +164,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
         {
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 destroy_door(caster_ptr, dir);
             }
@@ -409,7 +409,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
         {
             if (cast) {
                 if (!ident_spell(caster_ptr, false))
-                    return NULL;
+                    return nullptr;
             }
         }
         break;
@@ -430,7 +430,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 wall_to_mud(caster_ptr, dir, 20 + randint1(30));
             }
@@ -452,7 +452,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 msg_print(_("光線が放たれた。", "A line of light appears."));
                 lite_line(caster_ptr, dir, damroll(6, 8));
@@ -514,7 +514,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
         {
             if (cast) {
                 if (!get_check(_("本当に他の階にテレポートしますか？", "Are you sure? (Teleport Level)")))
-                    return NULL;
+                    return nullptr;
                 teleport_level(caster_ptr, 0);
             }
         }
@@ -534,7 +534,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_beam(caster_ptr, GF_AWAY_ALL, dir, power);
             }
@@ -558,7 +558,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 int type;
 
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 switch (randint1(4)) {
                 case 1:
@@ -615,7 +615,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
             if (cast) {
                 if (!recall_player(caster_ptr, randint0(21) + 15))
-                    return NULL;
+                    return nullptr;
             }
         }
         break;

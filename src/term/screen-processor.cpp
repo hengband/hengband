@@ -30,7 +30,7 @@ void flush(void) { inkey_xtra = true; }
  */
 void screen_save()
 {
-    msg_print(NULL);
+    msg_print(nullptr);
 
     term_save();
 
@@ -45,7 +45,7 @@ void screen_save()
  */
 void screen_load(SCREEN_LOAD_OPT opt)
 {
-    msg_print(NULL);
+    msg_print(nullptr);
 
     switch (opt) {
     case SCREEN_LOAD_OPT::ONE:

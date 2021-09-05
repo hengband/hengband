@@ -292,7 +292,7 @@ void do_cmd_macros(player_type *creature_ptr)
             prt(_("押すキー: ", "Keypress: "), 18, 0);
             do_cmd_macro_aux_keymap(buf);
             string_free(keymap_act[mode][(byte)(buf[0])]);
-            keymap_act[mode][(byte)(buf[0])] = NULL;
+            keymap_act[mode][(byte)(buf[0])] = nullptr;
             msg_print(_("キー配置を削除しました。", "Removed a keymap."));
         } else if (key == '0') {
             prt(_("コマンド: マクロ行動の入力", "Command: Enter a new action"), 16, 0);

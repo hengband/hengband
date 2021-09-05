@@ -57,7 +57,7 @@ void building_recharge(player_type *player_ptr)
     char tmp_str[MAX_NLEN];
     if (!o_ptr->is_known()) {
         msg_format(_("充填する前に鑑定されている必要があります！", "The item must be identified first!"));
-        msg_print(NULL);
+        msg_print(nullptr);
 
         if ((player_ptr->au >= 50) && get_check(_("＄50で鑑定しますか？ ", "Identify for 50 gold? ")))
 
@@ -221,13 +221,13 @@ void building_recharge_all(player_type *player_ptr)
 
     if (!total_cost) {
         msg_print(_("充填する必要はありません。", "No need to recharge."));
-        msg_print(NULL);
+        msg_print(nullptr);
         return;
     }
 
     if (player_ptr->au < total_cost) {
         msg_format(_("すべてのアイテムを再充填するには＄%d 必要です！", "You need %d gold to recharge all items!"), total_cost);
-        msg_print(NULL);
+        msg_print(nullptr);
         return;
     }
 
@@ -271,7 +271,7 @@ void building_recharge_all(player_type *player_ptr)
     }
 
     msg_format(_("＄%d で再充填しました。", "You pay %d gold."), total_cost);
-    msg_print(NULL);
+    msg_print(nullptr);
     player_ptr->update |= (PU_COMBINE | PU_REORDER);
     player_ptr->window_flags |= (PW_INVEN);
     player_ptr->au -= total_cost;

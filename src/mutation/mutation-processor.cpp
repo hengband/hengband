@@ -137,7 +137,7 @@ void process_world_aux_mutation(player_type *creature_ptr)
         if (!has_resist_nexus(creature_ptr) && creature_ptr->muta.has_not(MUTA::VTELEPORT) && !creature_ptr->anti_tele) {
             disturb(creature_ptr, false, true);
             msg_print(_("あなたの位置は突然ひじょうに不確定になった...", "Your position suddenly seems very uncertain..."));
-            msg_print(NULL);
+            msg_print(nullptr);
             teleport_player(creature_ptr, 40, TELEPORT_PASSIVE);
         }
     }
@@ -155,7 +155,7 @@ void process_world_aux_mutation(player_type *creature_ptr)
 
         if (!has_resist_chaos(creature_ptr)) {
             if (one_in_(20)) {
-                msg_print(NULL);
+                msg_print(nullptr);
                 if (one_in_(3))
                     lose_all_info(creature_ptr);
                 else
@@ -184,7 +184,7 @@ void process_world_aux_mutation(player_type *creature_ptr)
     if (creature_ptr->muta.has(MUTA::FLATULENT) && (randint1(3000) == 13)) {
         disturb(creature_ptr, false, true);
         msg_print(_("ブゥーーッ！おっと。", "BRRAAAP! Oops."));
-        msg_print(NULL);
+        msg_print(nullptr);
         fire_ball(creature_ptr, GF_POIS, 0, creature_ptr->lev, 3);
     }
 
@@ -195,7 +195,7 @@ void process_world_aux_mutation(player_type *creature_ptr)
             "Magical energy flows through you! You must release it!"));
 
         flush();
-        msg_print(NULL);
+        msg_print(nullptr);
         (void)get_hack_dir(creature_ptr, &dire);
         fire_ball(creature_ptr, GF_MANA, dire, creature_ptr->lev * 2, 3);
     }
@@ -235,7 +235,7 @@ void process_world_aux_mutation(player_type *creature_ptr)
             }
         }
 
-        msg_print(NULL);
+        msg_print(nullptr);
     }
 
     if (creature_ptr->muta.has(MUTA::BANISH_ALL) && one_in_(9000)) {
@@ -252,14 +252,14 @@ void process_world_aux_mutation(player_type *creature_ptr)
             msg_print(_("店の主人が丘に向かって走っている！", "You see one of the shopkeepers running for the hills!"));
             store_shuffle(creature_ptr, n);
         }
-        msg_print(NULL);
+        msg_print(nullptr);
     }
 
     if (creature_ptr->muta.has(MUTA::EAT_LIGHT) && one_in_(3000)) {
         object_type *o_ptr;
 
         msg_print(_("影につつまれた。", "A shadow passes over you."));
-        msg_print(NULL);
+        msg_print(nullptr);
 
         if ((creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) {
             hp_player(creature_ptr, 10);
@@ -301,7 +301,7 @@ void process_world_aux_mutation(player_type *creature_ptr)
     if (creature_ptr->muta.has(MUTA::RAW_CHAOS) && !creature_ptr->anti_magic && one_in_(8000)) {
         disturb(creature_ptr, false, true);
         msg_print(_("周りの空間が歪んでいる気がする！", "You feel the world warping around you!"));
-        msg_print(NULL);
+        msg_print(nullptr);
         fire_ball(creature_ptr, GF_CHAOS, 0, creature_ptr->lev, 8);
     }
 
@@ -313,7 +313,7 @@ void process_world_aux_mutation(player_type *creature_ptr)
     if (creature_ptr->muta.has(MUTA::WRAITH) && !creature_ptr->anti_magic && one_in_(3000)) {
         disturb(creature_ptr, false, true);
         msg_print(_("非物質化した！", "You feel insubstantial!"));
-        msg_print(NULL);
+        msg_print(nullptr);
         set_wraith_form(creature_ptr, randint1(creature_ptr->lev / 2) + (creature_ptr->lev / 2), false);
     }
 
@@ -357,7 +357,7 @@ void process_world_aux_mutation(player_type *creature_ptr)
         if (!sustained) {
             disturb(creature_ptr, false, true);
             msg_print(_("自分が衰弱していくのが分かる！", "You can feel yourself wasting away!"));
-            msg_print(NULL);
+            msg_print(nullptr);
             (void)dec_stat(creature_ptr, which_stat, randint1(6) + 6, one_in_(3));
         }
     }
@@ -389,7 +389,7 @@ void process_world_aux_mutation(player_type *creature_ptr)
     if (creature_ptr->muta.has(MUTA::NAUSEA) && !creature_ptr->slow_digest && one_in_(9000)) {
         disturb(creature_ptr, false, true);
         msg_print(_("胃が痙攣し、食事を失った！", "Your stomach roils, and you lose your lunch!"));
-        msg_print(NULL);
+        msg_print(nullptr);
         set_food(creature_ptr, PY_FOOD_WEAK);
         if (music_singing_any(creature_ptr))
             stop_singing(creature_ptr);
@@ -431,7 +431,7 @@ void process_world_aux_mutation(player_type *creature_ptr)
     if (creature_ptr->muta.has(MUTA::INVULN) && !creature_ptr->anti_magic && one_in_(5000)) {
         disturb(creature_ptr, false, true);
         msg_print(_("無敵な気がする！", "You feel invincible!"));
-        msg_print(NULL);
+        msg_print(nullptr);
         (void)set_invuln(creature_ptr, randint1(8) + 8, false);
     }
 
@@ -472,12 +472,12 @@ void process_world_aux_mutation(player_type *creature_ptr)
 bool drop_weapons(player_type *creature_ptr)
 {
     INVENTORY_IDX slot = 0;
-    object_type *o_ptr = NULL;
+    object_type *o_ptr = nullptr;
 
     if (creature_ptr->wild_mode)
         return false;
 
-    msg_print(NULL);
+    msg_print(nullptr);
     if (has_melee_weapon(creature_ptr, INVEN_MAIN_HAND)) {
         slot = INVEN_MAIN_HAND;
         o_ptr = &creature_ptr->inventory_list[INVEN_MAIN_HAND];

@@ -294,7 +294,7 @@ const std::array<const option_type, MAX_OPTION_INFO> option_info = {{
     { &record_named_pet, false, OPT_PAGE_PLAYRECORD, 4, 23, "record_named_pet", _("名前つきペットの情報を記録する", "Record information about named pets") },
 
     /*** End of Table ***/
-    { NULL, 0, 0, 0, 0, NULL, NULL }
+    { nullptr, 0, 0, 0, 0, nullptr, nullptr }
 }};
 
 /*!

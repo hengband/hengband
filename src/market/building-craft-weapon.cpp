@@ -412,7 +412,7 @@ PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
 
         if (total + cost > customer_ptr->au) {
             msg_print(_("お金が足りません！", "You don't have enough money!"));
-            msg_print(NULL);
+            msg_print(nullptr);
             continue;
         }
 
@@ -425,7 +425,7 @@ PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
 
         if (i2_ptr == o_ptr[0] || (n == 2 && i2_ptr == o_ptr[1])) {
             msg_print(_("表示中の武器は選べません！", "Select a different weapon than those displayed."));
-            msg_print(NULL);
+            msg_print(nullptr);
             continue;
         }
 

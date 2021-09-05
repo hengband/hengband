@@ -40,7 +40,7 @@ static bool cmd_visuals_aux(int i, IDX *num, IDX max)
         if (!get_string(format("Input new number(0-%d): ", max - 1), str, 4))
             return false;
 
-        IDX tmp = (IDX)strtol(str, NULL, 0);
+        IDX tmp = (IDX)strtol(str, nullptr, 0);
         if (tmp >= 0 && tmp < max)
             *num = tmp;
     } else if (isupper(i))
@@ -88,7 +88,7 @@ void do_cmd_visuals(player_type *creature_ptr)
     screen_save();
     while (true) {
         term_clear();
-        print_visuals_menu(NULL);
+        print_visuals_menu(nullptr);
         int i = inkey();
         if (i == ESCAPE)
             break;

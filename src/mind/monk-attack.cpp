@@ -248,7 +248,7 @@ bool double_attack(player_type *creature_ptr)
     POSITION x = creature_ptr->x + ddx[dir];
     if (!creature_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
         msg_print(_("その方向にはモンスターはいません。", "You don't see any monster in this direction"));
-        msg_print(NULL);
+        msg_print(nullptr);
         return true;
     }
 

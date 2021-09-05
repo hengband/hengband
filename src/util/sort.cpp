@@ -133,12 +133,12 @@ bool ang_sort_comp_importance(player_type *player_ptr, vptr u, vptr v, int a, in
     if (ca_ptr->m_idx && ma_ptr->ml)
         ap_ra_ptr = &r_info[ma_ptr->ap_r_idx];
     else
-        ap_ra_ptr = NULL;
+        ap_ra_ptr = nullptr;
 
     if (cb_ptr->m_idx && mb_ptr->ml)
         ap_rb_ptr = &r_info[mb_ptr->ap_r_idx];
     else
-        ap_rb_ptr = NULL;
+        ap_rb_ptr = nullptr;
 
     if (ap_ra_ptr && !ap_rb_ptr)
         return true;

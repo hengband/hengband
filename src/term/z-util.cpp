@@ -16,7 +16,7 @@
 /*
  * Convenient storage of the program name
  */
-concptr argv0 = NULL;
+concptr argv0 = nullptr;
 
 
 /*
@@ -65,7 +65,7 @@ bool prefix(concptr s, concptr t)
 /*
  * Redefinable "plog" action
  */
-void (*plog_aux)(concptr) = NULL;
+void (*plog_aux)(concptr) = nullptr;
 
 /*
  * Print (or log) a "warning" message (ala "perror()")
@@ -85,10 +85,10 @@ void plog(concptr str)
 /*
  * Redefinable "quit" action
  */
-void (*quit_aux)(concptr) = NULL;
+void (*quit_aux)(concptr) = nullptr;
 
 /*
- * Exit (ala "exit()").  If 'str' is NULL, do "exit(0)".
+ * Exit (ala "exit()").  If 'str' is nullptr, do "exit(0)".
  * If 'str' begins with "+" or "-", do "exit(atoi(str))".
  * Otherwise, plog() 'str' and exit with an error code of -1.
  * But always use 'quit_aux', if set, before anything else.
@@ -116,7 +116,7 @@ void quit(concptr str)
 /*
  * Redefinable "core" action
  */
-void (*core_aux)(concptr) = NULL;
+void (*core_aux)(concptr) = nullptr;
 
 /*
  * Dump a core file, after printing a warning message
@@ -124,7 +124,7 @@ void (*core_aux)(concptr) = NULL;
  */
 void core(concptr str)
 {
-	char *crash = NULL;
+	char *crash = nullptr;
 
 	/* Use the aux function */
 	if (core_aux) (*core_aux)(str);

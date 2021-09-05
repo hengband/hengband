@@ -9,7 +9,7 @@
  * エラーメッセージの名称定義 / Standard error message text
  */
 concptr err_str[PARSE_ERROR_MAX] = {
-    NULL,
+    nullptr,
     _("文法エラー", "parse error"),
     _("古いファイル", "obsolete file"),
     _("記録ヘッダがない", "missing record header"),

@@ -534,7 +534,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
                 msg_print(_("身の毛もよだつ光景が頭に浮かんだ。", "A horrible vision enters your mind."));
 
                 /* Have some nightmares */
-                sanity_blast(trapped_ptr, NULL, false);
+                sanity_blast(trapped_ptr, nullptr, false);
             }
             (void)set_paralyzed(trapped_ptr, trapped_ptr->paralyzed + randint0(10) + 5);
         }

@@ -25,7 +25,7 @@ void do_cmd_save_game(player_type *creature_ptr, int is_autosave)
     else
         disturb(creature_ptr, true, true);
 
-    msg_print(NULL);
+    msg_print(nullptr);
     handle_stuff(creature_ptr);
     prt(_("ゲームをセーブしています...", "Saving game..."), 0, 0);
     term_fresh();

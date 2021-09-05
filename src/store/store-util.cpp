@@ -18,7 +18,7 @@
 #include "world/world-object.h"
 
 int cur_store_num = 0;
-store_type *st_ptr = NULL;
+store_type *st_ptr = nullptr;
 
 /*!
  * @brief 店舗のオブジェクト数を増やす /

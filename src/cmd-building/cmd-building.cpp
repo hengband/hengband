@@ -83,7 +83,7 @@ bool reinit_wilderness = false;
 static void town_history(player_type *player_ptr)
 {
     screen_save();
-    (void)show_file(player_ptr, true, _("jbldg.txt", "bldg.txt"), NULL, 0, 0);
+    (void)show_file(player_ptr, true, _("jbldg.txt", "bldg.txt"), nullptr, 0, 0);
     screen_load();
 }
 
@@ -227,7 +227,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
         }
 
         msg_print(_("治すべき突然変異が無い。", "You have no mutations."));
-        msg_print(NULL);
+        msg_print(nullptr);
         break;
     }
 

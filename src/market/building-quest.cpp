@@ -103,7 +103,7 @@ void castle_quest(player_type *player_ptr)
 
         clear_bldg(4, 18);
         msg_print(_("放棄しました。", "You gave up."));
-        msg_print(NULL);
+        msg_print(nullptr);
         record_quest_final_status(q_ptr, player_ptr->lev, QUEST_STATUS_FAILED);
     }
 

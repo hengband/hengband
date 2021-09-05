@@ -19,7 +19,7 @@ using key_name_func = concptr (*)(int, char *);
  * action-typeはaction_typeメンバで指定する。
  * key_name_funcにより、action-valと.cfg内の読取対象キーの対応を取る。
  * key_name_funcの引数にaction-valが渡され、対応する読取対象キーを返す。
- * key_name_func引数のaction-valは0から1,2,3...と順に呼ばれ、key_name_funcがNULLを返すまで続ける。
+ * key_name_func引数のaction-valは0から1,2,3...と順に呼ばれ、key_name_funcがnullptrを返すまで続ける。
  */
 struct cfg_section {
 
@@ -32,8 +32,8 @@ struct cfg_section {
      * *action-val : the 2nd parameter of "term_xtra()"
      */
     key_name_func key_at;
-    //! 1つでもデータを読み込めた場合にtrueを設定する。（NULLの場合を除く）
-    bool *has_data = NULL;
+    //! 1つでもデータを読み込めた場合にtrueを設定する。（nullptrの場合を除く）
+    bool *has_data = nullptr;
 };
 
 class CfgData {

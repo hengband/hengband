@@ -147,7 +147,7 @@ static void restore_signal(void)
     val0.it_value.tv_usec = 0;
 
     /* アラーム解除 */
-    setitimer(ITIMER_REAL, &val0, NULL);
+    setitimer(ITIMER_REAL, &val0, nullptr);
     signal(SIGALRM, sig_alm_saved);
     signal(SIGINT, sig_int_saved);
 #endif
@@ -197,7 +197,7 @@ int connect_server(int timeout, concptr host, int port)
     sig_alm_saved = signal(SIGALRM, interrupt_report);
 
     /* タイムアウトの時間を設定 */
-    setitimer(ITIMER_REAL, &val, NULL);
+    setitimer(ITIMER_REAL, &val, nullptr);
 #else
     /* Unused in Windows */
     (void)timeout;
@@ -205,7 +205,7 @@ int connect_server(int timeout, concptr host, int port)
 
     /* プロキシが設定されていればプロキシに繋ぐ */
     if (proxy && proxy[0]) {
-        if ((hp = gethostbyname(proxy)) == NULL) {
+        if ((hp = gethostbyname(proxy)) == nullptr) {
 #ifdef JP
             errstr = "エラー: プロキシのアドレスが不正です";
 #else
@@ -216,7 +216,7 @@ int connect_server(int timeout, concptr host, int port)
 
             return -1;
         }
-    } else if ((hp = gethostbyname(host)) == NULL) {
+    } else if ((hp = gethostbyname(host)) == nullptr) {
 #ifdef JP
         errstr = "エラー: サーバのアドレスが不正です";
 #else

@@ -252,7 +252,7 @@ spoiler_output_status spoil_mon_info(concptr fname)
         sprintf(buf, "Exp:%ld\n", (long)(r_ptr->mexp));
         spoil_out(buf);
         output_monster_spoiler(who[i], roff_func);
-        spoil_out(NULL);
+        spoil_out(nullptr);
     }
 
     C_KILL(who, max_r_idx, int16_t);

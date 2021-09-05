@@ -35,9 +35,9 @@ EnumClassFlagGroup<RF_ABILITY> vault_aux_dragon_mask4;
  */
 void vault_prep_clone(player_type *player_ptr)
 {
-    get_mon_num_prep(player_ptr, vault_aux_simple, NULL);
+    get_mon_num_prep(player_ptr, vault_aux_simple, nullptr);
     vault_aux_race = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 10, 0);
-    get_mon_num_prep(player_ptr, NULL, NULL);
+    get_mon_num_prep(player_ptr, nullptr, nullptr);
 }
 
 /*!
@@ -46,9 +46,9 @@ void vault_prep_clone(player_type *player_ptr)
  */
 void vault_prep_symbol(player_type *player_ptr)
 {
-    get_mon_num_prep(player_ptr, vault_aux_simple, NULL);
+    get_mon_num_prep(player_ptr, vault_aux_simple, nullptr);
     MONRACE_IDX r_idx = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 10, 0);
-    get_mon_num_prep(player_ptr, NULL, NULL);
+    get_mon_num_prep(player_ptr, nullptr, nullptr);
     vault_aux_char = r_info[r_idx].d_char;
 }
 

@@ -48,7 +48,7 @@ static concptr basic_key_at(int index, char *buf)
     (void)buf;
 
     if (index >= MUSIC_BASIC_MAX)
-        return NULL;
+        return nullptr;
 
     return angband_music_basic_name[index];
 }
@@ -67,7 +67,7 @@ static inline DUNGEON_IDX get_dungeon_count()
 static concptr dungeon_key_at(int index, char *buf)
 {
     if (index >= get_dungeon_count())
-        return NULL;
+        return nullptr;
 
     sprintf(buf, "dungeon%03d", index);
     return buf;
@@ -87,7 +87,7 @@ static inline QUEST_IDX get_quest_count()
 static concptr quest_key_at(int index, char *buf)
 {
     if (index >= get_quest_count())
-        return NULL;
+        return nullptr;
 
     sprintf(buf, "quest%03d", index);
     return buf;
@@ -107,7 +107,7 @@ static inline int16_t get_town_count()
 static concptr town_key_at(int index, char *buf)
 {
     if (index >= get_town_count())
-        return NULL;
+        return nullptr;
 
     sprintf(buf, "town%03d", index);
     return buf;
@@ -127,7 +127,7 @@ static inline MONRACE_IDX get_monster_count()
 static concptr monster_key_at(int index, char *buf)
 {
     if (index >= get_monster_count())
-        return NULL;
+        return nullptr;
 
     sprintf(buf, "monster%04d", index);
     return buf;

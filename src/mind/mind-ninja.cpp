@@ -396,7 +396,7 @@ bool cast_ninja_spell(player_type *caster_ptr, mind_ninja_type spell)
         set_oppose_fire(caster_ptr, (TIME_EFFECT)plev, false);
         break;
     case NYUSIN:
-        return rush_attack(caster_ptr, NULL);
+        return rush_attack(caster_ptr, nullptr);
     case SYURIKEN_SPREADING: {
         for (int i = 0; i < 8; i++) {
             OBJECT_IDX slot;

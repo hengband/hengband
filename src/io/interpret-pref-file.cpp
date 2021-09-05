@@ -26,7 +26,7 @@
 
 #define MAX_MACRO_CHARS 16128 // 1つのマクロキー押下で実行可能なコマンド最大数 (エスケープシーケンス含む).
 
-char *histpref_buf = NULL;
+char *histpref_buf = nullptr;
 
 /*!
  * @brief Rトークンの解釈 / Process "R:<num>:<a>/<c>" -- attr/char for monster races
@@ -39,9 +39,9 @@ static errr interpret_r_token(char *buf)
 	if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) return 1;
 
 	monster_race *r_ptr;
-	int i = (int)strtol(zz[0], NULL, 0);
-	TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], NULL, 0);
-	SYMBOL_CODE n2 = (SYMBOL_CODE)strtol(zz[2], NULL, 0);
+	int i = (int)strtol(zz[0], nullptr, 0);
+	TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
+	SYMBOL_CODE n2 = (SYMBOL_CODE)strtol(zz[2], nullptr, 0);
 	if (i >= max_r_idx) return 1;
 
 	r_ptr = &r_info[i];
@@ -63,9 +63,9 @@ static errr interpret_k_token(char *buf)
 	if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) return 1;
 
 	object_kind *k_ptr;
-	int i = (int)strtol(zz[0], NULL, 0);
-	TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], NULL, 0);
-	SYMBOL_CODE n2 = (SYMBOL_CODE)strtol(zz[2], NULL, 0);
+	int i = (int)strtol(zz[0], nullptr, 0);
+	TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
+	SYMBOL_CODE n2 = (SYMBOL_CODE)strtol(zz[2], nullptr, 0);
 	if (i >= max_k_idx) return 1;
 
 	k_ptr = &k_info[i];
@@ -87,8 +87,8 @@ static errr decide_feature_type(int i, int num, char **zz)
 	feature_type *f_ptr;
 	f_ptr = &f_info[i];
 
-	TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], NULL, 0);
-	SYMBOL_CODE n2 = (SYMBOL_CODE)strtol(zz[2], NULL, 0);
+	TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
+	SYMBOL_CODE n2 = (SYMBOL_CODE)strtol(zz[2], nullptr, 0);
 	if (n1 || (!(n2 & 0x80) && n2)) f_ptr->x_attr[F_LIT_STANDARD] = n1; /* Allow TERM_DARK text */
 	if (n2) f_ptr->x_char[F_LIT_STANDARD] = n2;
 
@@ -118,8 +118,8 @@ static errr decide_feature_type(int i, int num, char **zz)
 		/* Use desired lighting */
 		for (int j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++)
 		{
-			n1 = (TERM_COLOR)strtol(zz[j * 2 + 1], NULL, 0);
-			n2 = (SYMBOL_CODE)strtol(zz[j * 2 + 2], NULL, 0);
+			n1 = (TERM_COLOR)strtol(zz[j * 2 + 1], nullptr, 0);
+			n2 = (SYMBOL_CODE)strtol(zz[j * 2 + 2], nullptr, 0);
 			if (n1 || (!(n2 & 0x80) && n2)) f_ptr->x_attr[j] = n1; /* Allow TERM_DARK text */
 			if (n2) f_ptr->x_char[j] = n2;
 		}
@@ -149,7 +149,7 @@ static errr interpret_f_token(char *buf)
 	if ((num != 3) && (num != 4) && (num != F_LIT_MAX * 2 + 1)) return 1;
 	else if ((num == 4) && !streq(zz[3], "LIT")) return 1;
 
-	int i = (int)strtol(zz[0], NULL, 0);
+	int i = (int)strtol(zz[0], nullptr, 0);
 	if (i >= max_f_idx) return 1;
 
 	return decide_feature_type(i, num, zz);
@@ -166,9 +166,9 @@ static errr interpret_s_token(char *buf)
 	char *zz[16];
 	if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) return 1;
 
-	int j = (byte)strtol(zz[0], NULL, 0);
-	TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], NULL, 0);
-	SYMBOL_CODE n2 = (SYMBOL_CODE)strtol(zz[2], NULL, 0);
+	int j = (byte)strtol(zz[0], nullptr, 0);
+	TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
+	SYMBOL_CODE n2 = (SYMBOL_CODE)strtol(zz[2], nullptr, 0);
 	misc_to_attr[j] = n1;
 	misc_to_char[j] = n2;
 	return 0;
@@ -185,9 +185,9 @@ static errr interpret_u_token(char *buf)
 	char *zz[16];
 	if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) return 1;
 
-	int j = (int)strtol(zz[0], NULL, 0);
-	TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], NULL, 0);
-	SYMBOL_CODE n2 = (SYMBOL_CODE)strtol(zz[2], NULL, 0);
+	int j = (int)strtol(zz[0], nullptr, 0);
+	TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
+	SYMBOL_CODE n2 = (SYMBOL_CODE)strtol(zz[2], nullptr, 0);
 	for (int i = 1; i < max_k_idx; i++)
 	{
 		object_kind *k_ptr = &k_info[i];
@@ -212,8 +212,8 @@ static errr interpret_e_token(char *buf)
 	char *zz[16];
 	if (tokenize(buf + 2, 2, zz, TOKENIZE_CHECKQUOTE) != 2) return 1;
 
-	int j = (byte)strtol(zz[0], NULL, 0) % 128;
-	TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], NULL, 0);
+	int j = (byte)strtol(zz[0], nullptr, 0) % 128;
+	TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], nullptr, 0);
 	if (n1) tval_to_attr[j] = n1;
 	return 0;
 }
@@ -242,7 +242,7 @@ static errr interpret_c_token(char *buf)
 	char *zz[16];
 	if (tokenize(buf + 2, 2, zz, TOKENIZE_CHECKQUOTE) != 2) return 1;
 
-	int mode = strtol(zz[0], NULL, 0);
+	int mode = strtol(zz[0], nullptr, 0);
 	if ((mode < 0) || (mode >= KEYMAP_MODES)) return 1;
 
 	char tmp[1024];
@@ -266,11 +266,11 @@ static errr interpret_v_token(char *buf)
 	char *zz[16];
 	if (tokenize(buf + 2, 5, zz, TOKENIZE_CHECKQUOTE) != 5) return 1;
 
-	int i = (byte)strtol(zz[0], NULL, 0);
-	angband_color_table[i][0] = (byte)strtol(zz[1], NULL, 0);
-	angband_color_table[i][1] = (byte)strtol(zz[2], NULL, 0);
-	angband_color_table[i][2] = (byte)strtol(zz[3], NULL, 0);
-	angband_color_table[i][3] = (byte)strtol(zz[4], NULL, 0);
+	int i = (byte)strtol(zz[0], nullptr, 0);
+	angband_color_table[i][0] = (byte)strtol(zz[1], nullptr, 0);
+	angband_color_table[i][1] = (byte)strtol(zz[2], nullptr, 0);
+	angband_color_table[i][2] = (byte)strtol(zz[3], nullptr, 0);
+	angband_color_table[i][3] = (byte)strtol(zz[4], nullptr, 0);
 	return 0;
 }
 
@@ -288,8 +288,8 @@ static errr interpret_xy_token(player_type *creature_ptr, char *buf)
 {
 	for (int i = 0; option_info[i].o_desc; i++)
 	{
-		bool is_option = option_info[i].o_var != NULL;
-		is_option &= option_info[i].o_text != NULL;
+		bool is_option = option_info[i].o_var != nullptr;
+		is_option &= option_info[i].o_text != nullptr;
 		is_option &= streq(option_info[i].o_text, buf + 2);
 		if (!is_option) continue;
 
@@ -300,7 +300,7 @@ static errr interpret_xy_token(player_type *creature_ptr, char *buf)
 			(OPT_PAGE_BIRTH == option_info[i].o_page) && !current_world_ptr->wizard)
 		{
 			msg_format(_("初期オプションは変更できません! '%s'", "Birth options can not changed! '%s'"), buf);
-			msg_print(NULL);
+			msg_print(nullptr);
 			return 0;
 		}
 
@@ -317,7 +317,7 @@ static errr interpret_xy_token(player_type *creature_ptr, char *buf)
 	}
 
 	msg_format(_("オプションの名前が正しくありません： %s", "Ignored invalid option: %s"), buf);
-	msg_print(NULL);
+	msg_print(nullptr);
 	return 0;
 }
 
@@ -354,11 +354,11 @@ static errr interpret_z_token(char *buf)
  */
 static errr decide_template_modifier(int tok, char **zz)
 {
-	if (macro_template != NULL)
+	if (macro_template != nullptr)
 	{
 		int macro_modifier_length = strlen(macro_modifier_chr);
 		string_free(macro_template);
-		macro_template = NULL;
+		macro_template = nullptr;
 		string_free(macro_modifier_chr);
 		for (int i = 0; i < macro_modifier_length; i++)
 		{

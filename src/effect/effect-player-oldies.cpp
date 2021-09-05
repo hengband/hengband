@@ -47,7 +47,7 @@ void effect_player_old_sleep(player_type *target_ptr, effect_player_type *ep_ptr
         msg_print(_("恐ろしい光景が頭に浮かんできた。", "A horrible vision enters your mind."));
 
         /* Have some nightmares */
-        sanity_blast(target_ptr, NULL, false);
+        sanity_blast(target_ptr, nullptr, false);
     }
 
     set_paralyzed(target_ptr, target_ptr->paralyzed + ep_ptr->dam);

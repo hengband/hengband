@@ -398,7 +398,7 @@ void sense_inventory2(player_type *creature_ptr)
 }
 
 /*!
- * @brief 重度擬似鑑定の判断処理 / Return a "feeling" (or NULL) about an item.  Method 1 (Heavy).
+ * @brief 重度擬似鑑定の判断処理 / Return a "feeling" (or nullptr) about an item.  Method 1 (Heavy).
  * @param o_ptr 擬似鑑定を行うオブジェクトの参照ポインタ。
  * @return 擬似鑑定結果のIDを返す。
  */
@@ -433,7 +433,7 @@ item_feel_type pseudo_value_check_heavy(object_type *o_ptr)
 }
 
 /*!
- * @brief 軽度擬似鑑定の判断処理 / Return a "feeling" (or NULL) about an item.  Method 2 (Light).
+ * @brief 軽度擬似鑑定の判断処理 / Return a "feeling" (or nullptr) about an item.  Method 2 (Light).
  * @param o_ptr 擬似鑑定を行うオブジェクトの参照ポインタ。
  * @return 擬似鑑定結果のIDを返す。
  */

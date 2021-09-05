@@ -613,7 +613,7 @@ bool detect_monsters_xxx(player_type *caster_ptr, POSITION range, uint32_t match
         }
 
         msg_format(_("%sの存在を感じとった！", "You sense the presence of %s!"), desc_monsters);
-        msg_print(NULL);
+        msg_print(nullptr);
     }
 
     return flag;

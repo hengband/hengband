@@ -195,7 +195,7 @@ void draw_text_editor(player_type *player_ptr, text_body_type *tb)
         return;
 
     autopick_type an_entry, *entry = &an_entry;
-    concptr str1 = NULL, str2 = NULL;
+    concptr str1 = nullptr, str2 = nullptr;
     for (int j = 0; j < DESCRIPT_HGT; j++) {
         term_erase(0, tb->hgt + 2 + j, tb->wid);
     }

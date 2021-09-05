@@ -35,11 +35,11 @@ static cfg_key make_cfg_key(int type, int val)
  * @brief マップのキーに対応する値を取得する
  * @param key1_type the "actions" value of "term_xtra()". see:z-term.h TERM_XTRA_xxxxx
  * @param key2_val the 2nd parameter of "term_xtra()"
- * @return キーに対応する値を返す。登録されていない場合はNULLを返す。
+ * @return キーに対応する値を返す。登録されていない場合はnullptrを返す。
  */
 static cfg_values *get_map_value(cfg_map *map, int key1_type, int key2_val)
 {
-    cfg_values *value = NULL;
+    cfg_values *value = nullptr;
     auto ite = map->find(make_cfg_key(key1_type, key2_val));
     if (ite != map->end()) {
         value = ite->second;
@@ -51,13 +51,13 @@ static cfg_values *get_map_value(cfg_map *map, int key1_type, int key2_val)
  * @brief 登録されている中からランダムに選択する
  * @param type the "actions" value of "term_xtra()". see:z-term.h TERM_XTRA_xxxxx
  * @param val the 2nd parameter of "term_xtra()"
- * @return キーに対応する値、複数のファイル名の中からからランダムに返す。登録されていない場合はNULLを返す。
+ * @return キーに対応する値、複数のファイル名の中からからランダムに返す。登録されていない場合はnullptrを返す。
  */
 concptr CfgData::get_rand(int key1_type, int key2_val)
 {
     cfg_values *filenames = get_map_value(this->map, key1_type, key2_val);
     if (!filenames) {
-        return NULL;
+        return nullptr;
     }
 
     return filenames->at(Rand_external(filenames->size()));
@@ -107,7 +107,7 @@ CfgData *CfgReader::read_sections(std::initializer_list<cfg_section> sections)
         bool has_data = false;
         int index = 0;
         concptr read_key;
-        while ((read_key = section.key_at(index, key_buf)) != NULL) {
+        while ((read_key = section.key_at(index, key_buf)) != nullptr) {
             GetPrivateProfileStringA(section.section_name, read_key, "", buf, MAIN_WIN_MAX_PATH, this->cfg_path.c_str());
             if (*buf != '\0') {
                 cfg_values *filenames = new cfg_values();

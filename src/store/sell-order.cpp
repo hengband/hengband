@@ -103,7 +103,7 @@ void store_sell(player_type *owner_ptr)
 
     int amt = 1;
     if (o_ptr->number > 1) {
-        amt = get_quantity(NULL, o_ptr->number);
+        amt = get_quantity(nullptr, o_ptr->number);
         if (amt <= 0)
             return;
     }
@@ -131,7 +131,7 @@ void store_sell(player_type *owner_ptr)
     bool placed = false;
     if ((cur_store_num != STORE_HOME) && (cur_store_num != STORE_MUSEUM)) {
         msg_format(_("%s(%c)を売却する。", "Selling %s (%c)."), o_name, index_to_label(item));
-        msg_print(NULL);
+        msg_print(nullptr);
 
         auto res = prompt_to_sell(owner_ptr, q_ptr);
         placed = res.has_value();

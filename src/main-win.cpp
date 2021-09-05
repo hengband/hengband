@@ -64,7 +64,7 @@
  * <p>
  * The various "warning" messages assume the existance of the "screen.w"
  * window, I think, and only a few calls actually check for its existance,
- * this may be okay since "NULL" means "on top of all windows". (?)  The
+ * this may be okay since "nullptr" means "on top of all windows". (?)  The
  * user must never be allowed to "hide" the main window, or the "menubar"
  * will disappear.
  * </p>
@@ -199,7 +199,7 @@ static bool keep_subwindows = true;
 /*
  * Full path to ANGBAND.INI
  */
-static concptr ini_file = NULL;
+static concptr ini_file = nullptr;
 
 /*
  * Name of application
@@ -1598,7 +1598,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
             break;
         }
 
-        quit(NULL);
+        quit(nullptr);
         break;
     }
     case IDM_FILE_SCORE: {
@@ -1610,7 +1610,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         } else {
             screen_save();
             term_clear();
-            display_scores(0, MAX_HISCORES, -1, NULL);
+            display_scores(0, MAX_HISCORES, -1, nullptr);
             (void)fd_close(highscore_fd);
             highscore_fd = -1;
             screen_load();
@@ -1877,7 +1877,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
         ofn.lpstrTitle = _(L"壁紙を選んでね。", L"Choose wall paper.");
         ofn.Flags = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
 
-        if (get_open_filename(&ofn, NULL, wallpaper_file, MAIN_WIN_MAX_PATH)) {
+        if (get_open_filename(&ofn, nullptr, wallpaper_file, MAIN_WIN_MAX_PATH)) {
             change_bg_mode(bg_mode::BG_ONE, true, true);
         }
         break;
@@ -2314,7 +2314,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
     }
     case WM_CLOSE: {
         if (!game_in_progress || !current_world_ptr->character_generated) {
-            quit(NULL);
+            quit(nullptr);
             return 0;
         }
 
@@ -2332,7 +2332,7 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
     }
     case WM_QUERYENDSESSION: {
         if (!game_in_progress || !current_world_ptr->character_generated) {
-            quit(NULL);
+            quit(nullptr);
             return 0;
         }
 
@@ -2345,11 +2345,11 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         signals_ignore_tstp();
         (void)strcpy(p_ptr->died_from, _("(緊急セーブ)", "(panic save)"));
         (void)save_player(p_ptr, SAVE_TYPE_CLOSE_GAME);
-        quit(NULL);
+        quit(nullptr);
         return 0;
     }
     case WM_QUIT: {
-        quit(NULL);
+        quit(nullptr);
         return 0;
     }
     case WM_COMMAND: {
@@ -2607,7 +2607,7 @@ void create_debug_spoiler(void)
         break;
     }
 
-    quit(NULL);
+    quit(nullptr);
 }
 
 /*!
@@ -2727,7 +2727,7 @@ int WINAPI WinMain(
         play_game(p_ptr, false, false);
     }
 
-    quit(NULL);
+    quit(nullptr);
     return 0;
 }
 #endif /* WINDOWS */

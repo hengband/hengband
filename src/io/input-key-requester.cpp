@@ -322,7 +322,7 @@ void request_command(player_type *player_ptr, int shopping)
 #ifdef JP
     for (int i = 0; i < 256; i++) {
         concptr s;
-        if ((s = keymap_act[mode][i]) != NULL) {
+        if ((s = keymap_act[mode][i]) != nullptr) {
             if (*s == command_cmd && *(s + 1) == 0) {
                 caretcmd = i;
                 break;

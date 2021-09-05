@@ -45,7 +45,7 @@
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param spell 魔法ID
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
- * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はnullptr文字列を返す。
  */
 concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 {
@@ -94,7 +94,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
                 project_length = range;
 
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_beam(caster_ptr, GF_ELEC, dir, damroll(dice, sides));
             }
@@ -180,7 +180,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 charm_animal(caster_ptr, dir, plev);
             }
@@ -246,7 +246,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 wall_to_mud(caster_ptr, dir, 20 + randint1(30));
             }
@@ -268,7 +268,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
                 fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr) - 10, GF_COLD, dir, damroll(dice, sides));
             }
         }
@@ -313,7 +313,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
                 fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr) - 10, GF_FIRE, dir, damroll(dice, sides));
             }
         }
@@ -334,7 +334,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
                 msg_print(_("太陽光線が現れた。", "A line of sunlight appears."));
                 lite_line(caster_ptr, dir, damroll(6, 8));
             }
@@ -478,7 +478,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
         {
             if (cast) {
                 if (!identify_fully(caster_ptr, false))
-                    return NULL;
+                    return nullptr;
             }
         }
         break;
@@ -505,7 +505,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
         {
             if (cast) {
                 if (!rustproof(caster_ptr))
-                    return NULL;
+                    return nullptr;
             }
         }
         break;
@@ -553,7 +553,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_ball(caster_ptr, GF_COLD, dir, dam, rad);
             }
@@ -575,7 +575,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
                 fire_ball(caster_ptr, GF_ELEC, dir, dam, rad);
                 break;
             }
@@ -597,7 +597,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
                 fire_ball(caster_ptr, GF_WATER, dir, dam, rad);
             }
         }

@@ -6,7 +6,7 @@ const int max_evolution_depth = 64;
 concptr spoiler_indent = "    ";
 
 /* The spoiler file being created */
-FILE *spoiler_file = NULL;
+FILE *spoiler_file = nullptr;
 
 /*!
  * @brief ファイルポインタ先に同じ文字を複数出力する /
@@ -56,7 +56,7 @@ void spoil_out(concptr str)
 #endif
 
     static char *roff_p = roff_buf;
-    static char *roff_s = NULL;
+    static char *roff_s = nullptr;
     static bool waiting_output = false;
     if (!str) {
         if (waiting_output) {
@@ -77,7 +77,7 @@ void spoil_out(concptr str)
         }
 
         roff_p = roff_buf;
-        roff_s = NULL;
+        roff_s = nullptr;
         roff_buf[0] = '\0';
         return;
     }
@@ -170,7 +170,7 @@ void spoil_out(concptr str)
             else
                 strcpy(roff_waiting_buf, roff_buf);
 
-            roff_s = NULL;
+            roff_s = nullptr;
             roff_p = roff_buf;
 #ifdef JP
             if (cbak != ' ')

@@ -28,7 +28,7 @@
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param spell 魔法ID
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
- * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はnullptr文字列を返す。
  */
 concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 {
@@ -87,7 +87,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
                 fire_ball_hide(caster_ptr, GF_WOUNDS, dir, damroll(dice, sides), 0);
             }
         }
@@ -196,7 +196,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
                 fire_ball_hide(caster_ptr, GF_WOUNDS, dir, damroll(dice, sides), 0);
             }
         }
@@ -318,7 +318,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
         {
             if (cast) {
                 if (!ident_spell(caster_ptr, false))
-                    return NULL;
+                    return nullptr;
             }
         }
         break;
@@ -375,7 +375,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
                 fire_ball_hide(caster_ptr, GF_WOUNDS, dir, damroll(dice, sides), 0);
             }
         }
@@ -397,7 +397,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 
             if (cast) {
                 if (!recall_player(caster_ptr, randint0(21) + 15))
-                    return NULL;
+                    return nullptr;
             }
         }
         break;
@@ -544,7 +544,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
         {
             if (cast) {
                 if (!identify_fully(caster_ptr, false))
-                    return NULL;
+                    return nullptr;
             }
         }
         break;

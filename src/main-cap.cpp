@@ -222,7 +222,7 @@ static void do_ce(void)
  */
 static void curs_set(int vis)
 {
-    char *v = NULL;
+    char *v = nullptr;
 
     if (!vis) {
         v = vi;
@@ -361,13 +361,13 @@ errr init_cap_aux(void)
     so = tgetstr("so", &next);
     se = tgetstr("se", &next);
     if (!so || !se)
-        so = se = NULL;
+        so = se = nullptr;
 
     /* Find out how to bold */
     md = tgetstr("md", &next);
     me = tgetstr("me", &next);
     if (!md || !me)
-        md = me = NULL;
+        md = me = nullptr;
 
     /* Check the cursor visibility stuff */
     vi = tgetstr("vi", &next);
@@ -943,7 +943,7 @@ errr init_cap(void)
     keymap_game();
 
     /* Hack -- Do NOT buffer stdout */
-    setbuf(stdout, NULL);
+    setbuf(stdout, nullptr);
 
     /*** Now prepare the term ***/
 

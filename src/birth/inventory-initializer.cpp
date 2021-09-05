@@ -93,7 +93,7 @@ static void decide_initial_items(player_type *creature_ptr, object_type *q_ptr)
         break;
     case player_race_type::BALROG:
         /* Demon can drain vitality from humanoid corpse */
-        get_mon_num_prep(creature_ptr, monster_hook_human, NULL);
+        get_mon_num_prep(creature_ptr, monster_hook_human, nullptr);
         for (int i = rand_range(3, 4); i > 0; i--) {
             q_ptr->prep(lookup_kind(TV_CORPSE, SV_CORPSE));
             q_ptr->pval = get_mon_num(creature_ptr, 0, 2, 0);

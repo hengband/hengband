@@ -132,14 +132,14 @@ static void choise_cursed_item(TRC flag, object_type *o_ptr, int *choices, int *
  * @brief 現在呪いを保持している装備品を一つランダムに探し出す / Choose one of items that have cursed flag
  * @param flag 探し出したい呪いフラグ配列
  * @return 該当の呪いが一つでもあった場合にランダムに選ばれた装備品のオブジェクト構造体参照ポインタを返す。\n
- * 呪いがない場合NULLを返す。
+ * 呪いがない場合nullptrを返す。
  */
 object_type *choose_cursed_obj_name(player_type *creature_ptr, TRC flag)
 {
     int choices[INVEN_TOTAL - INVEN_MAIN_HAND];
     int number = 0;
     if (creature_ptr->cursed.has_not(flag))
-        return NULL;
+        return nullptr;
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         object_type *o_ptr = &creature_ptr->inventory_list[i];

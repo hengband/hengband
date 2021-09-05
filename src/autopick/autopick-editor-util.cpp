@@ -204,14 +204,14 @@ static chain_str_type *new_chain_str(concptr str)
     size_t len = strlen(str);
     auto *chain = static_cast<chain_str_type *>(std::malloc(sizeof(chain_str_type) + len * sizeof(char)));
     strcpy(chain->s, str);
-    chain->next = NULL;
+    chain->next = nullptr;
     return chain;
 }
 
 void kill_yank_chain(text_body_type *tb)
 {
     chain_str_type *chain = tb->yank;
-    tb->yank = NULL;
+    tb->yank = nullptr;
     tb->yank_eol = true;
 
     while (chain) {

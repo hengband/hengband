@@ -17,7 +17,7 @@ concptr object_group_text[MAX_OBJECT_GROUP_TEXT] = { _("キノコ", "Mushrooms")
     _("鈍器", "Blunt Weapons"), _("長柄武器", "Polearms"), _("採掘道具", "Diggers"), _("飛び道具", "Bows"), _("弾", "Shots"), _("矢", "Arrows"),
     _("ボルト", "Bolts"), _("軽装鎧", "Soft Armor"), _("重装鎧", "Hard Armor"), _("ドラゴン鎧", "Dragon Armor"), _("盾", "Shields"), _("クローク", "Cloaks"),
     _("籠手", "Gloves"), _("ヘルメット", "Helms"), _("冠", "Crowns"), _("ブーツ", "Boots"), _("魔法書", "Spellbooks"), _("財宝", "Treasure"),
-    _("何か", "Something"), NULL };
+    _("何か", "Something"), nullptr };
 
 /*
  * TVALs of items in each group

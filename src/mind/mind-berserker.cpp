@@ -55,7 +55,7 @@ bool cast_berserk_spell(player_type *caster_ptr, mind_berserker_type spell)
         x += ddx[dir];
         if (player_can_enter(caster_ptr, caster_ptr->current_floor_ptr->grid_array[y][x].feat, 0)
             && !is_trap(caster_ptr, caster_ptr->current_floor_ptr->grid_array[y][x].feat) && !caster_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
-            msg_print(NULL);
+            msg_print(nullptr);
             (void)move_player_effect(caster_ptr, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
         }
 

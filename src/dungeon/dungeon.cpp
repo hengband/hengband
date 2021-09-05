@@ -44,7 +44,7 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
 		else
 		{
                     msg_format(_("まだ%sに入ったことはない。", "You haven't entered %s yet."), d_info[DUNGEON_ANGBAND].name.c_str());
-			msg_print(NULL);
+			msg_print(nullptr);
 			return 0;
 		}
 	}

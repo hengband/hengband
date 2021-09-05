@@ -30,7 +30,7 @@
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param spell 魔法ID
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
- * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はnullptr文字列を返す。
  */
 concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 {
@@ -133,7 +133,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 confuse_monster(caster_ptr, dir, power);
             }
@@ -172,7 +172,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 sleep_monster(caster_ptr, dir, plev);
             }
@@ -193,7 +193,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
 
             if (cast) {
                 if (!recharge(caster_ptr, power))
-                    return NULL;
+                    return nullptr;
             }
         }
         break;
@@ -225,7 +225,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
         {
             if (cast) {
                 if (!ident_spell(caster_ptr, false))
-                    return NULL;
+                    return nullptr;
             }
         }
         break;
@@ -244,7 +244,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 slow_monster(caster_ptr, dir, plev);
             }
@@ -283,7 +283,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_beam(caster_ptr, GF_AWAY_ALL, dir, power);
             }
@@ -337,7 +337,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
         {
             if (cast) {
                 if (!identify_fully(caster_ptr, false))
-                    return NULL;
+                    return nullptr;
             }
         }
         break;
@@ -376,7 +376,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 charm_monster(caster_ptr, dir, plev);
             }
@@ -411,7 +411,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
         {
             if (cast) {
                 if (!tele_town(caster_ptr))
-                    return NULL;
+                    return nullptr;
             }
         }
         break;
@@ -439,7 +439,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
         {
             if (cast) {
                 if (!get_check(_("本当に他の階にテレポートしますか？", "Are you sure? (Teleport Level)")))
-                    return NULL;
+                    return nullptr;
                 teleport_level(caster_ptr, 0);
             }
         }
@@ -461,7 +461,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
 
             if (cast) {
                 if (!recall_player(caster_ptr, randint0(21) + 15))
-                    return NULL;
+                    return nullptr;
             }
         }
         break;
@@ -481,7 +481,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
             if (cast) {
                 msg_print(_("次元の扉が開いた。目的地を選んで下さい。", "You open a dimensional gate. Choose a destination."));
                 if (!dimension_door(caster_ptr))
-                    return NULL;
+                    return nullptr;
             }
         }
         break;
@@ -534,7 +534,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fetch_item(caster_ptr, dir, weight, false);
             }
@@ -595,7 +595,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
         {
             if (cast) {
                 if (!alchemy(caster_ptr))
-                    return NULL;
+                    return nullptr;
             }
         }
         break;

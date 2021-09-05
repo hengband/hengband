@@ -80,14 +80,14 @@ static bool deal_damege_by_feat(player_type *creature_ptr, grid_type *g_ptr, con
 
         take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"), f_info[g_ptr->get_feat_mimic()].name.c_str()));
 
-        if (additional_effect != NULL)
+        if (additional_effect != nullptr)
             additional_effect(creature_ptr, damage);
     } else {
         concptr name = f_info[creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].get_feat_mimic()].name.c_str();
         msg_format(_("%s%s！", "The %s %s!"), name, msg_normal);
         take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, name);
 
-        if (additional_effect != NULL)
+        if (additional_effect != nullptr)
             additional_effect(creature_ptr, damage);
     }
 
@@ -160,22 +160,22 @@ void process_player_hp_mp(player_type *creature_ptr)
 
     if (f_ptr->flags.has(FF::LAVA) && !is_invuln(creature_ptr) && !has_immune_fire(creature_ptr)) {
         cave_no_regen = deal_damege_by_feat(
-            creature_ptr, g_ptr, _("熱で火傷した！", "The heat burns you!"), _("で火傷した！", "burns you!"), calc_fire_damage_rate, NULL);
+            creature_ptr, g_ptr, _("熱で火傷した！", "The heat burns you!"), _("で火傷した！", "burns you!"), calc_fire_damage_rate, nullptr);
     }
 
     if (f_ptr->flags.has(FF::COLD_PUDDLE) && !is_invuln(creature_ptr) && !has_immune_cold(creature_ptr)) {
         cave_no_regen = deal_damege_by_feat(
-            creature_ptr, g_ptr, _("冷気に覆われた！", "The cold engulfs you!"), _("に凍えた！", "frostbites you!"), calc_cold_damage_rate, NULL);
+            creature_ptr, g_ptr, _("冷気に覆われた！", "The cold engulfs you!"), _("に凍えた！", "frostbites you!"), calc_cold_damage_rate, nullptr);
     }
 
     if (f_ptr->flags.has(FF::ELEC_PUDDLE) && !is_invuln(creature_ptr) && !has_immune_elec(creature_ptr)) {
         cave_no_regen = deal_damege_by_feat(
-            creature_ptr, g_ptr, _("電撃を受けた！", "The electricity shocks you!"), _("に感電した！", "shocks you!"), calc_elec_damage_rate, NULL);
+            creature_ptr, g_ptr, _("電撃を受けた！", "The electricity shocks you!"), _("に感電した！", "shocks you!"), calc_elec_damage_rate, nullptr);
     }
 
     if (f_ptr->flags.has(FF::ACID_PUDDLE) && !is_invuln(creature_ptr) && !has_immune_acid(creature_ptr)) {
         cave_no_regen = deal_damege_by_feat(
-            creature_ptr, g_ptr, _("酸が飛び散った！", "The acid melts you!"), _("に溶かされた！", "melts you!"), calc_acid_damage_rate, NULL);
+            creature_ptr, g_ptr, _("酸が飛び散った！", "The acid melts you!"), _("に溶かされた！", "melts you!"), calc_acid_damage_rate, nullptr);
     }
 
     if (f_ptr->flags.has(FF::POISON_PUDDLE) && !is_invuln(creature_ptr)) {
@@ -298,13 +298,13 @@ void process_player_hp_mp(player_type *creature_ptr)
     if ((creature_ptr->csp == 0) && (creature_ptr->csp_frac == 0)) {
         while (upkeep_factor > 100) {
             msg_print(_("こんなに多くのペットを制御できない！", "Too many pets to control at once!"));
-            msg_print(NULL);
+            msg_print(nullptr);
             do_cmd_pet_dismiss(creature_ptr);
 
             upkeep_factor = calculate_upkeep(creature_ptr);
 
             msg_format(_("維持ＭＰは %d%%", "Upkeep: %d%% mana."), upkeep_factor);
-            msg_print(NULL);
+            msg_print(nullptr);
         }
     }
 

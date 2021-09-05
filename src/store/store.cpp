@@ -38,7 +38,7 @@
 int store_top = 0;
 int store_bottom = 0;
 int xtra_stock = 0;
-const owner_type *ot_ptr = NULL;
+const owner_type *ot_ptr = nullptr;
 int16_t old_town_num = 0;
 int16_t inner_town_num = 0;
 
@@ -153,7 +153,7 @@ int get_stock(COMMAND_CODE *com_val, concptr pmt, int i, int j)
     if (repeat_pull(com_val) && (*com_val >= i) && (*com_val <= j))
         return true;
 
-    msg_print(NULL);
+    msg_print(nullptr);
     *com_val = (-1);
     char lo = I2A(i);
     char hi = (j > 25) ? toupper(I2A(j - 26)) : I2A(j);

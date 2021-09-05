@@ -32,14 +32,14 @@ bool gamble_comm(player_type *player_ptr, int cmd)
     screen_save();
 
     if (cmd == BACT_GAMBLE_RULES) {
-        (void)show_file(player_ptr, true, _("jgambling.txt", "gambling.txt"), NULL, 0, 0);
+        (void)show_file(player_ptr, true, _("jgambling.txt", "gambling.txt"), nullptr, 0, 0);
         screen_load();
         return true;
     }
 
     if (player_ptr->au < 1) {
         msg_print(_("おい！おまえ一文なしじゃないか！こっから出ていけ！", "Hey! You don't have gold - get out of here!"));
-        msg_print(NULL);
+        msg_print(nullptr);
         screen_load();
         return false;
     }
@@ -56,7 +56,7 @@ bool gamble_comm(player_type *player_ptr, int cmd)
      * the int16_t value returned by get_quantity().
      */
     if (!get_string(tmp_str, out_val, 32)) {
-        msg_print(NULL);
+        msg_print(nullptr);
         screen_load();
         return true;
     }
@@ -67,7 +67,7 @@ bool gamble_comm(player_type *player_ptr, int cmd)
     wager = atol(p);
     if (wager > player_ptr->au) {
         msg_print(_("おい！金が足りないじゃないか！出ていけ！", "Hey! You don't have the gold - get out of here!"));
-        msg_print(NULL);
+        msg_print(nullptr);
         screen_load();
         return false;
     } else if (wager > maxbet) {
@@ -77,7 +77,7 @@ bool gamble_comm(player_type *player_ptr, int cmd)
         msg_print(_("ＯＫ、１ゴールドからはじめよう。", "Ok, we'll start with 1 gold."));
         wager = 1;
     }
-    msg_print(NULL);
+    msg_print(nullptr);
     win = 0;
     odds = 0;
     oldgold = player_ptr->au;
@@ -126,7 +126,7 @@ bool gamble_comm(player_type *player_ptr, int cmd)
                 do {
                     msg_print(_("なにかキーを押すともう一回振ります。", "Hit any key to roll again"));
 
-                    msg_print(NULL);
+                    msg_print(nullptr);
                     roll1 = randint1(6);
                     roll2 = randint1(6);
                     roll3 = roll1 + roll2;
@@ -161,7 +161,7 @@ bool gamble_comm(player_type *player_ptr, int cmd)
                 msg_print(_("ＯＫ、9番にしとくぜ。", "Ok, I'll put you down for 9."));
                 choice = 9;
             }
-            msg_print(NULL);
+            msg_print(nullptr);
             roll1 = randint0(10);
             sprintf(tmp_str, _("ルーレットは回り、止まった。勝者は %d番だ。", "The wheel spins to a stop and the winner is %d"), roll1);
             prt(tmp_str, 13, 3);
@@ -270,7 +270,7 @@ bool gamble_comm(player_type *player_ptr, int cmd)
         prt("", 18, 37);
         if (wager > player_ptr->au) {
             msg_print(_("おい！金が足りないじゃないか！ここから出て行け！", "Hey! You don't have the gold - get out of here!"));
-            msg_print(NULL);
+            msg_print(nullptr);
 
             /* Get out here */
             break;
@@ -286,7 +286,7 @@ bool gamble_comm(player_type *player_ptr, int cmd)
         chg_virtue(player_ptr, V_CHANCE, -3);
     }
 
-    msg_print(NULL);
+    msg_print(nullptr);
     screen_load();
     return true;
 }

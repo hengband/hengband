@@ -23,7 +23,7 @@ bool rustproof(player_type *caster_ptr)
     concptr s = _("錆止めできるものがありません。", "You have nothing to rustproof.");
     OBJECT_IDX item;
     object_type *o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, FuncItemTester(&object_type::is_armour));
-    if (o_ptr == NULL)
+    if (o_ptr == nullptr)
         return false;
 
     GAME_TEXT o_name[MAX_NLEN];

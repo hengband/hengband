@@ -9,7 +9,7 @@
 
 /*! @brief アイテムの価値記述テーブル */
 const concptr game_inscriptions[MAX_GAME_INSCRIPTIONS] = {
-    NULL, /* FEEL_NONE */
+    nullptr, /* FEEL_NONE */
     _("壊れている", "broken"), /* FEEL_BROKEN */
     _("恐ろしい", "terrible"), /* FEEL_TERRIBLE */
     _("無価値", "worthless"), /* FEEL_WORTHLESS */

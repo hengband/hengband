@@ -78,7 +78,7 @@ static void analyze_pval(object_type *o_ptr, pval_info_type *pi_ptr)
     }
 
     affects_list = spoiler_flag_aux(flgs, pval_flags1_desc, affects_list, N_ELEMENTS(pval_flags1_desc));
-    *affects_list = NULL;
+    *affects_list = nullptr;
 }
 
 /*!
@@ -91,7 +91,7 @@ static void analyze_slay(object_type *o_ptr, concptr *slay_list)
 {
     auto flgs = object_flags(o_ptr);
     slay_list = spoiler_flag_aux(flgs, slay_flags_desc, slay_list, N_ELEMENTS(slay_flags_desc));
-    *slay_list = NULL;
+    *slay_list = nullptr;
 }
 
 /*!
@@ -104,7 +104,7 @@ static void analyze_brand(object_type *o_ptr, concptr *brand_list)
 {
     auto flgs = object_flags(o_ptr);
     brand_list = spoiler_flag_aux(flgs, brand_flags_desc, brand_list, N_ELEMENTS(brand_flags_desc));
-    *brand_list = NULL;
+    *brand_list = nullptr;
 }
 
 /*!
@@ -117,7 +117,7 @@ static void analyze_resist(object_type *o_ptr, concptr *resist_list)
 {
     auto flgs = object_flags(o_ptr);
     resist_list = spoiler_flag_aux(flgs, resist_flags_desc, resist_list, N_ELEMENTS(resist_flags_desc));
-    *resist_list = NULL;
+    *resist_list = nullptr;
 }
 
 /*!
@@ -130,7 +130,7 @@ static void analyze_immune(object_type *o_ptr, concptr *immune_list)
 {
     auto flgs = object_flags(o_ptr);
     immune_list = spoiler_flag_aux(flgs, immune_flags_desc, immune_list, N_ELEMENTS(immune_flags_desc));
-    *immune_list = NULL;
+    *immune_list = nullptr;
 }
 
 /*!
@@ -150,7 +150,7 @@ static void analyze_sustains(object_type *o_ptr, concptr *sustain_list)
         sustain_list = spoiler_flag_aux(flgs, sustain_flags_desc, sustain_list, N_ELEMENTS(sustain_flags_desc));
     }
 
-    *sustain_list = NULL;
+    *sustain_list = nullptr;
 }
 
 /*!
@@ -219,7 +219,7 @@ static void analyze_misc_magic(object_type *o_ptr, concptr *misc_list)
     if (has_flag(flgs, TR_ADD_H_CURSE))
         *misc_list++ = _("強力な呪いを増やす", "Heavily Cursing");
 
-    *misc_list = NULL;
+    *misc_list = nullptr;
 }
 
 /*!

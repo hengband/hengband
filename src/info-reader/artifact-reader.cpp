@@ -37,7 +37,7 @@ static bool grab_one_artifact_flag(artifact_type *a_ptr, std::string_view what)
  */
 errr parse_a_info(std::string_view buf, angband_header *head)
 {
-    static artifact_type *a_ptr = NULL;
+    static artifact_type *a_ptr = nullptr;
     const auto &tokens = str_split(buf, ':', false, 10);
 
     if (tokens[0] == "N") {

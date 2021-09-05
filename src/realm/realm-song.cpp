@@ -53,7 +53,7 @@ static void start_singing(player_type *caster_ptr, SPELL_IDX spell, int32_t song
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param spell 歌ID
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST / SPELL_FAIL / SPELL_CONT / SPELL_STOP)
- * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST / SPELL_FAIL / SPELL_CONT / SPELL_STOP 時はNULL文字列を返す。
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST / SPELL_FAIL / SPELL_CONT / SPELL_STOP 時はnullptr文字列を返す。
  */
 concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 {
@@ -138,7 +138,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_bolt(caster_ptr, GF_SOUND, dir, damroll(dice, sides));
             }
@@ -732,7 +732,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_beam(caster_ptr, GF_SOUND, dir, damroll(dice, sides));
             }
@@ -956,7 +956,7 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_ball(caster_ptr, GF_SOUND, dir, damroll(dice, sides), rad);
             }

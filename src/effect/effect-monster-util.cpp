@@ -61,7 +61,7 @@ effect_monster_type *initialize_effect_monster(player_type *caster_ptr, effect_m
 	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
 	em_ptr->g_ptr = &floor_ptr->grid_array[em_ptr->y][em_ptr->x];
 	em_ptr->m_ptr = &floor_ptr->m_list[em_ptr->g_ptr->m_idx];
-	em_ptr->m_caster_ptr = (em_ptr->who > 0) ? &floor_ptr->m_list[em_ptr->who] : NULL;
+	em_ptr->m_caster_ptr = (em_ptr->who > 0) ? &floor_ptr->m_list[em_ptr->who] : nullptr;
 	em_ptr->r_ptr = &r_info[em_ptr->m_ptr->r_idx];
 	em_ptr->seen = em_ptr->m_ptr->ml;
         em_ptr->seen_msg = is_seen(caster_ptr, em_ptr->m_ptr);
@@ -79,7 +79,7 @@ effect_monster_type *initialize_effect_monster(player_type *caster_ptr, effect_m
 	em_ptr->do_time = 0;
 	em_ptr->heal_leper = false;
 	em_ptr->photo = 0;
-	em_ptr->note = NULL;
+	em_ptr->note = nullptr;
 	em_ptr->note_dies = extract_note_dies(real_r_idx(em_ptr->m_ptr));
 	em_ptr->caster_lev = (em_ptr->who > 0) ? r_info[em_ptr->m_caster_ptr->r_idx].level : (caster_ptr->lev * 2);
 	return em_ptr;

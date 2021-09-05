@@ -589,9 +589,9 @@ void wiz_dump_options(void)
     path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "opt_info.txt");
     FILE *fff;
     fff = angband_fopen(buf, "a");
-    if (fff == NULL) {
+    if (fff == nullptr) {
         msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), buf);
-        msg_print(NULL);
+        msg_print(nullptr);
         return;
     }
 
@@ -703,7 +703,7 @@ void cheat_death(player_type *creature_ptr)
 
     current_world_ptr->noscore |= 0x0001;
     msg_print(_("ウィザードモードに念を送り、死を欺いた。", "You invoke wizard mode and cheat death."));
-    msg_print(NULL);
+    msg_print(nullptr);
 
     creature_ptr->is_dead = false;
     (void)life_stream(creature_ptr, false, false);

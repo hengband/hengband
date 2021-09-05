@@ -36,7 +36,7 @@ static const convert_key s2j_table[] = { { "mb", "nb" }, { "mp", "np" }, { "mv",
     { "za", "ザ" }, { "zi", "ジ" }, { "zu", "ズ" }, { "ze", "ゼ" }, { "zo", "ゾ" }, { "dh", "ズ" }, { "ch", "フ" }, { "th", "ス" }, { "b", "ブ" },
     { "c", "ク" }, { "d", "ド" }, { "f", "フ" }, { "g", "グ" }, { "h", "フ" }, { "j", "ジュ" }, { "k", "ク" }, { "l", "ル" }, { "m", "ム" }, { "n", "ン" },
     { "p", "プ" }, { "q", "ク" }, { "r", "ル" }, { "s", "ス" }, { "t", "ト" }, { "v", "ヴ" }, { "w", "ウ" }, { "y", "イ" }, { "a", "ア" }, { "i", "イ" },
-    { "u", "ウ" }, { "e", "エ" }, { "o", "オ" }, { "-", "ー" }, { NULL, NULL } };
+    { "u", "ウ" }, { "e", "エ" }, { "o", "オ" }, { "-", "ー" }, { nullptr, nullptr } };
 
 /*!
  * @brief シンダリンを日本語の読みに変換する
@@ -54,7 +54,7 @@ void sindarin_to_kana(char *kana, concptr sindarin)
         if (isupper(kana[idx]))
             kana[idx] = (char)tolower(kana[idx]);
 
-    for (idx = 0; s2j_table[idx].key1 != NULL; idx++) {
+    for (idx = 0; s2j_table[idx].key1 != nullptr; idx++) {
         concptr pat1 = s2j_table[idx].key1;
         concptr pat2 = s2j_table[idx].key2;
         int len = strlen(pat1);
@@ -126,7 +126,7 @@ static const struct jverb_table_t {
     { "ぶ", { "び", "んで", "んだ" } },
     { "む", { "み", "んで", "んだ" } },
     { "る", { "り", "って", "った" } },
-    { NULL, { "そして", "ことにより", "ことや" } },
+    { nullptr, { "そして", "ことにより", "ことや" } },
 };
 
 /*!
@@ -151,7 +151,7 @@ void jverb(concptr in, char *out, int flag)
         }
     }
 
-    if (p->from == NULL)
+    if (p->from == nullptr)
         strcpy(&out[in_len], p->to[flag - 1]);
 }
 
@@ -418,7 +418,7 @@ static void ms_to_jis_unicode(char *str)
  */
 int utf8_to_euc(char *utf8_str, size_t utf8_str_len, char *euc_buf, size_t euc_buf_len)
 {
-    static iconv_t cd = NULL;
+    static iconv_t cd = nullptr;
     if (!cd)
         cd = iconv_open("EUC-JP", "UTF-8");
 
@@ -447,7 +447,7 @@ int utf8_to_euc(char *utf8_str, size_t utf8_str_len, char *euc_buf, size_t euc_b
  */
 int euc_to_utf8(const char *euc_str, size_t euc_str_len, char *utf8_buf, size_t utf8_buf_len)
 {
-    static iconv_t cd = NULL;
+    static iconv_t cd = nullptr;
     if (!cd)
         cd = iconv_open("UTF-8", "EUC-JP");
 
@@ -493,7 +493,7 @@ static bool utf8_to_sys(char *utf8_str, char *sys_str_buffer, size_t sys_str_buf
     }
 
     /* UTF-8 -> SJIS(CP932) */
-    if (WideCharToMultiByte(932, 0, utf16buf, -1, sys_str_buffer, sys_str_buflen, NULL, NULL) == 0) {
+    if (WideCharToMultiByte(932, 0, utf16buf, -1, sys_str_buffer, sys_str_buflen, nullptr, nullptr) == 0) {
         C_KILL(utf16buf, input_len, WCHAR);
         return false;
     }
@@ -522,7 +522,7 @@ void guess_convert_to_system_encoding(char *strbuf, int buflen)
         angband_strcpy(work, strbuf, buflen);
         if (!utf8_to_sys(work, strbuf, buflen)) {
             msg_print("警告:文字コードの変換に失敗しました");
-            msg_print(NULL);
+            msg_print(nullptr);
         }
         C_KILL(work, buflen, char);
     }

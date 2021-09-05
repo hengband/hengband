@@ -9,7 +9,7 @@
 const char hexsym[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 
 int max_macrotrigger = 0; /*!< 現在登録中のマクロ(トリガー)の数 */
-concptr macro_template = NULL; /*!< Angband設定ファイルのT: タグ情報から読み込んだ長いTコードを処理するために利用する文字列ポインタ */
+concptr macro_template = nullptr; /*!< Angband設定ファイルのT: タグ情報から読み込んだ長いTコードを処理するために利用する文字列ポインタ */
 concptr macro_modifier_chr; /*!< &x# で指定されるマクロトリガーに関する情報を記録する文字列ポインタ */
 concptr macro_modifier_name[MAX_MACRO_MOD]; /*!< マクロ上で取り扱う特殊キーを文字列上で表現するためのフォーマットを記録した文字列ポインタ配列 */
 concptr macro_trigger_name[MAX_MACRO_TRIG]; /*!< マクロのトリガーコード */
@@ -100,7 +100,7 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
     int shiftstatus = 0;
     concptr key_code;
 
-    if (macro_template == NULL)
+    if (macro_template == nullptr)
         return;
 
     for (i = 0; macro_modifier_chr[i]; i++)
@@ -245,7 +245,7 @@ static bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
     concptr str = *strptr;
     char key_code[100];
     int i;
-    if (macro_template == NULL)
+    if (macro_template == nullptr)
         return false;
 
     *s++ = '\\';
@@ -461,7 +461,7 @@ char *angband_strstr(concptr haystack, concptr needle)
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 /*
@@ -481,7 +481,7 @@ char *angband_strchr(concptr ptr, char ch)
 #endif
     }
 
-    return NULL;
+    return nullptr;
 }
 
 /*!

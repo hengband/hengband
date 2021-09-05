@@ -237,4 +237,4 @@ command_menu_type menu_data[MENU_DATA_NUM] = { { MN_HELP, 0, -1, EC_HELP }, { MN
 
     { MN_DELETE_CHAR, -1, 0x7F, EC_DELETE_CHAR },
 
-    { NULL, -1, -1, 0 } };
+    { nullptr, -1, -1, 0 } };

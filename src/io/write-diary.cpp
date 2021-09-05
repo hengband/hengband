@@ -63,7 +63,7 @@ static bool open_diary_file(FILE **fff, bool *disable_diary)
 	if (*fff) return true;
 
 	msg_format(_("%s を開くことができませんでした。プレイ記録を一時停止します。", "Failed to open %s. Play-Record is disabled temporarily."), buf);
-	msg_format(NULL);
+	msg_format(nullptr);
 	*disable_diary = true;
 	return false;
 }
@@ -192,7 +192,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		creature_ptr->current_floor_ptr->inside_quest = old_quest;
 	}
 
-	FILE *fff = NULL;
+	FILE *fff = nullptr;
 	if (!open_diary_file(&fff, &disable_diary)) return -1;
 
 	concptr note_level = "";

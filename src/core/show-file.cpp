@@ -41,7 +41,7 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
         str_tolower(lcstr);
 
         ptr = angband_strstr(lcstr, shower);
-        textcolor = (ptr == NULL) ? TERM_L_DARK : TERM_WHITE;
+        textcolor = (ptr == nullptr) ? TERM_L_DARK : TERM_WHITE;
     }
 
     int cx = 0;
@@ -148,7 +148,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
     strcpy(filename, name);
     int n = strlen(filename);
 
-    concptr tag = NULL;
+    concptr tag = nullptr;
     for (int i = 0; i < n; i++) {
         if (filename[i] == '#') {
             filename[i] = '\0';
@@ -158,7 +158,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
     }
 
     name = filename;
-    FILE *fff = NULL;
+    FILE *fff = nullptr;
     char path[1024];
     if (what) {
         strcpy(caption, what);
@@ -191,7 +191,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
 
     if (!fff) {
         msg_format(_("'%s'をオープンできません。", "Cannot open '%s'."), name);
-        msg_print(NULL);
+        msg_print(nullptr);
 
         return true;
     }
@@ -241,8 +241,8 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
 
     term_clear();
 
-    concptr find = NULL;
-    concptr shower = NULL;
+    concptr find = nullptr;
+    concptr shower = nullptr;
     while (true) {
         if (line >= size - rows)
               line = size - rows;
@@ -284,7 +284,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
                     continue;
             }
 
-            find = NULL;
+            find = nullptr;
             show_file_aux_line(str, row_count + 2, shower);
             row_count++;
         }
@@ -297,7 +297,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
         if (find) {
             bell();
             line = back;
-            find = NULL;
+            find = nullptr;
             continue;
         }
 
@@ -330,7 +330,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
         switch (skey) {
         case '?':
             if (strcmp(name, _("jhelpinfo.txt", "helpinfo.txt")) != 0)
-                show_file(creature_ptr, true, _("jhelpinfo.txt", "helpinfo.txt"), NULL, 0, mode);
+                show_file(creature_ptr, true, _("jhelpinfo.txt", "helpinfo.txt"), nullptr, 0, mode);
             break;
         case '=':
             prt(_("強調: ", "Show: "), hgt - 1, 0);
@@ -342,7 +342,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
                     str_tolower(shower_str);
                     shower = shower_str;
                 } else
-                    shower = NULL;
+                    shower = nullptr;
             } else
                 strcpy(shower_str, back_str);
             break;
@@ -359,7 +359,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
                     str_tolower(finder_str);
                     shower = finder_str;
                 } else
-                    shower = NULL;
+                    shower = nullptr;
             } else
                 strcpy(finder_str, back_str);
             break;
@@ -388,7 +388,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
             strcpy(tmp, _("jhelp.hlp", "help.hlp"));
 
             if (askfor(tmp, 80)) {
-                if (!show_file(creature_ptr, true, tmp, NULL, 0, mode))
+                if (!show_file(creature_ptr, true, tmp, nullptr, 0, mode))
                     skey = 'q';
             }
 
@@ -444,7 +444,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
 
             if ((key > -1) && hook[key][0]) {
                 /* Recurse on that file */
-                if (!show_file(creature_ptr, true, hook[key], NULL, 0, mode))
+                if (!show_file(creature_ptr, true, hook[key], nullptr, 0, mode))
                     skey = 'q';
             }
         }

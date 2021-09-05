@@ -37,7 +37,7 @@ typedef struct obj_desc_list {
     concptr misc_magic[N_ELEMENTS(misc_flags2_desc) + N_ELEMENTS(misc_flags3_desc) + 1 /* Permanent Light */
         + 1 /* TY curse */
         + 1 /* type of curse */
-        + 1]; /* sentinel NULL */
+        + 1]; /* sentinel nullptr */
 
     char addition[80]; /* Additional ability or resistance */
     concptr activation; /* A string describing an artifact's activation */

@@ -146,7 +146,7 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type *m_ptr, int 
 void print_monster_list(floor_type *floor_ptr, const std::vector<MONSTER_IDX> &monster_list, TERM_LEN x, TERM_LEN y, TERM_LEN max_lines)
 {
     TERM_LEN line = y;
-    monster_type *last_mons = NULL;
+    monster_type *last_mons = nullptr;
     int n_same = 0;
     size_t i;
     for (i = 0; i < monster_list.size(); i++) {
@@ -514,18 +514,18 @@ void fix_object(player_type *player_ptr)
  * @brief 床上のモンスター情報を返す
  * @param floor_ptr 階の情報への参照ポインタ
  * @param grid_prt 座標グリッドの情報への参照ポインタ
- * @return モンスターが見える場合にはモンスター情報への参照ポインタ、それ以外はNULL
+ * @return モンスターが見える場合にはモンスター情報への参照ポインタ、それ以外はnullptr
  * @details
  * Lookコマンドでカーソルを合わせた場合に合わせてミミックは考慮しない。
  */
 static monster_type *monster_on_floor_items(const floor_type *floor_ptr, const grid_type *g_ptr)
 {
     if (g_ptr->m_idx == 0)
-        return NULL;
+        return nullptr;
 
     monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
     if (!monster_is_valid(m_ptr) || !m_ptr->ml)
-        return NULL;
+        return nullptr;
 
     return m_ptr;
 }
@@ -557,7 +557,7 @@ static void display_floor_item_list(player_type *player_ptr, const int y, const 
     // 先頭行を書く。
     if (player_bold(player_ptr, y, x))
         sprintf(line, _("(X:%03d Y:%03d) あなたの足元のアイテム一覧", "Items at (%03d,%03d) under you"), x, y);
-    else if (const auto *m_ptr = monster_on_floor_items(floor_ptr, g_ptr); m_ptr != NULL) {
+    else if (const auto *m_ptr = monster_on_floor_items(floor_ptr, g_ptr); m_ptr != nullptr) {
         if (player_ptr->image) {
             sprintf(line, _("(X:%03d Y:%03d) 何か奇妙な物の足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under something strange"), x, y);
         } else {

@@ -98,7 +98,7 @@ static essence_type essence_info[] = { { TR_STR, "腕力", 4, TR_STR, 20 }, { TR
     { ESSENCE_SH_COLD, "冷気オーラ", 7, -1, 50 }, { ESSENCE_RESISTANCE, "全耐性", 2, -1, 150 }, { ESSENCE_SUSTAIN, "装備保持", 10, -1, 10 },
     { ESSENCE_SLAY_GLOVE, "殺戮の小手", 1, TR_ES_ATTACK, 200 },
 
-    { -1, NULL, 0, -1, 0 } };
+    { -1, nullptr, 0, -1, 0 } };
 #else
 static essence_type essence_info[] = { { TR_STR, "strength", 4, TR_STR, 20 }, { TR_INT, "intelligence", 4, TR_INT, 20 }, { TR_WIS, "wisdom", 4, TR_WIS, 20 },
     { TR_DEX, "dexterity", 4, TR_DEX, 20 }, { TR_CON, "constitution", 4, TR_CON, 20 }, { TR_CHR, "charisma", 4, TR_CHR, 20 },
@@ -150,7 +150,7 @@ static essence_type essence_info[] = { { TR_STR, "strength", 4, TR_STR, 20 }, { 
     { ESSENCE_RESISTANCE, "resistance", 2, -1, 150 }, { ESSENCE_SUSTAIN, "elements proof", 10, -1, 10 },
     { ESSENCE_SLAY_GLOVE, "gauntlets of slaying", 1, TR_ES_ATTACK, 200 },
 
-    { -1, NULL, 0, -1, 0 } };
+    { -1, nullptr, 0, -1, 0 } };
 #endif
 
 /*!
@@ -164,7 +164,7 @@ concptr essence_name[] = { "腕力", "知能", "賢さ", "器用さ", "耐久力
     "", "", "反魔法", "", "", "警告", "", "", "", "浮遊", "永久光源", "可視透明", "テレパシー", "遅消化", "急速回復", "", "", "", "", "", "", "", "",
     "テレポート", "", "", "攻撃", "防御",
 
-    NULL };
+    nullptr };
 
 #else
 
@@ -176,7 +176,7 @@ concptr essence_name[] = { "strength", "intelligen.", "wisdom", "dexterity", "co
     "", "anti magic", "", "", "warning", "", "", "", "levitation", "perm. light", "see invis.", "telepathy", "slow dige.", "regen.", "", "", "", "", "", "", "",
     "", "teleport", "", "", "weapon enc.", "armor enc.",
 
-    NULL };
+    nullptr };
 #endif
 
 static concptr const kaji_tips[5] = {
@@ -435,7 +435,7 @@ static void drain_essence(player_type *creature_ptr)
 
             creature_ptr->magic_num1[i] += drain_value[i];
             creature_ptr->magic_num1[i] = MIN(20000, creature_ptr->magic_num1[i]);
-            msg_print(NULL);
+            msg_print(nullptr);
             msg_format("%s...%d%s", essence_name[i], drain_value[i], _("。", ". "));
         }
     }

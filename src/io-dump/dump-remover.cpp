@@ -28,7 +28,7 @@ void remove_auto_dump(concptr orig_file, concptr auto_dump_mark)
 	orig_fff = angband_fopen(orig_file, "r");
 	if (!orig_fff) return;
 
-	FILE *tmp_fff = NULL;
+	FILE *tmp_fff = nullptr;
 	char tmp_file[FILE_NAME_SIZE];
 	if (!open_temporary_file(&tmp_fff, tmp_file)) return;
 

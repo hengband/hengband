@@ -19,7 +19,7 @@ int usleep(ulong usecs)
 
     int nfds = 0;
 
-    fd_set *no_fds = NULL;
+    fd_set *no_fds = nullptr;
     if (usecs > 4000000L)
         core(_("不当な usleep() 呼び出し", "Illegal usleep() call"));
 
@@ -141,7 +141,7 @@ errr path_parse(char *buf, int max, concptr file)
  */
 static errr path_temp(char *buf, int max)
 {
-    concptr s = tmpnam(NULL);
+    concptr s = tmpnam(nullptr);
     if (!s)
         return -1;
 

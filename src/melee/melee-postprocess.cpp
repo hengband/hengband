@@ -248,7 +248,7 @@ static void fall_off_horse_by_melee(player_type *player_ptr, mam_pp_type *mam_pp
  * @param dam ダメージ量
  * @param dead 目標となったモンスターの死亡状態を返す参照ポインタ
  * @param fear 目標となったモンスターの恐慌状態を返す参照ポインタ
- * @param note 目標モンスターが死亡した場合の特別メッセージ(NULLならば標準表示を行う)
+ * @param note 目標モンスターが死亡した場合の特別メッセージ(nullptrならば標準表示を行う)
  * @param who 打撃を行ったモンスターの参照ID
  * @todo 打撃が当たった時の後処理 (爆発持ちのモンスターを爆発させる等)なので、関数名を変更する必要あり
  */

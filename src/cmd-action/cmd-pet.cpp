@@ -345,7 +345,7 @@ static void do_name_pet(player_type *creature_ptr)
         monster_desc(creature_ptr, m_name, m_ptr, 0);
 
         msg_format(_("%sに名前をつける。", "Name %s."), m_name);
-        msg_print(NULL);
+        msg_print(nullptr);
 
         /* Start with nothing */
         strcpy(out_val, "");

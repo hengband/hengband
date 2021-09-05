@@ -52,7 +52,7 @@ static void write_birth_diary(player_type *creature_ptr)
     message_add("  ");
 
     exe_write_diary(creature_ptr, DIARY_GAMESTART, 1, _("-------- 新規ゲーム開始 --------", "------- Started New Game -------"));
-    exe_write_diary(creature_ptr, DIARY_DIALY, 0, NULL);
+    exe_write_diary(creature_ptr, DIARY_DIALY, 0, nullptr);
     char buf[80];
     sprintf(buf, _("%s性別に%sを選択した。", "%schose %s gender."), indent, sex_info[creature_ptr->psex].title);
     exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, buf);

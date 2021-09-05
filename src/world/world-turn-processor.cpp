@@ -78,7 +78,7 @@ void WorldTurnProcessor::process_world()
     process_world_monsters();
     if (!this->hour && !this->min) {
         if (this->min != prev_min) {
-            exe_write_diary(this->player_ptr, DIARY_DIALY, 0, NULL);
+            exe_write_diary(this->player_ptr, DIARY_DIALY, 0, nullptr);
             determine_daily_bounty(this->player_ptr, false);
         }
     }
@@ -151,7 +151,7 @@ void WorldTurnProcessor::process_monster_arena()
 
     if (number_mon == 0) {
         msg_print(_("相打ちに終わりました。", "Nothing survived."));
-        msg_print(NULL);
+        msg_print(nullptr);
         this->player_ptr->energy_need = 0;
         update_gambling_monsters(this->player_ptr);
         return;
@@ -171,7 +171,7 @@ void WorldTurnProcessor::process_monster_arena_winner(int win_m_idx)
     auto *wm_ptr = &this->player_ptr->current_floor_ptr->m_list[win_m_idx];
     monster_desc(this->player_ptr, m_name, wm_ptr, 0);
     msg_format(_("%sが勝利した！", "%s won!"), m_name);
-    msg_print(NULL);
+    msg_print(nullptr);
 
     if (win_m_idx == (sel_monster + 1)) {
         msg_print(_("おめでとうございます。", "Congratulations."));
@@ -181,7 +181,7 @@ void WorldTurnProcessor::process_monster_arena_winner(int win_m_idx)
         msg_print(_("残念でした。", "You lost gold."));
     }
 
-    msg_print(NULL);
+    msg_print(nullptr);
     this->player_ptr->energy_need = 0;
     update_gambling_monsters(this->player_ptr);
 }
@@ -195,7 +195,7 @@ void WorldTurnProcessor::process_monster_arena_draw()
 
     msg_print(_("申し訳ありませんが、この勝負は引き分けとさせていただきます。", "Sorry, but this battle ended in a draw."));
     this->player_ptr->au += kakekin;
-    msg_print(NULL);
+    msg_print(nullptr);
     this->player_ptr->energy_need = 0;
     update_gambling_monsters(this->player_ptr);
 }

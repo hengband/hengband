@@ -242,7 +242,7 @@ static bool place_monster_can_escort(player_type *player_ptr, MONRACE_IDX r_idx)
         return false;
 
     if (r_ptr->flags7 & RF7_FRIENDLY) {
-        if (monster_has_hostile_align(player_ptr, NULL, 1, -1, z_ptr))
+        if (monster_has_hostile_align(player_ptr, nullptr, 1, -1, z_ptr))
             return false;
     }
 
@@ -367,7 +367,7 @@ bool alloc_horde(player_type *player_ptr, POSITION y, POSITION x, summon_specifi
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     MONRACE_IDX r_idx = 0;
     int attempts = 1000;
-    monster_race *r_ptr = NULL;
+    monster_race *r_ptr = nullptr;
     while (--attempts) {
         r_idx = get_mon_num(player_ptr, 0, floor_ptr->monster_level, 0);
         if (!r_idx)

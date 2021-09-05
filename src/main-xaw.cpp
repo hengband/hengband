@@ -39,8 +39,8 @@ background          Background         Pixel           XtDefaultBackground
 border              BorderColor        Pixel           XtDefaultForeground
 borderWidth         BorderWidth        Dimension       1
 cursor              Cursor             Cursor          None
-cursorName          Cursor             String          NULL
-destroyCallback     Callback           Pointer         NULL
+cursorName          Cursor             String          nullptr
+destroyCallback     Callback           Pointer         nullptr
 height              Height             Dimension       0
 insensitiveBorder   Insensitive        Pixmap          Gray
 mappedWhenManaged   MappedWhenManaged  Boolean         True
@@ -253,7 +253,7 @@ static XtResource resources[] = { { XtNstartRows, XtCValue, XtRInt, sizeof(int),
     { XtNcolor14, XtCColor, XtRPixel, sizeof(Pixel), offset(color[14]), XtRString, "#00c8ff" },
     { XtNcolor15, XtCColor, XtRPixel, sizeof(Pixel), offset(color[15]), XtRString, "#ffcc80" },
 
-    { XtNredrawCallback, XtCCallback, XtRCallback, sizeof(XtPointer), offset(redraw_callbacks), XtRCallback, (XtPointer)NULL } };
+    { XtNredrawCallback, XtCCallback, XtRCallback, sizeof(XtPointer), offset(redraw_callbacks), XtRCallback, (XtPointer)nullptr } };
 
 #undef offset
 
@@ -274,35 +274,35 @@ AngbandClassRec angbandClassRec = { {
                                         /* superclass           */ (WidgetClass)superclass,
                                         /* class_name           */ "Angband",
                                         /* widget_size          */ sizeof(AngbandRec),
-                                        /* class_initialize     */ NULL,
-                                        /* class_part_initialize*/ NULL,
+                                        /* class_initialize     */ nullptr,
+                                        /* class_part_initialize*/ nullptr,
                                         /* class_inited         */ false,
                                         /* initialize           */ (XtInitProc)Initialize,
-                                        /* initialize_hook      */ NULL,
+                                        /* initialize_hook      */ nullptr,
                                         /* realize              */ XtInheritRealize,
-                                        /* actions              */ NULL,
+                                        /* actions              */ nullptr,
                                         /* num_actions          */ 0,
                                         /* resources            */ resources,
                                         /* num_resources        */ XtNumber(resources),
-                                        /* xrm_class            */ NULLQUARK,
+                                        /* xrm_class            */ nullptrQUARK,
                                         /* compress_motion      */ true,
                                         /* compress_exposure    */ XtExposeCompressMultiple,
                                         /* compress_enterleave  */ true,
                                         /* visible_interest     */ false,
                                         /* destroy              */ (XtWidgetProc)Destroy,
-                                        /* resize               */ NULL,
+                                        /* resize               */ nullptr,
                                         /* expose               */ (XtExposeProc)Redisplay,
                                         /* set_values           */ (XtSetValuesFunc)SetValues,
-                                        /* set_values_hook      */ NULL,
+                                        /* set_values_hook      */ nullptr,
                                         /* set_values_almost    */ XtInheritSetValuesAlmost,
-                                        /* get_values_hook      */ NULL,
-                                        /* accept_focus         */ NULL,
+                                        /* get_values_hook      */ nullptr,
+                                        /* accept_focus         */ nullptr,
                                         /* version              */ XtVersion,
-                                        /* callback_private     */ NULL,
-                                        /* tm_table             */ NULL,
-                                        /* query_geometry       */ NULL,
+                                        /* callback_private     */ nullptr,
+                                        /* tm_table             */ nullptr,
+                                        /* query_geometry       */ nullptr,
                                         /* display_accelerator  */ XtInheritDisplayAccelerator,
-                                        /* extension            */ NULL },
+                                        /* extension            */ nullptr },
     /* Simple class fields initialization */
     { /* change_sensitive     */ XtInheritChangeSensitive },
     /* Angband class fields initialization */
@@ -422,7 +422,7 @@ static void Destroy(AngbandWidget widget)
 static void Redisplay(AngbandWidget widget, XEvent *event, Region region)
 {
     if (XtHasCallbacks((Widget)widget, XtNredrawCallback) == XtCallbackHasSome)
-        XtCallCallbacks((Widget)widget, XtNredrawCallback, NULL);
+        XtCallCallbacks((Widget)widget, XtNredrawCallback, nullptr);
 }
 
 /*
@@ -446,7 +446,7 @@ static Boolean SetValues(AngbandWidget current, AngbandWidget request, AngbandWi
         new->angband.fnt = getFont(new, new->angband.font, FALSE);
 
         /* The font didn't exist */
-        if (new->angband.fnt == NULL) {
+        if (new->angband.fnt == nullptr) {
             new->angband.fnt = current->angband.fnt;
             new->angband.font = current->angband.font;
             XtWarning("Couldn't find the request font!");
@@ -507,7 +507,7 @@ static Boolean SetValues(AngbandWidget current, AngbandWidget request, AngbandWi
             + 2 * new->angband.internal_border;
 
         /* Get the new width */
-        if (XtMakeResizeRequest((Widget) new, width, height, NULL, NULL) == XtGeometryNo) {
+        if (XtMakeResizeRequest((Widget) new, width, height, nullptr, nullptr) == XtGeometryNo) {
             /* Not allowed */
             XtWarning("Size change denied!");
         } else {
@@ -555,7 +555,7 @@ static XFontStruct *getFont(AngbandWidget widget, String font, Boolean fallback)
 {
     Display *dpy = XtDisplay((Widget)widget);
     char buf[256];
-    XFontStruct *fnt = NULL;
+    XFontStruct *fnt = nullptr;
 
     if (!(fnt = XLoadQueryFont(dpy, font)) && fallback) {
         sprintf(buf, "Can't find the font \"%s\", trying fixed\n", font);
@@ -654,7 +654,7 @@ static String fallback[] = { "Angband.angband.iconName:            Angband", "An
     "Angband.recall.title:                Recall", "Angband.choice.iconName:             Choice", "Angband.choice.title:                Choice",
     "Angband.term-4.iconName:	      Term 4", "Angband.term-4.title:		      Term 4", "Angband.term-5.iconName:	      Term 5",
     "Angband.term-5.title:		      Term 5", "Angband.term-6.iconName:	      Term 6", "Angband.term-6.title:		      Term 6",
-    "Angband.term-7.iconName:	      Term 7", "Angband.term-7.title:		      Term 7", NULL };
+    "Angband.term-7.iconName:	      Term 7", "Angband.term-7.title:		      Term 7", nullptr };
 
 /*
  * Do a redraw
@@ -687,7 +687,7 @@ static void react_keypress(XKeyEvent *ev)
     char msg[128];
 
     /* Check for "normal" keypresses */
-    n = XLookupString(ev, buf, 125, &ks, NULL);
+    n = XLookupString(ev, buf, 125, &ks, nullptr);
 
     /* Terminate */
     buf[n] = '\0';
@@ -923,7 +923,7 @@ static errr term_data_init(term_data *td, Widget topLevel, int key_buf, String n
     term *t = &td->t;
 
     /* Create the shell widget */
-    parent = XtCreatePopupShell(name, topLevelShellWidgetClass, topLevel, NULL, 0);
+    parent = XtCreatePopupShell(name, topLevelShellWidgetClass, topLevel, nullptr, 0);
 
     /* Create the interior widget */
     td->widget = (AngbandWidget)XtCreateManagedWidget(name, angbandWidgetClass, parent, widget_arg, widget_arg_no);
@@ -987,7 +987,7 @@ errr init_xaw(void)
     argv[0] = argv0;
 
     /* Terminate */
-    argv[1] = NULL;
+    argv[1] = nullptr;
 
     /* Attempt to open the local display */
     dpy = XOpenDisplay("");
@@ -1001,11 +1001,11 @@ errr init_xaw(void)
 
 #ifdef USE_XAW_LANG
     /* Support locale processing */
-    XtSetLanguageProc(NULL, NULL, NULL);
+    XtSetLanguageProc(nullptr, nullptr, nullptr);
 #endif
 
     /* Initialize the toolkit */
-    topLevel = XtAppInitialize(&appcon, "Angband", NULL, 0, &argc, argv, fallback, NULL, 0);
+    topLevel = XtAppInitialize(&appcon, "Angband", nullptr, 0, &argc, argv, fallback, nullptr, 0);
 
     /* Initialize the windows */
     for (i = 0; i < MAX_TERM_DATA; i++) {

@@ -33,7 +33,7 @@
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param spell 魔法ID
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
- * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はnullptr文字列を返す。
  */
 concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 {
@@ -81,7 +81,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 /*
                  * A radius-0 ball may (1) be aimed at
@@ -143,7 +143,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_ball(caster_ptr, GF_POIS, dir, dam, rad);
             }
@@ -164,7 +164,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 sleep_monster(caster_ptr, dir, plev);
             }
@@ -204,7 +204,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fear_monster(caster_ptr, dir, plev);
                 stun_monster(caster_ptr, dir, plev);
@@ -226,7 +226,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 control_one_undead(caster_ptr, dir, plev);
             }
@@ -255,7 +255,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_ball(caster_ptr, GF_HYPODYNAMIA, dir, damroll(dice, sides) + base, rad);
             }
@@ -277,7 +277,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr), GF_NETHER, dir, damroll(dice, sides));
             }
@@ -317,7 +317,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_ball_hide(caster_ptr, GF_GENOCIDE, dir, power, 0);
             }
@@ -356,7 +356,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 HIT_POINT dam = base + damroll(dice, sides);
 
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 if (hypodynamic_bolt(caster_ptr, dir, dam)) {
                     chg_virtue(caster_ptr, V_SACRIFICE, -1);
@@ -447,7 +447,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 cast_invoke_spirits(caster_ptr, dir);
             }
@@ -469,7 +469,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr), GF_DARK, dir, damroll(dice, sides));
             }
@@ -526,7 +526,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 int i;
 
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 chg_virtue(caster_ptr, V_SACRIFICE, -1);
                 chg_virtue(caster_ptr, V_VITALITY, -1);
@@ -572,7 +572,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_ball(caster_ptr, GF_DARK, dir, dam, rad);
             }
@@ -588,7 +588,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
         {
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 death_ray(caster_ptr, dir, plev);
             }
@@ -614,10 +614,10 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
             if (cast) {
                 if (randint1(50) > plev) {
                     if (!ident_spell(caster_ptr, false))
-                        return NULL;
+                        return nullptr;
                 } else {
                     if (!identify_fully(caster_ptr, false))
-                        return NULL;
+                        return nullptr;
                 }
             }
         }
@@ -690,7 +690,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_ball(caster_ptr, GF_HELL_FIRE, dir, dam, rad);
                 take_hit(caster_ptr, DAMAGE_USELIFE, 20 + randint1(30), _("地獄の劫火の呪文を唱えた疲労", "the strain of casting Hellfire"));

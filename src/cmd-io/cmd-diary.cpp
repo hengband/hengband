@@ -87,7 +87,7 @@ static void do_cmd_erase_diary(void)
 {
     GAME_TEXT file_name[MAX_NLEN];
     char buf[256];
-    FILE *fff = NULL;
+    FILE *fff = nullptr;
 
     if (!get_check(_("本当に記録を消去しますか？", "Do you really want to delete all your records? ")))
         return;
@@ -103,7 +103,7 @@ static void do_cmd_erase_diary(void)
         msg_format(_("%s の消去に失敗しました。", "failed to delete %s."), buf);
     }
 
-    msg_print(NULL);
+    msg_print(nullptr);
 }
 
 /*!
