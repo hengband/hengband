@@ -153,41 +153,8 @@ void RealmHex::check_hex()
         return;
     }
 
-    auto need_mana = 0;
-    for (auto spell = 0; spell < 32; spell++) {
-        if (hex_spelling(this->caster_ptr, spell)) {
-            const magic_type *s_ptr;
-            s_ptr = &technic_info[REALM_HEX - MIN_TECHNIC][spell];
-            need_mana += mod_need_mana(this->caster_ptr, s_ptr->smana, spell, REALM_HEX);
-        }
-    }
-
-    /* Culcurates final mana cost */
-    uint need_mana_frac = 0;
-    s64b_div(&need_mana, &need_mana_frac, 0, 3); /* Divide by 3 */
-    need_mana += (casting_hex_num(this->caster_ptr) - 1);
-
-    /* Not enough mana */
-    if (s64b_cmp(this->caster_ptr->csp, this->caster_ptr->csp_frac, need_mana, need_mana_frac) < 0) {
-        stop_hex_spell_all(this->caster_ptr);
-        return;
-    }
-
-    /* Enough mana */
-    else {
-        s64b_sub(&(this->caster_ptr->csp), &(this->caster_ptr->csp_frac), need_mana, need_mana_frac);
-
-        this->caster_ptr->redraw |= PR_MANA;
-        if (need_restart) {
-            msg_print(_("詠唱を再開した。", "You restart casting."));
-            this->caster_ptr->action = ACTION_SPELL;
-            this->caster_ptr->update |= PU_BONUS | PU_HP;
-            this->caster_ptr->redraw |= PR_MAP | PR_STATUS | PR_STATE;
-            this->caster_ptr->update |= PU_MONSTERS;
-            this->caster_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
-        }
-    }
-
+    this->process_mana_cost(need_restart);
+        
     /* Gain experiences of spelling spells */
     for (auto spell = 0; spell < 32; spell++) {
         if (!hex_spelling(this->caster_ptr, spell)) {
@@ -241,6 +208,35 @@ void RealmHex::check_hex()
     }
 }
 
+void RealmHex::process_mana_cost(const bool need_restart)
+{
+    auto need_mana = this->calc_need_mana();
+
+    /* Culcurates final mana cost */
+    uint need_mana_frac = 0;
+    s64b_div(&need_mana, &need_mana_frac, 0, 3); /* Divide by 3 */
+    need_mana += (casting_hex_num(this->caster_ptr) - 1);
+
+    auto enough_mana = s64b_cmp(this->caster_ptr->csp, this->caster_ptr->csp_frac, need_mana, need_mana_frac) < 0;
+    if (!enough_mana) {
+        stop_hex_spell_all(this->caster_ptr);
+        return;
+    }
+
+    s64b_sub(&(this->caster_ptr->csp), &(this->caster_ptr->csp_frac), need_mana, need_mana_frac);
+    this->caster_ptr->redraw |= PR_MANA;
+    if (!need_restart) {
+        return;
+    }
+
+    msg_print(_("詠唱を再開した。", "You restart casting."));
+    this->caster_ptr->action = ACTION_SPELL;
+    this->caster_ptr->update |= PU_BONUS | PU_HP;
+    this->caster_ptr->redraw |= PR_MAP | PR_STATUS | PR_STATE;
+    this->caster_ptr->update |= PU_MONSTERS;
+    this->caster_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
+}
+
 bool RealmHex::check_restart()
 {
     if (this->caster_ptr->magic_num1[1] == 0) {
@@ -250,6 +246,19 @@ bool RealmHex::check_restart()
     this->caster_ptr->magic_num1[0] = this->caster_ptr->magic_num1[1];
     this->caster_ptr->magic_num1[1] = 0;
     return true;
+}
+
+int RealmHex::calc_need_mana()
+{
+    auto need_mana = 0;
+    for (auto spell = 0; spell < 32; spell++) {
+        if (hex_spelling(this->caster_ptr, spell)) {
+            const auto *s_ptr = &technic_info[REALM_HEX - MIN_TECHNIC][spell];
+            need_mana += mod_need_mana(this->caster_ptr, s_ptr->smana, spell, REALM_HEX);
+        }
+    }
+
+    return need_mana;
 }
 
 /*!
