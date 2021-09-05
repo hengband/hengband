@@ -94,20 +94,8 @@ bool RealmHex::stop_hex_spell()
  */
 bool RealmHex::select_spell_stopping(int *sp, char *out_val, char *choice)
 {
-    auto y = 1;
-    auto x = 20;
     while (true) {
-        auto n = 0;
-        term_erase(x, y, 255);
-        prt(_("     名前", "     Name"), y, x + 5);
-        for (auto spell = 0; spell < 32; spell++) {
-            if (hex_spelling(this->caster_ptr, spell)) {
-                term_erase(x, y + n + 1, 255);
-                put_str(format("%c)  %s", I2A(n), exe_spell(this->caster_ptr, REALM_HEX, spell, SPELL_NAME)), y + n + 1, x + 2);
-                sp[n++] = spell;
-            }
-        }
-
+        this->display_spells_list(sp);
         if (!get_com(out_val, choice, true)) {
             return false;
         }
@@ -130,9 +118,24 @@ bool RealmHex::select_spell_stopping(int *sp, char *out_val, char *choice)
     }
 }
 
+void RealmHex::display_spells_list(int *sp)
+{
+    constexpr auto y = 1;
+    constexpr auto x = 20;
+    auto n = 0;
+    term_erase(x, y, 255);
+    prt(_("     名前", "     Name"), y, x + 5);
+    for (auto spell = 0; spell < 32; spell++) {
+        if (hex_spelling(this->caster_ptr, spell)) {
+            term_erase(x, y + n + 1, 255);
+            put_str(format("%c)  %s", I2A(n), exe_spell(this->caster_ptr, REALM_HEX, spell, SPELL_NAME)), y + n + 1, x + 2);
+            sp[n++] = spell;
+        }
+    }
+}
+
 /*!
- * @brief 一定時間毎に呪術で消費するMPを処理する /
- * Upkeeping hex spells Called from dungeon.c
+ * @brief 一定時間毎に呪術で消費するMPを処理する
  */
 void RealmHex::check_hex()
 {
@@ -146,8 +149,6 @@ void RealmHex::check_hex()
     }
 
     auto need_restart = this->check_restart();
-
-    /* Stop all spells when anti-magic ability is given */
     if (this->caster_ptr->anti_magic) {
         stop_hex_spell_all(this->caster_ptr);
         return;
@@ -167,8 +168,6 @@ void RealmHex::check_hex()
 void RealmHex::process_mana_cost(const bool need_restart)
 {
     auto need_mana = this->calc_need_mana();
-
-    /* Culcurates final mana cost */
     uint need_mana_frac = 0;
     s64b_div(&need_mana, &need_mana_frac, 0, 3); /* Divide by 3 */
     need_mana += (casting_hex_num(this->caster_ptr) - 1);
