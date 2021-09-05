@@ -230,18 +230,11 @@ void RealmHex::gain_exp_from_hex()
             continue;
         }
 
-        auto *floor_ptr = this->caster_ptr->current_floor_ptr;
-        if (this->caster_ptr->spell_exp[spell] < SPELL_EXP_SKILLED) {
-            auto gain_condition = one_in_(2);
-            gain_condition &= floor_ptr->dun_level > 4;
-            gain_condition &= (floor_ptr->dun_level + 10) > this->caster_ptr->lev;
-            if (gain_condition) {
-                this->caster_ptr->spell_exp[spell]++;
-            }
-
+        if (this->gain_exp_skilled(spell)) {
             continue;
         }
 
+        auto *floor_ptr = this->caster_ptr->current_floor_ptr;
         if (this->caster_ptr->spell_exp[spell] < SPELL_EXP_EXPERT) {
             auto gain_condition = one_in_(5);
             gain_condition &= (floor_ptr->dun_level + 5) > this->caster_ptr->lev;
@@ -262,6 +255,23 @@ void RealmHex::gain_exp_from_hex()
             }
         }
     }
+}
+
+bool RealmHex::gain_exp_skilled(const int spell)
+{
+    if (this->caster_ptr->spell_exp[spell] >= SPELL_EXP_SKILLED) {
+        return false;
+    }
+
+    auto *floor_ptr = this->caster_ptr->current_floor_ptr;
+    auto gain_condition = one_in_(2);
+    gain_condition &= floor_ptr->dun_level > 4;
+    gain_condition &= (floor_ptr->dun_level + 10) > this->caster_ptr->lev;
+    if (gain_condition) {
+        this->caster_ptr->spell_exp[spell]++;
+    }
+    
+    return true;
 }
 
 /*!

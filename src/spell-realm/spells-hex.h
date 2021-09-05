@@ -20,6 +20,7 @@ private:
     bool check_restart();
     int calc_need_mana();
     void gain_exp_from_hex();
+    bool gain_exp_skilled(const int spell);
 };
 
 bool stop_hex_spell_all(player_type *caster_ptr);
