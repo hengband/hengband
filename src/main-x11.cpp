@@ -962,7 +962,7 @@ static errr Infofnt_text_non(int x, int y, concptr str, int len)
 /*
  * Hack -- cursor color
  */
-static infoclr * xor_ ;
+static infoclr *xor_;
 
 /*
  * Actual color table
@@ -1184,7 +1184,10 @@ static void sort_co_ord(co_ord *min, co_ord *max, const co_ord *b, const co_ord 
 /*
  * Remove the selection by redrawing it.
  */
-static void mark_selection_clear(int x1, int y1, int x2, int y2) { term_redraw_section(x1, y1, x2, y2); }
+static void mark_selection_clear(int x1, int y1, int x2, int y2)
+{
+    term_redraw_section(x1, y1, x2, y2);
+}
 
 /*
  * Select an area by drawing a grey box around it.
@@ -1867,7 +1870,8 @@ static errr Term_curs_x11(int x, int y)
         XftDrawRect(Infowin->draw, &xor_->fg, x * Infofnt->wid + Infowin->ox, y * Infofnt->hgt + Infowin->oy, Infofnt->wid - 1, Infofnt->hgt - 1);
         XftDrawRect(Infowin->draw, &xor_->fg, x * Infofnt->wid + Infowin->ox + 1, y * Infofnt->hgt + Infowin->oy + 1, Infofnt->wid - 3, Infofnt->hgt - 3);
 #else
-        XDrawRectangle(Metadpy->dpy, Infowin->win, xor_->gc, x * Infofnt->wid + Infowin->ox, y * Infofnt->hgt + Infowin->oy, Infofnt->wid - 1, Infofnt->hgt - 1);
+        XDrawRectangle(
+            Metadpy->dpy, Infowin->win, xor_->gc, x * Infofnt->wid + Infowin->ox, y * Infofnt->hgt + Infowin->oy, Infofnt->wid - 1, Infofnt->hgt - 1);
         XDrawRectangle(
             Metadpy->dpy, Infowin->win, xor_->gc, x * Infofnt->wid + Infowin->ox + 1, y * Infofnt->hgt + Infowin->oy + 1, Infofnt->wid - 3, Infofnt->hgt - 3);
 #endif
@@ -2071,7 +2075,10 @@ static void IMDestroyCallback(XIM xim, XPointer client_data, XPointer call_data)
 }
 #endif
 
-static char force_lower(char a) { return ((isupper((a))) ? tolower((a)) : (a)); }
+static char force_lower(char a)
+{
+    return ((isupper((a))) ? tolower((a)) : (a));
+}
 
 /*
  * Initialize a term_data
