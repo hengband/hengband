@@ -9,12 +9,13 @@ public:
     RealmHex(player_type *caster_ptr);
     virtual ~RealmHex() = default;
 
+    bool stop_hex_spell();
+
 private:
     player_type *caster_ptr;
 };
 
 bool stop_hex_spell_all(player_type *caster_ptr);
-bool stop_hex_spell(player_type *caster_ptr);
 void check_hex(player_type *caster_ptr);
 bool hex_spell_fully(player_type *caster_ptr);
 void revenge_spell(player_type *caster_ptr);
