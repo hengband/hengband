@@ -56,69 +56,68 @@ bool stop_hex_spell_all(player_type *caster_ptr)
  */
 bool RealmHex::stop_hex_spell()
 {
-    int spell;
-    char choice = 0;
-    char out_val[160];
-    bool flag = false;
-    TERM_LEN y = 1;
-    TERM_LEN x = 20;
-    int sp[MAX_KEEP];
-
     if (!hex_spelling_any(this->caster_ptr)) {
         msg_print(_("呪文を詠唱していません。", "You are not casting a spell."));
         return false;
     }
-
-    /* Stop all spells */
-    else if ((casting_hex_num(this->caster_ptr) == 1) || (this->caster_ptr->lev < 35)) {
+    
+    if ((casting_hex_num(this->caster_ptr) == 1) || (this->caster_ptr->lev < 35)) {
         return stop_hex_spell_all(this->caster_ptr);
-    } else {
-        strnfmt(out_val, 78, _("どの呪文の詠唱を中断しますか？(呪文 %c-%c, 'l'全て, ESC)", "Which spell do you stop casting? (Spell %c-%c, 'l' to all, ESC)"),
-            I2A(0), I2A(casting_hex_num(this->caster_ptr) - 1));
+    }
 
-        screen_save();
+    char out_val[160];
+    strnfmt(out_val, 78, _("どの呪文の詠唱を中断しますか？(呪文 %c-%c, 'l'全て, ESC)", "Which spell do you stop casting? (Spell %c-%c, 'l' to all, ESC)"),
+        I2A(0), I2A(casting_hex_num(this->caster_ptr) - 1));
+    screen_save();
 
-        while (!flag) {
-            int n = 0;
-            term_erase(x, y, 255);
-            prt(_("     名前", "     Name"), y, x + 5);
-            for (spell = 0; spell < 32; spell++) {
-                if (hex_spelling(this->caster_ptr, spell)) {
-                    term_erase(x, y + n + 1, 255);
-                    put_str(format("%c)  %s", I2A(n), exe_spell(this->caster_ptr, REALM_HEX, spell, SPELL_NAME)), y + n + 1, x + 2);
-                    sp[n++] = spell;
-                }
+    char choice = 0;
+    auto flag = false;
+    auto y = 1;
+    auto x = 20;
+    int sp[MAX_KEEP]{};
+    while (!flag) {
+        auto n = 0;
+        term_erase(x, y, 255);
+        prt(_("     名前", "     Name"), y, x + 5);
+        for (auto spell = 0; spell < 32; spell++) {
+            if (hex_spelling(this->caster_ptr, spell)) {
+                term_erase(x, y + n + 1, 255);
+                put_str(format("%c)  %s", I2A(n), exe_spell(this->caster_ptr, REALM_HEX, spell, SPELL_NAME)), y + n + 1, x + 2);
+                sp[n++] = spell;
             }
-
-            if (!get_com(out_val, &choice, true))
-                break;
-            if (isupper(choice))
-                choice = (char)tolower(choice);
-
-            if (choice == 'l') /* All */
-            {
-                screen_load();
-                return stop_hex_spell_all(this->caster_ptr);
-            }
-            if ((choice < I2A(0)) || (choice > I2A(casting_hex_num(this->caster_ptr) - 1)))
-                continue;
-            flag = true;
         }
+
+        if (!get_com(out_val, &choice, true)) {
+            break;
+        }
+
+        if (isupper(choice)) {
+            choice = (char)tolower(choice);
+        }
+
+         /* All */
+        if (choice == 'l') {
+            screen_load();
+            return stop_hex_spell_all(this->caster_ptr);
+        }
+
+        if ((choice < I2A(0)) || (choice > I2A(casting_hex_num(this->caster_ptr) - 1))) {
+            continue;
+        }
+
+        flag = true;
     }
 
     screen_load();
-
     if (flag) {
-        int n = sp[A2I(choice)];
-
+        auto n = sp[A2I(choice)];
         exe_spell(this->caster_ptr, REALM_HEX, n, SPELL_STOP);
         casting_hex_flags(this->caster_ptr) &= ~(1UL << n);
         casting_hex_num(this->caster_ptr)--;
     }
 
-    this->caster_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
-    this->caster_ptr->redraw |= (PR_EXTRA | PR_HP | PR_MANA);
-
+    this->caster_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
+    this->caster_ptr->redraw |= PR_EXTRA | PR_HP | PR_MANA;
     return flag;
 }
 
