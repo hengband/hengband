@@ -6,8 +6,8 @@
 #include "monster-race/monster-race.h"
 #include "player/attack-defense-types.h"
 #include "player/player-skill.h"
-#include "spell-realm/spells-song.h"
 #include "realm/realm-hex-numbers.h"
+#include "spell-realm/spells-song.h"
 #include "spell/spell-info.h"
 #include "spell/spells-execution.h"
 #include "spell/technic-info-table.h"
@@ -60,7 +60,7 @@ bool RealmHex::stop_hex_spell()
         msg_print(_("呪文を詠唱していません。", "You are not casting a spell."));
         return false;
     }
-    
+
     if ((casting_hex_num(this->caster_ptr) == 1) || (this->caster_ptr->lev < 35)) {
         return stop_hex_spell_all(this->caster_ptr);
     }
@@ -145,12 +145,7 @@ void RealmHex::check_hex()
         return;
     }
 
-    bool res = false;
-    if (this->caster_ptr->magic_num1[1]) {
-        this->caster_ptr->magic_num1[0] = this->caster_ptr->magic_num1[1];
-        this->caster_ptr->magic_num1[1] = 0;
-        res = true;
-    }
+    auto need_restart = this->check_restart();
 
     /* Stop all spells when anti-magic ability is given */
     if (this->caster_ptr->anti_magic) {
@@ -183,7 +178,7 @@ void RealmHex::check_hex()
         s64b_sub(&(this->caster_ptr->csp), &(this->caster_ptr->csp_frac), need_mana, need_mana_frac);
 
         this->caster_ptr->redraw |= PR_MANA;
-        if (res) {
+        if (need_restart) {
             msg_print(_("詠唱を再開した。", "You restart casting."));
             this->caster_ptr->action = ACTION_SPELL;
             this->caster_ptr->update |= PU_BONUS | PU_HP;
@@ -204,7 +199,7 @@ void RealmHex::check_hex()
             this->caster_ptr->spell_exp[spell] += 5;
             continue;
         }
-        
+
         auto *floor_ptr = this->caster_ptr->current_floor_ptr;
         if (this->caster_ptr->spell_exp[spell] < SPELL_EXP_SKILLED) {
             auto condition = one_in_(2);
@@ -216,7 +211,7 @@ void RealmHex::check_hex()
 
             continue;
         }
-        
+
         if (this->caster_ptr->spell_exp[spell] < SPELL_EXP_EXPERT) {
             auto condition = one_in_(5);
             condition &= (floor_ptr->dun_level + 5) > this->caster_ptr->lev;
@@ -227,7 +222,7 @@ void RealmHex::check_hex()
 
             continue;
         }
-        
+
         if (this->caster_ptr->spell_exp[spell] < SPELL_EXP_MASTER) {
             auto condition = one_in_(5);
             condition &= (floor_ptr->dun_level + 5) > this->caster_ptr->lev;
@@ -244,6 +239,17 @@ void RealmHex::check_hex()
             exe_spell(this->caster_ptr, REALM_HEX, spell, SPELL_CONT);
         }
     }
+}
+
+bool RealmHex::check_restart()
+{
+    if (this->caster_ptr->magic_num1[1] == 0) {
+        return false;
+    }
+
+    this->caster_ptr->magic_num1[0] = this->caster_ptr->magic_num1[1];
+    this->caster_ptr->magic_num1[1] = 0;
+    return true;
 }
 
 /*!
@@ -348,6 +354,12 @@ bool multiply_barrier(player_type *caster_ptr, MONSTER_IDX m_idx)
     return true;
 }
 
-bool hex_spelling(player_type *caster_ptr, int hex) { return (caster_ptr->realm1 == REALM_HEX) && (caster_ptr->magic_num1[0] & (1UL << (hex))); }
+bool hex_spelling(player_type *caster_ptr, int hex)
+{
+    return (caster_ptr->realm1 == REALM_HEX) && (caster_ptr->magic_num1[0] & (1UL << (hex)));
+}
 
-bool hex_spelling_any(player_type *caster_ptr) { return (caster_ptr->realm1 == REALM_HEX) && (caster_ptr->magic_num1[0] != 0); }
+bool hex_spelling_any(player_type *caster_ptr)
+{
+    return (caster_ptr->realm1 == REALM_HEX) && (caster_ptr->magic_num1[0] != 0);
+}

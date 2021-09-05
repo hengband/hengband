@@ -16,6 +16,7 @@ private:
     player_type *caster_ptr;
 
     bool select_spell_stopping(int *sp, char *out_val, char *choice);
+    bool check_restart();
 };
 
 bool stop_hex_spell_all(player_type *caster_ptr);
