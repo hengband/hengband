@@ -64,7 +64,7 @@ static void handle_signal_simple(int sig)
 {
     (void)signal(sig, SIG_IGN);
     if (!current_world_ptr->character_generated || current_world_ptr->character_saved)
-        quit(NULL);
+        quit(nullptr);
 
     signal_count++;
     if (p_ptr->is_dead) {
@@ -121,7 +121,7 @@ static void handle_signal_abort(int sig)
 
     (void)signal(sig, SIG_IGN);
     if (!current_world_ptr->character_generated || current_world_ptr->character_saved)
-        quit(NULL);
+        quit(nullptr);
 
     forget_lite(p_ptr->current_floor_ptr);
     forget_view(p_ptr->current_floor_ptr);

@@ -153,7 +153,7 @@ static void on_dead_sacred_treasures(player_type *player_ptr, monster_death_type
         return;
 
     ARTIFACT_IDX a_idx = 0;
-    artifact_type *a_ptr = NULL;
+    artifact_type *a_ptr = nullptr;
     do {
         switch (randint0(3)) {
         case 0:
@@ -376,7 +376,7 @@ static bool make_equipment(player_type *player_ptr, object_type *q_ptr, const BI
  * @brief 死亡時ドロップとしてランダムアーティファクトのみを生成する
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param md_ptr モンスター撃破構造体への参照ポインタ
- * @param object_hook_pf アイテム種別指定、特になければNULLで良い
+ * @param object_hook_pf アイテム種別指定、特になければnullptrで良い
  * @return なし
  * @details
  * 最初のアイテム生成でいきなり☆が生成された場合を除き、中途半端な☆ (例：呪われている)は生成しない.
@@ -386,7 +386,7 @@ static void on_dead_random_artifact(player_type *player_ptr, monster_death_type 
 {
     object_type forge;
     object_type *q_ptr = &forge;
-    auto is_object_hook_null = object_hook_pf == NULL;
+    auto is_object_hook_null = object_hook_pf == nullptr;
     auto drop_mode = md_ptr->mo_mode | AM_NO_FIXED_ART;
     while (true) {
         // make_object() の中でアイテム種別をキャンセルしている

@@ -171,10 +171,10 @@ inline T *free_impl(T *p)
 /* Load a thing of type T, at location P1, from another, at location P2 */
 #define COPY(P1, P2, T) (copy_impl<T>(P1, P2))
 
-/* Free an array of N things of type T at P, return NULL */
+/* Free an array of N things of type T at P, return nullptr */
 #define C_FREE(P, N, T) (c_free_impl<T>(P, N))
 
-/* Free one thing of type T at P, return NULL */
+/* Free one thing of type T at P, return nullptr */
 #define FREE(P, T) (free_impl<T>(P))
 
 /* Allocate, and return, an array of type T[N] */
@@ -195,10 +195,10 @@ inline T *free_impl(T *p)
 /* Allocate a wiped thing of type T, assign to pointer P */
 #define MAKE(P, T) ((P) = ZNEW(T))
 
-/* Free an array of type T[N], at location P, and set P to NULL */
+/* Free an array of type T[N], at location P, and set P to nullptr */
 #define C_KILL(P, N, T) ((P) = C_FREE(P, N, T))
 
-/* Free a thing of type T, at location P, and set P to NULL */
+/* Free a thing of type T, at location P, and set P to nullptr */
 #define KILL(P, T) ((P) = FREE(P, T))
 
 /**** Available functions ****/

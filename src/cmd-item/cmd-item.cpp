@@ -123,7 +123,7 @@ void do_cmd_drop(player_type *creature_ptr)
     }
 
     if (o_ptr->number > 1) {
-        amt = get_quantity(NULL, o_ptr->number);
+        amt = get_quantity(nullptr, o_ptr->number);
         if (amt <= 0)
             return;
     }
@@ -207,7 +207,7 @@ void do_cmd_inscribe(player_type *creature_ptr)
 
     describe_flavor(creature_ptr, o_name, o_ptr, OD_OMIT_INSCRIPTION);
     msg_format(_("%sに銘を刻む。", "Inscribing %s."), o_name);
-    msg_print(NULL);
+    msg_print(nullptr);
     strcpy(out_val, "");
     if (o_ptr->inscription)
         strcpy(out_val, quark_str(o_ptr->inscription));

@@ -51,7 +51,7 @@ static bool summon_specific_okay(player_type *player_ptr, MONRACE_IDX r_idx)
         if (monster_has_hostile_align(player_ptr, m_ptr, 0, 0, r_ptr))
             return false;
     } else if (summon_specific_who < 0) {
-        if (monster_has_hostile_align(player_ptr, NULL, 10, -10, r_ptr) && !one_in_(ABS(player_ptr->alignment) / 2 + 1))
+        if (monster_has_hostile_align(player_ptr, nullptr, 10, -10, r_ptr) && !one_in_(ABS(player_ptr->alignment) / 2 + 1))
             return false;
     }
 
@@ -62,7 +62,7 @@ static bool summon_specific_okay(player_type *player_ptr, MONRACE_IDX r_idx)
         return true;
 
     if ((summon_specific_who < 0) && ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))
-        && monster_has_hostile_align(player_ptr, NULL, 10, -10, r_ptr))
+        && monster_has_hostile_align(player_ptr, nullptr, 10, -10, r_ptr))
         return false;
 
     if ((r_ptr->flags7 & RF7_CHAMELEON) && d_info[player_ptr->dungeon_idx].flags.has(DF::CHAMELEON))

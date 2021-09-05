@@ -107,7 +107,7 @@ int macro_find_ready(concptr pat)
 /*
  * Add a macro definition (or redefinition).
  *
- * We should use "act == NULL" to "remove" a macro, but this might make it
+ * We should use "act == nullptr" to "remove" a macro, but this might make it
  * impossible to save the "removal" of a macro definition.
  *
  * We should consider refusing to allow macros which contain existing macros,

@@ -30,7 +30,7 @@
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param spell 魔法ID
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
- * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はnullptr文字列を返す。
  */
 concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 {
@@ -58,7 +58,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr) - 10, GF_MISSILE, dir, damroll(dice, sides));
             }
@@ -142,7 +142,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_ball(caster_ptr, GF_MISSILE, dir, damroll(dice, sides) + base, rad);
 
@@ -170,7 +170,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr), GF_FIRE, dir, damroll(dice, sides));
             }
@@ -192,7 +192,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_ball(caster_ptr, GF_DISINTEGRATE, dir, damroll(dice, sides), 0);
             }
@@ -230,7 +230,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
             if (cast) {
 
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 cast_wonder(caster_ptr, dir);
             }
@@ -252,7 +252,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr), GF_CHAOS, dir, damroll(dice, sides));
             }
@@ -294,7 +294,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_beam(caster_ptr, GF_MANA, dir, damroll(dice, sides));
             }
@@ -316,7 +316,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_ball(caster_ptr, GF_FIRE, dir, dam, rad);
             }
@@ -337,7 +337,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_beam(caster_ptr, GF_AWAY_ALL, dir, power);
             }
@@ -375,7 +375,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_ball(caster_ptr, GF_CHAOS, dir, dam, rad);
             }
@@ -396,7 +396,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 poly_monster(caster_ptr, dir, plev);
             }
@@ -436,7 +436,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 return info_power(power);
             if (cast) {
                 if (!recharge(caster_ptr, power))
-                    return NULL;
+                    return nullptr;
             }
         }
         break;
@@ -456,7 +456,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_ball(caster_ptr, GF_DISINTEGRATE, dir, dam, rad);
             }
@@ -497,7 +497,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 msg_print(_("ロケット発射！", "You launch a rocket!"));
                 fire_rocket(caster_ptr, GF_ROCKET, dir, dam, rad);
@@ -546,7 +546,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
                 fire_beam(caster_ptr, GF_GRAVITY, dir, damroll(dice, sides));
             }
         }
@@ -615,7 +615,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
         {
             if (cast) {
                 if (!get_check(_("変身します。よろしいですか？", "You will polymorph yourself. Are you sure? ")))
-                    return NULL;
+                    return nullptr;
                 do_poly_self(caster_ptr);
             }
         }
@@ -636,7 +636,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
                 fire_ball(caster_ptr, GF_MANA, dir, dam, rad);
             }
         }
@@ -657,7 +657,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_ball(caster_ptr, GF_CHAOS, dir, dam, rad);
             }

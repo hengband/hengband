@@ -20,5 +20,5 @@ const dragonbreath_type dragonbreath_info[] = {
 	{ TR_RES_NETHER, GF_NETHER, _("地獄", "nether") },
 	{ TR_RES_CHAOS, GF_CHAOS, _("カオス", "chaos") },
 	{ TR_RES_DISEN, GF_DISENCHANT, _("劣化", "disenchantment") },
-	{ TR_STR, 0, NULL }
+	{ TR_STR, 0, nullptr }
 };

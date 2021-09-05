@@ -59,7 +59,7 @@ static bool check_destory_item(player_type *creature_ptr, destroy_type *destroy_
 
     describe_flavor(creature_ptr, destroy_ptr->o_name, destroy_ptr->o_ptr, OD_OMIT_PREFIX);
     sprintf(destroy_ptr->out_val, _("本当に%sを壊しますか? [y/n/Auto]", "Really destroy %s? [y/n/Auto]"), destroy_ptr->o_name);
-    msg_print(NULL);
+    msg_print(nullptr);
     message_add(destroy_ptr->out_val);
     creature_ptr->window_flags |= PW_MESSAGE;
     handle_stuff(creature_ptr);
@@ -88,7 +88,7 @@ static bool select_destroying_item(player_type *creature_ptr, destroy_type *dest
     concptr q = _("どのアイテムを壊しますか? ", "Destroy which item? ");
     concptr s = _("壊せるアイテムを持っていない。", "You have nothing to destroy.");
     destroy_ptr->o_ptr = choose_object(creature_ptr, &destroy_ptr->item, q, s, USE_INVEN | USE_FLOOR);
-    if (destroy_ptr->o_ptr == NULL)
+    if (destroy_ptr->o_ptr == nullptr)
         return false;
 
     if (!check_destory_item(creature_ptr, destroy_ptr))
@@ -97,7 +97,7 @@ static bool select_destroying_item(player_type *creature_ptr, destroy_type *dest
     if (destroy_ptr->o_ptr->number <= 1)
         return true;
 
-    destroy_ptr->amt = get_quantity(NULL, destroy_ptr->o_ptr->number);
+    destroy_ptr->amt = get_quantity(nullptr, destroy_ptr->o_ptr->number);
     return destroy_ptr->amt > 0;
 }
 

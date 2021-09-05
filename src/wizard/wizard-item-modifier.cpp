@@ -431,7 +431,7 @@ static void wiz_statistics(player_type *caster_ptr, object_type *o_ptr)
             test_roll = atol(tmp_val);
         test_roll = MAX(1, test_roll);
         msg_format("Creating a lot of %s items. Base level = %d.", quality, caster_ptr->current_floor_ptr->dun_level);
-        msg_print(NULL);
+        msg_print(nullptr);
 
         correct = matches = better = worse = other = 0;
         for (i = 0; i <= test_roll; i++) {
@@ -470,7 +470,7 @@ static void wiz_statistics(player_type *caster_ptr, object_type *o_ptr)
         }
 
         msg_format(q, i, correct, matches, better, worse, other);
-        msg_print(NULL);
+        msg_print(nullptr);
     }
 
     if (o_ptr->is_fixed_artifact())
@@ -755,7 +755,7 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
         "corrodeproof",
         "fixed",
 #endif
-        NULL,
+        nullptr,
     };
 
     char buf[MAX_NLEN] = "\0";
@@ -801,7 +801,7 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
         blessed = true;
     }
 
-    for (int i = 0; fixed_str[i] != NULL; i++) {
+    for (int i = 0; fixed_str[i] != nullptr; i++) {
         int len = strlen(fixed_str[i]);
         if (!strncmp(str, fixed_str[i], len)) {
             str = ltrim(str + len);

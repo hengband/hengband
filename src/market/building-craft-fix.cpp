@@ -138,7 +138,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
     if (player_ptr->au < cost) {
         describe_flavor(player_ptr, basenm, o_ptr, OD_NAME_ONLY);
         msg_format(_("%sを修復するだけのゴールドがありません！", "You do not have the gold to repair %s!"), basenm);
-        msg_print(NULL);
+        msg_print(nullptr);
         return 0;
     }
 
@@ -257,7 +257,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 #else
     msg_format("Repaired into %s for %d gold.", basenm, cost);
 #endif
-    msg_print(NULL);
+    msg_print(nullptr);
     o_ptr->ident &= ~(IDENT_BROKEN);
     o_ptr->discount = 99;
 

@@ -171,7 +171,7 @@ void do_cmd_suicide(player_type *creature_ptr)
     if (creature_ptr->last_message)
         string_free(creature_ptr->last_message);
 
-    creature_ptr->last_message = NULL;
+    creature_ptr->last_message = nullptr;
     creature_ptr->playing = false;
     creature_ptr->is_dead = true;
     creature_ptr->leaving = true;

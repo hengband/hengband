@@ -626,7 +626,7 @@ void brand_weapon(player_type *caster_ptr, int brand_type)
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
-    concptr act = NULL;
+    concptr act = nullptr;
     switch (brand_type) {
     case 17:
         if (o_ptr->tval == TV_SWORD) {

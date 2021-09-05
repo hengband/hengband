@@ -171,7 +171,7 @@ static void redraw_health_bar(player_type *subject_ptr, mam_type *mam_ptr)
 static void describe_silly_melee(mam_type *mam_ptr)
 {
     char temp[MAX_NLEN];
-    if ((mam_ptr->act == NULL) || !mam_ptr->see_either)
+    if ((mam_ptr->act == nullptr) || !mam_ptr->see_either)
         return;
 
 #ifdef JP

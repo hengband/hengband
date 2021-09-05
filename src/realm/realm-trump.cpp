@@ -33,7 +33,7 @@
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param spell 魔法ID
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
- * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はnullptr文字列を返す。
  */
 concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 {
@@ -108,7 +108,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
         {
             if (cast) {
                 if (!reset_recall(caster_ptr))
-                    return NULL;
+                    return nullptr;
             }
         }
         break;
@@ -164,7 +164,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_beam(caster_ptr, GF_AWAY_ALL, dir, power);
             }
@@ -204,7 +204,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fetch_item(caster_ptr, dir, weight, false);
             }
@@ -224,7 +224,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
                 if (cast) {
                     if (!target_set(caster_ptr, TARGET_KILL))
-                        return NULL;
+                        return nullptr;
                     x = target_col;
                     y = target_row;
                 } else {
@@ -286,7 +286,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 target_pet = old_target_pet;
 
                 if (!result)
-                    return NULL;
+                    return nullptr;
 
                 speed_monster(caster_ptr, dir, plev);
             }
@@ -302,7 +302,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
         {
             if (cast) {
                 if (!get_check(_("本当に他の階にテレポートしますか？", "Are you sure? (Teleport Level)")))
-                    return NULL;
+                    return nullptr;
                 teleport_level(caster_ptr, 0);
             }
         }
@@ -323,7 +323,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
             if (cast) {
                 msg_print(_("次元の扉が開いた。目的地を選んで下さい。", "You open a dimensional gate. Choose a destination."));
                 if (!dimension_door(caster_ptr))
-                    return NULL;
+                    return nullptr;
             }
         }
         break;
@@ -344,7 +344,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!recall_player(caster_ptr, randint0(21) + 15))
-                    return NULL;
+                    return nullptr;
             }
         }
         break;
@@ -386,7 +386,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 project_length = 0;
 
                 if (!result)
-                    return NULL;
+                    return nullptr;
 
                 teleport_swap(caster_ptr, dir);
             }
@@ -540,7 +540,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
         {
             if (cast) {
                 if (!identify_fully(caster_ptr, false))
-                    return NULL;
+                    return nullptr;
             }
         }
         break;
@@ -570,7 +570,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
                 target_pet = old_target_pet;
 
                 if (!result)
-                    return NULL;
+                    return nullptr;
 
                 heal_monster(caster_ptr, dir, heal);
             }

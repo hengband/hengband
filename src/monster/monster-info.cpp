@@ -199,7 +199,7 @@ bool are_enemies(player_type *player_ptr, monster_type *m_ptr, monster_type *n_p
  * @param r_ptr モンスター種族情報の構造体参照ポインタ
  * @return プレイヤーに敵意を持つならばTRUEを返す
  * @details
- * If user is player, m_ptr == NULL.
+ * If user is player, m_ptr == nullptr.
  */
 bool monster_has_hostile_align(player_type *player_ptr, monster_type *m_ptr, int pa_good, int pa_evil, monster_race *r_ptr)
 {
@@ -261,7 +261,7 @@ bool is_mimicry(monster_type *m_ptr)
 
     monster_race *r_ptr = &r_info[m_ptr->ap_r_idx];
 
-    if (angband_strchr("/|\\()[]=$,.!?&`#%<>+~", r_ptr->d_char) == NULL)
+    if (angband_strchr("/|\\()[]=$,.!?&`#%<>+~", r_ptr->d_char) == nullptr)
         return false;
 
     if (none_bits(r_ptr->flags1, RF1_NEVER_MOVE) && !monster_csleep_remaining(m_ptr)) {

@@ -39,7 +39,7 @@
 #endif
 #include <curl/curl.h>
 
-concptr screen_dump = NULL;
+concptr screen_dump = nullptr;
 
 /*
  * internet resource value
@@ -73,14 +73,14 @@ static BUF *buf_new(void)
     BUF *p;
     p = static_cast<BUF*>(malloc(sizeof(BUF)));
     if (!p)
-        return NULL;
+        return nullptr;
 
     p->size = 0;
     p->max_size = BUFSIZE;
     p->data = static_cast<char*>(malloc(BUFSIZE));
     if (!p->data) {
         free(p);
-        return NULL;
+        return nullptr;
     }
 
     return p;
@@ -107,7 +107,7 @@ static int buf_append(BUF *buf, concptr data, size_t size)
 {
     while (buf->size + size > buf->max_size) {
         char *tmp;
-        if ((tmp = static_cast<char*>(malloc(buf->max_size * 2))) == NULL)
+        if ((tmp = static_cast<char*>(malloc(buf->max_size * 2))) == nullptr)
             return -1;
 
         memcpy(tmp, buf->data, buf->max_size);
@@ -172,11 +172,11 @@ static bool http_post(concptr url, BUF *buf)
 {
     bool succeeded = false;
     CURL *curl = curl_easy_init();
-    if (curl == NULL) {
+    if (curl == nullptr) {
         return false;
     }
 
-    struct curl_slist *slist = NULL;
+    struct curl_slist *slist = nullptr;
     slist = curl_slist_append(slist,
 #ifdef JP
 #ifdef SJIS
@@ -249,7 +249,7 @@ static errr make_dump(player_type *creature_ptr, BUF *dumpbuf, display_player_pf
 #else
         msg_format("Failed to create temporary file %s.", file_name);
 #endif
-        msg_print(NULL);
+        msg_print(nullptr);
         return 1;
     }
 
@@ -293,13 +293,13 @@ concptr make_screen_dump(player_type *creature_ptr)
     /* Alloc buffer */
     BUF *screen_buf;
     screen_buf = buf_new();
-    if (screen_buf == NULL)
-        return (NULL);
+    if (screen_buf == nullptr)
+        return nullptr;
 
     bool old_use_graphics = use_graphics;
     if (old_use_graphics) {
         /* Clear -more- prompt first */
-        msg_print(NULL);
+        msg_print(nullptr);
 
         use_graphics = false;
         reset_visuals(creature_ptr);
@@ -322,7 +322,7 @@ concptr make_screen_dump(player_type *creature_ptr)
         SYMBOL_CODE c = ' ';
         for (int x = 0; x < wid - 1; x++) {
             int rv, gv, bv;
-            concptr cc = NULL;
+            concptr cc = nullptr;
             /* Get the attr/char */
             (void)(term_what(x, y, &a, &c));
 
@@ -376,7 +376,7 @@ concptr make_screen_dump(player_type *creature_ptr)
     /* Screen dump size is too big ? */
     concptr ret;
     if (screen_buf->size + 1 > SCREEN_BUF_MAX_SIZE) {
-        ret = NULL;
+        ret = nullptr;
     } else {
         /* Terminate string */
         buf_append(screen_buf, "", 1);
@@ -461,5 +461,5 @@ bool report_score(player_type *creature_ptr, display_player_pf display_player)
     }
 }
 #else
-concptr screen_dump = NULL;
+concptr screen_dump = nullptr;
 #endif /* WORLD_SCORE */

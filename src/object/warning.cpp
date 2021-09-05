@@ -53,7 +53,7 @@ object_type *choose_warning_item(player_type *creature_ptr)
 
     /* Paranoia -- Player has no warning ability */
     if (!creature_ptr->warning)
-        return NULL;
+        return nullptr;
 
     /* Search Inventory */
     int number = 0;
@@ -68,7 +68,7 @@ object_type *choose_warning_item(player_type *creature_ptr)
     }
 
     /* Choice one of them */
-    return number ? &creature_ptr->inventory_list[choices[randint0(number)]] : NULL;
+    return number ? &creature_ptr->inventory_list[choices[randint0(number)]] : nullptr;
 }
 
 /*!
@@ -494,7 +494,7 @@ bool process_warning(player_type *creature_ptr, POSITION xx, POSITION yy)
         return true;
 
     object_type *o_ptr = choose_warning_item(creature_ptr);
-    if (o_ptr != NULL)
+    if (o_ptr != nullptr)
         describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     else
         strcpy(o_name, _("体", "body")); /* Warning ability without item */

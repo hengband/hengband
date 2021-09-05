@@ -81,7 +81,7 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
         break;
     }
 
-    concptr insc = NULL;
+    concptr insc = nullptr;
     char buf[MAX_LINELEN];
     int i;
     for (i = 0; *str; i++) {
@@ -113,7 +113,7 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
 
     concptr prev_ptr, ptr;
     ptr = prev_ptr = buf;
-    concptr old_ptr = NULL;
+    concptr old_ptr = nullptr;
     while (old_ptr != ptr) {
         old_ptr = ptr;
         if (MATCH_KEY(KEY_ALL))
@@ -647,7 +647,7 @@ bool entry_from_choosed_object(player_type *player_ptr, autopick_type *entry)
     concptr q = _("どのアイテムを登録しますか? ", "Enter which item? ");
     concptr s = _("アイテムを持っていない。", "You have nothing to enter.");
     object_type *o_ptr;
-    o_ptr = choose_object(player_ptr, NULL, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP);
+    o_ptr = choose_object(player_ptr, nullptr, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP);
     if (!o_ptr)
         return false;
 

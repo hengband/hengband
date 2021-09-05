@@ -275,7 +275,7 @@ static void show_home_equipment_resistances(player_type *creature_ptr, tval_type
  */
 void do_cmd_knowledge_inventory(player_type *creature_ptr)
 {
-    FILE *fff = NULL;
+    FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
     if (!open_temporary_file(&fff, file_name))
         return;

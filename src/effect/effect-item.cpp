@@ -59,7 +59,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
         object_type *o_ptr = &caster_ptr->current_floor_ptr->o_list[this_o_idx];
         bool ignore = false;
         bool do_kill = false;
-        concptr note_kill = NULL;
+        concptr note_kill = nullptr;
 
 #ifdef JP
 #else

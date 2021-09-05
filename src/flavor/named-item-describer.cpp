@@ -318,10 +318,10 @@ static void describe_artifact_body_en(flavor_type *flavor_ptr)
  */
 static void describe_inscription(flavor_type *flavor_ptr)
 {
-    for (flavor_ptr->s0 = NULL; *flavor_ptr->s || flavor_ptr->s0;) {
+    for (flavor_ptr->s0 = nullptr; *flavor_ptr->s || flavor_ptr->s0;) {
         if (!*flavor_ptr->s) {
             flavor_ptr->s = flavor_ptr->s0 + 1;
-            flavor_ptr->s0 = NULL;
+            flavor_ptr->s0 = nullptr;
         } else if ((*flavor_ptr->s == '#') && !flavor_ptr->s0) {
             flavor_ptr->s0 = flavor_ptr->s;
             flavor_ptr->s = flavor_ptr->modstr;

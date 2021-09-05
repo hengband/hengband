@@ -74,7 +74,7 @@ void redraw_stuff(player_type *creature_ptr)
 
     if (creature_ptr->redraw & (PR_WIPE)) {
         creature_ptr->redraw &= ~(PR_WIPE);
-        msg_print(NULL);
+        msg_print(nullptr);
         term_clear();
     }
 

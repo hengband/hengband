@@ -304,7 +304,7 @@ bool load_savedata(player_type *player_ptr, bool *new_game)
 #ifndef WINDOWS
     if (access(savefile, 0) < 0) {
         msg_print(_("セーブファイルがありません。", "Savefile does not exist."));
-        msg_print(NULL);
+        msg_print(nullptr);
         *new_game = true;
         return true;
     }
@@ -341,7 +341,7 @@ bool load_savedata(player_type *player_ptr, bool *new_game)
 
     if (err) {
         msg_format("%s: %s", what, savefile);
-        msg_print(NULL);
+        msg_print(nullptr);
         return false;
     }
 
@@ -367,7 +367,7 @@ bool load_savedata(player_type *player_ptr, bool *new_game)
         msg_format(_("エラー(%s)がバージョン%d.%d.%d.%d 用セーブファイル読み込み中に発生。", "Error (%s) reading %d.%d.%d.% savefile."), what,
             current_world_ptr->h_ver_major, current_world_ptr->h_ver_minor, current_world_ptr->h_ver_patch, current_world_ptr->h_ver_extra);
 
-        msg_print(NULL);
+        msg_print(nullptr);
         return false;
     }
 

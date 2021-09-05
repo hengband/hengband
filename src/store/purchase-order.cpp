@@ -224,7 +224,7 @@ void store_purchase(player_type *player_ptr)
             msg_format(_("一つにつき $%ldです。", "That costs %ld gold per item."), (long)(best));
         }
 
-        amt = get_quantity(NULL, o_ptr->number);
+        amt = get_quantity(nullptr, o_ptr->number);
         if (amt <= 0)
             return;
     }
@@ -253,7 +253,7 @@ void store_purchase(player_type *player_ptr)
     GAME_TEXT o_name[MAX_NLEN];
     describe_flavor(player_ptr, o_name, j_ptr, 0);
     msg_format(_("%s(%c)を購入する。", "Buying %s (%c)."), o_name, I2A(item));
-    msg_print(NULL);
+    msg_print(nullptr);
 
     auto res = prompt_to_buy(player_ptr, j_ptr);
     if (st_ptr->store_open >= current_world_ptr->game_turn)

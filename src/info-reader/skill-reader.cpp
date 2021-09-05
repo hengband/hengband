@@ -25,7 +25,7 @@ const std::unordered_map<int, int> level_to_exp = {
  */
 errr parse_s_info(std::string_view buf, angband_header *head)
 {
-    static skill_table *s_ptr = NULL;
+    static skill_table *s_ptr = nullptr;
     const auto &tokens = str_split(buf, ':', false, 5);
 
     if (tokens[0] == "N") {

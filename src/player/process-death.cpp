@@ -370,7 +370,7 @@ static void export_player_info(player_type *creature_ptr, display_player_pf disp
  */
 static void file_character_auto(player_type *creature_ptr, display_player_pf display_player)
 {
-    time_t now_t = time(NULL);
+    time_t now_t = time(nullptr);
     struct tm *now_tm = localtime(&now_t);
 
     char datetime[32];

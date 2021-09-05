@@ -155,7 +155,7 @@ void gain_level_reward(player_type *creature_ptr, int chosen_reward)
     char wrath_reason[32] = "";
     int nasty_chance = 6;
     int type, effect;
-    concptr reward = NULL;
+    concptr reward = nullptr;
     GAME_TEXT o_name[MAX_NLEN];
 
     int count = 0;

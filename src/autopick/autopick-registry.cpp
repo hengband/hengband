@@ -48,7 +48,7 @@ static bool clear_auto_register(player_type *player_ptr)
     if (!tmp_fff) {
         fclose(pref_fff);
         msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), tmp_file);
-        msg_print(NULL);
+        msg_print(nullptr);
         return false;
     }
 
@@ -174,7 +174,7 @@ bool autopick_autoregister(player_type *player_ptr, object_type *o_ptr)
     pref_fff = angband_fopen(pref_file, "a");
     if (!pref_fff) {
         msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), pref_file);
-        msg_print(NULL);
+        msg_print(nullptr);
         return false;
     }
 

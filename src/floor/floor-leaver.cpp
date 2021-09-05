@@ -360,7 +360,7 @@ static void refresh_new_floor_id(player_type *creature_ptr, grid_type *g_ptr)
         return;
 
     new_floor_id = get_new_floor_id(creature_ptr);
-    if ((g_ptr != NULL) && !feat_uses_special(g_ptr->feat))
+    if ((g_ptr != nullptr) && !feat_uses_special(g_ptr->feat))
         g_ptr->special = new_floor_id;
 }
 
@@ -377,7 +377,7 @@ static void update_upper_lower_or_floor_id(player_type *creature_ptr, saved_floo
 
 static void exe_leave_floor(player_type *creature_ptr, saved_floor_type *sf_ptr)
 {
-    grid_type *g_ptr = NULL;
+    grid_type *g_ptr = nullptr;
     set_grid_by_leaving_floor(creature_ptr, &g_ptr);
     jump_floors(creature_ptr);
     exit_to_wilderness(creature_ptr);
@@ -440,7 +440,7 @@ void jump_floor(player_type *creature_ptr, DUNGEON_IDX dun_idx, DEPTH depth)
     creature_ptr->wild_mode = false;
     leave_quest_check(creature_ptr);
     if (record_stair)
-        exe_write_diary(creature_ptr, DIARY_WIZ_TELE, 0, NULL);
+        exe_write_diary(creature_ptr, DIARY_WIZ_TELE, 0, nullptr);
 
     creature_ptr->current_floor_ptr->inside_quest = 0;
     PlayerEnergy(creature_ptr).reset_player_turn();

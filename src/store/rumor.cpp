@@ -60,7 +60,7 @@ void display_rumor(player_type *player_ptr, bool ex)
         return;
     }
 
-    concptr rumor_eff_format = NULL;
+    concptr rumor_eff_format = nullptr;
     char fullname[1024] = "";
     if (strcmp(zz[0], "ARTIFACT") == 0) {
         ARTIFACT_IDX a_idx;
@@ -130,7 +130,7 @@ void display_rumor(player_type *player_ptr, bool ex)
     concptr rumor_msg = rumor_bind_name(zz[2], fullname);
     msg_print(rumor_msg);
     if (rumor_eff_format) {
-        msg_print(NULL);
+        msg_print(nullptr);
         msg_format(rumor_eff_format, fullname);
     }
 }

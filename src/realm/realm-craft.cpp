@@ -24,7 +24,7 @@
  * @brief 匠領域魔法の各処理を行う
  * @param spell 魔法ID
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
- * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はnullptr文字列を返す。
  */
 concptr do_craft_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 {
@@ -308,7 +308,7 @@ concptr do_craft_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!choose_ele_attack(caster_ptr))
-                    return NULL;
+                    return nullptr;
             }
         }
         break;
@@ -470,7 +470,7 @@ concptr do_craft_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
         {
             if (cast) {
                 if (!mundane_spell(caster_ptr, true))
-                    return NULL;
+                    return nullptr;
             }
         }
         break;
@@ -496,7 +496,7 @@ concptr do_craft_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
         {
             if (cast) {
                 if (!identify_fully(caster_ptr, false))
-                    return NULL;
+                    return nullptr;
             }
         }
         break;
@@ -510,7 +510,7 @@ concptr do_craft_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
         {
             if (cast) {
                 if (!enchant_spell(caster_ptr, randint0(4) + 1, randint0(4) + 1, 0))
-                    return NULL;
+                    return nullptr;
             }
         }
         break;
@@ -524,7 +524,7 @@ concptr do_craft_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
         {
             if (cast) {
                 if (!enchant_spell(caster_ptr, 0, 0, randint0(3) + 2))
-                    return NULL;
+                    return nullptr;
             }
         }
         break;
@@ -566,7 +566,7 @@ concptr do_craft_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
             if (cast) {
                 if (!choose_ele_immune(caster_ptr, base + randint1(base)))
-                    return NULL;
+                    return nullptr;
             }
         }
         break;

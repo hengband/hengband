@@ -415,7 +415,7 @@ void effect_player_dark(player_type *target_ptr, effect_player_type *ep_ptr)
 static void effect_player_time_one_disability(player_type *target_ptr)
 {
     int k = 0;
-    concptr act = NULL;
+    concptr act = nullptr;
     switch (randint1(6)) {
     case 1:
         k = A_STR;

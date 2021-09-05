@@ -21,7 +21,7 @@ melee_spell_type *initialize_melee_spell_type(player_type *target_ptr, melee_spe
     ms_ptr->dam = 0;
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     ms_ptr->m_ptr = &floor_ptr->m_list[m_idx];
-    ms_ptr->t_ptr = NULL;
+    ms_ptr->t_ptr = nullptr;
     ms_ptr->r_ptr = &r_info[ms_ptr->m_ptr->r_idx];
     ms_ptr->see_m = is_seen(target_ptr, ms_ptr->m_ptr);
     ms_ptr->maneable = player_has_los_bold(target_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx);

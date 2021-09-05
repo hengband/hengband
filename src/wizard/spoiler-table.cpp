@@ -1,10 +1,10 @@
 ﻿#include "wizard/spoiler-table.h"
 
 /* The basic items categorized by type */
-grouper group_item[MAX_GROUPER_ITEM] = { { TV_SHOT, _("射撃物", "Ammo") }, { TV_ARROW, NULL }, { TV_BOLT, NULL }, { TV_BOW, _("弓", "Bows") },
-    { TV_DIGGING, _("武器", "Weapons") }, { TV_POLEARM, NULL }, { TV_HAFTED, NULL }, { TV_SWORD, NULL }, { TV_SOFT_ARMOR, _("防具 (体)", "Armour (Body)") },
-    { TV_HARD_ARMOR, NULL }, { TV_DRAG_ARMOR, NULL }, { TV_BOOTS, _("防具 (その他)", "Armour (Misc)") }, { TV_GLOVES, NULL }, { TV_HELM, NULL },
-    { TV_CROWN, NULL }, { TV_SHIELD, NULL }, { TV_CLOAK, NULL },
+grouper group_item[MAX_GROUPER_ITEM] = { { TV_SHOT, _("射撃物", "Ammo") }, { TV_ARROW, nullptr }, { TV_BOLT, nullptr }, { TV_BOW, _("弓", "Bows") },
+    { TV_DIGGING, _("武器", "Weapons") }, { TV_POLEARM, nullptr }, { TV_HAFTED, nullptr }, { TV_SWORD, nullptr }, { TV_SOFT_ARMOR, _("防具 (体)", "Armour (Body)") },
+    { TV_HARD_ARMOR, nullptr }, { TV_DRAG_ARMOR, nullptr }, { TV_BOOTS, _("防具 (その他)", "Armour (Misc)") }, { TV_GLOVES, nullptr }, { TV_HELM, nullptr },
+    { TV_CROWN, nullptr }, { TV_SHIELD, nullptr }, { TV_CLOAK, nullptr },
 
     { TV_LITE, _("光源", "Light Sources") }, { TV_AMULET, _("アミュレット", "Amulets") }, { TV_RING, _("指輪", "Rings") }, { TV_STAFF, _("杖", "Staffs") },
     { TV_WAND, _("魔法棒", "Wands") }, { TV_ROD, _("ロッド", "Rods") }, { TV_SCROLL, _("巻物", "Scrolls") }, { TV_POTION, _("薬", "Potions") },
@@ -23,7 +23,7 @@ grouper group_item[MAX_GROUPER_ITEM] = { { TV_SHOT, _("射撃物", "Ammo") }, { 
 
     { TV_FIGURINE, _("人形", "Magical Figurines") }, { TV_STATUE, _("像", "Statues") }, { TV_CORPSE, _("死体", "Corpses") },
 
-    { TV_SKELETON, _("その他", "Misc") }, { TV_BOTTLE, NULL }, { TV_JUNK, NULL }, { TV_SPIKE, NULL }, { TV_FLASK, NULL }, { TV_PARCHMENT, NULL },
+    { TV_SKELETON, _("その他", "Misc") }, { TV_BOTTLE, nullptr }, { TV_JUNK, nullptr }, { TV_SPIKE, nullptr }, { TV_FLASK, nullptr }, { TV_PARCHMENT, nullptr },
 
     { TV_NONE, "" } };
 
@@ -35,24 +35,24 @@ grouper group_artifact[MAX_GROUPER_ARTIFACT] = {
     { TV_DIGGING, _("シャベル/つるはし", "Shovels/Picks") },
     { TV_BOW, _("飛び道具", "Bows") },
     { TV_ARROW, _("矢", "Ammo") },
-    { TV_BOLT, NULL },
+    { TV_BOLT, nullptr },
 
     { TV_SOFT_ARMOR, _("鎧", "Body Armor") },
-    { TV_HARD_ARMOR, NULL },
-    { TV_DRAG_ARMOR, NULL },
+    { TV_HARD_ARMOR, nullptr },
+    { TV_DRAG_ARMOR, nullptr },
 
     { TV_CLOAK, _("クローク", "Cloaks") },
     { TV_SHIELD, _("盾", "Shields") },
-    { TV_CARD, NULL },
+    { TV_CARD, nullptr },
     { TV_HELM, _("兜/冠", "Helms/Crowns") },
-    { TV_CROWN, NULL },
+    { TV_CROWN, nullptr },
     { TV_GLOVES, _("籠手", "Gloves") },
     { TV_BOOTS, _("靴", "Boots") },
 
     { TV_LITE, _("光源", "Light Sources") },
     { TV_AMULET, _("アミュレット", "Amulets") },
     { TV_RING, _("指輪", "Rings") },
-    { TV_NONE, NULL },
+    { TV_NONE, nullptr },
 };
 
 flag_desc stat_flags_desc[MAX_STAT_FLAGS_DESCRIPTION] = { { TR_STR, _("腕力", "STR") }, { TR_INT, _("知能", "INT") }, { TR_WIS, _("賢さ", "WIS") },

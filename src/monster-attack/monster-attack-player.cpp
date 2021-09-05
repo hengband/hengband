@@ -131,7 +131,7 @@ static bool effect_protecion_from_evil(player_type *target_ptr, monap_type *mona
 
 static void describe_silly_attacks(monap_type *monap_ptr)
 {
-    if (monap_ptr->act == NULL)
+    if (monap_ptr->act == nullptr)
         return;
 
     if (monap_ptr->do_silly_attack) {
@@ -253,7 +253,7 @@ static void monster_explode(player_type *target_ptr, monap_type *monap_ptr)
 
     sound(SOUND_EXPLODE);
     MonsterDamageProcessor mdp(target_ptr, monap_ptr->m_idx, monap_ptr->m_ptr->hp + 1, &monap_ptr->fear);
-    if (mdp.mon_take_hit(NULL)) {
+    if (mdp.mon_take_hit(nullptr)) {
         monap_ptr->blinked = false;
         monap_ptr->alive = false;
     }
@@ -397,7 +397,7 @@ static bool process_monster_blows(player_type *target_ptr, monap_type *monap_ptr
     for (int ap_cnt = 0; ap_cnt < MAX_NUM_BLOWS; ap_cnt++) {
         monap_ptr->obvious = false;
         monap_ptr->damage = 0;
-        monap_ptr->act = NULL;
+        monap_ptr->act = nullptr;
         monap_ptr->effect = r_ptr->blow[ap_cnt].effect;
         monap_ptr->method = r_ptr->blow[ap_cnt].method;
         monap_ptr->d_dice = r_ptr->blow[ap_cnt].d_dice;

@@ -47,7 +47,7 @@ static bool process_ostensible_arena_victory(player_type *player_ptr)
     prt("", 11, 0);
     player_ptr->au += 1000000L;
     msg_print(_("スペースキーで続行", "Press the space bar to continue"));
-    msg_print(NULL);
+    msg_print(nullptr);
     player_ptr->arena_number++;
     return true;
 }
@@ -64,19 +64,19 @@ static bool battle_metal_babble(player_type *player_ptr)
 
     if (player_ptr->arena_number >= MAX_ARENA_MONS + 2) {
         msg_print(_("あなたはアリーナに入り、しばらくの間栄光にひたった。", "You enter the arena briefly and bask in your glory."));
-        msg_print(NULL);
+        msg_print(nullptr);
         return true;
     }
 
     msg_print(_("君のために最強の挑戦者を用意しておいた。", "The strongest challenger is waiting for you."));
-    msg_print(NULL);
+    msg_print(nullptr);
     if (!get_check(_("挑戦するかね？", "Do you fight? "))) {
         msg_print(_("残念だ。", "We are disappointed."));
         return true;
     }
 
     msg_print(_("死ぬがよい。", "Die, maggots."));
-    msg_print(NULL);
+    msg_print(nullptr);
 
     player_ptr->exit_bldg = false;
     reset_tim_flags(player_ptr);
@@ -100,7 +100,7 @@ static void go_to_arena(player_type *player_ptr)
 
     if (player_ptr->riding && (player_ptr->pclass != CLASS_BEASTMASTER) && (player_ptr->pclass != CLASS_CAVALRY)) {
         msg_print(_("ペットに乗ったままではアリーナへ入れさせてもらえなかった。", "You don't have permission to enter with pet."));
-        msg_print(NULL);
+        msg_print(nullptr);
         return;
     }
 
@@ -153,7 +153,7 @@ void arena_comm(player_type *player_ptr, int cmd)
         screen_save();
 
         /* Peruse the on_defeat_arena_monster help file */
-        (void)show_file(player_ptr, true, _("arena_j.txt", "arena.txt"), NULL, 0, 0);
+        (void)show_file(player_ptr, true, _("arena_j.txt", "arena.txt"), nullptr, 0, 0);
         screen_load();
         break;
     }
@@ -194,7 +194,7 @@ void update_gambling_monsters(player_type *player_ptr)
             MONRACE_IDX r_idx;
             int j;
             while (true) {
-                get_mon_num_prep(player_ptr, monster_can_entry_arena, NULL);
+                get_mon_num_prep(player_ptr, monster_can_entry_arena, nullptr);
                 r_idx = get_mon_num(player_ptr, 0, mon_level, GMN_ARENA);
                 if (!r_idx)
                     continue;
@@ -289,7 +289,7 @@ bool monster_arena_comm(player_type *player_ptr)
     /* No money */
     if (player_ptr->au <= 1) {
         msg_print(_("おい！おまえ一文なしじゃないか！こっから出ていけ！", "Hey! You don't have gold - get out of here!"));
-        msg_print(NULL);
+        msg_print(nullptr);
         screen_load();
         return false;
     }
@@ -357,7 +357,7 @@ bool monster_arena_comm(player_type *player_ptr)
     if (wager > player_ptr->au) {
         msg_print(_("おい！金が足りないじゃないか！出ていけ！", "Hey! You don't have the gold - get out of here!"));
 
-        msg_print(NULL);
+        msg_print(nullptr);
         screen_load();
         return false;
     } else if (wager > maxbet) {
@@ -369,7 +369,7 @@ bool monster_arena_comm(player_type *player_ptr)
         wager = 1;
     }
 
-    msg_print(NULL);
+    msg_print(nullptr);
     battle_odds = MAX(wager + 1, wager * battle_odds / 100);
     kakekin = wager;
     player_ptr->au -= wager;

@@ -266,7 +266,7 @@ bool pulish_shield(player_type *caster_ptr)
 
     OBJECT_IDX item;
     object_type *o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, TvalItemTester(TV_SHIELD));
-    if (o_ptr == NULL)
+    if (o_ptr == nullptr)
         return false;
 
     GAME_TEXT o_name[MAX_NLEN];

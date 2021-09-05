@@ -23,7 +23,7 @@ int num_more = 0;
  * trigger any macros, and cannot be bypassed by the Borg.  It is used
  * in Angband to handle "keymaps".
  */
-concptr inkey_next = NULL;
+concptr inkey_next = nullptr;
 
 /* Save macro trigger string for use in inkey_special() */
 static char inkey_macro_trigger_string[1024];
@@ -196,7 +196,7 @@ char inkey(bool do_all_term_refresh)
         return (ch);
     }
 
-    inkey_next = NULL;
+    inkey_next = nullptr;
     if (inkey_xtra) {
         parse_macro = false;
         parse_under = false;
@@ -299,7 +299,7 @@ int inkey_special(bool numpad_cursor)
     } modifier_key_list[] = {
         { "shift-", SKEY_MOD_SHIFT },
         { "control-", SKEY_MOD_CONTROL },
-        { NULL, 0 },
+        { nullptr, 0 },
     };
 
     static const struct {
@@ -331,7 +331,7 @@ int inkey_special(bool numpad_cursor)
         { true, "KP_3]", SKEY_PGDOWN },
         { true, "KP_7]", SKEY_TOP },
         { true, "KP_1]", SKEY_BOTTOM },
-        { false, NULL, 0 },
+        { false, nullptr, 0 },
     };
 
     static const struct {
@@ -346,7 +346,7 @@ int inkey_special(bool numpad_cursor)
         { "4~", SKEY_BOTTOM },
         { "5~", SKEY_PGUP },
         { "6~", SKEY_PGDOWN },
-        { NULL, 0 },
+        { nullptr, 0 },
     };
 
     char buf[1024];

@@ -78,7 +78,7 @@ static bool reflects_psi_with_currupted_mind(player_type *caster_ptr, effect_mon
     if (!is_corrupted)
         return false;
 
-    em_ptr->note = NULL;
+    em_ptr->note = nullptr;
     msg_format(_("%^sの堕落した精神は攻撃を跳ね返した！",
                    (em_ptr->seen ? "%^s's corrupted mind backlashes your attack!" : "%^ss corrupted mind backlashes your attack!")),
         em_ptr->m_name);

@@ -2720,7 +2720,7 @@ void check_experience(player_type *creature_ptr)
             }
             level_inc_stat = true;
 
-            exe_write_diary(creature_ptr, DIARY_LEVELUP, creature_ptr->lev, NULL);
+            exe_write_diary(creature_ptr, DIARY_LEVELUP, creature_ptr->lev, nullptr);
         }
 
         sound(SOUND_LEVEL);

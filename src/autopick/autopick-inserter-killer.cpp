@@ -218,7 +218,7 @@ void kill_line_segment(text_body_type *tb, int y, int x0, int x1, bool whole)
         int i;
         for (i = y; tb->lines_list[i + 1]; i++)
             tb->lines_list[i] = tb->lines_list[i + 1];
-        tb->lines_list[i] = NULL;
+        tb->lines_list[i] = nullptr;
 
         tb->dirty_flags |= DIRTY_EXPRESSION;
 

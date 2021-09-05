@@ -59,7 +59,7 @@ static concptr find_quest[] = {
  */
 void determine_random_questor(player_type *player_ptr, quest_type *q_ptr)
 {
-    get_mon_num_prep(player_ptr, mon_hook_quest, NULL);
+    get_mon_num_prep(player_ptr, mon_hook_quest, nullptr);
 
     MONRACE_IDX r_idx;
     while (true) {
@@ -125,11 +125,11 @@ void complete_quest(player_type *player_ptr, QUEST_IDX quest_num)
     switch (q_ptr->type) {
     case QUEST_TYPE_RANDOM:
         if (record_rand_quest)
-            exe_write_diary(player_ptr, DIARY_RAND_QUEST_C, quest_num, NULL);
+            exe_write_diary(player_ptr, DIARY_RAND_QUEST_C, quest_num, nullptr);
         break;
     default:
         if (record_fix_quest)
-            exe_write_diary(player_ptr, DIARY_FIX_QUEST_C, quest_num, NULL);
+            exe_write_diary(player_ptr, DIARY_FIX_QUEST_C, quest_num, nullptr);
         break;
     }
 
@@ -140,7 +140,7 @@ void complete_quest(player_type *player_ptr, QUEST_IDX quest_num)
 
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_QUEST_CLEAR);
     msg_print(_("クエストを達成した！", "You just completed your quest!"));
-    msg_print(NULL);
+    msg_print(nullptr);
 }
 
 /*!
@@ -176,7 +176,7 @@ void quest_discovery(QUEST_IDX q_idx)
     strcpy(name, (r_ptr->name.c_str()));
 
     msg_print(find_quest[rand_range(0, 4)]);
-    msg_print(NULL);
+    msg_print(nullptr);
 
     if (q_num != 1) {
 #ifdef JP
@@ -281,12 +281,12 @@ void leave_quest_check(player_type *player_ptr)
     /* Record finishing a quest */
     if (q_ptr->type == QUEST_TYPE_RANDOM) {
         if (record_rand_quest)
-            exe_write_diary(player_ptr, DIARY_RAND_QUEST_F, leaving_quest, NULL);
+            exe_write_diary(player_ptr, DIARY_RAND_QUEST_F, leaving_quest, nullptr);
         return;
     }
 
     if (record_fix_quest)
-        exe_write_diary(player_ptr, DIARY_FIX_QUEST_F, leaving_quest, NULL);
+        exe_write_diary(player_ptr, DIARY_FIX_QUEST_F, leaving_quest, nullptr);
 }
 
 /*!

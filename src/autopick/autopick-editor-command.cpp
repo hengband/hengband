@@ -60,7 +60,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
         break;
     }
     case EC_HELP: {
-        (void)show_file(player_ptr, true, _("jeditor.txt", "editor.txt"), NULL, 0, 0);
+        (void)show_file(player_ptr, true, _("jeditor.txt", "editor.txt"), nullptr, 0, 0);
         tb->dirty_flags |= DIRTY_SCREEN;
         break;
     }
@@ -335,7 +335,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
 
         if (tb->old_com_id != com_id) {
             kill_yank_chain(tb);
-            tb->yank = NULL;
+            tb->yank = nullptr;
         }
 
         if (tb->cx < len) {
@@ -405,7 +405,7 @@ ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int
             for (i = tb->cy; tb->lines_list[i + 1]; i++)
                 tb->lines_list[i] = tb->lines_list[i + 1];
 
-            tb->lines_list[i] = NULL;
+            tb->lines_list[i] = nullptr;
             tb->cy--;
             tb->dirty_flags |= DIRTY_ALL;
             tb->dirty_flags |= DIRTY_EXPRESSION;

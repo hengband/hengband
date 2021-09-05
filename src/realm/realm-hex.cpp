@@ -98,7 +98,7 @@ static bool item_tester_hook_weapon_except_bow(player_type *player_ptr, const ob
  * @brief 呪術領域魔法の各処理を行う
  * @param spell 魔法ID
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST / SPELL_CONT / SPELL_STOP)
- * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST / SPELL_CONT / SPELL_STOP 時はNULL文字列を返す。
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST / SPELL_CONT / SPELL_STOP 時はnullptr文字列を返す。
  */
 concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 {
@@ -284,7 +284,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 
             if (hex_revenge_turn(caster_ptr) > 0) {
                 msg_print(_("すでに我慢をしている。", "You are already biding your time for vengeance."));
-                return NULL;
+                return nullptr;
             }
 
             hex_revenge_type(caster_ptr) = 1;
@@ -470,7 +470,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
             return info_power(power);
         if (cast) {
             if (!recharge(caster_ptr, power))
-                return NULL;
+                return nullptr;
             add = false;
         }
         break;
@@ -574,10 +574,10 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 
             if (!o_ptr->k_idx) {
                 msg_print(_("クロークを身につけていない！", "You are not wearing a cloak."));
-                return NULL;
+                return nullptr;
             } else if (!o_ptr->is_cursed()) {
                 msg_print(_("クロークは呪われていない！", "Your cloak is not cursed."));
-                return NULL;
+                return nullptr;
             } else {
                 msg_print(_("影のオーラを身にまとった。", "You are enveloped by a shadowy aura!"));
             }
@@ -839,7 +839,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 
             if (hex_revenge_turn(caster_ptr) > 0) {
                 msg_print(_("すでに復讐は宣告済みだ。", "You've already declared your revenge."));
-                return NULL;
+                return nullptr;
             }
 
             hex_revenge_type(caster_ptr) = 2;

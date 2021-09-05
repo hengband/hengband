@@ -199,7 +199,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
     if (check_item_tag(owner_ptr, item_selection_ptr, &prev_tag, item_tester))
         return true;
 
-    msg_print(NULL);
+    msg_print(nullptr);
     item_selection_ptr->done = false;
     item_selection_ptr->item = false;
     item_selection_ptr->i1 = 0;

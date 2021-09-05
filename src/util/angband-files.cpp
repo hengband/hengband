@@ -19,7 +19,7 @@ int usleep(ulong usecs)
 
     int nfds = 0;
 
-    fd_set *no_fds = NULL;
+    fd_set *no_fds = nullptr;
     if (usecs > 4000000L)
         core(_("不当な usleep() 呼び出し", "Illegal usleep() call"));
 
@@ -141,7 +141,7 @@ errr path_parse(char *buf, int max, concptr file)
  */
 static errr path_temp(char *buf, int max)
 {
-    concptr s = tmpnam(NULL);
+    concptr s = tmpnam(nullptr);
     if (!s)
         return -1;
 
@@ -195,7 +195,7 @@ FILE *angband_fopen(concptr file, concptr mode)
 {
     char buf[1024];
     if (path_parse(buf, 1024, file))
-        return (NULL);
+        return nullptr;
 
     return (fopen(buf, mode));
 }
@@ -218,7 +218,7 @@ FILE *angband_fopen_temp(char *buf, int max)
     strncpy(buf, "/tmp/anXXXXXX", max);
     int fd = mkstemp(buf);
     if (fd < 0)
-        return (NULL);
+        return nullptr;
 
     return (fdopen(fd, "w"));
 }
@@ -226,7 +226,7 @@ FILE *angband_fopen_temp(char *buf, int max)
 FILE *angband_fopen_temp(char *buf, int max)
 {
     if (path_temp(buf, max))
-        return (NULL);
+        return nullptr;
     return (angband_fopen(buf, "w"));
 }
 #endif /* HAVE_MKSTEMP */

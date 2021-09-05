@@ -36,7 +36,7 @@ static void display_monster_blow_jp(lore_type *lore_ptr, int attack_numbers, int
     }
 
     /* XXしてYYし/XXしてYYする/XXし/XXする */
-    if (lore_ptr->q != NULL)
+    if (lore_ptr->q != nullptr)
         jverb(lore_ptr->p, lore_ptr->jverb_buf, JVERB_TO);
     else if (attack_numbers != lore_ptr->count - 1)
         jverb(lore_ptr->p, lore_ptr->jverb_buf, JVERB_AND);
@@ -76,13 +76,13 @@ static void display_monster_blow_en(lore_type *lore_ptr, int attack_numbers, int
         hooked_roff(", and ");
     }
 
-    if (lore_ptr->p == NULL) {
+    if (lore_ptr->p == nullptr) {
         lore_ptr->p = "do something weird";
         lore_ptr->pc = TERM_VIOLET;
     }
 
     hook_c_roff(lore_ptr->pc, lore_ptr->p);
-    if (lore_ptr->q != NULL) {
+    if (lore_ptr->q != nullptr) {
         hooked_roff(" to ");
         hook_c_roff(lore_ptr->qc, lore_ptr->q);
         if (d1 && d2 && (lore_ptr->know_everything || know_damage(lore_ptr->r_idx, m))) {

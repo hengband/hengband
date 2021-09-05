@@ -279,7 +279,7 @@ static void display_usage(const char *program)
 #endif /* USE_CAP */
 
     /* Actually abort the process */
-    quit(NULL);
+    quit(nullptr);
 }
 
 /*
@@ -299,7 +299,7 @@ static bool parse_long_opt(const char *opt)
     switch (output_all_spoilers()) {
     case spoiler_output_status::SPOILER_OUTPUT_SUCCESS:
         puts("Successfully created a spoiler file.");
-        quit(NULL);
+        quit(nullptr);
         break;
     case spoiler_output_status::SPOILER_OUTPUT_FAIL_FOPEN:
         quit("Cannot create spoiler file.");
@@ -328,7 +328,7 @@ int main(int argc, char *argv[])
     bool done = false;
     bool new_game = false;
     int show_score = 0;
-    concptr mstr = NULL;
+    concptr mstr = nullptr;
     bool args = true;
 
     /* Save the "program name" XXX XXX XXX */
@@ -509,7 +509,7 @@ int main(int argc, char *argv[])
     /* Hack -- Forget standard args */
     if (args) {
         argc = 1;
-        argv[1] = NULL;
+        argv[1] = nullptr;
     }
 
     /* Process the player name */
@@ -583,7 +583,7 @@ int main(int argc, char *argv[])
     play_game(p_ptr, new_game, browsing_movie);
 
     /* Quit */
-    quit(NULL);
+    quit(nullptr);
 
     /* Exit */
     return (0);

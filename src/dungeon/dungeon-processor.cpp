@@ -87,7 +87,7 @@ void process_dungeon(player_type *player_ptr, bool load_game)
     if ((max_dlv[player_ptr->dungeon_idx] < floor_ptr->dun_level) && !floor_ptr->inside_quest) {
         max_dlv[player_ptr->dungeon_idx] = floor_ptr->dun_level;
         if (record_maxdepth)
-            exe_write_diary(player_ptr, DIARY_MAXDEAPTH, floor_ptr->dun_level, NULL);
+            exe_write_diary(player_ptr, DIARY_MAXDEAPTH, floor_ptr->dun_level, nullptr);
     }
 
     (void)calculate_upkeep(player_ptr);
@@ -117,7 +117,7 @@ void process_dungeon(player_type *player_ptr, bool load_game)
             update_gambling_monsters(player_ptr);
         } else {
             msg_print(_("試合開始！", "Ready..Fight!"));
-            msg_print(NULL);
+            msg_print(nullptr);
         }
     }
 

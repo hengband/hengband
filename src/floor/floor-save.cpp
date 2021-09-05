@@ -70,7 +70,7 @@ void init_saved_floors(player_type *creature_ptr, bool force)
 
     max_floor_id = 1;
     latest_visit_mark = 1;
-    saved_floor_file_sign = (uint32_t)time(NULL);
+    saved_floor_file_sign = (uint32_t)time(nullptr);
     new_floor_id = 0;
     creature_ptr->change_floor_mode = 0;
 }
@@ -98,12 +98,12 @@ void clear_saved_floor_files(player_type *creature_ptr)
 /*!
  * @brief 保存フロアIDから参照ポインタを得る / Get a pointer for an item of the saved_floors array.
  * @param floor_id 保存フロアID
- * @return IDに対応する保存フロアのポインタ、ない場合はNULLを返す。
+ * @return IDに対応する保存フロアのポインタ、ない場合はnullptrを返す。
  */
 saved_floor_type *get_sf_ptr(FLOOR_IDX floor_id)
 {
     if (!floor_id)
-        return NULL;
+        return nullptr;
 
     for (int i = 0; i < MAX_SAVED_FLOORS; i++) {
         saved_floor_type *sf_ptr = &saved_floors[i];
@@ -111,7 +111,7 @@ saved_floor_type *get_sf_ptr(FLOOR_IDX floor_id)
             return sf_ptr;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 /*!
@@ -164,7 +164,7 @@ static FLOOR_IDX find_oldest_floor_idx(player_type *creature_ptr)
  */
 FLOOR_IDX get_new_floor_id(player_type *creature_ptr)
 {
-    saved_floor_type *sf_ptr = NULL;
+    saved_floor_type *sf_ptr = nullptr;
     FLOOR_IDX fl_idx;
     for (fl_idx = 0; fl_idx < MAX_SAVED_FLOORS; fl_idx++) {
         sf_ptr = &saved_floors[fl_idx];

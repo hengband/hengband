@@ -378,7 +378,7 @@ bool set_monster_timewalk(player_type *target_ptr, int num, MONRACE_IDX who, boo
         }
 
         msg_format(mes, m_name);
-        msg_print(NULL);
+        msg_print(nullptr);
     }
 
     current_world_ptr->timewalk_m_idx = hack_m_idx;
@@ -413,7 +413,7 @@ bool set_monster_timewalk(player_type *target_ptr, int num, MONRACE_IDX who, boo
         }
 
         msg_print(mes);
-        msg_print(NULL);
+        msg_print(nullptr);
     }
 
     handle_stuff(target_ptr);

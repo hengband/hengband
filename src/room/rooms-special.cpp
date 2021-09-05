@@ -88,7 +88,7 @@ bool build_type15(player_type *player_ptr, dun_data_type *dd_ptr)
     case 1: /* 4 lite breathers + potion */
     {
         DIRECTION dir1, dir2;
-        get_mon_num_prep(player_ptr, vault_aux_lite, NULL);
+        get_mon_num_prep(player_ptr, vault_aux_lite, nullptr);
 
         /* Place fixed lite berathers */
         for (dir1 = 4; dir1 < 8; dir1++) {
@@ -153,7 +153,7 @@ bool build_type15(player_type *player_ptr, dun_data_type *dd_ptr)
         g_ptr = &floor_ptr->grid_array[y2 - 1][x2 - 1];
         place_grid(player_ptr, g_ptr, GB_INNER);
         g_ptr->feat = feat_glass_wall;
-        get_mon_num_prep(player_ptr, vault_aux_lite, NULL);
+        get_mon_num_prep(player_ptr, vault_aux_lite, nullptr);
 
         r_idx = get_mon_num(player_ptr, 0, floor_ptr->dun_level, 0);
         if (r_idx)
@@ -211,7 +211,7 @@ bool build_type15(player_type *player_ptr, dun_data_type *dd_ptr)
             g_ptr->feat = feat_glass_wall;
         }
 
-        get_mon_num_prep(player_ptr, vault_aux_shards, NULL);
+        get_mon_num_prep(player_ptr, vault_aux_shards, nullptr);
 
         /* Place shard berathers */
         for (dir1 = 4; dir1 < 8; dir1++) {

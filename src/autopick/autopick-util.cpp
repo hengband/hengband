@@ -15,7 +15,7 @@
  */
 int max_autopick = 0; /*!< 現在登録している自動拾い/破壊設定の数 */
 int max_max_autopick = 0; /*!< 自動拾い/破壊設定の限界数 */
-autopick_type *autopick_list = NULL; /*!< 自動拾い/破壊設定構造体のポインタ配列 */
+autopick_type *autopick_list = nullptr; /*!< 自動拾い/破壊設定構造体のポインタ配列 */
 
 /*!
  * @brief Automatically destroy an item if it is to be destroyed
@@ -32,8 +32,8 @@ void autopick_free_entry(autopick_type *entry)
 {
     string_free(entry->name);
     string_free(entry->insc);
-    entry->name = NULL;
-    entry->insc = NULL;
+    entry->name = nullptr;
+    entry->insc = nullptr;
 }
 
 /*!

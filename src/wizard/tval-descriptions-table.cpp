@@ -14,7 +14,7 @@ tval_desc tvals[MAX_TVAL_DESCRIPTIONS] = { { TV_SWORD, "Sword" }, { TV_POLEARM, 
     { TV_CRUSADE_BOOK, "Crusade Spellbook" }, { TV_MUSIC_BOOK, "Music Spellbook" }, { TV_HISSATSU_BOOK, "Book of Kendo" }, { TV_HEX_BOOK, "Hex Spellbook" },
     { TV_PARCHMENT, "Parchment" }, { TV_WHISTLE, "Whistle" }, { TV_SPIKE, "Spikes" }, { TV_DIGGING, "Digger" }, { TV_CHEST, "Chest" },
     { TV_CAPTURE, "Capture Ball" }, { TV_CARD, "Express Card" }, { TV_FIGURINE, "Magical Figurine" }, { TV_STATUE, "Statue" }, { TV_CORPSE, "Corpse" },
-    { TV_FOOD, "Food" }, { TV_FLASK, "Flask" }, { TV_JUNK, "Junk" }, { TV_SKELETON, "Skeleton" }, { 0, NULL } };
+    { TV_FOOD, "Food" }, { TV_FLASK, "Flask" }, { TV_JUNK, "Junk" }, { TV_SKELETON, "Skeleton" }, { 0, nullptr } };
 
 /*!
  * 選択処理用キーコード /

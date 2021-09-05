@@ -441,7 +441,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
             if (tval == TV_ROD) {
                 if (creature_ptr->magic_num1[ext + i] > k_info[lookup_kind(tval, i)].pval * (creature_ptr->magic_num2[ext + i] - 1) * EATER_ROD_CHARGE) {
                     msg_print(_("その魔法はまだ充填している最中だ。", "The magic is still charging."));
-                    msg_print(NULL);
+                    msg_print(nullptr);
                     if (use_menu)
                         ask = true;
                     continue;
@@ -449,7 +449,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
             } else {
                 if (creature_ptr->magic_num1[ext + i] < EATER_CHARGE) {
                     msg_print(_("その魔法は使用回数が切れている。", "The magic has no charges left."));
-                    msg_print(NULL);
+                    msg_print(nullptr);
                     if (use_menu)
                         ask = true;
                     continue;

@@ -20,7 +20,7 @@
 void spoiler_outlist(concptr header, concptr *list, char separator)
 {
     char line[MAX_LINE_LEN + 20], buf[80];
-    if (*list == NULL)
+    if (*list == nullptr)
         return;
 
     strcpy(line, spoiler_indent);

@@ -88,7 +88,7 @@ bool ObjectThrowEntity::check_can_throw()
 
     if (this->creature_ptr->current_floor_ptr->inside_arena && !this->boomerang && (this->o_ptr->tval != TV_SPIKE)) {
         msg_print(_("アリーナではアイテムを使えない！", "You're in the arena now. This is hand-to-hand!"));
-        msg_print(NULL);
+        msg_print(nullptr);
         return false;
     }
 

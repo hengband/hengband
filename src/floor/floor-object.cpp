@@ -110,7 +110,7 @@ bool make_object(player_type *owner_ptr, object_type *j_ptr, BIT_FLAGS mode)
 
         k_idx = get_obj_num(owner_ptr, base, mode);
         if (get_obj_num_hook) {
-            get_obj_num_hook = NULL;
+            get_obj_num_hook = nullptr;
             get_obj_num_prep();
         }
 
@@ -593,13 +593,13 @@ object_type *choose_object(player_type *owner_ptr, OBJECT_IDX *idx, concptr q, c
     FixItemTesterSetter setter(item_tester);
 
     if (!get_item(owner_ptr, &item, q, s, option, item_tester))
-        return NULL;
+        return nullptr;
 
     if (idx)
         *idx = item;
 
     if (item == INVEN_FORCE)
-        return NULL;
+        return nullptr;
 
     return ref_item(owner_ptr, item);
 }

@@ -385,7 +385,7 @@ void wilderness_gen(player_type *creature_ptr)
     parse_fixed_map(creature_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
     POSITION x = creature_ptr->wilderness_x;
     POSITION y = creature_ptr->wilderness_y;
-    get_mon_num_prep(creature_ptr, get_monster_hook(creature_ptr), NULL);
+    get_mon_num_prep(creature_ptr, get_monster_hook(creature_ptr), nullptr);
 
     /* North border */
     generate_area(creature_ptr, y - 1, x, true, false);

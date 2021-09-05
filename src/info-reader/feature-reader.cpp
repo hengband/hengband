@@ -60,7 +60,7 @@ static bool grab_one_feat_action(feature_type *f_ptr, std::string_view what, int
  */
 errr parse_f_info(std::string_view buf, angband_header *head)
 {
-    static feature_type *f_ptr = NULL;
+    static feature_type *f_ptr = nullptr;
     const auto &tokens = str_split(buf, ':', false, 10);
 
     if (tokens[0] == "N") {

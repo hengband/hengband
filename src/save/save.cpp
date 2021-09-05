@@ -238,7 +238,7 @@ static bool save_player_aux(player_type *player_ptr, char *name, save_type type)
     safe_setuid_drop();
 
     bool is_save_successful = false;
-    saving_savefile = NULL;
+    saving_savefile = nullptr;
     if (fd >= 0) {
         (void)fd_close(fd);
         safe_setuid_grab(player_ptr);

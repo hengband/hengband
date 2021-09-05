@@ -39,7 +39,7 @@
  */
 void do_cmd_knowledge_artifacts(player_type *player_ptr)
 {
-    FILE *fff = NULL;
+    FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
     if (!open_temporary_file(&fff, file_name))
         return;
@@ -236,7 +236,7 @@ static void desc_obj_fake(player_type *creature_ptr, KIND_OBJECT_IDX k_idx)
         return;
 
     msg_print(_("特に変わったところはないようだ。", "You see nothing special."));
-    msg_print(NULL);
+    msg_print(nullptr);
 }
 
 /**
@@ -265,7 +265,7 @@ void do_cmd_knowledge_objects(player_type *creature_ptr, bool *need_redraw, bool
     int grp_cnt = 0;
     if (direct_k_idx < 0) {
         mode = visual_only ? 0x03 : 0x01;
-        for (IDX i = 0; object_group_text[i] != NULL; i++) {
+        for (IDX i = 0; object_group_text[i] != nullptr; i++) {
             len = strlen(object_group_text[i]);
             if (len > max)
                 max = len;

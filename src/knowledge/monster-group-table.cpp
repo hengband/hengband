@@ -24,7 +24,7 @@ concptr monster_group_text[] = {
     "Lich", "Multi-Headed Reptile", "Mystery Living", "Ogre", "Giant Humanoid", "Quylthulg", "Reptile/Amphibian", "Spider/Scorpion/Tick", "Troll", "Vampire",
     "Wight/Wraith/etc", "Xorn/Xaren/etc", "Yeti", "Zephyr Hound", "Mimic", "Wall/Plant/Gas", "Mushroom patch", "Ball", "Player",
 #endif
-    NULL
+    nullptr
 };
 
 /*
@@ -33,4 +33,4 @@ concptr monster_group_text[] = {
  */
 concptr monster_group_char[] = { (char *)-1L, (char *)-2L, (char *)-3L, (char *)-4L, "a", "b", "c", "dD", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o",
     "pt", "q", "r", "s", "uU", "v", "w", "y", "z", "A", "B", "C", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "V", "W", "X",
-    "Y", "Z", "!$&()+./=>?[\\]`{|~", "#%", ",", "*", "@", NULL };
+    "Y", "Z", "!$&()+./=>?[\\]`{|~", "#%", ",", "*", "@", nullptr };

@@ -287,7 +287,7 @@ static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
  */
 void do_cmd_knowledge_quests(player_type *creature_ptr)
 {
-    FILE *fff = NULL;
+    FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
     if (!open_temporary_file(&fff, file_name))
         return;

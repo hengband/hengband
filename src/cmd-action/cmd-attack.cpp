@@ -145,7 +145,7 @@ static void natural_attack(player_type *attacker_ptr, MONSTER_IDX m_idx, MUTA at
     case MUTA::TENTACLES:
     default: {
         MonsterDamageProcessor mdp(attacker_ptr, m_idx, k, fear);
-        *mdeath = mdp.mon_take_hit(NULL);
+        *mdeath = mdp.mon_take_hit(nullptr);
         break;
     }
     }

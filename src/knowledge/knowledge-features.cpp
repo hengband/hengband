@@ -106,7 +106,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
     FEAT_IDX *feat_idx;
     C_MAKE(feat_idx, max_f_idx, FEAT_IDX);
 
-    concptr feature_group_text[] = { "terrains", NULL };
+    concptr feature_group_text[] = { "terrains", nullptr };
     int len;
     int max = 0;
     int grp_cnt = 0;
@@ -117,7 +117,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
     byte char_left = 0;
     TERM_LEN browser_rows = hgt - 8;
     if (direct_f_idx < 0) {
-        for (FEAT_IDX i = 0; feature_group_text[i] != NULL; i++) {
+        for (FEAT_IDX i = 0; feature_group_text[i] != nullptr; i++) {
             len = strlen(feature_group_text[i]);
             if (len > max)
                 max = len;
@@ -344,7 +344,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
  */
 void do_cmd_knowledge_dungeon(player_type *creature_ptr)
 {
-    FILE *fff = NULL;
+    FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
     if (!open_temporary_file(&fff, file_name))
         return;

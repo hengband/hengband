@@ -177,15 +177,15 @@ static void ang_sort_swap_nest_mon_info(player_type *player_ptr, vptr u, vptr v,
  */
 std::vector<nest_pit_type> nest_types = {
     { _("クローン", "clone"), vault_aux_clone, vault_prep_clone, 5, 3 },
-    { _("ゼリー", "jelly"), vault_aux_jelly, NULL, 5, 6 },
+    { _("ゼリー", "jelly"), vault_aux_jelly, nullptr, 5, 6 },
     { _("シンボル(善)", "symbol good"), vault_aux_symbol_g, vault_prep_symbol, 25, 2 },
     { _("シンボル(悪)", "symbol evil"), vault_aux_symbol_e, vault_prep_symbol, 25, 2 },
-    { _("ミミック", "mimic"), vault_aux_mimic, NULL, 30, 4 },
-    { _("狂気", "lovecraftian"), vault_aux_cthulhu, NULL, 70, 2 },
-    { _("犬小屋", "kennel"), vault_aux_kennel, NULL, 45, 4 },
-    { _("動物園", "animal"), vault_aux_animal, NULL, 35, 5 },
-    { _("教会", "chapel"), vault_aux_chapel_g, NULL, 75, 4 },
-    { _("アンデッド", "undead"), vault_aux_undead, NULL, 75, 5 },
+    { _("ミミック", "mimic"), vault_aux_mimic, nullptr, 30, 4 },
+    { _("狂気", "lovecraftian"), vault_aux_cthulhu, nullptr, 70, 2 },
+    { _("犬小屋", "kennel"), vault_aux_kennel, nullptr, 45, 4 },
+    { _("動物園", "animal"), vault_aux_animal, nullptr, 35, 5 },
+    { _("教会", "chapel"), vault_aux_chapel_g, nullptr, 75, 4 },
+    { _("アンデッド", "undead"), vault_aux_undead, nullptr, 75, 5 },
 };
 
 /*!
@@ -239,7 +239,7 @@ bool build_type5(player_type *player_ptr, dun_data_type *dd_ptr)
     /* Process a preparation function if necessary */
     if (n_ptr->prep_func)
         (*(n_ptr->prep_func))(player_ptr);
-    get_mon_num_prep(player_ptr, n_ptr->hook_func, NULL);
+    get_mon_num_prep(player_ptr, n_ptr->hook_func, nullptr);
 
     align.sub_align = SUB_ALIGN_NEUTRAL;
 
@@ -247,7 +247,7 @@ bool build_type5(player_type *player_ptr, dun_data_type *dd_ptr)
     for (i = 0; i < NUM_NEST_MON_TYPE; i++) {
         MONRACE_IDX r_idx = 0;
         int attempts = 100;
-        monster_race *r_ptr = NULL;
+        monster_race *r_ptr = nullptr;
 
         while (attempts--) {
             /* Get a (hard) monster type */
@@ -370,7 +370,7 @@ bool build_type5(player_type *player_ptr, dun_data_type *dd_ptr)
     }
 
     if (cheat_room) {
-        ang_sort(player_ptr, nest_mon_info, NULL, NUM_NEST_MON_TYPE, ang_sort_comp_nest_mon_info, ang_sort_swap_nest_mon_info);
+        ang_sort(player_ptr, nest_mon_info, nullptr, NUM_NEST_MON_TYPE, ang_sort_comp_nest_mon_info, ang_sort_swap_nest_mon_info);
 
         /* Dump the entries (prevent multi-printing) */
         for (i = 0; i < NUM_NEST_MON_TYPE; i++) {
@@ -394,16 +394,16 @@ bool build_type5(player_type *player_ptr, dun_data_type *dd_ptr)
  * @brief 生成するPitの情報テーブル
  */
 std::vector<nest_pit_type> pit_types = {
-    { _("オーク", "orc"), vault_aux_orc, NULL, 5, 6 },
-    { _("トロル", "troll"), vault_aux_troll, NULL, 20, 6 },
-    { _("巨人", "giant"), vault_aux_giant, NULL, 50, 6 },
-    { _("狂気", "lovecraftian"), vault_aux_cthulhu, NULL, 80, 2 },
+    { _("オーク", "orc"), vault_aux_orc, nullptr, 5, 6 },
+    { _("トロル", "troll"), vault_aux_troll, nullptr, 20, 6 },
+    { _("巨人", "giant"), vault_aux_giant, nullptr, 50, 6 },
+    { _("狂気", "lovecraftian"), vault_aux_cthulhu, nullptr, 80, 2 },
     { _("シンボル(善)", "symbol good"), vault_aux_symbol_g, vault_prep_symbol, 70, 1 },
     { _("シンボル(悪)", "symbol evil"), vault_aux_symbol_e, vault_prep_symbol, 70, 1 },
-    { _("教会", "chapel"), vault_aux_chapel_g, NULL, 65, 2 },
+    { _("教会", "chapel"), vault_aux_chapel_g, nullptr, 65, 2 },
     { _("ドラゴン", "dragon"), vault_aux_dragon, vault_prep_dragon, 70, 6 },
-    { _("デーモン", "demon"), vault_aux_demon, NULL, 80, 6 },
-    { _("ダークエルフ", "dark elf"), vault_aux_dark_elf, NULL, 45, 4 },
+    { _("デーモン", "demon"), vault_aux_demon, nullptr, 80, 6 },
+    { _("ダークエルフ", "dark elf"), vault_aux_dark_elf, nullptr, 45, 4 },
 };
 
 /*!
@@ -466,7 +466,7 @@ bool build_type6(player_type *player_ptr, dun_data_type *dd_ptr)
     /* Process a preparation function if necessary */
     if (n_ptr->prep_func)
         (*(n_ptr->prep_func))(player_ptr);
-    get_mon_num_prep(player_ptr, n_ptr->hook_func, NULL);
+    get_mon_num_prep(player_ptr, n_ptr->hook_func, nullptr);
 
     align.sub_align = SUB_ALIGN_NEUTRAL;
 
@@ -474,7 +474,7 @@ bool build_type6(player_type *player_ptr, dun_data_type *dd_ptr)
     for (i = 0; i < 16; i++) {
         MONRACE_IDX r_idx = 0;
         int attempts = 100;
-        monster_race *r_ptr = NULL;
+        monster_race *r_ptr = nullptr;
 
         while (attempts--) {
             /* Get a (hard) monster type */
@@ -779,7 +779,7 @@ bool build_type13(player_type *player_ptr, dun_data_type *dd_ptr)
     for (i = 0; i < 16; i++) {
         MONRACE_IDX r_idx = 0;
         int attempts = 100;
-        monster_race *r_ptr = NULL;
+        monster_race *r_ptr = nullptr;
 
         while (attempts--) {
             /* Get a (hard) monster type */

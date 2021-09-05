@@ -31,7 +31,7 @@
 #endif
 
 /* The current "term" */
-term_type *Term = NULL;
+term_type *Term = nullptr;
 
 /*** Local routines ***/
 

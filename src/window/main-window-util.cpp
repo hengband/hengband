@@ -35,11 +35,11 @@ int feat_priority; /*!< マップ縮小表示時に表示すべき地形の優�
 
 static concptr simplify_list[][2] = {
 #ifdef JP
-    { "の魔法書", "" }, { NULL, NULL }
+    { "の魔法書", "" }, { nullptr, nullptr }
 #else
     { "^Ring of ", "=" }, { "^Amulet of ", "\"" }, { "^Scroll of ", "?" }, { "^Scroll titled ", "?" }, { "^Wand of ", "-" }, { "^Rod of ", "-" },
     { "^Staff of ", "_" }, { "^Potion of ", "!" }, { " Spellbook ", "" }, { "^Book of ", "" }, { " Magic [", "[" }, { " Book [", "[" }, { " Arts [", "[" },
-    { "^Set of ", "" }, { "^Pair of ", "" }, { NULL, NULL }
+    { "^Set of ", "" }, { "^Pair of ", "" }, { nullptr, nullptr }
 #endif
 };
 
@@ -215,7 +215,7 @@ void display_map(player_type *player_ptr, int *cy, int *cx)
     vector<vector<SYMBOL_CODE>> mc(hgt + 2, vector<SYMBOL_CODE>(wid + 2, ' '));
     vector<vector<byte>> mp(hgt + 2, vector<byte>(wid + 2, 0));
     vector<vector<int>> match_autopick_yx(hgt + 2, vector<int>(wid + 2, -1));
-    vector<vector<object_type *>> object_autopick_yx(hgt + 2, vector<object_type *>(wid + 2, NULL));
+    vector<vector<object_type *>> object_autopick_yx(hgt + 2, vector<object_type *>(wid + 2, nullptr));
 
     vector<vector<TERM_COLOR>> bigma(floor_ptr->height + 2, vector<TERM_COLOR>(floor_ptr->width + 2, TERM_WHITE));
     vector<vector<SYMBOL_CODE>> bigmc(floor_ptr->height + 2, vector<SYMBOL_CODE>(floor_ptr->width + 2, ' '));
@@ -227,7 +227,7 @@ void display_map(player_type *player_ptr, int *cy, int *cx)
             y = j / yrat + 1;
 
             match_autopick = -1;
-            autopick_obj = NULL;
+            autopick_obj = nullptr;
             feat_priority = -1;
             map_info(player_ptr, j, i, &ta, &tc, &ta, &tc);
             tp = (byte)feat_priority;

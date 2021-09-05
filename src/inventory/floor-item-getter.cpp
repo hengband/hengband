@@ -202,7 +202,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
     if (check_floor_item_tag(owner_ptr, fis_ptr, &prev_tag, item_tester))
         return true;
 
-    msg_print(NULL);
+    msg_print(nullptr);
     handle_stuff(owner_ptr);
     test_inventory_floor(owner_ptr, fis_ptr, item_tester);
     fis_ptr->done = false;

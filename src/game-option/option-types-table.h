@@ -5,12 +5,12 @@
 
 /*
  * Available "options"
- *	- Address of actual option variable (or NULL)
+ *	- Address of actual option variable (or nullptr)
  *	- Normal Value (TRUE or FALSE)
  *	- Option Page Number (or zero)
  *	- Savefile Set (or zero)
  *	- Savefile Bit in that set
- *	- Textual name (or NULL)
+ *	- Textual name (or nullptr)
  *	- Textual description
  */
 struct option_type {

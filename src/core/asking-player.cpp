@@ -214,7 +214,7 @@ bool askfor(char *buf, int len) { return askfor_aux(buf, len, true); }
 bool get_string(concptr prompt, char *buf, int len)
 {
     bool res;
-    msg_print(NULL);
+    msg_print(nullptr);
     prt(prompt, 0, 0);
     res = askfor(buf, len);
     prt("", 0, 0);
@@ -261,7 +261,7 @@ bool get_check_strict(player_type *player_ptr, concptr prompt, BIT_FLAGS mode)
         num_more = 0;
     }
 
-    msg_print(NULL);
+    msg_print(nullptr);
 
     prt(buf, 0, 0);
     if (!(mode & CHECK_NO_HISTORY) && player_ptr->playing) {
@@ -320,7 +320,7 @@ bool get_check_strict(player_type *player_ptr, concptr prompt, BIT_FLAGS mode)
  */
 bool get_com(concptr prompt, char *command, bool z_escape)
 {
-    msg_print(NULL);
+    msg_print(nullptr);
     prt(prompt, 0, 0);
     if (get_com_no_macros)
         *command = (char)inkey_special(false);
@@ -377,7 +377,7 @@ QUANTITY get_quantity(concptr prompt, QUANTITY max)
         prompt = tmp;
     }
 
-    msg_print(NULL);
+    msg_print(nullptr);
     prt(prompt, 0, 0);
     amt = 1;
     sprintf(buf, "%d", amt);

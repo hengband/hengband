@@ -33,7 +33,7 @@
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param spell 魔法ID
  * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST)
- * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はNULL文字列を返す。
+ * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST時はnullptr文字列を返す。
  */
 concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 {
@@ -61,7 +61,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr) - 10, GF_MISSILE, dir, damroll(dice, sides));
             }
@@ -138,7 +138,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fear_monster(caster_ptr, dir, power);
                 stun_monster(caster_ptr, dir, power);
@@ -161,7 +161,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr), GF_NETHER, dir, damroll(dice, sides));
             }
@@ -205,7 +205,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_ball(caster_ptr, GF_HELL_FIRE, dir, damroll(dice, sides) + base, rad);
             }
@@ -226,7 +226,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 control_one_demon(caster_ptr, dir, plev);
             }
@@ -284,7 +284,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr), GF_PLASMA, dir, damroll(dice, sides));
             }
@@ -306,7 +306,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_ball(caster_ptr, GF_FIRE, dir, dam, rad);
             }
@@ -341,7 +341,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_ball(caster_ptr, GF_NETHER, dir, dam, rad);
             }
@@ -441,7 +441,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_ball(caster_ptr, GF_PLASMA, dir, dam, rad);
             }
@@ -503,7 +503,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
                 fire_ball(caster_ptr, GF_NEXUS, dir, dam, rad);
             }
         }
@@ -518,7 +518,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
         {
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
                 else
                     msg_print(_("<破滅の手>を放った！", "You invoke the Hand of Doom!"));
 
@@ -606,7 +606,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
         {
             if (cast) {
                 if (!cast_summon_greater_demon(caster_ptr))
-                    return NULL;
+                    return nullptr;
             }
         }
         break;
@@ -626,7 +626,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_ball(caster_ptr, GF_NETHER, dir, dam, rad);
             }
@@ -649,7 +649,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mod
 
             if (cast) {
                 if (!get_aim_dir(caster_ptr, &dir))
-                    return NULL;
+                    return nullptr;
 
                 fire_ball_hide(caster_ptr, GF_BLOOD_CURSE, dir, dam, rad);
                 take_hit(caster_ptr, DAMAGE_USELIFE, 20 + randint1(30), _("血の呪い", "Blood curse"));

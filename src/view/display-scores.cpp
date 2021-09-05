@@ -84,7 +84,7 @@ void display_scores(int from, int to, int note, high_score *score)
             if ((note == j) && score) {
                 the_score = (*score);
                 attr = TERM_L_GREEN;
-                score = NULL;
+                score = nullptr;
                 note = -1;
                 j--;
             } else if (highscore_seek(j) || highscore_read(&the_score)) {
@@ -216,9 +216,9 @@ void display_scores(int from, int to)
     }
     
     term_clear();
-    display_scores(from, to, -1, NULL);
+    display_scores(from, to, -1, nullptr);
     (void)fd_close(highscore_fd);
     highscore_fd = -1;
-    quit(NULL);
+    quit(nullptr);
 }
 #endif

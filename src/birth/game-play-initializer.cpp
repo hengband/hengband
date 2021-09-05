@@ -51,7 +51,7 @@ void player_wipe_without_name(player_type *creature_ptr)
     if (creature_ptr->last_message)
         string_free(creature_ptr->last_message);
 
-    if (creature_ptr->inventory_list != NULL)
+    if (creature_ptr->inventory_list != nullptr)
         C_KILL(creature_ptr->inventory_list, INVEN_TOTAL, object_type);
 
     (void)WIPE(creature_ptr, player_type);

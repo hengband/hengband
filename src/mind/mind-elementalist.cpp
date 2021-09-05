@@ -1102,7 +1102,7 @@ static void display_realm_cursor(int i, int n, term_color_type color)
 static int interpret_realm_select_key(int cs, int n, char c)
 {
     if (c == 'Q')
-        quit(NULL);
+        quit(nullptr);
 
     if (c == '8')
         if (cs >= 5)
