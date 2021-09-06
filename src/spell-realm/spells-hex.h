@@ -12,7 +12,7 @@ public:
     bool stop_hex_spell();
     void check_hex();
     bool stop_hex_spell_all();
-    bool hex_spell_fully();
+    bool hex_spell_fully() const;
 
 private:
     player_type *caster_ptr;
