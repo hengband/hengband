@@ -425,12 +425,13 @@ void process_upkeep_with_speed(player_type *creature_ptr)
             check_music(creature_ptr);
         }
 
+        auto realm_hex = RealmHex(creature_ptr);
         if (!load) {
-            RealmHex(creature_ptr).check_hex();
+            realm_hex.check_hex();
         }
 
         if (!load) {
-            revenge_spell(creature_ptr);
+            realm_hex.revenge_spell();
         }
 
         creature_ptr->enchant_energy_need += ENERGY_NEED();

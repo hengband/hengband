@@ -303,7 +303,7 @@ bool RealmHex::hex_spell_fully() const
 /*!
  * @brief 一定ゲームターン毎に復讐処理の残り期間の判定を行う
  */
-void revenge_spell(player_type *caster_ptr)
+void RealmHex::revenge_spell()
 {
     if (caster_ptr->realm1 != REALM_HEX)
         return;
