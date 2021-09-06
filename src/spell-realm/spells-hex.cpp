@@ -32,22 +32,20 @@ RealmHex::RealmHex(player_type *caster_ptr)
  */
 bool RealmHex::stop_hex_spell_all()
 {
-    SPELL_IDX i;
-
-    for (i = 0; i < 32; i++) {
-        if (hex_spelling(this->caster_ptr, i))
+    for (auto i = 0; i < 32; i++) {
+        if (hex_spelling(this->caster_ptr, i)) {
             exe_spell(this->caster_ptr, REALM_HEX, i, SPELL_STOP);
+        }
     }
 
     casting_hex_flags(this->caster_ptr) = 0;
     casting_hex_num(this->caster_ptr) = 0;
-
-    if (this->caster_ptr->action == ACTION_SPELL)
+    if (this->caster_ptr->action == ACTION_SPELL) {
         set_action(this->caster_ptr, ACTION_NONE);
+    }
 
-    this->caster_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
-    this->caster_ptr->redraw |= (PR_EXTRA | PR_HP | PR_MANA);
-
+    this->caster_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
+    this->caster_ptr->redraw |= PR_EXTRA | PR_HP | PR_MANA;
     return true;
 }
 
