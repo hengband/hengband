@@ -327,12 +327,11 @@ void RealmHex::revenge_spell()
  */
 void RealmHex::revenge_store(HIT_POINT dam)
 {
-    if (caster_ptr->realm1 != REALM_HEX)
+    if ((this->caster_ptr->realm1 != REALM_HEX) || (hex_revenge_turn(this->caster_ptr) <= 0)) {
         return;
-    if (hex_revenge_turn(caster_ptr) <= 0)
-        return;
+    }
 
-    hex_revenge_power(caster_ptr) += dam;
+    hex_revenge_power(this->caster_ptr) += dam;
 }
 
 /*!
