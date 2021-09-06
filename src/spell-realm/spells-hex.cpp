@@ -365,15 +365,9 @@ bool RealmHex::magic_barrier(MONSTER_IDX m_idx)
  */
 bool RealmHex::multiply_barrier(MONSTER_IDX m_idx)
 {
-    monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-    if (!hex_spelling(caster_ptr, HEX_ANTI_MULTI))
-        return false;
-    if ((caster_ptr->lev * 3 / 2) < randint1(r_ptr->level))
-        return false;
-
-    return true;
+    const auto *m_ptr = &this->caster_ptr->current_floor_ptr->m_list[m_idx];
+    const auto *r_ptr = &r_info[m_ptr->r_idx];
+    return hex_spelling(this->caster_ptr, HEX_ANTI_MULTI) && ((this->caster_ptr->lev * 3 / 2) >= randint1(r_ptr->level));
 }
 
 bool hex_spelling(player_type *caster_ptr, int hex)
