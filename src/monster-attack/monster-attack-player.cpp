@@ -482,7 +482,7 @@ static void thief_teleport(player_type *target_ptr, monap_type *monap_ptr)
     if (!monap_ptr->blinked || !monap_ptr->alive || target_ptr->is_dead)
         return;
 
-    if (teleport_barrier(target_ptr, monap_ptr->m_idx)) {
+    if (RealmHex(target_ptr).teleport_barrier(monap_ptr->m_idx)) {
         msg_print(_("泥棒は笑って逃げ...ようとしたがバリアに防がれた。", "The thief flees laughing...? But a magic barrier obstructs it."));
     } else {
         msg_print(_("泥棒は笑って逃げた！", "The thief flees laughing!"));
