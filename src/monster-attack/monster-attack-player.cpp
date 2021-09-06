@@ -44,7 +44,6 @@
 #include "player/player-damage.h"
 #include "player/player-skill.h"
 #include "player/special-defense-types.h"
-#include "realm/realm-hex-numbers.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-crusade.h"
 #include "spell-realm/spells-hex.h"
@@ -482,7 +481,7 @@ static void thief_teleport(player_type *target_ptr, monap_type *monap_ptr)
     if (!monap_ptr->blinked || !monap_ptr->alive || target_ptr->is_dead)
         return;
 
-    if (RealmHex(target_ptr).teleport_barrier(monap_ptr->m_idx)) {
+    if (RealmHex(target_ptr).check_hex_barrier(monap_ptr->m_idx, HEX_ANTI_TELE)) {
         msg_print(_("泥棒は笑って逃げ...ようとしたがバリアに防がれた。", "The thief flees laughing...? But a magic barrier obstructs it."));
     } else {
         msg_print(_("泥棒は笑って逃げた！", "The thief flees laughing!"));

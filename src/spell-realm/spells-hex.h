@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "realm/realm-hex-numbers.h"
 
 struct player_type;
 class RealmHex {
@@ -15,9 +16,7 @@ public:
     bool hex_spell_fully() const;
     void revenge_spell();
     void revenge_store(HIT_POINT dam);
-    bool teleport_barrier(MONSTER_IDX m_idx);
-    bool magic_barrier(MONSTER_IDX m_idx);
-    bool multiply_barrier(MONSTER_IDX m_idx);
+    bool check_hex_barrier(MONSTER_IDX m_idx, realm_hex_type type) const;
 
 private:
     player_type *caster_ptr;

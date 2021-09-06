@@ -335,39 +335,16 @@ void RealmHex::revenge_store(HIT_POINT dam)
 }
 
 /*!
- * @brief 反テレポート結界の判定
+ * @brief 呪術結界の判定
  * @param m_idx 判定の対象となるモンスターID
- * @return 反テレポートの効果が適用されるならTRUEを返す
+ * @return 呪術の効果が適用されるならTRUEを返す
+ * @details v3.0.0現在は反テレポート・反魔法・反増殖の3種類
  */
-bool RealmHex::teleport_barrier(MONSTER_IDX m_idx)
+bool RealmHex::check_hex_barrier(MONSTER_IDX m_idx, realm_hex_type type) const
 {
     const auto *m_ptr = &this->caster_ptr->current_floor_ptr->m_list[m_idx];
     const auto *r_ptr = &r_info[m_ptr->r_idx];
-    return hex_spelling(this->caster_ptr, HEX_ANTI_TELE) && ((this->caster_ptr->lev * 3 / 2) >= randint1(r_ptr->level));
-}
-
-/*!
- * @brief 反魔法結界の判定
- * @param m_idx 判定の対象となるモンスターID
- * @return 反魔法の効果が適用されるならTRUEを返す
- */
-bool RealmHex::magic_barrier(MONSTER_IDX m_idx)
-{
-    const auto *m_ptr = &this->caster_ptr->current_floor_ptr->m_list[m_idx];
-    const auto *r_ptr = &r_info[m_ptr->r_idx];
-    return hex_spelling(this->caster_ptr, HEX_ANTI_MAGIC) && ((this->caster_ptr->lev * 3 / 2) >= randint1(r_ptr->level));
-}
-
-/*!
- * @brief 反増殖結界の判定
- * @param m_idx 判定の対象となるモンスターID
- * @return 反増殖の効果が適用されるならTRUEを返す
- */
-bool RealmHex::multiply_barrier(MONSTER_IDX m_idx)
-{
-    const auto *m_ptr = &this->caster_ptr->current_floor_ptr->m_list[m_idx];
-    const auto *r_ptr = &r_info[m_ptr->r_idx];
-    return hex_spelling(this->caster_ptr, HEX_ANTI_MULTI) && ((this->caster_ptr->lev * 3 / 2) >= randint1(r_ptr->level));
+    return hex_spelling(this->caster_ptr, type) && ((this->caster_ptr->lev * 3 / 2) >= randint1(r_ptr->level));
 }
 
 bool hex_spelling(player_type *caster_ptr, int hex)
