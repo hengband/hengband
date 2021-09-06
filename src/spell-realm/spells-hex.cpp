@@ -341,15 +341,9 @@ void RealmHex::revenge_store(HIT_POINT dam)
  */
 bool RealmHex::teleport_barrier(MONSTER_IDX m_idx)
 {
-    monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-    if (!hex_spelling(caster_ptr, HEX_ANTI_TELE))
-        return false;
-    if ((caster_ptr->lev * 3 / 2) < randint1(r_ptr->level))
-        return false;
-
-    return true;
+    const auto *m_ptr = &this->caster_ptr->current_floor_ptr->m_list[m_idx];
+    const auto *r_ptr = &r_info[m_ptr->r_idx];
+    return hex_spelling(this->caster_ptr, HEX_ANTI_TELE) && ((this->caster_ptr->lev * 3 / 2) >= randint1(r_ptr->level));
 }
 
 /*!
