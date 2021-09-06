@@ -11,6 +11,8 @@
 #include "grid/grid.h"
 #include "hpmp/hp-mp-regenerator.h"
 #include "inventory/inventory-slot-types.h"
+#include "main/sound-definitions-table.h"
+#include "main/sound-of-music.h"
 #include "monster-race/monster-race.h"
 #include "monster-race/race-flags2.h"
 #include "monster-race/race-flags3.h"
@@ -106,7 +108,9 @@ void process_player_hp_mp(player_type *creature_ptr)
     int upkeep_factor = 0;
     int regen_amount = PY_REGEN_NORMAL;
     if (creature_ptr->poisoned && !is_invuln(creature_ptr)) {
-        take_hit(creature_ptr, DAMAGE_NOESCAPE, 1, _("毒", "poison"));
+        if (take_hit(creature_ptr, DAMAGE_NOESCAPE, 1, _("毒", "poison")) > 0) {
+            sound(SOUND_DAMAGE_OVER_TIME);
+        }
     }
 
     if (creature_ptr->cut && !is_invuln(creature_ptr)) {
@@ -127,7 +131,9 @@ void process_player_hp_mp(player_type *creature_ptr)
             dam = 1;
         }
 
-        take_hit(creature_ptr, DAMAGE_NOESCAPE, dam, _("致命傷", "a fatal wound"));
+        if (take_hit(creature_ptr, DAMAGE_NOESCAPE, dam, _("致命傷", "a fatal wound")) > 0) {
+            sound(SOUND_DAMAGE_OVER_TIME);
+        }
     }
 
     if (player_race_life(creature_ptr) == PlayerRaceLife::UNDEAD && player_race_has_flag(creature_ptr, TR_VUL_LITE)) {
@@ -161,7 +167,8 @@ void process_player_hp_mp(player_type *creature_ptr)
     if (f_ptr->flags.has(FF::LAVA) && !is_invuln(creature_ptr) && !has_immune_fire(creature_ptr)) {
         if (deal_damege_by_feat(creature_ptr, g_ptr, _("熱で火傷した！", "The heat burns you!"), _("で火傷した！", "burns you!"),
                                 calc_fire_damage_rate, nullptr)) {
-            cave_no_regen = true;        
+            cave_no_regen = true;
+            sound(SOUND_TERRAIN_DAMAGE);
         }
     }
 
@@ -169,6 +176,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         if (deal_damege_by_feat(creature_ptr, g_ptr, _("冷気に覆われた！", "The cold engulfs you!"), _("に凍えた！", "frostbites you!"),
                                 calc_cold_damage_rate, nullptr)) {
             cave_no_regen = true;
+            sound(SOUND_TERRAIN_DAMAGE);
         }
     }
 
@@ -176,6 +184,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         if (deal_damege_by_feat(creature_ptr, g_ptr, _("電撃を受けた！", "The electricity shocks you!"), _("に感電した！", "shocks you!"),
                                 calc_elec_damage_rate, nullptr)) {
             cave_no_regen = true;
+            sound(SOUND_TERRAIN_DAMAGE);
         }
     }
 
@@ -183,6 +192,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         if (deal_damege_by_feat(creature_ptr, g_ptr, _("酸が飛び散った！", "The acid melts you!"), _("に溶かされた！", "melts you!"),
                                 calc_acid_damage_rate, nullptr)) {
             cave_no_regen = true;
+            sound(SOUND_TERRAIN_DAMAGE);
         }
     }
 
@@ -193,6 +203,7 @@ void process_player_hp_mp(player_type *creature_ptr)
                     (void)set_poisoned(creature_ptr, creature_ptr->poisoned + damage);
                                 })) {
             cave_no_regen = true;
+            sound(SOUND_TERRAIN_DAMAGE);
         }
     }
 
@@ -202,6 +213,7 @@ void process_player_hp_mp(player_type *creature_ptr)
             msg_print(_("溺れている！", "You are drowning!"));
             take_hit(creature_ptr, DAMAGE_NOESCAPE, randint1(creature_ptr->lev), _("溺れ", "drowning"));
             cave_no_regen = true;
+            sound(SOUND_TERRAIN_DAMAGE);
         }
     }
 
