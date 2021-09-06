@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "dungeon/dungeon-flag-types.h"
 #include "util/flag-group.h"
