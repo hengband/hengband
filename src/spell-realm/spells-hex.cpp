@@ -68,12 +68,12 @@ bool RealmHex::stop_hex_spell()
     strnfmt(out_val, 78, _("どの呪文の詠唱を中断しますか？(呪文 %c-%c, 'l'全て, ESC)", "Which spell do you stop casting? (Spell %c-%c, 'l' to all, ESC)"),
         I2A(0), I2A(casting_hex_num(this->caster_ptr) - 1));
     screen_save();
-    int sp[MAX_KEEP]{};
+    std::vector<int> sp(MAX_KEEP);
     char choice = 0;
     auto flag = select_spell_stopping(sp, out_val, &choice);
     screen_load();
     if (flag) {
-        auto n = sp[A2I(choice)];
+        auto n = sp.at(A2I(choice));
         exe_spell(this->caster_ptr, REALM_HEX, n, SPELL_STOP);
         casting_hex_flags(this->caster_ptr) &= ~(1UL << n);
         casting_hex_num(this->caster_ptr)--;
@@ -91,7 +91,7 @@ bool RealmHex::stop_hex_spell()
  * @param choice 選択した呪文
  * @return 選択が完了したらtrue、キャンセルならばfalse
  */
-bool RealmHex::select_spell_stopping(int *sp, char *out_val, char *choice)
+bool RealmHex::select_spell_stopping(std::vector<int> &sp, char *out_val, char *choice)
 {
     while (true) {
         this->display_spells_list(sp);
@@ -117,7 +117,7 @@ bool RealmHex::select_spell_stopping(int *sp, char *out_val, char *choice)
     }
 }
 
-void RealmHex::display_spells_list(int *sp)
+void RealmHex::display_spells_list(std::vector<int> &sp)
 {
     constexpr auto y = 1;
     constexpr auto x = 20;
@@ -128,7 +128,7 @@ void RealmHex::display_spells_list(int *sp)
         if (this->hex_spelling(spell)) {
             term_erase(x, y + n + 1, 255);
             put_str(format("%c)  %s", I2A(n), exe_spell(this->caster_ptr, REALM_HEX, spell, SPELL_NAME)), y + n + 1, x + 2);
-            sp[n++] = spell;
+            sp.at(n++) = spell;
         }
     }
 }
