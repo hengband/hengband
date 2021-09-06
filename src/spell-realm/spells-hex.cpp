@@ -293,7 +293,7 @@ void RealmHex::gain_exp_master(const int spell)
  * @brief プレイヤーの呪術詠唱枠がすでに最大かどうかを返す
  * @return すでに全枠を利用しているならTRUEを返す
  */
-bool hex_spell_fully(player_type *caster_ptr)
+bool RealmHex::hex_spell_fully()
 {
     int k_max = 0;
     k_max = (caster_ptr->lev / 15) + 1;

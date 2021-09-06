@@ -1015,7 +1015,7 @@ bool do_cmd_cast(player_type *caster_ptr)
         return false;
 
     if (caster_ptr->realm1 == REALM_HEX) {
-        if (hex_spell_fully(caster_ptr)) {
+        if (RealmHex(caster_ptr).hex_spell_fully()) {
             auto flag = false;
             msg_print(_("これ以上新しい呪文を詠唱することはできない。", "Can not cast more spells."));
             flush();
