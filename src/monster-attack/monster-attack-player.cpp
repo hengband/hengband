@@ -461,7 +461,7 @@ static bool process_monster_blows(player_type *target_ptr, monap_type *monap_ptr
  */
 static void eyes_on_eyes(player_type *target_ptr, monap_type *monap_ptr)
 {
-    if (((target_ptr->tim_eyeeye == 0) && !hex_spelling(target_ptr, HEX_EYE_FOR_EYE)) || (monap_ptr->get_damage == 0) || target_ptr->is_dead)
+    if (((target_ptr->tim_eyeeye == 0) && !RealmHex(target_ptr).hex_spelling(HEX_EYE_FOR_EYE)) || (monap_ptr->get_damage == 0) || target_ptr->is_dead)
         return;
 
 #ifdef JP

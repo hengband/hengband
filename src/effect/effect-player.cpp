@@ -309,7 +309,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
     switch_effects_player(target_ptr, ep_ptr);
 
     RealmHex(target_ptr).revenge_store(ep_ptr->get_damage);
-    if ((target_ptr->tim_eyeeye || hex_spelling(target_ptr, HEX_EYE_FOR_EYE)) && (ep_ptr->get_damage > 0) && !target_ptr->is_dead && (ep_ptr->who > 0)) {
+    if ((target_ptr->tim_eyeeye || RealmHex(target_ptr).hex_spelling(HEX_EYE_FOR_EYE)) && (ep_ptr->get_damage > 0) && !target_ptr->is_dead && (ep_ptr->who > 0)) {
         GAME_TEXT m_name_self[MAX_MONSTER_NAME];
         monster_desc(target_ptr, m_name_self, ep_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
         msg_format(_("攻撃が%s自身を傷つけた！", "The attack of %s has wounded %s!"), ep_ptr->m_name, m_name_self);

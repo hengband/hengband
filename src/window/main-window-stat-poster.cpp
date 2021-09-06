@@ -538,39 +538,39 @@ void print_status(player_type *creature_ptr)
         ADD_BAR_FLAG(BAR_EYEEYE);
 
     if (creature_ptr->realm1 == REALM_HEX) {
-        if (hex_spelling(creature_ptr, HEX_BLESS))
+        if (RealmHex(creature_ptr).hex_spelling(HEX_BLESS))
             ADD_BAR_FLAG(BAR_BLESSED);
-        if (hex_spelling(creature_ptr, HEX_DEMON_AURA)) {
+        if (RealmHex(creature_ptr).hex_spelling(HEX_DEMON_AURA)) {
             ADD_BAR_FLAG(BAR_SHFIRE);
             ADD_BAR_FLAG(BAR_REGENERATION);
         }
-        if (hex_spelling(creature_ptr, HEX_XTRA_MIGHT))
+        if (RealmHex(creature_ptr).hex_spelling(HEX_XTRA_MIGHT))
             ADD_BAR_FLAG(BAR_MIGHT);
-        if (hex_spelling(creature_ptr, HEX_DETECT_EVIL))
+        if (RealmHex(creature_ptr).hex_spelling(HEX_DETECT_EVIL))
             ADD_BAR_FLAG(BAR_ESP_EVIL);
-        if (hex_spelling(creature_ptr, HEX_ICE_ARMOR))
+        if (RealmHex(creature_ptr).hex_spelling(HEX_ICE_ARMOR))
             ADD_BAR_FLAG(BAR_SHCOLD);
-        if (hex_spelling(creature_ptr, HEX_RUNESWORD))
+        if (RealmHex(creature_ptr).hex_spelling(HEX_RUNESWORD))
             ADD_BAR_FLAG(BAR_RUNESWORD);
-        if (hex_spelling(creature_ptr, HEX_BUILDING))
+        if (RealmHex(creature_ptr).hex_spelling(HEX_BUILDING))
             ADD_BAR_FLAG(BAR_BUILD);
-        if (hex_spelling(creature_ptr, HEX_ANTI_TELE))
+        if (RealmHex(creature_ptr).hex_spelling(HEX_ANTI_TELE))
             ADD_BAR_FLAG(BAR_ANTITELE);
-        if (hex_spelling(creature_ptr, HEX_SHOCK_CLOAK))
+        if (RealmHex(creature_ptr).hex_spelling(HEX_SHOCK_CLOAK))
             ADD_BAR_FLAG(BAR_SHELEC);
-        if (hex_spelling(creature_ptr, HEX_SHADOW_CLOAK))
+        if (RealmHex(creature_ptr).hex_spelling(HEX_SHADOW_CLOAK))
             ADD_BAR_FLAG(BAR_SHSHADOW);
-        if (hex_spelling(creature_ptr, HEX_CONFUSION))
+        if (RealmHex(creature_ptr).hex_spelling(HEX_CONFUSION))
             ADD_BAR_FLAG(BAR_ATTKCONF);
-        if (hex_spelling(creature_ptr, HEX_EYE_FOR_EYE))
+        if (RealmHex(creature_ptr).hex_spelling(HEX_EYE_FOR_EYE))
             ADD_BAR_FLAG(BAR_EYEEYE);
-        if (hex_spelling(creature_ptr, HEX_ANTI_MULTI))
+        if (RealmHex(creature_ptr).hex_spelling(HEX_ANTI_MULTI))
             ADD_BAR_FLAG(BAR_ANTIMULTI);
-        if (hex_spelling(creature_ptr, HEX_VAMP_BLADE))
+        if (RealmHex(creature_ptr).hex_spelling(HEX_VAMP_BLADE))
             ADD_BAR_FLAG(BAR_VAMPILIC);
-        if (hex_spelling(creature_ptr, HEX_ANTI_MAGIC))
+        if (RealmHex(creature_ptr).hex_spelling(HEX_ANTI_MAGIC))
             ADD_BAR_FLAG(BAR_ANTIMAGIC);
-        if (hex_spelling(creature_ptr, HEX_CURE_LIGHT) || hex_spelling(creature_ptr, HEX_CURE_SERIOUS) || hex_spelling(creature_ptr, HEX_CURE_CRITICAL))
+        if (RealmHex(creature_ptr).hex_spelling(HEX_CURE_LIGHT) || RealmHex(creature_ptr).hex_spelling(HEX_CURE_SERIOUS) || RealmHex(creature_ptr).hex_spelling(HEX_CURE_CRITICAL))
             ADD_BAR_FLAG(BAR_CURE);
 
         if (hex_revenge_turn(creature_ptr)) {

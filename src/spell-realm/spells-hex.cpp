@@ -33,7 +33,7 @@ RealmHex::RealmHex(player_type *caster_ptr)
 bool RealmHex::stop_hex_spell_all()
 {
     for (auto i = 0; i < 32; i++) {
-        if (hex_spelling(this->caster_ptr, i)) {
+        if (this->hex_spelling(i)) {
             exe_spell(this->caster_ptr, REALM_HEX, i, SPELL_STOP);
         }
     }
@@ -124,7 +124,7 @@ void RealmHex::display_spells_list(int *sp)
     term_erase(x, y, 255);
     prt(_("     名前", "     Name"), y, x + 5);
     for (auto spell = 0; spell < 32; spell++) {
-        if (hex_spelling(this->caster_ptr, spell)) {
+        if (this->hex_spelling(spell)) {
             term_erase(x, y + n + 1, 255);
             put_str(format("%c)  %s", I2A(n), exe_spell(this->caster_ptr, REALM_HEX, spell, SPELL_NAME)), y + n + 1, x + 2);
             sp[n++] = spell;
@@ -157,7 +157,7 @@ void RealmHex::check_hex()
 
     /* Do any effects of continual spells */
     for (auto spell = 0; spell < 32; spell++) {
-        if (hex_spelling(this->caster_ptr, spell)) {
+        if (this->hex_spelling(spell)) {
             exe_spell(this->caster_ptr, REALM_HEX, spell, SPELL_CONT);
         }
     }
@@ -205,7 +205,7 @@ int RealmHex::calc_need_mana()
 {
     auto need_mana = 0;
     for (auto spell = 0; spell < 32; spell++) {
-        if (hex_spelling(this->caster_ptr, spell)) {
+        if (this->hex_spelling(spell)) {
             const auto *s_ptr = &technic_info[REALM_HEX - MIN_TECHNIC][spell];
             need_mana += mod_need_mana(this->caster_ptr, s_ptr->smana, spell, REALM_HEX);
         }
@@ -217,7 +217,7 @@ int RealmHex::calc_need_mana()
 void RealmHex::gain_exp_from_hex()
 {
     for (auto spell = 0; spell < 32; spell++) {
-        if (!hex_spelling(this->caster_ptr, spell)) {
+        if (!this->hex_spelling(spell)) {
             continue;
         }
 
@@ -344,10 +344,10 @@ bool RealmHex::check_hex_barrier(MONSTER_IDX m_idx, realm_hex_type type) const
 {
     const auto *m_ptr = &this->caster_ptr->current_floor_ptr->m_list[m_idx];
     const auto *r_ptr = &r_info[m_ptr->r_idx];
-    return hex_spelling(this->caster_ptr, type) && ((this->caster_ptr->lev * 3 / 2) >= randint1(r_ptr->level));
+    return this->hex_spelling(type) && ((this->caster_ptr->lev * 3 / 2) >= randint1(r_ptr->level));
 }
 
-bool hex_spelling(player_type *caster_ptr, int hex)
+bool RealmHex::hex_spelling(int hex) const
 {
     return (caster_ptr->realm1 == REALM_HEX) && (caster_ptr->magic_num1[0] & (1UL << (hex)));
 }

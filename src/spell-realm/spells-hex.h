@@ -17,6 +17,7 @@ public:
     void revenge_spell();
     void revenge_store(HIT_POINT dam);
     bool check_hex_barrier(MONSTER_IDX m_idx, realm_hex_type type) const;
+    bool hex_spelling(int hex) const;
 
 private:
     player_type *caster_ptr;
@@ -32,7 +33,6 @@ private:
     void gain_exp_master(const int spell);
 };
 
-bool hex_spelling(player_type *caster_ptr, int hex);
 bool hex_spelling_any(player_type *caster_ptr);
 
 #define casting_hex_flags(P_PTR) ((P_PTR)->magic_num1[0])
