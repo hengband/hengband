@@ -17,6 +17,7 @@
 #include "system/monster-type-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
@@ -349,7 +350,8 @@ bool RealmHex::check_hex_barrier(MONSTER_IDX m_idx, realm_hex_type type) const
 
 bool RealmHex::hex_spelling(int hex) const
 {
-    return (caster_ptr->realm1 == REALM_HEX) && (caster_ptr->magic_num1[0] & (1UL << (hex)));
+    auto check = static_cast<uint32_t>(this->caster_ptr->magic_num1[0]);
+    return (this->caster_ptr->realm1 == REALM_HEX) && any_bits(check, 1U << hex);
 }
 
 bool hex_spelling_any(player_type *caster_ptr)
