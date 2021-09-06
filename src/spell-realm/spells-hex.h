@@ -16,6 +16,7 @@ public:
     void revenge_spell();
     void revenge_store(HIT_POINT dam);
     bool teleport_barrier(MONSTER_IDX m_idx);
+    bool magic_barrier(MONSTER_IDX m_idx);
 
 private:
     player_type *caster_ptr;
@@ -31,7 +32,6 @@ private:
     void gain_exp_master(const int spell);
 };
 
-bool magic_barrier(player_type *caster_ptr, MONSTER_IDX m_idx);
 bool multiply_barrier(player_type *caster_ptr, MONSTER_IDX m_idx);
 bool hex_spelling(player_type *caster_ptr, int hex);
 bool hex_spelling_any(player_type *caster_ptr);
