@@ -90,4 +90,6 @@ const concptr angband_sound_name[SOUND_MAX] = {
     "shred_hit",
     "wield",
     "take_off",
+    "terrain_damage",
+    "damage_over_time",
 };
