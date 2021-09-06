@@ -363,7 +363,7 @@ bool RealmHex::magic_barrier(MONSTER_IDX m_idx)
  * @param m_idx 判定の対象となるモンスターID
  * @return 反増殖の効果が適用されるならTRUEを返す
  */
-bool multiply_barrier(player_type *caster_ptr, MONSTER_IDX m_idx)
+bool RealmHex::multiply_barrier(MONSTER_IDX m_idx)
 {
     monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
