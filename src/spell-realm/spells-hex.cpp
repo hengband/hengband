@@ -30,23 +30,23 @@ RealmHex::RealmHex(player_type *caster_ptr)
 /*!
  * @brief プレイヤーが詠唱中の全呪術を停止する
  */
-bool stop_hex_spell_all(player_type *caster_ptr)
+bool RealmHex::stop_hex_spell_all()
 {
     SPELL_IDX i;
 
     for (i = 0; i < 32; i++) {
-        if (hex_spelling(caster_ptr, i))
-            exe_spell(caster_ptr, REALM_HEX, i, SPELL_STOP);
+        if (hex_spelling(this->caster_ptr, i))
+            exe_spell(this->caster_ptr, REALM_HEX, i, SPELL_STOP);
     }
 
-    casting_hex_flags(caster_ptr) = 0;
-    casting_hex_num(caster_ptr) = 0;
+    casting_hex_flags(this->caster_ptr) = 0;
+    casting_hex_num(this->caster_ptr) = 0;
 
-    if (caster_ptr->action == ACTION_SPELL)
-        set_action(caster_ptr, ACTION_NONE);
+    if (this->caster_ptr->action == ACTION_SPELL)
+        set_action(this->caster_ptr, ACTION_NONE);
 
-    caster_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
-    caster_ptr->redraw |= (PR_EXTRA | PR_HP | PR_MANA);
+    this->caster_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
+    this->caster_ptr->redraw |= (PR_EXTRA | PR_HP | PR_MANA);
 
     return true;
 }
@@ -62,7 +62,7 @@ bool RealmHex::stop_hex_spell()
     }
 
     if ((casting_hex_num(this->caster_ptr) == 1) || (this->caster_ptr->lev < 35)) {
-        return stop_hex_spell_all(this->caster_ptr);
+        return this->stop_hex_spell_all();
     }
 
     char out_val[160];
@@ -107,7 +107,7 @@ bool RealmHex::select_spell_stopping(int *sp, char *out_val, char *choice)
         /* All */
         if (*choice == 'l') {
             screen_load();
-            return stop_hex_spell_all(this->caster_ptr);
+            return this->stop_hex_spell_all();
         }
 
         if ((*choice < I2A(0)) || (*choice > I2A(casting_hex_num(this->caster_ptr) - 1))) {
@@ -150,7 +150,7 @@ void RealmHex::check_hex()
 
     auto need_restart = this->check_restart();
     if (this->caster_ptr->anti_magic) {
-        stop_hex_spell_all(this->caster_ptr);
+        this->stop_hex_spell_all();
         return;
     }
 
@@ -174,7 +174,7 @@ void RealmHex::process_mana_cost(const bool need_restart)
 
     auto enough_mana = s64b_cmp(this->caster_ptr->csp, this->caster_ptr->csp_frac, need_mana, need_mana_frac) < 0;
     if (!enough_mana) {
-        stop_hex_spell_all(this->caster_ptr);
+        this->stop_hex_spell_all();
         return;
     }
 

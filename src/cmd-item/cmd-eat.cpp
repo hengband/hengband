@@ -259,8 +259,10 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 {
     if (music_singing_any(creature_ptr))
         stop_singing(creature_ptr);
-    if (hex_spelling_any(creature_ptr))
-        stop_hex_spell_all(creature_ptr);
+
+    if (hex_spelling_any(creature_ptr)) {
+        (void)RealmHex(creature_ptr).stop_hex_spell_all();
+    }
 
     object_type *o_ptr = ref_item(creature_ptr, item);
 

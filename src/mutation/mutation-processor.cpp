@@ -394,8 +394,9 @@ void process_world_aux_mutation(player_type *creature_ptr)
         if (music_singing_any(creature_ptr))
             stop_singing(creature_ptr);
 
-        if (hex_spelling_any(creature_ptr))
-            stop_hex_spell_all(creature_ptr);
+        if (hex_spelling_any(creature_ptr)) {
+            (void)RealmHex(creature_ptr).stop_hex_spell_all();
+        }
     }
 
     if (creature_ptr->muta.has(MUTA::WALK_SHAD) && !creature_ptr->anti_magic && one_in_(12000) && !creature_ptr->current_floor_ptr->inside_arena)

@@ -396,8 +396,9 @@ void do_cmd_rest(player_type *creature_ptr)
     if ((creature_ptr->pclass == CLASS_BARD) && ((get_singing_song_effect(creature_ptr) != 0) || (get_interrupting_song_effect(creature_ptr) != 0)))
         stop_singing(creature_ptr);
 
-    if (hex_spelling_any(creature_ptr))
-        stop_hex_spell_all(creature_ptr);
+    if (hex_spelling_any(creature_ptr)) {
+        (void)RealmHex(creature_ptr).stop_hex_spell_all();
+    }
 
     if (command_arg <= 0) {
         concptr p = _("休憩 (0-9999, '*' で HP/MP全快, '&' で必要なだけ): ", "Rest (0-9999, '*' for HP/SP, '&' as needed): ");

@@ -11,6 +11,7 @@ public:
 
     bool stop_hex_spell();
     void check_hex();
+    bool stop_hex_spell_all();
 
 private:
     player_type *caster_ptr;
@@ -26,7 +27,6 @@ private:
     void gain_exp_master(const int spell);
 };
 
-bool stop_hex_spell_all(player_type *caster_ptr);
 bool hex_spell_fully(player_type *caster_ptr);
 void revenge_spell(player_type *caster_ptr);
 void revenge_store(player_type *caster_ptr, HIT_POINT dam);

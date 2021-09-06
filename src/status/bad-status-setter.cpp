@@ -119,8 +119,9 @@ bool set_confused(player_type *creature_ptr, TIME_EFFECT v)
             if (creature_ptr->concent)
                 reset_concentration(creature_ptr, true);
 
-            if (hex_spelling_any(creature_ptr))
-                stop_hex_spell_all(creature_ptr);
+            if (hex_spelling_any(creature_ptr)) {
+                (void)RealmHex(creature_ptr).stop_hex_spell_all();
+            }
 
             notice = true;
             creature_ptr->counter = false;
@@ -251,8 +252,10 @@ bool set_paralyzed(player_type *creature_ptr, TIME_EFFECT v)
             msg_print(_("体が麻痺してしまった！", "You are paralyzed!"));
             if (creature_ptr->concent)
                 reset_concentration(creature_ptr, true);
-            if (hex_spelling_any(creature_ptr))
-                stop_hex_spell_all(creature_ptr);
+
+            if (hex_spelling_any(creature_ptr)) {
+                (void)RealmHex(creature_ptr).stop_hex_spell_all();
+            }
 
             creature_ptr->counter = false;
             notice = true;
@@ -447,8 +450,10 @@ bool set_stun(player_type *creature_ptr, TIME_EFFECT v)
 
         if (creature_ptr->concent)
             reset_concentration(creature_ptr, true);
-        if (hex_spelling_any(creature_ptr))
-            stop_hex_spell_all(creature_ptr);
+
+        if (hex_spelling_any(creature_ptr)) {
+            (void)RealmHex(creature_ptr).stop_hex_spell_all();
+        }
 
         notice = true;
     } else if (new_aux < old_aux) {

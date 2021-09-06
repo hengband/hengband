@@ -2968,8 +2968,10 @@ void stop_mouth(player_type *caster_ptr)
 {
     if (music_singing_any(caster_ptr))
         stop_singing(caster_ptr);
-    if (hex_spelling_any(caster_ptr))
-        stop_hex_spell_all(caster_ptr);
+
+    if (hex_spelling_any(caster_ptr)) {
+        (void)RealmHex(caster_ptr).stop_hex_spell_all();
+    }
 }
 
 bool is_fast(player_type *creature_ptr)

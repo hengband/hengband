@@ -95,8 +95,9 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
     if (music_singing_any(creature_ptr))
         stop_singing(creature_ptr);
 
-    if (hex_spelling_any(creature_ptr) && ((creature_ptr->lev < 35) || hex_spell_fully(creature_ptr)))
-        stop_hex_spell_all(creature_ptr);
+    if (hex_spelling_any(creature_ptr) && ((creature_ptr->lev < 35) || hex_spell_fully(creature_ptr))) {
+        (void)RealmHex(creature_ptr).stop_hex_spell_all();
+    }
 
     ident = false;
     lev = k_info[o_ptr->k_idx].level;
