@@ -70,7 +70,7 @@ bool RealmHex::stop_one_spell()
     screen_save();
     std::vector<int> sp(MAX_KEEP);
     char choice = 0;
-    auto flag = select_spell_stopping(sp, out_val, &choice);
+    auto flag = select_spell_stopping(sp, out_val, choice);
     screen_load();
     if (flag) {
         auto n = sp.at(A2I(choice));
@@ -91,25 +91,25 @@ bool RealmHex::stop_one_spell()
  * @param choice 選択した呪文
  * @return 選択が完了したらtrue、キャンセルならばfalse
  */
-bool RealmHex::select_spell_stopping(std::vector<int> &sp, char *out_val, char *choice)
+bool RealmHex::select_spell_stopping(std::vector<int> &sp, char *out_val, char &choice)
 {
     while (true) {
         this->display_spells_list(sp);
-        if (!get_com(out_val, choice, true)) {
+        if (!get_com(out_val, &choice, true)) {
             return false;
         }
 
-        if (isupper(*choice)) {
-            *choice = static_cast<char>(tolower(*choice));
+        if (isupper(choice)) {
+            choice = static_cast<char>(tolower(choice));
         }
 
         /* All */
-        if (*choice == 'l') {
+        if (choice == 'l') {
             screen_load();
             return this->stop_all_spells();
         }
 
-        if ((*choice < I2A(0)) || (*choice > I2A(casting_hex_num(this->caster_ptr) - 1))) {
+        if ((choice < I2A(0)) || (choice > I2A(casting_hex_num(this->caster_ptr) - 1))) {
             continue;
         }
 

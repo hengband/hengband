@@ -425,7 +425,7 @@ void process_upkeep_with_speed(player_type *creature_ptr)
             check_music(creature_ptr);
         }
 
-        auto realm_hex = RealmHex(creature_ptr);
+        RealmHex realm_hex(creature_ptr);
         if (!load) {
             realm_hex.decrease_mana();
         }
