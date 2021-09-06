@@ -427,11 +427,11 @@ void process_upkeep_with_speed(player_type *creature_ptr)
 
         auto realm_hex = RealmHex(creature_ptr);
         if (!load) {
-            realm_hex.check_hex();
+            realm_hex.decrease_mana();
         }
 
         if (!load) {
-            realm_hex.revenge_spell();
+            realm_hex.continue_revenge();
         }
 
         creature_ptr->enchant_energy_need += ENERGY_NEED();

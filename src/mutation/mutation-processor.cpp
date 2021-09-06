@@ -395,8 +395,8 @@ void process_world_aux_mutation(player_type *creature_ptr)
             stop_singing(creature_ptr);
 
         RealmHex realm_hex(creature_ptr);
-        if (realm_hex.hex_spelling_any()) {
-            (void)realm_hex.stop_hex_spell_all();
+        if (realm_hex.is_spelling_any()) {
+            (void)realm_hex.stop_all_spells();
         }
     }
 

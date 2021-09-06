@@ -184,8 +184,8 @@ static bool activate_whistle(player_type *user_ptr, ae_type *ae_ptr)
     if (music_singing_any(user_ptr))
         stop_singing(user_ptr);
 
-    if (RealmHex(user_ptr).hex_spelling_any()) {
-        (void)RealmHex(user_ptr).stop_hex_spell_all();
+    if (RealmHex(user_ptr).is_spelling_any()) {
+        (void)RealmHex(user_ptr).stop_all_spells();
     }
 
     MONSTER_IDX pet_ctr;

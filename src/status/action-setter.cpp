@@ -84,7 +84,7 @@ void set_action(player_type *creature_ptr, uint8_t typ)
         stop_singing(creature_ptr);
 
     if (prev_typ == ACTION_SPELL) {
-        (void)RealmHex(creature_ptr).stop_hex_spell();
+        (void)RealmHex(creature_ptr).stop_one_spell();
     }
 
     switch (creature_ptr->action) {

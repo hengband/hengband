@@ -10,15 +10,15 @@ public:
     RealmHex(player_type *caster_ptr);
     virtual ~RealmHex() = default;
 
-    bool stop_hex_spell();
-    void check_hex();
-    bool stop_hex_spell_all();
-    bool hex_spell_fully() const;
-    void revenge_spell();
-    void revenge_store(HIT_POINT dam);
+    bool stop_one_spell();
+    void decrease_mana();
+    bool stop_all_spells();
+    bool is_using_full_capacity() const;
+    void continue_revenge();
+    void store_vengeful_damage(HIT_POINT dam);
     bool check_hex_barrier(MONSTER_IDX m_idx, realm_hex_type type) const;
-    bool hex_spelling(int hex) const;
-    bool hex_spelling_any() const;
+    bool is_spelling_specific(int hex) const;
+    bool is_spelling_any() const;
 
 private:
     player_type *caster_ptr;

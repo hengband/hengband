@@ -397,8 +397,8 @@ void do_cmd_rest(player_type *creature_ptr)
         stop_singing(creature_ptr);
 
     RealmHex realm_hex(creature_ptr);
-    if (realm_hex.hex_spelling_any()) {
-        (void)realm_hex.stop_hex_spell_all();
+    if (realm_hex.is_spelling_any()) {
+        (void)realm_hex.stop_all_spells();
     }
 
     if (command_arg <= 0) {

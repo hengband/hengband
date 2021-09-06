@@ -31,10 +31,10 @@ RealmHex::RealmHex(player_type *caster_ptr)
 /*!
  * @brief プレイヤーが詠唱中の全呪術を停止する
  */
-bool RealmHex::stop_hex_spell_all()
+bool RealmHex::stop_all_spells()
 {
     for (auto i = 0; i < 32; i++) {
-        if (this->hex_spelling(i)) {
+        if (this->is_spelling_specific(i)) {
             exe_spell(this->caster_ptr, REALM_HEX, i, SPELL_STOP);
         }
     }
@@ -53,15 +53,15 @@ bool RealmHex::stop_hex_spell_all()
 /*!
  * @brief プレイヤーが詠唱中の呪術から一つを選んで停止する
  */
-bool RealmHex::stop_hex_spell()
+bool RealmHex::stop_one_spell()
 {
-    if (!RealmHex(this->caster_ptr).hex_spelling_any()) {
+    if (!RealmHex(this->caster_ptr).is_spelling_any()) {
         msg_print(_("呪文を詠唱していません。", "You are not casting a spell."));
         return false;
     }
 
     if ((casting_hex_num(this->caster_ptr) == 1) || (this->caster_ptr->lev < 35)) {
-        return this->stop_hex_spell_all();
+        return this->stop_all_spells();
     }
 
     char out_val[160];
@@ -106,7 +106,7 @@ bool RealmHex::select_spell_stopping(std::vector<int> &sp, char *out_val, char *
         /* All */
         if (*choice == 'l') {
             screen_load();
-            return this->stop_hex_spell_all();
+            return this->stop_all_spells();
         }
 
         if ((*choice < I2A(0)) || (*choice > I2A(casting_hex_num(this->caster_ptr) - 1))) {
@@ -125,7 +125,7 @@ void RealmHex::display_spells_list(std::vector<int> &sp)
     term_erase(x, y, 255);
     prt(_("     名前", "     Name"), y, x + 5);
     for (auto spell = 0; spell < 32; spell++) {
-        if (this->hex_spelling(spell)) {
+        if (this->is_spelling_specific(spell)) {
             term_erase(x, y + n + 1, 255);
             put_str(format("%c)  %s", I2A(n), exe_spell(this->caster_ptr, REALM_HEX, spell, SPELL_NAME)), y + n + 1, x + 2);
             sp.at(n++) = spell;
@@ -136,7 +136,7 @@ void RealmHex::display_spells_list(std::vector<int> &sp)
 /*!
  * @brief 一定時間毎に呪術で消費するMPを処理する
  */
-void RealmHex::check_hex()
+void RealmHex::decrease_mana()
 {
     /* Spells spelled by player */
     if (this->caster_ptr->realm1 != REALM_HEX) {
@@ -149,7 +149,7 @@ void RealmHex::check_hex()
 
     auto need_restart = this->check_restart();
     if (this->caster_ptr->anti_magic) {
-        this->stop_hex_spell_all();
+        this->stop_all_spells();
         return;
     }
 
@@ -158,7 +158,7 @@ void RealmHex::check_hex()
 
     /* Do any effects of continual spells */
     for (auto spell = 0; spell < 32; spell++) {
-        if (this->hex_spelling(spell)) {
+        if (this->is_spelling_specific(spell)) {
             exe_spell(this->caster_ptr, REALM_HEX, spell, SPELL_CONT);
         }
     }
@@ -173,7 +173,7 @@ void RealmHex::process_mana_cost(const bool need_restart)
 
     auto enough_mana = s64b_cmp(this->caster_ptr->csp, this->caster_ptr->csp_frac, need_mana, need_mana_frac) < 0;
     if (!enough_mana) {
-        this->stop_hex_spell_all();
+        this->stop_all_spells();
         return;
     }
 
@@ -206,7 +206,7 @@ int RealmHex::calc_need_mana()
 {
     auto need_mana = 0;
     for (auto spell = 0; spell < 32; spell++) {
-        if (this->hex_spelling(spell)) {
+        if (this->is_spelling_specific(spell)) {
             const auto *s_ptr = &technic_info[REALM_HEX - MIN_TECHNIC][spell];
             need_mana += mod_need_mana(this->caster_ptr, s_ptr->smana, spell, REALM_HEX);
         }
@@ -218,7 +218,7 @@ int RealmHex::calc_need_mana()
 void RealmHex::gain_exp_from_hex()
 {
     for (auto spell = 0; spell < 32; spell++) {
-        if (!this->hex_spelling(spell)) {
+        if (!this->is_spelling_specific(spell)) {
             continue;
         }
 
@@ -294,7 +294,7 @@ void RealmHex::gain_exp_master(const int spell)
  * @brief プレイヤーの呪術詠唱枠がすでに最大かどうかを返す
  * @return すでに全枠を利用しているならTRUEを返す
  */
-bool RealmHex::hex_spell_fully() const
+bool RealmHex::is_using_full_capacity() const
 {
     auto k_max = (this->caster_ptr->lev / 15) + 1;
     k_max = MIN(k_max, MAX_KEEP);
@@ -304,7 +304,7 @@ bool RealmHex::hex_spell_fully() const
 /*!
  * @brief 一定ゲームターン毎に復讐処理の残り期間の判定を行う
  */
-void RealmHex::revenge_spell()
+void RealmHex::continue_revenge()
 {
     if ((this->caster_ptr->realm1 != REALM_HEX) || (hex_revenge_turn(this->caster_ptr) <= 0)) {
         return;
@@ -326,7 +326,7 @@ void RealmHex::revenge_spell()
  * @brief 復讐ダメージの追加を行う
  * @param dam 蓄積されるダメージ量
  */
-void RealmHex::revenge_store(HIT_POINT dam)
+void RealmHex::store_vengeful_damage(HIT_POINT dam)
 {
     if ((this->caster_ptr->realm1 != REALM_HEX) || (hex_revenge_turn(this->caster_ptr) <= 0)) {
         return;
@@ -345,16 +345,16 @@ bool RealmHex::check_hex_barrier(MONSTER_IDX m_idx, realm_hex_type type) const
 {
     const auto *m_ptr = &this->caster_ptr->current_floor_ptr->m_list[m_idx];
     const auto *r_ptr = &r_info[m_ptr->r_idx];
-    return this->hex_spelling(type) && ((this->caster_ptr->lev * 3 / 2) >= randint1(r_ptr->level));
+    return this->is_spelling_specific(type) && ((this->caster_ptr->lev * 3 / 2) >= randint1(r_ptr->level));
 }
 
-bool RealmHex::hex_spelling(int hex) const
+bool RealmHex::is_spelling_specific(int hex) const
 {
     auto check = static_cast<uint32_t>(this->caster_ptr->magic_num1[0]);
     return (this->caster_ptr->realm1 == REALM_HEX) && any_bits(check, 1U << hex);
 }
 
-bool RealmHex::hex_spelling_any() const
+bool RealmHex::is_spelling_any() const
 {
     return (caster_ptr->realm1 == REALM_HEX) && (caster_ptr->magic_num1[0] != 0);
 }

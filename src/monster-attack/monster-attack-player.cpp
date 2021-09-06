@@ -461,7 +461,7 @@ static bool process_monster_blows(player_type *target_ptr, monap_type *monap_ptr
  */
 static void eyes_on_eyes(player_type *target_ptr, monap_type *monap_ptr)
 {
-    if (((target_ptr->tim_eyeeye == 0) && !RealmHex(target_ptr).hex_spelling(HEX_EYE_FOR_EYE)) || (monap_ptr->get_damage == 0) || target_ptr->is_dead)
+    if (((target_ptr->tim_eyeeye == 0) && !RealmHex(target_ptr).is_spelling_specific(HEX_EYE_FOR_EYE)) || (monap_ptr->get_damage == 0) || target_ptr->is_dead)
         return;
 
 #ifdef JP
@@ -491,7 +491,7 @@ static void thief_teleport(player_type *target_ptr, monap_type *monap_ptr)
 
 static void postprocess_monster_blows(player_type *target_ptr, monap_type *monap_ptr)
 {
-    RealmHex(target_ptr).revenge_store(monap_ptr->get_damage);
+    RealmHex(target_ptr).store_vengeful_damage(monap_ptr->get_damage);
     eyes_on_eyes(target_ptr, monap_ptr);
     musou_counterattack(target_ptr, monap_ptr);
     thief_teleport(target_ptr, monap_ptr);

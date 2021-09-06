@@ -1015,12 +1015,12 @@ bool do_cmd_cast(player_type *caster_ptr)
         return false;
 
     if (caster_ptr->realm1 == REALM_HEX) {
-        if (RealmHex(caster_ptr).hex_spell_fully()) {
+        if (RealmHex(caster_ptr).is_using_full_capacity()) {
             auto flag = false;
             msg_print(_("これ以上新しい呪文を詠唱することはできない。", "Can not cast more spells."));
             flush();
             if (caster_ptr->lev >= 35) {
-                flag = RealmHex(caster_ptr).stop_hex_spell();
+                flag = RealmHex(caster_ptr).stop_one_spell();
             }
 
             if (!flag) {
@@ -1092,7 +1092,7 @@ bool do_cmd_cast(player_type *caster_ptr)
 
     use_realm = tval2realm(o_ptr->tval);
     if (use_realm == REALM_HEX) {
-        if (RealmHex(caster_ptr).hex_spelling(spell)) {
+        if (RealmHex(caster_ptr).is_spelling_specific(spell)) {
             msg_print(_("その呪文はすでに詠唱中だ。", "You are already casting it."));
             return false;
         }

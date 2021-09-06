@@ -58,10 +58,10 @@ int16_t PlayerStrength::time_effect_value()
 
     if (this->owner_ptr->realm1 == REALM_HEX) {
         RealmHex realm_hex(this->owner_ptr);
-        if (realm_hex.hex_spelling(HEX_XTRA_MIGHT)) {
+        if (realm_hex.is_spelling_specific(HEX_XTRA_MIGHT)) {
             result += 4;
         }
-        if (realm_hex.hex_spelling(HEX_BUILDING)) {
+        if (realm_hex.is_spelling_specific(HEX_BUILDING)) {
             result += 4;
         }
     }
