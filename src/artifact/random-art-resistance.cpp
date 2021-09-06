@@ -18,10 +18,10 @@
  */
 static bool random_art_aura(object_type *o_ptr, tr_type tr_sh_flag)
 {
-    if ((o_ptr->tval < TV_CLOAK) || (o_ptr->tval > TV_HARD_ARMOR) || has_flag(o_ptr->art_flags, tr_sh_flag))
+    if ((o_ptr->tval < TV_CLOAK) || (o_ptr->tval > TV_HARD_ARMOR) || o_ptr->art_flags.has(tr_sh_flag))
         return false;
 
-    add_flag(o_ptr->art_flags, tr_sh_flag);
+    o_ptr->art_flags.set(tr_sh_flag);
     return one_in_(2);
 }
 
@@ -34,17 +34,17 @@ static bool random_art_aura(object_type *o_ptr, tr_type tr_sh_flag)
  */
 static bool random_art_immunity(object_type *o_ptr, tr_type tr_im_flag)
 {
-    if (!one_in_(BIAS_LUCK) || has_flag(o_ptr->art_flags, tr_im_flag))
+    if (!one_in_(BIAS_LUCK) || o_ptr->art_flags.has(tr_im_flag))
         return false;
 
     if (!one_in_(IM_LUCK)) {
-        remove_flag(o_ptr->art_flags, TR_IM_ACID);
-        remove_flag(o_ptr->art_flags, TR_IM_ELEC);
-        remove_flag(o_ptr->art_flags, TR_IM_FIRE);
-        remove_flag(o_ptr->art_flags, TR_IM_COLD);
+        o_ptr->art_flags.reset(TR_IM_ACID);
+        o_ptr->art_flags.reset(TR_IM_ELEC);
+        o_ptr->art_flags.reset(TR_IM_FIRE);
+        o_ptr->art_flags.reset(TR_IM_COLD);
     }
 
-    add_flag(o_ptr->art_flags, tr_im_flag);
+    o_ptr->art_flags.set(tr_im_flag);
     return one_in_(2);
 }
 
@@ -58,10 +58,10 @@ static bool random_art_immunity(object_type *o_ptr, tr_type tr_im_flag)
  */
 static bool random_art_resistance(object_type *o_ptr, tr_type tr_res_flag, bool skip = false)
 {
-    if (skip || has_flag(o_ptr->art_flags, tr_res_flag))
+    if (skip || o_ptr->art_flags.has(tr_res_flag))
         return false;
 
-    add_flag(o_ptr->art_flags, tr_res_flag);
+    o_ptr->art_flags.set(tr_res_flag);
     return one_in_(2);
 }
 
@@ -101,7 +101,7 @@ static void set_weird_bias_acid(object_type *o_ptr)
         return;
     }
 
-    add_flag(o_ptr->art_flags, TR_IM_ACID);
+    o_ptr->art_flags.set(TR_IM_ACID);
     if (!o_ptr->artifact_bias)
         o_ptr->artifact_bias = BIAS_ACID;
 }
@@ -114,7 +114,7 @@ static void set_weird_bias_elec(object_type *o_ptr)
         return;
     }
 
-    add_flag(o_ptr->art_flags, TR_IM_ELEC);
+    o_ptr->art_flags.set(TR_IM_ELEC);
     if (!o_ptr->artifact_bias)
         o_ptr->artifact_bias = BIAS_ELEC;
 }
@@ -127,7 +127,7 @@ static void set_weird_bias_cold(object_type *o_ptr)
         return;
     }
 
-    add_flag(o_ptr->art_flags, TR_IM_COLD);
+    o_ptr->art_flags.set(TR_IM_COLD);
     if (!o_ptr->artifact_bias)
         o_ptr->artifact_bias = BIAS_COLD;
 }
@@ -140,14 +140,14 @@ static void set_weird_bias_fire(object_type *o_ptr)
         return;
     }
 
-    add_flag(o_ptr->art_flags, TR_IM_FIRE);
+    o_ptr->art_flags.set(TR_IM_FIRE);
     if (!o_ptr->artifact_bias)
         o_ptr->artifact_bias = BIAS_FIRE;
 }
 
 static void set_bias_pois(object_type *o_ptr)
 {
-    add_flag(o_ptr->art_flags, TR_RES_POIS);
+    o_ptr->art_flags.set(TR_RES_POIS);
     if (!o_ptr->artifact_bias && !one_in_(4)) {
         o_ptr->artifact_bias = BIAS_POIS;
         return;
@@ -166,7 +166,7 @@ static void set_bias_pois(object_type *o_ptr)
 static void set_weird_bias_aura_elec(object_type *o_ptr)
 {
     if (o_ptr->tval >= TV_CLOAK && o_ptr->tval <= TV_HARD_ARMOR)
-        add_flag(o_ptr->art_flags, TR_SH_ELEC);
+        o_ptr->art_flags.set(TR_SH_ELEC);
     else
         random_resistance(o_ptr);
 
@@ -178,7 +178,7 @@ static void set_weird_bias_aura_elec(object_type *o_ptr)
 static void set_weird_bias_aura_fire(object_type *o_ptr)
 {
     if (o_ptr->tval >= TV_CLOAK && o_ptr->tval <= TV_HARD_ARMOR)
-        add_flag(o_ptr->art_flags, TR_SH_FIRE);
+        o_ptr->art_flags.set(TR_SH_FIRE);
     else
         random_resistance(o_ptr);
 
@@ -190,7 +190,7 @@ static void set_weird_bias_aura_fire(object_type *o_ptr)
 static void set_weird_bias_reflection(object_type *o_ptr)
 {
     if (o_ptr->tval == TV_SHIELD || o_ptr->tval == TV_CLOAK || o_ptr->tval == TV_HELM || o_ptr->tval == TV_HARD_ARMOR) {
-        add_flag(o_ptr->art_flags, TR_REFLECT);
+        o_ptr->art_flags.set(TR_REFLECT);
         return;
     }
 
@@ -201,7 +201,7 @@ static void set_weird_bias_reflection(object_type *o_ptr)
 static void set_weird_bias_aura_cold(object_type *o_ptr)
 {
     if (o_ptr->tval >= TV_CLOAK && o_ptr->tval <= TV_HARD_ARMOR)
-        add_flag(o_ptr->art_flags, TR_SH_COLD);
+        o_ptr->art_flags.set(TR_SH_COLD);
     else
         random_resistance(o_ptr);
 
@@ -239,7 +239,7 @@ void random_resistance(object_type *o_ptr)
     case 5:
     case 6:
     case 13:
-        add_flag(o_ptr->art_flags, TR_RES_ACID);
+        o_ptr->art_flags.set(TR_RES_ACID);
         if (!o_ptr->artifact_bias)
             o_ptr->artifact_bias = BIAS_ACID;
 
@@ -247,7 +247,7 @@ void random_resistance(object_type *o_ptr)
     case 7:
     case 8:
     case 14:
-        add_flag(o_ptr->art_flags, TR_RES_ELEC);
+        o_ptr->art_flags.set(TR_RES_ELEC);
         if (!o_ptr->artifact_bias)
             o_ptr->artifact_bias = BIAS_ELEC;
 
@@ -255,7 +255,7 @@ void random_resistance(object_type *o_ptr)
     case 9:
     case 10:
     case 15:
-        add_flag(o_ptr->art_flags, TR_RES_FIRE);
+        o_ptr->art_flags.set(TR_RES_FIRE);
         if (!o_ptr->artifact_bias)
             o_ptr->artifact_bias = BIAS_FIRE;
 
@@ -263,7 +263,7 @@ void random_resistance(object_type *o_ptr)
     case 11:
     case 12:
     case 16:
-        add_flag(o_ptr->art_flags, TR_RES_COLD);
+        o_ptr->art_flags.set(TR_RES_COLD);
         if (!o_ptr->artifact_bias)
             o_ptr->artifact_bias = BIAS_COLD;
 
@@ -274,69 +274,69 @@ void random_resistance(object_type *o_ptr)
         break;
     case 19:
     case 20:
-        add_flag(o_ptr->art_flags, TR_RES_FEAR);
+        o_ptr->art_flags.set(TR_RES_FEAR);
         if (!o_ptr->artifact_bias && one_in_(3))
             o_ptr->artifact_bias = BIAS_WARRIOR;
 
         break;
     case 21:
-        add_flag(o_ptr->art_flags, TR_RES_LITE);
+        o_ptr->art_flags.set(TR_RES_LITE);
         break;
     case 22:
-        add_flag(o_ptr->art_flags, TR_RES_DARK);
+        o_ptr->art_flags.set(TR_RES_DARK);
         break;
     case 23:
     case 24:
-        add_flag(o_ptr->art_flags, TR_RES_BLIND);
+        o_ptr->art_flags.set(TR_RES_BLIND);
         break;
     case 25:
     case 26:
-        add_flag(o_ptr->art_flags, TR_RES_CONF);
+        o_ptr->art_flags.set(TR_RES_CONF);
         if (!o_ptr->artifact_bias && one_in_(6))
             o_ptr->artifact_bias = BIAS_CHAOS;
 
         break;
     case 27:
     case 28:
-        add_flag(o_ptr->art_flags, TR_RES_SOUND);
+        o_ptr->art_flags.set(TR_RES_SOUND);
         break;
     case 29:
     case 30:
-        add_flag(o_ptr->art_flags, TR_RES_SHARDS);
+        o_ptr->art_flags.set(TR_RES_SHARDS);
         break;
     case 31:
     case 32:
-        add_flag(o_ptr->art_flags, TR_RES_NETHER);
+        o_ptr->art_flags.set(TR_RES_NETHER);
         if (!o_ptr->artifact_bias && one_in_(3))
             o_ptr->artifact_bias = BIAS_NECROMANTIC;
 
         break;
     case 33:
     case 34:
-        add_flag(o_ptr->art_flags, TR_RES_NEXUS);
+        o_ptr->art_flags.set(TR_RES_NEXUS);
         break;
     case 35:
     case 36:
-        add_flag(o_ptr->art_flags, TR_RES_CHAOS);
+        o_ptr->art_flags.set(TR_RES_CHAOS);
         if (!o_ptr->artifact_bias && one_in_(2))
             o_ptr->artifact_bias = BIAS_CHAOS;
 
         break;
     case 37:
     case 38:
-        add_flag(o_ptr->art_flags, TR_RES_DISEN);
+        o_ptr->art_flags.set(TR_RES_DISEN);
         break;
     case 39:
-        add_flag(o_ptr->art_flags, TR_RES_TIME);
+        o_ptr->art_flags.set(TR_RES_TIME);
         break;
     case 40:
-        add_flag(o_ptr->art_flags, TR_RES_WATER);
+        o_ptr->art_flags.set(TR_RES_WATER);
         if (!o_ptr->artifact_bias && one_in_(6)) {
             o_ptr->artifact_bias = BIAS_RANGER;
         }
         break;
     case 41:
-        add_flag(o_ptr->art_flags, TR_RES_CURSE);
+        o_ptr->art_flags.set(TR_RES_CURSE);
         if (!o_ptr->artifact_bias && one_in_(3)) {
             o_ptr->artifact_bias = BIAS_PRIESTLY;
         }

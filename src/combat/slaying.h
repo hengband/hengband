@@ -1,7 +1,9 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+
 #include "combat/combat-options-type.h"
+#include "object-enchant/tr-flags.h"
 
 struct monster_type;
 struct object_type;;

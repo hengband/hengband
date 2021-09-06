@@ -522,5 +522,5 @@ bool object_type::is_activatable() const
         return false;
 
     auto flags = object_flags(this);
-    return has_flag(flags, TR_ACTIVATE);
+    return flags.has(TR_ACTIVATE);
 }

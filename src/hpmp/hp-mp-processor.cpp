@@ -143,7 +143,7 @@ void process_player_hp_mp(player_type *creature_ptr)
         o_ptr = &creature_ptr->inventory_list[INVEN_LITE];
         auto flgs = object_flags(o_ptr);
 
-        if (creature_ptr->inventory_list[INVEN_LITE].tval && !has_flag(flgs, TR_DARK_SOURCE) && !has_resist_lite(creature_ptr)) {
+        if (creature_ptr->inventory_list[INVEN_LITE].tval && flgs.has_not(TR_DARK_SOURCE) && !has_resist_lite(creature_ptr)) {
             GAME_TEXT o_name[MAX_NLEN];
             char ouch[MAX_NLEN + 40];
             describe_flavor(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));

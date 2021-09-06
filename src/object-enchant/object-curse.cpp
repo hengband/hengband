@@ -72,7 +72,7 @@ void curse_equipment(player_type *owner_ptr, PERCENTAGE chance, PERCENTAGE heavy
     describe_flavor(owner_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
     /* Extra, biased saving throw for blessed items */
-    if (has_flag(oflgs, TR_BLESSED)) {
+    if (oflgs.has(TR_BLESSED)) {
 #ifdef JP
         msg_format("祝福された%sは呪いを跳ね返した！", o_name);
 #else

@@ -235,6 +235,6 @@ void give_activation_power(object_type *o_ptr)
     }
 
     o_ptr->xtra2 = (byte)type;
-    add_flag(o_ptr->art_flags, TR_ACTIVATE);
+    o_ptr->art_flags.set(TR_ACTIVATE);
     o_ptr->timeout = 0;
 }

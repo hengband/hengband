@@ -907,6 +907,8 @@
     <ClInclude Include="..\..\src\action\open-close-execution.h" />
     <ClInclude Include="..\..\src\action\open-util.h" />
     <ClInclude Include="..\..\src\action\run-execution.h" />
+    <ClInclude Include="..\..\src\load\savedata-old-flag-types.h" />
+    <ClInclude Include="..\..\src\object-enchant\tr-flags.h" />
     <ClInclude Include="..\..\src\object-use\throw-execution.h" />
     <ClInclude Include="..\..\src\action\travel-execution.h" />
     <ClInclude Include="..\..\src\action\tunnel-execution.h" />

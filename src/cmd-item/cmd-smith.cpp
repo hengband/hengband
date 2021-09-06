@@ -258,24 +258,24 @@ static void drain_essence(player_type *creature_ptr)
     PlayerEnergy(creature_ptr).set_player_turn_energy(100);
 
     auto old_flgs = object_flags(o_ptr);
-    if (has_flag(old_flgs, TR_KILL_DRAGON))
-        add_flag(old_flgs, TR_SLAY_DRAGON);
-    if (has_flag(old_flgs, TR_KILL_ANIMAL))
-        add_flag(old_flgs, TR_SLAY_ANIMAL);
-    if (has_flag(old_flgs, TR_KILL_EVIL))
-        add_flag(old_flgs, TR_SLAY_EVIL);
-    if (has_flag(old_flgs, TR_KILL_UNDEAD))
-        add_flag(old_flgs, TR_SLAY_UNDEAD);
-    if (has_flag(old_flgs, TR_KILL_DEMON))
-        add_flag(old_flgs, TR_SLAY_DEMON);
-    if (has_flag(old_flgs, TR_KILL_ORC))
-        add_flag(old_flgs, TR_SLAY_ORC);
-    if (has_flag(old_flgs, TR_KILL_TROLL))
-        add_flag(old_flgs, TR_SLAY_TROLL);
-    if (has_flag(old_flgs, TR_KILL_GIANT))
-        add_flag(old_flgs, TR_SLAY_GIANT);
-    if (has_flag(old_flgs, TR_KILL_HUMAN))
-        add_flag(old_flgs, TR_SLAY_HUMAN);
+    if (old_flgs.has(TR_KILL_DRAGON))
+        old_flgs.set(TR_SLAY_DRAGON);
+    if (old_flgs.has(TR_KILL_ANIMAL))
+        old_flgs.set(TR_SLAY_ANIMAL);
+    if (old_flgs.has(TR_KILL_EVIL))
+        old_flgs.set(TR_SLAY_EVIL);
+    if (old_flgs.has(TR_KILL_UNDEAD))
+        old_flgs.set(TR_SLAY_UNDEAD);
+    if (old_flgs.has(TR_KILL_DEMON))
+        old_flgs.set(TR_SLAY_DEMON);
+    if (old_flgs.has(TR_KILL_ORC))
+        old_flgs.set(TR_SLAY_ORC);
+    if (old_flgs.has(TR_KILL_TROLL))
+        old_flgs.set(TR_SLAY_TROLL);
+    if (old_flgs.has(TR_KILL_GIANT))
+        old_flgs.set(TR_SLAY_GIANT);
+    if (old_flgs.has(TR_KILL_HUMAN))
+        old_flgs.set(TR_SLAY_HUMAN);
 
     old_to_a = o_ptr->to_a;
     old_ac = o_ptr->ac;
@@ -288,41 +288,41 @@ static void drain_essence(player_type *creature_ptr)
     old_timeout = o_ptr->timeout;
     if (o_ptr->curse_flags.has_any_of({ TRC::CURSED, TRC::HEAVY_CURSE, TRC::PERMA_CURSE }))
         dec--;
-    if (has_flag(old_flgs, TR_ADD_L_CURSE))
+    if (old_flgs.has(TR_ADD_L_CURSE))
         dec--;
-    if (has_flag(old_flgs, TR_ADD_H_CURSE))
+    if (old_flgs.has(TR_ADD_H_CURSE))
         dec--;
-    if (has_flag(old_flgs, TR_AGGRAVATE))
+    if (old_flgs.has(TR_AGGRAVATE))
         dec--;
-    if (has_flag(old_flgs, TR_NO_TELE))
+    if (old_flgs.has(TR_NO_TELE))
         dec--;
-    if (has_flag(old_flgs, TR_DRAIN_EXP))
+    if (old_flgs.has(TR_DRAIN_EXP))
         dec--;
-    if (has_flag(old_flgs, TR_DRAIN_HP))
+    if (old_flgs.has(TR_DRAIN_HP))
         dec--;
-    if (has_flag(old_flgs, TR_DRAIN_MANA))
+    if (old_flgs.has(TR_DRAIN_MANA))
         dec--;
-    if (has_flag(old_flgs, TR_CALL_ANIMAL))
+    if (old_flgs.has(TR_CALL_ANIMAL))
         dec--;
-    if (has_flag(old_flgs, TR_CALL_DEMON))
+    if (old_flgs.has(TR_CALL_DEMON))
         dec--;
-    if (has_flag(old_flgs, TR_CALL_DRAGON))
+    if (old_flgs.has(TR_CALL_DRAGON))
         dec--;
-    if (has_flag(old_flgs, TR_CALL_UNDEAD))
+    if (old_flgs.has(TR_CALL_UNDEAD))
         dec--;
-    if (has_flag(old_flgs, TR_COWARDICE))
+    if (old_flgs.has(TR_COWARDICE))
         dec--;
-    if (has_flag(old_flgs, TR_LOW_MELEE))
+    if (old_flgs.has(TR_LOW_MELEE))
         dec--;
-    if (has_flag(old_flgs, TR_LOW_AC))
+    if (old_flgs.has(TR_LOW_AC))
         dec--;
-    if (has_flag(old_flgs, TR_HARD_SPELL))
+    if (old_flgs.has(TR_HARD_SPELL))
         dec--;
-    if (has_flag(old_flgs, TR_FAST_DIGEST))
+    if (old_flgs.has(TR_FAST_DIGEST))
         dec--;
-    if (has_flag(old_flgs, TR_SLOW_REGEN))
+    if (old_flgs.has(TR_SLOW_REGEN))
         dec--;
-    if (has_flag(old_flgs, TR_TY_CURSE))
+    if (old_flgs.has(TR_TY_CURSE))
         dec--;
 
     iy = o_ptr->iy;
@@ -347,11 +347,12 @@ static void drain_essence(player_type *creature_ptr)
     for (i = 0; essence_info[i].add_name; i++) {
         essence_type *es_ptr = &essence_info[i];
         PARAMETER_VALUE pval = 0;
+        const auto drain_flag = static_cast<tr_type>(es_ptr->add);
 
-        if (es_ptr->add < TR_FLAG_MAX && is_pval_flag(es_ptr->add) && old_pval)
-            pval = (has_flag(new_flgs, es_ptr->add)) ? old_pval - o_ptr->pval : old_pval;
+        if (es_ptr->add < TR_FLAG_MAX && TR_PVAL_FLAG_MASK.has(drain_flag) && old_pval)
+            pval = new_flgs.has(drain_flag) ? old_pval - o_ptr->pval : old_pval;
 
-        if (es_ptr->add < TR_FLAG_MAX && (!has_flag(new_flgs, es_ptr->add) || pval) && has_flag(old_flgs, es_ptr->add)) {
+        if (es_ptr->add < TR_FLAG_MAX && (new_flgs.has_not(drain_flag) || pval) && old_flgs.has(drain_flag)) {
             if (pval) {
                 drain_value[es_ptr->essence] += 10 * pval;
             } else if (es_ptr->essence != -2) {
@@ -373,24 +374,24 @@ static void drain_essence(player_type *creature_ptr)
         }
     }
 
-    if ((has_flag(old_flgs, TR_FORCE_WEAPON)) && !(has_flag(new_flgs, TR_FORCE_WEAPON))) {
+    if ((old_flgs.has(TR_FORCE_WEAPON)) && new_flgs.has_not(TR_FORCE_WEAPON)) {
         drain_value[TR_INT] += 5;
         drain_value[TR_WIS] += 5;
     }
-    if ((has_flag(old_flgs, TR_VORPAL)) && !(has_flag(new_flgs, TR_VORPAL))) {
+    if ((old_flgs.has(TR_VORPAL)) && new_flgs.has_not(TR_VORPAL)) {
         drain_value[TR_BRAND_POIS] += 5;
         drain_value[TR_BRAND_ACID] += 5;
         drain_value[TR_BRAND_ELEC] += 5;
         drain_value[TR_BRAND_FIRE] += 5;
         drain_value[TR_BRAND_COLD] += 5;
     }
-    if ((has_flag(old_flgs, TR_DEC_MANA)) && !(has_flag(new_flgs, TR_DEC_MANA))) {
+    if ((old_flgs.has(TR_DEC_MANA)) && new_flgs.has_not(TR_DEC_MANA)) {
         drain_value[TR_INT] += 10;
     }
-    if ((has_flag(old_flgs, TR_XTRA_MIGHT)) && !(has_flag(new_flgs, TR_XTRA_MIGHT))) {
+    if ((old_flgs.has(TR_XTRA_MIGHT)) && new_flgs.has_not(TR_XTRA_MIGHT)) {
         drain_value[TR_STR] += 10;
     }
-    if ((has_flag(old_flgs, TR_XTRA_SHOTS)) && !(has_flag(new_flgs, TR_XTRA_SHOTS))) {
+    if ((old_flgs.has(TR_XTRA_SHOTS)) && new_flgs.has_not(TR_XTRA_SHOTS)) {
         drain_value[TR_DEX] += 10;
     }
     if (old_name2 == EGO_2WEAPON) {
@@ -831,7 +832,7 @@ static void add_essence(player_type *creature_ptr, int32_t mode)
             msg_print(_("エッセンスが足りない。", "You don't have enough essences."));
             return;
         }
-        if (is_pval_flag(es_ptr->add)) {
+        if (es_ptr->add < TR_FLAG_MAX && TR_PVAL_FLAG_MASK.has(static_cast<tr_type>(es_ptr->add))) {
             if (o_ptr->pval < 0) {
                 msg_print(_("このアイテムの能力修正を強化することはできない。", "You cannot increase magic number of this item."));
                 return;
@@ -968,10 +969,10 @@ static void add_essence(player_type *creature_ptr, int32_t mode)
             return;
         }
         if (es_ptr->add == ESSENCE_SUSTAIN) {
-            add_flag(o_ptr->art_flags, TR_IGNORE_ACID);
-            add_flag(o_ptr->art_flags, TR_IGNORE_ELEC);
-            add_flag(o_ptr->art_flags, TR_IGNORE_FIRE);
-            add_flag(o_ptr->art_flags, TR_IGNORE_COLD);
+            o_ptr->art_flags.set(TR_IGNORE_ACID);
+            o_ptr->art_flags.set(TR_IGNORE_ELEC);
+            o_ptr->art_flags.set(TR_IGNORE_FIRE);
+            o_ptr->art_flags.set(TR_IGNORE_COLD);
         } else {
             o_ptr->xtra3 = es_ptr->add + 1;
         }
@@ -1017,7 +1018,7 @@ static void erase_essence(player_type *creature_ptr)
     }
     o_ptr->xtra3 = 0;
     auto flgs = object_flags(o_ptr);
-    if (!(has_pval_flags(flgs)))
+    if (flgs.has_none_of(TR_PVAL_FLAG_MASK))
         o_ptr->pval = 0;
     msg_print(_("エッセンスを取り去った。", "You removed all essence you have added."));
     creature_ptr->update |= (PU_COMBINE | PU_REORDER);

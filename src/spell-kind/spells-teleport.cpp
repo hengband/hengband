@@ -521,7 +521,7 @@ void teleport_away_followable(player_type *tracer_ptr, MONSTER_IDX m_idx)
             o_ptr = &tracer_ptr->inventory_list[i];
             if (o_ptr->k_idx && !o_ptr->is_cursed()) {
                 auto flgs = object_flags(o_ptr);
-                if (has_flag(flgs, TR_TELEPORT)) {
+                if (flgs.has(TR_TELEPORT)) {
                     follow = true;
                     break;
                 }

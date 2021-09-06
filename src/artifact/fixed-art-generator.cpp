@@ -51,8 +51,8 @@ static bool invest_terror_mask(player_type *player_ptr, object_type *o_ptr)
     case CLASS_BERSERKER:
         return true;
     default:
-        add_flag(o_ptr->art_flags, TR_AGGRAVATE);
-        add_flag(o_ptr->art_flags, TR_TY_CURSE);
+        o_ptr->art_flags.set(TR_AGGRAVATE);
+        o_ptr->art_flags.set(TR_TY_CURSE);
         o_ptr->curse_flags.set({ TRC::CURSED, TRC::HEAVY_CURSE });
         o_ptr->curse_flags.set(get_curse(2, o_ptr));
         return false;
@@ -70,12 +70,12 @@ static void milim_swimsuit(player_type *player_ptr, object_type *o_ptr)
         return;
 
     o_ptr->pval = 3;
-    add_flag(o_ptr->art_flags, TR_STR);
-    add_flag(o_ptr->art_flags, TR_INT);
-    add_flag(o_ptr->art_flags, TR_WIS);
-    add_flag(o_ptr->art_flags, TR_DEX);
-    add_flag(o_ptr->art_flags, TR_CON);
-    add_flag(o_ptr->art_flags, TR_CHR);
+    o_ptr->art_flags.set(TR_STR);
+    o_ptr->art_flags.set(TR_INT);
+    o_ptr->art_flags.set(TR_WIS);
+    o_ptr->art_flags.set(TR_DEX);
+    o_ptr->art_flags.set(TR_CON);
+    o_ptr->art_flags.set(TR_CHR);
 }
 
 /*!
@@ -93,24 +93,24 @@ static void invest_special_artifact_abilities(player_type *player_ptr, object_ty
     switch (o_ptr->name1) {
     case ART_MURAMASA:
         if (player_ptr->pclass != CLASS_SAMURAI) {
-            add_flag(o_ptr->art_flags, TR_NO_MAGIC);
+            o_ptr->art_flags.set(TR_NO_MAGIC);
             o_ptr->curse_flags.set(TRC::HEAVY_CURSE);
         }
         return;
     case ART_ROBINTON:
         if (player_ptr->pclass == CLASS_BARD)
-            add_flag(o_ptr->art_flags, TR_DEC_MANA);
+            o_ptr->art_flags.set(TR_DEC_MANA);
         return;
     case ART_XIAOLONG:
         if (player_ptr->pclass == CLASS_MONK)
-            add_flag(o_ptr->art_flags, TR_BLOWS);
+            o_ptr->art_flags.set(TR_BLOWS);
         return;
     case ART_BLOOD:
         get_bloody_moon_flags(o_ptr);
         return;
     case ART_HEAVENLY_MAIDEN:
         if (player_ptr->psex != SEX_FEMALE)
-            add_flag(o_ptr->art_flags, TR_AGGRAVATE);
+            o_ptr->art_flags.set(TR_AGGRAVATE);
         return;
     case ART_MILIM:
         milim_swimsuit(player_ptr, o_ptr);

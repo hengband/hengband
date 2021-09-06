@@ -33,7 +33,6 @@
  * </pre>
  */
 
-#include <array>
 #include <cassert>
 #include <stdint.h>
 
@@ -59,8 +58,6 @@ typedef int errr;
 
 #define MAX_NLEN 160 /*!< Maximum length of object's name */
 #define MAX_MONSTER_NAME 160 /*!< モンスター名称の最大バイト数 / Max characters of monster's name */
-
-constexpr int TR_FLAG_SIZE = 5;
 
 /*!
  * @brief 符号なし整数の簡潔な定義
@@ -190,8 +187,6 @@ typedef int EFFECT_ID; /*!< 効果属性ID */
 typedef int16_t ACTION_SKILL_POWER; /*!< 行動技能値 */
 
 typedef int16_t FEAT_PRIORITY; /*!< 地形の縮小表示優先順位 */
-
-using TrFlags = std::array<BIT_FLAGS, TR_FLAG_SIZE>;
 
 enum process_result {
     PROCESS_FALSE = 0,

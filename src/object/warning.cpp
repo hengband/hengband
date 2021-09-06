@@ -61,7 +61,7 @@ object_type *choose_warning_item(player_type *creature_ptr)
         object_type *o_ptr = &creature_ptr->inventory_list[i];
 
         auto flgs = object_flags(o_ptr);
-        if (has_flag(flgs, TR_WARNING)) {
+        if (flgs.has(TR_WARNING)) {
             choices[number] = i;
             number++;
         }

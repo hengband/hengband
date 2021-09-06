@@ -33,7 +33,7 @@ bool activate_dragon_breath(player_type *user_ptr, object_type *o_ptr)
     int n = 0;
     concptr name[20];
     for (int i = 0; dragonbreath_info[i].flag != 0; i++) {
-        if (has_flag(resistance_flags, dragonbreath_info[i].flag)) {
+        if (resistance_flags.has(dragonbreath_info[i].flag)) {
             type[n] = dragonbreath_info[i].type;
             name[n] = dragonbreath_info[i].name;
             n++;

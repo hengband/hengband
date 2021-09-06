@@ -249,7 +249,7 @@ bool curse_armor(player_type *owner_ptr)
     o_ptr->dd = 0;
     o_ptr->ds = 0;
 
-    o_ptr->art_flags.fill(0U);
+    o_ptr->art_flags.clear();
 
     /* Curse it */
     o_ptr->curse_flags.set(TRC::CURSED);
@@ -303,8 +303,7 @@ bool curse_weapon_object(player_type *owner_ptr, bool force, object_type *o_ptr)
     o_ptr->dd = 0;
     o_ptr->ds = 0;
 
-    for (int i = 0; i < TR_FLAG_SIZE; i++)
-        o_ptr->art_flags[i] = 0;
+    o_ptr->art_flags.clear();
 
     /* Curse it */
     o_ptr->curse_flags.set(TRC::CURSED);

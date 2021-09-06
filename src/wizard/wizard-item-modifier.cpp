@@ -219,7 +219,7 @@ void wiz_modify_item_activation(player_type *caster_ptr)
         return;
     }
 
-    add_flag(o_ptr->art_flags, TR_ACTIVATE);
+    o_ptr->art_flags.set(TR_ACTIVATE);
     o_ptr->xtra2 = act_idx;
 }
 
@@ -334,6 +334,15 @@ static void prt_binary(BIT_FLAGS flags, const int row, int col)
 static void wiz_display_item(player_type *player_ptr, object_type *o_ptr)
 {
     auto flgs = object_flags(o_ptr);
+    auto get_seq_32bits = [](const TrFlags &flgs, uint start) {
+        BIT_FLAGS result = 0U;
+        for (auto i = 0U; i < 32 && start + i < flgs.size(); i++) {
+            if (flgs.has(static_cast<tr_type>(start + i))) {
+                result |= 1U << i;
+            }
+        }
+        return result;
+    };
     int j = 13;
     for (int i = 1; i <= 23; i++)
         prt("", i, j - 2);
@@ -355,7 +364,7 @@ static void wiz_display_item(player_type *player_ptr, object_type *o_ptr)
     prt("siwdccsossidsahanvudotgddhuoclio", 13, j);
     prt("tnieohtctrnipttmiinmrrnrrraiierl", 14, j);
     prt("rtsxnarelcfgdkcpmldncltggpksdced", 15, j);
-    prt_binary(flgs[0], 16, j);
+    prt_binary(get_seq_32bits(flgs, 32 * 0), 16, j);
 
     prt("+------------FLAGS2------------+", 17, j);
     prt("SUST....IMMUN.RESIST............", 18, j);
@@ -363,7 +372,7 @@ static void wiz_display_item(player_type *player_ptr, object_type *o_ptr)
     prt("siwdcciaclioheatcliooeialoshtncd", 20, j);
     prt("tnieohdsierlrfraierliatrnnnrhehi", 21, j);
     prt("rtsxnaeydcedwlatdcedsrekdfddrxss", 22, j);
-    prt_binary(flgs[1], 23, j);
+    prt_binary(get_seq_32bits(flgs, 32 * 1), 23, j);
 
     prt("+------------FLAGS3------------+", 10, j + 32);
     prt("fe cnn t      stdrmsiiii d ab   ", 11, j + 32);
@@ -371,7 +380,7 @@ static void wiz_display_item(player_type *player_ptr, object_type *o_ptr)
     prt("uu utmacaih eielgggonnnnaaere   ", 13, j + 32);
     prt("rr reanurdo vtieeehtrrrrcilas   ", 14, j + 32);
     prt("aa algarnew ienpsntsaefctnevs   ", 15, j + 32);
-    prt_binary(flgs[2], 16, j + 32);
+    prt_binary(get_seq_32bits(flgs, 32 * 2), 16, j + 32);
 
     prt("+------------FLAGS4------------+", 17, j + 32);
     prt("KILL....ESP.........            ", 18, j + 32);
@@ -379,7 +388,7 @@ static void wiz_display_item(player_type *player_ptr, object_type *o_ptr)
     prt("nvneoriunneoriruvoon            ", 20, j + 32);
     prt("iidmroamidmroagmionq            ", 21, j + 32);
     prt("mlenclnmmenclnnnldlu            ", 22, j + 32);
-    prt_binary(flgs[3], 23, j + 32);
+    prt_binary(get_seq_32bits(flgs, 32 * 3), 23, j + 32);
 }
 
 /*!
@@ -1089,11 +1098,11 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
         }
 
         if (blessed && wield_slot(caster_ptr, o_ptr) != -1)
-            add_flag(o_ptr->art_flags, TR_BLESSED);
+            o_ptr->art_flags.set(TR_BLESSED);
 
         if (fixed && wield_slot(caster_ptr, o_ptr) != -1) {
-            add_flag(o_ptr->art_flags, TR_IGNORE_ACID);
-            add_flag(o_ptr->art_flags, TR_IGNORE_FIRE);
+            o_ptr->art_flags.set(TR_IGNORE_ACID);
+            o_ptr->art_flags.set(TR_IGNORE_FIRE);
         }
 
         (void)drop_near(caster_ptr, o_ptr, -1, caster_ptr->y, caster_ptr->x);

@@ -5,6 +5,7 @@
 #include "load/load-util.h"
 #include "load/load-v1-5-0.h"
 #include "load/savedata-flag-types.h"
+#include "load/savedata-old-flag-types.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
@@ -127,30 +128,30 @@ void rd_item(object_type *o_ptr)
         o_ptr->marked = 0;
 
     /* Object flags */
-    if (flags & SAVE_ITEM_ART_FLAGS0)
-        rd_u32b(&o_ptr->art_flags[0]);
-    else
-        o_ptr->art_flags[0] = 0;
-
-    if (flags & SAVE_ITEM_ART_FLAGS1)
-        rd_u32b(&o_ptr->art_flags[1]);
-    else
-        o_ptr->art_flags[1] = 0;
-
-    if (flags & SAVE_ITEM_ART_FLAGS2)
-        rd_u32b(&o_ptr->art_flags[2]);
-    else
-        o_ptr->art_flags[2] = 0;
-
-    if (flags & SAVE_ITEM_ART_FLAGS3)
-        rd_u32b(&o_ptr->art_flags[3]);
-    else
-        o_ptr->art_flags[3] = 0;
-
-    if (flags & SAVE_ITEM_ART_FLAGS4)
-        rd_u32b(&o_ptr->art_flags[4]);
-    else
-        o_ptr->art_flags[4] = 0;
+    if (loading_savefile_version_is_older_than(7)) {
+        constexpr savedata_item_older_than_7_flag_type old_savefile_art_flags[] = {
+            SAVE_ITEM_OLDER_THAN_7_ART_FLAGS0,
+            SAVE_ITEM_OLDER_THAN_7_ART_FLAGS1,
+            SAVE_ITEM_OLDER_THAN_7_ART_FLAGS2,
+            SAVE_ITEM_OLDER_THAN_7_ART_FLAGS3,
+            SAVE_ITEM_OLDER_THAN_7_ART_FLAGS4,
+        };
+        auto start = 0;
+        for (auto f : old_savefile_art_flags) {
+            if (flags & f) {
+                uint32_t tmp32u;
+                rd_u32b(&tmp32u);
+                migrate_bitflag_to_flaggroup(o_ptr->art_flags, tmp32u, start);
+            }
+            start += 32;
+        }
+    } else {
+        if (flags & SAVE_ITEM_ART_FLAGS) {
+            rd_FlagGroup(o_ptr->art_flags, rd_byte);
+        } else {
+            o_ptr->art_flags.clear();
+        }
+    }
 
     if (flags & SAVE_ITEM_CURSE_FLAGS) {
         if (loading_savefile_version_is_older_than(5)) {
@@ -235,25 +236,25 @@ void rd_item(object_type *o_ptr)
         return;
 
     if ((o_ptr->name2 == EGO_DARK) || (o_ptr->name2 == EGO_ANCIENT_CURSE) || (o_ptr->name1 == ART_NIGHT)) {
-        add_flag(o_ptr->art_flags, TR_LITE_M1);
-        remove_flag(o_ptr->art_flags, TR_LITE_1);
-        remove_flag(o_ptr->art_flags, TR_LITE_2);
-        remove_flag(o_ptr->art_flags, TR_LITE_3);
+        o_ptr->art_flags.set(TR_LITE_M1);
+        o_ptr->art_flags.reset(TR_LITE_1);
+        o_ptr->art_flags.reset(TR_LITE_2);
+        o_ptr->art_flags.reset(TR_LITE_3);
         return;
     }
 
     if (o_ptr->name2 == EGO_LITE_DARKNESS) {
         if (o_ptr->tval != TV_LITE) {
-            add_flag(o_ptr->art_flags, TR_LITE_M1);
+            o_ptr->art_flags.set(TR_LITE_M1);
             return;
         }
 
         if (o_ptr->sval == SV_LITE_TORCH) {
-            add_flag(o_ptr->art_flags, TR_LITE_M1);
+            o_ptr->art_flags.set(TR_LITE_M1);
         } else if (o_ptr->sval == SV_LITE_LANTERN) {
-            add_flag(o_ptr->art_flags, TR_LITE_M2);
+            o_ptr->art_flags.set(TR_LITE_M2);
         } else if (o_ptr->sval == SV_LITE_FEANOR) {
-            add_flag(o_ptr->art_flags, TR_LITE_M3);
+            o_ptr->art_flags.set(TR_LITE_M3);
         }
 
         return;
@@ -261,24 +262,24 @@ void rd_item(object_type *o_ptr)
 
     if (o_ptr->tval == TV_LITE) {
         if (o_ptr->is_fixed_artifact()) {
-            add_flag(o_ptr->art_flags, TR_LITE_3);
+            o_ptr->art_flags.set(TR_LITE_3);
             return;
         }
 
         if (o_ptr->sval == SV_LITE_TORCH) {
-            add_flag(o_ptr->art_flags, TR_LITE_1);
-            add_flag(o_ptr->art_flags, TR_LITE_FUEL);
+            o_ptr->art_flags.set(TR_LITE_1);
+            o_ptr->art_flags.set(TR_LITE_FUEL);
             return;
         }
 
         if (o_ptr->sval == SV_LITE_LANTERN) {
-            add_flag(o_ptr->art_flags, TR_LITE_2);
-            add_flag(o_ptr->art_flags, TR_LITE_FUEL);
+            o_ptr->art_flags.set(TR_LITE_2);
+            o_ptr->art_flags.set(TR_LITE_FUEL);
             return;
         }
 
         if (o_ptr->sval == SV_LITE_FEANOR) {
-            add_flag(o_ptr->art_flags, TR_LITE_2);
+            o_ptr->art_flags.set(TR_LITE_2);
             return;
         }
     }

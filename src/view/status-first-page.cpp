@@ -134,7 +134,7 @@ static int strengthen_basedam(player_type *creature_ptr, object_type *o_ptr, int
         /* vorpal blade */
         basedam *= 5;
         basedam /= 3;
-    } else if (has_flag(flgs, TR_VORPAL)) {
+    } else if (flgs.has(TR_VORPAL)) {
         /* vorpal flag only */
         basedam *= 11;
         basedam /= 9;
@@ -142,7 +142,7 @@ static int strengthen_basedam(player_type *creature_ptr, object_type *o_ptr, int
 
     // 理力
     bool is_force = creature_ptr->pclass != CLASS_SAMURAI;
-    is_force &= has_flag(flgs, TR_FORCE_WEAPON);
+    is_force &= flgs.has(TR_FORCE_WEAPON);
     is_force &= creature_ptr->csp > (o_ptr->dd * o_ptr->ds / 5);
     if (is_force)
         basedam = basedam * 7 / 2;

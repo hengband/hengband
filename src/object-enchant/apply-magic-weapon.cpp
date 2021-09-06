@@ -104,7 +104,7 @@ void apply_magic_weapon(player_type *owner_ptr, object_type *o_ptr, DEPTH level,
                 break;
             case EGO_EARTHQUAKES:
                 if (one_in_(3) && (level > 60))
-                    add_flag(o_ptr->art_flags, TR_BLOWS);
+                    o_ptr->art_flags.set(TR_BLOWS);
                 else
                     o_ptr->pval = (PARAMETER_VALUE)m_bonus(3, level);
                 break;

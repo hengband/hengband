@@ -3,6 +3,8 @@
 #include "system/angband.h"
 #include "system/system-variables.h"
 
+#include "object-enchant/tr-flags.h"
+
 typedef struct object_kind object_kind;
 struct object_type;;
 typedef struct flavor_type {

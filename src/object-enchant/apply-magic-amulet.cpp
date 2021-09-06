@@ -106,7 +106,7 @@ void AmuletEnchanter::enchant()
         }
 
         if (one_in_(5)) {
-            add_flag(this->o_ptr->art_flags, TR_RES_POIS);
+            this->o_ptr->art_flags.set(TR_RES_POIS);
         }
 
         break;
@@ -156,7 +156,7 @@ void AmuletEnchanter::give_ego_index()
         switch (randint1(21)) {
         case 1:
         case 2:
-            if (has_flag(k_ptr->flags, TR_SLOW_DIGEST)) {
+            if (k_ptr->flags.has(TR_SLOW_DIGEST)) {
                 break;
             }
 
@@ -172,7 +172,7 @@ void AmuletEnchanter::give_ego_index()
             break;
         case 5:
         case 6:
-            if (has_flag(k_ptr->flags, TR_SEE_INVIS)) {
+            if (k_ptr->flags.has(TR_SEE_INVIS)) {
                 break;
             }
 
@@ -180,14 +180,14 @@ void AmuletEnchanter::give_ego_index()
             break;
         case 7:
         case 8:
-            if (has_flag(k_ptr->flags, TR_HOLD_EXP)) {
+            if (k_ptr->flags.has(TR_HOLD_EXP)) {
                 break;
             }
 
             this->o_ptr->name2 = EGO_AMU_HOLD_EXP;
             break;
         case 9:
-            if (has_flag(k_ptr->flags, TR_LEVITATION)) {
+            if (k_ptr->flags.has(TR_LEVITATION)) {
                 break;
             }
 
@@ -199,7 +199,7 @@ void AmuletEnchanter::give_ego_index()
             this->o_ptr->name2 = EGO_AMU_AC;
             break;
         case 12:
-            if (has_flag(k_ptr->flags, TR_RES_FIRE)) {
+            if (k_ptr->flags.has(TR_RES_FIRE)) {
                 break;
             }
 
@@ -211,7 +211,7 @@ void AmuletEnchanter::give_ego_index()
             this->o_ptr->name2 = EGO_AMU_RES_FIRE;
             break;
         case 13:
-            if (has_flag(k_ptr->flags, TR_RES_COLD)) {
+            if (k_ptr->flags.has(TR_RES_COLD)) {
                 break;
             }
 
@@ -223,7 +223,7 @@ void AmuletEnchanter::give_ego_index()
             this->o_ptr->name2 = EGO_AMU_RES_COLD;
             break;
         case 14:
-            if (has_flag(k_ptr->flags, TR_RES_ELEC)) {
+            if (k_ptr->flags.has(TR_RES_ELEC)) {
                 break;
             }
 
@@ -235,7 +235,7 @@ void AmuletEnchanter::give_ego_index()
             this->o_ptr->name2 = EGO_AMU_RES_ELEC;
             break;
         case 15:
-            if (has_flag(k_ptr->flags, TR_RES_ACID)) {
+            if (k_ptr->flags.has(TR_RES_ACID)) {
                 break;
             }
 
@@ -340,13 +340,11 @@ void AmuletEnchanter::give_cursed()
         this->o_ptr->pval = 0 - this->o_ptr->pval;
     }
 
-    this->o_ptr->art_flags[0] = 0;
-    this->o_ptr->art_flags[1] = 0;
     while (!this->o_ptr->name2) {
         auto *k_ptr = &k_info[this->o_ptr->k_idx];
         switch (randint1(5)) {
         case 1:
-            if (has_flag(k_ptr->flags, TR_DRAIN_EXP)) {
+            if (k_ptr->flags.has(TR_DRAIN_EXP)) {
                 break;
             }
 
@@ -356,14 +354,14 @@ void AmuletEnchanter::give_cursed()
             this->o_ptr->name2 = EGO_AMU_FOOL;
             break;
         case 3:
-            if (has_flag(k_ptr->flags, TR_AGGRAVATE)) {
+            if (k_ptr->flags.has(TR_AGGRAVATE)) {
                 break;
             }
 
             this->o_ptr->name2 = EGO_AMU_AGGRAVATE;
             break;
         case 4:
-            if (has_flag(k_ptr->flags, TR_TY_CURSE)) {
+            if (k_ptr->flags.has(TR_TY_CURSE)) {
                 break;
             }
 

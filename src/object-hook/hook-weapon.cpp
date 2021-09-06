@@ -25,7 +25,7 @@ bool object_is_favorite(player_type *player_ptr, const object_type *o_ptr)
     case CLASS_PRIEST: {
         auto flgs = object_flags_known(o_ptr);
 
-        if (!has_flag(flgs, TR_BLESSED) && !(o_ptr->tval == TV_HAFTED))
+        if (flgs.has_not(TR_BLESSED) && !(o_ptr->tval == TV_HAFTED))
             return false;
         break;
     }
@@ -42,7 +42,7 @@ bool object_is_favorite(player_type *player_ptr, const object_type *o_ptr)
         auto flgs = object_flags_known(o_ptr);
 
         /* Is it known to be suitable to using while riding? */
-        if (!(has_flag(flgs, TR_RIDING)))
+        if (flgs.has_not(TR_RIDING))
             return false;
 
         break;

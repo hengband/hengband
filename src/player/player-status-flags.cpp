@@ -93,7 +93,7 @@ BIT_FLAGS check_equipment_flags(player_type *creature_ptr, tr_type tr_flag)
 
         auto flgs = object_flags(o_ptr);
 
-        if (has_flag(flgs, tr_flag))
+        if (flgs.has(tr_flag))
             set_bits(result, convert_inventory_slot_type_to_flag_cause(static_cast<inventory_slot_type>(i)));
     }
     return result;
@@ -768,7 +768,7 @@ BIT_FLAGS has_warning(player_type *creature_ptr)
 
         auto flgs = object_flags(o_ptr);
 
-        if (has_flag(flgs, TR_WARNING)) {
+        if (flgs.has(TR_WARNING)) {
             if (!o_ptr->inscription || !(angband_strchr(quark_str(o_ptr->inscription), '$')))
                 set_bits(result, convert_inventory_slot_type_to_flag_cause(static_cast<inventory_slot_type>(i)));
         }
@@ -1193,41 +1193,41 @@ void update_curses(player_type *creature_ptr)
         if (!o_ptr->k_idx)
             continue;
         auto flgs = object_flags(o_ptr);
-        if (has_flag(flgs, TR_AGGRAVATE))
+        if (flgs.has(TR_AGGRAVATE))
             creature_ptr->cursed.set(TRC::AGGRAVATE);
-        if (has_flag(flgs, TR_DRAIN_EXP))
+        if (flgs.has(TR_DRAIN_EXP))
             creature_ptr->cursed.set(TRC::DRAIN_EXP);
-        if (has_flag(flgs, TR_TY_CURSE))
+        if (flgs.has(TR_TY_CURSE))
             creature_ptr->cursed.set(TRC::TY_CURSE);
-        if (has_flag(flgs, TR_ADD_L_CURSE))
+        if (flgs.has(TR_ADD_L_CURSE))
             creature_ptr->cursed.set(TRC::ADD_L_CURSE);
-        if (has_flag(flgs, TR_ADD_H_CURSE))
+        if (flgs.has(TR_ADD_H_CURSE))
             creature_ptr->cursed.set(TRC::ADD_H_CURSE);
-        if (has_flag(flgs, TR_DRAIN_HP))
+        if (flgs.has(TR_DRAIN_HP))
             creature_ptr->cursed.set(TRC::DRAIN_HP);
-        if (has_flag(flgs, TR_DRAIN_MANA))
+        if (flgs.has(TR_DRAIN_MANA))
             creature_ptr->cursed.set(TRC::DRAIN_MANA);
-        if (has_flag(flgs, TR_CALL_ANIMAL))
+        if (flgs.has(TR_CALL_ANIMAL))
             creature_ptr->cursed.set(TRC::CALL_ANIMAL);
-        if (has_flag(flgs, TR_CALL_DEMON))
+        if (flgs.has(TR_CALL_DEMON))
             creature_ptr->cursed.set(TRC::CALL_DEMON);
-        if (has_flag(flgs, TR_CALL_DRAGON))
+        if (flgs.has(TR_CALL_DRAGON))
             creature_ptr->cursed.set(TRC::CALL_DRAGON);
-        if (has_flag(flgs, TR_CALL_UNDEAD))
+        if (flgs.has(TR_CALL_UNDEAD))
             creature_ptr->cursed.set(TRC::CALL_UNDEAD);
-        if (has_flag(flgs, TR_COWARDICE))
+        if (flgs.has(TR_COWARDICE))
             creature_ptr->cursed.set(TRC::COWARDICE);
-        if (has_flag(flgs, TR_LOW_MELEE))
+        if (flgs.has(TR_LOW_MELEE))
             creature_ptr->cursed.set(TRC::LOW_MELEE);
-        if (has_flag(flgs, TR_LOW_AC))
+        if (flgs.has(TR_LOW_AC))
             creature_ptr->cursed.set(TRC::LOW_AC);
-        if (has_flag(flgs, TR_HARD_SPELL))
+        if (flgs.has(TR_HARD_SPELL))
             creature_ptr->cursed.set(TRC::HARD_SPELL);
-        if (has_flag(flgs, TR_FAST_DIGEST))
+        if (flgs.has(TR_FAST_DIGEST))
             creature_ptr->cursed.set(TRC::FAST_DIGEST);
-        if (has_flag(flgs, TR_SLOW_REGEN))
+        if (flgs.has(TR_SLOW_REGEN))
             creature_ptr->cursed.set(TRC::SLOW_REGEN);
-        if (has_flag(flgs, TR_BERS_RAGE))
+        if (flgs.has(TR_BERS_RAGE))
             creature_ptr->cursed.set(TRC::BERS_RAGE);
 
         auto obj_curse_flags = o_ptr->curse_flags;
@@ -1236,7 +1236,7 @@ void update_curses(player_type *creature_ptr)
         if (o_ptr->name1 == ART_CHAINSWORD)
             creature_ptr->cursed_special.set(TRCS::CHAINSWORD);
 
-        if (has_flag(flgs, TR_TELEPORT)) {
+        if (flgs.has(TR_TELEPORT)) {
             if (o_ptr->is_cursed())
                 creature_ptr->cursed.set(TRC::TELEPORT);
             else {
@@ -1279,7 +1279,7 @@ void update_extra_blows(player_type *creature_ptr)
             continue;
 
         auto flgs = object_flags(o_ptr);
-        if (has_flag(flgs, TR_BLOWS)) {
+        if (flgs.has(TR_BLOWS)) {
             if ((i == INVEN_MAIN_HAND || i == INVEN_MAIN_RING) && !two_handed)
                 creature_ptr->extra_blows[0] += o_ptr->pval;
             else if ((i == INVEN_SUB_HAND || i == INVEN_SUB_RING) && !two_handed)
@@ -2032,7 +2032,7 @@ bool is_wielding_icky_weapon(player_type *creature_ptr, int i)
 
     auto has_no_weapon = (o_ptr->tval == TV_NONE) || (o_ptr->tval == TV_SHIELD);
     if (creature_ptr->pclass == CLASS_PRIEST) {
-        auto is_suitable_weapon = has_flag(flgs, TR_BLESSED);
+        auto is_suitable_weapon = flgs.has(TR_BLESSED);
         is_suitable_weapon |= (o_ptr->tval != TV_SWORD) && (o_ptr->tval != TV_POLEARM);
         return !has_no_weapon && !is_suitable_weapon;
     }
@@ -2056,7 +2056,7 @@ bool is_wielding_icky_riding_weapon(player_type *creature_ptr, int i)
     auto *o_ptr = &creature_ptr->inventory_list[INVEN_MAIN_HAND + i];
     auto flgs = object_flags(o_ptr);
     auto has_no_weapon = (o_ptr->tval == TV_NONE) || (o_ptr->tval == TV_SHIELD);
-    auto is_suitable = o_ptr->is_lance() || has_flag(flgs, TR_RIDING);
+    auto is_suitable = o_ptr->is_lance() || flgs.has(TR_RIDING);
     return (creature_ptr->riding > 0) && !has_no_weapon && !is_suitable;
 }
 

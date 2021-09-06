@@ -2,6 +2,8 @@
 
 #include "system/angband.h"
 
+#include "object-enchant/tr-flags.h"
+
 struct object_type;;
 struct player_type;
 void torch_flags(object_type *o_ptr, TrFlags &flgs);

@@ -179,12 +179,12 @@ void apply_magic_to_object(player_type *owner_ptr, object_type *o_ptr, DEPTH lev
 
     if ((o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI) && (owner_ptr->pseikaku == PERSONALITY_SEXY)) {
         o_ptr->pval = 3;
-        add_flag(o_ptr->art_flags, TR_STR);
-        add_flag(o_ptr->art_flags, TR_INT);
-        add_flag(o_ptr->art_flags, TR_WIS);
-        add_flag(o_ptr->art_flags, TR_DEX);
-        add_flag(o_ptr->art_flags, TR_CON);
-        add_flag(o_ptr->art_flags, TR_CHR);
+        o_ptr->art_flags.set(TR_STR);
+        o_ptr->art_flags.set(TR_INT);
+        o_ptr->art_flags.set(TR_WIS);
+        o_ptr->art_flags.set(TR_DEX);
+        o_ptr->art_flags.set(TR_CON);
+        o_ptr->art_flags.set(TR_CHR);
     }
 
     if (o_ptr->is_ego()) {

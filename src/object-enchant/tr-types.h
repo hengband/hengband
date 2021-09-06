@@ -1,9 +1,13 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
+#include <array>
+
 /*!
  * @todo TRが何の略か分かる人、補足求む
  */
-enum tr_type {
+enum tr_type : int32_t {
     TR_STR = 0, /* STR += "pval" */
     TR_INT = 1, /* INT += "pval" */
     TR_WIS = 2, /* WIS += "pval" */
@@ -81,7 +85,7 @@ enum tr_type {
     TR_WARNING = 72, /* Warning */
     TR_HIDE_TYPE = 73, /* Hide "pval" description */
     TR_SHOW_MODS = 74, /* Always show Tohit/Todam */
-    TR_SLAY_GOOD = 75,  //!< 善良スレイ(/善)
+    TR_SLAY_GOOD = 75, //!< 善良スレイ(/善)
     TR_LEVITATION = 76, /* Feather Falling */
     TR_LITE_1 = 77, /* Light Radius 1*/
     TR_SEE_INVIS = 78, /* See Invisible */
@@ -101,7 +105,7 @@ enum tr_type {
     TR_BLESSED = 92, /* Item is Blessed */
     TR_ES_ATTACK = 93, /* Fake flag for Smith */
     TR_ES_AC = 94, /* Fake flag for Smith */
-    TR_KILL_GOOD = 95,  //!< 善良スレイ(X善)
+    TR_KILL_GOOD = 95, //!< 善良スレイ(X善)
 
     TR_KILL_ANIMAL = 96,
     TR_KILL_EVIL = 97,
@@ -168,4 +172,24 @@ enum tr_type {
     TR_IM_DARK = 157, //!< 暗黒免疫
 
     TR_FLAG_MAX = 158,
+};
+
+/** 能力値(STR,INT,WIS,DEX,CON,CHR)のpvalを増減させるフラグのリスト */
+inline constexpr std::array<tr_type, 6> TR_STATUS_LIST = {
+    TR_STR,
+    TR_INT,
+    TR_WIS,
+    TR_DEX,
+    TR_CON,
+    TR_CHR,
+};
+
+/** 能力値(STR,INT,WIS,DEX,CON,CHR)を維持するフラグのリスト */
+inline constexpr std::array<tr_type, 6> TR_SUST_STATUS_LIST = {
+    TR_SUST_STR,
+    TR_SUST_INT,
+    TR_SUST_WIS,
+    TR_SUST_DEX,
+    TR_SUST_CON,
+    TR_SUST_CHR,
 };

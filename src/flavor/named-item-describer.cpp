@@ -50,7 +50,7 @@ static void check_object_known_aware(flavor_type *flavor_ptr)
 
 static void set_base_name(flavor_type *flavor_ptr)
 {
-    if (!flavor_ptr->aware || !has_flag(flavor_ptr->tr_flags, TR_FULL_NAME))
+    if (!flavor_ptr->aware || flavor_ptr->tr_flags.has_not(TR_FULL_NAME))
         return;
 
     flavor_ptr->basenm = (flavor_ptr->known && (flavor_ptr->o_ptr->name1 != 0)) ? a_info[flavor_ptr->o_ptr->name1].name.c_str() : flavor_ptr->kindname;
@@ -109,7 +109,7 @@ static void describe_artifact_ja(flavor_type *flavor_ptr)
         return;
     }
 
-    if (flavor_ptr->o_ptr->name1 && !has_flag(flavor_ptr->tr_flags, TR_FULL_NAME)) {
+    if (flavor_ptr->o_ptr->name1 && flavor_ptr->tr_flags.has_not(TR_FULL_NAME)) {
         artifact_type *a_ptr = &a_info[flavor_ptr->o_ptr->name1];
         /* '『' から始まらない伝説のアイテムの名前は最初に付加する */
         if (a_ptr->name.find("『", 0, 2) != 0)
@@ -281,7 +281,7 @@ static void describe_basename_en(flavor_type *flavor_ptr)
 
 static void describe_artifact_body_en(flavor_type *flavor_ptr)
 {
-    if (!flavor_ptr->known || has_flag(flavor_ptr->tr_flags, TR_FULL_NAME))
+    if (!flavor_ptr->known || flavor_ptr->tr_flags.has(TR_FULL_NAME))
         return;
 
     if (flavor_ptr->o_ptr->art_name) {

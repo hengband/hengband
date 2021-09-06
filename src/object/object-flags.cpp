@@ -30,57 +30,53 @@ TrFlags object_flags(const object_type *o_ptr)
 
     if (o_ptr->is_ego()) {
         ego_item_type *e_ptr = &e_info[o_ptr->name2];
-        for (int i = 0; i < TR_FLAG_SIZE; i++) {
-            flgs[i] |= e_ptr->flags[i];
-        }
+        flgs.set(e_ptr->flags);
 
         if ((o_ptr->name2 == EGO_LITE_AURA_FIRE) && !o_ptr->xtra4 && (o_ptr->sval <= SV_LITE_LANTERN)) {
-            remove_flag(flgs, TR_SH_FIRE);
+            flgs.reset(TR_SH_FIRE);
         } else if ((o_ptr->name2 == EGO_LITE_INFRA) && !o_ptr->xtra4 && (o_ptr->sval <= SV_LITE_LANTERN)) {
-            remove_flag(flgs, TR_INFRA);
+            flgs.reset(TR_INFRA);
         } else if ((o_ptr->name2 == EGO_LITE_EYE) && !o_ptr->xtra4 && (o_ptr->sval <= SV_LITE_LANTERN)) {
-            remove_flag(flgs, TR_RES_BLIND);
-            remove_flag(flgs, TR_SEE_INVIS);
+            flgs.reset(TR_RES_BLIND);
+            flgs.reset(TR_SEE_INVIS);
         }
     }
 
     /* Random artifact ! */
-    for (int i = 0; i < TR_FLAG_SIZE; i++) {
-        flgs[i] |= o_ptr->art_flags[i];
-    }
+    flgs.set(o_ptr->art_flags);
 
     if (o_ptr->is_smith()) {
         int add = o_ptr->xtra3 - 1;
         if (add < TR_FLAG_MAX) {
-            add_flag(flgs, add);
+            flgs.set(static_cast<tr_type>(add));
         } else if (add == ESSENCE_TMP_RES_ACID) {
-            add_flag(flgs, TR_RES_ACID);
-            add_flag(flgs, TR_ACTIVATE);
+            flgs.set(TR_RES_ACID);
+            flgs.set(TR_ACTIVATE);
         } else if (add == ESSENCE_TMP_RES_ELEC) {
-            add_flag(flgs, TR_RES_ELEC);
-            add_flag(flgs, TR_ACTIVATE);
+            flgs.set(TR_RES_ELEC);
+            flgs.set(TR_ACTIVATE);
         } else if (add == ESSENCE_TMP_RES_FIRE) {
-            add_flag(flgs, TR_RES_FIRE);
-            add_flag(flgs, TR_ACTIVATE);
+            flgs.set(TR_RES_FIRE);
+            flgs.set(TR_ACTIVATE);
         } else if (add == ESSENCE_TMP_RES_COLD) {
-            add_flag(flgs, TR_RES_COLD);
-            add_flag(flgs, TR_ACTIVATE);
+            flgs.set(TR_RES_COLD);
+            flgs.set(TR_ACTIVATE);
         } else if (add == ESSENCE_SH_FIRE) {
-            add_flag(flgs, TR_RES_FIRE);
-            add_flag(flgs, TR_SH_FIRE);
+            flgs.set(TR_RES_FIRE);
+            flgs.set(TR_SH_FIRE);
         } else if (add == ESSENCE_SH_ELEC) {
-            add_flag(flgs, TR_RES_ELEC);
-            add_flag(flgs, TR_SH_ELEC);
+            flgs.set(TR_RES_ELEC);
+            flgs.set(TR_SH_ELEC);
         } else if (add == ESSENCE_SH_COLD) {
-            add_flag(flgs, TR_RES_COLD);
-            add_flag(flgs, TR_SH_COLD);
+            flgs.set(TR_RES_COLD);
+            flgs.set(TR_SH_COLD);
         } else if (add == ESSENCE_RESISTANCE) {
-            add_flag(flgs, TR_RES_ACID);
-            add_flag(flgs, TR_RES_ELEC);
-            add_flag(flgs, TR_RES_FIRE);
-            add_flag(flgs, TR_RES_COLD);
+            flgs.set(TR_RES_ACID);
+            flgs.set(TR_RES_ELEC);
+            flgs.set(TR_RES_FIRE);
+            flgs.set(TR_RES_COLD);
         } else if (add == TR_EARTHQUAKE) {
-            add_flag(flgs, TR_ACTIVATE);
+            flgs.set(TR_ACTIVATE);
         }
     }
 
@@ -110,17 +106,15 @@ TrFlags object_flags_known(const object_type *o_ptr)
 
     if (o_ptr->is_ego()) {
         ego_item_type *e_ptr = &e_info[o_ptr->name2];
-        for (int i = 0; i < TR_FLAG_SIZE; i++) {
-            flgs[i] |= e_ptr->flags[i];
-        }
+        flgs.set(e_ptr->flags);
 
         if ((o_ptr->name2 == EGO_LITE_AURA_FIRE) && !o_ptr->xtra4 && (o_ptr->sval <= SV_LITE_LANTERN)) {
-            remove_flag(flgs, TR_SH_FIRE);
+            flgs.reset(TR_SH_FIRE);
         } else if ((o_ptr->name2 == EGO_LITE_INFRA) && !o_ptr->xtra4 && (o_ptr->sval <= SV_LITE_LANTERN)) {
-            remove_flag(flgs, TR_INFRA);
+            flgs.reset(TR_INFRA);
         } else if ((o_ptr->name2 == EGO_LITE_EYE) && !o_ptr->xtra4 && (o_ptr->sval <= SV_LITE_LANTERN)) {
-            remove_flag(flgs, TR_RES_BLIND);
-            remove_flag(flgs, TR_SEE_INVIS);
+            flgs.reset(TR_RES_BLIND);
+            flgs.reset(TR_SEE_INVIS);
         }
     }
 
@@ -130,9 +124,7 @@ TrFlags object_flags_known(const object_type *o_ptr)
         }
 
         /* Random artifact ! */
-        for (int i = 0; i < TR_FLAG_SIZE; i++) {
-            flgs[i] |= o_ptr->art_flags[i];
-        }
+        flgs.set(o_ptr->art_flags);
     }
 
     if (!o_ptr->is_smith())
@@ -140,29 +132,29 @@ TrFlags object_flags_known(const object_type *o_ptr)
 
     int add = o_ptr->xtra3 - 1;
     if (add < TR_FLAG_MAX) {
-        add_flag(flgs, add);
+        flgs.set(static_cast<tr_type>(add));
     } else if (add == ESSENCE_TMP_RES_ACID) {
-        add_flag(flgs, TR_RES_ACID);
+        flgs.set(TR_RES_ACID);
     } else if (add == ESSENCE_TMP_RES_ELEC) {
-        add_flag(flgs, TR_RES_ELEC);
+        flgs.set(TR_RES_ELEC);
     } else if (add == ESSENCE_TMP_RES_FIRE) {
-        add_flag(flgs, TR_RES_FIRE);
+        flgs.set(TR_RES_FIRE);
     } else if (add == ESSENCE_TMP_RES_COLD) {
-        add_flag(flgs, TR_RES_COLD);
+        flgs.set(TR_RES_COLD);
     } else if (add == ESSENCE_SH_FIRE) {
-        add_flag(flgs, TR_RES_FIRE);
-        add_flag(flgs, TR_SH_FIRE);
+        flgs.set(TR_RES_FIRE);
+        flgs.set(TR_SH_FIRE);
     } else if (add == ESSENCE_SH_ELEC) {
-        add_flag(flgs, TR_RES_ELEC);
-        add_flag(flgs, TR_SH_ELEC);
+        flgs.set(TR_RES_ELEC);
+        flgs.set(TR_SH_ELEC);
     } else if (add == ESSENCE_SH_COLD) {
-        add_flag(flgs, TR_RES_COLD);
-        add_flag(flgs, TR_SH_COLD);
+        flgs.set(TR_RES_COLD);
+        flgs.set(TR_SH_COLD);
     } else if (add == ESSENCE_RESISTANCE) {
-        add_flag(flgs, TR_RES_ACID);
-        add_flag(flgs, TR_RES_ELEC);
-        add_flag(flgs, TR_RES_FIRE);
-        add_flag(flgs, TR_RES_COLD);
+        flgs.set(TR_RES_ACID);
+        flgs.set(TR_RES_ELEC);
+        flgs.set(TR_RES_FIRE);
+        flgs.set(TR_RES_COLD);
     }
 
     return flgs;

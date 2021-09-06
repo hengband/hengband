@@ -116,7 +116,7 @@ static bool acid_minus_ac(player_type *creature_ptr)
         return false;
     }
 
-    if (has_flag(flgs, TR_IGNORE_ACID)) {
+    if (flgs.has(TR_IGNORE_ACID)) {
         msg_format(_("しかし%sには効果がなかった！", "Your %s is unaffected!"), o_name);
         return true;
     }

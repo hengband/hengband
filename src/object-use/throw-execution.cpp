@@ -109,7 +109,7 @@ void ObjectThrowEntity::calc_throw_range()
 
     auto mul = 10 + 2 * (this->mult - 1);
     auto div = ((this->q_ptr->weight > 10) ? this->q_ptr->weight : 10);
-    if ((has_flag(this->obj_flags, TR_THROW)) || this->boomerang) {
+    if ((this->obj_flags.has(TR_THROW)) || this->boomerang) {
         div /= 2;
     }
 
@@ -176,12 +176,12 @@ void ObjectThrowEntity::set_class_specific_throw_params()
     this->x = this->creature_ptr->x;
     handle_stuff(this->creature_ptr);
     this->shuriken = (this->creature_ptr->pclass == CLASS_NINJA)
-        && ((this->q_ptr->tval == TV_SPIKE) || ((has_flag(this->obj_flags, TR_THROW)) && (this->q_ptr->tval == TV_SWORD)));
+        && ((this->q_ptr->tval == TV_SPIKE) || ((this->obj_flags.has(TR_THROW)) && (this->q_ptr->tval == TV_SWORD)));
 }
 
 void ObjectThrowEntity::set_racial_chance()
 {
-    auto compensation = has_flag(this->obj_flags, TR_THROW) ? this->q_ptr->to_h : 0;
+    auto compensation = this->obj_flags.has(TR_THROW) ? this->q_ptr->to_h : 0;
     this->chance = this->creature_ptr->skill_tht + (this->creature_ptr->to_h_b + compensation) * BTH_PLUS_ADJ;
     if (this->shuriken != 0) {
         this->chance *= 2;
@@ -481,7 +481,7 @@ void ObjectThrowEntity::calc_racial_power_damage()
     if (this->boomerang) {
         this->tdam *= (this->mult + this->creature_ptr->num_blow[this->item - INVEN_MAIN_HAND]);
         this->tdam += this->creature_ptr->to_d_m;
-    } else if (has_flag(this->obj_flags, TR_THROW)) {
+    } else if (this->obj_flags.has(TR_THROW)) {
         this->tdam *= (3 + this->mult);
         this->tdam += this->creature_ptr->to_d_m;
     } else {

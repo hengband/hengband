@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include "object-enchant/tr-flags.h"
 #include "object-enchant/tr-types.h"
 #include "player-ability/player-ability-types.h"
 #include "player/player-class-types.h"

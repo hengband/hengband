@@ -668,7 +668,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
                     /* vorpal blade */
                     basedam *= 5;
                     basedam /= 3;
-                } else if (has_flag(flgs, TR_VORPAL)) {
+                } else if (flgs.has(TR_VORPAL)) {
                     /* vorpal flag only */
                     basedam *= 11;
                     basedam /= 9;
@@ -946,7 +946,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
                     /* vorpal blade */
                     basedam *= 5;
                     basedam /= 3;
-                } else if (has_flag(flgs, TR_VORPAL)) {
+                } else if (flgs.has(TR_VORPAL)) {
                     /* vorpal flag only */
                     basedam *= 11;
                     basedam /= 9;

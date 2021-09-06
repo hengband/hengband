@@ -35,55 +35,55 @@
  */
 static void update_object_flags(const TrFlags &flgs, BIT_FLAGS *flg2, BIT_FLAGS *flg3, BIT_FLAGS *flgr)
 {
-    if (has_flag(flgs, TR_SLAY_DRAGON))
+    if (flgs.has(TR_SLAY_DRAGON))
         *flg3 |= (RF3_DRAGON);
-    if (has_flag(flgs, TR_KILL_DRAGON))
+    if (flgs.has(TR_KILL_DRAGON))
         *flg3 |= (RF3_DRAGON);
-    if (has_flag(flgs, TR_SLAY_TROLL))
+    if (flgs.has(TR_SLAY_TROLL))
         *flg3 |= (RF3_TROLL);
-    if (has_flag(flgs, TR_KILL_TROLL))
+    if (flgs.has(TR_KILL_TROLL))
         *flg3 |= (RF3_TROLL);
-    if (has_flag(flgs, TR_SLAY_GIANT))
+    if (flgs.has(TR_SLAY_GIANT))
         *flg3 |= (RF3_GIANT);
-    if (has_flag(flgs, TR_KILL_GIANT))
+    if (flgs.has(TR_KILL_GIANT))
         *flg3 |= (RF3_GIANT);
-    if (has_flag(flgs, TR_SLAY_ORC))
+    if (flgs.has(TR_SLAY_ORC))
         *flg3 |= (RF3_ORC);
-    if (has_flag(flgs, TR_KILL_ORC))
+    if (flgs.has(TR_KILL_ORC))
         *flg3 |= (RF3_ORC);
-    if (has_flag(flgs, TR_SLAY_DEMON))
+    if (flgs.has(TR_SLAY_DEMON))
         *flg3 |= (RF3_DEMON);
-    if (has_flag(flgs, TR_KILL_DEMON))
+    if (flgs.has(TR_KILL_DEMON))
         *flg3 |= (RF3_DEMON);
-    if (has_flag(flgs, TR_SLAY_UNDEAD))
+    if (flgs.has(TR_SLAY_UNDEAD))
         *flg3 |= (RF3_UNDEAD);
-    if (has_flag(flgs, TR_KILL_UNDEAD))
+    if (flgs.has(TR_KILL_UNDEAD))
         *flg3 |= (RF3_UNDEAD);
-    if (has_flag(flgs, TR_SLAY_ANIMAL))
+    if (flgs.has(TR_SLAY_ANIMAL))
         *flg3 |= (RF3_ANIMAL);
-    if (has_flag(flgs, TR_KILL_ANIMAL))
+    if (flgs.has(TR_KILL_ANIMAL))
         *flg3 |= (RF3_ANIMAL);
-    if (has_flag(flgs, TR_SLAY_EVIL))
+    if (flgs.has(TR_SLAY_EVIL))
         *flg3 |= (RF3_EVIL);
-    if (has_flag(flgs, TR_KILL_EVIL))
+    if (flgs.has(TR_KILL_EVIL))
         *flg3 |= (RF3_EVIL);
-    if (has_flag(flgs, TR_SLAY_GOOD))
+    if (flgs.has(TR_SLAY_GOOD))
         *flg3 |= (RF3_GOOD);
-    if (has_flag(flgs, TR_KILL_GOOD))
+    if (flgs.has(TR_KILL_GOOD))
         *flg3 |= (RF3_GOOD);
-    if (has_flag(flgs, TR_SLAY_HUMAN))
+    if (flgs.has(TR_SLAY_HUMAN))
         *flg2 |= (RF2_HUMAN);
-    if (has_flag(flgs, TR_KILL_HUMAN))
+    if (flgs.has(TR_KILL_HUMAN))
         *flg2 |= (RF2_HUMAN);
-    if (has_flag(flgs, TR_BRAND_ACID))
+    if (flgs.has(TR_BRAND_ACID))
         *flgr |= (RFR_IM_ACID);
-    if (has_flag(flgs, TR_BRAND_ELEC))
+    if (flgs.has(TR_BRAND_ELEC))
         *flgr |= (RFR_IM_ELEC);
-    if (has_flag(flgs, TR_BRAND_FIRE))
+    if (flgs.has(TR_BRAND_FIRE))
         *flgr |= (RFR_IM_FIRE);
-    if (has_flag(flgs, TR_BRAND_COLD))
+    if (flgs.has(TR_BRAND_COLD))
         *flgr |= (RFR_IM_COLD);
-    if (has_flag(flgs, TR_BRAND_POIS))
+    if (flgs.has(TR_BRAND_POIS))
         *flgr |= (RFR_IM_POIS);
 }
 

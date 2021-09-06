@@ -15,44 +15,43 @@ void set_equipment_influence(player_type *creature_ptr, self_info_type *self_ptr
             continue;
 
         auto tflgs = object_flags(o_ptr);
-        for (int j = 0; j < TR_FLAG_SIZE; j++)
-            self_ptr->flags[j] |= tflgs[j];
+        self_ptr->flags.set(tflgs);
     }
 
-    if (has_flag(self_ptr->flags, TR_STR))
+    if (self_ptr->flags.has(TR_STR))
         self_ptr->info[self_ptr->line++] = _("あなたの腕力は装備によって影響を受けている。", "Your strength is affected by your equipment.");
 
-    if (has_flag(self_ptr->flags, TR_INT))
+    if (self_ptr->flags.has(TR_INT))
         self_ptr->info[self_ptr->line++] = _("あなたの知能は装備によって影響を受けている。", "Your intelligence is affected by your equipment.");
 
-    if (has_flag(self_ptr->flags, TR_WIS))
+    if (self_ptr->flags.has(TR_WIS))
         self_ptr->info[self_ptr->line++] = _("あなたの賢さは装備によって影響を受けている。", "Your wisdom is affected by your equipment.");
 
-    if (has_flag(self_ptr->flags, TR_DEX))
+    if (self_ptr->flags.has(TR_DEX))
         self_ptr->info[self_ptr->line++] = _("あなたの器用さは装備によって影響を受けている。", "Your dexterity is affected by your equipment.");
 
-    if (has_flag(self_ptr->flags, TR_CON))
+    if (self_ptr->flags.has(TR_CON))
         self_ptr->info[self_ptr->line++] = _("あなたの耐久力は装備によって影響を受けている。", "Your constitution is affected by your equipment.");
 
-    if (has_flag(self_ptr->flags, TR_CHR))
+    if (self_ptr->flags.has(TR_CHR))
         self_ptr->info[self_ptr->line++] = _("あなたの魅力は装備によって影響を受けている。", "Your charisma is affected by your equipment.");
 
-    if (has_flag(self_ptr->flags, TR_STEALTH))
+    if (self_ptr->flags.has(TR_STEALTH))
         self_ptr->info[self_ptr->line++] = _("あなたの隠密行動能力は装備によって影響を受けている。", "Your stealth is affected by your equipment.");
 
-    if (has_flag(self_ptr->flags, TR_SEARCH))
+    if (self_ptr->flags.has(TR_SEARCH))
         self_ptr->info[self_ptr->line++] = _("あなたの探索能力は装備によって影響を受けている。", "Your searching ability is affected by your equipment.");
 
-    if (has_flag(self_ptr->flags, TR_INFRA))
+    if (self_ptr->flags.has(TR_INFRA))
         self_ptr->info[self_ptr->line++] = _("あなたの赤外線視力は装備によって影響を受けている。", "Your infravision is affected by your equipment.");
 
-    if (has_flag(self_ptr->flags, TR_TUNNEL))
+    if (self_ptr->flags.has(TR_TUNNEL))
         self_ptr->info[self_ptr->line++] = _("あなたの採掘能力は装備によって影響を受けている。", "Your digging ability is affected by your equipment.");
 
-    if (has_flag(self_ptr->flags, TR_SPEED))
+    if (self_ptr->flags.has(TR_SPEED))
         self_ptr->info[self_ptr->line++] = _("あなたのスピードは装備によって影響を受けている。", "Your speed is affected by your equipment.");
 
-    if (has_flag(self_ptr->flags, TR_BLOWS))
+    if (self_ptr->flags.has(TR_BLOWS))
         self_ptr->info[self_ptr->line++] = _("あなたの攻撃速度は装備によって影響を受けている。", "Your attack speed is affected by your equipment.");
 }
 

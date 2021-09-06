@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 
+#include "object-enchant/tr-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trg-types.h"
 #include "system/angband.h"

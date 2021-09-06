@@ -4983,6 +4983,12 @@
     <ClInclude Include="..\..\src\util\enum-converter.h">
       <Filter>util</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\load\savedata-old-flag-types.h">
+      <Filter>load</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\tr-flags.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

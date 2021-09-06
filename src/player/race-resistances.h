@@ -2,6 +2,8 @@
 
 #include "system/angband.h"
 
+#include "object-enchant/tr-flags.h"
+
 struct player_type;
 void player_immunity(player_type *creature_ptr, TrFlags &flags);
 void tim_player_immunity(player_type *creature_ptr, TrFlags &flags);
