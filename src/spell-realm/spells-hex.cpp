@@ -325,7 +325,7 @@ void RealmHex::revenge_spell()
  * @brief 復讐ダメージの追加を行う
  * @param dam 蓄積されるダメージ量
  */
-void revenge_store(player_type *caster_ptr, HIT_POINT dam)
+void RealmHex::revenge_store(HIT_POINT dam)
 {
     if (caster_ptr->realm1 != REALM_HEX)
         return;

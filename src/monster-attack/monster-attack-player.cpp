@@ -492,7 +492,7 @@ static void thief_teleport(player_type *target_ptr, monap_type *monap_ptr)
 
 static void postprocess_monster_blows(player_type *target_ptr, monap_type *monap_ptr)
 {
-    revenge_store(target_ptr, monap_ptr->get_damage);
+    RealmHex(target_ptr).revenge_store(monap_ptr->get_damage);
     eyes_on_eyes(target_ptr, monap_ptr);
     musou_counterattack(target_ptr, monap_ptr);
     thief_teleport(target_ptr, monap_ptr);
