@@ -305,18 +305,19 @@ bool RealmHex::hex_spell_fully() const
  */
 void RealmHex::revenge_spell()
 {
-    if (caster_ptr->realm1 != REALM_HEX)
+    if ((this->caster_ptr->realm1 != REALM_HEX) || (hex_revenge_turn(this->caster_ptr) <= 0)) {
         return;
-    if (hex_revenge_turn(caster_ptr) <= 0)
-        return;
+    }
 
-    switch (hex_revenge_type(caster_ptr)) {
+    switch (hex_revenge_type(this->caster_ptr)) {
     case 1:
-        exe_spell(caster_ptr, REALM_HEX, HEX_PATIENCE, SPELL_CONT);
-        break;
+        exe_spell(this->caster_ptr, REALM_HEX, HEX_PATIENCE, SPELL_CONT);
+        return;
     case 2:
-        exe_spell(caster_ptr, REALM_HEX, HEX_REVENGE, SPELL_CONT);
-        break;
+        exe_spell(this->caster_ptr, REALM_HEX, HEX_REVENGE, SPELL_CONT);
+        return;
+    default:
+        return;
     }
 }
 
