@@ -21,7 +21,14 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
-#define MAX_KEEP 4 /*!<呪術の最大詠唱数 */
+/*!
+ * @brief 領域ごとの最大呪文数
+ * @details 呪術以外も全て8 * 4 == 32だが、暫定的にこのクラスからマジックナンバーをなくす
+ */
+constexpr int MAX_REALM_SPELLS = 32;
+
+/*!< 呪術の最大詠唱数 */
+constexpr int MAX_KEEP = 4;
 
 RealmHex::RealmHex(player_type *caster_ptr)
     : caster_ptr(caster_ptr)
@@ -33,7 +40,7 @@ RealmHex::RealmHex(player_type *caster_ptr)
  */
 bool RealmHex::stop_all_spells()
 {
-    for (auto i = 0; i < 32; i++) {
+    for (auto i = 0; i < MAX_REALM_SPELLS; i++) {
         if (this->is_spelling_specific(i)) {
             exe_spell(this->caster_ptr, REALM_HEX, i, SPELL_STOP);
         }
@@ -68,12 +75,12 @@ bool RealmHex::stop_one_spell()
     strnfmt(out_val, 78, _("どの呪文の詠唱を中断しますか？(呪文 %c-%c, 'l'全て, ESC)", "Which spell do you stop casting? (Spell %c-%c, 'l' to all, ESC)"),
         I2A(0), I2A(casting_hex_num(this->caster_ptr) - 1));
     screen_save();
-    std::vector<int> sp(MAX_KEEP);
     char choice = 0;
-    auto flag = select_spell_stopping(sp, out_val, choice);
+    auto spells = this->make_spells_list();
+    auto flag = select_spell_stopping(spells, out_val, choice);
     screen_load();
     if (flag) {
-        auto n = sp.at(A2I(choice));
+        auto n = spells.at(A2I(choice));
         exe_spell(this->caster_ptr, REALM_HEX, n, SPELL_STOP);
         casting_hex_flags(this->caster_ptr) &= ~(1UL << n);
         casting_hex_num(this->caster_ptr)--;
@@ -84,17 +91,31 @@ bool RealmHex::stop_one_spell()
     return flag;
 }
 
+std::vector<int> RealmHex::make_spells_list()
+{
+    std::vector<int> spells(MAX_KEEP);
+    auto n = 0;
+    for (auto spell = 0; spell < MAX_REALM_SPELLS; spell++) {
+        if (this->is_spelling_specific(spell)) {
+            spells.at(n) = spell;
+            n++;
+        }
+    }
+
+    return spells;
+}
+
 /*!
  * @brief 中断する呪術を選択する
- * @param sp 詠唱中の呪術リスト
+ * @param spells 詠唱中の呪術リスト
  * @param out_val 呪文名
  * @param choice 選択した呪文
  * @return 選択が完了したらtrue、キャンセルならばfalse
  */
-bool RealmHex::select_spell_stopping(std::vector<int> &sp, char *out_val, char &choice)
+bool RealmHex::select_spell_stopping(const std::vector<int> &spells, char *out_val, char &choice)
 {
     while (true) {
-        this->display_spells_list(sp);
+        this->display_spells_list(spells);
         if (!get_com(out_val, &choice, true)) {
             return false;
         }
@@ -117,19 +138,18 @@ bool RealmHex::select_spell_stopping(std::vector<int> &sp, char *out_val, char &
     }
 }
 
-void RealmHex::display_spells_list(std::vector<int> &sp)
+void RealmHex::display_spells_list(const std::vector<int> &spells)
 {
     constexpr auto y = 1;
     constexpr auto x = 20;
     auto n = 0;
     term_erase(x, y, 255);
     prt(_("     名前", "     Name"), y, x + 5);
-    for (auto spell = 0; spell < 32; spell++) {
-        if (this->is_spelling_specific(spell)) {
-            term_erase(x, y + n + 1, 255);
-            put_str(format("%c)  %s", I2A(n), exe_spell(this->caster_ptr, REALM_HEX, spell, SPELL_NAME)), y + n + 1, x + 2);
-            sp.at(n++) = spell;
-        }
+    for (auto spell : spells) {
+        term_erase(x, y + n + 1, 255);
+        auto spell_result = exe_spell(this->caster_ptr, REALM_HEX, spell, SPELL_NAME);
+        put_str(format("%c)  %s", I2A(n), spell_result), y + n + 1, x + 2);
+        n++;
     }
 }
 
@@ -157,7 +177,7 @@ void RealmHex::decrease_mana()
     this->gain_exp_from_hex();        
 
     /* Do any effects of continual spells */
-    for (auto spell = 0; spell < 32; spell++) {
+    for (auto spell = 0; spell < MAX_REALM_SPELLS; spell++) {
         if (this->is_spelling_specific(spell)) {
             exe_spell(this->caster_ptr, REALM_HEX, spell, SPELL_CONT);
         }
@@ -205,7 +225,7 @@ bool RealmHex::check_restart()
 int RealmHex::calc_need_mana()
 {
     auto need_mana = 0;
-    for (auto spell = 0; spell < 32; spell++) {
+    for (auto spell = 0; spell < MAX_REALM_SPELLS; spell++) {
         if (this->is_spelling_specific(spell)) {
             const auto *s_ptr = &technic_info[REALM_HEX - MIN_TECHNIC][spell];
             need_mana += mod_need_mana(this->caster_ptr, s_ptr->smana, spell, REALM_HEX);
@@ -217,7 +237,7 @@ int RealmHex::calc_need_mana()
 
 void RealmHex::gain_exp_from_hex()
 {
-    for (auto spell = 0; spell < 32; spell++) {
+    for (auto spell = 0; spell < MAX_REALM_SPELLS; spell++) {
         if (!this->is_spelling_specific(spell)) {
             continue;
         }
