@@ -119,8 +119,9 @@ bool set_confused(player_type *creature_ptr, TIME_EFFECT v)
             if (creature_ptr->concent)
                 reset_concentration(creature_ptr, true);
 
-            if (hex_spelling_any(creature_ptr)) {
-                (void)RealmHex(creature_ptr).stop_hex_spell_all();
+            RealmHex realm_hex(creature_ptr);
+            if (realm_hex.hex_spelling_any()) {
+                (void)realm_hex.stop_hex_spell_all();
             }
 
             notice = true;
@@ -253,8 +254,9 @@ bool set_paralyzed(player_type *creature_ptr, TIME_EFFECT v)
             if (creature_ptr->concent)
                 reset_concentration(creature_ptr, true);
 
-            if (hex_spelling_any(creature_ptr)) {
-                (void)RealmHex(creature_ptr).stop_hex_spell_all();
+            RealmHex realm_hex(creature_ptr);
+            if (realm_hex.hex_spelling_any()) {
+                (void)realm_hex.stop_hex_spell_all();
             }
 
             creature_ptr->counter = false;
@@ -451,8 +453,9 @@ bool set_stun(player_type *creature_ptr, TIME_EFFECT v)
         if (creature_ptr->concent)
             reset_concentration(creature_ptr, true);
 
-        if (hex_spelling_any(creature_ptr)) {
-            (void)RealmHex(creature_ptr).stop_hex_spell_all();
+        RealmHex realm_hex(creature_ptr);
+        if (realm_hex.hex_spelling_any()) {
+            (void)realm_hex.stop_hex_spell_all();
         }
 
         notice = true;

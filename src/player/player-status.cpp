@@ -2969,7 +2969,7 @@ void stop_mouth(player_type *caster_ptr)
     if (music_singing_any(caster_ptr))
         stop_singing(caster_ptr);
 
-    if (hex_spelling_any(caster_ptr)) {
+    if (RealmHex(caster_ptr).hex_spelling_any()) {
         (void)RealmHex(caster_ptr).stop_hex_spell_all();
     }
 }

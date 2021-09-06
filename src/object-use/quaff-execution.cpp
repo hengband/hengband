@@ -133,7 +133,8 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
     if (music_singing_any(creature_ptr))
         stop_singing(creature_ptr);
 
-    if (hex_spelling_any(creature_ptr) && !RealmHex(creature_ptr).hex_spelling(HEX_INHAIL)) {
+    RealmHex realm_hex(creature_ptr);
+    if (realm_hex.hex_spelling_any() && !realm_hex.hex_spelling(HEX_INHAIL)) {
         (void)RealmHex(creature_ptr).stop_hex_spell_all();
     }
 

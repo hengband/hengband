@@ -55,7 +55,7 @@ bool RealmHex::stop_hex_spell_all()
  */
 bool RealmHex::stop_hex_spell()
 {
-    if (!hex_spelling_any(this->caster_ptr)) {
+    if (!RealmHex(this->caster_ptr).hex_spelling_any()) {
         msg_print(_("呪文を詠唱していません。", "You are not casting a spell."));
         return false;
     }
@@ -354,7 +354,7 @@ bool RealmHex::hex_spelling(int hex) const
     return (this->caster_ptr->realm1 == REALM_HEX) && any_bits(check, 1U << hex);
 }
 
-bool hex_spelling_any(player_type *caster_ptr)
+bool RealmHex::hex_spelling_any() const
 {
     return (caster_ptr->realm1 == REALM_HEX) && (caster_ptr->magic_num1[0] != 0);
 }
