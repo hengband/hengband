@@ -159,31 +159,41 @@ void process_player_hp_mp(player_type *creature_ptr)
     }
 
     if (f_ptr->flags.has(FF::LAVA) && !is_invuln(creature_ptr) && !has_immune_fire(creature_ptr)) {
-        cave_no_regen = deal_damege_by_feat(
-            creature_ptr, g_ptr, _("熱で火傷した！", "The heat burns you!"), _("で火傷した！", "burns you!"), calc_fire_damage_rate, nullptr);
+        if (deal_damege_by_feat(creature_ptr, g_ptr, _("熱で火傷した！", "The heat burns you!"), _("で火傷した！", "burns you!"),
+                                calc_fire_damage_rate, nullptr)) {
+            cave_no_regen = true;        
+        }
     }
 
     if (f_ptr->flags.has(FF::COLD_PUDDLE) && !is_invuln(creature_ptr) && !has_immune_cold(creature_ptr)) {
-        cave_no_regen = deal_damege_by_feat(
-            creature_ptr, g_ptr, _("冷気に覆われた！", "The cold engulfs you!"), _("に凍えた！", "frostbites you!"), calc_cold_damage_rate, nullptr);
+        if (deal_damege_by_feat(creature_ptr, g_ptr, _("冷気に覆われた！", "The cold engulfs you!"), _("に凍えた！", "frostbites you!"),
+                                calc_cold_damage_rate, nullptr)) {
+            cave_no_regen = true;
+        }
     }
 
     if (f_ptr->flags.has(FF::ELEC_PUDDLE) && !is_invuln(creature_ptr) && !has_immune_elec(creature_ptr)) {
-        cave_no_regen = deal_damege_by_feat(
-            creature_ptr, g_ptr, _("電撃を受けた！", "The electricity shocks you!"), _("に感電した！", "shocks you!"), calc_elec_damage_rate, nullptr);
+        if (deal_damege_by_feat(creature_ptr, g_ptr, _("電撃を受けた！", "The electricity shocks you!"), _("に感電した！", "shocks you!"),
+                                calc_elec_damage_rate, nullptr)) {
+            cave_no_regen = true;
+        }
     }
 
     if (f_ptr->flags.has(FF::ACID_PUDDLE) && !is_invuln(creature_ptr) && !has_immune_acid(creature_ptr)) {
-        cave_no_regen = deal_damege_by_feat(
-            creature_ptr, g_ptr, _("酸が飛び散った！", "The acid melts you!"), _("に溶かされた！", "melts you!"), calc_acid_damage_rate, nullptr);
+        if (deal_damege_by_feat(creature_ptr, g_ptr, _("酸が飛び散った！", "The acid melts you!"), _("に溶かされた！", "melts you!"),
+                                calc_acid_damage_rate, nullptr)) {
+            cave_no_regen = true;
+        }
     }
 
     if (f_ptr->flags.has(FF::POISON_PUDDLE) && !is_invuln(creature_ptr)) {
-        cave_no_regen = deal_damege_by_feat(creature_ptr, g_ptr, _("毒気を吸い込んだ！", "The gas poisons you!"), _("に毒された！", "poisons you!"),
+        if (deal_damege_by_feat(creature_ptr, g_ptr, _("毒気を吸い込んだ！", "The gas poisons you!"), _("に毒された！", "poisons you!"),
             calc_acid_damage_rate, [](player_type *creature_ptr, int damage) {
                 if (!has_resist_pois(creature_ptr))
                     (void)set_poisoned(creature_ptr, creature_ptr->poisoned + damage);
-            });
+                                })) {
+            cave_no_regen = true;
+        }
     }
 
     if (f_ptr->flags.has_all_of({FF::WATER, FF::DEEP}) && !creature_ptr->levitation && !creature_ptr->can_swim
