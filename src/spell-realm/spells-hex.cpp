@@ -398,8 +398,10 @@ void RealmHex::eyes_on_eyes()
         throw("Invalid constructor was used!");
     }
 
-    if (((this->caster_ptr->tim_eyeeye == 0) && !this->is_spelling_specific(HEX_EYE_FOR_EYE)) || (this->monap_ptr->get_damage == 0) || this->caster_ptr->is_dead)
+    const auto is_eyeeye_finished = (this->caster_ptr->tim_eyeeye == 0) && !this->is_spelling_specific(HEX_EYE_FOR_EYE);
+    if (is_eyeeye_finished || (this->monap_ptr->get_damage == 0) || this->caster_ptr->is_dead) {
         return;
+    }
 
 #ifdef JP
     msg_format("攻撃が%s自身を傷つけた！", this->monap_ptr->m_name);
@@ -408,9 +410,12 @@ void RealmHex::eyes_on_eyes()
     monster_desc(this->caster_ptr, m_name_self, this->monap_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
     msg_format("The attack of %s has wounded %s!", this->monap_ptr->m_name, m_name_self);
 #endif
-    project(this->caster_ptr, 0, 0, this->monap_ptr->m_ptr->fy, this->monap_ptr->m_ptr->fx, this->monap_ptr->get_damage, GF_MISSILE, PROJECT_KILL);
-    if (this->caster_ptr->tim_eyeeye)
+    const auto y = this->monap_ptr->m_ptr->fy;
+    const auto x = this->monap_ptr->m_ptr->fx;
+    project(this->caster_ptr, 0, 0, y, x, this->monap_ptr->get_damage, GF_MISSILE, PROJECT_KILL);
+    if (this->caster_ptr->tim_eyeeye) {
         set_tim_eyeeye(this->caster_ptr, this->caster_ptr->tim_eyeeye - 5, true);
+    }
 }
 
 void RealmHex::thief_teleport()
@@ -419,8 +424,9 @@ void RealmHex::thief_teleport()
         throw("Invalid constructor was used!");
     }
 
-    if (!this->monap_ptr->blinked || !this->monap_ptr->alive || this->caster_ptr->is_dead)
+    if (!this->monap_ptr->blinked || !this->monap_ptr->alive || this->caster_ptr->is_dead) {
         return;
+    }
 
     if (this->check_hex_barrier(this->monap_ptr->m_idx, HEX_ANTI_TELE)) {
         msg_print(_("泥棒は笑って逃げ...ようとしたがバリアに防がれた。", "The thief flees laughing...? But a magic barrier obstructs it."));
