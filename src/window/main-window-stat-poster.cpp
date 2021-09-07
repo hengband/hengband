@@ -367,6 +367,92 @@ void print_imitation(player_type *player_ptr)
 }
 
 /*!
+ * @brief 画面下部に表示すべき呪術の呪文をリストアップする
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @bar_flags 表示可否を決めるためのフラグ群
+ */
+static void add_hex_status_flags(player_type *creature_ptr, BIT_FLAGS *bar_flags)
+{
+    if (creature_ptr->realm1 != REALM_HEX) {
+        return;
+    }
+
+    RealmHex realm_hex(creature_ptr);
+    if (realm_hex.is_spelling_specific(HEX_BLESS)) {
+        ADD_BAR_FLAG(BAR_BLESSED);
+    }
+
+    if (realm_hex.is_spelling_specific(HEX_DEMON_AURA)) {
+        ADD_BAR_FLAG(BAR_SHFIRE);
+        ADD_BAR_FLAG(BAR_REGENERATION);
+    }
+
+    if (realm_hex.is_spelling_specific(HEX_XTRA_MIGHT)) {
+        ADD_BAR_FLAG(BAR_MIGHT);
+    }
+
+    if (realm_hex.is_spelling_specific(HEX_DETECT_EVIL)) {
+        ADD_BAR_FLAG(BAR_ESP_EVIL);
+    }
+
+    if (realm_hex.is_spelling_specific(HEX_ICE_ARMOR)) {
+        ADD_BAR_FLAG(BAR_SHCOLD);
+    }
+
+    if (realm_hex.is_spelling_specific(HEX_RUNESWORD)) {
+        ADD_BAR_FLAG(BAR_RUNESWORD);
+    }
+
+    if (realm_hex.is_spelling_specific(HEX_BUILDING)) {
+        ADD_BAR_FLAG(BAR_BUILD);
+    }
+
+    if (realm_hex.is_spelling_specific(HEX_ANTI_TELE)) {
+        ADD_BAR_FLAG(BAR_ANTITELE);
+    }
+
+    if (realm_hex.is_spelling_specific(HEX_SHOCK_CLOAK)) {
+        ADD_BAR_FLAG(BAR_SHELEC);
+    }
+
+    if (realm_hex.is_spelling_specific(HEX_SHADOW_CLOAK)) {
+        ADD_BAR_FLAG(BAR_SHSHADOW);
+    }
+
+    if (realm_hex.is_spelling_specific(HEX_CONFUSION)) {
+        ADD_BAR_FLAG(BAR_ATTKCONF);
+    }
+
+    if (realm_hex.is_spelling_specific(HEX_EYE_FOR_EYE)) {
+        ADD_BAR_FLAG(BAR_EYEEYE);
+    }
+
+    if (realm_hex.is_spelling_specific(HEX_ANTI_MULTI)) {
+        ADD_BAR_FLAG(BAR_ANTIMULTI);
+    }
+
+    if (realm_hex.is_spelling_specific(HEX_VAMP_BLADE)) {
+        ADD_BAR_FLAG(BAR_VAMPILIC);
+    }
+
+    if (realm_hex.is_spelling_specific(HEX_ANTI_MAGIC)) {
+        ADD_BAR_FLAG(BAR_ANTIMAGIC);
+    }
+
+    if (realm_hex.is_spelling_specific(HEX_CURE_LIGHT) || realm_hex.is_spelling_specific(HEX_CURE_SERIOUS)
+        || realm_hex.is_spelling_specific(HEX_CURE_CRITICAL)) {
+        ADD_BAR_FLAG(BAR_CURE);
+    }
+
+    if (hex_revenge_turn(creature_ptr)) {
+        if (hex_revenge_type(creature_ptr) == 1)
+            ADD_BAR_FLAG(BAR_PATIENCE);
+        if (hex_revenge_type(creature_ptr) == 2)
+            ADD_BAR_FLAG(BAR_REVENGE);
+    }
+}
+
+/*!
  * @brief 下部に状態表示を行う / Show status bar
  */
 void print_status(player_type *creature_ptr)
@@ -537,50 +623,7 @@ void print_status(player_type *creature_ptr)
     if (creature_ptr->tim_eyeeye)
         ADD_BAR_FLAG(BAR_EYEEYE);
 
-    if (creature_ptr->realm1 == REALM_HEX) {
-        if (hex_spelling(creature_ptr, HEX_BLESS))
-            ADD_BAR_FLAG(BAR_BLESSED);
-        if (hex_spelling(creature_ptr, HEX_DEMON_AURA)) {
-            ADD_BAR_FLAG(BAR_SHFIRE);
-            ADD_BAR_FLAG(BAR_REGENERATION);
-        }
-        if (hex_spelling(creature_ptr, HEX_XTRA_MIGHT))
-            ADD_BAR_FLAG(BAR_MIGHT);
-        if (hex_spelling(creature_ptr, HEX_DETECT_EVIL))
-            ADD_BAR_FLAG(BAR_ESP_EVIL);
-        if (hex_spelling(creature_ptr, HEX_ICE_ARMOR))
-            ADD_BAR_FLAG(BAR_SHCOLD);
-        if (hex_spelling(creature_ptr, HEX_RUNESWORD))
-            ADD_BAR_FLAG(BAR_RUNESWORD);
-        if (hex_spelling(creature_ptr, HEX_BUILDING))
-            ADD_BAR_FLAG(BAR_BUILD);
-        if (hex_spelling(creature_ptr, HEX_ANTI_TELE))
-            ADD_BAR_FLAG(BAR_ANTITELE);
-        if (hex_spelling(creature_ptr, HEX_SHOCK_CLOAK))
-            ADD_BAR_FLAG(BAR_SHELEC);
-        if (hex_spelling(creature_ptr, HEX_SHADOW_CLOAK))
-            ADD_BAR_FLAG(BAR_SHSHADOW);
-        if (hex_spelling(creature_ptr, HEX_CONFUSION))
-            ADD_BAR_FLAG(BAR_ATTKCONF);
-        if (hex_spelling(creature_ptr, HEX_EYE_FOR_EYE))
-            ADD_BAR_FLAG(BAR_EYEEYE);
-        if (hex_spelling(creature_ptr, HEX_ANTI_MULTI))
-            ADD_BAR_FLAG(BAR_ANTIMULTI);
-        if (hex_spelling(creature_ptr, HEX_VAMP_BLADE))
-            ADD_BAR_FLAG(BAR_VAMPILIC);
-        if (hex_spelling(creature_ptr, HEX_ANTI_MAGIC))
-            ADD_BAR_FLAG(BAR_ANTIMAGIC);
-        if (hex_spelling(creature_ptr, HEX_CURE_LIGHT) || hex_spelling(creature_ptr, HEX_CURE_SERIOUS) || hex_spelling(creature_ptr, HEX_CURE_CRITICAL))
-            ADD_BAR_FLAG(BAR_CURE);
-
-        if (hex_revenge_turn(creature_ptr)) {
-            if (hex_revenge_type(creature_ptr) == 1)
-                ADD_BAR_FLAG(BAR_PATIENCE);
-            if (hex_revenge_type(creature_ptr) == 2)
-                ADD_BAR_FLAG(BAR_REVENGE);
-        }
-    }
-
+    add_hex_status_flags(creature_ptr, bar_flags);
     TERM_LEN col = 0, num = 0;
     for (int i = 0; stat_bars[i].sstr; i++) {
         if (IS_BAR_FLAG(i)) {

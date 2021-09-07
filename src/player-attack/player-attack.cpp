@@ -487,10 +487,9 @@ static void apply_actual_attack(
     pa_ptr->magical_effect = select_magical_brand_effect(attacker_ptr, pa_ptr);
     decide_blood_sucking(attacker_ptr, pa_ptr);
 
-    // process_monk_attackの中でplayer_type->magic_num1[0] を書き換えているので、ここでhex_spelling() の判定をしないとダメ.
-    bool vorpal_cut
-        = (pa_ptr->flags.has(TR_VORPAL) || hex_spelling(attacker_ptr, HEX_RUNESWORD)) && (randint1(vorpal_chance * 3 / 2) == 1) && !is_zantetsu_nullified;
-
+    // process_monk_attackの中でplayer_type->magic_num1[0] を書き換えているので、ここでis_spelling_specific() の判定をしないとダメ.
+    bool vorpal_cut = (pa_ptr->flags.has(TR_VORPAL) || RealmHex(attacker_ptr).is_spelling_specific(HEX_RUNESWORD)) && (randint1(vorpal_chance * 3 / 2) == 1)
+        && !is_zantetsu_nullified;
     calc_attack_damage(attacker_ptr, pa_ptr, do_quake, vorpal_cut, vorpal_chance);
     apply_damage_bonus(attacker_ptr, pa_ptr);
     apply_damage_negative_effect(pa_ptr, is_zantetsu_nullified, is_ej_nullified);

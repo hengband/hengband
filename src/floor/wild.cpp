@@ -887,8 +887,10 @@ bool change_wild_mode(player_type *creature_ptr, bool encount)
     energy.set_player_turn_energy(1000);
     creature_ptr->oldpx = creature_ptr->x;
     creature_ptr->oldpy = creature_ptr->y;
-    if (hex_spelling_any(creature_ptr))
-        stop_hex_spell_all(creature_ptr);
+    RealmHex realm_hex(creature_ptr);
+    if (realm_hex.is_spelling_any()) {
+        realm_hex.stop_all_spells();
+    }
 
     set_action(creature_ptr, ACTION_NONE);
     creature_ptr->wild_mode = true;

@@ -83,8 +83,9 @@ void set_action(player_type *creature_ptr, uint8_t typ)
     if (prev_typ == ACTION_SING)
         stop_singing(creature_ptr);
 
-    if (prev_typ == ACTION_SPELL)
-        stop_hex_spell(creature_ptr);
+    if (prev_typ == ACTION_SPELL) {
+        (void)RealmHex(creature_ptr).stop_one_spell();
+    }
 
     switch (creature_ptr->action) {
     case ACTION_SEARCH: {

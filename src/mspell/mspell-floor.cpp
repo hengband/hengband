@@ -108,7 +108,7 @@ MonsterSpellResult spell_RF6_BLINK(player_type *target_ptr, MONSTER_IDX m_idx, i
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         disturb(target_ptr, true, true);
 
-    if (!is_quantum_effect && teleport_barrier(target_ptr, m_idx)) {
+    if (!is_quantum_effect && RealmHex(target_ptr).check_hex_barrier(m_idx, HEX_ANTI_TELE)) {
         if (see_monster(target_ptr, m_idx))
             msg_format(_("魔法のバリアが%^sのテレポートを邪魔した。", "Magic barrier obstructs teleporting of %^s."), m_name);
         return res;
@@ -142,7 +142,7 @@ MonsterSpellResult spell_RF6_TPORT(player_type *target_ptr, MONSTER_IDX m_idx, i
 
     if (TARGET_TYPE == MONSTER_TO_PLAYER)
         disturb(target_ptr, true, true);
-    if (teleport_barrier(target_ptr, m_idx)) {
+    if (RealmHex(target_ptr).check_hex_barrier(m_idx, HEX_ANTI_TELE)) {
         if (see_monster(target_ptr, m_idx))
             msg_format(_("魔法のバリアが%^sのテレポートを邪魔した。", "Magic barrier obstructs teleporting of %^s."), m_name);
         return res;

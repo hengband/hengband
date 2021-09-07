@@ -421,12 +421,18 @@ void process_upkeep_with_speed(player_type *creature_ptr)
         return;
 
     while (creature_ptr->enchant_energy_need <= 0) {
-        if (!load)
+        if (!load) {
             check_music(creature_ptr);
-        if (!load)
-            check_hex(creature_ptr);
-        if (!load)
-            revenge_spell(creature_ptr);
+        }
+
+        RealmHex realm_hex(creature_ptr);
+        if (!load) {
+            realm_hex.decrease_mana();
+        }
+
+        if (!load) {
+            realm_hex.continue_revenge();
+        }
 
         creature_ptr->enchant_energy_need += ENERGY_NEED();
     }

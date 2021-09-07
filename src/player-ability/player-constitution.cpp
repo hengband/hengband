@@ -55,7 +55,7 @@ int16_t PlayerConstitution::time_effect_value()
     int16_t result = 0;
 
     if (this->owner_ptr->realm1 == REALM_HEX) {
-        if (hex_spelling(this->owner_ptr, HEX_BUILDING)) {
+        if (RealmHex(this->owner_ptr).is_spelling_specific(HEX_BUILDING)) {
             result += 4;
         }
     }

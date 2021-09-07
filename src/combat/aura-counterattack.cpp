@@ -177,7 +177,7 @@ static void aura_force_by_monster_attack(player_type *target_ptr, monap_type *mo
 
 static void aura_shadow_by_monster_attack(player_type *target_ptr, monap_type *monap_ptr)
 {
-    if (!hex_spelling(target_ptr, HEX_SHADOW_CLOAK) || !monap_ptr->alive || target_ptr->is_dead)
+    if (!RealmHex(target_ptr).is_spelling_specific(HEX_SHADOW_CLOAK) || !monap_ptr->alive || target_ptr->is_dead)
         return;
 
     HIT_POINT dam = 1;

@@ -113,7 +113,7 @@ int16_t PlayerStealth::time_effect_value()
 {
     int16_t result = 0;
     if (this->owner_ptr->realm1 == REALM_HEX) {
-        if (hex_spelling_any(this->owner_ptr))
+        if (RealmHex(this->owner_ptr).is_spelling_any())
             result -= (1 + casting_hex_num(this->owner_ptr));
     }
     if (is_shero(this->owner_ptr)) {

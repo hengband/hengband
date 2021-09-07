@@ -27,7 +27,7 @@ void do_cmd_quaff_potion(player_type *creature_ptr)
     if (creature_ptr->wild_mode)
         return;
 
-    if (!hex_spelling(creature_ptr, HEX_INHAIL) && cmd_limit_arena(creature_ptr))
+    if (!RealmHex(creature_ptr).is_spelling_specific(HEX_INHAIL) && cmd_limit_arena(creature_ptr))
         return;
 
     if (creature_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))

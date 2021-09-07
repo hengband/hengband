@@ -269,7 +269,7 @@ void change_monster_stat(player_type *attacker_ptr, player_attack_type *pa_ptr, 
     object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_MAIN_HAND + pa_ptr->hand];
 
     if (any_bits(attacker_ptr->special_attack, ATTACK_CONFUSE) || pa_ptr->chaos_effect == CE_CONFUSION || pa_ptr->mode == HISSATSU_CONF
-        || hex_spelling(attacker_ptr, HEX_CONFUSION))
+        || RealmHex(attacker_ptr).is_spelling_specific(HEX_CONFUSION))
         attack_confuse(attacker_ptr, pa_ptr);
 
     if (pa_ptr->magical_effect == MagicalBrandEffect::STUN)

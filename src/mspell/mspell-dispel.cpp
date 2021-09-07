@@ -81,7 +81,7 @@ static void dispel_player(player_type *creature_ptr)
         msg_print(_("手の輝きがなくなった。", "Your hands stop glowing."));
     }
 
-    if (music_singing_any(creature_ptr) || hex_spelling_any(creature_ptr)) {
+    if (music_singing_any(creature_ptr) || RealmHex(creature_ptr).is_spelling_any()) {
         concptr str = (music_singing_any(creature_ptr)) ? _("歌", "singing") : _("呪文", "casting");
         set_interrupting_song_effect(creature_ptr, get_singing_song_effect(creature_ptr));
         set_singing_song_effect(creature_ptr, MUSIC_NONE);

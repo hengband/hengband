@@ -491,9 +491,9 @@ static void update_max_hitpoints(player_type *creature_ptr)
         mhp += 30;
     if (creature_ptr->tsuyoshi)
         mhp += 50;
-    if (hex_spelling(creature_ptr, HEX_XTRA_MIGHT))
+    if (RealmHex(creature_ptr).is_spelling_specific(HEX_XTRA_MIGHT))
         mhp += 15;
-    if (hex_spelling(creature_ptr, HEX_BUILDING))
+    if (RealmHex(creature_ptr).is_spelling_specific(HEX_BUILDING))
         mhp += 60;
     if (creature_ptr->mhp == mhp)
         return;
@@ -1442,7 +1442,7 @@ static int16_t calc_num_blow(player_type *creature_ptr, int i)
                 mul = 4;
             }
 
-            if (hex_spelling(creature_ptr, HEX_XTRA_MIGHT) || hex_spelling(creature_ptr, HEX_BUILDING)) {
+            if (RealmHex(creature_ptr).is_spelling_specific(HEX_XTRA_MIGHT) || RealmHex(creature_ptr).is_spelling_specific(HEX_BUILDING)) {
                 num++;
                 wgt /= 2;
                 mul += 2;
@@ -1710,7 +1710,7 @@ static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_real_value)
     }
 
     if (creature_ptr->realm1 == REALM_HEX) {
-        if (hex_spelling(creature_ptr, HEX_ICE_ARMOR)) {
+        if (RealmHex(creature_ptr).is_spelling_specific(HEX_ICE_ARMOR)) {
             ac += 30;
         }
 
@@ -1995,7 +1995,7 @@ static int16_t calc_to_damage(player_type *creature_ptr, INVENTORY_IDX slot, boo
     }
 
     if ((creature_ptr->realm1 == REALM_HEX) && o_ptr->is_cursed()) {
-        if (hex_spelling(creature_ptr, HEX_RUNESWORD)) {
+        if (RealmHex(creature_ptr).is_spelling_specific(HEX_RUNESWORD)) {
             if (o_ptr->curse_flags.has(TRC::CURSED)) {
                 damage += 5;
             }
@@ -2937,7 +2937,7 @@ long calc_score(player_type *creature_ptr)
  */
 bool is_blessed(player_type *creature_ptr)
 {
-    return creature_ptr->blessed || music_singing(creature_ptr, MUSIC_BLESS) || hex_spelling(creature_ptr, HEX_BLESS);
+    return creature_ptr->blessed || music_singing(creature_ptr, MUSIC_BLESS) || RealmHex(creature_ptr).is_spelling_specific(HEX_BLESS);
 }
 
 bool is_tim_esp(player_type *creature_ptr)
@@ -2968,8 +2968,10 @@ void stop_mouth(player_type *caster_ptr)
 {
     if (music_singing_any(caster_ptr))
         stop_singing(caster_ptr);
-    if (hex_spelling_any(caster_ptr))
-        stop_hex_spell_all(caster_ptr);
+
+    if (RealmHex(caster_ptr).is_spelling_any()) {
+        (void)RealmHex(caster_ptr).stop_all_spells();
+    }
 }
 
 bool is_fast(player_type *creature_ptr)

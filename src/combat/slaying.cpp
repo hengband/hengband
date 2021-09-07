@@ -166,7 +166,7 @@ HIT_POINT calc_attack_damage_with_slay(player_type *attacker_ptr, object_type *o
             flgs.set(TR_BRAND_POIS);
     }
 
-    if (hex_spelling(attacker_ptr, HEX_RUNESWORD))
+    if (RealmHex(attacker_ptr).is_spelling_specific(HEX_RUNESWORD))
         flgs.set(TR_SLAY_GOOD);
 
     MULTIPLY mult = 10;

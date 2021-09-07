@@ -188,7 +188,7 @@ static bool check_mspell_unexploded(player_type *target_ptr, msa_type *msa_ptr)
         return true;
     }
 
-    if (!spell_is_inate(msa_ptr->thrown_spell) && magic_barrier(target_ptr, msa_ptr->m_idx)) {
+    if (!spell_is_inate(msa_ptr->thrown_spell) && RealmHex(target_ptr).check_hex_barrier(msa_ptr->m_idx, HEX_ANTI_MAGIC)) {
         msg_format(_("反魔法バリアが%^sの呪文をかき消した。", "Anti magic barrier cancels the spell which %^s casts."), msa_ptr->m_name);
         return true;
     }

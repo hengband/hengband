@@ -141,7 +141,7 @@ static void compare_weapon_aux(player_type *owner_ptr, object_type *o_ptr, int c
     mindam = calc_expect_crit(owner_ptr, o_ptr->weight, o_ptr->to_h, mindice, owner_ptr->to_h[0], dokubari, impact);
     maxdam = calc_expect_crit(owner_ptr, o_ptr->weight, o_ptr->to_h, maxdice, owner_ptr->to_h[0], dokubari, impact);
     show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("会心:", "Critical:"), TERM_L_RED);
-    if ((flgs.has(TR_VORPAL) || hex_spelling(owner_ptr, HEX_RUNESWORD))) {
+    if ((flgs.has(TR_VORPAL) || RealmHex(owner_ptr).is_spelling_specific(HEX_RUNESWORD))) {
         if ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)) {
             vorpal_mult = 5;
             vorpal_div = 3;
