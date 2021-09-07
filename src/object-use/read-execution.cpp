@@ -96,7 +96,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
         stop_singing(creature_ptr);
 
     RealmHex realm_hex(creature_ptr);
-    if (realm_hex.is_spelling_any() && ((creature_ptr->lev < 35) || realm_hex.is_using_full_capacity())) {
+    if (realm_hex.is_spelling_any() && ((creature_ptr->lev < 35) || realm_hex.is_casting_full_capacity())) {
         (void)RealmHex(creature_ptr).stop_all_spells();
     }
 

@@ -30,11 +30,11 @@ RealmHex::RealmHex(player_type *caster_ptr)
     constexpr int max_realm_spells = 32;
     for (auto spell = 0; spell < max_realm_spells; spell++) {
         if (this->is_spelling_specific(spell)) {
-            this->spells.push_back(spell);
+            this->casting_spells.push_back(spell);
         }
     }
 
-    if (this->spells.size() > MAX_KEEP) {
+    if (this->casting_spells.size() > MAX_KEEP) {
         throw("Invalid numbers of hex magics keep!");
     }
 }
@@ -44,7 +44,7 @@ RealmHex::RealmHex(player_type *caster_ptr)
  */
 bool RealmHex::stop_all_spells()
 {
-    for (auto spell : this->spells) {
+    for (auto spell : this->casting_spells) {
         exe_spell(this->caster_ptr, REALM_HEX, spell, SPELL_STOP);
     }
 
@@ -78,10 +78,10 @@ bool RealmHex::stop_one_spell()
         I2A(0), I2A(casting_hex_num(this->caster_ptr) - 1));
     screen_save();
     char choice = 0;
-    auto flag = select_spell_stopping(out_val, choice);
+    auto is_selected = select_spell_stopping(out_val, choice);
     screen_load();
-    if (flag) {
-        auto n = this->spells[A2I(choice)];
+    if (is_selected) {
+        auto n = this->casting_spells[A2I(choice)];
         exe_spell(this->caster_ptr, REALM_HEX, n, SPELL_STOP);
         casting_hex_flags(this->caster_ptr) &= ~(1UL << n);
         casting_hex_num(this->caster_ptr)--;
@@ -89,7 +89,7 @@ bool RealmHex::stop_one_spell()
 
     this->caster_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
     this->caster_ptr->redraw |= PR_EXTRA | PR_HP | PR_MANA;
-    return flag;
+    return is_selected;
 }
 
 /*!
@@ -102,7 +102,7 @@ bool RealmHex::stop_one_spell()
 bool RealmHex::select_spell_stopping(char *out_val, char &choice)
 {
     while (true) {
-        this->display_spells_list();
+        this->display_casting_spells_list();
         if (!get_com(out_val, &choice, true)) {
             return false;
         }
@@ -125,14 +125,14 @@ bool RealmHex::select_spell_stopping(char *out_val, char &choice)
     }
 }
 
-void RealmHex::display_spells_list()
+void RealmHex::display_casting_spells_list()
 {
     constexpr auto y = 1;
     constexpr auto x = 20;
     auto n = 0;
     term_erase(x, y, 255);
     prt(_("     名前", "     Name"), y, x + 5);
-    for (auto spell : this->spells) {
+    for (auto spell : this->casting_spells) {
         term_erase(x, y + n + 1, 255);
         auto spell_result = exe_spell(this->caster_ptr, REALM_HEX, spell, SPELL_NAME);
         put_str(format("%c)  %s", I2A(n), spell_result), y + n + 1, x + 2);
@@ -165,7 +165,7 @@ void RealmHex::decrease_mana()
     }
 
     this->gain_exp_from_hex();
-    for (auto spell : this->spells) {
+    for (auto spell : this->casting_spells) {
         exe_spell(this->caster_ptr, REALM_HEX, spell, SPELL_CONT);
     }
 }
@@ -217,7 +217,7 @@ bool RealmHex::check_restart()
 int RealmHex::calc_need_mana()
 {
     auto need_mana = 0;
-    for (auto spell : this->spells) {
+    for (auto spell : this->casting_spells) {
         const auto *s_ptr = &technic_info[REALM_HEX - MIN_TECHNIC][spell];
         need_mana += mod_need_mana(this->caster_ptr, s_ptr->smana, spell, REALM_HEX);
     }
@@ -227,7 +227,7 @@ int RealmHex::calc_need_mana()
 
 void RealmHex::gain_exp_from_hex()
 {
-    for (auto spell : this->spells) {
+    for (auto spell : this->casting_spells) {
         if (!this->is_spelling_specific(spell)) {
             continue;
         }
@@ -304,7 +304,7 @@ void RealmHex::gain_exp_master(const int spell)
  * @brief プレイヤーの呪術詠唱枠がすでに最大かどうかを返す
  * @return すでに全枠を利用しているならTRUEを返す
  */
-bool RealmHex::is_using_full_capacity() const
+bool RealmHex::is_casting_full_capacity() const
 {
     auto k_max = (this->caster_ptr->lev / 15) + 1;
     k_max = MIN(k_max, MAX_KEEP);

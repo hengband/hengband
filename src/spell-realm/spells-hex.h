@@ -13,7 +13,7 @@ public:
     bool stop_one_spell();
     void decrease_mana();
     bool stop_all_spells();
-    bool is_using_full_capacity() const;
+    bool is_casting_full_capacity() const;
     void continue_revenge();
     void store_vengeful_damage(HIT_POINT dam);
     bool check_hex_barrier(MONSTER_IDX m_idx, realm_hex_type type) const;
@@ -22,10 +22,10 @@ public:
 
 private:
     player_type *caster_ptr;
-    std::vector<int> spells;
+    std::vector<int> casting_spells;
     
     bool select_spell_stopping(char *out_val, char &choice);
-    void display_spells_list();
+    void display_casting_spells_list();
     bool process_mana_cost(const bool need_restart);
     bool check_restart();
     int calc_need_mana();
