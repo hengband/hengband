@@ -173,8 +173,11 @@ void RealmHex::decrease_mana()
         return;
     }
 
-    this->process_mana_cost(need_restart);
-    this->gain_exp_from_hex();        
+    if (!this->process_mana_cost(need_restart)) {
+        return;
+    }
+
+    this->gain_exp_from_hex();
 
     /* Do any effects of continual spells */
     for (auto spell = 0; spell < MAX_REALM_SPELLS; spell++) {
@@ -184,23 +187,28 @@ void RealmHex::decrease_mana()
     }
 }
 
-void RealmHex::process_mana_cost(const bool need_restart)
+/*!
+ * @brief 継続的な呪文の詠唱が可能な程度にMPが残っているか確認し、残量に応じて継続・中断を行う
+ * @param need_restart 詠唱を再開するか否か
+ * @return MPが足りているか否か
+ */
+bool RealmHex::process_mana_cost(const bool need_restart)
 {
     auto need_mana = this->calc_need_mana();
     uint need_mana_frac = 0;
     s64b_div(&need_mana, &need_mana_frac, 0, 3); /* Divide by 3 */
     need_mana += (casting_hex_num(this->caster_ptr) - 1);
 
-    auto enough_mana = s64b_cmp(this->caster_ptr->csp, this->caster_ptr->csp_frac, need_mana, need_mana_frac) < 0;
+    auto enough_mana = s64b_cmp(this->caster_ptr->csp, this->caster_ptr->csp_frac, need_mana, need_mana_frac) >= 0;
     if (!enough_mana) {
         this->stop_all_spells();
-        return;
+        return false;
     }
 
     s64b_sub(&(this->caster_ptr->csp), &(this->caster_ptr->csp_frac), need_mana, need_mana_frac);
     this->caster_ptr->redraw |= PR_MANA;
     if (!need_restart) {
-        return;
+        return true;
     }
 
     msg_print(_("詠唱を再開した。", "You restart casting."));
@@ -209,6 +217,7 @@ void RealmHex::process_mana_cost(const bool need_restart)
     this->caster_ptr->redraw |= PR_MAP | PR_STATUS | PR_STATE;
     this->caster_ptr->update |= PU_MONSTERS;
     this->caster_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
+    return true;
 }
 
 bool RealmHex::check_restart()
@@ -272,7 +281,7 @@ bool RealmHex::gain_exp_skilled(const int spell)
     if (gain_condition) {
         this->caster_ptr->spell_exp[spell]++;
     }
-    
+
     return true;
 }
 
