@@ -33,6 +33,10 @@ RealmHex::RealmHex(player_type *caster_ptr)
             this->spells.push_back(spell);
         }
     }
+
+    if (this->spells.size() > MAX_KEEP) {
+        throw("Invalid numbers of hex magics keep!");
+    }
 }
 
 /*!
@@ -77,7 +81,7 @@ bool RealmHex::stop_one_spell()
     auto flag = select_spell_stopping(out_val, choice);
     screen_load();
     if (flag) {
-        auto n = this->spells.at(A2I(choice));
+        auto n = this->spells[A2I(choice)];
         exe_spell(this->caster_ptr, REALM_HEX, n, SPELL_STOP);
         casting_hex_flags(this->caster_ptr) &= ~(1UL << n);
         casting_hex_num(this->caster_ptr)--;
