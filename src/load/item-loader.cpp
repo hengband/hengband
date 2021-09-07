@@ -157,11 +157,7 @@ void rd_item(object_type *o_ptr)
         if (loading_savefile_version_is_older_than(5)) {
             uint32_t tmp32u;
             rd_u32b(&tmp32u);
-            std::bitset<32> rd_bits_cursed_flags(tmp32u);
-            for (size_t i = 0; i < std::min(o_ptr->curse_flags.size(), rd_bits_cursed_flags.size()); i++) {
-                auto f = static_cast<TRC>(i);
-                o_ptr->curse_flags[f] = rd_bits_cursed_flags[i];
-            }
+            migrate_bitflag_to_flaggroup(o_ptr->curse_flags, tmp32u);
         } else {
             rd_FlagGroup(o_ptr->curse_flags, rd_byte);
         }

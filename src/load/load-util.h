@@ -29,18 +29,19 @@ bool loading_savefile_version_is_older_than(uint32_t version);
  * @tparam FG FlagGroupクラスのテンプレート型引数等を含めた型
  * @tparam BitFlagType ビットフラグデータの型
  * @param flaggroup ビットフラグデータを反映させるFlagGroupオブジェクトの参照
- * @param bitflags ビットフラグデータの内容
- * @param start_pos ビットフラグデータを反映させるFlagGroupオブジェクトのフラグ番号開始位置
+ * @param bitflag ビットフラグデータの内容
+ * @param start_pos ビットフラグデータを反映させるFlagGroupオブジェクトのフラグ番号開始位置。省略した場合は0(先頭)。
+ * @param count_max ビットフラグデータから反映する最大ビット数。省略した場合はビットフラグデータ型のビット数(全ビットを反映する)。
  */
-template <typename FG, typename BitFlagType>
-void migrate_bitflag_to_flaggroup(FG &flaggroup, BitFlagType bitflags, uint start_pos = 0)
+template <typename FG, typename BitFlagType, size_t BIT_COUNT = sizeof(BitFlagType) * 8>
+void migrate_bitflag_to_flaggroup(FG &flaggroup, BitFlagType bitflag, uint start_pos = 0, size_t count_max = BIT_COUNT)
 {
     if (start_pos >= flaggroup.size()) {
         return;
     }
 
-    std::bitset<sizeof(BitFlagType) * 8> bs(bitflags);
-    for (size_t i = 0, count = std::min(flaggroup.size() - start_pos, bs.size()); i < count; i++) {
+    std::bitset<BIT_COUNT> bs(bitflag);
+    for (size_t i = 0, count = std::min(flaggroup.size() - start_pos, count_max); i < count; i++) {
         auto f = static_cast<typename FG::flag_type>(start_pos + i);
         flaggroup[f] = bs[i];
     }

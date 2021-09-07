@@ -70,16 +70,9 @@ void rd_lore(monster_race *r_ptr, MONRACE_IDX r_idx)
         else
             rd_u32b(&r_ptr->r_flagsr);
 
-        auto migrate = [r_ptr](uint32_t f, int start_idx) {
-            std::bitset<32> flag_bits(f);
-            for (size_t i = 0; i < flag_bits.size(); i++) {
-                auto ability = static_cast<RF_ABILITY>(start_idx + i);
-                r_ptr->r_ability_flags[ability] = flag_bits[i];
-            }
-        };
-        migrate(f4, 0);
-        migrate(f5, 32);
-        migrate(f6, 64);
+        migrate_bitflag_to_flaggroup(r_ptr->r_ability_flags, f4, sizeof(uint32_t) * 8 * 0);
+        migrate_bitflag_to_flaggroup(r_ptr->r_ability_flags, f5, sizeof(uint32_t) * 8 * 1);
+        migrate_bitflag_to_flaggroup(r_ptr->r_ability_flags, f6, sizeof(uint32_t) * 8 * 2);
     } else {
         rd_u32b(&r_ptr->r_flagsr);
         rd_FlagGroup(r_ptr->r_ability_flags, rd_byte);

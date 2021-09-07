@@ -153,11 +153,7 @@ void rd_item_old(object_type *o_ptr)
     } else {
         uint32_t tmp32u;
         rd_u32b(&tmp32u);
-        std::bitset<32> rd_bits_cursed_flags(tmp32u);
-        for (size_t i = 0; i < std::min(o_ptr->curse_flags.size(), rd_bits_cursed_flags.size()); i++) {
-            auto f = static_cast<TRC>(i);
-            o_ptr->curse_flags[f] = rd_bits_cursed_flags[i];
-        }
+        migrate_bitflag_to_flaggroup(o_ptr->curse_flags, tmp32u);
     }
 
     rd_s16b(&o_ptr->held_m_idx);
@@ -436,14 +432,11 @@ void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
 
     uint32_t tmp32u;
     rd_u32b(&tmp32u);
-    std::bitset<32> rd_bits_smart(tmp32u);
-    for (size_t i = 0; i < std::min(m_ptr->smart.size(), rd_bits_smart.size()); i++) {
-        auto f = static_cast<SM>(i);
-        m_ptr->smart[f] = rd_bits_smart[i];
-    }
+    migrate_bitflag_to_flaggroup(m_ptr->smart, tmp32u);
 
     // 3.0.0Alpha10以前のSM_CLONED(ビット位置22)、SM_PET(23)、SM_FRIEDLY(28)をMFLAG2に移行する
     // ビット位置の定義はなくなるので、ビット位置の値をハードコードする。
+    std::bitset<32> rd_bits_smart(tmp32u);
     m_ptr->mflag2[MFLAG2::CLONED] = rd_bits_smart[22];
     m_ptr->mflag2[MFLAG2::PET] = rd_bits_smart[23];
     m_ptr->mflag2[MFLAG2::FRIENDLY] = rd_bits_smart[28];
@@ -464,11 +457,7 @@ void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
     } else {
         rd_byte(&tmp8u);
         constexpr auto base = enum2i(MFLAG2::KAGE);
-        std::bitset<7> rd_bits_mflag2(tmp8u);
-        for (size_t i = 0; i < std::min(m_ptr->mflag2.size(), rd_bits_mflag2.size()); ++i) {
-            auto f = static_cast<MFLAG2>(base + i);
-            m_ptr->mflag2[f] = rd_bits_mflag2[i];
-        }
+        migrate_bitflag_to_flaggroup(m_ptr->mflag2, tmp8u, base, 7);
     }
 
     if (h_older_than(1, 0, 12)) {

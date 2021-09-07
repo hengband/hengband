@@ -419,14 +419,7 @@ static void set_mutations(player_type *creature_ptr)
         for (int i = 0; i < 3; i++) {
             uint32_t tmp32u;
             rd_u32b(&tmp32u);
-            std::bitset<32> rd_bits(tmp32u);
-            for (size_t j = 0; j < rd_bits.size(); j++) {
-                size_t pos = i * rd_bits.size() + j;
-                if (pos < creature_ptr->muta.size()) {
-                    auto f = static_cast<MUTA>(pos);
-                    creature_ptr->muta[f] = rd_bits[j];
-                }
-            }
+            migrate_bitflag_to_flaggroup(creature_ptr->muta, tmp32u, i * 32);
         }
     } else {
         rd_FlagGroup(creature_ptr->muta, rd_byte);
