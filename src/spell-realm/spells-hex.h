@@ -22,10 +22,10 @@ public:
 
 private:
     player_type *caster_ptr;
-
-    bool select_spell_stopping(const std::vector<int> &spells, char *out_val, char &choice);
-    std::vector<int> make_spells_list();
-    void display_spells_list(const std::vector<int> &spells);
+    std::vector<int> spells;
+    
+    bool select_spell_stopping(char *out_val, char &choice);
+    void display_spells_list();
     bool process_mana_cost(const bool need_restart);
     bool check_restart();
     int calc_need_mana();
