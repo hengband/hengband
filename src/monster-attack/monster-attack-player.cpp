@@ -454,47 +454,13 @@ static bool process_monster_blows(player_type *target_ptr, monap_type *monap_ptr
     return false;
 }
 
-/*!
- * @brief 呪術「目には目を」の効果処理
- * @param target_ptr プレーヤーへの参照ポインタ
- * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
- */
-static void eyes_on_eyes(player_type *target_ptr, monap_type *monap_ptr)
-{
-    if (((target_ptr->tim_eyeeye == 0) && !RealmHex(target_ptr).is_spelling_specific(HEX_EYE_FOR_EYE)) || (monap_ptr->get_damage == 0) || target_ptr->is_dead)
-        return;
-
-#ifdef JP
-    msg_format("攻撃が%s自身を傷つけた！", monap_ptr->m_name);
-#else
-    GAME_TEXT m_name_self[MAX_MONSTER_NAME];
-    monster_desc(target_ptr, m_name_self, monap_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
-    msg_format("The attack of %s has wounded %s!", monap_ptr->m_name, m_name_self);
-#endif
-    project(target_ptr, 0, 0, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, monap_ptr->get_damage, GF_MISSILE, PROJECT_KILL);
-    if (target_ptr->tim_eyeeye)
-        set_tim_eyeeye(target_ptr, target_ptr->tim_eyeeye - 5, true);
-}
-
-static void thief_teleport(player_type *target_ptr, monap_type *monap_ptr)
-{
-    if (!monap_ptr->blinked || !monap_ptr->alive || target_ptr->is_dead)
-        return;
-
-    if (RealmHex(target_ptr).check_hex_barrier(monap_ptr->m_idx, HEX_ANTI_TELE)) {
-        msg_print(_("泥棒は笑って逃げ...ようとしたがバリアに防がれた。", "The thief flees laughing...? But a magic barrier obstructs it."));
-    } else {
-        msg_print(_("泥棒は笑って逃げた！", "The thief flees laughing!"));
-        teleport_away(target_ptr, monap_ptr->m_idx, MAX_SIGHT * 2 + 5, TELEPORT_SPONTANEOUS);
-    }
-}
-
 static void postprocess_monster_blows(player_type *target_ptr, monap_type *monap_ptr)
 {
-    RealmHex(target_ptr).store_vengeful_damage(monap_ptr->get_damage);
-    eyes_on_eyes(target_ptr, monap_ptr);
+    RealmHex realm_hex(target_ptr, monap_ptr);
+    realm_hex.store_vengeful_damage(monap_ptr->get_damage);
+    realm_hex.eyes_on_eyes();
     musou_counterattack(target_ptr, monap_ptr);
-    thief_teleport(target_ptr, monap_ptr);
+    realm_hex.thief_teleport();
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     if (target_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !target_ptr->current_floor_ptr->inside_arena)
         r_ptr->r_deaths++;
