@@ -2,6 +2,7 @@
 #include "cmd-item/cmd-smith.h" //!< @todo 相互参照している.
 #include "mind/mind-weaponsmith.h"
 #include "object-enchant/object-ego.h"
+#include "object-enchant/object-smith.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
@@ -46,38 +47,8 @@ TrFlags object_flags(const object_type *o_ptr)
     flgs.set(o_ptr->art_flags);
 
     if (o_ptr->is_smith()) {
-        int add = o_ptr->xtra3 - 1;
-        if (add < TR_FLAG_MAX) {
-            flgs.set(static_cast<tr_type>(add));
-        } else if (add == ESSENCE_TMP_RES_ACID) {
-            flgs.set(TR_RES_ACID);
-            flgs.set(TR_ACTIVATE);
-        } else if (add == ESSENCE_TMP_RES_ELEC) {
-            flgs.set(TR_RES_ELEC);
-            flgs.set(TR_ACTIVATE);
-        } else if (add == ESSENCE_TMP_RES_FIRE) {
-            flgs.set(TR_RES_FIRE);
-            flgs.set(TR_ACTIVATE);
-        } else if (add == ESSENCE_TMP_RES_COLD) {
-            flgs.set(TR_RES_COLD);
-            flgs.set(TR_ACTIVATE);
-        } else if (add == ESSENCE_SH_FIRE) {
-            flgs.set(TR_RES_FIRE);
-            flgs.set(TR_SH_FIRE);
-        } else if (add == ESSENCE_SH_ELEC) {
-            flgs.set(TR_RES_ELEC);
-            flgs.set(TR_SH_ELEC);
-        } else if (add == ESSENCE_SH_COLD) {
-            flgs.set(TR_RES_COLD);
-            flgs.set(TR_SH_COLD);
-        } else if (add == ESSENCE_RESISTANCE) {
-            flgs.set(TR_RES_ACID);
-            flgs.set(TR_RES_ELEC);
-            flgs.set(TR_RES_FIRE);
-            flgs.set(TR_RES_COLD);
-        } else if (add == TR_EARTHQUAKE) {
-            flgs.set(TR_ACTIVATE);
-        }
+        auto tr_flags = Smith::get_effect_tr_flags(static_cast<Smith::Effect>(o_ptr->xtra3));
+        flgs.set(tr_flags);
     }
 
     return flgs;
@@ -130,32 +101,8 @@ TrFlags object_flags_known(const object_type *o_ptr)
     if (!o_ptr->is_smith())
         return flgs;
 
-    int add = o_ptr->xtra3 - 1;
-    if (add < TR_FLAG_MAX) {
-        flgs.set(static_cast<tr_type>(add));
-    } else if (add == ESSENCE_TMP_RES_ACID) {
-        flgs.set(TR_RES_ACID);
-    } else if (add == ESSENCE_TMP_RES_ELEC) {
-        flgs.set(TR_RES_ELEC);
-    } else if (add == ESSENCE_TMP_RES_FIRE) {
-        flgs.set(TR_RES_FIRE);
-    } else if (add == ESSENCE_TMP_RES_COLD) {
-        flgs.set(TR_RES_COLD);
-    } else if (add == ESSENCE_SH_FIRE) {
-        flgs.set(TR_RES_FIRE);
-        flgs.set(TR_SH_FIRE);
-    } else if (add == ESSENCE_SH_ELEC) {
-        flgs.set(TR_RES_ELEC);
-        flgs.set(TR_SH_ELEC);
-    } else if (add == ESSENCE_SH_COLD) {
-        flgs.set(TR_RES_COLD);
-        flgs.set(TR_SH_COLD);
-    } else if (add == ESSENCE_RESISTANCE) {
-        flgs.set(TR_RES_ACID);
-        flgs.set(TR_RES_ELEC);
-        flgs.set(TR_RES_FIRE);
-        flgs.set(TR_RES_COLD);
-    }
+    auto tr_flags = Smith::get_effect_tr_flags(static_cast<Smith::Effect>(o_ptr->xtra3));
+    flgs.set(tr_flags).reset(TR_ACTIVATE);
 
     return flgs;
 }

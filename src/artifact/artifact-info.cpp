@@ -1,5 +1,5 @@
 ﻿/*!
- * @file artifact-info.cpp 
+ * @file artifact-info.cpp
  * @brief アーティファクトの発動効果取得関数定義
  */
 
@@ -9,6 +9,7 @@
 #include "mind/mind-weaponsmith.h"
 #include "object-enchant/activation-info-table.h"
 #include "object-enchant/object-ego.h"
+#include "object-enchant/object-smith.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-kind.h"
 #include "system/artifact-type-definition.h"
@@ -25,17 +26,19 @@
 int activation_index(const object_type *o_ptr)
 {
     if (o_ptr->is_smith()) {
-        switch (o_ptr->xtra3 - 1) {
-        case ESSENCE_TMP_RES_ACID:
+        switch (static_cast<Smith::Effect>(o_ptr->xtra3)) {
+        case Smith::Effect::TMP_RES_ACID:
             return ACT_RESIST_ACID;
-        case ESSENCE_TMP_RES_ELEC:
+        case Smith::Effect::TMP_RES_ELEC:
             return ACT_RESIST_ELEC;
-        case ESSENCE_TMP_RES_FIRE:
+        case Smith::Effect::TMP_RES_FIRE:
             return ACT_RESIST_FIRE;
-        case ESSENCE_TMP_RES_COLD:
+        case Smith::Effect::TMP_RES_COLD:
             return ACT_RESIST_COLD;
-        case TR_EARTHQUAKE:
+        case Smith::Effect::EARTHQUAKE:
             return ACT_QUAKE;
+        default:
+            break;
         }
     }
 
