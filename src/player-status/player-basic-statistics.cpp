@@ -46,7 +46,7 @@ int16_t PlayerBasicStatistics::get_value()
  */
 int16_t PlayerBasicStatistics::race_value()
 {
-    const player_race *tmp_rp_ptr;
+    const player_race_info *tmp_rp_ptr;
     if (this->owner_ptr->mimic_form)
         tmp_rp_ptr = &mimic_info[this->owner_ptr->mimic_form];
     else

@@ -66,9 +66,9 @@ struct player_race_condition {
 };
 
 /*!
- * @brief プレイヤー種族構造体 / Player racial info
+ * @brief プレイヤー種族情報構造体 / Player racial info
  */
-struct player_race {
+struct player_race_info {
     concptr title{}; //!< 種族名 / Title of race
 #ifdef JP
     concptr E_title{}; //!< 英語種族名
@@ -110,7 +110,7 @@ struct player_race {
     std::vector<player_race_condition> extra_flags;
 };
 
-extern const player_race *rp_ptr;
+extern const player_race_info *rp_ptr;
 
 struct player_type;
 SYMBOL_CODE get_summon_symbol_from_player(player_type *creature_ptr);

@@ -9,9 +9,9 @@
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 
-const player_race *rp_ptr;
+const player_race_info *rp_ptr;
 
-const player_race *get_player_race_info(player_type* creature_ptr, bool base_race = false)
+const player_race_info *get_player_race_info(player_type* creature_ptr, bool base_race = false)
 {
     if (base_race) {
         return &race_info[enum2i(creature_ptr->prace)];
