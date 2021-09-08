@@ -2322,6 +2322,9 @@
     <ClCompile Include="..\..\src\player-base\player-race.cpp">
       <Filter>player-base</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player-base\player-class.cpp">
+      <Filter>player-base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4993,6 +4996,9 @@
       <Filter>player-info</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player-base\player-race.h">
+      <Filter>player-base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-base\player-class.h">
       <Filter>player-base</Filter>
     </ClInclude>
   </ItemGroup>
