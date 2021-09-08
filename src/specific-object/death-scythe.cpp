@@ -15,14 +15,14 @@
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "player-attack/player-attack-util.h"
+#include "player-info/race-info.h"
 #include "player/player-damage.h"
-#include "player/player-race.h"
+#include "player/player-status-flags.h"
 #include "status/element-resistance.h"
 #include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
-#include "player/player-status-flags.h"
 
 /*!
  * @brief 死の大鎌ダメージが跳ね返ってきた時の、種族ごとのダメージ倍率を返す

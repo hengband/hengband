@@ -9,7 +9,7 @@
 #include "floor/floor-util.h"
 #include "game-option/option-flags.h"
 #include "object/item-tester-hooker.h"
-#include "player/player-race.h"
+#include "player-info/race-info.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"

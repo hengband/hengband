@@ -11,14 +11,14 @@
 #include "grid/feature.h"
 #include "io/input-key-requester.h"
 #include "io/write-diary.h"
+#include "player-info/race-info.h"
+#include "player-info/race-types.h"
 #include "player-status/player-energy.h"
 #include "player/player-damage.h"
 #include "player/player-move.h"
-#include "player/player-race-types.h"
-#include "player/player-race.h"
 #include "player/player-status.h"
-#include "spell/spells-status.h"
 #include "spell-kind/spells-teleport.h"
+#include "spell/spells-status.h"
 #include "status/bad-status-setter.h"
 #include "status/experience.h"
 #include "system/floor-type-definition.h"
@@ -26,8 +26,8 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
-#include "world/world.h"
 #include "world/world-movement-processor.h"
+#include "world/world.h"
 
 /*!
  * @brief パターン終点到達時のテレポート処理を行う

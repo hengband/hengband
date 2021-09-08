@@ -1,7 +1,7 @@
 ﻿#include "player-ability/player-wisdom.h"
 #include "mutation/mutation-flag-types.h"
 #include "object/object-flags.h"
-#include "player/mimic-info-table.h"
+#include "player-info/mimic-info-table.h"
 #include "player/player-class.h"
 #include "player/player-personality.h"
 #include "player/race-info-table.h"

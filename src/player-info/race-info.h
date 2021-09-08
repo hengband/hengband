@@ -7,8 +7,8 @@
 #include "object-enchant/tr-flags.h"
 #include "object-enchant/tr-types.h"
 #include "player-ability/player-ability-types.h"
+#include "player-info/race-types.h"
 #include "player/player-class-types.h"
-#include "player/player-race-types.h"
 #include "system/angband.h"
 
 /*

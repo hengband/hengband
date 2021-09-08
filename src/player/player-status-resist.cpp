@@ -11,10 +11,10 @@
 #include "object-enchant/trc-types.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-flags.h"
-#include "player/mimic-info-table.h"
+#include "player-info/mimic-info-table.h"
+#include "player-info/race-info.h"
+#include "player-info/race-types.h"
 #include "player/player-class.h"
-#include "player/player-race-types.h"
-#include "player/player-race.h"
 #include "player/player-skill.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
@@ -69,7 +69,7 @@ PERCENTAGE calc_acid_damage_rate(player_type *creature_ptr)
     }
 
     BIT_FLAGS flgs = has_vuln_acid(creature_ptr);
-    
+
     for (BIT_FLAGS check_flag = 0x01U; check_flag < FLAG_CAUSE_MAX; check_flag <<= 1) {
         if (any_bits(flgs, check_flag)) {
             if (check_flag == FLAG_CAUSE_MUTATION) {

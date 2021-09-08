@@ -4,9 +4,9 @@
 #include "object-enchant/trc-types.h"
 #include "object/tval-types.h"
 #include "player-ability/player-ability-types.h"
+#include "player-info/race-types.h"
 #include "player/player-class-types.h"
 #include "player/player-personality-types.h"
-#include "player/player-race-types.h"
 #include "player/player-sex.h"
 #include "system/angband.h"
 #include "system/system-variables.h"
@@ -18,7 +18,8 @@
 enum class RF_ABILITY;
 
 struct floor_type;
-struct object_type;;
+struct object_type;
+;
 typedef struct player_type {
     int player_uid{};
     int player_euid{};
@@ -39,9 +40,9 @@ typedef struct player_type {
 
     DICE_SID hitdie{}; /* Hit dice (sides) */
     uint16_t expfact{}; /* Experience factor
-                     * Note: was byte, causing overflow for Amberite
-                     * characters (such as Amberite Paladins)
-                     */
+                         * Note: was byte, causing overflow for Amberite
+                         * characters (such as Amberite Paladins)
+                         */
 
     int16_t age{}; /* Characters age */
     int16_t ht{}; /* Height */

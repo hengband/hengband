@@ -4,7 +4,7 @@
 #include "core/window-redrawer.h"
 #include "mutation/mutation-flag-types.h"
 #include "object/object-flags.h"
-#include "player/mimic-info-table.h"
+#include "player-info/mimic-info-table.h"
 #include "player/player-class.h"
 #include "player/player-personality.h"
 #include "player/player-status.h"

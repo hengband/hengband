@@ -17,8 +17,8 @@
 #include "object-enchant/trc-types.h"
 #include "object/object-flags.h"
 #include "perception/object-perception.h"
+#include "player-info/race-types.h"
 #include "player/player-damage.h"
-#include "player/player-race-types.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-random.h"
@@ -35,8 +35,8 @@
 #include "view/display-messages.h"
 
 namespace {
-const EnumClassFlagGroup<TRC> TRC_P_FLAG_MASK({ TRC::TY_CURSE, TRC::DRAIN_EXP, TRC::ADD_L_CURSE, TRC::ADD_H_CURSE, TRC::CALL_ANIMAL, TRC::CALL_DEMON, TRC::CALL_DRAGON,
-    TRC::COWARDICE, TRC::TELEPORT, TRC::DRAIN_HP, TRC::DRAIN_MANA, TRC::CALL_UNDEAD, TRC::BERS_RAGE });
+const EnumClassFlagGroup<TRC> TRC_P_FLAG_MASK({ TRC::TY_CURSE, TRC::DRAIN_EXP, TRC::ADD_L_CURSE, TRC::ADD_H_CURSE, TRC::CALL_ANIMAL, TRC::CALL_DEMON,
+    TRC::CALL_DRAGON, TRC::COWARDICE, TRC::TELEPORT, TRC::DRAIN_HP, TRC::DRAIN_MANA, TRC::CALL_UNDEAD, TRC::BERS_RAGE });
 const EnumClassFlagGroup<TRCS> TRCS_P_FLAG_MASK({ TRCS::TELEPORT_SELF, TRCS::CHAINSWORD });
 }
 
@@ -366,7 +366,8 @@ static void curse_drain_mp(player_type *creature_ptr)
 
 static void occur_curse_effects(player_type *creature_ptr)
 {
-    if ((creature_ptr->cursed.has_none_of(TRC_P_FLAG_MASK) && creature_ptr->cursed_special.has_none_of(TRCS_P_FLAG_MASK)) || creature_ptr->phase_out || creature_ptr->wild_mode)
+    if ((creature_ptr->cursed.has_none_of(TRC_P_FLAG_MASK) && creature_ptr->cursed_special.has_none_of(TRCS_P_FLAG_MASK)) || creature_ptr->phase_out
+        || creature_ptr->wild_mode)
         return;
 
     curse_teleport(creature_ptr);

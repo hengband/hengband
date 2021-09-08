@@ -864,11 +864,11 @@
     <ClCompile Include="..\..\src\status\action-setter.cpp" />
     <ClCompile Include="..\..\src\inventory\player-inventory.cpp" />
     <ClCompile Include="..\..\src\player\player-personality.cpp" />
-    <ClCompile Include="..\..\src\player\player-race.cpp" />
+    <ClCompile Include="..\..\src\player-info\race-info.cpp" />
     <ClCompile Include="..\..\src\player\player-sex.cpp" />
     <ClCompile Include="..\..\src\player\player-skill.cpp" />
     <ClCompile Include="..\..\src\player\player-status.cpp" />
-    <ClCompile Include="..\..\src\player\mimic-info-table.cpp" />
+    <ClCompile Include="..\..\src\player-info\mimic-info-table.cpp" />
     <ClCompile Include="..\..\src\player\permanent-resistances.cpp" />
     <ClCompile Include="..\..\src\player\process-name.cpp" />
     <ClCompile Include="..\..\src\player\race-info-table.cpp" />
@@ -1500,7 +1500,7 @@
     <ClInclude Include="..\..\src\mspell\mspell-util.h" />
     <ClInclude Include="..\..\src\mspell\mspell-ball.h" />
     <ClInclude Include="..\..\src\player\player-personality-types.h" />
-    <ClInclude Include="..\..\src\player\player-race-types.h" />
+    <ClInclude Include="..\..\src\player-info\race-types.h" />
     <ClInclude Include="..\..\src\player\player-class-types.h" />
     <ClInclude Include="..\..\src\spell-kind\spells-detection.h" />
     <ClInclude Include="..\..\src\system\angband-version.h" />
@@ -1752,7 +1752,7 @@
     <ClInclude Include="..\..\src\flavor\object-flavor.h" />
     <ClInclude Include="..\..\src\object\lite-processor.h" />
     <ClInclude Include="..\..\src\inventory\player-inventory.h" />
-    <ClInclude Include="..\..\src\player\mimic-info-table.h" />
+    <ClInclude Include="..\..\src\player-info\mimic-info-table.h" />
     <ClInclude Include="..\..\src\player\permanent-resistances.h" />
     <ClInclude Include="..\..\src\player\process-name.h" />
     <ClInclude Include="..\..\src\player\race-info-table.h" />
@@ -1832,7 +1832,7 @@
     <ClInclude Include="..\..\src\status\action-setter.h" />
     <ClInclude Include="..\..\src\player\player-move.h" />
     <ClInclude Include="..\..\src\player\player-personality.h" />
-    <ClInclude Include="..\..\src\player\player-race.h" />
+    <ClInclude Include="..\..\src\player-info\race-info.h" />
     <ClInclude Include="..\..\src\player\player-sex.h" />
     <ClInclude Include="..\..\src\player\player-skill.h" />
     <ClInclude Include="..\..\src\player\player-status.h" />

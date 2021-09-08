@@ -9,9 +9,9 @@
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "player-info/equipment-info.h"
+#include "player-info/race-info.h"
 #include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
-#include "player/player-race.h"
 #include "player/player-skill.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
@@ -140,7 +140,8 @@ int16_t PlayerSpeed::class_value()
 int16_t PlayerSpeed::personality_value()
 {
     int16_t result = 0;
-    if (this->owner_ptr->pseikaku == PERSONALITY_MUNCHKIN && this->owner_ptr->prace != player_race_type::KLACKON && this->owner_ptr->prace != player_race_type::SPRITE) {
+    if (this->owner_ptr->pseikaku == PERSONALITY_MUNCHKIN && this->owner_ptr->prace != player_race_type::KLACKON
+        && this->owner_ptr->prace != player_race_type::SPRITE) {
         result += (this->owner_ptr->lev) / 10 + 5;
     }
     return result;

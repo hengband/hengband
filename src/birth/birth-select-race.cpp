@@ -1,7 +1,7 @@
 ﻿#include "birth/birth-select-race.h"
 #include "birth/birth-util.h"
 #include "io/input-key-acceptor.h"
-#include "player/player-race.h"
+#include "player-info/race-info.h"
 #include "player/race-info-table.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
@@ -56,7 +56,7 @@ static void display_race_stat(int cs, int *os, char *cur, char *sym)
         sprintf(buf, "%2d", rp_ptr->r_mhp);
         c_put_str(TERM_L_BLUE, buf, 6, 43);
 
-        put_str(_("隠密","Stealth"), 6, 47);
+        put_str(_("隠密", "Stealth"), 6, 47);
         sprintf(buf, "%+2d", rp_ptr->r_stl);
         c_put_str(TERM_L_BLUE, buf, 6, _(52, 55));
 

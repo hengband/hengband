@@ -21,7 +21,7 @@
 #include "object/object-mark-types.h"
 #include "object/object-value.h"
 #include "perception/object-perception.h"
-#include "player/player-race-types.h"
+#include "player-info/race-types.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-wand-types.h"
 #include "system/monster-race-definition.h"

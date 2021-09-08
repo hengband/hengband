@@ -2,7 +2,7 @@
 #include "monster-race/race-ability-flags.h"
 #include "monster/smart-learn-types.h"
 #include "mspell/smart-mspell-util.h"
-#include "player/player-race.h"
+#include "player-info/race-info.h"
 #include "player/player-status-flags.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"

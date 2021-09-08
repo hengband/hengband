@@ -617,7 +617,6 @@ hengband_SOURCES = \
 	\
 	player/attack-defense-types.h \
 	player/eldritch-horror.cpp player/eldritch-horror.h \
-	player/mimic-info-table.cpp player/mimic-info-table.h \
 	player/patron.cpp player/patron.h \
 	player/process-death.cpp player/process-death.h \
 	player/process-name.cpp player/process-name.h \
@@ -631,8 +630,6 @@ hengband_SOURCES = \
 	player/player-damage.cpp player/player-damage.h \
 	player/player-move.cpp player/player-move.h \
 	player/player-personality.cpp player/player-personality.h \
-	player/player-race.cpp player/player-race.h \
-	player/player-race-types.h \
 	player/player-realm.cpp player/player-realm.h \
 	player/player-skill.cpp player/player-skill.h \
 	player/player-status.cpp player/player-status.h \
@@ -657,13 +654,16 @@ hengband_SOURCES = \
 	player-attack/blood-sucking-processor.cpp player-attack/blood-sucking-processor.h \
 	player-attack/player-attack.cpp player-attack/player-attack.h \
 	\
+	player-info/alignment.cpp player-info/alignment.h \
 	player-info/base-status-info.cpp player-info/base-status-info.h \
 	player-info/body-improvement-info.cpp player-info/body-improvement-info.h \
 	player-info/class-ability-info.cpp player-info/class-ability-info.h \
 	player-info/equipment-info.cpp player-info/equipment-info.h \
+	player-info/mimic-info-table.cpp player-info/mimic-info-table.h \
 	player-info/mutation-info.cpp player-info/mutation-info.h \
-	player-info/alignment.cpp player-info/alignment.h \
 	player-info/race-ability-info.cpp player-info/race-ability-info.h \
+	player-info/race-info.cpp player-info/race-info.h \
+	player-info/race-types.h \
 	player-info/resistance-info.cpp player-info/resistance-info.h \
 	player-info/self-info.cpp player-info/self-info.h \
 	player-info/self-info-util.cpp player-info/self-info-util.h \

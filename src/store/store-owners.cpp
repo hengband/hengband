@@ -1,18 +1,18 @@
 ﻿#include "store/store-owners.h"
-#include "player/player-race-types.h"
+#include "player-info/race-types.h"
 
 /*!
  * @todo _() でまとめる
  */
 const owner_type owners[MAX_STORES][MAX_OWNERS] = {
     {
-        /* General store - 32 unique names */
-        /*
-          Raistlin は dragonlance の powerful wizard 。
-          Rincewind the Chicken は Terry Pratchett の Discworld の登場人物 上記のパロディ？、
-          { "憶病者ラストリン",  200, 108, player_race_type::HUMAN},
-          { "Raistlin the Chicken", 200, 108, player_race_type::HUMAN},
-        */
+/* General store - 32 unique names */
+/*
+  Raistlin は dragonlance の powerful wizard 。
+  Rincewind the Chicken は Terry Pratchett の Discworld の登場人物 上記のパロディ？、
+  { "憶病者ラストリン",  200, 108, player_race_type::HUMAN},
+  { "Raistlin the Chicken", 200, 108, player_race_type::HUMAN},
+*/
 #ifdef JP
         { "フレンドリーなビルボ", 30000, 108, player_race_type::HOBBIT },
         { "憶病者リンスウィンド", 30000, 108, player_race_type::HUMAN },
@@ -82,7 +82,7 @@ const owner_type owners[MAX_STORES][MAX_OWNERS] = {
 #endif
     },
     {
-        /* Armoury - 28 unique names */
+/* Armoury - 28 unique names */
 #ifdef JP
         { "醜悪コン=ダー", 30000, 115, player_race_type::HALF_ORC },
         { "頑固者ダーグ=ロウ", 30000, 111, player_race_type::HUMAN },
@@ -153,7 +153,7 @@ const owner_type owners[MAX_STORES][MAX_OWNERS] = {
     },
 
     {
-        /* Weapon Smith - 28 unique names */
+/* Weapon Smith - 28 unique names */
 #ifdef JP
         { "残忍なるアーノルド", 30000, 115, player_race_type::HALF_TROLL },
         { "獣殺しのアーンダル", 30000, 110, player_race_type::HALF_ELF },
@@ -223,7 +223,7 @@ const owner_type owners[MAX_STORES][MAX_OWNERS] = {
 #endif
     },
     {
-        /* Temple - 22 unique names */
+/* Temple - 22 unique names */
 #ifdef JP
         { "質素なルードヴィヒ", 30000, 109, player_race_type::HUMAN },
         { "パラディンのガンナー", 30000, 110, player_race_type::HUMAN },
@@ -293,7 +293,7 @@ const owner_type owners[MAX_STORES][MAX_OWNERS] = {
 #endif
     },
     {
-        /* Alchemist - 26 unique names */
+/* Alchemist - 26 unique names */
 #ifdef JP
         { "化学者マウザー", 30000, 111, player_race_type::HALF_ELF },
         { "カオスのウィズル", 30000, 110, player_race_type::HOBBIT },
@@ -366,7 +366,7 @@ const owner_type owners[MAX_STORES][MAX_OWNERS] = {
     },
 
     {
-        /* Magic Shop - 23 unique names */
+/* Magic Shop - 23 unique names */
 #ifdef JP
         { "ソーサラーのロ=パン", 30000, 110, player_race_type::HALF_ELF },
         { "偉大なるブガービイ", 30000, 113, player_race_type::GNOME },
@@ -436,7 +436,7 @@ const owner_type owners[MAX_STORES][MAX_OWNERS] = {
 #endif
     },
     {
-        /* Black Market - 32 unique names */
+/* Black Market - 32 unique names */
 #ifdef JP
         { "ガリー=ギガズ", 60000, 150, player_race_type::HALF_TROLL },
         { "ゴブリンのヒストーア", 60000, 150, player_race_type::HALF_ORC },
@@ -542,7 +542,7 @@ const owner_type owners[MAX_STORES][MAX_OWNERS] = {
     },
 
     {
-        /* Bookstore - 21 unique names */
+/* Bookstore - 21 unique names */
 #ifdef JP
         { "強欲ドラフ", 30000, 108, player_race_type::HUMAN },
         { "賢者オドナー", 30000, 105, player_race_type::HIGH_ELF },
