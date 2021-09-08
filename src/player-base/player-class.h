@@ -8,6 +8,7 @@ public:
     virtual ~PlayerClass() = default;
 
     bool can_resist_stun() const;
+    bool is_wizard() const;
 
 private:
     player_type *player_ptr;

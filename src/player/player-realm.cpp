@@ -75,9 +75,3 @@ const uint32_t realm_choices2[MAX_CLASS] = {
 int16_t get_realm1_book(player_type *player_ptr) { return player_ptr->realm1 + TV_LIFE_BOOK - 1; }
 
 int16_t get_realm2_book(player_type *player_ptr) { return player_ptr->realm2 + TV_LIFE_BOOK - 1; }
-
-bool is_wizard_class(player_type *player_ptr)
-{
-    return (player_ptr->pclass == CLASS_MAGE || player_ptr->pclass == CLASS_HIGH_MAGE || player_ptr->pclass == CLASS_SORCERER || player_ptr->pclass == CLASS_MAGIC_EATER
-        || player_ptr->pclass == CLASS_BLUE_MAGE || player_ptr->pclass == CLASS_ELEMENTALIST);
-}

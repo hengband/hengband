@@ -16,3 +16,14 @@ bool PlayerClass::can_resist_stun() const
 {
     return (this->player_ptr->pclass == CLASS_BERSERKER) && (this->player_ptr->lev > 34);
 }
+
+bool PlayerClass::is_wizard() const
+{
+    auto is_wizard = this->player_ptr->pclass == CLASS_MAGE;
+    is_wizard |= this->player_ptr->pclass == CLASS_HIGH_MAGE;
+    is_wizard |= this->player_ptr->pclass == CLASS_SORCERER;
+    is_wizard |= this->player_ptr->pclass == CLASS_MAGIC_EATER;
+    is_wizard |= this->player_ptr->pclass == CLASS_BLUE_MAGE;
+    is_wizard |= this->player_ptr->pclass == CLASS_ELEMENTALIST;
+    return is_wizard;
+}
