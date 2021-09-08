@@ -645,10 +645,10 @@ static void add_essence(player_type *creature_ptr, int32_t mode)
 
                         /* Print header(s) */
 #ifdef JP
-                    prt(format("   %-43s %6s/%s", "能力(必要エッセンス)", "必要数", "所持数"), 1, x);
+                    prt(format("   %-45s %6s/%s", "能力(必要エッセンス)", "所持数", "必要数"), 1, x);
 
 #else
-                    prt(format("   %-43s %6s/%s", "Ability (needed essence)", "Needs", "Possess"), 1, x);
+                    prt(format("   %-44s %7s/%s", "Ability (needed essence)", "Possess", "Needs"), 1, x);
 #endif
                     /* Print list */
                     for (ctr = 0; ctr < max_num; ctr++) {
@@ -727,9 +727,9 @@ static void add_essence(player_type *creature_ptr, int32_t mode)
                             col = TERM_RED;
 
                         if (es_ptr->essence != -1) {
-                            sprintf(dummy2, "%-49s %3d/%d", dummy, es_ptr->value, (int)creature_ptr->magic_num1[es_ptr->essence]);
+                            sprintf(dummy2, "%-49s %5d/%d", dummy, (int)creature_ptr->magic_num1[es_ptr->essence], es_ptr->value);
                         } else {
-                            sprintf(dummy2, "%-49s %3d/(\?\?)", dummy, es_ptr->value);
+                            sprintf(dummy2, "%-49s  (\?\?)/%d", dummy, es_ptr->value);
                         }
 
                         c_prt(col, dummy2, ctr + 2, x);
