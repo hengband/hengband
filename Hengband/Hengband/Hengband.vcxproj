@@ -269,6 +269,7 @@
     <ClCompile Include="..\..\src\cmd-action\cmd-tunnel.cpp" />
     <ClCompile Include="..\..\src\action\movement-execution.cpp" />
     <ClCompile Include="..\..\src\core\score-util.cpp" />
+    <ClCompile Include="..\..\src\player-base\player-race.cpp" />
     <ClCompile Include="..\..\src\system\grid-type-definition.cpp" />
     <ClCompile Include="..\..\src\grid\feature-action-flags.cpp" />
     <ClCompile Include="..\..\src\main-win\commandline-win.cpp" />
@@ -974,6 +975,7 @@
     <ClInclude Include="..\..\src\object-enchant\apply-magic-ring.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic-shield.h" />
     <ClInclude Include="..\..\src\object\object-index-list.h" />
+    <ClInclude Include="..\..\src\player-base\player-race.h" />
     <ClInclude Include="..\..\src\player-info\alignment.h" />
     <ClInclude Include="..\..\src\player-info\equipment-info.h" />
     <ClInclude Include="..\..\src\player-status\player-energy.h" />

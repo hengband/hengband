@@ -654,6 +654,8 @@ hengband_SOURCES = \
 	player-attack/blood-sucking-processor.cpp player-attack/blood-sucking-processor.h \
 	player-attack/player-attack.cpp player-attack/player-attack.h \
 	\
+	player-base/player-race.cpp player-base/player-race.h \
+	\
 	player-info/alignment.cpp player-info/alignment.h \
 	player-info/base-status-info.cpp player-info/base-status-info.h \
 	player-info/body-improvement-info.cpp player-info/body-improvement-info.h \

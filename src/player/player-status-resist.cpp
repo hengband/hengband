@@ -11,9 +11,8 @@
 #include "object-enchant/trc-types.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-flags.h"
-#include "player-info/mimic-info-table.h"
+#include "player-base/player-race.h"
 #include "player-info/race-info.h"
-#include "player-info/race-types.h"
 #include "player/player-class.h"
 #include "player/player-skill.h"
 #include "player/player-status-flags.h"
@@ -205,7 +204,7 @@ PERCENTAGE calc_deathray_damage_rate(player_type *creature_ptr, rate_calc_type_m
 {
     (void)mode; // unused
     if (creature_ptr->mimic_form) {
-        if (any_bits(mimic_info[creature_ptr->mimic_form].choice, MIMIC_IS_NONLIVING)) {
+        if (PlayerRace(creature_ptr).is_mimic_nonliving()) {
             return 0;
         }
     }

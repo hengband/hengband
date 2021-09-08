@@ -2319,6 +2319,9 @@
     <ClCompile Include="..\..\src\player-info\race-info.cpp">
       <Filter>player-info</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player-base\player-race.cpp">
+      <Filter>player-base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4989,6 +4992,9 @@
     <ClInclude Include="..\..\src\player-info\race-types.h">
       <Filter>player-info</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\player-base\player-race.h">
+      <Filter>player-base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -5204,6 +5210,9 @@
     </Filter>
     <Filter Include="avatar">
       <UniqueIdentifier>{953acb44-db6d-4bd8-bb0b-5692524bad93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="player-base">
+      <UniqueIdentifier>{0bd4660d-028e-44be-a5fe-c7cc7d3d00c2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
