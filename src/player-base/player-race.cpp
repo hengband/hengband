@@ -19,3 +19,8 @@ bool PlayerRace::is_mimic_nonliving() const
     constexpr int nonliving_flag = 1;
     return any_bits(mimic_info[this->player_ptr->mimic_form].choice, nonliving_flag);
 }
+
+bool PlayerRace::equals(player_race_type prace) const
+{
+    return (this->player_ptr->mimic_form == MIMIC_NONE) && (this->player_ptr->prace == prace);
+}

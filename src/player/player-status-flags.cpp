@@ -11,10 +11,9 @@
 #include "object-enchant/trc-types.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-flags.h"
+#include "player-base/player-race.h"
 #include "player-info/equipment-info.h"
 #include "player-info/mimic-info-table.h"
-#include "player-info/race-info.h"
-#include "player-info/race-types.h"
 #include "player-status/player-basic-statistics.h"
 #include "player-status/player-hand-types.h"
 #include "player-status/player-infravision.h"
@@ -2089,7 +2088,7 @@ bool has_good_luck(player_type *creature_ptr)
 BIT_FLAGS player_aggravate_state(player_type *creature_ptr)
 {
     if (creature_ptr->cursed.has(TRC::AGGRAVATE)) {
-        if ((is_specific_player_race(creature_ptr, player_race_type::S_FAIRY)) && (creature_ptr->pseikaku != PERSONALITY_SEXY)) {
+        if ((PlayerRace(creature_ptr).equals(player_race_type::S_FAIRY)) && (creature_ptr->pseikaku != PERSONALITY_SEXY)) {
             return AGGRAVATE_S_FAIRY;
         }
         return AGGRAVATE_NORMAL;

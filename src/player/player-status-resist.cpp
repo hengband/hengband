@@ -386,7 +386,7 @@ PERCENTAGE calc_nether_damage_rate(player_type *creature_ptr, rate_calc_type_mod
     PERCENTAGE per = 100;
 
     if (has_resist_neth(creature_ptr)) {
-        if (!is_specific_player_race(creature_ptr, player_race_type::SPECTRE))
+        if (!PlayerRace(creature_ptr).equals(player_race_type::SPECTRE))
             per *= 6;
         per *= 100;
         per /= randrate(4, 7, mode);

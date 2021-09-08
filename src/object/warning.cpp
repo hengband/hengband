@@ -23,8 +23,7 @@
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
-#include "player-info/mimic-info-table.h"
-#include "player-info/race-types.h"
+#include "player-base/player-race.h"
 #include "player/player-class.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-resist.h"
@@ -159,7 +158,7 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
 
     case GF_NETHER:
         dam = dam * calc_nether_damage_rate(target_ptr, CALC_MAX) / 100;
-        if (is_specific_player_race(target_ptr, player_race_type::SPECTRE)) {
+        if (PlayerRace(target_ptr).equals(player_race_type::SPECTRE)) {
             ignore_wraith_form = true;
             dam = 0;
         }

@@ -8,6 +8,7 @@
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
+#include "player-base/player-race.h"
 #include "player-info/equipment-info.h"
 #include "player-info/race-info.h"
 #include "player/attack-defense-types.h"
@@ -57,10 +58,10 @@ int16_t PlayerSpeed::race_value()
 {
     int16_t result = 0;
 
-    if (is_specific_player_race(this->owner_ptr, player_race_type::KLACKON) || is_specific_player_race(this->owner_ptr, player_race_type::SPRITE))
+    if (PlayerRace(this->owner_ptr).equals(player_race_type::KLACKON) || PlayerRace(this->owner_ptr).equals(player_race_type::SPRITE))
         result += (this->owner_ptr->lev) / 10;
 
-    if (is_specific_player_race(this->owner_ptr, player_race_type::MERFOLK)) {
+    if (PlayerRace(this->owner_ptr).equals(player_race_type::MERFOLK)) {
         floor_type *floor_ptr = this->owner_ptr->current_floor_ptr;
         feature_type *f_ptr = &f_info[floor_ptr->grid_array[this->owner_ptr->y][this->owner_ptr->x].feat];
         if (f_ptr->flags.has(FF::WATER)) {
@@ -105,14 +106,14 @@ int16_t PlayerSpeed::class_value()
         } else if ((!this->owner_ptr->inventory_list[INVEN_MAIN_HAND].k_idx || can_attack_with_main_hand(this->owner_ptr))
             && (!this->owner_ptr->inventory_list[INVEN_SUB_HAND].k_idx || can_attack_with_sub_hand(this->owner_ptr))) {
             result += 3;
-            if (!(is_specific_player_race(this->owner_ptr, player_race_type::KLACKON) || is_specific_player_race(this->owner_ptr, player_race_type::SPRITE)
+            if (!(PlayerRace(this->owner_ptr).equals(player_race_type::KLACKON) || PlayerRace(this->owner_ptr).equals(player_race_type::SPRITE)
                     || (this->owner_ptr->pseikaku == PERSONALITY_MUNCHKIN)))
                 result += (this->owner_ptr->lev) / 10;
         }
     }
 
     if ((this->owner_ptr->pclass == CLASS_MONK || this->owner_ptr->pclass == CLASS_FORCETRAINER) && !(heavy_armor(this->owner_ptr))) {
-        if (!(is_specific_player_race(this->owner_ptr, player_race_type::KLACKON) || is_specific_player_race(this->owner_ptr, player_race_type::SPRITE)
+        if (!(PlayerRace(this->owner_ptr).equals(player_race_type::KLACKON) || PlayerRace(this->owner_ptr).equals(player_race_type::SPRITE)
                 || (this->owner_ptr->pseikaku == PERSONALITY_MUNCHKIN)))
             result += (this->owner_ptr->lev) / 10;
     }

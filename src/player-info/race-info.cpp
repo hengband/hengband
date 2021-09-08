@@ -47,11 +47,6 @@ SYMBOL_CODE get_summon_symbol_from_player(player_type *creature_ptr)
     return symbol;
 }
 
-bool is_specific_player_race(player_type *creature_ptr, player_race_type prace)
-{
-    return (!creature_ptr->mimic_form && (creature_ptr->prace == prace));
-}
-
 /*!
  * @brief 種族が指定の耐性/能力フラグを持つか判定する
  * @param creature_ptr プレイヤー情報への参照ポインタ

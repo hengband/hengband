@@ -1,4 +1,5 @@
 ﻿#include "player-info/resistance-info.h"
+#include "player-base/player-race.h"
 #include "player-info/race-info.h"
 #include "player-info/self-info-util.h"
 #include "player/player-status-flags.h"
@@ -84,7 +85,7 @@ void set_high_resistance_info(player_type *creature_ptr, self_info_type *self_pt
     if (has_resist_nexus(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたは因果混乱の攻撃への耐性を持っている。", "You are resistant to nexus attacks.");
 
-    if (is_specific_player_race(creature_ptr, player_race_type::SPECTRE))
+    if (PlayerRace(creature_ptr).equals(player_race_type::SPECTRE))
         self_ptr->info[self_ptr->line++] = _("あなたは地獄の力を吸収できる。", "You can drain nether forces.");
     else if (has_resist_neth(creature_ptr))
         self_ptr->info[self_ptr->line++] = _("あなたは地獄の力への耐性を持っている。", "You are resistant to nether forces.");

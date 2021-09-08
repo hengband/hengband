@@ -11,8 +11,8 @@
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
+#include "player-base/player-race.h"
 #include "player-info/mimic-info-table.h"
-#include "player-info/race-types.h"
 #include "player/permanent-resistances.h"
 #include "player/player-class.h"
 #include "player/player-personality.h"
@@ -57,7 +57,7 @@ static int calc_basic_stat(player_type *creature_ptr, int stat_num)
  */
 static int compensate_special_race(player_type *creature_ptr, int stat_num)
 {
-    if (!is_specific_player_race(creature_ptr, player_race_type::ENT))
+    if (!PlayerRace(creature_ptr).equals(player_race_type::ENT))
         return 0;
 
     int r_adj = 0;

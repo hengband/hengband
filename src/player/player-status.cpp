@@ -54,10 +54,10 @@
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
 #include "pet/pet-util.h"
+#include "player-base/player-race.h"
 #include "player-info/alignment.h"
 #include "player-info/equipment-info.h"
 #include "player-info/mimic-info-table.h"
-#include "player-info/race-types.h"
 #include "player-status/player-basic-statistics.h"
 #include "player-status/player-hand-types.h"
 #include "player-status/player-infravision.h"
@@ -1659,7 +1659,7 @@ static ARMOUR_CLASS calc_to_ac(player_type *creature_ptr, bool is_real_value)
         }
     }
 
-    if (is_specific_player_race(creature_ptr, player_race_type::GOLEM) || is_specific_player_race(creature_ptr, player_race_type::ANDROID)) {
+    if (PlayerRace(creature_ptr).equals(player_race_type::GOLEM) || PlayerRace(creature_ptr).equals(player_race_type::ANDROID)) {
         ac += 10 + (creature_ptr->lev * 2 / 5);
     }
 
