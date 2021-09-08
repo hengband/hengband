@@ -12,12 +12,15 @@
 #include "system/angband.h"
 
 /*
- * Constant for kinds of mimic
+ * @brief Constant for kinds of mimic
+ * @todo 後ほど時間がある時にenum classへ変換する.
  */
-#define MIMIC_NONE 0
-#define MIMIC_DEMON 1
-#define MIMIC_DEMON_LORD 2
-#define MIMIC_VAMPIRE 3
+enum mimic_kind_type {
+    MIMIC_NONE = 0,
+    MIMIC_DEMON = 1,
+    MIMIC_DEMON_LORD = 2,
+    MIMIC_VAMPIRE = 3,
+};
 
 /*!
  * @brief プレイヤー種族の生命形態
