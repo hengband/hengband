@@ -860,7 +860,7 @@
     <ClCompile Include="..\..\src\object\object-broken.cpp" />
     <ClCompile Include="..\..\src\object\lite-processor.cpp" />
     <ClCompile Include="..\..\src\player\patron.cpp" />
-    <ClCompile Include="..\..\src\player\player-class.cpp" />
+    <ClCompile Include="..\..\src\player-info\class-info.cpp" />
     <ClCompile Include="..\..\src\player\player-damage.cpp" />
     <ClCompile Include="..\..\src\status\action-setter.cpp" />
     <ClCompile Include="..\..\src\inventory\player-inventory.cpp" />
@@ -1503,7 +1503,7 @@
     <ClInclude Include="..\..\src\mspell\mspell-ball.h" />
     <ClInclude Include="..\..\src\player\player-personality-types.h" />
     <ClInclude Include="..\..\src\player-info\race-types.h" />
-    <ClInclude Include="..\..\src\player\player-class-types.h" />
+    <ClInclude Include="..\..\src\player-info\class-types.h" />
     <ClInclude Include="..\..\src\spell-kind\spells-detection.h" />
     <ClInclude Include="..\..\src\system\angband-version.h" />
     <ClInclude Include="..\..\src\core\turn-compensator.h" />
@@ -1829,7 +1829,7 @@
     <ClInclude Include="..\..\src\object\object-kind-hook.h" />
     <ClInclude Include="..\..\src\object\object-kind.h" />
     <ClInclude Include="..\..\src\player\patron.h" />
-    <ClInclude Include="..\..\src\player\player-class.h" />
+    <ClInclude Include="..\..\src\player-info\class-info.h" />
     <ClInclude Include="..\..\src\player\player-damage.h" />
     <ClInclude Include="..\..\src\status\action-setter.h" />
     <ClInclude Include="..\..\src\player\player-move.h" />

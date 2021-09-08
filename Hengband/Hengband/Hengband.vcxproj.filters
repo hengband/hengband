@@ -389,8 +389,8 @@
     <ClCompile Include="..\..\src\room\rooms-pit-nest.cpp">
       <Filter>room</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player\player-class.cpp">
-      <Filter>player</Filter>
+    <ClCompile Include="..\..\src\player-info\class-info.cpp">
+      <Filter>player-info</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\player\player-damage.cpp">
       <Filter>player</Filter>
@@ -2738,8 +2738,8 @@
     <ClInclude Include="..\..\src\room\rooms-vault.h">
       <Filter>room</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player\player-class.h">
-      <Filter>player</Filter>
+    <ClInclude Include="..\..\src\player-info\class-info.h">
+      <Filter>player-info</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player\player-damage.h">
       <Filter>player</Filter>
@@ -3749,8 +3749,8 @@
     <ClInclude Include="..\..\src\player\player-personality-types.h">
       <Filter>player</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player\player-class-types.h">
-      <Filter>player</Filter>
+    <ClInclude Include="..\..\src\player-info\class-types.h">
+      <Filter>player-info</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\spell\spell-types.h">
       <Filter>spell</Filter>

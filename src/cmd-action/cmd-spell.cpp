@@ -32,11 +32,11 @@
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "object/object-info.h"
+#include "player-info/class-info.h"
 #include "player-info/self-info.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/eldritch-horror.h"
-#include "player/player-class.h"
 #include "player/player-damage.h"
 #include "player/player-realm.h"
 #include "player/player-skill.h"
@@ -1043,8 +1043,7 @@ bool do_cmd_cast(player_type *caster_ptr)
 
     auto item_tester = get_castable_spellbook_tester(caster_ptr);
 
-    o_ptr = choose_object(
-        caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | (caster_ptr->pclass == CLASS_FORCETRAINER ? USE_FORCE : 0)), item_tester);
+    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | (caster_ptr->pclass == CLASS_FORCETRAINER ? USE_FORCE : 0)), item_tester);
     if (!o_ptr) {
         if (item == INVEN_FORCE) /* the_force */
         {

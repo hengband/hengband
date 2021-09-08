@@ -20,7 +20,7 @@
 #include "monster-race/race-flags7.h"
 #include "monster-race/race-flags8.h"
 #include "object/object-kind-hook.h"
-#include "player/player-class.h"
+#include "player-info/class-info.h"
 #include "realm/realm-names-table.h"
 #include "spell/spells-execution.h"
 #include "spell/spells-util.h"

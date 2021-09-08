@@ -3,7 +3,7 @@
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "perception/object-perception.h"
-#include "player/player-class.h"
+#include "player-info/class-info.h"
 #include "player/player-realm.h"
 #include "realm/realm-names-table.h"
 #include "system/object-type-definition.h"
@@ -75,7 +75,8 @@ bool item_tester_learn_spell(player_type *player_ptr, const object_type *o_ptr)
     else if (!is_magic(tval2realm(o_ptr->tval)))
         return false;
 
-    return (get_realm1_book(player_ptr) == o_ptr->tval) || (get_realm2_book(player_ptr) == o_ptr->tval) || (choices & (0x0001U << (tval2realm(o_ptr->tval) - 1)));
+    return (get_realm1_book(player_ptr) == o_ptr->tval) || (get_realm2_book(player_ptr) == o_ptr->tval)
+        || (choices & (0x0001U << (tval2realm(o_ptr->tval) - 1)));
 }
 
 /*!

@@ -56,6 +56,7 @@
 #include "pet/pet-util.h"
 #include "player-base/player-race.h"
 #include "player-info/alignment.h"
+#include "player-info/class-info.h"
 #include "player-info/equipment-info.h"
 #include "player-info/mimic-info-table.h"
 #include "player-status/player-basic-statistics.h"
@@ -66,7 +67,6 @@
 #include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
 #include "player/patron.h"
-#include "player/player-class.h"
 #include "player/player-damage.h"
 #include "player/player-move.h"
 #include "player/player-personality-types.h"
@@ -1061,7 +1061,7 @@ static ACTION_SKILL_POWER calc_disarming(player_type *creature_ptr)
         tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
     else
         tmp_rp_ptr = &race_info[enum2i(creature_ptr->prace)];
-    const player_class *c_ptr = &class_info[creature_ptr->pclass];
+    const player_class_info *c_ptr = &class_info[creature_ptr->pclass];
     const player_personality *a_ptr = &personality_info[creature_ptr->pseikaku];
 
     pow = tmp_rp_ptr->r_dis + c_ptr->c_dis + a_ptr->a_dis;
@@ -1091,7 +1091,7 @@ static ACTION_SKILL_POWER calc_device_ability(player_type *creature_ptr)
         tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
     else
         tmp_rp_ptr = &race_info[enum2i(creature_ptr->prace)];
-    const player_class *c_ptr = &class_info[creature_ptr->pclass];
+    const player_class_info *c_ptr = &class_info[creature_ptr->pclass];
     const player_personality *a_ptr = &personality_info[creature_ptr->pseikaku];
 
     pow = tmp_rp_ptr->r_dev + c_ptr->c_dev + a_ptr->a_dev;
@@ -1141,7 +1141,7 @@ static ACTION_SKILL_POWER calc_saving_throw(player_type *creature_ptr)
         tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
     else
         tmp_rp_ptr = &race_info[enum2i(creature_ptr->prace)];
-    const player_class *c_ptr = &class_info[creature_ptr->pclass];
+    const player_class_info *c_ptr = &class_info[creature_ptr->pclass];
     const player_personality *a_ptr = &personality_info[creature_ptr->pseikaku];
 
     pow = tmp_rp_ptr->r_sav + c_ptr->c_sav + a_ptr->a_sav;
@@ -1196,7 +1196,7 @@ static ACTION_SKILL_POWER calc_search(player_type *creature_ptr)
         tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
     else
         tmp_rp_ptr = &race_info[enum2i(creature_ptr->prace)];
-    const player_class *c_ptr = &class_info[creature_ptr->pclass];
+    const player_class_info *c_ptr = &class_info[creature_ptr->pclass];
     const player_personality *a_ptr = &personality_info[creature_ptr->pseikaku];
 
     pow = tmp_rp_ptr->r_srh + c_ptr->c_srh + a_ptr->a_srh;
@@ -1243,7 +1243,7 @@ static ACTION_SKILL_POWER calc_search_freq(player_type *creature_ptr)
         tmp_rp_ptr = &mimic_info[creature_ptr->mimic_form];
     else
         tmp_rp_ptr = &race_info[enum2i(creature_ptr->prace)];
-    const player_class *c_ptr = &class_info[creature_ptr->pclass];
+    const player_class_info *c_ptr = &class_info[creature_ptr->pclass];
     const player_personality *a_ptr = &personality_info[creature_ptr->pseikaku];
 
     pow = tmp_rp_ptr->r_fos + c_ptr->c_fos + a_ptr->a_fos;
@@ -1281,7 +1281,7 @@ static ACTION_SKILL_POWER calc_to_hit_melee(player_type *creature_ptr)
 {
     ACTION_SKILL_POWER pow;
     const player_race_info *tmp_rp_ptr;
-    const player_class *c_ptr = &class_info[creature_ptr->pclass];
+    const player_class_info *c_ptr = &class_info[creature_ptr->pclass];
     const player_personality *a_ptr = &personality_info[creature_ptr->pseikaku];
 
     if (creature_ptr->mimic_form)
@@ -1305,7 +1305,7 @@ static ACTION_SKILL_POWER calc_to_hit_shoot(player_type *creature_ptr)
 {
     ACTION_SKILL_POWER pow;
     const player_race_info *tmp_rp_ptr;
-    const player_class *c_ptr = &class_info[creature_ptr->pclass];
+    const player_class_info *c_ptr = &class_info[creature_ptr->pclass];
     const player_personality *a_ptr = &personality_info[creature_ptr->pseikaku];
 
     if (creature_ptr->mimic_form)
@@ -1330,7 +1330,7 @@ static ACTION_SKILL_POWER calc_to_hit_throw(player_type *creature_ptr)
 {
     ACTION_SKILL_POWER pow;
     const player_race_info *tmp_rp_ptr;
-    const player_class *c_ptr = &class_info[creature_ptr->pclass];
+    const player_class_info *c_ptr = &class_info[creature_ptr->pclass];
     const player_personality *a_ptr = &personality_info[creature_ptr->pseikaku];
 
     if (creature_ptr->mimic_form)

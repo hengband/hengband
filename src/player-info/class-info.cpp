@@ -4,7 +4,7 @@
  * @author deskull
  */
 
-#include "player/player-class.h"
+#include "player-info/class-info.h"
 #include "core/player-redraw-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "player-info/race-info.h"
@@ -16,7 +16,7 @@
 const player_magic *mp_ptr;
 std::vector<player_magic> m_info;
 
-const player_class *cp_ptr;
+const player_class_info *cp_ptr;
 
 /*!
  * @brief 職業情報 /
@@ -30,7 +30,7 @@ const player_class *cp_ptr;
  *      HD, Exp, pet_upkeep_div
  * </pre>
  */
-const player_class class_info[MAX_CLASS] = {
+const player_class_info class_info[MAX_CLASS] = {
     {
 #ifdef JP
         "戦士",

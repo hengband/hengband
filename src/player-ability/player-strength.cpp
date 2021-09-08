@@ -2,7 +2,7 @@
 #include "mutation/mutation-flag-types.h"
 #include "object/object-flags.h"
 #include "player-base/player-race.h"
-#include "player/player-class.h"
+#include "realm/realm-types.h"
 #include "player/player-personality.h"
 #include "player/race-info-table.h"
 #include "player/special-defense-types.h"

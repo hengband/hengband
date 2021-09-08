@@ -625,8 +625,6 @@ hengband_SOURCES = \
 	player/permanent-resistances.cpp player/permanent-resistances.h \
 	player/temporary-resistances.cpp player/temporary-resistances.h \
 	player/digestion-processor.cpp player/digestion-processor.h \
-	player/player-class-types.h \
-	player/player-class.cpp player/player-class.h \
 	player/player-damage.cpp player/player-damage.h \
 	player/player-move.cpp player/player-move.h \
 	player/player-personality.cpp player/player-personality.h \
@@ -660,6 +658,8 @@ hengband_SOURCES = \
 	player-info/base-status-info.cpp player-info/base-status-info.h \
 	player-info/body-improvement-info.cpp player-info/body-improvement-info.h \
 	player-info/class-ability-info.cpp player-info/class-ability-info.h \
+	player-info/class-types.h \
+	player-info/class-info.cpp player-info/class-info.h \
 	player-info/equipment-info.cpp player-info/equipment-info.h \
 	player-info/mimic-info-table.cpp player-info/mimic-info-table.h \
 	player-info/mutation-info.cpp player-info/mutation-info.h \

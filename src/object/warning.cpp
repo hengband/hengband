@@ -24,7 +24,6 @@
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "player-base/player-race.h"
-#include "player/player-class.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-resist.h"
 #include "player/special-defense-types.h"

@@ -18,7 +18,7 @@
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "perception/object-perception.h"
-#include "player/player-class.h"
+#include "player-info/class-info.h"
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/floor-type-definition.h"

@@ -1,7 +1,7 @@
 ﻿#pragma once
 
+#include "player-info/class-types.h"
 #include "player-info/race-types.h"
-#include "player/player-class-types.h"
 #include "player/player-personality-types.h"
 #include "player/player-sex.h"
 #include "system/angband.h"
