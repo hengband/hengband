@@ -160,7 +160,7 @@ const std::unordered_map<SmithEssence, concptr> essence_to_name = {
  */
 struct essence_drain_type {
     tr_type tr_flag; //!< 抽出する対象アイテムの持つ特性フラグ
-    const std::vector<SmithEssence> essences; //!< 抽出されるエッセンスのリスト
+    std::vector<SmithEssence> essences; //!< 抽出されるエッセンスのリスト
     int amount; //! エッセンス抽出量。ただしマイナスのものは抽出時のペナルティ源として扱う
 };
 
@@ -338,7 +338,7 @@ struct smith_info_type {
     SmithEffect effect; //!< 鍛冶で与える効果の種類
     concptr name; //!< 鍛冶で与える能力の名称
     SmithCategory category; //!< 鍛冶で与える能力が所属するグループ
-    const std::vector<SmithEssence> need_essences; //!< 能力を与えるのに必要なエッセンスのリスト
+    std::vector<SmithEssence> need_essences; //!< 能力を与えるのに必要なエッセンスのリスト
     int consumption; //!< 能力を与えるのに必要な消費量(need_essencesに含まれるエッセンスそれぞれについてこの量を消費)
     TrFlags add_flags; //!< 鍛冶で能力を与えることにより付与されるアイテム特性フラグ
 };
@@ -850,8 +850,8 @@ bool Smith::add_essence(SmithEffect effect, object_type *o_ptr, int number)
     }
 
     if (effect == SmithEffect::SLAY_GLOVE) {
-        auto get_to_h = ((number + 1) / 2 + randint0(number / 2 + 1));
-        auto get_to_d = ((number + 1) / 2 + randint0(number / 2 + 1));
+        HIT_PROB get_to_h = ((number + 1) / 2 + randint0(number / 2 + 1));
+        HIT_POINT get_to_d = ((number + 1) / 2 + randint0(number / 2 + 1));
         o_ptr->xtra4 = (get_to_h << 8) + get_to_d;
         o_ptr->to_h += get_to_h;
         o_ptr->to_d += get_to_d;
@@ -862,15 +862,15 @@ bool Smith::add_essence(SmithEffect effect, object_type *o_ptr, int number)
         if ((o_ptr->to_h >= max_val) && (o_ptr->to_d >= max_val)) {
             return false;
         } else {
-            o_ptr->to_h = std::min(o_ptr->to_h + 1, max_val);
-            o_ptr->to_d = std::min(o_ptr->to_d + 1, max_val);
+            o_ptr->to_h = static_cast<HIT_PROB>(std::min(o_ptr->to_h + 1, max_val));
+            o_ptr->to_d = static_cast<HIT_POINT>(std::min(o_ptr->to_d + 1, max_val));
         }
     } else if (effect == SmithEffect::AC) {
         const auto max_val = this->player_ptr->lev / 5 + 5;
         if (o_ptr->to_a >= max_val) {
             return false;
         } else {
-            o_ptr->to_a = std::min(o_ptr->to_a + 1, max_val);
+            o_ptr->to_a = static_cast<ARMOUR_CLASS>(std::min(o_ptr->to_a + 1, max_val));
         }
     } else if (effect == SmithEffect::SUSTAIN) {
         o_ptr->art_flags.set(TR_IGNORE_ACID);
