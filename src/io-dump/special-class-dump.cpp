@@ -99,7 +99,7 @@ static void dump_smith(player_type *creature_ptr, FILE *fff)
     auto n = essences.size();
     std::vector<int> amounts;
     std::transform(essences.begin(), essences.end(), std::back_inserter(amounts),
-        [smith = Smith(creature_ptr)](Smith::Essence e) { return smith.get_essence_num_of_posessions(e); });
+        [smith = Smith(creature_ptr)](SmithEssence e) { return smith.get_essence_num_of_posessions(e); });
 
     auto row = n / 3 + 1;
     for (auto i = 0U; i < row; i++) {

@@ -4995,6 +4995,9 @@
     <ClInclude Include="..\..\src\object-enchant\object-smith.h">
       <Filter>object-enchant</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\smith-types.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

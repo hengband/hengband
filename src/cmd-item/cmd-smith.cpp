@@ -20,6 +20,7 @@
 #include "main/sound-of-music.h"
 #include "mind/mind-weaponsmith.h"
 #include "object-enchant/object-smith.h"
+#include "object-enchant/smith-types.h"
 #include "object-enchant/tr-types.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
@@ -212,7 +213,7 @@ static COMMAND_CODE choose_essence(void)
  * @brief エッセンスを実際に付加する
  * @param mode エッセンスの大別ID
  */
-static void add_essence(player_type *creature_ptr, Smith::Category mode)
+static void add_essence(player_type *creature_ptr, SmithCategory mode)
 {
     OBJECT_IDX item;
     COMMAND_CODE i;
@@ -418,7 +419,7 @@ static void add_essence(player_type *creature_ptr, Smith::Category mode)
     if (!o_ptr)
         return;
 
-    if ((mode != Smith::Category::ENCHANT) && (o_ptr->is_artifact() || o_ptr->is_smith())) {
+    if ((mode != SmithCategory::ENCHANT) && (o_ptr->is_artifact() || o_ptr->is_smith())) {
         msg_print(_("そのアイテムはこれ以上改良できない。", "This item can not be improved any further."));
         return;
     }
@@ -460,7 +461,7 @@ static void add_essence(player_type *creature_ptr, Smith::Category mode)
         }
 
         add_essence_count = o_ptr->pval;
-    } else if (effect == Smith::Effect::SLAY_GLOVE) {
+    } else if (effect == SmithEffect::SLAY_GLOVE) {
         char tmp_val[8] = "1";
         const auto max_val = creature_ptr->lev / 7 + 3;
         if (!get_string(format(_("いくつ付加しますか？ (1-%d):", "Enchant how many? (1-%d):"), max_val), tmp_val, 2)) {
@@ -671,10 +672,10 @@ void do_cmd_kaji(player_type *creature_ptr, bool only_browse)
         mode = choose_essence();
         if (mode == 0)
             break;
-        add_essence(creature_ptr, static_cast<Smith::Category>(mode));
+        add_essence(creature_ptr, static_cast<SmithCategory>(mode));
         break;
     case 5:
-        add_essence(creature_ptr, Smith::Category::ENCHANT);
+        add_essence(creature_ptr, SmithCategory::ENCHANT);
         break;
     }
 }

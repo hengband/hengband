@@ -18,6 +18,7 @@
 #include "mind/mind-weaponsmith.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/object-smith.h"
+#include "object-enchant/smith-types.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trg-types.h"
@@ -106,7 +107,7 @@ static void decide_tval_show(flavor_type *flavor_ptr)
     if (flavor_ptr->tr_flags.has(TR_SHOW_MODS))
         flavor_ptr->show_weapon = true;
 
-    if (flavor_ptr->o_ptr->is_smith() && static_cast<Smith::Effect>(flavor_ptr->o_ptr->xtra3) == Smith::Effect::SLAY_GLOVE)
+    if (flavor_ptr->o_ptr->is_smith() && static_cast<SmithEffect>(flavor_ptr->o_ptr->xtra3) == SmithEffect::SLAY_GLOVE)
         flavor_ptr->show_weapon = true;
 
     if (flavor_ptr->o_ptr->to_h && flavor_ptr->o_ptr->to_d)
