@@ -2331,6 +2331,12 @@
     <ClCompile Include="..\..\src\object-enchant\smith-info.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\timed-effect\timed-effects.cpp">
+      <Filter>timed-effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\timed-effect\player-stun.cpp">
+      <Filter>timed-effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5016,6 +5022,12 @@
     <ClInclude Include="..\..\src\object-enchant\smith-info.h">
       <Filter>object-enchant</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\timed-effect\timed-effects.h">
+      <Filter>timed-effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\timed-effect\player-stun.h">
+      <Filter>timed-effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -5234,6 +5246,9 @@
     </Filter>
     <Filter Include="player-base">
       <UniqueIdentifier>{0bd4660d-028e-44be-a5fe-c7cc7d3d00c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="timed-effect">
+      <UniqueIdentifier>{b9e618e1-f780-4f5f-9413-d0270ac53660}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

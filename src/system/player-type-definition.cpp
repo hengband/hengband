@@ -9,3 +9,8 @@ player_type p_body;
  * @brief プレイヤー構造体へのグローバル参照ポインタ / Pointer to the player info
  */
 player_type *p_ptr = &p_body;
+
+std::shared_ptr<TimedEffects> player_type::effects() const
+{
+    return this->timed_effects;
+}

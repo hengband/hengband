@@ -10,6 +10,7 @@
 #include "player/player-sex.h"
 #include "system/angband.h"
 #include "system/system-variables.h"
+#include "timed-effect/timed-effects.h"
 #include "util/flag-group.h"
 
 #define MAX_SKILLS 10
@@ -19,8 +20,9 @@ enum class RF_ABILITY;
 
 struct floor_type;
 struct object_type;
-;
-typedef struct player_type {
+class TimedEffects;
+struct player_type {
+public:
     int player_uid{};
     int player_euid{};
     int player_egid{};
@@ -423,6 +425,11 @@ typedef struct player_type {
     POSITION x{}; /*!< ダンジョンの現在X座標 / Player location in dungeon */
     GAME_TEXT name[32]{}; /*!< 現在のプレイヤー名 / Current player's character name */
     char base_name[32]{}; /*!< Stripped version of "player_name" */
-} player_type;
+
+    std::shared_ptr<TimedEffects> effects() const;
+
+private:
+    std::shared_ptr<TimedEffects> timed_effects = std::shared_ptr<TimedEffects>(new TimedEffects());
+};
 
 extern player_type *p_ptr;

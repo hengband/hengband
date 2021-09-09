@@ -872,6 +872,9 @@ hengband_SOURCES = \
 	term/z-term.cpp term/z-term.h term/z-util.cpp term/z-util.h \
 	term/z-virt.cpp term/z-virt.h \
 	\
+	timed-effect/player-stun.cpp timed-effect/player-stun.h \
+	timed-effect/timed-effects.cpp timed-effect/timed-effects.h \
+	\
 	util/angband-files.cpp util/angband-files.h \
 	util/buffer-shaper.cpp util/buffer-shaper.h \
 	util/bit-flags-calculator.h \
