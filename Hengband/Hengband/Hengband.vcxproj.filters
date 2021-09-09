@@ -2319,6 +2319,9 @@
     <ClCompile Include="..\..\src\object-enchant\object-smith.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\smith-tables.cpp">
+      <Filter>object-enchant</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -4990,6 +4993,9 @@
       <Filter>object-enchant</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object-enchant\smith-types.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\smith-tables.h">
       <Filter>object-enchant</Filter>
     </ClInclude>
   </ItemGroup>

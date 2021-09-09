@@ -270,6 +270,7 @@
     <ClCompile Include="..\..\src\action\movement-execution.cpp" />
     <ClCompile Include="..\..\src\core\score-util.cpp" />
     <ClCompile Include="..\..\src\object-enchant\object-smith.cpp" />
+    <ClCompile Include="..\..\src\object-enchant\smith-tables.cpp" />
     <ClCompile Include="..\..\src\system\grid-type-definition.cpp" />
     <ClCompile Include="..\..\src\grid\feature-action-flags.cpp" />
     <ClCompile Include="..\..\src\main-win\commandline-win.cpp" />
@@ -909,6 +910,7 @@
     <ClInclude Include="..\..\src\action\run-execution.h" />
     <ClInclude Include="..\..\src\load\savedata-old-flag-types.h" />
     <ClInclude Include="..\..\src\object-enchant\object-smith.h" />
+    <ClInclude Include="..\..\src\object-enchant\smith-tables.h" />
     <ClInclude Include="..\..\src\object-enchant\smith-types.h" />
     <ClInclude Include="..\..\src\object-enchant\tr-flags.h" />
     <ClInclude Include="..\..\src\object-use\throw-execution.h" />
