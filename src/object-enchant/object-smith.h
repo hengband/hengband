@@ -5,6 +5,7 @@
 #include "object-enchant/tr-flags.h"
 
 #include <memory>
+#include <optional>
 
 struct object_type;
 struct player_type;
@@ -33,6 +34,7 @@ public:
     static int get_essence_consumption(SmithEffect effect, const object_type *o_ptr = nullptr);
     static std::unique_ptr<ItemTester> get_item_tester(SmithEffect effect);
     static TrFlags get_effect_tr_flags(SmithEffect effect);
+    static std::optional<SmithEffect> object_effect(const object_type *o_ptr);
 
     int get_essence_num_of_posessions(SmithEssence essence) const;
     DrainEssenceResult drain_essence(object_type *o_ptr);

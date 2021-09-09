@@ -46,8 +46,8 @@ TrFlags object_flags(const object_type *o_ptr)
     /* Random artifact ! */
     flgs.set(o_ptr->art_flags);
 
-    if (o_ptr->is_smith()) {
-        auto tr_flags = Smith::get_effect_tr_flags(static_cast<SmithEffect>(o_ptr->xtra3));
+    if (auto effect = Smith::object_effect(o_ptr); effect.has_value()) {
+        auto tr_flags = Smith::get_effect_tr_flags(effect.value());
         flgs.set(tr_flags);
     }
 
@@ -98,11 +98,10 @@ TrFlags object_flags_known(const object_type *o_ptr)
         flgs.set(o_ptr->art_flags);
     }
 
-    if (!o_ptr->is_smith())
-        return flgs;
-
-    auto tr_flags = Smith::get_effect_tr_flags(static_cast<SmithEffect>(o_ptr->xtra3));
-    flgs.set(tr_flags).reset(TR_ACTIVATE);
+    if (auto effect = Smith::object_effect(o_ptr); effect.has_value()) {
+        auto tr_flags = Smith::get_effect_tr_flags(effect.value());
+        flgs.set(tr_flags).reset(TR_ACTIVATE);
+    }
 
     return flgs;
 }

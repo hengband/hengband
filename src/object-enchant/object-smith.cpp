@@ -658,6 +658,23 @@ TrFlags Smith::get_effect_tr_flags(SmithEffect effect)
 }
 
 /*!
+ * @brief アイテムに付与されている鍛冶効果を取得する
+ *
+ * @param o_ptr アイテム構造体へのポインタ
+ * @return アイテムに付与されている鍛冶効果を保持する std::optional オブジェクト返す。
+ * 鍛冶効果が付与できないアイテムか、何も付与されていなければ std::nullopt を返す。
+ */
+std::optional<SmithEffect> Smith::object_effect(const object_type *o_ptr)
+{
+    auto effect = static_cast<SmithEffect>(o_ptr->xtra3);
+    if (!o_ptr->is_weapon_armour_ammo() || effect == SmithEffect::NONE) {
+        return std::nullopt;
+    }
+
+    return effect;
+}
+
+/*!
  * @brief 指定した鍛冶カテゴリの鍛冶効果のリストを取得する
  *
  * @param category 鍛冶カテゴリ
@@ -891,7 +908,7 @@ bool Smith::add_essence(SmithEffect effect, object_type *o_ptr, int number)
  */
 void Smith::erase_essence(object_type *o_ptr) const
 {
-    auto effect = static_cast<SmithEffect>(o_ptr->xtra3);
+    auto effect = Smith::object_effect(o_ptr);
     if (effect == SmithEffect::SLAY_GLOVE) {
         o_ptr->to_h -= (o_ptr->xtra4 >> 8);
         o_ptr->to_d -= (o_ptr->xtra4 & 0x000f);

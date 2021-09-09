@@ -27,7 +27,7 @@
 int activation_index(const object_type *o_ptr)
 {
     if (o_ptr->is_smith()) {
-        switch (static_cast<SmithEffect>(o_ptr->xtra3)) {
+        switch (Smith::object_effect(o_ptr).value_or(SmithEffect::NONE)) {
         case SmithEffect::TMP_RES_ACID:
             return ACT_RESIST_ACID;
         case SmithEffect::TMP_RES_ELEC:
