@@ -695,9 +695,6 @@
     <ClCompile Include="..\..\src\cmd-item\cmd-read.cpp">
       <Filter>cmd-item</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-item\cmd-smith.cpp">
-      <Filter>cmd-item</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\cmd-item\cmd-usestaff.cpp">
       <Filter>cmd-item</Filter>
     </ClCompile>
@@ -3072,9 +3069,6 @@
       <Filter>cmd-item</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-item\cmd-read.h">
-      <Filter>cmd-item</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd-item\cmd-smith.h">
       <Filter>cmd-item</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-item\cmd-usestaff.h">

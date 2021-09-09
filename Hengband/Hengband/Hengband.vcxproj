@@ -761,7 +761,6 @@
     <ClCompile Include="..\..\src\cmd-item\cmd-quaff.cpp" />
     <ClCompile Include="..\..\src\cmd-item\cmd-read.cpp" />
     <ClCompile Include="..\..\src\cmd-io\cmd-save.cpp" />
-    <ClCompile Include="..\..\src\cmd-item\cmd-smith.cpp" />
     <ClCompile Include="..\..\src\cmd-action\cmd-spell.cpp" />
     <ClCompile Include="..\..\src\cmd-item\cmd-usestaff.cpp" />
     <ClCompile Include="..\..\src\cmd-visual\cmd-visuals.cpp" />
@@ -1665,7 +1664,6 @@
     <ClInclude Include="..\..\src\cmd-item\cmd-quaff.h" />
     <ClInclude Include="..\..\src\cmd-item\cmd-read.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-save.h" />
-    <ClInclude Include="..\..\src\cmd-item\cmd-smith.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-spell.h" />
     <ClInclude Include="..\..\src\cmd-item\cmd-usestaff.h" />
     <ClInclude Include="..\..\src\cmd-visual\cmd-visuals.h" />

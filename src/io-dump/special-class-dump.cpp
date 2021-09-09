@@ -7,7 +7,6 @@
 #include "io-dump/special-class-dump.h"
 #include "blue-magic/blue-magic-checker.h"
 #include "cmd-item/cmd-magiceat.h"
-#include "cmd-item/cmd-smith.h"
 #include "mind/mind-blue-mage.h"
 #include "monster-race/race-ability-flags.h"
 #include "mspell/monster-power-table.h"

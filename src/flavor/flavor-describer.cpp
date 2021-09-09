@@ -5,7 +5,6 @@
  */
 
 #include "flavor/flavor-describer.h"
-#include "cmd-item/cmd-smith.h"
 #include "combat/shoot.h"
 #include "flavor/flag-inscriptions-table.h"
 #include "flavor/flavor-util.h"

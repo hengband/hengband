@@ -1,5 +1,4 @@
 ﻿#include "object/object-flags.h"
-#include "cmd-item/cmd-smith.h" //!< @todo 相互参照している.
 #include "mind/mind-weaponsmith.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/object-smith.h"
