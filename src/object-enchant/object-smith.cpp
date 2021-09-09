@@ -1,4 +1,5 @@
 ﻿#include "object-enchant/object-smith.h"
+#include "artifact/random-art-effects.h"
 #include "object-enchant/smith-types.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-flags.h"
@@ -655,6 +656,31 @@ TrFlags Smith::get_effect_tr_flags(SmithEffect effect)
     }
 
     return info.value()->add_flags;
+}
+
+/*!
+ * @brief 鍛冶効果により得られる発動IDを得る
+ *
+ * @param effect 鍛冶効果
+ * @return 鍛冶効果により得られる発動ID(random_art_activation_type型)
+ * 鍛冶効果により得られる発動効果が無い場合は std::nullopt
+ */
+std::optional<random_art_activation_type> Smith::get_effect_activation(SmithEffect effect)
+{
+    switch (effect) {
+    case SmithEffect::TMP_RES_ACID:
+        return ACT_RESIST_ACID;
+    case SmithEffect::TMP_RES_ELEC:
+        return ACT_RESIST_ELEC;
+    case SmithEffect::TMP_RES_FIRE:
+        return ACT_RESIST_FIRE;
+    case SmithEffect::TMP_RES_COLD:
+        return ACT_RESIST_COLD;
+    case SmithEffect::EARTHQUAKE:
+        return ACT_QUAKE;
+    default:
+        return std::nullopt;
+    }
 }
 
 /*!

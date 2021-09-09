@@ -10,7 +10,6 @@
 #include "object-enchant/activation-info-table.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/object-smith.h"
-#include "object-enchant/smith-types.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-kind.h"
 #include "system/artifact-type-definition.h"
@@ -27,19 +26,10 @@
 int activation_index(const object_type *o_ptr)
 {
     if (o_ptr->is_smith()) {
-        switch (Smith::object_effect(o_ptr).value_or(SmithEffect::NONE)) {
-        case SmithEffect::TMP_RES_ACID:
-            return ACT_RESIST_ACID;
-        case SmithEffect::TMP_RES_ELEC:
-            return ACT_RESIST_ELEC;
-        case SmithEffect::TMP_RES_FIRE:
-            return ACT_RESIST_FIRE;
-        case SmithEffect::TMP_RES_COLD:
-            return ACT_RESIST_COLD;
-        case SmithEffect::EARTHQUAKE:
-            return ACT_QUAKE;
-        default:
-            break;
+        if (auto effect = Smith::object_effect(o_ptr); effect.has_value()) {
+            if (auto act_idx = Smith::get_effect_activation(effect.value()); act_idx.has_value()) {
+                return act_idx.value();
+            }
         }
     }
 
