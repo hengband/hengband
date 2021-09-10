@@ -16,6 +16,9 @@ const std::vector<SmithEssence> Smith::essence_list_order = {
     SmithEssence::DEX,
     SmithEssence::CON,
     SmithEssence::CHR,
+
+    SmithEssence::SUST_STATUS,
+
     SmithEssence::MAGIC_MASTERY,
     SmithEssence::STEALTH,
     SmithEssence::SEARCH,
@@ -23,6 +26,7 @@ const std::vector<SmithEssence> Smith::essence_list_order = {
     SmithEssence::TUNNEL,
     SmithEssence::SPEED,
     SmithEssence::BLOWS,
+
     SmithEssence::CHAOTIC,
     SmithEssence::VAMPIRIC,
     SmithEssence::EATHQUAKE,
@@ -31,11 +35,10 @@ const std::vector<SmithEssence> Smith::essence_list_order = {
     SmithEssence::BRAND_ELEC,
     SmithEssence::BRAND_FIRE,
     SmithEssence::BRAND_COLD,
-    SmithEssence::SUST_STATUS,
+
     SmithEssence::IMMUNITY,
     SmithEssence::REFLECT,
-    SmithEssence::FREE_ACT,
-    SmithEssence::HOLD_EXP,
+
     SmithEssence::RES_ACID,
     SmithEssence::RES_ELEC,
     SmithEssence::RES_FIRE,
@@ -52,15 +55,19 @@ const std::vector<SmithEssence> Smith::essence_list_order = {
     SmithEssence::RES_NEXUS,
     SmithEssence::RES_CHAOS,
     SmithEssence::RES_DISEN,
-    SmithEssence::NO_MAGIC,
+
+    SmithEssence::HOLD_EXP,
+    SmithEssence::FREE_ACT,
     SmithEssence::WARNING,
     SmithEssence::LEVITATION,
-    SmithEssence::LITE,
     SmithEssence::SEE_INVIS,
-    SmithEssence::TELEPATHY,
     SmithEssence::SLOW_DIGEST,
     SmithEssence::REGEN,
     SmithEssence::TELEPORT,
+    SmithEssence::NO_MAGIC,
+    SmithEssence::LITE,
+    SmithEssence::TELEPATHY,
+
     SmithEssence::SLAY_EVIL,
     SmithEssence::SLAY_ANIMAL,
     SmithEssence::SLAY_UNDEAD,
@@ -70,6 +77,7 @@ const std::vector<SmithEssence> Smith::essence_list_order = {
     SmithEssence::SLAY_GIANT,
     SmithEssence::SLAY_DRAGON,
     SmithEssence::SLAY_HUMAN,
+
     SmithEssence::ATTACK,
     SmithEssence::AC,
 };
@@ -78,13 +86,15 @@ const std::vector<SmithEssence> Smith::essence_list_order = {
  * @brief SmithEssence からエッセンスの表記名を引く連想配列
  */
 const std::unordered_map<SmithEssence, concptr> Smith::essence_to_name = {
-    // clang-format off
     { SmithEssence::STR, _("腕力", "strength") },
     { SmithEssence::INT, _("知能", "intelligen.") },
     { SmithEssence::WIS, _("賢さ", "wisdom") },
     { SmithEssence::DEX, _("器用さ", "dexterity") },
     { SmithEssence::CON, _("耐久力", "constitut.") },
     { SmithEssence::CHR, _("魅力", "charisma") },
+
+    { SmithEssence::SUST_STATUS, _("能力維持", "sustain") },
+
     { SmithEssence::MAGIC_MASTERY, _("魔力支配", "magic mast.") },
     { SmithEssence::STEALTH, _("隠密", "stealth") },
     { SmithEssence::SEARCH, _("探索", "searching") },
@@ -92,6 +102,7 @@ const std::unordered_map<SmithEssence, concptr> Smith::essence_to_name = {
     { SmithEssence::TUNNEL, _("採掘", "digging") },
     { SmithEssence::SPEED, _("スピード", "speed") },
     { SmithEssence::BLOWS, _("追加攻撃", "extra atk") },
+
     { SmithEssence::CHAOTIC, _("カオス攻撃", "chaos brand") },
     { SmithEssence::VAMPIRIC, _("吸血攻撃", "vampiric") },
     { SmithEssence::EATHQUAKE, _("地震", "quake") },
@@ -100,11 +111,10 @@ const std::unordered_map<SmithEssence, concptr> Smith::essence_to_name = {
     { SmithEssence::BRAND_ELEC, _("電撃", "elec. brand") },
     { SmithEssence::BRAND_FIRE, _("焼棄", "fire brand") },
     { SmithEssence::BRAND_COLD, _("凍結", "cold brand") },
-    { SmithEssence::SUST_STATUS, _("能力維持", "sustain") },
+
     { SmithEssence::IMMUNITY, _("免疫", "immunity") },
     { SmithEssence::REFLECT, _("反射", "reflection") },
-    { SmithEssence::FREE_ACT, _("麻痺知らず", "free action") },
-    { SmithEssence::HOLD_EXP, _("経験値維持", "hold exp") },
+
     { SmithEssence::RES_ACID, _("耐酸", "res. acid") },
     { SmithEssence::RES_ELEC, _("耐電撃", "res. elec.") },
     { SmithEssence::RES_FIRE, _("耐火炎", "res. fire") },
@@ -121,15 +131,19 @@ const std::unordered_map<SmithEssence, concptr> Smith::essence_to_name = {
     { SmithEssence::RES_NEXUS, _("耐因果混乱", "res. nexus") },
     { SmithEssence::RES_CHAOS, _("耐カオス", "res. chaos") },
     { SmithEssence::RES_DISEN, _("耐劣化", "res. disen.") },
-    { SmithEssence::NO_MAGIC, _("反魔法", "anti magic") },
+
+    { SmithEssence::HOLD_EXP, _("経験値維持", "hold exp") },
+    { SmithEssence::FREE_ACT, _("麻痺知らず", "free action") },
     { SmithEssence::WARNING, _("警告", "warning") },
     { SmithEssence::LEVITATION, _("浮遊", "levitation") },
-    { SmithEssence::LITE, _("永久光源", "perm. light") },
     { SmithEssence::SEE_INVIS, _("可視透明", "see invis.") },
     { SmithEssence::TELEPATHY, _("テレパシー", "telepathy") },
     { SmithEssence::SLOW_DIGEST, _("遅消化", "slow dige.") },
     { SmithEssence::REGEN, _("急速回復", "regen.") },
     { SmithEssence::TELEPORT, _("テレポート", "teleport") },
+    { SmithEssence::NO_MAGIC, _("反魔法", "anti magic") },
+    { SmithEssence::LITE, _("永久光源", "perm. light") },
+
     { SmithEssence::SLAY_EVIL, _("邪悪倍打", "slay animal") },
     { SmithEssence::SLAY_ANIMAL, _("動物倍打", "slay evil") },
     { SmithEssence::SLAY_UNDEAD, _("不死倍打", "slay undead") },
@@ -139,16 +153,15 @@ const std::unordered_map<SmithEssence, concptr> Smith::essence_to_name = {
     { SmithEssence::SLAY_GIANT, _("巨人倍打", "slay giant") },
     { SmithEssence::SLAY_DRAGON, _("竜倍打", "slay dragon") },
     { SmithEssence::SLAY_HUMAN, _("人間倍打", "slay human") },
+
     { SmithEssence::ATTACK, _("攻撃", "weapon enc.") },
     { SmithEssence::AC, _("防御", "armor enc.") },
-    // clang-format on
 };
 
 /*!
  * @brief エッセンス抽出情報テーブル
  */
 const std::vector<essence_drain_type> Smith::essence_drain_info_table = {
-    // clang-format off
     { TR_STR, { SmithEssence::STR }, 10 },
     { TR_INT, { SmithEssence::INT }, 10 },
     { TR_WIS, { SmithEssence::WIS }, 10 },
@@ -174,13 +187,14 @@ const std::vector<essence_drain_type> Smith::essence_drain_info_table = {
     { TR_SLAY_GIANT, { SmithEssence::SLAY_GIANT }, 10 },
     { TR_SLAY_DRAGON, { SmithEssence::SLAY_DRAGON }, 10 },
     { TR_KILL_DRAGON, { SmithEssence::SLAY_DRAGON }, 10 },
-    { TR_VORPAL, { SmithEssence::BRAND_POIS, SmithEssence::BRAND_ACID, SmithEssence::BRAND_ELEC, SmithEssence::BRAND_FIRE, SmithEssence::BRAND_COLD }, 5},
+    { TR_VORPAL, { SmithEssence::BRAND_POIS, SmithEssence::BRAND_ACID, SmithEssence::BRAND_ELEC, SmithEssence::BRAND_FIRE, SmithEssence::BRAND_COLD }, 5 },
     { TR_EARTHQUAKE, { SmithEssence::EATHQUAKE }, 10 },
     { TR_BRAND_POIS, { SmithEssence::BRAND_POIS }, 10 },
     { TR_BRAND_ACID, { SmithEssence::BRAND_ACID }, 10 },
     { TR_BRAND_ELEC, { SmithEssence::BRAND_ELEC }, 10 },
     { TR_BRAND_FIRE, { SmithEssence::BRAND_FIRE }, 10 },
     { TR_BRAND_COLD, { SmithEssence::BRAND_COLD }, 10 },
+
     { TR_SUST_STR, { SmithEssence::SUST_STATUS }, 10 },
     { TR_SUST_INT, { SmithEssence::SUST_STATUS }, 10 },
     { TR_SUST_WIS, { SmithEssence::SUST_STATUS }, 10 },
@@ -213,6 +227,7 @@ const std::vector<essence_drain_type> Smith::essence_drain_info_table = {
     { TR_RES_NEXUS, { SmithEssence::RES_NEXUS }, 10 },
     { TR_RES_CHAOS, { SmithEssence::RES_CHAOS }, 10 },
     { TR_RES_DISEN, { SmithEssence::RES_DISEN }, 10 },
+
     { TR_SH_FIRE, { SmithEssence::BRAND_FIRE, SmithEssence::RES_FIRE }, 10 },
     { TR_SH_ELEC, { SmithEssence::BRAND_ELEC, SmithEssence::RES_ELEC }, 10 },
     { TR_SLAY_HUMAN, { SmithEssence::SLAY_HUMAN }, 10 },
@@ -257,7 +272,7 @@ const std::vector<essence_drain_type> Smith::essence_drain_info_table = {
     { TR_ESP_ANIMAL, { SmithEssence::SLAY_ANIMAL }, 10 },
     { TR_ESP_UNDEAD, { SmithEssence::SLAY_UNDEAD }, 10 },
     { TR_ESP_DEMON, { SmithEssence::SLAY_DEMON }, 10 },
-    { TR_ESP_ORC, { SmithEssence::SLAY_ORC}, 10 },
+    { TR_ESP_ORC, { SmithEssence::SLAY_ORC }, 10 },
     { TR_ESP_TROLL, { SmithEssence::SLAY_TROLL }, 10 },
     { TR_ESP_GIANT, { SmithEssence::SLAY_GIANT }, 10 },
     { TR_ESP_DRAGON, { SmithEssence::SLAY_DRAGON }, 10 },
@@ -278,6 +293,7 @@ const std::vector<essence_drain_type> Smith::essence_drain_info_table = {
     { TR_LITE_M2, {}, 0 },
     { TR_LITE_M3, {}, 0 },
     { TR_LITE_FUEL, {}, 0 },
+
     { TR_CALL_ANIMAL, {}, -1 },
     { TR_CALL_DEMON, {}, -1 },
     { TR_CALL_DRAGON, {}, -1 },
@@ -308,7 +324,6 @@ const std::vector<essence_drain_type> Smith::essence_drain_info_table = {
     { TR_VUL_FIRE, {}, 0 },
     { TR_VUL_LITE, {}, 0 },
     { TR_IM_DARK, {}, 0 },
-    // clang-format on
 };
 
 /*!
@@ -316,12 +331,21 @@ const std::vector<essence_drain_type> Smith::essence_drain_info_table = {
  */
 const std::vector<smith_info_type> Smith::smith_info_table = {
     { SmithEffect::NONE, _("なし", "None"), SmithCategory::NONE, { SmithEssence::NONE }, 0, {} },
+
     { SmithEffect::STR, _("腕力", "strength"), SmithCategory::PVAL, { SmithEssence::STR }, 20, { TR_STR } },
     { SmithEffect::INT, _("知能", "intelligence"), SmithCategory::PVAL, { SmithEssence::INT }, 20, { TR_INT } },
     { SmithEffect::WIS, _("賢さ", "wisdom"), SmithCategory::PVAL, { SmithEssence::WIS }, 20, { TR_WIS } },
     { SmithEffect::DEX, _("器用さ", "dexterity"), SmithCategory::PVAL, { SmithEssence::DEX }, 20, { TR_DEX } },
     { SmithEffect::CON, _("耐久力", "constitution"), SmithCategory::PVAL, { SmithEssence::CON }, 20, { TR_CON } },
     { SmithEffect::CHR, _("魅力", "charisma"), SmithCategory::PVAL, { SmithEssence::CHR }, 20, { TR_CHR } },
+
+    { SmithEffect::SUST_STR, _("腕力維持", "sustain strength"), SmithCategory::ABILITY, { SmithEssence::SUST_STATUS }, 15, { TR_SUST_STR } },
+    { SmithEffect::SUST_INT, _("知能維持", "sustain intelligence"), SmithCategory::ABILITY, { SmithEssence::SUST_STATUS }, 15, { TR_SUST_INT } },
+    { SmithEffect::SUST_WIS, _("賢さ維持", "sustain wisdom"), SmithCategory::ABILITY, { SmithEssence::SUST_STATUS }, 15, { TR_SUST_WIS } },
+    { SmithEffect::SUST_DEX, _("器用さ維持", "sustain dexterity"), SmithCategory::ABILITY, { SmithEssence::SUST_STATUS }, 15, { TR_SUST_DEX } },
+    { SmithEffect::SUST_CON, _("耐久力維持", "sustain constitution"), SmithCategory::ABILITY, { SmithEssence::SUST_STATUS }, 15, { TR_SUST_CON } },
+    { SmithEffect::SUST_CHR, _("魅力維持", "sustain charisma"), SmithCategory::ABILITY, { SmithEssence::SUST_STATUS }, 15, { TR_SUST_CHR } },
+
     { SmithEffect::MAGIC_MASTERY, _("魔力支配", "magic mastery"), SmithCategory::PVAL, { SmithEssence::MAGIC_MASTERY }, 20, { TR_MAGIC_MASTERY } },
     { SmithEffect::STEALTH, _("隠密", "stealth"), SmithCategory::PVAL, { SmithEssence::STEALTH }, 40, { TR_STEALTH } },
     { SmithEffect::SEARCH, _("探索", "searching"), SmithCategory::PVAL, { SmithEssence::SEARCH }, 15, { TR_SEARCH } },
@@ -329,6 +353,7 @@ const std::vector<smith_info_type> Smith::smith_info_table = {
     { SmithEffect::TUNNEL, _("採掘", "digging"), SmithCategory::PVAL, { SmithEssence::TUNNEL }, 15, { TR_TUNNEL } },
     { SmithEffect::SPEED, _("スピード", "speed"), SmithCategory::PVAL, { SmithEssence::SPEED }, 12, { TR_SPEED } },
     { SmithEffect::BLOWS, _("追加攻撃", "extra attack"), SmithCategory::WEAPON_ATTR, { SmithEssence::BLOWS }, 20, { TR_BLOWS } },
+
     { SmithEffect::CHAOTIC, _("カオス攻撃", "chaos brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::CHAOTIC }, 15, { TR_CHAOTIC } },
     { SmithEffect::VAMPIRIC, _("吸血攻撃", "vampiric brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::VAMPIRIC }, 60, { TR_VAMPIRIC } },
     { SmithEffect::EARTHQUAKE, _("地震発動", "quake activation"), SmithCategory::ETC, { SmithEssence::EATHQUAKE }, 15, { TR_EARTHQUAKE, TR_ACTIVATE } },
@@ -337,19 +362,13 @@ const std::vector<smith_info_type> Smith::smith_info_table = {
     { SmithEffect::BRAND_ELEC, _("電撃", "electric brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::BRAND_ELEC }, 20, { TR_BRAND_ELEC } },
     { SmithEffect::BRAND_FIRE, _("焼棄", "fire brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::BRAND_FIRE }, 20, { TR_BRAND_FIRE } },
     { SmithEffect::BRAND_COLD, _("凍結", "cold brand"), SmithCategory::WEAPON_ATTR, { SmithEssence::BRAND_COLD }, 20, { TR_BRAND_COLD } },
-    { SmithEffect::SUST_STR, _("腕力維持", "sustain strength"), SmithCategory::ABILITY, { SmithEssence::SUST_STATUS }, 15, { TR_SUST_STR } },
-    { SmithEffect::SUST_INT, _("知能維持", "sustain intelligence"), SmithCategory::ABILITY, { SmithEssence::SUST_STATUS }, 15, { TR_SUST_INT } },
-    { SmithEffect::SUST_WIS, _("賢さ維持", "sustain wisdom"), SmithCategory::ABILITY, { SmithEssence::SUST_STATUS }, 15, { TR_SUST_WIS } },
-    { SmithEffect::SUST_DEX, _("器用さ維持", "sustain dexterity"), SmithCategory::ABILITY, { SmithEssence::SUST_STATUS }, 15, { TR_SUST_DEX } },
-    { SmithEffect::SUST_CON, _("耐久力維持", "sustain constitution"), SmithCategory::ABILITY, { SmithEssence::SUST_STATUS }, 15, { TR_SUST_CON } },
-    { SmithEffect::SUST_CHR, _("魅力維持", "sustain charisma"), SmithCategory::ABILITY, { SmithEssence::SUST_STATUS }, 15, { TR_SUST_CHR } },
+
     { SmithEffect::IM_ACID, _("酸免疫", "acid immunity"), SmithCategory::RESISTANCE, { SmithEssence::IMMUNITY }, 20, { TR_IM_ACID } },
     { SmithEffect::IM_ELEC, _("電撃免疫", "electric immunity"), SmithCategory::RESISTANCE, { SmithEssence::IMMUNITY }, 20, { TR_IM_ELEC } },
     { SmithEffect::IM_FIRE, _("火炎免疫", "fire immunity"), SmithCategory::RESISTANCE, { SmithEssence::IMMUNITY }, 20, { TR_IM_FIRE } },
     { SmithEffect::IM_COLD, _("冷気免疫", "cold immunity"), SmithCategory::RESISTANCE, { SmithEssence::IMMUNITY }, 20, { TR_IM_COLD } },
     { SmithEffect::REFLECT, _("反射", "reflection"), SmithCategory::RESISTANCE, { SmithEssence::REFLECT }, 20, { TR_REFLECT } },
-    { SmithEffect::FREE_ACT, _("麻痺知らず", "free action"), SmithCategory::ABILITY, { SmithEssence::FREE_ACT }, 20, { TR_FREE_ACT } },
-    { SmithEffect::HOLD_EXP, _("経験値維持", "hold experience"), SmithCategory::ABILITY, { SmithEssence::HOLD_EXP }, 20, { TR_HOLD_EXP } },
+
     { SmithEffect::RES_ACID, _("耐酸", "resistance to acid"), SmithCategory::RESISTANCE, { SmithEssence::RES_ACID }, 15, { TR_RES_ACID } },
     { SmithEffect::RES_ELEC, _("耐電撃", "resistance to electric"), SmithCategory::RESISTANCE, { SmithEssence::RES_ELEC }, 15, { TR_RES_ELEC } },
     { SmithEffect::RES_FIRE, _("耐火炎", "resistance to fire"), SmithCategory::RESISTANCE, { SmithEssence::RES_FIRE }, 15, { TR_RES_FIRE } },
@@ -366,34 +385,39 @@ const std::vector<smith_info_type> Smith::smith_info_table = {
     { SmithEffect::RES_NEXUS, _("耐因果混乱", "resistance to nexus"), SmithCategory::RESISTANCE, { SmithEssence::RES_NEXUS }, 20, { TR_RES_NEXUS } },
     { SmithEffect::RES_CHAOS, _("耐カオス", "resistance to chaos"), SmithCategory::RESISTANCE, { SmithEssence::RES_CHAOS }, 20, { TR_RES_CHAOS } },
     { SmithEffect::RES_DISEN, _("耐劣化", "resistance to disenchantment"), SmithCategory::RESISTANCE, { SmithEssence::RES_DISEN }, 20, { TR_RES_DISEN } },
-    { SmithEffect::NO_MAGIC, _("反魔法", "anti magic"), SmithCategory::ABILITY, { SmithEssence::NO_MAGIC }, 15, { TR_NO_MAGIC } },
+
+    { SmithEffect::HOLD_EXP, _("経験値維持", "hold experience"), SmithCategory::ABILITY, { SmithEssence::HOLD_EXP }, 20, { TR_HOLD_EXP } },
+    { SmithEffect::FREE_ACT, _("麻痺知らず", "free action"), SmithCategory::ABILITY, { SmithEssence::FREE_ACT }, 20, { TR_FREE_ACT } },
     { SmithEffect::WARNING, _("警告", "warning"), SmithCategory::ABILITY, { SmithEssence::WARNING }, 20, { TR_WARNING } },
     { SmithEffect::LEVITATION, _("浮遊", "levitation"), SmithCategory::ABILITY, { SmithEssence::LEVITATION }, 20, { TR_LEVITATION } },
-    { SmithEffect::LITE, _("永久光源", "permanent light"), SmithCategory::ABILITY, { SmithEssence::LITE }, 15, { TR_LITE_1 } },
     { SmithEffect::SEE_INVIS, _("可視透明", "see invisible"), SmithCategory::ABILITY, { SmithEssence::SEE_INVIS }, 20, { TR_SEE_INVIS } },
-    { SmithEffect::TELEPATHY, _("テレパシー", "telepathy"), SmithCategory::ESP, { SmithEssence::TELEPATHY }, 15, { TR_TELEPATHY } },
     { SmithEffect::SLOW_DIGEST, _("遅消化", "slow digestion"), SmithCategory::ABILITY, { SmithEssence::SLOW_DIGEST }, 15, { TR_SLOW_DIGEST } },
     { SmithEffect::REGEN, _("急速回復", "regeneration"), SmithCategory::ABILITY, { SmithEssence::REGEN }, 20, { TR_REGEN } },
     { SmithEffect::TELEPORT, _("テレポート", "teleport"), SmithCategory::ABILITY, { SmithEssence::TELEPORT }, 25, { TR_TELEPORT } },
+    { SmithEffect::NO_MAGIC, _("反魔法", "anti magic"), SmithCategory::ABILITY, { SmithEssence::NO_MAGIC }, 15, { TR_NO_MAGIC } },
+    { SmithEffect::LITE, _("永久光源", "permanent light"), SmithCategory::ABILITY, { SmithEssence::LITE }, 15, { TR_LITE_1 } },
+
     { SmithEffect::SLAY_EVIL, _("邪悪倍打", "slay evil"), SmithCategory::SLAYING, { SmithEssence::SLAY_EVIL }, 100, { TR_SLAY_EVIL } },
-    { SmithEffect::KILL_EVIL, _("邪悪倍倍打", "kill evil"), SmithCategory::NONE, { SmithEssence::SLAY_EVIL }, 0,
-        { TR_KILL_EVIL } }, // 強力すぎるため無効(SmithCategory::NONE)
     { SmithEffect::SLAY_ANIMAL, _("動物倍打", "slay animal"), SmithCategory::SLAYING, { SmithEssence::SLAY_ANIMAL }, 20, { TR_SLAY_ANIMAL } },
-    { SmithEffect::KILL_ANIMAL, _("動物倍倍打", "kill animal"), SmithCategory::SLAYING, { SmithEssence::SLAY_ANIMAL }, 60, { TR_KILL_ANIMAL } },
     { SmithEffect::SLAY_UNDEAD, _("不死倍打", "slay undead"), SmithCategory::SLAYING, { SmithEssence::SLAY_UNDEAD }, 20, { TR_SLAY_UNDEAD } },
-    { SmithEffect::KILL_UNDEAD, _("不死倍倍打", "kill undead"), SmithCategory::SLAYING, { SmithEssence::SLAY_UNDEAD }, 60, { TR_KILL_UNDEAD } },
     { SmithEffect::SLAY_DEMON, _("悪魔倍打", "slay demon"), SmithCategory::SLAYING, { SmithEssence::SLAY_DEMON }, 20, { TR_SLAY_DEMON } },
-    { SmithEffect::KILL_DEMON, _("悪魔倍倍打", "kill demon"), SmithCategory::SLAYING, { SmithEssence::SLAY_DEMON }, 60, { TR_KILL_DEMON } },
     { SmithEffect::SLAY_ORC, _("オーク倍打", "slay orc"), SmithCategory::SLAYING, { SmithEssence::SLAY_ORC }, 20, { TR_SLAY_ORC } },
-    { SmithEffect::KILL_ORC, _("オーク倍倍打", "kill orc"), SmithCategory::SLAYING, { SmithEssence::SLAY_ORC }, 60, { TR_KILL_ORC } },
     { SmithEffect::SLAY_TROLL, _("トロル倍打", "slay troll"), SmithCategory::SLAYING, { SmithEssence::SLAY_TROLL }, 20, { TR_SLAY_TROLL } },
-    { SmithEffect::KILL_TROLL, _("トロル倍倍打", "kill troll"), SmithCategory::SLAYING, { SmithEssence::SLAY_TROLL }, 60, { TR_KILL_TROLL } },
     { SmithEffect::SLAY_GIANT, _("巨人倍打", "slay giant"), SmithCategory::SLAYING, { SmithEssence::SLAY_GIANT }, 20, { TR_SLAY_GIANT } },
-    { SmithEffect::KILL_GIANT, _("巨人倍倍打", "kill giant"), SmithCategory::SLAYING, { SmithEssence::SLAY_GIANT }, 60, { TR_KILL_GIANT } },
     { SmithEffect::SLAY_DRAGON, _("竜倍打", "slay dragon"), SmithCategory::SLAYING, { SmithEssence::SLAY_DRAGON }, 20, { TR_SLAY_DRAGON } },
-    { SmithEffect::KILL_DRAGON, _("竜倍倍打", "kill dragon"), SmithCategory::SLAYING, { SmithEssence::SLAY_DRAGON }, 60, { TR_KILL_DRAGON } },
     { SmithEffect::SLAY_HUMAN, _("人間倍打", "slay human"), SmithCategory::SLAYING, { SmithEssence::SLAY_HUMAN }, 20, { TR_SLAY_HUMAN } },
+
+    { SmithEffect::KILL_EVIL, _("邪悪倍倍打", "kill evil"), SmithCategory::NONE, { SmithEssence::SLAY_EVIL }, 0, { TR_KILL_EVIL } }, // 強力すぎるため無効(SmithCategory::NONE)
+    { SmithEffect::KILL_ANIMAL, _("動物倍倍打", "kill animal"), SmithCategory::SLAYING, { SmithEssence::SLAY_ANIMAL }, 60, { TR_KILL_ANIMAL } },
+    { SmithEffect::KILL_UNDEAD, _("不死倍倍打", "kill undead"), SmithCategory::SLAYING, { SmithEssence::SLAY_UNDEAD }, 60, { TR_KILL_UNDEAD } },
+    { SmithEffect::KILL_DEMON, _("悪魔倍倍打", "kill demon"), SmithCategory::SLAYING, { SmithEssence::SLAY_DEMON }, 60, { TR_KILL_DEMON } },
+    { SmithEffect::KILL_ORC, _("オーク倍倍打", "kill orc"), SmithCategory::SLAYING, { SmithEssence::SLAY_ORC }, 60, { TR_KILL_ORC } },
+    { SmithEffect::KILL_TROLL, _("トロル倍倍打", "kill troll"), SmithCategory::SLAYING, { SmithEssence::SLAY_TROLL }, 60, { TR_KILL_TROLL } },
+    { SmithEffect::KILL_GIANT, _("巨人倍倍打", "kill giant"), SmithCategory::SLAYING, { SmithEssence::SLAY_GIANT }, 60, { TR_KILL_GIANT } },
+    { SmithEffect::KILL_DRAGON, _("竜倍倍打", "kill dragon"), SmithCategory::SLAYING, { SmithEssence::SLAY_DRAGON }, 60, { TR_KILL_DRAGON } },
     { SmithEffect::KILL_HUMAN, _("人間倍倍打", "kill human"), SmithCategory::SLAYING, { SmithEssence::SLAY_HUMAN }, 60, { TR_KILL_HUMAN } },
+
+    { SmithEffect::TELEPATHY, _("テレパシー", "telepathy"), SmithCategory::ESP, { SmithEssence::TELEPATHY }, 15, { TR_TELEPATHY } },
     { SmithEffect::ESP_ANIMAL, _("動物ESP", "sense animal"), SmithCategory::ESP, { SmithEssence::SLAY_ANIMAL }, 40, { TR_ESP_ANIMAL } },
     { SmithEffect::ESP_UNDEAD, _("不死ESP", "sense undead"), SmithCategory::ESP, { SmithEssence::SLAY_UNDEAD }, 40, { TR_ESP_UNDEAD } },
     { SmithEffect::ESP_DEMON, _("悪魔ESP", "sense demon"), SmithCategory::ESP, { SmithEssence::SLAY_DEMON }, 40, { TR_ESP_DEMON } },
@@ -402,25 +426,19 @@ const std::vector<smith_info_type> Smith::smith_info_table = {
     { SmithEffect::ESP_GIANT, _("巨人ESP", "sense giant"), SmithCategory::ESP, { SmithEssence::SLAY_GIANT }, 40, { TR_ESP_GIANT } },
     { SmithEffect::ESP_DRAGON, _("竜ESP", "sense dragon"), SmithCategory::ESP, { SmithEssence::SLAY_DRAGON }, 40, { TR_ESP_DRAGON } },
     { SmithEffect::ESP_HUMAN, _("人間ESP", "sense human"), SmithCategory::ESP, { SmithEssence::SLAY_HUMAN }, 40, { TR_ESP_HUMAN } },
+
+    { SmithEffect::TMP_RES_ACID, _("酸耐性発動", "resist acid activation"), SmithCategory::ETC, { SmithEssence::RES_ACID }, 50, { TR_RES_ACID, TR_ACTIVATE } },
+    { SmithEffect::TMP_RES_ELEC, _("電撃耐性発動", "resist electricity activation"), SmithCategory::ETC, { SmithEssence::RES_ELEC }, 50, { TR_RES_ELEC, TR_ACTIVATE } },
+    { SmithEffect::TMP_RES_FIRE, _("火炎耐性発動", "resist fire activation"), SmithCategory::ETC, { SmithEssence::RES_FIRE }, 50, { TR_RES_FIRE, TR_ACTIVATE } },
+    { SmithEffect::TMP_RES_COLD, _("冷気耐性発動", "resist cold activation"), SmithCategory::ETC, { SmithEssence::RES_COLD }, 50, { TR_RES_COLD, TR_ACTIVATE } },
+    { SmithEffect::SH_FIRE, _("火炎オーラ", "fiery sheath"), SmithCategory::ETC, { SmithEssence::RES_FIRE, SmithEssence::BRAND_FIRE }, 50, { TR_RES_FIRE, TR_SH_FIRE } },
+    { SmithEffect::SH_ELEC, _("電撃オーラ", "electric sheath"), SmithCategory::ETC, { SmithEssence::RES_ELEC, SmithEssence::BRAND_ELEC }, 50, { TR_RES_ELEC, TR_SH_ELEC } },
+    { SmithEffect::SH_COLD, _("冷気オーラ", "sheath of coldness"), SmithCategory::ETC, { SmithEssence::RES_COLD, SmithEssence::BRAND_COLD }, 50, { TR_RES_COLD, TR_SH_COLD } },
+
+    { SmithEffect::RESISTANCE, _("全耐性", "resistance"), SmithCategory::RESISTANCE, { SmithEssence::RES_ACID, SmithEssence::RES_ELEC, SmithEssence::RES_FIRE, SmithEssence::RES_COLD }, 150, { TR_RES_ACID, TR_RES_ELEC, TR_RES_FIRE, TR_RES_COLD } },
+    { SmithEffect::SLAY_GLOVE, _("殺戮の小手", "gauntlets of slaying"), SmithCategory::WEAPON_ATTR, { SmithEssence::ATTACK }, 200, {} },
+
     { SmithEffect::ATTACK, _("攻撃", "weapon enchant"), SmithCategory::ENCHANT, { SmithEssence::ATTACK }, 30, {} },
     { SmithEffect::AC, _("防御", "armor enchant"), SmithCategory::ENCHANT, { SmithEssence::AC }, 15, {} },
-    { SmithEffect::TMP_RES_ACID, _("酸耐性発動", "resist acid activation"), SmithCategory::ETC, { SmithEssence::RES_ACID }, 50, { TR_RES_ACID, TR_ACTIVATE } },
-    { SmithEffect::TMP_RES_ELEC, _("電撃耐性発動", "resist electricity activation"), SmithCategory::ETC, { SmithEssence::RES_ELEC }, 50,
-        { TR_RES_ELEC, TR_ACTIVATE } },
-    { SmithEffect::TMP_RES_FIRE, _("火炎耐性発動", "resist fire activation"), SmithCategory::ETC, { SmithEssence::RES_FIRE }, 50,
-        { TR_RES_FIRE, TR_ACTIVATE } },
-    { SmithEffect::TMP_RES_COLD, _("冷気耐性発動", "resist cold activation"), SmithCategory::ETC, { SmithEssence::RES_COLD }, 50,
-        { TR_RES_COLD, TR_ACTIVATE } },
-    { SmithEffect::SH_FIRE, _("火炎オーラ", "fiery sheath"), SmithCategory::ETC, { SmithEssence::RES_FIRE, SmithEssence::BRAND_FIRE }, 50,
-        { TR_RES_FIRE, TR_SH_FIRE } },
-    { SmithEffect::SH_ELEC, _("電撃オーラ", "electric sheath"), SmithCategory::ETC, { SmithEssence::RES_ELEC, SmithEssence::BRAND_ELEC }, 50,
-        { TR_RES_ELEC, TR_SH_ELEC } },
-    { SmithEffect::SH_COLD, _("冷気オーラ", "sheath of coldness"), SmithCategory::ETC, { SmithEssence::RES_COLD, SmithEssence::BRAND_COLD }, 50,
-        { TR_RES_COLD, TR_SH_COLD } },
-    { SmithEffect::RESISTANCE, _("全耐性", "resistance"), SmithCategory::RESISTANCE,
-        { SmithEssence::RES_ACID, SmithEssence::RES_ELEC, SmithEssence::RES_FIRE, SmithEssence::RES_COLD }, 150,
-        { TR_RES_ACID, TR_RES_ELEC, TR_RES_FIRE, TR_RES_COLD } },
-    { SmithEffect::SUSTAIN, _("装備保持", "elements proof"), SmithCategory::ENCHANT,
-        { SmithEssence::RES_ACID, SmithEssence::RES_ELEC, SmithEssence::RES_FIRE, SmithEssence::RES_COLD }, 10, {} },
-    { SmithEffect::SLAY_GLOVE, _("殺戮の小手", "gauntlets of slaying"), SmithCategory::WEAPON_ATTR, { SmithEssence::ATTACK }, 200, {} },
+    { SmithEffect::SUSTAIN, _("装備保持", "elements proof"), SmithCategory::ENCHANT, { SmithEssence::RES_ACID, SmithEssence::RES_ELEC, SmithEssence::RES_FIRE, SmithEssence::RES_COLD }, 10, {} },
 };
