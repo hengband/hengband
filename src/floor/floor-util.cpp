@@ -48,7 +48,7 @@ static int scent_when = 0;
  * Whenever the age count loops, most of the scent trail is erased and
  * the age of the remainder is recalculated.
  */
-void update_smell(floor_type *floor_ptr, player_type *subject_ptr)
+void update_smell(floor_type *floor_ptr, player_type *player_ptr)
 {
     /* Create a table that controls the spread of scent */
     const int scent_adjust[5][5] = {
@@ -73,15 +73,15 @@ void update_smell(floor_type *floor_ptr, player_type *subject_ptr)
     for (POSITION i = 0; i < 5; i++) {
         for (POSITION j = 0; j < 5; j++) {
             grid_type *g_ptr;
-            POSITION y = i + subject_ptr->y - 2;
-            POSITION x = j + subject_ptr->x - 2;
+            POSITION y = i + player_ptr->y - 2;
+            POSITION x = j + player_ptr->x - 2;
             if (!in_bounds(floor_ptr, y, x))
                 continue;
 
             g_ptr = &floor_ptr->grid_array[y][x];
-            if (!g_ptr->cave_has_flag(FF::MOVE) && !is_closed_door(subject_ptr, g_ptr->feat))
+            if (!g_ptr->cave_has_flag(FF::MOVE) && !is_closed_door(player_ptr, g_ptr->feat))
                 continue;
-            if (!player_has_los_bold(subject_ptr, y, x))
+            if (!player_has_los_bold(player_ptr, y, x))
                 continue;
             if (scent_adjust[i][j] == -1)
                 continue;

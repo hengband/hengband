@@ -246,7 +246,7 @@ bool no_lite(player_type *player_ptr)
 /*
  * Place an attr/char pair at the given map coordinate, if legal.
  */
-void print_rel(player_type *subject_ptr, SYMBOL_CODE c, TERM_COLOR a, POSITION y, POSITION x)
+void print_rel(player_type *player_ptr, SYMBOL_CODE c, TERM_COLOR a, POSITION y, POSITION x)
 {
     /* Only do "legal" locations */
     if (panel_contains(y, x)) {
@@ -254,9 +254,9 @@ void print_rel(player_type *subject_ptr, SYMBOL_CODE c, TERM_COLOR a, POSITION y
         if (!use_graphics) {
             if (current_world_ptr->timewalk_m_idx)
                 a = TERM_DARK;
-            else if (is_invuln(subject_ptr) || subject_ptr->timewalk)
+            else if (is_invuln(player_ptr) || player_ptr->timewalk)
                 a = TERM_WHITE;
-            else if (subject_ptr->wraith_form)
+            else if (player_ptr->wraith_form)
                 a = TERM_L_DARK;
         }
 
@@ -639,14 +639,14 @@ static POSITION flow_y = 0;
  * We do not need a priority queue because the cost from grid
  * to grid is always "one" and we process them in order.
  */
-void update_flow(player_type *subject_ptr)
+void update_flow(player_type *player_ptr)
 {
     POSITION x, y;
     DIRECTION d;
-    floor_type *f_ptr = subject_ptr->current_floor_ptr;
+    floor_type *f_ptr = player_ptr->current_floor_ptr;
 
     /* The last way-point is on the map */
-    if (subject_ptr->running && in_bounds(f_ptr, flow_y, flow_x)) {
+    if (player_ptr->running && in_bounds(f_ptr, flow_y, flow_x)) {
         /* The way point is in sight - do not update.  (Speedup) */
         if (f_ptr->grid_array[flow_y][flow_x].info & CAVE_VIEW)
             return;
@@ -661,13 +661,13 @@ void update_flow(player_type *subject_ptr)
     }
 
     /* Save player position */
-    flow_y = subject_ptr->y;
-    flow_x = subject_ptr->x;
+    flow_y = player_ptr->y;
+    flow_x = player_ptr->x;
 
     for (int i = 0; i < FLOW_MAX; i++) {
         // 幅優先探索用のキュー。
         std::queue<Pos2D> que;
-        que.emplace(subject_ptr->y, subject_ptr->x);
+        que.emplace(player_ptr->y, player_ptr->x);
 
         /* Now process the queue */
         while (!que.empty()) {
@@ -677,20 +677,20 @@ void update_flow(player_type *subject_ptr)
 
             /* Add the "children" */
             for (d = 0; d < 8; d++) {
-                byte m = subject_ptr->current_floor_ptr->grid_array[ty][tx].costs[i] + 1;
-                byte n = subject_ptr->current_floor_ptr->grid_array[ty][tx].dists[i] + 1;
+                byte m = player_ptr->current_floor_ptr->grid_array[ty][tx].costs[i] + 1;
+                byte n = player_ptr->current_floor_ptr->grid_array[ty][tx].dists[i] + 1;
 
                 /* Child location */
                 y = ty + ddy_ddd[d];
                 x = tx + ddx_ddd[d];
 
                 /* Ignore player's grid */
-                if (player_bold(subject_ptr, y, x))
+                if (player_bold(player_ptr, y, x))
                     continue;
 
-                grid_type *g_ptr = &subject_ptr->current_floor_ptr->grid_array[y][x];
+                grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
-                if (is_closed_door(subject_ptr, g_ptr->feat))
+                if (is_closed_door(player_ptr, g_ptr->feat))
                     m += 3;
 
                 /* Ignore "pre-stamped" entries */
@@ -708,7 +708,7 @@ void update_flow(player_type *subject_ptr)
                     break;
                 }
 
-                if (!can_move && !is_closed_door(subject_ptr, g_ptr->feat))
+                if (!can_move && !is_closed_door(player_ptr, g_ptr->feat))
                     continue;
 
                 /* Save the flow cost */

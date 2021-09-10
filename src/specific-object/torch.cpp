@@ -163,13 +163,13 @@ void update_lite_radius(player_type *player_ptr)
  *                 ***         *****
  *                              ***
  */
-void update_lite(player_type *subject_ptr)
+void update_lite(player_type *player_ptr)
 {
     // 前回照らされていた座標たちを格納する配列。
     std::vector<Pos2D> points;
 
-    POSITION p = subject_ptr->cur_lite;
-    floor_type *const floor_ptr = subject_ptr->current_floor_ptr;
+    POSITION p = player_ptr->cur_lite;
+    floor_type *const floor_ptr = player_ptr->current_floor_ptr;
 
     // 前回照らされていた座標たちを記録。
     for (int i = 0; i < floor_ptr->lite_n; i++) {
@@ -184,40 +184,40 @@ void update_lite(player_type *subject_ptr)
 
     floor_ptr->lite_n = 0;
     if (p >= 1) {
-        cave_lite_hack(floor_ptr, subject_ptr->y, subject_ptr->x);
-        cave_lite_hack(floor_ptr, subject_ptr->y + 1, subject_ptr->x);
-        cave_lite_hack(floor_ptr, subject_ptr->y - 1, subject_ptr->x);
-        cave_lite_hack(floor_ptr, subject_ptr->y, subject_ptr->x + 1);
-        cave_lite_hack(floor_ptr, subject_ptr->y, subject_ptr->x - 1);
-        cave_lite_hack(floor_ptr, subject_ptr->y + 1, subject_ptr->x + 1);
-        cave_lite_hack(floor_ptr, subject_ptr->y + 1, subject_ptr->x - 1);
-        cave_lite_hack(floor_ptr, subject_ptr->y - 1, subject_ptr->x + 1);
-        cave_lite_hack(floor_ptr, subject_ptr->y - 1, subject_ptr->x - 1);
+        cave_lite_hack(floor_ptr, player_ptr->y, player_ptr->x);
+        cave_lite_hack(floor_ptr, player_ptr->y + 1, player_ptr->x);
+        cave_lite_hack(floor_ptr, player_ptr->y - 1, player_ptr->x);
+        cave_lite_hack(floor_ptr, player_ptr->y, player_ptr->x + 1);
+        cave_lite_hack(floor_ptr, player_ptr->y, player_ptr->x - 1);
+        cave_lite_hack(floor_ptr, player_ptr->y + 1, player_ptr->x + 1);
+        cave_lite_hack(floor_ptr, player_ptr->y + 1, player_ptr->x - 1);
+        cave_lite_hack(floor_ptr, player_ptr->y - 1, player_ptr->x + 1);
+        cave_lite_hack(floor_ptr, player_ptr->y - 1, player_ptr->x - 1);
     }
 
     if (p >= 2) {
-        if (cave_los_bold(floor_ptr, subject_ptr->y + 1, subject_ptr->x)) {
-            cave_lite_hack(floor_ptr, subject_ptr->y + 2, subject_ptr->x);
-            cave_lite_hack(floor_ptr, subject_ptr->y + 2, subject_ptr->x + 1);
-            cave_lite_hack(floor_ptr, subject_ptr->y + 2, subject_ptr->x - 1);
+        if (cave_los_bold(floor_ptr, player_ptr->y + 1, player_ptr->x)) {
+            cave_lite_hack(floor_ptr, player_ptr->y + 2, player_ptr->x);
+            cave_lite_hack(floor_ptr, player_ptr->y + 2, player_ptr->x + 1);
+            cave_lite_hack(floor_ptr, player_ptr->y + 2, player_ptr->x - 1);
         }
 
-        if (cave_los_bold(floor_ptr, subject_ptr->y - 1, subject_ptr->x)) {
-            cave_lite_hack(floor_ptr, subject_ptr->y - 2, subject_ptr->x);
-            cave_lite_hack(floor_ptr, subject_ptr->y - 2, subject_ptr->x + 1);
-            cave_lite_hack(floor_ptr, subject_ptr->y - 2, subject_ptr->x - 1);
+        if (cave_los_bold(floor_ptr, player_ptr->y - 1, player_ptr->x)) {
+            cave_lite_hack(floor_ptr, player_ptr->y - 2, player_ptr->x);
+            cave_lite_hack(floor_ptr, player_ptr->y - 2, player_ptr->x + 1);
+            cave_lite_hack(floor_ptr, player_ptr->y - 2, player_ptr->x - 1);
         }
 
-        if (cave_los_bold(floor_ptr, subject_ptr->y, subject_ptr->x + 1)) {
-            cave_lite_hack(floor_ptr, subject_ptr->y, subject_ptr->x + 2);
-            cave_lite_hack(floor_ptr, subject_ptr->y + 1, subject_ptr->x + 2);
-            cave_lite_hack(floor_ptr, subject_ptr->y - 1, subject_ptr->x + 2);
+        if (cave_los_bold(floor_ptr, player_ptr->y, player_ptr->x + 1)) {
+            cave_lite_hack(floor_ptr, player_ptr->y, player_ptr->x + 2);
+            cave_lite_hack(floor_ptr, player_ptr->y + 1, player_ptr->x + 2);
+            cave_lite_hack(floor_ptr, player_ptr->y - 1, player_ptr->x + 2);
         }
 
-        if (cave_los_bold(floor_ptr, subject_ptr->y, subject_ptr->x - 1)) {
-            cave_lite_hack(floor_ptr, subject_ptr->y, subject_ptr->x - 2);
-            cave_lite_hack(floor_ptr, subject_ptr->y + 1, subject_ptr->x - 2);
-            cave_lite_hack(floor_ptr, subject_ptr->y - 1, subject_ptr->x - 2);
+        if (cave_los_bold(floor_ptr, player_ptr->y, player_ptr->x - 1)) {
+            cave_lite_hack(floor_ptr, player_ptr->y, player_ptr->x - 2);
+            cave_lite_hack(floor_ptr, player_ptr->y + 1, player_ptr->x - 2);
+            cave_lite_hack(floor_ptr, player_ptr->y - 1, player_ptr->x - 2);
         }
     }
 
@@ -226,38 +226,38 @@ void update_lite(player_type *subject_ptr)
         if (p > 14)
             p = 14;
 
-        if (cave_los_bold(floor_ptr, subject_ptr->y + 1, subject_ptr->x + 1))
-            cave_lite_hack(floor_ptr, subject_ptr->y + 2, subject_ptr->x + 2);
+        if (cave_los_bold(floor_ptr, player_ptr->y + 1, player_ptr->x + 1))
+            cave_lite_hack(floor_ptr, player_ptr->y + 2, player_ptr->x + 2);
 
-        if (cave_los_bold(floor_ptr, subject_ptr->y + 1, subject_ptr->x - 1))
-            cave_lite_hack(floor_ptr, subject_ptr->y + 2, subject_ptr->x - 2);
+        if (cave_los_bold(floor_ptr, player_ptr->y + 1, player_ptr->x - 1))
+            cave_lite_hack(floor_ptr, player_ptr->y + 2, player_ptr->x - 2);
 
-        if (cave_los_bold(floor_ptr, subject_ptr->y - 1, subject_ptr->x + 1))
-            cave_lite_hack(floor_ptr, subject_ptr->y - 2, subject_ptr->x + 2);
+        if (cave_los_bold(floor_ptr, player_ptr->y - 1, player_ptr->x + 1))
+            cave_lite_hack(floor_ptr, player_ptr->y - 2, player_ptr->x + 2);
 
-        if (cave_los_bold(floor_ptr, subject_ptr->y - 1, subject_ptr->x - 1))
-            cave_lite_hack(floor_ptr, subject_ptr->y - 2, subject_ptr->x - 2);
+        if (cave_los_bold(floor_ptr, player_ptr->y - 1, player_ptr->x - 1))
+            cave_lite_hack(floor_ptr, player_ptr->y - 2, player_ptr->x - 2);
 
-        POSITION min_y = subject_ptr->y - p;
+        POSITION min_y = player_ptr->y - p;
         if (min_y < 0)
             min_y = 0;
 
-        POSITION max_y = subject_ptr->y + p;
+        POSITION max_y = player_ptr->y + p;
         if (max_y > floor_ptr->height - 1)
             max_y = floor_ptr->height - 1;
 
-        POSITION min_x = subject_ptr->x - p;
+        POSITION min_x = player_ptr->x - p;
         if (min_x < 0)
             min_x = 0;
 
-        POSITION max_x = subject_ptr->x + p;
+        POSITION max_x = player_ptr->x + p;
         if (max_x > floor_ptr->width - 1)
             max_x = floor_ptr->width - 1;
 
         for (POSITION y = min_y; y <= max_y; y++) {
             for (POSITION x = min_x; x <= max_x; x++) {
-                int dy = (subject_ptr->y > y) ? (subject_ptr->y - y) : (y - subject_ptr->y);
-                int dx = (subject_ptr->x > x) ? (subject_ptr->x - x) : (x - subject_ptr->x);
+                int dy = (player_ptr->y > y) ? (player_ptr->y - y) : (y - player_ptr->y);
+                int dx = (player_ptr->x > x) ? (player_ptr->x - x) : (x - player_ptr->x);
                 if ((dy <= 2) && (dx <= 2))
                     continue;
 
@@ -291,5 +291,5 @@ void update_lite(player_type *subject_ptr)
         cave_redraw_later(floor_ptr, y, x);
     }
 
-    subject_ptr->update |= PU_DELAY_VIS;
+    player_ptr->update |= PU_DELAY_VIS;
 }

@@ -51,10 +51,10 @@ bool player_can_enter(player_type *player_ptr, FEAT_IDX feature, BIT_FLAGS16 mod
 bool feat_uses_special(FEAT_IDX f_idx);
 void update_local_illumination(player_type *player_ptr, POSITION y, POSITION x);
 bool no_lite(player_type *player_ptr);
-void print_rel(player_type *subject_ptr, SYMBOL_CODE c, TERM_COLOR a, POSITION y, POSITION x);
+void print_rel(player_type *player_ptr, SYMBOL_CODE c, TERM_COLOR a, POSITION y, POSITION x);
 void note_spot(player_type *player_ptr, POSITION y, POSITION x);
 void lite_spot(player_type *player_ptr, POSITION y, POSITION x);
-void update_flow(player_type *subject_ptr);
+void update_flow(player_type *player_ptr);
 FEAT_IDX feat_state(floor_type *floor_ptr, FEAT_IDX feat, FF action);
 void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, FF action);
 void remove_mirror(player_type *player_ptr, POSITION y, POSITION x);
