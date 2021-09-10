@@ -492,33 +492,33 @@ void teleport_player_to(player_type *player_ptr, POSITION ny, POSITION nx, telep
     (void)move_player_effect(player_ptr, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
 }
 
-void teleport_away_followable(player_type *tracer_ptr, MONSTER_IDX m_idx)
+void teleport_away_followable(player_type *player_ptr, MONSTER_IDX m_idx)
 {
-    monster_type *m_ptr = &tracer_ptr->current_floor_ptr->m_list[m_idx];
+    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     POSITION oldfy = m_ptr->fy;
     POSITION oldfx = m_ptr->fx;
     bool old_ml = m_ptr->ml;
     POSITION old_cdis = m_ptr->cdis;
 
-    teleport_away(tracer_ptr, m_idx, MAX_SIGHT * 2 + 5, TELEPORT_SPONTANEOUS);
+    teleport_away(player_ptr, m_idx, MAX_SIGHT * 2 + 5, TELEPORT_SPONTANEOUS);
 
     bool is_followable = old_ml;
     is_followable &= old_cdis <= MAX_SIGHT;
     is_followable &= current_world_ptr->timewalk_m_idx == 0;
-    is_followable &= !tracer_ptr->phase_out;
-    is_followable &= los(tracer_ptr, tracer_ptr->y, tracer_ptr->x, oldfy, oldfx);
+    is_followable &= !player_ptr->phase_out;
+    is_followable &= los(player_ptr, player_ptr->y, player_ptr->x, oldfy, oldfx);
     if (!is_followable)
         return;
 
     bool follow = false;
-    if (tracer_ptr->muta.has(MUTA::VTELEPORT) || (tracer_ptr->pclass == CLASS_IMITATOR))
+    if (player_ptr->muta.has(MUTA::VTELEPORT) || (player_ptr->pclass == CLASS_IMITATOR))
         follow = true;
     else {
         object_type *o_ptr;
         INVENTORY_IDX i;
 
         for (i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-            o_ptr = &tracer_ptr->inventory_list[i];
+            o_ptr = &player_ptr->inventory_list[i];
             if (o_ptr->k_idx && !o_ptr->is_cursed()) {
                 auto flgs = object_flags(o_ptr);
                 if (flgs.has(TR_TELEPORT)) {
@@ -531,17 +531,17 @@ void teleport_away_followable(player_type *tracer_ptr, MONSTER_IDX m_idx)
 
     if (!follow)
         return;
-    if (!get_check_strict(tracer_ptr, _("ついていきますか？", "Do you follow it? "), CHECK_OKAY_CANCEL))
+    if (!get_check_strict(player_ptr, _("ついていきますか？", "Do you follow it? "), CHECK_OKAY_CANCEL))
         return;
 
     if (one_in_(3)) {
-        teleport_player(tracer_ptr, 200, TELEPORT_PASSIVE);
+        teleport_player(player_ptr, 200, TELEPORT_PASSIVE);
         msg_print(_("失敗！", "Failed!"));
     } else {
-        teleport_player_to(tracer_ptr, m_ptr->fy, m_ptr->fx, TELEPORT_SPONTANEOUS);
+        teleport_player_to(player_ptr, m_ptr->fy, m_ptr->fx, TELEPORT_SPONTANEOUS);
     }
 
-    tracer_ptr->energy_need += ENERGY_NEED();
+    player_ptr->energy_need += ENERGY_NEED();
 }
 
 /*!
