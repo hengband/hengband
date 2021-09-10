@@ -52,19 +52,19 @@
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param fff ファイルポインタ
  */
-static void dump_aux_pet(player_type *master_ptr, FILE *fff)
+static void dump_aux_pet(player_type *player_ptr, FILE *fff)
 {
     bool pet = false;
     bool pet_settings = false;
-    for (int i = master_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
-        monster_type *m_ptr = &master_ptr->current_floor_ptr->m_list[i];
+    for (int i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
+        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
 
         if (!monster_is_valid(m_ptr))
             continue;
         if (!is_pet(m_ptr))
             continue;
         pet_settings = true;
-        if (!m_ptr->nickname && (master_ptr->riding != i))
+        if (!m_ptr->nickname && (player_ptr->riding != i))
             continue;
         if (!pet) {
             fprintf(fff, _("\n\n  [主なペット]\n\n", "\n\n  [Leading Pets]\n\n"));
@@ -72,7 +72,7 @@ static void dump_aux_pet(player_type *master_ptr, FILE *fff)
         }
 
         GAME_TEXT pet_name[MAX_NLEN];
-        monster_desc(master_ptr, pet_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
+        monster_desc(player_ptr, pet_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
         fprintf(fff, "%s\n", pet_name);
     }
 
@@ -82,22 +82,22 @@ static void dump_aux_pet(player_type *master_ptr, FILE *fff)
     fprintf(fff, _("\n\n  [ペットへの命令]\n", "\n\n  [Command for Pets]\n"));
 
     fprintf(fff, _("\n ドアを開ける:                       %s", "\n Pets open doors:                    %s"),
-        (master_ptr->pet_extra_flags & PF_OPEN_DOORS) ? "ON" : "OFF");
+        (player_ptr->pet_extra_flags & PF_OPEN_DOORS) ? "ON" : "OFF");
 
     fprintf(fff, _("\n アイテムを拾う:                     %s", "\n Pets pick up items:                 %s"),
-        (master_ptr->pet_extra_flags & PF_PICKUP_ITEMS) ? "ON" : "OFF");
+        (player_ptr->pet_extra_flags & PF_PICKUP_ITEMS) ? "ON" : "OFF");
 
     fprintf(fff, _("\n テレポート系魔法を使う:             %s", "\n Allow teleport:                     %s"),
-        (master_ptr->pet_extra_flags & PF_TELEPORT) ? "ON" : "OFF");
+        (player_ptr->pet_extra_flags & PF_TELEPORT) ? "ON" : "OFF");
 
     fprintf(fff, _("\n 攻撃魔法を使う:                     %s", "\n Allow cast attack spell:            %s"),
-        (master_ptr->pet_extra_flags & PF_ATTACK_SPELL) ? "ON" : "OFF");
+        (player_ptr->pet_extra_flags & PF_ATTACK_SPELL) ? "ON" : "OFF");
 
     fprintf(fff, _("\n 召喚魔法を使う:                     %s", "\n Allow cast summon spell:            %s"),
-        (master_ptr->pet_extra_flags & PF_SUMMON_SPELL) ? "ON" : "OFF");
+        (player_ptr->pet_extra_flags & PF_SUMMON_SPELL) ? "ON" : "OFF");
 
     fprintf(fff, _("\n プレイヤーを巻き込む範囲魔法を使う: %s", "\n Allow involve player in area spell: %s"),
-        (master_ptr->pet_extra_flags & PF_BALL_SPELL) ? "ON" : "OFF");
+        (player_ptr->pet_extra_flags & PF_BALL_SPELL) ? "ON" : "OFF");
 
     fputc('\n', fff);
 }

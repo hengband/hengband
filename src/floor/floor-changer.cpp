@@ -64,15 +64,15 @@ static void build_dead_end(player_type *player_ptr)
     wipe_generate_random_floor_flags(player_ptr->current_floor_ptr);
 }
 
-static MONSTER_IDX decide_pet_index(player_type *master_ptr, const int current_monster, POSITION *cy, POSITION *cx)
+static MONSTER_IDX decide_pet_index(player_type *player_ptr, const int current_monster, POSITION *cy, POSITION *cx)
 {
-    floor_type *floor_ptr = master_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (current_monster == 0) {
         MONSTER_IDX m_idx = m_pop(floor_ptr);
-        master_ptr->riding = m_idx;
+        player_ptr->riding = m_idx;
         if (m_idx) {
-            *cy = master_ptr->y;
-            *cx = master_ptr->x;
+            *cy = player_ptr->y;
+            *cx = player_ptr->x;
         }
 
         return m_idx;
@@ -82,8 +82,8 @@ static MONSTER_IDX decide_pet_index(player_type *master_ptr, const int current_m
     for (d = 1; d < A_MAX; d++) {
         int j;
         for (j = 1000; j > 0; j--) {
-            scatter(master_ptr, cy, cx, master_ptr->y, master_ptr->x, d, PROJECT_NONE);
-            if (monster_can_enter(master_ptr, *cy, *cx, &r_info[party_mon[current_monster].r_idx], 0))
+            scatter(player_ptr, cy, cx, player_ptr->y, player_ptr->x, d, PROJECT_NONE);
+            if (monster_can_enter(player_ptr, *cy, *cx, &r_info[party_mon[current_monster].r_idx], 0))
                 break;
         }
 
@@ -94,16 +94,16 @@ static MONSTER_IDX decide_pet_index(player_type *master_ptr, const int current_m
     return (d == 6) ? 0 : m_pop(floor_ptr);
 }
 
-static void set_pet_params(player_type *master_ptr, monster_race **r_ptr, const int current_monster, MONSTER_IDX m_idx, const POSITION cy, const POSITION cx)
+static void set_pet_params(player_type *player_ptr, monster_race **r_ptr, const int current_monster, MONSTER_IDX m_idx, const POSITION cy, const POSITION cx)
 {
-    monster_type *m_ptr = &master_ptr->current_floor_ptr->m_list[m_idx];
-    master_ptr->current_floor_ptr->grid_array[cy][cx].m_idx = m_idx;
+    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    player_ptr->current_floor_ptr->grid_array[cy][cx].m_idx = m_idx;
     m_ptr->r_idx = party_mon[current_monster].r_idx;
     *m_ptr = party_mon[current_monster];
     *r_ptr = real_r_ptr(m_ptr);
     m_ptr->fy = cy;
     m_ptr->fx = cx;
-    m_ptr->current_floor_ptr = master_ptr->current_floor_ptr;
+    m_ptr->current_floor_ptr = player_ptr->current_floor_ptr;
     m_ptr->ml = true;
     m_ptr->mtimed[MTIMED_CSLEEP] = 0;
     m_ptr->hold_o_idx_list.clear();
@@ -115,34 +115,34 @@ static void set_pet_params(player_type *master_ptr, monster_race **r_ptr, const 
 
 /*!
  * @brief 移動先のフロアに伴ったペットを配置する / Place preserved pet monsters on new floor
- * @param master_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  */
-static void place_pet(player_type *master_ptr)
+static void place_pet(player_type *player_ptr)
 {
-    int max_num = master_ptr->wild_mode ? 1 : MAX_PARTY_MON;
+    int max_num = player_ptr->wild_mode ? 1 : MAX_PARTY_MON;
     for (int current_monster = 0; current_monster < max_num; current_monster++) {
         POSITION cy = 0;
         POSITION cx = 0;
         if (party_mon[current_monster].r_idx == 0)
             continue;
 
-        MONSTER_IDX m_idx = decide_pet_index(master_ptr, current_monster, &cy, &cx);
+        MONSTER_IDX m_idx = decide_pet_index(player_ptr, current_monster, &cy, &cx);
         if (m_idx != 0) {
             monster_race *r_ptr;
-            set_pet_params(master_ptr, &r_ptr, current_monster, m_idx, cy, cx);
-            update_monster(master_ptr, m_idx, true);
-            lite_spot(master_ptr, cy, cx);
+            set_pet_params(player_ptr, &r_ptr, current_monster, m_idx, cy, cx);
+            update_monster(player_ptr, m_idx, true);
+            lite_spot(player_ptr, cy, cx);
             if (r_ptr->flags2 & RF2_MULTIPLY)
-                master_ptr->current_floor_ptr->num_repro++;
+                player_ptr->current_floor_ptr->num_repro++;
         } else {
             monster_type *m_ptr = &party_mon[current_monster];
             monster_race *r_ptr = real_r_ptr(m_ptr);
             GAME_TEXT m_name[MAX_NLEN];
-            monster_desc(master_ptr, m_name, m_ptr, 0);
+            monster_desc(player_ptr, m_name, m_ptr, 0);
             msg_format(_("%sとはぐれてしまった。", "You have lost sight of %s."), m_name);
             if (record_named_pet && m_ptr->nickname) {
-                monster_desc(master_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
-                exe_write_diary(master_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_LOST_SIGHT, m_name);
+                monster_desc(player_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
+                exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_LOST_SIGHT, m_name);
             }
 
             if (r_ptr->cur_num)

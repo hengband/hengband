@@ -90,7 +90,7 @@ bool direct_beam(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2,
  * @param is_friend TRUEならば、プレイヤーを巻き込む時にブレスの判定をFALSEにする。
  * @return ブレスを直接当てられるならばTRUEを返す
  */
-bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, POSITION rad, EFFECT_ID typ, bool is_friend)
+bool breath_direct(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, POSITION rad, EFFECT_ID typ, bool is_friend)
 {
     BIT_FLAGS flg;
     switch (typ) {
@@ -107,7 +107,7 @@ bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POSITION y
     }
 
     uint16_t grid_g[512];
-    int grid_n = projection_path(master_ptr, grid_g, get_max_range(master_ptr), y1, x1, y2, x2, flg);
+    int grid_n = projection_path(player_ptr, grid_g, get_max_range(player_ptr), y1, x1, y2, x2, flg);
     int i;
     POSITION y = y1;
     POSITION x = x1;
@@ -116,13 +116,13 @@ bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POSITION y
         int nx = get_grid_x(grid_g[i]);
 
         if (flg & PROJECT_DISI) {
-            if (cave_stop_disintegration(master_ptr->current_floor_ptr, ny, nx))
+            if (cave_stop_disintegration(player_ptr->current_floor_ptr, ny, nx))
                 break;
         } else if (flg & PROJECT_LOS) {
-            if (!cave_los_bold(master_ptr->current_floor_ptr, ny, nx))
+            if (!cave_los_bold(player_ptr->current_floor_ptr, ny, nx))
                 break;
         } else {
-            if (!cave_has_flag_bold(master_ptr->current_floor_ptr, ny, nx, FF::PROJECT))
+            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, ny, nx, FF::PROJECT))
                 break;
         }
 
@@ -135,20 +135,20 @@ bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POSITION y
     bool hityou = false;
     if (!grid_n) {
         if (flg & PROJECT_DISI) {
-            if (in_disintegration_range(master_ptr->current_floor_ptr, y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad))
+            if (in_disintegration_range(player_ptr->current_floor_ptr, y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad))
                 hit2 = true;
-            if (in_disintegration_range(master_ptr->current_floor_ptr, y1, x1, master_ptr->y, master_ptr->x)
-                && (distance(y1, x1, master_ptr->y, master_ptr->x) <= rad))
+            if (in_disintegration_range(player_ptr->current_floor_ptr, y1, x1, player_ptr->y, player_ptr->x)
+                && (distance(y1, x1, player_ptr->y, player_ptr->x) <= rad))
                 hityou = true;
         } else if (flg & PROJECT_LOS) {
-            if (los(master_ptr, y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad))
+            if (los(player_ptr, y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad))
                 hit2 = true;
-            if (los(master_ptr, y1, x1, master_ptr->y, master_ptr->x) && (distance(y1, x1, master_ptr->y, master_ptr->x) <= rad))
+            if (los(player_ptr, y1, x1, player_ptr->y, player_ptr->x) && (distance(y1, x1, player_ptr->y, player_ptr->x) <= rad))
                 hityou = true;
         } else {
-            if (projectable(master_ptr, y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad))
+            if (projectable(player_ptr, y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad))
                 hit2 = true;
-            if (projectable(master_ptr, y1, x1, master_ptr->y, master_ptr->x) && (distance(y1, x1, master_ptr->y, master_ptr->x) <= rad))
+            if (projectable(player_ptr, y1, x1, player_ptr->y, player_ptr->x) && (distance(y1, x1, player_ptr->y, player_ptr->x) <= rad))
                 hityou = true;
         }
     } else {
@@ -156,13 +156,13 @@ bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POSITION y
         POSITION gx[1024], gy[1024];
         POSITION gm[32];
         POSITION gm_rad = rad;
-        breath_shape(master_ptr, grid_g, grid_n, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, y, x, typ);
+        breath_shape(player_ptr, grid_g, grid_n, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, y, x, typ);
         for (i = 0; i < grids; i++) {
             y = gy[i];
             x = gx[i];
             if ((y == y2) && (x == x2))
                 hit2 = true;
-            if (player_bold(master_ptr, y, x))
+            if (player_bold(player_ptr, y, x))
                 hityou = true;
         }
     }

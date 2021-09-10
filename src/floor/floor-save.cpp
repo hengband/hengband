@@ -195,7 +195,7 @@ FLOOR_IDX get_new_floor_id(player_type *player_ptr)
 
 /*!
  * @brief フロア移動時にペットを伴った場合の準備処理 / Pre-calculate the racial counters of preserved pets
- * @param master_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @details
  * To prevent multiple generation of unique monster who is the minion of player
  */

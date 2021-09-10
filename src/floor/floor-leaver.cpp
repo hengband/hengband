@@ -42,35 +42,35 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-static void check_riding_preservation(player_type *master_ptr)
+static void check_riding_preservation(player_type *player_ptr)
 {
-    if (!master_ptr->riding)
+    if (!player_ptr->riding)
         return;
 
-    monster_type *m_ptr = &master_ptr->current_floor_ptr->m_list[master_ptr->riding];
+    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
     if (m_ptr->parent_m_idx) {
-        master_ptr->riding = 0;
-        master_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
-        master_ptr->riding_ryoute = master_ptr->old_riding_ryoute = false;
+        player_ptr->riding = 0;
+        player_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
+        player_ptr->riding_ryoute = player_ptr->old_riding_ryoute = false;
     } else {
         (void)COPY(&party_mon[0], m_ptr, monster_type);
-        delete_monster_idx(master_ptr, master_ptr->riding);
+        delete_monster_idx(player_ptr, player_ptr->riding);
     }
 }
 
-static bool check_pet_preservation_conditions(player_type *master_ptr, monster_type *m_ptr)
+static bool check_pet_preservation_conditions(player_type *player_ptr, monster_type *m_ptr)
 {
     if (reinit_wilderness)
         return false;
 
-    POSITION dis = distance(master_ptr->y, master_ptr->x, m_ptr->fy, m_ptr->fx);
+    POSITION dis = distance(player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx);
     if (monster_confused_remaining(m_ptr) || monster_stunned_remaining(m_ptr) || monster_csleep_remaining(m_ptr) || (m_ptr->parent_m_idx != 0))
         return true;
 
     if (m_ptr->nickname
-        && ((player_has_los_bold(master_ptr, m_ptr->fy, m_ptr->fx) && projectable(master_ptr, master_ptr->y, master_ptr->x, m_ptr->fy, m_ptr->fx))
-            || (los(master_ptr, m_ptr->fy, m_ptr->fx, master_ptr->y, master_ptr->x)
-                && projectable(master_ptr, m_ptr->fy, m_ptr->fx, master_ptr->y, master_ptr->x)))) {
+        && ((player_has_los_bold(player_ptr, m_ptr->fy, m_ptr->fx) && projectable(player_ptr, player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx))
+            || (los(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x)
+                && projectable(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x)))) {
         if (dis > 3)
             return true;
     } else if (dis > 1)
@@ -79,62 +79,62 @@ static bool check_pet_preservation_conditions(player_type *master_ptr, monster_t
     return false;
 }
 
-static void sweep_preserving_pet(player_type *master_ptr)
+static void sweep_preserving_pet(player_type *player_ptr)
 {
-    if (master_ptr->wild_mode || master_ptr->current_floor_ptr->inside_arena || master_ptr->phase_out)
+    if (player_ptr->wild_mode || player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out)
         return;
 
-    for (MONSTER_IDX i = master_ptr->current_floor_ptr->m_max - 1, party_monster_num = 1; (i >= 1) && (party_monster_num < MAX_PARTY_MON); i--) {
-        monster_type *m_ptr = &master_ptr->current_floor_ptr->m_list[i];
-        if (!monster_is_valid(m_ptr) || !is_pet(m_ptr) || (i == master_ptr->riding) || check_pet_preservation_conditions(master_ptr, m_ptr))
+    for (MONSTER_IDX i = player_ptr->current_floor_ptr->m_max - 1, party_monster_num = 1; (i >= 1) && (party_monster_num < MAX_PARTY_MON); i--) {
+        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        if (!monster_is_valid(m_ptr) || !is_pet(m_ptr) || (i == player_ptr->riding) || check_pet_preservation_conditions(player_ptr, m_ptr))
             continue;
 
-        (void)COPY(&party_mon[party_monster_num], &master_ptr->current_floor_ptr->m_list[i], monster_type);
+        (void)COPY(&party_mon[party_monster_num], &player_ptr->current_floor_ptr->m_list[i], monster_type);
         party_monster_num++;
-        delete_monster_idx(master_ptr, i);
+        delete_monster_idx(player_ptr, i);
     }
 }
 
-static void record_pet_diary(player_type *master_ptr)
+static void record_pet_diary(player_type *player_ptr)
 {
     if (!record_named_pet)
         return;
 
-    for (MONSTER_IDX i = master_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
-        monster_type *m_ptr = &master_ptr->current_floor_ptr->m_list[i];
+    for (MONSTER_IDX i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
+        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         GAME_TEXT m_name[MAX_NLEN];
-        if (!monster_is_valid(m_ptr) || !is_pet(m_ptr) || !m_ptr->nickname || (master_ptr->riding == i))
+        if (!monster_is_valid(m_ptr) || !is_pet(m_ptr) || !m_ptr->nickname || (player_ptr->riding == i))
             continue;
 
-        monster_desc(master_ptr, m_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
-        exe_write_diary(master_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_MOVED, m_name);
+        monster_desc(player_ptr, m_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
+        exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_MOVED, m_name);
     }
 }
 
 /*!
  * @brief フロア移動時のペット保存処理 / Preserve_pets
- * @param master_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  */
-static void preserve_pet(player_type *master_ptr)
+static void preserve_pet(player_type *player_ptr)
 {
     for (MONSTER_IDX party_monster_num = 0; party_monster_num < MAX_PARTY_MON; party_monster_num++)
         party_mon[party_monster_num].r_idx = 0;
 
-    check_riding_preservation(master_ptr);
-    sweep_preserving_pet(master_ptr);
-    record_pet_diary(master_ptr);
-    for (MONSTER_IDX i = master_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
-        monster_type *m_ptr = &master_ptr->current_floor_ptr->m_list[i];
-        if ((m_ptr->parent_m_idx == 0) || (master_ptr->current_floor_ptr->m_list[m_ptr->parent_m_idx].r_idx != 0))
+    check_riding_preservation(player_ptr);
+    sweep_preserving_pet(player_ptr);
+    record_pet_diary(player_ptr);
+    for (MONSTER_IDX i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
+        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        if ((m_ptr->parent_m_idx == 0) || (player_ptr->current_floor_ptr->m_list[m_ptr->parent_m_idx].r_idx != 0))
             continue;
 
-        if (is_seen(master_ptr, m_ptr)) {
+        if (is_seen(player_ptr, m_ptr)) {
             GAME_TEXT m_name[MAX_NLEN];
-            monster_desc(master_ptr, m_name, m_ptr, 0);
+            monster_desc(player_ptr, m_name, m_ptr, 0);
             msg_format(_("%sは消え去った！", "%^s disappears!"), m_name);
         }
 
-        delete_monster_idx(master_ptr, i);
+        delete_monster_idx(player_ptr, i);
     }
 }
 
