@@ -1,10 +1,10 @@
 ﻿#include "birth/game-play-initializer.h"
-#include "info-reader/fixed-map-parser.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor-util.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
+#include "info-reader/fixed-map-parser.h"
 #include "inventory/inventory-slot-types.h"
 #include "market/arena.h"
 #include "monster-race/monster-race.h"
@@ -12,9 +12,9 @@
 #include "monster-race/race-flags7.h"
 #include "object/object-kind.h"
 #include "pet/pet-util.h"
+#include "player-info/race-info.h"
+#include "player-info/race-types.h"
 #include "player/digestion-processor.h"
-#include "player/player-race-types.h"
-#include "player/player-race.h"
 #include "system/artifact-type-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-race-definition.h"
@@ -56,7 +56,7 @@ void player_wipe_without_name(player_type *creature_ptr)
 
     (void)WIPE(creature_ptr, player_type);
 
-    //TODO: キャラ作成からゲーム開始までに  current_floor_ptr を参照しなければならない処理は今後整理して外す。
+    // TODO: キャラ作成からゲーム開始までに  current_floor_ptr を参照しなければならない処理は今後整理して外す。
     creature_ptr->current_floor_ptr = &floor_info;
     C_MAKE(creature_ptr->inventory_list, INVEN_TOTAL, object_type);
     for (int i = 0; i < 4; i++)

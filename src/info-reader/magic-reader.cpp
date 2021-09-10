@@ -3,7 +3,7 @@
 #include "info-reader/parse-error-types.h"
 #include "main/angband-headers.h"
 #include "player-ability/player-ability-types.h"
-#include "player/player-class.h"
+#include "player-info/class-info.h"
 #include "util/string-processor.h"
 
 namespace {

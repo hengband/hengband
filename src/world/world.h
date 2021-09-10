@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "player/player-class-types.h"
+#include "player-info/class-types.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
 

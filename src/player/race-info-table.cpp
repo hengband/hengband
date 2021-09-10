@@ -22,7 +22,7 @@
  *      class-choices
  * </pre>
  */
-const player_race race_info[MAX_RACES] =
+const player_race_info race_info[MAX_RACES] =
 {
 	{
 		N("人間", "Human"), "p",

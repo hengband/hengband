@@ -3,7 +3,8 @@
 #include "core/player-redraw-types.h"
 #include "core/stuff-handler.h"
 #include "game-option/disturbance-options.h"
-#include "player/player-race.h"
+#include "player-base/player-race.h"
+#include "player-info/race-info.h"
 #include "player/special-defense-types.h"
 #include "realm/realm-song-numbers.h"
 #include "spell-realm/spells-song.h"
@@ -104,7 +105,7 @@ bool set_oppose_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
     if (creature_ptr->is_dead)
         return false;
 
-    if ((is_specific_player_race(creature_ptr, player_race_type::BALROG) && (creature_ptr->lev > 44)) || (creature_ptr->mimic_form == MIMIC_DEMON))
+    if ((PlayerRace(creature_ptr).equals(player_race_type::BALROG) && (creature_ptr->lev > 44)) || (creature_ptr->mimic_form == MIMIC_DEMON))
         v = 1;
     if (v) {
         if (creature_ptr->oppose_fire && !do_dec) {
@@ -228,7 +229,7 @@ bool is_oppose_fire(player_type *creature_ptr)
 {
     return creature_ptr->oppose_fire || music_singing(creature_ptr, MUSIC_RESIST)
         || (creature_ptr->special_defense & KATA_MUSOU || (creature_ptr->mimic_form == MIMIC_DEMON)
-            || (is_specific_player_race(creature_ptr, player_race_type::BALROG) && creature_ptr->lev > 44));
+            || (PlayerRace(creature_ptr).equals(player_race_type::BALROG) && creature_ptr->lev > 44));
 }
 
 bool is_oppose_cold(player_type *creature_ptr)

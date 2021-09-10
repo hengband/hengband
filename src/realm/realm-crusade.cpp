@@ -7,7 +7,7 @@
 #include "hpmp/hp-mp-processor.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
-#include "player/player-class.h"
+#include "player-info/class-info.h"
 #include "spell-kind/spells-beam.h"
 #include "spell-kind/spells-curse-removal.h"
 #include "spell-kind/spells-detection.h"

@@ -17,9 +17,9 @@
 #include "io/inet.h"
 #include "io/input-key-acceptor.h"
 #include "mind/mind-elementalist.h"
-#include "player/player-class.h"
+#include "player-info/class-info.h"
+#include "player-info/race-info.h"
 #include "player/player-personality.h"
-#include "player/player-race.h"
 #include "player/player-status.h"
 #include "realm/realm-names-table.h"
 #include "system/angband-version.h"
@@ -71,13 +71,13 @@ typedef struct {
 static BUF *buf_new(void)
 {
     BUF *p;
-    p = static_cast<BUF*>(malloc(sizeof(BUF)));
+    p = static_cast<BUF *>(malloc(sizeof(BUF)));
     if (!p)
         return nullptr;
 
     p->size = 0;
     p->max_size = BUFSIZE;
-    p->data = static_cast<char*>(malloc(BUFSIZE));
+    p->data = static_cast<char *>(malloc(BUFSIZE));
     if (!p->data) {
         free(p);
         return nullptr;
@@ -107,7 +107,7 @@ static int buf_append(BUF *buf, concptr data, size_t size)
 {
     while (buf->size + size > buf->max_size) {
         char *tmp;
-        if ((tmp = static_cast<char*>(malloc(buf->max_size * 2))) == nullptr)
+        if ((tmp = static_cast<char *>(malloc(buf->max_size * 2))) == nullptr)
             return -1;
 
         memcpy(tmp, buf->data, buf->max_size);
@@ -152,7 +152,7 @@ static int buf_sprintf(BUF *buf, concptr fmt, ...)
 
 size_t read_callback(char *buffer, size_t size, size_t nitems, void *userdata)
 {
-    BUF *buf = static_cast<BUF*>(userdata);
+    BUF *buf = static_cast<BUF *>(userdata);
     const size_t remain = buf->size - buf->read_head;
     const size_t copy_size = MIN(size * nitems, remain);
 

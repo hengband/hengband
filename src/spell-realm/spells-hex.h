@@ -3,11 +3,13 @@
 #include "system/angband.h"
 #include "realm/realm-hex-numbers.h"
 
+struct monap_type;
 struct player_type;
 class RealmHex {
 public:
     RealmHex() = delete;
     RealmHex(player_type *caster_ptr);
+    RealmHex(player_type *caster_ptr, monap_type *monap_ptr);
     virtual ~RealmHex() = default;
 
     bool stop_one_spell();
@@ -19,10 +21,13 @@ public:
     bool check_hex_barrier(MONSTER_IDX m_idx, realm_hex_type type) const;
     bool is_spelling_specific(int hex) const;
     bool is_spelling_any() const;
+    void eyes_on_eyes();
+    void thief_teleport();
 
 private:
     player_type *caster_ptr;
     std::vector<int> casting_spells;
+    monap_type *monap_ptr = nullptr;
     
     bool select_spell_stopping(char *out_val, char &choice);
     void display_casting_spells_list();

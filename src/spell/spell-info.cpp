@@ -1,7 +1,7 @@
 ﻿#include "spell/spell-info.h"
 #include "io/input-key-requester.h"
 #include "monster-race/monster-race.h"
-#include "player/player-class.h"
+#include "player-info/class-info.h"
 #include "player/player-skill.h"
 #include "player/player-status-table.h"
 #include "player/player-status.h"

@@ -11,7 +11,7 @@
 #include "game-option/text-display-options.h"
 #include "io-dump/dump-util.h"
 #include "object/object-kind.h"
-#include "player/player-class.h"
+#include "player-info/class-info.h"
 #include "player/player-skill.h"
 #include "player/player-status.h"
 #include "realm/realm-names-table.h"
@@ -96,8 +96,7 @@ void do_cmd_knowledge_spell_exp(player_type *creature_ptr)
                 if (show_actual_value)
                     fprintf(fff, "----/---- ");
                 fprintf(fff, "[--]");
-            }
-            else {
+            } else {
                 if (show_actual_value)
                     fprintf(fff, "%4d/%4d ", MIN(spell_exp, SPELL_EXP_MASTER), SPELL_EXP_MASTER);
                 if (exp_level >= EXP_LEVEL_MASTER)

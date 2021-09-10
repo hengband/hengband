@@ -20,12 +20,13 @@
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
+#include "player-base/player-race.h"
+#include "player-info/mimic-info-table.h"
 #include "player-info/self-info.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
 #include "player/eldritch-horror.h"
-#include "player/mimic-info-table.h"
 #include "player/player-damage.h"
 #include "player/player-status-flags.h"
 #include "realm/realm-hex-numbers.h"
@@ -568,7 +569,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
         }
     }
 
-    if (is_specific_player_race(creature_ptr, player_race_type::SKELETON)) {
+    if (PlayerRace(creature_ptr).equals(player_race_type::SKELETON)) {
         msg_print(_("液体の一部はあなたのアゴを素通りして落ちた！", "Some of the fluid falls through your jaws!"));
         (void)potion_smash_effect(creature_ptr, 0, creature_ptr->y, creature_ptr->x, q_ptr->k_idx);
     }
@@ -591,7 +592,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 
     creature_ptr->window_flags |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
-    if (is_specific_player_race(creature_ptr, player_race_type::SKELETON))
+    if (PlayerRace(creature_ptr).equals(player_race_type::SKELETON))
         return; //!< @note スケルトンは水分で飢えを満たせない
 
     switch (player_race_food(creature_ptr)) {

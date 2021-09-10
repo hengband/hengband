@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "player/player-race-types.h"
+#include "player-info/race-types.h"
 #include "system/angband.h"
 
 struct player_type;

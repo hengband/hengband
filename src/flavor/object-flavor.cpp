@@ -31,7 +31,7 @@
 #include "object/object-info.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
-#include "player/player-class.h"
+#include "player-info/class-info.h"
 #include "player/player-status.h"
 #include "sv-definition/sv-food-types.h"
 #include "sv-definition/sv-lite-types.h"

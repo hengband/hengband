@@ -7,7 +7,7 @@
 #include "object-enchant/special-object-flags.h"
 #include "object/object-kind.h"
 #include "perception/object-perception.h"
-#include "player/mimic-info-table.h"
+#include "player-info/mimic-info-table.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-other-types.h"
 #include "system/monster-race-definition.h"

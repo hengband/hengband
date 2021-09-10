@@ -43,12 +43,12 @@
 #include "object/item-use-flags.h"
 #include "perception/identification.h"
 #include "perception/object-perception.h"
+#include "player-info/class-info.h"
+#include "player-info/race-types.h"
 #include "player-info/self-info.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
-#include "player/player-class.h"
 #include "player/player-personality-types.h"
-#include "player/player-race-types.h"
 #include "player/player-status.h"
 #include "player/special-defense-types.h"
 #include "racial/racial-android.h"
@@ -81,8 +81,7 @@ void do_cmd_inven(player_type *creature_ptr)
 #ifdef JP
     sprintf(out_val, "持ち物： 合計 %3d.%1d kg (限界の%ld%%) コマンド: ", (int)lbtokg1(weight), (int)lbtokg2(weight),
 #else
-    sprintf(out_val, "Inventory: carrying %d.%d pounds (%ld%% of capacity). Command: ", (int)(weight / 10),
-        (int)(weight % 10),
+    sprintf(out_val, "Inventory: carrying %d.%d pounds (%ld%% of capacity). Command: ", (int)(weight / 10), (int)(weight % 10),
 #endif
         (long int)(weight * 100) / weight_lim);
 
@@ -238,7 +237,8 @@ void do_cmd_use(player_type *creature_ptr)
 
     concptr q = _("どれを使いますか？", "Use which item? ");
     concptr s = _("使えるものがありません。", "You have nothing to use.");
-    o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_EQUIP | USE_FLOOR | IGNORE_BOTHHAND_SLOT), FuncItemTester(item_tester_hook_use, creature_ptr));
+    o_ptr = choose_object(
+        creature_ptr, &item, q, s, (USE_INVEN | USE_EQUIP | USE_FLOOR | IGNORE_BOTHHAND_SLOT), FuncItemTester(item_tester_hook_use, creature_ptr));
     if (!o_ptr)
         return;
 

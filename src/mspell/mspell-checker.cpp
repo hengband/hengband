@@ -40,9 +40,9 @@
 #include "mspell/mspell-selector.h"
 #include "mspell/mspell-util.h"
 #include "object-enchant/object-curse.h"
+#include "player-info/class-info.h"
+#include "player-info/race-types.h"
 #include "player/attack-defense-types.h"
-#include "player/player-class.h"
-#include "player/player-race-types.h"
 #include "spell-kind/spells-world.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/range-calc.h"
@@ -245,8 +245,7 @@ ProjectResult beam(player_type *target_ptr, MONSTER_IDX m_idx, POSITION y, POSIT
  * @param monspell モンスター魔法のID
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  */
-ProjectResult breath(
-    player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, EFFECT_ID typ, int dam_hp, POSITION rad, bool breath, int target_type)
+ProjectResult breath(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, EFFECT_ID typ, int dam_hp, POSITION rad, bool breath, int target_type)
 {
     monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];

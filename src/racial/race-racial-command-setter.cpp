@@ -1,6 +1,6 @@
 ﻿#include "racial/race-racial-command-setter.h"
 #include "cmd-action/cmd-spell.h"
-#include "player/player-race.h"
+#include "player-info/race-info.h"
 #include "racial/racial-util.h"
 #include "system/player-type-definition.h"
 

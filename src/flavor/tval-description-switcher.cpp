@@ -15,7 +15,7 @@
 #else
 #include "locale/english.h"
 #include "monster-race/race-flags1.h"
-#include "player/player-class.h"
+#include "player-info/class-info.h"
 #endif
 
 static void describe_monster_ball(flavor_type *flavor_ptr)

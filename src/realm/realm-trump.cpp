@@ -5,7 +5,7 @@
 #include "game-option/input-options.h"
 #include "monster-floor/place-monster-types.h"
 #include "mutation/mutation-calculator.h"
-#include "player/player-class.h"
+#include "player-info/class-info.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-fetcher.h"
 #include "spell-kind/spells-launcher.h"

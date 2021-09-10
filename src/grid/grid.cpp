@@ -41,7 +41,7 @@
 #include "monster/monster-update.h"
 #include "object/item-tester-hooker.h"
 #include "object/object-mark-types.h"
-#include "player/player-class.h"
+#include "player-info/class-info.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
 #include "room/rooms-builder.h"
@@ -159,12 +159,9 @@ bool check_local_illumination(player_type *creature_ptr, POSITION y, POSITION x)
 
     /* Check for "complex" illumination */
     auto *floor_ptr = creature_ptr->current_floor_ptr;
-    if ((feat_supports_los(floor_ptr->grid_array[yy][xx].get_feat_mimic())
-            && (floor_ptr->grid_array[yy][xx].info & CAVE_GLOW))
-        || (feat_supports_los(floor_ptr->grid_array[y][xx].get_feat_mimic())
-            && (floor_ptr->grid_array[y][xx].info & CAVE_GLOW))
-        || (feat_supports_los(floor_ptr->grid_array[yy][x].get_feat_mimic())
-            && (floor_ptr->grid_array[yy][x].info & CAVE_GLOW))) {
+    if ((feat_supports_los(floor_ptr->grid_array[yy][xx].get_feat_mimic()) && (floor_ptr->grid_array[yy][xx].info & CAVE_GLOW))
+        || (feat_supports_los(floor_ptr->grid_array[y][xx].get_feat_mimic()) && (floor_ptr->grid_array[y][xx].info & CAVE_GLOW))
+        || (feat_supports_los(floor_ptr->grid_array[yy][x].get_feat_mimic()) && (floor_ptr->grid_array[yy][x].info & CAVE_GLOW))) {
         return true;
     } else
         return false;
@@ -900,7 +897,7 @@ bool cave_player_teleportable_bold(player_type *player_ptr, POSITION y, POSITION
         if (!player_can_enter(player_ptr, g_ptr->feat, 0))
             return false;
 
-        if (f_ptr->flags.has_all_of({FF::WATER, FF::DEEP})) {
+        if (f_ptr->flags.has_all_of({ FF::WATER, FF::DEEP })) {
             if (!player_ptr->levitation && !player_ptr->can_swim)
                 return false;
         }

@@ -1,17 +1,17 @@
-﻿#include "player/player-race.h"
+﻿#include "player-info/race-info.h"
 #include "core/player-redraw-types.h"
 #include "inventory/inventory-slot-types.h"
-#include "player/player-race-types.h"
-#include "system/object-type-definition.h"
-#include "mimic-info-table.h"
+#include "player-info/mimic-info-table.h"
+#include "player-info/race-types.h"
 #include "player/race-info-table.h"
+#include "system/object-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 
-const player_race *rp_ptr;
+const player_race_info *rp_ptr;
 
-const player_race *get_player_race_info(player_type* creature_ptr, bool base_race = false)
+const player_race_info *get_player_race_info(player_type *creature_ptr, bool base_race = false)
 {
     if (base_race) {
         return &race_info[enum2i(creature_ptr->prace)];
@@ -47,8 +47,6 @@ SYMBOL_CODE get_summon_symbol_from_player(player_type *creature_ptr)
     return symbol;
 }
 
-bool is_specific_player_race(player_type *creature_ptr, player_race_type prace) { return (!creature_ptr->mimic_form && (creature_ptr->prace == prace)); }
-
 /*!
  * @brief 種族が指定の耐性/能力フラグを持つか判定する
  * @param creature_ptr プレイヤー情報への参照ポインタ
@@ -60,7 +58,7 @@ bool player_race_has_flag(player_type *creature_ptr, tr_type flag, bool base_rac
 {
     auto race_ptr = get_player_race_info(creature_ptr, base_race);
 
-    for (auto& cond : race_ptr->extra_flags) {
+    for (auto &cond : race_ptr->extra_flags) {
         if (cond.type != flag)
             continue;
         if (creature_ptr->lev < cond.level)

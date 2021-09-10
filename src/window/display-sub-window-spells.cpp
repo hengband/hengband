@@ -5,7 +5,7 @@
 #include "mind/mind-info.h"
 #include "mind/mind-sniper.h"
 #include "mind/mind-types.h"
-#include "player/player-class.h"
+#include "player-info/class-info.h"
 #include "player/player-status-table.h"
 #include "realm/realm-names-table.h"
 #include "spell/spells-execution.h"
