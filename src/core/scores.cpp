@@ -178,7 +178,7 @@ bool send_world_score(player_type *current_player_ptr, bool do_send, display_pla
  * @brief スコアの過去二十位内ランキングを表示する
  * Enters a players name on a hi-score table, if "legal", and in any
  * case, displays some relevant portion of the high score list.
- * @param current_player_ptr スコアに適用するための現在プレイヤークリーチャー参照ポインタ
+ * @param current_player_ptr プレーヤーへの参照ポインタ
  * @return エラーコード
  * @details
  * Assumes "signals_ignore_tstp()" has been called.

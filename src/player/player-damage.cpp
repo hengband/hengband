@@ -578,7 +578,7 @@ static void process_aura_damage(monster_type *m_ptr, player_type *touched_ptr, b
 /*!
  * @brief 敵オーラによるプレイヤーのダメージ処理
  * @param m_ptr オーラを持つモンスターの構造体参照ポインタ
- * @param touched_ptr オーラを持つ相手に振れたクリーチャーの参照ポインタ
+ * @param touched_ptr オーラを持つ相手に振れたプレーヤーの参照ポインタ
  */
 void touch_zap_player(monster_type *m_ptr, player_type *touched_ptr)
 {

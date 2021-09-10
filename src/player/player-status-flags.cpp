@@ -151,7 +151,7 @@ BIT_FLAGS player_flags_brand_cold(player_type *creature_ptr)
 
 /*!
  * @brief プレイヤーの所持するフラグのうち、tr_flagに対応するものを返す
- * @param creature_ptr 判定対象のクリーチャー参照ポインタ
+ * @param creature_ptr 判定対象のプレーヤー参照ポインタ
  * @param tr_flag 要求する装備フラグ
  */
 BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
@@ -429,7 +429,7 @@ BIT_FLAGS get_player_flags(player_type *creature_ptr, tr_type tr_flag)
 }
 
 /*!
- * @brief クリーチャーが壁破壊進行を持っているかを返す。
+ * @brief プレーヤーが壁破壊進行を持っているかを返す。
  */
 bool has_kill_wall(player_type *creature_ptr)
 {
@@ -448,8 +448,8 @@ bool has_kill_wall(player_type *creature_ptr)
 }
 
 /*!
- * @brief クリーチャーが壁通過を持っているかを返す。
- * @param creature_ptr 判定対象のクリーチャー参照ポインタ
+ * @brief プレーヤーが壁通過を持っているかを返す。
+ * @param creature_ptr 判定対象のプレーヤー参照ポインタ
  * @return 持っていたらTRUE
  * @details
  * * 時限で幽体化、壁抜けをもつか種族幽霊ならばひとまずTRUE。
@@ -474,8 +474,8 @@ bool has_pass_wall(player_type *creature_ptr)
 }
 
 /*!
- * @brief クリーチャーが強力射を持っているかを返す。
- * @param creature_ptr 判定対象のクリーチャー参照ポインタ
+ * @brief プレーヤーが強力射を持っているかを返す。
+ * @param creature_ptr 判定対象のプレーヤー参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
 BIT_FLAGS has_xtra_might(player_type *creature_ptr)
@@ -486,8 +486,8 @@ BIT_FLAGS has_xtra_might(player_type *creature_ptr)
 }
 
 /*!
- * @brief クリーチャーが邪悪感知を持っているかを返す。
- * @param creature_ptr 判定対象のクリーチャー参照ポインタ
+ * @brief プレーヤーが邪悪感知を持っているかを返す。
+ * @param creature_ptr 判定対象のプレーヤー参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
 BIT_FLAGS has_esp_evil(player_type *creature_ptr)
@@ -502,8 +502,8 @@ BIT_FLAGS has_esp_evil(player_type *creature_ptr)
 }
 
 /*!
- * @brief クリーチャーが自然界の動物感知を持っているかを返す。
- * @param creature_ptr 判定対象のクリーチャー参照ポインタ
+ * @brief プレーヤーが自然界の動物感知を持っているかを返す。
+ * @param creature_ptr 判定対象のプレーヤー参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
 BIT_FLAGS has_esp_animal(player_type *creature_ptr)
@@ -512,8 +512,8 @@ BIT_FLAGS has_esp_animal(player_type *creature_ptr)
 }
 
 /*!
- * @brief クリーチャーがアンデッド感知を持っているかを返す。
- * @param creature_ptr 判定対象のクリーチャー参照ポインタ
+ * @brief プレーヤーがアンデッド感知を持っているかを返す。
+ * @param creature_ptr 判定対象のプレーヤー参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
 BIT_FLAGS has_esp_undead(player_type *creature_ptr)
@@ -522,8 +522,8 @@ BIT_FLAGS has_esp_undead(player_type *creature_ptr)
 }
 
 /*!
- * @brief クリーチャーが悪魔感知を持っているかを返す。
- * @param creature_ptr 判定対象のクリーチャー参照ポインタ
+ * @brief プレーヤーが悪魔感知を持っているかを返す。
+ * @param creature_ptr 判定対象のプレーヤー参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
 BIT_FLAGS has_esp_demon(player_type *creature_ptr)
@@ -532,8 +532,8 @@ BIT_FLAGS has_esp_demon(player_type *creature_ptr)
 }
 
 /*!
- * @brief クリーチャーがオーク感知を持っているかを返す。
- * @param creature_ptr 判定対象のクリーチャー参照ポインタ
+ * @brief プレーヤーがオーク感知を持っているかを返す。
+ * @param creature_ptr 判定対象のプレーヤー参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
 BIT_FLAGS has_esp_orc(player_type *creature_ptr)
@@ -542,8 +542,8 @@ BIT_FLAGS has_esp_orc(player_type *creature_ptr)
 }
 
 /*!
- * @brief クリーチャーがトロル感知を持っているかを返す。
- * @param creature_ptr 判定対象のクリーチャー参照ポインタ
+ * @brief プレーヤーがトロル感知を持っているかを返す。
+ * @param creature_ptr 判定対象のプレーヤー参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
 BIT_FLAGS has_esp_troll(player_type *creature_ptr)
@@ -552,8 +552,8 @@ BIT_FLAGS has_esp_troll(player_type *creature_ptr)
 }
 
 /*!
- * @brief クリーチャーが巨人感知を持っているかを返す。
- * @param creature_ptr 判定対象のクリーチャー参照ポインタ
+ * @brief プレーヤーが巨人感知を持っているかを返す。
+ * @param creature_ptr 判定対象のプレーヤー参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
 BIT_FLAGS has_esp_giant(player_type *creature_ptr)
@@ -562,8 +562,8 @@ BIT_FLAGS has_esp_giant(player_type *creature_ptr)
 }
 
 /*!
- * @brief クリーチャーがドラゴン感知を持っているかを返す。
- * @param creature_ptr 判定対象のクリーチャー参照ポインタ
+ * @brief プレーヤーがドラゴン感知を持っているかを返す。
+ * @param creature_ptr 判定対象のプレーヤー参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
 BIT_FLAGS has_esp_dragon(player_type *creature_ptr)
@@ -572,8 +572,8 @@ BIT_FLAGS has_esp_dragon(player_type *creature_ptr)
 }
 
 /*!
- * @brief クリーチャーが人間感知を持っているかを返す。
- * @param creature_ptr 判定対象のクリーチャー参照ポインタ
+ * @brief プレーヤーが人間感知を持っているかを返す。
+ * @param creature_ptr 判定対象のプレーヤー参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
 BIT_FLAGS has_esp_human(player_type *creature_ptr)
@@ -582,8 +582,8 @@ BIT_FLAGS has_esp_human(player_type *creature_ptr)
 }
 
 /*!
- * @brief クリーチャーが善良感知を持っているかを返す。
- * @param creature_ptr 判定対象のクリーチャー参照ポインタ
+ * @brief プレーヤーが善良感知を持っているかを返す。
+ * @param creature_ptr 判定対象のプレーヤー参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
 BIT_FLAGS has_esp_good(player_type *creature_ptr)
@@ -592,8 +592,8 @@ BIT_FLAGS has_esp_good(player_type *creature_ptr)
 }
 
 /*!
- * @brief クリーチャーが無生物感知を持っているかを返す。
- * @param creature_ptr 判定対象のクリーチャー参照ポインタ
+ * @brief プレーヤーが無生物感知を持っているかを返す。
+ * @param creature_ptr 判定対象のプレーヤー参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
 BIT_FLAGS has_esp_nonliving(player_type *creature_ptr)
@@ -602,8 +602,8 @@ BIT_FLAGS has_esp_nonliving(player_type *creature_ptr)
 }
 
 /*!
- * @brief クリーチャーがユニーク感知を持っているかを返す。
- * @param creature_ptr 判定対象のクリーチャー参照ポインタ
+ * @brief プレーヤーがユニーク感知を持っているかを返す。
+ * @param creature_ptr 判定対象のプレーヤー参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
 BIT_FLAGS has_esp_unique(player_type *creature_ptr)
@@ -612,8 +612,8 @@ BIT_FLAGS has_esp_unique(player_type *creature_ptr)
 }
 
 /*!
- * @brief クリーチャーがテレパシーを持っているかを返す。
- * @param creature_ptr 判定対象のクリーチャー参照ポインタ
+ * @brief プレーヤーがテレパシーを持っているかを返す。
+ * @param creature_ptr 判定対象のプレーヤー参照ポインタ
  * @return 持っていたら所持前提ビットフラグを返す。
  */
 BIT_FLAGS has_esp_telepathy(player_type *creature_ptr)

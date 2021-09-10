@@ -14,7 +14,7 @@
 
 /*!
  * @brief 魔道具術師の魔力取り込み処理
- * @param user_ptr アイテムを取り込むクリーチャー
+ * @param user_ptr アイテムを取り込むプレーヤー
  * @return 取り込みを実行したらTRUE、キャンセルしたらFALSEを返す
  */
 bool import_magic_device(player_type *user_ptr)

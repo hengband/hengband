@@ -18,7 +18,7 @@
 #include "view/display-messages.h"
 
 /*!
- * @brief クリーチャー全既知呪文を表示する /
+ * @brief プレーヤー全既知呪文を表示する /
  * Hack -- Display all known spells in a window
  * @param caster_ptr 術者の参照ポインタ
  * return なし
