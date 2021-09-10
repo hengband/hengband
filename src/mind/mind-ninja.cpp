@@ -110,37 +110,37 @@ bool kawarimi(player_type *caster_ptr, bool success)
  * @param mdeath 目標モンスターが死亡したかを返す
  * @return 作用が実際にあった場合TRUEを返す /  Return value is for checking "done"
  */
-bool rush_attack(player_type *attacker_ptr, bool *mdeath)
+bool rush_attack(player_type *player_ptr, bool *mdeath)
 {
     if (mdeath)
         *mdeath = false;
 
     project_length = 5;
     DIRECTION dir;
-    if (!get_aim_dir(attacker_ptr, &dir))
+    if (!get_aim_dir(player_ptr, &dir))
         return false;
 
-    int tx = attacker_ptr->x + project_length * ddx[dir];
-    int ty = attacker_ptr->y + project_length * ddy[dir];
+    int tx = player_ptr->x + project_length * ddx[dir];
+    int ty = player_ptr->y + project_length * ddy[dir];
 
-    if ((dir == 5) && target_okay(attacker_ptr)) {
+    if ((dir == 5) && target_okay(player_ptr)) {
         tx = target_col;
         ty = target_row;
     }
 
     int tm_idx = 0;
-    floor_type *floor_ptr = attacker_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     if (in_bounds(floor_ptr, ty, tx))
         tm_idx = floor_ptr->grid_array[ty][tx].m_idx;
 
     uint16_t path_g[32];
-    int path_n = projection_path(attacker_ptr, path_g, project_length, attacker_ptr->y, attacker_ptr->x, ty, tx, PROJECT_STOP | PROJECT_KILL);
+    int path_n = projection_path(player_ptr, path_g, project_length, player_ptr->y, player_ptr->x, ty, tx, PROJECT_STOP | PROJECT_KILL);
     project_length = 0;
     if (!path_n)
         return true;
 
-    ty = attacker_ptr->y;
-    tx = attacker_ptr->x;
+    ty = player_ptr->y;
+    tx = player_ptr->x;
     bool tmp_mdeath = false;
     bool moved = false;
     for (int i = 0; i < path_n; i++) {
@@ -149,7 +149,7 @@ bool rush_attack(player_type *attacker_ptr, bool *mdeath)
         int ny = get_grid_y(path_g[i]);
         int nx = get_grid_x(path_g[i]);
 
-        if (is_cave_empty_bold(attacker_ptr, ny, nx) && player_can_enter(attacker_ptr, floor_ptr->grid_array[ny][nx].feat, 0)) {
+        if (is_cave_empty_bold(player_ptr, ny, nx) && player_can_enter(player_ptr, floor_ptr->grid_array[ny][nx].feat, 0)) {
             ty = ny;
             tx = nx;
             continue;
@@ -165,9 +165,9 @@ bool rush_attack(player_type *attacker_ptr, bool *mdeath)
             break;
         }
 
-        if (!player_bold(attacker_ptr, ty, tx))
-            teleport_player_to(attacker_ptr, ty, tx, TELEPORT_NONMAGICAL);
-        update_monster(attacker_ptr, floor_ptr->grid_array[ny][nx].m_idx, true);
+        if (!player_bold(player_ptr, ty, tx))
+            teleport_player_to(player_ptr, ty, tx, TELEPORT_NONMAGICAL);
+        update_monster(player_ptr, floor_ptr->grid_array[ny][nx].m_idx, true);
 
         m_ptr = &floor_ptr->m_list[floor_ptr->grid_array[ny][nx].m_idx];
         if (tm_idx != floor_ptr->grid_array[ny][nx].m_idx) {
@@ -176,22 +176,22 @@ bool rush_attack(player_type *attacker_ptr, bool *mdeath)
 #else
             msg_format("There is %s in the way!", m_ptr->ml ? (tm_idx ? "another monster" : "a monster") : "someone");
 #endif
-        } else if (!player_bold(attacker_ptr, ty, tx)) {
+        } else if (!player_bold(player_ptr, ty, tx)) {
             GAME_TEXT m_name[MAX_NLEN];
-            monster_desc(attacker_ptr, m_name, m_ptr, 0);
+            monster_desc(player_ptr, m_name, m_ptr, 0);
             msg_format(_("素早く%sの懐に入り込んだ！", "You quickly jump in and attack %s!"), m_name);
         }
 
-        if (!player_bold(attacker_ptr, ty, tx))
-            teleport_player_to(attacker_ptr, ty, tx, TELEPORT_NONMAGICAL);
+        if (!player_bold(player_ptr, ty, tx))
+            teleport_player_to(player_ptr, ty, tx, TELEPORT_NONMAGICAL);
         moved = true;
-        tmp_mdeath = do_cmd_attack(attacker_ptr, ny, nx, HISSATSU_NYUSIN);
+        tmp_mdeath = do_cmd_attack(player_ptr, ny, nx, HISSATSU_NYUSIN);
 
         break;
     }
 
-    if (!moved && !player_bold(attacker_ptr, ty, tx))
-        teleport_player_to(attacker_ptr, ty, tx, TELEPORT_NONMAGICAL);
+    if (!moved && !player_bold(player_ptr, ty, tx))
+        teleport_player_to(player_ptr, ty, tx, TELEPORT_NONMAGICAL);
 
     if (mdeath)
         *mdeath = tmp_mdeath;
@@ -200,26 +200,26 @@ bool rush_attack(player_type *attacker_ptr, bool *mdeath)
 
 /*!
  * @brief 盗賊と忍者における不意打ち
- * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  */
-void process_surprise_attack(player_type *attacker_ptr, player_attack_type *pa_ptr)
+void process_surprise_attack(player_type *player_ptr, player_attack_type *pa_ptr)
 {
     monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
-    if (!has_melee_weapon(attacker_ptr, INVEN_MAIN_HAND + pa_ptr->hand) || attacker_ptr->is_icky_wield[pa_ptr->hand])
+    if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND + pa_ptr->hand) || player_ptr->is_icky_wield[pa_ptr->hand])
         return;
 
-    int tmp = attacker_ptr->lev * 6 + (attacker_ptr->skill_stl + 10) * 4;
-    if (attacker_ptr->monlite && (pa_ptr->mode != HISSATSU_NYUSIN))
+    int tmp = player_ptr->lev * 6 + (player_ptr->skill_stl + 10) * 4;
+    if (player_ptr->monlite && (pa_ptr->mode != HISSATSU_NYUSIN))
         tmp /= 3;
-    if (has_aggravate(attacker_ptr))
+    if (has_aggravate(player_ptr))
         tmp /= 2;
-    if (r_ptr->level > (attacker_ptr->lev * attacker_ptr->lev / 20 + 10))
+    if (r_ptr->level > (player_ptr->lev * player_ptr->lev / 20 + 10))
         tmp /= 3;
     if (monster_csleep_remaining(pa_ptr->m_ptr) && pa_ptr->m_ptr->ml) {
         /* Can't backstab creatures that we can't see, right? */
         pa_ptr->backstab = true;
-    } else if ((attacker_ptr->special_defense & NINJA_S_STEALTH) && (randint0(tmp) > (r_ptr->level + 20)) && pa_ptr->m_ptr->ml
+    } else if ((player_ptr->special_defense & NINJA_S_STEALTH) && (randint0(tmp) > (r_ptr->level + 20)) && pa_ptr->m_ptr->ml
         && !(r_ptr->flagsr & RFR_RES_ALL)) {
         pa_ptr->surprise_attack = true;
     } else if (monster_fear_remaining(pa_ptr->m_ptr) && pa_ptr->m_ptr->ml) {
@@ -241,18 +241,18 @@ void print_surprise_attack(player_attack_type *pa_ptr)
 
 /*!
  * @brief 盗賊と忍者における不意打ちのダメージ計算
- * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  */
-void calc_surprise_attack_damage(player_type *attacker_ptr, player_attack_type *pa_ptr)
+void calc_surprise_attack_damage(player_type *player_ptr, player_attack_type *pa_ptr)
 {
     if (pa_ptr->backstab) {
-        pa_ptr->attack_damage *= (3 + (attacker_ptr->lev / 20));
+        pa_ptr->attack_damage *= (3 + (player_ptr->lev / 20));
         return;
     }
 
     if (pa_ptr->surprise_attack) {
-        pa_ptr->attack_damage = pa_ptr->attack_damage * (5 + (attacker_ptr->lev * 2 / 25)) / 2;
+        pa_ptr->attack_damage = pa_ptr->attack_damage * (5 + (player_ptr->lev * 2 / 25)) / 2;
         return;
     }
 

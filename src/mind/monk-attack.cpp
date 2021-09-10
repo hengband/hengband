@@ -62,44 +62,44 @@ static int calc_stun_resistance(player_attack_type *pa_ptr)
 
 /*!
  * @brief 技のランダム選択回数を決定する
- * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return 技のランダム選択回数
  * @details ランダム選択は一番強い技が最終的に選択されるので、回数が多いほど有利
  */
-static int calc_max_blow_selection_times(player_type *attacker_ptr)
+static int calc_max_blow_selection_times(player_type *player_ptr)
 {
-    if (attacker_ptr->special_defense & KAMAE_BYAKKO)
-        return (attacker_ptr->lev < 3 ? 1 : attacker_ptr->lev / 3);
+    if (player_ptr->special_defense & KAMAE_BYAKKO)
+        return (player_ptr->lev < 3 ? 1 : player_ptr->lev / 3);
 
-    if (attacker_ptr->special_defense & KAMAE_SUZAKU)
+    if (player_ptr->special_defense & KAMAE_SUZAKU)
         return 1;
 
-    if (attacker_ptr->special_defense & KAMAE_GENBU)
+    if (player_ptr->special_defense & KAMAE_GENBU)
         return 1;
 
-    return attacker_ptr->lev < 7 ? 1 : attacker_ptr->lev / 7;
+    return player_ptr->lev < 7 ? 1 : player_ptr->lev / 7;
 }
 
 /*!
  * @brief プレーヤーのレベルと技の難度を加味しつつ、確率で一番強い技を選ぶ
- * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return 技のランダム選択回数
  * @return 技の行使に必要な最低レベル
  */
-static int select_blow(player_type *attacker_ptr, player_attack_type *pa_ptr, int max_blow_selection_times)
+static int select_blow(player_type *player_ptr, player_attack_type *pa_ptr, int max_blow_selection_times)
 {
     int min_level = 1;
     const martial_arts *old_ptr = &ma_blows[0];
     for (int times = 0; times < max_blow_selection_times; times++) {
         do {
             pa_ptr->ma_ptr = &ma_blows[randint0(MAX_MA)];
-            if ((attacker_ptr->pclass == CLASS_FORCETRAINER) && (pa_ptr->ma_ptr->min_level > 1))
+            if ((player_ptr->pclass == CLASS_FORCETRAINER) && (pa_ptr->ma_ptr->min_level > 1))
                 min_level = pa_ptr->ma_ptr->min_level + 3;
             else
                 min_level = pa_ptr->ma_ptr->min_level;
-        } while ((min_level > attacker_ptr->lev) || (randint1(attacker_ptr->lev) < pa_ptr->ma_ptr->chance));
+        } while ((min_level > player_ptr->lev) || (randint1(player_ptr->lev) < pa_ptr->ma_ptr->chance));
 
-        if ((pa_ptr->ma_ptr->min_level <= old_ptr->min_level) || attacker_ptr->stun || attacker_ptr->confused) {
+        if ((pa_ptr->ma_ptr->min_level <= old_ptr->min_level) || player_ptr->stun || player_ptr->confused) {
             pa_ptr->ma_ptr = old_ptr;
             continue;
         }
@@ -109,7 +109,7 @@ static int select_blow(player_type *attacker_ptr, player_attack_type *pa_ptr, in
             msg_print(_("攻撃を再選択しました。", "Attack re-selected."));
     }
 
-    if (attacker_ptr->pclass == CLASS_FORCETRAINER)
+    if (player_ptr->pclass == CLASS_FORCETRAINER)
         min_level = MAX(1, pa_ptr->ma_ptr->min_level - 3);
     else
         min_level = pa_ptr->ma_ptr->min_level;
@@ -149,17 +149,17 @@ static int process_monk_additional_effect(player_attack_type *pa_ptr, int *stun_
 
 /*!
  * @brief 攻撃の重さ (修行僧と練気術師における武器重量)を決定する
- * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return 重さ
  */
-static WEIGHT calc_monk_attack_weight(player_type *attacker_ptr)
+static WEIGHT calc_monk_attack_weight(player_type *player_ptr)
 {
     WEIGHT weight = 8;
-    if (attacker_ptr->special_defense & KAMAE_SUZAKU)
+    if (player_ptr->special_defense & KAMAE_SUZAKU)
         weight = 4;
 
-    if ((attacker_ptr->pclass == CLASS_FORCETRAINER) && (get_current_ki(attacker_ptr) != 0)) {
-        weight += (get_current_ki(attacker_ptr) / 30);
+    if ((player_ptr->pclass == CLASS_FORCETRAINER) && (get_current_ki(player_ptr) != 0)) {
+        weight += (get_current_ki(player_ptr) / 30);
         if (weight > 20)
             weight = 20;
     }
@@ -169,24 +169,24 @@ static WEIGHT calc_monk_attack_weight(player_type *attacker_ptr)
 
 /*!
  * @brief 急所攻撃による追加効果を与える
- * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param stun_effect 朦朧の残りターン
  * @param resist_stun 朦朧への抵抗値
  * @param special_effect 技を繰り出した時の追加効果
  */
-static void process_attack_vital_spot(player_type *attacker_ptr, player_attack_type *pa_ptr, int *stun_effect, int *resist_stun, const int special_effect)
+static void process_attack_vital_spot(player_type *player_ptr, player_attack_type *pa_ptr, int *stun_effect, int *resist_stun, const int special_effect)
 {
     monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
-    if ((special_effect == MA_KNEE) && ((pa_ptr->attack_damage + attacker_ptr->to_d[pa_ptr->hand]) < pa_ptr->m_ptr->hp)) {
+    if ((special_effect == MA_KNEE) && ((pa_ptr->attack_damage + player_ptr->to_d[pa_ptr->hand]) < pa_ptr->m_ptr->hp)) {
         msg_format(_("%^sは苦痛にうめいている！", "%^s moans in agony!"), pa_ptr->m_name);
         *stun_effect = 7 + randint1(13);
         *resist_stun /= 3;
         return;
     }
 
-    if ((special_effect == MA_SLOW) && ((pa_ptr->attack_damage + attacker_ptr->to_d[pa_ptr->hand]) < pa_ptr->m_ptr->hp)) {
-        if (!(r_ptr->flags1 & RF1_UNIQUE) && (randint1(attacker_ptr->lev) > r_ptr->level) && pa_ptr->m_ptr->mspeed > 60) {
+    if ((special_effect == MA_SLOW) && ((pa_ptr->attack_damage + player_ptr->to_d[pa_ptr->hand]) < pa_ptr->m_ptr->hp)) {
+        if (!(r_ptr->flags1 & RF1_UNIQUE) && (randint1(player_ptr->lev) > r_ptr->level) && pa_ptr->m_ptr->mspeed > 60) {
             msg_format(_("%^sは足をひきずり始めた。", "You've hobbled %s."), pa_ptr->m_name);
             pa_ptr->m_ptr->mspeed -= 10;
         }
@@ -195,18 +195,18 @@ static void process_attack_vital_spot(player_type *attacker_ptr, player_attack_t
 
 /*!
  * @brief 朦朧効果を受けたモンスターのステータス表示
- * @param attacker_ptr プレーヤーの参照ポインタ
+ * @param player_ptr プレーヤーの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param g_ptr グリッドへの参照ポインタ
  * @param stun_effect 朦朧の残りターン
  * @param resist_stun 朦朧への抵抗値
  */
-static void print_stun_effect(player_type *attacker_ptr, player_attack_type *pa_ptr, const int stun_effect, const int resist_stun)
+static void print_stun_effect(player_type *player_ptr, player_attack_type *pa_ptr, const int stun_effect, const int resist_stun)
 {
     monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
-    if (stun_effect && ((pa_ptr->attack_damage + attacker_ptr->to_d[pa_ptr->hand]) < pa_ptr->m_ptr->hp)) {
-        if (attacker_ptr->lev > randint1(r_ptr->level + resist_stun + 10)) {
-            if (set_monster_stunned(attacker_ptr, pa_ptr->g_ptr->m_idx, stun_effect + monster_stunned_remaining(pa_ptr->m_ptr))) {
+    if (stun_effect && ((pa_ptr->attack_damage + player_ptr->to_d[pa_ptr->hand]) < pa_ptr->m_ptr->hp)) {
+        if (player_ptr->lev > randint1(r_ptr->level + resist_stun + 10)) {
+            if (set_monster_stunned(player_ptr, pa_ptr->g_ptr->m_idx, stun_effect + monster_stunned_remaining(pa_ptr->m_ptr))) {
                 msg_format(_("%^sはフラフラになった。", "%^s is stunned."), pa_ptr->m_name);
             } else {
                 msg_format(_("%^sはさらにフラフラになった。", "%^s is more stunned."), pa_ptr->m_name);
@@ -217,26 +217,26 @@ static void print_stun_effect(player_type *attacker_ptr, player_attack_type *pa_
 
 /*!
  * @brief 強力な素手攻撃ができる職業 (修行僧、狂戦士、練気術師)の素手攻撃処理メインルーチン
- * @param attacker_ptr プレーヤーの参照ポインタ
+ * @param player_ptr プレーヤーの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param g_ptr グリッドへの参照ポインタ
  */
-void process_monk_attack(player_type *attacker_ptr, player_attack_type *pa_ptr)
+void process_monk_attack(player_type *player_ptr, player_attack_type *pa_ptr)
 {
     int resist_stun = calc_stun_resistance(pa_ptr);
-    int max_blow_selection_times = calc_max_blow_selection_times(attacker_ptr);
-    int min_level = select_blow(attacker_ptr, pa_ptr, max_blow_selection_times);
+    int max_blow_selection_times = calc_max_blow_selection_times(player_ptr);
+    int min_level = select_blow(player_ptr, pa_ptr, max_blow_selection_times);
 
-    pa_ptr->attack_damage = damroll(pa_ptr->ma_ptr->dd + attacker_ptr->to_dd[pa_ptr->hand], pa_ptr->ma_ptr->ds + attacker_ptr->to_ds[pa_ptr->hand]);
-    if (attacker_ptr->special_attack & ATTACK_SUIKEN)
+    pa_ptr->attack_damage = damroll(pa_ptr->ma_ptr->dd + player_ptr->to_dd[pa_ptr->hand], pa_ptr->ma_ptr->ds + player_ptr->to_ds[pa_ptr->hand]);
+    if (player_ptr->special_attack & ATTACK_SUIKEN)
         pa_ptr->attack_damage *= 2;
 
     int stun_effect = 0;
     int special_effect = process_monk_additional_effect(pa_ptr, &stun_effect);
-    WEIGHT weight = calc_monk_attack_weight(attacker_ptr);
-    pa_ptr->attack_damage = critical_norm(attacker_ptr, attacker_ptr->lev * weight, min_level, pa_ptr->attack_damage, attacker_ptr->to_h[0], HISSATSU_NONE);
-    process_attack_vital_spot(attacker_ptr, pa_ptr, &stun_effect, &resist_stun, special_effect);
-    print_stun_effect(attacker_ptr, pa_ptr, stun_effect, resist_stun);
+    WEIGHT weight = calc_monk_attack_weight(player_ptr);
+    pa_ptr->attack_damage = critical_norm(player_ptr, player_ptr->lev * weight, min_level, pa_ptr->attack_damage, player_ptr->to_h[0], HISSATSU_NONE);
+    process_attack_vital_spot(player_ptr, pa_ptr, &stun_effect, &resist_stun, special_effect);
+    print_stun_effect(player_ptr, pa_ptr, stun_effect, resist_stun);
 }
 
 bool double_attack(player_type *player_ptr)
