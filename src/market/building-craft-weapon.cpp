@@ -345,7 +345,7 @@ static void list_weapon(player_type *player_ptr, object_type *o_ptr, TERM_LEN ro
  * @param bcost 基本鑑定費用
  * @return 最終的にかかった費用
  */
-PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
+PRICE compare_weapons(player_type *player_ptr, PRICE bcost)
 {
     object_type *o_ptr[2];
     object_type orig_weapon;
@@ -359,14 +359,14 @@ PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
 
     screen_save();
     clear_bldg(0, 22);
-    i_ptr = &customer_ptr->inventory_list[INVEN_MAIN_HAND];
+    i_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND];
     (&orig_weapon)->copy_from(i_ptr);
 
     concptr q = _("第一の武器は？", "What is your first weapon? ");
     concptr s = _("比べるものがありません。", "You have nothing to compare.");
 
     OBJECT_IDX item;
-    o_ptr[0] = choose_object(customer_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT), FuncItemTester(&object_type::is_orthodox_melee_weapons));
+    o_ptr[0] = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT), FuncItemTester(&object_type::is_orthodox_melee_weapons));
     if (!o_ptr[0]) {
         screen_load();
         return 0;
@@ -383,16 +383,16 @@ PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
             if (o_ptr[i] != i_ptr)
                 i_ptr->copy_from(o_ptr[i]);
 
-            customer_ptr->update |= PU_BONUS;
-            handle_stuff(customer_ptr);
+            player_ptr->update |= PU_BONUS;
+            handle_stuff(player_ptr);
 
-            list_weapon(customer_ptr, o_ptr[i], row, col);
-            compare_weapon_aux(customer_ptr, o_ptr[i], col, row + 8);
+            list_weapon(player_ptr, o_ptr[i], row, col);
+            compare_weapon_aux(player_ptr, o_ptr[i], col, row + 8);
             i_ptr->copy_from(&orig_weapon);
         }
 
-        customer_ptr->update |= PU_BONUS;
-        handle_stuff(customer_ptr);
+        player_ptr->update |= PU_BONUS;
+        handle_stuff(player_ptr);
 
         current_world_ptr->character_xtra = old_character_xtra;
 #ifdef JP
@@ -410,7 +410,7 @@ PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
         if (ch != 's')
             break;
 
-        if (total + cost > customer_ptr->au) {
+        if (total + cost > player_ptr->au) {
             msg_print(_("お金が足りません！", "You don't have enough money!"));
             msg_print(nullptr);
             continue;
@@ -419,7 +419,7 @@ PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
         q = _("第二の武器は？", "What is your second weapon? ");
         s = _("比べるものがありません。", "You have nothing to compare.");
         OBJECT_IDX item2;
-        object_type *i2_ptr = choose_object(customer_ptr, &item2, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT), FuncItemTester(&object_type::is_orthodox_melee_weapons));
+        object_type *i2_ptr = choose_object(player_ptr, &item2, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT), FuncItemTester(&object_type::is_orthodox_melee_weapons));
         if (!i2_ptr)
             continue;
 
