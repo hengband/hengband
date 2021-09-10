@@ -592,6 +592,7 @@ hengband_SOURCES = \
 	object-enchant/object-smith.cpp object-enchant/object-smith.h \
 	object-enchant/item-apply-magic.h object-enchant/item-feeling.h \
 	object-enchant/old-ego-extra-values.h object-enchant/special-object-flags.h \
+	object-enchant/smith-info.cpp object-enchant/smith-info.h \
 	object-enchant/smith-tables.cpp object-enchant/smith-tables.h \
 	object-enchant/smith-types.h \
 	object-enchant/tr-flags.h \

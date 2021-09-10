@@ -270,6 +270,7 @@
     <ClCompile Include="..\..\src\action\movement-execution.cpp" />
     <ClCompile Include="..\..\src\core\score-util.cpp" />
     <ClCompile Include="..\..\src\object-enchant\object-smith.cpp" />
+    <ClCompile Include="..\..\src\object-enchant\smith-info.cpp" />
     <ClCompile Include="..\..\src\object-enchant\smith-tables.cpp" />
     <ClCompile Include="..\..\src\player-base\player-class.cpp" />
     <ClCompile Include="..\..\src\player-base\player-race.cpp" />
@@ -912,6 +913,7 @@
     <ClInclude Include="..\..\src\action\run-execution.h" />
     <ClInclude Include="..\..\src\load\savedata-old-flag-types.h" />
     <ClInclude Include="..\..\src\object-enchant\object-smith.h" />
+    <ClInclude Include="..\..\src\object-enchant\smith-info.h" />
     <ClInclude Include="..\..\src\object-enchant\smith-tables.h" />
     <ClInclude Include="..\..\src\object-enchant\smith-types.h" />
     <ClInclude Include="..\..\src\object-enchant\tr-flags.h" />

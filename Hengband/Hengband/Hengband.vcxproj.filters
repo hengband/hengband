@@ -2328,6 +2328,9 @@
     <ClCompile Include="..\..\src\player-base\player-class.cpp">
       <Filter>player-base</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\smith-info.cpp">
+      <Filter>object-enchant</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5009,6 +5012,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player-base\player-class.h">
       <Filter>player-base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\smith-info.h">
+      <Filter>object-enchant</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
