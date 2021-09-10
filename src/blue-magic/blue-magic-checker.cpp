@@ -26,23 +26,23 @@
  * @brief 青魔法のラーニング判定と成功した場合のラーニング処理
  * @param monspell ラーニングを試みるモンスター攻撃のID
  */
-void learn_spell(player_type *learner_ptr, int monspell)
+void learn_spell(player_type *player_ptr, int monspell)
 {
-    if (learner_ptr->action != ACTION_LEARN)
+    if (player_ptr->action != ACTION_LEARN)
         return;
     if (monspell < 0)
         return;
-    if (learner_ptr->magic_num2[monspell])
+    if (player_ptr->magic_num2[monspell])
         return;
-    if (learner_ptr->confused || learner_ptr->blind || learner_ptr->image || learner_ptr->stun || learner_ptr->paralyzed)
+    if (player_ptr->confused || player_ptr->blind || player_ptr->image || player_ptr->stun || player_ptr->paralyzed)
         return;
-    if (randint1(learner_ptr->lev + 70) > monster_powers[monspell].level + 40) {
-        learner_ptr->magic_num2[monspell] = 1;
+    if (randint1(player_ptr->lev + 70) > monster_powers[monspell].level + 40) {
+        player_ptr->magic_num2[monspell] = 1;
         msg_format(_("%sを学習した！", "You have learned %s!"), monster_powers[monspell].name);
-        gain_exp(learner_ptr, monster_powers[monspell].level * monster_powers[monspell].smana);
+        gain_exp(player_ptr, monster_powers[monspell].level * monster_powers[monspell].smana);
         sound(SOUND_STUDY);
-        learner_ptr->new_mane = true;
-        learner_ptr->redraw |= PR_STATE;
+        player_ptr->new_mane = true;
+        player_ptr->redraw |= PR_STATE;
     }
 }
 
