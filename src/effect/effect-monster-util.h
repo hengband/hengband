@@ -44,5 +44,5 @@ typedef struct effect_monster_type {
 } effect_monster_type;
 
 struct player_type;
-effect_monster_type *initialize_effect_monster(player_type *caster_ptr, effect_monster_type *em_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x,
+effect_monster_type *initialize_effect_monster(player_type *player_ptr, effect_monster_type *em_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x,
     HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag, bool see_s_msg);

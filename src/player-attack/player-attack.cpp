@@ -591,18 +591,18 @@ void exe_player_attack_to_monster(player_type *player_ptr, POSITION y, POSITION 
 
 /*!
  * @brief 皆殺し(全方向攻撃)処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  */
-void massacre(player_type *caster_ptr)
+void massacre(player_type *player_ptr)
 {
     grid_type *g_ptr;
     monster_type *m_ptr;
     for (DIRECTION dir = 0; dir < 8; dir++) {
-        POSITION y = caster_ptr->y + ddy_ddd[dir];
-        POSITION x = caster_ptr->x + ddx_ddd[dir];
-        g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
-        m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-        if (g_ptr->m_idx && (m_ptr->ml || cave_has_flag_bold(caster_ptr->current_floor_ptr, y, x, FF::PROJECT)))
-            do_cmd_attack(caster_ptr, y, x, HISSATSU_NONE);
+        POSITION y = player_ptr->y + ddy_ddd[dir];
+        POSITION x = player_ptr->x + ddx_ddd[dir];
+        g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+        m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+        if (g_ptr->m_idx && (m_ptr->ml || cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, FF::PROJECT)))
+            do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
     }
 }

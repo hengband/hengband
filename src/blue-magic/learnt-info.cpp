@@ -12,12 +12,12 @@
 
 /*!
  * @brief モンスター魔法をプレイヤーが使用する場合の換算レベル
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param 換算レベル
  */
-PLAYER_LEVEL get_pseudo_monstetr_level(player_type *caster_ptr)
+PLAYER_LEVEL get_pseudo_monstetr_level(player_type *player_ptr)
 {
-    PLAYER_LEVEL monster_level = caster_ptr->lev + 40;
+    PLAYER_LEVEL monster_level = player_ptr->lev + 40;
     return (monster_level * monster_level - 1550) / 130;
 }
 

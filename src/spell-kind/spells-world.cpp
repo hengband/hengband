@@ -42,18 +42,18 @@
 
 /*!
  * @brief テレポート・レベルが効かないモンスターであるかどうかを判定する
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param idx テレポート・レベル対象のモンスター
  * @todo 変数名が実態と合っているかどうかは要確認
  */
-bool is_teleport_level_ineffective(player_type *caster_ptr, MONSTER_IDX idx)
+bool is_teleport_level_ineffective(player_type *player_ptr, MONSTER_IDX idx)
 {
-    floor_type *floor_ptr = caster_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     bool is_special_floor
-        = floor_ptr->inside_arena || caster_ptr->phase_out || (floor_ptr->inside_quest && !random_quest_number(caster_ptr, floor_ptr->dun_level));
+        = floor_ptr->inside_arena || player_ptr->phase_out || (floor_ptr->inside_quest && !random_quest_number(player_ptr, floor_ptr->dun_level));
     bool is_invalid_floor = idx <= 0;
-    is_invalid_floor &= quest_number(caster_ptr, floor_ptr->dun_level) || (floor_ptr->dun_level >= d_info[caster_ptr->dungeon_idx].maxdepth);
-    is_invalid_floor &= caster_ptr->current_floor_ptr->dun_level >= 1;
+    is_invalid_floor &= quest_number(player_ptr, floor_ptr->dun_level) || (floor_ptr->dun_level >= d_info[player_ptr->dungeon_idx].maxdepth);
+    is_invalid_floor &= player_ptr->current_floor_ptr->dun_level >= 1;
     is_invalid_floor &= ironman_downward;
     return is_special_floor || is_invalid_floor;
 }
@@ -212,31 +212,31 @@ void teleport_level(player_type *player_ptr, MONSTER_IDX m_idx)
         sound(SOUND_TPLEVEL);
 }
 
-bool teleport_level_other(player_type *caster_ptr)
+bool teleport_level_other(player_type *player_ptr)
 {
-    if (!target_set(caster_ptr, TARGET_KILL))
+    if (!target_set(player_ptr, TARGET_KILL))
         return false;
-    MONSTER_IDX target_m_idx = caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
+    MONSTER_IDX target_m_idx = player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
     if (!target_m_idx)
         return true;
-    if (!player_has_los_bold(caster_ptr, target_row, target_col))
+    if (!player_has_los_bold(player_ptr, target_row, target_col))
         return true;
-    if (!projectable(caster_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col))
+    if (!projectable(player_ptr, player_ptr->y, player_ptr->x, target_row, target_col))
         return true;
 
     monster_type *m_ptr;
     monster_race *r_ptr;
-    m_ptr = &caster_ptr->current_floor_ptr->m_list[target_m_idx];
+    m_ptr = &player_ptr->current_floor_ptr->m_list[target_m_idx];
     r_ptr = &r_info[m_ptr->r_idx];
     GAME_TEXT m_name[MAX_NLEN];
-    monster_desc(caster_ptr, m_name, m_ptr, 0);
+    monster_desc(player_ptr, m_name, m_ptr, 0);
     msg_format(_("%^sの足を指さした。", "You gesture at %^s's feet."), m_name);
 
     if ((r_ptr->flagsr & (RFR_EFF_RES_NEXU_MASK | RFR_RES_TELE)) || (r_ptr->flags1 & RF1_QUESTOR)
-        || (r_ptr->level + randint1(50) > caster_ptr->lev + randint1(60))) {
+        || (r_ptr->level + randint1(50) > player_ptr->lev + randint1(60))) {
         msg_format(_("しかし効果がなかった！", "%^s is unaffected!"), m_name);
     } else {
-        teleport_level(caster_ptr, target_m_idx);
+        teleport_level(player_ptr, target_m_idx);
     }
 
     return true;
@@ -244,17 +244,17 @@ bool teleport_level_other(player_type *caster_ptr)
 
 /*!
  * @brief 町間のテレポートを行うメインルーチン
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return テレポート処理を決定したか否か
  */
-bool tele_town(player_type *caster_ptr)
+bool tele_town(player_type *player_ptr)
 {
-    if (caster_ptr->current_floor_ptr->dun_level) {
+    if (player_ptr->current_floor_ptr->dun_level) {
         msg_print(_("この魔法は地上でしか使えない！", "This spell can only be used on the surface!"));
         return false;
     }
 
-    if (caster_ptr->current_floor_ptr->inside_arena || caster_ptr->phase_out) {
+    if (player_ptr->current_floor_ptr->inside_arena || player_ptr->phase_out) {
         msg_print(_("この魔法は外でしか使えない！", "This spell can only be used outside!"));
         return false;
     }
@@ -267,7 +267,7 @@ bool tele_town(player_type *caster_ptr)
     for (i = 1; i < max_towns; i++) {
         char buf[80];
 
-        if ((i == NO_TOWN) || (i == SECRET_TOWN) || (i == caster_ptr->town_num) || !(caster_ptr->visit & (1UL << (i - 1))))
+        if ((i == NO_TOWN) || (i == SECRET_TOWN) || (i == player_ptr->town_num) || !(player_ptr->visit & (1UL << (i - 1))))
             continue;
 
         sprintf(buf, "%c) %-20s", I2A(i - 1), town_info[i].name);
@@ -293,8 +293,8 @@ bool tele_town(player_type *caster_ptr)
 
         else if ((i < 'a') || (i > ('a' + max_towns - 2)))
             continue;
-        else if (((i - 'a' + 1) == caster_ptr->town_num) || ((i - 'a' + 1) == NO_TOWN) || ((i - 'a' + 1) == SECRET_TOWN)
-            || !(caster_ptr->visit & (1UL << (i - 'a'))))
+        else if (((i - 'a' + 1) == player_ptr->town_num) || ((i - 'a' + 1) == NO_TOWN) || ((i - 'a' + 1) == SECRET_TOWN)
+            || !(player_ptr->visit & (1UL << (i - 'a'))))
             continue;
         break;
     }
@@ -302,40 +302,40 @@ bool tele_town(player_type *caster_ptr)
     for (POSITION y = 0; y < current_world_ptr->max_wild_y; y++) {
         for (POSITION x = 0; x < current_world_ptr->max_wild_x; x++) {
             if (wilderness[y][x].town == (i - 'a' + 1)) {
-                caster_ptr->wilderness_y = y;
-                caster_ptr->wilderness_x = x;
+                player_ptr->wilderness_y = y;
+                player_ptr->wilderness_x = x;
             }
         }
     }
 
-    caster_ptr->leaving = true;
-    caster_ptr->leave_bldg = true;
-    caster_ptr->teleport_town = true;
+    player_ptr->leaving = true;
+    player_ptr->leave_bldg = true;
+    player_ptr->teleport_town = true;
     screen_load();
     return true;
 }
 
 /*!
  * @brief 現実変容処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  */
-void reserve_alter_reality(player_type *caster_ptr, TIME_EFFECT turns)
+void reserve_alter_reality(player_type *player_ptr, TIME_EFFECT turns)
 {
-    if (caster_ptr->current_floor_ptr->inside_arena || ironman_downward) {
+    if (player_ptr->current_floor_ptr->inside_arena || ironman_downward) {
         msg_print(_("何も起こらなかった。", "Nothing happens."));
         return;
     }
 
-    if (caster_ptr->alter_reality || turns == 0) {
-        caster_ptr->alter_reality = 0;
+    if (player_ptr->alter_reality || turns == 0) {
+        player_ptr->alter_reality = 0;
         msg_print(_("景色が元に戻った...", "The view around you returns to normal..."));
-        caster_ptr->redraw |= PR_STATUS;
+        player_ptr->redraw |= PR_STATUS;
         return;
     }
 
-    caster_ptr->alter_reality = turns;
+    player_ptr->alter_reality = turns;
     msg_print(_("回りの景色が変わり始めた...", "The view around you begins to change..."));
-    caster_ptr->redraw |= PR_STATUS;
+    player_ptr->redraw |= PR_STATUS;
 }
 
 /*!
@@ -425,10 +425,10 @@ bool free_level_recall(player_type *player_ptr)
 
 /*!
  * @brief フロア・リセット処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return リセット処理が実際に行われたらTRUEを返す
  */
-bool reset_recall(player_type *caster_ptr)
+bool reset_recall(player_type *player_ptr)
 {
     int select_dungeon, dummy = 0;
     char ppp[80];
@@ -443,7 +443,7 @@ bool reset_recall(player_type *caster_ptr)
     if (!select_dungeon)
         return false;
     sprintf(ppp, _("何階にセットしますか (%d-%d):", "Reset to which level (%d-%d): "), (int)d_info[select_dungeon].mindepth, (int)max_dlv[select_dungeon]);
-    sprintf(tmp_val, "%d", (int)MAX(caster_ptr->current_floor_ptr->dun_level, 1));
+    sprintf(tmp_val, "%d", (int)MAX(player_ptr->current_floor_ptr->dun_level, 1));
 
     if (!get_string(ppp, tmp_val, 10)) {
         return false;
@@ -460,7 +460,7 @@ bool reset_recall(player_type *caster_ptr)
     max_dlv[select_dungeon] = dummy;
 
     if (record_maxdepth)
-        exe_write_diary(caster_ptr, DIARY_TRUMP, select_dungeon, _("フロア・リセットで", "using a scroll of reset recall"));
+        exe_write_diary(player_ptr, DIARY_TRUMP, select_dungeon, _("フロア・リセットで", "using a scroll of reset recall"));
 #ifdef JP
     msg_format("%sの帰還レベルを %d 階にセット。", d_info[select_dungeon].name.c_str(), dummy, dummy * 50);
 #else

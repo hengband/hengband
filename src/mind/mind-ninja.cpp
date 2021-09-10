@@ -60,53 +60,53 @@
 
 /*!
  * @brief 変わり身処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param success 判定成功上の処理ならばTRUE
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool kawarimi(player_type *caster_ptr, bool success)
+bool kawarimi(player_type *player_ptr, bool success)
 {
     object_type forge;
     object_type *q_ptr = &forge;
 
-    if (caster_ptr->is_dead)
+    if (player_ptr->is_dead)
         return false;
-    if (caster_ptr->confused || caster_ptr->blind || caster_ptr->paralyzed || caster_ptr->image)
+    if (player_ptr->confused || player_ptr->blind || player_ptr->paralyzed || player_ptr->image)
         return false;
-    if (randint0(200) < caster_ptr->stun)
+    if (randint0(200) < player_ptr->stun)
         return false;
 
     if (!success && one_in_(3)) {
         msg_print(_("変わり身失敗！逃げられなかった。", "Kawarimi failed! You couldn't run away."));
-        caster_ptr->special_defense &= ~(NINJA_KAWARIMI);
-        caster_ptr->redraw |= (PR_STATUS);
+        player_ptr->special_defense &= ~(NINJA_KAWARIMI);
+        player_ptr->redraw |= (PR_STATUS);
         return false;
     }
 
-    POSITION y = caster_ptr->y;
-    POSITION x = caster_ptr->x;
+    POSITION y = player_ptr->y;
+    POSITION x = player_ptr->x;
 
-    teleport_player(caster_ptr, 10 + randint1(90), TELEPORT_SPONTANEOUS);
+    teleport_player(player_ptr, 10 + randint1(90), TELEPORT_SPONTANEOUS);
     q_ptr->wipe();
     const int SV_WOODEN_STATUE = 0;
     q_ptr->prep(lookup_kind(TV_STATUE, SV_WOODEN_STATUE));
 
     q_ptr->pval = MON_NINJA;
-    (void)drop_near(caster_ptr, q_ptr, -1, y, x);
+    (void)drop_near(player_ptr, q_ptr, -1, y, x);
 
     if (success)
         msg_print(_("攻撃を受ける前に素早く身をひるがえした。", "You have turned around just before the attack hit you."));
     else
         msg_print(_("変わり身失敗！攻撃を受けてしまった。", "Kawarimi failed! You are hit by the attack."));
 
-    caster_ptr->special_defense &= ~(NINJA_KAWARIMI);
-    caster_ptr->redraw |= (PR_STATUS);
+    player_ptr->special_defense &= ~(NINJA_KAWARIMI);
+    player_ptr->redraw |= (PR_STATUS);
     return true;
 }
 
 /*!
  * @brief 入身処理 / "Rush Attack" routine for Samurai or Ninja
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param mdeath 目標モンスターが死亡したかを返す
  * @return 作用が実際にあった場合TRUEを返す /  Return value is for checking "done"
  */
@@ -332,77 +332,77 @@ bool set_superstealth(player_type *player_ptr, bool set)
 /*!
  * @brief 忍術の発動 /
  * do_cmd_cast calls this function if the player's class is 'ninja'.
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param spell 発動する特殊技能のID
  * @return 処理を実行したらTRUE、キャンセルした場合FALSEを返す。
  */
-bool cast_ninja_spell(player_type *caster_ptr, mind_ninja_type spell)
+bool cast_ninja_spell(player_type *player_ptr, mind_ninja_type spell)
 {
     POSITION x = 0, y = 0;
     DIRECTION dir;
-    PLAYER_LEVEL plev = caster_ptr->lev;
+    PLAYER_LEVEL plev = player_ptr->lev;
     switch (spell) {
     case DARKNESS_CREATION:
-        (void)unlite_area(caster_ptr, 0, 3);
+        (void)unlite_area(player_ptr, 0, 3);
         break;
     case DETECT_NEAR:
         if (plev > 44)
-            wiz_lite(caster_ptr, true);
+            wiz_lite(player_ptr, true);
 
-        detect_monsters_normal(caster_ptr, DETECT_RAD_DEFAULT);
+        detect_monsters_normal(player_ptr, DETECT_RAD_DEFAULT);
         if (plev > 4) {
-            detect_traps(caster_ptr, DETECT_RAD_DEFAULT, true);
-            detect_doors(caster_ptr, DETECT_RAD_DEFAULT);
-            detect_stairs(caster_ptr, DETECT_RAD_DEFAULT);
+            detect_traps(player_ptr, DETECT_RAD_DEFAULT, true);
+            detect_doors(player_ptr, DETECT_RAD_DEFAULT);
+            detect_stairs(player_ptr, DETECT_RAD_DEFAULT);
         }
 
         if (plev > 14)
-            detect_objects_normal(caster_ptr, DETECT_RAD_DEFAULT);
+            detect_objects_normal(player_ptr, DETECT_RAD_DEFAULT);
 
         break;
     case HIDE_LEAVES:
-        teleport_player(caster_ptr, 10, TELEPORT_SPONTANEOUS);
+        teleport_player(player_ptr, 10, TELEPORT_SPONTANEOUS);
         break;
     case KAWARIMI:
-        if (!(caster_ptr->special_defense & NINJA_KAWARIMI)) {
+        if (!(player_ptr->special_defense & NINJA_KAWARIMI)) {
             msg_print(_("敵の攻撃に対して敏感になった。", "You are now prepared to evade any attacks."));
-            caster_ptr->special_defense |= NINJA_KAWARIMI;
-            caster_ptr->redraw |= (PR_STATUS);
+            player_ptr->special_defense |= NINJA_KAWARIMI;
+            player_ptr->redraw |= (PR_STATUS);
         }
 
         break;
     case ABSCONDING:
-        teleport_player(caster_ptr, caster_ptr->lev * 5, TELEPORT_SPONTANEOUS);
+        teleport_player(player_ptr, player_ptr->lev * 5, TELEPORT_SPONTANEOUS);
         break;
     case HIT_AND_AWAY:
-        if (!hit_and_away(caster_ptr))
+        if (!hit_and_away(player_ptr))
             return false;
 
         break;
     case BIND_MONSTER:
-        if (!get_aim_dir(caster_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir))
             return false;
 
-        (void)stasis_monster(caster_ptr, dir);
+        (void)stasis_monster(player_ptr, dir);
         break;
     case ANCIENT_KNOWLEDGE:
-        return ident_spell(caster_ptr, false);
+        return ident_spell(player_ptr, false);
     case FLOATING:
-        set_tim_levitation(caster_ptr, randint1(20) + 20, false);
+        set_tim_levitation(player_ptr, randint1(20) + 20, false);
         break;
     case HIDE_FLAMES:
-        fire_ball(caster_ptr, GF_FIRE, 0, 50 + plev, plev / 10 + 2);
-        teleport_player(caster_ptr, 30, TELEPORT_SPONTANEOUS);
-        set_oppose_fire(caster_ptr, (TIME_EFFECT)plev, false);
+        fire_ball(player_ptr, GF_FIRE, 0, 50 + plev, plev / 10 + 2);
+        teleport_player(player_ptr, 30, TELEPORT_SPONTANEOUS);
+        set_oppose_fire(player_ptr, (TIME_EFFECT)plev, false);
         break;
     case NYUSIN:
-        return rush_attack(caster_ptr, nullptr);
+        return rush_attack(player_ptr, nullptr);
     case SYURIKEN_SPREADING: {
         for (int i = 0; i < 8; i++) {
             OBJECT_IDX slot;
 
             for (slot = 0; slot < INVEN_PACK; slot++) {
-                if (caster_ptr->inventory_list[slot].tval == TV_SPIKE)
+                if (player_ptr->inventory_list[slot].tval == TV_SPIKE)
                     break;
             }
 
@@ -415,43 +415,43 @@ bool cast_ninja_spell(player_type *caster_ptr, mind_ninja_type spell)
                 return false;
             }
 
-            (void)ThrowCommand(caster_ptr).do_cmd_throw(1, false, slot);
-            PlayerEnergy(caster_ptr).set_player_turn_energy(100);
+            (void)ThrowCommand(player_ptr).do_cmd_throw(1, false, slot);
+            PlayerEnergy(player_ptr).set_player_turn_energy(100);
         }
 
         break;
     }
     case CHAIN_HOOK:
-        (void)fetch_monster(caster_ptr);
+        (void)fetch_monster(player_ptr);
         break;
     case SMOKE_BALL:
-        if (!get_aim_dir(caster_ptr, &dir))
+        if (!get_aim_dir(player_ptr, &dir))
             return false;
 
-        fire_ball(caster_ptr, GF_OLD_CONF, dir, plev * 3, 3);
+        fire_ball(player_ptr, GF_OLD_CONF, dir, plev * 3, 3);
         break;
     case SWAP_POSITION:
         project_length = -1;
-        if (!get_aim_dir(caster_ptr, &dir)) {
+        if (!get_aim_dir(player_ptr, &dir)) {
             project_length = 0;
             return false;
         }
 
         project_length = 0;
-        (void)teleport_swap(caster_ptr, dir);
+        (void)teleport_swap(player_ptr, dir);
         break;
     case EXPLOSIVE_RUNE:
-        create_rune_explosion(caster_ptr, caster_ptr->y, caster_ptr->x);
+        create_rune_explosion(player_ptr, player_ptr->y, player_ptr->x);
         break;
     case HIDE_MUD:
-        (void)set_pass_wall(caster_ptr, randint1(plev / 2) + plev / 2, false);
-        set_oppose_acid(caster_ptr, (TIME_EFFECT)plev, false);
+        (void)set_pass_wall(player_ptr, randint1(plev / 2) + plev / 2, false);
+        set_oppose_acid(player_ptr, (TIME_EFFECT)plev, false);
         break;
     case HIDE_MIST:
-        fire_ball(caster_ptr, GF_POIS, 0, 75 + plev * 2 / 3, plev / 5 + 2);
-        fire_ball(caster_ptr, GF_HYPODYNAMIA, 0, 75 + plev * 2 / 3, plev / 5 + 2);
-        fire_ball(caster_ptr, GF_CONFUSION, 0, 75 + plev * 2 / 3, plev / 5 + 2);
-        teleport_player(caster_ptr, 30, TELEPORT_SPONTANEOUS);
+        fire_ball(player_ptr, GF_POIS, 0, 75 + plev * 2 / 3, plev / 5 + 2);
+        fire_ball(player_ptr, GF_HYPODYNAMIA, 0, 75 + plev * 2 / 3, plev / 5 + 2);
+        fire_ball(player_ptr, GF_CONFUSION, 0, 75 + plev * 2 / 3, plev / 5 + 2);
+        teleport_player(player_ptr, 30, TELEPORT_SPONTANEOUS);
         break;
     case PURGATORY_FLAME: {
         int num = damroll(3, 9);
@@ -459,18 +459,18 @@ bool cast_ninja_spell(player_type *caster_ptr, mind_ninja_type spell)
             EFFECT_ID typ = one_in_(2) ? GF_FIRE : one_in_(3) ? GF_NETHER : GF_PLASMA;
             int attempts = 1000;
             while (attempts--) {
-                scatter(caster_ptr, &y, &x, caster_ptr->y, caster_ptr->x, 4, PROJECT_NONE);
-                if (!player_bold(caster_ptr, y, x))
+                scatter(player_ptr, &y, &x, player_ptr->y, player_ptr->x, 4, PROJECT_NONE);
+                if (!player_bold(player_ptr, y, x))
                     break;
             }
 
-            project(caster_ptr, 0, 0, y, x, damroll(6 + plev / 8, 10), typ, (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL));
+            project(player_ptr, 0, 0, y, x, damroll(6 + plev / 8, 10), typ, (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL));
         }
 
         break;
     }
     case ALTER_EGO:
-        set_multishadow(caster_ptr, 6 + randint1(6), false);
+        set_multishadow(player_ptr, 6 + randint1(6), false);
         break;
     default:
         msg_print(_("なに？", "Zap?"));

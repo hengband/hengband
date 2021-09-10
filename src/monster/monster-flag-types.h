@@ -2,7 +2,7 @@
 
 enum class MFLAG {
     VIEW = 0, /* Monster is in line of sight */
-    LOS = 1, /* Monster is marked for project_all_los(caster_ptr, ) */
+    LOS = 1, /* Monster is marked for project_all_los(player_ptr, ) */
     ESP = 2, /* Monster is being sensed by ESP */
     ETF = 3, /* Monster is entering the field. */
     BORN = 4, /* Monster is still being born */

@@ -50,14 +50,14 @@ static int exe_curse_removal(player_type *player_ptr, int all)
 /*!
  * @brief 装備の軽い呪い解呪処理 /
  * Remove most curses
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return 解呪に成功した装備数
  */
-int remove_curse(player_type *caster_ptr) { return exe_curse_removal(caster_ptr, false); }
+int remove_curse(player_type *player_ptr) { return exe_curse_removal(player_ptr, false); }
 
 /*!
  * @brief 装備の重い呪い解呪処理 /
  * Remove all curses
  * @return 解呪に成功した装備数
  */
-int remove_all_curse(player_type *caster_ptr) { return exe_curse_removal(caster_ptr, true); }
+int remove_all_curse(player_type *player_ptr) { return exe_curse_removal(player_ptr, true); }

@@ -21,61 +21,61 @@
 /*!
  * @brief プレイヤーの歌に関する継続処理
  */
-void check_music(player_type *caster_ptr)
+void check_music(player_type *player_ptr)
 {
-    if (caster_ptr->pclass != CLASS_BARD)
+    if (player_ptr->pclass != CLASS_BARD)
         return;
 
-    auto interupting_song_effect = get_interrupting_song_effect(caster_ptr);
-    if ((get_singing_song_effect(caster_ptr) == 0) && (interupting_song_effect == 0))
+    auto interupting_song_effect = get_interrupting_song_effect(player_ptr);
+    if ((get_singing_song_effect(player_ptr) == 0) && (interupting_song_effect == 0))
         return;
 
-    if (caster_ptr->anti_magic) {
-        stop_singing(caster_ptr);
+    if (player_ptr->anti_magic) {
+        stop_singing(player_ptr);
         return;
     }
 
-    int spell = get_singing_song_id(caster_ptr);
+    int spell = get_singing_song_id(player_ptr);
     const magic_type *s_ptr;
     s_ptr = &technic_info[REALM_MUSIC - MIN_TECHNIC][spell];
 
-    MANA_POINT need_mana = mod_need_mana(caster_ptr, s_ptr->smana, spell, REALM_MUSIC);
+    MANA_POINT need_mana = mod_need_mana(player_ptr, s_ptr->smana, spell, REALM_MUSIC);
     uint32_t need_mana_frac = 0;
 
     s64b_rshift(&need_mana, &need_mana_frac, 1);
-    if (s64b_cmp(caster_ptr->csp, caster_ptr->csp_frac, need_mana, need_mana_frac) < 0) {
-        stop_singing(caster_ptr);
+    if (s64b_cmp(player_ptr->csp, player_ptr->csp_frac, need_mana, need_mana_frac) < 0) {
+        stop_singing(player_ptr);
         return;
     } else {
-        s64b_sub(&(caster_ptr->csp), &(caster_ptr->csp_frac), need_mana, need_mana_frac);
+        s64b_sub(&(player_ptr->csp), &(player_ptr->csp_frac), need_mana, need_mana_frac);
 
-        caster_ptr->redraw |= PR_MANA;
+        player_ptr->redraw |= PR_MANA;
         if (interupting_song_effect != 0) {
-            set_singing_song_effect(caster_ptr, interupting_song_effect);
-            set_interrupting_song_effect(caster_ptr, MUSIC_NONE);
+            set_singing_song_effect(player_ptr, interupting_song_effect);
+            set_interrupting_song_effect(player_ptr, MUSIC_NONE);
             msg_print(_("歌を再開した。", "You resume singing."));
-            caster_ptr->action = ACTION_SING;
-            caster_ptr->update |= (PU_BONUS | PU_HP | PU_MONSTERS);
-            caster_ptr->redraw |= (PR_MAP | PR_STATUS | PR_STATE);
-            caster_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
+            player_ptr->action = ACTION_SING;
+            player_ptr->update |= (PU_BONUS | PU_HP | PU_MONSTERS);
+            player_ptr->redraw |= (PR_MAP | PR_STATUS | PR_STATE);
+            player_ptr->window_flags |= (PW_OVERHEAD | PW_DUNGEON);
         }
     }
 
-    if (caster_ptr->spell_exp[spell] < SPELL_EXP_BEGINNER)
-        caster_ptr->spell_exp[spell] += 5;
-    else if (caster_ptr->spell_exp[spell] < SPELL_EXP_SKILLED) {
-        if (one_in_(2) && (caster_ptr->current_floor_ptr->dun_level > 4) && ((caster_ptr->current_floor_ptr->dun_level + 10) > caster_ptr->lev))
-            caster_ptr->spell_exp[spell] += 1;
-    } else if (caster_ptr->spell_exp[spell] < SPELL_EXP_EXPERT) {
-        if (one_in_(5) && ((caster_ptr->current_floor_ptr->dun_level + 5) > caster_ptr->lev)
-            && ((caster_ptr->current_floor_ptr->dun_level + 5) > s_ptr->slevel))
-            caster_ptr->spell_exp[spell] += 1;
-    } else if (caster_ptr->spell_exp[spell] < SPELL_EXP_MASTER) {
-        if (one_in_(5) && ((caster_ptr->current_floor_ptr->dun_level + 5) > caster_ptr->lev) && (caster_ptr->current_floor_ptr->dun_level > s_ptr->slevel))
-            caster_ptr->spell_exp[spell] += 1;
+    if (player_ptr->spell_exp[spell] < SPELL_EXP_BEGINNER)
+        player_ptr->spell_exp[spell] += 5;
+    else if (player_ptr->spell_exp[spell] < SPELL_EXP_SKILLED) {
+        if (one_in_(2) && (player_ptr->current_floor_ptr->dun_level > 4) && ((player_ptr->current_floor_ptr->dun_level + 10) > player_ptr->lev))
+            player_ptr->spell_exp[spell] += 1;
+    } else if (player_ptr->spell_exp[spell] < SPELL_EXP_EXPERT) {
+        if (one_in_(5) && ((player_ptr->current_floor_ptr->dun_level + 5) > player_ptr->lev)
+            && ((player_ptr->current_floor_ptr->dun_level + 5) > s_ptr->slevel))
+            player_ptr->spell_exp[spell] += 1;
+    } else if (player_ptr->spell_exp[spell] < SPELL_EXP_MASTER) {
+        if (one_in_(5) && ((player_ptr->current_floor_ptr->dun_level + 5) > player_ptr->lev) && (player_ptr->current_floor_ptr->dun_level > s_ptr->slevel))
+            player_ptr->spell_exp[spell] += 1;
     }
 
-    exe_spell(caster_ptr, REALM_MUSIC, spell, SPELL_CONT);
+    exe_spell(player_ptr, REALM_MUSIC, spell, SPELL_CONT);
 }
 
 /*!
@@ -146,9 +146,9 @@ void stop_singing(player_type *player_ptr)
     set_bits(player_ptr->redraw, PR_STATUS);
 }
 
-bool music_singing(player_type *caster_ptr, int music_songs)
+bool music_singing(player_type *player_ptr, int music_songs)
 {
-    return (caster_ptr->pclass == CLASS_BARD) && (caster_ptr->magic_num1[0] == music_songs);
+    return (player_ptr->pclass == CLASS_BARD) && (player_ptr->magic_num1[0] == music_songs);
 }
 
 bool music_singing_any(player_type *player_ptr)

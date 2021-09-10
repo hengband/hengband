@@ -2962,15 +2962,15 @@ bool is_time_limit_stealth(player_type *player_ptr)
 
 /*!
  * @brief 口を使う継続的な処理を中断する
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  */
-void stop_mouth(player_type *caster_ptr)
+void stop_mouth(player_type *player_ptr)
 {
-    if (music_singing_any(caster_ptr))
-        stop_singing(caster_ptr);
+    if (music_singing_any(player_ptr))
+        stop_singing(player_ptr);
 
-    if (RealmHex(caster_ptr).is_spelling_any()) {
-        (void)RealmHex(caster_ptr).stop_all_spells();
+    if (RealmHex(player_ptr).is_spelling_any()) {
+        (void)RealmHex(player_ptr).stop_all_spells();
     }
 }
 

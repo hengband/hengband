@@ -57,7 +57,7 @@ void lite_spot(player_type *player_ptr, POSITION y, POSITION x);
 void update_flow(player_type *subject_ptr);
 FEAT_IDX feat_state(floor_type *floor_ptr, FEAT_IDX feat, FF action);
 void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, FF action);
-void remove_mirror(player_type *caster_ptr, POSITION y, POSITION x);
+void remove_mirror(player_type *player_ptr, POSITION y, POSITION x);
 bool is_open(player_type *player_ptr, FEAT_IDX feat);
 bool check_local_illumination(player_type *player_ptr, POSITION y, POSITION x);
 bool cave_monster_teleportable_bold(player_type *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, teleport_flags mode);

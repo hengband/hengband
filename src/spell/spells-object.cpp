@@ -174,7 +174,7 @@ void amusement(player_type *player_ptr, POSITION y1, POSITION x1, int num, bool 
 /*!
  * @brief 獲得ドロップを行う。
  * Scatter some "great" objects near the player
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param y1 配置したいフロアのY座標
  * @param x1 配置したいフロアのX座標
  * @param num 獲得の処理回数
@@ -182,7 +182,7 @@ void amusement(player_type *player_ptr, POSITION y1, POSITION x1, int num, bool 
  * @param special TRUEならば必ず特別品を落とす
  * @param known TRUEならばオブジェクトが必ず＊鑑定＊済になる
  */
-void acquirement(player_type *caster_ptr, POSITION y1, POSITION x1, int num, bool great, bool special, bool known)
+void acquirement(player_type *player_ptr, POSITION y1, POSITION x1, int num, bool great, bool special, bool known)
 {
     object_type *i_ptr;
     object_type object_type_body;
@@ -194,15 +194,15 @@ void acquirement(player_type *caster_ptr, POSITION y1, POSITION x1, int num, boo
         i_ptr->wipe();
 
         /* Make a good (or great) object (if possible) */
-        if (!make_object(caster_ptr, i_ptr, mode))
+        if (!make_object(player_ptr, i_ptr, mode))
             continue;
 
         if (known) {
-            object_aware(caster_ptr, i_ptr);
+            object_aware(player_ptr, i_ptr);
             object_known(i_ptr);
         }
 
-        (void)drop_near(caster_ptr, i_ptr, -1, y1, x1);
+        (void)drop_near(player_ptr, i_ptr, -1, y1, x1);
     }
 }
 
@@ -318,13 +318,13 @@ bool curse_weapon_object(player_type *player_ptr, bool force, object_type *o_ptr
 /*!
  * @brief ボルトのエゴ化処理(火炎エゴのみ) /
  * Enchant some bolts
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  */
-void brand_bolts(player_type *caster_ptr)
+void brand_bolts(player_type *player_ptr)
 {
     /* Use the first acceptable bolts */
     for (int i = 0; i < INVEN_PACK; i++) {
-        object_type *o_ptr = &caster_ptr->inventory_list[i];
+        object_type *o_ptr = &player_ptr->inventory_list[i];
 
         /* Skip non-bolts */
         if (o_ptr->tval != TV_BOLT)
@@ -346,7 +346,7 @@ void brand_bolts(player_type *caster_ptr)
 
         /* Ego-item */
         o_ptr->name2 = EGO_FLAME;
-        enchant_equipment(caster_ptr, o_ptr, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
+        enchant_equipment(player_ptr, o_ptr, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
         return;
     }
 
@@ -420,7 +420,7 @@ static void break_curse(object_type *o_ptr)
 /*!
  * @brief 装備修正強化処理 /
  * Enchants a plus onto an item. -RAK-
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 強化するアイテムの参照ポインタ
  * @param n 強化基本量
  * @param eflag 強化オプション(命中/ダメージ/AC)
@@ -440,7 +440,7 @@ static void break_curse(object_type *o_ptr)
  * the larger the pile, the lower the chance of success.
  * </pre>
  */
-bool enchant_equipment(player_type *caster_ptr, object_type *o_ptr, int n, int eflag)
+bool enchant_equipment(player_type *player_ptr, object_type *o_ptr, int n, int eflag)
 {
     /* Large piles resist enchantment */
     int prob = o_ptr->number * 100;
@@ -523,8 +523,8 @@ bool enchant_equipment(player_type *caster_ptr, object_type *o_ptr, int n, int e
     /* Failure */
     if (!res)
         return false;
-    set_bits(caster_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
-    set_bits(caster_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST);
+    set_bits(player_ptr->update, PU_BONUS | PU_COMBINE | PU_REORDER);
+    set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP | PW_PLAYER | PW_FLOOR_ITEM_LIST);
 
     /* Success */
     return true;
@@ -533,7 +533,7 @@ bool enchant_equipment(player_type *caster_ptr, object_type *o_ptr, int n, int e
 /*!
  * @brief 装備修正強化処理のメインルーチン /
  * Enchant an item (in the inventory or on the floor)
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param num_hit 命中修正量
  * @param num_dam ダメージ修正量
  * @param num_ac AC修正量
@@ -542,7 +542,7 @@ bool enchant_equipment(player_type *caster_ptr, object_type *o_ptr, int n, int e
  * Note that "num_ac" requires armour, else weapon
  * Returns TRUE if attempted, FALSE if cancelled
  */
-bool enchant_spell(player_type *caster_ptr, HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
+bool enchant_spell(player_type *player_ptr, HIT_PROB num_hit, HIT_POINT num_dam, ARMOUR_CLASS num_ac)
 {
     /* Assume enchant weapon */
     FuncItemTester item_tester(&object_type::allow_enchant_weapon);
@@ -556,12 +556,12 @@ bool enchant_spell(player_type *caster_ptr, HIT_PROB num_hit, HIT_POINT num_dam,
 
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), item_tester);
+    o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), item_tester);
     if (!o_ptr)
         return false;
 
     GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
     msg_format("%s は明るく輝いた！", o_name);
 #else
@@ -570,11 +570,11 @@ bool enchant_spell(player_type *caster_ptr, HIT_PROB num_hit, HIT_POINT num_dam,
 
     /* Enchant */
     bool is_enchant_successful = false;
-    if (enchant_equipment(caster_ptr, o_ptr, num_hit, ENCH_TOHIT))
+    if (enchant_equipment(player_ptr, o_ptr, num_hit, ENCH_TOHIT))
         is_enchant_successful = true;
-    if (enchant_equipment(caster_ptr, o_ptr, num_dam, ENCH_TODAM))
+    if (enchant_equipment(player_ptr, o_ptr, num_dam, ENCH_TODAM))
         is_enchant_successful = true;
-    if (enchant_equipment(caster_ptr, o_ptr, num_ac, ENCH_TOAC))
+    if (enchant_equipment(player_ptr, o_ptr, num_ac, ENCH_TOAC))
         is_enchant_successful = true;
 
     if (!is_enchant_successful) {
@@ -582,11 +582,11 @@ bool enchant_spell(player_type *caster_ptr, HIT_PROB num_hit, HIT_POINT num_dam,
             flush();
         msg_print(_("強化に失敗した。", "The enchantment failed."));
         if (one_in_(3))
-            chg_virtue(caster_ptr, V_ENCHANT, -1);
+            chg_virtue(player_ptr, V_ENCHANT, -1);
     } else
-        chg_virtue(caster_ptr, V_ENCHANT, 1);
+        chg_virtue(player_ptr, V_ENCHANT, 1);
 
-    calc_android_exp(caster_ptr);
+    calc_android_exp(player_ptr);
 
     /* Something happened */
     return true;
@@ -595,17 +595,17 @@ bool enchant_spell(player_type *caster_ptr, HIT_PROB num_hit, HIT_POINT num_dam,
 /*!
  * @brief 武器へのエゴ付加処理 /
  * Brand the current weapon
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param brand_type エゴ化ID(e_info.txtとは連動していない)
  */
-void brand_weapon(player_type *caster_ptr, int brand_type)
+void brand_weapon(player_type *player_ptr, int brand_type)
 {
     concptr q = _("どの武器を強化しますか? ", "Enchant which weapon? ");
     concptr s = _("強化できる武器がない。", "You have nothing to enchant.");
 
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | IGNORE_BOTHHAND_SLOT, FuncItemTester(&object_type::allow_enchant_melee_weapon));
+    o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | IGNORE_BOTHHAND_SLOT, FuncItemTester(&object_type::allow_enchant_melee_weapon));
     if (!o_ptr)
         return;
 
@@ -617,13 +617,13 @@ void brand_weapon(player_type *caster_ptr, int brand_type)
             flush();
 
         msg_print(_("属性付加に失敗した。", "The branding failed."));
-        chg_virtue(caster_ptr, V_ENCHANT, -2);
-        calc_android_exp(caster_ptr);
+        chg_virtue(player_ptr, V_ENCHANT, -2);
+        calc_android_exp(player_ptr);
         return;
     }
 
     GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
     concptr act = nullptr;
     switch (brand_type) {
@@ -632,14 +632,14 @@ void brand_weapon(player_type *caster_ptr, int brand_type)
             act = _("は鋭さを増した！", "becomes very sharp!");
 
             o_ptr->name2 = EGO_SHARPNESS;
-            o_ptr->pval = (PARAMETER_VALUE)m_bonus(5, caster_ptr->current_floor_ptr->dun_level) + 1;
+            o_ptr->pval = (PARAMETER_VALUE)m_bonus(5, player_ptr->current_floor_ptr->dun_level) + 1;
 
             if ((o_ptr->sval == SV_HAYABUSA) && (o_ptr->pval > 2))
                 o_ptr->pval = 2;
         } else {
             act = _("は破壊力を増した！", "seems very powerful.");
             o_ptr->name2 = EGO_EARTHQUAKES;
-            o_ptr->pval = (PARAMETER_VALUE)m_bonus(3, caster_ptr->current_floor_ptr->dun_level);
+            o_ptr->pval = (PARAMETER_VALUE)m_bonus(3, player_ptr->current_floor_ptr->dun_level);
         }
 
         break;
@@ -715,8 +715,8 @@ void brand_weapon(player_type *caster_ptr, int brand_type)
     }
 
     msg_format(_("あなたの%s%s", "Your %s %s"), o_name, act);
-    enchant_equipment(caster_ptr, o_ptr, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
+    enchant_equipment(player_ptr, o_ptr, randint0(3) + 4, ENCH_TOHIT | ENCH_TODAM);
     o_ptr->discount = 99;
-    chg_virtue(caster_ptr, V_ENCHANT, 2);
-    calc_android_exp(caster_ptr);
+    chg_virtue(player_ptr, V_ENCHANT, 2);
+    calc_android_exp(player_ptr);
 }

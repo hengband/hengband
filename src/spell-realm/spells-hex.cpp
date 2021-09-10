@@ -36,8 +36,8 @@
 /*!< 呪術の最大詠唱数 */
 constexpr int MAX_KEEP = 4;
 
-RealmHex::RealmHex(player_type *caster_ptr)
-    : caster_ptr(caster_ptr)
+RealmHex::RealmHex(player_type *player_ptr)
+    : player_ptr(player_ptr)
 {
     constexpr int max_realm_spells = 32;
     for (auto spell = 0; spell < max_realm_spells; spell++) {
@@ -51,8 +51,8 @@ RealmHex::RealmHex(player_type *caster_ptr)
     }
 }
 
-RealmHex::RealmHex(player_type *caster_ptr, monap_type *monap_ptr)
-    : caster_ptr(caster_ptr)
+RealmHex::RealmHex(player_type *player_ptr, monap_type *monap_ptr)
+    : player_ptr(player_ptr)
     , monap_ptr(monap_ptr)
 {
 }
@@ -63,17 +63,17 @@ RealmHex::RealmHex(player_type *caster_ptr, monap_type *monap_ptr)
 bool RealmHex::stop_all_spells()
 {
     for (auto spell : this->casting_spells) {
-        exe_spell(this->caster_ptr, REALM_HEX, spell, SPELL_STOP);
+        exe_spell(this->player_ptr, REALM_HEX, spell, SPELL_STOP);
     }
 
-    casting_hex_flags(this->caster_ptr) = 0;
-    casting_hex_num(this->caster_ptr) = 0;
-    if (this->caster_ptr->action == ACTION_SPELL) {
-        set_action(this->caster_ptr, ACTION_NONE);
+    casting_hex_flags(this->player_ptr) = 0;
+    casting_hex_num(this->player_ptr) = 0;
+    if (this->player_ptr->action == ACTION_SPELL) {
+        set_action(this->player_ptr, ACTION_NONE);
     }
 
-    this->caster_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
-    this->caster_ptr->redraw |= PR_EXTRA | PR_HP | PR_MANA;
+    this->player_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
+    this->player_ptr->redraw |= PR_EXTRA | PR_HP | PR_MANA;
     return true;
 }
 
@@ -82,31 +82,31 @@ bool RealmHex::stop_all_spells()
  */
 bool RealmHex::stop_one_spell()
 {
-    if (!RealmHex(this->caster_ptr).is_spelling_any()) {
+    if (!RealmHex(this->player_ptr).is_spelling_any()) {
         msg_print(_("呪文を詠唱していません。", "You are not casting a spell."));
         return false;
     }
 
-    if ((casting_hex_num(this->caster_ptr) == 1) || (this->caster_ptr->lev < 35)) {
+    if ((casting_hex_num(this->player_ptr) == 1) || (this->player_ptr->lev < 35)) {
         return this->stop_all_spells();
     }
 
     char out_val[160];
     strnfmt(out_val, 78, _("どの呪文の詠唱を中断しますか？(呪文 %c-%c, 'l'全て, ESC)", "Which spell do you stop casting? (Spell %c-%c, 'l' to all, ESC)"),
-        I2A(0), I2A(casting_hex_num(this->caster_ptr) - 1));
+        I2A(0), I2A(casting_hex_num(this->player_ptr) - 1));
     screen_save();
     char choice = 0;
     auto is_selected = select_spell_stopping(out_val, choice);
     screen_load();
     if (is_selected) {
         auto n = this->casting_spells[A2I(choice)];
-        exe_spell(this->caster_ptr, REALM_HEX, n, SPELL_STOP);
-        casting_hex_flags(this->caster_ptr) &= ~(1UL << n);
-        casting_hex_num(this->caster_ptr)--;
+        exe_spell(this->player_ptr, REALM_HEX, n, SPELL_STOP);
+        casting_hex_flags(this->player_ptr) &= ~(1UL << n);
+        casting_hex_num(this->player_ptr)--;
     }
 
-    this->caster_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
-    this->caster_ptr->redraw |= PR_EXTRA | PR_HP | PR_MANA;
+    this->player_ptr->update |= PU_BONUS | PU_HP | PU_MANA | PU_SPELLS;
+    this->player_ptr->redraw |= PR_EXTRA | PR_HP | PR_MANA;
     return is_selected;
 }
 
@@ -135,7 +135,7 @@ bool RealmHex::select_spell_stopping(char *out_val, char &choice)
             return this->stop_all_spells();
         }
 
-        if ((choice < I2A(0)) || (choice > I2A(casting_hex_num(this->caster_ptr) - 1))) {
+        if ((choice < I2A(0)) || (choice > I2A(casting_hex_num(this->player_ptr) - 1))) {
             continue;
         }
 
@@ -152,7 +152,7 @@ void RealmHex::display_casting_spells_list()
     prt(_("     名前", "     Name"), y, x + 5);
     for (auto spell : this->casting_spells) {
         term_erase(x, y + n + 1, 255);
-        auto spell_result = exe_spell(this->caster_ptr, REALM_HEX, spell, SPELL_NAME);
+        auto spell_result = exe_spell(this->player_ptr, REALM_HEX, spell, SPELL_NAME);
         put_str(format("%c)  %s", I2A(n), spell_result), y + n + 1, x + 2);
         n++;
     }
@@ -164,16 +164,16 @@ void RealmHex::display_casting_spells_list()
 void RealmHex::decrease_mana()
 {
     /* Spells spelled by player */
-    if (this->caster_ptr->realm1 != REALM_HEX) {
+    if (this->player_ptr->realm1 != REALM_HEX) {
         return;
     }
 
-    if (!casting_hex_flags(this->caster_ptr) && !this->caster_ptr->magic_num1[1]) {
+    if (!casting_hex_flags(this->player_ptr) && !this->player_ptr->magic_num1[1]) {
         return;
     }
 
     auto need_restart = this->check_restart();
-    if (this->caster_ptr->anti_magic) {
+    if (this->player_ptr->anti_magic) {
         this->stop_all_spells();
         return;
     }
@@ -184,7 +184,7 @@ void RealmHex::decrease_mana()
 
     this->gain_exp_from_hex();
     for (auto spell : this->casting_spells) {
-        exe_spell(this->caster_ptr, REALM_HEX, spell, SPELL_CONT);
+        exe_spell(this->player_ptr, REALM_HEX, spell, SPELL_CONT);
     }
 }
 
@@ -198,37 +198,37 @@ bool RealmHex::process_mana_cost(const bool need_restart)
     auto need_mana = this->calc_need_mana();
     uint need_mana_frac = 0;
     s64b_div(&need_mana, &need_mana_frac, 0, 3); /* Divide by 3 */
-    need_mana += (casting_hex_num(this->caster_ptr) - 1);
+    need_mana += (casting_hex_num(this->player_ptr) - 1);
 
-    auto enough_mana = s64b_cmp(this->caster_ptr->csp, this->caster_ptr->csp_frac, need_mana, need_mana_frac) >= 0;
+    auto enough_mana = s64b_cmp(this->player_ptr->csp, this->player_ptr->csp_frac, need_mana, need_mana_frac) >= 0;
     if (!enough_mana) {
         this->stop_all_spells();
         return false;
     }
 
-    s64b_sub(&(this->caster_ptr->csp), &(this->caster_ptr->csp_frac), need_mana, need_mana_frac);
-    this->caster_ptr->redraw |= PR_MANA;
+    s64b_sub(&(this->player_ptr->csp), &(this->player_ptr->csp_frac), need_mana, need_mana_frac);
+    this->player_ptr->redraw |= PR_MANA;
     if (!need_restart) {
         return true;
     }
 
     msg_print(_("詠唱を再開した。", "You restart casting."));
-    this->caster_ptr->action = ACTION_SPELL;
-    this->caster_ptr->update |= PU_BONUS | PU_HP;
-    this->caster_ptr->redraw |= PR_MAP | PR_STATUS | PR_STATE;
-    this->caster_ptr->update |= PU_MONSTERS;
-    this->caster_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
+    this->player_ptr->action = ACTION_SPELL;
+    this->player_ptr->update |= PU_BONUS | PU_HP;
+    this->player_ptr->redraw |= PR_MAP | PR_STATUS | PR_STATE;
+    this->player_ptr->update |= PU_MONSTERS;
+    this->player_ptr->window_flags |= PW_OVERHEAD | PW_DUNGEON;
     return true;
 }
 
 bool RealmHex::check_restart()
 {
-    if (this->caster_ptr->magic_num1[1] == 0) {
+    if (this->player_ptr->magic_num1[1] == 0) {
         return false;
     }
 
-    this->caster_ptr->magic_num1[0] = this->caster_ptr->magic_num1[1];
-    this->caster_ptr->magic_num1[1] = 0;
+    this->player_ptr->magic_num1[0] = this->player_ptr->magic_num1[1];
+    this->player_ptr->magic_num1[1] = 0;
     return true;
 }
 
@@ -237,7 +237,7 @@ int RealmHex::calc_need_mana()
     auto need_mana = 0;
     for (auto spell : this->casting_spells) {
         const auto *s_ptr = &technic_info[REALM_HEX - MIN_TECHNIC][spell];
-        need_mana += mod_need_mana(this->caster_ptr, s_ptr->smana, spell, REALM_HEX);
+        need_mana += mod_need_mana(this->player_ptr, s_ptr->smana, spell, REALM_HEX);
     }
 
     return need_mana;
@@ -250,8 +250,8 @@ void RealmHex::gain_exp_from_hex()
             continue;
         }
 
-        if (this->caster_ptr->spell_exp[spell] < SPELL_EXP_BEGINNER) {
-            this->caster_ptr->spell_exp[spell] += 5;
+        if (this->player_ptr->spell_exp[spell] < SPELL_EXP_BEGINNER) {
+            this->player_ptr->spell_exp[spell] += 5;
             continue;
         }
 
@@ -269,16 +269,16 @@ void RealmHex::gain_exp_from_hex()
 
 bool RealmHex::gain_exp_skilled(const int spell)
 {
-    if (this->caster_ptr->spell_exp[spell] >= SPELL_EXP_SKILLED) {
+    if (this->player_ptr->spell_exp[spell] >= SPELL_EXP_SKILLED) {
         return false;
     }
 
-    auto *floor_ptr = this->caster_ptr->current_floor_ptr;
+    auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto gain_condition = one_in_(2);
     gain_condition &= floor_ptr->dun_level > 4;
-    gain_condition &= (floor_ptr->dun_level + 10) > this->caster_ptr->lev;
+    gain_condition &= (floor_ptr->dun_level + 10) > this->player_ptr->lev;
     if (gain_condition) {
-        this->caster_ptr->spell_exp[spell]++;
+        this->player_ptr->spell_exp[spell]++;
     }
 
     return true;
@@ -286,17 +286,17 @@ bool RealmHex::gain_exp_skilled(const int spell)
 
 bool RealmHex::gain_exp_expert(const int spell)
 {
-    if (this->caster_ptr->spell_exp[spell] >= SPELL_EXP_EXPERT) {
+    if (this->player_ptr->spell_exp[spell] >= SPELL_EXP_EXPERT) {
         return false;
     }
 
     const auto *s_ptr = &technic_info[REALM_HEX - MIN_TECHNIC][spell];
-    auto *floor_ptr = this->caster_ptr->current_floor_ptr;
+    auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto gain_condition = one_in_(5);
-    gain_condition &= (floor_ptr->dun_level + 5) > this->caster_ptr->lev;
+    gain_condition &= (floor_ptr->dun_level + 5) > this->player_ptr->lev;
     gain_condition &= (floor_ptr->dun_level + 5) > s_ptr->slevel;
     if (gain_condition) {
-        this->caster_ptr->spell_exp[spell]++;
+        this->player_ptr->spell_exp[spell]++;
     }
 
     return true;
@@ -304,17 +304,17 @@ bool RealmHex::gain_exp_expert(const int spell)
 
 void RealmHex::gain_exp_master(const int spell)
 {
-    if (this->caster_ptr->spell_exp[spell] >= SPELL_EXP_MASTER) {
+    if (this->player_ptr->spell_exp[spell] >= SPELL_EXP_MASTER) {
         return;
     }
 
     const auto *s_ptr = &technic_info[REALM_HEX - MIN_TECHNIC][spell];
-    auto *floor_ptr = this->caster_ptr->current_floor_ptr;
+    auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto gain_condition = one_in_(5);
-    gain_condition &= (floor_ptr->dun_level + 5) > this->caster_ptr->lev;
+    gain_condition &= (floor_ptr->dun_level + 5) > this->player_ptr->lev;
     gain_condition &= floor_ptr->dun_level > s_ptr->slevel;
     if (gain_condition) {
-        this->caster_ptr->spell_exp[spell]++;
+        this->player_ptr->spell_exp[spell]++;
     }
 }
 
@@ -324,9 +324,9 @@ void RealmHex::gain_exp_master(const int spell)
  */
 bool RealmHex::is_casting_full_capacity() const
 {
-    auto k_max = (this->caster_ptr->lev / 15) + 1;
+    auto k_max = (this->player_ptr->lev / 15) + 1;
     k_max = MIN(k_max, MAX_KEEP);
-    return casting_hex_num(this->caster_ptr) >= k_max;
+    return casting_hex_num(this->player_ptr) >= k_max;
 }
 
 /*!
@@ -334,16 +334,16 @@ bool RealmHex::is_casting_full_capacity() const
  */
 void RealmHex::continue_revenge()
 {
-    if ((this->caster_ptr->realm1 != REALM_HEX) || (hex_revenge_turn(this->caster_ptr) <= 0)) {
+    if ((this->player_ptr->realm1 != REALM_HEX) || (hex_revenge_turn(this->player_ptr) <= 0)) {
         return;
     }
 
-    switch (hex_revenge_type(this->caster_ptr)) {
+    switch (hex_revenge_type(this->player_ptr)) {
     case 1:
-        exe_spell(this->caster_ptr, REALM_HEX, HEX_PATIENCE, SPELL_CONT);
+        exe_spell(this->player_ptr, REALM_HEX, HEX_PATIENCE, SPELL_CONT);
         return;
     case 2:
-        exe_spell(this->caster_ptr, REALM_HEX, HEX_REVENGE, SPELL_CONT);
+        exe_spell(this->player_ptr, REALM_HEX, HEX_REVENGE, SPELL_CONT);
         return;
     default:
         return;
@@ -356,11 +356,11 @@ void RealmHex::continue_revenge()
  */
 void RealmHex::store_vengeful_damage(HIT_POINT dam)
 {
-    if ((this->caster_ptr->realm1 != REALM_HEX) || (hex_revenge_turn(this->caster_ptr) <= 0)) {
+    if ((this->player_ptr->realm1 != REALM_HEX) || (hex_revenge_turn(this->player_ptr) <= 0)) {
         return;
     }
 
-    hex_revenge_power(this->caster_ptr) += dam;
+    hex_revenge_power(this->player_ptr) += dam;
 }
 
 /*!
@@ -371,25 +371,25 @@ void RealmHex::store_vengeful_damage(HIT_POINT dam)
  */
 bool RealmHex::check_hex_barrier(MONSTER_IDX m_idx, realm_hex_type type) const
 {
-    const auto *m_ptr = &this->caster_ptr->current_floor_ptr->m_list[m_idx];
+    const auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[m_idx];
     const auto *r_ptr = &r_info[m_ptr->r_idx];
-    return this->is_spelling_specific(type) && ((this->caster_ptr->lev * 3 / 2) >= randint1(r_ptr->level));
+    return this->is_spelling_specific(type) && ((this->player_ptr->lev * 3 / 2) >= randint1(r_ptr->level));
 }
 
 bool RealmHex::is_spelling_specific(int hex) const
 {
-    auto check = static_cast<uint32_t>(this->caster_ptr->magic_num1[0]);
-    return (this->caster_ptr->realm1 == REALM_HEX) && any_bits(check, 1U << hex);
+    auto check = static_cast<uint32_t>(this->player_ptr->magic_num1[0]);
+    return (this->player_ptr->realm1 == REALM_HEX) && any_bits(check, 1U << hex);
 }
 
 bool RealmHex::is_spelling_any() const
 {
-    return (caster_ptr->realm1 == REALM_HEX) && (caster_ptr->magic_num1[0] != 0);
+    return (player_ptr->realm1 == REALM_HEX) && (player_ptr->magic_num1[0] != 0);
 }
 
 /*!
  * @brief 呪術「目には目を」の効果処理
- * @param this->caster_ptr プレーヤーへの参照ポインタ
+ * @param this->player_ptr プレーヤーへの参照ポインタ
  * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
  */
 void RealmHex::eyes_on_eyes()
@@ -398,8 +398,8 @@ void RealmHex::eyes_on_eyes()
         throw("Invalid constructor was used!");
     }
 
-    const auto is_eyeeye_finished = (this->caster_ptr->tim_eyeeye == 0) && !this->is_spelling_specific(HEX_EYE_FOR_EYE);
-    if (is_eyeeye_finished || (this->monap_ptr->get_damage == 0) || this->caster_ptr->is_dead) {
+    const auto is_eyeeye_finished = (this->player_ptr->tim_eyeeye == 0) && !this->is_spelling_specific(HEX_EYE_FOR_EYE);
+    if (is_eyeeye_finished || (this->monap_ptr->get_damage == 0) || this->player_ptr->is_dead) {
         return;
     }
 
@@ -407,14 +407,14 @@ void RealmHex::eyes_on_eyes()
     msg_format("攻撃が%s自身を傷つけた！", this->monap_ptr->m_name);
 #else
     GAME_TEXT m_name_self[MAX_MONSTER_NAME];
-    monster_desc(this->caster_ptr, m_name_self, this->monap_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
+    monster_desc(this->player_ptr, m_name_self, this->monap_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
     msg_format("The attack of %s has wounded %s!", this->monap_ptr->m_name, m_name_self);
 #endif
     const auto y = this->monap_ptr->m_ptr->fy;
     const auto x = this->monap_ptr->m_ptr->fx;
-    project(this->caster_ptr, 0, 0, y, x, this->monap_ptr->get_damage, GF_MISSILE, PROJECT_KILL);
-    if (this->caster_ptr->tim_eyeeye) {
-        set_tim_eyeeye(this->caster_ptr, this->caster_ptr->tim_eyeeye - 5, true);
+    project(this->player_ptr, 0, 0, y, x, this->monap_ptr->get_damage, GF_MISSILE, PROJECT_KILL);
+    if (this->player_ptr->tim_eyeeye) {
+        set_tim_eyeeye(this->player_ptr, this->player_ptr->tim_eyeeye - 5, true);
     }
 }
 
@@ -424,7 +424,7 @@ void RealmHex::thief_teleport()
         throw("Invalid constructor was used!");
     }
 
-    if (!this->monap_ptr->blinked || !this->monap_ptr->alive || this->caster_ptr->is_dead) {
+    if (!this->monap_ptr->blinked || !this->monap_ptr->alive || this->player_ptr->is_dead) {
         return;
     }
 
@@ -432,6 +432,6 @@ void RealmHex::thief_teleport()
         msg_print(_("泥棒は笑って逃げ...ようとしたがバリアに防がれた。", "The thief flees laughing...? But a magic barrier obstructs it."));
     } else {
         msg_print(_("泥棒は笑って逃げた！", "The thief flees laughing!"));
-        teleport_away(this->caster_ptr, this->monap_ptr->m_idx, MAX_SIGHT * 2 + 5, TELEPORT_SPONTANEOUS);
+        teleport_away(this->player_ptr, this->monap_ptr->m_idx, MAX_SIGHT * 2 + 5, TELEPORT_SPONTANEOUS);
     }
 }

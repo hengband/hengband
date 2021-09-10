@@ -5,7 +5,7 @@
 #include "player-info/equipment-info.h"
 #include "system/player-type-definition.h"
 
-static void switch_mind_mindcrafter(player_type *caster_ptr, const PLAYER_LEVEL plev, const int power, char *p)
+static void switch_mind_mindcrafter(player_type *player_ptr, const PLAYER_LEVEL plev, const int power, char *p)
 {
     switch (power) {
     case 0:
@@ -51,15 +51,15 @@ static void switch_mind_mindcrafter(player_type *caster_ptr, const PLAYER_LEVEL 
         sprintf(p, " %sd%d+%d", KWD_DAM, plev * 3, plev * 3);
         break;
     case 13:
-        sprintf(p, _(" 行動:%ld回", " %ld acts."), (long int)(caster_ptr->csp + 100 - caster_ptr->energy_need - 50) / 100);
+        sprintf(p, _(" 行動:%ld回", " %ld acts."), (long int)(player_ptr->csp + 100 - player_ptr->energy_need - 50) / 100);
         break;
     }
 }
 
-static void switch_mind_ki(player_type *caster_ptr, const PLAYER_LEVEL plev, const int power, char *p)
+static void switch_mind_ki(player_type *player_ptr, const PLAYER_LEVEL plev, const int power, char *p)
 {
-    int boost = get_current_ki(caster_ptr);
-    if (heavy_armor(caster_ptr))
+    int boost = get_current_ki(player_ptr);
+    if (heavy_armor(player_ptr))
         boost /= 2;
 
     switch (power) {
@@ -219,16 +219,16 @@ static void switch_mind_ninja(const PLAYER_LEVEL plev, const int power, char *p)
  * @param use_mind 職業毎の特殊技能ID
  * @param power モンスター魔法のID
  */
-void mindcraft_info(player_type *caster_ptr, char *p, mind_kind_type use_mind, int power)
+void mindcraft_info(player_type *player_ptr, char *p, mind_kind_type use_mind, int power)
 {
-    const PLAYER_LEVEL plev = caster_ptr->lev;
+    const PLAYER_LEVEL plev = player_ptr->lev;
     strcpy(p, "");
     switch (use_mind) {
     case mind_kind_type::MINDCRAFTER:
-        switch_mind_mindcrafter(caster_ptr, plev, power, p);
+        switch_mind_mindcrafter(player_ptr, plev, power, p);
         break;
     case mind_kind_type::KI:
-        switch_mind_ki(caster_ptr, plev, power, p);
+        switch_mind_ki(player_ptr, plev, power, p);
         break;
     case mind_kind_type::MIRROR_MASTER:
         switch_mind_mirror_master(plev, power, p);

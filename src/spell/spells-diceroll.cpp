@@ -86,12 +86,12 @@ bool common_saving_throw_control(player_type *operator_ptr, HIT_POINT pow, monst
  * ハードコーティングによる実装が行われている。
  * メイジは(レベル)%、ハイメイジ、スペルマスターは(レベル)%、それ以外の職業は(レベル/2)%
  */
-PERCENTAGE beam_chance(player_type *caster_ptr)
+PERCENTAGE beam_chance(player_type *player_ptr)
 {
-    if (caster_ptr->pclass == CLASS_MAGE)
-        return (PERCENTAGE)(caster_ptr->lev);
-    if (caster_ptr->pclass == CLASS_HIGH_MAGE || caster_ptr->pclass == CLASS_SORCERER)
-        return (PERCENTAGE)(caster_ptr->lev + 10);
+    if (player_ptr->pclass == CLASS_MAGE)
+        return (PERCENTAGE)(player_ptr->lev);
+    if (player_ptr->pclass == CLASS_HIGH_MAGE || player_ptr->pclass == CLASS_SORCERER)
+        return (PERCENTAGE)(player_ptr->lev + 10);
 
-    return (PERCENTAGE)(caster_ptr->lev / 2);
+    return (PERCENTAGE)(player_ptr->lev / 2);
 }

@@ -804,27 +804,27 @@ void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, FF action)
 }
 
 /* Remove a mirror */
-void remove_mirror(player_type *caster_ptr, POSITION y, POSITION x)
+void remove_mirror(player_type *player_ptr, POSITION y, POSITION x)
 {
-    grid_type *g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
+    grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
     /* Remove the mirror */
     g_ptr->info &= ~(CAVE_OBJECT);
     g_ptr->mimic = 0;
 
-    if (d_info[caster_ptr->dungeon_idx].flags.has(DF::DARKNESS)) {
+    if (d_info[player_ptr->dungeon_idx].flags.has(DF::DARKNESS)) {
         g_ptr->info &= ~(CAVE_GLOW);
         if (!view_torch_grids)
             g_ptr->info &= ~(CAVE_MARK);
         if (g_ptr->m_idx)
-            update_monster(caster_ptr, g_ptr->m_idx, false);
+            update_monster(player_ptr, g_ptr->m_idx, false);
 
-        update_local_illumination(caster_ptr, y, x);
+        update_local_illumination(player_ptr, y, x);
     }
 
-    note_spot(caster_ptr, y, x);
+    note_spot(player_ptr, y, x);
 
-    lite_spot(caster_ptr, y, x);
+    lite_spot(player_ptr, y, x);
 }
 
 /*!

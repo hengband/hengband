@@ -54,145 +54,145 @@
 
 /*!
  * @brief モンスター回復処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool heal_monster(player_type *caster_ptr, DIRECTION dir, HIT_POINT dam)
+bool heal_monster(player_type *player_ptr, DIRECTION dir, HIT_POINT dam)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(caster_ptr, GF_OLD_HEAL, dir, dam, flg));
+    return (project_hook(player_ptr, GF_OLD_HEAL, dir, dam, flg));
 }
 
 /*!
  * @brief モンスター加速処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param power 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool speed_monster(player_type *caster_ptr, DIRECTION dir, int power)
+bool speed_monster(player_type *player_ptr, DIRECTION dir, int power)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(caster_ptr, GF_OLD_SPEED, dir, power, flg));
+    return (project_hook(player_ptr, GF_OLD_SPEED, dir, power, flg));
 }
 
 /*!
  * @brief モンスター減速処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param power 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool slow_monster(player_type *caster_ptr, DIRECTION dir, int power)
+bool slow_monster(player_type *player_ptr, DIRECTION dir, int power)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(caster_ptr, GF_OLD_SLOW, dir, power, flg));
+    return (project_hook(player_ptr, GF_OLD_SLOW, dir, power, flg));
 }
 
 /*!
  * @brief モンスター催眠処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param power 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool sleep_monster(player_type *caster_ptr, DIRECTION dir, int power)
+bool sleep_monster(player_type *player_ptr, DIRECTION dir, int power)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(caster_ptr, GF_OLD_SLEEP, dir, power, flg));
+    return (project_hook(player_ptr, GF_OLD_SLEEP, dir, power, flg));
 }
 
 /*!
  * @brief モンスター拘束(STASIS)処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @return 作用が実際にあった場合TRUEを返す
  * @details 威力はプレイヤーレベル*2に固定
  */
-bool stasis_monster(player_type *caster_ptr, DIRECTION dir)
+bool stasis_monster(player_type *player_ptr, DIRECTION dir)
 {
-    return (fire_ball_hide(caster_ptr, GF_STASIS, dir, caster_ptr->lev * 2, 0));
+    return (fire_ball_hide(player_ptr, GF_STASIS, dir, player_ptr->lev * 2, 0));
 }
 
 /*!
  * @brief 邪悪なモンスター拘束(STASIS)処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @return 作用が実際にあった場合TRUEを返す
  * @details 威力はプレイヤーレベル*2に固定
  */
-bool stasis_evil(player_type *caster_ptr, DIRECTION dir)
+bool stasis_evil(player_type *player_ptr, DIRECTION dir)
 {
-    return (fire_ball_hide(caster_ptr, GF_STASIS_EVIL, dir, caster_ptr->lev * 2, 0));
+    return (fire_ball_hide(player_ptr, GF_STASIS_EVIL, dir, player_ptr->lev * 2, 0));
 }
 
 /*!
  * @brief モンスター混乱処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param plev プレイヤーレベル(=効力)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool confuse_monster(player_type *caster_ptr, DIRECTION dir, PLAYER_LEVEL plev)
+bool confuse_monster(player_type *player_ptr, DIRECTION dir, PLAYER_LEVEL plev)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(caster_ptr, GF_OLD_CONF, dir, plev, flg));
+    return (project_hook(player_ptr, GF_OLD_CONF, dir, plev, flg));
 }
 
 /*!
  * @brief モンスター朦朧処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param plev プレイヤーレベル(=効力)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool stun_monster(player_type *caster_ptr, DIRECTION dir, PLAYER_LEVEL plev)
+bool stun_monster(player_type *player_ptr, DIRECTION dir, PLAYER_LEVEL plev)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(caster_ptr, GF_STUN, dir, plev, flg));
+    return (project_hook(player_ptr, GF_STUN, dir, plev, flg));
 }
 
 /*!
  * @brief チェンジモンスター処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param power 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool poly_monster(player_type *caster_ptr, DIRECTION dir, int power)
+bool poly_monster(player_type *player_ptr, DIRECTION dir, int power)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    bool tester = (project_hook(caster_ptr, GF_OLD_POLY, dir, power, flg));
+    bool tester = (project_hook(player_ptr, GF_OLD_POLY, dir, power, flg));
     if (tester)
-        chg_virtue(caster_ptr, V_CHANCE, 1);
+        chg_virtue(player_ptr, V_CHANCE, 1);
     return (tester);
 }
 
 /*!
  * @brief クローンモンスター処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool clone_monster(player_type *caster_ptr, DIRECTION dir)
+bool clone_monster(player_type *player_ptr, DIRECTION dir)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(caster_ptr, GF_OLD_CLONE, dir, 0, flg));
+    return (project_hook(player_ptr, GF_OLD_CLONE, dir, 0, flg));
 }
 
 /*!
  * @brief モンスター恐慌処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param plev プレイヤーレベル(=効力)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool fear_monster(player_type *caster_ptr, DIRECTION dir, PLAYER_LEVEL plev)
+bool fear_monster(player_type *player_ptr, DIRECTION dir, PLAYER_LEVEL plev)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
-    return (project_hook(caster_ptr, GF_TURN_ALL, dir, plev, flg));
+    return (project_hook(player_ptr, GF_TURN_ALL, dir, plev, flg));
 }
 
 bool time_walk(player_type *player_ptr)

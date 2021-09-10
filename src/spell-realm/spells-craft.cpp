@@ -259,18 +259,18 @@ bool choose_ele_immune(player_type *player_ptr, TIME_EFFECT immune_turn)
  * pulish shield
  * @return ターン消費を要する処理を行ったならばTRUEを返す
  */
-bool pulish_shield(player_type *caster_ptr)
+bool pulish_shield(player_type *player_ptr)
 {
     concptr q = _("どの盾を磨きますか？", "Polish which shield? ");
     concptr s = _("磨く盾がありません。", "You have no shield to polish.");
 
     OBJECT_IDX item;
-    object_type *o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, TvalItemTester(TV_SHIELD));
+    object_type *o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT, TvalItemTester(TV_SHIELD));
     if (o_ptr == nullptr)
         return false;
 
     GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(caster_ptr, o_name, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
+    describe_flavor(player_ptr, o_name, o_ptr, OD_OMIT_PREFIX | OD_NAME_ONLY);
 
     bool is_pulish_successful = o_ptr->k_idx && !o_ptr->is_artifact() && !o_ptr->is_ego();
     is_pulish_successful &= !o_ptr->is_cursed();
@@ -282,9 +282,9 @@ bool pulish_shield(player_type *caster_ptr)
         msg_format("%s %s shine%s!", ((item >= 0) ? "Your" : "The"), o_name, ((o_ptr->number > 1) ? "" : "s"));
 #endif
         o_ptr->name2 = EGO_REFLECTION;
-        enchant_equipment(caster_ptr, o_ptr, randint0(3) + 4, ENCH_TOAC);
+        enchant_equipment(player_ptr, o_ptr, randint0(3) + 4, ENCH_TOAC);
         o_ptr->discount = 99;
-        chg_virtue(caster_ptr, V_ENCHANT, 2);
+        chg_virtue(player_ptr, V_ENCHANT, 2);
         return true;
     }
 
@@ -292,7 +292,7 @@ bool pulish_shield(player_type *caster_ptr)
         flush();
 
     msg_print(_("失敗した。", "Failed."));
-    chg_virtue(caster_ptr, V_ENCHANT, -2);
-    calc_android_exp(caster_ptr);
+    chg_virtue(player_ptr, V_ENCHANT, -2);
+    calc_android_exp(player_ptr);
     return false;
 }

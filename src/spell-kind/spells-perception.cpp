@@ -92,19 +92,19 @@ bool identify_item(player_type *player_ptr, object_type *o_ptr)
 /*!
  * @brief アイテム鑑定のメインルーチン処理 /
  * Identify an object in the inventory (or on the floor)
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param only_equip 装備品のみを対象とするならばTRUEを返す
  * @return 実際に鑑定を行ったならばTRUEを返す
  * @details
  * This routine does *not* automatically combine objects.
  * Returns TRUE if something was identified, else FALSE.
  */
-bool ident_spell(player_type *caster_ptr, bool only_equip)
+bool ident_spell(player_type *player_ptr, bool only_equip)
 {
     std::unique_ptr<ItemTester> item_tester = std::make_unique<FuncItemTester>(only_equip ? object_is_not_identified_weapon_armor : object_is_not_identified);
 
     concptr q;
-    if (can_get_item(caster_ptr, *item_tester)) {
+    if (can_get_item(player_ptr, *item_tester)) {
         q = _("どのアイテムを鑑定しますか? ", "Identify which item? ");
     } else {
         if (only_equip) {
@@ -118,43 +118,43 @@ bool ident_spell(player_type *caster_ptr, bool only_equip)
     concptr s = _("鑑定するべきアイテムがない。", "You have nothing to identify.");
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
+    o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
     if (!o_ptr)
         return false;
 
-    bool old_known = identify_item(caster_ptr, o_ptr);
+    bool old_known = identify_item(player_ptr, o_ptr);
 
     GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(caster_ptr, o_name, o_ptr, 0);
+    describe_flavor(player_ptr, o_name, o_ptr, 0);
     if (item >= INVEN_MAIN_HAND) {
-        msg_format(_("%^s: %s(%c)。", "%^s: %s (%c)."), describe_use(caster_ptr, item), o_name, index_to_label(item));
+        msg_format(_("%^s: %s(%c)。", "%^s: %s (%c)."), describe_use(player_ptr, item), o_name, index_to_label(item));
     } else if (item >= 0) {
         msg_format(_("ザック中: %s(%c)。", "In your pack: %s (%c)."), o_name, index_to_label(item));
     } else {
         msg_format(_("床上: %s。", "On the ground: %s."), o_name);
     }
 
-    autopick_alter_item(caster_ptr, item, (bool)(destroy_identify && !old_known));
+    autopick_alter_item(player_ptr, item, (bool)(destroy_identify && !old_known));
     return true;
 }
 
 /*!
  * @brief アイテム*鑑定*のメインルーチン処理 /
  * Identify an object in the inventory (or on the floor)
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param only_equip 装備品のみを対象とするならばTRUEを返す
  * @return 実際に鑑定を行ったならばTRUEを返す
  * @details
  * Fully "identify" an object in the inventory -BEN-
  * This routine returns TRUE if an item was identified.
  */
-bool identify_fully(player_type *caster_ptr, bool only_equip)
+bool identify_fully(player_type *player_ptr, bool only_equip)
 {
     std::unique_ptr<ItemTester> item_tester
         = std::make_unique<FuncItemTester>(only_equip ? object_is_not_fully_identified_weapon_armour : object_is_not_fully_identified);
 
     concptr q;
-    if (can_get_item(caster_ptr, *item_tester)) {
+    if (can_get_item(player_ptr, *item_tester)) {
         q = _("どのアイテムを*鑑定*しますか? ", "*Identify* which item? ");
     } else {
         if (only_equip) {
@@ -169,30 +169,30 @@ bool identify_fully(player_type *caster_ptr, bool only_equip)
 
     OBJECT_IDX item;
     object_type *o_ptr;
-    o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
+    o_ptr = choose_object(player_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), *item_tester);
     if (!o_ptr)
         return false;
 
-    bool old_known = identify_item(caster_ptr, o_ptr);
+    bool old_known = identify_item(player_ptr, o_ptr);
 
     o_ptr->ident |= (IDENT_FULL_KNOWN);
 
     /* Refrect item informaiton onto subwindows without updating inventory */
-    caster_ptr->update &= ~(PU_COMBINE | PU_REORDER);
-    handle_stuff(caster_ptr);
-    caster_ptr->update |= (PU_COMBINE | PU_REORDER);
+    player_ptr->update &= ~(PU_COMBINE | PU_REORDER);
+    handle_stuff(player_ptr);
+    player_ptr->update |= (PU_COMBINE | PU_REORDER);
 
     GAME_TEXT o_name[MAX_NLEN];
-    describe_flavor(caster_ptr, o_name, o_ptr, 0);
+    describe_flavor(player_ptr, o_name, o_ptr, 0);
     if (item >= INVEN_MAIN_HAND) {
-        msg_format(_("%^s: %s(%c)。", "%^s: %s (%c)."), describe_use(caster_ptr, item), o_name, index_to_label(item));
+        msg_format(_("%^s: %s(%c)。", "%^s: %s (%c)."), describe_use(player_ptr, item), o_name, index_to_label(item));
     } else if (item >= 0) {
         msg_format(_("ザック中: %s(%c)。", "In your pack: %s (%c)."), o_name, index_to_label(item));
     } else {
         msg_format(_("床上: %s。", "On the ground: %s."), o_name);
     }
 
-    (void)screen_object(caster_ptr, o_ptr, 0L);
-    autopick_alter_item(caster_ptr, item, (bool)(destroy_identify && !old_known));
+    (void)screen_object(player_ptr, o_ptr, 0L);
+    autopick_alter_item(player_ptr, item, (bool)(destroy_identify && !old_known));
     return true;
 }

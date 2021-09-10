@@ -40,4 +40,4 @@ bool is_shero(player_type *player_ptr);
 bool is_echizen(player_type *player_ptr);
 bool is_chargeman(player_type *player_ptr);
 
-void stop_mouth(player_type *caster_ptr);
+void stop_mouth(player_type *player_ptr);

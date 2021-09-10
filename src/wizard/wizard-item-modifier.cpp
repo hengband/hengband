@@ -99,8 +99,8 @@ T clamp_cast(int val)
 }
 
 void wiz_restore_aware_flag_of_fixed_arfifact(ARTIFACT_IDX a_idx, bool aware = false);
-void wiz_modify_item_activation(player_type *caster_ptr);
-void wiz_identify_full_inventory(player_type *caster_ptr);
+void wiz_modify_item_activation(player_type *player_ptr);
+void wiz_identify_full_inventory(player_type *player_ptr);
 
 /*!
     * @brief ゲーム設定コマンドの入力を受け付ける
@@ -196,12 +196,12 @@ void wiz_restore_aware_flag_of_fixed_arfifact(ARTIFACT_IDX a_idx, bool aware)
  * @brief オブジェクトに発動を追加する/変更する
  * @param catser_ptr プレイヤー情報への参照ポインタ
  */
-void wiz_modify_item_activation(player_type *caster_ptr)
+void wiz_modify_item_activation(player_type *player_ptr)
 {
     concptr q = "Which object? ";
     concptr s = "Nothing to do with.";
     OBJECT_IDX item;
-    auto *o_ptr = choose_object(caster_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT);
+    auto *o_ptr = choose_object(player_ptr, &item, q, s, USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT);
     if (!o_ptr)
         return;
 
@@ -227,10 +227,10 @@ void wiz_modify_item_activation(player_type *caster_ptr)
  * @brief インベントリ内のアイテムを全て*鑑定*済みにする
  * @param catser_ptr プレイヤー情報への参照ポインタ
  */
-void wiz_identify_full_inventory(player_type *caster_ptr)
+void wiz_identify_full_inventory(player_type *player_ptr)
 {
     for (int i = 0; i < INVEN_TOTAL; i++) {
-        object_type *o_ptr = &caster_ptr->inventory_list[i];
+        object_type *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
 
@@ -241,10 +241,10 @@ void wiz_identify_full_inventory(player_type *caster_ptr)
     }
 
     /* Refrect item informaiton onto subwindows without updating inventory */
-    reset_bits(caster_ptr->update, PU_COMBINE | PU_REORDER);
-    handle_stuff(caster_ptr);
-    set_bits(caster_ptr->update, PU_COMBINE | PU_REORDER);
-    set_bits(caster_ptr->window_flags, PW_INVEN | PW_EQUIP);
+    reset_bits(player_ptr->update, PU_COMBINE | PU_REORDER);
+    handle_stuff(player_ptr);
+    set_bits(player_ptr->update, PU_COMBINE | PU_REORDER);
+    set_bits(player_ptr->window_flags, PW_INVEN | PW_EQUIP);
 }
 
 /*!
@@ -394,7 +394,7 @@ static void wiz_display_item(player_type *player_ptr, object_type *o_ptr)
 /*!
  * @brief 検査対象のアイテムを基準とした生成テストを行う /
  * Try to create an item again. Output some statistics.    -Bernd-
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 生成テストの基準となるアイテム情報の参照ポインタ
  * The statistics are correct now.  We acquire a clean grid, and then
  * repeatedly place an object in this grid, copying it into an item
@@ -402,7 +402,7 @@ static void wiz_display_item(player_type *player_ptr, object_type *o_ptr)
  * counter flags to prevent weirdness.  We use the items to collect
  * statistics on item creation relative to the initial item.
  */
-static void wiz_statistics(player_type *caster_ptr, object_type *o_ptr)
+static void wiz_statistics(player_type *player_ptr, object_type *o_ptr)
 {
     concptr q = "Rolls: %ld  Correct: %ld  Matches: %ld  Better: %ld  Worse: %ld  Other: %ld";
     concptr p = "Enter number of items to roll: ";
@@ -418,7 +418,7 @@ static void wiz_statistics(player_type *caster_ptr, object_type *o_ptr)
     BIT_FLAGS mode;
     while (true) {
         concptr pmt = "Roll for [n]ormal, [g]ood, or [e]xcellent treasure? ";
-        wiz_display_item(caster_ptr, o_ptr);
+        wiz_display_item(player_ptr, o_ptr);
         if (!get_com(pmt, &ch, false))
             break;
 
@@ -439,7 +439,7 @@ static void wiz_statistics(player_type *caster_ptr, object_type *o_ptr)
         if (get_string(p, tmp_val, 10))
             test_roll = atol(tmp_val);
         test_roll = MAX(1, test_roll);
-        msg_format("Creating a lot of %s items. Base level = %d.", quality, caster_ptr->current_floor_ptr->dun_level);
+        msg_format("Creating a lot of %s items. Base level = %d.", quality, player_ptr->current_floor_ptr->dun_level);
         msg_print(nullptr);
 
         correct = matches = better = worse = other = 0;
@@ -458,7 +458,7 @@ static void wiz_statistics(player_type *caster_ptr, object_type *o_ptr)
             object_type forge;
             object_type *q_ptr = &forge;
             q_ptr->wipe();
-            make_object(caster_ptr, q_ptr, mode);
+            make_object(player_ptr, q_ptr, mode);
             if (q_ptr->is_fixed_artifact())
                 a_info[q_ptr->name1].cur_num = 0;
 
@@ -620,7 +620,7 @@ static void wiz_tweak_item(player_type *player_ptr, object_type *o_ptr)
 /*!
  * @brief 検査対象のアイテムの数を変更する /
  * Change the quantity of a the item
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 変更するアイテム情報構造体の参照ポインタ
  */
 static void wiz_quantity_item(object_type *o_ptr)
@@ -717,9 +717,9 @@ void wiz_modify_item(player_type *player_ptr)
 /*!
  * @brief オブジェクトの装備スロットがエゴが有効なスロットかどうか判定
  */
-static int is_slot_able_to_be_ego(player_type *caster_ptr, object_type *o_ptr)
+static int is_slot_able_to_be_ego(player_type *player_ptr, object_type *o_ptr)
 {
-    int slot = wield_slot(caster_ptr, o_ptr);
+    int slot = wield_slot(player_ptr, o_ptr);
 
     if (slot > -1)
         return slot;
@@ -741,14 +741,14 @@ static void wishing_puff_of_smoke(void)
 
 /*!
  * @brief 願ったが消えてしまった場合のメッセージ
- * @param caster_ptr 願ったプレイヤー情報への参照ポインタ
+ * @param player_ptr 願ったプレイヤー情報への参照ポインタ
  * @param prob ★などを願った場合の生成確率
  * @param art_ok アーティファクトの生成を許すならTRUE
  * @param ego_ok エゴの生成を許すならTRUE
  * @param confirm 願わない場合に確認するかどうか
  * @return 願った結果
  */
-WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, bool allow_ego, bool confirm)
+WishResult do_cmd_wishing(player_type *player_ptr, int prob, bool allow_art, bool allow_ego, bool confirm)
 {
     concptr fixed_str[] = {
 #ifdef JP
@@ -863,7 +863,7 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
                 continue;
 
             o_ptr->prep(k);
-            describe_flavor(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
+            describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
 #ifndef JP
             str_tolower(o_name);
 #endif
@@ -897,7 +897,7 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
                     msg_format("Mathcing ego No.%d %s...", k, o_name);
 
                 if (_(!strncmp(str, o_name, strlen(o_name)), !strrncmp(str, o_name, strlen(o_name)))) {
-                    if (is_slot_able_to_be_ego(caster_ptr, o_ptr) != e_ptr->slot)
+                    if (is_slot_able_to_be_ego(player_ptr, o_ptr) != e_ptr->slot)
                         continue;
 
                     e_ids.push_back(k);
@@ -926,7 +926,7 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
             o_ptr->prep(k_idx);
             o_ptr->name1 = i;
 
-            describe_flavor(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
+            describe_flavor(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
 #ifndef JP
             str_tolower(o_name);
 #endif
@@ -988,7 +988,7 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
     if (a_ids.size() == 1) {
         ARTIFACT_IDX a_idx = a_ids.back();
         if (must || (ok_art && !a_info[a_idx].cur_num)) {
-            create_named_art(caster_ptr, a_idx, caster_ptr->y, caster_ptr->x);
+            create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
             if (!current_world_ptr->wizard)
                 a_info[a_idx].cur_num = 1;
         }
@@ -1021,7 +1021,7 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
         if (a_idx > 0) {
             a_ptr = &a_info[a_idx];
             if (must || (ok_art && !a_ptr->cur_num)) {
-                create_named_art(caster_ptr, a_idx, caster_ptr->y, caster_ptr->x);
+                create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
                 if (!current_world_ptr->wizard)
                     a_info[a_idx].cur_num = 1;
             }
@@ -1034,11 +1034,11 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
             if (must || ok_art) {
                 do {
                     o_ptr->prep(k_idx);
-                    apply_magic_to_object(caster_ptr, o_ptr, k_ptr->level, (AM_SPECIAL | AM_NO_FIXED_ART));
+                    apply_magic_to_object(player_ptr, o_ptr, k_ptr->level, (AM_SPECIAL | AM_NO_FIXED_ART));
                 } while (!o_ptr->art_name || o_ptr->name1 || o_ptr->name2 || o_ptr->is_cursed());
 
                 if (o_ptr->art_name)
-                    drop_near(caster_ptr, o_ptr, -1, caster_ptr->y, caster_ptr->x);
+                    drop_near(player_ptr, o_ptr, -1, player_ptr->y, player_ptr->x);
             } else {
                 wishing_puff_of_smoke();
             }
@@ -1051,13 +1051,13 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
                 if (e_ids.size() > 0) {
                     o_ptr->prep(k_idx);
                     o_ptr->name2 = e_ids[0];
-                    apply_ego(o_ptr, caster_ptr->current_floor_ptr->base_level);
+                    apply_ego(o_ptr, player_ptr->current_floor_ptr->base_level);
                 } else {
                     int max_roll = 1000;
                     int i = 0;
                     for (i = 0; i < max_roll; i++) {
                         o_ptr->prep(k_idx);
-                        (void)apply_magic_to_object(caster_ptr, o_ptr, k_ptr->level, (AM_GREAT | AM_NO_FIXED_ART));
+                        (void)apply_magic_to_object(player_ptr, o_ptr, k_ptr->level, (AM_GREAT | AM_NO_FIXED_ART));
 
                         if (o_ptr->name1 || o_ptr->art_name)
                             continue;
@@ -1090,22 +1090,22 @@ WishResult do_cmd_wishing(player_type *caster_ptr, int prob, bool allow_art, boo
         } else {
             for (int i = 0; i < 100; i++) {
                 o_ptr->prep(k_idx);
-                apply_magic_to_object(caster_ptr, o_ptr, 0, (AM_NO_FIXED_ART));
+                apply_magic_to_object(player_ptr, o_ptr, 0, (AM_NO_FIXED_ART));
                 if (!o_ptr->is_cursed())
                     break;
             }
             res = WishResult::NORMAL;
         }
 
-        if (blessed && wield_slot(caster_ptr, o_ptr) != -1)
+        if (blessed && wield_slot(player_ptr, o_ptr) != -1)
             o_ptr->art_flags.set(TR_BLESSED);
 
-        if (fixed && wield_slot(caster_ptr, o_ptr) != -1) {
+        if (fixed && wield_slot(player_ptr, o_ptr) != -1) {
             o_ptr->art_flags.set(TR_IGNORE_ACID);
             o_ptr->art_flags.set(TR_IGNORE_FIRE);
         }
 
-        (void)drop_near(caster_ptr, o_ptr, -1, caster_ptr->y, caster_ptr->x);
+        (void)drop_near(player_ptr, o_ptr, -1, player_ptr->y, player_ptr->x);
 
         return res;
     }

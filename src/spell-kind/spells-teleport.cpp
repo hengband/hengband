@@ -46,74 +46,74 @@
 
 /*!
  * @brief モンスターとの位置交換処理 / Switch position with a monster.
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool teleport_swap(player_type *caster_ptr, DIRECTION dir)
+bool teleport_swap(player_type *player_ptr, DIRECTION dir)
 {
     POSITION tx, ty;
-    if ((dir == 5) && target_okay(caster_ptr)) {
+    if ((dir == 5) && target_okay(player_ptr)) {
         tx = target_col;
         ty = target_row;
     } else {
-        tx = caster_ptr->x + ddx[dir];
-        ty = caster_ptr->y + ddy[dir];
+        tx = player_ptr->x + ddx[dir];
+        ty = player_ptr->y + ddy[dir];
     }
 
-    if (caster_ptr->anti_tele) {
+    if (player_ptr->anti_tele) {
         msg_print(_("不思議な力がテレポートを防いだ！", "A mysterious force prevents you from teleporting!"));
         return false;
     }
 
     grid_type *g_ptr;
-    g_ptr = &caster_ptr->current_floor_ptr->grid_array[ty][tx];
-    if (!g_ptr->m_idx || (g_ptr->m_idx == caster_ptr->riding)) {
+    g_ptr = &player_ptr->current_floor_ptr->grid_array[ty][tx];
+    if (!g_ptr->m_idx || (g_ptr->m_idx == player_ptr->riding)) {
         msg_print(_("それとは場所を交換できません。", "You can't trade places with that!"));
         return false;
     }
 
-    if ((g_ptr->is_icky()) || (distance(ty, tx, caster_ptr->y, caster_ptr->x) > caster_ptr->lev * 3 / 2 + 10)) {
+    if ((g_ptr->is_icky()) || (distance(ty, tx, player_ptr->y, player_ptr->x) > player_ptr->lev * 3 / 2 + 10)) {
         msg_print(_("失敗した。", "Failed to swap."));
         return false;
     }
 
     monster_type *m_ptr;
     monster_race *r_ptr;
-    m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+    m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
     r_ptr = &r_info[m_ptr->r_idx];
 
-    (void)set_monster_csleep(caster_ptr, g_ptr->m_idx, 0);
+    (void)set_monster_csleep(player_ptr, g_ptr->m_idx, 0);
 
     if (r_ptr->flagsr & RFR_RES_TELE) {
         msg_print(_("テレポートを邪魔された！", "Your teleportation is blocked!"));
-        if (is_original_ap_and_seen(caster_ptr, m_ptr))
+        if (is_original_ap_and_seen(player_ptr, m_ptr))
             r_ptr->r_flagsr |= RFR_RES_TELE;
         return false;
     }
 
     sound(SOUND_TELEPORT);
-    (void)move_player_effect(caster_ptr, ty, tx, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
+    (void)move_player_effect(player_ptr, ty, tx, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
     return true;
 }
 
 /*!
  * @brief モンスター用テレポート処理
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param distance 移動距離
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool teleport_monster(player_type *caster_ptr, DIRECTION dir, int distance)
+bool teleport_monster(player_type *player_ptr, DIRECTION dir, int distance)
 {
     BIT_FLAGS flg = PROJECT_BEAM | PROJECT_KILL;
-    return (project_hook(caster_ptr, GF_AWAY_ALL, dir, distance, flg));
+    return (project_hook(player_ptr, GF_AWAY_ALL, dir, distance, flg));
 }
 
 /*!
  * @brief モンスターのテレポートアウェイ処理 /
  * Teleport a monster, normally up to "dis" grids away.
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param dis テレポート距離
  * @param mode オプション
@@ -122,14 +122,14 @@ bool teleport_monster(player_type *caster_ptr, DIRECTION dir, int distance)
  * Attempt to move the monster at least "dis/2" grids away.
  * But allow variation to prevent infinite loops.
  */
-bool teleport_away(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION dis, teleport_flags mode)
+bool teleport_away(player_type *player_ptr, MONSTER_IDX m_idx, POSITION dis, teleport_flags mode)
 {
-    monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
+    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     if (!monster_is_valid(m_ptr))
         return false;
 
-    if ((mode & TELEPORT_DEC_VALOUR) && (((caster_ptr->chp * 10) / caster_ptr->mhp) > 5) && (4 + randint1(5) < ((caster_ptr->chp * 10) / caster_ptr->mhp))) {
-        chg_virtue(caster_ptr, V_VALOUR, -1);
+    if ((mode & TELEPORT_DEC_VALOUR) && (((player_ptr->chp * 10) / player_ptr->mhp) > 5) && (4 + randint1(5) < ((player_ptr->chp * 10) / player_ptr->mhp))) {
+        chg_virtue(player_ptr, V_VALOUR, -1);
     }
 
     POSITION oy = m_ptr->fy;
@@ -152,12 +152,12 @@ bool teleport_away(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION dis, tel
                     break;
             }
 
-            if (!in_bounds(caster_ptr->current_floor_ptr, ny, nx))
+            if (!in_bounds(player_ptr->current_floor_ptr, ny, nx))
                 continue;
-            if (!cave_monster_teleportable_bold(caster_ptr, m_idx, ny, nx, mode))
+            if (!cave_monster_teleportable_bold(player_ptr, m_idx, ny, nx, mode))
                 continue;
-            if (!(caster_ptr->current_floor_ptr->inside_quest || caster_ptr->current_floor_ptr->inside_arena))
-                if (caster_ptr->current_floor_ptr->grid_array[ny][nx].is_icky())
+            if (!(player_ptr->current_floor_ptr->inside_quest || player_ptr->current_floor_ptr->inside_arena))
+                if (player_ptr->current_floor_ptr->grid_array[ny][nx].is_icky())
                     continue;
 
             look = false;
@@ -172,19 +172,19 @@ bool teleport_away(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION dis, tel
     }
 
     sound(SOUND_TPOTHER);
-    caster_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = 0;
-    caster_ptr->current_floor_ptr->grid_array[ny][nx].m_idx = m_idx;
+    player_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = 0;
+    player_ptr->current_floor_ptr->grid_array[ny][nx].m_idx = m_idx;
 
     m_ptr->fy = ny;
     m_ptr->fx = nx;
 
     reset_target(m_ptr);
-    update_monster(caster_ptr, m_idx, true);
-    lite_spot(caster_ptr, oy, ox);
-    lite_spot(caster_ptr, ny, nx);
+    update_monster(player_ptr, m_idx, true);
+    lite_spot(player_ptr, oy, ox);
+    lite_spot(player_ptr, ny, nx);
 
     if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
-        caster_ptr->update |= (PU_MON_LITE);
+        player_ptr->update |= (PU_MON_LITE);
 
     return true;
 }
@@ -192,16 +192,16 @@ bool teleport_away(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION dis, tel
 /*!
  * @brief モンスターを指定された座標付近にテレポートする /
  * Teleport monster next to a grid near the given location
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param ty 目安Y座標
  * @param tx 目安X座標
  * @param power テレポート成功確率
  * @param mode オプション
  */
-void teleport_monster_to(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power, teleport_flags mode)
+void teleport_monster_to(player_type *player_ptr, MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power, teleport_flags mode)
 {
-    monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
+    monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     if (!m_ptr->r_idx)
         return;
     if (randint1(100) > power)
@@ -229,9 +229,9 @@ void teleport_monster_to(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION ty
                     break;
             }
 
-            if (!in_bounds(caster_ptr->current_floor_ptr, ny, nx))
+            if (!in_bounds(player_ptr->current_floor_ptr, ny, nx))
                 continue;
-            if (!cave_monster_teleportable_bold(caster_ptr, m_idx, ny, nx, mode))
+            if (!cave_monster_teleportable_bold(player_ptr, m_idx, ny, nx, mode))
                 continue;
 
             look = false;
@@ -246,18 +246,18 @@ void teleport_monster_to(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION ty
         return;
 
     sound(SOUND_TPOTHER);
-    caster_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = 0;
-    caster_ptr->current_floor_ptr->grid_array[ny][nx].m_idx = m_idx;
+    player_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = 0;
+    player_ptr->current_floor_ptr->grid_array[ny][nx].m_idx = m_idx;
 
     m_ptr->fy = ny;
     m_ptr->fx = nx;
 
-    update_monster(caster_ptr, m_idx, true);
-    lite_spot(caster_ptr, oy, ox);
-    lite_spot(caster_ptr, ny, nx);
+    update_monster(player_ptr, m_idx, true);
+    lite_spot(player_ptr, oy, ox);
+    lite_spot(player_ptr, ny, nx);
 
     if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
-        caster_ptr->update |= (PU_MON_LITE);
+        player_ptr->update |= (PU_MON_LITE);
 }
 
 /*!
@@ -547,41 +547,41 @@ void teleport_away_followable(player_type *tracer_ptr, MONSTER_IDX m_idx)
 /*!
  * @brief 次元の扉処理 /
  * Dimension Door
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param x テレポート先のX座標
  * @param y テレポート先のY座標
  * @return 目標に指定通りテレポートできたならばTRUEを返す
  */
-bool exe_dimension_door(player_type *caster_ptr, POSITION x, POSITION y)
+bool exe_dimension_door(player_type *player_ptr, POSITION x, POSITION y)
 {
-    PLAYER_LEVEL plev = caster_ptr->lev;
+    PLAYER_LEVEL plev = player_ptr->lev;
 
-    caster_ptr->energy_need += (int16_t)((int32_t)(60 - plev) * ENERGY_NEED() / 100L);
+    player_ptr->energy_need += (int16_t)((int32_t)(60 - plev) * ENERGY_NEED() / 100L);
 
-    if (!cave_player_teleportable_bold(caster_ptr, y, x, TELEPORT_SPONTANEOUS) || (distance(y, x, caster_ptr->y, caster_ptr->x) > plev / 2 + 10)
+    if (!cave_player_teleportable_bold(player_ptr, y, x, TELEPORT_SPONTANEOUS) || (distance(y, x, player_ptr->y, player_ptr->x) > plev / 2 + 10)
         || (!randint0(plev / 10 + 10))) {
-        caster_ptr->energy_need += (int16_t)((int32_t)(60 - plev) * ENERGY_NEED() / 100L);
-        teleport_player(caster_ptr, (plev + 2) * 2, TELEPORT_PASSIVE);
+        player_ptr->energy_need += (int16_t)((int32_t)(60 - plev) * ENERGY_NEED() / 100L);
+        teleport_player(player_ptr, (plev + 2) * 2, TELEPORT_PASSIVE);
         return false;
     }
 
-    teleport_player_to(caster_ptr, y, x, TELEPORT_SPONTANEOUS);
+    teleport_player_to(player_ptr, y, x, TELEPORT_SPONTANEOUS);
     return true;
 }
 
 /*!
  * @brief 次元の扉処理のメインルーチン /
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * Dimension Door
  * @return ターンを消費した場合TRUEを返す
  */
-bool dimension_door(player_type *caster_ptr)
+bool dimension_door(player_type *player_ptr)
 {
     DEPTH x = 0, y = 0;
-    if (!tgt_pt(caster_ptr, &x, &y))
+    if (!tgt_pt(player_ptr, &x, &y))
         return false;
 
-    if (exe_dimension_door(caster_ptr, x, y))
+    if (exe_dimension_door(player_ptr, x, y))
         return true;
 
     msg_print(_("精霊界から物質界に戻る時うまくいかなかった！", "You fail to exit the astral plane correctly!"));

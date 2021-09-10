@@ -38,7 +38,7 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
-process_result effect_monster_hypodynamia(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_hypodynamia(player_type *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -48,7 +48,7 @@ process_result effect_monster_hypodynamia(player_type *caster_ptr, effect_monste
         return PROCESS_CONTINUE;
     }
 
-    if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) {
+    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
         if (em_ptr->r_ptr->flags3 & RF3_DEMON)
             em_ptr->r_ptr->r_flags3 |= (RF3_DEMON);
         if (em_ptr->r_ptr->flags3 & RF3_UNDEAD)
@@ -66,13 +66,13 @@ process_result effect_monster_hypodynamia(player_type *caster_ptr, effect_monste
 /*!
  * @todo リファクタリング前のコード時点で、単に耐性があるだけでもダメージ0だった.
  */
-process_result effect_monster_death_ray(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_death_ray(player_type *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
 
     if (!monster_living(em_ptr->m_ptr->r_idx)) {
-        if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
             if (em_ptr->r_ptr->flags3 & RF3_DEMON)
                 em_ptr->r_ptr->r_flags3 |= (RF3_DEMON);
             if (em_ptr->r_ptr->flags3 & RF3_UNDEAD)
@@ -97,7 +97,7 @@ process_result effect_monster_death_ray(player_type *caster_ptr, effect_monster_
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_kill_wall(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_kill_wall(player_type *player_ptr, effect_monster_type *em_ptr)
 {
     if ((em_ptr->r_ptr->flags3 & (RF3_HURT_ROCK)) == 0) {
         em_ptr->dam = 0;
@@ -107,7 +107,7 @@ process_result effect_monster_kill_wall(player_type *caster_ptr, effect_monster_
     if (em_ptr->seen)
         em_ptr->obvious = true;
 
-    if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
         em_ptr->r_ptr->r_flags3 |= (RF3_HURT_ROCK);
 
     em_ptr->note = _("の皮膚がただれた！", " loses some skin!");
@@ -141,7 +141,7 @@ process_result effect_monster_hand_doom(effect_monster_type *em_ptr)
 
 /*!
  * @brief 剣術「幻惑」の効果をモンスターに与える
- * @param caster_ptr プレイヤーの情報へのポインタ
+ * @param player_ptr プレイヤーの情報へのポインタ
  * @param effect_monster_type モンスターの効果情報へのポインタ
  * @details
  * 精神のないモンスター、寝ているモンスターには無効。
@@ -149,7 +149,7 @@ process_result effect_monster_hand_doom(effect_monster_type *em_ptr)
  * 寝た場合は試行終了。
  * 与える効果は減速、朦朧、混乱、睡眠。
  */
-process_result effect_monster_engetsu(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_engetsu(player_type *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
@@ -158,7 +158,7 @@ process_result effect_monster_engetsu(player_type *caster_ptr, effect_monster_ty
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
         em_ptr->dam = 0;
         em_ptr->skipped = true;
-        if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
             set_bits(em_ptr->r_ptr->r_flags2, RF2_EMPTY_MIND);
         return PROCESS_CONTINUE;
     }
@@ -182,7 +182,7 @@ process_result effect_monster_engetsu(player_type *caster_ptr, effect_monster_ty
         switch (randint0(4)) {
         case 0:
             if (!any_bits(em_ptr->r_ptr->flags1, RF1_UNIQUE)) {
-                if (set_monster_slow(caster_ptr, em_ptr->g_ptr->m_idx, monster_slow_remaining(em_ptr->m_ptr) + 50)) {
+                if (set_monster_slow(player_ptr, em_ptr->g_ptr->m_idx, monster_slow_remaining(em_ptr->m_ptr) + 50)) {
                     em_ptr->note = _("の動きが遅くなった。", " starts moving slower.");
                 }
                 done = true;
@@ -192,14 +192,14 @@ process_result effect_monster_engetsu(player_type *caster_ptr, effect_monster_ty
             if (any_bits(em_ptr->r_ptr->flags1, RF1_UNIQUE)) {
                 em_ptr->do_stun = 0;
             } else {
-                em_ptr->do_stun = damroll((caster_ptr->lev / 10) + 3, (em_ptr->dam)) + 1;
+                em_ptr->do_stun = damroll((player_ptr->lev / 10) + 3, (em_ptr->dam)) + 1;
                 done = true;
             }
             break;
         case 2:
             if (any_bits(em_ptr->r_ptr->flags1, RF1_UNIQUE) || any_bits(em_ptr->r_ptr->flags3, RF3_NO_CONF)) {
                 if (any_bits(em_ptr->r_ptr->flags3, RF3_NO_CONF)) {
-                    if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+                    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
                         set_bits(em_ptr->r_ptr->r_flags3, RF3_NO_CONF);
                 }
                 em_ptr->do_conf = 0;
@@ -213,7 +213,7 @@ process_result effect_monster_engetsu(player_type *caster_ptr, effect_monster_ty
         default:
             if (any_bits(em_ptr->r_ptr->flags1, RF1_UNIQUE) || any_bits(em_ptr->r_ptr->flags3, RF3_NO_SLEEP)) {
                 if (any_bits(em_ptr->r_ptr->flags3, RF3_NO_SLEEP)) {
-                    if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+                    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
                         set_bits(em_ptr->r_ptr->r_flags3, RF3_NO_SLEEP);
                 }
                 em_ptr->do_sleep = 0;
@@ -239,14 +239,14 @@ process_result effect_monster_engetsu(player_type *caster_ptr, effect_monster_ty
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_genocide(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_genocide(player_type *player_ptr, effect_monster_type *em_ptr)
 {
     if (em_ptr->seen)
         em_ptr->obvious = true;
-    if (genocide_aux(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, !em_ptr->who, (em_ptr->r_ptr->level + 1) / 2, _("モンスター消滅", "Genocide One"))) {
+    if (genocide_aux(player_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, !em_ptr->who, (em_ptr->r_ptr->level + 1) / 2, _("モンスター消滅", "Genocide One"))) {
         if (em_ptr->seen_msg)
             msg_format(_("%sは消滅した！", "%^s disappeared!"), em_ptr->m_name);
-        chg_virtue(caster_ptr, V_VITALITY, -1);
+        chg_virtue(player_ptr, V_VITALITY, -1);
         return PROCESS_TRUE;
     }
 
@@ -254,7 +254,7 @@ process_result effect_monster_genocide(player_type *caster_ptr, effect_monster_t
     return PROCESS_CONTINUE;
 }
 
-process_result effect_monster_photo(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result effect_monster_photo(player_type *player_ptr, effect_monster_type *em_ptr)
 {
     if (!em_ptr->who)
         msg_format(_("%sを写真に撮った。", "You take a photograph of %s."), em_ptr->m_name);
@@ -263,7 +263,7 @@ process_result effect_monster_photo(player_type *caster_ptr, effect_monster_type
         if (em_ptr->seen)
             em_ptr->obvious = true;
 
-        if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr))
             em_ptr->r_ptr->r_flags3 |= (RF3_HURT_LITE);
 
         em_ptr->note = _("は光に身をすくめた！", " cringes from the light!");
@@ -294,7 +294,7 @@ process_result effect_monster_wounds(effect_monster_type *em_ptr)
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @return ここのスイッチングで終るならTRUEかFALSE、後続処理を実行するならCONTINUE
  */
-process_result switch_effects_monster(player_type *caster_ptr, effect_monster_type *em_ptr)
+process_result switch_effects_monster(player_type *player_ptr, effect_monster_type *em_ptr)
 {
     switch (em_ptr->effect_type) {
     case GF_PSY_SPEAR:
@@ -307,135 +307,135 @@ process_result switch_effects_monster(player_type *caster_ptr, effect_monster_ty
     case GF_SUPER_RAY:
         return effect_monster_nothing(em_ptr);
     case GF_ACID:
-        return effect_monster_acid(caster_ptr, em_ptr);
+        return effect_monster_acid(player_ptr, em_ptr);
     case GF_ELEC:
-        return effect_monster_elec(caster_ptr, em_ptr);
+        return effect_monster_elec(player_ptr, em_ptr);
     case GF_FIRE:
-        return effect_monster_fire(caster_ptr, em_ptr);
+        return effect_monster_fire(player_ptr, em_ptr);
     case GF_COLD:
-        return effect_monster_cold(caster_ptr, em_ptr);
+        return effect_monster_cold(player_ptr, em_ptr);
     case GF_POIS:
-        return effect_monster_pois(caster_ptr, em_ptr);
+        return effect_monster_pois(player_ptr, em_ptr);
     case GF_NUKE:
-        return effect_monster_nuke(caster_ptr, em_ptr);
+        return effect_monster_nuke(player_ptr, em_ptr);
     case GF_HELL_FIRE:
-        return effect_monster_hell_fire(caster_ptr, em_ptr);
+        return effect_monster_hell_fire(player_ptr, em_ptr);
     case GF_HOLY_FIRE:
-        return effect_monster_holy_fire(caster_ptr, em_ptr);
+        return effect_monster_holy_fire(player_ptr, em_ptr);
     case GF_PLASMA:
-        return effect_monster_plasma(caster_ptr, em_ptr);
+        return effect_monster_plasma(player_ptr, em_ptr);
     case GF_NETHER:
-        return effect_monster_nether(caster_ptr, em_ptr);
+        return effect_monster_nether(player_ptr, em_ptr);
     case GF_WATER:
-        return effect_monster_water(caster_ptr, em_ptr);
+        return effect_monster_water(player_ptr, em_ptr);
     case GF_CHAOS:
-        return effect_monster_chaos(caster_ptr, em_ptr);
+        return effect_monster_chaos(player_ptr, em_ptr);
     case GF_SHARDS:
-        return effect_monster_shards(caster_ptr, em_ptr);
+        return effect_monster_shards(player_ptr, em_ptr);
     case GF_ROCKET:
-        return effect_monster_rocket(caster_ptr, em_ptr);
+        return effect_monster_rocket(player_ptr, em_ptr);
     case GF_SOUND:
-        return effect_monster_sound(caster_ptr, em_ptr);
+        return effect_monster_sound(player_ptr, em_ptr);
     case GF_CONFUSION:
-        return effect_monster_confusion(caster_ptr, em_ptr);
+        return effect_monster_confusion(player_ptr, em_ptr);
     case GF_DISENCHANT:
-        return effect_monster_disenchant(caster_ptr, em_ptr);
+        return effect_monster_disenchant(player_ptr, em_ptr);
     case GF_NEXUS:
-        return effect_monster_nexus(caster_ptr, em_ptr);
+        return effect_monster_nexus(player_ptr, em_ptr);
     case GF_FORCE:
-        return effect_monster_force(caster_ptr, em_ptr);
+        return effect_monster_force(player_ptr, em_ptr);
     case GF_INERTIAL:
-        return effect_monster_inertial(caster_ptr, em_ptr);
+        return effect_monster_inertial(player_ptr, em_ptr);
     case GF_TIME:
-        return effect_monster_time(caster_ptr, em_ptr);
+        return effect_monster_time(player_ptr, em_ptr);
     case GF_GRAVITY:
-        return effect_monster_gravity(caster_ptr, em_ptr);
+        return effect_monster_gravity(player_ptr, em_ptr);
     case GF_DISINTEGRATE:
-        return effect_monster_disintegration(caster_ptr, em_ptr);
+        return effect_monster_disintegration(player_ptr, em_ptr);
     case GF_PSI:
-        return effect_monster_psi(caster_ptr, em_ptr);
+        return effect_monster_psi(player_ptr, em_ptr);
     case GF_PSI_DRAIN:
-        return effect_monster_psi_drain(caster_ptr, em_ptr);
+        return effect_monster_psi_drain(player_ptr, em_ptr);
     case GF_TELEKINESIS:
-        return effect_monster_telekinesis(caster_ptr, em_ptr);
+        return effect_monster_telekinesis(player_ptr, em_ptr);
     case GF_DOMINATION:
-        return effect_monster_domination(caster_ptr, em_ptr);
+        return effect_monster_domination(player_ptr, em_ptr);
     case GF_ICE:
-        return effect_monster_icee_bolt(caster_ptr, em_ptr);
+        return effect_monster_icee_bolt(player_ptr, em_ptr);
     case GF_HYPODYNAMIA:
-        return effect_monster_hypodynamia(caster_ptr, em_ptr);
+        return effect_monster_hypodynamia(player_ptr, em_ptr);
     case GF_DEATH_RAY:
-        return effect_monster_death_ray(caster_ptr, em_ptr);
+        return effect_monster_death_ray(player_ptr, em_ptr);
     case GF_OLD_POLY:
         return effect_monster_old_poly(em_ptr);
     case GF_OLD_CLONE:
-        return effect_monster_old_clone(caster_ptr, em_ptr);
+        return effect_monster_old_clone(player_ptr, em_ptr);
     case GF_STAR_HEAL:
-        return effect_monster_star_heal(caster_ptr, em_ptr);
+        return effect_monster_star_heal(player_ptr, em_ptr);
     case GF_OLD_HEAL:
-        return effect_monster_old_heal(caster_ptr, em_ptr);
+        return effect_monster_old_heal(player_ptr, em_ptr);
     case GF_OLD_SPEED:
-        return effect_monster_old_speed(caster_ptr, em_ptr);
+        return effect_monster_old_speed(player_ptr, em_ptr);
     case GF_OLD_SLOW:
-        return effect_monster_old_slow(caster_ptr, em_ptr);
+        return effect_monster_old_slow(player_ptr, em_ptr);
     case GF_OLD_SLEEP:
-        return effect_monster_old_sleep(caster_ptr, em_ptr);
+        return effect_monster_old_sleep(player_ptr, em_ptr);
     case GF_STASIS_EVIL:
         return effect_monster_stasis(em_ptr, true);
     case GF_STASIS:
         return effect_monster_stasis(em_ptr, false);
     case GF_CHARM:
-        return effect_monster_charm(caster_ptr, em_ptr);
+        return effect_monster_charm(player_ptr, em_ptr);
     case GF_CONTROL_UNDEAD:
-        return effect_monster_control_undead(caster_ptr, em_ptr);
+        return effect_monster_control_undead(player_ptr, em_ptr);
     case GF_CONTROL_DEMON:
-        return effect_monster_control_demon(caster_ptr, em_ptr);
+        return effect_monster_control_demon(player_ptr, em_ptr);
     case GF_CONTROL_ANIMAL:
-        return effect_monster_control_animal(caster_ptr, em_ptr);
+        return effect_monster_control_animal(player_ptr, em_ptr);
     case GF_CHARM_LIVING:
-        return effect_monster_charm_living(caster_ptr, em_ptr);
+        return effect_monster_charm_living(player_ptr, em_ptr);
     case GF_OLD_CONF:
-        return effect_monster_old_conf(caster_ptr, em_ptr);
+        return effect_monster_old_conf(player_ptr, em_ptr);
     case GF_STUN:
         return effect_monster_stun(em_ptr);
     case GF_LITE_WEAK:
-        return effect_monster_lite_weak(caster_ptr, em_ptr);
+        return effect_monster_lite_weak(player_ptr, em_ptr);
     case GF_LITE:
-        return effect_monster_lite(caster_ptr, em_ptr);
+        return effect_monster_lite(player_ptr, em_ptr);
     case GF_DARK:
-        return effect_monster_dark(caster_ptr, em_ptr);
+        return effect_monster_dark(player_ptr, em_ptr);
     case GF_KILL_WALL:
-        return effect_monster_kill_wall(caster_ptr, em_ptr);
+        return effect_monster_kill_wall(player_ptr, em_ptr);
     case GF_AWAY_UNDEAD:
-        return effect_monster_away_undead(caster_ptr, em_ptr);
+        return effect_monster_away_undead(player_ptr, em_ptr);
     case GF_AWAY_EVIL:
-        return effect_monster_away_evil(caster_ptr, em_ptr);
+        return effect_monster_away_evil(player_ptr, em_ptr);
     case GF_AWAY_ALL:
-        return effect_monster_away_all(caster_ptr, em_ptr);
+        return effect_monster_away_all(player_ptr, em_ptr);
     case GF_TURN_UNDEAD:
-        return effect_monster_turn_undead(caster_ptr, em_ptr);
+        return effect_monster_turn_undead(player_ptr, em_ptr);
     case GF_TURN_EVIL:
-        return effect_monster_turn_evil(caster_ptr, em_ptr);
+        return effect_monster_turn_evil(player_ptr, em_ptr);
     case GF_TURN_ALL:
         return effect_monster_turn_all(em_ptr);
     case GF_DISP_UNDEAD:
-        return effect_monster_disp_undead(caster_ptr, em_ptr);
+        return effect_monster_disp_undead(player_ptr, em_ptr);
     case GF_DISP_EVIL:
-        return effect_monster_disp_evil(caster_ptr, em_ptr);
+        return effect_monster_disp_evil(player_ptr, em_ptr);
     case GF_DISP_GOOD:
-        return effect_monster_disp_good(caster_ptr, em_ptr);
+        return effect_monster_disp_good(player_ptr, em_ptr);
     case GF_DISP_LIVING:
         return effect_monster_disp_living(em_ptr);
     case GF_DISP_DEMON:
-        return effect_monster_disp_demon(caster_ptr, em_ptr);
+        return effect_monster_disp_demon(player_ptr, em_ptr);
     case GF_DISP_ALL:
         return effect_monster_disp_all(em_ptr);
     case GF_DRAIN_MANA:
-        return effect_monster_drain_mana(caster_ptr, em_ptr);
+        return effect_monster_drain_mana(player_ptr, em_ptr);
     case GF_MIND_BLAST:
-        return effect_monster_mind_blast(caster_ptr, em_ptr);
+        return effect_monster_mind_blast(player_ptr, em_ptr);
     case GF_BRAIN_SMASH:
-        return effect_monster_brain_smash(caster_ptr, em_ptr);
+        return effect_monster_brain_smash(player_ptr, em_ptr);
     case GF_CAUSE_1:
         return effect_monster_curse_1(em_ptr);
     case GF_CAUSE_2:
@@ -447,25 +447,25 @@ process_result switch_effects_monster(player_type *caster_ptr, effect_monster_ty
     case GF_HAND_DOOM:
         return effect_monster_hand_doom(em_ptr);
     case GF_CAPTURE:
-        return effect_monster_capture(caster_ptr, em_ptr);
+        return effect_monster_capture(player_ptr, em_ptr);
     case GF_ATTACK:
-        return (process_result)do_cmd_attack(caster_ptr, em_ptr->y, em_ptr->x, static_cast<combat_options>(em_ptr->dam));
+        return (process_result)do_cmd_attack(player_ptr, em_ptr->y, em_ptr->x, static_cast<combat_options>(em_ptr->dam));
     case GF_ENGETSU:
-        return effect_monster_engetsu(caster_ptr, em_ptr);
+        return effect_monster_engetsu(player_ptr, em_ptr);
     case GF_GENOCIDE:
-        return effect_monster_genocide(caster_ptr, em_ptr);
+        return effect_monster_genocide(player_ptr, em_ptr);
     case GF_PHOTO:
-        return effect_monster_photo(caster_ptr, em_ptr);
+        return effect_monster_photo(player_ptr, em_ptr);
     case GF_CRUSADE:
-        return effect_monster_crusade(caster_ptr, em_ptr);
+        return effect_monster_crusade(player_ptr, em_ptr);
     case GF_WOUNDS:
         return effect_monster_wounds(em_ptr);
     case GF_E_GENOCIDE:
-        return effect_monster_elemental_genocide(caster_ptr, em_ptr);
+        return effect_monster_elemental_genocide(player_ptr, em_ptr);
     case GF_VOID:
-        return effect_monster_void(caster_ptr, em_ptr);
+        return effect_monster_void(player_ptr, em_ptr);
     case GF_ABYSS:
-        return effect_monster_abyss(caster_ptr, em_ptr);
+        return effect_monster_abyss(player_ptr, em_ptr);
     default: {
         em_ptr->skipped = true;
         em_ptr->dam = 0;

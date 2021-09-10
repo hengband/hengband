@@ -52,21 +52,21 @@ void health_track(player_type *player_ptr, MONSTER_IDX m_idx)
     player_ptr->redraw |= (PR_HEALTH);
 }
 
-bool update_player(player_type *caster_ptr)
+bool update_player(player_type *player_ptr)
 {
-    caster_ptr->update |= PU_COMBINE | PU_REORDER;
-    caster_ptr->window_flags |= PW_INVEN;
+    player_ptr->update |= PU_COMBINE | PU_REORDER;
+    player_ptr->window_flags |= PW_INVEN;
     return true;
 }
 
-bool redraw_player(player_type *caster_ptr)
+bool redraw_player(player_type *player_ptr)
 {
-    if (caster_ptr->csp > caster_ptr->msp) {
-        caster_ptr->csp = caster_ptr->msp;
+    if (player_ptr->csp > player_ptr->msp) {
+        player_ptr->csp = player_ptr->msp;
     }
 
-    caster_ptr->redraw |= PR_MANA;
-    caster_ptr->update |= PU_COMBINE | PU_REORDER;
-    caster_ptr->window_flags |= PW_INVEN;
+    player_ptr->redraw |= PR_MANA;
+    player_ptr->update |= PU_COMBINE | PU_REORDER;
+    player_ptr->window_flags |= PW_INVEN;
     return true;
 }

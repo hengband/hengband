@@ -9,4 +9,4 @@ enum blue_magic_type : int {
 };
 
 struct player_type;
-bool do_cmd_cast_learned(player_type *caster_ptr);
+bool do_cmd_cast_learned(player_type *player_ptr);

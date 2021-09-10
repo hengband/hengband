@@ -6,17 +6,17 @@
 struct object_type;;
 struct player_type;
 struct monster_type;
-bool heal_monster(player_type *caster_ptr, DIRECTION dir, HIT_POINT dam);
-bool speed_monster(player_type *caster_ptr, DIRECTION dir, int power);
-bool slow_monster(player_type *caster_ptr, DIRECTION dir, int power);
-bool sleep_monster(player_type *caster_ptr, DIRECTION dir, int power);
-bool stasis_monster(player_type *caster_ptr, DIRECTION dir);    /* Like sleep, affects undead as well */
-bool stasis_evil(player_type *caster_ptr, DIRECTION dir);    /* Like sleep, affects undead as well */
-bool confuse_monster(player_type *caster_ptr, DIRECTION dir, PLAYER_LEVEL plev);
-bool stun_monster(player_type *caster_ptr, DIRECTION dir, PLAYER_LEVEL plev);
-bool fear_monster(player_type *caster_ptr, DIRECTION dir, PLAYER_LEVEL plev);
-bool poly_monster(player_type *caster_ptr, DIRECTION dir, int power);
-bool clone_monster(player_type *caster_ptr, DIRECTION dir);
+bool heal_monster(player_type *player_ptr, DIRECTION dir, HIT_POINT dam);
+bool speed_monster(player_type *player_ptr, DIRECTION dir, int power);
+bool slow_monster(player_type *player_ptr, DIRECTION dir, int power);
+bool sleep_monster(player_type *player_ptr, DIRECTION dir, int power);
+bool stasis_monster(player_type *player_ptr, DIRECTION dir);    /* Like sleep, affects undead as well */
+bool stasis_evil(player_type *player_ptr, DIRECTION dir);    /* Like sleep, affects undead as well */
+bool confuse_monster(player_type *player_ptr, DIRECTION dir, PLAYER_LEVEL plev);
+bool stun_monster(player_type *player_ptr, DIRECTION dir, PLAYER_LEVEL plev);
+bool fear_monster(player_type *player_ptr, DIRECTION dir, PLAYER_LEVEL plev);
+bool poly_monster(player_type *player_ptr, DIRECTION dir, int power);
+bool clone_monster(player_type *player_ptr, DIRECTION dir);
 bool time_walk(player_type *player_ptr);
 void roll_hitdice(player_type *player_ptr, spell_operation options);
 bool life_stream(player_type *player_ptr, bool message, bool virtue_change);

@@ -182,7 +182,7 @@ KIND_OBJECT_IDX wiz_create_itemtype(void)
  * Hack -- this routine always makes a "dungeon object", and applies
  * magic to it, and attempts to decline cursed items.
  */
-void wiz_create_item(player_type *caster_ptr)
+void wiz_create_item(player_type *player_ptr)
 {
     screen_save();
     OBJECT_IDX k_idx = wiz_create_itemtype();
@@ -195,7 +195,7 @@ void wiz_create_item(player_type *caster_ptr)
             if ((a_info[i].tval != k_info[k_idx].tval) || (a_info[i].sval != k_info[k_idx].sval))
                 continue;
 
-            (void)create_named_art(caster_ptr, i, caster_ptr->y, caster_ptr->x);
+            (void)create_named_art(player_ptr, i, player_ptr->y, player_ptr->x);
             msg_print("Allocated(INSTA_ART).");
             return;
         }
@@ -205,16 +205,16 @@ void wiz_create_item(player_type *caster_ptr)
     object_type *q_ptr;
     q_ptr = &forge;
     q_ptr->prep(k_idx);
-    apply_magic_to_object(caster_ptr, q_ptr, caster_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
-    (void)drop_near(caster_ptr, q_ptr, -1, caster_ptr->y, caster_ptr->x);
+    apply_magic_to_object(player_ptr, q_ptr, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
+    (void)drop_near(player_ptr, q_ptr, -1, player_ptr->y, player_ptr->x);
     msg_print("Allocated.");
 }
 
 /*!
  * @brief 指定されたIDの固定アーティファクトを生成する / Create the artifact of the specified number
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  */
-void wiz_create_named_art(player_type *caster_ptr, ARTIFACT_IDX a_idx)
+void wiz_create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx)
 {
     if (a_idx <= 0) {
         char tmp[80] = "";
@@ -231,7 +231,7 @@ void wiz_create_named_art(player_type *caster_ptr, ARTIFACT_IDX a_idx)
         return;
     }
 
-    (void)create_named_art(caster_ptr, a_idx, caster_ptr->y, caster_ptr->x);
+    (void)create_named_art(player_ptr, a_idx, player_ptr->y, player_ptr->x);
     msg_print("Allocated.");
 }
 
@@ -479,9 +479,9 @@ void wiz_jump_to_dungeon(player_type *player_ptr)
 /*!
  * @brief 全ベースアイテムを鑑定済みにする /
  * Become aware of a lot of objects
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  */
-void wiz_learn_items_all(player_type *caster_ptr)
+void wiz_learn_items_all(player_type *player_ptr)
 {
     object_type forge;
     object_type *q_ptr;
@@ -490,7 +490,7 @@ void wiz_learn_items_all(player_type *caster_ptr)
         if (k_ptr->level <= command_arg) {
             q_ptr = &forge;
             q_ptr->prep(i);
-            object_aware(caster_ptr, q_ptr);
+            object_aware(player_ptr, q_ptr);
         }
     }
 }
@@ -656,42 +656,42 @@ void set_gametime(void)
 /*!
  * @brief プレイヤー近辺の全モンスターを消去する / Delete all nearby monsters
  */
-void wiz_zap_surrounding_monsters(player_type *caster_ptr)
+void wiz_zap_surrounding_monsters(player_type *player_ptr)
 {
-    for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
-        if (!monster_is_valid(m_ptr) || (i == caster_ptr->riding) || (m_ptr->cdis > MAX_SIGHT))
+    for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
+        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        if (!monster_is_valid(m_ptr) || (i == player_ptr->riding) || (m_ptr->cdis > MAX_SIGHT))
             continue;
 
         if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname) {
             GAME_TEXT m_name[MAX_NLEN];
 
-            monster_desc(caster_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
-            exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
+            monster_desc(player_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
+            exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
         }
 
-        delete_monster_idx(caster_ptr, i);
+        delete_monster_idx(player_ptr, i);
     }
 }
 
 /*!
  * @brief フロアに存在する全モンスターを消去する / Delete all monsters
- * @param caster_ptr 術者の参照ポインタ
+ * @param player_ptr 術者の参照ポインタ
  */
-void wiz_zap_floor_monsters(player_type *caster_ptr)
+void wiz_zap_floor_monsters(player_type *player_ptr)
 {
-    for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++) {
-        monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
-        if (!monster_is_valid(m_ptr) || (i == caster_ptr->riding))
+    for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
+        monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        if (!monster_is_valid(m_ptr) || (i == player_ptr->riding))
             continue;
 
         if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname) {
             GAME_TEXT m_name[MAX_NLEN];
-            monster_desc(caster_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
-            exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
+            monster_desc(player_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
+            exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
         }
 
-        delete_monster_idx(caster_ptr, i);
+        delete_monster_idx(player_ptr, i);
     }
 }
 
