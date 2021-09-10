@@ -49,21 +49,21 @@ static void center_string(char *buf, concptr str)
 
 /*!
  * @brief 墓に基本情報を表示
- * @param dead_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param buf 墓テンプレ
  */
-static void show_basic_params(player_type *dead_ptr, char *buf)
+static void show_basic_params(player_type *player_ptr, char *buf)
 {
     char tomb_message[160];
-    (void)sprintf(tomb_message, _("レベル: %d", "Level: %d"), (int)dead_ptr->lev);
+    (void)sprintf(tomb_message, _("レベル: %d", "Level: %d"), (int)player_ptr->lev);
     center_string(buf, tomb_message);
     put_str(buf, 11, 11);
 
-    (void)sprintf(tomb_message, _("経験値: %ld", "Exp: %ld"), (long)dead_ptr->exp);
+    (void)sprintf(tomb_message, _("経験値: %ld", "Exp: %ld"), (long)player_ptr->exp);
     center_string(buf, tomb_message);
     put_str(buf, 12, 11);
 
-    (void)sprintf(tomb_message, _("所持金: %ld", "AU: %ld"), (long)dead_ptr->au);
+    (void)sprintf(tomb_message, _("所持金: %ld", "AU: %ld"), (long)player_ptr->au);
     center_string(buf, tomb_message);
     put_str(buf, 13, 11);
 }
@@ -71,14 +71,14 @@ static void show_basic_params(player_type *dead_ptr, char *buf)
 #ifdef JP
 /*!
  * @brief プレーヤーを殺したモンスターを表示する (日本語版専用)
- * @param dead_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param buf 墓テンプレ
  * @param tomb_message 墓碑に刻む言葉
  * @return 追加の行数
  */
-static int show_killing_monster(player_type *dead_ptr, char *buf, char *tomb_message, size_t tomb_message_size)
+static int show_killing_monster(player_type *player_ptr, char *buf, char *tomb_message, size_t tomb_message_size)
 {
-    shape_buffer(dead_ptr->died_from, GRAVE_LINE_WIDTH + 1, tomb_message, tomb_message_size);
+    shape_buffer(player_ptr->died_from, GRAVE_LINE_WIDTH + 1, tomb_message, tomb_message_size);
     char *t;
     t = tomb_message + strlen(tomb_message) + 1;
     if (!*t)
@@ -116,28 +116,28 @@ static int show_killing_monster(player_type *dead_ptr, char *buf, char *tomb_mes
 
 /*!
  * @brief どこで死んだかを表示する (日本語版専用)
- * @param dead_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param buf 墓テンプレ
  * @param tomb_message 表示する文字列
  * @param extra_line 追加の行数
  */
-static void show_dead_place(player_type *dead_ptr, char *buf, char *tomb_message, int extra_line)
+static void show_dead_place(player_type *player_ptr, char *buf, char *tomb_message, int extra_line)
 {
-    if (streq(dead_ptr->died_from, "ripe") || streq(dead_ptr->died_from, "Seppuku"))
+    if (streq(player_ptr->died_from, "ripe") || streq(player_ptr->died_from, "Seppuku"))
         return;
 
-    if (dead_ptr->current_floor_ptr->dun_level == 0) {
-        concptr field_name = dead_ptr->town_num ? "街" : "荒野";
-        if (streq(dead_ptr->died_from, "途中終了")) {
+    if (player_ptr->current_floor_ptr->dun_level == 0) {
+        concptr field_name = player_ptr->town_num ? "街" : "荒野";
+        if (streq(player_ptr->died_from, "途中終了")) {
             sprintf(tomb_message, "%sで死んだ", field_name);
         } else {
             sprintf(tomb_message, "に%sで殺された", field_name);
         }
     } else {
-        if (streq(dead_ptr->died_from, "途中終了")) {
-            sprintf(tomb_message, "地下 %d 階で死んだ", (int)dead_ptr->current_floor_ptr->dun_level);
+        if (streq(player_ptr->died_from, "途中終了")) {
+            sprintf(tomb_message, "地下 %d 階で死んだ", (int)player_ptr->current_floor_ptr->dun_level);
         } else {
-            sprintf(tomb_message, "に地下 %d 階で殺された", (int)dead_ptr->current_floor_ptr->dun_level);
+            sprintf(tomb_message, "に地下 %d 階で殺された", (int)player_ptr->current_floor_ptr->dun_level);
         }
     }
 
@@ -147,44 +147,44 @@ static void show_dead_place(player_type *dead_ptr, char *buf, char *tomb_message
 
 /*!
  * @brief 墓に刻む言葉を細かく表示 (日本語版専用)
- * @param dead_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param buf 墓テンプレ
  */
-static void show_tomb_detail(player_type *dead_ptr, char *buf)
+static void show_tomb_detail(player_type *player_ptr, char *buf)
 {
     char tomb_message[160];
     int extra_line = 0;
-    if (streq(dead_ptr->died_from, "途中終了")) {
+    if (streq(player_ptr->died_from, "途中終了")) {
         strcpy(tomb_message, "<自殺>");
-    } else if (streq(dead_ptr->died_from, "ripe")) {
+    } else if (streq(player_ptr->died_from, "ripe")) {
         strcpy(tomb_message, "引退後に天寿を全う");
-    } else if (streq(dead_ptr->died_from, "Seppuku")) {
+    } else if (streq(player_ptr->died_from, "Seppuku")) {
         strcpy(tomb_message, "勝利の後、切腹");
     } else {
-        extra_line = show_killing_monster(dead_ptr, buf, tomb_message, sizeof(tomb_message));
+        extra_line = show_killing_monster(player_ptr, buf, tomb_message, sizeof(tomb_message));
     }
 
     center_string(buf, tomb_message);
     put_str(buf, 14, 11);
 
-    show_dead_place(dead_ptr, buf, tomb_message, extra_line);
+    show_dead_place(player_ptr, buf, tomb_message, extra_line);
 }
 #else
 
 /*!
  * @brief Detailed display of words engraved on the tomb (English version only)
- * @param dead_ptr reference pointer to the player
+ * @param player_ptr reference pointer to the player
  * @param buf template of the tomb
  * @return nothing
  */
-static void show_tomb_detail(player_type *dead_ptr, char *buf)
+static void show_tomb_detail(player_type *player_ptr, char *buf)
 {
     char tomb_message[160];
-    (void)sprintf(tomb_message, "Killed on Level %d", dead_ptr->current_floor_ptr->dun_level);
+    (void)sprintf(tomb_message, "Killed on Level %d", player_ptr->current_floor_ptr->dun_level);
     center_string(buf, tomb_message);
     put_str(buf, 14, 11);
 
-    shape_buffer(format("by %s.", dead_ptr->died_from), GRAVE_LINE_WIDTH + 1, tomb_message, sizeof(tomb_message));
+    shape_buffer(format("by %s.", player_ptr->died_from), GRAVE_LINE_WIDTH + 1, tomb_message, sizeof(tomb_message));
     center_string(buf, tomb_message);
     char *t;
     put_str(buf, 15, 11);
@@ -210,15 +210,15 @@ static void show_tomb_detail(player_type *dead_ptr, char *buf)
  * Display a "tomb-stone"
  * @param player_ptr プレーヤーへの参照ポインタ
  */
-void print_tomb(player_type *dead_ptr)
+void print_tomb(player_type *player_ptr)
 {
     term_clear();
     char buf[1024];
     read_dead_file(buf, sizeof(buf));
-    concptr p = (current_world_ptr->total_winner || (dead_ptr->lev > PY_MAX_LEVEL)) ? _("偉大なる者", "Magnificent")
-                                                                                    : player_title[dead_ptr->pclass][(dead_ptr->lev - 1) / 5];
+    concptr p = (current_world_ptr->total_winner || (player_ptr->lev > PY_MAX_LEVEL)) ? _("偉大なる者", "Magnificent")
+                                                                                    : player_title[player_ptr->pclass][(player_ptr->lev - 1) / 5];
 
-    center_string(buf, dead_ptr->name);
+    center_string(buf, player_ptr->name);
     put_str(buf, 6, 11);
 
 #ifdef JP
@@ -233,15 +233,15 @@ void print_tomb(player_type *dead_ptr)
     center_string(buf, cp_ptr->title);
     put_str(buf, 10, 11);
 
-    show_basic_params(dead_ptr, buf);
-    show_tomb_detail(dead_ptr, buf);
+    show_basic_params(player_ptr, buf);
+    show_tomb_detail(player_ptr, buf);
 
     char current_time[80];
     time_t ct = time((time_t *)0);
     (void)sprintf(current_time, "%-.24s", ctime(&ct));
     center_string(buf, current_time);
     put_str(buf, 17, 11);
-    msg_format(_("さようなら、%s!", "Goodbye, %s!"), dead_ptr->name);
+    msg_format(_("さようなら、%s!", "Goodbye, %s!"), player_ptr->name);
 }
 
 /*!
