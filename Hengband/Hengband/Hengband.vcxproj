@@ -269,6 +269,8 @@
     <ClCompile Include="..\..\src\cmd-action\cmd-tunnel.cpp" />
     <ClCompile Include="..\..\src\action\movement-execution.cpp" />
     <ClCompile Include="..\..\src\core\score-util.cpp" />
+    <ClCompile Include="..\..\src\object-enchant\object-smith.cpp" />
+    <ClCompile Include="..\..\src\object-enchant\smith-tables.cpp" />
     <ClCompile Include="..\..\src\player-base\player-class.cpp" />
     <ClCompile Include="..\..\src\player-base\player-race.cpp" />
     <ClCompile Include="..\..\src\system\grid-type-definition.cpp" />
@@ -762,7 +764,6 @@
     <ClCompile Include="..\..\src\cmd-item\cmd-quaff.cpp" />
     <ClCompile Include="..\..\src\cmd-item\cmd-read.cpp" />
     <ClCompile Include="..\..\src\cmd-io\cmd-save.cpp" />
-    <ClCompile Include="..\..\src\cmd-item\cmd-smith.cpp" />
     <ClCompile Include="..\..\src\cmd-action\cmd-spell.cpp" />
     <ClCompile Include="..\..\src\cmd-item\cmd-usestaff.cpp" />
     <ClCompile Include="..\..\src\cmd-visual\cmd-visuals.cpp" />
@@ -910,6 +911,9 @@
     <ClInclude Include="..\..\src\action\open-util.h" />
     <ClInclude Include="..\..\src\action\run-execution.h" />
     <ClInclude Include="..\..\src\load\savedata-old-flag-types.h" />
+    <ClInclude Include="..\..\src\object-enchant\object-smith.h" />
+    <ClInclude Include="..\..\src\object-enchant\smith-tables.h" />
+    <ClInclude Include="..\..\src\object-enchant\smith-types.h" />
     <ClInclude Include="..\..\src\object-enchant\tr-flags.h" />
     <ClInclude Include="..\..\src\object-use\throw-execution.h" />
     <ClInclude Include="..\..\src\action\travel-execution.h" />
@@ -1666,7 +1670,6 @@
     <ClInclude Include="..\..\src\cmd-item\cmd-quaff.h" />
     <ClInclude Include="..\..\src\cmd-item\cmd-read.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-save.h" />
-    <ClInclude Include="..\..\src\cmd-item\cmd-smith.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-spell.h" />
     <ClInclude Include="..\..\src\cmd-item\cmd-usestaff.h" />
     <ClInclude Include="..\..\src\cmd-visual\cmd-visuals.h" />

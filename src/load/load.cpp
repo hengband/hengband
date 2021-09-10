@@ -10,6 +10,7 @@
  */
 
 #include "load/load.h"
+#include "core/asking-player.h"
 #include "dungeon/quest.h"
 #include "game-option/birth-options.h"
 #include "game-option/runtime-arguments.h"
@@ -286,6 +287,21 @@ static errr rd_savefile(player_type *player_ptr)
     return err;
 }
 
+/**
+ * @brief セーブデータから引き継いでプレイできるかどうか調べる
+ *
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return 引き継ぎ可能ならtrue、そうでなければfalseを返す
+ */
+static bool can_takeover_savefile(const player_type *player_ptr)
+{
+    if (loading_savefile_version_is_older_than(8) && player_ptr->pclass == CLASS_SMITH) {
+        return false;
+    }
+
+    return true;
+}
+
 /*!
  * @brief セーブデータ読み込みのメインルーチン /
  * Attempt to Load a "savefile"
@@ -369,6 +385,19 @@ bool load_savedata(player_type *player_ptr, bool *new_game)
 
         msg_print(nullptr);
         return false;
+    }
+
+    if (!can_takeover_savefile(player_ptr)) {
+        msg_format(_("このセーブデータの続きをプレイすることはできません。", "You can't play the rest of the game from this save data."));
+        msg_print(nullptr);
+        if (!get_check(_("最初からプレイを始めますか？(モンスターの思い出は引き継がれます)",
+                "Play from the beginning? (Monster recalls will be inherited.) "))) {
+            msg_format(_("ゲームを終了します。", "Exit the game."));
+            msg_print(nullptr);
+            return false;
+        }
+        player_ptr->is_dead = true;
+        player_ptr->wait_report_score = false;
     }
 
     if (player_ptr->is_dead) {

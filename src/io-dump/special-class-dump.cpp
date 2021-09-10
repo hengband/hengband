@@ -4,20 +4,21 @@
  * @author Hourier
  */
 
-#include <vector>
-
 #include "io-dump/special-class-dump.h"
 #include "blue-magic/blue-magic-checker.h"
 #include "cmd-item/cmd-magiceat.h"
-#include "cmd-item/cmd-smith.h"
 #include "mind/mind-blue-mage.h"
 #include "monster-race/race-ability-flags.h"
 #include "mspell/monster-power-table.h"
+#include "object-enchant/object-smith.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
 #include "util/flag-group.h"
+
+#include <algorithm>
+#include <vector>
 
 typedef struct {
     EnumClassFlagGroup<RF_ABILITY> ability_flags;
@@ -90,24 +91,23 @@ static void dump_magic_eater(player_type *creature_ptr, FILE *fff)
  */
 static void dump_smith(player_type *creature_ptr, FILE *fff)
 {
-    int i, id[250], n = 0, row;
     fprintf(fff, _("\n\n  [手に入れたエッセンス]\n\n", "\n\n  [Get Essence]\n\n"));
     fprintf(fff, _("エッセンス   個数     エッセンス   個数     エッセンス   個数", "Essence      Num      Essence      Num      Essence      Num "));
-    for (i = 0; essence_name[i]; i++) {
-        if (!essence_name[i][0])
-            continue;
-        id[n] = i;
-        n++;
-    }
 
-    row = n / 3 + 1;
-    for (i = 0; i < row; i++) {
+    auto essences = Smith::get_essence_list();
+    auto n = essences.size();
+    std::vector<int> amounts;
+    std::transform(essences.begin(), essences.end(), std::back_inserter(amounts),
+        [smith = Smith(creature_ptr)](SmithEssence e) { return smith.get_essence_num_of_posessions(e); });
+
+    auto row = n / 3 + 1;
+    for (auto i = 0U; i < row; i++) {
         fprintf(fff, "\n");
-        fprintf(fff, "%-11s %5d     ", essence_name[id[i]], (int)creature_ptr->magic_num1[id[i]]);
+        fprintf(fff, "%-11s %5d     ", Smith::get_essence_name(essences[i]), amounts[i]);
         if (i + row < n)
-            fprintf(fff, "%-11s %5d     ", essence_name[id[i + row]], (int)creature_ptr->magic_num1[id[i + row]]);
+            fprintf(fff, "%-11s %5d     ", Smith::get_essence_name(essences[i + row]), amounts[i + row]);
         if (i + row * 2 < n)
-            fprintf(fff, "%-11s %5d", essence_name[id[i + row * 2]], (int)creature_ptr->magic_num1[id[i + row * 2]]);
+            fprintf(fff, "%-11s %5d", Smith::get_essence_name(essences[i + row * 2]), amounts[i + row * 2]);
     }
 
     fputs("\n", fff);

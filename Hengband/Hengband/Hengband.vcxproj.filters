@@ -692,9 +692,6 @@
     <ClCompile Include="..\..\src\cmd-item\cmd-read.cpp">
       <Filter>cmd-item</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-item\cmd-smith.cpp">
-      <Filter>cmd-item</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\cmd-item\cmd-usestaff.cpp">
       <Filter>cmd-item</Filter>
     </ClCompile>
@@ -2316,6 +2313,12 @@
     <ClCompile Include="..\..\src\object-use\throw-execution.cpp">
       <Filter>object-use</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\object-smith.cpp">
+      <Filter>object-enchant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\smith-tables.cpp">
+      <Filter>object-enchant</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\player-info\race-info.cpp">
       <Filter>player-info</Filter>
     </ClCompile>
@@ -3072,9 +3075,6 @@
       <Filter>cmd-item</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-item\cmd-read.h">
-      <Filter>cmd-item</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd-item\cmd-smith.h">
       <Filter>cmd-item</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-item\cmd-usestaff.h">
@@ -4987,6 +4987,15 @@
       <Filter>load</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object-enchant\tr-flags.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\object-smith.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\smith-types.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\smith-tables.h">
       <Filter>object-enchant</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player-info\race-info.h">

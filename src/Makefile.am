@@ -126,7 +126,6 @@ hengband_SOURCES = \
 	cmd-item/cmd-quaff.cpp cmd-item/cmd-quaff.h \
 	cmd-item/cmd-read.cpp cmd-item/cmd-read.h \
 	cmd-item/cmd-refill.cpp cmd-item/cmd-refill.h \
-	cmd-item/cmd-smith.cpp cmd-item/cmd-smith.h \
 	cmd-item/cmd-throw.cpp cmd-item/cmd-throw.h \
 	cmd-item/cmd-usestaff.cpp cmd-item/cmd-usestaff.h \
 	cmd-item/cmd-zaprod.cpp cmd-item/cmd-zaprod.h \
@@ -590,8 +589,11 @@ hengband_SOURCES = \
 	object-enchant/object-boost.cpp object-enchant/object-boost.h \
 	object-enchant/object-curse.cpp object-enchant/object-curse.h \
 	object-enchant/object-ego.cpp object-enchant/object-ego.h \
+	object-enchant/object-smith.cpp object-enchant/object-smith.h \
 	object-enchant/item-apply-magic.h object-enchant/item-feeling.h \
 	object-enchant/old-ego-extra-values.h object-enchant/special-object-flags.h \
+	object-enchant/smith-tables.cpp object-enchant/smith-tables.h \
+	object-enchant/smith-types.h \
 	object-enchant/tr-flags.h \
 	object-enchant/tr-types.h object-enchant/trc-types.h \
 	object-enchant/trg-types.h \

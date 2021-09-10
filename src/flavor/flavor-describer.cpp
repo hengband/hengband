@@ -5,7 +5,6 @@
  */
 
 #include "flavor/flavor-describer.h"
-#include "cmd-item/cmd-smith.h"
 #include "combat/shoot.h"
 #include "flavor/flag-inscriptions-table.h"
 #include "flavor/flavor-util.h"
@@ -17,6 +16,8 @@
 #include "mind/mind-sniper.h"
 #include "mind/mind-weaponsmith.h"
 #include "object-enchant/object-ego.h"
+#include "object-enchant/object-smith.h"
+#include "object-enchant/smith-types.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trg-types.h"
@@ -105,7 +106,7 @@ static void decide_tval_show(flavor_type *flavor_ptr)
     if (flavor_ptr->tr_flags.has(TR_SHOW_MODS))
         flavor_ptr->show_weapon = true;
 
-    if (flavor_ptr->o_ptr->is_smith() && (flavor_ptr->o_ptr->xtra3 == 1 + ESSENCE_SLAY_GLOVE))
+    if (flavor_ptr->o_ptr->is_smith() && (Smith::object_effect(flavor_ptr->o_ptr) == SmithEffect::SLAY_GLOVE))
         flavor_ptr->show_weapon = true;
 
     if (flavor_ptr->o_ptr->to_h && flavor_ptr->o_ptr->to_d)

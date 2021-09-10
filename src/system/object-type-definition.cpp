@@ -9,6 +9,7 @@
 #include "artifact/fixed-art-types.h"
 #include "monster-race/monster-race.h"
 #include "object-enchant/object-curse.h"
+#include "object-enchant/object-smith.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
@@ -354,7 +355,7 @@ bool object_type::is_ego() const
  */
 bool object_type::is_smith() const
 {
-    return this->is_weapon_armour_ammo() && (this->xtra3 > 0);
+    return Smith::object_effect(this).has_value();
 }
 
 /*!

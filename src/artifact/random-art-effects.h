@@ -1,10 +1,12 @@
 ﻿#pragma once
+
+#include "system/angband.h"
+
 /*!
  * @file random-art-effects.h
  * @brief ランダムアーティファクトの発動ID定義
  */
-
-enum random_art_activation_type {
+enum random_art_activation_type : uint8_t {
     ACT_SUNLIGHT = 1,
     ACT_BO_MISS_1 = 2,
     ACT_BA_POIS_1 = 3,

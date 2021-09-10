@@ -6,7 +6,6 @@
  */
 
 #include "load/load-v1-5-0.h"
-#include "cmd-item/cmd-smith.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor-object.h"
 #include "game-option/birth-options.h"
