@@ -1,4 +1,4 @@
 ﻿#pragma once
 
 struct player_type;
-bool activate_toragoroshi(player_type *user_ptr);
+bool activate_toragoroshi(player_type *player_ptr);

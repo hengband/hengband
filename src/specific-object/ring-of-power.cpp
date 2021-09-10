@@ -53,13 +53,13 @@ static void exe_ring_of_power(player_type *player_ptr, DIRECTION dir)
     }
 }
 
-bool activate_ring_of_power(player_type *user_ptr, concptr name)
+bool activate_ring_of_power(player_type *player_ptr, concptr name)
 {
     DIRECTION dir;
     msg_format(_("%sは漆黒に輝いた...", "The %s glows intensely black..."), name);
-    if (!get_aim_dir(user_ptr, &dir))
+    if (!get_aim_dir(player_ptr, &dir))
         return false;
 
-    exe_ring_of_power(user_ptr, dir);
+    exe_ring_of_power(player_ptr, dir);
     return true;
 }

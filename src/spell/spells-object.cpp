@@ -357,42 +357,42 @@ void brand_bolts(player_type *player_ptr)
 
 /*!
  * @brief 知識の石の発動を実行する / Do activation of the stone of lore.
- * @param user_ptr プレイヤー情報への参照ポインタ
+ * @param player_ptr プレイヤー情報への参照ポインタ
  * @return 実行したらTRUE、しなかったらFALSE
  * @details
  * 鑑定を実行した後HPを消費する。1/5で混乱し、1/20で追加ダメージ。
  * MPがある場合はさらにMPを20消費する。不足する場合は麻痺及び混乱。
  */
-bool perilous_secrets(player_type *user_ptr)
+bool perilous_secrets(player_type *player_ptr)
 {
-    if (!ident_spell(user_ptr, false))
+    if (!ident_spell(player_ptr, false))
         return false;
 
-    if (user_ptr->msp > 0) {
-        if (20 <= user_ptr->csp)
-            user_ptr->csp -= 20;
+    if (player_ptr->msp > 0) {
+        if (20 <= player_ptr->csp)
+            player_ptr->csp -= 20;
         else {
-            int oops = 20 - user_ptr->csp;
+            int oops = 20 - player_ptr->csp;
 
-            user_ptr->csp = 0;
-            user_ptr->csp_frac = 0;
+            player_ptr->csp = 0;
+            player_ptr->csp_frac = 0;
 
             msg_print(_("石を制御できない！", "You are too weak to control the stone!"));
 
-            (void)set_paralyzed(user_ptr, user_ptr->paralyzed + randint1(5 * oops + 1));
-            (void)set_confused(user_ptr, user_ptr->confused + randint1(5 * oops + 1));
+            (void)set_paralyzed(player_ptr, player_ptr->paralyzed + randint1(5 * oops + 1));
+            (void)set_confused(player_ptr, player_ptr->confused + randint1(5 * oops + 1));
         }
 
-        user_ptr->redraw |= (PR_MANA);
+        player_ptr->redraw |= (PR_MANA);
     }
 
-    take_hit(user_ptr, DAMAGE_LOSELIFE, damroll(1, 12), _("危険な秘密", "perilous secrets"));
+    take_hit(player_ptr, DAMAGE_LOSELIFE, damroll(1, 12), _("危険な秘密", "perilous secrets"));
 
     if (one_in_(5))
-        (void)set_confused(user_ptr, user_ptr->confused + randint1(10));
+        (void)set_confused(player_ptr, player_ptr->confused + randint1(10));
 
     if (one_in_(20))
-        take_hit(user_ptr, DAMAGE_LOSELIFE, damroll(4, 10), _("危険な秘密", "perilous secrets"));
+        take_hit(player_ptr, DAMAGE_LOSELIFE, damroll(4, 10), _("危険な秘密", "perilous secrets"));
 
     return true;
 }

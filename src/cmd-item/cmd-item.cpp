@@ -280,21 +280,21 @@ void do_cmd_use(player_type *player_ptr)
 
 /*!
  * @brief 装備を発動するコマンドのメインルーチン /
- * @param user_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  */
-void do_cmd_activate(player_type *user_ptr)
+void do_cmd_activate(player_type *player_ptr)
 {
     OBJECT_IDX item;
-    if (user_ptr->wild_mode || cmd_limit_arena(user_ptr))
+    if (player_ptr->wild_mode || cmd_limit_arena(player_ptr))
         return;
 
-    if (user_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
-        set_action(user_ptr, ACTION_NONE);
+    if (player_ptr->special_defense & (KATA_MUSOU | KATA_KOUKIJIN))
+        set_action(player_ptr, ACTION_NONE);
 
     concptr q = _("どのアイテムを始動させますか? ", "Activate which item? ");
     concptr s = _("始動できるアイテムを装備していない。", "You have nothing to activate.");
-    if (!choose_object(user_ptr, &item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), FuncItemTester(&object_type::is_activatable)))
+    if (!choose_object(player_ptr, &item, q, s, (USE_EQUIP | IGNORE_BOTHHAND_SLOT), FuncItemTester(&object_type::is_activatable)))
         return;
 
-    exe_activate(user_ptr, item);
+    exe_activate(player_ptr, item);
 }

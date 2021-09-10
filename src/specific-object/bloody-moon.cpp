@@ -47,20 +47,20 @@ void get_bloody_moon_flags(object_type *o_ptr)
 
 /*!
  * @brief Let's dance a RONDO!!
- * @param user_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr ブラッディ・ムーンへの参照ポインタ
  * @return オブジェクト情報に異常がない限りTRUE
  */
-bool activate_bloody_moon(player_type *user_ptr, object_type *o_ptr)
+bool activate_bloody_moon(player_type *player_ptr, object_type *o_ptr)
 {
     if (o_ptr->name1 != ART_BLOOD)
         return false;
 
     msg_print(_("鎌が明るく輝いた...", "Your scythe glows brightly!"));
     get_bloody_moon_flags(o_ptr);
-    if (user_ptr->prace == player_race_type::ANDROID)
-        calc_android_exp(user_ptr);
+    if (player_ptr->prace == player_race_type::ANDROID)
+        calc_android_exp(player_ptr);
 
-    user_ptr->update |= PU_BONUS | PU_HP;
+    player_ptr->update |= PU_BONUS | PU_HP;
     return true;
 }
