@@ -122,7 +122,6 @@ typedef int32_t ITEM_NUMBER; /*!< ゲーム中のアイテム数型を定義 */
 typedef int16_t ACTION_ENERGY; /*!< ゲーム中の行動エネルギー型を定義 */
 typedef int16_t ARMOUR_CLASS; /*!< ゲーム中の行動アーマークラス型を定義 */
 typedef int16_t TIME_EFFECT; /*!< ゲーム中の時限期間の型を定義 */
-typedef byte DISCOUNT_RATE; /*!< ゲーム中の値引き率の型を定義 */
 typedef int16_t SPEED; /*!< ゲーム中の加速値の型定義 */
 
 /*!
@@ -185,8 +184,6 @@ typedef int QUANTITY; /*!< インターフェース上の指定個数 */
 typedef int EFFECT_ID; /*!< 効果属性ID */
 
 typedef int16_t ACTION_SKILL_POWER; /*!< 行動技能値 */
-
-typedef int16_t FEAT_PRIORITY; /*!< 地形の縮小表示優先順位 */
 
 enum process_result {
     PROCESS_FALSE = 0,

@@ -42,7 +42,7 @@ typedef struct feature_type {
     FEAT_IDX mimic{}; /*!< 未確定時の外形地形ID / Feature to mimic */
     FEAT_IDX destroyed{}; /*!< *破壊*に巻き込まれた時の地形移行先(未実装？) / Default destroyed state */
     EnumClassFlagGroup<FF> flags{}; /*!< 地形の基本特性ビット配列 / Flags */
-    FEAT_PRIORITY priority{}; /*!< 縮小表示で省略する際の表示優先度 / Map priority */
+    int16_t priority{}; /*!< 縮小表示で省略する際の表示優先度 / Map priority */
     feature_state state[MAX_FEAT_STATES]{}; /*!< feature_state テーブル */
     FEAT_SUBTYPE subtype{}; /*!< 副特性値 */
     FEAT_POWER power{}; /*!< 地形強度 */

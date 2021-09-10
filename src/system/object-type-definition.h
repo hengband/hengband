@@ -25,7 +25,7 @@ typedef struct object_type {
 
     OBJECT_SUBTYPE_VALUE sval{}; /*!< Item sub-type (from kind) */
     PARAMETER_VALUE pval{}; /*!< Item extra-parameter */
-    DISCOUNT_RATE discount{}; /*!< Discount (if any) */
+    byte discount{}; /*!< ゲーム中の値引き率 (0～100) / Discount (if any) */
     ITEM_NUMBER number{}; /*!< Number of items */
     WEIGHT weight{}; /*!< Item weight */
     ARTIFACT_IDX name1{}; /*!< Artifact type, if any */
