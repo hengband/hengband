@@ -168,9 +168,9 @@ void wiz_summon_random_enemy(player_type *player_ptr, int num)
  * @details
  * This function is rather dangerous
  */
-void wiz_summon_specific_enemy(player_type *summoner_ptr, MONRACE_IDX r_idx)
+void wiz_summon_specific_enemy(player_type *player_ptr, MONRACE_IDX r_idx)
 {
-    (void)summon_named_creature(summoner_ptr, 0, summoner_ptr->y, summoner_ptr->x, r_idx, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
+    (void)summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, r_idx, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
 }
 
 /*!
@@ -180,9 +180,9 @@ void wiz_summon_specific_enemy(player_type *summoner_ptr, MONRACE_IDX r_idx)
  * @details
  * This function is rather dangerous
  */
-void wiz_summon_pet(player_type *summoner_ptr, MONRACE_IDX r_idx)
+void wiz_summon_pet(player_type *player_ptr, MONRACE_IDX r_idx)
 {
-    (void)summon_named_creature(summoner_ptr, 0, summoner_ptr->y, summoner_ptr->x, r_idx, PM_ALLOW_SLEEP | PM_ALLOW_GROUP | PM_FORCE_PET);
+    (void)summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, r_idx, PM_ALLOW_SLEEP | PM_ALLOW_GROUP | PM_FORCE_PET);
 }
 
 /*!
